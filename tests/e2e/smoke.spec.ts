@@ -49,3 +49,16 @@ test('civ card click opens detail, unique unit link opens unit page', async ({ p
   await page.locator('#detail .uchips a').first().click();
   await expect(page.locator('#unit h2')).toBeVisible();
 });
+
+test('leaving a tech detail page does not crash (regression)', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+  await page.goto('./#tech/12');
+  await expect(page.locator('#tech h2')).toBeVisible();
+  await page.locator('nav button', { hasText: '单位' }).click();
+  await expect(page.locator('#ugrid .card').first()).toBeVisible();
+  expect(errors).toEqual([]);
+});

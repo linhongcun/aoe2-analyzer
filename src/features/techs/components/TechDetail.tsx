@@ -14,7 +14,9 @@ export default function TechDetail() {
   const { id = '' } = useParams();
   const core = useCore();
   const nav = useNavigate();
-  useEffect(() => scrollTo(0, 0), [id]);
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, [id]);
   if (!core)
     return (
       <section className="pane">
