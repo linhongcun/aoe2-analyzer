@@ -1,3 +1,4 @@
+import { ListHead } from '../../../shared/ui/layout';
 import { civByEn, civs } from '../../../data';
 import { DLCS } from '../../../domain/dlc';
 import { CivChip, DlcImg } from '../../../shared/ui/art';
@@ -5,7 +6,8 @@ import { CivChip, DlcImg } from '../../../shared/ui/art';
 export default function DlcView() {
   return (
     <section id="dlcs" className="pane">
-      <h2>DLC / 版本 · 文明发售列表</h2>
+      <ListHead title="DLC / 资料片" desc="文明发售列表" />
+
       <table className="dlct">
         <tbody>
           {DLCS.map((d, i) => (

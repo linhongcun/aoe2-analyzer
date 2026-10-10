@@ -1,3 +1,4 @@
+import { ListHead } from '../../../shared/ui/layout';
 import { civs } from '../../../data';
 import { COUNTERS, matchup, TYPE_ZH } from '../../../domain/ratings';
 import { CivIcon } from '../../../shared/ui/art';
@@ -12,7 +13,8 @@ export default function Matchup() {
     m = matchup(a, e);
   return (
     <section id="matchup" className="pane">
-      <div className="bar">
+      <ListHead title="对局助手" desc="根据双方文明给出反制建议" />
+      <div className="bar fbar">
         我的文明{' '}
         <select id="ma" value={ia} onChange={(x) => setA(+x.target.value)}>
           <CivOptions />

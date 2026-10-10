@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import CivList from '../features/civs/components/CivList';
 import CivDetail from '../features/civs/components/CivDetail';
 import { civs } from '../data';
+import Home from '../features/home/components/Home';
 
 // 非首页路由按需拆包
 const UnitList = lazy(() => import('../features/units/components/UnitList'));
@@ -12,13 +13,16 @@ const TechDetail = lazy(() => import('../features/techs/components/TechDetail'))
 const TreeView = lazy(() => import('../features/tree/components/TreeView'));
 const DlcView = lazy(() => import('../features/dlc/components/DlcView'));
 const Compare = lazy(() => import('../features/compare/components/Compare'));
+const SimulatorHub = lazy(() => import('../features/simulator/components/SimulatorHub'));
+const Planned = lazy(() => import('../features/placeholder/components/Planned'));
 const Matchup = lazy(() => import('../features/matchup/components/Matchup'));
 
 /** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list */
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<CivList />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/civs" element={<Navigate to="/list" replace />} />
       <Route path="/list" element={<CivList />} />
       <Route path="/civ/:en" element={<CivDetail />} />
       <Route path="/units" element={<UnitList />} />
@@ -30,7 +34,11 @@ export function AppRoutes() {
       <Route path="/dlc" element={<DlcView />} />
       <Route path="/compare" element={<Compare />} />
       <Route path="/matchup" element={<Matchup />} />
-      <Route path="*" element={<CivList />} />
+      <Route path="/simulator" element={<SimulatorHub />} />
+      {['/buildings', '/maps', '/builds', '/patches', '/ladder'].map((p) => (
+        <Route key={p} path={p} element={<Planned />} />
+      ))}
+      <Route path="*" element={<Home />} />
     </Routes>
   );
 }

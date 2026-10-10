@@ -1,3 +1,4 @@
+import { ListHead } from '../../../shared/ui/layout';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
@@ -26,7 +27,8 @@ export default function TechList() {
   );
   return (
     <section id="techs" className="pane">
-      <div className="bar">
+      <ListHead title="科技" desc="全部科技 · 按类别、时代、DLC、建筑筛选" />
+      <div className="bar fbar">
         <SearchInput id="tq" value={q} onChange={setQ} placeholder="搜索科技（名称/效果）" />
         <select id="tt" value={ty} onChange={(e) => setTy(e.target.value)}>
           <option value="">全部类别</option>

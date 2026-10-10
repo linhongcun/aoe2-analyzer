@@ -1,3 +1,4 @@
+import { ListHead } from '../../../shared/ui/layout';
 import { Fragment } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { civIndex, civs } from '../../../data';
@@ -78,7 +79,8 @@ export default function TreeView() {
     eb = m === '2' ? extras(b.en, a.en) : [];
   return (
     <section id="tree" className="pane">
-      <div className="bar">
+      <ListHead title="科技树" desc="按建筑分列、按时代分行；可对比两个文明" />
+      <div className="bar fbar">
         <img id="trimg" className="ico" alt="" src={img(`civs/${a.en.toLowerCase()}.webp`)} />
         <select id="tra" value={civs.indexOf(a)} onChange={(e) => nav('/tree/' + civs[+e.target.value]!.en, { replace: true })}>
           <CivOptions />

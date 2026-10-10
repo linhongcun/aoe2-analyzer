@@ -1,5 +1,31 @@
 /** 界面图标统一入口：仅使用 Lucide（ISC），禁止 emoji / Unicode 符号作图标（见 CONTRIBUTING.md） */
-import { ArrowLeft, ArrowRight, ChevronRight, FlaskConical, Search, Swords, TreeDeciduous, TriangleAlert, type LucideIcon } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Calculator,
+  Castle,
+  ChevronRight,
+  CornerDownLeft,
+  Crosshair,
+  FlaskConical,
+  GitBranch,
+  House,
+  ListOrdered,
+  Map,
+  Menu,
+  Package,
+  Scale,
+  ScrollText,
+  Search,
+  Shield,
+  Swords,
+  TreeDeciduous,
+  TriangleAlert,
+  Trophy,
+  Users,
+  X,
+  type LucideIcon,
+} from 'lucide-react';
 
 const ICONS = {
   swords: Swords,
@@ -10,6 +36,22 @@ const ICONS = {
   'flask-conical': FlaskConical,
   'triangle-alert': TriangleAlert,
   search: Search,
+  calculator: Calculator,
+  castle: Castle,
+  enter: CornerDownLeft,
+  crosshair: Crosshair,
+  'git-branch': GitBranch,
+  home: House,
+  'list-ordered': ListOrdered,
+  map: Map,
+  menu: Menu,
+  package: Package,
+  scale: Scale,
+  scroll: ScrollText,
+  shield: Shield,
+  trophy: Trophy,
+  users: Users,
+  x: X,
 } satisfies Record<string, LucideIcon>;
 export type IconName = keyof typeof ICONS;
 

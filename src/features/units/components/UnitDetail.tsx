@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { parseUnitPath } from '../../../domain/simulator';
 import { AGE_ZH } from '../../../domain/ratings';
 import { upgradeLine } from '../../../domain/units';
 import { CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
-import { Icon } from '../../../shared/ui/Icon';
+import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
 import Simulator from '../../simulator/components/Simulator';
 import UnitList from './UnitList';
@@ -15,7 +15,6 @@ const UT: Record<string, string> = { UniqueUnit: '独特单位', Unit: '通用�
 
 export default function UnitDetail() {
   const loc = useLocation();
-  const nav = useNavigate();
   const core = useCore();
   const rt = parseUnitPath(loc.pathname);
   const u = core && rt ? core.unitById[rt.id] : undefined;
@@ -44,124 +43,174 @@ export default function UnitDetail() {
     ...(u.blast ? [['blast', '溅射范围', u.blast] as [string, string, number]] : []),
   ];
   const rel = core.techs.filter((t) => t.desc.includes(u.zh)).slice(0, 16);
+  const wantSim = hasCiv || new URLSearchParams(loc.search).get('tab') === 'sim';
   return (
-    <section id="unit" className="pane">
-      <button onClick={() => nav(-1)}>
-        <Icon name="arrow-left" /> 返回
-      </button>
-      <h2>
-        <UnitIcon u={u} big /> {u.zh} <small>{u.en}</small> <DlcBadgeL i={u.dlc} />
-      </h2>
-      <p>
-        <span className="tag">{UT[u.type] ?? u.type}</span> <b>建筑：</b>
-        {u.bz}（{u.ben}）　<b>时代：</b>
-        {AGE_ZH[u.age] ?? u.age}　<b>造价：</b>
-        <CostView c={u.cost} />　<b>生产时间：</b>
-        <StatIcon k="time" t="生产时间" />
-        {u.tt}s
-      </p>
-      <div className="two">
-        <div>
-          <table className="stat">
-            <tbody>
-              {stats.map((r) => (
-                <tr key={r[1]}>
-                  <td>
-                    <StatIcon k={r[0]} t={r[1]} />
-                    {r[1]}
-                  </td>
-                  <td>{r[2]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div>
-          <h4>攻击（按护甲类别）</h4>
-          <div>
-            {u.atks.length ? (
-              <Join
-                sep=" "
-                items={u.atks.map((a) => (
-                  <span className="tag">
-                    {a[0]} {a[1]}
-                  </span>
-                ))}
-              />
-            ) : (
-              '—'
-            )}
-          </div>
-          <h4>护甲类别</h4>
-          <div>
-            {u.arms.length ? (
-              <Join
-                sep=" "
-                items={u.arms.map((a) => (
-                  <span className="tag">
-                    {a[0]} {a[1]}
-                  </span>
-                ))}
-              />
-            ) : (
-              '—'
-            )}
-          </div>
-          <h4>升级路线</h4>
-          <div className="uline">
-            <Join
-              sep={<Sep />}
-              items={ln.map((x) =>
-                x.id === u.id ? (
-                  <b className="cur">
-                    <UnitIcon u={x} />
-                    {x.zh}
-                  </b>
-                ) : (
-                  <UnitLink u={x} />
-                ),
+    <DetailPage
+      key={u.id}
+      id="unit"
+      crumb={u.zh}
+      icon={<UnitIcon u={u} big />}
+      title={u.zh}
+      en={u.en}
+      badges={<DlcBadgeL i={u.dlc} />}
+      tags={
+        <>
+          <span className="tag">{UT[u.type] ?? u.type}</span>
+          <span className="tag">{u.bz}</span>
+          <span className="tag">{AGE_ZH[u.age] ?? u.age}</span>
+        </>
+      }
+      initialTab={wantSim && u.civs.length ? 'sim' : 'ov'}
+      tabs={[
+        {
+          key: 'ov',
+          label: '概览',
+          content: (
+            <>
+              <p>
+                <b>造价：</b>
+                <CostView c={u.cost} />　<b>生产时间：</b>
+                <StatIcon k="time" t="生产时间" />
+                {u.tt}s　<b>建筑：</b>
+                {u.bz}（{u.ben}）
+              </p>
+              <div className="two">
+                <div>
+                  <table className="stat">
+                    <tbody>
+                      {stats.map((r) => (
+                        <tr key={r[1]}>
+                          <td>
+                            <StatIcon k={r[0]} t={r[1]} />
+                            {r[1]}
+                          </td>
+                          <td>{r[2]}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <h4>攻击（按护甲类别）</h4>
+                  <div>
+                    {u.atks.length ? (
+                      <Join
+                        sep=" "
+                        items={u.atks.map((a) => (
+                          <span className="tag">
+                            {a[0]} {a[1]}
+                          </span>
+                        ))}
+                      />
+                    ) : (
+                      '—'
+                    )}
+                  </div>
+                  <h4>护甲类别</h4>
+                  <div>
+                    {u.arms.length ? (
+                      <Join
+                        sep=" "
+                        items={u.arms.map((a) => (
+                          <span className="tag">
+                            {a[0]} {a[1]}
+                          </span>
+                        ))}
+                      />
+                    ) : (
+                      '—'
+                    )}
+                  </div>
+                  {u.up && (
+                    <>
+                      <h4>升级研究</h4>
+                      <p>
+                        从上一级升级为 {u.zh}：<CostView c={u.up[0]} /> <StatIcon k="time" t="研究时间" />
+                        {u.up[1]}s
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+              <h4>说明</h4>
+              <p className="desc">
+                <Linked text={u.desc} nl />
+              </p>
+              <p className="note">数据来自 aoe2techtree（基础数值，未含文明加成与科技）</p>
+            </>
+          ),
+        },
+        ...(u.civs.length ? [{ key: 'sim', label: '科技模拟器', content: <Simulator key={u.id} u={u} route={rt} /> }] : []),
+        {
+          key: 'rel',
+          label: '相关',
+          content: (
+            <>
+              {rel.length > 0 && (
+                <>
+                  <h4>相关科技</h4>
+                  <div className="uchips">
+                    {rel.map((t) => (
+                      <TechLink key={t.id} t={t} />
+                    ))}
+                  </div>
+                </>
               )}
-            />
-          </div>
-        </div>
-      </div>
-      {u.up && (
+              <h4>
+                拥有该单位的文明（{u.civs.length}/{civs.length}）
+              </h4>
+              <div>
+                <Join
+                  sep=" "
+                  items={u.civs.map((n) => {
+                    const c = civByEn(n);
+                    return c ? <CivChip c={c} /> : n;
+                  })}
+                />
+              </div>
+            </>
+          ),
+        },
+      ]}
+      sidebar={
         <>
-          <h4>升级研究</h4>
-          <p>
-            从上一级升级为 {u.zh}：<CostView c={u.up[0]} /> <StatIcon k="time" t="研究时间" />
-            {u.up[1]}s
-          </p>
+          <SideBlock title="升级路线">
+            <div className="uline vline">
+              <Join
+                sep={<Sep />}
+                items={ln.map((x) =>
+                  x.id === u.id ? (
+                    <b className="cur">
+                      <UnitIcon u={x} />
+                      {x.zh}
+                    </b>
+                  ) : (
+                    <UnitLink u={x} />
+                  ),
+                )}
+              />
+            </div>
+          </SideBlock>
+          {rel.length > 0 && (
+            <SideBlock title="相关科技">
+              <div className="uchips">
+                {rel.slice(0, 6).map((t) => (
+                  <TechLink key={t.id} t={t} />
+                ))}
+              </div>
+            </SideBlock>
+          )}
+          <SideBlock title={`可用文明 ${u.civs.length}/${civs.length}`}>
+            <p className="note">
+              {u.civs
+                .slice(0, 8)
+                .map((n) => civByEn(n)?.zh ?? n)
+                .join('、')}
+              {u.civs.length > 8 ? ' 等' : ''}
+            </p>
+          </SideBlock>
         </>
-      )}
-      {rel.length > 0 && (
-        <>
-          <h4>相关科技</h4>
-          <div className="uchips">
-            {rel.map((t) => (
-              <TechLink key={t.id} t={t} />
-            ))}
-          </div>
-        </>
-      )}
-      {u.civs.length > 0 && <Simulator key={u.id} u={u} route={rt} />}
-      <h4>
-        拥有该单位的文明（{u.civs.length}/{civs.length}）
-      </h4>
-      <div>
-        <Join
-          sep=" "
-          items={u.civs.map((n) => {
-            const c = civByEn(n);
-            return c ? <CivChip c={c} /> : n;
-          })}
-        />
-      </div>
-      <h4>说明</h4>
-      <p className="desc">
-        <Linked text={u.desc} nl />
-      </p>
-      <p className="note">数据来自 aoe2techtree（基础数值，未含文明加成与科技）</p>
-    </section>
+      }
+    />
   );
 }

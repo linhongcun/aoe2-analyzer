@@ -1,3 +1,4 @@
+import { ListHead } from '../../../shared/ui/layout';
 import { Link } from 'react-router-dom';
 import { useCore } from '../../../data/hooks';
 import { dlcMatch } from '../../../domain/dlc';
@@ -17,7 +18,8 @@ export default function UnitList() {
   const r = all.filter((u) => (u.en.toLowerCase().includes(ql) || u.zh.includes(ql)) && (!t || u.type === t) && (!a || u.age === +a) && dlcMatch(u.dlc, dlc));
   return (
     <section id="units" className="pane">
-      <div className="bar">
+      <ListHead title="单位" desc="全部单位 · 按类别、DLC、时代筛选" />
+      <div className="bar fbar">
         <SearchInput id="uq" value={q} onChange={setQ} placeholder="搜索单位（中/英）" />
         <select id="ut" value={t} onChange={(e) => setT(e.target.value)}>
           <option value="">全部类别</option>

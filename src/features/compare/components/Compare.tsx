@@ -1,3 +1,4 @@
+import { ListHead } from '../../../shared/ui/layout';
 import { civs } from '../../../data';
 import { AXES } from '../../../domain/ratings';
 import type { Civ } from '../../../domain/types';
@@ -21,7 +22,8 @@ export default function Compare() {
     b = civs[ib]!;
   return (
     <section id="compare" className="pane">
-      <div className="bar">
+      <ListHead title="文明对比" desc="两个文明的能力雷达与关键差异" />
+      <div className="bar fbar">
         <select id="ca" value={ia} onChange={(e) => setA(+e.target.value)}>
           <CivOptions />
         </select>{' '}
