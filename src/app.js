@@ -10,7 +10,7 @@ function pos(l){const cl=["#d4a017","#50a0dc"],row=(n,k)=>`<div class=prow><span
 function opts(){return civs.map((c,i)=>`<option value=${i}>${c.zh} ${c.en}</option>`).join("")}
 function list(){const q=$("#q").value.toLowerCase(),t=$("#ty").value,p=$("#pos").value;let r=civs.map((c,i)=>[c,i]).filter(([c])=>(c.en.toLowerCase().includes(q)||c.zh.includes(q))&&(!t||c.ty.includes(t))&&(!p||(p=="fl"?c.fl>=7:c.pk>=7))&&dok(c,$("#cdlc").value));
 $("#grid").innerHTML=r.map(([c,i])=>`<div class=card onclick=show(${i})>${ic(c)}<span class=cdl>${dbadge(c.dlc)}</span><h3>${c.zh}</h3><small>${c.en}</small><div>${c.ty.map(t=>`<span class=tag>${TY[t]}</span>`).join("")}</div><div class=mini>边位 ${c.fl} · 口袋 ${c.pk}</div></div>`).join("")||"<p>无匹配文明</p>";$("#cnt").textContent=r.length+" / "+civs.length}
-function show(i,r){const c=civs[i],[s,w]=sw(c);if(!r){location.hash="civ/"+c.en;return}tab("detail");const myU=UN.filter(u=>u.type=="UniqueUnit"&&u.civs.includes(c.en));$("#detail").innerHTML=`<button onclick="location.hash='list'">← 返回列表</button><h2>${ic(c)} ${c.zh} <small>${c.en}</small> ${dbadgeL(c.dlc)}</h2><div class=two><div>
+function show(i,r){const c=civs[i],[s,w]=sw(c);if(!r){location.hash="civ/"+c.en;return}tab("detail");const myU=UN.filter(u=>u.type=="UniqueUnit"&&u.civs.includes(c.en));window.LASTCIV=c.en;$("#detail").innerHTML=`<button onclick="location.hash='list'">← 返回列表</button><h2>${ic(c)} ${c.zh} <small>${c.en}</small> ${dbadgeL(c.dlc)}</h2><div class=two><div>
 <p><b>官方定位：</b>${c.desc}　<b>筛选标签：</b>${c.ty.map(t=>TY[t]).join(" / ")}</p><p><b>特色兵种：</b>${linkify(c.uu)}</p><div class=uchips>${myU.map(ulink).join("")}</div><p><b>城堡时代独特科技：</b>${utech(c.ct,c.en)}</p><p><b>帝王时代独特科技：</b>${utech(c.it,c.en)}</p><p><b>文明加成：</b></p><ul>${c.bon.map(b=>`<li>${linkify(b)}</li>`).join("")}</ul><p><b>团队加成：</b>${linkify(c.tb)} <small class=note>(${c.tbEn})</small></p>
 <p class=g><b>优势：</b>${s.join("、")}</p><p class=r><b>劣势：</b>${w.join("、")}</p><p><b>推荐团战位置：</b>${c.fl>=c.pk?"边位 Flank":"口袋 Pocket"}（边位 ${c.fl}/10，口袋 ${c.pk}/10）</p><p><b>推荐开局：</b>${c.op}</p><p><a class="ulink tl" href="#tree/${c.en}">🌳 查看科技树 →</a></p></div><div><canvas id=rd width=440 height=440></canvas>${pos([c])}<p class=note>评分为主观近似值，仅供参考</p></div></div>`;radar($("#rd"),[c])}
 function cmp(){const a=civs[$("#ca").value],b=civs[$("#cb").value],L=K,va=a.s,vb=b.s;
@@ -34,17 +34,17 @@ const SI=(k,t)=>`<img class=si src="img/stats/${k}.webp" alt="${t||k}" title="${
 const cost=c=>Object.entries(c).map(([k,v])=>RK[k]?`<span class=res>${SI(RK[k],RES[k])}${v}</span>`:`${v} ${k}`).join(" ")||"—";
 const costT=c=>Object.entries(c).map(([k,v])=>`${v} ${RES[k]||k}`).join(" + ")||"—";
 function line(u){let a=[u],x=u;while(x.from_&&UM[x.from_]&&a.length<10){x=UM[x.from_];a.unshift(x)}let y=u,g=0;for(;g<10;g++){const n=UN.find(v=>v.from_==y.id);if(!n)break;a.push(n);y=n}return a}
-function unitView(id){const u=UM[id];if(!u)return tab("units");tab("unit");const ln=line(u);
+function unitView(id,civ,age,ids,team){const u=UM[id];if(!u)return tab("units");tab("unit");const ln=line(u);
 $("#unit").innerHTML=`<button onclick="history.back()">← 返回</button><h2>${uic(u).replace("uico","uico big")} ${u.zh} <small>${u.en}</small> ${dbadgeL(u.dlc)}</h2>
 <p><span class=tag>${UT[u.type]||u.type}</span> <b>建筑：</b>${u.bz}（${u.ben}）　<b>时代：</b>${AGE[u.age]||u.age}　<b>造价：</b>${cost(u.cost)}　<b>生产时间：</b>${SI("time","生产时间")}${u.tt}s</p>
 <div class=two><div><table class=stat>${[["hp","生命值 HP",u.hp],[u.rng>1?"patk":"atk","攻击力",u.atk],["marm","近战护甲",u.ma],["parm","穿刺护甲",u.pa],["range","射程",u.rng+(u.minr?`（最小 ${u.minr}）`:"")],["speed","移动速度",u.spd],["","视野",u.los],["rof","攻击间隔",u.rof+"s"],["","准确度",u.acc+"%"]].concat(u.blast?[["blast","溅射范围",u.blast]]:[]).map(r=>`<tr><td>${r[0]?SI(r[0],r[1]):"<span class=si></span>"}${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</table></div>
 <div><h4>攻击（按护甲类别）</h4><div>${u.atks.map(a=>`<span class=tag>${a[0]} ${a[1]}</span>`).join(" ")||"—"}</div><h4>护甲类别</h4><div>${u.arms.map(a=>`<span class=tag>${a[0]} ${a[1]}</span>`).join(" ")||"—"}</div>
 <h4>升级路线</h4><div class=uline>${ln.map(x=>x.id==u.id?`<b class=cur>${uic(x)}${x.zh}</b>`:ulink(x)).join(" → ")}</div></div></div>
-${u.up?`<h4>升级研究</h4><p>从上一级升级为 ${u.zh}：${cost(u.up[0])} ${SI("time","研究时间")}${u.up[1]}s</p>`:""}${(()=>{const r=TC.filter(t=>t.desc.includes(u.zh)).slice(0,16);return r.length?`<h4>相关科技</h4><div class=uchips>${r.map(tlink).join("")}</div>`:""})()}<h4>拥有该单位的文明（${u.civs.length}/${civs.length}）</h4><div>${u.civs.map(n=>{const i=civs.findIndex(c=>c.en==n);return i<0?n:`<a class=civchip href="#civ/${n}">${ic(civs[i])}${civs[i].zh}</a>`}).join(" ")}</div>
-<h4>说明</h4><p class=desc>${linkify(u.desc).replace(/\n/g,"<br>")}</p><p class=note>数据来自 aoe2techtree（基础数值，未含文明加成与科技）</p>`;scrollTo(0,0)}
+${u.up?`<h4>升级研究</h4><p>从上一级升级为 ${u.zh}：${cost(u.up[0])} ${SI("time","研究时间")}${u.up[1]}s</p>`:""}${(()=>{const r=TC.filter(t=>t.desc.includes(u.zh)).slice(0,16);return r.length?`<h4>相关科技</h4><div class=uchips>${r.map(tlink).join("")}</div>`:""})()}<div id=sim class=posbox></div><h4>拥有该单位的文明（${u.civs.length}/${civs.length}）</h4><div>${u.civs.map(n=>{const i=civs.findIndex(c=>c.en==n);return i<0?n:`<a class=civchip href="#civ/${n}">${ic(civs[i])}${civs[i].zh}</a>`}).join(" ")}</div>
+<h4>说明</h4><p class=desc>${linkify(u.desc).replace(/\n/g,"<br>")}</p><p class=note>数据来自 aoe2techtree（基础数值，未含文明加成与科技）</p>`;if(u.civs.length)simInit(u,civ||(window.LASTCIV&&u.civs.includes(window.LASTCIV)&&window.LASTCIV)||(SIM&&SIM.u.id==u.id&&SIM.civ)||u.civs[0],age||4,ids&&ids.length||civ?ids:[],team);if(!civ)scrollTo(0,0)}
 function ulist(){const q=$("#uq").value.toLowerCase(),t=$("#ut").value,a=$("#ua").value;const r=UN.filter(u=>(u.en.toLowerCase().includes(q)||u.zh.includes(q))&&(!t||u.type==t)&&(!a||u.age==a)&&dok(u,$("#udlc").value));
 $("#ugrid").innerHTML=r.map(u=>`<a class="card ucard" href="#unit/${u.id}">${uic(u)}<div><h3>${u.zh}</h3><small>${u.en}</small><div class=mini>${u.bz} · ${AGE[u.age]||""} · ${cost(u.cost)}</div>${dbadge(u.dlc)}</div></a>`).join("");$("#ucnt").textContent=r.length+" / "+UN.length}
-function route(){const h=decodeURIComponent(location.hash.slice(1));let m;if(m=h.match(/^unit\/(\d+)/))return unitView(+m[1]);if(m=h.match(/^civ\/(.+)/)){const i=civs.findIndex(c=>c.en==m[1]);if(i>=0)return show(i,1)}if(h=="dlc")return dlcView();if(m=h.match(/^tech\/(\d+)/))return techView(+m[1]);if(m=h.match(/^tree\/?(.*)/))return treeView(m[1]||civs[16].en);if(["list","compare","matchup","units","techs"].includes(h))return tab(h);tab("list")}
+function route(){const h=decodeURIComponent(location.hash.slice(1));let m;if(m=h.match(/^unit\/(\d+)(?:\/([^/]*))?(?:\/(\d))?(?:\/([\d,]*))?(?:\/([\d,]*))?/))return unitView(+m[1],m[2],m[3],(m[4]||"").split(",").filter(x=>x).map(Number),(m[5]||"").split(",").filter(x=>x).map(Number));if(m=h.match(/^civ\/(.+)/)){const i=civs.findIndex(c=>c.en==m[1]);if(i>=0)return show(i,1)}if(h=="dlc")return dlcView();if(m=h.match(/^tech\/(\d+)/))return techView(+m[1]);if(m=h.match(/^tree\/?(.*)/))return treeView(m[1]||civs[16].en);if(["list","compare","matchup","units","techs"].includes(h))return tab(h);tab("list")}
 window.addEventListener("hashchange",route);window.addEventListener("load",()=>{["#cdlc","#udlc","#tdlc"].forEach(s=>{$(s).innerHTML=dopts();dbar(s)});$("#cdlc").oninput=list;["#uq","#ut","#ua","#udlc"].forEach(s=>$(s).oninput=ulist);$("#tdlc").oninput=()=>tlist();ulist();["#tq","#tt","#ta","#tb"].forEach(s=>$(s).oninput=tlist);$("#tb").innerHTML+=[...new Set(TC.map(t=>t.bz))].map(b=>`<option>${b}</option>`).join("");tlist();route()});
 
 // ===== 科技模块 =====
@@ -111,3 +111,88 @@ const dopts=()=>`<option value="">全部 DLC</option>`+DLC.map((d,i)=>`<option v
 const dok=(o,v)=>v===""||(v=="none"?o.dlc==null:o.dlc==+v);
 function dlcView(){tab("dlcs");$("#dlcs").innerHTML=`<h2>DLC / 版本 · 文明发售列表</h2><table class=dlct>${DLC.map((d,i)=>`<tr><td class=dn><div class=dnw>${dimg(i,"dlcL")}<div><b>${d[0]}</b><br><small>${d[1]} · ${d[2]}</small></div></div></td><td>${d[3].map(n=>{const j=civs.findIndex(c=>c.en==n);return `<a class=civchip href="#civ/${n}" title="${civs[j].en}">${ic(civs[j])}${civs[j].zh}</a>`}).join("")}</td><td class=dc>${d[3].length}</td></tr>`).join("")}</table>
 <p class=note>共 ${civs.length} 个文明。来源与图标：seicing.com「文明发售列表」，并与 ageofempires.com 官方公告核对（最后的酋长 2026-02-17、维京传奇 2026-09-22）。独特单位/科技继承所属文明的 DLC；通用单位/科技仅标注可靠已知的引入版本，其余不标注。</p>`}
+
+// ===== 科技模拟器 =====
+// 单位类别判定（基于护甲类别 id：1步兵 8骑兵 15弓手 23火药 28骑射 30骆驼 5战象 38散兵 20攻城）
+const H=(u,c)=>u.cls.includes(c);
+const isInf=u=>H(u,1),isMounted=u=>H(u,8)||H(u,30)||H(u,5),isArcher=u=>H(u,15),isGun=u=>H(u,23),isCA=u=>H(u,28),isSkirm=u=>H(u,38);
+const isMelee=u=>u.rng<=1&&(isInf(u)||isMounted(u));
+const isArrow=u=>isArcher(u)&&!isGun(u);
+const isFootArcher=u=>isArcher(u)&&!isMounted(u)&&!isGun(u);
+const MIL=/^(Militia|Man-at-Arms|Long Swordsman|Two-Handed Swordsman|Champion|Fire Lancer|Elite Fire Lancer|Varangian Guard|Elite Varangian Guard)$/;
+const KNL=/^(Knight|Cavalier|Paladin)$/;
+// 效果：{s:属性, op:"add"|"mul"|"rof"(攻速 +x% → 攻击间隔 /(1+x)), v, vs:(加成伤害类别名)}
+const EFF={
+"Forging":[[isMelee,[{s:"atk",v:1}]]],"Iron Casting":[[isMelee,[{s:"atk",v:1}]]],"Blast Furnace":[[isMelee,[{s:"atk",v:2}]]],
+"Fletching":[[isArrow,[{s:"atk",v:1},{s:"rng",v:1},{s:"los",v:1}]]],"Bodkin Arrow":[[isArrow,[{s:"atk",v:1},{s:"rng",v:1},{s:"los",v:1}]]],"Bracer":[[isArrow,[{s:"atk",v:1},{s:"rng",v:1},{s:"los",v:1}]]],
+"Scale Mail Armor":[[isInf,[{s:"ma",v:1},{s:"pa",v:1}]]],"Chain Mail Armor":[[isInf,[{s:"ma",v:1},{s:"pa",v:1}]]],"Plate Mail Armor":[[isInf,[{s:"ma",v:1},{s:"pa",v:2}]]],
+"Scale Barding Armor":[[u=>isMounted(u)&&!isArcher(u),[{s:"ma",v:1},{s:"pa",v:1}]]],"Chain Barding Armor":[[u=>isMounted(u)&&!isArcher(u),[{s:"ma",v:1},{s:"pa",v:1}]]],"Plate Barding Armor":[[u=>isMounted(u)&&!isArcher(u),[{s:"ma",v:1},{s:"pa",v:2}]]],
+"Padded Archer Armor":[[isArcher,[{s:"ma",v:1},{s:"pa",v:1}]]],"Leather Archer Armor":[[isArcher,[{s:"ma",v:1},{s:"pa",v:1}]]],"Ring Archer Armor":[[isArcher,[{s:"ma",v:1},{s:"pa",v:2}]]],
+"Bloodlines":[[isMounted,[{s:"hp",v:20}]]],"Husbandry":[[isMounted,[{s:"spd",op:"mul",v:1.1}]]],
+"Squires":[[isInf,[{s:"spd",op:"mul",v:1.1}]]],"Arson":[[isInf,[{s:"bonus",vs:"标准建筑",v:2}]]],"Gambesons":[[u=>MIL.test(u.en),[{s:"pa",v:1}]]],
+"Thumb Ring":[[u=>isArrow(u)&&!isSkirm(u),[{s:"rof",v:.1765},{s:"acc",op:"set",v:100}]],[u=>isSkirm(u),[{s:"acc",op:"set",v:100}]]],
+"Parthian Tactics":[[isCA,[{s:"ma",v:1},{s:"pa",v:2},{s:"bonus",vs:"长矛兵",v:2}]]],
+"Chemistry":[[isArrow,[{s:"atk",v:1}]]]};
+const TEXTONLY=new Set(["Ballistics","Conscription","Siege Engineers","Heresy","Faith","Hoardings"]);
+// 文明加成（仅编码可靠的数值；按时代 a=2/3/4）
+const CIVB={
+Franks:[[isMounted,a=>a>=2?[{s:"hp",op:"mul",v:1.2}]:[],"骑兵单位从封建时代起生命值 +20%"]],
+Vikings:[[isInf,a=>a>=2?[{s:"hp",op:"mul",v:1.2}]:[],"步兵从封建时代起生命值 +20%"]],
+Britons:[[isFootArcher,a=>a>=4?[{s:"rng",v:2},{s:"los",v:2}]:a>=3?[{s:"rng",v:1},{s:"los",v:1}]:[],"步弓手城堡/帝王射程 +1/+2"]],
+Teutons:[[u=>isInf(u)||isMounted(u),a=>a>=4?[{s:"ma",v:2}]:a>=3?[{s:"ma",v:1}]:[],"步兵和骑乘单位城堡/帝王近战护甲 +1/+2"]],
+Japanese:[[isInf,a=>a>=2?[{s:"rof",v:.33}]:[],"步兵从封建时代起攻速 +33%"]],
+Celts:[[isInf,a=>[{s:"spd",op:"mul",v:1+.05*a}],"步兵移速 +5/10/15/20%（随时代）"]],
+Mongols:[[isCA,a=>[{s:"rof",v:.25}],"骑射手攻速 +25%"]],
+Ethiopians:[[isFootArcher,a=>[{s:"rof",v:.18}],"步弓手攻速 +18%"]],
+Malians:[[u=>u.b==12,a=>[{s:"pa",v:Math.max(0,a-1)}],"兵营单位封建/城堡/帝王穿刺护甲 +1/+2/+3"]],
+Burmese:[[isInf,a=>[{s:"atk",v:Math.max(0,a-1)}],"步兵封建/城堡/帝王攻击 +1/+2/+3"]],
+Hindustanis:[[isGun,a=>[{s:"ma",v:1},{s:"pa",v:1}],"火药单位 +1/+1 护甲"],[u=>H(u,30),a=>[{s:"rof",v:.2}],"骆驼骑兵攻速 +20%"]],
+Turks:[[isGun,a=>[{s:"hp",op:"mul",v:1.25}],"火药单位生命值 +25%"]],
+Saracens:[[u=>H(u,30),a=>[{s:"hp",op:"mul",v:1.25}],"骆驼单位生命值 +25%"]],
+Vietnamese:[[u=>isFootArcher(u)||isSkirm(u),a=>[{s:"hp",op:"mul",v:1.2}],"步弓手和散兵生命值 +20%"]],
+Cumans:[[isMounted,a=>a>=2?[{s:"spd",op:"mul",v:1+.05*(a-1)}]:[],"骑乘单位封建/城堡/帝王移速 +5/10/15%"]],
+Goths:[[isInf,a=>a>=2?[{s:"bonus",vs:"标准建筑",v:a-1}]:[],"步兵封建/城堡/帝王对建筑攻击 +1/+2/+3"]]};
+const TEAMB=[["Franks","法兰克：骑士系视野 +2",u=>KNL.test(u.en),[{s:"los",v:2}]],["Persians","波斯：骑士系对远程士兵攻击 +2",u=>KNL.test(u.en),[{s:"bonus",vs:"弓手",v:2}]],
+["Khitans","契丹：步兵对远程士兵攻击 +2",isInf,[{s:"bonus",vs:"弓手",v:2}]],["Saracens","萨拉森：步弓手和散兵对建筑攻击 +2",u=>isFootArcher(u)||isSkirm(u),[{s:"bonus",vs:"标准建筑",v:2}]]];
+const TBYEN={};TC.forEach(t=>{if(!TBYEN[t.en])TBYEN[t.en]=t});
+function simBase(u){const b={};u.atks.forEach(([n,v])=>{if(n!="近战"&&n!="穿刺")b[n]=v});return{hp:u.hp,atk:u.atk,ma:u.ma,pa:u.pa,rng:u.rng,spd:u.spd,los:u.los,rof:u.rof,acc:u.acc,bonus:b,rofx:1}}
+function apply(S,list){list.forEach(e=>{if(e.s=="bonus")S.bonus[e.vs]=(S.bonus[e.vs]||0)+e.v;else if(e.s=="rof")S.rofx*=1+e.v;else if(e.op=="mul")S[e.s]*=e.v;else if(e.op=="set")S[e.s]=e.v;else S[e.s]+=e.v})}
+function simTechs(u,civ){const st=statusMap(civ),r=[];
+ Object.keys(EFF).forEach(n=>{const t=TBYEN[n];if(!t||!st["t"+t.id])return;const ef=EFF[n].filter(([f])=>f(u)).flatMap(x=>x[1]);if(ef.length)r.push({t,ef})});
+ TC.filter(t=>t.type=="UniqueTech"&&t.civs.includes(civ)).forEach(t=>r.push({t,ef:null}));
+ ["Ballistics","Conscription"].forEach(n=>{const t=TBYEN[n];if(t&&st["t"+t.id]&&(n!="Ballistics"||u.rng>1))r.push({t,ef:null})});return r}
+function simCalc(u,civ,age,sel,team){const S=simBase(u);(CIVB[civ]||[]).forEach(([f,g])=>{if(f(u))apply(S,g(age))});
+ simTechs(u,civ).forEach(({t,ef})=>{if(ef&&sel.has(t.id))apply(S,ef)});TEAMB.forEach(([c,n,f,ef],i)=>{if(team.has(i)&&f(u))apply(S,ef)});
+ S.rof=S.rof/S.rofx;S.hp=Math.floor(S.hp);return S}
+let SIM=null;
+function simGroup(t){return t.type=="UniqueTech"?"城堡（独特科技）":t.bz}
+function simInit(u,civ,age,ids,team){const cs=u.civs;if(!cs.includes(civ))civ=cs[0];const minA=u.age;age=Math.max(minA,Math.min(4,+age||4));
+ const avail=simTechs(u,civ);const ok=new Set(avail.map(x=>x.t.id));SIM={u,civ,age,sel:new Set((ids||[]).filter(i=>ok.has(i))),team:new Set(team||[]),avail,cmp:SIM&&SIM.u.id==u.id?SIM.cmp:""};simRender()}
+function simPre(t){const r=[];let p=t.pre&&TM[t.pre];while(p){r.push(p);p=p.pre&&TM[p.pre]}return r}
+function simToggle(id){const t=TM[id],S=SIM;if(S.sel.has(id)){const rm=[id];let ch=true;while(ch){ch=false;S.avail.forEach(({t:x})=>{if(S.sel.has(x.id)&&!rm.includes(x.id)&&simPre(x).some(p=>rm.includes(p.id))){rm.push(x.id);ch=true}})}rm.forEach(i=>S.sel.delete(i))}
+ else{[t,...simPre(t)].forEach(x=>{if(S.avail.some(a=>a.t.id==x.id))S.sel.add(x.id)});S.age=Math.max(S.age,t.age)}simRender()}
+function simPreset(a){const S=SIM;S.age=Math.max(S.u.age,a);S.sel=new Set(S.avail.filter(x=>x.ef&&x.t.age<=S.age).map(x=>x.t.id));simRender()}
+function simAll(S0){return new Set(S0.avail.filter(x=>x.ef).map(x=>x.t.id))}
+const SL=[["hp","生命值","hp"],["atk","攻击力",null],["ma","近战护甲","marm"],["pa","穿刺护甲","parm"],["rng","射程","range"],["spd","移动速度","speed"],["los","视野",""],["rof","攻击间隔","rof"],["acc","准确度",""]];
+const fmt=(k,v)=>k=="spd"?(+v).toFixed(2):k=="rof"?(+v).toFixed(2)+"s":k=="acc"?Math.round(v)+"%":Math.round(v*100)/100;
+function simRow(u,B,S,C){return SL.map(([k,n,ic0])=>{const ic1=ic0===null?(u.rng>1?"patk":"atk"):ic0,d=S[k]-B[k],good=k=="rof"?d<0:d>0;const dd=Math.abs(d)>1e-9?`<span class=${good?"up":"dn"}>${d>0?"+":""}${String(fmt(k,d)).replace("s","")}</span>`:"";
+ return `<tr><td>${ic1?SI(ic1,n):"<span class=si></span>"}${n}</td><td>${fmt(k,B[k])}</td><td><b>${fmt(k,S[k])}</b> ${dd}</td>${C?`<td>${fmt(k,C[k])}</td>`:""}</tr>`}).join("")+
+ (()=>{const ks=[...new Set([...Object.keys(B.bonus),...Object.keys(S.bonus)])].filter(k=>(S.bonus[k]||B.bonus[k]));return ks.map(k=>{const b=B.bonus[k]||0,s=S.bonus[k]||0;return `<tr><td><span class=si></span>对 ${k} 加成</td><td>${b}</td><td><b>${s}</b> ${s!=b?`<span class=${s>b?"up":"dn"}>${s>b?"+":""}${s-b}</span>`:""}</td>${C?`<td>${C.bonus[k]||0}</td>`:""}</tr>`}).join("")})()}
+function simRender(){const S=SIM,u=S.u;if(!$("#sim"))return;const B=simBase(u);B.hp=u.hp;const cur=simCalc(u,S.civ,S.age,S.sel,S.team);
+ const C=S.cmp?simCalc(u,S.cmp,4,simAll({avail:simTechs(u,S.cmp)}),new Set()):null;
+ const tot={},tt={t:0};S.avail.forEach(({t})=>{if(S.sel.has(t.id)){Object.entries(t.cost).forEach(([k,v])=>tot[k]=(tot[k]||0)+v);tt.t+=t.rt}});
+ const groups={};S.avail.forEach(x=>(groups[simGroup(x.t)]=groups[simGroup(x.t)]||[]).push(x));
+ const civO=u.civs.map(n=>{const c=civs.find(x=>x.en==n);return `<option value="${n}"${n==S.civ?" selected":""}>${c?c.zh+" "+n:n}</option>`}).join("");
+ const cb=(CIVB[S.civ]||[]).filter(([f])=>f(u)).map(x=>x[2]);
+ $("#sim").innerHTML=`<h3>🧪 科技模拟器 <small class=note>选择文明与科技，查看属性变化与累计研究费用</small></h3>
+<div class=bar>文明 <select id=simciv>${civO}</select> 时代 <select id=simage>${[1,2,3,4].filter(a=>a>=u.age).map(a=>`<option value=${a}${a==S.age?" selected":""}>${AGE[a]}</option>`).join("")}</select>
+<button onclick="SIM.sel=simAll(SIM);SIM.age=4;simRender()">满科技</button><button onclick="SIM.sel=new Set();simRender()">清空</button>${[2,3,4].filter(a=>a>=u.age).map(a=>`<button onclick="simPreset(${a})">${AGE[a].slice(0,2)}预设</button>`).join("")}
+对比 <select id=simcmp><option value="">（不对比）</option>${u.civs.filter(n=>n!=S.civ).map(n=>{const c=civs.find(x=>x.en==n);return `<option value="${n}"${n==S.cmp?" selected":""}>${c?c.zh:n} 满科技</option>`}).join("")}</select></div>
+${cb.length?`<p class=note>已计入文明加成：${cb.join("；")}</p>`:""}
+<div class=two><div>${Object.entries(groups).map(([g,l])=>`<div class=simg><h4>${g}</h4>${l.map(({t,ef})=>`<label class="simt${S.sel.has(t.id)?" on":""}${ef?"":" txt"}${t.age>S.age&&!S.sel.has(t.id)?" late":""}">${ef?`<input type=checkbox ${S.sel.has(t.id)?"checked":""} onchange="simToggle(${t.id})">`:`<span class=tag>仅文本</span>`}${tic(t)}<a class="ulink tl" href="#tech/${t.id}">${t.zh}</a><small>${AGE[t.age].slice(0,2)}</small><span class=simc>${cost(t.cost)} ${SI("time","研究时间")}${t.rt}s</span>${ef?"":`<div class=note>${t.desc}</div>`}</label>`).join("")}</div>`).join("")}
+<div class=simg><h4>团队加成（开关）</h4>${TEAMB.map(([c,n,f],i)=>f(u)?`<label class=simt><input type=checkbox ${S.team.has(i)?"checked":""} onchange="SIM.team.has(${i})?SIM.team.delete(${i}):SIM.team.add(${i});simRender()">${n}</label>`:"").join("")||"<span class=note>无适用的已编码团队加成</span>"}</div></div>
+<div><table class="stat simtab"><tr><th>属性</th><th>基础</th><th>当前</th>${C?`<th>${(civs.find(x=>x.en==S.cmp)||{}).zh} 满</th>`:""}</tr>${simRow(u,B,cur,C)}</table>
+<div class=posbox><h4>累计研究费用（${S.sel.size} 项）</h4><p style="font-size:18px">${cost(tot)||"—"}　${SI("time","研究时间")}${tt.t}s</p></div>
+<p class=note>⚠️ 数值为近似：基于 aoe2techtree 基础属性 + 手工编码的通用科技与部分文明加成（来源：游戏内说明与 AoE2 Fandom Wiki）。独特科技与部分效果仅显示文本、不计入；未计入的文明加成、圣物、英雄等可能使实际数值不同。</p></div></div>`;
+ $("#simciv").onchange=e=>{simInit(u,e.target.value,S.age,[...S.sel],[...S.team])};$("#simage").onchange=e=>{S.age=+e.target.value;S.sel=new Set([...S.sel].filter(i=>TM[i].age<=S.age));simRender()};$("#simcmp").onchange=e=>{S.cmp=e.target.value;simRender()};
+ history.replaceState(null,"",`#unit/${u.id}/${S.civ}/${S.age}/${[...S.sel].join(",")}/${[...S.team].join(",")}`)}

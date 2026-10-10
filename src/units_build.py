@@ -19,7 +19,7 @@ for f in sorted(glob.glob(T+'trees/*.json')):
               cost=u['Cost'],hp=u['HP'],atk=u['Attack'],ma=u['MeleeArmor'],pa=u['PierceArmor'],rng=u['Range'],minr=u['MinRange'],spd=u['Speed'],los=u['LineOfSight'],rof=u['ReloadTime'],tt=u['TrainTime'],acc=u['AccuracyPercent'],blast=u['BlastWidth'],
               atks=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Attacks'] if a['Amount']],
               arms=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Armours'] if a['Amount'] or a['Class'] in(3,4)],
-              desc=hz,civs=[])
+              desc=hz,civs=[],cls=sorted(a['Class'] for a in u['Armours']))
         if x['node_status']!='NotAvailable': units[i]['civs'].append(civ) if civ not in units[i]['civs'] else None
 UU=d['data']['unit_upgrades']
 for u in units.values():
