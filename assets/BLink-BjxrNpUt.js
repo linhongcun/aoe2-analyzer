@@ -1,0 +1,1 @@
+import{u as e,j as n,d as r}from"./index-nrhBvtLW.js";function o({id:s,zh:a}){return e()?.buildingById[s]?n.jsx(r,{className:"tag tagl",to:`/building/${s}`,children:a}):n.jsx("span",{className:"tag",children:a})}export{o as B};
