@@ -5,7 +5,8 @@ import { useCore } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
 import { findUniqueTech } from '../../../domain/linker';
 import { strengths, TYPE_ZH } from '../../../domain/ratings';
-import { CivChip, CivIcon, DlcBadgeL, TechIcon, UnitLink } from '../../../shared/ui/art';
+import { CivChip, CivIcon, DlcBadgeL, TechIcon, UnitLinks } from '../../../shared/ui/art';
+import { collapse } from '../../../domain/family';
 import { Icon } from '../../../shared/ui/Icon';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Linked, PosBox, Radar, Steps } from '../../../shared/ui/widgets';
@@ -142,11 +143,7 @@ export default function CivDetail() {
       sidebar={
         <>
           <SideBlock title="独特单位">
-            <div className="uchips">
-              {myU.map((u) => (
-                <UnitLink key={u.id} u={u} />
-              ))}
-            </div>
+            <div className="uchips">{core && <UnitLinks list={collapse(myU, core.fam)} />}</div>
           </SideBlock>
           <SideBlock title="快速入口">
             <Link className="ulink tl" to={`/tree/${c.en}`}>

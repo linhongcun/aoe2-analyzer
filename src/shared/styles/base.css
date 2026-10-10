@@ -668,3 +668,68 @@ h2 .dlcb {
 .pane {
   display: block;
 }
+.ebadge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 4px;
+  font-size: 11px;
+  line-height: 16px;
+  border-radius: 3px;
+  color: #1b1408;
+  background: var(--c-gold-hi);
+  vertical-align: 1px;
+}
+.lchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  padding: 3px 8px;
+  background: var(--c-control);
+}
+.lchip .stack {
+  display: inline-flex;
+}
+.lchip .stack .uico {
+  margin-right: -12px;
+  border-radius: 4px;
+}
+.lchip .stack .uico:last-child {
+  margin-right: 4px;
+}
+.lchip .ulink {
+  border: none !important;
+  padding: 0 !important;
+  background: none !important;
+}
+.lchip .lsep {
+  opacity: 0.5;
+}
+.eseg {
+  display: inline-flex;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 0 10px;
+}
+.eseg a {
+  padding: 4px 14px;
+  text-decoration: none;
+  color: var(--c-gold-hi);
+  background: var(--c-control);
+}
+.eseg a.on {
+  background: var(--c-gold-hi);
+  color: #1b1408;
+  font-weight: bold;
+}
+table.ediff td.up {
+  color: #7fd17f;
+}
+table.ediff td.dn {
+  color: #e07a6a;
+}
+.ediffbox {
+  margin: 0 0 12px;
+}

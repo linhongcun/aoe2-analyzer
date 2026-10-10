@@ -3,7 +3,9 @@ import { useCore, useTrees } from '../../../data/hooks';
 import { techAffects, textMentions } from '../../../domain/affects';
 import { civStatus } from '../../../domain/simulator';
 import type { Tech } from '../../../domain/types';
-import { BuildingLink, StatIcon, UnitLink } from '../../../shared/ui/art';
+import { collapse, groupLines, type LineEntry } from '../../../domain/family';
+import { BuildingLink, EliteBadge, StatIcon, UnitIcon, UnitLink, UnitLinks } from '../../../shared/ui/art';
+import { Link } from 'react-router-dom';
 import { Icon } from '../../../shared/ui/Icon';
 import { Loading } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
@@ -60,8 +62,8 @@ export default function TechAffects({ t }: { t: Tech }) {
                       ))}
                     </div>
                     <div className="uchips">
-                      {r.units.map((u) => (
-                        <UnitLink key={'u' + u.id} u={u} />
+                      {groupLines(r.units, core.units, core.unitById, core.fam).map((g) => (
+                        <LineChip key={'l' + g.members[0]!.u.id} g={g} />
                       ))}
                       {r.buildings.map((b) => (
                         <BuildingLink key={'b' + b.id} b={b} />
@@ -82,11 +84,12 @@ export default function TechAffects({ t }: { t: Tech }) {
           </p>
           {tm && tm.units.length + tm.buildings.length ? (
             <div className="uchips">
-              {tm.units
-                .filter((u) => uOk(u.id, u.civs))
-                .map((u) => (
-                  <UnitLink key={'u' + u.id} u={u} />
-                ))}
+              <UnitLinks
+                list={collapse(
+                  tm.units.filter((u) => uOk(u.id, u.civs)),
+                  core.fam,
+                )}
+              />
               {tm.buildings
                 .filter((b) => bOk(b.civs))
                 .map((b) => (
@@ -99,5 +102,28 @@ export default function TechAffects({ t }: { t: Tech }) {
         </>
       )}
     </div>
+  );
+}
+
+/** 一条升级路线一个条目：叠放图标 + 「骑士 / 重骑士 / 圣骑士」，每个名字可点；精锐版合并为小标 */
+function LineChip({ g }: { g: LineEntry }) {
+  if (g.members.length === 1) return <UnitLink u={g.members[0]!.u} elite={g.members[0]!.elite} />;
+  return (
+    <span className="lchip" title={g.members.map((m) => m.u.zh + (m.elite ? '（含精锐）' : '')).join('、')}>
+      <span className="stack">
+        {g.members.map((m) => (
+          <UnitIcon key={m.u.id} u={m.u} />
+        ))}
+      </span>
+      {g.members.map((m, i) => (
+        <span key={m.u.id}>
+          {i > 0 && <span className="lsep"> / </span>}
+          <Link className="ulink" to={`/unit/${m.u.id}`}>
+            {m.u.zh}
+          </Link>
+          {m.elite && <EliteBadge />}
+        </span>
+      ))}
+    </span>
   );
 }

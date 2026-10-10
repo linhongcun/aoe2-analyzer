@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { useCore } from '../../../data/hooks';
 import { dlcMatch } from '../../../domain/dlc';
 import { AGE_ZH } from '../../../domain/ratings';
-import { CostView, DlcBadge, UnitIcon } from '../../../shared/ui/art';
+import type { Unit } from '../../../domain/types';
+import { collapse } from '../../../domain/family';
+import { CostView, DlcBadge, EliteBadge, UnitIcon } from '../../../shared/ui/art';
 import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 
@@ -15,7 +17,10 @@ export default function UnitList() {
     [dlc, setDlc] = useSticky('u.dlc', '');
   const all = core?.units ?? [];
   const ql = q.toLowerCase();
-  const r = all.filter((u) => (u.en.toLowerCase().includes(ql) || u.zh.includes(ql)) && (!t || u.type === t) && (!a || u.age === +a) && dlcMatch(u.dlc, dlc));
+  const fams = core ? collapse(all, core.fam) : [];
+  const ok = (u?: Unit) =>
+    !!u && (u.en.toLowerCase().includes(ql) || u.zh.includes(ql)) && (!t || u.type === t) && (!a || u.age === +a) && dlcMatch(u.dlc, dlc);
+  const r = fams.filter((x) => ok(x.u) || ok(x.elite));
   return (
     <section id="units" className="pane">
       <ListHead title="单位" desc="全部单位 · 按类别、DLC、时代筛选" />
@@ -37,7 +42,7 @@ export default function UnitList() {
           <option value="4">帝王</option>
         </select>
         <span id="ucnt" className="note">
-          {r.length} / {all.length}
+          {r.length} / {fams.length}
         </span>
       </div>
       <DlcBar value={dlc} onChange={setDlc} />
@@ -45,11 +50,14 @@ export default function UnitList() {
         <Loading />
       ) : (
         <div id="ugrid">
-          {r.map((u) => (
+          {r.map(({ u, elite }) => (
             <Link key={u.id} className="card ucard" to={`/unit/${u.id}`}>
               <UnitIcon u={u} />
               <div>
-                <h3>{u.zh}</h3>
+                <h3>
+                  {u.zh}
+                  {elite && <EliteBadge />}
+                </h3>
                 <small>{u.en}</small>
                 <div className="mini">
                   {u.bz} · {AGE_ZH[u.age] ?? ''} · <CostView c={u.cost} />

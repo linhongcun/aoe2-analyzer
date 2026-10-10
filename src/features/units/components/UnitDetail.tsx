@@ -1,6 +1,8 @@
 import { ArmorClasses, BonusTable } from '../../simulator/components/SimPanel';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { baseUnit } from '../../../domain/family';
+import type { Unit } from '../../../domain/types';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { parseUnitPath } from '../../../domain/simulator';
@@ -31,7 +33,12 @@ export default function UnitDetail() {
       </section>
     );
   if (!u || !rt) return <UnitList />;
-  const ln = upgradeLine(u, core.units, core.unitById);
+  const base = baseUnit(u, core.fam);
+  const elite = core.fam.eliteOf[base.id];
+  const isE = u.id !== base.id;
+  // 切换普通/精锐时保留路径中的模拟器状态（文明/时代/科技）
+  const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
+  const ln = upgradeLine(u, core.units, core.unitById).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id);
   const stats: [string, string, string | number][] = [
     ['hp', '生命值 HP', u.hp],
     [u.rng > 1 ? 'patk' : 'atk', '攻击力', u.atk],
@@ -48,7 +55,7 @@ export default function UnitDetail() {
   const wantSim = hasCiv || new URLSearchParams(loc.search).get('tab') === 'sim';
   return (
     <DetailPage
-      key={u.id}
+      key={base.id}
       id="unit"
       crumb={u.zh}
       icon={<UnitIcon u={u} big />}
@@ -62,6 +69,18 @@ export default function UnitDetail() {
           <span className="tag">{AGE_ZH[u.age] ?? u.age}</span>
         </>
       }
+      tabsTop={
+        elite ? (
+          <div className="eseg" role="radiogroup" aria-label="普通/精锐">
+            <Link role="radio" aria-checked={!isE} className={isE ? undefined : 'on'} to={swap(base.id)} replace>
+              普通
+            </Link>
+            <Link role="radio" aria-checked={isE} className={isE ? 'on' : undefined} to={swap(elite.id)} replace>
+              精锐
+            </Link>
+          </div>
+        ) : undefined
+      }
       initialTab={wantSim && u.civs.length ? 'sim' : 'ov'}
       tabs={[
         {
@@ -69,6 +88,7 @@ export default function UnitDetail() {
           label: '概览',
           content: (
             <>
+              {elite && <EliteDiff base={base} elite={elite} />}
               <p>
                 <b>造价：</b>
                 <CostView c={u.cost} />　<b>生产时间：</b>
@@ -186,5 +206,84 @@ export default function UnitDetail() {
         </>
       }
     />
+  );
+}
+
+const DIFF: [keyof Unit, string, string][] = [
+  ['hp', 'hp', '生命值'],
+  ['atk', 'atk', '攻击力'],
+  ['ma', 'marm', '近战护甲'],
+  ['pa', 'parm', '穿刺护甲'],
+  ['rng', 'range', '射程'],
+  ['spd', 'speed', '移动速度'],
+  ['los', '', '视野'],
+  ['rof', 'rof', '攻击间隔'],
+  ['acc', '', '准确度'],
+  ['tt', 'time', '生产时间'],
+];
+const fmt = (x: number) => String(Math.round(x * 100) / 100);
+/** 普通 vs 精锐：只列出有差异的属性，以及精锐升级的研究费用 */
+function EliteDiff({ base, elite }: { base: Unit; elite: Unit }) {
+  const rows = DIFF.filter(([k]) => base[k] !== elite[k]);
+  const ab = (u: Unit) => Object.fromEntries(u.atks.filter(([n]) => n !== '近战' && n !== '穿刺'));
+  const A = ab(base),
+    B = ab(elite);
+  const bon = [...new Set([...Object.keys(A), ...Object.keys(B)])].filter((k) => (A[k] ?? 0) !== (B[k] ?? 0));
+  // 攻击间隔、生产时间越小越好
+  const good = (k: string, d: number) => (k === 'rof' || k === 'tt' ? d < 0 : d > 0);
+  const sign = (d: number) => (d > 0 ? '+' : '') + fmt(d);
+  return (
+    <div className="ediffbox" id="ediff">
+      <h4>普通与精锐对比（仅列出有变化的项）</h4>
+      <table className="stat ediff">
+        <thead>
+          <tr>
+            <td></td>
+            <td>普通</td>
+            <td>精锐</td>
+            <td>变化</td>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([k, ic, zh]) => {
+            const a = base[k] as number,
+              b = elite[k] as number;
+            return (
+              <tr key={k}>
+                <td>
+                  <StatIcon k={ic} t={zh} />
+                  {zh}
+                </td>
+                <td>{fmt(a)}</td>
+                <td>
+                  <b>{fmt(b)}</b>
+                </td>
+                <td className={good(k, b - a) ? 'up' : 'dn'}>{sign(b - a)}</td>
+              </tr>
+            );
+          })}
+          {bon.map((k) => {
+            const d = (B[k] ?? 0) - (A[k] ?? 0);
+            return (
+              <tr key={'b' + k}>
+                <td>对 {k} 加成</td>
+                <td>{A[k] ?? 0}</td>
+                <td>
+                  <b>{B[k] ?? 0}</b>
+                </td>
+                <td className={d > 0 ? 'up' : 'dn'}>{sign(d)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {elite.up && (
+        <p className="note">
+          精锐升级研究：
+          <CostView c={elite.up[0]} /> <StatIcon k="time" t="研究时间" />
+          {elite.up[1]}s
+        </p>
+      )}
+    </div>
   );
 }

@@ -168,3 +168,35 @@ test('tech affects tab: Bracer lists archers + Keep; civ filter narrows', async 
   await expect(page.locator('#affects')).toContainText('骑兵');
   await expect(page.locator('#affects h4', { hasText: '步兵' })).toHaveCount(0);
 });
+
+test('elite dedup: civ chips, unit list, toggle keeps URL working', async ({ page }) => {
+  await page.goto('./#/civ/Vikings');
+  const chips = page.locator('.dside .uchips a');
+  await expect(chips).toHaveCount(1);
+  await expect(chips.first()).toContainText('精锐');
+  await page.goto('./#/units');
+  await page.locator('#uq').fill('掷斧');
+  await expect(page.locator('#ugrid .card')).toHaveCount(1);
+  // 旧的精锐链接仍可打开，并选中“精锐”
+  await page.goto('./#/unit/531');
+  await expect(page.locator('#unit h2')).toContainText('精锐掷斧兵');
+  await expect(page.locator('.eseg a.on')).toHaveText('精锐');
+  await expect(page.locator('#ediff')).toContainText('850');
+  await page.locator('.eseg a', { hasText: '普通' }).click();
+  await expect(page).toHaveURL(/#\/unit\/281$/);
+  await expect(page.locator('#unit h2')).not.toContainText('精锐');
+});
+
+test('elite toggle preserves simulator state', async ({ page }) => {
+  await page.goto('./#/unit/281/Franks/4');
+  await page.locator('.eseg a', { hasText: '精锐' }).click();
+  await expect(page).toHaveURL(/#\/unit\/531\/Franks\/4/);
+  await expect(page.locator('#sim .simtab')).toBeVisible();
+});
+
+test('tech affects groups upgrade lines into one chip', async ({ page }) => {
+  await page.goto('./#/tech/435');
+  await page.getByRole('tab', { name: /作用对象/ }).click();
+  await expect(page.locator('#affects .lchip', { hasText: '重装骑士' })).toHaveCount(1);
+  await expect(page.locator('#affects a', { hasText: /^精锐/ })).toHaveCount(0);
+});

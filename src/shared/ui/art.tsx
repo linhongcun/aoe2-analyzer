@@ -1,6 +1,7 @@
 /** 游戏美术图标（文明/单位/科技/属性/DLC），本地 public/img */
 import { Link } from 'react-router-dom';
 import type { Building, Civ, Cost, Tech, Unit } from '../../domain/types';
+import type { FamilyEntry } from '../../domain/family';
 import { DLCS } from '../../domain/dlc';
 import { RES_ZH } from '../../domain/ratings';
 
@@ -13,11 +14,26 @@ export const UnitIcon = ({ u, big }: { u: Unit; big?: boolean }) => (
 export const TechIcon = ({ t, big }: { t: Tech; big?: boolean }) => (
   <img className={big ? 'uico big' : 'uico'} src={img(`techs/${t.pic}.webp`)} alt="" loading="lazy" />
 );
-export const UnitLink = ({ u }: { u: Unit }) => (
-  <Link className="ulink" to={`/unit/${u.id}`}>
+/** 单位链接；传入 elite 时表示“普通+精锐”合并条目，名称后带「精锐」小标 */
+export const UnitLink = ({ u, elite }: { u: Unit; elite?: Unit }) => (
+  <Link className="ulink" to={`/unit/${u.id}`} title={elite ? `${u.zh} / ${elite.zh}` : undefined}>
     <UnitIcon u={u} />
     {u.zh}
+    {elite && <EliteBadge />}
   </Link>
+);
+export const EliteBadge = () => (
+  <span className="ebadge" title="含精锐版本">
+    精锐
+  </span>
+);
+/** 合并精锐后的单位链接列表 */
+export const UnitLinks = ({ list }: { list: FamilyEntry[] }) => (
+  <>
+    {list.map((x) => (
+      <UnitLink key={x.u.id} u={x.u} elite={x.elite} />
+    ))}
+  </>
 );
 export const TechLink = ({ t }: { t: Tech }) => (
   <Link className="ulink tl" to={`/tech/${t.id}`}>

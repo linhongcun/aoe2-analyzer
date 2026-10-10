@@ -5,6 +5,7 @@ import { useCore } from '../../../data/hooks';
 import { BUILDING_TYPE_ZH } from '../../../domain/buildings';
 import { AGE_ZH } from '../../../domain/ratings';
 import type { Tech, Unit } from '../../../domain/types';
+import { collapse } from '../../../domain/family';
 import { BuildingIcon, CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitLink } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
@@ -30,7 +31,12 @@ export default function BuildingDetail() {
     );
   const b = core.buildingById[+id];
   if (!b) return <BuildingList />;
-  const units = b.units.map((i) => core.unitById[i]).filter((x): x is Unit => !!x);
+  const famU = collapse(
+    b.units.map((i) => core.unitById[i]).filter((x): x is Unit => !!x),
+    core.fam,
+  );
+  const eliteMap = new Map(famU.map((x) => [x.u.id, x.elite]));
+  const units = famU.map((x) => x.u);
   const techs = b.techs.map((i) => core.techById[i]).filter((x): x is Tech => !!x);
   const owners = (x: Unit | Tech) => x.civs.map((n) => civByEn(n)?.zh ?? n).join('/');
   const split = <T extends Unit | Tech>(list: T[], L: (x: T) => React.ReactNode, empty: string) => {
@@ -136,7 +142,11 @@ export default function BuildingDetail() {
           ),
         },
         { key: 'sim', label: '科技模拟器', content: <BuildingSimulator b={b} /> },
-        { key: 'prod', label: `生产（${units.length}）`, content: split(units, (u) => <UnitLink key={u.id} u={u} />, '该建筑不生产单位') },
+        {
+          key: 'prod',
+          label: `生产（${units.length}）`,
+          content: split(units, (u) => <UnitLink key={u.id} u={u} elite={eliteMap.get(u.id)} />, '该建筑不生产单位'),
+        },
         { key: 'tech', label: `科技（${techs.length}）`, content: split(techs, (t) => <TechLink key={t.id} t={t} />, '该建筑不研究科技') },
         {
           key: 'civs',
@@ -176,7 +186,7 @@ export default function BuildingDetail() {
                   .filter((u) => !isUq(u))
                   .slice(0, 6)
                   .map((u) => (
-                    <UnitLink key={u.id} u={u} />
+                    <UnitLink key={u.id} u={u} elite={eliteMap.get(u.id)} />
                   ))}
               </div>
             </SideBlock>

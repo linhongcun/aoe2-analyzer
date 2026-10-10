@@ -43,6 +43,7 @@ export function DetailPage({
   tags,
   tabs,
   initialTab,
+  tabsTop,
   sidebar,
 }: {
   id: string;
@@ -54,6 +55,8 @@ export function DetailPage({
   tags?: ReactNode;
   tabs: DetailTab[];
   initialTab?: string;
+  /** 标签栏上方的额外控件（如 普通/精锐 切换） */
+  tabsTop?: ReactNode;
   sidebar?: ReactNode;
 }) {
   const [tab, setTab] = useState(initialTab ?? tabs[0]!.key);
@@ -73,6 +76,7 @@ export function DetailPage({
           </div>
         </div>
       </div>
+      {tabsTop}
       <div role="tablist" className="dtabs">
         {tabs.map((t) => (
           <button key={t.key} role="tab" aria-selected={t.key === cur.key} className={t.key === cur.key ? 'on' : undefined} onClick={() => setTab(t.key)}>

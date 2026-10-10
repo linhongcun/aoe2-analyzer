@@ -7,9 +7,16 @@ export interface SearchItem {
   href: string;
   sub: string;
   img?: string;
+  /** 额外可匹配的名称（如合并进来的精锐版） */
+  alt?: string[];
 }
 
 export function score(it: SearchItem, q: string): number {
+  const main = score1(it, q);
+  const a = (it.alt ?? []).map((x) => score1({ ...it, zh: x, en: x }, q) - 5);
+  return Math.max(main, ...a, 0);
+}
+function score1(it: SearchItem, q: string): number {
   const z = it.zh,
     e = it.en.toLowerCase();
   if (!q) return 0;

@@ -7,6 +7,7 @@ import type { Building, Civ, Tech, Trees, Unit } from '../domain/types';
 import { buildingDlc, buildingType } from '../domain/buildings';
 import { civDlc, dlcOf } from '../domain/dlc';
 import { buildLinker, type Linker } from '../domain/linker';
+import { buildFamilies, type Families } from '../domain/family';
 
 export const civs: Civ[] = (civsRaw as Omit<Civ, 'dlc'>[]).map((c) => ({ ...c, ty: c.ty, dlc: civDlc(c.en) }) as Civ);
 export const civIndex = (en: string) => civs.findIndex((c) => c.en === en);
@@ -20,6 +21,7 @@ export interface Core {
   buildings: Building[];
   buildingById: Record<number, Building>;
   linker: Linker;
+  fam: Families;
 }
 let corePromise: Promise<Core> | null = null;
 export let coreCache: Core | null = null;
@@ -38,7 +40,16 @@ export function loadCore(): Promise<Core> {
     }));
     const buildingById: Record<number, Building> = {};
     buildings.forEach((x) => (buildingById[x.id] = x));
-    coreCache = { units, techs, buildings, unitById, techById, buildingById, linker: buildLinker(units, techs, buildings) };
+    coreCache = {
+      units,
+      techs,
+      buildings,
+      unitById,
+      techById,
+      buildingById,
+      linker: buildLinker(units, techs, buildings),
+      fam: buildFamilies(units, unitById),
+    };
     return coreCache;
   });
   return corePromise;
