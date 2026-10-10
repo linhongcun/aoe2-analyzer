@@ -1,4 +1,5 @@
 import { ListHead } from '../../../shared/ui/layout';
+import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Fragment } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { civIndex, civs } from '../../../data';
@@ -6,7 +7,7 @@ import { useCore, useTrees } from '../../../data/hooks';
 import type { Civ, Trees } from '../../../domain/types';
 import { CivIcon, costText, img, TechLink, UnitLink } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
-import { CivOptions, Loading } from '../../../shared/ui/widgets';
+import { Loading } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 import { AGE_BANDS, extraItems, HD, layoutTree, TH } from '../logic/layout';
 import type { Core } from '../../../data';
@@ -83,18 +84,13 @@ export default function TreeView() {
     <section id="tree" className="pane">
       <ListHead title="科技树" desc="按建筑分列、按时代分行；可对比两个文明" />
       <div className="bar fbar">
-        <img id="trimg" className="ico" alt="" src={img(`civs/${a.en.toLowerCase()}.webp`)} />
-        <select id="tra" value={civs.indexOf(a)} onChange={(e) => nav('/tree/' + civs[+e.target.value]!.en, { replace: true })}>
-          <CivOptions />
-        </select>
+        <CivPicker id="tra" label="文明" value={a.en} onChange={(en) => nav('/tree/' + en, { replace: true })} />
         <select id="trm" value={m} onChange={(e) => setM(e.target.value)}>
           <option value="1">单个文明</option>
           <option value="2">差异高亮</option>
           <option value="3">上下对照</option>
         </select>
-        <select id="trb" value={ib} onChange={(e) => setB(+e.target.value)} style={m === '1' ? { display: 'none' } : undefined}>
-          <CivOptions />
-        </select>
+        {m !== '1' && <CivPicker id="trb" label="对比文明" value={civs[ib]!.en} onChange={(en) => setB(civs.findIndex((c) => c.en === en))} />}
       </div>
       <div id="treebox">
         {!trees || !core ? (

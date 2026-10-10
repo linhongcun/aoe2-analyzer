@@ -1,9 +1,10 @@
 import { ListHead } from '../../../shared/ui/layout';
+import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
 import { AXES } from '../../../domain/ratings';
 import type { Civ } from '../../../domain/types';
 import { CivIcon } from '../../../shared/ui/art';
-import { CivOptions, PosBox, Radar, Steps } from '../../../shared/ui/widgets';
+import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 
 const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
@@ -24,13 +25,8 @@ export default function Compare() {
     <section id="compare" className="pane">
       <ListHead title="文明对比" desc="两个文明的能力雷达与关键差异" />
       <div className="bar fbar">
-        <select id="ca" value={ia} onChange={(e) => setA(+e.target.value)}>
-          <CivOptions />
-        </select>{' '}
-        VS{' '}
-        <select id="cb" value={ib} onChange={(e) => setB(+e.target.value)}>
-          <CivOptions />
-        </select>
+        <CivPicker id="ca" label="文明 A" value={civs[ia]!.en} onChange={(en) => setA(civs.findIndex((c) => c.en === en))} /> VS{' '}
+        <CivPicker id="cb" label="文明 B" value={civs[ib]!.en} onChange={(en) => setB(civs.findIndex((c) => c.en === en))} />
       </div>
       <div className="two">
         <table id="ctab">

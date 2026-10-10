@@ -1,8 +1,8 @@
 import { ListHead } from '../../../shared/ui/layout';
+import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
 import { COUNTERS, matchup, TYPE_ZH } from '../../../domain/ratings';
 import { CivIcon } from '../../../shared/ui/art';
-import { CivOptions } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 
 export default function Matchup() {
@@ -15,14 +15,8 @@ export default function Matchup() {
     <section id="matchup" className="pane">
       <ListHead title="对局助手" desc="根据双方文明给出反制建议" />
       <div className="bar fbar">
-        我的文明{' '}
-        <select id="ma" value={ia} onChange={(x) => setA(+x.target.value)}>
-          <CivOptions />
-        </select>{' '}
-        对手文明{' '}
-        <select id="me" value={ie} onChange={(x) => setE(+x.target.value)}>
-          <CivOptions />
-        </select>
+        我的文明 <CivPicker id="ma" label="我的文明" value={civs[ia]!.en} onChange={(en) => setA(civs.findIndex((c) => c.en === en))} /> 对手文明{' '}
+        <CivPicker id="me" label="对手文明" value={civs[ie]!.en} onChange={(en) => setE(civs.findIndex((c) => c.en === en))} />
       </div>
       <div id="mres">
         <h3>

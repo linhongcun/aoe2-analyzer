@@ -1,4 +1,4 @@
-import { civByEn } from '../../../data';
+import { CivPicker } from '../../../shared/ui/CivPicker';
 import { useCore, useTrees } from '../../../data/hooks';
 import { techAffects, textMentions } from '../../../domain/affects';
 import { civStatus } from '../../../domain/simulator';
@@ -33,15 +33,7 @@ export default function TechAffects({ t }: { t: Tech }) {
   return (
     <div id="affects">
       <div className="bar">
-        文明{' '}
-        <select id="affciv" value={civ} onChange={(e) => setCiv(e.target.value)}>
-          <option value="">（全部单位/建筑）</option>
-          {t.civs.map((n) => (
-            <option key={n} value={n}>
-              {civByEn(n)?.zh ?? n} 拥有的
-            </option>
-          ))}
-        </select>
+        文明 <CivPicker id="affciv" label="按文明筛选" value={civ} onChange={setCiv} allowed={t.civs} none="全部单位/建筑" suffix="拥有的" />
         {civ && !trees && <Loading />}
       </div>
       {numeric ? (

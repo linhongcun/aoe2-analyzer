@@ -1,4 +1,5 @@
 /** 通用科技模拟器面板（单位与建筑共用）：文明/时代选择、分组科技开关、预设、属性表、费用汇总、团队加成、对比列 */
+import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { toggleTech } from '../../../domain/prereq';
@@ -179,15 +180,7 @@ export default function SimPanel(p: SimPanelProps) {
         <Icon name="flask-conical" /> 科技模拟器 <small className="note">选择文明与科技，查看属性变化与累计研究费用</small>
       </h3>
       <div className="bar">
-        文明{' '}
-        <select id="simciv" value={p.civ} onChange={(e) => p.go(e.target.value, p.age, p.sel, p.team)}>
-          {p.civs.map((n) => (
-            <option key={n} value={n}>
-              {civByEn(n) ? civByEn(n)!.zh + ' ' + n : n}
-            </option>
-          ))}
-        </select>{' '}
-        时代{' '}
+        文明 <CivPicker id="simciv" label="文明" value={p.civ} onChange={(en) => p.go(en, p.age, p.sel, p.team)} allowed={p.civs} /> 时代{' '}
         <select
           id="simage"
           value={p.age}
@@ -225,16 +218,7 @@ export default function SimPanel(p: SimPanelProps) {
             </button>
           ))}{' '}
         对比{' '}
-        <select id="simcmp" value={p.cmp} onChange={(e) => p.setCmp(e.target.value)}>
-          <option value="">（不对比）</option>
-          {p.civs
-            .filter((n) => n !== p.civ)
-            .map((n) => (
-              <option key={n} value={n}>
-                {civByEn(n)?.zh ?? n} 满科技
-              </option>
-            ))}
-        </select>
+        <CivPicker id="simcmp" label="对比文明" value={p.cmp} onChange={p.setCmp} allowed={p.civs.filter((n) => n !== p.civ)} none="不对比" suffix="满科技" />
       </div>
       {p.civNotes.length > 0 && <p className="note">已计入文明加成：{p.civNotes.join('；')}</p>}
       <div className="two">

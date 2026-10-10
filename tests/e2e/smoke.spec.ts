@@ -1,4 +1,12 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+/** CivPicker 选择助手：打开选择器、搜索英文名并点击对应选项 */
+async function pickCiv(page: Page, id: string, en: string) {
+  await page.locator('#' + id).click();
+  await page.locator('.cp-panel .cp-q').fill(en);
+  await page.locator(`.cp-panel [role="option"][data-civ="${en}"]`).click();
+  await expect(page.locator('#' + id)).toHaveAttribute('data-value', en);
+}
 
 // 旧版 hash（无前导 /）与新版 hash 都必须可用
 const ROUTES: [string, string][] = [
@@ -132,7 +140,7 @@ test('building simulator: Britons Castle full tech, URL state', async ({ page })
   await expect(page).toHaveURL(/civ=Britons.*techs=\d/);
   await page.reload();
   await expect(page.locator('.simtab tr').nth(1).locator('td').nth(2)).toHaveText('7028');
-  await page.locator('#simcmp').selectOption('Byzantines');
+  await pickCiv(page, 'simcmp', 'Byzantines');
   await expect(page.locator('.simtab th').nth(3)).toContainText('拜占庭');
 });
 
@@ -161,7 +169,7 @@ test('tech affects tab: Bracer lists archers + Keep; civ filter narrows', async 
   await expect(page.locator('#affects')).toContainText('弓兵');
   await expect(page.locator('#affects a[href*="building/"]').first()).toBeVisible();
   const all = await page.locator('#affects .affrow a').count();
-  await page.locator('#affciv').selectOption('Britons');
+  await pickCiv(page, 'affciv', 'Britons');
   await expect.poll(() => page.locator('#affects .affrow a').count()).toBeLessThan(all);
   await page.goto('./#/tech/435');
   await page.locator('.dtabs').getByText('作用对象').click();
@@ -199,4 +207,39 @@ test('tech affects groups upgrade lines into one chip', async ({ page }) => {
   await page.getByRole('tab', { name: /作用对象/ }).click();
   await expect(page.locator('#affects .lchip', { hasText: '重装骑士' })).toHaveCount(1);
   await expect(page.locator('#affects a', { hasText: /^精锐/ })).toHaveCount(0);
+});
+
+test('CivPicker: keyboard navigation, Esc, none option, allowed civs', async ({ page }) => {
+  await page.goto('./#/compare');
+  await page.locator('#ca').click();
+  await expect(page.locator('.cp-panel [role="option"]')).toHaveCount(56);
+  await expect(page.locator('.cp-panel .cp-q')).toBeFocused();
+  await page.keyboard.type('法兰');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#ca')).toHaveAttribute('data-value', 'Franks');
+  await expect(page.locator('#ca')).toBeFocused();
+  await page.locator('#cb').click();
+  await expect(page.locator('.cp-panel .cp-q')).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.cp-panel')).toHaveCount(0);
+  // 农田：限定可建造农田的文明 + 不对比
+  await page.goto('./#/building/50?tab=sim');
+  await page.locator('#simcmp').click();
+  await expect(page.locator('.cp-panel [data-civ="__none"]')).toContainText('不对比');
+  await expect(page.locator('.cp-panel .cp-q')).toBeFocused();
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#simcmp')).not.toHaveAttribute('data-value', '');
+  await pickCiv(page, 'simciv', 'Britons');
+});
+
+test('CivPicker opens as bottom sheet on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('./#/matchup');
+  await page.locator('#me').click();
+  const box = await page.locator('.cp-panel').boundingBox();
+  expect(box!.width).toBeGreaterThan(380);
+  expect(Math.round(box!.y + box!.height)).toBeGreaterThanOrEqual(843);
+  await page.locator('.cp-panel').getByRole('button', { name: '关闭' }).click();
+  await expect(page.locator('.cp-panel')).toHaveCount(0);
 });
