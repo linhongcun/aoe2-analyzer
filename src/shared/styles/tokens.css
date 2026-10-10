@@ -1,0 +1,17 @@
+/* 设计令牌：深色中世纪主题 */
+:root {
+  --c-gold-hi: #f0c75e;
+  --c-border: #6b5020;
+  --c-muted: #b08d57;
+  --c-bronze: #8b6914;
+  --c-tag: #4a3518;
+  --c-control: #2a1f13;
+  --c-bg-deep: #120d08;
+  --c-text: #e8d5a3;
+  --c-panel: #1f170e;
+  --c-bad: #e08080;
+  --c-gold: #d4a017;
+  --c-up: #5fd35f;
+  --c-blue: #50a0dc;
+  --c-good: #8fd18f;
+}

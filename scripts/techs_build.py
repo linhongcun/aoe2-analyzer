@@ -1,5 +1,5 @@
 import json,glob,re,os,io,urllib.request
-T='/workspace/tt/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'));TT=d['data']['Tech']
+import os;T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'));TT=d['data']['Tech']
 civn={v['internal_name'].upper():k for k,v in d['civs'].items()};civn['HINDUSTANIS']='Hindustanis'
 BN={};techs={}
 def txt(s):
@@ -20,14 +20,14 @@ for f in sorted(glob.glob(T+'trees/*.json')):
 for t in techs.values():
     t['bz'],t['ben']=BN.get(t['b'],('?','?'))
     if t['pre'] not in techs: t['pre']=None
-os.makedirs('img/techs',exist_ok=True)
+os.makedirs('public/img/techs',exist_ok=True)
 from PIL import Image;miss=[]
 for t in techs.values():
-    p=f"img/techs/{t['pic']}.webp"
+    p=f"public/img/techs/{t['pic']}.webp"
     if os.path.exists(p): continue
     try:
         im=Image.open(io.BytesIO(urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/master/img/Tech/{t['pic']}.png").read())).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
     except Exception: miss.append(t['en'])
 L=sorted(techs.values(),key=lambda t:(t['type']!='UniqueTech',t['b'],t['age'],t['id']))
-json.dump(L,open('techs.json','w'),ensure_ascii=False)
+json.dump(L,open('src/data/techs.json','w'),ensure_ascii=False)
 print(len(L),'unique',sum(t['type']=='UniqueTech' for t in L),'missing',miss)

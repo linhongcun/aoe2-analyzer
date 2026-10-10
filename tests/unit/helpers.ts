@@ -1,0 +1,13 @@
+import unitsRaw from '../../src/data/units.json';
+import techsRaw from '../../src/data/techs.json';
+import treesRaw from '../../src/data/trees.json';
+import type { Tech, Trees, Unit } from '../../src/domain/types';
+import { dlcOf } from '../../src/domain/dlc';
+import { makeSimContext } from '../../src/domain/simulator';
+export const units = (unitsRaw as unknown as Unit[]).map((u) => ({ ...u, dlc: dlcOf(u) }));
+export const techs = (techsRaw as unknown as Tech[]).map((t) => ({ ...t, dlc: dlcOf(t) }));
+export const trees = treesRaw as unknown as Trees;
+export const ctx = makeSimContext(techs, trees);
+export const unit = (en: string) => units.find((u) => u.en === en)!;
+export const tech = (en: string) => techs.find((t) => t.en === en)!;
+export const techById = Object.fromEntries(techs.map((t) => [t.id, t])) as Record<number, Tech>;

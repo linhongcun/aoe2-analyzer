@@ -1,5 +1,5 @@
 import json,glob,os,re,io,urllib.request
-T='/workspace/tt/';d=json.load(open(T+'data.json'));z=json.load(open(T+'zh.json'))
+import os;T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));z=json.load(open(T+'zh.json'))
 civn={v['internal_name'].upper():k for k,v in d['civs'].items()};civn['HINDUSTANIS']='Hindustanis'
 ORDER=[12,87,101,49,82,45,103,209,104,109,562,584,68,84]  # Barracks,Range,Stable,Siege,Castle,Dock,Blacksmith,University,Monastery,TC,Lumber,Mining,Mill,Market
 out={};B={}
@@ -19,12 +19,12 @@ for f in sorted(glob.glob(T+'trees/*.json')):
         bl.append([bid,b['row'],len(b['grid'][0]),cells])
     bl.sort(key=lambda x:(ORDER.index(x[0]) if x[0] in ORDER else 99,x[0]))
     out[civ]=bl
-json.dump({'b':B,'t':out},open('trees.json','w'),ensure_ascii=False,separators=(',',':'))
-os.makedirs('img/buildings',exist_ok=True)
+json.dump({'b':B,'t':out},open('src/data/trees.json','w'),ensure_ascii=False,separators=(',',':'))
+os.makedirs('public/img/buildings',exist_ok=True)
 from PIL import Image
 for bid,v in B.items():
-    p=f"img/buildings/{v[2]}.webp"
+    p=f"public/img/buildings/{v[2]}.webp"
     if not os.path.exists(p):
         im=Image.open(io.BytesIO(urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/master/img/Building/{v[2]}.png").read())).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
 print({k:v[1] for k,v in B.items()})
-print(os.path.getsize('trees.json'))
+print(os.path.getsize('src/data/trees.json'))
