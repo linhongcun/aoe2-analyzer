@@ -35,7 +35,10 @@ for (const [hash, sel] of ROUTES) {
 test('Franks Paladin full tech = 192 HP', async ({ page }) => {
   await page.goto('./#unit/569/Franks');
   await page.getByRole('button', { name: '满科技' }).click();
-  await expect(page.locator('.simtab tr').nth(1)).toContainText('192');
+  const hp = page.locator('.simtab tr').nth(1).locator('td');
+  await expect(hp.nth(1)).toHaveText(/^160\s*\+32$/); // 基础列：基础值 + 绿色增量
+  await expect(hp.nth(1).locator('.up')).toHaveText('+32');
+  await expect(hp.nth(2)).toHaveText('192'); // 当前列：仅最终值
   await expect(page).toHaveURL(/unit\/569\/Franks\/4\/[\d,]+/);
 });
 

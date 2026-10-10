@@ -37,15 +37,17 @@ function StatRows({ u, B, S, C }: { u: Unit; B: StatSet; S: StatSet; C: StatSet 
               <StatIcon k={ic1} t={n} />
               {n}
             </td>
-            <td>{fmtStat(k, B[k])}</td>
             <td>
-              <b>{fmtStat(k, S[k])}</b>{' '}
+              {fmtStat(k, B[k])}{' '}
               {Math.abs(d) > 1e-9 && (
                 <span className={good ? 'up' : 'dn'}>
                   {d > 0 ? '+' : ''}
                   {fmtStat(k, d).replace('s', '')}
                 </span>
               )}
+            </td>
+            <td>
+              <b>{fmtStat(k, S[k])}</b>
             </td>
             {C && <td>{fmtStat(k, C[k])}</td>}
           </tr>
@@ -59,15 +61,17 @@ function StatRows({ u, B, S, C }: { u: Unit; B: StatSet; S: StatSet; C: StatSet 
             <td>
               <span className="si" />对 {k} 加成
             </td>
-            <td>{b}</td>
             <td>
-              <b>{s}</b>{' '}
+              {b}{' '}
               {s !== b && (
                 <span className={s > b ? 'up' : 'dn'}>
                   {s > b ? '+' : ''}
                   {s - b}
                 </span>
               )}
+            </td>
+            <td>
+              <b>{s}</b>
             </td>
             {C && <td>{C.bonus[k] ?? 0}</td>}
           </tr>
