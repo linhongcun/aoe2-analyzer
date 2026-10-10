@@ -4,18 +4,18 @@ old={}
 src=open('data.js').read()
 for line in src.splitlines():
     if line.startswith('["'): r=json.loads(line.rstrip(',')); old[r[0]]=r
-new={"Danes":["inf,siege",[3,5,9,7,5,9,4,8],7,5,"民兵/长矛压制 → 城堡 Jomsviking + 冲车/投石车推进"],
-"Saxons":["inf,def",[3,6,9,7,9,5,7,7],8,5,"民兵/弓手 → 城堡 Hearth Troop + 塔楼/城堡推进"],
-"Varangians":["cav,naval",[9,4,6,8,5,5,4,8],5,9,"侦察骑兵 → 速城堡骑士/Jarl"],
-"Mapuche":["cav",[8,6,7,7,5,5,4,4],7,7,"侦察骑兵/长矛散兵 → 城堡 Kona + Bolas Rider"],
-"Muisca":["arch,monk",[2,8,6,7,5,5,8,5],8,4,"弓手/投石兵 → 城堡 Guecha Warrior + 僧侣"],
-"Tupi":["arch,inf",[2,8,7,7,6,5,4,5],8,4,"弓手 → 城堡 Blackwood Archer 爆兵"]}
-fix={"Shu":["arch,siege",None,None,None,"弓手 → 城堡弩手 + War Chariot → 帝王 Bolt Magazine"],
-"Wu":["inf,naval",None,None,None,"民兵/弓手 → 城堡 Jian Swordsman + Fire Archer；水图抢水"],
-"Jurchens":["cav,siege",None,None,None,"侦察骑兵 → 城堡 Iron Pagoda/骑士 → 帝王 Grenadier"],
-"Khitans":["cav,inf",None,None,None,"侦察/散兵 → 城堡重骑射 + Liao Dao"],
+new={"Danes":["inf,siege",[3,5,9,7,5,9,4,8],7,5,"民兵/长矛压制 -> 城堡 Jomsviking + 冲车/投石车推进"],
+"Saxons":["inf,def",[3,6,9,7,9,5,7,7],8,5,"民兵/弓手 -> 城堡 Hearth Troop + 塔楼/城堡推进"],
+"Varangians":["cav,naval",[9,4,6,8,5,5,4,8],5,9,"侦察骑兵 -> 速城堡骑士/Jarl"],
+"Mapuche":["cav",[8,6,7,7,5,5,4,4],7,7,"侦察骑兵/长矛散兵 -> 城堡 Kona + Bolas Rider"],
+"Muisca":["arch,monk",[2,8,6,7,5,5,8,5],8,4,"弓手/投石兵 -> 城堡 Guecha Warrior + 僧侣"],
+"Tupi":["arch,inf",[2,8,7,7,6,5,4,5],8,4,"弓手 -> 城堡 Blackwood Archer 爆兵"]}
+fix={"Shu":["arch,siege",None,None,None,"弓手 -> 城堡弩手 + War Chariot -> 帝王 Bolt Magazine"],
+"Wu":["inf,naval",None,None,None,"民兵/弓手 -> 城堡 Jian Swordsman + Fire Archer；水图抢水"],
+"Jurchens":["cav,siege",None,None,None,"侦察骑兵 -> 城堡 Iron Pagoda/骑士 -> 帝王 Grenadier"],
+"Khitans":["cav,inf",None,None,None,"侦察/散兵 -> 城堡重骑射 + Liao Dao"],
 "Persians":["cav",None,None,None,None],"Bohemians":["inf,monk,siege",None,None,None,None],
-"Chinese":["arch,naval",None,None,None,None],"Gurjaras":["cav",None,None,None,"侦察骑兵 → 城堡骆驼/Shrivamsha 骑手"]}
+"Chinese":["arch,naval",None,None,None,None],"Gurjaras":["cav",None,None,None,"侦察骑兵 -> 城堡骆驼/Shrivamsha 骑手"]}
 def strip(s): return re.sub(r'<[^>]+>','',s).strip()
 def parse(h):
     h=h.replace('<br>\n','\n').replace('<br>','\n')

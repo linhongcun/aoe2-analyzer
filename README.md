@@ -5,6 +5,7 @@
 帝国时代 II 决定版分析工具（中文界面）。当前模块：文明分析、单位（248 个单位详情）、科技（199 项科技详情），DLC/版本（每个文明及其独特单位/科技所属资料片）、科技模拟器（单位页内：选择文明与科技查看满科技属性和累计研究费用）、科技树（每个文明的完整科技树，含差异对比），均可从文明页点击跳转（56 个文明的列表/筛选、详情、雷达图、对比、对局助手）。评分为主观近似值。
 
 ## 数据与素材来源 / Credits
+- 界面图标：[Lucide](https://lucide.dev)（ISC License），SVG 本地内联于页面（不使用 CDN）
 - DLC/资料片列表与图标（`img/dlc/`，缩放为 64px WebP）：来自 [seicing.com 文明发售列表](https://seicing.com/html/aoe2/index-aoe2.html)，并与 ageofempires.com 官方公告核对
 - 文明数据：[SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)
 - 单位/科技数据与图标（`img/units/`、`img/techs/`）：取自 aoe2techtree（代码 MIT 许可；游戏图像 © Microsoft），缩放为 64px WebP
@@ -12,3 +13,8 @@
 - 文明图标（`img/civs/`）：取自 [denniske/aoe2companion](https://github.com/denniske/aoe2companion)（`assets/civilizations/de/`），缩放为 96px WebP。原始素材 © Microsoft Corporation。
 
 Age of Empires II © Microsoft Corporation. 本项目依据 Microsoft 的 [Game Content Usage Rules](https://www.xbox.com/en-us/developers/rules) 使用游戏素材，为非商业粉丝项目，未获 Microsoft 认可或赞助。
+
+## 项目约定 / Conventions
+- 自定义界面图标禁止使用 emoji 或 Unicode 符号字形（如 ⚔ ← → ★ ✓ ✕ ▲▼ 🔍 等），统一使用成熟图标库 [Lucide](https://lucide.dev)（ISC）的 SVG，本地内联打包（不走 CDN，保证国内可用），通过 `icon(name)` 辅助函数输出，尺寸/颜色由 CSS 控制（`currentColor`）。
+- 新增图标：从 lucide 仓库 `icons/<name>.svg` 取路径加入 `src/lucide.js` 的 `LUCIDE` 表。
+- 游戏美术图标（文明/单位/科技/建筑/DLC/属性）不受此约定影响。
