@@ -4,6 +4,13 @@ import { isArrow, isCA, isCamel, isFootArcher, isGun, isInf, isKnightLine, isMel
 
 export type EffectRule = [UnitPred, Effect[]];
 const cav: UnitPred = (u) => isMounted(u) && !isArcher(u);
+/** 射箭战船（Wiki Fletching/Bodkin/Bracer：Galleys, Longships, Caravels） */
+const ARROW_SHIP = /^(Galley|War Galley|Galleon|Longship|Elite Longship|Caravel|Elite Caravel)$/;
+const isArrowShip: UnitPred = (u) => ARROW_SHIP.test(u.en);
+/** 近战战船（Wiki Forging：Hulk-line melee attack） */
+const isHulk: UnitPred = (u) => /^(Hulk|War Hulk|Carrack)$/.test(u.en);
+/** 远程非火药攻城（Wiki Chemistry："ranged non-gunpowder siege units"，含被归类为攻城的弩象/战车/骑乘投石机） */
+const isRangedSiege: UnitPred = (u) => u.cls.includes(20) && u.rng > 1 && !isGun(u);
 const arrow3: Effect[] = [
   { s: 'atk', v: 1 },
   { s: 'rng', v: 1 },
@@ -11,12 +18,12 @@ const arrow3: Effect[] = [
 ];
 
 export const TECH_EFFECTS: Record<string, EffectRule[]> = {
-  Forging: [[isMelee, [{ s: 'atk', v: 1 }]]],
-  'Iron Casting': [[isMelee, [{ s: 'atk', v: 1 }]]],
-  'Blast Furnace': [[isMelee, [{ s: 'atk', v: 2 }]]],
-  Fletching: [[isArrow, arrow3]],
-  'Bodkin Arrow': [[isArrow, arrow3]],
-  Bracer: [[isArrow, arrow3]],
+  Forging: [[(u) => isMelee(u) || isHulk(u), [{ s: 'atk', v: 1 }]]],
+  'Iron Casting': [[(u) => isMelee(u) || isHulk(u), [{ s: 'atk', v: 1 }]]],
+  'Blast Furnace': [[(u) => isMelee(u) || isHulk(u), [{ s: 'atk', v: 2 }]]],
+  Fletching: [[(u) => isArrow(u) || isArrowShip(u), arrow3]],
+  'Bodkin Arrow': [[(u) => isArrow(u) || isArrowShip(u), arrow3]],
+  Bracer: [[(u) => isArrow(u) || isArrowShip(u), arrow3]],
   'Scale Mail Armor': [
     [
       isInf,
@@ -115,7 +122,7 @@ export const TECH_EFFECTS: Record<string, EffectRule[]> = {
   ],
   'Parthian Tactics': [
     [
-      isCA,
+      (u) => isCA(u) && !/Genitour/.test(u.en),
       [
         { s: 'ma', v: 1 },
         { s: 'pa', v: 2 },
@@ -123,7 +130,7 @@ export const TECH_EFFECTS: Record<string, EffectRule[]> = {
       ],
     ],
   ],
-  Chemistry: [[isArrow, [{ s: 'atk', v: 1 }]]],
+  Chemistry: [[(u) => isArrow(u) || isArrowShip(u) || isRangedSiege(u), [{ s: 'atk', v: 1 }]]],
 };
 /** 仅显示文本、不计入数值的通用科技 */
 export const TEXT_ONLY_TECHS = ['Ballistics', 'Conscription'] as const;

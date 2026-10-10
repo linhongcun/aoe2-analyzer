@@ -14,6 +14,8 @@ const is =
 const TOWERS = ['Watch Tower', 'Guard Tower', 'Keep'];
 /** 射箭的防御工事（受箭术系/化学影响） */
 const ARROW_FORT = is(...TOWERS, 'Castle', 'Krepost');
+/** Wiki Fletching/Bodkin/Bracer：Harbors、Kreposts、Bombard Towers 亦受益 */
+const FLETCH_BLD = is(...TOWERS, 'Castle', 'Krepost', 'Harbor', 'Bombard Tower');
 const DEFENSIVE = is(...TOWERS, 'Castle', 'Krepost', 'Donjon', 'Bombard Tower');
 const all: BPred = () => true;
 const arrow: Effect[] = [
@@ -37,18 +39,36 @@ export const BUILDING_EFFECTS: Record<string, [BPred, Effect[]][]> = {
     [is('Krepost'), [{ s: 'hp', op: 'mul', v: 1.385 }]],
   ],
   Fletching: [
-    [ARROW_FORT, arrow],
-    [is('Town Center'), [{ s: 'atk', v: 1 }]],
+    [FLETCH_BLD, arrow],
+    [
+      is('Town Center'),
+      [
+        { s: 'atk', v: 1 },
+        { s: 'los', v: 1 },
+      ],
+    ],
   ],
   'Bodkin Arrow': [
-    [ARROW_FORT, arrow],
-    [is('Town Center'), [{ s: 'atk', v: 1 }]],
+    [FLETCH_BLD, arrow],
+    [
+      is('Town Center'),
+      [
+        { s: 'atk', v: 1 },
+        { s: 'los', v: 1 },
+      ],
+    ],
   ],
   Bracer: [
-    [ARROW_FORT, arrow],
-    [is('Town Center'), [{ s: 'atk', v: 1 }]],
+    [FLETCH_BLD, arrow],
+    [
+      is('Town Center'),
+      [
+        { s: 'atk', v: 1 },
+        { s: 'los', v: 1 },
+      ],
+    ],
   ],
-  Chemistry: [[ARROW_FORT, [{ s: 'atk', v: 1 }]]],
+  Chemistry: [[is(...TOWERS, 'Castle', 'Krepost', 'Bombard Tower'), [{ s: 'atk', v: 1 }]]],
   Arrowslits: [
     [is('Watch Tower'), [{ s: 'atk', v: 1 }]],
     [is('Guard Tower'), [{ s: 'atk', v: 2 }]],

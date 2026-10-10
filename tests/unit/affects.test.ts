@@ -25,14 +25,14 @@ describe('tech affects (same rules as simulator)', () => {
     expect(a.groups).not.toContain('步兵');
     expect(a.effects.some((e) => e.includes('生命值 +20'))).toBe(true);
   });
-  it('Bracer: archers + towers/castle (+1 atk, +1 range), Town Center attack only', () => {
+  it('Bracer: archers + towers/castle (+1 atk, +1 range), Town Center attack + LOS (Wiki: Bracer)', () => {
     const a = flat('Bracer');
     expect(a.units).toEqual(expect.arrayContaining(['Arbalester', 'Crossbowman', 'Elite Skirmisher']));
     expect(a.units).not.toContain('Paladin');
     expect(a.buildings).toEqual(expect.arrayContaining(['Keep', 'Castle', 'Town Center']));
     const g = techAffects(tech('Bracer'), units, bs).flatMap((x) => x.rows);
     expect(g.find((r) => r.buildings.some((b) => b.en === 'Keep'))!.effect).toBe('攻击 +1，射程 +1，视野 +1');
-    expect(g.find((r) => r.buildings.some((b) => b.en === 'Town Center'))!.effect).toBe('攻击 +1');
+    expect(g.find((r) => r.buildings.some((b) => b.en === 'Town Center'))!.effect).toBe('攻击 +1，视野 +1');
   });
   it('Masonry affects buildings only', () => {
     const a = flat('Masonry');
