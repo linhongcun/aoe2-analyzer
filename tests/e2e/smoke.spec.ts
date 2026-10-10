@@ -122,3 +122,22 @@ test('buildings list filters by type', async ({ page }) => {
   await expect(page.locator('#bgrid .card', { hasText: 'Keep' })).toBeVisible();
   await expect(page.locator('#bgrid .card', { hasText: 'Barracks' })).toHaveCount(0);
 });
+
+test('building simulator: Britons Castle full tech, URL state', async ({ page }) => {
+  await page.goto('./#/building/82?tab=sim&civ=Britons');
+  await page.getByRole('button', { name: '满科技' }).click();
+  const hp = page.locator('.simtab tr').nth(1).locator('td');
+  await expect(hp.nth(1)).toHaveText(/^4800\s*\+2228$/);
+  await expect(hp.nth(2)).toHaveText('7028');
+  await expect(page).toHaveURL(/civ=Britons.*techs=\d/);
+  await page.reload();
+  await expect(page.locator('.simtab tr').nth(1).locator('td').nth(2)).toHaveText('7028');
+  await page.locator('#simcmp').selectOption('Byzantines');
+  await expect(page.locator('.simtab th').nth(3)).toContainText('拜占庭');
+});
+
+test('building simulator: prerequisite chain (Bracer selects Fletching + Bodkin)', async ({ page }) => {
+  await page.goto('./#/building/82?tab=sim&civ=Britons');
+  await page.locator('label.simt', { hasText: '护腕' }).locator('input').check();
+  await expect(page.locator('label.simt.on')).toHaveCount(3);
+});

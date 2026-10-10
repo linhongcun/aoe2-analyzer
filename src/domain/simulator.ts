@@ -36,7 +36,23 @@ export function baseStats(u: Unit): StatSet {
   u.atks.forEach(([n, v]) => {
     if (n !== '近战' && n !== '穿刺') bonus[n] = v;
   });
-  return { hp: u.hp, atk: u.atk, ma: u.ma, pa: u.pa, rng: u.rng, spd: u.spd, los: u.los, rof: u.rof, acc: u.acc, bonus, rofx: 1 };
+  return {
+    hp: u.hp,
+    atk: u.atk,
+    ma: u.ma,
+    pa: u.pa,
+    rng: u.rng,
+    spd: u.spd,
+    los: u.los,
+    rof: u.rof,
+    acc: u.acc,
+    minr: u.minr,
+    gar: 0,
+    bt: u.tt,
+    barm: 0,
+    bonus,
+    rofx: 1,
+  };
 }
 
 export function applyEffects(S: StatSet, list: readonly Effect[]): void {

@@ -94,6 +94,11 @@ export interface StatSet {
   pa: number;
   rng: number;
   spd: number;
+  /** 最小射程 / 驻扎容量 / 建造或生产时间 / 建筑护甲（建筑模拟器用） */
+  minr: number;
+  gar: number;
+  bt: number;
+  barm: number;
   los: number;
   rof: number;
   acc: number;
@@ -116,6 +121,8 @@ export interface Building {
   hp: number;
   ma: number;
   pa: number;
+  /** 建筑护甲（护甲类别 21） */
+  barm: number;
   /** 建造时间（秒） */
   bt: number;
   gar: number;

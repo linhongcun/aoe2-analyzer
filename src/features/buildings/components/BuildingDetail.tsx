@@ -10,12 +10,15 @@ import { Icon } from '../../../shared/ui/Icon';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import BuildingList from './BuildingList';
+import BuildingSimulator from './BuildingSimulator';
+import { useLocation } from 'react-router-dom';
 
 const isUq = (x: Unit | Tech) => x.type === 'UniqueUnit' || x.type === 'UniqueTech';
 
 export default function BuildingDetail() {
   const { id = '' } = useParams();
   const core = useCore();
+  const loc = useLocation();
   useEffect(() => {
     scrollTo(0, 0);
   }, [id]);
@@ -91,6 +94,7 @@ export default function BuildingDetail() {
           {b.civs.length <= 4 && <span className="tag">文明独特</span>}
         </>
       }
+      initialTab={new URLSearchParams(loc.search).get('tab') ?? undefined}
       tabs={[
         {
           key: 'ov',
@@ -131,6 +135,7 @@ export default function BuildingDetail() {
             </>
           ),
         },
+        { key: 'sim', label: '科技模拟器', content: <BuildingSimulator b={b} /> },
         { key: 'prod', label: `生产（${units.length}）`, content: split(units, (u) => <UnitLink key={u.id} u={u} />, '该建筑不生产单位') },
         { key: 'tech', label: `科技（${techs.length}）`, content: split(techs, (t) => <TechLink key={t.id} t={t} />, '该建筑不研究科技') },
         {
