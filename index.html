@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>帝国时代2 文明分析器</title><style>body{margin:0;background:#1a140d radial-gradient(circle at top,#2e2215,#120d08);color:#e8d5a3;font-family:"Noto Serif SC",Georgia,serif}
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>帝国时代2 分析器</title><style>body{margin:0;background:#1a140d radial-gradient(circle at top,#2e2215,#120d08);color:#e8d5a3;font-family:"Noto Serif SC",Georgia,serif}
 header{text-align:center;padding:18px;border-bottom:2px solid #8b6914;background:#0d0906cc}h1{margin:0;color:#d4a017;text-shadow:0 0 8px #000;letter-spacing:2px}
 .note{color:#b08d57;font-size:13px}nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:10px}
 button,select,input{background:#2a1f13;color:#e8d5a3;border:1px solid #8b6914;border-radius:6px;padding:8px 12px;font-size:15px}button{cursor:pointer}button.on,button:hover{background:#8b6914;color:#120d08}
@@ -11,8 +11,8 @@ main{max-width:1150px;margin:auto;padding:12px}.bar{display:flex;gap:8px;flex-wr
 #mres{background:#1f170e;border:1px solid #6b5020;border-radius:10px;padding:14px;margin-top:12px}
 @media(max-width:760px){.two{grid-template-columns:1fr}}
 </style></head><body>
-<header><h1>⚔ 帝国时代 II 决定版 · 文明分析器 ⚔</h1><div class=note>面向团战排位 · 所有评分（1-10）均为主观近似评分，仅供参考；文明数据来源：SiegeEngineers/aoe2techtree（2026-10 抓取）；数据可能随版本补丁变化</div></header>
-<nav><button data-t=list onclick="tab('list')">文明列表</button><button data-t=compare onclick="tab('compare')">文明对比</button><button data-t=matchup onclick="tab('matchup')">对局助手</button></nav><main>
+<header><h1>⚔ 帝国时代 II 决定版 · 分析器 ⚔</h1><div class=note>面向团战排位 · 所有评分（1-10）均为主观近似评分，仅供参考；文明数据来源：SiegeEngineers/aoe2techtree（2026-10 抓取）；数据可能随版本补丁变化</div></header>
+<nav><button data-t=list onclick="tab('list')">文明分析</button><button data-t=compare onclick="tab('compare')">文明对比</button><button data-t=matchup onclick="tab('matchup')">对局助手</button></nav><main>
 <section id=list class=pane><div class=bar><input id=q placeholder="搜索文明（中/英）"><select id=ty><option value="">全部类型</option><option value=cav>骑兵</option><option value=arch>弓手</option><option value=inf>步兵</option><option value=naval>海军</option><option value=monk>僧侣</option><option value=siege>攻城</option><option value=def>防御</option></select><select id=pos><option value="">全部位置</option><option value=fl>适合边位 Flank (≥7)</option><option value=pk>适合口袋 Pocket (≥7)</option></select><span id=cnt class=note></span></div><div id=grid></div></section>
 <section id=detail class=pane></section>
 <section id=compare class=pane><div class=bar><select id=ca></select> VS <select id=cb></select></div><div class=two><table id=ctab></table><div><canvas id=crd width=440 height=440></canvas><p class=note>金色=左侧文明，蓝色=右侧文明；主观近似评分</p></div></div></section>
