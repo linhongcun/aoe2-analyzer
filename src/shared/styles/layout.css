@@ -424,3 +424,15 @@ a.tbld:hover span {
   align-items: center;
   gap: 6px;
 }
+.bonusbox {
+  margin: 10px 0;
+}
+.bonusbox h4 {
+  margin: 6px 0 2px;
+}
+.bonusbox .note {
+  margin: 0 0 6px;
+}
+.bonustab td:first-child {
+  white-space: nowrap;
+}

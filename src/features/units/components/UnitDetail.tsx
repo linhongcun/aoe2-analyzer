@@ -1,3 +1,4 @@
+import { ArmorClasses, BonusTable } from '../../simulator/components/SimPanel';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
@@ -92,36 +93,8 @@ export default function UnitDetail() {
                   </table>
                 </div>
                 <div>
-                  <h4>攻击（按护甲类别）</h4>
-                  <div>
-                    {u.atks.length ? (
-                      <Join
-                        sep=" "
-                        items={u.atks.map((a) => (
-                          <span className="tag">
-                            {a[0]} {a[1]}
-                          </span>
-                        ))}
-                      />
-                    ) : (
-                      '—'
-                    )}
-                  </div>
-                  <h4>护甲类别</h4>
-                  <div>
-                    {u.arms.length ? (
-                      <Join
-                        sep=" "
-                        items={u.arms.map((a) => (
-                          <span className="tag">
-                            {a[0]} {a[1]}
-                          </span>
-                        ))}
-                      />
-                    ) : (
-                      '—'
-                    )}
-                  </div>
+                  <BonusTable B={Object.fromEntries(u.atks.filter(([n]) => n !== '近战' && n !== '穿刺'))} />
+                  <ArmorClasses list={u.armc} />
                   {u.up && (
                     <>
                       <h4>升级研究</h4>

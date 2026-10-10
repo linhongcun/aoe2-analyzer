@@ -25,13 +25,13 @@ export interface SimPanelProps {
   cur: StatSet;
   cmpStats: StatSet | null;
   civNotes: string[];
+  armorClasses?: [string, number][];
   teamBonuses: { label: string; ok: boolean }[];
   go: (civ: string, age: number, sel: Iterable<number>, team: Iterable<number>) => void;
   setCmp: (c: string) => void;
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
-  const ks = [...new Set([...Object.keys(B.bonus), ...Object.keys(S.bonus)])].filter((k) => S.bonus[k] || B.bonus[k]);
   return (
     <>
       {rows.map(([k, n, ic]) => {
@@ -59,31 +59,94 @@ function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; 
           </tr>
         );
       })}
-      {ks.map((k) => {
-        const b = B.bonus[k] ?? 0,
-          s = S.bonus[k] ?? 0;
-        return (
-          <tr key={'b' + k}>
-            <td>
-              <span className="si" />对 {k} 加成
-            </td>
-            <td>
-              {b}{' '}
-              {s !== b && (
-                <span className={s > b ? 'up' : 'dn'}>
-                  {s > b ? '+' : ''}
-                  {s - b}
-                </span>
-              )}
-            </td>
-            <td>
-              <b>{s}</b>
-            </td>
-            {C && <td>{C.bonus[k] ?? 0}</td>}
-          </tr>
-        );
-      })}
     </>
+  );
+}
+
+const BONUS_NOTE = '对这些目标类别造成的额外伤害（进攻向，与自身属性不同）';
+
+/** 克制加成表：目标类别 -> 基础(+增量) / 当前 / 对比 */
+export function BonusTable({
+  B,
+  S,
+  C,
+  cmpLabel,
+}: {
+  B: Record<string, number>;
+  S?: Record<string, number>;
+  C?: Record<string, number> | null;
+  cmpLabel?: string;
+}) {
+  const cur = S ?? B;
+  const ks = [...new Set([...Object.keys(B), ...Object.keys(cur), ...Object.keys(C ?? {})])].filter((k) => B[k] || cur[k] || C?.[k]);
+  return (
+    <div className="bonusbox">
+      <h4>
+        <Icon name="crosshair" /> 克制加成 / Bonus damage
+      </h4>
+      <p className="note">{BONUS_NOTE}</p>
+      {ks.length ? (
+        <table className="stat bonustab">
+          <tbody>
+            <tr>
+              <th>目标类别</th>
+              <th>基础</th>
+              {S && <th>当前</th>}
+              {C && <th>{cmpLabel}</th>}
+            </tr>
+            {ks.map((k) => {
+              const b = B[k] ?? 0,
+                s = cur[k] ?? 0;
+              return (
+                <tr key={k}>
+                  <td>对 {k}</td>
+                  <td>
+                    {b}{' '}
+                    {S && s !== b && (
+                      <span className={s > b ? 'up' : 'dn'}>
+                        {s > b ? '+' : ''}
+                        {s - b}
+                      </span>
+                    )}
+                  </td>
+                  {S && (
+                    <td>
+                      <b>{s}</b>
+                    </td>
+                  )}
+                  {C && <td>{C[k] ?? 0}</td>}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      ) : (
+        <p className="note">无</p>
+      )}
+    </div>
+  );
+}
+
+/** 护甲类别（防御向）：决定该对象会受到哪些克制加成 */
+export function ArmorClasses({ list }: { list: [string, number][] }) {
+  const l = list.filter(([n]) => !/^类别\d+$/.test(n));
+  return (
+    <div className="bonusbox">
+      <h4>
+        <Icon name="shield" /> 护甲类别（防御）
+      </h4>
+      <p className="note">敌方对这些类别有克制加成时会对其造成额外伤害；数值为该类别护甲</p>
+      <div>
+        {l.length
+          ? l.map(([n, v]) => (
+              <span key={n} className="tag">
+                {n}
+                {v ? ' ' + v : ''}
+              </span>
+            ))
+          : '—'}
+      </div>
+    </div>
   );
 }
 
@@ -229,6 +292,8 @@ export default function SimPanel(p: SimPanelProps) {
               <StatRows rows={p.rows} B={p.base} S={p.cur} C={p.cmpStats} />
             </tbody>
           </table>
+          <BonusTable B={p.base.bonus} S={p.cur.bonus} C={p.cmpStats?.bonus ?? null} cmpLabel={`${civByEn(p.cmp)?.zh ?? ''} 满`} />
+          {p.armorClasses && <ArmorClasses list={p.armorClasses} />}
           <div className="posbox">
             <h4>累计研究费用（{p.sel.size} 项）</h4>
             <p style={{ fontSize: 18 }}>

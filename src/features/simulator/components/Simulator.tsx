@@ -35,6 +35,7 @@ export default function Simulator({ u, route }: { u: Unit; route: SimRoute }) {
       cur={simulate(S.ctx, u, S.civ, S.age, S.sel, S.team)}
       cmpStats={C}
       civNotes={civBonusNotes(u, S.civ)}
+      armorClasses={u.armc}
       teamBonuses={TEAM_BONUSES.map(([, label, f]) => ({ label, ok: f(u) }))}
       go={go}
       setCmp={setCmp}

@@ -50,6 +50,8 @@ export interface Unit {
   civs: string[];
   /** 原始护甲类别 id（用于模拟器判定单位类别） */
   cls: number[];
+  /** 护甲类别（不含近战/穿刺）：[类别名, 护甲值]，决定受到哪些克制加成 */
+  armc: [string, number][];
   up: [Cost, number] | null;
   bz: string;
   ben: string;

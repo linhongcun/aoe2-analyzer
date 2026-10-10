@@ -141,3 +141,16 @@ test('building simulator: prerequisite chain (Bracer selects Fletching + Bodkin)
   await page.locator('label.simt', { hasText: '护腕' }).locator('input').check();
   await expect(page.locator('label.simt.on')).toHaveCount(3);
 });
+
+test('bonus damage is a separate section from self stats (unit + building sim)', async ({ page }) => {
+  await page.goto('./#/building/82?tab=sim&civ=Britons');
+  await page.getByRole('button', { name: '满科技' }).click();
+  await expect(page.locator('.simtab')).not.toContainText('加成');
+  const bt = page.locator('#sim .bonustab');
+  await expect(bt.locator('tr', { hasText: '船只' }).locator('td').nth(1)).toHaveText(/^0\s*\+4$/);
+  await expect(bt.locator('tr', { hasText: '船只' }).locator('td').nth(2)).toHaveText('4');
+  await page.goto('./#/unit/569/Franks');
+  await expect(page.locator('#sim')).toContainText('克制加成');
+  await expect(page.locator('#sim')).toContainText('护甲类别（防御）');
+  await expect(page.locator('.simtab')).not.toContainText('加成');
+});
