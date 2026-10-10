@@ -18,6 +18,8 @@ const BuildingDetail = lazy(() => import('../features/buildings/components/Build
 const SimulatorHub = lazy(() => import('../features/simulator/components/SimulatorHub'));
 const Planned = lazy(() => import('../features/placeholder/components/Planned'));
 const Duel = lazy(() => import('../features/duel/components/Duel'));
+const BonusDetail = lazy(() => import('../features/bonuses/components/BonusDetail'));
+const BonusList = lazy(() => import('../features/bonuses/components/BonusList'));
 const Matchup = lazy(() => import('../features/matchup/components/Matchup'));
 
 /** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list */
@@ -28,6 +30,8 @@ export function AppRoutes() {
       <Route path="/civs" element={<Navigate to="/list" replace />} />
       <Route path="/list" element={<CivList />} />
       <Route path="/civ/:en" element={<CivDetail />} />
+      <Route path="/civ/:en/bonus/:idx" element={<BonusDetail />} />
+      <Route path="/bonuses" element={<BonusList />} />
       <Route path="/units" element={<UnitList />} />
       <Route path="/unit/*" element={<UnitDetail />} />
       <Route path="/techs" element={<TechList />} />

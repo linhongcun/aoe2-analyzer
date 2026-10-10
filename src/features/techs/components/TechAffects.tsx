@@ -98,7 +98,7 @@ export default function TechAffects({ t }: { t: Tech }) {
 }
 
 /** 一条升级路线一个条目：叠放图标 + 「骑士 / 重骑士 / 圣骑士」，每个名字可点；精锐版合并为小标 */
-function LineChip({ g }: { g: LineEntry }) {
+export function LineChip({ g }: { g: LineEntry }) {
   if (g.members.length === 1) return <UnitLink u={g.members[0]!.u} elite={g.members[0]!.elite} />;
   return (
     <span className="lchip" title={g.members.map((m) => m.u.zh + (m.elite ? '（含精锐）' : '')).join('、')}>

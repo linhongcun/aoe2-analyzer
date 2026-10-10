@@ -1,6 +1,6 @@
 /** 结构化效果表：科技英文名 -> [适用单位判定, 效果列表][]。数值来源：游戏内说明与 AoE2 Fandom Wiki。 */
-import type { Effect, UnitPred } from './types';
-import { isArrow, isCA, isCamel, isFootArcher, isGun, isInf, isKnightLine, isMelee, isMilitiaLine, isMounted, isArcher, isSkirm } from './unitClass';
+import type { Effect, Unit, UnitPred } from './types';
+import { hasCls, isArrow, isCA, isCamel, isFootArcher, isGun, isInf, isKnightLine, isMelee, isMilitiaLine, isMounted, isArcher, isSkirm } from './unitClass';
 
 export type EffectRule = [UnitPred, Effect[]];
 const cav: UnitPred = (u) => isMounted(u) && !isArcher(u);
@@ -135,11 +135,12 @@ export const TECH_EFFECTS: Record<string, EffectRule[]> = {
 /** 仅显示文本、不计入数值的通用科技 */
 export const TEXT_ONLY_TECHS = ['Ballistics', 'Conscription'] as const;
 
-export type CivBonus = [UnitPred, (age: number) => Effect[], string];
+/** [适用判定, 按时代的效果, 说明, 对应 civs.json bon 的序号] */
+export type CivBonus = [UnitPred, (age: number) => Effect[], string, number];
 /** 文明加成（仅编码可靠的数值；按时代 2/3/4） */
 export const CIV_BONUSES: Record<string, CivBonus[]> = {
-  Franks: [[isMounted, (a) => (a >= 2 ? [{ s: 'hp', op: 'mul', v: 1.2 }] : []), '骑兵单位从封建时代起生命值 +20%']],
-  Vikings: [[isInf, (a) => (a >= 2 ? [{ s: 'hp', op: 'mul', v: 1.2 }] : []), '步兵从封建时代起生命值 +20%']],
+  Franks: [[isMounted, (a) => (a >= 2 ? [{ s: 'hp', op: 'mul', v: 1.2 }] : []), '骑兵单位从封建时代起生命值 +20%', 2]],
+  Vikings: [[isInf, (a) => (a >= 2 ? [{ s: 'hp', op: 'mul', v: 1.2 }] : []), '步兵从封建时代起生命值 +20%', 1]],
   Britons: [
     [
       isFootArcher,
@@ -156,17 +157,18 @@ export const CIV_BONUSES: Record<string, CivBonus[]> = {
               ]
             : [],
       '步弓手城堡/帝王射程 +1/+2',
+      2,
     ],
   ],
   Teutons: [
-    [(u) => isInf(u) || isMounted(u), (a) => (a >= 4 ? [{ s: 'ma', v: 2 }] : a >= 3 ? [{ s: 'ma', v: 1 }] : []), '步兵和骑乘单位城堡/帝王近战护甲 +1/+2'],
+    [(u) => isInf(u) || isMounted(u), (a) => (a >= 4 ? [{ s: 'ma', v: 2 }] : a >= 3 ? [{ s: 'ma', v: 1 }] : []), '步兵和骑乘单位城堡/帝王近战护甲 +1/+2', 2],
   ],
-  Japanese: [[isInf, (a) => (a >= 2 ? [{ s: 'rof', v: 0.33 }] : []), '步兵从封建时代起攻速 +33%']],
-  Celts: [[isInf, (a) => [{ s: 'spd', op: 'mul', v: 1 + 0.05 * a }], '步兵移速 +5/10/15/20%（随时代）']],
-  Mongols: [[isCA, () => [{ s: 'rof', v: 0.25 }], '骑射手攻速 +25%']],
-  Ethiopians: [[isFootArcher, () => [{ s: 'rof', v: 0.18 }], '步弓手攻速 +18%']],
-  Malians: [[(u) => u.b === 12, (a) => [{ s: 'pa', v: Math.max(0, a - 1) }], '兵营单位封建/城堡/帝王穿刺护甲 +1/+2/+3']],
-  Burmese: [[isInf, (a) => [{ s: 'atk', v: Math.max(0, a - 1) }], '步兵封建/城堡/帝王攻击 +1/+2/+3']],
+  Japanese: [[isInf, (a) => (a >= 2 ? [{ s: 'rof', v: 0.33 }] : []), '步兵从封建时代起攻速 +33%', 1]],
+  Celts: [[isInf, (a) => [{ s: 'spd', op: 'mul', v: 1 + 0.05 * a }], '步兵移速 +5/10/15/20%（随时代）', 2]],
+  Mongols: [[isCA, () => [{ s: 'rof', v: 0.25 }], '骑射手攻速 +25%', 1]],
+  Ethiopians: [[isFootArcher, () => [{ s: 'rof', v: 0.18 }], '步弓手攻速 +18%', 1]],
+  Malians: [[(u) => u.b === 12, (a) => [{ s: 'pa', v: Math.max(0, a - 1) }], '兵营单位封建/城堡/帝王穿刺护甲 +1/+2/+3', 2]],
+  Burmese: [[isInf, (a) => [{ s: 'atk', v: Math.max(0, a - 1) }], '步兵封建/城堡/帝王攻击 +1/+2/+3', 1]],
   Hindustanis: [
     [
       isGun,
@@ -175,15 +177,90 @@ export const CIV_BONUSES: Record<string, CivBonus[]> = {
         { s: 'pa', v: 1 },
       ],
       '火药单位 +1/+1 护甲',
+      2,
     ],
-    [isCamel, () => [{ s: 'rof', v: 0.2 }], '骆驼骑兵攻速 +20%'],
+    [isCamel, () => [{ s: 'rof', v: 0.2 }], '骆驼骑兵攻速 +20%', 1],
   ],
-  Turks: [[isGun, () => [{ s: 'hp', op: 'mul', v: 1.25 }], '火药单位生命值 +25%']],
-  Saracens: [[isCamel, () => [{ s: 'hp', op: 'mul', v: 1.25 }], '骆驼单位生命值 +25%']],
-  Vietnamese: [[(u) => isFootArcher(u) || isSkirm(u), () => [{ s: 'hp', op: 'mul', v: 1.2 }], '步弓手和散兵生命值 +20%']],
-  Cumans: [[isMounted, (a) => (a >= 2 ? [{ s: 'spd', op: 'mul', v: 1 + 0.05 * (a - 1) }] : []), '骑乘单位封建/城堡/帝王移速 +5/10/15%']],
-  Goths: [[isInf, (a) => (a >= 2 ? [{ s: 'bonus', vs: '标准建筑', v: a - 1 }] : []), '步兵封建/城堡/帝王对建筑攻击 +1/+2/+3']],
+  Turks: [[isGun, () => [{ s: 'hp', op: 'mul', v: 1.25 }], '火药单位生命值 +25%', 3]],
+  Saracens: [[isCamel, () => [{ s: 'hp', op: 'mul', v: 1.25 }], '骆驼单位生命值 +25%', 1]],
+  Vietnamese: [[(u) => isFootArcher(u) || isSkirm(u), () => [{ s: 'hp', op: 'mul', v: 1.2 }], '步弓手和散兵生命值 +20%', 2]],
+  Cumans: [[isMounted, (a) => (a >= 2 ? [{ s: 'spd', op: 'mul', v: 1 + 0.05 * (a - 1) }] : []), '骑乘单位封建/城堡/帝王移速 +5/10/15%', 1]],
+  Goths: [[isInf, (a) => (a >= 2 ? [{ s: 'bonus', vs: '标准建筑', v: a - 1 }] : []), '步兵封建/城堡/帝王对建筑攻击 +1/+2/+3', 3]],
 };
+const nm =
+  (...names: string[]): UnitPred =>
+  (u) =>
+    names.includes(u.en.replace(/^Elite /, ''));
+const armcHas = (u: Unit, c: string) => u.armc.some(([n]) => n === c);
+const SCOUT = ['Scout Cavalry', 'Light Cavalry', 'Hussar', 'Winged Hussar'];
+const GALLEY = ['Galley', 'War Galley', 'Galleon'];
+const FIRESHIP = ['Fire Galley', 'Fire Ship', 'Fast Fire Ship'];
+const SPEAR = ['Spearman', 'Pikeman', 'Halberdier'];
+const SKIRM = ['Skirmisher', 'Imperial Skirmisher'];
+const isShip: UnitPred = (u) => armcHas(u, '船只');
+const isSiege: UnitPred = (u) => hasCls(u, 20);
+const step = (ages: number[], vals: number[]) => (a: number) => {
+  let v = 0;
+  ages.forEach((g, i) => a >= g && (v = vals[i]!));
+  return v;
+};
+const pctHp = (ages: number[], vals: number[]) => (a: number) => (step(ages, vals)(a) ? [{ s: 'hp', op: 'mul', v: 1 + step(ages, vals)(a) } as Effect] : []);
+const pctSpd = (ages: number[], vals: number[]) => (a: number) => (step(ages, vals)(a) ? [{ s: 'spd', op: 'mul', v: 1 + step(ages, vals)(a) } as Effect] : []);
+const armor = (m: number, p: number) => (): Effect[] => [...(m ? [{ s: 'ma', v: m } as Effect] : []), ...(p ? [{ s: 'pa', v: p } as Effect] : [])];
+const rof =
+  (v: number, from = 1) =>
+  (a: number): Effect[] =>
+    a >= from ? [{ s: 'rof', v }] : [];
+/** 新增文明加成（2026-10 补充）；合并进 CIV_BONUSES */
+const MORE: Record<string, CivBonus[]> = {
+  Mongols: [[nm(...SCOUT, 'Steppe Lancer'), pctHp([3, 4], [0.2, 0.3]), '侦察骑兵系与草原枪兵城堡/帝王生命值 +20/30%', 2]],
+  Burmese: [[nm('Battle Elephant'), armor(1, 1), '象兵 +1/+1 护甲', 2]],
+  Turks: [[nm(...SCOUT), armor(0, 1), '侦察骑兵系 +1 穿刺护甲', 1]],
+  Saracens: [
+    [nm(...GALLEY), rof(0.25), '桨帆船系攻速 +25%', 2],
+    [nm('Transport Ship'), () => [{ s: 'hp', op: 'mul', v: 2 }], '运输船生命值 +100%', 3],
+  ],
+  Celts: [[isSiege, rof(0.25), '攻城武器攻速 +25%', 3]],
+  Spanish: [[isGun, rof(0.18), '火药单位攻速 +18%', 3]],
+  Byzantines: [[nm(...FIRESHIP, 'Dromon'), rof(0.25), '火船与德罗蒙战舰攻速 +25%', 4]],
+  Japanese: [[nm('Fishing Ship'), () => [{ s: 'hp', op: 'mul', v: 2 }], '渔船生命值 +100%', 3]],
+  Chinese: [[nm('Fire Lancer', ...FIRESHIP), pctSpd([3, 4], [0.05, 0.1]), '火矛兵与火船城堡/帝王移速 +5/10%', 3]],
+  Bengalis: [[nm('Monk'), armor(3, 3), '僧侣 +3/+3 护甲', 3]],
+  Berbers: [[isShip, () => [{ s: 'spd', op: 'mul', v: 1.1 }], '船只移速 +10%', 2]],
+  Burgundians: [[isGun, () => [{ s: 'atk', op: 'mul', v: 1.25 }], '火药单位攻击 +25%', 3]],
+  Dravidians: [[(u) => isSkirm(u) || nm('Elephant Archer')(u), rof(0.25), '散兵与骑象射手攻速 +25%', 2]],
+  Italians: [[(u) => isFootArcher(u) || nm('Condottiero')(u), armor(1, 1), '步弓手与意大利佣兵 +1/+1 护甲', 1]],
+  Jurchens: [[(u) => isMounted(u) || nm('Fire Lancer')(u), rof(0.25, 2), '骑乘单位与火矛兵从封建时代起攻速 +25%', 1]],
+  Khmer: [[nm('Battle Elephant'), () => [{ s: 'spd', op: 'mul', v: 1.1 }], '象兵移速 +10%', 3]],
+  Lithuanians: [[nm(...SPEAR, ...SKIRM), () => [{ s: 'spd', op: 'mul', v: 1.1 }], '长矛兵系与散兵系移速 +10%', 1]],
+  Mapuche: [
+    [
+      (u) => isInf(u) || isSkirm(u) || nm('Slinger')(u),
+      (a) => (step([2, 3, 4], [5, 10, 15])(a) ? [{ s: 'hp', v: step([2, 3, 4], [5, 10, 15])(a) }] : []),
+      '步兵、投石兵与散兵封建/城堡/帝王生命值 +5/10/15',
+      2,
+    ],
+  ],
+  Muisca: [
+    [
+      (u) => u.b === 87 || nm('Champi Warrior')(u),
+      (a) => (step([2, 3, 4], [1, 2, 3])(a) ? [{ s: 'ma', v: step([2, 3, 4], [1, 2, 3])(a) }] : []),
+      '蔷琵战士与靶场单位封建/城堡/帝王近战护甲 +1/2/3',
+      2,
+    ],
+  ],
+  Portuguese: [[isShip, pctHp([2, 3, 4], [0.1, 0.15, 0.2]), '船只封建/城堡/帝王生命值 +10/15/20%', 3]],
+  Romans: [[nm(...GALLEY, 'Dromon'), armor(1, 1), '桨帆船系与德罗蒙战舰 +1/+1 护甲', 3]],
+  Saxons: [[nm('Longship', 'Catapult Galleon'), () => [{ s: 'hp', op: 'mul', v: 1.2 }], '长船与投石战船生命值 +20%', 3]],
+  Slavs: [[nm('Monk'), () => [{ s: 'spd', op: 'mul', v: 1.2 }], '僧侣移速 +20%', 3]],
+  Varangians: [
+    [nm('Varangian Guard'), rof(0.25), '瓦兰吉卫队攻速 +25%（产金部分仅文本）', 2],
+    [nm('Longship', 'Catapult Galleon'), rof(0.15), '长船与投石战船攻速 +15%', 3],
+  ],
+  Wei: [[(u) => /Hei Guang|Xianbei Raider/.test(u.en), pctHp([3, 4], [0.2, 0.3]), '黑光铠骑兵与鲜卑掠骑兵城堡/帝王生命值 +20/30%', 1]],
+  Wu: [[(u) => /Jian Swordsman|Hei Guang/.test(u.en), (a) => (a >= 4 ? [{ s: 'atk', v: 2 }] : []), '剑士（剑）与黑光铠骑兵帝王时代攻击 +2', 2]],
+};
+Object.entries(MORE).forEach(([c, l]) => (CIV_BONUSES[c] = [...(CIV_BONUSES[c] ?? []), ...l]));
 
 export type TeamBonus = [string, string, UnitPred, Effect[]];
 export const TEAM_BONUSES: TeamBonus[] = [
@@ -191,4 +268,15 @@ export const TEAM_BONUSES: TeamBonus[] = [
   ['Persians', '波斯：骑士系对远程士兵攻击 +2', isKnightLine, [{ s: 'bonus', vs: '弓手', v: 2 }]],
   ['Khitans', '契丹：步兵对远程士兵攻击 +2', isInf, [{ s: 'bonus', vs: '弓手', v: 2 }]],
   ['Saracens', '萨拉森：步弓手和散兵对建筑攻击 +2', (u) => isFootArcher(u) || isSkirm(u), [{ s: 'bonus', vs: '标准建筑', v: 2 }]],
+  ['Armenians', '亚美尼亚：步兵视野 +2', isInf, [{ s: 'los', v: 2 }]],
+  ['Danes', '丹麦：攻城武器视野 +2', (u) => hasCls(u, 20), [{ s: 'los', v: 2 }]],
+  ['Jurchens', '女真：火药单位视野 +2', isGun, [{ s: 'los', v: 2 }]],
+  ['Khmer', '高棉：蝎式弩炮射程 +1', (u) => /Scorpion/.test(u.en), [{ s: 'rng', v: 1 }]],
+  ['Koreans', '高丽：村民视野 +3', (u) => u.armc.some(([n]) => n === '村民'), [{ s: 'los', v: 3 }]],
+  ['Mapuche', '马普切：长矛兵系与散兵视野 +2', (u) => /^(Spearman|Pikeman|Halberdier)$/.test(u.en) || isSkirm(u), [{ s: 'los', v: 2 }]],
+  ['Poles', '波兰：侦察骑兵系对远程士兵攻击 +1', (u) => /^(Scout Cavalry|Light Cavalry|Hussar|Winged Hussar)$/.test(u.en), [{ s: 'bonus', vs: '弓手', v: 1 }]],
+  ['Shu', '蜀：步弓手视野 +2', isFootArcher, [{ s: 'los', v: 2 }]],
+  ['Tatars', '鞑靼：骑射单位视野 +2', isCA, [{ s: 'los', v: 2 }]],
+  ['Varangians', '瓦兰吉：骑士系对步兵攻击 +1', isKnightLine, [{ s: 'bonus', vs: '步兵', v: 1 }]],
+  ['Wei', '魏：骑兵对攻城武器攻击 +2', (u) => isMounted(u) && !isArcher(u), [{ s: 'bonus', vs: '攻城武器', v: 2 }]],
 ];

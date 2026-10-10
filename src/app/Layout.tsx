@@ -45,8 +45,8 @@ export function Layout({ children }: { children: ReactNode }) {
           <Icon name="swords" className="ic hic" /> 帝国时代 II 分析器
         </Link>
         <nav className={menu ? 'mainnav open' : 'mainnav'}>
-          <NavGroup title="百科" items={WIKI} path={pathname} />
-          <NavGroup title="工具" items={TOOLS} path={pathname} />
+          <NavGroup title="百科" items={WIKI.filter((s) => !s.hideNav)} path={pathname} />
+          <NavGroup title="工具" items={TOOLS.filter((s) => !s.hideNav)} path={pathname} />
         </nav>
         <button className="searchbtn" onClick={() => setCmdk(true)} aria-label="全局搜索">
           <Icon name="search" />

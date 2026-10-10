@@ -1056,3 +1056,117 @@ table.ediff td.dn {
   color: #1b1408;
   font-weight: bold;
 }
+/* 文明加成 */
+.blrows {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+}
+.brow {
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  margin: 4px 0;
+  background: var(--c-control);
+}
+.brow-h {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  background: none;
+  border: none;
+  color: var(--c-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.brow-h:hover .brow-t {
+  color: var(--c-gold-hi);
+}
+.brow-t {
+  flex: 1;
+}
+.chev {
+  transition: transform 0.15s;
+}
+.chev.rot {
+  transform: rotate(90deg);
+}
+.brow-b {
+  padding: 4px 12px 10px 30px;
+  border-top: 1px solid var(--c-tag);
+}
+.tag.ok {
+  background: #234a23;
+  color: var(--c-good);
+}
+.tag.txt {
+  background: #4a2a18;
+  color: #f0b080;
+}
+.tag.team {
+  background: #1e3a55;
+  color: #9fd0f5;
+}
+.bonusbody .bz {
+  font-size: 16px;
+  margin: 4px 0;
+}
+.bex {
+  margin: 8px 0;
+}
+.bextab .ic {
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+}
+.affg h5 {
+  margin: 8px 0 4px;
+  color: var(--c-muted);
+}
+.blist {
+  list-style: none;
+  padding: 0;
+}
+.blist li a {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid var(--c-tag);
+  text-decoration: none;
+  color: var(--c-text);
+}
+.blist li a:hover {
+  background: var(--c-control);
+}
+.bl-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.catbar button.on,
+#bonuses .catbar button.on {
+  background: var(--c-gold-hi);
+  color: #1b1408;
+}
+.bside {
+  padding-left: 16px;
+  font-size: 13px;
+}
+.bside li.cur a {
+  color: var(--c-gold-hi);
+  font-weight: bold;
+}
+@media (max-width: 899px) {
+  .brow-b {
+    padding-left: 10px;
+  }
+}
+.lchip {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+.lchip > span {
+  white-space: nowrap;
+}

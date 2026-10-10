@@ -12,6 +12,7 @@ export interface Civ {
   ct: string;
   it: string;
   bon: string[];
+  bonEn: string[];
   tb: string;
   tbEn: string;
   /** 8 项能力评分：骑兵 弓手 步兵 经济 防御 攻城 僧侣 海军 */

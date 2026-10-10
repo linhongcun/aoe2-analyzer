@@ -11,6 +11,8 @@ export interface Section {
   /** 当前路径是否属于该模块（用于高亮与面包屑） */
   match: RegExp;
   status?: 'planned';
+  /** 不在顶部导航显示（首页与 Ctrl+K 仍可达），避免导航换行 */
+  hideNav?: boolean;
 }
 export const WIKI: Section[] = [
   {
@@ -33,6 +35,16 @@ export const WIKI: Section[] = [
     icon: 'castle',
     desc: '38 种建筑的属性、可生产单位与科技',
     match: /^\/buildings?(\/.*)?$/,
+  },
+  {
+    key: 'bonuses',
+    path: '/bonuses',
+    label: '文明加成',
+    en: 'Civ Bonuses',
+    icon: 'scroll',
+    desc: '全部文明与团队加成：效果、作用对象与数值示例',
+    match: /^\/bonuses$/,
+    hideNav: true,
   },
   { key: 'dlc', path: '/dlc', label: 'DLC', en: 'Expansions', icon: 'package', desc: '14 个资料片与对应文明', match: /^\/dlc$/ },
 ];

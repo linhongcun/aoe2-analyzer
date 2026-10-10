@@ -12,6 +12,7 @@ import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Linked, PosBox, Radar, Steps } from '../../../shared/ui/widgets';
 import { session } from '../../../shared/utils/sticky';
 import CivList from './CivList';
+import { BonusRows } from './BonusRows';
 
 function UTech({ s, civ }: { s: string; civ: string }) {
   const core = useCore();
@@ -73,17 +74,7 @@ export default function CivDetail() {
               <p>
                 <b>文明加成：</b>
               </p>
-              <ul>
-                {c.bon.map((b, i) => (
-                  <li key={i}>
-                    <Linked text={b} />
-                  </li>
-                ))}
-              </ul>
-              <p>
-                <b>团队加成：</b>
-                <Linked text={c.tb} /> <small className="note">({c.tbEn})</small>
-              </p>
+              <BonusRows c={c} />
               <p className="g">
                 <b>优势：</b>
                 {s.join('、')}

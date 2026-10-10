@@ -90,20 +90,21 @@ export const BUILDING_TEXT_ONLY: Record<string, BPred> = {
   'Bombard Tower': is(...TOWERS),
 };
 
-export type BCivBonus = [BPred, (age: number) => Effect[], string];
+/** [适用判定, 按时代的效果, 说明, 对应 civs.json bon 的序号] */
+export type BCivBonus = [BPred, (age: number) => Effect[], string, number];
 /** 文明加成（来自游戏内文明说明，仅编码明确数值） */
 export const BUILDING_CIV_BONUSES: Record<string, BCivBonus[]> = {
-  Byzantines: [[all, (a) => [{ s: 'hp', op: 'mul', v: 1 + 0.1 * a }], '建筑生命值随时代 +10/20/30/40%']],
-  Spanish: [[all, () => [{ s: 'bt', op: 'mul', v: 1 / 1.3 }], '建筑工工作速度 +30%']],
-  Persians: [[is('Town Center', 'Dock'), () => [{ s: 'hp', op: 'mul', v: 2 }], '城镇中心和码头生命值 +100%']],
-  Chinese: [[is('Town Center'), () => [{ s: 'los', v: 7 }], '城镇中心视野 +7']],
+  Byzantines: [[all, (a) => [{ s: 'hp', op: 'mul', v: 1 + 0.1 * a }], '建筑生命值随时代 +10/20/30/40%', 0]],
+  Spanish: [[all, () => [{ s: 'bt', op: 'mul', v: 1 / 1.3 }], '建筑工工作速度 +30%', 0]],
+  Persians: [[is('Town Center', 'Dock'), () => [{ s: 'hp', op: 'mul', v: 2 }], '城镇中心和码头生命值 +100%', 1]],
+  Chinese: [[is('Town Center'), () => [{ s: 'los', v: 7 }], '城镇中心视野 +7', 2]],
   Teutons: [
-    [is('Town Center'), () => [{ s: 'gar', v: 10 }], '城镇中心驻扎容量 +10'],
-    [is(...TOWERS), () => [{ s: 'gar', v: 5 }], '塔驻扎容量 +5'],
+    [is('Town Center'), () => [{ s: 'gar', v: 10 }], '城镇中心驻扎容量 +10', 1],
+    [is(...TOWERS), () => [{ s: 'gar', v: 5 }], '塔驻扎容量 +5', 1],
   ],
   Sicilians: [
-    [(b) => b.type === 'defense' || DEFENSIVE(b), () => [{ s: 'bt', op: 'mul', v: 1 / 1.5 }], '防御工事建造速度 +50%'],
-    [is('Town Center'), () => [{ s: 'bt', op: 'mul', v: 1 / 2 }], '城镇中心建造速度 +100%'],
+    [(b) => b.type === 'defense' || DEFENSIVE(b), () => [{ s: 'bt', op: 'mul', v: 1 / 1.5 }], '防御工事建造速度 +50%', 4],
+    [is('Town Center'), () => [{ s: 'bt', op: 'mul', v: 1 / 2 }], '城镇中心建造速度 +100%', 4],
   ],
 };
 

@@ -4,6 +4,7 @@ import { useCore } from '../../data/hooks';
 import type { SearchItem } from '../../domain/search';
 import { ALL } from '../../app/nav/sections';
 import { collapse } from '../../domain/family';
+import { allCivBonuses } from '../../domain/civBonus';
 import { TYPE_ZH } from '../../domain/ratings';
 
 export function useSearchIndex(): SearchItem[] {
@@ -39,6 +40,18 @@ export function useSearchIndex(): SearchItem[] {
     );
     core?.buildings.forEach((b) =>
       items.push({ kind: 'building', id: String(b.id), zh: b.zh, en: b.en, href: `/building/${b.id}`, sub: '建筑', img: `buildings/${b.pic}.webp` }),
+    );
+    allCivBonuses(civs).forEach((b) =>
+      items.push({
+        kind: 'bonus',
+        id: b.id,
+        zh: b.zh,
+        en: b.en,
+        href: `/civ/${b.civ}/bonus/${b.idx}`,
+        sub: `${civs.find((c) => c.en === b.civ)!.zh} · ${b.team ? '团队加成' : '文明加成'}`,
+        img: `civs/${b.civ.toLowerCase()}.webp`,
+        alt: [civs.find((c) => c.en === b.civ)!.zh + b.zh],
+      }),
     );
     return items;
   }, [core]);

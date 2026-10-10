@@ -32,6 +32,8 @@ const ROUTES: [string, string][] = [
   ['#compare', '#ctab tr'],
   ['#matchup', '#mres h3'],
   ['#/duel', '#duel-res h3'],
+  ['#/bonuses', '#blist li'],
+  ['#/civ/Franks/bonus/2', '#bonus h2'],
 ];
 
 for (const [hash, sel] of ROUTES) {
@@ -289,4 +291,47 @@ test('unit duel: mobile layout stacks sides', async ({ page }) => {
     b = await page.locator('#duel-b').boundingBox();
   expect(b!.y).toBeGreaterThan(a!.y + a!.height - 1);
   expect(a!.width).toBeLessThanOrEqual(390);
+});
+
+test('civ bonus rows expand inline and link to bonus detail', async ({ page }) => {
+  await page.goto('./#/civ/Franks');
+  const row = page.locator('.brow[data-bonus="2"]');
+  await row.locator('.brow-h').click();
+  await expect(row.locator('.brow-h')).toHaveAttribute('aria-expanded', 'true');
+  await expect(row.locator('.bextab')).toContainText('192');
+  await expect(row).toContainText('已计入数值');
+  await page.locator('.brow[data-bonus="1"] .brow-h').click();
+  await expect(page.locator('.brow[data-bonus="1"]')).toContainText('仅文本，未计入数值');
+  await page
+    .locator('.brow[data-bonus="1"]')
+    .getByRole('link', { name: /查看详情页/ })
+    .click();
+  await expect(page).toHaveURL(/#\/civ\/Franks\/bonus\/1$/);
+  await expect(page.locator('#bonus h2')).toContainText('文明加成 2');
+});
+
+test('team bonus detail notes allies; bonus list filters; Ctrl+K finds bonuses', async ({ page }) => {
+  await page.goto('./#/civ/Franks/bonus/team');
+  await expect(page.locator('#bonus')).toContainText('作用于盟友');
+  await page.goto('./#/bonuses');
+  await page.locator('#blist li').first().waitFor();
+  const all = await page.locator('#blist li').count();
+  expect(all).toBeGreaterThan(250);
+  await page.getByRole('radio', { name: '海军' }).click();
+  await expect.poll(() => page.locator('#blist li').count()).toBeLessThan(all);
+  await page.locator('#benc').check();
+  await expect(page.locator('#blist li').first()).toContainText('已计入数值');
+  await page.keyboard.press('Control+k');
+  await page.getByPlaceholder(/搜索文明、单位、科技/).fill('磨坊科技免费');
+  await expect(page.locator('.cmdk-list li').first()).toContainText('加成');
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#\/civ\/Franks\/bonus\/1$/);
+});
+
+test('bonus detail on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('./#/civ/Franks/bonus/2');
+  await expect(page.locator('#bonus .bextab')).toContainText('160');
+  const w = await page.evaluate(() => document.documentElement.scrollWidth);
+  expect(w).toBeLessThanOrEqual(392);
 });
