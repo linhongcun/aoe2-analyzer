@@ -1,3 +1,4 @@
+import { ListHead } from '../../../shared/ui/layout';
 import { useNavigate } from 'react-router-dom';
 import { civs } from '../../../data';
 import { TYPE_ZH } from '../../../domain/ratings';
@@ -16,7 +17,8 @@ export default function CivList() {
   const r = filterCivs(civs, { q, ty, pos, dlc });
   return (
     <section id="list" className="pane">
-      <div className="bar">
+      <ListHead title="文明" desc="56 个文明 · 按类型、DLC、团战位置筛选" />
+      <div className="bar fbar">
         <SearchInput id="q" value={q} onChange={setQ} placeholder="搜索文明（中/英）" />
         <select id="ty" value={ty} onChange={(e) => setTy(e.target.value)}>
           <option value="">全部类型</option>
