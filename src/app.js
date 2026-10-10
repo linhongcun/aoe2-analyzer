@@ -30,15 +30,17 @@ const NM={};UN.filter(u=>u.zh.length>=2).forEach(u=>{if(!NM[u.zh]||u.type!="Uniq
 const NRE=new RegExp("("+Object.keys(NM).sort((a,b)=>b.length-a.length).map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")","g");
 function linkify(t){return t.replace(NRE,m=>`<a class="ulink${NM[m][0]=="t"?" tl":""}" href="#${NM[m]}">${m}</a>`)}
 function utech(s,civ){const i=s.indexOf("｜"),en=s.slice(i+1),t=TC.find(x=>x.type=="UniqueTech"&&x.en==en&&x.civs.includes(civ));if(!t)return linkify(s);const p=s.indexOf(" (");return `<a class="ulink tl" href="#tech/${t.id}">${tic(t)}${s.slice(0,p)}</a>${linkify(s.slice(p,i))}｜${en}`}
-const cost=c=>Object.entries(c).map(([k,v])=>`${v} ${RES[k]||k}`).join(" + ")||"—";
+const SI=(k,t)=>`<img class=si src="img/stats/${k}.webp" alt="${t||k}" title="${t||k}">`;const RK={Food:"food",Wood:"wood",Gold:"gold",Stone:"stone"};
+const cost=c=>Object.entries(c).map(([k,v])=>RK[k]?`<span class=res>${SI(RK[k],RES[k])}${v}</span>`:`${v} ${k}`).join(" ")||"—";
+const costT=c=>Object.entries(c).map(([k,v])=>`${v} ${RES[k]||k}`).join(" + ")||"—";
 function line(u){let a=[u],x=u;while(x.from_&&UM[x.from_]&&a.length<10){x=UM[x.from_];a.unshift(x)}let y=u,g=0;for(;g<10;g++){const n=UN.find(v=>v.from_==y.id);if(!n)break;a.push(n);y=n}return a}
 function unitView(id){const u=UM[id];if(!u)return tab("units");tab("unit");const ln=line(u);
 $("#unit").innerHTML=`<button onclick="history.back()">← 返回</button><h2>${uic(u).replace("uico","uico big")} ${u.zh} <small>${u.en}</small> ${dbadgeL(u.dlc)}</h2>
-<p><span class=tag>${UT[u.type]||u.type}</span> <b>建筑：</b>${u.bz}（${u.ben}）　<b>时代：</b>${AGE[u.age]||u.age}　<b>造价：</b>${cost(u.cost)}　<b>生产时间：</b>${u.tt}s</p>
-<div class=two><div><table class=stat>${[["生命值 HP",u.hp],["攻击力",u.atk],["近战护甲",u.ma],["穿刺护甲",u.pa],["射程",u.rng+(u.minr?`（最小 ${u.minr}）`:"")],["移动速度",u.spd],["视野",u.los],["攻击间隔",u.rof+"s"],["准确度",u.acc+"%"]].concat(u.blast?[["溅射范围",u.blast]]:[]).map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table></div>
+<p><span class=tag>${UT[u.type]||u.type}</span> <b>建筑：</b>${u.bz}（${u.ben}）　<b>时代：</b>${AGE[u.age]||u.age}　<b>造价：</b>${cost(u.cost)}　<b>生产时间：</b>${SI("time","生产时间")}${u.tt}s</p>
+<div class=two><div><table class=stat>${[["hp","生命值 HP",u.hp],[u.rng>1?"patk":"atk","攻击力",u.atk],["marm","近战护甲",u.ma],["parm","穿刺护甲",u.pa],["range","射程",u.rng+(u.minr?`（最小 ${u.minr}）`:"")],["speed","移动速度",u.spd],["","视野",u.los],["rof","攻击间隔",u.rof+"s"],["","准确度",u.acc+"%"]].concat(u.blast?[["blast","溅射范围",u.blast]]:[]).map(r=>`<tr><td>${r[0]?SI(r[0],r[1]):"<span class=si></span>"}${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</table></div>
 <div><h4>攻击（按护甲类别）</h4><div>${u.atks.map(a=>`<span class=tag>${a[0]} ${a[1]}</span>`).join(" ")||"—"}</div><h4>护甲类别</h4><div>${u.arms.map(a=>`<span class=tag>${a[0]} ${a[1]}</span>`).join(" ")||"—"}</div>
 <h4>升级路线</h4><div class=uline>${ln.map(x=>x.id==u.id?`<b class=cur>${uic(x)}${x.zh}</b>`:ulink(x)).join(" → ")}</div></div></div>
-${u.up?`<h4>升级研究</h4><p>从上一级升级为 ${u.zh}：${cost(u.up[0])}，${u.up[1]}s</p>`:""}${(()=>{const r=TC.filter(t=>t.desc.includes(u.zh)).slice(0,16);return r.length?`<h4>相关科技</h4><div class=uchips>${r.map(tlink).join("")}</div>`:""})()}<h4>拥有该单位的文明（${u.civs.length}/${civs.length}）</h4><div>${u.civs.map(n=>{const i=civs.findIndex(c=>c.en==n);return i<0?n:`<a class=civchip href="#civ/${n}">${ic(civs[i])}${civs[i].zh}</a>`}).join(" ")}</div>
+${u.up?`<h4>升级研究</h4><p>从上一级升级为 ${u.zh}：${cost(u.up[0])} ${SI("time","研究时间")}${u.up[1]}s</p>`:""}${(()=>{const r=TC.filter(t=>t.desc.includes(u.zh)).slice(0,16);return r.length?`<h4>相关科技</h4><div class=uchips>${r.map(tlink).join("")}</div>`:""})()}<h4>拥有该单位的文明（${u.civs.length}/${civs.length}）</h4><div>${u.civs.map(n=>{const i=civs.findIndex(c=>c.en==n);return i<0?n:`<a class=civchip href="#civ/${n}">${ic(civs[i])}${civs[i].zh}</a>`}).join(" ")}</div>
 <h4>说明</h4><p class=desc>${linkify(u.desc).replace(/\n/g,"<br>")}</p><p class=note>数据来自 aoe2techtree（基础数值，未含文明加成与科技）</p>`;scrollTo(0,0)}
 function ulist(){const q=$("#uq").value.toLowerCase(),t=$("#ut").value,a=$("#ua").value;const r=UN.filter(u=>(u.en.toLowerCase().includes(q)||u.zh.includes(q))&&(!t||u.type==t)&&(!a||u.age==a)&&dok(u,$("#udlc").value));
 $("#ugrid").innerHTML=r.map(u=>`<a class="card ucard" href="#unit/${u.id}">${uic(u)}<div><h3>${u.zh}</h3><small>${u.en}</small><div class=mini>${u.bz} · ${AGE[u.age]||""} · ${cost(u.cost)}</div>${dbadge(u.dlc)}</div></a>`).join("");$("#ucnt").textContent=r.length+" / "+UN.length}
@@ -49,7 +51,7 @@ window.addEventListener("hashchange",route);window.addEventListener("load",()=>{
 const TT={UniqueTech:"独特科技",Research:"通用科技",RegionalTech:"区域科技"};
 function techView(id){const t=TM[id];if(!t)return tab("techs");tab("tech");const pre=t.pre&&TM[t.pre],nxt=TC.filter(x=>x.pre==t.id),rel=UN.filter(u=>u.zh.length>=2&&t.desc.includes(u.zh));
 $("#tech").innerHTML=`<button onclick="history.back()">← 返回</button><h2>${tic(t).replace("uico","uico big")} ${t.zh} <small>${t.en}</small> ${dbadgeL(t.dlc)}</h2>
-<p><span class=tag>${TT[t.type]||t.type}</span> <b>建筑：</b>${t.bz}（${t.ben}）　<b>时代：</b>${AGE[t.age]||t.age}　<b>费用：</b>${cost(t.cost)}　<b>研究时间：</b>${t.rt}s</p>
+<p><span class=tag>${TT[t.type]||t.type}</span> <b>建筑：</b>${t.bz}（${t.ben}）　<b>时代：</b>${AGE[t.age]||t.age}　<b>费用：</b>${cost(t.cost)}　<b>研究时间：</b>${SI("time","研究时间")}${t.rt}s</p>
 <h4>效果</h4><p class=desc>${linkify(t.desc).replace(/\n/g,"<br>")}<br><small class=note>${t.descEn.replace(/\n/g," ")}</small></p>
 ${pre||nxt.length?`<h4>科技链</h4><div class=uline>${pre?`前置：${tlink(pre)}　`:""}${nxt.length?`后续：${nxt.map(tlink).join(" ")}`:""}</div>`:""}
 ${rel.length?`<h4>涉及单位</h4><div class=uchips>${rel.map(ulink).join("")}</div>`:""}
@@ -62,7 +64,7 @@ $("#tgrid").innerHTML=r.map(t=>`<a class="card ucard" href="#tech/${t.id}">${tic
 // ===== 科技树模块 =====
 const TW=52,TH=56,HD=74,LW=60,AG=[["黑暗",0,1],["封建时代",1,2],["城堡时代",3,2],["帝王时代",5,2]];
 function tget(k,id){return k=="u"?UM[id]:TM[id]}
-function tnm(k,id){const x=tget(k,id);return x?`${x.zh} ${x.en}\n${cost(x.cost)}${k=="u"?"":"，"+x.rt+"s"}`:id}
+function tnm(k,id){const x=tget(k,id);return x?`${x.zh} ${x.en}\n${costT(x.cost)}${k=="u"?"":"，"+x.rt+"s"}`:id}
 function statusMap(civ){const s={};TR.t[civ].forEach(b=>b[3].forEach(c=>{s[c[2]+c[3]]=c[4]}));return s}
 function treeHTML(civ,cmpCiv){const bl=TR.t[civ],sb=cmpCiv?statusMap(cmpCiv):null;let x=LW,cols="",svg="",W;
 bl.forEach(([bid,brow,nc,cells])=>{const B=TR.b[bid],gw=nc*TW;const pos={};
