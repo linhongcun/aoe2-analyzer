@@ -12,13 +12,13 @@ function list(){const q=$("#q").value.toLowerCase(),t=$("#ty").value,p=$("#pos")
 $("#grid").innerHTML=r.map(([c,i])=>`<div class=card onclick=show(${i})>${ic(c)}<h3>${c.zh}</h3><small>${c.en}</small><div>${c.ty.map(t=>`<span class=tag>${TY[t]}</span>`).join("")}</div><div class=mini>边位 ${c.fl} · 口袋 ${c.pk}</div></div>`).join("")||"<p>无匹配文明</p>";$("#cnt").textContent=r.length+" / "+civs.length}
 function show(i,r){const c=civs[i],[s,w]=sw(c);if(!r){location.hash="civ/"+c.en;return}tab("detail");const myU=UN.filter(u=>u.type=="UniqueUnit"&&u.civs.includes(c.en));$("#detail").innerHTML=`<button onclick="location.hash='list'">← 返回列表</button><h2>${ic(c)} ${c.zh} <small>${c.en}</small></h2><div class=two><div>
 <p><b>官方定位：</b>${c.desc}　<b>筛选标签：</b>${c.ty.map(t=>TY[t]).join(" / ")}</p><p><b>特色兵种：</b>${linkify(c.uu)}</p><div class=uchips>${myU.map(ulink).join("")}</div><p><b>城堡时代独特科技：</b>${utech(c.ct,c.en)}</p><p><b>帝王时代独特科技：</b>${utech(c.it,c.en)}</p><p><b>文明加成：</b></p><ul>${c.bon.map(b=>`<li>${linkify(b)}</li>`).join("")}</ul><p><b>团队加成：</b>${linkify(c.tb)} <small class=note>(${c.tbEn})</small></p>
-<p class=g><b>优势：</b>${s.join("、")}</p><p class=r><b>劣势：</b>${w.join("、")}</p><p><b>推荐团战位置：</b>${c.fl>=c.pk?"边位 Flank":"口袋 Pocket"}（边位 ${c.fl}/10，口袋 ${c.pk}/10）</p><p><b>推荐开局：</b>${c.op}</p></div><div><canvas id=rd width=440 height=440></canvas>${pos([c])}<p class=note>评分为主观近似值，仅供参考</p></div></div>`;radar($("#rd"),[c])}
+<p class=g><b>优势：</b>${s.join("、")}</p><p class=r><b>劣势：</b>${w.join("、")}</p><p><b>推荐团战位置：</b>${c.fl>=c.pk?"边位 Flank":"口袋 Pocket"}（边位 ${c.fl}/10，口袋 ${c.pk}/10）</p><p><b>推荐开局：</b>${c.op}</p><p><a class="ulink tl" href="#tree/${c.en}">🌳 查看科技树 →</a></p></div><div><canvas id=rd width=440 height=440></canvas>${pos([c])}<p class=note>评分为主观近似值，仅供参考</p></div></div>`;radar($("#rd"),[c])}
 function cmp(){const a=civs[$("#ca").value],b=civs[$("#cb").value],L=K,va=a.s,vb=b.s;
 $("#ctab").innerHTML=`<tr><th></th><th style=color:#d4a017>${ic(a)}<br>${a.zh}</th><th style=color:#50a0dc>${ic(b)}<br>${b.zh}</th></tr>`+L.map((l,i)=>`<tr><td>${l}</td><td class=${va[i]>vb[i]?"win":""}>${va[i]}</td><td class=${vb[i]>va[i]?"win":""}>${vb[i]}</td></tr>`).join("")+[["特色兵种","uu"],["城堡科技","ct"],["帝王科技","it"],["团队加成","tb"],["开局","op"]].map(([l,k])=>`<tr><td>${l}</td><td>${a[k]}</td><td>${b[k]}</td></tr>`).join("");radar($("#crd"),[a,b]);$("#cpos").innerHTML=pos([a,b])}
 const CT={cav:"长矛兵/戟兵 + 骆驼 + 僧侣转化；用城墙/长矛阵限制机动",arch:"散兵/精英散兵 + 冲车/投石；侦察骑兵或骑士快速贴脸；轻骑兵绕后",inf:"弓手/手炮远程放风筝；用骑兵或骑射拉扯；城堡期蝎子克制密集步兵",naval:"在水图早出火船/战舰抢水；陆图则无需担心，压制其陆军",monk:"轻骑兵/鹰战士猎杀僧侣；分散阵型；具有转化抗性的单位",siege:"骑兵/轻骑兵直切攻城武器；保持冲车阵型分散",def:"避免强攻城墙塔楼，转为经济压制与攻城武器推进；多点骚扰",eco:"早期骚扰（侦察/民兵）打断其发育节奏，别让其速城堡"};
 function mu(){const a=civs[$("#ma").value],e=civs[$("#me").value],[es,ew]=sw(e);const best=K.map((k,i)=>[a.s[i]-e.s[i],k]).sort((x,y)=>y[0]-x[0]);
 $("#mres").innerHTML=`<h3>${ic(a)} ${a.zh} vs ${ic(e)} ${e.zh}</h3><p><b>对手强项：</b>${es.join("、")}；<b>弱项：</b>${ew.join("、")}</p><p><b>你的相对优势：</b>${best.slice(0,3).filter(x=>x[0]>0).map(x=>x[1]+"(+"+x[0]+")").join("、")||"无明显优势，建议稳健发育"}</p><p><b>针对对手兵种的反制：</b></p><ul>${e.ty.map(t=>`<li><b>${TY[t]}：</b>${CT[t]}</li>`).join("")}</ul><p><b>建议：</b>${e.s[3]>=8?"对手经济强，前期主动骚扰。":"对手经济一般，可以稳健发育拖后期。"}${a.s[0]>=8?"你骑兵强，可攻击对方后排弓手和攻城武器。":""}${ew.includes("骑兵")?"对手缺骑兵，你可以多用远程单位。":""}</p><p class=note>自动生成的建议，基于主观评分，仅供参考</p>`}
-function tab(t){if(t=="detail"||t=="unit"||t=="tech"){}else if(location.hash.slice(1)!=t&&!(t=="list"&&!location.hash))history.replaceState(null,"","#"+t);document.querySelectorAll(".pane").forEach(p=>p.style.display=p.id==t?"block":"none");document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t==t||(t=="detail"&&b.dataset.t=="list")||(t=="unit"&&b.dataset.t=="units")||(t=="tech"&&b.dataset.t=="techs")))}
+function tab(t){if(t=="detail"||t=="unit"||t=="tech"||t=="tree"){}else if(location.hash.slice(1)!=t&&!(t=="list"&&!location.hash))history.replaceState(null,"","#"+t);document.querySelectorAll(".pane").forEach(p=>p.style.display=p.id==t?"block":"none");document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t==t||(t=="detail"&&b.dataset.t=="list")||(t=="unit"&&b.dataset.t=="units")||(t=="tech"&&b.dataset.t=="techs")))}
 window.onload=()=>{["#ca","#cb","#ma","#me"].forEach((s,i)=>{$(s).innerHTML=opts();$(s).value=[16,5,16,5][i]});["#q","#ty","#pos"].forEach(s=>$(s).oninput=list);["#ca","#cb"].forEach(s=>$(s).onchange=cmp);["#ma","#me"].forEach(s=>$(s).onchange=mu);list();cmp();mu()};
 
 // ===== 单位模块 =====
@@ -42,7 +42,7 @@ ${u.up?`<h4>升级研究</h4><p>从上一级升级为 ${u.zh}：${cost(u.up[0])}
 <h4>说明</h4><p class=desc>${linkify(u.desc).replace(/\n/g,"<br>")}</p><p class=note>数据来自 aoe2techtree（基础数值，未含文明加成与科技）</p>`;scrollTo(0,0)}
 function ulist(){const q=$("#uq").value.toLowerCase(),t=$("#ut").value,a=$("#ua").value;const r=UN.filter(u=>(u.en.toLowerCase().includes(q)||u.zh.includes(q))&&(!t||u.type==t)&&(!a||u.age==a));
 $("#ugrid").innerHTML=r.map(u=>`<a class="card ucard" href="#unit/${u.id}">${uic(u)}<div><h3>${u.zh}</h3><small>${u.en}</small><div class=mini>${u.bz} · ${AGE[u.age]||""} · ${cost(u.cost)}</div></div></a>`).join("");$("#ucnt").textContent=r.length+" / "+UN.length}
-function route(){const h=decodeURIComponent(location.hash.slice(1));let m;if(m=h.match(/^unit\/(\d+)/))return unitView(+m[1]);if(m=h.match(/^civ\/(.+)/)){const i=civs.findIndex(c=>c.en==m[1]);if(i>=0)return show(i,1)}if(m=h.match(/^tech\/(\d+)/))return techView(+m[1]);if(["list","compare","matchup","units","techs"].includes(h))return tab(h);tab("list")}
+function route(){const h=decodeURIComponent(location.hash.slice(1));let m;if(m=h.match(/^unit\/(\d+)/))return unitView(+m[1]);if(m=h.match(/^civ\/(.+)/)){const i=civs.findIndex(c=>c.en==m[1]);if(i>=0)return show(i,1)}if(m=h.match(/^tech\/(\d+)/))return techView(+m[1]);if(m=h.match(/^tree\/?(.*)/))return treeView(m[1]||civs[16].en);if(["list","compare","matchup","units","techs"].includes(h))return tab(h);tab("list")}
 window.addEventListener("hashchange",route);window.addEventListener("load",()=>{["#uq","#ut","#ua"].forEach(s=>$(s).oninput=ulist);ulist();["#tq","#tt","#ta","#tb"].forEach(s=>$(s).oninput=tlist);$("#tb").innerHTML+=[...new Set(TC.map(t=>t.bz))].map(b=>`<option>${b}</option>`).join("");tlist();route()});
 
 // ===== 科技模块 =====
@@ -58,3 +58,30 @@ ${t.type!="UniqueTech"&&t.civs.length<civs.length?`<p class=note>无法研究：
 <p class=note>数据来自 aoe2techtree</p>`;scrollTo(0,0)}
 function tlist(){const q=$("#tq").value.toLowerCase(),ty=$("#tt").value,a=$("#ta").value,b=$("#tb").value;const r=TC.filter(t=>(t.en.toLowerCase().includes(q)||t.zh.includes(q)||t.desc.includes(q))&&(!ty||t.type==ty)&&(!a||t.age==a)&&(!b||t.bz==b));
 $("#tgrid").innerHTML=r.map(t=>`<a class="card ucard" href="#tech/${t.id}">${tic(t)}<div><h3>${t.zh}</h3><small>${t.en}</small><div class=mini>${t.bz} · ${AGE[t.age]||""} · ${cost(t.cost)}${t.type=="UniqueTech"?" · "+t.civs.map(n=>(civs.find(c=>c.en==n)||{}).zh).join("/"):""}</div></div></a>`).join("");$("#tcnt").textContent=r.length+" / "+TC.length}
+
+// ===== 科技树模块 =====
+const TW=52,TH=56,HD=74,LW=60,AG=[["黑暗",0,1],["封建时代",1,2],["城堡时代",3,2],["帝王时代",5,2]];
+function tget(k,id){return k=="u"?UM[id]:TM[id]}
+function tnm(k,id){const x=tget(k,id);return x?`${x.zh} ${x.en}\n${cost(x.cost)}${k=="u"?"":"，"+x.rt+"s"}`:id}
+function statusMap(civ){const s={};TR.t[civ].forEach(b=>b[3].forEach(c=>{s[c[2]+c[3]]=c[4]}));return s}
+function treeHTML(civ,cmpCiv){const bl=TR.t[civ],sb=cmpCiv?statusMap(cmpCiv):null;let x=LW,cols="",svg="",W;
+bl.forEach(([bid,brow,nc,cells])=>{const B=TR.b[bid],gw=nc*TW;const pos={};
+ cols+=`<div class=tbld style="left:${x}px;width:${gw}px"><img src="img/buildings/${B[2]}.webp" alt=""><span>${B[0]}</span></div>`;
+ cells.forEach(([r,c,k,id,st,lk])=>{const o=tget(k,id);if(!o)return;const px=x+c*TW,py=HD+(r-1)*TH;pos[k+id]=[px+TW/2,py];
+  const uq=o.type=="UniqueUnit"||o.type=="UniqueTech",d=sb?(st&&!sb[k+id]?" onlyA":!st&&sb[k+id]?" onlyB":""):"";
+  cols+=`<a class="tcell${st?"":" na"}${uq?" uq":""}${d}" href="#${k=="u"?"unit":"tech"}/${id}" style="left:${px+4}px;top:${py+4}px" title="${tnm(k,id)}${st?"":"\n（该文明不可用）"}"><img src="img/${k=="u"?"units":"techs"}/${o.pic}.webp" alt="" loading=lazy></a>`});
+ cells.forEach(([r,c,k,id,st,lk])=>{if(lk==null)return;const p=pos[k+lk];const q=pos[k+id];if(!p||!q)return;const y1=p[1]+TH-6,y2=q[1]+4,ym=(y1+y2)/2;
+  svg+=`<path d="M${p[0]} ${y1}V${ym}H${q[0]}V${y2}" class="${st?"":"na"}"/>`});
+ x+=gw+10});W=x;const H=HD+7*TH;
+const bands=AG.map(([n,r,h],i)=>`<div class="tband b${i}" style="top:${HD+r*TH}px;height:${h*TH}px;width:${W}px"><span>${n}</span></div>`).join("");
+return `<div class=tscroll><div class=tree style="width:${W}px;height:${H}px">${bands}<svg width=${W} height=${H}>${svg}</svg>${cols}</div></div>`}
+function extraUnique(a,b){const sa=statusMap(a);const r=[];TR.t[b].forEach(bl=>bl[3].forEach(c=>{if(c[4]&&!sa[c[2]+c[3]]){const o=tget(c[2],c[3]);if(o)r.push(c[2]=="u"?ulink(o):tlink(o))}}));return r}
+function treeRender(){const a=civs[$("#tra").value],m=$("#trm").value,b=civs[$("#trb").value];$("#trb").style.display=m=="1"?"none":"";
+ if(location.hash.slice(1)!="tree/"+a.en)history.replaceState(null,"","#tree/"+a.en);
+ const leg=`<div class=tleg><span><i class="tl1 uq"></i>独特单位/科技</span><span><i class="tl1 na"></i>该文明不可用</span>${m=="2"?`<span><i class="tl1 onlyA"></i>仅 ${a.zh} 有</span><span><i class="tl1 onlyB"></i>仅 ${b.zh} 有</span>`:""}<span class=note>悬停查看名称与费用，点击查看详情；小屏可左右滑动</span></div>`;
+ let h=`<h3>${ic(a)} ${a.zh} <small>${a.en}</small> <a class=ulink href="#civ/${a.en}">文明详情 →</a></h3>`+leg+treeHTML(a.en,m=="2"?b.en:null);
+ if(m=="2"){const ea=extraUnique(a.en,b.en),eb=extraUnique(b.en,a.en);h+=`<h4>${b.zh} 有而 ${a.zh} 树中没有的项目（${ea.length}）</h4><div class=uchips>${ea.join("")||"—"}</div><h4>${a.zh} 有而 ${b.zh} 树中没有的项目（${eb.length}）</h4><div class=uchips>${eb.join("")||"—"}</div>`}
+ if(m=="3")h+=`<h3>${ic(b)} ${b.zh} <small>${b.en}</small></h3>`+treeHTML(b.en,a.en);
+ $("#treebox").innerHTML=h;$("#trimg").src=`img/civs/${a.en.toLowerCase()}.webp`}
+function treeView(n){tab("tree");if(!$("#tra").options.length){["#tra","#trb"].forEach(s=>$(s).innerHTML=opts());$("#trb").value=5}const i=civs.findIndex(c=>c.en==n);if(i>=0)$("#tra").value=i;treeRender()}
+window.addEventListener("load",()=>{["#tra","#trb"].forEach(s=>$(s).innerHTML=opts());$("#trb").value=5;["#tra","#trb","#trm"].forEach(s=>$(s).onchange=treeRender)});
