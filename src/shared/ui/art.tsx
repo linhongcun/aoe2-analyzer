@@ -38,7 +38,7 @@ export const StatIcon = ({ k, t }: { k: string; t?: string }) =>
 
 const RK: Record<string, string> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone' };
 export function CostView({ c }: { c: Cost }) {
-  const e = Object.entries(c);
+  const e = Object.entries(c).filter(([, v]) => v);
   if (!e.length) return <>—</>;
   return (
     <>
