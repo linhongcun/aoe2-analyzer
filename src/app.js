@@ -84,4 +84,4 @@ function treeRender(){const a=civs[$("#tra").value],m=$("#trm").value,b=civs[$("
  if(m=="3")h+=`<h3>${ic(b)} ${b.zh} <small>${b.en}</small></h3>`+treeHTML(b.en,a.en);
  $("#treebox").innerHTML=h;$("#trimg").src=`img/civs/${a.en.toLowerCase()}.webp`}
 function treeView(n){tab("tree");if(!$("#tra").options.length){["#tra","#trb"].forEach(s=>$(s).innerHTML=opts());$("#trb").value=5}const i=civs.findIndex(c=>c.en==n);if(i>=0)$("#tra").value=i;treeRender()}
-window.addEventListener("load",()=>{["#tra","#trb"].forEach(s=>$(s).innerHTML=opts());$("#trb").value=5;["#tra","#trb","#trm"].forEach(s=>$(s).onchange=treeRender)});
+window.addEventListener("load",()=>{if(!$("#tra").options.length){["#tra","#trb"].forEach(s=>$(s).innerHTML=opts());$("#trb").value=5}["#tra","#trb","#trm"].forEach(s=>$(s).onchange=treeRender)});
