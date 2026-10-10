@@ -902,3 +902,157 @@ table.ediff td.dn {
     padding: 8px 6px;
   }
 }
+/* 单位 PK */
+.duel-sides {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: start;
+  margin: 10px 0;
+}
+.duel-vs {
+  align-self: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--c-gold-hi);
+}
+.duel-side {
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  padding: 10px;
+  background: var(--c-panel);
+  min-width: 0;
+}
+.side-a {
+  border-top: 3px solid var(--c-gold);
+}
+.side-b {
+  border-top: 3px solid var(--c-blue);
+}
+.duel-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.duel-head h3 {
+  margin: 0;
+}
+.duel-presets button.on,
+#duel .fbar button.on {
+  background: var(--c-gold-hi);
+  color: #1b1408;
+}
+.duel-stats {
+  width: 100%;
+}
+.duel-tech summary {
+  cursor: pointer;
+  color: var(--c-gold-hi);
+  margin: 6px 0;
+}
+.simemb .two {
+  grid-template-columns: 1fr;
+}
+.duel-win.w-a {
+  color: var(--c-gold-hi);
+}
+.duel-win.w-b {
+  color: var(--c-blue);
+}
+.duel-tab {
+  width: 100%;
+}
+.duel-tl {
+  margin: 6px 0;
+}
+.tl-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+.tl-l {
+  width: 16px;
+  font-weight: bold;
+}
+.tl-track {
+  position: relative;
+  flex: 1;
+  height: 18px;
+  background: var(--c-control);
+  border-radius: 4px;
+}
+.tl-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 4px;
+  opacity: 0.35;
+}
+.tl-a .tl-fill {
+  background: var(--c-gold);
+}
+.tl-b .tl-fill {
+  background: var(--c-blue);
+}
+.tl-hit {
+  position: absolute;
+  top: 5px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: var(--c-text);
+}
+.tl-kill {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 3px;
+  margin-left: -1px;
+  background: var(--c-bad);
+}
+.tl-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--c-muted);
+  margin-left: 24px;
+}
+.duel-chart {
+  width: 100%;
+  height: 130px;
+  background: var(--c-control);
+  border-radius: 6px;
+}
+.duel-chart path {
+  fill: none;
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+}
+.ln-a {
+  stroke: var(--c-gold);
+}
+.ln-b {
+  stroke: var(--c-blue);
+}
+@media (max-width: 899px) {
+  .duel-sides {
+    grid-template-columns: 1fr;
+  }
+  .duel-vs {
+    justify-self: center;
+  }
+}
+.eseg button {
+  padding: 4px 14px;
+  border: none;
+  border-radius: 0;
+  color: var(--c-gold-hi);
+  background: var(--c-control);
+  cursor: pointer;
+}
+.eseg button.on {
+  background: var(--c-gold-hi);
+  color: #1b1408;
+  font-weight: bold;
+}

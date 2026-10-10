@@ -31,6 +31,7 @@ const ROUTES: [string, string][] = [
   ['#dlc', '.dlct tr'],
   ['#compare', '#ctab tr'],
   ['#matchup', '#mres h3'],
+  ['#/duel', '#duel-res h3'],
 ];
 
 for (const [hash, sel] of ROUTES) {
@@ -242,4 +243,50 @@ test('CivPicker opens as bottom sheet on mobile', async ({ page }) => {
   expect(Math.round(box!.y + box!.height)).toBeGreaterThanOrEqual(843);
   await page.locator('.cp-panel').getByRole('button', { name: '关闭' }).click();
   await expect(page.locator('.cp-panel')).toHaveCount(0);
+});
+
+test('unit duel: default Paladin vs Halberdier, URL state, modes', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('./#/duel');
+  await expect(page.locator('#duel-res')).toContainText('获胜');
+  await expect(page.locator('#duel-res .duel-tab')).toContainText('37');
+  // 换 B 方单位：冠军剑士；无科技
+  await page.locator('#duel-b-unit').click();
+  await page.locator('.cp-panel .cp-q').fill('Champion');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#duel-b h3')).toContainText('冠军剑士');
+  await page.locator('#duel-b').getByRole('radio', { name: '无科技' }).click();
+  await expect(page).toHaveURL(/b=\d+\.[A-Za-z]+\.\d\.\./);
+  const url = page.url();
+  await page.reload();
+  expect(page.url()).toBe(url);
+  await expect(page.locator('#duel-b h3')).toContainText('冠军剑士');
+  // 等资源
+  await page.getByRole('radio', { name: '等资源' }).click();
+  await expect(page.locator('#duel-res')).toContainText('预算 3000');
+  await page.getByRole('radio', { name: 'N vs M' }).click();
+  await page.locator('#duel-na').fill('3');
+  await expect(page.locator('#duel-res')).toContainText('A 3');
+  expect(errors).toEqual([]);
+});
+
+test('unit duel: elite toggle, civ picker, tech panel', async ({ page }) => {
+  await page.goto('./#/duel?a=281.Franks.4.f.');
+  await page.locator('#duel-a').getByRole('radio', { name: '精锐' }).click();
+  await expect(page).toHaveURL(/a=531\./);
+  await pickCiv(page, 'duel-b-civ', 'Britons');
+  await page.locator('#duel-a summary').click();
+  await expect(page.locator('#duel-a-sim .simtab')).toBeVisible();
+  await page.locator('#duel-a-sim label.simt input').first().uncheck();
+  await expect(page).toHaveURL(/a=531\.Franks\.4\.[\d-]+\./);
+});
+
+test('unit duel: mobile layout stacks sides', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('./#/duel');
+  const a = await page.locator('#duel-a').boundingBox(),
+    b = await page.locator('#duel-b').boundingBox();
+  expect(b!.y).toBeGreaterThan(a!.y + a!.height - 1);
+  expect(a!.width).toBeLessThanOrEqual(390);
 });

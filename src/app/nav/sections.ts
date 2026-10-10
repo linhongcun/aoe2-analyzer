@@ -48,6 +48,15 @@ export const TOOLS: Section[] = [
     desc: '选择单位与科技，计算满科技属性与累计费用',
     match: /^\/simulator$/,
   },
+  {
+    key: 'duel',
+    path: '/duel',
+    label: '单位 PK',
+    en: 'Unit Duel',
+    icon: 'sword',
+    desc: '两个单位（含科技与文明加成）对战：击杀次数、用时、群战与等资源',
+    match: /^\/duel$/,
+  },
 ];
 export const FUTURE: Section[] = [
   { key: 'maps', path: '/maps', label: '地图', en: 'Maps', icon: 'map', desc: '排位地图池与地图特点', match: /^\/maps$/, status: 'planned' },

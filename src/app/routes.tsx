@@ -17,6 +17,7 @@ const BuildingList = lazy(() => import('../features/buildings/components/Buildin
 const BuildingDetail = lazy(() => import('../features/buildings/components/BuildingDetail'));
 const SimulatorHub = lazy(() => import('../features/simulator/components/SimulatorHub'));
 const Planned = lazy(() => import('../features/placeholder/components/Planned'));
+const Duel = lazy(() => import('../features/duel/components/Duel'));
 const Matchup = lazy(() => import('../features/matchup/components/Matchup'));
 
 /** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list */
@@ -38,6 +39,7 @@ export function AppRoutes() {
       <Route path="/matchup" element={<Matchup />} />
       <Route path="/buildings" element={<BuildingList />} />
       <Route path="/building/:id" element={<BuildingDetail />} />
+      <Route path="/duel" element={<Duel />} />
       <Route path="/simulator" element={<SimulatorHub />} />
       {['/maps', '/builds', '/patches', '/ladder'].map((p) => (
         <Route key={p} path={p} element={<Planned />} />

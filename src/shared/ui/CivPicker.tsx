@@ -193,7 +193,7 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix }:
                     role="option"
                     aria-selected={sel}
                     className={'cp-opt' + (i === act ? ' act' : '') + (sel ? ' sel' : '') + (r.c ? '' : ' none')}
-                    onMouseEnter={() => setAct(i)}
+                    onMouseMove={() => setAct(i)}
                     onClick={() => pick(r.en)}
                   >
                     {r.c ? <CivIcon c={r.c} /> : <span className="cp-noico" />}

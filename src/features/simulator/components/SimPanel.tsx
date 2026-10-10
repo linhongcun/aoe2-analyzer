@@ -30,6 +30,8 @@ export interface SimPanelProps {
   teamBonuses: { label: string; ok: boolean }[];
   go: (civ: string, age: number, sel: Iterable<number>, team: Iterable<number>) => void;
   setCmp: (c: string) => void;
+  /** 嵌入模式（单位 PK 等）：不显示标题、文明与对比选择器；id 加前缀以免重复 */
+  embedded?: string;
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
@@ -175,14 +177,21 @@ export default function SimPanel(p: SimPanelProps) {
     p.go(p.civ, p.age, p.sel, n);
   };
   return (
-    <div id="sim" className="posbox">
-      <h3>
-        <Icon name="flask-conical" /> 科技模拟器 <small className="note">选择文明与科技，查看属性变化与累计研究费用</small>
-      </h3>
+    <div id={p.embedded ? p.embedded + '-sim' : 'sim'} className={p.embedded ? 'posbox simemb' : 'posbox'}>
+      {!p.embedded && (
+        <h3>
+          <Icon name="flask-conical" /> 科技模拟器 <small className="note">选择文明与科技，查看属性变化与累计研究费用</small>
+        </h3>
+      )}
       <div className="bar">
-        文明 <CivPicker id="simciv" label="文明" value={p.civ} onChange={(en) => p.go(en, p.age, p.sel, p.team)} allowed={p.civs} /> 时代{' '}
+        {!p.embedded && (
+          <>
+            文明 <CivPicker id="simciv" label="文明" value={p.civ} onChange={(en) => p.go(en, p.age, p.sel, p.team)} allowed={p.civs} />{' '}
+          </>
+        )}
+        时代{' '}
         <select
-          id="simage"
+          id={p.embedded ? p.embedded + '-age' : 'simage'}
           value={p.age}
           onChange={(e) => {
             const a = +e.target.value;
@@ -217,8 +226,20 @@ export default function SimPanel(p: SimPanelProps) {
               {AGE_ZH[a]!.slice(0, 2)}预设
             </button>
           ))}{' '}
-        对比{' '}
-        <CivPicker id="simcmp" label="对比文明" value={p.cmp} onChange={p.setCmp} allowed={p.civs.filter((n) => n !== p.civ)} none="不对比" suffix="满科技" />
+        {!p.embedded && (
+          <>
+            对比{' '}
+            <CivPicker
+              id="simcmp"
+              label="对比文明"
+              value={p.cmp}
+              onChange={p.setCmp}
+              allowed={p.civs.filter((n) => n !== p.civ)}
+              none="不对比"
+              suffix="满科技"
+            />
+          </>
+        )}
       </div>
       {p.civNotes.length > 0 && <p className="note">已计入文明加成：{p.civNotes.join('；')}</p>}
       <div className="two">
