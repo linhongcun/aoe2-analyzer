@@ -154,3 +154,17 @@ test('bonus damage is a separate section from self stats (unit + building sim)',
   await expect(page.locator('#sim')).toContainText('护甲类别（防御）');
   await expect(page.locator('.simtab')).not.toContainText('加成');
 });
+
+test('tech affects tab: Bracer lists archers + Keep; civ filter narrows', async ({ page }) => {
+  await page.goto('./#/tech/201');
+  await page.locator('.dtabs').getByText('作用对象').click();
+  await expect(page.locator('#affects')).toContainText('弓兵');
+  await expect(page.locator('#affects a[href*="building/"]').first()).toBeVisible();
+  const all = await page.locator('#affects .affrow a').count();
+  await page.locator('#affciv').selectOption('Britons');
+  await expect.poll(() => page.locator('#affects .affrow a').count()).toBeLessThan(all);
+  await page.goto('./#/tech/435');
+  await page.locator('.dtabs').getByText('作用对象').click();
+  await expect(page.locator('#affects')).toContainText('骑兵');
+  await expect(page.locator('#affects h4', { hasText: '步兵' })).toHaveCount(0);
+});

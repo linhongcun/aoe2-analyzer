@@ -8,6 +8,7 @@ import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import TechList from './TechList';
+import TechAffects from './TechAffects';
 
 const TT: Record<string, string> = { UniqueTech: '独特科技', Research: '通用科技', RegionalTech: '区域科技' };
 
@@ -101,6 +102,7 @@ export default function TechDetail() {
             </>
           ),
         },
+        { key: 'affects', label: '作用对象', content: <TechAffects t={t} /> },
         { key: 'civs', label: '文明', content: civList },
       ]}
       sidebar={

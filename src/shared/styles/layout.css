@@ -436,3 +436,26 @@ a.tbld:hover span {
 .bonustab td:first-child {
   white-space: nowrap;
 }
+.affg {
+  margin: 10px 0 14px;
+}
+.affg h4 {
+  margin: 6px 0;
+  border-bottom: 1px solid var(--line, #4a3a26);
+}
+.affrow {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 6px 0;
+  flex-wrap: wrap;
+}
+.affef {
+  min-width: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.affrow .uchips {
+  flex: 1;
+}
