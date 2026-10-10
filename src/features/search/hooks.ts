@@ -26,6 +26,9 @@ export function useSearchIndex(): SearchItem[] {
     core?.techs.forEach((t) =>
       items.push({ kind: 'tech', id: String(t.id), zh: t.zh, en: t.en, href: `/tech/${t.id}`, sub: t.bz, img: `techs/${t.pic}.webp` }),
     );
+    core?.buildings.forEach((b) =>
+      items.push({ kind: 'building', id: String(b.id), zh: b.zh, en: b.en, href: `/building/${b.id}`, sub: '建筑', img: `buildings/${b.pic}.webp` }),
+    );
     return items;
   }, [core]);
 }

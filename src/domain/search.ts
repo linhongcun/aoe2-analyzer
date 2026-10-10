@@ -1,6 +1,6 @@
 /** 全局搜索：文明/单位/科技统一索引与打分（纯函数） */
 export interface SearchItem {
-  kind: 'civ' | 'unit' | 'tech' | 'page';
+  kind: 'civ' | 'unit' | 'tech' | 'building' | 'page';
   id: string;
   zh: string;
   en: string;
@@ -19,7 +19,7 @@ export function score(it: SearchItem, q: string): number {
   if (z.includes(q) || e.includes(q)) return 40;
   return 0;
 }
-const KIND_ORDER = { page: 0, civ: 1, unit: 2, tech: 3 } as const;
+const KIND_ORDER = { page: 0, civ: 1, unit: 2, building: 3, tech: 4 } as const;
 export function search(items: SearchItem[], raw: string, limit = 30): SearchItem[] {
   const q = raw.trim().toLowerCase();
   if (!q) return [];

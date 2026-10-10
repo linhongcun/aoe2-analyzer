@@ -30,10 +30,10 @@ function Tree({ trees, core, civ, cmp }: { trees: Trees; core: Core; civ: string
         {L.buildings.map((b) => {
           const B = trees.b[b.bid]!;
           return (
-            <div key={b.bid} className="tbld" style={{ left: b.x, width: b.w }}>
+            <Link key={b.bid} className="tbld" style={{ left: b.x, width: b.w }} to={`/building/${b.bid}`} title={`${B[0]} ${B[1]}`}>
               <img src={img(`buildings/${B[2]}.webp`)} alt="" />
               <span>{B[0]}</span>
-            </div>
+            </Link>
           );
         })}
         {L.cells.map((c) => {

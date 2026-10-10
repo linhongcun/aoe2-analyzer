@@ -5,7 +5,7 @@ import { img } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { useSearchIndex } from '../hooks';
 
-const KIND = { page: '页面', civ: '文明', unit: '单位', tech: '科技' } as const;
+const KIND = { page: '页面', civ: '文明', unit: '单位', tech: '科技', building: '建筑' } as const;
 
 /** Ctrl/Cmd+K 全局命令面板 */
 export default function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {

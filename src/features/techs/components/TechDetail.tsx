@@ -4,6 +4,7 @@ import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
 import { CivChip, CostView, DlcBadgeL, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
+import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import TechList from './TechList';
@@ -64,7 +65,7 @@ export default function TechDetail() {
       tags={
         <>
           <span className="tag">{TT[t.type] ?? t.type}</span>
-          <span className="tag">{t.bz}</span>
+          <BLink id={t.b} zh={t.bz} />
           <span className="tag">{AGE_ZH[t.age] ?? t.age}</span>
         </>
       }
@@ -79,7 +80,7 @@ export default function TechDetail() {
                 <CostView c={t.cost} />　<b>研究时间：</b>
                 <StatIcon k="time" t="研究时间" />
                 {t.rt}s　<b>建筑：</b>
-                {t.bz}（{t.ben}）
+                <BLink id={t.b} zh={t.bz} />（{t.ben}）
               </p>
               <h4>效果</h4>
               <p className="desc">

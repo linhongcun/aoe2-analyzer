@@ -31,9 +31,8 @@ export const WIKI: Section[] = [
     label: '建筑',
     en: 'Buildings',
     icon: 'castle',
-    desc: '建筑属性、可生产单位与科技',
-    match: /^\/buildings/,
-    status: 'planned',
+    desc: '38 种建筑的属性、可生产单位与科技',
+    match: /^\/buildings?(\/.*)?$/,
   },
   { key: 'dlc', path: '/dlc', label: 'DLC', en: 'Expansions', icon: 'package', desc: '14 个资料片与对应文明', match: /^\/dlc$/ },
 ];

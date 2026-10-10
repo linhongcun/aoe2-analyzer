@@ -5,7 +5,9 @@ const ROUTES: [string, string][] = [
   ['', '#home .hcard'],
   ['#civs', '#grid .card'],
   ['#simulator', '#simhub .card'],
-  ['#buildings', '.planned-page'],
+  ['#buildings', '#bgrid .card'],
+  ['#/building/82', '#building h2'],
+  ['#building/1251', '#building h2'],
   ['#builds', '.planned-page'],
   ['#list', '#grid .card'],
   ['#civ/Armenians', '#detail h2'],
@@ -99,4 +101,24 @@ test('leaving a tech detail page does not crash (regression)', async ({ page }) 
   await page.locator('nav.mainnav a[data-t="units"]').click();
   await expect(page.locator('#ugrid .card').first()).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test('building detail tabs + links from tree and unit page', async ({ page }) => {
+  await page.goto('./#/building/82');
+  await expect(page.locator('#building h2')).toContainText('Castle');
+  await page.getByRole('tab', { name: /生产/ }).click();
+  await expect(page.locator('#building .uqrow').first()).toBeVisible();
+  await page.goto('./#tree/Franks');
+  await page.locator('a.tbld').first().click();
+  await expect(page.locator('#building h2')).toBeVisible();
+  await page.goto('./#unit/569');
+  await page.locator('#unit a.tagl').first().click();
+  await expect(page.locator('#building h2')).toContainText('Stable');
+});
+
+test('buildings list filters by type', async ({ page }) => {
+  await page.goto('./#buildings');
+  await page.locator('#bt').selectOption('defense');
+  await expect(page.locator('#bgrid .card', { hasText: 'Keep' })).toBeVisible();
+  await expect(page.locator('#bgrid .card', { hasText: 'Barracks' })).toHaveCount(0);
 });

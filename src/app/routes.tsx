@@ -13,6 +13,8 @@ const TechDetail = lazy(() => import('../features/techs/components/TechDetail'))
 const TreeView = lazy(() => import('../features/tree/components/TreeView'));
 const DlcView = lazy(() => import('../features/dlc/components/DlcView'));
 const Compare = lazy(() => import('../features/compare/components/Compare'));
+const BuildingList = lazy(() => import('../features/buildings/components/BuildingList'));
+const BuildingDetail = lazy(() => import('../features/buildings/components/BuildingDetail'));
 const SimulatorHub = lazy(() => import('../features/simulator/components/SimulatorHub'));
 const Planned = lazy(() => import('../features/placeholder/components/Planned'));
 const Matchup = lazy(() => import('../features/matchup/components/Matchup'));
@@ -34,8 +36,10 @@ export function AppRoutes() {
       <Route path="/dlc" element={<DlcView />} />
       <Route path="/compare" element={<Compare />} />
       <Route path="/matchup" element={<Matchup />} />
+      <Route path="/buildings" element={<BuildingList />} />
+      <Route path="/building/:id" element={<BuildingDetail />} />
       <Route path="/simulator" element={<SimulatorHub />} />
-      {['/buildings', '/maps', '/builds', '/patches', '/ladder'].map((p) => (
+      {['/maps', '/builds', '/patches', '/ladder'].map((p) => (
         <Route key={p} path={p} element={<Planned />} />
       ))}
       <Route path="*" element={<Home />} />

@@ -1,6 +1,6 @@
 /** 游戏美术图标（文明/单位/科技/属性/DLC），本地 public/img */
 import { Link } from 'react-router-dom';
-import type { Civ, Cost, Tech, Unit } from '../../domain/types';
+import type { Building, Civ, Cost, Tech, Unit } from '../../domain/types';
 import { DLCS } from '../../domain/dlc';
 import { RES_ZH } from '../../domain/ratings';
 
@@ -88,3 +88,13 @@ export function DlcBadgeL({ i }: { i: number | null }) {
     </Link>
   );
 }
+
+export const BuildingIcon = ({ b, big }: { b: Pick<Building, 'pic'>; big?: boolean }) => (
+  <img className={big ? 'uico big' : 'uico'} src={img(`buildings/${b.pic}.webp`)} alt="" loading="lazy" />
+);
+export const BuildingLink = ({ b }: { b: Building }) => (
+  <Link className="ulink bl" to={`/building/${b.id}`}>
+    <BuildingIcon b={b} />
+    {b.zh}
+  </Link>
+);

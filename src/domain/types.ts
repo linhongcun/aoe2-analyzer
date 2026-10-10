@@ -104,3 +104,34 @@ export type NumStat = Exclude<keyof StatSet, 'bonus' | 'rofx'>;
 /** 效果：add 加值、mul 乘、set 设定；rof 表示攻速 +x%（攻击间隔 /(1+x)）；bonus 为对某类别的加成伤害 */
 export type Effect = { s: Exclude<NumStat, 'rof'>; op?: 'add' | 'mul' | 'set'; v: number } | { s: 'rof'; v: number } | { s: 'bonus'; vs: string; v: number };
 export type UnitPred = (u: Unit) => boolean;
+
+export type BuildingType = 'military' | 'economy' | 'defense' | 'other';
+export interface Building {
+  id: number;
+  en: string;
+  zh: string;
+  age: number;
+  pic: number;
+  cost: Cost;
+  hp: number;
+  ma: number;
+  pa: number;
+  /** 建造时间（秒） */
+  bt: number;
+  gar: number;
+  atk: number;
+  rng: number;
+  minr: number;
+  rof: number;
+  los: number;
+  /** 提供人口（仅当游戏说明中明确写出时） */
+  pop: number;
+  desc: string;
+  descEn: string;
+  civs: string[];
+  /** 该建筑格子中出现过的单位/科技（所有文明并集） */
+  units: number[];
+  techs: number[];
+  dlc: number | null;
+  type: BuildingType;
+}

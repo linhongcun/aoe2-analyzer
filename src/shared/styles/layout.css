@@ -392,3 +392,35 @@ main {
     font-size: 22px;
   }
 }
+a.tagl {
+  color: var(--c-gold-hi);
+  text-decoration: none;
+  border: 1px solid var(--c-border);
+}
+a.tagl:hover {
+  border-color: var(--c-gold);
+}
+#bgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+}
+a.tbld {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+a.tbld:hover span {
+  color: var(--c-gold-hi);
+  text-decoration: underline;
+}
+.uqlist {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 4px 10px;
+}
+.uqrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

@@ -6,6 +6,7 @@ import { parseUnitPath } from '../../../domain/simulator';
 import { AGE_ZH } from '../../../domain/ratings';
 import { upgradeLine } from '../../../domain/units';
 import { CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
+import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
 import Simulator from '../../simulator/components/Simulator';
@@ -56,7 +57,7 @@ export default function UnitDetail() {
       tags={
         <>
           <span className="tag">{UT[u.type] ?? u.type}</span>
-          <span className="tag">{u.bz}</span>
+          <BLink id={u.b} zh={u.bz} />
           <span className="tag">{AGE_ZH[u.age] ?? u.age}</span>
         </>
       }
@@ -72,7 +73,7 @@ export default function UnitDetail() {
                 <CostView c={u.cost} />　<b>生产时间：</b>
                 <StatIcon k="time" t="生产时间" />
                 {u.tt}s　<b>建筑：</b>
-                {u.bz}（{u.ben}）
+                <BLink id={u.b} zh={u.bz} />（{u.ben}）
               </p>
               <div className="two">
                 <div>
