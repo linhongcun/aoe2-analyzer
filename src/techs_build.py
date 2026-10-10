@@ -16,7 +16,7 @@ for f in sorted(glob.glob(T+'trees/*.json')):
             techs[i]=dict(id=i,en=x['name'],zh=re.sub(r'<br>\s*','',z.get(str(x['name_string_id']),x['name'])),type=x['node_type'],age=x['age_id'],b=x['building_id'],pic=x['picture_index'],
               pre=x['link_id'] if x['link_node_type']=='Research' else None,cost=g['Cost'],rt=g['ResearchTime'],
               desc=txt(z.get(str(g['LanguageNameId']+21000))),descEn=txt(e.get(str(g['LanguageNameId']+21000))),civs=[])
-        if x['node_status']!='NotAvailable': techs[i]['civs'].append(civ)
+        if x['node_status']!='NotAvailable': techs[i]['civs'].append(civ) if civ not in techs[i]['civs'] else None
 for t in techs.values():
     t['bz'],t['ben']=BN.get(t['b'],('?','?'))
     if t['pre'] not in techs: t['pre']=None
