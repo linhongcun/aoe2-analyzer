@@ -11,7 +11,7 @@ for f in sorted(glob.glob(T+'trees/*.json')):
             for c,k in enumerate(row):
                 if k and k in M:
                     x=M[k];lk=x['link_id'] if x['link_node_type'] in('Unit','UniqueUnit','RegionalUnit','UnitUpgrade','Research') else None
-                    cells.append([r,c,'u' if x['use_type']=='Unit' else 't',x['node_id'],0 if x['node_status']=='NotAvailable' else 1,lk])
+                    cells.append([r,c,{'Unit':'u','Building':'b'}.get(x['use_type'],'t'),x['node_id'],0 if x['node_status']=='NotAvailable' else 1,lk])
         if not cells: continue
         bid=b['building_id']
         if bid in B and B[bid][2]!=b['picture_index']: pass

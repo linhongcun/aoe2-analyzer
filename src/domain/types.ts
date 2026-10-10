@@ -74,7 +74,8 @@ export interface Tech {
   dlc: number | null;
 }
 /** 科技树格子：[行, 列, 类型 u/t, id, 是否可用 0/1, 连线父级 id] */
-export type TreeCell = [number, number, 'u' | 't', number, number, number | null];
+/** 格子类型：u=单位 t=科技 b=建筑（如鱼栅、港口） */
+export type TreeCell = [number, number, 'u' | 't' | 'b', number, number, number | null];
 export type TreeBlock = [number, number, number, TreeCell[]];
 export interface Trees {
   b: Record<string, [string, string, string | number, number]>;

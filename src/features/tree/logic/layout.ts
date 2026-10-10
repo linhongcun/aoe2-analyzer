@@ -14,7 +14,7 @@ export const AGE_BANDS: [string, number, number][] = [
 ];
 
 export interface LCell {
-  k: 'u' | 't';
+  k: 'u' | 't' | 'b';
   id: number;
   x: number;
   y: number;
@@ -38,7 +38,7 @@ export interface TreeLayout {
   lines: LLine[];
 }
 
-export function layoutTree(trees: Trees, civ: string, cmpCiv: string | null, exists: (k: 'u' | 't', id: number) => boolean): TreeLayout {
+export function layoutTree(trees: Trees, civ: string, cmpCiv: string | null, exists: (k: 'u' | 't' | 'b', id: number) => boolean): TreeLayout {
   const sb = cmpCiv ? civStatus(trees, cmpCiv) : null;
   let x = LW;
   const buildings: LBuilding[] = [],
@@ -72,9 +72,9 @@ export function layoutTree(trees: Trees, civ: string, cmpCiv: string | null, exi
 }
 
 /** b 的树中可用而 a 中不可用的项目 */
-export function extraItems(trees: Trees, a: string, b: string): ['u' | 't', number][] {
+export function extraItems(trees: Trees, a: string, b: string): ['u' | 't' | 'b', number][] {
   const sa = civStatus(trees, a),
-    r: ['u' | 't', number][] = [];
+    r: ['u' | 't' | 'b', number][] = [];
   (trees.t[b] ?? []).forEach((bl) =>
     bl[3].forEach((c) => {
       if (c[4] && !sa[c[2] + c[3]]) r.push([c[2], c[3]]);

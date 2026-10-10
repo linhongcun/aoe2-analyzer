@@ -12,7 +12,8 @@ import { AGE_BANDS, extraItems, HD, layoutTree, TH } from '../logic/layout';
 import type { Core } from '../../../data';
 
 function Tree({ trees, core, civ, cmp }: { trees: Trees; core: Core; civ: string; cmp: string | null }) {
-  const get = (k: 'u' | 't', id: number) => (k === 'u' ? core.unitById[id] : core.techById[id]);
+  const get = (k: 'u' | 't' | 'b', id: number) => (k === 'u' ? core.unitById[id] : k === 'b' ? core.buildingById[id] : core.techById[id]);
+  const dir = { u: ['unit', 'units'], t: ['tech', 'techs'], b: ['building', 'buildings'] } as const;
   const L = layoutTree(trees, civ, cmp, (k, id) => !!get(k, id));
   return (
     <div className="tscroll">
@@ -39,16 +40,16 @@ function Tree({ trees, core, civ, cmp }: { trees: Trees; core: Core; civ: string
         {L.cells.map((c) => {
           const o = get(c.k, c.id)!;
           const uq = o.type === 'UniqueUnit' || o.type === 'UniqueTech';
-          const title = `${o.zh} ${o.en}\n${costText(o.cost)}${c.k === 'u' ? '' : '，' + (o as { rt: number }).rt + 's'}${c.avail ? '' : '\n（该文明不可用）'}`;
+          const title = `${o.zh} ${o.en}\n${costText(o.cost)}${c.k === 't' ? '，' + (o as { rt: number }).rt + 's' : ''}${c.avail ? '' : '\n（该文明不可用）'}`;
           return (
             <Link
               key={c.k + c.id}
               className={`tcell${c.avail ? '' : ' na'}${uq ? ' uq' : ''}${c.diff ? ' ' + c.diff : ''}`}
-              to={`/${c.k === 'u' ? 'unit' : 'tech'}/${c.id}`}
+              to={`/${dir[c.k][0]}/${c.id}`}
               style={{ left: c.x, top: c.y }}
               title={title}
             >
-              <img src={img(`${c.k === 'u' ? 'units' : 'techs'}/${o.pic}.webp`)} alt="" loading="lazy" />
+              <img src={img(`${dir[c.k][1]}/${o.pic}.webp`)} alt="" loading="lazy" />
             </Link>
           );
         })}
@@ -70,6 +71,7 @@ export default function TreeView() {
     trees && core
       ? extraItems(trees, x, y)
           .map(([k, id]) => {
+            if (k === 'b') return null;
             const o = k === 'u' ? core.unitById[id] : core.techById[id];
             return o ? k === 'u' ? <UnitLink key={k + id} u={core.unitById[id]!} /> : <TechLink key={k + id} t={core.techById[id]!} /> : null;
           })
