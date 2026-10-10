@@ -12,5 +12,5 @@ for v in d['civs'].values():
     n=v['internal_name'].upper();n='HINDUSTANIS' if n=='INDIANS' else n
     get(RAW+f'trees/{n}.json',C+f'/trees/{n}.json')
 env=dict(os.environ,AOE_CACHE=C)
-for s in ['civs_build.py','units_build.py','techs_build.py','trees_build.py','buildings_build.py']:
+for s in ['civs_build.py','units_build.py','techs_build.py','trees_build.py','buildings_build.py','icons_hires.py']:
     print('==',s);subprocess.run([sys.executable,'scripts/'+s],env=env,check=True)
