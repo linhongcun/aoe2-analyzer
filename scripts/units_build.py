@@ -26,13 +26,24 @@ UU=d['data']['unit_upgrades']
 # #38 双射程：aoe2techtree 只给对单位射程；对建筑射程差值取自固定 .dat（蓄力远程 ChargeType，Range − DisplayedRange）
 import sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from dat_source import load as _dat_load
-_DU=_dat_load()['Civs'][1]['Units']
+_DAT=_dat_load();_DU=_DAT['Civs'][1]['Units']
+# #11 时代校正：aoe2techtree 的 age_id 对升级单位不可靠（长剑士/长戟兵/冠军剑士等低一个时代）。
+# 取 .dat 中该单位升级科技（unit_upgrades[id].ID）前置链里的最高时代科技：101 封建=2，102 城堡=3，103 帝王=4。
+_AGE_TECH={101:2,102:3,103:4};_DT=_DAT['Techs']
+def techAge(t,seen=()):
+    if t in _AGE_TECH: return _AGE_TECH[t]
+    if t<0 or t>=len(_DT) or t in seen: return 1
+    return max([techAge(r,seen+(t,)) for r in _DT[t]['RequiredTechs'] if r>=0]+[1])
 def rngBd(i):
     x=_DU[i] if i<len(_DU) else None
     if not x or not x.get('ChargeType') or not x.get('DisplayedRange'): return 0
     v=round(x['Range']-x['DisplayedRange'],2);return int(v) if float(v).is_integer() else v
 for u in units.values():
     g=UU.get(str(u['id']));u['up']=[g['Cost'],g['ResearchTime']] if g else None
+    if g:
+        a=techAge(g['ID'])
+        if a>u['age']: print('age fix',u['id'],u['en'],u['age'],'->',a);u['age']=a
+        assert u['age']>=a,(u['id'],u['en'],u['age'],a)  # 升级单位时代不得低于升级科技时代
     u['bz']=BN.get(u['b'],('?','?'))[0];u['ben']=BN.get(u['b'],('?','?'))[1]
     if u['from_'] not in units: u['from_']=None
     dd=rngBd(u['id'])
