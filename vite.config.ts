@@ -17,6 +17,7 @@ const dat = (
   JSON.parse(readFileSync('src/data/effects.json', 'utf8')) as { meta: { sources: { id: string; commit: string; patch: string }[] } }
 ).meta.sources.find((s) => s.id === 'DAT');
 
+const appVersion = (JSON.parse(readFileSync('package.json', 'utf8')) as { version: string }).version;
 const pins = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as unknown;
 const notes = readdirSync('docs/PATCH-NOTES')
   .filter((f) => f.endsWith('.md'))
@@ -33,6 +34,7 @@ export default defineConfig({
   plugins: [react()],
   define: {
     __UNIT_COUNT__: JSON.stringify(UNIT_COUNT),
+    __APP_VERSION__: JSON.stringify(appVersion),
     __BUILD__: JSON.stringify(sha),
     __DATA_SOURCES__: JSON.stringify(pins),
     __PATCH_NOTES__: JSON.stringify(notes),

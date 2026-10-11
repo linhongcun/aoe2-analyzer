@@ -19,6 +19,9 @@ export interface FeedbackCtx {
   ua: string;
 }
 
+/** 站点版本：package.json version（构建时注入），页脚显示在数据版本前 */
+export const appVersion = (): string => 'v' + __APP_VERSION__;
+
 /** 数据版本：游戏补丁 + .dat 提交（构建时注入） */
 export const dataVersion = (): string => __DATA_VERSION__;
 
