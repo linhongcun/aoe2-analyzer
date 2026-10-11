@@ -1,7 +1,7 @@
 name: CI / Deploy
 on:
-  push: { branches: [main] }
-  pull_request: { branches: [main] }
+  push: { branches: [main, 'release/**'] }
+  pull_request: { branches: [main, 'release/**'] }
   workflow_dispatch:
 permissions: { contents: read }
 concurrency: { group: 'ci-${{ github.ref }}', cancel-in-progress: true }
@@ -14,6 +14,10 @@ jobs:
         with: { node-version: 20, cache: npm }
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
+      - name: PR title (Conventional Commits)
+        if: github.event_name == 'pull_request'
+        env: { PR_TITLE: '${{ github.event.pull_request.title }}' }
+        run: node scripts/check-pr-title.mjs
       - run: npm ci --legacy-peer-deps
       - name: Lint
         run: npm run lint

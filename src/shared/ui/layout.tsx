@@ -38,6 +38,7 @@ export function DetailPage({
   crumb,
   icon,
   title,
+  titleNote,
   en,
   badges,
   tags,
@@ -50,6 +51,8 @@ export function DetailPage({
   crumb: string;
   icon: ReactNode;
   title: string;
+  /** 主名后的文明小字（#44：重名 / 易混单位的详情页页头始终显示） */
+  titleNote?: string;
   en: string;
   badges?: ReactNode;
   tags?: ReactNode;
@@ -68,7 +71,8 @@ export function DetailPage({
         <div className="dhead-ic">{icon}</div>
         <div>
           <h2>
-            {title} <small>{en}</small>
+            {title}
+            {titleNote && <span className="civnote">{titleNote}</span>} <small>{en}</small>
           </h2>
           <div className="dhead-tags">
             {badges}

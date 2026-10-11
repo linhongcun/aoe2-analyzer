@@ -6,47 +6,70 @@
 :root {
   color-scheme: light;
   /* —— 语义色（新） —— */
-  --color-bg: #fbfbfd;          /* 页面背景 */
-  --color-surface: #ffffff;     /* 卡片 / 面板 */
-  --color-surface-2: #f5f5f7;   /* 次级面板、关键数字块、表头 */
-  --color-control: #ececf0;     /* 分段控件槽、输入框底 */
-  --color-tag: #f2f2f7;         /* 标签 / chip 底 */
-  --color-border: #e5e5ea;      /* 1px 描边 */
-  --color-line: #f0f0f2;        /* 表格分隔线 */
-  --color-text: #1d1d1f;        /* 正文 16.8:1 */
-  --color-text-2: #3a3a3c;      /* 次级正文 */
-  --color-muted: #636366;       /* 说明文字 5.99:1（#ececf0 上 5.08:1） */
-  --color-accent: #a65a14;      /* 品牌琥珀（文字可用 5.13:1；白字在其上 5.13:1） */
+  --color-bg: #fbfbfd; /* 页面背景 */
+  --color-surface: #ffffff; /* 卡片 / 面板 */
+  --color-surface-2: #f5f5f7; /* 次级面板、关键数字块、表头 */
+  --color-control: #ececf0; /* 分段控件槽、输入框底 */
+  --color-tag: #f2f2f7; /* 标签 / chip 底 */
+  --color-border: #e5e5ea; /* 1px 描边 */
+  --color-line: #f0f0f2; /* 表格分隔线 */
+  --color-text: #1d1d1f; /* 正文 16.8:1 */
+  --color-text-2: #3a3a3c; /* 次级正文 */
+  --color-muted: #636366; /* 说明文字 5.99:1（#ececf0 上 5.08:1） */
+  --color-accent: #a65a14; /* 品牌琥珀（文字可用 5.13:1；白字在其上 5.13:1） */
   --color-accent-soft: #a65a141f;
-  --color-link: #0066cc;        /* 链接 5.57:1 */
-  --color-good: #1f7a35;        /* 增益 +n 5.39:1 */
-  --color-bad: #c4281c;         /* 卡点 / 减益 5.73:1 */
-  --color-bad-soft: #fdeeec;    /* 卡点行底色 */
-  --color-warn: #a15c00;        /* 5.19:1 */
-  --color-good-soft: #e6f4ea;   /* 正面标签底 */
-  --color-warn-soft: #fbf1e3;   /* 提醒标签底 */
-  --color-link-soft: #e5f0fb;   /* 链接类标签底 */
-  --color-shadow: #0000001f;    /* 图标、文字投影（原始透明黑） */
-  --color-scrim: #00000066;     /* 弹窗与菜单遮罩 */
+  --color-link: #0066cc; /* 链接 5.57:1 */
+  --color-chevron: #aeaeb2; /* 行尾装饰箭头（不承载信息） */
+  --color-good: #1f7a35; /* 增益 +n 5.39:1 */
+  --color-bad: #c4281c; /* 卡点 / 减益 5.73:1 */
+  --color-bad-soft: #fdeeec; /* 卡点行底色 */
+  --color-warn: #a15c00; /* 5.19:1 */
+  --color-good-soft: #e6f4ea; /* 正面标签底 */
+  --color-warn-soft: #fbf1e3; /* 提醒标签底 */
+  --color-link-soft: #e5f0fb; /* 链接类标签底 */
+  --color-shadow: #0000001f; /* 图标、文字投影（原始透明黑） */
+  --color-scrim: #00000066; /* 弹窗与菜单遮罩 */
   /* 资源色（仅作色块，不承载文字） */
 
   /* —— 字体 —— */
-  --font-sans: "Inter", "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif;
-  --font-num: "Inter", "SF Pro Text", system-ui, sans-serif; /* 配合 font-variant-numeric: tabular-nums */
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --fs-display: 56px; --fs-h1: 40px; --fs-h2: 28px; --fs-h3: 18px; --fs-body: 15px; --fs-sm: 13px; --fs-xs: 12px; --fs-num-xl: 28px;
-  --lh-tight: 1.15; --lh-body: 1.65;
+  --font-sans: 'Inter', 'PingFang SC', 'HarmonyOS Sans SC', 'Noto Sans SC', 'Noto Sans CJK SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-num: 'Inter', 'SF Pro Text', system-ui, sans-serif; /* 配合 font-variant-numeric: tabular-nums */
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --fs-display: 56px;
+  --fs-h1: 40px;
+  --fs-h2: 28px;
+  --fs-h3: 18px;
+  --fs-body: 15px;
+  --fs-sm: 13px;
+  --fs-xs: 12px;
+  --fs-num-xl: 28px;
+  --lh-tight: 1.15;
+  --lh-body: 1.65;
 
   /* —— 间距（4 的倍数） —— */
-  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-16: 64px; --space-24: 96px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-16: 64px;
+  --space-24: 96px;
   /* —— 圆角 —— */
-  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 18px; --radius-xl: 22px; --radius-pill: 999px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-pill: 999px;
   /* —— 阴影 —— */
-  --shadow-1: 0 1px 2px #0000000a, 0 4px 16px #0000000a;   /* 卡片 */
+  --shadow-1: 0 1px 2px #0000000a, 0 4px 16px #0000000a; /* 卡片 */
   --shadow-2: 0 2px 12px #0000000f, 0 0 0 1px var(--color-border); /* 搜索框、浮层 */
-  --shadow-3: 0 12px 40px #0000001f;                       /* 命令面板、弹窗 */
+  --shadow-3: 0 12px 40px #0000001f; /* 命令面板、弹窗 */
   --focus-ring: 0 0 0 3px #0066cc55;
-  --nav-h: 52px; --content-max: 1200px;
+  --nav-h: 52px;
+  --content-max: 1200px;
 
   /* —— 旧令牌 → 新值（兼容层） —— */
   --c-bg-deep: var(--color-bg);
@@ -57,7 +80,7 @@
   --line: var(--color-line);
   --c-text: var(--color-text);
   --c-muted: var(--color-muted);
-  --c-gold-hi: var(--color-text);    /* 旧“高亮金”多用于标题，改为正文黑；需要强调处改用 --color-accent */
+  --c-gold-hi: var(--color-text); /* 旧“高亮金”多用于标题，改为正文黑；需要强调处改用 --color-accent */
   --c-gold: var(--color-accent);
   --c-bronze: var(--color-accent);
   --c-blue: var(--color-link);

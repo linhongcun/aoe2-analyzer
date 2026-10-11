@@ -5,6 +5,7 @@ import { Loading } from '../shared/ui/widgets';
 import CommandPalette from '../features/search/components/CommandPalette';
 import { TOOLS, WIKI, type Section } from './nav/sections';
 import FeedbackLink from '../features/feedback/FeedbackLink';
+import { appVersion } from '../features/feedback/feedback';
 import { DATA_SOURCES, versionLabel } from '../features/about/dataInfo';
 
 function NavItem({ s, path }: { s: Section; path: string }) {
@@ -109,11 +110,18 @@ export function Layout({ children }: { children: ReactNode }) {
       <footer>
         <p className="fbfoot">
           <FeedbackLink /> <FeedbackLink kind="feature" /> 发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。{' '}
-          <Link to="/about-data" data-t="footer-version">
-            数据版本：{versionLabel(DATA_SOURCES)}
-          </Link>{' '}
-          <span className="build-id" data-t="footer-build">
-            构建 {__BUILD__}
+          <span className="fmeta" data-t="footer-meta">
+            <span className="build-id fitem" data-t="footer-app-version">
+              {appVersion()}
+            </span>
+            {' · '}
+            <Link className="fitem" to="/about-data" data-t="footer-version">
+              数据版本：{versionLabel(DATA_SOURCES)}
+            </Link>
+            {' · '}
+            <span className="build-id fitem" data-t="footer-build">
+              构建 {__BUILD__}
+            </span>
           </span>
         </p>
         <p className="note">面向团战排位 · 所有评分（1-10）均为主观近似评分，仅供参考；数据可能随版本补丁变化。</p>

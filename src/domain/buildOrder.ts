@@ -41,6 +41,11 @@ export interface Step {
   note?: string;
   /** 来源给出的资源分配检查点；校验时与按动作累计的分配比对 */
   split?: Split;
+  /**
+   * #42：说明里只和造房有关的片段（必须是 note 的子串）。不需要房子的文明（匈奴）显示时把这些片段置灰加删除线并标「匈奴不需要」。
+   * 含造房动作的步骤必须填。
+   */
+  houseText?: string[];
   /** 本站补充、来源未列出的步骤（界面会标注「本站补充，来源未列」） */
   siteAdded?: boolean;
 }
@@ -119,6 +124,11 @@ export function checkShape(bo: unknown): string[] {
       if (st.phase !== undefined && !PHASES.includes(st.phase as Phase)) e.push(`${p}.phase 无效`);
       if (st.siteAdded !== undefined && typeof st.siteAdded !== 'boolean') e.push(`${p}.siteAdded 必须为布尔值`);
       if (st.note !== undefined && typeof st.note !== 'string') e.push(`${p}.note 必须为字符串`);
+      if (st.houseText !== undefined) {
+        if (!Array.isArray(st.houseText) || st.houseText.some((x) => typeof x !== 'string' || !x || !String(st.note ?? '').includes(x)))
+          e.push(`${p}.houseText 必须是 note 中的非空片段`);
+      } else if (Array.isArray(st.actions) && st.actions.some((a) => isObj(a) && a.type === 'build' && a.building === 70))
+        e.push(`${p} 含造房动作，需要 houseText（#42）`);
       if (!Array.isArray(st.actions)) return e.push(`${p}.actions 必须为数组`);
       if (st.actions.length === 0 && !st.note) e.push(`${p} 既无动作也无说明`);
       st.actions.forEach((a, j) => {

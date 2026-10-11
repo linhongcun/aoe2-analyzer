@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Check, Info, TriangleAlert as Warn, Landmark, Link2, Settings2, X } from 'lucide-react';
+import { Check, Download, Info, TriangleAlert as Warn, Landmark, Link2, Settings2, Share2, X } from 'lucide-react';
 import eco from '../../data/eco.json';
 import units from '../../data/units.json';
 import { buildOrders } from '../../data/buildOrders';
 import { civByEn, civs } from '../../data';
 import { simSupport } from '../../domain/simSupport';
-import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
+import { noHouseCompare, simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { RowSegs } from './RowSegs';
+import { SHARE_DISABLED_NOTE, buildShareCard } from './shareCard';
+import { shareCardBlob } from './shareCardImage';
 import {
   RES_ZH,
   buildView,
@@ -20,9 +22,11 @@ import {
   rowTime,
   mmss,
   parseQuery,
-  rangeText,
+  rangeLabel,
   summaryText,
   isLongBottleneck,
+  noHouseCompareText,
+  noteParts,
   type RowKey,
   type Seg,
 } from './timelineModel';
@@ -76,6 +80,13 @@ export default function BuildTimelineView() {
     [bo, simCiv, q.dist, q.house],
   );
   const v = useMemo(() => buildView(tl, (id) => UNIT_ZH[id] ?? id), [tl]);
+  // #42 匈奴（huns-flag-* 稿）：只有文明被支持、按它计算且它不需要房子时才出现；置灰时 simCiv 是 Generic，这里恒为 false
+  const noHouses = tl.noHouses;
+  const noNeedZh = `${civByEn(simCiv)?.zh ?? simCiv}不需要`;
+  const genericTl = useMemo(
+    () => (noHouses ? simulateBuild(bo, 'Generic', eco as unknown as EcoData, UPS, { walkTiles: q.dist, autoHouses: q.house }) : null),
+    [noHouses, bo, q.dist, q.house],
+  );
   const [showAssume, setShowAssume] = useState(false);
   const [copied, setCopied] = useState(false);
   const [drawer, setDrawer] = useState(false);
@@ -92,10 +103,17 @@ export default function BuildTimelineView() {
   const targetZh = AGE_ZH[bo.target.age]!;
   const civLabel = simCiv !== 'Generic' ? `按${civByEn(simCiv)?.zh ?? simCiv}计` : '按通用计';
   const ranged = v.bottlenecks.filter((b) => b.to > b.from);
-  const tagged = v.top && v.top.to > v.top.from ? v.top : [...ranged].sort((a, b) => b.sec - a.sec)[0];
+  const tagged =
+    v.top && v.top.to > v.top.from
+      ? (ranged.find((b) => b.from === v.top!.from && b.type === v.top!.type && b.step === v.top!.step) ?? v.top)
+      : [...ranged].sort((a, b) => b.sec - a.sec)[0];
   const bad = new Set(tl.steps.filter((s) => s.anomalies.length).map((s) => s.index));
   const sel = q.step !== null ? tl.steps[q.step] : undefined;
-  const sumT = summaryText(v.top, targetZh, v.tOut);
+  const sumT = summaryText(v.top, targetZh);
+  const cmp = genericTl
+    ? noHouseCompare(tl, genericTl, eco as unknown as EcoData, simCiv, (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]!)
+    : null;
+  const cmpText = cmp ? noHouseCompareText(cmp, targetZh) : null;
   const changed = (q.civ ? 1 : 0) + (q.dist !== WALK.default ? 1 : 0) + (q.house ? 0 : 1);
   const source = bo.sources[0]?.title;
 
@@ -144,17 +162,105 @@ export default function BuildTimelineView() {
     try {
       await navigator.clipboard.writeText(location.href);
       setCopied(true);
-      setTimeout(() => setCopied(false), 1600);
+      setTimeout(() => setCopied(false), 2000);
     } catch {
       /* 剪贴板不可用时静默：地址栏仍是可分享链接 */
     }
   };
-  const share = (
+
+  // #19 分享卡：置灰文明（simSupport=false）不生成卡，避免通用数字配上该文明的名字传出去（Steve 定）
+  const canCard = !unsupported;
+  const card = useMemo(
+    () =>
+      buildShareCard({
+        view: v,
+        target,
+        boId: bo.id,
+        boNameZh: bo.name.zh,
+        civEn: q.civ,
+        civZh: q.civ ? (civByEn(q.civ)?.zh ?? q.civ) : '通用',
+        targetZh,
+        dist: q.dist,
+        defaultDist: WALK.default,
+        house: q.house,
+        patchBuild: __DATA_SOURCES__.patch.build,
+        siteRoot: `${location.host}${location.pathname}`,
+      }),
+    [v, target, bo, q.civ, q.dist, q.house, targetZh],
+  );
+  const [cardOpen, setCardOpen] = useState(false);
+  const [cardUrl, setCardUrl] = useState<string | null>(null);
+  const cardBlob = useRef<Blob | null>(null);
+  const shareBtn = useRef<HTMLButtonElement | null>(null);
+  const cardDlg = useRef<HTMLDivElement>(null);
+  const openCard = (e: { currentTarget: HTMLButtonElement }) => {
+    if (!canCard) return; // aria-disabled：可聚焦，点了不动
+    shareBtn.current = e.currentTarget;
+    setCardOpen(true);
+  };
+  const closeCard = () => {
+    setCardOpen(false);
+    shareBtn.current?.focus();
+  };
+  useEffect(() => {
+    if (!cardOpen) return;
+    let live = true;
+    let url: string | null = null;
+    void shareCardBlob(card).then((b) => {
+      if (!live || !b) return;
+      cardBlob.current = b;
+      url = URL.createObjectURL(b);
+      setCardUrl(url);
+    });
+    cardDlg.current?.querySelector<HTMLElement>('button')?.focus();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeCard();
+    window.addEventListener('keydown', onKey);
+    return () => {
+      live = false;
+      window.removeEventListener('keydown', onKey);
+      if (url) URL.revokeObjectURL(url);
+      setCardUrl(null);
+      cardBlob.current = null;
+    };
+  }, [cardOpen, card]);
+  const fileName = `aoe2-${bo.id}${q.civ ? `-${q.civ}` : ''}.png`;
+  const sysShare = async () => {
+    const b = cardBlob.current;
+    if (!b) return;
+    const file = new File([b], fileName, { type: 'image/png' });
+    try {
+      await navigator.share({ files: [file], title: card.title, url: location.href });
+    } catch {
+      /* 用户取消或平台不支持：不提示 */
+    }
+  };
+  const canSysShare = typeof navigator !== 'undefined' && typeof navigator.canShare === 'function';
+
+  const copyBtn = (
     <button type="button" className="tl-share" onClick={copy} aria-label="复制链接">
-      {copied ? <Check size={16} aria-hidden /> : <Link2 size={16} aria-hidden />}
-      {copied ? '已复制' : '复制链接'}
+      <Link2 size={16} aria-hidden />
+      复制链接
     </button>
   );
+  const shareCardBtn = (where: string) => (
+    <button
+      type="button"
+      className="tl-share is-ghost"
+      data-t="share-card-btn"
+      onClick={openCard}
+      aria-disabled={canCard ? undefined : true}
+      aria-describedby={canCard ? undefined : `share-note-${where}`}
+    >
+      <Share2 size={16} aria-hidden />
+      分享
+    </button>
+  );
+  const shareNote = (where: string) =>
+    !canCard && (
+      <span className="tl-share-note" id={`share-note-${where}`} data-t="share-note">
+        {SHARE_DISABLED_NOTE}
+      </span>
+    );
   const dot = (on: boolean) => on && <span className="tl-dot" aria-label="非默认" />;
 
   const settings = (
@@ -196,10 +302,24 @@ export default function BuildTimelineView() {
         <span className="tl-num">{q.dist} 格</span>
         {dot(q.dist !== WALK.default)}
       </label>
-      <button type="button" role="switch" aria-checked={q.house} className="tl-switch" onClick={() => set('house', q.house ? '0' : '1')}>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={noHouses ? false : q.house}
+        aria-disabled={noHouses || undefined}
+        disabled={noHouses}
+        className="tl-switch"
+        data-t="auto-house"
+        onClick={() => set('house', q.house ? '0' : '1')}
+      >
         自动造房 <span className="tl-knob" aria-hidden />
-        {dot(!q.house)}
+        {!noHouses && dot(!q.house)}
       </button>
+      {noHouses && (
+        <span className="tl-no-need" data-t="no-need">
+          {noNeedZh}
+        </span>
+      )}
       <span className="note">羊和浆果按近距离计{!q.house && ' · 关掉可以看到不造房会卡在哪'}</span>
     </>
   );
@@ -269,47 +389,55 @@ export default function BuildTimelineView() {
         </div>
       )}
       <div className="tl-summary-card">
-        <ul className="tl-summary" role="region" aria-label="摘要">
-          <li className="tl-arrive" data-t="sum-arrive">
-            <span className="k">到达{target?.nameZh ?? targetZh}</span>
-            <b className="tl-num" data-time>
-              {target ? `约 ${mmss(target.reachAt)}` : '—'}
-            </b>
-            <span className="tl-civ" data-t="sum-civ">
-              {civLabel}
-            </span>
-            {target && rangeText(target.reachAt, target.errSec) && (
-              <span className="s tl-num tl-desk-only" data-t="sum-range">
-                {rangeText(target.reachAt, target.errSec)}
+        <SumMain extra={cmpText}>
+          <ul className="tl-summary" role="region" aria-label="摘要">
+            <li className="tl-arrive" data-t="sum-arrive">
+              <span className="k">到达{target?.nameZh ?? targetZh}</span>
+              <b className="tl-num" data-time>
+                {target ? `约 ${mmss(target.reachAt)}` : '—'}
+              </b>
+              <span className="tl-civ" data-t="sum-civ">
+                {civLabel}
               </span>
-            )}
-          </li>
-          <li className={`tl-bn${v.top ? ' is-bad' : ''}${isLongBottleneck(sumT.main) ? ' is-long' : ''}`} data-t="sum-bottleneck">
-            {v.top ? (
-              <button type="button" className="tl-jump" onClick={() => jump(v.top!.step)} aria-label={`主要卡点 ${sumT.main}，${sumT.sub}，跳到该步`}>
-                <span className="k">主要卡点</span>
-                <b>{sumT.main}</b>
-                <span className="s">{sumT.sub}</span>
-              </button>
-            ) : (
-              <>
-                <span className="k">主要卡点</span>
-                <b>没有卡点</b>
-              </>
-            )}
-          </li>
-          <li>
-            <span className="k">城镇中心闲置</span>
-            <b className="tl-num" data-time>
-              约 {mmss(v.tcIdleTotal)}
-            </b>
-          </li>
-          <li>
-            <span className="k">村民</span>
-            <b className="tl-num">{target?.vils ?? '—'}</b>
-          </li>
-        </ul>
-        <div className="tl-share-slot">{share}</div>
+              {target && rangeLabel(target.reachAt, target.errSec) && (
+                <span className="s tl-num tl-range" data-t="sum-range">
+                  {rangeLabel(target.reachAt, target.errSec)}
+                </span>
+              )}
+            </li>
+            <li className={`tl-bn${v.top ? ' is-bad' : ''}${isLongBottleneck(sumT.main) ? ' is-long' : ''}`} data-t="sum-bottleneck">
+              {v.top ? (
+                <button type="button" className="tl-jump" onClick={() => jump(v.top!.step)} aria-label={`主要卡点 ${sumT.main}，${sumT.sub}，跳到该步`}>
+                  <span className="k">主要卡点</span>
+                  <b>{sumT.main}</b>
+                  <span className="s">{sumT.sub}</span>
+                </button>
+              ) : (
+                <>
+                  <span className="k">主要卡点</span>
+                  <b>没有卡点</b>
+                </>
+              )}
+            </li>
+            <li>
+              <span className="k">城镇中心闲置</span>
+              <b className="tl-num" data-time>
+                约 {mmss(v.tcIdleTotal)}
+              </b>
+            </li>
+            <li>
+              <span className="k">村民</span>
+              <b className="tl-num">{target?.vils ?? '—'}</b>
+            </li>
+          </ul>
+        </SumMain>
+        <div className="tl-share-slot">
+          <div className="tl-share-row">
+            {copyBtn}
+            {shareCardBtn('desk')}
+          </div>
+          {shareNote('desk')}
+        </div>
       </div>
 
       <div className="tl-card">
@@ -453,7 +581,16 @@ export default function BuildTimelineView() {
                   约 {mmss(rowTime(s))}
                 </span>
                 <span className="n">
-                  {st.note}
+                  {noteParts(st.note ?? '', st.houseText, noHouses).map((x, k) =>
+                    x.skip ? (
+                      <span key={k} className="tl-skip" data-t="house-skip">
+                        <s>{x.text}</s>
+                        <span className="tl-no-need">{noNeedZh}</span>
+                      </span>
+                    ) : (
+                      <span key={k}>{x.text}</span>
+                    ),
+                  )}
                   {st.siteAdded && (
                     <span className="tl-site-added" data-t="site-added">
                       本站补充，来源未列
@@ -506,7 +643,63 @@ export default function BuildTimelineView() {
         {source && <span className="tl-mob-only">来源 {source} · </span>}
         时间为模拟估算（{tl.model.version}）。<Link to="/builds">返回开局列表</Link>
       </p>
-      <div className="tl-share-sticky">{share}</div>
+      <div className="tl-share-sticky">
+        <div className="tl-share-row">
+          {copyBtn}
+          {shareCardBtn('mob')}
+        </div>
+        {shareNote('mob')}
+      </div>
+      {copied && (
+        <div className="tl-toast" role="status" data-t="toast-copied">
+          <Check size={16} strokeWidth={2} aria-hidden />
+          链接已复制
+        </div>
+      )}
+      {cardOpen && (
+        <div className="tl-scrim" onClick={closeCard}>
+          <div ref={cardDlg} className="tl-sheet tl-cardsheet" role="dialog" aria-modal="true" aria-label="分享卡" onClick={(e) => e.stopPropagation()}>
+            <div className="tl-sheet-head">
+              <b>分享卡</b>
+              <button type="button" className="tl-x" onClick={closeCard} aria-label="关闭">
+                <X size={18} aria-hidden />
+              </button>
+            </div>
+            <div className="tl-sheet-body">
+              <figure className="tl-cardprev" data-t="share-card">
+                <p className="tl-cardprev-title" data-t="card-title">
+                  {card.title}
+                </p>
+                <ul>
+                  {card.cells.map((c, i) => (
+                    <li key={i} data-t={`card-cell-${i}`}>
+                      <span className="k">{c.label}</span>
+                      <b className={`tl-num${c.accent ? ' is-accent' : ''}`}>{c.value}</b>
+                      {c.sub && <span className="s">{c.sub}</span>}
+                    </li>
+                  ))}
+                </ul>
+                <figcaption data-t="card-basis">{card.basis}</figcaption>
+                <span className="tl-cardprev-url" data-t="card-url">
+                  {card.url}
+                </span>
+              </figure>
+            </div>
+            <div className="tl-sheet-foot">
+              {cardUrl && (
+                <a className="tl-ghost tl-dl" href={cardUrl} download={fileName} data-t="card-download">
+                  <Download size={16} aria-hidden /> 下载图片
+                </a>
+              )}
+              {canSysShare && cardUrl && (
+                <button type="button" className="tl-primary" onClick={sysShare}>
+                  <Share2 size={16} aria-hidden /> 分享图片
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {drawer && (
         <div className="tl-scrim" onClick={close}>
@@ -531,5 +724,18 @@ export default function BuildTimelineView() {
         </div>
       )}
     </section>
+  );
+}
+
+/** 摘要四格；有 #42 对比行时包一层，把对比行放在四格下面（虚线分隔）。没有时 DOM 不变 */
+function SumMain({ extra, children }: { extra: string | null; children: React.ReactNode }) {
+  if (!extra) return <>{children}</>;
+  return (
+    <div className="tl-sum-main">
+      {children}
+      <p className="tl-cmp" data-t="sum-compare">
+        {extra.split(/(?<=·)\s*/).flatMap((x, i) => [...(i ? [' '] : []), <span key={i}>{x}</span>])}
+      </p>
+    </div>
   );
 }
