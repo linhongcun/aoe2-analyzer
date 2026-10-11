@@ -14,7 +14,7 @@ const compact = (r: ReturnType<typeof sim>) => ({
   tcIdleTotal: r.tcIdleTotal,
   steps: r.steps.map(
     (s) =>
-      `${s.index} v${s.vils} ${s.startAt}→${s.doneAt} (-${s.errSec.early}/+${s.errSec.late}) F${s.stock.food} W${s.stock.wood} G${s.stock.gold} S${s.stock.stone} pop ${s.pop.used}/${s.pop.cap}${s.anomalies.length ? ' ! ' + s.anomalies.map((a) => a.reasonZh).join(' | ') : ''}`,
+      `${s.index} v${s.vils} ${s.startAt}->${s.doneAt} (-${s.errSec.early}/+${s.errSec.late}) F${s.stock.food} W${s.stock.wood} G${s.stock.gold} S${s.stock.stone} pop ${s.pop.used}/${s.pop.cap}${s.anomalies.length ? ' ! ' + s.anomalies.map((a) => a.reasonZh).join(' | ') : ''}`,
   ),
 });
 
@@ -25,19 +25,19 @@ describe('golden snapshots (Britons, default params)', () => {
 });
 
 describe('determinism & coverage', () => {
-  it('same input → identical output', () => {
+  it('same input -> identical output', () => {
     const bo = buildOrders[0]!;
     expect(JSON.stringify(sim(bo, 'Franks', { walkTiles: 7 }))).toBe(JSON.stringify(sim(bo, 'Franks', { walkTiles: 7 })));
   });
-  it('all builds × all civs finish and reach the target age', () => {
+  it('all builds x all civs finish and reach the target age', () => {
     for (const bo of buildOrders)
       for (const c of civs) {
         const r = sim(bo, c.en);
         expect(
           r.anomalies.filter((a) => a.type === 'timeout'),
-          `${bo.id} × ${c.en}`,
+          `${bo.id} x ${c.en}`,
         ).toEqual([]);
-        expect(r.ageUps.length, `${bo.id} × ${c.en}`).toBe(bo.target.age - 1);
+        expect(r.ageUps.length, `${bo.id} x ${c.en}`).toBe(bo.target.age - 1);
       }
   }, 120_000);
   it('fields align with #3 draft', () => {
@@ -52,12 +52,12 @@ describe('determinism & coverage', () => {
 
 describe('walking distance & error band', () => {
   const bo = buildOrders.find((b) => b.id === 'fast-castle-boom')!;
-  it('clamps to 1–10, presets 2/4/7, default 4', () => {
+  it('clamps to 1-10, presets 2/4/7, default 4', () => {
     expect(WALK.presets).toEqual({ near: 2, mid: 4, far: 7 });
     expect(sim(bo, 'Britons', { walkTiles: 99 }).params.walkTiles).toBe(10);
     expect(sim(bo, 'Britons', { walkTiles: 0 }).params.walkTiles).toBe(1);
   });
-  it('farther wood → later Castle; band is asymmetric and brackets the near/far runs', () => {
+  it('farther wood -> later Castle; band is asymmetric and brackets the near/far runs', () => {
     const t = (d: number) => sim(bo, 'Britons', { walkTiles: d }).ageUps.find((a) => a.age === 'castle')!.reachAt;
     expect(t(2)).toBeLessThanOrEqual(t(4));
     expect(t(4)).toBeLessThanOrEqual(t(7));
@@ -69,18 +69,18 @@ describe('walking distance & error band', () => {
 });
 
 describe('TC idle threshold (strictly > 2 s)', () => {
-  it('1.9 s → not an anomaly', () => expect(idleAnomaly(100, 101.9, 'food')).toBeNull());
-  it('2.0 s → not an anomaly', () => expect(idleAnomaly(100, 102, 'food')).toBeNull());
-  it('2.1 s → idle_tc with seconds', () =>
+  it('1.9 s -> not an anomaly', () => expect(idleAnomaly(100, 101.9, 'food')).toBeNull());
+  it('2.0 s -> not an anomaly', () => expect(idleAnomaly(100, 102, 'food')).toBeNull());
+  it('2.1 s -> idle_tc with seconds', () =>
     expect(idleAnomaly(100, 102.1, 'pop')).toEqual({ type: 'idle_tc', waitSec: 2.1, from: 100, to: 102.1, reasonZh: '城镇中心闲置 约 2.1 秒（卡人口）' }));
 });
 
 describe('hand-computed resource shortfall', () => {
   // 3 个开局村民全部吃羊（近 = 2 格），不再造村民，立即点封建（500 食物）。
-  // 起始食物 200 → 缺口 300。
-  // 单人收入 = 10 ÷ (10 ÷ 0.33 + 2×2 ÷ 0.8) = 10 ÷ 35.3030 = 0.283262/秒；3 人 = 0.849785/秒。
-  // 每 0.1 秒入账 0.0849785，需 ⌈300 ÷ 0.0849785⌉ = 3531 个步长 → 第 353.1 秒付清，等待 353.1 秒；
-  // 研究 130 秒 → 483.1 秒到达封建。
+  // 起始食物 200 -> 缺口 300。
+  // 单人收入 = 10 ÷ (10 ÷ 0.33 + 2x2 ÷ 0.8) = 10 ÷ 35.3030 = 0.283262/秒；3 人 = 0.849785/秒。
+  // 每 0.1 秒入账 0.0849785，需 ⌈300 ÷ 0.0849785⌉ = 3531 个步长 -> 第 353.1 秒付清，等待 353.1 秒；
+  // 研究 130 秒 -> 483.1 秒到达封建。
   const bo: BuildOrder = {
     id: 'hand-case',
     name: { zh: '手算', en: 'hand' },
@@ -114,26 +114,26 @@ describe('hand-computed resource shortfall', () => {
 });
 
 describe('civ economy bonuses (vs Generic = no bonuses)', () => {
-  it('Britons shepherds work faster → more food than Generic', () => {
+  it('Britons shepherds work faster -> more food than Generic', () => {
     const b = buildOrders.find((x) => x.id === 'archers-19')!;
     expect(sim(b, 'Britons').steps[6]!.stock.food).toBeGreaterThan(sim(b, 'Generic').steps[6]!.stock.food);
   });
   const bo = buildOrders.find((b) => b.id === 'archers-19')!;
-  it('Chinese: start with 6 villagers and −200 food / −50 wood', () => {
+  it('Chinese: start with 6 villagers and -200 food / -50 wood', () => {
     const s = sim(bo, 'Chinese').steps[0]!;
     expect(s.stock).toMatchObject({ food: 0, wood: 150 });
     expect(s.pop.used).toBe(7);
   });
-  it('Celts lumberjacks +15% → more wood at the same step than Britons', () => {
+  it('Celts lumberjacks +15% -> more wood at the same step than Britons', () => {
     const i = bo.steps.findIndex((s) => s.phase === 'feudal-click');
     expect(sim(bo, 'Celts').steps[i]!.stock.wood).toBeGreaterThan(sim(bo, 'Generic').steps[i]!.stock.wood);
   });
-  it('Franks foragers +15% → more food at Feudal click than a no-bonus baseline', () => {
+  it('Franks foragers +15% -> more food at Feudal click than a no-bonus baseline', () => {
     const fc = buildOrders.find((b) => b.id === 'fast-castle-boom')!;
     const i = fc.steps.findIndex((s) => s.phase === 'feudal-click');
     expect(sim(fc, 'Franks').steps[i]!.stock.food).toBeGreaterThan(sim(fc, 'Generic').steps[i]!.stock.food);
   });
-  it('Hindustanis cheaper villagers → more food banked at Feudal click', () => {
+  it('Hindustanis cheaper villagers -> more food banked at Feudal click', () => {
     const i = bo.steps.findIndex((s) => s.phase === 'feudal-click');
     expect(sim(bo, 'Hindustanis').steps[i]!.stock.food).toBeGreaterThan(sim(bo, 'Generic').steps[i]!.stock.food);
   });

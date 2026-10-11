@@ -267,11 +267,16 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   let researching = false; // 时代研究中（不产村民）
 
   const costOf = (kind: 'unit' | 'building' | 'tech' | 'up', id: number): Stock => {
-    let c: Cost = {};
-    if (kind === 'unit') c = id === 83 ? eco.villager.cost : (eco.units[id]?.cost ?? {});
-    else if (kind === 'building') c = eco.buildings[id]?.cost ?? {};
-    else if (kind === 'tech') c = eco.techs[id]?.cost ?? {};
-    else c = ups[id]?.[0] ?? {};
+    const c: Cost =
+      kind === 'unit'
+        ? id === 83
+          ? eco.villager.cost
+          : (eco.units[id]?.cost ?? {})
+        : kind === 'building'
+          ? (eco.buildings[id]?.cost ?? {})
+          : kind === 'tech'
+            ? (eco.techs[id]?.cost ?? {})
+            : (ups[id]?.[0] ?? {});
     const out: Stock = { food: 0, wood: 0, gold: 0, stone: 0 };
     for (const [k, v] of Object.entries(c)) out[RES_OF[k]!] = v ?? 0;
     if (kind === 'tech' && m.techCost[id] === 'free') return { food: 0, wood: 0, gold: 0, stone: 0 };
@@ -355,7 +360,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     if (stepPending[i]!.length === 0) doneAt[i] = r1(t);
   };
 
-  let t = 0;
+  let t: number;
   let timedOut = false;
   for (let tick = 0; ; tick++) {
     t = tick * TICK;
