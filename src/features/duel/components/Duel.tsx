@@ -21,6 +21,7 @@ import { SIM_ROWS } from '../../simulator/logic/format';
 import { fmtSide, parseSide, type Mode, type SideSpec } from '../logic/state';
 import { CostDiscountBlock } from './CostDiscount';
 import { UnitPicker } from './UnitPicker';
+import { BreakEven } from './BreakEven';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
@@ -125,6 +126,20 @@ export default function Duel() {
         <Side k="b" side={B} fams={fams} onChange={(s) => upd('b', s)} count={cntB} bud={mode === 'r' ? bud : 0} />
       </div>
       {mode === '1' ? <OneVOne A={A} B={B} /> : <Group A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />}
+      {mode !== 'r' && (
+        // #25 盈亏平衡点：等资源模式 v1 不放入口（v2 SPEC）
+        <BreakEven
+          key={mode}
+          a={A.F}
+          b={B.F}
+          nb={cntB}
+          summary={`${beSide(A)} vs ${beSide(B)}`}
+          sig={[mode, fmtSide(A.spec), fmtSide(B.spec), cntB].join('|')}
+          auto={sp.get('be') === '1'}
+          onComputed={() => set({ be: '1' })}
+          onOpen={(n, m) => set({ m: 'n', na: String(n), nb: String(m) })}
+        />
+      )}
       <p className="note duel-note">
         <Icon name="triangle-alert" className="ic warn" />
         近似模型：伤害 = max(1, Σ max(0, 攻击类别 − 对应护甲类别))（来源：Fandom「Armor class」、aoe2.rocks 伤害计算）；双方 t=0
@@ -133,6 +148,11 @@ export default function Duel() {
     </section>
   );
 }
+
+const PRESET_ZH = { f: '满科技', c: '当前时代满科技' } as const;
+const beSide = (s: Resolved) =>
+  `${civByEn(s.civ)?.zh ?? s.civ} ${s.u.zh}` +
+  (Array.isArray(s.spec.techs) ? (s.spec.techs.length ? ` · 自选科技 ${s.sel.size} 项` : ' · 无科技') : ` · ${PRESET_ZH[s.spec.techs]}`);
 
 function Side({
   k,

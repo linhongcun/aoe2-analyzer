@@ -1,5 +1,5 @@
 /** #25 PK 盈亏平衡点（v3 样稿 docs/design/mockups/issue25-v3/）。只负责展示，计算见 domain/breakEven.ts */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { breakEven, BREAK_EVEN_CAP, type BreakEvenResult } from '../../../domain/breakEven';
 import type { Fighter } from '../../../domain/duel';
 import { Icon } from '../../../shared/ui/Icon';
@@ -22,16 +22,14 @@ export interface BreakEvenProps {
 }
 
 export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: BreakEvenProps) {
-  const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string } | null>(null);
+  const compute = () => ({ sig, r: breakEven(a, b, nb, BREAK_EVEN_CAP), aName: a.name, bName: b.name });
+  // URL 带 be=1（分享链接）时首次渲染即计算
+  const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string } | null>(() => (auto ? compute() : null));
   const [copied, setCopied] = useState(false);
   const run = () => {
-    setRes({ sig, r: breakEven(a, b, nb, BREAK_EVEN_CAP), aName: a.name, bName: b.name });
+    setRes(compute());
     onComputed();
   };
-  useEffect(() => {
-    if (auto && !res) run();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const stale = !!res && res.sig !== sig;
   const copy = () => {
     void navigator.clipboard?.writeText(location.href).then(() => setCopied(true));
