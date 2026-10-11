@@ -25,10 +25,10 @@ const waitGold = (r: ReturnType<typeof sim>, i: number) =>
   );
 
 describe('#42 西班牙', () => {
-  it('simSupport 为 true；波斯保持置灰', () => {
+  it('simSupport 为 true；波斯也已放开（#55）', () => {
     expect(simSupport(E, 'Spanish', buildOrders)).toEqual({ supported: true, reasons: [] });
     expect(simSupportFn('Spanish')).toBe(true);
-    expect(simSupportFn('Persians')).toBe(false);
+    expect(simSupportFn('Persians')).toBe(true);
   });
 
   it('整条科技规则：西班牙每条 tech 的每个效果都已分类（handled / irrelevant 带原因）', () => {
