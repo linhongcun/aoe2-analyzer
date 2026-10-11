@@ -1,10 +1,10 @@
 # #19 分享卡 v2：三层口径（Steve 定）
 
-数据：`0a0995d`（#51 合入，线上），`simulateBuild(fast-castle-boom, 'Franks', eco, ups, { walkTiles: 4, autoHouses: true })`；`simSupport('Franks') === true`。（v2 原为 main `bb9ff17`：15:29 / 早 56 秒 · 晚 1:46 / 6:06）
-- 到城堡 reachAt 932.6s → 15:33（点击 772.6s），errSec early 59.4 / late 102.5 → 早 59 秒 · 晚 1:43
-- resource_short(wood) 9 次，waitSec 合计 362.6s → 6:03；无 pop_block
+数据：`ff7999e`（#53 合入；时间统一用 formatClock 向下取整到整秒），`simulateBuild(fast-castle-boom, 'Franks', eco, ups, { walkTiles: 4, autoHouses: true })`；`simSupport('Franks') === true`。（v2 原为 main `bb9ff17`：15:29 / 早 56 秒 · 晚 1:46 / 6:06；`0a0995d` 四舍五入时为 15:33 / 晚 1:43 / 6:03 / 44 秒）
+- 到城堡 reachAt 932.6s → 15:32（点击 772.6s → 12:52），errSec early 59.4 / late 102.5 → 早 59 秒 · 晚 1:42
+- resource_short(wood) 9 次，waitSec 合计 362.6s → 6:02；无 pop_block
 - 新增 prereq_wait 1 次（等市场 3.7s，#51 前置建筑规则），不足以改变主卡点，结论仍为「卡在木头」
-- tcIdleTotal 43.6s → 约 44 秒（2 次 idle_tc）
+- tcIdleTotal 43.6s → 约 43 秒（2 次 idle_tc）
 
 ## 三层
 1. 结论句（自动生成，见下表）
