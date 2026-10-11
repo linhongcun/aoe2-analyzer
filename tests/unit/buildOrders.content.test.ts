@@ -13,19 +13,16 @@ const text = (s: Step) => [s.note ?? '', ...s.actions.map((a) => JSON.stringify(
 const stepsMentioningGold = (bo: BuildOrder) =>
   bo.steps.filter((s) => /金|gold/i.test(text(s)) || s.actions.some((a) => a.type === 'gather' && a.task === 'gold'));
 
-const houseCount = (s: Step) =>
-  s.actions.reduce((n, a) => (a.type === 'build' && a.building === HOUSE ? n + (a.count ?? 1) : n), 0);
+const houseCount = (s: Step) => s.actions.reduce((n, a) => (a.type === 'build' && a.building === HOUSE ? n + (a.count ?? 1) : n), 0);
 
 /** 在 [lo, hi] 村民区间内有盖房步骤 */
-const hasHouseBetweenVillagers = (bo: BuildOrder, lo: number, hi: number) =>
-  bo.steps.some((s) => s.vils >= lo && s.vils <= hi && houseCount(s) > 0);
+const hasHouseBetweenVillagers = (bo: BuildOrder, lo: number, hi: number) => bo.steps.some((s) => s.vils >= lo && s.vils <= hi && houseCount(s) > 0);
 
 /**
  * 人口逼近 pop 前需有补房：在 [pop-3, pop] 有盖房。
  * 故意不含开局（vils=3）和极早的房子，才能抓住「约 20 卡人口」这类漏写。
  */
-const hasHouseBeforePop = (bo: BuildOrder, pop: number) =>
-  hasHouseBetweenVillagers(bo, Math.max(4, pop - 3), pop);
+const hasHouseBeforePop = (bo: BuildOrder, pop: number) => hasHouseBetweenVillagers(bo, Math.max(4, pop - 3), pop);
 
 describe('Reid/Steve 合并前必改（内容回归）', () => {
   it('drush-fc：采金目标不是「10 金」，须体现约 60 金（3 民兵）', () => {
