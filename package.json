@@ -19,7 +19,8 @@
     "data:status": "python3 scripts/data_update.py --check",
     "test:py": "python3 -m unittest discover -s tests/py -v",
     "bo:check": "vite-node scripts/build_orders_check.ts",
-    "eco": "python3 scripts/eco_build.py"
+    "eco": "python3 scripts/eco_build.py",
+    "sim": "vite-node scripts/sim_try.ts"
   },
   "dependencies": {
     "lucide-react": "^1.54.0",
