@@ -87,3 +87,11 @@ for (const width of [1280, 390])
     const b = (await basis.boundingBox())!;
     expect(b.y).toBeGreaterThanOrEqual(t.y + t.height - 1);
   });
+
+test('390 宽：时间线摘要「按{文明}计」12px（#39 规范）', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('#/builds?bo=scouts-18&civ=Franks');
+  const civ = page.locator('[data-t="sum-civ"]');
+  await expect(civ).toBeVisible();
+  expect(await civ.evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
+});

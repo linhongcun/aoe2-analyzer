@@ -1391,9 +1391,8 @@ a.tbld:hover span {
     padding: var(--space-1) var(--space-2);
   }
   /* 摘要标签 12px / 数值 17px 见上方 #3 2×2 规则 */
-  /* 只作用于摘要；列表页「按通用计」保持 12px（Jony #49） */
-  .tl-summary .s,
-  .tl-summary .tl-civ {
+  /* 「按{文明}计」（.tl-civ）在 390 下也保持 12px（#39 规范），这里只缩误差带小字 */
+  .tl-summary .s {
     font-size: 11px;
   }
   .tl-share-slot {
