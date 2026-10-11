@@ -23,6 +23,8 @@ jobs:
         run: npm test
       - name: Python tests (patch detection, diff summary, markers)
         run: npm run test:py
+      - name: Design contrast check (WCAG AA)
+        run: python3 docs/design/contrast.py
       # .dat（© Microsoft）只缓存在 runner，不进仓库；key 跟随固定版本
       - name: Cache pinned .dat + genieutils venv
         uses: actions/cache@v4
