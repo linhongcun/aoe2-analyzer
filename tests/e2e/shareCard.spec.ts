@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 
 /** #19 分享卡（Jony SPEC v0.4 验收要点 1–4 + 置灰按钮 57b1376）。卡上文字须与页面摘要逐字一致，不写死秒数。 */
@@ -32,6 +33,9 @@ test.describe('#19 分享卡', () => {
     await expect(dlg.locator('[data-t="card-cell-0"] .s')).toHaveText(/^误差 \d+:\d\d–\d+:\d\d$/);
     await expect(dlg.locator('[data-t="card-title"]')).toHaveText(/^法兰克·速升城堡暴经济，约 \d+:\d\d 到城堡，卡在木头$/);
     await expect(dlg.locator('[data-t="card-url"]')).toHaveText(/#\/builds\?bo=fast-castle-boom&civ=Franks$/);
+    // 游戏版本取自 scripts/data_sources.json 的 patch.build（构建时注入），不硬编码
+    const build = (JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { patch: { build: number } }).patch.build;
+    await expect(dlg.locator('[data-t="card-basis"]')).toHaveText(`按法兰克计 · 走路 4 格 · 游戏版本 ${build}`);
     const dl = page.waitForEvent('download');
     await dlg.locator('[data-t="card-download"]').click();
     expect((await dl).suggestedFilename()).toBe('aoe2-fast-castle-boom-Franks.png');
