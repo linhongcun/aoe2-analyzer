@@ -59,7 +59,9 @@ export default function CommandPalette({ open, onClose }: { open: boolean; onClo
                 </span>
               )}
               <span className="cmdk-t">
-                <b>{r.zh}</b> <small>{r.en}</small>
+                <b>{r.zh}</b>
+                {r.civNote && res.some((o) => o !== r && o.kind === 'unit' && o.zh === r.zh) && <span className="civnote">{r.civNote}</span>}{' '}
+                <small>{r.en}</small>
                 <br />
                 <small className="note">{r.sub}</small>
               </span>

@@ -5,12 +5,15 @@ import { Link, useLocation } from 'react-router-dom';
 import { baseUnit } from '../../../domain/family';
 import type { Unit } from '../../../domain/types';
 import { civByEn, civs } from '../../../data';
-import { useCore } from '../../../data/hooks';
-import { parseUnitPath } from '../../../domain/simulator';
+import { useCore, useTrees } from '../../../data/hooks';
+import { civStatus, parseUnitPath } from '../../../domain/simulator';
 import { AGE_ZH } from '../../../domain/ratings';
-import { upgradeLine } from '../../../domain/units';
+import { uniqueCivs, upgradeLine } from '../../../domain/units';
+import { civNote, dupPeers } from '../../../domain/dupNames';
+import { confusablesOf } from '../../../data/confusables';
+import { Icon } from '../../../shared/ui/Icon';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
-import { CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
+import { CivChip, CivIcon, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
@@ -19,9 +22,26 @@ import UnitList from './UnitList';
 
 const UT: Record<string, string> = { UniqueUnit: '独特单位', Unit: '通用单位', UnitUpgrade: '升级单位', RegionalUnit: '区域单位' };
 
+/** 升级路线中的一项；独特单位带灰色小标签「{单位} · {文明}」+ 文明图标（#10） */
+function UnitLineItem({ x }: { x: Unit }) {
+  const trees = useTrees();
+  const c = trees ? civByEn(uniqueCivs(x, trees)[0] ?? '') : undefined;
+  if (!c) return <UnitLink u={x} />;
+  return (
+    <span className="uline-uu">
+      <UnitLink u={x} />
+      <span className="uu-tag" data-t="uu-tag">
+        <CivIcon c={c} />
+        {x.zh} · {c.zh}
+      </span>
+    </span>
+  );
+}
+
 export default function UnitDetail() {
   const loc = useLocation();
   const core = useCore();
+  const trees = useTrees();
   const rt = parseUnitPath(loc.pathname);
   const u = core && rt ? core.unitById[rt.id] : undefined;
   const hasCiv = !!rt?.civ;
@@ -40,7 +60,9 @@ export default function UnitDetail() {
   const isE = u.id !== base.id;
   // 切换普通/精锐时保留路径中的模拟器状态（文明/时代/科技）
   const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
-  const ln = upgradeLine(u, core.units, core.unitById).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id);
+  // 有文明上下文时按该文明科技树选分叉（#10）
+  const st = rt.civ && trees ? civStatus(trees, rt.civ) : null;
+  const ln = upgradeLine(u, core.units, core.unitById, st ? (id) => st['u' + id] === 1 : undefined).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id);
   const stats: [string, string, ReactNode][] = [
     ['hp', '生命值 HP', u.hp],
     [u.rng > 1 ? 'patk' : 'atk', '攻击力', u.atk],
@@ -74,6 +96,15 @@ export default function UnitDetail() {
     ...(u.blast ? [['blast', '溅射范围', u.blast] as [string, string, number]] : []),
   ];
   const rel = core.techs.filter((t) => t.desc.includes(u.zh)).slice(0, 16);
+  const cz = (en: string) => civByEn(en)?.zh;
+  // #44「相关」第一项：完全重名（自动识别）与易混淆（对照表）互斥，一个单位只出现其中一种
+  const peers = dupPeers(base, core.units);
+  const conf = peers.length
+    ? []
+    : confusablesOf(base.id)
+        .map((c) => ({ u: core.unitById[c.other], reason: c.reason }))
+        .filter((c) => c.u);
+  const showNote = peers.length > 0 || conf.length > 0;
   const wantSim = hasCiv || new URLSearchParams(loc.search).get('tab') === 'sim';
   return (
     <DetailPage
@@ -82,6 +113,7 @@ export default function UnitDetail() {
       crumb={u.zh}
       icon={<UnitIcon u={u} big />}
       title={u.zh}
+      titleNote={showNote ? civNote(u, cz) : undefined}
       en={u.en}
       badges={<DlcBadgeL i={u.dlc} />}
       tags={
@@ -190,6 +222,32 @@ export default function UnitDetail() {
       ]}
       sidebar={
         <>
+          {(peers.length > 0 || conf.length > 0) && (
+            <SideBlock title="相关">
+              <div className="rel-first" data-t="rel-first">
+                {peers.map((p) => (
+                  <Link key={p.id} className="rel-row" to={`/unit/${p.id}`} data-t="dup-link">
+                    <Icon name="copy" />
+                    <span className="rel-tx">
+                      同名单位：{p.zh}
+                      <span className="civnote">{civNote(p, cz)}</span>
+                    </span>
+                    <Icon name="chevron-right" className="ic rel-chev" />
+                  </Link>
+                ))}
+                {conf.map(({ u: o, reason }) => (
+                  <Link key={o!.id} className="rel-row" to={`/unit/${o!.id}`} data-t="conf-link">
+                    <Icon name="info" />
+                    <span className="rel-tx">
+                      别和 {o!.zh} 混淆
+                      {reason && <span className="rel-reason">{reason}</span>}
+                    </span>
+                    <Icon name="chevron-right" className="ic rel-chev" />
+                  </Link>
+                ))}
+              </div>
+            </SideBlock>
+          )}
           <SideBlock title="升级路线">
             <div className="uline vline">
               <Join
@@ -201,7 +259,7 @@ export default function UnitDetail() {
                       {x.zh}
                     </b>
                   ) : (
-                    <UnitLink u={x} />
+                    <UnitLineItem x={x} />
                   ),
                 )}
               />

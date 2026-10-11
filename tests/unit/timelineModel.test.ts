@@ -8,10 +8,12 @@ import {
   buildView,
   parseQuery,
   pickReason,
+  pickSummaryBottleneck,
   prereqDetail,
   rowSegments,
   segLabel,
   rangeText,
+  rangeLabel,
   rowTime,
   summaryText,
 } from '../../src/features/builds/timelineModel';
@@ -42,7 +44,43 @@ describe('timelineModel', () => {
     expect(v.top!.step).toBe(12);
     expect(v.timeout).toBe(false);
     expect(v.end).toBeLessThan(3600);
-    expect(summaryText(v.top, '封建', v.tOut)).toEqual({ main: expect.stringMatching(/^卡人口 约 \d+:\d\d/), sub: '第 13 步' });
+    expect(summaryText(v.top, '封建')).toEqual({ main: expect.stringMatching(/^卡人口 约 \d+:\d\d 起$/), sub: '第 13 步' });
+  });
+  describe('摘要主要卡点规则（Steve）', () => {
+    const B = (type: Anomaly['type'], from: number, sec: number, step: number, resource?: 'food' | 'wood' | 'gold') => ({
+      type,
+      from,
+      to: from + sec,
+      sec,
+      label: '',
+      reasonZh: '',
+      step,
+      ...(resource ? { resource } : {}),
+    });
+    it('规则 1：有卡人口时卡人口优先，即使别的同类合计更长；显示开始时间', () => {
+      const top = pickSummaryBottleneck([B('resource_short', 100, 300, 2, 'wood'), B('pop_block', 669, 20, 12), B('pop_block', 700, 5, 13)]);
+      expect(top).toMatchObject({ type: 'pop_block', from: 669, step: 12 });
+      expect(summaryText(top, '封建')).toEqual({ main: '卡人口 约 11:09 起', sub: '第 13 步' });
+    });
+    it('规则 2：没有卡人口时按同类合计取最长，显示合计时长', () => {
+      // 木头三段合计 362 秒（6:02），比单段最长的闲置 200 秒长；黄金不同资源不并入木头
+      const list = [
+        B('idle_tc', 50, 200, 1),
+        B('resource_short', 300, 120, 4, 'wood'),
+        B('resource_short', 500, 150, 6, 'gold'),
+        B('resource_short', 700, 120, 8, 'wood'),
+        B('resource_short', 900, 122.5, 10, 'wood'),
+      ];
+      const top = pickSummaryBottleneck(list)!;
+      expect(top).toMatchObject({ type: 'resource_short', resource: 'wood', step: 4, total: 362.5 });
+      expect(summaryText(top, '城堡')).toEqual({ main: '卡在木头 约 6:02', sub: '第 5 步' });
+    });
+    it('规则 3：合计相同取最先出现的一类', () => {
+      const top = pickSummaryBottleneck([B('prereq_wait', 400, 30, 9), B('idle_tc', 100, 10, 3), B('idle_tc', 200, 20, 5)])!;
+      expect(top).toMatchObject({ type: 'idle_tc', step: 3, total: 30 });
+      expect(summaryText(top, '城堡').main).toBe('城镇中心闲置 约 0:30');
+    });
+    it('没有卡点返回 null', () => expect(pickSummaryBottleneck([])).toBeNull());
   });
   it('超时文案按目标时代写', () => {
     const b = { type: 'timeout' as const, from: 3600, to: 3600, sec: 0, label: '', reasonZh: '', step: 4 };
@@ -53,6 +91,9 @@ describe('timelineModel', () => {
   it('误差带两端相同不显示区间', () => {
     expect(rangeText(554, { early: 0, late: 0 })).toBeNull();
     expect(rangeText(554, { early: 0, late: 25 })).toBe('9:14–9:39');
+    // 摘要卡/分享卡标签：加「误差 」前缀；两端相同不出行
+    expect(rangeLabel(554, { early: 0, late: 25 })).toBe('误差 9:14–9:39');
+    expect(rangeLabel(554, { early: 0, late: 0 })).toBeNull();
   });
   it('卡点标签形如「卡人口 · 约 m:ss」，摘要卡人口优先', () => {
     const v = buildView(sim('archers-19', 'Britons', false), (x) => x);

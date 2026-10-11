@@ -103,12 +103,21 @@ test.describe('#3 开局时间线', () => {
     await openBuild(page, FIX.pop_block);
     const cell = page.locator('[data-t="sum-bottleneck"]');
     await expect(cell).toContainText('第 13 步');
+    await expect(cell).toContainText(/卡人口\s*约 \d+:\d{2} 起/);
     await cell.getByRole('button').click();
     await expect(page).toHaveURL(/[?&]step=13(&|$)/);
     const row = page.locator('[data-step="12"]');
     await expect(row).toHaveAttribute('aria-selected', 'true');
     await expect(row).toBeInViewport();
     await expect(row.getByRole('region', { name: /步骤详情/ })).toBeVisible();
+  });
+
+  test('7b. 没有卡人口：摘要主要卡点取同类等待合计最长的一类，写「卡在木头 约 m:ss」（合计时长）', async ({ page }) => {
+    await openBuild(page, 'bo=fast-castle-boom');
+    const cell = page.locator('[data-t="sum-bottleneck"]');
+    await expect(cell).toContainText(/卡在木头\s*约 \d+:\d{2}/);
+    await expect(cell).toContainText('第 5 步');
+    await expect(cell).not.toContainText('起');
   });
 
   test('8. 默认不显示资源数字；点步骤才显示食/木/黄金/石头和人口；再点收起', async ({ page }) => {
@@ -283,7 +292,10 @@ test.describe('#3 开局时间线', () => {
     await openBuild(page, 'bo=scouts-18');
     await page.locator('#tlciv').click();
     await page.keyboard.type('法兰克');
-    await page.keyboard.press('Enter');
+    // 等列表过滤出「法兰克」再点选，避免 Enter 抢在过滤前选中第一项（偶发 civ=Aztecs）
+    const franks = page.getByRole('dialog', { name: '文明' }).locator('[data-civ="Franks"]');
+    await expect(franks).toBeVisible();
+    await franks.click();
     await expect(page).toHaveURL(/[?&]civ=Franks/);
     await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按法兰克计');
   });
@@ -334,8 +346,9 @@ test.describe('#3 开局时间线', () => {
     await expect(dlg).toBeVisible();
     await expect(page).not.toHaveURL(/civ=Portuguese/);
     await expect(dlg.getByText(/个文明已支持/)).toHaveCount(0);
-    // 键盘：搜到的只有禁用项时 Enter 不会选中
-    await page.keyboard.type('葡萄牙');
+    // 键盘：搜到的只有禁用项时 Enter 不会选中（等可选项滤空；Portuguese 打字前就在，不能拿它当过滤信号）
+    await dlg.getByRole('combobox').fill('葡萄牙');
+    await expect(dlg.getByRole('listbox').locator('[role="option"]:not([aria-disabled])')).toHaveCount(0);
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('Enter');
     await expect(page).not.toHaveURL(/civ=Portuguese/);

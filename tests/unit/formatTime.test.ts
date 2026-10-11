@@ -50,10 +50,11 @@ describe('同一个时间全站一致', () => {
           const next = tl.steps.find((s) => rowTime(s) >= a.reachAt - 1e-6 && rowTime(s) - a.reachAt < 1);
           if (next) expect(formatClock(rowTime(next)), ctx).toBe(summary);
         }
-        // 摘要卡点和它的步骤文案用同一个时长
-        if (v.top && v.top.type !== 'timeout' && !summaryText(v.top, '', v.tOut).main.endsWith('起')) {
-          const dur = summaryText(v.top, '', v.tOut).main.split('约 ')[1];
-          expect(v.top.label.endsWith(`约 ${dur}`), ctx).toBe(true);
+        // 摘要卡点：卡人口写开始时间；其余写同类合计时长，同样走 formatClock
+        if (v.top && v.top.type !== 'timeout') {
+          const main = summaryText(v.top, '').main;
+          if (v.top.type === 'pop_block') expect(main, ctx).toBe(`卡人口 约 ${formatClock(v.top.from)} 起`);
+          else expect(main.endsWith(` 约 ${formatClock(v.top.total!)}`), ctx).toBe(true);
         }
         // 列表页（通用、默认参数）
         if (civ === 'Generic' && house && dist === WALK.default) {

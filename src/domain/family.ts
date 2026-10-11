@@ -43,13 +43,13 @@ export interface FamilyEntry {
 export function collapse(list: readonly Unit[], f: Families): FamilyEntry[] {
   const ids = new Set(list.map((u) => u.id));
   const out: FamilyEntry[] = [];
-  // 同名不同 id（如城堡/马厩两处生产的答刺罕）只保留第一个
+  // 同英文名不同 id（同一单位由两种建筑生产：答刺罕 城堡/马厩、近卫军 城堡/兵营、保加利亚骑兵 城堡/营垒、萨金特卫兵 城堡/城楼、长矛/长枪/长戟 兵营/城楼）只保留第一个；中文同名但英文不同的（楼船、战车）各算一个
   const seen = new Set<string>();
   list.forEach((u) => {
     const b = f.baseOf[u.id];
-    if (b && (ids.has(b.id) || list.some((x) => x.zh === b.zh))) return;
-    if (seen.has(u.zh)) return;
-    seen.add(u.zh);
+    if (b && (ids.has(b.id) || list.some((x) => x.en === b.en))) return;
+    if (seen.has(u.en)) return;
+    seen.add(u.en);
     const e = f.eliteOf[u.id];
     out.push(e && ids.has(e.id) ? { u, elite: e } : { u });
   });
@@ -77,3 +77,15 @@ export function groupLines(list: readonly Unit[], all: Unit[], byId: Record<numb
   res.forEach((g) => g.members.sort((a, b) => (pos.get(a.u.id) ?? 0) - (pos.get(b.u.id) ?? 0)));
   return res;
 }
+
+/** 科技「涉及单位」（#13）：来自结构化效果（techAffects 的结果），按 id 去重，普通/精锐合并为一条 */
+export function affectedUnits(groups: readonly { rows: readonly { units: readonly Unit[] }[] }[], f: Families): Unit[] {
+  const seen = new Map<number, Unit>();
+  groups.forEach((g) => g.rows.forEach((r) => r.units.forEach((u) => seen.set(u.id, u))));
+  return collapse([...seen.values()], f).map((e) => e.u);
+}
+
+/** 单位总数口径（#14，Steve 定）：只数玩家能选的单位系列，精锐版并入对应单位计，按英文名去重。首页与列表页共用 */
+export const UNIT_COUNT_NOTE = '精锐版并入对应单位计';
+export const unitCount = (units: readonly Unit[], f: Families): number => collapse(units, f).length;
+export const unitCountLabel = (n: number): string => `${n} 个单位（${UNIT_COUNT_NOTE}）`;

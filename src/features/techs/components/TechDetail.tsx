@@ -9,6 +9,8 @@ import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import TechList from './TechList';
 import TechAffects from './TechAffects';
+import { techAffects } from '../../../domain/affects';
+import { affectedUnits } from '../../../domain/family';
 
 const TT: Record<string, string> = { UniqueTech: '独特科技', Research: '通用科技', RegionalTech: '区域科技' };
 
@@ -28,7 +30,8 @@ export default function TechDetail() {
   if (!t) return <TechList />;
   const pre = t.pre != null ? core.techById[t.pre] : undefined;
   const nxt = core.techs.filter((x) => x.pre === t.id);
-  const rel = core.units.filter((u) => u.zh.length >= 2 && t.desc.includes(u.zh));
+  // 涉及单位用结构化效果（与「作用对象」同源），不再按说明文字匹配单位名（#13）
+  const rel = affectedUnits(techAffects(t, core.units, core.buildings), core.fam);
   const civList = (
     <>
       <h4>
@@ -128,15 +131,6 @@ export default function TechDetail() {
                     />
                   </>
                 )}
-              </div>
-            </SideBlock>
-          )}
-          {rel.length > 0 && (
-            <SideBlock title="涉及单位">
-              <div className="uchips">
-                {rel.slice(0, 6).map((u) => (
-                  <UnitLink key={u.id} u={u} />
-                ))}
               </div>
             </SideBlock>
           )}
