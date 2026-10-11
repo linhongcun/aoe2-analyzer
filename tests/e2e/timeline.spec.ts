@@ -393,9 +393,19 @@ test.describe('#3 收尾', () => {
   test('列表页：时间由模拟器算并标按通用计；置灰推荐文明标「加成未计入」', async ({ page }) => {
     await page.goto('./#/builds');
     const scouts = page.locator('[data-t="build-order"]', { hasText: '18 人口侦察骑兵' });
-    await expect(scouts.locator('[data-t="bo-time"]')).toHaveText(/约 \d+:\d\d 到达封建，按通用计/);
-    await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '匈奴' })).toContainText('加成未计入');
+    await expect(scouts.locator('[data-t="bo-time"]')).toHaveText(/^约 \d+:\d\d 到达封建$/);
+    const tag = scouts.locator('[data-t="bo-time"] + small.tl-civ');
+    await expect(tag).toHaveText('按通用计');
+    expect(await tag.evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
+    const huns = scouts.locator('[data-t="bo-civ"]', { hasText: '匈奴' });
+    await expect(huns).toContainText('加成未计入');
+    await expect(huns.locator('small.tl-civ svg.lucide-ban')).toHaveCount(1);
+    expect(await huns.locator('small.tl-civ').evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
     await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '法兰克' })).not.toContainText('加成未计入');
+    // 已计入的排前面：data-off 的都在最后
+    const offs = await scouts.locator('[data-t="bo-civ"]').evaluateAll((els) => els.map((e) => e.hasAttribute('data-off')));
+    expect(offs).toEqual([...offs].sort((a, b) => Number(a) - Number(b)));
+    expect(offs.some(Boolean)).toBe(true);
   });
   test('390 宽：摘要 2 列，到达时间与主要卡点同在第一行', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -406,5 +416,23 @@ test.describe('#3 收尾', () => {
     const cols = await page.locator('.tl-summary').evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(' ').length);
     expect(cols).toBe(2);
     expect(a!.y + a!.height).toBeLessThan(844);
+    // 字号：标签 12px，数值 17px（不能被同断点里更早/更晚的旧规则盖掉）
+    const fs = (sel: string) =>
+      page
+        .locator(sel)
+        .first()
+        .evaluate((el) => getComputedStyle(el).fontSize);
+    expect(await fs('[data-t="sum-arrive"] .k')).toBe('12px');
+    expect(await fs('[data-t="sum-arrive"] b')).toBe('17px');
+  });
+  test('文明选择器：搜置灰文明「玛雅」显示置灰项、不显示「没有匹配的文明」；真没有匹配时仍显示', async ({ page }) => {
+    await page.goto('./#/builds?bo=scouts-18');
+    await page.locator('#tlciv').click();
+    const dlg = page.getByRole('dialog', { name: '文明' });
+    await dlg.getByRole('combobox').fill('玛雅');
+    await expect(dlg.locator('[data-civ="Mayans"]')).toHaveAttribute('aria-disabled', 'true');
+    await expect(dlg.getByText('没有匹配的文明')).toHaveCount(0);
+    await dlg.getByRole('combobox').fill('zzzz');
+    await expect(dlg.getByText('没有匹配的文明')).toBeVisible();
   });
 });

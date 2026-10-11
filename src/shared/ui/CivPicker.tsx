@@ -247,7 +247,7 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix, i
                   </div>
                 );
               })}
-              {!opts.length && <p className="note cp-empty">没有匹配的文明</p>}
+              {!rows.some((r) => r.kind !== 'head') && <p className="note cp-empty">没有匹配的文明</p>}
             </div>
           </div>
         </>

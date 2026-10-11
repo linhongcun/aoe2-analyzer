@@ -3,13 +3,16 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../data';
 import type { ListMeta } from './listMeta';
 import { visibleSources } from './sources';
-import { ChartGantt } from 'lucide-react';
+import { Ban, ChartGantt } from 'lucide-react';
 import { buildOrders } from '../../data/buildOrders';
 import type { Phase } from '../../domain/buildOrder';
 import { ListHead } from '../../shared/ui/layout';
 import FeedbackLink from '../feedback/FeedbackLink';
 import TimelineLoader from './TimelineLoader';
 import { PENDING_FIX, PENDING_LABEL, keptTime } from './pendingFix';
+
+/** 推荐文明：加成已计入的排前面，未计入的沉底（各自保持原顺序） */
+export const sortCivs = (civs: string[], off: string[] = []) => [...civs.filter((c) => !off.includes(c)), ...civs.filter((c) => off.includes(c))];
 
 const PHASE: Record<Phase, string> = {
   'feudal-click': '点封建',
@@ -58,15 +61,28 @@ export default function BuildOrderList() {
         <details key={b.id} className="bo" data-t="build-order">
           <summary>
             <b>{b.name.zh}</b> <span className="note">{b.name.en}</span> · {b.target.vils} 人口{AGE[b.target.age]}
-            {meta?.[b.id]?.time ? <span data-t="bo-time">（{meta[b.id]!.time}，按通用计）</span> : ''} ·{' '}
+            {meta?.[b.id]?.time && (
+              <>
+                {' · '}
+                <span data-t="bo-time">{meta[b.id]!.time}</span> <small className="tl-civ">按通用计</small>
+              </>
+            )}{' '}
+            ·{' '}
             {b.civs.length
-              ? b.civs.map((c, i) => (
-                  <span key={c} data-t="bo-civ">
-                    {i > 0 && '、'}
-                    {civName(c)}
-                    {meta?.[b.id]?.unsupported.includes(c) && <span className="note">（加成未计入）</span>}
-                  </span>
-                ))
+              ? sortCivs(b.civs, meta?.[b.id]?.unsupported).map((c, i) => {
+                  const off = meta?.[b.id]?.unsupported.includes(c);
+                  return (
+                    <span key={c} data-t="bo-civ" data-off={off ? '' : undefined}>
+                      {i > 0 && '、'}
+                      {civName(c)}
+                      {off && (
+                        <small className="tl-civ">
+                          <Ban size={12} aria-hidden /> 加成未计入
+                        </small>
+                      )}
+                    </span>
+                  );
+                })
               : '通用'}
           </summary>
           <p>{b.summary}</p>

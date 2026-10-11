@@ -1387,20 +1387,10 @@ a.tbld:hover span {
   .tl-summary-card {
     padding: var(--space-2);
   }
-  .tl-summary {
-    gap: var(--space-1);
-  }
-  .tl-summary li {
-    padding: var(--space-1) var(--space-2);
-  }
   .tl-jump {
     padding: var(--space-1) var(--space-2);
   }
-  .tl-summary b,
-  .tl-bn b {
-    font-size: var(--fs-sm);
-  }
-  .tl-summary .k,
+  /* 摘要标签 12px / 数值 17px 见上方 #3 2×2 规则 */
   .tl-summary .s,
   .tl-civ {
     font-size: 11px;
