@@ -74,14 +74,16 @@ export function Join({ items, sep }: { items: ReactNode[]; sep: ReactNode }) {
   );
 }
 
-const COL = ['rgba(212,160,23,', 'rgba(80,160,220,'];
-/** 8 轴能力雷达图（canvas） */
+/** 8 轴能力雷达图（canvas）；canvas 不认 var()，颜色从设计令牌读取 */
 export function Radar({ list, id }: { list: Civ[]; id?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const cv = ref.current;
     const x = cv?.getContext('2d');
     if (!cv || !x) return;
+    const css = getComputedStyle(cv);
+    const tok = (name: string) => css.getPropertyValue(name).trim();
+    const COL = [tok('--color-accent'), tok('--color-link')];
     const W = cv.width,
       H = cv.height,
       cx = W / 2,
@@ -97,7 +99,7 @@ export function Radar({ list, id }: { list: Civ[]; id?: string }) {
         const p = (R * r) / 5;
         x.lineTo(cx + p * Math.cos(ang(i)), cy + p * Math.sin(ang(i)));
       }
-      x.strokeStyle = '#5a4a32';
+      x.strokeStyle = tok('--color-border');
       x.stroke();
     }
     AXES.forEach((l, i) => {
@@ -106,7 +108,7 @@ export function Radar({ list, id }: { list: Civ[]; id?: string }) {
       x.moveTo(cx, cy);
       x.lineTo(cx + R * Math.cos(a), cy + R * Math.sin(a));
       x.stroke();
-      x.fillStyle = '#e8d5a3';
+      x.fillStyle = tok('--color-text');
       x.textAlign = 'center';
       x.fillText(l, cx + (R + 22) * Math.cos(a), cy + (R + 18) * Math.sin(a) + 4);
     });
@@ -114,9 +116,11 @@ export function Radar({ list, id }: { list: Civ[]; id?: string }) {
       x.beginPath();
       c.s.forEach((s, i) => x.lineTo(cx + ((R * s) / 10) * Math.cos(ang(i)), cy + ((R * s) / 10) * Math.sin(ang(i))));
       x.closePath();
-      x.fillStyle = COL[k] + '0.3)';
+      x.globalAlpha = 0.3;
+      x.fillStyle = COL[k]!;
       x.fill();
-      x.strokeStyle = COL[k] + '1)';
+      x.globalAlpha = 1;
+      x.strokeStyle = COL[k]!;
       x.lineWidth = 2;
       x.stroke();
       x.lineWidth = 1;

@@ -1,19 +1,43 @@
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('../fonts/inter-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('../fonts/inter-latin-600-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('../fonts/inter-latin-700-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
 body {
   margin: 0;
-  background: #1a140d radial-gradient(circle at top, #2e2215, var(--c-bg-deep));
+  background: var(--color-bg);
   color: var(--c-text);
-  font-family: 'Noto Serif SC', Georgia, serif;
+  font-family: var(--font-sans);
 }
 header {
   text-align: center;
   padding: 18px;
   border-bottom: 2px solid var(--c-bronze);
-  background: #0d0906cc;
+  background: var(--color-surface);
 }
 h1 {
   margin: 0;
   color: var(--c-gold);
-  text-shadow: 0 0 8px #000;
+  text-shadow: 0 0 8px var(--color-shadow);
   letter-spacing: 2px;
 }
 .note {
@@ -63,7 +87,7 @@ main {
   gap: 10px;
 }
 .card {
-  background: linear-gradient(#2b2015, #1c150d);
+  background: var(--color-surface);
   border: 1px solid var(--c-border);
   border-radius: 10px;
   padding: 12px;
@@ -73,7 +97,7 @@ main {
 .card:hover {
   transform: translateY(-3px);
   border-color: var(--c-gold);
-  box-shadow: 0 4px 14px #000;
+  box-shadow: 0 4px 14px var(--color-shadow);
 }
 .card h3 {
   margin: 0;
@@ -139,7 +163,7 @@ th {
   width: 56px;
   height: 56px;
   vertical-align: middle;
-  filter: drop-shadow(0 2px 4px #000);
+  filter: drop-shadow(0 2px 4px var(--color-shadow));
 }
 .card .ico {
   float: right;
@@ -153,7 +177,7 @@ h2 .ico {
 footer {
   text-align: center;
   padding: 20px;
-  color: #8a7350;
+  color: var(--color-muted);
   font-size: 12px;
   border-top: 1px solid var(--c-tag);
   margin-top: 30px;
@@ -203,8 +227,9 @@ footer a {
   left: 8px;
   top: 2px;
   font-size: 13px;
-  color: #fff;
-  text-shadow: 0 0 3px #000;
+  color: var(--color-text);
+  text-shadow: 0 0 3px var(--color-surface);
+  font-variant-numeric: tabular-nums;
 }
 .uico {
   width: 28px;
@@ -227,7 +252,7 @@ a {
   border-bottom: 1px dotted var(--c-gold-hi);
 }
 .ulink:hover {
-  color: #fff;
+  color: var(--color-accent);
 }
 .uchips {
   display: flex;
@@ -260,7 +285,7 @@ a {
   width: 40%;
 }
 .cur {
-  color: #fff;
+  color: var(--color-text);
 }
 .uline {
   line-height: 2.2;
@@ -294,8 +319,8 @@ a {
   gap: 10px;
 }
 .tl {
-  color: #9fd3ff;
-  border-bottom-color: #9fd3ff;
+  color: var(--color-link);
+  border-bottom-color: var(--color-link);
 }
 .tscroll {
   overflow-x: auto;
@@ -320,13 +345,13 @@ a {
   stroke-width: 2;
 }
 .tree path.na {
-  stroke: #4a3f30;
+  stroke: var(--color-border);
   stroke-dasharray: 3 3;
 }
 .tband {
   position: absolute;
   left: 0;
-  border-top: 1px solid #3a2c18;
+  border-top: 1px solid var(--color-line);
 }
 .tband span {
   position: sticky;
@@ -336,23 +361,23 @@ a {
   padding: 6px 4px;
   font-size: 12px;
   color: var(--c-gold-hi);
-  background: #1a130b;
+  background: var(--color-surface-2);
   writing-mode: vertical-rl;
   height: calc(100% - 12px);
   text-align: center;
   z-index: 2;
 }
 .tband.b0 {
-  background: #1a1510;
+  background: var(--color-surface);
 }
 .tband.b1 {
-  background: #1f1810;
+  background: var(--color-surface-2);
 }
 .tband.b2 {
-  background: #221a10;
+  background: var(--color-surface);
 }
 .tband.b3 {
-  background: #271d10;
+  background: var(--color-surface-2);
 }
 .tbld {
   position: absolute;
@@ -389,25 +414,25 @@ a {
   border-radius: 4px;
 }
 .tcell:hover {
-  border-color: #fff;
+  border-color: var(--color-accent);
   transform: scale(1.12);
   z-index: 3;
 }
 .tcell.na {
   filter: grayscale(1);
   opacity: 0.28;
-  border-color: #333;
+  border-color: var(--color-border);
 }
 .tcell.uq {
-  border-color: #ffd24a;
-  box-shadow: 0 0 8px #ffb300;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent);
 }
 .tcell.onlyA {
   outline: 3px solid var(--c-up);
   outline-offset: 1px;
 }
 .tcell.onlyB {
-  outline: 3px solid #ff5f5f;
+  outline: 3px solid var(--color-bad);
   outline-offset: 1px;
   opacity: 0.6;
 }
@@ -430,18 +455,18 @@ a {
   background: var(--c-control);
 }
 .tl1.uq {
-  border-color: #ffd24a;
-  box-shadow: 0 0 6px #ffb300;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 6px var(--color-accent);
 }
 .tl1.na {
   opacity: 0.3;
-  background: #555;
+  background: var(--color-muted);
 }
 .tl1.onlyA {
   outline: 3px solid var(--c-up);
 }
 .tl1.onlyB {
-  outline: 3px solid #ff5f5f;
+  outline: 3px solid var(--color-bad);
 }
 .dlcb {
   display: inline-block;
@@ -449,7 +474,7 @@ a {
   padding: 1px 6px;
   margin-top: 4px;
   border-radius: 4px;
-  background: #3b2a12;
+  background: var(--color-tag);
   border: 1px solid var(--c-bronze);
   color: var(--c-gold-hi);
   text-decoration: none;
@@ -494,13 +519,13 @@ h2 .dlcb {
 .dlci {
   width: 24px;
   height: 24px;
-  filter: drop-shadow(0 1px 2px #000);
+  filter: drop-shadow(0 1px 2px var(--color-shadow));
 }
 .dlcb.big {
   padding: 2px 8px 2px 2px;
   border: 1px solid var(--c-bronze);
   border-radius: 16px;
-  background: #3b2a12;
+  background: var(--color-tag);
   font-size: 13px;
   color: var(--c-gold-hi);
 }
@@ -530,7 +555,7 @@ h2 .dlcb {
 .dlcL {
   width: 52px;
   height: 52px;
-  filter: drop-shadow(0 2px 3px #000);
+  filter: drop-shadow(0 2px 3px var(--color-shadow));
 }
 .dbar {
   display: flex;
@@ -592,7 +617,7 @@ h2 .dlcb {
   background: var(--c-control);
 }
 .simt.on {
-  background: #2f2414;
+  background: var(--color-accent-soft);
   outline: 1px solid var(--c-bronze);
 }
 .simt.txt {
@@ -675,7 +700,7 @@ h2 .dlcb {
   font-size: 11px;
   line-height: 16px;
   border-radius: 3px;
-  color: #1b1408;
+  color: var(--color-surface);
   background: var(--c-gold-hi);
   vertical-align: 1px;
 }
@@ -721,14 +746,14 @@ h2 .dlcb {
 }
 .eseg a.on {
   background: var(--c-gold-hi);
-  color: #1b1408;
+  color: var(--color-surface);
   font-weight: bold;
 }
 table.ediff td.up {
-  color: #7fd17f;
+  color: var(--color-good);
 }
 table.ediff td.dn {
-  color: #e07a6a;
+  color: var(--color-bad);
 }
 .ediffbox {
   margin: 0 0 12px;
@@ -791,7 +816,7 @@ table.ediff td.dn {
   background: var(--c-panel);
   border: 1px solid var(--c-gold-hi);
   border-radius: 8px;
-  box-shadow: 0 10px 30px #000a;
+  box-shadow: var(--shadow-3);
 }
 .cp-head {
   display: flex;
@@ -870,7 +895,7 @@ table.ediff td.dn {
 }
 @media (max-width: 899px) {
   .cp-mask {
-    background: #0009;
+    background: var(--color-scrim);
   }
   .cp-panel {
     position: fixed;
@@ -940,7 +965,7 @@ table.ediff td.dn {
 .duel-presets button.on,
 #duel .fbar button.on {
   background: var(--c-gold-hi);
-  color: #1b1408;
+  color: var(--color-surface);
 }
 .duel-stats {
   width: 100%;
@@ -1053,7 +1078,7 @@ table.ediff td.dn {
 }
 .eseg button.on {
   background: var(--c-gold-hi);
-  color: #1b1408;
+  color: var(--color-surface);
   font-weight: bold;
 }
 /* 文明加成 */
@@ -1098,16 +1123,16 @@ table.ediff td.dn {
   border-top: 1px solid var(--c-tag);
 }
 .tag.ok {
-  background: #234a23;
+  background: var(--color-good-soft);
   color: var(--c-good);
 }
 .tag.txt {
-  background: #4a2a18;
-  color: #f0b080;
+  background: var(--color-warn-soft);
+  color: var(--color-warn);
 }
 .tag.team {
-  background: #1e3a55;
-  color: #9fd0f5;
+  background: var(--color-link-soft);
+  color: var(--color-link);
 }
 .bonusbody .bz {
   font-size: 16px;
@@ -1148,7 +1173,7 @@ table.ediff td.dn {
 .catbar button.on,
 #bonuses .catbar button.on {
   background: var(--c-gold-hi);
-  color: #1b1408;
+  color: var(--color-surface);
 }
 .bside {
   padding-left: 16px;
