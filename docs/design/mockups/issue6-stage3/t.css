@@ -37,3 +37,5 @@ ul.b{margin:0;padding:6px 0;list-style:none}ul.b li{padding:9px 0;border-bottom:
 .hdr{align-self:start}.copy{font:inherit;font-size:13px;height:32px;padding:0 14px;border-radius:999px;border:1px solid var(--bd);background:var(--surf);color:var(--tx);display:inline-flex;gap:6px;align-items:center}
 .bar i.n{background:#aeaeb2}
 @media (max-width:600px){.hd{grid-template-columns:56px 1fr auto}.hdr{grid-column:auto}.copy span{display:none}}
+
+.rel span.ext{display:inline-flex;align-items:center;gap:4px}.rel span.ext .i{width:14px;height:14px}
