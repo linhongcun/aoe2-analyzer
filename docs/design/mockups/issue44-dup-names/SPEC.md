@@ -17,7 +17,7 @@
 | 翼骑兵 | 441 | Hussar | 30 个文明 |
 | 波兰翼骑兵 | 1707 | Winged Hussar | 立陶宛、波兰 |
 
-## 详情页「相关」区块第一项：同名单位 / 别和 X 混淆（待 Steve 签字）
+## 详情页「相关」区块第一项：同名单位 / 别和 X 混淆（Steve 已签字（2026-10-11））
 
 样稿：`related-links-1280.png`、`related-links-390.png`（源：`related-1280.html`、`related-390.html`、`rl.css`）；`dup-names-*.png` 第④块已同步改成新写法。
 
