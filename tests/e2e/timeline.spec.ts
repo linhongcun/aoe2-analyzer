@@ -295,13 +295,13 @@ test.describe('#3 开局时间线', () => {
     if (m) expect(m[1]).not.toBe(m[2]);
   });
 
-  test('19. 链接带未支持文明（civ=Persians）：保留 URL、按通用算、摘要上方一行提示可关闭', async ({ page }) => {
-    await openBuild(page, 'bo=scouts-18&civ=Persians');
+  test('19. 链接带未支持文明（civ=Portuguese）：保留 URL、按通用算、摘要上方一行提示可关闭', async ({ page }) => {
+    await openBuild(page, 'bo=scouts-18&civ=Portuguese');
     const warn = page.locator('[data-t="civ-warn"]');
-    await expect(warn).toHaveText('链接里的波斯加成尚未计入，已按通用计算。');
+    await expect(warn).toHaveText('链接里的葡萄牙加成尚未计入，已按通用计算。');
     await expect(warn).toHaveAttribute('role', 'status');
     await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-    await expect(page).toHaveURL(/[?&]civ=Persians/);
+    await expect(page).toHaveURL(/[?&]civ=Portuguese/);
     const wb = (await warn.boundingBox())!;
     const sb = (await summary(page).boundingBox())!;
     expect(wb.y + wb.height).toBeLessThanOrEqual(sb.y);
@@ -323,7 +323,7 @@ test.describe('#3 开局时间线', () => {
     await page.locator('#tlciv').click();
     const dlg = page.getByRole('dialog', { name: '文明' });
     await expect(dlg.getByText('暂不支持 · 文明加成尚未计入')).toBeVisible();
-    const row = dlg.locator('[data-civ="Persians"]');
+    const row = dlg.locator('[data-civ="Portuguese"]');
     await expect(row).toHaveAttribute('aria-disabled', 'true');
     await expect(row).toContainText('文明加成尚未计入');
     await expect(row.locator('svg.lucide-ban')).toHaveCount(1);
@@ -332,14 +332,14 @@ test.describe('#3 开局时间线', () => {
     expect((await lastOk.boundingBox())!.y).toBeLessThan((await row.boundingBox())!.y);
     await row.click({ force: true });
     await expect(dlg).toBeVisible();
-    await expect(page).not.toHaveURL(/civ=Persians/);
+    await expect(page).not.toHaveURL(/civ=Portuguese/);
     await expect(dlg.getByText(/个文明已支持/)).toHaveCount(0);
     // 键盘：搜到的只有禁用项时 Enter 不会选中
-    await page.keyboard.type('波斯');
+    await page.keyboard.type('葡萄牙');
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('Enter');
-    await expect(page).not.toHaveURL(/civ=Persians/);
-    await expect(dlg.locator('[data-civ="Persians"]')).toBeVisible(); // 搜索时禁用组仍保留
+    await expect(page).not.toHaveURL(/civ=Portuguese/);
+    await expect(dlg.locator('[data-civ="Portuguese"]')).toBeVisible(); // 搜索时禁用组仍保留
   });
 
   test('20b. 手机「设置」里的文明选择器同样分组置灰', async ({ page }) => {
@@ -349,7 +349,7 @@ test.describe('#3 开局时间线', () => {
     await page.getByRole('dialog', { name: '设置' }).locator('#tlciv').click();
     const dlg = page.getByRole('dialog', { name: '文明' });
     await expect(dlg.getByText('暂不支持 · 文明加成尚未计入')).toBeAttached();
-    await expect(dlg.locator('[data-civ="Persians"]')).toHaveAttribute('aria-disabled', 'true');
+    await expect(dlg.locator('[data-civ="Portuguese"]')).toHaveAttribute('aria-disabled', 'true');
   });
 
   test('20c. #42 西班牙已支持：选择器里可选，选中后按西班牙计、不出「未计入」提示', async ({ page }) => {
@@ -363,9 +363,9 @@ test.describe('#3 开局时间线', () => {
     await expect(page).toHaveURL(/[?&]civ=Spanish/);
     await expect(page.locator('[data-t="sum-civ"]')).not.toHaveText('按通用计');
     await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
-    // 波斯仍然置灰（另一个 PR 处理）
+    // 未支持文明（葡萄牙）仍然置灰
     await page.locator('#tlciv').click();
-    await expect(page.getByRole('dialog', { name: '文明' }).locator('[data-civ="Persians"]')).toHaveAttribute('aria-disabled', 'true');
+    await expect(page.getByRole('dialog', { name: '文明' }).locator('[data-civ="Portuguese"]')).toHaveAttribute('aria-disabled', 'true');
   });
 
   test('21. 加载失败：数据分包取不到时显示说明和「重试」，不白屏；重试后恢复', async ({ page }) => {

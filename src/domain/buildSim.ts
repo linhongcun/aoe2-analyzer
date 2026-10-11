@@ -187,7 +187,8 @@ interface Mods {
   rate: Record<string, number>;
   carry: Record<string, number>;
   speed: number;
-  tcSpeed: number;
+  /** 城镇中心工作速度倍率，键为 unit:<TC 单位 id>；计时时取当前时代的 TC（见 TC_BY_AGE） */
+  tcRate: Record<string, number>;
   costMul: Record<string, Partial<Record<Res | 'all', number>>>;
   timeMul: Record<string, number>;
   /** 科技费用倍率（按资源；all = 全部资源） */
@@ -215,7 +216,7 @@ function baseMods(): Mods {
     rate: {},
     carry: {},
     speed: 1,
-    tcSpeed: 1,
+    tcRate: {},
     costMul: {},
     timeMul: {},
     techCost: {},
@@ -264,7 +265,7 @@ function applyEffects(m: Mods, effects: EffectRow['effects']) {
         if (x.op === 'mul') o[k] = (o[k] ?? 1) * v;
       };
       if (x.attr === 'workRate') {
-        if (key === 'unit:109') m.tcSpeed *= x.op === 'mul' ? v : 1;
+        if (key.startsWith('unit:') && TC_UNITS.has(Number(key.slice(5)))) mul(m.tcRate, key);
         else mul(m.rate, key);
       } else if (x.attr === 'carry') {
         if (x.op === 'mul') mul(m.carry, key);
@@ -686,7 +687,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     }
     // 5) 城镇中心
     if (tcState) {
-      tcState.left -= TICK * m.tcSpeed;
+      tcState.left -= TICK * (m.tcRate['unit:' + TC_BY_AGE[age - 1]!] ?? 1);
       if (tcState.left <= 1e-9) {
         if (tcState.kind === 'vil') assign();
         else if (tcState.p) {
@@ -935,7 +936,9 @@ const PENDING_TECH: Record<number, string> = {
   654: '高棉「农民无需回仓」：res 33=50 的含义 .dat 本身没有定义，现有开局里也没能证明它影响结果，先置灰（代码保留）',
 };
 const FARM_UNITS = new Set([50, 1187]);
-const TC_UNITS = new Set([TC, 71, 141, 142]);
+/** 各时代的城镇中心单位：黑暗 109、封建 71、城堡 141、帝王 142；升时代即换成下一个，村民训练与升时代研究都按当前这一个计工作速度 */
+const TC_BY_AGE = [TC, 71, 141, 142];
+const TC_UNITS = new Set(TC_BY_AGE);
 
 const HANDLED_RES = (res: number, op?: string) => ((RES_START[res] || RES_STOCK[res] || RES_DEPOSIT[res] || res === 4) && op === 'add') || false;
 const HANDLED_ATTR = new Set(['workRate', 'carry', 'trainTime', ...Object.keys(COST_ATTR)]);
@@ -990,8 +993,8 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
     if (e.attr === 'speed') return vil && e.op === 'mul' ? { kind: 'handled' } : { kind: 'irrelevant', reason: '非村民移速不影响开局时间' };
     if (FARM_UNITS.has(id) && e.attr === 'workRate')
       return { kind: 'unhandled', reason: '农田单位 workRate 与 task:farm 是否重复待 .dat 核实（罗马、斯拉夫）' };
-    if (TC_UNITS.has(id) && id !== TC && e.attr === 'workRate') return { kind: 'unhandled', reason: '升级后城镇中心（71/141/142）工作速度未建模（波斯）' };
-    if (FARM_UNITS.has(id) || (TC_UNITS.has(id) && id !== TC)) return { kind: 'irrelevant', reason: '农田/升级后城镇中心的非速度属性不影响开局' };
+    if (FARM_UNITS.has(id) || (TC_UNITS.has(id) && id !== TC && e.attr !== 'workRate'))
+      return { kind: 'irrelevant', reason: '农田/升级后城镇中心的非速度属性不影响开局' };
     if (e.attr && HANDLED_ATTR.has(e.attr) && (e.op === 'mul' || (e.op === 'add' && (e.attr === 'carry' || (e.attr in COST_ATTR && e.attr !== 'cost')))))
       return { kind: 'handled' };
     return { kind: 'unknown' };
