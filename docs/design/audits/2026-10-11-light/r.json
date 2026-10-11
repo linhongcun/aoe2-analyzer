@@ -1,0 +1,1065 @@
+{
+ "home-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 33,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "h1": " 帝国时代 II 决定版 · 分析器",
+  "headerBtns": [],
+  "sections": [
+   "百科",
+   "工具",
+   "即将推出"
+  ],
+  "sourceLine": true,
+  "hasNoneText": 0
+ },
+ "civs-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "文明"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "civ-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 32,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [
+   "国王时代 · 1999"
+  ],
+  "sections": [
+   "法兰克 Franks"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "units-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "单位"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "unit-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 24,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [
+   "国王时代 · 1999",
+   "城堡"
+  ],
+  "sections": [
+   "掷斧兵 Throwing Axeman"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "buildings-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "建筑"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "building-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 23,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "兵营 Barracks"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "techs-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "科技"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "tech-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [
+   "城镇中心"
+  ],
+  "sections": [
+   "织布机 Loom"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "tree-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 1,
+  "svgLucide": 23,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "科技树"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "matchup-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 24,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "对局助手"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "duel-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 33,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "单位 PK"
+  ],
+  "sourceLine": true,
+  "hasNoneText": 0
+ },
+ "compare-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 28,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "文明对比"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "builds-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "开局流程"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "simulator-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "科技模拟器"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "bonuses-1280": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "文明加成"
+  ],
+  "sourceLine": true,
+  "hasNoneText": 0
+ },
+ "home-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 33,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "亚美尼亚 110x30",
+   "不列颠 94x30",
+   "法兰克 94x30",
+   "印度斯坦 110x30",
+   "蒙古 78x30",
+   "波斯 78x30",
+   "罗马 78x30",
+   "蜀 62x30",
+   "全部 56 个文明 131x25",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "h1": " 帝国时代 II 决定版 · 分析器",
+  "headerBtns": [],
+  "sections": [
+   "百科",
+   "工具",
+   "即将推出"
+  ],
+  "sourceLine": true,
+  "hasNoneText": 0
+ },
+ "civs-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "INPUT 260x37",
+   "全部类型\n骑兵\n弓手\n步兵\n海军 107x39",
+   "全部 DLC\n国王时代 The  317x39",
+   "全部位置\n适合边位 Flank  243x39",
+   "全部 38x35",
+   "BUTTON 40x35",
+   "未标注 50x35",
+   "A 24x24",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "文明"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "civ-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 32,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "文明 26x19",
+   "国王时代 · 1999 139x36",
+   "概览 56x38",
+   "数据 56x38",
+   "科技 56x38",
+   "掷斧兵 48x21",
+   "采果工的工作速度 +15%\n仅文 364x36",
+   "磨坊科技免费\n仅文本 364x36",
+   "骑士系视野 +2\n已计入 364x36",
+   "掷斧兵精锐 134x38",
+   "科技树 344x25",
+   "文明对比 344x25",
+   "对局助手 344x25",
+   "中国 344x30",
+   "日本 344x30",
+   "蒙古 344x30",
+   "波斯 344x30",
+   "萨拉森 344x30",
+   "土耳其 344x30",
+   "哥特 344x30",
+   "条顿 344x30",
+   "维京 344x30",
+   "不列颠 344x30",
+   "凯尔特 344x30",
+   "拜占庭 344x30",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [
+   "国王时代 · 1999"
+  ],
+  "sections": [
+   "法兰克 Franks"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "units-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "INPUT 260x37",
+   "全部类别\n独特单位\n通用单位\n升 107x39",
+   "全部 DLC\n国王时代 The  317x39",
+   "全部时代\n黑暗\n封建\n城堡\n帝王 107x39",
+   "全部 38x35",
+   "BUTTON 40x35",
+   "未标注 50x35",
+   "A 24x24",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "单位"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "unit-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 24,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "单位 26x19",
+   "国王时代 · 1999 139x36",
+   "城堡 38x21",
+   "普通 60x32",
+   "精锐 60x32",
+   "概览 56x38",
+   "科技模拟器 101x38",
+   "相关 56x38",
+   "铁匠铺 48x21",
+   "兵营 32x21",
+   "精锐掷斧兵 80x21",
+   "城堡 32x21",
+   "修道院 48x21",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [
+   "国王时代 · 1999",
+   "城堡"
+  ],
+  "sections": [
+   "掷斧兵 Throwing Axeman"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "buildings-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "INPUT 260x37",
+   "全部类型\n军事\n经济\n防御\n其他 107x39",
+   "全部时代\n黑暗\n封建\n城堡\n帝王 107x39",
+   "全部 DLC\n国王时代 The  317x39",
+   "全部 38x35",
+   "BUTTON 40x35",
+   "未标注 50x35",
+   "A 24x24",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "建筑"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "building-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 23,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "建筑 26x19",
+   "概览 56x38",
+   "科技模拟器 101x38",
+   "生产（22） 104x38",
+   "科技（3） 95x38",
+   "文明（56） 104x38",
+   "靶场 32x21",
+   "马厩 32x21",
+   "城堡 32x21",
+   "城镇中心 64x21",
+   "大学 32x21",
+   "僧侣 32x21",
+   "民兵 84x38",
+   "武士 84x38",
+   "长剑士 100x38",
+   "长矛兵 100x38",
+   "长枪兵 100x38",
+   "长戟兵 100x38",
+   "科技树 344x25",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "兵营 Barracks"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "techs-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "INPUT 260x37",
+   "全部类别\n独特科技\n通用科技\n区 107x39",
+   "全部时代\n黑暗\n封建\n城堡\n帝王 107x39",
+   "全部 DLC\n国王时代 The  317x39",
+   "全部建筑\n城堡\n兵营\n船坞\n农田 107x39",
+   "全部 38x35",
+   "BUTTON 40x35",
+   "未标注 50x35",
+   "A 24x24",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "科技"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "tech-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "科技 26x19",
+   "城镇中心 62x21",
+   "概览 56x38",
+   "作用对象 86x38",
+   "文明 56x38",
+   "村民 32x21",
+   "村民 84x38",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [
+   "城镇中心"
+  ],
+  "sections": [
+   "织布机 Loom"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "tree-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 1,
+  "svgLucide": 23,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "法兰克 Franks 157x32",
+   "单个文明\n差异高亮\n上下对照 107x39",
+   "文明详情 98x24",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "科技树"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "matchup-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 24,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "法兰克 Franks 157x32",
+   "不列颠 Britons 159x32",
+   "掷矛手 48x21",
+   "精锐掷矛手 80x21",
+   "攻城锤 48x21",
+   "中型冲车 64x21",
+   "轻型投石车 80x21",
+   "中型投石车 80x21",
+   "轻型骑兵 64x21",
+   "骑士 32x21",
+   "重装骑士 64x21",
+   "游侠 32x21",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "对局助手"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "duel-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 33,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "1v1 46x37",
+   "N vs M 75x37",
+   "等资源 71x39",
+   "游侠 Paladin 154x38",
+   "法兰克 Franks 157x32",
+   "无科技 71x39",
+   "当前时代满科技 131x39",
+   "满科技 71x39",
+   "科技详情（已选 7 项，可逐项勾 344x24",
+   "SELECT 107x39",
+   "BUTTON 71x39",
+   "BUTTON 56x39",
+   "BUTTON 86x39",
+   "INPUT 13x13",
+   "A 32x25",
+   "A 64x25",
+   "A 48x25",
+   "A 96x25",
+   "长戟兵 Halberdier 185x38",
+   "日本 Japanese 155x32",
+   "科技详情（已选 8 项，可逐项勾 344x24",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "单位 PK"
+  ],
+  "sourceLine": true,
+  "hasNoneText": 0
+ },
+ "compare-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 28,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "法兰克 Franks 157x32",
+   "不列颠 Britons 159x32",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "文明对比"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "builds-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "来源：。步骤中的村民数与分配转写自 aoe2-guide（M",
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "A 221x16",
+   "A 251x16",
+   "A 175x16",
+   "A 315x35",
+   "A 181x16",
+   "A 337x35",
+   "A 187x16",
+   "A 257x16",
+   "A 203x16",
+   "A 151x16",
+   "A 332x35",
+   "报错/反馈 88x24",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "开局流程"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "simulator-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "INPUT 260x37",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "科技模拟器"
+  ],
+  "sourceLine": false,
+  "hasNoneText": 0
+ },
+ "bonuses-390": {
+  "contrast": {},
+  "amber": [],
+  "emoji": [
+   "单位/科技/建筑图标与科技树数据来自 （MIT 代码；图像 "
+  ],
+  "svgNonLucide": 0,
+  "svgLucide": 22,
+  "font": [],
+  "small": [
+   "菜单 33x29",
+   "帝国时代 II 分析器 210x26",
+   "A 32x22",
+   "全局搜索 41x33",
+   "报错/反馈 88x25",
+   "首页 43x19",
+   "INPUT 260x37",
+   "INPUT 13x13",
+   "全部 56x39",
+   "经济 56x39",
+   "军事 56x39",
+   "建筑 56x39",
+   "科技 56x39",
+   "费用 56x39",
+   "海军 56x39",
+   "僧侣 56x39",
+   "其他 56x39",
+   "团队 56x39",
+   "报错/反馈 70x17",
+   "功能建议 66x17",
+   "数据版本：DE 185872（2 233x32",
+   "SiegeEngineers/a 168x15",
+   "denniske/aoe2com 146x15",
+   "Lucide 38x15",
+   "Age of Empires F 162x15",
+   "seicing.com 68x15",
+   "Microsoft 游戏内容使用 153x15"
+  ],
+  "empty": [],
+  "title": "帝国时代2 分析器",
+  "headerBtns": [],
+  "sections": [
+   "文明加成"
+  ],
+  "sourceLine": true,
+  "hasNoneText": 0
+ }
+}
