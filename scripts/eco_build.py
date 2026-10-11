@@ -137,7 +137,8 @@ def main():
         team = decode(eff(d, dc['TeamBonusID']), T)
         if team: rows.append({'source': 'team', 'name': 'Team bonus', 'age': 1, 'effects': team})
         out['civEco'][c['en']] = rows
-    (ROOT / 'src/data/eco.json').write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':')))
+    # 键序排序：与 units.json 的排序解耦，输出确定
+    (ROOT / 'src/data/eco.json').write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':'), sort_keys=True))
 
     md = ['# 经济/开局数据导出与对账', '', '由 `scripts/eco_build.py` 从 %s（%s）生成 `src/data/eco.json`。' % (out['meta']['source'], DAT['patch']), '',
           '## 村民（.dat 原始值）', '', '| 任务 | 任务单位 | work_rate（/秒） | 携带量 |', '| --- | --- | --- | --- |']
