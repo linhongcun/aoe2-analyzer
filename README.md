@@ -34,11 +34,13 @@
 
 ## 数据与流水线 / Data pipeline
 
-| 数据                                                          | 来源                                                                                                                                                   | 脚本                                                                              |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| 文明、单位、科技、建筑、科技树、中英文本、图标                | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `scripts/data_sources.json`，185872）                        | `npm run data`（`scripts/build_data.py`）                                         |
-| 科技/文明加成/团队加成的结构化效果（`src/data/effects.json`） | DE 原版 `empires2_x2_p1.dat`，来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，sha256 `4aa2f0a7…7baa` 固定 | `npm run effects`（`scripts/effects_build.py` + 审计 `scripts/effects_audit.ts`） |
-| 基础数值对账（aoe2techtree vs .dat）                          | 同上                                                                                                                                                   | `npm run stats:check`                                                             |
+| 数据                                                                                       | 来源                                                                                                                                                   | 脚本                                                                              |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| 文明、单位、科技、建筑、科技树、中英文本、图标                                             | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `scripts/data_sources.json`，185872）                        | `npm run data`（`scripts/build_data.py`）                                         |
+| 科技/文明加成/团队加成的结构化效果（`src/data/effects.json`）                              | DE 原版 `empires2_x2_p1.dat`，来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，sha256 `4aa2f0a7…7baa` 固定 | `npm run effects`（`scripts/effects_build.py` + 审计 `scripts/effects_audit.ts`） |
+| 经济/开局数据（训练/建造/研究时间与费用、村民采集速率、文明经济效果，`src/data/eco.json`） | 同上                                                                                                                                                   | `npm run eco`（`scripts/eco_build.py`，对账见 `docs/ECO-DATA.md`）                |
+| 开局库（`src/data/build-orders/*.json`）                                                   | 社区开局转写，逐个注明出处（见 [docs/BUILD-ORDERS.md](docs/BUILD-ORDERS.md)）                                                                          | `npm run bo:check`                                                                |
+| 基础数值对账（aoe2techtree vs .dat）                                                       | 同上                                                                                                                                                   | `npm run stats:check`                                                             |
 
 - 全部上游固定版本（仓库、提交、sha256、补丁号、日期）集中在 **`scripts/data_sources.json`**；站点页头徽章「数据版本：DE 185872（2026-09-22）」链接到 [关于数据](https://linhongcun.github.io/aoe2-analyzer/#/about-data) 页。
 - `.dat` 仅在构建时下载到 `scripts/.cache/`（已 gitignore），校验 **sha256 + 补丁标记**（标记由 `data:update` 从新文件计算并记录：文明/科技/效果数量、最新文明；另有最小常识检查）：`npm run dat:check`。用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py) 解析（首次运行自动建立 `scripts/.cache/venv`）。
@@ -62,6 +64,8 @@ npm run effects      # 由 .dat 生成 effects.json 并重写 docs/EFFECTS-AUDIT
 npm run stats:check  # 基础数值与 .dat 对账
 npm run data:status  # 只检查上游是否有新补丁（有更新退出码 10）
 npm run data:update  # 补丁数据更新全流程（见 docs/DATA-UPDATE.md）
+npm run eco          # 由 .dat 导出 eco.json（时间/费用/采集速率/经济效果）
+npm run bo:check     # 开局数据校验
 npm run test:py      # Python 测试：补丁号识别、差异摘要、标记校验
 ```
 

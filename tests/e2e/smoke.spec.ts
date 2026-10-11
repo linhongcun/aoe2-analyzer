@@ -16,7 +16,7 @@ const ROUTES: [string, string][] = [
   ['#buildings', '#bgrid .card'],
   ['#/building/82', '#building h2'],
   ['#building/1251', '#building h2'],
-  ['#builds', '.planned-page'],
+  ['#builds', '#builds [data-t="build-order"]'],
   ['#list', '#grid .card'],
   ['#civ/Armenians', '#detail h2'],
   ['#/civ/Franks', '#detail h2'],
@@ -376,4 +376,13 @@ test('data version badge links to about-data page with pins and patch notes', as
   await expect(page.locator('[data-t="src-dat"]')).toContainText('sha256');
   await expect(page.locator('[data-t="src-aoe2techtree"]')).toContainText('@3bb43b1');
   await expect(page.locator('a[data-t="patch-note"]').first()).toHaveAttribute('href', /PATCH-NOTES\/185872\.md$/);
+});
+
+test('build orders read-only list renders all entries with sources', async ({ page }) => {
+  await page.goto('./#/builds');
+  const items = page.locator('[data-t="build-order"]');
+  await expect(items).toHaveCount(6);
+  await items.first().locator('summary').click();
+  await expect(items.first()).toContainText('来源');
+  await expect(items.first().locator('a[href*="aoe2guide.com"]')).toHaveCount(1);
 });

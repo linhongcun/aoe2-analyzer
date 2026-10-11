@@ -1,0 +1,1793 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`build-order snapshots > archers-19 matches snapshot (data + per-step allocation) 1`] = `
+{
+  "bo": {
+    "civs": [
+      "Britons",
+      "Mayans",
+      "Ethiopians",
+      "Tatars",
+      "Vikings",
+    ],
+    "difficulty": "intermediate",
+    "id": "archers-19",
+    "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
+    "map": "Arabia",
+    "name": {
+      "en": "19 Pop 1-Range Archers",
+      "zh": "19 人口单靶场弓手速攻",
+    },
+    "review": {
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "status": "reviewed",
+    },
+    "sources": [
+      {
+        "accessed": "2026-10-11",
+        "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
+        "ref": "themkdemiiir/aoe2-guide@f09ed56",
+        "section": "src/content/build-orders/19pop-archers.yaml",
+        "title": "AOE2 Guide — 19pop-archers",
+        "url": "https://aoe2guide.com/en/builds/19pop-archers/",
+      },
+      {
+        "accessed": "2026-10-11",
+        "author": "Hera（经 aoe2-guide 来源索引）",
+        "section": "19 Vils 1-Range Archers",
+        "title": "Hera — AoE2 Strategy Guide（2025-12）",
+        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
+      },
+    ],
+    "steps": [
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "count": 2,
+            "type": "build",
+          },
+        ],
+        "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。",
+        "vils": 3,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "from": "build",
+            "task": "sheep",
+            "type": "gather",
+          },
+          {
+            "count": 3,
+            "task": "sheep",
+            "type": "gather",
+          },
+        ],
+        "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
+        "split": {
+          "food": 6,
+          "gold": 0,
+          "stone": 0,
+          "wood": 0,
+        },
+        "vils": 6,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "building": 562,
+            "type": "build",
+          },
+        ],
+        "note": "3 个去伐木并建伐木场。",
+        "split": {
+          "food": 6,
+          "gold": 0,
+          "stone": 0,
+          "wood": 3,
+        },
+        "vils": 9,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "boar",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "第 10 个引第一头野猪。",
+        "split": {
+          "food": 7,
+          "gold": 0,
+          "stone": 0,
+          "wood": 3,
+        },
+        "vils": 10,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+          {
+            "building": 68,
+            "type": "build",
+          },
+        ],
+        "note": "第 11 个盖房子后到浆果建磨坊；羊找齐后用侦察骑兵推鹿。",
+        "split": {
+          "food": 8,
+          "gold": 0,
+          "stone": 0,
+          "wood": 3,
+        },
+        "vils": 11,
+      },
+      {
+        "actions": [
+          {
+            "count": 6,
+            "task": "hunt",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "6 个吃肉；期间引第二头野猪。",
+        "split": {
+          "food": 14,
+          "gold": 0,
+          "stone": 0,
+          "wood": 3,
+        },
+        "vils": 17,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "tech": 22,
+            "type": "research",
+          },
+          {
+            "age": 2,
+            "type": "ageUp",
+          },
+        ],
+        "note": "2 个伐木，研究织布机后点封建（理想 9:15 到达）。",
+        "phase": "feudal-click",
+        "split": {
+          "food": 14,
+          "gold": 0,
+          "stone": 0,
+          "wood": 5,
+        },
+        "vils": 19,
+      },
+      {
+        "actions": [
+          {
+            "count": 7,
+            "from": "hunt",
+            "task": "wood",
+            "type": "gather",
+          },
+        ],
+        "note": "到封建：从城镇中心下调 5 人去第二片树林建伐木场、2 人去零散树木。",
+        "phase": "feudal",
+        "split": {
+          "food": 7,
+          "gold": 0,
+          "stone": 0,
+          "wood": 12,
+        },
+        "vils": 19,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "from": "hunt",
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+          {
+            "building": 12,
+            "type": "build",
+          },
+          {
+            "count": 2,
+            "from": "hunt",
+            "task": "gold",
+            "type": "gather",
+          },
+          {
+            "building": 584,
+            "type": "build",
+          },
+          {
+            "tech": 202,
+            "type": "research",
+          },
+        ],
+        "note": "再调 1 人盖房子和兵营、2 人建金矿营地采金；研究双刃斧，暂不研究马轭。",
+        "split": {
+          "build": 1,
+          "food": 4,
+          "gold": 2,
+          "stone": 0,
+          "wood": 12,
+        },
+        "vils": 19,
+      },
+      {
+        "actions": [
+          {
+            "building": 87,
+            "type": "build",
+          },
+          {
+            "type": "train",
+            "unit": 4,
+          },
+          {
+            "count": 2,
+            "task": "gold",
+            "type": "gather",
+          },
+        ],
+        "note": "封建到达后再造第 20、21 个村民去采金（共 4 金）；建靶场开始出弓手。",
+        "split": {
+          "build": 1,
+          "food": 4,
+          "gold": 4,
+          "stone": 0,
+          "wood": 12,
+        },
+        "vils": 21,
+      },
+      {
+        "actions": [
+          {
+            "building": 103,
+            "type": "build",
+          },
+          {
+            "tech": 199,
+            "type": "research",
+          },
+          {
+            "count": 3,
+            "from": "hunt",
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "count": 1,
+            "from": "build",
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "building": 50,
+            "type": "build",
+          },
+          {
+            "type": "train",
+            "unit": 93,
+          },
+        ],
+        "note": "建铁匠铺研究箭头；把剩下的肉类村民和建造者调去浆果（共 5 人），开始种田。担心对手侦察骑兵可从兵营补 1–4 个长枪兵。",
+        "split": {
+          "build": 0,
+          "food": 5,
+          "gold": 4,
+          "stone": 0,
+          "wood": 12,
+        },
+        "vils": 21,
+      },
+    ],
+    "style": "archers",
+    "summary": "19 人口升封建，单靶场配箭头科技出弓手，在对手拿出克制兵种前施压。",
+    "target": {
+      "age": 2,
+      "time": "约 9:15 到达封建",
+      "vils": 19,
+    },
+  },
+  "splits": [
+    "3: {"food":0,"wood":0,"gold":0,"stone":0,"build":3}",
+    "6: {"food":6,"wood":0,"gold":0,"stone":0,"build":0}",
+    "9: {"food":6,"wood":3,"gold":0,"stone":0,"build":0}",
+    "10: {"food":7,"wood":3,"gold":0,"stone":0,"build":0}",
+    "11: {"food":8,"wood":3,"gold":0,"stone":0,"build":0}",
+    "17: {"food":14,"wood":3,"gold":0,"stone":0,"build":0}",
+    "19: {"food":14,"wood":5,"gold":0,"stone":0,"build":0}",
+    "19: {"food":7,"wood":12,"gold":0,"stone":0,"build":0}",
+    "19: {"food":4,"wood":12,"gold":2,"stone":0,"build":1}",
+    "21: {"food":4,"wood":12,"gold":4,"stone":0,"build":1}",
+    "21: {"food":5,"wood":12,"gold":4,"stone":0,"build":0}",
+  ],
+}
+`;
+
+exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allocation) 1`] = `
+{
+  "bo": {
+    "civs": [],
+    "difficulty": "intermediate",
+    "id": "drush-fc",
+    "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
+    "map": "Arabia",
+    "name": {
+      "en": "Drush Fast Castle",
+      "zh": "民兵骚扰转速升城堡",
+    },
+    "review": {
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "notes": "2026-10-11 与 buildorderguide.com 交叉核对：HumzaCrumza「Pre-Mill Drush → FC」（29+2）与 Viper「Drush FC」（29+4）均为到达封建后再造村民、两座封建建筑（铁匠铺 + 靶场/市场）完成后点城堡，与本条一致；具体人口与本条（27+2）不同属不同变体。",
+      "status": "reviewed",
+    },
+    "sources": [
+      {
+        "accessed": "2026-10-11",
+        "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
+        "ref": "themkdemiiir/aoe2-guide@f09ed56",
+        "section": "src/content/build-orders/drush-fc.yaml",
+        "title": "AOE2 Guide — drush-fc",
+        "url": "https://aoe2guide.com/en/builds/drush-fc/",
+      },
+      {
+        "accessed": "2026-10-11",
+        "author": "Hera（经 aoe2-guide 来源索引）",
+        "section": "27+2 Vils Drush Fast Castle",
+        "title": "Hera — AoE2 Strategy Guide（2025-12）",
+        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
+      },
+    ],
+    "steps": [
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "count": 2,
+            "type": "build",
+          },
+        ],
+        "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。",
+        "vils": 3,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "from": "build",
+            "task": "sheep",
+            "type": "gather",
+          },
+          {
+            "count": 3,
+            "task": "sheep",
+            "type": "gather",
+          },
+        ],
+        "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
+        "vils": 6,
+      },
+      {
+        "actions": [
+          {
+            "count": 4,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "building": 562,
+            "type": "build",
+          },
+        ],
+        "note": "4 个去伐木并建伐木场。",
+        "vils": 10,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "boar",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "第 11 个引第一头野猪。",
+        "vils": 11,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "count": 2,
+            "type": "build",
+          },
+          {
+            "building": 12,
+            "type": "build",
+          },
+          {
+            "building": 72,
+            "type": "build",
+          },
+        ],
+        "note": "第 12 个盖 2 座房子后在前方盖兵营，之后持续用木栅栏筑墙。",
+        "vils": 12,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "hunt",
+            "type": "gather",
+          },
+          {
+            "count": 3,
+            "type": "train",
+            "unit": 74,
+          },
+        ],
+        "note": "第 13 个先采够约 60 金（3 个民兵）再回去吃野猪；造 3 个民兵与侦察骑兵一起前压。不升级武士。",
+        "vils": 13,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "boar",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "第 14 个引第二头野猪。",
+        "vils": 14,
+      },
+      {
+        "actions": [
+          {
+            "count": 5,
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "building": 68,
+            "type": "build",
+          },
+        ],
+        "note": "5 个去浆果并建磨坊。",
+        "vils": 19,
+      },
+      {
+        "actions": [
+          {
+            "count": 4,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "tech": 22,
+            "type": "research",
+          },
+          {
+            "building": 70,
+            "count": 2,
+            "type": "build",
+          },
+        ],
+        "note": "4 个加到原伐木场；其中伐木村民顺手盖 2 座房子（人口上限约 35，够 27 村民 + 侦察 + 3 民兵）；尽早研究织布机，防对手封建侦察骑兵偷村民。",
+        "vils": 23,
+      },
+      {
+        "actions": [
+          {
+            "count": 4,
+            "task": "gold",
+            "type": "gather",
+          },
+          {
+            "age": 2,
+            "type": "ageUp",
+          },
+        ],
+        "note": "4 个去采金；点封建，期间补完墙并继续用民兵和侦察骑兵骚扰。",
+        "phase": "feudal-click",
+        "split": {
+          "build": 1,
+          "food": 14,
+          "gold": 4,
+          "stone": 0,
+          "wood": 8,
+        },
+        "vils": 27,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "task": "gold",
+            "type": "gather",
+          },
+          {
+            "building": 87,
+            "type": "build",
+          },
+          {
+            "building": 103,
+            "type": "build",
+          },
+        ],
+        "note": "到封建：再 2 个采金；2 人建靶场、1 人建铁匠铺。",
+        "phase": "feudal",
+        "vils": 29,
+      },
+      {
+        "actions": [
+          {
+            "age": 3,
+            "type": "ageUp",
+          },
+        ],
+        "note": "27 人口点升封建，到达封建后再造 2 个村民（第 28、29 个）；靶场与铁匠铺两座封建建筑都完成后，在 29 村民时点城堡。",
+        "phase": "castle-click",
+        "vils": 29,
+      },
+      {
+        "actions": [
+          {
+            "type": "train",
+            "unit": 4,
+          },
+          {
+            "tech": 202,
+            "type": "research",
+          },
+          {
+            "tech": 14,
+            "type": "research",
+          },
+          {
+            "tech": 199,
+            "type": "research",
+          },
+        ],
+        "note": "到城堡：单靶场持续出弓手，研究双刃斧、马轭与箭头。",
+        "phase": "castle",
+        "vils": 29,
+      },
+    ],
+    "style": "drush",
+    "summary": "黑暗时代 3 个民兵配合侦察骑兵骚扰，借对手被拖慢的节奏 27+2 人口快速升城堡，城堡后单靶场出弓手。",
+    "target": {
+      "age": 3,
+      "time": "约 12:35 封建、16:05 城堡",
+      "vils": 29,
+    },
+  },
+  "splits": [
+    "3: {"food":0,"wood":0,"gold":0,"stone":0,"build":3}",
+    "6: {"food":6,"wood":0,"gold":0,"stone":0,"build":0}",
+    "10: {"food":6,"wood":4,"gold":0,"stone":0,"build":0}",
+    "11: {"food":7,"wood":4,"gold":0,"stone":0,"build":0}",
+    "12: {"food":7,"wood":4,"gold":0,"stone":0,"build":1}",
+    "13: {"food":8,"wood":4,"gold":0,"stone":0,"build":1}",
+    "14: {"food":9,"wood":4,"gold":0,"stone":0,"build":1}",
+    "19: {"food":14,"wood":4,"gold":0,"stone":0,"build":1}",
+    "23: {"food":14,"wood":8,"gold":0,"stone":0,"build":1}",
+    "27: {"food":14,"wood":8,"gold":4,"stone":0,"build":1}",
+    "29: {"food":14,"wood":8,"gold":6,"stone":0,"build":1}",
+    "29: {"food":14,"wood":8,"gold":6,"stone":0,"build":1}",
+    "29: {"food":14,"wood":8,"gold":6,"stone":0,"build":1}",
+  ],
+}
+`;
+
+exports[`build-order snapshots > fast-castle-boom matches snapshot (data + per-step allocation) 1`] = `
+{
+  "bo": {
+    "civs": [],
+    "difficulty": "beginner",
+    "id": "fast-castle-boom",
+    "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
+    "map": "Arabia / 封闭地图",
+    "name": {
+      "en": "Fast Castle Boom (23+2)",
+      "zh": "速升城堡暴经济（23+2）",
+    },
+    "review": {
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "status": "reviewed",
+    },
+    "sources": [
+      {
+        "accessed": "2026-10-11",
+        "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
+        "ref": "themkdemiiir/aoe2-guide@f09ed56",
+        "section": "src/content/build-orders/fast-castle-boom.yaml",
+        "title": "AOE2 Guide — fast-castle-boom",
+        "url": "https://aoe2guide.com/en/builds/fast-castle-boom/",
+      },
+      {
+        "accessed": "2026-10-11",
+        "author": "Hera（经 aoe2-guide 来源索引）",
+        "section": "23+2 Vils Fast Castle Boom",
+        "title": "Hera — AoE2 Strategy Guide（2025-12）",
+        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
+      },
+    ],
+    "steps": [
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "count": 2,
+            "type": "build",
+          },
+        ],
+        "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。",
+        "vils": 3,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "from": "build",
+            "task": "sheep",
+            "type": "gather",
+          },
+          {
+            "count": 3,
+            "task": "sheep",
+            "type": "gather",
+          },
+        ],
+        "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
+        "vils": 6,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "building": 562,
+            "type": "build",
+          },
+        ],
+        "note": "3 个去伐木，第一个负责建伐木场。",
+        "vils": 9,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "boar",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "第 10 个引第一头野猪。",
+        "vils": 10,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+          {
+            "building": 68,
+            "type": "build",
+          },
+        ],
+        "note": "第 11 个盖房子，再到浆果旁建磨坊；侦察骑兵推 3 头鹿到城镇中心。",
+        "vils": 11,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "task": "hunt",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "2 个吃肉，其中一人去引第二头野猪。",
+        "vils": 13,
+      },
+      {
+        "actions": [
+          {
+            "count": 4,
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+        ],
+        "note": "4 个去浆果；其中一人先盖一座房子（人口上限约 25），避免卡在约 20。",
+        "vils": 17,
+      },
+      {
+        "actions": [
+          {
+            "count": 4,
+            "from": "hunt",
+            "task": "farm",
+            "type": "gather",
+          },
+          {
+            "building": 50,
+            "count": 4,
+            "type": "build",
+          },
+        ],
+        "note": "野猪吃完时，让吃肉的村民先种 4 块田。",
+        "vils": 17,
+      },
+      {
+        "actions": [
+          {
+            "count": 4,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+        ],
+        "note": "4 个去伐木，仍用同一个伐木场；顺手再盖一座房子（人口上限约 30，够 25 村民 + 侦察）。",
+        "vils": 21,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "task": "gold",
+            "type": "gather",
+          },
+          {
+            "building": 584,
+            "type": "build",
+          },
+          {
+            "age": 2,
+            "type": "ageUp",
+          },
+        ],
+        "note": "2 个去建金矿营地采金，然后点封建。",
+        "phase": "feudal-click",
+        "split": {
+          "food": 14,
+          "gold": 2,
+          "stone": 0,
+          "wood": 7,
+        },
+        "vils": 23,
+      },
+      {
+        "actions": [
+          {
+            "building": 103,
+            "type": "build",
+          },
+          {
+            "building": 84,
+            "type": "build",
+          },
+          {
+            "tech": 202,
+            "type": "research",
+          },
+          {
+            "tech": 14,
+            "type": "research",
+          },
+        ],
+        "note": "到封建：1 人建铁匠铺、2 人建市场（不出兵）；研究双刃斧与马轭。",
+        "phase": "feudal",
+        "vils": 23,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "age": 3,
+            "type": "ageUp",
+          },
+        ],
+        "note": "再 2 个伐木，点城堡。",
+        "phase": "castle-click",
+        "vils": 25,
+      },
+      {
+        "actions": [
+          {
+            "building": 109,
+            "count": 2,
+            "type": "build",
+          },
+          {
+            "tech": 203,
+            "type": "research",
+          },
+        ],
+        "note": "到城堡：在树林旁建第 2 座城镇中心，再在金/石旁建第 3 座；研究弓锯。有余力就在市场买食物或木材。",
+        "phase": "castle",
+        "vils": 25,
+      },
+    ],
+    "style": "fast-castle",
+    "summary": "不出兵，23 人口封建、25 人口城堡，随后连建第 2、3 座城镇中心暴经济。",
+    "target": {
+      "age": 3,
+      "time": "约 10:30 封建、14:00 城堡",
+      "vils": 25,
+    },
+  },
+  "splits": [
+    "3: {"food":0,"wood":0,"gold":0,"stone":0,"build":3}",
+    "6: {"food":6,"wood":0,"gold":0,"stone":0,"build":0}",
+    "9: {"food":6,"wood":3,"gold":0,"stone":0,"build":0}",
+    "10: {"food":7,"wood":3,"gold":0,"stone":0,"build":0}",
+    "11: {"food":8,"wood":3,"gold":0,"stone":0,"build":0}",
+    "13: {"food":10,"wood":3,"gold":0,"stone":0,"build":0}",
+    "17: {"food":14,"wood":3,"gold":0,"stone":0,"build":0}",
+    "17: {"food":14,"wood":3,"gold":0,"stone":0,"build":0}",
+    "21: {"food":14,"wood":7,"gold":0,"stone":0,"build":0}",
+    "23: {"food":14,"wood":7,"gold":2,"stone":0,"build":0}",
+    "23: {"food":14,"wood":7,"gold":2,"stone":0,"build":0}",
+    "25: {"food":14,"wood":9,"gold":2,"stone":0,"build":0}",
+    "25: {"food":14,"wood":9,"gold":2,"stone":0,"build":0}",
+  ],
+}
+`;
+
+exports[`build-order snapshots > feudal-drush-18 matches snapshot (data + per-step allocation) 1`] = `
+{
+  "bo": {
+    "civs": [
+      "Malians",
+      "Lithuanians",
+      "Japanese",
+      "Britons",
+      "Vikings",
+    ],
+    "difficulty": "intermediate",
+    "id": "feudal-drush-18",
+    "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
+    "map": "Arabia",
+    "name": {
+      "en": "18 Pop Feudal Drush",
+      "zh": "18 人口封建民兵速攻",
+    },
+    "review": {
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "notes": "2026-10-11 与 buildorderguide.com 交叉核对：未找到同名的 Hera「18 Vils Feudal Drush」；相近的 Hera「18 → MMA」显示点封建后不造村民、到达封建后继续补村民，与「+2 为到达封建后的第 19、20 个村民」一致。",
+      "status": "reviewed",
+    },
+    "sources": [
+      {
+        "accessed": "2026-10-11",
+        "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
+        "ref": "themkdemiiir/aoe2-guide@f09ed56",
+        "section": "src/content/build-orders/18pop-feudal-drush.yaml",
+        "title": "AOE2 Guide — 18pop-feudal-drush",
+        "url": "https://aoe2guide.com/en/builds/18pop-feudal-drush/",
+      },
+      {
+        "accessed": "2026-10-11",
+        "author": "Hera（经 aoe2-guide 来源索引）",
+        "section": "18 Vils Feudal Drush",
+        "title": "Hera — AoE2 Strategy Guide（2025-12）",
+        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
+      },
+    ],
+    "steps": [
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "count": 2,
+            "type": "build",
+          },
+        ],
+        "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。",
+        "vils": 3,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "from": "build",
+            "task": "sheep",
+            "type": "gather",
+          },
+          {
+            "count": 3,
+            "task": "sheep",
+            "type": "gather",
+          },
+        ],
+        "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
+        "vils": 6,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "building": 562,
+            "type": "build",
+          },
+        ],
+        "note": "3 个去伐木并建伐木场。",
+        "vils": 9,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "boar",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "第 10 个引第一头野猪。",
+        "vils": 10,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "hunt",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+        ],
+        "note": "第 11 个盖房子后回来吃肉；羊都找到后用侦察骑兵推鹿。",
+        "vils": 11,
+      },
+      {
+        "actions": [
+          {
+            "count": 4,
+            "task": "hunt",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "4 个吃肉；引第二头野猪。",
+        "vils": 15,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 12,
+            "type": "build",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+        ],
+        "note": "第 16 个到基地前方盖兵营，再盖房子。",
+        "vils": 16,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "hunt",
+            "type": "gather",
+          },
+        ],
+        "note": "第 17 个吃肉。",
+        "vils": 17,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "tech": 22,
+            "type": "research",
+          },
+          {
+            "age": 2,
+            "type": "ageUp",
+          },
+        ],
+        "note": "第 18 个伐木；研究织布机后点封建。",
+        "phase": "feudal-click",
+        "split": {
+          "build": 1,
+          "food": 13,
+          "gold": 0,
+          "stone": 0,
+          "wood": 4,
+        },
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "type": "train",
+            "unit": 74,
+          },
+        ],
+        "note": "到封建：造 2 个民兵直接送往对手基地。",
+        "phase": "feudal",
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 4,
+            "from": "hunt",
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "count": 1,
+            "from": "hunt",
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "building": 68,
+            "type": "build",
+          },
+          {
+            "tech": 202,
+            "type": "research",
+          },
+        ],
+        "note": "城镇中心下调 4 人回原伐木场，1 人去浆果建磨坊；研究双刃斧，马轭可选。",
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "task": "build",
+            "type": "gather",
+          },
+        ],
+        "note": "18 人口点升封建（升级期间城镇中心不能造村民），到达封建后再造的 2 个村民（第 19、20 个）根据侦察结果补后续军事建筑，并慢慢筑墙。默认补靶场转弓，遇骑则补矛。",
+        "vils": 20,
+      },
+    ],
+    "style": "drush",
+    "summary": "黑暗时代在前线盖兵营，封建到达时出民兵压制对手，随后按侦察结果转后续兵种。",
+    "target": {
+      "age": 2,
+      "time": "约 8:50 到达封建",
+      "vils": 18,
+    },
+  },
+  "splits": [
+    "3: {"food":0,"wood":0,"gold":0,"stone":0,"build":3}",
+    "6: {"food":6,"wood":0,"gold":0,"stone":0,"build":0}",
+    "9: {"food":6,"wood":3,"gold":0,"stone":0,"build":0}",
+    "10: {"food":7,"wood":3,"gold":0,"stone":0,"build":0}",
+    "11: {"food":8,"wood":3,"gold":0,"stone":0,"build":0}",
+    "15: {"food":12,"wood":3,"gold":0,"stone":0,"build":0}",
+    "16: {"food":12,"wood":3,"gold":0,"stone":0,"build":1}",
+    "17: {"food":13,"wood":3,"gold":0,"stone":0,"build":1}",
+    "18: {"food":13,"wood":4,"gold":0,"stone":0,"build":1}",
+    "18: {"food":13,"wood":4,"gold":0,"stone":0,"build":1}",
+    "18: {"food":9,"wood":8,"gold":0,"stone":0,"build":1}",
+    "20: {"food":9,"wood":8,"gold":0,"stone":0,"build":3}",
+  ],
+}
+`;
+
+exports[`build-order snapshots > maa-archers-18 matches snapshot (data + per-step allocation) 1`] = `
+{
+  "bo": {
+    "civs": [],
+    "difficulty": "intermediate",
+    "id": "maa-archers-18",
+    "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
+    "map": "Arabia",
+    "name": {
+      "en": "18 Pop Generic Man-at-Arms Rush",
+      "zh": "18 人口民兵升级武士（Man-at-Arms）速攻转弓手",
+    },
+    "review": {
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "status": "reviewed",
+    },
+    "sources": [
+      {
+        "accessed": "2026-10-11",
+        "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
+        "ref": "themkdemiiir/aoe2-guide@f09ed56",
+        "section": "src/content/build-orders/maa-archers.yaml",
+        "title": "AOE2 Guide — maa-archers",
+        "url": "https://aoe2guide.com/en/builds/maa-archers/",
+      },
+      {
+        "accessed": "2026-10-11",
+        "author": "Hera（经 aoe2-guide 来源索引）",
+        "section": "18 Vils Generic Modern Man-at-Arms Rush",
+        "title": "Hera — AoE2 Strategy Guide（2025-12）",
+        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
+      },
+    ],
+    "steps": [
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "count": 2,
+            "type": "build",
+          },
+        ],
+        "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。",
+        "vils": 3,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "from": "build",
+            "task": "sheep",
+            "type": "gather",
+          },
+          {
+            "count": 3,
+            "task": "sheep",
+            "type": "gather",
+          },
+        ],
+        "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
+        "vils": 6,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "building": 562,
+            "type": "build",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+        ],
+        "note": "3 个去伐木并建伐木场；房子顺势摆成墙的一部分。",
+        "vils": 9,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "boar",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+          {
+            "count": 2,
+            "target": "deer",
+            "type": "lure",
+          },
+        ],
+        "note": "第 10 个引第一头野猪；两头野猪都找到后至少推 2 头鹿——这套打法依赖额外肉类。",
+        "vils": 10,
+      },
+      {
+        "actions": [
+          {
+            "count": 5,
+            "task": "hunt",
+            "type": "gather",
+          },
+        ],
+        "note": "5 个吃肉（需要时吃第二头野猪）。",
+        "vils": 15,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 12,
+            "type": "build",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+          {
+            "count": 2,
+            "task": "hunt",
+            "type": "gather",
+          },
+          {
+            "tech": 22,
+            "type": "research",
+          },
+          {
+            "age": 2,
+            "type": "ageUp",
+          },
+        ],
+        "note": "1 人盖兵营和前方房子，2 人吃肉；找齐羊、侦察对手，研究织布机后点封建。",
+        "phase": "feudal-click",
+        "split": {
+          "build": 1,
+          "food": 14,
+          "gold": 0,
+          "stone": 0,
+          "wood": 3,
+        },
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 5,
+            "from": "hunt",
+            "task": "wood",
+            "type": "gather",
+          },
+        ],
+        "note": "到封建：5 人从肉类转去伐木（8 木 9 食）。",
+        "phase": "feudal",
+        "split": {
+          "build": 1,
+          "food": 9,
+          "gold": 0,
+          "stone": 0,
+          "wood": 8,
+        },
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "from": "hunt",
+            "task": "gold",
+            "type": "gather",
+          },
+          {
+            "building": 584,
+            "type": "build",
+          },
+          {
+            "count": 3,
+            "type": "train",
+            "unit": 74,
+          },
+          {
+            "type": "upgrade",
+            "unit": 75,
+          },
+        ],
+        "note": "2 人从肉类去建金矿营地采金（8 木 7 食 2 金）；连续出 3 个民兵并研究民兵→武士（Man-at-Arms）升级。",
+        "split": {
+          "build": 1,
+          "food": 7,
+          "gold": 2,
+          "stone": 0,
+          "wood": 8,
+        },
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "from": "build",
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "building": 68,
+            "type": "build",
+          },
+          {
+            "tech": 202,
+            "type": "research",
+          },
+        ],
+        "note": "建造者去浆果旁建磨坊；研究双刃斧。",
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 5,
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "building": 50,
+            "type": "build",
+          },
+        ],
+        "note": "5 个新村民去浆果，肉类吃完后开始种田。",
+        "vils": 23,
+      },
+      {
+        "actions": [
+          {
+            "building": 87,
+            "type": "build",
+          },
+          {
+            "count": 2,
+            "task": "gold",
+            "type": "gather",
+          },
+        ],
+        "note": "资源够时建靶场；再 2 个去采金。",
+        "vils": 25,
+      },
+      {
+        "actions": [
+          {
+            "type": "train",
+            "unit": 4,
+          },
+          {
+            "type": "train",
+            "unit": 93,
+          },
+          {
+            "building": 103,
+            "type": "build",
+          },
+          {
+            "tech": 199,
+            "type": "research",
+          },
+        ],
+        "note": "边筑墙边出弓手，视情况补长枪兵或箭塔；建铁匠铺研究箭头后弓手出击。",
+        "vils": 25,
+      },
+    ],
+    "style": "maa",
+    "summary": "封建开局出 3 个民兵并升级为武士（Man-at-Arms）压制，随后建靶场转弓手并补箭头；依赖推鹿获得的额外肉类。",
+    "target": {
+      "age": 2,
+      "time": "约 8:50 到达封建",
+      "vils": 18,
+    },
+  },
+  "splits": [
+    "3: {"food":0,"wood":0,"gold":0,"stone":0,"build":3}",
+    "6: {"food":6,"wood":0,"gold":0,"stone":0,"build":0}",
+    "9: {"food":6,"wood":3,"gold":0,"stone":0,"build":0}",
+    "10: {"food":7,"wood":3,"gold":0,"stone":0,"build":0}",
+    "15: {"food":12,"wood":3,"gold":0,"stone":0,"build":0}",
+    "18: {"food":14,"wood":3,"gold":0,"stone":0,"build":1}",
+    "18: {"food":9,"wood":8,"gold":0,"stone":0,"build":1}",
+    "18: {"food":7,"wood":8,"gold":2,"stone":0,"build":1}",
+    "18: {"food":8,"wood":8,"gold":2,"stone":0,"build":0}",
+    "23: {"food":13,"wood":8,"gold":2,"stone":0,"build":0}",
+    "25: {"food":13,"wood":8,"gold":4,"stone":0,"build":0}",
+    "25: {"food":13,"wood":8,"gold":4,"stone":0,"build":0}",
+  ],
+}
+`;
+
+exports[`build-order snapshots > scouts-18 matches snapshot (data + per-step allocation) 1`] = `
+{
+  "bo": {
+    "civs": [
+      "Franks",
+      "Huns",
+      "Lithuanians",
+      "Magyars",
+      "Malians",
+    ],
+    "difficulty": "intermediate",
+    "id": "scouts-18",
+    "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
+    "map": "Arabia",
+    "name": {
+      "en": "18 Pop 1-Stable Scouts",
+      "zh": "18 人口侦察骑兵速攻（单马厩）",
+    },
+    "review": {
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "status": "reviewed",
+    },
+    "sources": [
+      {
+        "accessed": "2026-10-11",
+        "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
+        "ref": "themkdemiiir/aoe2-guide@f09ed56",
+        "section": "src/content/build-orders/18pop-scouts.yaml",
+        "title": "AOE2 Guide — 18pop-scouts",
+        "url": "https://aoe2guide.com/en/builds/18pop-scouts/",
+      },
+      {
+        "accessed": "2026-10-11",
+        "author": "Hera（经 aoe2-guide 来源索引）",
+        "section": "18 Vils 1-Stable Scouts",
+        "title": "Hera — AoE2 Strategy Guide（2025-12）",
+        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
+      },
+    ],
+    "steps": [
+      {
+        "actions": [
+          {
+            "count": 3,
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "count": 2,
+            "type": "build",
+          },
+        ],
+        "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。",
+        "vils": 3,
+      },
+      {
+        "actions": [
+          {
+            "count": 3,
+            "from": "build",
+            "task": "sheep",
+            "type": "gather",
+          },
+          {
+            "count": 3,
+            "task": "sheep",
+            "type": "gather",
+          },
+        ],
+        "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
+        "vils": 6,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "building": 562,
+            "type": "build",
+          },
+        ],
+        "note": "第 7、8 个村民去第一片树林，建伐木场后伐木。",
+        "vils": 8,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "boar",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "第 9 个引第一头野猪；羊吃完前先把野猪吃掉。",
+        "vils": 9,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "task": "berries",
+            "type": "gather",
+          },
+          {
+            "building": 70,
+            "type": "build",
+          },
+          {
+            "building": 68,
+            "type": "build",
+          },
+        ],
+        "note": "第 10 个先盖房子，再到浆果旁建磨坊并采浆果。",
+        "vils": 10,
+      },
+      {
+        "actions": [
+          {
+            "target": "deer",
+            "type": "lure",
+          },
+        ],
+        "note": "用侦察骑兵把鹿推到城镇中心附近，延长肉类。此时不需要额外村民。",
+        "vils": 10,
+      },
+      {
+        "actions": [
+          {
+            "count": 6,
+            "task": "hunt",
+            "type": "gather",
+          },
+          {
+            "target": "boar",
+            "type": "lure",
+          },
+        ],
+        "note": "接下来 6 个全部在城镇中心下吃肉；期间引第二头野猪。",
+        "vils": 16,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "tech": 22,
+            "type": "research",
+          },
+          {
+            "age": 2,
+            "type": "ageUp",
+          },
+        ],
+        "note": "再 2 个去伐木；研究织布机后点封建。",
+        "phase": "feudal-click",
+        "split": {
+          "food": 14,
+          "gold": 0,
+          "stone": 0,
+          "wood": 4,
+        },
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "from": "hunt",
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 12,
+            "type": "build",
+          },
+        ],
+        "note": "升级进度约 60% 时从肉类调 1 人去盖兵营。",
+        "split": {
+          "build": 1,
+          "food": 13,
+          "gold": 0,
+          "stone": 0,
+          "wood": 4,
+        },
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 4,
+            "from": "hunt",
+            "task": "wood",
+            "type": "gather",
+          },
+          {
+            "count": 4,
+            "from": "hunt",
+            "task": "berries",
+            "type": "gather",
+          },
+        ],
+        "note": "到封建：默认激进打法，4 人回原伐木场（共 8 木）；另 4 人转去浆果。保守打法（备选，后续界面可切换）：改为 5 人去新树林建伐木场（共 9 木）。",
+        "phase": "feudal",
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "count": 1,
+            "from": "hunt",
+            "task": "build",
+            "type": "gather",
+          },
+          {
+            "building": 101,
+            "type": "build",
+          },
+          {
+            "type": "train",
+            "unit": 448,
+          },
+        ],
+        "note": "再从肉类调 1 人建马厩，与前面造兵营的村民共 2 名建造者；马厩建好立即连续出侦察骑兵。马厩开造后城镇中心继续排村民，不要停在 18。",
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "tech": 202,
+            "type": "research",
+          },
+          {
+            "tech": 14,
+            "type": "research",
+          },
+          {
+            "building": 50,
+            "type": "build",
+          },
+        ],
+        "note": "研究双刃斧与马轭，开始种田；两名建造者顺手筑墙。",
+        "vils": 18,
+      },
+      {
+        "actions": [
+          {
+            "type": "train",
+            "unit": 93,
+          },
+        ],
+        "note": "若对手也出侦察骑兵，补 1–4 个长枪兵；面对弓手则不必。",
+        "vils": 18,
+      },
+    ],
+    "style": "scouts",
+    "summary": "18 人口升封建，单马厩持续出侦察骑兵骚扰对手经济，家里同步补经济科技与农田。",
+    "target": {
+      "age": 2,
+      "time": "约 8:50 到达封建",
+      "vils": 18,
+    },
+  },
+  "splits": [
+    "3: {"food":0,"wood":0,"gold":0,"stone":0,"build":3}",
+    "6: {"food":6,"wood":0,"gold":0,"stone":0,"build":0}",
+    "8: {"food":6,"wood":2,"gold":0,"stone":0,"build":0}",
+    "9: {"food":7,"wood":2,"gold":0,"stone":0,"build":0}",
+    "10: {"food":8,"wood":2,"gold":0,"stone":0,"build":0}",
+    "10: {"food":8,"wood":2,"gold":0,"stone":0,"build":0}",
+    "16: {"food":14,"wood":2,"gold":0,"stone":0,"build":0}",
+    "18: {"food":14,"wood":4,"gold":0,"stone":0,"build":0}",
+    "18: {"food":13,"wood":4,"gold":0,"stone":0,"build":1}",
+    "18: {"food":9,"wood":8,"gold":0,"stone":0,"build":1}",
+    "18: {"food":8,"wood":8,"gold":0,"stone":0,"build":2}",
+    "18: {"food":8,"wood":8,"gold":0,"stone":0,"build":2}",
+    "18: {"food":8,"wood":8,"gold":0,"stone":0,"build":2}",
+  ],
+}
+`;
