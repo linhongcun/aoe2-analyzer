@@ -335,3 +335,15 @@ test('bonus detail on mobile', async ({ page }) => {
   const w = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(w).toBeLessThanOrEqual(392);
 });
+
+test('bonus detail shows .dat source, freshness fallback and structured eco effects', async ({ page }) => {
+  await page.goto('./#/civ/Bengalis/bonus/3');
+  await expect(page.getByText('数值来源：游戏 .dat').first()).toBeVisible();
+  await page
+    .getByText(/\.dat 原始效果/)
+    .first()
+    .click();
+  await expect(page.getByText('#870').first()).toBeVisible();
+  await page.goto('./#/civ/Byzantines/bonus/4');
+  await expect(page.getByText(/已回退/).first()).toBeVisible();
+});

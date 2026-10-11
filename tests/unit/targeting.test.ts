@@ -84,10 +84,10 @@ describe('effect target sets vs AoE2 Fandom Wiki', () => {
   it('Parthian Tactics', () => has('Parthian Tactics', ['Cavalry Archer', 'Mangudai', 'Arambai'], ['Genitour', 'Elite Genitour', 'Arbalester']));
   // Wiki Masonry/Architecture: "Buildings"; Hoardings: Castles, Donjons, Kreposts; Arrowslits: towers + Donjon; Town Watch/Patrol: building LOS
   it('Building techs', () => {
-    has('Masonry', ['Castle', 'House', 'Stone Wall', 'Town Center']);
+    has('Masonry', ['Castle', 'House', 'Town Center'], ['Stone Wall']); // .dat：Masonry 不作用于城墙
     has('Hoardings', ['Castle', 'Krepost', 'Donjon'], ['Keep', 'Town Center']);
     has('Arrowslits', ['Watch Tower', 'Guard Tower', 'Keep', 'Donjon'], ['Castle']);
-    has('Heated Shot', ['Castle', 'Krepost', 'Dock', 'Harbor'], ['Keep']);
+    has('Heated Shot', ['Castle', 'Krepost', 'Keep', 'Watch Tower']); // .dat 科技 380：塔类对船只加成 ×2.25，城堡/营垒 +4；船坞/巨港需 Thalassocracy（组合科技 736）
     has('Town Watch', ['House', 'Castle']);
   });
 });

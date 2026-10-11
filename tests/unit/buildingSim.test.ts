@@ -23,7 +23,7 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
   });
   it('Britons Castle full tech: armor 10/13, +6 building armor, attack 15, range 11, no min range', () => {
     const s = full('Castle', 'Britons');
-    expect([s.hp, s.ma, s.pa, s.barm]).toEqual([7028, 10, 13, 6]);
+    expect([s.hp, s.ma, s.pa, s.barm]).toEqual([7028, 10, 13, 14]); // barm: 基础 8 + Masonry 3 + Architecture 3（.dat 类别 11）
     expect([s.atk, s.rng, s.minr]).toEqual([15, 11, 0]);
     expect(s.bonus['船只']).toBe(4);
   });
@@ -52,6 +52,6 @@ describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
     expect(av.some((x) => x.t.en === 'Hoardings')).toBe(false);
     const wt = buildingSimTechs(ctx, B('Watch Tower'), 'Britons').find((x) => x.t.en === 'Guard Tower');
     expect(wt?.ef).toBeNull();
-    expect(buildingBase(B('Castle')).barm).toBe(0);
+    expect(buildingBase(B('Castle')).barm).toBe(8); // .dat 城堡对「所有建筑」类别(11) 护甲 8
   });
 });

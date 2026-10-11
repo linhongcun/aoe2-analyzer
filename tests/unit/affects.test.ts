@@ -31,18 +31,21 @@ describe('tech affects (same rules as simulator)', () => {
     expect(a.units).not.toContain('Paladin');
     expect(a.buildings).toEqual(expect.arrayContaining(['Keep', 'Castle', 'Town Center']));
     const g = techAffects(tech('Bracer'), units, bs).flatMap((x) => x.rows);
-    expect(g.find((r) => r.buildings.some((b) => b.en === 'Keep'))!.effect).toBe('攻击 +1，射程 +1，视野 +1');
+    expect(g.find((r) => r.buildings.some((b) => b.en === 'Keep'))!.effect).toBe('攻击 +1，视野 +1，射程 +1');
     expect(g.find((r) => r.buildings.some((b) => b.en === 'Town Center'))!.effect).toBe('攻击 +1，视野 +1');
   });
   it('Masonry affects buildings only', () => {
     const a = flat('Masonry');
     expect(a.units).toHaveLength(0);
-    expect(a.buildings).toEqual(expect.arrayContaining(['Castle', 'House', 'Stone Wall']));
+    // .dat 科技 13 Masonry 的命令只作用于建筑类别 3（不含城墙类 27），故不含石墙
+    expect(a.buildings).toEqual(expect.arrayContaining(['Castle', 'House', 'Town Center']));
+    expect(a.buildings).not.toContain('Stone Wall');
     expect(a.effects[0]).toContain('生命值 +10%');
   });
-  it('unique tech falls back to text mentions', () => {
+  it('unique tech: numeric from .dat (Yeomen +1 foot-archer range, +2 tower attack), text mentions still available', () => {
     const t = tech('Yeomen');
-    expect(techAffects(t, units, bs)).toHaveLength(0);
+    const rows = techAffects(t, units, bs).flatMap((x) => x.rows);
+    expect(rows.find((r) => r.units.some((u) => u.en === 'Longbowman'))!.effect).toContain('射程 +1');
     const L = buildLinker(units, [], bs);
     const m = textMentions(t, L, Object.fromEntries(units.map((u) => [u.id, u])), Object.fromEntries(bs.map((b) => [b.id, b])));
     expect(m.units.length + m.buildings.length).toBeGreaterThan(0);

@@ -84,7 +84,7 @@ describe('新增编码的文明加成（Fandom 各文明页）', () => {
     expect([s.ma - u.ma, s.pa - u.pa]).toEqual([1, 1]);
   });
   it('西班牙：火药单位攻速 +18%（手炮手攻击间隔 3.45 到 2.92）', () => {
-    expect(simulate(ctx, unit('Hand Cannoneer'), 'Spanish', 4, none, none).rof).toBeCloseTo(3.45 / 1.18, 2);
+    expect(simulate(ctx, unit('Hand Cannoneer'), 'Spanish', 4, none, none).rof).toBeCloseTo(3.45 * 0.85, 2); // .dat: 攻击间隔 ×0.85（文本「+18%」= 1/0.85 取整）;
   });
   it('蒙古：轻骑兵帝王时代 +30% 生命值', () => {
     const u = unit('Hussar');

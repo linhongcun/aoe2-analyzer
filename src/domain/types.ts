@@ -110,8 +110,9 @@ export interface StatSet {
   rofx: number;
 }
 export type NumStat = Exclude<keyof StatSet, 'bonus' | 'rofx'>;
-/** 效果：add 加值、mul 乘、set 设定；rof 表示攻速 +x%（攻击间隔 /(1+x)）；bonus 为对某类别的加成伤害 */
-export type Effect = { s: Exclude<NumStat, 'rof'>; op?: 'add' | 'mul' | 'set'; v: number } | { s: 'rof'; v: number } | { s: 'bonus'; vs: string; v: number };
+/** 效果：add 加值、mul 乘、set 设定；rof 表示攻速 +x%（攻击间隔 /(1+x)）；bonus 为对某类别的加成伤害（op=mul 时按倍率放大已有加成） */
+export type Effect =
+  { s: Exclude<NumStat, 'rof'>; op?: 'add' | 'mul' | 'set'; v: number } | { s: 'rof'; v: number } | { s: 'bonus'; vs: string; v: number; op?: 'add' | 'mul' };
 export type UnitPred = (u: Unit) => boolean;
 
 export type BuildingType = 'military' | 'economy' | 'defense' | 'other';

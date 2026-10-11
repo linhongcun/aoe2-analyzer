@@ -27,7 +27,7 @@ if 50 in info:  # 农田：由磨坊/大庄园提供；牧场文明不用农田
 L=[]
 for bid,o in info.items():
     s=DB[str(bid)]
-    L.append(dict(id=bid,en=o['en'],zh=re.sub(r'<br>\s*','',z.get(str(o['nid']),o['en'])),age=o['age'],pic=o['pic'],cost=s['Cost'],hp=s['HP'],ma=s['MeleeArmor'],pa=s['PierceArmor'],barm=next((a['Amount'] for a in s['Armours'] if a['Class']==21),0),
+    L.append(dict(id=bid,en=o['en'],zh=re.sub(r'<br>\s*','',z.get(str(o['nid']),o['en'])),age=o['age'],pic=o['pic'],cost=s['Cost'],hp=s['HP'],ma=s['MeleeArmor'],pa=s['PierceArmor'],barm=next((a['Amount'] for a in s['Armours'] if a['Class']==11),0),
       bt=s['TrainTime'],gar=s['GarrisonCapacity'],atk=s['Attack'],rng=s['Range'],minr=s['MinRange'],rof=s['ReloadTime'],los=s['LineOfSight'],
       pop=(lambda m:int(m.group(1)) if m else 0)(re.search(r'[Pp]rovides\s+\+?(\d+)\s+population',e.get(str(o['hid']-79000),''))),desc=clean(z.get(str(o['hid']-79000),'')),descEn=clean(e.get(str(o['hid']-79000),'')),civs=sorted(o['civs']),units=sorted(o['u']),techs=sorted(o['t'])))
 L.sort(key=lambda x:(x['age'],x['id']))

@@ -1,11 +1,26 @@
 /**
  * 文明加成 / 团队加成作为一等实体（与科技同等对待）。
- * 数值效果的唯一来源仍是模拟器的 CIV_BONUSES / BUILDING_CIV_BONUSES / TEAM_BONUSES（按 bon 序号关联）。
+ * 数值效果与模拟器同源：effects.ts 合成的 CIV_BONUSES / BUILDING_CIV_BONUSES / TEAM_BONUSES（.dat 优先、手工回退，按 bon 序号关联）。
  */
 import { effectKey, effectParts, unitGroup, type AffectGroup, type AffectRow } from './affects';
-import { BUILDING_CIV_BONUSES, buildingBase, type BCivBonus } from './buildingSim';
+import { buildingBase, type BCivBonus, type BPred } from './buildingSim';
 import { BUILDING_TYPE_ZH } from './buildings';
-import { CIV_BONUSES, TEAM_BONUSES, type CivBonus, type TeamBonus } from './effects';
+import type { DatEco, DatEntry } from './datEffects';
+import {
+  BONUS_DAT,
+  BONUS_SRC,
+  BUILDING_CIV_BONUSES,
+  CIV_BONUSES,
+  CIV_TECH_EXTRAS,
+  DAT_FRESH,
+  TEAM_BLD,
+  TEAM_BONUSES,
+  TEAM_ECO,
+  type BonusSrc,
+  type CivBonus,
+  type TeamBonus,
+  type TechExtra,
+} from './effects';
 import { applyEffects, baseStats } from './simulator';
 import type { Building, Civ, Effect, NumStat, StatSet, Unit } from './types';
 
@@ -26,6 +41,17 @@ export interface CivBonusEnt {
   unitFx: CivBonus[];
   bldFx: BCivBonus[];
   teamFx: TeamBonus[];
+  teamBld: [BPred, Effect[]][];
+  /** 由科技触发的部分：科技英文名 → 规则 */
+  techFx: [string, TechExtra][];
+  /** 数值来源 */
+  src: BonusSrc;
+  /** 关联的 .dat 条目（含经济/费用项） */
+  dat: DatEntry[];
+  /** 团队加成的 .dat 经济项 */
+  eco: DatEco[];
+  /** .dat 数值与当前文本的一致性：true 吻合 / false 不一致（已回退） / null 无可比数值或无 .dat */
+  fresh: boolean | null;
   encoded: boolean;
 }
 
@@ -72,6 +98,12 @@ export function civBonuses(c: Civ): CivBonusEnt[] {
     const en = c.bonEn[i] ?? '';
     const unitFx = U.filter((x) => x[3] === i),
       bldFx = B.filter((x) => x[3] === i);
+    const src = BONUS_SRC[c.en]?.[String(i)] ?? 'text';
+    const techFx: [string, TechExtra][] =
+      src === 'dat'
+        ? Object.entries(CIV_TECH_EXTRAS[c.en] ?? {}).flatMap(([t, l]) => l.filter((x) => x.idx === i).map((x) => [t, x] as [string, TechExtra]))
+        : [];
+    const dat = BONUS_DAT[c.en]?.[String(i)] ?? [];
     return {
       id: `${c.en}-${i}`,
       civ: c.en,
@@ -84,10 +116,17 @@ export function civBonuses(c: Civ): CivBonusEnt[] {
       unitFx,
       bldFx,
       teamFx: [],
-      encoded: unitFx.length + bldFx.length > 0,
+      teamBld: [],
+      techFx,
+      src,
+      dat,
+      eco: [],
+      fresh: DAT_FRESH(c.en, String(i)),
+      encoded: unitFx.length + bldFx.length + techFx.length > 0,
     };
   });
   const teamFx = TEAM_BONUSES.filter((t) => t[0] === c.en);
+  const teamBld = TEAM_BLD[c.en] ?? [];
   list.push({
     id: `${c.en}-team`,
     civ: c.en,
@@ -100,7 +139,13 @@ export function civBonuses(c: Civ): CivBonusEnt[] {
     unitFx: [],
     bldFx: [],
     teamFx,
-    encoded: teamFx.length > 0,
+    teamBld,
+    techFx: [],
+    src: BONUS_SRC[c.en]?.team ?? 'text',
+    dat: [],
+    eco: TEAM_ECO[c.en] ?? [],
+    fresh: DAT_FRESH(c.en, 'team'),
+    encoded: teamFx.length + teamBld.length > 0,
   });
   return list;
 }
@@ -108,9 +153,12 @@ export const allCivBonuses = (civs: readonly Civ[]) => civs.flatMap(civBonuses);
 
 /** 某加成在某时代对某单位的效果（团队加成与时代无关） */
 export function unitEffects(b: CivBonusEnt, u: Unit, age: number): Effect[] {
-  return [...b.unitFx.filter(([f]) => f(u)).flatMap(([, g]) => g(age)), ...b.teamFx.filter(([, , f]) => f(u)).flatMap((t) => t[3])];
+  return [...b.unitFx.filter(([f]) => f(u)).flatMap(([, g]) => g(age)), ...b.teamFx.filter(([, , f]) => f(u)).flatMap((t) => t[3](u))];
 }
-export const bldEffects = (b: CivBonusEnt, x: Building, age: number): Effect[] => b.bldFx.filter(([f]) => f(x)).flatMap(([, g]) => g(age));
+export const bldEffects = (b: CivBonusEnt, x: Building, age: number): Effect[] => [
+  ...b.bldFx.filter(([f]) => f(x)).flatMap(([, g]) => g(age)),
+  ...b.teamBld.filter(([f]) => f(x)).flatMap(([, fx]) => fx),
+];
 
 /** 作用对象（与模拟器同一判定）。按帝王时代数值合并同效果；civOnly=true 时只列该文明拥有的单位/建筑（团队加成列全部） */
 export function bonusAffects(b: CivBonusEnt, units: readonly Unit[], buildings: readonly Building[], civOnly = true): AffectGroup[] {
@@ -153,7 +201,7 @@ function diffRows(base: StatSet, f: (age: number) => Effect[], ages: number[]): 
     const S: StatSet = { ...base, bonus: { ...base.bonus } };
     applyEffects(S, f(a));
     S.rof = S.rof / S.rofx;
-    S.hp = Math.floor(S.hp);
+    S.hp = Math.round(S.hp);
     STATS.forEach((k) => {
       if (Math.abs(S[k] - base[k]) < 1e-9) return;
       const v = Math.round(S[k] * 100) / 100,

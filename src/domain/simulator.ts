@@ -1,6 +1,6 @@
 /** 科技模拟器效果引擎（纯函数，无 UI 依赖） */
 import type { Cost, Effect, StatSet, Tech, Trees, Unit } from './types';
-import { CIV_BONUSES, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS } from './effects';
+import { CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
 
 export interface SimContext {
   techs: Tech[];
@@ -57,8 +57,11 @@ export function baseStats(u: Unit): StatSet {
 
 export function applyEffects(S: StatSet, list: readonly Effect[]): void {
   for (const e of list) {
-    if (e.s === 'bonus') S.bonus[e.vs] = (S.bonus[e.vs] ?? 0) + e.v;
-    else if (e.s === 'rof') S.rofx *= 1 + e.v;
+    if (e.s === 'bonus') {
+      if (e.op === 'mul') {
+        if (S.bonus[e.vs] !== undefined) S.bonus[e.vs] = S.bonus[e.vs]! * e.v;
+      } else S.bonus[e.vs] = (S.bonus[e.vs] ?? 0) + e.v;
+    } else if (e.s === 'rof') S.rofx *= 1 + e.v;
     else if (e.op === 'mul') S[e.s] *= e.v;
     else if (e.op === 'set') S[e.s] = e.v;
     else S[e.s] += e.v;
@@ -69,13 +72,22 @@ export function applyEffects(S: StatSet, list: readonly Effect[]): void {
 export function simTechs(ctx: SimContext, u: Unit, civ: string): SimTech[] {
   const st = civStatus(ctx.trees, civ);
   const r: SimTech[] = [];
+  const ex = CIV_TECH_EXTRAS[civ] ?? {};
   Object.keys(TECH_EFFECTS).forEach((n) => {
     const t = ctx.techByEn[n];
     if (!t || !st['t' + t.id]) return;
-    const ef = TECH_EFFECTS[n]!.filter(([f]) => f(u)).flatMap((x) => x[1]);
+    if (t.type === 'UniqueTech' && !t.civs.includes(civ)) return;
+    const ef = [...TECH_EFFECTS[n]!.filter(([f]) => f(u)).flatMap((x) => x[1]), ...(ex[n] ?? []).filter((x) => !x.b && x.pred(u)).flatMap((x) => x.fx)];
     if (ef.length) r.push({ t, ef });
   });
-  ctx.techs.filter((t) => t.type === 'UniqueTech' && t.civs.includes(civ)).forEach((t) => r.push({ t, ef: null }));
+  // 本文明加成由科技触发、但通用科技本身不作用于该单位（如印加村民 + 锻造）
+  Object.entries(ex).forEach(([n, l]) => {
+    const t = ctx.techByEn[n];
+    if (!t || !st['t' + t.id] || r.some((x) => x.t.id === t.id)) return;
+    const ef = l.filter((x) => !x.b && x.pred(u)).flatMap((x) => x.fx);
+    if (ef.length) r.push({ t, ef });
+  });
+  ctx.techs.filter((t) => t.type === 'UniqueTech' && t.civs.includes(civ) && !r.some((x) => x.t.id === t.id)).forEach((t) => r.push({ t, ef: null }));
   TEXT_ONLY_TECHS.forEach((n) => {
     const t = ctx.techByEn[n];
     if (t && st['t' + t.id] && (n !== 'Ballistics' || u.rng > 1)) r.push({ t, ef: null });
@@ -84,8 +96,10 @@ export function simTechs(ctx: SimContext, u: Unit, civ: string): SimTech[] {
 }
 
 export function civBonusNotes(u: Unit, civ: string): string[] {
-  return (CIV_BONUSES[civ] ?? []).filter(([f]) => f(u)).map((x) => x[2]);
+  return [...new Set((CIV_BONUSES[civ] ?? []).filter(([f]) => f(u)).map((x) => x[2]))];
 }
+/** 科技触发的文明加成在当前时代是否生效（如印加村民吃锻造需城堡时代） */
+const extraOk = (civ: string, t: Tech, u: Unit, age: number) => (CIV_TECH_EXTRAS[civ]?.[t.en] ?? []).every((x) => x.b || !x.pred(u) || x.age <= age);
 
 export function simulate(ctx: SimContext, u: Unit, civ: string, age: number, sel: ReadonlySet<number>, team: ReadonlySet<number>): StatSet {
   const S = baseStats(u);
@@ -93,13 +107,30 @@ export function simulate(ctx: SimContext, u: Unit, civ: string, age: number, sel
     if (f(u)) applyEffects(S, g(age));
   });
   simTechs(ctx, u, civ).forEach(({ t, ef }) => {
-    if (ef && sel.has(t.id)) applyEffects(S, ef);
+    if (!ef || !sel.has(t.id)) return;
+    if (extraOk(civ, t, u, age)) applyEffects(S, ef);
+    else {
+      // 时代未到：只施加通用部分
+      applyEffects(
+        S,
+        (TECH_EFFECTS[t.en] ?? []).filter(([f]) => f(u)).flatMap((x) => x[1]),
+      );
+      applyEffects(
+        S,
+        (CIV_TECH_EXTRAS[civ]?.[t.en] ?? []).filter((x) => !x.b && x.pred(u) && x.age <= age).flatMap((x) => x.fx),
+      );
+    }
   });
   TEAM_BONUSES.forEach(([, , f, ef], i) => {
-    if (team.has(i) && f(u)) applyEffects(S, ef);
+    if (team.has(i) && f(u)) applyEffects(S, ef(u));
   });
+  applyEffects(
+    S,
+    genericFx(u, false, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id)),
+  );
   S.rof = S.rof / S.rofx;
-  S.hp = Math.floor(S.hp);
+  // .dat 逐时代乘子保留 4 位小数（如 1.0909），容差 0.2 后取整（1.1×1.0909×1.0833 = 1.29995）
+  S.hp = Math.floor(S.hp + 0.2);
   return S;
 }
 

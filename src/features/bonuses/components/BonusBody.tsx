@@ -13,6 +13,14 @@ import { fmtStat } from '../../simulator/logic/format';
 import { LineChip } from '../../techs/components/TechAffects';
 import type { Unit } from '../../../domain/types';
 import { collapse } from '../../../domain/family';
+import { ecoText } from '../../../domain/datEffects';
+
+const SRC_TAG: Record<string, [string, string]> = {
+  dat: ['ok', '数值来源：游戏 .dat'],
+  manual: ['txt', '数值来源：手工规则（.dat 缺失或已过时）'],
+  eco: ['ok', '.dat 经济/费用效果（文本展示）'],
+  text: ['txt', '无 .dat 数据'],
+};
 
 const STAT_ZH: Record<string, [string, string]> = {
   hp: ['生命值', 'hp'],
@@ -40,6 +48,8 @@ export function BonusTags({ b }: { b: CivBonusEnt }) {
       ))}
       {b.ages && <span className="tag">{ageTxt(b.ages)}时代</span>}
       {b.encoded ? <span className="tag ok">已计入数值</span> : <span className="tag txt">仅文本，未计入数值</span>}
+      {SRC_TAG[b.src] && <span className={'tag ' + SRC_TAG[b.src]![0]}>{SRC_TAG[b.src]![1]}</span>}
+      {b.fresh === false && <span className="tag txt">.dat(2025-06) 与当前文本不一致，已回退</span>}
     </>
   );
 }
@@ -102,9 +112,11 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
         <p className="note">
           <Icon name="triangle-alert" className="ic warn" />
           仅文本，未计入数值：
-          {b.cats.includes('经济') || b.cats.includes('费用')
-            ? '这是经济/费用类效果（采集、造价、研究等），以游戏原文为准，模拟器不计算。'
-            : '该效果尚未编码进模拟器，以游戏原文为准。'}
+          {b.src === 'eco'
+            ? '经济/费用类效果，结构化数值见下方「.dat 原始效果」；模拟器属性面板不计算。'
+            : b.cats.includes('经济') || b.cats.includes('费用')
+              ? '这是经济/费用类效果（采集、造价、研究等），以游戏原文为准，模拟器不计算。'
+              : '该效果尚未编码进模拟器，以游戏原文为准。'}
         </p>
       )}
       {(groups.length > 0 || mu.length + mb.length > 0) && <h4>作用对象{b.team ? '（所有拥有该单位的文明）' : `（${civByEn(b.civ)?.zh} 拥有的）`}</h4>}
@@ -134,6 +146,40 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
           ))}
         </div>
       ))}
+      {(b.dat.length > 0 || b.eco.length > 0) && (
+        <details className="datfx">
+          <summary>.dat 原始效果（{b.dat.length + (b.eco.length ? 1 : 0)} 条）</summary>
+          <ul>
+            {b.dat.map((e) => (
+              <li key={e.tech}>
+                <code>
+                  #{e.tech} {e.name}
+                </code>
+                {e.age > 1 && <small className="note"> · {AGE_ZH[e.age]}</small>}
+                {e.req.length > 0 && <small className="note"> · 需 {e.req.join(' + ')}</small>}
+                {e.rules.length > 0 && <small className="note"> · 属性命令 {e.rules.reduce((n, r) => n + r.fx.length, 0)} 条（见上方作用对象）</small>}
+                {e.eco.length > 0 && (
+                  <ul>
+                    {e.eco.map((x, i) => (
+                      <li key={i}>{ecoText(x, (id) => core.unitById[id]?.zh ?? core.buildingById[id]?.zh)}</li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+            {b.eco.length > 0 && (
+              <li>
+                团队加成经济项
+                <ul>
+                  {b.eco.map((x, i) => (
+                    <li key={i}>{ecoText(x, (id) => core.unitById[id]?.zh ?? core.buildingById[id]?.zh)}</li>
+                  ))}
+                </ul>
+              </li>
+            )}
+          </ul>
+        </details>
+      )}
       {!b.encoded && mu.length + mb.length > 0 && (
         <>
           <p className="note">根据说明文字推断：</p>

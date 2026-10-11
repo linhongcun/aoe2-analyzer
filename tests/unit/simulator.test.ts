@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allNumeric, parseUnitPath, simTechs, simulate, totalCost, unitPath } from '../../src/domain/simulator';
 import { ctx, unit } from './helpers';
+import { TEAM_BONUSES } from '../../src/domain/effects';
 
 const full = (en: string, civ: string, team = new Set<number>()) => {
   const u = unit(en);
@@ -15,9 +16,9 @@ describe('simulator', () => {
     expect(s.ma).toBe(5);
     expect(s.pa).toBe(7);
   });
-  it('Britons Arbalester full tech: range 5+3+2=10, atk 6+3+1=10, armor 3/4', () => {
+  it('Britons Arbalester full tech: range 5+3+2+1(Yeomen)=11, atk 6+3+1=10, armor 3/4', () => {
     const s = full('Arbalester', 'Britons');
-    expect(s.rng).toBe(10);
+    expect(s.rng).toBe(11);
     expect(s.atk).toBe(10);
     expect(s.ma).toBe(3);
     expect(s.pa).toBe(4);
@@ -30,7 +31,8 @@ describe('simulator', () => {
   });
   it('team bonus toggle (Franks: knight line LOS +2)', () => {
     const u = unit('Paladin');
-    expect(simulate(ctx, u, 'Britons', 4, new Set(), new Set([0])).los).toBe(u.los + 2);
+    const i = TEAM_BONUSES.findIndex((x) => x[0] === 'Franks');
+    expect(simulate(ctx, u, 'Britons', 4, new Set(), new Set([i])).los).toBe(u.los + 2);
   });
   it('cost totals', () => {
     const u = unit('Paladin'),

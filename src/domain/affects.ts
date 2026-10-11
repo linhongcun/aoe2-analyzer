@@ -3,7 +3,7 @@
  */
 import { BUILDING_EFFECTS } from './buildingSim';
 import { BUILDING_TYPE_ZH } from './buildings';
-import { TECH_EFFECTS } from './effects';
+import { GENERIC_FX, TECH_EFFECTS } from './effects';
 import { linkify, type Linker } from './linker';
 import type { Building, Effect, Tech, Unit } from './types';
 import { hasCls, isArcher, isInf, isMounted } from './unitClass';
@@ -30,7 +30,8 @@ export interface EffectPart {
 const pct = (x: number) => `${Math.round(x * 100)}%`;
 export function effectParts(ef: readonly Effect[]): EffectPart[] {
   return ef.map((e) => {
-    if (e.s === 'bonus') return { icon: '', text: `对 ${e.vs} 加成 ${e.v > 0 ? '+' : ''}${e.v}` };
+    if (e.s === 'bonus')
+      return { icon: '', text: e.op === 'mul' ? `对 ${e.vs} 加成伤害 ${e.v >= 1 ? '+' : ''}${pct(e.v - 1)}` : `对 ${e.vs} 加成 ${e.v > 0 ? '+' : ''}${e.v}` };
     const [n, icon] = STAT_ZH[e.s] ?? [e.s, ''];
     if (e.s === 'rof') return { icon, text: `${n} +${pct(e.v)}` };
     if (e.s === 'bt' && 'op' in e && e.op === 'mul') return { icon, text: `建造速度 +${pct(1 / e.v - 1)}` };
@@ -89,6 +90,12 @@ export function techAffects(t: Tech, units: readonly Unit[], buildings: readonly
       const ef = br.filter(([f]) => f(b)).flatMap((x) => x[1]);
       if (ef.length) add(BUILDING_TYPE_ZH[b.type] + '建筑', ef, undefined, b);
     });
+  // .dat 组合触发的隐藏科技（如 Thalassocracy + Fletching → 巨港；Arrowslits + Keep）
+  GENERIC_FX.filter((g) => g.req.includes(t.en)).forEach((g) => {
+    const label = '组合触发（需 ' + g.req.filter((r) => r !== t.en).join(' + ') + '）';
+    if (g.b) buildings.forEach((b) => g.pred(b) && add(label, g.fx, undefined, b));
+    else units.forEach((u) => g.pred(u) && add(label, g.fx, u));
+  });
   return [...G.entries()].sort((a, b) => GROUP_ORDER.indexOf(a[0]) - GROUP_ORDER.indexOf(b[0])).map(([group, m]) => ({ group, rows: [...m.values()] }));
 }
 
