@@ -1,0 +1,17 @@
+@media (max-width: 600px) {
+  .tl-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-1);
+  }
+  .tl-summary li { padding: 6px var(--space-2); }
+  .tl-summary .k {
+    font-size: 12px;
+    color: #636366;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tl-summary b { font-size: 17px; line-height: 1.25; }
+  .tl-bn b { font-size: 15px; overflow-wrap: anywhere; }
+  .tl-summary li.tl-bn.is-long { grid-column: 1 / -1; }
+}
