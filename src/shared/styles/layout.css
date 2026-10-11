@@ -1849,3 +1849,7 @@ a.tbld:hover span {
   color: var(--color-text-2);
   font-size: var(--fs-sm);
 }
+/* Jony：窄屏只在「·」后整段换行，不剩孤零零的「木）」 */
+.tl-cmp > span {
+  white-space: nowrap;
+}

@@ -1003,6 +1003,12 @@ const RES234_IRRELEVANT_TECH: Record<number, string> = {
 export const SOURCE_PENDING_CIVS: Record<string, string> = {
   Huns: '匈奴加成已实现，但还缺第二条 2020 年后的独立出处，本版暂按通用计',
 };
+/** 仅测试构建用：VITE_FORCE_SIM_CIVS=Huns 时跳过出处门槛（e2e 验 flag 打开后的界面）；正式构建不设 */
+const FORCED_CIVS = new Set(
+  String((import.meta as { env?: Record<string, string | undefined> }).env?.VITE_FORCE_SIM_CIVS ?? '')
+    .split(',')
+    .filter(Boolean),
+);
 /** 已在 START_VILS 建模送村民的文明 tech（汉 302、玛雅 554） */
 const RES234_HANDLED = new Set([302, 554]);
 /** 整条待核实的文明 tech → 原因 */
@@ -1104,7 +1110,7 @@ export function simSupport(
 ): { supported: boolean; reasons: string[] } {
   const u = unhandledEffects(eco, civ, bos);
   const reasons = [...new Set(u.map((x) => x.reason))];
-  if (!opts.ignoreSourceGate && SOURCE_PENDING_CIVS[civ]) reasons.push(SOURCE_PENDING_CIVS[civ]!);
+  if (!opts.ignoreSourceGate && !FORCED_CIVS.has(civ) && SOURCE_PENDING_CIVS[civ]) reasons.push(SOURCE_PENDING_CIVS[civ]!);
   return { supported: reasons.length === 0, reasons };
 }
 

@@ -734,7 +734,7 @@ function SumMain({ extra, children }: { extra: string | null; children: React.Re
     <div className="tl-sum-main">
       {children}
       <p className="tl-cmp" data-t="sum-compare">
-        {extra}
+        {extra.split(/(?<=·)\s*/).flatMap((x, i) => [...(i ? [' '] : []), <span key={i}>{x}</span>])}
       </p>
     </div>
   );
