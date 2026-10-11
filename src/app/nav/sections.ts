@@ -17,16 +17,14 @@ export interface Section {
 export const WIKI: Section[] = [
   {
     key: 'civs',
-    path: '/list',
+    path: '/civs',
     label: '文明',
     en: 'Civilizations',
     icon: 'shield',
     desc: '56 个文明的定位、加成、评分与团战位置',
-    match: /^\/(list|civ\/.*)$/,
+    match: /^\/(civs|civ\/.*)$/,
   },
   { key: 'units', path: '/units', label: '单位', en: 'Units', icon: 'users', desc: '248 个单位的属性、克制与升级路线', match: /^\/units?(\/.*)?$/ },
-  { key: 'techs', path: '/techs', label: '科技', en: 'Technologies', icon: 'flask-conical', desc: '199 项科技的效果、费用与前置', match: /^\/techs?(\/.*)?$/ },
-  { key: 'tree', path: '/tree', label: '科技树', en: 'Tech Tree', icon: 'git-branch', desc: '每个文明的完整科技树与差异对照', match: /^\/tree(\/.*)?$/ },
   {
     key: 'buildings',
     path: '/buildings',
@@ -36,6 +34,8 @@ export const WIKI: Section[] = [
     desc: '38 种建筑的属性、可生产单位与科技',
     match: /^\/buildings?(\/.*)?$/,
   },
+  { key: 'techs', path: '/techs', label: '科技', en: 'Technologies', icon: 'flask-conical', desc: '199 项科技的效果、费用与前置', match: /^\/techs?(\/.*)?$/ },
+  { key: 'tree', path: '/tree', label: '科技树', en: 'Tech Tree', icon: 'git-branch', desc: '每个文明的完整科技树与差异对照', match: /^\/tree(\/.*)?$/ },
   {
     key: 'bonuses',
     path: '/bonuses',
@@ -46,7 +46,7 @@ export const WIKI: Section[] = [
     match: /^\/bonuses$/,
     hideNav: true,
   },
-  { key: 'dlc', path: '/dlc', label: 'DLC', en: 'Expansions', icon: 'package', desc: '14 个资料片与对应文明', match: /^\/dlc$/ },
+  { key: 'dlc', path: '/dlc', label: 'DLC', en: 'Expansions', icon: 'package', desc: '14 个资料片与对应文明', match: /^\/dlc$/, hideNav: true },
 ];
 export const TOOLS: Section[] = [
   { key: 'compare', path: '/compare', label: '文明对比', en: 'Compare', icon: 'scale', desc: '两个文明的能力雷达与关键差异', match: /^\/compare$/ },

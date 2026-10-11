@@ -1,32 +1,20 @@
 import { Link } from 'react-router-dom';
 import { civs } from '../../../data';
-import { FUTURE, TOOLS, WIKI, type Section } from '../../../app/nav/sections';
+import { TOOLS, WIKI, type Section } from '../../../app/nav/sections';
 import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 
-const Card = ({ s }: { s: Section }) => {
-  const body = (
-    <>
-      <Icon name={s.icon} className="ic hc-ic" />
-      <div>
-        <h3>
-          {s.label} <small>{s.en}</small>
-        </h3>
-        <p className="note">{s.desc}</p>
-      </div>
-      {s.status && <span className="soon">规划中</span>}
-    </>
-  );
-  return s.status ? (
-    <div className="hcard planned" data-k={s.key}>
-      {body}
+const Card = ({ s }: { s: Section }) => (
+  <Link className="hcard" to={s.path} data-k={s.key}>
+    <Icon name={s.icon} className="ic hc-ic" />
+    <div>
+      <h3>
+        {s.label} <small>{s.en}</small>
+      </h3>
+      <p className="note">{s.desc}</p>
     </div>
-  ) : (
-    <Link className="hcard" to={s.path} data-k={s.key}>
-      {body}
-    </Link>
-  );
-};
+  </Link>
+);
 const POPULAR = ['Franks', 'Britons', 'Mongols', 'Persians', 'Hindustanis', 'Armenians', 'Romans', 'Shu'];
 
 export default function Home() {
@@ -51,7 +39,7 @@ export default function Home() {
                 {c.zh}
               </Link>
             ))}
-          <Link className="ulink" to="/list">
+          <Link className="ulink" to="/civs">
             全部 {civs.length} 个文明 <Icon name="arrow-right" />
           </Link>
         </div>
@@ -69,11 +57,10 @@ export default function Home() {
         ))}
       </div>
       <h2 className="hsec">即将推出</h2>
-      <div className="hgrid">
-        {FUTURE.map((s) => (
-          <Card key={s.key} s={s} />
-        ))}
-      </div>
+      <section className="soon-card" aria-labelledby="soon-title">
+        <h3 id="soon-title">正在制作</h3>
+        <p>地图 · 开局流程 · 版本补丁 · 天梯</p>
+      </section>
     </section>
   );
 }

@@ -93,7 +93,7 @@
 | 路由 | 页面 | 说明 |
 |---|---|---|
 | `#/` | 首页 | **变化**：原为文明列表 |
-| `#/list`（旧 `#list`）、`#/civs` | 文明列表 | `#/civs` 重定向到 `#/list` |
+| `#/civs`、`#/list`（旧 `#list`） | 文明列表 | `#/list` 重定向到 `#/civs`（#9） |
 | `#/civ/:en`（旧 `#civ/X`） | 文明详情 | |
 | `#/units`、`#/unit/:id[/:civ/:age/:ids/:team]` | 单位列表 / 详情 | 带文明参数时默认打开模拟器标签 |
 | `#/unit/:id?tab=sim` | 单位详情（模拟器标签） | 新增 |
@@ -115,7 +115,7 @@ graph TD
   H --> T[工具]
   H --> F[即将推出]
   H -. Ctrl+K .-> S[全局搜索]
-  W --> C[文明 /list] --> CD[文明详情 /civ/:en]
+  W --> C[文明 /civs] --> CD[文明详情 /civ/:en]
   W --> U[单位 /units] --> UD[单位详情 /unit/:id]
   W --> K[科技 /techs] --> KD[科技详情 /tech/:id]
   W --> TR[科技树 /tree/:civ]

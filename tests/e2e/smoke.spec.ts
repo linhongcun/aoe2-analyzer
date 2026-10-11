@@ -96,9 +96,78 @@ test('mobile nav opens and navigates', async ({ page }) => {
   await page.goto('./');
   await expect(page.locator('nav.mainnav')).toBeHidden();
   await page.getByRole('button', { name: '菜单' }).click();
+  await page.getByRole('button', { name: '工具' }).click();
   await page.locator('nav.mainnav a', { hasText: '对局助手' }).click();
   await expect(page.locator('#mres h3')).toBeVisible();
   await expect(page.locator('nav.mainnav')).toBeHidden();
+});
+
+test('nav: every entry opens its real page, none opens a planned placeholder', async ({ page }) => {
+  const PAGES: [string, string][] = [
+    ['#/', '#home .hcard'],
+    ['#/civs', '#grid .card'],
+    ['#/units', '#ugrid .card'],
+    ['#/buildings', '#bgrid .card'],
+    ['#/techs', '#tgrid .card'],
+    ['#/tree', '.tree .tcell'],
+    ['#/compare', '#ctab tr'],
+    ['#/matchup', '#mres h3'],
+    ['#/simulator', '#simhub .card'],
+    ['#/duel', '#duel-res h3'],
+  ];
+  await page.goto('./');
+  await page.getByRole('button', { name: '工具' }).click();
+  const hrefs = await page.locator('nav.mainnav a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
+  expect(hrefs.sort()).toEqual(PAGES.map(([h]) => h).sort());
+  for (const [href, sel] of PAGES) {
+    await page.goto('./' + href);
+    await expect(page.locator(sel).first()).toBeVisible();
+    await expect(page.locator('.planned-page')).toHaveCount(0);
+  }
+});
+
+test('old #/list and #list redirect to #/civs and show the civ grid', async ({ page }) => {
+  for (const old of ['./#/list', './#list']) {
+    await page.goto(old);
+    await expect(page).toHaveURL(/#\/civs$/);
+    await expect(page.locator('#grid .card')).toHaveCount(56);
+  }
+});
+
+test('old #/tree redirects to #/tree/Franks and shows the Franks tree', async ({ page }) => {
+  await page.goto('./#/tree');
+  await expect(page).toHaveURL(/#\/tree\/Franks$/);
+  await expect(page.locator('#tra')).toHaveAttribute('data-value', 'Franks');
+  await expect(page.locator('.tree .tcell').first()).toBeVisible();
+});
+
+test('nav: 工具 dropdown toggles on click, closes on outside click and Esc', async ({ page }) => {
+  await page.goto('./');
+  const tools = page.getByRole('button', { name: '工具' });
+  const panel = page.locator('#tools-menu');
+  await expect(panel).toBeHidden();
+  await tools.click();
+  await expect(tools).toHaveAttribute('aria-expanded', 'true');
+  await expect(panel.getByRole('link', { name: '文明对比' })).toBeVisible();
+  await page.locator('#home h2').first().click();
+  await expect(panel).toBeHidden();
+  await tools.click();
+  await page.keyboard.press('Escape');
+  await expect(panel).toBeHidden();
+  await tools.click();
+  await panel.getByRole('link', { name: '单位 PK' }).click();
+  await expect(page).toHaveURL(/#\/duel$/);
+  await expect(panel).toBeHidden();
+  await expect(tools).toHaveClass(/\bon\b/);
+});
+
+test('home: 即将推出 is one non-clickable card with the four modules', async ({ page }) => {
+  await page.goto('./');
+  const card = page.locator('#home .soon-card');
+  await expect(card).toContainText('正在制作');
+  await expect(card).toContainText('地图 · 开局流程 · 版本补丁 · 天梯');
+  await expect(card.locator('a, button')).toHaveCount(0);
+  await expect(page.locator('#home .hcard.planned')).toHaveCount(0);
 });
 
 test('leaving a tech detail page does not crash (regression)', async ({ page }) => {
@@ -385,4 +454,64 @@ test('build orders read-only list renders all entries with sources', async ({ pa
   await items.first().locator('summary').click();
   await expect(items.first()).toContainText('来源');
   await expect(items.first().locator('a[href*="aoe2guide.com"]')).toHaveCount(1);
+});
+
+test('rating help: beside 能力评分, opens/closes by click, outside click and Esc, focus moves in and back', async ({ page }) => {
+  await page.goto('./#/civ/Franks');
+  await page.getByRole('tab', { name: '数据' }).click();
+  const head = page.locator('#detail .ratehead');
+  await expect(head).toContainText('能力评分');
+  await expect(head).toContainText('主观评分，仅供参考');
+  await expect(page.locator('#detail')).not.toContainText('评分为主观近似值');
+  const btn = head.getByRole('button', { name: '评分说明' });
+  const box = await btn.boundingBox();
+  expect(box!.width).toBeGreaterThanOrEqual(32);
+  expect(box!.height).toBeGreaterThanOrEqual(32);
+  const pop = page.getByRole('dialog', { name: '评分是怎么来的' });
+  await expect(pop).toBeHidden();
+  await btn.click();
+  await expect(pop).toBeVisible();
+  await expect(pop).toBeFocused();
+  await expect(pop).toContainText(
+    '8 项能力按 1–10 打分，由我们参考以下几点人工整理：文明加成、独特单位和独特科技；科技树完整度（缺哪些关键升级）；团战排位社区的普遍看法。',
+  );
+  await expect(pop).toContainText('不是胜率统计，会随版本补丁调整。数据在 scripts/civ_ratings.json。');
+  await expect(pop.getByRole('link', { name: /反馈给我们/ })).toHaveAttribute('href', /issues\/new/);
+  await expect(btn).toHaveAttribute('aria-expanded', 'true');
+  await page.locator('#detail .dhead h2').click();
+  await expect(pop).toBeHidden();
+  await btn.click();
+  await expect(pop).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(pop).toBeHidden();
+  await expect(btn).toBeFocused();
+  await btn.click();
+  await btn.click();
+  await expect(pop).toBeHidden();
+});
+
+test('rating help on mobile: 44px target, popover spans the card width', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('./#/civ/Franks');
+  await page.getByRole('tab', { name: '数据' }).click();
+  const head = page.locator('#detail .ratehead');
+  const btn = head.getByRole('button', { name: '评分说明' });
+  const b = await btn.boundingBox();
+  expect(b!.width).toBeGreaterThanOrEqual(44);
+  expect(b!.height).toBeGreaterThanOrEqual(44);
+  await btn.click();
+  const pop = page.getByRole('dialog', { name: '评分是怎么来的' });
+  const h = await head.boundingBox();
+  const p = await pop.boundingBox();
+  expect(Math.abs(p!.x - h!.x)).toBeLessThan(1);
+  expect(Math.abs(p!.width - h!.width)).toBeLessThan(1);
+});
+
+test('rating label also on compare and matchup; old yellow note removed', async ({ page }) => {
+  await page.goto('./#/compare');
+  await expect(page.locator('#compare .ratehead')).toContainText('主观评分，仅供参考');
+  await page.goto('./#/matchup');
+  await expect(page.locator('#mres .note')).toContainText('主观评分，仅供参考');
+  await page.locator('#mres .note').getByRole('button', { name: '评分说明' }).click();
+  await expect(page.getByRole('dialog', { name: '评分是怎么来的' })).toBeVisible();
 });

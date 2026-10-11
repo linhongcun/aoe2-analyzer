@@ -46,7 +46,7 @@ tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 ## 路由（与旧版兼容）
 
 旧链接 `#civ/X` 与新链接 `#/civ/X` 等价（HashRouter 会补全前导 `/`）。
-`/` `/list` `/civ/:en` `/units` `/unit/:id[/:civ[/:age[/:ids[/:team]]]]` `/techs` `/tech/:id` `/tree[/:civ]` `/dlc` `/compare` `/matchup`；未知路由回到文明列表。
+`/` `/civs`（旧 `/list` 跳转） `/civ/:en` `/units` `/unit/:id[/:civ[/:age[/:ids[/:team]]]]` `/techs` `/tech/:id` `/tree[/:civ]` `/dlc` `/compare` `/matchup`；未知路由回到文明列表。
 模拟器状态全部写入 URL（replace），可分享。
 
 ## 如何添加

@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState, type ReactNode } from 'react';
+import { Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
@@ -7,17 +7,46 @@ import { TOOLS, WIKI, type Section } from './nav/sections';
 import FeedbackLink from '../features/feedback/FeedbackLink';
 import { DATA_SOURCES, versionLabel } from '../features/about/dataInfo';
 
-function NavGroup({ title, items, path }: { title: string; items: Section[]; path: string }) {
+function NavItem({ s, path }: { s: Section; path: string }) {
   return (
-    <div className="ngroup">
-      <span className="nlabel">{title}</span>
-      {items.map((s) => (
-        <NavLink key={s.key} to={s.path} className={() => `nitem${s.match.test(path) ? ' on' : ''}${s.status ? ' planned' : ''}`} data-t={s.key}>
-          <Icon name={s.icon} />
-          {s.label}
-          {s.status && <small className="soon">规划中</small>}
-        </NavLink>
-      ))}
+    <NavLink to={s.path} className={() => `nitem${s.match.test(path) ? ' on' : ''}`} data-t={s.key}>
+      <Icon name={s.icon} />
+      {s.label}
+    </NavLink>
+  );
+}
+
+function ToolsMenu({ path }: { path: string }) {
+  const [openAt, setOpenAt] = useState<string | null>(null);
+  const open = openAt === path;
+  const ref = useRef<HTMLDivElement>(null);
+  const on = TOOLS.some((s) => s.match.test(path));
+  useEffect(() => {
+    if (!open) return;
+    const down = (e: PointerEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpenAt(null);
+    };
+    const key = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpenAt(null);
+    };
+    document.addEventListener('pointerdown', down);
+    document.addEventListener('keydown', key);
+    return () => {
+      document.removeEventListener('pointerdown', down);
+      document.removeEventListener('keydown', key);
+    };
+  }, [open]);
+  return (
+    <div className="tools" ref={ref}>
+      <button type="button" className={`nitem${on ? ' on' : ''}`} aria-expanded={open} aria-controls="tools-menu" onClick={() => setOpenAt(open ? null : path)}>
+        工具
+        <Icon name="chevron-down" />
+      </button>
+      <div id="tools-menu" className="tools-panel" hidden={!open}>
+        {TOOLS.filter((s) => !s.hideNav).map((s) => (
+          <NavItem key={s.key} s={s} path={path} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -47,8 +76,16 @@ export function Layout({ children }: { children: ReactNode }) {
           <Icon name="swords" className="ic hic" /> 帝国时代 II 分析器
         </Link>
         <nav className={menu ? 'mainnav open' : 'mainnav'}>
-          <NavGroup title="百科" items={WIKI.filter((s) => !s.hideNav)} path={pathname} />
-          <NavGroup title="工具" items={TOOLS.filter((s) => !s.hideNav)} path={pathname} />
+          <div className="ngroup">
+            <NavLink to="/" end className={() => `nitem${pathname === '/' ? ' on' : ''}`} data-t="home">
+              <Icon name="home" />
+              首页
+            </NavLink>
+            {WIKI.filter((s) => !s.hideNav).map((s) => (
+              <NavItem key={s.key} s={s} path={pathname} />
+            ))}
+            <ToolsMenu path={pathname} />
+          </div>
         </nav>
         <Link to="/about-data" className="verbadge" data-t="version-badge" title="关于数据：来源、固定版本与补丁说明">
           <Icon name="database" />

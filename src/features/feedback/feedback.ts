@@ -9,7 +9,7 @@ const ENTITY: [RegExp, string][] = [
   [/^\/tech\/([^/]+)/, '科技'],
   [/^\/building\/([^/]+)/, '建筑'],
   [/^\/tree\/([^/]+)/, '科技树'],
-  [/^\/(compare|matchup|duel|simulator|dlc|bonuses|units|techs|buildings|list)\b/, '页面'],
+  [/^\/(compare|matchup|duel|simulator|dlc|bonuses|units|techs|buildings|civs)\b/, '页面'],
 ];
 
 export interface FeedbackCtx {
