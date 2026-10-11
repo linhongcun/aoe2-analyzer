@@ -30,10 +30,7 @@ describe('#14 单位总数口径', () => {
     expect(ids).toEqual(expect.arrayContaining([1750, 1948, 1962, 1759]));
   });
   it('同英文名不同 id 的单位只计一次：答刺罕（城堡/马厩）', () => {
-    const r = collapse(
-      units.filter((u) => u.en.endsWith('Tarkan')),
-      fam,
-    );
+    const r = collapse(units.filter((u) => u.en.endsWith('Tarkan')), fam);
     expect(r).toHaveLength(1);
   });
 });
