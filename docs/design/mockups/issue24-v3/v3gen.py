@@ -18,7 +18,7 @@ FOOT=f'<div class=foot>{ic("info")}<span>等资源已计入已核实的常驻文
 def res(t,s):return f'<div class=res><h3>{ic("trophy")}{t}</h3><p class=note>{s}</p></div>'
 W={}
 # S1 halb vs paladin
-a=side('swords','长戟兵','拜占庭',[('食物',o(35)+n('约 26')),('木头',o(25)+n('约 19'))],o(60)+'45',66,o(50),applied('拜占庭 反制单位费用 −25%'))
+a=side('swords','长戟兵','拜占庭',[('食物',o(35)+n('26')),('木头',o(25)+n('19'))],o(60)+'45',66,o(50),applied('拜占庭 反制单位费用 −25%'))
 b=side('swords','游侠','法兰克',[('食物','60'),('黄金','75')],'135',22,'',NONE)
 W['issue24-v3/discount']=P(head('等资源')+'<p class=lbl>场景 1 · 拜占庭长戟兵 vs 法兰克游侠</p>'+f'<div class=sides>{a}<div class=vs>VS</div>{b}</div>'+res('A 胜 · 66 个长戟兵 对 22 个游侠','A 剩 57 个 · 用时 6.0 秒 · 集火模型')+FOOT)
 # S4 magyar w/ popover
