@@ -96,6 +96,7 @@ export const idPred = (ids: readonly number[]) => {
 };
 
 const ECO_ATTR: Record<number, string> = {
+  10: '信仰恢复时间',
   13: '工作效率',
   14: '携带量',
   100: '造价',

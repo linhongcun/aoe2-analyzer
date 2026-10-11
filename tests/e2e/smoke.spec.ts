@@ -336,7 +336,7 @@ test('bonus detail on mobile', async ({ page }) => {
   expect(w).toBeLessThanOrEqual(392);
 });
 
-test('bonus detail shows .dat source, freshness fallback and structured eco effects', async ({ page }) => {
+test('bonus detail shows .dat source, text-vs-dat note and structured eco effects', async ({ page }) => {
   await page.goto('./#/civ/Bengalis/bonus/3');
   await expect(page.getByText('数值来源：游戏 .dat').first()).toBeVisible();
   await page
@@ -344,6 +344,6 @@ test('bonus detail shows .dat source, freshness fallback and structured eco effe
     .first()
     .click();
   await expect(page.getByText('#870').first()).toBeVisible();
-  await page.goto('./#/civ/Byzantines/bonus/4');
-  await expect(page.getByText(/已回退/).first()).toBeVisible();
+  await page.goto('./#/civ/Saracens/bonus/team');
+  await expect(page.getByText(/以 \.dat 为准/).first()).toBeVisible();
 });

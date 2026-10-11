@@ -8,7 +8,7 @@
 
 - 界面图标：[Lucide](https://lucide.dev)（ISC License），经 lucide-react 本地打包（不使用 CDN）
 - DLC/资料片列表与图标（`public/img/dlc/`，缩放为 64px WebP）：来自 [seicing.com 文明发售列表](https://seicing.com/html/aoe2/index-aoe2.html)，并与 ageofempires.com 官方公告核对
-- 科技/文明加成数值效果（`src/data/effects.json`，`scripts/effects_build.py`）：战斗属性 EffectCommands 取自 [HSZemi/aoe2dat](https://github.com/HSZemi/aoe2dat)（DE Update 147949 的完整 .dat 转储），当前补丁的加成清单/前置/经济命令取自 [PeterWhiteJavascript/aoe2-de-tools](https://github.com/PeterWhiteJavascript/aoe2-de-tools)（2026-10-03 genieutils 快照），并与 [linhongcun/lhc-aoe2](https://github.com/linhongcun/lhc-aoe2) 的科技数值对账；差异见 `docs/EFFECTS-AUDIT.md`
+- 科技/文明加成/团队加成数值效果（`src/data/effects.json`，`scripts/effects_build.py`）：全部取自 DE 原版游戏数据文件 `empires2_x2_p1.dat`（DE Update 185872），文件来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，构建时下载并校验 sha256 与补丁标记（`npm run dat:check`），用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py)（LGPL-3.0）解析。**.dat © Microsoft Corporation，本仓库与站点均不包含、不再分发该文件**，只发布由它派生的数值。基础数值仍取自 aoe2techtree，并与 .dat 对账（`npm run stats:check`）。参考对账：[linhongcun/lhc-aoe2](https://github.com/linhongcun/lhc-aoe2)。差异见 `docs/EFFECTS-AUDIT.md`
 - 文明数据：[SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)
 - 单位/科技数据与图标（`public/img/units/`、`img/techs/`）：高清版取自 [denniske/aoe2companion](https://github.com/denniske/aoe2companion) 的 256px DE 图标（缩放为 128px WebP，`scripts/icons_hires.py`），未覆盖的少数图标回退到 aoe2techtree 48px 原图（游戏图像 © Microsoft）
 - 属性/资源图标（`public/img/stats/`，40px WebP）：来自 [Age of Empires Fandom Wiki](https://ageofempires.fandom.com/)（如 Hpicon_aoe2de.png、Attack_cur.png、Armoricon_aoe2de.png、AoE2DE_icon_*.png、Aoe2de_food.png 等；Wiki 内容 CC BY-SA，游戏图像 © Microsoft）

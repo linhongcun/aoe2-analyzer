@@ -17,7 +17,7 @@ import { ecoText } from '../../../domain/datEffects';
 
 const SRC_TAG: Record<string, [string, string]> = {
   dat: ['ok', '数值来源：游戏 .dat'],
-  manual: ['txt', '数值来源：手工规则（.dat 缺失或已过时）'],
+  manual: ['txt', '数值来源：手工规则（.dat 缺少该项）'],
   eco: ['ok', '.dat 经济/费用效果（文本展示）'],
   text: ['txt', '无 .dat 数据'],
 };
@@ -49,7 +49,7 @@ export function BonusTags({ b }: { b: CivBonusEnt }) {
       {b.ages && <span className="tag">{ageTxt(b.ages)}时代</span>}
       {b.encoded ? <span className="tag ok">已计入数值</span> : <span className="tag txt">仅文本，未计入数值</span>}
       {SRC_TAG[b.src] && <span className={'tag ' + SRC_TAG[b.src]![0]}>{SRC_TAG[b.src]![1]}</span>}
-      {b.fresh === false && <span className="tag txt">.dat(2025-06) 与当前文本不一致，已回退</span>}
+      {b.fresh === false && <span className="tag txt">游戏说明文字与 .dat 数值不一致（以 .dat 为准）</span>}
     </>
   );
 }

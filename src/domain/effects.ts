@@ -39,21 +39,9 @@ for (const [en, t] of Object.entries(DAT.techs)) {
   if (u.length || b.length) TECH_SRC[en] = 'dat';
 }
 const datCombat = (en: string) => DAT.techs[en]?.combat === true;
-/** 源 A（DE Update 147949）之后才加入游戏的单位/建筑（新文明 UU、海军重做的 Hulk/Carrack 等） */
+/** 站内存在而 .dat 中缺失的单位/建筑 id（当前应为空） */
 export const NEW_IDS: ReadonlySet<number> = new Set(DAT.meta.newIds);
-const onlyNew =
-  <T extends { id: number }>(f: (x: T) => boolean) =>
-  (x: T) =>
-    NEW_IDS.has(x.id) && f(x);
-// .dat 科技对「新单位」没有命令：对这些单位沿用手工判定（标注为 manual）
-Object.entries(MANUAL_TECH_EFFECTS).forEach(([en, r]) => {
-  if (!datCombat(en) || !TECH_EFFECTS[en]) return;
-  TECH_EFFECTS[en] = [...TECH_EFFECTS[en]!, ...r.map(([f, fx]) => [onlyNew(f), fx] as EffectRule)];
-});
-Object.entries(MANUAL_BUILDING_EFFECTS).forEach(([en, r]) => {
-  if (!datCombat(en) || !BUILDING_EFFECTS[en]) return;
-  BUILDING_EFFECTS[en] = [...BUILDING_EFFECTS[en]!, ...r.map(([f, fx]) => [onlyNew(f), fx] as [BPred, Effect[]])];
-});
+// .dat 缺少的科技才回退手工表（标注为 manual）
 Object.entries(MANUAL_TECH_EFFECTS).forEach(([en, r]) => {
   if (datCombat(en)) return;
   TECH_EFFECTS[en] = r;
@@ -97,9 +85,9 @@ civs.forEach((c) => {
     const es = byIdx[k] ?? [];
     const idx = k === 'hidden' ? -1 : +k;
     const label = idx >= 0 ? c.bon[idx]! : '隐藏加成（.dat 中存在、加成文本未列出）';
-    const fresh = d?.fresh[k]?.ok !== false;
+    // .dat 为当前补丁（185872）：不再按文本一致性回退；fresh 仅供审计/页面提示
     const numeric = es.filter((e) => e.combat && e.rules.some((r) => toEffects(r.fx).length));
-    if (fresh && numeric.length) {
+    if (numeric.length) {
       numeric.forEach((e) =>
         e.rules.forEach((r) => {
           const fx = toEffects(r.fx);
@@ -111,11 +99,7 @@ civs.forEach((c) => {
           else U.push([idPred(r.t) as UnitPred, gate(e.age, fx), label, idx]);
         }),
       );
-      if (idx >= 0) {
-        src[k] = 'dat';
-        (MANUAL_CIV_BONUSES[c.en] ?? []).filter((x) => x[3] === idx).forEach(([f, g, l]) => U.push([onlyNew(f), g, l, idx]));
-        (MANUAL_BUILDING_CIV_BONUSES[c.en] ?? []).filter((x) => x[3] === idx).forEach(([f, g, l]) => B.push([onlyNew(f), g, l, idx]));
-      }
+      if (idx >= 0) src[k] = 'dat';
       return;
     }
     if (idx < 0) return;
@@ -145,7 +129,7 @@ civs.forEach((c) => {
   TEAM_ECO[c.en] = d?.team.eco ?? [];
   const rules = (d?.team.rules ?? []).filter((r) => !r.b).map((r) => [idPred(r.t), toEffects(r.fx)] as const);
   const brules = (d?.team.rules ?? []).filter((r) => r.b).map((r) => [idPred(r.t) as BPred, toEffects(r.fx)] as [BPred, Effect[]]);
-  if (d?.team.combat && d.fresh.team?.ok !== false && [...rules, ...brules].some((r) => r[1].length)) {
+  if (d?.team.combat && [...rules, ...brules].some((r) => r[1].length)) {
     if (rules.some((r) => r[1].length))
       TEAM_BONUSES.push([c.en, label, (u) => rules.some(([f, fx]) => fx.length && f(u)), (u) => rules.filter(([f]) => f(u)).flatMap(([, fx]) => fx)]);
     TEAM_BLD[c.en] = brules.filter((r) => r[1].length);

@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 """从 .dat 原始效果表生成 src/data/effects.json（科技 / 文明加成 / 团队加成的结构化效果）。
 
-数据源（均由 genieutils 系工具直接解析 DE 的 empires2_x2_p1.dat，零人工转写）：
-  A. HSZemi/aoe2dat data/full.json.xz —— 完整 .dat JSON（全部 EffectCommands，含战斗属性），
-     最后更新 = DE Update 147949（2025-06-26），之后的补丁/新文明不在其中。
-  B. PeterWhiteJavascript/aoe2-de-tools tools/gamedata/snapshot.json —— 当前补丁（2026-10-03 快照，
-     56 文明，DE Update 185872 之后）的科技/文明加成清单与「经济/费用类」EffectCommands（属性 13/14/100/101/103-106、资源效果）。
-  C. linhongcun/lhc-aoe2 lib/data/unitTechFx.ts —— 作者本机 .dat（2026-08）提取的每科技战斗数值代表值，仅用于新鲜度对账。
-
-规则：同一 tech id 在 A、B 中内部名一致 → 取 A 的战斗属性命令 + B 的经济命令（当前补丁）；
-不一致或 A 中缺失（2025-06 之后新增/重用的 id）→ 只有 B 的经济命令，战斗部分标记 stale，由运行时回退到手工表并在审计中列出。
+数据源：DE 原版 empires2_x2_p1.dat（SiegeEngineers/auto-mods@0c38027，DE Update 185872，sha256 固定），
+  由 scripts/dat_source.py 在构建时下载、校验（sha256 + 补丁标记）并用 genieutils-py 解析；.dat © Microsoft，不提交、不发布。
+  全部 EffectCommands（战斗属性 + 经济/费用 + 资源）均来自这一个文件。
+  对账参考（可选）：linhongcun/lhc-aoe2 lib/data/unitTechFx.ts（作者本机 .dat，2026-08）。
 
 用法：python3 scripts/effects_build.py   （下载缓存在 scripts/.cache/）
 """
-import json, lzma, os, re, sys, urllib.request
+import json, os, re, sys, urllib.request
 from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / 'scripts' / '.cache'
-SRC_A = ('https://raw.githubusercontent.com/HSZemi/aoe2dat/c0cec9bacd7414a95d1b3ba465a53cb122158f8d/data/full.json.xz', 'aoe2dat-full.json.xz')
-SRC_B = ('https://raw.githubusercontent.com/PeterWhiteJavascript/aoe2-de-tools/34e889c005cdffb70907af5f3aeacc9e6f0d98a9/tools/gamedata/snapshot.json', 'pw-snapshot.json')
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from dat_source import DAT as DAT_SRC, load as load_dat  # noqa: E402
 SRC_C = ('https://raw.githubusercontent.com/linhongcun/lhc-aoe2/6fdb912e95ce1ce837eb91b6c6ffc2945a74dc90/lib/data/unitTechFx.ts', 'lhc-unitTechFx.ts')
 
 
@@ -41,9 +36,12 @@ def fetch(src):
     return p
 
 
+# 团队加成由引擎按「区域/团队」触发的隐藏科技（.dat 中无从文明指向它们的命令，只能按 id 列出；数值仍取自 .dat）
+TEAM_TECHS = {'Berbers': [599, 601], 'Incas': [730], 'Italians': [522], 'Wu': [1089]}
+
 # 属性号 → 站内 stat（attribute 号见 genieutils / AGE「Attribute」表）
 ATTR = {0: 'hp', 1: 'los', 2: 'gar', 5: 'spd', 8: 'armor', 9: 'attack', 10: 'reload', 11: 'acc', 12: 'rng', 20: 'minr', 101: 'tt'}
-ECO_ATTR = {13: '工作效率', 14: '携带量', 100: '造价', 101: '生产/建造时间', 103: '食物造价', 104: '木材造价', 105: '黄金造价', 106: '石料造价',
+ECO_ATTR = {10: '信仰恢复时间', 13: '工作效率', 14: '携带量', 100: '造价', 101: '生产/建造时间', 103: '食物造价', 104: '木材造价', 105: '黄金造价', 106: '石料造价',
             102: '箭矢数', 107: '最大箭矢数', 22: '溅射半径', 24: '克制伤害抗性', 108: '驻扎回血', 109: '生命恢复', 63: '特殊能力', 19: '投射物命中', 23: '搜索半径'}
 RES = {0: '起始食物', 1: '起始木材', 2: '起始石料', 3: '起始黄金', 4: '人口上限', 32: '额外人口', 77: '征服', 92: '贸易收益(%)', 93: '钓鱼/采集', 190: '村民生产速度',
        47: '交易手续费', 79: '贸易收益', 194: '农田食物量', 216: '城镇中心与村民', 214: '牧场'}
@@ -55,8 +53,7 @@ CIV_DAT = {'British': 'Britons', 'French': 'Franks', 'Byzantine': 'Byzantines', 
 
 
 def main():
-    A = json.load(lzma.open(fetch(SRC_A)))
-    B = json.load(open(fetch(SRC_B)))
+    A = load_dat()
     pc = fetch(SRC_C); lhc_src = pc.read_text() if pc else ''
     units = json.load(open(ROOT / 'src/data/units.json'))
     blds = json.load(open(ROOT / 'src/data/buildings.json'))
@@ -67,22 +64,13 @@ def main():
     tech_by_id = {t['id']: t for t in techs}
     AT, AE, AC = A['Techs'], A['Effects'], A['Civs']
 
-    # 单位 dat class：B（当前）优先，A 回退
-    dcls = {}
-    for i, u in enumerate(AC[0]['Units']):
-        if u: dcls[i] = u['Class']
-    for k, u in B['units'].items():
-        dcls[int(k)] = u['class']
+    dcls = {i: u['Class'] for i, u in enumerate(AC[0]['Units']) if u}
     # 站内单位的主攻击类别（4 近战 / 3 穿刺）
     def main_atk(o):
         n = [x[0] for x in o.get('atks', [])]
         if o.get('_b'): return 3
         return 4 if '近战' in n else 3 if '穿刺' in n else None
 
-    def a_ok(tid):
-        """A 中该 id 与当前补丁（B）同一科技？"""
-        bt = B['techs'].get(str(tid))
-        return tid < len(AT) and bt is not None and AT[tid]['Name'] == bt['internalName']
 
     def targets(a, b):
         if a >= 0: return [a] if a in ours else []
@@ -106,6 +94,9 @@ def main():
                 return [(i, {'s': 'bt', 'op': op, 'v': r6(d)}) for i in ids], None
             if not ids and a >= 0 and a not in ours: return [], None
             return [], {'a': attr, 'op': op, 'v': r6(d), 't': sorted(ids), 'cls': b if a < 0 else None, 'unit': a if a >= 0 else None}
+        if attr == 10 and ids and all(dcls.get(i) == 18 for i in ids):
+            # 僧侣的「攻击间隔」= 信仰恢复时间（不是攻速）→ 经济/机制文本
+            return [], {'a': 10, 'op': op, 'v': r6(d), 't': sorted(ids), 'cls': b if a < 0 else None, 'unit': a if a >= 0 else None}
         out = []
         s = ATTR[attr]
         for i in ids:
@@ -150,8 +141,7 @@ def main():
 
     def tech_name(i):
         if i in tech_by_id: return tech_by_id[i]['en']
-        bt = B['techs'].get(str(i))
-        return bt['internalName'] if bt else (AT[i]['Name'] if i < len(AT) else str(i))
+        return AT[i]['Name'] if 0 <= i < len(AT) else str(i)
 
     def res_txt(c):
         t, a, b, _, d = c
@@ -202,38 +192,29 @@ def main():
         return [(c['Type'], c['A'], c['B'], c['C'], c['D']) for c in AE[eid]['EffectCommands']]
 
     def merged_cmds(tid):
-        """A 的非经济命令（若同一科技）+ B 的经济命令。返回 (cmds, combat_ok)。"""
-        bt = B['techs'].get(str(tid))
-        b_cmds = [tuple(x) for x in (bt or {}).get('effects', [])]
-        if tid < len(AT) and (bt is None or a_ok(tid)):
-            ac = a_cmds(AT[tid]['EffectID'])
-            keep = [c for c in ac if c[0] in (101, 103) or (not (c[0] % 10 in (0, 4, 5) and c[3] in (13, 14, 100, 101, 103, 104, 105, 106)) and c[0] % 10 not in (1, 6))]
-            return keep + (b_cmds if bt else [c for c in ac if c not in keep]), True
-        return b_cmds, False
+        """科技的全部命令（战斗 + 经济），全部来自同一 .dat。"""
+        return (a_cmds(AT[tid]['EffectID']) if 0 <= tid < len(AT) else []), True
 
     def age_req(tid, seen=None):
         """解析触发时代与前置科技（递归穿过隐藏科技）。"""
         seen = seen or set()
-        bt = B['techs'].get(str(tid))
-        req = bt['requiredTechs'] if bt else [x for x in AT[tid]['RequiredTechs'] if x >= 0] if tid < len(AT) else []
+        req = [x for x in AT[tid]['RequiredTechs'] if x >= 0] if tid < len(AT) else []
         age, pre = 1, []
         for r in req:
             if r in AGE_TECH: age = max(age, AGE_TECH[r]); continue
             if r in tech_by_id: pre.append(tech_by_id[r]['en']); continue
-            nm = (B['techs'].get(str(r)) or {}).get('internalName') or (AT[r]['Name'] if r < len(AT) else '')
+            nm = AT[r]['Name'] if r < len(AT) else ''
             m = re.search(r'(Feudal|Castle|Imperial)', nm or '')
             if m and 'Age' in nm: age = max(age, {'Feudal': 2, 'Castle': 3, 'Imperial': 4}[m.group(1)]); continue
             if r not in seen:
                 seen.add(r); a2, p2 = age_req(r, seen); age = max(age, a2); pre += p2
-        if bt and bt.get('ageReq'): age = max(age, bt['ageReq'])
         return age, sorted(set(pre))
 
     out = {'meta': {
         'generated_by': 'scripts/effects_build.py',
         'sources': [
-            {'id': 'A', 'repo': 'HSZemi/aoe2dat', 'commit': 'c0cec9b', 'file': 'data/full.json.xz', 'patch': 'DE Update 147949 (2025-06-26)', 'use': '战斗属性 EffectCommands'},
-            {'id': 'B', 'repo': 'PeterWhiteJavascript/aoe2-de-tools', 'commit': '34e889c', 'file': 'tools/gamedata/snapshot.json', 'patch': '2026-10-03 快照（DE Update 185872 之后，datVersion %s，build %s）' % (B['meta'].get('datVersion'), B['meta'].get('buildId')), 'use': '当前补丁的加成清单、科技前置、经济/费用 EffectCommands'},
-            {'id': 'C', 'repo': 'linhongcun/lhc-aoe2', 'commit': '6fdb912', 'file': 'lib/data/unitTechFx.ts', 'patch': '作者本机 .dat（2026-08）', 'use': '新鲜度对账'},
+            {'id': 'DAT', 'repo': DAT_SRC['repo'], 'commit': DAT_SRC['commit'][:7], 'file': DAT_SRC['path'], 'sha256': DAT_SRC['sha256'], 'patch': DAT_SRC['patch'], 'use': '全部 EffectCommands（战斗 + 经济/费用）、科技前置、文明科技树/团队加成；datVersion %s' % A.get('Version')},
+            {'id': 'C', 'repo': 'linhongcun/lhc-aoe2', 'commit': '6fdb912', 'file': 'lib/data/unitTechFx.ts', 'patch': '作者本机 .dat（2026-08）', 'use': '对账参考'},
         ]}, 'techs': {}, 'civs': {}}
 
     # ---- 通用科技 ----
@@ -248,7 +229,6 @@ def main():
     out['generic'] = []
     for i, t in enumerate(AT):
         if t['Civ'] != -1 or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or i in tech_by_id or i in AGE_TECH: continue
-        if str(i) in B['techs'] and not a_ok(i): continue
         rq = [r for r in t['RequiredTechs'] if r >= 0]
         if not rq: continue
         ages = [AGE_TECH[r] for r in rq if r in AGE_TECH]
@@ -265,14 +245,12 @@ def main():
     # ---- 文明：bonus techs + tech tree + team ----
     adat = {CIV_DAT.get(c['Name'], c['Name']): i for i, c in enumerate(AC)}
     for c in civs:
-        en = c['en']; bc = B['civs'].get(en, {})
+        en = c['en']
         ai = adat.get(en)
         entries = []
         # tech tree 效果（开局即有）
-        tree_cmds = [tuple(x) for x in bc.get('techTreeBonus', [])]
-        if ai is not None:
-            ac = a_cmds(AC[ai]['TechTreeID'])
-            tree_cmds = [x for x in ac if x[0] in (0, 4, 5) and x[3] not in (13, 14, 100, 101, 103, 104, 105, 106)] + tree_cmds
+        # 科技树效果里的「禁用单位/科技」(2/102/103) 与本站无关，compile_cmds 自然忽略
+        tree_cmds = a_cmds(AC[ai]['TechTreeID']) if ai is not None else []
         rules, eco = compile_cmds(tree_cmds)
         # tech tree 效果可能分属多条加成文本：逐规则/逐经济项拆成独立条目（tech = -1, -2, ...）
         k = 0
@@ -280,24 +258,19 @@ def main():
             k += 1; entries.append({'tech': -k, 'name': 'Tech tree #%d' % k, 'age': 1, 'req': [], 'combat': ai is not None, 'rules': [r], 'eco': []})
         for x in eco:
             k += 1; entries.append({'tech': -k, 'name': 'Tech tree #%d' % k, 'age': 1, 'req': [], 'combat': ai is not None, 'rules': [], 'eco': [x]})
-        ids = set(bc.get('bonusTechs', []))
-        if ai is not None:
-            ids |= {i for i, t in enumerate(AT) if t['Civ'] == ai and t['ResearchLocation'] <= 0 and t['EffectID'] >= 0 and (str(i) not in B['techs'] or a_ok(i))}
+        ids = {i for i, t in enumerate(AT) if ai is not None and t['Civ'] == ai and t['ResearchLocation'] <= 0 and t['EffectID'] >= 0} - set(TEAM_TECHS.get(en, []))
         for tid in sorted(ids):
             if tid in tech_by_id: continue
             cmds, ok = merged_cmds(tid)
             rules, eco = compile_cmds(cmds)
             if not rules and not eco and ok: continue
             age, pre = age_req(tid)
-            nm = (B['techs'].get(str(tid)) or {}).get('internalName') or AT[tid]['Name']
+            nm = AT[tid]['Name']
             if '+ BL' in nm: continue  # 「已研究血统」时的引擎替换副本（与无 BL 版本数值相同），不重复计入
             entries.append({'tech': tid, 'name': nm, 'age': age, 'req': pre, 'combat': ok, 'rules': rules, 'eco': eco})
-        team_cmds = [tuple(x) for x in bc.get('teamBonus', [])]
-        if ai is not None:
-            ac = a_cmds(AC[ai]['TeamBonusID'])
-            team_cmds = [x for x in ac if not (x[0] % 10 in (0, 4, 5) and x[3] in (13, 14, 100, 101, 103, 104, 105, 106)) and x[0] % 10 not in (1, 6)] + team_cmds
+        team_cmds = a_cmds(AC[ai]['TeamBonusID']) if ai is not None else []
         trules, teco = compile_cmds(team_cmds)
-        for tt in bc.get('teamTechs', []):
+        for tt in TEAM_TECHS.get(en, []):
             cm, _ = merged_cmds(tt); r2, e2 = compile_cmds(cm)
             trules += [r for r in r2 if r not in trules]; teco += [x for x in e2 if x not in teco]
         out['civs'][en] = {'dat': ai is not None, 'bonus': entries, 'team': {'combat': ai is not None, 'rules': trules, 'eco': teco}}
@@ -335,9 +308,10 @@ def main():
     m = re.search(r'=\s*(\{.*\})\s*;?\s*$', lhc_src, re.S)
     lhc = json.loads(m.group(1)) if m else {}
     out['meta']['lhc_techs'] = len(lhc)
-    # 源 A（2025-06）中不存在的单位/建筑：其科技/加成作用范围由运行时回退到手工判定
+    # .dat 中不存在的站内单位/建筑（应为空）：其科技/加成作用范围由运行时回退到手工判定
     U0 = AC[0]['Units']
     out['meta']['newIds'] = sorted(i for i in ours if i >= len(U0) or U0[i] is None)
+    out['meta']['unmatchedCivs'] = [c['en'] for c in civs if c['en'] not in adat]
     (ROOT / 'src/data/effects.json').write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':')))
     n = sum(len(v['bonus']) for v in out['civs'].values())
     print('techs', len(out['techs']), 'civ bonus techs', n, 'size', (ROOT / 'src/data/effects.json').stat().st_size)
