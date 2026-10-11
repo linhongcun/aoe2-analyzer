@@ -1814,3 +1814,42 @@ a.tbld:hover span {
     margin-top: 6px;
   }
 }
+
+/* #42 不需要房子的文明（匈奴，huns-flag-* 稿）：造房片段置灰 + 删除线 + 标签；对比行 13px 次级正文、虚线分隔 */
+.tl-skip {
+  color: var(--color-muted);
+}
+.tl-skip s {
+  text-decoration-thickness: 1px;
+}
+.tl-no-need {
+  display: inline-block;
+  margin: 0 var(--space-1);
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--color-tag);
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  text-decoration: none;
+}
+.tl-switch[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.tl-sum-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.tl-cmp {
+  margin: var(--space-2) 0 0;
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--color-border);
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+}
+/* Jony：窄屏只在「·」后整段换行，不剩孤零零的「木）」 */
+.tl-cmp > span {
+  white-space: nowrap;
+}
