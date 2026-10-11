@@ -43,7 +43,7 @@ export interface FamilyEntry {
 export function collapse(list: readonly Unit[], f: Families): FamilyEntry[] {
   const ids = new Set(list.map((u) => u.id));
   const out: FamilyEntry[] = [];
-  // 同英文名不同 id（如城堡/马厩两处生产的答刺罕）只保留第一个；中文同名但英文不同的（楼船、战车）各算一个
+  // 同英文名不同 id（同一单位由两种建筑生产：答刺罕 城堡/马厩、近卫军 城堡/兵营、保加利亚骑兵 城堡/营垒、萨金特卫兵 城堡/城楼、长矛/长枪/长戟 兵营/城楼）只保留第一个；中文同名但英文不同的（楼船、战车）各算一个
   const seen = new Set<string>();
   list.forEach((u) => {
     const b = f.baseOf[u.id];
