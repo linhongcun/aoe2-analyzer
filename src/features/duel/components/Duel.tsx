@@ -12,6 +12,7 @@ import type { StatSet, Unit } from '../../../domain/types';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CostView, StatIcon, UnitIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
+import { RangeB } from '../../../shared/ui/RangeB';
 import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
 import SimPanel, { type StatRow } from '../../simulator/components/SimPanel';
@@ -209,7 +210,14 @@ function Side({
               [u.rng > 1 ? 'patk' : 'atk', '攻击', r1(side.S.atk) + (side.F.ranged ? '（穿刺）' : '（近战）')],
               ['marm', '护甲', `${r1(side.S.ma)} / ${r1(side.S.pa)}`],
               ['rof', '攻击间隔', r1(side.S.rof * 100) === '0' ? '-' : (Math.round(side.S.rof * 100) / 100).toString() + 's'],
-              ['range', '射程', r1(side.S.rng) + (side.u.rngB != null && side.u.rngB !== side.u.rng ? `（对建筑 ${side.u.rngB}）` : '')],
+              [
+                'range',
+                '射程',
+                <>
+                  {r1(side.S.rng)}
+                  <RangeB u={side.u} compact />
+                </>,
+              ],
               ['', '命中率', Math.round(side.F.acc * 100) + '%'],
             ] as const
           ).map(([ic, n, v]) => (

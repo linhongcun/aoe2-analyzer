@@ -524,3 +524,19 @@ test('#31 Ctrl+K 搜到开局流程与开局名；工具菜单首项为开局流
   await page.keyboard.type('开局流程');
   await expect(page.getByRole('dialog').getByText('开局流程').first()).toBeVisible();
 });
+
+test('#22 对建筑射程：主数字下方小字「对建筑 N」，无括号；手机 PK 缩写「建筑 N」', async ({ page }) => {
+  await page.goto('./#/unit/1968');
+  const small = page.locator('#unit [data-t="range-building"]');
+  await expect(small).toHaveText('对建筑 9');
+  await expect(page.locator('#unit')).not.toContainText('（对建筑');
+  await page.goto('./#/unit/4');
+  await expect(page.locator('#unit [data-t="range-building"]')).toHaveCount(0);
+  await page.goto('./#/duel?a=1968.Wu.4.f.');
+  await expect(page.locator('#duel-a [data-t="range-building"] .rngb-full')).toHaveText('对建筑 9');
+  await page.setViewportSize({ width: 390, height: 844 });
+  const pk = page.locator('#duel-a [data-t="range-building"]');
+  await expect(pk.locator('.rngb-short')).toHaveText('建筑 9');
+  await expect(pk.locator('.rngb-full')).toBeHidden();
+  await expect(pk).toHaveAttribute('title', '对建筑射程 9');
+});

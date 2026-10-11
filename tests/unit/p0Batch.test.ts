@@ -119,6 +119,20 @@ describe('#22 双射程', () => {
   });
 });
 
+describe('#22 对建筑小字格式', () => {
+  it('rangeB 仅在不同才返回；组件文案「对建筑 N」/「建筑 N」，无括号', async () => {
+    const { rangeB } = await import('../../src/shared/ui/RangeB');
+    expect(rangeB({ rng: 5, rngB: 9 })).toBe(9);
+    expect(rangeB({ rng: 4 })).toBeNull();
+    const src = readFileSync('src/shared/ui/RangeB.tsx', 'utf8');
+    expect(src).toContain('对建筑 {n}');
+    expect(src).toContain('建筑 {n}');
+    expect(src).toContain('对建筑射程 ${n}');
+    for (const f of ['src/features/units/components/UnitDetail.tsx', 'src/features/duel/components/Duel.tsx'])
+      expect(readFileSync(f, 'utf8')).not.toContain('（对建筑');
+  });
+});
+
 describe('#28 开局页头', () => {
   it('不含草稿/待内容审核，文案为「N 个主流开局；时间轴视图开发中」', () => {
     const src = readFileSync('src/features/builds/BuildOrderList.tsx', 'utf8');
