@@ -6,6 +6,7 @@ import type { Phase } from '../../domain/buildOrder';
 import { ListHead } from '../../shared/ui/layout';
 import FeedbackLink from '../feedback/FeedbackLink';
 import TimelineLoader from './TimelineLoader';
+import { PENDING_FIX, PENDING_LABEL, keptTime } from './pendingFix';
 
 const PHASE: Record<Phase, string> = {
   'feudal-click': '点封建',
@@ -40,7 +41,16 @@ export default function BuildOrderList() {
         <details key={b.id} className="bo" data-t="build-order">
           <summary>
             <b>{b.name.zh}</b> <span className="note">{b.name.en}</span> · {b.target.vils} 人口{AGE[b.target.age]}
-            {b.target.time ? `（${b.target.time}）` : ''} · {b.civs.length ? b.civs.join('、') : '通用'}
+            {PENDING_FIX[b.id] ? (
+              <span className="is-pending" data-pending>
+                （{keptTime(b.target.time) ? `${keptTime(b.target.time)}、` : ''}— 城堡 <small className="pending-note">{PENDING_LABEL}</small>）
+              </span>
+            ) : b.target.time ? (
+              `（${b.target.time}）`
+            ) : (
+              ''
+            )}{' '}
+            · {b.civs.length ? b.civs.join('、') : '通用'}
           </summary>
           <p>{b.summary}</p>
           <p>
