@@ -1,0 +1,3 @@
+/** 构建时注入（vite.config.ts define） */
+declare const __BUILD__: string;
+declare const __DATA_VERSION__: string;

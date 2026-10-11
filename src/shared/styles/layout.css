@@ -459,3 +459,36 @@ a.tbld:hover span {
 .affrow .uchips {
   flex: 1;
 }
+
+/* 报错/反馈入口 */
+.fbbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 -4px;
+}
+.fbbtn,
+.fblink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+}
+.fbbtn {
+  font-size: 12px;
+  padding: 3px 8px;
+  border: 1px solid var(--line, #ccc);
+  border-radius: 6px;
+  color: inherit;
+  opacity: 0.8;
+}
+.fbbtn:hover {
+  opacity: 1;
+}
+.fbbtn .ic,
+.fblink .ic {
+  width: 14px;
+  height: 14px;
+}
+.fbfoot {
+  margin-bottom: 6px;
+}

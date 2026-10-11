@@ -4,6 +4,7 @@ import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
 import CommandPalette from '../features/search/components/CommandPalette';
 import { TOOLS, WIKI, type Section } from './nav/sections';
+import FeedbackLink from '../features/feedback/FeedbackLink';
 
 function NavGroup({ title, items, path }: { title: string; items: Section[]; path: string }) {
   return (
@@ -55,10 +56,18 @@ export function Layout({ children }: { children: ReactNode }) {
         </button>
       </header>
       <main>
+        {pathname !== '/' && (
+          <div className="fbbar">
+            <FeedbackLink compact />
+          </div>
+        )}
         <Suspense fallback={<Loading />}>{children}</Suspense>
       </main>
       {cmdk && <CommandPalette open onClose={() => setCmdk(false)} />}
       <footer>
+        <p className="fbfoot">
+          <FeedbackLink /> 发现数值或内容错误？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。
+        </p>
         <p className="note">面向团战排位 · 所有评分（1-10）均为主观近似评分，仅供参考；数据可能随版本补丁变化。</p>
         单位/科技/建筑图标与科技树数据来自 <a href="https://github.com/SiegeEngineers/aoe2techtree">SiegeEngineers/aoe2techtree</a>（MIT 代码；图像 ©
         Microsoft）；高清单位/科技/建筑图标来自 <a href="https://github.com/denniske/aoe2companion">denniske/aoe2companion</a>。界面图标：

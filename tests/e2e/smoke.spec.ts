@@ -347,3 +347,18 @@ test('bonus detail shows .dat source, text-vs-dat note and structured eco effect
   await page.goto('./#/civ/Saracens/bonus/team');
   await expect(page.getByText(/以 \.dat 为准/).first()).toBeVisible();
 });
+
+test('feedback link: footer + detail page button prefill GitHub issue', async ({ page }) => {
+  await page.goto('./#/unit/4');
+  const btn = page.locator('.fbbar a[data-t="feedback"]');
+  await expect(btn).toBeVisible();
+  const href = new URL((await btn.getAttribute('href'))!);
+  expect(href.origin + href.pathname).toBe('https://github.com/linhongcun/aoe2-analyzer/issues/new');
+  expect(href.searchParams.get('title')).toContain('单位 4');
+  expect(href.searchParams.get('body')).toContain('/unit/4');
+  expect(href.searchParams.get('body')).toContain('185872');
+  expect(await btn.getAttribute('target')).toBe('_blank');
+  await expect(page.locator('footer a[data-t="feedback"]')).toHaveAttribute('href', /issues\/new\?title=/);
+  await page.goto('./#/duel');
+  await expect(page.locator('.fbbar a[data-t="feedback"]')).toHaveAttribute('href', /title=.*duel/);
+});
