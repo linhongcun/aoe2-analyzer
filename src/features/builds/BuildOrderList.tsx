@@ -64,7 +64,14 @@ export default function BuildOrderList() {
             {meta?.[b.id]?.time && (
               <>
                 {' · '}
-                <span data-t="bo-time">{meta[b.id]!.time}</span> <small className="tl-civ">按通用计</small>
+                {PENDING_FIX[b.id] ? (
+                  <span className="is-pending" data-t="bo-time" data-pending>
+                    {keptTime(meta[b.id]!.time) ? `${keptTime(meta[b.id]!.time)}、` : ''}— 城堡 <small className="pending-note">{PENDING_LABEL}</small>
+                  </span>
+                ) : (
+                  <span data-t="bo-time">{meta[b.id]!.time}</span>
+                )}{' '}
+                <small className="tl-civ">按通用计</small>
               </>
             )}{' '}
             ·{' '}
