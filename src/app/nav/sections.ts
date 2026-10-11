@@ -35,7 +35,6 @@ export const WIKI: Section[] = [
     icon: 'castle',
     desc: '38 种建筑的属性、可生产单位与科技',
     match: /^\/buildings?(\/.*)?$/,
-    hideNav: true,
   },
   {
     key: 'bonuses',

@@ -109,6 +109,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/units', '#ugrid .card'],
     ['#/techs', '#tgrid .card'],
     ['#/tree', '.tree .tcell'],
+    ['#/buildings', '#bgrid .card'],
     ['#/compare', '#ctab tr'],
     ['#/matchup', '#mres h3'],
     ['#/simulator', '#simhub .card'],
