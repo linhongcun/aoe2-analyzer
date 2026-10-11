@@ -1,7 +1,7 @@
-# #3 开局时间线界面 交互稿（v1.1 增补）
+# #3 开局时间线界面 交互稿（v1.1 增补 · 含 #19 分享落位）
 
 作者：Jony Ive（体验设计） · 页面：`/builds` · 依赖：M2（PR #5，`src/domain/buildSim.ts`，`docs/BUILD-SIM.md`）
-样稿：`docs/design/mockups/issue3/`（含 v1.1：`fold-tip-*.png`）
+样稿：`docs/design/mockups/issue3/`（含 v1.1：`fold-tip-*.png`；分享落位：`share-placement/`）
 视觉：浅色编辑风（`docs/design/DESIGN-SYSTEM.md`），`--color-muted` = `#636366`。
 
 ## 0. 设计原则
@@ -81,5 +81,27 @@
 ### 7.3 验收加两条
 15. 连续造村民默认一行 `村民 ×N · 约 …–…`；点击展开见逐步；折叠行无红色卡点样式。
 16. （原 16 条顺延或合并）有跟进提示的步骤，详情顶部出现非红色提示条；关闭后同步不再显示（会话内）。
+
+
+### 7.4 #19 分享 / 复制链接控件落位（M3 页）
+
+依赖：[`docs/design/mockups/issue19/share-controls/`](../mockups/issue19/share-controls/)（按钮样式、已复制 toast、桌面预览气泡、手机底 sheet）。本页只定**在开局时间线上的位置**；交互与 #19 一致。
+
+| 断点 | 位置 | 说明 |
+|---|---|---|
+| **桌面** | **卡点摘要条右侧**（与四块统计同一卡片） | 主「复制链接」+ 次「分享」竖排或紧凑横排；左侧 1px `#e5e5ea` 分隔。不压在时间线主舞台，不单独占满宽一行（避免挤掉首屏 ≥60% 时间线）。 |
+| **手机 ≤600** | **视口底部 sticky 栏** | 摘要条内不塞钮（四块已满）。两钮等分、触控高度 ≥44px；主内容 `padding-bottom` 避开遮挡。滚动不消失。 |
+
+URL：复制 / 分享写入当前完整查询串（`bo` `civ` `dist` `var` `house` `step`，及可选 `expand`），与 §3 / #19 对齐。
+
+样稿标注：
+- 桌面：[`share-placement/place-desktop.png`](mockups/issue3/share-placement/place-desktop.png)
+- 手机：[`share-placement/place-mobile.png`](mockups/issue3/share-placement/place-mobile.png)
+
+时间线 mockups 对照：`builds-*.png` / `fold-tip-*.png`（摘要条与主轴相对关系不变，仅加分享落位）。
+
+### 7.5 验收再加
+17. 桌面：摘要条右侧可见「复制链接」「分享」；点击复制后 URL 含当前六参数。
+18. 手机：底部 sticky 双钮；不遮挡步骤最后一行（有底衬）。
 
 — Jony Ive，体验设计 · v1.1
