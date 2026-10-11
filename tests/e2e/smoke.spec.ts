@@ -559,3 +559,10 @@ test('#38 PK 火焰弓箭手满科技：对建筑射程随射程科技变为 12'
   await a.getByRole('radio', { name: '无科技', exact: true }).click();
   await expect(a.locator('[data-t="range-building"] .rngb-full')).toHaveText('对建筑 9');
 });
+
+test('页脚在数据版本后显示构建短 SHA（7 位十六进制）', async ({ page }) => {
+  await page.goto('#/builds');
+  const foot = page.locator('footer .fbfoot');
+  await expect(foot.locator('[data-t="footer-build"]')).toHaveText(/^构建 [0-9a-f]{7}$/);
+  expect(await foot.innerText()).toMatch(/数据版本：[^\n]*构建 [0-9a-f]{7}/);
+});

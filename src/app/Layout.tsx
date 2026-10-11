@@ -111,7 +111,10 @@ export function Layout({ children }: { children: ReactNode }) {
           <FeedbackLink /> <FeedbackLink kind="feature" /> 发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。{' '}
           <Link to="/about-data" data-t="footer-version">
             数据版本：{versionLabel(DATA_SOURCES)}
-          </Link>
+          </Link>{' '}
+          <span className="build-id" data-t="footer-build">
+            构建 {__BUILD__}
+          </span>
         </p>
         <p className="note">面向团战排位 · 所有评分（1-10）均为主观近似评分，仅供参考；数据可能随版本补丁变化。</p>
         单位/科技/建筑图标与科技树数据来自 <a href="https://github.com/SiegeEngineers/aoe2techtree">SiegeEngineers/aoe2techtree</a>（MIT 代码；图像 ©
