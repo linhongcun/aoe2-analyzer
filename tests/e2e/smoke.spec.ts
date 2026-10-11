@@ -289,7 +289,10 @@ test('CivPicker: keyboard navigation, Esc, none option, allowed civs', async ({ 
   await expect(page.locator('.cp-panel [role="option"]')).toHaveCount(56);
   await expect(page.locator('.cp-panel .cp-q')).toBeFocused();
   await page.keyboard.type('法兰');
-  await page.keyboard.press('Enter');
+  // 等列表过滤出 Franks 再选，避免 Enter 抢在过滤前选中第一项
+  const franks = page.locator('.cp-panel [data-civ="Franks"]');
+  await expect(franks).toBeVisible();
+  await franks.click();
   await expect(page.locator('#ca')).toHaveAttribute('data-value', 'Franks');
   await expect(page.locator('#ca')).toBeFocused();
   await page.locator('#cb').click();
