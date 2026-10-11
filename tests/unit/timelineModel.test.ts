@@ -47,7 +47,14 @@ describe('timelineModel', () => {
   });
   describe('摘要主要卡点规则（Steve）', () => {
     const B = (type: Anomaly['type'], from: number, sec: number, step: number, resource?: 'food' | 'wood' | 'gold') => ({
-      type, from, to: from + sec, sec, label: '', reasonZh: '', step, ...(resource ? { resource } : {}),
+      type,
+      from,
+      to: from + sec,
+      sec,
+      label: '',
+      reasonZh: '',
+      step,
+      ...(resource ? { resource } : {}),
     });
     it('规则 1：有卡人口时卡人口优先，即使别的同类合计更长；显示开始时间', () => {
       const top = pickSummaryBottleneck([B('resource_short', 100, 300, 2, 'wood'), B('pop_block', 669, 20, 12), B('pop_block', 700, 5, 13)]);
@@ -56,7 +63,13 @@ describe('timelineModel', () => {
     });
     it('规则 2：没有卡人口时按同类合计取最长，显示合计时长', () => {
       // 木头三段合计 362 秒（6:02），比单段最长的闲置 200 秒长；黄金不同资源不并入木头
-      const list = [B('idle_tc', 50, 200, 1), B('resource_short', 300, 120, 4, 'wood'), B('resource_short', 500, 150, 6, 'gold'), B('resource_short', 700, 120, 8, 'wood'), B('resource_short', 900, 122.5, 10, 'wood')];
+      const list = [
+        B('idle_tc', 50, 200, 1),
+        B('resource_short', 300, 120, 4, 'wood'),
+        B('resource_short', 500, 150, 6, 'gold'),
+        B('resource_short', 700, 120, 8, 'wood'),
+        B('resource_short', 900, 122.5, 10, 'wood'),
+      ];
       const top = pickSummaryBottleneck(list)!;
       expect(top).toMatchObject({ type: 'resource_short', resource: 'wood', step: 4, total: 362.5 });
       expect(summaryText(top, '城堡')).toEqual({ main: '卡在木头 约 6:02', sub: '第 5 步' });
