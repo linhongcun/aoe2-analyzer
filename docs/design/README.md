@@ -5,6 +5,7 @@ SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分
 
 | Issue | 内容 | 路径 | 状态 / 签字 |
 |---|---|---|---|
+| #24 / #25 | PK 等资源计入文明训练费用加成（v3）、盈亏平衡；勘误：柏柏尔骆驼城堡 −15% = 30（v3 图上的 32 作废）、.5 结尾按原价标「未计入」、韩国「折扣未计入」、「已计入」用加成原文 muted 12px、「按X时代价格」放价格旁 | `mockups/issue24-v3/`（SPEC.md、**ERRATA.md 优先**）、`mockups/issue25-v3/`（SPEC.md） | v3 已签字；勘误 2026-10-12（Steve 裁定） |
 | #44 | 同名单位 / 易混淆（「别和 X 混淆」）/ 相关链接 | `mockups/issue44-dup-names/`（SPEC.md） | Steve 已签字（2026-10-11，a50f739 版；SPEC 出处补充 e6c5381） |
 | #19 | 分享卡：主要卡点规则（卡在木头）、卡人口变体、「链接已复制」toast（Lucide check）、置灰文明不能生成分享卡的提示 | `mockups/issue19/share-card/`（SPEC.md）、`mockups/issue19/share-controls/` | v0.4 定稿（Steve，#58） |
 | #42 | 匈奴：置灰兜底（v0.4.0 主状态）、置灰时的分享提示、flag 后的状态（示例数据） | `mockups/issue42-huns/`（README.md） | v0.4 定稿；匈奴在 v0.4.0 保持置灰 |
