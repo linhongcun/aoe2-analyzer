@@ -30,5 +30,7 @@
 - 去掉激进/保守控件。
 - 差额卡只显示当前走路档；下方 12px muted 可点一行「走路距离不同，差额会变 ›」→ 开局时间线。
 - 路由（Linus 确认）：`#/builds?bo=&civ=&dist=&house=`；civ 英文 id（Generic=通用）；dist 1–10 默认 4；house=0 为关（开时省略）；step=N 从 0 起。
-- 链接：丹麦 `#/builds?bo=fast-castle-boom&dist=4&civ=Danes`；罗马 `…&civ=Romans`；差额说明行指向罗马（领先方），dist 跟随当前档。
+- 链接：丹麦 `#/builds?bo=fast-castle-boom&dist=4&civ=Danes`；罗马 `…&civ=Romans`；差额说明行指向丹麦（Steve 定），dist 跟随当前档。
 - 标题待 Kent 核实丹麦加成后再定，本版不改。
+- 默认文明：Linus 改为 Generic，civ 缺失或无效时按「通用」计（摘要小字「按 通用 计」）。
+- 2/4/7 走路距离对照表保留。
