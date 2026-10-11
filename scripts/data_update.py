@@ -75,6 +75,8 @@ def main():
     if 'aoe2techtree' in changed or '--force' in args: run(sys.executable, 'scripts/build_data.py')
     run(sys.executable, 'scripts/dat_source.py', '--check')
     run(sys.executable, 'scripts/effects_build.py')
+    run(sys.executable, 'scripts/eco_build.py')
+    run('npx', 'vite-node', 'scripts/build_orders_check.ts')
     run('npx', 'vite-node', 'scripts/effects_audit.ts')
     run(sys.executable, 'scripts/stats_crosscheck.py')
     # 差异摘要

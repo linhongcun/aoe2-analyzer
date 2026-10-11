@@ -38,6 +38,10 @@ jobs:
         run: npm run dat:check
       - name: Data check (effects.json reproducible from pinned dat)
         run: python3 scripts/effects_build.py && git diff --exit-code -- src/data/effects.json
+      - name: Data check (eco.json reproducible from pinned dat)
+        run: python3 scripts/eco_build.py && git diff --exit-code -- src/data/eco.json docs/ECO-DATA.md
+      - name: Build-order data check
+        run: npm run bo:check
       - name: Build
         run: npm run build
       - name: Playwright smoke (chromium)

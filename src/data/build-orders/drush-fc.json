@@ -1,0 +1,273 @@
+{
+  "id": "drush-fc",
+  "name": {
+    "zh": "民兵骚扰转速升城堡",
+    "en": "Drush Fast Castle"
+  },
+  "style": "drush",
+  "civs": [],
+  "map": "Arabia",
+  "difficulty": "intermediate",
+  "target": {
+    "age": 3,
+    "vils": 29,
+    "time": "约 12:35 封建、16:05 城堡"
+  },
+  "summary": "黑暗时代 3 个民兵配合侦察骑兵骚扰，借对手被拖慢的节奏 27+2 人口快速升城堡，城堡后单靶场出弓手。",
+  "sources": [
+    {
+      "title": "AOE2 Guide — drush-fc",
+      "url": "https://aoe2guide.com/en/builds/drush-fc/",
+      "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
+      "section": "src/content/build-orders/drush-fc.yaml",
+      "ref": "themkdemiiir/aoe2-guide@f09ed56",
+      "accessed": "2026-10-11"
+    },
+    {
+      "title": "Hera — AoE2 Strategy Guide（2025-12）",
+      "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
+      "author": "Hera（经 aoe2-guide 来源索引）",
+      "section": "27+2 Vils Drush Fast Castle",
+      "accessed": "2026-10-11"
+    }
+  ],
+  "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
+  "review": {
+    "status": "reviewed",
+    "by": "Steve Jobs",
+    "date": "2026-10-11",
+    "notes": "2026-10-11 与 buildorderguide.com 交叉核对：HumzaCrumza「Pre-Mill Drush → FC」（29+2）与 Viper「Drush FC」（29+4）均为到达封建后再造村民、两座封建建筑（铁匠铺 + 靶场/市场）完成后点城堡，与本条一致；具体人口与本条（27+2）不同属不同变体。"
+  },
+  "steps": [
+    {
+      "vils": 3,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "build",
+          "count": 3
+        },
+        {
+          "type": "build",
+          "building": 70,
+          "count": 2
+        }
+      ],
+      "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。"
+    },
+    {
+      "vils": 6,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "sheep",
+          "count": 3,
+          "from": "build"
+        },
+        {
+          "type": "gather",
+          "task": "sheep",
+          "count": 3
+        }
+      ],
+      "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。"
+    },
+    {
+      "vils": 10,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "wood",
+          "count": 4
+        },
+        {
+          "type": "build",
+          "building": 562
+        }
+      ],
+      "note": "4 个去伐木并建伐木场。"
+    },
+    {
+      "vils": 11,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "boar",
+          "count": 1
+        },
+        {
+          "type": "lure",
+          "target": "boar"
+        }
+      ],
+      "note": "第 11 个引第一头野猪。"
+    },
+    {
+      "vils": 12,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "build",
+          "count": 1
+        },
+        {
+          "type": "build",
+          "building": 70,
+          "count": 2
+        },
+        {
+          "type": "build",
+          "building": 12
+        },
+        {
+          "type": "build",
+          "building": 72
+        }
+      ],
+      "note": "第 12 个盖 2 座房子后在前方盖兵营，之后持续用木栅栏筑墙。"
+    },
+    {
+      "vils": 13,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "hunt",
+          "count": 1
+        },
+        {
+          "type": "train",
+          "unit": 74,
+          "count": 3
+        }
+      ],
+      "note": "第 13 个先采够约 60 金（3 个民兵）再回去吃野猪；造 3 个民兵与侦察骑兵一起前压。不升级武士。"
+    },
+    {
+      "vils": 14,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "boar",
+          "count": 1
+        },
+        {
+          "type": "lure",
+          "target": "boar"
+        }
+      ],
+      "note": "第 14 个引第二头野猪。"
+    },
+    {
+      "vils": 19,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "berries",
+          "count": 5
+        },
+        {
+          "type": "build",
+          "building": 68
+        }
+      ],
+      "note": "5 个去浆果并建磨坊。"
+    },
+    {
+      "vils": 23,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "wood",
+          "count": 4
+        },
+        {
+          "type": "research",
+          "tech": 22
+        },
+        {
+          "type": "build",
+          "building": 70,
+          "count": 2
+        }
+      ],
+      "note": "4 个加到原伐木场；其中伐木村民顺手盖 2 座房子（人口上限约 35，够 27 村民 + 侦察 + 3 民兵）；尽早研究织布机，防对手封建侦察骑兵偷村民。"
+    },
+    {
+      "vils": 27,
+      "phase": "feudal-click",
+      "actions": [
+        {
+          "type": "gather",
+          "task": "gold",
+          "count": 4
+        },
+        {
+          "type": "ageUp",
+          "age": 2
+        }
+      ],
+      "note": "4 个去采金；点封建，期间补完墙并继续用民兵和侦察骑兵骚扰。",
+      "split": {
+        "food": 14,
+        "wood": 8,
+        "gold": 4,
+        "stone": 0,
+        "build": 1
+      }
+    },
+    {
+      "vils": 29,
+      "phase": "feudal",
+      "actions": [
+        {
+          "type": "gather",
+          "task": "gold",
+          "count": 2
+        },
+        {
+          "type": "build",
+          "building": 87
+        },
+        {
+          "type": "build",
+          "building": 103
+        }
+      ],
+      "note": "到封建：再 2 个采金；2 人建靶场、1 人建铁匠铺。"
+    },
+    {
+      "vils": 29,
+      "phase": "castle-click",
+      "actions": [
+        {
+          "type": "ageUp",
+          "age": 3
+        }
+      ],
+      "note": "27 人口点升封建，到达封建后再造 2 个村民（第 28、29 个）；靶场与铁匠铺两座封建建筑都完成后，在 29 村民时点城堡。"
+    },
+    {
+      "vils": 29,
+      "phase": "castle",
+      "actions": [
+        {
+          "type": "train",
+          "unit": 4
+        },
+        {
+          "type": "research",
+          "tech": 202
+        },
+        {
+          "type": "research",
+          "tech": 14
+        },
+        {
+          "type": "research",
+          "tech": 199
+        }
+      ],
+      "note": "到城堡：单靶场持续出弓手，研究双刃斧、马轭与箭头。"
+    }
+  ]
+}
