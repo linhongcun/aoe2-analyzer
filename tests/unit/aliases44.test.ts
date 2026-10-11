@@ -82,12 +82,7 @@ describe('#44 完全重名（自动识别）', () => {
     expect(civNote(U(1759), cz)).toBe('孟加拉');
     expect(civNote(U(1962), cz)).toBe('蜀');
   });
-  it('列表里两个楼船、两个战车都保留（之前按中文名去重会藏掉一个）', () => {
-    const ids = fams.map((x) => x.u.id);
-    for (const id of [1750, 1948, 1759, 1962]) expect(ids).toContain(id);
-    // 同一单位的两个 id（近卫军 41/759）仍只留一个
-    expect(fams.filter((x) => x.u.en === 'Huskarl').length).toBe(1);
-  });
+  // 列表里两个楼船、两个战车都保留：由 #70（按英文名去重，163）负责，#70 合入后 rebase 时在这里补断言
   it('同时出现才加文明小字', () => {
     expect(dupIdsIn([U(1750), U(1948)])).toEqual(new Set([1750, 1948]));
     expect(dupIdsIn([U(1750), U(441)]).size).toBe(0);
