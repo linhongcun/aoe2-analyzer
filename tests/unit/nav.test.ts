@@ -6,7 +6,10 @@ const visibleTools = TOOLS.filter((s) => !s.hideNav);
 
 describe('顶部导航', () => {
   it('只列出已上线的百科与工具入口', () => {
-    expect(visibleWiki.map((s) => s.key)).toEqual(['civs', 'units', 'techs', 'tree', 'buildings']);
+    expect(visibleWiki.map((s) => s.key)).toEqual(['civs', 'units', 'buildings', 'techs', 'tree']);
+    expect(visibleWiki.map((s) => s.key)).not.toContain('dlc');
+    expect(WIKI.find((s) => s.key === 'dlc')?.hideNav).toBe(true);
+    expect(WIKI.find((s) => s.key === 'buildings')?.hideNav).toBeUndefined();
     expect(visibleTools.map((s) => s.key)).toEqual(['compare', 'matchup', 'simulator', 'duel']);
   });
 

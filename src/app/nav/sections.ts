@@ -25,8 +25,6 @@ export const WIKI: Section[] = [
     match: /^\/(civs|civ\/.*)$/,
   },
   { key: 'units', path: '/units', label: '单位', en: 'Units', icon: 'users', desc: '248 个单位的属性、克制与升级路线', match: /^\/units?(\/.*)?$/ },
-  { key: 'techs', path: '/techs', label: '科技', en: 'Technologies', icon: 'flask-conical', desc: '199 项科技的效果、费用与前置', match: /^\/techs?(\/.*)?$/ },
-  { key: 'tree', path: '/tree', label: '科技树', en: 'Tech Tree', icon: 'git-branch', desc: '每个文明的完整科技树与差异对照', match: /^\/tree(\/.*)?$/ },
   {
     key: 'buildings',
     path: '/buildings',
@@ -36,6 +34,8 @@ export const WIKI: Section[] = [
     desc: '38 种建筑的属性、可生产单位与科技',
     match: /^\/buildings?(\/.*)?$/,
   },
+  { key: 'techs', path: '/techs', label: '科技', en: 'Technologies', icon: 'flask-conical', desc: '199 项科技的效果、费用与前置', match: /^\/techs?(\/.*)?$/ },
+  { key: 'tree', path: '/tree', label: '科技树', en: 'Tech Tree', icon: 'git-branch', desc: '每个文明的完整科技树与差异对照', match: /^\/tree(\/.*)?$/ },
   {
     key: 'bonuses',
     path: '/bonuses',
