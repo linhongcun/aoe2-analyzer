@@ -5,13 +5,7 @@
     "en": "18 Pop Feudal Drush"
   },
   "style": "drush",
-  "civs": [
-    "Malians",
-    "Lithuanians",
-    "Japanese",
-    "Britons",
-    "Vikings"
-  ],
+  "civs": ["Malians", "Lithuanians", "Japanese", "Britons", "Vikings"],
   "map": "Arabia",
   "difficulty": "intermediate",
   "target": {
@@ -27,13 +21,6 @@
       "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
       "section": "src/content/build-orders/18pop-feudal-drush.yaml",
       "ref": "themkdemiiir/aoe2-guide@f09ed56",
-      "accessed": "2026-10-11"
-    },
-    {
-      "title": "Hera — AoE2 Strategy Guide（2025-12）",
-      "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
-      "author": "Hera（经 aoe2-guide 来源索引）",
-      "section": "18 Vils Feudal Drush",
       "accessed": "2026-10-11"
     }
   ],

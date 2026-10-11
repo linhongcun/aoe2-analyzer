@@ -97,7 +97,7 @@ export default function BuildTimelineView() {
   }, [ranged, tagged]);
 
   const jump = (step: number) => {
-    set('step', String(step));
+    set('step', String(step + 1));
     requestAnimationFrame(() => {
       const el = document.querySelector<HTMLElement>(`[data-step="${step}"] .tl-step`);
       el?.scrollIntoView({ block: 'center' });
@@ -424,12 +424,19 @@ export default function BuildTimelineView() {
           const open = q.step === i;
           return (
             <li key={i} data-step={i} className={`${bad.has(i) ? 'is-bad' : ''}${open ? ' is-sel' : ''}`} aria-selected={open}>
-              <button type="button" className="tl-step" onClick={() => set('step', open ? null : String(i))} aria-expanded={open}>
+              <button type="button" className="tl-step" onClick={() => set('step', open ? null : String(i + 1))} aria-expanded={open}>
                 <span className="tl-num i">{i + 1}</span>
                 <span className="tl-num t" data-time>
                   约 {mmss(s.startAt)}
                 </span>
-                <span className="n">{st.note}</span>
+                <span className="n">
+                  {st.note}
+                  {st.siteAdded && (
+                    <span className="tl-site-added" data-t="site-added">
+                      本站补充，来源未列
+                    </span>
+                  )}
+                </span>
                 {s.anomalies.length > 0 && (
                   <span className="r">
                     <TriangleAlert size={14} aria-hidden /> {bottleneckLabel(pickReason(s.anomalies)!, v.tOut)}

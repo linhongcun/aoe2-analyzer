@@ -186,7 +186,8 @@ export function parseQuery(sp: URLSearchParams, boIds: string[], civIds: string[
   const d = Number(sp.get('dist'));
   const st = sp.get('step');
   const okBo = bo && boIds.includes(bo) ? bo : null;
-  const n = st !== null && /^\d+$/.test(st) ? Number(st) : null;
+  // URL 里的 step 从 1 开始（与界面步号一致），内部下标从 0 开始；0、越界、非数字视为无
+  const n = st !== null && /^\d+$/.test(st) && Number(st) >= 1 ? Number(st) - 1 : null;
   const v = sp.get('var');
   return {
     bo: okBo,
