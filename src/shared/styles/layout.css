@@ -214,27 +214,6 @@ a.hcard:hover {
   color: var(--c-gold);
   flex: none;
 }
-.soon-card {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 4px 16px;
-  background: var(--color-surface-2);
-  border: 1px solid var(--c-border);
-  border-radius: 18px;
-  padding: 22px 26px;
-}
-.soon-card h3 {
-  margin: 0;
-  color: var(--c-text);
-  font-size: 18px;
-  font-weight: 700;
-}
-.soon-card p {
-  margin: 0;
-  font-size: 15px;
-  color: var(--c-muted);
-}
 /* 能力评分标注：主观评分小字 + 问号按钮 + 说明浮层 */
 .ratehead {
   position: relative;
@@ -641,11 +620,6 @@ a.tbld:hover span {
 @media (max-width: 720px) {
   .verbadge span {
     display: none;
-  }
-  .soon-card {
-    padding: 16px;
-    flex-direction: column;
-    gap: 6px;
   }
 }
 .bo {
