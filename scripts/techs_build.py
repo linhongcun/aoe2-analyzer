@@ -17,7 +17,14 @@ for f in sorted(glob.glob(T+'trees/*.json')):
               pre=x['link_id'] if x['link_node_type']=='Research' else None,cost=g['Cost'],rt=g['ResearchTime'],
               desc=txt(z.get(str(g['LanguageNameId']+21000))),descEn=txt(e.get(str(g['LanguageNameId']+21000))),civs=[])
         if x['node_status']!='NotAvailable': techs[i]['civs'].append(civ) if civ not in techs[i]['civs'] else None
+# #12 主研究建筑：aoe2techtree 的 building_id 取自首个文明树（按文件名排序，亚美尼亚在前），
+# 会得到骡车 1808 / 强化教堂 1806 这类文明专属替代建筑。改用固定 .dat 的 ResearchAt 首项（通用建筑）。
+import sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from dat_source import load as _dat_load
+_DT=_dat_load()['Techs']
 for t in techs.values():
+    ra=[r[0] for r in _DT[t['id']]['ResearchAt']] if t['id']<len(_DT) else []
+    if ra and ra[0] in BN and ra[0]!=t['b']: print('building fix',t['id'],t['en'],t['b'],'->',ra[0]);t['b']=ra[0]
     t['bz'],t['ben']=BN.get(t['b'],('?','?'))
     if t['pre'] not in techs: t['pre']=None
 os.makedirs('public/img/techs',exist_ok=True)
