@@ -1208,6 +1208,26 @@ a.tbld:hover span {
   color: var(--color-muted);
   font-size: var(--fs-xs);
 }
+.tl-step .r .rl {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: 0;
+}
+.tl-step .r .rl + .rl {
+  margin-top: var(--space-1);
+  color: var(--color-muted);
+}
+.tl-step .r .rr {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tl-step .r .rd {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
 .tl-step .r {
   color: var(--color-bad);
   font-size: var(--fs-xs);
@@ -1391,8 +1411,8 @@ a.tbld:hover span {
     padding: var(--space-1) var(--space-2);
   }
   /* 摘要标签 12px / 数值 17px 见上方 #3 2×2 规则 */
-  .tl-summary .s,
-  .tl-civ {
+  /* 「按{文明}计」（.tl-civ）在 390 下也保持 12px（#39 规范），这里只缩误差带小字 */
+  .tl-summary .s {
     font-size: 11px;
   }
   .tl-share-slot {
@@ -1465,8 +1485,15 @@ a.tbld:hover span {
   .tl-step .r {
     flex-basis: 100%;
     max-width: none;
+    min-width: 0;
     text-align: left;
     padding-left: 88px;
+  }
+  .tl-step .r .rl {
+    justify-content: flex-start;
+  }
+  .tl-step .r .rr {
+    white-space: nowrap;
   }
   .tl-detail {
     padding-left: var(--space-4);
@@ -1581,18 +1608,13 @@ a.tbld:hover span {
   }
 }
 
-/* 临时置灰（pendingFix.ts）：计算修正中的时间与步骤 */
-.is-pending,
-.tl-steps li.is-pending,
-.tl-summary li.is-pending b {
-  color: var(--c-muted);
+/* 开局列表（Jony #49）：「按通用计」在时间下方单独一行；加成未计入的推荐文明整项置灰 */
+.bo .bo-basis {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
 }
-.tl-steps li.is-pending *,
-.tl-summary li.is-pending * {
-  color: var(--c-muted);
-}
-.pending-note {
-  color: var(--c-muted);
-  font-size: var(--fs-xs, 0.75em);
-  margin-left: 0.25em;
+.bo .bo-civ-off,
+.bo .bo-civ-off * {
+  color: var(--color-muted);
 }
