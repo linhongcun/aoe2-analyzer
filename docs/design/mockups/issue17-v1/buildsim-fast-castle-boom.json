@@ -1,0 +1,286 @@
+{
+ "bo": "fast-castle-boom",
+ "name": "速升城堡暴经济（23+2）",
+ "Danes@2": {
+  "click": 508.3,
+  "reach": 638.3,
+  "err": {
+   "early": 0,
+   "late": 104.1
+  },
+  "stockAtReach": {
+   "food": 559,
+   "wood": 91,
+   "gold": 108,
+   "stone": 200
+  },
+  "pop": {
+   "used": 24,
+   "cap": 30
+  },
+  "vils": 23,
+  "tcIdleToFeudal": 7.3,
+  "stepAtReach": {
+   "i": 9,
+   "action": "ageup",
+   "ent": "101",
+   "doneAt": 638.3
+  },
+  "ageStep": [
+   [
+    9,
+    504.7,
+    638.3,
+    559
+   ],
+   [
+    11,
+    708.9,
+    888.5,
+    711
+   ]
+  ],
+  "anomalies": [
+   "城镇中心闲置 约 3.6 秒（食物不足）",
+   "城镇中心闲置 约 3.7 秒（等待）",
+   "木头差 9（等待 约 8.7 秒）"
+  ],
+  "variant": null,
+  "model": "m2-0.1"
+ },
+ "Romans@2": {
+  "click": 500.5,
+  "reach": 630.5,
+  "err": {
+   "early": 0,
+   "late": 101
+  },
+  "stockAtReach": {
+   "food": 616,
+   "wood": 106,
+   "gold": 108,
+   "stone": 200
+  },
+  "pop": {
+   "used": 24,
+   "cap": 30
+  },
+  "vils": 23,
+  "tcIdleToFeudal": 0,
+  "stepAtReach": {
+   "i": 9,
+   "action": "ageup",
+   "ent": "101",
+   "doneAt": 630.5
+  },
+  "ageStep": [
+   [
+    9,
+    500.5,
+    630.5,
+    616
+   ],
+   [
+    11,
+    693,
+    861.2,
+    761
+   ]
+  ],
+  "anomalies": [
+   "木头差 10（等待 约 9.7 秒）",
+   "木头差 122（等待 约 84.7 秒）",
+   "木头差 4（等待 约 1.7 秒）"
+  ],
+  "variant": null,
+  "model": "m2-0.1"
+ },
+ "Danes@4": {
+  "click": 543.6,
+  "reach": 673.6,
+  "err": {
+   "early": 35.3,
+   "late": 68.8
+  },
+  "stockAtReach": {
+   "food": 563,
+   "wood": 26,
+   "gold": 106,
+   "stone": 200
+  },
+  "pop": {
+   "used": 24,
+   "cap": 25
+  },
+  "vils": 23,
+  "tcIdleToFeudal": 42.7,
+  "stepAtReach": {
+   "i": 9,
+   "action": "ageup",
+   "ent": "101",
+   "doneAt": 673.6
+  },
+  "ageStep": [
+   [
+    9,
+    504.6,
+    673.6,
+    563
+   ],
+   [
+    11,
+    768.9,
+    928.9,
+    987
+   ]
+  ],
+  "anomalies": [
+   "城镇中心闲置 约 3.6 秒（食物不足）",
+   "城镇中心闲置 约 39.1 秒（等待）",
+   "木头差 18（等待 约 21.2 秒）"
+  ],
+  "variant": null,
+  "model": "m2-0.1"
+ },
+ "Romans@4": {
+  "click": 533.1,
+  "reach": 663.1,
+  "err": {
+   "early": 32.6,
+   "late": 68.4
+  },
+  "stockAtReach": {
+   "food": 620,
+   "wood": 35,
+   "gold": 107,
+   "stone": 200
+  },
+  "pop": {
+   "used": 24,
+   "cap": 25
+  },
+  "vils": 23,
+  "tcIdleToFeudal": 32.7,
+  "stepAtReach": {
+   "i": 9,
+   "action": "ageup",
+   "ent": "101",
+   "doneAt": 663.1
+  },
+  "ageStep": [
+   [
+    9,
+    500.5,
+    663.1,
+    620
+   ],
+   [
+    11,
+    752.4,
+    912.4,
+    1049
+   ]
+  ],
+  "anomalies": [
+   "城镇中心闲置 约 32.7 秒（等待）",
+   "木头差 20（等待 约 22.2 秒）",
+   "木头差 154（等待 约 111.1 秒）"
+  ],
+  "variant": null,
+  "model": "m2-0.1"
+ },
+ "Danes@7": {
+  "click": 612.4,
+  "reach": 742.4,
+  "err": {
+   "early": 104.1,
+   "late": 0
+  },
+  "stockAtReach": {
+   "food": 757,
+   "wood": 0,
+   "gold": 125,
+   "stone": 200
+  },
+  "pop": {
+   "used": 24,
+   "cap": 30
+  },
+  "vils": 23,
+  "tcIdleToFeudal": 111.5,
+  "stepAtReach": {
+   "i": 9,
+   "action": "ageup",
+   "ent": "101",
+   "doneAt": 742.4
+  },
+  "ageStep": [
+   [
+    9,
+    547.3,
+    742.4,
+    757
+   ],
+   [
+    11,
+    875.1,
+    1035.1,
+    1470
+   ]
+  ],
+  "anomalies": [
+   "城镇中心闲置 约 3.6 秒（食物不足）",
+   "城镇中心闲置 约 107.9 秒（等待）",
+   "木头差 28（等待 约 39.9 秒）"
+  ],
+  "variant": null,
+  "model": "m2-0.1"
+ },
+ "Romans@7": {
+  "click": 601.5,
+  "reach": 731.5,
+  "err": {
+   "early": 101,
+   "late": 0
+  },
+  "stockAtReach": {
+   "food": 800,
+   "wood": 0,
+   "gold": 123,
+   "stone": 200
+  },
+  "pop": {
+   "used": 24,
+   "cap": 30
+  },
+  "vils": 23,
+  "tcIdleToFeudal": 101.1,
+  "stepAtReach": {
+   "i": 9,
+   "action": "ageup",
+   "ent": "101",
+   "doneAt": 731.5
+  },
+  "ageStep": [
+   [
+    9,
+    538.1,
+    731.5,
+    800
+   ],
+   [
+    11,
+    858.3,
+    1018.3,
+    1556
+   ]
+  ],
+  "anomalies": [
+   "城镇中心闲置 约 101.1 秒（等待）",
+   "木头差 30（等待 约 41 秒）",
+   "木头差 187（等待 约 166.1 秒）"
+  ],
+  "variant": null,
+  "model": "m2-0.1"
+ }
+}
