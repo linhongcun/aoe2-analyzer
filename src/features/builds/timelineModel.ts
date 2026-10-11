@@ -130,6 +130,12 @@ export function summaryText(b: Bottleneck | null, targetZh: string, tOut = Infin
 export const rangeText = (t: number, e: { early: number; late: number }) =>
   floorSec(t - e.early) === floorSec(t + e.late) ? null : `${mmss(t - e.early)}–${mmss(t + e.late)}`;
 
+/** 摘要卡误差带文案：「误差 m:ss–m:ss」；两端相同时返回 null（不渲染整行，Steve 定）。分享卡复用同一函数。 */
+export const rangeLabel = (t: number, e: { early: number; late: number }) => {
+  const r = rangeText(t, e);
+  return r ? `误差 ${r}` : null;
+};
+
 export function buildView(tl: BuildTimeline, unitName: (id: string) => string): TimelineView {
   const steps = [...tl.steps].sort((a, b) => a.startAt - b.startAt || a.index - b.index);
   // 超时步骤的 doneAt 是 60 分钟上限，不参与定轴长，否则整条轴被压扁

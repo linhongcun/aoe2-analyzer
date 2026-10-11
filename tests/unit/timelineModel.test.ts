@@ -12,6 +12,7 @@ import {
   rowSegments,
   segLabel,
   rangeText,
+  rangeLabel,
   rowTime,
   summaryText,
 } from '../../src/features/builds/timelineModel';
@@ -53,6 +54,9 @@ describe('timelineModel', () => {
   it('误差带两端相同不显示区间', () => {
     expect(rangeText(554, { early: 0, late: 0 })).toBeNull();
     expect(rangeText(554, { early: 0, late: 25 })).toBe('9:14–9:39');
+    // 摘要卡/分享卡标签：加「误差 」前缀；两端相同不出行
+    expect(rangeLabel(554, { early: 0, late: 25 })).toBe('误差 9:14–9:39');
+    expect(rangeLabel(554, { early: 0, late: 0 })).toBeNull();
   });
   it('卡点标签形如「卡人口 · 约 m:ss」，摘要卡人口优先', () => {
     const v = buildView(sim('archers-19', 'Britons', false), (x) => x);
