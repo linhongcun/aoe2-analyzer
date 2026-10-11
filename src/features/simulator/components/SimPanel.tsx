@@ -130,6 +130,9 @@ export function BonusTable({
   );
 }
 
+/** 类别旧称（#18：类别 29 改名冲击步兵） */
+export const CLASS_AKA: Record<string, string> = { 冲击步兵: '旧称：鹰战士类' };
+
 /** 护甲类别（防御向）：决定该对象会受到哪些克制加成 */
 export function ArmorClasses({ list }: { list: [string, number][] }) {
   const l = list.filter(([n]) => !/^类别\d+$/.test(n));
@@ -142,7 +145,7 @@ export function ArmorClasses({ list }: { list: [string, number][] }) {
       <div>
         {l.length
           ? l.map(([n, v]) => (
-              <span key={n} className="tag">
+              <span key={n} className="tag" title={CLASS_AKA[n]} aria-label={CLASS_AKA[n] ? `${n}（${CLASS_AKA[n]}）` : undefined}>
                 {n}
                 {v ? ' ' + v : ''}
               </span>

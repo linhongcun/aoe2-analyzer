@@ -6,6 +6,10 @@ import { ALL } from '../../app/nav/sections';
 import { collapse } from '../../domain/family';
 import { allCivBonuses } from '../../domain/civBonus';
 import { TYPE_ZH } from '../../domain/ratings';
+import { buildOrders } from '../../data/buildOrders';
+
+/** 科技别名（#18 范围补充：1452 又名绞盘弩） */
+export const TECH_AKA: Record<number, string[]> = { 1452: ['绞盘弩', 'cranequins'] };
 
 export function useSearchIndex(): SearchItem[] {
   const core = useCore();
@@ -36,7 +40,7 @@ export function useSearchIndex(): SearchItem[] {
         }),
       );
     core?.techs.forEach((t) =>
-      items.push({ kind: 'tech', id: String(t.id), zh: t.zh, en: t.en, href: `/tech/${t.id}`, sub: t.bz, img: `techs/${t.pic}.webp` }),
+      items.push({ kind: 'tech', id: String(t.id), zh: t.zh, en: t.en, href: `/tech/${t.id}`, sub: t.bz, img: `techs/${t.pic}.webp`, alt: TECH_AKA[t.id] }),
     );
     core?.buildings.forEach((b) =>
       items.push({ kind: 'building', id: String(b.id), zh: b.zh, en: b.en, href: `/building/${b.id}`, sub: '建筑', img: `buildings/${b.pic}.webp` }),
@@ -53,6 +57,7 @@ export function useSearchIndex(): SearchItem[] {
         alt: [civs.find((c) => c.en === b.civ)!.zh + b.zh],
       }),
     );
+    buildOrders.forEach((b) => items.push({ kind: 'page', id: 'bo-' + b.id, zh: b.name.zh, en: b.name.en, href: '/builds', sub: '开局流程' }));
     return items;
   }, [core]);
 }

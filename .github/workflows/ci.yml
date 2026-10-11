@@ -36,6 +36,8 @@ jobs:
           key: dat-${{ hashFiles('scripts/data_sources.json') }}-py312
       - name: Data check (dat sha256 + patch markers)
         run: npm run dat:check
+      - name: Data check (site stats vs pinned dat; unlisted diffs fail)
+        run: npm run stats:check
       - name: Data check (effects.json reproducible from pinned dat)
         run: python3 scripts/effects_build.py && git diff --exit-code -- src/data/effects.json
       - name: Data check (eco.json reproducible from pinned dat)

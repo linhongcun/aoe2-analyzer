@@ -114,6 +114,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/matchup', '#mres h3'],
     ['#/simulator', '#simhub .card'],
     ['#/duel', '#duel-res h3'],
+    ['#/builds', '#builds [data-t="build-order"]'],
   ];
   await page.goto('./');
   await page.getByRole('button', { name: '工具' }).click();
@@ -161,11 +162,11 @@ test('nav: 工具 dropdown toggles on click, closes on outside click and Esc', a
   await expect(tools).toHaveClass(/\bon\b/);
 });
 
-test('home: 即将推出 is one non-clickable card with the four modules', async ({ page }) => {
+test('home: 即将推出 is one non-clickable card with the planned modules', async ({ page }) => {
   await page.goto('./');
   const card = page.locator('#home .soon-card');
   await expect(card).toContainText('正在制作');
-  await expect(card).toContainText('地图 · 开局流程 · 版本补丁 · 天梯');
+  await expect(card).toHaveText(/正在制作\s*开局时间轴 · 版本补丁$/);
   await expect(card.locator('a, button')).toHaveCount(0);
   await expect(page.locator('#home .hcard.planned')).toHaveCount(0);
 });
@@ -511,7 +512,41 @@ test('rating label also on compare and matchup; old yellow note removed', async 
   await page.goto('./#/compare');
   await expect(page.locator('#compare .ratehead')).toContainText('主观评分，仅供参考');
   await page.goto('./#/matchup');
-  await expect(page.locator('#mres .note')).toContainText('主观评分，仅供参考');
-  await page.locator('#mres .note').getByRole('button', { name: '评分说明' }).click();
+  await expect(page.locator('#mres .rating-foot')).toContainText('主观评分，仅供参考');
+  await page.locator('#mres .rating-foot').getByRole('button', { name: '评分说明' }).click();
   await expect(page.getByRole('dialog', { name: '评分是怎么来的' })).toBeVisible();
+});
+
+test('#31 Ctrl+K 搜到开局流程与开局名；工具菜单首项为开局流程', async ({ page }) => {
+  await page.goto('./#/');
+  await expect(page.locator('#home .hcard[data-k="builds"]')).toBeVisible();
+  await page.keyboard.press('Control+k');
+  await page.keyboard.type('开局流程');
+  await expect(page.getByRole('dialog').getByText('开局流程').first()).toBeVisible();
+});
+
+test('#22 对建筑射程：主数字下方小字「对建筑 N」，无括号；手机 PK 缩写「建筑 N」', async ({ page }) => {
+  await page.goto('./#/unit/1968');
+  const small = page.locator('#unit [data-t="range-building"]');
+  await expect(small).toHaveText('对建筑 9');
+  await expect(page.locator('#unit')).not.toContainText('（对建筑');
+  await page.goto('./#/unit/4');
+  await expect(page.locator('#unit [data-t="range-building"]')).toHaveCount(0);
+  await page.goto('./#/duel?a=1968.Wu.4.f.');
+  await expect(page.locator('#duel-a [data-t="range-building"] .rngb-full')).toHaveText('对建筑 9');
+  await page.setViewportSize({ width: 390, height: 844 });
+  const pk = page.locator('#duel-a [data-t="range-building"]');
+  await expect(pk.locator('.rngb-short')).toHaveText('建筑 9');
+  await expect(pk.locator('.rngb-full')).toBeHidden();
+  await expect(pk).toHaveAttribute('title', '对建筑射程 9');
+});
+
+test('#27 火焰骆驼：攻击间隔「—」+ 原因小字；击杀用时「—」不为 0s', async ({ page }) => {
+  await page.goto('./#/unit/1263');
+  await expect(page.locator('#unit [data-t="rof-reason"]')).toHaveText('爆炸单位，无攻击间隔');
+  await page.goto('./#/duel?a=1263.Tatars.4.f.');
+  await expect(page.locator('#duel-a [data-t="rof-reason"]')).toHaveText('爆炸单位，无攻击间隔');
+  await expect(page.locator('#duel-a .duel-stats')).not.toContainText('-爆炸');
+  const killRow = page.locator('#duel tr', { hasText: '击杀用时' }).first();
+  await expect(killRow.locator('td').nth(1)).toHaveText('—');
 });

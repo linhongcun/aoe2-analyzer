@@ -49,6 +49,15 @@ export const WIKI: Section[] = [
   { key: 'dlc', path: '/dlc', label: 'DLC', en: 'Expansions', icon: 'package', desc: '14 个资料片与对应文明', match: /^\/dlc$/, hideNav: true },
 ];
 export const TOOLS: Section[] = [
+  {
+    key: 'builds',
+    path: '/builds',
+    label: '开局流程',
+    en: 'Build Orders',
+    icon: 'list-ordered',
+    desc: '主流开局分步骤流程；时间轴视图开发中',
+    match: /^\/builds$/,
+  },
   { key: 'compare', path: '/compare', label: '文明对比', en: 'Compare', icon: 'scale', desc: '两个文明的能力雷达与关键差异', match: /^\/compare$/ },
   { key: 'matchup', path: '/matchup', label: '对局助手', en: 'Matchup', icon: 'crosshair', desc: '根据双方文明给出反制建议', match: /^\/matchup$/ },
   {
@@ -72,16 +81,6 @@ export const TOOLS: Section[] = [
 ];
 export const FUTURE: Section[] = [
   { key: 'maps', path: '/maps', label: '地图', en: 'Maps', icon: 'map', desc: '排位地图池与地图特点', match: /^\/maps$/, status: 'planned' },
-  {
-    key: 'builds',
-    path: '/builds',
-    label: '开局流程',
-    en: 'Build Orders',
-    icon: 'list-ordered',
-    desc: '分步骤开局流程与时间轴',
-    match: /^\/builds$/,
-    status: 'planned',
-  },
   {
     key: 'patches',
     path: '/patches',
