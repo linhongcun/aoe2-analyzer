@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
+import { discountedCost, priceAge, type CostDiscount } from '../../../domain/costDiscount';
 import { duel, fighterFrom, groupFight, countForBudget, costSum, type Fighter, DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { baseUnit, collapse } from '../../../domain/family';
 import { AGE_ZH } from '../../../domain/ratings';
@@ -18,6 +19,7 @@ import { Loading } from '../../../shared/ui/widgets';
 import SimPanel, { type StatRow } from '../../simulator/components/SimPanel';
 import { SIM_ROWS } from '../../simulator/logic/format';
 import { fmtSide, parseSide, type Mode, type SideSpec } from '../logic/state';
+import { CostDiscountBlock } from './CostDiscount';
 import { UnitPicker } from './UnitPicker';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
@@ -33,6 +35,8 @@ interface Resolved {
   S: StatSet;
   F: Fighter;
   avail: ReturnType<typeof simTechs>;
+  /** 训练费用（已按已核实的常驻文明加成折算，#24） */
+  disc: CostDiscount;
 }
 function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fallback: number): Resolved {
   let u = byId[spec.uid];
@@ -44,7 +48,8 @@ function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fa
   const sel = spec.techs === 'f' ? allNumeric(avail) : spec.techs === 'c' ? presetUpTo(avail, age) : new Set(spec.techs.filter((i) => ok.has(i)));
   const fullAge = spec.techs === 'f' ? 4 : age;
   const S = simulate(ctx, u, civ, fullAge, sel, new Set(spec.team));
-  return { spec, u, civ, age: fullAge, sel, S, F: fighterFrom(u, S), avail };
+  const disc = discountedCost(u, civ, priceAge(u.age, spec.ageSet === false ? null : spec.age), { techIds: ok });
+  return { spec, u, civ, age: fullAge, sel, S, F: { ...fighterFrom(u, S), cost: disc.cost }, avail, disc };
 }
 
 export default function Duel() {
@@ -81,8 +86,8 @@ export default function Duel() {
   const A = resolve(ctx, core.unitById, parseSide(sp.get('a'), DEF_A), DEF_A.uid);
   const B = resolve(ctx, core.unitById, parseSide(sp.get('b'), DEF_B), DEF_B.uid);
   const upd = (k: 'a' | 'b', s: SideSpec) => set({ [k]: fmtSide(s) });
-  const cntA = mode === 'r' ? countForBudget(A.u.cost, bud) : mode === 'n' ? na : 1,
-    cntB = mode === 'r' ? countForBudget(B.u.cost, bud) : mode === 'n' ? nb : 1;
+  const cntA = mode === 'r' ? countForBudget(A.disc.cost, bud) : mode === 'n' ? na : 1,
+    cntB = mode === 'r' ? countForBudget(B.disc.cost, bud) : mode === 'n' ? nb : 1;
   return (
     <section id="duel" className="pane">
       <ListHead title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
@@ -115,15 +120,15 @@ export default function Duel() {
         )}
       </div>
       <div className="duel-sides">
-        <Side k="a" side={A} fams={fams} onChange={(s) => upd('a', s)} count={cntA} />
+        <Side k="a" side={A} fams={fams} onChange={(s) => upd('a', s)} count={cntA} bud={mode === 'r' ? bud : 0} />
         <div className="duel-vs">VS</div>
-        <Side k="b" side={B} fams={fams} onChange={(s) => upd('b', s)} count={cntB} />
+        <Side k="b" side={B} fams={fams} onChange={(s) => upd('b', s)} count={cntB} bud={mode === 'r' ? bud : 0} />
       </div>
       {mode === '1' ? <OneVOne A={A} B={B} /> : <Group A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />}
       <p className="note duel-note">
         <Icon name="triangle-alert" className="ic warn" />
         近似模型：伤害 = max(1, Σ max(0, 攻击类别 − 对应护甲类别))（来源：Fandom「Armor class」、aoe2.rocks 伤害计算）；双方 t=0
-        同时出手（缺少出手前摇数据）；远程按命中率取期望伤害；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、特殊能力与独特科技（仅文本）。群战为集火模型，不考虑近战包围空间；等资源按造价总和计算，未计文明折扣。结果用于比较强弱趋势，不等同于实战。
+        同时出手（缺少出手前摇数据）；远程按命中率取期望伤害；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、特殊能力与独特科技（仅文本）。群战为集火模型，不考虑近战包围空间；等资源已计入已核实的常驻文明训练费用加成；未核实的加成、团队加成与需研究的科技折扣不计入。结果用于比较强弱趋势，不等同于实战。
       </p>
     </section>
   );
@@ -135,12 +140,15 @@ function Side({
   fams,
   onChange,
   count,
+  bud,
 }: {
   k: 'a' | 'b';
   side: Resolved;
   fams: ReturnType<typeof collapse>;
   onChange: (s: SideSpec) => void;
   count: number;
+  /** 等资源预算；0 = 非等资源模式（不显示折后价） */
+  bud: number;
 }) {
   const core = useCore()!;
   const { u, spec } = side;
@@ -161,6 +169,17 @@ function Side({
           </small>
         </div>
       </div>
+      {bud > 0 && (
+        <CostDiscountBlock
+          k={k}
+          unit={u.zh}
+          civ={civByEn(side.civ)?.zh ?? side.civ}
+          d={side.disc}
+          bud={bud}
+          count={count}
+          ageNote={side.spec.ageSet === false ? (AGE_ZH[side.disc.age] ?? null) : null}
+        />
+      )}
       <div className="bar">
         <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
         {elite && (
@@ -194,7 +213,7 @@ function Side({
           [
             ['none', '无科技', () => onChange({ ...spec, techs: [] })],
             ['c', '当前时代满科技', () => onChange({ ...spec, techs: 'c' })],
-            ['f', '满科技', () => onChange({ ...spec, techs: 'f', age: 4 })],
+            ['f', '满科技', () => onChange({ ...spec, techs: 'f', age: 4, ageSet: true })],
           ] as const
         ).map(([id, l, f]) => (
           <button key={id} role="radio" aria-checked={preset === id} className={preset === id ? 'on' : undefined} onClick={f}>
@@ -379,7 +398,8 @@ function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb
       </h3>
       {bud > 0 && (
         <p className="note">
-          预算 {bud}：A {A.u.zh} × {na}（单价 {costSum(A.u.cost)}），B {B.u.zh} × {nb}（单价 {costSum(B.u.cost)}）
+          预算 {bud}：A {A.u.zh} × {na}（单价 {costSum(A.disc.cost)}，投入 {na * costSum(A.disc.cost)}），B {B.u.zh} × {nb}（单价 {costSum(B.disc.cost)}，投入{' '}
+          {nb * costSum(B.disc.cost)}）
         </p>
       )}
       <table className="stat duel-tab">
