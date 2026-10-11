@@ -50,7 +50,7 @@ nav.mainnav {
   background: var(--c-panel);
   border: 1px solid var(--c-border);
   border-radius: 8px;
-  box-shadow: 0 8px 24px #000a;
+  box-shadow: var(--shadow-2);
 }
 .tools-panel[hidden] {
   display: none;
@@ -219,7 +219,7 @@ a.hcard:hover {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 4px 16px;
-  background: linear-gradient(#2b2015, #1c150d);
+  background: var(--color-surface-2);
   border: 1px solid var(--c-border);
   border-radius: 18px;
   padding: 22px 26px;
@@ -292,7 +292,7 @@ a.hcard:hover {
   background: var(--c-panel);
   border: 1px solid var(--c-border);
   border-radius: 14px;
-  box-shadow: 0 12px 32px #000b;
+  box-shadow: var(--shadow-3);
   color: var(--c-text);
   font-size: 13px;
   font-weight: normal;
@@ -649,7 +649,7 @@ a.tbld:hover span {
   }
 }
 .bo {
-  border: 1px solid var(--line, #ddd);
+  border: 1px solid var(--line);
   border-radius: 8px;
   padding: 8px 12px;
   margin: 8px 0;
@@ -666,7 +666,7 @@ a.tbld:hover span {
   gap: 8px;
   align-items: baseline;
   padding: 3px 0;
-  border-bottom: 1px dashed var(--line, #eee);
+  border-bottom: 1px dashed var(--line);
 }
 .bo-vils {
   min-width: 2.2em;
