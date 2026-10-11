@@ -53,6 +53,13 @@ describe('timelineModel', () => {
     expect(q).toEqual({ bo: null, civ: '', dist: 4, house: true, step: null, variant: null });
     const ok = parseQuery(new URLSearchParams('bo=scouts-18&civ=Generic&step=99&var=aggr'), ['scouts-18'], ['Britons'], () => 13);
     expect(ok).toMatchObject({ civ: '', step: null, variant: 'aggr' });
+    const P = (s: string) => parseQuery(new URLSearchParams(`bo=scouts-18&step=${s}`), ['scouts-18'], [], () => 13).step;
+    expect(P('1')).toBe(0); // 1 起 → 下标 0
+    expect(P('13')).toBe(12);
+    expect(P('14')).toBeNull();
+    expect(P('0')).toBeNull();
+    expect(P('-1')).toBeNull();
+    expect(P('x')).toBeNull();
     expect(parseQuery(new URLSearchParams('bo=scouts-18'), ['scouts-18'], ['Britons']).civ).toBe('');
     expect(parseQuery(new URLSearchParams('bo=scouts-18&civ=Britons'), ['scouts-18'], ['Britons']).civ).toBe('Britons');
   });

@@ -5,13 +5,7 @@
     "en": "19 Pop 1-Range Archers"
   },
   "style": "archers",
-  "civs": [
-    "Britons",
-    "Mayans",
-    "Ethiopians",
-    "Tatars",
-    "Vikings"
-  ],
+  "civs": ["Britons", "Mayans", "Ethiopians", "Tatars", "Vikings"],
   "map": "Arabia",
   "difficulty": "intermediate",
   "target": {
@@ -27,13 +21,6 @@
       "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
       "section": "src/content/build-orders/19pop-archers.yaml",
       "ref": "themkdemiiir/aoe2-guide@f09ed56",
-      "accessed": "2026-10-11"
-    },
-    {
-      "title": "Hera — AoE2 Strategy Guide（2025-12）",
-      "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
-      "author": "Hera（经 aoe2-guide 来源索引）",
-      "section": "19 Vils 1-Range Archers",
       "accessed": "2026-10-11"
     }
   ],
@@ -58,7 +45,8 @@
           "count": 2
         }
       ],
-      "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。"
+      "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。",
+      "siteAdded": true
     },
     {
       "vils": 6,

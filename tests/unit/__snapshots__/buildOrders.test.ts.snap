@@ -32,13 +32,6 @@ exports[`build-order snapshots > archers-19 matches snapshot (data + per-step al
         "title": "AOE2 Guide — 19pop-archers",
         "url": "https://aoe2guide.com/en/builds/19pop-archers/",
       },
-      {
-        "accessed": "2026-10-11",
-        "author": "Hera（经 aoe2-guide 来源索引）",
-        "section": "19 Vils 1-Range Archers",
-        "title": "Hera — AoE2 Strategy Guide（2025-12）",
-        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
-      },
     ],
     "steps": [
       {
@@ -55,6 +48,7 @@ exports[`build-order snapshots > archers-19 matches snapshot (data + per-step al
           },
         ],
         "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。",
+        "siteAdded": true,
         "vils": 3,
       },
       {
@@ -373,13 +367,6 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
         "title": "AOE2 Guide — drush-fc",
         "url": "https://aoe2guide.com/en/builds/drush-fc/",
       },
-      {
-        "accessed": "2026-10-11",
-        "author": "Hera（经 aoe2-guide 来源索引）",
-        "section": "27+2 Vils Drush Fast Castle",
-        "title": "Hera — AoE2 Strategy Guide（2025-12）",
-        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
-      },
     ],
     "steps": [
       {
@@ -664,13 +651,6 @@ exports[`build-order snapshots > fast-castle-boom matches snapshot (data + per-s
         "section": "src/content/build-orders/fast-castle-boom.yaml",
         "title": "AOE2 Guide — fast-castle-boom",
         "url": "https://aoe2guide.com/en/builds/fast-castle-boom/",
-      },
-      {
-        "accessed": "2026-10-11",
-        "author": "Hera（经 aoe2-guide 来源索引）",
-        "section": "23+2 Vils Fast Castle Boom",
-        "title": "Hera — AoE2 Strategy Guide（2025-12）",
-        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
       },
     ],
     "steps": [
@@ -959,13 +939,6 @@ exports[`build-order snapshots > feudal-drush-18 matches snapshot (data + per-st
         "title": "AOE2 Guide — 18pop-feudal-drush",
         "url": "https://aoe2guide.com/en/builds/18pop-feudal-drush/",
       },
-      {
-        "accessed": "2026-10-11",
-        "author": "Hera（经 aoe2-guide 来源索引）",
-        "section": "18 Vils Feudal Drush",
-        "title": "Hera — AoE2 Strategy Guide（2025-12）",
-        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
-      },
     ],
     "steps": [
       {
@@ -1218,13 +1191,6 @@ exports[`build-order snapshots > maa-archers-18 matches snapshot (data + per-ste
         "section": "src/content/build-orders/maa-archers.yaml",
         "title": "AOE2 Guide — maa-archers",
         "url": "https://aoe2guide.com/en/builds/maa-archers/",
-      },
-      {
-        "accessed": "2026-10-11",
-        "author": "Hera（经 aoe2-guide 来源索引）",
-        "section": "18 Vils Generic Modern Man-at-Arms Rush",
-        "title": "Hera — AoE2 Strategy Guide（2025-12）",
-        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
       },
     ],
     "steps": [
@@ -1532,13 +1498,6 @@ exports[`build-order snapshots > scouts-18 matches snapshot (data + per-step all
         "section": "src/content/build-orders/18pop-scouts.yaml",
         "title": "AOE2 Guide — 18pop-scouts",
         "url": "https://aoe2guide.com/en/builds/18pop-scouts/",
-      },
-      {
-        "accessed": "2026-10-11",
-        "author": "Hera（经 aoe2-guide 来源索引）",
-        "section": "18 Vils 1-Stable Scouts",
-        "title": "Hera — AoE2 Strategy Guide（2025-12）",
-        "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
       },
     ],
     "steps": [
