@@ -4,6 +4,7 @@ import { civs } from '../../../data';
 import { AXES } from '../../../domain/ratings';
 import type { Civ } from '../../../domain/types';
 import { CivIcon } from '../../../shared/ui/art';
+import { RatingHeading } from '../../../shared/ui/RatingHelp';
 import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 
@@ -61,8 +62,9 @@ export default function Compare() {
           </tbody>
         </table>
         <div>
+          <RatingHeading />
           <Radar id="crd" list={[a, b]} />
-          <p className="note">金色=左侧文明，蓝色=右侧文明；主观近似评分</p>
+          <p className="note">金色=左侧文明，蓝色=右侧文明</p>
         </div>
       </div>
       <div id="cpos">

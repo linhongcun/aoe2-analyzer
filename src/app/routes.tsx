@@ -24,13 +24,13 @@ const BonusDetail = lazy(() => import('../features/bonuses/components/BonusDetai
 const BonusList = lazy(() => import('../features/bonuses/components/BonusList'));
 const Matchup = lazy(() => import('../features/matchup/components/Matchup'));
 
-/** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list */
+/** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list→#civs */
 export function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/civs" element={<Navigate to="/list" replace />} />
-      <Route path="/list" element={<CivList />} />
+      <Route path="/civs" element={<CivList />} />
+      <Route path="/list" element={<Navigate to="/civs" replace />} />
       <Route path="/civ/:en" element={<CivDetail />} />
       <Route path="/civ/:en/bonus/:idx" element={<BonusDetail />} />
       <Route path="/bonuses" element={<BonusList />} />
