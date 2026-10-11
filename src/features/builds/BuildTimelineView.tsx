@@ -11,10 +11,11 @@ import { CivPicker } from '../../shared/ui/CivPicker';
 import { Breadcrumbs } from '../../shared/ui/layout';
 import {
   RES_ZH,
-  bottleneckLabel,
   buildView,
-  pickReason,
   prereqDetail,
+  ROW_SEG_MAX,
+  rowSegments,
+  segLabel,
   rowTime,
   mmss,
   parseQuery,
@@ -437,7 +438,14 @@ export default function BuildTimelineView() {
           const s = tl.steps[i]!;
           const open = q.step === i;
           return (
-            <li key={i} data-step={i} className={`${bad.has(i) ? 'is-bad' : ''}${open ? ' is-sel' : ''}`} aria-selected={open}>
+            <li
+              key={i}
+              data-step={i}
+              data-start-at={s.startAt}
+              data-row-at={rowTime(s)}
+              className={`${bad.has(i) ? 'is-bad' : ''}${open ? ' is-sel' : ''}`}
+              aria-selected={open}
+            >
               <button type="button" className="tl-step" onClick={() => set('step', open ? null : String(i + 1))} aria-expanded={open}>
                 <span className="tl-num i">{i + 1}</span>
                 <span className="tl-num t" data-time>
@@ -453,12 +461,46 @@ export default function BuildTimelineView() {
                 </span>
                 {s.anomalies.length > 0 && (
                   <span className="r">
-                    <TriangleAlert size={14} aria-hidden /> {bottleneckLabel(pickReason(s.anomalies)!, v.tOut)}
+                    {(() => {
+                      const segs = rowSegments(s.anomalies, s.researchAt !== undefined ? { from: s.startAt, to: s.researchAt } : undefined);
+                      const shown = segs.length > ROW_SEG_MAX ? segs.slice(0, ROW_SEG_MAX - 1) : segs;
+                      const rest = segs.slice(shown.length);
+                      return (
+                        <>
+                          {shown.map((x, k) => {
+                            const label = segLabel(x, v.tOut);
+                            const cut = label.lastIndexOf(' · ');
+                            return (
+                              <span key={k} className="rl" data-t="row-seg" data-type={x.a.type} data-start={x.start} data-end={x.end}>
+                                {k === 0 && <TriangleAlert size={14} aria-hidden />}
+                                <span className="rr">{cut > 0 ? label.slice(0, cut) : label}</span>
+                                {cut > 0 && <span className="rd">{label.slice(cut)}</span>}
+                              </span>
+                            );
+                          })}
+                          {rest.length > 0 && (
+                            <span className="rl" data-t="row-seg-more">
+                              <span className="rr">另有 {rest.length} 段等待</span>
+                              {rest.map((x, k) => (
+                                <span key={k} hidden data-t="row-seg" data-type={x.a.type} data-start={x.start} data-end={x.end} />
+                              ))}
+                            </span>
+                          )}
+                        </>
+                      );
+                    })()}
                   </span>
                 )}
               </button>
               {open && sel && (
                 <div role="region" aria-label="步骤详情" className="tl-detail">
+                  {rowSegments(s.anomalies, s.researchAt !== undefined ? { from: s.startAt, to: s.researchAt } : undefined).length > ROW_SEG_MAX && (
+                    <span className="note" data-t="seg-all">
+                      {rowSegments(s.anomalies, s.researchAt !== undefined ? { from: s.startAt, to: s.researchAt } : undefined)
+                        .map((x) => segLabel(x, v.tOut))
+                        .join('；')}
+                    </span>
+                  )}
                   {s.anomalies
                     .filter((a) => a.type === 'prereq_wait')
                     .map((a, k) => (

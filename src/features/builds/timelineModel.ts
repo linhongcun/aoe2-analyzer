@@ -2,6 +2,7 @@
  * #3 M3：把 M2 的 BuildTimeline（buildSim 输出）整理成时间线界面要画的行和摘要。
  * 纯函数，不碰 React；所有数字都来自 simulateBuild，不手写示例数。
  */
+import { TC_BUSY_ZH } from '../../domain/buildSim';
 import type { Anomaly, BuildTimeline, ErrBand, Res } from '../../domain/buildSim';
 
 export type RowKey = 'tc' | 'food' | 'wood' | 'gold' | 'military';
@@ -53,6 +54,34 @@ const dur = (a: Pick<Anomaly, 'waitSec' | 'from' | 'to'>) => a.waitSec ?? a.to -
 export function pickReason<T extends Pick<Anomaly, 'type' | 'waitSec' | 'from' | 'to'>>(list: readonly T[]): T | null {
   return [...list].sort((a, b) => PRIO[a.type] - PRIO[b.type] || dur(b) - dur(a))[0] ?? null;
 }
+/** 步骤行的一段等待：原因 + 这段在时间上的起止（秒） */
+export interface RowSeg<T> {
+  a: T;
+  start: number;
+  end: number;
+}
+/** 步骤行要列出的原因（#51）：互相重叠的原因只留优先级最高的一条（pickReason）；前后接续、不重叠的各成一段，按时间先后。
+ *  传入 clip（步骤开始 → 实际开始研究）时，每段裁到这个区间内，各段时长之和就是行时间的跳变。 */
+export function rowSegments<T extends Pick<Anomaly, 'type' | 'waitSec' | 'from' | 'to'>>(list: readonly T[], clip?: { from: number; to: number }): RowSeg<T>[] {
+  const groups: { from: number; to: number; items: T[] }[] = [];
+  for (const a of [...list].sort((x, y) => x.from - y.from || x.to - y.to)) {
+    const g = groups[groups.length - 1];
+    // 区间有交叠（接缝 ≤ 0.05 秒不算）归入同一组；零长度的（如超时）贴着上一组时也算交叠
+    if (g && (a.from < g.to - 0.05 || (a.to - a.from <= 0.05 && a.from <= g.to + 0.05))) {
+      g.items.push(a);
+      g.to = Math.max(g.to, a.to);
+    } else groups.push({ from: a.from, to: a.to, items: [a] });
+  }
+  const segs = groups.map((g) => ({ a: pickReason(g.items)!, start: g.from, end: g.to }));
+  if (!clip) return segs;
+  return segs
+    .map((x) => ({ ...x, start: Math.max(x.start, clip.from), end: Math.min(x.end, clip.to) }))
+    .filter((x, k) => x.end - x.start > 0.05 || (k === 0 && segs.length === 1));
+}
+/** 一段的文案：「原因 · 约 m:ss」，时长取这一段的长度 */
+export const segLabel = (x: RowSeg<Anomaly>, tOut = Infinity) => bottleneckLabel({ ...x.a, waitSec: x.end - x.start }, tOut);
+/** 行内最多 3 行；超过时第 3 行写「另有 N 段等待」 */
+export const ROW_SEG_MAX = 3;
 const VILLAGER = '83';
 
 /** 约 m:ss */
@@ -67,7 +96,7 @@ export function bottleneckLabel(a: Anomaly, tOut = Infinity): string {
   if (a.type === 'idle_tc') return `城镇中心闲置 · 约 ${d}`;
   if (a.type === 'pop_block') return `卡人口 · 约 ${d}`;
   if (a.type === 'prereq_wait') return `等前置建筑 · 约 ${d}`;
-  if (a.type === 'tc_busy') return `${a.busy === 'research' ? '城镇中心在研究' : '城镇中心在造村民'} · 约 ${d}`;
+  if (a.type === 'tc_busy') return `${TC_BUSY_ZH[a.busy ?? 'vil']} · 约 ${d}`;
   if (a.type === 'resource_short') return `${a.resource ? RES_ZH[a.resource] : '资源'}差 ${a.shortfall ?? '?'} · 约 ${d}`;
   return '60 分钟内到不了';
 }

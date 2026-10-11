@@ -124,7 +124,7 @@ describe('研究类步骤行时间 = 实际开始研究时刻（Steve #3）', ()
         });
 });
 
-describe('城镇中心在造村民（Kent #51）', () => {
+describe('等城镇中心（Kent #51）', () => {
   it('drush-fc 织布：缺资源之后等城镇中心造完村民的那段记为 tc_busy', () => {
     const tl = simulateBuild(
       buildOrders.find((b) => b.id === 'drush-fc')!,
@@ -136,6 +136,6 @@ describe('城镇中心在造村民（Kent #51）', () => {
     const s = tl.steps.find((x) => x.action === 'research' && x.researchAt! > x.startAt + 0.5)!;
     const busy = s.anomalies.find((a) => a.type === 'tc_busy')!;
     expect(busy).toMatchObject({ busy: 'vil', to: s.researchAt });
-    expect(busy.reasonZh).toMatch(/^城镇中心在造村民/);
+    expect(busy.reasonZh).toMatch(/^等城镇中心（在造村民）/);
   });
 });

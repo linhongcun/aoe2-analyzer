@@ -66,6 +66,9 @@ export interface SimParams {
 export const WALK = { min: 1, max: 10, presets: { near: 2, mid: 4, far: 7 }, default: 4 } as const;
 export const DEFAULT_PARAMS: SimParams = { walkTiles: WALK.default, nearTiles: WALK.presets.near, idleThreshold: 2, team: false, autoHouses: true };
 
+/** 城镇中心忙的卡点文案（Steve 定稿；只在这里改） */
+export const TC_BUSY_ZH: Record<'vil' | 'research', string> = { vil: '等城镇中心（在造村民）', research: '等城镇中心（在研究）' };
+
 export interface Anomaly {
   type: 'idle_tc' | 'pop_block' | 'prereq_wait' | 'resource_short' | 'tc_busy' | 'timeout';
   /** tc_busy：城镇中心当时在忙什么（造村民 / 研究） */
@@ -718,7 +721,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
             waitSec: wait,
             from: r1(p.queuedAt),
             to: r1(t),
-            reasonZh: `${busy === 'vil' ? '城镇中心在造村民' : '城镇中心在研究'} 约 ${wait} 秒`,
+            reasonZh: `${TC_BUSY_ZH[busy]} 约 ${wait} 秒`,
           });
         }
         tcState = { kind: 'research', left: time, p };
