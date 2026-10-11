@@ -61,18 +61,20 @@ for (const width of WIDTHS) {
       await expect(page.locator('#duel-res .duel-chart')).toBeVisible();
       await noHScroll(page);
       const box = await page.evaluate(() => {
-        const chart = document.querySelector('#duel-res .duel-chart')!.getBoundingClientRect();
+        const chartEl = document.querySelector('#duel-res .duel-chart')!;
+        const chart = chartEl.getBoundingClientRect();
+        const start = Math.min(...[...chartEl.querySelectorAll('path')].map((p) => p.getBoundingClientRect().left));
         const axis = document.querySelector('#duel-res .duel-chart + .tl-axis')!;
         const s = axis.querySelectorAll('span');
         const a = s[0]!.getBoundingClientRect();
         const b = s[s.length - 1]!.getBoundingClientRect();
         const ax = axis.getBoundingClientRect();
-        return { cl: chart.left, cr: chart.right, al: a.left, br: b.right, xl: ax.left, xr: ax.right };
+        return { start, cl: chart.left, cr: chart.right, al: a.left, br: b.right, xl: ax.left, xr: ax.right };
       });
       expect(box.xl).toBeGreaterThanOrEqual(box.cl - 1);
       expect(box.xr).toBeLessThanOrEqual(box.cr + 1);
-      // 末尾刻度贴齐图表右缘；「0s」在图表内（base.css .tl-axis margin-left:24px 使其距左缘 24px，见 PR 说明）
-      expect(box.al).toBeGreaterThanOrEqual(box.cl - 1);
+      // 「0s」左缘 = 曲线起点（群战图没有标签列）±1px；末尾刻度贴齐图表右缘
+      expect(Math.abs(box.al - box.start)).toBeLessThanOrEqual(1);
       expect(Math.abs(box.br - box.cr)).toBeLessThanOrEqual(1);
       await eachInViewport(page, '#duel-res');
     });

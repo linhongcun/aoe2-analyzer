@@ -1876,6 +1876,10 @@ a.tbld:hover span {
   position: static;
   height: auto;
 }
+/* 群战图没有标签列，曲线从图表左缘起画：「0s」对齐曲线起点 */
+.duel-chart + .tl-axis {
+  margin-left: 0;
+}
 .duel-tl .tl-axis span,
 .duel-chart + .tl-axis span {
   position: static;
