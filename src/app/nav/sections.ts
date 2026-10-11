@@ -31,7 +31,7 @@ export const WIKI: Section[] = [
     label: '单位',
     en: 'Units',
     icon: 'users',
-    desc: `${unitCountLabel(__UNIT_COUNT__)}。属性、克制与升级路线`,
+    desc: `${unitCountLabel(__UNIT_COUNT__)}的属性、克制与升级路线`,
     match: /^\/units?(\/.*)?$/,
   },
   {

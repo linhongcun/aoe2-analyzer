@@ -88,4 +88,4 @@ export function affectedUnits(groups: readonly { rows: readonly { units: readonl
 /** 单位总数口径（#14，Steve 定）：只数玩家能选的单位系列，精锐版并入对应单位计。首页与列表页共用 */
 export const UNIT_COUNT_NOTE = '精锐版并入对应单位计';
 export const unitCount = (units: readonly Unit[], f: Families): number => collapse(units, f).length;
-export const unitCountLabel = (n: number): string => `${n} · ${UNIT_COUNT_NOTE}`;
+export const unitCountLabel = (n: number): string => `${n} 个单位（${UNIT_COUNT_NOTE}）`;
