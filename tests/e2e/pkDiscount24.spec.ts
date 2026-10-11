@@ -181,9 +181,15 @@ for (const w of [360, 375, 390]) {
         const btn = A(page).locator(`[data-t="${row}"] [data-t="pk-src-btn"]`);
         await expect(btn).toBeVisible();
         const r = await btn.evaluate((e) => {
-          const range = document.createRange();
-          range.selectNodeContents(e);
-          const lines = new Set([...range.getClientRects()].filter((x) => x.width > 0).map((x) => Math.round(x.top)));
+          // 只量文字「来源」本身：逐字取位置，同一行则 top 相同
+          const t = [...e.childNodes].find((n) => n.nodeType === 3 && n.textContent!.trim())!;
+          const tops = [...t.textContent!].map((_, i) => {
+            const range = document.createRange();
+            range.setStart(t, i);
+            range.setEnd(t, i + 1);
+            return Math.round(range.getBoundingClientRect().top);
+          });
+          const lines = new Set(tops);
           return { lines: lines.size, h: e.getBoundingClientRect().height, lh: parseFloat(getComputedStyle(e).lineHeight) || 20 };
         });
         expect(r.lines).toBe(1);
