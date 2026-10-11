@@ -41,6 +41,8 @@ export interface Step {
   note?: string;
   /** 来源给出的资源分配检查点；校验时与按动作累计的分配比对 */
   split?: Split;
+  /** 本站补充、来源未列出的步骤（界面会标注「本站补充，来源未列」） */
+  siteAdded?: boolean;
 }
 
 export interface Source {
@@ -115,6 +117,7 @@ export function checkShape(bo: unknown): string[] {
       if (!isObj(st)) return e.push(`${p} 不是对象`);
       if (!isInt(st.vils, 3) || (st.vils as number) > 200) e.push(`${p}.vils 必须为 3–200 的整数`);
       if (st.phase !== undefined && !PHASES.includes(st.phase as Phase)) e.push(`${p}.phase 无效`);
+      if (st.siteAdded !== undefined && typeof st.siteAdded !== 'boolean') e.push(`${p}.siteAdded 必须为布尔值`);
       if (st.note !== undefined && typeof st.note !== 'string') e.push(`${p}.note 必须为字符串`);
       if (!Array.isArray(st.actions)) return e.push(`${p}.actions 必须为数组`);
       if (st.actions.length === 0 && !st.note) e.push(`${p} 既无动作也无说明`);

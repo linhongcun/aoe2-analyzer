@@ -22,13 +22,6 @@
       "section": "src/content/build-orders/maa-archers.yaml",
       "ref": "themkdemiiir/aoe2-guide@f09ed56",
       "accessed": "2026-10-11"
-    },
-    {
-      "title": "Hera — AoE2 Strategy Guide（2025-12）",
-      "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
-      "author": "Hera（经 aoe2-guide 来源索引）",
-      "section": "18 Vils Generic Modern Man-at-Arms Rush",
-      "accessed": "2026-10-11"
     }
   ],
   "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",

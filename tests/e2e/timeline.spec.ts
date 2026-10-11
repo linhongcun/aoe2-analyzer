@@ -104,7 +104,7 @@ test.describe('#3 开局时间线', () => {
     const cell = page.locator('[data-t="sum-bottleneck"]');
     await expect(cell).toContainText('第 13 步');
     await cell.getByRole('button').click();
-    await expect(page).toHaveURL(/[?&]step=12(&|$)/);
+    await expect(page).toHaveURL(/[?&]step=13(&|$)/);
     const row = page.locator('[data-step="12"]');
     await expect(row).toHaveAttribute('aria-selected', 'true');
     await expect(row).toBeInViewport();
@@ -116,7 +116,7 @@ test.describe('#3 开局时间线', () => {
     const detail = page.getByRole('region', { name: /步骤详情/ });
     await expect(detail).toHaveCount(0);
     await steps(page).nth(2).getByRole('button').click();
-    await expect(page).toHaveURL(/[?&]step=2/);
+    await expect(page).toHaveURL(/[?&]step=3(&|$)/);
     for (const k of ['食物', '木头', '黄金', '石头', '人口']) await expect(detail.getByText(k).first()).toBeVisible();
     await steps(page).nth(2).getByRole('button').click();
     await expect(detail).toHaveCount(0);
@@ -363,5 +363,28 @@ test.describe('#3 开局时间线', () => {
     await err.getByRole('button', { name: '重试' }).click();
     await expect(page.getByRole('list', { name: /时间线/ })).toBeVisible();
     await expect(err).toHaveCount(0);
+  });
+
+  test('step 参数从 1 开始：打开 step=N 选中界面第 N 步；点第 K 步写 step=K', async ({ page }) => {
+    await openBuild(page, 'bo=scouts-18&civ=Franks&house=0');
+    const m = (await page.locator('[data-t="sum-bottleneck"]').innerText()).match(/第 (\d+) 步/);
+    expect(m).not.toBeNull();
+    const n = Number(m![1]);
+    await openBuild(page, `bo=scouts-18&civ=Franks&house=0&step=${n}`);
+    const sel = page.locator('.tl-steps li[aria-selected="true"]');
+    await expect(sel).toHaveCount(1);
+    await expect(sel.locator('.tl-num.i')).toHaveText(String(n));
+    await expect(sel.getByRole('region', { name: /步骤详情/ })).toBeVisible();
+    await steps(page).nth(4).getByRole('button').click();
+    await expect(steps(page).nth(4).locator('.tl-num.i')).toHaveText('5');
+    await expect(page).toHaveURL(/[?&]step=5(&|$)/);
+    await openBuild(page, 'bo=scouts-18&civ=Franks&house=0&step=0');
+    await expect(page.getByRole('region', { name: /步骤详情/ })).toHaveCount(0);
+  });
+
+  test('本站补充的步骤显示「本站补充，来源未列」，其他步骤不显示', async ({ page }) => {
+    await openBuild(page, 'bo=archers-19&civ=Britons');
+    await expect(steps(page).nth(0).locator('[data-t="site-added"]')).toHaveText('本站补充，来源未列');
+    await expect(page.locator('[data-t="site-added"]')).toHaveCount(1);
   });
 });
