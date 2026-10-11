@@ -1,7 +1,7 @@
 {
   "id": "maa-archers-18",
   "name": {
-    "zh": "18 人口民兵升级武士（Man-at-Arms）转弓手",
+    "zh": "18 人口民兵升级武士（Man-at-Arms）速攻转弓手",
     "en": "18 Pop Generic Man-at-Arms Rush"
   },
   "style": "maa",
@@ -204,7 +204,7 @@
           "unit": 75
         }
       ],
-      "note": "2 人从肉类去建金矿营地采金（8 木 7 食 2 金）；连续出 3 个民兵并研究武士升级。",
+      "note": "2 人从肉类去建金矿营地采金（8 木 7 食 2 金）；连续出 3 个民兵并研究民兵→武士（Man-at-Arms）升级。",
       "split": {
         "food": 7,
         "wood": 8,

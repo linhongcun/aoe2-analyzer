@@ -482,7 +482,7 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
             "unit": 74,
           },
         ],
-        "note": "第 13 个先采够约 60 金（3 个民兵费用）再回去吃野猪；造 3 个民兵与侦察骑兵一起前压。不升级武士。",
+        "note": "第 13 个先采够约 60 金（3 个民兵）再回去吃野猪；造 3 个民兵与侦察骑兵一起前压。不升级武士。",
         "vils": 13,
       },
       {
@@ -528,10 +528,11 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
           },
           {
             "building": 70,
+            "count": 2,
             "type": "build",
           },
         ],
-        "note": "4 个加到原伐木场；期间再盖一座房子（保证 27 人口点封建不卡人口）；尽早研究织布机，防对手封建侦察骑兵偷村民。",
+        "note": "4 个加到原伐木场；其中伐木村民顺手盖 2 座房子（人口上限约 35，够 27 村民 + 侦察 + 3 民兵）；尽早研究织布机，防对手封建侦察骑兵偷村民。",
         "vils": 23,
       },
       {
@@ -782,7 +783,7 @@ exports[`build-order snapshots > fast-castle-boom matches snapshot (data + per-s
             "type": "build",
           },
         ],
-        "note": "4 个去浆果；其中 1 人先盖一座房子（人口约 20 前补房，避免卡人口）。",
+        "note": "4 个去浆果；其中一人先盖一座房子（人口上限约 25），避免卡在约 20。",
         "vils": 17,
       },
       {
@@ -809,8 +810,12 @@ exports[`build-order snapshots > fast-castle-boom matches snapshot (data + per-s
             "task": "wood",
             "type": "gather",
           },
+          {
+            "building": 70,
+            "type": "build",
+          },
         ],
-        "note": "4 个去伐木，仍用同一个伐木场。",
+        "note": "4 个去伐木，仍用同一个伐木场；顺手再盖一座房子（人口上限约 30，够 25 村民 + 侦察）。",
         "vils": 21,
       },
       {
@@ -1159,7 +1164,7 @@ exports[`build-order snapshots > feudal-drush-18 matches snapshot (data + per-st
             "type": "gather",
           },
         ],
-        "note": "18 人口点升封建（升级期间城镇中心不能造村民），到达封建后再造的 2 个村民（第 19、20 个）默认补靶场转弓手；若侦察到对方出骑则改补矛兵，并慢慢筑墙。",
+        "note": "18 人口点升封建（升级期间城镇中心不能造村民），到达封建后再造的 2 个村民（第 19、20 个）根据侦察结果补后续军事建筑，并慢慢筑墙。默认补靶场转弓，遇骑则补矛。",
         "vils": 20,
       },
     ],
@@ -1198,7 +1203,7 @@ exports[`build-order snapshots > maa-archers-18 matches snapshot (data + per-ste
     "map": "Arabia",
     "name": {
       "en": "18 Pop Generic Man-at-Arms Rush",
-      "zh": "18 人口民兵升级武士（Man-at-Arms）转弓手",
+      "zh": "18 人口民兵升级武士（Man-at-Arms）速攻转弓手",
     },
     "review": {
       "by": "Steve Jobs",
@@ -1388,7 +1393,7 @@ exports[`build-order snapshots > maa-archers-18 matches snapshot (data + per-ste
             "unit": 75,
           },
         ],
-        "note": "2 人从肉类去建金矿营地采金（8 木 7 食 2 金）；连续出 3 个民兵并研究武士升级。",
+        "note": "2 人从肉类去建金矿营地采金（8 木 7 食 2 金）；连续出 3 个民兵并研究民兵→武士（Man-at-Arms）升级。",
         "split": {
           "build": 1,
           "food": 7,
@@ -1729,7 +1734,7 @@ exports[`build-order snapshots > scouts-18 matches snapshot (data + per-step all
             "unit": 448,
           },
         ],
-        "note": "再从肉类调 1 人建马厩，与前面造兵营的村民共 2 名建造者；马厩建好立即连续出侦察骑兵。",
+        "note": "再从肉类调 1 人建马厩，与前面造兵营的村民共 2 名建造者；马厩建好立即连续出侦察骑兵。马厩开造后城镇中心继续排村民，不要停在 18。",
         "vils": 18,
       },
       {

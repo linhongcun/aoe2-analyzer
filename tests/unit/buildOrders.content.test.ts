@@ -72,6 +72,11 @@ describe('Reid/Steve 合并前必改（内容回归）', () => {
     expect(bo.name.zh).not.toMatch(/暴兵/);
   });
 
+  it('scouts-18：马厩开造后注明城镇中心继续排村民', () => {
+    const bo = loadBo('scouts-18');
+    expect(bo.steps.some((s) => /继续排村民|不要停在\s*18/.test(s.note ?? ''))).toBe(true);
+  });
+
   it('全部开局保持 reviewed', () => {
     for (const bo of buildOrders) {
       expect(bo.review.status, bo.id).toBe('reviewed');
