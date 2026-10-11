@@ -5,15 +5,23 @@ import buildings from '../src/data/buildings.json';
 import civs from '../src/data/civs.json';
 import { buildOrders, refData } from '../src/data/buildOrders';
 import { checkSemantics, splitOf, validateBuildOrder } from '../src/domain/buildOrder';
+import eco from '../src/data/eco.json';
+import { unknownCivEffects, type EcoData } from '../src/domain/buildSim';
 
 const ref = refData(units, techs, buildings, civs);
 let bad = 0;
 for (const b of buildOrders) {
   const e = validateBuildOrder(b, ref);
   const last = splitOf(checkSemantics(b, ref).allocs.at(-1)!);
-  console.log(`${e.length ? '✗' : '✓'} ${b.id.padEnd(18)} ${b.name.zh}  步骤 ${b.steps.length}  终态 食${last.food}/木${last.wood}/金${last.gold}/石${last.stone}/建${last.build}`);
+  console.log(
+    `${e.length ? '✗' : '✓'} ${b.id.padEnd(18)} ${b.name.zh}  步骤 ${b.steps.length}  终态 食${last.food}/木${last.wood}/金${last.gold}/石${last.stone}/建${last.build}`,
+  );
   e.forEach((x) => console.log('    ' + x));
   bad += e.length;
 }
+// 文明加成覆盖：buildSim 不认识的加成类型直接报错（不能静默跳过）
+const unknown = unknownCivEffects(eco as unknown as EcoData, buildOrders);
+unknown.forEach((x) => console.log('✗ 未知文明加成类型（buildSim 未处理也未登记忽略）: ' + x));
+bad += unknown.length;
 console.log(`${buildOrders.length} 个开局，${bad} 个错误`);
 if (bad) process.exit(1);
