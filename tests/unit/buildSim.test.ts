@@ -25,6 +25,12 @@ describe('golden snapshots (Britons, default params)', () => {
   });
 });
 
+describe('golden snapshots (Spanish, default params, #42)', () => {
+  it.each(buildOrders.map((b) => [b.id, b] as const))('%s', (_id, bo) => {
+    expect(compact(sim(bo, 'Spanish'))).toMatchSnapshot();
+  });
+});
+
 describe('determinism & coverage', () => {
   it('same input -> identical output', () => {
     const bo = buildOrders[0]!;
