@@ -214,7 +214,7 @@ def main():
         'generated_by': 'scripts/effects_build.py',
         'sources': [
             {'id': 'DAT', 'repo': DAT_SRC['repo'], 'commit': DAT_SRC['commit'][:7], 'file': DAT_SRC['path'], 'sha256': DAT_SRC['sha256'], 'patch': DAT_SRC['patch'], 'use': '全部 EffectCommands（战斗 + 经济/费用）、科技前置、文明科技树/团队加成；datVersion %s' % A.get('Version')},
-            {'id': 'C', 'repo': 'linhongcun/lhc-aoe2', 'commit': '6fdb912', 'file': 'lib/data/unitTechFx.ts', 'patch': '作者本机 .dat（2026-08）', 'use': '对账参考'},
+            {'id': 'C', 'repo': 'linhongcun/lhc-aoe2', 'commit': '6fdb912', 'file': 'lib/data/unitTechFx.ts', 'patch': '作者本机 .dat（2026-08）', 'use': '对账参考（仅 EFFECTS-AUDIT 第五节；不影响 effects.json）'},
         ]}, 'techs': {}, 'civs': {}}
 
     # ---- 通用科技 ----
@@ -304,10 +304,6 @@ def main():
         fr['team'] = freshness(c['tbEn'], [{'age': 1, 'rules': ent['team']['rules'], 'eco': ent['team']['eco'], 'combat': ent['team']['combat']}])
         ent['fresh'] = fr
 
-    # ---- C：与 lhc-aoe2（2026-08 .dat）对账 ----
-    m = re.search(r'=\s*(\{.*\})\s*;?\s*$', lhc_src, re.S)
-    lhc = json.loads(m.group(1)) if m else {}
-    out['meta']['lhc_techs'] = len(lhc)
     # .dat 中不存在的站内单位/建筑（应为空）：其科技/加成作用范围由运行时回退到手工判定
     U0 = AC[0]['Units']
     out['meta']['newIds'] = sorted(i for i in ours if i >= len(U0) or U0[i] is None)
