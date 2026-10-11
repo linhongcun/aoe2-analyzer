@@ -8,7 +8,7 @@ header.topbar {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: #0d0906ee;
+  background: var(--color-surface);
   border-bottom: 2px solid var(--c-bronze);
 }
 .brand {
@@ -50,7 +50,7 @@ nav.mainnav {
   background: var(--c-panel);
   border: 1px solid var(--c-border);
   border-radius: 8px;
-  box-shadow: 0 8px 24px #000a;
+  box-shadow: var(--shadow-2);
 }
 .tools-panel[hidden] {
   display: none;
@@ -186,7 +186,7 @@ nav.crumbs .ic {
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  background: linear-gradient(#2b2015, #1c150d);
+  background: var(--color-surface);
   border: 1px solid var(--c-border);
   border-radius: 10px;
   padding: 14px;
@@ -198,7 +198,7 @@ nav.crumbs .ic {
 a.hcard:hover {
   border-color: var(--c-gold);
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px #000;
+  box-shadow: 0 4px 14px var(--color-shadow);
 }
 .hcard h3 {
   margin: 0 0 4px;
@@ -219,7 +219,7 @@ a.hcard:hover {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 4px 16px;
-  background: linear-gradient(#2b2015, #1c150d);
+  background: var(--color-surface-2);
   border: 1px solid var(--c-border);
   border-radius: 18px;
   padding: 22px 26px;
@@ -292,7 +292,7 @@ a.hcard:hover {
   background: var(--c-panel);
   border: 1px solid var(--c-border);
   border-radius: 14px;
-  box-shadow: 0 12px 32px #000b;
+  box-shadow: var(--shadow-3);
   color: var(--c-text);
   font-size: 13px;
   font-weight: normal;
@@ -340,7 +340,7 @@ a.hcard:hover {
 .cmdk-mask {
   position: fixed;
   inset: 0;
-  background: #000a;
+  background: var(--color-scrim);
   z-index: 50;
   display: flex;
   justify-content: center;
@@ -352,7 +352,7 @@ a.hcard:hover {
   background: var(--c-panel);
   border: 1px solid var(--c-bronze);
   border-radius: 12px;
-  box-shadow: 0 10px 40px #000;
+  box-shadow: var(--shadow-3);
   overflow: hidden;
 }
 .cmdk-in {
@@ -487,7 +487,7 @@ main {
     left: 0;
     right: 0;
     top: 100%;
-    background: #0d0906f8;
+    background: var(--color-surface);
     flex-direction: column;
     padding: 10px 14px;
     border-bottom: 2px solid var(--c-bronze);
@@ -570,7 +570,7 @@ a.tbld:hover span {
 }
 .affg h4 {
   margin: 6px 0;
-  border-bottom: 1px solid var(--line, #4a3a26);
+  border-bottom: 1px solid var(--line);
 }
 .affrow {
   display: flex;
@@ -605,7 +605,7 @@ a.tbld:hover span {
 .fbbtn {
   font-size: 12px;
   padding: 3px 8px;
-  border: 1px solid var(--line, #ccc);
+  border: 1px solid var(--line);
   border-radius: 6px;
   color: inherit;
   opacity: 0.8;
@@ -627,7 +627,7 @@ a.tbld:hover span {
   gap: 4px;
   font-size: 12px;
   padding: 3px 8px;
-  border: 1px solid var(--line, #ccc);
+  border: 1px solid var(--line);
   border-radius: 999px;
   color: inherit;
   text-decoration: none;
@@ -649,7 +649,7 @@ a.tbld:hover span {
   }
 }
 .bo {
-  border: 1px solid var(--line, #ddd);
+  border: 1px solid var(--line);
   border-radius: 8px;
   padding: 8px 12px;
   margin: 8px 0;
@@ -666,7 +666,7 @@ a.tbld:hover span {
   gap: 8px;
   align-items: baseline;
   padding: 3px 0;
-  border-bottom: 1px dashed var(--line, #eee);
+  border-bottom: 1px dashed var(--line);
 }
 .bo-vils {
   min-width: 2.2em;
