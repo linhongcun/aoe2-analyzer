@@ -7,6 +7,7 @@ import { collapse } from '../../domain/family';
 import { allCivBonuses } from '../../domain/civBonus';
 import { TYPE_ZH } from '../../domain/ratings';
 import { buildOrders } from '../../data/buildOrders';
+import { BUILD_ALIASES, UNIT_ALIASES } from '../../data/aliases';
 
 /** 科技别名（#18 范围补充：1452 又名绞盘弩） */
 export const TECH_AKA: Record<number, string[]> = { 1452: ['绞盘弩', 'cranequins'] };
@@ -37,6 +38,7 @@ export function useSearchIndex(): SearchItem[] {
           sub: elite ? `${u.bz} · 含精锐` : u.bz,
           img: `units/${u.pic}.webp`,
           alt: elite ? [elite.zh, elite.en.toLowerCase()] : undefined,
+          aliases: UNIT_ALIASES[u.id],
         }),
       );
     core?.techs.forEach((t) =>
@@ -57,7 +59,18 @@ export function useSearchIndex(): SearchItem[] {
         alt: [civs.find((c) => c.en === b.civ)!.zh + b.zh],
       }),
     );
-    buildOrders.forEach((b) => items.push({ kind: 'page', id: 'bo-' + b.id, zh: b.name.zh, en: b.name.en, href: `/builds?bo=${b.id}`, sub: '开局时间线' }));
+    buildOrders.forEach((b) =>
+      items.push({
+        kind: 'page',
+        id: 'bo-' + b.id,
+        zh: b.name.zh,
+        en: b.name.en,
+        href: `/builds?bo=${b.id}`,
+        sub: '开局时间线',
+        aliases: BUILD_ALIASES[b.id],
+        late: true,
+      }),
+    );
     return items;
   }, [core]);
 }
