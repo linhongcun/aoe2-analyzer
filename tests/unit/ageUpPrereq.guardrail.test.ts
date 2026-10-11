@@ -109,10 +109,33 @@ describe('研究类步骤行时间 = 实际开始研究时刻（Steve #3）', ()
   for (const bo of buildOrders)
     for (const civ of CIVS)
       for (const dist of [2, 4, 7])
-        it(`行时间晚于步骤开始必须列卡点：${bo.id} · ${civ} · dist ${dist}`, () => {
+        it(`行时间晚于步骤开始，卡点区间要覆盖整段：${bo.id} · ${civ} · dist ${dist}`, () => {
           for (const [i, s] of simulateBuild(bo, civ, eco as unknown as EcoData, ups, { walkTiles: dist }).steps.entries()) {
-            if (s.researchAt !== undefined && s.researchAt - s.startAt > 0.5)
-              expect(s.anomalies.length, `第 ${i + 1} 步 ${s.startAt}→${s.researchAt}`).toBeGreaterThan(0);
+            if (s.researchAt === undefined || s.researchAt - s.startAt <= 0.5) continue;
+            // 把本行卡点区间并起来，从步骤开始往后扫，不能留下 > 0.5 秒的空档
+            const iv = s.anomalies.map((a) => [a.from, a.to] as const).sort((a, b) => a[0] - b[0]);
+            let cur = s.startAt;
+            for (const [f, t] of iv) {
+              if (f > cur + 0.5) break;
+              cur = Math.max(cur, t);
+            }
+            expect(cur, `第 ${i + 1} 步 ${s.startAt}→${s.researchAt} 只解释到 ${cur}`).toBeGreaterThanOrEqual(s.researchAt - 0.5);
           }
         });
+});
+
+describe('城镇中心在造村民（Kent #51）', () => {
+  it('drush-fc 织布：缺资源之后等城镇中心造完村民的那段记为 tc_busy', () => {
+    const tl = simulateBuild(
+      buildOrders.find((b) => b.id === 'drush-fc')!,
+      'Generic',
+      eco as unknown as EcoData,
+      ups,
+      {},
+    );
+    const s = tl.steps.find((x) => x.action === 'research' && x.researchAt! > x.startAt + 0.5)!;
+    const busy = s.anomalies.find((a) => a.type === 'tc_busy')!;
+    expect(busy).toMatchObject({ busy: 'vil', to: s.researchAt });
+    expect(busy.reasonZh).toMatch(/^城镇中心在造村民/);
+  });
 });

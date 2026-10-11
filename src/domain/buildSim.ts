@@ -67,7 +67,9 @@ export const WALK = { min: 1, max: 10, presets: { near: 2, mid: 4, far: 7 }, def
 export const DEFAULT_PARAMS: SimParams = { walkTiles: WALK.default, nearTiles: WALK.presets.near, idleThreshold: 2, team: false, autoHouses: true };
 
 export interface Anomaly {
-  type: 'idle_tc' | 'pop_block' | 'prereq_wait' | 'resource_short' | 'timeout';
+  type: 'idle_tc' | 'pop_block' | 'prereq_wait' | 'resource_short' | 'tc_busy' | 'timeout';
+  /** tc_busy：城镇中心当时在忙什么（造村民 / 研究） */
+  busy?: 'vil' | 'research';
   /** prereq_wait：还没建完的前置建筑名 */
   missing?: string[];
   /** prereq_wait：要升的时代 2/3/4 */
@@ -292,6 +294,9 @@ interface Pending {
   missing?: string[];
   /** 实际开始研究/训练的时刻 */
   startedAt?: number;
+  /** 付清、排进城镇中心研究队列的时刻与当时城镇中心在忙什么 */
+  queuedAt?: number;
+  queuedBusy?: 'vil' | 'research';
 }
 interface Construction {
   building: number;
@@ -580,7 +585,11 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           const time = (eco.techs[a.tech]?.researchTime ?? 0) * (m.techTime[a.tech] ?? 1);
           p.startedAt = r1(t);
           constructions.push({ building: -a.tech, progress: 0, bt: time, step: p.step, p, borrowed: undefined });
-        } else tcResearch.push(p);
+        } else {
+          p.queuedAt = t;
+          p.queuedBusy = tcState?.kind === 'research' ? 'research' : 'vil';
+          tcResearch.push(p);
+        }
       } else if (a.type === 'upgrade') {
         p.startedAt = r1(t);
         constructions.push({ building: -100000 - a.unit, progress: 0, bt: ups[a.unit]?.[1] ?? 0, step: p.step, p });
@@ -699,6 +708,19 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           ageUps.push({ age: a.age, clickAt: r1(t), reachAt: 0 });
         } else if (a.type === 'research') time = (eco.techs[a.tech]?.researchTime ?? 0) * (m.techTime[a.tech] ?? 1);
         p.startedAt = r1(t);
+        if (p.queuedAt !== undefined && t - p.queuedAt > 1e-9) {
+          // 付清了但城镇中心还在忙（造村民或别的研究）：这段等待也是卡点，避免行时间出现没有解释的跳变（Kent #51）
+          const wait = r1(t - p.queuedAt);
+          const busy = p.queuedBusy ?? 'vil';
+          stepAnoms[p.step]!.push({
+            type: 'tc_busy',
+            busy,
+            waitSec: wait,
+            from: r1(p.queuedAt),
+            to: r1(t),
+            reasonZh: `${busy === 'vil' ? '城镇中心在造村民' : '城镇中心在研究'} 约 ${wait} 秒`,
+          });
+        }
         tcState = { kind: 'research', left: time, p };
       } else if (!researching) {
         const nextClick = [2, 3, 4].map((a) => (a > age && !ageUps.some((x) => x.age === a) ? clickVils(a) : undefined)).find((x) => x !== undefined);
@@ -761,7 +783,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   return { startAt, doneAt, snap, stepAnoms, ageUps, researchAt, buildingsDone, tcIdleTotal: r1(tcIdleTotal), end: r1(t) };
 }
 
-const PRIO: Record<Anomaly['type'], number> = { idle_tc: 0, timeout: 1, pop_block: 2, prereq_wait: 3, resource_short: 4 };
+const PRIO: Record<Anomaly['type'], number> = { idle_tc: 0, timeout: 1, pop_block: 2, prereq_wait: 3, resource_short: 4, tc_busy: 5 };
 const primary = (acts: Action[]): Pick<TimelineStep, 'action' | 'entity'> => {
   const a = acts.find((x) => x.type === 'ageUp') ?? acts.find((x) => x.type === 'train' || x.type === 'build' || x.type === 'research' || x.type === 'upgrade');
   if (!a) return { action: 'assign' };

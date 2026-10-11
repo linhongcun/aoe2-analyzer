@@ -75,6 +75,8 @@ describe('pickReason（摘要与步骤行共用的原因优先级）', () => {
     expect(pickReason([a('prereq_wait', 0, 40), a('pop_block', 0, 5)])?.type).toBe('pop_block');
     expect(pickReason([a('resource_short', 0, 300), a('timeout', 3600, 3600), a('idle_tc', 0, 200), a('prereq_wait', 0, 4)])?.type).toBe('prereq_wait');
     expect(bottleneckLabel(a('prereq_wait', 830, 870))).toBe('等前置建筑 · 约 0:40');
+    expect(bottleneckLabel(a('tc_busy', 581, 600))).toBe('城镇中心在造村民 · 约 0:19');
+    expect(pickReason([a('tc_busy', 0, 100), a('resource_short', 0, 5)])?.type).toBe('resource_short');
     expect(prereqDetail({ age: 3, need: 2, missing: ['铁匠铺'] })).toBe('升城堡需先建完 2 座封建建筑（还差：铁匠铺）');
     expect(rowTime({ startAt: 380, researchAt: 441 })).toBe(441);
     expect(rowTime({ startAt: 380 })).toBe(380);

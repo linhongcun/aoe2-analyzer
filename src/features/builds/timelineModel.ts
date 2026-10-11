@@ -46,7 +46,7 @@ export interface TimelineView {
 export const AGE_ZH = { feudal: '封建', castle: '城堡', imperial: '帝王' } as const;
 export const RES_ZH: Record<Res, string> = { food: '食物', wood: '木头', gold: '黄金', stone: '石头' };
 /** 原因优先级（摘要与步骤行共用）：卡人口 > 等前置建筑 > 超时 > 城镇中心闲置 > 缺资源（#3 Steve 定） */
-const PRIO: Record<Anomaly['type'], number> = { pop_block: 0, prereq_wait: 1, timeout: 2, idle_tc: 3, resource_short: 4 };
+const PRIO: Record<Anomaly['type'], number> = { pop_block: 0, prereq_wait: 1, timeout: 2, idle_tc: 3, resource_short: 4, tc_busy: 5 };
 const dur = (a: Pick<Anomaly, 'waitSec' | 'from' | 'to'>) => a.waitSec ?? a.to - a.from;
 
 /** 一组异常里选出唯一要显示的原因：先按优先级，同级取等待更久的 */
@@ -67,6 +67,7 @@ export function bottleneckLabel(a: Anomaly, tOut = Infinity): string {
   if (a.type === 'idle_tc') return `城镇中心闲置 · 约 ${d}`;
   if (a.type === 'pop_block') return `卡人口 · 约 ${d}`;
   if (a.type === 'prereq_wait') return `等前置建筑 · 约 ${d}`;
+  if (a.type === 'tc_busy') return `${a.busy === 'research' ? '城镇中心在研究' : '城镇中心在造村民'} · 约 ${d}`;
   if (a.type === 'resource_short') return `${a.resource ? RES_ZH[a.resource] : '资源'}差 ${a.shortfall ?? '?'} · 约 ${d}`;
   return '60 分钟内到不了';
 }
@@ -82,6 +83,7 @@ export function prereqDetail(a: Pick<Anomaly, 'age' | 'need' | 'missing'>): stri
 export const rowTime = (s: { startAt: number; researchAt?: number }) => s.researchAt ?? s.startAt;
 
 const KIND_ZH: Record<Anomaly['type'], string> = {
+  tc_busy: '城镇中心忙',
   idle_tc: '城镇中心闲置',
   pop_block: '卡人口',
   prereq_wait: '等前置建筑',
