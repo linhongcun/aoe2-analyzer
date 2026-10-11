@@ -42,3 +42,12 @@ describe('#10 升级路线分叉', () => {
     }
   });
 });
+
+describe('#10 独特单位所属文明标签', () => {
+  it('萨瓦尔属于波斯，罗马军团兵属于罗马，游侠不是独特单位', async () => {
+    const { uniqueCivs } = await import('../../src/domain/units');
+    expect(uniqueCivs(byId[1813]!, trees)).toEqual(['Persians']);
+    expect(uniqueCivs(byId[1793]!, trees)).toEqual(['Romans']);
+    expect(uniqueCivs(byId[569]!, trees)).toEqual([]);
+  });
+});

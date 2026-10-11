@@ -8,9 +8,9 @@ import { civByEn, civs } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
 import { civStatus, parseUnitPath } from '../../../domain/simulator';
 import { AGE_ZH } from '../../../domain/ratings';
-import { upgradeLine } from '../../../domain/units';
+import { uniqueCivs, upgradeLine } from '../../../domain/units';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
-import { CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
+import { CivChip, CivIcon, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
@@ -18,6 +18,22 @@ import Simulator from '../../simulator/components/Simulator';
 import UnitList from './UnitList';
 
 const UT: Record<string, string> = { UniqueUnit: '独特单位', Unit: '通用单位', UnitUpgrade: '升级单位', RegionalUnit: '区域单位' };
+
+/** 升级路线中的一项；独特单位带灰色小标签「{单位} · {文明}」+ 文明图标（#10） */
+function UnitLineItem({ x }: { x: Unit }) {
+  const trees = useTrees();
+  const c = trees ? civByEn(uniqueCivs(x, trees)[0] ?? '') : undefined;
+  if (!c) return <UnitLink u={x} />;
+  return (
+    <span className="uline-uu">
+      <UnitLink u={x} />
+      <span className="uu-tag" data-t="uu-tag">
+        <CivIcon c={c} />
+        {x.zh} · {c.zh}
+      </span>
+    </span>
+  );
+}
 
 export default function UnitDetail() {
   const loc = useLocation();
@@ -204,7 +220,7 @@ export default function UnitDetail() {
                       {x.zh}
                     </b>
                   ) : (
-                    <UnitLink u={x} />
+                    <UnitLineItem x={x} />
                   ),
                 )}
               />

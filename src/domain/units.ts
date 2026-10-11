@@ -1,4 +1,5 @@
-import type { Unit } from './types';
+import type { Trees, Unit } from './types';
+import { civStatus } from './simulator';
 /**
  * 升级路线：向前追溯 from_，向后寻找以当前单位为 from_ 的单位。
  * 有分叉时（如重装骑士→游侠 / 萨瓦尔）：
@@ -25,4 +26,10 @@ export function upgradeLine(u: Unit, units: Unit[], byId: Record<number, Unit>, 
     y = n;
   }
   return a;
+}
+
+/** 独特单位所属文明（按科技树可用性），用于升级路线上的「{单位} · {文明}」小标签（#10） */
+export function uniqueCivs(u: Unit, trees: Trees): string[] {
+  if (u.type !== 'UniqueUnit') return [];
+  return Object.keys(trees.t).filter((c) => civStatus(trees, c)['u' + u.id] === 1);
 }
