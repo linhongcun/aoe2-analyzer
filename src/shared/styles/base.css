@@ -1352,3 +1352,10 @@ table.ediff td.dn {
 .pk-basis {
   margin-right: var(--space-1);
 }
+/* Jony #84 复审：390 下「来源」不竖排折行 */
+.pk-src {
+  flex: none;
+}
+.pk-src .linkish {
+  white-space: nowrap;
+}

@@ -169,6 +169,30 @@ for (const w of [1280, 390]) {
   });
 }
 
+for (const w of [360, 375, 390]) {
+  test.describe(`${w}px 来源链接`, () => {
+    test.use({ viewport: { width: w, height: 900 } });
+    for (const [name, q, row] of [
+      ['.5：哥特长戟兵帝王', 'a=359.Goths.4.c.&b=569.Franks.4.f.', 'pk-half'],
+      ['高丽弩手', 'a=24.Koreans.3.c.&b=569.Franks.4.f.', 'pk-unsupported'],
+    ] as const) {
+      test(`${name}：「来源」单行显示`, async ({ page }) => {
+        await open(page, q);
+        const btn = A(page).locator(`[data-t="${row}"] [data-t="pk-src-btn"]`);
+        await expect(btn).toBeVisible();
+        const r = await btn.evaluate((e) => {
+          const range = document.createRange();
+          range.selectNodeContents(e);
+          const lines = new Set([...range.getClientRects()].filter((x) => x.width > 0).map((x) => Math.round(x.top)));
+          return { lines: lines.size, h: e.getBoundingClientRect().height, lh: parseFloat(getComputedStyle(e).lineHeight) || 20 };
+        });
+        expect(r.lines).toBe(1);
+        expect(r.h).toBeLessThanOrEqual(Math.max(44, r.lh * 1.5)); // 点击区 ≥44px，单行
+      });
+    }
+  });
+}
+
 test('1v1 模式不显示折后价', async ({ page }) => {
   await page.goto('#/duel?m=1&a=359.Byzantines.4.f.&b=569.Franks.4.f.');
   await expect(page.locator('#duel-res')).toBeVisible();
