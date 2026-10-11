@@ -1336,6 +1336,32 @@ a.tbld:hover span {
 }
 
 @media (max-width: 600px) {
+  /* #3 Jony 44c7bed：390 宽摘要 2×2，标签不断行；只有到达时间是琥珀色 */
+  .tl-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-1);
+  }
+  .tl-summary li {
+    padding: 6px var(--space-2);
+  }
+  .tl-summary .k {
+    font-size: 12px;
+    color: var(--color-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tl-summary b {
+    font-size: 17px;
+    line-height: 1.25;
+  }
+  .tl-bn b {
+    font-size: 15px;
+    overflow-wrap: anywhere;
+  }
+  .tl-summary li.tl-bn.is-long {
+    grid-column: 1 / -1;
+  }
   .tl-desk-only {
     display: none !important;
   }
@@ -1361,20 +1387,10 @@ a.tbld:hover span {
   .tl-summary-card {
     padding: var(--space-2);
   }
-  .tl-summary {
-    gap: var(--space-1);
-  }
-  .tl-summary li {
-    padding: var(--space-1) var(--space-2);
-  }
   .tl-jump {
     padding: var(--space-1) var(--space-2);
   }
-  .tl-summary b,
-  .tl-bn b {
-    font-size: var(--fs-sm);
-  }
-  .tl-summary .k,
+  /* 摘要标签 12px / 数值 17px 见上方 #3 2×2 规则 */
   .tl-summary .s,
   .tl-civ {
     font-size: 11px;

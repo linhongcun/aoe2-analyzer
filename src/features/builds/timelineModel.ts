@@ -199,3 +199,7 @@ export function parseQuery(sp: URLSearchParams, boIds: string[], civIds: string[
     variant: v === 'aggr' || v === 'cons' ? v : null,
   };
 }
+
+/** #3 390 宽 2×2 摘要：主要卡点文案超过这么多字时占满一整行（Jony 44c7bed，边界 >14） */
+export const BN_LONG_CHARS = 14;
+export const isLongBottleneck = (text: string) => [...text].length > BN_LONG_CHARS;

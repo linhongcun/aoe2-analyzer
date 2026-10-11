@@ -57,7 +57,7 @@ export function useSearchIndex(): SearchItem[] {
         alt: [civs.find((c) => c.en === b.civ)!.zh + b.zh],
       }),
     );
-    buildOrders.forEach((b) => items.push({ kind: 'page', id: 'bo-' + b.id, zh: b.name.zh, en: b.name.en, href: '/builds', sub: '开局流程' }));
+    buildOrders.forEach((b) => items.push({ kind: 'page', id: 'bo-' + b.id, zh: b.name.zh, en: b.name.en, href: `/builds?bo=${b.id}`, sub: '开局时间线' }));
     return items;
   }, [core]);
 }

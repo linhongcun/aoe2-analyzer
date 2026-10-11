@@ -27,7 +27,7 @@ export default function Home() {
         <p className="note">文明、单位、科技百科 + 团战排位工具。数据来源 aoe2techtree（2026-10）。</p>
         <button className="herosearch" onClick={() => dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}>
           <Icon name="search" />
-          <span>搜索文明、单位、科技…</span>
+          <span>搜索文明、单位、科技、开局…</span>
           <kbd>Ctrl K</kbd>
         </button>
         <div className="quickciv">
@@ -59,7 +59,7 @@ export default function Home() {
       <h2 className="hsec">即将推出</h2>
       <section className="soon-card" aria-labelledby="soon-title">
         <h3 id="soon-title">正在制作</h3>
-        <p>开局时间轴 · 版本补丁</p>
+        <p>版本补丁</p>
       </section>
     </section>
   );
