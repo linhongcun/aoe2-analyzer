@@ -209,7 +209,7 @@ function Side({
               [u.rng > 1 ? 'patk' : 'atk', '攻击', r1(side.S.atk) + (side.F.ranged ? '（穿刺）' : '（近战）')],
               ['marm', '护甲', `${r1(side.S.ma)} / ${r1(side.S.pa)}`],
               ['rof', '攻击间隔', r1(side.S.rof * 100) === '0' ? '-' : (Math.round(side.S.rof * 100) / 100).toString() + 's'],
-              ['range', '射程', r1(side.S.rng)],
+              ['range', '射程', r1(side.S.rng) + (side.u.rngB != null && side.u.rngB !== side.u.rng ? `（对建筑 ${side.u.rngB}）` : '')],
               ['', '命中率', Math.round(side.F.acc * 100) + '%'],
             ] as const
           ).map(([ic, n, v]) => (
@@ -256,14 +256,17 @@ function Side({
 function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
   const r = duel(A.F, B.F);
   const wn = r.winner === 'draw' ? '平局（同时击杀）' : `${r.winner === 'a' ? 'A' : 'B'} · ${(r.winner === 'a' ? A : B).u.zh} 获胜`;
-  const T = Math.max(r.ab.time, r.ba.time, 0.01);
-  const rows: [string, string, string][] = [
+  const T = Math.max(r.ab.time ?? 0, r.ba.time ?? 0, r.duration, 0.01);
+  const fmtTime = (ow: typeof r.ab) => (ow.time === null ? '—' : r1(ow.time) + 's');
+  const fmtDps = (ow: typeof r.ab) => (ow.dps === null || !Number.isFinite(ow.dps) ? '—' : (Math.round(ow.dps * 100) / 100).toString());
+  const rows: [string, string, string, string?][] = [
     ['每击伤害', r1(r.ab.dmg), r1(r.ba.dmg)],
     ['期望每击（含命中率）', r1(r.ab.expDmg), r1(r.ba.expDmg)],
     ['击杀所需次数', String(r.ab.hits), String(r.ba.hits)],
-    ['击杀用时', r1(r.ab.time) + 's', r1(r.ba.time) + 's'],
-    ['DPS', (Math.round(r.ab.dps * 100) / 100).toString(), (Math.round(r.ba.dps * 100) / 100).toString()],
+    ['击杀用时', fmtTime(r.ab), fmtTime(r.ba)],
+    ['DPS', fmtDps(r.ab), fmtDps(r.ba)],
   ];
+  const dpsReason = r.ab.dpsReason || r.ba.dpsReason;
   return (
     <div id="duel-res" className="posbox">
       <h3 className={'duel-win w-' + r.winner}>
@@ -293,6 +296,11 @@ function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
           ))}
         </tbody>
       </table>
+      {dpsReason && (
+        <p className="note" data-t="dps-reason">
+          {dpsReason}
+        </p>
+      )}
       <h4>时间线（每个点为一次攻击，竖线为击杀时刻）</h4>
       <div className="duel-tl">
         {(
@@ -304,13 +312,14 @@ function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
           <div key={k} className={`tl-row tl-${k}`}>
             <span className="tl-l">{k.toUpperCase()}</span>
             <div className="tl-track">
-              <div className="tl-fill" style={{ width: `${(Math.min(w.time, r.duration) / T) * 100}%` }} />
-              {Array.from({ length: Math.min(w.hits, 60) }, (_, i) => i * s.F.rof)
-                .filter((t) => t <= r.duration + 1e-9)
-                .map((t, i) => (
-                  <i key={i} className="tl-hit" style={{ left: `${(t / T) * 100}%` }} />
-                ))}
-              {w.time <= r.duration + 1e-9 && <b className="tl-kill" style={{ left: `${(w.time / T) * 100}%` }} title={`击杀 ${r1(w.time)}s`} />}
+              <div className="tl-fill" style={{ width: `${(Math.min(w.time ?? r.duration, r.duration) / T) * 100}%` }} />
+              {s.F.rof > 0 &&
+                Array.from({ length: Math.min(w.hits, 60) }, (_, i) => i * s.F.rof)
+                  .filter((t) => t <= r.duration + 1e-9)
+                  .map((t, i) => <i key={i} className="tl-hit" style={{ left: `${(t / T) * 100}%` }} />)}
+              {w.time !== null && w.time <= r.duration + 1e-9 && (
+                <b className="tl-kill" style={{ left: `${(w.time / T) * 100}%` }} title={`击杀 ${r1(w.time)}s`} />
+              )}
             </div>
           </div>
         ))}

@@ -114,6 +114,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/matchup', '#mres h3'],
     ['#/simulator', '#simhub .card'],
     ['#/duel', '#duel-res h3'],
+    ['#/builds', '#builds [data-t="build-order"]'],
   ];
   await page.goto('./');
   await page.getByRole('button', { name: '工具' }).click();
@@ -161,11 +162,11 @@ test('nav: 工具 dropdown toggles on click, closes on outside click and Esc', a
   await expect(tools).toHaveClass(/\bon\b/);
 });
 
-test('home: 即将推出 is one non-clickable card with the four modules', async ({ page }) => {
+test('home: 即将推出 is one non-clickable card with the planned modules', async ({ page }) => {
   await page.goto('./');
   const card = page.locator('#home .soon-card');
   await expect(card).toContainText('正在制作');
-  await expect(card).toContainText('地图 · 开局流程 · 版本补丁 · 天梯');
+  await expect(card).toHaveText(/正在制作\s*开局时间轴 · 版本补丁$/);
   await expect(card.locator('a, button')).toHaveCount(0);
   await expect(page.locator('#home .hcard.planned')).toHaveCount(0);
 });
@@ -511,7 +512,15 @@ test('rating label also on compare and matchup; old yellow note removed', async 
   await page.goto('./#/compare');
   await expect(page.locator('#compare .ratehead')).toContainText('主观评分，仅供参考');
   await page.goto('./#/matchup');
-  await expect(page.locator('#mres .note')).toContainText('主观评分，仅供参考');
-  await page.locator('#mres .note').getByRole('button', { name: '评分说明' }).click();
+  await expect(page.locator('#mres .rating-foot')).toContainText('主观评分，仅供参考');
+  await page.locator('#mres .rating-foot').getByRole('button', { name: '评分说明' }).click();
   await expect(page.getByRole('dialog', { name: '评分是怎么来的' })).toBeVisible();
+});
+
+test('#31 Ctrl+K 搜到开局流程与开局名；工具菜单首项为开局流程', async ({ page }) => {
+  await page.goto('./#/');
+  await expect(page.locator('#home .hcard[data-k="builds"]')).toBeVisible();
+  await page.keyboard.press('Control+k');
+  await page.keyboard.type('开局流程');
+  await expect(page.getByRole('dialog').getByText('开局流程').first()).toBeVisible();
 });

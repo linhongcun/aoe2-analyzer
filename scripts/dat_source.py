@@ -83,7 +83,7 @@ def unit(u):
     t = u.type_50
     return {'Name': u.name, 'Class': u.class_, 'HP': u.hit_points, 'LOS': u.line_of_sight, 'Speed': u.speed, 'Garrison': u.garrison_capacity,
             'Attacks': [[a.class_, a.amount] for a in t.attacks] if t else [], 'Armours': [[a.class_, a.amount] for a in t.armours] if t else [],
-            'Range': t.max_range if t else 0, 'MinRange': t.min_range if t else 0, 'Reload': t.reload_time if t else 0, 'Accuracy': t.accuracy_percent if t else 0,
+            'Range': t.max_range if t else 0, 'DisplayedRange': t.displayed_range if t else 0, 'ChargeType': u.creatable.charge_type if u.creatable else 0, 'MinRange': t.min_range if t else 0, 'Reload': t.reload_time if t else 0, 'Accuracy': t.accuracy_percent if t else 0,
             'TrainTime': u.creatable.train_locations[0].train_time if u.creatable and u.creatable.train_locations else None,
             'TrainAt': [[l.unit_id, l.train_time] for l in u.creatable.train_locations] if u.creatable else [],
             'Cost': [[c.type, c.amount, c.flag] for c in u.creatable.resource_costs if c.type >= 0 and c.amount] if u.creatable else [],
@@ -110,7 +110,7 @@ json.dump(out, open(sys.argv[2], 'w'))
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v4.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v5.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

@@ -8,6 +8,7 @@ import { useCore } from '../../../data/hooks';
 import { parseUnitPath } from '../../../domain/simulator';
 import { AGE_ZH } from '../../../domain/ratings';
 import { upgradeLine } from '../../../domain/units';
+import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
@@ -44,10 +45,10 @@ export default function UnitDetail() {
     [u.rng > 1 ? 'patk' : 'atk', '攻击力', u.atk],
     ['marm', '近战护甲', u.ma],
     ['parm', '穿刺护甲', u.pa],
-    ['range', '射程', u.rng + (u.minr ? `（最小 ${u.minr}）` : '')],
+    ['range', '射程', u.rng + (u.minr ? `（最小 ${u.minr}）` : '') + (u.rngB != null && u.rngB !== u.rng ? `（对建筑 ${u.rngB}）` : '')],
     ['speed', '移动速度', u.spd],
     ['', '视野', u.los],
-    ['rof', '攻击间隔', u.rof + 's'],
+    ['rof', '攻击间隔', u.rof > 0 ? u.rof + 's' : `— ${DPS_UNAVAILABLE_REASON}`],
     ['', '准确度', u.acc + '%'],
     ...(u.blast ? [['blast', '溅射范围', u.blast] as [string, string, number]] : []),
   ];
