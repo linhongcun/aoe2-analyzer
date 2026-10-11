@@ -207,7 +207,7 @@ describe('#42 P0 buildSim 文明加成不得静默忽略', () => {
   it('真实 eco.json：没有未分类的效果（bo:check 同一检查）', () => expect(unknownCivEffects(E, buildOrders)).toEqual([]));
   it('simSupport：丹麦/马来/不列颠/高棉支持；汉、罗马、斯拉夫（待核实）与葡萄牙（未实现）不支持', () => {
     for (const c of ['Danes', 'Malay', 'Britons', 'Generic', 'Khmer']) expect(simSupport(E, c, buildOrders), c).toEqual({ supported: true, reasons: [] });
-    for (const c of ['Chinese', 'Romans', 'Slavs', 'Portuguese']) expect(simSupport(E, c, buildOrders).supported, c).toBe(false);
+    for (const c of ['Chinese', 'Romans', 'Slavs', 'Portuguese', 'Mayans', 'Tatars', 'Goths', 'Mapuche', 'Sicilians', 'Jurchens']) expect(simSupport(E, c, buildOrders).supported, c).toBe(false);
   });
   it('高棉农民无需回仓（654，res 33=50）：农田食物比去掉 654 时多', () => {
     const fc = (e: EcoData) => simulateBuild(fcb, 'Khmer', e, ups, { walkTiles: 4 }).ageUps.find((a) => a.age === 'castle')!.reachAt;
