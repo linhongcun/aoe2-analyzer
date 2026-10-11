@@ -80,6 +80,8 @@ export interface RefData {
   civs: Set<string>;
 }
 
+/** 房子 */
+export const HOUSE = 70;
 const AGE_TECH: Record<number, number> = { 101: 2, 102: 3, 103: 4 };
 const isObj = (x: unknown): x is Record<string, unknown> => typeof x === 'object' && x !== null && !Array.isArray(x);
 const isInt = (x: unknown, min = 0): x is number => typeof x === 'number' && Number.isInteger(x) && x >= min;
@@ -243,6 +245,9 @@ export function checkSemantics(bo: BuildOrder, ref: RefData): { errors: string[]
     }
     allocs.push({ ...alloc });
   });
+  // 开局规则：前 3 个村民（vils = 3 的步骤）必须包含盖房子
+  const opening = bo.steps.filter((s) => s.vils === 3);
+  if (!opening.some((s) => s.actions.some((a) => a.type === 'build' && a.building === HOUSE))) e.push('开局（前 3 个村民）缺少盖房子步骤');
   if (age < bo.target.age) e.push(`未到达目标时代 ${bo.target.age}`);
   const reach = bo.steps.find((s) => s.phase === (['', '', 'feudal-click', 'castle-click', 'imperial-click'] as const)[bo.target.age]);
   if (!reach) e.push('缺少目标时代的点击步骤');

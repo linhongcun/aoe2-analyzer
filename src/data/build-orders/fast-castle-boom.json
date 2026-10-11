@@ -38,15 +38,37 @@
   },
   "steps": [
     {
+      "vils": 3,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "build",
+          "count": 3
+        },
+        {
+          "type": "build",
+          "building": 70,
+          "count": 2
+        }
+      ],
+      "note": "开局 3 个村民：2 人合盖一座房子、1 人盖另一座，盖完都去吃羊；城镇中心立即排村民。"
+    },
+    {
       "vils": 6,
       "actions": [
         {
           "type": "gather",
           "task": "sheep",
-          "count": 6
+          "count": 3,
+          "from": "build"
+        },
+        {
+          "type": "gather",
+          "task": "sheep",
+          "count": 3
         }
       ],
-      "note": "6 个村民在城镇中心下吃羊。"
+      "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。"
     },
     {
       "vils": 9,

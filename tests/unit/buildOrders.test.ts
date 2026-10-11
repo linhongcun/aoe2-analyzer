@@ -36,6 +36,13 @@ describe('build-order data', () => {
   });
 });
 
+describe('build-order snapshots', () => {
+  it.each(buildOrders.map((b) => [b.id, b] as const))('%s matches snapshot (data + per-step allocation)', (_id, bo) => {
+    const { allocs } = checkSemantics(bo, ref);
+    expect({ bo, splits: allocs.map((a, i) => `${bo.steps[i]!.vils}: ${JSON.stringify(splitOf(a))}`) }).toMatchSnapshot();
+  });
+});
+
 describe('validator catches errors', () => {
   const base = structuredClone(buildOrders.find((b) => b.id === 'archers-19')!) as BuildOrder;
   const bad = (f: (b: BuildOrder) => void) => {
@@ -63,8 +70,15 @@ describe('validator catches errors', () => {
     expect(bad((b) => (b.steps[1]!.split!.wood = 4))).toContain('检查点');
     expect(bad((b) => (b.steps[2]!.vils = 5))).toContain('回退');
   });
+  it('opening must include a house-building step for the first 3 villagers', () => {
+    expect(
+      bad((b) => {
+        b.steps[0]!.actions = b.steps[0]!.actions.filter((a) => a.type !== 'build');
+      }),
+    ).toContain('开局（前 3 个村民）缺少盖房子步骤');
+  });
   it('age-up order and target', () => {
-    expect(bad((b) => (b.steps[5]!.phase = undefined))).toMatch(/phase|未点击/);
+    expect(bad((b) => (b.steps[6]!.phase = undefined))).toMatch(/phase|未点击/);
     expect(bad((b) => (b.target.vils = 22))).toContain('target.vils');
   });
 });
