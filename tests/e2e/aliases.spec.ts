@@ -30,7 +30,7 @@ for (const [alias, ids] of BUILD_ALIAS_ROWS)
 
 for (const [q, id] of [
   ['Drush', 'drush-fc'],
-  ['19P斥候', 'scouts-18'],
+  ['DRUSH', 'drush-fc'],
   ['Fast Castle', 'fast-castle-boom'],
 ] as const)
   test(`大小写/空格不敏感：「${q}」能搜到 ${id}`, async ({ page }) => {

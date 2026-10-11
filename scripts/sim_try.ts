@@ -1,10 +1,11 @@
 import eco from '../src/data/eco.json';
 import units from '../src/data/units.json';
 import { buildOrders } from '../src/data/buildOrders';
+import { formatClock } from '../src/domain/formatTime';
 import { simulateBuild, type EcoData, type UpgradeData } from '../src/domain/buildSim';
 const ups = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const civ = process.argv[2] ?? 'Britons';
-const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+const fmt = formatClock;
 for (const bo of buildOrders) {
   const r = simulateBuild(bo, civ, eco as unknown as EcoData, ups);
   console.log(

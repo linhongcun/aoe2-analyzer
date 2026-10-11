@@ -19,12 +19,13 @@ const items = [...unitItems, ...boItems];
 const boIds = (r: SearchItem[]) => r.filter((x) => x.id.startsWith('bo-')).map((x) => x.id.slice(3));
 
 describe('开局别名（审定名单）', () => {
-  it('名单只含审定的别名，不含 FC、骑士速城', () => {
+  it('名单只含审定的别名，不含 FC、骑士速城、19p斥候', () => {
     const all = BUILD_ALIAS_ROWS.map(([n]) => n);
     expect(all).not.toContain('FC');
     expect(all).not.toContain('fc');
     expect(all).not.toContain('骑士速城');
-    expect(all).toHaveLength(14);
+    expect(all).not.toContain('19p斥候');
+    expect(all).toHaveLength(13);
   });
   for (const [alias, ids] of BUILD_ALIAS_ROWS)
     it(`「${alias}」→ ${ids.join('、')}`, () => {
@@ -45,7 +46,6 @@ describe('开局别名（审定名单）', () => {
 describe('归一化：不分大小写、忽略空格', () => {
   it.each([
     ['Drush', 'drush'],
-    ['19P斥候', '19p斥候'],
     ['Fast Castle', 'fast castle'],
     ['FASTCASTLE', 'fast castle'],
     [' 黑 快 ', '黑快'],

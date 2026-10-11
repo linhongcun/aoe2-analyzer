@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { formatClock } from '../../src/domain/formatTime';
 import { describe, expect, it } from 'vitest';
 import eco from '../../src/data/eco.json';
 import units from '../../src/data/units.json';
@@ -17,8 +18,7 @@ describe('#3 收尾：列表页时间由模拟器实时算', () => {
     const tl = simulateBuild(bo, 'Generic', eco as unknown as EcoData, ups);
     const m = listMeta(bo);
     const feudal = tl.ageUps.find((a) => a.age === 'feudal')!;
-    const t = Math.round(feudal.reachAt);
-    expect(m.time).toContain(`${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`);
+    expect(m.time).toContain(formatClock(feudal.reachAt));
   });
   it('timeText 格式', () => {
     expect(timeText([{ age: 'feudal', reachAt: 554 }], 2)).toBe('约 9:14 到达封建');

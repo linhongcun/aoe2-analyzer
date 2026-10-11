@@ -15,7 +15,7 @@ export interface SearchItem {
   late?: boolean;
 }
 
-/** 归一化：不分大小写、忽略所有空白（「Fast Castle」=「fastcastle」，「19P斥候」=「19p斥候」） */
+/** 归一化：不分大小写、忽略所有空白（「Fast Castle」=「fastcastle」） */
 export const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
 
 /** 分档：名称完全匹配 > 名称前缀 > 别名完全匹配 > 名称包含 > 别名包含 */

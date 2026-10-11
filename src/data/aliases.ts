@@ -9,7 +9,7 @@ export const UNIT_ALIASES: Record<number, string[]> = {};
 
 /** 别名 → 开局 id（同一别名可指向多个开局） */
 const BUILD_ALIAS_TABLE: [string[], string[]][] = [
-  [['斥候', '斥候快攻', '19p斥候'], ['scouts-18']],
+  [['斥候', '斥候快攻'], ['scouts-18']],
   [['弓兵'], ['archers-19']],
   [['直城骑士'], ['fast-castle-boom']],
   [

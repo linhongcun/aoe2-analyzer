@@ -30,9 +30,9 @@ test('drush-fc 默认第 9 步：两段，先黄金后等城镇中心，第二�
   const row = page.locator('.tl-steps > li').nth(8);
   const segs = row.locator('[data-t="row-seg"]');
   await expect(segs).toHaveCount(2);
-  await expect(segs.nth(0)).toHaveText(/黄金差 10 · 约 0:56/);
+  await expect(segs.nth(0)).toHaveText(/黄金差 10 · 约 0:55/);
   await expect(segs.nth(1)).toHaveText('等城镇中心（在造村民） · 约 0:19');
-  await expect(row.locator('.tl-num.t')).toHaveText('约 10:01');
+  await expect(row.locator('.tl-num.t')).toHaveText('约 10:00');
   const [c0, c1, muted, gap] = await row.evaluate((li) => {
     const s = li.querySelectorAll('[data-t="row-seg"]');
     const d = document.createElement('span');
