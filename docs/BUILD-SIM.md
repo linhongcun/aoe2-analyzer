@@ -39,7 +39,8 @@
 
 `buildSim.ts` 的 `classifyCivEffect` 把每条文明效果分成四类：已处理 / 不影响开局（附原因）/ 影响开局但未实现 / 未分类。`bo:check` 遇到未分类就失败。有「影响开局但未实现」的文明，`simSupport(civId)`（`src/domain/simSupport.ts`）返回 false，界面把它置灰。
 
-- **高棉 654「Instant Farmers」**：.dat（185872，effect 690）里只有 `res 33 set 50` 和农民（214/259）workRate ×0.95 三条命令，**.dat 本身没有定义 res 33=50 的含义**。我们按玩法说明把它解释为「农民无需回仓」，实现为耕作没有走路时间。单测断言去掉 654 后结果会变（城堡时的食物更少），所以高棉标为支持。来源：<https://ageofempires.fandom.com/wiki/Civilization_bonus#Khmer>、<https://ageofempires.fandom.com/wiki/Farm_(Age_of_Empires_II)>（update 34699）。
+- **高棉 654「Instant Farmers」**：.dat（185872，effect 690）里只有 `res 33 set 50` 和农民（214/259）workRate ×0.95 三条命令，**.dat 本身没有定义 res 33=50 的含义**。我们按玩法说明把它解释为「农民无需回仓」，实现为耕作没有走路时间。按 #43 的范围规则，这个解释没有被现有开局证明，高棉先置灰，代码保留。来源：<https://ageofempires.fandom.com/wiki/Civilization_bonus#Khmer>、<https://ageofempires.fandom.com/wiki/Farm_(Age_of_Empires_II)>（update 34699）。
 - **资源储量倍率**（玛雅 47/79/189/190/219/296、鞑靼 216、哥特 268）：模型里资源点不会耗尽，但这些倍率和同一文明的采集 workRate 成对出现（玛雅 ×0.87 配 ×1.15，鞑靼 ×0.637 配 ×1.57，哥特 ×0.813 配 ×1.23）。模型只算了减速那一半，所以它们会改变到封建的时间，列为未实现，这几个文明置灰。
 - 西西里农田储量（69）、女真尸体不腐烂（292）：按 #43 的范围规则（不加新机制，有不确定就先置灰）列为未实现，这两个文明置灰。
 - 马普切采果存放 +25%（215）：未实现，马普切置灰。
+- **按 tech 整条判定**：同一个 tech 里只要有一条效果是未实现或未分类，buildSim 就不应用这个 tech 的任何效果，文明置灰。这样能避免成对效果只生效一半，比如储量 ×k 和 workRate ×1/k 只生效了减速那一半。

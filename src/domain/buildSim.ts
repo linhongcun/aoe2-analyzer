@@ -265,7 +265,10 @@ interface Construction {
 /** 单次模拟（固定参数）：返回每步时间与快照，不含误差带 */
 function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P: SimParams) {
   const m = baseMods();
-  const rows = (eco.civEco[civ] ?? []).filter((r) => P.team || r.source !== 'team');
+  // 按 tech 整条判定（#43 Steve）：只要有一条效果是未实现或未分类，这个 tech 的效果一条都不应用，
+  // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
+  const scope = simScope(eco, [bo]);
+  const rows = (eco.civEco[civ] ?? []).filter((r) => (P.team || r.source !== 'team') && techAtomicOk(r, scope));
   const freeByAge: Record<number, string[]> = {};
   let age = 1;
   const applyAge = () => {
@@ -285,7 +288,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   );
   for (const r of Object.keys(m.grant) as Res[]) if (!startRes.has(r)) m.start[r] += m.grant[r];
   m.grant = { food: 0, wood: 0, gold: 0, stone: 0 };
-  const techGold = rows.some((r) => r.effects.some((e) => e.kind === 'res' && e.res === 269));
+  const techGold = (eco.civEco[civ] ?? []).some((r) => r.effects.some((e) => e.kind === 'res' && e.res === 269));
   // 免费科技：techCost/techTime=0 已由 tree 行处理；freeTech 行只记录名称，效果在研究时生效——此处视为到达所需时代即自动生效
   const freeNames = new Set(rows.flatMap((r) => r.effects.filter((e) => e.kind === 'freeTech').map((e) => (e.techName ?? '').toLowerCase())));
   const stock: Stock = { ...m.start };
@@ -791,8 +794,10 @@ export const UNHANDLED_RES: Record<number, string> = {
 };
 /** 已在 START_VILS 建模送村民的文明 tech（汉 302、玛雅 554） */
 const RES234_HANDLED = new Set([302, 554]);
-/** 单条待核实（文明 tech → 原因）；高棉 654 已按 .dat 核实并实现 */
-const PENDING_TECH: Record<number, string> = {};
+/** 整条待核实的文明 tech → 原因 */
+const PENDING_TECH: Record<number, string> = {
+  654: '高棉「农民无需回仓」：res 33=50 的含义 .dat 本身没有定义，现有开局里也没能证明它影响结果，先置灰（代码保留）',
+};
 const FARM_UNITS = new Set([50, 1187]);
 const TC_UNITS = new Set([TC, 71, 141, 142]);
 
@@ -812,6 +817,14 @@ export function simScope(eco: EcoData, bos: BuildOrder[]) {
         if (a.type === 'research') techs.add(a.tech);
       }
   return { units, buildings, techs };
+}
+
+/** tech 是否可以应用：整条 tech 里没有未实现/未分类的效果 */
+function techAtomicOk(row: EffectRow, scope: ReturnType<typeof simScope>): boolean {
+  return row.effects.every((e) => {
+    const k = classifyCivEffect(e, row as { source?: string; tech?: number }, scope).kind;
+    return k !== 'unhandled' && k !== 'unknown';
+  });
 }
 
 /** 判定一条文明效果 */

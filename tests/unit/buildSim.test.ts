@@ -205,19 +205,35 @@ describe('#42 P0 buildSim 文明加成不得静默忽略', () => {
     expect(unknownCivEffects(e, buildOrders)).toEqual(['Danes tech -1: res res 9999 add 1']);
   });
   it('真实 eco.json：没有未分类的效果（bo:check 同一检查）', () => expect(unknownCivEffects(E, buildOrders)).toEqual([]));
-  it('simSupport：丹麦/马来/不列颠/高棉支持；汉、罗马、斯拉夫（待核实）与葡萄牙（未实现）不支持', () => {
-    for (const c of ['Danes', 'Malay', 'Britons', 'Generic', 'Khmer']) expect(simSupport(E, c, buildOrders), c).toEqual({ supported: true, reasons: [] });
-    for (const c of ['Chinese', 'Romans', 'Slavs', 'Portuguese', 'Mayans', 'Tatars', 'Goths', 'Mapuche', 'Sicilians', 'Jurchens']) expect(simSupport(E, c, buildOrders).supported, c).toBe(false);
+  it('simSupport：丹麦/马来/不列颠支持；汉、罗马、斯拉夫（待核实）与葡萄牙（未实现）不支持', () => {
+    for (const c of ['Danes', 'Malay', 'Britons', 'Generic']) expect(simSupport(E, c, buildOrders), c).toEqual({ supported: true, reasons: [] });
+    for (const c of ['Chinese', 'Romans', 'Slavs', 'Portuguese', 'Mayans', 'Tatars', 'Goths', 'Mapuche', 'Sicilians', 'Jurchens', 'Khmer'])
+      expect(simSupport(E, c, buildOrders).supported, c).toBe(false);
   });
-  it('高棉农民无需回仓（654，res 33=50）：农田食物比去掉 654 时多', () => {
-    const fc = (e: EcoData) => simulateBuild(fcb, 'Khmer', e, ups, { walkTiles: 4 }).ageUps.find((a) => a.age === 'castle')!.reachAt;
-    expect(fc(E)).toBeLessThanOrEqual(fc(without('Khmer', 654)));
-    const r = simulateBuild(fcb, 'Khmer', E, ups).steps.at(-1)!.stock.food;
-    expect(r).toBeGreaterThan(simulateBuild(fcb, 'Khmer', without('Khmer', 654), ups).steps.at(-1)!.stock.food);
+  it('按 tech 整条判定：鞑靼 704 不能只生效 workRate 那一半（去掉 704 结果相同）', () => {
+    expect(simulateBuild(fcb, 'Tatars', E, ups, { walkTiles: 4 }).ageUps).toEqual(
+      simulateBuild(fcb, 'Tatars', without('Tatars', 704), ups, { walkTiles: 4 }).ageUps,
+    );
+    expect(feudal('Tatars')).toBeLessThan(700);
   });
+  it('按 tech 整条判定：混入一条未实现效果，整条 tech 都不生效', () => {
+    const e = structuredClone(E);
+    const malay = e.civEco.Malay!.find((r) => (r as { tech?: number }).tech === 634)!;
+    malay.effects.push({ kind: 'res', res: 267, op: 'add', v: 1 });
+    expect(feudal('Malay', e)).toBe(feudal('Malay', without('Malay', 634)));
+    expect(simSupport(e, 'Malay', buildOrders).supported).toBe(false);
+  });
+  // Kent 草稿（#43 comment 6106496636）
+  it('高棉 fast-castle-boom 距离 4：食物不是瓶颈（只缺木）', () => {
+    const r = simulateBuild(fcb, 'Khmer', E, ups, { walkTiles: 4 });
+    expect(r.steps.flatMap((s) => s.anomalies.filter((a) => a.type === 'resource_short').map((a) => (a as { resource?: string }).resource))).not.toContain(
+      'food',
+    );
+  });
+  it.todo('高棉：农田为瓶颈的开局里，去掉 654 必须让结果变慢（证明后再把高棉放出来）');
   it('src/domain/simSupport 导出 (civId) => boolean', () => {
     expect(simSupportFn('Danes')).toBe(true);
-    expect(simSupportFn('Khmer')).toBe(true);
+    expect(simSupportFn('Khmer')).toBe(false);
     expect(simSupportFn('Chinese')).toBe(false);
   });
 });
