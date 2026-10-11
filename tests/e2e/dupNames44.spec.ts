@@ -92,6 +92,7 @@ for (const [id, alias] of UNIT_ALIAS_ROWS)
 
 test('#44 搜「战象」列出多条，不直接跳转', async ({ page }) => {
   const li = await palette(page, '战象');
-  expect(await li.count()).toBeGreaterThan(1);
+  // 单位索引异步加载，等结果稳定
+  await expect.poll(() => li.count()).toBeGreaterThan(1);
   await expect(page).not.toHaveURL(/unit\//);
 });
