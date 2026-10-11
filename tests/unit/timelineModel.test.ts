@@ -112,7 +112,7 @@ describe('rowSegments（#51 多段卡点）', () => {
     expect(rowSegments([a('idle_tc', 0, 50), a('resource_short', 1, 50)]).map((x) => x.a.type)).toEqual(['idle_tc']);
     expect(rowSegments([a('pop_block', 658, 3600), a('timeout', 3600, 3600)]).map((x) => x.a.type)).toEqual(['pop_block']);
   });
-  it('裁剪到步骤开始 → 开始研究', () => {
+  it('裁剪到步骤开始至开始研究', () => {
     const [x] = rowSegments([a('prereq_wait', 100, 300)], { from: 150, to: 200 });
     expect([x!.start, x!.end]).toEqual([150, 200]);
   });
