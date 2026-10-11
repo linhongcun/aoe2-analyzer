@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import eco from '../../src/data/eco.json';
 import units from '../../src/data/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
-import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { buildView, parseQuery, rangeText, summaryText } from '../../src/features/builds/timelineModel';
+import { simulateBuild, type Anomaly, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
+import { bottleneckLabel, buildView, parseQuery, pickReason, rangeText, summaryText } from '../../src/features/builds/timelineModel';
 
 const ups = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const sim = (id: string, civ: string, autoHouses = true) =>
@@ -43,10 +43,10 @@ describe('timelineModel', () => {
     expect(rangeText(554, { early: 0, late: 0 })).toBeNull();
     expect(rangeText(554, { early: 0, late: 25 })).toBe('9:14–9:39');
   });
-  it('卡点标签形如「卡人口 · 约 N 秒」', () => {
+  it('卡点标签形如「卡人口 · 约 m:ss」，摘要卡人口优先', () => {
     const v = buildView(sim('archers-19', 'Britons', false), (x) => x);
-    expect(v.bottlenecks.find((b) => b.type === 'pop_block')!.label).toMatch(/^卡人口 · 约 \d+ 秒$/);
-    expect(v.top!.type).toBe('idle_tc');
+    expect(v.bottlenecks.find((b) => b.type === 'pop_block')!.label).toMatch(/^卡人口 · 约 \d+:\d{2}$/);
+    expect(v.top!.type).toBe('pop_block');
   });
   it('URL 非法值回退默认', () => {
     const q = parseQuery(new URLSearchParams('bo=x&civ=y&dist=99&house=2&step=a'), ['scouts-18'], ['Britons']);
@@ -55,5 +55,20 @@ describe('timelineModel', () => {
     expect(ok).toMatchObject({ civ: '', step: null, variant: 'aggr' });
     expect(parseQuery(new URLSearchParams('bo=scouts-18'), ['scouts-18'], ['Britons']).civ).toBe('');
     expect(parseQuery(new URLSearchParams('bo=scouts-18&civ=Britons'), ['scouts-18'], ['Britons']).civ).toBe('Britons');
+  });
+});
+
+describe('pickReason（摘要与步骤行共用的原因优先级）', () => {
+  const a = (type: Anomaly['type'], from: number, to: number) => ({ type, from, to, reasonZh: '' }) as Anomaly;
+  it('卡人口 > 超时 > 其他，只返回一条', () => {
+    expect(pickReason([a('timeout', 3600, 3600), a('idle_tc', 0, 50), a('pop_block', 658, 3600)])?.type).toBe('pop_block');
+    expect(pickReason([a('resource_short', 0, 99), a('timeout', 3600, 3600), a('idle_tc', 0, 50)])?.type).toBe('timeout');
+  });
+  it('同级取等待更久的；空列表返回 null', () => {
+    expect(pickReason([a('idle_tc', 0, 10), a('idle_tc', 20, 60)])?.from).toBe(20);
+    expect(pickReason([])).toBeNull();
+  });
+  it('时长用 m:ss，不出现「秒」原始值', () => {
+    expect(bottleneckLabel(a('pop_block', 100, 225))).toBe('卡人口 · 约 2:05');
   });
 });

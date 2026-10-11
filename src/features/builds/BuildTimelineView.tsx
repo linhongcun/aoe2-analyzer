@@ -9,7 +9,7 @@ import { simSupport } from '../../domain/simSupport';
 import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Breadcrumbs } from '../../shared/ui/layout';
-import { RES_ZH, buildView, mmss, parseQuery, rangeText, summaryText, type RowKey, type Seg } from './timelineModel';
+import { RES_ZH, bottleneckLabel, buildView, pickReason, mmss, parseQuery, rangeText, summaryText, type RowKey, type Seg } from './timelineModel';
 
 const UPS = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const UNIT_ZH = Object.fromEntries((units as { id: number; zh: string }[]).map((u) => [String(u.id), u.zh]));
@@ -432,7 +432,7 @@ export default function BuildTimelineView() {
                 <span className="n">{st.note}</span>
                 {s.anomalies.length > 0 && (
                   <span className="r">
-                    <TriangleAlert size={14} aria-hidden /> {s.anomalies.map((a) => a.reasonZh).join('；')}
+                    <TriangleAlert size={14} aria-hidden /> {bottleneckLabel(pickReason(s.anomalies)!, v.tOut)}
                   </span>
                 )}
               </button>

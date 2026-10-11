@@ -45,7 +45,14 @@ export interface TimelineView {
 
 export const AGE_ZH = { feudal: '封建', castle: '城堡', imperial: '帝王' } as const;
 export const RES_ZH: Record<Res, string> = { food: '食物', wood: '木头', gold: '黄金', stone: '石头' };
-const PRIO: Record<Anomaly['type'], number> = { idle_tc: 0, timeout: 1, pop_block: 2, resource_short: 3 };
+/** 原因优先级（摘要与步骤行共用）：卡人口 > 超时 > 其他 */
+const PRIO: Record<Anomaly['type'], number> = { pop_block: 0, timeout: 1, idle_tc: 2, resource_short: 3 };
+const dur = (a: Pick<Anomaly, 'waitSec' | 'from' | 'to'>) => a.waitSec ?? a.to - a.from;
+
+/** 一组异常里选出唯一要显示的原因：先按优先级，同级取等待更久的 */
+export function pickReason<T extends Pick<Anomaly, 'type' | 'waitSec' | 'from' | 'to'>>(list: readonly T[]): T | null {
+  return [...list].sort((a, b) => PRIO[a.type] - PRIO[b.type] || dur(b) - dur(a))[0] ?? null;
+}
 const VILLAGER = '83';
 
 /** 约 m:ss */
@@ -55,11 +62,11 @@ export const mmss = (s: number) => {
 };
 
 export function bottleneckLabel(a: Anomaly, tOut = Infinity): string {
-  const sec = Math.round(a.waitSec ?? a.to - a.from);
+  const d = mmss(dur(a));
   if (a.type === 'pop_block' && a.to >= tOut - 1e-6) return `卡人口 · 约 ${mmss(a.from)} 起`;
-  if (a.type === 'idle_tc') return `城镇中心闲置 · 约 ${sec} 秒`;
-  if (a.type === 'pop_block') return `卡人口 · 约 ${sec} 秒`;
-  if (a.type === 'resource_short') return `${a.resource ? RES_ZH[a.resource] : '资源'}差 ${a.shortfall ?? '?'} · 约 ${sec} 秒`;
+  if (a.type === 'idle_tc') return `城镇中心闲置 · 约 ${d}`;
+  if (a.type === 'pop_block') return `卡人口 · 约 ${d}`;
+  if (a.type === 'resource_short') return `${a.resource ? RES_ZH[a.resource] : '资源'}差 ${a.shortfall ?? '?'} · 约 ${d}`;
   return '60 分钟内到不了';
 }
 
@@ -147,7 +154,7 @@ export function buildView(tl: BuildTimeline, unitName: (id: string) => string): 
       });
     }
   bottlenecks.sort((a, b) => a.from - b.from || PRIO[a.type] - PRIO[b.type]);
-  let top = [...bottlenecks].sort((a, b) => PRIO[a.type] - PRIO[b.type] || b.sec - a.sec)[0] ?? null;
+  let top = pickReason(bottlenecks);
   // 超时前已经卡人口：卡人口才是原因，摘要显示它和它所在的步骤，不显示超时（Steve #39）
   if (top?.type === 'timeout') top = bottlenecks.find((b) => b.type === 'pop_block' && b.from < top!.from) ?? top;
 

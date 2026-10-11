@@ -86,10 +86,10 @@ test.describe('#3 开局时间线', () => {
     await expect(page.locator('[data-anomaly~="idle_tc"], [data-anomaly~="pop_block"]')).toHaveCount(0);
   });
 
-  test('6. 城镇中心闲置 >2 秒：红区 + 步骤行「城镇中心闲置 约 x 秒」，摘要第 1 格到达时间、第 3 格闲置', async ({ page }) => {
+  test('6. 城镇中心闲置 >2 秒：红区 + 步骤行「城镇中心闲置 · 约 m:ss」，摘要第 1 格到达时间、第 3 格闲置', async ({ page }) => {
     await openBuild(page, FIX.idle_tc);
     await expect(page.locator('[data-anomaly~="idle_tc"]').first()).toBeAttached();
-    await expect(page.getByText(/城镇中心闲置 约 [\d.]+ 秒/).first()).toBeVisible();
+    await expect(page.locator('.tl-steps .r').getByText(/城镇中心闲置 · 约 \d+:\d{2}/).first()).toBeVisible();
     await expect(summary(page).getByRole('listitem').first()).toContainText('到达封建');
     await expect(summary(page).getByRole('listitem').nth(2)).toContainText(/城镇中心闲置约 \d+ 秒/);
   });
@@ -230,6 +230,21 @@ test.describe('#3 开局时间线', () => {
     await expect(page.locator('[data-t="sum-bottleneck"]')).not.toContainText('60 分钟内到不了');
     await expect(page.locator('.tl-steps li.is-bad').filter({ hasText: '卡人口' }).first()).toBeVisible();
     await expect(page.locator('[data-anomaly~="pop_block"]').first()).toBeAttached();
+  });
+
+  test('16c. 步骤行只显示一个原因（卡人口优先），时长用 m:ss，不出现超时文案和「秒」', async ({ page }) => {
+    await openBuild(page, 'bo=scouts-18&civ=Britons&house=0');
+    const bad = page.locator('.tl-steps li.is-bad');
+    await expect(bad.first()).toBeVisible();
+    const n = await bad.count();
+    for (let k = 0; k < n; k++) {
+      const r = bad.nth(k).locator('.r');
+      await expect(r).not.toContainText('60 分钟');
+      await expect(r).not.toContainText('；');
+      await expect(r).not.toContainText('秒');
+      await expect(r).toHaveText(/\d+:\d{2}/);
+    }
+    await expect(page.locator('.tl-steps li[data-step="12"] .r')).toHaveText(/^\s*卡人口 · 约 \d+:\d{2}( 起)?$/);
   });
 
   test('17. 摘要：第 1 格到达时间 + 下方「按{文明}计」，第 2 格只写主要卡点（无「N 处」）', async ({ page }) => {

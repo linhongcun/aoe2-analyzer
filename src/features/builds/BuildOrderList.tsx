@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom';
+import { visibleSources } from './sources';
 import { ChartGantt } from 'lucide-react';
 import { buildOrders } from '../../data/buildOrders';
 import type { Phase } from '../../domain/buildOrder';
@@ -55,19 +56,23 @@ export default function BuildOrderList() {
               </li>
             ))}
           </ol>
-          <p className="note">
-            来源：
-            {b.sources.map((s, i) => (
-              <span key={i}>
-                {i > 0 && '；'}
-                <a href={s.url} target="_blank" rel="noopener noreferrer">
-                  {s.title}
-                </a>
-                {s.section ? `（${s.section}）` : ''}
-              </span>
-            ))}
-            。{b.license}
-          </p>
+          {visibleSources(b.sources).length > 0 ? (
+            <p className="note" data-t="bo-source">
+              来源：
+              {visibleSources(b.sources).map((s, i) => (
+                <span key={i}>
+                  {i > 0 && '；'}
+                  <a href={s.url} target="_blank" rel="noopener noreferrer">
+                    {s.title}
+                  </a>
+                  {s.section ? `（${s.section}）` : ''}
+                </span>
+              ))}
+              。{b.license}
+            </p>
+          ) : (
+            b.license && <p className="note">{b.license}</p>
+          )}
         </details>
       ))}
       <p>

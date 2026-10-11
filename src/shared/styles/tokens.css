@@ -29,7 +29,6 @@
   --color-shadow: #0000001f;    /* 图标、文字投影（原始透明黑） */
   --color-scrim: #00000066;     /* 弹窗与菜单遮罩 */
   /* 资源色（仅作色块，不承载文字） */
-  --res-food: #e0864a; --res-wood: #8a6b3d; --res-gold: #d4a72c; --res-stone: #8e8e93; --res-villager: #7a7a80;
 
   /* —— 字体 —— */
   --font-sans: "Inter", "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif;
