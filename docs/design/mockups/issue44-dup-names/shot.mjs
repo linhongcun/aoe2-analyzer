@@ -1,0 +1,2 @@
+import {chromium} from 'playwright';const b=await chromium.launch();const d=new URL('.',import.meta.url).pathname;
+for(const [n,w] of [['desktop',1280],['mobile',390]]){const p=await b.newPage({viewport:{width:w,height:900},deviceScaleFactor:w<500?2:1});await p.goto('file://'+d+n+'.html');await p.waitForTimeout(300);await p.screenshot({path:d+'dup-names-'+w+'.png',fullPage:true});}await b.close();
