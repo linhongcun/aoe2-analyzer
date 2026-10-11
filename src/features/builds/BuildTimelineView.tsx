@@ -9,7 +9,6 @@ import { simSupport } from '../../domain/simSupport';
 import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Breadcrumbs } from '../../shared/ui/layout';
-import { PENDING_LABEL, agePending, pendingFrom } from './pendingFix';
 import {
   RES_ZH,
   bottleneckLabel,
@@ -283,15 +282,8 @@ export default function BuildTimelineView() {
               </span>
             )}
           </li>
-          <li className={`tl-bn${topP ? ' is-pending' : v.top ? ' is-bad' : ''}${!topP && isLongBottleneck(sumT.main) ? ' is-long' : ''}`} data-t="sum-bottleneck">
-            {topP ? (
-              <>
-                <span className="k">主要卡点</span>
-                <b data-pending>
-                  — <small className="pending-note">{PENDING_LABEL}</small>
-                </b>
-              </>
-            ) : v.top ? (
+          <li className={`tl-bn${v.top ? ' is-bad' : ''}${isLongBottleneck(sumT.main) ? ' is-long' : ''}`} data-t="sum-bottleneck">
+            {v.top ? (
               <button type="button" className="tl-jump" onClick={() => jump(v.top!.step)} aria-label={`主要卡点 ${sumT.main}，${sumT.sub}，跳到该步`}>
                 <span className="k">主要卡点</span>
                 <b>{sumT.main}</b>
