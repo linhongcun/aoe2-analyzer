@@ -1,0 +1,92 @@
+/**
+ * #19 分享卡（v0.4，Jony SPEC：docs/design/mockups/issue19/share-card/SPEC.md @ design/jony-archive）。
+ * 原则：卡片不自己算，和页面用同一套函数——rangeLabel（#56）、pickSummaryBottleneck + summaryText（#57）、formatClock。
+ * 纯函数，不碰 DOM；数字全部来自 simulateBuild → buildView。
+ */
+import { formatClock } from '../../domain/formatTime';
+import { RES_ZH, rangeLabel, summaryText, type AgeMark, type TimelineView } from './timelineModel';
+
+export interface ShareCell {
+  label: string;
+  value: string;
+  /** 琥珀强调（最多 2 处：格 1、格 2 主值） */
+  accent: boolean;
+  /** 次行；null → 整行不渲染（不留空行、不写「—」） */
+  sub: string | null;
+}
+export interface ShareCardModel {
+  title: string;
+  cells: [ShareCell, ShareCell, ShareCell];
+  basis: string;
+  site: string;
+  kind: string;
+  url: string;
+}
+export interface ShareInput {
+  view: TimelineView;
+  /** 目标时代的到达标记（页面摘要用的同一个）；没到达为 undefined */
+  target: AgeMark | undefined;
+  boId: string;
+  boNameZh: string;
+  civEn: string;
+  civZh: string;
+  /** 目标时代中文（封建/城堡/帝王） */
+  targetZh: string;
+  dist: number;
+  defaultDist: number;
+  house: boolean;
+  patchBuild: number | string;
+  /** 站点根，如 linhongcun.github.io/aoe2-analyzer/（不含协议） */
+  siteRoot: string;
+}
+
+export const SHARE_SITE = '帝国时代 II 分析器';
+/** 置灰文明（simSupport=false）旁边的说明，逐字（Steve 定） */
+export const SHARE_DISABLED_NOTE = '加成未计入，暂不能生成分享卡';
+
+/** 结论句里的开局名：去掉末尾括号补充（「速升城堡暴经济（23+2）」→「速升城堡暴经济」，与 Jony 样稿一致） */
+export const shortBoName = (zh: string) => zh.replace(/\s*[（(][^（）()]*[）)]\s*$/, '');
+
+/** 能还原同一设置的深链；dist / house 非默认时才追加 */
+export function shareUrl(i: Pick<ShareInput, 'siteRoot' | 'boId' | 'civEn' | 'dist' | 'defaultDist' | 'house'>): string {
+  const q = [`bo=${i.boId}`, ...(i.civEn ? [`civ=${i.civEn}`] : [])];
+  if (i.dist !== i.defaultDist) q.push(`dist=${i.dist}`);
+  if (!i.house) q.push('house=0');
+  return `${i.siteRoot}#/builds?${q.join('&')}`;
+}
+
+export function buildShareCard(i: ShareInput): ShareCardModel {
+  const v = i.view;
+  const target = i.target;
+  const top = v.top;
+  const sum = summaryText(top, i.targetZh);
+  const reached = !!target && !v.timeout;
+  const phrase = !top
+    ? '全程不卡'
+    : top.type === 'pop_block'
+      ? '卡人口'
+      : top.type === 'timeout'
+        ? sum.main
+        : top.type === 'resource_short' && top.resource
+          ? `卡在${RES_ZH[top.resource]}`
+          : sum.main.replace(/ 约 .*$/, '');
+  const head = `${i.civZh}·${shortBoName(i.boNameZh)}`;
+  const title = reached ? `${head}，约 ${formatClock(target!.reachAt)} 到${i.targetZh}，${phrase}` : `${head}，60 分钟内到不了${i.targetZh}`;
+  return {
+    title,
+    cells: [
+      {
+        label: `到达${i.targetZh}`,
+        value: reached ? `约 ${formatClock(target!.reachAt)}` : '未到',
+        accent: reached,
+        sub: reached ? rangeLabel(target!.reachAt, target!.errSec) : null,
+      },
+      { label: '主要卡点', value: sum.main, accent: !!top, sub: sum.sub || null },
+      { label: '城镇中心闲置', value: `约 ${formatClock(v.tcIdleTotal)}`, accent: false, sub: null },
+    ],
+    basis: [`按${i.civZh}计`, `走路 ${i.dist} 格`, ...(i.house ? [] : ['关自动建房']), `游戏版本 ${i.patchBuild}`].join(' · '),
+    site: SHARE_SITE,
+    kind: '开局时间线',
+    url: shareUrl(i),
+  };
+}
