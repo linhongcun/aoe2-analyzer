@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { civByEn } from '../../data';
+import type { ListMeta } from './listMeta';
 import { visibleSources } from './sources';
 import { ChartGantt } from 'lucide-react';
 import { buildOrders } from '../../data/buildOrders';
@@ -19,10 +22,24 @@ const PHASE: Record<Phase, string> = {
 const AGE = ['', '黑暗', '封建', '城堡', '帝王'];
 
 /** #/builds：开局库只读列表（时间轴视图见 #2/#3） */
+function useListMeta(): Record<string, ListMeta> | null {
+  const [meta, setMeta] = useState<Record<string, ListMeta> | null>(null);
+  useEffect(() => {
+    let live = true;
+    import('./listMeta').then((m) => live && setMeta(Object.fromEntries(buildOrders.map((b) => [b.id, m.listMeta(b)])))).catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, []);
+  return meta;
+}
+
 export default function BuildOrderList() {
   const [sp] = useSearchParams();
+  const meta = useListMeta();
   const bo = sp.get('bo');
   if (bo && buildOrders.some((b) => b.id === bo)) return <TimelineLoader />;
+  const civName = (en: string) => civByEn(en)?.zh ?? en;
   return (
     <section className="pane" id="builds">
       <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
@@ -41,16 +58,16 @@ export default function BuildOrderList() {
         <details key={b.id} className="bo" data-t="build-order">
           <summary>
             <b>{b.name.zh}</b> <span className="note">{b.name.en}</span> · {b.target.vils} 人口{AGE[b.target.age]}
-            {PENDING_FIX[b.id] ? (
-              <span className="is-pending" data-pending>
-                （{keptTime(b.target.time) ? `${keptTime(b.target.time)}、` : ''}— 城堡 <small className="pending-note">{PENDING_LABEL}</small>）
-              </span>
-            ) : b.target.time ? (
-              `（${b.target.time}）`
-            ) : (
-              ''
-            )}{' '}
-            · {b.civs.length ? b.civs.join('、') : '通用'}
+            {meta?.[b.id]?.time ? <span data-t="bo-time">（{meta[b.id]!.time}，按通用计）</span> : ''} ·{' '}
+            {b.civs.length
+              ? b.civs.map((c, i) => (
+                  <span key={c} data-t="bo-civ">
+                    {i > 0 && '、'}
+                    {civName(c)}
+                    {meta?.[b.id]?.unsupported.includes(c) && <span className="note">（加成未计入）</span>}
+                  </span>
+                ))
+              : '通用'}
           </summary>
           <p>{b.summary}</p>
           <p>

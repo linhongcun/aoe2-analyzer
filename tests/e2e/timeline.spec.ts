@@ -388,3 +388,23 @@ test.describe('#3 开局时间线', () => {
     await expect(page.locator('[data-t="site-added"]')).toHaveCount(1);
   });
 });
+
+test.describe('#3 收尾', () => {
+  test('列表页：时间由模拟器算并标按通用计；置灰推荐文明标「加成未计入」', async ({ page }) => {
+    await page.goto('./#/builds');
+    const scouts = page.locator('[data-t="build-order"]', { hasText: '18 人口侦察骑兵' });
+    await expect(scouts.locator('[data-t="bo-time"]')).toHaveText(/约 \d+:\d\d 到达封建，按通用计/);
+    await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '匈奴' })).toContainText('加成未计入');
+    await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '法兰克' })).not.toContainText('加成未计入');
+  });
+  test('390 宽：摘要 2 列，到达时间与主要卡点同在第一行', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('./#/builds?bo=scouts-18&civ=Franks');
+    const a = await page.locator('[data-t="sum-arrive"]').boundingBox();
+    const b = await page.locator('[data-t="sum-bottleneck"]').boundingBox();
+    expect(a && b && Math.abs(a.y - b.y) < 2 && b.x > a.x).toBeTruthy();
+    const cols = await page.locator('.tl-summary').evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+    expect(cols).toBe(2);
+    expect(a!.y + a!.height).toBeLessThan(844);
+  });
+});

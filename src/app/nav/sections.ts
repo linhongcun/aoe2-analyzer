@@ -55,7 +55,7 @@ export const TOOLS: Section[] = [
     label: '开局流程',
     en: 'Build Orders',
     icon: 'list-ordered',
-    desc: '主流开局分步骤流程；时间轴视图开发中',
+    desc: '主流开局分步骤时间线：几分几秒到封建、卡在哪一步',
     match: /^\/builds$/,
   },
   { key: 'compare', path: '/compare', label: '文明对比', en: 'Compare', icon: 'scale', desc: '两个文明的能力雷达与关键差异', match: /^\/compare$/ },

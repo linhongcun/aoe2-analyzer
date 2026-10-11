@@ -10,7 +10,19 @@ import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domai
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { PENDING_LABEL, agePending, pendingFrom } from './pendingFix';
-import { RES_ZH, bottleneckLabel, buildView, pickReason, mmss, parseQuery, rangeText, summaryText, type RowKey, type Seg } from './timelineModel';
+import {
+  RES_ZH,
+  bottleneckLabel,
+  buildView,
+  pickReason,
+  mmss,
+  parseQuery,
+  rangeText,
+  summaryText,
+  isLongBottleneck,
+  type RowKey,
+  type Seg,
+} from './timelineModel';
 
 const UPS = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const UNIT_ZH = Object.fromEntries((units as { id: number; zh: string }[]).map((u) => [String(u.id), u.zh]));
@@ -281,7 +293,7 @@ export default function BuildTimelineView() {
               </span>
             )}
           </li>
-          <li className={`tl-bn${topP ? ' is-pending' : v.top ? ' is-bad' : ''}`} data-t="sum-bottleneck">
+          <li className={`tl-bn${topP ? ' is-pending' : v.top ? ' is-bad' : ''}${!topP && isLongBottleneck(sumT.main) ? ' is-long' : ''}`} data-t="sum-bottleneck">
             {topP ? (
               <>
                 <span className="k">主要卡点</span>

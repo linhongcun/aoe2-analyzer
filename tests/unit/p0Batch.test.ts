@@ -180,7 +180,8 @@ describe('#31 开局流程入口', () => {
   });
   it('首页「正在制作」不再列开局流程', () => {
     const src = readFileSync('src/features/home/components/Home.tsx', 'utf8');
-    expect(src).toContain('<p>开局时间轴 · 版本补丁</p>');
+    expect(src).toContain('<p>版本补丁</p>');
+    expect(src).not.toContain('开局时间轴');
     expect(src).not.toMatch(/地图 ·|天梯/);
     expect(src).not.toMatch(/正在制作[\s\S]*开局流程/);
   });
