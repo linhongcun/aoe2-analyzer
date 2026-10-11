@@ -124,7 +124,13 @@ describe('civ economy bonuses (vs Generic = no bonuses)', () => {
     expect(s.stock).toMatchObject({ food: 0, wood: 150 });
     expect(s.pop.used).toBe(7);
   });
-  it('Celts lumberjacks +15% -> more wood at the same step than Britons', () => {
+  it('Mayans start with 4 villagers (Generic 3); pop = villagers + scout', () => {
+    const vils = (civ: string) => Object.values(sim(bo, civ).steps[0]!.villagers).reduce((a, b) => a + b, 0);
+    expect(vils('Mayans')).toBe(4);
+    expect(vils('Generic')).toBe(3);
+    expect(sim(bo, 'Mayans').steps[0]!.pop.used).toBe(5);
+  });
+  it('Celts lumberjacks +15% -> more wood at Feudal click than Generic', () => {
     const i = bo.steps.findIndex((s) => s.phase === 'feudal-click');
     expect(sim(bo, 'Celts').steps[i]!.stock.wood).toBeGreaterThan(sim(bo, 'Generic').steps[i]!.stock.wood);
   });
@@ -136,5 +142,30 @@ describe('civ economy bonuses (vs Generic = no bonuses)', () => {
   it('Hindustanis cheaper villagers -> more food banked at Feudal click', () => {
     const i = bo.steps.findIndex((s) => s.phase === 'feudal-click');
     expect(sim(bo, 'Hindustanis').steps[i]!.stock.food).toBeGreaterThan(sim(bo, 'Generic').steps[i]!.stock.food);
+  });
+});
+
+describe('pop_block with missing houses', () => {
+  const HOUSE = 70;
+  const withoutHouses = (bo: BuildOrder): BuildOrder => ({
+    ...bo,
+    steps: bo.steps.map((s) => ({ ...s, actions: s.actions.filter((a) => !(a.type === 'build' && a.building === HOUSE)) })),
+  });
+  it('autoHouses off + no house builds -> pop_block anomaly (卡人口)', () => {
+    const bo = withoutHouses(buildOrders.find((b) => b.id === 'fast-castle-boom')!);
+    const pb = sim(bo, 'Britons', { autoHouses: false }).anomalies.filter((a) => a.type === 'pop_block');
+    expect(pb.length).toBeGreaterThan(0);
+    expect(pb[0]!.waitSec).toBeGreaterThan(0);
+    expect(pb[0]!.reasonZh).toContain('卡人口');
+  });
+});
+
+describe('end-to-end idle_tc', () => {
+  it('fast-castle-boom x Britons (default params) -> idle_tc > 2 s; raising the threshold hides it', () => {
+    const bo = buildOrders.find((b) => b.id === 'fast-castle-boom')!;
+    const idle = sim(bo).anomalies.filter((a) => a.type === 'idle_tc');
+    expect(idle.length).toBeGreaterThan(0);
+    expect(idle[0]!.waitSec).toBeGreaterThan(2);
+    expect(sim(bo, 'Britons', { idleThreshold: 50 }).anomalies.some((a) => a.type === 'idle_tc')).toBe(false);
   });
 });
