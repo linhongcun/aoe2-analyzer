@@ -20,7 +20,7 @@ W={}
 # S1 halb vs paladin
 a=side('swords','长戟兵','拜占庭',[('食物',o(35)+n('26')),('木头',o(25)+n('19'))],o(60)+'45',66,o(50),applied('拜占庭 反制单位费用 −25%'))
 b=side('swords','游侠','法兰克',[('食物','60'),('黄金','75')],'135',22,'',NONE)
-W['issue24-v3/discount']=P(head('等资源')+'<p class=lbl>场景 1 · 拜占庭长戟兵 vs 法兰克游侠</p>'+f'<div class=sides>{a}<div class=vs>VS</div>{b}</div>'+res('A 胜 · 66 个长戟兵 对 22 个游侠','A 剩 57 个 · 用时 6.0 秒 · 集火模型')+FOOT)
+W['issue24-v3/discount']=P(head('等资源')+'<p class=lbl>场景 1 · 拜占庭长戟兵 vs 法兰克游侠</p>'+f'<div class=sides>{a}<div class=vs>VS</div>{b}</div>'+'<p class=ann>同一规则：拜占庭精锐掷矛手 食物 25 → 19 · 木头 35 → 26</p>'+res('A 胜 · 66 个长戟兵 对 22 个游侠','A 剩 57 个 · 用时 6.0 秒 · 集火模型')+FOOT)
 # S4 magyar w/ popover
 pop=f'''<span class=pop style="top:auto;left:0;margin-top:6px;position:relative;display:block"><b>马扎尔 · 翼骑兵 的费用</b><h4>已计入</h4><div class=it>{ic("check")}<span>斥候骑兵系费用 −15%<small>食物 80 → 68</small></span></div><h4>不影响费用</h4><div class=it>{ic("info")}<span>锻造、铸铁、鼓风炉免费且瞬间完成，但仍需在铁匠铺研究<small>不改变数量与攻击数值</small></span></div><a class=lk>查看文明加成 {ic("arrow-right")}</a></span>'''
 a=side('swords','翼骑兵','马扎尔',[('食物',o(80)+n('68'))],o(80)+'68',44,o(37),applied('马扎尔 斥候骑兵系费用 −15%')+pop)
