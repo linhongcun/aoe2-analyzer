@@ -31,7 +31,7 @@
 - 匈奴：不造房、起始少 100 木建模，摘要加对比行，「自动建房」开关置灰；出处补不齐则匈奴本版保持置灰（#42）
 - 页脚显示站点版本号：「v0.4.0 · 数据版本 · 构建号」，版本号读自 package.json
 - 许可证：项目代码采用 MIT；游戏数据、名称、图标和图像归各自权利人，不在 MIT 范围内（见 README）；补充第三方组件说明：Inter 字体（SIL OFL 1.1，附 OFL.txt）、Lucide（ISC）
-- 仓库规范：CHANGELOG、CONTRIBUTING、PR 模板、PR 标题 Conventional Commits 检查
+- 仓库规范：CHANGELOG、CONTRIBUTING、PR 模板、PR 标题 Conventional Commits 检查；写明定时任务只能开 PR 和修 bug，合并由开发手动进行
 
 #### 变更
 
