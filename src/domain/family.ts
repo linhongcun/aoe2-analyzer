@@ -77,3 +77,10 @@ export function groupLines(list: readonly Unit[], all: Unit[], byId: Record<numb
   res.forEach((g) => g.members.sort((a, b) => (pos.get(a.u.id) ?? 0) - (pos.get(b.u.id) ?? 0)));
   return res;
 }
+
+/** 科技「涉及单位」（#13）：来自结构化效果（techAffects 的结果），按 id 去重，普通/精锐合并为一条 */
+export function affectedUnits(groups: readonly { rows: readonly { units: readonly Unit[] }[] }[], f: Families): Unit[] {
+  const seen = new Map<number, Unit>();
+  groups.forEach((g) => g.rows.forEach((r) => r.units.forEach((u) => seen.set(u.id, u))));
+  return collapse([...seen.values()], f).map((e) => e.u);
+}
