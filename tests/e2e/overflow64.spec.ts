@@ -8,6 +8,28 @@ import { expect, test, type Page } from '@playwright/test';
 const WIDTHS = [360, 375, 390, 1280] as const;
 const BUILDS = ['archers-19', 'drush-fc', 'fast-castle-boom', 'feudal-drush-18', 'maa-archers-18', 'scouts-18'] as const;
 
+/** 逐个元素检查右缘不超出视口（跳过自身可横向滚动容器里的内容） */
+async function eachInViewport(page: Page, root: string) {
+  const bad = await page.evaluate((sel) => {
+    const vw = document.documentElement.clientWidth;
+    const out: string[] = [];
+    for (const el of document.querySelectorAll(`${sel}, ${sel} *`)) {
+      let p = el.parentElement,
+        scrolled = false;
+      while (p && !scrolled) {
+        const ox = getComputedStyle(p).overflowX;
+        scrolled = (ox === 'auto' || ox === 'scroll' || ox === 'hidden') && p !== document.body && p !== document.documentElement;
+        p = p.parentElement;
+      }
+      if (scrolled) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width && r.right > vw + 0.5) out.push(`${el.tagName.toLowerCase()}.${el.className} right=${Math.round(r.right)}`);
+    }
+    return { vw, out };
+  }, root);
+  expect(bad.out, `视口 ${bad.vw} 内越界元素`).toEqual([]);
+}
+
 async function noHScroll(page: Page) {
   const { sw, vw } = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, vw: window.innerWidth }));
   expect(sw, `scrollWidth ${sw} > 视口 ${vw}`).toBeLessThanOrEqual(vw);
@@ -31,6 +53,28 @@ for (const width of WIDTHS) {
       });
       expect(Math.abs(box.al - box.tl)).toBeLessThanOrEqual(1);
       expect(Math.abs(box.br - box.tr)).toBeLessThanOrEqual(1);
+      await eachInViewport(page, '#duel-res');
+    });
+
+    test('/duel N vs M 群战：无横向溢出，刻度在图表内且贴齐两端，逐元素不越界', async ({ page }) => {
+      await page.goto('./#/duel?m=n');
+      await expect(page.locator('#duel-res .duel-chart')).toBeVisible();
+      await noHScroll(page);
+      const box = await page.evaluate(() => {
+        const chart = document.querySelector('#duel-res .duel-chart')!.getBoundingClientRect();
+        const axis = document.querySelector('#duel-res .duel-chart + .tl-axis')!;
+        const s = axis.querySelectorAll('span');
+        const a = s[0]!.getBoundingClientRect();
+        const b = s[s.length - 1]!.getBoundingClientRect();
+        const ax = axis.getBoundingClientRect();
+        return { cl: chart.left, cr: chart.right, al: a.left, br: b.right, xl: ax.left, xr: ax.right };
+      });
+      expect(box.xl).toBeGreaterThanOrEqual(box.cl - 1);
+      expect(box.xr).toBeLessThanOrEqual(box.cr + 1);
+      // 末尾刻度贴齐图表右缘；「0s」在图表内（base.css .tl-axis margin-left:24px 使其距左缘 24px，见 PR 说明）
+      expect(box.al).toBeGreaterThanOrEqual(box.cl - 1);
+      expect(Math.abs(box.br - box.cr)).toBeLessThanOrEqual(1);
+      await eachInViewport(page, '#duel-res');
     });
 
     test('/about-data 无横向溢出', async ({ page }) => {

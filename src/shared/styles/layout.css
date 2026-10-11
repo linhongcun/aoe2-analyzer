@@ -1870,12 +1870,14 @@ a.tbld:hover span {
 }
 
 /* #64 横向溢出（Jony 设计 #64#issuecomment-6114971212） */
-/* 1. PK 页时间线刻度：不继承开局时间线的绝对定位 */
-.duel-tl .tl-axis {
+/* 1. PK 页时间线刻度（1v1 与 N vs M 群战）：不继承开局时间线的绝对定位 */
+.duel-tl .tl-axis,
+.duel-chart + .tl-axis {
   position: static;
   height: auto;
 }
-.duel-tl .tl-axis span {
+.duel-tl .tl-axis span,
+.duel-chart + .tl-axis span {
   position: static;
   transform: none;
 }
