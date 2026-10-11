@@ -1,3 +1,4 @@
+import { unitCountLabel } from '../../domain/family';
 import type { IconName } from '../../shared/ui/Icon';
 
 /** 信息架构：导航分组与模块注册表（新增模块只需在这里登记 + routes.tsx 注册路由） */
@@ -24,7 +25,15 @@ export const WIKI: Section[] = [
     desc: '56 个文明的定位、加成、评分与团战位置',
     match: /^\/(civs|civ\/.*)$/,
   },
-  { key: 'units', path: '/units', label: '单位', en: 'Units', icon: 'users', desc: '248 个单位的属性、克制与升级路线', match: /^\/units?(\/.*)?$/ },
+  {
+    key: 'units',
+    path: '/units',
+    label: '单位',
+    en: 'Units',
+    icon: 'users',
+    desc: `${unitCountLabel(__UNIT_COUNT__)}的属性、克制与升级路线`,
+    match: /^\/units?(\/.*)?$/,
+  },
   {
     key: 'buildings',
     path: '/buildings',
