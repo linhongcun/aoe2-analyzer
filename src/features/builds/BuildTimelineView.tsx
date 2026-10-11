@@ -481,7 +481,7 @@ export default function BuildTimelineView() {
                     style={{ left: pct(a.reachAt - a.errSec.early), width: w(a.reachAt - a.errSec.early, a.reachAt + a.errSec.late) }}
                   />
                   <span
-                    className="tl-age"
+                    className={`tl-age${Math.min(span, Math.max(0, a.reachAt)) / span > 0.7 ? ' is-end' : ''}`}
                     style={{ left: pct(a.reachAt) }}
                     data-age={a.age}
                     role="listitem"

@@ -1868,3 +1868,38 @@ a.tbld:hover span {
     white-space: normal;
   }
 }
+
+/* #64 横向溢出（Jony 设计 #64#issuecomment-6114971212） */
+/* 1. PK 页时间线刻度：不继承开局时间线的绝对定位 */
+.duel-tl .tl-axis {
+  position: static;
+  height: auto;
+}
+.duel-tl .tl-axis span {
+  position: static;
+  transform: none;
+}
+/* 2. /about-data 来源表在窄屏内横向滚动 */
+#about-data table.stat {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+/* 3. 开局时间线：首尾刻度不居中；到达时代第 2 个标记放第二行，靠右的向左展开 */
+.tl-chart .tl-axis span:first-child {
+  transform: none;
+}
+.tl-chart .tl-axis span:last-child {
+  transform: translateX(-100%);
+}
+.tl-row[data-row='age'] {
+  height: 44px;
+  align-items: flex-start;
+}
+.tl-row[data-row='age'] .tl-track > span:nth-child(even) .tl-age {
+  top: 22px;
+}
+.tl-age.is-end {
+  flex-direction: row-reverse;
+  transform: translateX(calc(-100% + 7px));
+}
