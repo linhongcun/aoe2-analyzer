@@ -13,7 +13,7 @@ h1{font-size:32px;letter-spacing:-.02em;line-height:1.2}.sub{color:#636366;font-
 .row{display:flex;align-items:center;gap:20px;background:#fff;border-radius:18px;padding:20px 24px;box-shadow:0 1px 2px #0000000a,0 4px 16px #0000000a;margin-bottom:12px}
 .row .v{font-size:20px;font-weight:700;min-width:180px}.row .d{font-size:13px;color:#636366}.row .s{flex:1;color:#3a3a3c;font-size:14px}.row.ph{opacity:1;background:#f5f5f7;box-shadow:none;border:1px dashed #e5e5ea}.row.ph .v,.row.ph .s{color:#636366}
 .cnt{display:flex;gap:6px;flex-wrap:wrap}.k{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
-.k.new{background:#e5f0fb;color:#0066cc}.k.buff{background:#e6f4ea;color:#1f7a35}.k.nerf{background:#fdeeec;color:#c4281c}.k.fix{background:#f2f2f7;color:#3a3a3c}
+.k.new{background:#e5f0fb;color:#0066cc}.k.buff{background:#e6f4ea;color:#1f7a35}.k.nerf{background:#fdeeec;color:#c4281c}.k.mix{background:#f2f2f7;color:#636366}.k.fix{background:#f2f2f7;color:#3a3a3c}
 .lay{display:grid;grid-template-columns:240px 1fr;gap:32px;align-items:start}
 .fp{background:#fff;border-radius:18px;padding:20px;box-shadow:0 1px 2px #0000000a,0 4px 16px #0000000a;position:sticky;top:16px}
 .fp h4{font-size:12px;color:#636366;font-weight:600;margin:16px 0 8px}.fp h4:first-child{margin-top:0}
@@ -25,7 +25,7 @@ h1{font-size:32px;letter-spacing:-.02em;line-height:1.2}.sub{color:#636366;font-
 .sec{font-size:18px;font-weight:700;margin:24px 0 12px;display:flex;gap:8px;align-items:center}.sec:first-of-type{margin-top:0}.sec small{font-size:13px;color:#636366;font-weight:400}
 .card{background:#fff;border-radius:14px;padding:16px 20px;box-shadow:0 1px 2px #0000000a,0 4px 16px #0000000a;margin-bottom:10px;border-left:3px solid var(--kc)}
 .card .h{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.card .t{font-weight:600;color:#0066cc}.card .t.na{color:#1d1d1f}.card .tt{font-size:12px;color:#636366}.card .civ{font-size:12px;color:#636366;margin-left:auto}
-.card p{margin-top:6px;color:#3a3a3c;font-size:14px}.ba{margin-top:8px;font-size:13px;color:#636366;display:flex;gap:8px;align-items:center}.ba b{color:#1d1d1f;font-size:15px}.dir{display:inline-flex;gap:3px;align-items:center;height:22px;padding:0 8px;border-radius:999px;font-size:12px;font-weight:600}.dir.up{background:#e6f4ea;color:#1f7a35}.dir.down{background:#fdeeec;color:#c4281c}
+.card p{margin-top:6px;color:#3a3a3c;font-size:14px}.ba{margin-top:8px;font-size:13px;color:#636366;display:flex;gap:8px;align-items:center}.ba b{color:#1d1d1f;font-size:15px}.dir{display:inline-flex;gap:3px;align-items:center;height:22px;padding:0 8px;border-radius:999px;font-size:12px;font-weight:600}.dir.up{background:#e6f4ea;color:#1f7a35}.dir.mix,.dir.fup,.dir.fdown{background:#f2f2f7;color:#636366}.dir.down{background:#fdeeec;color:#c4281c}
 .civbar{background:#fff;border-radius:18px;padding:16px 20px;box-shadow:0 1px 2px #0000000a,0 4px 16px #0000000a;margin-bottom:20px;display:grid;grid-template-columns:auto minmax(280px,420px) 1fr;gap:16px;align-items:center}.civbar .lb{position:absolute;left:0;right:0;z-index:5}.civbar .cvl{display:flex;gap:8px;align-items:center;font-size:17px;font-weight:700}.civbar .cvh{font-size:13px;color:#636366}.civbar .cvs{font-size:13px;color:#1d1d1f;justify-self:end}
 .oth{background:#fff;border-radius:14px;padding:4px 20px;box-shadow:0 1px 2px #0000000a,0 4px 16px #0000000a;margin-bottom:10px}.oth .ohd{display:flex;gap:8px;align-items:center;height:52px;font-weight:600}.oth .ohd span{margin-left:auto;font-size:13px;color:#0066cc;font-weight:400;display:flex;gap:4px;align-items:center}.oth ul{margin:0 0 12px;padding-left:20px;color:#3a3a3c;font-size:14px}.oth li{margin:4px 0}.oth .src{font-size:13px;color:#636366;margin-bottom:12px}.oth .src a{color:#0066cc}
 .empty{background:#fff;border-radius:18px;padding:48px 24px;text-align:center;box-shadow:0 1px 2px #0000000a,0 4px 16px #0000000a}.empty .lu{width:32px;height:32px;color:#636366}.empty h3{margin:12px 0 4px;font-size:17px}.empty p{color:#636366;font-size:14px}
@@ -50,7 +50,7 @@ h1{font-size:32px;letter-spacing:-.02em;line-height:1.2}.sub{color:#636366;font-
 def page(title,body):
   return f'''<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width"><style>{CSS}</style><body>
 <header class=top><button class=burger aria-label=菜单>{ic("menu")}</button><span class=brand>{ic("swords")}帝国时代 II 分析器</span><nav class=nav><a>首页</a><a>文明</a><a>单位</a><a>建筑</a><a>科技</a><a>科技树</a><a>工具 {ic("chevron-down")}</a></nav><span class=ver>{ic("database")}数据版本：2026-10</span></header><main>{body}</main>'''
-K={'new':('新内容','sparkles','#0066cc'),'buff':('加强','arrow-up','#1f7a35'),'nerf':('削弱','arrow-down','#c4281c'),'fix':('数据修正','wrench','#8e8e93')}
+K={'new':('新内容','sparkles','#0066cc'),'buff':('加强','arrow-up','#1f7a35'),'nerf':('削弱','arrow-down','#c4281c'),'fix':('数据修正','wrench','#8e8e93'),'mix':('调整','arrow-left-right','#8e8e93')}
 def kc(k,n=None):l,i,_=K[k];return f'<span class="k {k}">{ic(i)}{l}{" "+str(n) if n is not None else ""}</span>'
 # real items from docs/PATCH-NOTES/185872.md + Reid's checklist + official note; kinds/civ tags = 示例
 ITEMS=[
@@ -60,12 +60,13 @@ ITEMS=[
  ('buff','投石车','单位','',True,'攻击力（官方 185872 说明）',('50','55','up')),
  ('buff','长剑士','单位','',True,'对冲击步兵攻击加成（官方 185872 说明）',('+6','+8','up')),
  ('buff','重型爆破船','科技','',True,'升级降价（官方 185872 说明；数值待 data:update 生成）',None),
+ ('mix','（示例）多项属性同时改动的单位','单位','',False,'示例占位：如攻击和攻击间隔同时变、方向无法自动判断且未人工标注；185872.md 里没有这类真实条目',('x','y','mix')),
  ('fix','Dry Dock（干船坞）','科技','',True,'舰船 +1 穿刺护甲（旧数据为移速）',None),
- ('fix','德罗蒙','单位','拜占庭',True,'攻速加成',('20%','25%','up')),
- ('fix','Siege Engineers（攻城工程师）','科技','',True,'爆破船对建筑加成',('+172.8/211.2/268.8','+72/88/112','down')),
- ('fix','Fabric Shields','科技','印加',True,'作用于蔷琵系，不再作用于鹰勇士系',('+1/+2','+1/+1','down')),
+ ('fix','德罗蒙','单位','拜占庭',True,'攻速加成',('20%','25%','fup')),
+ ('fix','Siege Engineers（攻城工程师）','科技','',True,'爆破船对建筑加成',('+172.8/211.2/268.8','+72/88/112','fdown')),
+ ('fix','Fabric Shields','科技','印加',True,'作用于蔷琵系，不再作用于鹰勇士系',('+1/+2','+1/+1','fdown')),
  ('fix','萨拉森团队加成','团队加成','萨拉森',True,'对建筑 +3',None)]
-DIRL={'up':('arrow-up','加强'),'down':('arrow-down','削弱')}
+DIRL={'up':('arrow-up','加强'),'down':('arrow-down','削弱'),'mix':('arrow-left-right','调整'),'fup':('arrow-up-down','数值上调'),'fdown':('arrow-up-down','数值下调')}
 OTHER=lambda: f'''<h3 class=sec>其他</h3><div class=oth><div class=ohd>{ic("bug")}Bug 修复<span>展开 {ic("chevron-down")}</span></div></div>
 <div class=oth><div class=ohd>{ic("map")}地图与天梯</div><ul><li>新地图 Arabian Desert；另有地图平衡和脚本改动</li><li>天梯：Ranked Deathmatch 开放队伍位置和 Turbo</li></ul><div class=src>只列文字，详情见 <a>官方原文 {ic("external-link")}</a></div></div>'''
 def card(it):
@@ -74,7 +75,7 @@ def card(it):
   return f'<div class=card style="--kc:{K[k][2]}"><div class=h>{kc(k)}<span class="t{"" if link else " na"}">{n}{" "+ic("chevron-right") if link else ""}</span><span class=tt>{tt}</span><span class=civ>{civ+" 专属" if civ else "全局"}</span></div><p>{s}</p>{b}</div>'
 def secs(items):
   out='';
-  for k in ['new','buff','nerf','fix']:
+  for k in ['new','buff','nerf','mix','fix']:
     g=[i for i in items if i[0]==k]
     if g: out+=f'<h3 class=sec>{K[k][0]}<small>{len(g)} 条</small></h3>'+(f'<p class=fixn>{ic("database")}已与 185872 原版 .dat 核对，属于数据来源修正，不是平衡改动。</p>' if k=='fix' else '')+''.join(card(i) for i in g)
   return out+OTHER()
