@@ -1853,3 +1853,9 @@ a.tbld:hover span {
 .tl-cmp > span {
   white-space: nowrap;
 }
+
+/* 页脚：版本 · 数据版本 · 构建号 单独一行、不折行（390 下也不拆开） */
+.fmeta {
+  display: block;
+  white-space: nowrap;
+}

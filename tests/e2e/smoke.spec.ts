@@ -575,5 +575,21 @@ test('页脚在数据版本前显示站点版本（package.json）', async ({ pa
   await page.goto('#/builds');
   const foot = page.locator('footer .fbfoot');
   await expect(foot.locator('[data-t="footer-app-version"]')).toHaveText('v0.4.0');
-  expect(await foot.innerText()).toMatch(/v0\.4\.0\s*数据版本：[^\n]*构建 [0-9a-f]{7}/);
+  expect(await foot.locator('[data-t="footer-meta"]').innerText()).toMatch(/^v0\.4\.0 · 数据版本：[^\n]* · 构建 [0-9a-f]{7}$/);
+});
+
+test('390：页脚「版本 · 数据版本 · 构建号」在同一行', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('#/builds');
+  const meta = page.locator('footer [data-t="footer-meta"]');
+  const tops = await Promise.all(
+    ['footer-app-version', 'footer-version', 'footer-build'].map((k) =>
+      meta.locator(`[data-t="${k}"]`).evaluate((e) => Math.round(e.getBoundingClientRect().top)),
+    ),
+  );
+  expect(new Set(tops).size).toBe(1);
+  // 「数据版本」本身不折行：所有行框同一 top；整行不溢出
+  const vt = await page.locator('[data-t="footer-version"]').evaluate((e) => [...e.getClientRects()].map((r) => Math.round(r.top)));
+  expect(new Set(vt).size).toBe(1);
+  expect(await meta.evaluate((e) => e.scrollWidth <= e.clientWidth)).toBe(true);
 });
