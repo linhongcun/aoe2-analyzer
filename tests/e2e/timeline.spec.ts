@@ -96,7 +96,7 @@ test.describe('#3 开局时间线', () => {
         .first(),
     ).toBeVisible();
     await expect(summary(page).getByRole('listitem').first()).toContainText('到达封建');
-    await expect(summary(page).getByRole('listitem').nth(2)).toContainText(/城镇中心闲置约 \d+ 秒/);
+    await expect(summary(page).getByRole('listitem').nth(2)).toContainText(/城镇中心闲置约 \d+:\d{2}/);
   });
 
   test('7. 点摘要里的主要卡点：跳到对应步骤，选中并滚动到可见，URL 出现 step=', async ({ page }) => {
@@ -250,6 +250,13 @@ test.describe('#3 开局时间线', () => {
       await expect(r).toHaveText(/\d+:\d{2}/);
     }
     await expect(page.locator('.tl-steps li[data-step="12"] .r')).toHaveText(/^\s*卡人口 · 约 \d+:\d{2}( 起)?$/);
+    // 整页统一 m:ss：摘要卡、步骤行、展开详情里都不出现「秒」（Steve #39）
+    await page.locator('.tl-steps li[data-step="12"] .tl-step').click();
+    await expect(page.locator('#builds')).not.toContainText('秒');
+    for (const q of ['bo=archers-19&civ=Britons', 'bo=scouts-18&civ=Britons']) {
+      await openBuild(page, q);
+      await expect(page.locator('#builds')).not.toContainText('秒');
+    }
   });
 
   test('17. 摘要：第 1 格到达时间 + 下方「按{文明}计」，第 2 格只写主要卡点（无「N 处」）', async ({ page }) => {

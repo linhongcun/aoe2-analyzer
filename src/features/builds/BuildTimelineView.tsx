@@ -285,7 +285,7 @@ export default function BuildTimelineView() {
           <li>
             <span className="k">城镇中心闲置</span>
             <b className="tl-num" data-time>
-              约 {Math.round(v.tcIdleTotal)} 秒
+              约 {mmss(v.tcIdleTotal)}
             </b>
           </li>
           <li>

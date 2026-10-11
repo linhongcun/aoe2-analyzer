@@ -26,7 +26,7 @@ export interface Bottleneck {
   from: number;
   to: number;
   sec: number;
-  /** 短标签，如「卡人口 · 约 24 秒」 */
+  /** 短标签，如「卡人口 · 约 0:24」 */
   label: string;
   reasonZh: string;
   step: number;
