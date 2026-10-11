@@ -4,7 +4,7 @@ import { useCore } from '../../../data/hooks';
 import { dlcMatch } from '../../../domain/dlc';
 import { AGE_ZH } from '../../../domain/ratings';
 import type { Unit } from '../../../domain/types';
-import { collapse } from '../../../domain/family';
+import { collapse, UNIT_COUNT_NOTE } from '../../../domain/family';
 import { CostView, DlcBadge, EliteBadge, UnitIcon } from '../../../shared/ui/art';
 import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
@@ -42,7 +42,7 @@ export default function UnitList() {
           <option value="4">帝王</option>
         </select>
         <span id="ucnt" className="note">
-          {r.length} / {fams.length}
+          {r.length} / {fams.length} · {UNIT_COUNT_NOTE}
         </span>
       </div>
       <DlcBar value={dlc} onChange={setDlc} />
