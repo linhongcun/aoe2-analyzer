@@ -1,8 +1,11 @@
 /** #22 对建筑射程小字：主数字下方一行 muted。compact=true（PK）在窄屏缩写为「建筑 N」，悬停/长按显示「对建筑射程 N」。 */
-export function rangeB(u: { rng: number; rngB?: number }): number | null {
-  return u.rngB != null && u.rngB !== u.rng ? u.rngB : null;
+type RangeLike = { rng: number; rngB?: number; rngBd?: number };
+/** 对建筑射程：模拟后的 StatSet 用 rngB；原始 Unit 用 rng + rngBd */
+export function rangeB(u: RangeLike): number | null {
+  const b = u.rngB ?? (u.rngBd ? u.rng + u.rngBd : undefined);
+  return b != null && b !== u.rng ? b : null;
 }
-export function RangeB({ u, compact = false }: { u: { rng: number; rngB?: number }; compact?: boolean }) {
+export function RangeB({ u, compact = false }: { u: RangeLike; compact?: boolean }) {
   const n = rangeB(u);
   if (n === null) return null;
   return (

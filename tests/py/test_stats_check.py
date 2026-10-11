@@ -19,7 +19,7 @@ def fake_d():
 
 
 def site(i, rng, rngB, minr=0):
-    return {'id': i, 'en': 'U%d' % i, 'atks': [['穿刺', 6]], 'hp': 40, 'rng': rng, 'rngB': rngB, 'minr': minr, 'rof': 3.5, 'acc': 85}
+    return {'id': i, 'en': 'U%d' % i, 'atks': [['穿刺', 6]], 'hp': 40, 'rng': rng, 'rngBd': rngB - rng, 'minr': minr, 'rof': 3.5, 'acc': 85}
 
 
 class StatsCheck(unittest.TestCase):
@@ -31,6 +31,11 @@ class StatsCheck(unittest.TestCase):
 
     def test_dual_range_ok(self):
         self.assertEqual(sc.main(self.good(), [], fake_d()), 0)
+
+    def test_wrong_building_delta_nonzero(self):
+        # #38：差值写错（对建筑 = rng + rngBd ≠ .dat Range）应失败
+        u = self.good(); u[0]['rngBd'] = 3
+        self.assertEqual(sc.main(u, [], fake_d()), 1)
 
     def test_unlisted_diff_nonzero(self):
         u = self.good(); u[0]['hp'] = 999

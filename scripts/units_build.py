@@ -23,10 +23,21 @@ for f in sorted(glob.glob(T+'trees/*.json')):
               desc=hz,civs=[],cls=sorted(a['Class'] for a in u['Armours']))
         if x['node_status']!='NotAvailable': units[i]['civs'].append(civ) if civ not in units[i]['civs'] else None
 UU=d['data']['unit_upgrades']
+# #38 双射程：aoe2techtree 只给对单位射程；对建筑射程差值取自固定 .dat（蓄力远程 ChargeType，Range − DisplayedRange）
+import sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from dat_source import load as _dat_load
+_DU=_dat_load()['Civs'][1]['Units']
+def rngBd(i):
+    x=_DU[i] if i<len(_DU) else None
+    if not x or not x.get('ChargeType') or not x.get('DisplayedRange'): return 0
+    v=round(x['Range']-x['DisplayedRange'],2);return int(v) if float(v).is_integer() else v
 for u in units.values():
     g=UU.get(str(u['id']));u['up']=[g['Cost'],g['ResearchTime']] if g else None
     u['bz']=BN.get(u['b'],('?','?'))[0];u['ben']=BN.get(u['b'],('?','?'))[1]
     if u['from_'] not in units: u['from_']=None
+    dd=rngBd(u['id'])
+    if dd:  # 插在 rng 之后，保持字段顺序
+        it=list(u.items());it.insert([k for k,_ in it].index('rng')+1,('rngBd',dd));u.clear();u.update(it)
 # images
 os.makedirs('public/img/units',exist_ok=True)
 from PIL import Image;import io

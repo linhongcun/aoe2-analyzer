@@ -112,12 +112,15 @@ describe('#18 类别中文名', () => {
 describe('#22 双射程', () => {
   const u = (id: number) => units.find((x) => x.id === id)!;
   it('1968/1970/1948：对单位 5/6/10，对建筑 9/10/13；楼船最小 3', () => {
-    expect([u(1968).rng, u(1968).rngB]).toEqual([5, 9]);
-    expect([u(1970).rng, u(1970).rngB]).toEqual([6, 10]);
-    expect([u(1948).rng, u(1948).rngB, u(1948).minr]).toEqual([10, 13, 3]);
+    // #38：数据存差值 rngBd，对建筑 = rng + rngBd
+    expect([u(1968).rng, u(1968).rngBd]).toEqual([5, 4]);
+    expect([u(1970).rng, u(1970).rngBd]).toEqual([6, 4]);
+    expect([u(1948).rng, u(1948).rngBd, u(1948).minr]).toEqual([10, 3, 3]);
   });
-  it('rngB 只在与 rng 不同时存在', () => {
-    for (const x of units) if (x.rngB != null) expect(x.rngB).not.toBe(x.rng);
+  it('rngBd 只在非 0 时存在，且只有这 3 个单位', () => {
+    const w = units.filter((x) => 'rngBd' in x);
+    expect(w.map((x) => x.id).sort()).toEqual([1948, 1968, 1970]);
+    for (const x of w) expect(x.rngBd).not.toBe(0);
   });
 });
 
@@ -126,6 +129,7 @@ describe('#22 对建筑小字格式', () => {
     const { rangeB } = await import('../../src/shared/ui/RangeB');
     expect(rangeB({ rng: 5, rngB: 9 })).toBe(9);
     expect(rangeB({ rng: 4 })).toBeNull();
+    expect(rangeB({ rng: 5, rngBd: 4 })).toBe(9);
     const src = readFileSync('src/shared/ui/RangeB.tsx', 'utf8');
     expect(src).toContain('对建筑 {n}');
     expect(src).toContain('建筑 {n}');

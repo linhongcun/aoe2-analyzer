@@ -328,7 +328,7 @@ test('unit duel: default Paladin vs Halberdier, URL state, modes', async ({ page
   await page.locator('.cp-panel .cp-q').fill('Champion');
   await page.keyboard.press('Enter');
   await expect(page.locator('#duel-b h3')).toContainText('冠军剑士');
-  await page.locator('#duel-b').getByRole('radio', { name: '无科技' }).click();
+  await page.locator('#duel-b').getByRole('radio', { name: '无科技', exact: true }).click();
   await expect(page).toHaveURL(/b=\d+\.[A-Za-z]+\.\d\.\./);
   const url = page.url();
   await page.reload();
@@ -533,12 +533,12 @@ test('#22 对建筑射程：主数字下方小字「对建筑 N」，无括号�
   await page.goto('./#/unit/4');
   await expect(page.locator('#unit [data-t="range-building"]')).toHaveCount(0);
   await page.goto('./#/duel?a=1968.Wu.4.f.');
-  await expect(page.locator('#duel-a [data-t="range-building"] .rngb-full')).toHaveText('对建筑 9');
+  await expect(page.locator('#duel-a [data-t="range-building"] .rngb-full')).toHaveText('对建筑 12'); // 默认满科技（#38）
   await page.setViewportSize({ width: 390, height: 844 });
   const pk = page.locator('#duel-a [data-t="range-building"]');
-  await expect(pk.locator('.rngb-short')).toHaveText('建筑 9');
+  await expect(pk.locator('.rngb-short')).toHaveText('建筑 12');
   await expect(pk.locator('.rngb-full')).toBeHidden();
-  await expect(pk).toHaveAttribute('title', '对建筑射程 9');
+  await expect(pk).toHaveAttribute('title', '对建筑射程 12');
 });
 
 test('#27 火焰骆驼：攻击间隔「—」+ 原因小字；击杀用时「—」不为 0s', async ({ page }) => {
@@ -549,4 +549,13 @@ test('#27 火焰骆驼：攻击间隔「—」+ 原因小字；击杀用时「�
   await expect(page.locator('#duel-a .duel-stats')).not.toContainText('-爆炸');
   const killRow = page.locator('#duel tr', { hasText: '击杀用时' }).first();
   await expect(killRow.locator('td').nth(1)).toHaveText('—');
+});
+
+test('#38 PK 火焰弓箭手满科技：对建筑射程随射程科技变为 12', async ({ page }) => {
+  await page.goto('./#/duel?a=1968.Wu.4.f.');
+  const a = page.locator('#duel-a');
+  await a.getByRole('radio', { name: '满科技', exact: true }).click();
+  await expect(a.locator('[data-t="range-building"] .rngb-full')).toHaveText('对建筑 12');
+  await a.getByRole('radio', { name: '无科技', exact: true }).click();
+  await expect(a.locator('[data-t="range-building"] .rngb-full')).toHaveText('对建筑 9');
 });

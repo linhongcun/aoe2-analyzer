@@ -38,8 +38,9 @@ export interface Unit {
   ma: number;
   pa: number;
   rng: number;
-  /** 对建筑射程；仅当与 rng 不同时存在 */
-  rngB?: number;
+  /** 对建筑射程 − 对单位射程（.dat 蓄力远程单位 Range − DisplayedRange）；仅当不为 0 时存在。
+   *  对建筑射程由模拟器按 rng + rngBd 计算，随射程科技变化（#38） */
+  rngBd?: number;
   minr: number;
   spd: number;
   los: number;
@@ -93,6 +94,8 @@ export interface Dlc {
   civs: string[];
 }
 
+/** 模拟结果：StatSet + 对建筑射程（仅蓄力远程单位，= rng + Unit.rngBd，#38） */
+export type SimStats = StatSet & { rngB?: number };
 export interface StatSet {
   hp: number;
   atk: number;

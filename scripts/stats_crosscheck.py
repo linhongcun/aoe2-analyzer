@@ -2,7 +2,7 @@
 """基础数值对账：src/data/units.json / buildings.json（aoe2techtree）vs 原版 .dat（dat_source，185872）。
 用法：python3 scripts/stats_crosscheck.py [--json out.json]   不修改任何数据文件。
 双射程（#22）：带远程蓄力攻击的单位（火焰弓箭手、楼船…），.dat 的 Range 是对建筑射程，
-对单位射程为 DisplayedRange（= Range − 蓄力射程差）。站点 rng 比对单位射程，rngB 比对建筑射程。
+对单位射程为 DisplayedRange（= Range − 蓄力射程差）。站点 rng 比对单位射程，rng + rngBd（差值，#38）比对建筑射程。
 允许差异清单：scripts/stats_allowlist.json（每条须写 reason）；清单外差异 → 退出码 1。"""
 import json, sys
 from pathlib import Path
@@ -51,7 +51,9 @@ def main(units=None, blds=None, d=None):
         names = [a[0] for a in o.get('atks', [])]
         main = 4 if '近战' in names else 3 if '穿刺' in names else (3 if isb and o.get('atk') else None)
         ds = dat_stats(u, main)
-        if 'rngB' in o: ds['rngB'] = round(building_range(u), 2)
+        if o.get('rngBd'):
+            o = {**o, 'rngB': round(o['rng'] + o['rngBd'], 2)}
+            ds['rngB'] = round(building_range(u), 2)
         for k, v in ds.items():
             if k not in o or (isb and k in ('spd', 'acc', 'tt')): continue
             ov = o[k]
