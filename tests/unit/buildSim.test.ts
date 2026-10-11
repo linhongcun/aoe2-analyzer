@@ -159,6 +159,18 @@ describe('pop_block with missing houses', () => {
     expect(pb[0]!.waitSec).toBeGreaterThan(0);
     expect(pb[0]!.reasonZh).toContain('卡人口');
   });
+  it('造兵被人口卡住直到超时：从阻塞开始记 pop_block，且早于 timeout（scouts-18 × house=0）', () => {
+    const bo = buildOrders.find((b) => b.id === 'scouts-18')!;
+    const r = sim(bo, 'Britons', { autoHouses: false });
+    const pb = r.anomalies.find((a) => a.type === 'pop_block');
+    const to = r.anomalies.find((a) => a.type === 'timeout');
+    expect(pb).toBeDefined();
+    expect(to).toBeDefined();
+    expect(pb!.from).toBeLessThan(to!.from);
+    expect(pb!.reasonZh).toContain('卡人口');
+    const step = r.steps.find((s) => s.anomalies.includes(pb!))!;
+    expect(step.action).toBe('train');
+  });
 });
 
 describe('end-to-end idle_tc', () => {

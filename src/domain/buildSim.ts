@@ -666,6 +666,12 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       stepAnoms[x.step]!.push({ type: 'pop_block', waitSec: a.waitSec, from: a.from, to: a.to, reasonZh: `卡人口 等房子 约 ${a.waitSec} 秒` });
   }
   if (timedOut) {
+    // 超时前已开始、到最后都没解开的人口阻塞：从阻塞开始记一条 pop_block（卡人口先于超时，摘要据此显示卡在哪一步）
+    for (const p of payQ)
+      if (p.blockedSince !== undefined && !(p.short && p.short.length)) {
+        const wait = r1(t - p.blockedSince);
+        stepAnoms[p.step]!.push({ type: 'pop_block', waitSec: wait, from: r1(p.blockedSince), to: r1(t), reasonZh: `卡人口 等房子 约 ${wait} 秒` });
+      }
     const i = startAt.findIndex((x, k) => x === null || doneAt[k] === null);
     stepAnoms[Math.max(0, i)]!.push({ type: 'timeout', from: r1(t), to: r1(t), reasonZh: '模拟超过 60 分钟仍未完成（资源或建筑条件无法满足）' });
   }
