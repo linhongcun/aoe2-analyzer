@@ -59,6 +59,7 @@ input {
   border: 1px solid var(--c-bronze);
   border-radius: 6px;
   padding: 8px 12px;
+  font: inherit;
   font-size: 15px;
 }
 button {

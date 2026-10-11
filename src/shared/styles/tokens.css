@@ -15,7 +15,7 @@
   --color-line: #f0f0f2;        /* 表格分隔线 */
   --color-text: #1d1d1f;        /* 正文 16.8:1 */
   --color-text-2: #3a3a3c;      /* 次级正文 */
-  --color-muted: #6e6e73;       /* 说明文字 5.07:1 */
+  --color-muted: #636366;       /* 说明文字 5.99:1（#ececf0 上 5.08:1） */
   --color-accent: #a65a14;      /* 品牌琥珀（文字可用 5.13:1；白字在其上 5.13:1） */
   --color-accent-soft: #a65a141f;
   --color-link: #0066cc;        /* 链接 5.57:1 */
