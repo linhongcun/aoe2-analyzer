@@ -149,15 +149,46 @@ interface Mods {
   tcSpeed: number;
   costMul: Record<string, Partial<Record<Res | 'all', number>>>;
   timeMul: Record<string, number>;
-  techCost: Record<number, Partial<Record<Res, number>> | 'free'>;
+  /** 科技费用倍率（按资源；all = 全部资源） */
+  techCost: Record<number, Partial<Record<Res | 'all', number>>>;
+  /** 全部科技费用倍率（中国 res 85） */
+  techCostAll: number;
+  /** 科技研究时间倍率 */
   techTime: Record<number, number>;
+  /** 单位/建筑费用加减（如库曼马厩 -75 木） */
+  costAdd: Record<string, Partial<Record<Res, number>>>;
+  /** 存放资源时额外比例（丹麦 res 299：食物 +5%） */
+  depositBonus: Partial<Record<Res, number>>;
+  /** 到达新时代时直接发放的资源（res 0–3） */
+  grant: Stock;
+  /** 额外人口上限（匈奴 res 4） */
+  popBonus: number;
   start: Stock;
 }
 function baseMods(): Mods {
-  return { rate: {}, carry: {}, speed: 1, tcSpeed: 1, costMul: {}, timeMul: {}, techCost: {}, techTime: {}, start: { ...START } };
+  return {
+    rate: {},
+    carry: {},
+    speed: 1,
+    tcSpeed: 1,
+    costMul: {},
+    timeMul: {},
+    techCost: {},
+    techCostAll: 1,
+    techTime: {},
+    costAdd: {},
+    depositBonus: {},
+    grant: { food: 0, wood: 0, gold: 0, stone: 0 },
+    popBonus: 0,
+    start: { ...START },
+  };
 }
 const RES_START: Record<number, Res> = { 91: 'food', 92: 'wood', 93: 'stone', 94: 'gold' };
 const COST_ATTR: Record<string, Res | 'all'> = { cost: 'all', foodCost: 'food', woodCost: 'wood', goldCost: 'gold', stoneCost: 'stone' };
+/** res 0–3：当前库存 */
+const RES_STOCK: Record<number, Res> = { 0: 'food', 1: 'wood', 2: 'stone', 3: 'gold' };
+const TECH_RES: Record<string, Res | 'all'> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone', '-1': 'all' };
+const RES_DEPOSIT: Record<number, Res> = { 299: 'food' };
 
 function applyEffects(m: Mods, effects: EffectRow['effects']) {
   for (const x of effects) {
@@ -180,10 +211,22 @@ function applyEffects(m: Mods, effects: EffectRow['effects']) {
         const r = COST_ATTR[x.attr]!;
         const o = (m.costMul[id] ??= {});
         o[r] = (o[r] ?? 1) * v;
+      } else if (x.attr in COST_ATTR && x.op === 'add' && COST_ATTR[x.attr] !== 'all') {
+        const o = (m.costAdd[key] ??= {});
+        const r = COST_ATTR[x.attr] as Res;
+        o[r] = (o[r] ?? 0) + v;
       } else if (x.attr === 'trainTime' && x.op === 'mul') mul(m.timeMul, key === 'villager' ? 'unit:83' : key);
-    } else if (x.kind === 'res' && x.res !== undefined && RES_START[x.res] && x.op === 'add') m.start[RES_START[x.res]!] += v;
-    else if (x.kind === 'techTime' && x.tech !== undefined && x.op === 'set' && v === 0) m.techTime[x.tech] = 0;
-    else if (x.kind === 'techCost' && x.tech !== undefined && x.op === 'set' && v === 0) m.techCost[x.tech] = 'free';
+    } else if (x.kind === 'res' && x.res !== undefined) {
+      if (RES_START[x.res] && x.op === 'add') m.start[RES_START[x.res]!] += v;
+      else if (RES_STOCK[x.res] && x.op === 'add') m.grant[RES_STOCK[x.res]!] += v;
+      else if (RES_DEPOSIT[x.res] && x.op === 'add') m.depositBonus[RES_DEPOSIT[x.res]!] = (m.depositBonus[RES_DEPOSIT[x.res]!] ?? 0) + v / 100;
+      else if (x.res === 85 && x.op === 'set') m.techCostAll = v;
+      else if (x.res === 4 && x.op === 'add') m.popBonus += v;
+    } else if (x.kind === 'techTime' && x.tech !== undefined && x.op === 'set') m.techTime[x.tech] = v;
+    else if (x.kind === 'techCost' && x.tech !== undefined && x.op === 'set') {
+      const r = TECH_RES[String(x.res)];
+      if (r) (m.techCost[x.tech] ??= {})[r] = v;
+    }
   }
 }
 
@@ -222,6 +265,14 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     void freeByAge;
   };
   applyAge();
+  // res 0–3 的黑暗时代条目：若同一文明对该资源也有 res 91–94 条目（波斯、图皮、阿兹特克、西西里），两者是同一加成的两种写法，只算一次；
+  // 否则（埃塞俄比亚、德拉威「开局及每次升级时代」）开局直接发放
+  const startRes = new Set(
+    rows.flatMap((r) => r.effects.filter((e) => e.kind === 'res' && e.res !== undefined && RES_START[e.res]).map((e) => RES_START[e.res!]!)),
+  );
+  for (const r of Object.keys(m.grant) as Res[]) if (!startRes.has(r)) m.start[r] += m.grant[r];
+  m.grant = { food: 0, wood: 0, gold: 0, stone: 0 };
+  const techGold = rows.some((r) => r.effects.some((e) => e.kind === 'res' && e.res === 269));
   // 免费科技：techCost/techTime=0 已由 tree 行处理；freeTech 行只记录名称，效果在研究时生效——此处视为到达所需时代即自动生效
   const freeNames = new Set(rows.flatMap((r) => r.effects.filter((e) => e.kind === 'freeTech').map((e) => (e.techName ?? '').toLowerCase())));
   const stock: Stock = { ...m.start };
@@ -239,7 +290,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   };
   const startVils = START_VILS[civ] ?? 3;
   for (let i = 0; i < startVils; i++) assign();
-  let popCap = 5;
+  let popCap = Math.min(200, 5 + m.popBonus);
   let military = 1; // 侦察骑兵
   const built = new Map<number, number>([[TC, 1]]); // building id → 数量
   const constructions: Construction[] = [];
@@ -279,9 +330,15 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
             : (ups[id]?.[0] ?? {});
     const out: Stock = { food: 0, wood: 0, gold: 0, stone: 0 };
     for (const [k, v] of Object.entries(c)) out[RES_OF[k]!] = v ?? 0;
-    if (kind === 'tech' && m.techCost[id] === 'free') return { food: 0, wood: 0, gold: 0, stone: 0 };
+    if (kind === 'tech') {
+      const tm = m.techCost[id] ?? {};
+      for (const r of Object.keys(out) as Res[]) out[r] = Math.round(out[r] * m.techCostAll * (tm.all ?? 1) * (tm[r] ?? 1));
+      return out;
+    }
+    const add = kind !== 'up' ? m.costAdd['unit:' + id] : undefined;
+    if (add) for (const r of Object.keys(add) as Res[]) out[r] = Math.max(0, out[r] + add[r]!);
     const mul = m.costMul['unit:' + id];
-    if (mul && kind !== 'tech' && kind !== 'up') for (const r of Object.keys(out) as Res[]) out[r] = Math.round(out[r] * (mul.all ?? 1) * (mul[r] ?? 1));
+    if (mul && kind !== 'up') for (const r of Object.keys(out) as Res[]) out[r] = Math.round(out[r] * (mul.all ?? 1) * (mul[r] ?? 1));
     return out;
   };
   const afford = (c: Stock) => (Object.keys(c) as Res[]).every((r) => stock[r] + 1e-9 >= c[r]);
@@ -430,7 +487,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       } else if (a.type === 'research' || a.type === 'ageUp') {
         if (a.type === 'research' && eco.techs[a.tech]?.at !== TC) {
           // 非 TC 科技：在对应建筑研究（不占 TC）
-          const time = m.techTime[a.tech] === 0 ? 0 : (eco.techs[a.tech]?.researchTime ?? 0);
+          const time = (eco.techs[a.tech]?.researchTime ?? 0) * (m.techTime[a.tech] ?? 1);
           constructions.push({ building: -a.tech, progress: 0, bt: time, step: p.step, p, borrowed: undefined });
         } else tcResearch.push(p);
       } else if (a.type === 'upgrade') {
@@ -498,7 +555,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       let left = unitBusy.get(b);
       if (left === undefined) {
         const u = eco.units[cur.unit]!;
-        left = (u.timeAt?.[String(b)] ?? u.trainTime) * (m.timeMul['unit:' + cur.unit] ?? 1);
+        left = ((u.timeAt?.[String(b)] ?? u.trainTime) * (m.timeMul['unit:' + cur.unit] ?? 1)) / (m.rate['unit:' + b] ?? 1);
       }
       left -= TICK;
       if (left <= 1e-9) {
@@ -519,6 +576,9 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
             researching = false;
             ageUps.find((x) => x.age === a.age)!.reachAt = r1(t);
             applyAge();
+            // 西班牙的 res 3 −20 是抵消「研发科技返金」（res 269，未建模）里升级时代那份，未建模时一起不算
+            for (const r of Object.keys(stock) as Res[]) if (!(r === 'gold' && techGold)) stock[r] += m.grant[r];
+            m.grant = { food: 0, wood: 0, gold: 0, stone: 0 };
             for (const [id, et] of Object.entries(eco.ecoTechs))
               if (freeNames.has(((et as { en?: string }).en ?? '').toLowerCase()) || freeNames.has(((et as { name?: string }).name ?? '').toLowerCase())) {
                 const ta = (et as { age?: number }).age ?? 1;
@@ -541,10 +601,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         const a = p.a;
         let time = 0;
         if (a.type === 'ageUp') {
-          time = eco.techs[100 + a.age - 1]!.researchTime;
+          time = eco.techs[100 + a.age - 1]!.researchTime * (m.techTime[100 + a.age - 1] ?? 1);
           researching = true;
           ageUps.push({ age: a.age, clickAt: r1(t), reachAt: 0 });
-        } else if (a.type === 'research') time = m.techTime[a.tech] === 0 ? 0 : (eco.techs[a.tech]?.researchTime ?? 0);
+        } else if (a.type === 'research') time = (eco.techs[a.tech]?.researchTime ?? 0) * (m.techTime[a.tech] ?? 1);
         tcState = { kind: 'research', left: time, p };
       } else if (!researching) {
         const nextClick = [2, 3, 4].map((a) => (a > age && !ageUps.some((x) => x.age === a) ? clickVils(a) : undefined)).find((x) => x !== undefined);
@@ -574,7 +634,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     // 6) 采集（本 tick 结束时入账）
     for (const k of Object.keys(alloc) as Task[]) {
       const r = RES_TASK[k];
-      if (r && alloc[k] > 0) stock[r] += alloc[k] * rate(k) * TICK;
+      if (r && alloc[k] > 0) stock[r] += alloc[k] * rate(k) * TICK * (1 + (m.depositBonus[r] ?? 0));
     }
     if (nextStep >= nSteps && doneAt.every((x) => x !== null)) break;
     if (t >= MAX_T) {
@@ -650,4 +710,161 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
     tcIdleTotal: R.tcIdleTotal,
     model: { version: MODEL_VERSION, assumptions: ASSUMPTIONS },
   };
+}
+
+// ───────── 文明加成覆盖（#42）：每条效果必须是 已处理 / 不影响开局（带原因）/ 影响开局但未实现 之一 ─────────
+
+type Effect = EffectRow['effects'][number];
+export type EffectClass = { kind: 'handled' } | { kind: 'irrelevant'; reason: string } | { kind: 'unhandled'; reason: string } | { kind: 'unknown' };
+
+/** res 属性：不影响开局（模型层面）的，写明原因 */
+export const IRRELEVANT_RES: Record<number, string> = {
+  32: '帝王时代人口 +10（哥特），开局只到城堡',
+  33: '文明加成计数用属性，不影响经济（高棉 654 另行列为待核实）',
+  47: '资源储量：模型不模拟资源耗尽（所有文明一致）',
+  69: '农田食物储量（西西里）：模型不模拟资源耗尽，不重建农田',
+  78: '市场交易手续费（萨拉森），开局不交易',
+  79: '资源储量：模型不模拟资源耗尽',
+  86: '团队加成，默认不计团队',
+  88: '马来非经济属性',
+  89: '团队加成（拜占庭僧侣）',
+  90: '僧侣转化抗性（条顿）',
+  97: '羊不会被敌方转走（凯尔特），单人模拟无关',
+  178: '团队加成（条顿）',
+  179: '团队加成（条顿）',
+  189: '资源储量：模型不模拟资源耗尽',
+  190: '资源储量：模型不模拟资源耗尽',
+  191: '团队加成（阿兹特克圣物）',
+  204: '马普切非经济属性',
+  209: '开局显示敌方位置（越南）',
+  210: '团队加成（缅甸圣物）',
+  211: '高地伤害加成（鞑靼）',
+  212: '高地伤害加成（鞑靼）',
+  215: '马普切非经济属性',
+  216: '家畜食物储量：模型不模拟资源耗尽',
+  218: '封建时代可建城镇中心（库曼），开局不多建城镇中心',
+  219: '资源储量：模型不模拟资源耗尽',
+  225: '团队加成（勃艮第）',
+  251: '团队加成（孟加拉）',
+  266: '帝王时代加成（越南）',
+  268: '猎物储量（哥特/玛雅）：模型不模拟资源耗尽',
+  271: '团队加成（格鲁吉亚）',
+  272: '格鲁吉亚修理/建筑属性',
+  273: '格鲁吉亚修理/建筑属性',
+  283: '亚美尼亚特殊机制开关',
+  291: '摧毁建筑抢掠资源（丹麦）',
+  292: '动物尸体不腐烂（女真）：模型不模拟腐烂',
+  295: '图皮非经济属性',
+  296: '资源储量（玛雅）：模型不模拟资源耗尽',
+  297: '瓦兰吉非经济属性',
+  504: '团队加成（西班牙）',
+};
+/** res 属性：影响开局但本批未实现（对应文明标为不支持） */
+export const UNHANDLED_RES: Record<number, string> = {
+  85: '科技费用折扣是否作用于升级时代待 .dat 核实（汉）',
+  234: '开局/升级时代/经济科技送村民（孟加拉、魏等）未建模',
+  237: '波兰庄园农田加成未建模',
+  238: '波兰庄园农田加成未建模',
+  239: '波兰庄园农田加成未建模',
+  241: '波兰采石换金未建模',
+  254: '古尔贾拉家畜机制未建模',
+  267: '采浆果同时产木头（葡萄牙）未建模',
+  269: '研发科技返金（西班牙）未建模',
+  276: '采金加成（马里）未建模',
+  298: '羊/猎物/渔船额外产金（瓦兰吉）未建模',
+  502: '伐木同时产食物（蜀）未建模',
+};
+/** 已在 START_VILS 建模送村民的文明 tech（汉 302、玛雅 554） */
+const RES234_HANDLED = new Set([302, 554]);
+/** 单条待核实（文明 tech → 原因） */
+const PENDING_TECH: Record<number, string> = {
+  654: '高棉「农民无需回仓」：res 33 / 农田走路距离含义待 .dat 核实',
+};
+const FARM_UNITS = new Set([50, 1187]);
+const TC_UNITS = new Set([TC, 71, 141, 142]);
+
+const HANDLED_RES = (res: number, op?: string) => ((RES_START[res] || RES_STOCK[res] || RES_DEPOSIT[res] || res === 4) && op === 'add') || false;
+const HANDLED_ATTR = new Set(['workRate', 'carry', 'trainTime', ...Object.keys(COST_ATTR)]);
+
+/** 开局涉及的对象：村民、城镇中心（含升级后形态）、房子、时代升级、经济科技 + 所有开局里出现的单位/建筑/科技 */
+export function simScope(eco: EcoData, bos: BuildOrder[]) {
+  const units = new Set<number>([83]);
+  const buildings = new Set<number>([...TC_UNITS, HOUSE, ...FARM_UNITS]);
+  const techs = new Set<number>([101, 102, 103, ...Object.keys(eco.ecoTechs).map(Number)]);
+  for (const b of bos)
+    for (const st of b.steps)
+      for (const a of st.actions) {
+        if (a.type === 'build') buildings.add(a.building);
+        if (a.type === 'train' || a.type === 'upgrade') units.add(a.unit);
+        if (a.type === 'research') techs.add(a.tech);
+      }
+  return { units, buildings, techs };
+}
+
+/** 判定一条文明效果 */
+export function classifyCivEffect(e: Effect, row: { source?: string; tech?: number }, scope: ReturnType<typeof simScope>): EffectClass {
+  if (row.source === 'team') return { kind: 'irrelevant', reason: '团队加成，默认不计团队' };
+  if (row.tech !== undefined && PENDING_TECH[row.tech]) return { kind: 'unhandled', reason: PENDING_TECH[row.tech]! };
+  if (e.kind === 'freeTech') return { kind: 'handled' };
+  if (e.kind === 'techCost' || e.kind === 'techTime') {
+    if (e.tech === undefined || !scope.techs.has(e.tech)) return { kind: 'irrelevant', reason: '开局不涉及的科技' };
+    if (e.op === 'set' && (e.kind === 'techTime' || TECH_RES[String(e.res)])) return { kind: 'handled' };
+    return { kind: 'unknown' };
+  }
+  if (e.kind === 'res') {
+    if (e.res === undefined) return { kind: 'unknown' };
+    if (HANDLED_RES(e.res, e.op)) return { kind: 'handled' };
+    if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
+    if (UNHANDLED_RES[e.res]) return { kind: 'unhandled', reason: UNHANDLED_RES[e.res]! };
+    if (IRRELEVANT_RES[e.res]) return { kind: 'irrelevant', reason: IRRELEVANT_RES[e.res]! };
+    return { kind: 'unknown' };
+  }
+  if (e.kind === 'attr' && e.target) {
+    const t = e.target;
+    const id = t.startsWith('unit:') ? Number(t.slice(5)) : NaN;
+    const vil = t.startsWith('task:') || t === 'villager' || t === 'class:4' || id === 83;
+    if (!vil && !scope.units.has(id) && !scope.buildings.has(id)) return { kind: 'irrelevant', reason: '开局不涉及的单位/建筑/类别' };
+    if (e.attr === 'speed') return vil && e.op === 'mul' ? { kind: 'handled' } : { kind: 'irrelevant', reason: '非村民移速不影响开局时间' };
+    if (FARM_UNITS.has(id) && e.attr === 'workRate')
+      return { kind: 'unhandled', reason: '农田单位 workRate 与 task:farm 是否重复待 .dat 核实（罗马、斯拉夫）' };
+    if (TC_UNITS.has(id) && id !== TC && e.attr === 'workRate') return { kind: 'unhandled', reason: '升级后城镇中心（71/141/142）工作速度未建模（波斯）' };
+    if (FARM_UNITS.has(id) || (TC_UNITS.has(id) && id !== TC)) return { kind: 'irrelevant', reason: '农田/升级后城镇中心的非速度属性不影响开局' };
+    if (e.attr && HANDLED_ATTR.has(e.attr) && (e.op === 'mul' || (e.op === 'add' && (e.attr === 'carry' || (e.attr in COST_ATTR && e.attr !== 'cost')))))
+      return { kind: 'handled' };
+    return { kind: 'unknown' };
+  }
+  return { kind: 'unknown' };
+}
+
+const describeEffect = (civ: string, row: { tech?: number }, e: Effect) =>
+  `${civ} tech ${row.tech ?? '?'}: ${e.kind} ${e.kind === 'res' ? 'res ' + e.res : (e.target ?? e.tech ?? '')} ${e.attr ?? ''} ${e.op ?? ''} ${e.v ?? ''}`
+    .replace(/\s+/g, ' ')
+    .trim();
+
+/** 某文明未处理的效果：影响开局但未实现 + 未分类（Kent #42 草稿接口） */
+export function unhandledEffects(eco: EcoData, civ: string, bos: BuildOrder[] = []): { effect: string; kind: 'unhandled' | 'unknown'; reason: string }[] {
+  const scope = simScope(eco, bos);
+  const out: { effect: string; kind: 'unhandled' | 'unknown'; reason: string }[] = [];
+  for (const r of eco.civEco[civ] ?? [])
+    for (const e of r.effects) {
+      const c = classifyCivEffect(e, r as { source?: string; tech?: number }, scope);
+      if (c.kind === 'unhandled') out.push({ effect: describeEffect(civ, r as { tech?: number }, e), kind: 'unhandled', reason: c.reason });
+      else if (c.kind === 'unknown') out.push({ effect: describeEffect(civ, r as { tech?: number }, e), kind: 'unknown', reason: '未分类的效果类型' });
+    }
+  return out;
+}
+
+/** 文明是否被开局模拟完整支持：没有「影响开局但未实现」也没有未分类效果；UI（#39）据此置灰 */
+export function simSupport(eco: EcoData, civ: string, bos: BuildOrder[] = []): { supported: boolean; reasons: string[] } {
+  const u = unhandledEffects(eco, civ, bos);
+  return { supported: u.length === 0, reasons: [...new Set(u.map((x) => x.reason))] };
+}
+
+/** 所有文明里未分类的效果（bo:check 遇到即失败） */
+export function unknownCivEffects(eco: EcoData, bos: BuildOrder[] = []): string[] {
+  return Object.keys(eco.civEco).flatMap((c) =>
+    unhandledEffects(eco, c, bos)
+      .filter((x) => x.kind === 'unknown')
+      .map((x) => x.effect),
+  );
 }
