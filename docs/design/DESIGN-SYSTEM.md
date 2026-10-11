@@ -137,7 +137,7 @@ Chip（快捷入口）：白底，加 `0 0 0 1px` 描边，全圆角，左边是
   --color-bad-soft: #fdeeec;    /* 卡点行底色 */
   --color-warn: #a15c00;        /* 5.19:1 */
   /* 资源色（仅作色块，不承载文字） */
-  --res-food: #e0864a; --res-wood: #8a6b3d; --res-gold: #d4a72c; --res-stone: #8e8e93; --res-villager: #7a7a80;
+  --res-food: #e0864a; --res-wood: #8a6b3d; --res-gold: #d4a72c; --res-stone: #8e8e93;
 
   /* —— 字体 —— */
   --font-sans: "Inter", "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif;
