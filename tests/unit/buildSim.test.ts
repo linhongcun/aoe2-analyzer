@@ -225,7 +225,7 @@ describe('#42 P0 buildSim 文明加成不得静默忽略', () => {
   });
   it('真实 eco.json：没有未分类的效果（bo:check 同一检查）', () => expect(unknownCivEffects(E, buildOrders)).toEqual([]));
   it('simSupport：丹麦/马来/不列颠支持；汉、罗马、斯拉夫（待核实）与葡萄牙（未实现）不支持', () => {
-    for (const c of ['Danes', 'Malay', 'Britons', 'Generic']) expect(simSupport(E, c, buildOrders), c).toEqual({ supported: true, reasons: [] });
+    for (const c of ['Danes', 'Malay', 'Britons', 'Generic', 'Persians']) expect(simSupport(E, c, buildOrders), c).toEqual({ supported: true, reasons: [] });
     for (const c of ['Chinese', 'Romans', 'Slavs', 'Portuguese', 'Mayans', 'Tatars', 'Goths', 'Mapuche', 'Sicilians', 'Jurchens', 'Khmer'])
       expect(simSupport(E, c, buildOrders).supported, c).toBe(false);
   });
@@ -250,8 +250,23 @@ describe('#42 P0 buildSim 文明加成不得静默忽略', () => {
     );
   });
   it.todo('高棉：农田为瓶颈的开局里，去掉 654 必须让结果变慢（证明后再把高棉放出来）');
+  // 波斯 TC 工作速度（409：黑暗 109 ×1.05、封建 71 ×1.10、城堡 141 ×1.15）：村民训练与升时代研究都按当前城镇中心计
+  const researchDur = (civ: string, age: 'feudal' | 'castle', e: EcoData = E) => {
+    const a = simulateBuild(fcb, civ, e, ups, { walkTiles: 4 }).ageUps.find((x) => x.age === age)!;
+    return a.reachAt - a.clickAt;
+  };
+  it('波斯封建研究：黑暗 TC ×1.05，130 ÷ 1.05 ≈ 123.81 秒（误差不超过一个 0.1 秒步长）', () =>
+    expect(Math.abs(researchDur('Persians', 'feudal') - 130 / 1.05)).toBeLessThanOrEqual(0.1 + 1e-9));
+  it('波斯城堡研究：封建 TC ×1.10，160 ÷ 1.10 ≈ 145.45 秒（不是黑暗 TC 的 ×1.05）', () =>
+    expect(Math.abs(researchDur('Persians', 'castle') - 160 / 1.1)).toBeLessThanOrEqual(0.1 + 1e-9));
+  it('波斯封建研究快于不列颠（130 秒）', () => expect(researchDur('Persians', 'feudal')).toBeLessThan(researchDur('Britons', 'feudal')));
+  it('波斯村民训练也按当前城镇中心加速（去掉 409 则第 9 名村民更晚）', () => {
+    const at = (e: EcoData) => simulateBuild(fcb, 'Persians', e, ups, { walkTiles: 4 }).steps.find((s) => s.vils === 9)!.startAt;
+    expect(at(E)).toBeLessThan(at(without('Persians', 409)));
+  });
   it('src/domain/simSupport 导出 (civId) => boolean', () => {
     expect(simSupportFn('Danes')).toBe(true);
+    expect(simSupportFn('Persians')).toBe(true);
     expect(simSupportFn('Khmer')).toBe(false);
     expect(simSupportFn('Chinese')).toBe(false);
   });
