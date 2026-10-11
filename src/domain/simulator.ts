@@ -1,5 +1,5 @@
 /** 科技模拟器效果引擎（纯函数，无 UI 依赖） */
-import type { Cost, Effect, StatSet, Tech, Trees, Unit } from './types';
+import type { Cost, Effect, SimStats, StatSet, Tech, Trees, Unit } from './types';
 import { CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
 
 export interface SimContext {
@@ -101,8 +101,8 @@ export function civBonusNotes(u: Unit, civ: string): string[] {
 /** 科技触发的文明加成在当前时代是否生效（如印加村民吃锻造需城堡时代） */
 const extraOk = (civ: string, t: Tech, u: Unit, age: number) => (CIV_TECH_EXTRAS[civ]?.[t.en] ?? []).every((x) => x.b || !x.pred(u) || x.age <= age);
 
-export function simulate(ctx: SimContext, u: Unit, civ: string, age: number, sel: ReadonlySet<number>, team: ReadonlySet<number>): StatSet {
-  const S = baseStats(u);
+export function simulate(ctx: SimContext, u: Unit, civ: string, age: number, sel: ReadonlySet<number>, team: ReadonlySet<number>): SimStats {
+  const S: SimStats = baseStats(u);
   (CIV_BONUSES[civ] ?? []).forEach(([f, g]) => {
     if (f(u)) applyEffects(S, g(age));
   });
@@ -131,6 +131,8 @@ export function simulate(ctx: SimContext, u: Unit, civ: string, age: number, sel
   S.rof = S.rof / S.rofx;
   // .dat 逐时代乘子保留 4 位小数（如 1.0909），容差 0.2 后取整（1.1×1.0909×1.0833 = 1.29995）
   S.hp = Math.floor(S.hp + 0.2);
+  // #38 .dat 射程科技改的是属性 12（Range = 对建筑射程），对单位射程同步变化，差值恒定
+  if (u.rngBd) S.rngB = S.rng + u.rngBd;
   return S;
 }
 

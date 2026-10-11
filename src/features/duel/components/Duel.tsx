@@ -228,7 +228,7 @@ function Side({
                 '射程',
                 <>
                   {r1(side.S.rng)}
-                  <RangeB u={side.u} compact />
+                  <RangeB u={side.S} compact />
                 </>,
               ],
               ['', '命中率', Math.round(side.F.acc * 100) + '%'],
