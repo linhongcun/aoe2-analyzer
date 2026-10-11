@@ -163,6 +163,8 @@ interface Mods {
   grant: Stock;
   /** 额外人口上限（匈奴 res 4） */
   popBonus: number;
+  /** 农民不需要回仓（高棉）：耕作无走路时间 */
+  farmNoWalk: boolean;
   start: Stock;
 }
 function baseMods(): Mods {
@@ -180,6 +182,7 @@ function baseMods(): Mods {
     depositBonus: {},
     grant: { food: 0, wood: 0, gold: 0, stone: 0 },
     popBonus: 0,
+    farmNoWalk: false,
     start: { ...START },
   };
 }
@@ -189,6 +192,12 @@ const COST_ATTR: Record<string, Res | 'all'> = { cost: 'all', foodCost: 'food', 
 const RES_STOCK: Record<number, Res> = { 0: 'food', 1: 'wood', 2: 'stone', 3: 'gold' };
 const TECH_RES: Record<string, Res | 'all'> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone', '-1': 'all' };
 const RES_DEPOSIT: Record<number, Res> = { 299: 'food' };
+/**
+ * 高棉 tech 654「C-Bonus, Instant Farmers」在 .dat（185872，effect 690）里只有三条命令：
+ * res 33 set 50、农民（214/259）workRate ×0.95。res 33 是各文明加成的标记值（丹麦 35/36、格鲁吉亚 9…），
+ * 50 对应「农民直接入库、无需回仓」，引擎按这个标记取消耕作的回仓走路。×0.95 已通过 task:farm 生效。
+ */
+const RES33_INSTANT_FARMERS = 50;
 
 function applyEffects(m: Mods, effects: EffectRow['effects']) {
   for (const x of effects) {
@@ -222,6 +231,7 @@ function applyEffects(m: Mods, effects: EffectRow['effects']) {
       else if (RES_DEPOSIT[x.res] && x.op === 'add') m.depositBonus[RES_DEPOSIT[x.res]!] = (m.depositBonus[RES_DEPOSIT[x.res]!] ?? 0) + v / 100;
       else if (x.res === 85 && x.op === 'set') m.techCostAll = v;
       else if (x.res === 4 && x.op === 'add') m.popBonus += v;
+      else if (x.res === 33 && x.op === 'set' && v === RES33_INSTANT_FARMERS) m.farmNoWalk = true;
     } else if (x.kind === 'techTime' && x.tech !== undefined && x.op === 'set') m.techTime[x.tech] = v;
     else if (x.kind === 'techCost' && x.tech !== undefined && x.op === 'set') {
       const r = TECH_RES[String(x.res)];
@@ -351,7 +361,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const base = eco.villager.tasks[et]!;
     const wr = base.workRate * (m.rate[et] ?? 1) * (m.rate.villager ?? 1);
     const carry = base.carry * (m.carry[et] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + et] ?? 0) + (m.carry['add:villager'] ?? 0);
-    const d = NEAR.includes(t) ? P.nearTiles : P.walkTiles;
+    const d = t === 'farm' && m.farmNoWalk ? 0 : NEAR.includes(t) ? P.nearTiles : P.walkTiles;
     const walk = (2 * d) / (eco.villager.speed * m.speed);
     return carry / (carry / wr + walk);
   };
@@ -720,7 +730,7 @@ export type EffectClass = { kind: 'handled' } | { kind: 'irrelevant'; reason: st
 /** res 属性：不影响开局（模型层面）的，写明原因 */
 export const IRRELEVANT_RES: Record<number, string> = {
   32: '帝王时代人口 +10（哥特），开局只到城堡',
-  33: '文明加成计数用属性，不影响经济（高棉 654 另行列为待核实）',
+  33: '文明加成标记值，不影响经济（高棉的 50 = 农民无需回仓，已处理）',
   47: '资源储量：模型不模拟资源耗尽（所有文明一致）',
   69: '农田食物储量（西西里）：模型不模拟资源耗尽，不重建农田',
   78: '市场交易手续费（萨拉森），开局不交易',
@@ -776,10 +786,8 @@ export const UNHANDLED_RES: Record<number, string> = {
 };
 /** 已在 START_VILS 建模送村民的文明 tech（汉 302、玛雅 554） */
 const RES234_HANDLED = new Set([302, 554]);
-/** 单条待核实（文明 tech → 原因） */
-const PENDING_TECH: Record<number, string> = {
-  654: '高棉「农民无需回仓」：res 33 / 农田走路距离含义待 .dat 核实',
-};
+/** 单条待核实（文明 tech → 原因）；高棉 654 已按 .dat 核实并实现 */
+const PENDING_TECH: Record<number, string> = {};
 const FARM_UNITS = new Set([50, 1187]);
 const TC_UNITS = new Set([TC, 71, 141, 142]);
 
@@ -813,7 +821,7 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
   }
   if (e.kind === 'res') {
     if (e.res === undefined) return { kind: 'unknown' };
-    if (HANDLED_RES(e.res, e.op)) return { kind: 'handled' };
+    if (HANDLED_RES(e.res, e.op) || (e.res === 33 && e.op === 'set' && e.v === RES33_INSTANT_FARMERS)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
     if (UNHANDLED_RES[e.res]) return { kind: 'unhandled', reason: UNHANDLED_RES[e.res]! };
     if (IRRELEVANT_RES[e.res]) return { kind: 'irrelevant', reason: IRRELEVANT_RES[e.res]! };
