@@ -440,7 +440,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   };
   const startStep = (i: number, t: number) => {
     const st = bo.steps[i]!;
-    startAt[i] = r1(t);
+    // 到达新时代后放行的步骤在下一个模拟 tick 才开始；这 0.1 秒是步长造成的，记成到达时刻，
+    // 否则摘要「9:44 到达」和紧接的步骤行「9:45」会对不上（Reid/Steve #53）。只改记录值，不改模拟进程。
+    const reached = ageUps.find((x) => x.reachAt > 0 && t - x.reachAt > 1e-9 && t - x.reachAt <= TICK + 1e-9);
+    startAt[i] = reached ? reached.reachAt : r1(t);
     for (const a of st.actions) {
       if (a.type === 'gather') {
         if (a.from) {
