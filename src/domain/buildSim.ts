@@ -119,6 +119,12 @@ export interface BuildTimeline {
   /** 全部异常（按优先级：idle_tc > pop_block > resource_short），便于摘要 */
   anomalies: Anomaly[];
   tcIdleTotal: number;
+  /** #42：本文明人口不受房子限制（匈奴 Tech tree res 4 +2000），开局里的造房动作已跳过 */
+  noHouses: boolean;
+  /** 每座房子（含自动补房）付木开工的时刻 */
+  housePaidAt: number[];
+  /** noHouses 时被跳过造房动作的步骤下标（步骤本身保留，编号不变） */
+  skippedHouseSteps: number[];
   model: { version: string; assumptions: string[] };
 }
 
@@ -372,6 +378,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const built = new Map<number, number>([[TC, 1]]); // building id → 数量
   const constructions: Construction[] = [];
   const buildingsDone: { building: number; at: number }[] = [];
+  /** 每座房子（含自动补房）付木开工的时刻，#42 匈奴对比「省下的木头」用 */
+  const housePaidAt: number[] = [];
   const unitQueues = new Map<number, { p: Pending; left: number; unit: number }[]>(); // 训练建筑 → 队列
   const unitBusy = new Map<number, number>(); // 训练建筑 → 当前单位剩余时间
   // TC
@@ -591,6 +599,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         const n = a.count ?? 1;
         const bt = (eco.buildings[a.building]?.buildTime ?? 0) * (m.timeMul['unit:' + a.building] ?? 1);
         for (let k = 0; k < n; k++) constructions.push({ building: a.building, progress: 0, bt, step: p.step, p });
+        if (a.building === HOUSE) for (let k = 0; k < n; k++) housePaidAt.push(r1(t));
       } else if (a.type === 'train') {
         military++;
         const at = (eco.units[a.unit]?.at ?? []).find((b) => (built.get(b) ?? 0) > 0)!;
@@ -618,6 +627,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       const c = costOf('building', HOUSE);
       if (afford(c)) {
         pay(c);
+        housePaidAt.push(r1(t));
         constructions.push({
           building: HOUSE,
           progress: 0,
@@ -803,7 +813,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const xs = ps.filter((p) => p.a.type === 'ageUp' || p.a.type === 'research' || p.a.type === 'upgrade').map((p) => p.startedAt);
     return xs.length && xs.every((x) => x !== undefined) ? Math.max(...(xs as number[])) : null;
   });
-  return { startAt, doneAt, snap, stepAnoms, ageUps, researchAt, buildingsDone, tcIdleTotal: r1(tcIdleTotal), end: r1(t) };
+  return { startAt, doneAt, snap, stepAnoms, ageUps, researchAt, buildingsDone, housePaidAt, tcIdleTotal: r1(tcIdleTotal), end: r1(t) };
 }
 
 const PRIO: Record<Anomaly['type'], number> = { idle_tc: 0, timeout: 1, pop_block: 2, prereq_wait: 3, resource_short: 4, tc_busy: 5 };
@@ -822,6 +832,13 @@ const primary = (acts: Action[]): Pick<TimelineStep, 'action' | 'entity'> => {
 export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, params: Partial<SimParams> = {}): BuildTimeline {
   const P: SimParams = { ...DEFAULT_PARAMS, ...params };
   P.walkTiles = Math.min(WALK.max, Math.max(WALK.min, Math.round(P.walkTiles)));
+  // #42 匈奴：人口不受房子限制 → 开局里的造房动作不执行、不扣木，自动补房也关掉；步骤数与编号不变
+  const noHouses = civNoHouses(eco, civ);
+  const input = bo;
+  if (noHouses) {
+    bo = stripHouses(bo);
+    P.autoHouses = false;
+  }
   const R = runOnce(bo, civ, eco, ups, P);
   const near = runOnce(bo, civ, eco, ups, { ...P, walkTiles: WALK.presets.near });
   const far = runOnce(bo, civ, eco, ups, { ...P, walkTiles: WALK.presets.far });
@@ -853,8 +870,11 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
     return { age: AGE_NAME[a.age as 2 | 3 | 4], clickAt: a.clickAt, reachAt: a.reachAt, errSec: band(a.reachAt, n?.reachAt ?? null, f?.reachAt ?? null) };
   });
   return {
-    buildId: bo.id,
+    buildId: input.id,
     civ,
+    noHouses,
+    housePaidAt: R.housePaidAt,
+    skippedHouseSteps: noHouses ? input.steps.flatMap((st, i) => (st.actions.some(isHouse) ? [i] : [])) : [],
     variant: null,
     params: { ...P, carryModel: 'continuous-trip' },
     ageUps,
@@ -864,6 +884,44 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
     tcIdleTotal: R.tcIdleTotal,
     model: { version: MODEL_VERSION, assumptions: ASSUMPTIONS },
   };
+}
+
+const isHouse = (a: Action) => a.type === 'build' && a.building === HOUSE;
+/**
+ * #42：文明是否不需要房子——黑暗时代即生效的 res 4（人口余量）加法让 5 + 加成 ≥ 200（人口上限），
+ * 数值从 eco.json（.dat 导出）读，匈奴 Tech tree 为 +2000。只看 handled 的条目。
+ */
+export function civNoHouses(eco: EcoData, civ: string): boolean {
+  let bonus = 0;
+  for (const r of eco.civEco[civ] ?? [])
+    if (r.age === 1 && r.source !== 'team') for (const e of r.effects) if (e.kind === 'res' && e.res === 4 && e.op === 'add') bonus += e.v ?? 0;
+  return 5 + bonus >= 200;
+}
+/**
+ * 去掉开局里的造房动作（步骤保留）。只为盖房而去「建造」的村民改成去吃羊（第 1 步的写法未核实，默认羊，见 #42），
+ * 之后「从建造回来」的调动相应改为从羊调出。
+ */
+export function stripHouses(bo: BuildOrder): BuildOrder {
+  let freed = 0;
+  const steps = bo.steps.map((st) => {
+    const builds = st.actions.filter((a) => a.type === 'build');
+    const onlyHouses = builds.length > 0 && builds.every(isHouse);
+    const actions: Action[] = [];
+    for (const a of st.actions) {
+      if (isHouse(a)) continue;
+      if (onlyHouses && a.type === 'gather' && a.task === 'build' && !a.from) {
+        actions.push({ ...a, task: 'sheep' });
+        freed += a.count;
+      } else if (a.type === 'gather' && a.from === 'build' && freed > 0) {
+        const k = Math.min(freed, a.count);
+        freed -= k;
+        if (a.task !== 'sheep') actions.push({ ...a, count: k, from: 'sheep' });
+        if (a.count > k) actions.push({ ...a, count: a.count - k });
+      } else actions.push(a);
+    }
+    return { ...st, actions };
+  });
+  return { ...bo, steps };
 }
 
 // ───────── 文明加成覆盖（#42）：每条效果必须是 已处理 / 不影响开局（带原因）/ 影响开局但未实现 之一 ─────────
@@ -929,6 +987,22 @@ export const UNHANDLED_RES: Record<number, string> = {
   298: '羊/猎物/渔船额外产金（瓦兰吉）未建模',
   502: '伐木同时产食物（蜀）未建模',
 };
+/**
+ * 匈奴 tech 238「C-Bonus, Start w/ Horse」/ 241「C-Bonus, Disable Horse」（res 234 set 1）：
+ * 前置分别含 tech 308 / 307，名称表示开局送马/禁用马。307/308 的具体含义（哪种游戏模式）未核实。
+ * 送的是马（非村民），不改变村民数和资源，开局模拟不涉及。
+ */
+const RES234_IRRELEVANT_TECH: Record<number, string> = {
+  238: '匈奴开局送马（tech 238，前置 308，含义未核实），不改变村民数与资源',
+  241: '匈奴禁用开局马（tech 241，前置 307，含义未核实），不改变村民数与资源',
+};
+/**
+ * 加成逻辑已实现、但出处不足，本版仍按不支持处理（UI 置灰）的文明。
+ * 匈奴：缺第二条 2020 年后的独立出处（#42，Steve 裁定 v0.4.0 置灰）。补到后删掉这一行即可解除置灰。
+ */
+export const SOURCE_PENDING_CIVS: Record<string, string> = {
+  Huns: '匈奴加成已实现，但还缺第二条 2020 年后的独立出处，本版暂按通用计',
+};
 /** 已在 START_VILS 建模送村民的文明 tech（汉 302、玛雅 554） */
 const RES234_HANDLED = new Set([302, 554]);
 /** 整条待核实的文明 tech → 原因 */
@@ -981,6 +1055,7 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
     if (e.res === 269 && e.op === 'set') return { kind: 'handled' };
     if (HANDLED_RES(e.res, e.op) || (e.res === 33 && e.op === 'set' && e.v === RES33_INSTANT_FARMERS)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
+    if (e.res === 234 && row.tech !== undefined && RES234_IRRELEVANT_TECH[row.tech]) return { kind: 'irrelevant', reason: RES234_IRRELEVANT_TECH[row.tech]! };
     if (UNHANDLED_RES[e.res]) return { kind: 'unhandled', reason: UNHANDLED_RES[e.res]! };
     if (IRRELEVANT_RES[e.res]) return { kind: 'irrelevant', reason: IRRELEVANT_RES[e.res]! };
     return { kind: 'unknown' };
@@ -1021,9 +1096,16 @@ export function unhandledEffects(eco: EcoData, civ: string, bos: BuildOrder[] = 
 }
 
 /** 文明是否被开局模拟完整支持：没有「影响开局但未实现」也没有未分类效果；UI（#39）据此置灰 */
-export function simSupport(eco: EcoData, civ: string, bos: BuildOrder[] = []): { supported: boolean; reasons: string[] } {
+export function simSupport(
+  eco: EcoData,
+  civ: string,
+  bos: BuildOrder[] = [],
+  opts: { ignoreSourceGate?: boolean } = {},
+): { supported: boolean; reasons: string[] } {
   const u = unhandledEffects(eco, civ, bos);
-  return { supported: u.length === 0, reasons: [...new Set(u.map((x) => x.reason))] };
+  const reasons = [...new Set(u.map((x) => x.reason))];
+  if (!opts.ignoreSourceGate && SOURCE_PENDING_CIVS[civ]) reasons.push(SOURCE_PENDING_CIVS[civ]!);
+  return { supported: reasons.length === 0, reasons };
 }
 
 /** 所有文明里未分类的效果（bo:check 遇到即失败） */
@@ -1033,4 +1115,27 @@ export function unknownCivEffects(eco: EcoData, bos: BuildOrder[] = []): string[
       .filter((x) => x.kind === 'unknown')
       .map((x) => x.effect),
   );
+}
+
+/**
+ * #42 匈奴摘要对比行：到达目标时代比通用早多少；木头净值 = 通用在到达前付掉的房子木头 − 起始少的木头。
+ * 起始差值与房子单价都从数据读（不写死 100 / 25）。
+ */
+export function noHouseCompare(
+  civTl: BuildTimeline,
+  genericTl: BuildTimeline,
+  eco: EcoData,
+  civ: string,
+  age: 'feudal' | 'castle' | 'imperial' = 'feudal',
+): { earlierSec: number; startWoodDelta: number; housesSaved: number; woodNet: number } | null {
+  if (!civTl.noHouses) return null;
+  const c = civTl.ageUps.find((a) => a.age === age);
+  const g = genericTl.ageUps.find((a) => a.age === age);
+  if (!c || !g) return null;
+  let startWoodDelta = 0;
+  for (const r of eco.civEco[civ] ?? [])
+    if (r.age === 1 && r.source !== 'team') for (const e of r.effects) if (e.kind === 'res' && e.res === 92 && e.op === 'add') startWoodDelta += e.v ?? 0;
+  const houseWood = eco.buildings[HOUSE]?.cost.Wood ?? 25;
+  const housesSaved = genericTl.housePaidAt.filter((t) => t <= g.reachAt).length;
+  return { earlierSec: r1(g.reachAt - c.reachAt), startWoodDelta, housesSaved, woodNet: housesSaved * houseWood + startWoodDelta };
 }

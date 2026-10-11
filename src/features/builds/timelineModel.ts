@@ -287,3 +287,29 @@ export function parseQuery(sp: URLSearchParams, boIds: string[], civIds: string[
 /** #3 390 宽 2×2 摘要：主要卡点文案超过这么多字时占满一整行（Jony 44c7bed，边界 >14） */
 export const BN_LONG_CHARS = 14;
 export const isLongBottleneck = (text: string) => [...text].length > BN_LONG_CHARS;
+
+/** #42：步骤说明拆段，不需要房子的文明（匈奴）把造房片段标成 skip（界面置灰 + 删除线 +「匈奴不需要」）。noHouses=false 时原样一段。 */
+export type NotePart = { text: string; skip?: true };
+export function noteParts(note: string, houseText: readonly string[] | undefined, noHouses: boolean): NotePart[] {
+  if (!noHouses || !houseText?.length) return note ? [{ text: note }] : [];
+  const out: NotePart[] = [];
+  let rest = note;
+  const frags = [...houseText].sort((a, b) => note.indexOf(a) - note.indexOf(b));
+  for (const f of frags) {
+    const k = rest.indexOf(f);
+    if (k < 0) continue;
+    if (k > 0) out.push({ text: rest.slice(0, k) });
+    out.push({ text: f, skip: true });
+    rest = rest.slice(k + f.length);
+  }
+  if (rest) out.push({ text: rest });
+  return out;
+}
+
+/** #42 摘要对比行（Jony 稿 huns-flag-*）：「比通用：到达封建 早 0:21 · 木头按净值省 0（起始少 100 木）」 */
+export function noHouseCompareText(c: { earlierSec: number; startWoodDelta: number; woodNet: number }, ageZh: string): string {
+  const t = c.earlierSec >= 0 ? `早 ${mmss(c.earlierSec)}` : `晚 ${mmss(-c.earlierSec)}`;
+  const w = c.woodNet >= 0 ? `省 ${Math.round(c.woodNet)}` : `多花 ${Math.round(-c.woodNet)}`;
+  const start = c.startWoodDelta < 0 ? `起始少 ${-c.startWoodDelta} 木` : c.startWoodDelta > 0 ? `起始多 ${c.startWoodDelta} 木` : '起始木头相同';
+  return `比通用：到达${ageZh} ${t} · 木头按净值${w}（${start}）`;
+}

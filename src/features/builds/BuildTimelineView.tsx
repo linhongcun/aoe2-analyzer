@@ -6,7 +6,7 @@ import units from '../../data/units.json';
 import { buildOrders } from '../../data/buildOrders';
 import { civByEn, civs } from '../../data';
 import { simSupport } from '../../domain/simSupport';
-import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
+import { noHouseCompare, simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { RowSegs } from './RowSegs';
@@ -25,6 +25,8 @@ import {
   rangeLabel,
   summaryText,
   isLongBottleneck,
+  noHouseCompareText,
+  noteParts,
   type RowKey,
   type Seg,
 } from './timelineModel';
@@ -78,6 +80,13 @@ export default function BuildTimelineView() {
     [bo, simCiv, q.dist, q.house],
   );
   const v = useMemo(() => buildView(tl, (id) => UNIT_ZH[id] ?? id), [tl]);
+  // #42 匈奴（huns-flag-* 稿）：只有文明被支持、按它计算且它不需要房子时才出现；置灰时 simCiv 是 Generic，这里恒为 false
+  const noHouses = tl.noHouses;
+  const noNeedZh = `${civByEn(simCiv)?.zh ?? simCiv}不需要`;
+  const genericTl = useMemo(
+    () => (noHouses ? simulateBuild(bo, 'Generic', eco as unknown as EcoData, UPS, { walkTiles: q.dist, autoHouses: q.house }) : null),
+    [noHouses, bo, q.dist, q.house],
+  );
   const [showAssume, setShowAssume] = useState(false);
   const [copied, setCopied] = useState(false);
   const [drawer, setDrawer] = useState(false);
@@ -101,6 +110,10 @@ export default function BuildTimelineView() {
   const bad = new Set(tl.steps.filter((s) => s.anomalies.length).map((s) => s.index));
   const sel = q.step !== null ? tl.steps[q.step] : undefined;
   const sumT = summaryText(v.top, targetZh);
+  const cmp = genericTl
+    ? noHouseCompare(tl, genericTl, eco as unknown as EcoData, simCiv, (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]!)
+    : null;
+  const cmpText = cmp ? noHouseCompareText(cmp, targetZh) : null;
   const changed = (q.civ ? 1 : 0) + (q.dist !== WALK.default ? 1 : 0) + (q.house ? 0 : 1);
   const source = bo.sources[0]?.title;
 
@@ -289,10 +302,24 @@ export default function BuildTimelineView() {
         <span className="tl-num">{q.dist} 格</span>
         {dot(q.dist !== WALK.default)}
       </label>
-      <button type="button" role="switch" aria-checked={q.house} className="tl-switch" onClick={() => set('house', q.house ? '0' : '1')}>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={noHouses ? false : q.house}
+        aria-disabled={noHouses || undefined}
+        disabled={noHouses}
+        className="tl-switch"
+        data-t="auto-house"
+        onClick={() => set('house', q.house ? '0' : '1')}
+      >
         自动造房 <span className="tl-knob" aria-hidden />
-        {dot(!q.house)}
+        {!noHouses && dot(!q.house)}
       </button>
+      {noHouses && (
+        <span className="tl-no-need" data-t="no-need">
+          {noNeedZh}
+        </span>
+      )}
       <span className="note">羊和浆果按近距离计{!q.house && ' · 关掉可以看到不造房会卡在哪'}</span>
     </>
   );
@@ -362,46 +389,48 @@ export default function BuildTimelineView() {
         </div>
       )}
       <div className="tl-summary-card">
-        <ul className="tl-summary" role="region" aria-label="摘要">
-          <li className="tl-arrive" data-t="sum-arrive">
-            <span className="k">到达{target?.nameZh ?? targetZh}</span>
-            <b className="tl-num" data-time>
-              {target ? `约 ${mmss(target.reachAt)}` : '—'}
-            </b>
-            <span className="tl-civ" data-t="sum-civ">
-              {civLabel}
-            </span>
-            {target && rangeLabel(target.reachAt, target.errSec) && (
-              <span className="s tl-num tl-range" data-t="sum-range">
-                {rangeLabel(target.reachAt, target.errSec)}
+        <SumMain extra={cmpText}>
+          <ul className="tl-summary" role="region" aria-label="摘要">
+            <li className="tl-arrive" data-t="sum-arrive">
+              <span className="k">到达{target?.nameZh ?? targetZh}</span>
+              <b className="tl-num" data-time>
+                {target ? `约 ${mmss(target.reachAt)}` : '—'}
+              </b>
+              <span className="tl-civ" data-t="sum-civ">
+                {civLabel}
               </span>
-            )}
-          </li>
-          <li className={`tl-bn${v.top ? ' is-bad' : ''}${isLongBottleneck(sumT.main) ? ' is-long' : ''}`} data-t="sum-bottleneck">
-            {v.top ? (
-              <button type="button" className="tl-jump" onClick={() => jump(v.top!.step)} aria-label={`主要卡点 ${sumT.main}，${sumT.sub}，跳到该步`}>
-                <span className="k">主要卡点</span>
-                <b>{sumT.main}</b>
-                <span className="s">{sumT.sub}</span>
-              </button>
-            ) : (
-              <>
-                <span className="k">主要卡点</span>
-                <b>没有卡点</b>
-              </>
-            )}
-          </li>
-          <li>
-            <span className="k">城镇中心闲置</span>
-            <b className="tl-num" data-time>
-              约 {mmss(v.tcIdleTotal)}
-            </b>
-          </li>
-          <li>
-            <span className="k">村民</span>
-            <b className="tl-num">{target?.vils ?? '—'}</b>
-          </li>
-        </ul>
+              {target && rangeLabel(target.reachAt, target.errSec) && (
+                <span className="s tl-num tl-range" data-t="sum-range">
+                  {rangeLabel(target.reachAt, target.errSec)}
+                </span>
+              )}
+            </li>
+            <li className={`tl-bn${v.top ? ' is-bad' : ''}${isLongBottleneck(sumT.main) ? ' is-long' : ''}`} data-t="sum-bottleneck">
+              {v.top ? (
+                <button type="button" className="tl-jump" onClick={() => jump(v.top!.step)} aria-label={`主要卡点 ${sumT.main}，${sumT.sub}，跳到该步`}>
+                  <span className="k">主要卡点</span>
+                  <b>{sumT.main}</b>
+                  <span className="s">{sumT.sub}</span>
+                </button>
+              ) : (
+                <>
+                  <span className="k">主要卡点</span>
+                  <b>没有卡点</b>
+                </>
+              )}
+            </li>
+            <li>
+              <span className="k">城镇中心闲置</span>
+              <b className="tl-num" data-time>
+                约 {mmss(v.tcIdleTotal)}
+              </b>
+            </li>
+            <li>
+              <span className="k">村民</span>
+              <b className="tl-num">{target?.vils ?? '—'}</b>
+            </li>
+          </ul>
+        </SumMain>
         <div className="tl-share-slot">
           <div className="tl-share-row">
             {copyBtn}
@@ -552,7 +581,16 @@ export default function BuildTimelineView() {
                   约 {mmss(rowTime(s))}
                 </span>
                 <span className="n">
-                  {st.note}
+                  {noteParts(st.note ?? '', st.houseText, noHouses).map((x, k) =>
+                    x.skip ? (
+                      <span key={k} className="tl-skip" data-t="house-skip">
+                        <s>{x.text}</s>
+                        <span className="tl-no-need">{noNeedZh}</span>
+                      </span>
+                    ) : (
+                      <span key={k}>{x.text}</span>
+                    ),
+                  )}
                   {st.siteAdded && (
                     <span className="tl-site-added" data-t="site-added">
                       本站补充，来源未列
@@ -686,5 +724,18 @@ export default function BuildTimelineView() {
         </div>
       )}
     </section>
+  );
+}
+
+/** 摘要四格；有 #42 对比行时包一层，把对比行放在四格下面（虚线分隔）。没有时 DOM 不变 */
+function SumMain({ extra, children }: { extra: string | null; children: React.ReactNode }) {
+  if (!extra) return <>{children}</>;
+  return (
+    <div className="tl-sum-main">
+      {children}
+      <p className="tl-cmp" data-t="sum-compare">
+        {extra}
+      </p>
+    </div>
   );
 }
