@@ -13,6 +13,19 @@ import { expect, test, type Page } from '@playwright/test';
 
 const BUILDS = '#/builds';
 
+/**
+ * 异常隔离 fixture：每条用例只应触发一种 anomaly（见文件头优先级说明）。
+ * TODO(M3)：为每条补全真实 query 组合，确保不会同时冒出 idle_tc / timeout / pop_block / resource_short。
+ */
+const ANOMALY_FIXTURES = {
+  /** case 5 → resource_short only */
+  resource_short: 'bo=maa-archers-18&civ=Britons', // TODO(M3): 仅 resource_short
+  /** case 6 → idle_tc only（SimParams.idleThreshold=2，恰好 2 秒不算，须严格 >2） */
+  idle_tc: 'bo=feudal-drush-18&civ=Franks', // TODO(M3): 仅 idle_tc
+  /** case 15 → timeout only */
+  timeout: 'bo=fast-castle-boom&civ=Franks', // TODO(M3): 仅 timeout（60 分钟内到不了城堡）
+} as const;
+
 async function openBuild(page: Page, q: string) {
   await page.goto(`${BUILDS}?${q}`);
   await expect(page.getByRole('list', { name: /时间线/ })).toBeVisible();
@@ -62,7 +75,7 @@ test.describe('#3 开局时间线', () => {
   });
 
   test.fixme('5. 资源不足组合：气泡显示「木头差 35」类缺口，轴上有红色区间', async ({ page }) => {
-    await openBuild(page, 'bo=scouts-18&civ=Franks&dist=10');
+    await openBuild(page, ANOMALY_FIXTURES.resource_short);
     const n = page.locator('[data-anomaly="resource_short"]').first();
     await n.hover();
     await expect(page.getByRole('tooltip')).toHaveText(/(食物|木头|黄金|石头)差 \d+/);
@@ -70,7 +83,7 @@ test.describe('#3 开局时间线', () => {
   });
 
   test.fixme('6. 城镇中心闲置 >2 秒：红色+城镇中心图标，悬停「城镇中心闲置约 x 秒」，摘要第一位是 tcIdleTotal', async ({ page }) => {
-    await openBuild(page, 'bo=scouts-18&civ=Franks&dist=10');
+    await openBuild(page, ANOMALY_FIXTURES.idle_tc);
     const n = page.locator('[data-anomaly="idle_tc"]').first();
     await n.hover();
     await expect(page.getByRole('tooltip')).toHaveText(/城镇中心闲置约 \d+ 秒/);
@@ -122,18 +135,26 @@ test.describe('#3 开局时间线', () => {
     await t.getByRole('radio', { name: '保守' }).click();
     await expect(page).toHaveURL(/[?&]var=/);
     expect(before).toBeGreaterThan(0); // TODO：断言具体节点时间变化
-    await openBuild(page, 'bo=archers-22&civ=Britons'); // TODO：换成实际无变体开局 id
+    await openBuild(page, 'bo=archers-19&civ=Britons'); // M1 无激进/保守变体的开局
     await expect(page.getByRole('radiogroup', { name: /激进|保守/ })).toHaveCount(0);
   });
 
   test.fixme('11. 步骤详情里单位/科技/建筑链接指向 /unit、/tech、/building 且页面存在；后退恢复状态', async ({ page }) => {
+    const timelineUrl = /bo=scouts-18.*civ=Franks.*dist=7.*step=3|step=3/;
     await openBuild(page, 'bo=scouts-18&civ=Franks&dist=7&step=3');
     const detail = page.getByRole('region', { name: /步骤详情/ });
     await detail.locator('a[href*="/building/"]').first().click();
     await expect(page.locator('#building h2')).toBeVisible();
     await page.goBack();
-    await expect(page).toHaveURL(/bo=scouts-18.*civ=Franks.*dist=7.*step=3|step=3/);
-    // TODO：同样覆盖 /unit/… 和 /tech/:id
+    await expect(page).toHaveURL(timelineUrl);
+    await detail.locator('a[href*="/unit/"]').first().click();
+    await expect(page.locator('#unit h2')).toBeVisible();
+    await page.goBack();
+    await expect(page).toHaveURL(timelineUrl);
+    await detail.locator('a[href*="/tech/"]').first().click();
+    await expect(page.locator('#tech h2')).toBeVisible();
+    await page.goBack();
+    await expect(page).toHaveURL(timelineUrl);
   });
 
   test.fixme('12. 带全部参数的 URL 直接打开：状态完整还原；非法参数（dist=99）回退默认不报错', async ({ page }) => {
@@ -171,8 +192,7 @@ test.describe('#3 开局时间线', () => {
   });
 
   test.fixme('15. 超时状态：60 分钟内到不了城堡：显示「60 分钟内到不了城堡」', async ({ page }) => {
-    // TODO(M3)：找一个能触发 Anomaly type 'timeout' 的组合（例如不造房+最远距离）
-    await openBuild(page, 'bo=scouts-18&civ=Franks&dist=10&house=0');
+    await openBuild(page, ANOMALY_FIXTURES.timeout);
     await expect(page.getByText('60 分钟内到不了城堡')).toBeVisible();
     await expect(page.locator('[data-anomaly="timeout"]')).toHaveCount(1);
   });
