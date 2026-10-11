@@ -162,10 +162,10 @@ describe('Jony review 追加断言', () => {
 });
 
 describe('#28 开局页头', () => {
-  it('不含草稿/待内容审核，文案为「N 个主流开局；点「看时间线」看每一步卡在哪」（#3 时间线上线后更新）', () => {
+  it('不含草稿/待内容审核，文案为「N 个主流开局，点开看每一步卡在哪」（#3 时间线上线后更新）', () => {
     const src = readFileSync('src/features/builds/BuildOrderList.tsx', 'utf8');
     expect(src).not.toMatch(/草稿|待内容审核/);
-    expect(src).toContain('${buildOrders.length} 个主流开局；点「看时间线」看每一步卡在哪');
+    expect(src).toContain('${buildOrders.length} 个主流开局，点开看每一步卡在哪');
   });
 });
 

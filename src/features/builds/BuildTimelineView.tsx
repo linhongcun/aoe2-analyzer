@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Check, Info, Landmark, Link2, Settings2, TriangleAlert, X } from 'lucide-react';
+import { Check, Info, TriangleAlert as Warn, Landmark, Link2, Settings2, TriangleAlert, X } from 'lucide-react';
 import eco from '../../data/eco.json';
 import units from '../../data/units.json';
 import { buildOrders } from '../../data/buildOrders';
 import { civByEn, civs } from '../../data';
+import { simSupport } from '../../domain/simSupport';
 import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Breadcrumbs } from '../../shared/ui/layout';
@@ -50,7 +51,10 @@ export default function BuildTimelineView() {
     );
   const set = (k: string, v: string | null) => patch({ [k]: v });
 
-  const simCiv = q.civ || 'Generic';
+  // #42：链接里的文明加成还没计入 → 保留 URL 里的 civ，按通用计算并提示
+  const unsupported = !!q.civ && !simSupport(q.civ);
+  const simCiv = q.civ && !unsupported ? q.civ : 'Generic';
+  const [warnOff, setWarnOff] = useState(() => sessionStorage.getItem('tl-civwarn-off') === '1');
   const tl = useMemo(
     () => simulateBuild(bo, simCiv, eco as unknown as EcoData, UPS, { walkTiles: q.dist, autoHouses: q.house }),
     [bo, simCiv, q.dist, q.house],
@@ -70,7 +74,7 @@ export default function BuildTimelineView() {
   const ticks = Array.from({ length: minutes + 1 }, (_, i) => i).filter((m) => m % every === 0);
   const target = v.ages.find((a) => a.age === (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]) ?? v.ages[v.ages.length - 1];
   const targetZh = AGE_ZH[bo.target.age]!;
-  const civLabel = q.civ ? `按${civByEn(q.civ)?.zh ?? q.civ}计` : '按通用计';
+  const civLabel = simCiv !== 'Generic' ? `按${civByEn(simCiv)?.zh ?? simCiv}计` : '按通用计';
   const ranged = v.bottlenecks.filter((b) => b.to > b.from);
   const tagged = v.top && v.top.to > v.top.from ? v.top : [...ranged].sort((a, b) => b.sec - a.sec)[0];
   const bad = new Set(tl.steps.filter((s) => s.anomalies.length).map((s) => s.index));
@@ -140,7 +144,17 @@ export default function BuildTimelineView() {
   const settings = (
     <>
       <span className="tl-ctl">
-        文明 <CivPicker id="tlciv" label="文明" none="通用" value={q.civ} onChange={(en) => set('civ', en || null)} />
+        文明{' '}
+        <CivPicker
+          id="tlciv"
+          label="文明"
+          none="通用"
+          isEnabled={simSupport}
+          disabledGroup="暂不支持 · 文明加成尚未计入"
+          disabledNote="文明加成尚未计入"
+          value={unsupported ? '' : q.civ}
+          onChange={(en) => set('civ', en || null)}
+        />
         {dot(q.civ !== '')}
       </span>
       <div className="tl-seg" role="radiogroup" aria-label="走路距离预设">
@@ -222,6 +236,22 @@ export default function BuildTimelineView() {
         <div className="tl-desk-only tl-inline-settings">{settings}</div>
       </div>
 
+      {unsupported && !warnOff && (
+        <div className="tl-civwarn" role="status" data-t="civ-warn">
+          <Warn size={16} aria-hidden />
+          <span>链接里的{civByEn(q.civ)?.zh ?? q.civ}加成尚未计入，已按通用计算。</span>
+          <button
+            type="button"
+            aria-label="关闭提示"
+            onClick={() => {
+              sessionStorage.setItem('tl-civwarn-off', '1');
+              setWarnOff(true);
+            }}
+          >
+            <X size={16} aria-hidden />
+          </button>
+        </div>
+      )}
       <div className="tl-summary-card">
         <ul className="tl-summary" role="region" aria-label="摘要">
           <li className="tl-arrive" data-t="sum-arrive">

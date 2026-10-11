@@ -9,6 +9,7 @@ import { DLCS } from '../../domain/dlc';
 import type { Civ } from '../../domain/types';
 import { CivIcon, DlcImg } from './art';
 import { Icon } from './Icon';
+import { Ban } from 'lucide-react';
 
 export interface CivPickerProps {
   /** 触发按钮的 id（测试与 label 使用） */
@@ -24,11 +25,17 @@ export interface CivPickerProps {
   label: string;
   /** 选项名称后缀，如“满科技” */
   suffix?: string;
+  /** 可选：返回 false 的文明沉到底部「不可选」组，置灰、不可选、键盘跳过 */
+  isEnabled?: (en: string) => boolean;
+  /** 底部组标题与禁用行小字（配合 isEnabled） */
+  disabledGroup?: string;
+  disabledNote?: string;
 }
 
-type Row = { kind: 'head'; key: string; dlc: number | null; title: string } | { kind: 'opt'; key: string; en: string; c?: Civ };
+type Row =
+  { kind: 'head'; key: string; dlc: number | null; title: string } | { kind: 'opt'; key: string; en: string; c?: Civ } | { kind: 'dis'; key: string; c: Civ };
 
-export function CivPicker({ id, value, onChange, allowed, none, label, suffix }: CivPickerProps) {
+export function CivPicker({ id, value, onChange, allowed, none, label, suffix, isEnabled, disabledGroup, disabledNote }: CivPickerProps) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [act, setAct] = useState(0);
@@ -37,14 +44,24 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix }:
   const input = useRef<HTMLInputElement>(null);
   const listId = useId();
   const cur = value ? civByEn(value) : undefined;
-  const pool = useMemo(() => (allowed ? civs.filter((c) => allowed.includes(c.en)) : civs), [allowed]);
+  const all = useMemo(() => (allowed ? civs.filter((c) => allowed.includes(c.en)) : civs), [allowed]);
+  const pool = useMemo(() => (isEnabled ? all.filter((c) => isEnabled(c.en)) : all), [all, isEnabled]);
+  const off = useMemo(() => (isEnabled ? all.filter((c) => !isEnabled(c.en)) : []), [all, isEnabled]);
 
   const rows: Row[] = useMemo(() => {
     const ql = q.trim().toLowerCase();
     const out: Row[] = [];
+    // 不可选的文明统一沉底成一组（搜索时也保留），不进入键盘可达的 opts
+    const tail = () => {
+      const hit = off.filter((c) => !ql || c.zh.includes(ql) || c.en.toLowerCase().includes(ql));
+      if (!hit.length) return;
+      out.push({ kind: 'head', key: 'h-off', dlc: null, title: disabledGroup ?? '暂不可选' });
+      hit.forEach((c) => out.push({ kind: 'dis', key: 'off-' + c.en, c }));
+    };
     if (none && !ql) out.push({ kind: 'opt', key: '__none', en: '' });
     if (ql) {
       pool.filter((c) => c.zh.includes(ql) || c.en.toLowerCase().includes(ql)).forEach((c) => out.push({ kind: 'opt', key: c.en, en: c.en, c }));
+      tail();
       return out;
     }
     const groups = new Map<number | null, Civ[]>();
@@ -55,8 +72,9 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix }:
         out.push({ kind: 'head', key: 'h' + d, dlc: d, title: d == null ? '其他' : `${DLCS[d]!.zh} · ${DLCS[d]!.year}` });
         cs.forEach((c) => out.push({ kind: 'opt', key: c.en, en: c.en, c }));
       });
+    tail();
     return out;
-  }, [q, pool, none]);
+  }, [q, pool, off, none, disabledGroup]);
   const opts = rows.filter((r): r is Extract<Row, { kind: 'opt' }> => r.kind === 'opt');
 
   useEffect(() => {
@@ -181,6 +199,29 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix }:
                       {r.title}
                     </div>
                   );
+                if (r.kind === 'dis') {
+                  const tip = `${r.c.zh}：${disabledNote ?? '暂不可选'}，暂不能选`;
+                  return (
+                    <div
+                      key={r.key}
+                      className="cp-opt dis"
+                      role="option"
+                      aria-selected={false}
+                      aria-disabled="true"
+                      data-civ={r.c.en}
+                      title={tip}
+                      aria-label={tip}
+                    >
+                      <CivIcon c={r.c} />
+                      <span className="cp-name">
+                        {r.c.zh}
+                        <small>{r.c.en}</small>
+                        {disabledNote && <small className="cp-dis-note">{disabledNote}</small>}
+                      </span>
+                      <Ban size={16} aria-hidden />
+                    </div>
+                  );
+                }
                 idx++;
                 const i = idx;
                 const sel = r.en === value;

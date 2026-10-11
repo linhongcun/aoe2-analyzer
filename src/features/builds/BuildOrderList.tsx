@@ -29,7 +29,7 @@ export default function BuildOrderList() {
     );
   return (
     <section className="pane" id="builds">
-      <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局；点「看时间线」看每一步卡在哪`} />
+      <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
       <div className="tl-empty" data-t="timeline-empty">
         <div className="tl-empty-axis" aria-hidden />
         <p>选一个开局，看看你会卡在哪</p>
