@@ -1,7 +1,7 @@
 # #19 分享卡 v2：三层口径（Steve 定）
 
 数据：`ff7999e`（#53 合入；时间统一用 formatClock 向下取整到整秒），`simulateBuild(fast-castle-boom, 'Franks', eco, ups, { walkTiles: 4, autoHouses: true })`；`simSupport('Franks') === true`。（v2 原为 main `bb9ff17`：15:29 / 早 56 秒 · 晚 1:46 / 6:06；`0a0995d` 四舍五入时为 15:33 / 晚 1:43 / 6:03 / 44 秒）
-- 到城堡 reachAt 932.6s → 15:32（点击 772.6s → 12:52），errSec early 59.4 / late 102.5 → 范围 floor(932.6−59.4)=873→14:33，floor(932.6+102.5)=1035→17:15；卡上照页面写法：标签「到达城堡」，下面一行灰字「14:33–17:15」（Steve 定，不再写「早 X 秒 · 晚 Y」；和线上 `data-t=sum-range` 一致，次要文字色 #636366，在白底上对比度约 6:1，AA 通过）
+- 到城堡 reachAt 932.6s → 15:32（点击 772.6s → 12:52），errSec early 59.4 / late 102.5 → 范围 floor(932.6−59.4)=873→14:33，floor(932.6+102.5)=1035→17:15；卡上照页面写法：标签「到达城堡」，下面一行灰字「误差 14:33–17:15」（Steve 定，不再写「早 X 秒 · 晚 Y」；页面和卡都加「误差」两个字；范围两端相同（floor 后相等）时整行不出，不留空行也不写「—」；和线上 `data-t=sum-range` 一致，次要文字色 #636366，在白底上对比度约 6:1，AA 通过）
 - resource_short(wood) 9 次，waitSec 合计 362.6s → 6:02；无 pop_block
 - 新增 prereq_wait 1 次（等市场 3.7s，#51 前置建筑规则），不足以改变主卡点，结论仍为「卡在木头」
 - tcIdleTotal 43.6s → 约 43 秒（2 次 idle_tc）
