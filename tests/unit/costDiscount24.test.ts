@@ -143,7 +143,10 @@ describe('.5 规则（v3，Steve 在 PR #84 恢复）：折后价恰为 .5 的�
         .filter((x) => x.en === en && x.civs.includes(civ))
         .forEach((u) => {
           const d = discountedCost(u, civ, age);
-          expect(d.half.some((h) => h.res.includes(r)), `${en} ${civ} ${age} ${r}`).toBe(true);
+          expect(
+            d.half.some((h) => h.res.includes(r)),
+            `${en} ${civ} ${age} ${r}`,
+          ).toBe(true);
           expect(d.cost[r]).toBe(u.cost[r]);
         });
     });

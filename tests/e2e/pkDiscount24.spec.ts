@@ -8,19 +8,24 @@ const CD = (JSON.parse(readFileSync('src/data/effects.json', 'utf8')) as { costD
 /** 独立扫描折后价恰为 .5 的 单位 × 文明 × 时代（整数算术），用于逐个核对页面 */
 const HALVES: [U, string, number][] = [];
 Object.entries(CD).forEach(([civ, list]) =>
-  list.forEach((d) =>
-    d.ok &&
-    d.groups.forEach((g) =>
-      g.units.forEach((id) => {
-        const u = UNITS.find((x) => x.id === id);
-        if (!u || !u.civs.includes(civ)) return;
-        Object.entries(g.tiers).forEach(([a, m]) => {
-          const p = Math.round((1 - m) * 100);
-          if (+a >= u.age && g.res.some((r) => u.cost[r] && (u.cost[r]! * (100 - p)) % 100 === 50) && !HALVES.some((h) => h[0].id === id && h[1] === civ && h[2] === +a))
-            HALVES.push([u, civ, +a]);
-        });
-      }),
-    ),
+  list.forEach(
+    (d) =>
+      d.ok &&
+      d.groups.forEach((g) =>
+        g.units.forEach((id) => {
+          const u = UNITS.find((x) => x.id === id);
+          if (!u || !u.civs.includes(civ)) return;
+          Object.entries(g.tiers).forEach(([a, m]) => {
+            const p = Math.round((1 - m) * 100);
+            if (
+              +a >= u.age &&
+              g.res.some((r) => u.cost[r] && (u.cost[r]! * (100 - p)) % 100 === 50) &&
+              !HALVES.some((h) => h[0].id === id && h[1] === civ && h[2] === +a)
+            )
+              HALVES.push([u, civ, +a]);
+          });
+        }),
+      ),
   ),
 );
 
@@ -62,11 +67,23 @@ for (const w of [1280, 390]) {
       await open(page, 'a=329.Berbers..f.&b=38.Franks..f.');
       await expect(A(page).locator('[data-t="pk-count"] b')).toHaveText('30');
       await expect(A(page).locator('[data-t="pk-applied"]')).toContainText('−15%');
-      await expect(A(page).locator('[data-t="pk-basis"]')).toHaveText('· 按城堡时代价格');
+      await expect(A(page).locator('[data-t="pk-sum"] [data-t="pk-basis"]')).toHaveText('按城堡时代价格');
+      await expect(A(page).locator('[data-t="pk-applied"] [data-t="pk-basis"]')).toHaveCount(0);
       await page.goto('#/duel?m=r&bud=3000&a=329.Berbers.4.f.&b=38.Franks.3.f.');
       await expect(A(page).locator('[data-t="pk-applied"]')).toContainText('−20%');
       await expect(A(page).locator('[data-t="pk-count"] b')).toHaveText('32');
       await expect(A(page).locator('[data-t="pk-basis"]')).toHaveCount(0);
+    });
+
+    test('已计入行保留加成原文，12px，可折行不截断', async ({ page }) => {
+      await open(page, 'a=359.Byzantines.4.f.&b=569.Franks.4.f.');
+      const o = A(page).locator('[data-t="pk-orig"]');
+      await expect(o).toHaveText('骆驼骑兵、掷矛手和长矛兵系的费用 -25%');
+      const st = await o.evaluate((e) => {
+        const c = getComputedStyle(e);
+        return { fs: c.fontSize, to: c.textOverflow, ws: c.whiteSpace, clip: e.scrollWidth > e.clientWidth + 1 };
+      });
+      expect(st).toEqual({ fs: '12px', to: 'clip', ws: 'normal', clip: false });
     });
 
     test('来源浮层：Esc 关闭，含「查看文明加成」', async ({ page }) => {
@@ -143,7 +160,10 @@ for (const w of [1280, 390]) {
       await open(page, 'a=359.Byzantines.4.f.&b=569.Franks.4.f.');
       await A(page).locator('[data-t="pk-src-btn"]').click();
       await expect(A(page).locator('[data-t="pk-pop"]')).toBeVisible();
-      await page.locator('h1, .list-head, #duel').first().click({ position: { x: 5, y: 5 } });
+      await page
+        .locator('h1, .list-head, #duel')
+        .first()
+        .click({ position: { x: 5, y: 5 } });
       await expect(A(page).locator('[data-t="pk-pop"]')).toHaveCount(0);
     });
   });
