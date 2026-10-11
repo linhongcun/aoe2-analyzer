@@ -36,3 +36,54 @@ test('开局列表页不再有「计算修正中」', async ({ page }) => {
   await expect(page.locator('body')).not.toContainText('计算修正中');
   await expect(page.locator('[data-pending]')).toHaveCount(0);
 });
+
+test('列表页时间 = 时间线页模拟时间（6 个开局），没有旧的手写时间', async ({ page }) => {
+  await page.goto('#/builds');
+  const items = page.locator('[data-t="build-order"]');
+  await expect(items.first().locator('[data-t="bo-time"]')).toBeAttached();
+  const n = await items.count();
+  expect(n).toBe(6);
+  const rows: { id: string; time: string }[] = [];
+  for (let i = 0; i < n; i++) {
+    const href = await items.nth(i).locator('a[href*="bo="]').first().getAttribute('href');
+    rows.push({ id: href!.match(/bo=([\w-]+)/)![1]!, time: (await items.nth(i).locator('[data-t="bo-time"]').innerText()).trim() });
+  }
+  const text = await page.locator('body').innerText();
+  for (const bad of ['计算修正中', '14:00', '16:05']) expect(text).not.toContain(bad);
+  for (const r of rows) {
+    await page.goto(`#/builds?bo=${r.id}`);
+    const arrive = (await page.locator('[data-t="sum-arrive"] b').innerText()).match(/\d+:\d\d/)![0];
+    // 列表最后一个时间就是目标时代的到达时间
+    const last = [...r.time.matchAll(/\d+:\d\d/g)].map((m) => m[0]).pop();
+    expect(last, r.id).toBe(arrive);
+    const body = await page.locator('body').innerText();
+    expect(body).not.toContain('计算修正中');
+  }
+});
+
+for (const width of [1280, 390])
+  test(`列表页 @${width}：未计入加成的推荐文明整项置灰 + aria-disabled；「按通用计」单独一行 12px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('#/builds');
+    const scouts = page.locator('[data-t="build-order"]', { hasText: '18 人口侦察骑兵' });
+    const off = scouts.locator('[data-t="bo-civ"][data-off]').first();
+    await expect(off).toHaveAttribute('aria-disabled', 'true');
+    const muted = await page.evaluate(() => {
+      const d = document.createElement('span');
+      d.style.color = 'var(--color-muted)';
+      document.body.append(d);
+      const c = getComputedStyle(d).color;
+      d.remove();
+      return c;
+    });
+    expect(await off.evaluate((el) => getComputedStyle(el).color)).toBe(muted);
+    const on = scouts.locator('[data-t="bo-civ"]:not([data-off])').first();
+    await expect(on).not.toHaveAttribute('aria-disabled', 'true');
+    expect(await on.evaluate((el) => getComputedStyle(el).color)).not.toBe(muted);
+    const basis = scouts.locator('[data-t="bo-basis"]');
+    expect(await basis.evaluate((el) => getComputedStyle(el).display)).toBe('block');
+    expect(await basis.evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
+    const t = (await scouts.locator('[data-t="bo-time"]').boundingBox())!;
+    const b = (await basis.boundingBox())!;
+    expect(b.y).toBeGreaterThanOrEqual(t.y + t.height - 1);
+  });

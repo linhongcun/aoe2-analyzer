@@ -64,7 +64,6 @@ export default function BuildOrderList() {
               <>
                 {' · '}
                 <span data-t="bo-time">{meta[b.id]!.time}</span>{' '}
-                <small className="tl-civ">按通用计</small>
               </>
             )}{' '}
             ·{' '}
@@ -72,7 +71,13 @@ export default function BuildOrderList() {
               ? sortCivs(b.civs, meta?.[b.id]?.unsupported).map((c, i) => {
                   const off = meta?.[b.id]?.unsupported.includes(c);
                   return (
-                    <span key={c} data-t="bo-civ" data-off={off ? '' : undefined}>
+                    <span
+                      key={c}
+                      data-t="bo-civ"
+                      data-off={off ? '' : undefined}
+                      className={off ? 'bo-civ-off' : undefined}
+                      aria-disabled={off ? 'true' : undefined}
+                    >
                       {i > 0 && '、'}
                       {civName(c)}
                       {off && (
@@ -84,6 +89,11 @@ export default function BuildOrderList() {
                   );
                 })
               : '通用'}
+            {meta?.[b.id]?.time && (
+              <small className="tl-civ bo-basis" data-t="bo-basis">
+                按通用计
+              </small>
+            )}
           </summary>
           <p>{b.summary}</p>
           <p>

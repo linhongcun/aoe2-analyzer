@@ -1391,8 +1391,9 @@ a.tbld:hover span {
     padding: var(--space-1) var(--space-2);
   }
   /* 摘要标签 12px / 数值 17px 见上方 #3 2×2 规则 */
+  /* 只作用于摘要；列表页「按通用计」保持 12px（Jony #49） */
   .tl-summary .s,
-  .tl-civ {
+  .tl-summary .tl-civ {
     font-size: 11px;
   }
   .tl-share-slot {
@@ -1579,4 +1580,15 @@ a.tbld:hover span {
     width: 100%;
     justify-content: center;
   }
+}
+
+/* 开局列表（Jony #49）：「按通用计」在时间下方单独一行；加成未计入的推荐文明整项置灰 */
+.bo .bo-basis {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+}
+.bo .bo-civ-off,
+.bo .bo-civ-off * {
+  color: var(--color-muted);
 }
