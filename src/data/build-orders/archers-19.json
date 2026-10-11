@@ -5,7 +5,13 @@
     "en": "19 Pop 1-Range Archers"
   },
   "style": "archers",
-  "civs": ["Britons", "Mayans", "Ethiopians", "Tatars", "Vikings"],
+  "civs": [
+    "Britons",
+    "Mayans",
+    "Ethiopians",
+    "Tatars",
+    "Vikings"
+  ],
   "map": "Arabia",
   "difficulty": "intermediate",
   "target": {
@@ -268,7 +274,7 @@
           "count": 2
         }
       ],
-      "note": "19 人口点升封建，到达封建后再造 2 个村民（第 20、21 个）去采金（共 4 金）；建靶场开始出弓手。",
+      "note": "封建到达后再造第 20、21 个村民去采金（共 4 金）；建靶场开始出弓手。",
       "split": {
         "food": 4,
         "wood": 12,

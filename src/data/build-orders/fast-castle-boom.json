@@ -1,7 +1,7 @@
 {
   "id": "fast-castle-boom",
   "name": {
-    "zh": "速升城堡暴兵经济（23+2）",
+    "zh": "速升城堡暴经济（23+2）",
     "en": "Fast Castle Boom (23+2)"
   },
   "style": "fast-castle",
@@ -142,9 +142,13 @@
           "type": "gather",
           "task": "berries",
           "count": 4
+        },
+        {
+          "type": "build",
+          "building": 70
         }
       ],
-      "note": "4 个去浆果。"
+      "note": "4 个去浆果；其中 1 人先盖一座房子（人口约 20 前补房，避免卡人口）。"
     },
     {
       "vils": 17,

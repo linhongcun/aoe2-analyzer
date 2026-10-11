@@ -1,7 +1,7 @@
 {
   "id": "maa-archers-18",
   "name": {
-    "zh": "18 人口武士速攻转弓手",
+    "zh": "18 人口民兵升级武士（Man-at-Arms）转弓手",
     "en": "18 Pop Generic Man-at-Arms Rush"
   },
   "style": "maa",
@@ -13,7 +13,7 @@
     "vils": 18,
     "time": "约 8:50 到达封建"
   },
-  "summary": "封建开局出 3 个武士压制，随后建靶场转弓手并补箭头；依赖推鹿获得的额外肉类。",
+  "summary": "封建开局出 3 个民兵并升级为武士（Man-at-Arms）压制，随后建靶场转弓手并补箭头；依赖推鹿获得的额外肉类。",
   "sources": [
     {
       "title": "AOE2 Guide — maa-archers",

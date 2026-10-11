@@ -270,7 +270,7 @@ exports[`build-order snapshots > archers-19 matches snapshot (data + per-step al
             "type": "gather",
           },
         ],
-        "note": "19 人口点升封建，到达封建后再造 2 个村民（第 20、21 个）去采金（共 4 金）；建靶场开始出弓手。",
+        "note": "封建到达后再造第 20、21 个村民去采金（共 4 金）；建靶场开始出弓手。",
         "split": {
           "build": 1,
           "food": 4,
@@ -482,7 +482,7 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
             "unit": 74,
           },
         ],
-        "note": "第 13 个先采 10 金（够造民兵）再回去吃野猪；造 3 个民兵与侦察骑兵一起前压。不升级武士。",
+        "note": "第 13 个先采够约 60 金（3 个民兵费用）再回去吃野猪；造 3 个民兵与侦察骑兵一起前压。不升级武士。",
         "vils": 13,
       },
       {
@@ -526,8 +526,12 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
             "tech": 22,
             "type": "research",
           },
+          {
+            "building": 70,
+            "type": "build",
+          },
         ],
-        "note": "4 个加到原伐木场；尽早研究织布机，防对手封建侦察骑兵偷村民。",
+        "note": "4 个加到原伐木场；期间再盖一座房子（保证 27 人口点封建不卡人口）；尽早研究织布机，防对手封建侦察骑兵偷村民。",
         "vils": 23,
       },
       {
@@ -644,7 +648,7 @@ exports[`build-order snapshots > fast-castle-boom matches snapshot (data + per-s
     "map": "Arabia / 封闭地图",
     "name": {
       "en": "Fast Castle Boom (23+2)",
-      "zh": "速升城堡暴兵经济（23+2）",
+      "zh": "速升城堡暴经济（23+2）",
     },
     "review": {
       "by": "Steve Jobs",
@@ -773,8 +777,12 @@ exports[`build-order snapshots > fast-castle-boom matches snapshot (data + per-s
             "task": "berries",
             "type": "gather",
           },
+          {
+            "building": 70,
+            "type": "build",
+          },
         ],
-        "note": "4 个去浆果。",
+        "note": "4 个去浆果；其中 1 人先盖一座房子（人口约 20 前补房，避免卡人口）。",
         "vils": 17,
       },
       {
@@ -1151,7 +1159,7 @@ exports[`build-order snapshots > feudal-drush-18 matches snapshot (data + per-st
             "type": "gather",
           },
         ],
-        "note": "18 人口点升封建（升级期间城镇中心不能造村民），到达封建后再造的 2 个村民（第 19、20 个）根据侦察结果补后续军事建筑，并慢慢筑墙。",
+        "note": "18 人口点升封建（升级期间城镇中心不能造村民），到达封建后再造的 2 个村民（第 19、20 个）默认补靶场转弓手；若侦察到对方出骑则改补矛兵，并慢慢筑墙。",
         "vils": 20,
       },
     ],
@@ -1190,7 +1198,7 @@ exports[`build-order snapshots > maa-archers-18 matches snapshot (data + per-ste
     "map": "Arabia",
     "name": {
       "en": "18 Pop Generic Man-at-Arms Rush",
-      "zh": "18 人口武士速攻转弓手",
+      "zh": "18 人口民兵升级武士（Man-at-Arms）转弓手",
     },
     "review": {
       "by": "Steve Jobs",
@@ -1464,7 +1472,7 @@ exports[`build-order snapshots > maa-archers-18 matches snapshot (data + per-ste
       },
     ],
     "style": "maa",
-    "summary": "封建开局出 3 个武士压制，随后建靶场转弓手并补箭头；依赖推鹿获得的额外肉类。",
+    "summary": "封建开局出 3 个民兵并升级为武士（Man-at-Arms）压制，随后建靶场转弓手并补箭头；依赖推鹿获得的额外肉类。",
     "target": {
       "age": 2,
       "time": "约 8:50 到达封建",
