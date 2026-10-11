@@ -142,6 +142,10 @@ describe('Jony review 追加断言', () => {
     const src = readFileSync('src/features/matchup/components/Matchup.tsx', 'utf8');
     expect(src).toContain('EMPTY_STRENGTHS_COPY');
     expect(src).not.toContain('均未达门槛');
+    // Jony：空强项文案使用 muted .note 样式（同位置，无图标）
+    expect(src).toMatch(/<span className="note" data-t="empty-strengths">\s*\{EMPTY_STRENGTHS_COPY\}\s*<\/span>/);
+    const css = readFileSync('src/shared/styles/base.css', 'utf8');
+    expect(css).toMatch(/\.note \{\s*color: var\(--c-muted\)/);
   });
   it('#27 攻击间隔用全角 em dash + 原因小字，不用半角 -', () => {
     for (const f of ['src/features/duel/components/Duel.tsx', 'src/features/units/components/UnitDetail.tsx']) {

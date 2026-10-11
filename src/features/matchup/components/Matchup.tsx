@@ -33,7 +33,13 @@ export default function Matchup() {
           </h3>
           <p>
             <b>对手强项：</b>
-            {m.oppStrong.length ? m.oppStrong.join('、') : EMPTY_STRENGTHS_COPY}
+            {m.oppStrong.length ? (
+              m.oppStrong.join('、')
+            ) : (
+              <span className="note" data-t="empty-strengths">
+                {EMPTY_STRENGTHS_COPY}
+              </span>
+            )}
             <span className="tag note" style={{ marginLeft: 8 }} title="评分达到该值才列入强项">
               评分 ≥ {STRONG_THRESHOLD}
             </span>
