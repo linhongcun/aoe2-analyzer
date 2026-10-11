@@ -166,7 +166,7 @@ test('home: 即将推出 is one non-clickable card with the planned modules', as
   await page.goto('./');
   const card = page.locator('#home .soon-card');
   await expect(card).toContainText('正在制作');
-  await expect(card).toHaveText(/正在制作\s*开局时间轴 · 版本补丁$/);
+  await expect(card).toHaveText(/正在制作\s*版本补丁$/);
   await expect(card.locator('a, button')).toHaveCount(0);
   await expect(page.locator('#home .hcard.planned')).toHaveCount(0);
 });

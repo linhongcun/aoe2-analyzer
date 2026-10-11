@@ -56,7 +56,7 @@ test('置灰：开局列表页两条开局不显示城堡时间', async ({ page 
       .locator('[data-t="build-order"]')
       .filter({ has: page.locator('a[href$="bo=fast-castle-boom"]') })
       .locator('summary'),
-  ).toContainText('10:30 封建');
+  ).toContainText(/约 \d+:\d\d 封建、— 城堡/);
   await expect(
     page
       .locator('[data-t="build-order"] summary')
@@ -85,6 +85,19 @@ for (const id of IDS) {
     for (const t of OLD[id]!) expect(clip).not.toContain(t);
   });
 }
+
+test('置灰：列表页（模拟器实时时间）不出现任何旧城堡时间', async ({ page }) => {
+  await page.goto('#/builds');
+  for (const id of IDS) {
+    const s = page
+      .locator('[data-t="build-order"]')
+      .filter({ has: page.locator(`a[href$="bo=${id}"]`) })
+      .locator('summary');
+    await expect(s.locator('[data-t="bo-time"]')).toContainText('计算修正中');
+    const txt = await s.innerText();
+    for (const t of OLD[id]!) expect(txt).not.toContain(t);
+  }
+});
 
 test('置灰不影响其他开局', async ({ page }) => {
   await page.goto('#/builds');

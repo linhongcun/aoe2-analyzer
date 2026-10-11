@@ -30,7 +30,7 @@ export default function CommandPalette({ open, onClose }: { open: boolean; onClo
           <input
             autoFocus
             value={q}
-            placeholder="搜索文明、单位、科技…（中/英）"
+            placeholder="搜索文明、单位、科技、开局…（中/英）"
             onChange={(e) => {
               setQ(e.target.value);
               setSel(0);

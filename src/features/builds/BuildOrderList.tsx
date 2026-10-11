@@ -1,12 +1,18 @@
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { civByEn } from '../../data';
+import type { ListMeta } from './listMeta';
 import { visibleSources } from './sources';
-import { ChartGantt } from 'lucide-react';
+import { Ban, ChartGantt } from 'lucide-react';
 import { buildOrders } from '../../data/buildOrders';
 import type { Phase } from '../../domain/buildOrder';
 import { ListHead } from '../../shared/ui/layout';
 import FeedbackLink from '../feedback/FeedbackLink';
 import TimelineLoader from './TimelineLoader';
 import { PENDING_FIX, PENDING_LABEL, keptTime } from './pendingFix';
+
+/** 推荐文明：加成已计入的排前面，未计入的沉底（各自保持原顺序） */
+export const sortCivs = (civs: string[], off: string[] = []) => [...civs.filter((c) => !off.includes(c)), ...civs.filter((c) => off.includes(c))];
 
 const PHASE: Record<Phase, string> = {
   'feudal-click': '点封建',
@@ -19,10 +25,24 @@ const PHASE: Record<Phase, string> = {
 const AGE = ['', '黑暗', '封建', '城堡', '帝王'];
 
 /** #/builds：开局库只读列表（时间轴视图见 #2/#3） */
+function useListMeta(): Record<string, ListMeta> | null {
+  const [meta, setMeta] = useState<Record<string, ListMeta> | null>(null);
+  useEffect(() => {
+    let live = true;
+    import('./listMeta').then((m) => live && setMeta(Object.fromEntries(buildOrders.map((b) => [b.id, m.listMeta(b)])))).catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, []);
+  return meta;
+}
+
 export default function BuildOrderList() {
   const [sp] = useSearchParams();
+  const meta = useListMeta();
   const bo = sp.get('bo');
   if (bo && buildOrders.some((b) => b.id === bo)) return <TimelineLoader />;
+  const civName = (en: string) => civByEn(en)?.zh ?? en;
   return (
     <section className="pane" id="builds">
       <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
@@ -41,16 +61,36 @@ export default function BuildOrderList() {
         <details key={b.id} className="bo" data-t="build-order">
           <summary>
             <b>{b.name.zh}</b> <span className="note">{b.name.en}</span> · {b.target.vils} 人口{AGE[b.target.age]}
-            {PENDING_FIX[b.id] ? (
-              <span className="is-pending" data-pending>
-                （{keptTime(b.target.time) ? `${keptTime(b.target.time)}、` : ''}— 城堡 <small className="pending-note">{PENDING_LABEL}</small>）
-              </span>
-            ) : b.target.time ? (
-              `（${b.target.time}）`
-            ) : (
-              ''
+            {meta?.[b.id]?.time && (
+              <>
+                {' · '}
+                {PENDING_FIX[b.id] ? (
+                  <span className="is-pending" data-t="bo-time" data-pending>
+                    {keptTime(meta[b.id]!.time) ? `${keptTime(meta[b.id]!.time)}、` : ''}— 城堡 <small className="pending-note">{PENDING_LABEL}</small>
+                  </span>
+                ) : (
+                  <span data-t="bo-time">{meta[b.id]!.time}</span>
+                )}{' '}
+                <small className="tl-civ">按通用计</small>
+              </>
             )}{' '}
-            · {b.civs.length ? b.civs.join('、') : '通用'}
+            ·{' '}
+            {b.civs.length
+              ? sortCivs(b.civs, meta?.[b.id]?.unsupported).map((c, i) => {
+                  const off = meta?.[b.id]?.unsupported.includes(c);
+                  return (
+                    <span key={c} data-t="bo-civ" data-off={off ? '' : undefined}>
+                      {i > 0 && '、'}
+                      {civName(c)}
+                      {off && (
+                        <small className="tl-civ">
+                          <Ban size={12} aria-hidden /> 加成未计入
+                        </small>
+                      )}
+                    </span>
+                  );
+                })
+              : '通用'}
           </summary>
           <p>{b.summary}</p>
           <p>
