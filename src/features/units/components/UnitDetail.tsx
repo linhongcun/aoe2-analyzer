@@ -5,12 +5,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { baseUnit } from '../../../domain/family';
 import type { Unit } from '../../../domain/types';
 import { civByEn, civs } from '../../../data';
-import { useCore } from '../../../data/hooks';
-import { parseUnitPath } from '../../../domain/simulator';
+import { useCore, useTrees } from '../../../data/hooks';
+import { civStatus, parseUnitPath } from '../../../domain/simulator';
 import { AGE_ZH } from '../../../domain/ratings';
-import { upgradeLine } from '../../../domain/units';
+import { uniqueCivs, upgradeLine } from '../../../domain/units';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
-import { CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
+import { CivChip, CivIcon, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
@@ -19,9 +19,26 @@ import UnitList from './UnitList';
 
 const UT: Record<string, string> = { UniqueUnit: '独特单位', Unit: '通用单位', UnitUpgrade: '升级单位', RegionalUnit: '区域单位' };
 
+/** 升级路线中的一项；独特单位带灰色小标签「{单位} · {文明}」+ 文明图标（#10） */
+function UnitLineItem({ x }: { x: Unit }) {
+  const trees = useTrees();
+  const c = trees ? civByEn(uniqueCivs(x, trees)[0] ?? '') : undefined;
+  if (!c) return <UnitLink u={x} />;
+  return (
+    <span className="uline-uu">
+      <UnitLink u={x} />
+      <span className="uu-tag" data-t="uu-tag">
+        <CivIcon c={c} />
+        {x.zh} · {c.zh}
+      </span>
+    </span>
+  );
+}
+
 export default function UnitDetail() {
   const loc = useLocation();
   const core = useCore();
+  const trees = useTrees();
   const rt = parseUnitPath(loc.pathname);
   const u = core && rt ? core.unitById[rt.id] : undefined;
   const hasCiv = !!rt?.civ;
@@ -40,7 +57,9 @@ export default function UnitDetail() {
   const isE = u.id !== base.id;
   // 切换普通/精锐时保留路径中的模拟器状态（文明/时代/科技）
   const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
-  const ln = upgradeLine(u, core.units, core.unitById).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id);
+  // 有文明上下文时按该文明科技树选分叉（#10）
+  const st = rt.civ && trees ? civStatus(trees, rt.civ) : null;
+  const ln = upgradeLine(u, core.units, core.unitById, st ? (id) => st['u' + id] === 1 : undefined).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id);
   const stats: [string, string, ReactNode][] = [
     ['hp', '生命值 HP', u.hp],
     [u.rng > 1 ? 'patk' : 'atk', '攻击力', u.atk],
@@ -201,7 +220,7 @@ export default function UnitDetail() {
                       {x.zh}
                     </b>
                   ) : (
-                    <UnitLink u={x} />
+                    <UnitLineItem x={x} />
                   ),
                 )}
               />
