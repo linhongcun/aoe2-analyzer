@@ -140,10 +140,6 @@ test.describe('#3 开局时间线', () => {
     expect(feudal[2]!).toBeGreaterThanOrEqual(feudal[1]!);
   });
 
-  test.fixme('10. 激进/保守切换', async () => {
-    // 原因：M2 buildSim 的 variant 恒为 null，开局数据还没有变体，切换按开局有变体才显示，当前一律不显示
-  });
-
   test.fixme('11. 步骤详情里单位/科技/建筑链接', async () => {
     // 原因：步骤详情的实体链接未做（首屏范围外）
   });
@@ -329,7 +325,16 @@ test.describe('#3 开局时间线', () => {
     await expect(dlg.locator('[data-civ="Spanish"]')).toHaveAttribute('aria-disabled', 'true');
   });
 
-  test.fixme('补充：加载中骨架、计算失败错误文案和重试', async () => {
-    // 原因：计算是同步纯函数，暂无失败路径可注入；错误边界留到 M3 后续
+  test('21. 加载失败：数据分包取不到时显示说明和「重试」，不白屏；重试后恢复', async ({ page }) => {
+    let block = true;
+    await page.route(/BuildTimelineView-.*\.js/, (r) => (block ? r.abort() : r.continue()));
+    await page.goto(`${BUILDS}?bo=scouts-18&civ=Franks`);
+    const err = page.locator('[data-t="timeline-error"]');
+    await expect(err.getByRole('alert')).toContainText('时间线没能加载出来');
+    await expect(page.getByRole('list', { name: /时间线/ })).toHaveCount(0);
+    block = false;
+    await err.getByRole('button', { name: '重试' }).click();
+    await expect(page.getByRole('list', { name: /时间线/ })).toBeVisible();
+    await expect(err).toHaveCount(0);
   });
 });

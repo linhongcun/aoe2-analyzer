@@ -1,10 +1,10 @@
-import { lazy, Suspense } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ChartGantt } from 'lucide-react';
 import { buildOrders } from '../../data/buildOrders';
 import type { Phase } from '../../domain/buildOrder';
 import { ListHead } from '../../shared/ui/layout';
 import FeedbackLink from '../feedback/FeedbackLink';
+import TimelineLoader from './TimelineLoader';
 
 const PHASE: Record<Phase, string> = {
   'feudal-click': '点封建',
@@ -14,19 +14,13 @@ const PHASE: Record<Phase, string> = {
   'imperial-click': '点帝王',
   imperial: '到达帝王',
 };
-const BuildTimelineView = lazy(() => import('./BuildTimelineView'));
 const AGE = ['', '黑暗', '封建', '城堡', '帝王'];
 
 /** #/builds：开局库只读列表（时间轴视图见 #2/#3） */
 export default function BuildOrderList() {
   const [sp] = useSearchParams();
   const bo = sp.get('bo');
-  if (bo && buildOrders.some((b) => b.id === bo))
-    return (
-      <Suspense fallback={<p className="note">正在计算时间线…</p>}>
-        <BuildTimelineView />
-      </Suspense>
-    );
+  if (bo && buildOrders.some((b) => b.id === bo)) return <TimelineLoader />;
   return (
     <section className="pane" id="builds">
       <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
