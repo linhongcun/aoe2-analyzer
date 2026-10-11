@@ -349,7 +349,7 @@ test.describe('#3 开局时间线', () => {
     await page.getByRole('dialog', { name: '设置' }).locator('#tlciv').click();
     const dlg = page.getByRole('dialog', { name: '文明' });
     await expect(dlg.getByText('暂不支持 · 文明加成尚未计入')).toBeAttached();
-    await expect(dlg.locator('[data-civ="Persians"]')).toHaveAttribute('aria-disabled', 'true');
+    await expect(dlg.locator('[data-civ="Portuguese"]')).toHaveAttribute('aria-disabled', 'true');
   });
 
   test('20c. #42 西班牙已支持：选择器里可选，选中后按西班牙计、不出「未计入」提示', async ({ page }) => {
@@ -363,9 +363,9 @@ test.describe('#3 开局时间线', () => {
     await expect(page).toHaveURL(/[?&]civ=Spanish/);
     await expect(page.locator('[data-t="sum-civ"]')).not.toHaveText('按通用计');
     await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
-    // 波斯仍然置灰（另一个 PR 处理）
+    // 未支持文明（葡萄牙）仍然置灰
     await page.locator('#tlciv').click();
-    await expect(page.getByRole('dialog', { name: '文明' }).locator('[data-civ="Persians"]')).toHaveAttribute('aria-disabled', 'true');
+    await expect(page.getByRole('dialog', { name: '文明' }).locator('[data-civ="Portuguese"]')).toHaveAttribute('aria-disabled', 'true');
   });
 
   test('21. 加载失败：数据分包取不到时显示说明和「重试」，不白屏；重试后恢复', async ({ page }) => {
