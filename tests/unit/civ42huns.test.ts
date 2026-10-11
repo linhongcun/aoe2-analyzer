@@ -71,7 +71,7 @@ describe('#42 匈奴：模拟', () => {
     const g = run('scouts-18', 'Generic', false).steps[0]!;
     expect(h.stock.wood - g.stock.wood).toBe(-100);
   });
-  it.each(buildOrders.map((b) => [b.id] as const))('%s：到达目标时代比通用早；木头净值 = 通用到达前付的房子 × 25 − 100', (id) => {
+  it.each(buildOrders.map((b) => [b.id] as const))('%s：到达目标时代比通用早；木头净值 = 通用到达前付的房子数乘 25 − 100', (id) => {
     const h = run(id, 'Huns'),
       g = run(id, 'Generic');
     const c = noHouseCompare(h, g, E, 'Huns', targetAge(id))!;
@@ -81,7 +81,7 @@ describe('#42 匈奴：模拟', () => {
     expect(c.housesSaved).toBe(g.housePaidAt.filter((t) => t <= gReach).length);
     expect(c.woodNet).toBe(c.housesSaved * 25 - 100);
   });
-  it('feudal-drush-18：封建早 20.8s、通用到封建前付 4 座房子 → 木头净省 0（防回归）', () => {
+  it('feudal-drush-18：封建早 20.8s、通用到封建前付 4 座房子 时 木头净省 0（防回归）', () => {
     const c = noHouseCompare(run('feudal-drush-18', 'Huns'), run('feudal-drush-18', 'Generic'), E, 'Huns', 'feudal')!;
     expect(c.earlierSec).toBeCloseTo(20.8, 1);
     expect(c.housesSaved).toBe(4);

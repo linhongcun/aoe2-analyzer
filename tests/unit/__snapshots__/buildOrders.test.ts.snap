@@ -248,7 +248,7 @@ exports[`build-order snapshots > archers-19 matches snapshot (data + per-step al
           },
         ],
         "houseText": [
-          "房子和",
+          "房子",
         ],
         "note": "再调 1 人盖房子和兵营、2 人建金矿营地采金；研究双刃斧，暂不研究马轭。",
         "split": {
