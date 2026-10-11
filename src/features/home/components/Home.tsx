@@ -56,11 +56,6 @@ export default function Home() {
           <Card key={s.key} s={s} />
         ))}
       </div>
-      <h2 className="hsec">即将推出</h2>
-      <section className="soon-card" aria-labelledby="soon-title">
-        <h3 id="soon-title">正在制作</h3>
-        <p>版本补丁</p>
-      </section>
     </section>
   );
 }
