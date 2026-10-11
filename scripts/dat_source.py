@@ -84,11 +84,22 @@ def unit(u):
     return {'Name': u.name, 'Class': u.class_, 'HP': u.hit_points, 'LOS': u.line_of_sight, 'Speed': u.speed, 'Garrison': u.garrison_capacity,
             'Attacks': [[a.class_, a.amount] for a in t.attacks] if t else [], 'Armours': [[a.class_, a.amount] for a in t.armours] if t else [],
             'Range': t.max_range if t else 0, 'MinRange': t.min_range if t else 0, 'Reload': t.reload_time if t else 0, 'Accuracy': t.accuracy_percent if t else 0,
-            'TrainTime': u.creatable.train_time if u.creatable and hasattr(u.creatable, 'train_time') else None,
-            'Cost': [[c.type, c.amount] for c in u.creatable.resource_costs if c.flag] if u.creatable else []}
+            'TrainTime': u.creatable.train_locations[0].train_time if u.creatable and u.creatable.train_locations else None,
+            'TrainAt': [[l.unit_id, l.train_time] for l in u.creatable.train_locations] if u.creatable else [],
+            'Cost': [[c.type, c.amount, c.flag] for c in u.creatable.resource_costs if c.type >= 0 and c.amount] if u.creatable else [],
+            'Capacity': u.resource_capacity, 'WorkRate': u.bird.work_rate if u.bird else 0, 'Type': u.type}
+TASK_UNITS = {83, 293, 118, 212, 592, 590, 122, 216, 120, 354, 259, 214, 56, 57, 123, 218, 579, 581, 124, 220, 13}
+def tasks(i):
+    h = d.unit_headers[i] if i < len(d.unit_headers) else None
+    return [{'Action': t.action_type, 'Class': t.class_id, 'Unit': t.unit_id, 'ResIn': t.resource_in, 'ResOut': t.resource_out, 'Value': t.work_value_1}
+            for t in (h.task_list or [])] if h else []
 out = {
   'Techs': [{'Name': t.name, 'EffectID': t.effect_id, 'Civ': t.civ, 'RequiredTechs': list(t.required_techs), 'RequiredTechCount': t.required_tech_count,
-             'ResearchLocation': max([r.location_id for r in t.research_locations] or [-1])} for t in d.techs],
+             'ResearchLocation': max([r.location_id for r in t.research_locations] or [-1]),
+             'ResearchTime': max([r.research_time for r in t.research_locations] or [0]),
+             'ResearchAt': [[r.location_id, r.research_time] for r in t.research_locations if r.location_id >= 0],
+             'Cost': [[c.type, c.amount, c.flag] for c in t.resource_costs if c.type >= 0 and c.amount]} for t in d.techs],
+  'Tasks': {str(i): tasks(i) for i in sorted(TASK_UNITS)},
   'Effects': [{'Name': e.name, 'EffectCommands': [{'Type': c.type, 'A': c.a, 'B': c.b, 'C': c.c, 'D': c.d} for c in e.effect_commands]} for e in d.effects],
   'Civs': [{'Name': c.name, 'TechTreeID': c.tech_tree_id, 'TeamBonusID': c.team_bonus_id, 'Units': [unit(u) for u in c.units] if i < 2 else None} for i, c in enumerate(d.civs)],
   'Version': d.version,
@@ -99,7 +110,7 @@ json.dump(out, open(sys.argv[2], 'w'))
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v4.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

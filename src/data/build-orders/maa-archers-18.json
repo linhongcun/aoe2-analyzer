@@ -1,0 +1,266 @@
+{
+  "id": "maa-archers-18",
+  "name": {
+    "zh": "18 人口武士速攻转弓手",
+    "en": "18 Pop Generic Man-at-Arms Rush"
+  },
+  "style": "maa",
+  "civs": [],
+  "map": "Arabia",
+  "difficulty": "intermediate",
+  "target": {
+    "age": 2,
+    "vils": 18,
+    "time": "约 8:50 到达封建"
+  },
+  "summary": "封建开局出 3 个武士压制，随后建靶场转弓手并补箭头；依赖推鹿获得的额外肉类。",
+  "sources": [
+    {
+      "title": "AOE2 Guide — maa-archers",
+      "url": "https://aoe2guide.com/en/builds/maa-archers/",
+      "author": "Mehmet Kaan Demir 与 aoe2-guide 贡献者",
+      "section": "src/content/build-orders/maa-archers.yaml",
+      "ref": "themkdemiiir/aoe2-guide@f09ed56",
+      "accessed": "2026-10-11"
+    },
+    {
+      "title": "Hera — AoE2 Strategy Guide（2025-12）",
+      "url": "https://github.com/themkdemiiir/aoe2-guide/blob/f09ed56a9cad9c7054ea964e001e7723948174d5/docs/superpowers/notes/build-order-sources.md",
+      "author": "Hera（经 aoe2-guide 来源索引）",
+      "section": "18 Vils Generic Modern Man-at-Arms Rush",
+      "accessed": "2026-10-11"
+    }
+  ],
+  "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
+  "review": {
+    "status": "draft",
+    "notes": "待 Steve 内容审核"
+  },
+  "steps": [
+    {
+      "vils": 6,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "sheep",
+          "count": 6
+        }
+      ],
+      "note": "6 个村民在城镇中心下吃羊。"
+    },
+    {
+      "vils": 9,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "wood",
+          "count": 3
+        },
+        {
+          "type": "build",
+          "building": 562
+        },
+        {
+          "type": "build",
+          "building": 70
+        }
+      ],
+      "note": "3 个去伐木并建伐木场；房子顺势摆成墙的一部分。"
+    },
+    {
+      "vils": 10,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "boar",
+          "count": 1
+        },
+        {
+          "type": "lure",
+          "target": "boar"
+        },
+        {
+          "type": "lure",
+          "target": "deer",
+          "count": 2
+        }
+      ],
+      "note": "第 10 个引第一头野猪；两头野猪都找到后至少推 2 头鹿——这套打法依赖额外肉类。"
+    },
+    {
+      "vils": 15,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "hunt",
+          "count": 5
+        }
+      ],
+      "note": "5 个吃肉（需要时吃第二头野猪）。"
+    },
+    {
+      "vils": 18,
+      "phase": "feudal-click",
+      "actions": [
+        {
+          "type": "gather",
+          "task": "build",
+          "count": 1
+        },
+        {
+          "type": "build",
+          "building": 12
+        },
+        {
+          "type": "build",
+          "building": 70
+        },
+        {
+          "type": "gather",
+          "task": "hunt",
+          "count": 2
+        },
+        {
+          "type": "research",
+          "tech": 22
+        },
+        {
+          "type": "ageUp",
+          "age": 2
+        }
+      ],
+      "note": "1 人盖兵营和前方房子，2 人吃肉；找齐羊、侦察对手，研究织布机后点封建。",
+      "split": {
+        "food": 14,
+        "wood": 3,
+        "gold": 0,
+        "stone": 0,
+        "build": 1
+      }
+    },
+    {
+      "vils": 18,
+      "phase": "feudal",
+      "actions": [
+        {
+          "type": "gather",
+          "task": "wood",
+          "count": 5,
+          "from": "hunt"
+        }
+      ],
+      "note": "到封建：5 人从肉类转去伐木（8 木 9 食）。",
+      "split": {
+        "food": 9,
+        "wood": 8,
+        "gold": 0,
+        "stone": 0,
+        "build": 1
+      }
+    },
+    {
+      "vils": 18,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "gold",
+          "count": 2,
+          "from": "hunt"
+        },
+        {
+          "type": "build",
+          "building": 584
+        },
+        {
+          "type": "train",
+          "unit": 74,
+          "count": 3
+        },
+        {
+          "type": "upgrade",
+          "unit": 75
+        }
+      ],
+      "note": "2 人从肉类去建金矿营地采金（8 木 7 食 2 金）；连续出 3 个民兵并研究武士升级。",
+      "split": {
+        "food": 7,
+        "wood": 8,
+        "gold": 2,
+        "stone": 0,
+        "build": 1
+      }
+    },
+    {
+      "vils": 18,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "berries",
+          "count": 1,
+          "from": "build"
+        },
+        {
+          "type": "build",
+          "building": 68
+        },
+        {
+          "type": "research",
+          "tech": 202
+        }
+      ],
+      "note": "建造者去浆果旁建磨坊；研究双刃斧。"
+    },
+    {
+      "vils": 23,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "berries",
+          "count": 5
+        },
+        {
+          "type": "build",
+          "building": 50
+        }
+      ],
+      "note": "5 个新村民去浆果，肉类吃完后开始种田。"
+    },
+    {
+      "vils": 25,
+      "actions": [
+        {
+          "type": "build",
+          "building": 87
+        },
+        {
+          "type": "gather",
+          "task": "gold",
+          "count": 2
+        }
+      ],
+      "note": "资源够时建靶场；再 2 个去采金。"
+    },
+    {
+      "vils": 25,
+      "actions": [
+        {
+          "type": "train",
+          "unit": 4
+        },
+        {
+          "type": "train",
+          "unit": 93
+        },
+        {
+          "type": "build",
+          "building": 103
+        },
+        {
+          "type": "research",
+          "tech": 199
+        }
+      ],
+      "note": "边筑墙边出弓手，视情况补长枪兵或箭塔；建铁匠铺研究箭头后弓手出击。"
+    }
+  ]
+}
