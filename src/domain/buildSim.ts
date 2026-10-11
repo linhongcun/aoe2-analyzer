@@ -206,6 +206,8 @@ interface Mods {
   popBonus: number;
   /** 农民不需要回仓（高棉）：耕作无走路时间 */
   farmNoWalk: boolean;
+  /** 每完成一项科技（含升级时代、单位升级）返还的黄金（西班牙 res 269） */
+  techReward: number;
   start: Stock;
 }
 function baseMods(): Mods {
@@ -224,6 +226,7 @@ function baseMods(): Mods {
     grant: { food: 0, wood: 0, gold: 0, stone: 0 },
     popBonus: 0,
     farmNoWalk: false,
+    techReward: 0,
     start: { ...START },
   };
 }
@@ -239,6 +242,14 @@ const RES_DEPOSIT: Record<number, Res> = { 299: 'food' };
  * 50 对应「农民直接入库、无需回仓」，引擎按这个标记取消耕作的回仓走路。×0.95 已通过 task:farm 生效。
  */
 const RES33_INSTANT_FARMERS = 50;
+/**
+ * 西班牙 tech 186「C-Bonus, Tech reward」在 .dat 里只有 res 269 set 300 一条命令（#42）。
+ * 金额：https://ageofempires.fandom.com/wiki/Spanish_(Age_of_Empires_II) 「Receive 20 gold for each technology researched.」（已打开核对，见 #42 issuecomment-6106638881）
+ * 时机：研发完成时到账，https://ageofempires.fandom.com/wiki/Atonement 「receive 20 gold after researching」（wiki 措辞，引擎层面未核实）
+ * 300 怎么换算成 20 金：未核实（.dat 定不了），所以金额用常量，不从 300 推算。
+ * 升级时代那一次返金由 tech 323/324/326（res 3 −20，到达新时代时发放）抵消，升时代净 0 金（.dat 确认）。
+ */
+const SPANISH_TECH_REWARD_GOLD = 20;
 // 来源：.dat 本身没有定义 res 33=50 的含义（只是 set 50 这一条命令），含义来自玩法说明：
 // https://ageofempires.fandom.com/wiki/Civilization_bonus#Khmer 「Farmers don't carry food but rather add it directly to the stockpile without any drop-off, but work 5% slower」
 // https://ageofempires.fandom.com/wiki/Farm_(Age_of_Empires_II)（update 34699 起农民无需回仓）。详见 docs/BUILD-SIM.md「文明加成」
@@ -276,6 +287,7 @@ function applyEffects(m: Mods, effects: EffectRow['effects']) {
       else if (x.res === 85 && x.op === 'set') m.techCostAll = v;
       else if (x.res === 4 && x.op === 'add') m.popBonus += v;
       else if (x.res === 33 && x.op === 'set' && v === RES33_INSTANT_FARMERS) m.farmNoWalk = true;
+      else if (x.res === 269 && x.op === 'set' && v > 0) m.techReward = SPANISH_TECH_REWARD_GOLD;
     } else if (x.kind === 'techTime' && x.tech !== undefined && x.op === 'set') m.techTime[x.tech] = v;
     else if (x.kind === 'techCost' && x.tech !== undefined && x.op === 'set') {
       const r = TECH_RES[String(x.res)];
@@ -337,7 +349,6 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   );
   for (const r of Object.keys(m.grant) as Res[]) if (!startRes.has(r)) m.start[r] += m.grant[r];
   m.grant = { food: 0, wood: 0, gold: 0, stone: 0 };
-  const techGold = (eco.civEco[civ] ?? []).some((r) => r.effects.some((e) => e.kind === 'res' && e.res === 269));
   // 免费科技：techCost/techTime=0 已由 tree 行处理；freeTech 行只记录名称，效果在研究时生效——此处视为到达所需时代即自动生效
   const freeNames = new Set(rows.flatMap((r) => r.effects.filter((e) => e.kind === 'freeTech').map((e) => (e.techName ?? '').toLowerCase())));
   const stock: Stock = { ...m.start };
@@ -653,6 +664,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         if (c.p && !constructions.some((x) => x.p === c.p)) finish(c.p, t);
       } else if (c.p) {
         if (c.building > -100000 && c.p.a.type === 'research') applyEffects(m, eco.ecoTechs[c.p.a.tech]?.effects ?? []);
+        stock.gold += m.techReward; // 西班牙：科技/单位升级完成时返金
         finish(c.p, t);
       }
     }
@@ -684,8 +696,9 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
             researching = false;
             ageUps.find((x) => x.age === a.age)!.reachAt = r1(t);
             applyAge();
-            // 西班牙的 res 3 −20 是抵消「研发科技返金」（res 269，未建模）里升级时代那份，未建模时一起不算
-            for (const r of Object.keys(stock) as Res[]) if (!(r === 'gold' && techGold)) stock[r] += m.grant[r];
+            // 西班牙：升级时代完成也返 20 金，由 323/324/326 的 res 3 −20（已在 grant 里）抵消，净 0
+            stock.gold += m.techReward;
+            for (const r of Object.keys(stock) as Res[]) stock[r] += m.grant[r];
             m.grant = { food: 0, wood: 0, gold: 0, stone: 0 };
             for (const [id, et] of Object.entries(eco.ecoTechs))
               if (freeNames.has(((et as { en?: string }).en ?? '').toLowerCase()) || freeNames.has(((et as { name?: string }).name ?? '').toLowerCase())) {
@@ -696,7 +709,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
                   applyEffects(m, et.effects);
                 }
               }
-          } else if (a.type === 'research') applyEffects(m, eco.ecoTechs[a.tech]?.effects ?? []);
+          } else if (a.type === 'research') {
+            applyEffects(m, eco.ecoTechs[a.tech]?.effects ?? []);
+            stock.gold += m.techReward;
+          }
           finish(tcState.p, t);
         }
         tcState = null;
@@ -908,7 +924,6 @@ export const UNHANDLED_RES: Record<number, string> = {
   241: '波兰采石换金未建模',
   254: '古尔贾拉家畜机制未建模',
   267: '采浆果同时产木头（葡萄牙）未建模',
-  269: '研发科技返金（西班牙）未建模',
   276: '采金加成（马里）未建模',
   298: '羊/猎物/渔船额外产金（瓦兰吉）未建模',
   502: '伐木同时产食物（蜀）未建模',
@@ -960,6 +975,7 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
   }
   if (e.kind === 'res') {
     if (e.res === undefined) return { kind: 'unknown' };
+    if (e.res === 269 && e.op === 'set') return { kind: 'handled' };
     if (HANDLED_RES(e.res, e.op) || (e.res === 33 && e.op === 'set' && e.v === RES33_INSTANT_FARMERS)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
     if (UNHANDLED_RES[e.res]) return { kind: 'unhandled', reason: UNHANDLED_RES[e.res]! };
