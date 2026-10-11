@@ -1,0 +1,44 @@
+<!doctype html><meta charset=utf-8><link rel=stylesheet href=base.css><div class=wrap><div class=ph><div class="sb"><span>9:41</span><span>●●● ▮</span></div>
+<div class="top"><span class="lg"><i data-i="swords"></i>帝国时代 II 分析器</span><i data-i="menu"></i></div>
+<div class="pills"><div class="pr"><div class="pill on">18 人口侦察骑兵</div><div class="pill">19 人口弓箭手</div><div class="pill">快速城堡</div></div>
+<div class="setb"><i data-i="set"></i>设置<span class="badge">2</span></div></div>
+<div class="sum">
+<div class="c am"><span class="k">到达{目标时代}</span><b>约 m:ss</b><span class="s">m:ss–m:ss</span></div>
+<div class="c bad"><span class="k">主要卡点</span><b>卡人口</b><span class="s" style="color:#8E1F15">约 N 秒 · 第 n 步 ›</span></div>
+<div class="c"><span class="k">城镇中心闲置</span><b>约 N 秒</b><span class="s">共 n 处卡点</span></div>
+<div class="c"><span class="k">{时代}时村民</span><b>N</b><span class="s">&nbsp;</span></div>
+</div>
+<div class="card"><div class="ch"><span>时间线 · <span style="color:#C4281C">■</span> 卡点</span><span><i data-i="info"></i> 估算</span></div>
+<div class="row"><span>城镇中心</span><div class="bar" style="width:150px;background:#8e8e93"></div><div class="bar" style="width:10px;background:#C4281C"></div><div class="bar" style="width:60px;background:#B25000"></div></div>
+<div class="row"><span>食物</span><div class="bar" style="width:200px;background:#e8925a"></div></div>
+<div class="row"><span>木头</span><div class="bar" style="margin-left:40px;width:170px;background:#8b6a3e"></div></div>
+<div class="row"><span>金子</span><div class="bar" style="margin-left:200px;width:40px;background:#d4a72c"></div></div>
+<div class="row"><span>军事</span><div class="bar" style="margin-left:225px;width:25px;background:#8b4a2b"></div></div>
+</div>
+<div class="steps">
+<div class="st"><em>约 m:ss</em>第 1 步 {步骤文案}</div>
+<div class="st"><em>约 m:ss</em>第 2 步 {步骤文案}</div>
+<div class="st bad"><em>约 m:ss</em>第 n 步 · <span style="color:#C4281C">卡人口</span></div>
+<div class="st"><em>约 m:ss</em>第 n+1 步 {步骤文案}</div>
+</div>
+<div class="bot"><div class="cp"><i data-i="link"></i>复制链接</div><div class="home"></div></div>
+<div class=scrim></div><div class=sheet><div class=grab></div><div class=sh><span>设置</span><i data-i="x"></i></div>
+<div class=it><div class=l>文明</div><div class=sel><span>{文明}</span><i data-i="down"></i></div></div>
+<div class=it><div class=l><span>走路距离<span class=dot></span></span><span class=mut style="font-weight:400">7 格</span></div><div class=seg><div>近 2</div><div>中 4</div><div class=on>远 7</div></div><div class=rng><b></b><i></i></div></div>
+<div class=it><div class=l style="align-items:center;margin:0"><span>自动造房<span class=dot></span></span><div class=sw><i></i></div></div><p class=mut style="font-size:12px;margin-top:6px">羊和浆果按近距离计 · 关掉可以看到不造房会卡在哪</p></div>
+<div class=ft><div style="background:#f2f2f7"><i data-i="rot"></i>&nbsp;恢复默认</div><div style="background:#1d1d1f;color:#fff">完成</div></div></div><div class="ann" style="top:390px"><i>390 抽屉顶</i></div><div class="ann" style="top:446px"><i>446</i></div><div class="ann" style="top:530px"><i>530</i></div><div class="ann" style="top:650px"><i>650</i></div><div class="ann" style="top:746px"><i>746 底部操作</i></div></div><div class=spec>
+<h1>「设置」底部抽屉 · 打开态</h1><p class=mut>示例：距离=远 7、自动造房=关 → 徽标 2（橙点标出非默认项）。</p>
+<h2>从 PR #39 首屏移入的控件</h2><table>
+<tr><td>1</td><td>文明 CivPicker（默认 不列颠）</td></tr>
+<tr><td>2</td><td>走路距离预设 近 2 / 中 4 / 远 7（radiogroup）</td></tr>
+<tr><td>3</td><td>走路距离滑杆 1–10 格（默认 4）</td></tr>
+<tr><td>4</td><td>自动造房开关（默认开）</td></tr>
+<tr><td>5</td><td>说明行「羊和浆果按近距离计…」</td></tr></table>
+<p>留在首屏：开局选择（胶囊行，替代 select）、复制链接（吸底）、「估算」说明（时间线卡内）。</p>
+<h2>尺寸（px）</h2><table>
+<tr><td>390–446</td><td>拖手 + 标题行 56，右上关闭 44×44 触控区</td></tr>
+<tr><td>446–530</td><td>文明 84（选择框 44）</td></tr>
+<tr><td>530–650</td><td>走路距离 120：分段 40 + 滑杆 28</td></tr>
+<tr><td>650–746</td><td>自动造房 96：开关 51×31 + 说明</td></tr>
+<tr><td>746–844</td><td>恢复默认 / 完成 48 + 34 安全区</td></tr></table>
+<h2>行为</h2><p>· 改动即时写入 URL、即时重算，背后摘要跟着变；「完成」/点遮罩/下滑关闭。<br>· 打开时焦点进抽屉、Esc 关闭并还焦点到「设置」按钮；role="dialog" aria-modal。<br>· 「恢复默认」清掉 civ/dist/house 参数，徽标归零。<br>· 抽屉最高 85vh，超出内部滚动。</p></div></div><script src=icons.js></script>
