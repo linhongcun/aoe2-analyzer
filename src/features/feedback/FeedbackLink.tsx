@@ -15,8 +15,8 @@ export default function FeedbackLink({ compact, kind = 'data' }: { compact?: boo
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      data-t="feedback"
-      title="报错/反馈：在 GitHub 提交问题（自动附带页面与数据版本）"
+      data-t={kind === 'feature' ? 'feature' : 'feedback'}
+      title={kind === 'feature' ? '功能建议：在 GitHub 提交想法' : '报错/反馈：在 GitHub 提交问题（自动附带页面与数据版本）'}
     >
       <Icon name={kind === 'feature' ? 'lightbulb' : kind === 'data' ? 'message-square-warning' : 'bug'} />
       {kind === 'feature' ? '功能建议' : '报错/反馈'}
