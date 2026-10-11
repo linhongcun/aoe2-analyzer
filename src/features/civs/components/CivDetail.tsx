@@ -9,6 +9,7 @@ import { CivChip, CivIcon, DlcBadgeL, TechIcon, UnitLinks } from '../../../share
 import { collapse } from '../../../domain/family';
 import { Icon } from '../../../shared/ui/Icon';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
+import { RatingHeading } from '../../../shared/ui/RatingHelp';
 import { Linked, PosBox, Radar, Steps } from '../../../shared/ui/widgets';
 import { session } from '../../../shared/utils/sticky';
 import CivList from './CivList';
@@ -100,11 +101,11 @@ export default function CivDetail() {
           content: (
             <div className="two">
               <div>
+                <RatingHeading />
                 <Radar id="rd" list={[c]} />
               </div>
               <div>
                 <PosBox list={[c]} />
-                <p className="note">评分为主观近似值，仅供参考</p>
               </div>
             </div>
           ),

@@ -235,6 +235,107 @@ a.hcard:hover {
   font-size: 15px;
   color: var(--c-muted);
 }
+/* 能力评分标注：主观评分小字 + 问号按钮 + 说明浮层 */
+.ratehead {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+}
+.ratehead h4 {
+  margin: 0;
+}
+.ratelabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.rl-text {
+  font-size: 12px;
+  color: var(--c-muted);
+}
+.rl-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.rl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--c-muted);
+}
+.rl-btn:hover,
+.rl-btn[aria-expanded='true'] {
+  background: var(--c-control);
+  color: var(--c-text);
+}
+.rl-ic {
+  width: 16px;
+  height: 16px;
+}
+.rl-pop {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: -8px;
+  z-index: 25;
+  box-sizing: border-box;
+  width: 340px;
+  padding: 14px 16px;
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px #000b;
+  color: var(--c-text);
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 1.6;
+  text-align: left;
+}
+.rl-pop::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 19px;
+  width: 10px;
+  height: 10px;
+  background: var(--c-panel);
+  border-top: 1px solid var(--c-border);
+  border-left: 1px solid var(--c-border);
+  transform: rotate(45deg);
+}
+.rl-pop p {
+  margin: 0 0 6px;
+}
+.rl-title {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+@media (max-width: 600px) {
+  .rl-wrap {
+    position: static;
+  }
+  .rl-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .rl-pop {
+    left: 0;
+    right: 0;
+    width: auto;
+  }
+  .rl-pop::before {
+    display: none;
+  }
+}
 /* 命令面板 */
 .cmdk-mask {
   position: fixed;

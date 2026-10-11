@@ -3,6 +3,7 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
 import { COUNTERS, matchup, TYPE_ZH } from '../../../domain/ratings';
 import { CivIcon } from '../../../shared/ui/art';
+import { RatingLabel } from '../../../shared/ui/RatingHelp';
 import { useSticky } from '../../../shared/utils/sticky';
 
 export default function Matchup() {
@@ -46,7 +47,9 @@ export default function Matchup() {
           <b>建议：</b>
           {m.tips}
         </p>
-        <p className="note">自动生成的建议，基于主观评分，仅供参考</p>
+        <p className="note">
+          自动生成的建议 · <RatingLabel />
+        </p>
       </div>
     </section>
   );
