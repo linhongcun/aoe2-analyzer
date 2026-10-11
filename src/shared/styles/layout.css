@@ -1908,6 +1908,7 @@ a.tbld:hover span {
 .tl-age.is-end {
   flex-direction: row-reverse;
   transform: translateX(calc(-100% + 7px));
+}
 
 /* #78 第 7 项：主要卡点只在「原因」和「约 m:ss（起）」之间断行（Jony #78#issuecomment-6114971407） */
 .tl-cardprev .tl-v {
