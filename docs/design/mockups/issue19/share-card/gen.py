@@ -1,6 +1,6 @@
-# 数据：0a0995d（#51，线上） simulateBuild('fast-castle-boom','Franks',{walkTiles:4,autoHouses:true})；simSupport('Franks')=true
+# 数据：ff7999e（#53，线上） simulateBuild('fast-castle-boom','Franks',{walkTiles:4,autoHouses:true})；simSupport('Franks')=true
 D=dict(concl="法兰克·速升城堡暴经济，约 15:32 到城堡，卡在木头",
- k=[("到城堡","约 15:32",True,"早 59 秒 · 晚 1:42 · 估算"),("木头等待合计","约 6:02",True,"9 次缺木"),("城镇中心闲置","约 43 秒",False,"2 次")],
+ k=[("到达城堡","约 15:32",True,"14:33–17:15"),("木头等待合计","约 6:02",True,"9 次缺木"),("城镇中心闲置","约 43 秒",False,"2 次")],
  basis="按法兰克计 · 走路 4 格 · 游戏版本 185872",site="帝国时代 II 分析器",url="linhongcun.github.io/aoe2-analyzer/#/builds?bo=fast-castle-boom&amp;civ=Franks")
 SW='<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m13 19 6-6"/><path d="M14.5 17.5 3.586 6.586A2 2 0 013 5.172V3h2.172a2 2 0 011.414.586L17.5 14.5"/><path d="m14.828 6.172 2.586-2.586A2 2 0 0118.828 3H21v2.172a2 2 0 01-.586 1.414l-2.586 2.586"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="m5 14 4 4"/><path d="m5 21-2-2"/><path d="M7.5 16.5 4 20"/></svg>'
 def page(W,H,u,pad,bar,h1,hn,v,lab,gap):
