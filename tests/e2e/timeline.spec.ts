@@ -292,7 +292,10 @@ test.describe('#3 开局时间线', () => {
     await openBuild(page, 'bo=scouts-18');
     await page.locator('#tlciv').click();
     await page.keyboard.type('法兰克');
-    await page.keyboard.press('Enter');
+    // 等列表过滤出「法兰克」再点选，避免 Enter 抢在过滤前选中第一项（偶发 civ=Aztecs）
+    const franks = page.getByRole('dialog', { name: '文明' }).locator('[data-civ="Franks"]');
+    await expect(franks).toBeVisible();
+    await franks.click();
     await expect(page).toHaveURL(/[?&]civ=Franks/);
     await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按法兰克计');
   });
@@ -343,8 +346,9 @@ test.describe('#3 开局时间线', () => {
     await expect(dlg).toBeVisible();
     await expect(page).not.toHaveURL(/civ=Portuguese/);
     await expect(dlg.getByText(/个文明已支持/)).toHaveCount(0);
-    // 键盘：搜到的只有禁用项时 Enter 不会选中
-    await page.keyboard.type('葡萄牙');
+    // 键盘：搜到的只有禁用项时 Enter 不会选中（等可选项滤空；Portuguese 打字前就在，不能拿它当过滤信号）
+    await dlg.getByRole('combobox').fill('葡萄牙');
+    await expect(dlg.getByRole('listbox').locator('[role="option"]:not([aria-disabled])')).toHaveCount(0);
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('Enter');
     await expect(page).not.toHaveURL(/civ=Portuguese/);
