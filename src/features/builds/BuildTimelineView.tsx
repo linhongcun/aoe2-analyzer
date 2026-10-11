@@ -93,10 +93,7 @@ export default function BuildTimelineView() {
   // 不相邻的浅色卡点合并，只有 top 用实色，避免红带铺满（Jony 建议）
   const merged = useMemo(() => {
     const out: { from: number; to: number; types: Set<string> }[] = [];
-    for (const b of [...ranged]
-      .filter((x) => x !== tagged && x.from < cut)
-      .map((x) => ({ ...x, to: Math.min(x.to, cut) }))
-      .sort((a, b) => a.from - b.from)) {
+    for (const b of [...ranged].filter((x) => x !== tagged && x.to < cut).sort((a, b) => a.from - b.from)) {
       const last = out[out.length - 1];
       if (last && b.from <= last.to + 1) {
         last.to = Math.max(last.to, b.to);
@@ -339,8 +336,7 @@ export default function BuildTimelineView() {
               <span className="tl-lab">{r.zh}</span>
               <div className="tl-track">
                 {v.rows[r.key]
-                  .filter((s: Seg) => s.from < cut)
-                  .map((s: Seg) => ({ ...s, to: Math.min(s.to, cut) }))
+                  .filter((s: Seg) => s.to < cut)
                   .map((s: Seg, i) => (
                     <span
                       key={i}
@@ -396,12 +392,12 @@ export default function BuildTimelineView() {
                 style={{ left: pct(b.from), width: w(b.from, b.to) }}
               />
             ))}
-            {tagged && tagged.from < cut && (
+            {tagged && tagged.to < cut && (
               <span
                 className="tl-block is-top"
                 data-anomaly={tagged.type}
                 data-short-range={tagged.type === 'resource_short' ? '' : undefined}
-                style={{ left: pct(tagged.from), width: w(tagged.from, Math.min(tagged.to, cut)) }}
+                style={{ left: pct(tagged.from), width: w(tagged.from, tagged.to) }}
                 title={tagged.reasonZh}
               >
                 <span className="tl-block-tag">{tagged.label}</span>
@@ -452,7 +448,7 @@ export default function BuildTimelineView() {
         )}
       </div>
 
-      <ol className="tl-steps" aria-label="步骤">
+      <ol className="tl-steps" aria-label="步骤" data-cut={pFrom !== null ? cut : undefined}>
         {bo.steps.map((st, i) => {
           const s = tl.steps[i]!;
           const open = q.step === i;

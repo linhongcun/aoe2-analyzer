@@ -66,7 +66,7 @@ test('置灰：开局列表页两条开局不显示城堡时间', async ({ page 
 });
 
 /** 旧的（错误的）城堡到达时间：页面文字、属性、复制链接都不能出现 */
-const OLD: Record<string, string[]> = { 'fast-castle-boom': ['15:29', '14:49', '17:15'], 'drush-fc': ['16:32'] };
+const OLD: Record<string, string[]> = { 'fast-castle-boom': ['15:29', '14:49', '17:15', '12:49'], 'drush-fc': ['16:32'] };
 for (const id of IDS) {
   test(`置灰 ${id}：旧城堡时间不在任何文字、属性、展开详情、复制链接里`, async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
@@ -88,6 +88,7 @@ for (const id of IDS) {
 
 test('置灰不影响其他开局', async ({ page }) => {
   await page.goto('#/builds');
+  await expect(page.locator('[data-t="build-order"] a[href*="bo="]').first()).toBeAttached();
   const ids = await page
     .locator('[data-t="build-order"] a[href*="bo="]')
     .evaluateAll((as) => [...new Set(as.map((a) => new URL(a.getAttribute('href')!, location.href).hash.match(/bo=([\w-]+)/)?.[1] ?? ''))]);
@@ -109,3 +110,29 @@ test('置灰行整行灰色（Jony 规范）', async ({ page }) => {
   });
   expect(new Set(colors.all)).toEqual(new Set([colors.muted]));
 });
+
+/** Steve：置灰开局从城堡那步起不画任何条块（含截断的），时间线 DOM 里所有时间都不晚于截断点 */
+for (const vp of [
+  { width: 1280, height: 900 },
+  { width: 390, height: 844 },
+])
+  for (const id of IDS)
+    test(`置灰 ${id} @${vp.width}：时间线 DOM 无截断点之后的时间`, async ({ page }) => {
+      await page.setViewportSize(vp);
+      await page.goto(`#/builds?bo=${id}`);
+      const ol = page.locator('ol.tl-steps[data-cut]');
+      await expect(ol).toBeAttached();
+      const cut = Number(await ol.getAttribute('data-cut'));
+      // 刻度轴（.tl-axis）是整分钟标尺，不是数据，先移除
+      await page.evaluate(() => document.querySelectorAll('.tl-axis').forEach((e) => e.remove()));
+      const text = await page.evaluate(() =>
+        [
+          document.body.innerText,
+          ...[...document.querySelectorAll('*')].flatMap((e) => [e.getAttribute('title') ?? '', e.getAttribute('aria-label') ?? '']),
+        ].join('\n'),
+      );
+      const secs = [...text.matchAll(/(\d+):(\d\d)/g)].map((m) => Number(m[1]) * 60 + Number(m[2]));
+      // 截断点本身可能等于到达封建（已核对正确），只禁止更晚的时间
+      expect(secs.filter((s) => s > Math.round(cut))).toEqual([]);
+      for (const t of OLD[id]!) expect(text).not.toContain(t);
+    });
