@@ -1389,6 +1389,16 @@ a.tbld:hover span {
   .tl-summary .s {
     font-size: 11px;
   }
+  /* 误差带：390 下也显示，放在「到达…」格时间下面，12px 灰色单行（Steve 定，Jony 规范） */
+  .tl-summary .tl-range {
+    font-size: 12px;
+    color: var(--color-muted);
+    white-space: nowrap;
+    order: 1; /* 紧跟到达时间 */
+  }
+  .tl-arrive .tl-civ {
+    order: 2;
+  }
   .tl-share-slot {
     display: none;
   }

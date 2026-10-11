@@ -20,7 +20,7 @@ import {
   rowTime,
   mmss,
   parseQuery,
-  rangeText,
+  rangeLabel,
   summaryText,
   isLongBottleneck,
   type RowKey,
@@ -278,9 +278,9 @@ export default function BuildTimelineView() {
             <span className="tl-civ" data-t="sum-civ">
               {civLabel}
             </span>
-            {target && rangeText(target.reachAt, target.errSec) && (
-              <span className="s tl-num tl-desk-only" data-t="sum-range">
-                {rangeText(target.reachAt, target.errSec)}
+            {target && rangeLabel(target.reachAt, target.errSec) && (
+              <span className="s tl-num tl-range" data-t="sum-range">
+                {rangeLabel(target.reachAt, target.errSec)}
               </span>
             )}
           </li>
