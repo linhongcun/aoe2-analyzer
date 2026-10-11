@@ -92,10 +92,13 @@ export default function BuildTimelineView() {
   const targetZh = AGE_ZH[bo.target.age]!;
   const civLabel = simCiv !== 'Generic' ? `按${civByEn(simCiv)?.zh ?? simCiv}计` : '按通用计';
   const ranged = v.bottlenecks.filter((b) => b.to > b.from);
-  const tagged = v.top && v.top.to > v.top.from ? v.top : [...ranged].sort((a, b) => b.sec - a.sec)[0];
+  const tagged =
+    v.top && v.top.to > v.top.from
+      ? (ranged.find((b) => b.from === v.top!.from && b.type === v.top!.type && b.step === v.top!.step) ?? v.top)
+      : [...ranged].sort((a, b) => b.sec - a.sec)[0];
   const bad = new Set(tl.steps.filter((s) => s.anomalies.length).map((s) => s.index));
   const sel = q.step !== null ? tl.steps[q.step] : undefined;
-  const sumT = summaryText(v.top, targetZh, v.tOut);
+  const sumT = summaryText(v.top, targetZh);
   const changed = (q.civ ? 1 : 0) + (q.dist !== WALK.default ? 1 : 0) + (q.house ? 0 : 1);
   const source = bo.sources[0]?.title;
 

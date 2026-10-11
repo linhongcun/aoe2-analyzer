@@ -32,13 +32,18 @@ export interface Bottleneck {
   label: string;
   reasonZh: string;
   step: number;
+  /** 资源类卡点：缺的是哪种资源；城镇中心忙：忙什么。用于摘要按同类合计 */
+  resource?: Res;
+  busy?: Anomaly['busy'];
+  /** 只在摘要 top 上有：同类等待在整个开局里的合计秒数（Steve 规则 2） */
+  total?: number;
 }
 export interface TimelineView {
   end: number;
   rows: Record<RowKey, Seg[]>;
   ages: AgeMark[];
   bottlenecks: Bottleneck[];
-  /** 摘要第一块：最该先看的卡点（优先级最高，同级取最久） */
+  /** 摘要第一块：主要卡点（pickSummaryBottleneck：卡人口优先，否则同类合计最长，平局取先出现） */
   top: Bottleneck | null;
   timeout: boolean;
   tOut: number;
@@ -117,14 +122,41 @@ const KIND_ZH: Record<Anomaly['type'], string> = {
   resource_short: '缺资源',
   timeout: '超时',
 };
-/** 摘要第 2 格：主文案「卡人口 约 0:45」+ 小字「第 12 步」；超时按目标时代写 */
-export function summaryText(b: Bottleneck | null, targetZh: string, tOut = Infinity): { main: string; sub: string } {
+/** 摘要主要卡点的「同类」：类型 + 资源（缺资源）/ 忙的内容（城镇中心忙） */
+const sameKind = (b: Pick<Bottleneck, 'type' | 'resource' | 'busy'>) => `${b.type}|${b.resource ?? ''}|${b.busy ?? ''}`;
+
+/** 摘要主要卡点（Steve 定）：
+ *  1. 有卡人口时卡人口永远优先，取最早那次，显示开始时间；
+ *  2. 否则按同类（类型 + 资源）把整个开局里的等待时长加起来，取合计最长的一类，显示合计时长；
+ *  3. 合计相同取最先出现的一类。
+ *  返回该类最早那一条（用于跳步和高亮），total 为该类合计秒数。超时（零长度）仍沿用原规则：没有卡人口时显示超时。 */
+export function pickSummaryBottleneck(list: readonly Bottleneck[]): Bottleneck | null {
+  const byTime = [...list].sort((a, b) => a.from - b.from || PRIO[a.type] - PRIO[b.type]);
+  const pop = byTime.find((b) => b.type === 'pop_block');
+  if (pop) return { ...pop, total: pop.sec };
+  const timeout = byTime.find((b) => b.type === 'timeout');
+  if (timeout) return { ...timeout, total: 0 };
+  const groups = new Map<string, { first: Bottleneck; total: number }>();
+  for (const b of byTime) {
+    const g = groups.get(sameKind(b));
+    if (g) g.total += b.sec;
+    else groups.set(sameKind(b), { first: b, total: b.sec });
+  }
+  let best: { first: Bottleneck; total: number } | null = null;
+  // Map 按首次出现顺序遍历；只有严格更长才替换，平局保留先出现的
+  for (const g of groups.values()) if (!best || floorSec(g.total) > floorSec(best.total)) best = g;
+  return best ? { ...best.first, total: best.total } : null;
+}
+
+/** 摘要第 2 格：主文案「卡人口 约 0:45 起」/「卡在木头 约 6:02」+ 小字「第 12 步」；超时按目标时代写 */
+export function summaryText(b: Bottleneck | null, targetZh: string): { main: string; sub: string } {
   if (!b) return { main: '没有卡点', sub: '' };
   const sub = `第 ${b.step + 1} 步`;
   if (b.type === 'timeout') return { main: `60 分钟内到不了${targetZh}`, sub };
-  const kind = b.type === 'resource_short' ? b.label.split(' · ')[0]! : KIND_ZH[b.type];
-  if (b.type === 'pop_block' && b.to >= tOut - 1e-6) return { main: `${kind} 约 ${mmss(b.from)} 起`, sub };
-  return { main: `${kind} 约 ${mmss(b.sec)}`, sub };
+  if (b.type === 'pop_block') return { main: `卡人口 约 ${formatClock(b.from)} 起`, sub };
+  const kind =
+    b.type === 'resource_short' ? (b.resource ? `卡在${RES_ZH[b.resource]}` : '缺资源') : b.type === 'tc_busy' ? TC_BUSY_ZH[b.busy ?? 'vil'] : KIND_ZH[b.type];
+  return { main: `${kind} 约 ${formatClock(b.total ?? b.sec)}`, sub };
 }
 /** 误差带两端相同只显示一个时间 */
 export const rangeText = (t: number, e: { early: number; late: number }) =>
@@ -203,12 +235,12 @@ export function buildView(tl: BuildTimeline, unitName: (id: string) => string): 
         label: bottleneckLabel(a, tOut),
         reasonZh: a.reasonZh,
         step: s.index,
+        ...(a.resource ? { resource: a.resource } : {}),
+        ...(a.busy ? { busy: a.busy } : {}),
       });
     }
   bottlenecks.sort((a, b) => a.from - b.from || PRIO[a.type] - PRIO[b.type]);
-  let top = pickReason(bottlenecks);
-  // 超时前已经卡人口：卡人口才是原因，摘要显示它和它所在的步骤，不显示超时（Steve #39）
-  if (top?.type === 'timeout') top = bottlenecks.find((b) => b.type === 'pop_block' && b.from < top!.from) ?? top;
+  const top = pickSummaryBottleneck(bottlenecks);
 
   return {
     end,

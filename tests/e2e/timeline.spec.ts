@@ -103,12 +103,21 @@ test.describe('#3 开局时间线', () => {
     await openBuild(page, FIX.pop_block);
     const cell = page.locator('[data-t="sum-bottleneck"]');
     await expect(cell).toContainText('第 13 步');
+    await expect(cell).toContainText(/卡人口\s*约 \d+:\d{2} 起/);
     await cell.getByRole('button').click();
     await expect(page).toHaveURL(/[?&]step=13(&|$)/);
     const row = page.locator('[data-step="12"]');
     await expect(row).toHaveAttribute('aria-selected', 'true');
     await expect(row).toBeInViewport();
     await expect(row.getByRole('region', { name: /步骤详情/ })).toBeVisible();
+  });
+
+  test('7b. 没有卡人口：摘要主要卡点取同类等待合计最长的一类，写「卡在木头 约 m:ss」（合计时长）', async ({ page }) => {
+    await openBuild(page, 'bo=fast-castle-boom');
+    const cell = page.locator('[data-t="sum-bottleneck"]');
+    await expect(cell).toContainText(/卡在木头\s*约 \d+:\d{2}/);
+    await expect(cell).toContainText('第 5 步');
+    await expect(cell).not.toContainText('起');
   });
 
   test('8. 默认不显示资源数字；点步骤才显示食/木/黄金/石头和人口；再点收起', async ({ page }) => {
