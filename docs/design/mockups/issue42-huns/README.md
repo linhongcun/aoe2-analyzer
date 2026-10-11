@@ -10,4 +10,4 @@
 - 复现：`node shot.mjs`。
 
 ## 置灰时的分享按钮（Steve 定）
-`huns-greyed-share-1280.png` / `huns-greyed-share-390.png`：「分享」按钮 aria-disabled 置灰，旁边灰字「加成未计入，暂不能生成分享卡」（12px #636366，AA，单行）；「复制链接」照常可用。底图是线上匈奴置灰页面，按钮是在 DOM 里加上去的。复现：`node share-greyed.mjs`。
+`huns-greyed-share-1280.png` / `huns-greyed-share-390.png`：「分享」按钮 aria-disabled 置灰，旁边灰字「加成未计入，暂不能生成分享卡」（12px `var(--color-muted)`，AA，单行）；「复制链接」照常可用。底图是线上匈奴置灰页面，按钮是在 DOM 里加上去的。复现：`node share-greyed.mjs`。
