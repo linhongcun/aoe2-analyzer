@@ -34,13 +34,26 @@ nav.mainnav {
   align-items: center;
   gap: 2px;
 }
-.nlabel {
-  font-size: 12px;
-  color: var(--c-muted);
+.tools {
+  position: relative;
+}
+.tools-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 25;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  background: var(--c-panel);
   border: 1px solid var(--c-border);
-  border-radius: 4px;
-  padding: 1px 6px;
-  margin-right: 6px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px #000a;
+}
+.tools-panel[hidden] {
+  display: none;
 }
 .nitem {
   display: flex;
@@ -56,24 +69,20 @@ nav.mainnav {
 .nitem:hover {
   background: var(--c-control);
 }
+button.nitem {
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
 .nitem.on {
   background: var(--c-bronze);
   color: var(--c-bg-deep);
 }
-.nitem.planned {
-  opacity: 0.55;
-}
 .nitem .ic {
   width: 15px;
   height: 15px;
-}
-.soon {
-  font-size: 10px;
-  border: 1px solid var(--c-border);
-  border-radius: 3px;
-  padding: 0 4px;
-  color: var(--c-muted);
-  margin-left: 4px;
 }
 .searchbtn,
 .herosearch {
@@ -199,20 +208,32 @@ a.hcard:hover {
 .hcard p {
   margin: 0;
 }
-.hcard.planned {
-  opacity: 0.6;
-  border-style: dashed;
-}
-.hcard .soon {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}
 .hc-ic {
   width: 30px !important;
   height: 30px !important;
   color: var(--c-gold);
   flex: none;
+}
+.soon-card {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  background: linear-gradient(#2b2015, #1c150d);
+  border: 1px solid var(--c-border);
+  border-radius: 18px;
+  padding: 22px 26px;
+}
+.soon-card h3 {
+  margin: 0;
+  color: var(--c-text);
+  font-size: 18px;
+  font-weight: 700;
+}
+.soon-card p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--c-muted);
 }
 /* 命令面板 */
 .cmdk-mask {
@@ -375,12 +396,19 @@ main {
     display: flex;
   }
   .ngroup {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
   }
-  .nlabel {
-    width: 100%;
-    border: none;
-    padding: 0;
+  .tools {
+    position: static;
+  }
+  .tools-panel {
+    position: static;
+    min-width: 0;
+    box-shadow: none;
+    border: 0;
+    border-radius: 0;
+    padding: 4px 0 0 14px;
   }
   .dbody.has-side {
     grid-template-columns: 1fr;
@@ -512,6 +540,11 @@ a.tbld:hover span {
 @media (max-width: 720px) {
   .verbadge span {
     display: none;
+  }
+  .soon-card {
+    padding: 16px;
+    flex-direction: column;
+    gap: 6px;
   }
 }
 .bo {

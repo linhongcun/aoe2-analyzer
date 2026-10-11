@@ -96,9 +96,77 @@ test('mobile nav opens and navigates', async ({ page }) => {
   await page.goto('./');
   await expect(page.locator('nav.mainnav')).toBeHidden();
   await page.getByRole('button', { name: '菜单' }).click();
+  await page.getByRole('button', { name: '工具' }).click();
   await page.locator('nav.mainnav a', { hasText: '对局助手' }).click();
   await expect(page.locator('#mres h3')).toBeVisible();
   await expect(page.locator('nav.mainnav')).toBeHidden();
+});
+
+test('nav: every entry opens its real page, none opens a planned placeholder', async ({ page }) => {
+  const PAGES: [string, string][] = [
+    ['#/', '#home .hcard'],
+    ['#/civs', '#grid .card'],
+    ['#/units', '#ugrid .card'],
+    ['#/techs', '#tgrid .card'],
+    ['#/tree', '.tree .tcell'],
+    ['#/compare', '#ctab tr'],
+    ['#/matchup', '#mres h3'],
+    ['#/simulator', '#simhub .card'],
+    ['#/duel', '#duel-res h3'],
+  ];
+  await page.goto('./');
+  await page.getByRole('button', { name: '工具' }).click();
+  const hrefs = await page.locator('nav.mainnav a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
+  expect(hrefs.sort()).toEqual(PAGES.map(([h]) => h).sort());
+  for (const [href, sel] of PAGES) {
+    await page.goto('./' + href);
+    await expect(page.locator(sel).first()).toBeVisible();
+    await expect(page.locator('.planned-page')).toHaveCount(0);
+  }
+});
+
+test('old #/list and #list redirect to #/civs and show the civ grid', async ({ page }) => {
+  for (const old of ['./#/list', './#list']) {
+    await page.goto(old);
+    await expect(page).toHaveURL(/#\/civs$/);
+    await expect(page.locator('#grid .card')).toHaveCount(56);
+  }
+});
+
+test('old #/tree redirects to #/tree/Franks and shows the Franks tree', async ({ page }) => {
+  await page.goto('./#/tree');
+  await expect(page).toHaveURL(/#\/tree\/Franks$/);
+  await expect(page.locator('#tra')).toHaveAttribute('data-value', 'Franks');
+  await expect(page.locator('.tree .tcell').first()).toBeVisible();
+});
+
+test('nav: 工具 dropdown toggles on click, closes on outside click and Esc', async ({ page }) => {
+  await page.goto('./');
+  const tools = page.getByRole('button', { name: '工具' });
+  const panel = page.locator('#tools-menu');
+  await expect(panel).toBeHidden();
+  await tools.click();
+  await expect(tools).toHaveAttribute('aria-expanded', 'true');
+  await expect(panel.getByRole('link', { name: '文明对比' })).toBeVisible();
+  await page.locator('#home h2').first().click();
+  await expect(panel).toBeHidden();
+  await tools.click();
+  await page.keyboard.press('Escape');
+  await expect(panel).toBeHidden();
+  await tools.click();
+  await panel.getByRole('link', { name: '单位 PK' }).click();
+  await expect(page).toHaveURL(/#\/duel$/);
+  await expect(panel).toBeHidden();
+  await expect(tools).toHaveClass(/\bon\b/);
+});
+
+test('home: 即将推出 is one non-clickable card with the four modules', async ({ page }) => {
+  await page.goto('./');
+  const card = page.locator('#home .soon-card');
+  await expect(card).toContainText('正在制作');
+  await expect(card).toContainText('地图 · 开局流程 · 版本补丁 · 天梯');
+  await expect(card.locator('a, button')).toHaveCount(0);
+  await expect(page.locator('#home .hcard.planned')).toHaveCount(0);
 });
 
 test('leaving a tech detail page does not crash (regression)', async ({ page }) => {
