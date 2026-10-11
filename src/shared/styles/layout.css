@@ -674,3 +674,31 @@ a.tbld:hover span {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
+
+/* #22 对建筑射程小字（主数字下方） */
+.rngb {
+  display: block;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.rngb-short {
+  display: none;
+}
+@media (max-width: 600px) {
+  .duel-stats .rngb-full {
+    display: none;
+  }
+  .duel-stats .rngb-short {
+    display: inline;
+  }
+}
+
+/* #27 爆炸单位无攻击间隔原因（数值下一行） */
+.rof-reason {
+  display: block;
+  font-size: 12px;
+  font-weight: normal;
+}
+.rngb {
+  font-weight: normal;
+}

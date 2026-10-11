@@ -59,7 +59,7 @@ export default function Home() {
       <h2 className="hsec">即将推出</h2>
       <section className="soon-card" aria-labelledby="soon-title">
         <h3 id="soon-title">正在制作</h3>
-        <p>地图 · 开局流程 · 版本补丁 · 天梯</p>
+        <p>开局时间轴 · 版本补丁</p>
       </section>
     </section>
   );

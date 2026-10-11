@@ -46,14 +46,30 @@ export interface OneWay {
   dmg: number;
   expDmg: number;
   hits: number;
-  /** 击杀耗时（秒）：首击在 t=0，此后每 rof 一次 */
-  time: number;
-  dps: number;
+  /** 击杀耗时（秒）：首击在 t=0，此后每 rof 一次；rof≤0 时为 null */
+  time: number | null;
+  /** 每秒伤害；rof≤0（爆炸单位等）时为 null，禁止 Infinity */
+  dps: number | null;
+  /** dps 无法计算时的原因文案 */
+  dpsReason?: string;
 }
+export const DPS_UNAVAILABLE_REASON = '爆炸单位，无攻击间隔';
 export function oneWay(a: Fighter, d: Fighter): OneWay {
   const dmg = damagePerHit(a, d),
     expDmg = expectedHit(a, d);
-  const hits = Math.ceil(d.hp / expDmg - 1e-9);
+  const hits = expDmg > 0 ? Math.ceil(d.hp / expDmg - 1e-9) : Infinity;
+  if (!(a.rof > 0)) {
+    // 自爆等无攻击间隔：可算单次伤害，但 DPS/持续击杀时间无意义
+    return {
+      dmg,
+      expDmg,
+      hits: Number.isFinite(hits) ? hits : 0,
+      // 单发自爆击杀也不显示 0s：击杀用时统一为 null（UI 显示「—」）
+      time: null,
+      dps: null,
+      dpsReason: DPS_UNAVAILABLE_REASON,
+    };
+  }
   return { dmg, expDmg, hits, time: (hits - 1) * a.rof, dps: expDmg / a.rof };
 }
 
@@ -71,11 +87,16 @@ export interface DuelResult {
 export function duel(a: Fighter, b: Fighter): DuelResult {
   const ab = oneWay(a, b),
     ba = oneWay(b, a);
-  if (Math.abs(ab.time - ba.time) < 1e-9) return { ab, ba, winner: 'draw', remaining: 0, duration: ab.time };
-  const aWins = ab.time < ba.time;
-  const [w, l, T] = aWins ? [a, ba, ab.time] : [b, ab, ba.time];
-  // 败者在 T 之前（含 T 之前严格时刻）完成的攻击次数
-  const hitsTaken = Math.floor(T / (aWins ? b.rof : a.rof) - 1e-9) + 1;
+  // 判定胜负时，单发即可击杀的自爆单位视为 0 时刻击杀（显示仍为「—」）
+  const tOf = (o: OneWay) => o.time ?? (o.dpsReason && o.hits === 1 ? 0 : Number.POSITIVE_INFINITY);
+  const tA = tOf(ab),
+    tB = tOf(ba);
+  if (!Number.isFinite(tA) && !Number.isFinite(tB)) return { ab, ba, winner: 'draw', remaining: 0, duration: 0 };
+  if (Math.abs(tA - tB) < 1e-9) return { ab, ba, winner: 'draw', remaining: 0, duration: Number.isFinite(tA) ? tA : 0 };
+  const aWins = tA < tB;
+  const [w, l, T] = aWins ? [a, ba, tA] : [b, ab, tB];
+  const foeRof = aWins ? b.rof : a.rof;
+  const hitsTaken = foeRof > 0 ? Math.floor(T / foeRof - 1e-9) + 1 : l.hits > 0 ? 1 : 0;
   const remaining = Math.max(0, w.hp - Math.min(hitsTaken, l.hits) * l.expDmg);
   return { ab, ba, winner: aWins ? 'a' : 'b', remaining: Math.round(remaining * 10) / 10, duration: T };
 }
@@ -124,8 +145,8 @@ export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxT 
     };
     if (hitB) apply(B, hitB, dA);
     if (hitA) apply(A, hitA, dB);
-    if (aAtk) nextA += a.rof;
-    if (bAtk) nextB += b.rof;
+    if (aAtk) nextA += a.rof > 0 ? a.rof : maxT + 1;
+    if (bAtk) nextB += b.rof > 0 ? b.rof : maxT + 1;
     timeline.push([Math.round(t * 100) / 100, alive(A), alive(B)]);
   }
   const aAlive = alive(A),

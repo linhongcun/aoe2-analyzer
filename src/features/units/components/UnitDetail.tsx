@@ -1,5 +1,6 @@
 import { ArmorClasses, BonusTable } from '../../simulator/components/SimPanel';
-import { useEffect } from 'react';
+import { useEffect, type ReactNode } from 'react';
+import { RangeB } from '../../../shared/ui/RangeB';
 import { Link, useLocation } from 'react-router-dom';
 import { baseUnit } from '../../../domain/family';
 import type { Unit } from '../../../domain/types';
@@ -8,6 +9,7 @@ import { useCore } from '../../../data/hooks';
 import { parseUnitPath } from '../../../domain/simulator';
 import { AGE_ZH } from '../../../domain/ratings';
 import { upgradeLine } from '../../../domain/units';
+import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
@@ -39,15 +41,35 @@ export default function UnitDetail() {
   // 切换普通/精锐时保留路径中的模拟器状态（文明/时代/科技）
   const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
   const ln = upgradeLine(u, core.units, core.unitById).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id);
-  const stats: [string, string, string | number][] = [
+  const stats: [string, string, ReactNode][] = [
     ['hp', '生命值 HP', u.hp],
     [u.rng > 1 ? 'patk' : 'atk', '攻击力', u.atk],
     ['marm', '近战护甲', u.ma],
     ['parm', '穿刺护甲', u.pa],
-    ['range', '射程', u.rng + (u.minr ? `（最小 ${u.minr}）` : '')],
+    [
+      'range',
+      '射程',
+      <>
+        {u.rng + (u.minr ? `（最小 ${u.minr}）` : '')}
+        <RangeB u={u} />
+      </>,
+    ],
     ['speed', '移动速度', u.spd],
     ['', '视野', u.los],
-    ['rof', '攻击间隔', u.rof + 's'],
+    [
+      'rof',
+      '攻击间隔',
+      u.rof > 0 ? (
+        u.rof + 's'
+      ) : (
+        <>
+          —
+          <small className="note rof-reason" data-t="rof-reason">
+            {DPS_UNAVAILABLE_REASON}
+          </small>
+        </>
+      ),
+    ],
     ['', '准确度', u.acc + '%'],
     ...(u.blast ? [['blast', '溅射范围', u.blast] as [string, string, number]] : []),
   ];

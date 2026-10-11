@@ -17,7 +17,7 @@ const AGE = ['', '黑暗', '封建', '城堡', '帝王'];
 export default function BuildOrderList() {
   return (
     <section className="pane" id="builds">
-      <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局（草稿，待内容审核）；时间轴视图开发中`} />
+      <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局；时间轴视图开发中`} />
       {buildOrders.map((b) => (
         <details key={b.id} className="bo" data-t="build-order">
           <summary>

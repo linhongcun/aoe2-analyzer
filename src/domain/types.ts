@@ -38,6 +38,8 @@ export interface Unit {
   ma: number;
   pa: number;
   rng: number;
+  /** 对建筑射程；仅当与 rng 不同时存在 */
+  rngB?: number;
   minr: number;
   spd: number;
   los: number;
@@ -133,6 +135,8 @@ export interface Building {
   gar: number;
   atk: number;
   rng: number;
+  /** 对建筑射程；仅当与 rng 不同时存在 */
+  rngB?: number;
   minr: number;
   rof: number;
   los: number;
