@@ -2,6 +2,7 @@
  * #3 M3：把 M2 的 BuildTimeline（buildSim 输出）整理成时间线界面要画的行和摘要。
  * 纯函数，不碰 React；所有数字都来自 simulateBuild，不手写示例数。
  */
+import { TC_BUSY_ZH } from '../../domain/buildSim';
 import type { Anomaly, BuildTimeline, ErrBand, Res } from '../../domain/buildSim';
 
 export type RowKey = 'tc' | 'food' | 'wood' | 'gold' | 'military';
@@ -45,14 +46,42 @@ export interface TimelineView {
 
 export const AGE_ZH = { feudal: '封建', castle: '城堡', imperial: '帝王' } as const;
 export const RES_ZH: Record<Res, string> = { food: '食物', wood: '木头', gold: '黄金', stone: '石头' };
-/** 原因优先级（摘要与步骤行共用）：卡人口 > 超时 > 其他 */
-const PRIO: Record<Anomaly['type'], number> = { pop_block: 0, timeout: 1, idle_tc: 2, resource_short: 3 };
+/** 原因优先级（摘要与步骤行共用）：卡人口 > 等前置建筑 > 超时 > 城镇中心闲置 > 缺资源（#3 Steve 定） */
+const PRIO: Record<Anomaly['type'], number> = { pop_block: 0, prereq_wait: 1, timeout: 2, idle_tc: 3, resource_short: 4, tc_busy: 5 };
 const dur = (a: Pick<Anomaly, 'waitSec' | 'from' | 'to'>) => a.waitSec ?? a.to - a.from;
 
 /** 一组异常里选出唯一要显示的原因：先按优先级，同级取等待更久的 */
 export function pickReason<T extends Pick<Anomaly, 'type' | 'waitSec' | 'from' | 'to'>>(list: readonly T[]): T | null {
   return [...list].sort((a, b) => PRIO[a.type] - PRIO[b.type] || dur(b) - dur(a))[0] ?? null;
 }
+/** 步骤行的一段等待：原因 + 这段在时间上的起止（秒） */
+export interface RowSeg<T> {
+  a: T;
+  start: number;
+  end: number;
+}
+/** 步骤行要列出的原因（#51）：互相重叠的原因只留优先级最高的一条（pickReason）；前后接续、不重叠的各成一段，按时间先后。
+ *  传入 clip（步骤开始 → 实际开始研究）时，每段裁到这个区间内，各段时长之和就是行时间的跳变。 */
+export function rowSegments<T extends Pick<Anomaly, 'type' | 'waitSec' | 'from' | 'to'>>(list: readonly T[], clip?: { from: number; to: number }): RowSeg<T>[] {
+  const groups: { from: number; to: number; items: T[] }[] = [];
+  for (const a of [...list].sort((x, y) => x.from - y.from || x.to - y.to)) {
+    const g = groups[groups.length - 1];
+    // 区间有交叠（接缝 ≤ 0.05 秒不算）归入同一组；零长度的（如超时）贴着上一组时也算交叠
+    if (g && (a.from < g.to - 0.05 || (a.to - a.from <= 0.05 && a.from <= g.to + 0.05))) {
+      g.items.push(a);
+      g.to = Math.max(g.to, a.to);
+    } else groups.push({ from: a.from, to: a.to, items: [a] });
+  }
+  const segs = groups.map((g) => ({ a: pickReason(g.items)!, start: g.from, end: g.to }));
+  if (!clip) return segs;
+  return segs
+    .map((x) => ({ ...x, start: Math.max(x.start, clip.from), end: Math.min(x.end, clip.to) }))
+    .filter((x, k) => x.end - x.start > 0.05 || (k === 0 && segs.length === 1));
+}
+/** 一段的文案：「原因 · 约 m:ss」，时长取这一段的长度 */
+export const segLabel = (x: RowSeg<Anomaly>, tOut = Infinity) => bottleneckLabel({ ...x.a, waitSec: x.end - x.start }, tOut);
+/** 行内最多 3 行；超过时第 3 行写「另有 N 段等待」 */
+export const ROW_SEG_MAX = 3;
 const VILLAGER = '83';
 
 /** 约 m:ss */
@@ -66,11 +95,30 @@ export function bottleneckLabel(a: Anomaly, tOut = Infinity): string {
   if (a.type === 'pop_block' && a.to >= tOut - 1e-6) return `卡人口 · 约 ${mmss(a.from)} 起`;
   if (a.type === 'idle_tc') return `城镇中心闲置 · 约 ${d}`;
   if (a.type === 'pop_block') return `卡人口 · 约 ${d}`;
+  if (a.type === 'prereq_wait') return `等前置建筑 · 约 ${d}`;
+  if (a.type === 'tc_busy') return `${TC_BUSY_ZH[a.busy ?? 'vil']} · 约 ${d}`;
   if (a.type === 'resource_short') return `${a.resource ? RES_ZH[a.resource] : '资源'}差 ${a.shortfall ?? '?'} · 约 ${d}`;
   return '60 分钟内到不了';
 }
 
-const KIND_ZH: Record<Anomaly['type'], string> = { idle_tc: '城镇中心闲置', pop_block: '卡人口', resource_short: '缺资源', timeout: '超时' };
+const AGE_N_ZH: Record<number, string> = { 1: '黑暗', 2: '封建', 3: '城堡', 4: '帝王' };
+/** 等前置建筑的详情灰字：升城堡需先建完 2 座封建建筑（还差：市场） */
+export function prereqDetail(a: Pick<Anomaly, 'age' | 'need' | 'missing'>): string {
+  const age = a.age ?? 3;
+  const miss = a.missing?.length ? `（还差：${a.missing.join('、')}）` : '';
+  return `升${AGE_N_ZH[age]}需先建完 ${a.need ?? 2} 座${AGE_N_ZH[age - 1]}建筑${miss}`;
+}
+/** 步骤行显示的时间：研究类步骤用实际开始研究的时刻，其他用步骤开始时刻 */
+export const rowTime = (s: { startAt: number; researchAt?: number }) => s.researchAt ?? s.startAt;
+
+const KIND_ZH: Record<Anomaly['type'], string> = {
+  tc_busy: '城镇中心忙',
+  idle_tc: '城镇中心闲置',
+  pop_block: '卡人口',
+  prereq_wait: '等前置建筑',
+  resource_short: '缺资源',
+  timeout: '超时',
+};
 /** 摘要第 2 格：主文案「卡人口 约 0:45」+ 小字「第 12 步」；超时按目标时代写 */
 export function summaryText(b: Bottleneck | null, targetZh: string, tOut = Infinity): { main: string; sub: string } {
   if (!b) return { main: '没有卡点', sub: '' };

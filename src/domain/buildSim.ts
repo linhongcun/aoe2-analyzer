@@ -21,6 +21,32 @@ export interface EcoData {
   techs: Record<string, { researchTime: number; at: number; cost: Cost }>;
   ecoTechs: Record<string, { effects: EffectRow['effects'] }>;
   civEco: Record<string, EffectRow[]>;
+  /** 升级时代前置建筑条件树（scripts/eco_build.py 从 .dat 时代科技 101/102/103 的前置展开；缺省视为无条件） */
+  ageReq?: Record<string, { tech: number; req: AgeReqNode | null }>;
+}
+/** 前置条件树：{n, of} = of 中至少 n 项满足；{b} = 任一建筑已建成；{civ} = 本文明自动满足（如高棉） */
+export type AgeReqNode = { n: number; of: AgeReqNode[] } | { b: number[]; zh: string } | { civ: string[] };
+
+/** 条件是否满足 */
+export function ageReqOk(node: AgeReqNode | null | undefined, built: ReadonlyMap<number, number>, civ: string): boolean {
+  if (!node) return true;
+  if ('b' in node) return node.b.some((b) => (built.get(b) ?? 0) > 0);
+  if ('civ' in node) return node.civ.includes(civ);
+  return node.of.filter((x) => ageReqOk(x, built, civ)).length >= node.n;
+}
+/** 主干「任 n 种建筑」节点：取叶子最多的 {n, of}（封建/城堡/帝王都是「任两种」），用于提示文案 */
+export function ageReqMain(node: AgeReqNode | null | undefined): { n: number; leaves: { b: number[]; zh: string }[] } | null {
+  if (!node || !('of' in node)) return null;
+  const leaves = (x: AgeReqNode): { b: number[]; zh: string }[] => ('b' in x ? [x] : 'of' in x ? x.of.flatMap(leaves) : []);
+  let best: { n: number; leaves: { b: number[]; zh: string }[] } | null = null;
+  const walk = (x: AgeReqNode) => {
+    if (!('of' in x)) return;
+    const direct = x.of.filter((y) => 'b' in y || 'of' in y);
+    if (x.n >= 2 && (!best || direct.length > best.leaves.length)) best = { n: x.n, leaves: x.of.flatMap(leaves) };
+    x.of.forEach(walk);
+  };
+  walk(node);
+  return best;
 }
 /** 单位升级（units.json 的 up：[费用, 研究时间]） */
 export type UpgradeData = Record<number, [Cost, number]>;
@@ -40,8 +66,19 @@ export interface SimParams {
 export const WALK = { min: 1, max: 10, presets: { near: 2, mid: 4, far: 7 }, default: 4 } as const;
 export const DEFAULT_PARAMS: SimParams = { walkTiles: WALK.default, nearTiles: WALK.presets.near, idleThreshold: 2, team: false, autoHouses: true };
 
+/** 城镇中心忙的卡点文案（Steve 定稿；只在这里改） */
+export const TC_BUSY_ZH: Record<'vil' | 'research', string> = { vil: '等城镇中心（在造村民）', research: '等城镇中心（在研究）' };
+
 export interface Anomaly {
-  type: 'idle_tc' | 'pop_block' | 'resource_short' | 'timeout';
+  type: 'idle_tc' | 'pop_block' | 'prereq_wait' | 'resource_short' | 'tc_busy' | 'timeout';
+  /** tc_busy：城镇中心当时在忙什么（造村民 / 研究） */
+  busy?: 'vil' | 'research';
+  /** prereq_wait：还没建完的前置建筑名 */
+  missing?: string[];
+  /** prereq_wait：要升的时代 2/3/4 */
+  age?: number;
+  /** prereq_wait：需要几座前一时代建筑 */
+  need?: number;
   resource?: Res;
   shortfall?: number;
   waitSec?: number;
@@ -61,6 +98,8 @@ export interface TimelineStep {
   action: 'train' | 'build' | 'research' | 'assign' | 'ageup';
   entity?: { kind: 'unit' | 'tech' | 'building'; id: string };
   startAt: number;
+  /** 研究类步骤（升时代、科技）实际开始研究的时刻；界面行时间用它（#3） */
+  researchAt?: number;
   doneAt: number;
   errSec: ErrBand;
   stock: Stock;
@@ -75,6 +114,8 @@ export interface BuildTimeline {
   params: SimParams & { carryModel: string };
   ageUps: { age: 'feudal' | 'castle' | 'imperial'; clickAt: number; reachAt: number; errSec: ErrBand }[];
   steps: TimelineStep[];
+  /** 每座建筑（不含自动补的房子）建成时刻，按时间排序（#3 护栏用） */
+  buildingsDone: { building: number; at: number }[];
   /** 全部异常（按优先级：idle_tc > pop_block > resource_short），便于摘要 */
   anomalies: Anomaly[];
   tcIdleTotal: number;
@@ -88,7 +129,7 @@ export const ASSUMPTIONS = [
   '资源点不会耗尽；不计引猪、推鹿、找羊、放置建筑的微操时间；「hunt」（城镇中心下的肉类）按牧羊速率计。',
   '建造时间：n 个村民同建一座建筑用时 = 建造时间 × 3 ÷ (n + 2)；没有指定建造者时借 1 名村民建造，建完回原任务。',
   '自动补房：人口余量 ≤ 2 且没有在建房子时，借 1 名村民（优先伐木者）盖房，木头够 25 才盖（开局文字只写「按需盖房」的部分）。',
-  '升级时代所需的前置建筑视为已满足；第二、三座城镇中心建成后不额外产村民。',
+  '升级时代须先建完前置建筑（.dat 时代科技前置：封建/城堡/帝王各需前一时代任两种建筑，或城堡/营垒），没建完就等待并记为卡点；第二、三座城镇中心建成后不额外产村民。',
   '文明加成只计采集速率、携带量、移速、费用、训练/研究/建造时间、起始资源、免费科技；团队加成默认不计。',
   '误差带：同一开局分别用近（2 格）和远（7 格）走路距离再跑两次，取早晚差值，前后不对称。',
 ];
@@ -251,6 +292,14 @@ interface Pending {
   done?: boolean;
   blockedSince?: number;
   short?: { res: Res; amount: number }[];
+  /** 等前置建筑 */
+  prereq?: boolean;
+  missing?: string[];
+  /** 实际开始研究/训练的时刻 */
+  startedAt?: number;
+  /** 付清、排进城镇中心研究队列的时刻与当时城镇中心在忙什么 */
+  queuedAt?: number;
+  queuedBusy?: 'vil' | 'research';
 }
 interface Construction {
   building: number;
@@ -310,6 +359,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   let military = 1; // 侦察骑兵
   const built = new Map<number, number>([[TC, 1]]); // building id → 数量
   const constructions: Construction[] = [];
+  const buildingsDone: { building: number; at: number }[] = [];
   const unitQueues = new Map<number, { p: Pending; left: number; unit: number }[]>(); // 训练建筑 → 队列
   const unitBusy = new Map<number, number>(); // 训练建筑 → 当前单位剩余时间
   // TC
@@ -463,6 +513,38 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           break;
         }
       }
+      if (a.type === 'ageUp' && !ageReqOk(eco.ageReq?.[String(a.age)]?.req, built, civ)) {
+        if (!p.prereq) {
+          p.blockedSince ??= t;
+          p.prereq = true;
+          // 记下开始等待时还没建完的前置建筑：优先列在建/排队中的，否则列全部未建
+          const main = ageReqMain(eco.ageReq?.[String(a.age)]?.req);
+          const lack = (main?.leaves ?? []).filter((l) => !l.b.some((b) => (built.get(b) ?? 0) > 0));
+          const pending = lack.filter(
+            (l) => constructions.some((c) => l.b.includes(c.building)) || payQ.some((q) => q.a.type === 'build' && l.b.includes(q.a.building)),
+          );
+          p.missing = (pending.length ? pending : lack).map((l) => l.zh);
+        }
+        break;
+      }
+      if (p.prereq) {
+        // 前置建筑刚建完：等前置这段单独记一条卡点，之后若再等资源从此刻另算
+        const from = r1(p.blockedSince ?? t);
+        const wait = r1(t - (p.blockedSince ?? t));
+        if (wait > 1e-9 && a.type === 'ageUp')
+          stepAnoms[p.step]!.push({
+            type: 'prereq_wait',
+            waitSec: wait,
+            from,
+            to: r1(t),
+            age: a.age,
+            need: ageReqMain(eco.ageReq?.[String(a.age)]?.req)?.n ?? 2,
+            missing: p.missing ?? [],
+            reasonZh: `等前置建筑 约 ${wait} 秒`,
+          });
+        p.prereq = false;
+        p.blockedSince = undefined;
+      }
       const c = actionCost(a);
       if (!afford(c)) {
         if (p.blockedSince === undefined) {
@@ -504,9 +586,15 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         if (a.type === 'research' && eco.techs[a.tech]?.at !== TC) {
           // 非 TC 科技：在对应建筑研究（不占 TC）
           const time = (eco.techs[a.tech]?.researchTime ?? 0) * (m.techTime[a.tech] ?? 1);
+          p.startedAt = r1(t);
           constructions.push({ building: -a.tech, progress: 0, bt: time, step: p.step, p, borrowed: undefined });
-        } else tcResearch.push(p);
+        } else {
+          p.queuedAt = t;
+          p.queuedBusy = tcState?.kind === 'research' ? 'research' : 'vil';
+          tcResearch.push(p);
+        }
       } else if (a.type === 'upgrade') {
+        p.startedAt = r1(t);
         constructions.push({ building: -100000 - a.unit, progress: 0, bt: ups[a.unit]?.[1] ?? 0, step: p.step, p });
       }
     }
@@ -556,6 +644,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       if (c.borrowed) alloc[c.borrowed]++;
       if (c.building > 0) {
         built.set(c.building, (built.get(c.building) ?? 0) + 1);
+        if (!c.auto) buildingsDone.push({ building: c.building, at: r1(t) });
         if (c.building === HOUSE) popCap = Math.min(200, popCap + 5);
         if (c.building === TC) popCap = Math.min(200, popCap + 5);
         if (c.p && !constructions.some((x) => x.p === c.p)) finish(c.p, t);
@@ -621,6 +710,20 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           researching = true;
           ageUps.push({ age: a.age, clickAt: r1(t), reachAt: 0 });
         } else if (a.type === 'research') time = (eco.techs[a.tech]?.researchTime ?? 0) * (m.techTime[a.tech] ?? 1);
+        p.startedAt = r1(t);
+        if (p.queuedAt !== undefined && t - p.queuedAt > 1e-9) {
+          // 付清了但城镇中心还在忙（造村民或别的研究）：这段等待也是卡点，避免行时间出现没有解释的跳变（Kent #51）
+          const wait = r1(t - p.queuedAt);
+          const busy = p.queuedBusy ?? 'vil';
+          stepAnoms[p.step]!.push({
+            type: 'tc_busy',
+            busy,
+            waitSec: wait,
+            from: r1(p.queuedAt),
+            to: r1(t),
+            reasonZh: `${TC_BUSY_ZH[busy]} 约 ${wait} 秒`,
+          });
+        }
         tcState = { kind: 'research', left: time, p };
       } else if (!researching) {
         const nextClick = [2, 3, 4].map((a) => (a > age && !ageUps.some((x) => x.age === a) ? clickVils(a) : undefined)).find((x) => x !== undefined);
@@ -675,10 +778,15 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const i = startAt.findIndex((x, k) => x === null || doneAt[k] === null);
     stepAnoms[Math.max(0, i)]!.push({ type: 'timeout', from: r1(t), to: r1(t), reasonZh: '模拟超过 60 分钟仍未完成（资源或建筑条件无法满足）' });
   }
-  return { startAt, doneAt, snap, stepAnoms, ageUps, tcIdleTotal: r1(tcIdleTotal), end: r1(t) };
+  // 研究类步骤：实际开始研究的时刻（升时代/科技/单位升级里最晚开始的那项）
+  const researchAt = stepPending.map((ps) => {
+    const xs = ps.filter((p) => p.a.type === 'ageUp' || p.a.type === 'research' || p.a.type === 'upgrade').map((p) => p.startedAt);
+    return xs.length && xs.every((x) => x !== undefined) ? Math.max(...(xs as number[])) : null;
+  });
+  return { startAt, doneAt, snap, stepAnoms, ageUps, researchAt, buildingsDone, tcIdleTotal: r1(tcIdleTotal), end: r1(t) };
 }
 
-const PRIO: Record<Anomaly['type'], number> = { idle_tc: 0, timeout: 1, pop_block: 2, resource_short: 3 };
+const PRIO: Record<Anomaly['type'], number> = { idle_tc: 0, timeout: 1, pop_block: 2, prereq_wait: 3, resource_short: 4, tc_busy: 5 };
 const primary = (acts: Action[]): Pick<TimelineStep, 'action' | 'entity'> => {
   const a = acts.find((x) => x.type === 'ageUp') ?? acts.find((x) => x.type === 'train' || x.type === 'build' || x.type === 'research' || x.type === 'upgrade');
   if (!a) return { action: 'assign' };
@@ -706,6 +814,9 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
     vils: st.vils,
     ...primary(st.actions),
     startAt: R.startAt[i] ?? R.end,
+    ...(R.researchAt[i] != null && (primary(st.actions).action === 'ageup' || primary(st.actions).action === 'research')
+      ? { researchAt: R.researchAt[i]! }
+      : {}),
     doneAt: R.doneAt[i] ?? R.end,
     errSec: band(R.doneAt[i] ?? null, near.doneAt[i] ?? null, far.doneAt[i] ?? null),
     ...(R.snap[i] ?? {
@@ -728,6 +839,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
     params: { ...P, carryModel: 'continuous-trip' },
     ageUps,
     steps,
+    buildingsDone: R.buildingsDone,
     anomalies: steps.flatMap((s) => s.anomalies).sort((a, b) => PRIO[a.type] - PRIO[b.type] || a.from - b.from),
     tcIdleTotal: R.tcIdleTotal,
     model: { version: MODEL_VERSION, assumptions: ASSUMPTIONS },

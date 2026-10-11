@@ -394,7 +394,7 @@ test.describe('#3 收尾', () => {
     await page.goto('./#/builds');
     const scouts = page.locator('[data-t="build-order"]', { hasText: '18 人口侦察骑兵' });
     await expect(scouts.locator('[data-t="bo-time"]')).toHaveText(/^约 \d+:\d\d 到达封建$/);
-    const tag = scouts.locator('[data-t="bo-time"] + small.tl-civ');
+    const tag = scouts.locator('[data-t="bo-basis"]');
     await expect(tag).toHaveText('按通用计');
     expect(await tag.evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
     const huns = scouts.locator('[data-t="bo-civ"]', { hasText: '匈奴' });

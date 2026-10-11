@@ -9,7 +9,6 @@ import type { Phase } from '../../domain/buildOrder';
 import { ListHead } from '../../shared/ui/layout';
 import FeedbackLink from '../feedback/FeedbackLink';
 import TimelineLoader from './TimelineLoader';
-import { PENDING_FIX, PENDING_LABEL, keptTime } from './pendingFix';
 
 /** 推荐文明：加成已计入的排前面，未计入的沉底（各自保持原顺序） */
 export const sortCivs = (civs: string[], off: string[] = []) => [...civs.filter((c) => !off.includes(c)), ...civs.filter((c) => off.includes(c))];
@@ -64,14 +63,7 @@ export default function BuildOrderList() {
             {meta?.[b.id]?.time && (
               <>
                 {' · '}
-                {PENDING_FIX[b.id] ? (
-                  <span className="is-pending" data-t="bo-time" data-pending>
-                    {keptTime(meta[b.id]!.time) ? `${keptTime(meta[b.id]!.time)}、` : ''}— 城堡 <small className="pending-note">{PENDING_LABEL}</small>
-                  </span>
-                ) : (
-                  <span data-t="bo-time">{meta[b.id]!.time}</span>
-                )}{' '}
-                <small className="tl-civ">按通用计</small>
+                <span data-t="bo-time">{meta[b.id]!.time}</span>{' '}
               </>
             )}{' '}
             ·{' '}
@@ -79,7 +71,13 @@ export default function BuildOrderList() {
               ? sortCivs(b.civs, meta?.[b.id]?.unsupported).map((c, i) => {
                   const off = meta?.[b.id]?.unsupported.includes(c);
                   return (
-                    <span key={c} data-t="bo-civ" data-off={off ? '' : undefined}>
+                    <span
+                      key={c}
+                      data-t="bo-civ"
+                      data-off={off ? '' : undefined}
+                      className={off ? 'bo-civ-off' : undefined}
+                      aria-disabled={off ? 'true' : undefined}
+                    >
                       {i > 0 && '、'}
                       {civName(c)}
                       {off && (
@@ -91,6 +89,11 @@ export default function BuildOrderList() {
                   );
                 })
               : '通用'}
+            {meta?.[b.id]?.time && (
+              <small className="tl-civ bo-basis" data-t="bo-basis">
+                按通用计
+              </small>
+            )}
           </summary>
           <p>{b.summary}</p>
           <p>

@@ -106,7 +106,8 @@ describe('hand-computed resource shortfall', () => {
     ],
   };
   it('food short 300, waits 353.1 s, Feudal at 483.1 s', () => {
-    const r = sim(bo, 'Generic', { autoHouses: false }); // 无文明加成、不自动补房
+    // 无文明加成、不自动补房；手算用例只验资源等待，去掉前置建筑条件（前置另有护栏用例）
+    const r = simulateBuild(bo, 'Generic', { ...E, ageReq: undefined }, ups, { autoHouses: false });
     const a = r.steps[0]!.anomalies.find((x) => x.type === 'resource_short')!;
     expect(a).toMatchObject({ resource: 'food', shortfall: 300, from: 0, waitSec: 353.1, reasonZh: '食物差 300（等待 约 353.1 秒）' });
     expect(r.ageUps[0]).toMatchObject({ age: 'feudal', clickAt: 353.1, reachAt: 483.1 });

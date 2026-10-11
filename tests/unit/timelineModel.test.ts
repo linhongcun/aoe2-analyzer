@@ -3,7 +3,18 @@ import eco from '../../src/data/eco.json';
 import units from '../../src/data/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type Anomaly, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { bottleneckLabel, buildView, parseQuery, pickReason, rangeText, summaryText } from '../../src/features/builds/timelineModel';
+import {
+  bottleneckLabel,
+  buildView,
+  parseQuery,
+  pickReason,
+  prereqDetail,
+  rowSegments,
+  segLabel,
+  rangeText,
+  rowTime,
+  summaryText,
+} from '../../src/features/builds/timelineModel';
 
 const ups = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const sim = (id: string, civ: string, autoHouses = true) =>
@@ -71,11 +82,38 @@ describe('pickReason（摘要与步骤行共用的原因优先级）', () => {
     expect(pickReason([a('timeout', 3600, 3600), a('idle_tc', 0, 50), a('pop_block', 658, 3600)])?.type).toBe('pop_block');
     expect(pickReason([a('resource_short', 0, 99), a('timeout', 3600, 3600), a('idle_tc', 0, 50)])?.type).toBe('timeout');
   });
+  it('卡人口 > 等前置建筑 > 其他（#3）', () => {
+    expect(pickReason([a('prereq_wait', 0, 40), a('pop_block', 0, 5)])?.type).toBe('pop_block');
+    expect(pickReason([a('resource_short', 0, 300), a('timeout', 3600, 3600), a('idle_tc', 0, 200), a('prereq_wait', 0, 4)])?.type).toBe('prereq_wait');
+    expect(bottleneckLabel(a('prereq_wait', 830, 870))).toBe('等前置建筑 · 约 0:40');
+    expect(bottleneckLabel(a('tc_busy', 581, 600))).toBe('等城镇中心（在造村民） · 约 0:19');
+    expect(pickReason([a('tc_busy', 0, 100), a('resource_short', 0, 5)])?.type).toBe('resource_short');
+    expect(prereqDetail({ age: 3, need: 2, missing: ['铁匠铺'] })).toBe('升城堡需先建完 2 座封建建筑（还差：铁匠铺）');
+    expect(rowTime({ startAt: 380, researchAt: 441 })).toBe(441);
+    expect(rowTime({ startAt: 380 })).toBe(380);
+  });
   it('同级取等待更久的；空列表返回 null', () => {
     expect(pickReason([a('idle_tc', 0, 10), a('idle_tc', 20, 60)])?.from).toBe(20);
     expect(pickReason([])).toBeNull();
   });
   it('时长用 m:ss，不出现「秒」原始值', () => {
     expect(bottleneckLabel(a('pop_block', 100, 225))).toBe('卡人口 · 约 2:05');
+  });
+});
+
+describe('rowSegments（#51 多段卡点）', () => {
+  const a = (type: Anomaly['type'], from: number, to: number) => ({ type, from, to, waitSec: to - from, reasonZh: '' }) as Anomaly;
+  it('前后接续的各成一段，按时间先后；时长取段长', () => {
+    const segs = rowSegments([a('tc_busy', 581.3, 600.6), a('resource_short', 525.7, 581.3)], { from: 525.7, to: 600.6 });
+    expect(segs.map((x) => x.a.type)).toEqual(['resource_short', 'tc_busy']);
+    expect(segLabel(segs[1]!)).toBe('等城镇中心（在造村民） · 约 0:19');
+  });
+  it('重叠的只留优先级最高的；零长度超时贴着卡人口时并入', () => {
+    expect(rowSegments([a('idle_tc', 0, 50), a('resource_short', 1, 50)]).map((x) => x.a.type)).toEqual(['idle_tc']);
+    expect(rowSegments([a('pop_block', 658, 3600), a('timeout', 3600, 3600)]).map((x) => x.a.type)).toEqual(['pop_block']);
+  });
+  it('裁剪到步骤开始至开始研究', () => {
+    const [x] = rowSegments([a('prereq_wait', 100, 300)], { from: 150, to: 200 });
+    expect([x!.start, x!.end]).toEqual([150, 200]);
   });
 });
