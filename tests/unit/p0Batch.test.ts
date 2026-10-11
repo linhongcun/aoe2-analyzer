@@ -178,9 +178,9 @@ describe('#31 开局流程入口', () => {
     // 顶部导航：首页·文明·单位·建筑·科技·科技树·工具
     expect(['首页', ...WIKI.filter((s) => !s.hideNav).map((s) => s.label), '工具']).toEqual(['首页', '文明', '单位', '建筑', '科技', '科技树', '工具']);
   });
-  it('首页「正在制作」不再列开局流程', () => {
+  it('首页不再有「即将推出 · 正在制作」块', () => {
     const src = readFileSync('src/features/home/components/Home.tsx', 'utf8');
-    expect(src).toContain('<p>版本补丁</p>');
+    expect(src).not.toMatch(/即将推出|正在制作|soon-card|版本补丁/);
     expect(src).not.toContain('开局时间轴');
     expect(src).not.toMatch(/地图 ·|天梯/);
     expect(src).not.toMatch(/正在制作[\s\S]*开局流程/);

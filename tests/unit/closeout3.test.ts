@@ -50,7 +50,7 @@ describe('#3 收尾：推荐文明标「加成未计入」', () => {
 });
 
 describe('#3 收尾：首页不再写开局「开发中」', () => {
-  it('工具卡与正在制作都不提时间轴开发中', () => {
+  it('工具卡与首页都不提时间轴开发中', () => {
     expect(TOOLS.find((s) => s.key === 'builds')!.desc).not.toMatch(/开发中/);
     expect(readFileSync('src/features/home/components/Home.tsx', 'utf8')).not.toContain('开局时间轴');
   });
