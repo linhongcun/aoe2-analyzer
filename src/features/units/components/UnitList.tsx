@@ -5,6 +5,8 @@ import { dlcMatch } from '../../../domain/dlc';
 import { AGE_ZH } from '../../../domain/ratings';
 import type { Unit } from '../../../domain/types';
 import { collapse } from '../../../domain/family';
+import { civNote, dupIdsIn } from '../../../domain/dupNames';
+import { civByEn } from '../../../data';
 import { CostView, DlcBadge, EliteBadge, UnitIcon } from '../../../shared/ui/art';
 import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
@@ -21,6 +23,8 @@ export default function UnitList() {
   const ok = (u?: Unit) =>
     !!u && (u.en.toLowerCase().includes(ql) || u.zh.includes(ql)) && (!t || u.type === t) && (!a || u.age === +a) && dlcMatch(u.dlc, dlc);
   const r = fams.filter((x) => ok(x.u) || ok(x.elite));
+  // #44 同名单位同时出现在列表里时，主名后加文明小字
+  const dup = dupIdsIn(r.map((x) => x.u));
   return (
     <section id="units" className="pane">
       <ListHead title="单位" desc="全部单位 · 按类别、DLC、时代筛选" />
@@ -56,6 +60,7 @@ export default function UnitList() {
               <div>
                 <h3>
                   {u.zh}
+                  {dup.has(u.id) && <span className="civnote">{civNote(u, (en) => civByEn(en)?.zh)}</span>}
                   {elite && <EliteBadge />}
                 </h3>
                 <small>{u.en}</small>

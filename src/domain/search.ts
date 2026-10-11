@@ -11,6 +11,8 @@ export interface SearchItem {
   alt?: string[];
   /** 玩家俗称（src/data/aliases.ts），排在名称前缀之后、名称包含之前 */
   aliases?: string[];
+  /** 文明小字（#44 完全重名单位）：结果里同名单位同时出现时才显示 */
+  civNote?: string;
   /** 同分时排在其他结果之后（开局：搜单位名时不压过单位） */
   late?: boolean;
 }

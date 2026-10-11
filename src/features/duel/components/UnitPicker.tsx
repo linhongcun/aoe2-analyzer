@@ -4,6 +4,8 @@ import type { FamilyEntry } from '../../../domain/family';
 import type { Unit } from '../../../domain/types';
 import { EliteBadge, UnitIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
+import { civNote, dupIdsIn } from '../../../domain/dupNames';
+import { civByEn } from '../../../data';
 
 export function UnitPicker({ id, value, list, onChange, label }: { id: string; value: Unit; list: FamilyEntry[]; onChange: (u: Unit) => void; label: string }) {
   const [open, setOpen] = useState(false);
@@ -19,6 +21,8 @@ export function UnitPicker({ id, value, list, onChange, label }: { id: string; v
     const m = (u?: Unit) => !!u && (u.zh.includes(ql) || u.en.toLowerCase().includes(ql));
     return list.filter((x) => m(x.u) || m(x.elite));
   }, [q, list]);
+  // #44 同名单位同时出现在选项里时加文明小字
+  const dup = useMemo(() => dupIdsIn(opts.map((x) => x.u)), [opts]);
   useEffect(() => {
     if (!open) return;
     setTimeout(() => input.current?.focus(), 0);
@@ -130,6 +134,7 @@ export function UnitPicker({ id, value, list, onChange, label }: { id: string; v
                     <span className="cp-name">
                       <span>
                         {x.u.zh}
+                        {dup.has(x.u.id) && <span className="civnote">{civNote(x.u, (en) => civByEn(en)?.zh)}</span>}
                         {x.elite && <EliteBadge />}
                       </span>
                       <small>{x.u.en}</small>
