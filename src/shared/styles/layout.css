@@ -1564,3 +1564,19 @@ a.tbld:hover span {
     justify-content: center;
   }
 }
+
+/* 临时置灰（pendingFix.ts）：计算修正中的时间与步骤 */
+.is-pending,
+.tl-steps li.is-pending,
+.tl-summary li.is-pending b {
+  color: var(--c-muted);
+}
+.tl-steps li.is-pending *,
+.tl-summary li.is-pending * {
+  color: var(--c-muted);
+}
+.pending-note {
+  color: var(--c-muted);
+  font-size: var(--fs-xs, 0.75em);
+  margin-left: 0.25em;
+}
