@@ -111,15 +111,15 @@ export function Layout({ children }: { children: ReactNode }) {
         <p className="fbfoot">
           <FeedbackLink /> <FeedbackLink kind="feature" /> 发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。{' '}
           <span className="fmeta" data-t="footer-meta">
-            <span className="build-id" data-t="footer-app-version">
+            <span className="build-id fitem" data-t="footer-app-version">
               {appVersion()}
             </span>
             {' · '}
-            <Link to="/about-data" data-t="footer-version">
+            <Link className="fitem" to="/about-data" data-t="footer-version">
               数据版本：{versionLabel(DATA_SOURCES)}
             </Link>
             {' · '}
-            <span className="build-id" data-t="footer-build">
+            <span className="build-id fitem" data-t="footer-build">
               构建 {__BUILD__}
             </span>
           </span>

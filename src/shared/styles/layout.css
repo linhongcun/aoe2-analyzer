@@ -1854,8 +1854,17 @@ a.tbld:hover span {
   white-space: nowrap;
 }
 
-/* 页脚：版本 · 数据版本 · 构建号 单独一行、不折行（390 下也不拆开） */
+/* 页脚：版本 · 数据版本 · 构建号 单独一行；每项内部永不折行。
+   宽度 < 380px 时整行放不下，只允许在「·」分隔处换行 */
 .fmeta {
   display: block;
   white-space: nowrap;
+}
+.fmeta .fitem {
+  white-space: nowrap;
+}
+@media (max-width: 379.98px) {
+  .fmeta {
+    white-space: normal;
+  }
 }
