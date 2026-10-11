@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
 import { DAT } from '../../src/domain/datEffects';
 import { countForBudget } from '../../src/domain/duel';
-import { unit } from './helpers';
+import { unit, units } from './helpers';
 
 const D = (en: string, civ: string, age: number) => discountedCost(unit(en), civ, age);
 const N = (en: string, civ: string, age: number) => countForBudget(D(en, civ, age).cost, 3000);
@@ -39,8 +39,13 @@ describe('折扣档位跟随所选时代', () => {
     expect(D('Cavalry Archer', 'Huns', 3).applied[0]!.pct).toBe(10);
     expect(D('Cavalry Archer', 'Huns', 4).applied[0]!.pct).toBe(20);
   });
-  it('哥特步兵四档 15/20/25/30（.dat 逐时代累计）', () => {
-    expect([1, 2, 3, 4].map((a) => D('Spearman', 'Goths', a).applied[0]?.pct)).toEqual([15, 20, 25, 30]);
+  it('哥特步兵四档 15/20/25/30（.dat 逐时代累计）；长矛兵帝王 35×0.7=24.5 落在 .5：未计入、原价', () => {
+    expect([1, 2, 3].map((a) => D('Spearman', 'Goths', a).applied[0]?.pct)).toEqual([15, 20, 25]);
+    expect(D('Champion', 'Goths', 4).applied[0]!.pct).toBe(30);
+    const sp = D('Spearman', 'Goths', 4);
+    expect(sp.applied).toEqual([]);
+    expect(sp.half[0]!.res.sort()).toEqual(['Food', 'Wood']);
+    expect(sp.cost).toEqual(unit('Spearman').cost);
   });
   it('未选时代：按单位最早可用时代取价', () => {
     expect(priceAge(unit('Camel Rider').age, null)).toBe(3);
@@ -95,5 +100,59 @@ describe('不影响费用', () => {
     const d = discountedCost(unit('Hussar'), 'Magyars', 4, { techIds: new Set([67, 68, 75]) });
     expect(d.cost).toEqual({ Food: 68 });
     expect(d.noCost.map((x) => x.text)).toEqual(['近战攻击升级免费']);
+  });
+});
+
+describe('.5 规则（v3，Steve 在 PR #84 恢复）：折后价恰为 .5 的不计入、按原价', () => {
+  it('整数判定不受浮点误差影响', async () => {
+    const { isHalfFrac, roundHalfUp } = await import('../../src/domain/costDiscount');
+    expect(isHalfFrac(25 * 70, 100)).toBe(true); // 17.5
+    expect(isHalfFrac(35 * 75, 100)).toBe(false); // 26.25
+    expect(roundHalfUp(35 * 75, 100)).toBe(26);
+    expect(roundHalfUp(25 * 75, 100)).toBe(19);
+  });
+  // 独立扫描：所有 单位 × 文明 × 时代 × 资源，按 .dat 档位换算的整数百分比 p，原价 × (100 − p) 除以 100 余 50 即为 .5
+  const cases: [string, string, number, string][] = [];
+  Object.entries(DAT.costDiscounts).forEach(([civ, list]) =>
+    list.forEach((d) => {
+      if (!d.ok) return;
+      d.groups.forEach((g) =>
+        g.units.forEach((id) => {
+          const u = units.find((x) => x.id === id);
+          if (!u || !u.civs.includes(civ)) return;
+          Object.entries(g.tiers).forEach(([a, m]) => {
+            if (+a < u.age) return;
+            const p = Math.round((1 - m) * 100);
+            g.res.forEach((r) => {
+              const b = u.cost[r];
+              const c: [string, string, number, string] = [u.en, civ, +a, r];
+              if (b && (b * (100 - p)) % 100 === 50 && !cases.some((x) => x.join() === c.join())) cases.push(c);
+            });
+          });
+        }),
+      );
+    }),
+  );
+  it('扫描结果非空，且清单固定（数据变更时需复核）', () => {
+    expect(cases.length).toBeGreaterThan(0);
+    expect(cases.map((c) => c.join('|')).sort()).toMatchSnapshot();
+  });
+  it('每个 .5 情况：标「未计入」、该资源按原价、不在已计入里', () => {
+    cases.forEach(([en, civ, age, r]) => {
+      units
+        .filter((x) => x.en === en && x.civs.includes(civ))
+        .forEach((u) => {
+          const d = discountedCost(u, civ, age);
+          expect(d.half.some((h) => h.res.includes(r)), `${en} ${civ} ${age} ${r}`).toBe(true);
+          expect(d.cost[r]).toBe(u.cost[r]);
+        });
+    });
+  });
+  it('朝鲜（高丽，数据与文本对不上）仍是「折扣未计入」', () => {
+    const u = unit('Crossbowman');
+    const d = discountedCost(u, 'Koreans', 3);
+    expect(d.unsupported.length).toBe(1);
+    expect(d.half).toEqual([]);
+    expect(d.cost).toEqual(u.cost);
   });
 });

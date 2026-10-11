@@ -177,7 +177,7 @@ function Side({
           d={side.disc}
           bud={bud}
           count={count}
-          ageNote={side.spec.ageSet === false ? (AGE_ZH[side.disc.age] ?? null) : null}
+          ageNote={side.disc.age !== side.age ? (AGE_ZH[side.disc.age] ?? null) : null}
         />
       )}
       <div className="bar">

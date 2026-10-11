@@ -24,12 +24,12 @@ export function CostDiscountBlock({
   d: CostDiscount;
   bud: number;
   count: number;
-  /** 未选时代时的取价时代名（如「城堡时代」）；选了时代为 null */
+  /** 取价时代与卡片标题时代不同时的取价时代名（如「城堡时代」）；相同为 null */
   ageNote: string | null;
 }) {
   const basis = ageNote && (
     <small className="pk-basis" data-t="pk-basis">
-      {' · '}按{ageNote}价格
+      按{ageNote}价格
     </small>
   );
   const res = ORDER.filter((r) => d.base[r]);
@@ -58,7 +58,7 @@ export function CostDiscountBlock({
           <tr data-t="pk-sum">
             <td>单价合计</td>
             <td>
-              {changed && <s className="pk-was">{baseSum}</s>} {sum}
+              {basis} {changed && <s className="pk-was">{baseSum}</s>} {sum}
             </td>
           </tr>
           <tr className="pk-count" data-t="pk-count">
@@ -80,10 +80,12 @@ export function CostDiscountBlock({
         <div key={a.techs.join()} className="pk-line pk-applied" data-t="pk-applied">
           <Icon name="check" className="ic" />
           <span>
-            已计入：{civ} {a.label} −{a.pct}%{a.res && `（只减${a.res.map((r) => RES_ZH[r] ?? r).join('、')}）`}
+            已计入：{civ} −{a.pct}%{a.res && `（只减${a.res.map((r) => RES_ZH[r] ?? r).join('、')}）`}
+            <small className="pk-orig" data-t="pk-orig">
+              {a.text}
+            </small>
           </span>
           <SourcePop civ={civ} unit={unit} d={d} />
-          {basis}
         </div>
       ))}
       {d.unsupported.map((a, i) => (
@@ -96,15 +98,23 @@ export function CostDiscountBlock({
           {!d.applied.length && i === 0 && (
             <>
               <SourcePop civ={civ} unit={unit} d={d} />
-              {basis}
             </>
           )}
         </div>
       ))}
-      {!d.applied.length && !d.unsupported.length && (
+      {d.half.map((a, i) => (
+        <div key={a.techs.join()} className="pk-line pk-unverified" data-t="pk-half">
+          <Icon name="info" className="ic" />
+          <span>
+            未计入：{civ} {a.label}
+            <small className="note">尚未核实，暂不计入</small>
+          </span>
+          {!d.applied.length && !d.unsupported.length && i === 0 && <SourcePop civ={civ} unit={unit} d={d} />}
+        </div>
+      ))}
+      {!d.applied.length && !d.unsupported.length && !d.half.length && (
         <p className="note pk-none" data-t="pk-none">
           该文明没有可计入的训练费用加成，按原价计算。
-          {basis}
         </p>
       )}
     </div>
@@ -156,6 +166,17 @@ function SourcePop({ civ, unit, d }: { civ: string; unit: string; d: CostDiscoun
                 <p key={a.techs.join()}>
                   <Icon name="info" className="ic" /> {a.label}
                   <small className="note">按原价，不显示估算值</small>
+                </p>
+              ))}
+            </section>
+          )}
+          {d.half.length > 0 && (
+            <section data-t="pk-pop-half">
+              <h5>未计入</h5>
+              {d.half.map((a) => (
+                <p key={a.techs.join()}>
+                  <Icon name="info" className="ic" /> {a.label}
+                  <small className="note">尚未核实，暂不计入</small>
                 </p>
               ))}
             </section>
