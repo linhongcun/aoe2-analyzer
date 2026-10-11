@@ -64,7 +64,8 @@ export function oneWay(a: Fighter, d: Fighter): OneWay {
       dmg,
       expDmg,
       hits: Number.isFinite(hits) ? hits : 0,
-      time: hits <= 1 ? 0 : null,
+      // 单发自爆击杀也不显示 0s：击杀用时统一为 null（UI 显示「—」）
+      time: null,
       dps: null,
       dpsReason: DPS_UNAVAILABLE_REASON,
     };
@@ -86,8 +87,10 @@ export interface DuelResult {
 export function duel(a: Fighter, b: Fighter): DuelResult {
   const ab = oneWay(a, b),
     ba = oneWay(b, a);
-  const tA = ab.time ?? Number.POSITIVE_INFINITY,
-    tB = ba.time ?? Number.POSITIVE_INFINITY;
+  // 判定胜负时，单发即可击杀的自爆单位视为 0 时刻击杀（显示仍为「—」）
+  const tOf = (o: OneWay) => o.time ?? (o.dpsReason && o.hits === 1 ? 0 : Number.POSITIVE_INFINITY);
+  const tA = tOf(ab),
+    tB = tOf(ba);
   if (!Number.isFinite(tA) && !Number.isFinite(tB)) return { ab, ba, winner: 'draw', remaining: 0, duration: 0 };
   if (Math.abs(tA - tB) < 1e-9) return { ab, ba, winner: 'draw', remaining: 0, duration: Number.isFinite(tA) ? tA : 0 };
   const aWins = tA < tB;

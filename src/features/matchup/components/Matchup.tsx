@@ -2,7 +2,7 @@ import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
-import { COUNTER_EXTRA, EMPTY_COUNTERS_COPY, STRONG_THRESHOLD, TYPE_ZH, filterCounterUnits, matchup } from '../../../domain/ratings';
+import { COUNTER_EXTRA, EMPTY_COUNTERS_COPY, EMPTY_STRENGTHS_COPY, STRONG_THRESHOLD, TYPE_ZH, filterCounterUnits, matchup } from '../../../domain/ratings';
 import { CivIcon } from '../../../shared/ui/art';
 import { RatingLabel } from '../../../shared/ui/RatingHelp';
 import { useSticky } from '../../../shared/utils/sticky';
@@ -33,7 +33,7 @@ export default function Matchup() {
           </h3>
           <p>
             <b>对手强项：</b>
-            {m.oppStrong.length ? m.oppStrong.join('、') : '无（均未达门槛）'}
+            {m.oppStrong.length ? m.oppStrong.join('、') : EMPTY_STRENGTHS_COPY}
             <span className="tag note" style={{ marginLeft: 8 }} title="评分达到该值才列入强项">
               评分 ≥ {STRONG_THRESHOLD}
             </span>

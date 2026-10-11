@@ -3,6 +3,8 @@ import type { Civ, CivType } from './types';
 export const AXES = ['骑兵', '弓手', '步兵', '经济', '防御', '攻城', '僧侣', '海军'] as const;
 /** 强项门槛：评分 ≥ 8 才算「强」（与建议文案同源） */
 export const STRONG_THRESHOLD = 8;
+/** #15 对手无强项时的锁定文案（Jony） */
+export const EMPTY_STRENGTHS_COPY = `无突出强项（各项评分均低于 ${STRONG_THRESHOLD}）`;
 export const TYPE_ZH: Record<CivType, string> = {
   cav: '骑兵',
   arch: '弓手',

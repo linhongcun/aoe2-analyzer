@@ -56,7 +56,20 @@ export default function UnitDetail() {
     ],
     ['speed', '移动速度', u.spd],
     ['', '视野', u.los],
-    ['rof', '攻击间隔', u.rof > 0 ? u.rof + 's' : `— ${DPS_UNAVAILABLE_REASON}`],
+    [
+      'rof',
+      '攻击间隔',
+      u.rof > 0 ? (
+        u.rof + 's'
+      ) : (
+        <>
+          —
+          <small className="note rof-reason" data-t="rof-reason">
+            {DPS_UNAVAILABLE_REASON}
+          </small>
+        </>
+      ),
+    ],
     ['', '准确度', u.acc + '%'],
     ...(u.blast ? [['blast', '溅射范围', u.blast] as [string, string, number]] : []),
   ];

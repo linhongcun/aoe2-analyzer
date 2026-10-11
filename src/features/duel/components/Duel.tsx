@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
-import { duel, fighterFrom, groupFight, countForBudget, costSum, type Fighter } from '../../../domain/duel';
+import { duel, fighterFrom, groupFight, countForBudget, costSum, type Fighter, DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { baseUnit, collapse } from '../../../domain/family';
 import { AGE_ZH } from '../../../domain/ratings';
 import { TEAM_BONUSES } from '../../../domain/effects';
@@ -209,7 +209,20 @@ function Side({
               ['hp', '生命值', r1(side.F.hp)],
               [u.rng > 1 ? 'patk' : 'atk', '攻击', r1(side.S.atk) + (side.F.ranged ? '（穿刺）' : '（近战）')],
               ['marm', '护甲', `${r1(side.S.ma)} / ${r1(side.S.pa)}`],
-              ['rof', '攻击间隔', r1(side.S.rof * 100) === '0' ? '-' : (Math.round(side.S.rof * 100) / 100).toString() + 's'],
+              [
+                'rof',
+                '攻击间隔',
+                side.S.rof > 0 ? (
+                  (Math.round(side.S.rof * 100) / 100).toString() + 's'
+                ) : (
+                  <>
+                    —
+                    <small className="note rof-reason" data-t="rof-reason">
+                      {DPS_UNAVAILABLE_REASON}
+                    </small>
+                  </>
+                ),
+              ],
               [
                 'range',
                 '射程',

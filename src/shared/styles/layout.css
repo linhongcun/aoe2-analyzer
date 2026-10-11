@@ -692,3 +692,13 @@ a.tbld:hover span {
     display: inline;
   }
 }
+
+/* #27 爆炸单位无攻击间隔原因（数值下一行） */
+.rof-reason {
+  display: block;
+  font-size: 12px;
+  font-weight: normal;
+}
+.rngb {
+  font-weight: normal;
+}

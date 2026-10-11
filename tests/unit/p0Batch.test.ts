@@ -81,7 +81,9 @@ describe('#27 火焰骆驼 rof=0', () => {
   it('oneWay：dps/time 为 null 或有限值，不是 Infinity/NaN', () => {
     const r = oneWay(F(1263), F(74));
     expect(r.dps).toBeNull();
-    expect(r.time === null || Number.isFinite(r.time)).toBe(true);
+    expect(r.time).toBeNull(); // Jony：单发自爆也显示「—」，绝不显示 0s
+    // 对低血量目标（单发即杀）同样为 null
+    expect(oneWay(F(1263), F(83)).time).toBeNull();
     expect(r.dpsReason).toBe('爆炸单位，无攻击间隔');
     expect(DPS_UNAVAILABLE_REASON).toBe('爆炸单位，无攻击间隔');
   });
@@ -130,6 +132,24 @@ describe('#22 对建筑小字格式', () => {
     expect(src).toContain('对建筑射程 ${n}');
     for (const f of ['src/features/units/components/UnitDetail.tsx', 'src/features/duel/components/Duel.tsx'])
       expect(readFileSync(f, 'utf8')).not.toContain('（对建筑');
+  });
+});
+
+describe('Jony review 追加断言', () => {
+  it('#15 空强项文案锁定', async () => {
+    const { EMPTY_STRENGTHS_COPY } = await import('../../src/domain/ratings');
+    expect(EMPTY_STRENGTHS_COPY).toBe('无突出强项（各项评分均低于 8）');
+    const src = readFileSync('src/features/matchup/components/Matchup.tsx', 'utf8');
+    expect(src).toContain('EMPTY_STRENGTHS_COPY');
+    expect(src).not.toContain('均未达门槛');
+  });
+  it('#27 攻击间隔用全角 em dash + 原因小字，不用半角 -', () => {
+    for (const f of ['src/features/duel/components/Duel.tsx', 'src/features/units/components/UnitDetail.tsx']) {
+      const s = readFileSync(f, 'utf8');
+      expect(s).toMatch(/—\s*<small className="note rof-reason"/);
+      expect(s).not.toContain("? '-' :");
+      expect(s).not.toContain('`— ${DPS_UNAVAILABLE_REASON}`');
+    }
   });
 });
 
