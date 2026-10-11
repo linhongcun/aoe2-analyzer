@@ -33,8 +33,10 @@
   ],
   "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
   "review": {
-    "status": "draft",
-    "notes": "待 Steve 内容审核；2026-10-11 与 buildorderguide.com 交叉核对：HumzaCrumza「Pre-Mill Drush → FC」（29+2）与 Viper「Drush FC」（29+4）均为到达封建后再造村民、两座封建建筑（铁匠铺 + 靶场/市场）完成后点城堡，与本条一致；具体人口与本条（27+2）不同属不同变体。"
+    "status": "reviewed",
+    "by": "Steve Jobs",
+    "date": "2026-10-11",
+    "notes": "2026-10-11 与 buildorderguide.com 交叉核对：HumzaCrumza「Pre-Mill Drush → FC」（29+2）与 Viper「Drush FC」（29+4）均为到达封建后再造村民、两座封建建筑（铁匠铺 + 靶场/市场）完成后点城堡，与本条一致；具体人口与本条（27+2）不同属不同变体。"
   },
   "steps": [
     {

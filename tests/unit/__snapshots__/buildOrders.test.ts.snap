@@ -19,8 +19,9 @@ exports[`build-order snapshots > archers-19 matches snapshot (data + per-step al
       "zh": "19 人口单靶场弓手速攻",
     },
     "review": {
-      "notes": "待 Steve 内容审核",
-      "status": "draft",
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "status": "reviewed",
     },
     "sources": [
       {
@@ -358,8 +359,10 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
       "zh": "民兵骚扰转速升城堡",
     },
     "review": {
-      "notes": "待 Steve 内容审核；2026-10-11 与 buildorderguide.com 交叉核对：HumzaCrumza「Pre-Mill Drush → FC」（29+2）与 Viper「Drush FC」（29+4）均为到达封建后再造村民、两座封建建筑（铁匠铺 + 靶场/市场）完成后点城堡，与本条一致；具体人口与本条（27+2）不同属不同变体。",
-      "status": "draft",
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "notes": "2026-10-11 与 buildorderguide.com 交叉核对：HumzaCrumza「Pre-Mill Drush → FC」（29+2）与 Viper「Drush FC」（29+4）均为到达封建后再造村民、两座封建建筑（铁匠铺 + 靶场/市场）完成后点城堡，与本条一致；具体人口与本条（27+2）不同属不同变体。",
+      "status": "reviewed",
     },
     "sources": [
       {
@@ -644,8 +647,9 @@ exports[`build-order snapshots > fast-castle-boom matches snapshot (data + per-s
       "zh": "速升城堡暴兵经济（23+2）",
     },
     "review": {
-      "notes": "待 Steve 内容审核",
-      "status": "draft",
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "status": "reviewed",
     },
     "sources": [
       {
@@ -928,8 +932,10 @@ exports[`build-order snapshots > feudal-drush-18 matches snapshot (data + per-st
       "zh": "18 人口封建民兵速攻",
     },
     "review": {
-      "notes": "待 Steve 内容审核；2026-10-11 与 buildorderguide.com 交叉核对：未找到同名的 Hera「18 Vils Feudal Drush」；相近的 Hera「18 → MMA」显示点封建后不造村民、到达封建后继续补村民，与「+2 为到达封建后的第 19、20 个村民」一致。",
-      "status": "draft",
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "notes": "2026-10-11 与 buildorderguide.com 交叉核对：未找到同名的 Hera「18 Vils Feudal Drush」；相近的 Hera「18 → MMA」显示点封建后不造村民、到达封建后继续补村民，与「+2 为到达封建后的第 19、20 个村民」一致。",
+      "status": "reviewed",
     },
     "sources": [
       {
@@ -1187,8 +1193,9 @@ exports[`build-order snapshots > maa-archers-18 matches snapshot (data + per-ste
       "zh": "18 人口武士速攻转弓手",
     },
     "review": {
-      "notes": "待 Steve 内容审核",
-      "status": "draft",
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "status": "reviewed",
     },
     "sources": [
       {
@@ -1500,8 +1507,9 @@ exports[`build-order snapshots > scouts-18 matches snapshot (data + per-step all
       "zh": "18 人口侦察骑兵速攻（单马厩）",
     },
     "review": {
-      "notes": "待 Steve 内容审核",
-      "status": "draft",
+      "by": "Steve Jobs",
+      "date": "2026-10-11",
+      "status": "reviewed",
     },
     "sources": [
       {

@@ -33,8 +33,10 @@
   ],
   "license": "步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 f09ed56），该站据 Hera 攻略指南相应章节整理；中文步骤说明为本项目原创表述，未复制原文。游戏内容 © Microsoft。",
   "review": {
-    "status": "draft",
-    "notes": "待 Steve 内容审核；2026-10-11 与 buildorderguide.com 交叉核对：未找到同名的 Hera「18 Vils Feudal Drush」；相近的 Hera「18 → MMA」显示点封建后不造村民、到达封建后继续补村民，与「+2 为到达封建后的第 19、20 个村民」一致。"
+    "status": "reviewed",
+    "by": "Steve Jobs",
+    "date": "2026-10-11",
+    "notes": "2026-10-11 与 buildorderguide.com 交叉核对：未找到同名的 Hera「18 Vils Feudal Drush」；相近的 Hera「18 → MMA」显示点封建后不造村民、到达封建后继续补村民，与「+2 为到达封建后的第 19、20 个村民」一致。"
   },
   "steps": [
     {
