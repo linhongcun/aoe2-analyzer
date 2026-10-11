@@ -74,7 +74,7 @@ async function palette(page: Page, q: string) {
   await page.locator('#home').waitFor();
   await page.keyboard.press('Control+k');
   await page.getByPlaceholder(/搜索文明、单位、科技/).fill(q);
-  await expect(page.locator('.cmdk-list li').first()).toBeVisible();
+  await expect(page.locator('.cmdk-list .cmdk-t').first()).toBeVisible();
   return page.locator('.cmdk-list li');
 }
 
@@ -94,7 +94,8 @@ for (const [id, alias] of UNIT_ALIAS_ROWS)
 
 test('#44 搜「战象」列出多条，不直接跳转', async ({ page }) => {
   const li = await palette(page, '战象');
-  // 单位索引异步加载，等结果稳定
-  await expect.poll(() => li.count()).toBeGreaterThan(1);
+  // 单位索引异步加载：先等单位结果出现，再数条数
+  await expect(li.filter({ hasText: '装甲战象' })).toHaveCount(1);
+  expect(await li.count()).toBeGreaterThan(1);
   await expect(page).not.toHaveURL(/unit\//);
 });
