@@ -5,6 +5,7 @@ import { Loading } from '../shared/ui/widgets';
 import CommandPalette from '../features/search/components/CommandPalette';
 import { TOOLS, WIKI, type Section } from './nav/sections';
 import FeedbackLink from '../features/feedback/FeedbackLink';
+import { appVersion } from '../features/feedback/feedback';
 import { DATA_SOURCES, versionLabel } from '../features/about/dataInfo';
 
 function NavItem({ s, path }: { s: Section; path: string }) {
@@ -109,6 +110,9 @@ export function Layout({ children }: { children: ReactNode }) {
       <footer>
         <p className="fbfoot">
           <FeedbackLink /> <FeedbackLink kind="feature" /> 发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。{' '}
+          <span className="build-id" data-t="footer-app-version">
+            {appVersion()}
+          </span>{' '}
           <Link to="/about-data" data-t="footer-version">
             数据版本：{versionLabel(DATA_SOURCES)}
           </Link>{' '}

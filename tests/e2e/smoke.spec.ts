@@ -570,3 +570,10 @@ test('页脚在数据版本后显示构建短 SHA（7 位十六进制）', async
   await expect(foot.locator('[data-t="footer-build"]')).toHaveText(/^构建 [0-9a-f]{7}$/);
   expect(await foot.innerText()).toMatch(/数据版本：[^\n]*构建 [0-9a-f]{7}/);
 });
+
+test('页脚在数据版本前显示站点版本（package.json）', async ({ page }) => {
+  await page.goto('#/builds');
+  const foot = page.locator('footer .fbfoot');
+  await expect(foot.locator('[data-t="footer-app-version"]')).toHaveText('v0.4.0');
+  expect(await foot.innerText()).toMatch(/v0\.4\.0\s*数据版本：[^\n]*构建 [0-9a-f]{7}/);
+});
