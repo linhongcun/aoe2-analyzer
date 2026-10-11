@@ -69,7 +69,7 @@ exports[`build-order snapshots > archers-19 matches snapshot (data + per-step al
           },
         ],
         "houseText": [
-          "盖房的 3 人与",
+          "盖房的",
         ],
         "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
         "split": {
@@ -248,7 +248,7 @@ exports[`build-order snapshots > archers-19 matches snapshot (data + per-step al
           },
         ],
         "houseText": [
-          "房子",
+          "房子和",
         ],
         "note": "再调 1 人盖房子和兵营、2 人建金矿营地采金；研究双刃斧，暂不研究马轭。",
         "split": {
@@ -415,7 +415,7 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
           },
         ],
         "houseText": [
-          "盖房的 3 人与",
+          "盖房的",
         ],
         "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
         "vils": 6,
@@ -720,7 +720,7 @@ exports[`build-order snapshots > fast-castle-boom matches snapshot (data + per-s
           },
         ],
         "houseText": [
-          "盖房的 3 人与",
+          "盖房的",
         ],
         "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
         "vils": 6,
@@ -805,7 +805,7 @@ exports[`build-order snapshots > fast-castle-boom matches snapshot (data + per-s
           },
         ],
         "houseText": [
-          "其中一人先盖一座房子（人口上限约 25），避免卡在约 20。",
+          "；其中一人先盖一座房子（人口上限约 25），避免卡在约 20",
         ],
         "note": "4 个去浆果；其中一人先盖一座房子（人口上限约 25），避免卡在约 20。",
         "vils": 17,
@@ -1022,7 +1022,7 @@ exports[`build-order snapshots > feudal-drush-18 matches snapshot (data + per-st
           },
         ],
         "houseText": [
-          "盖房的 3 人与",
+          "盖房的",
         ],
         "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
         "vils": 6,
@@ -1287,7 +1287,7 @@ exports[`build-order snapshots > maa-archers-18 matches snapshot (data + per-ste
           },
         ],
         "houseText": [
-          "盖房的 3 人与",
+          "盖房的",
         ],
         "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
         "vils": 6,
@@ -1309,7 +1309,7 @@ exports[`build-order snapshots > maa-archers-18 matches snapshot (data + per-ste
           },
         ],
         "houseText": [
-          "房子顺势摆成墙的一部分。",
+          "；房子顺势摆成墙的一部分",
         ],
         "note": "3 个去伐木并建伐木场；房子顺势摆成墙的一部分。",
         "vils": 9,
@@ -1606,7 +1606,7 @@ exports[`build-order snapshots > scouts-18 matches snapshot (data + per-step all
           },
         ],
         "houseText": [
-          "盖房的 3 人与",
+          "盖房的",
         ],
         "note": "盖房的 3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。",
         "vils": 6,
