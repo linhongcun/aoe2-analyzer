@@ -8,6 +8,7 @@ import { allCivBonuses } from '../../domain/civBonus';
 import { TYPE_ZH } from '../../domain/ratings';
 import { buildOrders } from '../../data/buildOrders';
 import { BUILD_ALIASES, UNIT_ALIASES } from '../../data/aliases';
+import { civNote, dupIdsIn } from '../../domain/dupNames';
 
 /** 科技别名（#18 范围补充：1452 又名绞盘弩） */
 export const TECH_AKA: Record<number, string[]> = { 1452: ['绞盘弩', 'cranequins'] };
@@ -27,8 +28,10 @@ export function useSearchIndex(): SearchItem[] {
         img: `civs/${c.en.toLowerCase()}.webp`,
       }),
     );
+    const fams = core ? collapse(core.units, core.fam) : [];
+    const dup = dupIdsIn(fams.map((x) => x.u));
     if (core)
-      collapse(core.units, core.fam).forEach(({ u, elite }) =>
+      fams.forEach(({ u, elite }) =>
         items.push({
           kind: 'unit',
           id: String(u.id),
@@ -39,6 +42,7 @@ export function useSearchIndex(): SearchItem[] {
           img: `units/${u.pic}.webp`,
           alt: elite ? [elite.zh, elite.en.toLowerCase()] : undefined,
           aliases: UNIT_ALIASES[u.id],
+          civNote: dup.has(u.id) ? civNote(u, (en) => civs.find((c) => c.en === en)?.zh) : undefined,
         }),
       );
     core?.techs.forEach((t) =>

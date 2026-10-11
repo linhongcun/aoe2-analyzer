@@ -1613,3 +1613,43 @@ a.tbld:hover span {
   background: linear-gradient(var(--color-accent-soft), var(--color-accent-soft)), var(--color-surface);
   color: inherit;
 }
+
+/* #44 文明小字（重名 / 易混单位）与详情页「相关」第一项（SPEC a50f739） */
+.civnote {
+  margin-left: 6px;
+  font-size: var(--fs-xs);
+  font-weight: 400;
+  color: var(--color-muted);
+}
+.rel-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--color-link);
+}
+.rel-row:last-child {
+  border-bottom: 0;
+}
+.rel-row > .ic {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.rel-row > .rel-chev {
+  color: var(--color-chevron);
+}
+.rel-tx {
+  flex: 1;
+  min-width: 0;
+}
+.rel-reason {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  line-height: 1.5;
+  margin-top: 2px;
+}
