@@ -59,8 +59,7 @@ test('#44 390 宽：原因行可折行，页面不横向滚动', async ({ page }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });
 
-// 依赖 #70（同名不同单位分开计），#70 合入后 rebase 去掉 fixme
-test.fixme('#44 单位列表：两个楼船、两个战车都在，且带文明小字', async ({ page }) => {
+test('#44 单位列表：两个楼船、两个战车都在，且带文明小字', async ({ page }) => {
   await page.goto('./#units');
   await page.locator('#uq').fill('楼船');
   await expect(page.locator('#ugrid .card')).toHaveCount(2);
@@ -78,8 +77,7 @@ async function palette(page: Page, q: string) {
   return page.locator('.cmdk-list li');
 }
 
-// 依赖 #70（同名不同单位分开计），#70 合入后 rebase 去掉 fixme
-test.fixme('#44 搜索「战车」：两个结果，带文明小字', async ({ page }) => {
+test('#44 搜索「战车」：两个结果，带文明小字', async ({ page }) => {
   const li = await palette(page, '战车');
   await expect(li.filter({ hasText: '孟加拉' })).toHaveCount(1);
   await expect(li.filter({ hasText: '蜀' }).locator('.civnote')).toHaveCount(1);
