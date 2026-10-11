@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test';
 
 /** #3 P0 修好后撤掉临时置灰（#50）：两条速升城堡开局到处显示真实城堡时间（通用、距离 4） */
 const CASES = [
-  { id: 'fast-castle-boom', click: '12:53', reach: '15:33' },
-  { id: 'drush-fc', click: '14:31', reach: '17:11' },
+  { id: 'fast-castle-boom', click: '12:52', reach: '15:32' },
+  { id: 'drush-fc', click: '14:30', reach: '17:10' },
 ];
 
 for (const c of CASES) {

@@ -2,6 +2,7 @@
  * #3 M3：把 M2 的 BuildTimeline（buildSim 输出）整理成时间线界面要画的行和摘要。
  * 纯函数，不碰 React；所有数字都来自 simulateBuild，不手写示例数。
  */
+import { floorSec, formatClock } from '../../domain/formatTime';
 import { TC_BUSY_ZH } from '../../domain/buildSim';
 import type { Anomaly, BuildTimeline, ErrBand, Res } from '../../domain/buildSim';
 
@@ -84,11 +85,8 @@ export const segLabel = (x: RowSeg<Anomaly>, tOut = Infinity) => bottleneckLabel
 export const ROW_SEG_MAX = 3;
 const VILLAGER = '83';
 
-/** 约 m:ss */
-export const mmss = (s: number) => {
-  const t = Math.max(0, Math.round(s));
-  return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
-};
+/** 约 m:ss：统一走 domain/formatTime（向下取整），这里只是别名 */
+export const mmss = formatClock;
 
 export function bottleneckLabel(a: Anomaly, tOut = Infinity): string {
   const d = mmss(dur(a));
@@ -130,7 +128,7 @@ export function summaryText(b: Bottleneck | null, targetZh: string, tOut = Infin
 }
 /** 误差带两端相同只显示一个时间 */
 export const rangeText = (t: number, e: { early: number; late: number }) =>
-  Math.round(t - e.early) === Math.round(t + e.late) ? null : `${mmss(t - e.early)}–${mmss(t + e.late)}`;
+  floorSec(t - e.early) === floorSec(t + e.late) ? null : `${mmss(t - e.early)}–${mmss(t + e.late)}`;
 
 export function buildView(tl: BuildTimeline, unitName: (id: string) => string): TimelineView {
   const steps = [...tl.steps].sort((a, b) => a.startAt - b.startAt || a.index - b.index);
@@ -195,7 +193,7 @@ export function buildView(tl: BuildTimeline, unitName: (id: string) => string): 
         type: a.type,
         from: a.from,
         to: a.to,
-        sec: Math.round(a.waitSec ?? a.to - a.from),
+        sec: a.waitSec ?? a.to - a.from,
         label: bottleneckLabel(a, tOut),
         reasonZh: a.reasonZh,
         step: s.index,

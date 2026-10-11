@@ -1592,3 +1592,14 @@ a.tbld:hover span {
 .bo .bo-civ-off * {
   color: var(--color-muted);
 }
+
+/* 步骤行悬停/聚焦/选中（Jony #51）：盖过 base.css 的 button:hover 铜色底，保证卡点文字对比度 */
+.tl-step:hover,
+.tl-step:focus,
+.tl-step:focus-visible,
+.tl-step:active,
+.tl-steps li.is-sel .tl-step {
+  /* 半透明 accent-soft 叠在不透明面板色上：不再叠卡点行的浅红底，红字对比度保持 ≥ 4.5 */
+  background: linear-gradient(var(--color-accent-soft), var(--color-accent-soft)), var(--color-surface);
+  color: inherit;
+}
