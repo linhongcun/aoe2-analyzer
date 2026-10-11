@@ -1,7 +1,7 @@
 import {chromium} from '/workspace/aoe2-m3/node_modules/playwright/index.mjs';
 const b = await chromium.launch();
 const d = new URL('.', import.meta.url).pathname;
-for (const [n, w, h] of [['portrait-1080x1350', 1080, 1350], ['landscape-1200x630', 1200, 630]]) {
+for (const [n, w, h] of [['portrait-1080x1350', 1080, 1350], ['landscape-1200x630', 1200, 630], ['portrait-1080x1350-pop', 1080, 1350], ['landscape-1200x630-pop', 1200, 630]]) {
   const p = await b.newPage({viewport: {width: w, height: h}, deviceScaleFactor: 1});
   await p.goto('file://' + d + n + '.html');
   await p.waitForTimeout(400);
