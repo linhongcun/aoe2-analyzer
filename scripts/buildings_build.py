@@ -37,5 +37,5 @@ from PIL import Image
 for b in L:
     p=f"public/img/buildings/{b['pic']}.webp"
     if not os.path.exists(p):
-        im=Image.open(io.BytesIO(urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/master/img/Building/{b['pic']}.png").read())).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
+        im=Image.open(io.BytesIO(urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/{os.environ.get('AOE_TT_REF','master')}/img/Building/{b['pic']}.png").read())).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
 print('buildings',len(L),'no-civ',[b['en'] for b in L if not b['civs']])

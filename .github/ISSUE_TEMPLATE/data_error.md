@@ -1,7 +1,7 @@
 ---
 name: 数据错误 / Data error
 about: 单位/科技/建筑数值、文明加成、科技树、DLC 等内容与游戏不符
-title: "[数据错误] "
+title: '[数据错误] '
 labels: data-error
 ---
 

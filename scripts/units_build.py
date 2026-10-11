@@ -35,7 +35,7 @@ for u in units.values():
     p=f"public/img/units/{u['pic']}.webp"
     if os.path.exists(p): continue
     try:
-        raw=urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/master/img/Unit/{u['pic']}.png").read()
+        raw=urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/{os.environ.get('AOE_TT_REF','master')}/img/Unit/{u['pic']}.png").read()
         im=Image.open(io.BytesIO(raw)).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
     except Exception: miss.append(u['en'])
 L=sorted(units.values(),key=lambda u:(u['type']!='UniqueUnit',u['b'],u['age'],u['id']))

@@ -57,4 +57,4 @@ tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 
 ## 部署
 
-当前令牌缺少 Workflows 权限，现采用备用方案：本地 `npm run build` 后把 `dist/` 推到 `gh-pages` 分支，Pages 源为 `gh-pages` /。可选：把 `docs/deploy-pages.workflow.yml` 放到 `.github/workflows/deploy.yml`（需要 workflow 权限），即可改为push main → lint + test + build → `actions/deploy-pages`。备用方案：本地 `npm run build` 后把 `dist/` 推到 `gh-pages` 分支并把 Pages 源切到该分支。
+部署：GitHub Actions（`.github/workflows/ci.yml`）在 push main 时依次 lint → 类型检查 → Vitest → Python 测试 → 数据检查 → 构建 → Playwright，全部通过后用 `actions/deploy-pages` 发布；Pages 源为 GitHub Actions。详见 README「部署」与 docs/DATA-UPDATE.md。

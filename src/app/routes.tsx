@@ -6,6 +6,7 @@ import { civs } from '../data';
 import Home from '../features/home/components/Home';
 
 // 非首页路由按需拆包
+const AboutData = lazy(() => import('../features/about/AboutData'));
 const UnitList = lazy(() => import('../features/units/components/UnitList'));
 const UnitDetail = lazy(() => import('../features/units/components/UnitDetail'));
 const TechList = lazy(() => import('../features/techs/components/TechList'));
@@ -44,6 +45,7 @@ export function AppRoutes() {
       <Route path="/buildings" element={<BuildingList />} />
       <Route path="/building/:id" element={<BuildingDetail />} />
       <Route path="/duel" element={<Duel />} />
+      <Route path="/about-data" element={<AboutData />} />
       <Route path="/simulator" element={<SimulatorHub />} />
       {['/maps', '/builds', '/patches', '/ladder'].map((p) => (
         <Route key={p} path={p} element={<Planned />} />

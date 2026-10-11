@@ -14,7 +14,10 @@
     "data": "python3 scripts/build_data.py",
     "dat:check": "python3 scripts/dat_source.py --check",
     "effects": "python3 scripts/effects_build.py && vite-node scripts/effects_audit.ts",
-    "stats:check": "python3 scripts/stats_crosscheck.py"
+    "stats:check": "python3 scripts/stats_crosscheck.py",
+    "data:update": "python3 scripts/data_update.py",
+    "data:status": "python3 scripts/data_update.py --check",
+    "test:py": "python3 -m unittest discover -s tests/py -v"
   },
   "dependencies": {
     "lucide-react": "^1.54.0",

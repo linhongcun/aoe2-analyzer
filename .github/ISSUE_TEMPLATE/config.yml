@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 关于数据（来源、固定版本、补丁说明）
+    url: https://linhongcun.github.io/aoe2-analyzer/#/about-data
+    about: 报告数据错误前，可先确认当前数据对应的游戏补丁版本。

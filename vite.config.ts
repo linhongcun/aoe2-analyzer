@@ -1,6 +1,6 @@
 /// <reference types="vitest/config" />
 import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -15,12 +15,20 @@ const dat = (
   JSON.parse(readFileSync('src/data/effects.json', 'utf8')) as { meta: { sources: { id: string; commit: string; patch: string }[] } }
 ).meta.sources.find((s) => s.id === 'DAT');
 
+const pins = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as unknown;
+const notes = readdirSync('docs/PATCH-NOTES')
+  .filter((f) => f.endsWith('.md'))
+  .map((f) => f.replace(/\.md$/, ''))
+  .sort((a, b) => +b - +a);
+
 // base './'：GitHub Pages 子路径 /aoe2-analyzer/ 与本地预览都可用（配合 HashRouter）
 export default defineConfig({
   base: './',
   plugins: [react()],
   define: {
     __BUILD__: JSON.stringify(sha),
+    __DATA_SOURCES__: JSON.stringify(pins),
+    __PATCH_NOTES__: JSON.stringify(notes),
     __DATA_VERSION__: JSON.stringify(dat ? `${dat.patch}；.dat auto-mods@${dat.commit}` : 'unknown'),
   },
   build: { target: 'es2020', chunkSizeWarningLimit: 600 },

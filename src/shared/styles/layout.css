@@ -492,3 +492,25 @@ a.tbld:hover span {
 .fbfoot {
   margin-bottom: 6px;
 }
+.verbadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  padding: 3px 8px;
+  border: 1px solid var(--line, #ccc);
+  border-radius: 999px;
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  margin-left: auto;
+}
+.verbadge .ic {
+  width: 14px;
+  height: 14px;
+}
+@media (max-width: 720px) {
+  .verbadge span {
+    display: none;
+  }
+}

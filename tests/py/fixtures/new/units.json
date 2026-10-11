@@ -1,0 +1,5 @@
+[
+  { "id": 550, "en": "Onager", "zh": "中型投石车", "hp": 60, "atk": 55, "pa": 8 },
+  { "id": 4, "en": "Archer", "zh": "弓箭手", "hp": 30, "atk": 4, "pa": 0 },
+  { "id": 2700, "en": "Mounted Crossbowman", "zh": "骑马弩兵", "hp": 55, "atk": 5, "pa": 0 }
+]

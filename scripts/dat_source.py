@@ -16,22 +16,39 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / 'scripts' / '.cache'
-DAT = {
-    'repo': 'SiegeEngineers/auto-mods',
-    'commit': '0c38027504532826c9922e4db77e2c1d33554291',
-    'path': 'dat/empires2_x2_p1.dat',
-    'sha256': '4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa',
-    'patch': 'DE Update 185872 (2026-09-22)',
-}
+SOURCES_FILE = ROOT / 'scripts' / 'data_sources.json'
+
+
+def pins():
+    return json.load(open(SOURCES_FILE))
+
+
+def _dat_pin():
+    p = pins()
+    d = dict(p['sources']['dat'])
+    d['patch'] = '%s (%s)' % (p['patch']['name'], p['patch']['date'])
+    return d
+
+
+DAT = _dat_pin()
 GENIEUTILS = 'genieutils-py==0.1.2'
-# 补丁标记：只有 Update 185872 的 .dat 同时满足（见官方补丁说明）
-MARKERS = [
-    ('civs 数量 = 63（含 Muisca/Mapuche/Tupi/Saxons/Varangians/Danes）', lambda d: len(d['Civs']) == 63 and {'Muisca', 'Mapuche', 'Tupi', 'Saxons', 'Varangians', 'Danes'} <= {c['Name'] for c in d['Civs']}),
-    ('科技 1452 = Cranequins（185872 新增）', lambda d: d['Techs'][1452]['Name'] == 'Cranequins'),
-    ('单位 2700 = Mounted Crossbowman（185872 新增）', lambda d: d['Civs'][1]['Units'][2700]['Name'] == 'Mounted Crossbowman'),
-    ('Onager 攻击 50→55、穿刺护甲 7→8（185872）', lambda d: (lambda u: dict(u['Attacks']).get(4) == 55 and dict(u['Armours']).get(3) == 8)(d['Civs'][1]['Units'][550])),
-    ('Hulk HP 90→85、War Hulk 115→110（185872）', lambda d: d['Civs'][1]['Units'][2626]['HP'] == 85 and d['Civs'][1]['Units'][2627]['HP'] == 110),
-]
+
+
+def markers_of(d):
+    """从解析结果计算可记录的特征（data:update 时写入 data_sources.json，之后每次构建按此校验）。"""
+    return {'civs': len(d['Civs']), 'techs': len(d['Techs']), 'effects': len(d['Effects']), 'newestCivs': [c['Name'] for c in d['Civs'][-3:]]}
+
+
+def check_markers(d, expect):
+    """数据驱动的补丁标记 + 最小常识检查；返回失败项列表。"""
+    bad = []
+    if len(d['Civs']) < 40 or len(d['Techs']) < 1000 or len(d['Effects']) < 1000:
+        bad.append('常识检查失败：文明/科技/效果数量过少（文件损坏或非 DE .dat）')
+    got = markers_of(d)
+    for k, v in (expect or {}).items():
+        if got.get(k) != v:
+            bad.append('标记 %s：期望 %r，实际 %r' % (k, v, got.get(k)))
+    return bad
 
 
 def _venv_python():
@@ -42,16 +59,17 @@ def _venv_python():
     return py
 
 
-def fetch_dat():
+def fetch_dat(pin=None):
+    pin = pin or DAT
     CACHE.mkdir(parents=True, exist_ok=True)
-    p = CACHE / ('empires2_x2_p1.%s.dat' % DAT['commit'][:7])
+    p = CACHE / ('empires2_x2_p1.%s.dat' % pin['commit'][:7])
     if not p.exists():
-        url = 'https://raw.githubusercontent.com/%s/%s/%s' % (DAT['repo'], DAT['commit'], DAT['path'])
+        url = 'https://raw.githubusercontent.com/%s/%s/%s' % (pin['repo'], pin['commit'], pin['path'])
         print('download', url, file=sys.stderr)
         p.write_bytes(urllib.request.urlopen(url).read())
     h = hashlib.sha256(p.read_bytes()).hexdigest()
-    if h != DAT['sha256']:
-        raise SystemExit('✗ .dat sha256 不符：%s（期望 %s）' % (h, DAT['sha256']))
+    if pin.get('sha256') and h != pin['sha256']:
+        raise SystemExit('✗ .dat sha256 不符：%s（期望 %s）' % (h, pin['sha256']))
     return p
 
 
@@ -79,30 +97,27 @@ json.dump(out, open(sys.argv[2], 'w'))
 '''
 
 
-def load():
-    p = fetch_dat()
-    j = CACHE / ('dat.%s.json' % DAT['sha256'][:12])
+def parse(p):
+    """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
+    j = CACHE / ('dat.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])
         except Exception:
             # creatable.train_time 字段名随版本不同：失败时提示
             raise
-    d = json.load(open(j))
-    bad = [m for m, f in MARKERS if not _safe(f, d)]
+    return json.load(open(j))
+
+
+def load():
+    d = parse(fetch_dat())
+    bad = check_markers(d, DAT.get('markers'))
     if bad:
         raise SystemExit('✗ .dat 补丁标记不符：\n  ' + '\n  '.join(bad))
     return d
 
 
-def _safe(f, d):
-    try:
-        return bool(f(d))
-    except Exception:
-        return False
-
-
 if __name__ == '__main__':
     d = load()
-    print('✓ .dat %s@%s sha256 %s… %s；%d 文明 / %d 科技 / %d 效果；补丁标记 %d/%d 通过' % (
-        DAT['repo'], DAT['commit'][:7], DAT['sha256'][:12], DAT['patch'], len(d['Civs']), len(d['Techs']), len(d['Effects']), len(MARKERS), len(MARKERS)))
+    print('✓ .dat %s@%s sha256 %s… %s；%d 文明 / %d 科技 / %d 效果；补丁标记 %d 项通过' % (
+        DAT['repo'], DAT['commit'][:7], DAT['sha256'][:12], DAT['patch'], len(d['Civs']), len(d['Techs']), len(d['Effects']), len(DAT.get('markers') or {}) + 1))

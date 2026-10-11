@@ -1,0 +1,9 @@
+{
+  "techs": { "Dry Dock": { "rules": [{ "t": [539], "fx": [{ "s": "spd", "op": "mul", "v": 1.15 }] }] } },
+  "civs": {
+    "Britons": {
+      "bonus": [{ "tech": 382, "name": "C-Bonus, +1 Archer range", "rules": [{ "t": [4], "fx": [{ "s": "rng", "v": 1 }] }], "eco": [] }],
+      "team": { "rules": [] }
+    }
+  }
+}

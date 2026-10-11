@@ -25,6 +25,6 @@ from PIL import Image
 for bid,v in B.items():
     p=f"public/img/buildings/{v[2]}.webp"
     if not os.path.exists(p):
-        im=Image.open(io.BytesIO(urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/master/img/Building/{v[2]}.png").read())).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
+        im=Image.open(io.BytesIO(urllib.request.urlopen(f"https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/{os.environ.get('AOE_TT_REF','master')}/img/Building/{v[2]}.png").read())).convert('RGBA');im.thumbnail((64,64));im.save(p,'WEBP',quality=85)
 print({k:v[1] for k,v in B.items()})
 print(os.path.getsize('src/data/trees.json'))

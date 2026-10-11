@@ -1,0 +1,30 @@
+{
+  "_doc": "全部上游数据的固定版本（单一文件）。由 npm run data:update 更新；请勿手改 sha256。",
+  "patch": { "build": 185872, "date": "2026-09-22", "name": "DE Update 185872", "detectedFrom": "SiegeEngineers/halfon@abb48fd: Implement DE Update 185872" },
+  "updated": "2026-10-11",
+  "sources": {
+    "dat": {
+      "repo": "SiegeEngineers/auto-mods",
+      "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+      "path": "dat/empires2_x2_p1.dat",
+      "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+      "date": "2026-10-07",
+      "use": "全部 EffectCommands（战斗 + 经济/费用）、科技前置、文明科技树/团队加成；基础数值对账",
+      "markers": { "civs": 63, "techs": 1510, "effects": 1500, "newestCivs": ["Saxons", "Varangians", "Danes"] }
+    },
+    "aoe2techtree": {
+      "repo": "SiegeEngineers/aoe2techtree",
+      "commit": "3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f",
+      "path": "data/",
+      "date": "2026-09-22",
+      "use": "文明/单位/科技/建筑/科技树、中英文本、图标"
+    },
+    "halfon": {
+      "repo": "SiegeEngineers/halfon",
+      "commit": "abb48fdbedba57d5afe2b7941d6ae85cf6e0e803",
+      "path": "data/units_buildings_techs.de.json",
+      "date": "2026-09-22",
+      "use": "补丁号识别（提交信息「Implement DE Update N」）"
+    }
+  }
+}

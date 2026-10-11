@@ -30,13 +30,17 @@ export function entityOf(pathname: string): { type: string; id: string } | null 
   return null;
 }
 
-export function feedbackUrl(c: FeedbackCtx, kind: 'bug' | 'data' = 'data'): string {
+export function feedbackUrl(c: FeedbackCtx, kind: 'bug' | 'data' | 'feature' = 'data'): string {
   const e = entityOf(c.pathname);
   const q = new URLSearchParams(c.search);
   const civ = q.get('civ') ?? q.get('c') ?? (/^\/(civ|tree)\//.test(c.pathname) ? e?.id.split('/')[0] : null);
-  const title = `[${kind === 'data' ? '数据错误' : '问题'}] ${e ? `${e.type} ${e.id}` : c.pathname || '/'}`;
+  const title = `[${kind === 'data' ? '数据错误' : kind === 'feature' ? '功能建议' : '问题'}] ${e ? `${e.type} ${e.id}` : c.pathname || '/'}`;
   const body = [
-    kind === 'data' ? '## 哪个数值/内容有误？\n\n\n## 正确值与来源（游戏内截图 / Wiki / 补丁说明）\n\n' : '## 问题描述\n\n\n## 复现步骤\n\n',
+    kind === 'data'
+      ? '## 哪个数值/内容有误？\n\n\n## 正确值与来源（游戏内截图 / Wiki / 补丁说明）\n\n'
+      : kind === 'feature'
+        ? '## 想要什么功能？\n\n\n## 使用场景\n\n'
+        : '## 问题描述\n\n\n## 复现步骤\n\n',
     '## 环境（自动填写）',
     `- 页面：${c.href}`,
     `- 类型/ID：${e ? `${e.type} / ${e.id}` : '—'}`,
@@ -44,6 +48,6 @@ export function feedbackUrl(c: FeedbackCtx, kind: 'bug' | 'data' = 'data'): stri
     `- 数据版本：${dataVersion()}；构建 ${__BUILD__}`,
     `- 浏览器：${c.ua}`,
   ].join('\n');
-  const p = new URLSearchParams({ title, body, labels: kind === 'data' ? 'data-error' : 'bug' });
+  const p = new URLSearchParams({ title, body, labels: kind === 'data' ? 'data-error' : kind === 'feature' ? 'enhancement' : 'bug' });
   return `${ISSUES_NEW}?${p.toString()}`;
 }

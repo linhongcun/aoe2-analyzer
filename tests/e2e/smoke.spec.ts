@@ -362,3 +362,18 @@ test('feedback link: footer + detail page button prefill GitHub issue', async ({
   await page.goto('./#/duel');
   await expect(page.locator('.fbbar a[data-t="feedback"]')).toHaveAttribute('href', /title=.*duel/);
 });
+
+test('data version badge links to about-data page with pins and patch notes', async ({ page }) => {
+  await page.goto('./#/units');
+  const badge = page.locator('[data-t="version-badge"]');
+  await expect(badge).toContainText('数据版本：DE 185872（2026-09-22）');
+  await expect(page.locator('[data-t="footer-version"]')).toContainText('DE 185872');
+  await expect(page.locator('footer a[data-t="feature"]')).toHaveAttribute('href', /title=%5B%E5%8A%9F%E8%83%BD%E5%BB%BA%E8%AE%AE%5D/);
+  await badge.click();
+  await expect(page).toHaveURL(/#\/about-data$/);
+  await expect(page.locator('[data-t="data-version"]')).toHaveText('DE 185872（2026-09-22）');
+  await expect(page.locator('[data-t="src-dat"]')).toContainText('SiegeEngineers/auto-mods@0c38027');
+  await expect(page.locator('[data-t="src-dat"]')).toContainText('sha256');
+  await expect(page.locator('[data-t="src-aoe2techtree"]')).toContainText('@3bb43b1');
+  await expect(page.locator('a[data-t="patch-note"]').first()).toHaveAttribute('href', /PATCH-NOTES\/185872\.md$/);
+});

@@ -36,13 +36,14 @@
 
 | 数据                                                          | 来源                                                                                                                                                   | 脚本                                                                              |
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| 文明、单位、科技、建筑、科技树、中英文本、图标                | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（已同步至 185872）                                                       | `npm run data`（`scripts/build_data.py`）                                         |
+| 文明、单位、科技、建筑、科技树、中英文本、图标                | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `scripts/data_sources.json`，185872）                        | `npm run data`（`scripts/build_data.py`）                                         |
 | 科技/文明加成/团队加成的结构化效果（`src/data/effects.json`） | DE 原版 `empires2_x2_p1.dat`，来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，sha256 `4aa2f0a7…7baa` 固定 | `npm run effects`（`scripts/effects_build.py` + 审计 `scripts/effects_audit.ts`） |
 | 基础数值对账（aoe2techtree vs .dat）                          | 同上                                                                                                                                                   | `npm run stats:check`                                                             |
 
-- `.dat` 仅在构建时下载到 `scripts/.cache/`（已 gitignore），校验 **sha256 + 补丁标记**（63 文明、Cranequins、Mounted Crossbowman、Onager 55 攻/8 穿甲、Hulk 85 HP）：`npm run dat:check`。用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py) 解析（首次运行自动建立 `scripts/.cache/venv`）。
+- 全部上游固定版本（仓库、提交、sha256、补丁号、日期）集中在 **`scripts/data_sources.json`**；站点页头徽章「数据版本：DE 185872（2026-09-22）」链接到 [关于数据](https://linhongcun.github.io/aoe2-analyzer/#/about-data) 页。
+- `.dat` 仅在构建时下载到 `scripts/.cache/`（已 gitignore），校验 **sha256 + 补丁标记**（标记由 `data:update` 从新文件计算并记录：文明/科技/效果数量、最新文明；另有最小常识检查）：`npm run dat:check`。用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py) 解析（首次运行自动建立 `scripts/.cache/venv`）。
 - **.dat © Microsoft Corporation：本仓库与站点均不包含、不分发该文件**，只发布由它派生的数值。
-- 效果差异与覆盖率见 [docs/EFFECTS-AUDIT.md](docs/EFFECTS-AUDIT.md)；新补丁时更新 `scripts/dat_source.py` 中的提交与 sha256 后重跑 `npm run effects`。
+- 效果差异与覆盖率见 [docs/EFFECTS-AUDIT.md](docs/EFFECTS-AUDIT.md)；新补丁：`npm run data:update`（检查上游 → 更新固定版本 → 重新生成全部数据、审计、对账 → 写 `docs/PATCH-NOTES/<补丁号>.md`，**不自动提交**），详见 [docs/DATA-UPDATE.md](docs/DATA-UPDATE.md)。
 
 ## 开发 / Development
 
@@ -59,21 +60,20 @@ npm run data         # 从 aoe2techtree 重新生成 src/data/*.json 与 public/
 npm run dat:check    # 下载并校验 .dat（sha256 + 补丁标记）
 npm run effects      # 由 .dat 生成 effects.json 并重写 docs/EFFECTS-AUDIT.md
 npm run stats:check  # 基础数值与 .dat 对账
+npm run data:status  # 只检查上游是否有新补丁（有更新退出码 10）
+npm run data:update  # 补丁数据更新全流程（见 docs/DATA-UPDATE.md）
+npm run test:py      # Python 测试：补丁号识别、差异摘要、标记校验
 ```
 
 技术栈：Vite + React 18 + TypeScript（strict）+ react-router `HashRouter` + lucide-react。架构见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
 
 ## 部署 / Deploy
 
-站点托管于 GitHub Pages，Pages 源为 `gh-pages` 分支根目录：
+**GitHub Actions 自动部署**（`.github/workflows/ci.yml`），Pages 源为 GitHub Actions：
 
-```bash
-npm run lint && npm test && npm run build
-# 把 dist/ 的内容提交到 gh-pages 分支根目录（含 .nojekyll）并推送
-BASE_URL=https://linhongcun.github.io/aoe2-analyzer/ npm run e2e   # 线上验证
-```
-
-可选：将 `docs/deploy-pages.workflow.yml` 放到 `.github/workflows/`（需要 workflow 权限）改为 push 自动部署。
+- push / PR 到 `main`：安装 → ESLint → `tsc` 类型检查 → Vitest → Python 测试 → 数据检查（`.dat` sha256 + 补丁标记；`.dat` 与 genieutils 环境按 `data_sources.json` 哈希缓存；并校验 `effects.json` 可由固定 `.dat` 原样复现）→ 构建 → Playwright（chromium）冒烟。
+- 仅当以上全部通过且为 push 到 `main` 时，`deploy` 作业用 `actions/deploy-pages` 发布 `dist/`。PR 只测试不部署。
+- 线上验证：`BASE_URL=https://linhongcun.github.io/aoe2-analyzer/ npm run e2e`。
 
 ## 数据与素材来源 / Credits
 
