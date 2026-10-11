@@ -1,0 +1,12 @@
+// 置灰文明的分享按钮（Steve 定）：分享按钮 aria-disabled 置灰，旁边灰字「加成未计入，暂不能生成分享卡」（12px #636366），复制链接照常可用。底图：线上匈奴置灰页，DOM 里加上按钮
+import {chromium} from '/workspace/aoe2-pr39/node_modules/playwright/index.mjs';const D=new URL('.',import.meta.url).pathname;const b=await chromium.launch();
+const inj=`(()=>{const css=document.createElement('style');css.textContent='.sh-btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;border:1px solid #d1d1d6;background:#f2f2f7;color:#8e8e93;font:600 14px system-ui;cursor:not-allowed}.sh-note{font-size:12px;line-height:16px;color:#636366;white-space:nowrap}.sh-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}.sh-row{display:flex;align-items:center;gap:8px}';document.head.append(css);
+const ic='<svg width=16 height=16 viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round aria-hidden=true><circle cx=18 cy=5 r=3 /><circle cx=6 cy=12 r=3 /><circle cx=18 cy=19 r=3 /><line x1=8.59 y1=13.51 x2=15.42 y2=17.49 /><line x1=15.41 y1=6.51 x2=8.59 y2=10.49 /></svg>';
+document.querySelectorAll('button').forEach(cp=>{if(!/复制链接/.test(cp.textContent)||!cp.offsetParent)return;const btn='<button type=button class=sh-btn aria-disabled=true aria-describedby=sh-note>'+ic+'分享</button>';const note='<span class=sh-note id=sh-note>加成未计入，暂不能生成分享卡</span>';
+ const mob=innerWidth<600;const w=document.createElement('div');w.className='sh-wrap';cp.replaceWith(w);
+ w.innerHTML=mob?'<div class=sh-row style="width:100%"></div>'+note:'';if(mob){const r=w.firstChild;r.append(cp);r.insertAdjacentHTML('beforeend',btn);cp.style.flex='1';w.style.width='100%'}else{w.append(cp);w.insertAdjacentHTML('beforeend',btn+note)}});})()`;
+for(const [w,h,r] of [[1280,620,1],[390,844,2]]){const p=await b.newPage({viewport:{width:w,height:h},deviceScaleFactor:r});
+ await p.goto('https://linhongcun.github.io/aoe2-analyzer/?t='+Date.now()+'#/builds?bo=scouts-18&civ=Huns');await p.waitForSelector('.tl-summary-card');await p.waitForTimeout(800);await p.evaluate(inj);await p.mouse.move(2,2);
+ const note=await p.evaluate(()=>{const n=document.querySelector('.sh-note');const r=n.getBoundingClientRect();return [getComputedStyle(n).fontSize,getComputedStyle(n).color,Math.round(r.width),n.scrollWidth<=n.clientWidth+1]});console.log(w,note);
+ await p.screenshot({path:`${D}huns-greyed-share-${w}.png`});}
+await b.close();

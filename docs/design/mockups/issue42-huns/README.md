@@ -8,3 +8,6 @@
 - 摘要加一行和通用对比：「比通用：到达封建 早 X:XX · 木头按净值（起始少 100 木）」，13px #3a3a3c，上面一条虚线分隔。
 - 摘要「按匈奴计」；主要卡点按 #57 规则显示（占位「卡在XX 约 X:XX」）。
 - 复现：`node shot.mjs`。
+
+## 置灰时的分享按钮（Steve 定）
+`huns-greyed-share-1280.png` / `huns-greyed-share-390.png`：「分享」按钮 aria-disabled 置灰，旁边灰字「加成未计入，暂不能生成分享卡」（12px #636366，AA，单行）；「复制链接」照常可用。底图是线上匈奴置灰页面，按钮是在 DOM 里加上去的。复现：`node share-greyed.mjs`。
