@@ -548,11 +548,6 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
       {
         "actions": [
           {
-            "count": 2,
-            "task": "gold",
-            "type": "gather",
-          },
-          {
             "building": 87,
             "type": "build",
           },
@@ -561,8 +556,19 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
             "type": "build",
           },
         ],
-        "note": "到封建：再 2 个采金；2 人建靶场、1 人建铁匠铺。",
+        "note": "到封建：2 人建靶场、1 人建铁匠铺；城镇中心继续造村民。",
         "phase": "feudal",
+        "vils": 27,
+      },
+      {
+        "actions": [
+          {
+            "count": 2,
+            "task": "gold",
+            "type": "gather",
+          },
+        ],
+        "note": "第 28、29 个村民去采金。",
         "vils": 29,
       },
       {
@@ -572,8 +578,9 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
             "type": "ageUp",
           },
         ],
-        "note": "27 人口点升封建，到达封建后再造 2 个村民（第 28、29 个）；靶场与铁匠铺两座封建建筑都完成后，在 29 村民时点城堡。",
+        "note": "靶场与铁匠铺两座封建建筑都完成后，在 29 村民时点城堡。",
         "phase": "castle-click",
+        "siteAdded": true,
         "vils": 29,
       },
       {
@@ -618,6 +625,7 @@ exports[`build-order snapshots > drush-fc matches snapshot (data + per-step allo
     "14: {"food":9,"wood":4,"gold":0,"stone":0,"build":1}",
     "19: {"food":14,"wood":4,"gold":0,"stone":0,"build":1}",
     "23: {"food":14,"wood":8,"gold":0,"stone":0,"build":1}",
+    "27: {"food":14,"wood":8,"gold":4,"stone":0,"build":1}",
     "27: {"food":14,"wood":8,"gold":4,"stone":0,"build":1}",
     "29: {"food":14,"wood":8,"gold":6,"stone":0,"build":1}",
     "29: {"food":14,"wood":8,"gold":6,"stone":0,"build":1}",
@@ -1137,7 +1145,7 @@ exports[`build-order snapshots > feudal-drush-18 matches snapshot (data + per-st
             "type": "gather",
           },
         ],
-        "note": "18 人口点升封建（升级期间城镇中心不能造村民），到达封建后再造的 2 个村民（第 19、20 个）根据侦察结果补后续军事建筑，并慢慢筑墙。默认补靶场转弓，遇骑则补矛。",
+        "note": "到封建后再造的 2 个村民（第 19、20 个）根据侦察结果补后续军事建筑，并慢慢筑墙。默认补靶场转弓，遇骑则补矛。",
         "vils": 20,
       },
     ],

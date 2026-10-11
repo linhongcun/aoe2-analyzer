@@ -15,6 +15,8 @@ import {
   bottleneckLabel,
   buildView,
   pickReason,
+  prereqDetail,
+  rowTime,
   mmss,
   parseQuery,
   rangeText,
@@ -92,12 +94,6 @@ export default function BuildTimelineView() {
   const tagged = v.top && v.top.to > v.top.from ? v.top : [...ranged].sort((a, b) => b.sec - a.sec)[0];
   const bad = new Set(tl.steps.filter((s) => s.anomalies.length).map((s) => s.index));
   const sel = q.step !== null ? tl.steps[q.step] : undefined;
-  // 临时置灰（pendingFix.ts）：从 pFrom 步 / cut 秒起不显示任何时间
-  const pFrom = pendingFrom(bo);
-  const cut = pFrom !== null ? (tl.steps[pFrom]?.startAt ?? 0) : Infinity;
-  const isP = (i: number) => pFrom !== null && i >= pFrom;
-  const targetP = agePending(bo.id, bo.target.age);
-  const topP = !!v.top && isP(v.top.step);
   const sumT = summaryText(v.top, targetZh, v.tOut);
   const changed = (q.civ ? 1 : 0) + (q.dist !== WALK.default ? 1 : 0) + (q.house ? 0 : 1);
   const source = bo.sources[0]?.title;
@@ -105,7 +101,7 @@ export default function BuildTimelineView() {
   // 不相邻的浅色卡点合并，只有 top 用实色，避免红带铺满（Jony 建议）
   const merged = useMemo(() => {
     const out: { from: number; to: number; types: Set<string> }[] = [];
-    for (const b of [...ranged].filter((x) => x !== tagged && x.to < cut).sort((a, b) => a.from - b.from)) {
+    for (const b of [...ranged].filter((x) => x !== tagged).sort((a, b) => a.from - b.from)) {
       const last = out[out.length - 1];
       if (last && b.from <= last.to + 1) {
         last.to = Math.max(last.to, b.to);
@@ -113,7 +109,7 @@ export default function BuildTimelineView() {
       } else out.push({ from: b.from, to: b.to, types: new Set([b.type]) });
     }
     return out;
-  }, [ranged, tagged, cut]);
+  }, [ranged, tagged]);
 
   const jump = (step: number) => {
     set('step', String(step + 1));
@@ -273,21 +269,15 @@ export default function BuildTimelineView() {
       )}
       <div className="tl-summary-card">
         <ul className="tl-summary" role="region" aria-label="摘要">
-          <li className={`tl-arrive${targetP ? ' is-pending' : ''}`} data-t="sum-arrive">
+          <li className="tl-arrive" data-t="sum-arrive">
             <span className="k">到达{target?.nameZh ?? targetZh}</span>
-            {targetP ? (
-              <b data-pending>
-                — <small className="pending-note">{PENDING_LABEL}</small>
-              </b>
-            ) : (
-              <b className="tl-num" data-time>
-                {target ? `约 ${mmss(target.reachAt)}` : '—'}
-              </b>
-            )}
+            <b className="tl-num" data-time>
+              {target ? `约 ${mmss(target.reachAt)}` : '—'}
+            </b>
             <span className="tl-civ" data-t="sum-civ">
               {civLabel}
             </span>
-            {!targetP && target && rangeText(target.reachAt, target.errSec) && (
+            {target && rangeText(target.reachAt, target.errSec) && (
               <span className="s tl-num tl-desk-only" data-t="sum-range">
                 {rangeText(target.reachAt, target.errSec)}
               </span>
@@ -316,15 +306,9 @@ export default function BuildTimelineView() {
           </li>
           <li>
             <span className="k">城镇中心闲置</span>
-            {pFrom !== null ? (
-              <b data-pending>
-                — <small className="pending-note">{PENDING_LABEL}</small>
-              </b>
-            ) : (
-              <b className="tl-num" data-time>
-                约 {mmss(v.tcIdleTotal)}
-              </b>
-            )}
+            <b className="tl-num" data-time>
+              约 {mmss(v.tcIdleTotal)}
+            </b>
           </li>
           <li>
             <span className="k">村民</span>
@@ -347,51 +331,47 @@ export default function BuildTimelineView() {
             <div className="tl-row" key={r.key} data-row={r.key}>
               <span className="tl-lab">{r.zh}</span>
               <div className="tl-track">
-                {v.rows[r.key]
-                  .filter((s: Seg) => s.to < cut)
-                  .map((s: Seg, i) => (
-                    <span
-                      key={i}
-                      role="listitem"
-                      className={`tl-bar k-${s.kind}${s.step !== undefined && s.step === q.step ? ' is-sel' : ''}`}
-                      style={{ left: pct(s.from), width: w(s.from, s.to) }}
-                      title={`${s.label} · 约 ${mmss(s.from)}–${mmss(s.to)}`}
-                      aria-label={`${r.zh} ${s.label} 约 ${mmss(s.from)} 到 ${mmss(s.to)}`}
-                    >
-                      {s.label}
-                    </span>
-                  ))}
+                {v.rows[r.key].map((s: Seg, i) => (
+                  <span
+                    key={i}
+                    role="listitem"
+                    className={`tl-bar k-${s.kind}${s.step !== undefined && s.step === q.step ? ' is-sel' : ''}`}
+                    style={{ left: pct(s.from), width: w(s.from, s.to) }}
+                    title={`${s.label} · 约 ${mmss(s.from)}–${mmss(s.to)}`}
+                    aria-label={`${r.zh} ${s.label} 约 ${mmss(s.from)} 到 ${mmss(s.to)}`}
+                  >
+                    {s.label}
+                  </span>
+                ))}
               </div>
             </div>
           ))}
           <div className="tl-row" data-row="age">
             <span className="tl-lab">到达时代</span>
             <div className="tl-track">
-              {v.ages
-                .filter((a) => !agePending(bo.id, ['', '', 'feudal', 'castle', 'imperial'].indexOf(a.age)))
-                .map((a) => (
-                  <span key={a.age}>
-                    <span
-                      className="tl-band"
-                      data-errband
-                      data-early={a.errSec.early}
-                      data-late={a.errSec.late}
-                      style={{ left: pct(a.reachAt - a.errSec.early), width: w(a.reachAt - a.errSec.early, a.reachAt + a.errSec.late) }}
-                    />
-                    <span
-                      className="tl-age"
-                      style={{ left: pct(a.reachAt) }}
-                      data-age={a.age}
-                      role="listitem"
-                      aria-label={`到达${a.nameZh} 约 ${mmss(a.reachAt)}`}
-                    >
-                      <Landmark size={14} aria-hidden />
-                      <span className="tl-age-t" data-time>
-                        {a.nameZh} · {a.vils} 村民 · 人口 {a.pop.used}/{a.pop.cap} · 约 {mmss(a.reachAt)}
-                      </span>
+              {v.ages.map((a) => (
+                <span key={a.age}>
+                  <span
+                    className="tl-band"
+                    data-errband
+                    data-early={a.errSec.early}
+                    data-late={a.errSec.late}
+                    style={{ left: pct(a.reachAt - a.errSec.early), width: w(a.reachAt - a.errSec.early, a.reachAt + a.errSec.late) }}
+                  />
+                  <span
+                    className="tl-age"
+                    style={{ left: pct(a.reachAt) }}
+                    data-age={a.age}
+                    role="listitem"
+                    aria-label={`到达${a.nameZh} 约 ${mmss(a.reachAt)}`}
+                  >
+                    <Landmark size={14} aria-hidden />
+                    <span className="tl-age-t" data-time>
+                      {a.nameZh} · {a.vils} 村民 · 人口 {a.pop.used}/{a.pop.cap} · 约 {mmss(a.reachAt)}
                     </span>
                   </span>
-                ))}
+                </span>
+              ))}
             </div>
           </div>
           <div className="tl-blocks" aria-hidden>
@@ -404,7 +384,7 @@ export default function BuildTimelineView() {
                 style={{ left: pct(b.from), width: w(b.from, b.to) }}
               />
             ))}
-            {tagged && tagged.to < cut && (
+            {tagged && (
               <span
                 className="tl-block is-top"
                 data-anomaly={tagged.type}
@@ -460,30 +440,17 @@ export default function BuildTimelineView() {
         )}
       </div>
 
-      <ol className="tl-steps" aria-label="步骤" data-cut={pFrom !== null ? cut : undefined}>
+      <ol className="tl-steps" aria-label="步骤">
         {bo.steps.map((st, i) => {
           const s = tl.steps[i]!;
           const open = q.step === i;
-          const pend = isP(i);
           return (
-            <li
-              key={i}
-              data-step={i}
-              data-pending={pend ? '' : undefined}
-              className={`${pend ? 'is-pending' : bad.has(i) ? 'is-bad' : ''}${open ? ' is-sel' : ''}`}
-              aria-selected={open}
-            >
+            <li key={i} data-step={i} className={`${bad.has(i) ? 'is-bad' : ''}${open ? ' is-sel' : ''}`} aria-selected={open}>
               <button type="button" className="tl-step" onClick={() => set('step', open ? null : String(i + 1))} aria-expanded={open}>
                 <span className="tl-num i">{i + 1}</span>
-                {pend ? (
-                  <span className="t">
-                    — <small className="pending-note">{PENDING_LABEL}</small>
-                  </span>
-                ) : (
-                  <span className="tl-num t" data-time>
-                    约 {mmss(s.startAt)}
-                  </span>
-                )}
+                <span className="tl-num t" data-time>
+                  约 {mmss(rowTime(s))}
+                </span>
                 <span className="n">
                   {st.note}
                   {st.siteAdded && (
@@ -492,19 +459,21 @@ export default function BuildTimelineView() {
                     </span>
                   )}
                 </span>
-                {!pend && s.anomalies.length > 0 && (
+                {s.anomalies.length > 0 && (
                   <span className="r">
                     <TriangleAlert size={14} aria-hidden /> {bottleneckLabel(pickReason(s.anomalies)!, v.tOut)}
                   </span>
                 )}
               </button>
-              {open && sel && pend && (
-                <div role="region" aria-label="步骤详情" className="tl-detail" data-pending>
-                  <span>{PENDING_LABEL}：升城堡时间的计算正在修正，修好前不显示这一步及之后的数据。</span>
-                </div>
-              )}
-              {open && sel && !pend && (
+              {open && sel && (
                 <div role="region" aria-label="步骤详情" className="tl-detail">
+                  {s.anomalies
+                    .filter((a) => a.type === 'prereq_wait')
+                    .map((a, k) => (
+                      <span key={'pre' + k} className="note" data-t="prereq-detail">
+                        {prereqDetail(a)}
+                      </span>
+                    ))}
                   {(['food', 'wood', 'gold', 'stone'] as const).map((r) => (
                     <span key={r}>
                       {RES_ZH[r]} <b className="tl-num">{Math.round(sel.stock[r])}</b>

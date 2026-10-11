@@ -102,6 +102,8 @@ out = {
   'Tasks': {str(i): tasks(i) for i in sorted(TASK_UNITS)},
   'Effects': [{'Name': e.name, 'EffectCommands': [{'Type': c.type, 'A': c.a, 'B': c.b, 'C': c.c, 'D': c.d} for c in e.effect_commands]} for e in d.effects],
   'Civs': [{'Name': c.name, 'TechTreeID': c.tech_tree_id, 'TeamBonusID': c.team_bonus_id, 'Units': [unit(u) for u in c.units] if i < 2 else None} for i, c in enumerate(d.civs)],
+  # 建筑建成时触发的科技（Building.tech_id），所有文明合并：升级时代前置建筑判定用（#3 根因 3）
+  'BuildTech': {str(i): u.building.tech_id for c in d.civs for i, u in enumerate(c.units) if u is not None and u.building is not None and u.building.tech_id >= 0},
   'Version': d.version,
 }
 json.dump(out, open(sys.argv[2], 'w'))
@@ -110,7 +112,7 @@ json.dump(out, open(sys.argv[2], 'w'))
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v5.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v6.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

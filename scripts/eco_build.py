@@ -137,6 +137,29 @@ def main():
         team = decode(eff(d, dc['TeamBonusID']), T)
         if team: rows.append({'source': 'team', 'name': 'Team bonus', 'age': 1, 'effects': team})
         out['civEco'][c['en']] = rows
+    # 升级时代的前置建筑（#3 根因 3）：时代科技 101/102/103 的非时代前置（Shadow Node+ 659/660/661）按 .dat 展开成条件树。
+    # 叶子：建成时触发该科技的建筑（Building.tech_id，dat_source BuildTech）；或本文明专属、无前置的科技（如高棉 638，自动满足）。
+    # 节点：{n: 需满足的子项个数, of: [...]}；叶子：{b: [建筑 id], zh: 名称} / {civ: [文明]}；无法在开局中满足的叶子（由效果触发的 Port built 等）略去。
+    BT = {}
+    for u, tid in d.get('BuildTech', {}).items(): BT.setdefault(tid, []).append(int(u))
+    BZH = {b['id']: b['zh'] for b in json.load(open(ROOT / 'src/data/buildings.json'))}
+    civ_en = {k: c['en'] for c in civs for k in [dat_civ.get(c['en'], dat_civ.get({v: kk for kk, v in CIV_DAT.items()}.get(c['en'])))] if k is not None}
+    def req(i, depth=0):
+        t = T[i]; kids = [r for r in t['RequiredTechs'] if r >= 0]
+        if i in BT:
+            ids = sorted(BT[i]); zh = next((BZH[b] for b in ids if b in BZH), t['Name'])
+            return {'b': ids, 'zh': zh}
+        if not kids:
+            if t['RequiredTechCount'] == 0 and t['Civ'] >= 0 and t['Civ'] in civ_en: return {'civ': [civ_en[t['Civ']]]}
+            return None
+        of = [x for x in (req(r, depth + 1) for r in kids) if x]
+        n = t['RequiredTechCount']
+        if not of or len(of) < n: return None
+        return {'n': n, 'of': of}
+    out['ageReq'] = {}
+    for i, a in ((101, 2), (102, 3), (103, 4)):
+        pre = [r for r in T[i]['RequiredTechs'] if r >= 0 and r not in (101, 102, 103, 104)]
+        out['ageReq'][str(a)] = {'tech': i, 'req': req(pre[0]) if pre else None}
     # 键序排序：与 units.json 的排序解耦，输出确定
     (ROOT / 'src/data/eco.json').write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':'), sort_keys=True))
 

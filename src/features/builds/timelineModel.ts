@@ -45,8 +45,8 @@ export interface TimelineView {
 
 export const AGE_ZH = { feudal: '封建', castle: '城堡', imperial: '帝王' } as const;
 export const RES_ZH: Record<Res, string> = { food: '食物', wood: '木头', gold: '黄金', stone: '石头' };
-/** 原因优先级（摘要与步骤行共用）：卡人口 > 超时 > 其他 */
-const PRIO: Record<Anomaly['type'], number> = { pop_block: 0, timeout: 1, idle_tc: 2, resource_short: 3 };
+/** 原因优先级（摘要与步骤行共用）：卡人口 > 等前置建筑 > 超时 > 城镇中心闲置 > 缺资源（#3 Steve 定） */
+const PRIO: Record<Anomaly['type'], number> = { pop_block: 0, prereq_wait: 1, timeout: 2, idle_tc: 3, resource_short: 4 };
 const dur = (a: Pick<Anomaly, 'waitSec' | 'from' | 'to'>) => a.waitSec ?? a.to - a.from;
 
 /** 一组异常里选出唯一要显示的原因：先按优先级，同级取等待更久的 */
@@ -66,11 +66,28 @@ export function bottleneckLabel(a: Anomaly, tOut = Infinity): string {
   if (a.type === 'pop_block' && a.to >= tOut - 1e-6) return `卡人口 · 约 ${mmss(a.from)} 起`;
   if (a.type === 'idle_tc') return `城镇中心闲置 · 约 ${d}`;
   if (a.type === 'pop_block') return `卡人口 · 约 ${d}`;
+  if (a.type === 'prereq_wait') return `等前置建筑 · 约 ${d}`;
   if (a.type === 'resource_short') return `${a.resource ? RES_ZH[a.resource] : '资源'}差 ${a.shortfall ?? '?'} · 约 ${d}`;
   return '60 分钟内到不了';
 }
 
-const KIND_ZH: Record<Anomaly['type'], string> = { idle_tc: '城镇中心闲置', pop_block: '卡人口', resource_short: '缺资源', timeout: '超时' };
+const AGE_N_ZH: Record<number, string> = { 1: '黑暗', 2: '封建', 3: '城堡', 4: '帝王' };
+/** 等前置建筑的详情灰字：升城堡需先建完 2 座封建建筑（还差：市场） */
+export function prereqDetail(a: Pick<Anomaly, 'age' | 'need' | 'missing'>): string {
+  const age = a.age ?? 3;
+  const miss = a.missing?.length ? `（还差：${a.missing.join('、')}）` : '';
+  return `升${AGE_N_ZH[age]}需先建完 ${a.need ?? 2} 座${AGE_N_ZH[age - 1]}建筑${miss}`;
+}
+/** 步骤行显示的时间：研究类步骤用实际开始研究的时刻，其他用步骤开始时刻 */
+export const rowTime = (s: { startAt: number; researchAt?: number }) => s.researchAt ?? s.startAt;
+
+const KIND_ZH: Record<Anomaly['type'], string> = {
+  idle_tc: '城镇中心闲置',
+  pop_block: '卡人口',
+  prereq_wait: '等前置建筑',
+  resource_short: '缺资源',
+  timeout: '超时',
+};
 /** 摘要第 2 格：主文案「卡人口 约 0:45」+ 小字「第 12 步」；超时按目标时代写 */
 export function summaryText(b: Bottleneck | null, targetZh: string, tOut = Infinity): { main: string; sub: string } {
   if (!b) return { main: '没有卡点', sub: '' };
