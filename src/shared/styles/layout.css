@@ -2032,6 +2032,9 @@ a.tbld:hover span {
   width: 100%;
   font-variant-numeric: tabular-nums;
 }
+.be-tab td {
+  white-space: nowrap;
+}
 .be-tab tr.on td {
   background: var(--color-warn-soft);
   font-weight: 600;
