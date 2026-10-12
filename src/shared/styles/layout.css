@@ -2045,6 +2045,9 @@ a.tbld:hover span {
 .be-tab td {
   white-space: nowrap;
 }
+.be-tab td:first-child {
+  width: auto;
+}
 .be-tab tr.on td {
   background: var(--color-warn-soft);
   font-weight: 600;
@@ -2080,8 +2083,18 @@ a.tbld:hover span {
   .be-card {
     padding: var(--space-4);
   }
+  .be-tab {
+    font-size: var(--fs-sm);
+  }
   .be-tab td {
     padding-left: var(--space-1);
     padding-right: var(--space-1);
+  }
+  .be-tab thead td {
+    white-space: normal;
+  }
+  .be-tab td + td + td {
+    padding-left: 2px;
+    padding-right: 2px;
   }
 }

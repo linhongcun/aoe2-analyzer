@@ -46,6 +46,8 @@ for (const w of WIDTHS) {
       await page.getByRole('radio', { name: '无科技' }).first().click();
       await expect(page.locator('[data-t=be-stale]')).toContainText('参数已变，请重新计算');
       await expect(page.locator('.be-card')).toHaveClass(/is-stale/);
+      // 变灰时参数摘要仍是计算当时的（满科技）
+      await expect(page.locator('.be-sum')).toContainText('拜占庭 长戟兵 · 满科技');
       await noHScroll(page);
       await page.getByRole('button', { name: '重新计算' }).click();
       await expect(page.locator('[data-t=be-stale]')).toHaveCount(0);

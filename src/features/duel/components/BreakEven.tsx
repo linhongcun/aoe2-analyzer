@@ -22,9 +22,9 @@ export interface BreakEvenProps {
 }
 
 export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: BreakEvenProps) {
-  const compute = () => ({ sig, r: breakEven(a, b, nb, BREAK_EVEN_CAP), aName: a.name, bName: b.name });
+  const compute = () => ({ sig, r: breakEven(a, b, nb, BREAK_EVEN_CAP), aName: a.name, bName: b.name, summary });
   // URL 带 be=1（分享链接）时首次渲染即计算
-  const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string } | null>(() => (auto ? compute() : null));
+  const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string; summary: string } | null>(() => (auto ? compute() : null));
   const [copied, setCopied] = useState(false);
   const run = () => {
     setRes(compute());
@@ -44,6 +44,8 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
       </div>
     );
   const { r, aName, bName } = res;
+  // 变灰时仍展示计算当时的参数摘要
+  const sumText = res.summary;
   return (
     <div className="be-wrap" id="duel-be">
       {stale && (
@@ -88,7 +90,7 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
             少于 {r.n} 个时，部分数量也能赢，但不稳定
           </p>
         )}
-        <p className="note be-sum">{summary} · 集火模型</p>
+        <p className="note be-sum">{sumText} · 集火模型</p>
         <div className="be-tw">
           <table className="stat be-tab">
             <thead>
