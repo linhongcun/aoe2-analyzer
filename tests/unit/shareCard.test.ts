@@ -44,7 +44,8 @@ describe('#19 分享卡 buildShareCard', () => {
       accent: true,
       sub: rangeLabel(target!.reachAt, target!.errSec),
     });
-    expect(c.cells[1]).toEqual({ label: '主要卡点', value: sum.main, accent: true, sub: sum.sub });
+    expect(c.cells[1]).toEqual({ label: '主要卡点', value: sum.main, accent: true, sub: sum.sub, valueParts: [expect.any(String), expect.any(String)] });
+    expect(c.cells[1]!.valueParts!.join(' ')).toBe(sum.main);
     expect(c.cells[2]).toEqual({ label: '城镇中心闲置', value: `约 ${formatClock(view.tcIdleTotal)}`, accent: false, sub: null });
     // Jony 验收要点 1（SPEC）
     expect(c.title).toBe('法兰克·速升城堡暴经济，约 15:32 到城堡，卡在木头');

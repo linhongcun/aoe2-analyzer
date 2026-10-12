@@ -574,8 +574,8 @@ test('页脚在数据版本后显示构建短 SHA（7 位十六进制）', async
 test('页脚在数据版本前显示站点版本（package.json）', async ({ page }) => {
   await page.goto('#/builds');
   const foot = page.locator('footer .fbfoot');
-  await expect(foot.locator('[data-t="footer-app-version"]')).toHaveText('v0.4.0');
-  expect(await foot.locator('[data-t="footer-meta"]').innerText()).toMatch(/^v0\.4\.0 · 数据版本：[^\n]* · 构建 [0-9a-f]{7}$/);
+  await expect(foot.locator('[data-t="footer-app-version"]')).toHaveText('v0.5.0');
+  expect(await foot.locator('[data-t="footer-meta"]').innerText()).toMatch(/^v0\.5\.0 · 数据版本：[^\n]* · 构建 [0-9a-f]{7}$/);
 });
 
 for (const w of [360, 375, 390]) {

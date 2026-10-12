@@ -5,6 +5,8 @@ export interface SideSpec {
   uid: number;
   civ: string;
   age: number;
+  /** URL 里是否写了时代；未写时等资源按单位最早可用时代取价（#24） */
+  ageSet?: boolean;
   techs: TechSpec;
   team: number[];
 }
@@ -26,8 +28,10 @@ export function parseSide(s: string | null, def: SideSpec): SideSpec {
     uid,
     civ: civ ?? '',
     age: Math.min(4, Math.max(1, Number(age) || 4)),
+    ageSet: !!Number(age),
     techs: t === 'f' || t === 'c' ? t : list(t ?? ''),
     team: list(team ?? ''),
   };
 }
-export const fmtSide = (s: SideSpec) => [s.uid, s.civ, s.age, Array.isArray(s.techs) ? s.techs.join('-') : s.techs, s.team.join('-')].join('.');
+export const fmtSide = (s: SideSpec) =>
+  [s.uid, s.civ, s.ageSet === false ? '' : s.age, Array.isArray(s.techs) ? s.techs.join('-') : s.techs, s.team.join('-')].join('.');

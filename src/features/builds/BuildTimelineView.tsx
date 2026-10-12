@@ -481,7 +481,7 @@ export default function BuildTimelineView() {
                     style={{ left: pct(a.reachAt - a.errSec.early), width: w(a.reachAt - a.errSec.early, a.reachAt + a.errSec.late) }}
                   />
                   <span
-                    className="tl-age"
+                    className={`tl-age${Math.min(span, Math.max(0, a.reachAt)) / span > 0.7 ? ' is-end' : ''}`}
                     style={{ left: pct(a.reachAt) }}
                     data-age={a.age}
                     role="listitem"
@@ -674,7 +674,23 @@ export default function BuildTimelineView() {
                   {card.cells.map((c, i) => (
                     <li key={i} data-t={`card-cell-${i}`}>
                       <span className="k">{c.label}</span>
-                      <b className={`tl-num${c.accent ? ' is-accent' : ''}`}>{c.value}</b>
+                      <b className={`tl-num tl-v${c.accent ? ' is-accent' : ''}`}>
+                        {c.valueParts
+                          ? c.valueParts.map((p, k) => [
+                              k > 0 ? ' ' : null,
+                              <span key={k} className={k === 0 && p.includes('（') ? 'is-wrap' : undefined}>
+                                {k === 0 && p.includes('（') ? (
+                                  <>
+                                    <span>{p.slice(0, p.indexOf('（'))}</span>
+                                    <span>{p.slice(p.indexOf('（'))}</span>
+                                  </>
+                                ) : (
+                                  p
+                                )}
+                              </span>,
+                            ])
+                          : c.value}
+                      </b>
                       {c.sub && <span className="s">{c.sub}</span>}
                     </li>
                   ))}
