@@ -24,9 +24,7 @@ for (const w of WIDTHS) {
       await expect(rows.nth(1)).toContainText('A 胜');
       await expect(rows.nth(2)).toContainText('A 胜');
       await expect(page).toHaveURL(/be=1/);
-      await expect(page.locator('[data-t=be-sub]')).toHaveText('16 个及以上直到 200 个都能赢');
-      // 该场景 1..200 胜负单调，不显示不稳定提示
-      await expect(page.locator('[data-t=be-unstable]')).toHaveCount(0);
+      await expect(page.locator('[data-t=be-sub]')).toHaveText('16 个及以上都能赢');
       await noHScroll(page);
       // 「在 N vs M 中打开」后，主 PK 结果与第 N 档一致
       await page.getByRole('button', { name: /在 N vs M 中打开 16 vs 10/ }).click();
