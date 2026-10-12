@@ -1986,7 +1986,8 @@ a.tbld:hover span {
   padding: var(--space-5);
   min-width: 0;
 }
-.be-card.is-stale {
+/* 变灰：除参数摘要外整卡淡化；摘要保持可读（AA ≥ 4.5:1，Jony #86 review） */
+.be-card.is-stale > :not(.be-sum) {
   opacity: 0.45;
   filter: grayscale(1);
 }
@@ -2018,12 +2019,13 @@ a.tbld:hover span {
   gap: var(--space-1);
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
-  background: var(--color-bad-soft);
-  color: var(--color-bad);
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
 }
 .be-sub {
   margin: var(--space-1) 0 0;
-  color: var(--color-text-2);
+  color: var(--color-muted);
   font-size: var(--fs-sm);
 }
 .be-sum {

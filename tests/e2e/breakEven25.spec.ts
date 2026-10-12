@@ -9,6 +9,35 @@ const AB = 'a=359.Byzantines.4.f.&b=569.Franks.4.f.';
 const noHScroll = async (page: Page) =>
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
 
+/** 读取设计令牌的计算值（rgb 字符串） */
+const tokenRgb = (page: Page, name: string) =>
+  page.evaluate((n) => {
+    const d = document.createElement('i');
+    d.style.color = `var(${n})`;
+    document.body.appendChild(d);
+    const c = getComputedStyle(d).color;
+    d.remove();
+    return c;
+  }, name);
+
+/** 元素文字对白色卡片底的有效对比度：文字色按祖先 opacity 连乘与底色混合 */
+const effContrast = (page: Page, sel: string) =>
+  page.evaluate((q) => {
+    const el = document.querySelector(q)!;
+    let op = 1;
+    for (let e: Element | null = el; e; e = e.parentElement) op *= Number(getComputedStyle(e).opacity);
+    const [r, g, b] = getComputedStyle(el)
+      .color.match(/\d+(\.\d+)?/g)!
+      .map(Number);
+    const mix = [r!, g!, b!].map((c) => c * op + 255 * (1 - op));
+    const lum = (cs: number[]) =>
+      cs
+        .map((c) => c / 255)
+        .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+        .reduce((s, c, i) => s + c * [0.2126, 0.7152, 0.0722][i]!, 0);
+    return (1 + 0.05) / (lum(mix) + 0.05);
+  }, sel);
+
 for (const w of WIDTHS) {
   test.describe(`盈亏平衡 @${w}`, () => {
     test.use({ viewport: { width: w, height: 900 } });
@@ -72,6 +101,26 @@ for (const w of WIDTHS) {
       await expect(page.locator('[data-t=be-n]')).toHaveCount(0);
       await expect(page.locator('[data-t=be-entry]')).toBeVisible();
       await expect(page).not.toHaveURL(/be=1/);
+    });
+
+    test('设计复验：副标题与上限文案用 muted；变灰时参数摘要不淡化（AA ≥ 4.5:1）', async ({ page }) => {
+      await page.goto(`./#/duel?${AB}&m=n&na=10&nb=10&be=1`);
+      const mutedRgb = await tokenRgb(page, '--color-muted');
+      await expect(page.locator('[data-t=be-sub]')).toHaveCSS('color', mutedRgb);
+      // 变灰：摘要不淡化、对比度达标；其余部分仍淡化
+      await page.getByRole('radio', { name: '无科技' }).first().click();
+      await expect(page.locator('[data-t=be-stale]')).toBeVisible();
+      expect(await effContrast(page, '.be-sum')).toBeGreaterThanOrEqual(4.5);
+      await expect(page.locator('.be-hero')).toHaveCSS('opacity', '0.45');
+      await expect(page.locator('.be-tw')).toHaveCSS('opacity', '0.45');
+      await expect(page.locator('.be-sum')).toHaveCSS('opacity', '1');
+      // 上限文案：muted、非红色、非 16px
+      await page.goto('./#/duel?a=83.Franks.4..&b=569.Franks.4.f.&m=n&na=10&nb=200&be=1');
+      const cap = page.locator('[data-t=be-cap] b');
+      await expect(cap).toHaveText('200 个以内都打不赢');
+      await expect(cap).toHaveCSS('color', mutedRgb);
+      expect(await cap.evaluate((e) => getComputedStyle(e).color)).not.toBe(await tokenRgb(page, '--color-bad'));
+      expect(await cap.evaluate((e) => getComputedStyle(e).fontSize)).not.toBe('16px');
     });
   });
 }
