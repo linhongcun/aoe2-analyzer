@@ -55,5 +55,23 @@ for (const w of WIDTHS) {
       await page.goto(`./#/duel?${AB}&m=n&na=10&nb=10&be=1`);
       await expect(page.locator('[data-t=be-n]')).toHaveText('16');
     });
+
+    test('上限：200 个无科技村民打不赢 200 个满科技游侠，显示「200 个以内都打不赢」', async ({ page }) => {
+      await page.goto('./#/duel?a=83.Franks.4..&b=569.Franks.4.f.&m=n&na=10&nb=200&be=1');
+      await expect(page.locator('[data-t=be-cap] b')).toHaveText('200 个以内都打不赢');
+      await expect(page.locator('[data-t=be-n]')).toHaveCount(0);
+      await expect(page.locator('.be-tab tbody tr')).toHaveCount(1);
+      await expect(page.locator('.be-tab tbody tr')).toContainText('A 负（含平局）');
+      await noHScroll(page);
+    });
+
+    test('切换模式：结果清空，URL 去掉 be=1', async ({ page }) => {
+      await page.goto(`./#/duel?${AB}&m=n&na=10&nb=10&be=1`);
+      await expect(page.locator('[data-t=be-n]')).toHaveText('16');
+      await page.getByRole('radio', { name: '1v1' }).click();
+      await expect(page.locator('[data-t=be-n]')).toHaveCount(0);
+      await expect(page.locator('[data-t=be-entry]')).toBeVisible();
+      await expect(page).not.toHaveURL(/be=1/);
+    });
   });
 }

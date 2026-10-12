@@ -62,9 +62,10 @@ export default function Duel() {
   const na = Math.max(1, Math.min(200, Number(sp.get('na')) || 10)),
     nb = Math.max(1, Math.min(200, Number(sp.get('nb')) || 10)),
     bud = Math.max(100, Math.min(100000, Number(sp.get('bud')) || 3000));
-  const set = (k: Record<string, string>) => {
+  const set = (k: Record<string, string>, drop: string[] = []) => {
     const n = new URLSearchParams(sp);
     Object.entries(k).forEach(([a, b]) => n.set(a, b));
+    drop.forEach((d) => n.delete(d));
     setSp(n, { replace: true });
   };
   const fams = useMemo(
@@ -100,7 +101,7 @@ export default function Duel() {
             ['r', '等资源'],
           ] as const
         ).map(([k, l]) => (
-          <button key={k} role="radio" aria-checked={mode === k} className={mode === k ? 'on' : undefined} onClick={() => set({ m: k })}>
+          <button key={k} role="radio" aria-checked={mode === k} className={mode === k ? 'on' : undefined} onClick={() => set({ m: k }, ['be'])}>
             {l}
           </button>
         ))}
@@ -137,7 +138,7 @@ export default function Duel() {
           sig={[mode, fmtSide(A.spec), fmtSide(B.spec), cntB].join('|')}
           auto={sp.get('be') === '1'}
           onComputed={() => set({ be: '1' })}
-          onOpen={(n, m) => set({ m: 'n', na: String(n), nb: String(m) })}
+          onOpen={(n, m) => set({ m: 'n', na: String(n), nb: String(m) }, mode === 'n' ? [] : ['be'])}
         />
       )}
       <p className="note duel-note">

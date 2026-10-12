@@ -74,7 +74,7 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
           </p>
         ) : (
           <div className="be-cap" data-t="be-cap">
-            <b>{r.cap} 内无法取胜</b>
+            <b>{r.cap} 个以内都打不赢</b>
             <span>
               A 用 {r.cap} 个{aName}仍打不赢 {r.nb} 个{bName}。下面是 {r.cap} 个时的战损。
             </span>
