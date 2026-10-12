@@ -148,15 +148,23 @@ export function pickSummaryBottleneck(list: readonly Bottleneck[]): Bottleneck |
   return best ? { ...best.first, total: best.total } : null;
 }
 
-/** 摘要第 2 格：主文案「卡人口 约 0:45 起」/「卡在木头 约 6:02」+ 小字「第 12 步」；超时按目标时代写 */
-export function summaryText(b: Bottleneck | null, targetZh: string): { main: string; sub: string } {
-  if (!b) return { main: '没有卡点', sub: '' };
-  const sub = `第 ${b.step + 1} 步`;
-  if (b.type === 'timeout') return { main: `60 分钟内到不了${targetZh}`, sub };
-  if (b.type === 'pop_block') return { main: `卡人口 约 ${formatClock(b.from)} 起`, sub };
+/**
+ * 摘要第 2 格拆成两段（#78 第 7 项）：reason「卡在木头」+ time「约 6:02」/「约 0:45 起」；
+ * 没有时间的文案（没有卡点、超时）time 为 null。分享卡预览只在两段之间断行。
+ */
+export function summaryParts(b: Bottleneck | null, targetZh: string): { reason: string; time: string | null } {
+  if (!b) return { reason: '没有卡点', time: null };
+  if (b.type === 'timeout') return { reason: `60 分钟内到不了${targetZh}`, time: null };
+  if (b.type === 'pop_block') return { reason: '卡人口', time: `约 ${formatClock(b.from)} 起` };
   const kind =
     b.type === 'resource_short' ? (b.resource ? `卡在${RES_ZH[b.resource]}` : '缺资源') : b.type === 'tc_busy' ? TC_BUSY_ZH[b.busy ?? 'vil'] : KIND_ZH[b.type];
-  return { main: `${kind} 约 ${formatClock(b.total ?? b.sec)}`, sub };
+  return { reason: kind, time: `约 ${formatClock(b.total ?? b.sec)}` };
+}
+
+/** 摘要第 2 格：主文案「卡人口 约 0:45 起」/「卡在木头 约 6:02」+ 小字「第 12 步」；超时按目标时代写 */
+export function summaryText(b: Bottleneck | null, targetZh: string): { main: string; sub: string } {
+  const { reason, time } = summaryParts(b, targetZh);
+  return { main: time ? `${reason} ${time}` : reason, sub: b ? `第 ${b.step + 1} 步` : '' };
 }
 /** 误差带两端相同只显示一个时间 */
 export const rangeText = (t: number, e: { early: number; late: number }) =>

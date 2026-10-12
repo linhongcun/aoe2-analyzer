@@ -1909,3 +1909,20 @@ a.tbld:hover span {
   flex-direction: row-reverse;
   transform: translateX(calc(-100% + 7px));
 }
+
+/* #78 第 7 项：主要卡点只在「原因」和「约 m:ss（起）」之间断行（Jony #78#issuecomment-6114971407） */
+.tl-cardprev .tl-v {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.25em;
+}
+.tl-cardprev .tl-v > span {
+  white-space: nowrap;
+}
+/* 边界：TC_BUSY_ZH 原因本身放不下时，只在「（」前断 */
+.tl-cardprev .tl-v > span.is-wrap {
+  white-space: normal;
+}
+.tl-cardprev .tl-v > span.is-wrap > span {
+  white-space: nowrap;
+}

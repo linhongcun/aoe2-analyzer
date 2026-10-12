@@ -4,7 +4,7 @@
  * 纯函数，不碰 DOM；数字全部来自 simulateBuild → buildView。
  */
 import { formatClock } from '../../domain/formatTime';
-import { RES_ZH, rangeLabel, summaryText, type AgeMark, type TimelineView } from './timelineModel';
+import { RES_ZH, rangeLabel, summaryParts, summaryText, type AgeMark, type TimelineView } from './timelineModel';
 
 export interface ShareCell {
   label: string;
@@ -13,6 +13,8 @@ export interface ShareCell {
   accent: boolean;
   /** 次行；null → 整行不渲染（不留空行、不写「—」） */
   sub: string | null;
+  /** 主值分段（#78 第 7 项）：预览只在段与段之间断行；value 仍是拼接后的整串（标题、aria、PNG 用） */
+  valueParts?: string[];
 }
 export interface ShareCardModel {
   title: string;
@@ -60,6 +62,7 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
   const target = i.target;
   const top = v.top;
   const sum = summaryText(top, i.targetZh);
+  const parts = summaryParts(top, i.targetZh);
   const reached = !!target && !v.timeout;
   const phrase = !top
     ? '全程不卡'
@@ -81,7 +84,13 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
         accent: reached,
         sub: reached ? rangeLabel(target!.reachAt, target!.errSec) : null,
       },
-      { label: '主要卡点', value: sum.main, accent: !!top, sub: sum.sub || null },
+      {
+        label: '主要卡点',
+        value: sum.main,
+        accent: !!top,
+        sub: sum.sub || null,
+        valueParts: parts.time ? [parts.reason, parts.time] : [parts.reason],
+      },
       { label: '城镇中心闲置', value: `约 ${formatClock(v.tcIdleTotal)}`, accent: false, sub: null },
     ],
     basis: [`按${i.civZh}计`, `走路 ${i.dist} 格`, ...(i.house ? [] : ['关自动建房']), `游戏版本 ${i.patchBuild}`].join(' · '),
