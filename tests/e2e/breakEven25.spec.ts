@@ -115,7 +115,9 @@ for (const w of WIDTHS) {
       await expect(page.locator('.be-tw')).toHaveCSS('opacity', '0.45');
       await expect(page.locator('.be-sum')).toHaveCSS('opacity', '1');
       // 上限文案：muted、非红色、非 16px
+      // 同一文档内只改 hash 不会重新挂载卡片，这里整页重载
       await page.goto('./#/duel?a=83.Franks.4..&b=569.Franks.4.f.&m=n&na=10&nb=200&be=1');
+      await page.reload();
       const cap = page.locator('[data-t=be-cap] b');
       await expect(cap).toHaveText('200 个以内都打不赢');
       await expect(cap).toHaveCSS('color', mutedRgb);
