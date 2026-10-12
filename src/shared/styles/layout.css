@@ -1926,3 +1926,172 @@ a.tbld:hover span {
 .tl-cardprev .tl-v > span.is-wrap > span {
   white-space: nowrap;
 }
+
+/* ---- #25 盈亏平衡点（v3）---- */
+.be-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: var(--space-4) 0;
+}
+.be-pri,
+.be-sec {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  border: 0;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+.be-pri {
+  background: var(--color-text);
+  color: var(--color-surface);
+}
+.be-sec {
+  background: var(--color-control);
+  color: var(--color-text);
+}
+.be-pri:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.be-wrap {
+  margin: var(--space-4) 0;
+  min-width: 0;
+}
+.be-stale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.be-stale span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.be-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  padding: var(--space-5);
+  min-width: 0;
+}
+/* 变灰：除参数摘要外整卡淡化；摘要保持可读（AA ≥ 4.5:1，Jony #86 review） */
+.be-card.is-stale > :not(.be-sum) {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+.be-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h3);
+}
+.be-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  margin: 0;
+  font-size: var(--fs-h3);
+}
+.be-n {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  font-size: 64px;
+  line-height: var(--lh-tight);
+  color: var(--color-accent);
+}
+.be-cap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.be-sub {
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.be-sum {
+  margin: var(--space-1) 0 var(--space-3);
+  font-size: var(--fs-xs);
+}
+.be-tw {
+  overflow-x: auto;
+}
+.be-tab {
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+.be-tab td {
+  white-space: nowrap;
+}
+.be-tab td:first-child {
+  width: auto;
+}
+.be-tab tr.on td {
+  background: var(--color-warn-soft);
+  font-weight: 600;
+}
+.be-tab .ic {
+  vertical-align: -2px;
+}
+.be-w {
+  color: var(--color-good);
+  white-space: nowrap;
+}
+.be-l {
+  color: var(--color-bad);
+  white-space: nowrap;
+}
+.be-how {
+  margin: var(--space-3) 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+}
+.be-act {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+@media (max-width: 600px) {
+  .be-n {
+    font-size: 48px;
+  }
+  .be-card {
+    padding: var(--space-4);
+  }
+  .be-tab {
+    font-size: var(--fs-sm);
+  }
+  .be-tab td {
+    padding-left: var(--space-1);
+    padding-right: var(--space-1);
+  }
+  .be-tab thead td {
+    white-space: normal;
+  }
+  .be-tab td + td + td {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}
