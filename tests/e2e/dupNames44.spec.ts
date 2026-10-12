@@ -85,9 +85,10 @@ test('#44 搜索「战车」：两个结果，带文明小字', async ({ page })
 
 for (const [id, alias] of UNIT_ALIAS_ROWS)
   test(`#44 搜索单位别名「${alias}」能搜到官方名`, async ({ page }) => {
+    const zh = UNITS.find((u) => u.id === id)!.zh;
     const li = await palette(page, alias);
-    const names = await li.locator('.cmdk-t b').allInnerTexts();
-    expect(names).toContain(UNITS.find((u) => u.id === id)!.zh);
+    // 单位索引异步加载：先等目标单位出现在结果里，再读取列表
+    await expect.poll(async () => li.locator('.cmdk-t b').allInnerTexts()).toContain(zh);
   });
 
 test('#44 搜「战象」列出多条，不直接跳转', async ({ page }) => {
