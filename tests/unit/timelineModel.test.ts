@@ -15,6 +15,7 @@ import {
   rangeText,
   rangeLabel,
   rowTime,
+  summaryParts,
   summaryText,
 } from '../../src/features/builds/timelineModel';
 
@@ -87,6 +88,18 @@ describe('timelineModel', () => {
     expect(summaryText(b, '封建').main).toBe('60 分钟内到不了封建');
     expect(summaryText(b, '城堡').main).toBe('60 分钟内到不了城堡');
     expect(summaryText(null, '封建').main).toBe('没有卡点');
+  });
+  it('#78 第 7 项：summaryParts 拆成原因与时间两段，拼起来等于 summaryText.main', () => {
+    const B = (type: Anomaly['type'], from: number, sec: number, step: number, resource?: 'wood') =>
+      ({ type, from, to: from + sec, sec, label: '', reasonZh: '', step, ...(resource ? { resource } : {}) }) as never;
+    expect(summaryParts(B('pop_block', 669, 20, 12), '封建')).toEqual({ reason: '卡人口', time: '约 11:09 起' });
+    expect(summaryParts(B('resource_short', 300, 362, 4, 'wood'), '城堡')).toEqual({ reason: '卡在木头', time: '约 6:02' });
+    expect(summaryParts(B('timeout', 3600, 0, 4), '封建')).toEqual({ reason: '60 分钟内到不了封建', time: null });
+    expect(summaryParts(null, '封建')).toEqual({ reason: '没有卡点', time: null });
+    for (const b of [B('pop_block', 669, 20, 12), B('resource_short', 300, 362, 4, 'wood'), B('idle_tc', 100, 30, 3)]) {
+      const p = summaryParts(b, '城堡');
+      expect(`${p.reason} ${p.time}`).toBe(summaryText(b, '城堡').main);
+    }
   });
   it('误差带两端相同不显示区间', () => {
     expect(rangeText(554, { early: 0, late: 0 })).toBeNull();
