@@ -71,7 +71,23 @@ export interface DatGeneric {
   any: boolean;
   rules: DatRule[];
 }
+/** #24 结构化训练费用折扣（scripts/effects_build.py cost_discounts）：tiers 为该时代的累计乘数，由 .dat 费用效果算出 */
+export interface DatCostGroup {
+  units: number[];
+  res: string[];
+  tiers: Record<string, number>;
+}
+export interface DatCostDiscount {
+  idx: number | null;
+  techs: number[];
+  groups: DatCostGroup[];
+  /** 加成文本里的百分比（只用于对账） */
+  text: Record<string, number> | null;
+  /** .dat 与文本逐时代一致 */
+  ok: boolean;
+}
 export interface DatFile {
+  costDiscounts: Record<string, DatCostDiscount[]>;
   meta: { newIds: number[]; sources: { id: string; repo: string; commit: string; file: string; patch: string; use: string }[] };
   techs: Record<string, DatTech>;
   civs: Record<string, DatCiv>;

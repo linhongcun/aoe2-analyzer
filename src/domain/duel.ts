@@ -157,5 +157,5 @@ export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxT 
 }
 
 export const costSum = (c: Cost) => Object.values(c).reduce((s, v) => s + (v ?? 0), 0);
-/** 等资源：预算内可生产的数量（资源总和；未计文明折扣） */
+/** 等资源：预算内可生产的数量（资源总和）。文明费用加成由调用方先用 costDiscount.discountedCost 折算后传入 */
 export const countForBudget = (c: Cost, budget: number) => Math.max(1, Math.floor(budget / Math.max(1, costSum(c))));
