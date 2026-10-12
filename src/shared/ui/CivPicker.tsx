@@ -32,6 +32,32 @@ export interface CivPickerProps {
   disabledNote?: string;
 }
 
+/** 文明是否匹配搜索词（ql 已 trim + 小写）；列表过滤与 Enter 共用同一条规则 */
+export const civMatches = (c: Pick<Civ, 'zh' | 'en'>, ql: string) => !ql || c.zh.includes(ql) || c.en.toLowerCase().includes(ql);
+
+/**
+ * #73 Enter 要选的文明（英文名，'' 为「无」）；返回 undefined 表示什么都不选。
+ * live 是输入框里此刻的文字，shown 是当前列表按哪个查询渲染的。两者不一致（过滤还没跑完）时，
+ * 不信任旧列表的高亮项，直接按 live 取第一个匹配；一致时取高亮项，但它也必须匹配 live。
+ */
+export function enterTarget(
+  live: string,
+  shown: string,
+  opts: readonly { en: string; c?: Pick<Civ, 'zh' | 'en'> }[],
+  act: number,
+  pool: readonly Pick<Civ, 'zh' | 'en'>[],
+  hasNone: boolean,
+): string | undefined {
+  const ql = live.trim().toLowerCase();
+  const ok = (o: { en: string; c?: Pick<Civ, 'zh' | 'en'> }) => (o.c ? civMatches(o.c, ql) : hasNone && !ql);
+  if (ql === shown.trim().toLowerCase()) {
+    const o = opts[act];
+    if (o && ok(o)) return o.en;
+  }
+  if (!ql) return hasNone ? '' : pool[0]?.en;
+  return pool.find((c) => civMatches(c, ql))?.en;
+}
+
 type Row =
   { kind: 'head'; key: string; dlc: number | null; title: string } | { kind: 'opt'; key: string; en: string; c?: Civ } | { kind: 'dis'; key: string; c: Civ };
 
@@ -53,14 +79,14 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix, i
     const out: Row[] = [];
     // 不可选的文明统一沉底成一组（搜索时也保留），不进入键盘可达的 opts
     const tail = () => {
-      const hit = off.filter((c) => !ql || c.zh.includes(ql) || c.en.toLowerCase().includes(ql));
+      const hit = off.filter((c) => civMatches(c, ql));
       if (!hit.length) return;
       out.push({ kind: 'head', key: 'h-off', dlc: null, title: disabledGroup ?? '暂不可选' });
       hit.forEach((c) => out.push({ kind: 'dis', key: 'off-' + c.en, c }));
     };
     if (none && !ql) out.push({ kind: 'opt', key: '__none', en: '' });
     if (ql) {
-      pool.filter((c) => c.zh.includes(ql) || c.en.toLowerCase().includes(ql)).forEach((c) => out.push({ kind: 'opt', key: c.en, en: c.en, c }));
+      pool.filter((c) => civMatches(c, ql)).forEach((c) => out.push({ kind: 'opt', key: c.en, en: c.en, c }));
       tail();
       return out;
     }
@@ -127,8 +153,9 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix, i
       setAct(opts.length - 1);
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      const o = opts[act];
-      if (o) pick(o.en);
+      // #73 以输入框此刻的文字为准，过滤没跑完时不选未匹配的文明
+      const en = enterTarget(input.current?.value ?? q, q, opts, act, pool, !!none);
+      if (en !== undefined) pick(en);
     } else if (e.key === 'Tab') {
       // 焦点陷阱：在弹层内循环
       const f = [...(panel.current?.querySelectorAll<HTMLElement>('input,button') ?? [])];
