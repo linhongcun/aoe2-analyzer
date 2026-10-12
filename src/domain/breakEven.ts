@@ -28,7 +28,7 @@ export interface BreakEvenResult {
   rows: BreakEvenRow[];
   /** 1..cap 中获胜但不在末尾全胜后缀里的数量（非单调的证据，便于说明与测试） */
   isolatedWins: number[];
-  /** 少于 N 时也有获胜的数量（界面显示「少于 N 个时，部分数量也能赢，但不稳定」） */
+  /** 少于 N 时也有获胜的数量（目前界面不显示，Steve 裁定；由单测守住搜索逻辑） */
   unstableBelow: boolean;
 }
 
