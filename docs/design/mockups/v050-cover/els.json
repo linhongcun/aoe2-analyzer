@@ -1,0 +1,57 @@
+{
+ "urlBE": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=359.Byzantines.4.f.&b=569.Franks.4.f.&m=n&na=10&nb=10&be=1",
+ "urlR": "https://linhongcun.github.io/aoe2-analyzer/#/duel?a=359.Byzantines.4.f.&b=569.Franks.4.f.&m=r&bud=3000",
+ "date": "Mon Oct 12 2026 10:44:12 GMT+0800 (China Standard Time)",
+ "landscape": {
+  "viewport": 390,
+  "dpr": 2,
+  "N": "16",
+  "be": "盈亏平衡点\n\n16\n个长戟兵，才能打赢 10 个游侠\n\n16 个及以上都能赢\n\n拜占庭 长戟兵 · 满科技 vs 法兰克 游侠 · 满科技 · 集火模型\n\nA 数量\t结果\tA 剩余\tB 剩余\t用时\n15\t A 负（含平局）\t0\t1\t32.3 秒\n16\t A 胜\t5\t0\t18 秒\n17\t A 胜\t8\t0\t15 秒\n\n怎么算的：B 固定 10 个，A 从 1 个起逐个加到 200 个，用和群战相同的集火模型，找出 A 严格获胜的最少数量；平局算没打赢。\n\n在 N vs M 中打开 16 vs 10\n复制链接",
+  "footer": "v0.5.0 · 数据版本：DE 185872（2026-09-22） · 构建 44c2898",
+  "beMinFont": 13,
+  "beCss": {
+   "x": 12,
+   "y": 1775.4375,
+   "width": 366,
+   "height": 250.1875
+  },
+  "cost": "食物\t35 26\n木材\t25 19\n单价合计\t60 45\n派出数量\t50 66\n实际投入\t2970 / 3000\n已计入：拜占庭 −25%\n骆驼骑兵、掷矛手和长矛兵系的费用 -25%\n来源",
+  "costMinFont": 12,
+  "costCss": {
+   "x": 23,
+   "y": 396,
+   "width": 344,
+   "height": 277
+  },
+  "effMinFont": {
+   "be": 16.9,
+   "cost": 15.6
+  }
+ },
+ "portrait": {
+  "viewport": 560,
+  "dpr": 2,
+  "N": "16",
+  "be": "盈亏平衡点\n\n16\n个长戟兵，才能打赢 10 个游侠\n\n16 个及以上都能赢\n\n拜占庭 长戟兵 · 满科技 vs 法兰克 游侠 · 满科技 · 集火模型\n\nA 数量\t结果\tA 剩余\tB 剩余\t用时\n15\t A 负（含平局）\t0\t1\t32.3 秒\n16\t A 胜\t5\t0\t18 秒\n17\t A 胜\t8\t0\t15 秒\n\n怎么算的：B 固定 10 个，A 从 1 个起逐个加到 200 个，用和群战相同的集火模型，找出 A 严格获胜的最少数量；平局算没打赢。\n\n在 N vs M 中打开 16 vs 10\n复制链接",
+  "footer": "v0.5.0 · 数据版本：DE 185872（2026-09-22） · 构建 44c2898",
+  "beMinFont": 13,
+  "beCss": {
+   "x": 12,
+   "y": 1707.4375,
+   "width": 536,
+   "height": 250.1875
+  },
+  "cost": "食物\t35 26\n木材\t25 19\n单价合计\t60 45\n派出数量\t50 66\n实际投入\t2970 / 3000\n已计入：拜占庭 −25%\n骆驼骑兵、掷矛手和长矛兵系的费用 -25%\n来源",
+  "costMinFont": 12,
+  "costCss": {
+   "x": 23,
+   "y": 351,
+   "width": 514,
+   "height": 277
+  },
+  "effMinFont": {
+   "be": 21.7,
+   "cost": 20
+  }
+ }
+}
