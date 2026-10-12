@@ -28,21 +28,26 @@ export interface BreakEvenResult {
   rows: BreakEvenRow[];
   /** 1..cap 中获胜但不在末尾全胜后缀里的数量（非单调的证据，便于说明与测试） */
   isolatedWins: number[];
+  /** 少于 N 时也有获胜的数量（界面显示「少于 N 个时，部分数量也能赢，但不稳定」） */
+  unstableBelow: boolean;
 }
 
-export function breakEven(a: Fighter, b: Fighter, nb: number, cap = BREAK_EVEN_CAP): BreakEvenResult {
+/** 战斗函数签名与 groupFight 一致；仅供测试注入（例如构造非单调结果），生产调用一律用默认的 groupFight */
+export type FightFn = (a: Fighter, na: number, b: Fighter, nb: number) => GroupResult;
+
+export function breakEven(a: Fighter, b: Fighter, nb: number, cap = BREAK_EVEN_CAP, fight: FightFn = groupFight): BreakEvenResult {
   const C = Math.max(1, Math.floor(cap));
   const res: GroupResult[] = [];
-  for (let n = 1; n <= C; n++) res.push(groupFight(a, n, b, nb));
+  for (let n = 1; n <= C; n++) res.push(fight(a, n, b, nb));
   const win = (n: number) => res[n - 1]!.winner === 'a';
   const row = (n: number): BreakEvenRow => ({ n, win: win(n), r: res[n - 1]! });
   if (!win(C)) {
     const isolatedWins = res.map((_, i) => i + 1).filter(win);
-    return { n: null, nb, cap: C, capReached: true, rows: [row(C)], isolatedWins };
+    return { n: null, nb, cap: C, capReached: true, rows: [row(C)], isolatedWins, unstableBelow: false };
   }
   let N = C;
   while (N > 1 && win(N - 1)) N--;
   const rows = [N - 1, N, N + 1].filter((n) => n >= 1 && n <= C).map(row);
   const isolatedWins = res.map((_, i) => i + 1).filter((n) => n < N && win(n));
-  return { n: N, nb, cap: C, capReached: false, rows, isolatedWins };
+  return { n: N, nb, cap: C, capReached: false, rows, isolatedWins, unstableBelow: isolatedWins.length > 0 };
 }

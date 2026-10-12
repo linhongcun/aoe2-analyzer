@@ -4,7 +4,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { fighterFrom, groupFight, type Fighter } from '../../src/domain/duel';
-import { breakEven, BREAK_EVEN_CAP, BREAK_EVEN_DEFAULT_B } from '../../src/domain/breakEven';
+import { breakEven, BREAK_EVEN_CAP, BREAK_EVEN_DEFAULT_B, type FightFn } from '../../src/domain/breakEven';
 import { allNumeric, presetUpTo, simTechs, simulate } from '../../src/domain/simulator';
 import { ctx, unit } from './helpers';
 
@@ -80,5 +80,29 @@ describe('breakEven 口径', () => {
     const r = breakEven(halb, halb, 3, 10);
     expect(groupFight(halb, 3, halb, 3).winner).not.toBe('a');
     expect(r.n).toBe(4);
+  });
+  it('无零星胜档时 unstableBelow 为 false（两个场景）', () => {
+    expect(breakEven(halb, pala, 10).unstableBelow).toBe(false);
+    expect(breakEven(knight, camel, 10).unstableBelow).toBe(false);
+  });
+  it('非单调（注入的战斗结果）：N 取末尾全胜后缀起点，unstableBelow 为 true', () => {
+    // 合成胜负序列：3、5 胜，4 负，7 起全胜 -> N = 7，零星胜档 3、5
+    const wins = new Set([3, 5, 7, 8, 9, 10]);
+    const fake: FightFn = (_a, na) => ({ winner: wins.has(na) ? 'a' : 'b', aAlive: 0, bAlive: 0, hpLeft: 0, duration: na, timeline: [] });
+    const r = breakEven(halb, pala, 10, 10, fake);
+    expect(r.n).toBe(7);
+    expect(r.isolatedWins).toEqual([3, 5]);
+    expect(r.unstableBelow).toBe(true);
+    expect(r.rows.map((x) => [x.n, x.win])).toEqual([
+      [6, false],
+      [7, true],
+      [8, true],
+    ]);
+  });
+  it('上限内无法取胜时不给不稳定提示', () => {
+    const fake: FightFn = (_a, na) => ({ winner: na === 2 ? 'a' : 'b', aAlive: 0, bAlive: 0, hpLeft: 0, duration: 0, timeline: [] });
+    const r = breakEven(halb, pala, 10, 5, fake);
+    expect(r.n).toBeNull();
+    expect(r.unstableBelow).toBe(false);
   });
 });

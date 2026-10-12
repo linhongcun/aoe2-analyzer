@@ -2021,6 +2021,16 @@ a.tbld:hover span {
   background: var(--color-bad-soft);
   color: var(--color-bad);
 }
+.be-sub {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+}
+.be-unstable {
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+}
 .be-sum {
   margin: var(--space-1) 0 var(--space-3);
   font-size: var(--fs-xs);

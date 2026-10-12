@@ -78,6 +78,16 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
             </span>
           </div>
         )}
+        {r.n !== null && (
+          <p className="be-sub" data-t="be-sub">
+            {r.n} 个及以上直到 {r.cap} 个都能赢
+          </p>
+        )}
+        {r.unstableBelow && (
+          <p className="be-unstable" data-t="be-unstable">
+            少于 {r.n} 个时，部分数量也能赢，但不稳定
+          </p>
+        )}
         <p className="note be-sum">{summary} · 集火模型</p>
         <div className="be-tw">
           <table className="stat be-tab">
