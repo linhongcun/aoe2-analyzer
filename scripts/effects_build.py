@@ -304,6 +304,9 @@ def main():
         fr['team'] = freshness(c['tbEn'], [{'age': 1, 'rules': ent['team']['rules'], 'eco': ent['team']['eco'], 'combat': ent['team']['combat']}])
         ent['fresh'] = fr
 
+    # ---- #24 结构化训练费用折扣：仅由 .dat 费用效果（属性 100/103–106，乘法，非科技触发）逐时代累计得出 ----
+    out['costDiscounts'] = cost_discounts(out, civs)
+
     # .dat 中不存在的站内单位/建筑（应为空）：其科技/加成作用范围由运行时回退到手工判定
     U0 = AC[0]['Units']
     out['meta']['newIds'] = sorted(i for i in ours if i >= len(U0) or U0[i] is None)
@@ -350,6 +353,70 @@ def candidates(kind, op, v):
         return {round(abs(v - 1) * 100), round(abs(1 / v - 1) * 100) if v else 0}
     if kind == 'rof': return {round(v * 100)}
     return {round(abs(v), 2), round(abs(v))}
+
+
+COST_RES = {100: ['Food', 'Wood', 'Gold', 'Stone'], 103: ['Food'], 104: ['Wood'], 105: ['Gold'], 106: ['Stone']}
+AGE_N = {'Dark': 1, 'Feudal': 2, 'Castle': 3, 'Imperial': 4}
+
+
+def text_pcts(text, start):
+    """加成文本里的费用百分比 → {时代: p}；只用于与 .dat 对账，不作为数值来源。读不出返回 None。"""
+    m = re.search(r'-(\d+(?:/\d+)*)%', text)
+    if not m: return None
+    ps = [int(x) for x in m.group(1).split('/')]
+    st = re.search(r'starting in (Dark|Feudal|Castle|Imperial) Age', text)
+    ag = re.search(r'in ((?:(?:Dark|Feudal|Castle|Imperial)/?)+) Age', text)
+    if st: ages = [a for a in (1, 2, 3, 4) if a >= AGE_N[st.group(1)]]
+    elif ag: ages = [AGE_N[x] for x in ag.group(1).split('/')]
+    else: ages = [a for a in (1, 2, 3, 4) if a >= start]
+    if len(ps) == 1: ps = ps * len(ages)
+    if len(ps) != len(ages): return None
+    return dict(zip(ages, ps))
+
+
+def cost_discounts(out, civs):
+    """civ → [{idx, techs, groups:[{units, res, tiers:{时代: 累计乘数}}], text:{时代: p}|None, ok}]。
+    ok=True 仅当每个分组在文本列出的每个时代，.dat 累计折扣四舍五入到整数百分比都与文本一致；
+    文本没列出的时代不给档（tiers 不含该时代）。ok=False 的加成前端显示「折扣未计入」、按原价。"""
+    res = {}
+    for c in civs:
+        ent = out['civs'].get(c['en'])
+        if not ent: continue
+        by_idx = defaultdict(list)
+        for e in ent['bonus']:
+            if e.get('req'): continue
+            for x in e['eco']:
+                if x.get('a') in COST_RES and x.get('op') == 'mul' and x.get('t'):
+                    by_idx[e['idx']].append((e['tech'], e['age'], x))
+        lst = []
+        for idx, xs in by_idx.items():
+            per_unit = defaultdict(lambda: defaultdict(lambda: {a: 1.0 for a in (1, 2, 3, 4)}))
+            first = {}
+            for tech, age, x in xs:
+                for u in x['t']:
+                    key = tuple(COST_RES[x['a']])
+                    first[(u, key)] = min(first.get((u, key), 9), age)
+                    for a in (1, 2, 3, 4):
+                        if a >= age: per_unit[u][key][a] *= x['v']
+            text = text_pcts(c['bonEn'][idx], min(a for _, a, _ in xs)) if idx is not None and idx >= 0 else None
+            groups = defaultdict(list)
+            ok = text is not None
+            for u, by_res in per_unit.items():
+                for key, ser in by_res.items():
+                    tiers = {a: round(ser[a], 6) for a in (1, 2, 3, 4) if a >= first[(u, key)] and (text is None or a in text)}
+                    if text is not None:
+                        for a, p in text.items():
+                            if a >= first[(u, key)] and round((1 - ser[a]) * 100) != p: ok = False
+                    groups[(key, json.dumps(tiers, sort_keys=True))].append(u)
+            lst.append({
+                'idx': idx,
+                'techs': sorted({t for t, _, _ in xs}),
+                'groups': [{'units': sorted(us), 'res': list(k[0]), 'tiers': json.loads(k[1])} for k, us in groups.items()],
+                'text': text,
+                'ok': ok,
+            })
+        if lst: res[c['en']] = lst
+    return res
 
 
 def freshness(text, es):
