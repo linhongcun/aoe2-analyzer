@@ -41,5 +41,7 @@ for (const [q, id] of [
 for (const q of ['武士', '骑士', '长剑', '弓箭手'])
   test(`搜「${q}」：第一条不是开局`, async ({ page }) => {
     const li = await open(page, q);
+    // #76 单位索引异步加载：先等单位结果出现，再看第一条
+    await expect(li.filter({ has: page.locator('.tag', { hasText: /^单位$/ }) }).first()).toBeVisible();
     await expect(li.first()).not.toContainText('开局时间线');
   });
