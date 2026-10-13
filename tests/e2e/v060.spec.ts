@@ -62,7 +62,12 @@ test.describe('#102 PK 反馈链接与当前对阵一致', () => {
     await page.goto('#/duel');
     await expect(page.locator('.duel-head').first()).toBeVisible();
     const fb = hashParams(await fbPage(page));
-    for (const k of ['a', 'b', 'm']) expect(fb.get(k), `反馈链接缺 ${k}`).toBeTruthy();
+    const addr = hashParams(new URL(page.url()));
+    for (const k of ['a', 'b', 'm']) {
+      expect(addr.get(k), `地址栏缺 ${k}`).toBeTruthy();
+      expect(fb.get(k), `反馈链接缺 ${k}`).toBeTruthy();
+    }
+    expect(Object.fromEntries(fb)).toEqual(Object.fromEntries(addr));
   });
   test('只改了 A 侧时，反馈链接里 B 侧也要在（当前 hash 只写改动过的一侧）', async ({ page }) => {
     await page.goto('#/duel');
@@ -126,7 +131,8 @@ test.describe('#100 补充口径（Steve）+ 定稿 T1–T7', () => {
     await page.goto('#/duel?a=359.Byzantines.4.f.&b=569.Franks.4.f.&m=n&na=10&nb=10&be=1');
     await expect(page.locator('[data-t=be-n]')).toHaveText('16');
   });
-  // 期望值需按 .dat 实算城堡时代骑士/骆驼满科技属性后填入；未实算前不写数字（不编造）
+  // 未实算：N 取决于对决模拟器（逐击结算、攻速、冲锋/加成伤害、城堡时代可用科技集合），手算等于另写一个模拟器，
+  // 无法独立于被测实现给出可信的金标准；保留 fixme，待 Linus/Steve 指定计算口径（或游戏内实测）后填数。
   test.fixme('城堡时代：法兰克骑士 .3.f. vs 柏柏尔骆驼 .3.f. ×10 → N = 〈待按游戏数据实算〉', async () => {});
   test('T6 无时代参数：标题帝王时代，价格按帝王时代（柏柏尔骆驼 32 个，v0.5.0 线上帝王锚点）', async ({ page }) => {
     await page.goto('#/duel?m=r&bud=3000&a=329.Berbers..f.&b=38.Franks..f.');
@@ -170,3 +176,16 @@ for (const w of WIDTHS)
       expect(t).not.toMatch(/-\s?\d/);
     });
   });
+
+// ───────────── #42 白名单文明：页面标识「加成暂未计入」或置灰 ─────────────
+// 现有标识是 civ-warn「链接里的X加成尚未计入，已按通用计算。」+ 摘要「按通用计」。
+// 文案是「尚未计入」不是「暂未计入」；两者都接受，是否要统一成「暂未计入」需 Steve 确认。
+test.describe('#42 白名单文明在开局页有「未计入」标识', () => {
+  for (const civ of ['Bengalis', 'Wei', 'Portuguese', 'Shu', 'Varangians', 'Tatars', 'Mayans', 'Goths', 'Jurchens', 'Malians', 'Sicilians', 'Khmer', 'Chinese', 'Slavs', 'Romans'])
+    test(civ, async ({ page }) => {
+      await page.goto(`#/builds?bo=fast-castle-boom&civ=${civ}`);
+      await expect(page.getByRole('list', { name: /时间线/ })).toBeVisible();
+      await expect(page.locator('[data-t="civ-warn"]')).toHaveText(/(暂未|尚未)计入/);
+      await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
+    });
+});

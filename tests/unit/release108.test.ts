@@ -3,6 +3,7 @@
 //   node scripts/release.mjs <vX.Y.Z> [--dry-run] --site-url <url> [--footer-timeout <秒>]
 // 环境：每个用例新建临时仓库（带 bare origin），PATH 前插一个假的 gh（记录调用、按 FAKE_CI 回答 CI 状态），
 //       --site-url 指向本机 127.0.0.1:4792 的静态页（页脚 data-t=footer-app-version / footer-build，另给 version.json）。
+// --site-url 默认 https://linhongcun.github.io/aoe2-analyzer/；tag 已存在且指向合并后 main 头 → 跳过，指向别的提交 → 报错（前置检查同口径）。
 // 完成判定看仓库状态，不允许状态文件：每次跑完 `git status --porcelain --ignored` 必须为空。
 import { execFileSync, spawnSync } from 'node:child_process';
 import { chmodSync, existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
@@ -28,12 +29,13 @@ beforeAll(async () => {
     const head = repo ? short(originMain()) : '0000000';
     const build = site.mode === 'stale' ? '1111111' : head;
     const ver = site.mode === 'wrong-version' ? 'v0.5.0' : site.version;
-    if (req.url?.endsWith('version.json')) {
-      res.setHeader('content-type', 'application/json');
-      return res.end(JSON.stringify({ version: ver, build }));
-    }
+    // 页脚只由 JS 渲染：源码里没有版本号/构建号，curl 读源码必然失败，必须用浏览器（Playwright）读渲染后页面
+    const enc = Buffer.from(JSON.stringify({ v: ver, b: build })).toString('base64');
     res.setHeader('content-type', 'text/html; charset=utf-8');
-    res.end(`<!doctype html><footer><span data-t="footer-meta"><span data-t="footer-app-version">${ver}</span> · <span data-t="footer-build">构建 ${build}</span></span></footer>`);
+    res.end(`<!doctype html><html><body><footer id="f"></footer><script>
+const d = JSON.parse(atob('${enc}'));
+document.getElementById('f').innerHTML = '<span data-t="footer-meta"><span data-t="footer-app-version">' + d.v + '</span> · <span data-t="footer-build">构建 ' + d.b + '</span></span>';
+</script></body></html>`);
   });
   await new Promise<void>((r) => server.listen(PORT, '127.0.0.1', r));
 });
@@ -128,7 +130,14 @@ describe('#108 测试夹具自检（必须为绿，证明红是功能缺失而�
   it('临时仓库、假 gh、本地站点都可用', async () => {
     expect(git(origin, 'rev-parse', 'release/v0.6.0')).toMatch(/^[0-9a-f]{40}$/);
     const html = await (await fetch(SITE)).text();
-    expect(html).toContain(`构建 ${short(originMain())}`);
+    expect(html, '源码里不能直接出现构建号（防止脚本用 curl 读源码蒙混过关）').not.toContain(short(originMain()));
+    expect(html).not.toContain('v0.6.0');
+    const { chromium } = await import('@playwright/test');
+    const b = await chromium.launch();
+    const p = await b.newPage();
+    await p.goto(SITE);
+    expect(await p.locator('[data-t="footer-build"]').textContent()).toBe(`构建 ${short(originMain())}`);
+    await b.close();
     execFileSync(join(bin, 'gh'), ['api', 'repos/x/y/commits/abc/check-runs'], { env: { ...process.env, FAKE_GH_LOG: ghLog } });
     expect(ghCalls()).toHaveLength(1);
   });
@@ -167,7 +176,7 @@ describe('#108 发版脚本', () => {
     noStateFile();
   });
 
-  it('第 3 条：tag 已存在 → 报错退出，什么都不改', () => {
+  it('第 3 条：tag 已存在且指向别的提交（不是合并后 main 头）→ 报错退出，什么都不改', () => {
     git(repo, 'tag', '-a', 'v0.6.0', '-m', 'pre-existing', 'main');
     git(repo, 'push', '-q', 'origin', 'v0.6.0');
     const before = snapshot();
@@ -209,6 +218,29 @@ describe('#108 发版脚本', () => {
     expect(r2.status, out(r2)).toBe(0);
     expect(originMain(), '重跑不得再合并一次').toBe(mergedHead);
     expect(out(r2)).toMatch(/跳过|skip/i);
+    noStateFile();
+  });
+
+  it('--site-url 缺省时用线上地址 https://linhongcun.github.io/aoe2-analyzer/（dry-run 打印出来）', () => {
+    const r = run(['v0.6.0', '--dry-run', '--footer-timeout', '3']);
+    expect(r.status, out(r)).toBe(0);
+    expect(out(r)).toContain('https://linhongcun.github.io/aoe2-analyzer/');
+  });
+
+  it('tag 已存在且指向合并后 main 头 → 跳过打 tag，继续起草 Release', () => {
+    git(repo, 'fetch', '-q', 'origin');
+    git(repo, 'merge', '-q', '--no-ff', '-m', 'Merge release/v0.6.0', 'origin/release/v0.6.0');
+    git(repo, 'push', '-q', 'origin', 'main');
+    git(repo, 'tag', '-a', 'v0.6.0', '-m', 'v0.6.0', 'main');
+    git(repo, 'push', '-q', 'origin', 'v0.6.0');
+    const head = originMain(), tagObj = git(origin, 'rev-parse', 'v0.6.0');
+    const r = run(['v0.6.0', ...OPTS]);
+    expect(r.status, out(r)).toBe(0);
+    expect(out(r)).toMatch(/跳过|skip/i);
+    expect(originMain(), '不得再合并').toBe(head);
+    expect(git(origin, 'rev-parse', 'v0.6.0'), '不得重打 tag').toBe(tagObj);
+    expect(releaseCreates()).toHaveLength(1);
+    expect(releaseCreates()[0]!.args).toContain('--draft');
     noStateFile();
   });
 
