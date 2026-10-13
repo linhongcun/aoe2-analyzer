@@ -5,7 +5,8 @@
 //       --site-url 指向本机 127.0.0.1:4792 的静态页（页脚 data-t=footer-app-version / footer-build，另给 version.json）。
 // --site-url 默认 https://linhongcun.github.io/aoe2-analyzer/；tag 已存在且指向合并后 main 头 → 跳过，指向别的提交 → 报错（前置检查同口径）。
 // 完成判定看仓库状态，不允许状态文件：每次跑完 `git status --porcelain --ignored` 必须为空。
-import { execFileSync, spawnSync } from 'node:child_process';
+import { execFileSync, spawn, spawnSync } from 'node:child_process';
+import type { AddressInfo } from 'node:net';
 import { chmodSync, existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -13,8 +14,8 @@ import { join, resolve } from 'node:path';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 const SCRIPT = resolve('scripts/release.mjs');
-const PORT = 4792;
-const SITE = `http://127.0.0.1:${PORT}/`;
+// 端口用 0 由系统分配空闲端口（原固定 4792 被残留进程占用时 beforeAll 失败 → 12 条被静默跳过）
+let SITE = '';
 
 let repo = '', origin = '', bin = '', ghLog = '';
 let site: { mode: 'match' | 'stale' | 'wrong-version'; version: string } = { mode: 'match', version: 'v0.6.0' };
@@ -25,7 +26,7 @@ const originMain = () => git(origin, 'rev-parse', 'main');
 const short = (s: string) => s.slice(0, 7);
 
 beforeAll(async () => {
-  server = createServer((req, res) => {
+  server = createServer((_req, res) => {
     const head = repo ? short(originMain()) : '0000000';
     const build = site.mode === 'stale' ? '1111111' : head;
     const ver = site.mode === 'wrong-version' ? 'v0.5.0' : site.version;
@@ -37,9 +38,13 @@ const d = JSON.parse(atob('${enc}'));
 document.getElementById('f').innerHTML = '<span data-t="footer-meta"><span data-t="footer-app-version">' + d.v + '</span> · <span data-t="footer-build">构建 ' + d.b + '</span></span>';
 </script></body></html>`);
   });
-  await new Promise<void>((r) => server.listen(PORT, '127.0.0.1', r));
-});
-afterAll(() => new Promise<void>((r) => server.close(() => r())));
+  await new Promise<void>((ok, bad) => {
+    server.once('error', bad);
+    server.listen(0, '127.0.0.1', () => ok());
+  });
+  SITE = `http://127.0.0.1:${(server.address() as AddressInfo).port}/`;
+}, 30_000);
+afterAll(() => new Promise<void>((r) => (server ? server.close(() => r()) : r())));
 
 const CHANGELOG = `# 更新日志
 
@@ -103,12 +108,22 @@ if (/release (view)/.test(s)) process.exit(1);
   writeFileSync(ghLog, '');
 }
 
-const run = (args: string[], env: Record<string, string> = {}) =>
-  spawnSync('node', [SCRIPT, ...args], {
-    cwd: repo,
-    encoding: 'utf8',
-    timeout: 60_000,
-    env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, FAKE_GH_LOG: ghLog, FAKE_CI: 'success', ...env },
+// 必须非阻塞：假页脚服务器跑在本进程里，spawnSync 会阻塞事件循环，脚本永远读不到页面
+type RunResult = { status: number | null; stdout: string; stderr: string };
+const run = (args: string[], env: Record<string, string> = {}): Promise<RunResult> =>
+  new Promise((resolveRun) => {
+    const c = spawn('node', [SCRIPT, ...args], {
+      cwd: repo,
+      env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, FAKE_GH_LOG: ghLog, FAKE_CI: 'success', ...env },
+    });
+    let stdout = '', stderr = '';
+    c.stdout.on('data', (d) => (stdout += d));
+    c.stderr.on('data', (d) => (stderr += d));
+    const t = setTimeout(() => c.kill('SIGKILL'), 90_000);
+    c.on('close', (status) => {
+      clearTimeout(t);
+      resolveRun({ status, stdout, stderr });
+    });
   });
 const ghCalls = () => readFileSync(ghLog, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l) as { args: string[]; notes: string });
 const releaseCreates = () => ghCalls().filter((c) => c.args[0] === 'release' && c.args[1] === 'create');
@@ -118,15 +133,15 @@ const snapshot = () => ({
   releases: releaseCreates().length,
 });
 const noStateFile = () => expect(git(repo, 'status', '--porcelain', '--ignored'), '工作区不得留下状态文件或其它改动').toBe('');
-const out = (r: ReturnType<typeof run>) => `${r.stdout}\n${r.stderr}`;
-const OPTS = ['--site-url', SITE, '--footer-timeout', '3'];
+const out = (r: RunResult) => `${r.stdout}\n${r.stderr}`;
+const opts = () => ['--site-url', SITE, '--footer-timeout', '3'];
 
 beforeEach(() => {
   site = { mode: 'match', version: 'v0.6.0' };
   setup();
 });
 
-describe('#108 测试夹具自检（必须为绿，证明红是功能缺失而不是夹具错）', () => {
+describe('#108 测试夹具自检（必须为绿，证明红是功能缺失而不是夹具错）', { timeout: 60_000 }, () => {
   it('临时仓库、假 gh、本地站点都可用', async () => {
     expect(git(origin, 'rev-parse', 'release/v0.6.0')).toMatch(/^[0-9a-f]{40}$/);
     const html = await (await fetch(SITE)).text();
@@ -143,13 +158,13 @@ describe('#108 测试夹具自检（必须为绿，证明红是功能缺失而�
   });
 });
 
-describe('#108 发版脚本', () => {
-  it('scripts/release.mjs 存在', () => expect(existsSync(SCRIPT)).toBe(true));
+describe('#108 发版脚本', { timeout: 120_000 }, () => {
+  it('scripts/release.mjs 存在', async () => expect(existsSync(SCRIPT)).toBe(true));
 
-  it('第 2 条：版本号不是三段 vX.Y.Z 时报错退出、什么都不改', () => {
+  it('第 2 条：版本号不是三段 vX.Y.Z 时报错退出、什么都不改', async () => {
     const before = snapshot();
     for (const v of ['v0.6', '0.6.0', 'v0.6.0.1', 'v0.6.x']) {
-      const r = run([v, ...OPTS]);
+      const r = await run([v, ...opts()]);
       expect(r.status, v).not.toBe(0);
       expect(out(r), v).toMatch(/vX\.Y\.Z|版本号/);
     }
@@ -157,9 +172,9 @@ describe('#108 发版脚本', () => {
     noStateFile();
   });
 
-  it('第 1 条：--dry-run 走完所有步骤只打印，分支/tag/Release 与跑之前完全一致', () => {
+  it('第 1 条：--dry-run 走完所有步骤只打印，分支/tag/Release 与跑之前完全一致', async () => {
     const before = snapshot();
-    const r = run(['v0.6.0', '--dry-run', ...OPTS]);
+    const r = await run(['v0.6.0', '--dry-run', ...opts()]);
     expect(r.status, out(r)).toBe(0);
     for (const step of [/merge/i, /页脚|footer/i, /tag/i, /release/i]) expect(out(r)).toMatch(step);
     expect(snapshot()).toEqual(before);
@@ -167,29 +182,29 @@ describe('#108 发版脚本', () => {
     noStateFile();
   });
 
-  it('第 3 条：release 头部 CI 不是绿的 → 报错退出，什么都不改', () => {
+  it('第 3 条：release 头部 CI 不是绿的 → 报错退出，什么都不改', async () => {
     const before = snapshot();
-    const r = run(['v0.6.0', ...OPTS], { FAKE_CI: 'failure' });
+    const r = await run(['v0.6.0', ...opts()], { FAKE_CI: 'failure' });
     expect(r.status).not.toBe(0);
     expect(out(r)).toMatch(/CI/);
     expect(snapshot()).toEqual(before);
     noStateFile();
   });
 
-  it('第 3 条：tag 已存在且指向别的提交（不是合并后 main 头）→ 报错退出，什么都不改', () => {
+  it('第 3 条：tag 已存在且指向别的提交（不是合并后 main 头）→ 报错退出，什么都不改', async () => {
     git(repo, 'tag', '-a', 'v0.6.0', '-m', 'pre-existing', 'main');
     git(repo, 'push', '-q', 'origin', 'v0.6.0');
     const before = snapshot();
-    const r = run(['v0.6.0', ...OPTS]);
+    const r = await run(['v0.6.0', ...opts()]);
     expect(r.status).not.toBe(0);
     expect(out(r)).toMatch(/tag/i);
     expect(snapshot()).toEqual(before);
     noStateFile();
   });
 
-  it('第 4 条：线上页脚构建号与合并后 main 头部不一致 → 超时报错，不打 tag、不建 Release', () => {
+  it('第 4 条：线上页脚构建号与合并后 main 头部不一致 → 超时报错，不打 tag、不建 Release', async () => {
     site.mode = 'stale';
-    const r = run(['v0.6.0', ...OPTS]);
+    const r = await run(['v0.6.0', ...opts()]);
     expect(r.status).not.toBe(0);
     expect(out(r)).toMatch(/页脚|footer/i);
     expect(git(origin, 'tag', '-l')).toBe('');
@@ -197,9 +212,9 @@ describe('#108 发版脚本', () => {
     noStateFile();
   });
 
-  it('第 4 条：页脚版本号不一致（构建号一致）同样不打 tag', () => {
+  it('第 4 条：页脚版本号不一致（构建号一致）同样不打 tag', async () => {
     site.mode = 'wrong-version';
-    const r = run(['v0.6.0', ...OPTS]);
+    const r = await run(['v0.6.0', ...opts()]);
     expect(r.status).not.toBe(0);
     expect(out(r)).toMatch(/页脚|footer/i);
     expect(out(r)).toMatch(/v0\.5\.0/);
@@ -207,34 +222,34 @@ describe('#108 发版脚本', () => {
     expect(releaseCreates()).toHaveLength(0);
   });
 
-  it('第 5 条：页脚失败后重跑，跳过已完成的合并（看仓库状态判定），不产生第二个合并提交', () => {
+  it('第 5 条：页脚失败后重跑，跳过已完成的合并（看仓库状态判定），不产生第二个合并提交', async () => {
     site.mode = 'stale';
-    const r1 = run(['v0.6.0', ...OPTS]);
+    const r1 = await run(['v0.6.0', ...opts()]);
     expect(r1.status).not.toBe(0);
     const mergedHead = originMain();
     expect(spawnSync('git', ['merge-base', '--is-ancestor', 'release/v0.6.0', 'main'], { cwd: origin }).status, '第一次失败前已把 release 合入 main').toBe(0);
     site.mode = 'match';
-    const r2 = run(['v0.6.0', ...OPTS]);
+    const r2 = await run(['v0.6.0', ...opts()]);
     expect(r2.status, out(r2)).toBe(0);
     expect(originMain(), '重跑不得再合并一次').toBe(mergedHead);
     expect(out(r2)).toMatch(/跳过|skip/i);
     noStateFile();
   });
 
-  it('--site-url 缺省时用线上地址 https://linhongcun.github.io/aoe2-analyzer/（dry-run 打印出来）', () => {
-    const r = run(['v0.6.0', '--dry-run', '--footer-timeout', '3']);
+  it('--site-url 缺省时用线上地址 https://linhongcun.github.io/aoe2-analyzer/（dry-run 打印出来）', async () => {
+    const r = await run(['v0.6.0', '--dry-run', '--footer-timeout', '3']);
     expect(r.status, out(r)).toBe(0);
     expect(out(r)).toContain('https://linhongcun.github.io/aoe2-analyzer/');
   });
 
-  it('tag 已存在且指向合并后 main 头 → 跳过打 tag，继续起草 Release', () => {
+  it('tag 已存在且指向合并后 main 头 → 跳过打 tag，继续起草 Release', async () => {
     git(repo, 'fetch', '-q', 'origin');
     git(repo, 'merge', '-q', '--no-ff', '-m', 'Merge release/v0.6.0', 'origin/release/v0.6.0');
     git(repo, 'push', '-q', 'origin', 'main');
     git(repo, 'tag', '-a', 'v0.6.0', '-m', 'v0.6.0', 'main');
     git(repo, 'push', '-q', 'origin', 'v0.6.0');
     const head = originMain(), tagObj = git(origin, 'rev-parse', 'v0.6.0');
-    const r = run(['v0.6.0', ...OPTS]);
+    const r = await run(['v0.6.0', ...opts()]);
     expect(r.status, out(r)).toBe(0);
     expect(out(r)).toMatch(/跳过|skip/i);
     expect(originMain(), '不得再合并').toBe(head);
@@ -244,8 +259,8 @@ describe('#108 发版脚本', () => {
     noStateFile();
   });
 
-  it('真实模式全流程：merge commit 合入、annotated tag 指向 main 头、Release 为 draft 且正文取自 CHANGELOG [0.6.0] 小节', () => {
-    const r = run(['v0.6.0', ...OPTS]);
+  it('真实模式全流程：merge commit 合入、annotated tag 指向 main 头、Release 为 draft 且正文取自 CHANGELOG [0.6.0] 小节', async () => {
+    const r = await run(['v0.6.0', ...opts()]);
     expect(r.status, out(r)).toBe(0);
     const head = originMain();
     expect(git(origin, 'rev-list', '--parents', '-n', '1', head).split(' '), '是 merge commit').toHaveLength(3);
