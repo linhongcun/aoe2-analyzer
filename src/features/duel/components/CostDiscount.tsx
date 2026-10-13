@@ -23,29 +23,7 @@ function WasNow({ was, now, wasLabel = '原价' }: { was: number; now: number; w
   );
 }
 
-export function CostDiscountBlock({
-  k,
-  unit,
-  civ,
-  d,
-  bud,
-  count,
-  ageNote,
-}: {
-  k: 'a' | 'b';
-  unit: string;
-  civ: string;
-  d: CostDiscount;
-  bud: number;
-  count: number;
-  /** 取价时代与卡片标题时代不同时的取价时代名（如「城堡时代」）；相同为 null */
-  ageNote: string | null;
-}) {
-  const basis = ageNote && (
-    <small className="pk-basis" data-t="pk-basis">
-      按{ageNote}价格
-    </small>
-  );
+export function CostDiscountBlock({ k, unit, civ, d, bud, count }: { k: 'a' | 'b'; unit: string; civ: string; d: CostDiscount; bud: number; count: number }) {
   const res = ORDER.filter((r) => d.base[r]);
   const baseSum = costSum(d.base),
     sum = costSum(d.cost);
@@ -63,10 +41,7 @@ export function CostDiscountBlock({
           ))}
           <tr data-t="pk-sum">
             <td>单价合计</td>
-            <td>
-              {basis}
-              {changed ? <WasNow was={baseSum} now={sum} /> : sum}
-            </td>
+            <td>{changed ? <WasNow was={baseSum} now={sum} /> : sum}</td>
           </tr>
           <tr className="pk-count" data-t="pk-count">
             <td>派出数量</td>

@@ -8,7 +8,7 @@ import { duel, fighterFrom, groupFight, countForBudget, costSum, type Fighter, D
 import { baseUnit, collapse } from '../../../domain/family';
 import { AGE_ZH } from '../../../domain/ratings';
 import { TEAM_BONUSES } from '../../../domain/effects';
-import { allNumeric, baseStats, civBonusNotes, makeSimContext, presetUpTo, simTechs, simulate, type SimContext } from '../../../domain/simulator';
+import { baseStats, civBonusNotes, makeSimContext, presetUpTo, simTechs, simulate, type SimContext } from '../../../domain/simulator';
 import type { StatSet, Unit } from '../../../domain/types';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CostView, StatIcon, UnitIcon } from '../../../shared/ui/art';
@@ -46,11 +46,11 @@ function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fa
   const age = Math.max(u.age, spec.age);
   const avail = simTechs(ctx, u, civ);
   const ok = new Set(avail.map((x) => x.t.id));
-  const sel = spec.techs === 'f' ? allNumeric(avail) : spec.techs === 'c' ? presetUpTo(avail, age) : new Set(spec.techs.filter((i) => ok.has(i)));
-  const fullAge = spec.techs === 'f' ? 4 : age;
-  const S = simulate(ctx, u, civ, fullAge, sel, new Set(spec.team));
-  const disc = discountedCost(u, civ, priceAge(u.age, spec.ageSet === false ? null : spec.age), { techIds: ok });
-  return { spec, u, civ, age: fullAge, sel, S, F: { ...fighterFrom(u, S), cost: disc.cost }, avail, disc };
+  // issue 100：模拟、标题、取价统一用 URL 时代（未写时代按帝王）；「满科技」= 该时代及以前可研究的科技全算
+  const sel = spec.techs === 'f' || spec.techs === 'c' ? presetUpTo(avail, age) : new Set(spec.techs.filter((i) => ok.has(i)));
+  const S = simulate(ctx, u, civ, age, sel, new Set(spec.team));
+  const disc = discountedCost(u, civ, priceAge(u.age, age), { techIds: ok });
+  return { spec, u, civ, age, sel, S, F: { ...fighterFrom(u, S), cost: disc.cost }, avail, disc };
 }
 
 export default function Duel() {
@@ -186,21 +186,11 @@ function Side({
             {k.toUpperCase()} · {u.zh} {count > 1 && <span className="tag">× {count}</span>}
           </h3>
           <small className="note">
-            {civByEn(side.civ)?.zh} · {AGE_ZH[side.age]} · <CostView c={u.cost} />
+            {civByEn(side.civ)?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span> · <CostView c={u.cost} />
           </small>
         </div>
       </div>
-      {bud > 0 && (
-        <CostDiscountBlock
-          k={k}
-          unit={u.zh}
-          civ={civByEn(side.civ)?.zh ?? side.civ}
-          d={side.disc}
-          bud={bud}
-          count={count}
-          ageNote={side.disc.age !== side.age ? (AGE_ZH[side.disc.age] ?? null) : null}
-        />
-      )}
+      {bud > 0 && <CostDiscountBlock k={k} unit={u.zh} civ={civByEn(side.civ)?.zh ?? side.civ} d={side.disc} bud={bud} count={count} />}
       <div className="bar">
         <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
         {elite && (

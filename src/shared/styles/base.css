@@ -968,6 +968,11 @@ table.ediff td.dn {
 }
 .duel-head h3 {
   margin: 0;
+  font-size: var(--fs-h3);
+}
+.duel-age {
+  font-weight: 600;
+  color: var(--color-text-2);
 }
 .duel-presets button.on,
 #duel .fbar button.on {
@@ -1320,10 +1325,6 @@ table.ediff td.dn {
 .pk-none {
   margin-top: var(--space-2);
 }
-.pk-basis {
-  color: var(--color-muted);
-  font-size: var(--fs-xs);
-}
 .pk-unverified {
   color: var(--color-muted);
 }
@@ -1348,9 +1349,6 @@ table.ediff td.dn {
   font-size: var(--fs-xs);
   white-space: normal;
   overflow-wrap: anywhere;
-}
-.pk-basis {
-  margin-right: var(--space-1);
 }
 /* Jony #84 复审：390 下「来源」不竖排折行 */
 .pk-src {
