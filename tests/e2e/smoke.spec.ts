@@ -160,7 +160,7 @@ test('nav: 工具 dropdown toggles on click, closes on outside click and Esc', a
   await expect(panel).toBeHidden();
   await tools.click();
   await panel.getByRole('link', { name: '单位 PK' }).click();
-  await expect(page).toHaveURL(/#\/duel$/);
+  await expect(page).toHaveURL(/#\/duel(\?|$)/); // #102 后带完整 a/b/m，见 v060-102
   await expect(panel).toBeHidden();
   await expect(tools).toHaveClass(/\bon\b/);
 });
