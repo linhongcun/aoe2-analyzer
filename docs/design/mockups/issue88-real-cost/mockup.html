@@ -1,0 +1,91 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>#88 真实费用 · 等采集时间</title><style>
+@font-face{font-family:Inter;src:url(../../../../src/shared/fonts/inter-latin-400-normal.woff2)}@font-face{font-family:Inter;font-weight:600;src:url(../../../../src/shared/fonts/inter-latin-600-normal.woff2)}@font-face{font-family:Inter;font-weight:700;src:url(../../../../src/shared/fonts/inter-latin-700-normal.woff2)}
+:root{--color-bg:#fbfbfd;--color-surface:#fff;--color-surface-2:#f5f5f7;--color-control:#ececf0;--color-border:#e5e5ea;--color-line:#f0f0f2;--color-text:#1d1d1f;--color-text-2:#3a3a3c;--color-muted:#636366;--color-accent:#a65a14;--color-link:#0066cc;--color-good:#1f7a35;--color-tag:#f2f2f7;--shadow-2:0 2px 12px #0000000f,0 0 0 1px #e5e5ea}
+*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--color-bg);color:var(--color-text);font:15px/1.65 Inter,'Noto Sans CJK SC','Noto Sans SC',sans-serif}
+h1{font-size:18px;margin:0 0 4px}.sub{color:var(--color-muted);font-size:12px;margin:0 0 16px}
+.grid{display:grid;gap:16px;grid-template-columns:1fr}@media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
+.st{font-size:12px;font-weight:600;color:var(--color-accent);margin:0 0 6px}
+.side{border:1px solid var(--color-border);border-radius:8px;padding:10px;background:#fff;min-width:0;border-top:3px solid #a65a14}.b{border-top-color:#0066cc}
+h3{margin:0;font-size:18px;line-height:1.3}.note{color:var(--color-muted);font-size:13px}
+.ic{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px;flex:none}
+.anno{font-size:11px;color:#c4281c;font-family:monospace;margin-top:4px}
+.seg{display:inline-flex;background:var(--color-control);border-radius:8px;padding:2px;margin:8px 0}.seg span{min-height:32px;display:inline-flex;align-items:center;gap:4px;padding:0 12px;border-radius:6px;font-size:13px;color:var(--color-text-2);white-space:nowrap}.seg .on{background:#fff;color:var(--color-text);font-weight:600;box-shadow:0 1px 3px #0000001f}
+table{width:100%;border-collapse:collapse;margin-top:8px}td{padding:4px 0;border-bottom:1px solid var(--color-line);white-space:nowrap}td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.res{color:var(--color-muted);font-size:12px;margin-left:6px}
+.t{font-weight:600}.big{font-size:28px;font-weight:700;line-height:1.15}.acc{color:var(--color-accent)}
+.ph{outline:1px dashed #c4281c;outline-offset:1px}
+.lbl{font-size:12px;color:var(--color-muted);margin:0 4px 0 8px}.was{color:var(--color-muted)}
+.basis{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--color-muted)}.basis .lk{display:inline-flex;align-items:center;gap:4px;min-height:44px;padding:0 4px;color:var(--color-link);text-decoration:underline;white-space:nowrap;margin-left:auto}
+.pop{margin-top:4px;padding:12px 16px;background:#fff;border-radius:12px;box-shadow:var(--shadow-2);font-size:13px}.pop h4{margin:0 0 8px;font-size:13px}.pop ol{margin:0;padding-left:18px}.pop li{margin:0 0 4px}.pop small{display:block;color:var(--color-muted);font-size:12px}
+.pop .ok{color:var(--color-good)}.un{color:var(--color-muted)}
+.budget{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--color-text-2)}.budget b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.uline{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;padding:10px 12px;background:var(--color-surface-2);border-radius:8px}.uline .k{font-size:13px;color:var(--color-text-2)}
+</style>
+<h1>#88 真实费用 · 等采集时间（v0.7.0，#120）</h1>
+<p class=sub>设计系统 C · Inter · Lucide clock / info / chevron-down / check · 虚线红框数字为占位，待 Kent 按 #120 口径手算替换（见 README）</p>
+<div class=grid>
+
+<div><p class=st>S1 等采集时间 · 无加成（法兰克骑士 · 城堡）</p><div class=side>
+<h3>A · 骑士 <span style="font-size:12px;background:var(--color-tag);padding:1px 6px;border-radius:999px">× <span class=ph>NN</span></span></h3><span class=note>法兰克 · 城堡时代 · 食物 60 黄金 75</span>
+<div><span class=seg><span>等资源</span><span class=on><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 6v6l4 2"/></svg>等采集时间</span></span></div>
+<div class=budget>村民时间 <b>10 个村民 × 5:00</b></div>
+<table>
+<tr><td>食物 60<span class=res>按农田计</span></td><td class=t><span class=ph>m:ss</span></td></tr>
+<tr><td>黄金 75</td><td class=t>2:54</td></tr>
+<tr><td>单个用时<span class=res>1 个村民</span></td><td class=t><span class=ph>m:ss</span></td></tr>
+<tr><td>派出数量</td><td><span class="big acc ph">NN</span></td></tr>
+</table>
+<div class=basis><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 6v6l4 2"/></svg><span>城堡时代 · 经济科技全研究 · 按农田计</span><span class=lk><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 16v-4M12 8h.01"/></svg>口径</span></div>
+</div><div class=anno>黄金 2:54 = 设计演算（见 README），食物与数量为占位</div></div>
+
+<div><p class=st>S2 口径浮层展开</p><div class=side>
+<h3>A · 骑士</h3><span class=note>法兰克 · 城堡时代 · 食物 60 黄金 75</span>
+<div class=basis><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 6v6l4 2"/></svg><span>城堡时代 · 经济科技全研究 · 按农田计</span><span class=lk><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 16v-4M12 8h.01"/></svg>口径</span></div>
+<div class=pop><h4>采集时间怎么算</h4><ol>
+<li>采集速度按城堡时代，该时代能研究的经济科技全部算上；选了文明就叠加文明加成。</li>
+<li>食物按农田算，播种耗时计入。</li>
+<li>金和木离放置点 3 格，农田贴着磨坊；每趟 = 携带量 ÷ 采集速度 + 往返路程 ÷ 村民速度。</li>
+<li>有文明折扣先按折扣价，再换算成时间。</li></ol>
+<small>不模拟地图和资源分布，和实战会有出入。数据：游戏 .dat（DE Update 185872）</small></div>
+</div><div class=anno>四条口径与 #120 定稿一一对应，每条一句</div></div>
+
+<div><p class=st>S3 折扣单位（柏柏尔骆驼兵 · 城堡，先折扣再换算）</p><div class=side>
+<h3>A · 骆驼兵</h3><span class=note>柏柏尔 · 城堡时代 · 食物 55 黄金 60</span>
+<table>
+<tr><td>食物<span class=res>按农田计</span></td><td><span class=lbl>原价</span><s class=was>55</s><span class=lbl>实际</span><b class=acc>47</b><span class=lbl>用时</span><span class="t ph">m:ss</span></td></tr>
+<tr><td>黄金</td><td><span class=lbl>原价</span><s class=was>60</s><span class=lbl>实际</span><b class=acc>51</b><span class=lbl>用时</span><span class="t ph">m:ss</span></td></tr>
+<tr><td>单个用时<span class=res>1 个村民</span></td><td class=t><span class=ph>m:ss</span></td></tr>
+</table>
+<div class=basis><svg class=ic viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>已计入：柏柏尔马厩折扣 · 时间按实际价换算</span></div>
+</div><div class=anno>时间只按「实际」价算，原价不出时间；沿用 #97/#103 标签样式</div></div>
+
+<div><p class=st>S4 只花一种资源（僧侣 · 黄金 100）</p><div class="side b">
+<h3>B · 僧侣</h3><span class=note>城堡时代 · 黄金 100</span>
+<table><tr><td>黄金 100</td><td class=t><span class=ph>m:ss</span></td></tr><tr><td>单个用时<span class=res>1 个村民</span></td><td class=t><span class=ph>m:ss</span></td></tr></table>
+<div class=basis><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 6v6l4 2"/></svg><span>城堡时代 · 经济科技全研究</span></div>
+</div><div class=anno>没有食物时不写「按农田计」；单资源仍保留合计行，便于两侧对齐</div></div>
+
+<div><p class=st>S5 文明采集加成已计入</p><div class=side>
+<h3>A · 骑士</h3><span class=note>{采金加成文明} · 城堡时代 · 食物 60 黄金 75</span>
+<table><tr><td>黄金 75</td><td class=t><span class=ph>m:ss</span></td></tr></table>
+<div class=basis><svg class=ic viewBox="0 0 24 24" style="color:var(--color-good)"><path d="M20 6 9 17l-5-5"/></svg><span>已计入：{文明} 采金 +{n}%</span><span class=lk><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 16v-4M12 8h.01"/></svg>口径</span></div>
+</div><div class=anno>文明名与百分比取自 civEco，由实现填；百分比只出现一次</div></div>
+
+<div><p class=st>S6 文明加成读不准 · 未计入</p><div class=side>
+<h3>A · 骑士</h3><span class=note>匈奴 · 城堡时代 · 食物 60 黄金 75</span>
+<table><tr><td>黄金 75</td><td class=t><span class=ph>m:ss</span></td></tr></table>
+<div class=basis style="background:var(--color-surface-2);border-radius:8px;padding:0 8px"><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 16v-4M12 8h.01"/></svg><span>未计入：匈奴 {加成名}（数据读不准，按通用速度算）</span></div>
+</div><div class=anno>与 #97 S4「未计入」同样式；#42 解码 res 234 后可转 S5</div></div>
+
+<div><p class=st>S7 等资源模式（现状，仅加开关）</p><div class=side>
+<h3>A · 骑士 × 22</h3><span class=note>法兰克 · 城堡时代 · 食物 60 黄金 75</span>
+<div><span class=seg><span class=on>等资源</span><span><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 6v6l4 2"/></svg>等采集时间</span></span></div>
+<table><tr><td>食物</td><td>60</td></tr><tr><td>黄金</td><td>75</td></tr><tr><td>单价合计</td><td>135</td></tr><tr><td>派出数量</td><td><span class=big>22</span></td></tr></table>
+</div><div class=anno>开关放在费用块顶部，两侧共用一个（桌面在 VS 列上方居中）</div></div>
+
+<div><p class=st>S8 单位详情页 · 费用旁一行</p><div class=side style="border-top-width:1px">
+<p class=note style="margin:0 0 6px">费用 食物 60 · 黄金 75</p>
+<div class=uline><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 6v6l4 2"/></svg><span class=k>采集时间</span><b class="ph" style="white-space:nowrap">≈ 1 个村民 m:ss</b><span class=res style="margin:0">城堡时代 · 按农田计</span><span class=basis style="margin:0"><span class=lk style="min-height:32px">口径</span></span></div>
+</div><div class=anno>时代跟页面所选时代；未选文明按通用速度</div></div>
+
+</div>
