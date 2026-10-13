@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;margin-top:8px}td{padding:4px 0;border
 <div><p class=st>S1 等采集时间 · 无加成（法兰克骑士 · 城堡）</p><div class=side>
 <h3>A · 骑士 <span style="font-size:12px;background:var(--color-tag);padding:1px 6px;border-radius:999px">× <span class=ph>NN</span></span></h3><span class=note>法兰克 · 城堡时代 · 食物 60 黄金 75</span>
 <div><span class=seg><span>等资源</span><span class=on><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 6v6l4 2"/></svg>等采集时间</span></span></div>
-<div class=budget>村民时间 <b>10 个村民 × 5:00</b></div>
+<div class=budget>村民时间 <b style="white-space:nowrap">10 个村民 × 10:00</b> <span class=lk style="font-size:12px">可修改</span></div>
 <table>
 <tr><td>食物 60<span class=res>按农田计</span></td><td class=t><span class=ph>m:ss</span></td></tr>
 <tr><td>黄金 75</td><td class=t>2:54</td></tr>
@@ -43,7 +43,7 @@ table{width:100%;border-collapse:collapse;margin-top:8px}td{padding:4px 0;border
 <div class=basis><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 6v6l4 2"/></svg><span>城堡时代 · 经济科技全研究 · 按农田计</span><span class=lk><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 16v-4M12 8h.01"/></svg>口径</span></div>
 <div class=pop><h4>采集时间怎么算</h4><ol>
 <li>采集速度按城堡时代，该时代能研究的经济科技全部算上；选了文明就叠加文明加成。</li>
-<li>食物按农田算，播种耗时计入。</li>
+<li>食物按农田算，播种耗时计入（播种耗时 未核实）。</li>
 <li>金和木离放置点 3 格，农田贴着磨坊；每趟 = 携带量 ÷ 采集速度 + 往返路程 ÷ 村民速度。</li>
 <li>有文明折扣先按折扣价，再换算成时间。</li></ol>
 <small>不模拟地图和资源分布，和实战会有出入。数据：游戏 .dat（DE Update 185872）</small></div>
@@ -74,7 +74,7 @@ table{width:100%;border-collapse:collapse;margin-top:8px}td{padding:4px 0;border
 <div><p class=st>S6 文明加成读不准 · 未计入</p><div class=side>
 <h3>A · 骑士</h3><span class=note>匈奴 · 城堡时代 · 食物 60 黄金 75</span>
 <table><tr><td>黄金 75</td><td class=t><span class=ph>m:ss</span></td></tr></table>
-<div class=basis style="background:var(--color-surface-2);border-radius:8px;padding:0 8px"><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 16v-4M12 8h.01"/></svg><span>未计入：匈奴 {加成名}（数据读不准，按通用速度算）</span></div>
+<div class=basis style="background:var(--color-surface-2);border-radius:8px;padding:0 8px"><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 16v-4M12 8h.01"/></svg><span>未计入：匈奴 {加成名}（数据读不准，按通用速度算）；开局木头比通用开局少 100</span></div>
 </div><div class=anno>与 #97 S4「未计入」同样式；#42 解码 res 234 后可转 S5</div></div>
 
 <div><p class=st>S7 等资源模式（现状，仅加开关）</p><div class=side>
@@ -86,6 +86,6 @@ table{width:100%;border-collapse:collapse;margin-top:8px}td{padding:4px 0;border
 <div><p class=st>S8 单位详情页 · 费用旁一行</p><div class=side style="border-top-width:1px">
 <p class=note style="margin:0 0 6px">费用 食物 60 · 黄金 75</p>
 <div class=uline><svg class=ic viewBox="0 0 24 24"><circle cx=12 cy=12 r=10 /><path d="M12 6v6l4 2"/></svg><span class=k>采集时间</span><b class="ph" style="white-space:nowrap">≈ 1 个村民 m:ss</b><span class=res style="margin:0">城堡时代 · 按农田计</span><span class=basis style="margin:0"><span class=lk style="min-height:32px">口径</span></span></div>
-</div><div class=anno>时代跟页面所选时代；未选文明按通用速度</div></div>
+</div><div class=anno>时代跟页面所选时代，没选时默认城堡时代（与 PK 一致）；未选文明按通用速度</div></div>
 
 </div>
