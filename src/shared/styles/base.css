@@ -968,6 +968,11 @@ table.ediff td.dn {
 }
 .duel-head h3 {
   margin: 0;
+  font-size: var(--fs-h3);
+}
+.duel-age {
+  font-weight: 600;
+  color: var(--color-text-2);
 }
 .duel-presets button.on,
 #duel .fbar button.on {

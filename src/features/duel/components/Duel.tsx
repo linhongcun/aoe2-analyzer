@@ -186,7 +186,7 @@ function Side({
             {k.toUpperCase()} · {u.zh} {count > 1 && <span className="tag">× {count}</span>}
           </h3>
           <small className="note">
-            {civByEn(side.civ)?.zh} · {AGE_ZH[side.age]} · <CostView c={u.cost} />
+            {civByEn(side.civ)?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span> · <CostView c={u.cost} />
           </small>
         </div>
       </div>
