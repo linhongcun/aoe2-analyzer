@@ -1261,7 +1261,7 @@ table.ediff td.dn {
   display: block;
 }
 .pk-applied {
-  background: var(--color-good-soft);
+  background: var(--color-surface);
   color: var(--color-good);
 }
 .pk-unverified {
@@ -1358,4 +1358,24 @@ table.ediff td.dn {
 }
 .pk-src .linkish {
   white-space: nowrap;
+}
+/* issue 97/103 定稿：原价/实际标签，单元格不折行 */
+.pk-cost-tab td:last-child {
+  white-space: nowrap;
+}
+.pk-lbl {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  margin: 0 var(--space-1) 0 var(--space-2);
+}
+.pk-wn > .pk-lbl:first-child {
+  margin-left: 0;
+}
+.pk-wn .pk-was,
+.pk-wn .pk-now {
+  font-size: var(--fs-body);
+}
+.pk-count .pk-wn .pk-now {
+  font-size: var(--fs-num-xl);
 }

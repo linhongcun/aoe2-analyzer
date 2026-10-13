@@ -78,7 +78,7 @@ for (const w of [1280, 390]) {
     test('已计入行保留加成原文，12px，可折行不截断', async ({ page }) => {
       await open(page, 'a=359.Byzantines.4.f.&b=569.Franks.4.f.');
       const o = A(page).locator('[data-t="pk-orig"]');
-      await expect(o).toHaveText('骆驼骑兵、掷矛手和长矛兵系的费用 -25%');
+      await expect(o).toHaveText('骆驼骑兵、掷矛手和长矛兵系的费用 −25%');
       const st = await o.evaluate((e) => {
         const c = getComputedStyle(e);
         return { fs: c.fontSize, to: c.textOverflow, ws: c.whiteSpace, clip: e.scrollWidth > e.clientWidth + 1 };
