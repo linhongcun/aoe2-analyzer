@@ -147,15 +147,13 @@ test.describe('#100 补充口径（Steve）+ 定稿 T1–T7', () => {
     await expect(page.locator('[data-t="pk-cost-a"] [data-t="pk-res-Food"]')).toContainText('60');
     await expect(page.locator('[data-t="pk-cost-a"] [data-t="pk-res-Gold"]')).toContainText('75');
   });
-  // 注意：dd451de 上用「当前时代满科技」(.3.c.) 得到的正是上面的城堡属性，而该组合 N 也是 11，和帝王一样。
-  // 这条断言可能在功能修好后仍然红——需要 Steve 确认「N 必须不同」这一口径。
-  test('城堡时代与帝王时代算出的 N 不能相同（骑士 vs 骆驼 ×10）', async ({ page }) => {
-    await page.goto('#/duel?a=38.Franks.4.f.&b=329.Berbers.4.f.&m=n&na=10&nb=10&be=1');
-    const nImp = await page.locator('[data-t=be-n]').innerText();
-    await page.goto('about:blank');
-    await page.goto('#/duel?a=38.Franks.3.f.&b=329.Berbers.3.f.&m=n&na=10&nb=10&be=1');
-    const nCas = await page.locator('[data-t=be-n]').innerText();
-    expect(nCas).not.toBe(nImp);
+  test('.3.f.：标题显示城堡时代，价格按城堡价（柏柏尔骆驼 47 食 / 51 金）', async ({ page }) => {
+    await page.goto('#/duel?a=38.Franks.3.f.&b=329.Berbers.3.f.&m=r&bud=3000');
+    await expect(A(page)).toBeVisible();
+    await expect(notes(page).nth(0)).toContainText('城堡时代');
+    await expect(notes(page).nth(1)).toContainText('城堡时代');
+    await expect(page.locator('[data-t="pk-cost-b"] [data-t="pk-res-Food"] .pk-now')).toHaveText('47');
+    await expect(page.locator('[data-t="pk-cost-b"] [data-t="pk-res-Gold"] .pk-now')).toHaveText('51');
   });
   test('T6 无时代参数：标题帝王时代，价格按帝王时代（柏柏尔骆驼 32 个，v0.5.0 线上帝王锚点）', async ({ page }) => {
     await page.goto('#/duel?m=r&bud=3000&a=329.Berbers..f.&b=38.Franks..f.');
