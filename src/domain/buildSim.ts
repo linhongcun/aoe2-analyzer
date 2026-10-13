@@ -197,12 +197,12 @@ interface Mods {
   tcRate: Record<string, number>;
   costMul: Record<string, Partial<Record<Res | 'all', number>>>;
   timeMul: Record<string, number>;
-  /** 科技费用倍率（按资源；all = 全部资源） */
-  techCost: Record<number, Partial<Record<Res | 'all', number>>>;
+  /** 科技费用修正（按资源；all = 全部资源），保留 .dat 的 set/mul/add 语义 */
+  techCost: Record<number, Partial<Record<Res | 'all', NumMod>>>;
   /** 全部科技费用倍率（中国 res 85） */
   techCostAll: number;
-  /** 科技研究时间倍率 */
-  techTime: Record<number, number>;
+  /** 科技研究时间修正（.dat 效果 103：set 为绝对秒数，mul 为倍率） */
+  techTime: Record<number, NumMod>;
   /** 单位/建筑费用加减（如库曼马厩 -75 木） */
   costAdd: Record<string, Partial<Record<Res, number>>>;
   /** 存放资源时额外比例（丹麦 res 299：食物 +5%） */
@@ -217,6 +217,21 @@ interface Mods {
   techReward: number;
   start: Stock;
 }
+/** 数值修正：按 .dat 效果顺序累积，set 覆盖之前的一切，mul/add 依次叠加。值 = (set ?? 原值) × mul + add */
+export interface NumMod {
+  set?: number;
+  mul: number;
+  add: number;
+}
+export function pushMod(cur: NumMod | undefined, op: string | undefined, v: number): NumMod {
+  const m = cur ?? { mul: 1, add: 0 };
+  if (op === 'set') return { set: v, mul: 1, add: 0 };
+  if (op === 'mul') return { set: m.set, mul: m.mul * v, add: m.add * v };
+  return { set: m.set, mul: m.mul, add: m.add + v };
+}
+export const applyMod = (base: number, m?: NumMod): number => (m ? (m.set ?? base) * m.mul + m.add : base);
+const TECH_OPS = new Set(['set', 'mul', 'add']);
+
 function baseMods(): Mods {
   return {
     rate: {},
@@ -295,10 +310,13 @@ function applyEffects(m: Mods, effects: EffectRow['effects']) {
       else if (x.res === 4 && x.op === 'add') m.popBonus += v;
       else if (x.res === 33 && x.op === 'set' && v === RES33_INSTANT_FARMERS) m.farmNoWalk = true;
       else if (x.res === 269 && x.op === 'set' && v > 0) m.techReward = SPANISH_TECH_REWARD_GOLD;
-    } else if (x.kind === 'techTime' && x.tech !== undefined && x.op === 'set') m.techTime[x.tech] = v;
-    else if (x.kind === 'techCost' && x.tech !== undefined && x.op === 'set') {
+    } else if (x.kind === 'techTime' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) m.techTime[x.tech] = pushMod(m.techTime[x.tech], x.op, v);
+    else if (x.kind === 'techCost' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) {
       const r = TECH_RES[String(x.res)];
-      if (r) (m.techCost[x.tech] ??= {})[r] = v;
+      if (r) {
+        const o = (m.techCost[x.tech] ??= {});
+        o[r] = pushMod(o[r], x.op, v);
+      }
     }
   }
 }
@@ -418,7 +436,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     for (const [k, v] of Object.entries(c)) out[RES_OF[k]!] = v ?? 0;
     if (kind === 'tech') {
       const tm = m.techCost[id] ?? {};
-      for (const r of Object.keys(out) as Res[]) out[r] = Math.round(out[r] * m.techCostAll * (tm.all ?? 1) * (tm[r] ?? 1));
+      for (const r of Object.keys(out) as Res[]) out[r] = Math.max(0, Math.round(applyMod(applyMod(out[r] * m.techCostAll, tm.all), tm[r])));
       return out;
     }
     const add = kind !== 'up' ? m.costAdd['unit:' + id] : undefined;
@@ -427,6 +445,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     if (mul && kind !== 'up') for (const r of Object.keys(out) as Res[]) out[r] = Math.round(out[r] * (mul.all ?? 1) * (mul[r] ?? 1));
     return out;
   };
+  /** 科技研究时间：.dat 原值经文明修正（set 为绝对秒数，如哥特织布机 1 s；mul 为倍率，如马来升时代 ×0.6） */
+  const techTimeOf = (tech: number) => Math.max(0, applyMod(eco.techs[tech]?.researchTime ?? 0, m.techTime[tech]));
   const afford = (c: Stock) => (Object.keys(c) as Res[]).every((r) => stock[r] + 1e-9 >= c[r]);
   const pay = (c: Stock) => (Object.keys(c) as Res[]).forEach((r) => (stock[r] -= c[r]));
   const popUsed = () => born + military;
@@ -609,7 +629,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       } else if (a.type === 'research' || a.type === 'ageUp') {
         if (a.type === 'research' && eco.techs[a.tech]?.at !== TC) {
           // 非 TC 科技：在对应建筑研究（不占 TC）
-          const time = (eco.techs[a.tech]?.researchTime ?? 0) * (m.techTime[a.tech] ?? 1);
+          const time = techTimeOf(a.tech);
           p.startedAt = r1(t);
           constructions.push({ building: -a.tech, progress: 0, bt: time, step: p.step, p, borrowed: undefined });
         } else {
@@ -736,10 +756,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         const a = p.a;
         let time = 0;
         if (a.type === 'ageUp') {
-          time = eco.techs[100 + a.age - 1]!.researchTime * (m.techTime[100 + a.age - 1] ?? 1);
+          time = techTimeOf(100 + a.age - 1);
           researching = true;
           ageUps.push({ age: a.age, clickAt: r1(t), reachAt: 0 });
-        } else if (a.type === 'research') time = (eco.techs[a.tech]?.researchTime ?? 0) * (m.techTime[a.tech] ?? 1);
+        } else if (a.type === 'research') time = techTimeOf(a.tech);
         p.startedAt = r1(t);
         if (p.queuedAt !== undefined && t - p.queuedAt > 1e-9) {
           // 付清了但城镇中心还在忙（造村民或别的研究）：这段等待也是卡点，避免行时间出现没有解释的跳变（Kent #51）
@@ -1053,7 +1073,7 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
   if (e.kind === 'freeTech') return { kind: 'handled' };
   if (e.kind === 'techCost' || e.kind === 'techTime') {
     if (e.tech === undefined || !scope.techs.has(e.tech)) return { kind: 'irrelevant', reason: '开局不涉及的科技' };
-    if (e.op === 'set' && (e.kind === 'techTime' || TECH_RES[String(e.res)])) return { kind: 'handled' };
+    if (TECH_OPS.has(e.op ?? '') && (e.kind === 'techTime' || TECH_RES[String(e.res)])) return { kind: 'handled' };
     return { kind: 'unknown' };
   }
   if (e.kind === 'res') {
