@@ -3,7 +3,7 @@
 //   node scripts/release.mjs <vX.Y.Z> [--dry-run] --site-url <url> [--footer-timeout <秒>]
 // 环境：每个用例新建临时仓库（带 bare origin），PATH 前插一个假的 gh（记录调用、按 FAKE_CI 回答 CI 状态），
 //       --site-url 指向本机 127.0.0.1:4792 的静态页（页脚 data-t=footer-app-version / footer-build，另给 version.json）。
-// --site-url 默认 https://linhongcun.github.io/aoe2-analyzer/；tag 已存在且指向合并后 main 头 → 跳过，指向别的提交 → 报错（前置检查同口径）。
+// --site-url 默认 https://linhongcun.github.io/aoe2-analyzer/；tag 已存在且指向合并后 main 头 得 跳过，指向别的提交 得 报错（前置检查同口径）。
 // 完成判定看仓库状态，不允许状态文件：每次跑完 `git status --porcelain --ignored` 必须为空。
 import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import type { AddressInfo } from 'node:net';
@@ -14,7 +14,7 @@ import { join, resolve } from 'node:path';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 const SCRIPT = resolve('scripts/release.mjs');
-// 端口用 0 由系统分配空闲端口（原固定 4792 被残留进程占用时 beforeAll 失败 → 12 条被静默跳过）
+// 端口用 0 由系统分配空闲端口（原固定 4792 被残留进程占用时 beforeAll 失败 得 12 条被静默跳过）
 let SITE = '';
 
 let repo = '', origin = '', bin = '', ghLog = '';
@@ -182,7 +182,7 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     noStateFile();
   });
 
-  it('第 3 条：release 头部 CI 不是绿的 → 报错退出，什么都不改', async () => {
+  it('第 3 条：release 头部 CI 不是绿的时，报错退出，什么都不改', async () => {
     const before = snapshot();
     const r = await run(['v0.6.0', ...opts()], { FAKE_CI: 'failure' });
     expect(r.status).not.toBe(0);
@@ -191,7 +191,7 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     noStateFile();
   });
 
-  it('第 3 条：tag 已存在且指向别的提交（不是合并后 main 头）→ 报错退出，什么都不改', async () => {
+  it('第 3 条：tag 已存在且指向别的提交（不是合并后 main 头）时，报错退出，什么都不改', async () => {
     git(repo, 'tag', '-a', 'v0.6.0', '-m', 'pre-existing', 'main');
     git(repo, 'push', '-q', 'origin', 'v0.6.0');
     const before = snapshot();
@@ -202,7 +202,7 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     noStateFile();
   });
 
-  it('第 4 条：线上页脚构建号与合并后 main 头部不一致 → 超时报错，不打 tag、不建 Release', async () => {
+  it('第 4 条：线上页脚构建号与合并后 main 头部不一致时，超时报错，不打 tag、不建 Release', async () => {
     site.mode = 'stale';
     const r = await run(['v0.6.0', ...opts()]);
     expect(r.status).not.toBe(0);
@@ -242,7 +242,7 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     expect(out(r)).toContain('https://linhongcun.github.io/aoe2-analyzer/');
   });
 
-  it('tag 已存在且指向合并后 main 头 → 跳过打 tag，继续起草 Release', async () => {
+  it('tag 已存在且指向合并后 main 头时，跳过打 tag，继续起草 Release', async () => {
     git(repo, 'fetch', '-q', 'origin');
     git(repo, 'merge', '-q', '--no-ff', '-m', 'Merge release/v0.6.0', 'origin/release/v0.6.0');
     git(repo, 'push', '-q', 'origin', 'main');
