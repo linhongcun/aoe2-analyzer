@@ -22,7 +22,8 @@
     "test:py": "python3 -m unittest discover -s tests/py -v",
     "bo:check": "vite-node scripts/build_orders_check.ts",
     "eco": "python3 scripts/eco_build.py",
-    "sim": "vite-node scripts/sim_try.ts"
+    "sim": "vite-node scripts/sim_try.ts",
+    "release": "node scripts/release.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.54.0",
