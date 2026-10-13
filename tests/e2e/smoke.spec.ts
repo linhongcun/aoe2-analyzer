@@ -1,4 +1,7 @@
+import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+
+const PKG_VERSION = (JSON.parse(readFileSync('package.json', 'utf8')) as { version: string }).version;
 
 /** CivPicker 选择助手：打开选择器、搜索英文名并点击对应选项 */
 async function pickCiv(page: Page, id: string, en: string) {
@@ -574,8 +577,10 @@ test('页脚在数据版本后显示构建短 SHA（7 位十六进制）', async
 test('页脚在数据版本前显示站点版本（package.json）', async ({ page }) => {
   await page.goto('#/builds');
   const foot = page.locator('footer .fbfoot');
-  await expect(foot.locator('[data-t="footer-app-version"]')).toHaveText('v0.5.0');
-  expect(await foot.locator('[data-t="footer-meta"]').innerText()).toMatch(/^v0\.5\.0 · 数据版本：[^\n]* · 构建 [0-9a-f]{7}$/);
+  await expect(foot.locator('[data-t="footer-app-version"]')).toHaveText('v' + PKG_VERSION);
+  expect(await foot.locator('[data-t="footer-meta"]').innerText()).toMatch(
+    new RegExp('^v' + PKG_VERSION.replace(/\./g, '\\.') + ' · 数据版本：[^\\n]* · 构建 [0-9a-f]{7}$'),
+  );
 });
 
 for (const w of [360, 375, 390]) {
