@@ -7,5 +7,5 @@ describe('页脚站点版本', () => {
     const v = (JSON.parse(readFileSync('package.json', 'utf8')) as { version: string }).version;
     expect(appVersion()).toBe('v' + v);
   });
-  it('release/v0.5.0 上版本号为 0.5.0', () => expect(appVersion()).toBe('v0.5.0'));
+  it('版本号是三段 vX.Y.Z', () => expect(appVersion()).toMatch(/^v\d+\.\d+\.\d+$/));
 });

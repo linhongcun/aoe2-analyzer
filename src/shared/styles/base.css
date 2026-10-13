@@ -968,6 +968,11 @@ table.ediff td.dn {
 }
 .duel-head h3 {
   margin: 0;
+  font-size: var(--fs-h3);
+}
+.duel-age {
+  font-weight: 600;
+  color: var(--color-text-2);
 }
 .duel-presets button.on,
 #duel .fbar button.on {
@@ -1261,7 +1266,7 @@ table.ediff td.dn {
   display: block;
 }
 .pk-applied {
-  background: var(--color-good-soft);
+  background: var(--color-surface);
   color: var(--color-good);
 }
 .pk-unverified {
@@ -1320,10 +1325,6 @@ table.ediff td.dn {
 .pk-none {
   margin-top: var(--space-2);
 }
-.pk-basis {
-  color: var(--color-muted);
-  font-size: var(--fs-xs);
-}
 .pk-unverified {
   color: var(--color-muted);
 }
@@ -1349,13 +1350,30 @@ table.ediff td.dn {
   white-space: normal;
   overflow-wrap: anywhere;
 }
-.pk-basis {
-  margin-right: var(--space-1);
-}
 /* Jony #84 复审：390 下「来源」不竖排折行 */
 .pk-src {
   flex: none;
 }
 .pk-src .linkish {
   white-space: nowrap;
+}
+/* issue 97/103 定稿：原价/实际标签，单元格不折行 */
+.pk-cost-tab td:last-child {
+  white-space: nowrap;
+}
+.pk-lbl {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  margin: 0 var(--space-1) 0 var(--space-2);
+}
+.pk-wn > .pk-lbl:first-child {
+  margin-left: 0;
+}
+.pk-wn .pk-was,
+.pk-wn .pk-now {
+  font-size: var(--fs-body);
+}
+.pk-count .pk-wn .pk-now {
+  font-size: var(--fs-num-xl);
 }
