@@ -1,5 +1,5 @@
 /** 工具：单位 PK（1v1 / N vs M / 等资源）。属性复用科技模拟器引擎，战斗计算见 domain/duel.ts */
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
@@ -68,6 +68,20 @@ export default function Duel() {
     drop.forEach((d) => n.delete(d));
     setSp(n, { replace: true });
   };
+  // issue 102：地址栏始终带完整的 a、b、m（等资源再带 bud，N vs M 再带 na/nb），反馈链接读地址栏即可复现当前对阵
+  const canon = new URLSearchParams(sp);
+  canon.set('a', fmtSide(parseSide(sp.get('a'), DEF_A)));
+  canon.set('b', fmtSide(parseSide(sp.get('b'), DEF_B)));
+  canon.set('m', mode);
+  if (mode === 'r') canon.set('bud', String(bud));
+  if (mode === 'n') {
+    canon.set('na', String(na));
+    canon.set('nb', String(nb));
+  }
+  const canonStr = canon.toString();
+  useEffect(() => {
+    if (canonStr !== sp.toString()) setSp(new URLSearchParams(canonStr), { replace: true });
+  }, [canonStr, sp, setSp]);
   const fams = useMemo(
     () =>
       core
