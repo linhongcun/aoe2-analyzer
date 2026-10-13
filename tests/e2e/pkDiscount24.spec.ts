@@ -63,14 +63,10 @@ for (const w of [1280, 390]) {
       }
     });
 
-    test('柏柏尔骆驼：未选时代按城堡价 30 个并注明；切到帝王 −20%', async ({ page }) => {
+    test('柏柏尔骆驼：「已计入」行不叠加时代说明；帝王 32 个（无时代参数的个数、百分比显示见 v060-100 / v060-97-103）', async ({ page }) => {
       await open(page, 'a=329.Berbers..f.&b=38.Franks..f.');
-      await expect(A(page).locator('[data-t="pk-count"] b')).toHaveText('30');
-      await expect(A(page).locator('[data-t="pk-applied"]')).toContainText('−15%');
-      await expect(A(page).locator('[data-t="pk-sum"] [data-t="pk-basis"]')).toHaveText('按城堡时代价格');
       await expect(A(page).locator('[data-t="pk-applied"] [data-t="pk-basis"]')).toHaveCount(0);
       await page.goto('#/duel?m=r&bud=3000&a=329.Berbers.4.f.&b=38.Franks.3.f.');
-      await expect(A(page).locator('[data-t="pk-applied"]')).toContainText('−20%');
       await expect(A(page).locator('[data-t="pk-count"] b')).toHaveText('32');
       await expect(A(page).locator('[data-t="pk-basis"]')).toHaveCount(0);
     });
@@ -78,7 +74,7 @@ for (const w of [1280, 390]) {
     test('已计入行保留加成原文，12px，可折行不截断', async ({ page }) => {
       await open(page, 'a=359.Byzantines.4.f.&b=569.Franks.4.f.');
       const o = A(page).locator('[data-t="pk-orig"]');
-      await expect(o).toHaveText('骆驼骑兵、掷矛手和长矛兵系的费用 −25%');
+      await expect(o).toContainText('骆驼骑兵、掷矛手和长矛兵系的费用'); // 负号 U+2212 见 v060-97-103
       const st = await o.evaluate((e) => {
         const c = getComputedStyle(e);
         return { fs: c.fontSize, to: c.textOverflow, ws: c.whiteSpace, clip: e.scrollWidth > e.clientWidth + 1 };
@@ -121,10 +117,8 @@ for (const w of [1280, 390]) {
       await expect(A(page).locator('.pk-now')).toHaveCount(0);
       await expect(A(page).locator('[data-t="pk-res-Wood"] td').nth(1)).toHaveText('25');
     });
-    test('取价时代 ≠ 卡片时代：「按X时代价格」紧挨价格；相同时不显示', async ({ page }) => {
+    test('B 侧与 .3.c. 不显示「按X时代价格」（.3.f. 的口径见 v060-100）', async ({ page }) => {
       await open(page, 'a=329.Berbers.3.f.&b=569.Franks.4.f.');
-      const sum = A(page).locator('[data-t="pk-sum"] td').nth(1);
-      await expect(sum.locator('[data-t="pk-basis"]')).toHaveText('按城堡时代价格');
       await expect(page.locator('[data-t="pk-cost-b"] [data-t="pk-basis"]')).toHaveCount(0);
       await open(page, 'a=329.Berbers.3.c.&b=569.Franks.4.f.');
       await expect(A(page).locator('[data-t="pk-basis"]')).toHaveCount(0);
