@@ -23,6 +23,8 @@ jobs:
         run: npm run lint
       - name: Typecheck
         run: npx tsc -p . --noEmit
+      - name: Install Playwright chromium
+        run: npx playwright install --with-deps chromium
       - name: Vitest
         run: npm test
       - name: Python tests (patch detection, diff summary, markers)
@@ -51,7 +53,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Playwright smoke (chromium)
-        run: npx playwright install --with-deps chromium && npx playwright test --reporter=line
+        run: npx playwright test --reporter=line
       - uses: actions/upload-artifact@v4
         if: failure()
         with: { name: playwright-report, path: test-results, if-no-files-found: ignore }

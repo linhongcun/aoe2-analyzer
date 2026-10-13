@@ -33,7 +33,11 @@
 
 - **手动全量只做两次**：PR 首次验收，以及 release 整版验收。
 - **流程**：Kent 整版验收 → Steve 在发版 issue 上给整版 Product PASS → 开发用发版脚本完成：release 合入 main（merge commit）、等部署、核对线上页脚、打 annotated tag `vX.Y.Z`、用 CHANGELOG 对应小节起草 GitHub Release → Kent 线上复验 → 发布 GitHub Release，核对本版 issue 均已关闭（合到非默认分支时 `Closes #N` 不会自动关闭）。
-- 发版脚本是 v0.6.0 第一项，脚本完成前以上步骤手动执行。
+- **发版脚本**：`npm run release -- vX.Y.Z`（`scripts/release.mjs`）。参数：`--dry-run` 只打印每一步要执行的命令和要核对的内容，不改任何分支、tag、Release；`--site-url` 线上地址，默认 `https://linhongcun.github.io/aoe2-analyzer/`；`--footer-timeout` 等部署的秒数，默认 600。
+  - 前置检查：`release/vX.Y.Z` 头部 CI 为绿；tag 不存在，或已指向合并后的 main 头部（视为已完成、跳过），指向别的提交则报错退出。
+  - 步骤：合入 main（merge commit）→ 用 Playwright 读线上渲染后的页脚，版本号和构建号都等于合并后的 main 头部才通过（超时或不一致报错，不打 tag）→ 打 annotated tag → 用 CHANGELOG 对应小节起草 draft Release。
+  - 每一步做没做完都看远端仓库和线上的实际状态，不写本地状态文件；失败停在那一步并打印已完成的步骤和原因，修好后直接重跑，已完成的步骤自动跳过。
+  - 需要本机已登录 `gh`、对 main 有推送权限，并已安装 Playwright 浏览器（`npx playwright install chromium`）。
 - **公告**：每周小版本只写 CHANGELOG 里的玩家说明，不发外部公告。玩家可见的功能攒够时（新工具、文明解锁等），Reid 才起草外部公告，由 hongcun 决定是否发。有外部公告的版本：Kent 整版验收通过后，Reid 在 release 头上实测填数，每个数字附可复现链接；定稿挂在发版 issue，Steve、Kent 在那里确认。外部渠道由 hongcun 本人发。
 
 部署只在 main 上触发，版本分支只跑测试。
