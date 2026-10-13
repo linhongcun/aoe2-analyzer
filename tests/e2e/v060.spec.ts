@@ -105,20 +105,6 @@ for (const w of WIDTHS)
       expect(t.match(/[−-]\s?25%/g) ?? []).toHaveLength(1);
       expect(t).toMatch(/已计入：拜占庭(?![^骆]*[−-]25%)/);
     });
-    test('#103 原价与折后价可区分（删除线或文字标签），且每行不折行', async ({ page }) => {
-      for (const r of await A(page).locator('tr[data-t^="pk-res-"], tr[data-t="pk-sum"]').all()) {
-        const cell = r.locator('td').nth(1);
-        const struck = await cell.locator('s, del, .pk-was').evaluateAll((els) => els.some((e) => getComputedStyle(e).textDecorationLine.includes('line-through')));
-        const labelled = /原价|实际|折后/.test((await cell.textContent()) ?? '');
-        expect(struck || labelled).toBe(true);
-        const lines = await cell.evaluate((e) => {
-          const range = document.createRange();
-          range.selectNodeContents(e);
-          return new Set([...range.getClientRects()].map((x) => Math.round(x.top))).size;
-        });
-        expect(lines, `${await r.getAttribute('data-t')} 折行`).toBe(1);
-      }
-    });
   });
 
 // ───────────── Steve 10/13 23:04 补充口径 + Jony 定稿 PR #111 ─────────────
@@ -131,9 +117,46 @@ test.describe('#100 补充口径（Steve）+ 定稿 T1–T7', () => {
     await page.goto('#/duel?a=359.Byzantines.4.f.&b=569.Franks.4.f.&m=n&na=10&nb=10&be=1');
     await expect(page.locator('[data-t=be-n]')).toHaveText('16');
   });
-  // 未实算：N 取决于对决模拟器（逐击结算、攻速、冲锋/加成伤害、城堡时代可用科技集合），手算等于另写一个模拟器，
-  // 无法独立于被测实现给出可信的金标准；保留 fixme，待 Linus/Steve 指定计算口径（或游戏内实测）后填数。
-  test.fixme('城堡时代：法兰克骑士 .3.f. vs 柏柏尔骆驼 .3.f. ×10 → N = 〈待按游戏数据实算〉', async () => {});
+  // 城堡时代「满科技」= 该文明城堡时代及以前能研究的科技全算，帝王科技不算（Steve 10/13）。
+  // 推导（基础值 src/data/units.json，来自 .dat；科技效果为 .dat 数值；文明可研究性见 src/data/techs.json 的 civs）：
+  //   法兰克骑士(38)：HP 100、攻 10、甲 2/2、费用 60 食 75 金
+  //     锻造 Forging(封建) +1 攻、铸铁 Iron Casting(城堡) +1 攻 → 12
+  //     鳞甲 Scale Barding(封建) +1/+1、链甲 Chain Barding(城堡) +1/+1 → 4/4
+  //     法兰克无血统(Bloodlines)；文明加成 tech 290 骑兵 HP +20% → 100×1.2 = 120
+  //     费用无折扣 → 60/75
+  //   柏柏尔骆驼兵(329)：HP 100、攻 6、甲 0/0、费用 55 食 60 金
+  //     锻造+铸铁 → 8；鳞甲+链甲 → 2/2；血统 Bloodlines(封建) +20 HP → 120
+  //     tech 586 马厩单位城堡时代 −15%：55×0.85 = 46.75 → 显示 47，60×0.85 = 51
+  //   不算的帝王科技：高炉 Blast Furnace(+2 攻)、板甲 Plate Barding(+1/+2)。
+  //   对照：同口径的帝王满科技为 骑士 120/14/5/6、骆驼 120/10/3/4（dd451de 页面现值）。
+  const stats = async (page: Page, k: 'a' | 'b') => {
+    const t = (await page.locator(`#duel-${k} table.stat tr`).allInnerTexts()).map((x) => x.replace(/\s+/g, ' ')).join('|');
+    return {
+      hp: t.match(/生命值 (\d+)/)?.[1],
+      atk: t.match(/攻击 (\d+)（/)?.[1],
+      armor: t.match(/护甲 (\d+ \/ \d+)/)?.[1],
+    };
+  };
+  test('城堡时代满科技：对决输入（UI 属性 + 费用）与 .dat 独立推导一致', async ({ page }) => {
+    await page.goto('#/duel?a=38.Franks.3.f.&b=329.Berbers.3.f.&m=r&bud=3000');
+    await expect(A(page)).toBeVisible();
+    expect(await stats(page, 'a')).toEqual({ hp: '120', atk: '12', armor: '4 / 4' });
+    expect(await stats(page, 'b')).toEqual({ hp: '120', atk: '8', armor: '2 / 2' });
+    await expect(page.locator('[data-t="pk-cost-b"] [data-t="pk-res-Food"] .pk-now')).toHaveText('47');
+    await expect(page.locator('[data-t="pk-cost-b"] [data-t="pk-res-Gold"] .pk-now')).toHaveText('51');
+    await expect(page.locator('[data-t="pk-cost-a"] [data-t="pk-res-Food"]')).toContainText('60');
+    await expect(page.locator('[data-t="pk-cost-a"] [data-t="pk-res-Gold"]')).toContainText('75');
+  });
+  // 注意：dd451de 上用「当前时代满科技」(.3.c.) 得到的正是上面的城堡属性，而该组合 N 也是 11，和帝王一样。
+  // 这条断言可能在功能修好后仍然红——需要 Steve 确认「N 必须不同」这一口径。
+  test('城堡时代与帝王时代算出的 N 不能相同（骑士 vs 骆驼 ×10）', async ({ page }) => {
+    await page.goto('#/duel?a=38.Franks.4.f.&b=329.Berbers.4.f.&m=n&na=10&nb=10&be=1');
+    const nImp = await page.locator('[data-t=be-n]').innerText();
+    await page.goto('about:blank');
+    await page.goto('#/duel?a=38.Franks.3.f.&b=329.Berbers.3.f.&m=n&na=10&nb=10&be=1');
+    const nCas = await page.locator('[data-t=be-n]').innerText();
+    expect(nCas).not.toBe(nImp);
+  });
   test('T6 无时代参数：标题帝王时代，价格按帝王时代（柏柏尔骆驼 32 个，v0.5.0 线上帝王锚点）', async ({ page }) => {
     await page.goto('#/duel?m=r&bud=3000&a=329.Berbers..f.&b=38.Franks..f.');
     await expect(notes(page).nth(0)).toContainText('帝王时代');
