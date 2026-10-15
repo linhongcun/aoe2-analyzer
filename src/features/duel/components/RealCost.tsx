@@ -80,7 +80,7 @@ export function RealCostBlock({
           <tr className="pk-count" data-t="rc-count">
             <td>派出数量</td>
             <td>
-              <b className="rc-big">{count}</b>
+              <b className="rc-big tl-num">{count}</b>
             </td>
           </tr>
         </tbody>
@@ -144,7 +144,7 @@ export function Basis({ age, food, compact }: { age: number; food: boolean; comp
           <h4>采集时间怎么算</h4>
           <ol>
             <li>采集速度按{a}，该时代能研究的经济科技全部算上；选了文明就叠加文明加成。</li>
-            <li>食物按农田算，播种耗时不计入（播种耗时 未核实）。</li>
+            <li>食物按农田算，播种耗时未核实，不计入。</li>
             <li>金和木离放置点 3 格，农田贴着磨坊；每趟 = 携带量 ÷ 采集速度 + 往返路程 ÷ 村民速度。</li>
             <li>有文明折扣先按折扣价，再换算成时间。</li>
           </ol>

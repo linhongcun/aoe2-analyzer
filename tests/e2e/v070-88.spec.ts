@@ -47,7 +47,7 @@ for (const w of [1280, 390]) {
 }
 
 test.describe('#88 不含播种 / 口径', () => {
-  test('5 有食物：食物行、单个用时都有「不含播种」；口径浮层写播种 未核实；页面没有播种秒数', async ({ page }) => {
+  test('5 有食物：食物行、单个用时都有「不含播种」；口径浮层写播种耗时未核实；页面没有播种秒数', async ({ page }) => {
     await open(page, KNIGHT_CAMEL);
     const A = page.locator('[data-t="rc-a"]');
     await expect(A.locator('[data-t="rc-res-Food"] [data-t="rc-noseed"]')).toHaveText('不含播种');
@@ -57,27 +57,36 @@ test.describe('#88 不含播种 / 口径', () => {
     await A.locator('[data-t="rc-basis-btn"]').click();
     const li = A.locator('[data-t="rc-pop"] li');
     await expect(li).toHaveCount(4);
-    await expect(li.nth(1)).toContainText('播种耗时不计入');
-    await expect(li.nth(1)).toContainText('播种耗时 未核实');
+    await expect(li.nth(1)).toHaveText('食物按农田算，播种耗时未核实，不计入。');
     await expect(page.locator('body')).not.toContainText(/播种[^\n]{0,6}\d+(\.\d+)?\s*(s|秒)/);
   });
-  test('6 僧侣：没有「按农田计」「不含播种」，仍有合计行', async ({ page }) => {
+  test('6 僧侣：没有「按农田计」「不含播种」；合计 3:52、派出 25', async ({ page }) => {
     await open(page, '#/duel?a=38.Franks.3.f.&b=125..3.f.&m=t');
     const B = page.locator('[data-t="rc-b"]');
     await expect(B).not.toContainText('按农田计');
     await expect(B).not.toContainText('不含播种');
     await expect(B.locator('[data-t="rc-sum"]')).toBeVisible();
+    await expect(B.locator('[data-t="rc-total"]')).toHaveText('3:52');
+    expect(await count(page, 'b')).toBe(25);
   });
-  test('7 土耳其（Kent 稿写作突厥）已计入一次百分比；马里未计入且与通用法兰克同用时', async ({ page }) => {
+  test('7 土耳其（Kent 稿写作突厥）已计入一次百分比；骑士 4:17 / 23；马里未计入且与通用法兰克同用时', async ({ page }) => {
     await open(page, '#/duel?a=38.Turks.3.f.&b=38.Malians.3.f.&m=t');
     const A = page.locator('[data-t="rc-a"]'),
       B = page.locator('[data-t="rc-b"]');
     await expect(A.locator('[data-t="rc-applied"]')).toHaveText('已计入：土耳其 采金 +25%');
     expect(((await A.innerText()).match(/25%/g) ?? []).length).toBe(1);
+    await expect(A.locator('[data-t="rc-total"]')).toHaveText('4:17');
+    expect(await count(page, 'a')).toBe(23);
     await expect(B.locator('[data-t="rc-unsupported"]')).toHaveText('未计入：马里 采金加成（数据读不准，按通用速度算）');
     const mali = await B.locator('[data-t="rc-total"]').innerText();
     await open(page, KNIGHT_CAMEL);
     await expect(page.locator('[data-t="rc-a"] [data-t="rc-total"]')).toHaveText(mali);
+  });
+  test('帝王重弩手：单个用时 2:33、派出 39', async ({ page }) => {
+    await open(page, '#/duel?a=492..4.f.&b=38.Franks.3.f.&m=t');
+    const A = page.locator('[data-t="rc-a"]');
+    await expect(A.locator('[data-t="rc-total"]')).toHaveText('2:33');
+    expect(await count(page, 'a')).toBe(39);
   });
   test('9 vil=5 / min=5 预算减半；改回 10 后 URL 去掉 vil', async ({ page }) => {
     await open(page, KNIGHT_CAMEL);

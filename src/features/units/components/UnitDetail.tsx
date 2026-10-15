@@ -33,7 +33,7 @@ function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {
     <div className="rc-uline" data-t="rc-uline">
       <Icon name="clock" className="ic" />
       <span className="k">采集时间</span>
-      <b data-t="rc-uline-time">≈ 1 个村民 {fmtClock(rc.total)}</b>
+      <b className="tl-num" data-t="rc-uline-time">≈ 1 个村民 {fmtClock(rc.total)}</b>
       {rc.hasFood && (
         <small className="rc-ns" data-t="rc-noseed">
           不含播种
