@@ -456,14 +456,14 @@ test.describe('#3 收尾', () => {
     expect(await fs('[data-t="sum-arrive"] .k')).toBe('12px');
     expect(await fs('[data-t="sum-arrive"] b')).toBe('17px');
   });
-  test('文明选择器：搜置灰文明「玛雅」显示置灰项、不显示「没有匹配的文明」；真没有匹配时仍显示', async ({ page }) => {
+  test('文明选择器：搜置灰文明「玛雅」显示置灰项、不显示空态；真没有匹配时显示空态', async ({ page }) => {
     await page.goto('./#/builds?bo=scouts-18');
     await page.locator('#tlciv').click();
     const dlg = page.getByRole('dialog', { name: '文明' });
     await dlg.getByRole('combobox').fill('玛雅');
     await expect(dlg.locator('[data-civ="Mayans"]')).toHaveAttribute('aria-disabled', 'true');
-    await expect(dlg.getByText('没有匹配的文明')).toHaveCount(0);
+    await expect(dlg.locator('.cp-empty')).toHaveCount(0);
     await dlg.getByRole('combobox').fill('zzzz');
-    await expect(dlg.getByText('没有匹配的文明')).toBeVisible();
+    await expect(dlg.getByText('没有找到“zzzz”')).toBeVisible();
   });
 });
