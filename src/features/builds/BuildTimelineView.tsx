@@ -403,11 +403,6 @@ export default function BuildTimelineView() {
               <span className="tl-civ" data-t="sum-civ">
                 {civLabel}
               </span>
-              {civNotes.length > 0 && (
-                <span className="s" data-t="civ-note">
-                  {civNotes.join('；')}
-                </span>
-              )}
               {target && rangeLabel(target.reachAt, target.errSec) && (
                 <span className="s tl-num tl-range" data-t="sum-range">
                   {rangeLabel(target.reachAt, target.errSec)}
@@ -439,6 +434,11 @@ export default function BuildTimelineView() {
               <b className="tl-num">{target?.vils ?? '—'}</b>
             </li>
           </ul>
+          {civNotes.length > 0 && (
+            <p className="tl-civ-note" data-t="civ-note">
+              {civNotes.join('；')}
+            </p>
+          )}
         </SumMain>
         <div className="tl-share-slot">
           <div className="tl-share-row">
@@ -765,15 +765,16 @@ export default function BuildTimelineView() {
   );
 }
 
-/** 摘要四格；有 #42 对比行时包一层，把对比行放在四格下面（虚线分隔）。没有时 DOM 不变 */
+/** 摘要四格总包一层，对比行（#42）和文明附注都在结构上排在四格下面，不参与外层 flex */
 function SumMain({ extra, children }: { extra: string | null; children: React.ReactNode }) {
-  if (!extra) return <>{children}</>;
   return (
     <div className="tl-sum-main">
       {children}
-      <p className="tl-cmp" data-t="sum-compare">
-        {extra.split(/(?<=·)\s*/).flatMap((x, i) => [...(i ? [' '] : []), <span key={i}>{x}</span>])}
-      </p>
+      {extra && (
+        <p className="tl-cmp" data-t="sum-compare">
+          {extra.split(/(?<=·)\s*/).flatMap((x, i) => [...(i ? [' '] : []), <span key={i}>{x}</span>])}
+        </p>
+      )}
     </div>
   );
 }
