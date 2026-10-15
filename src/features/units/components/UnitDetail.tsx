@@ -19,6 +19,34 @@ import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
 import Simulator from '../../simulator/components/Simulator';
 import UnitList from './UnitList';
+import { discountedCost, priceAge } from '../../../domain/costDiscount';
+import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/realCost';
+import { Basis } from '../../duel/components/RealCost';
+
+/** #88 S8：费用下面一行「采集时间 ≈ 1 个村民 m:ss」；时代跟页面所选，未选默认城堡；未选文明按通用速度 */
+function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {
+  const a = Math.max(u.age, age ?? DEFAULT_AGE);
+  const cost = civ && u.civs.includes(civ) ? discountedCost(u, civ, priceAge(u.age, a)).cost : u.cost;
+  const rc = realCost(cost, gatherModel(a, civ && u.civs.includes(civ) ? civ : ''));
+  if (!(rc.total > 0)) return null;
+  return (
+    <div className="rc-uline" data-t="rc-uline">
+      <Icon name="clock" className="ic" />
+      <span className="k">采集时间</span>
+      <b className="tl-num" data-t="rc-uline-time">≈ 1 个村民 {fmtClock(rc.total)}</b>
+      {rc.hasFood && (
+        <small className="rc-ns" data-t="rc-noseed">
+          不含播种
+        </small>
+      )}
+      <small className="rc-res">
+        {AGE_ZH[a]}
+        {rc.hasFood ? ' · 按农田计' : ''}
+      </small>
+      <Basis age={a} food={rc.hasFood} compact />
+    </div>
+  );
+}
 
 const UT: Record<string, string> = { UniqueUnit: '独特单位', Unit: '通用单位', UnitUpgrade: '升级单位', RegionalUnit: '区域单位' };
 
@@ -150,6 +178,7 @@ export default function UnitDetail() {
                 {u.tt}s　<b>建筑：</b>
                 <BLink id={u.b} zh={u.bz} />（{u.ben}）
               </p>
+              <GatherLine u={u} civ={rt.civ} age={rt.age} />
               <div className="two">
                 <div>
                   <table className="stat">
