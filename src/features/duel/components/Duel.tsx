@@ -22,6 +22,8 @@ import { fmtSide, parseSide, type Mode, type SideSpec } from '../logic/state';
 import { CostDiscountBlock } from './CostDiscount';
 import { UnitPicker } from './UnitPicker';
 import { BreakEven } from './BreakEven';
+import { RealCostBlock, realCostOf } from './RealCost';
+import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock } from '../../../domain/realCost';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
@@ -58,10 +60,13 @@ export default function Duel() {
     trees = useTrees();
   const [sp, setSp] = useSearchParams();
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
-  const mode = (['1', 'n', 'r'].includes(sp.get('m') ?? '') ? sp.get('m') : '1') as Mode;
+  const mode = (['1', 'n', 'r', 't'].includes(sp.get('m') ?? '') ? sp.get('m') : '1') as Mode;
   const na = Math.max(1, Math.min(200, Number(sp.get('na')) || 10)),
     nb = Math.max(1, Math.min(200, Number(sp.get('nb')) || 10)),
     bud = Math.max(100, Math.min(100000, Number(sp.get('bud')) || 3000));
+  const vils = Math.max(1, Math.min(200, Math.floor(Number(sp.get('vil'))) || DEFAULT_VILS)),
+    mins = Math.max(1, Math.min(120, Math.floor(Number(sp.get('min'))) || DEFAULT_MIN));
+  const eq = mode === 'r' || mode === 't';
   const set = (k: Record<string, string>, drop: string[] = []) => {
     const n = new URLSearchParams(sp);
     Object.entries(k).forEach(([a, b]) => n.set(a, b));
@@ -74,6 +79,10 @@ export default function Duel() {
   canon.set('b', fmtSide(parseSide(sp.get('b'), DEF_B)));
   canon.set('m', mode);
   if (mode === 'r') canon.set('bud', String(bud));
+  if (mode === 't' && vils !== DEFAULT_VILS) canon.set('vil', String(vils));
+  else canon.delete('vil');
+  if (mode === 't' && mins !== DEFAULT_MIN) canon.set('min', String(mins));
+  else canon.delete('min');
   if (mode === 'n') {
     canon.set('na', String(na));
     canon.set('nb', String(nb));
@@ -102,8 +111,16 @@ export default function Duel() {
   const A = resolve(ctx, core.unitById, parseSide(sp.get('a'), DEF_A), DEF_A.uid);
   const B = resolve(ctx, core.unitById, parseSide(sp.get('b'), DEF_B), DEF_B.uid);
   const upd = (k: 'a' | 'b', s: SideSpec) => set({ [k]: fmtSide(s) });
-  const cntA = mode === 'r' ? countForBudget(A.disc.cost, bud) : mode === 'n' ? na : 1,
-    cntB = mode === 'r' ? countForBudget(B.disc.cost, bud) : mode === 'n' ? nb : 1;
+  const cnt = (s: Resolved, n: number) =>
+    mode === 'r'
+      ? countForBudget(s.disc.cost, bud)
+      : mode === 't'
+        ? Math.max(1, countForTime(realCostOf(s.disc, s.age, s.civ).rc.total, vils, mins))
+        : mode === 'n'
+          ? n
+          : 1;
+  const cntA = cnt(A, na),
+    cntB = cnt(B, nb);
   return (
     <section id="duel" className="pane">
       <ListHead title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
@@ -115,7 +132,13 @@ export default function Duel() {
             ['r', '等资源'],
           ] as const
         ).map(([k, l]) => (
-          <button key={k} role="radio" aria-checked={mode === k} className={mode === k ? 'on' : undefined} onClick={() => set({ m: k }, ['be'])}>
+          <button
+            key={k}
+            role="radio"
+            aria-checked={mode === k || (k === 'r' && mode === 't')}
+            className={mode === k || (k === 'r' && mode === 't') ? 'on' : undefined}
+            onClick={() => set({ m: k }, ['be'])}
+          >
             {l}
           </button>
         ))}
@@ -135,13 +158,45 @@ export default function Duel() {
           </label>
         )}
       </div>
+      {eq && (
+        <div className="rc-seg">
+          <span className="seg" role="radiogroup" aria-label="比法" data-t="rc-toggle">
+            <button
+              type="button"
+              role="radio"
+              aria-checked={mode === 'r'}
+              className={mode === 'r' ? 'on' : undefined}
+              onClick={() => set({ m: 'r' }, ['vil', 'min'])}
+            >
+              等资源
+            </button>
+            <button type="button" role="radio" aria-checked={mode === 't'} className={mode === 't' ? 'on' : undefined} onClick={() => set({ m: 't' })}>
+              <Icon name="clock" className="ic" />
+              等采集时间
+            </button>
+          </span>
+        </div>
+      )}
+      {mode === 't' && (
+        <div className="rc-budget" data-t="rc-budget">
+          <span>
+            村民时间 <b data-t="rc-budget-text">{`${vils} 个村民 × ${fmtClock(mins * 60)}`}</b>
+          </span>
+          <label>
+            村民 <input id="duel-vil" type="number" min={1} max={200} value={vils} onChange={(e) => set({ vil: e.target.value })} />
+          </label>
+          <label>
+            分钟 <input id="duel-min" type="number" min={1} max={120} value={mins} onChange={(e) => set({ min: e.target.value })} />
+          </label>
+        </div>
+      )}
       <div className="duel-sides">
-        <Side k="a" side={A} fams={fams} onChange={(s) => upd('a', s)} count={cntA} bud={mode === 'r' ? bud : 0} />
+        <Side k="a" side={A} fams={fams} onChange={(s) => upd('a', s)} count={cntA} bud={mode === 'r' ? bud : 0} time={mode === 't' ? [vils, mins] : null} />
         <div className="duel-vs">VS</div>
-        <Side k="b" side={B} fams={fams} onChange={(s) => upd('b', s)} count={cntB} bud={mode === 'r' ? bud : 0} />
+        <Side k="b" side={B} fams={fams} onChange={(s) => upd('b', s)} count={cntB} bud={mode === 'r' ? bud : 0} time={mode === 't' ? [vils, mins] : null} />
       </div>
       {mode === '1' ? <OneVOne A={A} B={B} /> : <Group A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />}
-      {mode !== 'r' && (
+      {!eq && (
         // #25 盈亏平衡点：等资源模式 v1 不放入口（v2 SPEC）
         <BreakEven
           key={mode}
@@ -176,6 +231,7 @@ function Side({
   onChange,
   count,
   bud,
+  time,
 }: {
   k: 'a' | 'b';
   side: Resolved;
@@ -184,6 +240,8 @@ function Side({
   count: number;
   /** 等资源预算；0 = 非等资源模式（不显示折后价） */
   bud: number;
+  /** #88 等采集时间预算 [村民数, 分钟]；null = 非该模式 */
+  time: [number, number] | null;
 }) {
   const core = useCore()!;
   const { u, spec } = side;
@@ -204,6 +262,7 @@ function Side({
           </small>
         </div>
       </div>
+      {time && <RealCostBlock k={k} civ={side.civ} civZh={civByEn(side.civ)?.zh ?? side.civ} age={side.age} d={side.disc} vils={time[0]} min={time[1]} />}
       {bud > 0 && <CostDiscountBlock k={k} unit={u.zh} civ={civByEn(side.civ)?.zh ?? side.civ} d={side.disc} bud={bud} count={count} />}
       <div className="bar">
         <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />

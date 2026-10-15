@@ -10,7 +10,8 @@ export interface SideSpec {
   techs: TechSpec;
   team: number[];
 }
-export type Mode = '1' | 'n' | 'r';
+/** 't' = 等资源里的「等采集时间」（#88），预算参数 vil / min，默认 10/10 不写进 URL */
+export type Mode = '1' | 'n' | 'r' | 't';
 
 const list = (s: string) =>
   s
