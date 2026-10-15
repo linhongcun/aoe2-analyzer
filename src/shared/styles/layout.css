@@ -2095,3 +2095,12 @@ a.tbld:hover span {
     padding-right: 2px;
   }
 }
+
+/* 文明附注单独一行，允许整句换行并均衡断行（v0.7.0 整版验收） */
+.tl-civ-note {
+  display: block;
+  margin: 4px 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  text-wrap: balance;
+}

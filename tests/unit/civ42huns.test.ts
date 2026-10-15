@@ -39,9 +39,10 @@ describe('#42 匈奴：数据与分类', () => {
     expect(unhandledEffects(E, 'Huns', buildOrders)).toEqual([]);
     expect(unknownCivEffects(E, buildOrders)).toEqual([]);
   });
-  it('v0.4.0 仍置灰：simSupport 为 false，原因是出处不足；去掉出处门槛则为 true', () => {
-    expect(simSupportFn('Huns')).toBe(false);
-    expect(simSupportReasons('Huns')).toEqual([SOURCE_PENDING_CIVS.Huns]);
+  it('v0.7.0 解禁（St4rk 2020 为第二条出处，issue 120 Q1）：simSupport 为 true，出处门槛里没有匈奴', () => {
+    expect(simSupportFn('Huns')).toBe(true);
+    expect(simSupportReasons('Huns')).toEqual([]);
+    expect(SOURCE_PENDING_CIVS.Huns).toBeUndefined();
     expect(simSupport(E, 'Huns', buildOrders, { ignoreSourceGate: true })).toEqual({ supported: true, reasons: [] });
   });
 });
