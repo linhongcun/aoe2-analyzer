@@ -73,3 +73,19 @@ for (const w of [360, 375, 390, 1280]) {
     });
   });
 }
+
+for (const w of [390, 1280]) {
+  test.describe(`#94 CivPicker 深色 @${w}`, () => {
+    test.use({ viewport: { width: w, height: w < 900 ? 740 : 800 }, colorScheme: 'dark' });
+
+    test('#94 深色：键盘高亮底和列表底对比 ≥ 3:1，高亮行文字 ≥ 4.5:1', async ({ page }) => {
+      await open(page);
+      await page.keyboard.press('ArrowDown');
+      const act = await bg(page, '.cp-opt.act');
+      const list = await page.locator('.cp-panel').evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(ratio(act, list)).toBeGreaterThanOrEqual(3);
+      expect(ratio(await fg(page, '.cp-opt.act'), act)).toBeGreaterThanOrEqual(4.5);
+      expect(ratio(await fg(page, '.cp-opt.act small'), act)).toBeGreaterThanOrEqual(4.5);
+    });
+  });
+}
