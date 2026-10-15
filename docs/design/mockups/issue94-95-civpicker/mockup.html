@@ -1,0 +1,72 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>#94 + #95 CivPicker</title><style>
+@font-face{font-family:Inter;src:url(../../../../src/shared/fonts/inter-latin-400-normal.woff2)}@font-face{font-family:Inter;font-weight:600;src:url(../../../../src/shared/fonts/inter-latin-600-normal.woff2)}
+:root{--color-bg:#fbfbfd;--color-surface:#fff;--color-control:#ececf0;--color-border:#e5e5ea;--color-tag:#f2f2f7;--color-text:#1d1d1f;--color-text-2:#3a3a3c;--color-muted:#636366;--color-accent:#a65a14;--color-scrim:#00000066}
+*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--color-bg);color:var(--color-text);font:15px/1.5 Inter,'Noto Sans CJK SC','Noto Sans SC',sans-serif}
+h1{font-size:18px;margin:0 0 4px}.sub{color:var(--color-muted);font-size:12px;margin:0 0 16px}.st{font-size:12px;font-weight:600;color:var(--color-accent);margin:0 0 6px}
+.anno{font-size:11px;color:#c4281c;font-family:monospace;margin-top:4px}
+.ic{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.grid{display:grid;gap:16px;grid-template-columns:1fr}@media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
+.list{display:grid;grid-template-columns:1fr 1fr;gap:2px 6px;background:#fff;border:1px solid var(--color-border);border-radius:8px;padding:6px}
+.opt{display:flex;align-items:center;gap:6px;padding:8px 6px;border-radius:6px;min-width:0}.opt .ico{width:24px;height:24px;border-radius:50%;background:var(--color-tag);flex:none}
+.opt .n{flex:1;min-width:0;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.opt small{display:block;font-size:11px;color:var(--color-muted)}
+.old-act{background:var(--color-tag)}
+.act{background:var(--color-accent);color:#fff}.act small{color:#fff}
+.sel{color:var(--color-accent);font-weight:600}.sel .chk{color:var(--color-accent)}
+.act.sel{color:#fff}.act.sel .chk{color:#fff}
+.q{display:flex;align-items:center;gap:6px;padding:6px 8px;background:var(--color-control);border:1px solid var(--color-border);border-radius:6px;color:var(--color-muted)}
+.q.focus{border-color:var(--color-accent);box-shadow:0 0 0 2px #a65a1433;color:var(--color-text)}
+.phone{position:relative;height:560px;border:1px solid var(--color-border);border-radius:12px;overflow:hidden;background:#eee}
+.phone .scrim{position:absolute;inset:0;background:var(--color-scrim)}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:min(75%,calc(100% - 48px));display:flex;flex-direction:column;background:#fff;border-radius:14px 14px 0 0;padding-bottom:16px}
+.sheet .hd{position:relative;padding:14px 8px 8px;border-bottom:1px solid var(--color-border);display:flex;gap:6px;align-items:center}
+.sheet .hd:before{content:'';position:absolute;top:4px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:2px;background:#c7c7cc}
+.sheet .hd .q{flex:1}
+.sheet .bd{flex:1;min-height:0;overflow-y:auto;padding:4px 6px}
+.sheet .bd .list{border:0;padding:0}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--color-muted);font-size:13px;text-align:center}
+.dim{position:absolute;right:6px;font:11px monospace;color:#c4281c;background:#fffffff0;padding:0 4px}
+table{border-collapse:collapse;font-size:12px;width:100%}.grid>div{min-width:0}td,th{border-bottom:1px solid var(--color-border);padding:4px 6px;text-align:left;font-variant-numeric:tabular-nums}
+</style>
+<h1>#94 + #95 定稿 · CivPicker 高亮对比度与手机弹层高度</h1>
+<p class=sub>设计系统 C · Inter · Lucide search / x / check / search-x · 浅色模式</p>
+<div class=grid>
+<div><p class=st>H0 现状（对照）· 高亮 #f2f2f7 / 白 1.12:1</p><div class=list>
+<div class=opt><span class=ico></span><span class=n>阿兹特克<small>Aztecs</small></span></div><div class="opt old-act"><span class=ico></span><span class=n>拜占庭<small>Byzantines</small></span></div>
+<div class=opt><span class=ico></span><span class=n>柏柏尔<small>Berbers</small></span></div><div class=opt><span class=ico></span><span class=n>波兰<small>Poles</small></span></div></div>
+<div class=anno>WCAG 1.4.11 需 ≥ 3:1，现状不达标</div></div>
+
+<div><p class=st>H1 键盘 / 悬停高亮（.act）</p><div class=list>
+<div class=opt><span class=ico></span><span class=n>阿兹特克<small>Aztecs</small></span></div><div class="opt act"><span class=ico></span><span class=n>拜占庭<small>Byzantines</small></span></div>
+<div class=opt><span class=ico></span><span class=n>柏柏尔<small>Berbers</small></span></div><div class=opt><span class=ico></span><span class=n>波兰<small>Poles</small></span></div></div>
+<div class=anno>背景 --color-accent #a65a14：对白底 / 相邻行 5.13:1；白字 5.13:1</div></div>
+
+<div><p class=st>H2 已选中（.sel，非高亮）</p><div class=list>
+<div class="opt sel"><span class=ico></span><span class=n>法兰克<small style="color:var(--color-accent)">Franks</small></span><svg class="ic chk" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><div class=opt><span class=ico></span><span class=n>哥特<small>Goths</small></span></div></div>
+<div class=anno>文字 accent 600 + 行尾 check（5.13:1）；不靠底色，与高亮区分</div></div>
+
+<div><p class=st>H3 已选中且高亮（.act.sel）</p><div class=list>
+<div class="opt act sel"><span class=ico></span><span class=n>法兰克<small>Franks</small></span><svg class="ic chk" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><div class=opt><span class=ico></span><span class=n>哥特<small>Goths</small></span></div></div>
+<div class=anno>琥珀底白字 + 白 check</div></div>
+
+<div><p class=st>H4 搜索框聚焦</p><div class="q focus"><svg class=ic viewBox="0 0 24 24"><circle cx=11 cy=11 r=8 /><path d="m21 21-4.3-4.3"/></svg>法</div>
+<div class=anno>边框 #a65a14（对 #ececf0 4.35:1 ≥ 3:1）+ 2px 20% 外圈；输入框不出现 outline:none</div></div>
+
+<div><p class=st>测量（计算样式，四档相同）</p><table>
+<tr><th>对象</th><th>现状</th><th>定稿</th></tr>
+<tr><td>高亮底 / 容器白</td><td>1.12:1</td><td>5.13:1</td></tr>
+<tr><td>高亮底 / 相邻行白</td><td>1.12:1</td><td>5.13:1</td></tr>
+<tr><td>高亮行文字</td><td>15.08:1</td><td>白 5.13:1</td></tr>
+<tr><td>高亮行英文小字</td><td>#636366 5.37:1</td><td>白 5.13:1</td></tr>
+<tr><td>选中文字</td><td>#1d1d1f 16.83:1（无区分）</td><td>#a65a14 5.13:1 + check</td></tr>
+</table></div>
+
+<div><p class=st>M1 手机弹层 · 打开（全部结果）</p><div class=phone><div class=scrim></div><div class=sheet><span class=dim style="top:-16px">height: min(75dvh, 100dvh − 48px)</span><div class=hd><div class=q><svg class=ic viewBox="0 0 24 24"><circle cx=11 cy=11 r=8 /><path d="m21 21-4.3-4.3"/></svg>搜索文明</div><svg class=ic viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></div><div class=bd><div class=list>
+<div class=opt><span class=ico></span><span class=n>阿兹特克<small>Aztecs</small></span></div><div class=opt><span class=ico></span><span class=n>拜占庭<small>Byzantines</small></span></div><div class=opt><span class=ico></span><span class=n>柏柏尔<small>Berbers</small></span></div><div class=opt><span class=ico></span><span class=n>波兰<small>Poles</small></span></div><div class="opt sel"><span class=ico></span><span class=n>法兰克<small style="color:var(--color-accent)">Franks</small></span><svg class="ic chk" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><div class=opt><span class=ico></span><span class=n>哥特<small>Goths</small></span></div><div class=opt><span class=ico></span><span class=n>高丽<small>Koreans</small></span></div><div class=opt><span class=ico></span><span class=n>孟加拉<small>Bengalis</small></span></div><div class=opt><span class=ico></span><span class=n>匈奴<small>Huns</small></span></div><div class=opt><span class=ico></span><span class=n>日本<small>Japanese</small></span></div><div class=opt><span class=ico></span><span class=n>瞿折罗<small>Gurjaras</small></span></div><div class=opt><span class=ico></span><span class=n>勃艮第<small>Burgundians</small></span></div><div class=opt><span class=ico></span><span class=n>马里<small>Malians</small></span></div><div class=opt><span class=ico></span><span class=n>蒙古<small>Mongols</small></span></div>
+</div></div></div></div><div class=anno>列表在 .bd 内滚动；弹层高度固定，不随结果变</div></div>
+
+<div><p class=st>M2 过滤后 1 条结果</p><div class=phone><div class=scrim></div><div class=sheet><div class=hd><div class="q focus"><svg class=ic viewBox="0 0 24 24"><circle cx=11 cy=11 r=8 /><path d="m21 21-4.3-4.3"/></svg>法兰</div><svg class=ic viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></div><div class=bd><div class=list><div class="opt act sel"><span class=ico></span><span class=n>法兰克<small>Franks</small></span><svg class="ic chk" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></div></div></div></div><div class=anno>高度与 M1 相同；输入框 top 不变（≤ 1px）</div></div>
+
+<div><p class=st>M3 无匹配</p><div class=phone><div class=scrim></div><div class=sheet><div class=hd><div class="q focus"><svg class=ic viewBox="0 0 24 24"><circle cx=11 cy=11 r=8 /><path d="m21 21-4.3-4.3"/></svg>xyz</div><svg class=ic viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></div><div class=bd><div class=empty><svg class=ic viewBox="0 0 24 24" style="width:24px;height:24px"><path d="m13.5 8.5-5 5M8.5 8.5l5 5"/><circle cx=11 cy=11 r=8 /><path d="m21 21-4.3-4.3"/></svg>没有找到“xyz”<br>可以试试英文名</div></div></div></div><div class=anno>空态在固定高度内垂直居中，无横向滚动</div></div>
+
+<div><p class=st>D1 桌面 1280 · 下拉面板（不改高度）</p><div style="position:relative;width:420px;max-width:100%;background:#fff;border:1px solid var(--color-border);border-radius:8px;box-shadow:0 8px 28px #0000001f"><div style="padding:8px;border-bottom:1px solid var(--color-border)"><div class="q focus"><svg class=ic viewBox="0 0 24 24"><circle cx=11 cy=11 r=8 /><path d="m21 21-4.3-4.3"/></svg>波</div></div><div class=list style="border:0"><div class="opt act"><span class=ico></span><span class=n>波兰<small>Poles</small></span></div><div class=opt><span class=ico></span><span class=n>波斯<small>Persians</small></span></div><div class=opt><span class=ico></span><span class=n>波西米亚<small>Bohemians</small></span></div></div></div><div class=anno>桌面保持 max-height 440px 下拉；只改高亮/选中/聚焦样式</div></div>
+</div>
