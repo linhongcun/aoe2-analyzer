@@ -76,6 +76,7 @@ def main():
         u = U[i] if i < len(U) else None
         if not u: diffs.append((kind, i, en, '.dat 中不存在', '', '')); return
         rec = {'en': en, time_key: u['TrainTime'], 'at': [x[0] for x in u['TrainAt']], 'cost': cost(u['Cost'])}
+        if kind == 'units': rec['class'] = u['Class']  # #42 按类别的折扣（哥特步兵 class 6）
         if len({x[1] for x in u['TrainAt']}) > 1: rec['timeAt'] = {str(x[0]): x[1] for x in u['TrainAt']}
         out[kind][str(i)] = rec
         if ref_time is not None and ref_time != rec[time_key] and ref_time not in rec.get('timeAt', {}).values(): diffs.append((kind, i, en, time_key, ref_time, rec[time_key]))
@@ -100,6 +101,8 @@ def main():
     out['villager'] = {'unit': 83, 'trainTime': U[83]['TrainTime'], 'cost': cost(U[83]['Cost']), 'speed': round(U[83]['Speed'], 4),
                        'carry': U[83]['Capacity'], 'hp': U[83]['HP'], 'tasks': {k: task_rec(v[0]) for k, v in TASKS.items()},
                        'female': {k: task_rec(v[1]) for k, v in TASKS.items()}}
+    # #42 哥特：猎物/家畜所含食物（unit 资源储量 type 0），猎物倍率 res 268 的基数从这里读，不写死
+    G = d['Civs'][0]['Units']; out['animals'] = {k: {'unit': uid, 'en': G[uid]['Name'], 'food': G[uid]['Food']} for k, uid in (('boar', 48), ('deer', 65), ('sheep', 594))}
     out['fishingShip'] = task_rec(13) | {'trainTime': U[13]['TrainTime'], 'cost': cost(U[13]['Cost'])}
     memo = {}
 
@@ -169,6 +172,7 @@ def main():
           '## 村民（.dat 原始值）', '', '| 任务 | 任务单位 | work_rate（/秒） | 携带量 |', '| --- | --- | --- | --- |']
     for k, v in out['villager']['tasks'].items(): md.append('| %s | %d | %s | %s |' % (k, v['unit'], v['workRate'], v['carry']))
     md += ['', '村民：训练 %ss，%s，移速 %s，基础携带 %s。渔船：work_rate %s，携带 %s。' % (out['villager']['trainTime'], out['villager']['cost'], out['villager']['speed'], out['villager']['carry'], out['fishingShip']['workRate'], out['fishingShip']['carry']),
+           '', '猎物/家畜食物：' + '，'.join('%s（unit %d）%s' % (k, v['unit'], v['food']) for k, v in out['animals'].items()) + '。',
            '', '> work_rate 是纯采集速率；实际每分钟收入还取决于往返距离、放下资源时间等，模拟时需另建模型。', '',
            '## 与 aoe2techtree 对账（训练/建造/研究时间、费用）', '']
     real = [x for x in diffs if x[3] != '.dat 中不存在']
