@@ -2,7 +2,7 @@
 
 ## 角色
 
-产品 Steve Jobs，项目经理 Jeff Sutherland，开发 Linus Torvalds，测试 Kent Beck，设计 Jony Ive，产品运营 Reid Hoffman；hongcun lin 最终拍板。
+产品 Steve Jobs（兼 UI/设计审查与玩家反馈），项目经理 Jeff Sutherland，开发 Linus Torvalds，测试 Kent Beck；hongcun lin 最终拍板。
 
 ## 版本工作流
 
@@ -12,16 +12,16 @@
 
 - **范围**：Steve 在版本 issue 里写明本版范围并签字，定下即冻结。
 - **验收标准**：每个 issue 写成可测的条件（具体数值、宽度、状态或可复现链接）。Kent 定版时逐条核对，写不成测试的当场退回 Steve 改。
-- **设计稿**：只有改界面（CSS、组件或文案）的 issue 需要 Jony 出稿。稿子覆盖全部状态（空、加载、置灰、上限、未计入等）和 360/375/390/1280 四档宽度，颜色、字号标成设计令牌和数值；提交到 `docs/design/` 并链接在 issue 上，才算定稿、才能开工。开工后发现的设计问题记进下一版，版本中途不补勘误。
+- **设计稿**：只有改界面（CSS、组件或文案）的 issue 需要 Steve 出稿。稿子覆盖全部状态（空、加载、置灰、上限、未计入等）和 360/375/390/1280 四档宽度，颜色、字号标成设计令牌和数值；提交到 `docs/design/` 并链接在 issue 上，才算定稿、才能开工。开工后发现的设计问题记进下一版，版本中途不补勘误。
 - **失败用例**：Kent 为每个 issue 挂上失败用例。纯数据/逻辑的 issue 有验收标准和失败用例即可开工。
 - **合并顺序**：Jeff 按改动文件排合并顺序，改同一文件的串行做。每个 issue 只由一个执行者负责。
-- **版本分支**：开发用脚本建 `release/vX.Y.Z`，同时建好版本号和 CHANGELOG 骨架。Reid 随每个 issue 在 CHANGELOG 里写一句玩家能看懂的话。本版 PR 以版本分支为目标，合入前先 rebase 到其最新提交。
+- **版本分支**：开发用脚本建 `release/vX.Y.Z`，同时建好版本号和 CHANGELOG 骨架。开发随每个 issue 在 CHANGELOG 里写一句玩家能看懂的话。本版 PR 以版本分支为目标，合入前先 rebase 到其最新提交。
 - **main 只接热修**：只有线上数据错误单独热修，直接提到 main，作为 `x.y.z` 补丁版本发布（修订号 +1），合入后同步回当前版本分支。
 
 ### 2. 开发和验收
 
-- **PR 门禁**：CI 绿 + Kent ACCEPT（代表产品要求已满足）；涉及界面的再加 Jony 设计通过。Steve 不再逐个 PR 给 Product PASS。
-- **只认 PR 上的本人留言**：第一句写「ACCEPT @ <已验证的提交 SHA>」或「设计通过 @ <已验证的提交 SHA>」，未写明 SHA 的不算；群里说的、定时任务发的都不算。审查人：Kent，设计类再加 Jony。
+- **PR 门禁**：只改文档或只改样式（不动逻辑和测试）的 PR，CI 绿即可合并，不需要 Kent ACCEPT。其他 PR 需 CI 绿 + Kent 在该 SHA 上 ACCEPT（代表产品要求已满足）；涉及界面的再加 Steve 设计通过。Steve 不再逐个 PR 给 Product PASS。
+- **只认 PR 上的本人留言**：第一句写「ACCEPT @ <已验证的提交 SHA>」或「设计通过 @ <已验证的提交 SHA>」，未写明 SHA 的不算；群里说的、定时任务发的都不算。审查人：Kent，设计类再加 Steve。
 - **能量化的交给 CI**：对比度、溢出等写进 e2e，CI 绿即过；设计只看机器量不出的层级、对齐、与稿是否一致。
 - **rebase 不重验**：rebase 后用 `git range-diff` 证明 PR 自身改动不变，只看 CI，不重新验收。
 - **工作目录**：每个 PR 用单独的 `git worktree` 和本地端口；不在共享目录切分支，不用 `git stash` 搬改动。
@@ -38,7 +38,7 @@
   - 步骤：合入 main（merge commit）→ 用 Playwright 读线上渲染后的页脚，版本号和构建号都等于合并后的 main 头部才通过（超时或不一致报错，不打 tag）→ 打 annotated tag → 用 CHANGELOG 对应小节起草 draft Release。
   - 每一步做没做完都看远端仓库和线上的实际状态，不写本地状态文件；失败停在那一步并打印已完成的步骤和原因，修好后直接重跑，已完成的步骤自动跳过。
   - 需要本机已登录 `gh`、对 main 有推送权限，并已安装 Playwright 浏览器（`npx playwright install chromium`）。
-- **公告**：每周小版本只写 CHANGELOG 里的玩家说明，不发外部公告。玩家可见的功能攒够时（新工具、文明解锁等），Reid 才起草外部公告，由 hongcun 决定是否发。有外部公告的版本：Kent 整版验收通过后，Reid 在 release 头上实测填数，每个数字附可复现链接；定稿挂在发版 issue，Steve、Kent 在那里确认。外部渠道由 hongcun 本人发。
+- **公告**：每周小版本只写 CHANGELOG 里的玩家说明，不发外部公告。玩家可见的功能攒够时（新工具、文明解锁等），Steve 才起草外部公告，由 hongcun 决定是否发。有外部公告的版本：Kent 整版验收通过后，Steve 在 release 头上实测填数，每个数字附可复现链接；定稿挂在发版 issue，Kent 在那里确认。外部渠道由 hongcun 本人发。
 
 部署只在 main 上触发，版本分支只跑测试。
 
