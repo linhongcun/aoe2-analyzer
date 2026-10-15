@@ -426,10 +426,12 @@ test.describe('#3 收尾', () => {
     const tag = scouts.locator('[data-t="bo-basis"]');
     await expect(tag).toHaveText('按通用计');
     expect(await tag.evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
-    const huns = scouts.locator('[data-t="bo-civ"]', { hasText: '匈奴' });
-    await expect(huns).toContainText('加成未计入');
-    await expect(huns.locator('small.tl-civ svg.lucide-ban')).toHaveCount(1);
-    expect(await huns.locator('small.tl-civ').evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
+    // v0.7.0 匈奴已支持，置灰示例改用马里（#42 白名单）
+    const off = scouts.locator('[data-t="bo-civ"]', { hasText: '马里' });
+    await expect(off).toContainText('加成未计入');
+    await expect(off.locator('small.tl-civ svg.lucide-ban')).toHaveCount(1);
+    expect(await off.locator('small.tl-civ').evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
+    await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '匈奴' })).not.toContainText('加成未计入');
     await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '法兰克' })).not.toContainText('加成未计入');
     // 已计入的排前面：data-off 的都在最后
     const offs = await scouts.locator('[data-t="bo-civ"]').evaluateAll((els) => els.map((e) => e.hasAttribute('data-off')));
@@ -454,14 +456,14 @@ test.describe('#3 收尾', () => {
     expect(await fs('[data-t="sum-arrive"] .k')).toBe('12px');
     expect(await fs('[data-t="sum-arrive"] b')).toBe('17px');
   });
-  test('文明选择器：搜置灰文明「玛雅」显示置灰项、不显示「没有匹配的文明」；真没有匹配时仍显示', async ({ page }) => {
+  test('文明选择器：搜置灰文明「玛雅」显示置灰项、不显示空态；真没有匹配时显示空态', async ({ page }) => {
     await page.goto('./#/builds?bo=scouts-18');
     await page.locator('#tlciv').click();
     const dlg = page.getByRole('dialog', { name: '文明' });
     await dlg.getByRole('combobox').fill('玛雅');
     await expect(dlg.locator('[data-civ="Mayans"]')).toHaveAttribute('aria-disabled', 'true');
-    await expect(dlg.getByText('没有匹配的文明')).toHaveCount(0);
+    await expect(dlg.locator('.cp-empty')).toHaveCount(0);
     await dlg.getByRole('combobox').fill('zzzz');
-    await expect(dlg.getByText('没有匹配的文明')).toBeVisible();
+    await expect(dlg.getByText('没有找到“zzzz”')).toBeVisible();
   });
 });
