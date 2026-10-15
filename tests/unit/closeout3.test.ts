@@ -42,9 +42,9 @@ describe('#3 收尾：推荐文明标「加成未计入」', () => {
   it('unsupported = 推荐文明中 simSupport 为 false 的', () => {
     for (const bo of buildOrders) expect(listMeta(bo).unsupported).toEqual(bo.civs.filter((c) => !simSupport(c)));
   });
-  it('scouts-18 推荐的匈奴标出、法兰克不标', () => {
+  it('scouts-18 推荐的匈奴（v0.7.0 已支持）和法兰克都不标', () => {
     const u = listMeta(buildOrders.find((b) => b.id === 'scouts-18')!).unsupported;
-    expect(u).toContain('Huns');
+    expect(u).not.toContain('Huns');
     expect(u).not.toContain('Franks');
   });
 });
