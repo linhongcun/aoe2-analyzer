@@ -4,6 +4,7 @@
  * 输出字段与 #3 交互稿第 4 节草案对齐（BuildTimeline / TimelineStep / Anomaly），差异见 docs/BUILD-SIM.md。
  */
 import type { Action, BuildOrder, Task } from './buildOrder';
+import { buildOrders as ALL_BOS } from '../data/buildOrders';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -365,8 +366,24 @@ interface Construction {
 }
 
 /** 单次模拟（固定参数）：返回每步时间与快照，不含误差带 */
+/**
+ * PR 127（Steve 口径 PR 评论 6195034241）：白名单（不支持）文明页面标「未计入」并按通用计，但直接调 simulateBuild 时
+ * 仍保持 release/v0.7.0 的旧算法：不应用按类别（class:*）的费用/训练时间倍率、折后价按整数取整。
+ * 否则葡萄牙黄金 −20% 等会被这次修正悄悄带进去。按文明缓存（eco 对象 + 文明）。
+ */
+const legacyCache = new WeakMap<EcoData, Map<string, boolean>>();
+function legacyCiv(eco: EcoData, civ: string): boolean {
+  if (civ === 'Generic') return false;
+  let c = legacyCache.get(eco);
+  if (!c) legacyCache.set(eco, (c = new Map()));
+  let v = c.get(civ);
+  if (v === undefined) c.set(civ, (v = !simSupport(eco, civ, ALL_BOS, { ignoreSourceGate: true }).supported));
+  return v;
+}
+
 function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P: SimParams) {
   const m = baseMods();
+  const legacy = legacyCiv(eco, civ);
   // 按 tech 整条判定（#43 Steve）：只要有一条效果是未实现或未分类，这个 tech 的效果一条都不应用，
   // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
   const scope = simScope(eco, [bo]);
@@ -460,10 +477,11 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const add = kind !== 'up' ? m.costAdd['unit:' + id] : undefined;
     if (add) for (const r of Object.keys(add) as Res[]) out[r] = Math.max(0, out[r] + add[r]!);
     // 单位折扣：按单位 id 与按类别（哥特步兵 class:6，#42）两种写法相乘
-    const cls = kind === 'unit' && eco.units[id]?.class !== undefined ? m.costMul['class:' + eco.units[id]!.class] : undefined;
+    const cls = !legacy && kind === 'unit' && eco.units[id]?.class !== undefined ? m.costMul['class:' + eco.units[id]!.class] : undefined;
     const mul = m.costMul['unit:' + id];
+    const rnd = legacy ? Math.round : roundHalf;
     if ((mul || cls) && kind !== 'up')
-      for (const r of Object.keys(out) as Res[]) out[r] = roundHalf(out[r] * (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1));
+      for (const r of Object.keys(out) as Res[]) out[r] = rnd(out[r] * (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1));
     return out;
   };
   /** 科技研究时间：.dat 原值经文明修正（set 为绝对秒数，如哥特织布机 1 s；mul 为倍率，如马来升时代 ×0.6） */
@@ -729,7 +747,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       let left = unitBusy.get(b);
       if (left === undefined) {
         const u = eco.units[cur.unit]!;
-        const clsT = u.class !== undefined ? (m.timeMul['class:' + u.class] ?? 1) : 1; // 按类别的训练加速（阿兹特克军事单位）
+        const clsT = !legacy && u.class !== undefined ? (m.timeMul['class:' + u.class] ?? 1) : 1; // 按类别的训练加速（阿兹特克军事单位）
         left = ((u.timeAt?.[String(b)] ?? u.trainTime) * (m.timeMul['unit:' + cur.unit] ?? 1) * clsT) / (m.rate['unit:' + b] ?? 1);
       }
       left -= TICK;
