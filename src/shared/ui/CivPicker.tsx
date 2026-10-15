@@ -9,7 +9,7 @@ import { DLCS } from '../../domain/dlc';
 import type { Civ } from '../../domain/types';
 import { CivIcon, DlcImg } from './art';
 import { Icon } from './Icon';
-import { Ban } from 'lucide-react';
+import { Ban, SearchX } from 'lucide-react';
 
 export interface CivPickerProps {
   /** 触发按钮的 id（测试与 label 使用） */
@@ -274,7 +274,13 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix, i
                   </div>
                 );
               })}
-              {!rows.some((r) => r.kind !== 'head') && <p className="note cp-empty">没有匹配的文明</p>}
+              {!rows.some((r) => r.kind !== 'head') && (
+                <div className="cp-empty" role="status">
+                  <SearchX size={24} aria-hidden />
+                  <p>没有找到“{q.trim()}”</p>
+                  <p className="cp-hint">可以试试英文名</p>
+                </div>
+              )}
             </div>
           </div>
         </>
