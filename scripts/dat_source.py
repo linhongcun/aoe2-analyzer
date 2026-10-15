@@ -87,7 +87,7 @@ def unit(u):
             'TrainTime': u.creatable.train_locations[0].train_time if u.creatable and u.creatable.train_locations else None,
             'TrainAt': [[l.unit_id, l.train_time] for l in u.creatable.train_locations] if u.creatable else [],
             'Cost': [[c.type, c.amount, c.flag] for c in u.creatable.resource_costs if c.type >= 0 and c.amount] if u.creatable else [],
-            'Capacity': u.resource_capacity, 'WorkRate': u.bird.work_rate if u.bird else 0, 'Type': u.type}
+            'Capacity': u.resource_capacity, 'Food': next((r.amount for r in u.resource_storages if r.type == 0 and r.amount > 0), 0), 'WorkRate': u.bird.work_rate if u.bird else 0, 'Type': u.type}
 TASK_UNITS = {83, 293, 118, 212, 592, 590, 122, 216, 120, 354, 259, 214, 56, 57, 123, 218, 579, 581, 124, 220, 13}
 def tasks(i):
     h = d.unit_headers[i] if i < len(d.unit_headers) else None
@@ -112,7 +112,7 @@ json.dump(out, open(sys.argv[2], 'w'))
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v6.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v7.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])

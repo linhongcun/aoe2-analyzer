@@ -4,6 +4,7 @@
  * 输出字段与 #3 交互稿第 4 节草案对齐（BuildTimeline / TimelineStep / Anomaly），差异见 docs/BUILD-SIM.md。
  */
 import type { Action, BuildOrder, Task } from './buildOrder';
+import { buildOrders as ALL_BOS } from '../data/buildOrders';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -16,13 +17,15 @@ interface EffectRow {
 /** eco.json 中模拟需要的部分 */
 export interface EcoData {
   villager: { trainTime: number; cost: Cost; speed: number; carry: number; tasks: Record<string, { workRate: number; carry: number }> };
-  units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number> }>;
+  units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number>; class?: number }>;
   buildings: Record<string, { buildTime: number; cost: Cost }>;
   techs: Record<string, { researchTime: number; at: number; cost: Cost }>;
   ecoTechs: Record<string, { effects: EffectRow['effects'] }>;
   civEco: Record<string, EffectRow[]>;
   /** 升级时代前置建筑条件树（scripts/eco_build.py 从 .dat 时代科技 101/102/103 的前置展开；缺省视为无条件） */
   ageReq?: Record<string, { tech: number; req: AgeReqNode | null }>;
+  /** 猎物/家畜所含食物（.dat unit 资源储量；#42 哥特猎物倍率的基数） */
+  animals?: Record<string, { unit: number; food: number }>;
 }
 /** 前置条件树：{n, of} = of 中至少 n 项满足；{b} = 任一建筑已建成；{civ} = 本文明自动满足（如高棉） */
 export type AgeReqNode = { n: number; of: AgeReqNode[] } | { b: number[]; zh: string } | { civ: string[] };
@@ -101,6 +104,8 @@ export interface TimelineStep {
   /** 研究类步骤（升时代、科技）实际开始研究的时刻；界面行时间用它（#3） */
   researchAt?: number;
   doneAt: number;
+  /** 本步第一项训练/建造实际付的费用（含文明折扣；可带 .5，如哥特民兵食物 42.5） */
+  cost?: Stock;
   errSec: ErrBand;
   stock: Stock;
   pop: { used: number; cap: number };
@@ -215,6 +220,8 @@ interface Mods {
   farmNoWalk: boolean;
   /** 每完成一项科技（含升级时代、单位升级）返还的黄金（西班牙 res 269） */
   techReward: number;
+  /** 猎物食物倍率（res 268，哥特 ×1.23）：每采 1 单位猎物，入账 ×倍率 */
+  huntFoodMul: number;
   start: Stock;
 }
 /** 数值修正：按 .dat 效果顺序累积，set 覆盖之前的一切，mul/add 依次叠加。值 = (set ?? 原值) × mul + add */
@@ -249,6 +256,7 @@ function baseMods(): Mods {
     popBonus: 0,
     farmNoWalk: false,
     techReward: 0,
+    huntFoodMul: 1,
     start: { ...START },
   };
 }
@@ -258,6 +266,14 @@ const COST_ATTR: Record<string, Res | 'all'> = { cost: 'all', foodCost: 'food', 
 const RES_STOCK: Record<number, Res> = { 0: 'food', 1: 'wood', 2: 'stone', 3: 'gold' };
 const TECH_RES: Record<string, Res | 'all'> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone', '-1': 'all' };
 const RES_DEPOSIT: Record<number, Res> = { 299: 'food' };
+/**
+ * res 268：猎物所含食物倍率（issue 120 评论 6157775069 解码）。哥特 tech 402 里与狩猎 workRate ×0.813008 成对出现，
+ * 每从猎物扣 1 入账 ×1.23，净采集速度 = workRate × 0.813008 × 1.23 ≈ 原值。只作用于狩猎（eco 任务 hunt）；
+ * 是否也作用于狩猎以外的采集：未核实（res 268 是玩家级资源，.dat 看不出限定范围），模型只按狩猎算。
+ */
+const RES_HUNT_FOOD = 268;
+/** 单位折后价：Steve 在 issue 120 定 .5 不取整（哥特民兵 50×0.85 = 42.5），其余按最近的整数或 .5 取（39.84 → 40） */
+const roundHalf = (x: number) => Math.round(x * 2) / 2;
 /**
  * 高棉 tech 654「C-Bonus, Instant Farmers」在 .dat（185872，effect 690）里只有三条命令：
  * res 33 set 50、农民（214/259）workRate ×0.95。res 33 是各文明加成的标记值（丹麦 35/36、格鲁吉亚 9…），
@@ -310,6 +326,7 @@ function applyEffects(m: Mods, effects: EffectRow['effects']) {
       else if (x.res === 4 && x.op === 'add') m.popBonus += v;
       else if (x.res === 33 && x.op === 'set' && v === RES33_INSTANT_FARMERS) m.farmNoWalk = true;
       else if (x.res === 269 && x.op === 'set' && v > 0) m.techReward = SPANISH_TECH_REWARD_GOLD;
+      else if (x.res === RES_HUNT_FOOD && x.op === 'mul') m.huntFoodMul *= v;
     } else if (x.kind === 'techTime' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) m.techTime[x.tech] = pushMod(m.techTime[x.tech], x.op, v);
     else if (x.kind === 'techCost' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) {
       const r = TECH_RES[String(x.res)];
@@ -349,8 +366,24 @@ interface Construction {
 }
 
 /** 单次模拟（固定参数）：返回每步时间与快照，不含误差带 */
+/**
+ * PR 127（Steve 口径 PR 评论 6195034241）：白名单（不支持）文明页面标「未计入」并按通用计，但直接调 simulateBuild 时
+ * 仍保持 release/v0.7.0 的旧算法：不应用按类别（class:*）的费用/训练时间倍率、折后价按整数取整。
+ * 否则葡萄牙黄金 −20% 等会被这次修正悄悄带进去。按文明缓存（eco 对象 + 文明）。
+ */
+const legacyCache = new WeakMap<EcoData, Map<string, boolean>>();
+function legacyCiv(eco: EcoData, civ: string): boolean {
+  if (civ === 'Generic') return false;
+  let c = legacyCache.get(eco);
+  if (!c) legacyCache.set(eco, (c = new Map()));
+  let v = c.get(civ);
+  if (v === undefined) c.set(civ, (v = !simSupport(eco, civ, ALL_BOS, { ignoreSourceGate: true }).supported));
+  return v;
+}
+
 function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P: SimParams) {
   const m = baseMods();
+  const legacy = legacyCiv(eco, civ);
   // 按 tech 整条判定（#43 Steve）：只要有一条效果是未实现或未分类，这个 tech 的效果一条都不应用，
   // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
   const scope = simScope(eco, [bo]);
@@ -415,6 +448,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const stepAnoms: Anomaly[][] = bo.steps.map(() => []);
   const stepPending: Pending[][] = bo.steps.map(() => []);
   const payQ: Pending[] = [];
+  /** 每步第一项训练/建造实际付的费用（#42 哥特民兵 42.5 显示用） */
+  const stepCost: (Stock | undefined)[] = Array(nSteps).fill(undefined);
   let nextStep = 0;
   const finalVils = Math.max(...bo.steps.map((s) => s.vils));
   const clickVils = (a: number) => bo.steps.find((s) => s.actions.some((x) => x.type === 'ageUp' && x.age === a))?.vils;
@@ -441,8 +476,12 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     }
     const add = kind !== 'up' ? m.costAdd['unit:' + id] : undefined;
     if (add) for (const r of Object.keys(add) as Res[]) out[r] = Math.max(0, out[r] + add[r]!);
+    // 单位折扣：按单位 id 与按类别（哥特步兵 class:6，#42）两种写法相乘
+    const cls = !legacy && kind === 'unit' && eco.units[id]?.class !== undefined ? m.costMul['class:' + eco.units[id]!.class] : undefined;
     const mul = m.costMul['unit:' + id];
-    if (mul && kind !== 'up') for (const r of Object.keys(out) as Res[]) out[r] = Math.round(out[r] * (mul.all ?? 1) * (mul[r] ?? 1));
+    const rnd = legacy ? Math.round : roundHalf;
+    if ((mul || cls) && kind !== 'up')
+      for (const r of Object.keys(out) as Res[]) out[r] = rnd(out[r] * (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1));
     return out;
   };
   /** 科技研究时间：.dat 原值经文明修正（set 为绝对秒数，如哥特织布机 1 s；mul 为倍率，如马来升时代 ×0.6） */
@@ -455,7 +494,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const rate = (t: Task): number => {
     const et = ECO_TASK[t];
     const base = eco.villager.tasks[et]!;
-    const wr = base.workRate * (m.rate[et] ?? 1) * (m.rate.villager ?? 1);
+    // 猎物倍率（res 268）只作用于狩猎：每次采集动作入账 ×倍率，等效于 workRate ×倍率
+    const wr = base.workRate * (m.rate[et] ?? 1) * (m.rate.villager ?? 1) * (et === 'hunt' ? m.huntFoodMul : 1);
     const carry = base.carry * (m.carry[et] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + et] ?? 0) + (m.carry['add:villager'] ?? 0);
     const d = t === 'farm' && m.farmNoWalk ? 0 : NEAR.includes(t) ? P.nearTiles : P.walkTiles;
     const walk = (2 * d) / (eco.villager.speed * m.speed);
@@ -598,6 +638,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       }
       pay(c);
       p.paid = true;
+      if ((a.type === 'train' || a.type === 'build') && !stepCost[p.step]) stepCost[p.step] = c;
       payQ.shift();
       if (p.blockedSince !== undefined && t - p.blockedSince > 1e-9) {
         const from = r1(p.blockedSince);
@@ -706,7 +747,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       let left = unitBusy.get(b);
       if (left === undefined) {
         const u = eco.units[cur.unit]!;
-        left = ((u.timeAt?.[String(b)] ?? u.trainTime) * (m.timeMul['unit:' + cur.unit] ?? 1)) / (m.rate['unit:' + b] ?? 1);
+        const clsT = !legacy && u.class !== undefined ? (m.timeMul['class:' + u.class] ?? 1) : 1; // 按类别的训练加速（阿兹特克军事单位）
+        left = ((u.timeAt?.[String(b)] ?? u.trainTime) * (m.timeMul['unit:' + cur.unit] ?? 1) * clsT) / (m.rate['unit:' + b] ?? 1);
       }
       left -= TICK;
       if (left <= 1e-9) {
@@ -833,7 +875,20 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const xs = ps.filter((p) => p.a.type === 'ageUp' || p.a.type === 'research' || p.a.type === 'upgrade').map((p) => p.startedAt);
     return xs.length && xs.every((x) => x !== undefined) ? Math.max(...(xs as number[])) : null;
   });
-  return { startAt, doneAt, snap, stepAnoms, ageUps, researchAt, buildingsDone, housePaidAt, tcIdleTotal: r1(tcIdleTotal), end: r1(t) };
+  return {
+    startAt,
+    doneAt,
+    snap,
+    stepAnoms,
+    stepCost,
+    ageUps,
+    researchAt,
+    buildingsDone,
+    housePaidAt,
+    tcIdleTotal: r1(tcIdleTotal),
+    end: r1(t),
+    huntFoodMul: m.huntFoodMul,
+  };
 }
 
 const PRIO: Record<Anomaly['type'], number> = { idle_tc: 0, timeout: 1, pop_block: 2, prereq_wait: 3, resource_short: 4, tc_busy: 5 };
@@ -875,6 +930,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
       ? { researchAt: R.researchAt[i]! }
       : {}),
     doneAt: R.doneAt[i] ?? R.end,
+    ...(R.stepCost[i] ? { cost: R.stepCost[i]! } : {}),
     errSec: band(R.doneAt[i] ?? null, near.doneAt[i] ?? null, far.doneAt[i] ?? null),
     ...(R.snap[i] ?? {
       stock: { food: 0, wood: 0, gold: 0, stone: 0 },
@@ -992,7 +1048,6 @@ export const UNHANDLED_RES: Record<number, string> = {
   190: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
   216: '家畜食物倍率，和牧羊 workRate 成对出现（鞑靼 ×0.637/×1.57），未建模',
   219: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  268: '猎物倍率，和狩猎 workRate 成对出现（哥特 ×0.813/×1.23），未建模',
   296: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
   215: '采果工存放的食物 +25%（马普切 1381），未建模',
   85: '科技费用折扣是否作用于升级时代待 .dat 核实（汉）',
@@ -1013,16 +1068,14 @@ export const UNHANDLED_RES: Record<number, string> = {
  * 送的是马（非村民），不改变村民数和资源，开局模拟不涉及。
  */
 const RES234_IRRELEVANT_TECH: Record<number, string> = {
-  238: '匈奴开局送马（tech 238，前置 308，含义未核实），不改变村民数与资源',
-  241: '匈奴禁用开局马（tech 241，前置 307，含义未核实），不改变村民数与资源',
+  238: '匈奴开局送马（tech 238，前置 308，含义未核实），马的食物未计入，不改变村民数与资源',
+  241: '匈奴禁用开局马（tech 241，前置 307，含义未核实），马的食物未计入，不改变村民数与资源',
 };
 /**
  * 加成逻辑已实现、但出处不足，本版仍按不支持处理（UI 置灰）的文明。
- * 匈奴：缺第二条 2020 年后的独立出处（#42，Steve 裁定 v0.4.0 置灰）。补到后删掉这一行即可解除置灰。
+ * v0.7.0：匈奴补齐第二条出处 St4rk（2020），已解除（issue 120 Q1）。
  */
-export const SOURCE_PENDING_CIVS: Record<string, string> = {
-  Huns: '匈奴加成已实现，但还缺第二条 2020 年后的独立出处，本版暂按通用计',
-};
+export const SOURCE_PENDING_CIVS: Record<string, string> = {};
 /** 仅测试构建用：VITE_FORCE_SIM_CIVS=Huns 时跳过出处门槛（e2e 验 flag 打开后的界面）；正式构建不设 */
 const FORCED_CIVS = new Set(
   String((import.meta as { env?: Record<string, string | undefined> }).env?.VITE_FORCE_SIM_CIVS ?? '')
@@ -1055,7 +1108,9 @@ export function simScope(eco: EcoData, bos: BuildOrder[]) {
         if (a.type === 'train' || a.type === 'upgrade') units.add(a.unit);
         if (a.type === 'research') techs.add(a.tech);
       }
-  return { units, buildings, techs };
+  /** 开局单位 → .dat 类别（类别折扣判定用） */
+  const unitClass = new Map([...units].map((u) => [u, eco.units[u]?.class ?? -1] as const));
+  return { units, buildings, techs, unitClass };
 }
 
 /** tech 是否可以应用：整条 tech 里没有未实现/未分类的效果 */
@@ -1079,6 +1134,7 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
   if (e.kind === 'res') {
     if (e.res === undefined) return { kind: 'unknown' };
     if (e.res === 269 && e.op === 'set') return { kind: 'handled' };
+    if (e.res === RES_HUNT_FOOD && e.op === 'mul') return { kind: 'handled' };
     if (HANDLED_RES(e.res, e.op) || (e.res === 33 && e.op === 'set' && e.v === RES33_INSTANT_FARMERS)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_IRRELEVANT_TECH[row.tech]) return { kind: 'irrelevant', reason: RES234_IRRELEVANT_TECH[row.tech]! };
@@ -1090,6 +1146,14 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
     const t = e.target;
     const id = t.startsWith('unit:') ? Number(t.slice(5)) : NaN;
     const vil = t.startsWith('task:') || t === 'villager' || t === 'class:4' || id === 83;
+    // 类别目标（#42 哥特步兵 class:6）：开局里有该类别的单位时，费用倍率已按类别实现；其余属性不影响开局时间
+    if (t.startsWith('class:') && !vil) {
+      const cls = Number(t.slice(6));
+      if (![...scope.units].some((u) => scope.unitClass.get(u) === cls)) return { kind: 'irrelevant', reason: '开局不涉及的单位/建筑/类别' };
+      if (e.attr && (e.attr in COST_ATTR || e.attr === 'trainTime') && e.op === 'mul') return { kind: 'handled' };
+      if (e.attr === 'trainTime' || e.attr === 'workRate' || e.attr === 'carry' || (e.attr ?? '') in COST_ATTR) return { kind: 'unknown' };
+      return { kind: 'irrelevant', reason: '开局单位类别的非经济属性（攻防、生命等）不影响开局时间' };
+    }
     if (!vil && !scope.units.has(id) && !scope.buildings.has(id)) return { kind: 'irrelevant', reason: '开局不涉及的单位/建筑/类别' };
     if (e.attr === 'speed') return vil && e.op === 'mul' ? { kind: 'handled' } : { kind: 'irrelevant', reason: '非村民移速不影响开局时间' };
     if (FARM_UNITS.has(id) && e.attr === 'workRate')
@@ -1164,4 +1228,55 @@ export function noHouseCompare(
   const houseWood = eco.buildings[HOUSE]?.cost.Wood ?? 25;
   const housesSaved = genericTl.housePaidAt.filter((t) => t <= g.reachAt).length;
   return { earlierSec: r1(g.reachAt - c.reachAt), startWoodDelta, housesSaved, woodNet: housesSaved * houseWood + startWoodDelta };
+}
+
+/** #42：猎物所含食物（基数从 eco.animals 读，乘文明的 res 268 倍率；哥特野猪 340 × 1.23） */
+export function huntFoodMul(eco: EcoData, civ: string): number {
+  const m = baseMods();
+  for (const r of eco.civEco[civ] ?? [])
+    if (r.age === 1 && r.source !== 'team')
+      applyEffects(
+        m,
+        r.effects.filter((e) => e.kind === 'res' && e.res === RES_HUNT_FOOD),
+      );
+  return m.huntFoodMul;
+}
+export function animalFood(eco: EcoData, civ: string, animal: string): number | undefined {
+  const base = eco.animals?.[animal]?.food;
+  return base === undefined ? undefined : base * huntFoodMul(eco, civ);
+}
+/**
+ * 黑暗时代的采集效率（每秒入账食物/木头…），与 runOnce 的 rate() 同一公式：carry / (carry / workRate + 往返走路)。
+ * #42 用例按任务（eco 任务名，如 hunt）核对文明加成。
+ */
+export function gatherRate(
+  eco: EcoData,
+  civ: string,
+  ecoTask: string,
+  tiles: number = DEFAULT_PARAMS.nearTiles,
+): { carry: number; workRate: number; rate: number } {
+  const m = baseMods();
+  for (const r of eco.civEco[civ] ?? []) if (r.age === 1 && r.source !== 'team') applyEffects(m, r.effects);
+  const base = eco.villager.tasks[ecoTask]!;
+  const workRate = base.workRate * (m.rate[ecoTask] ?? 1) * (m.rate.villager ?? 1) * (ecoTask === 'hunt' ? m.huntFoodMul : 1);
+  const carry = base.carry * (m.carry[ecoTask] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + ecoTask] ?? 0) + (m.carry['add:villager'] ?? 0);
+  const walk = (2 * tiles) / (eco.villager.speed * m.speed);
+  return { carry, workRate, rate: carry / (carry / workRate + walk) };
+}
+/** 页面「按某文明计」下方的附注：已计入但有未核实部分、或明确不计入的加成 */
+export function civSimNotes(eco: EcoData, civ: string): string[] {
+  const out: string[] = [];
+  const rows = (eco.civEco[civ] ?? []).filter((r) => r.source !== 'team');
+  if (
+    rows.some((r) => {
+      const t = (r as { tech?: number }).tech;
+      return t !== undefined && !!RES234_IRRELEVANT_TECH[t];
+    })
+  )
+    out.push('马的食物未计入');
+  if (rows.some((r) => r.effects.some((e) => e.kind === 'res' && e.res === RES_HUNT_FOOD))) {
+    const k = huntFoodMul(eco, civ);
+    out.push(`猎物食物 ×${Math.round(k * 100) / 100}；对其他采集的作用未核实`);
+  }
+  return out;
 }
