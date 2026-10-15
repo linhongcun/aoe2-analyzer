@@ -633,8 +633,12 @@ export default function BuildTimelineView() {
                       费用{' '}
                       {(['food', 'wood', 'gold', 'stone'] as const)
                         .filter((r) => sel.cost![r] > 0)
-                        .map((r) => `${RES_ZH[r]} ${fmtCost(sel.cost![r])}`)
-                        .join(' · ')}
+                        .map((r, i) => (
+                          <span key={r}>
+                            {i > 0 && ' · '}
+                            {RES_ZH[r]} <b className="tl-num">{fmtCost(sel.cost![r])}</b>
+                          </span>
+                        ))}
                     </span>
                   )}
                   {(['food', 'wood', 'gold', 'stone'] as const).map((r) => (

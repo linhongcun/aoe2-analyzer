@@ -1258,7 +1258,7 @@ export function civSimNotes(eco: EcoData, civ: string): string[] {
     out.push('马的食物未计入');
   if (rows.some((r) => r.effects.some((e) => e.kind === 'res' && e.res === RES_HUNT_FOOD))) {
     const k = huntFoodMul(eco, civ);
-    out.push(`猎物食物 ×${Math.round(k * 100) / 100} 已计入；是否也作用于狩猎以外的采集未核实，按只作用于狩猎计`);
+    out.push(`猎物食物 ×${Math.round(k * 100) / 100}；对其他采集的作用未核实`);
   }
   return out;
 }
