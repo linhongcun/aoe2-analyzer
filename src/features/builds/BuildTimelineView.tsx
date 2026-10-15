@@ -6,7 +6,7 @@ import units from '../../data/units.json';
 import { buildOrders } from '../../data/buildOrders';
 import { civByEn, civs } from '../../data';
 import { simSupport } from '../../domain/simSupport';
-import { noHouseCompare, simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
+import { civSimNotes, noHouseCompare, simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { RowSegs } from './RowSegs';
@@ -48,6 +48,9 @@ const PRESETS = [
 ] as const;
 
 /** #/builds?bo=…：开局时间线（#3 v1.0 交互稿 + v1.1 增补 + #39 手机首屏/设置抽屉） */
+/** 费用：整数照常显示，带小数的保留 1 位（#42 哥特民兵 42.5） */
+const fmtCost = (x: number) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
+
 export default function BuildTimelineView() {
   const [sp, setSp] = useSearchParams();
   const q = parseQuery(
@@ -102,6 +105,7 @@ export default function BuildTimelineView() {
   const target = v.ages.find((a) => a.age === (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]) ?? v.ages[v.ages.length - 1];
   const targetZh = AGE_ZH[bo.target.age]!;
   const civLabel = simCiv !== 'Generic' ? `按${civByEn(simCiv)?.zh ?? simCiv}计` : '按通用计';
+  const civNotes = useMemo(() => (simCiv !== 'Generic' ? civSimNotes(eco as unknown as EcoData, simCiv) : []), [simCiv]);
   const ranged = v.bottlenecks.filter((b) => b.to > b.from);
   const tagged =
     v.top && v.top.to > v.top.from
@@ -399,6 +403,11 @@ export default function BuildTimelineView() {
               <span className="tl-civ" data-t="sum-civ">
                 {civLabel}
               </span>
+              {civNotes.length > 0 && (
+                <span className="s" data-t="civ-note">
+                  {civNotes.join('；')}
+                </span>
+              )}
               {target && rangeLabel(target.reachAt, target.errSec) && (
                 <span className="s tl-num tl-range" data-t="sum-range">
                   {rangeLabel(target.reachAt, target.errSec)}
@@ -619,6 +628,15 @@ export default function BuildTimelineView() {
                         {prereqDetail(a)}
                       </span>
                     ))}
+                  {sel.cost && (
+                    <span data-t="step-cost">
+                      费用{' '}
+                      {(['food', 'wood', 'gold', 'stone'] as const)
+                        .filter((r) => sel.cost![r] > 0)
+                        .map((r) => `${RES_ZH[r]} ${fmtCost(sel.cost![r])}`)
+                        .join(' · ')}
+                    </span>
+                  )}
                   {(['food', 'wood', 'gold', 'stone'] as const).map((r) => (
                     <span key={r}>
                       {RES_ZH[r]} <b className="tl-num">{Math.round(sel.stock[r])}</b>

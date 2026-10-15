@@ -426,10 +426,12 @@ test.describe('#3 收尾', () => {
     const tag = scouts.locator('[data-t="bo-basis"]');
     await expect(tag).toHaveText('按通用计');
     expect(await tag.evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
-    const huns = scouts.locator('[data-t="bo-civ"]', { hasText: '匈奴' });
-    await expect(huns).toContainText('加成未计入');
-    await expect(huns.locator('small.tl-civ svg.lucide-ban')).toHaveCount(1);
-    expect(await huns.locator('small.tl-civ').evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
+    // v0.7.0 匈奴已支持，置灰示例改用马里（#42 白名单）
+    const off = scouts.locator('[data-t="bo-civ"]', { hasText: '马里' });
+    await expect(off).toContainText('加成未计入');
+    await expect(off.locator('small.tl-civ svg.lucide-ban')).toHaveCount(1);
+    expect(await off.locator('small.tl-civ').evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
+    await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '匈奴' })).not.toContainText('加成未计入');
     await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '法兰克' })).not.toContainText('加成未计入');
     // 已计入的排前面：data-off 的都在最后
     const offs = await scouts.locator('[data-t="bo-civ"]').evaluateAll((els) => els.map((e) => e.hasAttribute('data-off')));
