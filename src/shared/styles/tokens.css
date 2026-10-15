@@ -18,6 +18,9 @@
   --color-muted: #636366; /* 说明文字 5.99:1（#ececf0 上 5.08:1） */
   --color-accent: #a65a14; /* 品牌琥珀（文字可用 5.13:1；白字在其上 5.13:1） */
   --color-accent-soft: #a65a141f;
+  --color-on-accent: #ffffff; /* accent 底上的文字 5.13:1（#94） */
+  --color-accent-ring: #a65a1433; /* 输入框聚焦外圈（#94） */
+  --color-grip: #c7c7cc; /* 手机抽屉拖动条，装饰（#95） */
   --color-link: #0066cc; /* 链接 5.57:1 */
   --color-chevron: #aeaeb2; /* 行尾装饰箭头（不承载信息） */
   --color-good: #1f7a35; /* 增益 +n 5.39:1 */

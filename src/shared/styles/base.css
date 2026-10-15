@@ -786,7 +786,7 @@ table.ediff td.dn {
 }
 .cp-trigger:hover,
 .cp-trigger[aria-expanded='true'] {
-  border-color: var(--c-gold-hi);
+  border-color: var(--color-accent);
 }
 .cp-trigger .ico,
 .cp-opt .ico {
@@ -842,6 +842,11 @@ table.ediff td.dn {
   padding: 6px 8px;
   font: inherit;
 }
+.cp-q:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-ring);
+}
 .cp-x {
   background: none;
   border: none;
@@ -890,15 +895,42 @@ table.ediff td.dn {
   flex: 1;
   min-width: 0;
 }
-.cp-opt.act {
-  background: var(--c-tag);
+/* #94 高亮：琥珀底白字 5.13:1；悬停与键盘高亮同一套 */
+.cp-opt.act,
+.cp-opt:not(.dis):hover {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
 }
+.cp-opt.act small,
+.cp-opt:not(.dis):hover small {
+  color: var(--color-on-accent);
+}
+/* 选中：accent 600 + check，不加底色 */
 .cp-opt.sel {
-  color: var(--c-gold-hi);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.cp-opt.sel small {
+  color: var(--color-accent);
+}
+.cp-opt.act.sel,
+.cp-opt.act.sel small {
+  color: var(--color-on-accent);
 }
 .cp-empty {
   grid-column: 1 / -1;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--c-muted);
+}
+.cp-empty p {
+  margin: 0;
 }
 @media (max-width: 899px) {
   .cp-mask {
@@ -912,9 +944,21 @@ table.ediff td.dn {
     bottom: 0;
     width: auto;
     max-width: none;
-    max-height: 75vh;
+    /* #95 固定高度，过滤前后不变；不支持 dvh 时回退 75vh */
+    height: 75vh;
+    height: min(75dvh, calc(100dvh - 48px));
+    max-height: none;
+    padding-bottom: env(safe-area-inset-bottom);
     border-radius: 14px 14px 0 0;
     border-bottom: none;
+  }
+  .cp-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overscroll-behavior: contain;
+  }
+  .cp-empty {
+    height: 100%;
   }
   .cp-head::before {
     content: '';
@@ -925,7 +969,7 @@ table.ediff td.dn {
     height: 4px;
     margin-left: -20px;
     border-radius: 2px;
-    background: var(--c-border);
+    background: var(--color-grip);
   }
   .cp-head {
     padding-top: 14px;
