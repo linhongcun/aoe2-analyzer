@@ -403,11 +403,6 @@ export default function BuildTimelineView() {
               <span className="tl-civ" data-t="sum-civ">
                 {civLabel}
               </span>
-              {civNotes.length > 0 && (
-                <span className="s" data-t="civ-note">
-                  {civNotes.join('；')}
-                </span>
-              )}
               {target && rangeLabel(target.reachAt, target.errSec) && (
                 <span className="s tl-num tl-range" data-t="sum-range">
                   {rangeLabel(target.reachAt, target.errSec)}
@@ -439,6 +434,11 @@ export default function BuildTimelineView() {
               <b className="tl-num">{target?.vils ?? '—'}</b>
             </li>
           </ul>
+          {civNotes.length > 0 && (
+            <p className="tl-civ-note" data-t="civ-note">
+              {civNotes.join('；')}
+            </p>
+          )}
         </SumMain>
         <div className="tl-share-slot">
           <div className="tl-share-row">

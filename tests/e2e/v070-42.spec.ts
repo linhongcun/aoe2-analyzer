@@ -37,3 +37,30 @@ test.describe('#42 哥特', () => {
     await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按哥特计');
   });
 });
+
+for (const w of [360, 375, 390, 1280]) {
+  test.describe(`#42 哥特附注排版 @${w}`, () => {
+    test.use({ viewport: { width: w, height: w < 900 ? 740 : 800 } });
+    test('附注单独一行；1280 一整行，窄屏折行时末行不少于 3 个字', async ({ page }) => {
+      await page.goto('./#/builds?bo=drush-fc&civ=Goths');
+      const note = page.locator('[data-t="civ-note"]');
+      await expect(note).toContainText('未核实');
+      const lines = await note.evaluate((el) => {
+        const r = document.createRange();
+        r.selectNodeContents(el);
+        const tops = new Map<number, number>();
+        const text = el.textContent ?? '';
+        for (let i = 0; i < text.length; i++) {
+          const rr = document.createRange();
+          rr.setStart(el.firstChild!, i);
+          rr.setEnd(el.firstChild!, i + 1);
+          const t = Math.round(rr.getBoundingClientRect().top);
+          tops.set(t, (tops.get(t) ?? 0) + 1);
+        }
+        return [...tops.entries()].sort((a, b) => a[0] - b[0]).map((e) => e[1]);
+      });
+      if (w >= 900) expect(lines.length).toBe(1);
+      else expect(lines[lines.length - 1]).toBeGreaterThanOrEqual(3);
+    });
+  });
+}
