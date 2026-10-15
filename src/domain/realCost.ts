@@ -46,7 +46,10 @@ interface EffectLike {
 }
 const relevant = (e: EffectLike): { key: string; zh: string } | null => {
   if (e.kind === 'res' && e.res !== undefined && GATHER_RES.includes(e.res)) {
-    const zh = (UNHANDLED_RES[e.res] ?? '').replace(/（.*$/, '').replace(/未建模$/, '').trim();
+    const zh = (UNHANDLED_RES[e.res] ?? '')
+      .replace(/（.*$/, '')
+      .replace(/未建模$/, '')
+      .trim();
     return { key: 'res:' + e.res, zh: zh || `res ${e.res}` };
   }
   if (e.kind !== 'attr' || !e.attr || !['workRate', 'carry', 'speed'].includes(e.attr)) return null;

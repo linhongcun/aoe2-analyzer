@@ -1421,3 +1421,135 @@ table.ediff td.dn {
 .pk-count .pk-wn .pk-now {
   font-size: var(--fs-num-xl);
 }
+/* #88 等采集时间（设计稿 docs/design/mockups/issue88-real-cost） */
+.rc-seg {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-2) 0;
+}
+.rc-seg .seg {
+  display: inline-flex;
+  background: var(--color-control);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+.rc-seg .seg button {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  color: var(--color-text-2);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.rc-seg .seg button.on {
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 600;
+  box-shadow: 0 1px 3px var(--color-shadow);
+}
+.rc-budget {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  align-items: center;
+  font-size: 13px;
+  color: var(--color-text-2);
+}
+.rc-budget b {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.rc-budget input {
+  width: 64px;
+}
+.rc-res {
+  color: var(--color-muted);
+  font-size: 12px;
+  margin-left: 6px;
+}
+.rc-t {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.rc-ns {
+  display: block;
+  color: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.rc-big {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+.rc-basis {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-2);
+  font-size: 12px;
+  color: var(--color-muted);
+}
+.rc-basis .linkish {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 4px;
+  background: none;
+  border: 0;
+  color: var(--color-link);
+  text-decoration: underline;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.rc-basis .pk-pop {
+  font-size: 13px;
+}
+.rc-basis .pk-pop ol {
+  margin: 0;
+  padding-left: 18px;
+}
+.rc-basis-c {
+  display: inline-flex;
+  margin: 0;
+}
+.rc-basis-c .linkish {
+  min-height: 32px;
+}
+.rc-uline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: baseline;
+  padding: 10px 12px;
+  background: var(--color-surface-2);
+  border-radius: var(--radius-sm);
+  position: relative;
+}
+.rc-uline .k {
+  font-size: 13px;
+  color: var(--color-text-2);
+}
+.rc-uline b {
+  white-space: nowrap;
+}
+.rc-uline .rc-res,
+.rc-uline .rc-ns {
+  display: inline;
+  margin: 0;
+}
