@@ -20,12 +20,23 @@ test('#107 等资源 3000 拜占庭长戟兵 vs 法兰克游侠：按折后取�
   for (const n of ['405', '234', '171', '2970', '1 : 7.33']) await expect(t).toContainText(n);
   await expect(t).not.toContainText('236.25');
 });
-test('#107 B 方零损失显示「B 无阵亡」，不出数字和 Infinity / NaN / 破折号', async ({ page }) => {
+test('#107 B 方零损失显示「B 无阵亡」，不出「每损失」小字，两条注明照常显示', async ({ page }) => {
   await page.goto('#/duel?a=6.Byzantines.4.f.&b=569.Franks.4.f.&m=n&na=10&nb=10');
   const t = trade(page);
   await expect(t).toContainText('450');
   await expect(t).toContainText('B 无阵亡');
-  await expect(t).not.toContainText(/Infinity|NaN|—|1 : /);
+  await expect(t).not.toContainText(/每损失|Infinity|NaN|—|1 : /);
+  await expect(t).toContainText('只计阵亡单位');
+  await expect(t).toContainText('金按 1:1 计入');
+});
+test('#107 A 方零损失显示「A 无阵亡」（对调两方），不出「每损失」小字，两条注明照常显示', async ({ page }) => {
+  await page.goto('#/duel?a=569.Franks.4.f.&b=6.Byzantines.4.f.&m=n&na=10&nb=10');
+  const t = trade(page);
+  await expect(t).toContainText('450');
+  await expect(t).toContainText('A 无阵亡');
+  await expect(t).not.toContainText(/每损失|Infinity|NaN|—|1 : /);
+  await expect(t).toContainText('只计阵亡单位');
+  await expect(t).toContainText('金按 1:1 计入');
 });
 test('#107 1v1 模式整行不出', async ({ page }) => {
   await page.goto('#/duel?a=569.Franks.4.f.&b=359.Japanese.4.f.&m=1');

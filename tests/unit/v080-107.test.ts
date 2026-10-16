@@ -71,18 +71,26 @@ describe('#107 损失 = 阵亡数 × 折后单价（逐资源）', () => {
     expect(t.a).toEqual({ dead: 10, res: { Food: 190, Wood: 260 }, total: 450 });
     expect(t.b.total).toBe(0);
     expect(t.ratio).toBeNull();
-    expect(formatTrade(t).value).toBe('B 无阵亡');
-    expect(JSON.stringify(formatTrade(t))).not.toMatch(/Infinity|NaN|—/);
+    const f = formatTrade(t);
+    expect(f.value).toBe('B 无阵亡');
+    expect(f.note ?? '').toBe('');
+    expect(JSON.stringify(f)).not.toMatch(/每损失|Infinity|NaN|—/);
   });
   it('A 方零损失显示「A 无阵亡」（交换 A/B 两方后同一场战斗）', () => {
     const { t } = run(side(569, 'Franks', 4), 10, side(6, 'Byzantines', 4), 10);
     expect([t.a.total, t.b.total, t.ratio]).toEqual([0, 450, null]);
-    expect(formatTrade(t).value).toBe('A 无阵亡');
+    const f = formatTrade(t);
+    expect(f.value).toBe('A 无阵亡');
+    expect(f.note ?? '').toBe('');
+    expect(JSON.stringify(f)).not.toMatch(/每损失/);
   });
   it('双方均为 0 时显示「双方均无阵亡」', () => {
     const t = tradeLosses({ na: 5, nb: 5, aAlive: 5, bAlive: 5, costA: { Food: 60, Gold: 75 }, costB: { Food: 35, Wood: 25 } });
     expect([t.a.total, t.b.total, t.ratio]).toEqual([0, 0, null]);
-    expect(formatTrade(t).value).toBe('双方均无阵亡');
+    const f = formatTrade(t);
+    expect(f.value).toBe('双方均无阵亡');
+    expect(f.note ?? '').toBe('');
+    expect(JSON.stringify(f)).not.toMatch(/每损失/);
   });
   it('1v1 默认对阵：游侠剩 81 血不算损失，A 损失 0，B 损失 60，交换比为 null（1v1 界面整行不出，见 e2e）', () => {
     const A = side(569, 'Franks', 4),
