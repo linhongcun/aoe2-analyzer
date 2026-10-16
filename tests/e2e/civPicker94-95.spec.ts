@@ -50,7 +50,7 @@ for (const w of [360, 375, 390, 1280]) {
       expect(ratio(await fg(page, '.cp-opt.act small'), act)).toBeGreaterThanOrEqual(4.5);
     });
 
-    test('#95 过滤前后弹层高度不变、输入框不移动；空态文案只提英文名', async ({ page }) => {
+    test('#95 过滤前后弹层高度不变、输入框不移动；空态文案提示英文名或拼音', async ({ page }) => {
       await open(page);
       const box = async () => [(await page.locator('.cp-panel').boundingBox())!, (await page.locator('.cp-q').boundingBox())!] as const;
       const [p0, q0] = await box();
@@ -60,8 +60,7 @@ for (const w of [360, 375, 390, 1280]) {
       await page.locator('.cp-q').fill('zzzz');
       await expect(page.locator('.cp-empty')).toBeVisible();
       const [p2, q2] = await box();
-      await expect(page.locator('.cp-empty')).toContainText('可以试试英文名');
-      await expect(page.locator('.cp-empty')).not.toContainText('拼音');
+      await expect(page.locator('.cp-empty')).toContainText('可以试试英文名或拼音');
       if (w < 900) {
         expect(Math.abs(p1.height - p0.height)).toBeLessThanOrEqual(1);
         expect(Math.abs(p2.height - p0.height)).toBeLessThanOrEqual(1);
