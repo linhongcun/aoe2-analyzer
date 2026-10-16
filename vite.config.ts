@@ -41,5 +41,5 @@ export default defineConfig({
     __DATA_VERSION__: JSON.stringify(dat ? `${dat.patch}；.dat auto-mods@${dat.commit}` : 'unknown'),
   },
   build: { target: 'es2020', chunkSizeWarningLimit: 600 },
-  test: { include: ['tests/unit/**/*.test.ts'], environment: 'node' },
+  test: { include: ['tests/unit/**/*.test.ts'], environment: 'node', setupFiles: ['tests/setup/yieldEventLoop.ts'] },
 });
