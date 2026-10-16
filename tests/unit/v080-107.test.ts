@@ -4,7 +4,7 @@ import { discountedCost, priceAge } from '../../src/domain/costDiscount';
 import { countForBudget, duel, fighterFrom, groupFight } from '../../src/domain/duel';
 import { presetUpTo, simTechs, simulate } from '../../src/domain/simulator';
 // 草案：#107 需要的纯函数（模块尚不存在，实现时由 Linus 落地；名字可改）
-import { tradeLosses } from '../../src/domain/trade';
+import { formatTrade, tradeLosses } from '../../src/domain/trade';
 
 /** 与 Duel.tsx resolve() 同口径：满科技、按所选时代取折后价（#24/#129） */
 const byId = Object.fromEntries(units.map((u) => [u.id, u]));
@@ -44,6 +44,7 @@ describe('#107 损失 = 阵亡数 × 折后单价（逐资源）', () => {
     expect(t.a).toEqual({ dead: 3, res: { Food: 180, Gold: 225 }, total: 405 });
     expect(t.b).toEqual({ dead: 10, res: { Food: 350, Wood: 250 }, total: 600 });
     expect(t.ratio).toBeCloseTo(600 / 405, 9);
+    expect(formatTrade(t)).toEqual({ label: '交换比（A : B）', value: '1 : 1.48', note: 'A 每损失 1 资源，B 损失 1.48' });
   });
   it('等资源 3000 拜占庭长戟兵 x66 vs 法兰克游侠 x22：A 损失 405（用取整后的 26/19，不是 26.25/18.75），B 损失 2970，交换比 7.33', () => {
     const A = side(359, 'Byzantines', 4),
@@ -56,20 +57,34 @@ describe('#107 损失 = 阵亡数 × 折后单价（逐资源）', () => {
     expect(t.a).toEqual({ dead: 9, res: { Food: 234, Wood: 171 }, total: 405 });
     expect(t.b).toEqual({ dead: 22, res: { Food: 1320, Gold: 1650 }, total: 2970 });
     expect(t.ratio).toBeCloseTo(2970 / 405, 9);
+    expect(formatTrade(t).value).toBe('1 : 7.33');
   });
   it('10v10 哥特冠军剑士 vs 日本长戟兵：A 损失 98，B 损失 600，交换比 6.12', () => {
     const { t } = run(side(567, 'Goths', 4), 10, side(359, 'Japanese', 4), 10);
     expect(t.a.total).toBe(98);
     expect(t.b.total).toBe(600);
     expect(t.ratio).toBeCloseTo(600 / 98, 9);
+    expect(formatTrade(t).value).toBe('1 : 6.12');
   });
-  it('一方零损失：10v10 拜占庭精锐掷矛手 vs 法兰克游侠，B 损失 0，交换比为 null（不出 Infinity / NaN）', () => {
+  it('一方零损失：10v10 拜占庭精锐掷矛手 vs 法兰克游侠，B 损失 0，交换比为 null，显示「B 无阵亡」', () => {
     const { t } = run(side(6, 'Byzantines', 4), 10, side(569, 'Franks', 4), 10);
-    expect(t.a.total).toBe(450);
+    expect(t.a).toEqual({ dead: 10, res: { Food: 190, Wood: 260 }, total: 450 });
     expect(t.b.total).toBe(0);
     expect(t.ratio).toBeNull();
+    expect(formatTrade(t).value).toBe('B 无阵亡');
+    expect(JSON.stringify(formatTrade(t))).not.toMatch(/Infinity|NaN|—/);
   });
-  it('1v1 默认对阵：游侠剩 81 血不算损失，A 损失 0，B 损失 60，交换比为 null', () => {
+  it('A 方零损失显示「A 无阵亡」（交换 A/B 两方后同一场战斗）', () => {
+    const { t } = run(side(569, 'Franks', 4), 10, side(6, 'Byzantines', 4), 10);
+    expect([t.a.total, t.b.total, t.ratio]).toEqual([0, 450, null]);
+    expect(formatTrade(t).value).toBe('A 无阵亡');
+  });
+  it('双方均为 0 时显示「双方均无阵亡」', () => {
+    const t = tradeLosses({ na: 5, nb: 5, aAlive: 5, bAlive: 5, costA: { Food: 60, Gold: 75 }, costB: { Food: 35, Wood: 25 } });
+    expect([t.a.total, t.b.total, t.ratio]).toEqual([0, 0, null]);
+    expect(formatTrade(t).value).toBe('双方均无阵亡');
+  });
+  it('1v1 默认对阵：游侠剩 81 血不算损失，A 损失 0，B 损失 60，交换比为 null（1v1 界面整行不出，见 e2e）', () => {
     const A = side(569, 'Franks', 4),
       B = side(359, 'Japanese', 4);
     const d = duel(A.F, B.F);
