@@ -19,3 +19,20 @@ test('#124 B 方点「换成骑马弩兵」只改 b，保留时代/科技/团队
   await expect(page).toHaveURL(/a=39\.Magyars\./);
   await expect(page.locator('#duel-res')).toBeVisible();
 });
+test('#124 造不了的一方卡片置灰：data-unavailable、标题用 --color-muted、头像灰度', async ({ page }) => {
+  await page.goto('#/duel?a=39.Franks.3.f.&b=39.Magyars.3.f.&m=r&bud=3000');
+  const a = page.locator('#duel-a');
+  await expect(a).toHaveAttribute('data-unavailable', 'true');
+  await expect(page.locator('#duel-b')).not.toHaveAttribute('data-unavailable');
+  const muted = await page.evaluate(() => {
+    const el = document.createElement('span');
+    el.style.color = 'var(--color-muted)';
+    document.body.append(el);
+    const c = getComputedStyle(el).color;
+    el.remove();
+    return c;
+  });
+  await expect(a.locator('.duel-head h3')).toHaveCSS('color', muted);
+  await expect(a.locator('.duel-head img').first()).toHaveCSS('filter', 'grayscale(1)');
+  await expect(page.locator('#duel-b .duel-head h3')).not.toHaveCSS('color', muted);
+});

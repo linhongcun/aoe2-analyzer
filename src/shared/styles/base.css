@@ -1082,11 +1082,25 @@ table.ediff td.dn {
   background: var(--c-gold-hi);
   color: var(--color-surface);
 }
-.duel-pending {
+/* 造不了的组合：标题、文明行和头像整体置灰，一眼看出无效 */
+.duel-side[data-unavailable] .duel-head h3,
+.duel-side[data-unavailable] .duel-head .note,
+.duel-side[data-unavailable] .duel-head .duel-age {
+  color: var(--color-muted);
+}
+.duel-side[data-unavailable] .duel-head img {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+/* 结果区占位：--color-text-2 在 --color-surface 上，浅色 11.3:1、深色 11.2:1 */
+.duel-pending p {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
   justify-content: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-2);
 }
 .duel-tl {
   margin: 6px 0;

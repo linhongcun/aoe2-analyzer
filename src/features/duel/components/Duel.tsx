@@ -217,10 +217,12 @@ export default function Duel() {
         <Side k="b" side={B} fams={fams} onChange={(s) => upd('b', s)} count={cntB} bud={mode === 'r' ? bud : 0} time={mode === 't' ? [vils, mins] : null} />
       </div>
       {isUnavail(A) || isUnavail(B) ? (
-        <p className="note duel-pending" data-t="pk-pending">
-          <Icon name="info" className="ic" />
-          先在上面选好能造的单位或文明，再出对战结果。
-        </p>
+        <div id="duel-pending" className="posbox duel-pending">
+          <p data-t="pk-pending">
+            <Icon name="info" className="ic" />
+            先在上面选好能造的单位或文明，再出对战结果。
+          </p>
+        </div>
       ) : mode === '1' ? (
         <OneVOne A={A} B={B} />
       ) : (
@@ -414,7 +416,7 @@ function UnavailSide({ k, side, fams, onChange }: { k: 'a' | 'b'; side: Unavail;
   const civZh = civByEn(side.civ)?.zh ?? side.civ;
   const civId = `duel-${k}-civ`;
   return (
-    <div className={`duel-side side-${k} is-unavail`} id={`duel-${k}`}>
+    <div className={`duel-side side-${k} is-unavail`} id={`duel-${k}`} data-unavailable="true">
       <div className="duel-head">
         <UnitIcon u={u} big />
         <div>
