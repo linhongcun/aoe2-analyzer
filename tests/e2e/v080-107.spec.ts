@@ -3,22 +3,29 @@ import { expect, test, type Page } from '@playwright/test';
 /** #107：PK 结果卡显示双方损失资源与交换比（Steve 决定 issuecomment-6205718308 / 6205757051；分项格式 Linus 确认 CostView；360 断行 Steve issuecomment-6205888142） */
 const trade = (p: Page) => p.locator('#duel-res [data-t="pk-trade"]');
 
-/** 在根节点内找包含 needle 的文本 Range，返回其占了几行（按 top 去重）及第一行 top */
+/** 在根节点内跨文本节点找 needle，返回占了几行（按 top 去重）及第一行 top */
 async function textLines(root: import('@playwright/test').Locator, needle: string) {
   return root.evaluate((el, n) => {
+    type Pos = { node: Text; offset: number };
+    const pos: Pos[] = [];
     const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     let node: Node | null;
+    let acc = '';
     while ((node = walk.nextNode())) {
-      const t = node.textContent ?? '';
-      const i = t.indexOf(n);
-      if (i < 0) continue;
-      const r = document.createRange();
-      r.setStart(node, i);
-      r.setEnd(node, i + n.length);
-      const tops = [...r.getClientRects()].map((x) => Math.round(x.top));
-      return { lines: new Set(tops).size, top: tops[0] ?? -1, found: true };
+      const t = node as Text;
+      const s = t.textContent ?? '';
+      for (let i = 0; i < s.length; i++) pos.push({ node: t, offset: i });
+      acc += s;
     }
-    return { lines: 0, top: -1, found: false };
+    const i = acc.indexOf(n);
+    if (i < 0 || !pos[i] || !pos[i + n.length - 1]) return { lines: 0, top: -1, found: false };
+    const a = pos[i]!,
+      b = pos[i + n.length - 1]!;
+    const r = document.createRange();
+    r.setStart(a.node, a.offset);
+    r.setEnd(b.node, b.offset + 1);
+    const tops = [...r.getClientRects()].map((x) => Math.round(x.top));
+    return { lines: new Set(tops).size, top: tops[0] ?? -1, found: true };
   }, needle);
 }
 
