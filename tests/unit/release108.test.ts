@@ -185,6 +185,9 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     const r = await run(['v0.6.0', '--dry-run', ...opts()]);
     expect(r.status, out(r)).toBe(0);
     for (const step of [/merge/i, /页脚|footer/i, /tag/i, /release/i]) expect(out(r)).toMatch(step);
+    // #145 B 后续：第 3 步说的是「release 合入 main 的提交」，不再写「main 头部」
+    expect(out(r)).toContain('已指向 release 合入 main 的提交则跳过');
+    expect(out(r)).not.toContain('main 头部');
     expect(snapshot()).toEqual(before);
     expect(git(origin, 'tag', '-l')).toBe('');
     noStateFile();
