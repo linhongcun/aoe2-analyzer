@@ -4,6 +4,9 @@ export type Age = 1 | 2 | 3 | 4;
 export type CivType = 'cav' | 'arch' | 'inf' | 'naval' | 'monk' | 'siege' | 'def' | 'eco';
 
 export interface Civ {
+  /** issue 123 全拼 / 首字母，构建时生成 */
+  py?: string;
+  pyi?: string;
   en: string;
   zh: string;
   ty: CivType[];
@@ -24,6 +27,9 @@ export interface Civ {
   dlc: number | null;
 }
 export interface Unit {
+  /** issue 123 全拼 / 首字母，构建时生成 */
+  py?: string;
+  pyi?: string;
   id: number;
   en: string;
   zh: string;
@@ -62,6 +68,9 @@ export interface Unit {
   dlc: number | null;
 }
 export interface Tech {
+  /** issue 123 全拼 / 首字母，构建时生成 */
+  py?: string;
+  pyi?: string;
   id: number;
   en: string;
   zh: string;
@@ -122,6 +131,9 @@ export type UnitPred = (u: Unit) => boolean;
 
 export type BuildingType = 'military' | 'economy' | 'defense' | 'other';
 export interface Building {
+  /** issue 123 全拼 / 首字母，构建时生成 */
+  py?: string;
+  pyi?: string;
   id: number;
   en: string;
   zh: string;
