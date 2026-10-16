@@ -1,5 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import civs from '../../src/data/civs.json';
+import units from '../../src/data/units.json';
+import techs from '../../src/data/techs.json';
+import buildings from '../../src/data/buildings.json';
+import { pyMatch, search, type SearchItem } from '../../src/domain/search';
 
 /** v0.9.0 验收（#145）。Kent 写，先失败，功能做完后应全部通过。 */
 
@@ -24,5 +29,36 @@ describe('B #145 发版脚本重跑认合入提交、本地残留 tag 提前报�
     const mergeStep = src.indexOf('第 1 步：合并');
     expect(early).toBeGreaterThan(0);
     expect(early).toBeLessThan(mergeStep);
+  });
+});
+
+// ── E #145（kent/v090-acceptance @ fae2fc8 原样）──
+type Row = { zh: string; en: string; py?: string; pyi?: string; id?: number };
+const KINDS = { civs: 'civ', units: 'unit', buildings: 'building', techs: 'tech' } as const;
+const DATA = { civs, units, buildings, techs } as unknown as Record<keyof typeof KINDS, Row[]>;
+const items: SearchItem[] = (Object.keys(KINDS) as (keyof typeof KINDS)[]).flatMap((f) =>
+  DATA[f].map((r) => ({ ...r, kind: KINDS[f] }) as unknown as SearchItem),
+);
+
+describe('E #145 短拼音前缀不能被中英文命中挤出前 30', () => {
+  it('E1 「ba」前 30 条里有百夫长', () => {
+    expect(search(items, 'ba').map((r) => r.zh)).toContain('百夫长');
+  });
+  it('E2 任一 2 字母查询，只要有拼音命中，前 30 条里至少出现 1 条拼音命中', () => {
+    const bad: string[] = [];
+    for (const a of 'abcdefghijklmnopqrstuvwxyz')
+      for (const b of 'abcdefghijklmnopqrstuvwxyz') {
+        const q = a + b;
+        const pyHits = items.filter((it) => pyMatch(it, q));
+        if (!pyHits.length) continue;
+        const top = search(items, q);
+        if (!top.some((it) => pyMatch(it, q))) bad.push(q);
+      }
+    expect(bad).toEqual([]);
+  });
+  it('E3 中英文命中仍排在拼音命中前面（「ba」弹道学在百夫长前）', () => {
+    const r = search(items, 'ba').map((x) => x.zh);
+    expect(r.indexOf('弹道学')).toBeGreaterThanOrEqual(0);
+    expect(r.indexOf('弹道学')).toBeLessThan(r.indexOf('百夫长'));
   });
 });
