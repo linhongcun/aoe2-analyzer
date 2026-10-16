@@ -54,7 +54,7 @@ const buildCovers = (b, target) => {
 };
 
 /**
- * 打 tag 前的纯决策（#134）：看本地/远端同名 tag 是否已指向 main 头部。
+ * 打 tag 前的纯决策（#134）：看本地/远端同名 tag 是否已指向 release 合入 main 的提交（target）。
  * @param {{ version: string, localCommit: string | null, remoteCommit: string | null, mainHead: string }} p
  * @returns {{ action: 'create' } | { action: 'skip', where: string } | { action: 'fail', message: string }}
  */
@@ -198,16 +198,16 @@ async function main() {
     mainHead = c;
     log(`merge：已推送 merge commit ${c.slice(0, 7)} 到 main`);
   }
-  done.push(`合并：main 头部 ${dryRun && !merged ? '<merge commit>' : mainHead.slice(0, 7)}`);
+  done.push(`合并：合入提交 ${dryRun && !merged ? '<merge commit>' : mainHead.slice(0, 7)}`);
 
   // ── 第 2 步：等部署，读线上页脚 ──
-  const tagDone = !!tagObj; // 前置检查已保证此时 tag 指向 main 头部
+  const tagDone = !!tagObj; // 前置检查已保证此时 tag 指向 release 合入 main 的提交
   if (dryRun) {
     log(
-      `[dry-run] 页脚 footer：用 Playwright 打开 ${siteUrl}，最多等 ${o.footerTimeout}s，要求 [data-t=footer-app-version] = ${version}、[data-t=footer-build] 构建号 = 合并后 main 头部`,
+      `[dry-run] 页脚 footer：用 Playwright 打开 ${siteUrl}，最多等 ${o.footerTimeout}s，要求 [data-t=footer-app-version] = ${version}、[data-t=footer-build] 构建号 = release 合入 main 的提交或其后代`,
     );
   } else if (tagDone) {
-    log(`跳过页脚核对：tag ${version} 已指向 main 头部，说明之前已核对通过`);
+    log(`跳过页脚核对：tag ${version} 已指向 release 合入 main 的提交，说明之前已核对通过`);
   } else {
     const { chromium } = await import('@playwright/test');
     const browser = await chromium.launch();
@@ -236,14 +236,14 @@ async function main() {
           (last?.error ? `读取出错 ${last.error}` : `实际版本「${last?.version}」、「${last?.build}」`) +
           '。未打 tag；部署完成后重跑即可（合并会自动跳过）',
       );
-    log(`页脚 footer：${last.version} · ${last.build}，与 main 头部一致`);
+    log(`页脚 footer：${last.version} · ${last.build}，包含 release 合入 main 的提交 ${mainHead.slice(0, 7)}`);
   }
   done.push('页脚核对');
 
   // ── 第 3 步：annotated tag（#134：本地/远端分别解析，再 decideTagAction）──
   if (dryRun) {
     log(
-      `[dry-run] tag：用 ls-remote / 本地 rev-parse 看 ${version}；已指向 main 头部则跳过，否则 git tag -a ${version} -m ${version} <main 头部> && git push ${REMOTE} refs/tags/${version}`,
+      `[dry-run] tag：用 ls-remote / 本地 rev-parse 看 ${version}；已指向 release 合入 main 的提交则跳过，否则 git tag -a ${version} -m ${version} <release 合入 main 的提交> && git push ${REMOTE} refs/tags/${version}`,
     );
   } else {
     // 先读本地；fetch --tags 在本地/远端同名指向不同提交时会撞车，不能让它抛原始堆栈
@@ -263,7 +263,7 @@ async function main() {
       fail(`拉取 tags 失败：${err.split('\n')[0]}`);
     }
     if (decision.action === 'skip') {
-      log(`跳过打 tag：${version} 已在${decision.where}指向 main 头部 ${mainHead.slice(0, 7)}`);
+      log(`跳过打 tag：${version} 已在${decision.where}指向 release 合入 main 的提交 ${mainHead.slice(0, 7)}`);
       // 仅本地有、远端还没有时补推，避免跳过创建 tag 却漏推远端
       if (!remoteCommit) {
         git('push', '-q', REMOTE, `refs/tags/${version}`);
