@@ -7,55 +7,58 @@ import { decideTagAction } from '../../scripts/release.mjs';
 
 const head = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 const other = 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
+const ver = 'v0.7.0';
 
 describe('#134 decideTagAction', () => {
   it('none -> create', () => {
-    expect(decideTagAction({ localCommit: null, remoteCommit: null, mainHead: head })).toEqual({ action: 'create' });
+    expect(decideTagAction({ version: ver, localCommit: null, remoteCommit: null, mainHead: head })).toEqual({
+      action: 'create',
+    });
   });
 
   it('exists at head locally -> skip', () => {
-    expect(decideTagAction({ localCommit: head, remoteCommit: null, mainHead: head })).toEqual({
+    expect(decideTagAction({ version: ver, localCommit: head, remoteCommit: null, mainHead: head })).toEqual({
       action: 'skip',
       where: '本地',
     });
   });
 
   it('exists at head on remote only -> skip', () => {
-    expect(decideTagAction({ localCommit: null, remoteCommit: head, mainHead: head })).toEqual({
+    expect(decideTagAction({ version: ver, localCommit: null, remoteCommit: head, mainHead: head })).toEqual({
       action: 'skip',
       where: '远端',
     });
   });
 
   it('exists at head on both -> skip', () => {
-    expect(decideTagAction({ localCommit: head, remoteCommit: head, mainHead: head })).toEqual({
+    expect(decideTagAction({ version: ver, localCommit: head, remoteCommit: head, mainHead: head })).toEqual({
       action: 'skip',
       where: '本地和远端',
     });
   });
 
   it('exists elsewhere (local) -> fail', () => {
-    const r = decideTagAction({ localCommit: other, remoteCommit: null, mainHead: head });
+    const r = decideTagAction({ version: ver, localCommit: other, remoteCommit: null, mainHead: head });
     expect(r.action).toBe('fail');
     if (r.action === 'fail') {
-      expect(r.message).toMatch(/本地/);
-      expect(r.message).toMatch(/bbbbbbb/);
-      expect(r.message).toMatch(/aaaaaaa/);
+      expect(r.message).toBe('v0.7.0 指向 bbbbbbb，main 已经到 aaaaaaa；请人工核对后再跑');
     }
   });
 
   it('exists elsewhere (remote) -> fail', () => {
-    const r = decideTagAction({ localCommit: null, remoteCommit: other, mainHead: head });
+    const r = decideTagAction({ version: ver, localCommit: null, remoteCommit: other, mainHead: head });
     expect(r.action).toBe('fail');
     if (r.action === 'fail') {
-      expect(r.message).toMatch(/远端/);
-      expect(r.message).toMatch(/bbbbbbb/);
+      expect(r.message).toBe('v0.7.0 指向 bbbbbbb，main 已经到 aaaaaaa；请人工核对后再跑');
     }
   });
 
   it('local at head but remote elsewhere -> fail', () => {
-    const r = decideTagAction({ localCommit: head, remoteCommit: other, mainHead: head });
+    const r = decideTagAction({ version: ver, localCommit: head, remoteCommit: other, mainHead: head });
     expect(r.action).toBe('fail');
+    if (r.action === 'fail') {
+      expect(r.message).toBe('v0.7.0 指向 bbbbbbb，main 已经到 aaaaaaa；请人工核对后再跑');
+    }
   });
 });
 
