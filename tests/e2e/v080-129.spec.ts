@@ -7,6 +7,8 @@ for (const w of [360, 375, 390, 1280])
     const a = page.locator('[data-t="pk-cost-a"]');
     await expect(a).toBeVisible();
     await expect(a).not.toContainText('未计入');
+    await expect(a).toContainText('42.5');
+    await expect(a).toContainText('17');
     const h = await a.evaluate((el) => el.scrollWidth <= el.clientWidth);
     expect(h).toBe(true);
   });
