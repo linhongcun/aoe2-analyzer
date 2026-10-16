@@ -61,6 +61,13 @@ for (const w of [360, 1280]) {
       await expect(page.locator('.cmdk-list li').filter({ hasText: '印加枪兵长' }).first()).toBeVisible();
     });
 
+    test('精锐也能搜拼音：全局搜索「jryjqbz」和前缀「jryjqb」都出现「印加枪兵长」（精锐合并在同一条）', async ({ page }) => {
+      for (const q of ['jryjqbz', 'jryjqb']) {
+        const li = await palette(page, q);
+        await expect(li.filter({ hasText: '印加枪兵长' }).first(), q).toBeVisible();
+      }
+    });
+
     test('全局搜索「zzzz」显示「无匹配结果」', async ({ page }) => {
       await expect((await palette(page, 'zzzz')).first()).toHaveText('无匹配结果');
     });
