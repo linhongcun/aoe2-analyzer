@@ -135,13 +135,13 @@ test('#107 360 宽下 A、B 损失各占一行，「A 损失 405」与每个图�
   expect(aLoss.lines, '「A 损失 405」应只占一行').toBe(1);
   expect(bLoss.lines, '「B 损失 600」应只占一行').toBe(1);
   expect(aLoss.top, 'A 与 B 损失应各占一行').not.toBe(bLoss.top);
-  // 每个 CostView 的「图标 + 数字」组（.res 已 nowrap）各自只占一行
-  const resLines = await t.locator('.res').evaluateAll((els) =>
+  // 每个 CostView 的「图标 + 数字」组不换行（图标与数字 top 可能差 1px，用高度 / scrollWidth 判）
+  const resOk = await t.locator('.res').evaluateAll((els) =>
     els.map((e) => {
-      const r = document.createRange();
-      r.selectNodeContents(e);
-      return new Set([...r.getClientRects()].map((x) => Math.round(x.top))).size;
+      const lh = parseFloat(getComputedStyle(e).lineHeight) || e.getBoundingClientRect().height;
+      const box = e.getBoundingClientRect();
+      return box.height <= lh * 1.5 + 2 && e.scrollWidth <= e.clientWidth + 1;
     }),
   );
-  expect(resLines, '每个图标加数字组应只占一行').toEqual([1, 1, 1, 1]);
+  expect(resOk, '每个图标加数字组应不换行').toEqual([true, true, true, true]);
 });
