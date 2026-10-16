@@ -10,8 +10,8 @@ const ORDER: GatherRes[] = ['Food', 'Wood', 'Gold', 'Stone'];
 
 /** 未计入行括号里的原因。没有覆盖的文明仍写「数据读不准，按通用速度算」（v0.9.0 F 收尾只改这三家）。 */
 const UNCOUNTED_REASON: Record<string, string> = {
-  Bohemians: 'aoe2techtree 未写明此加成，暂不计入',
-  Armenians: 'aoe2techtree 未写明此加成，暂不计入',
+  Bohemians: '需研究科技，未建模',
+  Armenians: '需研究科技，未建模',
   Mayans: '资源多持续 15%，不是采集变快，暂不计入',
 };
 
