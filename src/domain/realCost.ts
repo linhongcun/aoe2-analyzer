@@ -10,6 +10,7 @@
  *   其余（含 eco.json 读得出但没有来源的）一律记「未计入」，按通用速度。
  */
 import ecoRaw from '../data/eco.json';
+import civs from '../data/civs.json';
 import type { Cost } from './types';
 import type { EcoData } from './buildSim';
 import { UNHANDLED_RES } from './buildSim';
@@ -70,7 +71,7 @@ export interface GatherModel {
   civ: string;
   /** 每种资源的有效速度（资源/秒，含往返） */
   rate: Record<Task, number>;
-  applied: CivGatherLine[];
+  applied: (CivGatherLine & { source: string })[];
   unsupported: CivGatherLine[];
 }
 
@@ -81,15 +82,16 @@ export interface GatherModel {
  * - Celts 120162「Lumberjacks work +15% faster」、Koreans 120167「Stone miners work +20% faster」、
  *   Turks 120159「Gold miners work +25% faster」→ 与 eco.json 一致，用 eco.json 值
  * - Berbers 120176「Villagers move +5% faster in Dark Age, +10% faster starting in Feudal Age」→ 与 eco.json 一致
- * 值：数字 = 用来源值；'eco' = 用 eco.json 值；'drop' = 不计也不列。未列出的条目记「未计入」。
+ * value：数字 = 用来源值；'eco' = 用 eco.json 值；'drop' = 不计也不列。未列出的条目记「未计入」。
+ * bonus：civs.json 的 bon 序号，取 aoe2techtree 中文文明描述中的对应要点作为展示来源。
  */
-const SOURCED: Record<string, Record<string, number | 'eco' | 'drop'>> = {
-  Romans: { 'class:4:workRate': 1.05, 'task:farm:workRate': 'drop' },
-  Slavs: { 'task:farm:workRate': 1.15 },
-  Celts: { 'task:wood:workRate': 'eco' },
-  Koreans: { 'task:stone:workRate': 'eco' },
-  Turks: { 'task:gold:workRate': 'eco' },
-  Berbers: { 'class:4:speed': 'eco' },
+const SOURCED: Record<string, Record<string, { value: number | 'eco'; bonus: number } | 'drop'>> = {
+  Romans: { 'class:4:workRate': { value: 1.05, bonus: 0 }, 'task:farm:workRate': 'drop' },
+  Slavs: { 'task:farm:workRate': { value: 1.15, bonus: 0 } },
+  Celts: { 'task:wood:workRate': { value: 'eco', bonus: 0 } },
+  Koreans: { 'task:stone:workRate': { value: 'eco', bonus: 0 } },
+  Turks: { 'task:gold:workRate': { value: 'eco', bonus: 0 } },
+  Berbers: { 'class:4:speed': { value: 'eco', bonus: 0 } },
 };
 
 const pct = (m: Mod) => Math.round((m.mul - 1) * 100);
@@ -118,16 +120,16 @@ export function gatherModel(age: number, civ = ''): GatherModel {
       else c.m.mul *= e.v ?? 1;
     }
   }
-  const applied: CivGatherLine[] = [],
+  const applied: GatherModel['applied'] = [],
     unsupported: CivGatherLine[] = [];
   for (const [key, c] of Object.entries(civMods)) {
     const s = src[key];
     if (s === 'drop') continue;
-    if (typeof s === 'number') c.m = { mul: s, add: 0 };
+    if (typeof s?.value === 'number') c.m = { mul: s.value, add: 0 };
     const label = c.exact ? `${c.zh} ${sign(pct(c.m))}%` : c.zh;
     if (s !== undefined && c.exact) {
       push(key, 'mul', c.m.mul);
-      applied.push({ label, techs: c.techs });
+      applied.push({ label, techs: c.techs, source: civs.find((c) => c.en === civ)?.bon[s.bonus] ?? '' });
     } else unsupported.push({ label, techs: c.techs });
   }
 

@@ -10,8 +10,8 @@ const ORDER: GatherRes[] = ['Food', 'Wood', 'Gold', 'Stone'];
 
 /** 未计入行括号里的原因。没有覆盖的文明仍写「数据读不准，按通用速度算」（v0.9.0 F 收尾只改这三家）。 */
 const UNCOUNTED_REASON: Record<string, string> = {
-  Bohemians: 'aoe2techtree 未写明此加成，暂不计入',
-  Armenians: 'aoe2techtree 未写明此加成，暂不计入',
+  Bohemians: '需研究科技，未建模',
+  Armenians: '需研究科技，未建模',
   Mayans: '资源多持续 15%，不是采集变快，暂不计入',
 };
 
@@ -110,14 +110,14 @@ export function RealCostBlock({
         <div key={'g' + a.label} className="pk-line pk-applied" data-t="rc-applied">
           <Icon name="check" className="ic" />
           <span>
-            已计入：{civZh} {a.label}
+            已计入：{civZh} {a.label}（来源：aoe2techtree 文明描述：{a.source}）
           </span>
         </div>
       ))}
       {g.unsupported.map((a) => (
-        <div key={'u' + a.label} className="pk-line pk-unverified" data-t="rc-unsupported">
+        <div key={'u' + a.label} className="pk-line pk-unverified rc-unsupported" data-t="rc-unsupported">
           <Icon name="info" className="ic" />
-          <span>{uncountedText(civ, civZh, a.label)}</span>
+          <span title={uncountedText(civ, civZh, a.label)}>{uncountedText(civ, civZh, a.label)}</span>
         </div>
       ))}
       <Basis age={age} food={rc.hasFood} />
