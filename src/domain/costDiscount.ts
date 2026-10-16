@@ -5,14 +5,15 @@
  *  2. 数值只来自 .dat 导出（scripts/effects_build.py → effects.json 的 costDiscounts：属性 100/103–106 的乘法效果逐时代累计），
  *     不从 civs.json 文本抄数；文本只用于对账。
  *  3. 读不出或与文本对不上的加成（ok=false）显示「折扣未计入」，按原价，不出估算值。
- * 折后价四舍五入，显示价与计算用价为同一个整数。
- * 恰好落在 .5 的（v3 规则，Steve 在 PR #84 恢复）：该加成对该单位记「未计入」，按原价，不出取整数字。
+ * 折后价取整（issue 129，Steve 在 issue 133 按游戏实测定）：就近取到 0.5，x.25 往小、x.75 往大（26.25 → 26，168.75 → 169），
+ * 与开局页共用 roundHalfPrice；显示价与计算用价为同一个值。恰好落在 .5 的直接显示 .5，不再记「未计入」。
  * 精确算术：每档用 .dat 乘数换算的整数百分比 p（构建时已与加成文本逐时代对账一致），
- * 折后价 = 原价 × Π(100 − p) / 100^k，全程整数，判断 .5 不受浮点误差影响。
+ * 折后价 = 原价 × Π(100 − p) / 100^k，分子分母全程整数，最后一步才取整。
  */
 import civsRaw from '../data/civs.json';
 import { DAT, type DatCostDiscount } from './datEffects';
 import type { Cost } from './types';
+import { roundHalfPrice } from './roundHalfPrice';
 
 const civs = civsRaw as unknown as { en: string; zh: string; bon: string[] }[];
 
@@ -35,13 +36,13 @@ export interface CostDiscount {
   /** 取价时代 */
   age: number;
   base: Cost;
-  /** 计算与显示共用的整数价 */
+  /** 计算与显示共用的价格（就近 0.5） */
   cost: Cost;
   exact: Cost;
   applied: AppliedLine[];
   /** 「折扣未计入」：数据读不出或与文本对不上，按原价 */
   unsupported: CostBonusLine[];
-  /** 「未计入」：折后价恰好落在 .5（取整方式未核实），按原价；res 为落在 .5 的资源 */
+  /** 已废弃（issue 129 起恒为空）：原「折后价恰好落在 .5 记未计入」。保留字段以免牵动界面代码 */
   half: (CostBonusLine & { res: string[] })[];
   /** 改科技费用/研究时间、不影响单位费用的加成 */
   noCost: CostBonusLine[];
@@ -52,11 +53,7 @@ function lineOf(civEn: string, d: { idx: number | null; techs: number[] }): Cost
   const text = d.idx !== null && d.idx >= 0 ? (civs.find((c) => c.en === civEn)?.bon[d.idx] ?? '') : '';
   return { idx: d.idx, text, label: stripPct(text) || text, techs: d.techs };
 }
-export const roundPrice = (x: number) => Math.round(x + 1e-9);
-/** n/d（正整数）小数部分恰为 .5 */
-export const isHalfFrac = (n: number, d: number) => (2 * n) % (2 * d) === d;
-/** n/d 四舍五入（整数运算） */
-export const roundHalfUp = (n: number, d: number) => Math.floor((2 * n + d) / (2 * d));
+export { roundHalfPrice };
 const ALL = ['Food', 'Wood', 'Gold', 'Stone'];
 
 /** 取价时代：选了时代用所选（不低于单位最早时代），没选用单位最早可用时代 */
@@ -97,8 +94,6 @@ export function discountedCost(
       });
     });
     const scale = (r: string) => 100 ** cnt[r]!;
-    const halves = Object.keys(step).filter((r) => isHalfFrac(num[r]! * step[r]!, den[r]! * scale(r)));
-    if (halves.length) return half.push({ ...lineOf(civEn, d), res: halves });
     Object.keys(step).forEach((r) => {
       num[r] = num[r]! * step[r]!;
       den[r] = den[r]! * scale(r);
@@ -110,7 +105,7 @@ export function discountedCost(
     cost: Cost = {};
   Object.keys(base).forEach((r) => {
     exact[r] = num[r]! / den[r]!;
-    cost[r] = roundHalfUp(num[r]!, den[r]!);
+    cost[r] = roundHalfPrice(num[r]! / den[r]!);
   });
   const noCost: CostBonusLine[] = [];
   if (opts.techIds) {

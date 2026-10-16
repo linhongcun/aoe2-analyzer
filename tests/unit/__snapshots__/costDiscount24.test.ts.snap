@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`.5 规则（v3，Steve 在 PR #84 恢复）：折后价恰为 .5 的不计入、按原价 > 扫描结果非空，且清单固定（数据变更时需复核） 1`] = `
+exports[`.5 规则（#129）：折后价恰为 .5 的直接显示 .5，不再记「未计入」 > 扫描结果非空，且清单固定（数据变更时需复核） 1`] = `
 [
   "Arbalester|Mayans|4|Gold",
   "Arbalester|Mayans|4|Wood",

@@ -6,6 +6,7 @@
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { civByEn, civs } from '../../data';
 import { DLCS } from '../../domain/dlc';
+import { pyMatch } from '../../domain/search';
 import type { Civ } from '../../domain/types';
 import { CivIcon, DlcImg } from './art';
 import { Icon } from './Icon';
@@ -33,7 +34,8 @@ export interface CivPickerProps {
 }
 
 /** 文明是否匹配搜索词（ql 已 trim + 小写）；列表过滤与 Enter 共用同一条规则 */
-export const civMatches = (c: Pick<Civ, 'zh' | 'en'>, ql: string) => !ql || c.zh.includes(ql) || c.en.toLowerCase().includes(ql);
+export const civMatches = (c: Pick<Civ, 'zh' | 'en' | 'py' | 'pyi'>, ql: string) =>
+  !ql || c.zh.includes(ql) || c.en.toLowerCase().includes(ql) || pyMatch(c, ql.replace(/\s+/g, ''));
 
 /**
  * #73 Enter 要选的文明（英文名，'' 为「无」）；返回 undefined 表示什么都不选。
@@ -278,7 +280,7 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix, i
                 <div className="cp-empty" role="status">
                   <SearchX size={24} aria-hidden />
                   <p>没有找到“{q.trim()}”</p>
-                  <p className="cp-hint">可以试试英文名</p>
+                  <p className="cp-hint">可以试试英文名或拼音</p>
                 </div>
               )}
             </div>
