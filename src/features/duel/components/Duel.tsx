@@ -95,8 +95,14 @@ export default function Duel() {
   };
   // issue 102：地址栏始终带完整的 a、b、m（等资源再带 bud，N vs M 再带 na/nb），反馈链接读地址栏即可复现当前对阵
   const canon = new URLSearchParams(sp);
-  canon.set('a', fmtSide(parseSide(sp.get('a'), DEF_A)));
-  canon.set('b', fmtSide(parseSide(sp.get('b'), DEF_B)));
+  // issue 141：文明为空或认不出时页面回落到该单位第一个能造的文明（issue 124 的规则不变），URL 也用 replace 写成这个文明
+  const civFix = (s: SideSpec, fallback: number): SideSpec => {
+    if (!core || civByEn(s.civ)) return s;
+    const u = core.unitById[s.uid]?.civs.length ? core.unitById[s.uid]! : core.unitById[fallback];
+    return u?.civs.length ? { ...s, civ: u.civs[0]! } : s;
+  };
+  canon.set('a', fmtSide(civFix(parseSide(sp.get('a'), DEF_A), DEF_A.uid)));
+  canon.set('b', fmtSide(civFix(parseSide(sp.get('b'), DEF_B), DEF_B.uid)));
   canon.set('m', mode);
   if (mode === 'r') canon.set('bud', String(bud));
   if (mode === 't' && vils !== DEFAULT_VILS) canon.set('vil', String(vils));
