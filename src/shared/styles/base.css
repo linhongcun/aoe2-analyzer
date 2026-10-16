@@ -1560,3 +1560,5 @@ table.ediff td.dn {
 .pk-trade-main { margin: 0; }
 .pk-trade-value { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .pk-trade .note { margin: 2px 0 0; }
+.pk-trade .nw,
+.pk-trade .res { white-space: nowrap; }

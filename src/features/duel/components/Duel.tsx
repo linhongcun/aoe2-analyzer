@@ -528,21 +528,20 @@ function TradeRow({ A, B, na, nb, aAlive, bAlive }: { A: Resolved; B: Resolved; 
         </b>
       </p>
       {f.note && <p className="note">{f.note}</p>}
-      <p className="note">
-        A 损失 {t.a.total}（阵亡 {t.a.dead}
-        {t.a.dead > 0 && (
-          <>
-            ：<CostView c={t.a.res} />
-          </>
-        )}
-        ）· B 损失 {t.b.total}（阵亡 {t.b.dead}
-        {t.b.dead > 0 && (
-          <>
-            ：<CostView c={t.b.res} />
-          </>
-        )}
-        ）
-      </p>
+      {(['a', 'b'] as const).map((k) => (
+        <p key={k} className="note pk-trade-loss" data-t={`pk-trade-loss-${k}`}>
+          <span className="nw">
+            {k.toUpperCase()} 损失 {t[k].total}
+          </span>
+          （阵亡 {t[k].dead}
+          {t[k].dead > 0 && (
+            <>
+              ：<CostView c={t[k].res} />
+            </>
+          )}
+          ）
+        </p>
+      ))}
       <p className="note">只计阵亡单位，存活单位掉的血不算；金按 1:1 计入。</p>
     </div>
   );
