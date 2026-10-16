@@ -1043,6 +1043,66 @@ table.ediff td.dn {
 .duel-tab {
   width: 100%;
 }
+/* issue 124 选的文明造不了这个单位 */
+.pk-unavail {
+  margin: var(--space-2) 0;
+  padding: var(--space-2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-control);
+}
+.pk-unavail-t {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  line-height: 20px;
+}
+.pk-unavail-t span {
+  /* 说明文字可换行，避免长提示在窄屏冲出提示框（PR 136 Kent） */
+  min-width: 0;
+  flex: 1;
+}
+.pk-unavail-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.pk-act {
+  min-height: 32px;
+  padding-block: 0;
+  white-space: nowrap;
+  font-size: var(--fs-sm);
+  /* 行高等于按钮高度：单行时高度 / 行高 = 1，便于四宽断言 */
+  line-height: 30px;
+}
+.pk-act.pri {
+  background: var(--c-gold-hi);
+  color: var(--color-surface);
+}
+/* 造不了的组合：标题、文明行和头像整体置灰，一眼看出无效 */
+.duel-side[data-unavailable] .duel-head h3,
+.duel-side[data-unavailable] .duel-head .note,
+.duel-side[data-unavailable] .duel-head .duel-age {
+  color: var(--color-muted);
+}
+.duel-side[data-unavailable] .duel-head img {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+/* 结果区占位：--color-text-2 在 --color-surface 上，浅色 11.3:1、深色 11.2:1 */
+.duel-pending p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-2);
+}
 .duel-tl {
   margin: 6px 0;
 }
