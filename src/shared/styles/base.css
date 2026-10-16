@@ -1043,6 +1043,14 @@ table.ediff td.dn {
 .duel-tab {
   width: 100%;
 }
+/* issue 140：群战「数量」表（无表头）里「A 10，剩 7」保持一行。
+   标签列不再占 40%，把宽度让给数字。1v1 对照表有表头，长标签仍可换行。 */
+.duel-tab:not(:has(thead)) td {
+  white-space: nowrap;
+}
+.stat.duel-tab:not(:has(thead)) td:first-child {
+  width: auto;
+}
 /* issue 124 选的文明造不了这个单位 */
 .pk-unavail {
   margin: var(--space-2) 0;
