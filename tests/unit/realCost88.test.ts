@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import eco from '../../src/data/eco.json';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
 import { countForTime, fmtClock, gatherModel, realCost } from '../../src/domain/realCost';
+import { uncountedText } from '../../src/features/duel/components/RealCost';
 
 type Eff = { kind: string; attr?: string; target?: string; op?: string; v?: number };
 const E = eco as unknown as {
@@ -133,5 +134,34 @@ describe('#88 Kent 手算表', () => {
     expect(gatherModel(4).rate.wood).toBeCloseTo(0.51434, 4);
     expect(gatherModel(3, 'Berbers').rate.gold).toBeCloseTo(0.43749, 4);
     expect(gatherModel(3, 'Turks').rate.gold).toBeCloseTo(0.52154, 4);
+  });
+});
+
+describe('#145 F 收尾：未计入原因只改三个文明', () => {
+  const lines = (civ: string, zh: string) => {
+    const u = gatherModel(4, civ).unsupported;
+    expect(u.length, civ).toBeGreaterThan(0);
+    return u.map((a) => uncountedText(civ, zh, a.label));
+  };
+  const paren = (rows: string[]) => rows.map((s) => s.slice(s.indexOf('（')));
+
+  it('波希米亚、亚美尼亚改为「aoe2techtree 未写明此加成，暂不计入」', () => {
+    expect(paren(lines('Bohemians', '波希米亚'))).toEqual(['（aoe2techtree 未写明此加成，暂不计入）']);
+    expect(new Set(paren(lines('Armenians', '亚美尼亚')))).toEqual(new Set(['（aoe2techtree 未写明此加成，暂不计入）']));
+  });
+  it('玛雅改为「资源多持续 15%，不是采集变快，暂不计入」', () => {
+    expect(new Set(paren(lines('Mayans', '玛雅')))).toEqual(new Set(['（资源多持续 15%，不是采集变快，暂不计入）']));
+  });
+  it('马里等其余文明仍是「数据读不准，按通用速度算」', () => {
+    expect(lines('Malians', '马里')).toEqual(['未计入：马里 采金加成（数据读不准，按通用速度算）']);
+    for (const [civ, zh] of [
+      ['Poles', '波兰'],
+      ['Portuguese', '葡萄牙'],
+      ['Shu', '蜀'],
+      ['Sicilians', '西西里'],
+      ['Khmer', '高棉'],
+      ['Aztecs', '阿兹特克'],
+    ] as const)
+      for (const s of lines(civ, zh)) expect(s, civ).toContain('（数据读不准，按通用速度算）');
   });
 });
