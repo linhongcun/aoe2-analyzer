@@ -202,9 +202,14 @@ describe('#145 F 收尾：未计入原因只改三个文明', () => {
   };
   const paren = (rows: string[]) => rows.map((s) => s.slice(s.indexOf('（')));
 
-  it('波希米亚、亚美尼亚改为「aoe2techtree 未写明此加成，暂不计入」', () => {
-    expect(paren(lines('Bohemians', '波希米亚'))).toEqual(['（aoe2techtree 未写明此加成，暂不计入）']);
-    expect(new Set(paren(lines('Armenians', '亚美尼亚')))).toEqual(new Set(['（aoe2techtree 未写明此加成，暂不计入）']));
+  it('波希米亚、亚美尼亚改为「需研究科技，未建模」，仍未计入', () => {
+    expect(paren(lines('Bohemians', '波希米亚'))).toEqual(['（需研究科技，未建模）']);
+    expect(new Set(paren(lines('Armenians', '亚美尼亚')))).toEqual(new Set(['（需研究科技，未建模）']));
+    for (const civ of ['Bohemians', 'Armenians']) {
+      const g = gatherModel(4, civ);
+      expect(g.applied).toEqual([]);
+      expect(g.rate).toEqual(gatherModel(4).rate);
+    }
   });
   it('玛雅改为「资源多持续 15%，不是采集变快，暂不计入」', () => {
     expect(new Set(paren(lines('Mayans', '玛雅')))).toEqual(new Set(['（资源多持续 15%，不是采集变快，暂不计入）']));
