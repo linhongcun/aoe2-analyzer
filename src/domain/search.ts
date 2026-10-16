@@ -15,13 +15,19 @@ export interface SearchItem {
   civNote?: string;
   /** 同分时排在其他结果之后（开局：搜单位名时不压过单位） */
   late?: boolean;
+  /** issue 123 全拼（无声调，ü 写 v），构建时由 scripts/pinyin_build.mjs 生成 */
+  py?: string;
+  /** issue 123 每个字的首字母 */
+  pyi?: string;
+  /** issue 123 合并进来的精锐版等的拼音（与 alt 对应） */
+  altPy?: { py?: string; pyi?: string }[];
 }
 
 /** 归一化：不分大小写、忽略所有空白（「Fast Castle」=「fastcastle」） */
 export const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
 
-/** 分档：名称完全匹配 > 名称前缀 > 别名完全匹配 > 名称包含 > 别名包含 */
-export const TIER = { exact: 100, prefix: 80, word: 75, alias: 70, sub: 40, aliasSub: 30 } as const;
+/** 分档：名称完全匹配 > 名称前缀 > 别名完全匹配 > 名称包含 > 别名包含 > 拼音前缀（issue 123） */
+export const TIER = { exact: 100, prefix: 80, word: 75, alias: 70, sub: 40, aliasSub: 30, py: 20 } as const;
 
 export function score(it: SearchItem, raw: string): number {
   const q = norm(raw);
@@ -32,8 +38,14 @@ export function score(it: SearchItem, raw: string): number {
     const n = norm(x);
     return n === q ? TIER.alias : n.includes(q) ? TIER.aliasSub : 0;
   });
-  return Math.max(main, ...a, ...al, 0);
+  return Math.max(main, ...a, ...al, pyMatch(it, q) || (it.altPy ?? []).some((x) => pyMatch(x, q)) ? TIER.py : 0, 0);
 }
+/** issue 123 拼音只认前缀，ü 写 v 和写 u 都算；排在所有中英文命中之后 */
+export const pyMatch = (it: { py?: string; pyi?: string }, q: string) => {
+  if (!/^[a-z]+$/.test(q)) return false;
+  const u = q.replace(/v/g, 'u');
+  return [it.py, it.pyi].some((p) => !!p && p.replace(/v/g, 'u').startsWith(u));
+};
 function score1(zh: string, en: string, q: string): number {
   const z = norm(zh),
     e = norm(en);
