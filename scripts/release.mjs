@@ -1,15 +1,18 @@
 #!/usr/bin/env node
-// 发版脚本（#108）：release/vX.Y.Z → main（merge commit）→ 等部署并核对线上页脚 → annotated tag → 起草 GitHub Release
+// 发版脚本（#108 / #134）：release/vX.Y.Z → main（merge commit）→ 等部署并核对线上页脚 → annotated tag → 起草 GitHub Release
 //
 // 用法：npm run release -- vX.Y.Z [--dry-run] [--site-url URL] [--footer-timeout 秒]
 //
 // 设计：每一步「做没做完」都看真实状态（远端分支/tag、线上页脚、gh release view），不写本地状态文件；
-// 任一步失败即停，打印已完成步骤与原因；重跑时已完成的步骤自动跳过。
+// 任一步失败即停（非 0 退出），打印已完成步骤与原因；重跑时已完成的步骤自动跳过。
+// tag 已在本地或远端指向 main 头部时跳过创建 tag；指向别的提交则失败。
 // --dry-run 只读远端状态并打印将执行的命令，不改任何分支、tag、Release。
+// 调用方勿用管道吞掉退出码；需要留日志时用 `set -o pipefail` 或检查 PIPESTATUS。
 import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const DEFAULT_SITE = 'https://linhongcun.github.io/aoe2-analyzer/';
 const REMOTE = 'origin';
@@ -40,6 +43,38 @@ const log = (m) => console.log(m);
 const git = (...a) => execFileSync('git', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 const gh = (...a) => spawnSync('gh', a, { encoding: 'utf8' });
 const isAncestor = (a, b) => spawnSync('git', ['merge-base', '--is-ancestor', a, b]).status === 0;
+
+/**
+ * 打 tag 前的纯决策（#134）：看本地/远端同名 tag 是否已指向 main 头部。
+ * @param {{ localCommit: string | null, remoteCommit: string | null, mainHead: string }} p
+ * @returns {{ action: 'create' } | { action: 'skip', where: string } | { action: 'fail', message: string }}
+ */
+export function decideTagAction({ localCommit, remoteCommit, mainHead }) {
+  const existing = [];
+  if (localCommit) existing.push({ where: '本地', commit: localCommit });
+  if (remoteCommit) existing.push({ where: '远端', commit: remoteCommit });
+  if (!existing.length) return { action: 'create' };
+  const bad = existing.find((e) => e.commit !== mainHead);
+  if (bad) {
+    return {
+      action: 'fail',
+      message:
+        `tag 已存在于${bad.where}且指向 ${bad.commit.slice(0, 7)}，不是 main 头部 ${mainHead.slice(0, 7)}；请人工核对后再跑`,
+    };
+  }
+  return { action: 'skip', where: existing.map((e) => e.where).join('和') };
+}
+
+/** 本地 tag 剥到 commit；不存在则 null */
+function localTagCommit(version) {
+  const r = spawnSync('git', ['rev-parse', '--verify', `${version}^{commit}`], { encoding: 'utf8' });
+  return r.status === 0 ? r.stdout.trim() : null;
+}
+
+/** 从 ls-remote 快照取 tag 指向的 commit（annotated 优先剥 ^{}） */
+function remoteTagCommit(refs, version) {
+  return refs.get(`refs/tags/${version}^{}`) ?? refs.get(`refs/tags/${version}`) ?? null;
+}
 
 /** 远端 refs 快照（ls-remote，只读，不动本地 ref） */
 function remoteRefs() {
@@ -104,9 +139,9 @@ async function main() {
   if (!mainHead0) fail('远端没有 main 分支');
   if (!dryRun) git('fetch', '-q', REMOTE, `refs/heads/${branch}:refs/remotes/${REMOTE}/${branch}`, `refs/heads/main:refs/remotes/${REMOTE}/main`);
   const merged = isAncestor(relHead, mainHead0);
-  const tagObj = refs.get(`refs/tags/${version}`);
-  const tagCommit = refs.get(`refs/tags/${version}^{}`) ?? tagObj;
-  if (tagObj && !(merged && tagCommit === mainHead0)) fail(`tag ${version} 已存在且指向 ${tagCommit?.slice(0, 7)}，不是合并后的 main 头部；请人工核对后再跑`);
+  const tagCommit = remoteTagCommit(refs, version);
+  const tagObj = tagCommit; // 远端是否已有该 tag（剥到 commit）
+  if (tagCommit && !(merged && tagCommit === mainHead0)) fail(`tag ${version} 已存在且指向 ${tagCommit.slice(0, 7)}，不是合并后的 main 头部；请人工核对后再跑`);
   const ci = ciGreen(relHead);
   log(`${DRY}检查 CI：gh api repos/{owner}/{repo}/commits/${relHead.slice(0, 7)}/check-runs`);
   if (!ci.ok) fail(`${branch} 头部 ${relHead.slice(0, 7)} 的 CI 不是绿的：${ci.why}`);
@@ -170,13 +205,29 @@ async function main() {
   }
   done.push('页脚核对');
 
-  // ── 第 3 步：annotated tag ──
-  if (tagDone) log(`跳过打 tag：${version} 已指向 main 头部 ${mainHead.slice(0, 7)}`);
-  else if (dryRun) log(`[dry-run] tag：git tag -a ${version} -m ${version} <main 头部> && git push ${REMOTE} refs/tags/${version}`);
-  else {
-    git('tag', '-a', version, '-m', version, mainHead);
-    git('push', '-q', REMOTE, `refs/tags/${version}`);
-    log(`tag：已推送 annotated tag ${version} → ${mainHead.slice(0, 7)}`);
+  // ── 第 3 步：annotated tag（#134：先 fetch tags，再按本地/远端决定 create/skip/fail）──
+  if (dryRun) {
+    log(`[dry-run] tag：git fetch --tags；若本地或远端已有指向 main 头部的 ${version} 则跳过，否则 git tag -a ${version} -m ${version} <main 头部> && git push ${REMOTE} refs/tags/${version}`);
+  } else {
+    // 先读本地（fetch 前），再拉远端 tags，避免「本地已有」被漏判后又 git tag -a 撞名
+    const localCommit = localTagCommit(version);
+    git('fetch', '-q', REMOTE, '--tags');
+    refs = remoteRefs();
+    const remoteCommit = remoteTagCommit(refs, version);
+    const decision = decideTagAction({ localCommit, remoteCommit, mainHead });
+    if (decision.action === 'fail') fail(decision.message);
+    if (decision.action === 'skip') {
+      log(`跳过打 tag：${version} 已在${decision.where}指向 main 头部 ${mainHead.slice(0, 7)}`);
+      // 仅本地有、远端还没有时补推，避免跳过创建 tag 却漏推远端
+      if (!remoteCommit) {
+        git('push', '-q', REMOTE, `refs/tags/${version}`);
+        log(`tag：已推送已有本地 tag ${version} → ${mainHead.slice(0, 7)}`);
+      }
+    } else {
+      git('tag', '-a', version, '-m', version, mainHead);
+      git('push', '-q', REMOTE, `refs/tags/${version}`);
+      log(`tag：已推送 annotated tag ${version} → ${mainHead.slice(0, 7)}`);
+    }
   }
   done.push(`tag ${version}`);
 
@@ -201,4 +252,7 @@ async function main() {
   log(`${DRY}完成：${done.join(' → ')}`);
 }
 
-main().catch((e) => fail(String(e?.stack ?? e)));
+const isDirectRun = import.meta.url === pathToFileURL(resolve(process.argv[1] ?? '')).href;
+if (isDirectRun) {
+  main().catch((e) => fail(String(e?.stack ?? e)));
+}
