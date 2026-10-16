@@ -4,7 +4,7 @@ import civs from '../../src/data/civs.json';
 import units from '../../src/data/units.json';
 import techs from '../../src/data/techs.json';
 import buildings from '../../src/data/buildings.json';
-import { pyMatch, search, type SearchItem } from '../../src/domain/search';
+import { pyMatch, score, search, TIER, type SearchItem } from '../../src/domain/search';
 import { gatherModel } from '../../src/domain/realCost';
 
 /** v0.9.0 验收（#145）。Kent 写，先失败，功能做完后应全部通过。 */
@@ -33,7 +33,7 @@ describe('B #145 发版脚本重跑认合入提交、本地残留 tag 提前报�
   });
 });
 
-// ── E #145（kent/v090-acceptance @ fae2fc8 原样）──
+// ── E #145（调整拼音展示顺序）──
 type Row = { zh: string; en: string; py?: string; pyi?: string; id?: number };
 const KINDS = { civs: 'civ', units: 'unit', buildings: 'building', techs: 'tech' } as const;
 const DATA = { civs, units, buildings, techs } as unknown as Record<keyof typeof KINDS, Row[]>;
@@ -42,8 +42,12 @@ const items: SearchItem[] = (Object.keys(KINDS) as (keyof typeof KINDS)[]).flatM
 );
 
 describe('E #145 短拼音前缀不能被中英文命中挤出前 30', () => {
-  it('E1 「ba」前 30 条里有百夫长', () => {
-    expect(search(items, 'ba').map((r) => r.zh)).toContain('百夫长');
+  it('E1 「ba」前 15 条里有百夫长', () => {
+    expect(
+      search(items, 'ba')
+        .slice(0, 15)
+        .map((r) => r.zh),
+    ).toContain('百夫长');
   });
   it('E2 任一 2 字母查询，只要有拼音命中，前 30 条里至少出现 1 条拼音命中', () => {
     const bad: string[] = [];
@@ -54,13 +58,44 @@ describe('E #145 短拼音前缀不能被中英文命中挤出前 30', () => {
         if (!pyHits.length) continue;
         const top = search(items, q);
         if (!top.some((it) => pyMatch(it, q))) bad.push(q);
+        if (items.some((it) => score(it, q) > TIER.py)) expect(score(top[0]!, q), q).toBeGreaterThan(TIER.py);
       }
     expect(bad).toEqual([]);
   });
-  it('E3 中英文命中仍排在拼音命中前面（「ba」弹道学在百夫长前）', () => {
-    const r = search(items, 'ba').map((x) => x.zh);
-    expect(r.indexOf('弹道学')).toBeGreaterThanOrEqual(0);
-    expect(r.indexOf('弹道学')).toBeLessThan(r.indexOf('百夫长'));
+  it('E3 中英文名称前缀命中仍优先（「ba」弹道学在百夫长前），拼音不再垫底', () => {
+    const textItems = items.filter((x) => score(x, 'ba') > TIER.py);
+    const pyItems = items.filter((x) => score(x, 'ba') === TIER.py);
+    const text = search(textItems, 'ba', items.length);
+    const py = search(pyItems, 'ba', items.length);
+    const r = search(items, 'ba');
+    const head = text.slice(0, 25);
+    expect(r).toEqual([...head.filter((x) => score(x, 'ba') >= TIER.prefix), ...py.slice(0, 5), ...head.filter((x) => score(x, 'ba') < TIER.prefix)]);
+    const names = r.map((x) => x.zh);
+    expect(names.indexOf('弹道学')).toBeGreaterThanOrEqual(0);
+    expect(names.indexOf('弹道学')).toBeLessThan(names.indexOf('百夫长'));
+  });
+  it('E4 不足 30 条时也提前展示拼音，不丢失结果', () => {
+    const subset = items.filter((x) => score(x, 'ba') > TIER.py).slice(0, 8);
+    const centurion = items.find((x) => x.zh === '百夫长')!;
+    const text = search(subset, 'ba');
+    expect(search([...subset, centurion], 'ba')).toEqual([
+      ...text.filter((x) => score(x, 'ba') >= TIER.prefix),
+      centurion,
+      ...text.filter((x) => score(x, 'ba') < TIER.prefix),
+    ]);
+  });
+  it('E5 小 limit 不超限，中英文命中仍居首；纯拼音查询填满可用位置', () => {
+    const text = items.filter((x) => score(x, 'ba') > TIER.py);
+    const first = search(text, 'ba')[0];
+    for (const limit of [1, 2, 3, 5, 10]) {
+      const r = search(items, 'ba', limit);
+      expect(r).toHaveLength(limit);
+      expect(r[0]).toBe(first);
+      expect(new Set(r).size).toBe(limit);
+    }
+    expect(search(items, 'ba', 0)).toEqual([]);
+    const py = items.filter((x) => score(x, 'ba') === TIER.py);
+    expect(search(py, 'ba', 10)).toHaveLength(10);
   });
 });
 

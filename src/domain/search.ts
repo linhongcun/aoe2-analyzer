@@ -40,7 +40,7 @@ export function score(it: SearchItem, raw: string): number {
   });
   return Math.max(main, ...a, ...al, pyMatch(it, q) || (it.altPy ?? []).some((x) => pyMatch(x, q)) ? TIER.py : 0, 0);
 }
-/** issue 123 拼音只认前缀，ü 写 v 和写 u 都算；排在所有中英文命中之后 */
+/** issue 123 拼音只认前缀，ü 写 v 和写 u 都算 */
 export const pyMatch = (it: { py?: string; pyi?: string }, q: string) => {
   if (!/^[a-z]+$/.test(q)) return false;
   const u = q.replace(/v/g, 'u');
@@ -62,11 +62,11 @@ function score1(zh: string, en: string, q: string): number {
   return 0;
 }
 const KIND_ORDER = { page: 0, civ: 1, unit: 2, building: 3, tech: 4, bonus: 5 } as const;
-/** issue 145 E：中英文命中占满前 limit 条时，末尾给只靠拼音命中的结果留这么多位（短拼音如「ba」不再被挤掉） */
+/** issue 145 E：给只靠拼音命中的结果最多预留这么多位，并提前展示 */
 export const PY_RESERVE = 5;
 export function search(items: SearchItem[], raw: string, limit = 30): SearchItem[] {
   const q = norm(raw);
-  if (!q) return [];
+  if (!q || limit <= 0) return [];
   const ranked = items
     .map((it) => [score(it, q), it] as const)
     .filter(([s]) => s > 0)
@@ -74,10 +74,13 @@ export function search(items: SearchItem[], raw: string, limit = 30): SearchItem
       (a, b) => b[0] - a[0] || Number(!!a[1].late) - Number(!!b[1].late) || KIND_ORDER[a[1].kind] - KIND_ORDER[b[1].kind] || a[1].zh.length - b[1].zh.length,
     )
     .map(([s, it]) => ({ s, it }));
-  if (ranked.length <= limit) return ranked.map((x) => x.it);
-  // 拼音档已排在最后；只有拼音命中被截掉时，才让出末尾几位给它们（仍排在所有中英文命中之后）
   const py = ranked.filter((x) => x.s === TIER.py);
-  const keepPy = Math.min(py.length, PY_RESERVE);
-  const head = ranked.filter((x) => x.s !== TIER.py).slice(0, limit - keepPy);
-  return [...head, ...py.slice(0, limit - head.length)].map((x) => x.it);
+  const text = ranked.filter((x) => x.s !== TIER.py);
+  // 小 limit 也保留第一条中英文命中；最多让出 5 个位置给拼音。
+  const keepPy = Math.min(py.length, PY_RESERVE, limit - (text.length ? 1 : 0));
+  const head = text.slice(0, limit - keepPy);
+  const selectedPy = py.slice(0, limit - head.length);
+  // 中英文精确/名称前缀命中（至少首条）优先，随后展示最多 5 条拼音，其余保持各自原顺序。
+  const firstCount = Math.max(1, head.filter((x) => x.s >= TIER.prefix).length);
+  return [...head.slice(0, firstCount), ...selectedPy.slice(0, PY_RESERVE), ...head.slice(firstCount), ...selectedPy.slice(PY_RESERVE)].map((x) => x.it);
 }
