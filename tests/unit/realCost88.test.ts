@@ -1,10 +1,15 @@
 // v0.7.0 #88 真实费用 / 等采集时间（Kent 草稿 #120 issuecomment-6157773161）。
 // 期望值不抄手算数字：用同一口径直接从 eco.json 按科技 id 独立推一遍，避免数据或规则变化后测试和实现一起漂移。
 import { describe, expect, it } from 'vitest';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import civs from '../../src/data/civs.json';
 import eco from '../../src/data/eco.json';
+import units from '../../src/data/units.json';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
-import { countForTime, fmtClock, gatherModel, realCost } from '../../src/domain/realCost';
-import { uncountedText } from '../../src/features/duel/components/RealCost';
+import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock, gatherModel, realCost } from '../../src/domain/realCost';
+import type { Unit } from '../../src/domain/types';
+import { RealCostBlock, uncountedText } from '../../src/features/duel/components/RealCost';
 
 type Eff = { kind: string; attr?: string; target?: string; op?: string; v?: number };
 const E = eco as unknown as {
@@ -168,5 +173,20 @@ describe('#145 F 收尾：未计入原因只改三个文明', () => {
       ['Aztecs', '阿兹特克'],
     ] as const)
       for (const s of lines(civ, zh)) expect(s, civ).toContain('（数据读不准，按通用速度算）');
+  });
+});
+
+describe('未计入行的紧凑显示', () => {
+  it.each(['Armenians', 'Bohemians', 'Mayans', 'Malians'])('%s 保留完整加成数值和原因，并提供完整悬停文本', (civ) => {
+    const civZh = civs.find((c) => c.en === civ)!.zh;
+    const unit = (units as Unit[]).find((u) => u.civs.includes(civ))!;
+    const html = renderToStaticMarkup(
+      createElement(RealCostBlock, { k: 'a', civ, civZh, age: 4, d: discountedCost(unit, civ, 4), vils: DEFAULT_VILS, min: DEFAULT_MIN }),
+    );
+    const rows = [...html.matchAll(/data-t="rc-unsupported">.*?<span title="([^"]*)">([^<]*)<\/span>/g)];
+    const expected = gatherModel(4, civ).unsupported.map((a) => uncountedText(civ, civZh, a.label));
+    expect(expected.length).toBeGreaterThan(0);
+    expect(rows.map((r) => r[1])).toEqual(expected);
+    expect(rows.map((r) => r[2])).toEqual(expected);
   });
 });
