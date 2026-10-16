@@ -59,12 +59,13 @@ describe('#88 采集速度', () => {
     expect(m.unsupported.map((x) => x.label)).toEqual(['采金加成']);
     expect(m.rate).toEqual(gatherModel(3).rate);
   });
-  it('Q5 罗马、斯拉夫（#42 白名单）采集加成走未计入', () => {
+  it('Q5 罗马、斯拉夫的采集加成有 aoe2techtree 来源，已计入（#138）', () => {
+    expect(gatherModel(3, 'Romans').applied.map((x) => x.label)).toEqual(['村民采集速度 +5%']);
+    expect(gatherModel(3, 'Slavs').applied.map((x) => x.label)).toEqual(['农田采集 +15%']);
     for (const c of ['Romans', 'Slavs']) {
       const g = gatherModel(3, c);
-      expect(g.applied).toEqual([]);
-      expect(g.unsupported.length).toBeGreaterThan(0);
-      expect(g.rate).toEqual(gatherModel(3).rate);
+      expect(g.unsupported).toEqual([]);
+      expect(g.rate.farm).toBeGreaterThan(gatherModel(3).rate.farm);
     }
   });
 });
