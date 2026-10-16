@@ -12,3 +12,17 @@ describe('A #145 huns42flag 行数断言等字体加载', () => {
     expect(body).toMatch(/fonts\.ready/);
   });
 });
+
+describe('B #145 发版脚本重跑认合入提交、本地残留 tag 提前报错', () => {
+  const src = readFileSync('scripts/release.mjs', 'utf8');
+  it('B1 重跑时以 release 合入 main 的提交为准（findReleaseCommit），不是当前 main 头部', () => {
+    expect(src).toMatch(/export function findReleaseCommit/);
+    expect(src).toMatch(/--first-parent/);
+  });
+  it('B2 本地残留 tag 在前置检查（合并之前）报错', () => {
+    const early = src.indexOf('本地残留 tag');
+    const mergeStep = src.indexOf('第 1 步：合并');
+    expect(early).toBeGreaterThan(0);
+    expect(early).toBeLessThan(mergeStep);
+  });
+});
