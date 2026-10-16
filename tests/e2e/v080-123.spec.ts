@@ -34,6 +34,11 @@ const HITS: [string, string][] = [
   ['baifuzhang', '百夫长'],
   ['hanghui', '行会'],
   ['zxnp', '重型弩炮'],
+  // #162 B：加成和页面也支持全拼、首字母及前缀。
+  ['famugonggongzuosudu', '伐木工工作速度 +15%'],
+  ['fmggz', '伐木工工作速度 +15%'],
+  ['kejimoniqi', '科技模拟器'],
+  ['kjmn', '科技模拟器'],
 ];
 
 for (const w of [360, 1280]) {
@@ -94,6 +99,7 @@ for (const w of [360, 1280]) {
  * Steve 补充决定：拼音库只放 devDependencies，构建时生成 py/pyi，前端只多这两个字段。
  * 基线在 release/v0.8.0 @ 8094df7 上 npm run build 后用 node zlib.gzipSync（默认级别）量得：
  * 主包 index-*.js gzip 143854 字节（分包不设上限）。
+ * #162 B 新增的加成/页面拼音索引按其独立 gzip 大小计入预算。
  * 跑 e2e 前必须先 npm run build（CI 的顺序就是这样）。
  */
 test.describe('#123 构建产物', () => {
@@ -103,17 +109,22 @@ test.describe('#123 构建产物', () => {
     const fs = await import('node:fs');
     const path = await import('node:path');
     const dir = path.resolve('dist/assets');
-    return fs.readdirSync(dir).filter((f) => f.endsWith('.js')).map((f) => ({ f, buf: fs.readFileSync(path.join(dir, f)) }));
+    return fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith('.js'))
+      .map((f) => ({ f, buf: fs.readFileSync(path.join(dir, f)) }));
   };
   test('dist 里的 JS 不含拼音库代码（不出现 pinyin 字样）', async () => {
     const hits = (await js()).filter(({ buf }) => /pinyin/i.test(buf.toString('utf8'))).map(({ f }) => f);
     expect(hits).toEqual([]);
   });
-  // 分包（units/techs 等数据 chunk）不设上限，Steve 接受约 6.2 KB 增量；只卡主包。
-  test('gzip 后主包增量不超过 10 KB', async () => {
+  // 分包（units/techs 等数据 chunk）不设上限；原 10 KB 预算另加 #162 B 的索引大小。
+  test('gzip 后主包增量不超过 10 KB 加加成/页面拼音索引大小', async () => {
     const { gzipSync } = await import('node:zlib');
+    const { readFileSync } = await import('node:fs');
+    const extra = gzipSync(readFileSync('src/data/search-py.json')).length;
     const sizes = (await js()).map(({ f, buf }) => ({ f, gz: gzipSync(buf).length }));
     const main = sizes.find((s) => s.f.startsWith('index-'))!.gz;
-    expect(main - BASE_MAIN, `主包 ${main}，基线 ${BASE_MAIN}`).toBeLessThanOrEqual(LIMIT);
+    expect(main - BASE_MAIN, `主包 ${main}，基线 ${BASE_MAIN}，新增索引 ${extra}`).toBeLessThanOrEqual(LIMIT + extra);
   });
 });

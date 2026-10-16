@@ -1,0 +1,1210 @@
+{
+  "18 人口侦察骑兵速攻（单马厩）": {
+    "py": "renkouzhenchaqibingsugongdanmajiu",
+    "pyi": "rkzcqbsgdmj"
+  },
+  "18 人口封建民兵速攻": {
+    "py": "renkoufengjianminbingsugong",
+    "pyi": "rkfjmbsg"
+  },
+  "18 人口民兵升级武士（Man-at-Arms）速攻转弓手": {
+    "py": "renkouminbingshengjiwushisugongzhuangongshou",
+    "pyi": "rkmbsjwssgzgs"
+  },
+  "19 人口单靶场弓手速攻": {
+    "py": "renkoudanbachanggongshousugong",
+    "pyi": "rkdbcgssg"
+  },
+  "DLC": {
+    "py": "",
+    "pyi": ""
+  },
+  "不需要建筑即可升级到下一时代或者解锁其他建筑": {
+    "py": "buxuyaojianzhujikeshengjidaoxiayishidaihuozhejiesuoqitajianzhu",
+    "pyi": "bxyjzjksjdxysdhzjsqtjz"
+  },
+  "不需要房屋，但初始木材 -100": {
+    "py": "buxuyaofangwudanchushimucai",
+    "pyi": "bxyfwdcsmc"
+  },
+  "从城堡时代开始，城镇中心的木材费用 -50%": {
+    "py": "congchengbaoshidaikaishichengzhenzhongxindemucaifeiyong",
+    "pyi": "ccbsdksczzxdmcfy"
+  },
+  "从城堡时代开始，新建造的城镇中心会产生 2 头绵羊": {
+    "py": "congchengbaoshidaikaishixinjianzaodechengzhenzhongxinhuichanshengtoumianyang",
+    "pyi": "ccbsdksxjzdczzxhcstmy"
+  },
+  "从城堡时代开始，步兵的铁匠铺升级会对村民产生影响": {
+    "py": "congchengbaoshidaikaishibubingdetiejiangpushengjihuiduicunminchanshengyingxiang",
+    "pyi": "ccbsdksbbdtjpsjhdcmcsyx"
+  },
+  "从城堡时代开始，靶场提供标枪骑兵": {
+    "py": "congchengbaoshidaikaishibachangtigongbiaoqiangqibing",
+    "pyi": "ccbsdksbctgbqqb"
+  },
+  "从封建时代开始步兵攻击速度 +33%": {
+    "py": "congfengjianshidaikaishibubinggongjisudu",
+    "pyi": "cfjsdksbbgjsd"
+  },
+  "从封建时代开始步兵生命值 +20%": {
+    "py": "congfengjianshidaikaishibubingshengmingzhi",
+    "pyi": "cfjsdksbbsmz"
+  },
+  "从封建时代开始，骑乘单位和火枪骑兵的攻击速度 +25%": {
+    "py": "congfengjianshidaikaishiqichengdanweihehuoqiangqibingdegongjisudu",
+    "pyi": "cfjsdksqcdwhhqqbdgjsd"
+  },
+  "伐木场科技免费": {
+    "py": "famuchangkejimianfei",
+    "pyi": "fmckjmf"
+  },
+  "伐木工不仅能产生木材，还能产生食物": {
+    "py": "famugongbujinnengchanshengmucaihainengchanshengshiwu",
+    "pyi": "fmgbjncsmchncssw"
+  },
+  "伐木工工作速度 +15%": {
+    "py": "famugonggongzuosudu",
+    "pyi": "fmggzsd"
+  },
+  "修理工的工作速度 +25%": {
+    "py": "xiuligongdegongzuosudu",
+    "pyi": "xlgdgzsd"
+  },
+  "修船厂、干船坞免费": {
+    "py": "xiuchuanchangganchuanwumianfei",
+    "pyi": "xccgcwmf"
+  },
+  "修道院的工作速度 +20%": {
+    "py": "xiudaoyuandegongzuosudu",
+    "pyi": "xdydgzsd"
+  },
+  "修道院科技费用 -50%": {
+    "py": "xiudaoyuankejifeiyong",
+    "pyi": "xdykjfy"
+  },
+  "僧侣信仰的恢复速度 +50%": {
+    "py": "senglvxinyangdehuifusudu",
+    "pyi": "slxydhfsd"
+  },
+  "僧侣治疗范围 +100%": {
+    "py": "senglvzhiliaofanwei",
+    "pyi": "slzlfw"
+  },
+  "僧侣治疗速度 +100%": {
+    "py": "senglvzhiliaosudu",
+    "pyi": "slzlsd"
+  },
+  "僧侣移动速度 +20%": {
+    "py": "senglvyidongsudu",
+    "pyi": "slydsd"
+  },
+  "僧侣近战护甲 +3/远程护甲 +3": {
+    "py": "senglvjinzhanhujiayuanchenghujia",
+    "pyi": "sljzhjychj"
+  },
+  "兵营单位在封建/城堡/帝王时代的远程护甲 +1/+2/+3": {
+    "py": "bingyingdanweizaifengjianchengbaodiwangshidaideyuanchenghujia",
+    "pyi": "bydwzfjcbdwsddychj"
+  },
+  "兵营和攻城武器厂升级花费的黄金 -66%": {
+    "py": "bingyinghegongchengwuqichangshengjihuafeidehuangjin",
+    "pyi": "byhgcwqcsjhfdhj"
+  },
+  "兵营生产速度 +20%": {
+    "py": "bingyingshengchansudu",
+    "pyi": "byscsd"
+  },
+  "兵营科技费用 -50%": {
+    "py": "bingyingkejifeiyong",
+    "pyi": "bykjfy"
+  },
+  "养鱼场费用 -33% 且提供的食物 +200%": {
+    "py": "yangyuchangfeiyongqietigongdeshiwu",
+    "pyi": "yycfyqtgdsw"
+  },
+  "军事单位在黑暗/封建/城堡/帝王时代的食物费用 -15/20/25/30%": {
+    "py": "junshidanweizaiheianfengjianchengbaodiwangshidaideshiwufeiyong",
+    "pyi": "jsdwzhafjcbdwsddswfy"
+  },
+  "军事单位训练速度 +15%": {
+    "py": "junshidanweixunliansudu",
+    "pyi": "jsdwxlsd"
+  },
+  "军事建筑 (城堡除外) 提供的人口空间 +5": {
+    "py": "junshijianzhuchengbaochuwaitigongderenkoukongjian",
+    "pyi": "jsjzcbcwtgdrkkj"
+  },
+  "军事生产建筑和码头建成后，提供的食物 +55": {
+    "py": "junshishengchanjianzhuhematoujianchenghoutigongdeshiwu",
+    "pyi": "jsscjzhmtjchtgdsw"
+  },
+  "农民不需要磨坊或城镇中心就可以存放食物": {
+    "py": "nongminbuxuyaomofanghuochengzhenzhongxinjiukeyicunfangshiwu",
+    "pyi": "nmbxymfhczzxjkycfsw"
+  },
+  "农民工作速度 +15%": {
+    "py": "nongmingongzuosudu",
+    "pyi": "nmgzsd"
+  },
+  "农田升级提供的食物 +125%": {
+    "py": "nongtianshengjitigongdeshiwu",
+    "pyi": "ntsjtgdsw"
+  },
+  "农田的食物 +10%": {
+    "py": "nongtiandeshiwu",
+    "pyi": "ntdsw"
+  },
+  "农田费用 -40%": {
+    "py": "nongtianfeiyong",
+    "pyi": "ntfy"
+  },
+  "初始木材和食物 +50": {
+    "py": "chushimucaiheshiwu",
+    "pyi": "csmchsw"
+  },
+  "初始村民数 +3，但是木材 -50 且食物 -200": {
+    "py": "chushicunminshudanshimucaiqieshiwu",
+    "pyi": "cscmsdsmcqsw"
+  },
+  "初始石料 +100": {
+    "py": "chushishiliao",
+    "pyi": "cssl"
+  },
+  "初始黄金 +50": {
+    "py": "chushihuangjin",
+    "pyi": "cshj"
+  },
+  "到达下一时代时，城镇中心产生 2 个村民": {
+    "py": "daodaxiayishidaishichengzhenzhongxinchanshenggecunmin",
+    "pyi": "ddxysdsczzxcsgcm"
+  },
+  "剑士和黑光铠骑兵在帝王时代的攻击力 +2": {
+    "py": "jianshiheheiguangkaiqibingzaidiwangshidaidegongjili",
+    "pyi": "jshhgkqbzdwsddgjl"
+  },
+  "化学免费；火药技术成本 -50%": {
+    "py": "huaxuemianfeihuoyaojishuchengben",
+    "pyi": "hxmfhyjscb"
+  },
+  "升级到下一时代时获得的木材 +200": {
+    "py": "shengjidaoxiayishidaishihuodedemucai",
+    "pyi": "sjdxysdshddmc"
+  },
+  "升级到下一时代时获得的黄金 +100、食物 +100": {
+    "py": "shengjidaoxiayishidaishihuodedehuangjinshiwu",
+    "pyi": "sjdxysdshddhjsw"
+  },
+  "升级到帝王时代的费用 -33%": {
+    "py": "shengjidaodiwangshidaidefeiyong",
+    "pyi": "sjddwsddfy"
+  },
+  "升级至下一个时代的速度 +66%": {
+    "py": "shengjizhixiayigeshidaidesudu",
+    "pyi": "sjzxygsddsd"
+  },
+  "升级至下一时代的费用 -15%": {
+    "py": "shengjizhixiayishidaidefeiyong",
+    "pyi": "sjzxysddfy"
+  },
+  "单位": {
+    "py": "danwei",
+    "pyi": "dw"
+  },
+  "单位 PK": {
+    "py": "danwei",
+    "pyi": "dw"
+  },
+  "单位受到友军误伤伤害 -50%": {
+    "py": "danweishoudaoyoujunwushangshanghai",
+    "pyi": "dwsdyjwssh"
+  },
+  "单位更难被招降": {
+    "py": "danweigengnanbeizhaoxiang",
+    "pyi": "dwgnbzx"
+  },
+  "可在帝王时代建造商队驿站": {
+    "py": "kezaidiwangshidaijianzaoshangduiyizhan",
+    "pyi": "kzdwsdjzsdyz"
+  },
+  "可将牲畜驻扎于磨坊以被动生产食物": {
+    "py": "kejiangshengchuzhuzhayumofangyibeidongshengchanshiwu",
+    "pyi": "kjsczzymfybdscsw"
+  },
+  "可提前一个时代获得长矛兵系和民兵系升级 (武士除外)": {
+    "py": "ketiqianyigeshidaihuodechangmaobingxiheminbingxishengjiwushichuwai",
+    "pyi": "ktqygsdhdcmbxhmbxsjwscw"
+  },
+  "可提前一个时代进行经济升级并且食物费用 -40%": {
+    "py": "ketiqianyigeshidaijinxingjingjishengjibingqieshiwufeiyong",
+    "pyi": "ktqygsdjxjjsjbqswfy"
+  },
+  "可立即研究织布机": {
+    "py": "kelijiyanjiuzhibuji",
+    "pyi": "kljyjzbj"
+  },
+  "哨站视野 +3 且不消耗石料": {
+    "py": "shaozhanshiyeqiebuxiaohaoshiliao",
+    "pyi": "szsyqbxhsl"
+  },
+  "喷火船和德罗蒙战舰的攻击速度 +25%": {
+    "py": "penhuochuanhedeluomengzhanjiandegongjisudu",
+    "pyi": "phchdlmzjdgjsd"
+  },
+  "圣物不仅能产生黄金，还能产生食物": {
+    "py": "shengwubujinnengchanshenghuangjinhainengchanshengshiwu",
+    "pyi": "swbjncshjhncssw"
+  },
+  "圣物产生的黄金 +33%": {
+    "py": "shengwuchanshengdehuangjin",
+    "pyi": "swcsdhj"
+  },
+  "在城堡时代可使用化学和火枪手": {
+    "py": "zaichengbaoshidaikeshiyonghuaxuehehuoqiangshou",
+    "pyi": "zcbsdksyhxhhqs"
+  },
+  "在城堡时代可使用帕提亚战术": {
+    "py": "zaichengbaoshidaikeshiyongpatiyazhanshu",
+    "pyi": "zcbsdksyptyzs"
+  },
+  "在城堡时代可升级为重装骑士": {
+    "py": "zaichengbaoshidaikeshengjiweizhongzhuangqishi",
+    "pyi": "zcbsdksjwzzqs"
+  },
+  "在城堡时代可建造营垒": {
+    "py": "zaichengbaoshidaikejianzaoyinglei",
+    "pyi": "zcbsdkjzyl"
+  },
+  "在封建时代可使用攻城武器厂和攻城锤；在城堡时代可使用中型冲车": {
+    "py": "zaifengjianshidaikeshiyonggongchengwuqichanghegongchengchuizaichengbaoshidaikeshiyongzhongxingchongche",
+    "pyi": "zfjsdksygcwqchgcczcbsdksyzxcc"
+  },
+  "在封建时代可额外建造一座城镇中心": {
+    "py": "zaifengjianshidaikeewaijianzaoyizuochengzhenzhongxin",
+    "pyi": "zfjsdkewjzyzczzx"
+  },
+  "在帝王时代人口空间 +10": {
+    "py": "zaidiwangshidairenkoukongjian",
+    "pyi": "zdwsdrkkj"
+  },
+  "在帝王时代兵营提供意大利佣兵": {
+    "py": "zaidiwangshidaibingyingtigongyidaliyongbing",
+    "pyi": "zdwsdbytgydlyb"
+  },
+  "在帝王时代可升级为帝王掷矛手": {
+    "py": "zaidiwangshidaikeshengjiweidiwangzhimaoshou",
+    "pyi": "zdwsdksjwdwzms"
+  },
+  "在帝王时代可建造商队驿站": {
+    "py": "zaidiwangshidaikejianzaoshangduiyizhan",
+    "pyi": "zdwsdkjzsdyz"
+  },
+  "在帝王时代可建造大商站": {
+    "py": "zaidiwangshidaikejianzaodashangzhan",
+    "pyi": "zdwsdkjzdsz"
+  },
+  "在游牧民族地图上，第一座城镇中心可产生一匹侦察马": {
+    "py": "zaiyoumuminzuditushangdiyizuochengzhenzhongxinkechanshengyipizhenchama",
+    "pyi": "zymmzdtsdyzczzxkcsypzcm"
+  },
+  "在高海拔战斗时，单位和建筑受到的伤害 -15%": {
+    "py": "zaigaohaibazhandoushidanweihejianzhushoudaodeshanghai",
+    "pyi": "zghbzdsdwhjzsddsh"
+  },
+  "在高海拔战斗时，单位造成的伤害 +25%": {
+    "py": "zaigaohaibazhandoushidanweizaochengdeshanghai",
+    "pyi": "zghbzdsdwzcdsh"
+  },
+  "在黑暗时代可建造城楼，替换瞭望塔系": {
+    "py": "zaiheianshidaikejianzaochengloutihuanliaowangtaxi",
+    "pyi": "zhasdkjzclthlwtx"
+  },
+  "地图": {
+    "py": "ditu",
+    "pyi": "dt"
+  },
+  "城堡在城堡/帝王时代的费用 -15/25%": {
+    "py": "chengbaozaichengbaodiwangshidaidefeiyong",
+    "pyi": "cbzcbdwsddfy"
+  },
+  "城墙费用 -50%": {
+    "py": "chengqiangfeiyong",
+    "pyi": "cqfy"
+  },
+  "城镇中心和码头的生命值 +100%，在黑暗/封建/城堡/帝王时代的工作速度 +5/10/15/20%": {
+    "py": "chengzhenzhongxinhematoudeshengmingzhizaiheianfengjianchengbaodiwangshidaidegongzuosudu",
+    "pyi": "czzxhmtdsmzzhafjcbdwsddgzsd"
+  },
+  "城镇中心的视野 +7，提供的人口控件 +15": {
+    "py": "chengzhenzhongxindeshiyetigongderenkoukongjian",
+    "pyi": "czzxdsytgdrkkj"
+  },
+  "城镇中心石料费用 -50%": {
+    "py": "chengzhenzhongxinshiliaofeiyong",
+    "pyi": "czzxslfy"
+  },
+  "城镇中心驻扎容量 +10；塔驻扎容量 +5": {
+    "py": "chengzhenzhongxinzhuzharongliangtazhuzharongliang",
+    "pyi": "czzxzzrltzzrl"
+  },
+  "城镇瞭望、城镇巡逻免费": {
+    "py": "chengzhenliaowangchengzhenxunluomianfei",
+    "pyi": "czlwczxlmf"
+  },
+  "塔和城堡从城堡时代开始，发射的基础箭矢 +100%": {
+    "py": "tahechengbaocongchengbaoshidaikaishifashedejichujianshi",
+    "pyi": "thcbccbsdksfsdjcjs"
+  },
+  "塔楼和城堡提供的人口空间 +10": {
+    "py": "talouhechengbaotigongderenkoukongjian",
+    "pyi": "tlhcbtgdrkkj"
+  },
+  "士兵受到的额外伤害 -40%": {
+    "py": "shibingshoudaodeewaishanghai",
+    "pyi": "sbsddewsh"
+  },
+  "处于凯尔特单位视野内的牲畜不会被窃取": {
+    "py": "chuyukaiertedanweishiyeneideshengchubuhuibeiqiequ",
+    "pyi": "cyketdwsyndscbhbqq"
+  },
+  "大学工作速度 +80%": {
+    "py": "daxuegongzuosudu",
+    "pyi": "dxgzsd"
+  },
+  "大庄园替代磨坊": {
+    "py": "dazhuangyuantidaimofang",
+    "pyi": "dzytdmf"
+  },
+  "天梯数据": {
+    "py": "tiantishuju",
+    "pyi": "ttsj"
+  },
+  "天然黄金资源持续时间 +15%": {
+    "py": "tianranhuangjinziyuanchixushijian",
+    "pyi": "trhjzycxsj"
+  },
+  "对局助手": {
+    "py": "duijuzhushou",
+    "pyi": "djzs"
+  },
+  "巨型投石机攻击单位和小型目标的准确度提高": {
+    "py": "juxingtoushijigongjidanweihexiaoxingmubiaodizhunquedutigao",
+    "pyi": "jxtsjgjdwhxxmbdzqdtg"
+  },
+  "市场效率 +80%": {
+    "py": "shichangxiaolv",
+    "pyi": "scxl"
+  },
+  "市场贸易税仅 5%；市场的木材费用 -100": {
+    "py": "shichangmaoyishuijinshichangdemucaifeiyong",
+    "pyi": "scmysjscdmcfy"
+  },
+  "建筑": {
+    "py": "jianzhu",
+    "pyi": "jz"
+  },
+  "建筑修理费用 -25%": {
+    "py": "jianzhuxiulifeiyong",
+    "pyi": "jzxlfy"
+  },
+  "建筑在黑暗/封建/城堡/帝王时代的生命值 +10/20/30/40%": {
+    "py": "jianzhuzaiheianfengjianchengbaodiwangshidaideshengmingzhi",
+    "pyi": "jzzhafjcbdwsddsmz"
+  },
+  "建筑工的工作速度 +30%": {
+    "py": "jianzhugongdegongzuosudu",
+    "pyi": "jzgdgzsd"
+  },
+  "建筑的木材费用 -15%": {
+    "py": "jianzhudemucaifeiyong",
+    "pyi": "jzdmcfy"
+  },
+  "建筑的石料费用 -15%": {
+    "py": "jianzhudeshiliaofeiyong",
+    "pyi": "jzdslfy"
+  },
+  "建造首座强化教堂可免费获得一件圣物": {
+    "py": "jianzaoshouzuoqianghuajiaotangkemianfeihuodeyijianshengwu",
+    "pyi": "jzszqhjtkmfhdyjsw"
+  },
+  "开始游戏时拥有一辆骡车": {
+    "py": "kaishiyouxishiyongyouyiliangluoche",
+    "pyi": "ksyxsyyyllc"
+  },
+  "开始游戏时额外获得一只羊驼": {
+    "py": "kaishiyouxishiewaihuodeyizhiyangtuo",
+    "pyi": "ksyxsewhdyzyt"
+  },
+  "开始游戏时，每种资源 +25": {
+    "py": "kaishiyouxishimeizhongziyuan",
+    "pyi": "ksyxsmzzy"
+  },
+  "开局时拥有 2 片果树丛": {
+    "py": "kaijushiyongyoupianguoshucong",
+    "pyi": "kjsyypgsc"
+  },
+  "开局时村民数 +1，但食物 -50": {
+    "py": "kaijushicunminshudanshiwu",
+    "pyi": "kjscmsdsw"
+  },
+  "开局流程": {
+    "py": "kaijuliucheng",
+    "pyi": "kjlc"
+  },
+  "弓兵单位在靶场和铁匠铺的科技费用 -25%": {
+    "py": "gongbingdanweizaibachanghetiejiangpudekejifeiyong",
+    "pyi": "gbdwzbchtjpdkjfy"
+  },
+  "弓兵护甲和塔升级免费 (升级炮塔需要化学)": {
+    "py": "gongbinghujiahetashengjimianfeishengjipaotaxuyaohuaxue",
+    "pyi": "gbhjhtsjmfsjptxyhx"
+  },
+  "强化教堂可使 9 格范围内的村民工作效率 +10%": {
+    "py": "qianghuajiaotangkeshigefanweineidecunmingongzuoxiaolv",
+    "pyi": "qhjtksgfwndcmgzxl"
+  },
+  "征招免费": {
+    "py": "zhengzhaomianfei",
+    "pyi": "zzmf"
+  },
+  "战船在封建/城堡/帝王时代的费用 -10/15/20%": {
+    "py": "zhanchuanzaifengjianchengbaodiwangshidaidefeiyong",
+    "pyi": "zczfjcbdwsddfy"
+  },
+  "战船的木材费用 -20%": {
+    "py": "zhanchuandemucaifeiyong",
+    "pyi": "zcdmcfy"
+  },
+  "战败单位返还 15% 的成本": {
+    "py": "zhanbaidanweifanhuandechengben",
+    "pyi": "zbdwfhdcb"
+  },
+  "房屋和聚落提供的人口空间 +5": {
+    "py": "fangwuhejuluotigongderenkoukongjian",
+    "pyi": "fwhjltgdrkkj"
+  },
+  "房屋建造速度 +100%": {
+    "py": "fangwujianzaosudu",
+    "pyi": "fwjzsd"
+  },
+  "所有单位的黄金费用 -20%": {
+    "py": "suoyoudanweidehuangjinfeiyong",
+    "pyi": "sydwdhjfy"
+  },
+  "扳指、帕提亚战术免费": {
+    "py": "banzhipatiyazhanshumianfei",
+    "pyi": "bzptyzsmf"
+  },
+  "捕鱼船和村民存放的食物 +5%": {
+    "py": "buyuchuanhecunmincunfangdeshiwu",
+    "pyi": "bychcmcfdsw"
+  },
+  "捕鱼船在黑暗/封建/城堡/帝王时代的工作速度 +5/10/15/20%；生命值 +100%": {
+    "py": "buyuchuanzaiheianfengjianchengbaodiwangshidaidegongzuosudushengmingzhi",
+    "pyi": "byczhafjcbdwsddgzsdsmz"
+  },
+  "捕鱼船费用 -15%": {
+    "py": "buyuchuanfeiyong",
+    "pyi": "bycfy"
+  },
+  "掷矛手、长矛兵和斥候骑兵系训练和升级速度 +15%": {
+    "py": "zhimaoshouchangmaobinghechihouqibingxixunlianheshengjisudu",
+    "pyi": "zmscmbhchqbxxlhsjsd"
+  },
+  "掷矛手和骑象弓兵的攻击速度 +25%": {
+    "py": "zhimaoshouheqixianggongbingdegongjisudu",
+    "pyi": "zmshqxgbdgjsd"
+  },
+  "攻城和防御工事升级木材费用 -75%，研究速度 +100%": {
+    "py": "gongchenghefangyugongshishengjimucaifeiyongyanjiusudu",
+    "pyi": "gchfygssjmcfyyjsd"
+  },
+  "攻城工程技师在城堡时代可用": {
+    "py": "gongchenggongchengjishizaichengbaoshidaikeyong",
+    "pyi": "gcgcjszcbsdky"
+  },
+  "攻城武器厂单位费用 -15%": {
+    "py": "gongchengwuqichangdanweifeiyong",
+    "pyi": "gcwqcdwfy"
+  },
+  "攻城武器厂的生产速度 +20%": {
+    "py": "gongchengwuqichangdeshengchansudu",
+    "pyi": "gcwqcdscsd"
+  },
+  "攻城武器和攻城战船在城堡/帝王时代的移动速度 +10/15%": {
+    "py": "gongchengwuqihegongchengzhanchuanzaichengbaodiwangshidaideyidongsudu",
+    "pyi": "gcwqhgczczcbdwsddydsd"
+  },
+  "攻城武器攻击速度 +25%": {
+    "py": "gongchengwuqigongjisudu",
+    "pyi": "gcwqgjsd"
+  },
+  "攻城武器的木材费用 -33%": {
+    "py": "gongchengwuqidemucaifeiyong",
+    "pyi": "gcwqdmcfy"
+  },
+  "攻城武器的视野 +2": {
+    "py": "gongchengwuqideshiye",
+    "pyi": "gcwqdsy"
+  },
+  "敌方城堡位置在地图上始终可见": {
+    "py": "difangchengbaoweizhizaiditushangshizhongkejian",
+    "pyi": "dfcbwzzdtsszkj"
+  },
+  "文明": {
+    "py": "wenming",
+    "pyi": "wm"
+  },
+  "文明加成": {
+    "py": "wenmingjiacheng",
+    "pyi": "wmjc"
+  },
+  "文明对比": {
+    "py": "wenmingduibi",
+    "pyi": "wmdb"
+  },
+  "斥候骑兵和骆驼单位对建筑的攻击力 +2": {
+    "py": "chihouqibingheluotuodanweiduijianzhudegongjili",
+    "pyi": "chqbhltdwdjzdgjl"
+  },
+  "斥候骑兵系和草原枪兵在城堡/帝王时代的生命值 +20/30%": {
+    "py": "chihouqibingxihecaoyuanqiangbingzaichengbaodiwangshidaideshengmingzhi",
+    "pyi": "chqbxhcyqbzcbdwsddsmz"
+  },
+  "斥候骑兵系对远程士兵的攻击力 +1": {
+    "py": "chihouqibingxiduiyuanchengshibingdegongjili",
+    "pyi": "chqbxdycsbdgjl"
+  },
+  "斥候骑兵系的远程护甲 +1 且升级免费": {
+    "py": "chihouqibingxideyuanchenghujiaqieshengjimianfei",
+    "pyi": "chqbxdychjqsjmf"
+  },
+  "斥候骑兵系视野 +2": {
+    "py": "chihouqibingxishiye",
+    "pyi": "chqbxsy"
+  },
+  "斥候骑兵系费用 -15%": {
+    "py": "chihouqibingxifeiyong",
+    "pyi": "chqbxfy"
+  },
+  "木栅栏生命值 +33%": {
+    "py": "muzhalanshengmingzhi",
+    "pyi": "mzlsmz"
+  },
+  "村民一击就能杀死狼群": {
+    "py": "cunminyijijiunengshasilangqun",
+    "pyi": "cmyjjnsslq"
+  },
+  "村民可以在聚落驻扎": {
+    "py": "cunminkeyizaijuluozhuzha",
+    "pyi": "cmkyzjlzz"
+  },
+  "村民可以驻扎进房屋里": {
+    "py": "cunminkeyizhuzhajinfangwuli",
+    "pyi": "cmkyzzjfwl"
+  },
+  "村民在封建/城堡/帝王时代每分钟可恢复 10/15/20 生命值": {
+    "py": "cunminzaifengjianchengbaodiwangshidaimeifenzhongkehuifushengmingzhi",
+    "pyi": "cmzfjcbdwsdmfzkhfsmz"
+  },
+  "村民在黑暗/封建/城堡/帝王时代的费用 -8/13/18/23%": {
+    "py": "cunminzaiheianfengjianchengbaodiwangshidaidefeiyong",
+    "pyi": "cmzhafjcbdwsddfy"
+  },
+  "村民在黑暗时代的移动速度 +5%，从封建时代开始 +10%": {
+    "py": "cunminzaiheianshidaideyidongsuducongfengjianshidaikaishi",
+    "pyi": "cmzhasddydsdcfjsdks"
+  },
+  "村民存放的黄金额外 +10%": {
+    "py": "cunmincunfangdehuangjinewai",
+    "pyi": "cmcfdhjew"
+  },
+  "村民携带量 +3": {
+    "py": "cunminxiedailiang",
+    "pyi": "cmxdl"
+  },
+  "村民收集、建造和修理的速度 +5%": {
+    "py": "cunminshoujijianzaohexiulidesudu",
+    "pyi": "cmsjjzhxldsd"
+  },
+  "村民视野 +3": {
+    "py": "cunminshiye",
+    "pyi": "cmsy"
+  },
+  "步兵、投石手和掷矛手在封建/城堡/帝王时代的生命值 +5/10/15": {
+    "py": "bubingtoushishouhezhimaoshouzaifengjianchengbaodiwangshidaideshengmingzhi",
+    "pyi": "bbtsshzmszfjcbdwsddsmz"
+  },
+  "步兵和骑兵单位在城堡/帝王时代的近战护甲 +1/+2": {
+    "py": "bubingheqibingdanweizaichengbaodiwangshidaidejinzhanhujia",
+    "pyi": "bbhqbdwzcbdwsddjzhj"
+  },
+  "步兵在封建/城堡/帝王时代对建筑的攻击力 +1/+2/+3": {
+    "py": "bubingzaifengjianchengbaodiwangshidaiduijianzhudegongjili",
+    "pyi": "bbzfjcbdwsddjzdgjl"
+  },
+  "步兵在封建/城堡/帝王时代每分钟可恢复 10/15/30 生命值": {
+    "py": "bubingzaifengjianchengbaodiwangshidaimeifenzhongkehuifushengmingzhi",
+    "pyi": "bbzfjcbdwsdmfzkhfsmz"
+  },
+  "步兵在封建/城堡/帝王时代的攻击力 +1/+2/+3": {
+    "py": "bubingzaifengjianchengbaodiwangshidaidegongjili",
+    "pyi": "bbzfjcbdwsddgjl"
+  },
+  "步兵在黑暗/封建/城堡/帝王时代的移动速度 +5/10/15/20%": {
+    "py": "bubingzaiheianfengjianchengbaodiwangshidaideyidongsudu",
+    "pyi": "bbzhafjcbdwsddydsd"
+  },
+  "步兵在黑暗/封建/城堡/帝王时代的费用 -15/20/25/30%": {
+    "py": "bubingzaiheianfengjianchengbaodiwangshidaidefeiyong",
+    "pyi": "bbzhafjcbdwsddfy"
+  },
+  "步兵对远程士兵的攻击力 +2": {
+    "py": "bubingduiyuanchengshibingdegongjili",
+    "pyi": "bbdycsbdgjl"
+  },
+  "步兵护甲升级免费": {
+    "py": "bubinghujiashengjimianfei",
+    "pyi": "bbhjsjmf"
+  },
+  "步兵护甲升级效果加倍": {
+    "py": "bubinghujiashengjixiaoguojiabei",
+    "pyi": "bbhjsjxgjb"
+  },
+  "步兵视野 +2": {
+    "py": "bubingshiye",
+    "pyi": "bbsy"
+  },
+  "步弓手和意大利佣兵的近战护甲 +1/远程护甲 +1": {
+    "py": "bugongshouheyidaliyongbingdejinzhanhujiayuanchenghujia",
+    "pyi": "bgshydlybdjzhjychj"
+  },
+  "步弓手和掷矛手对建筑的攻击力 +2": {
+    "py": "bugongshouhezhimaoshouduijianzhudegongjili",
+    "pyi": "bgshzmsdjzdgjl"
+  },
+  "步弓手和掷矛手生命值 +20%": {
+    "py": "bugongshouhezhimaoshoushengmingzhi",
+    "pyi": "bgshzmssmz"
+  },
+  "步弓手在城堡/帝王时代的射程 +1/+2": {
+    "py": "bugongshouzaichengbaodiwangshidaideshecheng",
+    "pyi": "bgszcbdwsddsc"
+  },
+  "步弓手在封建/城堡/帝王时代的费用 -10/20/30%": {
+    "py": "bugongshouzaifengjianchengbaodiwangshidaidefeiyong",
+    "pyi": "bgszfjcbdwsddfy"
+  },
+  "步弓手攻击速度 +18%": {
+    "py": "bugongshougongjisudu",
+    "pyi": "bgsgjsd"
+  },
+  "步弓手视野 +2": {
+    "py": "bugongshoushiye",
+    "pyi": "bgssy"
+  },
+  "每座城镇中心提供的食物 +100": {
+    "py": "meizuochengzhenzhongxintigongdeshiwu",
+    "pyi": "mzczzxtgdsw"
+  },
+  "每控制一个城镇中心或城堡，步兵花费 -5% (最多 -20%)": {
+    "py": "meikongzhiyigechengzhenzhongxinhuochengbaobubinghuafeizuiduo",
+    "pyi": "mkzygczzxhcbbbhfzd"
+  },
+  "每摧毁一座建筑，抢掠其 25% 的资源费用": {
+    "py": "meicuihuiyizuojianzhuqianglveqideziyuanfeiyong",
+    "pyi": "mchyzjzqlqdzyfy"
+  },
+  "每研究一次经济升级，可免费获得一位村民": {
+    "py": "meiyanjiuyicijingjishengjikemianfeihuodeyiweicunmin",
+    "pyi": "myjycjjsjkmfhdywcm"
+  },
+  "每驻守一件圣物，骑士系和烈堤司的攻击力 +1 (最高 +4)": {
+    "py": "meizhushouyijianshengwuqishixiheliedisidegongjilizuigao",
+    "pyi": "mzsyjswqsxhldsdgjlzg"
+  },
+  "民兵系升级免费": {
+    "py": "minbingxishengjimianfei",
+    "pyi": "mbxsjmf"
+  },
+  "民兵骚扰转速升城堡": {
+    "py": "minbingsaoraozhuansushengchengbao",
+    "pyi": "mbsrzsscb"
+  },
+  "渔夫和捕鱼船的携带资源量 +15": {
+    "py": "yufuhebuyuchuandexiedaiziyuanliang",
+    "pyi": "yfhbycdxdzyl"
+  },
+  "游戏开始时就能在地图上看见圣物": {
+    "py": "youxikaishishijiunengzaiditushangkanjianshengwu",
+    "pyi": "yxkssjnzdtskjsw"
+  },
+  "游戏开始时就能显示敌方城镇中心位置": {
+    "py": "youxikaishishijiunengxianshidifangchengzhenzhongxinweizhi",
+    "pyi": "yxkssjnxsdfczzxwz"
+  },
+  "火矛兵和喷火船在城堡/帝王时代移动速度 +5/10%": {
+    "py": "huomaobinghepenhuochuanzaichengbaodiwangshidaiyidongsudu",
+    "pyi": "hmbhphczcbdwsdydsd"
+  },
+  "火药单位攻击力 +25%": {
+    "py": "huoyaodanweigongjili",
+    "pyi": "hydwgjl"
+  },
+  "火药单位攻击速度 +18%": {
+    "py": "huoyaodanweigongjisudu",
+    "pyi": "hydwgjsd"
+  },
+  "火药单位生命值 +25%": {
+    "py": "huoyaodanweishengmingzhi",
+    "pyi": "hydwsmz"
+  },
+  "火药单位视野 +2": {
+    "py": "huoyaodanweishiye",
+    "pyi": "hydwsy"
+  },
+  "火药单位训练速度 +25%": {
+    "py": "huoyaodanweixunliansudu",
+    "pyi": "hydwxlsd"
+  },
+  "火药单位费用 -20%": {
+    "py": "huoyaodanweifeiyong",
+    "pyi": "hydwfy"
+  },
+  "火药单位近战护甲 +1/远程护甲 +1": {
+    "py": "huoyaodanweijinzhanhujiayuanchenghujia",
+    "pyi": "hydwjzhjychj"
+  },
+  "炮舰攻击移动目标的准确度提高": {
+    "py": "paojiangongjiyidongmubiaodizhunquedutigao",
+    "pyi": "pjgjydmbdzqdtg"
+  },
+  "版本补丁": {
+    "py": "banbenbuding",
+    "pyi": "bbbd"
+  },
+  "牧场取代农田": {
+    "py": "muchangqudainongtian",
+    "pyi": "mcqdnt"
+  },
+  "牧羊、捕鱼和狩猎也能产生黄金": {
+    "py": "muyangbuyuheshoulieyenengchanshenghuangjin",
+    "pyi": "mybyhslyncshj"
+  },
+  "牲畜持续时间 +50%": {
+    "py": "shengchuchixushijian",
+    "pyi": "sccxsj"
+  },
+  "牵引抛石机和楼船费用 -25%": {
+    "py": "qianyinpaoshijihelouchuanfeiyong",
+    "pyi": "qypsjhlcfy"
+  },
+  "狂热和圣洁会影响村民": {
+    "py": "kuangreheshengjiehuiyingxiangcunmin",
+    "pyi": "krhsjhyxcm"
+  },
+  "独轮推车和手推车免费": {
+    "py": "duluntuicheheshoutuichemianfei",
+    "pyi": "dltchstcmf"
+  },
+  "猎人工作速度 +40%": {
+    "py": "lierengongzuosudu",
+    "pyi": "lrgzsd"
+  },
+  "猎人携带量 +15；被捕猎的动物持续时间 +20%": {
+    "py": "lierenxiedailiangbeibuliededongwuchixushijian",
+    "pyi": "lrxdlbblddwcxsj"
+  },
+  "猎物和牲畜动物的肉不会腐烂": {
+    "py": "liewuheshengchudongwuderoubuhuifulan",
+    "pyi": "lwhscdwdrbhfl"
+  },
+  "瓦兰吉卫队和维京长船的移动速度 +10%": {
+    "py": "walanjiweiduiheweijingchangchuandeyidongsudu",
+    "pyi": "wljwdhwjccdydsd"
+  },
+  "瓦兰吉卫队的攻击速度 +25%，产生的黄金 +50%": {
+    "py": "walanjiweiduidegongjisuduchanshengdehuangjin",
+    "pyi": "wljwddgjsdcsdhj"
+  },
+  "石矿工不仅能产生石料，还能产生黄金": {
+    "py": "shikuanggongbujinnengchanshengshiliaohainengchanshenghuangjin",
+    "pyi": "skgbjncsslhncshj"
+  },
+  "石矿工的工作速度 +20%": {
+    "py": "shikuanggongdegongzuosudu",
+    "pyi": "skgdgzsd"
+  },
+  "码头和大学科技费用 -25%": {
+    "py": "matouhedaxuekejifeiyong",
+    "pyi": "mthdxkjfy"
+  },
+  "码头提供的人口空间 +5": {
+    "py": "matoutigongderenkoukongjian",
+    "pyi": "mttgdrkkj"
+  },
+  "码头视野 +6": {
+    "py": "matoushiye",
+    "pyi": "mtsy"
+  },
+  "码头费用 -15%": {
+    "py": "matoufeiyong",
+    "pyi": "mtfy"
+  },
+  "研究一项修道院科技后僧侣的生命值 +5": {
+    "py": "yanjiuyixiangxiudaoyuankejihousenglvdeshengmingzhi",
+    "pyi": "yjyxxdykjhsldsmz"
+  },
+  "研究一项科技后获得的黄金 +20": {
+    "py": "yanjiuyixiangkejihouhuodedehuangjin",
+    "pyi": "yjyxkjhhddhj"
+  },
+  "磨坊、伐木场和采矿场的费用 -50%": {
+    "py": "mofangfamuchanghecaikuangchangdefeiyong",
+    "pyi": "mffmchckcdfy"
+  },
+  "磨坊、木料和采矿场建成后，提供的食物 +35、石料 +10": {
+    "py": "mofangmuliaohecaikuangchangjianchenghoutigongdeshiwushiliao",
+    "pyi": "mfmlhckcjchtgdswsl"
+  },
+  "磨坊科技免费": {
+    "py": "mofangkejimianfei",
+    "pyi": "mfkjmf"
+  },
+  "科技": {
+    "py": "keji",
+    "pyi": "kj"
+  },
+  "科技在封建/城堡/帝王时代的费用 -5/10/15%": {
+    "py": "kejizaifengjianchengbaodiwangshidaidefeiyong",
+    "pyi": "kjzfjcbdwsddfy"
+  },
+  "科技树": {
+    "py": "kejishu",
+    "pyi": "kjs"
+  },
+  "科技模拟器": {
+    "py": "kejimoniqi",
+    "pyi": "kjmnq"
+  },
+  "科技研究速度 +25%": {
+    "py": "kejiyanjiusudu",
+    "pyi": "kjyjsd"
+  },
+  "箭船系和德罗蒙战舰可额外发射一颗炮弹": {
+    "py": "jianchuanxihedeluomengzhanjiankeewaifasheyikepaodan",
+    "pyi": "jcxhdlmzjkewfsykpd"
+  },
+  "箭船系和德罗蒙战舰的近战护甲 +1/远程护甲 +1": {
+    "py": "jianchuanxihedeluomengzhanjiandejinzhanhujiayuanchenghujia",
+    "pyi": "jcxhdlmzjdjzhjychj"
+  },
+  "箭船系攻击速度 +25%": {
+    "py": "jianchuanxigongjisudu",
+    "pyi": "jcxgjsd"
+  },
+  "箭船系视野 +4": {
+    "py": "jianchuanxishiye",
+    "pyi": "jcxsy"
+  },
+  "篷车、行会免费": {
+    "py": "pengchehanghuimianfei",
+    "pyi": "pchhmf"
+  },
+  "纵火、软甲免费": {
+    "py": "zonghuoruanjiamianfei",
+    "pyi": "zhrjmf"
+  },
+  "经济升级无须花费木材且研究速度 +100%": {
+    "py": "jingjishengjiwuxuhuafeimucaiqieyanjiusudu",
+    "pyi": "jjsjwxhfmcqyjsd"
+  },
+  "维京长船和大型投石战舰的攻击速度 +15%": {
+    "py": "weijingchangchuanhedaxingtoushizhanjiandegongjisudu",
+    "pyi": "wjcchdxtszjdgjsd"
+  },
+  "维京长船和大型投石战舰的生命值 +20%": {
+    "py": "weijingchangchuanhedaxingtoushizhanjiandeshengmingzhi",
+    "pyi": "wjcchdxtszjdsmz"
+  },
+  "羊倌工作速度 +25%": {
+    "py": "yangguangongzuosudu",
+    "pyi": "yggzsd"
+  },
+  "聚落可以训练长矛兵系和掷矛手": {
+    "py": "juluokeyixunlianchangmaobingxihezhimaoshou",
+    "pyi": "jlkyxlcmbxhzms"
+  },
+  "聚落成本 -33%，并治疗附近单位": {
+    "py": "juluochengbenbingzhiliaofujindanwei",
+    "pyi": "jlcbbzlfjdw"
+  },
+  "船只在封建/城堡/帝王时代的生命值 +10/15/20%": {
+    "py": "chuanzhizaifengjianchengbaodiwangshidaideshengmingzhi",
+    "pyi": "czzfjcbdwsddsmz"
+  },
+  "船舰每分钟恢复 15 生命值": {
+    "py": "chuanjianmeifenzhonghuifushengmingzhi",
+    "pyi": "cjmfzhfsmz"
+  },
+  "船舰移动速度 +10%": {
+    "py": "chuanjianyidongsudu",
+    "pyi": "cjydsd"
+  },
+  "蔷琵战士和靶场单位在封建/城堡/帝王时代的近战护甲 +1/2/3": {
+    "py": "qiangpizhanshihebachangdanweizaifengjianchengbaodiwangshidaidejinzhanhujia",
+    "pyi": "qpzshbcdwzfjcbdwsddjzhj"
+  },
+  "蝎式弩射程 +1": {
+    "py": "xieshinushecheng",
+    "pyi": "xsnsc"
+  },
+  "蝎式弩黄金费用 -50%": {
+    "py": "xieshinuhuangjinfeiyong",
+    "pyi": "xsnhjfy"
+  },
+  "血统和斥候骑兵系升级的食物费用 -50%": {
+    "py": "xuetonghechihouqibingxishengjideshiwufeiyong",
+    "pyi": "xthchqbxsjdswfy"
+  },
+  "血统和篷车的效果 +50%": {
+    "py": "xuetonghepengchedexiaoguo",
+    "pyi": "xthpcdxg"
+  },
+  "象兵单位受到的额外伤害 -25% 并提升该单位抵抗招降的能力": {
+    "py": "xiangbingdanweishoudaodeewaishanghaibingtishenggaidanweidikangzhaoxiangdenengli",
+    "pyi": "xbdwsddewshbtsgdwdkzxdnl"
+  },
+  "象兵在城堡/帝王时代的费用 -25/35%": {
+    "py": "xiangbingzaichengbaodiwangshidaidefeiyong",
+    "pyi": "xbzcbdwsddfy"
+  },
+  "象兵移动速度 +10%": {
+    "py": "xiangbingyidongsudu",
+    "pyi": "xbydsd"
+  },
+  "象兵近战护甲 +1/远程护甲 +1": {
+    "py": "xiangbingjinzhanhujiayuanchenghujia",
+    "pyi": "xbjzhjychj"
+  },
+  "贸易单位不仅能产生黄金，还能额外产生 10% 的食物": {
+    "py": "maoyidanweibujinnengchanshenghuangjinhainengewaichanshengdeshiwu",
+    "pyi": "mydwbjncshjhnewcsdsw"
+  },
+  "贸易单位产生的黄金 +25%": {
+    "py": "maoyidanweichanshengdehuangjin",
+    "pyi": "mydwcsdhj"
+  },
+  "资源持续时间 +15%": {
+    "py": "ziyuanchixushijian",
+    "pyi": "zycxsj"
+  },
+  "运输船生命值 +100%，运载量 +20": {
+    "py": "yunshuchuanshengmingzhiyunzailiang",
+    "pyi": "yscsmzyzl"
+  },
+  "运输船视野 +5 且费用 -50%": {
+    "py": "yunshuchuanshiyeqiefeiyong",
+    "pyi": "yscsyqfy"
+  },
+  "近射孔、草药免费": {
+    "py": "jinshekongcaoyaomianfei",
+    "pyi": "jskcymf"
+  },
+  "近战攻击升级免费": {
+    "py": "jinzhangongjishengjimianfei",
+    "pyi": "jzgjsjmf"
+  },
+  "近战攻击升级效果翻倍": {
+    "py": "jinzhangongjishengjixiaoguofanbei",
+    "pyi": "jzgjsjxgfb"
+  },
+  "进入下一个时代所需黄金成本 -50%": {
+    "py": "jinruxiayigeshidaisuoxuhuangjinchengben",
+    "pyi": "jrxygsdsxhjcb"
+  },
+  "远程士兵和步兵的木材费用 -50%": {
+    "py": "yuanchengshibinghebubingdemucaifeiyong",
+    "pyi": "ycsbhbbdmcfy"
+  },
+  "速升城堡暴经济（23+2）": {
+    "py": "sushengchengbaobaojingji",
+    "pyi": "sscbbjj"
+  },
+  "采果工不仅能产生食物，还能产生木材": {
+    "py": "caiguogongbujinnengchanshengshiwuhainengchanshengmucai",
+    "pyi": "cggbjncsswhncsmc"
+  },
+  "采果工存放的食物 +25%": {
+    "py": "caiguogongcunfangdeshiwu",
+    "pyi": "cggcfdsw"
+  },
+  "采果工的工作速度 +15%": {
+    "py": "caiguogongdegongzuosudu",
+    "pyi": "cggdgzsd"
+  },
+  "采矿场科技免费": {
+    "py": "caikuangchangkejimianfei",
+    "pyi": "ckckjmf"
+  },
+  "重装骑射手可在城堡时代升级，成本 -50%": {
+    "py": "zhongzhuangqisheshoukezaichengbaoshidaishengjichengben",
+    "pyi": "zzqsskzcbsdsjcb"
+  },
+  "金矿矿工的工作速度 +25%": {
+    "py": "jinkuangkuanggongdegongzuosudu",
+    "pyi": "jkkgdgzsd"
+  },
+  "铁匠铺升级不消耗黄金": {
+    "py": "tiejiangpushengjibuxiaohaohuangjin",
+    "pyi": "tjpsjbxhhj"
+  },
+  "铁匠铺和大学的木材费用 -100": {
+    "py": "tiejiangpuhedaxuedemucaifeiyong",
+    "pyi": "tjphdxdmcfy"
+  },
+  "铁匠铺和攻城武器厂科技的食物费用 -50%": {
+    "py": "tiejiangpuhegongchengwuqichangkejideshiwufeiyong",
+    "pyi": "tjphgcwqckjdswfy"
+  },
+  "铁匠铺工作速度 +80%": {
+    "py": "tiejiangpugongzuosudu",
+    "pyi": "tjpgzsd"
+  },
+  "长枪兵升级免费": {
+    "py": "changqiangbingshengjimianfei",
+    "pyi": "cqbsjmf"
+  },
+  "长矛兵系和掷矛手系的移动速度 +10%": {
+    "py": "changmaobingxihezhimaoshouxideyidongsudu",
+    "pyi": "cmbxhzmsxdydsd"
+  },
+  "长矛兵系和掷矛手视野 +2": {
+    "py": "changmaobingxihezhimaoshoushiye",
+    "pyi": "cmbxhzmssy"
+  },
+  "长矛兵系造成的额外伤害 +25%": {
+    "py": "changmaobingxizaochengdeewaishanghai",
+    "pyi": "cmbxzcdewsh"
+  },
+  "防御工事建造速度 +50%，城镇中心建造速度 +100%": {
+    "py": "fangyugongshijianzaosuduchengzhenzhongxinjianzaosudu",
+    "pyi": "fygsjzsdczzxjzsd"
+  },
+  "降低蝎式弩的最小射程": {
+    "py": "jiangdixieshinudezuixiaoshecheng",
+    "pyi": "jdxsndzxsc"
+  },
+  "靶场与兵营升级消耗食物 -50%": {
+    "py": "bachangyubingyingshengjixiaohaoshiwu",
+    "pyi": "bcybysjxhsw"
+  },
+  "靶场和马厩的木材费用 -75": {
+    "py": "bachanghemajiudemucaifeiyong",
+    "pyi": "bchmjdmcfy"
+  },
+  "靶场工作速度 +10%": {
+    "py": "bachanggongzuosudu",
+    "pyi": "bcgzsd"
+  },
+  "马厩单位在城堡/帝王时代的费用 -15/20%": {
+    "py": "majiudanweizaichengbaodiwangshidaidefeiyong",
+    "pyi": "mjdwzcbdwsddfy"
+  },
+  "马厩工作速度 +20%": {
+    "py": "majiugongzuosudu",
+    "pyi": "mjgzsd"
+  },
+  "马厩科技费用 - 50%": {
+    "py": "majiukejifeiyong",
+    "pyi": "mjkjfy"
+  },
+  "骆驼单位生命值 +25%": {
+    "py": "luotuodanweishengmingzhi",
+    "pyi": "ltdwsmz"
+  },
+  "骆驼和象兵单位的训练速度 +25%": {
+    "py": "luotuohexiangbingdanweidexunliansudu",
+    "pyi": "lthxbdwdxlsd"
+  },
+  "骆驼骑兵、掷矛手和长矛兵系的费用 -25%": {
+    "py": "luotuoqibingzhimaoshouhechangmaobingxidefeiyong",
+    "pyi": "ltqbzmshcmbxdfy"
+  },
+  "骆驼骑兵攻击速度 +20%": {
+    "py": "luotuoqibinggongjisudu",
+    "pyi": "ltqbgjsd"
+  },
+  "骑兵单位从封建时代开始生命值 +20%": {
+    "py": "qibingdanweicongfengjianshidaikaishishengmingzhi",
+    "pyi": "qbdwcfjsdkssmz"
+  },
+  "骑兵单位击败敌军时生成的黄金 +3": {
+    "py": "qibingdanweijibaidijunshishengchengdehuangjin",
+    "pyi": "qbdwjbdjsscdhj"
+  },
+  "骑兵单位在封建/城堡/帝王时代每分钟恢复 2/8/14 生命值": {
+    "py": "qibingdanweizaifengjianchengbaodiwangshidaimeifenzhonghuifushengmingzhi",
+    "pyi": "qbdwzfjcbdwsdmfzhfsmz"
+  },
+  "骑兵单位在封建/城堡/帝王时代的移动速度 +5/10/15%": {
+    "py": "qibingdanweizaifengjianchengbaodiwangshidaideyidongsudu",
+    "pyi": "qbdwzfjcbdwsddydsd"
+  },
+  "骑兵单位在封建/城堡/帝王时代造成的额外伤害 +20/30/40%": {
+    "py": "qibingdanweizaifengjianchengbaodiwangshidaizaochengdeewaishanghai",
+    "pyi": "qbdwzfjcbdwsdzcdewsh"
+  },
+  "骑兵对掷矛手的攻击力 +2": {
+    "py": "qibingduizhimaoshoudegongjili",
+    "pyi": "qbdzmsdgjl"
+  },
+  "骑兵对攻城武器的攻击力 +2": {
+    "py": "qibingduigongchengwuqidegongjili",
+    "pyi": "qbdgcwqdgjl"
+  },
+  "骑士系对步兵的攻击 +1": {
+    "py": "qishixiduibubingdegongji",
+    "pyi": "qsxdbbdgj"
+  },
+  "骑士系对远程士兵的攻击力 +2": {
+    "py": "qishixiduiyuanchengshibingdegongjili",
+    "pyi": "qsxdycsbdgjl"
+  },
+  "骑士系视野 +2": {
+    "py": "qishixishiye",
+    "pyi": "qsxsy"
+  },
+  "骑射手在城堡/帝王时代的费用 -10/20%": {
+    "py": "qisheshouzaichengbaodiwangshidaidefeiyong",
+    "pyi": "qsszcbdwsddfy"
+  },
+  "骑射手对远程士兵的攻击力 +2 (掷矛手除外)": {
+    "py": "qisheshouduiyuanchengshibingdegongjilizhimaoshouchuwai",
+    "pyi": "qssdycsbdgjlzmscw"
+  },
+  "骑射手攻击速度 +25%": {
+    "py": "qisheshougongjisudu",
+    "pyi": "qssgjsd"
+  },
+  "骑射手视野 +2": {
+    "py": "qisheshoushiye",
+    "pyi": "qsssy"
+  },
+  "骑射手训练速度 +25%": {
+    "py": "qisheshouxunliansudu",
+    "pyi": "qssxlsd"
+  },
+  "骡车科技效率 +40%": {
+    "py": "luochekejixiaolv",
+    "pyi": "lckjxl"
+  },
+  "骡车费用 -25%": {
+    "py": "luochefeiyong",
+    "pyi": "lcfy"
+  },
+  "黑光铠骑兵和鲜卑掠骑兵在城堡/帝王时代的生命值 +20/30%": {
+    "py": "heiguangkaiqibinghexianbeilveqibingzaichengbaodiwangshidaideshengmingzhi",
+    "pyi": "hgkqbhxblqbzcbdwsddsmz"
+  }
+}

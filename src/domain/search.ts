@@ -1,4 +1,6 @@
-/** 全局搜索：文明/单位/科技统一索引与打分（纯函数） */
+/** 全局搜索：文明/单位/科技/建筑/加成/页面统一索引与打分（纯函数） */
+import extraPy from '../data/search-py.json';
+
 export interface SearchItem {
   kind: 'civ' | 'unit' | 'tech' | 'building' | 'bonus' | 'page';
   id: string;
@@ -25,6 +27,13 @@ export interface SearchItem {
 
 /** 归一化：不分大小写、忽略所有空白（「Fast Castle」=「fastcastle」） */
 export const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
+
+/** issue 162 加成和页面共用构建时生成的拼音，排序与其他类型一致。 */
+export function withSearchPy(it: SearchItem): SearchItem {
+  if (it.kind !== 'bonus' && it.kind !== 'page') return it;
+  const fields = (extraPy as Record<string, { py: string; pyi: string }>)[it.zh];
+  return fields ? { ...it, ...fields } : it;
+}
 
 /** 分档：名称完全匹配 > 名称前缀 > 别名完全匹配 > 名称包含 > 别名包含 > 拼音前缀（issue 123） */
 export const TIER = { exact: 100, prefix: 80, word: 75, alias: 70, sub: 40, aliasSub: 30, py: 20 } as const;
