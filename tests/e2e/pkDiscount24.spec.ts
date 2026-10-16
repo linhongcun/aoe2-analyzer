@@ -95,16 +95,17 @@ for (const w of [1280, 390]) {
   });
 }
 
-test('每个 .5 情况：标「未计入」、按原价、无折后数字', async ({ page }) => {
+test('每个 .5 情况（#129）：不再标「未计入」，直接显示 .5 的折后价', async ({ page }) => {
   test.setTimeout(240_000);
   expect(HALVES.length).toBeGreaterThan(0);
   for (const [u, civ, age] of HALVES) {
     // 技术预设用「当前时代」，使卡片时代 = 取价时代
     await page.goto(`#/duel?m=r&bud=3000&a=${u.id}.${civ}.${age}.c.&b=569.Franks.4.f.`);
     const a = page.locator('[data-t="pk-cost-a"]');
-    await expect(a.locator('[data-t="pk-half"]'), `${u.en} ${civ} ${age}`).toBeVisible();
-    await expect(a.locator('.pk-now')).toHaveCount(0);
-    for (const [r, v] of Object.entries(u.cost)) if (v) await expect(a.locator(`[data-t="pk-res-${r}"] td`).nth(1)).toHaveText(String(v));
+    await expect(a.locator('[data-t="pk-applied"]').first(), `${u.en} ${civ} ${age}`).toBeVisible();
+    await expect(a.locator('[data-t="pk-half"]')).toHaveCount(0);
+    await expect(a).not.toContainText('未计入');
+    await expect(a.locator('[data-t^="pk-res-"]').filter({ hasText: /\d\.5/ }).first(), `${u.en} ${civ} ${age}`).toBeVisible();
   }
 });
 
@@ -167,7 +168,7 @@ for (const w of [360, 375, 390]) {
   test.describe(`${w}px 来源链接`, () => {
     test.use({ viewport: { width: w, height: 900 } });
     for (const [name, q, row] of [
-      ['.5：哥特长戟兵帝王', 'a=359.Goths.4.c.&b=569.Franks.4.f.', 'pk-half'],
+      ['.5：哥特长戟兵帝王（#129 起已计入）', 'a=359.Goths.4.c.&b=569.Franks.4.f.', 'pk-applied'],
       ['高丽弩手', 'a=24.Koreans.3.c.&b=569.Franks.4.f.', 'pk-unsupported'],
     ] as const) {
       test(`${name}：「来源」单行显示`, async ({ page }) => {

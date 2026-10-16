@@ -103,11 +103,11 @@ describe('不影响费用', () => {
   });
 });
 
-describe('.5 规则（#129 规则 B）：折后价恰为 .5 的直接显示 .5，不再记「未计入」', () => {
-  it('roundHalfPrice：就近 0.5，x.25 / x.75 往大取', async () => {
+describe('.5 规则（#129）：折后价恰为 .5 的直接显示 .5，不再记「未计入」', () => {
+  it('roundHalfPrice：就近 0.5，x.25 往小、x.75 往大（游戏实测）', async () => {
     const { roundHalfPrice } = await import('../../src/domain/costDiscount');
     expect(roundHalfPrice((25 * 70) / 100)).toBe(17.5);
-    expect(roundHalfPrice((35 * 75) / 100)).toBe(26.5); // 26.25
+    expect(roundHalfPrice((35 * 75) / 100)).toBe(26); // 26.25
     expect(roundHalfPrice((25 * 75) / 100)).toBe(19); // 18.75
   });
   // 独立扫描：所有 单位 × 文明 × 时代 × 资源，按 .dat 档位换算的整数百分比 p，原价 × (100 − p) 除以 100 余 50 即为 .5
