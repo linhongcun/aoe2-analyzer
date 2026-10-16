@@ -46,6 +46,7 @@ export function useSearchIndex(): SearchItem[] {
           aliases: UNIT_ALIASES[u.id],
           py: u.py,
           pyi: u.pyi,
+          altPy: elite ? [{ py: elite.py, pyi: elite.pyi }] : undefined,
           civNote: dup.has(u.id) ? civNote(u, (en) => civs.find((c) => c.en === en)?.zh) : undefined,
         }),
       );

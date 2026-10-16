@@ -19,6 +19,8 @@ export interface SearchItem {
   py?: string;
   /** issue 123 每个字的首字母 */
   pyi?: string;
+  /** issue 123 合并进来的精锐版等的拼音（与 alt 对应） */
+  altPy?: { py?: string; pyi?: string }[];
 }
 
 /** 归一化：不分大小写、忽略所有空白（「Fast Castle」=「fastcastle」） */
@@ -36,7 +38,7 @@ export function score(it: SearchItem, raw: string): number {
     const n = norm(x);
     return n === q ? TIER.alias : n.includes(q) ? TIER.aliasSub : 0;
   });
-  return Math.max(main, ...a, ...al, pyMatch(it, q) ? TIER.py : 0, 0);
+  return Math.max(main, ...a, ...al, pyMatch(it, q) || (it.altPy ?? []).some((x) => pyMatch(x, q)) ? TIER.py : 0, 0);
 }
 /** issue 123 拼音只认前缀，ü 写 v 和写 u 都算；排在所有中英文命中之后 */
 export const pyMatch = (it: { py?: string; pyi?: string }, q: string) => {
