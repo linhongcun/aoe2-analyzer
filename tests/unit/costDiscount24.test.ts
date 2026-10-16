@@ -39,13 +39,13 @@ describe('折扣档位跟随所选时代', () => {
     expect(D('Cavalry Archer', 'Huns', 3).applied[0]!.pct).toBe(10);
     expect(D('Cavalry Archer', 'Huns', 4).applied[0]!.pct).toBe(20);
   });
-  it('哥特步兵四档 15/20/25/30（.dat 逐时代累计）；长矛兵帝王 35×0.7=24.5 落在 .5：未计入、原价', () => {
+  it('哥特步兵四档 15/20/25/30（.dat 逐时代累计）；长矛兵帝王 35×0.7=24.5 落在 .5：#129 起直接显示 .5', () => {
     expect([1, 2, 3].map((a) => D('Spearman', 'Goths', a).applied[0]?.pct)).toEqual([15, 20, 25]);
     expect(D('Champion', 'Goths', 4).applied[0]!.pct).toBe(30);
     const sp = D('Spearman', 'Goths', 4);
-    expect(sp.applied).toEqual([]);
-    expect(sp.half[0]!.res.sort()).toEqual(['Food', 'Wood']);
-    expect(sp.cost).toEqual(unit('Spearman').cost);
+    expect(sp.applied[0]!.pct).toBe(30);
+    expect(sp.half).toEqual([]);
+    expect(sp.cost).toEqual({ Food: 24.5, Wood: 17.5 });
   });
   it('未选时代：按单位最早可用时代取价', () => {
     expect(priceAge(unit('Camel Rider').age, null)).toBe(3);
@@ -103,13 +103,12 @@ describe('不影响费用', () => {
   });
 });
 
-describe('.5 规则（v3，Steve 在 PR #84 恢复）：折后价恰为 .5 的不计入、按原价', () => {
-  it('整数判定不受浮点误差影响', async () => {
-    const { isHalfFrac, roundHalfUp } = await import('../../src/domain/costDiscount');
-    expect(isHalfFrac(25 * 70, 100)).toBe(true); // 17.5
-    expect(isHalfFrac(35 * 75, 100)).toBe(false); // 26.25
-    expect(roundHalfUp(35 * 75, 100)).toBe(26);
-    expect(roundHalfUp(25 * 75, 100)).toBe(19);
+describe('.5 规则（#129）：折后价恰为 .5 的直接显示 .5，不再记「未计入」', () => {
+  it('roundHalfPrice：就近 0.5，x.25 往小、x.75 往大（游戏实测）', async () => {
+    const { roundHalfPrice } = await import('../../src/domain/costDiscount');
+    expect(roundHalfPrice((25 * 70) / 100)).toBe(17.5);
+    expect(roundHalfPrice((35 * 75) / 100)).toBe(26); // 26.25
+    expect(roundHalfPrice((25 * 75) / 100)).toBe(19); // 18.75
   });
   // 独立扫描：所有 单位 × 文明 × 时代 × 资源，按 .dat 档位换算的整数百分比 p，原价 × (100 − p) 除以 100 余 50 即为 .5
   const cases: [string, string, number, string][] = [];
@@ -137,17 +136,14 @@ describe('.5 规则（v3，Steve 在 PR #84 恢复）：折后价恰为 .5 的�
     expect(cases.length).toBeGreaterThan(0);
     expect(cases.map((c) => c.join('|')).sort()).toMatchSnapshot();
   });
-  it('每个 .5 情况：标「未计入」、该资源按原价、不在已计入里', () => {
+  it('每个 .5 情况：不标「未计入」、该资源显示精确的 .5 价', () => {
     cases.forEach(([en, civ, age, r]) => {
       units
         .filter((x) => x.en === en && x.civs.includes(civ))
         .forEach((u) => {
           const d = discountedCost(u, civ, age);
-          expect(
-            d.half.some((h) => h.res.includes(r)),
-            `${en} ${civ} ${age} ${r}`,
-          ).toBe(true);
-          expect(d.cost[r]).toBe(u.cost[r]);
+          expect(d.half, `${en} ${civ} ${age} ${r}`).toEqual([]);
+          expect(d.cost[r]! % 1, `${en} ${civ} ${age} ${r}`).toBe(0.5);
         });
     });
   });
