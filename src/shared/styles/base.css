@@ -1053,7 +1053,7 @@ table.ediff td.dn {
 }
 .pk-unavail-t {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-1);
   margin: 0;
   font-size: var(--fs-sm);
@@ -1061,8 +1061,9 @@ table.ediff td.dn {
   line-height: 20px;
 }
 .pk-unavail-t span {
-  white-space: nowrap;
+  /* 说明文字可换行，避免长提示在窄屏冲出提示框（PR 136 Kent） */
   min-width: 0;
+  flex: 1;
 }
 .pk-unavail-acts {
   display: flex;
