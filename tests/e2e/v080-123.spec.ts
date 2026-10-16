@@ -45,12 +45,20 @@ for (const w of [360, 1280]) {
         const li = await palette(page, q);
         await expect(li.filter({ hasText: zh }).first()).toBeVisible();
         await noOverflow(page, '.cmdk-list li');
+        // Steve 定：这次不做拼音高亮
+        expect(await li.locator('mark').count()).toBe(0);
       });
 
     test('全局搜索中文「匈奴」和英文「Huns」照旧', async ({ page }) => {
       await expect((await palette(page, '匈奴')).first()).toContainText('匈奴');
       await page.getByPlaceholder(/搜索文明、单位、科技/).fill('Huns');
       await expect(page.locator('.cmdk-list li').first()).toContainText('匈奴');
+    });
+
+    test('全局搜索「nuzhen」（ü 输入 u）出现「女真」，「yinjiaqiangbingzhang」出现「印加枪兵长」', async ({ page }) => {
+      await expect((await palette(page, 'nuzhen')).filter({ hasText: '女真' }).first()).toBeVisible();
+      await page.getByPlaceholder(/搜索文明、单位、科技/).fill('yinjiaqiangbingzhang');
+      await expect(page.locator('.cmdk-list li').filter({ hasText: '印加枪兵长' }).first()).toBeVisible();
     });
 
     test('全局搜索「zzzz」显示「无匹配结果」', async ({ page }) => {
@@ -74,3 +82,33 @@ for (const w of [360, 1280]) {
     });
   });
 }
+
+/**
+ * Steve 补充决定：拼音库只放 devDependencies，构建时生成 py/pyi，前端只多这两个字段。
+ * 基线在 release/v0.8.0 @ 8094df7 上 npm run build 后用 node zlib.gzipSync（默认级别）量得：
+ * dist/assets 全部 JS gzip 合计 291849 字节，其中主包 index-*.js 143854 字节。
+ * 跑 e2e 前必须先 npm run build（CI 的顺序就是这样）。
+ */
+test.describe('#123 构建产物', () => {
+  const BASE_TOTAL = 291849;
+  const BASE_MAIN = 143854;
+  const LIMIT = 10 * 1024;
+  const js = async () => {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const dir = path.resolve('dist/assets');
+    return fs.readdirSync(dir).filter((f) => f.endsWith('.js')).map((f) => ({ f, buf: fs.readFileSync(path.join(dir, f)) }));
+  };
+  test('dist 里的 JS 不含拼音库代码（不出现 pinyin 字样）', async () => {
+    const hits = (await js()).filter(({ buf }) => /pinyin/i.test(buf.toString('utf8'))).map(({ f }) => f);
+    expect(hits).toEqual([]);
+  });
+  test('gzip 后 JS 合计和主包的增量都不超过 10 KB', async () => {
+    const { gzipSync } = await import('node:zlib');
+    const sizes = (await js()).map(({ f, buf }) => ({ f, gz: gzipSync(buf).length }));
+    const total = sizes.reduce((a, b) => a + b.gz, 0);
+    const main = sizes.find((s) => s.f.startsWith('index-'))!.gz;
+    expect(total - BASE_TOTAL, `合计 ${total}，基线 ${BASE_TOTAL}`).toBeLessThanOrEqual(LIMIT);
+    expect(main - BASE_MAIN, `主包 ${main}，基线 ${BASE_MAIN}`).toBeLessThanOrEqual(LIMIT);
+  });
+});

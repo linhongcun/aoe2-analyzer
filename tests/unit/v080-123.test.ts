@@ -9,6 +9,7 @@ import { civMatches } from '../../src/shared/ui/CivPicker';
 
 /**
  * #123 搜索支持拼音（全拼和首字母）。
+ * 范围（Steve 定）：只给 civs、units、techs、buildings 四个数据文件加拼音；文明加成、出兵顺序、页面不做。
  * 草案字段名：每条数据加 py（全拼，无声调，小写，无空格）和 pyi（每个字的首字母）。字段名 Linus 可改，改了这里跟着改。
  * 所有例子取自 src/data/*.json 的真实中文名；多音字按游戏内词义定读音（见 /workspace/v080-specs-123.md）。
  */
@@ -36,8 +37,17 @@ const POLY: [string, string | number, string, string, string][] = [
   ['techs', 93, '弹道学', 'dandaoxue', 'ddx'],
   ['units', 1911, '掷弹兵', 'zhidanbing', 'zdb'],
   ['techs', 59, '弹射器', 'tansheqi', 'tsq'],
+  // Steve 定（#123 评论 6206063202）：枪兵长的「长」读 zhǎng
+  ['units', 879, '印加枪兵长', 'yinjiaqiangbingzhang', 'yjqbz'],
+  ['units', 881, '精锐印加枪兵长', 'jingruiyinjiaqiangbingzhang', 'jryjqbz'],
 ];
-const ALL = [...CASES, ...POLY];
+/** ü 一律写成 v（Steve 定），搜索时输入 u 也要命中 */
+const UMLAUT: [string, string | number, string, string, string][] = [
+  ['civs', 'Jurchens', '女真', 'nvzhen', 'nz'],
+  ['units', 1013, '飞刀女兵', 'feidaonvbing', 'fdnb'],
+  ['buildings', 1754, '商队旅馆', 'shangduilvguan', 'sdlg'],
+];
+const ALL = [...CASES, ...POLY, ...UMLAUT];
 
 describe('#123 数据字段：每个中文名都有全拼和首字母', () => {
   for (const file of Object.keys(DATA))
@@ -88,8 +98,36 @@ describe('#123 全局搜索比对拼音', () => {
     expect(names('xiong nu')).toContain('匈奴');
     expect(names('qi she shou')).toContain('骑射手');
   });
-  it('多音字不按错误读音命中：「zhanggongbing」「chongxing」「xinghui」「danshe」搜不到', () => {
-    for (const q of ['zhanggongbing', 'chongxingnupao', 'xinghui', 'danshe']) expect(names(q), q).toEqual([]);
+  it('多音字不按错误读音命中：「zhanggongbing」「chongxing」「xinghui」「danshe」「yinjiaqiangbingchang」搜不到', () => {
+    for (const q of ['zhanggongbing', 'chongxingnupao', 'xinghui', 'danshe', 'yinjiaqiangbingchang']) expect(names(q), q).toEqual([]);
+  });
+  it('ü 写 v 和写 u 都能命中：「nvzhen」「nuzhen」「shangduilv」「shangduilu」「fdnb」', () => {
+    expect(names('nvzhen')).toContain('女真');
+    expect(names('nuzhen')).toContain('女真');
+    expect(names('shangduilv')).toContain('商队旅馆');
+    expect(names('shangduilu')).toContain('商队旅馆');
+    expect(names('feidaonubing')).toContain('飞刀女兵');
+  });
+  it('拼音只认前缀：全拼中段「gongbing」「sheshou」、首字母中段「ss」「gb」不命中', () => {
+    expect(names('gongbing')).not.toContain('长弓兵');
+    expect(names('sheshou')).not.toContain('骑射手');
+    expect(names('sheshou')).not.toContain('重装骑射手');
+    expect(names('ss')).not.toContain('骑射手');
+    expect(names('gb')).not.toContain('长弓兵');
+  });
+  it('排序：中英文命中排在拼音命中前面（「ba」英文 Ballistics/Banking 在拼音 baifuzhang 之前）', () => {
+    const r = names('ba');
+    expect(r).toContain('百夫长');
+    const py = r.indexOf('百夫长');
+    for (const zh of ['弹道学', '银行业']) {
+      expect(r, zh).toContain(zh);
+      expect(r.indexOf(zh), zh).toBeLessThan(py);
+    }
+  });
+  it('排序：中文命中排在拼音命中前面（「长」开头的中文名在任何纯拼音命中之前）', () => {
+    const r = names('chang');
+    // 「chang」只是拼音前缀；长弓兵/长剑士/长矛兵 都应命中
+    for (const zh of ['长弓兵', '长剑士', '长矛兵']) expect(r).toContain(zh);
   });
   it('中文和英文照旧：「匈奴」「Huns」第一个是匈奴，「长弓」能搜到长弓兵', () => {
     expect(names('匈奴')[0]).toBe('匈奴');
@@ -111,7 +149,13 @@ describe('#123 CivPicker 比对拼音', () => {
   });
 });
 
-describe('#123 不把拼音库打进前端', () => {
+describe('#123 范围只限四个数据文件', () => {
+  it('CivPicker 也走前缀：「iongnu」不命中匈奴', () => {
+    const huns = find('civs', 'Huns') as unknown as Parameters<typeof civMatches>[0];
+    expect(civMatches(huns, 'iongnu')).toBe(false);
+  });
+});
+describe('#123 拼音库只在构建时用，不打进前端（Steve 补充决定）', () => {
   it('package.json 的 dependencies 里没有拼音库（只能放 devDependencies）', () => {
     const pkg = JSON.parse(readFileSync('package.json', 'utf8')) as { dependencies: Record<string, string> };
     expect(Object.keys(pkg.dependencies).filter((d) => /pinyin/i.test(d))).toEqual([]);
@@ -121,3 +165,4 @@ describe('#123 不把拼音库打进前端', () => {
     expect(src).not.toMatch(/from ['"][^'"]*pinyin/i);
   });
 });
+// 构建产物里没有拼音库代码、gzip 体积增量不超过 10 KB：在 tests/e2e/v080-123.spec.ts 里对 dist 检查。
