@@ -62,15 +62,22 @@ function score1(zh: string, en: string, q: string): number {
   return 0;
 }
 const KIND_ORDER = { page: 0, civ: 1, unit: 2, building: 3, tech: 4, bonus: 5 } as const;
+/** issue 145 E：中英文命中占满前 limit 条时，末尾给只靠拼音命中的结果留这么多位（短拼音如「ba」不再被挤掉） */
+export const PY_RESERVE = 5;
 export function search(items: SearchItem[], raw: string, limit = 30): SearchItem[] {
   const q = norm(raw);
   if (!q) return [];
-  return items
+  const ranked = items
     .map((it) => [score(it, q), it] as const)
     .filter(([s]) => s > 0)
     .sort(
       (a, b) => b[0] - a[0] || Number(!!a[1].late) - Number(!!b[1].late) || KIND_ORDER[a[1].kind] - KIND_ORDER[b[1].kind] || a[1].zh.length - b[1].zh.length,
     )
-    .slice(0, limit)
-    .map(([, it]) => it);
+    .map(([s, it]) => ({ s, it }));
+  if (ranked.length <= limit) return ranked.map((x) => x.it);
+  // 拼音档已排在最后；只有拼音命中被截掉时，才让出末尾几位给它们（仍排在所有中英文命中之后）
+  const py = ranked.filter((x) => x.s === TIER.py);
+  const keepPy = Math.min(py.length, PY_RESERVE);
+  const head = ranked.filter((x) => x.s !== TIER.py).slice(0, limit - keepPy);
+  return [...head, ...py.slice(0, limit - head.length)].map((x) => x.it);
 }

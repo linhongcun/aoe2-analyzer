@@ -8,12 +8,15 @@ import { expect, test, type Page } from '@playwright/test';
  * #42 匈奴 flag 打开后的界面（huns-flag-* 稿，本版不上线）：单独构建一份 VITE_FORCE_SIM_CIVS=Huns 的测试包并在 4174 预览。
  * 正式构建不设这个变量，匈奴仍置灰（见 huns42.spec.ts）。
  */
-const PORT = 4174;
-const BASE = `http://localhost:${PORT}/`;
+// 每个并行 worker 用自己的端口（4174 + parallelIndex）：--repeat-each 或多 worker 时，固定端口会让一个 worker
+// 连上另一个 worker 的预览，对方 afterAll 杀掉服务后这边就失败（#145 A）。
+let BASE = 'http://localhost:4174/';
 let srv: ChildProcess | undefined;
 
 test.describe.configure({ mode: 'serial', timeout: 180_000 });
 test.beforeAll(async () => {
+  const PORT = 4174 + test.info().parallelIndex;
+  BASE = `http://localhost:${PORT}/`;
   const out = mkdtempSync(join(tmpdir(), 'huns-flag-'));
   execSync(`npx vite build --outDir ${out} --emptyOutDir`, { env: { ...process.env, VITE_FORCE_SIM_CIVS: 'Huns' }, stdio: 'ignore' });
   srv = spawn('npx', ['vite', 'preview', '--outDir', out, '--port', String(PORT), '--strictPort'], { stdio: 'ignore', detached: true });
@@ -35,13 +38,19 @@ async function open(page: Page, q: string) {
   await page.goto(`${BASE}#/builds?${q}`);
   await expect(page.getByRole('list', { name: /时间线/ })).toBeVisible();
 }
-const lines = (page: Page, sel: string) =>
-  page.locator(sel).evaluateAll((els) =>
+// 量行数前先等字体加载完、再等两帧让布局稳定；字体回退期间量到的高度会多算或少算一行（#145 A）
+const lines = async (page: Page, sel: string) => {
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
+  });
+  return page.locator(sel).evaluateAll((els) =>
     els.map((e) => {
       const lh = parseFloat(getComputedStyle(e).lineHeight) || 20;
       return Math.round(e.getBoundingClientRect().height / lh);
     }),
   );
+};
 
 test('flag 打开：按匈奴计、造房片段划掉并标「匈奴不需要」、自动造房禁用、步骤编号不变', async ({ page }) => {
   await open(page, 'bo=scouts-18&civ=Huns&step=5');

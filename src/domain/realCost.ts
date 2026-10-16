@@ -6,13 +6,13 @@
  * - 金、木、石离放置点 3 格（往返 6 格）；食物按农田，贴着磨坊（往返 0 格，有效速度 = workRate）。
  * - 播种耗时：eco.json 没有，不计入（页面写「播种耗时未核实，不计入」，不出数字）。
  * - 价格用调用方传入的折后价（PK 用 costDiscount 的 cost，与「等资源」显示同一个数）。
- * - 开局模拟不支持的文明（simSupport = false，与 #42 白名单同一口径），其采集相关加成记「未计入」，按通用速度。
+ * - 文明采集加成（issue 138，Steve 定稿）：只计入 aoe2techtree 当前文明文案里有来源的条目，数值用来源值（见 SOURCED）；
+ *   其余（含 eco.json 读得出但没有来源的）一律记「未计入」，按通用速度。
  */
 import ecoRaw from '../data/eco.json';
 import type { Cost } from './types';
 import type { EcoData } from './buildSim';
 import { UNHANDLED_RES } from './buildSim';
-import { simSupport } from './simSupport';
 
 const eco = ecoRaw as unknown as EcoData;
 export type GatherRes = 'Food' | 'Wood' | 'Gold' | 'Stone';
@@ -74,6 +74,24 @@ export interface GatherModel {
   unsupported: CivGatherLine[];
 }
 
+/**
+ * issue 138 有来源的文明采集加成。来源：aoe2techtree.net data/locales/en/strings.json 文明文案（2026-10-16 核对）：
+ * - Romans 120192「Villagers gather, build, and repair +5% faster」→ 村民采集 ×1.05；eco.json 另有农田 ×1.038095 无来源，不计也不列
+ * - Slavs 120172「Farmers work +15% faster」→ 农田 ×1.15（eco.json 为 1.23，不用）
+ * - Celts 120162「Lumberjacks work +15% faster」、Koreans 120167「Stone miners work +20% faster」、
+ *   Turks 120159「Gold miners work +25% faster」→ 与 eco.json 一致，用 eco.json 值
+ * - Berbers 120176「Villagers move +5% faster in Dark Age, +10% faster starting in Feudal Age」→ 与 eco.json 一致
+ * 值：数字 = 用来源值；'eco' = 用 eco.json 值；'drop' = 不计也不列。未列出的条目记「未计入」。
+ */
+const SOURCED: Record<string, Record<string, number | 'eco' | 'drop'>> = {
+  Romans: { 'class:4:workRate': 1.05, 'task:farm:workRate': 'drop' },
+  Slavs: { 'task:farm:workRate': 1.15 },
+  Celts: { 'task:wood:workRate': 'eco' },
+  Koreans: { 'task:stone:workRate': 'eco' },
+  Turks: { 'task:gold:workRate': 'eco' },
+  Berbers: { 'class:4:speed': 'eco' },
+};
+
 const pct = (m: Mod) => Math.round((m.mul - 1) * 100);
 const sign = (n: number) => (n < 0 ? `\u2212${-n}` : `+${n}`);
 
@@ -88,7 +106,7 @@ export function gatherModel(age: number, civ = ''): GatherModel {
     if (t.age <= age) for (const e of t.effects) if (relevant(e) && e.kind === 'attr') push(`${e.target}:${e.attr}`, e.op, e.v ?? 0);
 
   const civMods: Record<string, { m: Mod; zh: string; techs: number[]; exact: boolean }> = {};
-  const supported = !civ || simSupport(civ);
+  const src = SOURCED[civ] ?? {};
   for (const row of (eco.civEco[civ] ?? []) as { age: number; source?: string; tech?: number; effects: EffectLike[] }[]) {
     if (row.source === 'team' || row.age > age) continue;
     for (const e of row.effects) {
@@ -103,8 +121,11 @@ export function gatherModel(age: number, civ = ''): GatherModel {
   const applied: CivGatherLine[] = [],
     unsupported: CivGatherLine[] = [];
   for (const [key, c] of Object.entries(civMods)) {
+    const s = src[key];
+    if (s === 'drop') continue;
+    if (typeof s === 'number') c.m = { mul: s, add: 0 };
     const label = c.exact ? `${c.zh} ${sign(pct(c.m))}%` : c.zh;
-    if (supported && c.exact) {
+    if (s !== undefined && c.exact) {
       push(key, 'mul', c.m.mul);
       applied.push({ label, techs: c.techs });
     } else unsupported.push({ label, techs: c.techs });

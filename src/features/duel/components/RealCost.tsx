@@ -7,6 +7,19 @@ import { Icon } from '../../../shared/ui/Icon';
 import { minus } from './CostDiscount';
 
 const ORDER: GatherRes[] = ['Food', 'Wood', 'Gold', 'Stone'];
+
+/** 未计入行括号里的原因。没有覆盖的文明仍写「数据读不准，按通用速度算」（v0.9.0 F 收尾只改这三家）。 */
+const UNCOUNTED_REASON: Record<string, string> = {
+  Bohemians: 'aoe2techtree 未写明此加成，暂不计入',
+  Armenians: 'aoe2techtree 未写明此加成，暂不计入',
+  Mayans: '资源多持续 15%，不是采集变快，暂不计入',
+};
+
+export function uncountedText(civ: string, civZh: string, label: string): string {
+  const reason = UNCOUNTED_REASON[civ] ?? '数据读不准，按通用速度算';
+  return `未计入：${civZh} ${label}（${reason}）`;
+}
+
 const NoSeed = () => (
   <small className="rc-ns" data-t="rc-noseed">
     不含播种
@@ -104,9 +117,7 @@ export function RealCostBlock({
       {g.unsupported.map((a) => (
         <div key={'u' + a.label} className="pk-line pk-unverified" data-t="rc-unsupported">
           <Icon name="info" className="ic" />
-          <span>
-            未计入：{civZh} {a.label}（数据读不准，按通用速度算）
-          </span>
+          <span>{uncountedText(civ, civZh, a.label)}</span>
         </div>
       ))}
       <Basis age={age} food={rc.hasFood} />
