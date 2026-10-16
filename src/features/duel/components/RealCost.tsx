@@ -115,9 +115,9 @@ export function RealCostBlock({
         </div>
       ))}
       {g.unsupported.map((a) => (
-        <div key={'u' + a.label} className="pk-line pk-unverified" data-t="rc-unsupported">
+        <div key={'u' + a.label} className="pk-line pk-unverified rc-unsupported" data-t="rc-unsupported">
           <Icon name="info" className="ic" />
-          <span>{uncountedText(civ, civZh, a.label)}</span>
+          <span title={uncountedText(civ, civZh, a.label)}>{uncountedText(civ, civZh, a.label)}</span>
         </div>
       ))}
       <Basis age={age} food={rc.hasFood} />

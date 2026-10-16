@@ -1490,6 +1490,16 @@ table.ediff td.dn {
   font-size: var(--fs-num-xl);
 }
 /* #88 等采集时间（设计稿 docs/design/mockups/issue88-real-cost） */
+.rc-unsupported {
+  gap: var(--space-1);
+  padding: var(--space-2);
+  font-size: var(--fs-xs);
+}
+.rc-unsupported > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .rc-seg {
   display: flex;
   justify-content: center;
