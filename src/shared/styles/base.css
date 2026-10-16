@@ -1554,3 +1554,9 @@ table.ediff td.dn {
   display: inline;
   margin: 0;
 }
+
+/* issue 107 交换比 */
+.pk-trade { margin: 8px 0; }
+.pk-trade-main { margin: 0; }
+.pk-trade-value { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pk-trade .note { margin: 2px 0 0; }

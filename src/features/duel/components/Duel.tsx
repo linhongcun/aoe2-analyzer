@@ -23,6 +23,7 @@ import { CostDiscountBlock } from './CostDiscount';
 import { UnitPicker } from './UnitPicker';
 import { BreakEven } from './BreakEven';
 import { RealCostBlock, realCostOf } from './RealCost';
+import { formatTrade, tradeLosses } from '../../../domain/trade';
 import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock } from '../../../domain/realCost';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
@@ -499,6 +500,7 @@ function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb
           </tr>
         </tbody>
       </table>
+      <TradeRow A={A} B={B} na={na} nb={nb} aAlive={g.aAlive} bAlive={g.bAlive} />
       <h4>存活数量随时间变化</h4>
       <svg className="duel-chart" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="存活数量随时间变化">
         <path d={path(1)} className="ln-a" />
@@ -509,6 +511,39 @@ function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb
         <span>{r1(T)}s</span>
       </div>
       <p className="note">集火模型：每方所有单位攻击对方第一个存活单位，同时刻伤害同时结算，单位死亡后多余伤害转给下一个目标。</p>
+    </div>
+  );
+}
+
+/** issue 107 交换比：只计阵亡单位，按折后取整单价；金按 1:1 计入 */
+function TradeRow({ A, B, na, nb, aAlive, bAlive }: { A: Resolved; B: Resolved; na: number; nb: number; aAlive: number; bAlive: number }) {
+  const t = tradeLosses({ na, nb, aAlive, bAlive, costA: A.disc.cost, costB: B.disc.cost });
+  const f = formatTrade(t);
+  return (
+    <div className="pk-trade" data-t="pk-trade">
+      <p className="pk-trade-main">
+        {f.label}{' '}
+        <b className="pk-trade-value" data-t="pk-trade-value">
+          {f.value}
+        </b>
+      </p>
+      {f.note && <p className="note">{f.note}</p>}
+      <p className="note">
+        A 损失 {t.a.total}（阵亡 {t.a.dead}
+        {t.a.dead > 0 && (
+          <>
+            ：<CostView c={t.a.res} />
+          </>
+        )}
+        ）· B 损失 {t.b.total}（阵亡 {t.b.dead}
+        {t.b.dead > 0 && (
+          <>
+            ：<CostView c={t.b.res} />
+          </>
+        )}
+        ）
+      </p>
+      <p className="note">只计阵亡单位，存活单位掉的血不算；金按 1:1 计入。</p>
     </div>
   );
 }
