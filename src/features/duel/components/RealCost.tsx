@@ -110,14 +110,14 @@ export function RealCostBlock({
         <div key={'g' + a.label} className="pk-line pk-applied" data-t="rc-applied">
           <Icon name="check" className="ic" />
           <span>
-            已计入：{civZh} {a.label}
+            已计入：{civZh} {a.label}（来源：aoe2techtree 文明描述：{a.source}）
           </span>
         </div>
       ))}
       {g.unsupported.map((a) => (
-        <div key={'u' + a.label} className="pk-line pk-unverified" data-t="rc-unsupported">
+        <div key={'u' + a.label} className="pk-line pk-unverified rc-unsupported" data-t="rc-unsupported">
           <Icon name="info" className="ic" />
-          <span>{uncountedText(civ, civZh, a.label)}</span>
+          <span title={uncountedText(civ, civZh, a.label)}>{uncountedText(civ, civZh, a.label)}</span>
         </div>
       ))}
       <Basis age={age} food={rc.hasFood} />

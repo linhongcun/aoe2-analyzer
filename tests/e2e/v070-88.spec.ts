@@ -30,7 +30,7 @@ for (const w of [1280, 390]) {
       await expect(B.locator('[data-t="rc-res-Food"] .pk-was')).toHaveText('55');
       await expect(B.locator('[data-t="rc-res-Food"] [data-t="rc-time"]')).toHaveCount(1);
       await expect(B.locator('[data-t="rc-disc"]')).toContainText('时间按实际价换算');
-      await expect(B.locator('[data-t="rc-applied"]')).toHaveText('已计入：柏柏尔 村民移速 +10%');
+      await expect(B.locator('[data-t="rc-applied"]')).toContainText('已计入：柏柏尔 村民移速 +10%');
       // Kent 手算（#127 后复核不变）
       await expect(A.locator('[data-t="rc-res-Food"] [data-t="rc-time"]')).toHaveText('1:53');
       await expect(A.locator('[data-t="rc-res-Gold"] [data-t="rc-time"]')).toHaveText('2:54');
@@ -73,8 +73,8 @@ test.describe('#88 不含播种 / 口径', () => {
     await open(page, '#/duel?a=38.Turks.3.f.&b=38.Malians.3.f.&m=t');
     const A = page.locator('[data-t="rc-a"]'),
       B = page.locator('[data-t="rc-b"]');
-    await expect(A.locator('[data-t="rc-applied"]')).toHaveText('已计入：土耳其 采金 +25%');
-    expect(((await A.innerText()).match(/25%/g) ?? []).length).toBe(1);
+    await expect(A.locator('[data-t="rc-applied"]')).toContainText('已计入：土耳其 采金 +25%');
+    expect(((await A.innerText()).replace(/（来源：[^）]*）/g, '').match(/25%/g) ?? []).length).toBe(1);
     await expect(A.locator('[data-t="rc-total"]')).toHaveText('4:17');
     expect(await count(page, 'a')).toBe(23);
     await expect(B.locator('[data-t="rc-unsupported"]')).toHaveText('未计入：马里 采金加成（数据读不准，按通用速度算）');
