@@ -110,7 +110,7 @@ export function RealCostBlock({
         <div key={'g' + a.label} className="pk-line pk-applied" data-t="rc-applied">
           <Icon name="check" className="ic" />
           <span>
-            已计入：{civZh} {a.label}
+            已计入：{civZh} {a.label}（来源：aoe2techtree 文明描述：{a.source}）
           </span>
         </div>
       ))}

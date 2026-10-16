@@ -76,6 +76,58 @@ describe('#88 采集速度', () => {
   });
 });
 
+describe('等采集时间：文明加成来源', () => {
+  const render = (civ: string, age: number) => {
+    const knight = (units as unknown as Unit[]).find((u) => u.en === 'Knight')!;
+    return renderToStaticMarkup(
+      createElement(RealCostBlock, {
+        k: 'a',
+        civ,
+        civZh: civs.find((c) => c.en === civ)?.zh ?? civ,
+        age,
+        d: discountedCost(knight, civ, age),
+        vils: 10,
+        min: 10,
+      }),
+    );
+  };
+
+  it.each([
+    ['Romans', /^Villagers gather/],
+    ['Slavs', /^Farmers work/],
+    ['Celts', /^Lumberjacks work/],
+    ['Koreans', /^Stone miners work/],
+    ['Turks', /^Gold miners work/],
+    ['Berbers', /^Villagers move/],
+  ] as const)('%s 各时代已计入项展示对应的中文文明描述', (civ, bonus) => {
+    const data = civs.find((c) => c.en === civ)!;
+    const source = data.bon[data.bonEn.findIndex((text) => bonus.test(text))];
+    expect(source).toBeTruthy();
+    for (const age of [1, 2, 3, 4]) {
+      const g = gatherModel(age, civ);
+      expect(g.applied).toHaveLength(1);
+      expect(g.applied[0]!.source).toBe(source);
+      expect(render(civ, age)).toContain(`已计入：${data.zh} ${g.applied[0]!.label}（来源：aoe2techtree 文明描述：${source}）`);
+    }
+  });
+
+  it.each(['Bohemians', 'Armenians', 'Mayans', 'Malians'])('%s 未计入项保留原因，不展示已计入来源', (civ) => {
+    const data = civs.find((c) => c.en === civ)!;
+    const g = gatherModel(4, civ);
+    const html = render(civ, 4);
+    expect(g.unsupported.length).toBeGreaterThan(0);
+    for (const a of g.unsupported) expect(html).toContain(uncountedText(civ, data.zh, a.label));
+    expect(html).not.toContain('来源：aoe2techtree 文明描述');
+  });
+
+  it('通用文明不展示文明采集加成或来源', () => {
+    expect(gatherModel(3).applied).toEqual([]);
+    const html = render('', 3);
+    expect(html).not.toContain('data-t="rc-applied"');
+    expect(html).not.toContain('来源：aoe2techtree 文明描述');
+  });
+});
+
 describe('#88 单价用时与数量', () => {
   it('S1 法兰克骑士：食物按农田、金按城堡；默认预算 6000 村民秒 floor', () => {
     const { rc } = time(38, { Food: 60, Gold: 75 }, 'Franks');
