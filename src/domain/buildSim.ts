@@ -5,6 +5,7 @@
  */
 import type { Action, BuildOrder, Task } from './buildOrder';
 import { buildOrders as ALL_BOS } from '../data/buildOrders';
+import { roundHalfPrice } from './roundHalfPrice';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -272,8 +273,6 @@ const RES_DEPOSIT: Record<number, Res> = { 299: 'food' };
  * 是否也作用于狩猎以外的采集：未核实（res 268 是玩家级资源，.dat 看不出限定范围），模型只按狩猎算。
  */
 const RES_HUNT_FOOD = 268;
-/** 单位折后价：Steve 在 issue 120 定 .5 不取整（哥特民兵 50×0.85 = 42.5），其余按最近的整数或 .5 取（39.84 → 40） */
-const roundHalf = (x: number) => Math.round(x * 2) / 2;
 /**
  * 高棉 tech 654「C-Bonus, Instant Farmers」在 .dat（185872，effect 690）里只有三条命令：
  * res 33 set 50、农民（214/259）workRate ×0.95。res 33 是各文明加成的标记值（丹麦 35/36、格鲁吉亚 9…），
@@ -479,7 +478,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     // 单位折扣：按单位 id 与按类别（哥特步兵 class:6，#42）两种写法相乘
     const cls = !legacy && kind === 'unit' && eco.units[id]?.class !== undefined ? m.costMul['class:' + eco.units[id]!.class] : undefined;
     const mul = m.costMul['unit:' + id];
-    const rnd = legacy ? Math.round : roundHalf;
+    const rnd = legacy ? Math.round : roundHalfPrice;
     if ((mul || cls) && kind !== 'up')
       for (const r of Object.keys(out) as Res[]) out[r] = rnd(out[r] * (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1));
     return out;

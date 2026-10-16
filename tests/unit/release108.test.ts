@@ -195,9 +195,11 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     git(repo, 'tag', '-a', 'v0.6.0', '-m', 'pre-existing', 'main');
     git(repo, 'push', '-q', 'origin', 'v0.6.0');
     const before = snapshot();
+    const tagAt = git(origin, 'rev-parse', 'v0.6.0^{commit}');
+    const mainAt = originMain();
     const r = await run(['v0.6.0', ...opts()]);
     expect(r.status).not.toBe(0);
-    expect(out(r)).toMatch(/tag/i);
+    expect(out(r)).toContain(`v0.6.0 指向 ${tagAt.slice(0, 7)}，main 已经到 ${mainAt.slice(0, 7)}`);
     expect(snapshot()).toEqual(before);
     noStateFile();
   });
@@ -256,6 +258,42 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     expect(git(origin, 'rev-parse', 'v0.6.0'), '不得重打 tag').toBe(tagObj);
     expect(releaseCreates()).toHaveLength(1);
     expect(releaseCreates()[0]!.args).toContain('--draft');
+    noStateFile();
+  });
+
+  it('#134：本地已有指向合并后 main 头的 tag、远端没有时，跳过创建并补推到远端', async () => {
+    git(repo, 'fetch', '-q', 'origin');
+    git(repo, 'merge', '-q', '--no-ff', '-m', 'Merge release/v0.6.0', 'origin/release/v0.6.0');
+    git(repo, 'push', '-q', 'origin', 'main');
+    // 只打本地 tag，不推远端 —— 覆盖「跳过创建 + 补推」分支
+    git(repo, 'tag', '-a', 'v0.6.0', '-m', 'v0.6.0', 'main');
+    expect(git(origin, 'tag', '-l'), '远端此时还没有 tag').toBe('');
+    const head = originMain();
+    const r = await run(['v0.6.0', ...opts()]);
+    expect(r.status, out(r)).toBe(0);
+    expect(out(r)).toMatch(/跳过|已推送已有本地/);
+    expect(git(origin, 'rev-parse', 'v0.6.0^{commit}'), '远端应被补推到 main 头').toBe(head);
+    expect(releaseCreates()).toHaveLength(1);
+    noStateFile();
+  });
+
+  it('#134：本地与远端同名 tag 指向不同提交时，友好报错、无堆栈、退出 1', async () => {
+    git(repo, 'fetch', '-q', 'origin');
+    git(repo, 'merge', '-q', '--no-ff', '-m', 'Merge release/v0.6.0', 'origin/release/v0.6.0');
+    git(repo, 'push', '-q', 'origin', 'main');
+    const head = originMain();
+    // 远端 tag 指向合并后 main 头（前置检查通过，才能走到第 3 步）
+    git(repo, 'tag', '-a', 'v0.6.0', '-m', 'v0.6.0', 'main');
+    git(repo, 'push', '-q', 'origin', 'v0.6.0');
+    // 本地改指别处，制造 fetch --tags 会撞车的分歧
+    const other = git(repo, 'rev-parse', 'origin/release/v0.6.0');
+    expect(other, '别处必须不是 main 头').not.toBe(head);
+    git(repo, 'tag', '-d', 'v0.6.0');
+    git(repo, 'tag', '-a', 'v0.6.0', '-m', 'wrong', other);
+    const r = await run(['v0.6.0', ...opts()]);
+    expect(r.status, out(r)).toBe(1);
+    expect(out(r)).toContain(`v0.6.0 指向 ${other.slice(0, 7)}，main 已经到 ${head.slice(0, 7)}`);
+    expect(out(r), '不得泄露 git/node 堆栈').not.toMatch(/would clobber|Command failed|at Object\.|node:internal|Error:\s*Command/);
     noStateFile();
   });
 
