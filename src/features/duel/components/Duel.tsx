@@ -21,6 +21,7 @@ import { SIM_ROWS } from '../../simulator/logic/format';
 import { fmtSide, parseSide, type Mode, type SideSpec } from '../logic/state';
 import { CostDiscountBlock } from './CostDiscount';
 import { UnitPicker } from './UnitPicker';
+import { substituteIn } from '../logic/substitute';
 import { BreakEven } from './BreakEven';
 import { RealCostBlock, realCostOf } from './RealCost';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
@@ -42,9 +43,27 @@ interface Resolved {
   /** 训练费用（已按已核实的常驻文明加成折算，#24） */
   disc: CostDiscount;
 }
-function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fallback: number): Resolved {
+/** issue 124 选的文明造不了这个单位：保留玩家选的文明，不出属性与战斗结果，等玩家点按钮 */
+interface Unavail {
+  unavail: true;
+  spec: SideSpec;
+  u: Unit;
+  civ: string;
+  age: number;
+  /** 可替代单位；null = 没有替代 */
+  sub: Unit | null;
+}
+type SideState = Resolved | Unavail;
+const isUnavail = (s: SideState): s is Unavail => 'unavail' in s;
+
+function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideSpec, fallback: number): SideState {
   let u = byId[spec.uid];
   if (!u || !u.civs.length) u = byId[fallback]!;
+  // issue 124：URL 里是一个真实文明但它造不了这个单位时，不再静默换成 civs[0]；只有文明为空/不认识时才回落
+  if (!u.civs.includes(spec.civ) && civByEn(spec.civ)) {
+    const s = substituteIn(byId, u.id, spec.civ);
+    return { unavail: true, spec, u, civ: spec.civ, age: Math.max(u.age, spec.age), sub: s !== null && s !== u.id ? byId[s]! : null };
+  }
   const civ = u.civs.includes(spec.civ) ? spec.civ : u.civs[0]!;
   const age = Math.max(u.age, spec.age);
   const avail = simTechs(ctx, u, civ);
@@ -112,14 +131,16 @@ export default function Duel() {
   const A = resolve(ctx, core.unitById, parseSide(sp.get('a'), DEF_A), DEF_A.uid);
   const B = resolve(ctx, core.unitById, parseSide(sp.get('b'), DEF_B), DEF_B.uid);
   const upd = (k: 'a' | 'b', s: SideSpec) => set({ [k]: fmtSide(s) });
-  const cnt = (s: Resolved, n: number) =>
-    mode === 'r'
-      ? countForBudget(s.disc.cost, bud)
-      : mode === 't'
-        ? Math.max(1, countForTime(realCostOf(s.disc, s.age, s.civ).rc.total, vils, mins))
-        : mode === 'n'
-          ? n
-          : 1;
+  const cnt = (s: SideState, n: number) =>
+    isUnavail(s)
+      ? 1
+      : mode === 'r'
+        ? countForBudget(s.disc.cost, bud)
+        : mode === 't'
+          ? Math.max(1, countForTime(realCostOf(s.disc, s.age, s.civ).rc.total, vils, mins))
+          : mode === 'n'
+            ? n
+            : 1;
   const cntA = cnt(A, na),
     cntB = cnt(B, nb);
   return (
@@ -196,8 +217,19 @@ export default function Duel() {
         <div className="duel-vs">VS</div>
         <Side k="b" side={B} fams={fams} onChange={(s) => upd('b', s)} count={cntB} bud={mode === 'r' ? bud : 0} time={mode === 't' ? [vils, mins] : null} />
       </div>
-      {mode === '1' ? <OneVOne A={A} B={B} /> : <Group A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />}
-      {!eq && (
+      {isUnavail(A) || isUnavail(B) ? (
+        <div id="duel-pending" className="posbox duel-pending">
+          <p data-t="pk-pending">
+            <Icon name="info" className="ic" />
+            先在上面选好能造的单位或文明，再出对战结果。
+          </p>
+        </div>
+      ) : mode === '1' ? (
+        <OneVOne A={A} B={B} />
+      ) : (
+        <Group A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />
+      )}
+      {!eq && !isUnavail(A) && !isUnavail(B) && (
         // #25 盈亏平衡点：等资源模式 v1 不放入口（v2 SPEC）
         <BreakEven
           key={mode}
@@ -235,7 +267,7 @@ function Side({
   time,
 }: {
   k: 'a' | 'b';
-  side: Resolved;
+  side: SideState;
   fams: ReturnType<typeof collapse>;
   onChange: (s: SideSpec) => void;
   count: number;
@@ -245,6 +277,7 @@ function Side({
   time: [number, number] | null;
 }) {
   const core = useCore()!;
+  if (isUnavail(side)) return <UnavailSide k={k} side={side} fams={fams} onChange={onChange} />;
   const { u, spec } = side;
   const base = baseUnit(u, core.fam),
     elite = core.fam.eliteOf[base.id];
@@ -374,6 +407,50 @@ function Side({
           setCmp={() => {}}
         />
       </details>
+    </div>
+  );
+}
+
+/** issue 124：选的文明造不了这个单位。文明保持玩家选的，URL 不动；只有点按钮才改写 a / b */
+function UnavailSide({ k, side, fams, onChange }: { k: 'a' | 'b'; side: Unavail; fams: ReturnType<typeof collapse>; onChange: (s: SideSpec) => void }) {
+  const { u, spec, sub } = side;
+  const civZh = civByEn(side.civ)?.zh ?? side.civ;
+  const civId = `duel-${k}-civ`;
+  return (
+    <div className={`duel-side side-${k} is-unavail`} id={`duel-${k}`} data-unavailable="true">
+      <div className="duel-head">
+        <UnitIcon u={u} big />
+        <div>
+          <h3>
+            {k.toUpperCase()} · {u.zh}
+          </h3>
+          <small className="note">
+            {civZh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
+          </small>
+        </div>
+      </div>
+      <div className="pk-unavail" role="status">
+        <p className="pk-unavail-t">
+          <Icon name="info" className="ic" />
+          <span data-t={`pk-unavail-${k}`}>{sub ? `${civZh}造不了${u.zh}。` : `${civZh}造不了${u.zh}，也没有可以替代的单位。`}</span>
+        </p>
+        <div className="pk-unavail-acts">
+          {sub && (
+            <button type="button" className="pk-act pri" onClick={() => onChange({ ...spec, uid: sub.id, age: Math.max(spec.age, sub.age) })}>
+              换成{sub.zh}
+            </button>
+          )}
+          <button type="button" className="pk-act" onClick={() => document.getElementById(civId)?.click()}>
+            换个文明
+          </button>
+        </div>
+      </div>
+      <div className="bar">
+        <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
+      </div>
+      <div className="bar">
+        <CivPicker id={civId} label={`${k.toUpperCase()} 方文明`} value={side.civ} allowed={u.civs} onChange={(c) => onChange({ ...spec, civ: c })} />
+      </div>
     </div>
   );
 }
