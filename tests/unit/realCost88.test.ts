@@ -1,10 +1,15 @@
 // v0.7.0 #88 真实费用 / 等采集时间（Kent 草稿 #120 issuecomment-6157773161）。
 // 期望值不抄手算数字：用同一口径直接从 eco.json 按科技 id 独立推一遍，避免数据或规则变化后测试和实现一起漂移。
 import { describe, expect, it } from 'vitest';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import civs from '../../src/data/civs.json';
 import eco from '../../src/data/eco.json';
+import units from '../../src/data/units.json';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
 import { countForTime, fmtClock, gatherModel, realCost } from '../../src/domain/realCost';
-import { uncountedText } from '../../src/features/duel/components/RealCost';
+import type { Unit } from '../../src/domain/types';
+import { RealCostBlock, uncountedText } from '../../src/features/duel/components/RealCost';
 
 type Eff = { kind: string; attr?: string; target?: string; op?: string; v?: number };
 const E = eco as unknown as {
@@ -68,6 +73,58 @@ describe('#88 采集速度', () => {
       expect(g.unsupported).toEqual([]);
       expect(g.rate.farm).toBeGreaterThan(gatherModel(3).rate.farm);
     }
+  });
+});
+
+describe('等采集时间：文明加成来源', () => {
+  const render = (civ: string, age: number) => {
+    const knight = (units as unknown as Unit[]).find((u) => u.en === 'Knight')!;
+    return renderToStaticMarkup(
+      createElement(RealCostBlock, {
+        k: 'a',
+        civ,
+        civZh: civs.find((c) => c.en === civ)?.zh ?? civ,
+        age,
+        d: discountedCost(knight, civ, age),
+        vils: 10,
+        min: 10,
+      }),
+    );
+  };
+
+  it.each([
+    ['Romans', /^Villagers gather/],
+    ['Slavs', /^Farmers work/],
+    ['Celts', /^Lumberjacks work/],
+    ['Koreans', /^Stone miners work/],
+    ['Turks', /^Gold miners work/],
+    ['Berbers', /^Villagers move/],
+  ] as const)('%s 各时代已计入项展示对应的中文文明描述', (civ, bonus) => {
+    const data = civs.find((c) => c.en === civ)!;
+    const source = data.bon[data.bonEn.findIndex((text) => bonus.test(text))];
+    expect(source).toBeTruthy();
+    for (const age of [1, 2, 3, 4]) {
+      const g = gatherModel(age, civ);
+      expect(g.applied).toHaveLength(1);
+      expect(g.applied[0]!.source).toBe(source);
+      expect(render(civ, age)).toContain(`已计入：${data.zh} ${g.applied[0]!.label}（来源：aoe2techtree 文明描述：${source}）`);
+    }
+  });
+
+  it.each(['Bohemians', 'Armenians', 'Mayans', 'Malians'])('%s 未计入项保留原因，不展示已计入来源', (civ) => {
+    const data = civs.find((c) => c.en === civ)!;
+    const g = gatherModel(4, civ);
+    const html = render(civ, 4);
+    expect(g.unsupported.length).toBeGreaterThan(0);
+    for (const a of g.unsupported) expect(html).toContain(uncountedText(civ, data.zh, a.label));
+    expect(html).not.toContain('来源：aoe2techtree 文明描述');
+  });
+
+  it('通用文明不展示文明采集加成或来源', () => {
+    expect(gatherModel(3).applied).toEqual([]);
+    const html = render('', 3);
+    expect(html).not.toContain('data-t="rc-applied"');
+    expect(html).not.toContain('来源：aoe2techtree 文明描述');
   });
 });
 
