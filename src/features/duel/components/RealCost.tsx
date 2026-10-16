@@ -8,11 +8,18 @@ import { minus } from './CostDiscount';
 
 const ORDER: GatherRes[] = ['Food', 'Wood', 'Gold', 'Stone'];
 
-/** 未计入行括号里的原因。没有覆盖的文明仍写「数据读不准，按通用速度算」（v0.9.0 F 收尾只改这三家）。 */
+/** 未计入行括号里的原因，按 civs.json 文明描述归纳；只解释原因，不改变计入规则。 */
 const UNCOUNTED_REASON: Record<string, string> = {
   Bohemians: '需研究科技，未建模',
   Armenians: '需研究科技，未建模',
   Mayans: '资源多持续 15%，不是采集变快，暂不计入',
+  Malians: '存放黄金加成，未建模',
+  Poles: '石矿工兼产黄金，未建模',
+  Portuguese: '采果兼产木材，未建模',
+  Shu: '伐木兼产食物，未建模',
+  Sicilians: '农田升级产量加成，未建模',
+  Khmer: '免磨坊存放食物，未建模',
+  Aztecs: '携带量加成，未建模',
 };
 
 export function uncountedText(civ: string, civZh: string, label: string): string {

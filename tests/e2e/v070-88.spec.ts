@@ -77,7 +77,7 @@ test.describe('#88 不含播种 / 口径', () => {
     expect(((await A.innerText()).replace(/（来源：[^）]*）/g, '').match(/25%/g) ?? []).length).toBe(1);
     await expect(A.locator('[data-t="rc-total"]')).toHaveText('4:17');
     expect(await count(page, 'a')).toBe(23);
-    await expect(B.locator('[data-t="rc-unsupported"]')).toHaveText('未计入：马里 采金加成（数据读不准，按通用速度算）');
+    await expect(B.locator('[data-t="rc-unsupported"]')).toHaveText('未计入：马里 采金加成（存放黄金加成，未建模）');
     const mali = await B.locator('[data-t="rc-total"]').innerText();
     await open(page, KNIGHT_CAMEL);
     await expect(page.locator('[data-t="rc-a"] [data-t="rc-total"]')).toHaveText(mali);
