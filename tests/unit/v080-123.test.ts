@@ -101,6 +101,13 @@ describe('#123 全局搜索比对拼音', () => {
   it('多音字不按错误读音命中：「zhanggongbing」「chongxing」「xinghui」「danshe」「yinjiaqiangbingchang」搜不到', () => {
     for (const q of ['zhanggongbing', 'chongxingnupao', 'xinghui', 'danshe', 'yinjiaqiangbingchang']) expect(names(q), q).toEqual([]);
   });
+  it('印加枪兵长：py 含 yinjiaqiangbingzhang、pyi 为 yjqbz；搜「yjqbz」命中，「yjqbc」不命中', () => {
+    const r = find('units', 879);
+    expect(String(r.py)).toContain('yinjiaqiangbingzhang');
+    expect(r.pyi).toBe('yjqbz');
+    expect(names('yjqbz')).toContain('印加枪兵长');
+    expect(names('yjqbc')).not.toContain('印加枪兵长');
+  });
   it('ü 写 v 和写 u 都能命中：「nvzhen」「nuzhen」「shangduilv」「shangduilu」「fdnb」', () => {
     expect(names('nvzhen')).toContain('女真');
     expect(names('nuzhen')).toContain('女真');

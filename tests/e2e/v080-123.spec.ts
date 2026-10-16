@@ -86,11 +86,10 @@ for (const w of [360, 1280]) {
 /**
  * Steve 补充决定：拼音库只放 devDependencies，构建时生成 py/pyi，前端只多这两个字段。
  * 基线在 release/v0.8.0 @ 8094df7 上 npm run build 后用 node zlib.gzipSync（默认级别）量得：
- * dist/assets 全部 JS gzip 合计 291849 字节，其中主包 index-*.js 143854 字节。
+ * 主包 index-*.js gzip 143854 字节（分包不设上限）。
  * 跑 e2e 前必须先 npm run build（CI 的顺序就是这样）。
  */
 test.describe('#123 构建产物', () => {
-  const BASE_TOTAL = 291849;
   const BASE_MAIN = 143854;
   const LIMIT = 10 * 1024;
   const js = async () => {
@@ -103,12 +102,11 @@ test.describe('#123 构建产物', () => {
     const hits = (await js()).filter(({ buf }) => /pinyin/i.test(buf.toString('utf8'))).map(({ f }) => f);
     expect(hits).toEqual([]);
   });
-  test('gzip 后 JS 合计和主包的增量都不超过 10 KB', async () => {
+  // 分包（units/techs 等数据 chunk）不设上限，Steve 接受约 6.2 KB 增量；只卡主包。
+  test('gzip 后主包增量不超过 10 KB', async () => {
     const { gzipSync } = await import('node:zlib');
     const sizes = (await js()).map(({ f, buf }) => ({ f, gz: gzipSync(buf).length }));
-    const total = sizes.reduce((a, b) => a + b.gz, 0);
     const main = sizes.find((s) => s.f.startsWith('index-'))!.gz;
-    expect(total - BASE_TOTAL, `合计 ${total}，基线 ${BASE_TOTAL}`).toBeLessThanOrEqual(LIMIT);
     expect(main - BASE_MAIN, `主包 ${main}，基线 ${BASE_MAIN}`).toBeLessThanOrEqual(LIMIT);
   });
 });
