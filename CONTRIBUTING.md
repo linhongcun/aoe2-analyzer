@@ -34,7 +34,8 @@
 - **手动全量只做两次**：PR 首次验收，以及 release 整版验收。
 - **流程**：Kent 整版验收 → Steve 在发版 issue 上给整版 Product PASS → 开发用发版脚本完成：release 合入 main（merge commit）、等部署、核对线上页脚、打 annotated tag `vX.Y.Z`、用 CHANGELOG 对应小节起草 GitHub Release → Kent 线上复验 → 发布 GitHub Release，核对本版 issue 均已关闭（合到非默认分支时 `Closes #N` 不会自动关闭）。
 - **发版脚本**：`npm run release -- vX.Y.Z`（`scripts/release.mjs`）。参数：`--dry-run` 只打印每一步要执行的命令和要核对的内容，不改任何分支、tag、Release；`--site-url` 线上地址，默认 `https://linhongcun.github.io/aoe2-analyzer/`；`--footer-timeout` 等部署的秒数，默认 600。任一步失败进程以非 0 退出，`npm run release` 会原样传出该退出码。**不要用管道吞掉退出码**；若需要留日志，先 `set -o pipefail`，再 `npm run release -- vX.Y.Z 2>&1 | tee release.log`（或事后检查 `${PIPESTATUS[0]}`）。
-  - 前置检查：`release/vX.Y.Z` 头部 CI 为绿；远端 tag 不存在，或已指向合并后的 main 头部（视为已完成、跳过），指向别的提交则报错退出。
+  - 前置检查：`release/vX.Y.Z` 头部 CI 为绿；远端 tag 不存在，或已指向「release 合入 main 的那个提交」（视为已完成、跳过），指向别的提交则报错退出；本地残留指向别处的同名 tag 也在这一步报错（提示 `git tag -d`），不做任何改动。
+  - 重跑：release 已合入 main 时跳过合并，以 main 第一父链上最早包含 release 头的提交为准（main 之后有新提交也照样能重跑），tag 打在这个提交上。
   - 步骤：合入 main（merge commit）→ 用 Playwright 读线上渲染后的页脚，版本号和构建号都等于合并后的 main 头部才通过（超时或不一致报错，不打 tag）→ fetch tags 后打 annotated tag（本地或远端已有指向 main 头部的同名 tag 则跳过；指向别的提交则失败）→ 用 CHANGELOG 对应小节起草 draft Release。
   - 每一步做没做完都看远端仓库和线上的实际状态，不写本地状态文件；失败停在那一步并打印已完成的步骤和原因，修好后直接重跑，已完成的步骤自动跳过。
   - 需要本机已登录 `gh`、对 main 有推送权限，并已安装 Playwright 浏览器（`npx playwright install chromium`）。

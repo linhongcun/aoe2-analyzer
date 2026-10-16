@@ -17,7 +17,10 @@ const SCRIPT = resolve('scripts/release.mjs');
 // 端口用 0 由系统分配空闲端口（原固定 4792 被残留进程占用时 beforeAll 失败 得 12 条被静默跳过）
 let SITE = '';
 
-let repo = '', origin = '', bin = '', ghLog = '';
+let repo = '',
+  origin = '',
+  bin = '',
+  ghLog = '';
 let site: { mode: 'match' | 'stale' | 'wrong-version'; version: string } = { mode: 'match', version: 'v0.6.0' };
 let server: Server;
 
@@ -116,7 +119,8 @@ const run = (args: string[], env: Record<string, string> = {}): Promise<RunResul
       cwd: repo,
       env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, FAKE_GH_LOG: ghLog, FAKE_CI: 'success', ...env },
     });
-    let stdout = '', stderr = '';
+    let stdout = '',
+      stderr = '';
     c.stdout.on('data', (d) => (stdout += d));
     c.stderr.on('data', (d) => (stderr += d));
     const t = setTimeout(() => c.kill('SIGKILL'), 90_000);
@@ -125,7 +129,11 @@ const run = (args: string[], env: Record<string, string> = {}): Promise<RunResul
       resolveRun({ status, stdout, stderr });
     });
   });
-const ghCalls = () => readFileSync(ghLog, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l) as { args: string[]; notes: string });
+const ghCalls = () =>
+  readFileSync(ghLog, 'utf8')
+    .split('\n')
+    .filter(Boolean)
+    .map((l) => JSON.parse(l) as { args: string[]; notes: string });
 const releaseCreates = () => ghCalls().filter((c) => c.args[0] === 'release' && c.args[1] === 'create');
 const snapshot = () => ({
   origin: git(origin, 'for-each-ref', '--format=%(refname) %(objectname)'),
@@ -250,7 +258,8 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     git(repo, 'push', '-q', 'origin', 'main');
     git(repo, 'tag', '-a', 'v0.6.0', '-m', 'v0.6.0', 'main');
     git(repo, 'push', '-q', 'origin', 'v0.6.0');
-    const head = originMain(), tagObj = git(origin, 'rev-parse', 'v0.6.0');
+    const head = originMain(),
+      tagObj = git(origin, 'rev-parse', 'v0.6.0');
     const r = await run(['v0.6.0', ...opts()]);
     expect(r.status, out(r)).toBe(0);
     expect(out(r)).toMatch(/跳过|skip/i);
@@ -311,5 +320,70 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     expect(rc[0]!.notes).toContain('KENT-MARKER-060');
     expect(rc[0]!.notes).not.toContain('KENT-MARKER-050');
     noStateFile();
+  });
+});
+
+describe('#145 B 发版脚本重跑', { timeout: 120_000 }, () => {
+  const mergeRelease = () => {
+    git(repo, 'fetch', '-q', 'origin');
+    git(repo, 'merge', '-q', '--no-ff', '-m', 'Merge release/v0.6.0', 'origin/release/v0.6.0');
+    git(repo, 'push', '-q', 'origin', 'main');
+    return originMain();
+  };
+  const commitOnMain = (msg: string) => {
+    writeFileSync(join(repo, 'later.txt'), msg);
+    git(repo, 'add', 'later.txt');
+    git(repo, 'commit', '-qm', msg);
+    git(repo, 'push', '-q', 'origin', 'main');
+    return originMain();
+  };
+
+  it('B1 合入后 main 又有新提交：重跑不再合并，tag 打在 release 合入 main 的那个提交上', async () => {
+    const mergeCommit = mergeRelease();
+    const later = commitOnMain('hotfix after release');
+    const r = await run(['v0.6.0', ...opts()]);
+    expect(r.status, out(r)).toBe(0);
+    expect(out(r)).toMatch(/跳过合并/);
+    expect(originMain(), '不得再合并').toBe(later);
+    expect(git(origin, 'rev-parse', 'v0.6.0^{commit}')).toBe(mergeCommit);
+    expect(releaseCreates()).toHaveLength(1);
+    noStateFile();
+  });
+
+  it('B2 远端 tag 已指向合入提交、main 之后有新提交：重跑跳过 tag，不报错', async () => {
+    const mergeCommit = mergeRelease();
+    git(repo, 'tag', '-a', 'v0.6.0', '-m', 'v0.6.0', mergeCommit);
+    git(repo, 'push', '-q', 'origin', 'v0.6.0');
+    commitOnMain('later');
+    const tagObj = git(origin, 'rev-parse', 'v0.6.0');
+    const r = await run(['v0.6.0', ...opts()]);
+    expect(r.status, out(r)).toBe(0);
+    expect(git(origin, 'rev-parse', 'v0.6.0'), '不得重打 tag').toBe(tagObj);
+    noStateFile();
+  });
+
+  it('B3 未合入但本地残留同名 tag：前置检查就报错退出 1，提示 git tag -d，什么都不改', async () => {
+    git(repo, 'tag', '-a', 'v0.6.0', '-m', 'leftover', 'main');
+    const at = git(repo, 'rev-parse', 'v0.6.0^{commit}');
+    const before = snapshot();
+    const r = await run(['v0.6.0', ...opts()]);
+    expect(r.status, out(r)).toBe(1);
+    expect(out(r)).toContain('本地残留 tag');
+    expect(out(r)).toContain(at.slice(0, 7));
+    expect(out(r)).toContain('git tag -d v0.6.0');
+    expect(out(r)).not.toMatch(/node:internal|at Object\./);
+    expect(snapshot(), '不得合并、不得推 tag、不得建 Release').toEqual(before);
+  });
+
+  it('B4 已合入、main 有新提交，本地残留 tag 指向新 main 头：提前报错，指出合入提交', async () => {
+    const mergeCommit = mergeRelease();
+    const later = commitOnMain('later');
+    git(repo, 'tag', '-a', 'v0.6.0', '-m', 'leftover', later);
+    const before = snapshot();
+    const r = await run(['v0.6.0', ...opts()]);
+    expect(r.status, out(r)).toBe(1);
+    expect(out(r)).toContain(`release 合入 main 的提交是 ${mergeCommit.slice(0, 7)}`);
+    expect(out(r)).toContain('git tag -d v0.6.0');
+    expect(snapshot()).toEqual(before);
   });
 });
