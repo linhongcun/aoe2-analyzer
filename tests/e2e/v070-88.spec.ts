@@ -74,7 +74,7 @@ test.describe('#88 不含播种 / 口径', () => {
     const A = page.locator('[data-t="rc-a"]'),
       B = page.locator('[data-t="rc-b"]');
     await expect(A.locator('[data-t="rc-applied"]')).toContainText('已计入：土耳其 采金 +25%');
-    expect(((await A.innerText()).match(/25%/g) ?? []).length).toBe(1);
+    expect(((await A.innerText()).replace(/（来源：[^）]*）/g, '').match(/25%/g) ?? []).length).toBe(1);
     await expect(A.locator('[data-t="rc-total"]')).toHaveText('4:17');
     expect(await count(page, 'a')).toBe(23);
     await expect(B.locator('[data-t="rc-unsupported"]')).toHaveText('未计入：马里 采金加成（数据读不准，按通用速度算）');
