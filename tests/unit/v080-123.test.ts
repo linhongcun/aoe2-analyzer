@@ -115,12 +115,15 @@ describe('#123 全局搜索比对拼音', () => {
     expect(names('shangduilu')).toContain('商队旅馆');
     expect(names('feidaonubing')).toContain('飞刀女兵');
   });
-  it('拼音只认前缀：全拼中段「gongbing」「sheshou」、首字母中段「ss」「gb」不命中', () => {
+  it('拼音只认前缀：全拼中段「gongbing」「sheshou」、首字母中段「ss」「jqbz」不命中', () => {
     expect(names('gongbing')).not.toContain('长弓兵');
     expect(names('sheshou')).not.toContain('骑射手');
     expect(names('sheshou')).not.toContain('重装骑射手');
     expect(names('ss')).not.toContain('骑射手');
-    expect(names('gb')).not.toContain('长弓兵');
+    // jqbz 是 yjqbz（印加枪兵长）的中段；先确认它不是任何条目中英文名的子串，免得英文/中文命中混进来
+    const all = Object.values(DATA).flat();
+    expect(all.filter((x) => x.en.toLowerCase().replace(/\s+/g, '').includes('jqbz') || x.zh.includes('jqbz')).map((x) => x.en)).toEqual([]);
+    expect(names('jqbz')).not.toContain('印加枪兵长');
   });
   it('排序：中英文命中排在拼音命中前面（「ba」英文 Ballistics/Banking 在拼音 baifuzhang 之前）', () => {
     const r = names('ba');
