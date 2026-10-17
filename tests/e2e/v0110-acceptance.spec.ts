@@ -78,6 +78,19 @@ for (const width of [360, 375, 390, 1280]) {
   });
 }
 
+test.describe('A #162 西西里 @360 原因不省略', () => {
+  test.use({ viewport: { width: 360, height: 900 } });
+  test('A 西西里：「农田升级加成，未建模」完整显示，无省略号', async ({ page }) => {
+    await openTime(page, 'Sicilians');
+    const row = page.locator('[data-t="rc-a"]').locator(UNSUPPORTED).first();
+    await expect(row).toContainText('（农田升级加成，未建模）');
+    const span = row.locator('> span').first();
+    const el = (await span.count()) ? span : row;
+    const cut = await el.evaluate((e) => e.scrollWidth > e.clientWidth + 1);
+    expect(cut, '原因被省略号截断').toBe(false);
+  });
+});
+
 test('自检：夹具页面能打开（民兵 · 马里 等采集时间、搜索框）', async ({ page }) => {
   await openTime(page, 'Malians');
   const li = await palette(page, '科技树');

@@ -111,21 +111,28 @@ describe('B #162 文明加成与页面也支持拼音命中，排序同 #159', (
     expect(score(hit!, q)).toBe(TIER.py);
   });
 
-  it('B3 排序同 #159：「cunmin」多条加成拼音命中时，第一段拼音恰好 5 条（不读 PY_RESERVE），其后不再先出拼音再出文字以外的乱序', () => {
-    const q = 'cunmin'; // 「村民…」开头的加成远多于 5 条
-    const pyHits = idx.filter((r) => score(r, q) === TIER.py && r.kind === 'bonus');
-    expect(pyHits.length).toBeGreaterThan(5);
+  it('B3 纯拼音查询（无文字命中）：「cunmin」拼音命中的加成可填满 limit=10（同 v0.9.0 E5）', () => {
+    const q = 'cunmin';
+    expect(idx.filter((r) => score(r, q) > TIER.py)).toEqual([]);
+    expect(idx.filter((r) => score(r, q) === TIER.py && r.kind === 'bonus').length).toBeGreaterThanOrEqual(10);
+    const r = search(idx, q, 10);
+    expect(r).toHaveLength(10);
+    expect(r.every((x) => score(x, q) === TIER.py)).toBe(true);
+    expect(r.some((x) => x.kind === 'bonus')).toBe(true);
+  });
+
+  it('B3a 有文字命中竞争时：加成拼音最多 5 条，紧跟精确/前缀文字命中（#159）', () => {
+    const q = 'bu'; // 34 条文字命中、19 条加成拼音命中
+    const text = idx.filter((r) => score(r, q) > TIER.py);
+    expect(text.length, '夹具：cun 需有文字命中').toBeGreaterThan(0);
     const tiers = search(idx, q).map((r) => score(r, q));
     const firstPy = tiers.indexOf(TIER.py);
-    expect(firstPy).toBeGreaterThanOrEqual(0);
-    expect(tiers.slice(0, firstPy).every((t) => t >= TIER.prefix)).toBe(true);
+    expect(firstPy).toBeGreaterThan(0);
+    expect(firstPy).toBe(Math.max(1, tiers.slice(0, firstPy).filter((t) => t >= TIER.prefix).length));
     let end = firstPy;
     while (end < tiers.length && tiers[end] === TIER.py) end++;
-    expect(end - firstPy).toBe(Math.min(5, tiers.length - firstPy - tiers.slice(firstPy).filter((t) => t > TIER.py).length));
-    // 第一段拼音之后：先其余文字命中，再剩余拼音（与 #159 一致），文字命中不能出现在剩余拼音之后
-    const rest = tiers.slice(end);
-    const lastText = rest.map((t) => t > TIER.py).lastIndexOf(true);
-    expect(rest.slice(0, lastText + 1).every((t) => t > TIER.py)).toBe(true);
+    expect(end - firstPy, '拼音足够多时恰好 5 条').toBe(5);
+    expect(search(idx, q).filter((r) => score(r, q) === TIER.py).some((r) => r.kind === 'bonus')).toBe(true);
   });
 
   it('B3b 构造：页面精确命中、加成拼音 7 条、文字子串 3 条，顺序为 精确 | 5 拼音 | 3 文字 | 2 拼音', () => {
