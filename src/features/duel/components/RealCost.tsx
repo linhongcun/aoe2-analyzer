@@ -22,8 +22,13 @@ const UNCOUNTED_REASON: Record<string, string> = {
   Aztecs: '携带量加成，未建模',
 };
 
+/** 同一文明不同加成原因不同时，按加成行（label）单独写；优先于 UNCOUNTED_REASON。 */
+const UNCOUNTED_REASON_BY_LABEL: Record<string, string> = {
+  波兰庄园农田加成: '大庄园替代磨坊，未建模',
+};
+
 export function uncountedText(civ: string, civZh: string, label: string): string {
-  const reason = UNCOUNTED_REASON[civ] ?? '数据读不准，按通用速度算';
+  const reason = UNCOUNTED_REASON_BY_LABEL[label] ?? UNCOUNTED_REASON[civ] ?? '数据读不准，按通用速度算';
   return `未计入：${civZh} ${label}（${reason}）`;
 }
 

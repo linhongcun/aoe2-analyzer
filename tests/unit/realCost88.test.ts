@@ -32,6 +32,8 @@ const wood4 = eff(wood3wr * v(221, 'task:wood', 'workRate'), carry3, speed3);
 const farm = T.farm!.workRate;
 
 // #162：文案逐项对照 civs.json 原文，避免沿用泛化原因。
+/** 按加成行单独写原因的行（Steve 定稿：波兰大庄园三行） */
+const LABEL_REASON: Record<string, string> = { 波兰庄园农田加成: '大庄园替代磨坊，未建模' };
 const UNCOUNTED_CASES = [
   ['Malians', '村民存放的黄金额外 +10%', '存放黄金加成，未建模'],
   ['Poles', '石矿工不仅能产生石料，还能产生黄金', '石矿工兼产黄金，未建模'],
@@ -229,13 +231,19 @@ describe('#145 / #162 未计入原因按文明说明', () => {
   it.each(UNCOUNTED_CASES)('%s 原因归纳自「%s」，各时代仍按通用速度', (civ, source, reason) => {
     const data = civs.find((c) => c.en === civ)!;
     expect(data.bon).toContain(source);
-    expect(new Set(paren(lines(civ, data.zh)))).toEqual(new Set([`（${reason}）`]));
+    const want = (label: string) => LABEL_REASON[label] ?? reason;
+    expect(new Set(paren(lines(civ, data.zh)))).toEqual(new Set(gatherModel(4, civ).unsupported.map((a) => `（${want(a.label)}）`)));
     for (const age of [1, 2, 3, 4]) {
       const g = gatherModel(age, civ);
       expect(g.applied).toEqual([]);
       expect(g.rate).toEqual(gatherModel(age).rate);
-      for (const a of g.unsupported) expect(uncountedText(civ, data.zh, a.label)).toBe(`未计入：${data.zh} ${a.label}（${reason}）`);
+      for (const a of g.unsupported) expect(uncountedText(civ, data.zh, a.label)).toBe(`未计入：${data.zh} ${a.label}（${want(a.label)}）`);
     }
+  });
+  it('波兰按加成行分别写：大庄园三行「大庄园替代磨坊，未建模」，采石行「石矿工兼产黄金，未建模」', () => {
+    const rows = gatherModel(4, 'Poles').unsupported.map((a) => uncountedText('Poles', '波兰', a.label));
+    expect(rows.filter((r) => r.includes('（大庄园替代磨坊，未建模）'))).toHaveLength(3);
+    expect(rows.filter((r) => r.includes('（石矿工兼产黄金，未建模）'))).toHaveLength(1);
   });
   it('未覆盖的文明保留通用原因', () => {
     expect(uncountedText('Unknown', '未知文明', '采集加成')).toBe('未计入：未知文明 采集加成（数据读不准，按通用速度算）');

@@ -7,7 +7,7 @@ const cases = [
   ['Bohemians', '需研究科技，未建模'],
   ['Mayans', '资源多持续 15%，不是采集变快，暂不计入'],
   ['Malians', '存放黄金加成，未建模'],
-  ['Poles', '石矿工兼产黄金，未建模'],
+  ['Poles', '石矿工兼产黄金，未建模|大庄园替代磨坊，未建模'],
   ['Portuguese', '采果兼产木材，未建模'],
   ['Shu', '伐木兼产食物，未建模'],
   ['Sicilians', '农田升级加成，未建模'],
@@ -23,11 +23,15 @@ for (const width of [360, 375, 390]) {
       await page.goto(`#/duel?a=${unit.id}.${civ}.4.f.&b=${unit.id}.${civ}.4.f.&m=t`);
       await page.reload();
       const rows = page.locator('[data-t="rc-unsupported"] > span');
-      await expect(rows.first()).toContainText(`（${reason}）`);
+      const ok = reason.split('|').map((r) => `（${r}）`);
+      await expect(rows.last()).toContainText(new RegExp(ok.map((r) => r.replace(/[()（）|]/g, '\\$&')).join('|')));
       await page.evaluate(() => document.fonts.ready);
       for (const row of await rows.all()) {
         const text = (await row.textContent())!;
-        expect(text, civ).toContain(`（${reason}）`);
+        expect(
+          ok.some((r) => text.includes(r)),
+          `${civ}: ${text}`,
+        ).toBe(true);
         await expect(row).toHaveAttribute('title', text);
         const layout = await row.evaluate((el) => {
           const range = document.createRange();
