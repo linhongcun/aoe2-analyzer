@@ -30,7 +30,7 @@ export const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
 
 /** issue 162 加成和页面共用构建时生成的拼音，排序与其他类型一致。 */
 export function withSearchPy(it: SearchItem): SearchItem {
-  if (it.kind !== 'bonus' && it.kind !== 'page') return it;
+  if ((it.kind !== 'bonus' && it.kind !== 'page') || it.id.startsWith('bo-')) return it;
   const fields = (extraPy as Record<string, { py: string; pyi: string }>)[it.zh];
   return fields ? { ...it, ...fields } : it;
 }

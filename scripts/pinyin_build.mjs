@@ -1,6 +1,6 @@
 /**
  * #123 给 civs/units/techs/buildings 加 py（全拼，无声调，ü 写 v）和 pyi（每个字一个首字母）。
- * #162 加成、页面和开局名称的拼音另存 search-py.json，由搜索索引读取。
+ * #162 加成和页面名称的拼音（开局不做，见 v0.12.0 候选）另存 search-py.json，由搜索索引读取。
  * 拼音库 pinyin-pro 只在这里（构建时）用，只放 devDependencies，不打进前端。
  * 多音字按游戏内词义定读音，pinyin-pro 词库不对的在 FIX 里修。用法：node scripts/pinyin_build.mjs [--check]
  */
@@ -55,12 +55,6 @@ function labels(node) {
 }
 labels(sections);
 for (const c of JSON.parse(fs.readFileSync('src/data/civs.json', 'utf8'))) names.push(...c.bon, c.tb);
-for (const file of fs
-  .readdirSync('src/data/build-orders')
-  .filter((f) => f.endsWith('.json'))
-  .sort()) {
-  names.push(JSON.parse(fs.readFileSync(`src/data/build-orders/${file}`, 'utf8')).name.zh);
-}
 const extra = Object.fromEntries([...new Set(names)].sort().map((zh) => [zh, toPy(zh)]));
 const path = 'src/data/search-py.json';
 const out = JSON.stringify(extra, null, 2) + '\n';

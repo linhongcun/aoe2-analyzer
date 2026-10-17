@@ -1,20 +1,4 @@
 {
-  "18 人口侦察骑兵速攻（单马厩）": {
-    "py": "renkouzhenchaqibingsugongdanmajiu",
-    "pyi": "rkzcqbsgdmj"
-  },
-  "18 人口封建民兵速攻": {
-    "py": "renkoufengjianminbingsugong",
-    "pyi": "rkfjmbsg"
-  },
-  "18 人口民兵升级武士（Man-at-Arms）速攻转弓手": {
-    "py": "renkouminbingshengjiwushisugongzhuangongshou",
-    "pyi": "rkmbsjwssgzgs"
-  },
-  "19 人口单靶场弓手速攻": {
-    "py": "renkoudanbachanggongshousugong",
-    "pyi": "rkdbcgssg"
-  },
   "DLC": {
     "py": "",
     "pyi": ""
@@ -727,10 +711,6 @@
     "py": "minbingxishengjimianfei",
     "pyi": "mbxsjmf"
   },
-  "民兵骚扰转速升城堡": {
-    "py": "minbingsaoraozhuansushengchengbao",
-    "pyi": "mbsrzsscb"
-  },
   "渔夫和捕鱼船的携带资源量 +15": {
     "py": "yufuhebuyuchuandexiedaiziyuanliang",
     "pyi": "yfhbycdxdzyl"
@@ -1026,10 +1006,6 @@
   "远程士兵和步兵的木材费用 -50%": {
     "py": "yuanchengshibinghebubingdemucaifeiyong",
     "pyi": "ycsbhbbdmcfy"
-  },
-  "速升城堡暴经济（23+2）": {
-    "py": "sushengchengbaobaojingji",
-    "pyi": "sscbbjj"
   },
   "采果工不仅能产生食物，还能产生木材": {
     "py": "caiguogongbujinnengchanshengshiwuhainengchanshengmucai",

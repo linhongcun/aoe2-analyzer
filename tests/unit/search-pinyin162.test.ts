@@ -21,10 +21,9 @@ describe('#162 B 加成和页面拼音（沿用 #159 排序）', () => {
     expect(() => execFileSync('node', ['scripts/pinyin_build.mjs', '--check'], { stdio: 'inherit' })).not.toThrow();
   });
 
-  it('所有加成、团队加成、页面和开局都有对应中文名的全拼和首字母', () => {
-    const extra = items.filter((r) => r.kind === 'bonus' || r.kind === 'page');
+  it('所有加成、团队加成和页面（不含开局）都有对应中文名的全拼和首字母', () => {
+    const extra = items.filter((r) => (r.kind === 'bonus' || r.kind === 'page') && !r.id.startsWith('bo-'));
     expect(extra.some((r) => r.kind === 'bonus' && r.id.endsWith('-team'))).toBe(true);
-    expect(extra.some((r) => r.id.startsWith('bo-'))).toBe(true);
     for (const r of extra) {
       const count = r.zh.replace(/[^\u4e00-\u9fff]/g, '').length;
       expect(r.py, r.zh).toMatch(count ? /^[a-z]+$/ : /^$/);
@@ -48,11 +47,12 @@ describe('#162 B 加成和页面拼音（沿用 #159 排序）', () => {
     expect(search(items, item.en)).toContain(item);
   });
 
-  it('开局仍属于 page，也能按中文名全拼及首字母命中', () => {
+  it('开局不做拼音索引（v0.12.0 候选），中文名仍能命中', () => {
     const item = items.find((r) => r.id === 'bo-scouts-18')!;
-    expect(item.py).toBe('renkouzhenchaqibingsugongdanmajiu');
-    expect(item.pyi).toBe('rkzcqbsgdmj');
-    for (const q of [item.py!, item.pyi!]) expect(search(items, q)).toContain(item);
+    expect(item.py).toBeUndefined();
+    expect(item.pyi).toBeUndefined();
+    expect(search(items, 'rkzcqbsgdmj')).not.toContain(item);
+    expect(search(items, item.zh)).toContain(item);
   });
 
   it('新类型遵循名称精确/前缀优先、拼音提前展示、其余文本随后展示的顺序', () => {
