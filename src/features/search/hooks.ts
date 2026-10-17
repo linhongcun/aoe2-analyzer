@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { civs } from '../../data';
 import { useCore } from '../../data/hooks';
-import type { SearchItem } from '../../domain/search';
+import { withSearchPy, type SearchItem } from '../../domain/search';
 import { ALL } from '../../app/nav/sections';
 import { collapse } from '../../domain/family';
 import { allCivBonuses } from '../../domain/civBonus';
@@ -101,6 +101,6 @@ export function useSearchIndex(): SearchItem[] {
         late: true,
       }),
     );
-    return items;
+    return items.map(withSearchPy);
   }, [core]);
 }

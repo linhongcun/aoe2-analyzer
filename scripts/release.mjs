@@ -74,10 +74,12 @@ export function decideTagAction({ version, localCommit, remoteCommit, mainHead, 
  */
 export function findReleaseCommit(relHead, mainHead, cwd) {
   const opt = { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], cwd };
-  const r = spawnSync('git', ['rev-list', '--first-parent', '--ancestry-path', '--reverse', `${relHead}..${mainHead}`], opt);
+  const r = spawnSync('git', ['rev-list', '--first-parent', '--ancestry-path', '--reverse', '--parents', `${relHead}..${mainHead}`], opt);
   if (r.status !== 0) return null;
-  const first = r.stdout.split('\n').find(Boolean);
-  if (first) return first.trim();
+  const [first, firstParent] = (r.stdout.split('\n').find(Boolean) ?? '').trim().split(' ');
+  // 范围不含 relHead；若最早后代的第一父提交就是它，说明已快进合入，应返回 release 头（#162 C）。
+  // 普通 merge 的 release 头是第二父提交，此时仍返回 merge commit。
+  if (first) return firstParent === relHead ? relHead : first;
   return spawnSync('git', ['merge-base', '--is-ancestor', relHead, mainHead], opt).status === 0 ? relHead : null;
 }
 

@@ -31,6 +31,20 @@ const wood3 = eff(wood3wr, carry3, speed3);
 const wood4 = eff(wood3wr * v(221, 'task:wood', 'workRate'), carry3, speed3);
 const farm = T.farm!.workRate;
 
+// #162：文案逐项对照 civs.json 原文，避免沿用泛化原因。
+/** 按加成行单独写原因的行（Steve 定稿：波兰大庄园三行） */
+const LABEL_REASON: Record<string, string> = { 波兰庄园农田加成: '大庄园替代磨坊，未建模' };
+const UNCOUNTED_CASES = [
+  ['Malians', '村民存放的黄金额外 +10%', '存放黄金加成，未建模'],
+  ['Poles', '石矿工不仅能产生石料，还能产生黄金', '石矿工兼产黄金，未建模'],
+  ['Portuguese', '采果工不仅能产生食物，还能产生木材', '采果兼产木材，未建模'],
+  ['Shu', '伐木工不仅能产生木材，还能产生食物', '伐木兼产食物，未建模'],
+  ['Sicilians', '农田升级提供的食物 +125%', '农田升级，未建模'],
+  ['Khmer', '农民不需要磨坊或城镇中心就可以存放食物', '免磨坊存放食物，未建模'],
+  ['Aztecs', '村民携带量 +3', '携带量加成，未建模'],
+] as const;
+const UNCOUNTED_CIVS = ['Bohemians', 'Armenians', 'Mayans', ...UNCOUNTED_CASES.map(([civ]) => civ)];
+
 const time = (uid: number, cost: Record<string, number>, civ: string, age = 3) => {
   const d = discountedCost({ id: uid, cost }, civ, priceAge(3, age));
   return { d, rc: realCost(d.cost, gatherModel(age, civ)) };
@@ -111,7 +125,7 @@ describe('等采集时间：文明加成来源', () => {
     }
   });
 
-  it.each(['Bohemians', 'Armenians', 'Mayans', 'Malians'])('%s 未计入项保留原因，不展示已计入来源', (civ) => {
+  it.each(UNCOUNTED_CIVS)('%s 未计入项保留原因，不展示已计入来源', (civ) => {
     const data = civs.find((c) => c.en === civ)!;
     const g = gatherModel(4, civ);
     const html = render(civ, 4);
@@ -194,7 +208,7 @@ describe('#88 Kent 手算表', () => {
   });
 });
 
-describe('#145 F 收尾：未计入原因只改三个文明', () => {
+describe('#145 / #162 未计入原因按文明说明', () => {
   const lines = (civ: string, zh: string) => {
     const u = gatherModel(4, civ).unsupported;
     expect(u.length, civ).toBeGreaterThan(0);
@@ -214,22 +228,30 @@ describe('#145 F 收尾：未计入原因只改三个文明', () => {
   it('玛雅改为「资源多持续 15%，不是采集变快，暂不计入」', () => {
     expect(new Set(paren(lines('Mayans', '玛雅')))).toEqual(new Set(['（资源多持续 15%，不是采集变快，暂不计入）']));
   });
-  it('马里等其余文明仍是「数据读不准，按通用速度算」', () => {
-    expect(lines('Malians', '马里')).toEqual(['未计入：马里 采金加成（数据读不准，按通用速度算）']);
-    for (const [civ, zh] of [
-      ['Poles', '波兰'],
-      ['Portuguese', '葡萄牙'],
-      ['Shu', '蜀'],
-      ['Sicilians', '西西里'],
-      ['Khmer', '高棉'],
-      ['Aztecs', '阿兹特克'],
-    ] as const)
-      for (const s of lines(civ, zh)) expect(s, civ).toContain('（数据读不准，按通用速度算）');
+  it.each(UNCOUNTED_CASES)('%s 原因归纳自「%s」，各时代仍按通用速度', (civ, source, reason) => {
+    const data = civs.find((c) => c.en === civ)!;
+    expect(data.bon).toContain(source);
+    const want = (label: string) => LABEL_REASON[label] ?? reason;
+    expect(new Set(paren(lines(civ, data.zh)))).toEqual(new Set(gatherModel(4, civ).unsupported.map((a) => `（${want(a.label)}）`)));
+    for (const age of [1, 2, 3, 4]) {
+      const g = gatherModel(age, civ);
+      expect(g.applied).toEqual([]);
+      expect(g.rate).toEqual(gatherModel(age).rate);
+      for (const a of g.unsupported) expect(uncountedText(civ, data.zh, a.label)).toBe(`未计入：${data.zh} ${a.label}（${want(a.label)}）`);
+    }
+  });
+  it('波兰按加成行分别写：大庄园三行「大庄园替代磨坊，未建模」，采石行「石矿工兼产黄金，未建模」', () => {
+    const rows = gatherModel(4, 'Poles').unsupported.map((a) => uncountedText('Poles', '波兰', a.label));
+    expect(rows.filter((r) => r.includes('（大庄园替代磨坊，未建模）'))).toHaveLength(3);
+    expect(rows.filter((r) => r.includes('（石矿工兼产黄金，未建模）'))).toHaveLength(1);
+  });
+  it('未覆盖的文明保留通用原因', () => {
+    expect(uncountedText('Unknown', '未知文明', '采集加成')).toBe('未计入：未知文明 采集加成（数据读不准，按通用速度算）');
   });
 });
 
 describe('未计入行的紧凑显示', () => {
-  it.each(['Armenians', 'Bohemians', 'Mayans', 'Malians'])('%s 保留完整加成数值和原因，并提供完整悬停文本', (civ) => {
+  it.each(UNCOUNTED_CIVS)('%s 保留完整加成数值和原因，并提供完整悬停文本', (civ) => {
     const civZh = civs.find((c) => c.en === civ)!.zh;
     const unit = (units as Unit[]).find((u) => u.civs.includes(civ))!;
     const html = renderToStaticMarkup(
