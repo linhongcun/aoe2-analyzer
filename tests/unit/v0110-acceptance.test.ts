@@ -101,8 +101,9 @@ describe('B #162 文明加成与页面也支持拼音命中，排序同 #159', (
     expect(bonuses.map((b) => b.zh)).toContain('村民携带量 +3');
   });
 
-  it('B1 每个页面和文明加成条目都带 py/pyi（含中文时）', () => {
-    const missing = [...pages, ...bonuses].filter((i) => /[\u4e00-\u9fff]/.test(i.zh) && !(i.py && i.pyi)).map((i) => `${i.kind}:${i.zh}`);
+  it('B1 每个页面和文明加成条目都带 py/pyi（含中文时）；开局条目（bo-）不在范围、不带拼音', () => {
+    expect(pages.filter((p) => p.id.startsWith('bo-') && (p.py || p.pyi)).map((p) => p.zh)).toEqual([]);
+    const missing = [...pages.filter((p) => !p.id.startsWith('bo-')), ...bonuses].filter((i) => /[\u4e00-\u9fff]/.test(i.zh) && !(i.py && i.pyi)).map((i) => `${i.kind}:${i.zh}`);
     expect(missing.slice(0, 5), `${missing.length} 条缺拼音`).toEqual([]);
   });
 
