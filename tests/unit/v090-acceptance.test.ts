@@ -1,5 +1,10 @@
-import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+// @ts-expect-error no types for scripts/*.mjs
+import { findReleaseCommit } from '../../scripts/release.mjs';
 import civs from '../../src/data/civs.json';
 import units from '../../src/data/units.json';
 import techs from '../../src/data/techs.json';
@@ -21,15 +26,63 @@ describe('A #145 huns42flag 行数断言等字体加载', () => {
 
 describe('B #145 发版脚本重跑认合入提交、本地残留 tag 提前报错', () => {
   const src = readFileSync('scripts/release.mjs', 'utf8');
-  it('B1 重跑时以 release 合入 main 的提交为准（findReleaseCommit），不是当前 main 头部', () => {
-    expect(src).toMatch(/export function findReleaseCommit/);
-    expect(src).toMatch(/--first-parent/);
+  let repo: string;
+  let relHead: string;
+  const git = (...args: string[]) => execFileSync('git', args, { cwd: repo, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+  const commit = (message: string) => {
+    git('commit', '-q', '--allow-empty', '-m', message);
+    return git('rev-parse', 'HEAD');
+  };
+  beforeEach(() => {
+    repo = mkdtempSync(join(tmpdir(), 'release-commit-'));
+    git('init', '-q', '-b', 'main');
+    git('config', 'user.name', 'Kent');
+    git('config', 'user.email', 'kent@test');
+    commit('base');
+    git('checkout', '-q', '-b', 'release/v0.9.0');
+    relHead = commit('release');
+    git('checkout', '-q', 'main');
+  });
+  afterEach(() => rmSync(repo, { recursive: true, force: true }));
+
+  it.each([false, true])('B1 重跑时以 release 合入 main 的提交为准（main 分叉：%s），不是当前 main 头部', (diverged) => {
+    if (diverged) commit('main diverges');
+    git('merge', '-q', '--no-ff', '-m', 'merge release', 'release/v0.9.0');
+    const mergeCommit = git('rev-parse', 'HEAD');
+    expect(mergeCommit).not.toBe(relHead);
+    expect(findReleaseCommit(relHead, mergeCommit, repo)).toBe(mergeCommit);
+    const later = commit('later on main');
+    expect(findReleaseCommit(relHead, later, repo)).toBe(mergeCommit);
   });
   it('B2 本地残留 tag 在前置检查（合并之前）报错', () => {
     const early = src.indexOf('本地残留 tag');
     const mergeStep = src.indexOf('第 1 步：合并');
     expect(early).toBeGreaterThan(0);
     expect(early).toBeLessThan(mergeStep);
+  });
+  it('B3 #162 C 手动 fast-forward 后 main 再有新提交，发版提交仍是 release 头', () => {
+    git('merge', '-q', '--ff-only', 'release/v0.9.0');
+    expect(git('rev-parse', 'HEAD')).toBe(relHead);
+    expect(findReleaseCommit(relHead, relHead, repo)).toBe(relHead);
+    const later = commit('later on main');
+    expect(findReleaseCommit(relHead, later, repo)).toBe(relHead);
+    const latest = commit('another commit on main');
+    expect(findReleaseCommit(relHead, latest, repo)).toBe(relHead);
+  });
+  it('B4 release 尚未合入 main 时返回 null', () => {
+    expect(findReleaseCommit(relHead, git('rev-parse', 'HEAD'), repo)).toBeNull();
+    const later = commit('unrelated main commit');
+    expect(findReleaseCommit(relHead, later, repo)).toBeNull();
+  });
+  it('B5 fast-forward 后的第一个 main 提交是 merge commit，仍返回 release 头', () => {
+    git('merge', '-q', '--ff-only', 'release/v0.9.0');
+    git('checkout', '-q', '-b', 'topic');
+    commit('topic work');
+    git('checkout', '-q', 'main');
+    git('merge', '-q', '--no-ff', '-m', 'merge topic', 'topic');
+    expect(findReleaseCommit(relHead, git('rev-parse', 'HEAD'), repo)).toBe(relHead);
+    const later = commit('later on main');
+    expect(findReleaseCommit(relHead, later, repo)).toBe(relHead);
   });
 });
 
