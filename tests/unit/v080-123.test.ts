@@ -9,7 +9,7 @@ import { civMatches } from '../../src/shared/ui/CivPicker';
 
 /**
  * #123 搜索支持拼音（全拼和首字母）。
- * 范围（Steve 定）：只给 civs、units、techs、buildings 四个数据文件加拼音；文明加成、出兵顺序、页面不做。
+ * #123 原始范围：civs、units、techs、buildings；#162 B 扩展的加成和页面见 search-pinyin162.test.ts。
  * 草案字段名：每条数据加 py（全拼，无声调，小写，无空格）和 pyi（每个字的首字母）。字段名 Linus 可改，改了这里跟着改。
  * 所有例子取自 src/data/*.json 的真实中文名；多音字按游戏内词义定读音（见 /workspace/v080-specs-123.md）。
  */
@@ -125,7 +125,7 @@ describe('#123 全局搜索比对拼音', () => {
     expect(all.filter((x) => x.en.toLowerCase().replace(/\s+/g, '').includes('jqbz') || x.zh.includes('jqbz')).map((x) => x.en)).toEqual([]);
     expect(names('jqbz')).not.toContain('印加枪兵长');
   });
-  it('排序：中英文命中排在拼音命中前面（「ba」英文 Ballistics/Banking 在拼音 baifuzhang 之前）', () => {
+  it('排序：中英文名称前缀排在拼音命中前面（「ba」英文 Ballistics/Banking 在拼音 baifuzhang 之前）', () => {
     const r = names('ba');
     expect(r).toContain('百夫长');
     const py = r.indexOf('百夫长');
@@ -134,7 +134,7 @@ describe('#123 全局搜索比对拼音', () => {
       expect(r.indexOf(zh), zh).toBeLessThan(py);
     }
   });
-  it('排序：中文命中排在拼音命中前面（「长」开头的中文名在任何纯拼音命中之前）', () => {
+  it('拼音前缀「chang」命中长弓兵、长剑士、长矛兵', () => {
     const r = names('chang');
     // 「chang」只是拼音前缀；长弓兵/长剑士/长矛兵 都应命中
     for (const zh of ['长弓兵', '长剑士', '长矛兵']) expect(r).toContain(zh);
@@ -159,7 +159,7 @@ describe('#123 CivPicker 比对拼音', () => {
   });
 });
 
-describe('#123 范围只限四个数据文件', () => {
+describe('#123 CivPicker 只认拼音前缀', () => {
   it('CivPicker 也走前缀：「iongnu」不命中匈奴', () => {
     const huns = find('civs', 'Huns') as unknown as Parameters<typeof civMatches>[0];
     expect(civMatches(huns, 'iongnu')).toBe(false);
@@ -175,4 +175,4 @@ describe('#123 拼音库只在构建时用，不打进前端（Steve 补充决�
     expect(src).not.toMatch(/from ['"][^'"]*pinyin/i);
   });
 });
-// 构建产物里没有拼音库代码、gzip 体积增量不超过 10 KB：在 tests/e2e/v080-123.spec.ts 里对 dist 检查。
+// 构建产物不含拼音库代码；主包 gzip 预算为 10 KB 加 #162 的额外索引大小，见 tests/e2e/v080-123.spec.ts。
