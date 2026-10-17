@@ -2,17 +2,36 @@ import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
 const units = JSON.parse(readFileSync('src/data/units.json', 'utf8')) as { id: number; civs: string[] }[];
+const cases = [
+  ['Armenians', '需研究科技，未建模'],
+  ['Bohemians', '需研究科技，未建模'],
+  ['Mayans', '资源多持续 15%，不是采集变快，暂不计入'],
+  ['Malians', '存放黄金加成，未建模'],
+  ['Poles', '石矿工兼产黄金，未建模|大庄园替代磨坊，未建模'],
+  ['Portuguese', '采果兼产木材，未建模'],
+  ['Shu', '伐木兼产食物，未建模'],
+  ['Sicilians', '农田升级，未建模'],
+  ['Khmer', '免磨坊存放食物，未建模'],
+  ['Aztecs', '携带量加成，未建模'],
+] as const;
 
 for (const width of [360, 375, 390]) {
   test(`未计入行 @${width}：加成与数值完整同行，长原因才省略`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    for (const civ of ['Armenians', 'Bohemians', 'Mayans', 'Malians']) {
+    for (const [civ, reason] of cases) {
       const unit = units.find((u) => u.civs.includes(civ))!;
       await page.goto(`#/duel?a=${unit.id}.${civ}.4.f.&b=${unit.id}.${civ}.4.f.&m=t`);
+      await page.reload();
       const rows = page.locator('[data-t="rc-unsupported"] > span');
-      await expect(rows.first()).toBeVisible();
+      const ok = reason.split('|').map((r) => `（${r}）`);
+      await expect(rows.last()).toContainText(new RegExp(ok.map((r) => r.replace(/[()（）|]/g, '\\$&')).join('|')));
+      await page.evaluate(() => document.fonts.ready);
       for (const row of await rows.all()) {
         const text = (await row.textContent())!;
+        expect(
+          ok.some((r) => text.includes(r)),
+          `${civ}: ${text}`,
+        ).toBe(true);
         await expect(row).toHaveAttribute('title', text);
         const layout = await row.evaluate((el) => {
           const range = document.createRange();
