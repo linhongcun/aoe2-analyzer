@@ -83,9 +83,15 @@ export const DlcImg = ({ i, className = 'dlci' }: { i: number; className?: strin
   const d = DLCS[i]!;
   return <img className={className} src={img(`dlc/${i}.webp`)} alt={`${d.zh} ${d.en}`} title={`${d.zh} · ${d.en} (${d.year})`} />;
 };
-export function DlcBadge({ i }: { i: number | null }) {
+export function DlcBadge({ i, linked = true }: { i: number | null; linked?: boolean }) {
   if (i == null) return null;
   const d = DLCS[i]!;
+  if (!linked)
+    return (
+      <span className="dlcb" title={`${d.zh} · ${d.en} (${d.year})`}>
+        <DlcImg i={i} />
+      </span>
+    );
   return (
     <Link className="dlcb" to="/dlc" title={`${d.zh} · ${d.en} (${d.year})`}>
       <DlcImg i={i} />

@@ -67,7 +67,7 @@ export default function UnitList() {
                 <div className="mini">
                   {u.bz} · {AGE_ZH[u.age] ?? ''} · <CostView c={u.cost} />
                 </div>
-                <DlcBadge i={u.dlc} />
+                <DlcBadge i={u.dlc} linked={false} />
               </div>
             </Link>
           ))}
