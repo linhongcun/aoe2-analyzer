@@ -4,7 +4,7 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { COUNTER_EXTRA, EMPTY_COUNTERS_COPY, EMPTY_STRENGTHS_COPY, STRONG_THRESHOLD, TYPE_ZH, filterCounterUnits, matchup } from '../../../domain/ratings';
-import { CivIcon } from '../../../shared/ui/art';
+import { CivIcon, UnitIcon } from '../../../shared/ui/art';
 import { RatingLabel } from '../../../shared/ui/RatingHelp';
 import { useSticky } from '../../../shared/utils/sticky';
 import { Loading } from '../../../shared/ui/widgets';
@@ -64,14 +64,18 @@ export default function Matchup() {
           {counters.length === 0 ? (
             <p className="note">{EMPTY_COUNTERS_COPY}</p>
           ) : (
-            <ul>
-              {counters.map((u) => (
-                <li key={u.id}>
-                  <Link className="ulink" to={`/unit/${u.id}`}>
-                    {u.nameZh}
-                  </Link>
-                </li>
-              ))}
+            <ul className="matchup-counter-list">
+              {counters.map((u) => {
+                const unit = core.units.find((x) => x.id === u.id);
+                return (
+                  <li key={u.id}>
+                    <Link className="ulink matchup-counter-link" to={`/unit/${u.id}`}>
+                      {unit && <UnitIcon u={unit} />}
+                      <span>{u.nameZh}</span>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           )}
           <p>

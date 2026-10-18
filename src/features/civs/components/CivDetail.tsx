@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
 import { findUniqueTech } from '../../../domain/linker';
 import { AXES, strengths, TYPE_ZH } from '../../../domain/ratings';
+import type { Civ } from '../../../domain/types';
 import { CivChip, CivIcon, DlcBadgeL, TechIcon, UnitLinks } from '../../../shared/ui/art';
 import { collapse } from '../../../domain/family';
 import { Icon } from '../../../shared/ui/Icon';
@@ -29,6 +30,26 @@ function UTech({ s, civ }: { s: string; civ: string }) {
       </Link>
       <Linked text={f.rest} />｜{f.en}
     </>
+  );
+}
+
+function SameDlcCivs({ list }: { list: Civ[] }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <SideBlock title="同资料片文明">
+      <ul id="same-dlc-civs" className="same-dlc-civs">
+        {(expanded ? list : list.slice(0, 5)).map((c) => (
+          <li key={c.en}>
+            <CivChip c={c} />
+          </li>
+        ))}
+      </ul>
+      {list.length > 5 && (
+        <button type="button" className="same-dlc-toggle" aria-expanded={expanded} aria-controls="same-dlc-civs" onClick={() => setExpanded(!expanded)}>
+          {expanded ? '收起' : `查看全部（${list.length}）`}
+        </button>
+      )}
+    </SideBlock>
   );
 }
 
@@ -189,13 +210,7 @@ export default function CivDetail() {
               <Icon name="crosshair" /> 对局助手
             </Link>
           </SideBlock>
-          {sameDlc.length > 0 && (
-            <SideBlock title="同资料片文明">
-              {sameDlc.map((x) => (
-                <CivChip key={x.en} c={x} />
-              ))}
-            </SideBlock>
-          )}
+          {sameDlc.length > 0 && <SameDlcCivs key={c.en} list={sameDlc} />}
           <p className="note">共 {civs.length} 个文明</p>
         </>
       }
