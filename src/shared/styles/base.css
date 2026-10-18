@@ -1669,3 +1669,11 @@ table.ediff td.dn {
 .age-table { width: 100%; table-layout: fixed; }
 .age-table th { overflow-wrap: anywhere; }
 .age-table td { white-space: nowrap; }
+/* issue 104 回放 */
+.battle-replay { margin-block: 16px; }
+.replay-field { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.replay-field progress { width: 100%; }
+.replay-field p { overflow-wrap: anywhere; }
+.battle-replay input[type='range'] { width: 100%; min-height: 44px; box-sizing: border-box; margin-inline: 0; }
+.replay-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.replay-controls button, .replay-controls select { min-height: 44px; }
