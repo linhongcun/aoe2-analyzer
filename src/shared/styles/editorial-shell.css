@@ -186,6 +186,13 @@ footer.editorial-footer .fbfoot {
   max-width: var(--content-max);
   margin: 0 auto 8px;
 }
+/* 元信息里的链接和文本共享同一行盒，触控高度不会改变基线。 */
+footer.editorial-footer .fmeta .fitem {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  vertical-align: middle;
+}
 footer.editorial-footer .note {
   margin: 8px 0;
   font-size: var(--fs-xs);
@@ -399,6 +406,10 @@ footer.editorial-footer .footer-sources a {
   }
 }
 @media (max-width: 600px) {
+  footer.editorial-footer .fmeta {
+    /* 仅扩展版本行，390px 保留完整日期且字号仍为 12px。 */
+    margin-inline: calc(-1 * var(--space-2));
+  }
   header.topbar.editorial-topbar .brand {
     font-size: 15px;
     letter-spacing: -0.4px;
