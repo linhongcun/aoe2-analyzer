@@ -4,6 +4,7 @@
  */
 import { floorSec, formatClock } from '../../domain/formatTime';
 import { TC_BUSY_ZH } from '../../domain/buildSim';
+import { villagerGroups } from './timelineFollowups';
 import type { Anomaly, BuildTimeline, ErrBand, Res } from '../../domain/buildSim';
 
 export type RowKey = 'tc' | 'food' | 'wood' | 'gold' | 'military';
@@ -211,6 +212,17 @@ export function buildView(tl: BuildTimeline, unitName: (id: string) => string): 
   if (lastDone > cur + 1) {
     const n = vilsAt(lastDone) - vilsAt(cur);
     tc.push({ from: cur, to: lastDone, label: n > 0 ? `村民 ×${n} · 约 ${mmss(cur)}–${mmss(lastDone)}` : '', kind: 'villager' });
+  }
+  if (tl.villagerEvents) {
+    const actual: Seg[] = villagerGroups(tl).map((g) => ({
+      from: g[0]!.from,
+      to: g.at(-1)!.to,
+      label: `村民 ×${g.length} · 约 ${mmss(g[0]!.from)}–${mmss(g.at(-1)!.to)}`,
+      kind: 'villager',
+      step: g[0]!.step,
+    }));
+    actual.push(...tl.ageUps.map((a) => ({ from: a.clickAt, to: a.reachAt, label: `升${AGE_ZH[a.age]}`, kind: 'ageup' as const })));
+    tc.splice(0, tc.length, ...actual.sort((a, b) => a.from - b.from));
   }
 
   const military: Seg[] = tl.steps

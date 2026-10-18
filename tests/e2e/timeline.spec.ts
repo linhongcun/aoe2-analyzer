@@ -154,8 +154,20 @@ test.describe('#3 开局时间线', () => {
     expect(feudal[2]!).toBeGreaterThanOrEqual(feudal[1]!);
   });
 
-  test.fixme('11. 步骤详情里单位/科技/建筑链接', async () => {
-    // 原因：步骤详情的实体链接未做（首屏范围外）
+  test('11. 步骤详情里单位/科技/建筑链接', async ({ page }) => {
+    for (const [step, href] of [
+      [1, '#/unit/83'],
+      [1, '#/building/70'],
+      [8, '#/tech/22'],
+    ] as const) {
+      await openBuild(page, `bo=scouts-18&civ=Franks&dist=7&house=0&step=${step}`);
+      const before = page.url();
+      await page.getByRole('region', { name: '步骤详情' }).locator(`a[href="${href}"]`).click();
+      await expect(page).toHaveURL(new RegExp(href + '$'));
+      await page.goBack();
+      await expect(page).toHaveURL(before);
+      await expect(page.getByRole('region', { name: '步骤详情' })).toBeVisible();
+    }
   });
 
   test('12. 带参数 URL 直接打开：状态还原；非法参数回退默认、越界 step 视为无，不报错', async ({ page }) => {
@@ -218,8 +230,22 @@ test.describe('#3 开局时间线', () => {
     expect(b.x).toBeGreaterThanOrEqual(s.x + s.width - 1);
   });
 
-  test.fixme('14. 键盘左右方向键、Enter、Esc 操作时间线节点', async () => {
-    // 原因：时间线节点的方向键漫游未做；步骤列表已可 Tab/Enter 操作
+  test('14. 键盘左右方向键、Enter、Esc 操作时间线节点', async ({ page }) => {
+    await openBuild(page, 'bo=scouts-18');
+    await page.locator('.tl-extra-controls > summary').click();
+    const buttons = page.getByRole('navigation', { name: '时间线节点' }).getByRole('button');
+    await buttons.first().focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(buttons.nth(1)).toBeFocused();
+    await page.keyboard.press('ArrowLeft');
+    await expect(buttons.first()).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/step=1/);
+    await expect(page.getByRole('region', { name: '步骤详情' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('region', { name: '步骤详情' })).toHaveCount(0);
+    await openBuild(page, 'bo=scouts-18&house=0');
+    await expect(page.locator('[data-node="12"]')).toHaveAttribute('aria-label', /第 13 步.*约.*卡人口/);
   });
 
   test.fixme('15. 超时状态（按目标时代写「60 分钟内到不了{时代}」）', async () => {
