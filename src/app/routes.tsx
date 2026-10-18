@@ -7,6 +7,7 @@ import Home from '../features/home/components/Home';
 
 // 非首页路由按需拆包
 const BuildOrderList = lazy(() => import('../features/builds/BuildOrderList'));
+const Patches = lazy(() => import('../features/patches/Patches'));
 const AboutData = lazy(() => import('../features/about/AboutData'));
 const UnitList = lazy(() => import('../features/units/components/UnitList'));
 const UnitDetail = lazy(() => import('../features/units/components/UnitDetail'));
@@ -47,11 +48,13 @@ export function AppRoutes() {
       <Route path="/buildings" element={<BuildingList />} />
       <Route path="/building/:id" element={<BuildingDetail />} />
       <Route path="/duel" element={<Duel />} />
+      <Route path="/patches" element={<Patches />} />
+      <Route path="/patches/:id" element={<Patches />} />
       <Route path="/about-data" element={<AboutData />} />
       <Route path="/simulator" element={<SimulatorHub />} />
       <Route path="/builds" element={<BuildOrderList />} />
       <Route path="/maps" element={<Maps />} />
-      {['/patches', '/ladder'].map((p) => (
+      {['/ladder'].map((p) => (
         <Route key={p} path={p} element={<Planned />} />
       ))}
       <Route path="*" element={<Home />} />

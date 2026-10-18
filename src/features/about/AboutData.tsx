@@ -48,6 +48,9 @@ export default function AboutData() {
           ))}
         </tbody>
       </table>
+      <p>
+        <Link to="/patches">查看版本补丁</Link>
+      </p>
       <h3>补丁数据变化</h3>
       <ul>
         {PATCH_NOTES.map((b) => (

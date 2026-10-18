@@ -165,13 +165,13 @@ test('nav: 工具 dropdown toggles on click, closes on outside click and Esc', a
   await expect(tools).toHaveClass(/\bon\b/);
 });
 
-test('home: 不再显示「即将推出 · 正在制作」块（#16 开工前不展示）', async ({ page }) => {
+test('home: 无占位块，版本补丁已提供正式入口', async ({ page }) => {
   await page.goto('./');
   await expect(page.locator('#home .hgrid').first()).toBeVisible();
   await expect(page.locator('#home .soon-card')).toHaveCount(0);
   await expect(page.locator('#home')).not.toContainText('即将推出');
   await expect(page.locator('#home')).not.toContainText('正在制作');
-  await expect(page.locator('#home')).not.toContainText('版本补丁');
+  await expect(page.locator('#home a[href="#/patches"]')).toBeVisible();
   await expect(page.locator('#home .hcard.planned')).toHaveCount(0);
 });
 

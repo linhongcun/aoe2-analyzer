@@ -91,7 +91,10 @@ export function search(items: SearchItem[], raw: string, limit = 30): SearchItem
   // 小 limit 也保留第一条中英文命中；最多让出 5 个位置给拼音。
   const keepPy = Math.min(py.length, PY_RESERVE, limit - (text.length ? 1 : 0));
   const head = text.slice(0, limit - keepPy);
-  const selectedPy = py.slice(0, limit - head.length);
+  // 仅当结果拥挤时，避免新导航页挤掉实体的拼音名额；展示仍沿用原排序。
+  const candidates = ranked.length > limit && py.length > PY_RESERVE ? [...py].sort((a, b) => Number(a.it.kind === 'page') - Number(b.it.kind === 'page')) : py;
+  const selected = new Set(candidates.slice(0, limit - head.length));
+  const selectedPy = py.filter((x) => selected.has(x));
   // 中英文精确/名称前缀命中（至少首条）优先，随后展示最多 5 条拼音，其余保持各自原顺序。
   const firstCount = Math.max(1, head.filter((x) => x.s >= TIER.prefix).length);
   return [...head.slice(0, firstCount), ...selectedPy.slice(0, PY_RESERVE), ...head.slice(firstCount), ...selectedPy.slice(PY_RESERVE)].map((x) => x.it);
