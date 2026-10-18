@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { DATA_SOURCES } from '../../features/about/dataInfo';
-import { sharePageUrl } from '../../domain/sharePage';
 import { Icon } from './Icon';
 import { StatIcon } from './art';
 
@@ -77,16 +76,20 @@ export function DetailSource({ note = '基础数值，未含文明加成与科�
 export function CopyPageLink() {
   const loc = useLocation();
   const [state, setState] = useState<'idle' | 'copied' | 'fallback'>('idle');
+  const [fallbackUrl, setFallbackUrl] = useState('');
   const timer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => () => clearTimeout(timer.current), []);
-  const url = typeof document === 'undefined' ? '' : sharePageUrl(loc.pathname, loc.search, document.baseURI);
   const copy = async () => {
     clearTimeout(timer.current);
+    let url = window.location.href;
     try {
+      const { sharePageUrl } = await import('../../domain/sharePage');
+      url = sharePageUrl(loc.pathname, loc.search, document.baseURI);
       await navigator.clipboard.writeText(url);
       setState('copied');
       timer.current = setTimeout(() => setState('idle'), 2000);
     } catch {
+      setFallbackUrl(url);
       setState('fallback');
     }
   };
@@ -99,7 +102,7 @@ export function CopyPageLink() {
       {state === 'fallback' && (
         <label className="detail-copy-fallback">
           请复制页面链接
-          <input readOnly value={url} onFocus={(e) => e.currentTarget.select()} />
+          <input readOnly value={fallbackUrl} onFocus={(e) => e.currentTarget.select()} />
         </label>
       )}
     </div>
