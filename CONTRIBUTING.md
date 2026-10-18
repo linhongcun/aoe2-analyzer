@@ -1,5 +1,7 @@
 # 贡献约定 / Contributing
 
+AI 编码代理先读 [AGENTS.md](AGENTS.md)（目录、命令、数据规则、测试规则的速查）。
+
 ## 角色
 
 产品 Steve Jobs（兼项目管理、UI/设计审查与玩家反馈），开发 Linus Torvalds，测试 Kent Beck；hongcun lin 最终拍板。
@@ -32,7 +34,7 @@
 ### 3. 发版
 
 - **手动全量只做两次**：PR 首次验收，以及 release 整版验收。
-- **流程**：Kent 整版验收 → Steve 在发版 issue 上给整版 Product PASS → 开发用发版脚本完成：release 合入 main（merge commit）、等部署、核对线上页脚、打 annotated tag `vX.Y.Z`、用 CHANGELOG 对应小节起草 GitHub Release → Kent 线上复验 → 发布 GitHub Release，核对本版 issue 均已关闭（合到非默认分支时 `Closes #N` 不会自动关闭）。
+- **流程**：Kent 整版验收 → Steve 在发版 issue 上给整版 Product PASS → 开发用发版脚本完成：release 合入 main（merge commit）、等部署、核对线上页脚、打 annotated tag `vX.Y.Z`、用 CHANGELOG 对应小节起草 GitHub Release → 脚本全部通过后直接发布 GitHub Release（不再做人工线上复验），核对本版 issue 均已关闭（合到非默认分支时 `Closes #N` 不会自动关闭）。
 - **发版脚本**：`npm run release -- vX.Y.Z`（`scripts/release.mjs`）。参数：`--dry-run` 只打印每一步要执行的命令和要核对的内容，不改任何分支、tag、Release；`--site-url` 线上地址，默认 `https://linhongcun.github.io/aoe2-analyzer/`；`--footer-timeout` 等部署的秒数，默认 600。任一步失败进程以非 0 退出，`npm run release` 会原样传出该退出码。**不要用管道吞掉退出码**；若需要留日志，先 `set -o pipefail`，再 `npm run release -- vX.Y.Z 2>&1 | tee release.log`（或事后检查 `${PIPESTATUS[0]}`）。
   - 前置检查：`release/vX.Y.Z` 头部 CI 为绿；远端 tag 不存在，或已指向「release 合入 main 的那个提交」（视为已完成、跳过），指向别的提交则报错退出；本地残留指向别处的同名 tag 也在这一步报错（提示 `git tag -d`），不做任何改动。
   - 重跑：release 已合入 main 时跳过合并，以 main 第一父链上最早包含 release 头的提交为准（main 之后有新提交也照样能重跑），tag 打在这个提交上。
@@ -75,14 +77,14 @@
 - **图标**：自定义界面图标禁止使用 emoji 或 Unicode 符号字形（⚔ ← → ★ ✓ ✕ ▲▼ 🔍 等）。统一使用 [Lucide](https://lucide.dev)（ISC License），通过 `lucide-react` 本地打包（不使用 CDN，站点需在中国可访问）。在 `src/shared/ui/Icon.tsx` 的 `ICONS` 表登记后以 `<Icon name="..." />` 使用；颜色用 `currentColor`，尺寸由 CSS（`.ic`）控制。ESLint 规则 `no-restricted-syntax` 会拦截代码中的 emoji/箭头符号。
 - 游戏美术图标（文明/单位/科技/建筑/DLC/属性）保持使用 `public/img/` 下的素材。
 - 样式：颜色只用 `src/shared/styles/tokens.css` 中的设计令牌（CSS 变量），保持深色中世纪主题（`npm run lint:colors` 检查），规范见 `docs/DESIGN-SYSTEM.md`。
-- 同时检查 1280 与 390 宽、浅色与深色，对比度满足 WCAG AA。
+- 同时检查 360/375/390/1280 四档宽度（无横向滚动、无页面报错）、浅色与深色，对比度满足 WCAG AA。
 - 领域逻辑（`src/domain`）必须是纯函数、无 React 依赖，并配 Vitest 单测。
 - 数据：`npm run data` 重新生成 `src/data/*.json` 与 `public/img/*`，不要手改生成的 JSON；主观评分改 `scripts/civ_ratings.json`。
 
 ## 本地检查
 
 ```bash
-npm ci --legacy-peer-deps
+npm ci                     # .npmrc 已设 legacy-peer-deps
 npm run lint && npx tsc -p . --noEmit && npm test
-npm run build && npm run e2e
+npm run build && npm run e2e   # 4173 被占用时先 fuser -k 4173/tcp
 ```

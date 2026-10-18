@@ -52,7 +52,7 @@
 需要 Node 20+、Python 3.10+（仅数据脚本需要）。
 
 ```bash
-npm install          # 已配置 legacy-peer-deps
+npm ci               # .npmrc 已配置 legacy-peer-deps
 npm run dev          # 本地开发（http://localhost:5173）
 npm run build        # tsc 严格检查 + Vite 构建到 dist/
 npm test             # Vitest 单元测试（domain 逻辑与生成数据）
@@ -95,7 +95,7 @@ Age of Empires II © Microsoft Corporation. 本项目依据 Microsoft 的 [Game 
 
 - 界面图标只用 [Lucide](https://lucide.dev)（`<Icon name="..." />`，本地打包），禁止 emoji / Unicode 符号作图标；游戏美术图标不受此限。
 - 数值必须可溯源：效果来自 `.dat`，手工规则仅在 `.dat` 确实缺失时保留并在审计中列出。
-- 详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+- 详见 [CONTRIBUTING.md](CONTRIBUTING.md)；AI 编码代理请先读 [AGENTS.md](AGENTS.md)。
 
 ## 第三方组件 / Third-party
 
