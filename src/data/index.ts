@@ -4,9 +4,8 @@
  */
 import civsRaw from './civs.json';
 import type { Building, Civ, Tech, Trees, Unit } from '../domain/types';
-import { buildingDlc, buildingType } from '../domain/buildings';
+import { buildingType } from '../domain/buildings';
 import { civDlc, dlcOf } from '../domain/dlc';
-import { unitDlc } from '../domain/introductions';
 import { buildLinker, type Linker } from '../domain/linker';
 import { buildFamilies, type Families } from '../domain/family';
 
@@ -27,32 +26,34 @@ export interface Core {
 let corePromise: Promise<Core> | null = null;
 export let coreCache: Core | null = null;
 export function loadCore(): Promise<Core> {
-  corePromise ??= Promise.all([import('./units.json'), import('./techs.json'), import('./buildings.json')]).then(([u, t, b]) => {
-    const units = (u.default as unknown as Unit[]).map((x) => ({ ...x, dlc: unitDlc(x) }));
-    const techs = (t.default as unknown as Tech[]).map((x) => ({ ...x, dlc: dlcOf(x) }));
-    const unitById: Record<number, Unit> = {};
-    units.forEach((x) => (unitById[x.id] = x));
-    const techById: Record<number, Tech> = {};
-    techs.forEach((x) => (techById[x.id] = x));
-    const buildings = (b.default as unknown as Omit<Building, 'dlc' | 'type'>[]).map((x) => ({
-      ...x,
-      dlc: buildingDlc(x),
-      type: buildingType(x.en),
-    }));
-    const buildingById: Record<number, Building> = {};
-    buildings.forEach((x) => (buildingById[x.id] = x));
-    coreCache = {
-      units,
-      techs,
-      buildings,
-      unitById,
-      techById,
-      buildingById,
-      linker: buildLinker(units, techs, buildings),
-      fam: buildFamilies(units, unitById),
-    };
-    return coreCache;
-  });
+  corePromise ??= Promise.all([import('./units.json'), import('./techs.json'), import('./buildings.json'), import('../domain/introductions')]).then(
+    ([u, t, b, { unitDlc, buildingDlc }]) => {
+      const units = (u.default as unknown as Unit[]).map((x) => ({ ...x, dlc: unitDlc(x) }));
+      const techs = (t.default as unknown as Tech[]).map((x) => ({ ...x, dlc: dlcOf(x) }));
+      const unitById: Record<number, Unit> = {};
+      units.forEach((x) => (unitById[x.id] = x));
+      const techById: Record<number, Tech> = {};
+      techs.forEach((x) => (techById[x.id] = x));
+      const buildings = (b.default as unknown as Omit<Building, 'dlc' | 'type'>[]).map((x) => ({
+        ...x,
+        dlc: buildingDlc(x),
+        type: buildingType(x.en),
+      }));
+      const buildingById: Record<number, Building> = {};
+      buildings.forEach((x) => (buildingById[x.id] = x));
+      coreCache = {
+        units,
+        techs,
+        buildings,
+        unitById,
+        techById,
+        buildingById,
+        linker: buildLinker(units, techs, buildings),
+        fam: buildFamilies(units, unitById),
+      };
+      return coreCache;
+    },
+  );
   return corePromise;
 }
 
