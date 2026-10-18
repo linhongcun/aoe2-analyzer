@@ -453,6 +453,7 @@ a.hcard:hover {
   .dbar button,
   .civchip,
   .uchips .ulink,
+  .ulink:not(p .ulink):not(li .ulink),
   .rc-seg .seg button,
   .rc-basis .linkish,
   .cp-trigger,
@@ -471,6 +472,11 @@ a.hcard:hover {
     min-height: 44px;
   }
   .tag.tagl {
+    display: inline-flex;
+    align-items: center;
+  }
+  label:has(> input[type='checkbox']),
+  label:has(> input[type='radio']) {
     display: inline-flex;
     align-items: center;
   }
