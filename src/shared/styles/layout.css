@@ -315,6 +315,23 @@ a.hcard:hover {
     display: none;
   }
 }
+/* #36 射程说明：以表格标题单元格定位，手机端浮层不超出屏幕。 */
+.range-heading {
+  position: relative;
+}
+.range-help {
+  position: static;
+  vertical-align: middle;
+}
+.range-help .rl-btn {
+  width: 44px;
+  height: 44px;
+}
+.range-help .rl-pop {
+  left: 0;
+  right: auto;
+  width: min(340px, calc(100vw - 64px));
+}
 /* 命令面板 */
 .cmdk-mask {
   position: fixed;

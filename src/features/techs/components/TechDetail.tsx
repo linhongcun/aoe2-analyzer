@@ -11,6 +11,7 @@ import TechList from './TechList';
 import TechAffects from './TechAffects';
 import { techAffects } from '../../../domain/affects';
 import { affectedUnits } from '../../../domain/family';
+import { TECH_AKA } from '../../../data/aliases';
 
 const TT: Record<string, string> = { UniqueTech: '独特科技', Research: '通用科技', RegionalTech: '区域科技' };
 
@@ -29,6 +30,7 @@ export default function TechDetail() {
   const t = core.techById[+id];
   if (!t) return <TechList />;
   const pre = t.pre != null ? core.techById[t.pre] : undefined;
+  const aliases = TECH_AKA[t.id]?.filter((name) => name.toLowerCase() !== t.en.toLowerCase() && name !== t.zh);
   const nxt = core.techs.filter((x) => x.pre === t.id);
   // 涉及单位用结构化效果（与「作用对象」同源），不再按说明文字匹配单位名（#13）
   const rel = affectedUnits(techAffects(t, core.units, core.buildings), core.fam);
@@ -71,6 +73,7 @@ export default function TechDetail() {
           <span className="tag">{TT[t.type] ?? t.type}</span>
           <BLink id={t.b} zh={t.bz} />
           <span className="tag">{AGE_ZH[t.age] ?? t.age}</span>
+          {!!aliases?.length && <span className="note">又名：{aliases.join('、')}</span>}
         </>
       }
       tabs={[

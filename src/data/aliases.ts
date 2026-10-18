@@ -34,6 +34,12 @@ export const PENDING_UNIT_ALIASES: readonly (readonly [number, string])[] = [
   [569, '圣骑士'],
 ];
 
+/** #18 / #36 已采用的科技别名，详情与全局搜索共用。 */
+export const TECH_AKA: Record<number, string[]> = { 1452: ['绞盘弩', 'cranequins'] };
+
+/** #36 产品补充：新手和快攻指向开局流程，地图入口待 #34。 */
+export const PAGE_ALIASES: Record<string, string[]> = { builds: ['新手', '快攻'] };
+
 export const UNIT_ALIASES: Record<number, string[]> = {};
 for (const [id, a] of UNIT_ALIAS_TABLE) (UNIT_ALIASES[id] ??= []).push(a);
 
