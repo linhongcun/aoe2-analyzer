@@ -15,7 +15,7 @@ h4 {
   line-height: 1.35;
   letter-spacing: -0.02em;
 }
-button,
+button:not(td button):not(th button):not(svg button),
 select,
 input:not([type='checkbox']):not([type='radio']):not([type='range']) {
   min-height: 44px;
@@ -453,7 +453,7 @@ a.hcard:hover {
   .dbar button,
   .civchip,
   .uchips .ulink,
-  .ulink:not(p .ulink):not(li .ulink),
+  .ulink:not(p .ulink):not(li .ulink):not(td .ulink):not(th .ulink),
   .rc-seg .seg button,
   .rc-basis .linkish,
   .cp-trigger,
