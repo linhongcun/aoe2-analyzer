@@ -1,10 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Check, Download, Info, TriangleAlert as Warn, Landmark, Link2, Settings2, Share2, X } from 'lucide-react';
 import eco from '../../data/eco.json';
 import units from '../../data/units.json';
 import { buildOrders } from '../../data/buildOrders';
 import { civByEn, civs } from '../../data';
+import { useCore } from '../../data/hooks';
+import type { BuildOrder } from '../../domain/buildOrder';
+import { visibleSources } from './sources';
+import { followupHint, stepEntities, villagerGroups } from './timelineFollowups';
 import { simSupport } from '../../domain/simSupport';
 import { civSimNotes, noHouseCompare, simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
 import { CivPicker } from '../../shared/ui/CivPicker';
@@ -51,15 +55,16 @@ const PRESETS = [
 /** 费用：整数照常显示，带小数的保留 1 位（#42 哥特民兵 42.5） */
 const fmtCost = (x: number) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
 
-export default function BuildTimelineView() {
+export default function BuildTimelineView({ orders = buildOrders }: { orders?: BuildOrder[] }) {
+  const core = useCore();
   const [sp, setSp] = useSearchParams();
   const q = parseQuery(
     sp,
-    buildOrders.map((b) => b.id),
+    orders.map((b) => b.id),
     civs.map((c) => c.en),
-    (id) => buildOrders.find((b) => b.id === id)?.steps.length ?? 0,
+    (id) => orders.find((b) => b.id === id)?.steps.length ?? 0,
   );
-  const bo = buildOrders.find((b) => b.id === q.bo)!;
+  const bo = orders.find((b) => b.id === q.bo)!;
   const patch = (kv: Record<string, string | null>) =>
     setSp(
       (p) => {
@@ -119,7 +124,23 @@ export default function BuildTimelineView() {
     : null;
   const cmpText = cmp ? noHouseCompareText(cmp, targetZh) : null;
   const changed = (q.civ ? 1 : 0) + (q.dist !== WALK.default ? 1 : 0) + (q.house ? 0 : 1);
-  const source = bo.sources[0]?.title;
+  const source = visibleSources(bo.sources)[0]?.title;
+  const [hintOff, setHintOff] = useState(() => sessionStorage.getItem('tl-followup-off') === '1');
+  const hint = sel && !hintOff ? followupHint(sel, noHouses) : null;
+  const groups = useMemo(() => villagerGroups(tl), [tl]);
+  const nodeLabel = (i: number) =>
+    `第 ${i + 1} 步，约 ${mmss(rowTime(tl.steps[i]!))}${tl.steps[i]!.anomalies.length ? '，' + tl.steps[i]!.anomalies.map((a) => a.reasonZh).join('；') : ''}`;
+  const roam = (event: ReactKeyboardEvent<HTMLButtonElement>, i: number, chart = false) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      set('step', null);
+      return;
+    }
+    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+    event.preventDefault();
+    const next = Math.max(0, Math.min(bo.steps.length - 1, i + (event.key === 'ArrowRight' ? 1 : -1)));
+    document.querySelector<HTMLButtonElement>(chart ? `[data-node="${next}"]` : `[data-step="${next}"] .tl-step`)?.focus();
+  };
 
   // 不相邻的浅色卡点合并，只有 top 用实色，避免红带铺满（Jony 建议）
   const merged = useMemo(() => {
@@ -571,6 +592,51 @@ export default function BuildTimelineView() {
         )}
       </div>
 
+      <details className="tl-extra-controls">
+        <summary>时间线操作与村民生产</summary>
+        <nav className="tl-node-list" aria-label="时间线节点">
+          {bo.steps.map((_, i) => (
+            <button
+              type="button"
+              key={i}
+              data-node={i}
+              aria-label={nodeLabel(i)}
+              aria-pressed={q.step === i}
+              onKeyDown={(e) => roam(e, i, true)}
+              onClick={() => jump(i)}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </nav>
+        <div className="tl-villagers" aria-label="村民生产分段">
+          {groups
+            .filter((g) => g.length > 1)
+            .map((g) => (
+              <details key={g[0]!.from}>
+                <summary>
+                  村民 <span className="nw">×{g.length}</span> ·{' '}
+                  <span className="nw">
+                    约 {mmss(g[0]!.from)}–{mmss(g.at(-1)!.to)}
+                  </span>
+                </summary>
+                <ol>
+                  {g.map((event, i) => (
+                    <li key={event.from}>
+                      <button type="button" onClick={() => jump(event.step)}>
+                        村民 {i + 1} ·{' '}
+                        <span className="nw">
+                          约 {mmss(event.from)}–{mmss(event.to)}
+                        </span>{' '}
+                        · 第 {event.step + 1} 步
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            ))}
+        </div>
+      </details>
       <ol className="tl-steps" aria-label="步骤">
         {bo.steps.map((st, i) => {
           const s = tl.steps[i]!;
@@ -584,7 +650,14 @@ export default function BuildTimelineView() {
               className={`${bad.has(i) ? 'is-bad' : ''}${open ? ' is-sel' : ''}`}
               aria-selected={open}
             >
-              <button type="button" className="tl-step" onClick={() => set('step', open ? null : String(i + 1))} aria-expanded={open}>
+              <button
+                type="button"
+                className="tl-step"
+                onKeyDown={(e) => roam(e, i)}
+                aria-label={nodeLabel(i)}
+                onClick={() => set('step', open ? null : String(i + 1))}
+                aria-expanded={open}
+              >
                 <span className="tl-num i">{i + 1}</span>
                 <span className="tl-num t" data-time>
                   约 {mmss(rowTime(s))}
@@ -614,6 +687,28 @@ export default function BuildTimelineView() {
               </button>
               {open && sel && (
                 <div role="region" aria-label="步骤详情" className="tl-detail">
+                  {hint && (
+                    <div className="tl-followup" role="status">
+                      <span>{hint}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          sessionStorage.setItem('tl-followup-off', '1');
+                          setHintOff(true);
+                        }}
+                      >
+                        知道了
+                      </button>
+                    </div>
+                  )}
+                  <div className="tl-entities">
+                    {stepEntities(st).map((ref) => (
+                      <Link className="ulink" key={`${ref.kind}-${ref.id}`} to={`/${ref.kind}/${ref.id}`}>
+                        {(ref.kind === 'unit' ? core?.unitById[ref.id] : ref.kind === 'tech' ? core?.techById[ref.id] : core?.buildingById[ref.id])?.zh ??
+                          `${ref.kind === 'unit' ? '单位' : ref.kind === 'tech' ? '科技' : '建筑'} ${ref.id}`}
+                      </Link>
+                    ))}
+                  </div>
                   {rowSegments(s.anomalies, s.researchAt !== undefined ? { from: s.startAt, to: s.researchAt } : undefined).length > ROW_SEG_MAX && (
                     <span className="note" data-t="seg-all">
                       {rowSegments(s.anomalies, s.researchAt !== undefined ? { from: s.startAt, to: s.researchAt } : undefined)

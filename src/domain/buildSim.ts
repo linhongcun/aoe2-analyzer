@@ -113,7 +113,14 @@ export interface TimelineStep {
   villagers: { food: number; wood: number; gold: number; stone: number; build: number; idle: number };
   anomalies: Anomaly[];
 }
+export interface VillagerEvent {
+  from: number;
+  to: number;
+  step: number;
+}
 export interface BuildTimeline {
+  /** 实际村民训练事件，仅用于时间线展示，不改变模拟。 */
+  villagerEvents?: VillagerEvent[];
   buildId: string;
   civ: string;
   variant: 'aggr' | 'cons' | null;
@@ -435,6 +442,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   // TC
   let tcState: { kind: 'vil' | 'research'; left: number; p?: Pending; age?: number; tech?: number } | null = null;
   const tcResearch: Pending[] = [];
+  const villagerEvents: VillagerEvent[] = [];
+  let villagerStartedAt = 0;
   let tcIdleFrom: number | null = null;
   let tcIdleCause: 'pop' | 'food' | 'other' = 'other';
   let tcIdleTotal = 0;
@@ -760,8 +769,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     if (tcState) {
       tcState.left -= TICK * (m.tcRate['unit:' + TC_BY_AGE[age - 1]!] ?? 1);
       if (tcState.left <= 1e-9) {
-        if (tcState.kind === 'vil') assign();
-        else if (tcState.p) {
+        if (tcState.kind === 'vil') {
+          villagerEvents.push({ from: villagerStartedAt, to: r1(t), step: activeStep() });
+          assign();
+        } else if (tcState.p) {
           const a = tcState.p.a;
           if (a.type === 'ageUp') {
             age = a.age;
@@ -826,6 +837,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           else {
             pay(c);
             tcState = { kind: 'vil', left: eco.villager.trainTime * (m.timeMul['unit:83'] ?? 1) };
+            villagerStartedAt = r1(t);
           }
         } else if (nextStep < nSteps && born < finalVils) cause = 'other';
       }
@@ -875,6 +887,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     return xs.length && xs.every((x) => x !== undefined) ? Math.max(...(xs as number[])) : null;
   });
   return {
+    villagerEvents,
     startAt,
     doneAt,
     snap,
@@ -946,6 +959,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
   });
   return {
     buildId: input.id,
+    villagerEvents: R.villagerEvents,
     civ,
     noHouses,
     housePaidAt: R.housePaidAt,
