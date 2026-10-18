@@ -254,7 +254,7 @@ test('#6 文明评分明确为主观数据，仅两个关键评分强调，开�
   await ready(page, 'civ/Franks', '#detail h1');
   const opening = page.locator('#detail .dmain > section').first();
   await expect(opening).toHaveAttribute('aria-label', '开局建议');
-  await expect(opening.getByRole('link').first()).toHaveAttribute('href', /#\/builds\?bo=/);
+  await expect(opening.locator('a[href^="#/builds?bo="]').first()).toBeVisible();
   await page.getByRole('tab', { name: '数据', exact: true }).click();
   await expect(page.locator('.ratehead')).toContainText('主观评分，仅供参考');
   const ratings = page.locator('#detail [data-stat^="rating-"]');
