@@ -1,8 +1,8 @@
 ---
 name: 功能建议 / Feature request
 about: 新模块、新工具、交互或数据展示方面的建议
-title: '[功能建议] '
-labels: enhancement
+title: ''
+labels: feature
 ---
 
 ## 想要什么功能？

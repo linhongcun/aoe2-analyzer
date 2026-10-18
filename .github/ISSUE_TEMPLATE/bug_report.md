@@ -1,7 +1,7 @@
 ---
 name: 问题报告 / Bug report
 about: 页面显示异常、功能不可用、交互问题
-title: '[问题] '
+title: ''
 labels: bug
 ---
 
