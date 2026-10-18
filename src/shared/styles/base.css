@@ -1043,6 +1043,17 @@ table.ediff td.dn {
 .duel-tab {
   width: 100%;
 }
+.duel-counters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+.duel-counter {
+  overflow-wrap: anywhere;
+}
 /* issue 140：群战「数量」表（无表头）里「A 10，剩 7」保持一行。
    标签列不再占 40%，把宽度让给数字。1v1 对照表有表头，长标签仍可换行。 */
 .duel-tab:not(:has(thead)) td {

@@ -26,6 +26,7 @@ import { BreakEven } from './BreakEven';
 import { RealCostBlock, realCostOf } from './RealCost';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
 import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock } from '../../../domain/realCost';
+import { CounterSummary } from './CounterSummary';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
@@ -486,6 +487,7 @@ function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
           </small>
         )}
       </h3>
+      <CounterSummary a={A.F} b={B.F} />
       <table className="stat duel-tab">
         <thead>
           <tr>
@@ -570,6 +572,7 @@ function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb
           {nb * costSum(B.disc.cost)}）
         </p>
       )}
+      <CounterSummary a={A.F} b={B.F} />
       <table className="stat duel-tab">
         <tbody>
           <tr>
