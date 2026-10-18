@@ -61,7 +61,9 @@ jobs:
         if: always()
         with:
           name: editorial-viewport-screenshots
-          path: test-results/editorial6-*/home-light-*.png
+          path: |
+            test-results/editorial6-*/home-light-*.png
+            test-results/catalogLayout187-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: failure()

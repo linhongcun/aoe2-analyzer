@@ -77,6 +77,28 @@ kbd {
 .lhead h2 {
   font-size: var(--fs-h2);
 }
+/* 资料列表共用网格和卡片页脚，版本标记不再受正文长度影响。 */
+#tgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: var(--space-3);
+}
+:is(#units, #techs, #buildings) .ucard {
+  align-items: flex-start;
+  padding-bottom: calc(var(--space-6) * 2);
+}
+:is(#units, #techs, #buildings) .ucard > div {
+  flex: 1;
+  min-width: 0;
+}
+:is(#units, #techs, #buildings) .ucard .mini {
+  padding-left: 0;
+}
+:is(#units, #techs, #buildings) .ucard .dlcb {
+  position: absolute;
+  left: var(--space-4);
+  bottom: var(--space-3);
+}
 .stat td:not(:first-child),
 .stat th:not(:first-child),
 .compare-score {
@@ -454,6 +476,9 @@ a.hcard:hover {
   }
   .card .mini {
     padding-left: 0;
+  }
+  :is(#units, #techs, #buildings) .ucard .dlcb {
+    left: var(--space-3);
   }
   .fbar {
     padding: var(--space-3);
