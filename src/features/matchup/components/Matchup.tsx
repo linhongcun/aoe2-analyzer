@@ -1,3 +1,4 @@
+import RushDefense from './RushDefense';
 import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
@@ -24,6 +25,7 @@ export default function Matchup() {
         我的文明 <CivPicker id="ma" label="我的文明" value={civs[ia]!.en} onChange={(en) => setA(civs.findIndex((c) => c.en === en))} /> 对手文明{' '}
         <CivPicker id="me" label="对手文明" value={civs[ie]!.en} onChange={(en) => setE(civs.findIndex((c) => c.en === en))} />
       </div>
+      <RushDefense />
       {!core ? (
         <Loading />
       ) : (
