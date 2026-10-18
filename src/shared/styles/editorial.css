@@ -358,6 +358,10 @@ a.hcard:hover {
   background: var(--color-timeline-bad);
   color: var(--color-on-timeline-bad);
 }
+:root[data-theme='dark'] .tl-step:is(:hover, :focus, :focus-visible, :active),
+:root[data-theme='dark'] .tl-steps li.is-sel .tl-step {
+  background: var(--color-surface-2);
+}
 @media (max-width: 1050px) {
   .hgrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -488,6 +492,12 @@ a.hcard:hover {
   .tl-bar,
   .tl-lab {
     font-size: var(--fs-xs);
+  }
+  .tl-empty .tl-chip {
+    max-width: 100%;
+    white-space: normal;
+    padding-block: var(--space-2);
+    text-align: left;
   }
   .dbar button {
     min-width: 44px;

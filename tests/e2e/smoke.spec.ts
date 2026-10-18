@@ -36,7 +36,7 @@ const ROUTES: [string, string][] = [
   ['#matchup', '#mres h3'],
   ['#/duel', '#duel-res h3'],
   ['#/bonuses', '#blist li'],
-  ['#/civ/Franks/bonus/2', '#bonus h2'],
+  ['#/civ/Franks/bonus/2', '#bonus h1'],
 ];
 
 for (const [hash, sel] of ROUTES) {
@@ -384,7 +384,7 @@ test('civ bonus rows expand inline and link to bonus detail', async ({ page }) =
     .getByRole('link', { name: /查看详情页/ })
     .click();
   await expect(page).toHaveURL(/#\/civ\/Franks\/bonus\/1$/);
-  await expect(page.locator('#bonus h2')).toContainText('文明加成 2');
+  await expect(page.locator('#bonus h1')).toContainText('文明加成 2');
 });
 
 test('team bonus detail notes allies; bonus list filters; Ctrl+K finds bonuses', async ({ page }) => {
