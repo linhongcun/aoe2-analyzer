@@ -550,7 +550,9 @@ test('#22 对建筑射程：主数字下方小字「对建筑 N」，无括号�
 
 test('#27 火焰骆驼：攻击间隔「—」+ 原因小字；击杀用时「—」不为 0s', async ({ page }) => {
   await page.goto('./#/unit/1263');
+  await expect(page.locator('#unit [data-stat="rof"] [data-t="stat-value"]')).toHaveText('—');
   await expect(page.locator('#unit [data-t="rof-reason"]')).toHaveText('爆炸单位，无攻击间隔');
+  await expect(page.locator('#unit [data-t="rof-reason"]')).toHaveCSS('font-size', '12px');
   await page.goto('./#/duel?a=1263.Tatars.4.f.');
   await expect(page.locator('#duel-a [data-t="rof-reason"]')).toHaveText('爆炸单位，无攻击间隔');
   await expect(page.locator('#duel-a .duel-stats')).not.toContainText('-爆炸');

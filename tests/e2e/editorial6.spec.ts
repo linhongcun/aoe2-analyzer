@@ -215,6 +215,18 @@ test('#6 手机点击导航遮罩关闭抽屉并恢复菜单按钮焦点', async
   await expect(trigger).toBeFocused();
 });
 
+test('#6 开局页固定分享条不会遮挡手机导航的外观按钮', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await ready(page, 'builds?bo=scouts-18', '.tl-steps');
+  await expect(page.locator('.tl-share-sticky')).toBeVisible();
+  await page.getByRole('button', { name: '菜单', exact: true }).click();
+  const nav = page.getByRole('dialog', { name: '主导航', exact: true });
+  await nav.getByRole('radio', { name: '深色', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await nav.getByRole('radio', { name: '浅色', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+});
+
 for (const width of WIDTHS)
   test(`#6 @${width}：首页首屏可搜索并看到至少四个资料入口`, async ({ page }, info) => {
     await page.setViewportSize({ width, height: 900 });

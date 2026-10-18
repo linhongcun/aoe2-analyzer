@@ -230,6 +230,10 @@ footer.editorial-footer .footer-sources a {
   }
 }
 @media (max-width: 900px) {
+  header.topbar.editorial-topbar:has(nav.mainnav.open) {
+    /* 整个抽屉高于正文的固定分享条，仍低于全局搜索弹层。 */
+    z-index: 40;
+  }
   header.topbar.editorial-topbar {
     min-height: 60px;
     gap: 6px;
