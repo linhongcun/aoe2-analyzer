@@ -50,10 +50,10 @@ export const UNIT_ALIAS_ROWS: readonly (readonly [number, string])[] = UNIT_ALIA
 const BUILD_ALIAS_TABLE: [string[], string[]][] = [
   [['斥候', '斥候快攻'], ['scouts-18']],
   [['弓兵'], ['archers-19']],
-  [['直城骑士'], ['fast-castle-boom']],
+  [['直城骑士'], ['fast-castle-knights']],
   [
     ['直城', '速生城堡', '速升城堡', 'fast castle'],
-    ['fast-castle-boom', 'drush-fc'],
+    ['fast-castle-boom', 'drush-fc', 'fast-castle-knights'],
   ],
   [['黑快直城'], ['drush-fc']],
   [['黑快弓兵'], ['maa-archers-18']],

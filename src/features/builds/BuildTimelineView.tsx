@@ -105,7 +105,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   const span = minutes * 60;
   const pct = (t: number) => `${(Math.min(span, Math.max(0, t)) / span) * 100}%`;
   const w = (a: number, b: number) => `${(Math.max(0, Math.min(span, b) - Math.max(0, a)) / span) * 100}%`;
-  const every = minutes > 30 ? 5 : minutes > 15 ? 2 : 1;
+  const every = minutes > 30 ? 5 : minutes > 10 ? 2 : 1;
   const ticks = Array.from({ length: minutes + 1 }, (_, i) => i).filter((m) => m % every === 0);
   const target = v.ages.find((a) => a.age === (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]) ?? v.ages[v.ages.length - 1];
   const targetZh = AGE_ZH[bo.target.age]!;
@@ -360,6 +360,34 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
         </p>
       </div>
 
+      {['fast-castle-boom', 'fast-castle-knights'].includes(bo.id) && (
+        <p className="note">
+          城堡后选择：
+          <Link className="ulink" to="/builds?bo=fast-castle-boom">
+            暴经济
+          </Link>
+          {' · '}
+          <Link className="ulink" to="/builds?bo=fast-castle-knights">
+            转骑士
+          </Link>
+          （沿用相同前半段）
+        </p>
+      )}
+      {['hybrid-fish-18', 'fast-castle-knights'].includes(bo.id) && (
+        <details className="bo-sources">
+          <summary>开局来源</summary>
+          <ul>
+            {(bo.sources ?? []).map((s) => (
+              <li key={s.url}>
+                <a className="ulink" href={s.url} target="_blank" rel="noopener noreferrer">
+                  {s.title}
+                </a>
+                （核对：{s.accessed}）
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
       {/* 开局：电脑为下拉，手机为横滑胶囊 + 「设置」 */}
       <div className="tl-params" role="group" aria-label="参数">
         <label className="tl-ctl tl-desk-only">

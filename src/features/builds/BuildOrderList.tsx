@@ -59,7 +59,8 @@ export default function BuildOrderList() {
       {buildOrders.map((b) => (
         <details key={b.id} className="bo" data-t="build-order">
           <summary>
-            <b>{b.name.zh}</b> <span className="note">{b.name.en}</span> · {b.target.vils} 人口{AGE[b.target.age]}
+            <b>{b.name.zh}</b> <span className="note">{b.name.en}</span> · {b.target.vils} {b.id === 'hybrid-fish-18' ? '村民' : '人口'}
+            {AGE[b.target.age]}
             {meta?.[b.id]?.time && (
               <>
                 {' · '}

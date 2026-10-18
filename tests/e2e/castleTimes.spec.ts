@@ -37,12 +37,12 @@ test('开局列表页不再有「计算修正中」', async ({ page }) => {
   await expect(page.locator('[data-pending]')).toHaveCount(0);
 });
 
-test('列表页时间 = 时间线页模拟时间（6 个开局），没有旧的手写时间', async ({ page }) => {
+test('列表页时间 = 时间线页模拟时间（8 个开局），没有旧的手写时间', async ({ page }) => {
   await page.goto('#/builds');
   const items = page.locator('[data-t="build-order"]');
   await expect(items.first().locator('[data-t="bo-time"]')).toBeAttached();
   const n = await items.count();
-  expect(n).toBe(6);
+  expect(n).toBe(8);
   const rows: { id: string; time: string }[] = [];
   for (let i = 0; i < n; i++) {
     const href = await items.nth(i).locator('a[href*="bo="]').first().getAttribute('href');

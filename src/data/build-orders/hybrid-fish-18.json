@@ -1,0 +1,175 @@
+{
+  "id": "hybrid-fish-18",
+  "name": {
+    "zh": "混合图速封（18 村民、3 渔船）",
+    "en": "Hybrid: 18 Villagers and 3 Fishing Ships"
+  },
+  "style": "other",
+  "civs": [],
+  "map": "混合图 / 近岸安全渔场",
+  "difficulty": "intermediate",
+  "target": {
+    "age": 2,
+    "vils": 18,
+    "time": "时间以模拟结果为准"
+  },
+  "summary": "单码头生产 3 艘渔船，18 村民点封建。来源称 19-pop（村民加侦察），本站明确区分村民、渔船和总人口；第三艘进队列后研究织布机。",
+  "sources": [
+    {
+      "title": "AoE Buddy — Generic 19-pop Hybrid",
+      "url": "https://aoebuddy.com/build-orders/18-fishing-ship-build",
+      "author": "Survivalist（AoE Buddy 整理）",
+      "accessed": "2026-10-18"
+    }
+  ],
+  "license": "中文步骤为本站原创说明，仅参考公开攻略中的分配事实；来源正文未授予转载许可，未复制其表述。游戏内容 © Microsoft。",
+  "review": {
+    "status": "reviewed",
+    "by": "Codex（来源与数据核对）",
+    "date": "2026-10-18",
+    "notes": "核对公开来源、固定 .dat 和模拟回归；不代表人工 ACCEPT 或产品设计签字。"
+  },
+  "steps": [
+    {
+      "vils": 3,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "build",
+          "count": 3
+        },
+        {
+          "type": "build",
+          "building": 70,
+          "count": 2
+        }
+      ],
+      "note": "开局盖两座房子，完成后采肉；房屋步骤为本站补充。",
+      "houseText": ["盖两座房子，完成后"],
+      "siteAdded": true
+    },
+    {
+      "vils": 6,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "hunt",
+          "count": 3,
+          "from": "build"
+        },
+        {
+          "type": "gather",
+          "task": "hunt",
+          "count": 3
+        }
+      ],
+      "note": "新增 3 人采肉；优先猎物，羊作为后备。"
+    },
+    {
+      "vils": 10,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "wood",
+          "count": 4
+        },
+        {
+          "type": "build",
+          "building": 562
+        }
+      ],
+      "note": "新增 4 人砍木，建伐木场。"
+    },
+    {
+      "vils": 11,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "build",
+          "count": 1
+        },
+        {
+          "type": "build",
+          "building": 45
+        }
+      ],
+      "note": "新增村民去水边建一座码头，木材由伐木村民供应。"
+    },
+    {
+      "vils": 11,
+      "actions": [
+        {
+          "type": "train",
+          "unit": 13,
+          "count": 3
+        },
+        {
+          "type": "gather",
+          "task": "wood",
+          "count": 1,
+          "from": "build"
+        }
+      ],
+      "note": "连续排 3 艘渔船，建完码头的村民回去砍木。渔船训练完成后才开始捕鱼。"
+    },
+    {
+      "vils": 13,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "wood",
+          "count": 2
+        }
+      ],
+      "note": "再加 2 人伐木，共 7 人砍木，为渔船和房屋供木。"
+    },
+    {
+      "vils": 18,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "hunt",
+          "count": 5
+        },
+        {
+          "type": "research",
+          "tech": 22
+        },
+        {
+          "type": "ageUp",
+          "age": 2
+        }
+      ],
+      "note": "食物村民增至 11 人。第三艘渔船入队后研究织布机，攒够食物点封建。",
+      "phase": "feudal-click"
+    },
+    {
+      "vils": 18,
+      "actions": [
+        {
+          "type": "gather",
+          "task": "wood",
+          "count": 6,
+          "from": "hunt"
+        },
+        {
+          "type": "gather",
+          "task": "gold",
+          "count": 4,
+          "from": "hunt"
+        },
+        {
+          "type": "build",
+          "building": 584
+        }
+      ],
+      "note": "升时代时调成 13 木、4 金、1 食物，建采矿场；额外前置建筑者未单独模拟。"
+    },
+    {
+      "vils": 18,
+      "actions": [],
+      "note": "到封建：侦察到敌方码头可考虑喷火船；没有敌方码头时用箭船保护渔船。后续军舰未包含在本条时间线。",
+      "phase": "feudal"
+    }
+  ]
+}

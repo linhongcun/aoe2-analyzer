@@ -168,6 +168,12 @@ describe('#42 houseText 精确片段（Steve 定稿）：划掉的片段与剩�
     ['scouts-18', 1, ['盖房的 '], '3 人与前 3 个新村民在城镇中心下吃羊（共 6 人）。'],
     ['scouts-18', 4, ['先盖房子，再'], '第 10 个到浆果旁建磨坊并采浆果。'],
   ];
+  CASES.push(
+    ...CASES.filter(([id]) => id === 'fast-castle-boom').map(
+      ([, i, struck, rest]) => ['fast-castle-knights', i, struck, rest] as [string, number, string[], string],
+    ),
+  );
+  CASES.push(['hybrid-fish-18', 0, ['盖两座房子，完成后'], '开局采肉；房屋步骤为本站补充。']);
   it.each(CASES)('%s 第 %i 步（下标）', (id, i, struck, rest) => {
     const s = bo(id).steps[i]!;
     const parts = noteParts(s.note!, s.houseText, true);

@@ -167,12 +167,14 @@ describe('C 白名单', () => {
       expect(simSupport(E, c, buildOrders).supported, c).toBe(true);
     }
   });
-  it('19 个白名单文明 × 全部开局：每步库存、时间和升时代与 release/v0.7.0 基线完全相同', () => {
+  it('19 个白名单文明 × v0.7.0 原有开局：每步库存、时间和升时代与基线完全相同', () => {
     const B = baseline as Record<string, Record<string, unknown>>;
     expect(Object.keys(B).sort()).toEqual([...WHITELIST].sort());
     for (const c of WHITELIST) {
-      expect(Object.keys(B[c]!).sort(), c).toEqual(buildOrders.map((b) => b.id).sort());
-      for (const b of buildOrders) {
+      expect(Object.keys(B[c]!)).toHaveLength(6);
+      for (const id of Object.keys(B[c]!)) {
+        const b = buildOrders.find((b) => b.id === id)!;
+        expect(b, `历史开局 ${id} 必须仍存在`).toBeDefined();
         const tl = run(b.id, c);
         const got = {
           steps: tl.steps.map((s) => ({ doneAt: s.doneAt, stock: s.stock })),

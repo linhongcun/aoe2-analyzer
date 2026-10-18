@@ -458,7 +458,7 @@ test('data version badge links to about-data page with pins and patch notes', as
 test('build orders read-only list renders all entries with sources', async ({ page }) => {
   await page.goto('./#/builds');
   const items = page.locator('[data-t="build-order"]');
-  await expect(items).toHaveCount(6);
+  await expect(items).toHaveCount(8);
   await items.first().locator('summary').click();
   await expect(items.first()).toContainText('来源');
   await expect(items.first().locator('a[href*="aoe2guide.com"]')).toHaveCount(1);
