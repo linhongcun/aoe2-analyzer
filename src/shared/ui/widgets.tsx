@@ -81,50 +81,56 @@ export function Radar({ list, id }: { list: Civ[]; id?: string }) {
     const cv = ref.current;
     const x = cv?.getContext('2d');
     if (!cv || !x) return;
-    const css = getComputedStyle(cv);
-    const tok = (name: string) => css.getPropertyValue(name).trim();
-    const COL = [tok('--color-accent'), tok('--color-link')];
-    const W = cv.width,
-      H = cv.height,
-      cx = W / 2,
-      cy = H / 2,
-      R = Math.min(W, H) / 2 - 40,
-      n = AXES.length;
-    const ang = (i: number) => (i / n) * 2 * Math.PI - Math.PI / 2;
-    x.clearRect(0, 0, W, H);
-    x.font = '13px sans-serif';
-    for (let r = 1; r <= 5; r++) {
-      x.beginPath();
-      for (let i = 0; i <= n; i++) {
-        const p = (R * r) / 5;
-        x.lineTo(cx + p * Math.cos(ang(i)), cy + p * Math.sin(ang(i)));
+    const draw = () => {
+      const css = getComputedStyle(cv);
+      const tok = (name: string) => css.getPropertyValue(name).trim();
+      const COL = [tok('--color-accent'), tok('--color-link')];
+      const W = cv.width,
+        H = cv.height,
+        cx = W / 2,
+        cy = H / 2,
+        R = Math.min(W, H) / 2 - 40,
+        n = AXES.length;
+      const ang = (i: number) => (i / n) * 2 * Math.PI - Math.PI / 2;
+      x.clearRect(0, 0, W, H);
+      x.font = '13px sans-serif';
+      for (let r = 1; r <= 5; r++) {
+        x.beginPath();
+        for (let i = 0; i <= n; i++) {
+          const p = (R * r) / 5;
+          x.lineTo(cx + p * Math.cos(ang(i)), cy + p * Math.sin(ang(i)));
+        }
+        x.strokeStyle = tok('--color-border');
+        x.stroke();
       }
-      x.strokeStyle = tok('--color-border');
-      x.stroke();
-    }
-    AXES.forEach((l, i) => {
-      const a = ang(i);
-      x.beginPath();
-      x.moveTo(cx, cy);
-      x.lineTo(cx + R * Math.cos(a), cy + R * Math.sin(a));
-      x.stroke();
-      x.fillStyle = tok('--color-text');
-      x.textAlign = 'center';
-      x.fillText(l, cx + (R + 22) * Math.cos(a), cy + (R + 18) * Math.sin(a) + 4);
-    });
-    list.forEach((c, k) => {
-      x.beginPath();
-      c.s.forEach((s, i) => x.lineTo(cx + ((R * s) / 10) * Math.cos(ang(i)), cy + ((R * s) / 10) * Math.sin(ang(i))));
-      x.closePath();
-      x.globalAlpha = 0.3;
-      x.fillStyle = COL[k]!;
-      x.fill();
-      x.globalAlpha = 1;
-      x.strokeStyle = COL[k]!;
-      x.lineWidth = 2;
-      x.stroke();
-      x.lineWidth = 1;
-    });
+      AXES.forEach((l, i) => {
+        const a = ang(i);
+        x.beginPath();
+        x.moveTo(cx, cy);
+        x.lineTo(cx + R * Math.cos(a), cy + R * Math.sin(a));
+        x.stroke();
+        x.fillStyle = tok('--color-text');
+        x.textAlign = 'center';
+        x.fillText(l, cx + (R + 22) * Math.cos(a), cy + (R + 18) * Math.sin(a) + 4);
+      });
+      list.forEach((c, k) => {
+        x.beginPath();
+        c.s.forEach((s, i) => x.lineTo(cx + ((R * s) / 10) * Math.cos(ang(i)), cy + ((R * s) / 10) * Math.sin(ang(i))));
+        x.closePath();
+        x.globalAlpha = 0.3;
+        x.fillStyle = COL[k]!;
+        x.fill();
+        x.globalAlpha = 1;
+        x.strokeStyle = COL[k]!;
+        x.lineWidth = 2;
+        x.stroke();
+        x.lineWidth = 1;
+      });
+    };
+    draw();
+    const theme = new MutationObserver(draw);
+    theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => theme.disconnect();
   }, [list]);
   return <canvas id={id} ref={ref} width={440} height={440} />;
 }

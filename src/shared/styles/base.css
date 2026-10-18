@@ -33,18 +33,21 @@ body {
   background: var(--color-bg);
   color: var(--c-text);
   font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-variant-numeric: tabular-nums;
 }
 header {
   text-align: center;
   padding: 18px;
-  border-bottom: 2px solid var(--c-bronze);
+  border-bottom: 1px solid var(--color-border);
   background: var(--color-surface);
 }
 h1 {
   margin: 0;
-  color: var(--c-gold);
-  text-shadow: 0 0 8px var(--color-shadow);
-  letter-spacing: 2px;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  line-height: var(--lh-tight);
 }
 .note {
   color: var(--c-muted);
@@ -62,8 +65,8 @@ select,
 input {
   background: var(--c-control);
   color: var(--c-text);
-  border: 1px solid var(--c-bronze);
-  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   padding: 8px 12px;
   font: inherit;
   font-size: 15px;
@@ -71,10 +74,13 @@ input {
 button {
   cursor: pointer;
 }
-button.on,
 button:hover {
-  background: var(--c-bronze);
-  color: var(--c-bg-deep);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+button.on {
+  background: var(--color-selected, var(--color-text));
+  color: var(--color-on-selected, var(--color-surface));
 }
 main {
   max-width: 1150px;
@@ -96,15 +102,16 @@ main {
 .card {
   background: var(--color-surface);
   border: 1px solid var(--c-border);
-  border-radius: 10px;
-  padding: 12px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-1);
   cursor: pointer;
   transition: 0.2s;
 }
 .card:hover {
-  transform: translateY(-3px);
-  border-color: var(--c-gold);
-  box-shadow: 0 4px 14px var(--color-shadow);
+  transform: translateY(-1px);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-2);
 }
 .card h3 {
   margin: 0;
@@ -113,7 +120,7 @@ main {
 .tag {
   display: inline-block;
   background: var(--c-tag);
-  border-radius: 4px;
+  border-radius: var(--radius-pill);
   padding: 1px 6px;
   margin: 4px 3px 0 0;
   font-size: 12px;
@@ -146,9 +153,16 @@ table {
 }
 td,
 th {
-  border: 1px solid var(--c-tag);
-  padding: 6px;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  padding: 10px 8px;
   vertical-align: top;
+}
+th {
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  text-align: left;
 }
 .win {
   color: var(--c-good);
@@ -628,7 +642,6 @@ h2 .dlcb {
   outline: 1px solid var(--c-bronze);
 }
 .simt.txt {
-  opacity: 0.75;
   cursor: default;
 }
 .simt.late small {
@@ -1645,35 +1658,110 @@ table.ediff td.dn {
 }
 
 /* issue 107 交换比 */
-.pk-trade { margin: 8px 0; }
-.pk-trade-main { margin: 0; }
-.pk-trade-value { white-space: nowrap; font-variant-numeric: tabular-nums; }
-.pk-trade .note { margin: 2px 0 0; }
+.pk-trade {
+  margin: 8px 0;
+}
+.pk-trade-main {
+  margin: 0;
+}
+.pk-trade-value {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.pk-trade .note {
+  margin: 2px 0 0;
+}
 .pk-trade .nw,
-.pk-trade .res { white-space: nowrap; }
+.pk-trade .res {
+  white-space: nowrap;
+}
 
 /* issue 77 文明开局阶段和流程入口 */
-.civ-opening li { margin-block: 8px; }
-.civ-opening-links { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
-.civ-opening-links .ulink { min-height: 44px; }
+.civ-opening li {
+  margin-block: 8px;
+}
+.civ-opening-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.civ-opening-links .ulink {
+  min-height: 44px;
+}
 /* issue 105 伤害拆解 */
-.damage-breakdown { margin-block: 16px; }
-.damage-breakdown summary { min-height: 44px; padding: 12px; cursor: pointer; font-weight: 600; }
-.damage-breakdown section { padding: 12px; border-top: 1px solid var(--line); }
-.damage-breakdown li { margin-block: 8px; overflow-wrap: anywhere; }
-.damage-change { display: block; }
+.damage-breakdown {
+  margin-block: 16px;
+}
+.damage-breakdown summary {
+  min-height: 44px;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.damage-breakdown section {
+  padding: 12px;
+  border-top: 1px solid var(--line);
+}
+.damage-breakdown li {
+  margin-block: 8px;
+  overflow-wrap: anywhere;
+}
+.damage-change {
+  display: block;
+}
 /* issue 106 各时代对比 */
-.age-comparison { margin-block: 16px; }
-.age-comparison summary { min-height: 44px; padding: 12px; cursor: pointer; font-weight: 600; }
-.age-comparison section { padding: 12px; border-top: 1px solid var(--line); }
-.age-table { width: 100%; table-layout: fixed; }
-.age-table th { overflow-wrap: anywhere; }
-.age-table td { white-space: nowrap; }
+.age-comparison {
+  margin-block: 16px;
+}
+.age-comparison summary {
+  min-height: 44px;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.age-comparison section {
+  padding: 12px;
+  border-top: 1px solid var(--line);
+}
+.age-table {
+  width: 100%;
+  table-layout: fixed;
+}
+.age-table th {
+  overflow-wrap: anywhere;
+}
+.age-table td {
+  white-space: nowrap;
+}
 /* issue 104 回放 */
-.battle-replay { margin-block: 16px; }
-.replay-field { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
-.replay-field progress { width: 100%; }
-.replay-field p { overflow-wrap: anywhere; }
-.battle-replay input[type='range'] { width: 100%; min-height: 44px; box-sizing: border-box; margin-inline: 0; }
-.replay-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.replay-controls button, .replay-controls select { min-height: 44px; }
+.battle-replay {
+  margin-block: 16px;
+}
+.replay-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.replay-field progress {
+  width: 100%;
+}
+.replay-field p {
+  overflow-wrap: anywhere;
+}
+.battle-replay input[type='range'] {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  margin-inline: 0;
+}
+.replay-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.replay-controls button,
+.replay-controls select {
+  min-height: 44px;
+}

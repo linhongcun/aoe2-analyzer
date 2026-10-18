@@ -289,6 +289,22 @@ export default function SimPanel(p: SimPanelProps) {
           </div>
         </div>
         <div>
+          <section className="sim-summary" aria-label="累计研究">
+            <div>
+              <h4>累计研究费用（{p.sel.size} 项）</h4>
+              <div className="sim-summary-cost">
+                <CostView c={tot.cost} />
+              </div>
+            </div>
+            <div>
+              <span className="note">累计研究时长</span>
+              <strong className="sim-summary-time">
+                <StatIcon k="time" t="研究时间" />
+                {tot.time}
+                <small>秒</small>
+              </strong>
+            </div>
+          </section>
           <table className="stat simtab">
             <tbody>
               <tr>
@@ -302,13 +318,6 @@ export default function SimPanel(p: SimPanelProps) {
           </table>
           <BonusTable B={p.base.bonus} S={p.cur.bonus} C={p.cmpStats?.bonus ?? null} cmpLabel={`${civByEn(p.cmp)?.zh ?? ''} 满`} />
           {p.armorClasses && <ArmorClasses list={p.armorClasses} />}
-          <div className="posbox">
-            <h4>累计研究费用（{p.sel.size} 项）</h4>
-            <p style={{ fontSize: 18 }}>
-              <CostView c={tot.cost} />　<StatIcon k="time" t="研究时间" />
-              {tot.time}s
-            </p>
-          </div>
           <p className="note">
             <Icon name="triangle-alert" className="ic warn" />
             数值为近似：基于 aoe2techtree 基础属性 + 手工编码的通用科技与部分文明加成（来源：游戏内说明与 AoE2 Fandom

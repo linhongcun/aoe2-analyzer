@@ -3,16 +3,33 @@ import { civs } from '../../../data';
 import { TOOLS, WIKI, type Section } from '../../../app/nav/sections';
 import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
+import { DLCS } from '../../../domain/dlc';
 
-const Card = ({ s }: { s: Section }) => (
+const COUNTS: Record<string, number> = {
+  ...__CATALOG_COUNTS__,
+  civs: civs.length,
+  tree: civs.length,
+  bonuses: civs.reduce((n, c) => n + c.bon.length + 1, 0),
+  dlc: DLCS.length,
+};
+const Card = ({ s, tool = false }: { s: Section; tool?: boolean }) => (
   <Link className="hcard" to={s.path} data-k={s.key}>
     <Icon name={s.icon} className="ic hc-ic" />
-    <div>
-      <h3>
-        {s.label} <small>{s.en}</small>
-      </h3>
+    {COUNTS[s.key] != null && (
+      <span className="hc-count" aria-hidden="true">
+        {COUNTS[s.key]}
+      </span>
+    )}
+    <div className="hc-body">
+      <h3>{s.label}</h3>
+      <small className="hc-en">{s.en}</small>
       <p className="note">{s.desc}</p>
     </div>
+    {tool && (
+      <span className="hc-open">
+        打开 <Icon name="arrow-right" />
+      </span>
+    )}
   </Link>
 );
 const POPULAR = ['Franks', 'Britons', 'Mongols', 'Persians', 'Hindustanis', 'Armenians', 'Romans', 'Shu'];
@@ -22,17 +39,17 @@ export default function Home() {
     <section id="home" className="pane">
       <div className="hero">
         <h1>
-          <Icon name="swords" className="ic hic" /> 帝国时代 II 决定版 · 分析器
+          帝国时代 II 决定版 <span>分析器</span>
         </h1>
-        <p className="note">文明、单位、科技百科 + 团战排位工具。数据来源 aoe2techtree（2026-10）。</p>
+        <p className="note">查资料、选文明、练开局，让每次决策都有依据。</p>
         <button className="herosearch" onClick={() => dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}>
           <Icon name="search" />
           <span>搜索文明、单位、科技、开局…</span>
           <kbd>Ctrl K</kbd>
         </button>
         <div className="quickciv">
-          {civs
-            .filter((c) => POPULAR.includes(c.en))
+          {POPULAR.map((en) => civs.find((c) => c.en === en)!)
+            .filter(Boolean)
             .map((c) => (
               <Link key={c.en} className="civchip" to={`/civ/${c.en}`}>
                 <CivIcon c={c} />
@@ -53,7 +70,7 @@ export default function Home() {
       <h2 className="hsec">工具</h2>
       <div className="hgrid">
         {TOOLS.map((s) => (
-          <Card key={s.key} s={s} />
+          <Card key={s.key} s={s} tool />
         ))}
       </div>
     </section>
