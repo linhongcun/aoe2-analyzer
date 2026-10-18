@@ -300,6 +300,25 @@ for (const width of WIDTHS)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 
+for (const width of WIDTHS)
+  test(`#6 @${width}：射程说明锚定属性卡且不超出屏幕`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await ready(page, 'unit/281', '#unit h1');
+    const card = page.locator('#unit [data-stat="rng"]');
+    await card.getByRole('button', { name: '射程说明', exact: true }).click();
+    const pop = page.getByRole('dialog', { name: '射程说明', exact: true });
+    await expect(pop).toBeVisible();
+    const anchor = (await card.boundingBox())!;
+    const box = (await pop.boundingBox())!;
+    expect(box.y).toBeGreaterThanOrEqual(anchor.y + anchor.height);
+    expect(box.y).toBeLessThanOrEqual(anchor.y + anchor.height + 16);
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(width);
+    await page.keyboard.press('Escape');
+    await expect(pop).toBeHidden();
+    await expect(card.getByRole('button', { name: '射程说明', exact: true })).toBeFocused();
+  });
+
 test('#6 文明评分明确为主观数据，仅两个关键评分强调，开局建议置首', async ({ page }) => {
   await ready(page, 'civ/Franks', '#detail h1');
   const opening = page.locator('#detail .dmain > section').first();
