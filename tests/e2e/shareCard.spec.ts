@@ -32,7 +32,7 @@ test.describe('#19 分享卡', () => {
     const dlg = await cardMatchesSummary(page);
     await expect(dlg.locator('[data-t="card-cell-0"] .s')).toHaveText(/^误差 \d+:\d\d–\d+:\d\d$/);
     await expect(dlg.locator('[data-t="card-title"]')).toHaveText(/^法兰克·速升城堡暴经济，约 \d+:\d\d 到城堡，卡在木头$/);
-    await expect(dlg.locator('[data-t="card-url"]')).toHaveText(/#\/builds\?bo=fast-castle-boom&civ=Franks$/);
+    await expect(dlg.locator('[data-t="card-url"]')).toHaveText(/\/builds\/fast-castle-boom\/\?civ=Franks$/);
     // 游戏版本取自 scripts/data_sources.json 的 patch.build（构建时注入），不硬编码
     const build = (JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { patch: { build: number } }).patch.build;
     await expect(dlg.locator('[data-t="card-basis"]')).toHaveText(`按法兰克计 · 走路 4 格 · 游戏版本 ${build}`);

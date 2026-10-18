@@ -1,3 +1,4 @@
+import ShareImage from '../../share/ShareImage';
 /** 工具：单位 PK（1v1 / N vs M / 等资源）。属性复用科技模拟器引擎，战斗计算见 domain/duel.ts */
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -493,6 +494,15 @@ function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
           </small>
         )}
       </h3>
+      <ShareImage
+        title={`${A.u.zh} 对 ${B.u.zh}：${wn}`}
+        stats={[
+          ['模拟用时', `${r1(r.duration)} 秒`],
+          ['剩余生命', r1(r.remaining)],
+          ['双方数量', '1 / 1'],
+        ]}
+        note="忽略射程拉扯与操作；完整文明和科技参数见链接。"
+      />
       <CounterSummary a={A.F} b={B.F} />
       <table className="stat duel-tab">
         <thead>
@@ -573,6 +583,15 @@ function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb
           · 用时 {r1(g.duration)}s · 剩余 {g.winner === 'b' ? g.bAlive : g.aAlive} 个单位、总生命 {g.hpLeft}
         </small>
       </h3>
+      <ShareImage
+        title={`${na} ${A.u.zh} 对 ${nb} ${B.u.zh}：${wn}`}
+        stats={[
+          ['模拟用时', `${r1(g.duration)} 秒`],
+          ['A 存活', g.aAlive],
+          ['B 存活', g.bAlive],
+        ]}
+        note="群战不模拟走位、围墙与城镇中心火力；完整参数见链接。"
+      />
       {bud > 0 && (
         <p className="note">
           预算 {bud}：A {A.u.zh} × {na}（单价 {costSum(A.disc.cost)}，投入 {na * costSum(A.disc.cost)}），B {B.u.zh} × {nb}（单价 {costSum(B.disc.cost)}，投入{' '}

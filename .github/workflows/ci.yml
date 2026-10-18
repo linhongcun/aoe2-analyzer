@@ -53,7 +53,7 @@ jobs:
       - name: Build-order data check
         run: npm run bo:check
       - name: Build
-        run: npm run build
+        run: npm run build && git diff --exit-code -- src/data/page-metadata.json
       - name: Playwright smoke (chromium)
         run: npx playwright test --reporter=line
       - uses: actions/upload-artifact@v4
