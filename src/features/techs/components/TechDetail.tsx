@@ -36,7 +36,20 @@ export default function TechDetail() {
   // 涉及单位用结构化效果（与「作用对象」同源），不再按说明文字匹配单位名（#13）
   const affected = techAffects(t, core.units, core.buildings);
   const rel = affectedUnits(affected, core.fam);
-  const effectStats = [...new Map(affected.flatMap((group) => group.rows.flatMap((row) => row.parts)).map((part) => [part.text, part])).values()];
+  // 条件与对象是效果的一部分；相同的“攻击 +1”不能跨建筑或组合科技去重。
+  const effectCards = affected.flatMap((group, groupIndex) => {
+    const conditional = group.group.startsWith('组合触发');
+    const label = conditional ? core.techs.reduce((text, tech) => text.replaceAll(tech.en, tech.zh), group.group) : `${group.group}（基础效果）`;
+    return group.rows.map((row, rowIndex) => {
+      const targets = [...new Set([...row.units.map((unit) => unit.zh), ...row.buildings.map((building) => building.zh)])];
+      return {
+        key: `effect-${groupIndex}-${rowIndex}`,
+        label,
+        value: row.effect,
+        note: `作用对象：${targets.slice(0, 4).join('、')}${targets.length > 4 ? ` 等 ${targets.length} 类单位或建筑` : ''}`,
+      };
+    });
+  });
   const civList = (
     <>
       <h4>
@@ -108,12 +121,10 @@ export default function TechDetail() {
                   </div>
                 </dl>
               </DetailSection>
-              {effectStats.length > 0 && (
+              {effectCards.length > 0 && (
                 <div className="detail-effect-tiles">
-                  <StatTiles
-                    label="科技效果"
-                    stats={effectStats.map((part, index) => ({ key: `effect-${index}`, label: '效果', value: part.text, icon: part.icon, accent: index < 2 }))}
-                  />
+                  <p className="note">基础效果与需要额外科技的组合效果分别列出；请结合生效条件与作用对象阅读，完整说明见「作用对象」。</p>
+                  <StatTiles label="科技效果" stats={effectCards.map((card, index) => ({ ...card, accent: index < 2 }))} />
                 </div>
               )}
               {t.desc.trim() && (
