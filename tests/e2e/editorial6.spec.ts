@@ -155,6 +155,7 @@ test('#6 主题选择经刷新保留，系统选项响应系统变化，分享 U
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   expect(page.url()).toBe(url);
   await page.locator('#unit .dhead').getByRole('button', { name: '复制链接', exact: true }).click();
+  await expect(page.locator('#unit .detail-copy [role="status"]')).toHaveText('链接已复制');
   const copied = new URL(await page.evaluate(() => navigator.clipboard.readText()));
   expect(copied.pathname).toMatch(/\/unit\/281\/$/);
   expect(copied.searchParams.has('theme')).toBe(false);

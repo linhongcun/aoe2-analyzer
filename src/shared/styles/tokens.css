@@ -38,7 +38,7 @@
   --color-route-current: #1d1d1f;
   --color-on-route-current: #ffffff;
   --color-rating: #aeaeb2;
-  --color-decorative: #e8e8ed;
+  --color-decorative: #909096; /* 大号辅助数字在白色卡片上满足 3:1 */
   --color-route-selected: var(--color-route-current);
   --color-on-route-selected: var(--color-on-route-current);
   --color-on-bad: #ffffff;
@@ -151,7 +151,7 @@
   --color-route-current: #48484a;
   --color-on-route-current: #ffffff;
   --color-rating: #636366;
-  --color-decorative: #38383a;
+  --color-decorative: #77777d;
   --color-on-bad: #000000;
   --color-on-warn: #000000;
   --color-timeline-villager: #636366;
