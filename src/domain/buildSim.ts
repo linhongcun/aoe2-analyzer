@@ -17,6 +17,7 @@ interface EffectRow {
 }
 /** eco.json 中模拟需要的部分 */
 export interface EcoData {
+  fishingShip?: { unit: number; workRate: number; carry: number; speed: number; deepFishMultiplier?: number };
   villager: { trainTime: number; cost: Cost; speed: number; carry: number; tasks: Record<string, { workRate: number; carry: number }> };
   units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number>; class?: number }>;
   buildings: Record<string, { buildTime: number; cost: Cost }>;
@@ -206,6 +207,7 @@ interface Mods {
   rate: Record<string, number>;
   carry: Record<string, number>;
   speed: number;
+  unitSpeed: Record<string, number>;
   /** 城镇中心工作速度倍率，键为 unit:<TC 单位 id>；计时时取当前时代的 TC（见 TC_BY_AGE） */
   tcRate: Record<string, number>;
   costMul: Record<string, Partial<Record<Res | 'all', number>>>;
@@ -252,6 +254,7 @@ function baseMods(): Mods {
     rate: {},
     carry: {},
     speed: 1,
+    unitSpeed: {},
     tcRate: {},
     costMul: {},
     timeMul: {},
@@ -314,6 +317,7 @@ function applyEffects(m: Mods, effects: EffectRow['effects']) {
         if (x.op === 'mul') mul(m.carry, key);
         else m.carry['add:' + key] = (m.carry['add:' + key] ?? 0) + v;
       } else if (x.attr === 'speed' && key === 'villager' && x.op === 'mul') m.speed *= v;
+      else if (x.attr === 'speed' && x.op === 'mul') mul(m.unitSpeed, key);
       else if (x.attr in COST_ATTR && x.op === 'mul') {
         const id = key === 'villager' ? 'unit:83' : key;
         const r = COST_ATTR[x.attr]!;
@@ -431,6 +435,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const startVils = START_VILS[civ] ?? 3;
   for (let i = 0; i < startVils; i++) assign();
   let popCap = Math.min(200, 5 + m.popBonus);
+  let fishingShips = 0;
   let military = 1; // 侦察骑兵
   const built = new Map<number, number>([[TC, 1]]); // building id → 数量
   const constructions: Construction[] = [];
@@ -438,7 +443,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   /** 每座房子（含自动补房）付木开工的时刻，#42 匈奴对比「省下的木头」用 */
   const housePaidAt: number[] = [];
   const unitQueues = new Map<number, { p: Pending; left: number; unit: number }[]>(); // 训练建筑 → 队列
-  const unitBusy = new Map<number, number>(); // 训练建筑 → 当前单位剩余时间
+  const unitBusy = new Map<string, { job: { p: Pending; left: number; unit: number }; left: number }>(); // 训练建筑 → 当前单位剩余时间
   // TC
   let tcState: { kind: 'vil' | 'research'; left: number; p?: Pending; age?: number; tech?: number } | null = null;
   const tcResearch: Pending[] = [];
@@ -748,22 +753,26 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         finish(c.p, t);
       }
     }
-    // 4) 训练建筑
+    // 4) 每座训练建筑各有一个队列槽位；费用和人口仍在入队时预留。
     for (const [b, q] of unitQueues) {
-      if (!q.length) continue;
-      const cur = q[0]!;
-      let left = unitBusy.get(b);
-      if (left === undefined) {
-        const u = eco.units[cur.unit]!;
-        const clsT = !legacy && u.class !== undefined ? (m.timeMul['class:' + u.class] ?? 1) : 1; // 按类别的训练加速（阿兹特克军事单位）
-        left = ((u.timeAt?.[String(b)] ?? u.trainTime) * (m.timeMul['unit:' + cur.unit] ?? 1) * clsT) / (m.rate['unit:' + b] ?? 1);
+      for (let slot = 0; slot < (built.get(b) ?? 0); slot++) {
+        const key = b + ':' + slot;
+        let active = unitBusy.get(key);
+        if (!active) {
+          const job = q.shift();
+          if (!job) continue;
+          const u = eco.units[job.unit]!;
+          const clsT = !legacy && u.class !== undefined ? (m.timeMul['class:' + u.class] ?? 1) : 1;
+          active = { job, left: ((u.timeAt?.[String(b)] ?? u.trainTime) * (m.timeMul['unit:' + job.unit] ?? 1) * clsT) / (m.rate['unit:' + b] ?? 1) };
+          unitBusy.set(key, active);
+        }
+        active.left -= TICK;
+        if (active.left <= 1e-9) {
+          unitBusy.delete(key);
+          if (active.job.unit === eco.fishingShip?.unit) fishingShips++;
+          finish(active.job.p, t);
+        }
       }
-      left -= TICK;
-      if (left <= 1e-9) {
-        q.shift();
-        unitBusy.delete(b);
-        finish(cur.p, t);
-      } else unitBusy.set(b, left);
     }
     // 5) 城镇中心
     if (tcState) {
@@ -857,6 +866,15 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     for (const k of Object.keys(alloc) as Task[]) {
       const r = RES_TASK[k];
       if (r && alloc[k] > 0) stock[r] += alloc[k] * rate(k) * TICK * (1 + (m.depositBonus[r] ?? 0));
+    }
+    if (fishingShips && eco.fishingShip) {
+      const fish = eco.fishingShip;
+      const key = 'unit:' + fish.unit,
+        cls = 'class:' + eco.units[fish.unit]?.class;
+      const wr = fish.workRate * (fish.deepFishMultiplier ?? 1) * (m.rate[key] ?? 1) * (m.rate[cls] ?? 1);
+      const carry = fish.carry * (m.carry[key] ?? 1) * (m.carry[cls] ?? 1) + (m.carry['add:' + key] ?? 0) + (m.carry['add:' + cls] ?? 0);
+      const speed = fish.speed * (m.unitSpeed[key] ?? 1) * (m.unitSpeed[cls] ?? 1);
+      if (wr > 0 && carry > 0 && speed > 0) stock.food += ((fishingShips * carry) / (carry / wr + (2 * P.walkTiles) / speed)) * TICK;
     }
     if (nextStep >= nSteps && doneAt.every((x) => x !== null)) break;
     if (t >= MAX_T) {
@@ -971,7 +989,12 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
     buildingsDone: R.buildingsDone,
     anomalies: steps.flatMap((s) => s.anomalies).sort((a, b) => PRIO[a.type] - PRIO[b.type] || a.from - b.from),
     tcIdleTotal: R.tcIdleTotal,
-    model: { version: MODEL_VERSION, assumptions: ASSUMPTIONS },
+    model: {
+      version: MODEL_VERSION,
+      assumptions: bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
+        ? [...ASSUMPTIONS, '渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
+        : ASSUMPTIONS,
+    },
   };
 }
 
@@ -1163,12 +1186,19 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
     if (t.startsWith('class:') && !vil) {
       const cls = Number(t.slice(6));
       if (![...scope.units].some((u) => scope.unitClass.get(u) === cls)) return { kind: 'irrelevant', reason: '开局不涉及的单位/建筑/类别' };
+      if (
+        cls === scope.unitClass.get(13) &&
+        scope.units.has(13) &&
+        ['workRate', 'carry', 'speed'].includes(e.attr ?? '') &&
+        (e.op === 'mul' || (e.attr === 'carry' && e.op === 'add'))
+      )
+        return { kind: 'handled' };
       if (e.attr && (e.attr in COST_ATTR || e.attr === 'trainTime') && e.op === 'mul') return { kind: 'handled' };
       if (e.attr === 'trainTime' || e.attr === 'workRate' || e.attr === 'carry' || (e.attr ?? '') in COST_ATTR) return { kind: 'unknown' };
       return { kind: 'irrelevant', reason: '开局单位类别的非经济属性（攻防、生命等）不影响开局时间' };
     }
     if (!vil && !scope.units.has(id) && !scope.buildings.has(id)) return { kind: 'irrelevant', reason: '开局不涉及的单位/建筑/类别' };
-    if (e.attr === 'speed') return vil && e.op === 'mul' ? { kind: 'handled' } : { kind: 'irrelevant', reason: '非村民移速不影响开局时间' };
+    if (e.attr === 'speed') return (vil || id === 13) && e.op === 'mul' ? { kind: 'handled' } : { kind: 'irrelevant', reason: '非村民移速不影响开局时间' };
     if (FARM_UNITS.has(id) && e.attr === 'workRate')
       return { kind: 'unhandled', reason: '农田单位 workRate 与 task:farm 是否重复待 .dat 核实（罗马、斯拉夫）' };
     if (FARM_UNITS.has(id) || (TC_UNITS.has(id) && id !== TC && e.attr !== 'workRate'))

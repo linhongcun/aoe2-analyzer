@@ -104,6 +104,8 @@ def main():
     # #42 哥特：猎物/家畜所含食物（unit 资源储量 type 0），猎物倍率 res 268 的基数从这里读，不写死
     G = d['Civs'][0]['Units']; out['animals'] = {k: {'unit': uid, 'en': G[uid]['Name'], 'food': G[uid]['Food']} for k, uid in (('boar', 48), ('deer', 65), ('sheep', 594))}
     out['fishingShip'] = task_rec(13) | {'trainTime': U[13]['TrainTime'], 'cost': cost(U[13]['Cost'])}
+    # Deep-sea fish use class 5 gather task (action 5); retain multiplier from pinned .dat.
+    out['fishingShip']['deepFishMultiplier'] = next(t['Value'] for t in d['Tasks']['13'] if t['Action'] == 5 and t['Class'] == 5)
     memo = {}
 
     def age_of(i, depth=0):
