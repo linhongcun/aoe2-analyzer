@@ -5,6 +5,7 @@ import { countForTime, fmtClock, gatherModel, realCost, type GatherRes } from '.
 import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
 import { Icon } from '../../../shared/ui/Icon';
 import { minus } from './CostDiscount';
+import './real-cost-layout.css';
 
 const ORDER: GatherRes[] = ['Food', 'Wood', 'Gold', 'Stone'];
 
