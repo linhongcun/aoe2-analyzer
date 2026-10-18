@@ -52,7 +52,7 @@ async function openFilters(root: Locator, mobile: boolean) {
 
 test('#62 首页五个工具在桌面同一行显示', async ({ page }) => {
   await page.goto('./#/');
-  const cards = page.locator('#home .home-tools-grid .hcard');
+  const cards = page.locator('#home .hgrid:last-child .hcard');
   await expect(cards).toHaveCount(5);
   const tops = await cards.evaluateAll((items) => items.map((item) => Math.round(item.getBoundingClientRect().top)));
   expect(new Set(tops).size).toBe(1);
@@ -108,6 +108,11 @@ for (const width of WIDTHS)
       await expect(civRoot.locator('#cnt')).toHaveText(`${filteredCivs.length} / ${CIVS.length}`);
       if (mobile) {
         await expect(civFilters.toggle).toHaveText('筛选（2）');
+        await civRoot.locator('#ty').focus();
+        await page.keyboard.press('Escape');
+        await expect(civFilters.toggle).toBeFocused();
+        await expect(civFilters.panel).toBeHidden();
+        await civFilters.toggle.click();
         await civFilters.toggle.click();
         await expect(civFilters.panel).toBeHidden();
         await expect(civRoot.locator('#grid .card')).toHaveCount(filteredCivs.length);
@@ -131,7 +136,7 @@ for (const width of WIDTHS)
       await expect(civRoot.locator('#ty')).toHaveValue(FIRST_CIV.ty[0]!);
       await expect(civRoot.locator('#grid .card')).toHaveCount(filteredCivs.length);
       if (mobile) await civFilters.toggle.click();
-      await civFilters.panel.getByRole('button', { name: '清空筛选', exact: true }).click();
+      await civRoot.getByRole('button', { name: '清空筛选', exact: true }).click();
       for (const id of ['ty', 'cdlc', 'pos']) await expect(civRoot.locator('#' + id)).toHaveValue('');
       await expect(civRoot.locator('#cnt')).toHaveText(`${CIVS.length} / ${CIVS.length}`);
       // 沿用 useSticky 原有语义：路由间保留，完整刷新恢复默认。
@@ -167,7 +172,7 @@ for (const width of WIDTHS)
       await expect(techRoot.locator('#tt')).toHaveValue(FIRST_TECH.type);
       await expect(techRoot.locator('#tcnt')).toHaveText(`${filteredTechs.length} / ${TECHS.length}`);
       if (mobile) await techFilters.toggle.click();
-      await techFilters.panel.getByRole('button', { name: '清空筛选', exact: true }).click();
+      await techRoot.getByRole('button', { name: '清空筛选', exact: true }).click();
       for (const id of ['tt', 'ta', 'tdlc', 'tb']) await expect(techRoot.locator('#' + id)).toHaveValue('');
       await expect(techRoot.locator('#tcnt')).toHaveText(`${TECHS.length} / ${TECHS.length}`);
 
@@ -184,6 +189,9 @@ for (const width of WIDTHS)
       await expect(firstGroup).toHaveAttribute('open');
       await expect(firstGroup.locator('summary')).toBeFocused();
       await expect(firstGroup.locator('summary')).toBeInViewport();
+      const target = await firstGroup.locator('summary').boundingBox();
+      const header = await page.locator('header').boundingBox();
+      expect(target!.y).toBeGreaterThanOrEqual(header!.y + header!.height);
       await firstGroup.locator('a.tl-open').click();
       await expect(page).toHaveURL(/#\/builds\?bo=/);
       await expect(page.locator('.tl-steps')).toBeVisible();
@@ -192,13 +200,22 @@ for (const width of WIDTHS)
         await page.getByRole('button', { name: /^设置/ }).click();
         const settings = page.getByRole('dialog', { name: '设置', exact: true });
         await expect(settings.getByRole('slider', { name: '走路距离', exact: true })).toBeVisible();
+        const presets = await settings.getByRole('radiogroup', { name: '走路距离预设' }).boundingBox();
+        const distance = await settings.locator('.tl-settings-economy > .tl-ctl').boundingBox();
+        const autoHouse = await settings.getByRole('switch', { name: /自动造房/ }).boundingBox();
+        expect(distance!.y - presets!.y - presets!.height).toBeGreaterThanOrEqual(8);
+        expect(autoHouse!.y - distance!.y - distance!.height).toBeGreaterThanOrEqual(8);
         await page.keyboard.press('Escape');
         await expect(settings).toHaveCount(0);
         await expect(page.getByRole('button', { name: /^设置/ })).toBeFocused();
       } else {
         await expect(page.getByRole('slider', { name: '走路距离', exact: true })).toBeVisible();
+        const order = await page.getByRole('combobox', { name: '开局', exact: true }).boundingBox();
+        const economy = await page.locator('.tl-inline-settings .tl-settings-economy').boundingBox();
+        expect(economy!.y).toBeGreaterThanOrEqual(order!.y + order!.height);
       }
       await noOverflow(page);
+      await screenshot(page, info, 'timeline', width, theme);
 
       await ready(page, 'matchup', '.matchup-counter-link');
       const counterLinks = page.locator('.matchup-counter-list .matchup-counter-link');

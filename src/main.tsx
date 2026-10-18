@@ -5,6 +5,8 @@ import './shared/styles/tokens.css';
 import './shared/styles/base.css';
 import './shared/styles/layout.css';
 import './shared/styles/editorial.css';
+import './shared/styles/issue62-layout.css';
+import './shared/styles/issue62-cards.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

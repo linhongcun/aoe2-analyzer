@@ -4,7 +4,8 @@ import { civs } from '../../../data';
 import { TYPE_ZH } from '../../../domain/ratings';
 import type { CivType } from '../../../domain/types';
 import { CivIcon, DlcBadge } from '../../../shared/ui/art';
-import { DlcBar, DlcSelect, SearchInput } from '../../../shared/ui/widgets';
+import { DlcSelect, SearchInput } from '../../../shared/ui/widgets';
+import CatalogFilters from '../../../shared/ui/CatalogFilters';
 import { useSticky } from '../../../shared/utils/sticky';
 import { filterCivs } from '../logic/filter';
 
@@ -18,9 +19,23 @@ export default function CivList() {
   return (
     <section id="list" className="pane">
       <ListHead title="文明" desc="56 个文明 · 按类型、DLC、团战位置筛选" />
-      <div className="bar fbar">
-        <SearchInput id="q" value={q} onChange={setQ} placeholder="搜索文明（中/英）" />
-        <select id="ty" value={ty} onChange={(e) => setTy(e.target.value)}>
+      <CatalogFilters
+        search={<SearchInput id="q" value={q} onChange={setQ} placeholder="搜索文明（中/英）" />}
+        count={
+          <span id="cnt">
+            {r.length} / {civs.length}
+          </span>
+        }
+        active={[ty, pos, dlc].filter(Boolean).length}
+        dirty={Boolean(q || ty || pos || dlc)}
+        onReset={() => {
+          setQ('');
+          setTy('');
+          setPos('');
+          setDlc('');
+        }}
+      >
+        <select id="ty" aria-label="文明类型" value={ty} onChange={(e) => setTy(e.target.value)}>
           <option value="">全部类型</option>
           {(['cav', 'arch', 'inf', 'naval', 'monk', 'siege', 'def'] as CivType[]).map((t) => (
             <option key={t} value={t}>
@@ -29,16 +44,12 @@ export default function CivList() {
           ))}
         </select>
         <DlcSelect id="cdlc" value={dlc} onChange={setDlc} />
-        <select id="pos" value={pos} onChange={(e) => setPos(e.target.value)}>
+        <select id="pos" aria-label="团战位置" value={pos} onChange={(e) => setPos(e.target.value)}>
           <option value="">全部位置</option>
           <option value="fl">适合边位 Flank (7分及以上)</option>
           <option value="pk">适合口袋 Pocket (7分及以上)</option>
         </select>
-        <span id="cnt" className="note">
-          {r.length} / {civs.length}
-        </span>
-      </div>
-      <DlcBar value={dlc} onChange={setDlc} />
+      </CatalogFilters>
       <div id="grid">
         {r.length ? (
           r.map((c) => (

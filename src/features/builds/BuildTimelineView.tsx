@@ -306,48 +306,50 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
         />
         {dot(q.civ !== '')}
       </span>
-      <div className="tl-seg" role="radiogroup" aria-label="走路距离预设">
-        {PRESETS.map(([zh, d]) => (
-          <button key={d} type="button" role="radio" aria-checked={q.dist === d} aria-label={zh} onClick={() => set('dist', String(d))}>
-            {zh} {d}
-          </button>
-        ))}
+      <div className="tl-settings-economy">
+        <div className="tl-seg" role="radiogroup" aria-label="走路距离预设">
+          {PRESETS.map(([zh, d]) => (
+            <button key={d} type="button" role="radio" aria-checked={q.dist === d} aria-label={zh} onClick={() => set('dist', String(d))}>
+              {zh} {d}
+            </button>
+          ))}
+        </div>
+        <label className="tl-ctl">
+          走路距离
+          <input
+            type="range"
+            min={WALK.min}
+            max={WALK.max}
+            value={q.dist}
+            aria-label="走路距离"
+            aria-valuemin={WALK.min}
+            aria-valuemax={WALK.max}
+            aria-valuenow={q.dist}
+            onChange={(e) => set('dist', e.target.value)}
+          />
+          <span className="tl-num">{q.dist} 格</span>
+          {dot(q.dist !== WALK.default)}
+        </label>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={noHouses ? false : q.house}
+          aria-disabled={noHouses || undefined}
+          disabled={noHouses}
+          className="tl-switch"
+          data-t="auto-house"
+          onClick={() => set('house', q.house ? '0' : '1')}
+        >
+          自动造房 <span className="tl-knob" aria-hidden />
+          {!noHouses && dot(!q.house)}
+        </button>
+        {noHouses && (
+          <span className="tl-no-need" data-t="no-need">
+            {noNeedZh}
+          </span>
+        )}
+        <span className="note">羊和浆果按近距离计{!q.house && ' · 关掉可以看到不造房会卡在哪'}</span>
       </div>
-      <label className="tl-ctl">
-        走路距离
-        <input
-          type="range"
-          min={WALK.min}
-          max={WALK.max}
-          value={q.dist}
-          aria-label="走路距离"
-          aria-valuemin={WALK.min}
-          aria-valuemax={WALK.max}
-          aria-valuenow={q.dist}
-          onChange={(e) => set('dist', e.target.value)}
-        />
-        <span className="tl-num">{q.dist} 格</span>
-        {dot(q.dist !== WALK.default)}
-      </label>
-      <button
-        type="button"
-        role="switch"
-        aria-checked={noHouses ? false : q.house}
-        aria-disabled={noHouses || undefined}
-        disabled={noHouses}
-        className="tl-switch"
-        data-t="auto-house"
-        onClick={() => set('house', q.house ? '0' : '1')}
-      >
-        自动造房 <span className="tl-knob" aria-hidden />
-        {!noHouses && dot(!q.house)}
-      </button>
-      {noHouses && (
-        <span className="tl-no-need" data-t="no-need">
-          {noNeedZh}
-        </span>
-      )}
-      <span className="note">羊和浆果按近距离计{!q.house && ' · 关掉可以看到不造房会卡在哪'}</span>
     </>
   );
 

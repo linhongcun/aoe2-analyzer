@@ -68,7 +68,7 @@ export default function Home() {
         ))}
       </div>
       <h2 className="hsec">工具</h2>
-      <div className="hgrid">
+      <div className="hgrid home-tools-grid">
         {TOOLS.map((s) => (
           <Card key={s.key} s={s} tool />
         ))}

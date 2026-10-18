@@ -181,7 +181,7 @@ export function CivOptions() {
 /** DLC 下拉 + 图标按钮条（共享同一状态） */
 export function DlcSelect({ value, onChange, id }: { value: string; onChange: (v: string) => void; id?: string }) {
   return (
-    <select id={id} value={value} onChange={(e) => onChange(e.target.value)}>
+    <select id={id} aria-label="资料片" value={value} onChange={(e) => onChange(e.target.value)}>
       <option value="">全部 DLC</option>
       {DLCS.map((d, i) => (
         <option key={i} value={i}>

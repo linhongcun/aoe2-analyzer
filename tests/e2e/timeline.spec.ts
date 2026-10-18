@@ -37,9 +37,13 @@ test.describe('#3 开局时间线', () => {
     await expect(summary(page)).toHaveCount(0);
   });
 
-  test('2. 从开局库打开：出现时间线，URL 含 bo，摘要「到达封建 约 m:ss」', async ({ page }) => {
+  test('2. 开局快捷定位到分组，再打开时间线：URL 含 bo，摘要「到达封建 约 m:ss」', async ({ page }) => {
     await page.goto(BUILDS);
     await page.locator('[data-t="timeline-empty"]').getByRole('button', { name: /开局/ }).first().click();
+    const group = page.locator('[data-t="build-order"]').first();
+    await expect(group).toHaveAttribute('open');
+    await expect(group.locator('summary')).toBeFocused();
+    await group.locator('a.tl-open').click();
     await expect(page).toHaveURL(/[?&]bo=/);
     await expect(nodes(page).first()).toBeVisible();
     await expect(

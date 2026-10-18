@@ -1,0 +1,100 @@
+/* #62：保留编辑风，收敛工具入口、列表筛选与参数层级。 */
+.catalog-filter-panel {
+  display: flex;
+  flex: 1 1 420px;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.catalog-filter-panel select {
+  flex: 1;
+  min-width: 0;
+}
+.catalog-filters .sw {
+  flex: 1 1 220px;
+  max-width: 320px;
+}
+.catalog-filters .sw input {
+  width: 100%;
+}
+.catalog-filter-toggle {
+  display: none;
+}
+.catalog-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-inline-start: auto;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.catalog-filter-reset {
+  color: var(--color-link);
+}
+.bo {
+  scroll-margin-top: calc(var(--nav-h) + var(--space-8));
+}
+.tl-settings-economy {
+  display: contents;
+}
+@media (min-width: 1051px) {
+  .home-tools-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+@media (min-width: 601px) {
+  .tl-inline-settings {
+    display: contents;
+  }
+  .tl-settings-economy {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .tl-settings-economy > .note {
+    flex-basis: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .home-tools-grid .hcard:last-child {
+    grid-column: 1 / -1;
+  }
+  .catalog-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .catalog-filters .sw {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+  }
+  .catalog-filter-toggle {
+    display: inline-flex;
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .catalog-count {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .catalog-filter-panel {
+    display: none;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .catalog-filter-panel[data-open='true'] {
+    display: grid;
+  }
+  .catalog-filter-panel select {
+    width: 100%;
+  }
+  .catalog-filter-reset {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
