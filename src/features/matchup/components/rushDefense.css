@@ -1,0 +1,25 @@
+.rush-defense {
+  margin-block: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.rush-defense p {
+  line-height: 1.7;
+}
+.rush-count {
+  white-space: nowrap;
+}
+.rush-defense a,
+.rush-defense summary {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.rush-defense select {
+  min-height: 44px;
+  max-width: 100%;
+}
+.rush-defense li {
+  overflow-wrap: anywhere;
+}
