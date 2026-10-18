@@ -13,6 +13,14 @@ import '../shared/styles/editorial-shell.css';
 
 const PageMeta = lazy(() => import('../features/share/PageMeta'));
 
+/** 外点的默认焦点行为结束后归还触发按钮；新弹窗接管焦点时不抢回。 */
+function returnFocusAfterClose(target: HTMLElement | null) {
+  requestAnimationFrame(() => {
+    const dialogOpen = [...document.querySelectorAll<HTMLElement>('[role="dialog"], dialog[open]')].some((dialog) => dialog.getClientRects().length > 0);
+    if (!dialogOpen) target?.focus();
+  });
+}
+
 function NavItem({ s, path }: { s: Section; path: string }) {
   return (
     <NavLink to={s.path} className={() => `nitem${s.match.test(path) ? ' on' : ''}`} data-t={s.key}>
@@ -59,7 +67,17 @@ function ToolsMenu({ path }: { path: string }) {
         工具
         <Icon name="chevron-down" />
       </button>
-      <div id="tools-menu" className="tools-panel" hidden={!open}>
+      <div
+        id="tools-menu"
+        className="tools-panel"
+        hidden={!open}
+        onClick={(event) => {
+          if ((event.target as Element).closest('a[href]')) {
+            setOpenAt(null);
+            trigger.current?.focus();
+          }
+        }}
+      >
         {TOOLS.filter((s) => !s.hideNav).map((s) => (
           <NavItem key={s.key} s={s} path={path} />
         ))}
@@ -89,8 +107,12 @@ function ThemeMenu({ preference, onSelect }: { preference: ThemePreference; onSe
     const pointer = (event: PointerEvent) => {
       if (!wrap.current?.contains(event.target as Node)) {
         setOpen(false);
-        // 等外部目标的默认焦点行为完成，再归还菜单触发按钮。
-        requestAnimationFrame(() => trigger.current?.focus());
+        const target = event.target instanceof Element ? event.target : null;
+        const interactive = target?.closest(
+          'a[href], button, input, select, textarea, summary, [role="button"], [role="link"], [tabindex], [contenteditable="true"]',
+        );
+        // 外部按钮/链接保留自身交互与焦点；空白区域关闭才归还触发按钮。
+        if (!interactive) returnFocusAfterClose(trigger.current);
       }
     };
     const key = (event: KeyboardEvent) => {
@@ -249,7 +271,7 @@ export function Layout({ children }: { children: ReactNode }) {
       document.removeEventListener('keydown', key);
       document.removeEventListener('pointerdown', pointer);
       mobile.removeEventListener('change', resize);
-      menuTrigger?.focus();
+      returnFocusAfterClose(menuTrigger);
     };
   }, [menu]);
   useEffect(() => {
