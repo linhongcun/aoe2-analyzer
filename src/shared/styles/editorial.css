@@ -56,6 +56,10 @@ kbd {
 .hc-en {
   color: var(--color-muted);
 }
+.cp-trigger small,
+.cp-opt small {
+  font-size: var(--fs-xs);
+}
 .fbar {
   border-radius: var(--radius-lg);
   padding: var(--space-4);
