@@ -23,6 +23,8 @@ jobs:
         run: npm run lint
       - name: Typecheck
         run: npx tsc -p . --noEmit
+      - name: Catalog introduction audit
+        run: npm run introductions:check
       - name: Install Playwright chromium
         run: npx playwright install --with-deps chromium
       - name: Vitest
@@ -65,6 +67,7 @@ jobs:
             test-results/editorial6-*/home-light-*.png
             test-results/catalogLayout187-*/*.png
             test-results/layout62-*/*.png
+            test-results/introductions190-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: failure()

@@ -15,6 +15,8 @@
     "lint:colors": "node scripts/check-colors.mjs",
     "format": "prettier --write .",
     "data": "python3 scripts/build_data.py && node scripts/pinyin_build.mjs",
+    "introductions": "node scripts/catalog_introductions.mjs",
+    "introductions:check": "node scripts/catalog_introductions.mjs --check",
     "pinyin:check": "node scripts/pinyin_build.mjs --check",
     "dat:check": "python3 scripts/dat_source.py --check",
     "effects": "python3 scripts/effects_build.py && vite-node scripts/effects_audit.ts",

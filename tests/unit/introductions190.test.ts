@@ -18,7 +18,7 @@ interface AuditEntry {
 }
 type Catalog = Record<'units' | 'buildings', AuditEntry[]>;
 type Generated = Record<'units' | 'buildings', Record<string, number | null>>;
-const audit = JSON.parse(readFileSync('scripts/catalog_introductions.json', 'utf8')) as Catalog;
+const audit = JSON.parse(readFileSync('scripts/catalog_introductions.json', 'utf8')) as Catalog & { releases: string[] };
 const generated = JSON.parse(readFileSync('src/data/catalog-introductions.json', 'utf8')) as Generated;
 const catalogs = { units: unitsRaw, buildings: buildingsRaw };
 
@@ -55,10 +55,10 @@ describe('#190 单位的首次引入版本', () => {
     expect(buildingDlc({ id: 82 })).toBe(0);
   });
 
-  it('版本不会随当前名称、类型或拥有文明改变', () => {
-    const renamedUnit = { id: 751, en: 'Knight', type: 'UniqueUnit', civs: ['Franks'] };
-    const reassignedBuilding = { id: 2556, en: 'Castle', civs: ['Incas'] };
-    expect(unitDlc(renamedUnit)).toBe(2);
+  it('已核对的版本不会随类型或拥有文明改变', () => {
+    const reassignedUnit = { id: 751, en: 'Eagle Scout', type: 'UniqueUnit', civs: ['Franks'] };
+    const reassignedBuilding = { id: 2556, en: 'Settlement', civs: ['Incas'] };
+    expect(unitDlc(reassignedUnit)).toBe(2);
     expect(buildingDlc(reassignedBuilding)).toBe(12);
   });
 
@@ -77,6 +77,7 @@ describe('#190 首发版本核对清单', () => {
     it(`${kind} 完整覆盖当前 ID 和英文名，且每个 ID 只登记一次`, () => {
       const raw = catalogs[kind];
       const entries = audit[kind];
+      expect(audit.releases).toEqual(DLCS.map((dlc) => dlc.zh));
       expect(raw).toHaveLength(kind === 'units' ? 248 : 38);
       expect(entries).toHaveLength(raw.length);
       expect(new Set(entries.map((entry) => entry.id)).size).toBe(entries.length);

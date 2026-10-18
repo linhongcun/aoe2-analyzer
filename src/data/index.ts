@@ -6,6 +6,7 @@ import civsRaw from './civs.json';
 import type { Building, Civ, Tech, Trees, Unit } from '../domain/types';
 import { buildingDlc, buildingType } from '../domain/buildings';
 import { civDlc, dlcOf } from '../domain/dlc';
+import { unitDlc } from '../domain/introductions';
 import { buildLinker, type Linker } from '../domain/linker';
 import { buildFamilies, type Families } from '../domain/family';
 
@@ -27,7 +28,7 @@ let corePromise: Promise<Core> | null = null;
 export let coreCache: Core | null = null;
 export function loadCore(): Promise<Core> {
   corePromise ??= Promise.all([import('./units.json'), import('./techs.json'), import('./buildings.json')]).then(([u, t, b]) => {
-    const units = (u.default as unknown as Unit[]).map((x) => ({ ...x, dlc: dlcOf(x) }));
+    const units = (u.default as unknown as Unit[]).map((x) => ({ ...x, dlc: unitDlc(x) }));
     const techs = (t.default as unknown as Tech[]).map((x) => ({ ...x, dlc: dlcOf(x) }));
     const unitById: Record<number, Unit> = {};
     units.forEach((x) => (unitById[x.id] = x));
@@ -35,7 +36,7 @@ export function loadCore(): Promise<Core> {
     techs.forEach((x) => (techById[x.id] = x));
     const buildings = (b.default as unknown as Omit<Building, 'dlc' | 'type'>[]).map((x) => ({
       ...x,
-      dlc: buildingDlc(x, civs.length),
+      dlc: buildingDlc(x),
       type: buildingType(x.en),
     }));
     const buildingById: Record<number, Building> = {};

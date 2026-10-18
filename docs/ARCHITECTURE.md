@@ -11,11 +11,13 @@ scripts/            数据管线（Python）：npm run data
   units_build.py      单位（属性、护甲类别 cls、升级路线、图标 → public/img/units）
   techs_build.py      科技（费用、前置、图标 → public/img/techs）
   trees_build.py      每文明科技树布局（建筑分列/时代分行/连线、建筑图标）
+  catalog_introductions.json / .mjs  单位、建筑首发版本的逐ID来源清单与编译校验
 src/
   app/              路由（routes.tsx，兼容全部旧 hash）、布局（Layout.tsx：页眉/导航/页脚）、App
   domain/           纯 TS：类型模型 + 纯逻辑，不依赖 React
     types.ts          Civ / Unit / Tech / Dlc / Effect / StatSet / Trees
-    dlc.ts            DLC 表、文明→DLC、通用单位/科技引入版本、筛选
+    dlc.ts            DLC 表、文明→DLC、科技既有版本标记、筛选
+    introductions.ts  按单位/建筑各自ID查首发版本；未知返回null，不按文明推断
     ratings.ts        能力轴、优势/劣势、对局建议
     unitClass.ts      按护甲类别 id 判定单位类型（步兵/骑乘/弓手/火药…）
     effects.ts        结构化效果表：通用科技、文明加成、团队加成
