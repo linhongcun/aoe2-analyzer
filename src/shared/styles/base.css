@@ -1662,3 +1662,10 @@ table.ediff td.dn {
 .damage-breakdown section { padding: 12px; border-top: 1px solid var(--line); }
 .damage-breakdown li { margin-block: 8px; overflow-wrap: anywhere; }
 .damage-change { display: block; }
+/* issue 106 各时代对比 */
+.age-comparison { margin-block: 16px; }
+.age-comparison summary { min-height: 44px; padding: 12px; cursor: pointer; font-weight: 600; }
+.age-comparison section { padding: 12px; border-top: 1px solid var(--line); }
+.age-table { width: 100%; table-layout: fixed; }
+.age-table th { overflow-wrap: anywhere; }
+.age-table td { white-space: nowrap; }
