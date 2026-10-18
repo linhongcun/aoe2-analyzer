@@ -57,6 +57,16 @@ export const WIKI: Section[] = [
     hideNav: true,
   },
   { key: 'dlc', path: '/dlc', label: 'DLC', en: 'Expansions', icon: 'package', desc: '14 个资料片与对应文明', match: /^\/dlc$/, hideNav: true },
+  {
+    key: 'patches',
+    path: '/patches',
+    label: '版本补丁',
+    en: 'Patch Notes',
+    icon: 'scroll',
+    desc: '每次补丁对文明/单位的改动',
+    match: /^\/patches(\/.*)?$/,
+    hideNav: true,
+  },
 ];
 export const TOOLS: Section[] = [
   {
@@ -90,16 +100,6 @@ export const TOOLS: Section[] = [
   },
 ];
 export const FUTURE: Section[] = [
-  {
-    key: 'patches',
-    path: '/patches',
-    label: '版本补丁',
-    en: 'Patch Notes',
-    icon: 'scroll',
-    desc: '每次补丁对文明/单位的改动',
-    match: /^\/patches$/,
-    status: 'planned',
-  },
   {
     key: 'ladder',
     path: '/ladder',

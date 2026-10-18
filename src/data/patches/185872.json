@@ -1,0 +1,1812 @@
+{
+  "id": "185872",
+  "date": "2026-09-22",
+  "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+  "note": "改动前取自官方 185872 平衡说明；改动后数值取自本站固定数据，科技树已逐项核对。未持有上一补丁的完整 .dat，不声称是两个 .dat 的自动差分。",
+  "entries": [
+    {
+      "id": "185872-1",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 75,
+      "targetNameZh": "武士",
+      "civIds": [],
+      "summaryZh": "对冲击步兵的额外伤害增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "2",
+      "after": "3"
+    },
+    {
+      "id": "185872-2",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 77,
+      "targetNameZh": "长剑士",
+      "civIds": [],
+      "summaryZh": "对冲击步兵的额外伤害增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "6",
+      "after": "8"
+    },
+    {
+      "id": "185872-3",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 473,
+      "targetNameZh": "双手剑士",
+      "civIds": [],
+      "summaryZh": "对冲击步兵的额外伤害增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "8",
+      "after": "9"
+    },
+    {
+      "id": "185872-4",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 567,
+      "targetNameZh": "冠军剑士",
+      "civIds": [],
+      "summaryZh": "对冲击步兵的额外伤害增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "8",
+      "after": "9"
+    },
+    {
+      "id": "185872-5",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 751,
+      "targetNameZh": "鹰斥候",
+      "civIds": [],
+      "summaryZh": "训练时间缩短（秒）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "50",
+      "after": "46"
+    },
+    {
+      "id": "185872-6",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1258,
+      "targetNameZh": "攻城锤",
+      "civIds": [],
+      "summaryZh": "视野扩大（格）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "3",
+      "after": "5"
+    },
+    {
+      "id": "185872-7",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 422,
+      "targetNameZh": "中型冲车",
+      "civIds": [],
+      "summaryZh": "视野扩大（格）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "3",
+      "after": "5"
+    },
+    {
+      "id": "185872-8",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 548,
+      "targetNameZh": "重型冲车",
+      "civIds": [],
+      "summaryZh": "视野扩大（格）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "3",
+      "after": "5"
+    },
+    {
+      "id": "185872-9",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1744,
+      "targetNameZh": "装甲战象",
+      "civIds": [],
+      "summaryZh": "视野扩大（格）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "4",
+      "after": "6"
+    },
+    {
+      "id": "185872-10",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1746,
+      "targetNameZh": "攻城战象",
+      "civIds": [],
+      "summaryZh": "视野扩大（格）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "4",
+      "after": "6"
+    },
+    {
+      "id": "185872-11",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1105,
+      "targetNameZh": "攻城塔",
+      "civIds": [],
+      "summaryZh": "视野缩小（格）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "8",
+      "after": "6"
+    },
+    {
+      "id": "185872-12",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 550,
+      "targetNameZh": "中型投石车",
+      "civIds": [],
+      "summaryZh": "基础攻击提高",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "50",
+      "after": "55"
+    },
+    {
+      "id": "185872-13",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 550,
+      "targetNameZh": "中型投石车",
+      "civIds": [],
+      "summaryZh": "远程护甲提高",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "7",
+      "after": "8"
+    },
+    {
+      "id": "185872-14",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 527,
+      "targetNameZh": "爆破船",
+      "civIds": [],
+      "summaryZh": "升级为爆破船的费用与时间降低",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "dat",
+      "before": "50 木、100 金、50 秒",
+      "after": "25 木、75 金、20 秒"
+    },
+    {
+      "id": "185872-15",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2626,
+      "targetNameZh": "趸船",
+      "civIds": [],
+      "summaryZh": "近战护甲降低",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "4",
+      "after": "3"
+    },
+    {
+      "id": "185872-16",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2627,
+      "targetNameZh": "战争趸船",
+      "civIds": [],
+      "summaryZh": "近战护甲降低",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "5",
+      "after": "4"
+    },
+    {
+      "id": "185872-17",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 2628,
+      "targetNameZh": "大帆船",
+      "civIds": [],
+      "summaryZh": "来源冲突：官方写近战护甲 6 降为 5；本站固定 .dat 的近战护甲仍为 6。此项削弱未获数据证实，工具按 6 计算。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "source-conflict"
+    },
+    {
+      "id": "185872-18",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2626,
+      "targetNameZh": "趸船",
+      "civIds": [],
+      "summaryZh": "基础生命降低",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "90",
+      "after": "85"
+    },
+    {
+      "id": "185872-19",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2627,
+      "targetNameZh": "战争趸船",
+      "civIds": [],
+      "summaryZh": "基础生命降低",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "115",
+      "after": "110"
+    },
+    {
+      "id": "185872-20",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1948,
+      "targetNameZh": "楼船",
+      "civIds": [],
+      "summaryZh": "对建筑的额外伤害降低",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "230",
+      "after": "180"
+    },
+    {
+      "id": "185872-21",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1103,
+      "targetNameZh": "火艨艟",
+      "civIds": [],
+      "summaryZh": "移除对建筑的额外伤害",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "1",
+      "after": "0"
+    },
+    {
+      "id": "185872-22",
+      "kind": "nerf",
+      "targetType": "building",
+      "targetId": 1806,
+      "targetNameZh": "强化教堂",
+      "civIds": [],
+      "summaryZh": "建造时间增加（秒）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "40",
+      "after": "50"
+    },
+    {
+      "id": "185872-23",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1759,
+      "targetNameZh": "战车",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "训练时间增加；精锐不变（秒）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "20",
+      "after": "24"
+    },
+    {
+      "id": "185872-24",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1704,
+      "targetNameZh": "胡斯派战车",
+      "civIds": [
+        "Bohemians"
+      ],
+      "summaryZh": "黄金费用增加，木材费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "70",
+      "after": "80"
+    },
+    {
+      "id": "185872-25",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1706,
+      "targetNameZh": "精锐胡斯派战车",
+      "civIds": [
+        "Bohemians"
+      ],
+      "summaryZh": "黄金费用增加，木材费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "70",
+      "after": "80"
+    },
+    {
+      "id": "185872-26",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 784,
+      "targetNameZh": "大车阵战术",
+      "civIds": [
+        "Bohemians"
+      ],
+      "summaryZh": "火药单位的移速加成降低",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "official-and-effects",
+      "before": "15%",
+      "after": "10%"
+    },
+    {
+      "id": "185872-27",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1699,
+      "targetNameZh": "弗拉芒民兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "食物费用增加，黄金费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "30",
+      "after": "35"
+    },
+    {
+      "id": "185872-28",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1699,
+      "targetNameZh": "弗拉芒民兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "封建时代训练时间增加（秒）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "14",
+      "after": "16"
+    },
+    {
+      "id": "185872-29",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 40,
+      "targetNameZh": "甲胄骑兵",
+      "civIds": [
+        "Byzantines"
+      ],
+      "summaryZh": "对步兵的额外伤害增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "9",
+      "after": "13"
+    },
+    {
+      "id": "185872-30",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 553,
+      "targetNameZh": "精锐甲胄骑兵",
+      "civIds": [
+        "Byzantines"
+      ],
+      "summaryZh": "对步兵的额外伤害增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "12",
+      "after": "18"
+    },
+    {
+      "id": "185872-31",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 61,
+      "targetNameZh": "后勤学",
+      "civIds": [
+        "Byzantines"
+      ],
+      "summaryZh": "践踏效果覆盖瓦兰吉卫队；甲胄骑兵的额外反步兵伤害并入基础属性。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "official-and-effects"
+    },
+    {
+      "id": "185872-32",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 281,
+      "targetNameZh": "掷斧兵",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "基础射程增加（格）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "3",
+      "after": "5"
+    },
+    {
+      "id": "185872-33",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 531,
+      "targetNameZh": "精锐掷斧兵",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "基础射程增加（格）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "4",
+      "after": "6"
+    },
+    {
+      "id": "185872-34",
+      "kind": "new",
+      "targetType": "tech",
+      "targetId": 1496,
+      "targetNameZh": "王家敕令骑兵",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "替换旧特色科技掷斧兵射程升级；降低骑马弩兵黄金费用。费用和研究时间见科技详情。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "official-and-effects"
+    },
+    {
+      "id": "185872-35",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Gurjaras",
+      "targetNameZh": "瞿折罗",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "码头驻扎容量的文明加成被移除。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "official-and-effects"
+    },
+    {
+      "id": "185872-36",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 21,
+      "targetNameZh": "无神论",
+      "civIds": [
+        "Huns"
+      ],
+      "summaryZh": "胜利倒计时延长仅作用于敌对与中立玩家，允许多次研究叠加；圣物收入削减也覆盖中立玩家。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "official-and-effects"
+    },
+    {
+      "id": "185872-37",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1911,
+      "targetNameZh": "掷弹兵",
+      "civIds": [
+        "Jurchens"
+      ],
+      "summaryZh": "食物费用提高、黄金费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "35 食物、65 金",
+      "after": "55 食物、50 金"
+    },
+    {
+      "id": "185872-38",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 831,
+      "targetNameZh": "龟甲船",
+      "civIds": [
+        "Koreans"
+      ],
+      "summaryZh": "基础生命降低",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "275",
+      "after": "260"
+    },
+    {
+      "id": "185872-39",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 869,
+      "targetNameZh": "马扎尔骠骑",
+      "civIds": [
+        "Magyars"
+      ],
+      "summaryZh": "训练时间增加；精锐不变（秒）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "12",
+      "after": "18"
+    },
+    {
+      "id": "185872-40",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2569,
+      "targetNameZh": "掷石绳骑兵",
+      "civIds": [
+        "Mapuche"
+      ],
+      "summaryZh": "木材费用增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "45",
+      "after": "50"
+    },
+    {
+      "id": "185872-41",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2569,
+      "targetNameZh": "掷石绳骑兵",
+      "civIds": [
+        "Mapuche"
+      ],
+      "summaryZh": "黄金费用增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "50",
+      "after": "55"
+    },
+    {
+      "id": "185872-42",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2571,
+      "targetNameZh": "精锐掷石绳骑兵",
+      "civIds": [
+        "Mapuche"
+      ],
+      "summaryZh": "木材费用增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "45",
+      "after": "50"
+    },
+    {
+      "id": "185872-43",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2571,
+      "targetNameZh": "精锐掷石绳骑兵",
+      "civIds": [
+        "Mapuche"
+      ],
+      "summaryZh": "黄金费用增加",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "50",
+      "after": "55"
+    },
+    {
+      "id": "185872-44",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2586,
+      "targetNameZh": "神庙护卫",
+      "civIds": [
+        "Muisca"
+      ],
+      "summaryZh": "基础攻击降低；精锐不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "12",
+      "after": "11"
+    },
+    {
+      "id": "185872-45",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1001,
+      "targetNameZh": "风琴炮",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "训练时间增加；精锐不变（秒）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "25",
+      "after": "28"
+    },
+    {
+      "id": "185872-46",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1962,
+      "targetNameZh": "战车",
+      "civIds": [
+        "Shu"
+      ],
+      "summaryZh": "食物费用增加，黄金费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "65",
+      "after": "75"
+    },
+    {
+      "id": "185872-47",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1962,
+      "targetNameZh": "战车",
+      "civIds": [
+        "Shu"
+      ],
+      "summaryZh": "训练时间增加（秒）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "28",
+      "after": "32"
+    },
+    {
+      "id": "185872-48",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 771,
+      "targetNameZh": "西班牙征服者",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "食物费用增加，黄金费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "70",
+      "after": "75"
+    },
+    {
+      "id": "185872-49",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 773,
+      "targetNameZh": "精锐西班牙征服者",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "食物费用增加，黄金费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "70",
+      "after": "75"
+    },
+    {
+      "id": "185872-50",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 771,
+      "targetNameZh": "西班牙征服者",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "训练时间增加；精锐不变（秒）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "24",
+      "after": "26"
+    },
+    {
+      "id": "185872-51",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 775,
+      "targetNameZh": "传教士",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "新增食物费用，黄金费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "0",
+      "after": "30"
+    },
+    {
+      "id": "185872-52",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Teutons",
+      "targetNameZh": "条顿",
+      "civIds": [
+        "Teutons"
+      ],
+      "summaryZh": "城堡与帝王时代的近战护甲加成扩大到步兵与骑乘单位。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "official-and-effects"
+    },
+    {
+      "id": "185872-53",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 554,
+      "targetNameZh": "精锐条顿骑士",
+      "civIds": [
+        "Teutons"
+      ],
+      "summaryZh": "基础近战护甲降低；计入本文明加成后不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "10",
+      "after": "8"
+    },
+    {
+      "id": "185872-54",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2579,
+      "targetNameZh": "黑檀木步弓手",
+      "civIds": [
+        "Tupi"
+      ],
+      "summaryZh": "木材费用增加，黄金费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "35",
+      "after": "40"
+    },
+    {
+      "id": "185872-55",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 2581,
+      "targetNameZh": "精锐黑檀木步弓手",
+      "civIds": [
+        "Tupi"
+      ],
+      "summaryZh": "木材费用增加，黄金费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "35",
+      "after": "40"
+    },
+    {
+      "id": "185872-56",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Vietnamese",
+      "targetNameZh": "越南",
+      "civIds": [
+        "Vietnamese"
+      ],
+      "summaryZh": "生命加成的适用对象改为步弓手和掷矛手。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "official-and-effects"
+    },
+    {
+      "id": "185872-57",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1129,
+      "targetNameZh": "藤弓兵",
+      "civIds": [
+        "Vietnamese"
+      ],
+      "summaryZh": "基础生命降低（未计文明加成）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "40",
+      "after": "35"
+    },
+    {
+      "id": "185872-58",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1131,
+      "targetNameZh": "精锐藤弓兵",
+      "civIds": [
+        "Vietnamese"
+      ],
+      "summaryZh": "基础生命降低（未计文明加成）",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "45",
+      "after": "40"
+    },
+    {
+      "id": "185872-59",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1131,
+      "targetNameZh": "精锐藤弓兵",
+      "civIds": [
+        "Vietnamese"
+      ],
+      "summaryZh": "精锐升级食物费用降低；黄金费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "dat",
+      "before": "1000 食物、750 金",
+      "after": "800 食物、750 金"
+    },
+    {
+      "id": "185872-60",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 463,
+      "targetNameZh": "酋长",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "击杀村民、贸易单位和僧侣不再额外获得黄金。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "official-and-effects"
+    },
+    {
+      "id": "185872-61",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1952,
+      "targetNameZh": "鲜卑掠骑兵",
+      "civIds": [
+        "Wei"
+      ],
+      "summaryZh": "黄金费用增加，木材费用不变",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "25",
+      "after": "35"
+    },
+    {
+      "id": "185872-62",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Armenians"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-63",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-64",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Goths"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-65",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Shu"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-66",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-67",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Bohemians"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-68",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-69",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Saracens"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-70",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Bohemians"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-71",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Britons"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-72",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-73",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-74",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-75",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Italians"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-76",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Poles"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-77",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-78",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-79",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-80",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Teutons"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-81",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-82",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2701,
+      "targetNameZh": "重装骑马弩兵",
+      "civIds": [
+        "Britons"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-83",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2701,
+      "targetNameZh": "重装骑马弩兵",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-84",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2701,
+      "targetNameZh": "重装骑马弩兵",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-85",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2701,
+      "targetNameZh": "重装骑马弩兵",
+      "civIds": [
+        "Poles"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-86",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2701,
+      "targetNameZh": "重装骑马弩兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-87",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2701,
+      "targetNameZh": "重装骑马弩兵",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-88",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2701,
+      "targetNameZh": "重装骑马弩兵",
+      "civIds": [
+        "Teutons"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-89",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Britons"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-90",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-91",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-92",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-93",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Italians"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-94",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Poles"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-95",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-96",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-97",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-98",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Teutons"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-99",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 39,
+      "targetNameZh": "骑射手",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-100",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 474,
+      "targetNameZh": "重装骑射手",
+      "civIds": [
+        "Britons"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-101",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 474,
+      "targetNameZh": "重装骑射手",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-102",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 474,
+      "targetNameZh": "重装骑射手",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-103",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 474,
+      "targetNameZh": "重装骑射手",
+      "civIds": [
+        "Poles"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-104",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 474,
+      "targetNameZh": "重装骑射手",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-105",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 474,
+      "targetNameZh": "重装骑射手",
+      "civIds": [
+        "Chinese"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-106",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 1452,
+      "targetNameZh": "便携弯弩装置",
+      "civIds": [
+        "Britons"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-107",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 1452,
+      "targetNameZh": "便携弯弩装置",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-108",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 1452,
+      "targetNameZh": "便携弯弩装置",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-109",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Koreans"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-110",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-111",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 316,
+      "targetNameZh": "救赎",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-112",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 50,
+      "targetNameZh": "石工术",
+      "civIds": [
+        "Vietnamese"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-113",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2703,
+      "targetNameZh": "瓦兰吉卫队",
+      "civIds": [
+        "Byzantines"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-114",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2704,
+      "targetNameZh": "精锐瓦兰吉卫队",
+      "civIds": [
+        "Byzantines"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-115",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2703,
+      "targetNameZh": "瓦兰吉卫队",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-116",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 420,
+      "targetNameZh": "炮舰",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-117",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 691,
+      "targetNameZh": "精锐炮舰",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "科技树现在移除此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "185872-118",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 2633,
+      "targetNameZh": "大型投石战舰",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "科技树现在开放此项。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "185872-119",
+      "kind": "new",
+      "targetType": "civ",
+      "targetId": "Danes",
+      "targetNameZh": "丹麦人",
+      "civIds": [
+        "Danes"
+      ],
+      "summaryZh": "维京传奇新增文明；完整单位与加成见文明详情。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data"
+    },
+    {
+      "id": "185872-120",
+      "kind": "new",
+      "targetType": "civ",
+      "targetId": "Saxons",
+      "targetNameZh": "撒克逊人",
+      "civIds": [
+        "Saxons"
+      ],
+      "summaryZh": "维京传奇新增文明；完整单位与加成见文明详情。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data"
+    },
+    {
+      "id": "185872-121",
+      "kind": "new",
+      "targetType": "civ",
+      "targetId": "Varangians",
+      "targetNameZh": "瓦兰吉人",
+      "civIds": [
+        "Varangians"
+      ],
+      "summaryZh": "维京传奇新增文明；完整单位与加成见文明详情。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data"
+    },
+    {
+      "id": "185872-122",
+      "kind": "new",
+      "targetType": "unit",
+      "targetId": 2700,
+      "targetNameZh": "骑马弩兵",
+      "civIds": [],
+      "summaryZh": "本补丁新增单位；属性和适用文明见详情。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data"
+    },
+    {
+      "id": "185872-123",
+      "kind": "new",
+      "targetType": "unit",
+      "targetId": 2701,
+      "targetNameZh": "重装骑马弩兵",
+      "civIds": [],
+      "summaryZh": "本补丁新增单位；属性和适用文明见详情。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data"
+    },
+    {
+      "id": "185872-124",
+      "kind": "new",
+      "targetType": "unit",
+      "targetId": 2703,
+      "targetNameZh": "瓦兰吉卫队",
+      "civIds": [],
+      "summaryZh": "本补丁新增单位；属性和适用文明见详情。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data"
+    },
+    {
+      "id": "185872-125",
+      "kind": "new",
+      "targetType": "unit",
+      "targetId": 2704,
+      "targetNameZh": "精锐瓦兰吉卫队",
+      "civIds": [],
+      "summaryZh": "本补丁新增单位；属性和适用文明见详情。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data"
+    },
+    {
+      "id": "185872-126",
+      "kind": "new",
+      "targetType": "tech",
+      "targetId": 1452,
+      "targetNameZh": "便携弯弩装置",
+      "civIds": [],
+      "summaryZh": "新增骑马弩兵相关科技；效果见详情。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "provenance": "fixed-data"
+    }
+  ]
+}

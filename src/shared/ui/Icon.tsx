@@ -1,6 +1,9 @@
 /** 界面图标统一入口：仅使用 Lucide（ISC），禁止 emoji / Unicode 符号作图标（见 CONTRIBUTING.md） */
 import {
   ArrowLeft,
+  ArrowUp,
+  ArrowDown,
+  Plus,
   ArrowRight,
   Calculator,
   Castle,
@@ -40,6 +43,9 @@ import {
 
 const ICONS = {
   swords: Swords,
+  'arrow-up': ArrowUp,
+  'arrow-down': ArrowDown,
+  plus: Plus,
   'arrow-left': ArrowLeft,
   'arrow-right': ArrowRight,
   'chevron-right': ChevronRight,
