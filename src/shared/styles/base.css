@@ -1651,3 +1651,8 @@ table.ediff td.dn {
 .pk-trade .note { margin: 2px 0 0; }
 .pk-trade .nw,
 .pk-trade .res { white-space: nowrap; }
+
+/* issue 77 文明开局阶段和流程入口 */
+.civ-opening li { margin-block: 8px; }
+.civ-opening-links { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.civ-opening-links .ulink { min-height: 44px; }

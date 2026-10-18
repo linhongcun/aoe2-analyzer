@@ -31,6 +31,7 @@ export function BonusRows({ c }: { c: Civ }) {
   };
   return (
     <>
+      <p className="note">标签说明：已计入表示有可计算的效果，展开可查看适用单位或科技；仅文本表示只展示游戏说明。各工具实际支持范围以工具内的提示为准。</p>
       <ul className="blrows">{list.filter((b) => !b.team).map(row)}</ul>
       <p>
         <b>团队加成：</b>

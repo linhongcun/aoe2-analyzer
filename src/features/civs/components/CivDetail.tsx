@@ -10,10 +10,11 @@ import { collapse } from '../../../domain/family';
 import { Icon } from '../../../shared/ui/Icon';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { RatingHeading } from '../../../shared/ui/RatingHelp';
-import { Linked, PosBox, Radar, Steps } from '../../../shared/ui/widgets';
+import { Linked, PosBox, Radar } from '../../../shared/ui/widgets';
 import { session } from '../../../shared/utils/sticky';
 import CivList from './CivList';
 import { BonusRows } from './BonusRows';
+import { CivOpening } from './CivOpening';
 
 function UTech({ s, civ }: { s: string; civ: string }) {
   const core = useCore();
@@ -74,6 +75,9 @@ export default function CivDetail() {
               </p>
               <p>
                 <b>文明加成：</b>
+                <Link className="ulink" to="/bonuses">
+                  查看完整加成表
+                </Link>
               </p>
               <BonusRows c={c} />
               <p className="g">
@@ -88,10 +92,7 @@ export default function CivDetail() {
                 <b>推荐团战位置：</b>
                 {c.fl >= c.pk ? '边位 Flank' : '口袋 Pocket'}（边位 {c.fl}/10，口袋 {c.pk}/10）
               </p>
-              <p>
-                <b>推荐开局：</b>
-                <Steps s={c.op} />
-              </p>
+              <CivOpening c={c} />
             </>
           ),
         },
