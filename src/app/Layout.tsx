@@ -331,7 +331,7 @@ export function Layout({ children }: { children: ReactNode }) {
             ))}
             <ToolsMenu path={pathname} />
           </div>
-          <MobileTheme preference={preference} onSelect={select} />
+          {menu && <MobileTheme preference={preference} onSelect={select} />}
         </nav>
         <Link to="/about-data" className="verbadge" data-t="version-badge" title="关于数据：来源、固定版本与补丁说明">
           <Icon name="database" />
