@@ -92,7 +92,7 @@ export function CopyPageLink() {
   };
   return (
     <div className="detail-copy">
-      <button type="button" className="detail-copy-button" onClick={copy}>
+      <button type="button" className="detail-copy-button" aria-label="复制链接" onClick={copy}>
         <Icon name={state === 'copied' ? 'check' : 'copy'} />
         <span role="status">{state === 'copied' ? '链接已复制' : '复制链接'}</span>
       </button>
