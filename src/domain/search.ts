@@ -13,6 +13,8 @@ export interface SearchItem {
   alt?: string[];
   /** 玩家俗称（src/data/aliases.ts），排在名称前缀之后、名称包含之前 */
   aliases?: string[];
+  /** 护甲类别等检索关键词，排在名称、别名和拼音之后。 */
+  keywords?: string[];
   /** 文明小字（#44 完全重名单位）：结果里同名单位同时出现时才显示 */
   civNote?: string;
   /** 同分时排在其他结果之后（开局：搜单位名时不压过单位） */
@@ -47,7 +49,8 @@ export function score(it: SearchItem, raw: string): number {
     const n = norm(x);
     return n === q ? TIER.alias : n.includes(q) ? TIER.aliasSub : 0;
   });
-  return Math.max(main, ...a, ...al, pyMatch(it, q) || (it.altPy ?? []).some((x) => pyMatch(x, q)) ? TIER.py : 0, 0);
+  const keyword = it.keywords?.some((x) => norm(x).includes(q)) ? 10 : 0;
+  return Math.max(main, ...a, ...al, pyMatch(it, q) || (it.altPy ?? []).some((x) => pyMatch(x, q)) ? TIER.py : 0, keyword, 0);
 }
 /** issue 123 拼音只认前缀，ü 写 v 和写 u 都算 */
 export const pyMatch = (it: { py?: string; pyi?: string }, q: string) => {

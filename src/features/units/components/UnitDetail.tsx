@@ -1,6 +1,7 @@
 import { ArmorClasses, BonusTable } from '../../simulator/components/SimPanel';
 import { useEffect, type ReactNode } from 'react';
 import { RangeB } from '../../../shared/ui/RangeB';
+import { RangeHelp } from '../../../shared/ui/RangeHelp';
 import { Link, useLocation } from 'react-router-dom';
 import { baseUnit } from '../../../domain/family';
 import type { Unit } from '../../../domain/types';
@@ -33,7 +34,9 @@ function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {
     <div className="rc-uline" data-t="rc-uline">
       <Icon name="clock" className="ic" />
       <span className="k">采集时间</span>
-      <b className="tl-num" data-t="rc-uline-time">≈ 1 个村民 {fmtClock(rc.total)}</b>
+      <b className="tl-num" data-t="rc-uline-time">
+        ≈ 1 个村民 {fmtClock(rc.total)}
+      </b>
       {rc.hasFood && (
         <small className="rc-ns" data-t="rc-noseed">
           不含播种
@@ -185,9 +188,10 @@ export default function UnitDetail() {
                     <tbody>
                       {stats.map((r) => (
                         <tr key={r[1]}>
-                          <td>
+                          <td className={r[0] === 'range' ? 'range-heading' : undefined}>
                             <StatIcon k={r[0]} t={r[1]} />
                             {r[1]}
+                            {r[0] === 'range' && <RangeHelp u={u} />}
                           </td>
                           <td>{r[2]}</td>
                         </tr>

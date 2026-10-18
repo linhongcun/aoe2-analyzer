@@ -7,16 +7,23 @@ import { collapse } from '../../domain/family';
 import { allCivBonuses } from '../../domain/civBonus';
 import { TYPE_ZH } from '../../domain/ratings';
 import { buildOrders } from '../../data/buildOrders';
-import { BUILD_ALIASES, UNIT_ALIASES } from '../../data/aliases';
+import { BUILD_ALIASES, PAGE_ALIASES, TECH_AKA, UNIT_ALIASES } from '../../data/aliases';
 import { civNote, dupIdsIn } from '../../domain/dupNames';
 
-/** 科技别名（#18 范围补充：1452 又名绞盘弩） */
-export const TECH_AKA: Record<number, string[]> = { 1452: ['绞盘弩', 'cranequins'] };
+export { TECH_AKA } from '../../data/aliases';
 
 export function useSearchIndex(): SearchItem[] {
   const core = useCore();
   return useMemo(() => {
-    const items: SearchItem[] = ALL.filter((s) => !s.status).map((s) => ({ kind: 'page', id: s.key, zh: s.label, en: s.en, href: s.path, sub: s.desc }));
+    const items: SearchItem[] = ALL.filter((s) => !s.status).map((s) => ({
+      kind: 'page',
+      id: s.key,
+      zh: s.label,
+      en: s.en,
+      href: s.path,
+      sub: s.desc,
+      aliases: PAGE_ALIASES[s.key],
+    }));
     civs.forEach((c) =>
       items.push({
         kind: 'civ',
@@ -44,6 +51,7 @@ export function useSearchIndex(): SearchItem[] {
           img: `units/${u.pic}.webp`,
           alt: elite ? [elite.zh, elite.en.toLowerCase()] : undefined,
           aliases: UNIT_ALIASES[u.id],
+          keywords: [...new Set([...u.armc, ...(elite?.armc ?? [])].map(([name]) => name).filter((name) => !/^类别\d+$/.test(name)))],
           py: u.py,
           pyi: u.pyi,
           altPy: elite ? [{ py: elite.py, pyi: elite.pyi }] : undefined,
