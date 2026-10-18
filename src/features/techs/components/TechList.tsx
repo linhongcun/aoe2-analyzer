@@ -5,7 +5,8 @@ import { useCore } from '../../../data/hooks';
 import { dlcMatch } from '../../../domain/dlc';
 import { AGE_ZH } from '../../../domain/ratings';
 import { CostView, DlcBadge, TechIcon } from '../../../shared/ui/art';
-import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
+import { DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
+import CatalogFilters from '../../../shared/ui/CatalogFilters';
 import { useSticky } from '../../../shared/utils/sticky';
 
 export default function TechList() {
@@ -28,15 +29,30 @@ export default function TechList() {
   return (
     <section id="techs" className="pane">
       <ListHead title="科技" desc="全部科技 · 按类别、时代、DLC、建筑筛选" />
-      <div className="bar fbar">
-        <SearchInput id="tq" value={q} onChange={setQ} placeholder="搜索科技（名称/效果）" />
-        <select id="tt" value={ty} onChange={(e) => setTy(e.target.value)}>
+      <CatalogFilters
+        search={<SearchInput id="tq" value={q} onChange={setQ} placeholder="搜索科技（名称/效果）" />}
+        count={
+          <span id="tcnt">
+            {r.length} / {all.length}
+          </span>
+        }
+        active={[ty, a, b, dlc].filter(Boolean).length}
+        dirty={Boolean(q || ty || a || b || dlc)}
+        onReset={() => {
+          setQ('');
+          setTy('');
+          setA('');
+          setB('');
+          setDlc('');
+        }}
+      >
+        <select id="tt" aria-label="科技类别" value={ty} onChange={(e) => setTy(e.target.value)}>
           <option value="">全部类别</option>
           <option value="UniqueTech">独特科技</option>
           <option value="Research">通用科技</option>
           <option value="RegionalTech">区域科技</option>
         </select>
-        <select id="ta" value={a} onChange={(e) => setA(e.target.value)}>
+        <select id="ta" aria-label="科技时代" value={a} onChange={(e) => setA(e.target.value)}>
           <option value="">全部时代</option>
           <option value="1">黑暗</option>
           <option value="2">封建</option>
@@ -44,17 +60,13 @@ export default function TechList() {
           <option value="4">帝王</option>
         </select>
         <DlcSelect id="tdlc" value={dlc} onChange={setDlc} />
-        <select id="tb" value={b} onChange={(e) => setB(e.target.value)}>
+        <select id="tb" aria-label="研究建筑" value={b} onChange={(e) => setB(e.target.value)}>
           <option value="">全部建筑</option>
           {[...new Set(all.map((t) => t.bz))].map((x) => (
             <option key={x}>{x}</option>
           ))}
         </select>
-        <span id="tcnt" className="note">
-          {r.length} / {all.length}
-        </span>
-      </div>
-      <DlcBar value={dlc} onChange={setDlc} />
+      </CatalogFilters>
       {!core ? (
         <Loading />
       ) : (

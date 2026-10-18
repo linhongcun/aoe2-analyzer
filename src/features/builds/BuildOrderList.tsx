@@ -42,22 +42,30 @@ export default function BuildOrderList() {
   const bo = sp.get('bo');
   if (bo && buildOrders.some((b) => b.id === bo)) return <TimelineLoader />;
   const civName = (en: string) => civByEn(en)?.zh ?? en;
+  const showOrder = (id: string) => {
+    const group = document.getElementById(`bo-${id}`) as HTMLDetailsElement | null;
+    if (!group) return;
+    group.open = true;
+    group.querySelector('summary')?.focus({ preventScroll: true });
+    group.scrollIntoView({ block: 'start' });
+  };
   return (
     <section className="pane" id="builds">
       <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
       <div className="tl-empty" data-t="timeline-empty">
         <div className="tl-empty-axis" aria-hidden />
         <p>选一个开局，看看你会卡在哪</p>
+        <p className="note">快速定位下方开局详情，再打开时间线。</p>
         <div className="tl-empty-btns">
           {buildOrders.slice(0, 6).map((b) => (
-            <Link key={b.id} to={`/builds?bo=${b.id}`} role="button" className="tl-chip">
+            <button key={b.id} type="button" className="tl-chip" aria-controls={`bo-${b.id}`} onClick={() => showOrder(b.id)}>
               开局：{b.name.zh}
-            </Link>
+            </button>
           ))}
         </div>
       </div>
       {buildOrders.map((b) => (
-        <details key={b.id} className="bo" data-t="build-order">
+        <details key={b.id} id={`bo-${b.id}`} className="bo" data-t="build-order">
           <summary>
             <b>{b.name.zh}</b> <span className="note">{b.name.en}</span> · {b.target.vils} {b.id === 'hybrid-fish-18' ? '村民' : '人口'}
             {AGE[b.target.age]}
