@@ -37,7 +37,7 @@ export function feedbackUrl(c: FeedbackCtx, kind: 'bug' | 'data' | 'feature' = '
   const e = entityOf(c.pathname);
   const q = new URLSearchParams(c.search);
   const civ = q.get('civ') ?? q.get('c') ?? (/^\/(civ|tree)\//.test(c.pathname) ? e?.id.split('/')[0] : null);
-  const title = `[${kind === 'data' ? '数据错误' : kind === 'feature' ? '功能建议' : '问题'}] ${e ? `${e.type} ${e.id}` : c.pathname || '/'}`;
+  const title = e ? `${e.type} ${e.id}` : c.pathname || '/';
   const body = [
     kind === 'data'
       ? '## 哪个数值/内容有误？\n\n\n## 正确值与来源（游戏内截图 / Wiki / 补丁说明）\n\n'
@@ -51,6 +51,6 @@ export function feedbackUrl(c: FeedbackCtx, kind: 'bug' | 'data' | 'feature' = '
     `- 数据版本：${dataVersion()}；构建 ${__BUILD__}`,
     `- 浏览器：${c.ua}`,
   ].join('\n');
-  const p = new URLSearchParams({ title, body, labels: kind === 'data' ? 'data-error' : kind === 'feature' ? 'enhancement' : 'bug' });
+  const p = new URLSearchParams({ title, body, labels: kind === 'data' ? 'data' : kind === 'feature' ? 'feature' : 'bug' });
   return `${ISSUES_NEW}?${p.toString()}`;
 }

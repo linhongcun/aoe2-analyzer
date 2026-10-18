@@ -445,7 +445,7 @@ test('data version badge links to about-data page with pins and patch notes', as
   const badge = page.locator('[data-t="version-badge"]');
   await expect(badge).toContainText('数据版本：DE 185872（2026-09-22）');
   await expect(page.locator('[data-t="footer-version"]')).toContainText('DE 185872');
-  await expect(page.locator('footer a[data-t="feature"]')).toHaveAttribute('href', /title=%5B%E5%8A%9F%E8%83%BD%E5%BB%BA%E8%AE%AE%5D/);
+  await expect(page.locator('footer a[data-t="feature"]')).toHaveAttribute('href', /[?&]labels=feature(&|$)/);
   await badge.click();
   await expect(page).toHaveURL(/#\/about-data$/);
   await expect(page.locator('[data-t="data-version"]')).toHaveText('DE 185872（2026-09-22）');
