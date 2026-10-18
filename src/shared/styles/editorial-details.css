@@ -112,8 +112,8 @@
   color: var(--color-text);
 }
 .detail .dtabs button.on {
-  background: var(--color-selected, var(--color-surface));
-  color: var(--color-on-selected, var(--color-text));
+  background: var(--color-surface);
+  color: var(--color-text);
   font-weight: 600;
   box-shadow: var(--shadow-1);
 }

@@ -10,6 +10,7 @@ import { civByEn } from '../../../data';
 import { CostView, DlcBadge, EliteBadge, UnitIcon } from '../../../shared/ui/art';
 import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
+import './unit-cards.css';
 
 export default function UnitList() {
   const core = useCore();
@@ -55,7 +56,7 @@ export default function UnitList() {
       ) : (
         <div id="ugrid">
           {r.map(({ u, elite }) => (
-            <Link key={u.id} className="card ucard" to={`/unit/${u.id}`}>
+            <Link key={u.id} className="card ucard" to={`/unit/${u.id}`} data-unit-id={u.id}>
               <UnitIcon u={u} />
               <div>
                 <h3>
@@ -64,6 +65,20 @@ export default function UnitList() {
                   {elite && <EliteBadge />}
                 </h3>
                 <small>{u.en}</small>
+                <dl className="unit-card-stats" aria-label="基础属性">
+                  <div data-stat="hp">
+                    <dt>生命</dt>
+                    <dd>{u.hp}</dd>
+                  </div>
+                  <div data-stat="atk">
+                    <dt>攻击</dt>
+                    <dd>{u.atk}</dd>
+                  </div>
+                  <div data-stat="rng">
+                    <dt>射程</dt>
+                    <dd>{u.rng}</dd>
+                  </div>
+                </dl>
                 <div className="mini">
                   {u.bz} · {AGE_ZH[u.age] ?? ''} · <CostView c={u.cost} />
                 </div>
