@@ -1,8 +1,10 @@
 /** 统一详情页模板：面包屑 + 头部（图标/中英名/DLC/标签）+ 分区标签页 + 右侧相关链接栏 */
-import { useState, type ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useId, type KeyboardEvent, type ReactNode } from 'react';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { sectionOf } from '../../app/nav/sections';
 import { Icon } from './Icon';
+import { CopyPageLink } from './DetailBlocks';
+import '../styles/editorial-details.css';
 
 export function Breadcrumbs({ current }: { current?: string }) {
   const { pathname } = useLocation();
@@ -62,34 +64,62 @@ export function DetailPage({
   tabsTop?: ReactNode;
   sidebar?: ReactNode;
 }) {
-  const [tab, setTab] = useState(initialTab ?? tabs[0]!.key);
-  const cur = tabs.find((t) => t.key === tab) ?? tabs[0]!;
+  const [params, setParams] = useSearchParams();
+  const tabId = useId();
+  const cur = tabs.find((t) => t.key === params.get('tab')) ?? tabs.find((t) => t.key === initialTab) ?? tabs[0]!;
+  const setTab = (key: string) => {
+    const next = new URLSearchParams(params);
+    next.set('tab', key);
+    setParams(next);
+  };
+  const tabKeys = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next: number;
+    if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+    else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = tabs.length - 1;
+    else return;
+    event.preventDefault();
+    setTab(tabs[next]!.key);
+    event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
+  };
   return (
     <section id={id} className="pane detail">
       <Breadcrumbs current={crumb} />
       <div className="dhead">
         <div className="dhead-ic">{icon}</div>
         <div>
-          <h2>
+          <h1>
             {title}
             {titleNote && <span className="civnote">{titleNote}</span>} <small>{en}</small>
-          </h2>
+          </h1>
           <div className="dhead-tags">
             {badges}
             {tags}
           </div>
         </div>
+        <CopyPageLink />
       </div>
       {tabsTop}
-      <div role="tablist" className="dtabs">
-        {tabs.map((t) => (
-          <button key={t.key} role="tab" aria-selected={t.key === cur.key} className={t.key === cur.key ? 'on' : undefined} onClick={() => setTab(t.key)}>
+      <div role="tablist" className="dtabs" aria-label={`${title}内容`}>
+        {tabs.map((t, index) => (
+          <button
+            key={t.key}
+            id={`${tabId}-${t.key}`}
+            role="tab"
+            aria-selected={t.key === cur.key}
+            aria-controls={`${tabId}-panel`}
+            tabIndex={t.key === cur.key ? 0 : -1}
+            className={t.key === cur.key ? 'on' : undefined}
+            onClick={() => setTab(t.key)}
+            onKeyDown={(event) => tabKeys(event, index)}
+          >
             {t.label}
           </button>
         ))}
       </div>
       <div className={sidebar ? 'dbody has-side' : 'dbody'}>
-        <div className="dmain" role="tabpanel">
+        <div className="dmain" role="tabpanel" id={`${tabId}-panel`} aria-labelledby={`${tabId}-${cur.key}`} tabIndex={0}>
           {cur.content}
         </div>
         {sidebar && <aside className="dside">{sidebar}</aside>}

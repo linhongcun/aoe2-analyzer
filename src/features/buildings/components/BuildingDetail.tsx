@@ -9,6 +9,7 @@ import { collapse } from '../../../domain/family';
 import { BuildingIcon, CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitLink } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
+import { DetailSection, DetailSource, StatTiles, type DetailStat } from '../../../shared/ui/DetailBlocks';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import BuildingList from './BuildingList';
 import BuildingSimulator from './BuildingSimulator';
@@ -67,19 +68,17 @@ export default function BuildingDetail() {
       </>
     );
   };
-  const stats: [string, string, string | number][] = [
-    ['hp', '生命值', b.hp],
-    ['marm', '近战护甲', b.ma],
-    ['parm', '穿刺护甲', b.pa],
-    ['time', '建造时间', b.bt + 's'],
-    ['', '视野', b.los],
-    ...(b.gar ? [['', '驻扎容量', b.gar] as [string, string, number]] : []),
-    ...(b.pop ? [['', '提供人口', b.pop] as [string, string, number]] : []),
+  const stats: DetailStat[] = [
+    { key: 'hp', icon: 'hp', label: '生命值', value: b.hp, accent: true },
+    { key: 'armor', icon: 'marm', label: '护甲（近战 / 穿刺）', value: `${b.ma} / ${b.pa}`, accent: true },
+    { key: 'los', label: '视野', value: b.los },
+    ...(b.gar ? [{ key: 'gar', label: '驻扎容量', value: b.gar }] : []),
+    ...(b.pop ? [{ key: 'pop', label: '提供人口', value: b.pop }] : []),
     ...(b.atk
       ? [
-          ['patk', '攻击力', b.atk] as [string, string, number],
-          ['range', '射程', b.rng + (b.minr ? `（最小 ${b.minr}）` : '')] as [string, string, string],
-          ['rof', '攻击间隔', b.rof + 's'] as [string, string, string],
+          { key: 'atk', icon: 'patk', label: '攻击力', value: b.atk },
+          { key: 'rng', icon: 'range', label: '射程', value: b.rng, note: b.minr ? `最小射程 ${b.minr}` : undefined },
+          { key: 'rof', icon: 'rof', label: '攻击间隔', value: `${b.rof}s` },
         ]
       : []),
   ];
@@ -107,47 +106,49 @@ export default function BuildingDetail() {
           label: '概览',
           content: (
             <>
-              <p>
-                <b>造价：</b>
-                <CostView c={b.cost} />　<b>建造时间：</b>
-                <StatIcon k="time" t="建造时间" />
-                {b.bt}s
-              </p>
-              <div className="two">
-                <div>
-                  <table className="stat">
-                    <tbody>
-                      {stats.map((r) => (
-                        <tr key={r[1]}>
-                          <td>
-                            <StatIcon k={r[0]} t={r[1]} />
-                            {r[1]}
-                          </td>
-                          <td>{r[2]}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div>
-                  <h4>说明</h4>
+              <DetailSection title="造价与建造">
+                <dl className="detail-cost-grid">
+                  <div>
+                    <dt>造价</dt>
+                    <dd>
+                      <CostView c={b.cost} />
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>建造时间</dt>
+                    <dd className="detail-number">
+                      <StatIcon k="time" t="建造时间" />
+                      {b.bt}s
+                    </dd>
+                  </div>
+                </dl>
+              </DetailSection>
+              <StatTiles stats={stats} label="建筑属性" />
+              {b.desc.trim() && (
+                <DetailSection title="说明">
                   <p className="desc">
                     <Linked text={b.desc} nl />
                   </p>
                   <p className="note">{b.descEn.replace(/\n/g, ' ')}</p>
-                </div>
-              </div>
-              <p className="note">数据来自 aoe2techtree（基础数值，未含文明加成与科技）</p>
+                </DetailSection>
+              )}
+              <DetailSource />
             </>
           ),
         },
         { key: 'sim', label: '科技模拟器', content: <BuildingSimulator b={b} /> },
-        {
-          key: 'prod',
-          label: `生产（${units.length}）`,
-          content: split(units, (u) => <UnitLink key={u.id} u={u} elite={eliteMap.get(u.id)} />, '该建筑不生产单位'),
-        },
-        { key: 'tech', label: `科技（${techs.length}）`, content: split(techs, (t) => <TechLink key={t.id} t={t} />, '该建筑不研究科技') },
+        ...(units.length
+          ? [
+              {
+                key: 'prod',
+                label: `生产（${units.length}）`,
+                content: split(units, (u) => <UnitLink key={u.id} u={u} elite={eliteMap.get(u.id)} />, '该建筑不生产单位'),
+              },
+            ]
+          : []),
+        ...(techs.length
+          ? [{ key: 'tech', label: `科技（${techs.length}）`, content: split(techs, (t) => <TechLink key={t.id} t={t} />, '该建筑不研究科技') }]
+          : []),
         {
           key: 'civs',
           label: `文明（${b.civs.length}）`,

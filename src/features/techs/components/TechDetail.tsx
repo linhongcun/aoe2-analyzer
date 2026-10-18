@@ -6,6 +6,7 @@ import { AGE_ZH } from '../../../domain/ratings';
 import { CivChip, CostView, DlcBadgeL, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
+import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import TechList from './TechList';
 import TechAffects from './TechAffects';
@@ -33,7 +34,9 @@ export default function TechDetail() {
   const aliases = TECH_AKA[t.id]?.filter((name) => name.toLowerCase() !== t.en.toLowerCase() && name !== t.zh);
   const nxt = core.techs.filter((x) => x.pre === t.id);
   // 涉及单位用结构化效果（与「作用对象」同源），不再按说明文字匹配单位名（#13）
-  const rel = affectedUnits(techAffects(t, core.units, core.buildings), core.fam);
+  const affected = techAffects(t, core.units, core.buildings);
+  const rel = affectedUnits(affected, core.fam);
+  const effectStats = [...new Map(affected.flatMap((group) => group.rows.flatMap((row) => row.parts)).map((part) => [part.text, part])).values()];
   const civList = (
     <>
       <h4>
@@ -82,19 +85,46 @@ export default function TechDetail() {
           label: '概览',
           content: (
             <>
-              <p>
-                <b>费用：</b>
-                <CostView c={t.cost} />　<b>研究时间：</b>
-                <StatIcon k="time" t="研究时间" />
-                {t.rt}s　<b>建筑：</b>
-                <BLink id={t.b} zh={t.bz} />（{t.ben}）
-              </p>
-              <h4>效果</h4>
-              <p className="desc">
-                <Linked text={t.desc} nl />
-                <br />
-                <small className="note">{t.descEn.replace(/\n/g, ' ')}</small>
-              </p>
+              <DetailSection title="研究">
+                <dl className="detail-cost-grid">
+                  <div>
+                    <dt>费用</dt>
+                    <dd>
+                      <CostView c={t.cost} />
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>研究时间</dt>
+                    <dd className="detail-number">
+                      <StatIcon k="time" t="研究时间" />
+                      {t.rt}s
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>研究建筑</dt>
+                    <dd>
+                      <BLink id={t.b} zh={t.bz} />
+                    </dd>
+                  </div>
+                </dl>
+              </DetailSection>
+              {effectStats.length > 0 && (
+                <div className="detail-effect-tiles">
+                  <StatTiles
+                    label="科技效果"
+                    stats={effectStats.map((part, index) => ({ key: `effect-${index}`, label: '效果', value: part.text, icon: part.icon, accent: index < 2 }))}
+                  />
+                </div>
+              )}
+              {t.desc.trim() && (
+                <DetailSection title="效果说明">
+                  <p className="desc">
+                    <Linked text={t.desc} nl />
+                    <br />
+                    <small className="note">{t.descEn.replace(/\n/g, ' ')}</small>
+                  </p>
+                </DetailSection>
+              )}
               {rel.length > 0 && (
                 <>
                   <h4>涉及单位</h4>
@@ -105,6 +135,7 @@ export default function TechDetail() {
                   </div>
                 </>
               )}
+              <DetailSource note="结构化效果与科技模拟器同源；未编码效果以游戏说明为准" />
             </>
           ),
         },
@@ -137,7 +168,6 @@ export default function TechDetail() {
               </div>
             </SideBlock>
           )}
-          <p className="note">数据来自 aoe2techtree</p>
         </>
       }
     />

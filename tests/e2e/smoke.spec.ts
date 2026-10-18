@@ -17,18 +17,18 @@ const ROUTES: [string, string][] = [
   ['#civs', '#grid .card'],
   ['#simulator', '#simhub .card'],
   ['#buildings', '#bgrid .card'],
-  ['#/building/82', '#building h2'],
-  ['#building/1251', '#building h2'],
+  ['#/building/82', '#building h1'],
+  ['#building/1251', '#building h1'],
   ['#builds', '#builds [data-t="build-order"]'],
   ['#list', '#grid .card'],
-  ['#civ/Armenians', '#detail h2'],
-  ['#/civ/Franks', '#detail h2'],
+  ['#civ/Armenians', '#detail h1'],
+  ['#/civ/Franks', '#detail h1'],
   ['#units', '#ugrid .card'],
   ['#unit/569', '#unit .dtabs'],
   ['#unit/569?tab=sim', '#sim .simt'],
   ['#unit/569/Franks/4', '#sim .simtab'],
   ['#techs', '#tgrid .card'],
-  ['#tech/12', '#tech h2'],
+  ['#tech/12', '#tech h1'],
   ['#tree', '.tree .tcell'],
   ['#tree/Britons', '.tree .tcell'],
   ['#dlc', '.dlct tr'],
@@ -66,9 +66,9 @@ test('Franks Paladin full tech = 192 HP', async ({ page }) => {
 test('civ card click opens detail, unique unit link opens unit page', async ({ page }) => {
   await page.goto('./#list');
   await page.locator('#grid .card', { hasText: 'Armenians' }).click();
-  await expect(page.locator('#detail h2')).toContainText('Armenians');
+  await expect(page.locator('#detail h1')).toContainText('Armenians');
   await page.locator('#detail .uchips a').first().click();
-  await expect(page.locator('#unit h2')).toBeVisible();
+  await expect(page.locator('#unit h1')).toBeVisible();
 });
 
 test('unit tabs: overview -> simulator tab', async ({ page }) => {
@@ -182,7 +182,7 @@ test('leaving a tech detail page does not crash (regression)', async ({ page }) 
     if (m.type() === 'error') errors.push(m.text());
   });
   await page.goto('./#tech/12');
-  await expect(page.locator('#tech h2')).toBeVisible();
+  await expect(page.locator('#tech h1')).toBeVisible();
   await page.locator('nav.mainnav a[data-t="units"]').click();
   await expect(page.locator('#ugrid .card').first()).toBeVisible();
   expect(errors).toEqual([]);
@@ -190,15 +190,15 @@ test('leaving a tech detail page does not crash (regression)', async ({ page }) 
 
 test('building detail tabs + links from tree and unit page', async ({ page }) => {
   await page.goto('./#/building/82');
-  await expect(page.locator('#building h2')).toContainText('Castle');
+  await expect(page.locator('#building h1')).toContainText('Castle');
   await page.getByRole('tab', { name: /生产/ }).click();
   await expect(page.locator('#building .uqrow').first()).toBeVisible();
   await page.goto('./#tree/Franks');
   await page.locator('a.tbld').first().click();
-  await expect(page.locator('#building h2')).toBeVisible();
+  await expect(page.locator('#building h1')).toBeVisible();
   await page.goto('./#unit/569');
   await page.locator('#unit a.tagl').first().click();
-  await expect(page.locator('#building h2')).toContainText('Stable');
+  await expect(page.locator('#building h1')).toContainText('Stable');
 });
 
 test('buildings list filters by type', async ({ page }) => {
@@ -264,12 +264,12 @@ test('elite dedup: civ chips, unit list, toggle keeps URL working', async ({ pag
   await expect(page.locator('#ugrid .card')).toHaveCount(1);
   // 旧的精锐链接仍可打开，并选中“精锐”
   await page.goto('./#/unit/531');
-  await expect(page.locator('#unit h2')).toContainText('精锐掷斧兵');
+  await expect(page.locator('#unit h1')).toContainText('精锐掷斧兵');
   await expect(page.locator('.eseg a.on')).toHaveText('精锐');
   await expect(page.locator('#ediff')).toContainText('850');
   await page.locator('.eseg a', { hasText: '普通' }).click();
   await expect(page).toHaveURL(/#\/unit\/281$/);
-  await expect(page.locator('#unit h2')).not.toContainText('精锐');
+  await expect(page.locator('#unit h1')).not.toContainText('精锐');
 });
 
 test('elite toggle preserves simulator state', async ({ page }) => {
@@ -486,7 +486,7 @@ test('rating help: beside 能力评分, opens/closes by click, outside click and
   await expect(pop).toContainText('不是胜率统计，会随版本补丁调整。数据在 scripts/civ_ratings.json。');
   await expect(pop.getByRole('link', { name: /反馈给我们/ })).toHaveAttribute('href', /issues\/new/);
   await expect(btn).toHaveAttribute('aria-expanded', 'true');
-  await page.locator('#detail .dhead h2').click();
+  await page.locator('#detail .dhead h1').click();
   await expect(pop).toBeHidden();
   await btn.click();
   await expect(pop).toBeVisible();
