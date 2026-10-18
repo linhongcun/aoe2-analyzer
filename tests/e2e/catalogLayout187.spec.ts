@@ -55,7 +55,10 @@ for (const width of [360, 375, 390, 1280, 1920])
           expect(Math.max(...offsets) - Math.min(...offsets), `${route} ${side}`).toBeLessThanOrEqual(1);
         }
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), route).toBe(true);
-        if (theme === 'light') await page.screenshot({ path: info.outputPath(`${route}-${width}.png`) });
+        if (theme === 'light') {
+          await page.locator(`${grid} > .card`).first().scrollIntoViewIfNeeded();
+          await page.screenshot({ path: info.outputPath(`${route}-${width}.png`) });
+        }
       }
       expect(errors).toEqual([]);
     });
