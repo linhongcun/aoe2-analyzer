@@ -55,7 +55,7 @@ describe('#19 分享卡 buildShareCard', () => {
       ['约 0:43', null],
     ]);
     expect(c.basis).toBe(`按法兰克计 · 走路 4 格 · 游戏版本 ${__DATA_SOURCES__.patch.build}`);
-    expect(c.url).toBe('linhongcun.github.io/aoe2-analyzer/#/builds?bo=fast-castle-boom&civ=Franks');
+    expect(c.url).toBe('linhongcun.github.io/aoe2-analyzer/builds/fast-castle-boom/?civ=Franks');
   });
 
   it('卡人口：显示开始时间；无范围时误差行为 null（整行不渲染）（scouts-18 · 法兰克 · 关自动建房）', () => {
@@ -82,9 +82,9 @@ describe('#19 分享卡 buildShareCard', () => {
 
   it('深链：dist / house 非默认才追加；通用不带 civ', () => {
     const base = { siteRoot: 's/', boId: 'x', civEn: 'Franks', defaultDist: 4 };
-    expect(shareUrl({ ...base, dist: 4, house: true })).toBe('s/#/builds?bo=x&civ=Franks');
-    expect(shareUrl({ ...base, dist: 7, house: false })).toBe('s/#/builds?bo=x&civ=Franks&dist=7&house=0');
-    expect(shareUrl({ ...base, civEn: '', dist: 4, house: true })).toBe('s/#/builds?bo=x');
+    expect(shareUrl({ ...base, dist: 4, house: true })).toBe('s/builds/x/?civ=Franks');
+    expect(shareUrl({ ...base, dist: 7, house: false })).toBe('s/builds/x/?civ=Franks&dist=7&house=0');
+    expect(shareUrl({ ...base, civEn: '', dist: 4, house: true })).toBe('s/builds/x/');
     expect(card('scouts-18', 'Franks', '法兰克', true, 7).c.basis).toContain('走路 7 格');
   });
 

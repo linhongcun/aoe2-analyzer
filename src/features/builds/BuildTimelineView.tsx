@@ -1,3 +1,4 @@
+import { sharePageUrl } from '../../domain/sharePage';
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Check, Download, Info, TriangleAlert as Warn, Landmark, Link2, Settings2, Share2, X } from 'lucide-react';
@@ -185,7 +186,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
 
   const copy = async () => {
     try {
-      await navigator.clipboard.writeText(location.href);
+      await navigator.clipboard.writeText(sharePageUrl('/builds', sp.toString(), document.baseURI));
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -209,7 +210,8 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
         defaultDist: WALK.default,
         house: q.house,
         patchBuild: __DATA_SOURCES__.patch.build,
-        siteRoot: `${location.host}${location.pathname}`,
+        siteRoot:
+          typeof document === 'undefined' ? `${location.host}${location.pathname}` : `${new URL(document.baseURI).host}${new URL(document.baseURI).pathname}`,
       }),
     [v, target, bo, q.civ, q.dist, q.house, targetZh],
   );
@@ -254,7 +256,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
     if (!b) return;
     const file = new File([b], fileName, { type: 'image/png' });
     try {
-      await navigator.share({ files: [file], title: card.title, url: location.href });
+      await navigator.share({ files: [file], title: card.title, url: sharePageUrl('/builds', sp.toString(), document.baseURI) });
     } catch {
       /* 用户取消或平台不支持：不提示 */
     }

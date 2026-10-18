@@ -51,10 +51,10 @@ export const shortBoName = (zh: string) => zh.replace(/\s*[（(][^（）()]*[）
 
 /** 能还原同一设置的深链；dist / house 非默认时才追加 */
 export function shareUrl(i: Pick<ShareInput, 'siteRoot' | 'boId' | 'civEn' | 'dist' | 'defaultDist' | 'house'>): string {
-  const q = [`bo=${i.boId}`, ...(i.civEn ? [`civ=${i.civEn}`] : [])];
+  const q = [...(i.civEn ? [`civ=${encodeURIComponent(i.civEn)}`] : [])];
   if (i.dist !== i.defaultDist) q.push(`dist=${i.dist}`);
   if (!i.house) q.push('house=0');
-  return `${i.siteRoot}#/builds?${q.join('&')}`;
+  return `${i.siteRoot.replace(/\/?$/, '/')}builds/${encodeURIComponent(i.boId)}/${q.length ? '?' + q.join('&') : ''}`;
 }
 
 export function buildShareCard(i: ShareInput): ShareCardModel {

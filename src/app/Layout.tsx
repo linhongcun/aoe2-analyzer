@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
@@ -7,6 +7,8 @@ import { TOOLS, WIKI, type Section } from './nav/sections';
 import FeedbackLink from '../features/feedback/FeedbackLink';
 import { appVersion } from '../features/feedback/feedback';
 import { DATA_SOURCES, versionLabel } from '../features/about/dataInfo';
+
+const PageMeta = lazy(() => import('../features/share/PageMeta'));
 
 function NavItem({ s, path }: { s: Section; path: string }) {
   return (
@@ -105,6 +107,9 @@ export function Layout({ children }: { children: ReactNode }) {
           </div>
         )}
         <Suspense fallback={<Loading />}>{children}</Suspense>
+        <Suspense fallback={null}>
+          <PageMeta />
+        </Suspense>
       </main>
       {cmdk && <CommandPalette open onClose={() => setCmdk(false)} />}
       <footer>

@@ -1,0 +1,29 @@
+.page-share {
+  margin: 1rem;
+}
+.share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.share-image button,
+.share-image a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.share-preview {
+  max-width: 720px;
+  margin-block: 1rem;
+}
+.share-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.share-image p {
+  overflow-wrap: anywhere;
+}

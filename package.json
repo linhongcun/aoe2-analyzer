@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p . && vite build",
+    "build": "node scripts/page_metadata.mjs && tsc -p . && vite build && node scripts/static_pages.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "e2e": "playwright test",
@@ -26,7 +26,8 @@
     "eco": "python3 scripts/eco_build.py",
     "sim": "vite-node scripts/sim_try.ts",
     "release": "node scripts/release.mjs",
-    "patches": "python3 scripts/patches_build.py"
+    "patches": "python3 scripts/patches_build.py",
+    "metadata:check": "node scripts/page_metadata.mjs --check"
   },
   "dependencies": {
     "lucide-react": "^1.54.0",
