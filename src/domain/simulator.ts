@@ -101,32 +101,54 @@ export function civBonusNotes(u: Unit, civ: string): string[] {
 /** 科技触发的文明加成在当前时代是否生效（如印加村民吃锻造需城堡时代） */
 const extraOk = (civ: string, t: Tech, u: Unit, age: number) => (CIV_TECH_EXTRAS[civ]?.[t.en] ?? []).every((x) => x.b || !x.pred(u) || x.age <= age);
 
-export function simulate(ctx: SimContext, u: Unit, civ: string, age: number, sel: ReadonlySet<number>, team: ReadonlySet<number>): SimStats {
+export interface SimStep {
+  source: string;
+  techId?: number;
+  before: StatSet;
+  after: StatSet;
+}
+
+export function simulate(
+  ctx: SimContext,
+  u: Unit,
+  civ: string,
+  age: number,
+  sel: ReadonlySet<number>,
+  team: ReadonlySet<number>,
+  trace?: (step: SimStep) => void,
+): SimStats {
   const S: SimStats = baseStats(u);
-  (CIV_BONUSES[civ] ?? []).forEach(([f, g]) => {
-    if (f(u)) applyEffects(S, g(age));
+  const apply = (list: readonly Effect[], source: string, techId?: number) => {
+    const before = trace ? { ...S, bonus: { ...S.bonus } } : null;
+    applyEffects(S, list);
+    if (trace && before) trace({ source, techId, before, after: { ...S, bonus: { ...S.bonus } } });
+  };
+  (CIV_BONUSES[civ] ?? []).forEach(([f, g, note]) => {
+    if (f(u)) apply(g(age), `文明加成：${note}`);
   });
   simTechs(ctx, u, civ).forEach(({ t, ef }) => {
     if (!ef || !sel.has(t.id)) return;
-    if (extraOk(civ, t, u, age)) applyEffects(S, ef);
+    if (extraOk(civ, t, u, age)) apply(ef, `科技：${t.zh}`, t.id);
     else {
       // 时代未到：只施加通用部分
-      applyEffects(
-        S,
+      apply(
         (TECH_EFFECTS[t.en] ?? []).filter(([f]) => f(u)).flatMap((x) => x[1]),
+        `科技：${t.zh}`,
+        t.id,
       );
-      applyEffects(
-        S,
+      apply(
         (CIV_TECH_EXTRAS[civ]?.[t.en] ?? []).filter((x) => !x.b && x.pred(u) && x.age <= age).flatMap((x) => x.fx),
+        `科技触发的文明加成：${t.zh}`,
+        t.id,
       );
     }
   });
-  TEAM_BONUSES.forEach(([, , f, ef], i) => {
-    if (team.has(i) && f(u)) applyEffects(S, ef(u));
+  TEAM_BONUSES.forEach(([, note, f, ef], i) => {
+    if (team.has(i) && f(u)) apply(ef(u), `团队加成：${note}`);
   });
-  applyEffects(
-    S,
+  apply(
     genericFx(u, false, age, (n) => !!ctx.techByEn[n] && sel.has(ctx.techByEn[n]!.id)),
+    '时代与单位特殊规则',
   );
   S.rof = S.rof / S.rofx;
   // .dat 逐时代乘子保留 4 位小数（如 1.0909），容差 0.2 后取整（1.1×1.0909×1.0833 = 1.29995）

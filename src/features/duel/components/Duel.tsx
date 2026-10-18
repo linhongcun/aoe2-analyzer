@@ -27,6 +27,7 @@ import { RealCostBlock, realCostOf } from './RealCost';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
 import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock } from '../../../domain/realCost';
 import { CounterSummary } from './CounterSummary';
+import { DamageBreakdown } from './DamageBreakdown';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
@@ -236,6 +237,7 @@ export default function Duel() {
       ) : (
         <Group A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />
       )}
+      {!isUnavail(A) && !isUnavail(B) && <DamageBreakdown ctx={ctx} a={A} b={B} />}
       {!eq && !isUnavail(A) && !isUnavail(B) && (
         // #25 盈亏平衡点：等资源模式 v1 不放入口（v2 SPEC）
         <BreakEven
