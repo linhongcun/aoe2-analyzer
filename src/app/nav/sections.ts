@@ -16,6 +16,7 @@ export interface Section {
   hideNav?: boolean;
 }
 export const WIKI: Section[] = [
+  { key: 'maps', path: '/maps', label: '地图', en: 'Maps', icon: 'map', desc: '阿拉伯、竞技场、游牧和海图的资源与开局', match: /^\/maps$/, hideNav: true },
   {
     key: 'civs',
     path: '/civs',
@@ -89,7 +90,6 @@ export const TOOLS: Section[] = [
   },
 ];
 export const FUTURE: Section[] = [
-  { key: 'maps', path: '/maps', label: '地图', en: 'Maps', icon: 'map', desc: '排位地图池与地图特点', match: /^\/maps$/, status: 'planned' },
   {
     key: 'patches',
     path: '/patches',

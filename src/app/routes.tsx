@@ -18,6 +18,7 @@ const Compare = lazy(() => import('../features/compare/components/Compare'));
 const BuildingList = lazy(() => import('../features/buildings/components/BuildingList'));
 const BuildingDetail = lazy(() => import('../features/buildings/components/BuildingDetail'));
 const SimulatorHub = lazy(() => import('../features/simulator/components/SimulatorHub'));
+const Maps = lazy(() => import('../features/maps/Maps'));
 const Planned = lazy(() => import('../features/placeholder/components/Planned'));
 const Duel = lazy(() => import('../features/duel/components/Duel'));
 const BonusDetail = lazy(() => import('../features/bonuses/components/BonusDetail'));
@@ -49,7 +50,8 @@ export function AppRoutes() {
       <Route path="/about-data" element={<AboutData />} />
       <Route path="/simulator" element={<SimulatorHub />} />
       <Route path="/builds" element={<BuildOrderList />} />
-      {['/maps', '/patches', '/ladder'].map((p) => (
+      <Route path="/maps" element={<Maps />} />
+      {['/patches', '/ladder'].map((p) => (
         <Route key={p} path={p} element={<Planned />} />
       ))}
       <Route path="*" element={<Home />} />
