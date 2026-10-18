@@ -29,6 +29,8 @@ import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock } from '../../../doma
 import { CounterSummary } from './CounterSummary';
 import { DamageBreakdown } from './DamageBreakdown';
 import { AgeComparison } from './AgeComparison';
+import { BattleReplay } from './BattleReplay';
+import { groupReplay, oneReplay } from '../../../domain/battleReplay';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
@@ -234,9 +236,9 @@ export default function Duel() {
           </p>
         </div>
       ) : mode === '1' ? (
-        <OneVOne A={A} B={B} />
+        <OneVOne key={[fmtSide(A.spec), fmtSide(B.spec)].join('|')} A={A} B={B} />
       ) : (
-        <Group A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />
+        <Group key={[mode, fmtSide(A.spec), fmtSide(B.spec), cntA, cntB].join('|')} A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />
       )}
       {!isUnavail(A) && !isUnavail(B) && <DamageBreakdown ctx={ctx} a={A} b={B} />}
       {!isUnavail(A) && !isUnavail(B) && <AgeComparison ctx={ctx} byId={core.unitById} a={{ ...A.spec, civ: A.civ }} b={{ ...B.spec, civ: B.civ }} />}
@@ -515,6 +517,7 @@ function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
           {dpsReason}
         </p>
       )}
+      <BattleReplay frames={oneReplay(A.F, B.F, r)} duration={r.duration} a={A.u} b={B.u} maxA={A.F.hp} maxB={B.F.hp} unit="生命" />
       <h4>时间线（每个点为一次攻击，竖线为击杀时刻）</h4>
       <div className="duel-tl">
         {(
@@ -591,6 +594,7 @@ function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb
         </tbody>
       </table>
       <TradeRow A={A} B={B} na={na} nb={nb} aAlive={g.aAlive} bAlive={g.bAlive} />
+      <BattleReplay frames={groupReplay(g)} duration={g.duration} a={A.u} b={B.u} maxA={na} maxB={nb} unit="个单位" />
       <h4>存活数量随时间变化</h4>
       <svg className="duel-chart" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="存活数量随时间变化">
         <path d={path(1)} className="ln-a" />
