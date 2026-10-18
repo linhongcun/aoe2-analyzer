@@ -151,13 +151,12 @@ describe('Jony review 追加断言', () => {
     const css = readFileSync('src/shared/styles/base.css', 'utf8');
     expect(css).toMatch(/\.note \{\s*color: var\(--c-muted\)/);
   });
-  it('#27 攻击间隔用全角 em dash + 原因小字，不用半角 -', () => {
-    for (const f of ['src/features/duel/components/Duel.tsx', 'src/features/units/components/UnitDetail.tsx']) {
-      const s = readFileSync(f, 'utf8');
-      expect(s).toMatch(/—\s*<small className="note rof-reason"/);
-      expect(s).not.toContain("? '-' :");
-      expect(s).not.toContain('`— ${DPS_UNAVAILABLE_REASON}`');
-    }
+  it('#27 PK 攻击间隔用全角 em dash + 原因小字，不用半角 -', () => {
+    // 单位页已改为共享统计卡，其破折号与说明小字在 smoke 的 #27 用例检查真实 DOM。
+    const s = readFileSync('src/features/duel/components/Duel.tsx', 'utf8');
+    expect(s).toMatch(/—\s*<small className="note rof-reason"/);
+    expect(s).not.toContain("? '-' :");
+    expect(s).not.toContain('`— ${DPS_UNAVAILABLE_REASON}`');
   });
 });
 

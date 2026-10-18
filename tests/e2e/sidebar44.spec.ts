@@ -18,7 +18,7 @@ for (const [hash, sel] of [
   ['#unit/569', '#unit .dtabs'],
   ['#unit/1948', '#unit .dtabs'],
   ['#tech/12', '.dtabs'],
-  ['#civ/Armenians', '#detail h2'],
+  ['#civ/Armenians', '#detail h1'],
   ['#/building/82', '.dtabs'],
 ] as const)
   test(`#44 1280：${hash} 无横向溢出`, async ({ page }) => {

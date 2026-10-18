@@ -1,0 +1,6 @@
+/* #6：在手机卡片内为完整的未建模原因留出空间，保留字号与单行规则。 */
+@media (max-width: 600px) {
+  .pk-line.rc-unsupported {
+    padding-inline: 2px;
+  }
+}

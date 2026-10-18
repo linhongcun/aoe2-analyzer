@@ -4,12 +4,13 @@ import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
 import { findUniqueTech } from '../../../domain/linker';
-import { strengths, TYPE_ZH } from '../../../domain/ratings';
+import { AXES, strengths, TYPE_ZH } from '../../../domain/ratings';
 import { CivChip, CivIcon, DlcBadgeL, TechIcon, UnitLinks } from '../../../shared/ui/art';
 import { collapse } from '../../../domain/family';
 import { Icon } from '../../../shared/ui/Icon';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
-import { RatingHeading } from '../../../shared/ui/RatingHelp';
+import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
+import { RatingHeading, RatingLabel } from '../../../shared/ui/RatingHelp';
 import { Linked, PosBox, Radar } from '../../../shared/ui/widgets';
 import { session } from '../../../shared/utils/sticky';
 import CivList from './CivList';
@@ -44,6 +45,30 @@ export default function CivDetail() {
   if (!c) return <CivList />;
   const [s, w] = strengths(c);
   const myU = core ? core.units.filter((u) => u.type === 'UniqueUnit' && u.civs.includes(c.en)) : [];
+  const highlights = new Set(
+    c.s
+      .map((score, index) => ({ score, index }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 2)
+      .map((x) => x.index),
+  );
+  const ratingTiles = (
+    <StatTiles
+      label="文明能力评分"
+      stats={AXES.map((label, index) => ({
+        key: `rating-${index}`,
+        label,
+        value: (
+          <>
+            {c.s[index]}
+            <small className="detail-score-max">/10</small>
+          </>
+        ),
+        score: c.s[index],
+        accent: highlights.has(index),
+      }))}
+    />
+  );
   const sameDlc = c.dlc != null ? DLCS[c.dlc]!.civs.filter((n) => n !== c.en).map((n) => civByEn(n)!) : [];
   return (
     <DetailPage
@@ -65,6 +90,16 @@ export default function CivDetail() {
           label: '概览',
           content: (
             <>
+              {c.op.trim() && (
+                <DetailSection title="开局建议">
+                  <CivOpening c={c} />
+                </DetailSection>
+              )}
+              <section className="detail-ratings-heading">
+                <h2>能力评分</h2>
+                <RatingLabel />
+              </section>
+              {ratingTiles}
               <p>
                 <b>官方定位：</b>
                 {c.desc}
@@ -92,7 +127,7 @@ export default function CivDetail() {
                 <b>推荐团战位置：</b>
                 {c.fl >= c.pk ? '边位 Flank' : '口袋 Pocket'}（边位 {c.fl}/10，口袋 {c.pk}/10）
               </p>
-              <CivOpening c={c} />
+              <DetailSource note="能力评分为主观近似评分；开局建议请结合文明加成调整" />
             </>
           ),
         },
@@ -100,15 +135,18 @@ export default function CivDetail() {
           key: 'data',
           label: '数据',
           content: (
-            <div className="two">
-              <div>
-                <RatingHeading />
-                <Radar id="rd" list={[c]} />
+            <>
+              {ratingTiles}
+              <div className="two">
+                <div>
+                  <RatingHeading />
+                  <Radar id="rd" list={[c]} />
+                </div>
+                <div>
+                  <PosBox list={[c]} />
+                </div>
               </div>
-              <div>
-                <PosBox list={[c]} />
-              </div>
-            </div>
+            </>
           ),
         },
         {
@@ -135,9 +173,11 @@ export default function CivDetail() {
       ]}
       sidebar={
         <>
-          <SideBlock title="独特单位">
-            <div className="uchips">{core && <UnitLinks list={collapse(myU, core.fam)} />}</div>
-          </SideBlock>
+          {myU.length > 0 && (
+            <SideBlock title="独特单位">
+              <div className="uchips">{core && <UnitLinks list={collapse(myU, core.fam)} />}</div>
+            </SideBlock>
+          )}
           <SideBlock title="快速入口">
             <Link className="ulink tl" to={`/tree/${c.en}`}>
               <Icon name="git-branch" /> 科技树

@@ -27,6 +27,13 @@ const notes = readdirSync('docs/PATCH-NOTES')
 // #14：首页单位数在构建时从数据算出（首页不加载 units.json），口径与列表页同一个函数
 const units = JSON.parse(readFileSync('src/data/units.json', 'utf8')) as Unit[];
 const UNIT_COUNT = unitCount(units, buildFamilies(units, Object.fromEntries(units.map((u) => [u.id, u]))));
+const CATALOG_COUNTS = {
+  units: UNIT_COUNT,
+  techs: (JSON.parse(readFileSync('src/data/techs.json', 'utf8')) as unknown[]).length,
+  buildings: (JSON.parse(readFileSync('src/data/buildings.json', 'utf8')) as unknown[]).length,
+  builds: readdirSync('src/data/build-orders').filter((f) => f.endsWith('.json')).length,
+  patches: readdirSync('src/data/patches').filter((f) => f.endsWith('.json')).length,
+};
 
 // base './'：GitHub Pages 子路径 /aoe2-analyzer/ 与本地预览都可用（配合 HashRouter）
 export default defineConfig({
@@ -34,6 +41,7 @@ export default defineConfig({
   plugins: [react()],
   define: {
     __UNIT_COUNT__: JSON.stringify(UNIT_COUNT),
+    __CATALOG_COUNTS__: JSON.stringify(CATALOG_COUNTS),
     __APP_VERSION__: JSON.stringify(appVersion),
     __BUILD__: JSON.stringify(sha),
     __DATA_SOURCES__: JSON.stringify(pins),

@@ -1,5 +1,5 @@
 import { ArmorClasses, BonusTable } from '../../simulator/components/SimPanel';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect } from 'react';
 import { RangeB } from '../../../shared/ui/RangeB';
 import { RangeHelp } from '../../../shared/ui/RangeHelp';
 import { Link, useLocation } from 'react-router-dom';
@@ -17,6 +17,7 @@ import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { CivChip, CivIcon, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
+import { DetailSection, DetailSource, StatTiles, type DetailStat } from '../../../shared/ui/DetailBlocks';
 import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
 import Simulator from '../../simulator/components/Simulator';
 import UnitList from './UnitList';
@@ -94,37 +95,41 @@ export default function UnitDetail() {
   // 有文明上下文时按该文明科技树选分叉（#10）
   const st = rt.civ && trees ? civStatus(trees, rt.civ) : null;
   const ln = upgradeLine(u, core.units, core.unitById, st ? (id) => st['u' + id] === 1 : undefined).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id);
-  const stats: [string, string, ReactNode][] = [
-    ['hp', '生命值 HP', u.hp],
-    [u.rng > 1 ? 'patk' : 'atk', '攻击力', u.atk],
-    ['marm', '近战护甲', u.ma],
-    ['parm', '穿刺护甲', u.pa],
-    [
-      'range',
-      '射程',
-      <>
-        {u.rng + (u.minr ? `（最小 ${u.minr}）` : '')}
-        <RangeB u={u} />
-      </>,
-    ],
-    ['speed', '移动速度', u.spd],
-    ['', '视野', u.los],
-    [
-      'rof',
-      '攻击间隔',
-      u.rof > 0 ? (
-        u.rof + 's'
-      ) : (
+  const stats: DetailStat[] = [
+    { key: 'hp', icon: 'hp', label: '生命值 HP', value: u.hp, accent: true, change: isE ? u.hp - base.hp : undefined },
+    { key: 'atk', icon: u.rng > 1 ? 'patk' : 'atk', label: '攻击力', value: u.atk, accent: true, change: isE ? u.atk - base.atk : undefined },
+    { key: 'ma', icon: 'marm', label: '近战护甲', value: u.ma, change: isE ? u.ma - base.ma : undefined },
+    { key: 'pa', icon: 'parm', label: '穿刺护甲', value: u.pa, change: isE ? u.pa - base.pa : undefined },
+    {
+      key: 'rng',
+      icon: 'range',
+      label: '射程',
+      value: u.rng,
+      change: isE ? u.rng - base.rng : undefined,
+      note: (
         <>
-          —
-          <small className="note rof-reason" data-t="rof-reason">
-            {DPS_UNAVAILABLE_REASON}
-          </small>
+          <RangeB u={u} />
+          <RangeHelp u={u} />
+          {u.minr ? `最小射程 ${u.minr}` : null}
         </>
       ),
-    ],
-    ['', '准确度', u.acc + '%'],
-    ...(u.blast ? [['blast', '溅射范围', u.blast] as [string, string, number]] : []),
+    },
+    { key: 'spd', icon: 'speed', label: '移动速度', value: u.spd, change: isE ? u.spd - base.spd : undefined },
+    { key: 'los', label: '视野', value: u.los, change: isE ? u.los - base.los : undefined },
+    {
+      key: 'rof',
+      icon: 'rof',
+      label: '攻击间隔',
+      value: u.rof > 0 ? `${u.rof}s` : '—',
+      change: isE && u.rof > 0 && base.rof > 0 ? u.rof - base.rof : undefined,
+      lowerIsBetter: true,
+      note:
+        u.rof > 0 ? undefined : (
+          <span className="rof-reason" data-t="rof-reason">
+            {DPS_UNAVAILABLE_REASON}
+          </span>
+        ),
+    },
   ];
   const rel = core.techs.filter((t) => t.desc.includes(u.zh)).slice(0, 16);
   const cz = (en: string) => civByEn(en)?.zh;
@@ -173,51 +178,77 @@ export default function UnitDetail() {
           label: '概览',
           content: (
             <>
-              {elite && <EliteDiff base={base} elite={elite} />}
-              <p>
-                <b>造价：</b>
-                <CostView c={u.cost} />　<b>生产时间：</b>
-                <StatIcon k="time" t="生产时间" />
-                {u.tt}s　<b>建筑：</b>
-                <BLink id={u.b} zh={u.bz} />（{u.ben}）
-              </p>
-              <GatherLine u={u} civ={rt.civ} age={rt.age} />
+              <DetailSection title="造价与生产">
+                <dl className="detail-cost-grid">
+                  <div>
+                    <dt>造价</dt>
+                    <dd>
+                      <CostView c={u.cost} />
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>生产时间</dt>
+                    <dd className="detail-number">
+                      <StatIcon k="time" t="生产时间" />
+                      {u.tt}s
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>生产建筑</dt>
+                    <dd>
+                      <BLink id={u.b} zh={u.bz} />
+                    </dd>
+                  </div>
+                </dl>
+                <GatherLine u={u} civ={rt.civ} age={rt.age} />
+              </DetailSection>
+              <StatTiles stats={stats} label="基础属性" />
               <div className="two">
                 <div>
-                  <table className="stat">
-                    <tbody>
-                      {stats.map((r) => (
-                        <tr key={r[1]}>
-                          <td className={r[0] === 'range' ? 'range-heading' : undefined}>
-                            <StatIcon k={r[0]} t={r[1]} />
-                            {r[1]}
-                            {r[0] === 'range' && <RangeHelp u={u} />}
-                          </td>
-                          <td>{r[2]}</td>
+                  <DetailSection title="其他属性">
+                    <table className="stat">
+                      <tbody>
+                        <tr>
+                          <td>准确度</td>
+                          <td className="detail-number">{u.acc}%</td>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div>
-                  <BonusTable B={Object.fromEntries(u.atks.filter(([n]) => n !== '近战' && n !== '穿刺'))} />
-                  <ArmorClasses list={u.armc} />
-                  {u.up && (
-                    <>
-                      <h4>升级研究</h4>
+                        {!!u.blast && (
+                          <tr>
+                            <td>
+                              <StatIcon k="blast" t="溅射范围" />
+                              溅射范围
+                            </td>
+                            <td>{u.blast}</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </DetailSection>
+                  {u.up && (!elite || u.id !== elite.id) && (
+                    <DetailSection title="升级研究">
                       <p>
-                        从上一级升级为 {u.zh}：<CostView c={u.up[0]} /> <StatIcon k="time" t="研究时间" />
-                        {u.up[1]}s
+                        从上一级升级为 {u.zh}：<CostView c={u.up[0]} />{' '}
+                        <span className="detail-number">
+                          <StatIcon k="time" t="研究时间" />
+                          {u.up[1]}s
+                        </span>
                       </p>
-                    </>
+                    </DetailSection>
                   )}
                 </div>
+                <div>
+                  {u.atks.some(([n]) => n !== '近战' && n !== '穿刺') && (
+                    <BonusTable B={Object.fromEntries(u.atks.filter(([n]) => n !== '近战' && n !== '穿刺'))} />
+                  )}
+                  {u.armc.length > 0 && <ArmorClasses list={u.armc} />}
+                </div>
               </div>
+              {elite && <EliteDiff base={base} elite={elite} />}
               <h4>说明</h4>
               <p className="desc">
                 <Linked text={u.desc} nl />
               </p>
-              <p className="note">数据来自 aoe2techtree（基础数值，未含文明加成与科技）</p>
+              <DetailSource />
             </>
           ),
         },
@@ -322,81 +353,51 @@ export default function UnitDetail() {
   );
 }
 
-const DIFF: [keyof Unit, string, string][] = [
-  ['hp', 'hp', '生命值'],
-  ['atk', 'atk', '攻击力'],
-  ['ma', 'marm', '近战护甲'],
-  ['pa', 'parm', '穿刺护甲'],
-  ['rng', 'range', '射程'],
-  ['spd', 'speed', '移动速度'],
-  ['los', '', '视野'],
-  ['rof', 'rof', '攻击间隔'],
-  ['acc', '', '准确度'],
-  ['tt', 'time', '生产时间'],
-];
 const fmt = (x: number) => String(Math.round(x * 100) / 100);
-/** 普通 vs 精锐：只列出有差异的属性，以及精锐升级的研究费用 */
+/** 属性变化已放入统计卡；这里只保留升级费用、生产时间及克制加成差异。 */
 function EliteDiff({ base, elite }: { base: Unit; elite: Unit }) {
-  const rows = DIFF.filter(([k]) => base[k] !== elite[k]);
   const ab = (u: Unit) => Object.fromEntries(u.atks.filter(([n]) => n !== '近战' && n !== '穿刺'));
   const A = ab(base),
     B = ab(elite);
   const bon = [...new Set([...Object.keys(A), ...Object.keys(B)])].filter((k) => (A[k] ?? 0) !== (B[k] ?? 0));
-  // 攻击间隔、生产时间越小越好
-  const good = (k: string, d: number) => (k === 'rof' || k === 'tt' ? d < 0 : d > 0);
-  const sign = (d: number) => (d > 0 ? '+' : '') + fmt(d);
+  if (!elite.up && !bon.length && base.acc === elite.acc && base.tt === elite.tt) return null;
   return (
-    <div className="ediffbox" id="ediff">
-      <h4>普通与精锐对比（仅列出有变化的项）</h4>
-      <table className="stat ediff">
-        <thead>
-          <tr>
-            <td></td>
-            <td>普通</td>
-            <td>精锐</td>
-            <td>变化</td>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map(([k, ic, zh]) => {
-            const a = base[k] as number,
-              b = elite[k] as number;
-            return (
-              <tr key={k}>
-                <td>
-                  <StatIcon k={ic} t={zh} />
-                  {zh}
-                </td>
-                <td>{fmt(a)}</td>
-                <td>
-                  <b>{fmt(b)}</b>
-                </td>
-                <td className={good(k, b - a) ? 'up' : 'dn'}>{sign(b - a)}</td>
-              </tr>
-            );
-          })}
-          {bon.map((k) => {
-            const d = (B[k] ?? 0) - (A[k] ?? 0);
-            return (
-              <tr key={'b' + k}>
-                <td>对 {k} 加成</td>
-                <td>{A[k] ?? 0}</td>
-                <td>
-                  <b>{B[k] ?? 0}</b>
-                </td>
-                <td className={d > 0 ? 'up' : 'dn'}>{sign(d)}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <section className="detail-section" id="ediff" aria-label="精锐升级">
+      <h2>精锐升级</h2>
       {elite.up && (
-        <p className="note">
+        <p>
           精锐升级研究：
-          <CostView c={elite.up[0]} /> <StatIcon k="time" t="研究时间" />
-          {elite.up[1]}s
+          <CostView c={elite.up[0]} />{' '}
+          <span className="detail-number">
+            <StatIcon k="time" t="研究时间" />
+            {elite.up[1]}s
+          </span>
         </p>
       )}
-    </div>
+      {(bon.length > 0 || base.acc !== elite.acc || base.tt !== elite.tt) && (
+        <ul className="detail-upgrade-notes">
+          {base.acc !== elite.acc && (
+            <li>
+              准确度：<span className="detail-number">{base.acc}%</span> 至 <span className="detail-number">{elite.acc}%</span>
+            </li>
+          )}
+          {base.tt !== elite.tt && (
+            <li>
+              生产时间：<span className="detail-number">{base.tt}s</span> 至 <span className="detail-number">{elite.tt}s</span>
+            </li>
+          )}
+          {bon.map((k) => (
+            <li key={k}>
+              对 {k} 加成：<span className="detail-number">{A[k] ?? 0}</span> 至 <span className="detail-number">{B[k] ?? 0}</span>（
+              <span className={(B[k] ?? 0) > (A[k] ?? 0) ? 'g detail-number' : 'r detail-number'}>
+                {(B[k] ?? 0) - (A[k] ?? 0) > 0 ? '+' : ''}
+                {fmt((B[k] ?? 0) - (A[k] ?? 0))}
+              </span>
+              ）
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

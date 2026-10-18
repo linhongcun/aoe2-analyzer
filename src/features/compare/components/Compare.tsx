@@ -48,8 +48,8 @@ export default function Compare() {
             {AXES.map((l, i) => (
               <tr key={l}>
                 <td>{l}</td>
-                <td className={a.s[i]! > b.s[i]! ? 'win' : ''}>{a.s[i]}</td>
-                <td className={b.s[i]! > a.s[i]! ? 'win' : ''}>{b.s[i]}</td>
+                <td className={`compare-score${a.s[i]! > b.s[i]! ? ' win' : ''}`}>{a.s[i]}</td>
+                <td className={`compare-score${b.s[i]! > a.s[i]! ? ' win' : ''}`}>{b.s[i]}</td>
               </tr>
             ))}
             {ROWS.map(([l, k]) => (

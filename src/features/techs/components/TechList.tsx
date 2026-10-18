@@ -69,7 +69,7 @@ export default function TechList() {
                   {t.bz} · {AGE_ZH[t.age] ?? ''} · <CostView c={t.cost} />
                   {t.type === 'UniqueTech' ? ' · ' + t.civs.map((n) => civByEn(n)?.zh).join('/') : ''}
                 </div>
-                <DlcBadge i={t.dlc} />
+                <DlcBadge i={t.dlc} linked={false} />
               </div>
             </Link>
           ))}

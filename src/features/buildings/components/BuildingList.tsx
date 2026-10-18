@@ -57,7 +57,7 @@ export default function BuildingList() {
                   {BUILDING_TYPE_ZH[b.type]} · {AGE_ZH[b.age] ?? ''} · <CostView c={b.cost} />
                   {b.civs.length < 10 ? ' · ' + b.civs.length + ' 个文明' : ''}
                 </div>
-                <DlcBadge i={b.dlc} />
+                <DlcBadge i={b.dlc} linked={false} />
               </div>
             </Link>
           ))}

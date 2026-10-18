@@ -14,7 +14,7 @@ for (const [id, other, note, otherNote] of [
 ] as const)
   test(`#44 同名单位 ${id}：页头文明小字 + 「同名单位」互链，无混淆提示`, async ({ page }) => {
     await page.goto(`./#unit/${id}`);
-    await expect(page.locator('#unit h2 .civnote')).toHaveText(note);
+    await expect(page.locator('#unit h1 .civnote')).toHaveText(note);
     const link = rel(page).locator('[data-t="dup-link"]');
     await expect(link).toHaveCount(1);
     await expect(link).toContainText('同名单位：');
@@ -49,7 +49,7 @@ for (const id of [239, 1132, 569])
     await page.goto(`./#unit/${id}`);
     await expect(page.locator('#unit .dtabs')).toBeVisible();
     await expect(rel(page)).toHaveCount(0);
-    await expect(page.locator('#unit h2 .civnote')).toHaveCount(0);
+    await expect(page.locator('#unit h1 .civnote')).toHaveCount(0);
   });
 
 test('#44 390 宽：原因行可折行，页面不横向滚动', async ({ page }) => {
