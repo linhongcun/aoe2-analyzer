@@ -51,6 +51,6 @@ export function feedbackUrl(c: FeedbackCtx, kind: 'bug' | 'data' | 'feature' = '
     `- 数据版本：${dataVersion()}；构建 ${__BUILD__}`,
     `- 浏览器：${c.ua}`,
   ].join('\n');
-  const p = new URLSearchParams({ title, body, labels: kind === 'data' ? 'data-error' : kind === 'feature' ? 'enhancement' : 'bug' });
+  const p = new URLSearchParams({ title, body, labels: kind === 'data' ? 'data' : kind === 'feature' ? 'feature' : 'bug' });
   return `${ISSUES_NEW}?${p.toString()}`;
 }
