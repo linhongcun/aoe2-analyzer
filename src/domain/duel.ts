@@ -32,12 +32,19 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
   return { name: u.zh, hp: S.hp, attack, armor, rof: S.rof, acc: Math.min(100, Math.max(0, S.acc)) / 100, ranged: u.rng > 1, rng: S.rng, cost: u.cost };
 }
 
+/** 本场匹配的攻击类别；计算和展示共用，保留零伤害及负攻击的扣减。 */
+export function damageByClass(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>) {
+  // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对村民 −3 会扣减）
+  return Object.entries(a.attack).flatMap(([category, attack]) =>
+    category in d.armor ? [{ category, attack, armor: d.armor[category]!, damage: Math.max(Math.min(0, attack), attack - d.armor[category]!) }] : [],
+  );
+}
 /** 单次命中伤害（不含命中率） */
 export function damagePerHit(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>): number {
-  let sum = 0;
-  // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对村民 −3 会扣减）
-  for (const [c, v] of Object.entries(a.attack)) if (c in d.armor) sum += Math.max(Math.min(0, v), v - d.armor[c]!);
-  return Math.max(1, sum);
+  return Math.max(
+    1,
+    damageByClass(a, d).reduce((sum, row) => sum + row.damage, 0),
+  );
 }
 /** 期望每次攻击伤害（远程乘命中率；近战命中率视为 100%） */
 export const expectedHit = (a: Fighter, d: Fighter) => damagePerHit(a, d) * (a.ranged ? a.acc : 1);
