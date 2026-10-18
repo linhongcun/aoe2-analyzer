@@ -120,6 +120,31 @@ test('#6 首次访问默认浅色，主题菜单可用键盘关闭并恢复焦�
   await expect(trigger).toBeFocused();
 });
 
+test('#6 外观菜单打开时进入全局搜索，焦点留在新搜索框并可直接输入', async ({ page }) => {
+  await ready(page, '', '#home .hcard');
+  await page.getByRole('button', { name: '主题：浅色', exact: true }).click();
+  await page.getByRole('button', { name: '全局搜索', exact: true }).click();
+  // 外点关闭的延迟焦点恢复必须先完成，避免只验证到弹层刚打开的一瞬。
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  const search = page.getByPlaceholder(/搜索文明、单位、科技/);
+  await expect(search).toBeFocused();
+  await page.keyboard.type('Paladin');
+  await expect(search).toHaveValue('Paladin');
+  await expect(page.locator('.cmdk-list li').first()).toContainText('Paladin');
+});
+
+test('#6 已在单位 PK 时再次选择同一工具入口也关闭菜单', async ({ page }) => {
+  await ready(page, 'duel', '#duel-res');
+  const tools = page.getByRole('button', { name: '工具', exact: true });
+  await tools.click();
+  const panel = page.locator('#tools-menu');
+  await expect(panel).toBeVisible();
+  await panel.getByRole('link', { name: '单位 PK', exact: true }).click();
+  await expect(panel).toBeHidden();
+  await expect(tools).toHaveAttribute('aria-expanded', 'false');
+  await expect(page).toHaveURL(/#\/duel(?:\?|$)/);
+});
+
 test('#6 主题选择经刷新保留，系统选项响应系统变化，分享 URL 不混入主题', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.emulateMedia({ colorScheme: 'light' });
@@ -176,6 +201,18 @@ for (const width of [360, 375, 390])
     await page.reload();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   });
+
+test('#6 手机点击导航遮罩关闭抽屉并恢复菜单按钮焦点', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  await ready(page, '', '#home .hcard');
+  const trigger = page.getByRole('button', { name: '菜单', exact: true });
+  await trigger.click();
+  const drawer = page.getByRole('dialog', { name: '主导航', exact: true });
+  await expect(drawer).toBeVisible();
+  await page.locator('.nav-backdrop').click({ position: { x: 380, y: 200 } });
+  await expect(drawer).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
 
 for (const width of WIDTHS)
   test(`#6 @${width}：首页首屏可搜索并看到至少四个资料入口`, async ({ page }, info) => {
