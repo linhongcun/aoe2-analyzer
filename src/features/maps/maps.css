@@ -1,0 +1,31 @@
+.map-guide article {
+  margin-block: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  scroll-margin-top: 6rem;
+}
+.map-guide p {
+  line-height: 1.7;
+}
+.map-guide nav,
+.map-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.map-guide a,
+.map-guide summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.25rem;
+}
+.map-guide small {
+  display: block;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+.map-guide li {
+  overflow-wrap: anywhere;
+}
