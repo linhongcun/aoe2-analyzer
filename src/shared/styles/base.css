@@ -1656,3 +1656,9 @@ table.ediff td.dn {
 .civ-opening li { margin-block: 8px; }
 .civ-opening-links { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
 .civ-opening-links .ulink { min-height: 44px; }
+/* issue 105 伤害拆解 */
+.damage-breakdown { margin-block: 16px; }
+.damage-breakdown summary { min-height: 44px; padding: 12px; cursor: pointer; font-weight: 600; }
+.damage-breakdown section { padding: 12px; border-top: 1px solid var(--line); }
+.damage-breakdown li { margin-block: 8px; overflow-wrap: anywhere; }
+.damage-change { display: block; }
