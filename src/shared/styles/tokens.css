@@ -1,7 +1,7 @@
 /* 设计令牌：浅色编辑风（方向 C）
  * 旧令牌名全部保留，只是换了值，现有组件不用改就能用；新组件请用语义名 --color-* / --space-* 等。
  * 字体由 base.css 改为 font-family: var(--font-sans)。
- * 阶段 1–3 仅浅色：深色块保留在下方注释中，阶段 4 再启用。
+ * 首次使用浅色；外观选择与系统主题由 app/theme 管理。
  */
 :root {
   color-scheme: light;
@@ -32,7 +32,31 @@
   --color-link-soft: #e5f0fb; /* 链接类标签底 */
   --color-shadow: #0000001f; /* 图标、文字投影（原始透明黑） */
   --color-scrim: #00000066; /* 弹窗与菜单遮罩 */
-  /* 资源色（仅作色块，不承载文字） */
+  /* 中性控件与路线当前项使用独立前景，避免深色时反转成白底。 */
+  --color-selected: #1d1d1f;
+  --color-on-selected: #ffffff;
+  --color-route-current: #1d1d1f;
+  --color-on-route-current: #ffffff;
+  --color-rating: #aeaeb2;
+  --color-decorative: #e8e8ed;
+  --color-route-selected: var(--color-route-current);
+  --color-on-route-selected: var(--color-on-route-current);
+  --color-on-bad: #ffffff;
+  --color-on-warn: #ffffff;
+  /* 资源色与其文字保持固定，不随主题反转。 */
+  --res-food: #e08a4a;
+  --res-wood: #7a5a30;
+  --res-gold: #d4a72c;
+  --res-stone: #8e8e93;
+  --color-on-resource-light: #000000;
+  --color-on-resource-dark: #ffffff;
+  --color-timeline-villager: #3a3a3c;
+  --color-on-timeline-villager: #ffffff;
+  --color-timeline-ageup: #a65a14;
+  --color-on-timeline-ageup: #ffffff;
+  --color-timeline-band: #f4ebe3;
+  --color-timeline-bad: #c4281c;
+  --color-on-timeline-bad: #ffffff;
 
   /* —— 字体 —— */
   --font-sans: 'Inter', 'PingFang SC', 'HarmonyOS Sans SC', 'Noto Sans SC', 'Noto Sans CJK SC', 'Microsoft YaHei', system-ui, sans-serif;
@@ -92,22 +116,53 @@
   --c-bad: var(--color-bad);
 }
 
-/* 深色模式（阶段 4 启用，当前注释掉，避免跟随系统时切到未检查的界面）
-:root[data-theme="dark"] {
-  --color-bg: #000000; --color-surface: #1c1c1e; --color-surface-2: #2c2c2e; --color-control: #2c2c2e; --color-tag: #2c2c2e;
-  --color-border: #38383a; --color-line: #2c2c2e; --color-text: #f5f5f7; --color-text-2: #d1d1d6; --color-muted: #a1a1a6;
-  --color-accent: #f0a454; --color-on-accent: #1c1c1e; --color-accent-soft: #f0a45429; --color-link: #4da3ff; --color-good: #4cd964; --color-bad: #ff6b5e;
-  --color-bad-soft: #3a1714; --color-warn: #ffb340;
-  --shadow-1: 0 0 0 1px var(--color-border); --shadow-2: 0 0 0 1px var(--color-border); --shadow-3: 0 12px 40px #000a;
+/* 深色仍沿用编辑风的信息层级，只替换语义令牌。 */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: #000000;
+  --color-surface: #1c1c1e;
+  --color-surface-2: #2c2c2e;
+  /* 控件上可能出现说明或链接文字，使用通过 AA 的次级面色。 */
+  --color-control: #2c2c2e;
+  --color-tag: #2c2c2e;
+  --color-border: #38383a;
+  --color-line: #2c2c2e;
+  --color-text: #f5f5f7;
+  --color-text-2: #d1d1d6;
+  --color-muted: #a1a1a6;
+  --color-accent: #f0a454;
+  --color-on-accent: #000000;
+  --color-accent-soft: #423428;
+  --color-accent-ring: #f0a45466;
+  --color-grip: #636366;
+  --color-link: #4da3ff;
+  --color-chevron: #636366;
+  --color-good: #4cd964;
+  --color-bad: #ff6961;
+  --color-bad-soft: #452323;
+  --color-warn: #ffb340;
+  --color-good-soft: #183622;
+  --color-warn-soft: #423428;
+  --color-link-soft: #18324d;
+  --color-shadow: #00000066;
+  --color-scrim: #00000099;
+  --color-selected: #636366;
+  --color-on-selected: #ffffff;
+  --color-route-current: #48484a;
+  --color-on-route-current: #ffffff;
+  --color-rating: #636366;
+  --color-decorative: #38383a;
+  --color-on-bad: #000000;
+  --color-on-warn: #000000;
+  --color-timeline-villager: #636366;
+  --color-on-timeline-villager: #ffffff;
+  --color-timeline-ageup: #f0a454;
+  --color-on-timeline-ageup: #000000;
+  --color-timeline-band: #423428;
+  --color-timeline-bad: #c4281c;
+  --color-on-timeline-bad: #ffffff;
+  --shadow-1: 0 0 0 1px var(--color-border);
+  --shadow-2: 0 0 0 1px var(--color-border);
+  --shadow-3: 0 12px 40px #00000099;
+  --focus-ring: 0 0 0 3px #4da3ff88;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --color-bg: #000000; --color-surface: #1c1c1e; --color-surface-2: #2c2c2e; --color-control: #2c2c2e; --color-tag: #2c2c2e;
-    --color-border: #38383a; --color-line: #2c2c2e; --color-text: #f5f5f7; --color-text-2: #d1d1d6; --color-muted: #a1a1a6;
-    --color-accent: #f0a454; --color-on-accent: #1c1c1e; --color-accent-soft: #f0a45429; --color-link: #4da3ff; --color-good: #4cd964; --color-bad: #ff6b5e;
-    --color-bad-soft: #3a1714; --color-warn: #ffb340;
-    --shadow-1: 0 0 0 1px var(--color-border); --shadow-2: 0 0 0 1px var(--color-border); --shadow-3: 0 12px 40px #000a;
-  }
-}
-*/

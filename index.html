@@ -1,13 +1,27 @@
 <!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>帝国时代2 分析器</title>
-<link rel="icon" type="image/webp" href="/img/buildings/7.webp" />
-</head>
-<body>
-<div id="root"></div>
-<script type="module" src="/src/main.tsx"></script>
-</body>
+<html lang="zh-CN" data-theme="light" data-theme-preference="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script>
+      (() => {
+        let preference = 'light';
+        try {
+          const saved = localStorage.getItem('aoe2-theme');
+          if (saved === 'light' || saved === 'dark' || saved === 'system') preference = saved;
+        } catch {
+          /* 外观选择不依赖本地存储可用性。 */
+        }
+        const root = document.documentElement;
+        root.dataset.themePreference = preference;
+        root.dataset.theme = preference === 'system' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : preference;
+      })();
+    </script>
+    <title>帝国时代2 分析器</title>
+    <link rel="icon" type="image/webp" href="/img/buildings/7.webp" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
