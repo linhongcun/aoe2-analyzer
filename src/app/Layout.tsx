@@ -87,7 +87,11 @@ function ThemeMenu({ preference, onSelect }: { preference: ThemePreference; onSe
       trigger.current?.focus();
     };
     const pointer = (event: PointerEvent) => {
-      if (!wrap.current?.contains(event.target as Node)) close();
+      if (!wrap.current?.contains(event.target as Node)) {
+        setOpen(false);
+        // 等外部目标的默认焦点行为完成，再归还菜单触发按钮。
+        requestAnimationFrame(() => trigger.current?.focus());
+      }
     };
     const key = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
