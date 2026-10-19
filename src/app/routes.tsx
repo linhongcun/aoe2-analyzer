@@ -1,11 +1,11 @@
 import { lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import CivList from '../features/civs/components/CivList';
-import CivDetail from '../features/civs/components/CivDetail';
 import { civs } from '../data';
 import Home from '../features/home/components/Home';
 
 // 非首页路由按需拆包
+const CivList = lazy(() => import('../features/civs/components/CivList'));
+const CivDetail = lazy(() => import('../features/civs/components/CivDetail'));
 const BuildOrderList = lazy(() => import('../features/builds/BuildOrderList'));
 const Patches = lazy(() => import('../features/patches/Patches'));
 const AboutData = lazy(() => import('../features/about/AboutData'));
