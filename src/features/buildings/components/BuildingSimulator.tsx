@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCore, useTrees } from '../../../data/hooks';
 import { buildingBase, buildingCivNotes, buildingSimTechs, simulateBuilding } from '../../../domain/buildingSim';
 import { allNumeric, makeSimContext } from '../../../domain/simulator';
@@ -53,24 +53,35 @@ export default function BuildingSimulator({ b }: { b: Building }) {
   ];
   const C = cmp ? simulateBuilding(ctx, b, cmp, 4, allNumeric(buildingSimTechs(ctx, b, cmp))) : null;
   return (
-    <SimPanel
-      civs={b.civs}
-      minAge={b.age}
-      civ={civ}
-      age={age}
-      sel={sel}
-      team={new Set()}
-      cmp={cmp}
-      avail={avail}
-      techById={core.techById}
-      rows={rows}
-      base={buildingBase(b)}
-      cur={simulateBuilding(ctx, b, civ, age, sel)}
-      cmpStats={C}
-      civNotes={buildingCivNotes(b, civ)}
-      teamBonuses={[]}
-      go={(c, a, s) => write(c, a, s, cmp)}
-      setCmp={(cm) => write(civ, age, sel, cm)}
-    />
+    <>
+      {[109, 79, 234, 235].includes(b.id) && (
+        <p>
+          <Link
+            to={`/building/${b.id}?${new URLSearchParams({ tab: 'garrison', civ, age: String(age), gtechs: [...sel].filter((id) => [3, 47, 199, 200, 201, 482, 484, 576, 608].includes(id)).join(','), garrison: '0' }).toString()}`}
+          >
+            查看村民驻军箭数与人数阈值
+          </Link>
+        </p>
+      )}
+      <SimPanel
+        civs={b.civs}
+        minAge={b.age}
+        civ={civ}
+        age={age}
+        sel={sel}
+        team={new Set()}
+        cmp={cmp}
+        avail={avail}
+        techById={core.techById}
+        rows={rows}
+        base={buildingBase(b)}
+        cur={simulateBuilding(ctx, b, civ, age, sel)}
+        cmpStats={C}
+        civNotes={buildingCivNotes(b, civ)}
+        teamBonuses={[]}
+        go={(c, a, s) => write(c, a, s, cmp)}
+        setCmp={(cm) => write(civ, age, sel, cm)}
+      />
+    </>
   );
 }
