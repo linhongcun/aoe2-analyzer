@@ -13,7 +13,7 @@ test.afterEach(async ({ page }) => {
   expect(messages.get(page)).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
-const url = (building = 109, params = '') => `/#/building/${building}?tab=garrison&civ=Franks&age=4&${params}`;
+const url = (building = 109, params = '') => `./#/building/${building}?tab=garrison&civ=Franks&age=4&${params}`;
 const panel = (page: Page) => page.getByTestId('garrison-preview');
 const total = (page: Page) => page.getByTestId('garrison-total');
 
@@ -47,7 +47,7 @@ test('#218 防御箭塔存在容量内无法再加箭的状态', async ({ page }
 });
 
 test('#218 科技前置联动与当前版本村民贡献修正', async ({ page }) => {
-  await page.goto('/#/building/109?tab=garrison&civ=Britons&age=4&garrison=5');
+  await page.goto('./#/building/109?tab=garrison&civ=Britons&age=4&garrison=5');
   const bracer = page.getByRole('checkbox', { name: '护腕', exact: true });
   await bracer.check();
   await expect(page.getByRole('checkbox', { name: '箭羽', exact: true })).toBeChecked();
@@ -58,28 +58,28 @@ test('#218 科技前置联动与当前版本村民贡献修正', async ({ page }
 });
 
 test('#218 条顿修正容量和箭矢上限', async ({ page }) => {
-  await page.goto('/#/building/109?tab=garrison&civ=Teutons&age=4&garrison=25');
+  await page.goto('./#/building/109?tab=garrison&civ=Teutons&age=4&garrison=25');
   await expect(total(page)).toHaveText('15');
   await expect(panel(page)).toContainText('25 人');
   await expect(panel(page)).toContainText('15 箭');
 });
 
 test('#218 日本UT常驻箭数与村民副箭分开', async ({ page }) => {
-  await page.goto('/#/building/79?tab=garrison&civ=Japanese&age=3&gtechs=484&garrison=0');
+  await page.goto('./#/building/79?tab=garrison&civ=Japanese&age=3&gtechs=484&garrison=0');
   await expect(page.getByTestId('garrison-base')).toHaveText('3');
   await expect(page.getByTestId('garrison-extra')).toHaveText('0');
   await expect(total(page)).toHaveText('3');
 });
 
 test('#218 土耳其免费化学自动勾选且不可取消', async ({ page }) => {
-  await page.goto('/#/building/109?tab=garrison&civ=Turks&age=4');
+  await page.goto('./#/building/109?tab=garrison&civ=Turks&age=4');
   const chemistry = page.getByRole('checkbox', { name: '化学（免费）' });
   await expect(chemistry).toBeChecked();
   await expect(chemistry).toBeDisabled();
 });
 
 test('#218 从建筑模拟器带入文明、时代和相关科技', async ({ page }) => {
-  await page.goto('/#/building/79?tab=sim&civ=Britons&age=3&techs=199,200');
+  await page.goto('./#/building/79?tab=sim&civ=Britons&age=3&techs=199,200');
   await page.getByRole('link', { name: '查看村民驻军箭数与人数阈值' }).click();
   await expect(page.getByRole('checkbox', { name: '箭羽', exact: true })).toBeChecked();
   await expect(page.getByRole('checkbox', { name: '锥子箭', exact: true })).toBeChecked();
@@ -87,7 +87,7 @@ test('#218 从建筑模拟器带入文明、时代和相关科技', async ({ pag
 });
 
 test('#218 从模拟器保留斯万箭塔并应用村民火力修正', async ({ page }) => {
-  await page.goto('/#/building/234?tab=sim&civ=Georgians&age=3&techs=923');
+  await page.goto('./#/building/234?tab=sim&civ=Georgians&age=3&techs=923');
   await page.getByRole('link', { name: '查看村民驻军箭数与人数阈值' }).click();
   const svan = page.getByRole('checkbox', { name: '斯万箭塔', exact: true });
   await expect(svan).toBeChecked();
@@ -99,7 +99,7 @@ test('#218 从模拟器保留斯万箭塔并应用村民火力修正', async ({ 
 
 for (const query of ['gtechs=199,,200', 'age=4&age=3', 'garrison=0&garrison=4'])
   test(`#218 解析错误锁定常规编辑和复制直至显式重置 ${query}`, async ({ page }) => {
-    await page.goto(`/#/building/109?tab=garrison&civ=Britons&${query}`);
+    await page.goto(`./#/building/109?tab=garrison&civ=Britons&${query}`);
     const original = page.url();
     await expect(panel(page).getByRole('alert')).toBeVisible();
     await expect(page.getByRole('spinbutton', { name: '驻军人数' })).toBeDisabled();
@@ -129,7 +129,7 @@ test('#218 分享复制拒绝提供可还原的手动链接', async ({ page }) =
       configurable: true,
     }),
   );
-  await page.goto('/#/building/79?tab=garrison&civ=Japanese&age=3&gtechs=199,200,484&garrison=4');
+  await page.goto('./#/building/79?tab=garrison&civ=Japanese&age=3&gtechs=199,200,484&garrison=4');
   await expect(total(page)).toHaveText('7');
   await page.getByRole('button', { name: '复制驻军方案', exact: true }).click();
   const link = page.getByRole('textbox', { name: '驻军方案链接' });
@@ -142,7 +142,7 @@ test('#218 分享复制拒绝提供可还原的手动链接', async ({ page }) =
 
 for (const query of ['gtechs=999999', 'gtechs=199,,200', 'gtechs=' + '9'.repeat(400), 'garrison=16', 'garrison=0&garrison=5', 'civ=Unknown'])
   test(`#218 非法链接不输出假结果 ${query.slice(0, 35)}`, async ({ page }) => {
-    await page.goto(query.startsWith('civ=') ? `/#/building/109?tab=garrison&${query}` : url(109, query));
+    await page.goto(query.startsWith('civ=') ? `./#/building/109?tab=garrison&${query}` : url(109, query));
     await expect(panel(page).getByRole('alert')).toBeVisible();
     await expect(page.getByTestId('garrison-result')).toHaveCount(0);
     await page.getByRole('button', { name: '重置驻军方案' }).click();
@@ -150,10 +150,10 @@ for (const query of ['gtechs=999999', 'gtechs=199,,200', 'gtechs=' + '9'.repeat(
   });
 
 test('#218 建筑详情有独立入口，范围外建筑没有驻军计算入口', async ({ page }) => {
-  await page.goto('/#/building/109');
+  await page.goto('./#/building/109');
   await page.getByRole('tab', { name: '村民驻军', exact: true }).click();
   await expect(panel(page)).toBeVisible();
-  await page.goto('/#/building/82');
+  await page.goto('./#/building/82');
   await expect(page.getByRole('tab', { name: '村民驻军', exact: true })).toHaveCount(0);
 });
 
@@ -162,7 +162,7 @@ for (const width of [360, 375, 390, 1280])
     test(`#218 ${theme} @${width} 驻军预览布局与键盘`, async ({ page }, info) => {
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
-      await page.goto('/#/building/79?tab=garrison&civ=Japanese&age=4&gtechs=199,200,201,47,484,608&garrison=4');
+      await page.goto('./#/building/79?tab=garrison&civ=Japanese&age=4&gtechs=199,200,201,47,484,608&garrison=4');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await expect(total(page)).toBeVisible();
       const count = page.getByRole('spinbutton', { name: '驻军人数' });
