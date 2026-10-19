@@ -5,6 +5,7 @@ import {
   calculateGeneralGarrison,
   getFreeGarrisonTechs,
   getGarrisonCandidates,
+  getGarrisonBuildingAge,
   getGarrisonTechs,
   readGeneralGarrison,
   toggleGeneralGarrisonTech,
@@ -34,6 +35,7 @@ export default function GeneralGarrisonPreview({ b }: { b: Building }) {
 function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext }) {
   const [params, setParams] = useSearchParams();
   const { config, errors: parseErrors } = readGeneralGarrison(params, b);
+  const minAge = getGarrisonBuildingAge(b, config.civ);
   const result = calculateGeneralGarrison(ctx, b, config);
   const errors = [...new Set([...parseErrors, ...result.errors])];
   const available = getGarrisonTechs(ctx, b, config);
@@ -114,9 +116,9 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
               update({ ...next, techs: config.techs.filter((id) => allowed.has(id)) });
             }}
           >
-            {(!Number.isSafeInteger(config.age) || config.age < b.age || config.age > 4) && <option value={String(config.age)}>无效时代</option>}
+            {(!Number.isSafeInteger(config.age) || config.age < minAge || config.age > 4) && <option value={String(config.age)}>无效时代</option>}
             {[1, 2, 3, 4]
-              .filter((age) => age >= b.age)
+              .filter((age) => age >= minAge)
               .map((age) => (
                 <option key={age} value={age}>
                   {AGE_ZH[age]}

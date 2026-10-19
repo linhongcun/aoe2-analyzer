@@ -7,7 +7,7 @@ import type { Building } from '../../../domain/types';
 import { Loading } from '../../../shared/ui/widgets';
 import SimPanel, { type StatRow } from '../../simulator/components/SimPanel';
 import garrisonHosts from '../../../data/garrison_hosts.json';
-import { getGarrisonTechs, writeGeneralGarrison } from '../../../domain/garrisonGeneral';
+import { getGarrisonBuildingAge, getGarrisonTechs, writeGeneralGarrison } from '../../../domain/garrisonGeneral';
 
 const nums = (s: string | null) => (s ?? '').split(',').filter(Boolean).map(Number);
 
@@ -26,7 +26,8 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     );
   const q = new URLSearchParams(loc.search);
   const civ = b.civs.includes(q.get('civ') ?? '') ? q.get('civ')! : b.civs[0]!;
-  const age = Math.max(b.age, Math.min(4, +(q.get('age') ?? 4) || 4));
+  const minAge = getGarrisonBuildingAge(b, civ);
+  const age = Math.max(minAge, Math.min(4, +(q.get('age') ?? 4) || 4));
   const avail = buildingSimTechs(ctx, b, civ);
   const ok = new Set(avail.filter((x) => x.ef).map((x) => x.t.id));
   const sel = new Set(nums(q.get('techs')).filter((i) => ok.has(i)));
@@ -71,7 +72,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
       )}
       <SimPanel
         civs={b.civs}
-        minAge={b.age}
+        minAge={minAge}
         civ={civ}
         age={age}
         sel={sel}
