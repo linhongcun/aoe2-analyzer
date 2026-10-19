@@ -1,0 +1,205 @@
+.construction-page {
+  display: grid;
+  gap: var(--space-6);
+}
+.construction-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+.construction-heading h1 {
+  margin-top: 0;
+}
+.construction-heading .btn {
+  min-height: 44px;
+}
+.construction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+.construction-panel {
+  min-width: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.construction-panel h2 {
+  margin-top: 0;
+}
+.construction-page fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.construction-settings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.construction-settings label,
+.construction-manual {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+}
+.construction-settings input,
+.construction-settings select,
+.construction-manual input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+.construction-wide {
+  grid-column: 1 / -1;
+}
+.construction-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  font-size: var(--fs-sm);
+}
+.construction-check input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin: 0;
+}
+.construction-techs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+.construction-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.construction-stats div {
+  padding: var(--space-3);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-sm);
+  min-width: 0;
+}
+.construction-stats dt {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.construction-stats dd {
+  margin: var(--space-2) 0 0;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.construction-number {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.construction-limit,
+.construction-loss {
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-warn-soft);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+}
+.construction-errors {
+  padding: var(--space-4);
+  border: 1px solid var(--color-bad);
+  border-radius: var(--radius-sm);
+  background: var(--color-bad-soft);
+  color: var(--color-text);
+}
+.construction-errors .btn {
+  min-height: 44px;
+}
+.construction-comparison {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.construction-comparison article {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.construction-comparison article.construction-current {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+.construction-comparison h3 {
+  margin: 0 0 var(--space-3);
+  white-space: nowrap;
+}
+.construction-comparison dl {
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+.construction-comparison dl div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+}
+.construction-comparison dt {
+  color: var(--color-muted);
+}
+.construction-comparison dd {
+  margin: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.construction-warnings {
+  padding-left: var(--space-5);
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+}
+.construction-page p,
+.construction-page li {
+  overflow-wrap: anywhere;
+}
+.construction-page :is(input, select, button):focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+@media (max-width: 900px) {
+  .construction-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .construction-comparison {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .construction-panel {
+    padding: var(--space-4);
+  }
+  .construction-settings,
+  .construction-techs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .construction-comparison {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .construction-stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
