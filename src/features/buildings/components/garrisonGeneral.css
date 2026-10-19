@@ -1,0 +1,66 @@
+.garrison-general-controls {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+.garrison-army {
+  min-width: 0;
+  margin: var(--space-6) 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.garrison-army legend {
+  font-weight: 600;
+}
+.garrison-army-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: end;
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+.garrison-army-row label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.garrison-army-row select,
+.garrison-army-row input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.garrison-row-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.garrison-capacity {
+  margin-bottom: var(--space-4);
+}
+.garrison-warnings {
+  padding: var(--space-4);
+  margin: var(--space-4) 0;
+  background: var(--color-surface-2);
+  border-left: 3px solid var(--color-accent);
+  overflow-wrap: anywhere;
+}
+.garrison-warnings h3 {
+  margin-top: 0;
+}
+.garrison-next {
+  padding-left: var(--space-5);
+}
+@media (max-width: 600px) {
+  .garrison-general-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .garrison-army-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .garrison-army-row > label:first-child {
+    grid-column: 1 / -1;
+  }
+}

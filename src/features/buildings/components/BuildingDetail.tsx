@@ -14,9 +14,10 @@ import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import BuildingList from './BuildingList';
 import BuildingSimulator from './BuildingSimulator';
 import { useLocation } from 'react-router-dom';
+import garrisonHosts from '../../../data/garrison_hosts.json';
 
 const isUq = (x: Unit | Tech) => x.type === 'UniqueUnit' || x.type === 'UniqueTech';
-const GarrisonPreview = lazy(() => import('./GarrisonPreview'));
+const GarrisonPreview = lazy(() => import('./GeneralGarrisonPreview'));
 
 export default function BuildingDetail() {
   const { id = '' } = useParams();
@@ -138,11 +139,11 @@ export default function BuildingDetail() {
           ),
         },
         { key: 'sim', label: '科技模拟器', content: <BuildingSimulator b={b} /> },
-        ...([109, 79, 234, 235].includes(b.id)
+        ...(garrisonHosts.includes(b.id)
           ? [
               {
                 key: 'garrison',
-                label: '村民驻军',
+                label: '驻军预览',
                 content: (
                   <Suspense fallback={<Loading />}>
                     <GarrisonPreview b={b} />
