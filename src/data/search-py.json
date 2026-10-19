@@ -375,6 +375,10 @@
     "py": "juxingtoushijigongjidanweihexiaoxingmubiaodizhunquedutigao",
     "pyi": "jxtsjgjdwhxxmbdzqdtg"
   },
+  "市场买卖": {
+    "py": "shichangmaimai",
+    "pyi": "scmm"
+  },
   "市场效率 +80%": {
     "py": "shichangxiaolv",
     "pyi": "scxl"
