@@ -50,6 +50,8 @@ jobs:
         run: python3 scripts/effects_build.py && git diff --exit-code -- src/data/effects.json
       - name: Data check (eco.json reproducible from pinned dat)
         run: python3 scripts/eco_build.py && git diff --exit-code -- src/data/eco.json docs/ECO-DATA.md
+      - name: Data check (garrison.json reproducible from pinned dat)
+        run: python3 scripts/garrison_build.py --check
       - name: Patch notes match pinned data
         run: python3 scripts/patches_build.py --check
       - name: Build-order data check
