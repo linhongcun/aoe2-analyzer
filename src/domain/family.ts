@@ -33,7 +33,7 @@ export const baseUnit = (u: Unit, f: Families): Unit => f.baseOf[u.id] ?? u;
 export const isElite = (u: Unit, f: Families) => !!f.baseOf[u.id];
 
 export interface FamilyEntry {
-  /** 代表单位（普通版） */
+  /** 代表单位；collapse 优先普通版，筛选后可为实际命中的精锐版 */
   u: Unit;
   /** 列表中同时出现的精锐版 */
   elite?: Unit;
