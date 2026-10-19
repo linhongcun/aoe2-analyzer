@@ -98,6 +98,15 @@ export const TOOLS: Section[] = [
     desc: '两个单位（含科技与文明加成）对战：击杀次数、用时、群战与等资源',
     match: /^\/duel$/,
   },
+  {
+    key: 'production',
+    path: '/production',
+    label: '持续生产',
+    en: 'Production',
+    icon: 'calculator',
+    desc: '按生产建筑和科技计算每分钟开销与村民分配',
+    match: /^\/production$/,
+  },
 ];
 export const FUTURE: Section[] = [
   {
