@@ -11,6 +11,9 @@ describe('顶部导航', () => {
     expect(WIKI.find((s) => s.key === 'dlc')?.hideNav).toBe(true);
     expect(WIKI.find((s) => s.key === 'buildings')?.hideNav).toBeUndefined();
     expect(visibleTools.map((s) => s.key)).toEqual(['builds', 'compare', 'matchup', 'simulator', 'duel']);
+    expect(TOOLS.map((s) => s.key)).toEqual(['production', 'builds', 'compare', 'matchup', 'simulator', 'duel']);
+    expect(TOOLS.find((s) => s.key === 'production')?.hideNav).toBe(true);
+    expect(sectionOf('/production')?.key).toBe('production');
   });
 
   it('导航入口都不是规划中页面，且路径能被本模块自己匹配', () => {
