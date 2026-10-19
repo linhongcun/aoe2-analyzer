@@ -120,5 +120,17 @@ export const FUTURE: Section[] = [
     status: 'planned',
   },
 ];
-export const ALL = [...WIKI, ...TOOLS, ...FUTURE];
+export const SECONDARY_TOOLS: Section[] = [
+  {
+    key: 'market',
+    path: '/market',
+    label: '市场买卖',
+    en: 'Market',
+    icon: 'calculator',
+    desc: '逐笔估算市场买卖、库存预算与两份方案的收支',
+    match: /^\/market$/,
+    hideNav: true,
+  },
+];
+export const ALL = [...WIKI, ...TOOLS, ...SECONDARY_TOOLS, ...FUTURE];
 export const sectionOf = (path: string) => ALL.find((s) => s.match.test(path));
