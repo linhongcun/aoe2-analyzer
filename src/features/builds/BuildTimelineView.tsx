@@ -17,6 +17,7 @@ import { Breadcrumbs } from '../../shared/ui/layout';
 import { RowSegs } from './RowSegs';
 import { SHARE_DISABLED_NOTE, buildShareCard } from './shareCard';
 import { shareCardBlob } from './shareCardImage';
+import BuildPracticeView, { buildPracticeUrl } from './BuildPracticeView';
 import {
   RES_ZH,
   buildView,
@@ -353,6 +354,21 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
     </>
   );
 
+  const mode = sp.get('view');
+  if (mode === 'practice' || mode === 'print')
+    return (
+      <BuildPracticeView
+        key={`${bo.id}:${q.civ}:${q.dist}:${q.house}`}
+        order={bo}
+        timeline={tl}
+        query={q}
+        params={sp}
+        mode={mode}
+        onChange={patch}
+        civNotes={civNotes}
+      />
+    );
+
   return (
     <section className="pane tl" id="builds" data-t="timeline">
       <div className="tl-desk-only">
@@ -363,6 +379,15 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
           {source && ` · 来源 ${source}`}
         </p>
       </div>
+
+      <nav className="bp-entry" aria-label="开局跟练与打印">
+        <Link className="bp-button" to={buildPracticeUrl(sp, 'practice')}>
+          专注跟练
+        </Link>
+        <Link className="bp-button" to={buildPracticeUrl(sp, 'print')}>
+          打印步骤单
+        </Link>
+      </nav>
 
       {['fast-castle-boom', 'fast-castle-knights'].includes(bo.id) && (
         <p className="note">

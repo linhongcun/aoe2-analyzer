@@ -80,6 +80,7 @@ jobs:
             test-results/civRequirements206-*/*.png
             test-results/ecoPayoff214-*/*.png
             test-results/market215-*/*.png
+            test-results/practice216-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: failure()

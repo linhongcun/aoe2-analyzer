@@ -109,6 +109,10 @@ export default function BuildOrderList() {
             <Link to={`/builds?bo=${b.id}`} className="tl-open">
               <ChartGantt size={16} aria-hidden /> 看时间线
             </Link>
+            {' · '}
+            <Link to={`/builds?bo=${b.id}&view=practice`} className="bo-practice-open">
+              专注跟练
+            </Link>
           </p>
           <ol className="bo-steps">
             {b.steps.map((s, i) => (
