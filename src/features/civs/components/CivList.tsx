@@ -29,7 +29,7 @@ export default function CivList() {
     [stickyTy, setTy] = useSticky('civ.ty', ''),
     [stickyPos, setPos] = useSticky('civ.pos', ''),
     [stickyDlc, setDlc] = useSticky('civ.dlc', '');
-  const { filters, conditions } = readCivRequirements(params, { q: stickyQ, ty: stickyTy, pos: stickyPos, dlc: stickyDlc });
+  const { filters, conditions, owned } = readCivRequirements(params, { q: stickyQ, ty: stickyTy, pos: stickyPos, dlc: stickyDlc });
   const { q, ty, pos, dlc } = filters;
   const context = core && trees ? { units: core.units, techs: core.techs, trees } : null;
   const invalid = context ? resolveRequirements(conditions, context).some((r) => !!r.error) : false;
@@ -41,7 +41,7 @@ export default function CivList() {
     setTy(nextFilters.ty);
     setPos(nextFilters.pos);
     setDlc(nextFilters.dlc);
-    setParams(writeCivRequirements(params, nextFilters, nextConditions), { replace: true });
+    if (owned || nextConditions.length > 0) setParams(writeCivRequirements(params, nextFilters, nextConditions), { replace: true });
   };
   const changeFilter = (values: Partial<CivRequirementFilters>) => update({ ...filters, ...values }, conditions);
   return (

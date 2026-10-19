@@ -107,6 +107,40 @@ test('#206 旧筛选组合、清空条件和复制链接刷新还原', async ({ 
   await expectCivs(page, ['Huns']);
 });
 
+test('#206 裸入口旧筛选保持临时记忆，复制和新增条件才生成完整快照', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('./#/civs');
+  await page.locator('#q').fill('Huns');
+  await page.locator('#ty').selectOption('cav');
+  await page.locator('#pos').selectOption('pk');
+  await page.locator('#cdlc').selectOption('1');
+  await expectCivs(page, ['Huns']);
+  expect(new URL(page.url()).hash).toBe('#/civs');
+  await page.getByRole('button', { name: '复制筛选链接', exact: true }).click();
+  const link = await page.evaluate(() => navigator.clipboard.readText());
+  const copied = new URLSearchParams(new URL(link).hash.split('?')[1]);
+  for (const [key, value] of Object.entries({ q: 'Huns', ty: 'cav', pos: 'pk', dlc: '1' })) expect(copied.get(key)).toBe(value);
+  expect(new URL(page.url()).hash).toBe('#/civs');
+  await page.reload();
+  await expectLegacyFilters(page, { q: '', ty: '', pos: '', dlc: '' });
+  await expect(page.locator('#cnt')).toHaveText('56 / 56');
+  await page.goto(link);
+  await expectLegacyFilters(page, { q: 'Huns', ty: 'cav', pos: 'pk', dlc: '1' });
+  await expectCivs(page, ['Huns']);
+
+  await page.goto('./#/civs');
+  await page.locator('#q').fill('Huns');
+  await addRequirement(page, '单位', '游侠');
+  const added = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
+  expect(added.get('req')).toBe('u:569');
+  expect(added.get('q')).toBe('Huns');
+  await page.getByRole('button', { name: '清空组合条件', exact: true }).click();
+  expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).has('req')).toBe(false);
+  await page.reload();
+  await expectLegacyFilters(page, { q: 'Huns', ty: '', pos: '', dlc: '' });
+  await expectCivs(page, ['Huns']);
+});
+
 test('#206 复制被拒绝时提供手动链接，筛选变化后清除旧反馈', async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'clipboard', {
