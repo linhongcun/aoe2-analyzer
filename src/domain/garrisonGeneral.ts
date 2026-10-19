@@ -153,7 +153,9 @@ const categoryNames: Record<number, string> = { 1: '村民', 2: '步行单位', 
 /** Modern explicit size class overrides the legacy object class. CreatableType is unrelated. */
 export function garrisonUnitMask(unit: Pick<GeneralGarrisonUnit, 'sizeClass' | 'class'>): number | null {
   if (unit.sizeClass !== 0) return Number.isSafeInteger(unit.sizeClass) && unit.sizeClass >= 1 && unit.sizeClass <= 7 ? 2 ** (unit.sizeClass - 1) : null;
-  if (unit.class === 4) return 1;
+  // King (legacy object class 59) also enters Khmer Houses, whose only flag is civilian (1).
+  // Official Hotfix 63581 confirms building garrison; the source chain is recorded in issue224-engine.md.
+  if (unit.class === 4 || unit.class === 59) return 1;
   if ([0, 6, 44].includes(unit.class)) return 2;
   if ([12, 23, 36, 47].includes(unit.class)) return 4;
   if ([18, 43].includes(unit.class)) return 8;

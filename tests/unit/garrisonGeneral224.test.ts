@@ -167,6 +167,18 @@ describe('#224 general garrison model', () => {
     expect(candidates(109, { civ: 'Armenians' }).some((u) => u.id === 1808 && u.canEnter)).toBe(true);
     expect(candidates(109, { civ: 'Franks' }).some((u) => u.id === 1808)).toBe(false);
   });
+  it('includes the real King record through the civilian legacy flag and keeps host restrictions', () => {
+    expect(GENERAL_GARRISON_DATA.units[434]).toMatchObject({ class: 59, sizeClass: 0, firepower: 0 });
+    expect(garrisonUnitMask(GENERAL_GARRISON_DATA.units[434]!)).toBe(1);
+    expect(candidates(109, { civ: 'Franks', age: 3 }).some((u) => u.id === 434 && u.canEnter)).toBe(true);
+    const tc = calc(109, { civ: 'Franks', age: 3, rows: [row(434)] });
+    expect(tc).toMatchObject({ errors: [], capacity: 15, usedSlots: 1, totalProjectiles: 0, garrisonPower: 0 });
+    expect(tc.warnings.join(' ')).toContain('国王驻军仅适用于');
+    expect(calc(70, { civ: 'Khmer', age: 1, rows: [row(434)] })).toMatchObject({ errors: [], capacity: 5, usedSlots: 1, totalProjectiles: 0 });
+    expect(calc(70, { civ: 'Franks', rows: [row(434)] }).errors.length).toBeGreaterThan(0);
+    expect(calc(68, { civ: 'Gurjaras', rows: [row(434)] }).errors.length).toBeGreaterThan(0);
+    expect(calc(45, { rows: [row(434)] }).errors.length).toBeGreaterThan(0);
+  });
   it('reports public multi-projectile theory as an estimate', () => {
     const result = calc(82, { civ: 'Chinese', rows: [row(73, '4')] });
     expect(result.errors).toEqual([]);
