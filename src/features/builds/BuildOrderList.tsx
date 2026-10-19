@@ -52,6 +52,9 @@ export default function BuildOrderList() {
   return (
     <section className="pane" id="builds">
       <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
+      <p className="note">
+        看不懂 FC、drush 等用语？<Link to="/glossary">查看术语与缩写</Link>
+      </p>
       <div className="tl-empty" data-t="timeline-empty">
         <div className="tl-empty-axis" aria-hidden />
         <p>选一个开局，看看你会卡在哪</p>
@@ -110,7 +113,7 @@ export default function BuildOrderList() {
               <ChartGantt size={16} aria-hidden /> 看时间线
             </Link>
             {' · '}
-            <Link to={`/builds?bo=${b.id}&view=practice`} className="tl-open">
+            <Link to={`/builds?bo=${b.id}&view=practice`} className="bo-practice-open">
               专注跟练
             </Link>
           </p>

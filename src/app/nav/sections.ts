@@ -16,6 +16,16 @@ export interface Section {
   hideNav?: boolean;
 }
 export const WIKI: Section[] = [
+  {
+    key: 'glossary',
+    path: '/glossary',
+    label: '术语与缩写',
+    en: 'Glossary',
+    icon: 'scroll',
+    desc: '看懂社区缩写、开局用语与加成措辞',
+    match: /^\/glossary(\/.*)?$/,
+    hideNav: true,
+  },
   { key: 'maps', path: '/maps', label: '地图', en: 'Maps', icon: 'map', desc: '阿拉伯、竞技场、游牧和海图的资源与开局', match: /^\/maps$/, hideNav: true },
   {
     key: 'civs',

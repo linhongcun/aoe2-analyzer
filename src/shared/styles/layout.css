@@ -708,7 +708,8 @@ a.tbld:hover span {
 .tl-mob-only {
   display: none !important;
 }
-.tl-open {
+.tl-open,
+.bo-practice-open {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);

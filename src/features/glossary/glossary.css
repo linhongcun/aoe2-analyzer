@@ -1,0 +1,151 @@
+.glossary {
+  max-width: 900px;
+}
+.glossary h1 {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  margin-block: var(--space-3) var(--space-4);
+  overflow-wrap: anywhere;
+}
+.glossary h2 {
+  font-size: var(--fs-h3);
+  margin-block: var(--space-3);
+}
+.glossary p {
+  line-height: var(--lh-body);
+}
+.gl-eyebrow {
+  margin-bottom: 0;
+}
+.gl-en {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+}
+.gl-search {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-8);
+}
+.gl-search > span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.gl-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+}
+.gl-count {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+}
+.glossary button,
+.gl-back,
+.gl-links a,
+.gl-actions a,
+.gl-sources summary,
+.gl-sources a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.gl-list {
+  display: grid;
+  gap: var(--space-4);
+}
+.gl-list article,
+.gl-term {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  background: var(--color-surface);
+}
+.gl-list article > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px;
+}
+.gl-list article > a > div {
+  min-width: 0;
+}
+.gl-list h2 {
+  margin-block: 0 var(--space-1);
+}
+.gl-list p {
+  margin-bottom: 0;
+  color: var(--color-text-2);
+}
+.gl-term {
+  margin-top: var(--space-4);
+}
+.gl-variants,
+.gl-links,
+.gl-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.gl-variants .tag {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.gl-meaning {
+  font-size: 17px;
+  margin-block: var(--space-6);
+}
+.gl-example {
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-md);
+}
+.gl-example p {
+  margin-bottom: var(--space-2);
+}
+.gl-links {
+  margin-top: var(--space-6);
+}
+.gl-sources {
+  margin-block: var(--space-6);
+  border-top: 1px solid var(--color-line);
+}
+.gl-sources ul {
+  padding-left: var(--space-5);
+}
+.gl-sources li,
+.gl-sources a,
+.gl-term p {
+  overflow-wrap: anywhere;
+}
+.gl-actions {
+  border-top: 1px solid var(--color-line);
+  padding-top: var(--space-4);
+}
+.gl-empty {
+  padding-block: var(--space-6);
+}
+.gl-footnote {
+  margin-top: var(--space-8);
+}
+@media (max-width: 600px) {
+  .glossary h1 {
+    font-size: var(--fs-h2);
+  }
+  .gl-list article,
+  .gl-term {
+    padding: var(--space-4);
+  }
+  .gl-example {
+    padding: var(--space-3);
+  }
+  .gl-meaning {
+    font-size: var(--fs-body);
+  }
+}
