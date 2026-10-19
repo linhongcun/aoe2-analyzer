@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
@@ -121,6 +121,13 @@ export default function TechDetail() {
                   </div>
                 </dl>
               </DetailSection>
+              {[202, 203, 221, 55, 182, 278, 279].includes(t.id) && (
+                <p>
+                  <Link className="ulink tech-payoff-entry" to={`/eco-payoff?civ=Byzantines&target=${t.id}&age=${t.age}`}>
+                    查看经济科技收益与研究投入
+                  </Link>
+                </p>
+              )}
               {effectCards.length > 0 && (
                 <div className="detail-effect-tiles">
                   <p className="note">基础效果与需要额外科技的组合效果分别列出；请结合生效条件与作用对象阅读，完整说明见「作用对象」。</p>
