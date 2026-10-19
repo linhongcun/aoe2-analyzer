@@ -73,6 +73,7 @@ jobs:
             test-results/matchup194-*/*.png
             test-results/introductions195-*/*.png
             test-results/unitFilters196-*/*.png
+            test-results/production204-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: failure()
