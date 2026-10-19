@@ -33,6 +33,20 @@ class GarrisonGeneral224Test(unittest.TestCase):
         self.assertEqual(module.decode(commands, units, {133: 45}),
                          [{'unit': 45, 'stat': 'capacity', 'op': 'add', 'value': 5}])
 
+    def test_explicit_age_alias_commands_do_not_multiply_one_bonus(self):
+        units = {str(i): {'class': 3} for i in (109, 71, 141, 142)}
+        commands = [{'Type': 4, 'A': i, 'B': -1, 'C': 2, 'D': 10} for i in (109, 71, 141, 142)]
+        self.assertEqual(module.decode(commands, units, {71: 109, 141: 109, 142: 109}),
+                         [{'unit': 109, 'stat': 'capacity', 'op': 'add', 'value': 10}])
+
+    def test_intentionally_repeated_original_target_and_class_bonus_remain(self):
+        units = {'109': {'class': 3}, '71': {'class': 3}}
+        original = {'Type': 4, 'A': 109, 'B': -1, 'C': 2, 'D': 5}
+        commands = [original, {'Type': 4, 'A': 71, 'B': -1, 'C': 2, 'D': 5}, original,
+                    {'Type': 4, 'A': -1, 'B': 3, 'C': 2, 'D': 5}]
+        effects = module.decode(commands, units, {71: 109})
+        self.assertEqual(effects, [{'unit': 109, 'stat': 'capacity', 'op': 'add', 'value': 5}] * 3)
+
     def test_potential_hosts_include_civ_enabled_zero_capacity_buildings(self):
         self.assertTrue({68, 70, 2556}.issubset(self.hosts))
         self.assertEqual(self.data['units']['70']['capacity'], 0)
@@ -69,6 +83,11 @@ class GarrisonGeneral224Test(unittest.TestCase):
         self.assertIn({'unit': 236, 'stat': 'capacity', 'op': 'add', 'value': 5}, bonus['effects'])
         self.assertIn({'unit': 236, 'stat': 'max', 'op': 'add', 'value': 4}, bonus['effects'])
         self.assertFalse(any(e['unit'] == 236 and e['stat'] == 'max' for e in self.data['techs']['11']['effects']))
+        town_bonus = next(r for r in self.data['civs']['Teutons']['automatic'] if r['id'] == 336)
+        self.assertEqual([e for e in town_bonus['effects'] if e['unit'] == 109 and e['stat'] == 'capacity'],
+                         [{'unit': 109, 'stat': 'capacity', 'op': 'add', 'value': 10}])
+        self.assertEqual([e for e in self.data['techs']['576']['effects'] if e['unit'] == 109 and e['stat'] == 'total'],
+                         [{'unit': 109, 'stat': 'total', 'op': 'add', 'value': 8}])
 
     def test_size_class_exceptions_do_not_follow_legacy_object_group(self):
         self.assertEqual((self.data['units']['1811']['class'], self.data['units']['1811']['sizeClass']), (6, 4))

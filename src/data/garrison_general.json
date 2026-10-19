@@ -5546,42 +5546,6 @@
             },
             {
               "op": "set",
-              "stat": "garrisonType",
-              "unit": 68,
-              "value": 16.0
-            },
-            {
-              "op": "set",
-              "stat": "garrisonType",
-              "unit": 68,
-              "value": 16.0
-            },
-            {
-              "op": "set",
-              "stat": "garrisonType",
-              "unit": 68,
-              "value": 16.0
-            },
-            {
-              "op": "set",
-              "stat": "capacity",
-              "unit": 68,
-              "value": 10.0
-            },
-            {
-              "op": "set",
-              "stat": "capacity",
-              "unit": 68,
-              "value": 10.0
-            },
-            {
-              "op": "set",
-              "stat": "capacity",
-              "unit": 68,
-              "value": 10.0
-            },
-            {
-              "op": "set",
               "stat": "capacity",
               "unit": 68,
               "value": 10.0
@@ -7685,42 +7649,6 @@
               "stat": "capacity",
               "unit": 70,
               "value": 5.0
-            },
-            {
-              "op": "add",
-              "stat": "capacity",
-              "unit": 70,
-              "value": 5.0
-            },
-            {
-              "op": "add",
-              "stat": "capacity",
-              "unit": 70,
-              "value": 5.0
-            },
-            {
-              "op": "add",
-              "stat": "capacity",
-              "unit": 70,
-              "value": 5.0
-            },
-            {
-              "op": "set",
-              "stat": "garrisonType",
-              "unit": 70,
-              "value": 1.0
-            },
-            {
-              "op": "set",
-              "stat": "garrisonType",
-              "unit": 70,
-              "value": 1.0
-            },
-            {
-              "op": "set",
-              "stat": "garrisonType",
-              "unit": 70,
-              "value": 1.0
             },
             {
               "op": "set",
@@ -10607,42 +10535,6 @@
               "stat": "capacity",
               "unit": 109,
               "value": 10.0
-            },
-            {
-              "op": "add",
-              "stat": "capacity",
-              "unit": 109,
-              "value": 10.0
-            },
-            {
-              "op": "add",
-              "stat": "capacity",
-              "unit": 109,
-              "value": 10.0
-            },
-            {
-              "op": "add",
-              "stat": "capacity",
-              "unit": 109,
-              "value": 10.0
-            },
-            {
-              "op": "add",
-              "stat": "max",
-              "unit": 109,
-              "value": 5.0
-            },
-            {
-              "op": "add",
-              "stat": "max",
-              "unit": 109,
-              "value": 5.0
-            },
-            {
-              "op": "add",
-              "stat": "max",
-              "unit": 109,
-              "value": 5.0
             },
             {
               "op": "add",
@@ -13538,24 +13430,6 @@
         {
           "op": "add",
           "stat": "attack",
-          "unit": 104,
-          "value": 2.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 2.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 2.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
           "unit": 1806,
           "value": 2.0
         }
@@ -13615,24 +13489,6 @@
         {
           "op": "add",
           "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
           "unit": 1806,
           "value": 1.0
         }
@@ -13648,24 +13504,6 @@
     {
       "count": 2,
       "effects": [
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
         {
           "op": "add",
           "stat": "attack",
@@ -13699,24 +13537,6 @@
         {
           "op": "add",
           "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
           "unit": 1806,
           "value": 1.0
         }
@@ -13732,24 +13552,6 @@
     {
       "count": 2,
       "effects": [
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 104,
-          "value": 1.0
-        },
         {
           "op": "add",
           "stat": "attack",
@@ -17565,24 +17367,6 @@
         {
           "op": "add",
           "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
           "unit": 82,
           "value": 1.0
         },
@@ -17716,24 +17500,6 @@
           "op": "add",
           "stat": "attack",
           "unit": 1189,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
           "value": 1.0
         },
         {
@@ -18103,24 +17869,6 @@
         {
           "op": "add",
           "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
           "unit": 82,
           "value": 1.0
         },
@@ -18254,24 +18002,6 @@
           "op": "add",
           "stat": "attack",
           "unit": 1189,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
           "value": 1.0
         },
         {
@@ -18642,24 +18372,6 @@
         {
           "op": "add",
           "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
           "unit": 82,
           "value": 1.0
         },
@@ -18793,24 +18505,6 @@
           "op": "add",
           "stat": "attack",
           "unit": 1189,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
           "value": 1.0
         },
         {
@@ -20293,24 +19987,6 @@
         {
           "op": "add",
           "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
           "unit": 82,
           "value": 1.0
         },
@@ -20432,24 +20108,6 @@
           "op": "add",
           "stat": "attack",
           "unit": 2631,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
-          "value": 1.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 45,
           "value": 1.0
         },
         {
@@ -21123,42 +20781,6 @@
         {
           "op": "add",
           "stat": "total",
-          "unit": 109,
-          "value": 8.0
-        },
-        {
-          "op": "add",
-          "stat": "total",
-          "unit": 109,
-          "value": 8.0
-        },
-        {
-          "op": "add",
-          "stat": "total",
-          "unit": 109,
-          "value": 8.0
-        },
-        {
-          "op": "add",
-          "stat": "total",
-          "unit": 109,
-          "value": 8.0
-        },
-        {
-          "op": "add",
-          "stat": "max",
-          "unit": 109,
-          "value": 8.0
-        },
-        {
-          "op": "add",
-          "stat": "max",
-          "unit": 109,
-          "value": 8.0
-        },
-        {
-          "op": "add",
-          "stat": "max",
           "unit": 109,
           "value": 8.0
         },
@@ -23278,24 +22900,6 @@
           "op": "add",
           "stat": "attack",
           "unit": 746,
-          "value": 2.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 2.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
-          "value": 2.0
-        },
-        {
-          "op": "add",
-          "stat": "attack",
-          "unit": 109,
           "value": 2.0
         },
         {

@@ -103,7 +103,7 @@ def strings(locale):
 def decode(commands, units, canonical=None):
     """Expand raw unit/class targets and keep encoded attack classes separate."""
     canonical = canonical or {}
-    result = []
+    result, occurrences, emitted = [], {}, {}
     for command in commands:
         typ, attr = command['Type'], command['C']
         if typ not in (0, 4, 5) or attr not in ATTRS:
@@ -124,6 +124,19 @@ def decode(commands, units, canonical=None):
             if signature in seen:
                 continue
             seen.add(signature)
+            # Genie lists the same stat change separately for each age alias.
+            # Those are alternative building forms, not cumulative changes to
+            # the one canonical building used by the calculator. Retain the
+            # maximum multiplicity of any original unit target, so two actual
+            # repeated commands on 109 still apply twice. A class command and
+            # an explicit-unit command remain separate additive operations.
+            scope = ('class', command['B']) if command['A'] == -1 else ('units', actual)
+            group = (scope, signature)
+            source = (group, command['A'])
+            occurrences[source] = occurrences.get(source, 0) + 1
+            if occurrences[source] <= emitted.get(group, 0):
+                continue
+            emitted[group] = occurrences[source]
             result.append({'unit': actual, 'stat': ATTRS[attr],
                            'op': {0: 'set', 4: 'add', 5: 'mul'}[typ], 'value': value})
     return result
