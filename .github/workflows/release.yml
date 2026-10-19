@@ -42,7 +42,7 @@ jobs:
       - name: Verify published pages
         env:
           BASE_URL: https://linhongcun.github.io/aoe2-analyzer/
-        run: npx playwright test tests/e2e/maps34.spec.ts tests/e2e/patches16.spec.ts tests/e2e/share78.spec.ts tests/e2e/production204.spec.ts tests/e2e/upgrades205.spec.ts tests/e2e/civRequirements206.spec.ts --reporter=line
+        run: npx playwright test tests/e2e/maps34.spec.ts tests/e2e/patches16.spec.ts tests/e2e/share78.spec.ts tests/e2e/production204.spec.ts tests/e2e/upgrades205.spec.ts tests/e2e/civRequirements206.spec.ts tests/e2e/ecoPayoff214.spec.ts --reporter=line
       - name: Build downloadable site from the verified tag
         run: |
           git switch --detach "$RELEASE_VERSION"
