@@ -1,0 +1,97 @@
+.upgrade-comparison {
+  margin-top: 24px;
+  min-width: 0;
+  color: var(--color-text);
+  font-size: 14px;
+}
+.upgrade-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.upgrade-actions button {
+  min-width: 44px;
+  min-height: 44px;
+}
+.upgrade-invalid {
+  color: var(--color-warn);
+}
+.upgrade-copy input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+.upgrade-plans {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+.upgrade-plan {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface-2);
+  padding: 16px;
+}
+.upgrade-plan h4,
+.upgrade-investment h4 {
+  margin-top: 0;
+}
+.upgrade-tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 0;
+  list-style: none;
+}
+.upgrade-tech-list li {
+  min-width: 0;
+  max-width: 100%;
+}
+.upgrade-table {
+  width: 100%;
+  table-layout: fixed;
+}
+.upgrade-table th,
+.upgrade-table td {
+  padding: 8px;
+  overflow-wrap: anywhere;
+}
+.upgrade-table th:first-child {
+  width: 36%;
+}
+.upgrade-number {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.upgrade-delta {
+  display: block;
+  font-size: 12px;
+  color: var(--color-accent);
+}
+.upgrade-investment {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.upgrade-comparison .note {
+  font-size: 12px;
+}
+@media (max-width: 600px) {
+  .upgrade-plans,
+  .upgrade-investment {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .upgrade-plan {
+    padding: 12px;
+  }
+  .upgrade-table th,
+  .upgrade-table td {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+}

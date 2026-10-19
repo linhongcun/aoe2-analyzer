@@ -32,6 +32,8 @@ import { DamageBreakdown } from './DamageBreakdown';
 import { AgeComparison } from './AgeComparison';
 import { BattleReplay } from './BattleReplay';
 import { groupReplay, oneReplay } from '../../../domain/battleReplay';
+import { UpgradeComparison } from './UpgradeComparison';
+import { DATA_SOURCES } from '../../about/dataInfo';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
@@ -101,15 +103,19 @@ export default function Duel() {
   };
   // issue 102：地址栏始终带完整的 a、b、m（等资源再带 bud，N vs M 再带 na/nb），反馈链接读地址栏即可复现当前对阵
   const canon = new URLSearchParams(sp);
+  const hasUpgrade = ['base', 'fixed', 'basev'].some((key) => sp.has(key));
   // issue 141：文明为空或认不出时页面回落到该单位第一个能造的文明（issue 124 的规则不变），URL 也用 replace 写成这个文明
   const civFix = (s: SideSpec, fallback: number): SideSpec => {
     if (!core || civByEn(s.civ)) return s;
     const u = core.unitById[s.uid]?.civs.length ? core.unitById[s.uid]! : core.unitById[fallback];
     return u?.civs.length ? { ...s, civ: u.civs[0]! } : s;
   };
-  canon.set('a', fmtSide(civFix(parseSide(sp.get('a'), DEF_A), DEF_A.uid)));
-  canon.set('b', fmtSide(civFix(parseSide(sp.get('b'), DEF_B), DEF_B.uid)));
-  canon.set('m', mode);
+  // 比较链接的错误参数须保留并明确失效，不能经旧 PK 容错回退后变成有效比较。
+  if (!hasUpgrade) {
+    canon.set('a', fmtSide(civFix(parseSide(sp.get('a'), DEF_A), DEF_A.uid)));
+    canon.set('b', fmtSide(civFix(parseSide(sp.get('b'), DEF_B), DEF_B.uid)));
+    canon.set('m', mode);
+  }
   if (mode === 'r') canon.set('bud', String(bud));
   if (mode === 't' && vils !== DEFAULT_VILS) canon.set('vil', String(vils));
   else canon.delete('vil');
@@ -241,6 +247,15 @@ export default function Duel() {
       ) : (
         <Group key={[mode, fmtSide(A.spec), fmtSide(B.spec), cntA, cntB].join('|')} A={A} B={B} na={cntA} nb={cntB} bud={mode === 'r' ? bud : 0} />
       )}
+      <UpgradeComparison
+        ctx={ctx}
+        byId={core.unitById}
+        params={sp}
+        available={!isUnavail(A) && !isUnavail(B)}
+        onSave={(a, b) => set({ a: fmtSide(a), b: fmtSide(b), m: '1', base: fmtSide(a), fixed: fmtSide(b), basev: String(DATA_SOURCES.patch.build) })}
+        onClear={() => set({}, ['base', 'fixed', 'basev'])}
+        onNormalize={(values) => set(values)}
+      />
       {!isUnavail(A) && !isUnavail(B) && <DamageBreakdown ctx={ctx} a={A} b={B} />}
       {!isUnavail(A) && !isUnavail(B) && <AgeComparison ctx={ctx} byId={core.unitById} a={{ ...A.spec, civ: A.civ }} b={{ ...B.spec, civ: B.civ }} />}
       {!eq && !isUnavail(A) && !isUnavail(B) && (

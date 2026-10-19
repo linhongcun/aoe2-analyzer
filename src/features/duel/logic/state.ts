@@ -36,3 +36,21 @@ export function parseSide(s: string | null, def: SideSpec): SideSpec {
 }
 export const fmtSide = (s: SideSpec) =>
   [s.uid, s.civ, s.ageSet === false ? '' : s.age, Array.isArray(s.techs) ? s.techs.join('-') : s.techs, s.team.join('-')].join('.');
+
+/** 比较链接须完整且可验证；旧 PK 的宽松解析与回退规则保持不变。 */
+export function parseUpgradeSide(raw: string | null, allowPreset = true): SideSpec | null {
+  if (raw === null) return null;
+  const parts = raw.split('.');
+  if (parts.length !== 5) return null;
+  const [uid, civ, age, techs, team] = parts as [string, string, string, string, string];
+  const ids = /^(?:[1-9]\d*(?:-[1-9]\d*)*)?$/;
+  const teams = /^(?:\d+(?:-\d+)*)?$/;
+  if (!/^[1-9]\d*$/.test(uid) || !/^[A-Za-z]+$/.test(civ) || !/^[1-4]$/.test(age) || !teams.test(team)) return null;
+  if (!ids.test(techs) && !(allowPreset && (techs === 'f' || techs === 'c'))) return null;
+  // 此处不复用旧 list 的有限数过滤：溢出 ID 必须拒绝，不能被丢弃成空方案。
+  const strictIds = (value: string) => (value === '' ? [] : value.split('-').map(Number));
+  const result = { uid: +uid, civ, age: +age, ageSet: true, techs: techs === 'f' || techs === 'c' ? techs : strictIds(techs), team: strictIds(team) };
+  return Number.isSafeInteger(result.uid) && [...(Array.isArray(result.techs) ? result.techs : []), ...result.team].every(Number.isSafeInteger)
+    ? (result as SideSpec)
+    : null;
+}
