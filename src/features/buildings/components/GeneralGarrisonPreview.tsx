@@ -280,7 +280,9 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
                 {result.totalProjectiles === null
                   ? '当前组合存在未核实机制，保留容量结果，暂不显示弹丸总数。'
                   : result.totalProjectiles === 0
-                    ? '空驻军时不会开火。'
+                    ? result.usedSlots === 0
+                      ? '空驻军时不会开火。'
+                      : '当前驻军组合不会使建筑开火。'
                     : `可发射 ${result.totalProjectiles} ${shortProjectile}。`}{' '}
                 {result.totalProjectiles !== null &&
                   (result.totalProjectiles >= result.maxProjectiles

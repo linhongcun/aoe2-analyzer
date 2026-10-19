@@ -173,6 +173,7 @@ test('#224 船坞区分渔船回驻与军船生产后留驻', async ({ page }) =
   await page.getByRole('button', { name: '移除驻军单位 1', exact: true }).click();
   await capacity(page, 2, 5);
   await expect(total(page)).toHaveText('0');
+  await expect(result(page)).toContainText('当前驻军组合不会使建筑开火');
   await page.goto(url(45, 'Franks', 2, '539:1:e'));
   await expect(panel(page).getByRole('alert')).toBeVisible();
   await expect(result(page)).toHaveCount(0);
