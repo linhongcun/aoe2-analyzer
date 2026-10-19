@@ -39,8 +39,13 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GarrisonContext }) {
   const shareUrl = sharePageUrl(`/building/${b.id}`, shareParams.toString(), document.baseURI);
   const [copied, setCopied] = useState('');
   const [manual, setManual] = useState('');
-  const update = (next: GarrisonConfig) => setParams(writeGarrison(next), { replace: true });
+  // Parsing failures have no lossless editable config. Only an explicit reset
+  // may replace the original URL, never an unrelated count/age/technology edit.
+  const update = (next: GarrisonConfig) => {
+    if (!parseErrors.length) setParams(writeGarrison(next), { replace: true });
+  };
   const copy = async () => {
+    if (parseErrors.length) return;
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(shareUrl);
@@ -64,11 +69,11 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GarrisonContext }) {
           <h2 id="garrison-title">村民驻军箭矢</h2>
           <p className="note">看看驻多少村民会多一箭。仅限村民，建筑形态视为已解锁。</p>
         </div>
-        <button type="button" onClick={() => void copy()}>
+        <button type="button" disabled={parseErrors.length > 0} onClick={() => void copy()}>
           复制驻军方案
         </button>
       </div>
-      <div className="garrison-controls">
+      <fieldset className="garrison-controls" aria-label="驻军配置" disabled={parseErrors.length > 0}>
         <div>
           <label htmlFor="garrison-civ">文明</label>
           <CivPicker
@@ -112,9 +117,9 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GarrisonContext }) {
             onChange={(e) => update({ ...config, villagers: e.target.value })}
           />
         </label>
-      </div>
+      </fieldset>
       {!civByEn(config.civ) && <p className="garrison-error">链接中的文明“{config.civ}”无效，请重新选择。</p>}
-      <fieldset className="garrison-techs">
+      <fieldset className="garrison-techs" disabled={parseErrors.length > 0}>
         <legend>影响箭数的已研究科技</legend>
         <p className="note">只选择已完成的科技；前置联动，免费科技自动生效。未选择的独特科技按未研究处理。</p>
         <div className="garrison-tech-grid">
@@ -147,12 +152,16 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GarrisonContext }) {
       {errors.length > 0 ? (
         <div role="alert" className="garrison-error">
           <h3>暂不能计算</h3>
+          {parseErrors.length > 0 && <p>链接格式无效，常规编辑和复制已停用。请重置驻军方案后重新配置。</p>}
           <ul>
             {[...new Set(errors)].map((error) => (
               <li key={error}>{error}</li>
             ))}
           </ul>
-          <button type="button" onClick={() => update({ civ: b.civs[0]!, age: Math.max(b.age, 3), techs: [], villagers: '0' })}>
+          <button
+            type="button"
+            onClick={() => setParams(writeGarrison({ civ: b.civs[0]!, age: Math.max(b.age, 3), techs: [], villagers: '0' }), { replace: true })}
+          >
             重置驻军方案
           </button>
         </div>
@@ -233,6 +242,7 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GarrisonContext }) {
           村民驻军贡献与建筑单箭火力的比值向下取整，再受箭矢上限限制。城镇中心空驻军通常不开火；科技提供的常驻箭数单独计入基础箭。驻扎容量与箭矢上限是两件事。
         </p>
         <p>仅支持城镇中心、瞭望塔、防御箭塔、大型箭塔的村民驻军；不含军事单位、混合驻军、城堡、火炮塔、强化教堂、其他盟友加成、DPS、命中率和地形。</p>
+        <p>斯万箭塔仅计建筑攻击与村民驻军火力对箭数的修正，不计算穿透伤害。</p>
         <p className="note">
           数据：{GARRISON_DATA.meta.patch}。<Link to="/about-data">关于数据</Link> ·{' '}
           <a href="https://ugc.aoe2.rocks/general/attributes/attributes/#130-garrison-firepower" target="_blank" rel="noreferrer">

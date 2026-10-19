@@ -57,7 +57,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
       {[109, 79, 234, 235].includes(b.id) && (
         <p>
           <Link
-            to={`/building/${b.id}?${new URLSearchParams({ tab: 'garrison', civ, age: String(age), gtechs: [...sel].filter((id) => [3, 47, 199, 200, 201, 482, 484, 576, 608].includes(id)).join(','), garrison: '0' }).toString()}`}
+            to={`/building/${b.id}?${new URLSearchParams({ tab: 'garrison', civ, age: String(age), gtechs: [...sel].filter((id) => [3, 47, 199, 200, 201, 482, 484, 576, 608, 923].includes(id)).join(','), garrison: '0' }).toString()}`}
           >
             查看村民驻军箭数与人数阈值
           </Link>

@@ -733,6 +733,51 @@
       "requires": [
         103
       ]
+    },
+    "923": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 109,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 83,
+          "value": -1.0
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 293,
+          "value": -1.0
+        }
+      ],
+      "id": 923,
+      "requires": [
+        102
+      ]
     }
   },
   "units": {

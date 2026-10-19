@@ -33,6 +33,15 @@ class Garrison218Test(unittest.TestCase):
         tc = self.data['units']['109']
         self.assertEqual((tc['projectile'], tc['total'], tc['max'], tc['capacity']), (-1, 1, 11, 15))
 
+    def test_svan_towers_exports_building_and_villager_contributions(self):
+        rule = self.data['techs']['923']
+        self.assertIn(923, module.TECHS)
+        self.assertEqual((rule['requires'], rule['count']), ([102], 1))
+        self.assertEqual(rule['effects'], [
+            *({'unit': i, 'stat': 'attack', 'op': 'add', 'value': 2} for i in (79, 234, 235, 109)),
+            *({'unit': i, 'stat': 'firepower', 'op': 'add', 'value': -1} for i in (83, 293)),
+        ])
+
     def test_conditional_effects_keep_n_of_prerequisites(self):
         rules = {r['id']: r for r in self.data['conditional']}
         self.assertEqual(rules[610]['count'], 2)
