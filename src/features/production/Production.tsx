@@ -104,6 +104,9 @@ function ProductionBody({
           <h1>持续生产</h1>
           <p className="note">从专用生产建筑反推每分钟开销与村民分配。时间均为游戏时间。</p>
         </div>
+        <Link className="btn" to="/market">
+          市场买卖预算
+        </Link>
         <button type="button" className="btn" disabled={linkErrors.length > 0} onClick={() => void share()}>
           <Icon name="copy" />
           复制方案链接
