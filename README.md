@@ -14,7 +14,7 @@
 | 单位     | `#/units`、`#/unit/:id`             | 163 个单位：属性、克制、升级路线、普通/精锐切换、内嵌科技模拟器                                                              |
 | 科技     | `#/techs`、`#/tech/:id`             | 199 项科技：效果、费用、前置、「作用对象」（与模拟器同一判定）                                                               |
 | 科技树   | `#/tree/:civ`                       | 每个文明的完整科技树与差异对照                                                                                               |
-| 建筑     | `#/buildings`、`#/building/:id`     | 38 种建筑：属性、生产单位、可研究科技、建筑模拟器                                                                            |
+| 建筑     | `#/buildings`、`#/building/:id`     | 38 种建筑：属性、生产单位、可研究科技、建筑模拟器；城镇中心与箭塔线可预览村民驻军箭数、下一箭人数与上限                      |
 | DLC      | `#/dlc`                             | 14 个资料片与对应文明、独特单位/科技                                                                                         |
 | 文明加成 | `#/bonuses`、`#/civ/:en/bonus/:idx` | 文明加成与团队加成：中英原文、适用时代、数值示例、作用对象、.dat 原始效果（含经济/费用项）                                   |
 
@@ -47,6 +47,7 @@
 | 文明、单位、科技、建筑、科技树、中英文本、图标                                             | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `scripts/data_sources.json`，185872）                        | `npm run data`（`scripts/build_data.py`）                                         |
 | 科技/文明加成/团队加成的结构化效果（`src/data/effects.json`）                              | DE 原版 `empires2_x2_p1.dat`，来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，sha256 `4aa2f0a7…7baa` 固定 | `npm run effects`（`scripts/effects_build.py` + 审计 `scripts/effects_audit.ts`） |
 | 经济/开局数据（训练/建造/研究时间与费用、村民采集速率、文明经济效果，`src/data/eco.json`） | 同上                                                                                                                                                   | `npm run eco`（`scripts/eco_build.py`，对账见 `docs/ECO-DATA.md`）                |
+| 村民驻军数据（弹丸基数/上限、驻军贡献与相关科技，`src/data/garrison.json`）                | 同一固定 `.dat`；算法与范围见 [issue218 规格](docs/design/issue218-spec.md)                                                                            | `python3 scripts/garrison_build.py`（CI 使用 `--check` 校验可复现）               |
 | 开局库（`src/data/build-orders/*.json`）                                                   | 社区开局转写，逐个注明出处（见 [docs/BUILD-ORDERS.md](docs/BUILD-ORDERS.md)）                                                                          | `npm run bo:check`                                                                |
 | 基础数值对账（aoe2techtree vs .dat）                                                       | 同上                                                                                                                                                   | `npm run stats:check`                                                             |
 
