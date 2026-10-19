@@ -16,11 +16,11 @@ describe('DLC mapping', () => {
     civs.forEach((c) => expect(CIV_DLC[c.en], c.en).toBeTypeOf('number'));
     expect(Object.keys(CIV_DLC).length).toBe(56);
   });
-  it('unique units inherit civ DLC; common Eagle line = Conquerors', () => {
+  it('unit forms use their own introduction, including original base-game units', () => {
     expect(units.find((u) => u.en === 'Eagle Warrior')!.dlc).toBe(1);
     const cs = units.find((u) => u.en === 'Throwing Axeman')!;
     expect(cs.dlc).toBe(0);
-    expect(units.find((u) => u.en === 'Knight')!.dlc).toBeNull();
+    expect(units.find((u) => u.en === 'Knight')!.dlc).toBe(0);
   });
   it('filter', () => {
     expect(dlcMatch(null, 'none')).toBe(true);

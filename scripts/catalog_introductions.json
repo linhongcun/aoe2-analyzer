@@ -1,0 +1,2705 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-18",
+  "definition": "当前具名单位或升级形态、建筑首次引入的发行版本；不是引擎ID/模型创建时间，也不随当前可用文明和训练渠道变化。",
+  "releases": [
+    "国王时代",
+    "征服者",
+    "失落帝国",
+    "非洲王国",
+    "蛮王崛起",
+    "最后的可汗",
+    "西方霸主",
+    "公爵的崛起",
+    "印度王朝",
+    "罗马归来",
+    "皇家山脉",
+    "三国",
+    "最后的酋长",
+    "维京传奇"
+  ],
+  "units": [
+    {
+      "id": 4,
+      "en": "Archer",
+      "zh": "步弓手",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/步弓手.html",
+      "evidence": "发行版本栏：国王时代；具体条目：步弓手(Archer)",
+      "status": "verified"
+    },
+    {
+      "id": 5,
+      "en": "Hand Cannoneer",
+      "zh": "火枪手",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/火枪手.html",
+      "evidence": "发行版本栏：国王时代；具体条目：火枪手(Hand Cannoneer)",
+      "status": "verified"
+    },
+    {
+      "id": 6,
+      "en": "Elite Skirmisher",
+      "zh": "精锐掷矛手",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐掷矛手.html",
+      "evidence": "发行版本栏：国王时代；具体条目：精锐掷矛手(Elite Skirmisher)",
+      "status": "verified"
+    },
+    {
+      "id": 7,
+      "en": "Skirmisher",
+      "zh": "掷矛手",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/掷矛手.html",
+      "evidence": "发行版本栏：国王时代；具体条目：掷矛手(Skirmisher)",
+      "status": "verified"
+    },
+    {
+      "id": 8,
+      "en": "Longbowman",
+      "zh": "长弓兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/长弓兵.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 11,
+      "en": "Mangudai",
+      "zh": "蒙古突骑",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/蒙古突骑.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 13,
+      "en": "Fishing Ship",
+      "zh": "渔船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/渔船.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 17,
+      "en": "Trade Cog",
+      "zh": "贸易船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/贸易船.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 21,
+      "en": "War Galley",
+      "zh": "战船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/战舰.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 24,
+      "en": "Crossbowman",
+      "zh": "弩手",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/弩手.html",
+      "evidence": "发行版本栏：国王时代；具体条目：弩手(Crossbowman)",
+      "status": "verified"
+    },
+    {
+      "id": 25,
+      "en": "Teutonic Knight",
+      "zh": "条顿骑士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/条顿骑士.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 36,
+      "en": "Bombard Cannon",
+      "zh": "手推炮",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/手推炮.html",
+      "evidence": "发行版本栏：国王时代；具体条目：手推炮(Bombard Cannon)",
+      "status": "verified"
+    },
+    {
+      "id": 38,
+      "en": "Knight",
+      "zh": "骑士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/骑士.html",
+      "evidence": "发行版本栏：国王时代；具体条目：骑士(Knight)",
+      "status": "verified"
+    },
+    {
+      "id": 39,
+      "en": "Cavalry Archer",
+      "zh": "骑射手",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/骑射手.html",
+      "evidence": "发行版本栏：国王时代；具体条目：骑射手(Cavalry Archer)",
+      "status": "verified"
+    },
+    {
+      "id": 40,
+      "en": "Cataphract",
+      "zh": "甲胄骑兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/甲胄骑兵.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 41,
+      "en": "Huskarl",
+      "zh": "近卫军",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/近卫军.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified",
+      "note": "同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 46,
+      "en": "Janissary",
+      "zh": "苏丹亲兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/苏丹亲兵.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 73,
+      "en": "Chu Ko Nu",
+      "zh": "诸葛弩",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/诸葛弩.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 74,
+      "en": "Militia",
+      "zh": "民兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/民兵.html",
+      "evidence": "发行版本栏：国王时代；具体条目：民兵(Militia)",
+      "status": "verified"
+    },
+    {
+      "id": 75,
+      "en": "Man-at-Arms",
+      "zh": "武士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/剑士.html",
+      "evidence": "发行版本栏：国王时代；具体条目：剑士(Man-at-Arms)",
+      "status": "verified",
+      "note": "本站译名武士；来源使用剑士，但英文Man-at-Arms完全一致。不要误认成Samurai。"
+    },
+    {
+      "id": 77,
+      "en": "Long Swordsman",
+      "zh": "长剑士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/长剑士.html",
+      "evidence": "发行版本栏：国王时代；具体条目：长剑士(Long Swordsman)",
+      "status": "verified"
+    },
+    {
+      "id": 83,
+      "en": "Villager",
+      "zh": "村民",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/村民.html",
+      "evidence": "发行版本栏：国王时代；具体条目：村民(Villager)",
+      "status": "verified"
+    },
+    {
+      "id": 93,
+      "en": "Spearman",
+      "zh": "长矛兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/长矛兵.html",
+      "evidence": "发行版本栏：国王时代；具体条目：长矛兵(Spearman)",
+      "status": "verified"
+    },
+    {
+      "id": 125,
+      "en": "Monk",
+      "zh": "僧侣",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/僧侣.html",
+      "evidence": "发行版本栏：国王时代；具体条目：僧侣(Monk)",
+      "status": "verified"
+    },
+    {
+      "id": 128,
+      "en": "Trade Cart",
+      "zh": "贸易车",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/贸易马车.html",
+      "evidence": "发行版本栏：国王时代；具体条目：贸易马车(Trade Cart)",
+      "status": "verified",
+      "note": "本站译名贸易车，来源使用贸易马车，英文Trade Cart匹配。"
+    },
+    {
+      "id": 185,
+      "en": "Slinger",
+      "zh": "投石手",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/投石手.html",
+      "evidence": "发行版本栏：失落帝国；具体条目：投石手(Slinger)",
+      "status": "verified",
+      "note": "简介记为失落帝国的印加独特单位，最后的酋长更新改为区域单位；首次引入仍为失落帝国。"
+    },
+    {
+      "id": 207,
+      "en": "Imperial Camel Rider",
+      "zh": "帝王骆驼兵",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/帝王骆驼兵.html",
+      "evidence": "发行版本: 失落帝国",
+      "status": "verified"
+    },
+    {
+      "id": 232,
+      "en": "Woad Raider",
+      "zh": "靛蓝突袭者",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/靛蓝突袭者.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 239,
+      "en": "War Elephant",
+      "zh": "战象",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/战象.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 250,
+      "en": "Longship",
+      "zh": "维京长船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/维京长船.html",
+      "evidence": "发行版本：国王时代；更新日志说明维京传奇仅改名和扩为区域单位",
+      "status": "verified"
+    },
+    {
+      "id": 279,
+      "en": "Scorpion",
+      "zh": "弩炮",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/弩炮.html",
+      "evidence": "发行版本栏：国王时代；具体条目：弩炮(Scorpion)",
+      "status": "verified"
+    },
+    {
+      "id": 280,
+      "en": "Mangonel",
+      "zh": "轻型投石车",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/轻型投石车.html",
+      "evidence": "发行版本栏：国王时代；具体条目：轻型投石车(Mangonel)",
+      "status": "verified"
+    },
+    {
+      "id": 281,
+      "en": "Throwing Axeman",
+      "zh": "掷斧兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/掷斧兵.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 282,
+      "en": "Mameluke",
+      "zh": "马穆鲁克",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/马穆鲁克.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 283,
+      "en": "Cavalier",
+      "zh": "重装骑士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重装骑士.html",
+      "evidence": "发行版本栏：国王时代；具体条目：重装骑士(Cavalier)",
+      "status": "verified"
+    },
+    {
+      "id": 291,
+      "en": "Samurai",
+      "zh": "日本武士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/日本武士.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 329,
+      "en": "Camel Rider",
+      "zh": "骆驼兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/骆驼兵.html",
+      "evidence": "发行版本栏：国王时代；具体条目：骆驼兵(Camel Rider)",
+      "status": "verified"
+    },
+    {
+      "id": 330,
+      "en": "Heavy Camel Rider",
+      "zh": "重装骆驼兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重装骆驼兵.html",
+      "evidence": "发行版本栏：国王时代；具体条目：重装骆驼兵(Heavy Camel Rider)",
+      "status": "verified"
+    },
+    {
+      "id": 331,
+      "en": "Trebuchet (Packed)",
+      "zh": "巨型投石机",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/巨型投石机.html",
+      "evidence": "发行版本栏：国王时代；简介明确巨型投石机训练后为包装形态，拆包后攻击。",
+      "status": "verified",
+      "note": "本站id331英文Trebuchet (Packed)，来源同时介绍打包/拆包两种形态。"
+    },
+    {
+      "id": 358,
+      "en": "Pikeman",
+      "zh": "长枪兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/长枪兵.html",
+      "evidence": "发行版本栏：国王时代；具体条目：长枪兵(Pikeman)",
+      "status": "verified"
+    },
+    {
+      "id": 359,
+      "en": "Halberdier",
+      "zh": "长戟兵",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/长戟兵.html",
+      "evidence": "发行版本栏：征服者；具体条目：长戟兵(Halberdier)",
+      "status": "verified"
+    },
+    {
+      "id": 420,
+      "en": "Cannon Galleon",
+      "zh": "炮舰",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/炮舰.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 422,
+      "en": "Capped Ram",
+      "zh": "中型冲车",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/中型冲车.html",
+      "evidence": "发行版本栏：国王时代；具体条目：中型冲车(Capped Ram)",
+      "status": "verified"
+    },
+    {
+      "id": 440,
+      "en": "Petard",
+      "zh": "爆破兵",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/爆破兵.html",
+      "evidence": "发行版本栏：征服者；具体条目：爆破兵(Petard)",
+      "status": "verified"
+    },
+    {
+      "id": 441,
+      "en": "Hussar",
+      "zh": "翼骑兵",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/翼骑兵.html",
+      "evidence": "发行版本栏：征服者；具体条目：翼骑兵(Hussar)",
+      "status": "verified"
+    },
+    {
+      "id": 442,
+      "en": "Galleon",
+      "zh": "大型战舰",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/大型战舰.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 448,
+      "en": "Scout Cavalry",
+      "zh": "斥候骑兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/斥候骑兵.html",
+      "evidence": "发行版本栏：国王时代；具体条目：斥候骑兵(Scout Cavalry)",
+      "status": "verified"
+    },
+    {
+      "id": 473,
+      "en": "Two-Handed Swordsman",
+      "zh": "双手剑士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/双手剑士.html",
+      "evidence": "发行版本栏：国王时代；具体条目：双手剑士(Two-Handed Swordsman)",
+      "status": "verified"
+    },
+    {
+      "id": 474,
+      "en": "Heavy Cavalry Archer",
+      "zh": "重装骑射手",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重装骑射手.html",
+      "evidence": "发行版本栏：国王时代；具体条目：重装骑射手(Heavy Cavalry Archer)",
+      "status": "verified"
+    },
+    {
+      "id": 492,
+      "en": "Arbalester",
+      "zh": "劲弩手",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/劲弩手.html",
+      "evidence": "发行版本栏：国王时代；具体条目：劲弩手(Arbalester)",
+      "status": "verified"
+    },
+    {
+      "id": 527,
+      "en": "Demolition Ship",
+      "zh": "爆破船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/爆破船.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 528,
+      "en": "Heavy Demolition Ship",
+      "zh": "重型爆破船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重型爆破船.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 529,
+      "en": "Fire Ship",
+      "zh": "喷火船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/喷火船.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 530,
+      "en": "Elite Longbowman",
+      "zh": "精锐长弓兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/长弓兵.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐长弓兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 531,
+      "en": "Elite Throwing Axeman",
+      "zh": "精锐掷斧兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/掷斧兵.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐掷斧兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 532,
+      "en": "Fast Fire Ship",
+      "zh": "快速喷火船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/快速喷火船.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 533,
+      "en": "Elite Longship",
+      "zh": "精锐维京长船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐维京长船.html",
+      "evidence": "发行版本：国王时代；更新日志说明维京传奇仅改名和扩为区域单位",
+      "status": "verified"
+    },
+    {
+      "id": 534,
+      "en": "Elite Woad Raider",
+      "zh": "精锐靛蓝突袭者",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/靛蓝突袭者.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐靛蓝突袭者",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 539,
+      "en": "Galley",
+      "zh": "箭船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/箭船.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 542,
+      "en": "Heavy Scorpion",
+      "zh": "重型弩炮",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重型弩炮.html",
+      "evidence": "发行版本栏：国王时代；具体条目：重型弩炮(Heavy Scorpion)",
+      "status": "verified"
+    },
+    {
+      "id": 545,
+      "en": "Transport Ship",
+      "zh": "运输船",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/运输船.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 546,
+      "en": "Light Cavalry",
+      "zh": "轻型骑兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/轻骑兵.html",
+      "evidence": "发行版本栏：国王时代；具体条目：轻骑兵(Light Cavalry)",
+      "status": "verified",
+      "note": "本站译名轻型骑兵，来源使用轻骑兵，英文Light Cavalry匹配。"
+    },
+    {
+      "id": 548,
+      "en": "Siege Ram",
+      "zh": "重型冲车",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重型冲车.html",
+      "evidence": "发行版本栏：国王时代；具体条目：重型冲车(Siege Ram)",
+      "status": "verified"
+    },
+    {
+      "id": 550,
+      "en": "Onager",
+      "zh": "中型投石车",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/中型投石车.html",
+      "evidence": "发行版本栏：国王时代；具体条目：中型投石车(Onager)",
+      "status": "verified"
+    },
+    {
+      "id": 553,
+      "en": "Elite Cataphract",
+      "zh": "精锐甲胄骑兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/甲胄骑兵.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐甲胄骑兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 554,
+      "en": "Elite Teutonic Knight",
+      "zh": "精锐条顿骑士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/条顿骑士.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐条顿骑士",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 555,
+      "en": "Elite Huskarl",
+      "zh": "精锐近卫军",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/近卫军.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐近卫军",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 556,
+      "en": "Elite Mameluke",
+      "zh": "精锐马穆鲁克",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/马穆鲁克.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐马穆鲁克",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 557,
+      "en": "Elite Janissary",
+      "zh": "精锐苏丹亲兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/苏丹亲兵.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐苏丹亲兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 558,
+      "en": "Elite War Elephant",
+      "zh": "精锐战象",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/战象.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐战象",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 559,
+      "en": "Elite Chu Ko Nu",
+      "zh": "精锐诸葛弩",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/诸葛弩.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐诸葛弩",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 560,
+      "en": "Elite Samurai",
+      "zh": "精锐日本武士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/日本武士.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐日本武士",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 561,
+      "en": "Elite Mangudai",
+      "zh": "精锐蒙古突骑",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/蒙古突骑.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐蒙古突骑",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 567,
+      "en": "Champion",
+      "zh": "冠军剑士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/冠军剑士.html",
+      "evidence": "发行版本栏：国王时代；具体条目：冠军剑士(Champion)",
+      "status": "verified"
+    },
+    {
+      "id": 569,
+      "en": "Paladin",
+      "zh": "游侠",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/游侠.html",
+      "evidence": "发行版本栏：国王时代；具体条目：游侠(Paladin)",
+      "status": "verified"
+    },
+    {
+      "id": 588,
+      "en": "Siege Onager",
+      "zh": "重型投石车",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重型投石车.html",
+      "evidence": "发行版本栏：国王时代；具体条目：重型投石车(Siege Onager)",
+      "status": "verified"
+    },
+    {
+      "id": 691,
+      "en": "Elite Cannon Galleon",
+      "zh": "精锐炮舰",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐炮舰.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 692,
+      "en": "Berserk",
+      "zh": "狂战士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/狂战士.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 694,
+      "en": "Elite Berserk",
+      "zh": "精锐狂战士",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/狂战士.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐狂战士",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 725,
+      "en": "Jaguar Warrior",
+      "zh": "豹勇士",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/豹勇士.html",
+      "evidence": "发行版本: 征服者",
+      "status": "verified"
+    },
+    {
+      "id": 726,
+      "en": "Elite Jaguar Warrior",
+      "zh": "精锐豹勇士",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/豹勇士.html",
+      "evidence": "发行版本: 征服者；升级可能  | 精锐豹勇士",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 751,
+      "en": "Eagle Scout",
+      "zh": "鹰斥候",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/鹰斥候.html",
+      "evidence": "发行版本栏：失落帝国；简介明确鹰斥候在失落帝国引入，取代征服者时期起始鹰勇士。",
+      "status": "verified"
+    },
+    {
+      "id": 752,
+      "en": "Elite Eagle Warrior",
+      "zh": "精锐鹰勇士",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐鹰勇士.html",
+      "evidence": "发行版本栏：征服者；具体条目：精锐鹰勇士(Elite Eagle Warrior)",
+      "status": "verified"
+    },
+    {
+      "id": 753,
+      "en": "Eagle Warrior",
+      "zh": "鹰勇士",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/鹰勇士.html",
+      "evidence": "发行版本栏：征服者；具体条目：鹰勇士(Eagle Warrior)",
+      "status": "verified"
+    },
+    {
+      "id": 755,
+      "en": "Tarkan",
+      "zh": "答刺罕骑兵",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/答剌罕骑兵.html",
+      "evidence": "发行版本: 征服者",
+      "status": "verified",
+      "note": "来源采用译名“答剌罕骑兵”，已用英文名核对，避免中文同名误配。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 757,
+      "en": "Elite Tarkan",
+      "zh": "精锐答刺罕骑兵",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/答剌罕骑兵.html",
+      "evidence": "发行版本: 征服者；升级可能  | 精锐答剌罕骑兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 来源采用译名“答剌罕骑兵”，已用英文名核对，避免中文同名误配。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 759,
+      "en": "Huskarl",
+      "zh": "近卫军",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/近卫军.html",
+      "evidence": "发行版本: 国王时代",
+      "status": "verified",
+      "note": "同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 761,
+      "en": "Elite Huskarl",
+      "zh": "精锐近卫军",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/近卫军.html",
+      "evidence": "发行版本: 国王时代；升级可能  | 精锐近卫军",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 763,
+      "en": "Plumed Archer",
+      "zh": "羽箭手",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/羽箭手.html",
+      "evidence": "发行版本: 征服者",
+      "status": "verified"
+    },
+    {
+      "id": 765,
+      "en": "Elite Plumed Archer",
+      "zh": "精锐羽箭手",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/羽箭手.html",
+      "evidence": "发行版本: 征服者；升级可能  | 精锐羽箭手",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 771,
+      "en": "Conquistador",
+      "zh": "西班牙征服者",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/征服者.html",
+      "evidence": "发行版本: 征服者",
+      "status": "verified",
+      "note": "来源采用译名“征服者”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 773,
+      "en": "Elite Conquistador",
+      "zh": "精锐西班牙征服者",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/征服者.html",
+      "evidence": "发行版本: 征服者；升级可能  | 精锐征服者",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 来源采用译名“征服者”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 775,
+      "en": "Missionary",
+      "zh": "传教士",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/传教士.html",
+      "evidence": "发行版本: 征服者",
+      "status": "verified"
+    },
+    {
+      "id": 827,
+      "en": "War Wagon",
+      "zh": "高丽战车",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/高丽战车.html",
+      "evidence": "发行版本: 征服者",
+      "status": "verified"
+    },
+    {
+      "id": 829,
+      "en": "Elite War Wagon",
+      "zh": "精锐高丽战车",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/高丽战车.html",
+      "evidence": "发行版本: 征服者；升级可能  | 精锐高丽战车",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 831,
+      "en": "Turtle Ship",
+      "zh": "龟甲船",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/龟甲船.html",
+      "evidence": "发行版本: 征服者",
+      "status": "verified"
+    },
+    {
+      "id": 832,
+      "en": "Elite Turtle Ship",
+      "zh": "精锐龟甲船",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/龟甲船.html",
+      "evidence": "发行版本: 征服者；升级可能  | 精锐龟甲船",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 866,
+      "en": "Genoese Crossbowman",
+      "zh": "热那亚弩手",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/热那亚弩手.html",
+      "evidence": "发行版本: 失落帝国",
+      "status": "verified"
+    },
+    {
+      "id": 868,
+      "en": "Elite Genoese Crossbowman",
+      "zh": "精锐热那亚弩手",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/热那亚弩手.html",
+      "evidence": "发行版本: 失落帝国；升级可能  | 精锐热那亚弩手",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 869,
+      "en": "Magyar Huszar",
+      "zh": "马扎尔骠骑",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/马扎尔骠骑.html",
+      "evidence": "发行版本: 失落帝国",
+      "status": "verified"
+    },
+    {
+      "id": 871,
+      "en": "Elite Magyar Huszar",
+      "zh": "精锐马扎尔骠骑",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/马扎尔骠骑.html",
+      "evidence": "发行版本: 失落帝国；升级可能  | 精锐马扎尔骠骑",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 873,
+      "en": "Elephant Archer",
+      "zh": "骑象射手",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/骑象射手.html",
+      "evidence": "发行版本栏：失落帝国；具体条目：骑象射手(Elephant Archer)",
+      "status": "verified",
+      "note": "简介明确首次为失落帝国的印度独特单位，印度王朝时才改为区域单位；首次引入版本不随训练文明变化。"
+    },
+    {
+      "id": 875,
+      "en": "Elite Elephant Archer",
+      "zh": "精锐骑象射手",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐骑象射手.html",
+      "evidence": "发行版本栏：失落帝国；具体条目：精锐骑象射手(Elite Elephant Archer)",
+      "status": "verified",
+      "note": "简介明确首次为失落帝国的印度独特单位，印度王朝时才改为区域单位；首次引入版本不随训练文明变化。"
+    },
+    {
+      "id": 876,
+      "en": "Boyar",
+      "zh": "贵族铁骑",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/贵族铁骑.html",
+      "evidence": "发行版本: 失落帝国",
+      "status": "verified"
+    },
+    {
+      "id": 878,
+      "en": "Elite Boyar",
+      "zh": "精锐贵族铁骑",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/贵族铁骑.html",
+      "evidence": "发行版本: 失落帝国；升级可能  | 精锐贵族铁骑",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 879,
+      "en": "Kamayuk",
+      "zh": "印加枪兵长",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/印加枪兵长.html",
+      "evidence": "发行版本: 失落帝国",
+      "status": "verified"
+    },
+    {
+      "id": 881,
+      "en": "Elite Kamayuk",
+      "zh": "精锐印加枪兵长",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/印加枪兵长.html",
+      "evidence": "发行版本: 失落帝国；升级可能  | 精锐印加枪兵长",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 882,
+      "en": "Condottiero",
+      "zh": "意大利佣兵",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/意大利佣兵.html",
+      "evidence": "发行版本: 失落帝国",
+      "status": "verified"
+    },
+    {
+      "id": 886,
+      "en": "Tarkan",
+      "zh": "答刺罕骑兵",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/答剌罕骑兵.html",
+      "evidence": "发行版本: 征服者",
+      "status": "verified",
+      "note": "来源采用译名“答剌罕骑兵”，已用英文名核对，避免中文同名误配。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 887,
+      "en": "Elite Tarkan",
+      "zh": "精锐答刺罕骑兵",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/答剌罕骑兵.html",
+      "evidence": "发行版本: 征服者；升级可能  | 精锐答剌罕骑兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 来源采用译名“答剌罕骑兵”，已用英文名核对，避免中文同名误配。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1001,
+      "en": "Organ Gun",
+      "zh": "风琴炮",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/风琴炮.html",
+      "evidence": "发行版本: 非洲王国",
+      "status": "verified"
+    },
+    {
+      "id": 1003,
+      "en": "Elite Organ Gun",
+      "zh": "精锐风琴炮",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/风琴炮.html",
+      "evidence": "发行版本: 非洲王国；升级可能  | 精锐风琴炮",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1004,
+      "en": "Caravel",
+      "zh": "卡拉维尔战舰",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/卡拉维尔战舰.html",
+      "evidence": "发行版本: 非洲王国",
+      "status": "verified"
+    },
+    {
+      "id": 1006,
+      "en": "Elite Caravel",
+      "zh": "精锐卡拉维尔战舰",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/卡拉维尔战舰.html",
+      "evidence": "发行版本: 非洲王国；升级可能  | 精锐卡拉维尔战舰",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1007,
+      "en": "Camel Archer",
+      "zh": "骆驼射手",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/骆驼射手.html",
+      "evidence": "发行版本: 非洲王国",
+      "status": "verified"
+    },
+    {
+      "id": 1009,
+      "en": "Elite Camel Archer",
+      "zh": "精锐骆驼射手",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/骆驼射手.html",
+      "evidence": "发行版本: 非洲王国；升级可能  | 精锐骆驼射手",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1010,
+      "en": "Genitour",
+      "zh": "标枪骑兵",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/标枪骑兵.html",
+      "evidence": "发行版本: 非洲王国",
+      "status": "verified"
+    },
+    {
+      "id": 1012,
+      "en": "Elite Genitour",
+      "zh": "精锐标枪骑兵",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/标枪骑兵.html",
+      "evidence": "发行版本: 非洲王国；升级可能  | 精锐标枪骑兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1013,
+      "en": "Gbeto",
+      "zh": "飞刀女兵",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/飞刀女兵.html",
+      "evidence": "发行版本: 非洲王国",
+      "status": "verified"
+    },
+    {
+      "id": 1015,
+      "en": "Elite Gbeto",
+      "zh": "精锐飞刀女兵",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/飞刀女兵.html",
+      "evidence": "发行版本: 非洲王国；升级可能  | 精锐飞刀女兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1016,
+      "en": "Shotel Warrior",
+      "zh": "弯刀勇士",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/弯刀勇士.html",
+      "evidence": "发行版本: 非洲王国",
+      "status": "verified"
+    },
+    {
+      "id": 1018,
+      "en": "Elite Shotel Warrior",
+      "zh": "精锐弯刀勇士",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/弯刀勇士.html",
+      "evidence": "发行版本: 非洲王国；升级可能  | 精锐弯刀勇士",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1103,
+      "en": "Fire Galley",
+      "zh": "火艨艟",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/火艨艟.html",
+      "evidence": "发行版本：非洲王国；简介同样明确为非洲王国登场",
+      "status": "verified",
+      "note": "杂项段把引入写成失落帝国，与页面发行版本及简介冲突；发行版本和简介均为非洲王国。",
+      "additionalSourceURLs": ["https://www.ageofempires.com/news/age-of-empires-ii-hd-the-african-kingdoms-released/"]
+    },
+    {
+      "id": 1104,
+      "en": "Demolition Raft",
+      "zh": "爆破筏",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/爆破筏.html",
+      "evidence": "发行版本：非洲王国；简介同样明确为非洲王国登场",
+      "status": "verified"
+    },
+    {
+      "id": 1105,
+      "en": "Siege Tower",
+      "zh": "攻城塔",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/攻城塔.html",
+      "evidence": "发行版本栏：非洲王国；具体条目：攻城塔(Siege Tower)",
+      "status": "verified"
+    },
+    {
+      "id": 1120,
+      "en": "Ballista Elephant",
+      "zh": "重弩战象",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重弩战象.html",
+      "evidence": "发行版本: 蛮王崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1122,
+      "en": "Elite Ballista Elephant",
+      "zh": "精锐重弩战象",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重弩战象.html",
+      "evidence": "发行版本: 蛮王崛起；升级可能  | 精锐重弩战象",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1123,
+      "en": "Karambit Warrior",
+      "zh": "爪刀勇士",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/爪刀勇士.html",
+      "evidence": "发行版本: 蛮王崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1125,
+      "en": "Elite Karambit Warrior",
+      "zh": "精锐爪刀勇士",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/爪刀勇士.html",
+      "evidence": "发行版本: 蛮王崛起；升级可能  | 精锐爪刀勇士",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1126,
+      "en": "Arambai",
+      "zh": "飞镖骑兵",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/飞镖骑兵.html",
+      "evidence": "发行版本: 蛮王崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1128,
+      "en": "Elite Arambai",
+      "zh": "精锐飞镖骑兵",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/飞镖骑兵.html",
+      "evidence": "发行版本: 蛮王崛起；升级可能  | 精锐飞镖骑兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1129,
+      "en": "Rattan Archer",
+      "zh": "藤弓兵",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/藤弓兵.html",
+      "evidence": "发行版本: 蛮王崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1131,
+      "en": "Elite Rattan Archer",
+      "zh": "精锐藤弓兵",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/藤弓兵.html",
+      "evidence": "发行版本: 蛮王崛起；升级可能  | 精锐藤弓兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1132,
+      "en": "Battle Elephant",
+      "zh": "象兵",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/象兵.html",
+      "evidence": "发行版本栏：蛮王崛起；具体条目：象兵(Battle Elephant)",
+      "status": "verified"
+    },
+    {
+      "id": 1134,
+      "en": "Elite Battle Elephant",
+      "zh": "精锐象兵",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐象兵.html",
+      "evidence": "发行版本栏：蛮王崛起；具体条目：精锐象兵(Elite Battle Elephant)",
+      "status": "verified"
+    },
+    {
+      "id": 1155,
+      "en": "Imperial Skirmisher",
+      "zh": "帝王掷矛手",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/帝王掷矛手.html",
+      "evidence": "发行版本: 蛮王崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1225,
+      "en": "Konnik",
+      "zh": "保加利亚骑兵",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/保加利亚骑兵.html",
+      "evidence": "发行版本: 最后的可汗",
+      "status": "verified",
+      "note": "同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1227,
+      "en": "Elite Konnik",
+      "zh": "精锐保加利亚骑兵",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/保加利亚骑兵.html",
+      "evidence": "发行版本: 最后的可汗；升级可能  | 精锐保加利亚骑兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1228,
+      "en": "Keshik",
+      "zh": "怯薛骑兵",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/怯薛.html",
+      "evidence": "发行版本: 最后的可汗",
+      "status": "verified",
+      "note": "来源采用译名“怯薛”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1230,
+      "en": "Elite Keshik",
+      "zh": "精锐怯薛骑兵",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/怯薛.html",
+      "evidence": "发行版本: 最后的可汗；升级可能  | 精锐怯薛",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 来源采用译名“怯薛”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1231,
+      "en": "Kipchak",
+      "zh": "钦察",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/钦察.html",
+      "evidence": "发行版本: 最后的可汗",
+      "status": "verified"
+    },
+    {
+      "id": 1233,
+      "en": "Elite Kipchak",
+      "zh": "精锐钦察",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/钦察.html",
+      "evidence": "发行版本: 最后的可汗；升级可能  | 精锐钦察",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1234,
+      "en": "Leitis",
+      "zh": "烈堤司",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/烈堤司.html",
+      "evidence": "发行版本: 最后的可汗",
+      "status": "verified"
+    },
+    {
+      "id": 1236,
+      "en": "Elite Leitis",
+      "zh": "精锐烈堤司",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/烈堤司.html",
+      "evidence": "发行版本: 最后的可汗；升级可能  | 精锐烈堤司",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1254,
+      "en": "Konnik",
+      "zh": "保加利亚骑兵",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/保加利亚骑兵.html",
+      "evidence": "发行版本: 最后的可汗",
+      "status": "verified",
+      "note": "同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1255,
+      "en": "Elite Konnik",
+      "zh": "精锐保加利亚骑兵",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/保加利亚骑兵.html",
+      "evidence": "发行版本: 最后的可汗；升级可能  | 精锐保加利亚骑兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1258,
+      "en": "Battering Ram",
+      "zh": "攻城锤",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/轻型冲车.html",
+      "evidence": "发行版本栏：国王时代；具体条目：轻型冲车(Battering Ram)",
+      "status": "verified",
+      "note": "本站译名攻城锤；来源使用轻型冲车，英文Battering Ram匹配；这里核对单位形态首次引入，不声称现代内部ID1258的创建时间。"
+    },
+    {
+      "id": 1260,
+      "en": "Elite Kipchak",
+      "zh": "精锐钦察",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/钦察.html",
+      "evidence": "发行版本: 最后的可汗；升级可能  | 精锐钦察",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1263,
+      "en": "Flaming Camel",
+      "zh": "火焰骆驼",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/火焰骆驼.html",
+      "evidence": "发行版本: 最后的可汗",
+      "status": "verified"
+    },
+    {
+      "id": 1302,
+      "en": "Dragon Ship",
+      "zh": "龙舟",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/龙船.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified",
+      "note": "来源采用译名“龙船”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1370,
+      "en": "Steppe Lancer",
+      "zh": "草原枪兵",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/草原枪兵.html",
+      "evidence": "发行版本栏：最后的可汗；具体条目：草原枪兵(Steppe Lancer)",
+      "status": "verified"
+    },
+    {
+      "id": 1372,
+      "en": "Elite Steppe Lancer",
+      "zh": "精锐草原枪兵",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐草原枪兵.html",
+      "evidence": "发行版本栏：最后的可汗；具体条目：精锐草原枪兵(Elite Steppe Lancer)",
+      "status": "verified"
+    },
+    {
+      "id": 1655,
+      "en": "Coustillier",
+      "zh": "马上轻装兵",
+      "release": 6,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/马上轻装兵.html",
+      "evidence": "发行版本: 西方霸主",
+      "status": "verified"
+    },
+    {
+      "id": 1657,
+      "en": "Elite Coustillier",
+      "zh": "精锐马上轻装兵",
+      "release": 6,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/马上轻装兵.html",
+      "evidence": "发行版本: 西方霸主；升级可能  | 精锐马上轻装兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1658,
+      "en": "Serjeant",
+      "zh": "萨金特卫兵",
+      "release": 6,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/萨金特卫兵.html",
+      "evidence": "发行版本: 西方霸主",
+      "status": "verified",
+      "note": "同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1659,
+      "en": "Elite Serjeant",
+      "zh": "精锐萨金特卫兵",
+      "release": 6,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/萨金特卫兵.html",
+      "evidence": "发行版本: 西方霸主；升级可能  | 精锐萨金特卫兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1660,
+      "en": "Serjeant",
+      "zh": "萨金特卫兵",
+      "release": 6,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/萨金特卫兵.html",
+      "evidence": "发行版本: 西方霸主",
+      "status": "verified",
+      "note": "同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1661,
+      "en": "Elite Serjeant",
+      "zh": "精锐萨金特卫兵",
+      "release": 6,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/萨金特卫兵.html",
+      "evidence": "发行版本: 西方霸主；升级可能  | 精锐萨金特卫兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 同名异 id 为训练建筑/特殊生产变体；此处记录该战斗单位的首发版本，不把新训练渠道视作新单位。"
+    },
+    {
+      "id": 1699,
+      "en": "Flemish Militia",
+      "zh": "弗拉芒民兵",
+      "release": 6,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/弗拉芒民兵.html",
+      "evidence": "发行版本: 西方霸主",
+      "status": "verified"
+    },
+    {
+      "id": 1701,
+      "en": "Obuch",
+      "zh": "奥布奇战锤兵",
+      "release": 7,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/奥布奇战锤兵.html",
+      "evidence": "发行版本: 公爵的崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1703,
+      "en": "Elite Obuch",
+      "zh": "精锐奥布奇战锤兵",
+      "release": 7,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/奥布奇战锤兵.html",
+      "evidence": "发行版本: 公爵的崛起；升级可能  | 精锐奥布奇战锤兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1704,
+      "en": "Hussite Wagon",
+      "zh": "胡斯派战车",
+      "release": 7,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/胡斯派战车.html",
+      "evidence": "发行版本: 公爵的崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1706,
+      "en": "Elite Hussite Wagon",
+      "zh": "精锐胡斯派战车",
+      "release": 7,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/胡斯派战车.html",
+      "evidence": "发行版本: 公爵的崛起；升级可能  | 精锐胡斯派战车",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1707,
+      "en": "Winged Hussar",
+      "zh": "波兰翼骑兵",
+      "release": 7,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/波兰翼骑兵.html",
+      "evidence": "发行版本: 公爵的崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1709,
+      "en": "Houfnice",
+      "zh": "榴弹炮",
+      "release": 7,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/榴弹炮.html",
+      "evidence": "发行版本: 公爵的崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1735,
+      "en": "Urumi Swordsman",
+      "zh": "乌鲁米剑士",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/印度剑客.html",
+      "evidence": "发行版本: 印度王朝",
+      "status": "verified",
+      "note": "来源采用译名“印度剑客”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1737,
+      "en": "Elite Urumi Swordsman",
+      "zh": "精锐乌鲁米剑士",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/印度剑客.html",
+      "evidence": "发行版本: 印度王朝；升级可能  | 精锐印度剑客",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 来源采用译名“印度剑客”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1741,
+      "en": "Chakram Thrower",
+      "zh": "飞轮刃投掷手",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/飞轮刃投掷手.html",
+      "evidence": "发行版本: 印度王朝",
+      "status": "verified"
+    },
+    {
+      "id": 1743,
+      "en": "Elite Chakram Thrower",
+      "zh": "精锐飞轮刃投掷手",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/飞轮刃投掷手.html",
+      "evidence": "发行版本: 印度王朝；升级可能  | 精锐飞轮刃投掷手",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1744,
+      "en": "Armored Elephant",
+      "zh": "装甲战象",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/装甲战象.html",
+      "evidence": "发行版本栏：印度王朝；具体条目：装甲战象(Armored Elephant)",
+      "status": "verified"
+    },
+    {
+      "id": 1746,
+      "en": "Siege Elephant",
+      "zh": "攻城战象",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/攻城战象.html",
+      "evidence": "发行版本栏：印度王朝；具体条目：攻城战象(Siege Elephant)",
+      "status": "verified"
+    },
+    {
+      "id": 1747,
+      "en": "Ghulam",
+      "zh": "古拉姆",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/古拉姆.html",
+      "evidence": "发行版本: 印度王朝",
+      "status": "verified"
+    },
+    {
+      "id": 1749,
+      "en": "Elite Ghulam",
+      "zh": "精锐古拉姆",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/古拉姆.html",
+      "evidence": "发行版本: 印度王朝；升级可能  | 精锐古拉姆",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1750,
+      "en": "Thirisadai",
+      "zh": "楼船",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/巨舰.html",
+      "evidence": "发行版本: 印度王朝",
+      "status": "verified",
+      "note": "来源采用译名“巨舰”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1751,
+      "en": "Shrivamsha Rider",
+      "zh": "施里瓦姆沙骑手",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/施里瓦姆沙骑手.html",
+      "evidence": "发行版本: 印度王朝",
+      "status": "verified"
+    },
+    {
+      "id": 1753,
+      "en": "Elite Shrivamsha Rider",
+      "zh": "精锐施里瓦姆沙骑手",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/施里瓦姆沙骑手.html",
+      "evidence": "发行版本: 印度王朝；升级可能  | 精锐施里瓦姆沙骑手",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1755,
+      "en": "Camel Scout",
+      "zh": "骆驼斥候",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/骆驼斥候.html",
+      "evidence": "发行版本: 印度王朝",
+      "status": "verified"
+    },
+    {
+      "id": 1759,
+      "en": "Ratha",
+      "zh": "战车",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/战车.html",
+      "evidence": "发行版本: 印度王朝",
+      "status": "verified"
+    },
+    {
+      "id": 1761,
+      "en": "Elite Ratha",
+      "zh": "精锐战车",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/战车.html",
+      "evidence": "发行版本: 印度王朝；升级可能  | 精锐战车",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1786,
+      "en": "Spearman",
+      "zh": "长矛兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/长矛兵.html",
+      "evidence": "发行版本栏：国王时代；具体条目：长矛兵(Spearman)",
+      "status": "verified",
+      "note": "与兵营同名形态的战斗数值相同，仅训练建筑、文明适用性和升级引用不同。本清单记录具名单位/升级形态首次引入；生产渠道增加或内部ID创建时间不作为新形态首发，不继承西西里文明或城楼版本。",
+      "equivalentUnitId": 93
+    },
+    {
+      "id": 1787,
+      "en": "Pikeman",
+      "zh": "长枪兵",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/长枪兵.html",
+      "evidence": "发行版本栏：国王时代；具体条目：长枪兵(Pikeman)",
+      "status": "verified",
+      "note": "与兵营同名形态的战斗数值相同，仅训练建筑、文明适用性和升级引用不同。本清单记录具名单位/升级形态首次引入；生产渠道增加或内部ID创建时间不作为新形态首发，不继承西西里文明或城楼版本。",
+      "equivalentUnitId": 358
+    },
+    {
+      "id": 1788,
+      "en": "Halberdier",
+      "zh": "长戟兵",
+      "release": 1,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/长戟兵.html",
+      "evidence": "发行版本栏：征服者；具体条目：长戟兵(Halberdier)",
+      "status": "verified",
+      "note": "与兵营同名形态的战斗数值相同，仅训练建筑、文明适用性和升级引用不同。本清单记录具名单位/升级形态首次引入；生产渠道增加或内部ID创建时间不作为新形态首发，不继承西西里文明或城楼版本。",
+      "equivalentUnitId": 359
+    },
+    {
+      "id": 1790,
+      "en": "Centurion",
+      "zh": "百夫长",
+      "release": 9,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/百夫长.html",
+      "evidence": "发行版本: 罗马归来",
+      "status": "verified"
+    },
+    {
+      "id": 1792,
+      "en": "Elite Centurion",
+      "zh": "精锐百夫长",
+      "release": 9,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/百夫长.html",
+      "evidence": "发行版本: 罗马归来；升级可能  | 精锐百夫长",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1793,
+      "en": "Legionary",
+      "zh": "罗马军",
+      "release": 9,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/罗马军.html",
+      "evidence": "发行版本: 罗马归来",
+      "status": "verified"
+    },
+    {
+      "id": 1795,
+      "en": "Dromon",
+      "zh": "德罗蒙战舰",
+      "release": 9,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/德罗蒙战舰.html",
+      "evidence": "发行版本：罗马归来；简介明确罗马归来登场",
+      "status": "verified"
+    },
+    {
+      "id": 1800,
+      "en": "Composite Bowman",
+      "zh": "复合弓箭手",
+      "release": 10,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/复合弓箭手.html",
+      "evidence": "发行版本: 皇家山脉",
+      "status": "verified"
+    },
+    {
+      "id": 1802,
+      "en": "Elite Composite Bowman",
+      "zh": "精锐复合弓箭手",
+      "release": 10,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/复合弓箭手.html",
+      "evidence": "发行版本: 皇家山脉；升级可能  | 精锐复合弓箭手",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1803,
+      "en": "Monaspa",
+      "zh": "莫纳斯帕",
+      "release": 10,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/莫纳斯帕.html",
+      "evidence": "发行版本: 皇家山脉",
+      "status": "verified"
+    },
+    {
+      "id": 1805,
+      "en": "Elite Monaspa",
+      "zh": "精锐莫纳斯帕",
+      "release": 10,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/莫纳斯帕.html",
+      "evidence": "发行版本: 皇家山脉；升级可能  | 精锐莫纳斯帕",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1811,
+      "en": "Warrior Priest",
+      "zh": "牧师战士",
+      "release": 10,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/牧师战士.html",
+      "evidence": "发行版本: 皇家山脉",
+      "status": "verified"
+    },
+    {
+      "id": 1813,
+      "en": "Savar",
+      "zh": "萨瓦尔",
+      "release": 10,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/萨瓦尔.html",
+      "evidence": "发行版本: 皇家山脉",
+      "status": "verified"
+    },
+    {
+      "id": 1901,
+      "en": "Fire Lancer",
+      "zh": "火矛兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/火矛兵.html",
+      "evidence": "发行版本栏：三国；具体条目：火矛兵(Fire Lancer)",
+      "status": "verified",
+      "note": "发行版本栏归三国；简介进一步指出是三国DLC前的平衡补丁引入，不能解释成购买三国才可使用。"
+    },
+    {
+      "id": 1903,
+      "en": "Elite Fire Lancer",
+      "zh": "精锐火矛兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐火矛兵.html",
+      "evidence": "发行版本栏：三国；具体条目：精锐火矛兵(Elite Fire Lancer)",
+      "status": "verified",
+      "note": "发行版本栏归三国；简介进一步指出是三国DLC前的平衡补丁引入，不能解释成购买三国才可使用。"
+    },
+    {
+      "id": 1904,
+      "en": "Rocket Cart",
+      "zh": "火箭推车",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/火箭推车.html",
+      "evidence": "发行版本栏：三国；具体条目：火箭推车(Rocket Cart)",
+      "status": "verified",
+      "note": "发行版本栏归三国；重型页简介说明基础与重型是在三国DLC前平衡补丁添加，不按中国/高丽等文明首次版本推断。"
+    },
+    {
+      "id": 1907,
+      "en": "Heavy Rocket Cart",
+      "zh": "重型火箭推车",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重型火箭推车.html",
+      "evidence": "发行版本栏：三国；具体条目：重型火箭推车(Heavy Rocket Cart)",
+      "status": "verified",
+      "note": "发行版本栏归三国；重型页简介说明基础与重型是在三国DLC前平衡补丁添加，不按中国/高丽等文明首次版本推断。"
+    },
+    {
+      "id": 1908,
+      "en": "Iron Pagoda",
+      "zh": "铁浮屠",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/铁浮屠.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 1910,
+      "en": "Elite Iron Pagoda",
+      "zh": "精锐铁浮屠",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/铁浮屠.html",
+      "evidence": "发行版本: 三国；升级可能  | 精锐铁浮屠",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1911,
+      "en": "Grenadier",
+      "zh": "掷弹兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/掷弹兵.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 1920,
+      "en": "Liao Dao",
+      "zh": "辽刀兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/辽刀.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified",
+      "note": "来源采用译名“辽刀”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1922,
+      "en": "Elite Liao Dao",
+      "zh": "精锐辽刀兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/辽刀.html",
+      "evidence": "发行版本: 三国；升级可能  | 精锐辽刀",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。 来源采用译名“辽刀”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1923,
+      "en": "Mounted Trebuchet",
+      "zh": "骆驼投石机",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/骆驼投石机.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 1942,
+      "en": "Traction Trebuchet",
+      "zh": "牵引抛石机",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/牵引抛石机.html",
+      "evidence": "发行版本栏：三国；具体条目：牵引抛石机(Traction Trebuchet)",
+      "status": "verified"
+    },
+    {
+      "id": 1944,
+      "en": "Hei Guang Cavalry",
+      "zh": "黑光铠骑兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/黑光铠骑兵.html",
+      "evidence": "发行版本栏：三国；具体条目：黑光铠骑兵(Hei Guang Cavalry)",
+      "status": "verified"
+    },
+    {
+      "id": 1946,
+      "en": "Heavy Hei Guang Cavalry",
+      "zh": "重装黑光铠骑兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重装黑光铠骑兵.html",
+      "evidence": "发行版本栏：三国；具体条目：(Heavy Hei Guang Cavalry)",
+      "status": "verified"
+    },
+    {
+      "id": 1948,
+      "en": "Lou Chuan",
+      "zh": "楼船",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/楼船.html",
+      "evidence": "发行版本：三国",
+      "status": "verified"
+    },
+    {
+      "id": 1949,
+      "en": "Tiger Cavalry",
+      "zh": "虎豹骑",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/虎豹骑.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 1951,
+      "en": "Elite Tiger Cavalry",
+      "zh": "精锐虎豹骑",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/虎豹骑.html",
+      "evidence": "发行版本: 三国；升级可能  | 精锐虎豹骑",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1952,
+      "en": "Xianbei Raider",
+      "zh": "鲜卑掠骑兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/鲜卑掠骑兵.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 1954,
+      "en": "Cao Cao",
+      "zh": "曹操",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/曹操.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 1959,
+      "en": "White Feather Guard",
+      "zh": "白毦兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/白毦兵.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 1961,
+      "en": "Elite White Feather Guard",
+      "zh": "精锐白毦兵",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/白毦兵.html",
+      "evidence": "发行版本: 三国；升级可能  | 精锐白毦兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1962,
+      "en": "War Chariot",
+      "zh": "战车",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/连弩战车.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified",
+      "note": "来源采用译名“连弩战车”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1966,
+      "en": "Liu Bei",
+      "zh": "刘备",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/刘备.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 1968,
+      "en": "Fire Archer",
+      "zh": "火焰弓箭手",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/火焰弓箭手.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 1970,
+      "en": "Elite Fire Archer",
+      "zh": "精锐火焰弓箭手",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/火焰弓箭手.html",
+      "evidence": "发行版本: 三国；升级可能  | 精锐火焰弓箭手",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 1974,
+      "en": "Jian Swordsman",
+      "zh": "剑士",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/刀剑手.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified",
+      "note": "来源采用译名“刀剑手”，已用英文名核对，避免中文同名误配。"
+    },
+    {
+      "id": 1978,
+      "en": "Sun Jian",
+      "zh": "孙坚",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/孙坚.html",
+      "evidence": "发行版本: 三国",
+      "status": "verified"
+    },
+    {
+      "id": 2550,
+      "en": "Champi Scout",
+      "zh": "蔷琵斥候",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/蔷琵斥候.html",
+      "evidence": "发行版本栏：最后的酋长；具体条目：蔷琵斥候(Champi Scout)",
+      "status": "verified"
+    },
+    {
+      "id": 2552,
+      "en": "Champi Warrior",
+      "zh": "蔷琵战士",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/蔷琵战士.html",
+      "evidence": "发行版本栏：最后的酋长；具体条目：蔷琵战士(Champi Warrior)",
+      "status": "verified"
+    },
+    {
+      "id": 2554,
+      "en": "Elite Champi Warrior",
+      "zh": "精锐蔷琵战士",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐蔷琵战士.html",
+      "evidence": "发行版本栏：最后的酋长；具体条目：精锐蔷琵战士(Elite Champi Warrior)",
+      "status": "verified"
+    },
+    {
+      "id": 2562,
+      "en": "Guecha Warrior",
+      "zh": "格查战士",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/格查战士.html",
+      "evidence": "发行版本: 最后的酋长",
+      "status": "verified"
+    },
+    {
+      "id": 2564,
+      "en": "Elite Guecha Warrior",
+      "zh": "精锐格查战士",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/格查战士.html",
+      "evidence": "发行版本: 最后的酋长；升级可能  | 精锐格查战士",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 2566,
+      "en": "Kona",
+      "zh": "科那",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/科那.html",
+      "evidence": "发行版本: 最后的酋长",
+      "status": "verified"
+    },
+    {
+      "id": 2568,
+      "en": "Elite Kona",
+      "zh": "精锐科那",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/科那.html",
+      "evidence": "发行版本: 最后的酋长；升级可能  | 精锐科那",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 2569,
+      "en": "Bolas Rider",
+      "zh": "掷石绳骑兵",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/掷石绳骑兵.html",
+      "evidence": "发行版本: 最后的酋长",
+      "status": "verified"
+    },
+    {
+      "id": 2571,
+      "en": "Elite Bolas Rider",
+      "zh": "精锐掷石绳骑兵",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/掷石绳骑兵.html",
+      "evidence": "发行版本: 最后的酋长；升级可能  | 精锐掷石绳骑兵",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 2579,
+      "en": "Blackwood Archer",
+      "zh": "黑檀木步弓手",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/黑檀木步弓手.html",
+      "evidence": "发行版本: 最后的酋长",
+      "status": "verified"
+    },
+    {
+      "id": 2581,
+      "en": "Elite Blackwood Archer",
+      "zh": "精锐黑檀木步弓手",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/黑檀木步弓手.html",
+      "evidence": "发行版本: 最后的酋长；升级可能  | 精锐黑檀木步弓手",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 2582,
+      "en": "Ibirapema Warrior",
+      "zh": "伊比拉贝玛战士",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/伊比拉贝玛战士.html",
+      "evidence": "发行版本: 最后的酋长",
+      "status": "verified"
+    },
+    {
+      "id": 2584,
+      "en": "Elite Ibirapema Warrior",
+      "zh": "精锐伊比拉贝玛战士",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/伊比拉贝玛战士.html",
+      "evidence": "发行版本: 最后的酋长；升级可能  | 精锐伊比拉贝玛战士",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 2586,
+      "en": "Temple Guard",
+      "zh": "神庙护卫",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/神庙护卫.html",
+      "evidence": "发行版本: 最后的酋长",
+      "status": "verified"
+    },
+    {
+      "id": 2587,
+      "en": "Elite Temple Guard",
+      "zh": "精锐神庙护卫",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/神庙护卫.html",
+      "evidence": "发行版本: 最后的酋长；升级可能  | 精锐神庙护卫",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 2588,
+      "en": "Champi Runner",
+      "zh": "蔷琵步兵",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/蔷琵步兵.html",
+      "evidence": "发行版本栏：最后的酋长；具体条目：蔷琵步兵(Champi Runner)",
+      "status": "verified"
+    },
+    {
+      "id": 2626,
+      "en": "Hulk",
+      "zh": "趸船",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/趸船.html",
+      "evidence": "发行版本：最后的酋长；简介确认趸船系列由最后的酋长引入",
+      "status": "verified"
+    },
+    {
+      "id": 2627,
+      "en": "War Hulk",
+      "zh": "战争趸船",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/战争巨舰.html",
+      "evidence": "发行版本：最后的酋长；简介确认趸船系列由最后的酋长引入；来源标题战争巨舰(War Hulk)与本地英文吻合",
+      "status": "verified"
+    },
+    {
+      "id": 2628,
+      "en": "Carrack",
+      "zh": "大帆船",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/大帆船.html",
+      "evidence": "发行版本：最后的酋长；简介确认趸船系列由最后的酋长引入",
+      "status": "verified"
+    },
+    {
+      "id": 2633,
+      "en": "Catapult Galleon",
+      "zh": "大型投石战舰",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/大型投石战舰.html",
+      "evidence": "发行版本：最后的酋长；简介明确由最后的酋长引入",
+      "status": "verified"
+    },
+    {
+      "id": 2700,
+      "en": "Mounted Crossbowman",
+      "zh": "骑马弩兵",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/骑马弩兵.html",
+      "evidence": "发行版本栏：维京传奇；具体条目：骑马弩兵(Mounted Crossbowman)",
+      "status": "verified"
+    },
+    {
+      "id": 2701,
+      "en": "Heavy Mounted Crossbowman",
+      "zh": "重装骑马弩兵",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/重装骑马弩兵.html",
+      "evidence": "发行版本栏：维京传奇；具体条目：重装骑马弩兵(Heavy Mounted Crossbowman)",
+      "status": "verified"
+    },
+    {
+      "id": 2703,
+      "en": "Varangian Guard",
+      "zh": "瓦兰吉卫队",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/瓦兰吉卫队.html",
+      "evidence": "发行版本栏：维京传奇；具体条目：瓦兰吉卫队(Varangian Guard)",
+      "status": "verified"
+    },
+    {
+      "id": 2704,
+      "en": "Elite Varangian Guard",
+      "zh": "精锐瓦兰吉卫队",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/精锐瓦兰吉卫队.html",
+      "evidence": "发行版本栏：维京传奇；具体条目：精锐瓦兰吉卫队(Elite Varangian Guard)",
+      "status": "verified"
+    },
+    {
+      "id": 2705,
+      "en": "Hearth Troop",
+      "zh": "扈从部队",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/扈从部队.html",
+      "evidence": "发行版本: 维京传奇",
+      "status": "verified"
+    },
+    {
+      "id": 2706,
+      "en": "Elite Hearth Troop",
+      "zh": "精锐扈从部队",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/扈从部队.html",
+      "evidence": "发行版本: 维京传奇；升级可能  | 精锐扈从部队",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 2708,
+      "en": "Jarl",
+      "zh": "首领",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/首领.html",
+      "evidence": "发行版本: 维京传奇",
+      "status": "verified"
+    },
+    {
+      "id": 2709,
+      "en": "Elite Jarl",
+      "zh": "精锐首领",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/首领.html",
+      "evidence": "发行版本: 维京传奇；升级可能  | 精锐首领",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    },
+    {
+      "id": 2711,
+      "en": "Jomsviking",
+      "zh": "约姆斯维京",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/约姆斯维京.html",
+      "evidence": "发行版本: 维京传奇",
+      "status": "verified"
+    },
+    {
+      "id": 2712,
+      "en": "Elite Jomsviking",
+      "zh": "精锐约姆斯维京",
+      "release": 13,
+      "sourceURL": "https://seicing.com/html/aoe2/unit/约姆斯维京.html",
+      "evidence": "发行版本: 维京传奇；升级可能  | 精锐约姆斯维京",
+      "status": "verified",
+      "note": "来源页面同时列出基础与精锐形态，逐 id 记录。"
+    }
+  ],
+  "buildings": [
+    {
+      "id": 12,
+      "en": "Barracks",
+      "zh": "兵营",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/兵营.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 45,
+      "en": "Dock",
+      "zh": "船坞",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/船坞.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 49,
+      "en": "Siege Workshop",
+      "zh": "攻城武器厂",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/攻城武器厂.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 50,
+      "en": "Farm",
+      "zh": "农田",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/农田.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 68,
+      "en": "Mill",
+      "zh": "磨坊",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/磨坊.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 70,
+      "en": "House",
+      "zh": "房屋",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/房屋.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 72,
+      "en": "Palisade Wall",
+      "zh": "木栅栏",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/木墙.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 79,
+      "en": "Watch Tower",
+      "zh": "瞭望箭塔",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/瞭望箭塔.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 82,
+      "en": "Castle",
+      "zh": "城堡",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/城堡.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 84,
+      "en": "Market",
+      "zh": "市场",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/市场.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 87,
+      "en": "Archery Range",
+      "zh": "靶场",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/靶场.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 101,
+      "en": "Stable",
+      "zh": "马厩",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/马厩.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 103,
+      "en": "Blacksmith",
+      "zh": "铁匠铺",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/铁匠铺.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 104,
+      "en": "Monastery",
+      "zh": "修道院",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/修道院.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 109,
+      "en": "Town Center",
+      "zh": "城镇中心",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/城镇中心.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 117,
+      "en": "Stone Wall",
+      "zh": "石墙",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/石墙.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 155,
+      "en": "Fortified Wall",
+      "zh": "垛墙",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/垛墙.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 199,
+      "en": "Fish Trap",
+      "zh": "养鱼场",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/养鱼场.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 209,
+      "en": "University",
+      "zh": "大学",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/大学.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 234,
+      "en": "Guard Tower",
+      "zh": "警戒箭塔",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/警戒箭塔.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 235,
+      "en": "Keep",
+      "zh": "大型箭塔",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/大型箭塔.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 236,
+      "en": "Bombard Tower",
+      "zh": "炮塔",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/炮塔.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 276,
+      "en": "Wonder",
+      "zh": "世界奇观",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/世界奇观.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 487,
+      "en": "Gate",
+      "zh": "城门",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/城门.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 562,
+      "en": "Lumber Camp",
+      "zh": "伐木场",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/伐木场.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 584,
+      "en": "Mining Camp",
+      "zh": "采矿场",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/采矿营地.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 598,
+      "en": "Outpost",
+      "zh": "哨站",
+      "release": 0,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/哨站.html",
+      "evidence": "发行版本：国王时代",
+      "status": "verified"
+    },
+    {
+      "id": 792,
+      "en": "Palisade Gate",
+      "zh": "木城门",
+      "release": 2,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/木城门.html",
+      "evidence": "发行版本：失落帝国；简介及木墙更新日志均确认该版引入。",
+      "status": "verified"
+    },
+    {
+      "id": 1021,
+      "en": "Feitoria",
+      "zh": "大商站",
+      "release": 3,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/大商站.html",
+      "evidence": "发行版本：非洲王国",
+      "status": "verified"
+    },
+    {
+      "id": 1189,
+      "en": "Harbor",
+      "zh": "巨港",
+      "release": 4,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/巨港.html",
+      "evidence": "发行版本：蛮王崛起",
+      "status": "verified"
+    },
+    {
+      "id": 1251,
+      "en": "Krepost",
+      "zh": "营垒",
+      "release": 5,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/营垒.html",
+      "evidence": "发行版本：最后的可汗",
+      "status": "verified"
+    },
+    {
+      "id": 1665,
+      "en": "Donjon",
+      "zh": "城楼",
+      "release": 6,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/城楼.html",
+      "evidence": "发行版本：西方霸主",
+      "status": "verified"
+    },
+    {
+      "id": 1734,
+      "en": "Folwark",
+      "zh": "大庄园",
+      "release": 7,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/大庄园.html",
+      "evidence": "简介说明公爵的崛起版本引入；官方 2021-08-10 DLC 预告也列明新增 Folwark。",
+      "status": "verified",
+      "sourceConflict": "该页信息框把发行版本误写为国王时代，与同页简介矛盾；采信明确的引入历史。",
+      "additionalSourceURLs": ["https://www.ageofempires.com/news/aoe2de-dukes-preorder/"]
+    },
+    {
+      "id": 1754,
+      "en": "Caravanserai",
+      "zh": "商队旅馆",
+      "release": 8,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/商队旅馆.html",
+      "evidence": "发行版本：印度王朝；简介说明皇家山脉版本后波斯才可使用。",
+      "status": "verified"
+    },
+    {
+      "id": 1806,
+      "en": "Fortified Church",
+      "zh": "强化教堂",
+      "release": 10,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/强化教堂.html",
+      "evidence": "发行版本：皇家山脉",
+      "status": "verified"
+    },
+    {
+      "id": 1808,
+      "en": "Mule Cart",
+      "zh": "骡车",
+      "release": 10,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/骡车.html",
+      "evidence": "发行版本：皇家山脉",
+      "status": "verified"
+    },
+    {
+      "id": 1889,
+      "en": "Pasture",
+      "zh": "牧场",
+      "release": 11,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/牧场.html",
+      "evidence": "发行版本：三国",
+      "status": "verified"
+    },
+    {
+      "id": 2556,
+      "en": "Settlement",
+      "zh": "聚落",
+      "release": 12,
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/定居点.html",
+      "evidence": "发行版本：最后的酋长；简介说明该 DLC 引入此南美区域建筑。",
+      "status": "verified"
+    }
+  ]
+}

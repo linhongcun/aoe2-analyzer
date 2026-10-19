@@ -16,3 +16,4 @@ for v in d['civs'].values():
 env=dict(os.environ,AOE_CACHE=C,AOE_TT_REF=REF)
 for s in ['civs_build.py','units_build.py','techs_build.py','trees_build.py','buildings_build.py','icons_hires.py']:
     print('==',s);subprocess.run([sys.executable,'scripts/'+s],env=env,check=True)
+subprocess.run(['node','scripts/catalog_introductions.mjs'],env=env,check=True)
