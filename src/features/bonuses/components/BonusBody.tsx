@@ -119,6 +119,9 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
               : '该效果尚未编码进模拟器，以游戏原文为准。'}
         </p>
       )}
+      <p className="note">
+        措辞帮助：<Link to="/glossary/rate-and-time">速率与耗时</Link> · <Link to="/glossary/stronger-effect">科技效果更强</Link>
+      </p>
       {(groups.length > 0 || mu.length + mb.length > 0) && <h4>作用对象{b.team ? '（所有拥有该单位的文明）' : `（${civByEn(b.civ)?.zh} 拥有的）`}</h4>}
       {groups.map((g) => (
         <div className="affg" key={g.group}>

@@ -20,6 +20,7 @@ const staticPages = {
   '/market': ['市场买卖预算', '按文明、库存、行情和交易顺序估算逐笔买卖报价，比较两份方案的资源收支。'],
   '/production': ['持续生产', '按文明、时代、已研究科技和生产建筑数量估算每分钟开销与村民分配。'],
   '/eco-payoff': ['经济科技收益', '固定村民人数与采集条件，比较伐木、采矿科技的研究投入、增量收入和等采集时间收支平衡。'],
+  '/glossary': ['术语与缩写', '查询中英社区缩写、开局用语以及速率和科技增强措辞。'],
   '/about-data': ['关于数据', '查看游戏数据版本、固定来源与可复现校验。'],
   '/dlc': ['资料片', '查看决定版资料片及其文明。'],
   '/tree': ['文明科技树', '查看各文明可用单位和科技。'],
@@ -28,6 +29,7 @@ const staticPages = {
   '/ladder': ['天梯数据', '文明统计入口；可靠的新版本统计数据仍在准备中。'],
 };
 for (const [route, [title, description]] of Object.entries(staticPages)) add(route, title, description);
+for (const term of JSON.parse(readFileSync(path.join(root, 'src/content/glossary.json'), 'utf8'))) add(`/glossary/${term.id}`, term.zh, term.meaning);
 for (const [file, type] of [
   ['units', 'unit'],
   ['techs', 'tech'],

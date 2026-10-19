@@ -1,0 +1,170 @@
+[
+  {
+    "id": "maa",
+    "zh": "MAA：武士",
+    "en": "Man-at-Arms",
+    "aliases": ["MAA", "M@A", "Men at Arms", "武士缩写"],
+    "meaning": "民兵升级线中 Man-at-Arms 这一单位形态的缩写。讨论 MAA 开局时，通常指围绕该步兵形态进行早期施压。",
+    "example": "“MAA 转弓”表示先用这条步兵路线施压，再接步弓；不是把骑兵或其他步兵都叫 MAA。",
+    "note": "单位形态和时代可用性以所选文明科技树为准，不能仅凭缩写推断。",
+    "links": [
+      { "label": "MAA 单位详情", "href": "/unit/75" },
+      { "label": "步兵转弓开局", "href": "/builds?bo=maa-archers-18" }
+    ],
+    "sources": [
+      { "title": "Reddit：Acronyms in this Subreddit", "url": "https://www.reddit.com/r/aoe2/comments/gwy29g/acronyms_in_this_subreddit/", "date": "2020" }
+    ]
+  },
+  {
+    "id": "fc",
+    "zh": "FC：速升城堡",
+    "en": "Fast Castle",
+    "aliases": ["FC", "速城", "直城", "速升城堡"],
+    "meaning": "把尽快进入城堡时代作为开局目标，通常减少封建时代的停留和军事投入。它是一类开局思路，不是一套固定的人口与时间数字。",
+    "example": "“FC 骑士”表示速升城堡后接骑士路线；“FC boom”则强调随后发展经济。",
+    "note": "直城是否安全取决于地图与侦察；缩写本身不代表推荐跳过防守。",
+    "links": [
+      { "label": "速升城堡转骑士", "href": "/builds?bo=fast-castle-knights" },
+      { "label": "速升城堡发展经济", "href": "/builds?bo=fast-castle-boom" }
+    ],
+    "sources": [
+      { "title": "Reddit：Acronyms in this Subreddit", "url": "https://www.reddit.com/r/aoe2/comments/gwy29g/acronyms_in_this_subreddit/", "date": "2020" }
+    ]
+  },
+  {
+    "id": "drush",
+    "zh": "drush：黑暗时代快攻",
+    "en": "Dark Age Rush",
+    "aliases": ["drush", "dark rush", "黑快", "民兵快攻"],
+    "meaning": "在黑暗时代以民兵等早期兵力进行骚扰的开局思路。重点是进攻发生的阶段，不是某个文明或独特单位的名称。",
+    "example": "“drush FC”表示先做黑暗时代骚扰，再衔接速升城堡。",
+    "note": "社区也会用黑快泛指早期步兵打法；遇到具体流程时，应核对出兵和升级发生的时代。",
+    "links": [
+      { "label": "黑快直城流程", "href": "/builds?bo=drush-fc" },
+      { "label": "早期防守思路", "href": "/matchup" }
+    ],
+    "sources": [
+      { "title": "Reddit：Acronyms in this Subreddit", "url": "https://www.reddit.com/r/aoe2/comments/gwy29g/acronyms_in_this_subreddit/", "date": "2020" }
+    ]
+  },
+  {
+    "id": "boom",
+    "zh": "boom：发展经济",
+    "en": "Economic Boom",
+    "aliases": ["boom", "booming", "爆经济", "暴经济", "经济发展"],
+    "meaning": "把资源投入村民和经济发展，常见于补充城镇中心并持续训练村民的阶段。它描述投入方向，不是某项科技或一个固定按钮。",
+    "example": "“FC boom”是先升城堡、再发展经济；并不等于已经有足够资源维持所有生产。",
+    "note": "经济投入会占用眼前的资源，仍需结合军事压力决定投入规模。",
+    "links": [
+      { "label": "发展经济开局", "href": "/builds?bo=fast-castle-boom" },
+      { "label": "持续生产与配农", "href": "/production" }
+    ],
+    "sources": [
+      {
+        "title": "官方论坛：Help with Tamerlane Campaign, Scenario #4",
+        "url": "https://forums.ageofempires.com/t/help-with-tamerlane-campaign-scenario-4/126217",
+        "date": "2021-04"
+      }
+    ]
+  },
+  {
+    "id": "idle-tc",
+    "zh": "idle TC：城镇中心空闲",
+    "en": "Idle Town Center",
+    "aliases": ["idle TC", "TC idle", "断农", "城镇中心空闲", "城镇中心闲置", "空闲TC"],
+    "meaning": "TC 是 Town Center（城镇中心）。idle TC 指它没有进行训练、研究或升级时代等工作；讨论开局时，常用来提醒连续训练村民出现了空档。",
+    "example": "“减少 idle TC”是检查城镇中心的工作空档，不是让地图上的村民全部移动起来。",
+    "note": "研究科技和升级时代会占用城镇中心，但不属于空闲；有意停产也可能是战术选择。空闲村民是另一件事。",
+    "links": [
+      { "label": "城镇中心详情", "href": "/building/109" },
+      { "label": "开局时间线", "href": "/builds" }
+    ],
+    "sources": [
+      {
+        "title": "官方论坛：Mod Request: Idle TC notification",
+        "url": "https://forums.ageofempires.com/t/mod-request-idle-tc-notification/98294",
+        "date": "2020-09 至 2022-12"
+      }
+    ]
+  },
+  {
+    "id": "fu",
+    "zh": "FU：满科技",
+    "en": "Fully Upgraded",
+    "aliases": ["FU", "fully upgraded", "满科技", "全升级"],
+    "meaning": "表示讨论对象已完成相关升级。它不是“拥有游戏里所有科技”的意思，具体需要哪些科技，应结合单位、文明、时代与讨论语境确认。",
+    "example": "“FU 骑射”是在说明这批骑射手的升级状态，不是在说所有文明的骑射手属性相同。",
+    "note": "同一单位在不同文明可能缺少部分升级。比较时应列明实际研究项，不能只凭 FU 这个标签当成同一配置。",
+    "links": [
+      { "label": "查看文明科技树", "href": "/tree" },
+      { "label": "按实际科技模拟", "href": "/simulator" }
+    ],
+    "sources": [
+      {
+        "title": "官方论坛：Help with Tamerlane Campaign, Scenario #4（FU 释义回复）",
+        "url": "https://forums.ageofempires.com/t/help-with-tamerlane-campaign-scenario-4/126217",
+        "date": "2021-04-18"
+      }
+    ]
+  },
+  {
+    "id": "double-range",
+    "zh": "double range：双靶场",
+    "en": "Double Archery Range",
+    "aliases": ["double range", "two ranges", "双靶场", "双射箭场"],
+    "meaning": "指建造或使用两座靶场的生产路线。这里的 range 是 Archery Range（靶场）的简称，不是把单位射程加倍。",
+    "example": "“double range archers”是在说双靶场出弓兵，不是弓兵有两倍射程。",
+    "note": "在属性讨论里，range 也可能指射程；需要看是在讨论生产建筑，还是攻击距离。双建筑也不自动代表有经济维持不停产。",
+    "links": [
+      { "label": "靶场详情", "href": "/building/87" },
+      { "label": "估算持续生产需求", "href": "/production" }
+    ],
+    "sources": [
+      {
+        "title": "Reddit：Medieval Monday（double range 提问与解释）",
+        "url": "https://www.reddit.com/r/aoe2/comments/1kq71jm/medieval_monday_ask_your_questions_and_get_your/",
+        "date": "2025-05"
+      }
+    ]
+  },
+  {
+    "id": "rate-and-time",
+    "zh": "速率与耗时",
+    "en": "Work Rate and Duration",
+    "aliases": ["work faster", "work rate", "工作更快", "研究更快", "训练更快", "工作效率", "速率", "耗时"],
+    "meaning": "速率描述单位时间能完成多少工作；耗时描述完成固定工作需要多久。提高速率的百分比，不能直接当成缩短用时的百分比。",
+    "example": "纯数学示例：同一工作量原需 100 秒，速率提高 25%，新耗时是 100 ÷ 1.25＝80 秒；用时减少 20%，不是 25%。这些数字不是游戏加成。",
+    "note": "公式：新耗时＝原耗时÷（1＋速率增幅）。前提是工作量固定，且没有行走、等待等额外耗时，或只讨论纯工作阶段。完整采集往返时间还包括移动。实际效果可能直接修改间隔或时间，须以该项固定数据为准，不能只看“速度”二字套公式。",
+    "links": [
+      { "label": "查看文明加成的实际效果", "href": "/bonuses" },
+      { "label": "有效采集与持续生产", "href": "/production" }
+    ],
+    "sources": [
+      {
+        "title": "Reddit：How does “work faster” actually work?",
+        "url": "https://www.reddit.com/r/aoe2/comments/1jcdkzv/how_does_work_faster_actually_work/",
+        "date": "2025-03-16"
+      }
+    ]
+  },
+  {
+    "id": "stronger-effect",
+    "zh": "科技效果更强",
+    "en": "More Effective Technologies",
+    "aliases": ["more effective", "stronger effect", "科技增强", "效果增量", "效果更强"],
+    "meaning": "先分清增强对象：一条科技提供的效果，和单位最终的全部属性，是两回事。加成若放大科技带来的增量，不能把这个倍率直接乘到最终总量。",
+    "example": "纯数学示例：原效果使某速率增加 20%，若规则明确说把这一增量增强 50%，则增量变成 30%，最终是基准的 130%；不是把最终速率直接变成 150%。这些数字不对应某个文明。",
+    "note": "这是帮助读懂措辞的假设例子，不是所有科技的统一叠加公式。适用科技、增强对象、加法或乘法以及缺失升级，均应查看具体文明的固定数据。",
+    "links": [
+      { "label": "亚美尼亚文明与加成", "href": "/civ/Armenians" },
+      { "label": "科技百科", "href": "/techs" }
+    ],
+    "sources": [
+      {
+        "title": "Steam：What does this Armenian civ bonus do?",
+        "url": "https://steamcommunity.com/app/813780/discussions/0/819211732999210064/",
+        "date": "2025-08-17"
+      }
+    ]
+  }
+]

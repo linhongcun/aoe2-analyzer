@@ -9,6 +9,7 @@ import { TYPE_ZH } from '../../domain/ratings';
 import { buildOrders } from '../../data/buildOrders';
 import { BUILD_ALIASES, PAGE_ALIASES, TECH_AKA, UNIT_ALIASES } from '../../data/aliases';
 import { civNote, dupIdsIn } from '../../domain/dupNames';
+import { glossarySearchItems } from '../../domain/glossary';
 
 export { TECH_AKA } from '../../data/aliases';
 
@@ -109,6 +110,6 @@ export function useSearchIndex(): SearchItem[] {
         late: true,
       }),
     );
-    return items.map(withSearchPy);
+    return [...items, ...glossarySearchItems].map(withSearchPy);
   }, [core]);
 }
