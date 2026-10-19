@@ -7,7 +7,8 @@ import { baseUnit } from '../../../domain/family';
 import type { Unit } from '../../../domain/types';
 import { civByEn, civs } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
-import { civStatus, parseUnitPath } from '../../../domain/simulator';
+import { civStatus, makeSimContext, parseUnitPath } from '../../../domain/simulator';
+import { unitRelatedTechs, type UnitRelatedTech } from '../../../domain/relatedTechs';
 import { AGE_ZH } from '../../../domain/ratings';
 import { uniqueCivs, upgradeLine } from '../../../domain/units';
 import { civNote, dupPeers } from '../../../domain/dupNames';
@@ -67,6 +68,37 @@ function UnitLineItem({ x }: { x: Unit }) {
         {x.zh} · {c.zh}
       </span>
     </span>
+  );
+}
+
+function RelatedTechs({ items, compact = false, civ }: { items: UnitRelatedTech[]; compact?: boolean; civ?: string }) {
+  const chips = (list: UnitRelatedTech[]) => (
+    <div className="uchips">
+      {list.map(({ t, civs }) => (
+        <span key={t.id} className="unit-related-tech">
+          <TechLink t={t} />
+          {!!civs.length && <small className="note">{civs.map((c) => civByEn(c)?.zh ?? c).join('、')}限定</small>}
+        </span>
+      ))}
+    </div>
+  );
+  return (
+    <div data-t="unit-related-techs">
+      <p className="note">已建模的数值科技；{civ ? `按${civByEn(civ)?.zh ?? civ}科技树筛选` : '通用科技仍以各文明科技树为准'}。未建模的说明效果未列入。</p>
+      {items.length ? (
+        <>
+          {chips(compact ? items.slice(0, 6) : items)}
+          {compact && items.length > 6 && (
+            <details className="unit-related-more">
+              <summary>展开其余 {items.length - 6} 项科技</summary>
+              {chips(items.slice(6))}
+            </details>
+          )}
+        </>
+      ) : (
+        <p className="note">当前单位暂无已建模的数值科技</p>
+      )}
+    </div>
   );
 }
 
@@ -131,7 +163,7 @@ export default function UnitDetail() {
         ),
     },
   ];
-  const rel = core.techs.filter((t) => t.desc.includes(u.zh)).slice(0, 16);
+  const rel = trees ? unitRelatedTechs(makeSimContext(core.techs, trees), u, rt.civ) : null;
   const cz = (en: string) => civByEn(en)?.zh;
   // #44「相关」第一项：完全重名（自动识别）与易混淆（对照表）互斥，一个单位只出现其中一种
   const peers = dupPeers(base, core.units);
@@ -258,16 +290,8 @@ export default function UnitDetail() {
           label: '相关',
           content: (
             <>
-              {rel.length > 0 && (
-                <>
-                  <h4>相关科技</h4>
-                  <div className="uchips">
-                    {rel.map((t) => (
-                      <TechLink key={t.id} t={t} />
-                    ))}
-                  </div>
-                </>
-              )}
+              <h4>相关科技</h4>
+              {rel ? <RelatedTechs items={rel} civ={rt.civ} /> : <Loading />}
               <h4>
                 拥有该单位的文明（{u.civs.length}/{civs.length}）
               </h4>
@@ -329,15 +353,7 @@ export default function UnitDetail() {
               />
             </div>
           </SideBlock>
-          {rel.length > 0 && (
-            <SideBlock title="相关科技">
-              <div className="uchips">
-                {rel.slice(0, 6).map((t) => (
-                  <TechLink key={t.id} t={t} />
-                ))}
-              </div>
-            </SideBlock>
-          )}
+          <SideBlock title="相关科技">{rel ? <RelatedTechs items={rel} compact civ={rt.civ} /> : <Loading />}</SideBlock>
           <SideBlock title={`可用文明 ${u.civs.length}/${civs.length}`}>
             <p className="note">
               {u.civs
