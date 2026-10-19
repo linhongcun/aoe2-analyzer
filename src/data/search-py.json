@@ -3,6 +3,34 @@
     "py": "",
     "pyi": ""
   },
+  "FC：速升城堡": {
+    "py": "sushengchengbao",
+    "pyi": "sscb"
+  },
+  "FU：满科技": {
+    "py": "mankeji",
+    "pyi": "mkj"
+  },
+  "MAA：武士": {
+    "py": "wushi",
+    "pyi": "ws"
+  },
+  "boom：发展经济": {
+    "py": "fazhanjingji",
+    "pyi": "fzjj"
+  },
+  "double range：双靶场": {
+    "py": "shuangbachang",
+    "pyi": "sbc"
+  },
+  "drush：黑暗时代快攻": {
+    "py": "heianshidaikuaigong",
+    "pyi": "hasdkg"
+  },
+  "idle TC：城镇中心空闲": {
+    "py": "chengzhenzhongxinkongxian",
+    "pyi": "czzxkx"
+  },
   "不需要建筑即可升级到下一时代或者解锁其他建筑": {
     "py": "buxuyaojianzhujikeshengjidaoxiayishidaihuozhejiesuoqitajianzhu",
     "pyi": "bxyjzjksjdxysdhzjsqtjz"
@@ -579,6 +607,10 @@
     "py": "muzhalanshengmingzhi",
     "pyi": "mzlsmz"
   },
+  "术语与缩写": {
+    "py": "shuyuyusuoxie",
+    "pyi": "syysx"
+  },
   "村民一击就能杀死狼群": {
     "py": "cunminyijijiunengshasilangqun",
     "pyi": "cmyjjnsslq"
@@ -863,6 +895,10 @@
     "py": "kejizaifengjianchengbaodiwangshidaidefeiyong",
     "pyi": "kjzfjcbdwsddfy"
   },
+  "科技效果更强": {
+    "py": "kejixiaoguogengqiang",
+    "pyi": "kjxggq"
+  },
   "科技树": {
     "py": "kejishu",
     "pyi": "kjs"
@@ -1010,6 +1046,10 @@
   "远程士兵和步兵的木材费用 -50%": {
     "py": "yuanchengshibinghebubingdemucaifeiyong",
     "pyi": "ycsbhbbdmcfy"
+  },
+  "速率与耗时": {
+    "py": "sulvyuhaoshi",
+    "pyi": "slyhs"
   },
   "采果工不仅能产生食物，还能产生木材": {
     "py": "caiguogongbujinnengchanshengshiwuhainengchanshengmucai",

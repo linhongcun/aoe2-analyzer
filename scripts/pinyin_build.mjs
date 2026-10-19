@@ -54,6 +54,7 @@ function labels(node) {
   ts.forEachChild(node, labels);
 }
 labels(sections);
+for (const term of JSON.parse(fs.readFileSync('src/content/glossary.json', 'utf8'))) names.push(term.zh);
 for (const c of JSON.parse(fs.readFileSync('src/data/civs.json', 'utf8'))) names.push(...c.bon, c.tb);
 const extra = Object.fromEntries([...new Set(names)].sort().map((zh) => [zh, toPy(zh)]));
 const path = 'src/data/search-py.json';

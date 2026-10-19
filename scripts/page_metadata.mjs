@@ -18,6 +18,7 @@ const staticPages = {
   '/simulator': ['科技模拟器', '计算文明与科技作用后的单位属性和投入费用。'],
   '/duel': ['单位 PK', '设置单位、文明、科技和数量，比较击杀时间与模拟结果。'],
   '/production': ['持续生产', '按文明、时代、已研究科技和生产建筑数量估算每分钟开销与村民分配。'],
+  '/glossary': ['术语与缩写', '查询中英社区缩写、开局用语以及速率和科技增强措辞。'],
   '/about-data': ['关于数据', '查看游戏数据版本、固定来源与可复现校验。'],
   '/dlc': ['资料片', '查看决定版资料片及其文明。'],
   '/tree': ['文明科技树', '查看各文明可用单位和科技。'],
@@ -26,6 +27,7 @@ const staticPages = {
   '/ladder': ['天梯数据', '文明统计入口；可靠的新版本统计数据仍在准备中。'],
 };
 for (const [route, [title, description]] of Object.entries(staticPages)) add(route, title, description);
+for (const term of JSON.parse(readFileSync(path.join(root, 'src/content/glossary.json'), 'utf8'))) add(`/glossary/${term.id}`, term.zh, term.meaning);
 for (const [file, type] of [
   ['units', 'unit'],
   ['techs', 'tech'],
