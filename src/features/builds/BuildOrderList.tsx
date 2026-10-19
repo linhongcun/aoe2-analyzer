@@ -110,7 +110,7 @@ export default function BuildOrderList() {
               <ChartGantt size={16} aria-hidden /> 看时间线
             </Link>
             {' · '}
-            <Link to={`/builds?bo=${b.id}&view=practice`} className="tl-open">
+            <Link to={`/builds?bo=${b.id}&view=practice`} className="bo-practice-open">
               专注跟练
             </Link>
           </p>
