@@ -126,3 +126,12 @@ test('#215 分享方案中的不可用科技状态可以直接取消修正', asy
   await expect(page.getByRole('checkbox', { name: /已研究行会/ })).toBeDisabled();
   await expect(page.getByTestId('market-summary-0')).toContainText('5%');
 });
+
+test('#215 全局搜索可用市场页面拼音进入子工具', async ({ page }) => {
+  await page.goto('./#/production');
+  await page.getByRole('button', { name: '全局搜索', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: '全局搜索', exact: true });
+  await dialog.getByPlaceholder(/搜索文明、单位、科技/).fill('shichangmaimai');
+  await dialog.locator('.cmdk-list li').filter({ hasText: '市场买卖' }).click();
+  await expect(page.getByRole('heading', { name: '市场买卖预算', exact: true })).toBeVisible();
+});
