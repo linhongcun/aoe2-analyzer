@@ -1,0 +1,221 @@
+.eco-payoff {
+  min-width: 0;
+}
+.eco-heading,
+.eco-actions,
+.eco-stat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.eco-heading h1 {
+  margin-bottom: var(--space-2);
+}
+.eco-actions {
+  justify-content: flex-start;
+  margin-block: var(--space-4);
+}
+.eco-payoff button,
+.eco-payoff input,
+.eco-payoff select,
+.eco-payoff summary,
+.eco-heading a {
+  min-height: 44px;
+}
+.eco-heading a {
+  display: inline-flex;
+  align-items: center;
+}
+.eco-boundary {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-6);
+}
+.eco-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+.eco-settings,
+.eco-results {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.eco-settings {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.eco-card {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  background: var(--color-surface);
+}
+.eco-card h2 {
+  font-size: var(--fs-h3);
+  margin: 0 0 var(--space-4);
+}
+.eco-card h3 {
+  font-size: var(--fs-body);
+  margin-block: var(--space-4) var(--space-3);
+}
+.eco-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.eco-form-grid label,
+.eco-manual {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--fs-sm);
+}
+.eco-full {
+  grid-column: 1 / -1;
+}
+.eco-payoff input:not([type='checkbox']),
+.eco-payoff select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: var(--fs-body);
+}
+.eco-tech-group {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+}
+.eco-tech-group legend {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.eco-tech-group .eco-check {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-body);
+}
+.eco-check input {
+  width: 20px;
+  min-height: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--color-accent);
+}
+.eco-check span {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+.eco-check small {
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+}
+.eco-stat {
+  margin-block: var(--space-3);
+  font-size: var(--fs-sm);
+}
+.eco-stat strong,
+.eco-number {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.eco-costs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  font-size: var(--fs-sm);
+}
+.eco-costs > span {
+  white-space: nowrap;
+  background: var(--color-surface-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+.eco-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.eco-resource {
+  min-width: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+}
+.eco-resource h3 {
+  margin: 0 0 var(--space-3);
+}
+.eco-resource dl {
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+}
+.eco-resource dl > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.eco-resource dd {
+  margin: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.eco-resource small {
+  display: block;
+  margin-top: var(--space-3);
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+}
+.eco-balance {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+}
+.eco-payoff details {
+  font-size: var(--fs-sm);
+  margin-top: var(--space-4);
+}
+.eco-payoff summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: var(--color-link);
+}
+.eco-errors {
+  color: var(--color-bad);
+  overflow-wrap: anywhere;
+}
+.eco-incomplete,
+.eco-warnings {
+  color: var(--color-warn);
+}
+.eco-source {
+  font-size: var(--fs-xs);
+}
+@media (max-width: 800px) {
+  .eco-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .eco-card {
+    padding: var(--space-3);
+  }
+}
+@media (max-width: 420px) {
+  .eco-resource-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

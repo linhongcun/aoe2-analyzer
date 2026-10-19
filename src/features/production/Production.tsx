@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civs } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
 import { Loading } from '../../shared/ui/widgets';
@@ -109,6 +109,11 @@ function ProductionBody({
           复制方案链接
         </button>
       </header>
+      <p>
+        <Link className="ulink production-payoff-entry" to="/eco-payoff">
+          经济科技收益：固定村民对比研究投入与增量
+        </Link>
+      </p>
       {linkErrors.length > 0 && <p className="note">请先修正链接错误，再复制方案。</p>}
       {shareStatus && (
         <p className="note" role="status">

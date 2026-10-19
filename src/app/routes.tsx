@@ -26,6 +26,7 @@ const BonusDetail = lazy(() => import('../features/bonuses/components/BonusDetai
 const BonusList = lazy(() => import('../features/bonuses/components/BonusList'));
 const Matchup = lazy(() => import('../features/matchup/components/Matchup'));
 const Production = lazy(() => import('../features/production/Production'));
+const EcoPayoff = lazy(() => import('../features/ecoPayoff/EcoPayoff'));
 
 /** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list→#civs */
 export function AppRoutes() {
@@ -50,6 +51,7 @@ export function AppRoutes() {
       <Route path="/building/:id" element={<BuildingDetail />} />
       <Route path="/duel" element={<Duel />} />
       <Route path="/production" element={<Production />} />
+      <Route path="/eco-payoff" element={<EcoPayoff />} />
       <Route path="/patches" element={<Patches />} />
       <Route path="/patches/:id" element={<Patches />} />
       <Route path="/about-data" element={<AboutData />} />

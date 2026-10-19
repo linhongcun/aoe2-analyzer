@@ -403,3 +403,8 @@
 .detail-ratings-heading {
   margin-bottom: 12px;
 }
+.detail .tech-payoff-entry {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
