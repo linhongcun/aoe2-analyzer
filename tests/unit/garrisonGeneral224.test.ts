@@ -150,6 +150,23 @@ describe('#224 general garrison model', () => {
     expect(calc(12, { age: 2, rows: [row(4, '2', 'created')] }).errors).not.toEqual([]);
     expect(candidates(45).some((u) => u.id === 17 && u.canCreate && !u.canEnter)).toBe(true);
   });
+  it('does not treat scenario sheep train locations as normal Town Center production', () => {
+    expect(GENERAL_GARRISON_DATA.units[594]!.trainLocations).toEqual([{ unitId: 109, time: 15 }]);
+    expect(GENERAL_GARRISON_DATA.buildings[109]!.produces).toEqual([83]);
+    expect(candidates(109, { civ: 'Franks' }).some((u) => u.id === 594)).toBe(false);
+    expect(calc(109, { civ: 'Franks', rows: [row(594, '1', 'created')] }).errors.length).toBeGreaterThan(0);
+    expect(calc(68, { civ: 'Gurjaras', rows: [row(594, '8')] })).toMatchObject({ errors: [], usedSlots: 8, capacity: 10, totalProjectiles: 0 });
+    for (const civ of ctx.core.buildingById[109]!.civs)
+      expect(
+        candidates(109, { civ }).some((u) => GENERAL_GARRISON_DATA.herdableIds.includes(u.id)),
+        civ,
+      ).toBe(false);
+  });
+  it('preserves normal production, female villager production and inherited Harbor production', () => {
+    expect(calc(109, { rows: [row(83, '2', 'created'), row(293, '3', 'created')] })).toMatchObject({ errors: [], usedSlots: 5, totalProjectiles: 5 });
+    expect(calc(1189, { civ: 'Malay', rows: [row(539, '2', 'created')] })).toMatchObject({ errors: [], usedSlots: 2 });
+    expect(candidates(109, { civ: 'Armenians' }).find((u) => u.id === 1808)).toMatchObject({ canEnter: true, canCreate: false });
+  });
   it('uses technology-dependent extra production locations instead of granting them from the unit name', () => {
     expect(calc(12, { civ: 'Goths', rows: [row(41, '1', 'created')] }).errors.length).toBeGreaterThan(0);
     expect(calc(12, { civ: 'Goths', techs: [16], rows: [row(41, '1', 'created')] })).toMatchObject({ errors: [], totalProjectiles: 0 });

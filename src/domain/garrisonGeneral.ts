@@ -212,6 +212,7 @@ interface Snapshot {
   building: GeneralGarrisonUnit | undefined;
   known: Set<number>;
   selected: number[];
+  productionLocations: Record<number, number[]>;
 }
 
 function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarrisonConfig, data: GeneralGarrisonData): Snapshot {
@@ -225,6 +226,7 @@ function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarri
   const actual = data.buildings[b.id]?.eraForms[config.age - 1] ?? b.id;
   if (units[actual]) units[b.id] = { ...units[actual]!, id: b.id };
   const selected = unique([...config.techs, ...getFreeGarrisonTechs(ctx, b, config, data)]);
+  const productionLocations: Record<number, number[]> = {};
   const known = new Set([104]);
   const disabled = new Set(civ?.disabled ?? []);
   const implied = implicitShapeTechs(ctx, b, config, data);
@@ -243,6 +245,7 @@ function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarri
       const previous = unit.trainLocations[e.slot];
       if (previous) previous.unitId = e.location;
       else unit.trainLocations[e.slot] = { unitId: e.location, time: unit.trainLocations[0]?.time ?? 0 };
+      productionLocations[e.unit] = [...(productionLocations[e.unit] ?? []), e.location];
     }
   };
   for (const [index, id] of [101, 102, 103].entries())
@@ -278,7 +281,7 @@ function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarri
   }
   automatic.push(...data.conditional);
   advance();
-  return { units, building: units[b.id], known, selected };
+  return { units, building: units[b.id], known, selected, productionLocations };
 }
 
 export function getGarrisonBuildings(ctx: GeneralGarrisonContext): Building[] {
@@ -308,7 +311,13 @@ function candidate(
   const aliases = data.buildings[b.id]?.aliases ?? [b.id];
   const canEnter = B.capacity > 0 && mask !== null && (B.garrisonType & mask) !== 0 && acceptsTask(u, B, aliases);
   const predecessors = data.buildings[b.id]?.predecessors ?? aliases;
-  let canCreate = B.capacity > 0 && u.trainLocations.some((t) => predecessors.includes(t.unitId));
+  // Scenario/editor defaults can have a train location without being part of the normal production roster (e.g. sheep at TC).
+  // Female villagers share the normal villager production slot rather than a separate raw train-location record.
+  const productionId = id === 293 ? 83 : id;
+  const producer = state.units[productionId];
+  const catalogProduction = predecessors.some((sourceId) => data.buildings[sourceId]?.produces.includes(productionId));
+  const relocatedProduction = state.productionLocations[productionId]?.some((location) => predecessors.includes(location)) ?? false;
+  let canCreate = B.capacity > 0 && (catalogProduction || relocatedProduction) && !!producer?.trainLocations.some((t) => predecessors.includes(t.unitId));
   const relic = (data.relicIds ?? []).includes(id);
   const carrier = state.units[286];
   const canDeposit =
