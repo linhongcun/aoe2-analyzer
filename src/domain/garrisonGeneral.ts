@@ -114,7 +114,16 @@ export interface GeneralGarrisonData {
   ageRules: Record<string, GeneralGarrisonRule>;
   unitUpgradeTechs?: Record<string, number[]>;
   conditional: GeneralGarrisonRule[];
-  civs: Record<string, { automatic: GeneralGarrisonRule[]; free: number[]; disabled: number[]; baseOverrides: Record<string, Partial<GeneralGarrisonUnit>> }>;
+  civs: Record<
+    string,
+    {
+      automatic: GeneralGarrisonRule[];
+      free: number[];
+      disabled: number[];
+      baseOverrides: Record<string, Partial<GeneralGarrisonUnit>>;
+      startingScoutId?: number;
+    }
+  >;
 }
 export const GENERAL_GARRISON_DATA = raw as unknown as GeneralGarrisonData;
 export const GENERAL_GARRISON_LIMIT = 32;
@@ -176,12 +185,17 @@ function unitAge(ctx: GeneralGarrisonContext, id: number, civ: string, data: Gen
     Math.max(u?.age ?? ctx.core.buildingById[id]?.age ?? data.units[id]?.catalog?.age ?? 1, id === 93 ? 2 : 1, data.herdableIds.includes(id) ? 1 : 0)
   );
 }
+function existingUnitAge(ctx: GeneralGarrisonContext, id: number, civ: string, data: GeneralGarrisonData) {
+  // Civ.resources[263] names an existing starting unit, independently of its production unlock.
+  // Keep the normal training age separate (see issue224-engine.md).
+  return data.civs[civ]?.startingScoutId === id ? 1 : unitAge(ctx, id, civ, data);
+}
 function unitAvailable(ctx: GeneralGarrisonContext, id: number, config: GeneralGarrisonConfig, data: GeneralGarrisonData): boolean {
   const u = ctx.core.unitById[id] ?? (id === 293 ? ctx.core.unitById[83] : undefined) ?? ctx.core.buildingById[id];
   if (u && !u.civs.includes(config.civ)) return false;
   if (!u && !data.herdableIds.includes(id) && !(data.specialOccupantIds ?? []).includes(id) && !(data.relicIds ?? []).includes(id)) return false;
   if (!u && data.units[id]?.catalog?.civs.length && !data.units[id]!.catalog!.civs.includes(config.civ)) return false;
-  if (unitAge(ctx, id, config.civ, data) > config.age) return false;
+  if (existingUnitAge(ctx, id, config.civ, data) > config.age) return false;
   return civStatus(ctx.trees, config.civ)['u' + (id === 293 ? 83 : id)] !== 0;
 }
 
@@ -317,7 +331,11 @@ function candidate(
   const producer = state.units[productionId];
   const catalogProduction = predecessors.some((sourceId) => data.buildings[sourceId]?.produces.includes(productionId));
   const relocatedProduction = state.productionLocations[productionId]?.some((location) => predecessors.includes(location)) ?? false;
-  let canCreate = B.capacity > 0 && (catalogProduction || relocatedProduction) && !!producer?.trainLocations.some((t) => predecessors.includes(t.unitId));
+  let canCreate =
+    B.capacity > 0 &&
+    unitAge(ctx, id, config.civ, data) <= config.age &&
+    (catalogProduction || relocatedProduction) &&
+    !!producer?.trainLocations.some((t) => predecessors.includes(t.unitId));
   const relic = (data.relicIds ?? []).includes(id);
   const carrier = state.units[286];
   const canDeposit =
@@ -335,7 +353,7 @@ function candidate(
     id,
     zh: id === 293 ? '女村民' : u.zh,
     en: u.en,
-    age: unitAge(ctx, id, config.civ, data),
+    age: existingUnitAge(ctx, id, config.civ, data),
     pic: core?.pic ?? u.catalog?.pic ?? 0,
     category: relic ? '圣物' : mask === null ? '其他单位' : (categoryNames[mask] ?? '其他单位'),
     canEnter,
@@ -344,7 +362,9 @@ function candidate(
     reason: canDeposit
       ? '通过持有圣物的僧侣存放；此预览只计容量，不估算圣物资源收益。'
       : canEnter
-        ? '可从外部进入驻军。'
+        ? config.age < unitAge(ctx, id, config.civ, data)
+          ? '初始单位可从外部进入；当前时代尚不能生产该单位。'
+          : '可从外部进入驻军。'
         : canCreate
           ? '仅支持在此建筑生产后留驻；离开后不能重新进入。'
           : '当前建筑、时代或科技不允许该入驻方式。',

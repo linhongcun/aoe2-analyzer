@@ -167,6 +167,20 @@ describe('#224 general garrison model', () => {
     expect(calc(1189, { civ: 'Malay', rows: [row(539, '2', 'created')] })).toMatchObject({ errors: [], usedSlots: 2 });
     expect(candidates(109, { civ: 'Armenians' }).find((u) => u.id === 1808)).toMatchObject({ canEnter: true, canCreate: false });
   });
+  it.each(['Aztecs', 'Mayans'])('allows the starting Eagle Scout to enter a Dark Age TC for %s without allowing Dark Age production', (civ) => {
+    expect(ctx.core.unitById[751]!.age).toBe(2);
+    expect(GENERAL_GARRISON_DATA.civs[civ]!.startingScoutId).toBe(751);
+    expect(candidates(109, { civ, age: 1 }).find((u) => u.id === 751)).toMatchObject({ age: 1, canEnter: true, canCreate: false });
+    expect(calc(109, { civ, age: 1, rows: [row(751)] })).toMatchObject({ errors: [], usedSlots: 1, totalProjectiles: 0 });
+    expect(calc(12, { civ, age: 1, rows: [row(751, '1', 'created')] }).errors.length).toBeGreaterThan(0);
+    expect(calc(12, { civ, age: 2, rows: [row(751, '1', 'created')] })).toMatchObject({ errors: [], usedSlots: 1 });
+  });
+  it('does not grant the old Eagle Scout starting-unit exception to Incas or other civilizations', () => {
+    expect(GENERAL_GARRISON_DATA.civs.Incas!.startingScoutId).toBe(2550);
+    expect(candidates(109, { civ: 'Incas', age: 1 }).find((u) => u.id === 2550)).toMatchObject({ age: 1, canEnter: true });
+    expect(candidates(109, { civ: 'Incas', age: 1 }).some((u) => u.id === 751)).toBe(false);
+    expect(candidates(109, { civ: 'Franks', age: 1 }).some((u) => u.id === 751)).toBe(false);
+  });
   it('uses technology-dependent extra production locations instead of granting them from the unit name', () => {
     expect(calc(12, { civ: 'Goths', rows: [row(41, '1', 'created')] }).errors.length).toBeGreaterThan(0);
     expect(calc(12, { civ: 'Goths', techs: [16], rows: [row(41, '1', 'created')] })).toMatchObject({ errors: [], totalProjectiles: 0 });
