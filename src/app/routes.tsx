@@ -25,6 +25,7 @@ const Duel = lazy(() => import('../features/duel/components/Duel'));
 const BonusDetail = lazy(() => import('../features/bonuses/components/BonusDetail'));
 const BonusList = lazy(() => import('../features/bonuses/components/BonusList'));
 const Matchup = lazy(() => import('../features/matchup/components/Matchup'));
+const Market = lazy(() => import('../features/market/Market'));
 const Production = lazy(() => import('../features/production/Production'));
 const EcoPayoff = lazy(() => import('../features/ecoPayoff/EcoPayoff'));
 
@@ -52,6 +53,7 @@ export function AppRoutes() {
       <Route path="/duel" element={<Duel />} />
       <Route path="/production" element={<Production />} />
       <Route path="/eco-payoff" element={<EcoPayoff />} />
+      <Route path="/market" element={<Market />} />
       <Route path="/patches" element={<Patches />} />
       <Route path="/patches/:id" element={<Patches />} />
       <Route path="/about-data" element={<AboutData />} />
