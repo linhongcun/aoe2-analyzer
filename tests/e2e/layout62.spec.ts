@@ -1,21 +1,23 @@
 import { expect, test, type Locator, type Page, type TestInfo } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-import { CIV_DLC, DLCS, dlcOf } from '../../src/domain/dlc';
+import { CIV_DLC, DLCS } from '../../src/domain/dlc';
 
 const WIDTHS = [360, 375, 390, 1280];
 const THEMES = ['light', 'dark'] as const;
 type Theme = (typeof THEMES)[number];
 type Civ = { en: string; zh: string; ty: string[] };
 type Unit = { id: number; zh: string; pic: number };
-type Tech = { en: string; type: string; civs: string[]; age: number; bz: string };
+type Tech = { id: number; en: string; type: string; civs: string[]; age: number; bz: string };
 const CIVS = JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as Civ[];
 const UNITS = JSON.parse(readFileSync('src/data/units.json', 'utf8')) as Unit[];
 const TECHS = JSON.parse(readFileSync('src/data/techs.json', 'utf8')) as Tech[];
+const TECH_RELEASES = (JSON.parse(readFileSync('src/data/catalog-introductions.json', 'utf8')) as { techs: Record<number, number | null> }).techs;
+const techDlc = ({ id }: { id: number }) => TECH_RELEASES[id] ?? null;
 const LARGE_DLC = DLCS.findIndex((dlc) => dlc.civs.length > 6);
 const DLC_CIVS = CIVS.filter((civ) => CIV_DLC[civ.en] === LARGE_DLC);
 const FIRST_CIV = DLC_CIVS[0]!;
 const NEXT_CIV = DLC_CIVS[1]!;
-const FIRST_TECH = TECHS.find((tech) => tech.type === 'UniqueTech' && dlcOf(tech) != null)!;
+const FIRST_TECH = TECHS.find((tech) => tech.type === 'UniqueTech' && techDlc(tech) != null)!;
 
 async function ready(page: Page, route: string, selector: string) {
   await page.goto('./#/' + route);
@@ -154,10 +156,10 @@ for (const width of WIDTHS)
       const techFilters = await openFilters(techRoot, mobile);
       await techRoot.locator('#tt').selectOption(FIRST_TECH.type);
       await techRoot.locator('#ta').selectOption(String(FIRST_TECH.age));
-      await techRoot.locator('#tdlc').selectOption(String(dlcOf(FIRST_TECH)));
+      await techRoot.locator('#tdlc').selectOption(String(techDlc(FIRST_TECH)));
       await techRoot.locator('#tb').selectOption(FIRST_TECH.bz);
       const filteredTechs = TECHS.filter(
-        (tech) => tech.type === FIRST_TECH.type && tech.age === FIRST_TECH.age && dlcOf(tech) === dlcOf(FIRST_TECH) && tech.bz === FIRST_TECH.bz,
+        (tech) => tech.type === FIRST_TECH.type && tech.age === FIRST_TECH.age && techDlc(tech) === techDlc(FIRST_TECH) && tech.bz === FIRST_TECH.bz,
       );
       await expect(techRoot.locator('#tcnt')).toHaveText(`${filteredTechs.length} / ${TECHS.length}`);
       if (mobile) {

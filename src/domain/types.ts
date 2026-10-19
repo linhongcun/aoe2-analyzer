@@ -87,6 +87,8 @@ export interface Tech {
   bz: string;
   ben: string;
   dlc: number | null;
+  /** 独立免费更新引入的当前具名科技；与 DLC 首发互斥。 */
+  introducedUpdate?: string;
 }
 /** 科技树格子：[行, 列, 类型 u/t, id, 是否可用 0/1, 连线父级 id] */
 /** 格子类型：u=单位 t=科技 b=建筑（如鱼栅、港口） */

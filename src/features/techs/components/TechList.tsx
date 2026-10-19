@@ -2,9 +2,9 @@ import { ListHead } from '../../../shared/ui/layout';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
-import { dlcMatch } from '../../../domain/dlc';
+import { techReleaseMatches } from '../../../domain/introductions';
 import { AGE_ZH } from '../../../domain/ratings';
-import { CostView, DlcBadge, TechIcon } from '../../../shared/ui/art';
+import { CostView, TechReleaseBadge, TechIcon } from '../../../shared/ui/art';
 import { DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
 import CatalogFilters from '../../../shared/ui/CatalogFilters';
 import { useSticky } from '../../../shared/utils/sticky';
@@ -24,11 +24,11 @@ export default function TechList() {
       (!ty || t.type === ty) &&
       (!a || t.age === +a) &&
       (!b || t.bz === b) &&
-      dlcMatch(t.dlc, dlc),
+      techReleaseMatches(t, dlc),
   );
   return (
     <section id="techs" className="pane">
-      <ListHead title="科技" desc="全部科技 · 按类别、时代、DLC、建筑筛选" />
+      <ListHead title="科技" desc="全部科技 · 按类别、时代、首发版本、建筑筛选" />
       <CatalogFilters
         search={<SearchInput id="tq" value={q} onChange={setQ} placeholder="搜索科技（名称/效果）" />}
         count={
@@ -59,7 +59,7 @@ export default function TechList() {
           <option value="3">城堡</option>
           <option value="4">帝王</option>
         </select>
-        <DlcSelect id="tdlc" value={dlc} onChange={setDlc} />
+        <DlcSelect id="tdlc" value={dlc} onChange={setDlc} includeUpdates />
         <select id="tb" aria-label="研究建筑" value={b} onChange={(e) => setB(e.target.value)}>
           <option value="">全部建筑</option>
           {[...new Set(all.map((t) => t.bz))].map((x) => (
@@ -81,7 +81,7 @@ export default function TechList() {
                   {t.bz} · {AGE_ZH[t.age] ?? ''} · <CostView c={t.cost} />
                   {t.type === 'UniqueTech' ? ' · ' + t.civs.map((n) => civByEn(n)?.zh).join('/') : ''}
                 </div>
-                <DlcBadge i={t.dlc} linked={false} />
+                <TechReleaseBadge t={t} />
               </div>
             </Link>
           ))}

@@ -40,9 +40,9 @@ git add -A && git commit -m "Data: DE Update <补丁号>" && git push   # CI 通
 
 ## CI（`.github/workflows/ci.yml`）
 
-单位、建筑的首发版本独立维护在 `scripts/catalog_introductions.json`，每条记录包含当前英文身份、发行版本、来源和核对证据。执行 `npm run introductions` 会校验全部当前资料ID并生成 `src/data/catalog-introductions.json`；`npm run data` 也会执行此步骤。新增或重命名资料后，必须先补来源清单，不能用文明所属资料片或引擎ID年代自动补值；无法核实的条目显式记为 `unverified` / `null`。
+单位、建筑、科技的首发版本独立维护在 `scripts/catalog_introductions.json`，每条记录包含当前英文身份、发行版本、来源和核对证据。执行 `npm run introductions` 会校验全部当前资料ID并生成 `src/data/catalog-introductions.json`；`npm run data` 也会执行此步骤。新增或重命名资料后，必须先补来源清单，不能用文明所属资料片或引擎ID年代自动补值；无法核实的条目显式记为 `unverified` / `null`。科技独立免费更新使用 `release: null`、`update: "更新号"`、`status: "verified"`，不能填成某个文明的 DLC；发行版本与更新号互斥。
 
-`npm run introductions:check` 离线检查清单覆盖与生成结果，CI 始终运行；运行时只加载紧凑查表，不访问外站。首发口径、来源冲突与本轮核对结果见 [#190核对报告](data/catalog-introductions-audit.md)。
+`npm run introductions:check` 离线检查清单覆盖与生成结果，CI 始终运行；运行时只加载紧凑查表，不访问外站。首发口径、来源冲突与本轮核对结果见 [#190核对报告](data/catalog-introductions-audit.md)及[#195科技核对报告](data/tech-introductions-audit.md)。
 
 push / PR 到 `main` 时运行 lint、类型检查、Vitest、Python 测试（`tests/py`：补丁号识别、差异摘要、标记校验，含 fixtures）、数据检查（缓存的 `.dat` + sha256/标记 + `effects.json` 可复现）、构建、Playwright 冒烟；全部通过且为 push 到 `main` 才通过 `actions/deploy-pages` 部署。
 

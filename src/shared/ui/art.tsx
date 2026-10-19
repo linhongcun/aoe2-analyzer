@@ -111,6 +111,17 @@ export function DlcBadgeL({ i }: { i: number | null }) {
   );
 }
 
+/** 科技独立免费更新与未核实状态也显式展示，不冒用资料片图标。 */
+export function TechReleaseBadge({ t, large = false }: { t: Pick<Tech, 'dlc' | 'introducedUpdate'>; large?: boolean }) {
+  if (t.introducedUpdate || t.dlc === null)
+    return (
+      <span className="tag" data-tech-release={t.introducedUpdate ? 'update' : 'none'}>
+        {t.introducedUpdate ? `免费更新 · ${t.introducedUpdate}` : '首发版本未标注'}
+      </span>
+    );
+  return large ? <DlcBadgeL i={t.dlc} /> : <DlcBadge i={t.dlc} linked={false} />;
+}
+
 export const BuildingIcon = ({ b, big }: { b: Pick<Building, 'pic'>; big?: boolean }) => (
   <img className={big ? 'uico big' : 'uico'} src={img(`buildings/${b.pic}.webp`)} alt="" loading="lazy" />
 );

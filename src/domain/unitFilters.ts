@@ -1,13 +1,20 @@
 import { dlcMatch } from './dlc';
 import { collapse, type Families, type FamilyEntry } from './family';
 import type { Unit } from './types';
+import { unitRoles, type UnitRole } from './unitRoles';
 
 export interface UnitFilters {
   query: string;
   type: string;
   age: string;
   dlc: string;
+  civ?: string;
+  role?: UnitRole | '';
 }
+
+/** 文明可用性与目录兵种必须由同一实际形态提供。 */
+const available = (u: Unit, filters: UnitFilters): boolean =>
+  (!filters.civ || u.civs.includes(filters.civ)) && (!filters.role || unitRoles(u).includes(filters.role));
 
 /** 所有条件由同一条单位记录满足，不能拼接普通版和精锐版的属性。 */
 export function unitMatches(u: Unit, filters: UnitFilters): boolean {
@@ -16,7 +23,8 @@ export function unitMatches(u: Unit, filters: UnitFilters): boolean {
     (u.en.toLowerCase().includes(query) || u.zh.includes(query)) &&
     (!filters.type || u.type === filters.type) &&
     (!filters.age || u.age === +filters.age) &&
-    dlcMatch(u.dlc, filters.dlc)
+    dlcMatch(u.dlc, filters.dlc) &&
+    available(u, filters)
   );
 }
 
@@ -36,7 +44,8 @@ export function filterUnitFamilies(list: readonly Unit[], families: Families, fi
     const selected = matches.find((form) => !families.baseOf[form.id]) ?? matches[0];
     if (!selected) return [];
     if (families.baseOf[selected.id]) return [{ u: selected }];
-    const elite = group.find((form) => form.id === families.eliteOf[selected.id]?.id) ?? group.find((form) => !!families.baseOf[form.id]);
+    const eligible = group.filter((form) => available(form, filters));
+    const elite = eligible.find((form) => form.id === families.eliteOf[selected.id]?.id) ?? eligible.find((form) => !!families.baseOf[form.id]);
     return [{ u: selected, ...(elite ? { elite } : {}) }];
   });
 }

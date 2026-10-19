@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
-import { CivChip, CostView, DlcBadgeL, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
+import { CivChip, CostView, TechReleaseBadge, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../buildings/components/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
@@ -83,7 +83,7 @@ export default function TechDetail() {
       icon={<TechIcon t={t} big />}
       title={t.zh}
       en={t.en}
-      badges={<DlcBadgeL i={t.dlc} />}
+      badges={<TechReleaseBadge t={t} large />}
       tags={
         <>
           <span className="tag">{TT[t.type] ?? t.type}</span>
