@@ -6,6 +6,8 @@ import { allNumeric, makeSimContext } from '../../../domain/simulator';
 import type { Building } from '../../../domain/types';
 import { Loading } from '../../../shared/ui/widgets';
 import SimPanel, { type StatRow } from '../../simulator/components/SimPanel';
+import garrisonHosts from '../../../data/garrison_hosts.json';
+import { getGarrisonBuildingAge, getGarrisonTechs, writeGeneralGarrison } from '../../../domain/garrisonGeneral';
 
 const nums = (s: string | null) => (s ?? '').split(',').filter(Boolean).map(Number);
 
@@ -24,7 +26,8 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     );
   const q = new URLSearchParams(loc.search);
   const civ = b.civs.includes(q.get('civ') ?? '') ? q.get('civ')! : b.civs[0]!;
-  const age = Math.max(b.age, Math.min(4, +(q.get('age') ?? 4) || 4));
+  const minAge = getGarrisonBuildingAge(b, civ);
+  const age = Math.max(minAge, Math.min(4, +(q.get('age') ?? 4) || 4));
   const avail = buildingSimTechs(ctx, b, civ);
   const ok = new Set(avail.filter((x) => x.ef).map((x) => x.t.id));
   const sel = new Set(nums(q.get('techs')).filter((i) => ok.has(i)));
@@ -52,20 +55,24 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     ['bt', '建造时间', 'time'],
   ];
   const C = cmp ? simulateBuilding(ctx, b, cmp, 4, allNumeric(buildingSimTechs(ctx, b, cmp))) : null;
+  const garrisonTechIds =
+    trees && garrisonHosts.includes(b.id)
+      ? new Set(getGarrisonTechs({ core, trees }, b, { civ, age, techs: [], rows: [] }).map((t) => t.id))
+      : new Set<number>();
   return (
     <>
-      {[109, 79, 234, 235].includes(b.id) && (
+      {trees && garrisonHosts.includes(b.id) && (
         <p>
           <Link
-            to={`/building/${b.id}?${new URLSearchParams({ tab: 'garrison', civ, age: String(age), gtechs: [...sel].filter((id) => [3, 47, 199, 200, 201, 482, 484, 576, 608, 923].includes(id)).join(','), garrison: '0' }).toString()}`}
+            to={`/building/${b.id}?${writeGeneralGarrison({ civ, age, techs: [...sel].filter((id) => garrisonTechIds.has(id)), rows: [109, 79, 234, 235].includes(b.id) ? [{ unitId: 83, count: '0', entry: 'enter' }] : [] }).toString()}`}
           >
-            查看村民驻军箭数与人数阈值
+            查看驻军配置与弹丸预览
           </Link>
         </p>
       )}
       <SimPanel
         civs={b.civs}
-        minAge={b.age}
+        minAge={minAge}
         civ={civ}
         age={age}
         sel={sel}
