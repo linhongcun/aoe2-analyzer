@@ -35,7 +35,7 @@ export function strengthEntries(c: Civ): StrengthEntry[] {
     .sort((a, b) => b.score - a.score);
 }
 
-/** 前三项优势与后三项劣势（文明页用，相对排序；对局助手强项另用 strengthEntries 门槛） */
+/** 前三项优势与后三项弱项，仅为评分的相对排序，不代表兵种可用性；对局助手强项另用 strengthEntries 门槛。 */
 export function strengths(c: Civ): [string[], string[]] {
   const a = c.s.map((v, i) => [v, AXES[i]!] as const).sort((x, y) => y[0] - x[0]);
   return [a.slice(0, 3).map((x) => x[1]), a.slice(-3).map((x) => x[1])];
@@ -126,6 +126,7 @@ export function filterCounterUnits(meEn: string, oppTypes: CivType[], units: { i
 
 export interface MatchupAdvice {
   oppStrong: string[];
+  /** 对手评分最低的三项，不推导缺兵种或配兵结论。 */
   oppWeak: string[];
   /** 带分数的强项（仅 ≥ 门槛） */
   strengths: StrengthEntry[];
@@ -148,7 +149,6 @@ export function matchup(a: Civ, e: Civ): MatchupAdvice {
   const advice: string[] = [];
   advice.push(e.s[3]! >= STRONG_THRESHOLD ? '对手经济强，前期主动骚扰。' : '对手经济一般，可以稳健发育拖后期。');
   if (a.s[0]! >= STRONG_THRESHOLD) advice.push('你骑兵强，可攻击对方后排弓手和攻城武器。');
-  if (ew.includes('骑兵')) advice.push('对手缺骑兵，你可以多用远程单位。');
   return {
     oppStrong: entries.map((x) => x.axis),
     oppWeak: ew,

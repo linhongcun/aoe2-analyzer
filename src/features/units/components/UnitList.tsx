@@ -1,10 +1,9 @@
 import { ListHead } from '../../../shared/ui/layout';
 import { Link } from 'react-router-dom';
 import { useCore } from '../../../data/hooks';
-import { dlcMatch } from '../../../domain/dlc';
 import { AGE_ZH } from '../../../domain/ratings';
-import type { Unit } from '../../../domain/types';
 import { collapse } from '../../../domain/family';
+import { filterUnitFamilies } from '../../../domain/unitFilters';
 import { civNote, dupIdsIn } from '../../../domain/dupNames';
 import { civByEn } from '../../../data';
 import { CostView, DlcBadge, EliteBadge, UnitIcon } from '../../../shared/ui/art';
@@ -19,11 +18,8 @@ export default function UnitList() {
     [a, setA] = useSticky('u.a', ''),
     [dlc, setDlc] = useSticky('u.dlc', '');
   const all = core?.units ?? [];
-  const ql = q.toLowerCase();
   const fams = core ? collapse(all, core.fam) : [];
-  const ok = (u?: Unit) =>
-    !!u && (u.en.toLowerCase().includes(ql) || u.zh.includes(ql)) && (!t || u.type === t) && (!a || u.age === +a) && dlcMatch(u.dlc, dlc);
-  const r = fams.filter((x) => ok(x.u) || ok(x.elite));
+  const r = core ? filterUnitFamilies(all, core.fam, { query: q, type: t, age: a, dlc }) : [];
   // #44 同名单位同时出现在列表里时，主名后加文明小字
   const dup = dupIdsIn(r.map((x) => x.u));
   return (

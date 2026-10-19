@@ -68,6 +68,9 @@ jobs:
             test-results/catalogLayout187-*/*.png
             test-results/layout62-*/*.png
             test-results/introductions190-*/*.png
+            test-results/units192-*/*.png
+            test-results/relatedTechs193-*/*.png
+            test-results/matchup194-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: failure()
