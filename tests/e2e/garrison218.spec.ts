@@ -80,7 +80,7 @@ test('#218 土耳其免费化学自动勾选且不可取消', async ({ page }) =
 
 test('#218 从建筑模拟器带入文明、时代和相关科技', async ({ page }) => {
   await page.goto('./#/building/79?tab=sim&civ=Britons&age=3&techs=199,200');
-  await page.getByRole('link', { name: '查看村民驻军箭数与人数阈值' }).click();
+  await page.getByRole('link', { name: '查看驻军配置与弹丸预览' }).click();
   await expect(page.getByRole('checkbox', { name: '箭羽', exact: true })).toBeChecked();
   await expect(page.getByRole('checkbox', { name: '锥子箭', exact: true })).toBeChecked();
   await expect(page.getByRole('combobox', { name: '驻军时代' })).toHaveValue('3');
@@ -88,7 +88,7 @@ test('#218 从建筑模拟器带入文明、时代和相关科技', async ({ pag
 
 test('#218 从模拟器保留斯万箭塔并应用村民火力修正', async ({ page }) => {
   await page.goto('./#/building/234?tab=sim&civ=Georgians&age=3&techs=923');
-  await page.getByRole('link', { name: '查看村民驻军箭数与人数阈值' }).click();
+  await page.getByRole('link', { name: '查看驻军配置与弹丸预览' }).click();
   const svan = page.getByRole('checkbox', { name: '斯万箭塔', exact: true });
   await expect(svan).toBeChecked();
   await page.getByRole('spinbutton', { name: '驻军人数' }).fill('4');
@@ -149,12 +149,14 @@ for (const query of ['gtechs=999999', 'gtechs=199,,200', 'gtechs=' + '9'.repeat(
     await expect(page.getByTestId('garrison-result')).toBeVisible();
   });
 
-test('#218 建筑详情有独立入口，范围外建筑没有驻军计算入口', async ({ page }) => {
+test('#218 建筑详情有独立入口，#224扩展城堡并排除无驻军建筑', async ({ page }) => {
   await page.goto('./#/building/109');
-  await page.getByRole('tab', { name: '村民驻军', exact: true }).click();
+  await page.getByRole('tab', { name: '驻军预览', exact: true }).click();
   await expect(panel(page)).toBeVisible();
   await page.goto('./#/building/82');
-  await expect(page.getByRole('tab', { name: '村民驻军', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('tab', { name: '驻军预览', exact: true })).toBeVisible();
+  await page.goto('./#/building/103');
+  await expect(page.getByRole('tab', { name: '驻军预览', exact: true })).toHaveCount(0);
 });
 
 for (const width of [360, 375, 390, 1280])
