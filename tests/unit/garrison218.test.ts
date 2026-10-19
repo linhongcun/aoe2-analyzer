@@ -79,6 +79,23 @@ describe('#218 fixed DE 185872 garrison cases', () => {
   it('Yeomen increases the building attack denominator without a false villager buff', () => {
     expect(result(79, { civ: 'Britons', techs: [3], villagers: '3' })).toMatchObject({ errors: [], villagerPower: 2.5, buildingPower: 3.5, totalArrows: 3 });
   });
+  it('Svan Towers changes both the building attack and villager firepower', () => {
+    expect(result(234, { civ: 'Georgians', age: 3, villagers: '4' })).toMatchObject({ errors: [], totalArrows: 3, nextAt: 5 });
+    expect(result(234, { civ: 'Georgians', age: 3, techs: [923], villagers: '4' })).toMatchObject({
+      errors: [],
+      totalArrows: 4,
+      villagerPower: 3.5,
+      buildingPower: 4.5,
+      nextAt: null,
+    });
+    expect(result(109, { civ: 'Georgians', age: 3, techs: [923], villagers: '4' })).toMatchObject({
+      errors: [],
+      totalArrows: 4,
+      villagerPower: 3.5,
+      buildingPower: 3.5,
+    });
+    expect(result(234, { civ: 'Franks', age: 3, techs: [923], villagers: '4' }).errors.length).toBeGreaterThan(0);
+  });
   it('Turkish Chemistry is free and automatically active only when available', () => {
     expect(result(109, { civ: 'Turks', age: 3 }).selected).not.toContain(47);
     expect(result(109, { civ: 'Turks', age: 4 })).toMatchObject({ errors: [], selected: [47], villagerPower: 3, buildingPower: 3 });

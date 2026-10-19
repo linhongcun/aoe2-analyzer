@@ -86,6 +86,38 @@ test('#218 从建筑模拟器带入文明、时代和相关科技', async ({ pag
   await expect(page.getByRole('combobox', { name: '驻军时代' })).toHaveValue('3');
 });
 
+test('#218 从模拟器保留斯万箭塔并应用村民火力修正', async ({ page }) => {
+  await page.goto('/#/building/234?tab=sim&civ=Georgians&age=3&techs=923');
+  await page.getByRole('link', { name: '查看村民驻军箭数与人数阈值' }).click();
+  const svan = page.getByRole('checkbox', { name: '斯万箭塔', exact: true });
+  await expect(svan).toBeChecked();
+  await page.getByRole('spinbutton', { name: '驻军人数' }).fill('4');
+  await expect(total(page)).toHaveText('4');
+  await svan.uncheck();
+  await expect(total(page)).toHaveText('3');
+});
+
+for (const query of ['gtechs=199,,200', 'age=4&age=3', 'garrison=0&garrison=4'])
+  test(`#218 解析错误锁定常规编辑和复制直至显式重置 ${query}`, async ({ page }) => {
+    await page.goto(`/#/building/109?tab=garrison&civ=Britons&${query}`);
+    const original = page.url();
+    await expect(panel(page).getByRole('alert')).toBeVisible();
+    await expect(page.getByRole('spinbutton', { name: '驻军人数' })).toBeDisabled();
+    await expect(page.getByRole('combobox', { name: '驻军时代' })).toBeDisabled();
+    await expect(page.getByRole('button', { name: /^驻军文明/ })).toBeDisabled();
+    await expect(page.getByRole('button', { name: '复制驻军方案', exact: true })).toBeDisabled();
+    await expect(page.getByRole('button', { name: '清空自选科技' })).toBeDisabled();
+    await expect(page.getByRole('checkbox', { name: '箭羽', exact: true })).toBeDisabled();
+    await expect(page.getByTestId('garrison-result')).toHaveCount(0);
+    expect(page.url()).toBe(original);
+    await page.reload();
+    await expect(page.getByTestId('garrison-result')).toHaveCount(0);
+    await page.getByRole('button', { name: '重置驻军方案' }).click();
+    await expect(page.getByRole('spinbutton', { name: '驻军人数' })).toBeEnabled();
+    await expect(page.getByRole('button', { name: '复制驻军方案', exact: true })).toBeEnabled();
+    await expect(page.getByTestId('garrison-result')).toBeVisible();
+  });
+
 test('#218 分享复制拒绝提供可还原的手动链接', async ({ page }) => {
   await page.addInitScript(() =>
     Object.defineProperty(navigator, 'clipboard', {

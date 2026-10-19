@@ -19,7 +19,7 @@ OUT = ROOT / 'src/data/garrison.json'
 IDS = (83, 293, 109, 79, 234, 235)
 ATTRS = {2: 'capacity', 9: 'attack', 10: 'reload', 102: 'total', 107: 'max', 130: 'firepower'}
 # Technologies that influence the supported buildings or villager firepower.
-TECHS = (3, 47, 199, 200, 201, 482, 484, 576, 608)
+TECHS = (3, 47, 199, 200, 201, 482, 484, 576, 608, 923)
 
 DUMP = r'''
 import json,sys
@@ -77,6 +77,13 @@ def generate(d, raw):
 
     def effects(eid):
         return decode(d['Effects'][eid]['EffectCommands'], baseline) if eid >= 0 else []
+
+    # A newly added researchable modifier must not silently disappear from the
+    # preview just because its ID was omitted from the supported technology set.
+    catalog = json.loads((ROOT / 'src/data/techs.json').read_text())
+    missing = [t['id'] for t in catalog if effects(techs[t['id']]['EffectID']) and t['id'] not in TECHS]
+    if missing:
+        raise ValueError('Researchable garrison modifiers need explicit support: ' + ', '.join(map(str, missing)))
 
     def rule(tid):
         t = techs[tid]

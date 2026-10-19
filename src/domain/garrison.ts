@@ -225,7 +225,7 @@ export function readGarrison(params: URLSearchParams, b: Building): { config: Ga
   const techs: number[] = [];
   if (tokens)
     for (const token of tokens.split(',')) {
-      if (!/^\d+$/.test(token) || !Number.isSafeInteger(Number(token)) || Number(token) <= 0) errors.push('科技参数包含无效 ID，请清空科技后重选。');
+      if (!/^\d+$/.test(token) || !Number.isSafeInteger(Number(token)) || Number(token) <= 0) errors.push('科技参数包含无效 ID，请重置驻军方案后重选。');
       else techs.push(Number(token));
     }
   if (age !== null && (!/^\d+$/.test(age) || !Number.isSafeInteger(Number(age)))) errors.push('时代参数无效。');
