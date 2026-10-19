@@ -118,6 +118,38 @@ test('#224 兵营只收自产留驻，不把收容数量当成火力', async ({ 
   await expect(panel(page)).toContainText('生产后留驻不代表可以从外部重新进入');
 });
 
+test('#224 场景中的牧畜训练位置不能冒充普通 TC 生产权限', async ({ page }) => {
+  await page.goto(url(109, 'Franks', 3));
+  await page.getByRole('button', { name: '添加驻军单位', exact: true }).click();
+  await expect(unit(page).locator('option[value="594"]')).toHaveCount(0);
+  await page.goto(url(109, 'Franks', 3, '594:1:c'));
+  await expect(panel(page).getByRole('alert')).toBeVisible();
+  await expect(result(page)).toHaveCount(0);
+  await unit(page).selectOption('83');
+  await capacity(page, 1, 15);
+});
+
+test('#224 女村民可在 TC 生产后留驻，不因替代形态缺少训练槽而丢失', async ({ page }) => {
+  await page.goto(url(109, 'Franks', 3, '293:2:c'));
+  await capacity(page, 2, 15);
+  await expect(entry(page)).toHaveValue('created');
+  await expect(total(page)).toHaveText('2');
+});
+
+test('#224 起始鹰斥候可在黑暗时代进入 TC，训练留驻仍须封建时代', async ({ page }) => {
+  await page.goto(url(109, 'Aztecs', 1, '751:1:e'));
+  await capacity(page, 1, 15);
+  await expect(total(page)).toHaveText('0');
+  await page.goto(url(12, 'Aztecs', 1, '751:1:c'));
+  await expect(panel(page).getByRole('alert')).toBeVisible();
+  await expect(result(page)).toHaveCount(0);
+  await page.getByRole('combobox', { name: '驻军时代', exact: true }).selectOption('2');
+  await page.getByRole('button', { name: '添加驻军单位', exact: true }).click();
+  await unit(page).selectOption('751');
+  await expect(entry(page)).toHaveValue('created');
+  await capacity(page, 1, 10);
+});
+
 test('#224 库曼封建攻城器厂可从模拟器进入并往返切换时代', async ({ page }) => {
   await page.goto('./#/building/49?tab=sim&civ=Cumans&age=3');
   await expect(page.locator('#simage')).toBeVisible();
