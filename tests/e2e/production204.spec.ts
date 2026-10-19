@@ -74,3 +74,16 @@ test('#204 站内入口和文明时代科技解锁', async ({ page }) => {
   await expect(page.getByRole('checkbox', { name: '独轮推车', exact: true })).toBeChecked();
   await expect(page.getByRole('checkbox', { name: '独轮推车', exact: true })).toBeDisabled();
 });
+
+for (const width of [390, 1280])
+  test(`#204 @${width} 工具菜单可进入持续生产并保留开局首项`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./#/');
+    if (width < 600) await page.getByRole('button', { name: '菜单', exact: true }).click();
+    await page.getByRole('button', { name: '工具', exact: true }).click();
+    const menu = page.locator('#tools-menu');
+    await expect(menu.getByRole('link').first()).toContainText('开局流程');
+    await menu.getByRole('link', { name: /持续生产/ }).click();
+    await expect(page.getByRole('heading', { level: 1, name: '持续生产' })).toBeVisible();
+    await expect(menu).toBeHidden();
+  });

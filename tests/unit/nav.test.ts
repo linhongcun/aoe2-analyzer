@@ -10,9 +10,9 @@ describe('顶部导航', () => {
     expect(visibleWiki.map((s) => s.key)).not.toContain('dlc');
     expect(WIKI.find((s) => s.key === 'dlc')?.hideNav).toBe(true);
     expect(WIKI.find((s) => s.key === 'buildings')?.hideNav).toBeUndefined();
-    expect(visibleTools.map((s) => s.key)).toEqual(['builds', 'compare', 'matchup', 'simulator', 'duel']);
-    expect(TOOLS.map((s) => s.key)).toEqual(['production', 'builds', 'compare', 'matchup', 'simulator', 'duel']);
-    expect(TOOLS.find((s) => s.key === 'production')?.hideNav).toBe(true);
+    expect(visibleTools.map((s) => s.key)).toEqual(['builds', 'compare', 'matchup', 'simulator', 'duel', 'production']);
+    expect(TOOLS.map((s) => s.key)).toEqual(['builds', 'compare', 'matchup', 'simulator', 'duel', 'production']);
+    expect(TOOLS.find((s) => s.key === 'production')?.hideNav).toBeUndefined();
     expect(sectionOf('/production')?.key).toBe('production');
   });
 
