@@ -7,6 +7,8 @@ import { CivIcon } from '../../../shared/ui/art';
 import { RatingHeading } from '../../../shared/ui/RatingHelp';
 import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
+import { Link } from 'react-router-dom';
+import { defaultTeamBonusConfig, encodeTeamBonuses, updateTeamRoster } from '../../../domain/teamBonuses';
 
 const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
   ['特色兵种', 'uu'],
@@ -25,6 +27,11 @@ export default function Compare() {
   return (
     <section id="compare" className="pane">
       <ListHead title="文明对比" desc="两个文明的能力雷达与关键差异" />
+      <p>
+        <Link className="btn community-tool-entry" to={'/team-bonuses?' + encodeTeamBonuses(updateTeamRoster(defaultTeamBonusConfig(), [a.en, b.en]))}>
+          查看这两个文明的队伍加成来源
+        </Link>
+      </p>
       <div className="bar fbar">
         <CivPicker id="ca" label="文明 A" value={civs[ia]!.en} onChange={(en) => setA(civs.findIndex((c) => c.en === en))} /> VS{' '}
         <CivPicker id="cb" label="文明 B" value={civs[ib]!.en} onChange={(en) => setB(civs.findIndex((c) => c.en === en))} />

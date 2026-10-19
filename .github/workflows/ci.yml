@@ -56,6 +56,14 @@ jobs:
         run: python3 scripts/garrison_build.py --check
       - name: Data check (general garrison inputs reproducible from pinned dat)
         run: python3 scripts/garrison_general_build.py --check
+      - name: Data check (trade population reproducible from pinned dat)
+        run: python3 scripts/trade_income_build.py --check
+      - name: Data check (construction inputs reproducible from pinned dat)
+        run: python3 scripts/construction_build.py --check
+      - name: Data check (team sources reproducible from pinned dat)
+        run: python3 scripts/team_bonuses_build.py --check
+      - name: Data check (garrison healing inputs reproducible from pinned dat)
+        run: python3 scripts/garrison_healing_build.py --check
       - name: Patch notes match pinned data
         run: python3 scripts/patches_build.py --check
       - name: Build-order data check
@@ -88,6 +96,11 @@ jobs:
             test-results/glossary217-*/*.png
             test-results/garrison218-*/*.png
             test-results/garrison224-*/*.png
+            test-results/tradeIncome226-*/*.png
+            test-results/construction227-*/*.png
+            test-results/teamBonuses228-*/*.png
+            test-results/team-bonuses228-*.png
+            test-results/garrisonHealing229-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: failure()

@@ -29,6 +29,10 @@ const Market = lazy(() => import('../features/market/Market'));
 const Production = lazy(() => import('../features/production/Production'));
 const EcoPayoff = lazy(() => import('../features/ecoPayoff/EcoPayoff'));
 const Glossary = lazy(() => import('../features/glossary/Glossary'));
+const TradeIncome = lazy(() => import('../features/tradeIncome/TradeIncome'));
+const Construction = lazy(() => import('../features/construction/Construction'));
+const TeamBonuses = lazy(() => import('../features/teamBonuses/TeamBonuses'));
+const GarrisonHealing = lazy(() => import('../features/garrisonHealing/GarrisonHealing'));
 
 /** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list→#civs */
 export function AppRoutes() {
@@ -55,6 +59,10 @@ export function AppRoutes() {
       <Route path="/production" element={<Production />} />
       <Route path="/eco-payoff" element={<EcoPayoff />} />
       <Route path="/market" element={<Market />} />
+      <Route path="/trade-income" element={<TradeIncome />} />
+      <Route path="/construction" element={<Construction />} />
+      <Route path="/team-bonuses" element={<TeamBonuses />} />
+      <Route path="/garrison-healing" element={<GarrisonHealing />} />
       <Route path="/glossary" element={<Glossary />} />
       <Route path="/glossary/:id" element={<Glossary />} />
       <Route path="/patches" element={<Patches />} />

@@ -8,6 +8,8 @@ import { Loading } from '../../../shared/ui/widgets';
 import SimPanel, { type StatRow } from '../../simulator/components/SimPanel';
 import garrisonHosts from '../../../data/garrison_hosts.json';
 import { getGarrisonBuildingAge, getGarrisonTechs, writeGeneralGarrison } from '../../../domain/garrisonGeneral';
+import { constructionLink } from '../../../domain/construction';
+import { healingLink } from '../../../domain/garrisonHealing';
 
 const nums = (s: string | null) => (s ?? '').split(',').filter(Boolean).map(Number);
 
@@ -59,8 +61,22 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     trees && garrisonHosts.includes(b.id)
       ? new Set(getGarrisonTechs({ core, trees }, b, { civ, age, techs: [], rows: [] }).map((t) => t.id))
       : new Set<number>();
+  const constructionHref = trees ? constructionLink({ core, trees }, { buildingId: b.id, civ, age, techs: sel }) : null;
+  const healingHref = trees && garrisonHosts.includes(b.id) ? healingLink({ core, trees }, { buildingId: b.id, civ, age, techs: sel }) : null;
   return (
     <>
+      <div className="bar">
+        {constructionHref && (
+          <Link className="btn community-tool-entry" to={constructionHref}>
+            按当前文明与科技比较施工
+          </Link>
+        )}
+        {healingHref && (
+          <Link className="btn community-tool-entry" to={healingHref}>
+            查看单目标驻军回血
+          </Link>
+        )}
+      </div>
       {trees && garrisonHosts.includes(b.id) && (
         <p>
           <Link

@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "datSha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+    "engineVerifiedInPinnedBuild": false,
+    "generatedBy": "scripts/trade_income_build.py",
+    "patch": "DE Update 185872 (2026-09-22)",
+    "populationSource": "unit.resource_storages[type=4], negated; all civ templates agree"
+  },
+  "units": {
+    "128": {
+      "population": 1.0
+    },
+    "17": {
+      "population": 1.0
+    }
+  }
+}

@@ -1,0 +1,317 @@
+.team-bonuses-page {
+  max-width: 1160px;
+  margin-inline: auto;
+}
+.team-bonuses-page h1,
+.team-bonuses-page h2,
+.team-bonuses-page h3,
+.team-bonuses-page h4 {
+  margin-block: 0 var(--space-3);
+}
+.team-bonuses-page p,
+.team-bonuses-page li {
+  line-height: var(--lh-body);
+  overflow-wrap: anywhere;
+}
+.team-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.team-heading p {
+  margin-bottom: 0;
+}
+.team-bonuses-page .btn,
+.team-bonuses-page select,
+.team-bonuses-page summary,
+.team-bonuses-page textarea {
+  min-height: 44px;
+}
+.team-bonuses-page .btn {
+  white-space: normal;
+}
+.team-bonuses-page label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--fs-sm);
+}
+.team-bonuses-page select,
+.team-bonuses-page textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+.team-bonuses-page summary {
+  display: list-item;
+  align-content: center;
+  cursor: pointer;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.team-notice,
+.team-panel,
+.team-error {
+  padding: var(--space-6);
+  margin-block: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  min-width: 0;
+}
+.team-notice {
+  background: var(--color-surface-2);
+}
+.team-notice p:last-child,
+.team-model p:last-child {
+  margin-bottom: 0;
+}
+.team-error {
+  color: var(--color-bad);
+  background: var(--color-bad-soft);
+  border-color: var(--color-bad);
+}
+.team-players {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.team-player {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.team-player > label {
+  grid-column: 1 / -1;
+}
+.team-player .civpick {
+  min-width: 0;
+}
+.team-player .cp-trigger {
+  min-height: 44px;
+  min-width: 0;
+  width: 100%;
+}
+.team-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-block: var(--space-6) var(--space-4);
+}
+.team-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-block: var(--space-6);
+}
+.team-summary > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  text-align: center;
+  font-size: var(--fs-sm);
+}
+.team-summary strong {
+  font-size: var(--fs-num-xl);
+}
+.team-number {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.team-section {
+  margin-block: var(--space-8);
+  min-width: 0;
+}
+.team-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--space-4);
+}
+.team-card {
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  min-width: 0;
+}
+.team-card header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.team-card h3 {
+  font-size: var(--fs-h3);
+}
+.team-card h4 {
+  font-size: var(--fs-sm);
+}
+.team-state {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-body);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-text-2);
+}
+.team-active {
+  background: var(--color-good-soft);
+  color: var(--color-good);
+}
+.team-pending {
+  background: var(--color-warn-soft);
+  color: var(--color-warn);
+}
+.team-providers,
+.team-entities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.team-entity {
+  min-width: 44px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  max-width: 100%;
+  padding-inline: var(--space-2);
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+}
+.team-providers .team-entity {
+  background: var(--color-surface-2);
+  border-radius: var(--radius-sm);
+}
+.team-target-details,
+.team-prerequisites {
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+}
+.team-bonuses-page .team-research-check {
+  flex-direction: row;
+  align-items: center;
+  min-height: 44px;
+  margin-block: var(--space-3);
+  padding: var(--space-2);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+}
+.team-research-check input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.team-requirements {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-block: var(--space-4);
+}
+.team-requirements > div {
+  min-width: 0;
+}
+.team-requirements dt {
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+}
+.team-requirements dd {
+  margin: var(--space-1) 0 0;
+  font-size: var(--fs-sm);
+}
+.team-requirements dd .team-entity {
+  padding-left: 0;
+}
+.team-requirements dd .team-number {
+  display: inline-block;
+  margin-right: var(--space-2);
+}
+.team-empty {
+  padding: var(--space-4);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
+}
+.team-unknown {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+.team-unknown > p {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.team-manual-link textarea {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  padding: var(--space-3);
+  resize: vertical;
+}
+@media (max-width: 700px) {
+  .team-players,
+  .team-cards,
+  .team-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .team-card,
+  .team-panel,
+  .team-notice,
+  .team-error {
+    padding: var(--space-4);
+  }
+  .team-summary {
+    gap: var(--space-2);
+  }
+  .team-summary > div {
+    font-size: var(--fs-xs);
+  }
+  .team-heading > .btn {
+    width: 100%;
+  }
+}
+
+.team-effect-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block: var(--space-3);
+}
+.team-effect-types > span {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-text-2);
+  font-size: var(--fs-xs);
+}
+/* Keep visible trigger text aligned with CivPicker's Chinese accessible name. */
+.team-player .cp-trigger .cp-name small {
+  display: none;
+}
+/* Automatic entity links in prose need the same touch area as detail links. */
+.team-card a.ulink {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-inline: var(--space-1);
+  vertical-align: middle;
+}
