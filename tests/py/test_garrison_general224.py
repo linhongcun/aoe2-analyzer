@@ -132,6 +132,18 @@ class GarrisonGeneral224Test(unittest.TestCase):
         self.assertFalse(self.data['meta']['engineVerifiedInPinnedBuild'])
         self.assertIn(47, self.data['civs']['Turks']['free'])
 
+    def test_starting_scout_ids_come_from_current_civilization_resources(self):
+        exceptional = {'Aztecs': 751, 'Mayans': 751, 'Incas': 2550, 'Mapuche': 2550,
+                       'Muisca': 2550, 'Tupi': 2550, 'Gurjaras': 1755}
+        for civ, record in self.data['civs'].items():
+            with self.subTest(civ=civ):
+                self.assertIs(type(record['startingScoutId']), int)
+                self.assertEqual(record['startingScoutId'], exceptional.get(civ, 448))
+                self.assertIn(str(record['startingScoutId']), self.data['units'])
+        # Starting units may exist before their normal training age. Exporting
+        # the starting rule must not rewrite the normal unit catalog age.
+        self.assertEqual(self.data['units']['751']['catalog']['age'], 2)
+
 
 if __name__ == '__main__':
     unittest.main()

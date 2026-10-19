@@ -70,6 +70,7 @@ def rec(u):
             'trainLocations':[{'unitId':x.unit_id,'time':x.train_time} for x in (c.train_locations if c else []) if x.unit_id>=0]}
 json.dump({'units':{str(i):rec(base(i)) for i in sorted(ids)},
            'civs':{c.name:{str(i):rec(c.units[i] or base(i)) for i in sorted(ids)} for c in d.civs[1:]},
+           'startingScoutIds':{c.name:c.resources[263] for c in d.civs[1:]},
            'forms':forms,'aliases':{str(k):sorted(v) for k,v in aliases.items()}},open(sys.argv[3],'w'))
 '''
 
@@ -277,7 +278,11 @@ def generate(d, raw):
             changes = {stat: value[stat] for stat in stats if stat in value and value[stat] != units[key][stat]}
             if changes:
                 override[key] = changes
+        starting_scout = raw['startingScoutIds'][dat_civ['Name']]
+        if not isinstance(starting_scout, (int, float)) or not float(starting_scout).is_integer() or int(starting_scout) < 0 or str(int(starting_scout)) not in units:
+            raise ValueError('Invalid or unexported starting scout: %s %r' % (civ['en'], starting_scout))
         result['civs'][civ['en']] = {'automatic': automatic, 'free': sorted(free),
+                                    'startingScoutId': int(starting_scout),
                                     'disabled': sorted(int(c['D']) for c in commands if c['Type'] == 102),
                                     'baseOverrides': override}
 
