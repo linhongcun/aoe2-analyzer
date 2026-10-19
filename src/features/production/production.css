@@ -24,6 +24,11 @@
 .production-page .btn {
   min-height: 44px;
 }
+.production-page .production-payoff-entry {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 .production-settings {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

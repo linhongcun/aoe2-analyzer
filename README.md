@@ -30,6 +30,8 @@
 
 ### 通用
 
+持续生产页与伐木、采矿科技详情可进入[经济科技收益](https://linhongcun.github.io/aoe2-analyzer/#/eco-payoff)：固定村民人数、距离和已有科技，比较一次升级的研究费用、完成后增量及观察期收益；统一折算明确标为“等采集时间收支平衡”，未完整支持的机制不给回收时间结论。
+
 - **全局搜索**：`Ctrl+K`（macOS `Cmd+K`）搜索文明、单位、科技、建筑、文明加成。
 - **报错/反馈**：页脚与各详情页/工具页右上角的「报错/反馈」按钮会打开预填好的 [GitHub issue](https://github.com/linhongcun/aoe2-analyzer/issues/new)（页面地址、类型/ID、文明、数据版本、浏览器）；模板见 `.github/ISSUE_TEMPLATE/`。
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FUTURE, TOOLS, WIKI, sectionOf } from '../../src/app/nav/sections';
+import { ALL, FUTURE, SECONDARY_TOOLS, TOOLS, WIKI, sectionOf } from '../../src/app/nav/sections';
 
 const visibleWiki = WIKI.filter((s) => !s.hideNav);
 const visibleTools = TOOLS.filter((s) => !s.hideNav);
@@ -14,6 +14,9 @@ describe('顶部导航', () => {
     expect(TOOLS.map((s) => s.key)).toEqual(['builds', 'compare', 'matchup', 'simulator', 'duel', 'production']);
     expect(TOOLS.find((s) => s.key === 'production')?.hideNav).toBeUndefined();
     expect(sectionOf('/production')?.key).toBe('production');
+    expect(SECONDARY_TOOLS.find((s) => s.key === 'eco-payoff')?.hideNav).toBe(true);
+    expect(ALL.find((s) => s.key === 'eco-payoff')?.status).toBeUndefined();
+    expect(sectionOf('/eco-payoff')?.key).toBe('eco-payoff');
   });
 
   it('导航入口都不是规划中页面，且路径能被本模块自己匹配', () => {

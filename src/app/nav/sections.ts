@@ -108,6 +108,19 @@ export const TOOLS: Section[] = [
     match: /^\/production$/,
   },
 ];
+/** 已上线的子工具：提供全局搜索与面包屑，不增加首页工具卡片。 */
+export const SECONDARY_TOOLS: Section[] = [
+  {
+    key: 'eco-payoff',
+    path: '/eco-payoff',
+    label: '经济科技收益',
+    en: 'Economic Technology Payoff',
+    icon: 'calculator',
+    desc: '固定村民与距离，对比单项采集科技的研究投入和收益',
+    match: /^\/eco-payoff$/,
+    hideNav: true,
+  },
+];
 export const FUTURE: Section[] = [
   {
     key: 'ladder',
@@ -120,5 +133,5 @@ export const FUTURE: Section[] = [
     status: 'planned',
   },
 ];
-export const ALL = [...WIKI, ...TOOLS, ...FUTURE];
+export const ALL = [...WIKI, ...TOOLS, ...SECONDARY_TOOLS, ...FUTURE];
 export const sectionOf = (path: string) => ALL.find((s) => s.match.test(path));
