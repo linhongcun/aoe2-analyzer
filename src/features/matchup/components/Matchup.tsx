@@ -45,7 +45,7 @@ export default function Matchup() {
             <span className="tag note" style={{ marginLeft: 8 }} title="评分达到该值才列入强项">
               评分 ≥ {STRONG_THRESHOLD}
             </span>
-            ；<b>弱项：</b>
+            ；<b>相对弱项：</b>
             {m.oppWeak.join('、')}
           </p>
           <p>
@@ -83,7 +83,7 @@ export default function Matchup() {
             {m.tips}
           </p>
           <p className="note rating-foot">
-            自动生成的建议 · <RatingLabel />
+            评分仅描述相对强弱，不代表兵种是否可用。自动生成的建议 · <RatingLabel />
           </p>
         </div>
       )}
