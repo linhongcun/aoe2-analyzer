@@ -52,6 +52,8 @@ jobs:
         run: python3 scripts/eco_build.py && git diff --exit-code -- src/data/eco.json docs/ECO-DATA.md
       - name: Data check (market.json reproducible from pinned dat and reviewed rules)
         run: python3 scripts/market_build.py --check
+      - name: Data check (garrison.json reproducible from pinned dat)
+        run: python3 scripts/garrison_build.py --check
       - name: Patch notes match pinned data
         run: python3 scripts/patches_build.py --check
       - name: Build-order data check
@@ -82,6 +84,7 @@ jobs:
             test-results/market215-*/*.png
             test-results/practice216-*/*.png
             test-results/glossary217-*/*.png
+            test-results/garrison218-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: failure()

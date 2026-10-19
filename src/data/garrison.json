@@ -1,0 +1,845 @@
+{
+  "civs": {
+    "Armenians": {
+      "automatic": [],
+      "free": []
+    },
+    "Aztecs": {
+      "automatic": [],
+      "free": []
+    },
+    "Bengalis": {
+      "automatic": [],
+      "free": []
+    },
+    "Berbers": {
+      "automatic": [],
+      "free": []
+    },
+    "Bohemians": {
+      "automatic": [],
+      "free": []
+    },
+    "Britons": {
+      "automatic": [],
+      "free": []
+    },
+    "Bulgarians": {
+      "automatic": [],
+      "free": []
+    },
+    "Burgundians": {
+      "automatic": [],
+      "free": []
+    },
+    "Burmese": {
+      "automatic": [],
+      "free": []
+    },
+    "Byzantines": {
+      "automatic": [],
+      "free": []
+    },
+    "Celts": {
+      "automatic": [],
+      "free": []
+    },
+    "Chinese": {
+      "automatic": [],
+      "free": []
+    },
+    "Cumans": {
+      "automatic": [],
+      "free": []
+    },
+    "Danes": {
+      "automatic": [],
+      "free": []
+    },
+    "Dravidians": {
+      "automatic": [],
+      "free": []
+    },
+    "Ethiopians": {
+      "automatic": [],
+      "free": []
+    },
+    "Franks": {
+      "automatic": [],
+      "free": []
+    },
+    "Georgians": {
+      "automatic": [],
+      "free": []
+    },
+    "Goths": {
+      "automatic": [],
+      "free": []
+    },
+    "Gurjaras": {
+      "automatic": [],
+      "free": []
+    },
+    "Hindustanis": {
+      "automatic": [],
+      "free": []
+    },
+    "Huns": {
+      "automatic": [],
+      "free": []
+    },
+    "Incas": {
+      "automatic": [],
+      "free": []
+    },
+    "Italians": {
+      "automatic": [],
+      "free": []
+    },
+    "Japanese": {
+      "automatic": [],
+      "free": []
+    },
+    "Jurchens": {
+      "automatic": [],
+      "free": []
+    },
+    "Khitans": {
+      "automatic": [],
+      "free": []
+    },
+    "Khmer": {
+      "automatic": [],
+      "free": []
+    },
+    "Koreans": {
+      "automatic": [],
+      "free": []
+    },
+    "Lithuanians": {
+      "automatic": [],
+      "free": []
+    },
+    "Magyars": {
+      "automatic": [],
+      "free": []
+    },
+    "Malay": {
+      "automatic": [],
+      "free": []
+    },
+    "Malians": {
+      "automatic": [],
+      "free": []
+    },
+    "Mapuche": {
+      "automatic": [],
+      "free": []
+    },
+    "Mayans": {
+      "automatic": [],
+      "free": []
+    },
+    "Mongols": {
+      "automatic": [],
+      "free": []
+    },
+    "Muisca": {
+      "automatic": [],
+      "free": []
+    },
+    "Persians": {
+      "automatic": [],
+      "free": []
+    },
+    "Poles": {
+      "automatic": [],
+      "free": []
+    },
+    "Portuguese": {
+      "automatic": [],
+      "free": []
+    },
+    "Romans": {
+      "automatic": [],
+      "free": []
+    },
+    "Saracens": {
+      "automatic": [],
+      "free": []
+    },
+    "Saxons": {
+      "automatic": [
+        {
+          "count": 1,
+          "effects": [
+            {
+              "op": "add",
+              "stat": "total",
+              "unit": 79,
+              "value": 1.0
+            },
+            {
+              "op": "add",
+              "stat": "total",
+              "unit": 234,
+              "value": 1.0
+            },
+            {
+              "op": "add",
+              "stat": "total",
+              "unit": 235,
+              "value": 1.0
+            },
+            {
+              "op": "add",
+              "stat": "max",
+              "unit": 79,
+              "value": 1.0
+            },
+            {
+              "op": "add",
+              "stat": "max",
+              "unit": 234,
+              "value": 1.0
+            },
+            {
+              "op": "add",
+              "stat": "max",
+              "unit": 235,
+              "value": 1.0
+            }
+          ],
+          "id": 1493,
+          "requires": [
+            102
+          ]
+        }
+      ],
+      "free": []
+    },
+    "Shu": {
+      "automatic": [],
+      "free": []
+    },
+    "Sicilians": {
+      "automatic": [],
+      "free": []
+    },
+    "Slavs": {
+      "automatic": [],
+      "free": []
+    },
+    "Spanish": {
+      "automatic": [],
+      "free": []
+    },
+    "Tatars": {
+      "automatic": [],
+      "free": []
+    },
+    "Teutons": {
+      "automatic": [
+        {
+          "count": 0,
+          "effects": [
+            {
+              "op": "add",
+              "stat": "capacity",
+              "unit": 109,
+              "value": 10.0
+            },
+            {
+              "op": "add",
+              "stat": "max",
+              "unit": 109,
+              "value": 5.0
+            }
+          ],
+          "id": 336,
+          "requires": []
+        },
+        {
+          "count": 0,
+          "effects": [
+            {
+              "op": "add",
+              "stat": "capacity",
+              "unit": 79,
+              "value": 5.0
+            },
+            {
+              "op": "add",
+              "stat": "capacity",
+              "unit": 234,
+              "value": 5.0
+            },
+            {
+              "op": "add",
+              "stat": "capacity",
+              "unit": 235,
+              "value": 5.0
+            },
+            {
+              "op": "add",
+              "stat": "max",
+              "unit": 79,
+              "value": 4.0
+            },
+            {
+              "op": "add",
+              "stat": "max",
+              "unit": 234,
+              "value": 4.0
+            },
+            {
+              "op": "add",
+              "stat": "max",
+              "unit": 235,
+              "value": 4.0
+            }
+          ],
+          "id": 353,
+          "requires": []
+        }
+      ],
+      "free": []
+    },
+    "Tupi": {
+      "automatic": [],
+      "free": []
+    },
+    "Turks": {
+      "automatic": [],
+      "free": [
+        47
+      ]
+    },
+    "Varangians": {
+      "automatic": [],
+      "free": []
+    },
+    "Vietnamese": {
+      "automatic": [],
+      "free": []
+    },
+    "Vikings": {
+      "automatic": [],
+      "free": []
+    },
+    "Wei": {
+      "automatic": [],
+      "free": []
+    },
+    "Wu": {
+      "automatic": [],
+      "free": []
+    }
+  },
+  "conditional": [
+    {
+      "count": 2,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 1
+        }
+      ],
+      "id": 610,
+      "requires": [
+        608,
+        140,
+        775
+      ]
+    },
+    {
+      "count": 2,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 1
+        }
+      ],
+      "id": 611,
+      "requires": [
+        608,
+        63,
+        775
+      ]
+    }
+  ],
+  "meta": {
+    "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "generatedBy": "scripts/garrison_build.py",
+    "patch": "DE Update 185872 (2026-09-22)",
+    "repo": "SiegeEngineers/auto-mods",
+    "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa"
+  },
+  "techs": {
+    "199": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 109,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 83,
+          "value": -0.5
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 293,
+          "value": -0.5
+        }
+      ],
+      "id": 199,
+      "requires": [
+        101
+      ]
+    },
+    "200": {
+      "count": 2,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 109,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 83,
+          "value": -0.5
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 293,
+          "value": -0.5
+        }
+      ],
+      "id": 200,
+      "requires": [
+        102,
+        199
+      ]
+    },
+    "201": {
+      "count": 2,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 109,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 83,
+          "value": -0.5
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 293,
+          "value": -0.5
+        }
+      ],
+      "id": 201,
+      "requires": [
+        103,
+        200
+      ]
+    },
+    "3": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 2
+        }
+      ],
+      "id": 3,
+      "requires": [
+        102
+      ]
+    },
+    "47": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 109,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 83,
+          "value": -0.5
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 293,
+          "value": -0.5
+        }
+      ],
+      "id": 47,
+      "requires": [
+        103,
+        800
+      ]
+    },
+    "482": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "mul",
+          "stat": "reload",
+          "unit": 79,
+          "value": 0.75
+        },
+        {
+          "op": "mul",
+          "stat": "reload",
+          "unit": 234,
+          "value": 0.75
+        },
+        {
+          "op": "mul",
+          "stat": "reload",
+          "unit": 235,
+          "value": 0.75
+        }
+      ],
+      "id": 482,
+      "requires": [
+        102
+      ]
+    },
+    "484": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "total",
+          "unit": 79,
+          "value": 2.0
+        },
+        {
+          "op": "add",
+          "stat": "max",
+          "unit": 79,
+          "value": 2.0
+        },
+        {
+          "op": "add",
+          "stat": "total",
+          "unit": 234,
+          "value": 2.0
+        },
+        {
+          "op": "add",
+          "stat": "max",
+          "unit": 234,
+          "value": 2.0
+        },
+        {
+          "op": "add",
+          "stat": "total",
+          "unit": 235,
+          "value": 2.0
+        },
+        {
+          "op": "add",
+          "stat": "max",
+          "unit": 235,
+          "value": 2.0
+        }
+      ],
+      "id": 484,
+      "requires": [
+        102
+      ]
+    },
+    "576": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "total",
+          "unit": 109,
+          "value": 8.0
+        },
+        {
+          "op": "add",
+          "stat": "max",
+          "unit": 109,
+          "value": 8.0
+        }
+      ],
+      "id": 576,
+      "requires": [
+        102
+      ]
+    },
+    "608": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 1
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 1
+        }
+      ],
+      "id": 608,
+      "requires": [
+        103
+      ]
+    },
+    "923": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 79,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 234,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 235,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "attack",
+          "unit": 109,
+          "value": 2
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 83,
+          "value": -1.0
+        },
+        {
+          "op": "add",
+          "stat": "firepower",
+          "unit": 293,
+          "value": -1.0
+        }
+      ],
+      "id": 923,
+      "requires": [
+        102
+      ]
+    }
+  },
+  "units": {
+    "109": {
+      "attack": 5,
+      "capacity": 15,
+      "class": 3,
+      "firepower": 0.0,
+      "max": 11,
+      "projectile": -1,
+      "reload": 2.0,
+      "total": 1.0
+    },
+    "234": {
+      "attack": 7,
+      "capacity": 5,
+      "class": 52,
+      "firepower": 0.0,
+      "max": 5,
+      "projectile": 504,
+      "reload": 2.0,
+      "total": 1.0
+    },
+    "235": {
+      "attack": 8,
+      "capacity": 5,
+      "class": 52,
+      "firepower": 0.0,
+      "max": 5,
+      "projectile": 504,
+      "reload": 2.0,
+      "total": 1.0
+    },
+    "293": {
+      "attack": 0,
+      "capacity": 0,
+      "class": 4,
+      "firepower": -2.5,
+      "max": 1,
+      "projectile": -1,
+      "reload": 2.0,
+      "total": 1.0
+    },
+    "79": {
+      "attack": 5,
+      "capacity": 5,
+      "class": 52,
+      "firepower": 0.0,
+      "max": 5,
+      "projectile": 504,
+      "reload": 2.0,
+      "total": 1.0
+    },
+    "83": {
+      "attack": 0,
+      "capacity": 0,
+      "class": 4,
+      "firepower": -2.5,
+      "max": 1,
+      "projectile": -1,
+      "reload": 2.0,
+      "total": 1.0
+    }
+  }
+}
