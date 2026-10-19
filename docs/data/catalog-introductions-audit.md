@@ -33,4 +33,4 @@
 
 `npm run introductions` 从逐项清单生成 `src/data/catalog-introductions.json`；`npm run introductions:check` 离线检查生成结果、全部当前 ID、英文身份、状态和有效版本。运行时按单位与建筑两个独立 ID 空间查询，未知项返回 `null`，不再继承文明版本。
 
-新增或改名条目必须先补核对清单；无法证实的记录明确标为 `unverified` / `null`。生成文件不手改。科技版本沿用原规则，全部 199 条结果单独回归，游戏数值与既有受保护验收保持原样。
+新增或改名条目必须先补核对清单；无法证实的记录明确标为 `unverified` / `null`。生成文件不手改。本报告仅记录 #190 当时的单位与建筑范围；科技已在后续 [#195 专项核对](tech-introductions-audit.md)中纳入独立清单，原单位与建筑结果、游戏数值与既有受保护验收保持原样。

@@ -179,15 +179,26 @@ export function CivOptions() {
 }
 
 /** DLC 下拉 + 图标按钮条（共享同一状态） */
-export function DlcSelect({ value, onChange, id }: { value: string; onChange: (v: string) => void; id?: string }) {
+export function DlcSelect({
+  value,
+  onChange,
+  id,
+  includeUpdates = false,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  id?: string;
+  includeUpdates?: boolean;
+}) {
   return (
-    <select id={id} aria-label="资料片" value={value} onChange={(e) => onChange(e.target.value)}>
-      <option value="">全部 DLC</option>
+    <select id={id} aria-label={includeUpdates ? '首发版本' : '资料片'} value={value} onChange={(e) => onChange(e.target.value)}>
+      <option value="">{includeUpdates ? '全部首发版本' : '全部 DLC'}</option>
       {DLCS.map((d, i) => (
         <option key={i} value={i}>
           {d.zh} {d.en} ({d.year})
         </option>
       ))}
+      {includeUpdates && <option value="update">免费更新</option>}
       <option value="none">未标注</option>
     </select>
   );

@@ -2,11 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import unitsRaw from '../../src/data/units.json';
 import buildingsRaw from '../../src/data/buildings.json';
-import techsRaw from '../../src/data/techs.json';
 import { loadCore } from '../../src/data';
-import { CIV_DLC, DLCS, dlcOf } from '../../src/domain/dlc';
+import { DLCS } from '../../src/domain/dlc';
 import { buildingDlc, unitDlc } from '../../src/domain/introductions';
-import { techs, units } from './helpers';
+import { units } from './helpers';
 
 interface AuditEntry {
   id: number;
@@ -126,18 +125,4 @@ describe('#190 首发版本核对清单', () => {
   });
 });
 
-describe('#190 科技版本语义保持不变', () => {
-  // 独立保留改动前的科技规则，避免用被测函数生成预期。
-  const oldCommonTechs = ['Bloodlines', 'Caravan', 'Herbal Medicine', 'Heresy', 'Theocracy', 'Parthian Tactics', 'Thumb Ring'];
-  const before = techsRaw.map((tech) => [
-    tech.id,
-    oldCommonTechs.includes(tech.en) ? 1 : tech.type === 'UniqueTech' && tech.civs.length === 1 ? (CIV_DLC[tech.civs[0]!] ?? null) : null,
-  ]);
-
-  it('全部 199 条科技的函数、helpers 与运行时结果保持原值', async () => {
-    expect(techsRaw).toHaveLength(199);
-    expect(techsRaw.map((tech) => [tech.id, dlcOf(tech)])).toEqual(before);
-    expect(techs.map((tech) => [tech.id, tech.dlc])).toEqual(before);
-    expect((await loadCore()).techs.map((tech) => [tech.id, tech.dlc])).toEqual(before);
-  });
-});
+// #195 将科技纳入独立来源清单；科技回归见 introductions195.test.ts。
