@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civs } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
 import { Loading } from '../../shared/ui/widgets';
+import { Breadcrumbs } from '../../shared/ui/layout';
 import { Icon } from '../../shared/ui/Icon';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import { fmtClock } from '../../domain/realCost';
@@ -86,6 +87,7 @@ function EcoPayoffBody({
   const groups = [...new Set(available.map((t) => t.bz.replace(/\n/g, '')))];
   return (
     <section className="pane eco-payoff" data-testid="eco-payoff-page">
+      <Breadcrumbs />
       <header className="eco-heading">
         <div>
           <h1>经济科技收益</h1>
