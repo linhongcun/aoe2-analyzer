@@ -1,3 +1,60 @@
+.unit-list-filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.unit-list-filters .sw,
+.unit-list-filters .civpick {
+  grid-column: span 2;
+  min-width: 0;
+}
+.unit-list-filters .sw input,
+.unit-list-filters select,
+.unit-list-filters .cp-trigger {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+}
+.unit-list-filters .cp-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.unit-list-filters .cp-trigger .ic {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}
+.unit-filter-summary {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.unit-filter-summary .note {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.unit-filter-summary button {
+  color: var(--color-link);
+}
+.unit-filter-note {
+  margin: var(--space-2) 0 var(--space-3);
+}
+.unit-filter-empty {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.unit-filter-empty > .ic {
+  color: var(--color-muted);
+  width: 24px;
+  height: 24px;
+}
+.unit-filter-empty button {
+  color: var(--color-link);
+}
 .unit-card-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -26,6 +83,9 @@
   white-space: nowrap;
 }
 @media (max-width: 600px) {
+  .unit-list-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .unit-card-stats {
     gap: 4px;
     padding: 8px 6px;
