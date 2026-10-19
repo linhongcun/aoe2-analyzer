@@ -350,8 +350,12 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
                     const next = result.nextByUnit[row.unitId];
                     return (
                       <li key={`${row.unitId}-${row.entry}`}>
-                        {row.zh}：
-                        {next ? `再加 ${next.additionalUnits} 个，总弹丸变为 ${next.totalProjectiles}。` : '当前剩余容量内无法增加弹丸，或贡献尚待核实。'}
+                        {row.zh}（{ENTRY_LABEL[row.entry]}）：
+                        {next
+                          ? `再加 ${next.additionalUnits} 个，总弹丸变为 ${next.totalProjectiles}。`
+                          : row.powerEach === null
+                            ? '贡献尚待核实。'
+                            : '当前剩余容量内无法增加弹丸。'}
                       </li>
                     );
                   })}
