@@ -97,15 +97,18 @@ const SOURCED: Record<string, Record<string, { value: number | 'eco'; bonus: num
 const pct = (m: Mod) => Math.round((m.mul - 1) * 100);
 const sign = (n: number) => (n < 0 ? `\u2212${-n}` : `+${n}`);
 
-export function gatherModel(age: number, civ = ''): GatherModel {
+/** 不传 options 时保持原来的「所选时代经济科技全研究」口径。 */
+export function gatherModel(age: number, civ = '', options: { techIds?: ReadonlySet<number>; walkTiles?: number; farmTiles?: number } = {}): GatherModel {
   const mods: Record<string, Mod> = {};
   const push = (key: string, op: string | undefined, v: number) => {
     const m = (mods[key] ??= { mul: 1, add: 0 });
     if (op === 'mul') m.mul *= v;
     else if (op === 'add') m.add += v;
   };
-  for (const t of Object.values(eco.ecoTechs) as { age: number; effects: EffectLike[] }[])
-    if (t.age <= age) for (const e of t.effects) if (relevant(e) && e.kind === 'attr') push(`${e.target}:${e.attr}`, e.op, e.v ?? 0);
+  for (const [id, t] of Object.entries(eco.ecoTechs) as [string, { age: number; effects: EffectLike[] }][]) {
+    const enabled = options.techIds ? options.techIds.has(Number(id)) : t.age <= age;
+    if (enabled) for (const e of t.effects) if (relevant(e) && e.kind === 'attr') push(`${e.target}:${e.attr}`, e.op, e.v ?? 0);
+  }
 
   const civMods: Record<string, { m: Mod; zh: string; techs: number[]; exact: boolean }> = {};
   const src = SOURCED[civ] ?? {};
@@ -143,8 +146,9 @@ export function gatherModel(age: number, civ = ''): GatherModel {
     const b = eco.villager.tasks[t]!;
     const wr = get(`task:${t}:workRate`, get(`${VIL}:workRate`, b.workRate));
     const carry = get(`task:${t}:carry`, get(`${VIL}:carry`, b.carry));
-    const trip = carry / wr + ROUND_TRIP[t] / speed;
-    rate[t] = ROUND_TRIP[t] === 0 ? wr : carry / trip;
+    const distance = t === 'farm' ? (options.farmTiles ?? 0) * 2 : options.walkTiles === undefined ? ROUND_TRIP[t] : options.walkTiles * 2;
+    const trip = carry / wr + distance / speed;
+    rate[t] = distance === 0 ? wr : carry / trip;
   }
   return { age, civ, rate, applied, unsupported };
 }

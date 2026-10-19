@@ -70,6 +70,16 @@ export const WIKI: Section[] = [
 ];
 export const TOOLS: Section[] = [
   {
+    key: 'production',
+    path: '/production',
+    label: '持续生产',
+    en: 'Production',
+    icon: 'calculator',
+    desc: '按生产建筑和科技计算每分钟开销与村民分配',
+    match: /^\/production$/,
+    hideNav: true,
+  },
+  {
     key: 'builds',
     path: '/builds',
     label: '开局流程',
