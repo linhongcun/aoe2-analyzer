@@ -1,4 +1,4 @@
-/** #224: building capacity, entry compatibility and a documented projectile model. */
+/** Issue 224: building capacity, entry compatibility and a documented projectile model. */
 import raw from '../data/garrison_general.json';
 import hostIds from '../data/garrison_hosts.json';
 import type { Core } from '../data';
@@ -604,7 +604,7 @@ export function calculateGeneralGarrison(
   return out;
 }
 
-/** Strict versioned URL; legacy #218 villager-only links migrate without dropping malformed tokens. */
+/** Strict versioned URL; legacy issue 218 links migrate without dropping malformed tokens. */
 export function readGeneralGarrison(params: URLSearchParams, b: Building): { config: GeneralGarrisonConfig; errors: string[] } {
   const errors: string[] = [];
   for (const key of ['civ', 'age', 'gtechs', 'garrison', 'gv', 'army']) if (params.getAll(key).length > 1) errors.push(`${key} 参数重复，请重置方案。`);
