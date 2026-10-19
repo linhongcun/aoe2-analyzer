@@ -2,7 +2,7 @@
 import extraPy from '../data/search-py.json';
 
 export interface SearchItem {
-  kind: 'civ' | 'unit' | 'tech' | 'building' | 'bonus' | 'page';
+  kind: 'civ' | 'unit' | 'tech' | 'building' | 'bonus' | 'page' | 'term';
   id: string;
   zh: string;
   en: string;
@@ -32,7 +32,7 @@ export const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
 
 /** issue 162 加成和页面共用构建时生成的拼音，排序与其他类型一致。 */
 export function withSearchPy(it: SearchItem): SearchItem {
-  if ((it.kind !== 'bonus' && it.kind !== 'page') || it.id.startsWith('bo-')) return it;
+  if (!['bonus', 'page', 'term'].includes(it.kind) || it.id.startsWith('bo-')) return it;
   const fields = (extraPy as Record<string, { py: string; pyi: string }>)[it.zh];
   return fields ? { ...it, ...fields } : it;
 }
@@ -73,7 +73,7 @@ function score1(zh: string, en: string, q: string): number {
   if (z.includes(q) || e.includes(q)) return TIER.sub;
   return 0;
 }
-const KIND_ORDER = { page: 0, civ: 1, unit: 2, building: 3, tech: 4, bonus: 5 } as const;
+const KIND_ORDER = { page: 0, civ: 1, unit: 2, building: 3, tech: 4, bonus: 5, term: 6 } as const;
 /** issue 145 E：给只靠拼音命中的结果最多预留这么多位，并提前展示 */
 export const PY_RESERVE = 5;
 export function search(items: SearchItem[], raw: string, limit = 30): SearchItem[] {
