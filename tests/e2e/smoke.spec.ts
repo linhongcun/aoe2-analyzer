@@ -118,6 +118,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/simulator', '#simhub .card'],
     ['#/duel', '#duel-res h3'],
     ['#/builds', '#builds [data-t="build-order"]'],
+    ['#/production', '[data-testid="production-page"]'],
   ];
   await page.goto('./');
   await page.getByRole('button', { name: '工具' }).click();
