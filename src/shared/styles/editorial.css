@@ -94,7 +94,7 @@ kbd {
 :is(#units, #techs, #buildings) .ucard .mini {
   padding-left: 0;
 }
-:is(#units, #techs, #buildings) .ucard .dlcb {
+:is(#units, #techs, #buildings) .ucard :is(.dlcb, [data-tech-release]) {
   position: absolute;
   left: var(--space-4);
   bottom: var(--space-3);
@@ -477,7 +477,7 @@ a.hcard:hover {
   .card .mini {
     padding-left: 0;
   }
-  :is(#units, #techs, #buildings) .ucard .dlcb {
+  :is(#units, #techs, #buildings) .ucard :is(.dlcb, [data-tech-release]) {
     left: var(--space-3);
   }
   .fbar {

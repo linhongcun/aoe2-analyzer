@@ -25,23 +25,7 @@ export const DLCS: Dlc[] = [
 export const CIV_DLC: Record<string, number> = {};
 DLCS.forEach((d, i) => d.civs.forEach((c) => (CIV_DLC[c] = i)));
 
-/** 通用科技的既有版本标记；单位和建筑由 introductions 独立查表。 */
-export const COMMON_DLC: Record<string, number> = {
-  Bloodlines: 1,
-  Caravan: 1,
-  'Herbal Medicine': 1,
-  Heresy: 1,
-  Theocracy: 1,
-  'Parthian Tactics': 1,
-  'Thumb Ring': 1,
-};
-
-/** 科技的既有版本派生；不再作为单位的版本判断入口。 */
-export function dlcOf(o: { en: string; type?: string | null; civs: string[] }): number | null {
-  if (o.en in COMMON_DLC) return COMMON_DLC[o.en]!;
-  if (o.type === 'UniqueTech' && o.civs.length === 1) return CIV_DLC[o.civs[0]!] ?? null;
-  return null;
-}
+/** 文明首发单独查表，不能据此推导单位、建筑或科技版本。 */
 export const civDlc = (en: string): number | null => CIV_DLC[en] ?? null;
 
 /** DLC 筛选：'' 全部，'none' 未标注，数字字符串为 DLC 序号 */

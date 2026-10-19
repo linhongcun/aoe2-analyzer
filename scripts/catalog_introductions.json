@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 1,
-  "verifiedAt": "2026-10-18",
-  "definition": "当前具名单位或升级形态、建筑首次引入的发行版本；不是引擎ID/模型创建时间，也不随当前可用文明和训练渠道变化。",
+  "schemaVersion": 2,
+  "verifiedAt": "2026-10-19",
+  "definition": "当前具名单位或升级形态、建筑、科技首次引入的发行版本；独立免费更新单列补丁号。不是引擎ID或模型创建时间，不随当前可用文明、训练渠道或单纯效果调整变化。",
   "releases": [
     "国王时代",
     "征服者",
@@ -2700,6 +2700,2003 @@
       "sourceURL": "https://seicing.com/html/aoe2/buildings/定居点.html",
       "evidence": "发行版本：最后的酋长；简介说明该 DLC 引入此南美区域建筑。",
       "status": "verified"
+    }
+  ],
+  "techs": [
+    {
+      "id": 3,
+      "en": "Yeomen",
+      "zh": "英皇侍卫",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/不列颠.html",
+      "evidence": "更新日志在征服者段记录英皇侍卫加入。",
+      "notes": "后来移至城堡时代；时代迁移不重置首次引入。"
+    },
+    {
+      "id": 16,
+      "en": "Anarchy",
+      "zh": "无政府",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/哥特.html",
+      "evidence": "征服者更新日志同时记录无政府和井喷加入。",
+      "notes": ""
+    },
+    {
+      "id": 28,
+      "en": "Bimaristan",
+      "zh": "穆斯林诊所",
+      "release": 10,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/preview-age-of-empires-ii-definitive-edition-update-95810/",
+      "evidence": "皇家山脉首发补丁95810以 Bimaristan 替换 Zealotry。",
+      "notes": "公告发表于2023-10-30，明确补丁与资料片于10月31日上线；不能继承2000年的Zealotry或1999年的文明版本。"
+    },
+    {
+      "id": 455,
+      "en": "Detinets",
+      "zh": "罗斯堡垒",
+      "release": 8,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-61321/",
+      "evidence": "印度王朝首发补丁61321以 Detinets 替换 Orthodoxy。",
+      "notes": "这是新名称及新效果；不继承2013年的Orthodoxy。"
+    },
+    {
+      "id": 460,
+      "en": "Atlatl",
+      "zh": "掷矛器",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Atlatl 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 462,
+      "en": "Great Wall",
+      "zh": "长城",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Great Wall 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 463,
+      "en": "Chieftains",
+      "zh": "酋长",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Chieftains 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 464,
+      "en": "Greek Fire",
+      "zh": "希腊之火",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Greek Fire 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 482,
+      "en": "Stronghold",
+      "zh": "堡垒",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Stronghold 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 483,
+      "en": "Marauders",
+      "zh": "掠夺者",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Marauders 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 484,
+      "en": "Yasama",
+      "zh": "射箭孔",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Yasama 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 485,
+      "en": "Hul'che Javelineers",
+      "zh": "胡尔切掷矛兵",
+      "release": 6,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/aoeiide-update-44725/",
+      "evidence": "西方霸主首发配套补丁44725以 Hul’che Javelineers 替换 Obsidian Arrows。",
+      "notes": "该补丁在资料片正式发布前一天上线，官方公告明确二者的首发关联；归属配套发行版本，不表示需要购买资料片。"
+    },
+    {
+      "id": 486,
+      "en": "Eupseong",
+      "zh": "邑城",
+      "release": null,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/aoe2de-update-42848/",
+      "evidence": "官方42848更新说明以 Eupseong 替换 Panokseon。",
+      "notes": "独立的决定版周年免费更新，发生在2020年；不能归征服者、失落帝国或2019决定版首发。",
+      "update": "42848"
+    },
+    {
+      "id": 487,
+      "en": "Nomads",
+      "zh": "游牧",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Nomads 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 488,
+      "en": "Kamandaran",
+      "zh": "波斯步弓手",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/波斯.html",
+      "evidence": "最后的可汗更新日志记录波斯步弓手取代沸油。",
+      "notes": "当前 Kamandaran 在2019决定版/最后的可汗首发加入；不继承2013年的Boiling Oil。"
+    },
+    {
+      "id": 489,
+      "en": "Ironclad",
+      "zh": "重装甲",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Ironclad 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 491,
+      "en": "Sipahi",
+      "zh": "西帕希骑兵",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Sipahi 列为新增独特科技。",
+      "notes": "125283仅更改中文翻译为“西帕希骑兵”；2013官方首发清单已使用英文 Sipahi，因此英文科技身份未改变。"
+    },
+    {
+      "id": 492,
+      "en": "Inquisition",
+      "zh": "宗教法庭",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Inquisition 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 499,
+      "en": "Silk Road",
+      "zh": "丝绸之路",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Silk Road 列为新增独特科技。",
+      "notes": "141935将该科技移至城堡时代；首次引入仍是2013。"
+    },
+    {
+      "id": 506,
+      "en": "Grand Trunk Road",
+      "zh": "大干道",
+      "release": 8,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/印度斯坦.html",
+      "evidence": "61321日志明确 Sultans 更名为 Grand Trunk Road。",
+      "notes": "当前英文名按印度王朝首发；前身Sultans在2013存在，后续87863改效果不重置当前名引入。"
+    },
+    {
+      "id": 514,
+      "en": "Corvinian Army",
+      "zh": "科维尼安军队",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/马扎尔.html",
+      "evidence": "最后的可汗日志明确 Mercenaries 重命名为 Corvinian Army。",
+      "notes": "按当前英文名首发记2019；前身Mercenaries为2013，95810效果修改不重置当前名版本。"
+    },
+    {
+      "id": 516,
+      "en": "Andean Sling",
+      "zh": "安第斯弹弓",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Andean Sling 列为新增独特科技。",
+      "notes": "81058给投石手增加攻击效果，不重置2013的首次引入。"
+    },
+    {
+      "id": 574,
+      "en": "Royal Heirs",
+      "zh": "龙脉",
+      "release": 3,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-the-african-kingdoms/civilizations/ethiopians",
+      "evidence": "开发商非洲王国发行文明页逐名列出 Royal Heirs 与 Torsion Engines 的原始科技效果。",
+      "notes": "Royal Heirs 在 81058 仅重做效果；科技名及身份延续，不把效果变更当作新科技首发。seicing 埃塞俄比亚更新日志也将该变化记为效果修改。"
+    },
+    {
+      "id": 576,
+      "en": "Tigui",
+      "zh": "蛮王",
+      "release": 3,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-the-african-kingdoms/civilizations/malians",
+      "evidence": "开发商非洲王国发行文明页的 Unique Techs 明列 Tigui 与 Farimba。",
+      "notes": "来源保留最初效果；后续箭矢数、攻击加成调整不改变科技首次引入版本。"
+    },
+    {
+      "id": 578,
+      "en": "Kasbah",
+      "zh": "土堡",
+      "release": 3,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-the-african-kingdoms/civilizations/berbers",
+      "evidence": "开发商非洲王国发行页列出 Kasbah 和 Maghrabi Camels，分别加快城堡工作和恢复骆驼生命值。",
+      "notes": "Maghrabi Camels 是 Maghrebi Camels 的旧拼写，属于同一具名科技的转写规范化，不是替换科技。Fandom 的同名条目也明确说明决定版之前的旧拼写。"
+    },
+    {
+      "id": 622,
+      "en": "Tusk Swords",
+      "zh": "獠牙剑",
+      "release": 4,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-rise-of-the-rajas/civilizations/khmer",
+      "evidence": "开发商蛮王崛起发行页 Unique Techs 列出 Tusk Swords 与 Double Crossbow。",
+      "notes": "两科技在原发行资料中已具名存在；成本、加成以及受影响单位变化不重置首发。"
+    },
+    {
+      "id": 624,
+      "en": "Thalassocracy",
+      "zh": "海上霸主",
+      "release": 4,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-rise-of-the-rajas/civilizations/malay",
+      "evidence": "开发商蛮王崛起发行页列出 Thalassocracy 与 Forced Levy，分别升级巨港和移除民兵系黄金成本。",
+      "notes": "Forced Levy 后来改成额外食物替代黄金，是同名科技效果修改，保留蛮王崛起首次引入。"
+    },
+    {
+      "id": 627,
+      "en": "Manipur Cavalry",
+      "zh": "曼尼普尔马",
+      "release": 4,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-rise-of-the-rajas/civilizations/burmese",
+      "evidence": "开发商蛮王崛起发行页列出 Howdah 与 Manipur Cavalry 的原始名称和效果。",
+      "notes": "两科技后来互换研发时代；Manipur Cavalry 改变克制对象，中文译名也有修改，英文科技名保持不变，均不重置首发。"
+    },
+    {
+      "id": 628,
+      "en": "Chatras",
+      "zh": "宝伞",
+      "release": 4,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-rise-of-the-rajas/civilizations/vietnamese",
+      "evidence": "开发商蛮王崛起发行页列出 Chatras 与 Paper Money，后者当时向盟友提供一次性黄金。",
+      "notes": "Paper Money 后来重做为伐木产金，仍为同名科技；Chatras 生命加成调整也不重置首发。"
+    },
+    {
+      "id": 685,
+      "en": "Stirrups",
+      "zh": "马镫",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/bulgarians",
+      "evidence": "开发商决定版发行文明页列出 Stirrups 与 Bagains，并保留最初骑兵攻速和民兵护甲效果。",
+      "notes": "Bagains 的中文从屯长改译为协议，英文 Bagains 没变；这不是新科技。"
+    },
+    {
+      "id": 687,
+      "en": "Silk Armor",
+      "zh": "丝护甲",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/tatars",
+      "evidence": "开发商决定版发行页列出 Silk Armor 和 Timurid Siegecraft 的最初效果。",
+      "notes": "Silk Armor 后来追加近战护甲；Timurid Siegecraft 增加射程及爆破骆驼解锁，均是原科技调整。"
+    },
+    {
+      "id": 689,
+      "en": "Steppe Husbandry",
+      "zh": "大草原畜牧",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/cumans",
+      "evidence": "开发商决定版发行页逐名列出 Steppe Husbandry 和 Cuman Mercenaries。",
+      "notes": "原始雇佣兵科技按团队一次性解锁十名精锐钦察；后续改为每座城堡五名是效果调整。"
+    },
+    {
+      "id": 691,
+      "en": "Hill Forts",
+      "zh": "山城堡",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/lithuanians",
+      "evidence": "开发商决定版发行页逐名列出 Hill Forts 和 Tower Shields。",
+      "notes": "Hill Forts 的中文译名由山寨改为山城堡，英文没有改变；Tower Shields 护甲增益和费用变化不重置首发。"
+    },
+    {
+      "id": 754,
+      "en": "Burgundian Vineyards",
+      "zh": "勃艮第葡萄园",
+      "release": 6,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/burgundians",
+      "evidence": "开发商西方霸主原始文明资料列出 Burgundian Vineyards 与 Flemish Revolution 的初始效果。",
+      "notes": "可与 seicing 勃艮第日志西方霸主章节交叉核对：原葡萄园一次性转换食物，原革命转换村民；后续修改不重置具名科技首发。"
+    },
+    {
+      "id": 756,
+      "en": "First Crusade",
+      "zh": "第一次十字军东征",
+      "release": 6,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/sicilians",
+      "evidence": "开发商西方霸主原始资料列出 First Crusade：最多五个城镇中心各生成十名萨金特卫兵。",
+      "notes": "同页旧帝王科技是 Scutage；现存 Hauberk 是后来替换项，须单独记录，不能继承西西里文明的发行版本。"
+    },
+    {
+      "id": 782,
+      "en": "Szlachta Privileges",
+      "zh": "贵族特权",
+      "release": 7,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/aoe2de-dukes-preorder/",
+      "evidence": "官方公爵的崛起首发预购公告逐名列出波兰的 Szlachta Privileges、Lechitic Legacy 和波希米亚的 Wagenburg Tactics、Hussite Reforms。",
+      "notes": "公告明确这两组是新文明的新科技，并给出 2021-08-10 首发日期。"
+    },
+    {
+      "id": 784,
+      "en": "Wagenburg Tactics",
+      "zh": "大车阵战术",
+      "release": 7,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/aoe2de-dukes-preorder/",
+      "evidence": "官方公爵的崛起首发预购公告逐名列出波兰的 Szlachta Privileges、Lechitic Legacy 和波希米亚的 Wagenburg Tactics、Hussite Reforms。",
+      "notes": "公告明确这两组是新文明的新科技，并给出 2021-08-10 首发日期。"
+    },
+    {
+      "id": 831,
+      "en": "Medical Corps",
+      "zh": "医疗部队",
+      "release": 8,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/dynasties_of_india_is_here/",
+      "evidence": "官方印度王朝首发公告按三新文明列出 Medical Corps、Wootz Steel、Paiks、Mahayana、Kshatriyas、Frontier Guards。",
+      "notes": "公告给出 2022-04-28 发行日；六个科技名在各文明 Unique Techs 清单里均可直接核对。"
+    },
+    {
+      "id": 833,
+      "en": "Paiks",
+      "zh": "派",
+      "release": 8,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/dynasties_of_india_is_here/",
+      "evidence": "官方印度王朝首发公告按三新文明列出 Medical Corps、Wootz Steel、Paiks、Mahayana、Kshatriyas、Frontier Guards。",
+      "notes": "公告给出 2022-04-28 发行日；六个科技名在各文明 Unique Techs 清单里均可直接核对。"
+    },
+    {
+      "id": 835,
+      "en": "Kshatriyas",
+      "zh": "刹帝利",
+      "release": 8,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/dynasties_of_india_is_here/",
+      "evidence": "官方印度王朝首发公告按三新文明列出 Medical Corps、Wootz Steel、Paiks、Mahayana、Kshatriyas、Frontier Guards。",
+      "notes": "公告给出 2022-04-28 发行日；六个科技名在各文明 Unique Techs 清单里均可直接核对。"
+    },
+    {
+      "id": 883,
+      "en": "Ballistas",
+      "zh": "弩炮",
+      "release": 9,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-83607/",
+      "evidence": "官方罗马归来首发更新在需购买该 DLC 的罗马新文明段，逐名列出 Ballistas 与 Comitatenses。",
+      "notes": "83607 是罗马归来首发配套更新；来源同时明确新罗马文明须购买 Return of Rome，与独立免费科技替换有别。"
+    },
+    {
+      "id": 922,
+      "en": "Cilician Fleet",
+      "zh": "奇里乞亚舰队",
+      "release": 10,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/pre-order-aoe-ii-de-the-mountain-royals/",
+      "evidence": "官方皇家山脉首发预购公告逐名列出 Cilician Fleet、Fereters、Svan Towers 和 Aznauri Cavalry。",
+      "notes": "四项列在两个新文明的 Unique Technologies 段；后续效果增减均不重置首发。"
+    },
+    {
+      "id": 923,
+      "en": "Svan Towers",
+      "zh": "斯万箭塔",
+      "release": 10,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/pre-order-aoe-ii-de-the-mountain-royals/",
+      "evidence": "官方皇家山脉首发预购公告逐名列出 Cilician Fleet、Fereters、Svan Towers 和 Aznauri Cavalry。",
+      "notes": "四项列在两个新文明的 Unique Technologies 段；后续效果增减均不重置首发。"
+    },
+    {
+      "id": 996,
+      "en": "Fortified Bastions",
+      "zh": "强化堡垒",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/jurchens/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Fortified Bastions 与 Thunderclap Bombs；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1006,
+      "en": "Lamellar Armor",
+      "zh": "札甲",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/khitan/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Lamellar Armor 与 Ordo Cavalry；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1061,
+      "en": "Tuntian",
+      "zh": "屯田",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/wei/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Tuntian 与 Ming Guang Armor；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1070,
+      "en": "Coiled Serpent Array",
+      "zh": "盘蛇阵",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/shu/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Bolt Magazine 与 Coiled Serpent Array；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1080,
+      "en": "Red Cliff Tactics",
+      "zh": "赤壁战术",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/wu/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Red Cliffs Tactics 与 Sitting Tiger；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1365,
+      "en": "Herbalism",
+      "zh": "草药学",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://store.steampowered.com/news/posts/?appgroupname=Age+of+Empires+II%3A+Definitive+Edition&appids=813780&enddate=1771016924&feed=steam_community_announcements",
+      "evidence": "官方 Steam 首发前公告归档包含三篇新文明深度介绍，分别逐名列 Herbalism/Huaracas、Malon/Butalmapu、Caciques/Curare，并标注最后酋长预购与首发。",
+      "notes": "Steam 单条 announcements 页面只返回占位图，因此实际打开可读官方 news/posts 归档核对。对应单条原公告：Muisca https://steamcommunity.com/games/813780/announcements/detail/536623744410455609；Tupi https://steamcommunity.com/games/813780/announcements/detail/536623744410455659；Mapuche https://steamcommunity.com/games/813780/announcements/detail/536623744410453001。已读归档包含三篇科技清单；没有根据文明版本自动继承。"
+    },
+    {
+      "id": 1379,
+      "en": "Malon",
+      "zh": "突袭",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://store.steampowered.com/news/posts/?appgroupname=Age+of+Empires+II%3A+Definitive+Edition&appids=813780&enddate=1771016924&feed=steam_community_announcements",
+      "evidence": "官方 Steam 首发前公告归档包含三篇新文明深度介绍，分别逐名列 Herbalism/Huaracas、Malon/Butalmapu、Caciques/Curare，并标注最后酋长预购与首发。",
+      "notes": "Steam 单条 announcements 页面只返回占位图，因此实际打开可读官方 news/posts 归档核对。对应单条原公告：Muisca https://steamcommunity.com/games/813780/announcements/detail/536623744410455609；Tupi https://steamcommunity.com/games/813780/announcements/detail/536623744410455659；Mapuche https://steamcommunity.com/games/813780/announcements/detail/536623744410453001。已读归档包含三篇科技清单；没有根据文明版本自动继承。"
+    },
+    {
+      "id": 1392,
+      "en": "Caciques",
+      "zh": "卡西克",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://store.steampowered.com/news/posts/?appgroupname=Age+of+Empires+II%3A+Definitive+Edition&appids=813780&enddate=1771016924&feed=steam_community_announcements",
+      "evidence": "官方 Steam 首发前公告归档包含三篇新文明深度介绍，分别逐名列 Herbalism/Huaracas、Malon/Butalmapu、Caciques/Curare，并标注最后酋长预购与首发。",
+      "notes": "Steam 单条 announcements 页面只返回占位图，因此实际打开可读官方 news/posts 归档核对。对应单条原公告：Muisca https://steamcommunity.com/games/813780/announcements/detail/536623744410455609；Tupi https://steamcommunity.com/games/813780/announcements/detail/536623744410455659；Mapuche https://steamcommunity.com/games/813780/announcements/detail/536623744410453001。已读归档包含三篇科技清单；没有根据文明版本自动继承。"
+    },
+    {
+      "id": 1404,
+      "en": "Circumnavigation",
+      "zh": "环游世界",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/",
+      "evidence": "官方 169123 补丁在葡萄牙段明确移除 Carrack，新增具名科技 Circumnavigation。",
+      "notes": "葡萄牙原始非洲王国发行资料列Carrack，当前科技在169123替换它。官方海战预告明确此次海战改版随最后的酋长于2026-02-17首发：https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/ 。按统一首发配套发行时期归档；不继承葡萄牙文明版本，也不表示购买要求。"
+    },
+    {
+      "id": 1473,
+      "en": "Vendel Legacy",
+      "zh": "文德尔传承",
+      "release": 13,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/varangians-civilization-deep-dive/",
+      "evidence": "官方维京传奇首发前瓦兰吉文明介绍逐名列出 Vendel Legacy 与 Gothikon，并标明该 DLC 预购。",
+      "notes": "2026-09-04 官方介绍将二者列为 Unique Technologies；与 2026-09-23 维京传奇首发配套。"
+    },
+    {
+      "id": 1484,
+      "en": "Hamask",
+      "zh": "哈马思克",
+      "release": 13,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/danes-civilization-deep-dive/",
+      "evidence": "官方维京传奇首发前丹麦文明介绍逐名列出 Hamask 与 Northmen’s Fury，并标明该 DLC 预购。",
+      "notes": "2026-08-28 官方介绍将二者列为 Unique Technologies；Northmen’s 的弯引号与数据直引号属于排版差异。"
+    },
+    {
+      "id": 1491,
+      "en": "Clerical Recruitment",
+      "zh": "神职人员招募",
+      "release": 13,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/saxons-civilization-deep-dive/",
+      "evidence": "官方维京传奇首发前撒克逊文明介绍逐名列出 Clerical Recruitment 与 Shield Wall，并标明该 DLC 预购。",
+      "notes": "2026-08-31 官方介绍列出二者独特科技及效果；与维京传奇首发配套。"
+    },
+    {
+      "id": 1496,
+      "en": "Ordonnance Companies",
+      "zh": "王家敕令骑兵",
+      "release": 13,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "evidence": "维京传奇首发补丁185872删除 Bearded Axe 并新增 Ordonnance Companies。",
+      "notes": "官方公告同时宣布The Viking Sagas已上线；不能继承Bearded Axe的征服者版本。"
+    },
+    {
+      "id": 4,
+      "en": "Holcans",
+      "zh": "霍尔坎",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/玛雅.html",
+      "evidence": "特性段明确 El Dorado 在最后的酋长资料片更名为 Holcans。",
+      "notes": "按当前英文名称首发归属最后的酋长；前身El Dorado在2000年征服者中已存在，不以相同ID继承旧名引入版本。"
+    },
+    {
+      "id": 5,
+      "en": "Furor Celtica",
+      "zh": "凯尔特狂暴",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/凯尔特.html",
+      "evidence": "征服者更新日志记录凯尔特狂暴加入。",
+      "notes": "后续生命值加成变化不重置版本。"
+    },
+    {
+      "id": 6,
+      "en": "Drill",
+      "zh": "操练",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://www.scribd.com/document/335987944/Age-of-Empires-II-The-Conquerors-Manual-PC",
+      "evidence": "征服者说明书第24页列出蒙古科技 Drill。",
+      "notes": "以原版说明书核对英文名，避免将中文旧译“攻城”误认为另一科技。"
+    },
+    {
+      "id": 7,
+      "en": "Citadels",
+      "zh": "堡垒",
+      "release": 10,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/波斯.html",
+      "evidence": "皇家山脉日志记录95810删除象夫并获得新科技堡垒。",
+      "notes": "当前 Citadels 替换原Mahouts；官方95810首发公告也列出Citadels，不能继承征服者的Mahouts。"
+    },
+    {
+      "id": 10,
+      "en": "Artillery",
+      "zh": "火炮术",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/土耳其.html",
+      "evidence": "征服者更新日志记录火炮术加入。",
+      "notes": ""
+    },
+    {
+      "id": 11,
+      "en": "Crenellations",
+      "zh": "开垛口",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/条顿.html",
+      "evidence": "征服者更新日志记录开垛口加入。",
+      "notes": ""
+    },
+    {
+      "id": 21,
+      "en": "Atheism",
+      "zh": "无神论",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://www.scribd.com/document/335987944/Age-of-Empires-II-The-Conquerors-Manual-PC",
+      "evidence": "征服者说明书第23页列出匈奴科技 Atheism。",
+      "notes": "后续胜利计时和圣物收入效果改变不重置首次引入。"
+    },
+    {
+      "id": 24,
+      "en": "Garland Wars",
+      "zh": "荣冠战争",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/unit/剑士.html",
+      "evidence": "剑士的征服者日志记录阿兹特克引入荣冠战争。",
+      "notes": "来源使用旧中文译名，英文身份另与征服者说明书第21页的 Garland Wars 对应。"
+    },
+    {
+      "id": 49,
+      "en": "Bogsveigar",
+      "zh": "博格斯维加尔",
+      "release": null,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "evidence": "官方81058更新说明以 Bogsveigar 替换 Berserkergang。",
+      "notes": "2023-04-11独立免费平衡更新，早于Return of Rome；不得归入印度王朝或罗马归来。",
+      "update": "81058"
+    },
+    {
+      "id": 52,
+      "en": "Rocketry",
+      "zh": "火箭术",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/中国.html",
+      "evidence": "征服者更新日志记录火箭科技加入。",
+      "notes": "三国补丁更改作用对象和效果，不是新增当前英文科技。"
+    },
+    {
+      "id": 59,
+      "en": "Kataparuto",
+      "zh": "弹射器",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/日本.html",
+      "evidence": "征服者更新日志记录弹射器科技加入。",
+      "notes": ""
+    },
+    {
+      "id": 61,
+      "en": "Logistica",
+      "zh": "后勤学",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/拜占庭.html",
+      "evidence": "征服者更新日志记录后勤学增加。",
+      "notes": "185872扩大效果对象不重置引入版本。"
+    },
+    {
+      "id": 440,
+      "en": "Supremacy",
+      "zh": "霸权",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://www.scribd.com/document/335987944/Age-of-Empires-II-The-Conquerors-Manual-PC",
+      "evidence": "征服者说明书第25页列出西班牙科技 Supremacy。",
+      "notes": ""
+    },
+    {
+      "id": 445,
+      "en": "Shinkichon",
+      "zh": "神机箭",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/高丽.html",
+      "evidence": "征服者段已列出神机箭及其原始效果。",
+      "notes": "同段记载1.0c改变射程，说明该科技在该补丁之前已存在。"
+    },
+    {
+      "id": 454,
+      "en": "Counterweights",
+      "zh": "配重块",
+      "release": 8,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-61321/",
+      "evidence": "印度王朝首发补丁61321新增帝王时代科技 Counterweights。",
+      "notes": "Zealotry改为城堡时代科技、Madrasah移除；新帝王科技不继承旧科技或文明的版本。"
+    },
+    {
+      "id": 457,
+      "en": "Perfusion",
+      "zh": "井喷",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/哥特.html",
+      "evidence": "征服者更新日志记录井喷科技加入。",
+      "notes": "征服者原版说明书第23页也列出 Perfusion；不按哥特文明的国王时代版本归属。"
+    },
+    {
+      "id": 461,
+      "en": "Warwolf",
+      "zh": "战狼号",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Warwolf 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 493,
+      "en": "Chivalry",
+      "zh": "骑士精神",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Chivalry 列为新增独特科技。",
+      "notes": "47820将该科技移至帝王时代；首次引入仍是2013，不能继承法兰克的1999版本。"
+    },
+    {
+      "id": 507,
+      "en": "Shatagni",
+      "zh": "印度火铳",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Shatagni 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 513,
+      "en": "Druzhina",
+      "zh": "皇家卫队",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Druzhina 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 515,
+      "en": "Recurve Bow",
+      "zh": "反曲弓",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://steamcommunity.com/app/221380/discussions/1/666825524931444842",
+      "evidence": "失落帝国首发变更清单把 Recurve Bow 列为新增独特科技。",
+      "notes": ""
+    },
+    {
+      "id": 517,
+      "en": "Fabric Shields",
+      "zh": "织物盾",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/2/印加.html",
+      "evidence": "最后的可汗日志明确 Couriers 更名为 Fabric Shields。",
+      "notes": "按当前英文名首发记2019；Couriers原为2013，2015已改变过效果，这些都不等于当前名首发。"
+    },
+    {
+      "id": 573,
+      "en": "Arquebus",
+      "zh": "火绳枪",
+      "release": 3,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-the-african-kingdoms/civilizations/portuguese",
+      "evidence": "开发商非洲王国发行页逐名列出 Arquebus，其原始效果是火药单位获得弹道学效果。",
+      "notes": "同页旧银冠是 Carrack；本记录只核对现存 Arquebus，不能据葡萄牙文明版本将替换后的 Circumnavigation 也标为非洲王国。"
+    },
+    {
+      "id": 575,
+      "en": "Torsion Engines",
+      "zh": "扭绞机",
+      "release": 3,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-the-african-kingdoms/civilizations/ethiopians",
+      "evidence": "开发商非洲王国发行文明页逐名列出 Royal Heirs 与 Torsion Engines 的原始科技效果。",
+      "notes": "Royal Heirs 在 81058 仅重做效果；科技名及身份延续，不把效果变更当作新科技首发。seicing 埃塞俄比亚更新日志也将该变化记为效果修改。"
+    },
+    {
+      "id": 577,
+      "en": "Farimba",
+      "zh": "死士",
+      "release": 3,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-the-african-kingdoms/civilizations/malians",
+      "evidence": "开发商非洲王国发行文明页的 Unique Techs 明列 Tigui 与 Farimba。",
+      "notes": "来源保留最初效果；后续箭矢数、攻击加成调整不改变科技首次引入版本。"
+    },
+    {
+      "id": 579,
+      "en": "Maghrebi Camels",
+      "zh": "马格里布骆驼",
+      "release": 3,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-the-african-kingdoms/civilizations/berbers",
+      "evidence": "开发商非洲王国发行页列出 Kasbah 和 Maghrabi Camels，分别加快城堡工作和恢复骆驼生命值。",
+      "notes": "Maghrabi Camels 是 Maghrebi Camels 的旧拼写，属于同一具名科技的转写规范化，不是替换科技。Fandom 的同名条目也明确说明决定版之前的旧拼写。"
+    },
+    {
+      "id": 623,
+      "en": "Double Crossbow",
+      "zh": "双箭弩",
+      "release": 4,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-rise-of-the-rajas/civilizations/khmer",
+      "evidence": "开发商蛮王崛起发行页 Unique Techs 列出 Tusk Swords 与 Double Crossbow。",
+      "notes": "两科技在原发行资料中已具名存在；成本、加成以及受影响单位变化不重置首发。"
+    },
+    {
+      "id": 625,
+      "en": "Forced Levy",
+      "zh": "强征兵役",
+      "release": 4,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-rise-of-the-rajas/civilizations/malay",
+      "evidence": "开发商蛮王崛起发行页列出 Thalassocracy 与 Forced Levy，分别升级巨港和移除民兵系黄金成本。",
+      "notes": "Forced Levy 后来改成额外食物替代黄金，是同名科技效果修改，保留蛮王崛起首次引入。"
+    },
+    {
+      "id": 626,
+      "en": "Howdah",
+      "zh": "象轿",
+      "release": 4,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-rise-of-the-rajas/civilizations/burmese",
+      "evidence": "开发商蛮王崛起发行页列出 Howdah 与 Manipur Cavalry 的原始名称和效果。",
+      "notes": "两科技后来互换研发时代；Manipur Cavalry 改变克制对象，中文译名也有修改，英文科技名保持不变，均不重置首发。"
+    },
+    {
+      "id": 629,
+      "en": "Paper Money",
+      "zh": "纸币",
+      "release": 4,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-2-hd-rise-of-the-rajas/civilizations/vietnamese",
+      "evidence": "开发商蛮王崛起发行页列出 Chatras 与 Paper Money，后者当时向盟友提供一次性黄金。",
+      "notes": "Paper Money 后来重做为伐木产金，仍为同名科技；Chatras 生命加成调整也不重置首发。"
+    },
+    {
+      "id": 686,
+      "en": "Bagains",
+      "zh": "协议",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/bulgarians",
+      "evidence": "开发商决定版发行文明页列出 Stirrups 与 Bagains，并保留最初骑兵攻速和民兵护甲效果。",
+      "notes": "Bagains 的中文从屯长改译为协议，英文 Bagains 没变；这不是新科技。"
+    },
+    {
+      "id": 688,
+      "en": "Timurid Siegecraft",
+      "zh": "帖木儿攻城术",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/tatars",
+      "evidence": "开发商决定版发行页列出 Silk Armor 和 Timurid Siegecraft 的最初效果。",
+      "notes": "Silk Armor 后来追加近战护甲；Timurid Siegecraft 增加射程及爆破骆驼解锁，均是原科技调整。"
+    },
+    {
+      "id": 690,
+      "en": "Cuman Mercenaries",
+      "zh": "库曼雇佣兵",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/cumans",
+      "evidence": "开发商决定版发行页逐名列出 Steppe Husbandry 和 Cuman Mercenaries。",
+      "notes": "原始雇佣兵科技按团队一次性解锁十名精锐钦察；后续改为每座城堡五名是效果调整。"
+    },
+    {
+      "id": 692,
+      "en": "Tower Shields",
+      "zh": "塔盾",
+      "release": 5,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/lithuanians",
+      "evidence": "开发商决定版发行页逐名列出 Hill Forts 和 Tower Shields。",
+      "notes": "Hill Forts 的中文译名由山寨改为山城堡，英文没有改变；Tower Shields 护甲增益和费用变化不重置首发。"
+    },
+    {
+      "id": 755,
+      "en": "Flemish Revolution",
+      "zh": "弗拉芒革命",
+      "release": 6,
+      "status": "verified",
+      "sourceURL": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/civilizations/burgundians",
+      "evidence": "开发商西方霸主原始文明资料列出 Burgundian Vineyards 与 Flemish Revolution 的初始效果。",
+      "notes": "可与 seicing 勃艮第日志西方霸主章节交叉核对：原葡萄园一次性转换食物，原革命转换村民；后续修改不重置具名科技首发。"
+    },
+    {
+      "id": 757,
+      "en": "Hauberk",
+      "zh": "锁子甲",
+      "release": 7,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/aoeiide-update-51737/",
+      "evidence": "官方 51737 补丁明确移除 Scutage 并以新科技 Hauberk 替换，提供骑士护甲。",
+      "notes": "西西里在西方霸主首发时的帝王科技是Scutage，Hauberk在51737替换它。官方51737公告明确是公爵的崛起首发配套更新，因此统一归公爵的崛起发行时期；不继承西西里文明首发版本，也不是仅按相邻日期推断。"
+    },
+    {
+      "id": 783,
+      "en": "Lechitic Legacy",
+      "zh": "列克提克遗产",
+      "release": 7,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/aoe2de-dukes-preorder/",
+      "evidence": "官方公爵的崛起首发预购公告逐名列出波兰的 Szlachta Privileges、Lechitic Legacy 和波希米亚的 Wagenburg Tactics、Hussite Reforms。",
+      "notes": "公告明确这两组是新文明的新科技，并给出 2021-08-10 首发日期。"
+    },
+    {
+      "id": 785,
+      "en": "Hussite Reforms",
+      "zh": "胡斯革新",
+      "release": 7,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/aoe2de-dukes-preorder/",
+      "evidence": "官方公爵的崛起首发预购公告逐名列出波兰的 Szlachta Privileges、Lechitic Legacy 和波希米亚的 Wagenburg Tactics、Hussite Reforms。",
+      "notes": "公告明确这两组是新文明的新科技，并给出 2021-08-10 首发日期。"
+    },
+    {
+      "id": 832,
+      "en": "Wootz Steel",
+      "zh": "乌兹钢",
+      "release": 8,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/dynasties_of_india_is_here/",
+      "evidence": "官方印度王朝首发公告按三新文明列出 Medical Corps、Wootz Steel、Paiks、Mahayana、Kshatriyas、Frontier Guards。",
+      "notes": "公告给出 2022-04-28 发行日；六个科技名在各文明 Unique Techs 清单里均可直接核对。"
+    },
+    {
+      "id": 834,
+      "en": "Mahayana",
+      "zh": "大乘佛教",
+      "release": 8,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/dynasties_of_india_is_here/",
+      "evidence": "官方印度王朝首发公告按三新文明列出 Medical Corps、Wootz Steel、Paiks、Mahayana、Kshatriyas、Frontier Guards。",
+      "notes": "公告给出 2022-04-28 发行日；六个科技名在各文明 Unique Techs 清单里均可直接核对。"
+    },
+    {
+      "id": 836,
+      "en": "Frontier Guards",
+      "zh": "边防部队",
+      "release": 8,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/dynasties_of_india_is_here/",
+      "evidence": "官方印度王朝首发公告按三新文明列出 Medical Corps、Wootz Steel、Paiks、Mahayana、Kshatriyas、Frontier Guards。",
+      "notes": "公告给出 2022-04-28 发行日；六个科技名在各文明 Unique Techs 清单里均可直接核对。"
+    },
+    {
+      "id": 884,
+      "en": "Comitatenses",
+      "zh": "野战军",
+      "release": 9,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-83607/",
+      "evidence": "官方罗马归来首发更新在需购买该 DLC 的罗马新文明段，逐名列出 Ballistas 与 Comitatenses。",
+      "notes": "83607 是罗马归来首发配套更新；来源同时明确新罗马文明须购买 Return of Rome，与独立免费科技替换有别。"
+    },
+    {
+      "id": 902,
+      "en": "Pirotechnia",
+      "zh": "烟火之术",
+      "release": null,
+      "update": "141935",
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/a-sneak-peek-at-new-content-coming-to-age-of-empires-ii-definitive-edition/",
+      "evidence": "141935官方完整更新清单的意大利段明确新增独特科技Pirotechnia。",
+      "notes": "纠正early-output暂定release11：官方最终公告https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-141935/发表于2025-04-10并链接此完整清单；三国2025-05-06才发布。属于独立免费更新141935，不能按seicing的三国时间段标题归DLC。上游a7b7c41固定提交同步新增Pirotechnia字符串和意大利说明，也支持这一时间顺序。"
+    },
+    {
+      "id": 921,
+      "en": "Fereters",
+      "zh": "费雷特斯",
+      "release": 10,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/pre-order-aoe-ii-de-the-mountain-royals/",
+      "evidence": "官方皇家山脉首发预购公告逐名列出 Cilician Fleet、Fereters、Svan Towers 和 Aznauri Cavalry。",
+      "notes": "四项列在两个新文明的 Unique Technologies 段；后续效果增减均不重置首发。"
+    },
+    {
+      "id": 924,
+      "en": "Aznauri Cavalry",
+      "zh": "阿兹瑙里骑兵",
+      "release": 10,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/pre-order-aoe-ii-de-the-mountain-royals/",
+      "evidence": "官方皇家山脉首发预购公告逐名列出 Cilician Fleet、Fereters、Svan Towers 和 Aznauri Cavalry。",
+      "notes": "四项列在两个新文明的 Unique Technologies 段；后续效果增减均不重置首发。"
+    },
+    {
+      "id": 997,
+      "en": "Thunderclap Bombs",
+      "zh": "霹雳炸弹",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/jurchens/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Fortified Bastions 与 Thunderclap Bombs；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1007,
+      "en": "Ordo Cavalry",
+      "zh": "斡鲁朵骑兵",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/khitan/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Lamellar Armor 与 Ordo Cavalry；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1062,
+      "en": "Ming-Kuang Armor",
+      "zh": "明光铠",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/wei/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Tuntian 与 Ming Guang Armor；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1069,
+      "en": "Bolt Magazine",
+      "zh": "弩箭匣",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/shu/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Bolt Magazine 与 Coiled Serpent Array；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1081,
+      "en": "Sitting Tiger",
+      "zh": "卧虎",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/games/aoeiide/civilizations/wu/",
+      "evidence": "官方三国发行文明页的 Unique Technologies 直接列出 Red Cliffs Tactics 与 Sitting Tiger；首发公告明确五个文明及其专属科技随三国 DLC 引入。",
+      "notes": "交叉来源：https://www.ageofempires.com/news/pre-order-age-of-empires-ii-definitive-edition-the-three-kingdoms/（2025-04-10 公告，明确 2025-05-06 三国首发，五新文明各自带新独特科技）。科技名在对应官方文明页逐项核对；未以 seicing 日志章节标题推定日期。Ming Guang/Ming-Kuang、Red Cliffs/Red Cliff 属同一科技的转写/拼写差异。"
+    },
+    {
+      "id": 1366,
+      "en": "Huaracas",
+      "zh": "瓦拉卡斯",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://store.steampowered.com/news/posts/?appgroupname=Age+of+Empires+II%3A+Definitive+Edition&appids=813780&enddate=1771016924&feed=steam_community_announcements",
+      "evidence": "官方 Steam 首发前公告归档包含三篇新文明深度介绍，分别逐名列 Herbalism/Huaracas、Malon/Butalmapu、Caciques/Curare，并标注最后酋长预购与首发。",
+      "notes": "Steam 单条 announcements 页面只返回占位图，因此实际打开可读官方 news/posts 归档核对。对应单条原公告：Muisca https://steamcommunity.com/games/813780/announcements/detail/536623744410455609；Tupi https://steamcommunity.com/games/813780/announcements/detail/536623744410455659；Mapuche https://steamcommunity.com/games/813780/announcements/detail/536623744410453001。已读归档包含三篇科技清单；没有根据文明版本自动继承。"
+    },
+    {
+      "id": 1380,
+      "en": "Butalmapu",
+      "zh": "布图马普",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://store.steampowered.com/news/posts/?appgroupname=Age+of+Empires+II%3A+Definitive+Edition&appids=813780&enddate=1771016924&feed=steam_community_announcements",
+      "evidence": "官方 Steam 首发前公告归档包含三篇新文明深度介绍，分别逐名列 Herbalism/Huaracas、Malon/Butalmapu、Caciques/Curare，并标注最后酋长预购与首发。",
+      "notes": "Steam 单条 announcements 页面只返回占位图，因此实际打开可读官方 news/posts 归档核对。对应单条原公告：Muisca https://steamcommunity.com/games/813780/announcements/detail/536623744410455609；Tupi https://steamcommunity.com/games/813780/announcements/detail/536623744410455659；Mapuche https://steamcommunity.com/games/813780/announcements/detail/536623744410453001。已读归档包含三篇科技清单；没有根据文明版本自动继承。"
+    },
+    {
+      "id": 1393,
+      "en": "Curare",
+      "zh": "箭毒",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://store.steampowered.com/news/posts/?appgroupname=Age+of+Empires+II%3A+Definitive+Edition&appids=813780&enddate=1771016924&feed=steam_community_announcements",
+      "evidence": "官方 Steam 首发前公告归档包含三篇新文明深度介绍，分别逐名列 Herbalism/Huaracas、Malon/Butalmapu、Caciques/Curare，并标注最后酋长预购与首发。",
+      "notes": "Steam 单条 announcements 页面只返回占位图，因此实际打开可读官方 news/posts 归档核对。对应单条原公告：Muisca https://steamcommunity.com/games/813780/announcements/detail/536623744410455609；Tupi https://steamcommunity.com/games/813780/announcements/detail/536623744410455659；Mapuche https://steamcommunity.com/games/813780/announcements/detail/536623744410453001。已读归档包含三篇科技清单；没有根据文明版本自动继承。"
+    },
+    {
+      "id": 1464,
+      "en": "Shield Wall",
+      "zh": "盾墙",
+      "release": 13,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/saxons-civilization-deep-dive/",
+      "evidence": "官方维京传奇首发前撒克逊文明介绍逐名列出 Clerical Recruitment 与 Shield Wall，并标明该 DLC 预购。",
+      "notes": "2026-08-31 官方介绍列出二者独特科技及效果；与维京传奇首发配套。"
+    },
+    {
+      "id": 1474,
+      "en": "Gothikon",
+      "zh": "哥瑟砍",
+      "release": 13,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/varangians-civilization-deep-dive/",
+      "evidence": "官方维京传奇首发前瓦兰吉文明介绍逐名列出 Vendel Legacy 与 Gothikon，并标明该 DLC 预购。",
+      "notes": "2026-09-04 官方介绍将二者列为 Unique Technologies；与 2026-09-23 维京传奇首发配套。"
+    },
+    {
+      "id": 1483,
+      "en": "Northmen's Fury",
+      "zh": "北方人之怒",
+      "release": 13,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/danes-civilization-deep-dive/",
+      "evidence": "官方维京传奇首发前丹麦文明介绍逐名列出 Hamask 与 Northmen’s Fury，并标明该 DLC 预购。",
+      "notes": "2026-08-28 官方介绍将二者列为 Unique Technologies；Northmen’s 的弯引号与数据直引号属于排版差异。"
+    },
+    {
+      "id": 602,
+      "en": "Arson",
+      "zh": "纵火",
+      "release": 3,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/兵营.html",
+      "evidence": "非洲王国历史明确新增纵火。",
+      "notes": ""
+    },
+    {
+      "id": 215,
+      "en": "Squires",
+      "zh": "护卫",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Squires）。",
+      "notes": ""
+    },
+    {
+      "id": 875,
+      "en": "Gambesons",
+      "zh": "软甲",
+      "release": null,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "evidence": "官方81058公告将Gambesons列为新科技。",
+      "notes": "2023-04-11免费平衡更新；不是印度王朝随文明新增，来源历史的分期标题不能作为DLC归属。",
+      "update": "81058"
+    },
+    {
+      "id": 906,
+      "en": "Fishing Lines",
+      "zh": "钓线",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/",
+      "evidence": "169123海战更新宣布新增Fishing Lines。",
+      "notes": "2026-02-17通用海战更新。 官方海战预告明确本改版随最后的酋长于2026-02-17首发：https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/ 。按统一的首发配套发行时期归档，不表示购买要求，不是单凭同日或文明推断。"
+    },
+    {
+      "id": 34,
+      "en": "Warships",
+      "zh": "中型战船",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/",
+      "evidence": "169123公告列出Medium/Heavy Warships；船坞历史确认原升级更名。",
+      "notes": "2026-02-17；原War Galley/Galleon升级已存在于国王时代；当前具名升级在此更名并同时升级箭船、喷火船及趸船系。 官方海战预告明确本改版随最后的酋长于2026-02-17首发：https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/ 。按统一的首发配套发行时期归档，不表示购买要求，不是单凭同日或文明推断。"
+    },
+    {
+      "id": 65,
+      "en": "Gillnets",
+      "zh": "刺网",
+      "release": 2,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/船坞.html",
+      "evidence": "失落帝国历史记载新增刺网。",
+      "notes": "后续收益调整和添加钓线前置不改变首次引入版本。"
+    },
+    {
+      "id": 35,
+      "en": "Heavy Warships",
+      "zh": "重型战船",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/",
+      "evidence": "169123公告列出Medium/Heavy Warships；船坞历史确认原升级更名。",
+      "notes": "2026-02-17；原War Galley/Galleon升级已存在于国王时代；当前具名升级在此更名并同时升级箭船、喷火船及趸船系。 官方海战预告明确本改版随最后的酋长于2026-02-17首发：https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/ 。按统一的首发配套发行时期归档，不表示购买要求，不是单凭同日或文明推断。"
+    },
+    {
+      "id": 14,
+      "en": "Horse Collar",
+      "zh": "马轭",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Horse Collar）。",
+      "notes": ""
+    },
+    {
+      "id": 1014,
+      "en": "Domestication",
+      "zh": "驯化术",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://github.com/SiegeEngineers/aoe2techtree/commit/46f04a161ca49f72651ce94670d4cf9570c0637a",
+      "evidence": "上游Add TTK Civs提交新增DOMESTICATION=1014及磨坊封建时代科技节点，并新增对应科技图标。",
+      "notes": "独立核对固定提交js/techtree.js第463、1083行及前一提交a7b7c41（不存在该节点），不是由当前所属文明推算。配合官方https://www.ageofempires.com/news/new-dlc-available-now-the-three-kingdoms/（2025-05-06）确认三国首发版本。4月数据预置的名称字符串不等于已解锁可玩的首发；不将上游4月20日提交日期当作游戏发售日。"
+    },
+    {
+      "id": 13,
+      "en": "Heavy Plow",
+      "zh": "重犁",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Heavy Plow）。",
+      "notes": ""
+    },
+    {
+      "id": 1013,
+      "en": "Pastoralism",
+      "zh": "畜牧业",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://github.com/SiegeEngineers/aoe2techtree/commit/46f04a161ca49f72651ce94670d4cf9570c0637a",
+      "evidence": "上游Add TTK Civs提交新增PASTORALISM=1013及磨坊城堡时代科技节点，建立驯化至畜牧业的升级关系。",
+      "notes": "固定提交js/techtree.js第464、1085、1289行；前一提交a7b7c41尚无该节点。与官方三国首发公告2025-05-06交叉核对：https://www.ageofempires.com/news/new-dlc-available-now-the-three-kingdoms/ 。没有使用Fandom受阻正文或单凭文明版本推断。"
+    },
+    {
+      "id": 12,
+      "en": "Crop Rotation",
+      "zh": "轮作",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Crop Rotation）。",
+      "notes": ""
+    },
+    {
+      "id": 1012,
+      "en": "Transhumance",
+      "zh": "畜牧季移",
+      "release": 11,
+      "status": "verified",
+      "sourceURL": "https://github.com/SiegeEngineers/aoe2techtree/commit/46f04a161ca49f72651ce94670d4cf9570c0637a",
+      "evidence": "上游Add TTK Civs提交新增TRANSHUMANCE=1012及磨坊帝王时代科技节点，接续Pastoralism。",
+      "notes": "实际ID为1012。固定提交js/techtree.js第465、1087、1290行提供独立代码证据，支持common原有三国归属；Fandom当前正文再次打开仍受阻，建议最终来源改用固定上游提交。官方三国首发公告为2025-05-06。"
+    },
+    {
+      "id": 315,
+      "en": "Conscription",
+      "zh": "征招",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Conscription）。",
+      "notes": ""
+    },
+    {
+      "id": 321,
+      "en": "Sappers",
+      "zh": "工兵",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Sappers）。",
+      "notes": ""
+    },
+    {
+      "id": 379,
+      "en": "Hoardings",
+      "zh": "围墙",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Hoardings）。",
+      "notes": ""
+    },
+    {
+      "id": 408,
+      "en": "Spies/Treason",
+      "zh": "间谍/叛徒",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Spies/Treason）。",
+      "notes": ""
+    },
+    {
+      "id": 23,
+      "en": "Coinage",
+      "zh": "铸币术",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Coinage）。",
+      "notes": ""
+    },
+    {
+      "id": 48,
+      "en": "Caravan",
+      "zh": "篷车",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/市场.html",
+      "evidence": "征服者历史记载新增大篷车。",
+      "notes": ""
+    },
+    {
+      "id": 15,
+      "en": "Guilds",
+      "zh": "行会",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Guilds）。",
+      "notes": ""
+    },
+    {
+      "id": 17,
+      "en": "Banking",
+      "zh": "银行业",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Banking）。",
+      "notes": ""
+    },
+    {
+      "id": 437,
+      "en": "Thumb Ring",
+      "zh": "扳指",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/靶场.html",
+      "evidence": "征服者历史列出扳指及帕提亚战术新增。",
+      "notes": ""
+    },
+    {
+      "id": 436,
+      "en": "Parthian Tactics",
+      "zh": "帕提亚战术",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/靶场.html",
+      "evidence": "征服者历史列出扳指及帕提亚战术新增。",
+      "notes": ""
+    },
+    {
+      "id": 1452,
+      "en": "Cranequins",
+      "zh": "便携弯弩装置",
+      "release": 13,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "evidence": "185872官方公告明确随The Viking Sagas新增Cranequins。",
+      "notes": "共享区域科技，首发跟随维京传奇；不按拥有此科技的旧文明推导。"
+    },
+    {
+      "id": 435,
+      "en": "Bloodlines",
+      "zh": "血统",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/马厩.html",
+      "evidence": "征服者历史明确新增血统。",
+      "notes": ""
+    },
+    {
+      "id": 39,
+      "en": "Husbandry",
+      "zh": "畜牧",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Husbandry）。",
+      "notes": ""
+    },
+    {
+      "id": 67,
+      "en": "Forging",
+      "zh": "锻造",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Forging）。",
+      "notes": ""
+    },
+    {
+      "id": 74,
+      "en": "Scale Mail Armor",
+      "zh": "步兵鳞甲",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Scale Mail Armor）。",
+      "notes": ""
+    },
+    {
+      "id": 81,
+      "en": "Scale Barding Armor",
+      "zh": "骑兵鳞甲",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Scale Barding Armor）。",
+      "notes": ""
+    },
+    {
+      "id": 199,
+      "en": "Fletching",
+      "zh": "箭羽",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Fletching）。",
+      "notes": ""
+    },
+    {
+      "id": 211,
+      "en": "Padded Archer Armor",
+      "zh": "射手软甲",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Padded Archer Armor）。",
+      "notes": ""
+    },
+    {
+      "id": 68,
+      "en": "Iron Casting",
+      "zh": "铸铁",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Iron Casting）。",
+      "notes": ""
+    },
+    {
+      "id": 76,
+      "en": "Chain Mail Armor",
+      "zh": "步兵锁甲",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Chain Mail Armor）。",
+      "notes": ""
+    },
+    {
+      "id": 82,
+      "en": "Chain Barding Armor",
+      "zh": "骑兵锁甲",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Chain Barding Armor）。",
+      "notes": ""
+    },
+    {
+      "id": 200,
+      "en": "Bodkin Arrow",
+      "zh": "锥子箭",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Bodkin Arrow）。",
+      "notes": ""
+    },
+    {
+      "id": 212,
+      "en": "Leather Archer Armor",
+      "zh": "射手皮甲",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Leather Archer Armor）。",
+      "notes": ""
+    },
+    {
+      "id": 75,
+      "en": "Blast Furnace",
+      "zh": "鼓风炉",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Blast Furnace）。",
+      "notes": ""
+    },
+    {
+      "id": 77,
+      "en": "Plate Mail Armor",
+      "zh": "步兵钢甲",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Plate Mail Armor）。",
+      "notes": ""
+    },
+    {
+      "id": 80,
+      "en": "Plate Barding Armor",
+      "zh": "骑兵钢甲",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Plate Barding Armor）。",
+      "notes": ""
+    },
+    {
+      "id": 201,
+      "en": "Bracer",
+      "zh": "护腕",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Bracer）。",
+      "notes": ""
+    },
+    {
+      "id": 219,
+      "en": "Ring Archer Armor",
+      "zh": "射手锁甲",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Ring Archer Armor）。",
+      "notes": ""
+    },
+    {
+      "id": 46,
+      "en": "Devotion",
+      "zh": "虔诚",
+      "release": null,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-99311/",
+      "evidence": "官方99311公告宣布新增Devotion。",
+      "notes": "2023-12-11免费更新；信念仍是原版科技，新增前置不改变信念的首发。",
+      "update": "99311"
+    },
+    {
+      "id": 231,
+      "en": "Sanctity",
+      "zh": "圣洁",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Sanctity）。",
+      "notes": ""
+    },
+    {
+      "id": 252,
+      "en": "Fervor",
+      "zh": "狂热",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Fervor）。",
+      "notes": ""
+    },
+    {
+      "id": 316,
+      "en": "Redemption",
+      "zh": "救赎",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Redemption）。",
+      "notes": ""
+    },
+    {
+      "id": 319,
+      "en": "Atonement",
+      "zh": "赎罪",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Atonement）。",
+      "notes": ""
+    },
+    {
+      "id": 439,
+      "en": "Heresy",
+      "zh": "异教",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/修道院.html",
+      "evidence": "征服者历史列出异教、草药及神权新增。",
+      "notes": ""
+    },
+    {
+      "id": 441,
+      "en": "Herbal Medicine",
+      "zh": "草药",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/修道院.html",
+      "evidence": "征服者历史列出异教、草药及神权新增。",
+      "notes": ""
+    },
+    {
+      "id": 45,
+      "en": "Faith",
+      "zh": "信念",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Faith）。",
+      "notes": ""
+    },
+    {
+      "id": 230,
+      "en": "Block Printing",
+      "zh": "雕版印刷术",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Block Printing）。",
+      "notes": ""
+    },
+    {
+      "id": 233,
+      "en": "Illumination",
+      "zh": "启发",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Illumination）。",
+      "notes": ""
+    },
+    {
+      "id": 438,
+      "en": "Theocracy",
+      "zh": "神权",
+      "release": 1,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/修道院.html",
+      "evidence": "征服者历史列出异教、草药及神权新增。",
+      "notes": ""
+    },
+    {
+      "id": 22,
+      "en": "Loom",
+      "zh": "织布机",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Loom）。",
+      "notes": ""
+    },
+    {
+      "id": 101,
+      "en": "Feudal Age",
+      "zh": "封建时代",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=37",
+      "evidence": "国王时代原版手册p32列出该时代晋级按钮（Feudal Age）。",
+      "notes": ""
+    },
+    {
+      "id": 8,
+      "en": "Town Watch",
+      "zh": "城镇瞭望",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Town Watch）。",
+      "notes": ""
+    },
+    {
+      "id": 102,
+      "en": "Castle Age",
+      "zh": "城堡时代",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=37",
+      "evidence": "国王时代原版手册p32列出该时代晋级按钮（Castle Age）。",
+      "notes": ""
+    },
+    {
+      "id": 213,
+      "en": "Wheelbarrow",
+      "zh": "独轮推车",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Wheelbarrow）。",
+      "notes": ""
+    },
+    {
+      "id": 103,
+      "en": "Imperial Age",
+      "zh": "帝王时代",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=37",
+      "evidence": "国王时代原版手册p32列出该时代晋级按钮（Imperial Age）。",
+      "notes": ""
+    },
+    {
+      "id": 249,
+      "en": "Hand Cart",
+      "zh": "手推车",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Hand Cart）。",
+      "notes": ""
+    },
+    {
+      "id": 280,
+      "en": "Town Patrol",
+      "zh": "城镇巡逻",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Town Patrol）。",
+      "notes": ""
+    },
+    {
+      "id": 50,
+      "en": "Masonry",
+      "zh": "石工术",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Masonry）。",
+      "notes": ""
+    },
+    {
+      "id": 54,
+      "en": "Treadmill Crane",
+      "zh": "脚踏起重机",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Treadmill Crane）。",
+      "notes": ""
+    },
+    {
+      "id": 93,
+      "en": "Ballistics",
+      "zh": "弹道学",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Ballistics）。",
+      "notes": ""
+    },
+    {
+      "id": 140,
+      "en": "Guard Tower",
+      "zh": "警戒箭塔",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=63",
+      "evidence": "国王时代原版手册p58说明瞭望塔升级为警戒塔（Guard Tower）。",
+      "notes": ""
+    },
+    {
+      "id": 194,
+      "en": "Fortified Wall",
+      "zh": "垛墙",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=62",
+      "evidence": "国王时代原版手册p57说明石墙升级为垛墙（Fortified Wall）。",
+      "notes": ""
+    },
+    {
+      "id": 322,
+      "en": "Murder Holes",
+      "zh": "近射孔",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Murder Holes）。",
+      "notes": ""
+    },
+    {
+      "id": 374,
+      "en": "Careening",
+      "zh": "修船厂",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Careening）。",
+      "notes": ""
+    },
+    {
+      "id": 380,
+      "en": "Heated Shot",
+      "zh": "加热射击",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Heated Shot）。",
+      "notes": ""
+    },
+    {
+      "id": 908,
+      "en": "Clinker Construction",
+      "zh": "鱼鳞式建造法",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/",
+      "evidence": "169123海战更新列出这项大学海军科技。",
+      "notes": "2026-02-17免费海战更新；seicing大学历史也明确列出四项科技新增。 官方海战预告明确本改版随最后的酋长于2026-02-17首发：https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/ 。按统一的首发配套发行时期归档，不表示购买要求，不是单凭同日或文明推断。"
+    },
+    {
+      "id": 909,
+      "en": "Siphons",
+      "zh": "虹吸管",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/",
+      "evidence": "169123海战更新列出这项大学海军科技。",
+      "notes": "2026-02-17免费海战更新；seicing大学历史也明确列出四项科技新增。 官方海战预告明确本改版随最后的酋长于2026-02-17首发：https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/ 。按统一的首发配套发行时期归档，不表示购买要求，不是单凭同日或文明推断。"
+    },
+    {
+      "id": 47,
+      "en": "Chemistry",
+      "zh": "化学",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Chemistry）。",
+      "notes": ""
+    },
+    {
+      "id": 51,
+      "en": "Architecture",
+      "zh": "建筑学",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Architecture）。",
+      "notes": ""
+    },
+    {
+      "id": 63,
+      "en": "Keep",
+      "zh": "大型箭塔",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=63",
+      "evidence": "国王时代原版手册p58说明警戒塔升级为大型箭塔（Keep）。",
+      "notes": ""
+    },
+    {
+      "id": 64,
+      "en": "Bombard Tower",
+      "zh": "炮塔",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=63",
+      "evidence": "国王时代原版手册p58明确要求先研究Bombard Tower科技才能建造炮塔。",
+      "notes": ""
+    },
+    {
+      "id": 373,
+      "en": "Shipwright",
+      "zh": "造船匠",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Shipwright）。",
+      "notes": ""
+    },
+    {
+      "id": 375,
+      "en": "Dry Dock",
+      "zh": "干船坞",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Dry Dock）。",
+      "notes": ""
+    },
+    {
+      "id": 377,
+      "en": "Siege Engineers",
+      "zh": "攻城技师",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=116",
+      "evidence": "国王时代原版手册附录p111列出该科技（Siege Engineers）。",
+      "notes": ""
+    },
+    {
+      "id": 608,
+      "en": "Arrowslits",
+      "zh": "射箭槽",
+      "release": 3,
+      "status": "verified",
+      "sourceURL": "https://seicing.com/html/aoe2/buildings/大学.html",
+      "evidence": "非洲王国历史记载新增射箭槽；之后仅调整研发时代。",
+      "notes": ""
+    },
+    {
+      "id": 907,
+      "en": "Carvel Hull",
+      "zh": "外板平接船体",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/",
+      "evidence": "169123海战更新列出这项大学海军科技。",
+      "notes": "2026-02-17免费海战更新；seicing大学历史也明确列出四项科技新增。 官方海战预告明确本改版随最后的酋长于2026-02-17首发：https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/ 。按统一的首发配套发行时期归档，不表示购买要求，不是单凭同日或文明推断。"
+    },
+    {
+      "id": 910,
+      "en": "Incendiaries",
+      "zh": "燃烧弹",
+      "release": 12,
+      "status": "verified",
+      "sourceURL": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/",
+      "evidence": "169123海战更新列出这项大学海军科技。",
+      "notes": "2026-02-17免费海战更新；seicing大学历史也明确列出四项科技新增。 官方海战预告明确本改版随最后的酋长于2026-02-17首发：https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/ 。按统一的首发配套发行时期归档，不表示购买要求，不是单凭同日或文明推断。"
+    },
+    {
+      "id": 202,
+      "en": "Double-Bit Axe",
+      "zh": "双刃斧",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Double-Bit Axe）。",
+      "notes": ""
+    },
+    {
+      "id": 203,
+      "en": "Bow Saw",
+      "zh": "弓锯",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Bow Saw）。",
+      "notes": ""
+    },
+    {
+      "id": 221,
+      "en": "Two-Man Saw",
+      "zh": "双人锯",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Two-Man Saw）。",
+      "notes": ""
+    },
+    {
+      "id": 55,
+      "en": "Gold Mining",
+      "zh": "金矿开采",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Gold Mining）。",
+      "notes": ""
+    },
+    {
+      "id": 278,
+      "en": "Stone Mining",
+      "zh": "石矿开采",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Stone Mining）。",
+      "notes": ""
+    },
+    {
+      "id": 182,
+      "en": "Gold Shaft Mining",
+      "zh": "钻井采金法",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Gold Shaft Mining）。",
+      "notes": ""
+    },
+    {
+      "id": 279,
+      "en": "Stone Shaft Mining",
+      "zh": "钻井采石法",
+      "release": 0,
+      "status": "verified",
+      "sourceURL": "https://manuals.plus/m/bede02f48ca7b2aae252168379555520636b871dcd6c6fdba8ba2766ea0186e2.pdf#page=115",
+      "evidence": "国王时代原版手册附录p110列出该科技（Stone Shaft Mining）。",
+      "notes": ""
     }
   ]
 }
