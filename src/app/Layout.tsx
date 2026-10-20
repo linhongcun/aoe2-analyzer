@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
@@ -230,6 +230,30 @@ export function Layout({ children }: { children: ReactNode }) {
   const [menuAt, setMenuAt] = useState<string | null>(null);
   const menu = menuAt === pathname; // 路由变化后自动收起
   const [cmdk, setCmdk] = useState(false);
+  const searchTrigger = useRef<HTMLElement | null>(null);
+  const main = useRef<HTMLElement>(null);
+  const openSearch = useCallback(() => {
+    searchTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setMenuAt(null);
+    setCmdk(true);
+  }, []);
+  useEffect(() => {
+    if (cmdk) return;
+    const target = searchTrigger.current;
+    if (!target) return;
+    // 等关闭和路由更新提交后再恢复；页面内的触发元素可能已随导航卸载。
+    const frame = requestAnimationFrame(() => {
+      if (target.isConnected) target.focus();
+      if (target.isConnected && document.activeElement === target && target !== document.body) return;
+      // 只在需要兜底时临时让 main 可聚焦，避免平时点击正文把焦点吸到 main 上。
+      const fallback = main.current;
+      if (!fallback) return;
+      fallback.setAttribute('tabindex', '-1');
+      fallback.addEventListener('blur', () => fallback.removeAttribute('tabindex'), { once: true });
+      fallback.focus();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [cmdk]);
   useEffect(() => {
     if (!menu) return;
     const mobile = window.matchMedia('(max-width: 900px)');
@@ -279,13 +303,13 @@ export function Layout({ children }: { children: ReactNode }) {
     const h = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setMenuAt(null);
-        setCmdk((v) => !v);
+        if (cmdk) setCmdk(false);
+        else openSearch();
       }
     };
     addEventListener('keydown', h);
     return () => removeEventListener('keydown', h);
-  }, []);
+  }, [cmdk, openSearch]);
   return (
     <>
       <header className="topbar editorial-topbar">
@@ -338,14 +362,14 @@ export function Layout({ children }: { children: ReactNode }) {
           <Icon name="database" />
           <span>数据版本：{versionLabel(DATA_SOURCES)}</span>
         </Link>
-        <button className="searchbtn" onClick={() => setCmdk(true)} aria-label="全局搜索">
+        <button className="searchbtn" onClick={openSearch} aria-label="全局搜索">
           <Icon name="search" />
           <span>搜索</span>
           <kbd>Ctrl K</kbd>
         </button>
         <ThemeMenu preference={preference} onSelect={select} />
       </header>
-      <main>
+      <main ref={main}>
         {pathname !== '/' && (
           <div className="fbbar">
             <FeedbackLink compact />
