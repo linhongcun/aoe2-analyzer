@@ -32,6 +32,12 @@ export default function Matchup() {
         </Link>
       </p>
       <nav className="bar" aria-label="情境与队伍规划">
+        <Link className="community-tool-entry" to="/scouting">
+          先辨析侦察线索与缺失信息
+        </Link>
+        <Link className="community-tool-entry" to="/match-review">
+          记录本局疑问与下次练习重点
+        </Link>
         <Link className="community-tool-entry" to="/mixed-army">
           按敌军组合查看混兵情境
         </Link>
