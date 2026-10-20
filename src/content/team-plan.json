@@ -1,0 +1,355 @@
+{
+  "checked": "2026-10-20",
+  "patch": 185872,
+  "unitIds": [
+    74, 75, 77, 473, 567, 93, 358, 359, 751, 753, 752, 448, 546, 441, 38, 283, 569, 329, 330, 207, 4, 24, 492, 7, 6, 39, 474, 1258, 422, 548, 280, 550, 588,
+    279, 542, 125, 5, 36, 331
+  ],
+  "baseFormIds": [74, 93, 751, 448, 38, 329, 4, 7, 39, 1258, 280, 279, 125, 5, 36, 331],
+  "unlockRequirements": [
+    {
+      "units": [5, 36],
+      "techs": [47],
+      "evidence": "DE185872 techs.json 化学47与production.ts已核对的生产解锁。"
+    }
+  ],
+  "sources": [
+    {
+      "id": "official-maps",
+      "title": "Two Pools 2 官方赛事与地图介绍",
+      "url": "https://www.ageofempires.com/news/2pools2-2021/",
+      "published": "2021-03-30",
+      "kind": "官方赛事说明",
+      "claim": "2v2也可能有边位与口袋；地图条件影响位置和协作。"
+    },
+    {
+      "id": "roles",
+      "title": "Teamgame Roles",
+      "url": "https://aoe2.guide/teamgame-roles/",
+      "published": "2020-06-11",
+      "kind": "署名社区指南",
+      "claim": "标准开放图的弓骑协同和不同人数的支援分工仅为有条件范例。"
+    },
+    {
+      "id": "coordination",
+      "title": "How to get better at team games?",
+      "url": "https://forums.ageofempires.com/t/how-to-get-better-at-team-games/112860",
+      "published": "2021-01-03",
+      "kind": "官方论坛社区讨论",
+      "claim": "联合行动要结合敌军位置、安全路线与队友沟通；非开发者打法背书。"
+    }
+  ],
+  "example": {
+    "version": 1,
+    "patch": 185872,
+    "title": "开放陆地图4v4分工范例（本站整理）",
+    "map": {
+      "name": "Arabia等标准开放陆地图",
+      "openness": "open",
+      "conditions": "标准基地开局，已确认起始位置，两侧道路可通行，队友愿意沟通。"
+    },
+    "players": [
+      {
+        "id": "p1",
+        "name": "P1",
+        "civ": "Britons",
+        "position": "flank",
+        "positionNote": "左边位"
+      },
+      {
+        "id": "p2",
+        "name": "P2",
+        "civ": "Franks",
+        "position": "pocket",
+        "positionNote": "左口袋"
+      },
+      {
+        "id": "p3",
+        "name": "P3",
+        "civ": "Huns",
+        "position": "pocket",
+        "positionNote": "右口袋"
+      },
+      {
+        "id": "p4",
+        "name": "P4",
+        "civ": "Ethiopians",
+        "position": "flank",
+        "positionNote": "右边位"
+      }
+    ],
+    "phases": [
+      {
+        "age": 2,
+        "players": [
+          {
+            "playerId": "p1",
+            "main": {
+              "unitId": 4,
+              "buildingId": 87
+            },
+            "secondary": null,
+            "completedBuildings": [87],
+            "completedForms": [],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          },
+          {
+            "playerId": "p2",
+            "main": {
+              "unitId": 448,
+              "buildingId": 101
+            },
+            "secondary": null,
+            "completedBuildings": [101],
+            "completedForms": [],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          },
+          {
+            "playerId": "p3",
+            "main": {
+              "unitId": 448,
+              "buildingId": 101
+            },
+            "secondary": null,
+            "completedBuildings": [101],
+            "completedForms": [],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          },
+          {
+            "playerId": "p4",
+            "main": {
+              "unitId": 4,
+              "buildingId": 87
+            },
+            "secondary": null,
+            "completedBuildings": [87],
+            "completedForms": [],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          }
+        ],
+        "tasks": [
+          {
+            "kind": "scout",
+            "owners": ["p2", "p3"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2确认左侧、P3确认右侧敌军与支援路线。"
+          },
+          {
+            "kind": "screen",
+            "owners": ["p2", "p3"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2掩护P1，P3掩护P4；交战前双方确认兵量与道路。"
+          },
+          {
+            "kind": "support",
+            "owners": ["p2", "p3"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2响应P1，P3响应P4；实际到位需游戏内沟通。"
+          }
+        ],
+        "supportTrigger": "对应边位报告遭两军共同进攻；口袋回应后再确认道路与兵量。",
+        "rally": "己方靶场前或双方标记的安全地点；到位后再共同决定推进。",
+        "retreat": "友军尚未到位、道路被切断或实际兵量与升级不明时先后撤并沟通。",
+        "notApplicable": "海上压力、游牧无固定基地、封闭单通道或实际位置与模板不符。"
+      },
+      {
+        "age": 3,
+        "players": [
+          {
+            "playerId": "p1",
+            "main": {
+              "unitId": 24,
+              "buildingId": 87
+            },
+            "secondary": null,
+            "completedBuildings": [87],
+            "completedForms": [24],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          },
+          {
+            "playerId": "p2",
+            "main": {
+              "unitId": 38,
+              "buildingId": 101
+            },
+            "secondary": null,
+            "completedBuildings": [101],
+            "completedForms": [],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          },
+          {
+            "playerId": "p3",
+            "main": {
+              "unitId": 38,
+              "buildingId": 101
+            },
+            "secondary": null,
+            "completedBuildings": [101],
+            "completedForms": [],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          },
+          {
+            "playerId": "p4",
+            "main": {
+              "unitId": 24,
+              "buildingId": 87
+            },
+            "secondary": null,
+            "completedBuildings": [87],
+            "completedForms": [24],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          }
+        ],
+        "tasks": [
+          {
+            "kind": "scout",
+            "owners": ["p2", "p3"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2确认左侧、P3确认右侧敌军与支援路线。"
+          },
+          {
+            "kind": "screen",
+            "owners": ["p2", "p3"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2掩护P1，P3掩护P4；交战前双方确认兵量与道路。"
+          },
+          {
+            "kind": "support",
+            "owners": ["p2", "p3"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2响应P1，P3响应P4；实际到位需游戏内沟通。"
+          },
+          {
+            "kind": "breach",
+            "owners": [],
+            "intentionalGap": true,
+            "gapReason": "本阶段保兵，暂不承担破城；若敌方前置防御改变则重新约定。",
+            "note": ""
+          }
+        ],
+        "supportTrigger": "对应边位报告遭两军共同进攻；口袋回应后再确认道路与兵量。",
+        "rally": "己方靶场前或双方标记的安全地点；到位后再共同决定推进。",
+        "retreat": "友军尚未到位、道路被切断或实际兵量与升级不明时先后撤并沟通。",
+        "notApplicable": "海上压力、游牧无固定基地、封闭单通道或实际位置与模板不符。"
+      },
+      {
+        "age": 4,
+        "players": [
+          {
+            "playerId": "p1",
+            "main": {
+              "unitId": 492,
+              "buildingId": 87
+            },
+            "secondary": null,
+            "completedBuildings": [87],
+            "completedForms": [492],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          },
+          {
+            "playerId": "p2",
+            "main": {
+              "unitId": 569,
+              "buildingId": 101
+            },
+            "secondary": {
+              "unitId": 331,
+              "buildingId": 82
+            },
+            "completedBuildings": [101, 82],
+            "completedForms": [569],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          },
+          {
+            "playerId": "p3",
+            "main": {
+              "unitId": 569,
+              "buildingId": 101
+            },
+            "secondary": null,
+            "completedBuildings": [101],
+            "completedForms": [569],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          },
+          {
+            "playerId": "p4",
+            "main": {
+              "unitId": 492,
+              "buildingId": 87
+            },
+            "secondary": null,
+            "completedBuildings": [87],
+            "completedForms": [492],
+            "supply": "unchecked",
+            "supplyNote": "建筑与升级完成仅为本范例假设，实际兵力与资源尚未核对。",
+            "completedUnlockTechIds": []
+          }
+        ],
+        "tasks": [
+          {
+            "kind": "scout",
+            "owners": ["p2", "p3"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2确认左侧、P3确认右侧敌军与支援路线。"
+          },
+          {
+            "kind": "screen",
+            "owners": ["p2", "p3"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2掩护P1，P3掩护P4；交战前双方确认兵量与道路。"
+          },
+          {
+            "kind": "support",
+            "owners": ["p2", "p3"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2响应P1，P3响应P4；实际到位需游戏内沟通。"
+          },
+          {
+            "kind": "breach",
+            "owners": ["p2"],
+            "intentionalGap": false,
+            "gapReason": "",
+            "note": "P2在城堡及相关准备完成后承担攻坚；是否足够需实战确认。"
+          }
+        ],
+        "supportTrigger": "对应边位报告遭两军共同进攻；口袋回应后再确认道路与兵量。",
+        "rally": "己方靶场前或双方标记的安全地点；到位后再共同决定推进。",
+        "retreat": "友军尚未到位、道路被切断或实际兵量与升级不明时先后撤并沟通。",
+        "notApplicable": "海上压力、游牧无固定基地、封闭单通道或实际位置与模板不符。"
+      }
+    ],
+    "activeAge": 2,
+    "example": "open-land-4v4-v1"
+  }
+}
