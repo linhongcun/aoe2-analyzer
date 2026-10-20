@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { civs } from '../../../data';
-import { TOOLS, WIKI, type Section } from '../../../app/nav/sections';
+import { SECONDARY_TOOLS, TOOLS, WIKI, type Section } from '../../../app/nav/sections';
 import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { DLCS } from '../../../domain/dlc';
@@ -72,6 +72,13 @@ export default function Home() {
         {TOOLS.map((s) => (
           <Card key={s.key} s={s} tool />
         ))}
+        <nav className="bar home-planning-links" aria-label="更多规划工具">
+          {SECONDARY_TOOLS.filter((s) => ['trade-income', 'construction', 'team-bonuses', 'garrison-healing'].includes(s.key)).map((s) => (
+            <Link key={s.key} className="btn community-tool-entry" to={s.path}>
+              {s.label}
+            </Link>
+          ))}
+        </nav>
       </div>
     </section>
   );

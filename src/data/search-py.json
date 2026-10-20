@@ -259,6 +259,10 @@
     "py": "shaozhanshiyeqiebuxiaohaoshiliao",
     "pyi": "szsyqbxhsl"
   },
+  "商路供给": {
+    "py": "shanglugongji",
+    "pyi": "slgj"
+  },
   "喷火船和德罗蒙战舰的攻击速度 +25%": {
     "py": "penhuochuanhedeluomengzhanjiandegongjisudu",
     "pyi": "phchdlmzjdgjsd"
@@ -378,6 +382,10 @@
   "处于凯尔特单位视野内的牲畜不会被窃取": {
     "py": "chuyukaiertedanweishiyeneideshengchubuhuibeiqiequ",
     "pyi": "cyketdwsyndscbhbqq"
+  },
+  "多人施工": {
+    "py": "duorenshigong",
+    "pyi": "drsg"
   },
   "大学工作速度 +80%": {
     "py": "daxuegongzuosudu",
@@ -1115,6 +1123,10 @@
     "py": "changmaobingxizaochengdeewaishanghai",
     "pyi": "cmbxzcdewsh"
   },
+  "队伍加成": {
+    "py": "duiwujiacheng",
+    "pyi": "dwjc"
+  },
   "防御工事建造速度 +50%，城镇中心建造速度 +100%": {
     "py": "fangyugongshijianzaosuduchengzhenzhongxinjianzaosudu",
     "pyi": "fygsjzsdczzxjzsd"
@@ -1146,6 +1158,10 @@
   "马厩科技费用 - 50%": {
     "py": "majiukejifeiyong",
     "pyi": "mjkjfy"
+  },
+  "驻军回血": {
+    "py": "zhujunhuixue",
+    "pyi": "zjhx"
   },
   "骆驼单位生命值 +25%": {
     "py": "luotuodanweishengmingzhi",

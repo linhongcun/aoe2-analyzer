@@ -10,6 +10,7 @@ import { DATA_SOURCES, versionLabel } from '../features/about/dataInfo';
 import { useTheme } from './theme/useTheme';
 import type { ThemePreference } from './theme/theme';
 import '../shared/styles/editorial-shell.css';
+import '../shared/styles/community-tools.css';
 
 const PageMeta = lazy(() => import('../features/share/PageMeta'));
 

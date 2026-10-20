@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useCore, useTrees } from '../../../data/hooks';
 import {
   calculateGeneralGarrison,
@@ -22,6 +22,7 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Loading } from '../../../shared/ui/widgets';
 import './garrison.css';
 import './garrisonGeneral.css';
+import { healingLink } from '../../../domain/garrisonHealing';
 
 const ENTRY_LABEL: Record<GarrisonEntry, string> = { enter: '从外部进入', created: '生产后留驻', deposit: '存放圣物' };
 
@@ -83,6 +84,16 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
   const firing = result.mode === 'arrows' || result.mode === 'cannon';
   const projectile = result.mode === 'cannon' ? '炮弹' : '箭矢';
   const shortProjectile = result.mode === 'cannon' ? '发' : '箭';
+  const singleOccupant = config.rows.length === 1 ? config.rows[0] : undefined;
+  const healingHref = !errors.length
+    ? healingLink(ctx, {
+        buildingId: b.id,
+        civ: config.civ,
+        age: config.age,
+        techs: config.techs,
+        ...(singleOccupant ? { unitId: singleOccupant.unitId, entry: singleOccupant.entry } : {}),
+      })
+    : null;
   return (
     <section className="garrison-preview" data-testid="garrison-preview" aria-labelledby="garrison-title">
       <div className="garrison-heading">
@@ -94,6 +105,14 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
           复制驻军方案
         </button>
       </div>
+      {healingHref && (
+        <p>
+          <Link className="btn community-tool-entry" to={healingHref}>
+            {singleOccupant ? '按此单位查看驻军回血' : '查看单目标回血，进入后选择对象'}
+          </Link>
+        </p>
+      )}
+      {healingHref && <p className="note">回血为独立的单目标预览，不迁移混合数量；可迁移的文明、时代、单位和相关科技会保留。</p>}
       <fieldset className="garrison-controls garrison-general-controls" aria-label="驻军配置" disabled={parseErrors.length > 0}>
         <div>
           <label htmlFor="garrison-civ">文明</label>
