@@ -194,6 +194,19 @@ describe('#224 general garrison model', () => {
     expect(calc(104, { rows: [row(286)] }).errors).not.toEqual([]);
     expect(calc(104, { rows: [row(285)] }).errors).not.toEqual([]);
   });
+  it.each(['Armenians', 'Georgians'])('keeps relic and villager contributions in sync with selected technologies for %s', (civ) => {
+    const b = ctx.core.buildingById[1806]!;
+    const techs = getGarrisonTechs(ctx, b, config({ civ })).map((t) => t.id);
+    const relics = calc(1806, { civ, techs, rows: [row(285, '2', 'deposit')] });
+    const villagers = calc(1806, { civ, techs, rows: [row(83, '2')] });
+    expect(relics.errors).toEqual([]);
+    expect(villagers.errors).toEqual([]);
+    expect(relics.rows[0]!.powerEach).toBe(villagers.rows[0]!.powerEach);
+    expect(relics.thresholds).toEqual(villagers.thresholds);
+    expect(relics.maxAtCapacity).toBe(villagers.maxAtCapacity);
+    expect(relics.nextByUnit[285]).toEqual(villagers.nextByUnit[83]);
+    expect(candidates(1806, { civ }).find((u) => u.id === 285)!.reason).not.toContain('只计容量');
+  });
   it('includes the movable Mule Cart as an occupant for its own civilizations', () => {
     expect(candidates(109, { civ: 'Armenians' }).some((u) => u.id === 1808 && u.canEnter)).toBe(true);
     expect(candidates(109, { civ: 'Franks' }).some((u) => u.id === 1808)).toBe(false);

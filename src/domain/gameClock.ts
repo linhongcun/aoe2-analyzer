@@ -16,7 +16,7 @@ const decimal = /^\d+(?:\.\d+)?$/;
 const clock = /^(\d+):([0-5]\d)(?:\.(\d+))?$/;
 
 export function defaultGameClockConfig(): GameClockConfig {
-  return { direction: 'game-to-real', unit: 'minutes', duration: '10:00', ratio: '1' };
+  return { direction: 'game-to-real', unit: 'minutes', duration: '10:00', ratio: '1.7' };
 }
 
 export type GameClockDuration = { ok: true; seconds: number; whole: number; fraction: string } | { ok: false; error: string };
@@ -117,17 +117,17 @@ export function decodeGameClock(search: string): { config: GameClockConfig; erro
     if (!keys.includes(key) || params.getAll(key).length !== 1) return fail('换算链接含未知或重复参数，请重置。');
     if (value.includes('\uFFFD') || value.length > TEXT_LIMIT) return fail('换算链接包含损坏或过长的输入，请重置。');
   }
-  if (keys.some((key) => !params.has(key))) return fail('换算链接缺少必要参数，请重置。');
+  if (keys.filter((key) => key !== 'ratio').some((key) => !params.has(key))) return fail('换算链接缺少必要参数，请重置。');
   if (params.get('v') !== '1') return fail('换算链接版本不受支持，请重置。');
   const direction = params.get('direction');
   const unit = params.get('unit');
   if (direction !== 'game-to-real' && direction !== 'real-to-game') return fail('换算链接方向无效，请重置。');
   if (unit !== 'seconds' && unit !== 'minutes') return fail('换算链接单位无效，请重置。');
-  return { config: { direction, unit, duration: params.get('duration')!, ratio: params.get('ratio')! }, errors: [] };
+  return { config: { direction, unit, duration: params.get('duration')!, ratio: params.get('ratio') ?? config.ratio }, errors: [] };
 }
 
 /** Context links always carry game seconds; callers never apply a speed multiplier. */
-export function gameClockHref(seconds: number): string | null {
+export function gameClockHref(seconds: number, ratio?: string): string | null {
   if (!Number.isFinite(seconds) || seconds < 0 || seconds > GAME_CLOCK_DURATION_LIMIT) return null;
   let duration = String(seconds);
   // Convert scientific notation lexically, retaining the original finite number.
@@ -140,5 +140,5 @@ export function gameClockHref(seconds: number): string | null {
       at <= 0 ? '0.' + '0'.repeat(-at) + digits : at >= digits.length ? digits + '0'.repeat(at - digits.length) : digits.slice(0, at) + '.' + digits.slice(at);
   }
   if (duration.length > TEXT_LIMIT) return null;
-  return '/game-clock?' + encodeGameClock({ direction: 'game-to-real', unit: 'seconds', duration, ratio: '1' });
+  return '/game-clock?' + encodeGameClock({ direction: 'game-to-real', unit: 'seconds', duration, ratio: ratio ?? defaultGameClockConfig().ratio });
 }

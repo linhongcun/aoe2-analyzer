@@ -75,10 +75,27 @@
   font-size: var(--fs-body);
 }
 .gc-actions,
+.gc-presets,
 .gc-links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+}
+.gc-presets {
+  margin-bottom: var(--space-4);
+}
+.gc-presets button {
+  flex: 1 1 100px;
+  min-width: 44px;
+  min-height: 44px;
+  white-space: nowrap;
+  font-size: var(--fs-sm);
+}
+.gc-presets button[aria-pressed='true'] {
+  color: var(--color-text);
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  font-weight: 600;
 }
 .gc-actions .btn,
 .gc-heading .btn,
@@ -158,6 +175,7 @@
 @media print {
   .gc-heading button,
   .gc-actions,
+  .gc-presets,
   .gc-manual-link,
   .gc-links {
     display: none;

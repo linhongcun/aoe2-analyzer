@@ -26,6 +26,18 @@ import { healingLink } from '../../../domain/garrisonHealing';
 
 const ENTRY_LABEL: Record<GarrisonEntry, string> = { enter: '从外部进入', created: '生产后留驻', deposit: '存放圣物' };
 
+function GarrisonNote({ text }: { text: string }) {
+  return text.split(/(\+?\d+(?:\.\d+)?(?:\s*支箭)?)/g).map((part, index) =>
+    /^\+?\d/.test(part) ? (
+      <span className="garrison-number" key={index}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
+
 export default function GeneralGarrisonPreview({ b }: { b: Building }) {
   const core = useCore(),
     trees = useTrees();
@@ -213,7 +225,7 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
                 移除
               </button>
               <p className="note garrison-row-note">
-                {known?.reason} {firing && result.rows[i]?.reason}
+                <GarrisonNote text={`${known?.reason ?? ''} ${firing ? (result.rows[i]?.reason ?? '') : ''}`} />
               </p>
             </div>
           );

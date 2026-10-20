@@ -127,6 +127,8 @@ export interface GeneralGarrisonData {
 }
 export const GENERAL_GARRISON_DATA = raw as unknown as GeneralGarrisonData;
 export const GENERAL_GARRISON_LIMIT = 32;
+// buildings.json: "Villagers and Relics provide additional projectiles".
+const FORTIFIED_CHURCH_IDS = new Set([1806]);
 export interface GeneralGarrisonResult {
   errors: string[];
   warnings: string[];
@@ -360,7 +362,7 @@ function candidate(
     canCreate,
     canDeposit,
     reason: canDeposit
-      ? '通过持有圣物的僧侣存放；此预览只计容量，不估算圣物资源收益。'
+      ? '通过持有圣物的僧侣存放；此预览不估算圣物资源收益。'
       : canEnter
         ? config.age < unitAge(ctx, id, config.civ, data)
           ? '初始单位可从外部进入；当前时代尚不能生产该单位。'
@@ -484,6 +486,18 @@ export function unitGarrisonPower(unit: GeneralGarrisonUnit, units: Record<strin
   return { power: (unit.attack * unit.firepower) / unit.reload, reason: '按穿刺攻击、攻击间隔和驻军火力系数折算。' };
 }
 
+function relicGarrisonPower(buildingId: number, building: GeneralGarrisonUnit, units: Record<string, GeneralGarrisonUnit>) {
+  if (!FORTIFIED_CHURCH_IDS.has(buildingId)) return { power: 0, reason: '圣物存放只计容量，不增加弹丸；不估算资源收益。' };
+  const villager = units[83];
+  const power = villager ? unitGarrisonPower(villager, units).power : null;
+  const maxProjectiles = building.projectile >= 0 ? Math.max(1, building.max) : Math.max(0, building.max - 1);
+  return {
+    power,
+    reason:
+      power === null ? '村民驻军贡献数据缺失或无效，暂不计算圣物弹丸贡献。' : `加固教堂中每个圣物 +1 支箭，与村民合计上限 ${maxProjectiles}；不估算资源收益。`,
+  };
+}
+
 export function calculateGeneralGarrison(
   ctx: GeneralGarrisonContext,
   b: Building,
@@ -547,7 +561,7 @@ export function calculateGeneralGarrison(
     out.usedSlots += countValue;
     const contribution =
       row.entry === 'deposit'
-        ? { power: 0, reason: '圣物存放只计容量，不增加弹丸；不估算资源收益。' }
+        ? relicGarrisonPower(b.id, B, state.units)
         : unit
           ? unitGarrisonPower(unit, state.units)
           : { power: null, reason: '单位数据缺失。' };

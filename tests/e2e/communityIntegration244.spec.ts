@@ -69,7 +69,8 @@ test('#244 施工时间带入换算，返回时原施工方案不变', async ({ 
   await expect(page.getByTestId('game-clock-page')).toBeVisible();
   expect(Number(query(page).get('duration'))).toBeCloseTo(seconds, 2);
   expect(query(page).get('direction')).toBe('game-to-real');
-  expect(query(page).get('ratio')).toBe('1');
+  expect(query(page).get('ratio')).toBe('1.7');
+  await expect(page.getByRole('textbox', { name: '速度倍率', exact: true })).toHaveValue('1.7');
   await page.getByRole('textbox', { name: '速度倍率', exact: true }).fill('1.7');
   await page.goBack();
   await expect(time).toHaveText(before);
