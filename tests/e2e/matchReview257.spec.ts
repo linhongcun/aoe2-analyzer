@@ -29,6 +29,91 @@ async function restore(page: Page, draft: MatchReviewDraft) {
   await expect(page.getByTestId('review-import-preview')).toBeVisible();
   await page.getByRole('button', { name: '使用此备份替换本页草稿', exact: true }).click();
 }
+for (const width of [360, 375, 390, 1280]) {
+  test('#292 清空需确认，取消和 Esc 保留草稿，清空后可撤销 ' + width, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await visit(page);
+    await field(page, '复盘标题').fill('需要保留的复盘');
+    await field(page, '地图').fill('自记地图');
+    await page.getByRole('button', { name: '添加关键事件', exact: true }).click();
+    await field(page, '事件 1：当时可见事实').fill('清空前记录的事实');
+    await field(page, '目标：想做的动作').fill('下局练习动作');
+    await page.getByRole('button', { name: '添加跟进尝试', exact: true }).click();
+    await field(page, '尝试 1：观察').fill('跟进记录');
+    await page.getByRole('checkbox', { name: '包含对局上下文', exact: true }).uncheck();
+    const original = await getBackup(page);
+    const stored = await page.evaluate((name) => localStorage.getItem(name), key);
+    const clear = page.getByRole('button', { name: '清空本页内容', exact: true });
+    const dialog = page.getByRole('dialog', { name: '确认清空本页内容？', exact: true });
+    const cancel = dialog.getByRole('button', { name: '取消', exact: true });
+    const confirm = dialog.getByRole('button', { name: '确认清空', exact: true });
+    const undo = page.getByRole('button', { name: '撤销', exact: true });
+    const noOverflow = async () => expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+    await clear.click();
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveAccessibleDescription(/将清除本页内容及本机保存的复盘草稿/);
+    await expect(cancel).toBeFocused();
+    for (const button of [cancel, confirm]) {
+      const box = await button.boundingBox();
+      expect(box?.height).toBeGreaterThanOrEqual(44);
+      expect(box?.width).toBeGreaterThanOrEqual(44);
+    }
+    await noOverflow();
+    await cancel.click();
+    await expect(dialog).not.toBeVisible();
+    await expect(clear).toBeFocused();
+    expect(await getBackup(page)).toEqual(original);
+    expect(await page.evaluate((name) => localStorage.getItem(name), key)).toBe(stored);
+
+    await clear.press('Enter');
+    await expect(cancel).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(dialog).not.toBeVisible();
+    await expect(clear).toBeFocused();
+    expect(await getBackup(page)).toEqual(original);
+    expect(await page.evaluate((name) => localStorage.getItem(name), key)).toBe(stored);
+
+    await clear.press('Enter');
+    await page.keyboard.press('Tab');
+    await expect(confirm).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(dialog).not.toBeVisible();
+    await expect(clear).toBeFocused();
+    await expect(field(page, '复盘标题')).toHaveValue('');
+    await expect(field(page, '地图')).toHaveValue('');
+    await expect(field(page, '目标：想做的动作')).toHaveValue('');
+    await expect(page.getByTestId('review-event')).toHaveCount(0);
+    await expect(page.getByTestId('review-attempt')).toHaveCount(0);
+    await expect(page.getByRole('status').first()).toContainText('已清空');
+    const cleared = await getBackup(page);
+    expect(JSON.parse((await page.evaluate((name) => localStorage.getItem(name), key))!)).toEqual(cleared);
+    const undoBox = await undo.boundingBox();
+    expect(undoBox?.height).toBeGreaterThanOrEqual(44);
+    expect(undoBox?.width).toBeGreaterThanOrEqual(44);
+    await noOverflow();
+
+    await undo.click();
+    await expect(field(page, '复盘标题')).toHaveValue('需要保留的复盘');
+    await expect(field(page, '事件 1：当时可见事实')).toHaveValue('清空前记录的事实');
+    expect(await getBackup(page)).toEqual(original);
+    expect(await page.evaluate((name) => localStorage.getItem(name), key)).toBe(stored);
+    await expect(undo).toHaveCount(0);
+    expect(
+      await page
+        .locator('.match-review-page .mr-number, .match-review-page .num')
+        .evaluateAll((elements) => elements.every((element) => element.getClientRects().length <= 1)),
+    ).toBe(true);
+    await noOverflow();
+
+    await clear.click();
+    await confirm.click();
+    await expect(undo).toBeVisible();
+    await page.reload();
+    await expect(field(page, '复盘标题')).toHaveValue('');
+    await expect(undo).toHaveCount(0);
+  });
+}
 test('#257 空草稿、来源与可选引导，不预设已知时间或目标', async ({ page }) => {
   await visit(page);
   await expect(page.getByTestId('match-review-page')).toBeVisible();

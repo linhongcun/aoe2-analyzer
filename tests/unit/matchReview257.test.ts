@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { matchReviewDraftReducer } from '../../src/features/matchReview/matchReviewDraftState';
 import {
   MATCH_REVIEW_LIMITS,
   MATCH_REVIEW_STORAGE_KEY,
@@ -48,6 +49,41 @@ function roundTrip(draft: MatchReviewDraft, pretty = false): MatchReviewDraft {
 }
 
 const face = String.fromCodePoint(0x1f642);
+
+describe('#292 clear and undo draft', () => {
+  it('clears only on confirmation and restores the complete draft, including output choices', () => {
+    const draft = withRows();
+    draft.output.context = false;
+    draft.context.link = '尚未修正的链接';
+    const original = structuredClone(draft);
+    const state = { draft, beforeClear: null };
+
+    const cleared = matchReviewDraftReducer(state, { type: 'clear' });
+    expect(cleared.draft).toEqual(emptyMatchReview());
+    expect(cleared.beforeClear).toEqual(original);
+    expect(state.draft).toEqual(original);
+
+    const restored = matchReviewDraftReducer(cleared, { type: 'undo' });
+    expect(restored.draft).toEqual(original);
+    expect(restored.beforeClear).toBeNull();
+    expect(roundTrip(restored.draft)).toEqual(original);
+  });
+
+  it('retains only the latest cleared draft, without changing its snapshot during later edits', () => {
+    const first = matchReviewDraftReducer({ draft: withRows(), beforeClear: null }, { type: 'clear' });
+    const next = emptyMatchReview();
+    next.context.title = '第二份草稿';
+    const edited = matchReviewDraftReducer(first, { type: 'edit', draft: next });
+    expect(edited.beforeClear).toEqual(withRows());
+    const second = matchReviewDraftReducer(edited, { type: 'clear' });
+    expect(matchReviewDraftReducer(second, { type: 'undo' }).draft).toEqual(next);
+  });
+
+  it('does nothing when there is no in-memory snapshot to undo', () => {
+    const state = { draft: withRows(), beforeClear: null };
+    expect(matchReviewDraftReducer(state, { type: 'undo' })).toBe(state);
+  });
+});
 
 function markedText(length: number, marker: string, multiline: boolean): string {
   const pattern = multiline ? ['汉', face, '\n', '\t'] : ['汉', face];
