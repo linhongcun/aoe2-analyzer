@@ -37,6 +37,12 @@ const GameClock = lazy(() => import('../features/gameClock/GameClock'));
 const Hotkeys = lazy(() => import('../features/hotkeys/Hotkeys'));
 const CastleDefense = lazy(() => import('../features/castleDefense/CastleDefense'));
 
+const ContentGuide = lazy(() => import('../features/contentGuide/ContentGuide'));
+const MixedArmy = lazy(() => import('../features/mixedArmy/MixedArmy'));
+const TeamPlan = lazy(() => import('../features/teamPlan/TeamPlan'));
+const Campaigns = lazy(() => import('../features/campaigns/Campaigns'));
+const RelicIncome = lazy(() => import('../features/relicIncome/RelicIncome'));
+
 /** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list→#civs */
 export function AppRoutes() {
   return (
@@ -69,6 +75,11 @@ export function AppRoutes() {
       <Route path="/game-clock" element={<GameClock />} />
       <Route path="/hotkeys" element={<Hotkeys />} />
       <Route path="/castle-defense" element={<CastleDefense />} />
+      <Route path="/content-guide" element={<ContentGuide />} />
+      <Route path="/mixed-army" element={<MixedArmy />} />
+      <Route path="/team-plan" element={<TeamPlan />} />
+      <Route path="/campaigns" element={<Campaigns />} />
+      <Route path="/relic-income" element={<RelicIncome />} />
       <Route path="/glossary" element={<Glossary />} />
       <Route path="/glossary/:id" element={<Glossary />} />
       <Route path="/patches" element={<Patches />} />

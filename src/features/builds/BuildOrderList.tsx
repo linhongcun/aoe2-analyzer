@@ -52,6 +52,14 @@ export default function BuildOrderList() {
   return (
     <section className="pane" id="builds">
       <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
+      <nav className="bar" aria-label="单人与内容入门">
+        <Link className="community-tool-entry" to="/campaigns">
+          先从教程与战役认识游戏
+        </Link>
+        <Link className="community-tool-entry" to="/content-guide">
+          查看本体包含和可选内容
+        </Link>
+      </nav>
       <p className="note">
         看不懂 FC、drush 等用语？<Link to="/glossary">查看术语与缩写</Link>
       </p>

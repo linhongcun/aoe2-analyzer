@@ -79,6 +79,13 @@ export default function Home() {
             </Link>
           ))}
         </nav>
+        <nav className="bar home-planning-links" aria-label="社区新工具">
+          {SECONDARY_TOOLS.filter((s) => ['content-guide', 'mixed-army', 'team-plan', 'campaigns', 'relic-income'].includes(s.key)).map((s) => (
+            <Link key={s.key} className="btn community-tool-entry" to={s.path}>
+              {s.label}
+            </Link>
+          ))}
+        </nav>
         <nav className="bar home-planning-links" aria-label="更多规划工具">
           {SECONDARY_TOOLS.filter((s) => ['trade-income', 'construction', 'team-bonuses', 'garrison-healing'].includes(s.key)).map((s) => (
             <Link key={s.key} className="btn community-tool-entry" to={s.path}>

@@ -127,6 +127,17 @@ function ProductionBody({
           <span className="note">修正当前生产配置后可带入商路供给。</span>
         )}
       </p>
+      <nav className="bar" aria-label="生产与战术规划">
+        <Link className="community-tool-entry" to="/mixed-army">
+          结合当前局面查看混兵条件
+        </Link>
+        <Link className="community-tool-entry" to="/team-plan">
+          在团战计划中约定主副兵种
+        </Link>
+        <Link className="community-tool-entry" to="/relic-income">
+          另查固定圣物收入
+        </Link>
+      </nav>
       {linkErrors.length > 0 && <p className="note">请先修正链接错误，再复制方案。</p>}
       {shareStatus && (
         <p className="note" role="status">

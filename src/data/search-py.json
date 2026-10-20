@@ -135,6 +135,10 @@
     "py": "yangyuchangfeiyongqietigongdeshiwu",
     "pyi": "yycfyqtgdsw"
   },
+  "内容与购买": {
+    "py": "neirongyugoumai",
+    "pyi": "nrygm"
+  },
   "军事单位在黑暗/封建/城堡/帝王时代的食物费用 -15/20/25/30%": {
     "py": "junshidanweizaiheianfengjianchengbaodiwangshidaideshiwufeiyong",
     "pyi": "jsdwzhafjcbdwsddswfy"
@@ -267,6 +271,10 @@
     "py": "penhuochuanhedeluomengzhanjiandegongjisudu",
     "pyi": "phchdlmzjdgjsd"
   },
+  "团战分工": {
+    "py": "tuanzhanfengong",
+    "pyi": "tzfg"
+  },
   "圣物不仅能产生黄金，还能产生食物": {
     "py": "shengwubujinnengchanshenghuangjinhainengchanshengshiwu",
     "pyi": "swbjncshjhncssw"
@@ -274,6 +282,10 @@
   "圣物产生的黄金 +33%": {
     "py": "shengwuchanshengdehuangjin",
     "pyi": "swcsdhj"
+  },
+  "圣物收益": {
+    "py": "shengwushouyi",
+    "pyi": "swsy"
   },
   "在城堡时代可使用化学和火枪手": {
     "py": "zaichengbaoshidaikeshiyonghuaxuehehuoqiangshou",
@@ -498,6 +510,10 @@
   "快捷键速查": {
     "py": "kuaijiejiansucha",
     "pyi": "kjjsc"
+  },
+  "战役入门": {
+    "py": "zhanyirumen",
+    "pyi": "zyrm"
   },
   "战船在封建/城堡/帝王时代的费用 -10/15/20%": {
     "py": "zhanchuanzaifengjianchengbaodiwangshidaidefeiyong",
@@ -770,6 +786,10 @@
   "民兵系升级免费": {
     "py": "minbingxishengjimianfei",
     "pyi": "mbxsjmf"
+  },
+  "混兵情境": {
+    "py": "hunbingqingjing",
+    "pyi": "hbqj"
   },
   "渔夫和捕鱼船的携带资源量 +15": {
     "py": "yufuhebuyuchuandexiedaiziyuanliang",
