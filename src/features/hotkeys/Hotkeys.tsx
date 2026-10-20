@@ -7,7 +7,6 @@ import {
   findHotkeys,
   hotkeyBindingError,
   hotkeyCheckedAt,
-  hotkeyEvidenceNames,
   hotkeyMenuNote,
   hotkeyProfileNames,
   hotkeys,
@@ -91,10 +90,8 @@ export default function Hotkeys() {
   return (
     <section className="pane hotkeys-page" aria-labelledby="hk-title" data-testid="hotkeys-page">
       <header className="hk-screen">
-        <p className="note">找到游戏操作，记下自己的按键</p>
         <h1 id="hk-title">游戏快捷键速查</h1>
-        <p>例如搜索“闲置村民”，区分逐个跳转与选择全部，再填写你在游戏中使用的按键。</p>
-        <p className="hk-boundary">填写的按键只用于本站速查，不会应用到游戏，也不会执行游戏指令。</p>
+        <p className="note hk-scope">{hotkeyMenuNote}</p>
       </header>
 
       <div className="hk-screen hk-search">
@@ -109,10 +106,9 @@ export default function Hotkeys() {
         />
         <div className="hk-count">
           <p className="note" role="status">
-            <span className="hk-number">
-              {actions.length} / {hotkeys.length}
-            </span>{' '}
-            个操作
+            <span className="num hk-number">
+              {actions.length} / {hotkeys.length} 个操作
+            </span>
           </p>
           {query && (
             <button type="button" onClick={() => setQuery('')}>
@@ -139,7 +135,7 @@ export default function Hotkeys() {
           ))}
         </div>
         <p className="note">
-          两份表独立保存；同一按键可在不同操作上下文重复使用。每项最多 <span className="hk-number">{HOTKEY_BINDING_LIMIT} 个字符</span>。
+          两份表独立保存，每项最多 <span className="num hk-number">{HOTKEY_BINDING_LIMIT} 个字符</span>；打印包含当前表的全部操作。
         </p>
         <div className="hk-buttons">
           <button type="button" onClick={clearCurrent}>
@@ -150,7 +146,6 @@ export default function Hotkeys() {
             打印完整{hotkeyProfileNames[profile]}
           </button>
         </div>
-        <p className="note">打印包含当前表的全部操作，不受搜索结果限制；空白项标为未填写。</p>
         {warning && (
           <p className="hk-warning" role="alert">
             {warning}
@@ -177,37 +172,14 @@ export default function Hotkeys() {
                 <p className="hk-en" lang="en">
                   {action.en}
                 </p>
-                <p className="note">英文检索参考，固定版精确菜单名未核实。</p>
-                <p>{action.context}</p>
-                <p>{action.meaning}</p>
-                <p className="note">{hotkeyEvidenceNames[action.status]}</p>
-                <details className="hk-action-source">
-                  <summary>此操作的来源状态</summary>
-                  <p>{hotkeyEvidenceNames[action.status]}</p>
-                  <p className="note">
-                    英文字符串编号参考：<span className="hk-number">{action.stringId}</span>。固定版菜单分组未核实。
-                  </p>
-                  <ul>
-                    {action.sourceIds.map((id) => {
-                      const source = hotkeySources.find((item) => item.id === id)!;
-                      return (
-                        <li key={id}>
-                          <a href={source.url} target="_blank" rel="noopener noreferrer">
-                            {source.title}
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </details>
+              </div>
+              <div className="hk-default">
+                <span>默认键</span>
+                <kbd>{action.defaultBinding}</kbd>
+                {action.bindingContext && <span className="note">（{action.bindingContext}）</span>}
               </div>
               <div className="hk-personal">
-                <div className="hk-default">
-                  <span>默认参考</span>
-                  <strong>未核实</strong>
-                  <p className="note">未填入固定版默认键位。</p>
-                </div>
-                <label htmlFor={`hk-binding-${action.id}`}>我的按键：{action.zh}</label>
+                <label htmlFor={`hk-binding-${action.id}`}>我的按键</label>
                 <input
                   id={`hk-binding-${action.id}`}
                   type="text"
@@ -215,22 +187,35 @@ export default function Hotkeys() {
                   maxLength={HOTKEY_BINDING_LIMIT + 1}
                   autoComplete="off"
                   spellCheck={false}
+                  placeholder="未填写"
+                  aria-label={`我的按键：${action.zh}`}
                   aria-invalid={!!error}
-                  aria-describedby={`hk-help-${action.id}${error ? ` hk-error-${action.id}` : ''}`}
+                  aria-describedby={error ? `hk-error-${action.id}` : undefined}
                   onChange={(event) => changeBinding(action.id, event.target.value)}
                 />
-                <p className="note" id={`hk-help-${action.id}`}>
-                  个人填写 · {hotkeyProfileNames[profile]}。未填写表示尚未记录。
-                </p>
                 {error && (
                   <p className="hk-error" role="alert" id={`hk-error-${action.id}`}>
                     {error}
                   </p>
                 )}
-                <p className="hk-value" aria-label="完整按键说明">
-                  {value || '未填写'}
-                </p>
               </div>
+              <details className="hk-action-source">
+                <summary>来源与说明</summary>
+                <p>{action.context}</p>
+                <p>{action.meaning}</p>
+                <ul>
+                  {action.sourceIds.map((id) => {
+                    const source = hotkeySources.find((item) => item.id === id)!;
+                    return (
+                      <li key={id}>
+                        <a href={source.url} target="_blank" rel="noopener noreferrer">
+                          {source.title}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </details>
             </article>
           );
         })}
@@ -243,18 +228,10 @@ export default function Hotkeys() {
       </div>
 
       <section className="hk-screen hk-audit" aria-label="来源与核实范围">
-        <h2>来源与核实范围</h2>
-        <p>功能说明逐项标注来源。默认键位与固定版菜单分组均未核实，请在游戏中确认后填写个人表。</p>
-        <p className="note">英文名称用于辨认操作，不是固定版菜单的逐字转录。</p>
         <details>
           <summary>查看来源与核对说明</summary>
-          <p>
-            功能说明与默认键位分别核对。本站固定数据版本为 <span className="hk-number">DE 185872</span>
-            ，本目录尚未取得该版完整原始快捷键配置；所有默认参考均留空，标为未核实。
-          </p>
-          <p>{hotkeyMenuNote}</p>
           <p className="note">
-            {hotkeyCheckedAt} 已打开核对以下内容。官方网页可支持基础功能说明；第三方快照没有声明客户端版本，不能证明固定版精确名称或默认键位。
+            核对日期：<span className="num hk-number">{hotkeyCheckedAt}</span>。默认键来源为官方教学与 KeyCombiner；官方补丁仅作快捷键相关改动参考。
           </p>
           <ul>
             {hotkeySources.map((source) => (
@@ -272,9 +249,10 @@ export default function Hotkeys() {
       <section className="hk-print" aria-label="打印完整个人表">
         <h1>游戏快捷键速查 · {hotkeyProfileNames[profile]}</h1>
         <p>
-          此表包含全部 <span className="hk-number">{hotkeys.length} 个操作</span>，与屏幕搜索无关。个人值仅为手填记录，未应用到游戏。
+          此表包含全部 <span className="hk-number">{hotkeys.length} 个操作</span>，不受屏幕搜索限制。
         </p>
-        <p>所有默认键位、固定版精确菜单名与子组位置未核实。功能说明有官方教学、官方补丁或参考快照三类来源；核对日期 {hotkeyCheckedAt}。</p>
+        <p>{hotkeyMenuNote}</p>
+        <p>核对日期：{hotkeyCheckedAt}。官方补丁仅作快捷键相关改动参考。</p>
         {warning && <p>{warning}</p>}
         {hasInvalidDraft && <p>注意：当前表含有无效输入，标为“未保存输入”的内容尚未保存，请修正后重新打印。</p>}
         <table>
@@ -282,7 +260,7 @@ export default function Hotkeys() {
             <tr>
               <th>操作与上下文</th>
               <th>我的按键</th>
-              <th>默认参考与功能来源</th>
+              <th>默认键与来源</th>
             </tr>
           </thead>
           <tbody>
@@ -305,7 +283,11 @@ export default function Hotkeys() {
                   )}
                 </td>
                 <td>
-                  默认：未核实<p>{hotkeyEvidenceNames[action.status]}</p>
+                  <kbd>{action.defaultBinding}</kbd>
+                  {action.bindingContext && <p>（{action.bindingContext}）</p>}
+                  {action.sourceIds.map((id) => (
+                    <p key={id}>{hotkeySources.find((source) => source.id === id)!.title}</p>
+                  ))}
                 </td>
               </tr>
             ))}

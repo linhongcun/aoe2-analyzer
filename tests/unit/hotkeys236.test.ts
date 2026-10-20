@@ -13,7 +13,7 @@ import {
 } from '../../src/domain/hotkeys';
 
 describe('#236 可审计动作目录与个人表', () => {
-  it('支持中英文、别名、组合词和空查询，来源不伪造默认按键', () => {
+  it('支持中英文、别名、组合词和空查询', () => {
     expect(hotkeys).toHaveLength(20);
     expect(findHotkeys('训练村民').map((a) => a.id)).toEqual(findHotkeys('Train Villager').map((a) => a.id));
     expect(findHotkeys('Ｓｅｌｅｃｔ   Town Centers').map((a) => a.id)).toEqual(['select-town-centers']);
@@ -22,11 +22,43 @@ describe('#236 可审计动作目录与个人表', () => {
     expect(findHotkeys('missing-operation')).toEqual([]);
     expect(new Set(hotkeys.map((a) => a.id)).size).toBe(hotkeys.length);
     for (const action of hotkeys) {
-      expect(action.defaultBinding).toBeNull();
       expect(action.sourceIds.length).toBeGreaterThan(0);
       expect(action.sourceIds.every((id) => hotkeySources.some((s) => s.id === id))).toBe(true);
-      expect(action.meaning.length).toBeGreaterThan(15);
+      expect(action.meaning.length).toBeGreaterThan(0);
     }
+  });
+
+  it('#267 20 项网格默认键逐项绑定公开来源，移除内部快照与字符串编号', () => {
+    const expected = [
+      ['go-town-center', 'H', 'official-hotkeys'],
+      ['select-town-centers', 'Ctrl+Shift+H', 'keycombiner'],
+      ['go-idle-villager', '.', 'official-hotkeys'],
+      ['select-idle-villagers', 'Shift+.', 'keycombiner'],
+      ['select-military', 'Shift+,', 'keycombiner'],
+      ['select-idle-military', 'Ctrl+,', 'keycombiner'],
+      ['go-selected', 'Space', 'keycombiner'],
+      ['train-villager', 'Q', 'official-hotkeys'],
+      ['economic-menu', 'Q', 'official-hotkeys'],
+      ['military-menu', 'W', 'keycombiner'],
+      ['build-house', 'Q', 'official-hotkeys'],
+      ['build-farm', 'A', 'official-hotkeys'],
+      ['repair', 'E', 'keycombiner'],
+      ['garrison', 'T', 'keycombiner'],
+      ['stop', 'G', 'keycombiner'],
+      ['attack-move', 'R', 'keycombiner'],
+      ['patrol', 'Q', 'keycombiner'],
+      ['gather-point', 'T', 'keycombiner'],
+      ['create-group-1', 'Ctrl+1', 'official-hotkeys'],
+      ['select-group-1', '1', 'official-hotkeys'],
+    ];
+    expect(hotkeys.map((action) => [action.id, action.defaultBinding, action.sourceIds[0]])).toEqual(expected);
+    for (const action of hotkeys) {
+      expect(action).not.toHaveProperty('stringId');
+      expect(action.sourceIds).not.toContain('english-snapshot');
+    }
+    expect(hotkeySources.find((source) => source.id === 'official-hotkeys')?.url).toBe('https://www.ageofempires.com/learn-to-play/match-goals-aoe2/');
+    expect(hotkeySources.find((source) => source.id === 'keycombiner')?.url).toBe('https://keycombiner.com/collections/age-of-empires-2-de/');
+    expect(JSON.stringify(hotkeySources)).not.toMatch(/english-snapshot|hotkey-catalog|97f0660|stringId/);
   });
 
   it('两份表隔离，跨上下文同键合法，更新不改变原值', () => {

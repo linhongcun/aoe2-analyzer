@@ -1,6 +1,5 @@
 import content from '../content/hotkeys.json';
 
-export type HotkeyEvidence = 'official-guide' | 'official-patch' | 'reference-only';
 export interface HotkeySource {
   id: string;
   title: string;
@@ -11,17 +10,16 @@ export interface HotkeyAction {
   id: string;
   zh: string;
   en: string;
-  stringId: number;
   aliases: string[];
   context: string;
   meaning: string;
-  status: HotkeyEvidence;
   sourceIds: string[];
-  defaultBinding: null;
+  defaultBinding: string;
+  bindingContext: string;
 }
 
-// 人工有来源目录；默认键位没有取得固定版配置，必须保持 null。
-export const hotkeys: readonly HotkeyAction[] = content.actions as HotkeyAction[];
+// 人工核对的 DE 网格默认配置；每项默认键对应公开来源。
+export const hotkeys: readonly HotkeyAction[] = content.actions;
 export const hotkeySources: readonly HotkeySource[] = content.sources;
 export const hotkeyMenuNote = content.menuNote;
 export const hotkeyCheckedAt = content.checkedAt;
@@ -36,11 +34,6 @@ export interface HotkeyState {
   profiles: Record<HotkeyProfile, { bindings: Record<string, string> }>;
 }
 export const hotkeyProfileNames: Record<HotkeyProfile, string> = { single: '单人表', multi: '多人表' };
-export const hotkeyEvidenceNames: Record<HotkeyEvidence, string> = {
-  'official-guide': '功能说明：官方教学',
-  'official-patch': '功能说明：官方补丁',
-  'reference-only': '功能说明：参考快照，固定版未核实',
-};
 
 export function emptyHotkeyState(): HotkeyState {
   return { version: 1, profiles: { single: { bindings: {} }, multi: { bindings: {} } } };
