@@ -1,0 +1,157 @@
+name: Correct v0.24.0 release notes
+on:
+  push:
+    branches: [automation/release-notes-v0.24.0]
+    paths: [.github/workflows/release-notes-v0.24.0.yml]
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: release-notes-v0.24.0
+  cancel-in-progress: false
+jobs:
+  notes:
+    if: >-
+      github.event_name == 'push' &&
+      github.repository == 'linhongcun/aoe2-analyzer' &&
+      github.ref == 'refs/heads/automation/release-notes-v0.24.0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Verify immutable release identity and correct notes only
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_PROMPT_DISABLED: '1'
+        run: |
+          set -Eeuo pipefail
+          [[ "$GITHUB_EVENT_NAME" == push ]]
+          [[ "$GITHUB_REPOSITORY" == linhongcun/aoe2-analyzer ]]
+          [[ "$GITHUB_REF" == refs/heads/automation/release-notes-v0.24.0 ]]
+          task_repo='linhongcun/aoe2-analyzer'
+          task_version='v0.24.0'
+          task_main='c8c2171501dcf1a46eab32ce48c8d3308d6c9ae3'
+          task_release_head='e6f5a72e36751861ef98b1abec785772345e551c'
+          task_ci='39365854105'
+          task_tmp=$(mktemp -d "$RUNNER_TEMP/aoe2-v24-notes.XXXXXX")
+          trap 'rm -rf "$task_tmp"' EXIT
+
+          verify_heads_and_ci() {
+            gh api "repos/$task_repo/git/ref/heads/main" > "$task_tmp/main.json"
+            jq -e --arg sha "$task_main" '.ref == "refs/heads/main" and .object.type == "commit" and .object.sha == $sha' "$task_tmp/main.json" > /dev/null
+            gh api "repos/$task_repo/git/ref/heads/release/$task_version" > "$task_tmp/release-head.json"
+            jq -e --arg sha "$task_release_head" --arg ref "refs/heads/release/$task_version" '.ref == $ref and .object.type == "commit" and .object.sha == $sha' "$task_tmp/release-head.json" > /dev/null
+            gh api "repos/$task_repo/actions/runs/$task_ci" > "$task_tmp/ci.json"
+            jq -e --arg sha "$task_main" --arg repo "$task_repo" --argjson run "$task_ci" '
+              .id == $run and .repository.full_name == $repo and
+              .event == "push" and .head_branch == "main" and .head_sha == $sha and
+              .path == ".github/workflows/ci.yml" and
+              .status == "completed" and .conclusion == "success"
+            ' "$task_tmp/ci.json" > /dev/null
+            gh api --paginate --slurp "repos/$task_repo/actions/runs/$task_ci/jobs?filter=latest&per_page=100" > "$task_tmp/jobs.json"
+            jq -e '
+              [.[].jobs[]] as $jobs |
+              all(["test", "deploy"][];
+                . as $name | [$jobs[] | select(.name == $name)] as $matches |
+                ($matches | length) == 1 and
+                $matches[0].status == "completed" and $matches[0].conclusion == "success")
+            ' "$task_tmp/jobs.json" > /dev/null
+          }
+
+          verify_annotated_tag() {
+            gh api "repos/$task_repo/git/ref/tags/$task_version" > "$task_tmp/tag-ref.json"
+            jq -e --arg ref "refs/tags/$task_version" '.ref == $ref and .object.type == "tag" and (.object.sha | test("^[0-9a-f]{40}$"))' "$task_tmp/tag-ref.json" > /dev/null
+            task_tag_object=$(jq -r '.object.sha' "$task_tmp/tag-ref.json")
+            gh api "repos/$task_repo/git/tags/$task_tag_object" > "$task_tmp/tag-object.json"
+            jq -e --arg tag "$task_version" --arg object "$task_tag_object" --arg sha "$task_main" '
+              .sha == $object and .tag == $tag and .object.type == "commit" and .object.sha == $sha
+            ' "$task_tmp/tag-object.json" > /dev/null
+          }
+
+          # The native Release workflow owns draft creation, assets and publication.
+          verify_heads_and_ci
+          printf '%s\n' 'Fixed main, release branch and successful main test/deploy verified.'
+          cat > "$task_tmp/notes.md" <<'AOE2_V24_NOTES_END'
+          ### 更新说明
+
+          - 新增游戏与现实时间双向换算，可从开局跟练、施工、商路和回血结果带入原始游戏时长，按自己填写的速度倍率解释攻略时点（#237）。
+          - 新增常用游戏操作速查，支持中英文搜索、分别保存单人和多人个人按键表，并打印完整当前配置（#236）。
+          - 新增1v1竞技场城堡前置应对，按侦察、施工及资源封锁情况整理有条件的行动、代价和复查信号（#242）。
+
+          ### 适用范围
+
+          - 固定 DE Update 185872。时间换算不还原暂停、变速或卡顿；未核实的速度预设和默认按键不猜测。
+          - 按键表只保存在当前浏览器，不更改游戏设置；城堡资料不模拟地图或保证拆堡胜负，未知护军与通路仍保留为未知。
+          AOE2_V24_NOTES_END
+
+          # Bound the wait to 15 minutes, including each release lookup request.
+          task_deadline=$((SECONDS + 900))
+          while true; do
+            task_remaining=$((task_deadline - SECONDS))
+            if (( task_remaining <= 0 )); then
+              printf '%s\n' 'Timed out waiting for the existing v0.24.0 Release.' >&2
+              exit 1
+            fi
+            task_found=false
+            if timeout "${task_remaining}s" gh api --include "repos/$task_repo/releases/tags/$task_version" > "$task_tmp/release.http" 2> "$task_tmp/release.err"; then
+              task_status=$(awk 'NR == 1 { print $2; exit }' "$task_tmp/release.http")
+              [[ "$task_status" == 200 ]]
+              awk 'body { print; next } /^\r?$/ { body=1 }' "$task_tmp/release.http" > "$task_tmp/release.json"
+              task_found=true
+            else
+              task_exit=$?
+              task_status=$(awk 'NR == 1 { print $2; exit }' "$task_tmp/release.http")
+              if [[ "$task_status" != 404 ]]; then
+                cat "$task_tmp/release.err" >&2
+                printf 'Release lookup failed (exit %s, HTTP %s).\n' "$task_exit" "${task_status:-unknown}" >&2
+                exit 1
+              fi
+              # Drafts are not always resolved by the tag endpoint. Authenticated collection
+              # lookup also sees drafts; require exactly one release with this tag.
+              task_remaining=$((task_deadline - SECONDS))
+              if (( task_remaining <= 0 )); then
+                printf '%s\n' 'Timed out waiting for the existing v0.24.0 Release.' >&2
+                exit 1
+              fi
+              timeout "${task_remaining}s" gh api --paginate --slurp "repos/$task_repo/releases?per_page=100" > "$task_tmp/release-pages.json"
+              jq -e 'type == "array" and all(.[]; type == "array")' "$task_tmp/release-pages.json" > /dev/null
+              jq --arg tag "$task_version" '[.[][] | select(.tag_name == $tag)]' "$task_tmp/release-pages.json" > "$task_tmp/matches.json"
+              task_count=$(jq 'length' "$task_tmp/matches.json")
+              if [[ "$task_count" == 1 ]]; then
+                jq '.[0]' "$task_tmp/matches.json" > "$task_tmp/release.json"
+                task_found=true
+              elif [[ "$task_count" != 0 ]]; then
+                printf '%s\n' 'Multiple releases with the target tag; refusing to edit.' >&2
+                exit 1
+              fi
+            fi
+            if [[ "$task_found" == true ]]; then
+              break
+            fi
+            task_remaining=$((task_deadline - SECONDS))
+            if (( task_remaining <= 0 )); then
+              printf '%s\n' 'Timed out waiting for the existing v0.24.0 Release.' >&2
+              exit 1
+            fi
+            task_sleep=5
+            if (( task_remaining < task_sleep )); then task_sleep=$task_remaining; fi
+            sleep "$task_sleep"
+          done
+
+          jq -e --arg tag "$task_version" '
+            .tag_name == $tag and (.id | type) == "number" and
+            (.id | floor) == .id and .id > 0 and (.draft | type) == "boolean"
+          ' "$task_tmp/release.json" > /dev/null
+          task_release_id=$(jq -r '.id' "$task_tmp/release.json")
+          task_before_draft=$(jq -r '.draft' "$task_tmp/release.json")
+          # Repeat preconditions after the wait, immediately before the only mutation.
+          verify_heads_and_ci
+          verify_annotated_tag
+          # No --draft / --latest flags: edit only the notes on the existing Release.
+          gh release edit "$task_version" --repo "$task_repo" --notes-file "$task_tmp/notes.md"
+          gh api "repos/$task_repo/releases/$task_release_id" > "$task_tmp/after.json"
+          jq -e --arg tag "$task_version" --argjson id "$task_release_id" --rawfile notes "$task_tmp/notes.md" '
+            .id == $id and .tag_name == $tag and .body == $notes and (.draft | type) == "boolean"
+          ' "$task_tmp/after.json" > /dev/null
+          task_after_draft=$(jq -r '.draft' "$task_tmp/after.json")
+          printf 'Corrected notes for release %s (%s); draft before=%s, observed after=%s. No publication requested.\n' "$task_release_id" "$task_version" "$task_before_draft" "$task_after_draft"
