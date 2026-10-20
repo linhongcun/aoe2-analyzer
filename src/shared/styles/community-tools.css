@@ -16,7 +16,3 @@
 .community-tool-entry:hover {
   background: var(--color-link-soft);
 }
-.home-planning-links {
-  grid-column: 1 / -1;
-  margin: 0;
-}

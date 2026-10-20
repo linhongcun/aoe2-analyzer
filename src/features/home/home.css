@@ -1,0 +1,13 @@
+.home-group-desc {
+  margin: 0 0 var(--space-4);
+}
+.home-group .hsec {
+  margin-bottom: var(--space-2);
+}
+.home-group .hc-en {
+  overflow-wrap: anywhere;
+}
+#home .num {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}

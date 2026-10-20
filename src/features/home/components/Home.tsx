@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import { civs } from '../../../data';
-import { SECONDARY_TOOLS, TOOLS, WIKI, type Section } from '../../../app/nav/sections';
+import { HOME_GROUPS, type Section } from '../../../app/nav/sections';
 import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { DLCS } from '../../../domain/dlc';
+import '../home.css';
 
 const COUNTS: Record<string, number> = {
   ...__CATALOG_COUNTS__,
@@ -12,20 +13,30 @@ const COUNTS: Record<string, number> = {
   bonuses: civs.reduce((n, c) => n + c.bon.length + 1, 0),
   dlc: DLCS.length,
 };
-const Card = ({ s, tool = false }: { s: Section; tool?: boolean }) => (
+const Card = ({ s }: { s: Section }) => (
   <Link className="hcard" to={s.path} data-k={s.key}>
     <Icon name={s.icon} className="ic hc-ic" />
     {COUNTS[s.key] != null && (
-      <span className="hc-count" aria-hidden="true">
+      <span className="hc-count num" aria-hidden="true">
         {COUNTS[s.key]}
       </span>
     )}
     <div className="hc-body">
       <h3>{s.label}</h3>
       <small className="hc-en">{s.en}</small>
-      <p className="note">{s.desc}</p>
+      <p className="note">
+        {s.desc.split(/(\d+(?:\s*(?:个(?:文明|单位|历史首发时期)?|种建筑|项科技))?)/g).map((part, i) =>
+          /^\d/.test(part) ? (
+            <span className="num" key={i}>
+              {part}
+            </span>
+          ) : (
+            part
+          ),
+        )}
+      </p>
     </div>
-    {tool && (
+    {(s.group === 'planning' || s.group === 'economy') && (
       <span className="hc-open">
         打开 <Icon name="arrow-right" />
       </span>
@@ -57,50 +68,23 @@ export default function Home() {
               </Link>
             ))}
           <Link className="ulink" to="/civs">
-            全部 {civs.length} 个文明 <Icon name="arrow-right" />
+            全部 <span className="num">{civs.length} 个文明</span> <Icon name="arrow-right" />
           </Link>
         </div>
       </div>
-      <h2 className="hsec">百科</h2>
-      <div className="hgrid">
-        {WIKI.map((s) => (
-          <Card key={s.key} s={s} />
-        ))}
-      </div>
-      <h2 className="hsec">工具</h2>
-      <div className="hgrid home-tools-grid">
-        {TOOLS.map((s) => (
-          <Card key={s.key} s={s} tool />
-        ))}
-        <nav className="bar home-planning-links" aria-label="学习与复盘">
-          {SECONDARY_TOOLS.filter((s) => ['game-guide', 'match-review', 'scouting'].includes(s.key)).map((s) => (
-            <Link key={s.key} className="btn community-tool-entry" to={s.path}>
-              {s.label}
-            </Link>
-          ))}
-        </nav>
-        <nav className="bar home-planning-links" aria-label="入门与实战">
-          {SECONDARY_TOOLS.filter((s) => ['game-clock', 'hotkeys', 'castle-defense'].includes(s.key)).map((s) => (
-            <Link key={s.key} className="btn community-tool-entry" to={s.path}>
-              {s.label}
-            </Link>
-          ))}
-        </nav>
-        <nav className="bar home-planning-links" aria-label="社区新工具">
-          {SECONDARY_TOOLS.filter((s) => ['content-guide', 'mixed-army', 'team-plan', 'campaigns', 'relic-income'].includes(s.key)).map((s) => (
-            <Link key={s.key} className="btn community-tool-entry" to={s.path}>
-              {s.label}
-            </Link>
-          ))}
-        </nav>
-        <nav className="bar home-planning-links" aria-label="更多规划工具">
-          {SECONDARY_TOOLS.filter((s) => ['trade-income', 'construction', 'team-bonuses', 'garrison-healing'].includes(s.key)).map((s) => (
-            <Link key={s.key} className="btn community-tool-entry" to={s.path}>
-              {s.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
+      {HOME_GROUPS.map((group) => (
+        <section key={group.key} className="home-group" aria-labelledby={`home-${group.key}`}>
+          <h2 className="hsec" id={`home-${group.key}`}>
+            {group.title}
+          </h2>
+          <p className="note home-group-desc">{group.desc}</p>
+          <div className="hgrid">
+            {group.sections.map((s) => (
+              <Card key={s.key} s={s} />
+            ))}
+          </div>
+        </section>
+      ))}
     </section>
   );
 }

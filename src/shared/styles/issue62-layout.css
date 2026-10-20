@@ -37,11 +37,6 @@
 .tl-settings-economy {
   display: contents;
 }
-@media (min-width: 1051px) {
-  .home-tools-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-}
 @media (min-width: 601px) {
   .tl-inline-settings {
     display: contents;
@@ -58,9 +53,6 @@
   }
 }
 @media (max-width: 600px) {
-  .home-tools-grid .hcard:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-  }
   .catalog-filters {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
