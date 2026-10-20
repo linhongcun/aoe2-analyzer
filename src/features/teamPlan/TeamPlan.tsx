@@ -129,7 +129,7 @@ export default function TeamPlanPage() {
         {!!manualLink && (
           <label className="tp-field">
             手动复制计划链接
-            <textarea readOnly value={manualLink} onFocus={(e) => e.target.select()} rows={4} />
+            <textarea aria-label="手动复制计划链接" readOnly value={manualLink} onFocus={(e) => e.target.select()} rows={4} />
           </label>
         )}
         {!plan ? (
@@ -138,7 +138,7 @@ export default function TeamPlanPage() {
             <p>{decoded.errors.join(' ')}</p>
             <label className="tp-field">
               原始计划参数
-              <textarea readOnly value={location.search} onFocus={(e) => e.target.select()} rows={4} />
+              <textarea aria-label="原始计划参数" readOnly value={location.search} onFocus={(e) => e.target.select()} rows={4} />
             </label>
             <button className="btn" onClick={() => update(defaultTeamPlan())}>
               重置计划
