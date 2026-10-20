@@ -88,10 +88,12 @@ header.topbar.editorial-topbar .tools-panel[hidden] {
 header.topbar.editorial-topbar .tools-group {
   min-width: 0;
 }
-header.topbar.editorial-topbar .tools-group h2 {
+header.topbar.editorial-topbar .tools-group .tools-group-title {
   margin: 0 0 6px;
   padding-inline: 12px;
+  color: var(--color-text);
   font-size: var(--fs-body);
+  font-weight: 600;
 }
 header.topbar.editorial-topbar .tools-group p {
   margin: 0 0 8px;

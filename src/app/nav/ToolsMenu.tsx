@@ -83,7 +83,9 @@ export function ToolsMenu({ path }: { path: string }) {
       >
         {TOOL_GROUPS.map((group) => (
           <section key={group.key} className="tools-group" aria-labelledby={`tools-${group.key}`}>
-            <h2 id={`tools-${group.key}`}>{group.title}</h2>
+            <p className="tools-group-title" id={`tools-${group.key}`}>
+              {group.title}
+            </p>
             <p>{group.desc}</p>
             {group.sections.map((s) => (
               <NavItem key={s.key} s={s} path={path} />

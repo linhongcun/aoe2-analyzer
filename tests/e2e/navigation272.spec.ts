@@ -36,7 +36,8 @@ for (const width of [360, 375, 390, 1280])
       const tools = page.getByRole('button', { name: '工具', exact: true });
       await tools.click();
       const panel = page.locator('#tools-menu');
-      await expect(panel.getByRole('heading', { level: 2 })).toHaveText(groups);
+      // 菜单分组名不用标题元素，避免页头的隐藏面板打乱页面标题层级。
+      await expect(panel.locator('.tools-group-title')).toHaveText(groups);
       // 首页所有模块卡片都在桌面菜单和手机抽屉中有对应入口。
       const paths = await home.locator('a.hcard').evaluateAll((links) => links.map((link) => link.getAttribute('href')).sort());
       expect(await panel.getByRole('link').evaluateAll((links) => links.map((link) => link.getAttribute('href')).sort())).toEqual(paths);
