@@ -1,0 +1,198 @@
+.content-guide-page {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  min-width: 0;
+  font-size: var(--fs-body);
+}
+.content-guide-page h1,
+.content-guide-page h2,
+.content-guide-page h3,
+.content-guide-page p {
+  margin-top: 0;
+}
+.cg-heading h1 {
+  font-size: var(--fs-h2);
+  margin-bottom: var(--space-3);
+}
+.cg-note,
+.cg-en {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  line-height: var(--lh-body);
+}
+.cg-controls,
+.cg-card,
+.cg-boundaries,
+.cg-empty,
+.cg-error {
+  min-width: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow-wrap: anywhere;
+}
+.cg-controls {
+  margin-block: var(--space-5);
+}
+.content-guide-page label {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--space-2);
+}
+.cg-search input,
+.cg-selects select,
+.content-guide-page textarea {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+  font-size: var(--fs-body);
+}
+.cg-selects {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-block: var(--space-4);
+}
+.cg-actions,
+.cg-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.content-guide-page button,
+.content-guide-page summary,
+.content-guide-page a {
+  min-height: 44px;
+  min-width: 44px;
+}
+.content-guide-page button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-body);
+}
+.content-guide-page a {
+  display: inline-flex;
+  align-items: center;
+  padding-block: var(--space-2);
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.content-guide-page :is(input, select, textarea, button, a, summary):focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+}
+.cg-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--space-4);
+}
+.cg-card h2 {
+  font-size: var(--fs-h3);
+  margin-bottom: var(--space-2);
+}
+.cg-acquisition {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-2);
+}
+.cg-prerequisite {
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+}
+.cg-content-blocks {
+  margin-block: var(--space-4);
+}
+.cg-block {
+  border-top: 1px solid var(--color-line);
+  padding-top: var(--space-3);
+  margin-top: var(--space-3);
+}
+.cg-block h3 {
+  font-size: var(--fs-body);
+  margin-bottom: var(--space-2);
+}
+.cg-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+}
+.cg-names li {
+  min-width: 0;
+}
+.cg-names li > span {
+  display: inline-block;
+  padding-block: var(--space-1);
+}
+.cg-store {
+  gap: var(--space-2);
+}
+.cg-snapshot {
+  margin-block: var(--space-2);
+}
+.cg-sources {
+  border-top: 1px solid var(--color-line);
+  padding-top: var(--space-2);
+}
+.content-guide-page summary {
+  cursor: pointer;
+  padding-block: var(--space-2);
+  box-sizing: border-box;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.cg-sources ul {
+  padding-left: var(--space-4);
+}
+.cg-sources li {
+  margin-bottom: var(--space-3);
+}
+.cg-sources li p {
+  margin-bottom: var(--space-2);
+}
+.cg-boundaries {
+  margin-top: var(--space-6);
+}
+.cg-number {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.cg-error,
+.cg-uncertain {
+  color: var(--color-bad);
+}
+.cg-error {
+  background: var(--color-bad-soft);
+  margin-block: var(--space-4);
+}
+.cg-error h2,
+.cg-empty h2 {
+  font-size: var(--fs-h3);
+}
+.cg-error label,
+.cg-manual {
+  color: var(--color-text);
+  margin-block: var(--space-4);
+}
+.content-guide-page textarea {
+  min-height: 100px;
+  resize: vertical;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 700px) {
+  .cg-grid,
+  .cg-selects {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,230 @@
+.relic-income {
+  display: grid;
+  gap: var(--space-5);
+  min-width: 0;
+  font-size: var(--fs-body);
+}
+.relic-income * {
+  box-sizing: border-box;
+}
+.relic-heading h1 {
+  margin-bottom: var(--space-3);
+}
+.relic-heading p {
+  color: var(--color-muted);
+  margin: 0;
+}
+.relic-actions,
+.relic-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.relic-income button,
+.relic-income input,
+.relic-income select,
+.relic-income textarea {
+  min-height: 44px;
+  min-width: 44px;
+  font: inherit;
+}
+.relic-income button {
+  white-space: normal;
+}
+.relic-income :is(button, input, select, textarea, summary, a):focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+}
+.relic-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+.relic-card {
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+.relic-card h2 {
+  font-size: 22px;
+  margin: 0 0 var(--space-4);
+}
+.relic-card h3 {
+  font-size: var(--fs-h3);
+  margin: var(--space-4) 0 var(--space-2);
+}
+.relic-settings {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  min-width: 0;
+}
+.relic-settings label,
+.relic-manual {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.relic-settings :is(input, select),
+.relic-manual textarea {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  background: var(--color-control);
+  padding: var(--space-2) var(--space-3);
+}
+.relic-settings :is(input, select):disabled {
+  opacity: 0.65;
+}
+.relic-span {
+  grid-column: 1 / -1;
+}
+.relic-settings .relic-check {
+  display: flex;
+  align-items: center;
+}
+.relic-check input {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  accent-color: var(--color-accent);
+}
+.relic-note {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  line-height: var(--lh-body);
+  margin: var(--space-2) 0;
+  overflow-wrap: anywhere;
+}
+.relic-resources {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.relic-resource {
+  min-width: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.relic-resource h3 {
+  margin: 0 0 var(--space-3);
+}
+.relic-income dl {
+  margin: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+.relic-income dt {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.relic-income dd {
+  margin: var(--space-1) 0 0;
+  font-weight: 600;
+}
+.relic-number {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.relic-resource dd {
+  font-size: 15px;
+}
+.relic-target {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: var(--space-3) 0;
+}
+.relic-warning,
+.relic-error {
+  background: var(--color-warn-soft);
+  color: var(--color-text);
+  border-left: 3px solid var(--color-warn);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+}
+.relic-error {
+  border-color: var(--color-bad);
+  background: var(--color-bad-soft);
+}
+.relic-error ul {
+  margin-top: 0;
+}
+.relic-details summary {
+  min-height: 44px;
+  cursor: pointer;
+  display: list-item;
+  padding: var(--space-3) 0;
+  font-weight: 600;
+}
+.relic-details > p {
+  line-height: var(--lh-body);
+}
+.relic-ledger {
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-3);
+}
+.relic-ledger li {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+  min-width: 0;
+}
+.relic-ledger p {
+  margin: var(--space-2) 0;
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+}
+.relic-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  color: var(--color-link);
+}
+.relic-provenance {
+  overflow-wrap: anywhere;
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.relic-manual textarea {
+  min-height: 96px;
+  resize: vertical;
+  overflow-wrap: anywhere;
+  font-size: var(--fs-sm);
+}
+.relic-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+}
+@media (max-width: 900px) {
+  .relic-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .relic-card {
+    padding: var(--space-4);
+  }
+  .relic-settings,
+  .relic-resources,
+  .relic-target {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .relic-income .relic-number {
+    font-size: 15px;
+  }
+}
