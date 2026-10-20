@@ -1,0 +1,262 @@
+import rawContent from '../content/scouting.json';
+
+export const SCOUTING_SCENARIOS = ['early', 'walled'] as const;
+export const SCOUTING_MAPS = ['arabia', 'arena', 'nomad', 'water', 'other', 'unknown'] as const;
+export const SCOUTING_MODES = ['one-v-one', 'team', 'other', 'unknown'] as const;
+export const SCOUTING_STAGES = ['dark', 'feudal', 'castle', 'imperial', 'unknown'] as const;
+export const SCOUTING_PLANS = ['undecided', 'press', 'hold', 'develop'] as const;
+export const SCOUTING_STATES = ['unknown', 'unseen', 'seen', 'absent'] as const;
+export const SCOUTING_AREAS = ['unknown', 'enemy-front', 'enemy-edge', 'own-approach'] as const;
+export const SCOUTING_OBSERVATIONS = ['military-building', 'field-army', 'army-departure', 'new-town-center', 'forward-production', 'forward-move'] as const;
+export type ScoutingScenarioId = (typeof SCOUTING_SCENARIOS)[number];
+export type ScoutingObservationId = (typeof SCOUTING_OBSERVATIONS)[number];
+export type ScoutingObservationState = (typeof SCOUTING_STATES)[number];
+export type ScoutingArea = (typeof SCOUTING_AREAS)[number];
+export interface ScoutingObservation {
+  state: ScoutingObservationState;
+  at: string;
+  area: ScoutingArea;
+  stale: boolean;
+}
+export interface ScoutingConfig {
+  scenario: ScoutingScenarioId;
+  map: (typeof SCOUTING_MAPS)[number];
+  mode: (typeof SCOUTING_MODES)[number];
+  stage: (typeof SCOUTING_STAGES)[number];
+  plan: (typeof SCOUTING_PLANS)[number];
+  observations: Record<ScoutingObservationId, ScoutingObservation>;
+}
+export interface ScoutingSource {
+  id: string;
+  title: string;
+  url: string;
+  publishedAt: string | null;
+  kind: string;
+  note: string;
+}
+interface EvidenceRule {
+  observation: ScoutingObservationId;
+  state: 'seen' | 'absent';
+}
+export interface ScoutingHypothesis {
+  id: string;
+  title: string;
+  body: string;
+  support: EvidenceRule[];
+  counter: EvidenceRule[];
+  evidenceMeaning: string;
+  counterMeaning: string;
+  need: string;
+  next: string;
+  condition: string;
+  cost: string;
+  counterexample: string;
+  alternative: string;
+  sourceIds: string[];
+}
+export interface ScoutingScenario {
+  id: ScoutingScenarioId;
+  title: string;
+  stage: 'feudal' | 'castle';
+  observationIds: ScoutingObservationId[];
+  summary: string;
+  sharedClue: string;
+  notEnough: string[];
+  checks: string[];
+  hypotheses: ScoutingHypothesis[];
+}
+export const SCOUTING_CONTENT = rawContent as unknown as {
+  checkedAt: string;
+  dataVersion: string;
+  editorialNotice: string;
+  sources: ScoutingSource[];
+  observations: { id: ScoutingObservationId; title: string; meaning: string }[];
+  scenarios: ScoutingScenario[];
+};
+export const SCOUTING_STATE_ZH: Record<ScoutingObservationState, string> = {
+  unknown: '未知，尚未观察',
+  unseen: '这次没有看见',
+  seen: '已见到',
+  absent: '限定时刻与可见范围内确认不存在',
+};
+export const SCOUTING_AREA_ZH: Record<ScoutingArea, string> = {
+  unknown: '范围未确认',
+  'enemy-front': '敌方正面当前可见区域',
+  'enemy-edge': '敌方侧面或外围当前可见区域',
+  'own-approach': '接近自家的一段当前可见通路',
+};
+export const SCOUTING_URL_LIMIT = 8000;
+export const SCOUTING_TIME_LIMIT = 32;
+const configKeys = ['scenario', 'map', 'mode', 'stage', 'plan', 'observations'];
+const observationKeys = ['state', 'at', 'area', 'stale'];
+const record = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
+const exactKeys = (value: Record<string, unknown>, keys: readonly string[]) =>
+  Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key));
+function member<T extends readonly string[]>(values: T, value: unknown): value is T[number] {
+  return typeof value === 'string' && values.includes(value);
+}
+/** Structural safety only; an editable clock format mistake is checked separately. */
+export function isScoutingTimeText(value: unknown): value is string {
+  return (
+    typeof value === 'string' &&
+    value.length <= SCOUTING_TIME_LIMIT &&
+    !Array.from(value).some((char) => {
+      const cp = char.codePointAt(0)!;
+      return cp < 32 || (cp >= 127 && cp <= 159) || (cp >= 0x202a && cp <= 0x202e) || (cp >= 0x2066 && cp <= 0x2069) || (cp >= 0xd800 && cp <= 0xdfff);
+    })
+  );
+}
+export function isScoutingConfig(value: unknown): value is ScoutingConfig {
+  if (
+    !record(value) ||
+    !exactKeys(value, configKeys) ||
+    !member(SCOUTING_SCENARIOS, value.scenario) ||
+    !member(SCOUTING_MAPS, value.map) ||
+    !member(SCOUTING_MODES, value.mode) ||
+    !member(SCOUTING_STAGES, value.stage) ||
+    !member(SCOUTING_PLANS, value.plan) ||
+    !record(value.observations) ||
+    !exactKeys(value.observations, SCOUTING_OBSERVATIONS)
+  )
+    return false;
+  const observations = value.observations;
+  return SCOUTING_OBSERVATIONS.every((id) => {
+    const entry = observations[id];
+    return (
+      record(entry) &&
+      exactKeys(entry, observationKeys) &&
+      member(SCOUTING_STATES, entry.state) &&
+      isScoutingTimeText(entry.at) &&
+      member(SCOUTING_AREAS, entry.area) &&
+      typeof entry.stale === 'boolean'
+    );
+  });
+}
+export function defaultScoutingConfig(): ScoutingConfig {
+  const observations = Object.fromEntries(
+    SCOUTING_OBSERVATIONS.map((id) => [id, { state: 'unknown', at: '', area: 'unknown', stale: false }]),
+  ) as ScoutingConfig['observations'];
+  return { scenario: 'early', map: 'arabia', mode: 'one-v-one', stage: 'feudal', plan: 'undecided', observations };
+}
+export function scoutingTimeError(value: string): string | null {
+  if (value === '') return null;
+  return /^(?:\d{1,3}:[0-5]\d|\d{1,2}:[0-5]\d:[0-5]\d)$/.test(value) ? null : '游戏时间请填分:秒或时:分:秒，秒和小时后的分须在 00–59；也可留空表示未记录。';
+}
+export function scoutingInputErrors(config: ScoutingConfig): string[] {
+  if (!isScoutingConfig(config)) return ['情报结构或字段无效，解释已暂停。'];
+  const errors: string[] = [];
+  // Hidden observations are preserved too; invalid entries must never disappear from a shared state.
+  for (const definition of SCOUTING_CONTENT.observations) {
+    const observation = config.observations[definition.id];
+    const timeError = scoutingTimeError(observation.at);
+    if (timeError) errors.push(`${definition.title}：${timeError}`);
+    if (observation.state === 'absent' && (!observation.at || observation.area === 'unknown'))
+      errors.push(`${definition.title}：确认不存在必须填写该观察时刻与明确可见范围；不能代表全图或之后一直不存在。`);
+  }
+  return errors;
+}
+/** Encoding preserves editable semantic mistakes; sharing is separately disabled until they are fixed. */
+export function encodeScouting(config: ScoutingConfig): string {
+  if (!isScoutingConfig(config)) throw new TypeError('不能编码无效情报结构。');
+  const encoded = new URLSearchParams({ sv: '1', data: JSON.stringify(config) }).toString();
+  if (encoded.length > SCOUTING_URL_LIMIT) throw new RangeError('情报链接超出上限，未截断。');
+  return encoded;
+}
+export function decodeScouting(search: string): { config: ScoutingConfig; locked: boolean; errors: string[] } {
+  const fallback = () => ({ config: defaultScoutingConfig(), locked: true, errors: ['情报链接无效、损坏或版本不兼容，解释已暂停；默认值不代表恢复结果。'] });
+  if (search === '' || search === '?') return { config: defaultScoutingConfig(), locked: false, errors: [] };
+  if (search.length > SCOUTING_URL_LIMIT + 1) return fallback();
+  const raw = search.startsWith('?') ? search.slice(1) : search;
+  try {
+    decodeURIComponent(raw.replace(/\+/g, ' '));
+    const params = new URLSearchParams(raw);
+    if (
+      [...params.keys()].some((key) => key !== 'sv' && key !== 'data') ||
+      params.getAll('sv').length !== 1 ||
+      params.getAll('data').length !== 1 ||
+      params.get('sv') !== '1'
+    )
+      return fallback();
+    const config: unknown = JSON.parse(params.get('data')!);
+    return isScoutingConfig(config) ? { config, locked: false, errors: [] } : fallback();
+  } catch {
+    return fallback();
+  }
+}
+export interface ScoutingHypothesisResult {
+  hypothesis: ScoutingHypothesis;
+  status: 'needs-evidence' | 'local-support' | 'recheck';
+  support: ScoutingObservationId[];
+  counter: ScoutingObservationId[];
+}
+export interface ScoutingAnalysis {
+  status: 'covered' | 'not-covered' | 'invalid';
+  title: string;
+  summary: string;
+  errors: string[];
+  gaps: string[];
+  planNote: string;
+  hypotheses: ScoutingHypothesisResult[];
+}
+export const SCOUTING_RESULT_ZH: Record<ScoutingHypothesisResult['status'], string> = {
+  'needs-evidence': '仍需区分',
+  'local-support': '有局部补证，仍非证明',
+  recheck: '有需重查线索，解释仍可相容',
+};
+const planNotes: Record<ScoutingConfig['plan'], string> = {
+  undecided: '尚未决定行动：先列缺失信息，不从并列解释中自动替你选择。',
+  press: '你正考虑施压：先查现有军队、接近路线与撤回条件；本页不认证能够交战。',
+  hold: '你正考虑防守：先查具体威胁和接近路线，不把所有未知都变成已确认进攻。',
+  develop: '你正考虑发展：先查地图变化和已有防守，不因正面安静就认证可以安全追加投入。',
+};
+function usable(observation: ScoutingObservation) {
+  return !observation.stale && observation.at !== '' && observation.area !== 'unknown' && (observation.state === 'seen' || observation.state === 'absent');
+}
+export function analyseScouting(config: ScoutingConfig): ScoutingAnalysis {
+  const errors = scoutingInputErrors(config);
+  const empty = { errors, gaps: [], planNote: '', hypotheses: [] };
+  if (errors.length) return { ...empty, status: 'invalid', title: '先修正观察，解释已暂停', summary: '原输入保留供修正，不把缺少限定的不存在当成事实。' };
+  const scenario = SCOUTING_CONTENT.scenarios.find((row) => row.id === config.scenario)!;
+  if (config.map !== 'arabia' || config.mode !== 'one-v-one' || config.stage !== scenario.stage)
+    return {
+      ...empty,
+      status: 'not-covered',
+      title: '暂未覆盖这组模式、地图或阶段',
+      summary: `本组只覆盖常规开局 1v1 Arabia 的${scenario.stage === 'feudal' ? '封建' : '城堡'}阶段；保留所选条件，不套用资料。`,
+    };
+  const gaps: string[] = [];
+  for (const id of scenario.observationIds) {
+    const observation = config.observations[id];
+    const title = SCOUTING_CONTENT.observations.find((row) => row.id === id)!.title;
+    if (observation.stale) gaps.push(`${title}：已标记陈旧，先复查；不作为当前补证或反证。`);
+    else if (observation.state === 'unknown') gaps.push(`${title}：未知，先补查。`);
+    else if (observation.state === 'unseen') gaps.push(`${title}：这次没看见不等于不存在，仍需补查。`);
+    else if (!usable(observation)) gaps.push(`${title}：虽已见到，但观察时刻或可见范围未记录，不作为当前补证。`);
+  }
+  const matches = (rules: EvidenceRule[]) =>
+    rules
+      .filter((rule) => {
+        const observation = config.observations[rule.observation];
+        return scenario.observationIds.includes(rule.observation) && usable(observation) && observation.state === rule.state;
+      })
+      .map((rule) => rule.observation);
+  const hypotheses = scenario.hypotheses.map((hypothesis) => {
+    const support = matches(hypothesis.support),
+      counter = matches(hypothesis.counter);
+    return {
+      hypothesis,
+      support,
+      counter,
+      status: counter.length ? ('recheck' as const) : support.length ? ('local-support' as const) : ('needs-evidence' as const),
+    };
+  });
+  return {
+    status: 'covered',
+    title: '并列解释与下一次补查',
+    summary: scenario.summary,
+    errors: [],
+    gaps,
+    planNote: planNotes[config.plan],
+    hypotheses,
+  };
+}
