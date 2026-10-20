@@ -10,6 +10,7 @@ import { simSupport } from '../../domain/simSupport';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { mmss, noteParts, rowTime, type TimelineQuery } from './timelineModel';
+import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { visibleSources } from './sources';
 import './practice.css';
 
@@ -245,6 +246,12 @@ export default function BuildPracticeView({
           </ul>
         )}
         <p className="note">时间均为模拟估算，不是倒计时或游戏监测。步骤村民数来自开局标记；人口与分配为模拟步骤开始快照，研究类估算时点可能晚于该快照。</p>
+        <nav className="bar bp-screen-only" aria-label="跟练辅助资料">
+          <GameClockLink seconds={rowTime(current.simulation)} label="换算当前步骤时点" />
+          <Link className="community-tool-entry" to="/hotkeys">
+            查游戏操作与个人按键表
+          </Link>
+        </nav>
       </div>
 
       {mode === 'practice' && (

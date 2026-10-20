@@ -339,6 +339,10 @@
     "py": "ditu",
     "pyi": "dt"
   },
+  "城堡前置应对": {
+    "py": "chengbaoqianzhiyingdui",
+    "pyi": "cbqzyd"
+  },
   "城堡在城堡/帝王时代的费用 -15/25%": {
     "py": "chengbaozaichengbaodiwangshidaidefeiyong",
     "pyi": "cbzcbdwsddfy"
@@ -491,6 +495,10 @@
     "py": "zhengzhaomianfei",
     "pyi": "zzmf"
   },
+  "快捷键速查": {
+    "py": "kuaijiejiansucha",
+    "pyi": "kjjsc"
+  },
   "战船在封建/城堡/帝王时代的费用 -10/15/20%": {
     "py": "zhanchuanzaifengjianchengbaodiwangshidaidefeiyong",
     "pyi": "zczfjcbdwsddfy"
@@ -614,6 +622,10 @@
   "斥候骑兵系费用 -15%": {
     "py": "chihouqibingxifeiyong",
     "pyi": "chqbxfy"
+  },
+  "时间换算": {
+    "py": "shijianhuansuan",
+    "pyi": "sjhs"
   },
   "木栅栏生命值 +33%": {
     "py": "muzhalanshengmingzhi",

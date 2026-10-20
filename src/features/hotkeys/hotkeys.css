@@ -168,6 +168,11 @@
     size: A4 portrait;
     margin: 12mm;
   }
+  /* Match the dark root selector's specificity so the printed page canvas stays light. */
+  :root:has(.hotkeys-page) {
+    background: var(--color-on-resource-dark);
+    color-scheme: light;
+  }
   body:has(.hotkeys-page) {
     --color-text: var(--color-on-resource-light);
     --color-text-2: var(--color-on-resource-light);

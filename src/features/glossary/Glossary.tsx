@@ -109,6 +109,9 @@ export default function Glossary() {
         <p className="note gl-eyebrow">读懂社区建议</p>
         <h1>术语与缩写</h1>
         <p>从一个缩写开始，了解含义、使用语境和相关工具。</p>
+        <Link className="community-tool-entry" to="/hotkeys">
+          查游戏操作与个人按键表
+        </Link>
       </header>
       <label className="gl-search">
         搜索术语

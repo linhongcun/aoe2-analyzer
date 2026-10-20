@@ -38,7 +38,12 @@ export const PENDING_UNIT_ALIASES: readonly (readonly [number, string])[] = [
 export const TECH_AKA: Record<number, string[]> = { 1452: ['绞盘弩', 'cranequins'] };
 
 /** #36 产品补充：新手和快攻指向开局流程，地图入口待 #34。 */
-export const PAGE_ALIASES: Record<string, string[]> = { builds: ['新手', '快攻'] };
+export const PAGE_ALIASES: Record<string, string[]> = {
+  builds: ['新手', '快攻'],
+  'game-clock': ['时钟', '游戏时间', '现实时间', '速度倍率', 'game time', 'real time'],
+  hotkeys: ['热键', '个人按键', '控制组', 'hotkey'],
+  'castle-defense': ['城堡快攻', '城堡防守', 'castle drop'],
+};
 
 export const UNIT_ALIASES: Record<number, string[]> = {};
 for (const [id, a] of UNIT_ALIAS_TABLE) (UNIT_ALIASES[id] ??= []).push(a);

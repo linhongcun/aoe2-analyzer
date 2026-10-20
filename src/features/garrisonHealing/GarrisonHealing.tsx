@@ -19,6 +19,7 @@ import { getGarrisonBuildingAge, type GarrisonCandidate, type GarrisonEntry } fr
 import { AGE_ZH } from '../../domain/ratings';
 import { Icon } from '../../shared/ui/Icon';
 import { Loading } from '../../shared/ui/widgets';
+import { GameClockLink } from '../../shared/ui/GameClockLink';
 import './garrisonHealing.css';
 
 const num = (value: number) => value.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
@@ -333,6 +334,7 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
                   </div>
                 </dl>
               )}
+              {['valid', 'complete'].includes(result.status) && result.seconds !== null && <GameClockLink seconds={result.seconds} label="换算这段回血时间" />}
               {!['valid', 'complete'].includes(result.status) && (
                 <p className="healing-warning" data-testid="healing-paused">
                   已暂停恢复时间计算。该状态不能用零秒表示。
