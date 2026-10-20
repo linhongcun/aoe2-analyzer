@@ -1,0 +1,1518 @@
+{
+  "armenianChain": {
+    "effects": [
+      {
+        "commands": [
+          {
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 1.0,
+            "Type": 1
+          },
+          {
+            "A": 1118,
+            "B": 104,
+            "C": 1,
+            "D": 0.0,
+            "Type": 7
+          }
+        ],
+        "id": 951,
+        "name": "C-Bonus, Free Relic"
+      },
+      {
+        "commands": [
+          {
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 1.0,
+            "Type": 1
+          },
+          {
+            "A": 283,
+            "B": 0,
+            "C": -1,
+            "D": 1.0,
+            "Type": 1
+          },
+          {
+            "A": 285,
+            "B": 104,
+            "C": 1,
+            "D": 0.0,
+            "Type": 7
+          },
+          {
+            "A": 283,
+            "B": 0,
+            "C": -1,
+            "D": 0.0,
+            "Type": 1
+          }
+        ],
+        "id": 952,
+        "name": "C-Bonus, Free Relic2"
+      },
+      {
+        "commands": [
+          {
+            "A": 104,
+            "B": 1806,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 30,
+            "B": 1806,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 31,
+            "B": 1806,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 32,
+            "B": 1806,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          }
+        ],
+        "id": 941,
+        "name": "C-Bonus, Fortified Church"
+      }
+    ],
+    "helper": {
+      "buildingTech": 957,
+      "class": 27,
+      "id": 1118,
+      "name": "Relic building",
+      "tasks": [],
+      "workRate": 0.0
+    },
+    "techs": [
+      {
+        "civ": 44,
+        "costs": [],
+        "effectId": 951,
+        "id": 949,
+        "name": "C-Bonus, Free Relic",
+        "repeatable": 1,
+        "requiredCount": 1,
+        "requires": [
+          107
+        ],
+        "researchLocations": [
+          {
+            "button_id": 0,
+            "hot_key_id": -1,
+            "location_id": -1,
+            "research_time": 0
+          }
+        ]
+      },
+      {
+        "civ": 44,
+        "costs": [],
+        "effectId": 952,
+        "id": 957,
+        "name": "C-Bonus, Free Relic2",
+        "repeatable": 1,
+        "requiredCount": 1,
+        "requires": [],
+        "researchLocations": [
+          {
+            "button_id": 0,
+            "hot_key_id": -1,
+            "location_id": -1,
+            "research_time": 0
+          }
+        ]
+      },
+      {
+        "civ": 44,
+        "costs": [],
+        "effectId": 941,
+        "id": 941,
+        "name": "Fortified Church (Armenians)",
+        "repeatable": 1,
+        "requiredCount": 1,
+        "requires": [
+          929
+        ],
+        "researchLocations": [
+          {
+            "button_id": 0,
+            "hot_key_id": -1,
+            "location_id": -1,
+            "research_time": 0
+          }
+        ]
+      },
+      {
+        "civ": 45,
+        "costs": [],
+        "effectId": 941,
+        "id": 930,
+        "name": "Fortified Church (Georgians)",
+        "repeatable": 1,
+        "requiredCount": 1,
+        "requires": [
+          929
+        ],
+        "researchLocations": [
+          {
+            "button_id": 0,
+            "hot_key_id": -1,
+            "location_id": -1,
+            "research_time": 0
+          }
+        ]
+      }
+    ]
+  },
+  "audit": {
+    "armenianHelper": {
+      "buildingTech": 957,
+      "class": 27,
+      "id": 1118,
+      "name": "Relic building",
+      "tasks": [],
+      "workRate": 0.0
+    },
+    "civCount": 63,
+    "effectCount": 1500,
+    "gaiaRelics": {
+      "285": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 285,
+        "name": "RELIC",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "287": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 287,
+        "name": "RLIC1",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "288": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 288,
+        "name": "RLIC2",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "289": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 289,
+        "name": "RLIC3",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "290": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 290,
+        "name": "RLIC4",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "292": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 292,
+        "name": "RLIC5",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "294": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 294,
+        "name": "RLIC6",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "295": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 295,
+        "name": "RLIC7",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "296": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 296,
+        "name": "RLIC8",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "297": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 297,
+        "name": "RLIC9",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "298": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 298,
+        "name": "RLIC0",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "688": {
+        "buildingTech": null,
+        "class": 42,
+        "id": 688,
+        "name": "HPTC",
+        "tasks": [],
+        "workRate": 1.0
+      }
+    },
+    "generateResourceTaskCount": 7119,
+    "headerResourceTaskReferences": [],
+    "headerTaskCount": 2329,
+    "monasteries": {
+      "104": {
+        "buildingTech": 107,
+        "class": 3,
+        "id": 104,
+        "name": "CRCH",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "1806": {
+        "buildingTech": 107,
+        "class": 3,
+        "id": 1806,
+        "name": "FORTCRCH",
+        "tasks": [
+          {
+            "action_type": 7,
+            "auto_search_targets": 1,
+            "carry_check": 0,
+            "carrying_graphic_id": -1,
+            "class_id": -1,
+            "combat_level_flag": 1,
+            "enable_targeting": 1,
+            "enabled": -1,
+            "gather_type": 1,
+            "id": 0,
+            "is_default": 0,
+            "moving_graphic_id": -1,
+            "pick_for_construction": 0,
+            "proceeding_graphic_id": -1,
+            "resource_deposit_sound_id": -1,
+            "resource_gathering_sound_id": -1,
+            "resource_in": -1,
+            "resource_multiplier": -1,
+            "resource_out": -1,
+            "search_wait_time": 3.0,
+            "target_diplomacy": 5,
+            "task_type": 1,
+            "terrain_id": -1,
+            "unit_id": -1,
+            "unused_resource": -1,
+            "work_flag_2": 0,
+            "work_range": 0.0,
+            "work_value_1": 0.0,
+            "work_value_2": 0.0,
+            "working_graphic_id": -1,
+            "wwise_resource_deposit_sound_id": 0,
+            "wwise_resource_gathering_sound_id": 0
+          }
+        ],
+        "workRate": 1.0
+      },
+      "30": {
+        "buildingTech": 107,
+        "class": 3,
+        "id": 30,
+        "name": "CRCH2",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "31": {
+        "buildingTech": 107,
+        "class": 3,
+        "id": 31,
+        "name": "CRCH3",
+        "tasks": [],
+        "workRate": 1.0
+      },
+      "32": {
+        "buildingTech": 107,
+        "class": 3,
+        "id": 32,
+        "name": "CRCH4",
+        "tasks": [],
+        "workRate": 1.0
+      }
+    },
+    "resourceCommands": [
+      {
+        "command": {
+          "A": 191,
+          "B": 0,
+          "C": -1,
+          "D": 0.5,
+          "Type": 26
+        },
+        "effectId": 464,
+        "index": 3
+      },
+      {
+        "command": {
+          "A": 225,
+          "B": 0,
+          "C": -1,
+          "D": 0.5,
+          "Type": 26
+        },
+        "effectId": 464,
+        "index": 4
+      },
+      {
+        "command": {
+          "A": 191,
+          "B": 0,
+          "C": -1,
+          "D": 0.5,
+          "Type": 36
+        },
+        "effectId": 464,
+        "index": 7
+      },
+      {
+        "command": {
+          "A": 225,
+          "B": 0,
+          "C": -1,
+          "D": 0.5,
+          "Type": 36
+        },
+        "effectId": 464,
+        "index": 8
+      },
+      {
+        "command": {
+          "A": 191,
+          "B": 0,
+          "C": -1,
+          "D": 1.3300000429153442,
+          "Type": 6
+        },
+        "effectId": 488,
+        "index": 0
+      },
+      {
+        "command": {
+          "A": 191,
+          "B": 1,
+          "C": -1,
+          "D": 1.100000023841858,
+          "Type": 6
+        },
+        "effectId": 562,
+        "index": 5
+      },
+      {
+        "command": {
+          "A": 225,
+          "B": -1,
+          "C": -1,
+          "D": 20.0,
+          "Type": 1
+        },
+        "effectId": 783,
+        "index": 0
+      }
+    ],
+    "resourceTaskReferences": [],
+    "techCount": 1510,
+    "unitTaskCount": 433192
+  },
+  "baseRates": {
+    "Food": 0.0,
+    "Gold": 30.0,
+    "Stone": 0.0,
+    "Wood": 0.0
+  },
+  "civs": {
+    "Armenians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 44
+    },
+    "Aztecs": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 15
+    },
+    "Bengalis": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 41
+    },
+    "Berbers": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 27
+    },
+    "Bohemians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 39
+    },
+    "Britons": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 1
+    },
+    "Bulgarians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 32
+    },
+    "Burgundians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 36
+    },
+    "Burmese": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 30
+    },
+    "Byzantines": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 7
+    },
+    "Celts": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 13
+    },
+    "Chinese": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 6
+    },
+    "Cumans": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 34
+    },
+    "Danes": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 62
+    },
+    "Dravidians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 40
+    },
+    "Ethiopians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 25
+    },
+    "Franks": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 2
+    },
+    "Georgians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 45
+    },
+    "Goths": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 3
+    },
+    "Gurjaras": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 42
+    },
+    "Hindustanis": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 20
+    },
+    "Huns": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 17
+    },
+    "Incas": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 21
+    },
+    "Italians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 19
+    },
+    "Japanese": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 5
+    },
+    "Jurchens": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 52
+    },
+    "Khitans": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 53
+    },
+    "Khmer": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 28
+    },
+    "Koreans": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 18
+    },
+    "Lithuanians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 35
+    },
+    "Magyars": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 22
+    },
+    "Malay": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 29
+    },
+    "Malians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 26
+    },
+    "Mapuche": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 58
+    },
+    "Mayans": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 16
+    },
+    "Mongols": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 12
+    },
+    "Muisca": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 57
+    },
+    "Persians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 8
+    },
+    "Poles": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 38
+    },
+    "Portuguese": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 24
+    },
+    "Romans": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 43
+    },
+    "Saracens": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 9
+    },
+    "Saxons": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 60
+    },
+    "Shu": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 49
+    },
+    "Sicilians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 37
+    },
+    "Slavs": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 23
+    },
+    "Spanish": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 14
+    },
+    "Tatars": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 33
+    },
+    "Teutons": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 4
+    },
+    "Tupi": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 59
+    },
+    "Turks": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 10
+    },
+    "Varangians": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 61
+    },
+    "Vietnamese": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 31
+    },
+    "Vikings": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 11
+    },
+    "Wei": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 51
+    },
+    "Wu": {
+      "baseResources": {
+        "191": 30.0,
+        "225": 0.0,
+        "264": 0.0,
+        "265": 0.0,
+        "7": 0.0
+      },
+      "datCiv": 50
+    }
+  },
+  "lithuanians": {
+    "attackClass": 4,
+    "attackIncrement": 1.0,
+    "cap": 4,
+    "countResource": 7,
+    "extraRawTargets": [
+      {
+        "en": "Savar",
+        "id": 1813,
+        "zh": "萨瓦尔"
+      }
+    ],
+    "thresholds": [
+      {
+        "count": 1,
+        "effect": {
+          "commands": [
+            {
+              "A": 38,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 283,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 569,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1813,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1234,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1236,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            }
+          ],
+          "id": 736,
+          "name": "C-Bonus, Relic +1 cav attack 1"
+        },
+        "tech": {
+          "civ": 35,
+          "costs": [
+            {
+              "amount": 1,
+              "flag": 1,
+              "type": 7
+            }
+          ],
+          "effectId": 736,
+          "id": 699,
+          "name": "C-Bonus, Relic +1 cav attack 1",
+          "repeatable": 1,
+          "requiredCount": 2,
+          "requires": [
+            104,
+            107
+          ],
+          "researchLocations": [
+            {
+              "button_id": 0,
+              "hot_key_id": -1,
+              "location_id": -1,
+              "research_time": 0
+            }
+          ]
+        }
+      },
+      {
+        "count": 2,
+        "effect": {
+          "commands": [
+            {
+              "A": 38,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 283,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 569,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1813,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1234,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1236,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            }
+          ],
+          "id": 737,
+          "name": "C-Bonus, Relic +1 cav attack 2"
+        },
+        "tech": {
+          "civ": 35,
+          "costs": [
+            {
+              "amount": 2,
+              "flag": 1,
+              "type": 7
+            }
+          ],
+          "effectId": 737,
+          "id": 700,
+          "name": "C-Bonus, Relic +1 cav attack 2",
+          "repeatable": 1,
+          "requiredCount": 2,
+          "requires": [
+            104,
+            699
+          ],
+          "researchLocations": [
+            {
+              "button_id": 0,
+              "hot_key_id": -1,
+              "location_id": -1,
+              "research_time": 0
+            }
+          ]
+        }
+      },
+      {
+        "count": 3,
+        "effect": {
+          "commands": [
+            {
+              "A": 38,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 283,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 569,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1813,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1234,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1236,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            }
+          ],
+          "id": 738,
+          "name": "C-Bonus, Relic +1 cav attack 3"
+        },
+        "tech": {
+          "civ": 35,
+          "costs": [
+            {
+              "amount": 3,
+              "flag": 1,
+              "type": 7
+            }
+          ],
+          "effectId": 738,
+          "id": 701,
+          "name": "C-Bonus, Relic +1 cav attack 3",
+          "repeatable": 1,
+          "requiredCount": 2,
+          "requires": [
+            104,
+            700
+          ],
+          "researchLocations": [
+            {
+              "button_id": 0,
+              "hot_key_id": -1,
+              "location_id": -1,
+              "research_time": 0
+            }
+          ]
+        }
+      },
+      {
+        "count": 4,
+        "effect": {
+          "commands": [
+            {
+              "A": 38,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 283,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 569,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1813,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1234,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            },
+            {
+              "A": 1236,
+              "B": -1,
+              "C": 9,
+              "D": 1025.0,
+              "Type": 4
+            }
+          ],
+          "id": 739,
+          "name": "C-Bonus, Relic +1 cav attack 4"
+        },
+        "tech": {
+          "civ": 35,
+          "costs": [
+            {
+              "amount": 4,
+              "flag": 1,
+              "type": 7
+            }
+          ],
+          "effectId": 739,
+          "id": 702,
+          "name": "C-Bonus, Relic +1 cav attack 4",
+          "repeatable": 1,
+          "requiredCount": 2,
+          "requires": [
+            104,
+            701
+          ],
+          "researchLocations": [
+            {
+              "button_id": 0,
+              "hot_key_id": -1,
+              "location_id": -1,
+              "research_time": 0
+            }
+          ]
+        }
+      }
+    ],
+    "units": [
+      {
+        "en": "Knight",
+        "id": 38,
+        "zh": "骑士"
+      },
+      {
+        "en": "Cavalier",
+        "id": 283,
+        "zh": "重装骑士"
+      },
+      {
+        "en": "Paladin",
+        "id": 569,
+        "zh": "游侠"
+      },
+      {
+        "en": "Leitis",
+        "id": 1234,
+        "zh": "烈堤司"
+      },
+      {
+        "en": "Elite Leitis",
+        "id": 1236,
+        "zh": "精锐烈堤司"
+      }
+    ]
+  },
+  "meta": {
+    "datSha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+    "datSource": {
+      "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+      "path": "dat/empires2_x2_p1.dat",
+      "repo": "SiegeEngineers/auto-mods"
+    },
+    "engineVerifiedInPinnedBuild": false,
+    "fieldSemantics": {
+      "effectTypes": "https://github.com/Tapsa/AGE/blob/0bd1b417ca6d77aa0b8a2e84a37f2d5f178944de/AGE_Frame/Lists.cpp",
+      "resources": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md"
+    },
+    "generatedBy": "scripts/relic_income_build.py",
+    "numberEvidence": "全部游戏参数来自固定.dat；数值计算直接使用EffectCommands原始float；另存displayValue仅用于文案。",
+    "patch": "DE Update 185872 (2026-09-22)",
+    "rateUnit": "resource per game minute",
+    "semanticsChecked": "2026-10-20",
+    "semanticsEvidence": "字段时间单位及引擎操作语义；文档示例数值不用于游戏参数。"
+  },
+  "modifiers": {
+    "atheism": {
+      "civ": "Huns",
+      "commandIndices": [
+        3,
+        4
+      ],
+      "commands": [
+        {
+          "A": 191,
+          "B": 0,
+          "C": -1,
+          "D": 0.5,
+          "Type": 26
+        },
+        {
+          "A": 225,
+          "B": 0,
+          "C": -1,
+          "D": 0.5,
+          "Type": 26
+        }
+      ],
+      "displayValue": 0.5,
+      "effectId": 464,
+      "neutralCommands": [
+        {
+          "A": 191,
+          "B": 0,
+          "C": -1,
+          "D": 0.5,
+          "Type": 36
+        },
+        {
+          "A": 225,
+          "B": 0,
+          "C": -1,
+          "D": 0.5,
+          "Type": 36
+        }
+      ],
+      "operation": "mul",
+      "resources": [
+        191,
+        225
+      ],
+      "scope": "enemy-or-neutral",
+      "techId": 21,
+      "value": 0.5
+    },
+    "aztecs": {
+      "civ": "Aztecs",
+      "commandIndices": [
+        0
+      ],
+      "commands": [
+        {
+          "A": 191,
+          "B": 0,
+          "C": -1,
+          "D": 1.3300000429153442,
+          "Type": 6
+        }
+      ],
+      "displayValue": 1.33,
+      "effectId": 488,
+      "operation": "mul",
+      "resources": [
+        191
+      ],
+      "scope": "team",
+      "techId": null,
+      "value": 1.3300000429153442
+    },
+    "burgundians": {
+      "civ": "Burgundians",
+      "commandIndices": [
+        0
+      ],
+      "commands": [
+        {
+          "A": 225,
+          "B": -1,
+          "C": -1,
+          "D": 20.0,
+          "Type": 1
+        }
+      ],
+      "displayValue": 20.0,
+      "effectId": 783,
+      "operation": "set",
+      "resources": [
+        225
+      ],
+      "scope": "team",
+      "techId": null,
+      "value": 20.0
+    },
+    "grandTrunkRoad": {
+      "civ": "Hindustanis",
+      "commandIndices": [
+        5
+      ],
+      "commands": [
+        {
+          "A": 191,
+          "B": 1,
+          "C": -1,
+          "D": 1.100000023841858,
+          "Type": 6
+        }
+      ],
+      "displayValue": 1.1,
+      "effectId": 562,
+      "operation": "mul",
+      "resources": [
+        191
+      ],
+      "scope": "self",
+      "techId": 506,
+      "value": 1.100000023841858
+    }
+  }
+}

@@ -1,0 +1,939 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-20",
+  "versionNote": "战役元数据单独审计：名称为2022年固定语言快照，部分文明关联来自2024年社区客户端悬停抄录。网页与镜像均未标客户端版本，不能视为DE185872客户端实测。",
+  "coverage": {
+    "complete": false,
+    "modeIds": ["aoe2"],
+    "includedCount": 10,
+    "excludedModes": ["chronicles", "return-of-rome"],
+    "excludedExamples": ["The Art of War", "The Forgotten and later named campaigns", "Other Historical Battles", "Co-op variants", "Community mods"]
+  },
+  "sources": {
+    "fe-campaigns": {
+      "title": "Forgotten Empires — Campaigns",
+      "url": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns",
+      "kind": "developer",
+      "checkedAt": "2026-10-20",
+      "version": "Live page checked 2026-10-20; no game build declared"
+    },
+    "fe-timeline": {
+      "title": "Forgotten Empires — Campaigns Timeline",
+      "url": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns/campaigns-timeline",
+      "kind": "developer",
+      "checkedAt": "2026-10-20",
+      "version": "Live page checked 2026-10-20; no game build declared"
+    },
+    "client-en": {
+      "title": "English client language snapshot",
+      "url": "https://github.com/wj654cj86/aoe2DeLanguageReader/blob/12d8d5280e0b0a85f8dfdc558b4ad79279f8b73c/resources/en/strings/key-value/key-value-strings-utf8.txt",
+      "kind": "client-mirror",
+      "checkedAt": "2026-10-20",
+      "version": "12d8d5280e0b0a85f8dfdc558b4ad79279f8b73c (2022-12-31); client build not declared",
+      "sha256": "78ae17e7ec1f3cfaf883f55c510755b9c1da9c93c4dea9ba1871d0b56f131089"
+    },
+    "client-zh": {
+      "title": "Simplified Chinese client language snapshot",
+      "url": "https://github.com/wj654cj86/aoe2DeLanguageReader/blob/12d8d5280e0b0a85f8dfdc558b4ad79279f8b73c/resources/zh/strings/key-value/key-value-strings-utf8.txt",
+      "kind": "client-mirror",
+      "checkedAt": "2026-10-20",
+      "version": "12d8d5280e0b0a85f8dfdc558b4ad79279f8b73c (2022-12-31); client build not declared",
+      "sha256": "9a2a8ac7d82594537e3df90b4203040572e31c85797c5b7733f3ac9a178718be"
+    },
+    "guide-civs-2024": {
+      "title": "Raigavin — Campaign list in chronology",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=2375610295",
+      "kind": "community-client-transcription",
+      "publishedAt": "2021-01-27",
+      "updatedAt": "2024-05-12",
+      "checkedAt": "2026-10-20",
+      "version": "Updated 2024-05-12; author says data were transcribed by hovering over game campaigns; use only for civ associations, not dates or swords"
+    },
+    "official-tutorial": {
+      "title": "Age of Empires — Getting Started with Age of Empires II: DE – PC",
+      "url": "https://www.ageofempires.com/learn-to-play/getting-started-aoe2/",
+      "kind": "official",
+      "checkedAt": "2026-10-20",
+      "version": "Live page checked 2026-10-20"
+    },
+    "official-swords": {
+      "title": "Age of Empires II: DE — Update 34055",
+      "url": "https://www.ageofempires.com/news/aoe2de-update-34055/",
+      "kind": "official",
+      "checkedAt": "2026-10-20",
+      "version": "Update 34055 (2019); describes sword scale, does not provide individual values"
+    },
+    "repo-release": {
+      "title": "Existing historical release table",
+      "url": "https://github.com/linhongcun/aoe2-analyzer/blob/c8c2171501dcf1a46eab32ce48c8d3308d6c9ae3/src/domain/dlc.ts",
+      "kind": "repository",
+      "checkedAt": "2026-10-20",
+      "version": "main c8c2171501dcf1a46eab32ce48c8d3308d6c9ae3; only original release years/order, no entitlement inference"
+    },
+    "official-aok-release": {
+      "title": "Microsoft — The Age of Kings Catapults Onto Store Shelves",
+      "url": "https://news.microsoft.com/source/1999/10/18/microsoft-age-of-empires-ii-the-age-of-kings-catapults-onto-store-shelves/",
+      "kind": "official",
+      "checkedAt": "2026-10-20",
+      "version": "1999-10-18; supports 1999 availability, not a precise first release date"
+    },
+    "editorial": {
+      "title": "Site editorial classification",
+      "kind": "editorial",
+      "checkedAt": "2026-10-20",
+      "version": "Issue issue 240 audit; geography derived from cited campaign synopsis; aliases aid search and are not official alternate titles"
+    }
+  },
+  "campaigns": [
+    {
+      "id": "william-wallace",
+      "nameZh": "威廉·华莱士",
+      "nameEn": "William Wallace",
+      "aliases": ["华莱士", "威廉华莱士"],
+      "kind": "tutorial",
+      "modeId": "aoe2",
+      "civilizationIds": ["Celts"],
+      "regionIds": ["europe"],
+      "settingZh": "苏格兰",
+      "originalContentPackId": "age-of-kings",
+      "contentPackId": "base",
+      "releaseYear": 1999,
+      "releaseDate": null,
+      "historicalStartYear": 1296,
+      "historicalEndYear": 1298,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 35146",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 35146; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 35146",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["official-tutorial"],
+          "locator": "guide CSV row William Wallace; official-tutorial Lesson 4",
+          "status": "official"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "fe-campaigns §§William Wallace; official-tutorial Lesson 4",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Age of Kings heading",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release", "official-aok-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "William Wallace — 1296–1298",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    },
+    {
+      "id": "joan-of-arc",
+      "nameZh": "圣女贞德",
+      "nameEn": "Joan of Arc",
+      "aliases": ["贞德"],
+      "kind": "campaign",
+      "modeId": "aoe2",
+      "civilizationIds": ["Franks"],
+      "regionIds": ["europe"],
+      "settingZh": "法兰西",
+      "originalContentPackId": "age-of-kings",
+      "contentPackId": "base",
+      "releaseYear": 1999,
+      "releaseDate": null,
+      "historicalStartYear": 1428,
+      "historicalEndYear": 1453,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 34935",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 34935; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 34935",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["guide-civs-2024"],
+          "locator": "guide CSV row Joan of Arc",
+          "status": "community-transcription"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "fe-campaigns §Joan of Arc",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Age of Kings heading",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release", "official-aok-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "Joan of Arc — 1428–1453",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    },
+    {
+      "id": "saladin",
+      "nameZh": "萨拉丁",
+      "nameEn": "Saladin",
+      "aliases": [],
+      "kind": "campaign",
+      "modeId": "aoe2",
+      "civilizationIds": ["Saracens"],
+      "regionIds": ["africa", "asia"],
+      "settingZh": "埃及与圣地",
+      "originalContentPackId": "age-of-kings",
+      "contentPackId": "base",
+      "releaseYear": 1999,
+      "releaseDate": null,
+      "historicalStartYear": 1163,
+      "historicalEndYear": 1191,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 34965",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 34965; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 34965",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["guide-civs-2024"],
+          "locator": "guide CSV row Saladin",
+          "status": "community-transcription"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "fe-campaigns §Saladin; client string 45909 (Nile/Cairo)",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Age of Kings heading",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release", "official-aok-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "Saladin — 1163–1191",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    },
+    {
+      "id": "genghis-khan",
+      "nameZh": "成吉思汗",
+      "nameEn": "Genghis Khan",
+      "aliases": [],
+      "kind": "campaign",
+      "modeId": "aoe2",
+      "civilizationIds": ["Mongols"],
+      "regionIds": ["asia", "europe"],
+      "settingZh": "蒙古、中国、波斯与东欧",
+      "originalContentPackId": "age-of-kings",
+      "contentPackId": "base",
+      "releaseYear": 1999,
+      "releaseDate": null,
+      "historicalStartYear": 1186,
+      "historicalEndYear": 1241,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 34995",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 34995; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 34995",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["guide-civs-2024"],
+          "locator": "guide CSV row Genghis Khan",
+          "status": "community-transcription"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "fe-campaigns §Genghis Khan",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Age of Kings heading",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release", "official-aok-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "Genghis Khan — 1186–1241",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    },
+    {
+      "id": "barbarossa",
+      "nameZh": "巴巴罗萨",
+      "nameEn": "Barbarossa",
+      "aliases": [],
+      "kind": "campaign",
+      "modeId": "aoe2",
+      "civilizationIds": ["Teutons"],
+      "regionIds": ["europe", "asia"],
+      "settingZh": "日耳曼、意大利与第三次十字军东征",
+      "originalContentPackId": "age-of-kings",
+      "contentPackId": "base",
+      "releaseYear": 1999,
+      "releaseDate": null,
+      "historicalStartYear": 1152,
+      "historicalEndYear": 1191,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 35025",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 35025; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 35025",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["guide-civs-2024"],
+          "locator": "guide CSV row Barbarossa",
+          "status": "community-transcription"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "fe-campaigns §Barbarossa",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Age of Kings heading",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release", "official-aok-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "Barbarossa — 1152–1191",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    },
+    {
+      "id": "attila-the-hun",
+      "nameZh": "匈奴王阿提拉",
+      "nameEn": "Attila the Hun",
+      "aliases": ["阿提拉"],
+      "kind": "campaign",
+      "modeId": "aoe2",
+      "civilizationIds": ["Huns"],
+      "regionIds": ["europe"],
+      "settingZh": "罗马帝国境内",
+      "originalContentPackId": "the-conquerors",
+      "contentPackId": "base",
+      "releaseYear": 2000,
+      "releaseDate": null,
+      "historicalStartYear": 434,
+      "historicalEndYear": 453,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 35245",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 35245; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 35245",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["guide-civs-2024"],
+          "locator": "guide CSV row Attila the Huns",
+          "status": "community-transcription"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "fe-campaigns §Attila the Hun",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Conquerors heading; strings 35318–35326",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "Attila the Hun — 434–453",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    },
+    {
+      "id": "el-cid",
+      "nameZh": "熙德",
+      "nameEn": "El Cid",
+      "aliases": [],
+      "kind": "campaign",
+      "modeId": "aoe2",
+      "civilizationIds": ["Spanish", "Saracens"],
+      "regionIds": ["europe"],
+      "settingZh": "伊比利亚",
+      "originalContentPackId": "the-conquerors",
+      "contentPackId": "base",
+      "releaseYear": 2000,
+      "releaseDate": null,
+      "historicalStartYear": 1057,
+      "historicalEndYear": 1102,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 35275",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 35275; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 35275",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["guide-civs-2024"],
+          "locator": "guide CSV row El Cid",
+          "status": "community-transcription"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "fe-campaigns §El Cid",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Conquerors heading; strings 35318–35326",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "El Cid — 1057–1102",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    },
+    {
+      "id": "montezuma",
+      "nameZh": "蒙提祖马",
+      "nameEn": "Montezuma",
+      "aliases": ["蒙特祖玛", "蒙特祖马", "蒙特苏马"],
+      "kind": "campaign",
+      "modeId": "aoe2",
+      "civilizationIds": ["Aztecs"],
+      "regionIds": ["americas"],
+      "settingZh": "中美洲",
+      "originalContentPackId": "the-conquerors",
+      "contentPackId": "base",
+      "releaseYear": 2000,
+      "releaseDate": null,
+      "historicalStartYear": 1515,
+      "historicalEndYear": 1521,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 35305",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 35305; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 35305",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["guide-civs-2024"],
+          "locator": "guide CSV row Montezuma",
+          "status": "community-transcription"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "fe-campaigns §Montezuma",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Conquerors heading; strings 35318–35326",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "Montezuma — 1515–1521",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    },
+    {
+      "id": "hastings",
+      "nameZh": "黑斯廷斯战役",
+      "nameEn": "Hastings",
+      "aliases": [],
+      "kind": "historical-battle",
+      "modeId": "aoe2",
+      "civilizationIds": ["Franks"],
+      "regionIds": ["europe"],
+      "settingZh": "英格兰",
+      "originalContentPackId": "the-conquerors",
+      "contentPackId": "base",
+      "releaseYear": 2000,
+      "releaseDate": null,
+      "historicalStartYear": 1066,
+      "historicalEndYear": 1066,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 35321",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 35321; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 35321",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["guide-civs-2024"],
+          "locator": "guide CSV row Hastings",
+          "status": "community-transcription"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "client string 209351 (England/Hastings)",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Conquerors heading; strings 35318–35326",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "Hastings — 1066",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    },
+    {
+      "id": "agincourt",
+      "nameZh": "阿金库尔战役",
+      "nameEn": "Agincourt",
+      "aliases": [],
+      "kind": "historical-battle",
+      "modeId": "aoe2",
+      "civilizationIds": ["Britons"],
+      "regionIds": ["europe"],
+      "settingZh": "法兰西",
+      "originalContentPackId": "the-conquerors",
+      "contentPackId": "base",
+      "releaseYear": 2000,
+      "releaseDate": null,
+      "historicalStartYear": 1415,
+      "historicalEndYear": 1415,
+      "swords": null,
+      "verifiedAt": "2026-10-20",
+      "fieldEvidence": {
+        "nameZh": {
+          "sourceIds": ["client-zh"],
+          "locator": "string 35323",
+          "status": "snapshot-verified"
+        },
+        "nameEn": {
+          "sourceIds": ["client-en", "fe-campaigns"],
+          "locator": "string 35323; campaign heading",
+          "status": "verified"
+        },
+        "aliases": {
+          "sourceIds": ["editorial"],
+          "status": "editorial"
+        },
+        "kind": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "campaign section; string 35323",
+          "status": "verified"
+        },
+        "modeId": {
+          "sourceIds": ["fe-campaigns"],
+          "locator": "Age of Empires II: Definitive Edition campaign catalogue",
+          "status": "verified"
+        },
+        "civilizationIds": {
+          "sourceIds": ["guide-civs-2024"],
+          "locator": "guide CSV row Agincourt",
+          "status": "community-transcription"
+        },
+        "regionIds": {
+          "sourceIds": ["editorial", "fe-campaigns", "client-en", "client-zh"],
+          "locator": "client strings 209504–209505 (Calais/France)",
+          "status": "editorial-derived"
+        },
+        "originalContentPackId": {
+          "sourceIds": ["fe-campaigns", "client-en"],
+          "locator": "The Conquerors heading; strings 35318–35326",
+          "status": "verified"
+        },
+        "contentPackId": {
+          "sourceIds": [],
+          "locator": "仅为issue 239内容导航外键；购买条件在/content-guide?pack=base统一说明。",
+          "status": "external-reference"
+        },
+        "releaseYear": {
+          "sourceIds": ["repo-release"],
+          "locator": "Existing DLCS table year; first release year, not DE rerelease",
+          "status": "verified-existing-catalogue"
+        },
+        "releaseDate": {
+          "sourceIds": [],
+          "status": "not-verified",
+          "note": "精确首发日期未核实；只显示年，不补月日。"
+        },
+        "historicalRange": {
+          "sourceIds": ["fe-timeline"],
+          "locator": "Agincourt — 1415",
+          "status": "developer-verified"
+        },
+        "swords": {
+          "sourceIds": [],
+          "status": "not-provided",
+          "note": "未取得逐条官方或固定客户端剑级证据；通用定义不证明本条的剑数。"
+        }
+      }
+    }
+  ]
+}

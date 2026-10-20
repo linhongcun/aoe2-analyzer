@@ -31,6 +31,14 @@ export default function Matchup() {
           城堡前置：按当前局面查看应对
         </Link>
       </p>
+      <nav className="bar" aria-label="情境与队伍规划">
+        <Link className="community-tool-entry" to="/mixed-army">
+          按敌军组合查看混兵情境
+        </Link>
+        <Link className="community-tool-entry" to="/team-plan">
+          记录队友分工与支援约定
+        </Link>
+      </nav>
       {!core ? (
         <Loading />
       ) : (

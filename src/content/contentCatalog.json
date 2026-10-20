@@ -1,0 +1,1361 @@
+{
+  "schemaVersion": 1,
+  "platform": "steam",
+  "verifiedAt": "2026-10-20",
+  "region": "unspecified-public-store",
+  "scope": "2026-10-20公开Steam本体页可见本体加16项附加内容的固定审计快照；不含合集、未公布或隐藏商品。",
+  "baseProductId": "base",
+  "products": [
+    {
+      "id": "base",
+      "steamAppId": 813780,
+      "zh": "决定版本体",
+      "en": "Age of Empires II: Definitive Edition",
+      "releaseDate": "2019-11-14",
+      "acquisition": {
+        "kind": "base-game",
+        "sourceIds": ["steam"]
+      },
+      "prerequisites": {
+        "productIds": [],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "civilizations",
+          "summary": "原有的常规AoE2文明。",
+          "names": [],
+          "sourceIds": ["steam"]
+        },
+        {
+          "mode": "aoe2",
+          "kind": "campaigns",
+          "summary": "原有战役与既有历史内容；具名战役入门另见战役目录。",
+          "names": [],
+          "sourceIds": ["steam"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Age of Empires II: Definitive Edition",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        }
+      ],
+      "includedProductIds": ["lords-of-the-west", "dawn-of-the-dukes", "dynasties-of-india"],
+      "includedProductSourceIds": ["steam"]
+    },
+    {
+      "id": "lords-of-the-west",
+      "steamAppId": 1389240,
+      "zh": "西方霸主",
+      "en": "Lords of the West",
+      "releaseDate": "2021-01-26",
+      "acquisition": {
+        "kind": "included-with-base",
+        "sourceIds": ["steam", "base-package", "gift-announcement"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "civilizations",
+          "summary": "2个常规AoE2文明",
+          "names": [
+            {
+              "id": "aoe2:Burgundians",
+              "en": "Burgundians",
+              "zh": "勃艮第",
+              "siteCivEn": "Burgundians"
+            },
+            {
+              "id": "aoe2:Sicilians",
+              "en": "Sicilians",
+              "zh": "西西里",
+              "siteCivEn": "Sicilians"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 2
+        },
+        {
+          "mode": "aoe2",
+          "kind": "campaigns",
+          "summary": "3个具名战役",
+          "names": [
+            {
+              "id": "aoe2:Edward Longshanks",
+              "en": "Edward Longshanks"
+            },
+            {
+              "id": "aoe2:The Grand Dukes of the West",
+              "en": "The Grand Dukes of the West"
+            },
+            {
+              "id": "aoe2:The Hautevilles",
+              "en": "The Hautevilles"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 3
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/1389240/",
+          "title": "Lords of the West",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        },
+        {
+          "id": "gift-announcement",
+          "url": "https://www.ageofempires.com/news/celebrate-5-years-of-age-ii-de-with-a-fresh-deal-for-new-players/",
+          "title": "官方五周年收录及赠送公告",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前新购买本体含此包；公告同时说明当时已有Steam本体的玩家会获赠缺失的前三包。",
+          "publishedAt": "2024-11-14"
+        }
+      ],
+      "historicalReleaseIndex": 6
+    },
+    {
+      "id": "dawn-of-the-dukes",
+      "steamAppId": 1557210,
+      "zh": "公爵的崛起",
+      "en": "Dawn of the Dukes",
+      "releaseDate": "2021-08-10",
+      "acquisition": {
+        "kind": "included-with-base",
+        "sourceIds": ["steam", "base-package", "gift-announcement"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "civilizations",
+          "summary": "2个常规AoE2文明",
+          "names": [
+            {
+              "id": "aoe2:Bohemians",
+              "en": "Bohemians",
+              "zh": "波希米亚",
+              "siteCivEn": "Bohemians"
+            },
+            {
+              "id": "aoe2:Poles",
+              "en": "Poles",
+              "zh": "波兰",
+              "siteCivEn": "Poles"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 2
+        },
+        {
+          "mode": "aoe2",
+          "kind": "campaigns",
+          "summary": "3个具名战役",
+          "names": [
+            {
+              "id": "aoe2:Algirdas and Kestutis",
+              "en": "Algirdas and Kestutis"
+            },
+            {
+              "id": "aoe2:Jadwiga",
+              "en": "Jadwiga"
+            },
+            {
+              "id": "aoe2:Jan Zizka",
+              "en": "Jan Zizka"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 3
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/1557210/",
+          "title": "Dawn of the Dukes",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        },
+        {
+          "id": "gift-announcement",
+          "url": "https://www.ageofempires.com/news/celebrate-5-years-of-age-ii-de-with-a-fresh-deal-for-new-players/",
+          "title": "官方五周年收录及赠送公告",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前新购买本体含此包；公告同时说明当时已有Steam本体的玩家会获赠缺失的前三包。",
+          "publishedAt": "2024-11-14"
+        }
+      ],
+      "historicalReleaseIndex": 7
+    },
+    {
+      "id": "dynasties-of-india",
+      "steamAppId": 1869820,
+      "zh": "印度王朝",
+      "en": "Dynasties of India",
+      "releaseDate": "2022-04-28",
+      "acquisition": {
+        "kind": "included-with-base",
+        "sourceIds": ["steam", "base-package", "gift-announcement"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "civilizations",
+          "summary": "3个常规AoE2文明",
+          "names": [
+            {
+              "id": "aoe2:Bengalis",
+              "en": "Bengalis",
+              "zh": "孟加拉",
+              "siteCivEn": "Bengalis"
+            },
+            {
+              "id": "aoe2:Dravidians",
+              "en": "Dravidians",
+              "zh": "达罗毗荼",
+              "siteCivEn": "Dravidians"
+            },
+            {
+              "id": "aoe2:Gurjaras",
+              "en": "Gurjaras",
+              "zh": "瞿折罗",
+              "siteCivEn": "Gurjaras"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 3
+        },
+        {
+          "mode": "aoe2",
+          "kind": "campaigns",
+          "summary": "3个具名战役",
+          "names": [
+            {
+              "id": "aoe2:Babur",
+              "en": "Babur"
+            },
+            {
+              "id": "aoe2:Rajendra",
+              "en": "Rajendra"
+            },
+            {
+              "id": "aoe2:Devapala",
+              "en": "Devapala"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 3
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/1869820/",
+          "title": "Dynasties of India",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        },
+        {
+          "id": "gift-announcement",
+          "url": "https://www.ageofempires.com/news/celebrate-5-years-of-age-ii-de-with-a-fresh-deal-for-new-players/",
+          "title": "官方五周年收录及赠送公告",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前新购买本体含此包；公告同时说明当时已有Steam本体的玩家会获赠缺失的前三包。",
+          "publishedAt": "2024-11-14"
+        }
+      ],
+      "historicalReleaseIndex": 8
+    },
+    {
+      "id": "return-of-rome",
+      "steamAppId": 2141580,
+      "zh": "罗马归来",
+      "en": "Return of Rome",
+      "releaseDate": "2023-05-16",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "civilizations",
+          "summary": "常规AoE2的罗马文明",
+          "names": [
+            {
+              "id": "aoe2:Romans",
+              "en": "Romans",
+              "zh": "罗马",
+              "siteCivEn": "Romans"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 1
+        },
+        {
+          "mode": "return-of-rome",
+          "kind": "civilizations",
+          "summary": "独立RoR子游戏的17个古代文明；同名文明不等同常规AoE2或Chronicles实体。",
+          "names": [
+            {
+              "id": "return-of-rome:Assyrians",
+              "en": "Assyrians",
+              "zh": "亚述人"
+            },
+            {
+              "id": "return-of-rome:Babylonians",
+              "en": "Babylonians",
+              "zh": "巴比伦人"
+            },
+            {
+              "id": "return-of-rome:Carthaginians",
+              "en": "Carthaginians",
+              "zh": "迦太基人"
+            },
+            {
+              "id": "return-of-rome:Choson",
+              "en": "Choson",
+              "zh": "朝鲜人"
+            },
+            {
+              "id": "return-of-rome:Egyptians",
+              "en": "Egyptians",
+              "zh": "埃及人"
+            },
+            {
+              "id": "return-of-rome:Greeks",
+              "en": "Greeks",
+              "zh": "希腊人"
+            },
+            {
+              "id": "return-of-rome:Hittites",
+              "en": "Hittites",
+              "zh": "赫梯人"
+            },
+            {
+              "id": "return-of-rome:Macedonians",
+              "en": "Macedonians",
+              "zh": "马其顿人"
+            },
+            {
+              "id": "return-of-rome:Minoans",
+              "en": "Minoans",
+              "zh": "米诺斯人"
+            },
+            {
+              "id": "return-of-rome:Palmyrans",
+              "en": "Palmyrans",
+              "zh": "巴尔米拉人"
+            },
+            {
+              "id": "return-of-rome:Persians",
+              "en": "Persians",
+              "zh": "波斯人"
+            },
+            {
+              "id": "return-of-rome:Phoenicians",
+              "en": "Phoenicians",
+              "zh": "腓尼基人"
+            },
+            {
+              "id": "return-of-rome:Romans",
+              "en": "Romans",
+              "zh": "罗马人"
+            },
+            {
+              "id": "return-of-rome:Shang",
+              "en": "Shang",
+              "zh": "商朝人"
+            },
+            {
+              "id": "return-of-rome:Sumerians",
+              "en": "Sumerians",
+              "zh": "苏美尔人"
+            },
+            {
+              "id": "return-of-rome:Yamato",
+              "en": "Yamato",
+              "zh": "大和人"
+            },
+            {
+              "id": "return-of-rome:Lac Viet",
+              "en": "Lac Viet",
+              "zh": "骆越"
+            }
+          ],
+          "sourceIds": ["steam", "steam-zh"],
+          "count": 17
+        },
+        {
+          "mode": "return-of-rome",
+          "kind": "campaigns",
+          "summary": "7个战役：3个新战役及后续加入的4个经典战役。",
+          "names": [
+            {
+              "id": "return-of-rome:Sargon of Akkad",
+              "en": "Sargon of Akkad",
+              "zh": "阿卡德的萨尔贡"
+            },
+            {
+              "id": "return-of-rome:Pyrrhus of Epirus",
+              "en": "Pyrrhus of Epirus",
+              "zh": "伊庇鲁斯的皮洛士"
+            },
+            {
+              "id": "return-of-rome:Trajan",
+              "en": "Trajan",
+              "zh": "图拉真"
+            },
+            {
+              "id": "return-of-rome:Ascent of Egypt",
+              "en": "Ascent of Egypt",
+              "zh": "Ascent of Egypt"
+            },
+            {
+              "id": "return-of-rome:The First Punic War",
+              "en": "The First Punic War",
+              "zh": "The First Punic War"
+            },
+            {
+              "id": "return-of-rome:Glory of Greece",
+              "en": "Glory of Greece",
+              "zh": "Glory of Greece"
+            },
+            {
+              "id": "return-of-rome:Voices of Babylon",
+              "en": "Voices of Babylon",
+              "zh": "Voices of Babylon"
+            }
+          ],
+          "sourceIds": ["campaign-update", "steam-zh"],
+          "count": 7
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/2141580/",
+          "title": "Return of Rome",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        },
+        {
+          "id": "campaign-update",
+          "url": "https://www.ageofempires.com/news/more-campaigns-now-available-in-return-of-rome/",
+          "title": "RoR当前七战役清单",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "官方列出七个战役，不能只列发售时三个。",
+          "publishedAt": "2023-12-20"
+        },
+        {
+          "id": "mode-support",
+          "url": "https://support.ageofempires.com/hc/en-us/articles/15552096234644-Return-of-Rome-DLC",
+          "title": "RoR官方支持说明",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "购买同一包同时提供RoR子游戏和常规AoE2 Romans。",
+          "publishedAt": "2026-01-20"
+        },
+        {
+          "id": "steam-zh",
+          "url": "https://store.steampowered.com/app/2141580/?l=schinese",
+          "title": "Steam 中文内容名称",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "实际打开中文商品正文，核对本包古代文明名称；RoR另核对三个新战役的中文名。"
+        }
+      ],
+      "historicalReleaseIndex": 9,
+      "modeNotes": ["RoR有独立主菜单入口和D3规则。", "罗马排位资格的新旧商品文案不一致，本页不据此判断排位资格。"],
+      "modeNotesSourceIds": ["steam", "mode-support"]
+    },
+    {
+      "id": "the-mountain-royals",
+      "steamAppId": 2555420,
+      "zh": "皇家山脉",
+      "en": "The Mountain Royals",
+      "releaseDate": "2023-10-31",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "civilizations",
+          "summary": "2个常规AoE2文明",
+          "names": [
+            {
+              "id": "aoe2:Armenians",
+              "en": "Armenians",
+              "zh": "亚美尼亚",
+              "siteCivEn": "Armenians"
+            },
+            {
+              "id": "aoe2:Georgians",
+              "en": "Georgians",
+              "zh": "格鲁吉亚",
+              "siteCivEn": "Georgians"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 2
+        },
+        {
+          "mode": "aoe2",
+          "kind": "campaigns",
+          "summary": "3个具名战役",
+          "names": [
+            {
+              "id": "aoe2:Tamar",
+              "en": "Tamar"
+            },
+            {
+              "id": "aoe2:Thoros the Great",
+              "en": "Thoros the Great"
+            },
+            {
+              "id": "aoe2:Ismail",
+              "en": "Ismail"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 3
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/2555420/",
+          "title": "The Mountain Royals",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        }
+      ],
+      "historicalReleaseIndex": 10
+    },
+    {
+      "id": "victors-and-vanquished",
+      "steamAppId": 2805510,
+      "zh": "征服与陨落",
+      "en": "Victors and Vanquished",
+      "releaseDate": "2024-03-14",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "scenarios",
+          "summary": "19个单人剧本；无新增常规文明。下列名称是商店举例，不是完整19条清单。",
+          "names": [
+            {
+              "id": "aoe2:Ragnar Lothbrok",
+              "en": "Ragnar Lothbrok"
+            },
+            {
+              "id": "aoe2:Oda Nobunaga",
+              "en": "Oda Nobunaga"
+            },
+            {
+              "id": "aoe2:Charlemagne",
+              "en": "Charlemagne"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 19
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/2805510/",
+          "title": "Victors and Vanquished",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        },
+        {
+          "id": "steam-zh",
+          "url": "https://store.steampowered.com/app/2805510/?l=schinese",
+          "title": "征服与陨落中文商品说明",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "中文正文实际使用征服与陨落；仅单人剧本，不添加新文明。"
+        }
+      ]
+    },
+    {
+      "id": "chronicles-battle-for-greece",
+      "steamAppId": 2805520,
+      "zh": "编年史：希腊之战",
+      "en": "Chronicles: Battle for Greece",
+      "releaseDate": "2024-11-14",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam", "chronicles-independent"]
+      },
+      "contents": [
+        {
+          "mode": "chronicles",
+          "kind": "civilizations",
+          "summary": "3个Chronicles文明；可自定义多人及AI遭遇战，不进排位。",
+          "names": [
+            {
+              "id": "chronicles:Athenians",
+              "en": "Athenians",
+              "zh": "雅典人"
+            },
+            {
+              "id": "chronicles:Spartans",
+              "en": "Spartans",
+              "zh": "斯巴达人"
+            },
+            {
+              "id": "chronicles:Achaemenids",
+              "en": "Achaemenids",
+              "zh": "阿契美尼德人"
+            }
+          ],
+          "sourceIds": ["steam", "steam-zh", "chronicles-faq", "chronicles-independent"],
+          "count": 3
+        },
+        {
+          "mode": "chronicles",
+          "kind": "campaigns",
+          "summary": "包含21个剧本的大叙事战役，不是21个独立战役。",
+          "names": [
+            {
+              "id": "chronicles:Chronicles: Battle for Greece",
+              "en": "Chronicles: Battle for Greece",
+              "zh": "编年史：希腊之战"
+            }
+          ],
+          "sourceIds": ["steam", "steam-zh", "chronicles-faq"],
+          "count": 1,
+          "scenarioCount": 21
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/2805520/",
+          "title": "Chronicles: Battle for Greece",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        },
+        {
+          "id": "chronicles-faq",
+          "url": "https://support.ageofempires.com/hc/en-us/articles/31839163606932-Chronicles-Expansions-FAQ",
+          "title": "Chronicles官方FAQ",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "两包各3文明，21/18个战役剧本，均不进排位。",
+          "publishedAt": "2026-07-17"
+        },
+        {
+          "id": "chronicles-independent",
+          "url": "https://www.ageofempires.com/news/what-to-expect-from-chronicles-alexander-the-great/",
+          "title": "Chronicles玩法及依赖说明",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "两包可独立购买游玩，只要求AoE2 DE；Chronicles文明可与常规文明自定义混战。",
+          "publishedAt": "2025-10-10"
+        },
+        {
+          "id": "steam-zh",
+          "url": "https://store.steampowered.com/app/2805520/?l=schinese",
+          "title": "Steam 中文内容名称",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "实际打开中文商品正文，核对本包古代文明名称；RoR另核对三个新战役的中文名。"
+        }
+      ],
+      "modeNotes": ["通过Chronicles菜单进入叙事内容；其文明也可在自定义/AI对局与常规文明混战，不进排位。"],
+      "modeNotesSourceIds": ["chronicles-faq", "chronicles-independent"]
+    },
+    {
+      "id": "chronicles-alexander-the-great",
+      "steamAppId": 3793540,
+      "zh": "编年史：亚历山大大帝",
+      "en": "Chronicles: Alexander the Great",
+      "releaseDate": "2025-10-14",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam", "chronicles-independent"]
+      },
+      "contents": [
+        {
+          "mode": "chronicles",
+          "kind": "civilizations",
+          "summary": "3个Chronicles文明；可自定义多人及AI遭遇战，不进排位。",
+          "names": [
+            {
+              "id": "chronicles:Macedonians",
+              "en": "Macedonians",
+              "zh": "马其顿人"
+            },
+            {
+              "id": "chronicles:Thracians",
+              "en": "Thracians",
+              "zh": "色雷斯人"
+            },
+            {
+              "id": "chronicles:Puru",
+              "en": "Puru",
+              "zh": "普鲁人"
+            }
+          ],
+          "sourceIds": ["steam", "steam-zh", "chronicles-faq", "chronicles-independent"],
+          "count": 3
+        },
+        {
+          "mode": "chronicles",
+          "kind": "campaigns",
+          "summary": "包含18个剧本的大叙事战役，不是18个独立战役。",
+          "names": [
+            {
+              "id": "chronicles:Chronicles: Alexander the Great",
+              "en": "Chronicles: Alexander the Great",
+              "zh": "编年史：亚历山大大帝"
+            }
+          ],
+          "sourceIds": ["steam", "steam-zh", "chronicles-faq"],
+          "count": 1,
+          "scenarioCount": 18
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/3793540/",
+          "title": "Chronicles: Alexander the Great",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        },
+        {
+          "id": "chronicles-faq",
+          "url": "https://support.ageofempires.com/hc/en-us/articles/31839163606932-Chronicles-Expansions-FAQ",
+          "title": "Chronicles官方FAQ",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "两包各3文明，21/18个战役剧本，均不进排位。",
+          "publishedAt": "2026-07-17"
+        },
+        {
+          "id": "chronicles-independent",
+          "url": "https://www.ageofempires.com/news/what-to-expect-from-chronicles-alexander-the-great/",
+          "title": "Chronicles玩法及依赖说明",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "两包可独立购买游玩，只要求AoE2 DE；Chronicles文明可与常规文明自定义混战。",
+          "publishedAt": "2025-10-10"
+        },
+        {
+          "id": "steam-zh",
+          "url": "https://store.steampowered.com/app/3793540/?l=schinese",
+          "title": "Steam 中文内容名称",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "实际打开中文商品正文，核对本包古代文明名称；RoR另核对三个新战役的中文名。"
+        }
+      ],
+      "modeNotes": ["通过Chronicles菜单进入叙事内容；其文明也可在自定义/AI对局与常规文明混战，不进排位。"],
+      "modeNotesSourceIds": ["chronicles-faq", "chronicles-independent"]
+    },
+    {
+      "id": "the-three-kingdoms",
+      "steamAppId": 3080080,
+      "zh": "三国",
+      "en": "The Three Kingdoms",
+      "releaseDate": "2025-05-06",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "civilizations",
+          "summary": "5个常规AoE2文明；不属于Chronicles。",
+          "names": [
+            {
+              "id": "aoe2:Shu",
+              "en": "Shu",
+              "zh": "蜀",
+              "siteCivEn": "Shu"
+            },
+            {
+              "id": "aoe2:Wei",
+              "en": "Wei",
+              "zh": "魏",
+              "siteCivEn": "Wei"
+            },
+            {
+              "id": "aoe2:Wu",
+              "en": "Wu",
+              "zh": "吴",
+              "siteCivEn": "Wu"
+            },
+            {
+              "id": "aoe2:Jurchens",
+              "en": "Jurchens",
+              "zh": "女真",
+              "siteCivEn": "Jurchens"
+            },
+            {
+              "id": "aoe2:Khitans",
+              "en": "Khitans",
+              "zh": "契丹",
+              "siteCivEn": "Khitans"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 5
+        },
+        {
+          "mode": "aoe2",
+          "kind": "campaigns",
+          "summary": "3个具名战役",
+          "names": [
+            {
+              "id": "aoe2:Liu Bei",
+              "en": "Liu Bei"
+            },
+            {
+              "id": "aoe2:Cao Cao",
+              "en": "Cao Cao"
+            },
+            {
+              "id": "aoe2:The Sun Clan",
+              "en": "The Sun Clan"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 3
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/3080080/",
+          "title": "The Three Kingdoms",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        }
+      ],
+      "historicalReleaseIndex": 11
+    },
+    {
+      "id": "the-last-chieftains",
+      "steamAppId": 3219700,
+      "zh": "最后的酋长",
+      "en": "The Last Chieftains",
+      "releaseDate": "2026-02-17",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "civilizations",
+          "summary": "3个常规AoE2文明",
+          "names": [
+            {
+              "id": "aoe2:Mapuche",
+              "en": "Mapuche",
+              "zh": "马普切",
+              "siteCivEn": "Mapuche"
+            },
+            {
+              "id": "aoe2:Muisca",
+              "en": "Muisca",
+              "zh": "穆伊斯卡",
+              "siteCivEn": "Muisca"
+            },
+            {
+              "id": "aoe2:Tupi",
+              "en": "Tupi",
+              "zh": "图皮",
+              "siteCivEn": "Tupi"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 3
+        },
+        {
+          "mode": "aoe2",
+          "kind": "campaigns",
+          "summary": "3个南美主题战役；本次未逐项核对战役专名。",
+          "names": [],
+          "sourceIds": ["steam"],
+          "count": 3
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/3219700/",
+          "title": "The Last Chieftains",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        }
+      ],
+      "historicalReleaseIndex": 12
+    },
+    {
+      "id": "the-viking-sagas",
+      "steamAppId": 4376980,
+      "zh": "维京传奇",
+      "en": "The Viking Sagas",
+      "releaseDate": "2026-09-22",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "aoe2",
+          "kind": "civilizations",
+          "summary": "3个常规AoE2文明；原Vikings文明不因此改为本包解锁。",
+          "names": [
+            {
+              "id": "aoe2:Danes",
+              "en": "Danes",
+              "zh": "丹麦人",
+              "siteCivEn": "Danes"
+            },
+            {
+              "id": "aoe2:Saxons",
+              "en": "Saxons",
+              "zh": "撒克逊人",
+              "siteCivEn": "Saxons"
+            },
+            {
+              "id": "aoe2:Varangians",
+              "en": "Varangians",
+              "zh": "瓦兰吉人",
+              "siteCivEn": "Varangians"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 3
+        },
+        {
+          "mode": "aoe2",
+          "kind": "campaigns",
+          "summary": "3个相互连接的哈拉尔故事战役",
+          "names": [
+            {
+              "id": "aoe2:The Exiled Prince",
+              "en": "The Exiled Prince"
+            },
+            {
+              "id": "aoe2:The Hard Ruler",
+              "en": "The Hard Ruler"
+            },
+            {
+              "id": "aoe2:The Last Viking",
+              "en": "The Last Viking"
+            }
+          ],
+          "sourceIds": ["steam"],
+          "count": 3
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/4376980/",
+          "title": "The Viking Sagas",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        }
+      ],
+      "historicalReleaseIndex": 13
+    },
+    {
+      "id": "icons-la-hire",
+      "steamAppId": 2672800,
+      "zh": "拉海尔动态头像包",
+      "en": "La Hire’s Dry Humor Animated Icons",
+      "releaseDate": "2023-12-11",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "appearance",
+          "kind": "cosmetics",
+          "summary": "8个动态玩家头像，仅外观，无游戏数值优势。",
+          "names": [],
+          "sourceIds": ["steam"],
+          "count": 8
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/2672800/",
+          "title": "La Hire’s Dry Humor Animated Icons",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        }
+      ],
+      "translationNote": "中文为便于导航的概述；保留官方英文商品原名，不声称中文为官方商品全译名。"
+    },
+    {
+      "id": "icons-joan",
+      "steamAppId": 2672810,
+      "zh": "贞德动态头像包",
+      "en": "Joan’s Marvelous Moving Masterpieces Animated Icons",
+      "releaseDate": "2023-12-11",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "appearance",
+          "kind": "cosmetics",
+          "summary": "8个动态玩家头像，仅外观，无游戏数值优势。",
+          "names": [],
+          "sourceIds": ["steam"],
+          "count": 8
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/2672810/",
+          "title": "Joan’s Marvelous Moving Masterpieces Animated Icons",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        }
+      ],
+      "translationNote": "中文为便于导航的概述；保留官方英文商品原名，不声称中文为官方商品全译名。"
+    },
+    {
+      "id": "icons-barbarossa",
+      "steamAppId": 2672820,
+      "zh": "巴巴罗萨动态头像包",
+      "en": "Barbarossa’s Barrel of Pickled Goods Animated Icons",
+      "releaseDate": "2023-12-11",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "appearance",
+          "kind": "cosmetics",
+          "summary": "8个动态玩家头像，仅外观，无游戏数值优势。",
+          "names": [],
+          "sourceIds": ["steam"],
+          "count": 8
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/2672820/",
+          "title": "Barbarossa’s Barrel of Pickled Goods Animated Icons",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        }
+      ],
+      "translationNote": "中文为便于导航的概述；保留官方英文商品原名，不声称中文为官方商品全译名。"
+    },
+    {
+      "id": "soundtrack",
+      "steamAppId": 1228810,
+      "zh": "决定版原声",
+      "en": "Age of Empires II: Definitive Edition Soundtrack",
+      "releaseDate": "2020-01-23",
+      "acquisition": {
+        "kind": "paid-add-on",
+        "sourceIds": ["steam", "base-package"]
+      },
+      "prerequisites": {
+        "productIds": [],
+        "status": "unverified",
+        "note": "音乐商品，不含游戏。商品页未明确本体所有权是否为购买/播放前置；本次不推断，交由Steam确认。",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "audio",
+          "kind": "soundtrack",
+          "summary": "可下载MP3音乐专辑；不含游戏，不解锁文明或战役。",
+          "names": [],
+          "sourceIds": ["steam"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/1228810/",
+          "title": "Age of Empires II: Definitive Edition Soundtrack",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        },
+        {
+          "id": "base-package",
+          "url": "https://store.steampowered.com/app/813780/",
+          "title": "Steam 本体当前购买项",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "当前本体购买项列出四件物品：本体、西方霸主、公爵的崛起、印度王朝。"
+        }
+      ],
+      "verificationNotes": ["内容类型与另购项已核实；前置本体所有权细节未核实，不能将空productIds渲染成无需本体。"]
+    },
+    {
+      "id": "enhanced-graphics",
+      "steamAppId": 1039811,
+      "zh": "高清画质包",
+      "en": "Enhanced Graphics Pack",
+      "releaseDate": "2019-11-14",
+      "acquisition": {
+        "kind": "free-download",
+        "sourceIds": ["steam"]
+      },
+      "prerequisites": {
+        "productIds": ["base"],
+        "status": "verified",
+        "sourceIds": ["steam"]
+      },
+      "contents": [
+        {
+          "mode": "graphics",
+          "kind": "graphics",
+          "summary": "免费可选的高分辨率素材包；需本体并满足配置，不增加文明或战役。",
+          "names": [],
+          "sourceIds": ["steam"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "steam",
+          "url": "https://store.steampowered.com/app/1039811/",
+          "title": "Enhanced Graphics Pack",
+          "verifiedAt": "2026-10-20",
+          "status": "verified",
+          "note": "已实际打开商品页；读取购买项、前置本体提示和内容说明。"
+        }
+      ]
+    }
+  ]
+}

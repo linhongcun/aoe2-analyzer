@@ -80,6 +80,14 @@ export default function TeamBonuses() {
           复制队伍方案
         </button>
       </header>
+      <nav className="bar" aria-label="队伍相关工具">
+        <Link className="community-tool-entry" to="/team-plan">
+          约定团战分工与支援
+        </Link>
+        <Link className="community-tool-entry" to="/relic-income">
+          按明确来源预览圣物收益
+        </Link>
+      </nav>
       <aside className="team-notice" aria-label="汇总口径">
         <strong>包含本人，按效果来源汇总</strong>
         <p>重复文明的同一来源只列一条，保留全部提供者；来源合并用于查阅，不表示叠加倍率。不同来源分别列出，不计算总倍率。</p>
