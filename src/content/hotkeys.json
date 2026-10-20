@@ -1,0 +1,285 @@
+{
+  "checkedAt": "2026-10-20",
+  "build": 185872,
+  "menuNote": "在游戏选项内查找快捷键设置，再按英文用语辨认对应操作。固定版的子组名称、排列与中文菜单译名未核实；以下中文为本站说明，英文为检索参考。",
+  "sources": [
+    {
+      "id": "official-hotkeys",
+      "title": "官方 PC 教学：Match Goals & Hotkeys",
+      "url": "https://www.ageofempires.com/learn-to-play/match-goals-aoe2/",
+      "note": "已核对网页正文中的 TC、村民、建造、网格布局和控制组说明；页面未声明对应 185872，不用其中按键证明固定版默认值。"
+    },
+    {
+      "id": "official-controls",
+      "title": "官方 PC 教学：Controlling Your Empire & Gathering Resources",
+      "url": "https://www.ageofempires.com/learn-to-play/control-resources-aoe2/",
+      "note": "核对命令菜单随选中对象变化、修理、驻军、军队命令及集结点。未引用其中旧建筑枚举或其他游戏数值。"
+    },
+    {
+      "id": "patch-185872",
+      "title": "官方 Update 185872：Hotkeys",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "note": "确认选择全部闲置军队的筛选修复。该补丁没有给出本目录全部动作的默认按键或完整设置分组。"
+    },
+    {
+      "id": "patch-177723",
+      "title": "官方 Update 177723：选择全部城镇中心",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/",
+      "note": "官方说明选择全部 TC 包括其地基；这是既往补丁的功能证据，不是 185872 客户端实测。"
+    },
+    {
+      "id": "patch-169123",
+      "title": "官方 Update 169123：Stop 与 Autoscout",
+      "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/",
+      "note": "确认停止动作存在，以及与自动侦察共用按键时停止优先的修复。"
+    },
+    {
+      "id": "english-snapshot",
+      "title": "英文名称快照：hotkey-catalog.ts @ 97f0660",
+      "url": "https://github.com/bsubramaniam/aoe2-hotkeys-practice/blob/97f0660ef11c4a4f4157628c42e7ce1e78a3dbb6/src/hotkey-catalog.ts",
+      "note": "第三方文件说明从安装游戏的英文字符串生成，固定提交可追溯；客户端 build 未声明。仅作名称与 string ID 参考，185872 的精确名称、分组和默认键位未核实。"
+    }
+  ],
+  "actions": [
+    {
+      "id": "go-town-center",
+      "zh": "前往城镇中心",
+      "en": "Go to Town Center",
+      "stringId": 19026,
+      "aliases": ["TC", "回城", "跳转城镇中心"],
+      "context": "在对局中寻找自己的城镇中心。",
+      "meaning": "官方教学将它描述为选中城镇中心并移动镜头。它与选择全部城镇中心是两个操作；具体循环次序未作固定版核实。",
+      "status": "official-guide",
+      "sourceIds": ["official-hotkeys", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "select-town-centers",
+      "zh": "选择全部城镇中心",
+      "en": "Select all Town Centers",
+      "stringId": 19021,
+      "aliases": ["全选TC", "全选城镇中心", "全部TC"],
+      "context": "需要集中选择自己的城镇中心时。",
+      "meaning": "选择一类建筑与前往单个建筑应分别辨认。官方既往补丁说明此动作包括 TC 地基；本页不保证镜头定位或未完工建筑可生产。",
+      "status": "official-patch",
+      "sourceIds": ["patch-177723", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "go-idle-villager",
+      "zh": "前往下一个闲置村民",
+      "en": "Go to Next Idle Villager",
+      "stringId": 19023,
+      "aliases": ["闲村", "空闲村民", "找村民"],
+      "context": "当前存在闲置村民时。",
+      "meaning": "官方教学说明此操作会移动到并选中一个闲置村民。寻找下一个与选择全部闲置村民应分开记录。",
+      "status": "official-guide",
+      "sourceIds": ["official-hotkeys", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "select-idle-villagers",
+      "zh": "选择全部闲置村民",
+      "en": "Select all Idle Villagers",
+      "stringId": 19077,
+      "aliases": ["全选闲村", "全部空闲村民"],
+      "context": "需要集中找到闲置村民时。",
+      "meaning": "英文快照记录了全选闲置村民这一动作，区别于逐个跳转。固定版的选择范围、特殊单位与镜头行为未核实，请在游戏中确认。",
+      "status": "reference-only",
+      "sourceIds": ["english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "select-military",
+      "zh": "选择全部军队",
+      "en": "Select all Land/Naval Military Units",
+      "stringId": 19076,
+      "aliases": ["全选军队", "全军", "全部军事单位"],
+      "context": "需要重新集合军队时。",
+      "meaning": "英文快照使用陆军与海军合并的用语。固定版具体包含哪些特殊单位、驻军或选择上限未核实；不能把它当作必定选中所有对象的保证。",
+      "status": "reference-only",
+      "sourceIds": ["english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "select-idle-military",
+      "zh": "选择全部闲置军队",
+      "en": "Select all Idle Land/Naval Military Units",
+      "stringId": 19140,
+      "aliases": ["全选闲兵", "空闲军队", "闲置军事单位"],
+      "context": "寻找当前闲置的军事单位。",
+      "meaning": "185872 官方补丁修复了此热键误选非闲置单位的问题。固定版的特殊单位范围、选择上限与镜头行为未逐项核实。",
+      "status": "official-patch",
+      "sourceIds": ["patch-185872", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "go-selected",
+      "zh": "前往已选对象",
+      "en": "Go to Selected Object",
+      "stringId": 19025,
+      "aliases": ["定位选择", "镜头定位", "已选单位"],
+      "context": "已有选中对象，需要辨认定位动作时。",
+      "meaning": "英文快照将定位已选对象列为独立操作。固定版面对分散单位或多建筑时的镜头定位规则未核实，请在游戏中确认。",
+      "status": "reference-only",
+      "sourceIds": ["english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "train-villager",
+      "zh": "训练村民",
+      "en": "Villager",
+      "stringId": 19054,
+      "aliases": ["造村民", "生产村民", "Train Villager"],
+      "context": "已选中可训练村民的城镇中心。",
+      "meaning": "在城镇中心命令面板中排入村民训练。相同字母在其他已选对象下可能执行其他操作，个人表允许按上下文复用按键。",
+      "status": "official-guide",
+      "sourceIds": ["official-hotkeys", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "economic-menu",
+      "zh": "打开经济建筑菜单",
+      "en": "Economic Buildings",
+      "stringId": 19214,
+      "aliases": ["经济建筑", "建造菜单", "Building Menu"],
+      "context": "已选中村民，准备放置经济建筑。",
+      "meaning": "先进入建造菜单，再选择所需建筑。官方教学展示了村民建房与种田的两步流程；固定版的精确子菜单标题未核实。",
+      "status": "official-guide",
+      "sourceIds": ["official-hotkeys", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "military-menu",
+      "zh": "打开军事建筑菜单",
+      "en": "Military Buildings",
+      "stringId": 19215,
+      "aliases": ["军事建筑", "军营菜单"],
+      "context": "已选中村民，准备查找军事建筑。",
+      "meaning": "英文快照把军事建筑菜单与经济建筑菜单分别列出。固定版子菜单位置和标题未核实；它不等于选择全部军事建筑。",
+      "status": "reference-only",
+      "sourceIds": ["english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "build-house",
+      "zh": "建造房屋",
+      "en": "House",
+      "stringId": 19213,
+      "aliases": ["造房子", "房屋", "Build House"],
+      "context": "已选中村民并进入相应建造菜单。",
+      "meaning": "进入房屋放置操作，再在有效位置放置地基。选择建筑动作不代表已经完工，也不会由本网页自动执行。",
+      "status": "official-guide",
+      "sourceIds": ["official-hotkeys", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "build-farm",
+      "zh": "建造农田",
+      "en": "Farm, Pasture",
+      "stringId": 19200,
+      "aliases": ["种田", "农田", "Build Farm"],
+      "context": "已选中村民并进入相应建造菜单。",
+      "meaning": "官方教学介绍农田放置流程。英文快照中此项与牧场共享名称；特殊文明的替代建筑与固定版菜单细节未核实。",
+      "status": "official-guide",
+      "sourceIds": ["official-hotkeys", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "repair",
+      "zh": "修理",
+      "en": "Repair",
+      "stringId": 19224,
+      "aliases": ["维修", "修建筑"],
+      "context": "已选中村民，并有可修理的目标。",
+      "meaning": "官方操作教学列出村民修理建筑、船只和攻城单位的命令。是否可修、资源条件与实际目标以游戏为准。",
+      "status": "official-guide",
+      "sourceIds": ["official-controls", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "garrison",
+      "zh": "驻军",
+      "en": "Garrison",
+      "stringId": 19012,
+      "aliases": ["驻扎", "进建筑", "躲入建筑"],
+      "context": "已选中可驻军单位，并有合法宿主和容量。",
+      "meaning": "命令单位进入允许驻军的宿主。并非每个单位都能进入每种建筑，容量与资格需另外确认；本页只记录操作。",
+      "status": "official-guide",
+      "sourceIds": ["official-controls", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "stop",
+      "zh": "停止",
+      "en": "Stop",
+      "stringId": 19216,
+      "aliases": ["停止命令", "停下"],
+      "context": "已选中支持停止命令的单位。",
+      "meaning": "停止是独立命令。官方既往补丁说明斥候停止与自动侦察共用按键时停止优先；不据此保证所有特殊动作都可即时取消。",
+      "status": "official-patch",
+      "sourceIds": ["patch-169123", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "attack-move",
+      "zh": "攻击移动",
+      "en": "Attack Move",
+      "stringId": 200008,
+      "aliases": ["攻击前进", "A地板"],
+      "context": "已选中支持此命令的军事单位。",
+      "meaning": "官方教学把攻击移动列为军队命令；需要在游戏中指定目标位置。具体索敌、阵型与特殊单位行为未在本页核实。",
+      "status": "official-guide",
+      "sourceIds": ["official-controls", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "patrol",
+      "zh": "巡逻",
+      "en": "Patrol",
+      "stringId": 19312,
+      "aliases": ["巡逻命令"],
+      "context": "已选中支持巡逻命令的军事单位。",
+      "meaning": "官方教学将巡逻列为独立军队命令。不要与攻击移动混为同一个按键项；具体路线和索敌细节请在游戏中确认。",
+      "status": "official-guide",
+      "sourceIds": ["official-controls", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "gather-point",
+      "zh": "设置集结点",
+      "en": "Set Gather Point",
+      "stringId": 19002,
+      "aliases": ["集合点", "出兵位置", "Rally Point"],
+      "context": "已选中支持集结点的生产建筑。",
+      "meaning": "为生产建筑指定新单位的集合目标。官方教学说明可在选中建筑后设置集结点；不同对象的目标效果以游戏为准。",
+      "status": "official-guide",
+      "sourceIds": ["official-controls", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "create-group-1",
+      "zh": "创建控制组1",
+      "en": "Create Group #1",
+      "stringId": 19244,
+      "aliases": ["编队", "建立控制组", "控制组一"],
+      "context": "已选中希望编入控制组的对象；此项只记录第1组。",
+      "meaning": "官方教学展示先选择对象，再创建一个编号控制组。创建与之后重新选择该组是两个操作；本页不推断追加与替换规则。",
+      "status": "official-guide",
+      "sourceIds": ["official-hotkeys", "english-snapshot"],
+      "defaultBinding": null
+    },
+    {
+      "id": "select-group-1",
+      "zh": "选择控制组1",
+      "en": "Select Group #1",
+      "stringId": 19254,
+      "aliases": ["选编队", "选择编队", "控制组一"],
+      "context": "已经创建第1控制组。",
+      "meaning": "重新选中先前创建的控制组。选择对象与镜头居中应分别辨认；本页没有核实双击或镜头定位的固定版规则。",
+      "status": "official-guide",
+      "sourceIds": ["official-hotkeys", "english-snapshot"],
+      "defaultBinding": null
+    }
+  ]
+}
