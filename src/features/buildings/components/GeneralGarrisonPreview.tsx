@@ -105,6 +105,13 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
           复制驻军方案
         </button>
       </div>
+      {compatible.some((unit) => unit.canDeposit) && (
+        <p>
+          <Link className="community-tool-entry" to="/relic-income">
+            按已生效数量预览圣物收益
+          </Link>
+        </p>
+      )}
       {healingHref && (
         <p>
           <Link className="btn community-tool-entry" to={healingHref}>

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { ListHead } from '../../../shared/ui/layout';
 import { civByEn, civs } from '../../../data';
 import { DLCS } from '../../../domain/dlc';
@@ -6,7 +7,12 @@ import { CivChip, DlcImg } from '../../../shared/ui/art';
 export default function DlcView() {
   return (
     <section id="dlcs" className="pane">
-      <ListHead title="DLC / 资料片" desc="文明发售列表" />
+      <ListHead title="DLC / 资料片" desc="文明历史首发列表；版本标签不等于当前购买要求" />
+      <p>
+        <Link className="community-tool-entry" to="/content-guide">
+          查看当前内容与购买导航
+        </Link>
+      </p>
 
       <table className="dlct">
         <tbody>
