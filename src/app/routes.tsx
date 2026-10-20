@@ -24,6 +24,7 @@ const Planned = lazy(() => import('../features/placeholder/components/Planned'))
 const Duel = lazy(() => import('../features/duel/components/Duel'));
 const BonusDetail = lazy(() => import('../features/bonuses/components/BonusDetail'));
 const BonusList = lazy(() => import('../features/bonuses/components/BonusList'));
+const Scouting = lazy(() => import('../features/scouting/Scouting'));
 const Matchup = lazy(() => import('../features/matchup/components/Matchup'));
 const Market = lazy(() => import('../features/market/Market'));
 const Production = lazy(() => import('../features/production/Production'));
@@ -61,6 +62,7 @@ export function AppRoutes() {
       <Route path="/tree/:civ" element={<TreeView />} />
       <Route path="/dlc" element={<DlcView />} />
       <Route path="/compare" element={<Compare />} />
+      <Route path="/scouting" element={<Scouting />} />
       <Route path="/matchup" element={<Matchup />} />
       <Route path="/buildings" element={<BuildingList />} />
       <Route path="/building/:id" element={<BuildingDetail />} />
