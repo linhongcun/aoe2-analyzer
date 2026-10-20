@@ -6,6 +6,7 @@ import Home from '../features/home/components/Home';
 // 非首页路由按需拆包
 const CivList = lazy(() => import('../features/civs/components/CivList'));
 const CivDetail = lazy(() => import('../features/civs/components/CivDetail'));
+const MatchReview = lazy(() => import('../features/matchReview/MatchReview'));
 const BuildOrderList = lazy(() => import('../features/builds/BuildOrderList'));
 const Patches = lazy(() => import('../features/patches/Patches'));
 const AboutData = lazy(() => import('../features/about/AboutData'));
@@ -86,6 +87,7 @@ export function AppRoutes() {
       <Route path="/patches/:id" element={<Patches />} />
       <Route path="/about-data" element={<AboutData />} />
       <Route path="/simulator" element={<SimulatorHub />} />
+      <Route path="/match-review" element={<MatchReview />} />
       <Route path="/builds" element={<BuildOrderList />} />
       <Route path="/maps" element={<Maps />} />
       {['/ladder'].map((p) => (
