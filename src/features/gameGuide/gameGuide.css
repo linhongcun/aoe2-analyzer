@@ -1,0 +1,252 @@
+.game-guide-page {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  min-width: 0;
+}
+.game-guide-page * {
+  box-sizing: border-box;
+}
+.game-guide-page p {
+  margin: 0 0 var(--space-3);
+}
+.game-guide-page h2 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-tight);
+}
+.game-guide-page h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h3);
+}
+.game-guide-page button,
+.game-guide-page select,
+.game-guide-page a,
+.game-guide-page summary {
+  min-height: 44px;
+}
+.game-guide-page button,
+.game-guide-page a,
+.game-guide-page summary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.game-guide-page button:focus-visible,
+.game-guide-page select:focus-visible,
+.game-guide-page a:focus-visible,
+.game-guide-page summary:focus-visible,
+.game-guide-page textarea:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+}
+.game-guide-page textarea {
+  width: 100%;
+  min-height: 88px;
+  padding: var(--space-3);
+  background: var(--color-control);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+  resize: vertical;
+}
+.gg-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+.gg-heading h1 {
+  margin-bottom: var(--space-3);
+}
+.gg-heading button {
+  flex-shrink: 0;
+}
+.gg-scope {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  margin-bottom: var(--space-5);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.gg-setting {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  min-width: 0;
+}
+.gg-setting > span:first-child {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.gg-setting select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.gg-layout {
+  display: grid;
+  grid-template-columns: 204px minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+.gg-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  padding: 0;
+}
+.gg-nav button {
+  width: 100%;
+  text-align: left;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+.gg-nav button[aria-pressed='true'] {
+  background: var(--color-route-current);
+  color: var(--color-on-route-current);
+  border-color: var(--color-route-current);
+}
+.gg-index {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.gg-card,
+.gg-unsupported {
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow-wrap: anywhere;
+}
+.gg-kicker {
+  color: var(--color-accent);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.gg-summary {
+  color: var(--color-text-2);
+}
+.gg-explanation {
+  margin: var(--space-5) 0;
+}
+.gg-example {
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+}
+.gg-example p:last-child,
+.gg-source p:last-child {
+  margin-bottom: 0;
+}
+.gg-question,
+.gg-sources {
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+.game-guide-page summary {
+  display: list-item;
+  padding: var(--space-3) 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+.gg-boundary {
+  margin-top: var(--space-4) !important;
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.gg-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.gg-links a {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-link);
+  background: var(--color-surface);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+  max-width: 100%;
+}
+.gg-links a:hover {
+  background: var(--color-link-soft);
+}
+.gg-source {
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--color-line);
+}
+.gg-source a {
+  color: var(--color-link);
+  overflow-wrap: anywhere;
+  font-size: var(--fs-sm);
+}
+.gg-number {
+  white-space: nowrap;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+.gg-alert {
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+  border: 1px solid var(--color-warn);
+  border-radius: var(--radius-sm);
+  background: var(--color-warn-soft);
+}
+.gg-alert label,
+.gg-copy label {
+  display: grid;
+  gap: var(--space-2);
+}
+.gg-alert button {
+  margin-top: var(--space-3);
+}
+.gg-copy {
+  margin-bottom: var(--space-4);
+}
+.gg-footer {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+@media (max-width: 720px) {
+  .gg-heading {
+    display: grid;
+  }
+  .gg-heading h1 {
+    font-size: var(--fs-h2);
+  }
+  .gg-heading button {
+    justify-self: start;
+  }
+  .gg-scope {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+  .gg-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+  .gg-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .gg-card,
+  .gg-unsupported {
+    padding: var(--space-4);
+  }
+  .game-guide-page h2 {
+    font-size: var(--fs-h3);
+  }
+}
