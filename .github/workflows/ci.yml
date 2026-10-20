@@ -111,6 +111,11 @@ jobs:
             test-results/mixedArmy241-*/*.png
             test-results/teamPlan243-*/*.png
             test-results/campaigns240-*/*.png
+            test-results/gameGuide256-*/*.png
+            test-results/gameGuide256-*.png
+            test-results/matchReview257-*/*.png
+            test-results/scouting258-*/*.png
+            test-results/learningIntegration259-*/*.png
             test-results/relicIncome238-*/*.png
             test-results/communityIntegration249-*/*.png
           if-no-files-found: ignore

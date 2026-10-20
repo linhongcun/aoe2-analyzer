@@ -72,6 +72,13 @@ export default function Home() {
         {TOOLS.map((s) => (
           <Card key={s.key} s={s} tool />
         ))}
+        <nav className="bar home-planning-links" aria-label="学习与复盘">
+          {SECONDARY_TOOLS.filter((s) => ['game-guide', 'match-review', 'scouting'].includes(s.key)).map((s) => (
+            <Link key={s.key} className="btn community-tool-entry" to={s.path}>
+              {s.label}
+            </Link>
+          ))}
+        </nav>
         <nav className="bar home-planning-links" aria-label="入门与实战">
           {SECONDARY_TOOLS.filter((s) => ['game-clock', 'hotkeys', 'castle-defense'].includes(s.key)).map((s) => (
             <Link key={s.key} className="btn community-tool-entry" to={s.path}>
