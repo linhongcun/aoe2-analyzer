@@ -1,0 +1,3431 @@
+{
+  "baseOverrides": {},
+  "hostIds": [
+    12,
+    45,
+    49,
+    68,
+    70,
+    79,
+    82,
+    84,
+    87,
+    101,
+    104,
+    109,
+    234,
+    235,
+    236,
+    1189,
+    1251,
+    1665,
+    1806,
+    2556
+  ],
+  "meta": {
+    "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "eligibilityPolicy": "organic-classes-v1; special mechanical, herdable and mobile-building cases paused",
+    "engineVerifiedInPinnedBuild": false,
+    "fields": [
+      "Unit.hit_points",
+      "Unit.class_",
+      "Unit.type",
+      "Building.garrison_heal_rate",
+      "Building.garrison_repair_rate",
+      "EffectCommand attribute 108"
+    ],
+    "generatedBy": "scripts/garrison_healing_build.py",
+    "patch": "DE Update 185872 (2026-09-22)",
+    "repo": "SiegeEngineers/auto-mods",
+    "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa"
+  },
+  "organicClasses": [
+    0,
+    4,
+    6,
+    12,
+    18,
+    23,
+    36,
+    43,
+    44,
+    47,
+    59
+  ],
+  "rateTechs": {
+    "441": {
+      "count": 1,
+      "effects": [
+        {
+          "op": "mul",
+          "units": [
+            79,
+            234,
+            235,
+            236,
+            1665
+          ],
+          "value": 6.0
+        },
+        {
+          "op": "mul",
+          "units": [
+            10,
+            12,
+            14,
+            18,
+            19,
+            20,
+            30,
+            31,
+            32,
+            45,
+            47,
+            49,
+            51,
+            68,
+            70,
+            71,
+            82,
+            84,
+            86,
+            87,
+            101,
+            103,
+            104,
+            105,
+            109,
+            116,
+            129,
+            130,
+            131,
+            132,
+            133,
+            137,
+            141,
+            142,
+            153,
+            209,
+            210,
+            276,
+            463,
+            464,
+            465,
+            498,
+            562,
+            563,
+            564,
+            565,
+            584,
+            585,
+            586,
+            587,
+            598,
+            1021,
+            1189,
+            1251,
+            1734,
+            1754,
+            1806,
+            1808,
+            2556
+          ],
+          "value": 6.0
+        }
+      ],
+      "requires": [
+        102
+      ]
+    }
+  },
+  "units": {
+    "10": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.5,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1001": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "1003": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "1004": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 130,
+      "repairRate": null,
+      "type": 70
+    },
+    "1006": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 150,
+      "repairRate": null,
+      "type": 70
+    },
+    "1007": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "1009": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "101": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.25,
+      "hp": 1500,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1010": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "1012": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "1013": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "1015": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "1016": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "1018": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "1021": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 2700,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "103": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "104": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 1.5,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "105": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1055": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1057": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1060": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 7,
+      "repairRate": null,
+      "type": 70
+    },
+    "109": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.10000000149011612,
+      "hp": 2400,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "11": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "1103": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 110,
+      "repairRate": null,
+      "type": 70
+    },
+    "1104": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "1105": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 175,
+      "repairRate": null,
+      "type": 70
+    },
+    "1119": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1120": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 250,
+      "repairRate": null,
+      "type": 70
+    },
+    "1122": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 280,
+      "repairRate": null,
+      "type": 70
+    },
+    "1123": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 30,
+      "repairRate": null,
+      "type": 70
+    },
+    "1125": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "1126": {
+      "class": 23,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "1128": {
+      "class": 23,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "1129": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 35,
+      "repairRate": null,
+      "type": 70
+    },
+    "1131": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "1132": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 250,
+      "repairRate": null,
+      "type": 70
+    },
+    "1134": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 300,
+      "repairRate": null,
+      "type": 70
+    },
+    "1142": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 14,
+      "repairRate": null,
+      "type": 70
+    },
+    "1155": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 35,
+      "repairRate": null,
+      "type": 70
+    },
+    "116": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1167": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1169": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "117": {
+      "class": 27,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1080,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1189": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 2000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "12": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.5,
+      "hp": 1200,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1225": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "1227": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 120,
+      "repairRate": null,
+      "type": 70
+    },
+    "1228": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 120,
+      "repairRate": null,
+      "type": 70
+    },
+    "1230": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 145,
+      "repairRate": null,
+      "type": 70
+    },
+    "1231": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "1233": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "1234": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "1236": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 130,
+      "repairRate": null,
+      "type": 70
+    },
+    "1243": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 7,
+      "repairRate": null,
+      "type": 70
+    },
+    "1245": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 7,
+      "repairRate": null,
+      "type": 70
+    },
+    "125": {
+      "class": 18,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 30,
+      "repairRate": null,
+      "type": 70
+    },
+    "1251": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.20000000298023224,
+      "hp": 2600,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1254": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "1255": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 120,
+      "repairRate": null,
+      "type": 70
+    },
+    "1258": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 175,
+      "repairRate": null,
+      "type": 70
+    },
+    "1260": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "1263": {
+      "class": 35,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "128": {
+      "class": 19,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "129": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "13": {
+      "class": 21,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "130": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1302": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 135,
+      "repairRate": null,
+      "type": 70
+    },
+    "131": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "132": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.5,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "133": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "137": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1370": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "1372": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "14": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.5,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "141": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.10000000149011612,
+      "hp": 2400,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "142": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.10000000149011612,
+      "hp": 2400,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "153": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.25,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1548": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "155": {
+      "class": 27,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 3000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1596": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 14,
+      "repairRate": null,
+      "type": 70
+    },
+    "1598": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 14,
+      "repairRate": null,
+      "type": 70
+    },
+    "1600": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 14,
+      "repairRate": null,
+      "type": 70
+    },
+    "1655": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 115,
+      "repairRate": null,
+      "type": 70
+    },
+    "1657": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 145,
+      "repairRate": null,
+      "type": 70
+    },
+    "1658": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "1659": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 85,
+      "repairRate": null,
+      "type": 70
+    },
+    "1660": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "1661": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 85,
+      "repairRate": null,
+      "type": 70
+    },
+    "1665": {
+      "class": 52,
+      "eligibility": "unverified",
+      "healRate": 0.10000000149011612,
+      "hp": 625,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1699": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "17": {
+      "class": 2,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "1701": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "1703": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 95,
+      "repairRate": null,
+      "type": 70
+    },
+    "1704": {
+      "class": 55,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 160,
+      "repairRate": null,
+      "type": 70
+    },
+    "1706": {
+      "class": 55,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 230,
+      "repairRate": null,
+      "type": 70
+    },
+    "1707": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "1709": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 90,
+      "repairRate": null,
+      "type": 70
+    },
+    "1733": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1734": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1735": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "1737": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "1741": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "1743": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "1744": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 180,
+      "repairRate": null,
+      "type": 70
+    },
+    "1746": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 220,
+      "repairRate": null,
+      "type": 70
+    },
+    "1747": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "1749": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "1750": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 250,
+      "repairRate": null,
+      "type": 70
+    },
+    "1751": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "1753": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "1754": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 2700,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1755": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "1756": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1759": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "1761": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 115,
+      "repairRate": null,
+      "type": 70
+    },
+    "1779": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1781": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1783": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1786": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "1787": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "1788": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "1789": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1790": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 110,
+      "repairRate": null,
+      "type": 70
+    },
+    "1792": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 155,
+      "repairRate": null,
+      "type": 70
+    },
+    "1793": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 75,
+      "repairRate": null,
+      "type": 70
+    },
+    "1795": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 125,
+      "repairRate": null,
+      "type": 70
+    },
+    "18": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1800": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "1802": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "1803": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "1805": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "1806": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.4000000059604645,
+      "hp": 2400,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1808": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 300,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1811": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "1813": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 145,
+      "repairRate": null,
+      "type": 70
+    },
+    "185": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 35,
+      "repairRate": null,
+      "type": 70
+    },
+    "187": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1889": {
+      "class": 49,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 560,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "19": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "1901": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "1903": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 85,
+      "repairRate": null,
+      "type": 70
+    },
+    "1904": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "1906": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1907": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "1908": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 115,
+      "repairRate": null,
+      "type": 70
+    },
+    "1910": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 140,
+      "repairRate": null,
+      "type": 70
+    },
+    "1911": {
+      "class": 44,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "1913": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1920": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 75,
+      "repairRate": null,
+      "type": 70
+    },
+    "1922": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 85,
+      "repairRate": null,
+      "type": 70
+    },
+    "1923": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 75,
+      "repairRate": null,
+      "type": 70
+    },
+    "1925": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1926": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1930": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1932": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1934": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1936": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1938": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1942": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 115,
+      "repairRate": null,
+      "type": 70
+    },
+    "1944": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "1946": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 90,
+      "repairRate": null,
+      "type": 70
+    },
+    "1948": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 175,
+      "repairRate": null,
+      "type": 70
+    },
+    "1949": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 110,
+      "repairRate": null,
+      "type": 70
+    },
+    "1951": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 125,
+      "repairRate": null,
+      "type": 70
+    },
+    "1952": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 30,
+      "repairRate": null,
+      "type": 70
+    },
+    "1954": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 475,
+      "repairRate": null,
+      "type": 70
+    },
+    "1959": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 95,
+      "repairRate": null,
+      "type": 70
+    },
+    "1961": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "1962": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "1963": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 7,
+      "repairRate": null,
+      "type": 70
+    },
+    "1964": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1966": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 425,
+      "repairRate": null,
+      "type": 70
+    },
+    "1968": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 35,
+      "repairRate": null,
+      "type": 70
+    },
+    "1970": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "1971": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1974": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "1978": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 400,
+      "repairRate": null,
+      "type": 70
+    },
+    "1982": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "1983": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "199": {
+      "class": 49,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 250,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "20": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.5,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "207": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 140,
+      "repairRate": null,
+      "type": 70
+    },
+    "2083": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 5,
+      "repairRate": null,
+      "type": 70
+    },
+    "2085": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 5,
+      "repairRate": null,
+      "type": 70
+    },
+    "2087": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 5,
+      "repairRate": null,
+      "type": 70
+    },
+    "209": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "21": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 125,
+      "repairRate": null,
+      "type": 70
+    },
+    "210": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "232": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "234": {
+      "class": 52,
+      "eligibility": "unverified",
+      "healRate": 0.10000000149011612,
+      "hp": 1500,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "235": {
+      "class": 52,
+      "eligibility": "unverified",
+      "healRate": 0.10000000149011612,
+      "hp": 2250,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "236": {
+      "class": 52,
+      "eligibility": "unverified",
+      "healRate": 0.10000000149011612,
+      "hp": 2220,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "239": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 450,
+      "repairRate": null,
+      "type": 70
+    },
+    "24": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 35,
+      "repairRate": null,
+      "type": 70
+    },
+    "25": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 90,
+      "repairRate": null,
+      "type": 70
+    },
+    "250": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 125,
+      "repairRate": null,
+      "type": 70
+    },
+    "2550": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 35,
+      "repairRate": null,
+      "type": 70
+    },
+    "2552": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "2554": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "2556": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "2562": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "2564": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "2566": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 125,
+      "repairRate": null,
+      "type": 70
+    },
+    "2568": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 145,
+      "repairRate": null,
+      "type": 70
+    },
+    "2569": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "2571": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "2572": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2573": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2574": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2575": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2579": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 20,
+      "repairRate": null,
+      "type": 70
+    },
+    "2581": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 25,
+      "repairRate": null,
+      "type": 70
+    },
+    "2582": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "2584": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 90,
+      "repairRate": null,
+      "type": 70
+    },
+    "2586": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "2587": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 115,
+      "repairRate": null,
+      "type": 70
+    },
+    "2588": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "2590": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 7,
+      "repairRate": null,
+      "type": 70
+    },
+    "2608": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2609": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2626": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 85,
+      "repairRate": null,
+      "type": 70
+    },
+    "2627": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 110,
+      "repairRate": null,
+      "type": 70
+    },
+    "2628": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 135,
+      "repairRate": null,
+      "type": 70
+    },
+    "2629": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2631": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2633": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 140,
+      "repairRate": null,
+      "type": 70
+    },
+    "2636": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2700": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "2701": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "2702": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2703": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "2704": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "2705": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 75,
+      "repairRate": null,
+      "type": 70
+    },
+    "2706": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 85,
+      "repairRate": null,
+      "type": 70
+    },
+    "2707": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2708": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "2709": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 75,
+      "repairRate": null,
+      "type": 70
+    },
+    "2711": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "2712": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 75,
+      "repairRate": null,
+      "type": 70
+    },
+    "2713": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2719": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "2720": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "276": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 4800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "279": {
+      "class": 55,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "280": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "281": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "282": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "283": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 120,
+      "repairRate": null,
+      "type": 70
+    },
+    "285": {
+      "class": 42,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 30,
+      "repairRate": null,
+      "type": 70
+    },
+    "286": {
+      "class": 43,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 30,
+      "repairRate": null,
+      "type": 70
+    },
+    "291": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "293": {
+      "class": 4,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 25,
+      "repairRate": null,
+      "type": 70
+    },
+    "30": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 1.5,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "305": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 7,
+      "repairRate": null,
+      "type": 70
+    },
+    "31": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 1.5,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "32": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 1.5,
+      "hp": 2100,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "329": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "330": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 120,
+      "repairRate": null,
+      "type": 70
+    },
+    "331": {
+      "class": 51,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 150,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "358": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "359": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "36": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "363": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "364": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "365": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "366": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "367": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "368": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "369": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "372": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "373": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "374": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "38": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "380": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "39": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "4": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 30,
+      "repairRate": null,
+      "type": 70
+    },
+    "40": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 110,
+      "repairRate": null,
+      "type": 70
+    },
+    "41": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "420": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 120,
+      "repairRate": null,
+      "type": 70
+    },
+    "422": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 200,
+      "repairRate": null,
+      "type": 70
+    },
+    "434": {
+      "class": 59,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 75,
+      "repairRate": null,
+      "type": 70
+    },
+    "440": {
+      "class": 35,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "441": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 75,
+      "repairRate": null,
+      "type": 70
+    },
+    "442": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 155,
+      "repairRate": null,
+      "type": 70
+    },
+    "448": {
+      "class": 47,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "45": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "46": {
+      "class": 44,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 35,
+      "repairRate": null,
+      "type": 70
+    },
+    "463": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 750,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "464": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 900,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "465": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 900,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "47": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "473": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "474": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "477": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "478": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "487": {
+      "class": 39,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1650,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "49": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1500,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "492": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "498": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.5,
+      "hp": 1500,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "5": {
+      "class": 44,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "50": {
+      "class": 49,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 480,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "503": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "504": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "505": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "506": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "507": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "508": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "51": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "510": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "511": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "512": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "515": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "527": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "528": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "529": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 120,
+      "repairRate": null,
+      "type": 70
+    },
+    "530": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "531": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "532": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 140,
+      "repairRate": null,
+      "type": 70
+    },
+    "533": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 130,
+      "repairRate": null,
+      "type": 70
+    },
+    "534": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 85,
+      "repairRate": null,
+      "type": 70
+    },
+    "539": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 110,
+      "repairRate": null,
+      "type": 70
+    },
+    "54": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "542": {
+      "class": 55,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "545": {
+      "class": 20,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "546": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "548": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 270,
+      "repairRate": null,
+      "type": 70
+    },
+    "550": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "553": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 150,
+      "repairRate": null,
+      "type": 70
+    },
+    "554": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 110,
+      "repairRate": null,
+      "type": 70
+    },
+    "555": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "556": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "557": {
+      "class": 44,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "558": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 600,
+      "repairRate": null,
+      "type": 70
+    },
+    "559": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "560": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "561": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "562": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 600,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "563": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "564": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "565": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "567": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "569": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 160,
+      "repairRate": null,
+      "type": 70
+    },
+    "584": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 600,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "585": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "586": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "587": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1000,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "588": {
+      "class": 13,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "594": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 7,
+      "repairRate": null,
+      "type": 70
+    },
+    "598": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 500,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "6": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 35,
+      "repairRate": null,
+      "type": 70
+    },
+    "627": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "656": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "676": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "68": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 600,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "691": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 150,
+      "repairRate": null,
+      "type": 70
+    },
+    "692": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 54,
+      "repairRate": null,
+      "type": 70
+    },
+    "694": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 62,
+      "repairRate": null,
+      "type": 70
+    },
+    "7": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 30,
+      "repairRate": null,
+      "type": 70
+    },
+    "70": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 550,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "705": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 14,
+      "repairRate": null,
+      "type": 70
+    },
+    "71": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.10000000149011612,
+      "hp": 2400,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "72": {
+      "class": 27,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 150,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "725": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "726": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 75,
+      "repairRate": null,
+      "type": 70
+    },
+    "73": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "736": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "74": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 40,
+      "repairRate": null,
+      "type": 70
+    },
+    "746": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "75": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "751": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "752": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "753": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "755": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "757": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 150,
+      "repairRate": null,
+      "type": 70
+    },
+    "759": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "761": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "763": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "765": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 65,
+      "repairRate": null,
+      "type": 70
+    },
+    "767": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "77": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 60,
+      "repairRate": null,
+      "type": 70
+    },
+    "771": {
+      "class": 23,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 55,
+      "repairRate": null,
+      "type": 70
+    },
+    "773": {
+      "class": 23,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "775": {
+      "class": 18,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 30,
+      "repairRate": null,
+      "type": 70
+    },
+    "786": {
+      "class": 11,
+      "eligibility": "ineligible",
+      "healRate": null,
+      "hp": 1,
+      "repairRate": null,
+      "type": 60
+    },
+    "79": {
+      "class": 52,
+      "eligibility": "unverified",
+      "healRate": 0.10000000149011612,
+      "hp": 850,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "792": {
+      "class": 39,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 240,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "8": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 35,
+      "repairRate": null,
+      "type": 70
+    },
+    "82": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.20000000298023224,
+      "hp": 4800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "827": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 150,
+      "repairRate": null,
+      "type": 70
+    },
+    "829": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 200,
+      "repairRate": null,
+      "type": 70
+    },
+    "83": {
+      "class": 4,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 25,
+      "repairRate": null,
+      "type": 70
+    },
+    "831": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 260,
+      "repairRate": null,
+      "type": 70
+    },
+    "832": {
+      "class": 22,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 350,
+      "repairRate": null,
+      "type": 70
+    },
+    "833": {
+      "class": 58,
+      "eligibility": "unverified",
+      "healRate": null,
+      "hp": 7,
+      "repairRate": null,
+      "type": 70
+    },
+    "84": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.0,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "86": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.25,
+      "hp": 1800,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "866": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    },
+    "868": {
+      "class": 0,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 50,
+      "repairRate": null,
+      "type": 70
+    },
+    "869": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "87": {
+      "class": 3,
+      "eligibility": "unverified",
+      "healRate": 0.5,
+      "hp": 1500,
+      "repairRate": 0.0,
+      "type": 80
+    },
+    "871": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 90,
+      "repairRate": null,
+      "type": 70
+    },
+    "873": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 230,
+      "repairRate": null,
+      "type": 70
+    },
+    "875": {
+      "class": 36,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 280,
+      "repairRate": null,
+      "type": 70
+    },
+    "876": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "878": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 130,
+      "repairRate": null,
+      "type": 70
+    },
+    "879": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 70,
+      "repairRate": null,
+      "type": 70
+    },
+    "881": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "882": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 80,
+      "repairRate": null,
+      "type": 70
+    },
+    "886": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 100,
+      "repairRate": null,
+      "type": 70
+    },
+    "887": {
+      "class": 12,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 150,
+      "repairRate": null,
+      "type": 70
+    },
+    "93": {
+      "class": 6,
+      "eligibility": "organic",
+      "healRate": null,
+      "hp": 45,
+      "repairRate": null,
+      "type": 70
+    }
+  }
+}
