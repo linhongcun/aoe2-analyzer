@@ -42,6 +42,7 @@ const MixedArmy = lazy(() => import('../features/mixedArmy/MixedArmy'));
 const TeamPlan = lazy(() => import('../features/teamPlan/TeamPlan'));
 const Campaigns = lazy(() => import('../features/campaigns/Campaigns'));
 const RelicIncome = lazy(() => import('../features/relicIncome/RelicIncome'));
+const GameGuide = lazy(() => import('../features/gameGuide/GameGuide'));
 
 /** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list→#civs */
 export function AppRoutes() {
@@ -80,6 +81,7 @@ export function AppRoutes() {
       <Route path="/team-plan" element={<TeamPlan />} />
       <Route path="/campaigns" element={<Campaigns />} />
       <Route path="/relic-income" element={<RelicIncome />} />
+      <Route path="/game-guide" element={<GameGuide />} />
       <Route path="/glossary" element={<Glossary />} />
       <Route path="/glossary/:id" element={<Glossary />} />
       <Route path="/patches" element={<Patches />} />
