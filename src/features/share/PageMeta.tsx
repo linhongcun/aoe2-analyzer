@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useMatch } from 'react-router-dom';
 import { PAGE_META, pageKey, sharePageUrl, SITE_NAME } from '../../domain/sharePage';
 import ShareImage from './ShareImage';
 export default function PageMeta() {
   const { pathname, search } = useLocation();
-  const key = pageKey(pathname, search);
+  const reviewMatch = useMatch('/match-review');
+  const teamMatch = useMatch('/team-plan');
+  const privateKey = reviewMatch ? '/match-review' : teamMatch ? '/team-plan' : null;
+  const key = privateKey ?? pageKey(pathname, search);
   const meta = PAGE_META[key] ?? PAGE_META['/']!;
   useEffect(() => {
     document.title = `${meta.title} | ${SITE_NAME}`;
@@ -23,7 +26,7 @@ export default function PageMeta() {
     set('og:description', meta.description, true);
     // Team plans keep large state in fragments; personal match reviews stay
     // in local storage. Crawler metadata for both identifies only the tool.
-    set('og:url', sharePageUrl(pathname, ['/team-plan', '/match-review'].includes(key) ? '' : search, document.baseURI), true);
+    set('og:url', sharePageUrl(privateKey ?? pathname, privateKey ? '' : search, document.baseURI), true);
     let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement('link');
@@ -33,7 +36,7 @@ export default function PageMeta() {
     canonical.href = new URL(key === '/' ? './' : `.${key}/`, document.baseURI).href;
     const image = ['civ', 'build'].includes(meta.kind ?? '') ? key.slice(1).replaceAll('/', '-') : 'default';
     set('og:image', new URL(`og/${image}.png`, document.baseURI).href, true);
-  }, [meta, pathname, search, key]);
+  }, [meta, pathname, search, key, privateKey]);
   if (!['unit', 'tech', 'civ'].includes(meta.kind ?? '')) return null;
   return (
     <div className="page-share">

@@ -139,15 +139,44 @@ for (const [route, label, id] of contexts)
     await expect(page.getByTestId(id)).toBeVisible();
   });
 
-for (const route of ['/match-review', '/match-review/', '/match-review//', '/match-review///'])
+for (const route of [
+  '/match-review',
+  '/match-review/',
+  '/match-review//',
+  '/match-review///',
+  '/MATCH-REVIEW',
+  '/Match-Review///',
+  '/%6datch-review',
+  '/match%2Dreview',
+])
   test(`#259 复盘元信息不携带个人查询 ${route}`, async ({ page }) => {
     const privateText = '仅本机个人记录'.repeat(200);
     await page.goto('./#' + route + '?notes=' + encodeURIComponent(privateText));
     await expect(page.getByTestId('match-review-page')).toBeVisible();
+    await expect(page).toHaveTitle(/手填复盘与下局目标/);
     const og = await page.locator('meta[property="og:url"]').getAttribute('content');
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
     expect(new URL(og!).pathname).toMatch(/\/match-review\/$/);
+    expect(new URL(canonical!).pathname).toMatch(/\/match-review\/$/);
     expect(new URL(og!).search).toBe('');
     expect(new URL(canonical!).search).toBe('');
+    expect(new URL(og!).hash).toBe('');
+    expect(new URL(canonical!).hash).toBe('');
     expect(og).not.toContain(encodeURIComponent('仅本机'));
+  });
+
+for (const route of ['/TEAM-PLAN', '/%74eam-plan'])
+  test(`#259 团战元信息不携带个人查询 ${route}`, async ({ page }) => {
+    await page.goto('./#' + route + '?notes=' + encodeURIComponent('仅本机个人计划'.repeat(200)));
+    await expect(page.getByTestId('team-plan-page')).toBeVisible();
+    await expect(page).toHaveTitle(/团战分工/);
+    for (const [selector, attribute] of [
+      ['meta[property="og:url"]', 'content'],
+      ['link[rel="canonical"]', 'href'],
+    ] as const) {
+      const url = new URL((await page.locator(selector).getAttribute(attribute))!);
+      expect(url.pathname).toMatch(/\/team-plan\/$/);
+      expect(url.search).toBe('');
+      expect(url.hash).toBe('');
+    }
   });
