@@ -1,4 +1,4 @@
-/** #241: finite, conditional reading cards. No mixed-army combat simulation. */
+/** Issue 241: finite, conditional reading cards. No mixed-army combat simulation. */
 import content from '../content/mixed-army.json';
 import units from '../data/units.json';
 import techs from '../data/techs.json';
