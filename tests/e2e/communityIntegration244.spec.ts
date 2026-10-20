@@ -44,7 +44,7 @@ for (const width of [360, 375, 390, 1280])
 for (const [label, path, id] of entries) {
   test(`#244 全局搜索可找到${label}`, async ({ page }) => {
     await page.goto('./#/');
-    await page.keyboard.press('Control+k');
+    await page.getByRole('button', { name: '全局搜索', exact: true }).click();
     const dialog = page.getByRole('dialog', { name: '全局搜索' });
     await dialog.getByRole('textbox').fill(label);
     await expect(dialog.locator('.cmdk-t b', { hasText: label })).toBeVisible();
@@ -90,7 +90,10 @@ test('#244 回血时间带入换算且保留原回血结果', async ({ page }) =
   await expect(seconds).toHaveText('150 秒');
   await page.getByRole('link', { name: '换算这段回血时间', exact: true }).click();
   await expect(page.getByTestId('game-clock-page')).toBeVisible();
-  expect(Number(query(page).get('duration'))).toBe(150);
+  // The pinned healing rate is a Float32 value; the old panel rounds to 150.
+  // Clock input must retain the raw duration rather than requiring that display rounding.
+  expect(Number(query(page).get('duration'))).toBeCloseTo(150, 4);
+  await expect(page.getByRole('textbox', { name: '原始游戏时长', exact: true })).toHaveValue(query(page).get('duration')!);
   await page.goBack();
   await expect(seconds).toHaveText('150 秒');
 });
@@ -128,6 +131,8 @@ test('#244 无效施工与回血配置不产生可用的时长带入入口', asy
   await expect(page.getByTestId('construction-page').getByRole('alert').first()).toBeVisible();
   await expect(page.getByRole('link', { name: '换算这段施工时间', exact: true })).toHaveCount(0);
   await page.goto('./#/garrison-healing?broken=1');
+  await expect(page.getByTestId('garrison-healing-page')).toBeVisible();
+  await expect(page.getByTestId('garrison-healing-page').getByRole('alert').first()).toBeVisible();
   await expect(page.getByRole('link', { name: '换算这段回血时间', exact: true })).toHaveCount(0);
 });
 
