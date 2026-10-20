@@ -6,7 +6,15 @@ import {
   type GeneralGarrisonContext,
   type GeneralGarrisonRow,
 } from '../../src/domain/garrisonGeneral';
-import { calculateGameClock, decodeGameClock, defaultGameClockConfig, gameClockMinutes, type GameClockConfig } from '../../src/domain/gameClock';
+import {
+  GAME_CLOCK_DURATION_LIMIT,
+  calculateGameClock,
+  decodeGameClock,
+  defaultGameClockConfig,
+  gameClockHref,
+  gameClockMinutes,
+  type GameClockConfig,
+} from '../../src/domain/gameClock';
 
 /**
  * v0.27.0 验收（#299）。Kent 写，先失败，#264 / #266 修完后应全部通过。
@@ -130,4 +138,42 @@ describe('#266 时间换算默认 1.7 倍', () => {
   it.each(['', '0', '-1', '1e3', '1,7', '1000.0001', 'abc'])('e. 守卫：手填非法倍率 %j 仍被拒绝', (ratio) => {
     expect(calculateGameClock(clock({ ratio })).ok).toBe(false);
   });
+});
+
+// #266 补充验收（Steve，issuecomment-6303285333）：gameClockHref 不再写死 ratio '1'；
+// 从其他工具跳来、没有指定倍率时用 1.7；旧链接显式带 ratio=1 的仍按 1 打开。
+// 不规定 href 是省略 ratio 还是带 1.7，只验解码结果。
+const decodeHref = (href: string) => decodeGameClock(href.slice(href.indexOf('?')));
+
+describe('#266 其他工具跳转到时间换算的默认倍率', () => {
+  it.each([0, 150, 600, 123.45, 59.123456789, GAME_CLOCK_DURATION_LIMIT])('f. gameClockHref(%s) 解码后倍率为 1.7，时长和方向不变', (seconds) => {
+    const href = gameClockHref(seconds);
+    expect(href).not.toBeNull();
+    const decoded = decodeHref(href!);
+    expect(decoded.errors).toEqual([]);
+    expect(Number(decoded.config.ratio)).toBe(1.7);
+    expect(decoded.config.direction).toBe('game-to-real');
+    const result = calculateGameClock(decoded.config);
+    if (!result.ok) throw new Error('跳转链接无法换算');
+    expect(result.inputSeconds).toBe(seconds);
+    expect(result.outputSeconds).toBeCloseTo(seconds / 1.7, 6);
+  });
+
+  it('f. 600 游戏秒从其他工具跳来，按默认倍率显示 5:53', () => {
+    const result = calculateGameClock(decodeHref(gameClockHref(600)!).config);
+    if (!result.ok) throw new Error('跳转链接无法换算');
+    expect(gameClockMinutes(result.outputSeconds)).toBe('5:53');
+  });
+
+  it.each(['v=1&direction=game-to-real&unit=seconds&duration=600&ratio=1', '?v=1&direction=game-to-real&unit=minutes&duration=10:00&ratio=1'])(
+    'g. 守卫：旧链接显式带 ratio=1 仍按 1 打开：%s',
+    (search) => {
+      const decoded = decodeGameClock(search);
+      expect(decoded.errors).toEqual([]);
+      expect(decoded.config.ratio).toBe('1');
+      const result = calculateGameClock(decoded.config);
+      if (!result.ok) throw new Error('旧链接无法换算');
+      expect(result.outputSeconds).toBe(600);
+    },
+  );
 });

@@ -78,6 +78,35 @@ test('#266 e 守卫：仍可手填倍率，非法倍率仍被拒绝', async ({ p
   await expect(clockResult(page)).toHaveText('6:40');
 });
 
+// #266 补充验收（issuecomment-6303285333）：从其他工具跳来没有指定倍率时用 1.7；旧链接显式 ratio=1 仍按 1。
+const clockQuery = (page: Page) => new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
+
+test('#266 f 从贸易收益跳到时间换算，倍率框显示 1.7 并按 1.7 换算', async ({ page }) => {
+  await page.goto('./#/trade-income');
+  await page.getByRole('textbox', { name: '完整周期（游戏秒）', exact: true }).fill('600');
+  await page.getByRole('link', { name: '换算这段贸易周期', exact: true }).click();
+  await expect(clockPage(page)).toBeVisible();
+  expect(Number(clockQuery(page).get('duration'))).toBe(600);
+  await expect.poll(async () => Number(await ratioInput(page).inputValue())).toBe(1.7);
+  await expect(clockResult(page)).toHaveText('5:53');
+});
+
+test('#266 f 从驻军回血跳到时间换算，倍率框显示 1.7', async ({ page }) => {
+  await page.goto('./#/garrison-healing');
+  await expect(page.getByTestId('healing-seconds')).toHaveText('150 秒');
+  await page.getByRole('link', { name: '换算这段回血时间', exact: true }).click();
+  await expect(clockPage(page)).toBeVisible();
+  await expect.poll(async () => Number(await ratioInput(page).inputValue())).toBe(1.7);
+  await expect(clockResult(page)).toHaveText('1:28');
+});
+
+test('#266 g 守卫：旧链接显式带 ratio=1 仍按 1 打开', async ({ page }) => {
+  await page.goto('./#/game-clock?v=1&direction=game-to-real&unit=seconds&duration=600&ratio=1');
+  await expect(clockPage(page)).toBeVisible();
+  await expect(ratioInput(page)).toHaveValue('1');
+  await expect(clockResult(page)).toHaveText('10:00');
+});
+
 // ---------- #264 加固教堂圣物 ----------
 const garrisonUrl = (building: number, civ: string, age: number, army: string) =>
   `./#/building/${building}?tab=garrison&gv=2&civ=${civ}&age=${age}&army=${army}&gtechs=`;
