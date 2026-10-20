@@ -1,0 +1,251 @@
+.scouting-page {
+  display: grid;
+  gap: var(--space-6);
+  font-size: var(--fs-body);
+}
+.scouting-page p {
+  margin: 0 0 var(--space-3);
+}
+.scouting-heading {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+.scouting-heading h1 {
+  margin-bottom: var(--space-3);
+}
+.scouting-kicker {
+  color: var(--color-accent);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.scouting-buttons,
+.scouting-links {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.scouting-page .btn,
+.scouting-page summary,
+.scouting-page a {
+  min-height: 44px;
+}
+.scouting-scope,
+.scouting-panel,
+.scouting-card {
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  min-width: 0;
+}
+.scouting-scope {
+  background: var(--color-surface-2);
+}
+.scouting-scope p:last-child,
+.scouting-card p:last-child {
+  margin-bottom: 0;
+}
+.scouting-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.7fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+.scouting-page h2,
+.scouting-page h3 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-h3);
+}
+.scouting-page h3 {
+  font-size: var(--fs-body);
+}
+.scouting-settings fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0 0 var(--space-4);
+  border: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+.scouting-settings legend {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  padding: 0 0 var(--space-3);
+}
+.scouting-field {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-2);
+}
+.scouting-field input,
+.scouting-field select,
+.scouting-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+.scouting-observation {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  min-width: 0;
+}
+.scouting-observation h3,
+.scouting-observation p {
+  margin: 0;
+}
+.scouting-check {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--fs-sm);
+  color: var(--color-text-2);
+}
+.scouting-check input {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+.scouting-note,
+.scouting-feedback {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.scouting-result,
+.scouting-cards {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.scouting-page ul {
+  margin: 0 0 var(--space-4);
+  padding-left: var(--space-5);
+}
+.scouting-page li + li {
+  margin-top: var(--space-2);
+}
+.scouting-badge {
+  display: inline-block;
+  color: var(--color-text-2);
+  background: var(--color-tag);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-3);
+}
+.scouting-evidence,
+.scouting-counter {
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-4);
+  background: var(--color-surface-2);
+  color: var(--color-text-2);
+}
+.scouting-counter {
+  background: var(--color-warn-soft);
+}
+.scouting-page dt {
+  font-weight: 600;
+  color: var(--color-text-2);
+}
+.scouting-page dd {
+  margin: var(--space-2) 0 var(--space-4);
+}
+.scouting-page a {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-link);
+}
+.scouting-page summary {
+  padding: var(--space-3) 0;
+  cursor: pointer;
+  box-sizing: border-box;
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+}
+.scouting-sources .scouting-note {
+  display: block;
+}
+.scouting-error {
+  padding: var(--space-4);
+  border: 1px solid var(--color-bad);
+  border-radius: var(--radius-md);
+  background: var(--color-bad-soft);
+  color: var(--color-text);
+}
+.scouting-nowrap {
+  white-space: nowrap;
+}
+.scouting-page p,
+.scouting-page li,
+.scouting-page dd,
+.scouting-page a {
+  overflow-wrap: anywhere;
+}
+.scouting-page :is(input, select, textarea, button, summary, a):focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .scouting-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .scouting-scope,
+  .scouting-panel,
+  .scouting-card {
+    padding: var(--space-4);
+  }
+}
+@media print {
+  :root:has(.scouting-page),
+  :root[data-theme='dark']:has(.scouting-page) {
+    color-scheme: light;
+    --color-bg: var(--color-on-resource-dark);
+    --color-surface: var(--color-on-resource-dark);
+    --color-surface-2: var(--color-on-resource-dark);
+    --color-text: var(--color-on-resource-light);
+    --color-text-2: var(--color-on-resource-light);
+    --color-muted: var(--color-on-resource-light);
+    --c-text: var(--color-on-resource-light);
+    --color-link: var(--color-on-resource-light);
+    --color-tag: var(--color-on-resource-dark);
+    --color-warn-soft: var(--color-on-resource-dark);
+    --color-accent: var(--color-on-resource-light);
+  }
+  .scouting-settings,
+  .scouting-manual,
+  .scouting-buttons,
+  .scouting-reset,
+  .scouting-feedback {
+    display: none;
+  }
+  .scouting-layout {
+    display: block;
+  }
+  .scouting-card,
+  .scouting-panel {
+    margin-bottom: var(--space-4);
+    break-inside: auto;
+  }
+  .scouting-page details > :not(summary) {
+    display: block;
+  }
+}
