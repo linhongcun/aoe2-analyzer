@@ -2,6 +2,10 @@
 
 本文件记录 aoe2-analyzer 每个版本的变化，格式参照 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [0.24.0] - 2026-10-20
+
+- 新增游戏与现实时间换算、个人快捷键速查表，以及竞技场城堡前置的分阶段应对。
+
 ## 版本号规则
 
 采用[语义化版本](https://semver.org/lang/zh-CN/)「主版本.次版本.修订号」：
