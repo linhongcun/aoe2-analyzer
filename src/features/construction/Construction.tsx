@@ -5,6 +5,7 @@ import { useCore, useTrees } from '../../data/hooks';
 import { AGE_ZH } from '../../domain/ratings';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
+import { GameClockLink } from '../../shared/ui/GameClockLink';
 import {
   calculateConstruction,
   constructionBuildings,
@@ -216,6 +217,7 @@ export default function Construction() {
                     <dd>{num(result.baseline.seconds)} 秒</dd>
                   </div>
                 </dl>
+                <GameClockLink seconds={result.target.seconds} label="换算这段施工时间" />
                 <p>村民工时是全部施工者的占用时间之和；增加人数通常能提前完工，也会增加总工时。</p>
                 <p>
                   再增加 <span className="construction-number">1 人</span>：

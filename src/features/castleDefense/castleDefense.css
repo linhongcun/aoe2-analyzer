@@ -1,0 +1,227 @@
+.castle-defense-page {
+  display: grid;
+  gap: var(--space-6);
+  font-size: var(--fs-body);
+}
+.castle-defense-heading,
+.castle-defense-buttons {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.castle-defense-heading h1 {
+  margin-top: 0;
+}
+.castle-defense-page p {
+  margin: 0 0 var(--space-3);
+}
+.castle-defense-heading p:last-child,
+.castle-defense-action p:last-child {
+  margin-bottom: 0;
+}
+.castle-defense-page .btn,
+.castle-defense-page summary,
+.castle-defense-page a {
+  min-height: 44px;
+}
+.castle-defense-grid {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.8fr) minmax(0, 2fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+.castle-defense-panel,
+.castle-defense-action {
+  min-width: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.castle-defense-page h2,
+.castle-defense-page h3 {
+  margin: 0 0 var(--space-3);
+}
+.castle-defense-page h2 {
+  font-size: var(--fs-h3);
+}
+.castle-defense-page h3 {
+  font-size: var(--fs-body);
+}
+.castle-defense-settings fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+.castle-defense-settings legend {
+  margin-bottom: var(--space-3);
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.castle-defense-settings label,
+.castle-defense-manual {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+}
+.castle-defense-settings select,
+.castle-defense-manual textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+.castle-defense-settings .castle-defense-note,
+.castle-defense-reset {
+  margin-top: var(--space-4);
+}
+.castle-defense-note,
+.castle-defense-next,
+.castle-defense-action details {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.castle-defense-nowrap {
+  white-space: nowrap;
+}
+.castle-defense-example {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  color: var(--color-text-2);
+}
+.castle-defense-result,
+.castle-defense-actions {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.castle-defense-stages {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-xs);
+}
+.castle-defense-stages li {
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+}
+.castle-defense-stages [aria-current='step'] {
+  background: var(--color-selected);
+  color: var(--color-on-selected);
+}
+.castle-defense-kicker {
+  color: var(--color-accent);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.castle-defense-cost,
+.castle-defense-notices {
+  background: var(--color-warn-soft);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-2);
+  padding: var(--space-3);
+  font-size: var(--fs-sm);
+}
+.castle-defense-notices {
+  padding-left: var(--space-8);
+}
+.castle-defense-page summary {
+  cursor: pointer;
+  padding: var(--space-3) 0;
+  box-sizing: border-box;
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+}
+.castle-defense-page dt {
+  font-weight: 600;
+  color: var(--color-text-2);
+}
+.castle-defense-page dd {
+  margin: var(--space-2) 0 var(--space-3);
+}
+.castle-defense-source-links,
+.castle-defense-context-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+.castle-defense-page a {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-link);
+}
+.castle-defense-source-list {
+  padding-left: var(--space-5);
+}
+.castle-defense-source-list li {
+  margin-bottom: var(--space-4);
+}
+.castle-defense-source-list .castle-defense-note {
+  display: block;
+}
+.castle-defense-page p,
+.castle-defense-page li,
+.castle-defense-page dd,
+.castle-defense-page a {
+  overflow-wrap: anywhere;
+}
+.castle-defense-page :is(select, textarea, button, summary, a):focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+}
+.castle-defense-error {
+  padding: var(--space-4);
+  border: 1px solid var(--color-bad);
+  border-radius: var(--radius-md);
+  background: var(--color-bad-soft);
+  color: var(--color-text);
+}
+@media (max-width: 700px) {
+  .castle-defense-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .castle-defense-panel,
+  .castle-defense-action {
+    padding: var(--space-4);
+  }
+  .castle-defense-stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media print {
+  .castle-defense-buttons,
+  .castle-defense-reset,
+  .castle-defense-manual {
+    display: none;
+  }
+  .castle-defense-grid {
+    display: block;
+  }
+  .castle-defense-settings {
+    margin-bottom: var(--space-4);
+  }
+  .castle-defense-action {
+    break-inside: avoid;
+  }
+  .castle-defense-page details > :not(summary) {
+    display: block;
+  }
+}

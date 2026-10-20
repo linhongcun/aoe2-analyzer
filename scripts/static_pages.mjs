@@ -38,8 +38,9 @@ for (const [key, meta] of Object.entries(pages)) {
   const title = `${meta.title} | 帝国时代 II 分析器`;
   const image = new URL(`og/${imageKey(key, meta)}.png`, site).href;
   const route = meta.route ?? key;
-  // 合并静态开局页的 bo 与查询参数；不使用重定向，保留实体页的 HTTP 200 与 head。
-  const boot = `(()=>{if(location.hash)return;const route=${JSON.stringify(route)};const [p,q]=route.split('?');const params=new URLSearchParams(q);new URLSearchParams(location.search).forEach((v,k)=>params.set(k,v));history.replaceState(null,'',location.pathname+location.search+'#'+p+(params.size?'?'+params:''));})();`;
+  // 无默认参数的页面保留原始查询，重复参数和损坏编码交由各页严格校验，不能在进入路由前洗成正常链接。
+  // 静态开局页仍合并其默认 bo；不使用重定向，保留实体页的 HTTP 200 与 head。
+  const boot = `(()=>{if(location.hash)return;const route=${JSON.stringify(route)};const [p,q]=route.split('?');let search=location.search;if(q){const params=new URLSearchParams(q);new URLSearchParams(location.search).forEach((v,k)=>params.set(k,v));search=params.size?'?'+params:'';}history.replaceState(null,'',location.pathname+location.search+'#'+p+search);})();`;
   const head = `${depth ? `<base href="${base}">` : ''}\n<meta name="description" content="${escape(meta.description)}">\n<link rel="canonical" href="${escape(url)}">\n<meta property="og:type" content="website">\n<meta property="og:title" content="${escape(title)}">\n<meta property="og:description" content="${escape(meta.description)}">\n<meta property="og:url" content="${escape(url)}">\n<meta property="og:image" content="${escape(image)}">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta name="twitter:card" content="summary_large_image">\n<script>${boot}</script>\n`;
   const html = template.replace(/<title>[^<]*<\/title>/, `<title>${escape(title)}</title>`).replace('<head>', '<head>\n' + head);
   const dir = path.join('dist', rel);

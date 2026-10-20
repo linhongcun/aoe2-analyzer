@@ -101,6 +101,10 @@ jobs:
             test-results/teamBonuses228-*/*.png
             test-results/team-bonuses228-*.png
             test-results/garrisonHealing229-*/*.png
+            test-results/gameClock237-*/*.png
+            test-results/hotkeys236-*/*.png
+            test-results/castleDefense242-*/*.png
+            test-results/communityIntegration244-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: failure()

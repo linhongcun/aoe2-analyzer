@@ -1,0 +1,232 @@
+.hotkeys-page {
+  max-width: 1040px;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  overflow-wrap: anywhere;
+}
+.hotkeys-page h1 {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  margin-block: var(--space-3) var(--space-4);
+}
+.hotkeys-page h2 {
+  font-size: var(--fs-h3);
+  margin-block: 0 var(--space-2);
+}
+.hotkeys-page .note,
+.hk-en,
+.hk-feedback {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.hk-number {
+  white-space: nowrap;
+}
+.hk-boundary {
+  color: var(--color-text-2);
+}
+.hk-controls,
+.hk-audit {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.hk-profile,
+.hk-buttons,
+.hk-count {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+.hotkeys-page button,
+.hotkeys-page summary,
+.hotkeys-page a,
+.hotkeys-page input {
+  min-height: 44px;
+}
+.hotkeys-page button {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+}
+.hk-profile button[aria-pressed='true'] {
+  background: var(--color-selected);
+  color: var(--color-on-selected);
+}
+.hotkeys-page button:focus-visible,
+.hotkeys-page summary:focus-visible,
+.hotkeys-page input:focus-visible,
+.hotkeys-page a:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+.hk-warning {
+  color: var(--color-warn);
+}
+.hk-error {
+  color: var(--color-bad);
+  font-size: var(--fs-sm);
+}
+.hotkeys-page summary {
+  cursor: pointer;
+  padding-block: var(--space-2);
+}
+.hotkeys-page a {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-link);
+}
+.hotkeys-page ul {
+  padding-left: var(--space-5);
+}
+.hk-audit li + li {
+  margin-top: var(--space-3);
+}
+.hk-search {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+}
+.hotkeys-page input {
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-body);
+}
+.hk-count {
+  justify-content: space-between;
+}
+.hk-list {
+  display: grid;
+  gap: var(--space-4);
+}
+.hk-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.hk-description,
+.hk-personal {
+  min-width: 0;
+}
+.hk-en {
+  margin-block: var(--space-1);
+}
+.hk-personal label {
+  display: block;
+  margin-block: var(--space-4) var(--space-2);
+}
+.hk-default {
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+}
+.hk-default span,
+.hk-default strong {
+  display: block;
+}
+.hk-default strong {
+  color: var(--color-warn);
+  font-size: var(--fs-sm);
+}
+.hk-default p {
+  margin-bottom: 0;
+}
+.hk-value {
+  min-height: 1.65em;
+  font-family: var(--font-mono);
+  color: var(--color-text-2);
+  overflow-wrap: anywhere;
+}
+.hk-empty {
+  padding-block: var(--space-6);
+}
+.hk-print {
+  display: none;
+}
+@media (max-width: 600px) {
+  .hotkeys-page h1 {
+    font-size: var(--fs-h2);
+  }
+  .hk-card {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+}
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+  /* Match the dark root selector's specificity so the printed page canvas stays light. */
+  :root:has(.hotkeys-page) {
+    background: var(--color-on-resource-dark);
+    color-scheme: light;
+  }
+  body:has(.hotkeys-page) {
+    --color-text: var(--color-on-resource-light);
+    --color-text-2: var(--color-on-resource-light);
+    --color-muted: var(--color-on-resource-light);
+    --color-bg: var(--color-on-resource-dark);
+    --color-surface: var(--color-on-resource-dark);
+    --color-border: var(--color-on-resource-light);
+    color-scheme: light;
+    color: var(--color-text);
+    background: var(--color-bg);
+  }
+  body:has(.hotkeys-page) .topbar,
+  body:has(.hotkeys-page) .editorial-footer,
+  body:has(.hotkeys-page) .fbbar,
+  .hotkeys-page .hk-screen {
+    display: none !important;
+  }
+  body:has(.hotkeys-page) main,
+  .hotkeys-page {
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+  }
+  .hk-print {
+    display: block;
+    font-size: var(--fs-xs);
+  }
+  .hk-print h1 {
+    font-size: var(--fs-h2);
+  }
+  .hk-print table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+  .hk-print th,
+  .hk-print td {
+    border: 1px solid var(--color-border);
+    padding: var(--space-2);
+    vertical-align: top;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+  .hk-print th:first-child {
+    width: 40%;
+  }
+  .hk-print p {
+    margin-block: var(--space-2);
+  }
+  .hk-print tr,
+  .hk-print li {
+    break-inside: avoid;
+  }
+}
