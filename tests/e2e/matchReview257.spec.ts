@@ -240,8 +240,11 @@ test('#257 一次保存失败后的重试不会丢掉较早编辑', async ({ pag
 });
 test('#257 多标签变化暂停自动保存，用户明确覆盖或重载', async ({ page, context }) => {
   await visit(page);
+  await expect(field(page, '复盘标题')).toHaveValue('');
   const other = await context.newPage();
   await visit(other);
+  // The lazy route must have read the original snapshot before the other tab writes.
+  await expect(field(other, '复盘标题')).toHaveValue('');
   await field(page, '复盘标题').fill('甲标签最新内容');
   await expect(other.getByRole('alert')).toContainText('自动保存已暂停');
   await field(other, '地图').fill('乙标签尚未保存');
