@@ -1,0 +1,62 @@
+# Temporary branch-only bridge. Do not merge this file into main.
+# Install as .github/workflows/release-v0.23.0-dispatch.yml on the branch below.
+# Fill MAIN_CI_RUN_ID only after the pinned main CI (including Pages) is green.
+name: Dispatch existing Release v0.23.0
+on:
+  push:
+    branches: [automation/release-v0.23.0]
+    paths: [.github/workflows/release-v0.23.0-dispatch.yml]
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: dispatch-release-v0.23.0
+  cancel-in-progress: false
+jobs:
+  dispatch:
+    if: github.repository == 'linhongcun/aoe2-analyzer' && github.ref == 'refs/heads/automation/release-v0.23.0' && !github.event.deleted
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: linhongcun/aoe2-analyzer
+      EXPECTED_MAIN_SHA: 0447fdd9e1159e36a327ef4124615eb53bcb7b3a
+      EXPECTED_RELEASE_SHA: 06431806675b45179d51109cefde00be19a30ef8
+      RELEASE_VERSION: v0.23.0
+      MAIN_CI_RUN_ID: "39349236563"
+    steps:
+      - name: Verify pinned commits, versions and completed main deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$MAIN_CI_RUN_ID" =~ ^[0-9]+$ ]]
+          test "$(gh api "repos/$GH_REPO/git/ref/heads/main" --jq .object.sha)" = "$EXPECTED_MAIN_SHA"
+          test "$(gh api "repos/$GH_REPO/git/ref/heads/release/$RELEASE_VERSION" --jq .object.sha)" = "$EXPECTED_RELEASE_SHA"
+          gh api "repos/$GH_REPO/git/commits/$EXPECTED_MAIN_SHA" |
+            jq -e --arg release "$EXPECTED_RELEASE_SHA" '(.parents | length) == 2 and any(.parents[]; .sha == $release)' >/dev/null
+          for commit in "$EXPECTED_MAIN_SHA" "$EXPECTED_RELEASE_SHA"; do
+            gh api "repos/$GH_REPO/contents/package.json?ref=$commit" --jq .content |
+              base64 --decode |
+              jq -e --arg version "${RELEASE_VERSION#v}" '.version == $version' >/dev/null
+          done
+          gh api "repos/$GH_REPO/actions/runs/$MAIN_CI_RUN_ID" |
+            jq -e --arg sha "$EXPECTED_MAIN_SHA" '
+              .head_sha == $sha and .head_branch == "main" and
+              .event == "push" and .path == ".github/workflows/ci.yml" and
+              .status == "completed" and .conclusion == "success"
+            ' >/dev/null
+          gh api "repos/$GH_REPO/actions/runs/$MAIN_CI_RUN_ID/jobs?filter=latest&per_page=100" |
+            jq -e '
+              [.jobs[] | select(.name == "test" or .name == "deploy")] as $jobs |
+              ($jobs | map(.name) | sort) == ["deploy", "test"] and
+              all($jobs[]; .status == "completed" and .conclusion == "success")
+            ' >/dev/null
+      - name: Dispatch unchanged release.yml on main
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Recheck mutable refs immediately before dispatch. Existing Release
+          # still performs its own deployment/build/tag acceptance checks.
+          test "$(gh api "repos/$GH_REPO/git/ref/heads/main" --jq .object.sha)" = "$EXPECTED_MAIN_SHA"
+          test "$(gh api "repos/$GH_REPO/git/ref/heads/release/$RELEASE_VERSION" --jq .object.sha)" = "$EXPECTED_RELEASE_SHA"
+          gh workflow run release.yml --repo "$GH_REPO" --ref main -f version="$RELEASE_VERSION"
