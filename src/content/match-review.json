@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-10-20",
+  "scope": "常规随机地图 1v1 的手填复盘。按需要挑一组问题，记录事实、当时选择与一个下局目标；无需填满所有项目。",
+  "boundary": "以下提问由本站根据玩家原始问答整理，不是自动教练结论。不读取游戏或录像，不判定败因；回看后才知道的信息不能当作当时已经知道，尝试结果由用户自行记录。",
+  "sources": [
+    {
+      "id": "replay-focus",
+      "title": "How do I improve by rewatching my games?",
+      "url": "https://www.reddit.com/r/aoe2/comments/1ob5zpp/how_do_i_improve_by_rewatching_my_games/",
+      "note": "Reddit 玩家原始问答；页面日期导航为 2025-10-20。本轮读取主帖与可见回复，支持关键事件、经济与军队观察、当时视野和回看事实分开的引导方向；未展开全部隐藏回复。"
+    },
+    {
+      "id": "feedback-context",
+      "title": "Best place to get feedback?",
+      "url": "https://www.reddit.com/r/aoe2/comments/1gvp2gr/best_place_to_get_feedback/",
+      "note": "Reddit 玩家原始问答；页面日期导航为 2024-11-20。本轮读取主帖与可见回复，核对了看 YouTube 教程后的具体反馈需求与如何分享比赛的追问；不采纳评论中的收费、训练阈值或等级承诺。"
+    },
+    {
+      "id": "focused-practice",
+      "title": "How did you get better at the game?",
+      "url": "https://www.reddit.com/r/aoe2/comments/1359q2e/how_did_you_get_better_at_the_game/",
+      "note": "Reddit 玩家原始问答；页面日期导航为 2023-05-02。本轮读取主帖、作者与 Survivalist 的可见往返及部分回复，核对将练习重点与胜负结果分开的思路；未读取全部回复，不复用旧人口、时点或 Elo 保证。"
+    }
+  ],
+  "groups": [
+    {
+      "id": "economy",
+      "title": "经济执行",
+      "questions": [
+        "在这个游戏时间点，你实际看到哪些采集、库存或生产状态？哪些还没有记录？",
+        "当时计划把资源用于什么，之后实际做了什么？先记事实，再写可能解释。",
+        "观察到闲置时，你的注意力和操作在什么事情上？哪些原因仍需复查？"
+      ],
+      "sourceIds": ["replay-focus", "focused-practice"]
+    },
+    {
+      "id": "army",
+      "title": "军队用途与升级",
+      "questions": [
+        "这次军队原本承担什么任务，录像中实际做了什么？",
+        "交战前你已知道双方哪些单位、数量和升级？哪些是回看才确认的？",
+        "你当时选择交战、撤退或等待的依据是什么，还有什么条件未核实？"
+      ],
+      "sourceIds": ["replay-focus", "feedback-context"]
+    },
+    {
+      "id": "information",
+      "title": "侦察与信息",
+      "questions": [
+        "暂停在决定发生前，只看自己当时的视野：已经知道什么，哪些仍未知？",
+        "回看全图后新增了哪些事实？把它们与当时可知的信息分开记录。",
+        "下一局想在什么触发情境尝试哪一项动作，用什么可见结果检查？"
+      ],
+      "sourceIds": ["replay-focus", "focused-practice"]
+    }
+  ]
+}
