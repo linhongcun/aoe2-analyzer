@@ -21,9 +21,9 @@ export default function PageMeta() {
     set('description', meta.description);
     set('og:title', document.title, true);
     set('og:description', meta.description, true);
-    // A full team plan can exceed an HTTP request URL. Its own share action
-    // keeps state in the fragment; crawler metadata identifies the tool only.
-    set('og:url', sharePageUrl(pathname, key === '/team-plan' ? '' : search, document.baseURI), true);
+    // Team plans keep large state in fragments; personal match reviews stay
+    // in local storage. Crawler metadata for both identifies only the tool.
+    set('og:url', sharePageUrl(pathname, ['/team-plan', '/match-review'].includes(key) ? '' : search, document.baseURI), true);
     let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement('link');

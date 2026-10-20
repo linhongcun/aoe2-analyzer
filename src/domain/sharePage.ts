@@ -11,7 +11,7 @@ export interface PageMeta {
 export const PAGE_META = raw as unknown as Record<string, PageMeta>;
 export const SITE_NAME = '帝国时代 II 分析器';
 export function pageKey(pathname: string, search = '') {
-  const p = pathname.replace(/\/$/, '') || '/';
+  const p = pathname.replace(/\/+$/, '') || '/';
   const bo = new URLSearchParams(search).get('bo');
   if (p === '/builds' && bo && PAGE_META[`/builds/${bo}`]) return `/builds/${bo}`;
   if (PAGE_META[p]) return p;

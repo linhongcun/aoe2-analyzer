@@ -39,6 +39,9 @@ export const TECH_AKA: Record<number, string[]> = { 1452: ['绞盘弩', 'cranequ
 
 /** #36 产品补充：新手和快攻指向开局流程，地图入口待 #34。 */
 export const PAGE_ALIASES: Record<string, string[]> = {
+  'game-guide': ['新手入门', '怎么看比赛', '观赛入门', '看懂一局', '游戏目标', 'game guide', 'spectating'],
+  'match-review': ['复盘', '赛后记录', '下局目标', '练习记录', 'match review'],
+  scouting: ['侦察情报', '竞争假设', '补查', 'scouting'],
   builds: ['新手', '快攻'],
   'content-guide': ['购买', '买哪个', '本体包含', '资料片导航', 'DLC guide', 'Steam'],
   'mixed-army': ['混编', '混合兵种', '兵种搭配', 'mixed army'],

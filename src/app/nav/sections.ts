@@ -130,6 +130,36 @@ export const TOOLS: Section[] = [
 /** 已上线的子工具：提供全局搜索与面包屑，不增加首页工具卡片。 */
 export const SECONDARY_TOOLS: Section[] = [
   {
+    key: 'game-guide',
+    path: '/game-guide',
+    label: '一局与观赛',
+    en: 'Game Guide',
+    icon: 'scroll',
+    desc: '用六张短卡认识一局目标、开局角色和观赛关注点',
+    match: /^\/game-guide\/?$/,
+    hideNav: true,
+  },
+  {
+    key: 'match-review',
+    path: '/match-review',
+    label: '手填复盘',
+    en: 'Match Review',
+    icon: 'list-ordered',
+    desc: '整理当时视野、回看事实和一个下局目标，保存备份与打印',
+    match: /^\/match-review\/?$/,
+    hideNav: true,
+  },
+  {
+    key: 'scouting',
+    path: '/scouting',
+    label: '侦察辨析',
+    en: 'Scouting',
+    icon: 'crosshair',
+    desc: '对照相容解释、反证和缺失信息，决定下一次补查什么',
+    match: /^\/scouting\/?$/,
+    hideNav: true,
+  },
+  {
     key: 'content-guide',
     path: '/content-guide',
     label: '内容与购买',

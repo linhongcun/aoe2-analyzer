@@ -31,6 +31,10 @@
     "py": "chengzhenzhongxinkongxian",
     "pyi": "czzxkx"
   },
+  "一局与观赛": {
+    "py": "yijuyuguansai",
+    "pyi": "yjygs"
+  },
   "不需要建筑即可升级到下一时代或者解锁其他建筑": {
     "py": "buxuyaojianzhujikeshengjidaoxiayishidaihuozhejiesuoqitajianzhu",
     "pyi": "bxyjzjksjdxysdhzjsqtjz"
@@ -78,6 +82,10 @@
   "伐木工工作速度 +15%": {
     "py": "famugonggongzuosudu",
     "pyi": "fmggzsd"
+  },
+  "侦察辨析": {
+    "py": "zhenchabianxi",
+    "pyi": "zcbx"
   },
   "修理工的工作速度 +25%": {
     "py": "xiuligongdegongzuosudu",
@@ -538,6 +546,10 @@
   "所有单位的黄金费用 -20%": {
     "py": "suoyoudanweidehuangjinfeiyong",
     "pyi": "sydwdhjfy"
+  },
+  "手填复盘": {
+    "py": "shoutianfupan",
+    "pyi": "stfp"
   },
   "扳指、帕提亚战术免费": {
     "py": "banzhipatiyazhanshumianfei",
