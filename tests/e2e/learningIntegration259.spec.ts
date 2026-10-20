@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 
 const entries = [
   ['一局与观赛', 'game-guide', 'game-guide-page'],
@@ -92,16 +92,24 @@ test('#259 入门卡复制出的完整静态链接恢复所有条件', async ({ 
   await expect(page.getByRole('button', { name: /观赛关注点/ })).toHaveAttribute('aria-pressed', 'true');
 });
 
+/** #269 起，观察的时间、范围与时效收进「补充…（可选）」折叠区，先展开再操作。 */
+async function openOptional(observation: Locator) {
+  const details = observation.locator('details');
+  if (!(await details.evaluate((element) => (element as HTMLDetailsElement).open))) await details.locator('summary').click();
+}
+
 test('#259 侦察卡复制出的完整静态链接恢复两组观察', async ({ page }) => {
   await page.goto('./#/scouting');
   const field = page.locator('[data-observation="military-building"]');
   await field.getByRole('combobox').first().selectOption('seen');
+  await openOptional(field);
   await field.getByRole('textbox').fill('12:30');
   await field.getByRole('combobox').last().selectOption('enemy-front');
   await page.getByRole('combobox', { name: '情境', exact: true }).selectOption('walled');
   await page.getByRole('combobox', { name: '我的当前阶段', exact: true }).selectOption('castle');
   const second = page.locator('[data-observation="new-town-center"]');
   await second.getByRole('combobox').first().selectOption('seen');
+  await openOptional(second);
   await second.getByRole('textbox').fill('25:00');
   await second.getByRole('combobox').last().selectOption('enemy-edge');
   await second.getByRole('checkbox').check();
@@ -117,10 +125,12 @@ test('#259 侦察卡复制出的完整静态链接恢复两组观察', async ({ 
   await page.goto(copied!);
   await expect(page.getByTestId('scouting-page')).toBeVisible();
   await expect(page.getByRole('combobox', { name: '情境', exact: true })).toHaveValue('walled');
+  await openOptional(second);
   await expect(second.getByRole('textbox')).toHaveValue('25:00');
   await expect(second.getByRole('checkbox')).toBeChecked();
   await page.getByRole('combobox', { name: '情境', exact: true }).selectOption('early');
   await expect(field.getByRole('combobox').first()).toHaveValue('seen');
+  await openOptional(field);
   await expect(field.getByRole('textbox')).toHaveValue('12:30');
   await expect(field.getByRole('combobox').last()).toHaveValue('enemy-front');
 });

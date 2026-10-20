@@ -32,27 +32,61 @@ test.afterEach(async ({ page }) => {
   expect(errors.get(page)).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+async function expandObservation(page: Page, id: string) {
+  const details = page.locator(`[data-observation="${id}"] details`);
+  if (!(await details.evaluate((element) => (element as HTMLDetailsElement).open))) await details.locator('summary').click();
+}
+async function expandContext(page: Page) {
+  const details = page.locator('.scouting-context');
+  if (!(await details.evaluate((element) => (element as HTMLDetailsElement).open))) await details.locator('summary').click();
+}
 async function observe(page: Page, id: string, state = 'seen', at = '12:30', area = 'enemy-front') {
   const title = titles[id]!;
   await page.getByLabel(`${title}：状态`, { exact: true }).selectOption(state);
+  await expandObservation(page, id);
   await page.getByLabel(`${title}：游戏时间`, { exact: true }).fill(at);
   await page.getByLabel(`${title}：可见范围`, { exact: true }).selectOption(area);
 }
 
-test('#258 unknown observations retain competing explanations and show missing evidence first', async ({ page }) => {
+test('#269 clearing the example keeps empty observations through reload', async ({ page }) => {
   await page.goto('./#/scouting');
   await expect(page.getByRole('heading', { name: '侦察情报辨析卡', exact: true })).toBeVisible();
-  await expect(page.locator('[data-hypothesis]')).toHaveCount(2);
+  await expect(page.getByTestId('scouting-example')).toContainText('示例观察');
+  await expect(page.getByTestId('scouting-example')).toContainText('保护伐木场与金矿');
+  await expect(page.locator('[data-hypothesis="military-investment"]')).toHaveAttribute('data-evidence-status', 'local-support');
+  await expect(page.getByTestId('scouting-result')).toContainText('保护伐木场与金矿');
+  await expect(page.getByLabel('所填区域内的实际军队：游戏时间', { exact: true })).toBeHidden();
+  await page.getByRole('button', { name: '清空，填写我的观察' }).click();
+  await expect(page.getByTestId('scouting-example')).toHaveCount(0);
   await expect(page.getByTestId('scouting-gaps')).toContainText('实际军队：未知');
   await expect(page.locator('[data-evidence-status="local-support"]')).toHaveCount(0);
-  await expect(page.getByTestId('scouting-result')).toContainText('不从并列解释中自动替你选择');
+  await page.reload();
+  await expect(page.getByLabel('所填区域内的实际军队：状态', { exact: true })).toHaveValue('unknown');
+});
+
+test('#269 each scenario exposes sourced signals and state alone updates the conclusion', async ({ page }) => {
+  await page.goto(href());
+  const signalList = page.getByTestId('scouting-signals');
+  await expect(signalList.locator('[data-signal]')).toHaveCount(3);
+  await expect(signalList).toContainText('黑暗时代就采金');
+  for (const signal of await signalList.locator('[data-signal]').all()) {
+    await expect(signal).toContainText('看到什么');
+    await expect(signal).toContainText('可能意味着什么');
+    await expect(signal).toContainText('下一步做什么');
+    await expect(signal.getByRole('link')).toHaveAttribute('href', 'https://www.ageofempires.com/learn-to-play/defending-your-empires-aoe2/');
+  }
+  const state = page.getByLabel('所填区域内的实际军队：状态', { exact: true });
+  expect(await state.locator('option').allTextContents()).toEqual(['看到', '没看到', '未知']);
+  await state.selectOption('seen');
+  await expect(page.getByTestId('scouting-result')).toContainText('保护伐木场与金矿');
+  await expect(page.getByLabel('所填区域内的实际军队：游戏时间', { exact: true })).toBeHidden();
 });
 
 test('#258 one building never authenticates a unique strategy; seeing and withdrawing army updates evidence', async ({ page }) => {
-  await page.goto('./#/scouting');
+  await page.goto(href());
   await observe(page, 'military-building');
   await expect(page.locator('[data-hypothesis="military-investment"]')).toHaveAttribute('data-evidence-status', 'needs-evidence');
-  await expect(page.locator('[data-hypothesis="preparation-or-transition"]')).toContainText('还不能说明暂停生产或已经安全');
+  await expect(page.locator('[data-hypothesis="preparation-or-transition"]')).toContainText('复查实际生产');
   await observe(page, 'field-army');
   await expect(page.locator('[data-hypothesis="military-investment"]')).toHaveAttribute('data-evidence-status', 'local-support');
   await expect(page.locator('[data-hypothesis="preparation-or-transition"]')).toHaveAttribute('data-evidence-status', 'recheck');
@@ -62,9 +96,9 @@ test('#258 one building never authenticates a unique strategy; seeing and withdr
 });
 
 test('#258 unseen and stale observations never become no army', async ({ page }) => {
-  await page.goto('./#/scouting');
+  await page.goto(href());
   await observe(page, 'field-army', 'unseen');
-  await expect(page.getByTestId('scouting-gaps')).toContainText('这次没看见不等于不存在');
+  await expect(page.getByTestId('scouting-gaps')).toContainText('复查视野');
   await expect(page.locator('[data-hypothesis="military-investment"]')).toHaveAttribute('data-evidence-status', 'needs-evidence');
   await observe(page, 'field-army');
   await page.getByLabel('所填区域内的实际军队：这条信息已陈旧', { exact: true }).check();
@@ -74,15 +108,17 @@ test('#258 unseen and stale observations never become no army', async ({ page })
 });
 
 test('#258 absence requires a specific time and visible scope and remains a local counter', async ({ page }) => {
-  await page.goto('./#/scouting');
-  await page.getByLabel('所填区域内的实际军队：状态', { exact: true }).selectOption('absent');
+  await page.goto(href());
+  await page.getByLabel('所填区域内的实际军队：状态', { exact: true }).selectOption('unseen');
+  await expandObservation(page, 'field-army');
+  await page.getByLabel('所填区域内的实际军队：确认此时此区不存在', { exact: true }).check();
   await expect(page.getByRole('alert')).toContainText('确认不存在必须填写该观察时刻与明确可见范围');
   await expect(page.locator('[data-hypothesis]')).toHaveCount(0);
   await expect(page.getByRole('button', { name: '复制情报链接' })).toBeDisabled();
   await page.getByLabel('所填区域内的实际军队：游戏时间', { exact: true }).fill('12:30');
   await page.getByLabel('所填区域内的实际军队：可见范围', { exact: true }).selectOption('enemy-front');
   await expect(page.locator('[data-hypothesis]')).toHaveCount(2);
-  await expect(page.locator('[data-hypothesis="military-investment"]')).toContainText('在别处仍有可能');
+  await expect(page.locator('[data-hypothesis="military-investment"]')).toContainText('复查其他方向');
   await expect(page.locator('[data-hypothesis="military-investment"]')).toHaveAttribute('data-evidence-status', 'recheck');
 });
 
@@ -95,23 +131,25 @@ test('#258 walled economic and forward evidence coexist, with different checks a
   await observe(page, 'forward-production', 'seen', '20:20', 'own-approach');
   await expect(page.locator('[data-hypothesis="economic-expansion"] [data-testid="scouting-local-support"]')).toContainText('新增城镇中心');
   await expect(page.locator('[data-hypothesis="economic-expansion"] [data-testid="scouting-local-counter"]')).toContainText('侧面或前出的生产设施');
-  await expect(page.locator('[data-hypothesis="economic-expansion"] .scouting-badge')).toHaveText('有需重查线索，解释仍可相容');
-  await expect(page.locator('[data-hypothesis="economic-expansion"]')).toContainText('重查“只有发展”的想法');
+  await expect(page.locator('[data-hypothesis="economic-expansion"] .scouting-badge')).toHaveText('需重新评估');
+  await expect(page.locator('[data-hypothesis="economic-expansion"]')).toContainText('重新检查扩张方向与侧路');
   await expect(page.locator('[data-hypothesis="hidden-pressure"]')).toHaveAttribute('data-evidence-status', 'local-support');
-  await expect(page.getByTestId('scouting-result')).toContainText('经济与军事投入也可同时发生');
+  await expect(page.getByTestId('scouting-result')).toContainText('同时发展和施压');
   await expect(page.getByRole('link', { name: '已辨认快攻的应对' })).toHaveAttribute('href', /#\/matchup$/);
   await expect(page.getByRole('link', { name: '已见城堡前置的阶段应对' })).toHaveAttribute('href', /#\/castle-defense$/);
   await expect(page.getByRole('link', { name: '已见混兵组合的分工' })).toHaveAttribute('href', /#\/mixed-army$/);
 });
 
 test('#258 legitimate unsupported context stays distinct from malformed parameters', async ({ page }) => {
-  await page.goto('./#/scouting');
+  await page.goto(href());
+  await expandContext(page);
   await page.getByLabel('地图', { exact: true }).selectOption('arena');
   await expect(page.getByTestId('scouting-result')).toHaveAttribute('data-analysis-status', 'not-covered');
   await expect(page.locator('[data-hypothesis]')).toHaveCount(0);
   await expect(page.getByRole('alert')).toHaveCount(0);
   await page.reload();
   await expect(page.getByLabel('地图', { exact: true })).toHaveValue('arena');
+  await expandContext(page);
   await page.getByLabel('地图', { exact: true }).selectOption('arabia');
   await page.getByLabel('我的当前阶段', { exact: true }).selectOption('castle');
   await expect(page.getByTestId('scouting-result')).toContainText('只覆盖常规开局');
@@ -120,7 +158,7 @@ test('#258 legitimate unsupported context stays distinct from malformed paramete
 });
 
 test('#258 full state including hidden scenario observations survives reload and canonical sharing', async ({ page }) => {
-  await page.goto('./#/scouting');
+  await page.goto(href());
   await observe(page, 'field-army', 'seen', '15:16', 'enemy-edge');
   await page.getByLabel('情境', { exact: true }).selectOption('walled');
   await page.getByLabel('我的当前阶段', { exact: true }).selectOption('castle');
@@ -161,13 +199,14 @@ test('#258 malformed links suspend all explanations until explicit reset', async
     await expect(page.getByLabel('情境', { exact: true })).toBeDisabled();
     await expect(page.getByRole('button', { name: '复制情报链接' })).toBeDisabled();
     await expect(page).toHaveURL(new RegExp(suffix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'));
-    await page.getByRole('button', { name: '重置为未知观察' }).click();
+    await page.getByRole('button', { name: '清空，填写我的观察' }).click();
     await expect(page.locator('[data-hypothesis]')).toHaveCount(2);
   }
 });
 
 test('#258 invalid and oversized times stay visible for repair and do not yield advice or truncated sharing', async ({ page }) => {
-  await page.goto('./#/scouting');
+  await page.goto(href());
+  await expandObservation(page, 'field-army');
   const time = page.getByLabel('所填区域内的实际军队：游戏时间', { exact: true });
   await time.fill('12:60');
   await expect(time).toHaveValue('12:60');
@@ -182,8 +221,9 @@ test('#258 invalid and oversized times stay visible for repair and do not yield 
 });
 
 test('#258 unsafe short clock input preserves its exact draft and pauses old explanations and sharing', async ({ page }) => {
-  await page.goto('./#/scouting');
+  await page.goto(href());
   await observe(page, 'field-army');
+  await expandObservation(page, 'field-army');
   const time = page.getByLabel('所填区域内的实际军队：游戏时间', { exact: true });
   await page.evaluate(() =>
     Object.defineProperty(navigator, 'clipboard', {
@@ -222,7 +262,7 @@ test('#258 unsafe short clock input preserves its exact draft and pauses old exp
 });
 
 test('#258 keyboard, successful copying, sources and dark print retain a complete static snapshot', async ({ page }) => {
-  await page.goto('./#/scouting');
+  await page.goto(href());
   const plan = page.getByLabel('我正在考虑的计划', { exact: true });
   await plan.focus();
   await page.keyboard.press('ArrowDown');
@@ -236,15 +276,21 @@ test('#258 keyboard, successful copying, sources and dark print retain a complet
   });
   await page.getByRole('button', { name: '复制情报链接' }).click();
   await expect(page.getByRole('status')).toContainText('情报链接已复制');
-  await page.getByText('来源、核对日期与资料边界', { exact: true }).click();
-  await expect(page.getByText('社区原问答只用于识别困惑', { exact: false })).toBeVisible();
+  await page.getByText('适用范围', { exact: true }).click();
+  await expect(page.locator('.scouting-boundaries')).toContainText('没有看见不等于不存在');
   await page.getByRole('button', { name: '打印当前辨析' }).click();
+  await expect(page.locator('.scouting-snapshot')).toHaveAttribute('open', '');
+  await expect(page.locator('.scouting-hypotheses')).toHaveAttribute('open', '');
   await page.emulateMedia({ media: 'print' });
   await expect(page.getByRole('button', { name: '打印当前辨析' })).toBeHidden();
   await expect(page.locator('.scouting-snapshot')).toContainText('12:34');
   await expect(page.locator('[data-hypothesis]')).toHaveCount(2);
   const paper = await page.evaluate(() => ({ background: getComputedStyle(document.body).backgroundColor, text: getComputedStyle(document.body).color }));
   expect(paper).toEqual({ background: 'rgb(255, 255, 255)', text: 'rgb(0, 0, 0)' });
+  await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
+  await expect(page.locator('.scouting-snapshot')).not.toHaveAttribute('open');
+  await expect(page.locator('.scouting-hypotheses')).not.toHaveAttribute('open');
+  await expect(page.locator('.scouting-boundaries')).toHaveAttribute('open', '');
 });
 
 for (const width of [360, 375, 390, 1280])
@@ -252,11 +298,13 @@ for (const width of [360, 375, 390, 1280])
     test(`#258 ${width}px ${theme} controls, evidence and sources remain readable`, async ({ page }, testInfo) => {
       await page.setViewportSize({ width, height: 900 });
       await page.goto('./#/scouting');
-      await observe(page, 'field-army');
       await page.evaluate((value) => {
         document.documentElement.dataset.theme = value;
       }, theme);
       await expect(page.getByTestId('scouting-page')).toBeVisible();
+      if (width === 390) expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(3500);
+      await expect(page.getByTestId('scouting-signals').locator('[data-signal]')).toHaveCount(3);
+      await expect(page.locator('.scouting-boundaries')).not.toHaveAttribute('open');
       const small = await page
         .getByTestId('scouting-page')
         .locator('select, button, summary, a:visible')
@@ -270,5 +318,29 @@ for (const width of [360, 375, 390, 1280])
         );
       expect(small).toEqual([]);
       expect((await new AxeBuilder({ page }).include('[data-testid="scouting-page"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+      const checkLayout = async () => {
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        expect(
+          await page.locator('.scouting-page .num:visible').evaluateAll((elements) =>
+            elements.every((element) => {
+              const range = document.createRange();
+              range.selectNodeContents(element);
+              return range.getClientRects().length === 1;
+            }),
+          ),
+        ).toBe(true);
+      };
+      await checkLayout();
+      await page.screenshot({ path: testInfo.outputPath(`scouting269-default-${width}-${theme}.png`), fullPage: true });
+      // Also check the second scenario, with optional fields and scope expanded.
+      await page.getByLabel('情境', { exact: true }).selectOption('walled');
+      await page.getByLabel('我的当前阶段', { exact: true }).selectOption('castle');
+      await expect(page.getByTestId('scouting-signals').locator('[data-signal]')).toHaveCount(3);
+      await expect(page.getByTestId('scouting-signals')).toContainText('本站整理');
+      await observe(page, 'new-town-center');
+      await page.locator('.scouting-boundaries summary').click();
+      await page.locator('.scouting-snapshot summary').click();
+      await page.locator('.scouting-hypotheses summary').click();
+      await checkLayout();
       await page.screenshot({ path: testInfo.outputPath(`scouting258-${width}-${theme}.png`), fullPage: true });
     });
