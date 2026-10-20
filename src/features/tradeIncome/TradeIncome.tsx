@@ -17,6 +17,7 @@ import {
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
+import { GameClockLink } from '../../shared/ui/GameClockLink';
 import './trade-income.css';
 
 const number = (n: number) =>
@@ -191,6 +192,7 @@ function TradeIncomeBody({
               <span className="trade-income-number">120 秒</span>。
             </p>
             <p className="note">实测交金与周期已包含篷车科技、文明、队伍及路线效果，本页不会再次叠加。条件变化后请重新测量；附带食物收入不计入。</p>
+            {errors.length === 0 && <GameClockLink seconds={Number(c.cycle)} label="换算这段贸易周期" />}
           </section>
           <section className="trade-income-card">
             <h2>目标黄金消耗</h2>

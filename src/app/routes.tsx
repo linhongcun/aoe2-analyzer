@@ -33,6 +33,9 @@ const TradeIncome = lazy(() => import('../features/tradeIncome/TradeIncome'));
 const Construction = lazy(() => import('../features/construction/Construction'));
 const TeamBonuses = lazy(() => import('../features/teamBonuses/TeamBonuses'));
 const GarrisonHealing = lazy(() => import('../features/garrisonHealing/GarrisonHealing'));
+const GameClock = lazy(() => import('../features/gameClock/GameClock'));
+const Hotkeys = lazy(() => import('../features/hotkeys/Hotkeys'));
+const CastleDefense = lazy(() => import('../features/castleDefense/CastleDefense'));
 
 /** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list→#civs */
 export function AppRoutes() {
@@ -63,6 +66,9 @@ export function AppRoutes() {
       <Route path="/construction" element={<Construction />} />
       <Route path="/team-bonuses" element={<TeamBonuses />} />
       <Route path="/garrison-healing" element={<GarrisonHealing />} />
+      <Route path="/game-clock" element={<GameClock />} />
+      <Route path="/hotkeys" element={<Hotkeys />} />
+      <Route path="/castle-defense" element={<CastleDefense />} />
       <Route path="/glossary" element={<Glossary />} />
       <Route path="/glossary/:id" element={<Glossary />} />
       <Route path="/patches" element={<Patches />} />

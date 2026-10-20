@@ -121,6 +121,36 @@ export const TOOLS: Section[] = [
 /** 已上线的子工具：提供全局搜索与面包屑，不增加首页工具卡片。 */
 export const SECONDARY_TOOLS: Section[] = [
   {
+    key: 'game-clock',
+    path: '/game-clock',
+    label: '时间换算',
+    en: 'Game Clock',
+    icon: 'clock',
+    desc: '按自己填写的倍率换算游戏与现实时间，读懂攻略时点',
+    match: /^\/game-clock$/,
+    hideNav: true,
+  },
+  {
+    key: 'hotkeys',
+    path: '/hotkeys',
+    label: '快捷键速查',
+    en: 'Hotkeys',
+    icon: 'scroll',
+    desc: '按游戏操作搜索，填写并打印自己的单人和多人按键表',
+    match: /^\/hotkeys$/,
+    hideNav: true,
+  },
+  {
+    key: 'castle-defense',
+    path: '/castle-defense',
+    label: '城堡前置应对',
+    en: 'Castle Defense',
+    icon: 'castle',
+    desc: '按竞技场侦察与落堡阶段，比较防守、让地和解围的条件',
+    match: /^\/castle-defense$/,
+    hideNav: true,
+  },
+  {
     key: 'trade-income',
     path: '/trade-income',
     label: '商路供给',

@@ -26,6 +26,11 @@ export default function Matchup() {
         <CivPicker id="me" label="对手文明" value={civs[ie]!.en} onChange={(en) => setE(civs.findIndex((c) => c.en === en))} />
       </div>
       <RushDefense />
+      <p>
+        <Link className="community-tool-entry" to="/castle-defense">
+          城堡前置：按当前局面查看应对
+        </Link>
+      </p>
       {!core ? (
         <Loading />
       ) : (
