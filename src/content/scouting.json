@@ -1,0 +1,253 @@
+{
+  "checkedAt": "2026-10-20",
+  "dataVersion": "DE185872",
+  "editorialNotice": "本站整理的有限情报辨析资料。教学来源支持持续观察与调整，不能认证敌方计划；未做该版本客户端侦察实测。各解释可以同时成立，补证不等于证明。",
+  "sources": [
+    {
+      "id": "official-scouting",
+      "title": "官方：侦察、建筑与地图信息",
+      "url": "https://www.ageofempires.com/learn-to-play/defending-your-empires-aoe2/",
+      "publishedAt": null,
+      "kind": "官方教学方法",
+      "note": "采用重复收集建筑、资源与通路信息的原则；不采用其出生资源数量、采金即造弓等简化判断。"
+    },
+    {
+      "id": "guide-2020",
+      "title": "AOE2 Guide：按实际生产重新评估",
+      "url": "https://aoe2.guide/top-9-tips-aoe2-beginners-need-to-know/",
+      "publishedAt": "2020-05-26",
+      "kind": "独立教学方法",
+      "note": "采用按实际对手生产调整的原则；不采用旧人数、时间、配比或文明强弱断言。"
+    },
+    {
+      "id": "mochi-scouting",
+      "title": "もち：重新重视侦察的信息任务",
+      "url": "https://note.com/aoe2_moti/n/ne0367d003ef2?hl=en",
+      "publishedAt": "2026-08-15",
+      "kind": "独立教学方法",
+      "note": "采用观察生产、资源、墙与移动的思路；不采用分钟阈值、Elo 或获胜承诺。"
+    }
+  ],
+  "observations": [
+    {
+      "id": "military-building",
+      "title": "敌方军事生产建筑",
+      "meaning": "只记录你看见的建筑，不等于知道队列、持续产能或所有训练地点。"
+    },
+    {
+      "id": "field-army",
+      "title": "所填区域内的实际军队",
+      "meaning": "这里的军队仅指当前可见区域，不能代表敌方全部军力。"
+    },
+    {
+      "id": "army-departure",
+      "title": "军队离开或进军方向",
+      "meaning": "看见一次移动也不能证明后续都走同一路线。"
+    },
+    {
+      "id": "new-town-center",
+      "title": "新增城镇中心",
+      "meaning": "经济扩张的局部线索不排除同时出兵或隐藏其他计划。"
+    },
+    {
+      "id": "forward-production",
+      "title": "侧面或前出的生产设施",
+      "meaning": "设施存在不等于队列、军量和攻击时间都已确定。"
+    },
+    {
+      "id": "forward-move",
+      "title": "侧路的前出村民或军队",
+      "meaning": "这里只记录经过的对象；目的、后续位置和未见路线仍待查。"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "early",
+      "title": "早期：建筑已见，后续投入未知",
+      "stage": "feudal",
+      "observationIds": [
+        "military-building",
+        "field-army",
+        "army-departure"
+      ],
+      "summary": "同一座生产建筑，可能服务当前军队，也可能是准备、暂停或转型。先用实际军队与重复观察区分，别把建筑数换成确定兵量。",
+      "sharedClue": "只见到生产建筑，而队列、实际军队与离开方向尚未完整确认。",
+      "notEnough": [
+        "一座建筑的存在，不能说明它是否持续工作、已经投入多少或何时出兵。",
+        "一个资源点的人数、一次没有看见军队，都不足以唯一判断开局。"
+      ],
+      "checks": [
+        "从已确认安全的位置复查建筑出口和可能进军路线。",
+        "比较下次看见的实际军队、移动和设施变化；先确认侦察能安全往返。"
+      ],
+      "hypotheses": [
+        {
+          "id": "military-investment",
+          "title": "解释一：正在或准备投入军队",
+          "body": "已见建筑可能服务当前军事投入，军队也可能仍未出门、已离开或在视线之外。它不是“兵已就绪”的证明。",
+          "support": [
+            {
+              "observation": "field-army",
+              "state": "seen"
+            },
+            {
+              "observation": "army-departure",
+              "state": "seen"
+            }
+          ],
+          "counter": [
+            {
+              "observation": "field-army",
+              "state": "absent"
+            }
+          ],
+          "evidenceMeaning": "实际军队或进军方向只为军事投入提供局部补证，不能直接推算持续产量或到达时间。",
+          "counterMeaning": "此时此区确认没有军队，只削弱“这里已部署军队”的判断；兵未出、已离开或在别处仍有可能。",
+          "need": "还需确认实际军队、重复出现的移动及是否有其他未见方向。",
+          "next": "若能安全观察，复看出口和通路；只把实际新见的单位与移动补入记录。",
+          "condition": "有可用视野或可安全往返的侦察路径时才补查；关键军队与路况未知时，先保留两种解释。",
+          "cost": "会占用侦察单位和注意力，也可能暴露位置；没有安全退路时不强行靠近。",
+          "counterexample": "只看到建筑却一直没有当前有效的军队记录时，不能据此宣称对方将持续进攻。",
+          "alternative": "侦察风险太高时，优先利用已有安全视野查接近自家的路线，再决定是否调整原计划。",
+          "sourceIds": [
+            "official-scouting",
+            "guide-2020",
+            "mochi-scouting"
+          ]
+        },
+        {
+          "id": "preparation-or-transition",
+          "title": "解释二：尚在准备、暂停或转换",
+          "body": "建筑存在也可能只是前期准备、已经暂停，或后续资源转向别处。没有看见军队不是这项解释已被证明。",
+          "support": [
+            {
+              "observation": "military-building",
+              "state": "seen"
+            }
+          ],
+          "counter": [
+            {
+              "observation": "field-army",
+              "state": "seen"
+            },
+            {
+              "observation": "army-departure",
+              "state": "seen"
+            }
+          ],
+          "evidenceMeaning": "建筑本身只证明这处设施已出现，与准备/转型相容；还不能说明暂停生产或已经安全。",
+          "counterMeaning": "新见实际军队或离开方向时，要重新检查“只有准备、没有当前压力”的想法；小股军队仍不说明全部后续。",
+          "need": "还缺后续生产、实际军队与其他方向的变化；不要用没有情报补成安全结论。",
+          "next": "把下次观察与当前快照对照，查实际军队及新增设施，再决定是否修正计划。",
+          "condition": "只讨论有限观察区域；若新增军队或路况改变，先重查而非照原先的无压力假设行动。",
+          "cost": "等待更多信息可能错过机会，贸然发展也会投入资源；两者都不能由建筑单独决定。",
+          "counterexample": "已经看到军队离开却仍把“没看见全部队列”解释成对方没压力，会漏掉已有威胁。",
+          "alternative": "确认具体威胁后进入现有快攻或混兵资料；尚未确认时保留补查任务。",
+          "sourceIds": [
+            "official-scouting",
+            "guide-2020",
+            "mochi-scouting"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "walled",
+      "title": "城堡阶段：墙后发展还是侧面推进",
+      "stage": "castle",
+      "observationIds": [
+        "new-town-center",
+        "forward-production",
+        "forward-move"
+      ],
+      "summary": "墙和正面安静可以与多种计划相容。经济扩张与军事推进也可能同时进行；检查侧路和外围变化，不能只盯墙后。",
+      "sharedClue": "对手被墙或防御位置遮挡，墙内外关键区域没有持续、完整的当前视野。",
+      "notEnough": [
+        "正面安静、墙后未知，不能证明敌方只在发展。",
+        "看到新增经济建筑也不能排除军队；一次扫过没发现只代表那次的有限视野。"
+      ],
+      "checks": [
+        "从已有安全视野复查侧路、外围资源方向和接近自家的通路。",
+        "记录哪些区域何时失去视野，不把探索过的地形当作当前仍可见。"
+      ],
+      "hypotheses": [
+        {
+          "id": "economic-expansion",
+          "title": "解释一：墙后扩张经济或准备后续",
+          "body": "墙可能保护经济扩张或下一阶段准备，但这与对手同时部署军队并不冲突。",
+          "support": [
+            {
+              "observation": "new-town-center",
+              "state": "seen"
+            }
+          ],
+          "counter": [
+            {
+              "observation": "new-town-center",
+              "state": "absent"
+            },
+            {
+              "observation": "forward-production",
+              "state": "seen"
+            },
+            {
+              "observation": "forward-move",
+              "state": "seen"
+            }
+          ],
+          "evidenceMeaning": "新城镇中心为经济扩张提供局部补证，不能认证对方只发展、不进攻。",
+          "counterMeaning": "这片视野没有新增城镇中心，或新见前出设施/移动，都要求重查“只有发展”的想法；墙后其他区域和同时发展仍未知。",
+          "need": "还缺经济设施的后续变化、侧路与外围的当前信息。",
+          "next": "在安全范围内复查已见经济设施和扩张方向，并同时关注侧面的移动。",
+          "condition": "以自己当前可见范围为限，不因看见经济投入就自动追加经济；先核对剩余防守与信息缺口。",
+          "cost": "继续发展会投入资源，追查会花注意力；看不清时不能把对手安静当作安全时间。",
+          "counterexample": "只看见新增城镇中心就忽略侧面军队，会把可同时发生的两件事误当成互斥。",
+          "alternative": "若视野风险太高，先利用已确认的安全位置补查接近自家的路线，再评估原计划。",
+          "sourceIds": [
+            "official-scouting",
+            "guide-2020",
+            "mochi-scouting"
+          ]
+        },
+        {
+          "id": "hidden-pressure",
+          "title": "解释二：墙掩护侧面军队或前置生产",
+          "body": "墙可以掩护别处的部署。军队和生产设施可能已在侧翼，正面看不见并不能将它们排除。",
+          "support": [
+            {
+              "observation": "forward-production",
+              "state": "seen"
+            },
+            {
+              "observation": "forward-move",
+              "state": "seen"
+            }
+          ],
+          "counter": [
+            {
+              "observation": "forward-production",
+              "state": "absent"
+            },
+            {
+              "observation": "forward-move",
+              "state": "absent"
+            }
+          ],
+          "evidenceMeaning": "前出设施或移动为侧面部署提供局部补证，设施存在也不能直接说明队列、军量或攻击时间。",
+          "counterMeaning": "所填时刻和通路确认没有设施/移动，只削弱这段通路的线索，不排除地图别处或之后的新部署。",
+          "need": "还需查侧路去向、实际军队和失去视野的区域，不能只反复看墙后。",
+          "next": "先复查已有安全视野附近的侧路和接近自家的方向；新见具体威胁后再转入对应应对。",
+          "condition": "补查必须考虑现有视野与安全退路；不要为了确认一种猜测把侦察单位强送到危险位置。",
+          "cost": "侦察与防守会分配注意力和资源，反复搜查同一处也可能漏掉其他方向。",
+          "counterexample": "一条路暂时没有发现就宣布“没有推进”，会把有限快照错误扩大到全图。",
+          "alternative": "不能安全接近敌方基地时，先查己方外围的已知通路和视野空窗；仍保留经济扩张解释。",
+          "sourceIds": [
+            "official-scouting",
+            "guide-2020",
+            "mochi-scouting"
+          ]
+        }
+      ]
+    }
+  ]
+}
