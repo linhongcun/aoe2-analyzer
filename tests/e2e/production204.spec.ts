@@ -83,7 +83,7 @@ for (const width of [390, 1280])
     await page.getByRole('button', { name: '工具', exact: true }).click();
     const menu = page.locator('#tools-menu');
     await expect(menu.getByRole('region', { name: '对局计划', exact: true }).getByRole('link').first()).toContainText('开局流程');
-    await expect(menu.getByRole('heading')).toHaveText(['新手入门', '对局计划', '经济计算', '资料']);
+    await expect(menu.locator('.tools-group-title')).toHaveText(['新手入门', '对局计划', '经济计算', '资料']);
     await menu.getByRole('link', { name: /持续生产/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: '持续生产' })).toBeVisible();
     await expect(menu).toBeHidden();
