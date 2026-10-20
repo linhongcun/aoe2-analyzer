@@ -1,5 +1,5 @@
-import { lazy } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { civs } from '../data';
 import Home from '../features/home/components/Home';
 
@@ -45,59 +45,80 @@ const RelicIncome = lazy(() => import('../features/relicIncome/RelicIncome'));
 const GameGuide = lazy(() => import('../features/gameGuide/GameGuide'));
 const MatchReview = lazy(() => import('../features/matchReview/MatchReview'));
 const Scouting = lazy(() => import('../features/scouting/Scouting'));
+const NotFound = lazy(() => import('../features/notFound/NotFound'));
+const PageMeta = lazy(() => import('../features/share/PageMeta'));
+
+/** 元数据跟随实际匹配的路由，未知路径即使有同名静态元数据也显示 404 标题。 */
+function PageRoute({ notFound = false }: { notFound?: boolean }) {
+  return (
+    <>
+      <Outlet />
+      <Suspense fallback={null}>
+        <PageMeta notFound={notFound} />
+      </Suspense>
+    </>
+  );
+}
 
 /** 兼容旧版所有 hash 路由：#civ/X #unit/id/... #tech/id #tree/X #dlc #units #techs #compare #matchup #list→#civs */
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/civs" element={<CivList />} />
-      <Route path="/list" element={<Navigate to="/civs" replace />} />
-      <Route path="/civ/:en" element={<CivDetail />} />
-      <Route path="/civ/:en/bonus/:idx" element={<BonusDetail />} />
-      <Route path="/bonuses" element={<BonusList />} />
-      <Route path="/units" element={<UnitList />} />
-      <Route path="/unit/*" element={<UnitDetail />} />
-      <Route path="/techs" element={<TechList />} />
-      <Route path="/tech/:id" element={<TechDetail />} />
-      <Route path="/tree" element={<Navigate to={'/tree/' + civs[16]!.en} replace />} />
-      <Route path="/tree/:civ" element={<TreeView />} />
-      <Route path="/dlc" element={<DlcView />} />
-      <Route path="/compare" element={<Compare />} />
-      <Route path="/matchup" element={<Matchup />} />
-      <Route path="/buildings" element={<BuildingList />} />
-      <Route path="/building/:id" element={<BuildingDetail />} />
-      <Route path="/duel" element={<Duel />} />
-      <Route path="/production" element={<Production />} />
-      <Route path="/eco-payoff" element={<EcoPayoff />} />
-      <Route path="/market" element={<Market />} />
-      <Route path="/trade-income" element={<TradeIncome />} />
-      <Route path="/construction" element={<Construction />} />
-      <Route path="/team-bonuses" element={<TeamBonuses />} />
-      <Route path="/garrison-healing" element={<GarrisonHealing />} />
-      <Route path="/game-clock" element={<GameClock />} />
-      <Route path="/hotkeys" element={<Hotkeys />} />
-      <Route path="/castle-defense" element={<CastleDefense />} />
-      <Route path="/content-guide" element={<ContentGuide />} />
-      <Route path="/mixed-army" element={<MixedArmy />} />
-      <Route path="/team-plan" element={<TeamPlan />} />
-      <Route path="/campaigns" element={<Campaigns />} />
-      <Route path="/relic-income" element={<RelicIncome />} />
-      <Route path="/game-guide" element={<GameGuide />} />
-      <Route path="/match-review" element={<MatchReview />} />
-      <Route path="/scouting" element={<Scouting />} />
-      <Route path="/glossary" element={<Glossary />} />
-      <Route path="/glossary/:id" element={<Glossary />} />
-      <Route path="/patches" element={<Patches />} />
-      <Route path="/patches/:id" element={<Patches />} />
-      <Route path="/about-data" element={<AboutData />} />
-      <Route path="/simulator" element={<SimulatorHub />} />
-      <Route path="/builds" element={<BuildOrderList />} />
-      <Route path="/maps" element={<Maps />} />
-      {['/ladder'].map((p) => (
-        <Route key={p} path={p} element={<Planned />} />
-      ))}
-      <Route path="*" element={<Home />} />
+      <Route element={<PageRoute />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/civs" element={<CivList />} />
+        <Route path="/list" element={<Navigate to="/civs" replace />} />
+        <Route path="/civ/:en" element={<CivDetail />} />
+        <Route path="/civ/:en/bonus/:idx" element={<BonusDetail />} />
+        <Route path="/bonuses" element={<BonusList />} />
+        <Route path="/units" element={<UnitList />} />
+        <Route path="/unit/*" element={<UnitDetail />} />
+        <Route path="/techs" element={<TechList />} />
+        <Route path="/tech/:id" element={<TechDetail />} />
+        <Route path="/tree" element={<Navigate to={'/tree/' + civs[16]!.en} replace />} />
+        <Route path="/tree/:civ" element={<TreeView />} />
+        <Route path="/dlc" element={<DlcView />} />
+        <Route path="/compare" element={<Compare />} />
+        <Route path="/matchup" element={<Matchup />} />
+        <Route path="/buildings" element={<BuildingList />} />
+        <Route path="/building/:id" element={<BuildingDetail />} />
+        <Route path="/duel" element={<Duel />} />
+        <Route path="/production" element={<Production />} />
+        <Route path="/eco-payoff" element={<EcoPayoff />} />
+        <Route path="/market" element={<Market />} />
+        <Route path="/trade-income" element={<TradeIncome />} />
+        <Route path="/trade" element={<Navigate to="/trade-income" replace />} />
+        <Route path="/construction" element={<Construction />} />
+        <Route path="/team-bonuses" element={<TeamBonuses />} />
+        <Route path="/garrison-healing" element={<GarrisonHealing />} />
+        <Route path="/garrison" element={<Navigate to="/garrison-healing" replace />} />
+        <Route path="/garrison-general" element={<Navigate to="/garrison-healing" replace />} />
+        <Route path="/game-clock" element={<GameClock />} />
+        <Route path="/hotkeys" element={<Hotkeys />} />
+        <Route path="/castle-defense" element={<CastleDefense />} />
+        <Route path="/content-guide" element={<ContentGuide />} />
+        <Route path="/mixed-army" element={<MixedArmy />} />
+        <Route path="/team-plan" element={<TeamPlan />} />
+        <Route path="/campaigns" element={<Campaigns />} />
+        <Route path="/relic-income" element={<RelicIncome />} />
+        <Route path="/game-guide" element={<GameGuide />} />
+        <Route path="/match-review" element={<MatchReview />} />
+        <Route path="/scouting" element={<Scouting />} />
+        <Route path="/glossary" element={<Glossary />} />
+        <Route path="/glossary/:id" element={<Glossary />} />
+        <Route path="/patches" element={<Patches />} />
+        <Route path="/patches/:id" element={<Patches />} />
+        <Route path="/about-data" element={<AboutData />} />
+        <Route path="/simulator" element={<SimulatorHub />} />
+        <Route path="/builds" element={<BuildOrderList />} />
+        <Route path="/maps" element={<Maps />} />
+        {['/ladder'].map((p) => (
+          <Route key={p} path={p} element={<Planned />} />
+        ))}
+      </Route>
+      <Route element={<PageRoute notFound />}>
+        <Route path="*" element={<NotFound />} />
+      </Route>
     </Routes>
   );
 }
