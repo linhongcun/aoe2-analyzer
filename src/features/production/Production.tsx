@@ -5,6 +5,7 @@ import { useCore, useTrees } from '../../data/hooks';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { CostView } from '../../shared/ui/art';
+import { tradeIncomeProductionHref } from '../../domain/tradeIncome';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import {
   BUILDING_LIMIT,
@@ -116,6 +117,15 @@ function ProductionBody({
         <Link className="ulink production-payoff-entry" to="/eco-payoff">
           经济科技收益：固定村民对比研究投入与增量
         </Link>
+      </p>
+      <p>
+        {!errors.length ? (
+          <Link className="btn community-tool-entry" to={tradeIncomeProductionHref(config)}>
+            按当前生产金耗规划商路供给
+          </Link>
+        ) : (
+          <span className="note">修正当前生产配置后可带入商路供给。</span>
+        )}
       </p>
       {linkErrors.length > 0 && <p className="note">请先修正链接错误，再复制方案。</p>}
       {shareStatus && (
