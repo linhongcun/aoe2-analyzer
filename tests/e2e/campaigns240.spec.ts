@@ -1,5 +1,12 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+
+const campaignSources = (
+  JSON.parse(readFileSync(new URL('../../src/content/campaigns.json', import.meta.url), 'utf8')) as { sources: Record<string, { url?: string }> }
+).sources;
+
+const internalTerms = /string \d+|CSV|§|issue ?\d+|[0-9a-f]{7,40}|SHA-?256|Site editorial classification|Existing historical release table/i;
 const href = (patch: Record<string, string> = {}) =>
   './#/campaigns?' +
   new URLSearchParams({
@@ -93,22 +100,29 @@ test('#240 首发和历史排序独立，区间与单年保持原样', async ({ 
   await expect(page.locator('[data-campaign="joan-of-arc"] .campaign-facts')).toContainText('1428–1453年');
 });
 
-test('#240 未提供剑级和逐字段来源性质诚实显示，购买统一转base', async ({ page }) => {
+test('#268 来源精简为公开链接，空剑级隐藏，购买统一转base', async ({ page }) => {
   await page.goto(href({ q: 'El Cid' }));
   const card = page.getByTestId('campaign-card');
   await expect(card.locator('.campaign-facts')).toContainText('西班牙、萨拉森');
-  await expect(card.locator('.campaign-facts dd').last()).toHaveText('未提供');
-  await expect(card).toContainText('社区客户端抄录（2024-05-12）');
+  await expect(card.locator('.campaign-facts')).not.toContainText('官方剑级');
+  await expect(card.locator('details')).toHaveCount(0);
+  await expect(card.locator('.campaign-evidence')).toHaveCount(0);
+  const sources = card.locator('.campaign-source-row');
+  await expect(sources).toHaveCount(1);
+  await expect(sources.getByRole('link', { name: '战役目录', exact: true })).toHaveAttribute('href', campaignSources['fe-campaigns']!.url!);
+  await expect(sources.getByRole('link', { name: '年代时间表', exact: true })).toHaveAttribute('href', campaignSources['fe-timeline']!.url!);
   await expect(card.getByRole('link', { name: /查看当前内容与购买要求/ })).toHaveAttribute('href', '#/content-guide?pack=base');
-  const summary = card.locator('summary');
-  await summary.focus();
+  const about = page.getByTestId('campaigns-page').locator('details');
+  await about.locator('summary').focus();
   await page.keyboard.press('Enter');
-  await expect(card.locator('.campaign-sources')).toHaveAttribute('open', '');
-  await expect(card.locator('.campaign-evidence')).toContainText('中文名称');
-  await expect(card.locator('.campaign-source-list')).toContainText('client build not declared');
-  await expect(card.locator('.campaign-source-list')).toContainText('2024-05-12');
-  await page.getByText('怎样理解年代、剑级与首发顺序', { exact: true }).click();
-  await expect(page.getByText(/不表示零剑或最容易/)).toBeVisible();
+  await expect(about).toHaveAttribute('open', '');
+  await expect(about).toContainText('本站整理');
+  await expect(about).toContainText('2024-05-12');
+  await expect(about).toContainText('不表示零剑或最容易');
+  await expect(about.getByRole('link', { name: '本站历史发行目录', exact: true })).toHaveAttribute('href', campaignSources['repo-release']!.url!);
+  expect(await page.getByTestId('campaigns-page').innerText()).not.toMatch(internalTerms);
+  const publicUrls = Object.values(campaignSources).flatMap((source) => (source.url ? [source.url] : []));
+  for (const url of await about.getByRole('link').evaluateAll((links) => links.map((link) => link.getAttribute('href')))) expect(publicUrls).toContain(url);
 });
 
 test('#240 刷新与前进后退恢复所有条件', async ({ page }) => {
@@ -238,7 +252,7 @@ test('#240 复制成功与键盘筛选反馈可用', async ({ page }) => {
 
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['light', 'dark'])
-    test(`#240 ${width}px ${theme} 首屏搜索、长来源、44px与AA`, async ({ page }, info) => {
+    test(`#240 ${width}px ${theme} 首屏搜索、精简来源、44px与AA`, async ({ page }, info) => {
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/campaigns');
@@ -250,7 +264,29 @@ for (const width of [360, 375, 390, 1280])
         path: info.outputPath(`campaigns240-${width}-${theme}.png`),
         fullPage: true,
       });
-      await page.getByTestId('campaign-card').first().locator('summary').click();
+      await expect(root.locator('.campaign-source-row')).toHaveCount(10);
+      await expect(root.locator('.campaign-facts dt').filter({ hasText: '官方剑级' })).toHaveCount(0);
+      await root.getByText('关于数据', { exact: true }).click();
+      expect(await root.innerText()).not.toMatch(internalTerms);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      const wrappedSources = await root
+        .locator('.campaign-source-row')
+        .evaluateAll((rows) =>
+          rows
+            .filter((row) => new Set([...row.querySelectorAll('a')].map((link) => Math.round(link.getBoundingClientRect().top))).size > 1)
+            .map((row) => row.textContent),
+        );
+      expect(wrappedSources).toEqual([]);
+      const wrappedNumbers = await root.locator('.num, .campaign-nowrap').evaluateAll((elements) =>
+        elements
+          .filter((element) => {
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            return new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size > 1;
+          })
+          .map((element) => element.textContent),
+      );
+      expect(wrappedNumbers).toEqual([]);
       const bad = await root.locator('input, select, button, summary, a').evaluateAll((elements) =>
         elements
           .filter((element) => {
