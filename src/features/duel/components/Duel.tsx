@@ -19,14 +19,15 @@ import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
 import SimPanel, { type StatRow } from '../../../shared/ui/sim/SimPanel';
 import { SIM_ROWS } from '../../../shared/utils/simFormat';
-import { fmtSide, parseSide, type Mode, type SideSpec } from '../../../domain/duelState';
+import { fmtSide, parseSide, type SideSpec } from '../../../domain/duelState';
+import { canonDuelParams, decodeDuelParams } from '../../../domain/duelParams';
 import { CostDiscountBlock } from './CostDiscount';
 import { UnitPicker } from './UnitPicker';
 import { substituteIn } from '../logic/substitute';
 import { BreakEven } from './BreakEven';
 import { RealCostBlock, realCostOf } from '../../../shared/ui/RealCost';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
-import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock } from '../../../domain/realCost';
+import { countForTime, fmtClock } from '../../../domain/realCost';
 import { CounterSummary } from './CounterSummary';
 import { DamageBreakdown } from './DamageBreakdown';
 import { AgeComparison } from './AgeComparison';
@@ -88,12 +89,8 @@ export default function Duel() {
     trees = useTrees();
   const [sp, setSp] = useSearchParams();
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
-  const mode = (['1', 'n', 'r', 't'].includes(sp.get('m') ?? '') ? sp.get('m') : '1') as Mode;
-  const na = Math.max(1, Math.min(200, Number(sp.get('na')) || 10)),
-    nb = Math.max(1, Math.min(200, Number(sp.get('nb')) || 10)),
-    bud = Math.max(100, Math.min(100000, Number(sp.get('bud')) || 3000));
-  const vils = Math.max(1, Math.min(200, Math.floor(Number(sp.get('vil'))) || DEFAULT_VILS)),
-    mins = Math.max(1, Math.min(120, Math.floor(Number(sp.get('min'))) || DEFAULT_MIN));
+  const params = decodeDuelParams(sp);
+  const { mode, na, nb, bud, vils, mins } = params;
   const eq = mode === 'r' || mode === 't';
   const set = (k: Record<string, string>, drop: string[] = []) => {
     const n = new URLSearchParams(sp);
@@ -116,16 +113,7 @@ export default function Duel() {
     canon.set('b', fmtSide(civFix(parseSide(sp.get('b'), DEF_B), DEF_B.uid)));
     canon.set('m', mode);
   }
-  if (mode === 'r') canon.set('bud', String(bud));
-  if (mode === 't' && vils !== DEFAULT_VILS) canon.set('vil', String(vils));
-  else canon.delete('vil');
-  if (mode === 't' && mins !== DEFAULT_MIN) canon.set('min', String(mins));
-  else canon.delete('min');
-  if (mode === 'n') {
-    canon.set('na', String(na));
-    canon.set('nb', String(nb));
-  }
-  const canonStr = canon.toString();
+  const canonStr = canonDuelParams(canon, params).toString();
   useEffect(() => {
     if (canonStr !== sp.toString()) setSp(new URLSearchParams(canonStr), { replace: true });
   }, [canonStr, sp, setSp]);
