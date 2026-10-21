@@ -33,7 +33,7 @@ describe('#237 explicit clock arithmetic', () => {
   });
 
   it.each(['0', '1', '37.125', '100000000'])('keeps duration %s unchanged at ratio one and supports zero', (duration) => {
-    const result = calculateGameClock(config({ unit: 'seconds', duration }));
+    const result = calculateGameClock(config({ unit: 'seconds', duration, ratio: '1' }));
     expect(result.ok).toBe(true);
     if (!result.ok) throw new Error('valid duration rejected');
     expect(result.inputSeconds).toBe(Number(duration));
@@ -81,7 +81,7 @@ describe('#237 duration unit changes', () => {
       expect(minutes.config.duration).toBe('10:00.123456789012345');
       value = changeGameClockUnit(minutes.config, 'seconds').config;
       expect(value.duration).toBe('600.123456789012345');
-      expect(value.ratio).toBe('1');
+      expect(value.ratio).toBe('1.7');
       expect(value.direction).toBe('game-to-real');
     }
   });
@@ -116,7 +116,7 @@ describe('#237 route codec and context links', () => {
     expect(decodeGameClock('?' + encodeGameClock(value))).toEqual({ config: value, errors: [] });
     const a = decodeGameClock('').config;
     a.ratio = '9';
-    expect(decodeGameClock('').config.ratio).toBe('1');
+    expect(decodeGameClock('').config.ratio).toBe('1.7');
   });
 
   it('preserves editable numeric drafts but never calculates or shares them as valid', () => {
@@ -131,7 +131,7 @@ describe('#237 route codec and context links', () => {
     'v=2&direction=game-to-real&unit=seconds&duration=10&ratio=1',
     'v=1&direction=game-to-real&unit=seconds&duration=10&ratio=1&ratio=2',
     'v=1&direction=game-to-real&unit=seconds&duration=10&ratio=1&extra=1',
-    'v=1&direction=game-to-real&unit=seconds&duration=10',
+    'v=1&direction=game-to-real&unit=seconds',
     'v=1&direction=other&unit=seconds&duration=10&ratio=1',
     'v=1&direction=game-to-real&unit=other&duration=10&ratio=1',
     'v=1&direction=game-to-real&unit=seconds&duration=%GG&ratio=1',
@@ -147,15 +147,16 @@ describe('#237 route codec and context links', () => {
     for (const seconds of [0, 600, 59.123456789, 0.0000001, GAME_CLOCK_DURATION_LIMIT]) {
       const href = gameClockHref(seconds);
       expect(href).toMatch(/^\/game-clock\?/);
+      expect(new URLSearchParams(href!.split('?')[1]!).get('ratio')).toBe('1.7');
       const decoded = decodeGameClock(href!.split('?')[1]!);
       expect(decoded.errors).toEqual([]);
       expect(decoded.config.direction).toBe('game-to-real');
       expect(decoded.config.unit).toBe('seconds');
-      expect(decoded.config.ratio).toBe('1');
+      expect(decoded.config.ratio).toBe('1.7');
       const result = calculateGameClock(decoded.config);
       if (!result.ok) throw new Error('valid context rejected');
       expect(result.inputSeconds).toBe(seconds);
-      expect(result.outputSeconds).toBe(seconds);
+      expect(result.outputSeconds).toBe(seconds / 1.7);
     }
     expect(gameClockHref(-1)).toBeNull();
     expect(gameClockHref(Number.POSITIVE_INFINITY)).toBeNull();

@@ -226,6 +226,26 @@ test('#224 圣物存放与僧侣自产留驻分别显示，不虚构箭数', asy
   await capacity(page, 2, 10);
 });
 
+for (const width of [360, 375, 390, 1280])
+  test(`#264 加固教堂圣物加箭与混合上限 @${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(url(1806, 'Armenians', 3, '285:1:d'));
+    await capacity(page, 1, 10);
+    await expect(total(page)).toHaveText('1');
+    await expect(panel(page)).toContainText('每个圣物 +1 支箭，与村民合计上限 5');
+    await expect(panel(page)).not.toContainText('不增加弹丸');
+    await expect(panel(page)).toContainText('再驻 1 个圣物');
+    expect(
+      await panel(page)
+        .locator('.garrison-number')
+        .evaluateAll((elements) => elements.every((element) => element.getClientRects().length === 1)),
+    ).toBe(true);
+    await page.goto(url(1806, 'Georgians', 3, '83:3:e,285:4:d'));
+    await capacity(page, 7, 10);
+    await expect(total(page)).toHaveText('5');
+    await expect(panel(page)).not.toContainText('不增加弹丸');
+  });
+
 test('#224 骡车和武僧按显式分类进入设防教堂', async ({ page }) => {
   await page.goto(url(1806, 'Armenians', 3, '1808:1:e,1811:1:e'));
   await capacity(page, 2, 10);

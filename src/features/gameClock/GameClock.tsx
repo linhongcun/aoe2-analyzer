@@ -17,6 +17,13 @@ import { sharePageUrl } from '../../domain/sharePage';
 import { Icon } from '../../shared/ui/Icon';
 import './gameClock.css';
 
+const SPEED_PRESETS = [
+  { ratio: '1.0', name: '慢速', english: 'Slow' },
+  { ratio: '1.5', name: '休闲', english: 'Casual' },
+  { ratio: '1.7', name: '标准', english: 'Normal，天梯默认' },
+  { ratio: '2.0', name: '快速', english: 'Fast' },
+] as const;
+
 const numberWithUnit = /^(?:\d+(?:\.\d+)?\s*(?:现实秒|游戏秒|秒|个字符|位小数))$/;
 function ClockText({ text }: { text: string }) {
   return text.split(/(\d+(?:\.\d+)?\s*(?:现实秒|游戏秒|秒|个字符|位小数))/g).map((part, index) =>
@@ -82,10 +89,10 @@ export default function GameClock() {
       <aside className="gc-intro" aria-label="时钟口径">
         <strong>攻略时点通常使用游戏时钟</strong>
         <p>
-          倍率表示每经过 <span className="gc-number">1 现实秒</span>，游戏经过多少秒。这里的初始值 <span className="gc-number">1</span>{' '}
-          是数学起点，请改为你的实际倍率。
+          倍率表示每经过 <span className="gc-number">1 现实秒</span>，游戏经过多少秒。默认使用标准速度（天梯默认），倍率为{' '}
+          <span className="gc-number">1.7</span>；可选预设或手动填写。
         </p>
-        <p className="note">本页没有预设游戏速度名称或默认速度；换算只适用于倍率恒定、连续运行的情况，不能还原暂停、变速或卡顿后的实际对局耗时。</p>
+        <p className="note">换算只适用于倍率恒定、连续运行的情况，不能还原暂停、变速或卡顿后的实际对局耗时。</p>
       </aside>
       {locked ? (
         <div className="gc-error" role="alert">
@@ -143,22 +150,37 @@ export default function GameClock() {
               />
             </label>
             <p className="note" id="gc-ratio-help">
-              大于 0、不超过 1000。每现实秒对应的游戏秒数；请按自己的设置填写。
+              大于 <span className="gc-number">0</span>、不超过 <span className="gc-number">1000</span>。每现实秒对应的游戏秒数；请按自己的设置填写。
             </p>
+            <div className="gc-presets" role="group" aria-label="游戏速度预设">
+              {SPEED_PRESETS.map((preset) => (
+                <button
+                  key={preset.ratio}
+                  type="button"
+                  aria-label={`${preset.ratio} ${preset.name}（${preset.english}）`}
+                  aria-pressed={!ratioInvalid && Number(config.ratio) === Number(preset.ratio)}
+                  onClick={() => update({ ...config, ratio: preset.ratio })}
+                >
+                  <span className="gc-number">{`${preset.ratio} ${preset.name}`}</span>
+                </button>
+              ))}
+            </div>
             {unitError && (
               <p role="alert" className="gc-error">
                 <ClockText text={unitError} />
               </p>
             )}
             <div className="gc-actions">
-              <button type="button" className="btn" onClick={() => update({ direction: 'game-to-real', unit: 'minutes', duration: '10:00', ratio: '1.7' })}>
+              <button type="button" className="btn" onClick={() => update(defaultGameClockConfig())}>
                 试算数学示例
               </button>
               <button type="button" className="btn" onClick={() => update(defaultGameClockConfig())}>
                 重置换算
               </button>
             </div>
-            <p className="note">示例使用用户填写倍率 1.7，不表示游戏默认速度。</p>
+            <p className="note">
+              示例采用标准速度（天梯默认），倍率为 <span className="gc-number">1.7</span>。
+            </p>
           </section>
           <section className="gc-panel gc-result" aria-labelledby="gc-result-title" aria-live="polite">
             <h2 id="gc-result-title">{gameInput ? '理论现实时长' : '对应游戏时长'}</h2>
@@ -180,9 +202,7 @@ export default function GameClock() {
                 </p>
                 <p className="note">分:秒，四舍五入到整秒</p>
                 <p className="gc-seconds">
-                  <span className="gc-number" data-testid="game-clock-seconds">
-                    {gameClockSeconds(result.outputSeconds)} 秒
-                  </span>
+                  <span className="gc-number" data-testid="game-clock-seconds">{`${gameClockSeconds(result.outputSeconds)} 秒`}</span>
                 </p>
                 <p className="note">
                   秒数最多显示 <span className="gc-number">6 位小数</span>；更小的正数用科学记数法显示。计算使用未取整值。
@@ -191,9 +211,7 @@ export default function GameClock() {
                   <div>
                     <dt>原始输入</dt>
                     <dd>
-                      <span className="gc-number">
-                        {gameClockSeconds(result.inputSeconds)} {gameInput ? '游戏秒' : '现实秒'}
-                      </span>
+                      <span className="gc-number">{`${gameClockSeconds(result.inputSeconds)} ${gameInput ? '游戏秒' : '现实秒'}`}</span>
                     </dd>
                   </div>
                   <div>
@@ -226,10 +244,19 @@ export default function GameClock() {
           游戏时间除以速度倍率得到理论现实时间，现实时间乘以速度倍率得到游戏时间。这里只做时钟算术，不读取游戏，也不改变本站开局、施工、生产、商路或治疗模型的游戏时间。
         </p>
         <p>
-          输入时长最多 <span className="gc-number">100000000 秒</span>，倍率大于 0 且不超过
-          1000；换算结果超过安全整数秒范围时暂停显示。空值、负数、指数写法与非法分秒需要先修正。
+          输入时长最多 <span className="gc-number">100000000 秒</span>，倍率大于 <span className="gc-number">0</span> 且不超过{' '}
+          <span className="gc-number">1000</span>；换算结果超过安全整数秒范围时暂停显示。空值、负数、指数写法与非法分秒需要先修正。
         </p>
-        <p>本站固定数据版本为 DE185872；游戏速度名称与预设倍率尚未按该版核实，本页只使用你明确填写的倍率。数学示例与社区需求来源都不是游戏参数证据。</p>
+        <p>
+          决定版速度预设：慢速（Slow）<span className="gc-number">1.0</span>、休闲（Casual）<span className="gc-number">1.5</span>、 标准（Normal）
+          <span className="gc-number">1.7</span>、快速（Fast）<span className="gc-number">2.0</span>。天梯与比赛使用标准速度， 本页默认倍率为{' '}
+          <span className="gc-number">1.7</span>。
+        </p>
+        <p>
+          来源：<a href="https://forums.ageofempires.com/t/whats-the-equivalent-to-1-5-game-speed-in-aoe2-de/84298">帝国时代官方论坛：DE 游戏速度讨论</a>（
+          <span className="gc-number">2020 年</span>），帖中说明 Normal 为 <span className="gc-number">1.7</span>、Casual 为{' '}
+          <span className="gc-number">1.5</span>，Normal 是多人游戏的标准速度。
+        </p>
         <nav className="gc-links" aria-label="相关工具">
           <Link to="/builds">开局流程</Link>
           <Link to="/construction">多人施工</Link>

@@ -37,6 +37,10 @@
   margin: 0;
   overflow-wrap: anywhere;
 }
+.garrison-number {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
 .garrison-capacity {
   margin-bottom: var(--space-4);
 }
