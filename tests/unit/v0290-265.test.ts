@@ -1,5 +1,5 @@
 /**
- * v0.29.0 验收（#329）A 组 #265 部分：取自 Kent Beck test/v0290-acceptance @ 2b917c0 tests/unit/v0290-A.test.ts，断言原样未改。
+ * v0.29.0 验收（#329）A 组 #265 部分：取自 Kent Beck test/v0290-acceptance @ 04c4123 tests/unit/v0290-A.test.ts，断言原样未改。
  */
 import { describe, expect, it } from 'vitest';
 import catalog from '../../src/content/contentCatalog.json';

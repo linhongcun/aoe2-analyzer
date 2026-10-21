@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { guardPage } from './v0290-helpers';
 
 /**
- * v0.29.0 验收（#329）A 组 #265 部分：取自 Kent Beck test/v0290-acceptance @ 2b917c0 tests/e2e/v0290-A.spec.ts，断言原样未改。
+ * v0.29.0 验收（#329）A 组 #265 部分：取自 Kent Beck test/v0290-acceptance @ 04c4123 tests/e2e/v0290-A.spec.ts，断言原样未改。
  * 公开来源：https://support.ageofempires.com/api/v2/help_center/en-us/articles/15552096234644.json 、…/31839163606932.json 的 created_at
  */
 guardPage();
