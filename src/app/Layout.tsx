@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
@@ -18,24 +18,53 @@ const loadCommandPalette = () => import('../features/search/components/CommandPa
 const CommandPalette = lazy(loadCommandPalette);
 
 /**
- * 搜索分包加载期间（通常不到一眨眼）先放一个不可见的输入框接住焦点和输入（含输入法），
- * 弹窗出现后把已输入的文字作为初始查询带进去，避免按 Ctrl+K 后立刻输入时丢字（issue 280）。
+ * 搜索分包加载期间先画出与正式面板同结构的外壳和「加载中」，输入框可立即打字；
+ * 弹窗出现后把已输入的文字作为初始查询带进去（issue 280 / 325）。
  */
-const HIDDEN: CSSProperties = { position: 'fixed', top: 0, left: 0, width: 1, height: 1, opacity: 0, border: 0, padding: 0 };
 function PalettePending({ onType, onClose }: { onType: (value: string) => void; onClose: () => void }) {
+  const [value, setValue] = useState('');
   return (
-    <input
-      autoFocus
-      aria-label="全局搜索（加载中）"
-      style={HIDDEN}
-      onChange={(e) => onType(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          onClose();
-        }
-      }}
-    />
+    <div className="cmdk-mask" onClick={onClose}>
+      <div
+        className="cmdk"
+        role="dialog"
+        aria-modal="true"
+        aria-label="全局搜索"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            onClose();
+          }
+        }}
+      >
+        <div className="cmdk-in">
+          <Icon name="search" />
+          <input
+            autoFocus
+            aria-label="全局搜索"
+            placeholder="搜索文明、单位、科技、开局…（中/英）"
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+              onType(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') {
+                e.preventDefault();
+                onClose();
+              }
+            }}
+          />
+          <kbd>Esc</kbd>
+        </div>
+        <ul className="cmdk-list" role="listbox" aria-label="搜索结果">
+          <li className="note" role="presentation">
+            加载中
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 }
 
