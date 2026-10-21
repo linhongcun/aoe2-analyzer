@@ -262,7 +262,10 @@ export default function Campaigns() {
             <span className="num campaign-nowrap">
               {entries.length} / {CAMPAIGNS.length}项
             </span>
-            。{filters.sort === 'history' ? '按已核实起始年排列，重叠区间照实保留。' : '按首发年排列，同一年发行的按固定顺序排列。'}
+            。
+            {filters.sort === 'history'
+              ? '按已核实起始年排列，重叠区间照实保留，起始年相同的按英文名字母顺序排列。'
+              : '按首发年排列，同一年发行的按英文名字母顺序排列。'}
           </p>
           {entries.length > 0 ? (
             <div className="campaign-results">
@@ -284,7 +287,9 @@ export default function Campaigns() {
       <details className="campaign-boundaries">
         <summary>关于数据</summary>
         <p>游戏覆盖年代来自开发方战役时间表，描述游戏剧情所跨越的区间，不是英雄生卒年，也不宣称剧情严格等同史实。区间可以重叠；排序仅提供查找方式。</p>
-        <p>首发内容包表示历史上的首次发行。当前包含关系与购买条件请查看内容导航；年代排序与首发顺序彼此独立，缺失年份排在末尾，同一年发行的按固定顺序排列。</p>
+        <p>
+          首发内容包表示历史上的首次发行。当前包含关系与购买条件请查看内容导航；年代排序与首发顺序彼此独立，缺失年份排在末尾，同一年发行的按英文名字母顺序排列。
+        </p>
         <p>官方剑级是战役挑战标记，与进入游戏时选择的标准、中等、困难不同。本批尚无逐条官方剑级证据，暂不展示剑级，不表示零剑或最容易。</p>
         <p>本站整理：地区按剧情地点归纳，可跨洲，并非游戏战役菜单的位置；搜索别名帮助查找，不是官方替代标题。</p>
         <p data-testid="campaign-name-sources">
