@@ -97,14 +97,17 @@ for (const w of [360, 1280]) {
 
 /**
  * Steve 补充决定：拼音库只放 devDependencies，构建时生成 py/pyi，前端只多这两个字段。
- * 基线在 release/v0.8.0 @ 8094df7 上 npm run build 后用 node zlib.gzipSync（默认级别）量得：
- * 主包 index-*.js gzip 143854 字节（分包不设上限）。
- * #162 B 新增的加成/页面拼音索引按其独立 gzip 大小计入预算。
  * 跑 e2e 前必须先 npm run build（CI 的顺序就是这样）。
+ *
+ * 入口预算（#280，Steve 在 https://github.com/linhongcun/aoe2-analyzer/issues/310#issuecomment-6307439864 定）：
+ * 改前基线 = main @ 6a54c18（v0.27.0）上 npm run build 后，用 node zlib.gzipSync（默认级别）量
+ * dist/assets/index-*.js，得 162,023 字节；#280 要求至少减少 40 KB（40 × 1024 = 40,960），
+ * 所以入口 gzip 上限为 162,023 − 40,960 = 121,063 字节。#280 之后搜索拼音索引不在入口里，
+ * 不再给它额外预算。分包（units/techs 等数据 chunk、搜索面板）不设上限。
  */
 test.describe('#123 构建产物', () => {
-  const BASE_MAIN = 143854;
-  const LIMIT = 10 * 1024;
+  const BEFORE_280 = 162_023;
+  const MAIN_LIMIT = BEFORE_280 - 40 * 1024; // 121,063
   const js = async () => {
     const fs = await import('node:fs');
     const path = await import('node:path');
@@ -118,13 +121,11 @@ test.describe('#123 构建产物', () => {
     const hits = (await js()).filter(({ buf }) => /pinyin/i.test(buf.toString('utf8'))).map(({ f }) => f);
     expect(hits).toEqual([]);
   });
-  // 分包（units/techs 等数据 chunk）不设上限；原 10 KB 预算另加 #162 B 的索引大小。
-  test('gzip 后主包增量不超过 10 KB 加加成/页面拼音索引大小', async () => {
+  test('gzip 后入口包不超过 121,063 字节（#280：比 v0.27.0 至少小 40 KB）', async () => {
     const { gzipSync } = await import('node:zlib');
-    const { readFileSync } = await import('node:fs');
-    const extra = gzipSync(readFileSync('src/data/search-py.json')).length;
-    const sizes = (await js()).map(({ f, buf }) => ({ f, gz: gzipSync(buf).length }));
-    const main = sizes.find((s) => s.f.startsWith('index-'))!.gz;
-    expect(main - BASE_MAIN, `主包 ${main}，基线 ${BASE_MAIN}，新增索引 ${extra}`).toBeLessThanOrEqual(LIMIT + extra);
+    const entries = (await js()).filter(({ f }) => /^index-.*\.js$/.test(f)).map(({ f, buf }) => ({ f, gz: gzipSync(buf).length }));
+    expect(entries.length, entries.map((e) => e.f).join(', ')).toBe(1);
+    expect(MAIN_LIMIT).toBe(121_063);
+    expect(entries[0]!.gz, `入口 ${entries[0]!.f} gzip ${entries[0]!.gz}，上限 ${MAIN_LIMIT}`).toBeLessThanOrEqual(MAIN_LIMIT);
   });
 });
