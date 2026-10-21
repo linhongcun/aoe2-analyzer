@@ -67,6 +67,38 @@ describe('#281 分层边界检查脚本', () => {
     expect(real.map((x) => rule(x)).filter(Boolean)).toEqual([]);
   });
 
+  it('eager glob 的数组写法逐项处理：字面路径、通配、{a,b}、** 与 ! 排除', () => {
+    const parse = parseImports as (f: string, t: string) => Edge[];
+    const at = `${ROOT}/src/features/z/Z.tsx`;
+    const tos = (code: string) => parse(at, code).map((x) => x.to);
+    expect(tos("import.meta.glob(['../../data/units.json'], { eager: true });")).toEqual(['src/data/units.json']);
+    expect(tos("import.meta.glob(['../../data/{units,techs}.json', '../../data/eco.json'], { eager: true });")).toEqual([
+      'src/data/eco.json',
+      'src/data/techs.json',
+      'src/data/units.json',
+    ]);
+    const excl = tos("import.meta.glob(['../../data/*.json', '!../../data/{civs,techs}.json'], { eager: true });");
+    expect(excl).toContain('src/data/units.json');
+    expect(excl).not.toContain('src/data/civs.json');
+    expect(excl).not.toContain('src/data/techs.json');
+    expect(tos("import.meta.glob('/src/data/build-orders/**/*.json', { eager: true });").length).toBeGreaterThan(0);
+    // 数组写法照样落进规则：features 直接 eager glob 核心 JSON 算 core-json-direct
+    const edges = parse(at, "import.meta.glob(['../../data/units.json', '../../data/eco.json'], { eager: true });");
+    expect(edges.map((x) => rule(x))).toEqual(['core-json-direct', 'core-json-direct']);
+    // 非 eager 的数组也不计（同动态 import 口径）
+    expect(tos("import.meta.glob(['../../data/units.json']);")).toEqual([]);
+  });
+
+  it('eager glob 的参数不是字面量就报错，不静默跳过', () => {
+    const parse = parseImports as (f: string, t: string) => Edge[];
+    const at = `${ROOT}/src/features/z/Z.tsx`;
+    expect(() => parse(at, "const p = '../../data/units.json'; import.meta.glob(p, { eager: true });")).toThrow(/字面量/);
+    expect(() => parse(at, "const p = 'units'; import.meta.glob(['../../data/eco.json', `../../data/${p}.json`], { eager: true });")).toThrow(/字面量/);
+    expect(() => parse(at, "const p = '../../data/units.json'; import.meta.glob([p], { eager: true });")).toThrow(/字面量/);
+    expect(() => parse(at, 'import.meta.glob([], { eager: true });')).toThrow(/字面量/);
+    expect(() => parse(at, "import.meta.glob('../../data/nope.json', { eager: true });")).toThrow(/不存在/);
+  });
+
   it('require() 与 import x = require() 直接报错，不静默漏扫', () => {
     const parse = parseImports as (f: string, t: string) => Edge[];
     expect(() => parse(`${ROOT}/src/domain/x.ts`, "const r = require('react');")).toThrow(/require/);

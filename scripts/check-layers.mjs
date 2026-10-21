@@ -82,13 +82,18 @@ export function parseImports(absFile, text = readFileSync(absFile, 'utf8')) {
       ts.isPropertyAccessExpression(node.expression) &&
       node.expression.name.text === 'glob' &&
       node.expression.expression.getText(sf) === 'import.meta' &&
-      node.arguments[0] &&
-      ts.isStringLiteral(node.arguments[0]) &&
       isEager(node.arguments[1])
     ) {
-      // eager 的 import.meta.glob 等同于对每个匹配文件的静态 import
-      for (const to of globEager(absFile, node.arguments[0].text))
-        edges.push({ from, line: line(node), spec: node.arguments[0].text, to, typeOnly: false, dynamic: false });
+      // eager 的 import.meta.glob 等同于对每个匹配文件的静态 import。
+      // 第一个参数可以是字符串或字符串数组；只要有一项不是字面量就报错，不静默跳过。
+      const a0 = node.arguments[0];
+      const lit = (x) => !!x && (ts.isStringLiteral(x) || ts.isNoSubstitutionTemplateLiteral(x));
+      let patterns;
+      if (lit(a0)) patterns = [a0.text];
+      else if (a0 && ts.isArrayLiteralExpression(a0) && a0.elements.length > 0 && a0.elements.every(lit)) patterns = a0.elements.map((x) => x.text);
+      else throw new Error(`${from}:${line(node)} eager 的 import.meta.glob 第一个参数必须是字符串字面量或字符串字面量数组，分层检查无法核对`);
+      const spec = patterns.join(',');
+      for (const to of globEager(absFile, patterns)) edges.push({ from, line: line(node), spec, to, typeOnly: false, dynamic: false });
     }
     ts.forEachChild(node, visit);
   };
@@ -108,15 +113,74 @@ function isEager(arg) {
   );
 }
 
-/** 只支持本仓库用到的 './dir/*.ext' 形式；其他写法直接报错，避免静默漏扫 */
-function globEager(fromAbs, pattern) {
-  const m = /^(.*)\/\*(\.[a-z]+)$/.exec(pattern);
-  if (!m) throw new Error(`分层检查不支持的 import.meta.glob 写法 ${pattern}（${posix(relative(ROOT, fromAbs))}）`);
-  const dir = resolve(dirname(fromAbs), m[1]);
-  return readdirSync(dir)
-    .filter((f) => f.endsWith(m[2]))
-    .sort()
-    .map((f) => posix(relative(ROOT, join(dir, f))));
+/** glob → 正则：支持 * ** ? {a,b}；其余字符按字面匹配 */
+function globToRegExp(absPattern) {
+  const esc = (x) => x.replace(/[.+^$()|[\]\\]/g, '\\$&');
+  let re = '';
+  for (let i = 0; i < absPattern.length; i++) {
+    const ch = absPattern[i];
+    if (ch === '*' && absPattern[i + 1] === '*') {
+      // '**/' 匹配零层或多层目录
+      if (absPattern[i + 2] === '/') {
+        re += '(?:.*/)?';
+        i += 2;
+      } else {
+        re += '.*';
+        i += 1;
+      }
+    } else if (ch === '*') re += '[^/]*';
+    else if (ch === '?') re += '[^/]';
+    else if (ch === '{') {
+      const close = absPattern.indexOf('}', i);
+      if (close < 0) throw new Error(`分层检查不支持的 glob 写法 ${absPattern}`);
+      re +=
+        '(?:' +
+        absPattern
+          .slice(i + 1, close)
+          .split(',')
+          .map((x) => esc(x).replace(/\*/g, '[^/]*'))
+          .join('|') +
+        ')';
+      i = close;
+    } else re += esc(ch);
+  }
+  return new RegExp('^' + re + '$');
+}
+
+function walkFiles(dir, out = []) {
+  if (!existsSync(dir) || !statSync(dir).isDirectory()) return out;
+  for (const name of readdirSync(dir)) {
+    if (name === 'node_modules' || name === '.git') continue;
+    const p = join(dir, name);
+    if (statSync(p).isDirectory()) walkFiles(p, out);
+    else out.push(p);
+  }
+  return out;
+}
+
+/**
+ * eager 的 import.meta.glob 匹配到的仓库内文件（相对仓库根，已排序）。
+ * 逐项处理：字面路径、* ** ? {a,b}、'!' 开头的排除项；'/' 开头从仓库根算。字面路径不存在时报错。
+ */
+export function globEager(fromAbs, patterns) {
+  const abs = (p) => posix(p.startsWith('/') ? join(ROOT, p) : resolve(dirname(fromAbs), p));
+  const hits = new Set();
+  for (const p of patterns.filter((x) => !x.startsWith('!'))) {
+    const a = abs(p);
+    if (!/[*?{]/.test(p)) {
+      if (!existsSync(a) || !statSync(a).isFile()) throw new Error(`import.meta.glob 字面路径不存在 ${p}（${posix(relative(ROOT, fromAbs))}）`);
+      hits.add(a);
+      continue;
+    }
+    const base = a.slice(0, a.search(/[*?{]/)).replace(/[^/]*$/, '');
+    const re = globToRegExp(a);
+    for (const f of walkFiles(base)) if (re.test(posix(f))) hits.add(posix(f));
+  }
+  for (const p of patterns.filter((x) => x.startsWith('!'))) {
+    const re = globToRegExp(abs(p.slice(1)));
+    for (const f of [...hits]) if (re.test(f)) hits.delete(f);
+  }
+  return [...hits].map((f) => posix(relative(ROOT, f))).sort();
 }
 
 const featureOf = (f) => /^src\/features\/([^/]+)\//.exec(f)?.[1] ?? null;
