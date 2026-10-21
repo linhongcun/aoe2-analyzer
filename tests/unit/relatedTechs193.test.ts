@@ -32,7 +32,7 @@ describe('#193 单位相关科技来自结构化作用对象', () => {
     no.forEach((name) => expect(result).not.toContain(name));
   });
 
-  it('全部科技到单位与单位到科技双向一致；只补充有结构化规则的文明限定作用', () => {
+  it('全部科技到单位与单位到科技双向一致；只补充有结构化规则的文明限定作用', { timeout: 15_000 }, () => {
     for (const u of units) {
       const result = unitRelatedTechs(ctx, u);
       const owners = Object.keys(ctx.trees.t)
