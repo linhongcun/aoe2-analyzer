@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "verifiedAt": "2026-10-20",
-  "versionNote": "名称参考固定语言镜像，部分文明关联来自社区客户端抄录。网页与镜像均未标明游戏版本，不能视为当前版本的客户端实测。",
+  "versionNote": "战役名称参考第三方存档的游戏内文字，部分玩家文明参考玩家社区整理的指南。这些资料都没有标明对应的游戏版本，可能与你当前游戏里的显示略有不同。",
   "coverage": {
     "complete": false,
     "modeIds": ["aoe2"],
@@ -25,7 +25,7 @@
       "version": "Live page checked 2026-10-20; no game build declared"
     },
     "client-en": {
-      "title": "英文语言镜像",
+      "title": "游戏英文文字存档",
       "url": "https://github.com/wj654cj86/aoe2DeLanguageReader/blob/12d8d5280e0b0a85f8dfdc558b4ad79279f8b73c/resources/en/strings/key-value/key-value-strings-utf8.txt",
       "kind": "client-mirror",
       "checkedAt": "2026-10-20",
@@ -33,7 +33,7 @@
       "sha256": "78ae17e7ec1f3cfaf883f55c510755b9c1da9c93c4dea9ba1871d0b56f131089"
     },
     "client-zh": {
-      "title": "简体中文语言镜像",
+      "title": "游戏简体中文文字存档",
       "url": "https://github.com/wj654cj86/aoe2DeLanguageReader/blob/12d8d5280e0b0a85f8dfdc558b4ad79279f8b73c/resources/zh/strings/key-value/key-value-strings-utf8.txt",
       "kind": "client-mirror",
       "checkedAt": "2026-10-20",
@@ -63,12 +63,13 @@
       "checkedAt": "2026-10-20",
       "version": "Update 34055 (2019); describes sword scale, does not provide individual values"
     },
-    "repo-release": {
-      "title": "本站历史发行目录",
-      "url": "https://github.com/linhongcun/aoe2-analyzer/blob/c8c2171501dcf1a46eab32ce48c8d3308d6c9ae3/src/domain/dlc.ts",
-      "kind": "repository",
-      "checkedAt": "2026-10-20",
-      "version": "main c8c2171501dcf1a46eab32ce48c8d3308d6c9ae3; only original release years/order, no entitlement inference"
+    "ign-conquerors-2000": {
+      "title": "IGN：《征服者》战役介绍（2000 年上市时）",
+      "url": "https://www.ign.com/articles/2000/08/25/age-of-empires-ii-the-conquerors-the-battles-of-the-conquerors",
+      "kind": "media",
+      "publishedAt": "2000-08-25",
+      "checkedAt": "2026-10-21",
+      "version": "IGN 2000-08-25, by Ensemble Studios designer Greg Street; says the expansion is on store shelves and lists Attila, El Cid, Montezuma and the Battles of the Conquerors (incl. Hastings, Agincourt)"
     },
     "official-aok-release": {
       "title": "微软《国王时代》上市公告",
@@ -149,9 +150,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -234,9 +235,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -319,9 +320,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -404,9 +405,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -489,9 +490,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -574,9 +575,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -659,9 +660,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -744,9 +745,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -829,9 +830,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -914,9 +915,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],

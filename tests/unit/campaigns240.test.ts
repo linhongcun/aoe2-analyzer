@@ -38,7 +38,10 @@ describe('#268 玩家可见来源', () => {
     expect(html).not.toContain('campaign-evidence');
     expect(html.match(/class="campaign-source-row"/g)).toHaveLength(CAMPAIGNS.length);
     expect(html).toContain(`href="${CAMPAIGN_CATALOG.sources['fe-campaigns']!.url}"`);
-    expect(html).toContain(`href="${CAMPAIGN_CATALOG.sources['repo-release']!.url}"`);
+    expect(html).toContain(`href="${CAMPAIGN_CATALOG.sources['ign-conquerors-2000']!.url}"`);
+    // 来源必须是公开可核实页面，不链接本站仓库源码。
+    expect(html).not.toContain('github.com/linhongcun/aoe2-analyzer');
+    expect(text).not.toMatch(/固定语言镜像|社区客户端抄录|稳定条目编号/);
   });
 });
 

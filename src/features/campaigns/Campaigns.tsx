@@ -28,9 +28,9 @@ const DATA_ERRORS = campaignCatalogErrors();
 const SOURCE_NAMES: Record<string, string> = {
   developer: '开发方资料',
   official: '官方资料',
-  'client-mirror': '固定语言镜像',
-  'community-client-transcription': '社区客户端抄录',
-  repository: '既有固定发行表',
+  'client-mirror': '游戏文字存档（第三方）',
+  'community-client-transcription': '玩家社区整理',
+  media: '游戏媒体报道',
   editorial: '本站整理',
 };
 function Source({ source }: { source: CampaignSource }) {
@@ -262,7 +262,7 @@ export default function Campaigns() {
             <span className="num campaign-nowrap">
               {entries.length} / {CAMPAIGNS.length}项
             </span>
-            。{filters.sort === 'history' ? '按已核实起始年排列，重叠区间照实保留。' : '按首发年排列，同年按稳定条目编号排序。'}
+            。{filters.sort === 'history' ? '按已核实起始年排列，重叠区间照实保留。' : '按首发年排列，同一年发行的按固定顺序排列。'}
           </p>
           {entries.length > 0 ? (
             <div className="campaign-results">
@@ -284,12 +284,13 @@ export default function Campaigns() {
       <details className="campaign-boundaries">
         <summary>关于数据</summary>
         <p>游戏覆盖年代来自开发方战役时间表，描述游戏剧情所跨越的区间，不是英雄生卒年，也不宣称剧情严格等同史实。区间可以重叠；排序仅提供查找方式。</p>
-        <p>首发内容包表示历史上的首次发行。当前包含关系与购买条件请查看内容导航；年代排序与首发顺序彼此独立，缺失年份排在末尾，同年按稳定条目编号排序。</p>
+        <p>首发内容包表示历史上的首次发行。当前包含关系与购买条件请查看内容导航；年代排序与首发顺序彼此独立，缺失年份排在末尾，同一年发行的按固定顺序排列。</p>
         <p>官方剑级是战役挑战标记，与进入游戏时选择的标准、中等、困难不同。本批尚无逐条官方剑级证据，暂不展示剑级，不表示零剑或最容易。</p>
         <p>本站整理：地区按剧情地点归纳，可跨洲，并非游戏战役菜单的位置；搜索别名帮助查找，不是官方替代标题。</p>
         <p>
-          名称依据固定语言镜像；华莱士的玩家文明关联依据官方教程，其余依据社区客户端抄录，更新于
-          <span className="num campaign-nowrap">2024-05-12</span>。社区抄录仅用于文明关联，不用于年代或剑级。
+          战役名称取自第三方存档的游戏内文字（英文与简体中文）。华莱士的玩家文明依据官方教程；其余战役的玩家文明参考 Steam
+          社区玩家进游戏逐个查看后整理的指南，更新于
+          <span className="num campaign-nowrap">2024-05-12</span>。这份指南只用来确认玩家文明，不用于年代或剑级。
         </p>
         <p>{CAMPAIGN_CATALOG.versionNote}</p>
         <p>

@@ -119,7 +119,13 @@ test('#268 来源精简为公开链接，空剑级隐藏，购买统一转base',
   await expect(about).toContainText('本站整理');
   await expect(about).toContainText('2024-05-12');
   await expect(about).toContainText('不表示零剑或最容易');
-  await expect(about.getByRole('link', { name: '本站历史发行目录', exact: true })).toHaveAttribute('href', campaignSources['repo-release']!.url!);
+  await expect(about.getByRole('link', { name: campaignSources['ign-conquerors-2000']!.title, exact: true })).toHaveAttribute(
+    'href',
+    campaignSources['ign-conquerors-2000']!.url!,
+  );
+  for (const href of await about.getByRole('link').evaluateAll((links) => links.map((link) => link.getAttribute('href') ?? '')))
+    expect(href).not.toContain('github.com/linhongcun/aoe2-analyzer');
+  await expect(about).not.toContainText(/固定语言镜像|社区客户端抄录|稳定条目编号/);
   expect(await page.getByTestId('campaigns-page').innerText()).not.toMatch(internalTerms);
   const publicUrls = Object.values(campaignSources).flatMap((source) => (source.url ? [source.url] : []));
   for (const url of await about.getByRole('link').evaluateAll((links) => links.map((link) => link.getAttribute('href')))) expect(publicUrls).toContain(url);
