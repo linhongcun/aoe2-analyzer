@@ -167,9 +167,9 @@ export function parseImports(absFile: string, text: string, resolveTo: (spec: st
       const a0 = node.arguments[0];
       let patterns: string | string[];
       if (ts.isStringLiteralLike(a0)) patterns = a0.text;
-      else if (ts.isArrayLiteralExpression(a0) && a0.elements.every((x) => ts.isStringLiteralLike(x)))
+      else if (ts.isArrayLiteralExpression(a0) && a0.elements.length > 0 && a0.elements.every((x) => ts.isStringLiteralLike(x)))
         patterns = a0.elements.map((x) => (x as ts.StringLiteralLike).text);
-      else throw new Error(`${key}:${lineOf(node)} import.meta.glob 的第一个参数不是字面量，扫描器无法核对`);
+      else throw new Error(`${key}:${lineOf(node)} import.meta.glob 的第一个参数必须是字符串字面量或非空的字符串字面量数组，扫描器无法核对`);
       const spec = Array.isArray(patterns) ? patterns.join(',') : patterns;
       for (const to of globEager(absFile, patterns)) edges.push({ from: key, line: lineOf(node), spec, to, typeOnly: false });
     }

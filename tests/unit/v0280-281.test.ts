@@ -85,6 +85,10 @@ describe('#281 分层规则', () => {
     expect(tos("const m = import.meta.glob('/src/data/build-orders/**/*.json', { eager: true });").length).toBeGreaterThan(0);
     expect(tos("const m = import.meta.glob('../../data/units.json');")).toEqual([]);
     expect(() => tos("const m = import.meta.glob('../../data/nope.json', { eager: true });")).toThrow(/不存在/);
+    // 空数组、变量、数组里放变量都报错，不静默算 0
+    expect(() => tos('const m = import.meta.glob([], { eager: true });')).toThrow(/字面量/);
+    expect(() => tos("const p = '../../data/units.json'; const m = import.meta.glob(p, { eager: true });")).toThrow(/字面量/);
+    expect(() => tos("const p = '../../data/units.json'; const m = import.meta.glob([p], { eager: true });")).toThrow(/字面量/);
     expect(classify(parseImports(at, "const m = import.meta.glob('../../data/units.json', { eager: true });")[0]!)).toBe('core-json-direct');
   });
 
