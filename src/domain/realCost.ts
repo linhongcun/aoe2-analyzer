@@ -188,7 +188,7 @@ export function fmtClock(sec: number): string {
   return h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`;
 }
 
-/** #322：折后价 → 采集模型 + 真实成本（原在 shared/ui/RealCost，纯计算迁入 domain） */
+/** issue 322：折后价 → 采集模型 + 真实成本（原在 shared/ui/RealCost，纯计算迁入 domain） */
 export function realCostOf(d: CostDiscount, age: number, civ: string) {
   const g = gatherModel(age, civ);
   return { g, rc: realCost(d.cost, g) };
