@@ -10,6 +10,7 @@ import {
   decodeScouting,
   defaultScoutingConfig,
   encodeScouting,
+  exampleScoutingConfig,
   isScoutingTimeText,
   type ScoutingConfig,
   type ScoutingHypothesisResult,
@@ -56,71 +57,21 @@ function HypothesisCard({ result }: { result: ScoutingHypothesisResult }) {
       <h3>{hypothesis.title}</h3>
       <p>{hypothesis.body}</p>
       {support.length > 0 && (
-        <div className="scouting-evidence" data-testid="scouting-local-support">
-          <strong>当前局部补证</strong>
-          <ul>
-            {support.map((id) => (
-              <li key={id}>{titleOf(id)}</li>
-            ))}
-          </ul>
-          <p>{hypothesis.evidenceMeaning}</p>
-        </div>
+        <p className="scouting-evidence" data-testid="scouting-local-support">
+          <strong>已见：{support.map(titleOf).join('、')}。</strong>
+          {hypothesis.evidenceMeaning}
+        </p>
       )}
       {counter.length > 0 && (
-        <div className="scouting-counter" data-testid="scouting-local-counter">
-          <strong>当前需重查线索，请结合下方限定</strong>
-          <ul>
-            {counter.map((id) => (
-              <li key={id}>{titleOf(id)}</li>
-            ))}
-          </ul>
-          <p>{hypothesis.counterMeaning}</p>
-        </div>
+        <p className="scouting-counter" data-testid="scouting-local-counter">
+          <strong>重查：{counter.map(titleOf).join('、')}。</strong>
+          {hypothesis.counterMeaning}
+        </p>
       )}
-      {!support.length && !counter.length && <p className="scouting-note">目前没有带明确时刻、可见范围且未标记陈旧的相关补证；这不代表解释成立或被排除。</p>}
-      <dl>
-        <div>
-          <dt>还缺什么</dt>
-          <dd>{hypothesis.need}</dd>
-        </div>
-        <div>
-          <dt>下一次补查</dt>
-          <dd>{hypothesis.next}</dd>
-        </div>
-        <div>
-          <dt>采用条件</dt>
-          <dd>{hypothesis.condition}</dd>
-        </div>
-        <div>
-          <dt>投入与风险</dt>
-          <dd>{hypothesis.cost}</dd>
-        </div>
-      </dl>
-      <details>
-        <summary>反例、替代与来源</summary>
-        <p>
-          <b>失效反例：</b>
-          {hypothesis.counterexample}
-        </p>
-        <p>
-          <b>替代方式：</b>
-          {hypothesis.alternative}
-        </p>
-        <ul className="scouting-sources">
-          {SCOUTING_CONTENT.sources
-            .filter((source) => hypothesis.sourceIds.includes(source.id))
-            .map((source) => (
-              <li key={source.id}>
-                <a href={source.url} target="_blank" rel="noopener noreferrer">
-                  {source.title}
-                </a>
-                <span className="scouting-note">
-                  {source.kind} · {source.publishedAt ? `发布 ${source.publishedAt}` : '发布日期未标注'} · 核对 {SCOUTING_CONTENT.checkedAt}
-                </span>
-              </li>
-            ))}
-        </ul>
-      </details>
+      <p>
+        <strong>下一步：</strong>
+        {hypothesis.next}
+      </p>
     </article>
   );
 }
@@ -128,8 +79,8 @@ function HypothesisCard({ result }: { result: ScoutingHypothesisResult }) {
 function ObservationText({ observation }: { observation: ScoutingObservation }) {
   return (
     <span>
-      {SCOUTING_STATE_ZH[observation.state]}；游戏时间 {observation.at || '未记录'}；{SCOUTING_AREA_ZH[observation.area]}；
-      {observation.stale ? '已标记陈旧' : '未标记陈旧，仍需核实时效'}。
+      {SCOUTING_STATE_ZH[observation.state]}；游戏时间 <span className="num">{observation.at || '未记录'}</span>；{SCOUTING_AREA_ZH[observation.area]}；
+      {observation.stale ? '已标记陈旧' : '当前记录'}。
     </span>
   );
 }
@@ -142,6 +93,7 @@ export default function Scouting() {
   const [manualLink, setManualLink] = useState('');
   const [timeDrafts, setTimeDrafts] = useState<Partial<Record<ScoutingObservationId, string>>>({});
   const config = decoded.config;
+  const isExample = encodeScouting(config) === encodeScouting(exampleScoutingConfig());
   const scenario = SCOUTING_CONTENT.scenarios.find((row) => row.id === config.scenario)!;
   const draftTimes = Object.keys(timeDrafts) as ScoutingObservationId[];
   const analysis = !decoded.locked && draftTimes.length === 0 ? analyseScouting(config) : null;
@@ -169,10 +121,26 @@ export default function Scouting() {
     changeObservation(id, { at: value });
   };
   const reset = () => {
-    navigate({ pathname: '/scouting', search: '?' + encodeScouting(defaultScoutingConfig()) }, { replace: true });
+    const empty = decoded.locked ? defaultScoutingConfig() : { ...config, observations: defaultScoutingConfig().observations };
+    navigate({ pathname: '/scouting', search: '?' + encodeScouting(empty) }, { replace: true });
     setTimeDrafts({});
     setManualLink('');
-    setNotice('已重置情境，观察均为未知。');
+    setNotice('观察已清空，可以填写自己的观察。');
+  };
+  const print = () => {
+    const folded = Array.from(document.querySelectorAll<HTMLDetailsElement>('.scouting-result details:not([open]), .scouting-boundaries:not([open])'));
+    folded.forEach((details) => {
+      details.open = true;
+    });
+    window.addEventListener(
+      'afterprint',
+      () =>
+        folded.forEach((details) => {
+          details.open = false;
+        }),
+      { once: true },
+    );
+    window.print();
   };
   const share = async () => {
     if (!canShare) return;
@@ -190,16 +158,16 @@ export default function Scouting() {
     <section className="pane scouting-page" data-testid="scouting-page" aria-labelledby="scouting-title">
       <header className="scouting-heading">
         <div>
-          <p className="scouting-kicker">先分清事实、猜测与还缺的观察</p>
+          <p className="scouting-kicker">从信号找到下一步</p>
           <h1 id="scouting-title">侦察情报辨析卡</h1>
-          <p>同一条线索可以有不同解释。先找能区分它们的补证，不直接替对手决定计划。</p>
+          <p>对照具体信号，记录观察，安排下一步行动。</p>
         </div>
         <div className="scouting-buttons">
           <button type="button" className="btn" disabled={!canShare} onClick={() => void share()}>
             <Icon name="copy" />
             复制情报链接
           </button>
-          <button type="button" className="btn" disabled={analysis?.status !== 'covered'} onClick={() => window.print()}>
+          <button type="button" className="btn" disabled={analysis?.status !== 'covered'} onClick={print}>
             <Icon name="printer" />
             打印当前辨析
           </button>
@@ -219,7 +187,7 @@ export default function Scouting() {
       {decoded.locked && (
         <div className="scouting-error" role="alert">
           <p>{decoded.errors.join(' ')}</p>
-          <p>原链接已保留。显式重置后才能重新选择，不会用默认解释冒充恢复。</p>
+          <p>原链接已保留，清空后可以重新填写。</p>
         </div>
       )}
       {draftTimes.length > 0 && (
@@ -228,17 +196,36 @@ export default function Scouting() {
           <ul>
             {draftTimes.map((id) => (
               <li key={id}>
-                {titleOf(id)}：{timeDrafts[id]!.length > SCOUTING_TIME_LIMIT ? `超过 ${SCOUTING_TIME_LIMIT} 个字符` : '含控制、隐藏方向或不完整字符'}
+                {titleOf(id)}：
+                {timeDrafts[id]!.length > SCOUTING_TIME_LIMIT ? (
+                  <>
+                    超过 <span className="num">{SCOUTING_TIME_LIMIT}个字符</span>
+                  </>
+                ) : (
+                  '含控制、隐藏方向或不完整字符'
+                )}
                 ；原文保留，尚未进入链接；若在另一组，请切回修正。
               </li>
             ))}
           </ul>
         </div>
       )}
-      <section className="scouting-scope" aria-label="本页适用范围">
-        <strong>有限首版</strong>
-        <p>常规开局 1v1 Arabia；两组资料分别用于封建、城堡阶段。未覆盖海图、游牧、Arena、团战或其他阶段；不读取游戏、不预测胜率。</p>
-      </section>
+      {isExample && !decoded.locked && (
+        <div className="scouting-example" data-testid="scouting-example">
+          <p>
+            <strong>示例观察：</strong>已见军事生产建筑与实际军队，进军方向待查。
+          </p>
+          {analysis?.status === 'covered' && (
+            <p>
+              <strong>示例判断：</strong>
+              {analysis.summary}
+            </p>
+          )}
+          <button type="button" className="btn scouting-reset" onClick={reset}>
+            清空，填写我的观察
+          </button>
+        </div>
+      )}
       <div className="scouting-layout">
         <section className="scouting-panel scouting-settings" aria-labelledby="scouting-settings-title">
           <h2 id="scouting-settings-title">选择情境与观察</h2>
@@ -250,60 +237,85 @@ export default function Scouting() {
               options={Object.fromEntries(SCOUTING_CONTENT.scenarios.map((row) => [row.id, row.title])) as Record<ScoutingConfig['scenario'], string>}
               change={(scenario) => change({ scenario })}
             />
-            <Select label="地图" value={config.map} options={maps} change={(map) => change({ map })} />
-            <Select label="模式" value={config.mode} options={modes} change={(mode) => change({ mode })} />
+            <details className="scouting-context">
+              <summary>
+                地图与模式（<span className="num">{modes[config.mode]}</span> · {maps[config.map]}）
+              </summary>
+              <div className="scouting-optional-fields">
+                <Select label="地图" value={config.map} options={maps} change={(map) => change({ map })} />
+                <Select label="模式" value={config.mode} options={modes} change={(mode) => change({ mode })} />
+              </div>
+            </details>
             <Select label="我的当前阶段" value={config.stage} options={stages} change={(stage) => change({ stage })} />
             <Select label="我正在考虑的计划" value={config.plan} options={plans} change={(plan) => change({ plan })} />
           </fieldset>
-          <p className="scouting-note">切换情境保留两组记录与阶段；不会把你自动改到另一时代。时间均为游戏内计时，留空表示未记录。</p>
+
           <fieldset disabled={decoded.locked} className="scouting-observations">
-            <legend>固定观察项</legend>
+            <legend>我的观察</legend>
             {scenario.observationIds.map((id) => {
               const definition = SCOUTING_CONTENT.observations.find((row) => row.id === id)!;
               const observation = config.observations[id];
               return (
                 <section className="scouting-observation" data-observation={id} key={id} aria-labelledby={`scouting-observation-${id}`}>
                   <h3 id={`scouting-observation-${id}`}>{definition.title}</h3>
-                  <p className="scouting-note">{definition.meaning}</p>
                   <Select
                     label={`${definition.title}：状态`}
-                    value={observation.state}
-                    options={SCOUTING_STATE_ZH}
+                    value={observation.state === 'absent' ? 'unseen' : observation.state}
+                    options={{ seen: SCOUTING_STATE_ZH.seen, unseen: SCOUTING_STATE_ZH.unseen, unknown: SCOUTING_STATE_ZH.unknown }}
                     change={(state) => changeObservation(id, { state })}
                   />
-                  <label className="scouting-field">
-                    {definition.title}：游戏时间
-                    <input
-                      aria-label={`${definition.title}：游戏时间`}
-                      type="text"
-                      inputMode="text"
-                      placeholder="如 12:30，未知可留空"
-                      value={timeDrafts[id] ?? observation.at}
-                      onChange={(event) => changeTime(id, event.target.value)}
-                    />
-                  </label>
-                  <Select
-                    label={`${definition.title}：可见范围`}
-                    value={observation.area}
-                    options={SCOUTING_AREA_ZH}
-                    change={(area) => changeObservation(id, { area })}
-                  />
-                  <label className="scouting-check">
-                    <input type="checkbox" checked={observation.stale} onChange={(event) => changeObservation(id, { stale: event.target.checked })} />
-                    <span>{definition.title}：这条信息已陈旧</span>
-                  </label>
+                  <details className="scouting-observation-details">
+                    <summary>补充时间、范围与时效（可选）</summary>
+                    <div className="scouting-optional-fields">
+                      <label className="scouting-field">
+                        {definition.title}：游戏时间
+                        <input
+                          aria-label={`${definition.title}：游戏时间`}
+                          type="text"
+                          inputMode="text"
+                          placeholder="如 12:30，未知可留空"
+                          value={timeDrafts[id] ?? observation.at}
+                          onChange={(event) => changeTime(id, event.target.value)}
+                        />
+                      </label>
+                      <Select
+                        label={`${definition.title}：可见范围`}
+                        value={observation.area}
+                        options={SCOUTING_AREA_ZH}
+                        change={(area) => changeObservation(id, { area })}
+                      />
+                      <label className="scouting-check">
+                        <input type="checkbox" checked={observation.stale} onChange={(event) => changeObservation(id, { stale: event.target.checked })} />
+                        <span>{definition.title}：这条信息已陈旧</span>
+                      </label>
+                      {(observation.state === 'unseen' || observation.state === 'absent') && (
+                        <label className="scouting-check">
+                          <input
+                            type="checkbox"
+                            checked={observation.state === 'absent'}
+                            onChange={(event) => changeObservation(id, { state: event.target.checked ? 'absent' : 'unseen' })}
+                          />
+                          <span>{definition.title}：确认此时此区不存在</span>
+                        </label>
+                      )}
+                    </div>
+                  </details>
                 </section>
               );
             })}
           </fieldset>
-          <p className="scouting-note">“这次没有看见”不能当作不存在。“确认不存在”必须限定观察时刻和实际可见区域；已探索过的地形不等于当前仍有视野。</p>
+          {!isExample && (
+            <button type="button" className="btn scouting-reset" onClick={reset}>
+              清空，填写我的观察
+            </button>
+          )}
         </section>
         {analysis && (
           <section className="scouting-result" data-testid="scouting-result" data-analysis-status={analysis.status} aria-labelledby="scouting-result-title">
             <div className="scouting-panel">
               <h2 id="scouting-result-title">{analysis.title}</h2>
               <p className="scouting-note">
-                {scenario.title}；{modes[config.mode]}；{maps[config.map]}；{stages[config.stage]}；{plans[config.plan]}。
+                {scenario.title}；<span className="num">{modes[config.mode]}</span>；{maps[config.map]}；{stages[config.stage]}。
               </p>
               <p>{analysis.summary}</p>
               {analysis.status === 'invalid' && (
@@ -318,40 +330,70 @@ export default function Scouting() {
               )}
               {analysis.status === 'covered' && (
                 <>
-                  <p className="scouting-note">所有解释都可能与现有信息相容，局部补证或反证均不能认证全局意图；经济与军事投入也可同时发生。</p>
-                  <p>{analysis.planNote}</p>
+                  {config.plan !== 'undecided' && <p>{analysis.planNote}</p>}
+                  {analysis.gaps.length > 0 && (
+                    <p className="scouting-note" data-testid="scouting-gaps">
+                      待查：{analysis.gaps.join(' ')}
+                    </p>
+                  )}
                 </>
               )}
             </div>
             {analysis.status === 'covered' && (
               <>
-                <section className="scouting-panel" aria-labelledby="scouting-common-title">
-                  <h3 id="scouting-common-title">同一线索为何还不能区分</h3>
-                  <p>{scenario.sharedClue}</p>
-                  <ul>
-                    {scenario.notEnough.map((text) => (
-                      <li key={text}>{text}</li>
-                    ))}
-                  </ul>
-                  <h3>当前仍缺的信息</h3>
-                  {analysis.gaps.length ? (
-                    <ul data-testid="scouting-gaps">
-                      {analysis.gaps.map((gap) => (
-                        <li key={gap}>{gap}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p data-testid="scouting-gaps">所填观察已具有限定信息，仍不代表所有地图方向或后续变化都已核实。</p>
-                  )}
-                  <h3>先做的共同补查</h3>
-                  <ul>
-                    {scenario.checks.map((check) => (
-                      <li key={check}>{check}</li>
+                <section className="scouting-panel" aria-labelledby="scouting-signals-title">
+                  <h3 id="scouting-signals-title">具体信号速查</h3>
+                  <ul className="scouting-signals" data-testid="scouting-signals">
+                    {scenario.signals.map((signal) => (
+                      <li key={signal.id} data-signal={signal.id}>
+                        <dl>
+                          <div>
+                            <dt>看到什么</dt>
+                            <dd>{signal.seen}</dd>
+                          </div>
+                          <div>
+                            <dt>可能意味着什么</dt>
+                            <dd>{signal.meaning}</dd>
+                          </div>
+                          <div>
+                            <dt>下一步做什么</dt>
+                            <dd>{signal.next}</dd>
+                          </div>
+                        </dl>
+                        <div className="scouting-signal-sources">
+                          {signal.editorial && <span className="scouting-note">本站整理</span>}
+                          {signal.sourceIds.map((id) => {
+                            const source = SCOUTING_CONTENT.sources.find((item) => item.id === id)!;
+                            return (
+                              <a key={id} href={source.url} target="_blank" rel="noopener noreferrer" aria-label={`来源：${source.title}（${signal.seen}）`}>
+                                {source.title}
+                              </a>
+                            );
+                          })}
+                        </div>
+                      </li>
                     ))}
                   </ul>
                 </section>
-                <section className="scouting-panel scouting-snapshot" aria-labelledby="scouting-snapshot-title">
-                  <h3 id="scouting-snapshot-title">这次辨析使用的观察快照</h3>
+                <details className="scouting-panel scouting-hypotheses">
+                  <summary>解释与观察依据（可选）</summary>
+                  <div className="scouting-cards">
+                    {analysis.hypotheses.map((result) => (
+                      <HypothesisCard result={result} key={result.hypothesis.id} />
+                    ))}
+                  </div>
+                </details>
+                <section className="scouting-panel" aria-labelledby="scouting-followup-title">
+                  <h3 id="scouting-followup-title">已经确认具体威胁后</h3>
+
+                  <div className="scouting-links">
+                    <Link to="/matchup">已辨认快攻的应对</Link>
+                    <Link to="/castle-defense">已见城堡前置的阶段应对</Link>
+                    <Link to="/mixed-army">已见混兵组合的分工</Link>
+                  </div>
+                </section>
+                <details className="scouting-panel scouting-snapshot">
+                  <summary>这次辨析使用的观察快照</summary>
                   <dl>
                     {scenario.observationIds.map((id) => (
                       <div key={id}>
@@ -362,32 +404,18 @@ export default function Scouting() {
                       </div>
                     ))}
                   </dl>
-                </section>
-                <div className="scouting-cards">
-                  {analysis.hypotheses.map((result) => (
-                    <HypothesisCard result={result} key={result.hypothesis.id} />
-                  ))}
-                </div>
-                <section className="scouting-panel" aria-labelledby="scouting-followup-title">
-                  <h3 id="scouting-followup-title">已经确认具体威胁后</h3>
-                  <p>再按实际威胁查对应条件资料；这些入口不能替这里的未知信息下结论。</p>
-                  <div className="scouting-links">
-                    <Link to="/matchup">已辨认快攻的应对</Link>
-                    <Link to="/castle-defense">已见城堡前置的阶段应对</Link>
-                    <Link to="/mixed-army">已见混兵组合的分工</Link>
-                  </div>
-                </section>
+                </details>
               </>
             )}
           </section>
         )}
       </div>
       <details className="scouting-panel scouting-boundaries">
-        <summary>来源、核对日期与资料边界</summary>
+        <summary>适用范围</summary>
         <p>{SCOUTING_CONTENT.editorialNotice}</p>
         <p className="scouting-note">
-          游戏资料口径 {SCOUTING_CONTENT.dataVersion}，核对 {SCOUTING_CONTENT.checkedAt}
-          。本页没有即时训练、研究或建造指令，也不认证文明、资源、兵力与实际前置已就绪。社区原问答只用于识别困惑，不证明战术正确。
+          游戏资料口径 <span className="num">{SCOUTING_CONTENT.dataVersion}</span>，核对 <span className="num">{SCOUTING_CONTENT.checkedAt}</span>
+          。信号的判断来自所列教学或本站整理，行动建议按这些观察原则组织。
         </p>
         <ul className="scouting-sources">
           {SCOUTING_CONTENT.sources.map((source) => (
@@ -396,7 +424,14 @@ export default function Scouting() {
                 {source.title}
               </a>
               <span className="scouting-note">
-                {source.kind} · {source.publishedAt ? `发布 ${source.publishedAt}` : '发布日期未标注'} · 核对 {SCOUTING_CONTENT.checkedAt}
+                {source.kind} ·{' '}
+                {source.publishedAt ? (
+                  <>
+                    发布 <span className="num">{source.publishedAt}</span>
+                  </>
+                ) : (
+                  '发布日期未标注'
+                )}
               </span>
               <p>{source.note}</p>
             </li>
@@ -406,9 +441,6 @@ export default function Scouting() {
           链接保存全部固定观察，没有本地存储覆盖。破损链接暂停解释；范围外保留条件且显示未覆盖，超长或含异常字符的时间原文留在输入框但不会进入链接，不截断分享。
         </p>
       </details>
-      <button type="button" className="btn scouting-reset" onClick={reset}>
-        重置为未知观察
-      </button>
     </section>
   );
 }

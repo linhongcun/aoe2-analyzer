@@ -46,13 +46,16 @@ export interface ScoutingHypothesis {
   counter: EvidenceRule[];
   evidenceMeaning: string;
   counterMeaning: string;
-  need: string;
   next: string;
-  condition: string;
-  cost: string;
-  counterexample: string;
-  alternative: string;
   sourceIds: string[];
+}
+export interface ScoutingSignal {
+  id: string;
+  seen: string;
+  meaning: string;
+  next: string;
+  sourceIds: string[];
+  editorial: boolean;
 }
 export interface ScoutingScenario {
   id: ScoutingScenarioId;
@@ -60,9 +63,7 @@ export interface ScoutingScenario {
   stage: 'feudal' | 'castle';
   observationIds: ScoutingObservationId[];
   summary: string;
-  sharedClue: string;
-  notEnough: string[];
-  checks: string[];
+  signals: ScoutingSignal[];
   hypotheses: ScoutingHypothesis[];
 }
 export const SCOUTING_CONTENT = rawContent as unknown as {
@@ -74,9 +75,9 @@ export const SCOUTING_CONTENT = rawContent as unknown as {
   scenarios: ScoutingScenario[];
 };
 export const SCOUTING_STATE_ZH: Record<ScoutingObservationState, string> = {
-  unknown: '未知，尚未观察',
-  unseen: '这次没有看见',
-  seen: '已见到',
+  unknown: '未知',
+  unseen: '没看到',
+  seen: '看到',
   absent: '限定时刻与可见范围内确认不存在',
 };
 export const SCOUTING_AREA_ZH: Record<ScoutingArea, string> = {
@@ -138,6 +139,13 @@ export function defaultScoutingConfig(): ScoutingConfig {
   ) as ScoutingConfig['observations'];
   return { scenario: 'early', map: 'arabia', mode: 'one-v-one', stage: 'feudal', plan: 'undecided', observations };
 }
+/** A teaching example only; clearing or loading a saved empty config keeps it empty. */
+export function exampleScoutingConfig(): ScoutingConfig {
+  const config = defaultScoutingConfig();
+  config.observations['military-building'].state = 'seen';
+  config.observations['field-army'].state = 'seen';
+  return config;
+}
 export function scoutingTimeError(value: string): string | null {
   if (value === '') return null;
   return /^(?:\d{1,3}:[0-5]\d|\d{1,2}:[0-5]\d:[0-5]\d)$/.test(value) ? null : '游戏时间请填分:秒或时:分:秒，秒和小时后的分须在 00–59；也可留空表示未记录。';
@@ -164,7 +172,7 @@ export function encodeScouting(config: ScoutingConfig): string {
 }
 export function decodeScouting(search: string): { config: ScoutingConfig; locked: boolean; errors: string[] } {
   const fallback = () => ({ config: defaultScoutingConfig(), locked: true, errors: ['情报链接无效、损坏或版本不兼容，解释已暂停；默认值不代表恢复结果。'] });
-  if (search === '' || search === '?') return { config: defaultScoutingConfig(), locked: false, errors: [] };
+  if (search === '' || search === '?') return { config: exampleScoutingConfig(), locked: false, errors: [] };
   if (search.length > SCOUTING_URL_LIMIT + 1) return fallback();
   const raw = search.startsWith('?') ? search.slice(1) : search;
   try {
@@ -199,18 +207,18 @@ export interface ScoutingAnalysis {
   hypotheses: ScoutingHypothesisResult[];
 }
 export const SCOUTING_RESULT_ZH: Record<ScoutingHypothesisResult['status'], string> = {
-  'needs-evidence': '仍需区分',
-  'local-support': '有局部补证，仍非证明',
-  recheck: '有需重查线索，解释仍可相容',
+  'needs-evidence': '待观察',
+  'local-support': '有观察支持',
+  recheck: '需重新评估',
 };
 const planNotes: Record<ScoutingConfig['plan'], string> = {
-  undecided: '尚未决定行动：先列缺失信息，不从并列解释中自动替你选择。',
-  press: '你正考虑施压：先查现有军队、接近路线与撤回条件；本页不认证能够交战。',
-  hold: '你正考虑防守：先查具体威胁和接近路线，不把所有未知都变成已确认进攻。',
-  develop: '你正考虑发展：先查地图变化和已有防守，不因正面安静就认证可以安全追加投入。',
+  undecided: '结合下方信号选择下一步。',
+  press: '考虑施压：先核对现有军队、接近路线与撤回条件。',
+  hold: '考虑防守：优先确认实际兵种和接近资源点的路线。',
+  develop: '考虑发展：同时关注侧路视野与已有防守。',
 };
 function usable(observation: ScoutingObservation) {
-  return !observation.stale && observation.at !== '' && observation.area !== 'unknown' && (observation.state === 'seen' || observation.state === 'absent');
+  return !observation.stale && (observation.state === 'seen' || (observation.state === 'absent' && observation.at !== '' && observation.area !== 'unknown'));
 }
 export function analyseScouting(config: ScoutingConfig): ScoutingAnalysis {
   const errors = scoutingInputErrors(config);
@@ -228,10 +236,9 @@ export function analyseScouting(config: ScoutingConfig): ScoutingAnalysis {
   for (const id of scenario.observationIds) {
     const observation = config.observations[id];
     const title = SCOUTING_CONTENT.observations.find((row) => row.id === id)!.title;
-    if (observation.stale) gaps.push(`${title}：已标记陈旧，先复查；不作为当前补证或反证。`);
-    else if (observation.state === 'unknown') gaps.push(`${title}：未知，先补查。`);
-    else if (observation.state === 'unseen') gaps.push(`${title}：这次没看见不等于不存在，仍需补查。`);
-    else if (!usable(observation)) gaps.push(`${title}：虽已见到，但观察时刻或可见范围未记录，不作为当前补证。`);
+    if (observation.stale) gaps.push(`${title}：已标记陈旧，复查。`);
+    else if (observation.state === 'unknown') gaps.push(`${title}：未知。`);
+    else if (observation.state === 'unseen') gaps.push(`${title}：没看到，复查视野与其他方向。`);
   }
   const matches = (rules: EvidenceRule[]) =>
     rules
@@ -252,8 +259,17 @@ export function analyseScouting(config: ScoutingConfig): ScoutingAnalysis {
   });
   return {
     status: 'covered',
-    title: '并列解释与下一次补查',
-    summary: scenario.summary,
+    title: '当前判断与下一步',
+    summary:
+      config.scenario === 'early' && hypotheses[0]!.support.length
+        ? '已见实际军队或移动，倾向已有军事投入；优先看进军方向，保护伐木场与金矿。'
+        : config.scenario === 'walled' && hypotheses[1]!.support.length
+          ? hypotheses[0]!.support.length
+            ? '已见经济扩张与侧面部署，倾向同时发展和施压；优先查侧路去向并保护资源点。'
+            : '已见侧面设施或移动，可能正从侧路部署；优先查去向与实际出兵。'
+          : config.scenario === 'walled' && hypotheses[0]!.support.length
+            ? '已见新增城镇中心，倾向扩张经济；结合自己的军队考虑施压或同步发展，并关注侧路。'
+            : scenario.summary,
     errors: [],
     gaps,
     planNote: planNotes[config.plan],

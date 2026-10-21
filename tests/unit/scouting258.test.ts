@@ -25,9 +25,16 @@ describe('#258 finite evidence and hypotheses', () => {
     expect(SCOUTING_CONTENT.scenarios.map((row) => row.id)).toEqual(['early', 'walled']);
     expect(SCOUTING_CONTENT.scenarios.map((row) => row.hypotheses.length)).toEqual([2, 2]);
     for (const scenario of SCOUTING_CONTENT.scenarios) {
-      expect(scenario.notEnough.length).toBeGreaterThan(1);
+      expect(scenario.signals.length).toBeGreaterThanOrEqual(3);
+      for (const signal of scenario.signals) {
+        expect(signal.seen.length).toBeGreaterThan(0);
+        expect(signal.meaning).toMatch(/可能|倾向/);
+        expect(signal.next.length).toBeGreaterThan(0);
+        expect(signal.sourceIds.length).toBeGreaterThan(0);
+        expect(signal.sourceIds.every((id) => SCOUTING_CONTENT.sources.some((source) => source.id === id))).toBe(true);
+      }
       for (const card of scenario.hypotheses) {
-        for (const text of [card.need, card.next, card.condition, card.cost, card.counterexample, card.alternative]) expect(text.length).toBeGreaterThan(12);
+        for (const text of [card.body, card.next, card.evidenceMeaning, card.counterMeaning]) expect(text.length).toBeGreaterThan(12);
         expect(card.sourceIds.every((id) => SCOUTING_CONTENT.sources.some((source) => source.id === id))).toBe(true);
       }
     }
@@ -39,14 +46,14 @@ describe('#258 finite evidence and hypotheses', () => {
     expect(result.gaps).toHaveLength(3);
     expect(result.hypotheses.map((row) => row.status)).toEqual(['needs-evidence', 'needs-evidence']);
     expect(result.hypotheses.every((row) => !row.support.length && !row.counter.length)).toBe(true);
-    expect(result.planNote).toContain('不从并列解释中自动替你选择');
+    expect(result.summary).toContain('对照下方信号');
   });
   it('a production building alone does not authenticate military production', () => {
     const result = analyseScouting(withObservation('military-building', current));
     expect(result.hypotheses[0]!.support).toEqual([]);
     expect(result.hypotheses[0]!.status).toBe('needs-evidence');
     expect(result.hypotheses[1]!.support).toEqual(['military-building']);
-    expect(result.hypotheses[1]!.hypothesis.evidenceMeaning).toContain('还不能说明暂停生产或已经安全');
+    expect(result.hypotheses[1]!.hypothesis.evidenceMeaning).toContain('复查实际生产');
     expect(result.hypotheses).toHaveLength(2);
   });
   it('observed army updates local support and a competing explanation without proving intent', () => {
@@ -58,7 +65,7 @@ describe('#258 finite evidence and hypotheses', () => {
   it.each(['unseen', 'unknown'] as const)('%s never becomes scoped absence or current counterevidence', (state) => {
     const result = analyseScouting(withObservation('field-army', { ...current, state }));
     expect(result.hypotheses.every((row) => !row.support.length && !row.counter.length)).toBe(true);
-    expect(result.gaps.join(' ')).toContain(state === 'unseen' ? '不等于不存在' : '未知');
+    expect(result.gaps.join(' ')).toContain(state === 'unseen' ? '复查视野' : '未知');
   });
   it('stale observations lose their current evidential role without being changed to absence', () => {
     const config = withObservation('field-army', { ...current, stale: true });
@@ -88,13 +95,13 @@ describe('#258 finite evidence and hypotheses', () => {
     expect(result.status).toBe('covered');
     expect(result.hypotheses).toHaveLength(2);
     expect(result.hypotheses[0]!.counter).toEqual(['field-army']);
-    expect(result.hypotheses[0]!.hypothesis.counterMeaning).toContain('在别处仍有可能');
+    expect(result.hypotheses[0]!.hypothesis.counterMeaning).toContain('复查其他方向');
   });
-  it('a seen record without time or area is retained but not treated as current evidence', () => {
+  it('a seen record works with optional time and area left blank', () => {
     const config = withObservation('field-army', { state: 'seen' });
     const result = analyseScouting(config);
-    expect(result.hypotheses[0]!.support).toEqual([]);
-    expect(result.gaps.join(' ')).toContain('时刻或可见范围未记录');
+    expect(result.hypotheses[0]!.support).toEqual(['field-army']);
+    expect(result.gaps.join(' ')).not.toContain('实际军队');
   });
   it('new TC and side production can coexist; economic and military explanations are not exclusive', () => {
     let config: ScoutingConfig = { ...defaultScoutingConfig(), scenario: 'walled', stage: 'castle' };
@@ -105,6 +112,16 @@ describe('#258 finite evidence and hypotheses', () => {
     expect(result.hypotheses[0]!.support).toEqual(['new-town-center']);
     expect(result.hypotheses[0]!.counter).toEqual(['forward-production']);
     expect(result.hypotheses[1]!.support).toEqual(['forward-production']);
+    expect(result.summary).toContain('同时发展和施压');
+  });
+  it('#269 castle observations work without optional fields and stale clues no longer drive the summary', () => {
+    const base: ScoutingConfig = { ...defaultScoutingConfig(), scenario: 'walled', stage: 'castle' };
+    const economy = withObservation('new-town-center', { state: 'seen' }, base);
+    expect(analyseScouting(economy).summary).toContain('倾向扩张经济');
+    const pressure = withObservation('forward-move', { state: 'seen' }, base);
+    expect(analyseScouting(pressure).summary).toContain('可能正从侧路部署');
+    const stale = withObservation('forward-move', { stale: true }, pressure);
+    expect(analyseScouting(stale).summary).toContain('对照下方信号');
   });
   it('withdrawing a key observation updates support and missing information', () => {
     const seen = withObservation('field-army', current);
@@ -157,6 +174,17 @@ describe('#258 time and lossless strict URL state', () => {
       config = withObservation(id, { ...current, at: `${index + 1}:23`, area: index % 2 ? 'own-approach' : 'enemy-edge', stale: index % 2 === 0 }, config);
     expect(decodeScouting('?' + encodeScouting(config))).toEqual({ config, locked: false, errors: [] });
     expect(encodeScouting(config).length).toBeLessThan(SCOUTING_URL_LIMIT);
+  });
+  it('#269 opens a useful example, while an explicit empty config stays empty after sharing', () => {
+    for (const search of ['', '?']) {
+      const decoded = decodeScouting(search);
+      expect(decoded.locked).toBe(false);
+      expect(decoded.config.observations['field-army'].state).toBe('seen');
+      expect(analyseScouting(decoded.config).summary).toContain('保护伐木场与金矿');
+    }
+    const cleared = defaultScoutingConfig();
+    expect(decodeScouting('?' + encodeScouting(cleared)).config).toEqual(cleared);
+    expect(analyseScouting(cleared).hypotheses.every((row) => row.status === 'needs-evidence')).toBe(true);
   });
   it('empty initial access is the only implicit default', () => {
     expect(decodeScouting('').locked).toBe(false);
