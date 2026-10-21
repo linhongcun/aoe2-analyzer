@@ -4,6 +4,7 @@
  * 行为与原先 Duel.tsx 里的写法逐字一致：非数字、0、缺省一律取默认；超界钳到上下限；
  * na/nb/bud 不取整（与旧版一致），vil/min 先向下取整再判断。
  */
+import 'react';
 import type { Mode } from './duelState';
 import { DEFAULT_MIN, DEFAULT_VILS } from './realCost';
 
