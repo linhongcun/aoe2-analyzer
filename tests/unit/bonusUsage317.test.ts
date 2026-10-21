@@ -13,7 +13,7 @@ import units from '../../src/data/units.json';
 import { civs, loadCore, type Core } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
 import { civBonuses, type CivBonusEnt } from '../../src/domain/civBonus';
-import { bonusUsage, showEcoSourceTag, usageLevel } from '../../src/domain/bonusUsage';
+import { bonusTechs, bonusUsage, showEcoSourceTag, usageLevel } from '../../src/domain/bonusUsage';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 import { simSupport } from '../../src/domain/simSupport';
 import { gatherModel } from '../../src/domain/realCost';
@@ -24,12 +24,14 @@ import { loadTrees } from '../../src/data';
 
 const E = eco as unknown as EcoData;
 const ups = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
-const ECO = civs.flatMap((c) => civBonuses(c)).filter((b) => b.src === 'eco' && !b.team);
+const ALL = civs.flatMap((c) => civBonuses(c)).filter((b) => !b.team);
+/** 112 条非团队经济/费用类加成 + 37 条 src = text（没有关联 .dat 条目）的加成：后者被工具计入时同样要按工具标注（Steve 2026-10-21） */
+const ECO = ALL.filter((b) => b.src === 'eco' || b.src === 'text');
 const bon = (id: string) => ECO.find((b) => b.id === id)!;
 const line = (b: CivBonusEnt, tool: string) => bonusUsage(b).filter((l) => l.tool === tool);
 const runBo = (bo: (typeof buildOrders)[number], civ: string, e: EcoData) =>
   JSON.stringify(simulateBuild(bo, civ, e, ups, { walkTiles: 4 }).steps.map((s) => [s.doneAt, s.stock]));
-const techsOf = (b: CivBonusEnt) => b.dat.map((d) => d.tech).filter((t) => t > 0);
+const techsOf = (b: CivBonusEnt) => bonusTechs(b).techs;
 /** 去掉该加成后第一个结果变化的开局方案 id；都不变为 null */
 const firstChanged = (b: CivBonusEnt, bos = buildOrders): string | null => {
   const e = without(b.civ, techsOf(b));
@@ -109,8 +111,23 @@ describe('issue 317 罗马', () => {
 });
 
 describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一致', () => {
-  it('覆盖面', () => {
-    expect(ECO.length).toBeGreaterThan(100);
+  it('覆盖面：112 条 src = eco、37 条 src = text（非团队）', () => {
+    expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(112);
+    expect(ECO.filter((b) => b.src === 'text')).toHaveLength(37);
+  });
+  it('src = text 中被真实成本计入的三条：凯尔特伐木、朝鲜采石、突厥采金，标「已计入」并写明工具', () => {
+    const counted = ECO.filter((b) => b.src === 'text' && bonusUsage(b).some((l) => l.on === true)).map((b) => b.id);
+    expect(counted).toEqual(['Celts-0', 'Koreans-0', 'Turks-0']);
+    for (const [id, label] of [
+      ['Celts-0', '伐木 +15%'],
+      ['Koreans-0', '采石 +20%'],
+      ['Turks-0', '采金 +25%'],
+    ] as const) {
+      const g = line(bon(id), 'gather');
+      expect([id, g.map((l) => [l.on, l.note])]).toEqual([id, [[true, `采集速度已计入（${label}）`]]]);
+    }
+    // 朝鲜的采石加成在 eco.json 的科技树汇总行里，无法与开局模拟逐条对应
+    expect(line(bon('Koreans-0'), 'sim').map((l) => l.on)).toEqual([null]);
   });
   it.runIf(UPDATE)(
     '（UPDATE_BONUS317=1）重新生成开局模拟快照',
@@ -180,13 +197,15 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
     expect(showEcoSourceTag(bon('Romans-2'))).toBe(false);
     expect(showEcoSourceTag(bon('Chinese-0'))).toBe(true);
     let hidden = 0;
-    for (const b of ECO) {
+    for (const b of ECO.filter((x) => x.src === 'eco')) {
       const counted = bonusUsage(b).some((l) => l.on === true);
       expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !counted]);
       if (counted) hidden++;
     }
     expect(hidden).toBeGreaterThan(0);
-    expect(hidden).toBeLessThan(ECO.length);
+    expect(hidden).toBeLessThan(112);
+    // src = text 没有「文本展示」标签，其来源标签（「无 .dat 数据」）本 PR 不动
+    for (const b of ECO.filter((x) => x.src === 'text')) expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, true]);
   });
   it('没有任何工具计入的加成保持「仅文本」', () => {
     for (const b of ECO) if (!bonusUsage(b).some((l) => l.on)) expect([b.id, usageLevel(bonusUsage(b))]).toEqual([b.id, 'none']);

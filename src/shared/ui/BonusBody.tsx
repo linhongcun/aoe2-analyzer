@@ -141,7 +141,7 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
               </li>
             ))}
           </ul>
-          <p>单位模拟器属性面板不计算经济/费用类效果，结构化数值见下方「.dat 原始效果」。</p>
+          <p>单位模拟器属性面板不计算经济/费用类效果{b.dat.length + b.eco.length > 0 ? '，结构化数值见下方「.dat 原始效果」' : ''}。</p>
         </div>
       )}
       {!b.encoded && usage.length === 0 && (

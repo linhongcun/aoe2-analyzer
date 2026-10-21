@@ -16,7 +16,7 @@ import { buildOrders } from '../data/buildOrders';
 import { classifyCivEffect, simScope, techAtomicOk, type EcoData } from './buildSim';
 import type { CivBonusEnt } from './civBonus';
 import { DAT } from './datEffects';
-import { gatherBonusIdx } from './realCost';
+import { gatherBonusIdx, gatherModel } from './realCost';
 import { simSupport } from './simSupport';
 
 const eco = ecoRaw as unknown as EcoData;
@@ -54,10 +54,27 @@ const commonRules = () => {
   return (commonCache = new Set([...all[0]!].filter((id) => all.every((s) => s.has(id)))));
 };
 
+const gatherCache = new Map<string, ReturnType<typeof gatherModel>['applied']>();
+/** 真实成本采集模型里引用了这条加成的行（帝王时代，含全部时代的文明加成） */
+const gatherLines = (b: CivBonusEnt) => {
+  let a = gatherCache.get(b.civ);
+  if (!a) gatherCache.set(b.civ, (a = gatherModel(4, b.civ).applied));
+  return typeof b.idx === 'number' && gatherBonusIdx(b.civ).includes(b.idx) ? a.filter((l) => l.source === b.zh) : [];
+};
+/**
+ * 与 civEco 行对应的 .dat tech 号：加成自带的 .dat 条目（正 tech 号）+ 真实成本采集模型为这条加成引用的 civEco tech。
+ * 没有可对应的 tech（科技树汇总效果，或采集行来自科技树汇总行）时 treeOnly = true。
+ */
+export function bonusTechs(b: CivBonusEnt): { techs: number[]; treeOnly: boolean } {
+  const dat = b.dat.map((d) => d.tech).filter((t) => t > 0);
+  const g = gatherLines(b);
+  const techs = [...new Set([...dat, ...g.flatMap((l) => l.techs)])];
+  return { techs, treeOnly: techs.length === 0 && (b.dat.length > 0 || g.length > 0) };
+}
+
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
-  const techs = b.dat.map((d) => d.tech).filter((t) => t > 0);
-  const treeOnly = b.dat.length > 0 && techs.length === 0;
+  const { techs, treeOnly } = bonusTechs(b);
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
     const t = (r as { tech?: number }).tech;
     return r.source !== 'team' && t !== undefined && techs.includes(t);
@@ -72,21 +89,35 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
   return null;
 }
 
-/** 经济/费用类加成（src = 'eco'）的分工具计入情况；其余加成返回空数组 */
+/**
+ * 经济/费用类加成（src = 'eco'）的分工具计入情况；
+ * src = 'text'（没有关联 .dat 条目）的加成只有被某个工具实际计入时才给出（Steve 2026-10-21：凯尔特伐木、朝鲜采石、突厥采金）；
+ * 其余加成返回空数组。
+ */
 export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
-  if (b.src !== 'eco' || b.team || typeof b.idx !== 'number') return [];
+  if (b.team || typeof b.idx !== 'number') return [];
+  const nb = b as CivBonusEnt & { idx: number };
+  if (b.src === 'text') {
+    const lines = usageLines(nb);
+    return lines.some((l) => l.on === true) ? lines : [];
+  }
+  return b.src === 'eco' ? usageLines(nb) : [];
+}
+
+function usageLines(b: CivBonusEnt & { idx: number }): BonusUsageLine[] {
   const idx = b.idx;
   const out: BonusUsageLine[] = [];
   const sim = simLine(b);
   if (sim) out.push(sim);
-  if (gatherBonusIdx(b.civ).includes(idx)) out.push({ tool: 'gather', name: USAGE_TOOL_ZH.gather, on: true, note: '村民采集速度已计入' });
+  const g = gatherLines(b);
+  if (g.length) out.push({ tool: 'gather', name: USAGE_TOOL_ZH.gather, on: true, note: `采集速度已计入（${g.map((l) => l.label).join('、')}）` });
   for (const d of (DAT.costDiscounts?.[b.civ] ?? []).filter((x) => x.idx === idx && x.groups.some((g) => g.units.some((id) => UNIT_IDS.has(id)))))
     out.push(
       d.ok
         ? { tool: 'cost', name: USAGE_TOOL_ZH.cost, on: true, note: '单位 PK「等资源」与单位详情的真实成本按折后价计算' }
         : { tool: 'cost', name: USAGE_TOOL_ZH.cost, on: false, note: '.dat 数值与说明对不上，显示「折扣未计入」，按原价' },
     );
-  const techs = new Set(b.dat.map((d) => d.tech).filter((t) => t > 0));
+  const techs = new Set(bonusTechs(b).techs);
   const cc = construction.civs[b.civ];
   const rules = (cc?.automatic ?? []).filter((r) => techs.has(r.id) && !commonRules().has(r.id));
   // 与 construction.ts 的 matches 同口径：命令指向普通村民 118，或 A = -1 且类别与 118 相同
@@ -106,5 +137,5 @@ export function usageLevel(lines: BonusUsageLine[]): 'all' | 'part' | 'none' {
   return lines.every((l) => l.on === true) ? 'all' : 'part';
 }
 
-/** Steve 设计审查（PR 330）：有工具计入的经济/费用类加成不再显示「.dat 经济/费用效果（文本展示）」来源标签；没有工具计入的保持原样 */
+/** Steve 设计审查（PR 330）：有工具计入的经济/费用类加成（src = 'eco'）不再显示「.dat 经济/费用效果（文本展示）」来源标签；没有工具计入的保持原样 */
 export const showEcoSourceTag = (b: CivBonusEnt) => !(b.src === 'eco' && !b.encoded && usageLevel(bonusUsage(b)) !== 'none');
