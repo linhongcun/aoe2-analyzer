@@ -1,0 +1,186 @@
+[
+  {
+    "civ": "Berbers",
+    "idx": 0,
+    "src": "dat",
+    "zh": "村民在黑暗时代的移动速度 +5%，从封建时代开始 +10%",
+    "realCostGather": true,
+    "costDiscount": false
+  },
+  {
+    "civ": "Berbers",
+    "idx": 1,
+    "src": "eco",
+    "zh": "马厩单位在城堡/帝王时代的费用 -15/20%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Byzantines",
+    "idx": 1,
+    "src": "eco",
+    "zh": "骆驼骑兵、掷矛手和长矛兵系的费用 -25%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Celts",
+    "idx": 0,
+    "src": "text",
+    "zh": "伐木工工作速度 +15%",
+    "realCostGather": true,
+    "costDiscount": false
+  },
+  {
+    "civ": "Dravidians",
+    "idx": 4,
+    "src": "eco",
+    "zh": "攻城武器的木材费用 -33%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Goths",
+    "idx": 2,
+    "src": "eco",
+    "zh": "步兵在黑暗/封建/城堡/帝王时代的费用 -15/20/25/30%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Hindustanis",
+    "idx": 0,
+    "src": "eco",
+    "zh": "村民在黑暗/封建/城堡/帝王时代的费用 -8/13/18/23%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Huns",
+    "idx": 1,
+    "src": "eco",
+    "zh": "骑射手在城堡/帝王时代的费用 -10/20%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Incas",
+    "idx": 2,
+    "src": "eco",
+    "zh": "军事单位在黑暗/封建/城堡/帝王时代的食物费用 -15/20/25/30%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Italians",
+    "idx": 3,
+    "src": "dat",
+    "zh": "火药单位费用 -20%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Italians",
+    "idx": 4,
+    "src": "eco",
+    "zh": "捕鱼船费用 -15%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Koreans",
+    "idx": 0,
+    "src": "text",
+    "zh": "石矿工的工作速度 +20%",
+    "realCostGather": true,
+    "costDiscount": false
+  },
+  {
+    "civ": "Magyars",
+    "idx": 1,
+    "src": "eco",
+    "zh": "斥候骑兵系费用 -15%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Malay",
+    "idx": 2,
+    "src": "eco",
+    "zh": "象兵在城堡/帝王时代的费用 -25/35%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Mayans",
+    "idx": 2,
+    "src": "eco",
+    "zh": "步弓手在封建/城堡/帝王时代的费用 -10/20/30%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Portuguese",
+    "idx": 1,
+    "src": "eco",
+    "zh": "所有单位的黄金费用 -20%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Romans",
+    "idx": 0,
+    "src": "eco",
+    "zh": "村民收集、建造和修理的速度 +5%",
+    "realCostGather": true,
+    "costDiscount": false
+  },
+  {
+    "civ": "Romans",
+    "idx": 2,
+    "src": "eco",
+    "zh": "蝎式弩黄金费用 -50%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Slavs",
+    "idx": 0,
+    "src": "eco",
+    "zh": "农民工作速度 +15%",
+    "realCostGather": true,
+    "costDiscount": false
+  },
+  {
+    "civ": "Slavs",
+    "idx": 2,
+    "src": "eco",
+    "zh": "攻城武器厂单位费用 -15%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Turks",
+    "idx": 0,
+    "src": "text",
+    "zh": "金矿矿工的工作速度 +25%",
+    "realCostGather": true,
+    "costDiscount": false
+  },
+  {
+    "civ": "Vikings",
+    "idx": 2,
+    "src": "eco",
+    "zh": "战船在封建/城堡/帝王时代的费用 -10/15/20%",
+    "realCostGather": false,
+    "costDiscount": true
+  },
+  {
+    "civ": "Wei",
+    "idx": 2,
+    "src": "eco",
+    "zh": "牵引抛石机和楼船费用 -25%",
+    "realCostGather": false,
+    "costDiscount": true
+  }
+]

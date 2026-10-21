@@ -1286,6 +1286,23 @@ table.ediff td.dn {
   font-size: 16px;
   margin: 4px 0;
 }
+.busage p {
+  margin: 4px 0;
+}
+.busage ul {
+  margin: 4px 0;
+  padding-left: 0;
+  list-style: none;
+}
+.busage li {
+  margin: 2px 0;
+}
+.busage .ic {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  vertical-align: -2px;
+}
 .bex {
   margin: 8px 0;
 }

@@ -14,6 +14,7 @@ import { LineChip } from './LineChip';
 import type { Unit } from '../../domain/types';
 import { collapse } from '../../domain/family';
 import { ecoText } from '../../domain/datEffects';
+import { bonusUsage, showEcoSourceTag, usageLevel, type BonusUsageLine } from '../../domain/bonusUsage';
 
 const SRC_TAG: Record<string, [string, string]> = {
   dat: ['ok', '数值来源：游戏 .dat'],
@@ -38,6 +39,9 @@ const STAT_ZH: Record<string, [string, string]> = {
 const ageTxt = (a: number[]) => a.map((x) => AGE_ZH[x]!.slice(0, 2)).join('/');
 
 export function BonusTags({ b }: { b: CivBonusEnt }) {
+  const usage = b.encoded ? [] : bonusUsage(b);
+  // issue 317（Steve 设计审查）：已有工具计入的经济/费用类加成不显示「文本展示」来源标签，见 showEcoSourceTag
+  const src = SRC_TAG[b.src] && showEcoSourceTag(b) ? SRC_TAG[b.src] : undefined;
   return (
     <>
       {b.team && <span className="tag team">团队加成 · 作用于盟友</span>}
@@ -47,17 +51,35 @@ export function BonusTags({ b }: { b: CivBonusEnt }) {
         </span>
       ))}
       {b.ages && <span className="tag">{ageTxt(b.ages)}时代</span>}
-      {b.encoded ? <span className="tag ok">已计入数值</span> : <span className="tag txt">仅文本，未计入数值</span>}
-      {SRC_TAG[b.src] && <span className={'tag ' + SRC_TAG[b.src]![0]}>{SRC_TAG[b.src]![1]}</span>}
+      {b.encoded ? <span className="tag ok">已计入数值</span> : <UsageTags lines={usage} />}
+      {src && <span className={'tag ' + src[0]}>{src[1]}</span>}
       {b.fresh === false && <span className="tag txt">游戏说明文字与 .dat 数值不一致（以 .dat 为准）</span>}
     </>
   );
 }
 
+const toolNames = (ls: BonusUsageLine[]) => ls.map((l) => l.name).join('、');
+/** issue 317：经济/费用类加成按工具写明已计入 / 未计入；没有任何工具计入时仍为「仅文本，未计入数值」 */
+function UsageTags({ lines }: { lines: BonusUsageLine[] }) {
+  if (usageLevel(lines) === 'none') return <span className="tag txt">仅文本，未计入数值</span>;
+  const on = lines.filter((l) => l.on === true),
+    off = lines.filter((l) => l.on === false),
+    unk = lines.filter((l) => l.on === null);
+  return (
+    <>
+      <span className="tag ok">已计入：{toolNames(on)}</span>
+      {off.length > 0 && <span className="tag txt">未计入：{toolNames(off)}</span>}
+      {unk.length > 0 && <span className="tag txt">未逐条核对：{toolNames(unk)}</span>}
+    </>
+  );
+}
+const USAGE_ICON = { true: 'check', false: 'x', null: 'circle-help' } as const;
+
 export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: boolean }) {
   const core = useCore();
   if (!core) return <Loading />;
   const groups = bonusAffects(b, core.units, core.buildings);
+  const usage = b.encoded ? [] : bonusUsage(b);
   const ex = bonusExample(b, core.units, core.buildings, b.civ === 'Franks' && b.idx === 2 ? 'Paladin' : undefined);
   // 未编码：根据文字识别出的单位/建筑（不计入数值）
   const mentions = !b.encoded
@@ -108,7 +130,21 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
           </table>
         </div>
       )}
-      {!b.encoded && (
+      {!b.encoded && usage.length > 0 && (
+        <div className="note busage">
+          <p>各工具计入情况：</p>
+          <ul>
+            {usage.map((l) => (
+              <li key={l.tool} data-usage={l.tool} data-on={String(l.on)}>
+                <Icon name={USAGE_ICON[String(l.on) as keyof typeof USAGE_ICON]} className={'ic' + (l.on === false ? ' warn' : '')} />
+                <b>{l.name}</b>：{l.note}
+              </li>
+            ))}
+          </ul>
+          <p>单位模拟器属性面板不计算经济/费用类效果{b.dat.length + b.eco.length > 0 ? '，结构化数值见下方「.dat 原始效果」' : ''}。</p>
+        </div>
+      )}
+      {!b.encoded && usage.length === 0 && (
         <p className="note">
           <Icon name="triangle-alert" className="ic warn" />
           仅文本，未计入数值：
