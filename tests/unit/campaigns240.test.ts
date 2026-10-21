@@ -27,6 +27,9 @@ const filters = (patch: Partial<CampaignFilters> = {}): CampaignFilters => ({ ..
 const ids = (patch: Partial<CampaignFilters> = {}) => filterCampaigns(filters(patch)).map((entry) => entry.id);
 const fixture = (id: string, patch: Partial<Campaign> = {}): Campaign => ({ ...CAMPAIGNS[0]!, id, ...patch });
 
+const NAME_SOURCES_TEXT =
+  '战役名称取自第三方存档的游戏内文字（英文与简体中文）。华莱士的玩家文明依据官方教程；其余战役的玩家文明参考 Steam 社区玩家进游戏逐个查看后整理的指南，更新于 2024-05-12。这份指南只用来确认玩家文明，不用于年代或剑级。这些资料都没有标明对应的游戏版本，可能与你当前游戏里的显示略有不同。';
+
 describe('#268 玩家可见来源', () => {
   it('包括折叠区的全部渲染文本不泄露内部审计信息', () => {
     const html = renderToStaticMarkup(createElement(StaticRouter, { location: '/campaigns' }, createElement(CampaignsPage)));
@@ -42,6 +45,12 @@ describe('#268 玩家可见来源', () => {
     // 来源必须是公开可核实页面，不链接本站仓库源码。
     expect(html).not.toContain('github.com/linhongcun/aoe2-analyzer');
     expect(text).not.toMatch(/固定语言镜像|社区客户端抄录|稳定条目编号/);
+    // 名称与文明来源只讲一次：合并为一段，不再单独渲染 versionNote。
+    const plain = html.replace(/<[^>]*>/g, '');
+    expect(plain).toContain(NAME_SOURCES_TEXT);
+    expect(plain.match(/第三方存档的游戏内文字/g)).toHaveLength(1);
+    expect(plain.match(/没有标明对应的游戏版本/g)).toHaveLength(1);
+    expect(CAMPAIGN_CATALOG).not.toHaveProperty('versionNote');
   });
 });
 

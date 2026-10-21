@@ -126,6 +126,10 @@ test('#268 来源精简为公开链接，空剑级隐藏，购买统一转base',
   for (const href of await about.getByRole('link').evaluateAll((links) => links.map((link) => link.getAttribute('href') ?? '')))
     expect(href).not.toContain('github.com/linhongcun/aoe2-analyzer');
   await expect(about).not.toContainText(/固定语言镜像|社区客户端抄录|稳定条目编号/);
+  await expect(about.getByTestId('campaign-name-sources')).toHaveText(
+    '战役名称取自第三方存档的游戏内文字（英文与简体中文）。华莱士的玩家文明依据官方教程；其余战役的玩家文明参考 Steam 社区玩家进游戏逐个查看后整理的指南，更新于 2024-05-12。这份指南只用来确认玩家文明，不用于年代或剑级。这些资料都没有标明对应的游戏版本，可能与你当前游戏里的显示略有不同。',
+  );
+  expect((await about.innerText()).match(/第三方存档的游戏内文字/g)).toHaveLength(1);
   expect(await page.getByTestId('campaigns-page').innerText()).not.toMatch(internalTerms);
   const publicUrls = Object.values(campaignSources).flatMap((source) => (source.url ? [source.url] : []));
   for (const url of await about.getByRole('link').evaluateAll((links) => links.map((link) => link.getAttribute('href')))) expect(publicUrls).toContain(url);

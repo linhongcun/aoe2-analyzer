@@ -1,7 +1,6 @@
 {
   "schemaVersion": 1,
   "verifiedAt": "2026-10-20",
-  "versionNote": "战役名称参考第三方存档的游戏内文字，部分玩家文明参考玩家社区整理的指南。这些资料都没有标明对应的游戏版本，可能与你当前游戏里的显示略有不同。",
   "coverage": {
     "complete": false,
     "modeIds": ["aoe2"],

@@ -43,7 +43,6 @@ export interface Campaign {
 interface CampaignCatalog {
   schemaVersion: number;
   verifiedAt: string;
-  versionNote: string;
   sources: Record<string, CampaignSource>;
   campaigns: Campaign[];
 }
