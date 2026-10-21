@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 
 /**
- * v0.29.0 验收（#329）B 组 #326 部分：取自 Kent Beck test/v0290-acceptance @ fd1c718 tests/e2e/v0290-B.spec.ts，断言原样未改。
+ * v0.29.0 验收（#329）B 组 #326 部分：取自 Kent Beck test/v0290-acceptance @ ac675c6 tests/e2e/v0290-B.spec.ts，断言原样未改。
  */
 guardPage();
 
