@@ -172,6 +172,13 @@ export default function ContentGuide() {
         <p className="cg-note">先看想玩的内容</p>
         <h1>内容与购买导航</h1>
         <p>查资料片提供的文明、战役和其他内容，分清当前本体已包含与另购项目。</p>
+        <p>
+          想看文明最早在哪个版本登场，请去
+          <Link className="community-tool-entry" to="/dlc">
+            查看文明历史首发列表
+          </Link>
+          。
+        </p>
         <p className="cg-note">
           Steam 公开商店快照 · 核对 {contentCatalog.verifiedAt} · <span className="cg-number">17 项</span>内容
         </p>
@@ -322,7 +329,6 @@ export default function ContentGuide() {
         </p>
         <p>版本首发表示何时引入，与当前购买条件分别核对。内容获取快照日期与本站 DE185872 战斗数据版本互不替代。</p>
         <nav className="cg-links" aria-label="内容导航相关页面">
-          <Link to="/dlc">查看文明历史首发列表</Link>
           <a
             href="https://www.ageofempires.com/news/celebrate-5-years-of-age-ii-de-with-a-fresh-deal-for-new-players/"
             target="_blank"

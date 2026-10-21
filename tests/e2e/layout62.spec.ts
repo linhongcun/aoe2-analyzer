@@ -52,12 +52,13 @@ async function openFilters(root: Locator, mobile: boolean) {
   return { toggle, panel };
 }
 
-test('#62 首页六个工具在桌面同一行显示', async ({ page }) => {
+test('#62 首页入口按用途分组，桌面每行四张卡片', async ({ page }) => {
   await page.goto('./#/');
-  const cards = page.locator('#home .hgrid:last-child .hcard');
-  await expect(cards).toHaveCount(6);
+  const cards = page.locator('#home .home-group').first().locator('.hcard');
+  await expect(cards).toHaveCount(5);
   const tops = await cards.evaluateAll((items) => items.map((item) => Math.round(item.getBoundingClientRect().top)));
-  expect(new Set(tops).size).toBe(1);
+  expect(new Set(tops.slice(0, 4)).size).toBe(1);
+  expect(tops[4]).toBeGreaterThan(tops[0]!);
 });
 
 for (const width of WIDTHS)
@@ -73,10 +74,10 @@ for (const width of WIDTHS)
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
 
-      await ready(page, '', '#home .home-tools-grid .hcard');
+      await ready(page, '', '#home .home-group .hcard');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      const cards = page.locator('#home .home-tools-grid .hcard');
-      await expect(cards).toHaveCount(6);
+      const cards = page.locator('#home .home-group').first().locator('.hcard');
+      await expect(cards).toHaveCount(5);
       const boxes = await cards.evaluateAll((items) =>
         items.map((item) => {
           const rect = item.getBoundingClientRect();
@@ -88,10 +89,10 @@ for (const width of WIDTHS)
         expect(Math.abs(boxes[2]!.y - boxes[3]!.y)).toBeLessThan(1);
         expect(boxes[4]!.y).toBeGreaterThan(boxes[3]!.y);
         expect(Math.abs(boxes[4]!.x - boxes[0]!.x)).toBeLessThan(1);
-        expect(Math.abs(boxes[4]!.y - boxes[5]!.y)).toBeLessThan(1);
-        expect(Math.abs(boxes[5]!.right - boxes[1]!.right)).toBeLessThan(1);
+        expect(Math.abs(boxes[4]!.width - boxes[0]!.width)).toBeLessThan(1);
       } else {
-        expect(new Set(boxes.map((box) => Math.round(box.y))).size).toBe(1);
+        expect(new Set(boxes.slice(0, 4).map((box) => Math.round(box.y))).size).toBe(1);
+        expect(boxes[4]!.y).toBeGreaterThan(boxes[0]!.y);
       }
       const sources = page.locator('.footer-sources');
       await expect(sources).not.toHaveAttribute('open');
