@@ -43,7 +43,6 @@ export interface Campaign {
 interface CampaignCatalog {
   schemaVersion: number;
   verifiedAt: string;
-  versionNote: string;
   sources: Record<string, CampaignSource>;
   campaigns: Campaign[];
 }
@@ -159,8 +158,8 @@ export function campaignHistoricalRange(entry: Pick<Campaign, 'historicalStartYe
   if (end === null) return `${start}年起，终点未核实`;
   return start === end ? `${start}年` : `${start}–${end}年`;
 }
-export function campaignSwordLabel(swords: Campaign['swords']): string {
-  return swords === null ? '未提供' : `${swords}剑`;
+export function campaignSwordLabel(swords: Campaign['swords']): string | null {
+  return swords === null ? null : `${swords}剑`;
 }
 /** Small catalogue filters stay in the hash; outer tracking parameters are never copied. */
 export function campaignShareUrl(filters: CampaignFilters, base: string): string {

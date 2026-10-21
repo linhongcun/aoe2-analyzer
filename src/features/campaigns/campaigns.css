@@ -145,13 +145,9 @@
 .campaign-content-link {
   padding-block: var(--space-2);
 }
-.campaign-sources,
 .campaign-boundaries {
   border-top: 1px solid var(--color-line);
   padding-top: var(--space-2);
-  margin-top: var(--space-3);
-}
-.campaign-boundaries {
   margin-top: var(--space-6);
 }
 .campaigns-page summary {
@@ -159,19 +155,18 @@
   box-sizing: border-box;
   padding-block: var(--space-3);
 }
-.campaign-evidence {
+.campaign-source-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  border-top: 1px solid var(--color-line);
+  padding-top: var(--space-2);
   font-size: var(--fs-sm);
+  color: var(--color-muted);
 }
-.campaign-evidence > div {
-  padding-block: var(--space-3);
-  border-bottom: 1px solid var(--color-line);
-}
-.campaign-evidence dt {
-  color: var(--color-text-2);
-  font-weight: 600;
-}
-.campaign-evidence dd {
-  margin: var(--space-1) 0 0;
+.campaign-source-row a {
+  white-space: nowrap;
 }
 .campaign-source-list {
   display: grid;
@@ -183,11 +178,6 @@
 .campaign-source p,
 .campaign-source strong {
   color: var(--color-text-2);
-}
-.campaign-hash {
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  word-break: break-all;
 }
 .campaign-error,
 .campaign-empty {

@@ -1,7 +1,6 @@
 {
   "schemaVersion": 1,
   "verifiedAt": "2026-10-20",
-  "versionNote": "战役元数据单独审计：名称为2022年固定语言快照，部分文明关联来自2024年社区客户端悬停抄录。网页与镜像均未标客户端版本，不能视为DE185872客户端实测。",
   "coverage": {
     "complete": false,
     "modeIds": ["aoe2"],
@@ -11,21 +10,21 @@
   },
   "sources": {
     "fe-campaigns": {
-      "title": "Forgotten Empires — Campaigns",
+      "title": "Forgotten Empires 战役目录",
       "url": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns",
       "kind": "developer",
       "checkedAt": "2026-10-20",
       "version": "Live page checked 2026-10-20; no game build declared"
     },
     "fe-timeline": {
-      "title": "Forgotten Empires — Campaigns Timeline",
+      "title": "Forgotten Empires 战役时间表",
       "url": "https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns/campaigns-timeline",
       "kind": "developer",
       "checkedAt": "2026-10-20",
       "version": "Live page checked 2026-10-20; no game build declared"
     },
     "client-en": {
-      "title": "English client language snapshot",
+      "title": "游戏英文文字存档",
       "url": "https://github.com/wj654cj86/aoe2DeLanguageReader/blob/12d8d5280e0b0a85f8dfdc558b4ad79279f8b73c/resources/en/strings/key-value/key-value-strings-utf8.txt",
       "kind": "client-mirror",
       "checkedAt": "2026-10-20",
@@ -33,7 +32,7 @@
       "sha256": "78ae17e7ec1f3cfaf883f55c510755b9c1da9c93c4dea9ba1871d0b56f131089"
     },
     "client-zh": {
-      "title": "Simplified Chinese client language snapshot",
+      "title": "游戏简体中文文字存档",
       "url": "https://github.com/wj654cj86/aoe2DeLanguageReader/blob/12d8d5280e0b0a85f8dfdc558b4ad79279f8b73c/resources/zh/strings/key-value/key-value-strings-utf8.txt",
       "kind": "client-mirror",
       "checkedAt": "2026-10-20",
@@ -41,7 +40,7 @@
       "sha256": "9a2a8ac7d82594537e3df90b4203040572e31c85797c5b7733f3ac9a178718be"
     },
     "guide-civs-2024": {
-      "title": "Raigavin — Campaign list in chronology",
+      "title": "Raigavin 战役编年指南",
       "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=2375610295",
       "kind": "community-client-transcription",
       "publishedAt": "2021-01-27",
@@ -50,35 +49,36 @@
       "version": "Updated 2024-05-12; author says data were transcribed by hovering over game campaigns; use only for civ associations, not dates or swords"
     },
     "official-tutorial": {
-      "title": "Age of Empires — Getting Started with Age of Empires II: DE – PC",
+      "title": "帝国时代 II 决定版官方入门教程",
       "url": "https://www.ageofempires.com/learn-to-play/getting-started-aoe2/",
       "kind": "official",
       "checkedAt": "2026-10-20",
       "version": "Live page checked 2026-10-20"
     },
     "official-swords": {
-      "title": "Age of Empires II: DE — Update 34055",
+      "title": "帝国时代 II 决定版官方更新说明",
       "url": "https://www.ageofempires.com/news/aoe2de-update-34055/",
       "kind": "official",
       "checkedAt": "2026-10-20",
       "version": "Update 34055 (2019); describes sword scale, does not provide individual values"
     },
-    "repo-release": {
-      "title": "Existing historical release table",
-      "url": "https://github.com/linhongcun/aoe2-analyzer/blob/c8c2171501dcf1a46eab32ce48c8d3308d6c9ae3/src/domain/dlc.ts",
-      "kind": "repository",
-      "checkedAt": "2026-10-20",
-      "version": "main c8c2171501dcf1a46eab32ce48c8d3308d6c9ae3; only original release years/order, no entitlement inference"
+    "ign-conquerors-2000": {
+      "title": "IGN：《征服者》战役介绍（2000 年上市时）",
+      "url": "https://www.ign.com/articles/2000/08/25/age-of-empires-ii-the-conquerors-the-battles-of-the-conquerors",
+      "kind": "media",
+      "publishedAt": "2000-08-25",
+      "checkedAt": "2026-10-21",
+      "version": "IGN 2000-08-25, by Ensemble Studios designer Greg Street; says the expansion is on store shelves and lists Attila, El Cid, Montezuma and the Battles of the Conquerors (incl. Hastings, Agincourt)"
     },
     "official-aok-release": {
-      "title": "Microsoft — The Age of Kings Catapults Onto Store Shelves",
+      "title": "微软《国王时代》上市公告",
       "url": "https://news.microsoft.com/source/1999/10/18/microsoft-age-of-empires-ii-the-age-of-kings-catapults-onto-store-shelves/",
       "kind": "official",
       "checkedAt": "2026-10-20",
       "version": "1999-10-18; supports 1999 availability, not a precise first release date"
     },
     "editorial": {
-      "title": "Site editorial classification",
+      "title": "本站整理",
       "kind": "editorial",
       "checkedAt": "2026-10-20",
       "version": "Issue issue 240 audit; geography derived from cited campaign synopsis; aliases aid search and are not official alternate titles"
@@ -149,9 +149,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -234,9 +234,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -319,9 +319,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -404,9 +404,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -489,9 +489,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release", "official-aok-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["official-aok-release"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -574,9 +574,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -659,9 +659,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -744,9 +744,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -829,9 +829,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],
@@ -914,9 +914,9 @@
           "status": "external-reference"
         },
         "releaseYear": {
-          "sourceIds": ["repo-release"],
-          "locator": "Existing DLCS table year; first release year, not DE rerelease",
-          "status": "verified-existing-catalogue"
+          "sourceIds": ["ign-conquerors-2000"],
+          "locator": "First release year, not DE rerelease",
+          "status": "verified-public-source"
         },
         "releaseDate": {
           "sourceIds": [],

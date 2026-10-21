@@ -1,4 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom/server';
+import CampaignsPage from '../../src/features/campaigns/Campaigns';
 import {
   CAMPAIGNS,
   CAMPAIGN_CATALOG,
@@ -22,6 +26,33 @@ const defaults = defaultCampaignFilters();
 const filters = (patch: Partial<CampaignFilters> = {}): CampaignFilters => ({ ...defaults, ...patch });
 const ids = (patch: Partial<CampaignFilters> = {}) => filterCampaigns(filters(patch)).map((entry) => entry.id);
 const fixture = (id: string, patch: Partial<Campaign> = {}): Campaign => ({ ...CAMPAIGNS[0]!, id, ...patch });
+
+const NAME_SOURCES_TEXT =
+  '战役名称取自第三方存档的游戏内文字（英文与简体中文）。华莱士的玩家文明依据官方教程；其余战役的玩家文明参考 Steam 社区玩家进游戏逐个查看后整理的指南，更新于 2024-05-12。这份指南只用来确认玩家文明，不用于年代或剑级。这些资料都没有标明对应的游戏版本，可能与你当前游戏里的显示略有不同。';
+
+describe('#268 玩家可见来源', () => {
+  it('包括折叠区的全部渲染文本不泄露内部审计信息', () => {
+    const html = renderToStaticMarkup(createElement(StaticRouter, { location: '/campaigns' }, createElement(CampaignsPage)));
+    const text = html.replace(/<[^>]*>/g, ' ');
+    expect(text).not.toMatch(/string \d+|CSV|§|issue ?\d+|[0-9a-f]{7,40}|SHA-?256|Site editorial classification|Existing historical release table/i);
+    expect(text).toContain('本站整理');
+    expect(text).toContain('关于数据');
+    expect(html).not.toContain('<dt>官方剑级</dt>');
+    expect(html).not.toContain('campaign-evidence');
+    expect(html.match(/class="campaign-source-row"/g)).toHaveLength(CAMPAIGNS.length);
+    expect(html).toContain(`href="${CAMPAIGN_CATALOG.sources['fe-campaigns']!.url}"`);
+    expect(html).toContain(`href="${CAMPAIGN_CATALOG.sources['ign-conquerors-2000']!.url}"`);
+    // 来源必须是公开可核实页面，不链接本站仓库源码。
+    expect(html).not.toContain('github.com/linhongcun/aoe2-analyzer');
+    expect(text).not.toMatch(/固定语言镜像|社区客户端抄录|稳定条目编号/);
+    // 名称与文明来源只讲一次：合并为一段，不再单独渲染 versionNote。
+    const plain = html.replace(/<[^>]*>/g, '');
+    expect(plain).toContain(NAME_SOURCES_TEXT);
+    expect(plain.match(/第三方存档的游戏内文字/g)).toHaveLength(1);
+    expect(plain.match(/没有标明对应的游戏版本/g)).toHaveLength(1);
+    expect(CAMPAIGN_CATALOG).not.toHaveProperty('versionNote');
+  });
+});
 
 describe('#240 有限目录与来源', () => {
   it('固定10项，教程、7战役与2历史战役，来源引用完整', () => {
@@ -59,7 +90,7 @@ describe('#240 有限目录与来源', () => {
   });
   it('未知剑级不是零，1至3剑必须逐条有来源', () => {
     expect(CAMPAIGNS.every((entry) => entry.swords === null)).toBe(true);
-    expect(campaignSwordLabel(null)).toBe('未提供');
+    expect(campaignSwordLabel(null)).toBeNull();
     expect(campaignSwordLabel(2)).toBe('2剑');
     for (const swords of [0, 4, 1]) {
       const entry = fixture('swords', { swords: swords as Campaign['swords'] });

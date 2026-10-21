@@ -25,40 +25,12 @@ import './campaigns.css';
 
 const DATA_ERRORS = campaignCatalogErrors();
 
-const FIELD_NAMES: Record<string, string> = {
-  nameZh: '中文名称',
-  nameEn: '英文名称',
-  aliases: '搜索别名',
-  kind: '条目类型',
-  modeId: '游戏模式',
-  civilizationIds: '玩家文明',
-  regionIds: '地区归纳',
-  originalContentPackId: '首发内容包',
-  contentPackId: '当前内容导航',
-  releaseYear: '首发年',
-  releaseDate: '精确首发日',
-  historicalRange: '游戏覆盖年代',
-  swords: '官方剑级',
-};
-const EVIDENCE_NAMES: Record<string, string> = {
-  'snapshot-verified': '固定快照已核对',
-  verified: '来源已核对',
-  editorial: '本站搜索整理',
-  official: '官方说明',
-  'community-transcription': '社区客户端抄录',
-  'editorial-derived': '本站按剧情地点归纳',
-  'external-reference': '关联内容导航',
-  'verified-existing-catalogue': '既有发行目录已核对',
-  'developer-verified': '开发方时间表已核对',
-  'not-verified': '未核实',
-  'not-provided': '未提供',
-};
 const SOURCE_NAMES: Record<string, string> = {
   developer: '开发方资料',
   official: '官方资料',
-  'client-mirror': '固定语言镜像',
-  'community-client-transcription': '社区客户端抄录',
-  repository: '既有固定发行表',
+  'client-mirror': '游戏文字存档（第三方）',
+  'community-client-transcription': '玩家社区整理',
+  media: '游戏媒体报道',
   editorial: '本站整理',
 };
 function Source({ source }: { source: CampaignSource }) {
@@ -72,27 +44,25 @@ function Source({ source }: { source: CampaignSource }) {
         <strong>{source.title}</strong>
       )}
       <p>
-        {SOURCE_NAMES[source.kind] ?? '未核实来源'} · 核对于 <span className="campaign-nowrap">{source.checkedAt}</span>
+        {SOURCE_NAMES[source.kind] ?? '未核实来源'} · 核对于 <span className="num campaign-nowrap">{source.checkedAt}</span>
         {source.publishedAt && (
           <>
             {' '}
-            · 发布于 <span className="campaign-nowrap">{source.publishedAt}</span>
+            · 发布于 <span className="num campaign-nowrap">{source.publishedAt}</span>
           </>
         )}
         {source.updatedAt && (
           <>
             {' '}
-            · 更新于 <span className="campaign-nowrap">{source.updatedAt}</span>
+            · 更新于 <span className="num campaign-nowrap">{source.updatedAt}</span>
           </>
         )}
       </p>
-      <p>{source.version}</p>
-      {source.sha256 && <p className="campaign-hash">SHA256：{source.sha256}</p>}
     </div>
   );
 }
 function CampaignCard({ entry }: { entry: Campaign }) {
-  const sourceIds = [...new Set(Object.values(entry.fieldEvidence).flatMap((evidence) => evidence.sourceIds))];
+  const swordLabel = campaignSwordLabel(entry.swords);
   return (
     <article className="campaign-card" data-testid="campaign-card" data-campaign={entry.id} aria-labelledby={`campaign-${entry.id}`}>
       <div className="campaign-card-heading">
@@ -104,11 +74,11 @@ function CampaignCard({ entry }: { entry: Campaign }) {
       </div>
       <dl className="campaign-facts">
         <dt>游戏覆盖年代</dt>
-        <dd className="campaign-nowrap">{campaignHistoricalRange(entry)}</dd>
+        <dd className="num campaign-nowrap">{campaignHistoricalRange(entry)}</dd>
         <dt>首发内容包</dt>
         <dd>
           {CAMPAIGN_RELEASE_PACKS[entry.originalContentPackId]} ·{' '}
-          <span className="campaign-nowrap">{entry.releaseYear === null ? '年份未核实' : `${entry.releaseYear}年`}</span>
+          <span className="num campaign-nowrap">{entry.releaseYear === null ? '年份未核实' : `${entry.releaseYear}年`}</span>
         </dd>
         <dt>玩家文明</dt>
         <dd>{entry.civilizationIds.map((id) => civByEn(id)?.zh ?? `${id}（名称未核实）`).join('、')}</dd>
@@ -117,37 +87,25 @@ function CampaignCard({ entry }: { entry: Campaign }) {
           {entry.regionIds.map((id) => CAMPAIGN_REGIONS[id]).join('、')}
           <span className="campaign-setting">{entry.settingZh}</span>
         </dd>
-        <dt>官方剑级</dt>
-        <dd>{campaignSwordLabel(entry.swords)}</dd>
+        {swordLabel && (
+          <>
+            <dt>官方剑级</dt>
+            <dd className="num campaign-nowrap">{swordLabel}</dd>
+          </>
+        )}
       </dl>
-      <p className="campaign-note">{entry.id === 'william-wallace' ? '文明关联有官方教程说明。' : '文明关联依据社区客户端抄录（2024-05-12）。'}</p>
       <Link className="campaign-content-link" to={`/content-guide?pack=${encodeURIComponent(entry.contentPackId)}`}>
         查看当前内容与购买要求 <Icon name="arrow-right" />
       </Link>
-      <details className="campaign-sources">
-        <summary>字段来源与核对版本</summary>
-        <p className="campaign-note">核对日期：{entry.verifiedAt}。来源性质逐字段列出；固定语言镜像和社区抄录均不代表当前客户端实测。</p>
-        <dl className="campaign-evidence">
-          {Object.entries(entry.fieldEvidence).map(([field, evidence]) => (
-            <div key={field}>
-              <dt>{FIELD_NAMES[field] ?? field}</dt>
-              <dd>
-                <strong>{EVIDENCE_NAMES[evidence.status] ?? '未核实'}</strong>
-                {evidence.locator && <p>{evidence.locator}</p>}
-                {evidence.note && <p>{evidence.note}</p>}
-                {evidence.sourceIds.length > 0 && <p>依据：{evidence.sourceIds.map((id) => CAMPAIGN_CATALOG.sources[id]?.title ?? '来源未核实').join('；')}</p>}
-              </dd>
-            </div>
-          ))}
-        </dl>
-        <div className="campaign-source-list">
-          {sourceIds.map((id) => {
-            const source = CAMPAIGN_CATALOG.sources[id];
-            return source && <Source key={id} source={source} />;
-          })}
-        </div>
-        {entry.aliases.length > 0 && <p>本站搜索别名：{entry.aliases.join('、')}。它们不是官方替代标题。</p>}
-      </details>
+      <p className="campaign-source-row">
+        <span>来源：</span>
+        <a href={CAMPAIGN_CATALOG.sources['fe-campaigns']!.url} target="_blank" rel="noopener noreferrer">
+          战役目录
+        </a>
+        <a href={CAMPAIGN_CATALOG.sources['fe-timeline']!.url} target="_blank" rel="noopener noreferrer">
+          年代时间表
+        </a>
+      </p>
     </article>
   );
 }
@@ -242,7 +200,7 @@ export default function Campaigns() {
           </span>
         </label>
         <p id="campaign-search-help" className="campaign-note">
-          支持中英文名称与已整理别名，最多<span className="campaign-nowrap">{CAMPAIGN_QUERY_LIMIT}个字符</span>。
+          支持中英文名称与已整理别名，最多<span className="num campaign-nowrap">{CAMPAIGN_QUERY_LIMIT}个字符</span>。
         </p>
         <div className="campaign-filter-grid">
           <label>
@@ -292,8 +250,8 @@ export default function Campaigns() {
       )}
       <aside className="campaign-coverage" aria-label="收录范围">
         <p>
-          首批<span className="campaign-nowrap">10项</span>：华莱士教程、国王时代<span className="campaign-nowrap">4个战役</span>、征服者
-          <span className="campaign-nowrap">3个战役</span>与<span className="campaign-nowrap">2场历史战役</span>。并非完整目录。
+          首批<span className="num campaign-nowrap">10项</span>：华莱士教程、国王时代<span className="num campaign-nowrap">4个战役</span>、征服者
+          <span className="num campaign-nowrap">3个战役</span>与<span className="num campaign-nowrap">2场历史战役</span>。并非完整目录。
         </p>
         <p>Chronicles（编年史）、Return of Rome（罗马归来）、孙子兵法、其他战役、合作变体与社区模组暂未收录。</p>
       </aside>
@@ -301,10 +259,10 @@ export default function Campaigns() {
         <>
           <p className="campaign-count" role="status">
             当前
-            <span className="campaign-nowrap">
+            <span className="num campaign-nowrap">
               {entries.length} / {CAMPAIGNS.length}项
             </span>
-            。{filters.sort === 'history' ? '按已核实起始年排列，重叠区间照实保留。' : '按首发年排列，同年按稳定条目编号排序。'}
+            。{filters.sort === 'history' ? '按已核实起始年排列，重叠区间照实保留。' : '按首发年排列，同一年发行的按固定顺序排列。'}
           </p>
           {entries.length > 0 ? (
             <div className="campaign-results">
@@ -324,20 +282,29 @@ export default function Campaigns() {
         </>
       )}
       <details className="campaign-boundaries">
-        <summary>怎样理解年代、剑级与首发顺序</summary>
+        <summary>关于数据</summary>
         <p>游戏覆盖年代来自开发方战役时间表，描述游戏剧情所跨越的区间，不是英雄生卒年，也不宣称剧情严格等同史实。区间可以重叠；排序仅提供查找方式。</p>
-        <p>首发内容包表示历史上的首次发行。当前包含关系与购买条件请查看内容导航；年代排序与首发顺序彼此独立，缺失年份排在末尾，同年按稳定条目编号排序。</p>
-        <p>官方剑级是战役挑战标记，与进入游戏时选择的标准、中等、困难不同。本批尚无逐条官方剑级证据，均显示“未提供”，不表示零剑或最容易。</p>
-        <p>地区是本站按剧情地点归纳的标签，可跨洲；它不是游戏战役菜单的位置。</p>
-        <Source source={CAMPAIGN_CATALOG.sources['official-swords']!} />
-      </details>
-      <details className="campaign-boundaries">
-        <summary>资料核对范围与版本限制</summary>
-        <p>{CAMPAIGN_CATALOG.versionNote}</p>
+        <p>首发内容包表示历史上的首次发行。当前包含关系与购买条件请查看内容导航；年代排序与首发顺序彼此独立，缺失年份排在末尾，同一年发行的按固定顺序排列。</p>
+        <p>官方剑级是战役挑战标记，与进入游戏时选择的标准、中等、困难不同。本批尚无逐条官方剑级证据，暂不展示剑级，不表示零剑或最容易。</p>
+        <p>本站整理：地区按剧情地点归纳，可跨洲，并非游戏战役菜单的位置；搜索别名帮助查找，不是官方替代标题。</p>
+        <p data-testid="campaign-name-sources">
+          {
+            '战役名称取自第三方存档的游戏内文字（英文与简体中文）。华莱士的玩家文明依据官方教程；其余战役的玩家文明参考 Steam 社区玩家进游戏逐个查看后整理的指南，更新于 '
+          }
+          <span className="num campaign-nowrap">2024-05-12</span>
+          {'。这份指南只用来确认玩家文明，不用于年代或剑级。这些资料都没有标明对应的游戏版本，可能与你当前游戏里的显示略有不同。'}
+        </p>
         <p>
-          资料核对于<span className="campaign-nowrap">{CAMPAIGN_CATALOG.verifiedAt}</span>
+          资料核对于<span className="num campaign-nowrap">{CAMPAIGN_CATALOG.verifiedAt}</span>
           。仅收录已列明的条目，不提供逐关攻略、剧情剧透、主观难度总榜或成就与存档同步。
         </p>
+        <div className="campaign-source-list">
+          {Object.entries(CAMPAIGN_CATALOG.sources)
+            .filter(([, source]) => source.url)
+            .map(([id, source]) => (
+              <Source key={id} source={source} />
+            ))}
+        </div>
       </details>
     </section>
   );
