@@ -283,16 +283,23 @@ test.describe('#316 首页与导航', () => {
     });
 });
 
-// ---------- #316 新增城镇中心按位置给两种解读（Steve 2026-10-21 21:11） ----------
-// 公开来源：https://aoecoach.com/en/resources/buildings/town-center/ （Castle Age Boom；Forward Town Center；How to counter it）
-// 位置用观察「可见范围」：enemy-front（敌方正面）= 对方自家附近 → 扩张经济；own-approach（接近自家的通路）= 前线 / 我方资源点 → 前置进攻。
-// enemy-edge 归属待 Steve 定，不断言。判定只看两次结果里「互不相同」的文字（去掉观察快照里的范围名称本身），不限定 DOM 结构。
-const AREA_ZH = ['范围未确认', '敌方正面当前可见区域', '敌方侧面或外围当前可见区域', '接近自家的一段当前可见通路'];
-const TC_BOOM = /扩张|经济/;
-const TC_FORWARD = /前置|进攻|压制/;
-const TC_BOOM_NEXT = /同步|跟着|一起|更快|也(扩张|发展)|施压|惩罚|出兵|进攻|攻击/;
-const TC_FORWARD_NEXT = /争夺|驱逐|拆|投石|攻城|阻止|攻击|反击|防守|施压/;
-async function tcResultLines(page: Page, area: string): Promise<string[]> {
+// ---------- #316 新增城镇中心：两种解读同时列出（Steve 2026-10-21 21:11 / 21:18；issue 316 comment 6316912314） ----------
+// 「看见新增城镇中心」始终同时列出两种解读，各带判断依据（位置）和一句应对；不随「可见范围」变化，不加新字段。
+// 公开来源 AoE2 Coach 城镇中心页 https://aoecoach.com/en/resources/buildings/town-center/ ：
+// - Castle Age Boom：“Upon reaching Castle Age, immediately build 2-3 additional Town Centers … rapidly grows your economy”
+// - Forward Town Center：“building a Town Center on a contested gold or stone pile secures resources”；In pro play：“placing a TC near the opponent both pressures them”
+// - How to counter it：“either boom harder yourself or punish them militarily”；“Forward TCs can be denied by contesting the location with early military or by Trebuchet/siege”
+/** 判断依据 + 解读：同一句里（不跨句号 / 分号）位置线索与解读关键词相距不超过 24 字 */
+const near = (cue: string, kw: string) => new RegExp(`(?:${cue})[^。；]{0,24}(?:${kw})|(?:${kw})[^。；]{0,24}(?:${cue})`);
+const TC_BOOM_CUE = '敌方家|对方家|自家附近';
+const TC_FWD_CUE = '前线|我方资源';
+const TC_BOOM_READ = near(TC_BOOM_CUE, '扩张|经济');
+const TC_FWD_READ = near(TC_FWD_CUE, '前置|进攻|压制');
+/** 应对：扩张经济 → 同步扩张或用军队施压；前置 → 出兵争夺位置或用攻城武器拆除（须和「前置 / 前线 / 我方资源」写在同一句） */
+const TC_BOOM_NEXT = /同步(扩张|发展)|更快地?(扩张|发展)|施压|惩罚|趁[^。；]{0,10}(出兵|进攻)/;
+const TC_FWD_NEXT = near('前置|前线|我方资源', '争夺|驱逐|拆除|拆掉|投石|攻城|阻止|摧毁');
+/** 城堡阶段情境下把「新增城镇中心」标为看到并选定可见范围，返回「看见新增城镇中心」这条信号的文字 */
+async function extraTcSignal(page: Page, area: string): Promise<string> {
   await page.goto('./#/scouting');
   await page.getByLabel('情境', { exact: true }).selectOption('walled');
   await expect(page.getByLabel('我的当前阶段', { exact: true })).toHaveValue('castle');
@@ -300,38 +307,20 @@ async function tcResultLines(page: Page, area: string): Promise<string[]> {
   await obs.getByLabel('新增城镇中心：状态', { exact: true }).selectOption('seen');
   await obs.locator('summary').click();
   await obs.getByLabel('新增城镇中心：可见范围', { exact: true }).selectOption(area);
-  const result = page.getByTestId('scouting-result');
-  await expect(result).toHaveAttribute('data-analysis-status', 'covered');
-  // 展开结果区里的全部折叠项，读用户能看到的文字
-  await result.evaluate((el) => el.querySelectorAll('details').forEach((d) => (d.open = true)));
-  const text = await result.innerText();
-  return text
-    .split('\n')
-    .map((l) => AREA_ZH.reduce((x, zh) => x.split(zh).join(''), l).trim())
-    .filter(Boolean);
+  await expect(page.getByTestId('scouting-result')).toHaveAttribute('data-analysis-status', 'covered');
+  const li = page.locator('[data-testid="scouting-signals"] > li[data-signal="extra-tc"]');
+  await expect(li).toBeVisible();
+  await expect(li).toContainText('看见新增城镇中心');
+  return (await li.innerText()).replace(/\s+/g, ' ');
 }
-test.describe('#316 「看见新增城镇中心」按位置给两种解读', () => {
-  test('对方自家附近（敌方正面）给扩张经济的解读和应对；前线 / 我方资源点附近（接近自家的通路）给前置进攻的解读和应对', async ({ page }) => {
-    const near = await tcResultLines(page, 'enemy-front');
-    const fwd = await tcResultLines(page, 'own-approach');
-    const onlyNear = near.filter((l) => !fwd.includes(l)),
-      onlyFwd = fwd.filter((l) => !near.includes(l));
-    expect(
-      onlyFwd.some((l) => TC_FORWARD.test(l)),
-      `前置进攻的解读：${JSON.stringify(onlyFwd)}`,
-    ).toBe(true);
-    expect(
-      onlyFwd.some((l) => TC_FORWARD_NEXT.test(l)),
-      `前置进攻的应对（争夺位置 / 出兵或攻城武器拆除）：${JSON.stringify(onlyFwd)}`,
-    ).toBe(true);
-    expect(
-      onlyNear.some((l) => TC_BOOM.test(l)),
-      `扩张经济的解读：${JSON.stringify(onlyNear)}`,
-    ).toBe(true);
-    expect(
-      onlyNear.some((l) => TC_BOOM_NEXT.test(l)),
-      `扩张经济的应对（同步扩张或用军队施压）：${JSON.stringify(onlyNear)}`,
-    ).toBe(true);
+test.describe('#316 「看见新增城镇中心」同时列出两种解读', () => {
+  test('标为看到后，信号里同时看得到两种解读、各自的判断依据和应对；换一种可见范围内容不变', async ({ page }) => {
+    const a = await extraTcSignal(page, 'enemy-front');
+    expect(a, '前置进攻（前线 / 我方资源点）').toMatch(TC_FWD_READ);
+    expect(a, '扩张经济（敌方家 / 自家附近）').toMatch(TC_BOOM_READ);
+    expect(a, '前置的应对：出兵争夺位置或用攻城武器拆除').toMatch(TC_FWD_NEXT);
+    expect(a, '扩张经济的应对：同步扩张或用军队施压').toMatch(TC_BOOM_NEXT);
+    for (const area of ['own-approach', 'unknown']) expect(await extraTcSignal(page, area), `可见范围 ${area} 时内容相同`).toBe(a);
   });
   test('「看见新增城镇中心」的来源只有 AoE2 Coach，不标「本站整理」', async ({ page }) => {
     await page.goto('./#/scouting');
@@ -343,13 +332,11 @@ test.describe('#316 「看见新增城镇中心」按位置给两种解读', () 
     await expect(li).not.toContainText('本站整理');
   });
   for (const width of WIDTHS)
-    test(`#/scouting 城堡阶段、新增城镇中心两种位置 @${width}：.num 不折行、无横向滚动`, async ({ page }) => {
+    test(`#/scouting 城堡阶段、新增城镇中心标为看到 @${width}：.num 不折行、无横向滚动`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
-      for (const area of ['enemy-front', 'own-approach']) {
-        await tcResultLines(page, area);
-        expect(await wrappedNums(page, 'main'), area).toEqual([]);
-        await noOverflow(page);
-      }
+      await extraTcSignal(page, 'enemy-front');
+      expect(await wrappedNums(page, 'main')).toEqual([]);
+      await noOverflow(page);
     });
 });
 
