@@ -5,8 +5,8 @@
  *   feature-to-feature  features/X 不能 import features/Y（需要共享的挪到 shared/ 或 domain/）
  *   shared-upward       shared/ 不能 import features/、app/
  *   domain-upward       domain/ 不能 import react、features/、app/、shared/ui
- *   core-json-direct    src/{domain,features} 不能直接 import src/data/{civs,units,techs,buildings,trees,eco,effects}.json
- *                       （src/data/ 下的读取接口——index.ts、raw/*.ts——以及 LOADERS 里登记的专门 loader 除外）
+ *   core-json-direct    src/data/{civs,units,techs,buildings,trees,eco,effects}.json 只能由 LOADERS 里逐个登记的
+ *                       7 个文件直接 import；src 下其他任何文件（含 shared/、app/、data/ 其他文件）都不行
  * `import type` 和动态 import() 也算：分层依赖与是否打包无关。
  *
  * 用法：
@@ -28,11 +28,23 @@ export const RULES = {
   'feature-to-feature': 'features/X 不能 import features/Y',
   'shared-upward': 'shared/ 不能 import features/、app/',
   'domain-upward': 'domain/ 不能 import react、features/、app/、shared/ui',
-  'core-json-direct': 'src/{domain,features} 不能直接 import 核心数据 JSON',
+  'core-json-direct': '核心数据 JSON 只能经 LOADERS 登记的文件读取',
 };
 export const CORE_JSON = ['civs', 'units', 'techs', 'buildings', 'trees', 'eco', 'effects'].map((n) => `src/data/${n}.json`);
-/** 专门的 loader：effects.json 的唯一读取入口。新增 loader 要在这里登记并在 PR 里说明理由。 */
-export const LOADERS = new Set(['src/domain/datEffects.ts']);
+/**
+ * 核心数据 JSON 的读取入口白名单（逐个列名，不用通配）。src 下除这 7 个文件外，任何文件
+ * （domain、features、shared、app、data 层其他文件）直接 import 核心 JSON 都报 core-json-direct。
+ * 新增入口要在这里登记、同步更新 AGENTS.md 与 docs/ARCHITECTURE.md，并在 PR 里说明理由。
+ */
+export const LOADERS = new Set([
+  'src/data/index.ts', // 异步入口：civs 随主包，units/techs/buildings/trees 动态 import 拆包
+  'src/data/raw/civs.ts', // src/data/raw/：同步、原样转出的唯一入口
+  'src/data/raw/units.ts',
+  'src/data/raw/techs.ts',
+  'src/data/raw/buildings.ts',
+  'src/data/raw/eco.ts',
+  'src/domain/datEffects.ts', // 特例：effects.json 的类型与转换
+]);
 
 const EXT = ['.ts', '.tsx', '.js', '.jsx', '.json', '.css'];
 function resolveSpec(fromAbs, spec) {
@@ -199,7 +211,7 @@ export function classify(e) {
     const upward = to !== null && (to.startsWith('src/features/') || to.startsWith('src/app/') || to.startsWith('src/shared/ui/'));
     if (react || upward) return 'domain-upward';
   }
-  if ((from.startsWith('src/domain/') || from.startsWith('src/features/')) && to && CORE_JSON.includes(to) && !LOADERS.has(from)) return 'core-json-direct';
+  if (to && CORE_JSON.includes(to) && !LOADERS.has(from)) return 'core-json-direct';
   return null;
 }
 

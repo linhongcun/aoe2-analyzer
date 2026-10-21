@@ -32,10 +32,40 @@ describe('#281 分层边界检查脚本', () => {
     expect(rule(e('src/domain/x.ts', 'src/data/eco.json'))).toBe('core-json-direct');
     expect(rule(e('src/features/a/A.tsx', 'src/data/units.json'))).toBe('core-json-direct');
     expect(rule(e('src/features/a/A.tsx', 'src/data/index.ts'))).toBeNull();
-    expect(rule(e('src/data/index.ts', 'src/data/units.json'))).toBeNull();
     expect(rule(e('src/domain/datEffects.ts', 'src/data/effects.json'))).toBeNull();
     expect(rule(e('src/app/Layout.tsx', 'src/features/search/components/CommandPalette.tsx'))).toBeNull();
-    expect([...(LOADERS as Set<string>)]).toEqual(['src/domain/datEffects.ts']);
+  });
+
+  it('核心 JSON 只能由 LOADERS 逐个登记的 7 个文件直接 import，src 下其他文件一律报错', () => {
+    const loaders = [
+      'src/data/index.ts',
+      'src/data/raw/civs.ts',
+      'src/data/raw/units.ts',
+      'src/data/raw/techs.ts',
+      'src/data/raw/buildings.ts',
+      'src/data/raw/eco.ts',
+      'src/domain/datEffects.ts',
+    ];
+    expect([...(LOADERS as Set<string>)]).toEqual(loaders);
+    // 逐个列名、不用通配：每个登记项都是真实存在的文件
+    for (const f of loaders) expect(readFileSync(`${ROOT}/${f}`, 'utf8').length).toBeGreaterThan(0);
+    // 白名单文件不报（静态与动态）
+    expect(rule(e('src/data/index.ts', 'src/data/civs.json'))).toBeNull();
+    expect(rule(e('src/data/index.ts', 'src/data/units.json', './units.json', true))).toBeNull();
+    expect(rule(e('src/data/raw/eco.ts', 'src/data/eco.json'))).toBeNull();
+    expect(rule(e('src/domain/datEffects.ts', 'src/data/effects.json'))).toBeNull();
+    // 违规探针：domain、data 层其他文件、shared、app 各一条
+    expect(rule(e('src/domain/x.ts', 'src/data/eco.json'))).toBe('core-json-direct');
+    expect(rule(e('src/data/hooks.ts', 'src/data/civs.json'))).toBe('core-json-direct');
+    expect(rule(e('src/data/raw/extra.ts', 'src/data/trees.json', './trees.json', true))).toBe('core-json-direct');
+    expect(rule(e('src/shared/ui/X.tsx', 'src/data/units.json'))).toBe('core-json-direct');
+    expect(rule(e('src/app/Layout.tsx', 'src/data/effects.json'))).toBe('core-json-direct');
+    // 非核心 JSON 不受限
+    expect(rule(e('src/data/hooks.ts', 'src/data/search-py.json'))).toBeNull();
+    // 真实解析：未登记文件里的直接 import 会被扫出来，经登记入口读取不报
+    const parse = parseImports as (f: string, t: string) => Edge[];
+    const edges = parse(`${ROOT}/src/data/hooks.ts`, "import c from './civs.json';\nconst t = () => import('./trees.json');\nimport r from './raw/civs';");
+    expect(edges.map((x) => rule(x))).toEqual(['core-json-direct', 'core-json-direct', null]);
   });
 
   it('解析 import type、export from 与动态 import()，注释不算', () => {

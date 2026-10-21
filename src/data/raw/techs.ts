@@ -1,6 +1,6 @@
 /**
- * issue 281：techs.json 的同步读取入口（原样转出，不做任何转换）。
- * src/domain、src/features 不直接 import 核心数据 JSON，需要同步拿原始数据时从这里取；
- * 需要带 dlc 等派生字段的数据仍走 src/data/index.ts（civs / loadCore / loadTrees）。
+ * issue 281：techs.json 的同步读取入口（登记在 scripts/check-layers.mjs 的 LOADERS 里），原样转出，不做转换。
+ * 核心 JSON 只能经 LOADERS 里的文件读取：同步读原始数据从 src/data/raw/ 取；
+ * 异步拆包与带派生字段（dlc 等）的数据走 src/data/index.ts。
  */
 export { default } from '../techs.json';
