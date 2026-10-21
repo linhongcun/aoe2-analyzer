@@ -42,12 +42,13 @@ test.describe('issue 317 罗马加成标签', () => {
     for (const c of ['Celts', 'Turks', 'Koreans']) {
       await page.goto(`./#/civ/${c}/bonus/0`);
       await expect(page.locator('#bonus [data-usage="gather"]'), c).toHaveAttribute('data-on', 'true');
-      await expect(page.locator('#bonus'), c).not.toContainText('无 .dat 数据');
+      // 页眉标签行和正文各渲染一次来源标签，两处都不能有
+      await expect(page.locator('main'), c).not.toContainText('无 .dat 数据');
     }
     await page.goto('./#/civ/Britons/bonus/0');
     await expect(page.locator('#bonus')).toContainText('羊倌工作速度 +25%');
     await expect(page.locator('#bonus')).toContainText('仅文本，未计入数值');
-    await expect(page.locator('#bonus')).toContainText('无 .dat 数据');
+    await expect(page.locator('main')).toContainText('无 .dat 数据');
   });
 
   test('没有任何工具计入的经济加成仍显示「.dat 经济/费用效果（文本展示）」', async ({ page }) => {

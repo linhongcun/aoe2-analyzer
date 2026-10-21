@@ -1,7 +1,7 @@
 // issue 317：经济/费用类文明加成（src = 'eco'）的「是否计入」标签必须与各工具的实际计算一致。
 // 判定不靠标签自身：开局模拟用「去掉该加成的 civEco 行后重跑」看结果是否变化，真实成本 / 训练费用直接调用工具函数。
 // 开局模拟全量重跑约 60 次 × 8 个开局方案，太慢（CI 上 60 s 以上），结果存成快照 fixtures/bonusUsage317-sim.json：
-// 快照带输入指纹（civEco、开局方案、升级数据、buildSim.ts 源码），任一变化本测试即失败，提示重新生成：
+// 快照带输入指纹（整个 eco.json 数据对象、开局方案、升级数据、buildSim.ts / roundHalfPrice.ts / buildOrder.ts 源码），任一变化本测试即失败，提示重新生成：
 //   UPDATE_BONUS317=1 npx vitest run tests/unit/bonusUsage317.test.ts
 // 平时只抽两条（条顿第 1 条、阿兹特克第 1 条）在记录的开局方案上现场重跑，确认快照与真实计算一致。
 import { createHash } from 'node:crypto';
@@ -43,10 +43,10 @@ const SNAP_URL = new URL('./fixtures/bonusUsage317-sim.json', import.meta.url);
 const sha = (...xs: string[]) => createHash('sha256').update(xs.join('\n')).digest('hex');
 const inputsHash = () =>
   sha(
-    JSON.stringify(E.civEco),
+    JSON.stringify(E),
     JSON.stringify(buildOrders),
     JSON.stringify(ups),
-    readFileSync(fileURLToPath(new URL('../../src/domain/buildSim.ts', import.meta.url)), 'utf8'),
+    ...['buildSim.ts', 'roundHalfPrice.ts', 'buildOrder.ts'].map((f) => readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8')),
   );
 type Snap = { inputs: string; firstChanged: Record<string, string | null> };
 const UPDATE = !!process.env.UPDATE_BONUS317;

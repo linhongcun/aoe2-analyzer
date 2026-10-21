@@ -25,7 +25,7 @@ test.describe('#317 文明加成「是否计入」标签', () => {
     await expect(first).toContainText('开局模拟');
   });
 
-  test('#/civ/Romans/bonus/0（村民 +5%）：写明采集已计入开局模拟与真实成本、建造未计入开局模拟', async ({ page }) => {
+  test('#/civ/Romans/bonus/0（村民 +5%）：写明采集已计入真实成本、建造未计入开局模拟', async ({ page }) => {
     await page.goto('./#/civ/Romans/bonus/0');
     const main = page.locator('main');
     await expect(main).toContainText('村民收集、建造和修理的速度 +5%');
@@ -41,7 +41,7 @@ test.describe('#317 文明加成「是否计入」标签', () => {
     const main = page.locator('main');
     await expect(main).toContainText('蝎式弩黄金费用 -50%');
     await expect(main).not.toContainText(BLANKET);
-    expect(await main.innerText()).toMatch(/等资源|真实成本|单位 PK/);
+    await expect(main).toContainText(/等资源|真实成本|单位 PK/);
   });
 
   test('#/bonuses 列表里罗马第 1、3 条不再显示「仅文本，未计入数值」', async ({ page }) => {
