@@ -18,7 +18,55 @@ test.afterEach(async ({ page }) => {
 
 const binding = (page: Page, name = '训练村民') => page.getByRole('textbox', { name: `我的按键：${name}`, exact: true });
 
-test('#236 中文英文检索、无结果、来源与默认值边界', async ({ page }) => {
+test('#267 网格默认键、公开来源与折叠说明', async ({ page }) => {
+  await page.goto('./#/hotkeys');
+  const defaults = [
+    ['go-town-center', 'H', 'A'],
+    ['select-town-centers', 'Ctrl+Shift+H', 'B'],
+    ['go-idle-villager', '.', 'A'],
+    ['select-idle-villagers', 'Shift+.', 'B'],
+    ['select-military', 'Shift+,', 'B'],
+    ['select-idle-military', 'Ctrl+,', 'B'],
+    ['go-selected', 'Space', 'B'],
+    ['train-villager', 'Q', 'A'],
+    ['economic-menu', 'Q', 'A'],
+    ['military-menu', 'W', 'B'],
+    ['build-house', 'Q', 'A'],
+    ['build-farm', 'A', 'A'],
+    ['repair', 'E', 'B'],
+    ['garrison', 'T', 'B'],
+    ['stop', 'G', 'B'],
+    ['attack-move', 'R', 'B'],
+    ['patrol', 'Q', 'B'],
+    ['gather-point', 'T', 'B'],
+    ['create-group-1', 'Ctrl+1', 'A'],
+    ['select-group-1', '1', 'A'],
+  ] as const;
+  await expect(page.locator('.hk-card')).toHaveCount(defaults.length);
+  await expect(page.locator('.hk-scope')).toHaveCount(1);
+  await expect(page.locator('.hk-scope')).toContainText('网格布局 Grid');
+  await expect(page.locator('.hk-scope')).toContainText('传统（经典）布局');
+  await expect(page.locator('.hk-scope')).toContainText('以游戏内为准');
+  for (const [id, key, source] of defaults) {
+    const card = page.locator(`.hk-card[data-action="${id}"]`);
+    await expect(card.locator('.hk-default kbd')).toHaveText(key);
+    await expect(card.getByRole('textbox')).toBeVisible();
+    await expect(card.locator('details')).toHaveJSProperty('open', false);
+    await expect(card.locator('details p').first()).toBeHidden();
+    await card.getByText('来源与说明', { exact: true }).click();
+    await expect(card.getByRole('link')).toBeVisible();
+    await expect(card.getByRole('link')).toHaveAttribute(
+      'href',
+      source === 'A' ? 'https://www.ageofempires.com/learn-to-play/match-goals-aoe2/' : 'https://keycombiner.com/collections/age-of-empires-2-de/',
+    );
+    await card.getByText('来源与说明', { exact: true }).click();
+  }
+  await expect(page.locator('[data-action="build-house"] .hk-default')).toContainText('即 Q Q');
+  await expect(page.locator('[data-action="build-farm"] .hk-default')).toContainText('即 Q A');
+  await expect(page.getByTestId('hotkeys-page')).not.toContainText(/未核实|hotkey-catalog|97f0660|stringId|字符串编号/);
+});
+
+test('#236 中文英文检索、无结果与来源区', async ({ page }) => {
   await page.goto('./#/hotkeys');
   await expect(page.getByTestId('hotkeys-page')).toBeVisible();
   await expect(page.locator('.hk-card')).toHaveCount(20);
@@ -30,9 +78,7 @@ test('#236 中文英文检索、无结果、来源与默认值边界', async ({ 
   await expect(page.locator('.hk-card')).toHaveAttribute('data-action', 'train-villager');
   await search.fill('Select all Town Centers');
   await expect(page.locator('.hk-card')).toHaveAttribute('data-action', 'select-town-centers');
-  await expect(page.locator('.hk-default strong')).toHaveText('未核实');
-  await page.getByText('此操作的来源状态', { exact: true }).click();
-  await expect(page.getByText(/固定版菜单分组未核实/)).toBeVisible();
+  await expect(page.locator('.hk-default kbd')).toHaveText('Ctrl+Shift+H');
   await search.fill('not-in-catalogue');
   await expect(page.getByRole('heading', { name: '没有匹配的操作' })).toBeVisible();
   await page.getByRole('button', { name: '清空搜索', exact: true }).click();
@@ -176,6 +222,10 @@ test('#236 打印完整当前配置，不受搜索过滤或另一配置影响', 
   await expect(page.locator('.hk-screen').first()).toBeHidden();
   await expect(page.locator('.hk-print tbody tr')).toHaveCount(20);
   await expect(page.locator('[data-print-action="train-villager"]')).toContainText('Q');
+  await expect(page.locator('[data-print-action="train-villager"] kbd')).toHaveText('Q');
+  await expect(page.locator('[data-print-action="train-villager"]')).toContainText('官方 PC 教学');
+  await expect(page.locator('[data-print-action="select-town-centers"] kbd')).toHaveText('Ctrl+Shift+H');
+  await expect(page.locator('[data-print-action="select-town-centers"]')).toContainText('KeyCombiner');
   await expect(page.locator('[data-print-action="select-group-1"]')).toContainText('Control + Shift + Alt + Extra Mouse Button 4');
   await expect(page.locator('[data-print-action="go-town-center"]')).toContainText('未填写');
   await expect(page.locator('.hk-print')).not.toContainText('多人专用');
@@ -183,13 +233,50 @@ test('#236 打印完整当前配置，不受搜索过滤或另一配置影响', 
 
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['light', 'dark']) {
-    test(`#236 ${theme} @${width} 长按键、键盘、四宽无溢出与对比度`, async ({ page }, info) => {
+    test(`#267 ${theme} @${width} 页面高度、按键不折行、长按键与对比度`, async ({ page }, info) => {
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/hotkeys');
+      await expect(page.locator('.hk-card')).toHaveCount(20);
+      await page.evaluate(() => document.fonts.ready);
+      if (width === 390) expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(7000);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      const checkKeyWrapping = async () => {
+        expect(
+          await page.locator('.hk-screen kbd, .hotkeys-page .num:visible').evaluateAll((elements) =>
+            elements.every((element) => {
+              const range = document.createRange();
+              range.selectNodeContents(element);
+              const rects = Array.from(range.getClientRects());
+              const box = element.getBoundingClientRect();
+              return (
+                rects.length > 0 &&
+                rects.every((rect) => Math.abs(rect.top - rects[0]!.top) < 1) &&
+                box.left >= 0 &&
+                box.right <= innerWidth &&
+                getComputedStyle(element).whiteSpace === 'nowrap'
+              );
+            }),
+          ),
+        ).toBe(true);
+      };
+      await checkKeyWrapping();
+      await page.screenshot({ path: info.outputPath(`hotkeys-default-${theme}-${width}.png`), fullPage: true });
+      await page.locator('.hk-screen details').evaluateAll((elements) =>
+        elements.forEach((element) => {
+          (element as HTMLDetailsElement).open = true;
+        }),
+      );
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await checkKeyWrapping();
+      await page.locator('.hk-screen details').evaluateAll((elements) =>
+        elements.forEach((element) => {
+          (element as HTMLDetailsElement).open = false;
+        }),
+      );
       await page.getByRole('searchbox').fill('训练村民');
       await binding(page).fill('Control + Shift + Alt + Extra Mouse Button 4 + Custom Key');
-      await expect(page.locator('.hk-value')).toHaveText('Control + Shift + Alt + Extra Mouse Button 4 + Custom Key');
+      await expect(binding(page)).toHaveValue('Control + Shift + Alt + Extra Mouse Button 4 + Custom Key');
       await binding(page).focus();
       await page.keyboard.press('Tab');
       await page.evaluate(() => window.scrollTo(0, 0));
