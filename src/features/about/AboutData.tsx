@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Icon } from '../../shared/ui/Icon';
-import { commitUrl, DATA_SOURCES as D, PATCH_NOTES, patchNoteUrl, REPO, versionLabel } from './dataInfo';
+import { commitUrl, DATA_SOURCES as D, PATCH_NOTES, patchNoteUrl, REPO, versionLabel } from '../../shared/utils/dataInfo';
 
 const NAMES: Record<string, string> = { dat: '游戏原版 .dat', aoe2techtree: 'aoe2techtree', halfon: 'halfon' };
 

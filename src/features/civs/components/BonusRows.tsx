@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { civBonuses } from '../../../domain/civBonus';
 import type { Civ } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
-import BonusBody from '../../bonuses/components/BonusBody';
+import BonusBody from '../../../shared/ui/BonusBody';
 
 export function BonusRows({ c }: { c: Civ }) {
   const list = civBonuses(c);

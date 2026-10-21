@@ -2,9 +2,9 @@ import { useCore } from '../../../data/hooks';
 import { TEAM_BONUSES } from '../../../domain/effects';
 import { allNumeric, baseStats, civBonusNotes, simTechs, simulate, type SimRoute } from '../../../domain/simulator';
 import type { Unit } from '../../../domain/types';
-import { Loading } from '../../../shared/ui/widgets';
-import { useSimState } from '../hooks/useSimState';
-import { SIM_ROWS } from '../logic/format';
+import { Loading } from '../widgets';
+import { useSimState } from '../../hooks/useSimState';
+import { SIM_ROWS } from '../../utils/simFormat';
 import SimPanel, { type StatRow } from './SimPanel';
 
 /** 单位科技模拟器（状态在路径中：#/unit/<id>/<civ>/<age>/<ids>/<team>） */

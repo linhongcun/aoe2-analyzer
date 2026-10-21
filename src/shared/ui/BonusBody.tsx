@@ -1,19 +1,19 @@
 /** 文明/团队加成的效果说明：中英原文、适用时代、数值示例（之前→之后）、作用对象（与模拟器同一判定） */
 import { Link } from 'react-router-dom';
-import { civByEn } from '../../../data';
-import { useCore } from '../../../data/hooks';
-import { bonusAffects, bonusExample, type CivBonusEnt } from '../../../domain/civBonus';
-import { groupLines } from '../../../domain/family';
-import { linkify } from '../../../domain/linker';
-import { AGE_ZH } from '../../../domain/ratings';
-import { BuildingLink, StatIcon, UnitLinks } from '../../../shared/ui/art';
-import { Icon } from '../../../shared/ui/Icon';
-import { Linked, Loading } from '../../../shared/ui/widgets';
-import { fmtStat } from '../../simulator/logic/format';
-import { LineChip } from '../../techs/components/TechAffects';
-import type { Unit } from '../../../domain/types';
-import { collapse } from '../../../domain/family';
-import { ecoText } from '../../../domain/datEffects';
+import { civByEn } from '../../data';
+import { useCore } from '../../data/hooks';
+import { bonusAffects, bonusExample, type CivBonusEnt } from '../../domain/civBonus';
+import { groupLines } from '../../domain/family';
+import { linkify } from '../../domain/linker';
+import { AGE_ZH } from '../../domain/ratings';
+import { BuildingLink, StatIcon, UnitLinks } from './art';
+import { Icon } from './Icon';
+import { Linked, Loading } from './widgets';
+import { fmtStat } from '../utils/simFormat';
+import { LineChip } from './LineChip';
+import type { Unit } from '../../domain/types';
+import { collapse } from '../../domain/family';
+import { ecoText } from '../../domain/datEffects';
 
 const SRC_TAG: Record<string, [string, string]> = {
   dat: ['ok', '数值来源：游戏 .dat'],

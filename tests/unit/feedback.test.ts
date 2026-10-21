@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { entityOf, feedbackUrl, ISSUES_NEW } from '../../src/features/feedback/feedback';
+import { entityOf, feedbackUrl, ISSUES_NEW } from '../../src/shared/utils/feedback';
 
 describe('feedback link', () => {
   it('detects entity type/id from route', () => {

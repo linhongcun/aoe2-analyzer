@@ -1,4 +1,4 @@
-import type { NumStat } from '../../../domain/types';
+import type { NumStat } from '../../domain/types';
 /** 单位模拟器属性行：[属性键, 中文名, 图标键（null=按射程选 atk/patk，''=无图标）] */
 export const SIM_ROWS: [NumStat, string, string | null][] = [
   ['hp', '生命值', 'hp'],

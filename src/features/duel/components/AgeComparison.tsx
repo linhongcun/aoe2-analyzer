@@ -3,7 +3,7 @@ import { ageComparison, type AgeSide } from '../../../domain/ageComparison';
 import { AGE_ZH } from '../../../domain/ratings';
 import type { SimContext } from '../../../domain/simulator';
 import type { Unit } from '../../../domain/types';
-import { fmtSide } from '../logic/state';
+import { fmtSide } from '../../../domain/duelState';
 
 const n = (v: number | null) => (v === null ? '—' : Number(v.toFixed(2)));
 export function AgeComparison({ ctx, byId, a, b }: { ctx: SimContext; byId: Record<number, Unit>; a: AgeSide; b: AgeSide }) {

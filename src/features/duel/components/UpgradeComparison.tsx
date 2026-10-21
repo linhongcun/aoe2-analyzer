@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { civByEn } from '../../../data';
-import { DATA_SOURCES, versionLabel } from '../../about/dataInfo';
+import { DATA_SOURCES, versionLabel } from '../../../shared/utils/dataInfo';
 import { upgradeComparison, upgradePlan, type UpgradeSide } from '../../../domain/upgradeComparison';
 import type { SimContext } from '../../../domain/simulator';
 import type { Tech, Unit } from '../../../domain/types';
 import { CostView, TechLink } from '../../../shared/ui/art';
-import { fmtSide, parseUpgradeSide } from '../logic/state';
+import { fmtSide, parseUpgradeSide } from '../../../domain/duelState';
 import './upgrade-comparison.css';
 
 const fmt = (n: number | null) => (n === null || !Number.isFinite(n) ? '—' : String(Number(n.toFixed(3))));

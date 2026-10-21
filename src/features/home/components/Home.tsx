@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { civs } from '../../../data';
-import { HOME_GROUPS, type Section } from '../../../app/nav/sections';
+import { HOME_GROUPS, type Section } from '../../../shared/nav/sections';
 import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { DLCS } from '../../../domain/dlc';

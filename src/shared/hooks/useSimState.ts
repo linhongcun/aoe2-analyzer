@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useCore, useTrees } from '../../../data/hooks';
-import { makeSimContext, simTechs, unitPath, type SimContext, type SimRoute, type SimTech } from '../../../domain/simulator';
-import type { Unit } from '../../../domain/types';
-import { session } from '../../../shared/utils/sticky';
+import { useCore, useTrees } from '../../data/hooks';
+import { makeSimContext, simTechs, unitPath, type SimContext, type SimRoute, type SimTech } from '../../domain/simulator';
+import type { Unit } from '../../domain/types';
+import { session } from '../utils/sticky';
 
 export interface SimState {
   ctx: SimContext;

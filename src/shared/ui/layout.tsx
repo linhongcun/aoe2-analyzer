@@ -1,7 +1,7 @@
 /** 统一详情页模板：面包屑 + 头部（图标/中英名/DLC/标签）+ 分区标签页 + 右侧相关链接栏 */
 import { useId, type KeyboardEvent, type ReactNode } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import { sectionOf } from '../../app/nav/sections';
+import { sectionOf } from '../nav/sections';
 import { Icon } from './Icon';
 import { CopyPageLink } from './DetailBlocks';
 import '../styles/editorial-details.css';

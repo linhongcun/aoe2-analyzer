@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { DATA_SOURCES } from '../../features/about/dataInfo';
+import { DATA_SOURCES } from '../utils/dataInfo';
 import { Icon } from './Icon';
 import { StatIcon } from './art';
 

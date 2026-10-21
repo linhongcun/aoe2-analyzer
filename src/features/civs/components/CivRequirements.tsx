@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../../../shared/ui/Icon';
 import { TechIcon, UnitIcon } from '../../../shared/ui/art';
-import { DATA_SOURCES, versionLabel } from '../../about/dataInfo';
+import { DATA_SOURCES, versionLabel } from '../../../shared/utils/dataInfo';
 import { requirementToken, resolveRequirements, searchRequirements, type RequirementCondition, type RequirementContext } from '../../../domain/civRequirements';
 import type { Tech, Unit } from '../../../domain/types';
 import './civ-requirements.css';

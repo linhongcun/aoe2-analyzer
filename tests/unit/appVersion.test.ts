@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { appVersion } from '../../src/features/feedback/feedback';
+import { appVersion } from '../../src/shared/utils/feedback';
 
 describe('页脚站点版本', () => {
   it('来自 package.json version，带 v 前缀', () => {

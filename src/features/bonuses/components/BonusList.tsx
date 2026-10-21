@@ -6,7 +6,7 @@ import { CivIcon } from '../../../shared/ui/art';
 import { ListHead } from '../../../shared/ui/layout';
 import { SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
-import { BonusTags } from './BonusBody';
+import { BonusTags } from '../../../shared/ui/BonusBody';
 import { civByEn } from '../../../data';
 
 const ALL = allCivBonuses(civs);

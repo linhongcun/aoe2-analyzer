@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import civs from '../../src/data/civs.json';
 import { gatherModel } from '../../src/domain/realCost';
-import { uncountedText } from '../../src/features/duel/components/RealCost';
+import { uncountedText } from '../../src/shared/ui/RealCost';
 import { search, score, TIER, type SearchItem } from '../../src/domain/search';
 
 /** v0.11.0 验收（#162）。Kent 写，先失败，功能做完后应全部通过。 */
@@ -103,7 +103,9 @@ describe('B #162 文明加成与页面也支持拼音命中，排序同 #159', (
 
   it('B1 每个页面和文明加成条目都带 py/pyi（含中文时）；开局条目（bo-）不在范围、不带拼音', () => {
     expect(pages.filter((p) => p.id.startsWith('bo-') && (p.py || p.pyi)).map((p) => p.zh)).toEqual([]);
-    const missing = [...pages.filter((p) => !p.id.startsWith('bo-')), ...bonuses].filter((i) => /[\u4e00-\u9fff]/.test(i.zh) && !(i.py && i.pyi)).map((i) => `${i.kind}:${i.zh}`);
+    const missing = [...pages.filter((p) => !p.id.startsWith('bo-')), ...bonuses]
+      .filter((i) => /[\u4e00-\u9fff]/.test(i.zh) && !(i.py && i.pyi))
+      .map((i) => `${i.kind}:${i.zh}`);
     expect(missing.slice(0, 5), `${missing.length} 条缺拼音`).toEqual([]);
   });
 
@@ -140,7 +142,11 @@ describe('B #162 文明加成与页面也支持拼音命中，排序同 #159', (
     let end = firstPy;
     while (end < tiers.length && tiers[end] === TIER.py) end++;
     expect(end - firstPy, '拼音足够多时恰好 5 条').toBe(5);
-    expect(search(idx, q).filter((r) => score(r, q) === TIER.py).some((r) => r.kind === 'bonus')).toBe(true);
+    expect(
+      search(idx, q)
+        .filter((r) => score(r, q) === TIER.py)
+        .some((r) => r.kind === 'bonus'),
+    ).toBe(true);
   });
 
   it('B3b 构造：页面精确命中、加成拼音 7 条、文字子串 3 条，顺序为 精确 | 5 拼音 | 3 文字 | 2 拼音', () => {

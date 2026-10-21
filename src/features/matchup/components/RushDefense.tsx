@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { buildOrders } from '../../../data/buildOrders';
-import { fmtSide } from '../../duel/logic/state';
+import { fmtSide } from '../../../domain/duelState';
 import './rushDefense.css';
 
 const guides = [
