@@ -14,13 +14,15 @@ export default function BonusDetail() {
   const b = list.find((x) => String(x.idx) === idx);
   if (!c || !b) return <BonusList />;
   const title = b.team ? `${c.zh} · 团队加成` : `${c.zh} · 文明加成 ${+b.idx + 1}`;
+  /** issue 275：标题只允许在「文明名 ·」与「文明加成 N」之间换行：两处不换行空格把「名 ·」和「加成 N」粘住，CSS keep-all 不在中文字之间断开 */
+  const heading = b.team ? `${c.zh}\u00a0· 团队加成` : `${c.zh}\u00a0· 文明加成\u00a0${+b.idx + 1}`;
   return (
     <DetailPage
       key={b.id}
       id="bonus"
       crumb={title}
       icon={<CivIcon c={c} />}
-      title={title}
+      title={heading}
       en={b.team ? `${c.en} team bonus` : `${c.en} bonus ${+b.idx + 1}`}
       tags={<BonusTags b={b} />}
       tabs={[{ key: 'ov', label: '效果', content: <BonusBody b={b} /> }]}
