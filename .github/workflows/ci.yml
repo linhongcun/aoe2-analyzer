@@ -23,6 +23,9 @@ jobs:
         run: npm run lint
       - name: Typecheck
         run: npx tsc -p . --noEmit
+      # #281 ①：先只报警（脚本以 0 退出，违规显示为 ::warning 注解）；⑤ 清零后改为 --strict
+      - name: Layer boundaries (warn only, #281)
+        run: npm run lint:layers
       - name: Catalog introduction audit
         run: npm run introductions:check
       - name: Install Playwright chromium
