@@ -12,6 +12,7 @@
 import ecoRaw from '../data/raw/eco';
 import civs from '../data/raw/civs';
 import type { Cost } from './types';
+import type { CostDiscount } from './costDiscount';
 import type { EcoData } from './buildSim';
 import { UNHANDLED_RES } from './buildSim';
 
@@ -185,4 +186,10 @@ export function fmtClock(sec: number): string {
     m = Math.floor((s % 3600) / 60),
     ss = String(s % 60).padStart(2, '0');
   return h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`;
+}
+
+/** #322：折后价 → 采集模型 + 真实成本（原在 shared/ui/RealCost，纯计算迁入 domain） */
+export function realCostOf(d: CostDiscount, age: number, civ: string) {
+  const g = gatherModel(age, civ);
+  return { g, rc: realCost(d.cost, g) };
 }

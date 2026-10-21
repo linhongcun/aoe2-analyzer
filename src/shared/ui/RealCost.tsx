@@ -1,7 +1,7 @@
 /** #88 等采集时间：每侧把（折后）价格换算成村民采集时间。只展示，数值来自 domain/realCost */
 import { useEffect, useId, useRef, useState } from 'react';
 import type { CostDiscount } from '../../domain/costDiscount';
-import { countForTime, fmtClock, gatherModel, realCost, type GatherRes } from '../../domain/realCost';
+import { countForTime, fmtClock, realCostOf, type GatherRes } from '../../domain/realCost';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import { Icon } from './Icon';
 import { minus } from '../utils/minus';
@@ -39,10 +39,7 @@ const NoSeed = () => (
   </small>
 );
 
-export function realCostOf(d: CostDiscount, age: number, civ: string) {
-  const g = gatherModel(age, civ);
-  return { g, rc: realCost(d.cost, g) };
-}
+export { realCostOf };
 
 export function RealCostBlock({
   k,
