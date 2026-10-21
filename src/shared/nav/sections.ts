@@ -222,7 +222,7 @@ export const SECONDARY_TOOLS: Section[] = [
     label: '侦察辨析',
     en: 'Scouting',
     icon: 'crosshair',
-    desc: '对照相容解释、反证和缺失信息，决定下一次补查什么',
+    desc: '对照具体信号，判断对手在做什么，安排下一步',
     match: /^\/scouting\/?$/,
   },
   {

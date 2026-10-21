@@ -36,11 +36,9 @@ const Card = ({ s }: { s: Section }) => (
         )}
       </p>
     </div>
-    {(s.group === 'planning' || s.group === 'economy') && (
-      <span className="hc-open">
-        打开 <Icon name="arrow-right" />
-      </span>
-    )}
+    <span className="hc-open" aria-hidden="true">
+      打开 <Icon name="arrow-right" />
+    </span>
   </Link>
 );
 const POPULAR = ['Franks', 'Britons', 'Mongols', 'Persians', 'Hindustanis', 'Armenians', 'Romans', 'Shu'];

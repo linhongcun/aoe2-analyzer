@@ -3,13 +3,20 @@ import { Icon } from '../../shared/ui/Icon';
 import { NavItem } from './NavItem';
 import { TOOL_GROUPS, WIKI } from '../../shared/nav/sections';
 
-export function ToolsMenu({ path }: { path: string }) {
-  const [openAt, setOpenAt] = useState<string | null>(null);
+function isMobileDrawer() {
+  return typeof window !== 'undefined' && window.matchMedia('(max-width: 900px)').matches;
+}
+function toolsPath(path: string) {
+  return !WIKI.some((s) => !s.hideNav && s.match.test(path)) && TOOL_GROUPS.some((group) => group.sections.some((s) => s.match.test(path)));
+}
+export function ToolsMenu({ path, drawerOpen = false }: { path: string; drawerOpen?: boolean }) {
+  // 手机抽屉打开时由 Layout 用 key 重挂载；初始展开当前工具页（issue 316）。桌面 drawerOpen 恒为 false，仍靠点击。
+  const [openAt, setOpenAt] = useState<string | null>(() => (drawerOpen && isMobileDrawer() && toolsPath(path) ? path : null));
   const open = openAt === path;
   const ref = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
-  const on = !WIKI.some((s) => !s.hideNav && s.match.test(path)) && TOOL_GROUPS.some((group) => group.sections.some((s) => s.match.test(path)));
+  const on = toolsPath(path);
   useEffect(() => {
     if (!open) return;
     const down = (event: PointerEvent) => {
