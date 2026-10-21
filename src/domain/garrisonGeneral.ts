@@ -487,14 +487,13 @@ export function unitGarrisonPower(unit: GeneralGarrisonUnit, units: Record<strin
 }
 
 function relicGarrisonPower(buildingId: number, building: GeneralGarrisonUnit, units: Record<string, GeneralGarrisonUnit>) {
-  if (!FORTIFIED_CHURCH_IDS.has(buildingId)) return { power: 0, reason: '圣物存放只计容量，不增加弹丸；不估算资源收益。' };
+  if (!FORTIFIED_CHURCH_IDS.has(buildingId)) return { power: 0, reason: '圣物存放只计容量，不增加弹丸。' };
   const villager = units[83];
   const power = villager ? unitGarrisonPower(villager, units).power : null;
   const maxProjectiles = building.projectile >= 0 ? Math.max(1, building.max) : Math.max(0, building.max - 1);
   return {
     power,
-    reason:
-      power === null ? '村民驻军贡献数据缺失或无效，暂不计算圣物弹丸贡献。' : `加固教堂中每个圣物 +1 支箭，与村民合计上限 ${maxProjectiles}；不估算资源收益。`,
+    reason: power === null ? '村民驻军贡献数据缺失或无效，暂不计算圣物弹丸贡献。' : `强化教堂中每个圣物 +1 支箭，与村民合计上限 ${maxProjectiles}。`,
   };
 }
 
