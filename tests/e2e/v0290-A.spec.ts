@@ -67,14 +67,17 @@ test.describe('#317 文明加成「是否计入」标签', () => {
     expect(bad).toEqual([]);
   });
 
-  test(`【待确认·超出 #317 字面范围】同一问题的 src=text 加成（${text.length} 条：凯尔特伐木、朝鲜采石、突厥采金）也被真实成本计入，标签应一致`, async ({
+  test(`src=text 加成（${text.length} 条：凯尔特伐木、朝鲜采石、突厥采金）已被真实成本计入：标「已计入」并写明工具（Steve 2026-10-21 定，#330）`, async ({
     page,
   }) => {
     const bad: string[] = [];
     for (const u of text) {
       await page.goto(`./#/civ/${u.civ}/bonus/${u.idx}`);
       await expect(page.locator('main')).toContainText(u.zh);
-      if ((await page.locator('main').innerText()).includes(BLANKET)) bad.push(`${u.civ}-${u.idx} ${u.zh}`);
+      const t = await page.locator('main').innerText();
+      if (t.includes(BLANKET)) bad.push(`${u.civ}-${u.idx} 仍标「${BLANKET}」`);
+      else if (!/已计入/.test(t)) bad.push(`${u.civ}-${u.idx} 未标「已计入」`);
+      else if (!/真实成本|等资源|等采集时间/.test(t)) bad.push(`${u.civ}-${u.idx} 未写明由哪个工具计算`);
     }
     expect(bad).toEqual([]);
   });
