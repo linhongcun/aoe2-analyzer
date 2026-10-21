@@ -1,5 +1,5 @@
 import type { Trees, Unit } from './types';
-import { civStatus } from './simulator';
+import { civStatus } from './civStatus';
 /**
  * 升级路线：向前追溯 from_，向后寻找以当前单位为 from_ 的单位。
  * 有分叉时（如重装骑士→游侠 / 萨瓦尔）：

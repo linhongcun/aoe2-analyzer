@@ -1,4 +1,4 @@
-import { unitCountLabel } from '../../domain/family';
+import { unitCountLabel } from '../../shared/utils/unitCountLabel';
 import type { IconName } from '../../shared/ui/Icon';
 
 export const SECTION_GROUPS = [
