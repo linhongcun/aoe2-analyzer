@@ -136,6 +136,12 @@ describe('#281 分层边界检查脚本', () => {
     expect(() => parse(`${ROOT}/src/domain/x.ts`, "// const r = require('react');")).not.toThrow();
   });
 
+  it('CI 以 --strict 运行分层检查（#281 ⑤）', () => {
+    const ci = readFileSync(`${ROOT}/.github/workflows/ci.yml`, 'utf8');
+    expect(ci).toMatch(/- name: Layer boundaries \(strict, #281\)\n\s+run: npm run lint:layers -- --strict\n/);
+    expect(ci).not.toMatch(/warn only/i);
+  });
+
   it('默认模式只报警（退出码 0），--strict 在有违规时退出码 1', () => {
     const run = (...args: string[]) => spawnSync(process.execPath, ['scripts/check-layers.mjs', ...args], { cwd: ROOT, encoding: 'utf8' });
     const warn = run();

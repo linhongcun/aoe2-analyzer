@@ -45,6 +45,10 @@ tests/unit/         Vitest：模拟器数值、前置链、DLC 映射、自动�
 tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 ```
 
+## 分层边界（#281）
+
+`scripts/check-layers.mjs` 检查四条规则：`features/X` 不 import `features/Y`；`shared/` 不 import `features/`、`app/`；`domain/` 不 import react、`features/`、`app/`、`shared/ui`；核心数据 JSON 只能经下面登记的入口读取。`import type`、动态 `import()` 和 eager 的 `import.meta.glob` 都计入。CI 以 `npm run lint:layers -- --strict` 运行，有任何违规即失败；本地不带 `--strict` 只报告、总以 0 退出。
+
 ## 核心数据 JSON 的读取入口（#281）
 
 `src/data/{civs,units,techs,buildings,trees,eco,effects}.json` 只能由下面 7 个文件直接 import（`scripts/check-layers.mjs` 的 `LOADERS`，逐个列名）。src 下其他任何文件，包括 `shared/`、`app/` 和 `data/` 层的其他文件，直接 import 都会报 `core-json-direct`：

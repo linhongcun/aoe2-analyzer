@@ -10,10 +10,10 @@
  * `import type` 和动态 import() 也算：分层依赖与是否打包无关。
  *
  * 用法：
- *   node scripts/check-layers.mjs            报告并以 0 退出（当前阶段：CI 只报警）
- *   node scripts/check-layers.mjs --strict   有违规时以 1 退出（#281 ⑤ 清零后改用这个）
+ *   node scripts/check-layers.mjs            只报告，总以 0 退出（本地排查用）
+ *   node scripts/check-layers.mjs --strict   有违规时以 1 退出（CI 用这个：npm run lint:layers -- --strict）
  *   node scripts/check-layers.mjs --json     输出 JSON（供测试和 PR 报告使用）
- * 在 GitHub Actions 里会额外输出 ::warning 注解，违规会显示在 PR 的 Files changed 里。
+ * 在 GitHub Actions 里会额外输出注解（--strict 下为 ::error，否则 ::warning），违规会显示在 PR 的 Files changed 里。
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
@@ -243,7 +243,7 @@ function main(argv) {
     return strict && all.length ? 1 : 0;
   }
   const gha = process.env.GITHUB_ACTIONS === 'true';
-  console.log(`分层边界检查（#281）：${all.length} 处越层引用${strict ? '' : '（当前只报警，不阻塞 CI）'}`);
+  console.log(`分层边界检查（#281）：${all.length} 处越层引用${strict ? '（strict：有违规即失败）' : '（只报告，不以非 0 退出；CI 用 --strict）'}`);
   for (const [rule, desc] of Object.entries(RULES)) {
     const hits = all.filter((v) => v.rule === rule);
     console.log(`\n${rule}（${desc}）：${hits.length} 处`);
