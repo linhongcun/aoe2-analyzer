@@ -8,9 +8,18 @@ import { useSearchIndex } from '../hooks';
 const KIND = { page: '页面', civ: '文明', unit: '单位', tech: '科技', building: '建筑', bonus: '加成', term: '术语' } as const;
 
 /** Ctrl/Cmd+K 全局命令面板 */
-export default function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function CommandPalette({
+  open,
+  onClose,
+  initialQuery,
+}: {
+  open: boolean;
+  onClose: () => void;
+  /** 懒加载期间已输入的文字，挂载时作为初始查询（issue 280） */
+  initialQuery?: string;
+}) {
   const idx = useSearchIndex();
-  const [q, setQ] = useState('');
+  const [q, setQ] = useState(initialQuery ?? '');
   const [sel, setSel] = useState(0);
   const input = useRef<HTMLInputElement>(null);
   const listId = useId();

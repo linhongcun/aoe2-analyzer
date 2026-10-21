@@ -1,8 +1,7 @@
-import { Suspense, useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
-import CommandPalette from '../features/search/components/CommandPalette';
 import { WIKI } from './nav/sections';
 import { NavItem } from './nav/NavItem';
 import { ToolsMenu } from './nav/ToolsMenu';
@@ -13,6 +12,32 @@ import { useTheme } from './theme/useTheme';
 import type { ThemePreference } from './theme/theme';
 import '../shared/styles/editorial-shell.css';
 import '../shared/styles/community-tools.css';
+
+// 全局搜索带着拼音索引、术语表和加成数据，改为第一次打开时才加载，不进首页入口包（issue 280）。
+const loadCommandPalette = () => import('../features/search/components/CommandPalette');
+const CommandPalette = lazy(loadCommandPalette);
+
+/**
+ * 搜索分包加载期间（通常不到一眨眼）先放一个不可见的输入框接住焦点和输入（含输入法），
+ * 弹窗出现后把已输入的文字作为初始查询带进去，避免按 Ctrl+K 后立刻输入时丢字（issue 280）。
+ */
+const HIDDEN: CSSProperties = { position: 'fixed', top: 0, left: 0, width: 1, height: 1, opacity: 0, border: 0, padding: 0 };
+function PalettePending({ onType, onClose }: { onType: (value: string) => void; onClose: () => void }) {
+  return (
+    <input
+      autoFocus
+      aria-label="全局搜索（加载中）"
+      style={HIDDEN}
+      onChange={(e) => onType(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          onClose();
+        }
+      }}
+    />
+  );
+}
 
 /** 外点的默认焦点行为结束后归还触发按钮；新弹窗接管焦点时不抢回。 */
 function returnFocusAfterClose(target: HTMLElement | null) {
@@ -167,8 +192,12 @@ export function Layout({ children }: { children: ReactNode }) {
   const [cmdk, setCmdk] = useState(false);
   const searchTrigger = useRef<HTMLElement | null>(null);
   const main = useRef<HTMLElement>(null);
+  const closeSearch = useCallback(() => setCmdk(false), []);
+  // 每次输入都触发重渲染：正在进行的懒加载渲染会以最新文字重来，提交时不丢字。
+  const [pendingQuery, setPendingQuery] = useState('');
   const openSearch = useCallback(() => {
     searchTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setPendingQuery('');
     setMenuAt(null);
     setCmdk(true);
   }, []);
@@ -297,7 +326,13 @@ export function Layout({ children }: { children: ReactNode }) {
           <Icon name="database" />
           <span>数据版本：{versionLabel(DATA_SOURCES)}</span>
         </Link>
-        <button className="searchbtn" onClick={openSearch} aria-label="全局搜索">
+        <button
+          className="searchbtn"
+          onClick={openSearch}
+          onPointerEnter={() => void loadCommandPalette()}
+          onFocus={() => void loadCommandPalette()}
+          aria-label="全局搜索"
+        >
           <Icon name="search" />
           <span>搜索</span>
           <kbd>Ctrl K</kbd>
@@ -312,7 +347,11 @@ export function Layout({ children }: { children: ReactNode }) {
         )}
         <Suspense fallback={<Loading />}>{children}</Suspense>
       </main>
-      {cmdk && <CommandPalette open onClose={() => setCmdk(false)} />}
+      {cmdk && (
+        <Suspense fallback={<PalettePending onType={setPendingQuery} onClose={closeSearch} />}>
+          <CommandPalette open onClose={closeSearch} initialQuery={pendingQuery} />
+        </Suspense>
+      )}
       <footer className="editorial-footer">
         <p className="fbfoot">
           <FeedbackLink /> <FeedbackLink kind="feature" /> 发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。{' '}

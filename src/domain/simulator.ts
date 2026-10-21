@@ -20,16 +20,9 @@ export function makeSimContext(techs: Tech[], trees: Trees): SimContext {
   return { techs, trees, techByEn };
 }
 
-/** 某文明科技树中可用项目，键为 "u<id>" / "t<id>" */
-export function civStatus(trees: Trees, civ: string): Record<string, number> {
-  const s: Record<string, number> = {};
-  (trees.t[civ] ?? []).forEach((b) =>
-    b[3].forEach((c) => {
-      s[c[2] + c[3]] = c[4];
-    }),
-  );
-  return s;
-}
+// 纯函数放在无数据依赖的模块里，单位列表等轻量链路不必引入效果数据（issue 280）。
+import { civStatus } from './civStatus';
+export { civStatus };
 
 export function baseStats(u: Unit): StatSet {
   const bonus: Record<string, number> = {};
