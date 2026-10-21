@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import toolUsed from './fixtures/v0290-317-tool-used.json' with { type: 'json' };
+import civsRaw from '../../src/data/civs.json' with { type: 'json' };
 import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 
 /**
@@ -26,7 +27,7 @@ test.describe('#317 文明加成「是否计入」标签', () => {
     await expect(first).toContainText('开局模拟');
   });
 
-  test('#/civ/Romans/bonus/0（村民 +5%）：写明采集已计入开局模拟与真实成本、建造未计入开局模拟', async ({ page }) => {
+  test('#/civ/Romans/bonus/0（村民 +5%）：写明采集已计入真实成本、建造未计入开局模拟', async ({ page }) => {
     await page.goto('./#/civ/Romans/bonus/0');
     const main = page.locator('main');
     await expect(main).toContainText('村民收集、建造和修理的速度 +5%');
@@ -42,7 +43,7 @@ test.describe('#317 文明加成「是否计入」标签', () => {
     const main = page.locator('main');
     await expect(main).toContainText('蝎式弩黄金费用 -50%');
     await expect(main).not.toContainText(BLANKET);
-    expect(await main.innerText()).toMatch(/等资源|真实成本|单位 PK/);
+    await expect(main).toContainText(/等资源|真实成本|单位 PK/);
   });
 
   test('#/bonuses 列表里罗马第 1、3 条不再显示「仅文本，未计入数值」', async ({ page }) => {
@@ -80,6 +81,30 @@ test.describe('#317 文明加成「是否计入」标签', () => {
       else if (!/真实成本|等资源|等采集时间/.test(t)) bad.push(`${u.civ}-${u.idx} 未写明由哪个工具计算`);
     }
     expect(bad).toEqual([]);
+  });
+
+  test('全部加成详情页：标「已计入」的不能同时显示「无 .dat 数据」（Steve 2026-10-21，#330）', async ({ page }) => {
+    test.setTimeout(180_000);
+    const counted: string[] = [];
+    const bad: string[] = [];
+    let tagged = 0;
+    for (const c of civsRaw as { en: string; bon: string[] }[])
+      for (let i = 0; i < c.bon.length; i++) {
+        await page.goto(`./#/civ/${c.en}/bonus/${i}`);
+        // 等正文的标签行渲染完（页眉和正文各一行），再读全部标签
+        await page.locator('#bonus .tag').first().waitFor();
+        const tags = await page.locator('main .tag').allInnerTexts();
+        const noDat = tags.some((t) => t.includes('无 .dat 数据'));
+        if (noDat) tagged++;
+        if (tags.some((t) => t.startsWith('已计入'))) {
+          counted.push(`${c.en}-${i}`);
+          if (noDat) bad.push(`${c.en}-${i}`);
+        }
+      }
+    expect(bad).toEqual([]);
+    // 防空转：凯尔特 / 朝鲜 / 突厥第 1 条在「已计入」里；没被工具计入的 src = text 加成仍显示「无 .dat 数据」
+    expect(counted).toEqual(expect.arrayContaining(['Celts-0', 'Koreans-0', 'Turks-0', 'Romans-0', 'Romans-2']));
+    expect(tagged).toBeGreaterThan(0);
   });
 
   for (const width of WIDTHS)
