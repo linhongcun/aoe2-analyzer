@@ -4,7 +4,7 @@ import { guardPage, WIDTHS } from './v0290-helpers';
 
 /**
  * v0.29.0 验收（#329）B 组：手机排版与交互（#313/#316 已并入 main：v0290-313|316.spec.ts）。Kent 写，先失败；标「守卫」的现在就应通过。
- * 搜索弱网（#325）单独在 v0290-325-search.spec.ts。
+ * 搜索弱网（#325）已并入 main（tests/e2e/v0290-325-search.spec.ts）。
  */
 guardPage();
 
