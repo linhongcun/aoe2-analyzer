@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import civsRaw from '../../src/data/civs.json' with { type: 'json' };
 import { guardPage, noOverflow, setTheme, THEMES, WIDTHS, wrappedFragments, wrappedNums } from './v0290-helpers';
 
 /**
@@ -63,6 +64,66 @@ test.describe('#275 开局步骤：数字与单位不断行', () => {
       expect(await page.locator('main').innerText()).not.toMatch(/[0-9a-f]{64}/i);
       await expect(page.locator('main')).not.toContainText('SHA256');
       expect(await wrappedNums(page, 'main')).toEqual([]);
+    });
+});
+
+/** 加成详情页标题「… · 文明加成 N」：末尾序号 N 和「加成」是否在同一行（逐字取 Range 的 clientRects，同 wrappedNums 的量法）。返回 null 表示标题不含该格式 */
+async function bonusTitleOrphan(page: Page): Promise<boolean | null> {
+  return page
+    .locator('main h1')
+    .first()
+    .evaluate((h1) => {
+      const nodes: { n: Text; start: number }[] = [];
+      let text = '';
+      const tw = document.createTreeWalker(h1, NodeFilter.SHOW_TEXT);
+      for (let n = tw.nextNode() as Text | null; n; n = tw.nextNode() as Text | null) {
+        // 只看标题本身的文字，不含 <small> 里的英文副标题
+        if (n.parentElement !== h1) continue;
+        nodes.push({ n, start: text.length });
+        text += n.data;
+      }
+      const m = /文明加成(\s*)(\d+)\s*$/.exec(text);
+      if (!m) return null;
+      const at = (i: number) => {
+        const k = nodes.findLast((x) => x.start <= i)!;
+        return [k.n, i - k.start] as const;
+      };
+      const lineOf = (from: number, to: number) => {
+        const r = document.createRange();
+        r.setStart(...at(from));
+        r.setEnd(...at(to - 1));
+        r.setEnd(r.endContainer, r.endOffset + 1);
+        const rs = [...r.getClientRects()].filter((x) => x.width > 0 && x.height > 0);
+        return { top: Math.min(...rs.map((x) => x.top)), bottom: Math.max(...rs.map((x) => x.bottom)) };
+      };
+      const cheng = m.index + '文明加'.length; // 「成」
+      const num = m.index + '文明加成'.length + m[1]!.length;
+      const a = lineOf(cheng, cheng + 1),
+        b = lineOf(num, num + m[2]!.length);
+      // 不在同一行：两段的垂直区间不重叠
+      return !(b.top < a.bottom - 2 && b.bottom > a.top + 2);
+    });
+}
+test.describe('#275 文明加成详情页标题：序号不单独成行（Steve 2026-10-21 并入，起因土耳其 @360）', () => {
+  for (const width of WIDTHS)
+    test(`全部加成详情页标题 @${width}：「加成」与序号 N 在同一行`, async ({ page }) => {
+      test.setTimeout(180_000);
+      await page.setViewportSize({ width, height: 900 });
+      const bad: string[] = [];
+      let checked = 0;
+      for (const c of civsRaw as { en: string; bon: string[] }[])
+        for (let i = 0; i < c.bon.length; i++) {
+          await page.goto(`./#/civ/${c.en}/bonus/${i}`);
+          await expect(page.locator('main h1').first()).toContainText(`文明加成 ${i + 1}`);
+          const orphan = await bonusTitleOrphan(page);
+          if (orphan === null) bad.push(`${c.en}/bonus/${i} 标题不是「… · 文明加成 N」`);
+          else {
+            checked++;
+            if (orphan) bad.push(`#/civ/${c.en}/bonus/${i}「${(await page.locator('main h1').first().innerText()).replace(/\s+/g, ' ')}」`);
+          }
+        }
+      expect(checked, '防空转：225 个标题都量到').toBe(225);
+      expect(bad).toEqual([]);
     });
 });
 
