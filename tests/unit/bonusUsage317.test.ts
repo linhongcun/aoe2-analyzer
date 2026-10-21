@@ -1,12 +1,19 @@
 // issue 317：经济/费用类文明加成（src = 'eco'）的「是否计入」标签必须与各工具的实际计算一致。
 // 判定不靠标签自身：开局模拟用「去掉该加成的 civEco 行后重跑」看结果是否变化，真实成本 / 训练费用直接调用工具函数。
+// 开局模拟全量重跑约 60 次 × 8 个开局方案，太慢（CI 上 60 s 以上），结果存成快照 fixtures/bonusUsage317-sim.json：
+// 快照带输入指纹（civEco、开局方案、升级数据、buildSim.ts 源码），任一变化本测试即失败，提示重新生成：
+//   UPDATE_BONUS317=1 npx vitest run tests/unit/bonusUsage317.test.ts
+// 平时只抽两条（条顿第 1 条、阿兹特克第 1 条）在记录的开局方案上现场重跑，确认快照与真实计算一致。
+import { createHash } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { beforeAll, describe, expect, it } from 'vitest';
 import eco from '../../src/data/eco.json';
 import units from '../../src/data/units.json';
 import { civs, loadCore, type Core } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
 import { civBonuses, type CivBonusEnt } from '../../src/domain/civBonus';
-import { bonusUsage, usageLevel } from '../../src/domain/bonusUsage';
+import { bonusUsage, showEcoSourceTag, usageLevel } from '../../src/domain/bonusUsage';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 import { simSupport } from '../../src/domain/simSupport';
 import { gatherModel } from '../../src/domain/realCost';
@@ -20,8 +27,28 @@ const ups = Object.fromEntries((units as { id: number; up?: unknown }[]).filter(
 const ECO = civs.flatMap((c) => civBonuses(c)).filter((b) => b.src === 'eco' && !b.team);
 const bon = (id: string) => ECO.find((b) => b.id === id)!;
 const line = (b: CivBonusEnt, tool: string) => bonusUsage(b).filter((l) => l.tool === tool);
-const runAll = (civ: string, e: EcoData) =>
-  JSON.stringify(buildOrders.map((bo) => simulateBuild(bo, civ, e, ups, { walkTiles: 4 }).steps.map((s) => [s.doneAt, s.stock])));
+const runBo = (bo: (typeof buildOrders)[number], civ: string, e: EcoData) =>
+  JSON.stringify(simulateBuild(bo, civ, e, ups, { walkTiles: 4 }).steps.map((s) => [s.doneAt, s.stock]));
+const techsOf = (b: CivBonusEnt) => b.dat.map((d) => d.tech).filter((t) => t > 0);
+/** 去掉该加成后第一个结果变化的开局方案 id；都不变为 null */
+const firstChanged = (b: CivBonusEnt, bos = buildOrders): string | null => {
+  const e = without(b.civ, techsOf(b));
+  return bos.find((bo) => runBo(bo, b.civ, e) !== runBo(bo, b.civ, E))?.id ?? null;
+};
+/** 需要开局模拟对照的加成：支持的文明、有 .dat 正 tech 号 */
+const SIM_CHECKED = ECO.filter((b) => simSupport(b.civ) && techsOf(b).length > 0);
+const SNAP_URL = new URL('./fixtures/bonusUsage317-sim.json', import.meta.url);
+const sha = (...xs: string[]) => createHash('sha256').update(xs.join('\n')).digest('hex');
+const inputsHash = () =>
+  sha(
+    JSON.stringify(E.civEco),
+    JSON.stringify(buildOrders),
+    JSON.stringify(ups),
+    readFileSync(fileURLToPath(new URL('../../src/domain/buildSim.ts', import.meta.url)), 'utf8'),
+  );
+type Snap = { inputs: string; firstChanged: Record<string, string | null> };
+const UPDATE = !!process.env.UPDATE_BONUS317;
+const readSnap = (): Snap => JSON.parse(readFileSync(SNAP_URL, 'utf8')) as Snap;
 const without = (civ: string, techs: number[]): EcoData => ({
   ...E,
   civEco: { ...E.civEco, [civ]: E.civEco[civ]!.filter((r) => !techs.includes((r as { tech?: number }).tech ?? NaN)) },
@@ -85,28 +112,53 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
   it('覆盖面', () => {
     expect(ECO.length).toBeGreaterThan(100);
   });
+  it.runIf(UPDATE)(
+    '（UPDATE_BONUS317=1）重新生成开局模拟快照',
+    () => {
+      const snap: Snap = { inputs: inputsHash(), firstChanged: Object.fromEntries(SIM_CHECKED.map((b) => [b.id, firstChanged(b)])) };
+      writeFileSync(SNAP_URL, JSON.stringify(snap, null, 2) + '\n');
+    },
+    300_000,
+  );
+  it('开局模拟快照与当前输入一致（输入变了请按文件头命令重新生成并审阅 diff）', () => {
+    const snap = readSnap();
+    expect(snap.inputs).toBe(inputsHash());
+    expect(Object.keys(snap.firstChanged).sort()).toEqual(SIM_CHECKED.map((b) => b.id).sort());
+  });
+  it('快照抽查：条顿第 1 条（农田 -40%）、阿兹特克第 1 条（初始黄金 +50）现场重跑与快照一致', () => {
+    const snap = readSnap();
+    for (const id of ['Teutons-0', 'Aztecs-0']) {
+      const bo = snap.firstChanged[id];
+      expect([id, bo]).not.toEqual([id, null]);
+      expect([
+        id,
+        firstChanged(
+          bon(id),
+          buildOrders.filter((x) => x.id === bo),
+        ),
+      ]).toEqual([id, bo]);
+    }
+  });
   it('开局模拟：标「已计入」当且仅当 去掉该加成后结果变化；不支持的文明整页按通用计算', () => {
+    const snap = readSnap();
     const bad: string[] = [];
-    const baseCache = new Map<string, string>();
     for (const b of ECO) {
       const sim = line(b, 'sim')[0];
       if (!simSupport(b.civ)) {
         if (sim && sim.on !== false) bad.push(b.id + ' 不支持的文明不能标已计入');
         continue;
       }
-      const techs = b.dat.map((d) => d.tech).filter((t) => t > 0);
-      if (!techs.length) {
+      if (!techsOf(b).length) {
         if (sim && sim.on !== null) bad.push(b.id + ' 科技树汇总效果只能标未核对');
         continue;
       }
-      if (!baseCache.has(b.civ)) baseCache.set(b.civ, runAll(b.civ, E));
-      const changed = runAll(b.civ, without(b.civ, techs)) !== baseCache.get(b.civ);
+      const changed = snap.firstChanged[b.id] !== null;
       if (changed && sim?.on !== true) bad.push(`${b.id} 改变了开局结果却没标已计入`);
       if (!changed && sim?.on === true && !UNTRIGGERED[b.id]) bad.push(`${b.id} 标已计入但现有开局方案都不受影响，需在 UNTRIGGERED 写明原因`);
       if (changed && UNTRIGGERED[b.id]) bad.push(`${b.id} 已经会改变开局结果，从 UNTRIGGERED 移除`);
     }
     expect(bad).toEqual([]);
-  }, 120_000);
+  });
   it('真实成本 · 采集：标「已计入」当且仅当 gatherModel 的 applied 引用了这条加成', () => {
     for (const b of ECO) {
       const text = civs.find((c) => c.en === b.civ)!.bon[b.idx as number];
@@ -122,6 +174,19 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
       );
       expect([b.id, line(b, 'cost').some((l) => l.on)]).toEqual([b.id, hit]);
     }
+  });
+  it('来源标签「.dat 经济/费用效果（文本展示）」：有工具计入的不显示，没有工具计入的仍显示（Steve 设计审查）', () => {
+    expect(showEcoSourceTag(bon('Romans-0'))).toBe(false);
+    expect(showEcoSourceTag(bon('Romans-2'))).toBe(false);
+    expect(showEcoSourceTag(bon('Chinese-0'))).toBe(true);
+    let hidden = 0;
+    for (const b of ECO) {
+      const counted = bonusUsage(b).some((l) => l.on === true);
+      expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !counted]);
+      if (counted) hidden++;
+    }
+    expect(hidden).toBeGreaterThan(0);
+    expect(hidden).toBeLessThan(ECO.length);
   });
   it('没有任何工具计入的加成保持「仅文本」', () => {
     for (const b of ECO) if (!bonusUsage(b).some((l) => l.on)) expect([b.id, usageLevel(bonusUsage(b))]).toEqual([b.id, 'none']);
