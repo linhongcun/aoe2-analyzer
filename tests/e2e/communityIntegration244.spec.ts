@@ -47,9 +47,9 @@ for (const [label, path, id] of entries) {
     await page.goto('./#/');
     await page.getByRole('button', { name: '全局搜索', exact: true }).click();
     const dialog = page.getByRole('dialog', { name: '全局搜索' });
-    await dialog.getByRole('textbox').fill(label);
+    await dialog.getByRole('combobox').fill(label);
     await expect(dialog.locator('.cmdk-t b', { hasText: label })).toBeVisible();
-    await dialog.getByRole('textbox').press('Enter');
+    await dialog.getByRole('combobox').press('Enter');
     await expect(page.getByTestId(id)).toBeVisible();
     expect(new URL(page.url()).hash.split('?')[0]).toBe('#' + path);
   });
