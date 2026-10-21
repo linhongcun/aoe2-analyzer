@@ -3,8 +3,7 @@ import civsRaw from '../../src/data/civs.json' with { type: 'json' };
 import { guardPage, WIDTHS } from './v0290-helpers';
 
 /**
- * v0.29.0 验收（#329）B 组：手机排版与交互（#313/#316 已并入 main：v0290-313|316.spec.ts）。Kent 写，先失败；标「守卫」的现在就应通过。
- * 搜索弱网（#325）已并入 main（tests/e2e/v0290-325-search.spec.ts）。
+ * v0.29.0 验收（#329）B 组：手机排版与交互（#313/#315/#316/#325 已并入 main）。Kent 写，先失败；标「守卫」的现在就应通过。
  */
 guardPage();
 
@@ -72,33 +71,4 @@ test.describe('#275 团队加成详情页标题：只在文明名与「团队加
       expect(checked, '防空转：56 个团队加成标题都量到').toBe((civsRaw as unknown[]).length);
       expect(bad).toEqual([]);
     });
-});
-
-// ---------- #315 ----------
-test.describe('#315 404 页容错建议', () => {
-  for (const [input, label] of [
-    ['/glossery', '术语与缩写'],
-    ['/glosary', '术语与缩写'],
-    ['/buildorder', '开局流程'],
-    ['/build-orders', '开局流程'],
-    ['/tradeincome', '商路供给'],
-  ] as const)
-    test(`#${input} 第 1 条建议是「${label}」`, async ({ page }) => {
-      await page.goto('./#' + input);
-      await expect(page.getByRole('heading', { level: 1, name: '找不到该页' })).toBeVisible();
-      const links = page.locator('.not-found-suggestions a');
-      await expect(links.first()).toHaveText(label);
-      expect(await links.count()).toBeLessThanOrEqual(3);
-    });
-  test('守卫：#/hotkey 建议 快捷键速查，#/civ 建议 文明', async ({ page }) => {
-    await page.goto('./#/hotkey');
-    await expect(page.locator('.not-found-suggestions a').first()).toHaveText('快捷键速查');
-    await page.goto('./#/civ');
-    await expect(page.locator('.not-found-suggestions a').first()).toHaveText('文明');
-  });
-  test('反例：#/ab 不出建议', async ({ page }) => {
-    await page.goto('./#/ab');
-    await expect(page.getByRole('heading', { level: 1, name: '找不到该页' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '你是不是要找' })).toHaveCount(0);
-  });
 });
