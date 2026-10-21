@@ -1,56 +1,17 @@
 /**
- * v0.29.0 验收（#329）C 组：工程。Kent 写。
- * - #328：不调高全局超时；relatedTechs193 的慢用例单独设超时，覆盖范围和断言不变。（先失败）
- * - #322：纯重构的金标准。期望值在 main @ bb2235a（v0.28.0 发布提交）上一次性录下，存在 fixtures/v0290-322-golden.json，
- *   这里只比对（现在就应通过，重构后也必须通过）。如确需重录，须在 PR 里说明并由 Kent 重录。
- *   录制命令：V0290_RECORD=1 npx vitest run tests/unit/v0290-C.test.ts
+ * v0.29.0 验收（#329）C 组：#322 纯重构金标准。Kent 写。
+ * #328 已并入 main（tests/unit/v0290-328.test.ts）。
+ * 期望值在 main @ bb2235a（v0.28.0 发布提交）上一次性录下，存在 fixtures/v0290-322-golden.json，
+ * 这里只比对（现在就应通过，重构后也必须通过）。如确需重录，须在 PR 里说明并由 Kent 重录。
+ * 录制命令：V0290_RECORD=1 npx vitest run tests/unit/v0290-C.test.ts
  */
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import civsRaw from '../../src/data/civs.json';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
 import { countForBudget } from '../../src/domain/duel';
 import { countForTime, gatherModel, realCost } from '../../src/domain/realCost';
 import { units } from './helpers';
-
-// ---------- #328 ----------
-describe('#328 relatedTechs193 慢用例：单独设超时，不调全局', () => {
-  const config = readFileSync('vite.config.ts', 'utf8');
-  it('全局 testTimeout 保持默认（vite.config.ts 不设，或不超过 5000；也没有 vitest.config.*）', () => {
-    const m = config.match(/testTimeout\s*:\s*([^,}\s]+)/);
-    if (m) expect(Number(m[1]!.replace(/_/g, ''))).toBeLessThanOrEqual(5000);
-    for (const f of ['vitest.config.ts', 'vitest.config.mts', 'vitest.config.js', 'vitest.workspace.ts']) expect(existsSync(f), f).toBe(false);
-  });
-  it('npm test 脚本和 CI 工作流不通过命令行或环境变量调高超时', () => {
-    const pkg = JSON.parse(readFileSync('package.json', 'utf8')) as { scripts: Record<string, string> };
-    expect(pkg.scripts.test).not.toMatch(/timeout/i);
-    for (const wf of ['.github/workflows/ci.yml', '.github/workflows/release.yml'])
-      expect(readFileSync(wf, 'utf8'), wf).not.toMatch(/testTimeout|test-timeout|VITEST_.*TIMEOUT/i);
-  });
-  const src = readFileSync('tests/unit/relatedTechs193.test.ts', 'utf8');
-  const title = '全部科技到单位与单位到科技双向一致';
-  const start = src.indexOf(title);
-  const body = start < 0 ? '' : src.slice(start, src.indexOf('\n  it(', start) < 0 ? undefined : src.indexOf('\n  it(', start));
-  it('用例仍在，覆盖范围不变：全部单位 × 全部科技，比对 techAffects 与 CIV_TECH_EXTRAS', () => {
-    expect(start).toBeGreaterThan(0);
-    // 不能改成 it.skip / it.todo / it.only / xit
-    expect(src.slice(Math.max(0, start - 8), start)).toMatch(/(^|[^.\w])it\(\s*['"`]$/);
-    for (const s of [
-      'for (const u of units)',
-      'for (const t of techs)',
-      'unitRelatedTechs(ctx, u)',
-      'techAffects(t, [u], [])',
-      'CIV_TECH_EXTRAS',
-      '`${u.en} / ${t.en}`',
-    ])
-      expect(body, s).toContain(s);
-  });
-  it('这条用例单独设了超时（≥ 10000 ms，issue 建议 15000）', () => {
-    const own = body.match(/\{\s*timeout\s*:\s*([\d_]+)\s*\}/) ?? body.match(/\}\s*,\s*([\d_]+)\s*\)\s*;?\s*$/);
-    expect(own, '未见单条 timeout。若改用预先算好的数据或优化算法，请在 PR 里说明，由 Kent 按新实现改写本条').not.toBeNull();
-    expect(Number(own![1]!.replace(/_/g, ''))).toBeGreaterThanOrEqual(10000);
-  });
-});
 
 // ---------- #322 ----------
 const FIXTURE = 'tests/unit/fixtures/v0290-322-golden.json';
