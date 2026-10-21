@@ -26,6 +26,21 @@ for (const width of [360, 375, 390, 1280]) {
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     });
 
+    test('404 页「打开全局搜索」按 Esc 关闭后焦点回到该按钮', async ({ page }) => {
+      await page.goto('./#/no-such-page-291');
+      const open = page.getByRole('button', { name: '打开全局搜索', exact: true });
+      const dialog = page.getByRole('dialog', { name: '全局搜索', exact: true });
+      await open.click();
+      await expect(dialog.getByRole('combobox')).toBeFocused();
+      await page.keyboard.press('Escape');
+      await expect(dialog).toHaveCount(0);
+      await expect(open).toBeFocused();
+      await open.press('Enter');
+      await expect(dialog.getByRole('combobox')).toBeFocused();
+      await page.keyboard.press('Escape');
+      await expect(open).toBeFocused();
+    });
+
     test('按钮打开后 Esc 和遮罩关闭都归还焦点', async ({ page }) => {
       const button = page.getByRole('button', { name: '全局搜索', exact: true });
       const dialog = page.getByRole('dialog', { name: '全局搜索', exact: true });
