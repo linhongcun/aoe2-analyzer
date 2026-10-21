@@ -143,5 +143,6 @@ describe('#281 分层边界检查脚本', () => {
     expect(warn.stdout).toMatch(/^分层边界检查（#281）：\d+ 处越层引用/);
     const report = JSON.parse(run('--json').stdout) as Edge[];
     expect(run('--strict').status).toBe(report.length ? 1 : 0);
-  });
+    // 连续起 3 个 node 子进程各扫一遍 src，CI 满载时会超过默认 5s（3e3b8b1 上实测超时），单独放宽
+  }, 30_000);
 });
