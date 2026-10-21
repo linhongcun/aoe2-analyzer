@@ -67,8 +67,12 @@ test.describe('#275 开局步骤：数字与单位不断行', () => {
     });
 });
 
-/** 加成详情页标题「… · 文明加成 N」：末尾序号 N 和「加成」是否在同一行（逐字取 Range 的 clientRects，同 wrappedNums 的量法）。返回 null 表示标题不含该格式 */
-async function bonusTitleOrphan(page: Page): Promise<boolean | null> {
+/**
+ * 加成详情页标题「文明名 · 文明加成 N」的断行（逐字取 Range 的 clientRects，同 wrappedNums 的量法）：
+ * Steve 2026-10-21 20:31：「文明加成 N」整体不断行，文明名本身也不断；放不下时只在文明名与「文明加成」之间换行。
+ * 返回各段占了几行；null 表示标题不含该格式。只看 h1 自身的文字，不含 <small> 里的英文副标题。
+ */
+async function bonusTitleLines(page: Page): Promise<{ civ: number; tail: number; num: boolean } | null> {
   return page
     .locator('main h1')
     .first()
@@ -77,36 +81,49 @@ async function bonusTitleOrphan(page: Page): Promise<boolean | null> {
       let text = '';
       const tw = document.createTreeWalker(h1, NodeFilter.SHOW_TEXT);
       for (let n = tw.nextNode() as Text | null; n; n = tw.nextNode() as Text | null) {
-        // 只看标题本身的文字，不含 <small> 里的英文副标题
         if (n.parentElement !== h1) continue;
         nodes.push({ n, start: text.length });
         text += n.data;
       }
-      const m = /文明加成(\s*)(\d+)\s*$/.exec(text);
+      const m = /^(\s*)(\S.*?)\s*·\s*(文明加成\s*\d+)\s*$/.exec(text);
       if (!m) return null;
       const at = (i: number) => {
-        const k = nodes.findLast((x) => x.start <= i)!;
+        const k = nodes.findLast((x) => x.start <= i && i < x.start + x.n.data.length)!;
         return [k.n, i - k.start] as const;
       };
-      const lineOf = (from: number, to: number) => {
-        const r = document.createRange();
-        r.setStart(...at(from));
-        r.setEnd(...at(to - 1));
-        r.setEnd(r.endContainer, r.endOffset + 1);
-        const rs = [...r.getClientRects()].filter((x) => x.width > 0 && x.height > 0);
-        return { top: Math.min(...rs.map((x) => x.top)), bottom: Math.max(...rs.map((x) => x.bottom)) };
+      /** 区间 [from, to) 内每个非空白字符的行矩形，按垂直区间归并成行 */
+      const lines = (from: number, to: number) => {
+        const out: { top: number; bottom: number }[] = [];
+        for (let i = from; i < to; i++) {
+          if (/\s/.test(text[i]!)) continue;
+          const r = document.createRange();
+          const [n, o] = at(i);
+          r.setStart(n, o);
+          r.setEnd(n, o + 1);
+          for (const x of r.getClientRects())
+            if (x.width > 0 && x.height > 0 && !out.some((l) => x.top < l.bottom - 2 && x.bottom > l.top + 2)) out.push({ top: x.top, bottom: x.bottom });
+        }
+        return out;
       };
-      const cheng = m.index + '文明加'.length; // 「成」
-      const num = m.index + '文明加成'.length + m[1]!.length;
-      const a = lineOf(cheng, cheng + 1),
-        b = lineOf(num, num + m[2]!.length);
-      // 不在同一行：两段的垂直区间不重叠
-      return !(b.top < a.bottom - 2 && b.bottom > a.top + 2);
+      const civFrom = m[1]!.length,
+        civTo = civFrom + m[2]!.length;
+      const tailFrom = text.indexOf(m[3]!, civTo),
+        tailTo = tailFrom + m[3]!.length;
+      const numFrom = tailFrom + m[3]!.search(/\d/);
+      const chengAt = tailFrom + m[3]!.indexOf('成');
+      const cheng = lines(chengAt, chengAt + 1);
+      const num = lines(numFrom, tailTo);
+      return {
+        civ: lines(civFrom, civTo).length,
+        tail: lines(tailFrom, tailTo).length,
+        // 序号单独成行：「成」与 N 不在同一行
+        num: !(num[0]!.top < cheng[0]!.bottom - 2 && num[0]!.bottom > cheng[0]!.top + 2),
+      };
     });
 }
-test.describe('#275 文明加成详情页标题：序号不单独成行（Steve 2026-10-21 并入，起因土耳其 @360）', () => {
+test.describe('#275 文明加成详情页标题：只在文明名与「文明加成」之间换行（Steve 2026-10-21 并入，起因土耳其 @360）', () => {
   for (const width of WIDTHS)
-    test(`全部加成详情页标题 @${width}：「加成」与序号 N 在同一行`, async ({ page }) => {
+    test(`全部加成详情页标题 @${width}：文明名不断行，「文明加成 N」不断行，序号不单独成行`, async ({ page }) => {
       test.setTimeout(180_000);
       await page.setViewportSize({ width, height: 900 });
       const bad: string[] = [];
@@ -115,12 +132,15 @@ test.describe('#275 文明加成详情页标题：序号不单独成行（Steve 
         for (let i = 0; i < c.bon.length; i++) {
           await page.goto(`./#/civ/${c.en}/bonus/${i}`);
           await expect(page.locator('main h1').first()).toContainText(`文明加成 ${i + 1}`);
-          const orphan = await bonusTitleOrphan(page);
-          if (orphan === null) bad.push(`${c.en}/bonus/${i} 标题不是「… · 文明加成 N」`);
-          else {
-            checked++;
-            if (orphan) bad.push(`#/civ/${c.en}/bonus/${i}「${(await page.locator('main h1').first().innerText()).replace(/\s+/g, ' ')}」`);
+          const r = await bonusTitleLines(page);
+          if (r === null) {
+            bad.push(`${c.en}/bonus/${i} 标题不是「文明名 · 文明加成 N」`);
+            continue;
           }
+          checked++;
+          const why = [r.civ > 1 && `文明名断成 ${r.civ} 行`, r.tail > 1 && `「文明加成 N」断成 ${r.tail} 行`, r.num && '序号单独成行'].filter(Boolean);
+          if (why.length)
+            bad.push(`#/civ/${c.en}/bonus/${i}「${(await page.locator('main h1').first().innerText()).replace(/\s+/g, ' ')}」：${why.join('、')}`);
         }
       expect(checked, '防空转：225 个标题都量到').toBe(225);
       expect(bad).toEqual([]);
@@ -260,6 +280,76 @@ test.describe('#316 首页与导航', () => {
       await page.goto('./#/');
       await expect(page.locator('#home a.hcard').first()).toBeVisible();
       expect(await wrappedNums(page, 'main')).toEqual([]);
+    });
+});
+
+// ---------- #316 新增城镇中心按位置给两种解读（Steve 2026-10-21 21:11） ----------
+// 公开来源：https://aoecoach.com/en/resources/buildings/town-center/ （Castle Age Boom；Forward Town Center；How to counter it）
+// 位置用观察「可见范围」：enemy-front（敌方正面）= 对方自家附近 → 扩张经济；own-approach（接近自家的通路）= 前线 / 我方资源点 → 前置进攻。
+// enemy-edge 归属待 Steve 定，不断言。判定只看两次结果里「互不相同」的文字（去掉观察快照里的范围名称本身），不限定 DOM 结构。
+const AREA_ZH = ['范围未确认', '敌方正面当前可见区域', '敌方侧面或外围当前可见区域', '接近自家的一段当前可见通路'];
+const TC_BOOM = /扩张|经济/;
+const TC_FORWARD = /前置|进攻|压制/;
+const TC_BOOM_NEXT = /同步|跟着|一起|更快|也(扩张|发展)|施压|惩罚|出兵|进攻|攻击/;
+const TC_FORWARD_NEXT = /争夺|驱逐|拆|投石|攻城|阻止|攻击|反击|防守|施压/;
+async function tcResultLines(page: Page, area: string): Promise<string[]> {
+  await page.goto('./#/scouting');
+  await page.getByLabel('情境', { exact: true }).selectOption('walled');
+  await expect(page.getByLabel('我的当前阶段', { exact: true })).toHaveValue('castle');
+  const obs = page.locator('[data-observation="new-town-center"]');
+  await obs.getByLabel('新增城镇中心：状态', { exact: true }).selectOption('seen');
+  await obs.locator('summary').click();
+  await obs.getByLabel('新增城镇中心：可见范围', { exact: true }).selectOption(area);
+  const result = page.getByTestId('scouting-result');
+  await expect(result).toHaveAttribute('data-analysis-status', 'covered');
+  // 展开结果区里的全部折叠项，读用户能看到的文字
+  await result.evaluate((el) => el.querySelectorAll('details').forEach((d) => (d.open = true)));
+  const text = await result.innerText();
+  return text
+    .split('\n')
+    .map((l) => AREA_ZH.reduce((x, zh) => x.split(zh).join(''), l).trim())
+    .filter(Boolean);
+}
+test.describe('#316 「看见新增城镇中心」按位置给两种解读', () => {
+  test('对方自家附近（敌方正面）给扩张经济的解读和应对；前线 / 我方资源点附近（接近自家的通路）给前置进攻的解读和应对', async ({ page }) => {
+    const near = await tcResultLines(page, 'enemy-front');
+    const fwd = await tcResultLines(page, 'own-approach');
+    const onlyNear = near.filter((l) => !fwd.includes(l)),
+      onlyFwd = fwd.filter((l) => !near.includes(l));
+    expect(
+      onlyFwd.some((l) => TC_FORWARD.test(l)),
+      `前置进攻的解读：${JSON.stringify(onlyFwd)}`,
+    ).toBe(true);
+    expect(
+      onlyFwd.some((l) => TC_FORWARD_NEXT.test(l)),
+      `前置进攻的应对（争夺位置 / 出兵或攻城武器拆除）：${JSON.stringify(onlyFwd)}`,
+    ).toBe(true);
+    expect(
+      onlyNear.some((l) => TC_BOOM.test(l)),
+      `扩张经济的解读：${JSON.stringify(onlyNear)}`,
+    ).toBe(true);
+    expect(
+      onlyNear.some((l) => TC_BOOM_NEXT.test(l)),
+      `扩张经济的应对（同步扩张或用军队施压）：${JSON.stringify(onlyNear)}`,
+    ).toBe(true);
+  });
+  test('「看见新增城镇中心」的来源只有 AoE2 Coach，不标「本站整理」', async ({ page }) => {
+    await page.goto('./#/scouting');
+    await page.getByLabel('情境', { exact: true }).selectOption('walled');
+    const li = page.locator('[data-testid="scouting-signals"] > li[data-signal="extra-tc"]');
+    await expect(li).toContainText('看见新增城镇中心');
+    await expect(li.locator('a[href^="http"]')).toHaveCount(1);
+    await expect(li.locator('a[href^="http"]')).toHaveAttribute('href', 'https://aoecoach.com/en/resources/buildings/town-center/');
+    await expect(li).not.toContainText('本站整理');
+  });
+  for (const width of WIDTHS)
+    test(`#/scouting 城堡阶段、新增城镇中心两种位置 @${width}：.num 不折行、无横向滚动`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      for (const area of ['enemy-front', 'own-approach']) {
+        await tcResultLines(page, area);
+        expect(await wrappedNums(page, 'main'), area).toEqual([]);
+        await noOverflow(page);
+      }
     });
 });
 
