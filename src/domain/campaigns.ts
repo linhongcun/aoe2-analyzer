@@ -129,6 +129,8 @@ export function normalizeCampaignName(value: string): string {
     .replace(/[\s·・.\-_'’]/g, '');
 }
 const compareId = (a: Campaign, b: Campaign) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+/** issue 314：年份相同时按英文名（nameEn）字母顺序，与页面文案「同一年发行的按英文名字母顺序排列」一致；英文名相同才退回内部 id，保证顺序稳定 */
+const compareNameEn = (a: Campaign, b: Campaign) => a.nameEn.localeCompare(b.nameEn, 'en') || compareId(a, b);
 function compareYear(a: number | null, b: number | null): number {
   if (a === null) return b === null ? 0 : 1;
   if (b === null) return -1;
@@ -148,7 +150,7 @@ export function filterCampaigns(filters: CampaignFilters, entries: readonly Camp
     )
     .sort((a, b) => {
       const years = filters.sort === 'history' ? compareYear(a.historicalStartYear, b.historicalStartYear) : compareYear(a.releaseYear, b.releaseYear);
-      return years || compareId(a, b);
+      return years || compareNameEn(a, b);
     });
 }
 export function campaignHistoricalRange(entry: Pick<Campaign, 'historicalStartYear' | 'historicalEndYear'>): string {
