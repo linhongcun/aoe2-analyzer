@@ -20,7 +20,7 @@ export function makeSimContext(techs: Tech[], trees: Trees): SimContext {
   return { techs, trees, techByEn };
 }
 
-// 纯函数放在无数据依赖的模块里，单位列表等轻量链路不必引入效果数据（#280）。
+// 纯函数放在无数据依赖的模块里，单位列表等轻量链路不必引入效果数据（issue 280）。
 import { civStatus } from './civStatus';
 export { civStatus };
 

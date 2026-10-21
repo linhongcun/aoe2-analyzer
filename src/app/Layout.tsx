@@ -13,13 +13,13 @@ import type { ThemePreference } from './theme/theme';
 import '../shared/styles/editorial-shell.css';
 import '../shared/styles/community-tools.css';
 
-// 全局搜索带着拼音索引、术语表和加成数据，改为第一次打开时才加载，不进首页入口包（#280）。
+// 全局搜索带着拼音索引、术语表和加成数据，改为第一次打开时才加载，不进首页入口包（issue 280）。
 const loadCommandPalette = () => import('../features/search/components/CommandPalette');
 const CommandPalette = lazy(loadCommandPalette);
 
 /**
  * 搜索分包加载期间（通常不到一眨眼）先放一个不可见的输入框接住焦点和输入（含输入法），
- * 弹窗出现后把已输入的文字作为初始查询带进去，避免按 Ctrl+K 后立刻输入时丢字（#280）。
+ * 弹窗出现后把已输入的文字作为初始查询带进去，避免按 Ctrl+K 后立刻输入时丢字（issue 280）。
  */
 const HIDDEN: CSSProperties = { position: 'fixed', top: 0, left: 0, width: 1, height: 1, opacity: 0, border: 0, padding: 0 };
 function PalettePending({ onType, onClose }: { onType: (value: string) => void; onClose: () => void }) {

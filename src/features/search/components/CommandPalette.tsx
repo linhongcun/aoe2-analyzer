@@ -15,7 +15,7 @@ export default function CommandPalette({
 }: {
   open: boolean;
   onClose: () => void;
-  /** 懒加载期间已输入的文字，挂载时作为初始查询（#280） */
+  /** 懒加载期间已输入的文字，挂载时作为初始查询（issue 280） */
   initialQuery?: string;
 }) {
   const idx = useSearchIndex();

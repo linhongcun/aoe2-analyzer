@@ -87,5 +87,5 @@ export function affectedUnits(groups: readonly { rows: readonly { units: readonl
 
 /** 单位总数口径（#14，Steve 定）：只数玩家能选的单位系列，精锐版并入对应单位计，按英文名去重。首页与列表页共用 */
 export const unitCount = (units: readonly Unit[], f: Families): number => collapse(units, f).length;
-// 文案放在无依赖的 shared 模块，导航配置不必为一句文案引入单位数据链（#280）。
+// 文案放在无依赖的 shared 模块，导航配置不必为一句文案引入单位数据链（issue 280）。
 export { UNIT_COUNT_NOTE, unitCountLabel } from '../shared/utils/unitCountLabel';
