@@ -86,6 +86,8 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(page.getByTestId('review-event')).toHaveCount(0);
     await expect(page.getByTestId('review-attempt')).toHaveCount(0);
     await expect(page.getByRole('status').first()).toContainText('已清空');
+    // 清空提示只出现一次：状态行之外不再重复「已清空」。
+    expect((await page.locator('.mr-notice').allInnerTexts()).join('\n').match(/已清空/g)).toHaveLength(1);
     const cleared = await getBackup(page);
     expect(JSON.parse((await page.evaluate((name) => localStorage.getItem(name), key))!)).toEqual(cleared);
     const undoBox = await undo.boundingBox();
@@ -106,6 +108,13 @@ for (const width of [360, 375, 390, 1280]) {
     ).toBe(true);
     await noOverflow();
 
+    await clear.click();
+    await confirm.click();
+    await expect(undo).toBeVisible();
+    // 清空后开始输入新内容：撤销收起，新内容不会被旧草稿覆盖。
+    await field(page, '复盘标题').fill('清空后的新内容');
+    await expect(undo).toHaveCount(0);
+    await expect(field(page, '复盘标题')).toHaveValue('清空后的新内容');
     await clear.click();
     await confirm.click();
     await expect(undo).toBeVisible();

@@ -9,7 +9,8 @@ type DraftAction = { type: 'edit'; draft: MatchReviewDraft } | { type: 'clear' }
 export function matchReviewDraftReducer(state: DraftState, action: DraftAction): DraftState {
   switch (action.type) {
     case 'edit':
-      return { ...state, draft: action.draft };
+      // A new edit after clearing supersedes the undo snapshot, so undo can never overwrite newer input.
+      return { draft: action.draft, beforeClear: null };
     case 'clear':
       return { draft: emptyMatchReview(), beforeClear: state.draft };
     case 'undo':

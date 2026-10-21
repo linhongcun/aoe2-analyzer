@@ -394,7 +394,7 @@ export default function MatchReview() {
           </p>
           {beforeClear && (
             <div className="mr-notice mr-actions">
-              <span>已清空。可恢复清空前内容，仅本次页面会话有效。</span>
+              <span>可恢复清空前内容；开始输入新内容后不再提供，仅本次页面会话有效。</span>
               <button type="button" onClick={undoClear}>
                 撤销
               </button>

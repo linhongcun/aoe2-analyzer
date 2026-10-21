@@ -69,12 +69,22 @@ describe('#292 clear and undo draft', () => {
     expect(roundTrip(restored.draft)).toEqual(original);
   });
 
-  it('retains only the latest cleared draft, without changing its snapshot during later edits', () => {
+  it('drops the undo snapshot as soon as new content is edited after clearing', () => {
+    const first = matchReviewDraftReducer({ draft: withRows(), beforeClear: null }, { type: 'clear' });
+    expect(first.beforeClear).toEqual(withRows());
+    const next = emptyMatchReview();
+    next.context.title = '清空后的新内容';
+    const edited = matchReviewDraftReducer(first, { type: 'edit', draft: next });
+    expect(edited.beforeClear).toBeNull();
+    expect(edited.draft).toEqual(next);
+    expect(matchReviewDraftReducer(edited, { type: 'undo' })).toBe(edited);
+  });
+
+  it('retains only the latest cleared draft', () => {
     const first = matchReviewDraftReducer({ draft: withRows(), beforeClear: null }, { type: 'clear' });
     const next = emptyMatchReview();
     next.context.title = '第二份草稿';
     const edited = matchReviewDraftReducer(first, { type: 'edit', draft: next });
-    expect(edited.beforeClear).toEqual(withRows());
     const second = matchReviewDraftReducer(edited, { type: 'clear' });
     expect(matchReviewDraftReducer(second, { type: 'undo' }).draft).toEqual(next);
   });
