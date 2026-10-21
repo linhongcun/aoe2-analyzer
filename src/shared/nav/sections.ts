@@ -23,6 +23,8 @@ export interface Section {
   status?: 'planned';
   /** 不作为顶部独立快捷入口显示；分组工具菜单仍收录所有已上线页面 */
   hideNav?: boolean;
+  /** 404「你是不是要找」的常见写法 / 旧路径（issue 315） */
+  aliases?: readonly string[];
 }
 export const WIKI: Section[] = [
   {
@@ -138,6 +140,7 @@ export const TOOLS: Section[] = [
     path: '/builds',
     label: '开局流程',
     en: 'Build Orders',
+    aliases: ['buildorder', 'build-orders', 'buildorders'],
     icon: 'list-ordered',
     desc: '主流开局分步骤时间线：几分几秒到封建、卡在哪一步',
     match: /^\/builds$/,
@@ -312,6 +315,7 @@ export const SECONDARY_TOOLS: Section[] = [
     path: '/trade-income',
     label: '商路供给',
     en: 'Trade Income',
+    aliases: ['tradeincome'],
     icon: 'calculator',
     desc: '按实测交金周期估算贸易收入、目标车船数与投资',
     match: /^\/trade-income$/,
