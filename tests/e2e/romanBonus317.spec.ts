@@ -33,6 +33,16 @@ test.describe('issue 317 罗马加成标签', () => {
     await expect(r2).toContainText('已计入：训练费用');
     await expect(r2.locator('[data-usage]')).toHaveCount(1);
     await expect(r2.locator('[data-usage="cost"]')).toContainText('单位 PK「等资源」');
+    // Steve 设计审查：有工具计入的加成不再显示「.dat 经济/费用效果（文本展示）」
+    await expect(r0).not.toContainText('经济/费用效果（文本展示）');
+    await expect(r2).not.toContainText('经济/费用效果（文本展示）');
+  });
+
+  test('没有任何工具计入的经济加成仍显示「.dat 经济/费用效果（文本展示）」', async ({ page }) => {
+    // 中国第 1 条「初始村民 +3…」：中国开局模拟不支持，其他工具也不涉及
+    await page.goto('./#/civ/Chinese/bonus/0');
+    await expect(page.locator('#bonus')).toContainText('仅文本，未计入数值');
+    await expect(page.locator('#bonus')).toContainText('.dat 经济/费用效果（文本展示）');
   });
 
   test('#/bonuses 与详情页：罗马第 1 条不再显示「仅文本，未计入数值」', async ({ page }) => {
@@ -42,9 +52,11 @@ test.describe('issue 317 罗马加成标签', () => {
     await expect(li).toHaveCount(1);
     await expect(li).not.toContainText('仅文本，未计入数值');
     await expect(li).toContainText('已计入：真实成本、施工工具');
+    await expect(li).not.toContainText('经济/费用效果（文本展示）');
     await page.goto('./#/civ/Romans/bonus/0');
     await expect(page.locator('#bonus')).not.toContainText('仅文本，未计入数值');
     await expect(page.locator('#bonus [data-usage]')).toHaveCount(4);
+    await expect(page.locator('#bonus')).not.toContainText('经济/费用效果（文本展示）');
   });
 
   for (const theme of ['light', 'dark'])

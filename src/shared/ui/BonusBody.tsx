@@ -14,7 +14,7 @@ import { LineChip } from './LineChip';
 import type { Unit } from '../../domain/types';
 import { collapse } from '../../domain/family';
 import { ecoText } from '../../domain/datEffects';
-import { bonusUsage, usageLevel, type BonusUsageLine } from '../../domain/bonusUsage';
+import { bonusUsage, showEcoSourceTag, usageLevel, type BonusUsageLine } from '../../domain/bonusUsage';
 
 const SRC_TAG: Record<string, [string, string]> = {
   dat: ['ok', '数值来源：游戏 .dat'],
@@ -39,6 +39,9 @@ const STAT_ZH: Record<string, [string, string]> = {
 const ageTxt = (a: number[]) => a.map((x) => AGE_ZH[x]!.slice(0, 2)).join('/');
 
 export function BonusTags({ b }: { b: CivBonusEnt }) {
+  const usage = b.encoded ? [] : bonusUsage(b);
+  // issue 317（Steve 设计审查）：已有工具计入的经济/费用类加成不显示「文本展示」来源标签，见 showEcoSourceTag
+  const src = SRC_TAG[b.src] && showEcoSourceTag(b) ? SRC_TAG[b.src] : undefined;
   return (
     <>
       {b.team && <span className="tag team">团队加成 · 作用于盟友</span>}
@@ -48,8 +51,8 @@ export function BonusTags({ b }: { b: CivBonusEnt }) {
         </span>
       ))}
       {b.ages && <span className="tag">{ageTxt(b.ages)}时代</span>}
-      {b.encoded ? <span className="tag ok">已计入数值</span> : <UsageTags lines={bonusUsage(b)} />}
-      {SRC_TAG[b.src] && <span className={'tag ' + SRC_TAG[b.src]![0]}>{SRC_TAG[b.src]![1]}</span>}
+      {b.encoded ? <span className="tag ok">已计入数值</span> : <UsageTags lines={usage} />}
+      {src && <span className={'tag ' + src[0]}>{src[1]}</span>}
       {b.fresh === false && <span className="tag txt">游戏说明文字与 .dat 数值不一致（以 .dat 为准）</span>}
     </>
   );

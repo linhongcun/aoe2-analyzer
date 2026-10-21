@@ -105,3 +105,6 @@ export function usageLevel(lines: BonusUsageLine[]): 'all' | 'part' | 'none' {
   if (!on) return 'none';
   return lines.every((l) => l.on === true) ? 'all' : 'part';
 }
+
+/** Steve 设计审查（PR 330）：有工具计入的经济/费用类加成不再显示「.dat 经济/费用效果（文本展示）」来源标签；没有工具计入的保持原样 */
+export const showEcoSourceTag = (b: CivBonusEnt) => !(b.src === 'eco' && !b.encoded && usageLevel(bonusUsage(b)) !== 'none');
