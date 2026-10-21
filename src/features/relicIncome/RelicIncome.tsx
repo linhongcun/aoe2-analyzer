@@ -375,8 +375,8 @@ export default function RelicIncome() {
                 ，普通立陶宛科技树不可用，未列入上述普通适用单位。
               </p>
               <p className="relic-provenance">
-                .dat SHA256：{data.meta.datSha256}；核对日：{data.meta.semanticsChecked}。原字段与导出方式见仓库 docs/RELIC-INCOME.md；参数能由
-                scripts/relic_income_build.py --check 复现。
+                数据所用游戏 .dat 的固定版本与校验信息见<Link to="/about-data">关于数据</Link>。核对日：{data.meta.semanticsChecked}。原字段与导出方式见仓库
+                docs/RELIC-INCOME.md；参数能由 scripts/relic_income_build.py --check 复现。
               </p>
               <div className="relic-links">
                 <a

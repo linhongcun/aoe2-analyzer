@@ -1903,11 +1903,53 @@ a.tbld:hover span {
   position: static;
   transform: none;
 }
-/* 2. /about-data 来源表在窄屏内横向滚动 */
-#about-data table.stat {
+/* 2. /about-data 来源表（issue 338）：不横向滚动；只有链接和 <code> 可断行，日期不断行；≤480px 每条来源逐行堆叠 */
+#about-data table.src-table {
   display: block;
   max-width: 100%;
-  overflow-x: auto;
+  overflow-x: visible;
+}
+#about-data .src-table a {
+  overflow-wrap: anywhere;
+}
+#about-data .src-table code.src-sha {
+  font-family: var(--font-mono);
+  word-break: break-all;
+}
+#about-data .src-table .src-date {
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  #about-data .src-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  #about-data .src-table tbody,
+  #about-data .src-table tr,
+  #about-data .src-table td {
+    display: block;
+    width: auto;
+    text-align: left;
+  }
+  #about-data .src-table tr {
+    border-bottom: 1px solid var(--color-line);
+    padding: var(--space-2, 8px) 0;
+  }
+  #about-data .src-table td {
+    border: 0;
+    padding: 2px 0;
+    font-family: inherit;
+  }
+  #about-data .src-table td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--color-muted);
+    font-size: var(--fs-xs);
+  }
 }
 /* 3. 开局时间线：首尾刻度不居中；到达时代第 2 个标记放第二行，靠右的向左展开 */
 .tl-chart .tl-axis span:first-child {
