@@ -25,13 +25,13 @@ for (const width of [360, 375, 390, 1280])
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/');
-      const nav = page.getByRole('navigation', { name: '学习与复盘', exact: true });
-      await expect(nav.getByRole('link')).toHaveCount(3);
-      await expect(page.getByRole('navigation', { name: '社区新工具', exact: true }).getByRole('link')).toHaveCount(5);
-      await expect(page.locator('.home-tools-grid .hcard')).toHaveCount(6);
+      const home = page.locator('#home');
+      await expect(home.locator('.home-group')).toHaveCount(4);
+      await expect(home.getByRole('region', { name: '新手入门', exact: true }).getByRole('link')).toHaveCount(5);
+      await expect(home.getByRole('region', { name: '对局计划', exact: true }).getByRole('link')).toHaveCount(11);
       await page.screenshot({ path: info.outputPath(`learning259-${theme}-${width}.png`), fullPage: true });
       for (const [label, route, id] of entries) {
-        const link = nav.getByRole('link', { name: label, exact: true });
+        const link = home.getByRole('link', { name: new RegExp(label) });
         expect((await link.boundingBox())?.height).toBeGreaterThanOrEqual(44);
         await link.focus();
         await expect(link).toBeFocused();

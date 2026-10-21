@@ -61,11 +61,46 @@ header.topbar.editorial-topbar .nitem.on::after {
   border-radius: var(--radius-pill);
   background: var(--color-accent);
 }
+header.topbar.editorial-topbar .tools {
+  position: static;
+}
 header.topbar.editorial-topbar .tools-panel {
+  left: 24px;
+  right: 24px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 16px;
   min-width: 184px;
-  padding: 6px;
+  max-width: 960px;
+  max-height: calc(100dvh - 96px);
+  margin-inline: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
   border-radius: var(--radius-md);
   border-color: var(--color-border);
+  background: var(--color-surface);
+}
+header.topbar.editorial-topbar .tools-panel[hidden] {
+  display: none;
+}
+header.topbar.editorial-topbar .tools-group {
+  min-width: 0;
+}
+header.topbar.editorial-topbar .tools-group .tools-group-title {
+  margin: 0 0 6px;
+  padding-inline: 12px;
+  color: var(--color-text);
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+header.topbar.editorial-topbar .tools-group p {
+  margin: 0 0 8px;
+  padding-inline: 12px;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
 }
 header.topbar.editorial-topbar .tools-panel .nitem {
   border-radius: var(--radius-sm);
@@ -352,7 +387,12 @@ footer.editorial-footer .footer-sources a {
   }
   header.topbar.editorial-topbar .tools-panel {
     position: static;
+    grid-template-columns: minmax(0, 1fr);
     min-width: 0;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    overflow: visible;
     padding: 4px 0 0 12px;
     box-shadow: none;
     border: 0;

@@ -122,12 +122,18 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
   ];
   await page.goto('./');
   await page.getByRole('button', { name: '工具' }).click();
-  const hrefs = await page.locator('nav.mainnav a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
-  expect(hrefs.sort()).toEqual(PAGES.map(([h]) => h).sort());
+  // #272 起「工具」菜单按分组收录全部已上线页面，与顶部快捷入口会有重复链接。
+  const hrefs = [...new Set(await page.locator('nav.mainnav a').evaluateAll((as) => as.map((a) => a.getAttribute('href')!)))];
+  for (const [href] of PAGES) expect(hrefs).toContain(href);
   for (const [href, sel] of PAGES) {
     await page.goto('./' + href);
     await expect(page.locator(sel).first()).toBeVisible();
     await expect(page.locator('.planned-page')).toHaveCount(0);
+  }
+  for (const href of hrefs.filter((h) => !PAGES.some(([p]) => p === h))) {
+    await page.goto('./' + href);
+    await expect(page.locator('main :is(h1, h2)').first(), href).toBeVisible(); // 部分页面缺 h1 见 #296
+    await expect(page.locator('.planned-page'), href).toHaveCount(0);
   }
 });
 
@@ -154,7 +160,8 @@ test('nav: 工具 dropdown toggles on click, closes on outside click and Esc', a
   await tools.click();
   await expect(tools).toHaveAttribute('aria-expanded', 'true');
   await expect(panel.getByRole('link', { name: '文明对比' })).toBeVisible();
-  await page.locator('#home h2').first().click();
+  // 分组面板较大，会盖住首页正文；点面板以外的页面空白处。
+  await page.mouse.click(4, 890);
   await expect(panel).toBeHidden();
   await tools.click();
   await page.keyboard.press('Escape');
@@ -184,7 +191,7 @@ test('leaving a tech detail page does not crash (regression)', async ({ page }) 
   });
   await page.goto('./#tech/12');
   await expect(page.locator('#tech h1')).toBeVisible();
-  await page.locator('nav.mainnav a[data-t="units"]').click();
+  await page.locator('nav.mainnav a[data-t="units"]').first().click();
   await expect(page.locator('#ugrid .card').first()).toBeVisible();
   expect(errors).toEqual([]);
 });

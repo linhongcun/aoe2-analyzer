@@ -22,9 +22,6 @@
 .hk-number {
   white-space: nowrap;
 }
-.hk-boundary {
-  color: var(--color-text-2);
-}
 .hk-controls,
 .hk-audit {
   margin-top: var(--space-6);
@@ -103,49 +100,58 @@
 }
 .hk-list {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-3);
+  margin-top: var(--space-4);
 }
 .hk-card {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: var(--space-6);
-  padding: var(--space-6);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
 }
 .hk-description,
+.hk-action-source {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
 .hk-personal {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-2);
+  align-items: center;
   min-width: 0;
 }
 .hk-en {
   margin-block: var(--space-1);
 }
 .hk-personal label {
-  display: block;
-  margin-block: var(--space-4) var(--space-2);
-}
-.hk-default {
-  padding: var(--space-3);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-2);
-}
-.hk-default span,
-.hk-default strong {
-  display: block;
-}
-.hk-default strong {
-  color: var(--color-warn);
+  white-space: nowrap;
   font-size: var(--fs-sm);
 }
-.hk-default p {
-  margin-bottom: 0;
+.hk-personal .hk-error {
+  grid-column: 1 / -1;
 }
-.hk-value {
-  min-height: 1.65em;
+.hk-default {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+}
+.hotkeys-page kbd {
+  display: inline-block;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
   font-family: var(--font-mono);
-  color: var(--color-text-2);
-  overflow-wrap: anywhere;
+  font-size: var(--fs-sm);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
 }
 .hk-empty {
   padding-block: var(--space-6);
@@ -159,8 +165,6 @@
   }
   .hk-card {
     grid-template-columns: minmax(0, 1fr);
-    padding: var(--space-4);
-    gap: var(--space-3);
   }
 }
 @media print {

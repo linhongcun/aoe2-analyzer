@@ -1,9 +1,11 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
 import CommandPalette from '../features/search/components/CommandPalette';
-import { TOOLS, WIKI, type Section } from './nav/sections';
+import { WIKI } from './nav/sections';
+import { NavItem } from './nav/NavItem';
+import { ToolsMenu } from './nav/ToolsMenu';
 import FeedbackLink from '../features/feedback/FeedbackLink';
 import { appVersion } from '../features/feedback/feedback';
 import { DATA_SOURCES, versionLabel } from '../features/about/dataInfo';
@@ -12,79 +14,12 @@ import type { ThemePreference } from './theme/theme';
 import '../shared/styles/editorial-shell.css';
 import '../shared/styles/community-tools.css';
 
-const PageMeta = lazy(() => import('../features/share/PageMeta'));
-
 /** 外点的默认焦点行为结束后归还触发按钮；新弹窗接管焦点时不抢回。 */
 function returnFocusAfterClose(target: HTMLElement | null) {
   requestAnimationFrame(() => {
     const dialogOpen = [...document.querySelectorAll<HTMLElement>('[role="dialog"], dialog[open]')].some((dialog) => dialog.getClientRects().length > 0);
     if (!dialogOpen) target?.focus();
   });
-}
-
-function NavItem({ s, path }: { s: Section; path: string }) {
-  return (
-    <NavLink to={s.path} className={() => `nitem${s.match.test(path) ? ' on' : ''}`} data-t={s.key}>
-      <Icon name={s.icon} />
-      {s.label}
-    </NavLink>
-  );
-}
-
-function ToolsMenu({ path }: { path: string }) {
-  const [openAt, setOpenAt] = useState<string | null>(null);
-  const open = openAt === path;
-  const ref = useRef<HTMLDivElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const on = TOOLS.some((s) => s.match.test(path));
-  useEffect(() => {
-    if (!open) return;
-    const down = (e: PointerEvent) => {
-      if (!ref.current?.contains(e.target as Node)) setOpenAt(null);
-    };
-    const key = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setOpenAt(null);
-        trigger.current?.focus();
-      }
-    };
-    document.addEventListener('pointerdown', down);
-    document.addEventListener('keydown', key);
-    return () => {
-      document.removeEventListener('pointerdown', down);
-      document.removeEventListener('keydown', key);
-    };
-  }, [open]);
-  return (
-    <div className="tools" ref={ref}>
-      <button
-        type="button"
-        ref={trigger}
-        className={`nitem${on ? ' on' : ''}`}
-        aria-expanded={open}
-        aria-controls="tools-menu"
-        onClick={() => setOpenAt(open ? null : path)}
-      >
-        工具
-        <Icon name="chevron-down" />
-      </button>
-      <div
-        id="tools-menu"
-        className="tools-panel"
-        hidden={!open}
-        onClick={(event) => {
-          if ((event.target as Element).closest('a[href]')) {
-            setOpenAt(null);
-            trigger.current?.focus();
-          }
-        }}
-      >
-        {TOOLS.filter((s) => !s.hideNav).map((s) => (
-          <NavItem key={s.key} s={s} path={path} />
-        ))}
-      </div>
-    </div>
-  );
 }
 
 const THEME_OPTIONS = [
@@ -376,9 +311,6 @@ export function Layout({ children }: { children: ReactNode }) {
           </div>
         )}
         <Suspense fallback={<Loading />}>{children}</Suspense>
-        <Suspense fallback={null}>
-          <PageMeta />
-        </Suspense>
       </main>
       {cmdk && <CommandPalette open onClose={() => setCmdk(false)} />}
       <footer className="editorial-footer">

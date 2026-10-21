@@ -42,14 +42,15 @@ async function compareCiv(page: Page, slot: 'A' | 'B', civ: string) {
 
 test('#230 窄屏首页四个规划入口可键盘访问并进入真实页面', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 900 });
-  for (const [label, path, pageId] of [
+  for (const [, path, pageId] of [
     ['商路供给', '/trade-income', 'trade-income-page'],
     ['多人施工', '/construction', 'construction-page'],
     ['队伍加成', '/team-bonuses', 'team-bonuses-page'],
     ['驻军回血', '/garrison-healing', 'garrison-healing-page'],
   ]) {
     await page.goto('./#/');
-    const link = page.getByRole('navigation', { name: '更多规划工具', exact: true }).getByRole('link', { name: label!, exact: true });
+    // #272 起首页按用途分组，入口改为分组卡片。
+    const link = page.locator(`#home a.hcard[href="#${path}"]`);
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute('href', '#' + path);
     await touchTarget(link);

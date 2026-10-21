@@ -26,9 +26,10 @@ for (const width of [360, 375, 390, 1280])
     test(`#244 首页新入口可键盘进入 ${width} ${theme}`, async ({ page }, info) => {
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
-      for (const [label, path, id] of entries) {
+      for (const [, path, id] of entries) {
         await page.goto('./#/');
-        const link = page.getByRole('navigation', { name: '入门与实战', exact: true }).getByRole('link', { name: label, exact: true });
+        // #272 起首页按用途分组，入口改为分组卡片。
+        const link = page.locator(`#home a.hcard[href="#${path}"]`);
         await expect(link).toHaveAttribute('href', '#' + path);
         const box = await link.boundingBox();
         expect(box!.width).toBeGreaterThanOrEqual(44);

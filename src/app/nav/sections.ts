@@ -1,9 +1,18 @@
 import { unitCountLabel } from '../../domain/family';
 import type { IconName } from '../../shared/ui/Icon';
 
+export const SECTION_GROUPS = [
+  { key: 'beginner', title: '新手入门', desc: '认识一局游戏，查术语、练操作，找到入门方向。' },
+  { key: 'planning', title: '对局计划', desc: '从开局与侦察到兵种搭配、团战分工和赛后复盘。' },
+  { key: 'economy', title: '经济计算', desc: '比较资源收支、生产供给与经济投入的收益。' },
+  { key: 'reference', title: '资料', desc: '查文明、单位与科技，区分历史首发和当前购买内容。' },
+] as const;
+export type SectionGroup = (typeof SECTION_GROUPS)[number]['key'];
+
 /** 信息架构：导航分组与模块注册表（新增模块只需在这里登记 + routes.tsx 注册路由） */
 export interface Section {
   key: string;
+  group: SectionGroup;
   path: string;
   label: string;
   en: string;
@@ -12,12 +21,13 @@ export interface Section {
   /** 当前路径是否属于该模块（用于高亮与面包屑） */
   match: RegExp;
   status?: 'planned';
-  /** 不在顶部导航显示（首页与 Ctrl+K 仍可达），避免导航换行 */
+  /** 不作为顶部独立快捷入口显示；分组工具菜单仍收录所有已上线页面 */
   hideNav?: boolean;
 }
 export const WIKI: Section[] = [
   {
     key: 'glossary',
+    group: 'beginner',
     path: '/glossary',
     label: '术语与缩写',
     en: 'Glossary',
@@ -26,9 +36,20 @@ export const WIKI: Section[] = [
     match: /^\/glossary(\/.*)?$/,
     hideNav: true,
   },
-  { key: 'maps', path: '/maps', label: '地图', en: 'Maps', icon: 'map', desc: '阿拉伯、竞技场、游牧和海图的资源与开局', match: /^\/maps$/, hideNav: true },
+  {
+    key: 'maps',
+    group: 'reference',
+    path: '/maps',
+    label: '地图',
+    en: 'Maps',
+    icon: 'map',
+    desc: '阿拉伯、竞技场、游牧和海图的资源与开局',
+    match: /^\/maps$/,
+    hideNav: true,
+  },
   {
     key: 'civs',
+    group: 'reference',
     path: '/civs',
     label: '文明',
     en: 'Civilizations',
@@ -38,6 +59,7 @@ export const WIKI: Section[] = [
   },
   {
     key: 'units',
+    group: 'reference',
     path: '/units',
     label: '单位',
     en: 'Units',
@@ -47,6 +69,7 @@ export const WIKI: Section[] = [
   },
   {
     key: 'buildings',
+    group: 'reference',
     path: '/buildings',
     label: '建筑',
     en: 'Buildings',
@@ -54,10 +77,29 @@ export const WIKI: Section[] = [
     desc: '38 种建筑的属性、可生产单位与科技',
     match: /^\/buildings?(\/.*)?$/,
   },
-  { key: 'techs', path: '/techs', label: '科技', en: 'Technologies', icon: 'flask-conical', desc: '199 项科技的效果、费用与前置', match: /^\/techs?(\/.*)?$/ },
-  { key: 'tree', path: '/tree', label: '科技树', en: 'Tech Tree', icon: 'git-branch', desc: '每个文明的完整科技树与差异对照', match: /^\/tree(\/.*)?$/ },
+  {
+    key: 'techs',
+    group: 'reference',
+    path: '/techs',
+    label: '科技',
+    en: 'Technologies',
+    icon: 'flask-conical',
+    desc: '199 项科技的效果、费用与前置',
+    match: /^\/techs?(\/.*)?$/,
+  },
+  {
+    key: 'tree',
+    group: 'reference',
+    path: '/tree',
+    label: '科技树',
+    en: 'Tech Tree',
+    icon: 'git-branch',
+    desc: '每个文明的完整科技树与差异对照',
+    match: /^\/tree(\/.*)?$/,
+  },
   {
     key: 'bonuses',
+    group: 'reference',
     path: '/bonuses',
     label: '文明加成',
     en: 'Civ Bonuses',
@@ -68,6 +110,7 @@ export const WIKI: Section[] = [
   },
   {
     key: 'dlc',
+    group: 'reference',
     path: '/dlc',
     label: 'DLC',
     en: 'Expansions',
@@ -78,6 +121,7 @@ export const WIKI: Section[] = [
   },
   {
     key: 'patches',
+    group: 'reference',
     path: '/patches',
     label: '版本补丁',
     en: 'Patch Notes',
@@ -90,6 +134,7 @@ export const WIKI: Section[] = [
 export const TOOLS: Section[] = [
   {
     key: 'builds',
+    group: 'planning',
     path: '/builds',
     label: '开局流程',
     en: 'Build Orders',
@@ -97,10 +142,29 @@ export const TOOLS: Section[] = [
     desc: '主流开局分步骤时间线：几分几秒到封建、卡在哪一步',
     match: /^\/builds$/,
   },
-  { key: 'compare', path: '/compare', label: '文明对比', en: 'Compare', icon: 'scale', desc: '两个文明的能力雷达与关键差异', match: /^\/compare$/ },
-  { key: 'matchup', path: '/matchup', label: '对局助手', en: 'Matchup', icon: 'crosshair', desc: '根据双方文明给出反制建议', match: /^\/matchup$/ },
+  {
+    key: 'compare',
+    group: 'planning',
+    path: '/compare',
+    label: '文明对比',
+    en: 'Compare',
+    icon: 'scale',
+    desc: '两个文明的能力雷达与关键差异',
+    match: /^\/compare$/,
+  },
+  {
+    key: 'matchup',
+    group: 'planning',
+    path: '/matchup',
+    label: '对局助手',
+    en: 'Matchup',
+    icon: 'crosshair',
+    desc: '根据双方文明给出反制建议',
+    match: /^\/matchup$/,
+  },
   {
     key: 'simulator',
+    group: 'planning',
     path: '/simulator',
     label: '科技模拟器',
     en: 'Simulator',
@@ -110,6 +174,7 @@ export const TOOLS: Section[] = [
   },
   {
     key: 'duel',
+    group: 'planning',
     path: '/duel',
     label: '单位 PK',
     en: 'Unit Duel',
@@ -119,6 +184,7 @@ export const TOOLS: Section[] = [
   },
   {
     key: 'production',
+    group: 'economy',
     path: '/production',
     label: '持续生产',
     en: 'Production',
@@ -127,183 +193,184 @@ export const TOOLS: Section[] = [
     match: /^\/production$/,
   },
 ];
-/** 已上线的子工具：提供全局搜索与面包屑，不增加首页工具卡片。 */
+/** 已上线的扩展工具，与首页、工具菜单共用用途分组。 */
 export const SECONDARY_TOOLS: Section[] = [
   {
     key: 'game-guide',
+    group: 'beginner',
     path: '/game-guide',
     label: '一局与观赛',
     en: 'Game Guide',
     icon: 'scroll',
     desc: '用六张短卡认识一局目标、开局角色和观赛关注点',
     match: /^\/game-guide\/?$/,
-    hideNav: true,
   },
   {
     key: 'match-review',
+    group: 'planning',
     path: '/match-review',
     label: '手填复盘',
     en: 'Match Review',
     icon: 'list-ordered',
     desc: '整理当时视野、回看事实和一个下局目标，保存备份与打印',
     match: /^\/match-review\/?$/,
-    hideNav: true,
   },
   {
     key: 'scouting',
+    group: 'planning',
     path: '/scouting',
     label: '侦察辨析',
     en: 'Scouting',
     icon: 'crosshair',
     desc: '对照相容解释、反证和缺失信息，决定下一次补查什么',
     match: /^\/scouting\/?$/,
-    hideNav: true,
   },
   {
     key: 'content-guide',
+    group: 'reference',
     path: '/content-guide',
     label: '内容与购买',
     en: 'Content Guide',
     icon: 'package',
     desc: '区分当前本体包含、另购内容、免费可选下载与不同游戏模式',
     match: /^\/content-guide$/,
-    hideNav: true,
   },
   {
     key: 'mixed-army',
+    group: 'planning',
     path: '/mixed-army',
     label: '混兵情境',
     en: 'Mixed Army',
     icon: 'sword',
     desc: '按实际敌军组合、路线与补兵条件查看六张有限情境卡',
     match: /^\/mixed-army$/,
-    hideNav: true,
   },
   {
     key: 'team-plan',
+    group: 'planning',
     path: '/team-plan',
     label: '团战分工',
     en: 'Team Plan',
     icon: 'users',
     desc: '为二至四名队友约定三个时代的主副兵种、任务与支援',
     match: /^\/team-plan$/,
-    hideNav: true,
   },
   {
     key: 'campaigns',
+    group: 'beginner',
     path: '/campaigns',
     label: '战役入门',
     en: 'Campaigns',
     icon: 'scroll',
     desc: '从十条教程、战役与历史战役资料中按兴趣寻找入口',
     match: /^\/campaigns$/,
-    hideNav: true,
   },
   {
     key: 'relic-income',
+    group: 'economy',
     path: '/relic-income',
     label: '圣物收益',
     en: 'Relic Income',
     icon: 'calculator',
     desc: '按已生效数量、游戏时长与明确来源分开估算金币和食物',
     match: /^\/relic-income$/,
-    hideNav: true,
   },
 
   {
     key: 'game-clock',
+    group: 'beginner',
     path: '/game-clock',
     label: '时间换算',
     en: 'Game Clock',
     icon: 'clock',
     desc: '按自己填写的倍率换算游戏与现实时间，读懂攻略时点',
     match: /^\/game-clock$/,
-    hideNav: true,
   },
   {
     key: 'hotkeys',
+    group: 'beginner',
     path: '/hotkeys',
     label: '快捷键速查',
     en: 'Hotkeys',
     icon: 'scroll',
     desc: '按游戏操作搜索，填写并打印自己的单人和多人按键表',
     match: /^\/hotkeys$/,
-    hideNav: true,
   },
   {
     key: 'castle-defense',
+    group: 'planning',
     path: '/castle-defense',
     label: '城堡前置应对',
     en: 'Castle Defense',
     icon: 'castle',
     desc: '按竞技场侦察与落堡阶段，比较防守、让地和解围的条件',
     match: /^\/castle-defense$/,
-    hideNav: true,
   },
   {
     key: 'trade-income',
+    group: 'economy',
     path: '/trade-income',
     label: '商路供给',
     en: 'Trade Income',
     icon: 'calculator',
     desc: '按实测交金周期估算贸易收入、目标车船数与投资',
     match: /^\/trade-income$/,
-    hideNav: true,
   },
   {
     key: 'construction',
+    group: 'economy',
     path: '/construction',
     label: '多人施工',
     en: 'Construction',
     icon: 'castle',
     desc: '比较施工人数、完工时间、村民工时与停采估算',
     match: /^\/construction$/,
-    hideNav: true,
   },
   {
     key: 'team-bonuses',
+    group: 'planning',
     path: '/team-bonuses',
     label: '队伍加成',
     en: 'Team Bonuses',
     icon: 'users',
     desc: '一屏查看队伍加成来源与需要研究的团队科技',
     match: /^\/team-bonuses$/,
-    hideNav: true,
   },
   {
     key: 'garrison-healing',
+    group: 'economy',
     path: '/garrison-healing',
     label: '驻军回血',
     en: 'Garrison Healing',
     icon: 'calculator',
     desc: '核对治疗资格、草药效果与单目标理论恢复时间',
     match: /^\/garrison-healing$/,
-    hideNav: true,
   },
   {
     key: 'eco-payoff',
+    group: 'economy',
     path: '/eco-payoff',
     label: '经济科技收益',
     en: 'Economic Technology Payoff',
     icon: 'calculator',
     desc: '固定村民与距离，对比单项采集科技的研究投入和收益',
     match: /^\/eco-payoff$/,
-    hideNav: true,
   },
   {
     key: 'market',
+    group: 'economy',
     path: '/market',
     label: '市场买卖',
     en: 'Market',
     icon: 'calculator',
     desc: '逐笔估算市场买卖、库存预算与两份方案的收支',
     match: /^\/market$/,
-    hideNav: true,
   },
 ];
 export const FUTURE: Section[] = [
   {
     key: 'ladder',
+    group: 'reference',
     path: '/ladder',
     label: '天梯数据',
     en: 'Ladder Stats',
@@ -315,4 +382,11 @@ export const FUTURE: Section[] = [
 ];
 
 export const ALL = [...WIKI, ...TOOLS, ...SECONDARY_TOOLS, ...FUTURE];
+/** 两处入口都从模块的 group 派生，新增已上线模块自动进入对应分组。 */
+export const HOME_GROUPS = SECTION_GROUPS.map((group) => ({
+  ...group,
+  sections: ALL.filter((section) => section.status !== 'planned' && section.group === group.key),
+}));
+export const TOOL_GROUPS = HOME_GROUPS;
+
 export const sectionOf = (path: string) => ALL.find((s) => s.match.test(path));

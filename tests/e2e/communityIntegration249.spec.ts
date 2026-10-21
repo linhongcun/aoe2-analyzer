@@ -27,13 +27,14 @@ for (const width of [360, 375, 390, 1280])
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/');
-      const nav = page.getByRole('navigation', { name: '社区新工具', exact: true });
-      await expect(nav.getByRole('link')).toHaveCount(5);
-      await expect(page.getByRole('navigation', { name: '入门与实战', exact: true }).getByRole('link')).toHaveCount(3);
-      await expect(page.getByRole('navigation', { name: '更多规划工具', exact: true }).getByRole('link')).toHaveCount(4);
+      // #272 起首页按用途分组：五个社区新工具与旧规划入口都以分组卡片出现，每个只出现一次。
+      const home = page.locator('#home');
+      for (const [, route] of entries) await expect(home.locator(`a.hcard[href="#/${route}"]`)).toHaveCount(1);
+      for (const path of ['/game-clock', '/hotkeys', '/castle-defense', '/trade-income', '/construction', '/team-bonuses', '/garrison-healing'])
+        await expect(home.locator(`a.hcard[href="#${path}"]`)).toHaveCount(1);
       await page.screenshot({ path: info.outputPath(`community249-${theme}-${width}.png`), fullPage: true });
-      for (const [label, route, id] of entries) {
-        const link = nav.getByRole('link', { name: label, exact: true });
+      for (const [, route, id] of entries) {
+        const link = home.locator(`a.hcard[href="#/${route}"]`);
         const box = await link.boundingBox();
         expect(box?.height).toBeGreaterThanOrEqual(44);
         await link.focus();
