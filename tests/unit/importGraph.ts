@@ -38,15 +38,75 @@ function resolveSpec(fromFile: string, spec: string): string | null {
   throw new Error(`无法解析 ${spec}（${relative(ROOT, fromFile)}）`);
 }
 
-function globEager(fromFile: string, pattern: string): string[] {
-  // 只支持本仓库用到的 './dir/*.ext' 形式
-  const m = /^(.*)\/\*(\.[a-z]+)$/.exec(pattern);
-  if (!m) throw new Error(`不支持的 glob ${pattern}`);
-  const dir = resolve(dirname(fromFile), m[1]!);
-  return readdirSync(dir)
-    .filter((f) => f.endsWith(m[2]!))
-    .sort()
-    .map((f) => relative(ROOT, join(dir, f)));
+/** 把 Vite glob（* ** ? {a,b}）转成匹配绝对路径的正则 */
+function globToRegExp(absPattern: string): RegExp {
+  let re = '';
+  for (let i = 0; i < absPattern.length; i++) {
+    const ch = absPattern[i]!;
+    if (ch === '*' && absPattern[i + 1] === '*') {
+      // '**/' 可匹配零层或多层目录；结尾的 '**' 匹配任意
+      if (absPattern[i + 2] === '/') {
+        re += '(?:.*/)?';
+        i += 2;
+      } else {
+        re += '.*';
+        i += 1;
+      }
+    } else if (ch === '*') re += '[^/]*';
+    else if (ch === '?') re += '[^/]';
+    else if (ch === '{') {
+      const close = absPattern.indexOf('}', i);
+      if (close < 0) throw new Error(`不支持的 glob ${absPattern}`);
+      re +=
+        '(?:' +
+        absPattern
+          .slice(i + 1, close)
+          .split(',')
+          .map((x) => x.replace(/[.+^$()|[\]\\]/g, '\\$&').replace(/\*/g, '[^/]*'))
+          .join('|') +
+        ')';
+      i = close;
+    } else re += ch.replace(/[.+^$()|[\]\\]/g, '\\$&');
+  }
+  return new RegExp('^' + re + '$');
+}
+
+function walkFiles(dir: string, out: string[] = []): string[] {
+  if (!existsSync(dir)) return out;
+  for (const f of readdirSync(dir)) {
+    if (f === 'node_modules' || f === '.git') continue;
+    const abs = join(dir, f);
+    if (statSync(abs).isDirectory()) walkFiles(abs, out);
+    else out.push(abs);
+  }
+  return out;
+}
+
+/**
+ * eager 的 import.meta.glob 匹配到的仓库内文件（相对仓库根，已排序）。
+ * 支持字面路径（如 '../../data/units.json'）、* ** ? {a,b}、数组和 '!' 排除；'/' 开头从仓库根算。
+ */
+function globEager(fromFile: string, patterns: string | string[]): string[] {
+  const list = Array.isArray(patterns) ? patterns : [patterns];
+  const abs = (p: string) => (p.startsWith('/') ? join(ROOT, p) : resolve(dirname(fromFile), p));
+  const hits = new Set<string>();
+  for (const p of list.filter((x) => !x.startsWith('!'))) {
+    const a = abs(p);
+    if (!/[*?{]/.test(p)) {
+      // 字面路径：文件不存在时 Vite 也只给空对象，这里报错避免静默漏扫
+      if (!existsSync(a) || !statSync(a).isFile()) throw new Error(`glob 字面路径不存在 ${p}（${relative(ROOT, fromFile)}）`);
+      hits.add(a);
+      continue;
+    }
+    const base = a.slice(0, a.search(/[*?{]/)).replace(/[^/]*$/, '');
+    const re = globToRegExp(a);
+    for (const f of walkFiles(base)) if (re.test(f)) hits.add(f);
+  }
+  for (const p of list.filter((x) => x.startsWith('!'))) {
+    const re = globToRegExp(abs(p.slice(1)));
+    for (const f of [...hits]) if (re.test(f)) hits.delete(f);
+  }
+  return [...hits].map((f) => relative(ROOT, f)).sort();
 }
 
 /** import.meta.glob 的第二个参数里是否写了 eager: true（按语法树判断，注释不算） */
@@ -102,11 +162,16 @@ export function parseImports(absFile: string, text: string, resolveTo: (spec: st
       node.expression.name.text === 'glob' &&
       node.expression.expression.getText(sf) === 'import.meta' &&
       node.arguments[0] &&
-      ts.isStringLiteral(node.arguments[0]) &&
       isEagerOption(node.arguments[1])
     ) {
-      for (const to of globEager(absFile, node.arguments[0].text))
-        edges.push({ from: key, line: lineOf(node), spec: node.arguments[0].text, to, typeOnly: false });
+      const a0 = node.arguments[0];
+      let patterns: string | string[];
+      if (ts.isStringLiteralLike(a0)) patterns = a0.text;
+      else if (ts.isArrayLiteralExpression(a0) && a0.elements.every((x) => ts.isStringLiteralLike(x)))
+        patterns = a0.elements.map((x) => (x as ts.StringLiteralLike).text);
+      else throw new Error(`${key}:${lineOf(node)} import.meta.glob 的第一个参数不是字面量，扫描器无法核对`);
+      const spec = Array.isArray(patterns) ? patterns.join(',') : patterns;
+      for (const to of globEager(absFile, patterns)) edges.push({ from: key, line: lineOf(node), spec, to, typeOnly: false });
     }
     ts.forEachChild(node, visit);
   };

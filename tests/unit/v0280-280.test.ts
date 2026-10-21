@@ -14,7 +14,7 @@ describe('#280 入口静态依赖', () => {
 
   it('守卫：遍历确实从入口走到了 Layout 和导航配置', () => {
     expect(closure.has('src/app/Layout.tsx')).toBe(true);
-    expect(closure.has('src/app/nav/sections.ts')).toBe(true);
+    expect(closure.has('src/shared/nav/sections.ts')).toBe(true);
   });
 
   it.each(['effects.json', 'search-py.json', 'glossary.json'])('入口静态依赖里没有 %s', (name) => {
@@ -31,7 +31,7 @@ describe('#280 入口静态依赖', () => {
   });
 
   it('sections.ts 不 import src/domain/**（单位数文案改用构建期常量 __UNIT_COUNT__）', () => {
-    const bad = importsOf('src/app/nav/sections.ts').filter((e) => e.to?.startsWith('src/domain/'));
+    const bad = importsOf('src/shared/nav/sections.ts').filter((e) => e.to?.startsWith('src/domain/'));
     expect(bad.map((e) => `${e.from}:${e.line} -> ${e.to}`)).toEqual([]);
   });
 });
