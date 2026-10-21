@@ -318,7 +318,7 @@ export function Layout({ children }: { children: ReactNode }) {
             {WIKI.filter((s) => !s.hideNav).map((s) => (
               <NavItem key={s.key} s={s} path={pathname} />
             ))}
-            <ToolsMenu path={pathname} />
+            <ToolsMenu key={menu ? `drawer:${pathname}` : `bar:${pathname}`} path={pathname} drawerOpen={menu} />
           </div>
           {menu && <MobileTheme preference={preference} onSelect={select} />}
         </nav>

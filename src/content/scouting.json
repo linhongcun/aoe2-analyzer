@@ -33,7 +33,7 @@
       "url": "https://aoecoach.com/en/resources/buildings/town-center/",
       "publishedAt": null,
       "kind": "独立教学方法",
-      "note": "Castle Age Boom 段：进入城堡时代后加建 2–3 个城镇中心是扩张经济（boom）；新增城镇中心宜放在新的资源点；How to counter it 段：侦察对方的城镇中心时机，对方在扩张时要么同步发展、要么趁其投入经济时用军队施压。只用于「新增城镇中心」一条。"
+      "note": "Castle Age Boom 段：进入城堡时代后加建 2–3 个城镇中心迅速扩张经济；Forward Town Center 段：在争夺中的金矿或石矿建城镇中心可锁资源；In pro play：把城镇中心放在对手附近既施压又建立前线基地；How to counter it：侦察对方加建城镇中心的时机，对方在扩张时要么同步发展、要么用军队施压；前置城镇中心可用早期军队争夺位置，或用投石机/攻城武器拆除。只用于「新增城镇中心」一条。"
     }
   ],
   "observations": [
@@ -224,8 +224,8 @@
         {
           "id": "extra-tc",
           "seen": "看见新增城镇中心",
-          "meaning": "倾向正在扩张经济",
-          "next": "查看扩张方向，结合自己的军队考虑施压或同步发展。",
+          "meaning": "建在敌方自家附近是扩张经济；建在前线或我方资源点附近是前置进攻。",
+          "next": "扩张经济则同步扩张或用军队施压；前置则出兵争夺位置或用攻城武器拆除。",
           "sourceIds": ["aoecoach-town-center"],
           "editorial": false
         },
