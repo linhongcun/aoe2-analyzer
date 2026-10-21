@@ -5,11 +5,10 @@ import { costSum } from '../../../domain/duel';
 import type { CostDiscount } from '../../../domain/costDiscount';
 import { RES_ZH } from '../../../domain/ratings';
 import { Icon } from '../../../shared/ui/Icon';
+import { minus } from '../../../shared/utils/minus';
 
 import { AGE_ZH as AGE } from '../../../domain/ratings';
 const ORDER = ['Food', 'Wood', 'Gold', 'Stone'];
-/** issue 97：只在显示层把「-数字」里的连字符换成 U+2212 减号；数据原文不动 */
-export const minus = (s: string) => s.replace(/-(?=\s?\d)/g, '\u2212');
 
 /** issue 103：有变化的格子：「原价 ~~55~~ 实际 **47**」；无变化只显示单个数字 */
 function WasNow({ was, now, wasLabel = '原价' }: { was: number; now: number; wasLabel?: string }) {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import pins from '../../scripts/data_sources.json';
-import { commitUrl, versionLabel, type DataSources } from '../../src/features/about/dataInfo';
+import { commitUrl, versionLabel, type DataSources } from '../../src/shared/utils/dataInfo';
 
 describe('data version info', () => {
   const p = pins as unknown as DataSources;

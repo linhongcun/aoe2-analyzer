@@ -5,7 +5,7 @@ import { buildingBase, buildingCivNotes, buildingSimTechs, simulateBuilding } fr
 import { allNumeric, makeSimContext } from '../../../domain/simulator';
 import type { Building } from '../../../domain/types';
 import { Loading } from '../../../shared/ui/widgets';
-import SimPanel, { type StatRow } from '../../simulator/components/SimPanel';
+import SimPanel, { type StatRow } from '../../../shared/ui/sim/SimPanel';
 import garrisonHosts from '../../../data/garrison_hosts.json';
 import { getGarrisonBuildingAge, getGarrisonTechs, writeGeneralGarrison } from '../../../domain/garrisonGeneral';
 import { constructionLink } from '../../../domain/construction';

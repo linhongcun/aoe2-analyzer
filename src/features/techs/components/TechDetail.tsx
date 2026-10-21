@@ -4,7 +4,7 @@ import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
 import { CivChip, CostView, TechReleaseBadge, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
-import { BLink } from '../../buildings/components/BLink';
+import { BLink } from '../../../shared/ui/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';

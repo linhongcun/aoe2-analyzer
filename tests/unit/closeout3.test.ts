@@ -6,7 +6,7 @@ import units from '../../src/data/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 import { simSupport } from '../../src/domain/simSupport';
-import { TOOLS } from '../../src/app/nav/sections';
+import { TOOLS } from '../../src/shared/nav/sections';
 import { listMeta, timeText } from '../../src/features/builds/listMeta';
 import { BN_LONG_CHARS, isLongBottleneck } from '../../src/features/builds/timelineModel';
 

@@ -3,7 +3,7 @@ import { civByEn } from '../../../data';
 import { civBonuses } from '../../../domain/civBonus';
 import { CivIcon } from '../../../shared/ui/art';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
-import BonusBody, { BonusTags } from './BonusBody';
+import BonusBody, { BonusTags } from '../../../shared/ui/BonusBody';
 import BonusList from './BonusList';
 
 /** #/civ/:en/bonus/:idx（idx 为序号或 team） */

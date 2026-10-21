@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { sectionOf } from '../../../app/nav/sections';
+import { sectionOf } from '../../../shared/nav/sections';
 import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
 

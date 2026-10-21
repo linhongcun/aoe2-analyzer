@@ -45,7 +45,7 @@ for (const f of ['civs', 'units', 'techs', 'buildings']) {
 }
 
 // 导航注册表是 TS：只读取 label 字符串，不执行依赖浏览器/构建常量的模块。
-const sections = ts.createSourceFile('sections.ts', fs.readFileSync('src/app/nav/sections.ts', 'utf8'), ts.ScriptTarget.Latest);
+const sections = ts.createSourceFile('sections.ts', fs.readFileSync('src/shared/nav/sections.ts', 'utf8'), ts.ScriptTarget.Latest);
 const names = [];
 function labels(node) {
   if (ts.isPropertyAssignment(node) && node.name.getText(sections) === 'label' && ts.isStringLiteral(node.initializer)) {

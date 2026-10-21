@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Icon } from '../../shared/ui/Icon';
 import { NavItem } from './NavItem';
-import { TOOL_GROUPS, WIKI } from './sections';
+import { TOOL_GROUPS, WIKI } from '../../shared/nav/sections';
 
 export function ToolsMenu({ path }: { path: string }) {
   const [openAt, setOpenAt] = useState<string | null>(null);

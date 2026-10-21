@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { ALL } from '../../app/nav/sections';
+import { ALL } from '../../shared/nav/sections';
 import { suggestRoutes } from '../../domain/routeSuggestions';
 import { Icon } from '../../shared/ui/Icon';
 import { Breadcrumbs } from '../../shared/ui/layout';

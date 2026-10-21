@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { fmtSide, parseSide, parseUpgradeSide } from '../../src/features/duel/logic/state';
+import { fmtSide, parseSide, parseUpgradeSide } from '../../src/domain/duelState';
 
 it('完整比较配置可往返，基准拒绝会随时代变化的预设', () => {
   const raw = '38.Byzantines.3.39-67-68.0-1';

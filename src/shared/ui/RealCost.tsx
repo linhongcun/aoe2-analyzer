@@ -1,11 +1,11 @@
 /** #88 等采集时间：每侧把（折后）价格换算成村民采集时间。只展示，数值来自 domain/realCost */
 import { useEffect, useId, useRef, useState } from 'react';
-import type { CostDiscount } from '../../../domain/costDiscount';
-import { countForTime, fmtClock, gatherModel, realCost, type GatherRes } from '../../../domain/realCost';
-import { AGE_ZH, RES_ZH } from '../../../domain/ratings';
-import { Icon } from '../../../shared/ui/Icon';
-import { minus } from './CostDiscount';
-import './real-cost-layout.css';
+import type { CostDiscount } from '../../domain/costDiscount';
+import { countForTime, fmtClock, gatherModel, realCost, type GatherRes } from '../../domain/realCost';
+import { AGE_ZH, RES_ZH } from '../../domain/ratings';
+import { Icon } from './Icon';
+import { minus } from '../utils/minus';
+import '../styles/real-cost-layout.css';
 
 const ORDER: GatherRes[] = ['Food', 'Wood', 'Gold', 'Stone'];
 

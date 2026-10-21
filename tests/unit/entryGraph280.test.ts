@@ -56,7 +56,7 @@ const graph = walk(join(ROOT, 'src/main.tsx'));
 describe('#280 首页入口静态依赖', () => {
   it('遍历到了入口的主要模块', () => {
     expect(graph.has(join(ROOT, 'src/app/Layout.tsx'))).toBe(true);
-    expect(graph.has(join(ROOT, 'src/app/nav/sections.ts'))).toBe(true);
+    expect(graph.has(join(ROOT, 'src/shared/nav/sections.ts'))).toBe(true);
   });
 
   for (const json of ['src/data/effects.json', 'src/data/search-py.json', 'src/content/glossary.json']) {
@@ -72,8 +72,8 @@ describe('#280 首页入口静态依赖', () => {
   });
 
   it('sections.ts 不引入 src/domain', () => {
-    const domain = staticImports(join(ROOT, 'src/app/nav/sections.ts'))
-      .map((spec) => resolveImport(join(ROOT, 'src/app/nav/sections.ts'), spec))
+    const domain = staticImports(join(ROOT, 'src/shared/nav/sections.ts'))
+      .map((spec) => resolveImport(join(ROOT, 'src/shared/nav/sections.ts'), spec))
       .filter((p): p is string => !!p && rel(p).startsWith('src/domain/'));
     expect(domain.map(rel)).toEqual([]);
   });

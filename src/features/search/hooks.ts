@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { civs } from '../../data';
 import { useCore } from '../../data/hooks';
 import { withSearchPy, type SearchItem } from '../../domain/search';
-import { ALL } from '../../app/nav/sections';
+import { ALL } from '../../shared/nav/sections';
 import { collapse } from '../../domain/family';
 import { allCivBonuses } from '../../domain/civBonus';
 import { TYPE_ZH } from '../../domain/ratings';

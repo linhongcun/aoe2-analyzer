@@ -7,7 +7,7 @@ import { Ban, ChartGantt } from 'lucide-react';
 import { buildOrders } from '../../data/buildOrders';
 import type { Phase } from '../../domain/buildOrder';
 import { ListHead } from '../../shared/ui/layout';
-import FeedbackLink from '../feedback/FeedbackLink';
+import FeedbackLink from '../../shared/ui/FeedbackLink';
 import TimelineLoader from './TimelineLoader';
 
 /** 推荐文明：加成已计入的排前面，未计入的沉底（各自保持原顺序） */

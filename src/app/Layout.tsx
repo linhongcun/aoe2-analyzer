@@ -2,12 +2,12 @@ import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSPrope
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
-import { WIKI } from './nav/sections';
+import { WIKI } from '../shared/nav/sections';
 import { NavItem } from './nav/NavItem';
 import { ToolsMenu } from './nav/ToolsMenu';
-import FeedbackLink from '../features/feedback/FeedbackLink';
-import { appVersion } from '../features/feedback/feedback';
-import { DATA_SOURCES, versionLabel } from '../features/about/dataInfo';
+import FeedbackLink from '../shared/ui/FeedbackLink';
+import { appVersion } from '../shared/utils/feedback';
+import { DATA_SOURCES, versionLabel } from '../shared/utils/dataInfo';
 import { useTheme } from './theme/useTheme';
 import type { ThemePreference } from './theme/theme';
 import '../shared/styles/editorial-shell.css';

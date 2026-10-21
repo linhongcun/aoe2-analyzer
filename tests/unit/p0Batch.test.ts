@@ -8,7 +8,7 @@ import { simulate } from '../../src/domain/simulator';
 import { ctx, units } from './helpers';
 import { search, type SearchItem } from '../../src/domain/search';
 import { TECH_AKA } from '../../src/features/search/hooks';
-import { CLASS_AKA } from '../../src/features/simulator/components/SimPanel';
+import { CLASS_AKA } from '../../src/shared/ui/sim/SimPanel';
 import { techs } from './helpers';
 import { readFileSync } from 'node:fs';
 
@@ -170,7 +170,7 @@ describe('#28 开局页头', () => {
 
 describe('#31 开局流程入口', () => {
   it('工具首项为开局流程 /builds，且不再是规划中', async () => {
-    const { TOOLS, FUTURE, WIKI } = await import('../../src/app/nav/sections');
+    const { TOOLS, FUTURE, WIKI } = await import('../../src/shared/nav/sections');
     expect(TOOLS[0]).toMatchObject({ key: 'builds', path: '/builds', label: '开局流程' });
     expect(TOOLS[0]!.status).toBeUndefined();
     expect(FUTURE.map((s) => s.key)).not.toContain('builds');

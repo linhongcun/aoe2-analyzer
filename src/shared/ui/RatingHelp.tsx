@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import FeedbackLink from '../../features/feedback/FeedbackLink';
+import FeedbackLink from './FeedbackLink';
 import { Icon } from './Icon';
 
 /** 「能力评分」标题 + 主观评分标注（详情页、对比页共用） */

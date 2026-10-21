@@ -1,4 +1,4 @@
-import { ArmorClasses, BonusTable } from '../../simulator/components/SimPanel';
+import { ArmorClasses, BonusTable } from '../../../shared/ui/sim/SimPanel';
 import { useEffect } from 'react';
 import { RangeB } from '../../../shared/ui/RangeB';
 import { RangeHelp } from '../../../shared/ui/RangeHelp';
@@ -16,15 +16,15 @@ import { confusablesOf } from '../../../data/confusables';
 import { Icon } from '../../../shared/ui/Icon';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { CivChip, CivIcon, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, UnitLink } from '../../../shared/ui/art';
-import { BLink } from '../../buildings/components/BLink';
+import { BLink } from '../../../shared/ui/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles, type DetailStat } from '../../../shared/ui/DetailBlocks';
 import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
-import Simulator from '../../simulator/components/Simulator';
+import Simulator from '../../../shared/ui/sim/Simulator';
 import UnitList from './UnitList';
 import { discountedCost, priceAge } from '../../../domain/costDiscount';
 import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/realCost';
-import { Basis } from '../../duel/components/RealCost';
+import { Basis } from '../../../shared/ui/RealCost';
 
 /** #88 S8：费用下面一行「采集时间 ≈ 1 个村民 m:ss」；时代跟页面所选，未选默认城堡；未选文明按通用速度 */
 function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {

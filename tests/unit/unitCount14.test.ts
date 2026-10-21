@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { WIKI } from '../../src/app/nav/sections';
+import { WIKI } from '../../src/shared/nav/sections';
 import { buildFamilies, collapse, unitCount, unitCountLabel } from '../../src/domain/family';
 import type { Unit } from '../../src/domain/types';
 import { units } from './helpers';
@@ -23,14 +23,17 @@ describe('#14 单位总数口径', () => {
     expect(+desc.match(/^(\d+) 个单位/)![1]!).toBe(collapse(units, fam).length);
   });
   it('源码不再写死单位数', () => {
-    expect(readFileSync('src/app/nav/sections.ts', 'utf8')).not.toMatch(/\d+ 个单位/);
+    expect(readFileSync('src/shared/nav/sections.ts', 'utf8')).not.toMatch(/\d+ 个单位/);
   });
   it('同中文名不同英文名的单位分开计：楼船 1750/1948、战车 1759/1962', () => {
     const ids = collapse(units, fam).map((x) => x.u.id);
     expect(ids).toEqual(expect.arrayContaining([1750, 1948, 1962, 1759]));
   });
   it('同英文名不同 id 的单位只计一次：答刺罕（城堡/马厩）', () => {
-    const r = collapse(units.filter((u) => u.en.endsWith('Tarkan')), fam);
+    const r = collapse(
+      units.filter((u) => u.en.endsWith('Tarkan')),
+      fam,
+    );
     expect(r).toHaveLength(1);
   });
 });

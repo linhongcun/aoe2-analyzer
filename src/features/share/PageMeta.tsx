@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useMatch } from 'react-router-dom';
 import { PAGE_META, pageKey, sharePageUrl, SITE_NAME } from '../../domain/sharePage';
-import ShareImage from './ShareImage';
+import ShareImage from '../../shared/ui/ShareImage';
 const notFoundMeta: (typeof PAGE_META)[string] = {
   title: '找不到该页',
   description: '这个地址没有对应的页面，请检查链接，或通过全局搜索查找内容。',

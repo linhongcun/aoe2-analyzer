@@ -30,11 +30,14 @@ src/
     hooks.ts          useCore() / useTrees()
   features/<name>/  civs units techs tree simulator dlc compare matchup
     components/       页面组件（路由级组件经 React.lazy 拆包）
-    hooks/            特性内状态（如 simulator/useSimState：状态以 URL 为唯一来源）
+    hooks/            特性内状态
     logic/            特性内纯逻辑（如 tree/layout.ts 布局计算、civs/filter.ts）
   shared/
     ui/               Icon（Lucide）、art（CivIcon/UnitLink/CostView/StatIcon/DlcBadge…）、widgets（Radar/PosBox/Linked/DlcBar…）
     styles/           tokens.css（设计令牌）+ base.css（全局主题样式）
+    ui/sim/           跨页面复用的单位模拟器（SimPanel / Simulator，单位详情、PK、建筑模拟共用）
+    hooks/            跨页面状态（如 useSimState：状态以 URL 为唯一来源）
+    nav/sections.ts   导航分组与模块注册表（导航、首页卡片、面包屑、搜索共用）
     utils/sticky.ts   跨路由保留的筛选状态（等价于旧版隐藏面板保留输入）
 public/img/         游戏美术（civs/units/techs/buildings/dlc/stats，WebP）
 tests/unit/         Vitest：模拟器数值、前置链、DLC 映射、自动链接器

@@ -1,5 +1,5 @@
-import { unitCountLabel } from '../../shared/utils/unitCountLabel';
-import type { IconName } from '../../shared/ui/Icon';
+import { unitCountLabel } from '../utils/unitCountLabel';
+import type { IconName } from '../ui/Icon';
 
 export const SECTION_GROUPS = [
   { key: 'beginner', title: '新手入门', desc: '认识一局游戏，查术语、练操作，找到入门方向。' },

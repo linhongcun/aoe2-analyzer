@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import { describe, expect, it } from 'vitest';
-import { ALL, FUTURE, HOME_GROUPS, TOOL_GROUPS, WIKI, sectionOf } from '../../src/app/nav/sections';
+import { ALL, FUTURE, HOME_GROUPS, TOOL_GROUPS, WIKI, sectionOf } from '../../src/shared/nav/sections';
 import { ToolsMenu } from '../../src/app/nav/ToolsMenu';
 import Home from '../../src/features/home/components/Home';
 

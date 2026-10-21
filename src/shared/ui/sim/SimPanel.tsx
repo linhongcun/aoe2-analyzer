@@ -1,14 +1,14 @@
 /** 通用科技模拟器面板（单位与建筑共用）：文明/时代选择、分组科技开关、预设、属性表、费用汇总、团队加成、对比列 */
-import { CivPicker } from '../../../shared/ui/CivPicker';
+import { CivPicker } from '../CivPicker';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
 import { allNumeric, presetUpTo, simGroup, totalCost, type SimTech } from '../../../domain/simulator';
 import type { NumStat, StatSet, Tech } from '../../../domain/types';
-import { CostView, StatIcon, TechIcon } from '../../../shared/ui/art';
-import { Icon } from '../../../shared/ui/Icon';
-import { fmtStat } from '../logic/format';
+import { CostView, StatIcon, TechIcon } from '../art';
+import { Icon } from '../Icon';
+import { fmtStat } from '../../utils/simFormat';
 
 export type StatRow = [NumStat, string, string];
 export interface SimPanelProps {

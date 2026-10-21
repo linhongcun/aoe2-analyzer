@@ -9,7 +9,7 @@ import units from '../../src/data/units.json';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
 import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock, gatherModel, realCost } from '../../src/domain/realCost';
 import type { Unit } from '../../src/domain/types';
-import { RealCostBlock, uncountedText } from '../../src/features/duel/components/RealCost';
+import { RealCostBlock, uncountedText } from '../../src/shared/ui/RealCost';
 
 type Eff = { kind: string; attr?: string; target?: string; op?: string; v?: number };
 const E = eco as unknown as {

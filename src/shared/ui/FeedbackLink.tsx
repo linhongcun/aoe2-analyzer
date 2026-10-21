@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Icon } from '../../shared/ui/Icon';
-import { feedbackUrl } from './feedback';
+import { Icon } from './Icon';
+import { feedbackUrl } from '../utils/feedback';
 
 /** 报错/反馈入口：在新标签打开预填好的 GitHub issue */
 export default function FeedbackLink({ compact, kind = 'data', label }: { compact?: boolean; kind?: 'bug' | 'data' | 'feature'; label?: ReactNode }) {

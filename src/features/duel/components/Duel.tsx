@@ -1,4 +1,4 @@
-import ShareImage from '../../share/ShareImage';
+import ShareImage from '../../../shared/ui/ShareImage';
 /** 工具：单位 PK（1v1 / N vs M / 等资源）。属性复用科技模拟器引擎，战斗计算见 domain/duel.ts */
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -17,14 +17,14 @@ import { Icon } from '../../../shared/ui/Icon';
 import { RangeB } from '../../../shared/ui/RangeB';
 import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
-import SimPanel, { type StatRow } from '../../simulator/components/SimPanel';
-import { SIM_ROWS } from '../../simulator/logic/format';
-import { fmtSide, parseSide, type Mode, type SideSpec } from '../logic/state';
+import SimPanel, { type StatRow } from '../../../shared/ui/sim/SimPanel';
+import { SIM_ROWS } from '../../../shared/utils/simFormat';
+import { fmtSide, parseSide, type Mode, type SideSpec } from '../../../domain/duelState';
 import { CostDiscountBlock } from './CostDiscount';
 import { UnitPicker } from './UnitPicker';
 import { substituteIn } from '../logic/substitute';
 import { BreakEven } from './BreakEven';
-import { RealCostBlock, realCostOf } from './RealCost';
+import { RealCostBlock, realCostOf } from '../../../shared/ui/RealCost';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
 import { countForTime, DEFAULT_MIN, DEFAULT_VILS, fmtClock } from '../../../domain/realCost';
 import { CounterSummary } from './CounterSummary';
@@ -33,7 +33,7 @@ import { AgeComparison } from './AgeComparison';
 import { BattleReplay } from './BattleReplay';
 import { groupReplay, oneReplay } from '../../../domain/battleReplay';
 import { UpgradeComparison } from './UpgradeComparison';
-import { DATA_SOURCES } from '../../about/dataInfo';
+import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };

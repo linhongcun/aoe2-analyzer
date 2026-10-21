@@ -4,7 +4,7 @@ import units from '../../src/data/units.json';
 import buildings from '../../src/data/buildings.json';
 import techs from '../../src/data/techs.json';
 import { gatherModel } from '../../src/domain/realCost';
-import { uncountedText } from '../../src/features/duel/components/RealCost';
+import { uncountedText } from '../../src/shared/ui/RealCost';
 import { search, pyMatch, PY_RESERVE, TIER, score, type SearchItem } from '../../src/domain/search';
 
 /** v0.10.0 验收（#156）。Kent 写，先失败，功能做完后应全部通过。 */
@@ -38,11 +38,12 @@ describe('A #156 亚美尼亚、波希米亚「未计入」原因改为「需研
       expect(civs.find((c) => c.en === en)?.bon).toContain(bonus);
       for (const age of ages) {
         const g = gatherModel(age, en);
-        expect(g.unsupported.map((x) => x.label), `${en}@${age}`).toEqual(labelsByAge[age]);
+        expect(
+          g.unsupported.map((x) => x.label),
+          `${en}@${age}`,
+        ).toEqual(labelsByAge[age]);
         for (const line of g.unsupported) {
-          expect(uncountedText(en, zh, line.label), `${en}@${age}`).toBe(
-            `未计入：${zh} ${line.label}（需研究科技，未建模）`,
-          );
+          expect(uncountedText(en, zh, line.label), `${en}@${age}`).toBe(`未计入：${zh} ${line.label}（需研究科技，未建模）`);
         }
       }
     });
@@ -62,9 +63,7 @@ describe('A #156 亚美尼亚、波希米亚「未计入」原因改为「需研
     expect(g.unsupported.length).toBeGreaterThan(0);
     expect(g.rate).toEqual(gatherModel(4).rate);
     for (const line of g.unsupported) {
-      expect(uncountedText('Mayans', '玛雅', line.label)).toBe(
-        `未计入：玛雅 ${line.label}（资源多持续 15%，不是采集变快，暂不计入）`,
-      );
+      expect(uncountedText('Mayans', '玛雅', line.label)).toBe(`未计入：玛雅 ${line.label}（资源多持续 15%，不是采集变快，暂不计入）`);
     }
   });
 
@@ -76,9 +75,7 @@ describe('A #156 亚美尼亚、波希米亚「未计入」原因改为「需研
 
   it('A5 边界：未覆盖原因的文明仍使用原有兜底原因', () => {
     // v0.11.0 A（#162）会给马里等 7 家写具体原因，这里用不在范围内的假文明守住兜底。
-    expect(uncountedText('NoSuchCiv', '某文明', '采金加成')).toBe(
-      '未计入：某文明 采金加成（数据读不准，按通用速度算）',
-    );
+    expect(uncountedText('NoSuchCiv', '某文明', '采金加成')).toBe('未计入：某文明 采金加成（数据读不准，按通用速度算）');
   });
 });
 
@@ -110,14 +107,8 @@ const item = (id: string, fields: Partial<SearchItem>): SearchItem => ({
   ...fields,
 });
 const exact = item('exact', { zh: '精确英文命中', en: 'ba' });
-const pinyin = Array.from({ length: 12 }, (_, i) =>
-  item(`py-${i}`, { zh: `靶站${i}`, en: `Target ${i}`, py: 'bazhan', pyi: 'bz' }),
-);
-const crowded = [
-  exact,
-  ...Array.from({ length: 40 }, (_, i) => item(`name-${i}`, { zh: `名称命中${i}`, en: `candidate ba${i}` })),
-  ...pinyin,
-];
+const pinyin = Array.from({ length: 12 }, (_, i) => item(`py-${i}`, { zh: `靶站${i}`, en: `Target ${i}`, py: 'bazhan', pyi: 'bz' }));
+const crowded = [exact, ...Array.from({ length: 40 }, (_, i) => item(`name-${i}`, { zh: `名称命中${i}`, en: `candidate ba${i}` })), ...pinyin];
 
 /** 固定 v0.9.0 旧尾部边界（末尾 5 位）；改 PY_RESERVE 本身不能让「往前提」断言跟着松掉。 */
 const LIMIT = 30;
@@ -247,7 +238,10 @@ describe('D #156 已计入采集加成携带 aoe2techtree 原文要点（civs.js
       for (const age of [1, 2, 3, 4]) {
         const g = gatherModel(age, en);
         const expectedLabel = en === 'Berbers' && age === 1 ? '村民移速 +5%' : label;
-        expect(g.applied.map((line) => line.label), `${en}@${age}`).toEqual([expectedLabel]);
+        expect(
+          g.applied.map((line) => line.label),
+          `${en}@${age}`,
+        ).toEqual([expectedLabel]);
         expect(g.unsupported, `${en}@${age}`).toEqual([]);
 
         for (const line of g.applied) {

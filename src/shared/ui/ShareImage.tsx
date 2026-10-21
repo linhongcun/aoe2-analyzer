@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { sharePageUrl, SITE_NAME } from '../../domain/sharePage';
-import { Icon } from '../../shared/ui/Icon';
-import './share.css';
+import { Icon } from './Icon';
+import '../styles/share.css';
 
 export interface ShareImageProps {
   title: string;
