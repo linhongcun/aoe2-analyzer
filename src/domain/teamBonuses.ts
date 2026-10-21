@@ -1,7 +1,7 @@
 /** Issue 228: a source viewer only. These selections never enter a simulator. */
 import raw from '../data/team_bonuses.json';
-import civsRaw from '../data/civs.json';
-import unitsRaw from '../data/units.json';
+import civsRaw from '../data/raw/civs';
+import unitsRaw from '../data/raw/units';
 import type { Cost } from './types';
 
 export type TeamEffectKind = 'attributes' | 'production' | 'unlock' | 'economy' | 'research' | 'other';

@@ -1,8 +1,8 @@
 /** Issue 241: finite, conditional reading cards. No mixed-army combat simulation. */
 import content from '../content/mixed-army.json';
-import units from '../data/units.json';
-import techs from '../data/techs.json';
-import buildings from '../data/buildings.json';
+import units from '../data/raw/units';
+import techs from '../data/raw/techs';
+import buildings from '../data/raw/buildings';
 import { civs } from '../data';
 import { GENERAL_GARRISON_DATA } from './garrisonGeneral';
 import { productionBuildings, productionTechAge, productionTechs, type ProductionContext } from './production';

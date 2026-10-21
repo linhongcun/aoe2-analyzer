@@ -1,5 +1,5 @@
 /** #42：开局模拟是否完整支持某文明（UI 据此置灰，#39 使用）。规则与数据见 buildSim.ts 的 classifyCivEffect。 */
-import eco from '../data/eco.json';
+import eco from '../data/raw/eco';
 import { buildOrders } from '../data/buildOrders';
 import { simSupport as detail, type EcoData } from './buildSim';
 

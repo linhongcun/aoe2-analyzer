@@ -28,6 +28,7 @@ src/
   data/             生成的 JSON + 类型化加载器
     index.ts          civs 随主包；units+techs、trees 通过 dynamic import 懒加载并缓存
     hooks.ts          useCore() / useTrees()
+    raw/*.ts          核心 JSON 唯一的同步入口：civs/units/techs/buildings/eco.ts，原样转出
   features/<name>/  civs units techs tree simulator dlc compare matchup
     components/       页面组件（路由级组件经 React.lazy 拆包）
     hooks/            特性内状态
@@ -43,6 +44,22 @@ public/img/         游戏美术（civs/units/techs/buildings/dlc/stats，WebP�
 tests/unit/         Vitest：模拟器数值、前置链、DLC 映射、自动链接器
 tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 ```
+
+## 核心数据 JSON 的读取入口（#281）
+
+`src/data/{civs,units,techs,buildings,trees,eco,effects}.json` 只能由下面 7 个文件直接 import（`scripts/check-layers.mjs` 的 `LOADERS`，逐个列名）。src 下其他任何文件，包括 `shared/`、`app/` 和 `data/` 层的其他文件，直接 import 都会报 `core-json-direct`：
+
+| 文件                        | 角色                                                                       |
+| --------------------------- | -------------------------------------------------------------------------- |
+| `src/data/index.ts`         | 异步入口：civs 随主包；units/techs/buildings、trees 动态 import 拆包并缓存 |
+| `src/data/raw/civs.ts`      | 同步入口（原样转出 civs.json）                                             |
+| `src/data/raw/units.ts`     | 同步入口（原样转出 units.json）                                            |
+| `src/data/raw/techs.ts`     | 同步入口（原样转出 techs.json）                                            |
+| `src/data/raw/buildings.ts` | 同步入口（原样转出 buildings.json）                                        |
+| `src/data/raw/eco.ts`       | 同步入口（原样转出 eco.json）                                              |
+| `src/domain/datEffects.ts`  | 特例：effects.json 的类型与转换                                            |
+
+新增入口要登记进 `LOADERS`，并同步更新本表和 `AGENTS.md`。
 
 ## 数据流
 

@@ -1,7 +1,7 @@
 /** #3 收尾：#/builds 列表页的到达时间（模拟器实时算，不读开局 JSON 里手写的 target.time）与推荐文明支持情况。
  *  按需加载（含 eco/units 数据），列表首屏不变重。 */
-import eco from '../../data/eco.json';
-import units from '../../data/units.json';
+import eco from '../../data/raw/eco';
+import units from '../../data/raw/units';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../domain/buildSim';
 import type { BuildOrder } from '../../domain/buildOrder';
 import { simSupport } from '../../domain/simSupport';

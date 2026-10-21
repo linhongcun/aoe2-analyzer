@@ -10,7 +10,7 @@
  * 精确算术：每档用 .dat 乘数换算的整数百分比 p（构建时已与加成文本逐时代对账一致），
  * 折后价 = 原价 × Π(100 − p) / 100^k，分子分母全程整数，最后一步才取整。
  */
-import civsRaw from '../data/civs.json';
+import civsRaw from '../data/raw/civs';
 import { DAT, type DatCostDiscount } from './datEffects';
 import type { Cost } from './types';
 import { roundHalfPrice } from './roundHalfPrice';
