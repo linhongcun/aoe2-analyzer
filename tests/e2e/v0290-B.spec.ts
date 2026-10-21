@@ -147,6 +147,56 @@ test.describe('#275 文明加成详情页标题：只在文明名与「文明加
     });
 });
 
+// 内容指南来源说明 p.cg-note 里的日期（Steve 2026-10-21 并入 #275，起因 #334 复核：375 断成「2023-」/「05-11」，390 断成「2024-11-」/「05」）
+const ISO_DATE = /\d{4}-\d{2}-\d{2}/g;
+async function cgNoteDates(page: Page) {
+  return page.locator('main p.cg-note').evaluateAll((els, source) => {
+    const all: string[] = [];
+    const bad: string[] = [];
+    for (const el of els) {
+      if (!(el as HTMLElement).offsetParent) continue;
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      for (let n = walker.nextNode() as Text | null; n; n = walker.nextNode() as Text | null)
+        for (const m of n.data.matchAll(new RegExp(source, 'g'))) {
+          all.push(m[0]);
+          const lines: string[] = [];
+          let top: number | null = null;
+          for (let k = 0; k < m[0].length; k++) {
+            const r = document.createRange();
+            r.setStart(n, m.index! + k);
+            r.setEnd(n, m.index! + k + 1);
+            const t = Math.round(r.getBoundingClientRect().top);
+            if (top === null || t !== top) lines.push('');
+            top = t;
+            lines[lines.length - 1] += m[0][k];
+          }
+          const range = document.createRange();
+          range.setStart(n, m.index!);
+          range.setEnd(n, m.index! + m[0].length);
+          const tops = new Set([...range.getClientRects()].filter((r) => r.width > 0).map((r) => Math.round(r.top)));
+          if (tops.size > 1 || lines.length > 1) bad.push(`${m[0]} 断成「${lines.join('」/「')}」`);
+        }
+    }
+    return { all, bad };
+  }, ISO_DATE.source);
+}
+test.describe('#275 内容指南：来源说明里的日期不在连字符处断行（Steve 2026-10-21 并入）', () => {
+  for (const width of WIDTHS)
+    test(`#/content-guide @${width}：展开全部来源后，p.cg-note 里每个 YYYY-MM-DD 都在同一行`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('./#/content-guide');
+      const details = page.locator('main details');
+      await expect(details.first()).toBeVisible();
+      for (const d of await details.all()) if ((await d.getAttribute('open')) === null) await d.locator('> summary').click();
+      // 防空转：三处支持站文章的发布日期都量到
+      await expect(page.locator('main details.cg-sources li', { hasText: '发布日期：2023-05-11' })).toHaveCount(1);
+      const { all, bad } = await cgNoteDates(page);
+      expect(all, '防空转').toEqual(expect.arrayContaining(['2023-05-11', '2024-11-05']));
+      expect(all.length).toBeGreaterThan(10);
+      expect(bad).toEqual([]);
+    });
+});
+
 // ---------- #326 ----------
 /** 每张文明卡：DLC 小图标的矩形与卡片内任何文字（不含图标自身）的行矩形都不相交 */
 async function overlaps(page: Page) {
