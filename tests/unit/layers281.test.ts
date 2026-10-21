@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error 纯 JS 脚本，没有类型声明
 import { classify, LOADERS, parseImports, ROOT, RULES } from '../../scripts/check-layers.mjs';
@@ -52,6 +53,25 @@ describe('#281 分层边界检查脚本', () => {
       ['src/shared/utils/unitCountLabel.ts', false, false],
       ['src/domain/family.ts', false, true],
     ]);
+  });
+
+  it('eager 的 import.meta.glob 按匹配到的每个文件计边，非 eager 不计', () => {
+    const parse = parseImports as (f: string, t: string) => Edge[];
+    const eager = parse(`${ROOT}/src/data/buildOrders.ts`, "const m = import.meta.glob('./build-orders/*.json', { eager: true });");
+    expect(eager.length).toBeGreaterThan(0);
+    expect(eager.every((x) => x.to?.startsWith('src/data/build-orders/') && x.to.endsWith('.json') && !x.dynamic && !x.typeOnly)).toBe(true);
+    expect(parse(`${ROOT}/src/data/buildOrders.ts`, "const m = import.meta.glob('./build-orders/*.json');")).toEqual([]);
+    // 真实文件：只有 src/data/buildOrders.ts 用到，它不在 domain/features 下，不改变违规口径
+    const real = parse(`${ROOT}/src/data/buildOrders.ts`, readFileSync(`${ROOT}/src/data/buildOrders.ts`, 'utf8'));
+    expect(real.filter((x) => x.spec === './build-orders/*.json').length).toBe(eager.length);
+    expect(real.map((x) => rule(x)).filter(Boolean)).toEqual([]);
+  });
+
+  it('require() 与 import x = require() 直接报错，不静默漏扫', () => {
+    const parse = parseImports as (f: string, t: string) => Edge[];
+    expect(() => parse(`${ROOT}/src/domain/x.ts`, "const r = require('react');")).toThrow(/require/);
+    expect(() => parse(`${ROOT}/src/domain/x.ts`, "import r = require('react');")).toThrow(/require/);
+    expect(() => parse(`${ROOT}/src/domain/x.ts`, "// const r = require('react');")).not.toThrow();
   });
 
   it('默认模式只报警（退出码 0），--strict 在有违规时退出码 1', () => {

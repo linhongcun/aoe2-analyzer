@@ -74,11 +74,49 @@ export function parseImports(absFile, text = readFileSync(absFile, 'utf8')) {
       ts.isStringLiteralLike(node.arguments[0])
     ) {
       add(node, node.arguments[0].text, false, true);
+    } else if (ts.isImportEqualsDeclaration(node) || (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === 'require')) {
+      // require() / import x = require() 绕过 ESM 依赖图，扫描器无法按分层规则核对，直接报错要求改成 import。
+      throw new Error(`${from}:${line(node)} 用了 require() / import = require()，分层检查不支持，请改成 ESM import`);
+    } else if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      node.expression.name.text === 'glob' &&
+      node.expression.expression.getText(sf) === 'import.meta' &&
+      node.arguments[0] &&
+      ts.isStringLiteral(node.arguments[0]) &&
+      isEager(node.arguments[1])
+    ) {
+      // eager 的 import.meta.glob 等同于对每个匹配文件的静态 import
+      for (const to of globEager(absFile, node.arguments[0].text))
+        edges.push({ from, line: line(node), spec: node.arguments[0].text, to, typeOnly: false, dynamic: false });
     }
     ts.forEachChild(node, visit);
   };
   visit(sf);
   return edges;
+}
+
+/** import.meta.glob 的第二个参数是否写了 eager: true（按语法树判断） */
+function isEager(arg) {
+  if (!arg || !ts.isObjectLiteralExpression(arg)) return false;
+  return arg.properties.some(
+    (p) =>
+      ts.isPropertyAssignment(p) &&
+      (ts.isIdentifier(p.name) || ts.isStringLiteral(p.name)) &&
+      p.name.text === 'eager' &&
+      p.initializer.kind === ts.SyntaxKind.TrueKeyword,
+  );
+}
+
+/** 只支持本仓库用到的 './dir/*.ext' 形式；其他写法直接报错，避免静默漏扫 */
+function globEager(fromAbs, pattern) {
+  const m = /^(.*)\/\*(\.[a-z]+)$/.exec(pattern);
+  if (!m) throw new Error(`分层检查不支持的 import.meta.glob 写法 ${pattern}（${posix(relative(ROOT, fromAbs))}）`);
+  const dir = resolve(dirname(fromAbs), m[1]);
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(m[2]))
+    .sort()
+    .map((f) => posix(relative(ROOT, join(dir, f))));
 }
 
 const featureOf = (f) => /^src\/features\/([^/]+)\//.exec(f)?.[1] ?? null;
