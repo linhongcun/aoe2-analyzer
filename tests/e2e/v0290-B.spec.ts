@@ -3,7 +3,7 @@ import civsRaw from '../../src/data/civs.json' with { type: 'json' };
 import { guardPage, WIDTHS } from './v0290-helpers';
 
 /**
- * v0.29.0 验收（#329）B 组：手机排版与交互（#316 已并入 main tests/e2e/v0290-316.spec.ts）。Kent 写，先失败；标「守卫」的现在就应通过。
+ * v0.29.0 验收（#329）B 组：手机排版与交互（#313/#316 已并入 main：v0290-313|316.spec.ts）。Kent 写，先失败；标「守卫」的现在就应通过。
  * 搜索弱网（#325）单独在 v0290-325-search.spec.ts。
  */
 guardPage();
@@ -71,37 +71,6 @@ test.describe('#275 团队加成详情页标题：只在文明名与「团队加
       }
       expect(checked, '防空转：56 个团队加成标题都量到').toBe((civsRaw as unknown[]).length);
       expect(bad).toEqual([]);
-    });
-});
-
-// ---------- #313 ----------
-const field = (page: Page, name: string) => page.getByRole('textbox', { name, exact: true });
-test.describe('#313 手填复盘：连续清空两次后撤销', () => {
-  for (const width of [360, 1280])
-    test(`写「旧草稿」→ 清空 → 再清空（或无法再清空）→ 撤销，恢复「旧草稿」和本机存档 @${width}`, async ({ page }) => {
-      await page.setViewportSize({ width, height: 900 });
-      await page.goto('./#/match-review');
-      await field(page, '复盘标题').fill('旧草稿');
-      const clear = page.getByRole('button', { name: '清空本页内容', exact: true });
-      const dialog = page.getByRole('dialog', { name: '确认清空本页内容？', exact: true });
-      const confirm = dialog.getByRole('button', { name: '确认清空', exact: true });
-      const undo = page.getByRole('button', { name: '撤销', exact: true });
-      await clear.click();
-      await confirm.click();
-      await expect(field(page, '复盘标题')).toHaveValue('');
-      await expect(undo).toBeVisible();
-      if (await clear.isEnabled()) {
-        await clear.click();
-        if (await dialog.isVisible()) await confirm.click();
-      } else {
-        // 禁用方案：要有可见说明，读屏能听到原因；按钮仍不小于 44px
-        await expect(clear).toHaveAccessibleDescription(/.+/);
-        const box = await clear.boundingBox();
-        expect(box!.height).toBeGreaterThanOrEqual(44);
-      }
-      await undo.click();
-      await expect(field(page, '复盘标题')).toHaveValue('旧草稿');
-      expect(await page.evaluate(() => localStorage.getItem('aoe2-match-review-v1') ?? '')).toContain('旧草稿');
     });
 });
 
