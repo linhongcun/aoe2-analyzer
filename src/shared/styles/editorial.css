@@ -475,6 +475,10 @@ a.hcard:hover {
     height: 40px;
   }
   /* issue 326：手机宽度下保留 base.css 的左内边距（28px），给左下角 24px 的 DLC 图标让位，不再盖住「边位」 */
+  /* 模拟器卡片没有 DLC 图标，费用行保持原来的 0 左内边距（Steve 设计审查，PR 339） */
+  #simhub .ucard .mini {
+    padding-left: 0;
+  }
   :is(#units, #techs, #buildings) .ucard :is(.dlcb, [data-tech-release]) {
     left: var(--space-3);
   }
