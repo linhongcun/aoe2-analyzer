@@ -23,7 +23,7 @@ describe('#281 分层规则', () => {
     expect(classify(e('src/features/a/A.tsx', 'src/features/b/B.tsx'))).toBe('feature-to-feature');
     expect(classify(e('src/features/a/A.tsx', 'src/features/a/x/Y.ts'))).toBeNull();
     expect(classify(e('src/shared/ui/X.tsx', 'src/features/a/A.tsx'))).toBe('shared-upward');
-    expect(classify(e('src/shared/ui/X.tsx', 'src/app/nav/sections.ts'))).toBe('shared-upward');
+    expect(classify(e('src/shared/ui/X.tsx', 'src/app/Layout.tsx'))).toBe('shared-upward');
     expect(classify(e('src/domain/x.ts', null, 'react'))).toBe('domain-upward');
     expect(classify(e('src/domain/x.ts', null, 'react-dom/client'))).toBe('domain-upward');
     expect(classify(e('src/domain/x.ts', null, 'react-router-dom'))).toBeNull();
@@ -63,9 +63,26 @@ describe('#281 分层规则', () => {
       ['./lazy', false, true],
     ]);
     // 真实解析：TypeScript 允许 './x.js' 指向 x.ts
-    expect(parseImports(`${ROOT}/src/app/nav/sections.ts`, "import { f } from '../../domain/family.js';")[0]!.to).toBe('src/domain/family.ts');
+    expect(parseImports(`${ROOT}/src/shared/nav/sections.ts`, "import { f } from '../../domain/family.js';")[0]!.to).toBe('src/domain/family.ts');
     expect(() => parseImports(`${ROOT}/src/domain/x.ts`, "const r = require('react');", (s) => s)).toThrow(/require/);
     expect(CORE_JSON_LOADERS.has('src/domain/datEffects.ts')).toBe(true);
+  });
+
+  it('守卫：eager glob 支持字面路径、通配、数组与排除；非 eager 不计', () => {
+    const at = `${ROOT}/src/features/z/Z.tsx`;
+    const tos = (code: string) => parseImports(at, code).map((x) => x.to);
+    expect(tos("const m = import.meta.glob('../../data/units.json', { eager: true });")).toEqual(['src/data/units.json']);
+    const many = tos("const m = import.meta.glob('../../data/*.json', { eager: true });");
+    expect(many).toEqual(expect.arrayContaining(['src/data/units.json', 'src/data/eco.json']));
+    expect(many.every((t) => /^src\/data\/[^/]+\.json$/.test(t!))).toBe(true);
+    expect(tos("const m = import.meta.glob(['../../data/{units,techs}.json'], { eager: true });")).toEqual(['src/data/techs.json', 'src/data/units.json']);
+    const excl = tos("const m = import.meta.glob(['../../data/*.json', '!../../data/{civs,techs}.json'], { eager: true });");
+    expect(excl).toContain('src/data/units.json');
+    expect(excl).not.toContain('src/data/techs.json');
+    expect(tos("const m = import.meta.glob('/src/data/build-orders/**/*.json', { eager: true });").length).toBeGreaterThan(0);
+    expect(tos("const m = import.meta.glob('../../data/units.json');")).toEqual([]);
+    expect(() => tos("const m = import.meta.glob('../../data/nope.json', { eager: true });")).toThrow(/不存在/);
+    expect(classify(parseImports(at, "const m = import.meta.glob('../../data/units.json', { eager: true });")[0]!)).toBe('core-json-direct');
   });
 
   it('守卫：动态 import 也受分层规则约束', () => {
