@@ -1150,7 +1150,7 @@ export function simScope(eco: EcoData, bos: BuildOrder[]) {
 }
 
 /** tech 是否可以应用：整条 tech 里没有未实现/未分类的效果 */
-function techAtomicOk(row: EffectRow, scope: ReturnType<typeof simScope>): boolean {
+export function techAtomicOk(row: EffectRow, scope: ReturnType<typeof simScope>): boolean {
   return row.effects.every((e) => {
     const k = classifyCivEffect(e, row as { source?: string; tech?: number }, scope).kind;
     return k !== 'unhandled' && k !== 'unknown';
@@ -1201,6 +1201,8 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
     if (e.attr === 'speed') return (vil || id === 13) && e.op === 'mul' ? { kind: 'handled' } : { kind: 'irrelevant', reason: '非村民移速不影响开局时间' };
     if (FARM_UNITS.has(id) && e.attr === 'workRate')
       return { kind: 'unhandled', reason: '农田单位 workRate 与 task:farm 是否重复待 .dat 核实（罗马、斯拉夫）' };
+    // issue 317：农田费用倍率由 applyEffects 计入 costMul（条顿农田 -40% 会改变开局结果），归为已实现；只影响分类，不改数值
+    if (FARM_UNITS.has(id) && e.attr && e.attr in COST_ATTR && e.op === 'mul') return { kind: 'handled' };
     if (FARM_UNITS.has(id) || (TC_UNITS.has(id) && id !== TC && e.attr !== 'workRate'))
       return { kind: 'irrelevant', reason: '农田/升级后城镇中心的非速度属性不影响开局' };
     if (e.attr && HANDLED_ATTR.has(e.attr) && (e.op === 'mul' || (e.op === 'add' && (e.attr === 'carry' || (e.attr in COST_ATTR && e.attr !== 'cost')))))

@@ -94,6 +94,9 @@ const SOURCED: Record<string, Record<string, { value: number | 'eco'; bonus: num
   Berbers: { 'class:4:speed': { value: 'eco', bonus: 0 } },
 };
 
+/** issue 317：真实成本采集模型计入了哪些文明加成（civs.json bon 序号）；与 gatherModel 的 applied 同一张 SOURCED 表 */
+export const gatherBonusIdx = (civ: string): number[] => Object.values(SOURCED[civ] ?? {}).flatMap((s) => (s === 'drop' ? [] : [s.bonus]));
+
 const pct = (m: Mod) => Math.round((m.mul - 1) * 100);
 const sign = (n: number) => (n < 0 ? `\u2212${-n}` : `+${n}`);
 
