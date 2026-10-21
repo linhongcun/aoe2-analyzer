@@ -222,13 +222,23 @@ export type LayerRule = 'feature-to-feature' | 'shared-upward' | 'domain-upward'
 export interface Violation extends ImportEdge {
   rule: LayerRule;
 }
-/** #281：src/{domain,features} 不能直接 import 这些 JSON；src/data/index.ts 和专门的 loader 除外 */
+/**
+ * #281 规则 4 的核心 JSON。原文是「src/{domain,features} 不能直接 import，src/data/index.ts 和专门的 loader 除外」；
+ * 验收口径收紧到整个 src：只有 CORE_JSON_LOADERS 里的文件能直接 import，src/data 下其他文件、shared、app 一样报。
+ */
 export const CORE_JSON = ['civs', 'units', 'techs', 'buildings', 'trees', 'eco', 'effects'].map((n) => `src/data/${n}.json`);
 /**
- * 「专门的 loader」：#281 没点名。#281 列出的 domain 9 处里没有 datEffects.ts，
- * 说明 datEffects.ts（effects.json 的唯一读取入口）被当作 loader。新增 loader 要在这里登记并在 PR 里说明。
+ * 唯一允许直接 import 核心 JSON 的 7 个文件（逐个登记，不按目录豁免）：
+ * - src/data/index.ts：异步/加工后的读取接口
+ * - src/data/raw/{civs,units,techs,buildings,eco}.ts：#320 的同步原样读取入口
+ * - src/domain/datEffects.ts：effects.json 的专门 loader（#281 列的 domain 9 处里没有它）
+ * 新增 loader 要在这里登记并在 PR 里说明。
  */
-export const CORE_JSON_LOADERS = new Set(['src/domain/datEffects.ts']);
+export const CORE_JSON_LOADERS = new Set([
+  'src/data/index.ts',
+  ...['civs', 'units', 'techs', 'buildings', 'eco'].map((n) => `src/data/raw/${n}.ts`),
+  'src/domain/datEffects.ts',
+]);
 
 const featureOf = (f: string) => /^src\/features\/([^/]+)\//.exec(f)?.[1] ?? null;
 
@@ -247,8 +257,7 @@ export function classify(e: ImportEdge): LayerRule | null {
     const upward = to !== null && (to.startsWith('src/features/') || to.startsWith('src/app/') || to.startsWith('src/shared/ui/'));
     if (react || upward) return 'domain-upward';
   }
-  if ((file.startsWith('src/domain/') || file.startsWith('src/features/')) && to && CORE_JSON.includes(to) && !CORE_JSON_LOADERS.has(file))
-    return 'core-json-direct';
+  if (file.startsWith('src/') && to && CORE_JSON.includes(to) && !CORE_JSON_LOADERS.has(file)) return 'core-json-direct';
   return null;
 }
 
