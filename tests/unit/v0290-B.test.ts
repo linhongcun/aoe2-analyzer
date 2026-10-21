@@ -39,7 +39,7 @@ describe('#316 「侦察辨析」入口说明', () => {
 // - How to counter it：“either boom harder yourself or punish them militarily”；“Forward TCs can be denied by contesting the location with early military or by Trebuchet/siege”
 /** 判断依据 + 解读：同一句里（不跨句号 / 分号）位置线索与解读关键词相距不超过 24 字 */
 const near = (cue: string, kw: string) => new RegExp(`(?:${cue})[^。；]{0,24}(?:${kw})|(?:${kw})[^。；]{0,24}(?:${cue})`);
-const TC_BOOM_CUE = '敌方家|对方家|自家附近';
+const TC_BOOM_CUE = '敌方自家附近';
 const TC_FWD_CUE = '前线|我方资源';
 const TC_BOOM_READ = near(TC_BOOM_CUE, '扩张|经济');
 const TC_FWD_READ = near(TC_FWD_CUE, '前置|进攻|压制');
@@ -61,7 +61,7 @@ describe('#316 「看见新增城镇中心」同时列出两种解读，各带�
   });
   it('「可能意味着什么」：敌方自家附近 = 扩张经济，前线 / 我方资源点附近 = 前置进攻', () => {
     expect(extraTc.meaning, '前置进攻（前线 / 我方资源点）').toMatch(TC_FWD_READ);
-    expect(extraTc.meaning, '扩张经济（敌方家 / 自家附近）').toMatch(TC_BOOM_READ);
+    expect(extraTc.meaning, '扩张经济（必须写「敌方自家附近」，Steve 21:22）').toMatch(TC_BOOM_READ);
   });
   it('「下一步做什么」：两种解读各有一句应对', () => {
     expect(extraTc.next, '前置：出兵争夺位置或用攻城武器拆除').toMatch(TC_FWD_NEXT);

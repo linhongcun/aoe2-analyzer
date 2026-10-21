@@ -291,7 +291,7 @@ test.describe('#316 首页与导航', () => {
 // - How to counter it：“either boom harder yourself or punish them militarily”；“Forward TCs can be denied by contesting the location with early military or by Trebuchet/siege”
 /** 判断依据 + 解读：同一句里（不跨句号 / 分号）位置线索与解读关键词相距不超过 24 字 */
 const near = (cue: string, kw: string) => new RegExp(`(?:${cue})[^。；]{0,24}(?:${kw})|(?:${kw})[^。；]{0,24}(?:${cue})`);
-const TC_BOOM_CUE = '敌方家|对方家|自家附近';
+const TC_BOOM_CUE = '敌方自家附近';
 const TC_FWD_CUE = '前线|我方资源';
 const TC_BOOM_READ = near(TC_BOOM_CUE, '扩张|经济');
 const TC_FWD_READ = near(TC_FWD_CUE, '前置|进攻|压制');
@@ -317,7 +317,7 @@ test.describe('#316 「看见新增城镇中心」同时列出两种解读', () 
   test('标为看到后，信号里同时看得到两种解读、各自的判断依据和应对；换一种可见范围内容不变', async ({ page }) => {
     const a = await extraTcSignal(page, 'enemy-front');
     expect(a, '前置进攻（前线 / 我方资源点）').toMatch(TC_FWD_READ);
-    expect(a, '扩张经济（敌方家 / 自家附近）').toMatch(TC_BOOM_READ);
+    expect(a, '扩张经济（必须写「敌方自家附近」，Steve 21:22）').toMatch(TC_BOOM_READ);
     expect(a, '前置的应对：出兵争夺位置或用攻城武器拆除').toMatch(TC_FWD_NEXT);
     expect(a, '扩张经济的应对：同步扩张或用军队施压').toMatch(TC_BOOM_NEXT);
     for (const area of ['own-approach', 'unknown']) expect(await extraTcSignal(page, area), `可见范围 ${area} 时内容相同`).toBe(a);
