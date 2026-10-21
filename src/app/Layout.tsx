@@ -26,7 +26,7 @@ function PalettePending({ onType, onClose }: { onType: (value: string) => void; 
   return (
     <input
       autoFocus
-      aria-label="全局搜索"
+      aria-label="全局搜索（加载中）"
       style={HIDDEN}
       onChange={(e) => onType(e.target.value)}
       onKeyDown={(e) => {
