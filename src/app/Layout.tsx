@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import { Suspense, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../shared/ui/Icon';
 import { Loading } from '../shared/ui/widgets';
@@ -13,8 +13,6 @@ import { useTheme } from './theme/useTheme';
 import type { ThemePreference } from './theme/theme';
 import '../shared/styles/editorial-shell.css';
 import '../shared/styles/community-tools.css';
-
-const PageMeta = lazy(() => import('../features/share/PageMeta'));
 
 /** 外点的默认焦点行为结束后归还触发按钮；新弹窗接管焦点时不抢回。 */
 function returnFocusAfterClose(target: HTMLElement | null) {
@@ -289,9 +287,6 @@ export function Layout({ children }: { children: ReactNode }) {
           </div>
         )}
         <Suspense fallback={<Loading />}>{children}</Suspense>
-        <Suspense fallback={null}>
-          <PageMeta />
-        </Suspense>
       </main>
       {cmdk && <CommandPalette open onClose={() => setCmdk(false)} />}
       <footer className="editorial-footer">

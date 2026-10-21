@@ -2,13 +2,18 @@ import { useEffect } from 'react';
 import { useLocation, useMatch } from 'react-router-dom';
 import { PAGE_META, pageKey, sharePageUrl, SITE_NAME } from '../../domain/sharePage';
 import ShareImage from './ShareImage';
-export default function PageMeta() {
+const notFoundMeta: (typeof PAGE_META)[string] = {
+  title: '找不到该页',
+  description: '这个地址没有对应的页面，请检查链接，或通过全局搜索查找内容。',
+};
+
+export default function PageMeta({ notFound = false }: { notFound?: boolean }) {
   const { pathname, search } = useLocation();
   const reviewMatch = useMatch('/match-review');
   const teamMatch = useMatch('/team-plan');
   const privateKey = reviewMatch ? '/match-review' : teamMatch ? '/team-plan' : null;
   const key = privateKey ?? pageKey(pathname, search);
-  const meta = PAGE_META[key] ?? PAGE_META['/']!;
+  const meta = notFound ? notFoundMeta : (PAGE_META[key] ?? PAGE_META['/']!);
   useEffect(() => {
     document.title = `${meta.title} | ${SITE_NAME}`;
     const set = (name: string, content: string, property = false) => {
