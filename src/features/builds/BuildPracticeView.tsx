@@ -12,6 +12,7 @@ import { Icon } from '../../shared/ui/Icon';
 import { mmss, noteParts, rowTime, type TimelineQuery } from './timelineModel';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { visibleSources } from './sources';
+import { NumUnitText } from './NumUnitText';
 import './practice.css';
 
 export function buildPracticeUrl(params: URLSearchParams, view: 'practice' | 'print' | null): string {
@@ -19,18 +20,6 @@ export function buildPracticeUrl(params: URLSearchParams, view: 'practice' | 'pr
   if (view) next.set('view', view);
   else next.delete('view');
   return `/builds?${next.toString()}`;
-}
-
-function InstructionText({ text }: { text: string }) {
-  return text.split(/(\d+(?:\.\d+)?\s*(?:名村民|个村民|人口|村民|分钟|名|个|座|头|只|人|格|步|秒|艘))/g).map((part, index) =>
-    index % 2 ? (
-      <span className="nw" key={index}>
-        {part}
-      </span>
-    ) : (
-      part
-    ),
-  );
 }
 
 function StepContent({ item, timeline, name }: { item: PracticeStep; timeline: BuildTimeline; name: PracticeNames }) {
@@ -51,13 +40,13 @@ function StepContent({ item, timeline, name }: { item: PracticeStep; timeline: B
             part.skip ? (
               <span key={i}>
                 <s>
-                  <InstructionText text={part.text} />
+                  <NumUnitText text={part.text} />
                 </s>
                 <small>（{noNeed}）</small>
               </span>
             ) : (
               <span key={i}>
-                <InstructionText text={part.text} />
+                <NumUnitText text={part.text} />
               </span>
             ),
           )}
@@ -74,12 +63,12 @@ function StepContent({ item, timeline, name }: { item: PracticeStep; timeline: B
                 {skip ? (
                   <>
                     <s>
-                      <InstructionText text={text} />
+                      <NumUnitText text={text} />
                     </s>
                     （跳过，{noNeed}）
                   </>
                 ) : (
-                  <InstructionText text={text} />
+                  <NumUnitText text={text} />
                 )}
               </li>
             );

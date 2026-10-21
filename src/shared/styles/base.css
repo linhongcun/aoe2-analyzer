@@ -1693,6 +1693,16 @@ table.ediff td.dn {
   white-space: nowrap;
 }
 
+/* issue 275：加成详情页标题不在中文字之间断开，只在「文明名 ·」与「文明加成 N」之间的空格处换行（见 BonusDetail） */
+#bonus h1 {
+  word-break: keep-all;
+}
+
+/* issue 275：数字 + 单位、日期等不可断开的片段（开局步骤、跟练卡、内容指南日期） */
+.nw {
+  white-space: nowrap;
+}
+
 /* issue 77 文明开局阶段和流程入口 */
 .civ-opening li {
   margin-block: 8px;

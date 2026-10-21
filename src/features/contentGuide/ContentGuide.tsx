@@ -26,9 +26,19 @@ import './contentGuide.css';
 
 const evidenceLabels = { verified: '已核实', unverified: '暂未核实', stale: '证据待重新核对', conflict: '来源存在冲突' };
 const hasKey = (record: object, key: string) => Object.prototype.hasOwnProperty.call(record, key);
+/** issue 275：日期（如 2023-05-11）整体不断行，不在连字符处折行 */
+function DateText({ date }: { date: string }) {
+  return <span className="nw">{date}</span>;
+}
+/** 只把文中的日期包成不断行片段，其余文字原样（不加数字样式） */
+function DatesText({ text }: { text: string }) {
+  return text.split(/(\d{4}-\d{2}-\d{2})/g).map((part, index) => (index % 2 ? <DateText date={part} key={index} /> : part));
+}
 function ContentText({ text }: { text: string }) {
-  return text.split(/(\d+(?:个|条|项|年|包|文明|战役|剧本))/g).map((part, index) =>
-    /^\d+(?:个|条|项|年|包|文明|战役|剧本)$/.test(part) ? (
+  return text.split(/(\d{4}-\d{2}-\d{2}|\d+(?:个|条|项|年|包|文明|战役|剧本))/g).map((part, index) =>
+    /^\d{4}-\d{2}-\d{2}$/.test(part) ? (
+      <DateText date={part} key={index} />
+    ) : /^\d+(?:个|条|项|年|包|文明|战役|剧本)$/.test(part) ? (
       <span className="cg-number" key={index}>
         {part}
       </span>
@@ -53,7 +63,11 @@ function ProductCard({ product, state }: { product: ContentProduct; state: Conte
         <p className="cg-prerequisite" data-testid="content-prerequisite">
           {contentPrerequisiteLabel(product)}
         </p>
-        {product.prerequisites.note && <p className="cg-note">{product.prerequisites.note}</p>}
+        {product.prerequisites.note && (
+          <p className="cg-note">
+            <DatesText text={product.prerequisites.note} />
+          </p>
+        )}
       </header>
       <div className="cg-content-blocks">
         {blocks.map((block) => (
@@ -86,18 +100,22 @@ function ProductCard({ product, state }: { product: ContentProduct; state: Conte
       {contentEvidenceState(product, product.modeNotesSourceIds ?? []) === 'verified' &&
         product.modeNotes?.map((note) => (
           <p className="cg-note" key={note}>
-            {note}
+            <DatesText text={note} />
           </p>
         ))}
       <a className="cg-store" href={`https://store.steampowered.com/app/${product.steamAppId}/`} target="_blank" rel="noopener noreferrer">
         查看 Steam 商品
         <Icon name="arrow-right" />
       </a>
-      <p className="cg-note cg-snapshot">Steam · 核对 {contentCatalog.verifiedAt}</p>
+      <p className="cg-note cg-snapshot">
+        Steam · 核对 <DateText date={contentCatalog.verifiedAt} />
+      </p>
       <details className="cg-sources">
         <summary>{product.zh}的来源与核对说明</summary>
         <p className="cg-note">
-          商品发行日：{product.releaseDate}。获取方式依据：{sourceTitles(product.acquisition.sourceIds)}。
+          商品发行日：
+          <DateText date={product.releaseDate} />
+          。获取方式依据：{sourceTitles(product.acquisition.sourceIds)}。
         </p>
         <p className="cg-note">
           前置条件依据：{sourceTitles(product.prerequisites.sourceIds)}；状态：{evidenceLabels[product.prerequisites.status]}。
@@ -109,7 +127,11 @@ function ProductCard({ product, state }: { product: ContentProduct; state: Conte
             {CONTENT_MODES[block.mode]}的{CONTENT_KINDS[block.kind]}依据：{sourceTitles(block.sourceIds)}。
           </p>
         ))}
-        {product.translationNote && <p className="cg-note">{product.translationNote}</p>}
+        {product.translationNote && (
+          <p className="cg-note">
+            <DatesText text={product.translationNote} />
+          </p>
+        )}
         <ul>
           {product.sources.map((source) => (
             <li key={source.id}>
@@ -117,8 +139,9 @@ function ProductCard({ product, state }: { product: ContentProduct; state: Conte
                 {source.title}
               </a>
               <p className="cg-note">
-                官方商品说明或公告 · {evidenceLabels[source.status]} · 发布日期：{source.publishedAt ?? '页面未提供文章发布日期'} · 核对日期：
-                {source.verifiedAt}
+                官方商品说明或公告 · {evidenceLabels[source.status]} · 发布日期：
+                {source.publishedAt ? <DateText date={source.publishedAt} /> : '页面未提供文章发布日期'} · 核对日期：
+                <DateText date={source.verifiedAt} />
               </p>
               <p className="cg-note">
                 <ContentText text={source.note} />

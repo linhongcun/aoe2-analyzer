@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civs } from '../../data';
 import { RES_ZH } from '../../domain/ratings';
 import {
@@ -179,8 +179,9 @@ export default function Market() {
         </p>
         <p>最低买价由最低基价和当前费率自然计算，不另设统一买价下限。报价是整数预算，实际引擎取整仍需同版复核，临界库存请以游戏为准。</p>
         <p>行会和大干道只切换已研究后的费率，不扣研究费。萨拉森与印度斯坦没有行会，不会叠加两种费率。</p>
+        {/* issue 275：不再向玩家显示 .dat 的校验值，固定版本与校验信息统一放在「关于数据」 */}
         <p className="note">
-          .dat SHA256：<span className="market-hash">{MARKET_DATA.meta.datSha256}</span>
+          数据所用游戏 .dat 的固定版本与校验信息见<Link to="/about-data">关于数据</Link>。
         </p>
         <ul>
           {MARKET_DATA.engine.sources.map((source) => (

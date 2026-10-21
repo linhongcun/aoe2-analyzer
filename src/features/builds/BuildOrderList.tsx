@@ -9,6 +9,7 @@ import type { Phase } from '../../domain/buildOrder';
 import { ListHead } from '../../shared/ui/layout';
 import FeedbackLink from '../../shared/ui/FeedbackLink';
 import TimelineLoader from './TimelineLoader';
+import { NumUnitText } from './NumUnitText';
 
 /** 推荐文明：加成已计入的排前面，未计入的沉底（各自保持原顺序） */
 export const sortCivs = (civs: string[], off: string[] = []) => [...civs.filter((c) => !off.includes(c)), ...civs.filter((c) => off.includes(c))];
@@ -135,7 +136,10 @@ export default function BuildOrderList() {
             {b.steps.map((s, i) => (
               <li key={i}>
                 <span className="bo-vils">{s.vils}</span>
-                {s.phase && <span className="tag">{PHASE[s.phase]}</span>} {s.note}
+                {s.phase && <span className="tag">{PHASE[s.phase]}</span>}{' '}
+                <span className="bo-note">
+                  <NumUnitText text={s.note} />
+                </span>
               </li>
             ))}
           </ol>
