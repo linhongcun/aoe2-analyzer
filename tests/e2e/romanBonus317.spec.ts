@@ -38,6 +38,18 @@ test.describe('issue 317 罗马加成标签', () => {
     await expect(r2).not.toContainText('经济/费用效果（文本展示）');
   });
 
+  test('src = text：凯尔特 / 突厥 / 朝鲜被工具计入，不再显示「无 .dat 数据」；没有工具计入的（不列颠羊倌）仍显示', async ({ page }) => {
+    for (const c of ['Celts', 'Turks', 'Koreans']) {
+      await page.goto(`./#/civ/${c}/bonus/0`);
+      await expect(page.locator('#bonus [data-usage="gather"]'), c).toHaveAttribute('data-on', 'true');
+      await expect(page.locator('#bonus'), c).not.toContainText('无 .dat 数据');
+    }
+    await page.goto('./#/civ/Britons/bonus/0');
+    await expect(page.locator('#bonus')).toContainText('羊倌工作速度 +25%');
+    await expect(page.locator('#bonus')).toContainText('仅文本，未计入数值');
+    await expect(page.locator('#bonus')).toContainText('无 .dat 数据');
+  });
+
   test('没有任何工具计入的经济加成仍显示「.dat 经济/费用效果（文本展示）」', async ({ page }) => {
     // 中国第 1 条「初始村民 +3…」：中国开局模拟不支持，其他工具也不涉及
     await page.goto('./#/civ/Chinese/bonus/0');

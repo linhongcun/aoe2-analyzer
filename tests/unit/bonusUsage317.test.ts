@@ -192,7 +192,7 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
       expect([b.id, line(b, 'cost').some((l) => l.on)]).toEqual([b.id, hit]);
     }
   });
-  it('来源标签「.dat 经济/费用效果（文本展示）」：有工具计入的不显示，没有工具计入的仍显示（Steve 设计审查）', () => {
+  it('来源标签（eco「.dat 经济/费用效果（文本展示）」、text「无 .dat 数据」）：有工具计入的不显示，没有工具计入的仍显示（Steve 设计审查）', () => {
     expect(showEcoSourceTag(bon('Romans-0'))).toBe(false);
     expect(showEcoSourceTag(bon('Romans-2'))).toBe(false);
     expect(showEcoSourceTag(bon('Chinese-0'))).toBe(true);
@@ -204,8 +204,10 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
     }
     expect(hidden).toBeGreaterThan(0);
     expect(hidden).toBeLessThan(112);
-    // src = text 没有「文本展示」标签，其来源标签（「无 .dat 数据」）本 PR 不动
-    for (const b of ECO.filter((x) => x.src === 'text')) expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, true]);
+    // src = text 的橙色「无 .dat 数据」同样规则：凯尔特 / 朝鲜 / 突厥被工具计入，不显示；其余 34 条没有工具计入，仍显示
+    const text = ECO.filter((x) => x.src === 'text');
+    for (const b of text) expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !['Celts-0', 'Koreans-0', 'Turks-0'].includes(b.id)]);
+    expect(text.filter((b) => showEcoSourceTag(b))).toHaveLength(34);
   });
   it('没有任何工具计入的加成保持「仅文本」', () => {
     for (const b of ECO) if (!bonusUsage(b).some((l) => l.on)) expect([b.id, usageLevel(bonusUsage(b))]).toEqual([b.id, 'none']);

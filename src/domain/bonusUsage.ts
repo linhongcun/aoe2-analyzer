@@ -137,5 +137,5 @@ export function usageLevel(lines: BonusUsageLine[]): 'all' | 'part' | 'none' {
   return lines.every((l) => l.on === true) ? 'all' : 'part';
 }
 
-/** Steve 设计审查（PR 330）：有工具计入的经济/费用类加成（src = 'eco'）不再显示「.dat 经济/费用效果（文本展示）」来源标签；没有工具计入的保持原样 */
-export const showEcoSourceTag = (b: CivBonusEnt) => !(b.src === 'eco' && !b.encoded && usageLevel(bonusUsage(b)) !== 'none');
+/** Steve 设计审查（PR 330）：有工具计入的加成不再显示来源标签（src = 'eco' 的绿色「.dat 经济/费用效果（文本展示）」、src = 'text' 的橙色「无 .dat 数据」）；没有工具计入的保持原样 */
+export const showEcoSourceTag = (b: CivBonusEnt) => !((b.src === 'eco' || b.src === 'text') && !b.encoded && usageLevel(bonusUsage(b)) !== 'none');
