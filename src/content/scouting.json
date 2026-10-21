@@ -26,6 +26,14 @@
       "publishedAt": "2026-08-15",
       "kind": "独立教学方法",
       "note": "只采用观察生产、资源、墙与移动的思路；城堡阶段信号为本站按此思路整理。"
+    },
+    {
+      "id": "aoecoach-town-center",
+      "title": "AoE2 Coach：城镇中心",
+      "url": "https://aoecoach.com/en/resources/buildings/town-center/",
+      "publishedAt": null,
+      "kind": "独立教学方法",
+      "note": "页面说明进入城堡时代后加建城镇中心是扩张经济（boom）的常见做法；只用于「新增城镇中心」一条。"
     }
   ],
   "observations": [
@@ -218,7 +226,7 @@
           "seen": "看见新增城镇中心",
           "meaning": "倾向正在扩张经济",
           "next": "查看扩张方向，结合自己的军队考虑施压或同步发展。",
-          "sourceIds": ["mochi-scouting"],
+          "sourceIds": ["aoecoach-town-center", "mochi-scouting"],
           "editorial": true
         },
         {

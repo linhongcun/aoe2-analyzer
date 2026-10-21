@@ -362,17 +362,14 @@ export default function Scouting() {
                         </dl>
                         <div className="scouting-signal-sources">
                           {signal.editorial && <span className="scouting-note">本站整理</span>}
-                          {signal.sourceIds.map((id) => (
-                            <a
-                              key={id}
-                              href={SCOUTING_CONTENT.sources.find((source) => source.id === id)!.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label={`来源 ${id}：${signal.seen}`}
-                            >
-                              {id}
-                            </a>
-                          ))}
+                          {signal.sourceIds.map((id) => {
+                            const source = SCOUTING_CONTENT.sources.find((item) => item.id === id)!;
+                            return (
+                              <a key={id} href={source.url} target="_blank" rel="noopener noreferrer" aria-label={`来源：${source.title}（${signal.seen}）`}>
+                                {source.title}
+                              </a>
+                            );
+                          })}
                         </div>
                       </li>
                     ))}

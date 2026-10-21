@@ -344,3 +344,37 @@ for (const width of [360, 375, 390, 1280])
       await checkLayout();
       await page.screenshot({ path: testInfo.outputPath(`scouting258-${width}-${theme}.png`), fullPage: true });
     });
+
+test('#269 信号来源显示来源标题，页面不出现内部来源 id', async ({ page }) => {
+  const content = (await import('../../src/content/scouting.json', { with: { type: 'json' } })).default as {
+    sources: { id: string; title: string; url: string }[];
+    scenarios: { id: string; stage: string; signals: { sourceIds: string[] }[] }[];
+  };
+  for (const width of [360, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const scenario of content.scenarios) {
+      await page.goto('./#/scouting');
+      await page.getByRole('combobox', { name: '情境', exact: true }).selectOption(scenario.id);
+      await page.getByRole('combobox', { name: '我的当前阶段', exact: true }).selectOption(scenario.stage);
+      await expect(page.getByTestId('scouting-signals')).toBeVisible();
+      // 展开全部折叠区，确保隐藏内容也一起检查。
+      await page.locator('details').evaluateAll((elements) => elements.forEach((element) => ((element as HTMLDetailsElement).open = true)));
+      const text = await page.getByTestId('scouting-page').innerText();
+      for (const source of content.sources) expect(text, `${scenario.id} ${source.id}`).not.toContain(source.id);
+      const labels = (
+        await page
+          .getByTestId('scouting-page')
+          .locator('[aria-label]')
+          .evaluateAll((elements) => elements.map((element) => element.getAttribute('aria-label')))
+      ).join(' ');
+      for (const source of content.sources) expect(labels, `aria-label ${scenario.id} ${source.id}`).not.toContain(source.id);
+      const used = [...new Set(scenario.signals.flatMap((signal) => signal.sourceIds))];
+      for (const id of used) {
+        const source = content.sources.find((item) => item.id === id)!;
+        const links = page.locator('.scouting-signal-sources a', { hasText: source.title });
+        await expect(links.first(), `${scenario.id} ${id}`).toBeVisible();
+        await expect(links.first()).toHaveAttribute('href', source.url);
+      }
+    }
+  }
+});
