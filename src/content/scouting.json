@@ -25,7 +25,7 @@
       "url": "https://note.com/aoe2_moti/n/ne0367d003ef2?hl=en",
       "publishedAt": "2026-08-15",
       "kind": "独立教学方法",
-      "note": "只采用观察生产、资源、墙与移动的思路；城堡阶段信号为本站按此思路整理。"
+      "note": "只采用观察生产、资源、墙与移动的思路；城堡阶段的「侧面新增军事生产设施」「村民或军队沿侧路前出」两条为本站按此思路整理。"
     },
     {
       "id": "aoecoach-town-center",
@@ -33,7 +33,7 @@
       "url": "https://aoecoach.com/en/resources/buildings/town-center/",
       "publishedAt": null,
       "kind": "独立教学方法",
-      "note": "页面说明进入城堡时代后加建城镇中心是扩张经济（boom）的常见做法；只用于「新增城镇中心」一条。"
+      "note": "Castle Age Boom 段：进入城堡时代后加建 2–3 个城镇中心是扩张经济（boom）；新增城镇中心宜放在新的资源点；How to counter it 段：侦察对方的城镇中心时机，对方在扩张时要么同步发展、要么趁其投入经济时用军队施压。只用于「新增城镇中心」一条。"
     }
   ],
   "observations": [
@@ -226,8 +226,8 @@
           "seen": "看见新增城镇中心",
           "meaning": "倾向正在扩张经济",
           "next": "查看扩张方向，结合自己的军队考虑施压或同步发展。",
-          "sourceIds": ["aoecoach-town-center", "mochi-scouting"],
-          "editorial": true
+          "sourceIds": ["aoecoach-town-center"],
+          "editorial": false
         },
         {
           "id": "forward-building",
