@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import {
   MATCH_REVIEW_LIMITS as limits,
   MATCH_REVIEW_STORAGE_KEY as storageKey,
@@ -27,6 +27,7 @@ import {
   type ReviewResult,
 } from '../../domain/matchReview';
 import { Icon } from '../../shared/ui/Icon';
+import { matchReviewDraftReducer } from './matchReviewDraftState';
 import './matchReview.css';
 
 type Lock = 'corrupt' | 'conflict' | null;
@@ -71,10 +72,7 @@ function Field({ id, label, value, limit = limits.long, multiline = false, probl
       {multiline ? <textarea {...attributes} rows={3} /> : <input {...attributes} type="text" autoComplete="off" />}
       <small id={id + '-help'}>
         {hint ? hint + ' ' : ''}
-        <span className="mr-number">
-          {reviewTextLength(value)} / {limit}
-        </span>{' '}
-        个字符
+        <span className="mr-number">{`${reviewTextLength(value)} / ${limit}`}</span> 个字符
       </small>
       {error && (
         <p id={id + '-error'} className="mr-error">
@@ -106,8 +104,12 @@ const outputLabels: Record<keyof ReviewOutput, string> = { context: '对局上�
 
 export default function MatchReview() {
   const [initial] = useState(loadInitial);
-  const [draft, setDraft] = useState(initial.draft);
+  const [draftState, dispatchDraft] = useReducer(matchReviewDraftReducer, { draft: initial.draft, beforeClear: null });
+  const { draft, beforeClear } = draftState;
   const draftRef = useRef(draft);
+  const clearButtonRef = useRef<HTMLButtonElement>(null);
+  const clearDialogRef = useRef<HTMLDialogElement>(null);
+  const cancelClearRef = useRef<HTMLButtonElement>(null);
   const snapshot = useRef(initial.raw);
   const [lock, setLock] = useState<Lock>(initial.lock);
   const lockRef = useRef<Lock>(initial.lock);
@@ -181,8 +183,24 @@ export default function MatchReview() {
   const apply = (change: (current: MatchReviewDraft) => MatchReviewDraft) => {
     const next = change(draftRef.current);
     draftRef.current = next;
-    setDraft(next);
+    dispatchDraft({ type: 'edit', draft: next });
     persist(next);
+  };
+  const clearDraft = () => {
+    const next = matchReviewDraftReducer(draftState, { type: 'clear' });
+    draftRef.current = next.draft;
+    dispatchDraft({ type: 'clear' });
+    const saved = persist(next.draft);
+    setNotice(saved ? '已清空，本机草稿已更新。' : '已清空本页；本机草稿未更新，请查看保存提示。');
+    clearDialogRef.current?.close();
+  };
+  const undoClear = () => {
+    if (!beforeClear) return;
+    draftRef.current = beforeClear;
+    dispatchDraft({ type: 'undo' });
+    const saved = persist(beforeClear);
+    setNotice(saved ? '已撤销清空，复盘草稿已恢复并保存到本机。' : '已撤销清空，本页内容已恢复；本机草稿未更新，请查看保存提示。');
+    clearButtonRef.current?.focus();
   };
   const overwriteLocal = () => {
     const serialized = serializeMatchReview(draftRef.current);
@@ -216,7 +234,7 @@ export default function MatchReview() {
         return;
       }
       draftRef.current = parsed.draft;
-      setDraft(parsed.draft);
+      dispatchDraft({ type: 'edit', draft: parsed.draft });
       snapshot.current = raw;
       lockRef.current = null;
       setLock(null);
@@ -315,7 +333,15 @@ export default function MatchReview() {
             <button type="button" onClick={() => persist(draftRef.current)}>
               重试保存本页
             </button>
-            <button type="button" onClick={() => apply(() => emptyMatchReview())}>
+            <button
+              type="button"
+              ref={clearButtonRef}
+              aria-haspopup="dialog"
+              onClick={() => {
+                clearDialogRef.current?.showModal();
+                cancelClearRef.current?.focus();
+              }}
+            >
               清空本页内容
             </button>
             <button type="button" onClick={() => jumpTo('mr-backup')}>
@@ -325,6 +351,24 @@ export default function MatchReview() {
               求助摘要与打印
             </button>
           </div>
+          <dialog
+            ref={clearDialogRef}
+            className="mr-clear-dialog"
+            aria-labelledby="mr-clear-title"
+            aria-describedby="mr-clear-description"
+            onClose={() => clearButtonRef.current?.focus()}
+          >
+            <h2 id="mr-clear-title">确认清空本页内容？</h2>
+            <p id="mr-clear-description">将清除本页内容及本机保存的复盘草稿。本次页面会话内可撤销刚才的清空，刷新或离开后无法恢复；需要长期保留请先备份。</p>
+            <div className="mr-actions">
+              <button type="button" ref={cancelClearRef} onClick={() => clearDialogRef.current?.close()}>
+                取消
+              </button>
+              <button type="button" onClick={clearDraft}>
+                确认清空
+              </button>
+            </div>
+          </dialog>
           {warning && (
             <p className="mr-warning" role="alert">
               {warning}
@@ -348,6 +392,14 @@ export default function MatchReview() {
           <p role="status" className="mr-notice" aria-live="polite">
             {notice}
           </p>
+          {beforeClear && (
+            <div className="mr-notice mr-actions">
+              <span>可恢复清空前内容；开始输入新内容后不再提供，仅本次页面会话有效。</span>
+              <button type="button" onClick={undoClear}>
+                撤销
+              </button>
+            </div>
+          )}
         </div>
         <section className="mr-panel" aria-labelledby="mr-context-heading">
           <h2 id="mr-context-heading">对局上下文</h2>
@@ -378,9 +430,7 @@ export default function MatchReview() {
         <section className="mr-panel" aria-labelledby="mr-events-title">
           <div className="mr-section-head">
             <h2 id="mr-events-title">关键事件</h2>
-            <span className="mr-number">
-              {draft.events.length} / {limits.events} 个
-            </span>
+            <span className="mr-number">{`${draft.events.length} / ${limits.events} 个`}</span>
           </div>
           <p>保留当时自己的视野，再补回看时发现的事实。推测单独写，未知时间留空。</p>
           {!draft.events.length && <p className="mr-empty">尚未记录事件。可以先写一个你想请别人帮忙解释的时刻。</p>}
@@ -473,9 +523,7 @@ export default function MatchReview() {
         <section className="mr-panel" aria-labelledby="mr-attempts-title">
           <div className="mr-section-head">
             <h2 id="mr-attempts-title">跟进尝试</h2>
-            <span className="mr-number">
-              {draft.attempts.length} / {limits.attempts} 次
-            </span>
+            <span className="mr-number">{`${draft.attempts.length} / ${limits.attempts} 次`}</span>
           </div>
           <p className="note">结果由你手动记录；未评估和无法判断不会被自动算成失败，不展示成功率。</p>
           {draft.attempts.map((attempt, index) => (
@@ -647,8 +695,8 @@ export default function MatchReview() {
               <div className="mr-import-preview" data-testid="review-import-preview">
                 <h3>准备替换本页的备份</h3>
                 <p>
-                  标题：{prepared.context.title || '未记录'}；<span className="mr-number">{prepared.events.length} 个事件</span>、
-                  <span className="mr-number">{prepared.attempts.length} 次尝试</span>。本页现有内容将被替换，请先备份。
+                  标题：{prepared.context.title || '未记录'}；<span className="mr-number">{`${prepared.events.length} 个事件`}</span>、
+                  <span className="mr-number">{`${prepared.attempts.length} 次尝试`}</span>。本页现有内容将被替换，请先备份。
                 </p>
                 <pre className="mr-summary">{matchReviewSummary(prepared)}</pre>
                 <button
