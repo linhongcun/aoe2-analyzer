@@ -6,7 +6,7 @@
  *   shared-upward       shared/ 不能 import features/、app/
  *   domain-upward       domain/ 不能 import react、features/、app/、shared/ui
  *   core-json-direct    src/{domain,features} 不能直接 import src/data/{civs,units,techs,buildings,trees,eco,effects}.json
- *                       （src/data/index.ts 和 LOADERS 里登记的专门 loader 除外）
+ *                       （src/data/ 下的读取接口——index.ts、raw/*.ts——以及 LOADERS 里登记的专门 loader 除外）
  * `import type` 和动态 import() 也算：分层依赖与是否打包无关。
  *
  * 用法：

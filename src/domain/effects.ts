@@ -5,7 +5,7 @@
  *      或 .dat 数值与当前补丁的游戏内加成文本不一致（新鲜度检查失败）时回退。
  * 每条科技/加成的来源记录在 TECH_SRC / BONUS_SRC，页面据此标注；差异清单见 docs/EFFECTS-AUDIT.md。
  */
-import civsRaw from '../data/civs.json';
+import civsRaw from '../data/raw/civs';
 import { MANUAL_BUILDING_CIV_BONUSES, MANUAL_BUILDING_EFFECTS, type BCivBonus, type BPred } from './buildingEffects.manual';
 import { DAT, idPred, toEffects, type DatEco, type DatEntry } from './datEffects';
 import { MANUAL_CIV_BONUSES, MANUAL_TECH_EFFECTS, MANUAL_TEAM_BONUSES, type CivBonus, type EffectRule } from './effects.manual';

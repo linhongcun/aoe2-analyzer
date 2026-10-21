@@ -1,5 +1,5 @@
 /** Issue 238 fixed-state relic estimate. Data fields and documented engine semantics are separate evidence. */
-import civs from '../data/civs.json';
+import civs from '../data/raw/civs';
 
 export const RELIC_RESOURCES = ['Gold', 'Food', 'Wood', 'Stone'] as const;
 export type RelicResource = (typeof RELIC_RESOURCES)[number];

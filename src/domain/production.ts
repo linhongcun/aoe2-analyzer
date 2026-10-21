@@ -1,5 +1,5 @@
 /** issue 204 稳态连续训练。游戏数值只读固定 eco / effects；不修改旧真实费用默认口径。 */
-import ecoRaw from '../data/eco.json';
+import ecoRaw from '../data/raw/eco';
 import { civs, type Core } from '../data';
 import { DAT, type DatEco } from './datEffects';
 import { discountedCost, roundHalfPrice } from './costDiscount';

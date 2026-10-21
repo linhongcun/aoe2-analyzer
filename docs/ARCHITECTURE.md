@@ -28,6 +28,7 @@ src/
   data/             生成的 JSON + 类型化加载器
     index.ts          civs 随主包；units+techs、trees 通过 dynamic import 懒加载并缓存
     hooks.ts          useCore() / useTrees()
+    raw/*.ts          civs/units/techs/buildings/eco.json 的同步原样读取入口（domain、features 不直接 import 核心 JSON）
   features/<name>/  civs units techs tree simulator dlc compare matchup
     components/       页面组件（路由级组件经 React.lazy 拆包）
     hooks/            特性内状态

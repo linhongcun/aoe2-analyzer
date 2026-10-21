@@ -9,8 +9,8 @@
  * - 文明采集加成（issue 138，Steve 定稿）：只计入 aoe2techtree 当前文明文案里有来源的条目，数值用来源值（见 SOURCED）；
  *   其余（含 eco.json 读得出但没有来源的）一律记「未计入」，按通用速度。
  */
-import ecoRaw from '../data/eco.json';
-import civs from '../data/civs.json';
+import ecoRaw from '../data/raw/eco';
+import civs from '../data/raw/civs';
 import type { Cost } from './types';
 import type { EcoData } from './buildSim';
 import { UNHANDLED_RES } from './buildSim';

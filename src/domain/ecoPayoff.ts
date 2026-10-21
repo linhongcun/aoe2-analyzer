@@ -1,5 +1,5 @@
 /** issue 214：固定人口的单项经济科技收益；游戏数值只从固定导出读取。 */
-import ecoRaw from '../data/eco.json';
+import ecoRaw from '../data/raw/eco';
 import { civs } from '../data';
 import { DAT } from './datEffects';
 import { freeProductionTechs, productionTechAge, type ProductionContext } from './production';
