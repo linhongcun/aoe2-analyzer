@@ -474,9 +474,7 @@ a.hcard:hover {
     width: 40px;
     height: 40px;
   }
-  .card .mini {
-    padding-left: 0;
-  }
+  /* issue 326：手机宽度下保留 base.css 的左内边距（28px），给左下角 24px 的 DLC 图标让位，不再盖住「边位」 */
   :is(#units, #techs, #buildings) .ucard :is(.dlcb, [data-tech-release]) {
     left: var(--space-3);
   }
