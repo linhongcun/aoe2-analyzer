@@ -139,6 +139,11 @@ export function defaultScoutingConfig(): ScoutingConfig {
   ) as ScoutingConfig['observations'];
   return { scenario: 'early', map: 'arabia', mode: 'one-v-one', stage: 'feudal', plan: 'undecided', observations };
 }
+/** issue 312：切换情境时阶段跟随该情境（早期 → 封建时代，城堡阶段 → 城堡时代），其他选项不动。分享链接里显式的 stage 由 decodeScouting 原样保留，不经过这里。 */
+export function withScenario(config: ScoutingConfig, scenario: ScoutingScenarioId): ScoutingConfig {
+  const stage = SCOUTING_CONTENT.scenarios.find((row) => row.id === scenario)!.stage;
+  return { ...config, scenario, stage };
+}
 /** A teaching example only; clearing or loading a saved empty config keeps it empty. */
 export function exampleScoutingConfig(): ScoutingConfig {
   const config = defaultScoutingConfig();

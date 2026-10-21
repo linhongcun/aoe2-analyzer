@@ -12,6 +12,7 @@ import {
   encodeScouting,
   exampleScoutingConfig,
   isScoutingTimeText,
+  withScenario,
   type ScoutingConfig,
   type ScoutingHypothesisResult,
   type ScoutingObservation,
@@ -235,7 +236,7 @@ export default function Scouting() {
               label="情境"
               value={config.scenario}
               options={Object.fromEntries(SCOUTING_CONTENT.scenarios.map((row) => [row.id, row.title])) as Record<ScoutingConfig['scenario'], string>}
-              change={(scenario) => change({ scenario })}
+              change={(scenario) => change(withScenario(config, scenario))}
             />
             <details className="scouting-context">
               <summary>
