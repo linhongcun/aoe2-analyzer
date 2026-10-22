@@ -523,9 +523,11 @@ a.hcard:hover {
     min-height: 44px;
     min-width: 44px;
   }
-  /* 页脚第一行：点击区只向上借用页脚顶部留白，不把同一句说明撑出大行距 */
+  /* 页脚第一行：点击区只向上借用页脚顶部留白（上内边距 + 等量负外边距），
+     行盒高度、图标与文字的对齐都和加高前一样，不把同一句说明撑出大行距 */
   footer.editorial-footer .fbfoot a.fblink {
-    align-items: flex-end;
+    box-sizing: border-box;
+    padding-top: 20px;
     margin-top: -20px;
   }
   .tl-summary .s,

@@ -69,12 +69,19 @@ for (const width of [360, 375, 390, 414, 480]) {
       const rg = document.createRange();
       rg.selectNodeContents(tn);
       const bottoms = [...new Set([...rg.getClientRects()].map((q) => Math.round(q.bottom)))];
-      return { minTop: Math.min(...links.map((l) => l.top)) - top, overlaps, bottoms };
+      // 入口文字与同一行说明文字的底边差（加高前约 3px）
+      const lt = [...document.querySelector(sels[0])!.childNodes].find((n) => n.nodeType === 3 && n.textContent!.trim())!;
+      const lr = document.createRange();
+      lr.selectNodeContents(lt);
+      const labelShift = Math.abs(lr.getClientRects()[0].bottom - rg.getClientRects()[0].bottom);
+      return { minTop: Math.min(...links.map((l) => l.top)) - top, overlaps, bottoms, labelShift };
     }, LINKS);
     expect(r.minTop).toBeGreaterThanOrEqual(0);
     expect(r.overlaps).toEqual([]);
     expect(r.bottoms.length).toBeGreaterThanOrEqual(2);
     // 说明文字第 1、2 行之间不被 44px 点击区撑出段落似的空隙
     expect(r.bottoms[1] - r.bottoms[0]).toBeLessThanOrEqual(22);
+    // 入口文字不因点击区加高而比同行说明文字明显偏高
+    expect(r.labelShift).toBeLessThanOrEqual(3.5);
   });
 }
