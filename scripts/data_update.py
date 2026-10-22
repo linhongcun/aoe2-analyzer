@@ -26,9 +26,15 @@ def gh(path):
     return json.load(urllib.request.urlopen(req))
 
 
+def beijing_date(ts):
+    """GitHub 提交时间（ISO 8601，如 2026-09-22T19:21:29Z）换算成北京时间（UTC+8）的日期 YYYY-MM-DD（#335：站内日期一律按北京时间）。"""
+    t = datetime.datetime.fromisoformat(ts.replace('Z', '+00:00'))
+    return t.astimezone(datetime.timezone(datetime.timedelta(hours=8))).date().isoformat()
+
+
 def latest(repo, path):
     c = gh('repos/%s/commits?path=%s&per_page=1' % (repo, path))[0]
-    return {'commit': c['sha'], 'date': c['commit']['committer']['date'][:10], 'message': c['commit']['message'].splitlines()[0]}
+    return {'commit': c['sha'], 'date': beijing_date(c['commit']['committer']['date']), 'message': c['commit']['message'].splitlines()[0]}
 
 
 def run(*cmd):

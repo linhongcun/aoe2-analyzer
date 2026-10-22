@@ -6,6 +6,22 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent.parent / 'scripts'))
 from data_diff import detect_patch, load_dir, summarize  # noqa: E402
 from dat_source import check_markers, markers_of  # noqa: E402
+from data_update import beijing_date  # noqa: E402
+
+
+
+class BeijingDate(unittest.TestCase):
+    """#335：上游提交时间按北京时间取日期（patch.date 与来源表日期）"""
+    def test_utc_evening_is_next_day(self):
+        self.assertEqual(beijing_date('2026-09-22T19:21:29Z'), '2026-09-23')
+
+    def test_boundary(self):
+        self.assertEqual(beijing_date('2026-09-22T15:59:59Z'), '2026-09-22')
+        self.assertEqual(beijing_date('2026-09-22T16:00:00Z'), '2026-09-23')
+
+    def test_offset_and_morning(self):
+        self.assertEqual(beijing_date('2026-10-07T11:52:25Z'), '2026-10-07')
+        self.assertEqual(beijing_date('2026-09-22T10:16:33-07:00'), '2026-09-23')
 
 
 class DetectPatch(unittest.TestCase):
