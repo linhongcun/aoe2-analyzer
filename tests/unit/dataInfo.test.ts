@@ -5,7 +5,7 @@ import { commitUrl, versionLabel, type DataSources } from '../../src/shared/util
 describe('data version info', () => {
   const p = pins as unknown as DataSources;
   it('label from pinned sources', () => {
-    expect(versionLabel(p)).toBe('DE 185872（2026-09-22）');
+    expect(versionLabel(p)).toBe('DE 185872（2026-09-23）');
   });
   it('every source is pinned to a full commit; dat also to sha256 + recorded markers', () => {
     Object.values(p.sources).forEach((s) => expect(s.commit).toMatch(/^[0-9a-f]{40}$/));

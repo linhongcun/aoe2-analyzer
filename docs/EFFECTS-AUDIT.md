@@ -6,7 +6,7 @@
 
 | 源 | 仓库@提交 | 文件 | 对应补丁 | 用途 |
 |---|---|---|---|---|
-| DAT | SiegeEngineers/auto-mods@0c38027 | `dat/empires2_x2_p1.dat` | DE Update 185872 (2026-09-22) | 全部 EffectCommands（战斗 + 经济/费用）、科技前置、文明科技树/团队加成；datVersion VER 8.9 |
+| DAT | SiegeEngineers/auto-mods@0c38027 | `dat/empires2_x2_p1.dat` | DE Update 185872 (2026-09-23) | 全部 EffectCommands（战斗 + 经济/费用）、科技前置、文明科技树/团队加成；datVersion VER 8.9 |
 | C | linhongcun/lhc-aoe2@6fdb912 | `lib/data/unitTechFx.ts` | 作者本机 .dat（2026-08） | 对账参考 |
 
 - 唯一数值来源：DE 原版 `empires2_x2_p1.dat`（SiegeEngineers/auto-mods@0c38027，DE Update 185872），构建时下载并校验 sha256 与补丁标记（`python3 scripts/dat_source.py --check`），用 genieutils-py 解析。.dat © Microsoft，不提交、不随站点发布。
