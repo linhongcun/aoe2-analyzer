@@ -133,11 +133,21 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
       {!b.encoded && usage.length > 0 && (
         <div className="note busage">
           <p>各工具计入情况：</p>
+          {b.team && usage.every((l) => l.on === false) && <p>各工具均未计入：本文明自己的和队友给的这条团队加成都不计，逐项如下。</p>}
           <ul>
             {usage.map((l) => (
               <li key={l.tool} data-usage={l.tool} data-on={String(l.on)}>
                 <Icon name={USAGE_ICON[String(l.on) as keyof typeof USAGE_ICON]} className={'ic' + (l.on === false ? ' warn' : '')} />
-                <b>{l.name}</b>：{l.note}
+                <b>
+                  {l.href ? (
+                    <Link className="ulink" to={l.href}>
+                      {l.name}
+                    </Link>
+                  ) : (
+                    l.name
+                  )}
+                </b>
+                ：{l.note}
               </li>
             ))}
           </ul>

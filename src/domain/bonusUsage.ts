@@ -43,6 +43,8 @@ export interface BonusUsageLine {
   /** true 已计入 / false 未计入 / null 未逐条核对 */
   on: boolean | null;
   note: string;
+  /** 工具页路由（issue 331，Steve：圣物收益一行链到工具） */
+  href?: string;
 }
 export const USAGE_TOOL_ZH: Record<UsageTool, string> = {
   sim: '开局模拟',
@@ -170,7 +172,13 @@ function teamUsageLines(b: CivBonusEnt): BonusUsageLine[] {
     });
   }
   if (relicMods.some((m) => m.scope === 'team' && m.civ === b.civ))
-    out.push({ tool: 'relic', name: USAGE_TOOL_ZH.relic, on: true, note: '已计入：本方是该文明或任一队友是该文明时都生效（同一加成不叠加）' });
+    out.push({
+      tool: 'relic',
+      name: USAGE_TOOL_ZH.relic,
+      on: true,
+      note: '已计入：本方是该文明或任一队友是该文明时都生效（同一加成不叠加）',
+      href: '/relic-income',
+    });
   if (/repair/i.test(b.en)) out.push({ tool: 'repair', name: USAGE_TOOL_ZH.repair, on: false, note: '没有工具计算修理，本文明自己的和队友给的都未计入' });
   return out;
 }
