@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civs, coreCache, treesCache, loadCore, loadTrees } from '../../data';
 import type { ProductionContext } from '../../domain/production';
@@ -20,15 +20,59 @@ import { Icon } from '../../shared/ui/Icon';
 import { Loading } from '../../shared/ui/widgets';
 import './mixedArmy.css';
 
+/** issue 271：每页/每卡第一次出现的站内单位名链到详情（Steve：后面重复不必再链；精锐形态也算「胡斯派战车」） */
+const FIRST_UNIT_NAMES = [
+  { name: '胡斯派战车', id: 1704, elitePrefix: '精锐', eliteId: 1706 },
+  { name: '手推炮', id: 36 },
+] as const;
+
+function linkFirstUnits(text: string, seen: Set<string>): ReactNode {
+  type Hit = { start: number; end: number; label: string; id: number; key: string };
+  const hits: Hit[] = [];
+  for (const row of FIRST_UNIT_NAMES) {
+    if (seen.has(row.name)) continue;
+    const i = text.indexOf(row.name);
+    if (i < 0) continue;
+    const elite = 'elitePrefix' in row && row.elitePrefix && i >= row.elitePrefix.length && text.slice(i - row.elitePrefix.length, i) === row.elitePrefix;
+    if (elite) {
+      hits.push({ start: i - row.elitePrefix.length, end: i + row.name.length, label: row.elitePrefix + row.name, id: row.eliteId, key: row.name });
+    } else {
+      hits.push({ start: i, end: i + row.name.length, label: row.name, id: row.id, key: row.name });
+    }
+  }
+  hits.sort((a, b) => a.start - b.start || b.end - b.start - (a.end - a.start));
+  // drop overlaps (keep earlier / longer)
+  const picked: Hit[] = [];
+  for (const h of hits) {
+    if (picked.some((p) => !(h.end <= p.start || h.start >= p.end))) continue;
+    picked.push(h);
+  }
+  if (!picked.length) return text;
+  const out: ReactNode[] = [];
+  let cursor = 0;
+  picked.forEach((h, n) => {
+    if (h.start > cursor) out.push(text.slice(cursor, h.start));
+    out.push(
+      <Link key={`${h.key}-${n}`} to={`/unit/${h.id}`}>
+        {h.label}
+      </Link>,
+    );
+    seen.add(h.key);
+    cursor = h.end;
+  });
+  if (cursor < text.length) out.push(text.slice(cursor));
+  return out;
+}
+
 const modeOptions = { unknown: '未知，尚未确认', 'one-v-one-arena': '1v1 Arena', 'one-v-one-other': '1v1 其他地图', team: '团战' };
 const enemyOptions = {
   unknown: '未知，先确认实际敌军',
   cavalry: '近战骑兵',
   skirmishers: '掷矛手',
   'cavalry-skirmishers': '近战骑兵与掷矛手',
-  wagons: '目前只见战车',
-  'wagons-cannon': '战车与后排火炮',
-  'wagons-cannon-halberdiers': '战车、后排火炮与长戟兵',
+  wagons: '目前只见胡斯派战车',
+  'wagons-cannon': '胡斯派战车与后排手推炮',
+  'wagons-cannon-halberdiers': '胡斯派战车、后排手推炮与长戟兵',
   other: '还有其他组合或额外护军',
 };
 const terrainOptions = { unknown: '未知，尚未确认', open: '开阔，可侧向接近', narrow: '狭窄，通路受限' };
@@ -61,19 +105,21 @@ function SelectField<T extends string>({ label, value, options, change }: { labe
 }
 function Card({ result, ctx }: { result: MixedCardResult; ctx: ProductionContext }) {
   const { card, status, reasons } = result;
+  const seen = new Set<string>();
+  const L = (text: string) => linkFirstUnits(text, seen);
   return (
     <article className="mixed-card" data-card={card.id} data-card-status={status}>
       <header>
         <span className={status === 'conditions-met' ? 'mixed-status mixed-status-met' : 'mixed-status'}>{MIXED_CARD_STATUS_ZH[status]}</span>
-        <h3>{card.title}</h3>
+        <h3>{L(card.title)}</h3>
       </header>
-      <p>{card.problem}</p>
+      <p>{L(card.problem)}</p>
       {!!reasons.length && (
         <div className="mixed-card-reasons">
           <strong>当前需处理</strong>
           <ul>
             {reasons.map((reason) => (
-              <li key={reason}>{reason}</li>
+              <li key={reason}>{L(reason)}</li>
             ))}
           </ul>
         </div>
@@ -81,38 +127,38 @@ function Card({ result, ctx }: { result: MixedCardResult; ctx: ProductionContext
       <dl className="mixed-roles">
         <div>
           <dt>主力</dt>
-          <dd>{card.roles.main}</dd>
+          <dd>{L(card.roles.main)}</dd>
         </div>
         <div>
           <dt>掩护</dt>
-          <dd>{card.roles.cover}</dd>
+          <dd>{L(card.roles.cover)}</dd>
         </div>
         <div>
           <dt>攻城</dt>
-          <dd>{card.roles.siege}</dd>
+          <dd>{L(card.roles.siege)}</dd>
         </div>
       </dl>
       <p>
         <b>采用条件：</b>
-        {card.conditions.join(' ')}
+        {L(card.conditions.join(' '))}
       </p>
       <p>
         <b>代价与风险：</b>
-        {card.cost}
+        {L(card.cost)}
       </p>
       <p className="mixed-next">
         <b>下一步观察：</b>
-        {card.next}
+        {L(card.next)}
       </p>
       <details className="mixed-details">
         <summary>反例、备选与依据</summary>
         <p>
           <b>何时失效：</b>
-          {card.counterexample}
+          {L(card.counterexample)}
         </p>
         <p>
           <b>备选路线：</b>
-          {card.alternative}
+          {L(card.alternative)}
         </p>
         <div className="mixed-links">
           {card.unitIds.map((id) => (
@@ -207,7 +253,7 @@ export default function MixedArmy() {
       <header className="mixed-heading">
         <div>
           <h1>混兵情境卡</h1>
-          <p>看到掩护后，先分清谁防骑、谁清掷矛手、谁处理后排火炮。</p>
+          <p>看到掩护后，先分清谁防骑、谁清掷矛手、谁处理后排攻城。</p>
         </div>
         <button
           className="btn"
@@ -297,9 +343,14 @@ export default function MixedArmy() {
               <SelectField label="地图与模式" value={config.mode} options={modeOptions} change={(mode) => change({ mode })} />
               {config.scenario === 'arena-wagon-cannon' && (
                 <>
+                  <div className="mixed-links mixed-field-units">
+                    <Link to="/unit/1704">胡斯派战车资料</Link>
+                    <Link to="/unit/36">手推炮资料</Link>
+                    <Link to="/unit/1709">榴弹炮资料</Link>
+                  </div>
                   <label className="mixed-field">
-                    已见战车形态
-                    <select aria-label="已见战车形态" value={config.wagon} onChange={(event) => change({ wagon: choice(event.target.value) })}>
+                    已见胡斯派战车（普通或精锐）
+                    <select aria-label="已见胡斯派战车（普通或精锐）" value={config.wagon} onChange={(event) => change({ wagon: choice(event.target.value) })}>
                       <option value="unknown">未知，尚未辨认</option>
                       <option value="other">其他，暂未覆盖</option>
                       {[1704, 1706, ...(typeof config.wagon === 'number' && ![1704, 1706].includes(config.wagon) ? [config.wagon] : [])].map((id) => (
@@ -310,8 +361,12 @@ export default function MixedArmy() {
                     </select>
                   </label>
                   <label className="mixed-field">
-                    已见后排火炮形态
-                    <select aria-label="已见后排火炮形态" value={config.cannon} onChange={(event) => change({ cannon: choice(event.target.value) })}>
+                    已见后排炮（手推炮或榴弹炮）
+                    <select
+                      aria-label="已见后排炮（手推炮或榴弹炮）"
+                      value={config.cannon}
+                      onChange={(event) => change({ cannon: choice(event.target.value) })}
+                    >
                       <option value="unknown">未知，尚未辨认</option>
                       <option value="other">其他，暂未覆盖</option>
                       {[36, 1709, ...(typeof config.cannon === 'number' && ![36, 1709].includes(config.cannon) ? [config.cannon] : [])].map((id) => (
@@ -384,19 +439,19 @@ export default function MixedArmy() {
                 <h2 id="mixed-result-heading">
                   {plan.status === 'not-covered' ? '暂未覆盖这组输入' : plan.status === 'invalid' ? '先修正确认记录' : '按当前观察分配任务'}
                 </h2>
-                <p>{plan.summary}</p>
+                <p>{linkFirstUnits(plan.summary, new Set())}</p>
               </header>
               {plan.status === 'invalid' && (
                 <div className="mixed-error" role="alert">
                   {plan.notices.map((notice) => (
-                    <p key={notice}>{notice}</p>
+                    <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
                   ))}
                 </div>
               )}
               {plan.status === 'not-covered' && (
                 <div className="mixed-notice">
                   {plan.notices.map((notice) => (
-                    <p key={notice}>{notice}</p>
+                    <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
                   ))}
                 </div>
               )}
