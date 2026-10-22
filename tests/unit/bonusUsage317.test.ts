@@ -126,8 +126,8 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
       const g = line(bon(id), 'gather');
       expect([id, g.map((l) => [l.on, l.note])]).toEqual([id, [[true, `采集速度已计入（${label}）`]]]);
     }
-    // 朝鲜的采石加成在 eco.json 的科技树汇总行里，无法与开局模拟逐条对应
-    expect(line(bon('Koreans-0'), 'sim').map((l) => l.on)).toEqual([null]);
+    // issue 332：朝鲜采石在科技树汇总行，开局方案不采石 → 开局模拟未计入（真实成本已计入）
+    expect(line(bon('Koreans-0'), 'sim').map((l) => l.on)).toEqual([false]);
   });
   it.runIf(UPDATE)(
     '（UPDATE_BONUS317=1）重新生成开局模拟快照',
@@ -166,7 +166,8 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
         continue;
       }
       if (!techsOf(b).length) {
-        if (sim && sim.on !== null) bad.push(b.id + ' 科技树汇总效果只能标未核对');
+        // issue 332：科技树汇总加成已逐条下结论（已计入 / 未计入 / 无法核实）；结论正确性由 v0300-332 用去掉效果重跑对照
+        if (sim && sim.on === null && !sim.note.trimStart().startsWith('无法核实')) bad.push(b.id + ' 科技树汇总效果须下结论或写「无法核实」');
         continue;
       }
       const changed = snap.firstChanged[b.id] !== null;

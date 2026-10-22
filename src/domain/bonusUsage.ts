@@ -13,7 +13,8 @@
  * - 施工工具：只套用本文明 construction.json 的 team 命令，且只认改建造者工作速率 / 施工工期的命令（与 construction.ts 的 apply 同口径），不计队友；
  * - 圣物收益：relic_income.json 里 scope = 'team' 的修正，本方或任一队友是该文明即计入；
  * - 训练费用：DAT.costDiscounts 没有团队条目，不列。
- * 科技树汇总效果（.dat tech 号 < 0）无法与开局模拟的 civEco 行逐条对应，记为「未逐条核对」，不下结论。
+ * 科技树汇总效果（.dat tech 号 < 0，issue 332）：按 aoe2techtree@3bb43b1 文明加成英文原文把每条对应到 eco.json 的 tree 行效果，
+ * 结论 = 去掉这些效果后全部开局方案重跑是否变化（见 TREE_SIM / tests/unit/v0300-332.test.ts）；核对不了的写「无法核实」再写具体原因。
  */
 import ecoRaw from '../data/raw/eco';
 import constructionRaw from '../data/construction.json';
@@ -83,6 +84,34 @@ export function bonusTechs(b: CivBonusEnt): { techs: number[]; treeOnly: boolean
   return { techs, treeOnly: techs.length === 0 && (b.dat.length > 0 || g.length > 0) };
 }
 
+/**
+ * issue 332：开局模拟里原先「未逐条核对」的 15 条科技树汇总加成的结论。
+ * 键 = CivBonusEnt.id；en = aoe2techtree@3bb43b1 文明加成英文原文（与 b.en 一致，文案变了要重新认定）。
+ * on = 去掉 eco.json 该文明 source = 'tree' 行里属于本条的效果后，全部开局方案重跑是否变化；
+ * on = null 表示 tree 行里没有可去掉的对应效果，note 必须以「无法核实」开头再写具体原因。
+ */
+const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }> = {
+  'Aztecs-1': { en: 'Villagers carry +3', on: true, note: '已计入' },
+  'Bohemians-0': { en: 'Mining Camp technologies free', on: true, note: '已计入' },
+  'Burgundians-2': {
+    en: 'Cavalier upgrade available in Castle Age',
+    on: null,
+    note: '无法核实：城堡时代可升级骑士是科技可用性，不在 eco.json 的科技树汇总行里（该行骑士费用折扣属于勃艮第另一条加成），开局模拟没有可去掉的对应效果',
+  },
+  'Byzantines-2': { en: 'Town Watch, Town Patrol free', on: false, note: '未计入：警戒瞭望 / 城镇巡逻是视野科技，开局方案不研究也不受益' },
+  'Franks-1': { en: 'Mill technologies free', on: true, note: '已计入' },
+  'Italians-0': { en: 'Advancing to the next Age costs -15%', on: true, note: '已计入' },
+  'Italians-2': { en: 'Dock and University technologies cost -25%', on: false, note: '未计入：码头与大学科技费用折扣，现有开局方案不研究这些科技' },
+  'Italians-4': { en: 'Fishing Ships cost -15%', on: true, note: '已计入' },
+  'Koreans-0': { en: 'Stone miners work +20% faster', on: false, note: '未计入：现有开局方案不采石（真实成本采集模型已另行计入）' },
+  'Magyars-2': { en: 'Melee attack upgrades free', on: false, note: '未计入：近战攻击升级是战斗科技，不影响开局时间与库存' },
+  'Malay-1': { en: 'Infantry armor upgrades free', on: false, note: '未计入：步兵护甲升级是战斗科技，不影响开局时间与库存' },
+  'Teutons-4': { en: 'Murder Holes, Herbal Medicine free', on: false, note: '未计入：近射孔 / 草药学不影响开局方案的资源与时间' },
+  'Turks-2': { en: 'Chemistry free; Gunpowder technologies costs -50%', on: false, note: '未计入：化学与火药科技费用，现有开局方案不涉及' },
+  'Vietnamese-3': { en: 'Conscription free', on: false, note: '未计入：征兵是军事生产加速，现有开局方案不征兵' },
+  'Vikings-0': { en: 'Wheelbarrow, Hand Cart free', on: true, note: '已计入' },
+};
+
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
   const { techs, treeOnly } = bonusTechs(b);
@@ -96,7 +125,14 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
   if (rows.some((r) => techAtomicOk(r, scope())) && kinds.some(({ r, ks }) => techAtomicOk(r, scope()) && ks.includes('handled')))
     return { tool: 'sim', name, on: true, note: '已计入' };
   if (relevant) return { tool: 'sim', name, on: false, note: '本条效果待核实，未计入' };
-  if (treeOnly) return { tool: 'sim', name, on: null, note: '本条属于科技树汇总效果，未逐条核对是否计入' };
+  if (treeOnly) {
+    const t = TREE_SIM[b.id];
+    if (t) {
+      // 文案漂移时仍给出结论，由 v0300-332 的 en 对照把关
+      return { tool: 'sim', name, on: t.on, note: t.note };
+    }
+    return { tool: 'sim', name, on: null, note: '本条属于科技树汇总效果，未逐条核对是否计入' };
+  }
   return null;
 }
 
