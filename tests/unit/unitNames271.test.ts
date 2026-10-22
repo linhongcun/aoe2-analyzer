@@ -4,6 +4,8 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, type Core } from '../../src/data';
 import MIXED from '../../src/content/mixed-army.json';
 import { unitOptionLabel } from '../../src/features/teamPlan/TeamPlan';
+import { TEAM_PLAN_UNIT_IDS } from '../../src/domain/teamPlan';
+import { civs } from '../../src/data';
 import type { ProductionContext } from '../../src/domain/production';
 
 let core: Core;
@@ -46,9 +48,26 @@ describe('#271 混兵情境文案', () => {
     expect(src).toContain("wagons: '目前只见胡斯派战车'");
     expect(src).toContain("'wagons-cannon': '胡斯派战车与后排手推炮'");
     expect(src).toContain("'wagons-cannon-halberdiers': '胡斯派战车、后排手推炮与长戟兵'");
-    expect(src).toContain('aria-label="已见前排单位形态"');
-    expect(src).toContain('aria-label="已见后排攻城形态"');
-    expect(src).not.toMatch(/目前只见战车'|战车与后排火炮|已见战车形态|已见后排火炮形态|已见胡斯派战车形态|已见后排手推炮形态/);
+    expect(src).toContain('aria-label="已见胡斯派战车（普通或精锐）"');
+    expect(src).toContain('aria-label="已见后排炮（手推炮或榴弹炮）"');
+    expect(src).not.toMatch(
+      /目前只见战车'|战车与后排火炮|已见战车形态|已见后排火炮形态|已见胡斯派战车形态|已见后排手推炮形态|已见前排单位形态|已见后排攻城形态/,
+    );
+  });
+  it('Arena 两个下拉上方单独一行资料链接（标签本身不带链接）', () => {
+    const src = readFileSync(new URL('../../src/features/mixedArmy/MixedArmy.tsx', import.meta.url), 'utf8');
+    const block = src.slice(src.indexOf('<div className="mixed-links mixed-field-units">'), src.indexOf('已见胡斯派战车（普通或精锐）'));
+    expect(block).toContain('<Link to="/unit/1704">胡斯派战车资料</Link>');
+    expect(block).toContain('<Link to="/unit/36">手推炮资料</Link>');
+    expect(block).toContain('<Link to="/unit/1709">榴弹炮资料</Link>');
+  });
+  it('情境标题去掉「帝王」，360 宽不截断', () => {
+    expect(MIXED.scenarios.find((s) => s.id === 'arena-wagon-cannon')!.title).toBe('1v1 Arena 胡斯派战车与手推炮推进');
+  });
+  it('来源说明按帖子原文写「手推炮」', () => {
+    expect(MIXED.sources.find((s) => s.id === 'artillery-discussion-2023')!.note).toBe(
+      '正文提及手推炮、火炮术、苏丹亲兵和翼骑兵分工；未核对所述录像，不采纳胜负或过强结论。',
+    );
   });
 });
 
@@ -90,5 +109,32 @@ describe('#271 团战分工下拉：同名单位可区分', () => {
       const labels = group.map((u) => unitOptionLabel(ctx, u, group));
       expect(new Set(labels).size, labels.join('|')).toBe(labels.length);
     }
+  });
+  it('精锐钦察：1233 显示「精锐钦察」，1260（库曼雇佣兵送的）显示「精锐钦察（库曼雇佣兵）」', () => {
+    const other = core.units.filter((u) => !TEAM_PLAN_UNIT_IDS.includes(u.id));
+    expect(unitOptionLabel(ctx, core.unitById[1233]!, other)).toBe('精锐钦察');
+    expect(unitOptionLabel(ctx, core.unitById[1260]!, other)).toBe('精锐钦察（库曼雇佣兵）');
+  });
+  it('56 个文明：单位下拉两个分组的选项文字都不含数字、编号，组内不重复', () => {
+    // 下拉选项与所选文明无关（全目录分两组），仍按文明逐个核对，防止以后改成按文明生成时漏查
+    expect(civs.length).toBe(56);
+    const options = core.units.filter((u) => TEAM_PLAN_UNIT_IDS.includes(u.id));
+    const other = core.units.filter((u) => !TEAM_PLAN_UNIT_IDS.includes(u.id));
+    expect(options.length + other.length).toBe(core.units.length);
+    const bad: string[] = [];
+    for (const civ of civs)
+      for (const [name, group] of [
+        ['本版核对', options],
+        ['其它具名形态', other],
+      ] as const) {
+        const labels = group.map((u) => unitOptionLabel(ctx, u, group));
+        for (const l of labels) if (/\d/.test(l) || /形态\s?\d|\d{3,}/.test(l)) bad.push(`${civ.en} ${name}：${l}`);
+        const seen = new Set<string>();
+        for (const l of labels) {
+          if (seen.has(l)) bad.push(`${civ.en} ${name}：重复「${l}」`);
+          seen.add(l);
+        }
+      }
+    expect(bad).toEqual([]);
   });
 });

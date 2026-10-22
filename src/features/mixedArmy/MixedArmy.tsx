@@ -343,9 +343,14 @@ export default function MixedArmy() {
               <SelectField label="地图与模式" value={config.mode} options={modeOptions} change={(mode) => change({ mode })} />
               {config.scenario === 'arena-wagon-cannon' && (
                 <>
+                  <div className="mixed-links mixed-field-units">
+                    <Link to="/unit/1704">胡斯派战车资料</Link>
+                    <Link to="/unit/36">手推炮资料</Link>
+                    <Link to="/unit/1709">榴弹炮资料</Link>
+                  </div>
                   <label className="mixed-field">
-                    已见前排单位形态
-                    <select aria-label="已见前排单位形态" value={config.wagon} onChange={(event) => change({ wagon: choice(event.target.value) })}>
+                    已见胡斯派战车（普通或精锐）
+                    <select aria-label="已见胡斯派战车（普通或精锐）" value={config.wagon} onChange={(event) => change({ wagon: choice(event.target.value) })}>
                       <option value="unknown">未知，尚未辨认</option>
                       <option value="other">其他，暂未覆盖</option>
                       {[1704, 1706, ...(typeof config.wagon === 'number' && ![1704, 1706].includes(config.wagon) ? [config.wagon] : [])].map((id) => (
@@ -356,8 +361,12 @@ export default function MixedArmy() {
                     </select>
                   </label>
                   <label className="mixed-field">
-                    已见后排攻城形态
-                    <select aria-label="已见后排攻城形态" value={config.cannon} onChange={(event) => change({ cannon: choice(event.target.value) })}>
+                    已见后排炮（手推炮或榴弹炮）
+                    <select
+                      aria-label="已见后排炮（手推炮或榴弹炮）"
+                      value={config.cannon}
+                      onChange={(event) => change({ cannon: choice(event.target.value) })}
+                    >
                       <option value="unknown">未知，尚未辨认</option>
                       <option value="other">其他，暂未覆盖</option>
                       {[36, 1709, ...(typeof config.cannon === 'number' && ![36, 1709].includes(config.cannon) ? [config.cannon] : [])].map((id) => (
