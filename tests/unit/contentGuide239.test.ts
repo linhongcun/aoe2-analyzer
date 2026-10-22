@@ -44,7 +44,7 @@ describe('#239 verified Steam catalog and independent historical releases', () =
     const entry = product(id);
     expect(entry.acquisition.kind).toBe('included-with-base');
     expect(product('base').includedProductIds).toContain(id);
-    expect(entry.sources.find((source) => source.id === 'gift-announcement')).toMatchObject({ status: 'verified', publishedAt: '2024-11-14' });
+    expect(entry.sources.find((source) => source.id === 'gift-announcement')).toMatchObject({ status: 'verified', publishedAt: '2024-11-15' });
     expect(contentPrerequisiteLabel(entry)).toBe('需 Steam 版决定版本体');
   });
   it('splits RoR from standard Romans and retains all seven campaign entitlements', () => {

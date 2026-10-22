@@ -120,7 +120,7 @@ def generate():
     for civ in ['Danes','Saxons','Varangians']: add('new','civ',civ,'维京传奇新增文明；完整单位与加成见文明详情。',civ)
     for uid in [2700,2701,2703,2704]: add('new','unit',uid,'本补丁新增单位；属性和适用文明见详情。')
     add('new','tech',1452,'新增骑马弩兵相关科技；效果见详情。')
-    return dict(id='185872',date='2026-09-22',source=SOURCE,
+    return dict(id='185872',date='2026-09-23',source=SOURCE,
                 note='改动前取自官方 185872 平衡说明；改动后数值取自本站固定数据，科技树已逐项核对。未持有上一补丁的完整 .dat，不声称是两个 .dat 的自动差分。', entries=rows)
 
 if __name__=='__main__':
