@@ -110,5 +110,129 @@ class LatestUsesBeijingDate(unittest.TestCase):
         self.assertNotEqual(self.latest_at('2026-09-22T19:21:29Z')['date'], '2026-09-12')
 
 
+
+# ---- Steve 2026-10-22 追加 (a)：data:update 写入的 pins['updated']（页面「最后更新」）= 运行当下的北京时间日期，与机器时区无关 ----
+# f856c9e / 4aa95a3 用 datetime.date.today()（机器本地日期），在 UTC / 美西机器上北京时间凌晨运行会写成前一天。
+# 测试缝（对 Linus 的约束，尽量少）：data_update.py 保持 `import datetime` 模块式写法，通过 `datetime.` 取当前时间
+# （datetime.datetime.now(tz) / datetime.datetime.now(datetime.timezone.utc) / datetime.date.today() 都会被冻结），
+# 或用 time.time()。建议实现：模块级 beijing_today(now: datetime.datetime | None = None) -> str，
+# now 为带时区的时刻（默认 datetime.datetime.now(datetime.timezone.utc)），返回北京时间日期；main() 里 pins['updated'] = beijing_today()。
+# 若定义了 beijing_today，下面也直接测它；未定义则那组跳过，以 main() 的端到端结果为准。
+import calendar, datetime, json, shutil, tempfile, types  # noqa: E402,E401
+
+UTC = datetime.timezone.utc
+
+
+def frozen_datetime_module(instant):
+    """冻结在 instant（带时区）的 datetime 模块替身：本地时间按当前进程 TZ 计算，和真实 date.today() 的行为一致。"""
+    epoch = instant.timestamp()
+    real = datetime
+
+    class FDateTime(real.datetime):
+        # 返回替身类自己的实例（Codex 复核）：实现里 isinstance(x, datetime.datetime) 之类的校验不应被替身误伤
+        @classmethod
+        def now(cls, tz=None):
+            return super().fromtimestamp(epoch, tz)
+
+        @classmethod
+        def utcnow(cls):
+            return super().fromtimestamp(epoch, UTC).replace(tzinfo=None)
+
+        @classmethod
+        def today(cls):
+            return cls.now()
+
+    class FDate(real.date):
+        @classmethod
+        def today(cls):
+            d = real.datetime.fromtimestamp(epoch).date()
+            return cls(d.year, d.month, d.day)
+
+    m = types.ModuleType('datetime')
+    for k in dir(real):
+        if not k.startswith('__'):
+            setattr(m, k, getattr(real, k))
+    m.datetime, m.date = FDateTime, FDate
+    return m
+
+
+class MachineTZ:
+    def __init__(self, tz):
+        self.tz = tz
+
+    def __enter__(self):
+        self.old = os.environ.get('TZ')
+        os.environ['TZ'] = self.tz
+        time.tzset()
+
+    def __exit__(self, *a):
+        if self.old is None:
+            os.environ.pop('TZ', None)
+        else:
+            os.environ['TZ'] = self.old
+        time.tzset()
+
+
+def run_main_frozen(instant):
+    """不联网、不跑生成脚本地执行一次 data_update.main()：只有 halfon 有新提交（补丁号不变），返回写出的 data_sources.json。"""
+    tmp = Path(tempfile.mkdtemp(prefix='k335-upd-'))
+    try:
+        (tmp / 'src' / 'data').mkdir(parents=True)
+        src = tmp / 'data_sources.json'
+        shutil.copy(data_update.SRC, src)
+        pins = json.loads(src.read_text())
+        S = pins['sources']
+
+        def fake_latest(repo, path):
+            k = next(k for k in S if S[k]['repo'] == repo)
+            sha = S[k]['commit'] if k != 'halfon' else 'f' * 40
+            return {'commit': sha, 'date': S[k]['date'], 'message': 'Implement DE Update %d' % pins['patch']['build']}
+
+        fdt = frozen_datetime_module(instant)
+        with mock.patch.object(data_update, 'ROOT', tmp), mock.patch.object(data_update, 'SRC', src), \
+                mock.patch.object(data_update, 'CACHE', tmp / 'cache'), mock.patch.object(data_update, 'latest', fake_latest), \
+                mock.patch.object(data_update, 'run', lambda *c: None), mock.patch.object(data_update, 'load_dir', lambda d: {}), \
+                mock.patch.object(data_update, 'summarize', lambda *a: 'T'), mock.patch.object(data_update, 'datetime', fdt), \
+                mock.patch('time.time', lambda: instant.timestamp()), mock.patch.object(sys, 'argv', ['data_update.py']), \
+                mock.patch('builtins.print'):
+            data_update.main()
+        return json.loads(src.read_text())
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+CASES = [
+    # (时刻 UTC, 北京时间日期)
+    (datetime.datetime(2026, 9, 22, 19, 21, 29, tzinfo=UTC), '2026-09-23'),
+    (datetime.datetime(2026, 9, 22, 15, 59, 59, tzinfo=UTC), '2026-09-22'),
+    (datetime.datetime(2026, 9, 22, 16, 0, 0, tzinfo=UTC), '2026-09-23'),
+]
+
+
+class UpdatedIsBeijingToday(unittest.TestCase):
+    def test_harness_reaches_updated(self):
+        # 防空转：替身确实被 main() 用到——冻结在 2001 年时写出的 updated 不应是今天的真实日期
+        with MachineTZ('Asia/Shanghai'):
+            out = run_main_frozen(datetime.datetime(2001, 2, 3, 4, 5, 6, tzinfo=UTC))
+        self.assertEqual(out['updated'], '2001-02-03')
+        self.assertEqual(out['sources']['halfon']['commit'], 'f' * 40)
+
+    def test_updated_is_beijing_date_under_any_machine_tz(self):
+        for tz in ('UTC', 'America/Los_Angeles'):
+            for instant, want in CASES:
+                with self.subTest(tz=tz, now=instant.isoformat()), MachineTZ(tz):
+                    self.assertEqual(run_main_frozen(instant)['updated'], want)
+
+    def test_beijing_today_helper_if_defined(self):
+        f = getattr(data_update, 'beijing_today', None)
+        if not callable(f):
+            self.skipTest('未定义 beijing_today（可选缝）；以 main() 的结果为准')
+        for tz in ('UTC', 'America/Los_Angeles'):
+            with MachineTZ(tz):
+                for instant, want in CASES:
+                    self.assertEqual(f(instant), want, (tz, instant))
+                    self.assertEqual(f(instant.astimezone(datetime.timezone(datetime.timedelta(hours=-7)))), want, (tz, instant))
+
+
 if __name__ == '__main__':
     unittest.main()

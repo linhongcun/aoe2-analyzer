@@ -323,3 +323,27 @@ describe('#335 scripts/data_sources.json 的上游固定提交日期 = 提交时
     expect(all.patch.date).toBe(ds.sources.halfon!.date);
   });
 });
+
+// Steve 2026-10-22 追加 (b)：docs/PATCH-NOTES/185872.md（关于数据页链接的补丁差异摘要）末尾「上游：」行的提交日期也按北京时间。
+describe('#335 docs/PATCH-NOTES/185872.md「上游：」行的提交日期 = 北京时间日期', () => {
+  const lines = readFileSync('docs/PATCH-NOTES/185872.md', 'utf8')
+    .split('\n')
+    .filter((l) => l.startsWith('上游：'));
+  it('恰好一行「上游：」', () => {
+    expect(lines.length).toBe(1);
+  });
+  const upstream: [string, string][] = [
+    ['SiegeEngineers/aoe2techtree@3bb43b1', '2026-09-23'],
+    ['SiegeEngineers/halfon@abb48fd', '2026-09-23'],
+    ['SiegeEngineers/auto-mods@0c38027', '2026-10-07'], // 对照
+  ];
+  for (const [ref, want] of upstream)
+    it(`${ref}（${want}）`, () => {
+      expect(lines[0]).toContain(`${ref}（${want}）`);
+    });
+  it('「上游：」行不再有 2026-09-22，且与 scripts/data_sources.json 的固定日期一致', () => {
+    expect(lines[0]).not.toContain('2026-09-22');
+    const ds = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { sources: Record<string, { repo: string; commit: string; date: string }> };
+    for (const s of Object.values(ds.sources)) expect(lines[0]).toContain(`${s.repo}@${s.commit.slice(0, 7)}（${s.date}）`);
+  });
+});
