@@ -9,6 +9,11 @@ async function open(page: import('@playwright/test').Page, q: string) {
   await page.locator('#home').waitFor();
   await page.keyboard.press('Control+k');
   await page.getByPlaceholder(/搜索文明、单位、科技/).fill(q);
+  // #343：搜索面板懒加载，加载期间先显示同结构外壳（#325），外壳的 .cmdk-list 里有一条「加载中」<li>。
+  // 只等 `.cmdk-list li` 会在真面板挂载前就读结果，4 worker 并行时分包加载变慢就偶发红。
+  // 先等真面板（只有它的输入框是 combobox）接过输入的文字，再等真正的结果项（role=option）。
+  await expect(page.getByRole('combobox', { name: '全局搜索' })).toHaveValue(q);
+  await expect(page.locator('.cmdk-list li[role="option"]').first()).toBeVisible();
   await expect(page.locator('.cmdk-list li').first()).toBeVisible();
   return page.locator('.cmdk-list li');
 }

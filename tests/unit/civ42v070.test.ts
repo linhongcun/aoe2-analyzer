@@ -81,7 +81,8 @@ describe('A 匈奴', () => {
         b.id,
       ).toEqual(z.map((s) => [s.villagers, s.stock, s.pop]));
     }
-  });
+    // #289：单独跑约 1 秒，但全量负载下到过 5.2 秒，超过默认 5 秒；只给这一条放宽，不动全局超时
+  }, 20_000);
   it('A6 模型现值守护', () => {
     expect(reach('scouts-18', 'Huns', 'feudal')).toBeCloseTo(537.7, 1);
     expect(reach('drush-fc', 'Huns', 'castle')).toBeCloseTo(1005.2, 1);
