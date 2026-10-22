@@ -74,7 +74,13 @@ for (const width of [360, 375, 390, 414, 480]) {
       const lr = document.createRange();
       lr.selectNodeContents(lt);
       const labelShift = Math.abs(lr.getClientRects()[0].bottom - rg.getClientRects()[0].bottom);
-      return { minTop: Math.min(...links.map((l) => l.top)) - top, overlaps, bottoms, labelShift };
+      return {
+        minTop: Math.min(...links.map((l) => l.top)) - top,
+        overlaps,
+        bottoms,
+        labelShift,
+        firstLine: rg.getClientRects()[0].bottom - top,
+      };
     }, LINKS);
     expect(r.minTop).toBeGreaterThanOrEqual(0);
     expect(r.overlaps).toEqual([]);
@@ -83,5 +89,7 @@ for (const width of [360, 375, 390, 414, 480]) {
     expect(r.bottoms[1] - r.bottoms[0]).toBeLessThanOrEqual(22);
     // 入口文字不因点击区加高而比同行说明文字明显偏高
     expect(r.labelShift).toBeLessThanOrEqual(3.5);
+    // 点击区加高不得把页脚文字整体往下推（main 上第一行底边距页脚顶约 47px）
+    expect(r.firstLine).toBeLessThanOrEqual(50);
   });
 }
