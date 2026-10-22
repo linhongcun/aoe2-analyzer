@@ -356,9 +356,9 @@ function evaluateCard(ctx: ProductionContext, config: MixedArmyConfig, card: Mix
     }
   } else {
     need(config.mode !== 'unknown', '先确认是否为1v1 Arena。');
-    need(config.wagon !== 'unknown', '先确认战车的准确形态。');
+    need(config.wagon !== 'unknown', '先确认胡斯派战车的准确形态。');
     if (config.enemy !== 'wagons') need(config.cannon !== 'unknown', '先辨认后排是手推炮还是榴弹炮。');
-    if (card.id !== 'turks-reposition' && config.enemy === 'wagons') blocked.push('目前只记录战车，未见后排火炮；纯战车完整应对暂未覆盖。');
+    if (card.id !== 'turks-reposition' && config.enemy === 'wagons') blocked.push('目前只记录胡斯派战车，未见后排手推炮；纯胡斯派战车完整应对暂未覆盖。');
     if (card.id === 'turks-protected-artillery') {
       observation(config.position, 'safe', '需要受保护的射击位置。');
       observation(config.retreat, 'safe', '需要可撤回的位置和资源。');
@@ -404,9 +404,9 @@ export function planMixedArmy(ctx: ProductionContext, config: MixedArmyConfig): 
   if (config.scenario === 'arena-wagon-cannon') {
     if (config.mode !== 'unknown' && config.mode !== 'one-v-one-arena') outside.push('本情境只整理1v1 Arena，其他模式暂未覆盖。');
     if (config.wagon === 'other' || (typeof config.wagon === 'number' && ![1704, 1706].includes(config.wagon)))
-      outside.push('战车形态暂未覆盖，请保留观察或修正。');
+      outside.push('胡斯派战车形态暂未覆盖，请保留观察或修正。');
     if (config.cannon === 'other' || (typeof config.cannon === 'number' && ![36, 1709].includes(config.cannon)))
-      outside.push('后排火炮形态暂未覆盖，请保留观察或修正。');
+      outside.push('后排手推炮形态暂未覆盖，请保留观察或修正。');
   }
   const confirmationErrors = mixedArmyConfirmationErrors(ctx, config);
   if (outside.length)
