@@ -287,6 +287,11 @@ function Providers({ providers }: { providers: TeamProvider[] }) {
  * 文案按 Steve 2026-10-22 设计审（PR 360）。
  */
 const PLAYER_NOTE: [string, string][] = [
+  [
+    '属性单位/类别目标与生产目录为静态关联；不合成队伍倍率，不作客户端实测声明。',
+    '受影响的单位、类别和可训练单位只列出对应关系；不计算队伍总倍率，没有在游戏里实测。',
+  ],
+  ['生产单位是全目录间接关联，不限定为加成来源文明。', '通过生产建筑关联到的单位按所有文明列出，不限于提供加成的文明。'],
   ['单位目标关联未完全核实；未知资源、科技修改与引擎函数不按文案猜测。', '有些单位是否适用还没核对完；核对不了的效果不按说明文字猜测。'],
   ['存在资源/引擎函数、科技修改或目录外对象，适用目标关联仅部分核实。', '部分效果无法从游戏数据核对，适用单位只核对了一部分。'],
   ['只枚举站内56文明的常驻来源和固定.dat中可研究的团队命令科技。', '只列出本站 56 个文明的常驻团队加成和可研究的团队科技。'],
@@ -310,6 +315,10 @@ const INTERNAL_PREREQ: Record<number, (civ: string, core: Core) => string> = {
   639: (civ) => `队伍中有${civ}文明时开局自动生效`,
   307: (civ) => `队伍中有${civ}文明时开局自动生效`,
 };
+/** issue 273：研究条件列表的名字；站内查不到名字的是科技树看不到的内部条件，不显示编号（Steve 2026-10-22） */
+export function teamPrereqLabel(id: number, core: Core): string {
+  return core.techById[id]?.zh ?? '游戏内部条件（科技树里看不到）';
+}
 export function playerTeamNote(note: string, core: Core, civ?: string): string {
   let out = note;
   const m = /^关联科技编号(\d+)：[^；]+；(.+?)；原始前置为([^，]*)，所需数量为\d+。$/.exec(note);
@@ -340,8 +349,8 @@ function Targets({ source, core }: { source: TeamTargetSource; core: Core }) {
     <details className="team-target-details">
       <summary>查看已核对的目标与条件</summary>
       <p className="note">
-        目标覆盖：{source.targetCoverage === 'complete' ? '已解析当前原始命令' : source.targetCoverage === 'partial' ? '部分已解析，其余待核实' : '待核实'}
-        。不将这些关联合成为数值结果。
+        目标覆盖：{source.targetCoverage === 'complete' ? '已全部核对' : source.targetCoverage === 'partial' ? '部分已核对，其余待核实' : '待核实'}
+        。这些目标不会合并成一个数值。
       </p>
       {!!unitIds.length && (
         <div>
@@ -475,17 +484,17 @@ function TechnologyCard({
         </div>
       </dl>
       <details className="team-prerequisites">
-        <summary>原始前置门槛</summary>
-        <p className="note">需满足原始前置中的 {source.requiredCount} 项；包含时代及自动隐藏条件，不能仅把具名科技当作完整前置。</p>
+        <summary>研究条件</summary>
+        <p className="note">需满足下列条件中的 {source.requiredCount} 项；其中可能有时代要求，以及科技树里看不到的游戏内部条件。</p>
         <ul>
           {source.prerequisites.map((id) => (
             <li key={id}>
               {core.techById[id] ? (
                 <Link className="team-entity" to={`/tech/${id}`}>
-                  {core.techById[id]!.zh}
+                  {teamPrereqLabel(id, core)}
                 </Link>
               ) : (
-                `条件科技 #${id}（固定数据中的隐藏或时代条件）`
+                teamPrereqLabel(id, core)
               )}
             </li>
           ))}

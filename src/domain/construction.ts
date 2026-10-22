@@ -282,8 +282,8 @@ export function calculateConstruction(ctx: ConstructionContext, config: Construc
   result.form = form!;
   result.single = time / rate;
   warnings.push('理论同时施工：所有普通村民已到场，不计步行、阻挡、分批到达、战斗或维修。没有在游戏里实测。');
-  if (b.id === 109) warnings.push('采用真实施工附属物的 150 秒基数；旧详情和开局模型的已建城镇中心 100 秒口径不适用于此处。');
-  if (['Spanish', 'Romans'].includes(config.civ)) warnings.push('旧开局模型未应用建造者工作速率；本工具按固定原字段计算，结果可能不同。');
+  if (b.id === 109) warnings.push('按游戏里实际建造城镇中心的 150 秒计算，和其他页面里的 100 秒不是同一个口径。');
+  if (['Spanish', 'Romans'].includes(config.civ)) warnings.push('本工具计入了这个文明的建造速度加成，结果可能和开局模拟不同。');
   if (config.civ === 'Sicilians') warnings.push('西西里施工加成须已完成过首座城镇中心；本开关同时控制城堡与防御工事加成。');
   let gather: GatherModel | null = null;
   if (config.task) {
