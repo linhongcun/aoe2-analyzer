@@ -26,10 +26,21 @@ def gh(path):
     return json.load(urllib.request.urlopen(req))
 
 
-def beijing_date(ts):
+def beijing_date(ts: str) -> str:
     """GitHub 提交时间（ISO 8601，如 2026-09-22T19:21:29Z）换算成北京时间（UTC+8）的日期 YYYY-MM-DD（#335：站内日期一律按北京时间）。"""
     t = datetime.datetime.fromisoformat(ts.replace('Z', '+00:00'))
     return t.astimezone(datetime.timezone(datetime.timedelta(hours=8))).date().isoformat()
+
+
+def beijing_today(now=None) -> str:
+    """北京时间（UTC+8）的当天日期 YYYY-MM-DD，与机器时区无关；now 可注入（带时区的 datetime 或 ISO 时间戳），默认当前时刻。"""
+    if now is None:
+        now = datetime.datetime.now(datetime.timezone.utc)
+    if isinstance(now, str):
+        return beijing_date(now)
+    if now.tzinfo is None:
+        raise ValueError('beijing_today(now) 需要带时区的时间')
+    return beijing_date(now.isoformat())
 
 
 def latest(repo, path):
@@ -75,7 +86,7 @@ def main():
     if patch != old_patch:
         pins['patch'] = {'build': patch, 'date': up['halfon']['date'] if detect_patch([up['halfon']['message']]) == patch else up['aoe2techtree']['date'],
                          'name': 'DE Update %d' % patch, 'detectedFrom': '%s@%s: %s' % (S['halfon']['repo'], up['halfon']['commit'][:7], up['halfon']['message'])}
-    pins['updated'] = datetime.date.today().isoformat()
+    pins['updated'] = beijing_today()
     SRC.write_text(json.dumps(pins, ensure_ascii=False, indent=2) + '\n')
     # 重新生成
     if 'aoe2techtree' in changed or '--force' in args: run(sys.executable, 'scripts/build_data.py')

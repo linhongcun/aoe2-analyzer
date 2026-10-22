@@ -6,7 +6,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent.parent / 'scripts'))
 from data_diff import detect_patch, load_dir, summarize  # noqa: E402
 from dat_source import check_markers, markers_of  # noqa: E402
-from data_update import beijing_date  # noqa: E402
+from data_update import beijing_date, beijing_today  # noqa: E402
 
 
 
@@ -18,6 +18,15 @@ class BeijingDate(unittest.TestCase):
     def test_boundary(self):
         self.assertEqual(beijing_date('2026-09-22T15:59:59Z'), '2026-09-22')
         self.assertEqual(beijing_date('2026-09-22T16:00:00Z'), '2026-09-23')
+
+    def test_today_injected(self):
+        import datetime
+        utc = datetime.timezone.utc
+        self.assertEqual(beijing_today(datetime.datetime(2026, 9, 22, 19, 21, 29, tzinfo=utc)), '2026-09-23')
+        self.assertEqual(beijing_today(datetime.datetime(2026, 9, 22, 15, 59, 59, tzinfo=utc)), '2026-09-22')
+        self.assertEqual(beijing_today('2026-12-31T16:00:00Z'), '2027-01-01')
+        with self.assertRaises(ValueError):
+            beijing_today(datetime.datetime(2026, 9, 22, 19, 0))
 
     def test_offset_and_morning(self):
         self.assertEqual(beijing_date('2026-10-07T11:52:25Z'), '2026-10-07')
