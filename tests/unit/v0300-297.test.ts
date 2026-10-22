@@ -5,14 +5,14 @@
 //   - 保留中英文与拼音现有能力；加单测覆盖上述三个查询的前三名
 //   - #291 的键盘选择行为不被破坏（见 tests/e2e/v0300-297.spec.ts 与 tests/unit/search291.test.ts）
 // f856c9e 实测：三个查询的前 3 名都已含对应页面（时间换算、市场买卖、开局流程分别第 1/2/1 名），名称命中同分时 KIND_ORDER 已让 page 排前。
-// 因此本文件在 f856c9e 上只有 [严格读法] 一条红；其余是本 issue 要求补上的单测（绿）。
-// [严格读法·待 Steve] 「对 page 加权」读作：任何档位的页面命中都排在加成命中之前（页面只靠名称包含 / 别名命中，也要排在名称前缀命中的加成之前）。
-//   有限加权（如 page +20）或只在面板里按 kind 分组显示，都过不了这一条；若这两种做法也算达标，这条应删除。
+// Steve 2026-10-22：#297 只补测试后关闭。页面不必总排在加成前；只有查询命中页面名称时，该页面排在加成之前。
+// 「命中页面名称」按搜索分档取「名称完全匹配或名称前缀」（中文名或英文名）；只靠名称中间包含、别名、拼音命中的页面不要求排前。
+// 因此本文件在 f856c9e 上全绿：都是本 issue 要求补上的单测。
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore } from '../../src/data';
-import { search, type SearchItem } from '../../src/domain/search';
+import { norm, search, type SearchItem } from '../../src/domain/search';
 import { useSearchIndex } from '../../src/features/search/hooks';
 
 let items: SearchItem[];
@@ -44,11 +44,13 @@ describe('#297 三个查询的前三名', () => {
           .join(' | '),
       ).toContain(`page:${id}`);
     });
+  const nameHit = (r: SearchItem, q: string) => r.kind === 'page' && [r.zh, r.en].some((n) => norm(n).startsWith(norm(q)));
   for (const [q] of CASES)
-    it(`「${q}」：所有页面命中都排在第一个加成命中之前`, () => {
+    it(`「${q}」：名称以查询开头的页面都排在第一个加成之前`, () => {
       const res = search(items, q);
       const firstBonus = res.findIndex((r) => r.kind === 'bonus');
-      const lastPage = res.map((r) => r.kind).lastIndexOf('page');
+      const lastPage = res.map((r, i) => (nameHit(r, q) ? i : -1)).reduce((a, b) => Math.max(a, b), -1);
+      expect(lastPage, '防空转：有页面名称命中').toBeGreaterThanOrEqual(0);
       expect(
         firstBonus === -1 || lastPage < firstBonus,
         res
@@ -70,9 +72,20 @@ describe('#297 对 page 加权', () => {
     const res = search([mk('bonus', '资源持续时间 +15%'), mk('page', '游戏时间换算')], '时间');
     expect(res.map((r) => r.kind)).toEqual(['page', 'bonus']);
   });
-  it('[严格读法·待 Steve] 页面只靠名称包含命中，也排在名称前缀命中的加成之前', () => {
-    const res = search([mk('bonus', '资源持续时间 +15%'), mk('page', '采集资源计算')], '资源');
+  it('名称前缀同档：页面排在名称前缀命中的加成之前', () => {
+    const res = search([mk('bonus', '资源持续时间 +15%'), mk('page', '资源采集计算')], '资源');
     expect(res.map((r) => r.kind)).toEqual(['page', 'bonus']);
+  });
+  it('全站每个页面：用它的中文名 / 英文名搜索，它排在所有加成之前', () => {
+    const bad: string[] = [];
+    for (const p of items.filter((r) => r.kind === 'page'))
+      for (const q of [p.zh, p.en].filter(Boolean)) {
+        const res = search(items, q);
+        const i = res.indexOf(p);
+        const firstBonus = res.findIndex((r) => r.kind === 'bonus');
+        if (i < 0 || (firstBonus >= 0 && firstBonus < i)) bad.push(`${q} → 第 ${i + 1} 名，首个加成第 ${firstBonus + 1} 名`);
+      }
+    expect(bad).toEqual([]);
   });
 });
 

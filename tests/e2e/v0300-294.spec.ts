@@ -5,8 +5,8 @@
 //   - 在 skip 到 main（或等价主内容锚点）的链接，焦点态可见，符合 WCAG AA 对比
 //   - 360/375/390 下上述控件热区可用；不引入 emoji
 // 注：f856c9e 上抽屉收起时 nav 为 display:none，「关闭菜单」已不在 Tab 序里——这几条是对照（绿），防回退。
-// [严格读法·待 Steve] 「热区可用」按 #295 的 44×44 判断（徽章、菜单、关闭菜单、跳到主内容）。
-// [严格读法·待 Steve] 跳到主内容链接要求是页面第一个 Tab 停点。
+// [Steve 2026-10-22 确认] 「热区可用」按 44×44 判断（徽章、菜单、关闭菜单、跳到主内容）；正文里的行内文字链接除外（本文件没有测行内链接）。
+// [Steve 2026-10-22 确认] 跳到主内容链接要求是页面第一个 Tab 停点。
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 const NARROW = [360, 375, 390] as const;
@@ -112,7 +112,7 @@ test.describe('#294 对照：抽屉收起时「关闭菜单」不在 Tab 序（f
         expect(stops.filter((s) => s.w === 0 || s.h === 0)).toEqual([]);
       });
   for (const w of NARROW)
-    test(`@${w}：打开抽屉后「关闭菜单」可聚焦、可见，点它能关上抽屉；热区 ≥44×44 [严格读法]`, async ({ page }) => {
+    test(`@${w}：打开抽屉后「关闭菜单」可聚焦、可见，点它能关上抽屉；热区 ≥44×44 [Steve 确认]`, async ({ page }) => {
       await go(page, '/market', w);
       const burger = page.getByRole('button', { name: '菜单', exact: true });
       await burger.click();
@@ -159,7 +159,7 @@ test.describe('#294 跳到主内容链接', () => {
         expect(await contrast(page.locator(':focus'))).toBeGreaterThanOrEqual(4.5);
         if ((NARROW as readonly number[]).includes(w)) {
           const box = (await page.locator(':focus').boundingBox())!;
-          expect(Math.min(box.width, box.height), '[严格读法] 热区').toBeGreaterThanOrEqual(44);
+          expect(Math.min(box.width, box.height), '[Steve 确认] 热区').toBeGreaterThanOrEqual(44);
         }
         const before = page.url().split('#')[1]?.split('?')[0];
         await page.keyboard.press('Enter');
@@ -183,7 +183,7 @@ test.describe('#294 跳到主内容链接', () => {
 
 test.describe('#294 对照：窄屏顶栏控件热区', () => {
   for (const w of NARROW)
-    test(`@${w}：数据版本徽章、菜单按钮热区 ≥44×44 [严格读法·待 Steve]`, async ({ page }) => {
+    test(`@${w}：数据版本徽章、菜单按钮热区 ≥44×44 [Steve 2026-10-22 确认]`, async ({ page }) => {
       await go(page, '/market', w);
       for (const loc of [page.locator('.verbadge'), page.getByRole('button', { name: '菜单', exact: true })]) {
         const b = (await loc.boundingBox())!;
