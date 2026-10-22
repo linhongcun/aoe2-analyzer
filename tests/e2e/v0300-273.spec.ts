@@ -20,6 +20,8 @@ const INTERNAL: [string, RegExp][] = [
   ['Float32', /Float32/i],
   ['SHA256', /SHA-?256/i],
   ['括号内部编号', /[（(]\d{3,}[）)]/],
+  // 2026-10-22：后台科技改名后也不能写成裸编号，如「关联的后台科技 599」「前置为科技 601」
+  ['科技编号', /后台科技\s?\d|科技\s?\d{3,}|前置为\s?\d/],
   ['其他编号', /(科技|单位|建筑|文明)\s?编号|前置为\s?\d/],
 ];
 async function open(page: Page, route: string) {
@@ -159,4 +161,34 @@ test.describe('#273 四个宽度、浅色与深色：数字不折行、无横向
           );
           expect(wrapped, '折行的数字').toEqual([]);
         });
+});
+
+// Steve 2026-10-22 定稿：前置写回来。具名科技写「需先研究 X」（玩家看得到的中文名），时代写「需先进入 X 时代」；
+// 前置是科技树里看不到的内部科技时写玩家怎么触发它（如「队伍中有 X 文明时自动生效」），写不出就写「需先满足游戏内部条件（科技树里看不到）」，都不写编号。
+// 数据（src/data/team_bonuses.json chain）：599 = 标枪骑兵→精锐标枪骑兵（靶场研究），前置 103 帝王时代 + 601；
+// 601 = 启用标枪骑兵，前置 102 城堡时代（柏柏尔团队加成，队伍里有柏柏尔就生效）；730 = 印加团队加成，前置 639、307 都是内部科技，库里没有触发方式。
+test.describe('#273 队伍加成：关联科技的前置写回来（Steve 10-22 定稿）', () => {
+  const ROUTE = '/team-bonuses?tv=1&players=Berbers,Incas,Franks,Britons&age=4&target=all&unit=&researched=';
+  const lines = async (page: Page, id: string) =>
+    (await page.getByTestId(`team-bonus-${id}`).locator('li').allInnerTexts()).filter((l) => /关联(的后台)?科技/.test(l));
+  test('柏柏尔：精锐标枪骑兵那条写「需先进入帝王时代」和 601 的触发方式（队伍里有柏柏尔）', async ({ page }) => {
+    await open(page, ROUTE);
+    const l599 = (await lines(page, 'Berbers-team')).filter((l) => l.includes('仍需在靶场完成研究'));
+    expect(l599, '599 只有一条').toHaveLength(1);
+    expect(l599[0]).toContain('需先进入帝王时代');
+    expect(l599[0], '601 是内部科技，要写触发方式而不是编号').toMatch(/柏柏尔/);
+  });
+  test('柏柏尔：启用标枪骑兵那条（601）写「需先进入城堡时代」', async ({ page }) => {
+    await open(page, ROUTE);
+    const l601 = (await lines(page, 'Berbers-team')).filter((l) => !l.includes('靶场'));
+    expect(l601, '601 只有一条').toHaveLength(1);
+    expect(l601[0]).toContain('需先进入城堡时代');
+  });
+  test('印加：730 不写「不限时代」，写出前置（639、307 写不出触发方式就用固定兜底句）', async ({ page }) => {
+    await open(page, ROUTE);
+    const l730 = await lines(page, 'Incas-team');
+    expect(l730, '730 只有一条').toHaveLength(1);
+    expect(l730[0]).not.toContain('不限时代');
+    expect(l730[0]).toMatch(/需先满足游戏内部条件（科技树里看不到）|自动生效/);
+  });
 });

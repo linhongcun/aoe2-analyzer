@@ -246,7 +246,7 @@ export default function Construction() {
               </>
             )
           )}
-          <p className="construction-limit">理论同时施工：所有普通村民已到场。不计步行、阻挡、分批到达、战斗或维修；未在固定版本客户端实测。</p>
+          <p className="construction-limit">理论同时施工：所有普通村民已到场。不计步行、阻挡、分批到达、战斗或维修；没有在游戏里实测。</p>
         </section>
       </div>
       <section className="construction-panel" aria-labelledby="construction-gather-title">
@@ -323,7 +323,7 @@ export default function Construction() {
         <h2>来源与支持范围</h2>
         <p>
           数据固定为 DE185872。当前目录 <span className="construction-number">38 类</span>建筑中，<span className="construction-number">37 类</span>
-          有普通村民施工形态；渔栅由渔船建造，暂停计算。文明、时代、升级前置与特殊条件仍需逐项满足。特殊建造者与盟友施工加成不在首版范围。
+          可由村民建造；渔栅由渔船建造，暂停计算。文明、时代、升级前置与特殊条件仍需逐项满足。特殊建造者与盟友施工加成暂不计算。
         </p>
         {result.applied.length > 0 && (
           <>
@@ -345,13 +345,10 @@ export default function Construction() {
             <li key={i}>{w}</li>
           ))}
         </ul>
-        <p className="note">
-          理论多人工期 = 单人工期 × 3 ÷（人数 + 2）；总村民秒 = 人数 × 完工秒数；停采量 = 总村民秒 × 所选原任务的有效采集速率。与旧开局工具的 TC
-          基数和建造者速度差异已单独记录。
-        </p>
+        <p className="note">理论多人工期 = 单人工期 × 3 ÷（人数 + 2）；总村民秒 = 人数 × 完工秒数；停采量 = 总村民秒 × 所选原任务的有效采集速率。</p>
         <p>
           <a href="https://github.com/linhongcun/aoe2-analyzer/blob/main/docs/CONSTRUCTION-MODEL.md" target="_blank" rel="noreferrer">
-            施工数据与支持矩阵
+            施工数据说明
           </a>{' '}
           ·{' '}
           <a href="https://github.com/SFTtech/openage/blob/master/doc/reverse_engineering/game_mechanics/build_speed.md" target="_blank" rel="noreferrer">

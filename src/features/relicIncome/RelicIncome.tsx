@@ -300,7 +300,8 @@ export default function RelicIncome() {
                       </p>
                       <ul className="relic-ledger">
                         {r.sources
-                          .filter((row) => shownResources.includes(row.resource))
+                          // issue 273：贡献为 0 的单步不显示（暂停计算的 null 仍显示），合计不变
+                          .filter((row) => shownResources.includes(row.resource) && row.perMinute !== 0)
                           .map((row) => (
                             <li key={row.id} data-testid={`relic-source-${row.id}`}>
                               <strong>
@@ -351,7 +352,7 @@ export default function RelicIncome() {
               </section>
             )}
             <details className="relic-card relic-details">
-              <summary>支持范围、字段与来源</summary>
+              <summary>支持范围与资料来源</summary>
               <p>
                 按 {data.meta.patch} 固定数据估算。支持全部{Object.keys(data.civs).length}个本站常规文明；阿兹特克团队黄金倍率{' '}
                 {data.modifiers.aztecs.displayValue}
@@ -373,7 +374,7 @@ export default function RelicIncome() {
                 ，普通立陶宛科技树不可用，未列入上述普通适用单位。
               </p>
               <p className="relic-provenance">
-                数据所用游戏 .dat 的固定版本与校验信息见<Link to="/about-data">关于数据</Link>。核对日：{data.meta.semanticsChecked}。原始字段与复现方法见
+                数据所用游戏 .dat 的固定版本与校验信息见<Link to="/about-data">关于数据</Link>。核对日：{data.meta.semanticsChecked}。计算方法与复现步骤见
                 <a href="https://github.com/linhongcun/aoe2-analyzer/blob/main/docs/RELIC-INCOME.md" target="_blank" rel="noreferrer">
                   仓库文档
                 </a>
@@ -386,13 +387,13 @@ export default function RelicIncome() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  固定数据提交
+                  所用游戏数据
                 </a>
                 <a className="relic-link" href={data.meta.fieldSemantics.resources} target="_blank" rel="noreferrer">
-                  资源字段与时间单位
+                  资源与时间单位说明
                 </a>
                 <a className="relic-link" href={data.meta.fieldSemantics.effectTypes} target="_blank" rel="noreferrer">
-                  引擎效果类型语义
+                  效果类型说明
                 </a>
               </div>
             </details>
