@@ -95,6 +95,9 @@ const SOURCED: Record<string, Record<string, { value: number | 'eco'; bonus: num
   Berbers: { 'class:4:speed': { value: 'eco', bonus: 0 } },
 };
 
+/** issue 331：一组效果里有没有采集模型会读的项（村民采集/搬运/移动、资源产量）；团队行本身在 gatherModel 里一律跳过 */
+export const touchesGather = (effects: readonly EffectLike[]): boolean => effects.some((e) => relevant(e) !== null);
+
 /** issue 317：真实成本采集模型计入了哪些文明加成（civs.json bon 序号）；与 gatherModel 的 applied 同一张 SOURCED 表 */
 export const gatherBonusIdx = (civ: string): number[] => Object.values(SOURCED[civ] ?? {}).flatMap((s) => (s === 'drop' ? [] : [s.bonus]));
 
