@@ -296,3 +296,30 @@ describe('#335 对照：改到的文件里除这 13 处日期外，数值和文�
       expect(leaves).toMatchSnapshot();
     });
 });
+
+// Steve 2026-10-22（PR #351 范围追加）：「关于数据」来源表的上游提交日期也按北京时间。
+// 时间戳为 GitHub API /repos/<repo>/commits/<sha> 的 commit.committer.date（data:update 的 latest() 取的就是 committer.date），
+// 2026-10-22 10:50 北京时间由 Kent 读取。
+const PIN_STAMPS: Record<string, { commit: string; ts: string; want: string }> = {
+  aoe2techtree: { commit: '3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f', ts: '2026-09-22T19:21:29Z', want: '2026-09-23' },
+  halfon: { commit: 'abb48fdbedba57d5afe2b7941d6ae85cf6e0e803', ts: '2026-09-22T19:26:06Z', want: '2026-09-23' },
+  // 对照：UTC 11:52，北京时间同日，不变
+  dat: { commit: '0c38027504532826c9922e4db77e2c1d33554291', ts: '2026-10-07T11:52:25Z', want: '2026-10-07' },
+};
+describe('#335 scripts/data_sources.json 的上游固定提交日期 = 提交时间的北京时间日期', () => {
+  const ds = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { sources: Record<string, { commit: string; date: string }> };
+  it('只有这 3 个上游来源（新加来源须先在本表登记提交时间戳）', () => {
+    expect(Object.keys(ds.sources).sort()).toEqual(Object.keys(PIN_STAMPS).sort());
+  });
+  for (const [k, p] of Object.entries(PIN_STAMPS))
+    it(`sources.${k}：固定提交仍是 ${p.commit.slice(0, 7)}，date = ${p.want}（${p.ts} 的北京时间日期）`, () => {
+      expect(ds.sources[k]!.commit).toBe(p.commit);
+      expect(beijingDate(p.ts)).toBe(p.want);
+      expect(ds.sources[k]!.date).toBe(p.want);
+    });
+  it('patch.date 与识别补丁号的 halfon 提交同一天（北京时间）', () => {
+    const all = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { patch: { date: string; detectedFrom: string } };
+    expect(all.patch.detectedFrom).toContain('halfon@abb48fd');
+    expect(all.patch.date).toBe(ds.sources.halfon!.date);
+  });
+});

@@ -83,3 +83,19 @@ test('顶栏徽章与页脚的数据版本：DE 185872（2026-09-23）', async (
     expect(await loc.first().textContent()).toContain('DE 185872（2026-09-23）');
   }
 });
+
+// Steve 2026-10-22（PR #351 范围追加）：「关于数据」来源表的提交日期按北京时间（提交时间 2026-09-22T19:2xZ → 2026-09-23）。
+test('#/about-data 来源表：aoe2techtree@3bb43b1、halfon@abb48fd 日期为 2026-09-23；auto-mods@0c38027 仍为 2026-10-07', async ({ page }) => {
+  await mainText(page, '/about-data');
+  const rows: [string, string, string][] = [
+    ['aoe2techtree', 'SiegeEngineers/aoe2techtree@3bb43b1', '2026-09-23'],
+    ['halfon', 'SiegeEngineers/halfon@abb48fd', '2026-09-23'],
+    ['dat', 'SiegeEngineers/auto-mods@0c38027', '2026-10-07'],
+  ];
+  for (const [k, repo, want] of rows) {
+    const cells = page.locator(`main tr[data-t="src-${k}"] td`);
+    await expect(cells, `src-${k} 那一行`).toHaveCount(4);
+    await expect(cells.nth(1)).toContainText(repo);
+    expect((await cells.nth(2).innerText()).trim(), `${repo} 的日期`).toBe(want);
+  }
+});
