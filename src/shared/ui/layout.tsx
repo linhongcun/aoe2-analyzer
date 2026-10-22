@@ -133,13 +133,16 @@ export const SideBlock = ({ title, children }: { title: string; children: ReactN
     {children}
   </div>
 );
-/** 列表页统一头部：面包屑 + 标题 + 说明 */
-export const ListHead = ({ title, desc }: { title: string; desc: string }) => (
-  <>
-    <Breadcrumbs />
-    <div className="lhead">
-      <h2>{title}</h2>
-      <span className="note">{desc}</span>
-    </div>
-  </>
-);
+/** 列表页统一头部：面包屑 + 标题 + 说明。level=1 时标题用 h1 作页面主标题，外观与 h2 相同 */
+export const ListHead = ({ title, desc, level = 2 }: { title: string; desc: string; level?: 1 | 2 }) => {
+  const H = level === 1 ? 'h1' : 'h2';
+  return (
+    <>
+      <Breadcrumbs />
+      <div className="lhead">
+        <H>{title}</H>
+        <span className="note">{desc}</span>
+      </div>
+    </>
+  );
+};

@@ -74,8 +74,10 @@ kbd {
   gap: var(--space-2) var(--space-4);
   margin-bottom: var(--space-5);
 }
-.lhead h2 {
+/* 列表页主标题可为 h1（开局流程、单位 PK 页），外观与 h2 一致 */
+.lhead :is(h1, h2) {
   font-size: var(--fs-h2);
+  line-height: 1.35;
 }
 /* 资料列表共用网格和卡片页脚，版本标记不再受正文长度影响。 */
 #tgrid {

@@ -52,7 +52,7 @@ export default function BuildOrderList() {
   };
   return (
     <section className="pane" id="builds">
-      <ListHead title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
+      <ListHead level={1} title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
       <nav className="bar" aria-label="单人与内容入门">
         <Link className="community-tool-entry" to="/game-guide">
           先看懂一局的目标与角色
