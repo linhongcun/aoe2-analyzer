@@ -517,6 +517,12 @@ a.hcard:hover {
     display: inline-flex;
     align-items: center;
   }
+  /* 反馈/功能建议入口：字号与图标不变，只用透明内边距把手指可点区域补足到 44px */
+  a.fblink,
+  footer.editorial-footer a.fblink {
+    min-height: 44px;
+    min-width: 44px;
+  }
   .tl-summary .s,
   .tl-bar,
   .tl-lab {
