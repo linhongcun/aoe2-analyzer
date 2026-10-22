@@ -10,7 +10,8 @@ export default function AboutData() {
     <section id="about-data" className="pane">
       <h2>关于数据</h2>
       <p>
-        当前数据版本：<b data-t="data-version">{versionLabel(D)}</b>（{D.patch.name}；识别自 {D.patch.detectedFrom}）。最后更新：{D.updated}。
+        当前数据版本：<b data-t="data-version">{versionLabel(D)}</b>（{D.patch.name}；识别自 {D.patch.detectedFrom}）。最后更新：
+        <span className="src-date">{D.updated}</span>。
       </p>
       <p className="note">
         全部数值都能追溯到下列固定版本的上游数据；更新流程见{' '}
@@ -19,7 +20,7 @@ export default function AboutData() {
         </a>
         。游戏原版 .dat © Microsoft，本站只发布由它派生的数值，不分发该文件。
       </p>
-      <table className="stat">
+      <table className="stat src-table">
         <thead>
           <tr>
             <th>来源</th>
@@ -31,19 +32,21 @@ export default function AboutData() {
         <tbody>
           {Object.entries(D.sources).map(([k, s]) => (
             <tr key={k} data-t={'src-' + k}>
-              <td>{NAMES[k] ?? k}</td>
-              <td>
+              <td data-label="来源">{NAMES[k] ?? k}</td>
+              <td data-label="仓库@提交">
                 <a href={commitUrl(s)} target="_blank" rel="noopener noreferrer">
                   {s.repo}@{s.commit.slice(0, 7)}
                 </a>
                 {s.sha256 && (
                   <div className="note">
-                    sha256 <code>{s.sha256.slice(0, 16)}…</code>
+                    sha256 <code className="src-sha">{s.sha256}</code>
                   </div>
                 )}
               </td>
-              <td>{s.date}</td>
-              <td>{s.use}</td>
+              <td data-label="日期" className="src-date">
+                {s.date}
+              </td>
+              <td data-label="用途">{s.use}</td>
             </tr>
           ))}
         </tbody>
