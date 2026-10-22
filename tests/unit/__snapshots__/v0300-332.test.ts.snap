@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`#332 所有数值不变：这些文明的开局模拟结果与 f856c9e 相同 > 13 个文明 × 全部开局方案 1`] = `
+{
+  "Aztecs": "d95bdde438fb4784733311b636968f76fdbccf747dba833fd09338af48dd21aa",
+  "Bohemians": "9d02e04fd06280e02aecc9eb678ccae6350ffe1af384a62100e2103e16e0c259",
+  "Burgundians": "923309634da3e07d89e189aa6ba9a16e33b731ccbdece88350e5cb6dc6caf4b3",
+  "Byzantines": "65e909d36f0049f15a06339e9f95a59a5b81be7020f4d890b038a2110afde823",
+  "Franks": "e059246e73985dc3fdfda87529bc3ff686b984e24212ba1c14629e91d2098c69",
+  "Italians": "fcc83eae4356be73cebb7bd4ba63e919d5a9362253030bf55c60bf95e0cf5426",
+  "Koreans": "4d103323c839e0604aaeeeeb4bc4f6c1c0719b583ff05553b1423301b5920d09",
+  "Magyars": "e2fe569b0d77e0ba03bc490df2c1594beee351b167f7cec66fced7053aeda08f",
+  "Malay": "002daaee44a645318e198a9183164523192762a390e9b6a4ef00a3816e23bec5",
+  "Teutons": "ed4ef73109f59459de47877d227292ab2a2383bdf212acf1eec32f8171048a9f",
+  "Turks": "7b216a2e91f3194dcbaadaa6d9cc912795430eed7d509663b4b3d04662ff3605",
+  "Vietnamese": "fc3aa58b59b082c802a1e807881f0e16959f946d2df040131a71df7c7e5f486e",
+  "Vikings": "9e81caa0177015ae0e9d33a43cd4fc97132a5362d5e76cf04133281ececb51d3",
+}
+`;
