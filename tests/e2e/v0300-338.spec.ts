@@ -279,6 +279,7 @@ const PAGES = Object.entries(JSON.parse(readFileSync('src/data/page-metadata.jso
   .filter((r) => r !== '/about-data');
 const SHARDS = 8;
 test.describe('#338 除「关于数据」外全站不显示 sha256', () => {
+  test.describe.configure({ mode: 'parallel' });
   test('守卫：页面清单含市场与文物收入页，共 900 页以上', () => {
     expect(PAGES).toEqual(expect.arrayContaining(['/market', '/relic-income']));
     expect(PAGES.length).toBeGreaterThan(900);
@@ -316,6 +317,7 @@ const tableGolden: Record<string, TableStyle[]> = existsSync(TABLES_FIXTURE)
   ? (JSON.parse(readFileSync(TABLES_FIXTURE, 'utf8')) as Record<string, TableStyle[]>)
   : {};
 test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main ead4c34 相同', () => {
+  test.describe.configure({ mode: 'parallel' });
   if (RECORD_TABLES) test.afterAll(() => writeFileSync(TABLES_FIXTURE, JSON.stringify(tableGolden, null, 1) + '\n'));
   test('守卫：基准已录制，覆盖全部非「关于数据」静态页、两个宽度，并且确实录到了表格', () => {
     test.skip(RECORD_TABLES);
