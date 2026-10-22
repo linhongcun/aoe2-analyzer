@@ -6,7 +6,7 @@
 // 入口（f856c9e）：非首页 main 顶部 .fbbar 里的 a.fbbtn（报错/反馈），页脚 a[data-t=feedback]「报错/反馈」与 a[data-t=feature]「功能建议」。
 // 「可点区域」用 elementFromPoint 量：经过链接中心的横线 / 竖线上连续落在这个链接上的长度都要 ≥44，
 // 这样透明 padding、::before 扩出的热区（含不对称扩展）都算，被相邻元素盖住的部分不算。
-// [严格读法·待 Steve] 「约 44px」按 ≥44 判断（不留 1–2px 余量）；也测了 #/builds 列表里的非紧凑「报错/反馈」。
+// [Steve 2026-10-22 确认] 「约 44px」按 ≥44 判断（不留 1–2px 余量）；#/builds 列表里的非紧凑「报错/反馈」也算。
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 const NARROW = [360, 375, 390] as const;
@@ -81,7 +81,7 @@ test.describe('#295 手机宽度热区 ≥44×44', () => {
           expect(bad).toEqual([]);
         });
   for (const w of NARROW)
-    test(`#/builds @${w}：列表里的「报错/反馈」（非紧凑样式）可点区域 ≥44×44 [严格读法·待 Steve]`, async ({ page }) => {
+    test(`#/builds @${w}：列表里的「报错/反馈」（非紧凑样式）可点区域 ≥44×44 [Steve 2026-10-22 确认]`, async ({ page }) => {
       await go(page, '/builds', w);
       const loc = page.locator('main a.fblink[data-t="feedback"]').first();
       await expect(loc).toBeVisible();

@@ -75,7 +75,7 @@ async function scenario(page: Page, id: string, patch: Record<string, string> = 
   await expect(page.locator(`[data-card]`).first(), '情境卡片已渲染（防空转）').toBeVisible();
   await page.evaluate(() => document.querySelectorAll('main details').forEach((d) => ((d as HTMLDetailsElement).open = true)));
 }
-/** main 的可见文字；外部来源链接（http 开头）的标题另算，见严格读法那条 */
+/** main 的可见文字，去掉外部来源链接（http 开头）：Steve 2026-10-22，引用的外部标题（如 Steam 帖标题）不改名 */
 const ownText = (page: Page, keepExternal = false) =>
   page.locator('main').evaluate((main, keep) => {
     const c = main.cloneNode(true) as HTMLElement;
@@ -118,15 +118,13 @@ test.describe('#271 混兵情境：单位名与全站一致', () => {
     }) => {
       await scenario(page, id, patch);
       const lines = (await ownText(page)).split('\n');
-      expect(lines.filter((l) => badWagon(l) || badCannon(l))).toEqual([]);
+      // Steve 2026-10-22：不列颠情境 / 卡片里泛指的「火炮」不算（只查「战车」）；Arena 情境两个都查
+      const bad = id === 'britons-archer-cover' ? badWagon : (l: string) => badWagon(l) || badCannon(l);
+      expect(lines.filter(bad)).toEqual([]);
     });
-  test('[严格读法·待 Steve] 外部来源标题（如 Steam 帖「受战车保护的火炮为何难以切入？」）也不出现单独的「战车」「火炮」', async ({ page }) => {
-    const bad: string[] = [];
-    for (const id of Object.keys(CONFIG)) {
-      await scenario(page, id);
-      bad.push(...(await page.locator('main a[href^="http"]').allInnerTexts()).filter((l) => badWagon(l) || badCannon(l)));
-    }
-    expect(bad).toEqual([]);
+  test('对照（Steve 2026-10-22：外部来源标题不改名）：Steam 讨论帖标题「受战车保护的火炮为何难以切入？」原样保留', async ({ page }) => {
+    await scenario(page, 'arena-wagon-cannon');
+    await expect(page.locator('main a[href*="steamcommunity.com"]').filter({ hasText: '受战车保护的火炮为何难以切入？' }).first()).toBeAttached();
   });
   test('情境 arena-wagon-cannon：「胡斯派战车」链到 #/unit/1704 或 1706，「手推炮」链到 #/unit/36；没有链错单位', async ({ page }) => {
     await scenario(page, 'arena-wagon-cannon');
@@ -144,25 +142,37 @@ test.describe('#271 混兵情境：单位名与全站一致', () => {
     await page.locator('main a[href$="#/unit/36"]').filter({ hasText: '手推炮' }).first().click();
     await expect(page).toHaveURL(/#\/unit\/36$/);
   });
-  test('[严格读法·待 Steve] 情境 arena-wagon-cannon：卡片与说明里每一处「胡斯派战车」「手推炮」都链到对应单位详情', async ({ page }) => {
-    await scenario(page, 'arena-wagon-cannon');
-    const unlinked = await page.locator('main').evaluate(
-      (main, pats) => {
-        const out: string[] = [];
-        const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
-        for (let n = walker.nextNode(); n; n = walker.nextNode()) {
-          const el = n.parentElement!;
-          if (el.closest('select, option, a[href^="http"]')) continue;
-          const href = el.closest('a')?.getAttribute('href') ?? '';
-          for (const [name, re] of pats)
-            if ((n.textContent ?? '').includes(name) && !new RegExp(re).test(href)) out.push(`${name}：${(n.textContent ?? '').trim().slice(0, 50)}`);
-        }
-        return out;
-      },
-      Object.entries(LINK).map(([k, v]) => [k, v.source] as [string, string]),
-    );
-    expect(unlinked).toEqual([]);
-  });
+  // Steve 2026-10-22：每页（或每张卡片）第一次提到时链到单位详情即可，后面重复的不必再链。
+  for (const [id, patch] of [
+    ['arena-wagon-cannon', {}],
+    ['arena-wagon-cannon', { wagon: 'unknown', cannon: 'unknown' }],
+  ] as [string, Record<string, string>][])
+    test(`情境 ${id}${Object.keys(patch).length ? `，${new URLSearchParams(patch)}` : ''}：卡片外正文与每张卡片里，「胡斯派战车」「手推炮」第一次出现都链到对应单位详情`, async ({
+      page,
+    }) => {
+      await scenario(page, id, patch);
+      const res = await page.locator('main').evaluate(
+        (main, pats) => {
+          const first = new Map<string, boolean>();
+          const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
+          for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+            const el = n.parentElement!;
+            if (el.closest('select, option, a[href^="http"]')) continue;
+            const scope = el.closest('[data-card]')?.getAttribute('data-card') ?? '卡片外正文';
+            const href = el.closest('a')?.getAttribute('href') ?? '';
+            for (const [name, re] of pats) {
+              const key = `${scope}｜${name}`;
+              if (first.has(key) || !(n.textContent ?? '').includes(name)) continue;
+              first.set(key, new RegExp(re).test(href));
+            }
+          }
+          return [...first.entries()];
+        },
+        Object.entries(LINK).map(([k, v]) => [k, v.source] as [string, string]),
+      );
+      expect(res.length, '防空转：至少有一处提到').toBeGreaterThan(0);
+      expect(res.filter(([, ok]) => !ok).map(([k]) => k)).toEqual([]);
+    });
   test('Steam 讨论帖链接不带 ?l=hungarian（界面语言参数）', async ({ page }) => {
     let n = 0;
     for (const id of Object.keys(CONFIG)) {

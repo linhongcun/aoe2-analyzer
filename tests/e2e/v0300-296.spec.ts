@@ -3,8 +3,8 @@
 //   - #/builds 与 #/duel 各有且仅有一个描述页面用途的 h1（可用现有视觉 class，不必改字号体系）
 //   - 跟练视图 / 时间线详情若已有 h1，列表页与详情页层级不冲突（详情可用 h1，列表离开后详情独立）
 //   - 加一条简单 e2e 或 axe 检查：这两路由存在 h1
-// 「描述页面用途」按页面元数据标题核对：h1 文字要包含 page-metadata.json 里该路由的 title（f856c9e：/builds「开局流程」、/duel「单位 PK」）。
-// [严格读法·待 Steve] 用 page-metadata 标题判断「描述页面用途」；若允许别的措辞（如「开局流程列表」以外的「建造顺序」），这条要放宽。
+// Steve 2026-10-22：h1 不必逐字等于页面元数据标题，但要含同一个核心词（/builds「开局」、/duel「PK」），并直白说出页面做什么。
+// 「直白说出页面做什么」机器只能粗查：核心词之外还要有别的字（不能只写「开局」「PK」）。
 import { expect, test, type Page } from '@playwright/test';
 import meta from '../../src/data/page-metadata.json' with { type: 'json' };
 
@@ -28,10 +28,15 @@ test.describe('#296 #/builds 与 #/duel 有且仅有一个 h1', () => {
         await expect(h1).toBeVisible();
         expect((await h1.innerText()).trim().length, '有文字').toBeGreaterThanOrEqual(2);
       });
-  for (const route of ['/builds', '/duel'])
-    test(`[严格读法·待 Steve] #${route}：h1 文字含页面元数据标题「${TITLE[route]!.title}」`, async ({ page }) => {
+  for (const [route, noun] of [
+    ['/builds', '开局'],
+    ['/duel', 'PK'],
+  ] as const)
+    test(`#${route}：h1 含核心词「${noun}」，且不只是这个词`, async ({ page }) => {
       await go(page, route);
-      await expect(page.locator('main h1')).toContainText(TITLE[route]!.title);
+      const t = (await page.locator('main h1').first().innerText()).trim();
+      expect(t, t).toContain(noun);
+      expect(t.replaceAll(noun, '').replace(/\s/g, '').length, `核心词以外还有说明：${t}`).toBeGreaterThanOrEqual(2);
     });
 });
 
