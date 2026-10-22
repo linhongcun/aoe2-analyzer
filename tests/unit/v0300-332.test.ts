@@ -89,6 +89,10 @@ describe('#332 清单：f856c9e 上开局模拟「未逐条核对」的加成', 
   });
 });
 
+const RULED: Record<string, string> = {
+  'Franks-1': '未计入：开局模拟仍按原价研究马轭',
+  'Burgundians-2': '未计入：现有开局方案不升级骑士',
+};
 describe('#332 每条都有结论：已计入 / 未计入（与「去掉后重跑」一致），或「无法核实」在前、具体原因在后', () => {
   for (const id of Object.keys(EFFECTS))
     it(`${id}（${EFFECTS[id]!.en}）`, () => {
@@ -96,6 +100,12 @@ describe('#332 每条都有结论：已计入 / 未计入（与「去掉后重�
       expect(simSupport(b.civ), '支持的文明').toBe(true);
       const l = simLine(b);
       expect(l, '开局模拟一行还在').toBeDefined();
+      if (id in RULED) {
+        // Steve 2026-10-22 定稿：这两条按定稿结论和原因断言（法兰克-1 去掉后只有马轭效果重复套用的 1 食物副作用，免费未模拟，修模拟见 #358）
+        expect(l!.on, `${id} 定稿结论`).toBe(false);
+        expect(l!.note).toContain(RULED[id]!);
+        return;
+      }
       if (l!.on === null) {
         // Steve 2026-10-22：具体原因不能代替结论——先写结论「无法核实」，再写具体原因；不能是原来的通用句
         expect(l!.note).not.toContain(GENERIC);
@@ -109,6 +119,11 @@ describe('#332 每条都有结论：已计入 / 未计入（与「去掉后重�
       }
       expect(l!.on, '已计入 当且仅当 去掉这条效果后开局模拟结果变化').toBe(simChanges(b));
     }, 60_000);
+  it('合计 5 条已计入、10 条未计入（Steve 2026-10-22）', () => {
+    const ons = Object.keys(EFFECTS).map((id) => simLine(ALL.find((x) => x.id === id)!)!.on);
+    expect(ons.filter((x) => x === true).length).toBe(5);
+    expect(ons.filter((x) => x === false).length).toBe(10);
+  });
 });
 
 describe('#332 所有数值不变：这些文明的开局模拟结果与 f856c9e 相同', () => {

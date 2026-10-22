@@ -94,13 +94,9 @@ export function bonusTechs(b: CivBonusEnt): { techs: number[]; treeOnly: boolean
 const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }> = {
   'Aztecs-1': { en: 'Villagers carry +3', on: true, note: '已计入' },
   'Bohemians-0': { en: 'Mining Camp technologies free', on: true, note: '已计入' },
-  'Burgundians-2': {
-    en: 'Cavalier upgrade available in Castle Age',
-    on: null,
-    note: '无法核实：这条改的是科技能在哪个时代研究，开局模拟里没有对应的效果可以去掉重跑，所以无法核实',
-  },
+  'Burgundians-2': { en: 'Cavalier upgrade available in Castle Age', on: false, note: '未计入：现有开局方案不升级骑士' },
   'Byzantines-2': { en: 'Town Watch, Town Patrol free', on: false, note: '未计入：城镇瞭望 / 城镇巡逻是视野科技，开局方案不研究也不受益' },
-  'Franks-1': { en: 'Mill technologies free', on: true, note: '已计入' },
+  'Franks-1': { en: 'Mill technologies free', on: false, note: '未计入：开局模拟仍按原价研究马轭' },
   'Italians-0': { en: 'Advancing to the next Age costs -15%', on: true, note: '已计入' },
   'Italians-2': { en: 'Dock and University technologies cost -25%', on: false, note: '未计入：码头与大学科技费用折扣，现有开局方案不研究这些科技' },
   'Italians-4': { en: 'Fishing Ships cost -15%', on: true, note: '已计入' },

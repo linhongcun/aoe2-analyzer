@@ -386,9 +386,8 @@ test('civ bonus rows expand inline and link to bonus detail', async ({ page }) =
   await expect(row.locator('.bextab')).toContainText('192');
   await expect(row).toContainText('已计入数值');
   await page.locator('.brow[data-bonus="1"] .brow-h').click();
-  // issue 332：法兰克磨坊科技免费已核对为开局模拟已计入
-  await expect(page.locator('.brow[data-bonus="1"]')).toContainText('已计入');
-  await expect(page.locator('.brow[data-bonus="1"]')).not.toContainText('仅文本，未计入数值');
+  // issue 332：法兰克磨坊科技免费核对为开局模拟未计入（模拟仍按原价研究马轭，修正见 #358）
+  await expect(page.locator('.brow[data-bonus="1"]')).toContainText('仅文本，未计入数值');
   await page
     .locator('.brow[data-bonus="1"]')
     .getByRole('link', { name: /查看详情页/ })
