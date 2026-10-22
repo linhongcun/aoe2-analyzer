@@ -230,6 +230,14 @@ export function Layout({ children }: { children: ReactNode }) {
     setMenuAt(null);
     setCmdk(true);
   }, []);
+  /** 让 main 临时可聚焦并移入焦点；离开后去掉 tabindex，平时点击正文不会把焦点吸到 main 上。 */
+  const focusMain = useCallback(() => {
+    const target = main.current;
+    if (!target) return;
+    target.setAttribute('tabindex', '-1');
+    target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+    target.focus();
+  }, []);
   useEffect(() => {
     if (cmdk) return;
     const target = searchTrigger.current;
@@ -239,14 +247,10 @@ export function Layout({ children }: { children: ReactNode }) {
       if (target.isConnected) target.focus();
       if (target.isConnected && document.activeElement === target && target !== document.body) return;
       // 只在需要兜底时临时让 main 可聚焦，避免平时点击正文把焦点吸到 main 上。
-      const fallback = main.current;
-      if (!fallback) return;
-      fallback.setAttribute('tabindex', '-1');
-      fallback.addEventListener('blur', () => fallback.removeAttribute('tabindex'), { once: true });
-      fallback.focus();
+      focusMain();
     });
     return () => cancelAnimationFrame(frame);
-  }, [cmdk]);
+  }, [cmdk, focusMain]);
   useEffect(() => {
     if (!menu) return;
     const mobile = window.matchMedia('(max-width: 900px)');
@@ -305,6 +309,17 @@ export function Layout({ children }: { children: ReactNode }) {
   }, [cmdk, openSearch]);
   return (
     <>
+      {/* 页面上第一个 Tab 停点：键盘用户可直接越过顶栏和导航。用哈希路由，所以不改地址，只移动焦点。 */}
+      <a
+        href="#main-content"
+        className="skip-link"
+        onClick={(event) => {
+          event.preventDefault();
+          focusMain();
+        }}
+      >
+        跳到主内容
+      </a>
       <header className="topbar editorial-topbar">
         <button
           ref={burger}
@@ -351,7 +366,13 @@ export function Layout({ children }: { children: ReactNode }) {
           </div>
           {menu && <MobileTheme preference={preference} onSelect={select} />}
         </nav>
-        <Link to="/about-data" className="verbadge" data-t="version-badge" title="关于数据：来源、固定版本与补丁说明">
+        <Link
+          to="/about-data"
+          className="verbadge"
+          data-t="version-badge"
+          title="关于数据：来源、固定版本与补丁说明"
+          aria-label={`数据版本：${versionLabel(DATA_SOURCES)}，查看数据来源与补丁说明`}
+        >
           <Icon name="database" />
           <span>数据版本：{versionLabel(DATA_SOURCES)}</span>
         </Link>
@@ -368,7 +389,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </button>
         <ThemeMenu preference={preference} onSelect={select} />
       </header>
-      <main ref={main}>
+      <main ref={main} id="main-content">
         {pathname !== '/' && (
           <div className="fbbar">
             <FeedbackLink compact />
