@@ -135,7 +135,7 @@ function ProductionBody({
           在团战计划中约定主副兵种
         </Link>
         <Link className="community-tool-entry" to="/relic-income">
-          另查固定圣物收入
+          另查固定圣物收益
         </Link>
       </nav>
       {linkErrors.length > 0 && <p className="note">请先修正链接错误，再复制方案。</p>}

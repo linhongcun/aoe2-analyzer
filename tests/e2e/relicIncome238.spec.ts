@@ -126,7 +126,8 @@ test('#238 本方团队不重复、盟友大干道不传递、阵容变动实时
   await expect(page.getByTestId('relic-rate-Gold')).toHaveText('30 金／游戏分钟');
   await page.getByRole('combobox', { name: '圣物文明', exact: true }).selectOption('Franks');
   await page.getByRole('combobox', { name: '队友3文明', exact: true }).selectOption('');
-  await expect(page.getByTestId('relic-rate-Food')).toHaveText('0 食物／游戏分钟');
+  // issue 273：收入为 0 的资源不再显示卡片
+  await expect(page.getByTestId('relic-rate-Food')).toHaveCount(0);
 });
 
 for (const atheism of ['multiple', 'unknown', 'changing'])
@@ -145,7 +146,8 @@ for (const atheism of ['multiple', 'unknown', 'changing'])
     await expect(page.getByTestId('relic-rate-Gold')).toHaveText('未核实，暂停');
     await expect(page.getByTestId('relic-total-Food')).toHaveText('未核实，暂停');
     await expect(page.getByTestId('relic-gap')).toHaveText('暂停计算');
-    await expect(page.getByTestId('relic-rate-Wood')).toHaveText('0 木材／游戏分钟');
+    // issue 273：木材收入为 0，不再显示卡片
+    await expect(page.getByTestId('relic-rate-Wood')).toHaveCount(0);
     await expect(page.getByRole('button', { name: '复制方案链接', exact: true })).toBeEnabled();
     await page.reload();
     await expect(page.getByRole('combobox', { name: '无神论状态', exact: true })).toHaveValue(atheism);
