@@ -284,7 +284,7 @@ function Providers({ providers }: { providers: TeamProvider[] }) {
 }
 /**
  * issue 273：team_bonuses.json 的说明由脚本从游戏数据生成，带编号和开发用语；界面上显示时换成玩家能懂的话，数据文件不改。
- * 文案按 Steve 2026-10-22 设计审（PR #360）。
+ * 文案按 Steve 2026-10-22 设计审（PR 360）。
  */
 const PLAYER_NOTE: [string, string][] = [
   ['单位目标关联未完全核实；未知资源、科技修改与引擎函数不按文案猜测。', '有些单位是否适用还没核对完；核对不了的效果不按说明文字猜测。'],
