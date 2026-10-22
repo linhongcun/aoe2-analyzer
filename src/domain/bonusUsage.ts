@@ -89,6 +89,7 @@ export function bonusTechs(b: CivBonusEnt): { techs: number[]; treeOnly: boolean
  * 键 = CivBonusEnt.id；en = aoe2techtree@3bb43b1 文明加成英文原文（与 b.en 一致，文案变了要重新认定）。
  * on = 去掉 eco.json 该文明 source = 'tree' 行里属于本条的效果后，全部开局方案重跑是否变化；
  * on = null 表示 tree 行里没有可去掉的对应效果，note 必须以「无法核实」开头再写具体原因。
+ * note 是界面文字：用玩家能懂的话，科技名与站内中文名一致，不写 eco.json、tree 行、科技树汇总等内部说法（Steve 2026-10-22 定稿）。
  */
 const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }> = {
   'Aztecs-1': { en: 'Villagers carry +3', on: true, note: '已计入' },
@@ -96,19 +97,19 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
   'Burgundians-2': {
     en: 'Cavalier upgrade available in Castle Age',
     on: null,
-    note: '无法核实：城堡时代可升级骑士是科技可用性，不在 eco.json 的科技树汇总行里（该行骑士费用折扣属于勃艮第另一条加成），开局模拟没有可去掉的对应效果',
+    note: '无法核实：这条改的是科技能在哪个时代研究，开局模拟里没有对应的效果可以去掉重跑，所以无法核实',
   },
-  'Byzantines-2': { en: 'Town Watch, Town Patrol free', on: false, note: '未计入：警戒瞭望 / 城镇巡逻是视野科技，开局方案不研究也不受益' },
+  'Byzantines-2': { en: 'Town Watch, Town Patrol free', on: false, note: '未计入：城镇瞭望 / 城镇巡逻是视野科技，开局方案不研究也不受益' },
   'Franks-1': { en: 'Mill technologies free', on: true, note: '已计入' },
   'Italians-0': { en: 'Advancing to the next Age costs -15%', on: true, note: '已计入' },
   'Italians-2': { en: 'Dock and University technologies cost -25%', on: false, note: '未计入：码头与大学科技费用折扣，现有开局方案不研究这些科技' },
   'Italians-4': { en: 'Fishing Ships cost -15%', on: true, note: '已计入' },
-  'Koreans-0': { en: 'Stone miners work +20% faster', on: false, note: '未计入：现有开局方案不采石（真实成本采集模型已另行计入）' },
+  'Koreans-0': { en: 'Stone miners work +20% faster', on: false, note: '未计入：现有开局方案不采石' },
   'Magyars-2': { en: 'Melee attack upgrades free', on: false, note: '未计入：近战攻击升级是战斗科技，不影响开局时间与库存' },
   'Malay-1': { en: 'Infantry armor upgrades free', on: false, note: '未计入：步兵护甲升级是战斗科技，不影响开局时间与库存' },
-  'Teutons-4': { en: 'Murder Holes, Herbal Medicine free', on: false, note: '未计入：近射孔 / 草药学不影响开局方案的资源与时间' },
+  'Teutons-4': { en: 'Murder Holes, Herbal Medicine free', on: false, note: '未计入：近射孔 / 草药不影响开局方案的资源与时间' },
   'Turks-2': { en: 'Chemistry free; Gunpowder technologies costs -50%', on: false, note: '未计入：化学与火药科技费用，现有开局方案不涉及' },
-  'Vietnamese-3': { en: 'Conscription free', on: false, note: '未计入：征兵是军事生产加速，现有开局方案不征兵' },
+  'Vietnamese-3': { en: 'Conscription free', on: false, note: '未计入：征招是军事单位训练加速，现有开局方案不研究征招' },
   'Vikings-0': { en: 'Wheelbarrow, Hand Cart free', on: true, note: '已计入' },
 };
 
