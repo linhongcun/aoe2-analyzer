@@ -231,13 +231,22 @@ export function Layout({ children }: { children: ReactNode }) {
     setCmdk(true);
   }, []);
   /** 让 main 临时可聚焦并移入焦点；离开后去掉 tabindex，平时点击正文不会把焦点吸到 main 上。 */
-  const focusMain = useCallback(() => {
+  const focusMain = useCallback((options?: FocusOptions) => {
     const target = main.current;
     if (!target) return;
     target.setAttribute('tabindex', '-1');
     target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
-    target.focus();
+    target.focus(options);
   }, []);
+  /** 跳到主内容：正文开头停在吸顶栏下方，不被顶栏挡住 */
+  const skipToMain = useCallback(() => {
+    focusMain({ preventScroll: true });
+    const target = main.current;
+    const bar = target?.ownerDocument.querySelector('header.topbar');
+    if (!target || !bar) return;
+    const gap = target.getBoundingClientRect().top - bar.getBoundingClientRect().bottom;
+    if (gap < 0) window.scrollBy(0, gap);
+  }, [focusMain]);
   useEffect(() => {
     if (cmdk) return;
     const target = searchTrigger.current;
@@ -315,7 +324,7 @@ export function Layout({ children }: { children: ReactNode }) {
         className="skip-link"
         onClick={(event) => {
           event.preventDefault();
-          focusMain();
+          skipToMain();
         }}
       >
         跳到主内容

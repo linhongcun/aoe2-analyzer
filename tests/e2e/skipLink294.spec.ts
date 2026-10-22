@@ -46,18 +46,31 @@ test('@390：鼠标点跳到主内容也不改地址；焦点离开 main 后 mai
   await expect(page.locator('main')).not.toHaveAttribute('tabindex');
 });
 
-test('@390：跳过后 main 顶部在视口内，且 main 本身不画整块焦点框', async ({ page }) => {
-  await open(page, '/market', 390);
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Enter');
-  const r = await page.locator('main').evaluate((el) => {
-    const s = getComputedStyle(el);
-    return { top: el.getBoundingClientRect().top, outline: s.outlineStyle === 'none' || parseFloat(s.outlineWidth) === 0 };
+for (const scrolled of [0, 600])
+  test(`@390${scrolled ? '（先向下滚动）' : ''}：跳过后正文开头停在吸顶栏下方，下一个 Tab 停点不被顶栏挡住；main 不画整块焦点框`, async ({ page }) => {
+    await open(page, '/market', 390);
+    if (scrolled) await page.evaluate((y) => scrollTo(0, y), scrolled);
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    const below = () =>
+      page.evaluate(() => {
+        const el = document.activeElement as HTMLElement;
+        const bar = document.querySelector('header')!.getBoundingClientRect().bottom;
+        const s = getComputedStyle(el);
+        return {
+          tag: el.tagName,
+          gap: el.getBoundingClientRect().top - bar,
+          noRing: el.tagName !== 'MAIN' || s.outlineStyle === 'none' || parseFloat(s.outlineWidth) === 0,
+        };
+      });
+    const m = await below();
+    expect(m.tag).toBe('MAIN');
+    expect(m.gap).toBeGreaterThanOrEqual(-0.5);
+    expect(m.noRing).toBe(true);
+    await page.keyboard.press('Tab');
+    const next = await below();
+    expect(next.gap).toBeGreaterThanOrEqual(0);
   });
-  expect(r.top).toBeGreaterThanOrEqual(0);
-  expect(r.top).toBeLessThan(800);
-  expect(r.outline).toBe(true);
-});
 
 for (const width of [390, 1280])
   test(`@${width}：数据版本徽章读出的名称包含看得见的版本文字（窄屏文字隐藏时也一样）`, async ({ page }) => {
