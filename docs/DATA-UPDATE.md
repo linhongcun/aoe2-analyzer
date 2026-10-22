@@ -11,7 +11,7 @@
 | `sources.aoe2techtree`               | SiegeEngineers/aoe2techtree `data/` 的固定提交（`npm run data` 按此提交下载，不再跟随 master）                           |
 | `sources.halfon`                     | SiegeEngineers/halfon：仅用于从提交信息（`Implement DE Update N`）识别补丁号                                             |
 
-构建时 `vite.config.ts` 读入该文件，站点页头/页脚显示「数据版本：DE 185872（2026-09-22）」，并在 `#/about-data` 列出来源、提交、sha256 和补丁说明链接。
+构建时 `vite.config.ts` 读入该文件，站点页头/页脚显示「数据版本：DE 185872（2026-09-23）」，并在 `#/about-data` 列出来源、提交、sha256 和补丁说明链接。
 
 ## 一条命令：`npm run data:update`
 
