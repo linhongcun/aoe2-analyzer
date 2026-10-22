@@ -197,5 +197,6 @@ test('#228 共享单位与精锐升级不是低时代自动已解锁', async ({ 
   await berbers.getByText('查看已审计目标与条件', { exact: true }).click();
   await expect(berbers).toContainText('仅启用，不代表已经研究');
   await expect(berbers).toContainText('仍需在靶场完成研究');
-  await expect(berbers).toContainText('原始前置为103、601');
+  // issue 273：界面不再显示原始前置编号（数据仍保留在 team_bonuses.json）
+  await expect(berbers).not.toContainText('原始前置为103、601');
 });

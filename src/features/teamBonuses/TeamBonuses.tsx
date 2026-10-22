@@ -284,6 +284,15 @@ function Providers({ providers }: { providers: TeamProvider[] }) {
     </div>
   );
 }
+/** issue 273：数据里的关联科技说明带科技编号与原始前置编号，界面改成科技名并去掉内部编号，其余措辞不变（数据文件不改） */
+export function playerChainNote(note: string, core: Core): string {
+  const m = /^关联科技编号(\d+)：([^；]+)；(.+?)；原始前置为[^，]*，所需数量为\d+。$/.exec(note);
+  if (!m) return note;
+  const [mode = '', ...more] = m[3]!.split('；');
+  const age = m[2] === '无直接时代前置' ? '不限时代' : m[2]!;
+  const zh = core.techById[+m[1]!]?.zh;
+  return `${zh ? `关联科技「${zh}」` : '关联的后台科技（不在科技树中显示）'}：${[age, mode, ...more].join('；')}。`;
+}
 function Targets({ source, core }: { source: TeamTargetSource; core: Core }) {
   const unitIds = [...new Set(source.targetUnits)],
     buildingIds = [...new Set(source.targetBuildings)];
@@ -330,11 +339,10 @@ function Targets({ source, core }: { source: TeamTargetSource; core: Core }) {
       {source.notes.length > 0 && (
         <ul>
           {source.notes.map((note) => (
-            <li key={note}>{note}</li>
+            <li key={note}>{playerChainNote(note, core)}</li>
           ))}
         </ul>
       )}
-      <p className="note">固定数据效果编号：{source.effectId}。</p>
     </details>
   );
 }

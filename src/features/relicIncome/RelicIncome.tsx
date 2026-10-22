@@ -64,6 +64,8 @@ export default function RelicIncome() {
   const data = loaded.data;
   const r = data ? calculateRelicIncome(c, data) : null;
   const errors = [...decoded.structuralErrors, ...(r?.errors ?? [])];
+  // issue 273：收入为 0 的资源不出卡片、不进计算步骤；黄金始终显示（与目标金耗对比），未核实（null）也显示
+  const shownResources = RELIC_RESOURCES.filter((res) => res === 'Gold' || !r || r.resources[res].perMinute !== 0);
   const key = encodeRelicIncome(c);
   const feedback = shared?.key === key ? shared : null;
   const write = (next: RelicIncomeConfig) => {
@@ -103,7 +105,7 @@ export default function RelicIncome() {
     <section className="pane relic-income" data-testid="relic-income-page">
       <Breadcrumbs />
       <header className="relic-heading">
-        <h1>圣物收入</h1>
+        <h1>圣物收益</h1>
         <p>估算已存放且生效的固定圣物，在一段游戏时间内提供的分资源收入。</p>
       </header>
       {!data ? (
@@ -241,7 +243,7 @@ export default function RelicIncome() {
                       </p>
                     )}
                     <div className="relic-resources">
-                      {RELIC_RESOURCES.map((resource) => (
+                      {shownResources.map((resource) => (
                         <section className="relic-resource" key={resource} aria-label={`${resourceNames[resource]}收入`}>
                           <h3>{resourceNames[resource]}</h3>
                           <dl>
@@ -294,38 +296,38 @@ export default function RelicIncome() {
                     <details className="relic-details">
                       <summary>来源贡献与计算顺序</summary>
                       <p className="relic-note">
-                        按通用规则、团队来源、大干道、无神论顺序逐步计算。下面列出每一步的增减贡献，各资源分别对账。计算直接使用 .dat 原始 Float32
-                        参数；界面显示四舍五入，显示项的合计可能有末位差异。
+                        按通用规则、团队来源、大干道、无神论顺序逐步计算。下面列出每一步的增减贡献，各资源分别对账。计算使用游戏数据里的原始数值；界面显示四舍五入，显示项的合计可能有末位差异。
                       </p>
                       <ul className="relic-ledger">
-                        {r.sources.map((row) => (
-                          <li key={row.id} data-testid={`relic-source-${row.id}`}>
-                            <strong>
-                              {row.label} · {resourceNames[row.resource]}
-                            </strong>
-                            <p>
-                              {row.providers.join('、')}；{row.rule}
-                              {row.effectId !== null ? `；效果 ${row.effectId}` : ''}
-                            </p>
-                            <p>
-                              {row.perMinute === null ? (
-                                '受影响贡献暂停计算'
-                              ) : (
-                                <>
-                                  <span className="relic-number">
-                                    {row.perMinute > 0 ? '+' : ''}
-                                    {num(row.perMinute)} {units[row.resource]}／游戏分钟
-                                  </span>
-                                  ；期间{' '}
-                                  <span className="relic-number">
-                                    {row.total! > 0 ? '+' : ''}
-                                    {num(row.total!)} {units[row.resource]}
-                                  </span>
-                                </>
-                              )}
-                            </p>
-                          </li>
-                        ))}
+                        {r.sources
+                          .filter((row) => shownResources.includes(row.resource))
+                          .map((row) => (
+                            <li key={row.id} data-testid={`relic-source-${row.id}`}>
+                              <strong>
+                                {row.label} · {resourceNames[row.resource]}
+                              </strong>
+                              <p>
+                                {row.providers.join('、')}；{row.rule}
+                              </p>
+                              <p>
+                                {row.perMinute === null ? (
+                                  '受影响贡献暂停计算'
+                                ) : (
+                                  <>
+                                    <span className="relic-number">
+                                      {row.perMinute > 0 ? '+' : ''}
+                                      {num(row.perMinute)} {units[row.resource]}／游戏分钟
+                                    </span>
+                                    ；期间{' '}
+                                    <span className="relic-number">
+                                      {row.total! > 0 ? '+' : ''}
+                                      {num(row.total!)} {units[row.resource]}
+                                    </span>
+                                  </>
+                                )}
+                              </p>
+                            </li>
+                          ))}
                       </ul>
                     </details>
                   </>
@@ -357,13 +359,9 @@ export default function RelicIncome() {
                 ，单一对手无神论黄金及食物倍率 {data.modifiers.atheism.displayValue}。
               </p>
               <p>
-                参数来自固定 .dat
-                的文明资源191（黄金）、225（食物）、264（木材）、265（石料）及效果命令；资源7作为已存放数量阈值。圣物和修道院没有直接产生这项收入的151任务，不能把修道院工作速率当作收益倍率。
+                每件圣物的收入来自游戏数据里各文明的圣物产出参数和相关效果，按已存放的圣物数量判断立陶宛等门槛。修道院本身不产出这项收入，修道院工作速度加成不会放大圣物收益。
               </p>
-              <p>
-                时间单位与引擎效果语义来自下列字段文档；文档中的历史示例数字没有用于本模型。全局扫描 {data.audit.unitTaskCount.toLocaleString('zh-CN')}{' '}
-                项单位任务、{data.audit.headerTaskCount.toLocaleString('zh-CN')} 项header任务和相关资源命令，未运行 DE185872 游戏客户端逐帧结算验证。
-              </p>
+              <p>时间单位与效果含义参考下列资料，资料里的历史示例数字没有用于本模型。结果按游戏数据推算，没有在游戏里逐帧实测。</p>
               <p>
                 亚美尼亚免费圣物如已存放，计入输入数量，不再自动加一件。修道院与强化教堂采用相同收入参数；立陶宛团队修道院工作速度不额外放大收入。其他普通队伍加成不会凭文案套用成圣物收益。
               </p>
@@ -371,12 +369,15 @@ export default function RelicIncome() {
                 仅算固定数量、固定生效状态和固定期间；不模拟抢夺、携带路程、途中增减、研究完成时刻、外交改变、战役触发或自制场景奖励。多个无神论来源尚未核实其执行叠加，暂停黄金、食物及金耗覆盖。
               </p>
               <p className="relic-note">
-                原立陶宛效果还含{data.lithuanians.extraRawTargets.map((unit) => `${unit.zh}（${unit.id}）`).join('、')}
+                原立陶宛效果还含{data.lithuanians.extraRawTargets.map((unit) => unit.zh).join('、')}
                 ，普通立陶宛科技树不可用，未列入上述普通适用单位。
               </p>
               <p className="relic-provenance">
-                数据所用游戏 .dat 的固定版本与校验信息见<Link to="/about-data">关于数据</Link>。核对日：{data.meta.semanticsChecked}。原字段与导出方式见仓库
-                docs/RELIC-INCOME.md；参数能由 scripts/relic_income_build.py --check 复现。
+                数据所用游戏 .dat 的固定版本与校验信息见<Link to="/about-data">关于数据</Link>。核对日：{data.meta.semanticsChecked}。原始字段与复现方法见
+                <a href="https://github.com/linhongcun/aoe2-analyzer/blob/main/docs/RELIC-INCOME.md" target="_blank" rel="noreferrer">
+                  仓库文档
+                </a>
+                。
               </p>
               <div className="relic-links">
                 <a

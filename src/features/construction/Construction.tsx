@@ -337,7 +337,7 @@ export default function Construction() {
         )}
         {result.form !== null && (
           <p className="note">
-            施工形态 ID {result.form}，效果后单人工量 {num(result.baseTime!)} 秒，建造者工作速率 {num(result.builderRate!)}。
+            计入科技与文明效果后，单个村民建造需 {num(result.baseTime!)} 秒，建造者工作速率 {num(result.builderRate!)}。
           </p>
         )}
         <ul className="construction-warnings">
