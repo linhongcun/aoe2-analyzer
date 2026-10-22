@@ -1922,6 +1922,12 @@ a.tbld:hover span {
 #about-data .src-date {
   white-space: nowrap;
 }
+/* 宽屏：取消 base.css `.stat td:first-child{width:40%}` 对本表「来源」列的占宽，链接不从中间断开 */
+@media (min-width: 481px) {
+  #about-data .src-table td:first-child {
+    width: auto;
+  }
+}
 @media (max-width: 480px) {
   #about-data .src-table thead {
     position: absolute;
