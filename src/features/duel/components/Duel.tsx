@@ -130,7 +130,7 @@ export default function Duel() {
   if (!core || !ctx)
     return (
       <section id="duel" className="pane">
-        <ListHead title="单位 PK" desc="两个单位对战模拟" />
+        <ListHead level={1} title="单位 PK" desc="两个单位对战模拟" />
         <Loading />
       </section>
     );
@@ -151,7 +151,7 @@ export default function Duel() {
     cntB = cnt(B, nb);
   return (
     <section id="duel" className="pane">
-      <ListHead title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
+      <ListHead level={1} title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
       <div className="bar fbar" role="radiogroup" aria-label="模式">
         {(
           [
