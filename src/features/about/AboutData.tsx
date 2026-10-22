@@ -10,7 +10,8 @@ export default function AboutData() {
     <section id="about-data" className="pane">
       <h2>关于数据</h2>
       <p>
-        当前数据版本：<b data-t="data-version">{versionLabel(D)}</b>（{D.patch.name}；识别自 {D.patch.detectedFrom}）。最后更新：{D.updated}。
+        当前数据版本：<b data-t="data-version">{versionLabel(D)}</b>（{D.patch.name}；识别自 {D.patch.detectedFrom}）。最后更新：
+        <span className="src-date">{D.updated}</span>。
       </p>
       <p className="note">
         全部数值都能追溯到下列固定版本的上游数据；更新流程见{' '}

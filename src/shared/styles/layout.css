@@ -1909,6 +1909,9 @@ a.tbld:hover span {
   max-width: 100%;
   overflow-x: visible;
 }
+#about-data .src-table :is(th, td) {
+  text-align: left;
+}
 #about-data .src-table a {
   overflow-wrap: anywhere;
 }
@@ -1916,7 +1919,7 @@ a.tbld:hover span {
   font-family: var(--font-mono);
   word-break: break-all;
 }
-#about-data .src-table .src-date {
+#about-data .src-date {
   white-space: nowrap;
 }
 @media (max-width: 480px) {
