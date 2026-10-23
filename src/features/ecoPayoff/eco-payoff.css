@@ -2,7 +2,6 @@
   min-width: 0;
 }
 .eco-heading,
-.eco-actions,
 .eco-stat {
   display: flex;
   flex-wrap: wrap;
@@ -13,9 +12,13 @@
 .eco-heading h1 {
   margin-bottom: var(--space-2);
 }
-.eco-actions {
-  justify-content: flex-start;
-  margin-block: var(--space-4);
+.eco-lead {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  min-width: 0;
 }
 .eco-payoff button,
 .eco-payoff input,

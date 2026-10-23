@@ -17,7 +17,7 @@ import {
   type RelicIncomeData,
 } from '../../domain/relicIncome';
 import { Breadcrumbs } from '../../shared/ui/layout';
-import { Icon } from '../../shared/ui/Icon';
+import { CalcDock } from '../../shared/ui/CalcDock';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import './relicIncome.css';
 
@@ -131,20 +131,14 @@ export default function RelicIncome() {
       ) : (
         r && (
           <>
-            <div className="relic-actions">
-              <button className="btn" type="button" onClick={() => void copy()} disabled={errors.length > 0}>
-                <Icon name="copy" />
-                复制方案链接
-              </button>
-              <button className="btn" type="button" onClick={() => write(newRelicIncomeConfig())}>
-                重置圣物方案
-              </button>
-            </div>
-            {feedback && (
-              <p role="status" className="relic-note">
-                {feedback.message}
-              </p>
-            )}
+            <CalcDock
+              note={feedback?.message}
+              resultId="relic-result-title"
+              actions={[
+                { label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void copy() },
+                { label: '重置圣物方案', onClick: () => write(newRelicIncomeConfig()) },
+              ]}
+            />
             {feedback?.manual && (
               <label className="relic-manual">
                 完整方案链接
@@ -234,7 +228,9 @@ export default function RelicIncome() {
                 data-testid="relic-result"
                 data-status={locked ? 'invalid' : r.status}
               >
-                <h2 id="relic-result-title">{errors.length ? '输入无效，暂停计算' : r.status === 'paused' ? '部分资源未核实' : '分资源收入'}</h2>
+                <h2 id="relic-result-title" className="calc-dock-target" tabIndex={-1}>
+                  {errors.length ? '输入无效，暂停计算' : r.status === 'paused' ? '部分资源未核实' : '分资源收入'}
+                </h2>
                 {!errors.length && (
                   <>
                     {r.status === 'paused' && (

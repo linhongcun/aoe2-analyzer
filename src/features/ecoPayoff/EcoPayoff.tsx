@@ -4,7 +4,7 @@ import { civs } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
 import { Loading } from '../../shared/ui/widgets';
 import { Breadcrumbs } from '../../shared/ui/layout';
-import { Icon } from '../../shared/ui/Icon';
+import { CalcDock } from '../../shared/ui/CalcDock';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import { fmtClock } from '../../domain/realCost';
 import {
@@ -16,11 +16,20 @@ import {
   PAYOFF_RESOURCES,
   PAYOFF_TARGETS,
   type EcoPayoffConfig,
+  type EcoPayoffResult,
 } from '../../domain/ecoPayoff';
 import type { ProductionContext } from '../../domain/production';
 import './eco-payoff.css';
 
 const number = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
+function payoffLead(result: EcoPayoffResult) {
+  const name = result.target?.zh ?? '这项科技';
+  if (result.state === 'free') return `${name}：自动免费，已获得。`;
+  if (result.state === 'already') return `${name}：已研究，无新增投入。`;
+  if (!result.complete) return `${name}：机制未完整核实，下面只展示已支持部分。`;
+  if (result.balance === null) return `${name}：暂无有限的等采集平衡时间。`;
+  return name;
+}
 export default function EcoPayoff() {
   const core = useCore(),
     trees = useTrees(),
@@ -97,20 +106,25 @@ function EcoPayoffBody({
           持续生产工具
         </Link>
       </header>
-      <div className="eco-actions">
-        <button type="button" className="btn" disabled={parseErrors.length > 0} onClick={() => void copy()}>
-          <Icon name="copy" />
-          复制方案链接
-        </button>
-        <button type="button" className="btn" onClick={reset}>
-          重置方案
-        </button>
-      </div>
-      {shared && (
-        <p className="note" role="status">
-          {shared.text}
-        </p>
-      )}
+      <CalcDock
+        note={shared?.text}
+        resultId="eco-result"
+        actions={[
+          { label: '复制方案链接', icon: 'copy', disabled: parseErrors.length > 0, onClick: () => void copy() },
+          { label: '重置方案', onClick: reset },
+        ]}
+      />
+      <p className="eco-lead" data-testid="eco-lead">
+        {errors.length ? (
+          '当前方案无法计算，请先修正或重置。'
+        ) : result.balance !== null && result.state === 'ready' && result.complete ? (
+          <>
+            {payoffLead(result)}：从现在起约 <span className="eco-number">{fmtClock(result.balance)}</span>。
+          </>
+        ) : (
+          payoffLead(result)
+        )}
+      </p>
       {shared?.link && (
         <label className="eco-manual">
           方案链接
@@ -232,7 +246,7 @@ function EcoPayoffBody({
             )}
           </section>
         </fieldset>
-        <div className="eco-results" aria-live="polite">
+        <div className="eco-results calc-dock-target" id="eco-result" tabIndex={-1} aria-live="polite">
           {errors.length ? (
             <section className="eco-card eco-errors" role="alert">
               <h2>当前方案无法计算</h2>

@@ -58,6 +58,10 @@ const turks = {
   completedUnlockTechIds: '47,10',
   completedBuildings: '87,101,49',
 };
+const openObservations = (page: Page) =>
+  page.locator('details.mixed-observation-details').evaluate((el: HTMLDetailsElement) => {
+    el.open = true;
+  });
 const errors = new WeakMap<Page, string[]>();
 test.beforeEach(async ({ page }) => {
   const found: string[] = [];
@@ -87,6 +91,7 @@ test('#241 cavalry gains skirmisher protection: task explanation and applicable 
   await page.getByLabel('实际敌军组合', { exact: true }).selectOption('cavalry-skirmishers');
   await expect(page.getByTestId('mixed-army-result')).toContainText('不能解决后方掷矛手');
   await expect(page.locator('[data-card="britons-light-cav-access"]')).toHaveAttribute('data-card-status', 'conditions-met');
+  await openObservations(page);
   await page.getByLabel('侧向到场与后排空当', { exact: true }).selectOption('unknown');
   await expect(page.locator('[data-card="britons-light-cav-access"]')).toHaveAttribute('data-card-status', 'needs-observation');
   await page.getByLabel('侧向到场与后排空当', { exact: true }).selectOption('blocked');
@@ -146,6 +151,7 @@ test('#241 protected cannon needs explicit chemistry/artillery and a workshop; f
   await expect(page.locator('[data-card="turks-flank-opening"]')).toHaveAttribute('data-card-status', 'conditions-met');
   await page.getByRole('checkbox', { name: '攻城武器厂', exact: true }).uncheck();
   await expect(page.locator('[data-card="turks-protected-artillery"]')).toHaveAttribute('data-card-status', 'missing-prerequisites');
+  await openObservations(page);
   await page.getByLabel('侧向到场与后排空当', { exact: true }).selectOption('blocked');
   await expect(page.locator('[data-card="turks-flank-opening"]')).toHaveAttribute('data-card-status', 'conditions-not-met');
 });

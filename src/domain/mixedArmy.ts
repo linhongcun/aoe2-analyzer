@@ -128,6 +128,28 @@ export function defaultMixedArmyConfig(): MixedArmyConfig {
     completedBuildings: [],
   };
 }
+/** 仍为「未知」的观察。只列出当前情境会问到的项，供首屏说明缺什么。 */
+export function mixedArmyGaps(config: MixedArmyConfig): string[] {
+  const gaps: string[] = [];
+  const add = (unknown: boolean, label: string) => {
+    if (unknown) gaps.push(label);
+  };
+  add(config.ownMain === 'unknown', '现有主力准确形态');
+  add(config.enemy === 'unknown', '实际敌军组合');
+  add(config.mode === 'unknown', '地图与模式');
+  if (config.scenario === 'arena-wagon-cannon') {
+    add(config.wagon === 'unknown', '已见胡斯派战车（普通或精锐）');
+    if (config.enemy !== 'wagons') add(config.cannon === 'unknown', '已见后排炮（手推炮或榴弹炮）');
+  }
+  add(config.terrain === 'unknown', '交战地形');
+  add(config.formation === 'unknown', '敌方步行目标阵型');
+  add(config.flank === 'unknown', '侧向到场与后排空当');
+  add(config.position === 'unknown', '己方保护射击位置');
+  add(config.retreat === 'unknown', '撤回与替代资源');
+  add(config.food === 'unknown', '食物持续能力');
+  add(config.woodGold === 'unknown', '木材与黄金持续能力');
+  return gaps;
+}
 /** Structural failures cannot be safely edited as an allegedly restored plan. */
 function structureErrors(config: MixedArmyConfig): string[] {
   const errors: string[] = [];
