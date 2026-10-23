@@ -401,6 +401,7 @@
   font-size: var(--fs-h3);
 }
 .detail-ratings-heading {
+  position: relative;
   margin-bottom: 12px;
 }
 .detail .tech-payoff-entry {

@@ -256,7 +256,7 @@ export default function SimPanel(p: SimPanelProps) {
                   <label key={t.id} className={`simt${on ? ' on' : ''}${ef ? '' : ' txt'}${t.age > p.age && !on ? ' late' : ''}`}>
                     {ef ? <input type="checkbox" checked={on} onChange={() => toggle(t.id)} /> : <span className="tag">仅文本</span>}
                     <TechIcon t={t} />
-                    <Link className="ulink tl" to={`/tech/${t.id}`}>
+                    <Link className="ulink tlink" to={`/tech/${t.id}`}>
                       {t.zh}
                     </Link>
                     <small>{AGE_ZH[t.age]!.slice(0, 2)}</small>

@@ -223,6 +223,10 @@ a.hcard:hover {
   gap: 8px;
   margin: 0 0 8px;
 }
+/* 对局助手脚注没有 .ratehead，窄屏浮层否则会相对视口定位并盖住按钮（issue 366） */
+.rating-foot {
+  position: relative;
+}
 .ratehead h4 {
   margin: 0;
 }
@@ -303,8 +307,27 @@ a.hcard:hover {
     position: static;
   }
   .rl-btn {
+    position: relative;
     width: 44px;
     height: 44px;
+    /* 圆形只留在装饰层。边框盒保持方形，底边采样才不会落到按钮后面的文字或浮层上（issue 366） */
+    border-radius: 0;
+    background: transparent;
+  }
+  .rl-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .rl-btn:hover,
+  .rl-btn[aria-expanded='true'] {
+    background: transparent;
+  }
+  .rl-btn:hover::before,
+  .rl-btn[aria-expanded='true']::before {
+    background: var(--c-control);
   }
   .rl-pop {
     left: 0;
@@ -1380,7 +1403,8 @@ a.tbld:hover span {
   .tl-mob-only {
     display: flex !important;
   }
-  .tl {
+  /* 只让开局时间轴给底部固定分享条让位；科技链接用 .tlink，不再吃到这段留白（issue 359） */
+  .pane.tl {
     padding-bottom: 110px;
   }
   .tl-params {
