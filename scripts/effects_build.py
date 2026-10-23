@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / 'scripts' / '.cache'
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from dat_source import DAT as DAT_SRC, load as load_dat  # noqa: E402
+from res_names import RES_ZH as RES  # noqa: E402
 SRC_C = ('https://raw.githubusercontent.com/linhongcun/lhc-aoe2/6fdb912e95ce1ce837eb91b6c6ffc2945a74dc90/lib/data/unitTechFx.ts', 'lhc-unitTechFx.ts')
 
 
@@ -43,13 +44,59 @@ TEAM_TECHS = {'Berbers': [599, 601], 'Incas': [730], 'Italians': [522], 'Wu': [1
 ATTR = {0: 'hp', 1: 'los', 2: 'gar', 5: 'spd', 8: 'armor', 9: 'attack', 10: 'reload', 11: 'acc', 12: 'rng', 20: 'minr', 101: 'tt'}
 ECO_ATTR = {10: '信仰恢复时间', 13: '工作效率', 14: '携带量', 100: '造价', 101: '生产/建造时间', 103: '食物造价', 104: '木材造价', 105: '黄金造价', 106: '石料造价',
             102: '箭矢数', 107: '最大箭矢数', 22: '溅射半径', 24: '克制伤害抗性', 108: '驻扎回血', 109: '生命恢复', 63: '特殊能力', 19: '投射物命中', 23: '搜索半径'}
-RES = {0: '起始食物', 1: '起始木材', 2: '起始石料', 3: '起始黄金', 4: '人口上限', 32: '额外人口', 77: '征服', 92: '贸易收益(%)', 93: '钓鱼/采集', 190: '村民生产速度',
-       47: '交易手续费', 79: '贸易收益', 194: '农田食物量', 216: '城镇中心与村民', 214: '牧场'}
 CL = {1: '步兵', 3: '穿刺', 4: '近战', 5: '战象', 8: '骑兵', 11: '所有建筑', 13: '石质防御', 15: '弓手', 16: '船只', 17: '冲车', 18: '树木', 19: '独特单位', 20: '攻城武器',
       21: '标准建筑', 22: '城墙/城门', 23: '火药单位', 25: '僧侣', 26: '城堡', 27: '长矛兵', 28: '骑射手', 29: '冲击步兵', 30: '骆驼', 32: '雇佣兵', 34: '渔船', 35: '马穆鲁克', 36: '英雄/国王', 39: '村民', 2: '重型战舰', 31: '特殊近战', 37: '重型攻城武器', 38: '掷矛手', 41: '喷火船', 60: '远程战船'}
 BUILDER = {118}  # 建造者（男性 id；女性 212 为同值副本，只计一次）
 AGE_TECH = {101: 2, 102: 3, 103: 4}
 CIV_DAT = {'British': 'Britons', 'French': 'Franks', 'Byzantine': 'Byzantines', 'Mayan': 'Mayans', 'Indians': 'Hindustanis'}
+
+
+def building_age_forms(A, catalog_ids):
+    """各时代建筑 id。从升级时代科技（101 封建 / 102 城堡 / 103 帝王）的单位替换（效果类型 3）推导，不手写名单。"""
+    U = A['Civs'][1]['Units']
+
+    def is_b(i):
+        return isinstance(i, int) and 0 <= i < len(U) and U[i] is not None and U[i].get('Bld') == 1
+
+    forms = {i: [i, i, i, i] for i in catalog_ids}
+    aliases = {i: {i} for i in catalog_ids}
+    for age, tid in ((2, 101), (3, 102), (4, 103)):
+        eid = A['Techs'][tid]['EffectID'] if 0 <= tid < len(A['Techs']) else -1
+        cmds = A['Effects'][eid]['EffectCommands'] if 0 <= eid < len(A['Effects']) else []
+        for original in catalog_ids:
+            forms[original][age - 1] = forms[original][age - 2]
+            for c in cmds:
+                if c['Type'] == 3 and c['A'] in aliases[original] and is_b(c['B']):
+                    aliases[original].add(c['B'])
+                    forms[original][age - 1] = c['B']
+    return forms
+
+
+def annotate_building_ages(eco, cmds, forms):
+    """同一建筑各时代形态的乘法倍率不同时，记到目录形态的 byAge。v 与 t 仍是目录 id，避免各时代连乘。"""
+    rev = {}
+    for base, seq in forms.items():
+        for idx, uid in enumerate(seq):
+            rev.setdefault(uid, (base, idx + 1))
+    series = {}
+    for raw in cmds:
+        t, a, _b, attr, d = raw
+        if 10 <= t <= 16:
+            t -= 10
+        if t != 5 or a not in rev:
+            continue
+        base, age = rev[a]
+        series.setdefault((base, attr), {})[age] = d
+    for e in eco:
+        if e.get('op') != 'mul' or 'a' not in e or e.get('unit') is None:
+            continue
+        ages = series.get((e['unit'], e['a']))
+        if not ages or len(ages) < 2:
+            continue
+        ordered = [ages[i] for i in range(1, 5) if i in ages]
+        rounded = [int(v) if abs(float(v) - round(float(v))) < 1e-9 else round(float(v), 6) for v in ordered]
+        if len(rounded) == len(ages) and len(set(rounded)) > 1:
+            e['byAge'] = rounded
 
 
 def tech_cost_op(c):
@@ -73,6 +120,7 @@ def main():
     civs = json.load(open(ROOT / 'src/data/civs.json'))
     ours = {u['id']: u for u in units}
     ours.update({b['id']: dict(b, _b=1) for b in blds})
+    forms = building_age_forms(A, [b['id'] for b in blds])
     tech_by_id = {t['id']: t for t in techs}
     AT, AE, AC = A['Techs'], A['Effects'], A['Civs']
 
@@ -198,6 +246,7 @@ def main():
             if u: rules.append({'t': u, 'fx': json.loads(k)})
             if b: rules.append({'t': b, 'fx': json.loads(k), 'b': 1})
         rules.sort(key=lambda r: (-len(r['t']), r['t'][0]))
+        annotate_building_ages(eco, cmds, forms)
         return rules, eco
 
     def a_cmds(eid):

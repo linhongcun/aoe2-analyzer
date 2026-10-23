@@ -13,6 +13,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from dat_source import DAT, load  # noqa: E402
 from effects_build import CIV_DAT  # noqa: E402
+from res_names import RES_ZH as RES_LABEL  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RES = {0: 'Food', 1: 'Wood', 2: 'Stone', 3: 'Gold'}
@@ -25,9 +26,6 @@ ATTR = {5: 'speed', 13: 'workRate', 14: 'carry', 100: 'cost', 101: 'trainTime', 
 OP = {0: 'set', 4: 'add', 5: 'mul'}
 # 效果 101/103（科技费用/时间）的 C 字段：0 = 设为，1 = 加，2 = 乘，-1 = 加（#355）。未知模式仍按设为。
 TECH_OP = {0: 'set', 1: 'add', 2: 'mul', -1: 'add'}
-# 资源编号：0–4、32 为通用定义；91–94 由文明加成「-200f -50w」等交叉印证（推断）；其余保留编号
-RES_LABEL = {36: '农田食物量（马轭 +75 印证）', 0: '食物库存', 1: '木材库存', 2: '石料库存', 3: '黄金库存', 4: '人口余量', 32: '额外人口上限',
-             91: '起始食物（推断）', 92: '起始木材（推断）', 93: '起始石料（推断）', 94: '起始黄金（推断）'}
 ECO_BLDG = {109: 'Town Center', 68: 'Mill', 562: 'Lumber Camp', 584: 'Mining Camp', 84: 'Market', 45: 'Dock'}
 AGE_TECHS = {101: 'Feudal Age', 102: 'Castle Age', 103: 'Imperial Age'}
 

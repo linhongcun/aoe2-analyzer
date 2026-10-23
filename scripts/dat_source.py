@@ -87,12 +87,34 @@ def unit(u):
             'TrainTime': u.creatable.train_locations[0].train_time if u.creatable and u.creatable.train_locations else None,
             'TrainAt': [[l.unit_id, l.train_time] for l in u.creatable.train_locations] if u.creatable else [],
             'Cost': [[c.type, c.amount, c.flag] for c in u.creatable.resource_costs if c.type >= 0 and c.amount] if u.creatable else [],
-            'Capacity': u.resource_capacity, 'Food': next((r.amount for r in u.resource_storages if r.type == 0 and r.amount > 0), 0), 'WorkRate': u.bird.work_rate if u.bird else 0, 'Type': u.type}
-TASK_UNITS = {83, 293, 118, 212, 592, 590, 122, 216, 120, 354, 259, 214, 56, 57, 123, 218, 579, 581, 124, 220, 13}
+            'Capacity': u.resource_capacity, 'Food': next((r.amount for r in u.resource_storages if r.type == 0 and r.amount > 0), 0), 'WorkRate': u.bird.work_rate if u.bird else 0, 'Type': u.type, 'Bld': 1 if u.building else 0}
+# 产资源（action 151）单位：怯薛、瓜查、瓦兰吉卫队、城堡。任务从文明单位读，不从 unit_headers。
+TASK_UNITS = {83, 293, 118, 212, 592, 590, 122, 216, 120, 354, 259, 214, 56, 57, 123, 218, 579, 581, 124, 220, 13, 2703, 2704, 1228, 1230, 2562, 2564, 82, 2418}
+# Return of Rome 子游戏专有文明。与本文件里的常规/编年史同名文明（Persians、Romans、Macedonians）不是这些实体，不在此列。
+ROR = {'Assyrians', 'Babylonians', 'Carthaginians', 'Choson', 'Egyptians', 'Greeks', 'Hittites', 'Minoans', 'Palmyrans', 'Phoenicians', 'Shang', 'Sumerians', 'Yamato', 'Lac Viet'}
+def task_rec(t):
+    return {'Action': t.action_type, 'Class': t.class_id, 'Unit': t.unit_id, 'ResIn': t.resource_in, 'ResOut': t.resource_out, 'ResMul': t.resource_multiplier, 'Value': t.work_value_1}
+def task_sig(u):
+    if u is None: return None
+    return tuple((t.action_type, t.class_id, t.unit_id, t.resource_in, t.resource_out, t.resource_multiplier, t.work_value_1) for t in (u.bird.tasks if u.bird else []))
 def tasks(i):
-    h = d.unit_headers[i] if i < len(d.unit_headers) else None
-    return [{'Action': t.action_type, 'Class': t.class_id, 'Unit': t.unit_id, 'ResIn': t.resource_in, 'ResOut': t.resource_out, 'Value': t.work_value_1}
-            for t in (h.task_list or [])] if h else []
+    units = d.civs[1].units
+    u = units[i] if i < len(units) else None
+    return [task_rec(t) for t in (u.bird.tasks if u and u.bird else [])]
+base_sigs = [task_sig(u) for u in d.civs[1].units]
+bad = []
+for c in d.civs:
+    if c.name == 'Gaia' or c.name in ROR: continue
+    n = max(len(base_sigs), len(c.units))
+    for i in range(n):
+        a = base_sigs[i] if i < len(base_sigs) else None
+        b = task_sig(c.units[i] if i < len(c.units) else None)
+        if a != b:
+            bad.append('%s #%s' % (c.name, i))
+            if len(bad) >= 12: break
+    if len(bad) >= 12: break
+if bad:
+    raise SystemExit('文明单位任务不一致（RoR 以外）：' + '；'.join(bad))
 out = {
   'Techs': [{'Name': t.name, 'EffectID': t.effect_id, 'Civ': t.civ, 'RequiredTechs': list(t.required_techs), 'RequiredTechCount': t.required_tech_count,
              'ResearchLocation': max([r.location_id for r in t.research_locations] or [-1]),
@@ -112,7 +134,7 @@ json.dump(out, open(sys.argv[2], 'w'))
 
 def parse(p):
     """解析任意 .dat 文件为精简 JSON（按文件 sha256 缓存）。"""
-    j = CACHE / ('dat.v7.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
+    j = CACHE / ('dat.v8.%s.json' % hashlib.sha256(Path(p).read_bytes()).hexdigest()[:12])
     if not j.exists():
         try:
             subprocess.check_call([str(_venv_python()), '-c', _DUMP, str(p), str(j)])
