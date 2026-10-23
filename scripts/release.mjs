@@ -121,7 +121,10 @@ function ciGreen(sha) {
     return { ok: false, why: 'CI 查询结果无法解析' };
   }
   if (!runs.length) return { ok: false, why: '该提交没有 CI 记录' };
-  const bad = runs.filter((c) => c.status !== 'completed' || !['success', 'skipped', 'neutral'].includes(c.conclusion));
+  // Release 工作流的 job 名是 release。从 main 调度时这条 check 落在 main 的合并提交上；
+  // release 与 main 尖端重合（例如 squash 合入）时会落在同一个 SHA，不能让它挡住自己的门禁。
+  // 只忽略这个名字，CI / Deploy 的 test、deploy 以及其它 check 仍照常把关。
+  const bad = runs.filter((c) => c.name !== 'release' && (c.status !== 'completed' || !['success', 'skipped', 'neutral'].includes(c.conclusion)));
   return bad.length ? { ok: false, why: bad.map((c) => `${c.name}=${c.conclusion ?? c.status}`).join(', ') } : { ok: true };
 }
 

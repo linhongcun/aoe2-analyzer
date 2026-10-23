@@ -99,7 +99,10 @@ const n = a.indexOf('--notes'); if (n >= 0) notes = a[n + 1];
 fs.appendFileSync(process.env.FAKE_GH_LOG, JSON.stringify({ args: a, notes }) + '\\n');
 const ci = process.env.FAKE_CI || 'success';
 const s = a.join(' ');
-if (/check-runs|run list|run view|\\bstatus\\b|checks/.test(s)) {
+if (s.includes('check-runs') && process.env.FAKE_CHECKS) {
+  const check_runs = JSON.parse(process.env.FAKE_CHECKS);
+  process.stdout.write(JSON.stringify({ total_count: check_runs.length, check_runs }));
+} else if (/check-runs|run list|run view|\\bstatus\\b|checks/.test(s)) {
   const conclusion = ci, state = ci === 'success' ? 'success' : 'failure';
   process.stdout.write(JSON.stringify({ state, total_count: 1, check_runs: [{ name: 'test', status: 'completed', conclusion }], statuses: [{ state }], workflow_runs: [{ status: 'completed', conclusion }] }));
   if (/run list/.test(s)) process.stdout.write('');
@@ -198,6 +201,69 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
     const r = await run(['v0.6.0', ...opts()], { FAKE_CI: 'failure' });
     expect(r.status).not.toBe(0);
     expect(out(r)).toMatch(/CI/);
+    expect(snapshot()).toEqual(before);
+    noStateFile();
+  });
+
+  it.each([
+    ['进行中', 'in_progress', null],
+    ['失败', 'completed', 'failure'],
+  ] as const)('绿的 test/deploy 加上%s的 release check 仍算 CI 绿', async (label, status, conclusion) => {
+    const r = await run(['v0.6.0', '--dry-run', ...opts()], {
+      FAKE_CHECKS: JSON.stringify([
+        { name: 'test', status: 'completed', conclusion: 'success' },
+        { name: 'deploy', status: 'completed', conclusion: 'success' },
+        { name: 'release', status, conclusion },
+      ]),
+    });
+    expect(r.status, `${label}\n${out(r)}`).toBe(0);
+    expect(out(r)).toContain('CI 绿');
+    expect(out(r)).not.toContain(`release=${conclusion ?? status}`);
+  });
+
+  it.each([
+    [
+      'test 进行中',
+      [
+        { name: 'test', status: 'in_progress', conclusion: null },
+        { name: 'deploy', status: 'completed', conclusion: 'success' },
+        { name: 'release', status: 'in_progress', conclusion: null },
+      ],
+      'test=in_progress',
+    ],
+    [
+      'test 失败',
+      [
+        { name: 'test', status: 'completed', conclusion: 'failure' },
+        { name: 'deploy', status: 'completed', conclusion: 'success' },
+        { name: 'release', status: 'completed', conclusion: 'failure' },
+      ],
+      'test=failure',
+    ],
+    [
+      'deploy 进行中',
+      [
+        { name: 'test', status: 'completed', conclusion: 'success' },
+        { name: 'deploy', status: 'in_progress', conclusion: null },
+        { name: 'release', status: 'completed', conclusion: 'failure' },
+      ],
+      'deploy=in_progress',
+    ],
+    [
+      '名字不是 release',
+      [
+        { name: 'test', status: 'completed', conclusion: 'success' },
+        { name: 'deploy', status: 'completed', conclusion: 'success' },
+        { name: 'pre-release', status: 'in_progress', conclusion: null },
+      ],
+      'pre-release=in_progress',
+    ],
+  ] as const)('%s 时 CI 门禁仍失败', async (label, runs, why) => {
+    const before = snapshot();
+    const r = await run(['v0.6.0', ...opts()], { FAKE_CHECKS: JSON.stringify(runs) });
+    expect(r.status, `${label}\n${out(r)}`).not.toBe(0);
+    expect(out(r)).toContain(why);
+    expect(out(r)).toContain('不是绿的');
     expect(snapshot()).toEqual(before);
     noStateFile();
   });
