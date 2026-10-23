@@ -77,7 +77,7 @@ tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 
 ## 如何添加
 
-- **新特性**：建 `src/features/<x>/{components,hooks,logic}`，在 `app/routes.tsx` 用 `lazy()` 注册路由，在 `app/Layout.tsx` 的 `TABS` 加导航。纯计算放 `domain/` 或特性 `logic/` 并写单测。
+- **新页面**：在 `src/shared/nav/pageRegistry.ts` 登记路径、分组、文案、元数据和搜索别名，并在 `src/app/pageRegistry.tsx` 的 `LOADERS` 加上对应懒加载。路由、导航、首页和 `scripts/page_metadata.mjs` 都从这份登记表派生。纯计算放 `domain/` 或特性 `logic/` 并写单测。
 - **新数据源**：在 `scripts/` 写 `<x>_build.py`（读取 `AOE_CACHE`，输出到 `src/data/`），加入 `build_data.py` 列表；在 `domain/types.ts` 定义类型，在 `data/index.ts` 写加载器（大文件用 dynamic import）。
 - **新科技效果**：在 `domain/effects.ts` 的 `TECH_EFFECTS` / `CIV_BONUSES` 添加规则，并在 `tests/unit/simulator.test.ts` 加已知数值用例。
 

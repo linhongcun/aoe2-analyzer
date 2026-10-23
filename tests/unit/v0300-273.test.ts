@@ -22,8 +22,8 @@ const OLD_CHANGELOG = ['- 新增圣物资源收入预览，按固定数据核对
 /** [位置, 文字] */
 function places(): [string, string][] {
   const out: [string, string][] = [['page-metadata.json /relic-income title', TITLE]];
-  const nav = /key:\s*'relic-income'[\s\S]*?label:\s*'([^']+)'/.exec(read('src/shared/nav/sections.ts'));
-  out.push(['sections.ts relic-income label', nav?.[1] ?? '（没找到）']);
+  const nav = /key:\s*'relic-income'[\s\S]*?label:\s*'([^']+)'/.exec(read('src/shared/nav/pageRegistry.ts'));
+  out.push(['pageRegistry.ts relic-income label', nav?.[1] ?? '（没找到）']);
   const h1 = /<h1[^>]*>([^<]+)<\/h1>/.exec(read('src/features/relicIncome/RelicIncome.tsx'));
   out.push(['RelicIncome.tsx h1', h1?.[1]?.trim() ?? '（没找到）']);
   for (const f of files('src'))
@@ -50,7 +50,7 @@ describe('#273 圣物功能只有一个名字', () => {
   it('导航 label 和页面 h1 就是 page-metadata 的标题，且是三个候选名之一', () => {
     const p = Object.fromEntries(places());
     expect(NAMES).toContain(TITLE);
-    expect([p['sections.ts relic-income label'], p['RelicIncome.tsx h1']]).toEqual([TITLE, TITLE]);
+    expect([p['pageRegistry.ts relic-income label'], p['RelicIncome.tsx h1']]).toEqual([TITLE, TITLE]);
   });
 });
 

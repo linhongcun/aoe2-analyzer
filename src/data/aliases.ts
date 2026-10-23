@@ -37,22 +37,6 @@ export const PENDING_UNIT_ALIASES: readonly (readonly [number, string])[] = [
 /** #18 / #36 已采用的科技别名，详情与全局搜索共用。 */
 export const TECH_AKA: Record<number, string[]> = { 1452: ['绞盘弩', 'cranequins'] };
 
-/** #36 产品补充：新手和快攻指向开局流程，地图入口待 #34。 */
-export const PAGE_ALIASES: Record<string, string[]> = {
-  'game-guide': ['新手入门', '怎么看比赛', '观赛入门', '看懂一局', '游戏目标', 'game guide', 'spectating'],
-  'match-review': ['复盘', '赛后记录', '下局目标', '练习记录', 'match review'],
-  scouting: ['侦察情报', '竞争假设', '补查', 'scouting'],
-  builds: ['新手', '快攻'],
-  'content-guide': ['购买', '买哪个', '本体包含', '资料片导航', 'DLC guide', 'Steam'],
-  'mixed-army': ['混编', '混合兵种', '兵种搭配', 'mixed army'],
-  'team-plan': ['团战计划', '队伍分工', '边位', '口袋', 'team plan'],
-  campaigns: ['战役目录', '战役顺序', '单人战役', 'campaign'],
-  'relic-income': ['圣物收入', '遗物收益', 'relic income'],
-  'game-clock': ['时钟', '游戏时间', '现实时间', '速度倍率', 'game time', 'real time'],
-  hotkeys: ['热键', '个人按键', '控制组', 'hotkey'],
-  'castle-defense': ['城堡快攻', '城堡防守', 'castle drop'],
-};
-
 export const UNIT_ALIASES: Record<number, string[]> = {};
 for (const [id, a] of UNIT_ALIAS_TABLE) (UNIT_ALIASES[id] ??= []).push(a);
 

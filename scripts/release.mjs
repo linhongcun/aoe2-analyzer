@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // 发版脚本（#108 / #134）：release/vX.Y.Z → main（merge commit）→ 等部署并核对线上页脚 → annotated tag → 起草 GitHub Release
+// 新版本的 CHANGELOG 小节用 insertVersionSection（scripts/changelog.mjs，#274）插在 [Unreleased] 之后，不要插到文首说明之前。
 //
 // 用法：npm run release -- vX.Y.Z [--dry-run] [--site-url URL] [--footer-timeout 秒]
 //
@@ -15,6 +16,8 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+
+export { insertVersionSection } from './changelog.mjs';
 
 const DEFAULT_SITE = 'https://linhongcun.github.io/aoe2-analyzer/';
 const REMOTE = 'origin';

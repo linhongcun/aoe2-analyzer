@@ -1,49 +1,35 @@
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import ts from 'typescript';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = (name) => JSON.parse(readFileSync(path.join(root, 'src/data', name + '.json'), 'utf8'));
 const pages = {};
 const add = (route, title, description, extra = {}) => (pages[route] = { title, description, ...extra });
-const staticPages = {
-  '/': ['帝国时代 II 分析器', '查看决定版文明、单位、科技与开局流程，比较单位对战和文明加成。'],
-  '/civs': ['文明百科', '查看全部文明的加成、特色科技、单位与开局建议。'],
-  '/units': ['单位百科', '查询单位属性、费用、克制关系与升级路线。'],
-  '/techs': ['科技百科', '查询科技效果、费用、前置要求与适用文明。'],
-  '/buildings': ['建筑百科', '查询建筑属性、可生产单位和科技。'],
-  '/bonuses': ['文明加成百科', '查看文明与团队加成的数值效果和适用对象。'],
-  '/builds': ['开局流程', '查看主流开局的分步时间线、资源分配与卡点估算。'],
-  '/compare': ['文明对比', '比较两个文明的能力与科技树差异。'],
-  '/matchup': ['对局助手', '查看双方文明特点、反制建议和早期防守思路。'],
-  '/simulator': ['科技模拟器', '计算文明与科技作用后的单位属性和投入费用。'],
-  '/duel': ['单位 PK', '设置单位、文明、科技和数量，比较击杀时间与模拟结果。'],
-  '/market': ['市场买卖预算', '按文明、库存、行情和交易顺序估算逐笔买卖报价，比较两份方案的资源收支。'],
-  '/trade-income': ['商路供给', '按实际交金量与完整周期估算车船收入、目标数量和逐资源投资。'],
-  '/construction': ['多人施工', '比较建筑施工人数、理论完工时间、村民工时和显式采集条件下的停采估算。'],
-  '/team-bonuses': ['队伍加成', '按一至四名玩家的文明汇总团队加成来源，区分常驻效果与需要研究的团队科技。'],
-  '/garrison-healing': ['驻军回血', '核对驻留与治疗资格，按草药和单位生命科技估算单目标理论恢复时间。'],
-  '/game-clock': ['游戏与现实时间换算', '填写速度倍率，双向换算游戏时间与理论现实时长，解释攻略和计算工具中的时点。'],
-  '/hotkeys': ['游戏快捷键速查', '按中英文操作查找说明，保存单人和多人个人按键表并完整打印。'],
-  '/castle-defense': ['城堡前置分阶段应对', '按竞技场侦察、施工和落堡后的资源状况，查看行动条件、投入代价与复查信号。'],
-  '/content-guide': ['内容与购买导航', '按公开来源区分当前本体已含、另购与免费可选内容，查看模式、依赖和核对日期。'],
-  '/mixed-army': ['混兵情境', '记录敌军组合、地形和已确认前置，对照六张条件化战术资料卡。'],
-  '/team-plan': ['团战分工', '填写二至四名队友三个时代的主副兵种、任务与支援约定，完整分享与打印。'],
-  '/campaigns': ['战役入门目录', '按名称、地区、类型与首发时期浏览十条教程、战役及历史战役资料。'],
-  '/relic-income': ['圣物收益', '按已生效圣物数量和固定期间，分别核对金币、食物速率与团队修正来源。'],
-  '/game-guide': ['一局与观赛入门卡', '用六张短卡了解一局目标、开局角色、资源用途、时代与观赛关注点，并核对示例范围。'],
-  '/match-review': ['手填复盘与下局目标', '手动整理关键事件、当时视野、回看事实和一个下局目标，保存本机草稿、备份与打印。'],
-  '/scouting': ['侦察情报辨析', '在两组阿拉伯一对一情境中对照相容解释、反证和缺失信息，选择下一次补查。'],
-  '/production': ['持续生产', '按文明、时代、已研究科技和生产建筑数量估算每分钟开销与村民分配。'],
-  '/eco-payoff': ['经济科技收益', '固定村民人数与采集条件，比较伐木、采矿科技的研究投入、增量收入和等采集时间收支平衡。'],
-  '/glossary': ['术语与缩写', '查询中英社区缩写、开局用语以及速率和科技增强措辞。'],
-  '/about-data': ['关于数据', '查看游戏数据版本、固定来源与可复现校验。'],
-  '/dlc': ['资料片', '查看决定版资料片及其文明。'],
-  '/tree': ['文明科技树', '查看各文明可用单位和科技。'],
-  '/maps': ['地图与开局', '查看常见地图的资源特点与开局建议。'],
-  '/patches': ['版本补丁', '按版本与文明查看游戏平衡改动。'],
-  '/ladder': ['天梯数据', '文明统计入口；可靠的新版本统计数据仍在准备中。'],
-};
-for (const [route, [title, description]] of Object.entries(staticPages)) add(route, title, description);
+
+/** 静态页标题和说明从页面登记表读取，不再另维护一份路由列表（#283）。 */
+function staticPagesFromRegistry() {
+  const file = path.join(root, 'src/shared/nav/pageRegistry.ts');
+  const sf = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);
+  const found = {};
+  const text = (node, name) => {
+    const prop = node.properties.find((item) => ts.isPropertyAssignment(item) && item.name.getText(sf) === name);
+    if (!prop || !ts.isPropertyAssignment(prop) || !ts.isStringLiteral(prop.initializer)) return undefined;
+    return prop.initializer.text;
+  };
+  const visit = (node) => {
+    if (ts.isObjectLiteralExpression(node)) {
+      const route = text(node, 'path');
+      const title = text(node, 'metaTitle');
+      const description = text(node, 'metaDescription');
+      if (route && title && description) found[route] = [title, description];
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return found;
+}
+for (const [route, [title, description]] of Object.entries(staticPagesFromRegistry())) add(route, title, description);
 for (const term of JSON.parse(readFileSync(path.join(root, 'src/content/glossary.json'), 'utf8'))) add(`/glossary/${term.id}`, term.zh, term.meaning);
 for (const [file, type] of [
   ['units', 'unit'],
@@ -119,7 +105,12 @@ try {
   if (error.code !== 'ENOENT') throw error;
 }
 const target = path.join(root, 'src/data/page-metadata.json');
-const contents = JSON.stringify(pages) + '\n';
+// 已有键保持原顺序，避免只因登记表遍历顺序变化而重写整份 JSON。
+const previous = JSON.parse(readFileSync(target, 'utf8'));
+const ordered = {};
+for (const key of Object.keys(previous)) if (pages[key]) ordered[key] = pages[key];
+for (const key of Object.keys(pages)) if (!ordered[key]) ordered[key] = pages[key];
+const contents = JSON.stringify(ordered) + '\n';
 if (process.argv.includes('--check')) {
   if (readFileSync(target, 'utf8') !== contents) throw new Error('page-metadata.json 需要重新生成');
 } else writeFileSync(target, contents);
