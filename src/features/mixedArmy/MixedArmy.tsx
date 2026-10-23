@@ -8,6 +8,7 @@ import {
   defaultMixedArmyConfig,
   decodeMixedArmy,
   encodeMixedArmy,
+  mixedArmyGaps,
   mixedFormNeedsConfirmation,
   planMixedArmy,
   type MixedArmyConfig,
@@ -16,7 +17,7 @@ import {
 } from '../../domain/mixedArmy';
 import { AGE_ZH } from '../../domain/ratings';
 import { sharePageUrl } from '../../domain/sharePage';
-import { Icon } from '../../shared/ui/Icon';
+import { CalcDock } from '../../shared/ui/CalcDock';
 import { Loading } from '../../shared/ui/widgets';
 import './mixedArmy.css';
 
@@ -89,6 +90,26 @@ const woodGoldOptions = {
   'both-tight': '木材与黄金均紧张',
 };
 
+function MixedGaps({ config }: { config: MixedArmyConfig }) {
+  const gaps = mixedArmyGaps(config);
+  return (
+    <section className="mixed-gaps" aria-labelledby="mixed-gaps-title" data-testid="mixed-gaps">
+      <h2 id="mixed-gaps-title">{gaps.length ? '还缺的关键观察' : '关键观察已填写'}</h2>
+      {gaps.length ? (
+        <>
+          <p>下列条件仍是未知。先看缺什么，再填主条件；地形和持续资源默认收起。</p>
+          <ul>
+            {gaps.map((gap) => (
+              <li key={gap}>{gap}</li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>关键观察都已填写。可跳到结果，查看哪些路线对得上当前条件。</p>
+      )}
+    </section>
+  );
+}
 function SelectField<T extends string>({ label, value, options, change }: { label: string; value: T; options: Record<T, string>; change: (value: T) => void }) {
   return (
     <label className="mixed-field">
@@ -248,6 +269,9 @@ export default function MixedArmy() {
   const buildingChoices = [...new Set([12, 87, 82, 101, 49, ...config.completedBuildings])];
   const conditionsMet = plan?.cards.filter((row) => row.status === 'conditions-met') ?? [];
   const otherCards = plan?.cards.filter((row) => row.status !== 'conditions-met') ?? [];
+  const observationUnknown = [config.terrain, config.formation, config.flank, config.position, config.retreat, config.food, config.woodGold].filter(
+    (value) => value === 'unknown',
+  ).length;
   return (
     <section className="pane mixed-army-page" data-testid="mixed-army-page">
       <header className="mixed-heading">
@@ -255,17 +279,20 @@ export default function MixedArmy() {
           <h1>混兵情境卡</h1>
           <p>看到掩护后，先分清谁防骑、谁清掷矛手、谁处理后排攻城。</p>
         </div>
-        <button
-          className="btn"
-          type="button"
-          onClick={() => void share()}
-          disabled={!ctx || decoded.locked || decoded.errors.length > 0 || plan?.status === 'invalid'}
-        >
-          <Icon name="copy" />
-          复制情境链接
-        </button>
       </header>
-      {shareStatus && <p role="status">{shareStatus}</p>}
+      <CalcDock
+        note={shareStatus}
+        resultId={plan ? 'mixed-result-heading' : undefined}
+        actions={[
+          {
+            label: '复制情境链接',
+            icon: 'copy',
+            disabled: !ctx || decoded.locked || decoded.errors.length > 0 || plan?.status === 'invalid',
+            onClick: () => void share(),
+          },
+          { label: '重置为默认情境', onClick: reset },
+        ]}
+      />
       {manualLink && (
         <label className="mixed-field mixed-manual">
           手动复制情境链接
@@ -276,9 +303,6 @@ export default function MixedArmy() {
         <div role="alert" className="mixed-error">
           <p>{decoded.errors.join(' ')}</p>
           <p>{decoded.locked ? '原链接已保留，默认值不代表恢复结果。显式重置后才能编辑。' : '原字段已保留，请修正输入后继续；不会用默认值覆盖。'}</p>
-          <button className="btn" type="button" onClick={reset}>
-            重置为默认情境
-          </button>
         </div>
       )}
       {loadError ? (
@@ -292,6 +316,7 @@ export default function MixedArmy() {
         <Loading />
       ) : (
         <>
+          {!decoded.locked && <MixedGaps config={config} />}
           <fieldset disabled={decoded.locked} className="mixed-panel mixed-settings">
             <legend>我实际观察到什么</legend>
             <div className="mixed-grid">
@@ -379,8 +404,17 @@ export default function MixedArmy() {
                 </>
               )}
             </div>
-            <details className="mixed-details mixed-observation-details" open>
-              <summary>地形、通路与持续资源</summary>
+            <details className="mixed-details mixed-observation-details">
+              <summary>
+                地形、通路与持续资源
+                {observationUnknown > 0 ? (
+                  <>
+                    （还有 <span className="mixed-number">{observationUnknown} 项</span>未知）
+                  </>
+                ) : (
+                  '（已填写）'
+                )}
+              </summary>
               <div className="mixed-grid">
                 <SelectField label="交战地形" value={config.terrain} options={terrainOptions} change={(terrain) => change({ terrain })} />
                 <SelectField label="敌方步行目标阵型" value={config.formation} options={formationOptions} change={(formation) => change({ formation })} />
@@ -436,7 +470,7 @@ export default function MixedArmy() {
           {plan && (
             <section className="mixed-results" data-testid="mixed-army-result" aria-labelledby="mixed-result-heading">
               <header className="mixed-result-heading">
-                <h2 id="mixed-result-heading">
+                <h2 id="mixed-result-heading" className="calc-dock-target" tabIndex={-1}>
                   {plan.status === 'not-covered' ? '暂未覆盖这组输入' : plan.status === 'invalid' ? '先修正确认记录' : '按当前观察分配任务'}
                 </h2>
                 <p>{linkFirstUnits(plan.summary, new Set())}</p>
@@ -514,11 +548,6 @@ export default function MixedArmy() {
         </div>
         <p className="mixed-note">前置核对仅复用固定目录、科技树、形态索引与生产潜在资格。不自动研究、不自动建造，不认证资源、人口、兵力或实际支援。</p>
       </details>
-      {!decoded.locked && (
-        <button className="btn mixed-reset" type="button" onClick={reset}>
-          重置为默认情境
-        </button>
-      )}
     </section>
   );
 }

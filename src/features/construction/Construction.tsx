@@ -4,7 +4,7 @@ import { civs } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
 import { AGE_ZH } from '../../domain/ratings';
 import { Loading } from '../../shared/ui/widgets';
-import { Icon } from '../../shared/ui/Icon';
+import { CalcDock } from '../../shared/ui/CalcDock';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import {
   calculateConstruction,
@@ -85,12 +85,15 @@ export default function Construction() {
           <h1>多人施工</h1>
           <p className="note">比较提前完工的时间与村民工时。时间均为游戏时间。</p>
         </div>
-        <button className="btn" type="button" disabled={errors.length > 0} onClick={() => void share()}>
-          <Icon name="copy" />
-          复制方案链接
-        </button>
       </header>
-      {status && <p role="status">{status}</p>}
+      <CalcDock
+        note={status}
+        resultId="construction-result-title"
+        actions={[
+          { label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void share() },
+          { label: '重置为默认方案', onClick: reset },
+        ]}
+      />
       {manual && (
         <label className="construction-manual">
           方案链接
@@ -105,9 +108,6 @@ export default function Construction() {
               <li key={e}>{e}</li>
             ))}
           </ul>
-          <button type="button" className="btn" onClick={reset}>
-            重置为默认方案
-          </button>
         </div>
       )}
       <div className="construction-grid">
@@ -182,7 +182,9 @@ export default function Construction() {
           </fieldset>
         </section>
         <section className="construction-panel construction-summary" aria-labelledby="construction-result-title">
-          <h2 id="construction-result-title">完工与工时</h2>
+          <h2 id="construction-result-title" className="calc-dock-target" tabIndex={-1}>
+            完工与工时
+          </h2>
           {errors.length > 0 ? (
             <div className="construction-errors" role="alert">
               <p>当前方案无法计算，请修正以下项目：</p>

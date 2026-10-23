@@ -14,7 +14,7 @@ import {
   type GameClockUnit,
 } from '../../domain/gameClock';
 import { sharePageUrl } from '../../domain/sharePage';
-import { Icon } from '../../shared/ui/Icon';
+import { CalcDock } from '../../shared/ui/CalcDock';
 import './gameClock.css';
 
 const SPEED_PRESETS = [
@@ -81,11 +81,15 @@ export default function GameClock() {
           <h1>游戏与现实时间换算</h1>
           <p>填入你使用的速度倍率，把游戏时长和理论现实时长相互换算。</p>
         </div>
-        <button className="btn" type="button" disabled={locked || !result.ok} onClick={() => void share()}>
-          <Icon name="copy" />
-          复制换算链接
-        </button>
       </header>
+      <CalcDock
+        note={notice}
+        resultId={locked ? undefined : 'gc-result-title'}
+        actions={[
+          { label: '复制换算链接', icon: 'copy', disabled: locked || !result.ok, onClick: () => void share() },
+          { label: '重置换算', onClick: () => update(defaultGameClockConfig()) },
+        ]}
+      />
       <aside className="gc-intro" aria-label="时钟口径">
         <strong>攻略时点通常使用游戏时钟</strong>
         <p>
@@ -98,9 +102,6 @@ export default function GameClock() {
         <div className="gc-error" role="alert">
           <h2>换算链接无法读取</h2>
           <p>{decoded.errors.join(' ')}</p>
-          <button type="button" className="btn" onClick={() => update(defaultGameClockConfig())}>
-            重置换算
-          </button>
         </div>
       ) : (
         <div className="gc-layout">
@@ -174,16 +175,15 @@ export default function GameClock() {
               <button type="button" className="btn" onClick={() => update(defaultGameClockConfig())}>
                 试算数学示例
               </button>
-              <button type="button" className="btn" onClick={() => update(defaultGameClockConfig())}>
-                重置换算
-              </button>
             </div>
             <p className="note">
               示例采用标准速度（天梯默认），倍率为 <span className="gc-number">1.7</span>。
             </p>
           </section>
           <section className="gc-panel gc-result" aria-labelledby="gc-result-title" aria-live="polite">
-            <h2 id="gc-result-title">{gameInput ? '理论现实时长' : '对应游戏时长'}</h2>
+            <h2 id="gc-result-title" className="calc-dock-target" tabIndex={-1}>
+              {gameInput ? '理论现实时长' : '对应游戏时长'}
+            </h2>
             {!result.ok ? (
               <div role="alert" className="gc-error">
                 <strong>请修正输入，暂不计算</strong>
@@ -231,7 +231,6 @@ export default function GameClock() {
           </section>
         </div>
       )}
-      {notice && <p role="status">{notice}</p>}
       {manualLink && (
         <label className="gc-manual-link">
           手动复制换算链接

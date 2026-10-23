@@ -36,7 +36,7 @@ import {
   type PlanAge,
   type PlanTask,
 } from '../../domain/teamPlan';
-import { Icon } from '../../shared/ui/Icon';
+import { CalcDock } from '../../shared/ui/CalcDock';
 import './teamPlan.css';
 
 const AGE_NAMES: Record<PlanAge, string> = { 2: '封建', 3: '城堡', 4: '帝王' };
@@ -134,17 +134,20 @@ export default function TeamPlanPage() {
           <p>记录谁出兵、谁承担任务、何时会合；各阶段按玩家各自到达的时代约定。</p>
         </div>
         <div className="tp-actions">
-          <button type="button" className="btn" disabled={!plan} onClick={() => void share()}>
-            <Icon name="copy" />
-            复制完整计划
-          </button>
           <button type="button" className="btn" disabled={!plan || !ctx} onClick={() => window.print()}>
             打印全部阶段
           </button>
         </div>
       </header>
       <div className="tp-screen">
-        {!!notice && <p role="status">{notice}</p>}
+        <CalcDock
+          note={notice}
+          resultId={plan && ctx ? 'tp-phase-heading' : undefined}
+          actions={[
+            { label: '复制完整计划', icon: 'copy', disabled: !plan, onClick: () => void share() },
+            { label: '重置计划', onClick: () => update(defaultTeamPlan(), Boolean(plan)) },
+          ]}
+        />
         {!!editError && (
           <p role="alert" className="tp-error">
             {editError}未截断或替换原计划。
@@ -164,9 +167,6 @@ export default function TeamPlanPage() {
               原始计划参数
               <textarea aria-label="原始计划参数" readOnly value={location.search} onFocus={(e) => e.target.select()} rows={4} />
             </label>
-            <button className="btn" onClick={() => update(defaultTeamPlan())}>
-              重置计划
-            </button>
           </div>
         ) : !ctx ? (
           <div role={loadError ? 'alert' : 'status'} className="tp-panel">
@@ -227,12 +227,18 @@ function PlanEditor({
   const teamHref = '/team-bonuses?' + encodeTeamBonuses({ players: plan.players.map((p) => p.civ), age: phase.age, target: 'all', unit: null, researched: [] });
   return (
     <>
+      <section className="tp-panel tp-lead" aria-labelledby="tp-lead-heading">
+        <h2 id="tp-lead-heading">当前约定</h2>
+        <p>
+          {AGE_NAMES[phase.age]}阶段
+          <span className="tp-number"> · {plan.players.length} 名玩家</span>
+          <span> · {plan.map.name.trim() || (plan.map.openness === 'unspecified' ? '地图未填' : OPEN_NAMES[plan.map.openness])}</span>
+          <span>{phase.tasks.length ? <span className="tp-number"> · {phase.tasks.length} 项任务</span> : ' · 尚未选择任务'}</span>
+        </p>
+      </section>
       <div className="tp-actions">
         <button className="btn" onClick={() => update(exampleTeamPlan(), true)}>
           载入开放陆地4v4范例
-        </button>
-        <button className="btn" onClick={() => update(defaultTeamPlan(), true)}>
-          重置计划
         </button>
         <Link className="btn" to={teamHref}>
           查看队伍加成来源
@@ -358,7 +364,9 @@ function PlanEditor({
         ))}
       </nav>
       <section className="tp-phase" aria-labelledby="tp-phase-heading">
-        <h2 id="tp-phase-heading">{AGE_NAMES[phase.age]}阶段的出兵约定</h2>
+        <h2 id="tp-phase-heading" className="calc-dock-target" tabIndex={-1}>
+          {AGE_NAMES[phase.age]}阶段的出兵约定
+        </h2>
         <p className="note">
           本版核对 <span className="tp-number">39</span>{' '}
           个常规陆战形态。其他具名单位可记录并显示暂未支持，不静默替换。形态确认表示其所需升级已实际完成，免费升级也需本人确认。

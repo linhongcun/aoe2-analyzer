@@ -8,6 +8,7 @@ import {
   decodeMixedArmy,
   defaultMixedArmyConfig,
   encodeMixedArmy,
+  mixedArmyGaps,
   mixedArmyConfirmationErrors,
   mixedArmyInputErrors,
   mixedFormNeedsConfirmation,
@@ -69,6 +70,31 @@ const turks = (patch: Partial<MixedArmyConfig> = {}) =>
   });
 const card = (value: MixedArmyConfig, id: string) => planMixedArmy(ctx, value).cards.find((row) => row.card.id === id)!;
 
+describe('#298 missing observations stay on the first screen', () => {
+  it('lists every unknown the default Britons card actually asks', () => {
+    expect(mixedArmyGaps(defaultMixedArmyConfig())).toEqual([
+      '现有主力准确形态',
+      '实际敌军组合',
+      '地图与模式',
+      '交战地形',
+      '敌方步行目标阵型',
+      '侧向到场与后排空当',
+      '己方保护射击位置',
+      '撤回与替代资源',
+      '食物持续能力',
+      '木材与黄金持续能力',
+    ]);
+  });
+  it('drops filled fields and only adds wagon questions for that scenario', () => {
+    expect(mixedArmyGaps(britons())).toEqual(['地图与模式']);
+    expect(mixedArmyGaps(turks({ formation: 'spread' }))).toEqual([]);
+    expect(mixedArmyGaps(turks({ formation: 'spread', wagon: 'unknown', cannon: 'unknown', enemy: 'wagons' }))).toEqual(['已见胡斯派战车（普通或精锐）']);
+    expect(mixedArmyGaps(turks({ formation: 'spread', wagon: 'unknown', cannon: 'unknown' }))).toEqual([
+      '已见胡斯派战车（普通或精锐）',
+      '已见后排炮（手推炮或榴弹炮）',
+    ]);
+  });
+});
 describe('#241 honest unit prerequisites', () => {
   it('separates civilization, age, shape and an actual production building', () => {
     expect(prereq({ civ: 'Aztecs', unitId: 38 }).status).toBe('civ-unavailable');

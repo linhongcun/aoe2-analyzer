@@ -20,12 +20,28 @@ import {
   type MarketPlan,
   type MarketResult,
 } from '../../domain/market';
+import { CalcDock } from '../../shared/ui/CalcDock';
 import { Icon } from '../../shared/ui/Icon';
 import './market.css';
 
 const number = (value: number) => value.toLocaleString('zh-CN');
 const signed = (value: number) => (value > 0 ? '+' : '') + number(value);
 const PAGE_SIZE = 25;
+function marketLead(result: MarketResult, name: string) {
+  if (result.errors.length) return <>方案 {name}：输入无效</>;
+  if (result.failure)
+    return (
+      <>
+        方案 {name}：只覆盖部分交易，已执行 <span className="market-number">{result.trades.length} 笔</span>
+      </>
+    );
+  if (!result.trades.length) return <>方案 {name}：没有交易</>;
+  return (
+    <>
+      方案 {name}：预计可执行 <span className="market-number">{result.trades.length} 笔</span>
+    </>
+  );
+}
 
 export default function Market() {
   const location = useLocation(),
@@ -61,16 +77,25 @@ export default function Market() {
           <h1>市场买卖预算</h1>
           <p className="note">按你的交易顺序，估算资源收支与下一笔报价。</p>
         </div>
-        <button
-          type="button"
-          className="btn"
-          disabled={decoded.errors.length > 0 || config.plans.some((plan) => marketErrors(plan).length > 0)}
-          onClick={() => void share()}
-        >
-          <Icon name="copy" />
-          复制两份方案链接
-        </button>
       </header>
+      <CalcDock
+        note={status}
+        resultId={decoded.errors.length ? undefined : 'market-compare-title'}
+        actions={[
+          {
+            label: '复制两份方案链接',
+            icon: 'copy',
+            disabled: decoded.errors.length > 0 || config.plans.some((plan) => marketErrors(plan).length > 0),
+            onClick: () => void share(),
+          },
+          { label: '重置方案', onClick: () => update(defaultMarketConfig()) },
+        ]}
+      />
+      {!decoded.errors.length && (
+        <p className="market-lead" data-testid="market-lead">
+          {marketLead(results[0]!, 'A')}；{marketLead(results[1]!, 'B')}。
+        </p>
+      )}
       <aside className="market-caution" aria-label="预算口径">
         <strong>预算估算，游戏实际报价优先</strong>
         <p>
@@ -81,12 +106,8 @@ export default function Market() {
       {!!decoded.errors.length && (
         <div className="market-error" role="alert">
           {decoded.errors.join(' ')}
-          <button className="btn" type="button" onClick={() => update(defaultMarketConfig())}>
-            重置方案
-          </button>
         </div>
       )}
-      {status && <p role="status">{status}</p>}
       {manualLink && (
         <label className="market-link">
           手动复制方案链接
@@ -125,7 +146,9 @@ export default function Market() {
       {!decoded.errors.length && (
         <>
           <section className="market-panel" aria-labelledby="market-compare-title">
-            <h2 id="market-compare-title">方案对照</h2>
+            <h2 id="market-compare-title" className="calc-dock-target" tabIndex={-1}>
+              方案对照
+            </h2>
             <p className="note">分别使用每份方案的初始库存和行情，不共用交易历史；不同资源分别列账。</p>
             <div className="market-comparison">
               {results.map((result, index) => (
