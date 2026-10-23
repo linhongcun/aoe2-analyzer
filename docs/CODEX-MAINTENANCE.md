@@ -71,7 +71,7 @@
 
 - **禁止修改** `tests/**/v0*-acceptance*` 里的期望值——这些是 **Kent 专属**验收用例。与产品决定冲突时不改测试，在 issue 写清冲突等人决定。
 - 改领域逻辑补 `tests/unit/`；修 bug 先写能复现的失败用例。
-- e2e 命令、端口、并行 worktree、BASE_URL 等细节以即将补充的 **`docs/TESTING.md`**（Kent 维护）为准；在该文件合入前，沿用 AGENTS.md「命令」与「测试规则」节。
+- e2e 命令、端口、并行 worktree、BASE_URL、四宽、axe 与 CI 跳过条件，见 [docs/TESTING.md](TESTING.md)（Kent 维护）。
 
 ## 8. 选 issue 流程（checklist）
 

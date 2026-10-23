@@ -89,7 +89,7 @@ npm run build
 BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 ```
 
-多个代理并行时每个用自己的 `git worktree` 和端口，不在共享目录切分支，不用 `git stash`。
+多个代理并行时每个用自己的 `git worktree` 和端口，不在共享目录切分支，不用 `git stash`。写法、四宽、axe、验收用例命名，以及 CI 何时跳过 Playwright，见 [docs/TESTING.md](docs/TESTING.md)。
 
 ## 合并前必须通过
 
