@@ -133,6 +133,7 @@ jobs:
             test-results/editorial6-*/home-light-*.png
             test-results/catalogLayout187-*/*.png
             test-results/layout62-*/*.png
+            test-results/searchLoading395-*/*.png
             test-results/introductions190-*/*.png
             test-results/units192-*/*.png
             test-results/relatedTechs193-*/*.png
