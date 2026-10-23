@@ -13,7 +13,7 @@ scripts/            数据管线（Python）：npm run data
   trees_build.py      每文明科技树布局（建筑分列/时代分行/连线、建筑图标）
   catalog_introductions.json / .mjs  单位、建筑首发版本的逐ID来源清单与编译校验
 src/
-  app/              路由（routes.tsx，兼容全部旧 hash）、布局（Layout.tsx：页眉/导航/页脚）、App
+  app/              路由 routes.tsx（由登记表生成）、pageRegistry.tsx（懒加载 import 表）、布局 Layout.tsx、App
   domain/           纯 TS：类型模型 + 纯逻辑，不依赖 React
     types.ts          Civ / Unit / Tech / Dlc / Effect / StatSet / Trees
     dlc.ts            DLC 表、文明→DLC、科技既有版本标记、筛选
@@ -38,7 +38,8 @@ src/
     styles/           tokens.css（设计令牌）+ base.css（全局主题样式）
     ui/sim/           跨页面复用的单位模拟器（SimPanel / Simulator，单位详情、PK、建筑模拟共用）
     hooks/            跨页面状态（如 useSimState：状态以 URL 为唯一来源）
-    nav/sections.ts   导航分组与模块注册表（导航、首页卡片、面包屑、搜索共用）
+    nav/pageRegistry.ts  页面登记表（路径、分组、文案、元数据、搜索别名；唯一来源）
+    nav/sections.ts      从登记表派生导航、首页卡片、面包屑与搜索
     utils/sticky.ts   跨路由保留的筛选状态（等价于旧版隐藏面板保留输入）
 public/img/         游戏美术（civs/units/techs/buildings/dlc/stats，WebP）
 tests/unit/         Vitest：模拟器数值、前置链、DLC 映射、自动链接器
@@ -72,12 +73,39 @@ tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 ## 路由（与旧版兼容）
 
 旧链接 `#civ/X` 与新链接 `#/civ/X` 等价（HashRouter 会补全前导 `/`）。
-`/` `/civs`（旧 `/list` 跳转） `/civ/:en` `/units` `/unit/:id[/:civ[/:age[/:ids[/:team]]]]` `/techs` `/tech/:id` `/tree[/:civ]` `/dlc` `/compare` `/matchup`；未知路由回到文明列表。
+路径、重定向和详情页都在页面登记表里（见下节），`routes.tsx` 按登记表生成 `<Route>`。
 模拟器状态全部写入 URL（replace），可分享。
+
+## 页面登记表（#283 / #388）
+
+`src/shared/nav/pageRegistry.ts` 的 `PAGES` 是全站页面的唯一登记表。路由、导航、首页和静态页标题/说明都从这里派生。不要在 `routes.tsx`、`sections.ts`、首页或 `scripts/page_metadata.mjs` 里另维护一份平行名单。
+
+一条登记（`PageDef`）写这些：
+
+- **path**：路由 pattern，与 `<Route path>` 一致。`kind` 为 `page`、`redirect` 或 `detail`。
+- **component**：懒加载组件 id，名字来自 `LAZY_COMPONENTS`。首页是同步组件 `Home`，不进这份懒加载名单。重定向写 `redirectTo`；`/tree` 用 `redirectDefaultTree` 跳到默认文明科技树，没有组件。
+- **lane / group**：`lane` 为 `wiki`、`tool`、`secondary` 或 `future`，`group` 取 `SECTION_GROUPS`（新手入门、对局计划、经济计算、资料）。两者都有才进入导航和首页。首页分组和导航分组目前是同一个 `group`（issue 272，不在登记表里拆开）。`hideNav` 的页面不作为顶部百科快捷入口，分组工具菜单仍收录。`status: 'planned'`（如天梯）不进首页卡片。
+- **metaTitle / metaDescription**：静态页标题和说明。带具体 id 的单位、科技、建筑、文明、科技树、开局、术语、补丁仍由数据生成，不在登记表里逐条写。
+- **searchAliases**：全局搜索俗称，经 `sections.ts` 进入搜索。`aliases` 是 404「你是不是要找」的常见写法和旧路径。
+- **omitShareSearch**：分享用的 `og:url` 不带查询。目前只有复盘 `/match-review` 和团战计划 `/team-plan`。
+- **entry: 'none'**：不进首页也不进导航时必须写 `entryReason`。现有三类：首页本身（`/`）、旧路径重定向（`/list` → `/civs`，`/trade` → `/trade-income`，`/garrison` 与 `/garrison-general` → `/garrison-healing`）、详情页（文明、单条加成、单位、科技、某文明科技树、建筑、术语条目、单条补丁；入口在对应列表）。没有 `lane`、又没有 `entry: 'none'` 的页面只能出现在 `PLACEMENT_ALLOWLIST`。这是 issue 272 的已知缺口：`about-data` 仍没有首页或导航位置；`market` 与 `eco-payoff` 已经在经济计算分组里，名单先留着，不要借登记表改它们的导航。
+
+`src/app/pageRegistry.tsx` 持有 `LOADERS`：每个懒加载 id 对应一次 `lazy(() => import(...))`。`shared/` 不能 import `features/` 里的页面，所以 `import()` 放在 `app/`，再和 `PAGES` 合成 `PAGE_REGISTRY`。`Home` 同步打进入口包，其余页面按 id 懒加载。
+
+消费者只读登记表：
+
+| 消费者                            | 用法                                                                                                                                                          |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/routes.tsx`              | `PAGE_REGISTRY.map` 生成路由。重定向、页面组件，以及传给 `PageMeta` 的 `pattern`（登记表 `path`）和 `omitShareSearch`，都来自登记项。未知路径是 `*`。         |
+| `src/shared/nav/sections.ts`      | 按 `lane` 得到导航条目。`HOME_GROUPS`（`TOOL_GROUPS` 与它相同）按 `SECTION_GROUPS` 分组，首页渲染 `HOME_GROUPS`。面包屑和搜索里的页面结果也用这里派生的字段。 |
+| `scripts/page_metadata.mjs`       | 读取登记表里的 `path`、`metaTitle`、`metaDescription`，写入 `src/data/page-metadata.json`。动态条目仍按游戏数据生成。                                         |
+| `src/features/share/PageMeta.tsx` | 标题和说明来自生成的 `PAGE_META`。匹配的是登记表上的路由 pattern，不看地址栏里的大小写或编码。`omitShareSearch` 为真时 `og:url` 去掉查询。                    |
+
+新增或改动页面：先改 `pageRegistry.ts`；若是新组件，再在 `src/app/pageRegistry.tsx` 的 `LOADERS` 补上同名懒加载。单测锁住这条规则：`tests/unit/pageRegistry283.test.ts`（路由只从登记表生成、懒加载 id 一一对应、要么有入口要么写明 `entry: 'none'`、静态元数据对齐、首页从分组派生）、`tests/unit/pageMeta287.test.ts`（元信息跟随匹配到的路由；复盘和团战去掉查询后仍是该页）。
 
 ## 如何添加
 
-- **新页面**：在 `src/shared/nav/pageRegistry.ts` 登记路径、分组、文案、元数据和搜索别名，并在 `src/app/pageRegistry.tsx` 的 `LOADERS` 加上对应懒加载。路由、导航、首页和 `scripts/page_metadata.mjs` 都从这份登记表派生。纯计算放 `domain/` 或特性 `logic/` 并写单测。
+- **新页面**：按上一节先改登记表和懒加载表，不要另写一份路由或导航名单。纯计算放 `domain/` 或特性 `logic/` 并写单测。
 - **新数据源**：在 `scripts/` 写 `<x>_build.py`（读取 `AOE_CACHE`，输出到 `src/data/`），加入 `build_data.py` 列表；在 `domain/types.ts` 定义类型，在 `data/index.ts` 写加载器（大文件用 dynamic import）。
 - **新科技效果**：在 `domain/effects.ts` 的 `TECH_EFFECTS` / `CIV_BONUSES` 添加规则，并在 `tests/unit/simulator.test.ts` 加已知数值用例。
 

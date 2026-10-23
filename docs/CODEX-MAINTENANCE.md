@@ -65,7 +65,7 @@
 - **无障碍**：文字对比度 WCAG AA；可点区域 ≥ **44×44**；文字不小于 12px。
 - **数字不换行**：数值与「数字+单位」用 **`.num`**（等宽数字）与/或 **`.nw`**（`white-space: nowrap`）包住，360 宽也不能折行。
 - **四宽截图**：界面 PR 附 **360 / 375 / 390 / 1280**，无横向滚动、无 console error / pageerror。
-- **中文 UI**：文案与相邻页面一致；新增路由登记导航/首页时遵循现有分组（合入 #388 后见 pageRegistry 段）。
+- **中文 UI**：文案与相邻页面一致；新增页面先改 `pageRegistry`，分组见 [ARCHITECTURE](ARCHITECTURE.md)「页面登记表」。
 
 ## 7. 测试规则
 
@@ -91,9 +91,9 @@
 - Codex **默认不跑发版**；除非 hongcun 明示。
 - CHANGELOG 写**玩家可见**的一句中文说明，不写内部实现黑话。
 
-## 10. pageRegistry（待 #388 合入后）
+## 10. pageRegistry（#388 已合入）
 
-合入 **#388** 后，**以 `pageRegistry` 为页面登记的唯一来源**（导航、首页卡片、面包屑、搜索等共用）。具体 API、文件路径与迁移步骤以届时更新的 [docs/ARCHITECTURE.md](ARCHITECTURE.md) 与 [AGENTS.md](../AGENTS.md) 为准——**本文不编造 API**。在 #388 合入前新增页面，仍按现有 `routes.tsx` / 导航登记方式，并避免与 #388 冲突的大范围改同一文件。
+页面登记的唯一来源是 `src/shared/nav/pageRegistry.ts`。路由、导航、首页和静态元信息都从它派生，不要手改 `routes.tsx` 或另一份名单。字段、`import()` 所在文件和测试见 [docs/ARCHITECTURE.md](ARCHITECTURE.md)「页面登记表」与 [AGENTS.md](../AGENTS.md)。本文不重复 API。
 
 ## 11. 交给人类的事
 
