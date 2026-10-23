@@ -1,7 +1,8 @@
 /**
- * issue 350：瓦兰吉卫队（2703/2704）在单位 PK 结果卡下的计入标注。
- * 只说明现有战斗模型已经算进或没有算进的加成，不计算产金数量。
+ * issue 350 / 383：瓦兰吉卫队（2703/2704）在单位 PK 结果卡下的计入标注。
+ * 产金数量在 domain/generateResource.ts，按交战时长估算，不在这里重算战斗。
  */
+import { formatRatio, varangianListedRatio } from '../../../domain/generateResource';
 
 export type VgStatus = 'counted' | 'uncounted';
 
@@ -40,8 +41,9 @@ export function varangianPkNotes(unitId: number, civ: string, age: number, rof?:
       id: 'vg-gold',
       civ,
       label: '产生的黄金 +50%',
-      status: 'uncounted',
-      reason: '单位 PK 不计攻击产生的黄金，具体数量待核实',
+      status: 'counted',
+      // 说明文案是 +50%，.dat / UGC 的内部乘法约为 ×1.33。黄金数字见结果卡上的估算。
+      reason: `游戏说明写 +50%，数据里约为 ×${formatRatio(varangianListedRatio())}。本场黄金已按这个倍率估算。`,
     });
     if (age >= 4) {
       notes.push({

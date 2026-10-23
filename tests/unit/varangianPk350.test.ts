@@ -11,15 +11,15 @@ const side = (id: number, civ: string, age = 4) => {
 };
 
 describe('#350 瓦兰吉卫队 PK 计入标注', () => {
-  it('精锐瓦兰吉人列出攻速已计入、产金与哥瑟砍未计入，且不给产金数字', () => {
+  it('精锐瓦兰吉人列出攻速与产金已计入，哥瑟砍仍未计入', () => {
     const a = side(2704, 'Varangians');
     const notes = varangianPkNotes(2704, 'Varangians', 4, a.S.rof);
     expect(notes.map((n) => [n.id, n.status, n.label, n.reason])).toEqual([
       ['vg-rof', 'counted', '攻击速度 +25%', '已反映在攻击间隔 1.6s'],
-      ['vg-gold', 'uncounted', '产生的黄金 +50%', '单位 PK 不计攻击产生的黄金，具体数量待核实'],
+      ['vg-gold', 'counted', '产生的黄金 +50%', '游戏说明写 +50%，数据里约为 ×1.33。本场黄金已按这个倍率估算。'],
       ['vg-gothikon', 'uncounted', '哥瑟砍（定期投掷斧头）', '定期投斧不计入单位 PK'],
     ]);
-    expect(notes.map((n) => `${n.label} ${n.reason}`).join('\n')).not.toMatch(/\d+\.\d{3,}|每秒|每次/);
+    expect(notes.map((n) => `${n.label} ${n.reason}`).join('\n')).not.toMatch(/每秒|每次|work_value/);
   });
 
   it('城堡时代的普通瓦兰吉卫队还没有哥瑟砍', () => {

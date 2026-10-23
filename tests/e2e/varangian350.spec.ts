@@ -20,8 +20,15 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(lines.nth(0)).toHaveAttribute('data-status', 'counted');
     await expect(lines.nth(0)).toContainText('已计入：瓦兰吉人 攻击速度 +25%');
     await expect(lines.nth(0)).toContainText('已反映在攻击间隔 1.6s');
-    await expect(lines.nth(1)).toContainText('未计入：瓦兰吉人 产生的黄金 +50%');
+    await expect(lines.nth(1)).toHaveAttribute('data-status', 'counted');
+    await expect(lines.nth(1)).toContainText('已计入：瓦兰吉人 产生的黄金 +50%');
+    await expect(lines.nth(1)).toContainText('×1.33');
     await expect(lines.nth(2)).toContainText('未计入：瓦兰吉人 哥瑟砍（定期投掷斧头）');
+    const gold = page.locator('[data-t="pk-vg-gold"]');
+    await expect(gold).toHaveCount(1);
+    await expect(gold).toHaveAttribute('data-mul', 'civ');
+    await expect(gold).toContainText('本场产生黄金');
+    await expect(gold).toContainText('约 6.4');
     await expect(page.locator('[data-t="pk-vg"]')).not.toContainText('每秒');
     const box = page.locator('[data-t="pk-vg"]');
     await box.scrollIntoViewIfNeeded();
@@ -40,6 +47,11 @@ test('#350 其他文明只列各自生效的加成', async ({ page }) => {
   await expect(page.locator('[data-t="pk-vg-line"]')).toHaveCount(1);
   await expect(page.locator('[data-t="pk-vg"]')).toContainText('未计入：拜占庭 后勤学（践踏伤害）');
   await expect(page.locator('[data-t="pk-vg"]')).not.toContainText('哥瑟砍');
+  await expect(page.locator('[data-t="pk-vg"]')).not.toContainText('产生的黄金 +50%');
+  const byzGold = page.locator('[data-t="pk-vg-gold"]');
+  await expect(byzGold).toHaveAttribute('data-mul', 'default');
+  await expect(byzGold).toContainText('默认产金');
+  await expect(byzGold).toContainText('不含瓦兰吉人');
 
   await page.goto('./#/duel?a=2704.Danes.4.f.&b=567.Teutons.4.f.&m=1');
   await expect(page.locator('[data-id="danes-spd"]')).toContainText('未计入：丹麦人 移动速度 +10%');

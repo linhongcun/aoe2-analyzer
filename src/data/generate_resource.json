@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "engineVerifiedInPinnedBuild": false,
+    "formula": "gold = engagementUnitSeconds * Task.work_value_1 * (resourceBase * autoMul)",
+    "formulaNote": "交战单位·秒 × 任务 work_value_1 × 资源 ResMul。资源 297 起始值为 50；瓦兰吉人再乘约 ×1.3333。不按攻击次数。",
+    "generatedBy": "scripts/generate_resource_build.py",
+    "patch": "DE Update 185872 (2026-09-23)",
+    "path": "dat/empires2_x2_p1.dat",
+    "repo": "SiegeEngineers/auto-mods",
+    "rounding": "6 d.p.",
+    "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+    "sources": [
+      "https://ugc.aoe2.rocks/general/resources/resources/",
+      "https://www.reddit.com/r/aoe2/comments/1wpq9yi/reasoning_for_the_weird_numbers_behind_the/"
+    ]
+  },
+  "modifiers": [
+    {
+      "auto": false,
+      "civ": "Wei",
+      "op": "set",
+      "res": 287,
+      "tech": 1061,
+      "v": 3
+    },
+    {
+      "auto": true,
+      "civ": "Varangians",
+      "op": "mul",
+      "res": 297,
+      "tech": 1488,
+      "v": 1.3333
+    },
+    {
+      "auto": false,
+      "civ": "Spartans",
+      "op": "set",
+      "res": 521,
+      "tech": 1133,
+      "v": 2.25
+    }
+  ],
+  "resources": {
+    "213": {
+      "autoMul": {},
+      "base": 50
+    },
+    "287": {
+      "autoMul": {},
+      "base": 0
+    },
+    "297": {
+      "autoMul": {
+        "Varangians": 1.3333
+      },
+      "base": 50
+    },
+    "521": {
+      "autoMul": {},
+      "base": 0
+    }
+  },
+  "units": {
+    "1228": {
+      "action": 151,
+      "classes": [
+        0,
+        2,
+        4,
+        6,
+        12,
+        13,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        35,
+        36,
+        43,
+        44,
+        47,
+        51,
+        54,
+        55,
+        59
+      ],
+      "resMul": 213,
+      "resOut": 3,
+      "value": 0.01
+    },
+    "1230": {
+      "action": 151,
+      "classes": [
+        0,
+        2,
+        4,
+        6,
+        12,
+        13,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        35,
+        36,
+        43,
+        44,
+        47,
+        51,
+        54,
+        55,
+        59
+      ],
+      "resMul": 213,
+      "resOut": 3,
+      "value": 0.01
+    },
+    "2418": {
+      "action": 151,
+      "classes": [
+        -1
+      ],
+      "resMul": 521,
+      "resOut": 3,
+      "value": 0.33
+    },
+    "2562": {
+      "action": 151,
+      "classes": [
+        -1
+      ],
+      "resMul": 287,
+      "resOut": 0,
+      "value": 0.01
+    },
+    "2564": {
+      "action": 151,
+      "classes": [
+        -1
+      ],
+      "resMul": 287,
+      "resOut": 0,
+      "value": 0.01
+    },
+    "2703": {
+      "action": 151,
+      "classes": [
+        0,
+        2,
+        4,
+        6,
+        12,
+        13,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        35,
+        36,
+        43,
+        44,
+        47,
+        51,
+        54,
+        55,
+        59
+      ],
+      "resMul": 297,
+      "resOut": 3,
+      "value": 0.013637
+    },
+    "2704": {
+      "action": 151,
+      "classes": [
+        0,
+        2,
+        4,
+        6,
+        12,
+        13,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        35,
+        36,
+        43,
+        44,
+        47,
+        51,
+        54,
+        55,
+        59
+      ],
+      "resMul": 297,
+      "resOut": 3,
+      "value": 0.015909
+    },
+    "82": {
+      "action": 151,
+      "classes": [
+        -1
+      ],
+      "resMul": 521,
+      "resOut": 3,
+      "value": 0.33
+    }
+  }
+}

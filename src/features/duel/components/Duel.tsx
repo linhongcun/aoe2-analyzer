@@ -6,6 +6,7 @@ import { civByEn } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
 import { discountedCost, priceAge, type CostDiscount } from '../../../domain/costDiscount';
 import { duel, fighterFrom, groupFight, countForBudget, costSum, type Fighter, DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
+import { sideEngagementSeconds } from '../../../domain/generateResource';
 import { baseUnit, collapse } from '../../../domain/family';
 import { AGE_ZH } from '../../../domain/ratings';
 import { TEAM_BONUSES } from '../../../domain/effects';
@@ -533,8 +534,8 @@ function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
       )}
       <VgNotes
         sides={[
-          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof },
-          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof },
+          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: r.duration },
+          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: r.duration },
         ]}
       />
       <BattleReplay frames={oneReplay(A.F, B.F, r)} duration={r.duration} a={A.u} b={B.u} maxA={A.F.hp} maxB={B.F.hp} unit="生命" />
@@ -625,8 +626,8 @@ function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb
       <TradeRow A={A} B={B} na={na} nb={nb} aAlive={g.aAlive} bAlive={g.bAlive} />
       <VgNotes
         sides={[
-          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof },
-          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof },
+          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof, seconds: sideEngagementSeconds(g.timeline, 'a') },
+          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof, seconds: sideEngagementSeconds(g.timeline, 'b') },
         ]}
       />
       <BattleReplay frames={groupReplay(g)} duration={g.duration} a={A.u} b={B.u} maxA={na} maxB={nb} unit="个单位" />
