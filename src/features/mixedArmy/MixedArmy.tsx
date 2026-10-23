@@ -92,6 +92,8 @@ const woodGoldOptions = {
 
 function MixedGaps({ config }: { config: MixedArmyConfig }) {
   const gaps = mixedArmyGaps(config);
+  // 缺项在表单和卡片之前，单位名的第一次出现落在这里，须链到详情。
+  const seen = new Set<string>();
   return (
     <section className="mixed-gaps" aria-labelledby="mixed-gaps-title" data-testid="mixed-gaps">
       <h2 id="mixed-gaps-title">{gaps.length ? '还缺的关键观察' : '关键观察已填写'}</h2>
@@ -100,7 +102,7 @@ function MixedGaps({ config }: { config: MixedArmyConfig }) {
           <p>下列条件仍是未知。先看缺什么，再填主条件；地形和持续资源默认收起。</p>
           <ul>
             {gaps.map((gap) => (
-              <li key={gap}>{gap}</li>
+              <li key={gap}>{linkFirstUnits(gap, seen)}</li>
             ))}
           </ul>
         </>
