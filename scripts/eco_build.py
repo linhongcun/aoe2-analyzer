@@ -60,6 +60,15 @@ def eff(d, eid):
     return d['Effects'][eid]['EffectCommands'] if 0 <= eid < len(d['Effects']) else []
 
 
+def split_tree_effects(effects):
+    """固定 .dat 用研究时间设为 0 标记自动免费科技；仅免某种资源仍是费用修正（#393）。"""
+    free_ids = {x['tech'] for x in effects if x['kind'] == 'techTime' and x['op'] == 'set' and x['v'] == 0}
+    tree = [x for x in effects if not (x.get('tech') in free_ids and x['kind'] in ('techCost', 'techTime')
+                                      and x['op'] == 'set' and x['v'] == 0)]
+    free = sorted({x['techName'] for x in effects if x.get('tech') in free_ids})
+    return tree, free
+
+
 def main():
     d = load(); U = d['Civs'][1]['Units']; T = d['Techs']
     units = json.load(open(ROOT / 'src/data/units.json')); techs = json.load(open(ROOT / 'src/data/techs.json'))
@@ -129,9 +138,7 @@ def main():
         e = fx['civs'].get(c['en'], {}); k = dat_civ.get(c['en'], dat_civ.get({v: kk for kk, v in CIV_DAT.items()}.get(c['en'])))
         if k is None: continue
         dc = d['Civs'][k]; rows = []
-        tree = decode(eff(d, dc['TechTreeID']), T)
-        tree = [x for x in tree if not (x['kind'] == 'techCost' and x['v'] == 0) and not (x['kind'] == 'techTime' and x['v'] == 0)]
-        free = sorted({x['techName'] for x in decode(eff(d, dc['TechTreeID']), T) if x['kind'] in ('techCost', 'techTime') and x['v'] == 0})
+        tree, free = split_tree_effects(decode(eff(d, dc['TechTreeID']), T))
         if tree: rows.append({'source': 'tree', 'name': 'Tech tree', 'age': 1, 'effects': tree})
         if free: rows.append({'source': 'tree', 'name': 'Free techs', 'age': 1, 'effects': [{'kind': 'freeTech', 'techName': n} for n in free]})
         # 加成科技：本文明专属、无研究地点（引擎自动生效），与 effects_build 相同的选取规则，但不过滤「站内无对应单位」的经济效果

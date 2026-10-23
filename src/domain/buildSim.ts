@@ -417,7 +417,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   );
   for (const r of Object.keys(m.grant) as Res[]) if (!startRes.has(r)) m.start[r] += m.grant[r];
   m.grant = { food: 0, wood: 0, gold: 0, stone: 0 };
-  // 免费科技在 eco 里只留名称（techCost/techTime = 0 已被收成 freeTech），效果在到达所需时代时自动生效一次。
+  // 自动免费科技在 eco 里只留名称（研究时间设为 0 的条目收成 freeTech），效果在到达所需时代时自动生效一次。
+  // 只免单项资源的科技保留为 techCost，由普通研究动作收费并应用效果（issue 393）。
   const freeNames = new Set(rows.flatMap((r) => r.effects.filter((e) => e.kind === 'freeTech').map((e) => (e.techName ?? '').toLowerCase())));
   const freeIds = new Set<number>();
   for (const [id, et] of Object.entries(eco.ecoTechs)) {
@@ -426,7 +427,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     if (names.some((n) => freeNames.has(n))) freeIds.add(Number(id));
   }
   // 法兰克磨坊科技开局会再点一次研究。费用按 0，已经随时代生效的效果不再套第二遍。
-  // 越南等文明的免费经济科技也出现在同一批开局里；这次不改它们，避免其他文明的开局结果跟着变。
+  // 其他文明的真正免费科技保持既有研究动作处理，不在本次费用导出修复中扩展。
   const frankMillFree = civ === 'Franks';
   const freeApplied = new Set<number>();
   const applyEcoTech = (id: number, granted: boolean) => {
