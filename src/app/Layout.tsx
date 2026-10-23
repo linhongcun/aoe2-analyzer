@@ -212,7 +212,7 @@ function MobileTheme({ preference, onSelect }: { preference: ThemePreference; on
 }
 
 export function Layout({ children }: { children: ReactNode }) {
-  const { pathname } = useLocation();
+  const { pathname, search, hash } = useLocation();
   const { preference, select } = useTheme();
   const nav = useRef<HTMLElement>(null);
   const burger = useRef<HTMLButtonElement>(null);
@@ -318,11 +318,12 @@ export function Layout({ children }: { children: ReactNode }) {
   }, [cmdk, openSearch]);
   return (
     <>
-      {/* 页面上第一个 Tab 停点：键盘用户可直接越过顶栏和导航。用哈希路由，所以不改地址，只移动焦点。 */}
+      {/* 页面上第一个 Tab 停点。href 用当前页：普通点击只移动焦点、不改地址；中键、Ctrl/⌘+点击或「在新标签页打开」沿用这个地址，不会把 #main-content 当成路由。 */}
       <a
-        href="#main-content"
+        href={`#${pathname}${search}${hash}`}
         className="skip-link"
         onClick={(event) => {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
           event.preventDefault();
           skipToMain();
         }}

@@ -35,6 +35,30 @@ for (const width of [360, 375, 390, 1280]) {
   });
 }
 
+test('@390：跳到主内容的地址是当前页（含查询），中键和 Ctrl/⌘+点击打开的也是当前页', async ({ page }) => {
+  await open(page, '/market?tab=1', 390);
+  const link = skip(page);
+  await page.keyboard.press('Tab');
+  await expect(link).toBeFocused();
+  const here = new URL(page.url());
+  const href = new URL(await link.evaluate((el: HTMLAnchorElement) => el.href));
+  expect(here.hash).toBe('#/market?tab=1');
+  expect(href.hash).toBe(here.hash);
+  expect(href.hash).not.toContain('main-content');
+  expect(`${href.pathname}${href.search}`).toBe(`${here.pathname}${here.search}`);
+
+  for (const openModified of [() => link.click({ button: 'middle' }), () => link.click({ modifiers: ['ControlOrMeta'] })]) {
+    const opened = page.context().waitForEvent('page');
+    await openModified();
+    const popup = await opened;
+    await popup.waitForLoadState('domcontentloaded');
+    expect(new URL(popup.url()).hash).toBe(here.hash);
+    expect(new URL(page.url()).hash).toBe(here.hash);
+    await popup.close();
+    await link.focus();
+  }
+});
+
 test('@390：鼠标点跳到主内容也不改地址；焦点离开 main 后 main 不再可被 Tab 或点击吸住', async ({ page }) => {
   await open(page, '/builds', 390);
   await page.keyboard.press('Tab');
