@@ -3,13 +3,49 @@ on:
   push: { branches: [main, 'release/**'] }
   pull_request: { branches: [main, 'release/**'] }
   workflow_dispatch:
-permissions: { contents: read }
+permissions: { contents: read, pull-requests: read }
 concurrency: { group: 'ci-${{ github.ref }}', cancel-in-progress: true }
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # #375：只在 pull_request 上按路径决定要不要跑 Playwright。
+      # push（main、release/**）和 workflow_dispatch 不跑这两步，后面的条件因此仍会跑全量。
+      # 白名单：.github/**、docs/**（不含 docs/PATCH-NOTES/**）、scripts/release.mjs、
+      # scripts/check-pr-title.mjs、tests/unit/release*.test.ts。任一文件在白名单外就要跑 e2e。
+      # predicate-quantifier: every 让一个文件必须同时满足全部规则才算 needed；否定规则挖掉白名单。
+      # docs/PATCH-NOTES/** 被 !docs/** 一起挖掉，所以单独再记一笔，两条里有一条命中就跑 e2e。
+      - name: Classify pull request paths
+        id: paths
+        if: github.event_name == 'pull_request'
+        uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3.0.4
+        with:
+          predicate-quantifier: every
+          filters: |
+            needed:
+              - '**'
+              - '!.github/**'
+              - '!docs/**'
+              - '!scripts/release.mjs'
+              - '!scripts/check-pr-title.mjs'
+              - '!tests/unit/release*.test.ts'
+            patch_notes:
+              - 'docs/PATCH-NOTES/**'
+      - name: Decide whether Playwright runs
+        id: playwright
+        if: github.event_name == 'pull_request'
+        env:
+          NEEDED: ${{ steps.paths.outputs.needed }}
+          PATCH_NOTES: ${{ steps.paths.outputs.patch_notes }}
+        run: |
+          if [ "$NEEDED" = "true" ] || [ "$PATCH_NOTES" = "true" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "运行 Playwright：变更里有白名单以外的路径，或改了 docs/PATCH-NOTES。"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "跳过 Playwright：本次 PR 的变更全部在白名单内。"
+          fi
       - uses: actions/setup-node@v4
         with: { node-version: 20, cache: npm }
       - uses: actions/setup-python@v5
@@ -29,7 +65,15 @@ jobs:
       - name: Catalog introduction audit
         run: npm run introductions:check
       - name: Install Playwright chromium
+        if: github.event_name != 'pull_request' || steps.playwright.outputs.run == 'true'
         run: npx playwright install --with-deps chromium
+      # 发版单测会 chromium.launch()（tests/unit/release108.test.ts、scripts/release.mjs）。
+      # 白名单 PR 跳过上面的安装时，这里补装，Vitest 才能保持绿色；不跑 playwright test。
+      - name: Install Chromium for release unit tests
+        if: github.event_name == 'pull_request' && steps.playwright.outputs.run != 'true'
+        run: |
+          echo "跳过 Playwright 测试；为发版单测安装 Chromium。"
+          npx playwright install --with-deps chromium
       - name: Vitest
         run: npm test
       - name: Python tests (patch detection, diff summary, markers)
@@ -76,10 +120,11 @@ jobs:
       - name: Build
         run: npm run build && git diff --exit-code -- src/data/page-metadata.json
       - name: Playwright smoke (chromium)
+        if: github.event_name != 'pull_request' || steps.playwright.outputs.run == 'true'
         run: npx playwright test --reporter=line
       - name: Save editorial viewport screenshots
         uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && (github.event_name != 'pull_request' || steps.playwright.outputs.run == 'true')
         with:
           name: editorial-viewport-screenshots
           path: |
@@ -123,7 +168,7 @@ jobs:
             test-results/communityIntegration249-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: failure() && (github.event_name != 'pull_request' || steps.playwright.outputs.run == 'true')
         with: { name: playwright-report, path: test-results, if-no-files-found: ignore }
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

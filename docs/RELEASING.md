@@ -5,6 +5,8 @@
 3. 等待 release 分支的 CI 和 main 的部署全部成功。
 4. 从 **main** 手动调度 GitHub Actions 的 **Release** 工作流，填写三段版本号，例如 `v0.12.0`。
 
+拉取请求若改动全部落在 `.github/**`、`docs/**`（不含会打进构建的 `docs/PATCH-NOTES/**`）、`scripts/release.mjs`、`scripts/check-pr-title.mjs` 和 `tests/unit/release*.test.ts`，CI 会跳过 Playwright 测试及产物上传（Chromium 仍会安装，供发版单测启动浏览器），而推送到 `main` 或 `release/**`、手动触发和 Release 工作流仍跑全量 Playwright。
+
 工作流复用 `scripts/release.mjs`，核对 release 头部 CI、线上渲染后的版本号和构建号，再创建 annotated tag 和草稿 Release。随后在已部署网站检查地图、补丁筛选和分享功能；从确认过的 tag 构建静态站点 ZIP 及 SHA256SUMS.txt，上传后发布为正式 Release。
 
 工作流必须从 main 调度：其自身的 check 记录在 main 的合并提交上，避免把运行中的发版任务误算进 release 分支头部的 CI 门禁。release 分支与 main 尖端重合时，脚本忽略名为 release 的 check，test 与 deploy 仍把门禁。首次运行前必须已合并发行准备 PR。
