@@ -8,9 +8,15 @@ async function open(page: import('@playwright/test').Page, q: string) {
   await page.goto('./');
   await page.locator('#home').waitFor();
   await page.keyboard.press('Control+k');
-  await page.getByPlaceholder(/搜索文明、单位、科技/).fill(q);
-  await expect(page.locator('.cmdk-list li').first()).toBeVisible();
-  return page.locator('.cmdk-list li');
+  // 搜索面板懒加载：加载期间的外壳（#325）也有 .cmdk-list 和一条「加载中」<li>。
+  // 只等 li 可见会在真面板挂载前就读结果（并行负载高时偶发 0 条，#343）。
+  // 真面板的输入框才是 combobox，结果项才是 option：先等真面板，再等结果。
+  const box = page.getByRole('combobox', { name: '全局搜索' });
+  await expect(box).toBeVisible();
+  await box.fill(q);
+  const li = page.locator('.cmdk-list li[role="option"]');
+  await expect(li.first()).toBeVisible();
+  return li;
 }
 
 /** 全局搜索里的开局（sub「开局时间线」）按出现顺序 */
