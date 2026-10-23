@@ -29,10 +29,10 @@ test('#239 完整17条、包含规则、真实未知字段及折叠证据', asyn
   await expect(soundtrack.getByTestId('content-prerequisite')).toHaveText('前置条件暂未核实');
   await expect(page.locator('[data-product="enhanced-graphics"] [data-testid="content-acquisition"]')).toHaveText('免费可选下载');
   await expect(page.locator('.cg-sources[open]')).toHaveCount(0);
-  await soundtrack.locator('summary').click();
+  await soundtrack.locator('.cg-sources summary').click();
   await expect(soundtrack.getByRole('link', { name: 'Age of Empires II: Definitive Edition Soundtrack', exact: true })).toHaveAttribute('href', 'https://store.steampowered.com/app/1228810/');
   await expect(soundtrack.locator('.cg-sources')).toContainText('2026-10-20');
-  await page.getByText('购买口径、旧拥有者与模式边界', { exact: true }).click();
+  await page.getByText('适用范围与来源', { exact: true }).click();
   await expect(page.getByRole('link', { name: '查看文明历史首发列表' })).toHaveAttribute('href', '#/dlc');
 });
 
@@ -44,12 +44,14 @@ test('#239 模式内容同块交集，不把RoR战役拼成常规AoE2战役', as
   await mode(page).selectOption('return-of-rome');
   await expect(page.locator('.cg-card')).toHaveCount(1);
   await expect(page.locator('.cg-card')).toHaveAttribute('data-product', 'return-of-rome');
+  await page.locator('.cg-card details.cg-contents').evaluate((el: HTMLDetailsElement) => { el.open = true; });
   await expect(page.locator('.cg-card')).toContainText('7个');
   await expect(page.locator('[data-content-id="return-of-rome:Trajan"]')).toBeVisible();
   await expect(page.locator('[data-content-id="aoe2:Romans"]')).toHaveCount(0);
   await kind(page).selectOption('civilizations');
   await mode(page).selectOption('aoe2');
   await pack(page).selectOption('return-of-rome');
+  await page.locator('.cg-card details.cg-contents').evaluate((el: HTMLDetailsElement) => { el.open = true; });
   await expect(page.locator('[data-content-id="aoe2:Romans"]')).toBeVisible();
   await search(page).fill('Trajan');
   await expect(page.getByRole('heading', { name: '没有匹配的内容' })).toBeVisible();
@@ -68,6 +70,7 @@ test('#239 纯剧本及中英文内容可搜索，Chronicles互不前置且无�
   await expect(page.locator('.cg-names a')).toHaveCount(0);
   const alexander = page.locator('[data-product="chronicles-alexander-the-great"]');
   await expect(alexander.getByTestId('content-prerequisite')).toHaveText('需 Steam 版决定版本体');
+  await alexander.locator('details.cg-contents > summary').click();
   await expect(alexander).toContainText('不进排位');
   await search(page).fill('斯巴达');
   await expect(page.locator('.cg-card')).toHaveCount(1);

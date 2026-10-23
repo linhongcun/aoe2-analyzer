@@ -75,12 +75,14 @@ test.afterEach(async ({ page }) => {
   expect(errors.get(page)).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
-test('#241 defaults preserve unknowns, with inputs before folded sources and no adoptable route', async ({ page }) => {
+test('#241 defaults preserve unknowns and show one example before folded sources', async ({ page }) => {
   await page.goto('./#/mixed-army');
   await expect(page.getByRole('heading', { name: '混兵情境卡', exact: true })).toBeVisible();
   await expect(page.getByLabel('现有主力准确形态', { exact: true })).toHaveValue('unknown');
-  await expect(page.getByTestId('mixed-conditions-met')).toContainText('目前没有可按所填条件采用的路线');
-  expect(await page.getByText('来源、核对日期与适用边界', { exact: true }).evaluate((node) => (node.parentElement as HTMLDetailsElement).open)).toBe(false);
+  await expect(page.getByRole('heading', { name: '示例结论', exact: true })).toBeVisible();
+  await expect(page.getByTestId('mixed-example')).toContainText('不能解决后方掷矛手');
+  expect(await page.getByTestId('mixed-pending').evaluate((node) => (node as HTMLDetailsElement).open)).toBe(false);
+  expect(await page.getByText('适用范围与来源', { exact: true }).evaluate((node) => (node.parentElement as HTMLDetailsElement).open)).toBe(false);
   await expect(page.getByLabel('情境', { exact: true })).toBeInViewport();
 });
 test('#241 cavalry gains skirmisher protection: task explanation and applicable routes change', async ({ page }) => {
@@ -225,7 +227,7 @@ test('#241 strict damaged links lock; recoverable semantic mistakes retain edita
   await expect(page.getByLabel('我的当前时代', { exact: true })).toBeEnabled();
   await expect(page.getByTestId('mixed-army-result')).toContainText('需要修正');
   await page.getByLabel('我的当前时代', { exact: true }).selectOption('4');
-  await expect(page.getByTestId('mixed-army-result')).toContainText('关键信息仍未知');
+  await expect(page.getByRole('heading', { name: '示例结论', exact: true })).toBeVisible();
 });
 test('#241 keyboard focus, sources and copy feedback remain usable', async ({ page }) => {
   await page.goto(href(britons));
@@ -242,7 +244,7 @@ test('#241 keyboard focus, sources and copy feedback remain usable', async ({ pa
   );
   await page.getByRole('button', { name: '复制情境链接', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('情境链接已复制');
-  await page.getByText('来源、核对日期与适用边界', { exact: true }).focus();
+  await page.getByText('适用范围与来源', { exact: true }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByText('尚未完成该版本客户端交战实测', { exact: false })).toBeVisible();
   await expect(page.getByRole('link', { name: '单位PK：局部单兵资料', exact: true })).toHaveAttribute('href', /\/duel$/);
@@ -273,7 +275,7 @@ for (const width of [360, 375, 390, 1280])
       }, theme);
       await expect(page.getByTestId('mixed-army-page')).toBeVisible();
       await page.getByText('记录已完成的形态、研究与生产建筑', { exact: true }).click();
-      await page.getByText('来源、核对日期与适用边界', { exact: true }).click();
+      await page.getByText('适用范围与来源', { exact: true }).click();
       await page.locator('[data-card="britons-protected-onager"] summary').click();
       const undersized = await page
         .getByTestId('mixed-army-page')

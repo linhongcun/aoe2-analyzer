@@ -271,6 +271,7 @@ function MUST_CHANGE_KEYS(): string[] {
     'src/content/glossary.json[8].sources[0].date',
   ];
 }
+// #270 给内容指南的战役/剧本补了中文名（zh），叶子快照因此多出这些名字；日期仍按上面的表锁定。
 describe('#335 对照：改到的文件里除这 13 处日期外，数值和文字都不变', () => {
   for (const f of [
     'src/content/contentCatalog.json',

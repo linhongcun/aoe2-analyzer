@@ -31,6 +31,17 @@ import { matchReviewDraftReducer } from './matchReviewDraftState';
 import './matchReview.css';
 
 type Lock = 'corrupt' | 'conflict' | null;
+function ReviewNote({ text }: { text: string }) {
+  return text.split(/(\d{4}-\d{2}-\d{2})/g).map((part, index) =>
+    index % 2 ? (
+      <span className="mr-number" key={index}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
 function loadInitial() {
   try {
     const raw = window.localStorage.getItem(storageKey);
@@ -324,8 +335,6 @@ export default function MatchReview() {
         <header>
           <p className="note">把观察变成一个可验证的练习重点</p>
           <h1 id="mr-title">手填复盘与下局目标</h1>
-          <p>{matchReviewContent.scope}</p>
-          <p className="mr-boundary">{matchReviewContent.boundary}</p>
         </header>
         <div className="mr-panel mr-storage" aria-label="草稿保存状态">
           <p>草稿只保存在此浏览器的本机存储，不会上传。清除网站数据、换设备或存储被拒绝时，请使用 JSON 备份。</p>
@@ -403,7 +412,6 @@ export default function MatchReview() {
         </div>
         <section className="mr-panel" aria-labelledby="mr-context-heading">
           <h2 id="mr-context-heading">对局上下文</h2>
-          <p className="note">适用于随机地图 1v1 的人工复盘。游戏版本由你记录；不默认认定录像使用本站数据版本。</p>
           <div className="mr-grid">{(Object.keys(contextLabels) as (keyof ReviewContext)[]).map(contextField)}</div>
           {draft.context.link && !reviewLinkProblem(draft.context.link) && (
             <a href={draft.context.link} target="_blank" rel="noopener noreferrer">
@@ -413,7 +421,6 @@ export default function MatchReview() {
         </section>
         <details className="mr-panel mr-prompts">
           <summary>选择一个观察方向，不必填满所有问题</summary>
-          <p className="note">本站整理的可选引导。可以复盘胜局或败局，不预设你一定犯错，也不自动给出原因。</p>
           <div className="mr-grid">
             {matchReviewContent.groups.map((group) => (
               <article key={group.id}>
@@ -502,7 +509,7 @@ export default function MatchReview() {
         </section>
         <section className="mr-panel" aria-labelledby="mr-goal-title">
           <h2 id="mr-goal-title">唯一的下局目标</h2>
-          <p>一次只选一个练习重点；草稿也可以暂不设目标。把想做的动作与可观察标准分开，自报结果不等于水平提升。</p>
+          <p>一次只选一个练习重点；也可以先不设目标。想做的动作和可观察标准分开写。</p>
           <div className="mr-grid">
             {(Object.keys(goalLabels) as (keyof ReviewGoal)[]).map((key) => (
               <Field
@@ -525,7 +532,7 @@ export default function MatchReview() {
             <h2 id="mr-attempts-title">跟进尝试</h2>
             <span className="mr-number">{`${draft.attempts.length} / ${limits.attempts} 次`}</span>
           </div>
-          <p className="note">结果由你手动记录；未评估和无法判断不会被自动算成失败，不展示成功率。</p>
+          <p className="note">每次练习后自己记一条结果。</p>
           {draft.attempts.map((attempt, index) => (
             <fieldset key={attempt.id} className="mr-row" data-testid="review-attempt">
               <legend>尝试 {index + 1}</legend>
@@ -713,11 +720,13 @@ export default function MatchReview() {
             )}
           </div>
         </section>
-        <details className="mr-panel">
-          <summary>查看引导来源、核对日期与边界</summary>
+        <details className="mr-panel" data-testid="scope-sources">
+          <summary>适用范围与来源</summary>
+          <p>{matchReviewContent.scope}</p>
+          <p className="mr-boundary">{matchReviewContent.boundary}</p>
           <p>
-            核对日期：{matchReviewContent.checkedAt}。原始问题来自围绕 YouTube 学习的 Reddit 问答；没有读取 YouTube
-            评论。引导是本站整理，不采用旧游戏数值或能力承诺。
+            核对日期：<span className="mr-number">{matchReviewContent.checkedAt}</span>
+            。原始问题来自围绕 YouTube 学习的 Reddit 问答；没有读取 YouTube 评论。引导是本站整理，不采用旧游戏数值或能力承诺。
           </p>
           <ul>
             {matchReviewContent.sources.map((source) => (
@@ -725,10 +734,14 @@ export default function MatchReview() {
                 <a href={source.url} target="_blank" rel="noopener noreferrer">
                   {source.title}
                 </a>
-                <p className="note">{source.note}</p>
+                <p className="note">
+                  <ReviewNote text={source.note} />
+                </p>
               </li>
             ))}
           </ul>
+          <p>游戏版本由你记录，不默认认定录像使用本站数据版本。可以复盘胜局或败局，不预设你一定犯错，也不自动给出原因。</p>
+          <p>自报结果不等于水平提升。未评估和无法判断不会被自动算成失败，不展示成功率。</p>
           <p>不上传或解析录像，不读取游戏、截图或视频，不自动统计闲置/APM/资源，不生成败因、最优打法或 Elo 评价。</p>
         </details>
       </div>

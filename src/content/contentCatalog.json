@@ -94,15 +94,18 @@
           "names": [
             {
               "id": "aoe2:Edward Longshanks",
-              "en": "Edward Longshanks"
+              "en": "Edward Longshanks",
+              "zh": "长腿爱德华"
             },
             {
               "id": "aoe2:The Grand Dukes of the West",
-              "en": "The Grand Dukes of the West"
+              "en": "The Grand Dukes of the West",
+              "zh": "西方大公爵"
             },
             {
               "id": "aoe2:The Hautevilles",
-              "en": "The Hautevilles"
+              "en": "The Hautevilles",
+              "zh": "欧特维尔家族"
             }
           ],
           "sourceIds": ["steam"],
@@ -182,15 +185,18 @@
           "names": [
             {
               "id": "aoe2:Algirdas and Kestutis",
-              "en": "Algirdas and Kestutis"
+              "en": "Algirdas and Kestutis",
+              "zh": "阿基尔达斯和科斯图提斯"
             },
             {
               "id": "aoe2:Jadwiga",
-              "en": "Jadwiga"
+              "en": "Jadwiga",
+              "zh": "雅德维加"
             },
             {
               "id": "aoe2:Jan Zizka",
-              "en": "Jan Zizka"
+              "en": "Jan Zizka",
+              "zh": "扬·杰式卡"
             }
           ],
           "sourceIds": ["steam"],
@@ -276,15 +282,18 @@
           "names": [
             {
               "id": "aoe2:Babur",
-              "en": "Babur"
+              "en": "Babur",
+              "zh": "巴布尔"
             },
             {
               "id": "aoe2:Rajendra",
-              "en": "Rajendra"
+              "en": "Rajendra",
+              "zh": "拉金德拉"
             },
             {
               "id": "aoe2:Devapala",
-              "en": "Devapala"
+              "en": "Devapala",
+              "zh": "提婆波罗"
             }
           ],
           "sourceIds": ["steam"],
@@ -468,22 +477,22 @@
             {
               "id": "return-of-rome:Ascent of Egypt",
               "en": "Ascent of Egypt",
-              "zh": "Ascent of Egypt"
+              "zh": "埃及的崛起"
             },
             {
               "id": "return-of-rome:The First Punic War",
               "en": "The First Punic War",
-              "zh": "The First Punic War"
+              "zh": "第一次布匿战争"
             },
             {
               "id": "return-of-rome:Glory of Greece",
               "en": "Glory of Greece",
-              "zh": "Glory of Greece"
+              "zh": "希腊之光"
             },
             {
               "id": "return-of-rome:Voices of Babylon",
               "en": "Voices of Babylon",
-              "zh": "Voices of Babylon"
+              "zh": "巴比伦之声"
             }
           ],
           "sourceIds": ["campaign-update", "steam-zh"],
@@ -582,15 +591,18 @@
           "names": [
             {
               "id": "aoe2:Tamar",
-              "en": "Tamar"
+              "en": "Tamar",
+              "zh": "塔玛尔的崛起"
             },
             {
               "id": "aoe2:Thoros the Great",
-              "en": "Thoros the Great"
+              "en": "Thoros the Great",
+              "zh": "索罗斯大帝"
             },
             {
               "id": "aoe2:Ismail",
-              "en": "Ismail"
+              "en": "Ismail",
+              "zh": "亦思马因"
             }
           ],
           "sourceIds": ["steam"],
@@ -640,15 +652,18 @@
           "names": [
             {
               "id": "aoe2:Ragnar Lothbrok",
-              "en": "Ragnar Lothbrok"
+              "en": "Ragnar Lothbrok",
+              "zh": "拉格纳·洛德布罗克"
             },
             {
               "id": "aoe2:Oda Nobunaga",
-              "en": "Oda Nobunaga"
+              "en": "Oda Nobunaga",
+              "zh": "织田信长"
             },
             {
               "id": "aoe2:Charlemagne",
-              "en": "Charlemagne"
+              "en": "Charlemagne",
+              "zh": "查理曼"
             }
           ],
           "sourceIds": ["steam"],
@@ -950,15 +965,18 @@
           "names": [
             {
               "id": "aoe2:Liu Bei",
-              "en": "Liu Bei"
+              "en": "Liu Bei",
+              "zh": "刘备"
             },
             {
               "id": "aoe2:Cao Cao",
-              "en": "Cao Cao"
+              "en": "Cao Cao",
+              "zh": "曹操"
             },
             {
               "id": "aoe2:The Sun Clan",
-              "en": "The Sun Clan"
+              "en": "The Sun Clan",
+              "zh": "孙氏"
             }
           ],
           "sourceIds": ["steam"],
@@ -1107,15 +1125,18 @@
           "names": [
             {
               "id": "aoe2:The Exiled Prince",
-              "en": "The Exiled Prince"
+              "en": "The Exiled Prince",
+              "zh": "流亡王子"
             },
             {
               "id": "aoe2:The Hard Ruler",
-              "en": "The Hard Ruler"
+              "en": "The Hard Ruler",
+              "zh": "铁腕统治者"
             },
             {
               "id": "aoe2:The Last Viking",
-              "en": "The Last Viking"
+              "en": "The Last Viking",
+              "zh": "最后的维京人"
             }
           ],
           "sourceIds": ["steam"],
