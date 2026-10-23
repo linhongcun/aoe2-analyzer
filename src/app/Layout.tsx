@@ -23,6 +23,7 @@ const CommandPalette = lazy(loadCommandPalette);
  */
 function PalettePending({ onType, onClose }: { onType: (value: string) => void; onClose: () => void }) {
   const [value, setValue] = useState('');
+  const input = useRef<HTMLInputElement>(null);
   return (
     <div className="cmdk-mask" onClick={onClose}>
       <div
@@ -35,12 +36,17 @@ function PalettePending({ onType, onClose }: { onType: (value: string) => void; 
           if (e.key === 'Escape') {
             e.preventDefault();
             onClose();
+          } else if (e.key === 'Tab') {
+            // 与正式面板一致：加载期间输入框也是唯一的 Tab 停靠点。
+            e.preventDefault();
+            input.current?.focus();
           }
         }}
       >
         <div className="cmdk-in">
           <Icon name="search" />
           <input
+            ref={input}
             autoFocus
             aria-label="全局搜索"
             placeholder="搜索文明、单位、科技、开局…（中/英）"
