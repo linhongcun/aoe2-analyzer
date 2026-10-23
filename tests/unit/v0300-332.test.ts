@@ -126,7 +126,7 @@ describe('#332 每条都有结论：已计入 / 未计入（与「去掉后重�
 });
 
 describe('#332 所有数值不变：这些文明的开局模拟结果与 f856c9e 相同', () => {
-  // #358 只更新了 Franks 的哈希（马轭改为免费）。其余文明仍是 f856c9e。
+  // #358 更新 Franks（马轭免费）；#393 更新 Vietnamese（免木材不再误当自动获得，避免重复套用）。其余文明仍是 f856c9e。
   it('13 个文明 × 全部开局方案', () => {
     const civsUsed = [...new Set(Object.keys(EFFECTS).map((id) => id.split('-')[0]!))].sort();
     expect(Object.fromEntries(civsUsed.map((c) => [c, runFull(c)]))).toMatchSnapshot();
