@@ -113,6 +113,8 @@ jobs:
         run: python3 scripts/garrison_healing_build.py --check
       - name: Data check (relic income inputs reproducible from pinned dat)
         run: python3 scripts/relic_income_build.py --check
+      - name: Data check (generate-resource tasks reproducible from pinned dat)
+        run: python3 scripts/generate_resource_build.py --check
       - name: Patch notes match pinned data
         run: python3 scripts/patches_build.py --check
       - name: Build-order data check
