@@ -105,6 +105,7 @@ Age of Empires II © Microsoft Corporation. 本项目依据 Microsoft 的 [Game 
 - 界面图标只用 [Lucide](https://lucide.dev)（`<Icon name="..." />`，本地打包），禁止 emoji / Unicode 符号作图标；游戏美术图标不受此限。
 - 数值必须可溯源：效果来自 `.dat`，手工规则仅在 `.dat` 确实缺失时保留并在审计中列出。
 - 详见 [CONTRIBUTING.md](CONTRIBUTING.md)；AI 编码代理请先读 [AGENTS.md](AGENTS.md)。
+- Codex / 无人值守维护纪律：[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)（一次一 issue、门禁、Hold #364/#372）。
 
 ## 第三方组件 / Third-party
 

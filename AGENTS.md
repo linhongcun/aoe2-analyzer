@@ -1,5 +1,24 @@
 # AGENTS.md — AI 编码代理工作说明
 
+## Codex / 无人值守维护（必读）
+
+批量或无人值守改代码前，先读 **[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（Kent `ACCEPT @ <SHA>` / Steve `设计通过 @ <SHA>`）、Hold 表（**#364 / #372 勿开**）、跳过条件与选 issue checklist。
+
+与 CONTRIBUTING 冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
+
+### 数字不换行（`.num` / `.nw`）
+
+界面上的数值与「数字+单位」必须不折行：用 **`.num`**（tabular 数字）和/或 **`.nw`**（nowrap）包住；360 宽下「1个村民」一类折行视为 bug。详见 CODEX-MAINTENANCE「设计硬规则」。
+
+### Hold（勿开）
+
+| # | 状态 |
+| --- | --- |
+| #364 | Hold — 单位 PK heading-order 整树上移 |
+| #372 | Hold — 波希米亚竞技场火药预置对战 |
+
+解 hold 仅 hongcun / Steve 明示后才可开工。
+
 给批量处理 issue 的 AI 代理（DeepSeek、Codex 等）看的入口文件。人类贡献者看 [CONTRIBUTING.md](CONTRIBUTING.md)；两者冲突时以 CONTRIBUTING.md 为准，并在 issue 里指出。
 
 ## 项目是什么
