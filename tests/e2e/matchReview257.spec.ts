@@ -135,7 +135,7 @@ test('#257 空草稿、来源与可选引导，不预设已知时间或目标', 
   expect(await page.evaluate((name) => localStorage.getItem(name), key)).toBeNull();
   await page.getByText('选择一个观察方向，不必填满所有问题', { exact: true }).click();
   await expect(page.getByRole('heading', { name: '侦察与信息', exact: true })).toBeVisible();
-  await page.getByText('查看引导来源、核对日期与边界', { exact: true }).click();
+  await page.getByText('适用范围与来源', { exact: true }).click();
   await expect(page.getByRole('link', { name: 'How do I improve by rewatching my games?', exact: true })).toHaveAttribute('href', /reddit.com/);
   await expect(page.getByText(/没有读取 YouTube 评论/)).toBeVisible();
 });

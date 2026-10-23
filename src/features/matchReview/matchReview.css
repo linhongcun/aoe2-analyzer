@@ -101,6 +101,10 @@
   cursor: pointer;
   font-weight: 600;
 }
+/* 关闭的 details 在部分浏览器里仍把子元素算进滚动高度 */
+.match-review-page details:not([open]) > :not(summary) {
+  display: none;
+}
 .match-review-page :is(button, a, input, textarea, select, summary):focus-visible {
   outline: 2px solid var(--color-link);
   outline-offset: 2px;

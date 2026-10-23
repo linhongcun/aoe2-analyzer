@@ -40,10 +40,12 @@ test.describe('#335 页面上的来源日期按北京时间', () => {
     expect(text).not.toContain('2026-09-22');
   });
 
-  test('#/content-guide：官方五周年公告 2024-11-15（3 处）、RoR 战役公告 2023-12-21、Chronicles 说明 2025-10-11（2 处）', async ({ page }) => {
+  test('#/content-guide：官方五周年公告 2024-11-15（共用依据只列 1 处，#270）、RoR 战役公告 2023-12-21、Chronicles 说明 2025-10-11（2 处）', async ({
+    page,
+  }) => {
     const text = await mainText(page, '/content-guide');
     const count = (d: string) => text.split(`发布日期：${d}`).length - 1;
-    expect([count('2024-11-15'), count('2023-12-21'), count('2025-10-11')]).toEqual([3, 1, 2]);
+    expect([count('2024-11-15'), count('2023-12-21'), count('2025-10-11')]).toEqual([1, 1, 2]);
     expect([count('2024-11-14'), count('2023-12-20'), count('2025-10-10')], '旧日期').toEqual([0, 0, 0]);
   });
 

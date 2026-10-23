@@ -96,7 +96,20 @@
 }
 .cg-card h2 {
   font-size: var(--fs-h3);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+.cg-card > header :is(p) {
+  margin-bottom: var(--space-1);
+}
+.cg-card > header .cg-prerequisite {
+  margin-bottom: 0;
+}
+.cg-contents {
+  margin-top: var(--space-3);
+}
+.cg-contents-names {
+  font-weight: 400;
+  color: var(--color-text);
 }
 .cg-acquisition {
   color: var(--color-accent);
@@ -138,9 +151,6 @@
 .cg-store {
   gap: var(--space-2);
 }
-.cg-snapshot {
-  margin-block: var(--space-2);
-}
 .cg-sources {
   border-top: 1px solid var(--color-line);
   padding-top: var(--space-2);
@@ -151,6 +161,10 @@
   box-sizing: border-box;
   font-size: var(--fs-sm);
   font-weight: 600;
+}
+/* 关闭的 details 在部分浏览器里仍把子元素算进滚动高度 */
+.content-guide-page details:not([open]) > :not(summary) {
+  display: none;
 }
 .cg-sources ul {
   padding-left: var(--space-4);
@@ -194,5 +208,14 @@
   .cg-grid,
   .cg-selects {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .cg-grid {
+    gap: var(--space-2);
+  }
+  .cg-card {
+    padding: var(--space-2);
+  }
+  .cg-sources {
+    padding-top: 0;
   }
 }

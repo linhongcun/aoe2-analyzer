@@ -49,6 +49,7 @@ describe('CHANGELOG 结构 #274', () => {
     const open = unreleasedBody(changelog);
     for (const issue of SHIPPED) expect(open, issue).not.toContain(`（${issue}）`);
     expect(open).toContain('（#383）');
+    expect(open).toContain('（#270）');
     const v13 = section('0.13.0');
     expect(v13).toContain('（#190）');
     expect(v13).toContain('（#62）');
