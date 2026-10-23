@@ -34,6 +34,8 @@ export interface DatEco {
   tech?: string;
   tid?: number;
   what?: string;
+  /** 同一建筑各时代形态的倍率（黑暗到帝王）。v 仍是目录里那个形态的值。 */
+  byAge?: number[];
 }
 export interface DatEntry {
   tech: number;
@@ -175,6 +177,13 @@ export function ecoText(x: DatEco, nameOf: (id: number) => string | undefined): 
         ? (CLS_ZH[x.cls] ?? `类别 ${x.cls}`)
         : '';
   const attr = ECO_ATTR[x.a ?? -1] ?? `属性 ${x.a}`;
+  if (x.op === 'mul' && x.byAge && x.byAge.length > 1) {
+    const ps = x.byAge.map((v) => Math.round((v - 1) * 1000) / 10);
+    const same = ps.every((p) => p >= 0) || ps.every((p) => p < 0);
+    const body = same ? ps.map((p) => String(Math.abs(p))).join('/') : ps.map((p) => (p > 0 ? '+' : '') + p).join('/');
+    const sign = same ? (ps[0]! >= 0 ? '+' : '-') : '';
+    return `${who} ${attr} ${sign}${body}%`;
+  }
   if (x.op === 'mul') return `${who} ${attr} ${pct(x.v - 1)}`;
   if (x.op === 'set') return `${who} ${attr} = ${x.v}`;
   return `${who} ${attr} ${signed(x.v)}`;
