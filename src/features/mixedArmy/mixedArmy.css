@@ -94,6 +94,16 @@
   min-width: 0;
   margin-top: var(--space-4);
 }
+/* 关闭的 details 在部分浏览器里仍把子元素算进滚动高度 */
+.mixed-army-page details:not([open]) > :not(summary) {
+  display: none;
+}
+.mixed-example {
+  margin: 0 0 var(--space-4);
+}
+.mixed-example h2 {
+  font-size: var(--fs-h3);
+}
 .mixed-details > summary {
   cursor: pointer;
   padding: var(--space-2) 0;

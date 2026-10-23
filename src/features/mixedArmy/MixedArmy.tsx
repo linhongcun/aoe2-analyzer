@@ -94,24 +94,41 @@ function MixedGaps({ config }: { config: MixedArmyConfig }) {
   const gaps = mixedArmyGaps(config);
   // 缺项在表单和卡片之前，单位名的第一次出现落在这里，须链到详情。
   const seen = new Set<string>();
-  return (
-    <section className="mixed-gaps" aria-labelledby="mixed-gaps-title" data-testid="mixed-gaps">
-      <h2 id="mixed-gaps-title">{gaps.length ? '还缺的关键观察' : '关键观察已填写'}</h2>
-      {gaps.length ? (
-        <>
-          <p>下列条件仍是未知。先看缺什么，再填主条件；地形和持续资源默认收起。</p>
-          <ul>
-            {gaps.map((gap) => (
-              <li key={gap}>{linkFirstUnits(gap, seen)}</li>
-            ))}
-          </ul>
-        </>
-      ) : (
+  if (!gaps.length) {
+    return (
+      <section className="mixed-gaps" data-testid="mixed-gaps">
         <p>关键观察都已填写。可跳到结果，查看哪些路线对得上当前条件。</p>
-      )}
+      </section>
+    );
+  }
+  return (
+    <details className="mixed-details mixed-gaps" data-testid="mixed-pending">
+      <summary>
+        尚未确认（<span className="mixed-number">{gaps.length} 项</span>）
+      </summary>
+      <ul>
+        {gaps.map((gap) => (
+          <li key={gap}>{linkFirstUnits(gap, seen)}</li>
+        ))}
+      </ul>
+    </details>
+  );
+}
+function ExampleConclusion() {
+  const scenario = MIXED_ARMY_CONTENT.scenarios.find((row) => row.id === 'britons-archer-cover')!;
+  const card = MIXED_ARMY_CONTENT.cards.find((row) => row.id === 'britons-halb-screen')!;
+  return (
+    <section className="mixed-notice mixed-example" data-testid="mixed-army-result" aria-labelledby="mixed-example-title">
+      <h2 id="mixed-example-title" className="calc-dock-target" tabIndex={-1}>
+        示例结论
+      </h2>
+      <p data-testid="mixed-example">
+        若已确认不列颠步弓面对近战骑兵和掷矛手：{scenario.mixedThreatNote}可参考「{card.title}」。把观察改成你的实际局面后，这里会换成对应路线。
+      </p>
     </section>
   );
 }
+const PENDING_REASON = /尚未确认|尚未明确确认|尚未查清|先确认|先辨认|先补|先查明/;
 function SelectField<T extends string>({ label, value, options, change }: { label: string; value: T; options: Record<T, string>; change: (value: T) => void }) {
   return (
     <label className="mixed-field">
@@ -128,6 +145,8 @@ function SelectField<T extends string>({ label, value, options, change }: { labe
 }
 function Card({ result, ctx }: { result: MixedCardResult; ctx: ProductionContext }) {
   const { card, status, reasons } = result;
+  const pending = reasons.filter((reason) => PENDING_REASON.test(reason));
+  const active = reasons.filter((reason) => !pending.includes(reason));
   const seen = new Set<string>();
   const L = (text: string) => linkFirstUnits(text, seen);
   return (
@@ -137,15 +156,27 @@ function Card({ result, ctx }: { result: MixedCardResult; ctx: ProductionContext
         <h3>{L(card.title)}</h3>
       </header>
       <p>{L(card.problem)}</p>
-      {!!reasons.length && (
+      {!!active.length && (
         <div className="mixed-card-reasons">
           <strong>当前需处理</strong>
           <ul>
-            {reasons.map((reason) => (
+            {active.map((reason) => (
               <li key={reason}>{L(reason)}</li>
             ))}
           </ul>
         </div>
+      )}
+      {!!pending.length && (
+        <details className="mixed-details">
+          <summary>
+            尚未确认（<span className="mixed-number">{pending.length} 项</span>）
+          </summary>
+          <ul>
+            {pending.map((reason) => (
+              <li key={reason}>{L(reason)}</li>
+            ))}
+          </ul>
+        </details>
       )}
       <dl className="mixed-roles">
         <div>
@@ -195,21 +226,6 @@ function Card({ result, ctx }: { result: MixedCardResult; ctx: ProductionContext
             </Link>
           ))}
         </div>
-        <ul className="mixed-source-list">
-          {MIXED_ARMY_CONTENT.sources
-            .filter((source) => card.sourceIds.includes(source.id))
-            .map((source) => (
-              <li key={source.id}>
-                <a href={source.url} target="_blank" rel="noopener noreferrer">
-                  {source.title}
-                </a>
-                <span>
-                  {source.kind} · 发布 <time dateTime={source.publishedAt}>{source.publishedAt}</time> · 核对{' '}
-                  <time dateTime={source.checkedAt}>{source.checkedAt}</time>
-                </span>
-              </li>
-            ))}
-        </ul>
       </details>
     </article>
   );
@@ -274,6 +290,7 @@ export default function MixedArmy() {
   const observationUnknown = [config.terrain, config.formation, config.flank, config.position, config.retreat, config.food, config.woodGold].filter(
     (value) => value === 'unknown',
   ).length;
+  const showExample = !!plan && plan.status === 'needs-observation' && config.ownMain === 'unknown' && config.enemy === 'unknown';
   return (
     <section className="pane mixed-army-page" data-testid="mixed-army-page">
       <header className="mixed-heading">
@@ -284,7 +301,7 @@ export default function MixedArmy() {
       </header>
       <CalcDock
         note={shareStatus}
-        resultId={plan ? 'mixed-result-heading' : undefined}
+        resultId={showExample ? 'mixed-example-title' : plan ? 'mixed-result-heading' : undefined}
         actions={[
           {
             label: '复制情境链接',
@@ -318,6 +335,7 @@ export default function MixedArmy() {
         <Loading />
       ) : (
         <>
+          {!decoded.locked && showExample && <ExampleConclusion />}
           {!decoded.locked && <MixedGaps config={config} />}
           <fieldset disabled={decoded.locked} className="mixed-panel mixed-settings">
             <legend>我实际观察到什么</legend>
@@ -469,7 +487,7 @@ export default function MixedArmy() {
               </p>
             </details>
           </fieldset>
-          {plan && (
+          {plan && !showExample && (
             <section className="mixed-results" data-testid="mixed-army-result" aria-labelledby="mixed-result-heading">
               <header className="mixed-result-heading">
                 <h2 id="mixed-result-heading" className="calc-dock-target" tabIndex={-1}>
@@ -495,7 +513,6 @@ export default function MixedArmy() {
                 <>
                   <section aria-labelledby="mixed-met-heading" data-testid="mixed-conditions-met">
                     <h3 id="mixed-met-heading">所列前置与观察条件满足</h3>
-                    <p className="mixed-note">只是固定资料与本人确认相符；仍需判断实际兵力、资源和操作，不表示能够打赢。</p>
                     {conditionsMet.length ? (
                       <div className="mixed-cards">
                         {conditionsMet.map((result) => (
@@ -522,8 +539,8 @@ export default function MixedArmy() {
           )}
         </>
       )}
-      <details className="mixed-details mixed-panel mixed-boundaries">
-        <summary>来源、核对日期与适用边界</summary>
+      <details className="mixed-details mixed-panel mixed-boundaries" data-testid="scope-sources">
+        <summary>适用范围与来源</summary>
         <p>{MIXED_ARMY_CONTENT.editorialNotice}</p>
         <p className="mixed-note">资料固定为 DE185872；战术文字经来源交叉核对，尚未完成该版本客户端交战实测。主力/掩护职责不能由单位PK或同兵种群战结果证明。</p>
         <p className="mixed-note">
