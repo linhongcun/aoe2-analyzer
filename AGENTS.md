@@ -33,6 +33,8 @@
 
 Vite 6 + React 18 + TypeScript（strict、`noUncheckedIndexedAccess`）+ react-router 6 `HashRouter`（路由都是 `#/...`，例如 `#/unit/:id`、`#/duel`；路由表在 `src/app/routes.tsx`）+ lucide-react。无运行时 CDN。数据脚本用 Python 3.10+。详细分层见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
 
+页面的路由、导航、首页分组和静态标题/说明以 `src/shared/nav/pageRegistry.ts` 为唯一登记表。`src/app/pageRegistry.tsx` 只放对应的 `import()`（`shared/` 不能引用功能页）。`routes.tsx`、导航与首页（`HOME_GROUPS`）、`scripts/page_metadata.mjs` 和分享用 `PageMeta` 都从登记表派生，不要手改平行名单。新增或改动页面先改登记表。详见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)「页面登记表」。
+
 ## 目录
 
 | 路径                   | 内容                                                                                                                                                                                                                                                                                                             |
