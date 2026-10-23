@@ -160,7 +160,9 @@ export function ecoText(x: DatEco, nameOf: (id: number) => string | undefined): 
   if (x.tech) {
     const what = x.what ?? '';
     if (x.op === 'set') return `科技「${x.tech}」${what} = ${x.v}`;
-    return `科技「${x.tech}」${what} ${what === '研究时间' ? signed(x.v) + ' 秒' : Math.abs(x.v) < 1.01 && x.v !== 0 && !Number.isInteger(x.v) ? '×' + x.v : signed(x.v)}`;
+    // 101/103：c=2 为乘法，显示乘号与倍率；研究时间的加法才带「秒」
+    if (x.op === 'mul') return `科技「${x.tech}」${what} ×${x.v}`;
+    return `科技「${x.tech}」${what} ${what === '研究时间' ? `${signed(x.v)} 秒` : signed(x.v)}`;
   }
   if (x.res !== undefined) {
     const n = x.name && !x.name.startsWith('资源') ? x.name : `游戏资源 #${x.res}`;

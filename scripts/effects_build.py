@@ -52,6 +52,18 @@ AGE_TECH = {101: 2, 102: 3, 103: 4}
 CIV_DAT = {'British': 'Britons', 'French': 'Franks', 'Byzantine': 'Byzantines', 'Mayan': 'Mayans', 'Indians': 'Hindustanis'}
 
 
+def tech_cost_op(c):
+    """效果 101/103 的 C：0 设为，2 乘，1 与 -1 加（#355）。"""
+    if c == 0: return 'set'
+    if c == 2: return 'mul'
+    return 'add'
+
+
+def tech_cost_what(b):
+    """效果 101 的 B：-1 为全部资源。"""
+    return {0: '食物', 1: '木材', 2: '石料', 3: '黄金', -1: '全部资源'}.get(b, '资源%d' % b)
+
+
 def main():
     A = load_dat()
     pc = fetch(SRC_C); lhc_src = pc.read_text() if pc else ''
@@ -144,13 +156,14 @@ def main():
         return AT[i]['Name'] if 0 <= i < len(AT) else str(i)
 
     def res_txt(c):
-        t, a, b, _, d = c
+        t, a, b, cc, d = c
         if t in (11, 16): t -= 10
         if t == 1: return {'res': a, 'name': RES.get(a, '资源%d' % a), 'op': 'set' if b == 0 else 'add', 'v': r6(d)}
         if t in (101, 103):
             tn = tech_name(a)
-            if t == 101: return {'tech': tn, 'tid': a, 'what': {0: '食物', 1: '木材', 2: '石料', 3: '黄金'}.get(b, '资源%d' % b), 'op': 'set' if c[3] == 0 else 'add', 'v': r6(d)}
-            return {'tech': tn, 'tid': a, 'what': '研究时间', 'op': 'set' if c[3] == 0 else 'add', 'v': r6(d)}
+            op = tech_cost_op(cc)
+            if t == 101: return {'tech': tn, 'tid': a, 'what': tech_cost_what(b), 'op': op, 'v': r6(d)}
+            return {'tech': tn, 'tid': a, 'what': '研究时间', 'op': op, 'v': r6(d)}
         if t == 6: return {'res': a, 'name': RES.get(a, '资源%d' % a), 'op': 'mul', 'v': r6(d)}
         return None
 
