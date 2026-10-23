@@ -50,8 +50,8 @@ describe('#19 分享卡 buildShareCard', () => {
     // Jony 验收要点 1（SPEC）
     expect(c.title).toBe('法兰克·速升城堡暴经济，约 15:32 到城堡，卡在木头');
     expect(c.cells.map((x) => [x.value, x.sub])).toEqual([
-      ['约 15:32', '误差 14:33–17:15'],
-      ['卡在木头 约 6:02', '第 5 步'],
+      ['约 15:32', '误差 14:32–17:09'],
+      ['卡在木头 约 5:04', '第 5 步'],
       ['约 0:43', null],
     ]);
     expect(c.basis).toBe(`按法兰克计 · 走路 4 格 · 游戏版本 ${__DATA_SOURCES__.patch.build}`);
@@ -62,7 +62,7 @@ describe('#19 分享卡 buildShareCard', () => {
     const { c } = card('scouts-18', 'Franks', '法兰克', false);
     expect(c.title).toBe('法兰克·18 人口侦察骑兵速攻，约 9:13 到封建，卡人口');
     expect(c.cells[0].sub).toBeNull();
-    expect(c.cells.map((x) => x.value)).toEqual(['约 9:13', '卡人口 约 11:09 起', '约 0:00']);
+    expect(c.cells.map((x) => x.value)).toEqual(['约 9:13', '卡人口 约 10:38 起', '约 0:00']);
     expect(c.cells[1].sub).toBe('第 13 步');
     expect(c.basis).toContain('关自动建房');
     expect(c.url).toMatch(/&house=0$/);

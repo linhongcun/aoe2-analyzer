@@ -417,8 +417,27 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   );
   for (const r of Object.keys(m.grant) as Res[]) if (!startRes.has(r)) m.start[r] += m.grant[r];
   m.grant = { food: 0, wood: 0, gold: 0, stone: 0 };
-  // 免费科技：techCost/techTime=0 已由 tree 行处理；freeTech 行只记录名称，效果在研究时生效——此处视为到达所需时代即自动生效
+  // 免费科技在 eco 里只留名称（techCost/techTime = 0 已被收成 freeTech），效果在到达所需时代时自动生效一次。
   const freeNames = new Set(rows.flatMap((r) => r.effects.filter((e) => e.kind === 'freeTech').map((e) => (e.techName ?? '').toLowerCase())));
+  const freeIds = new Set<number>();
+  for (const [id, et] of Object.entries(eco.ecoTechs)) {
+    const row = et as { en?: string; name?: string };
+    const names = [row.en, row.name].filter((n): n is string => !!n).map((n) => n.toLowerCase());
+    if (names.some((n) => freeNames.has(n))) freeIds.add(Number(id));
+  }
+  // 法兰克磨坊科技开局会再点一次研究。费用按 0，已经随时代生效的效果不再套第二遍。
+  // 越南等文明的免费经济科技也出现在同一批开局里；这次不改它们，避免其他文明的开局结果跟着变。
+  const frankMillFree = civ === 'Franks';
+  const freeApplied = new Set<number>();
+  const applyEcoTech = (id: number, granted: boolean) => {
+    const et = eco.ecoTechs[id];
+    if (!et) return;
+    if ((granted || frankMillFree) && freeIds.has(id)) {
+      if (freeApplied.has(id)) return;
+      freeApplied.add(id);
+    }
+    applyEffects(m, et.effects);
+  };
   const stock: Stock = { ...m.start };
   const alloc = Object.fromEntries((Object.keys(RES_TASK) as Task[]).map((t) => [t, 0])) as Record<Task, number>;
   let idleVils = 0;
@@ -483,6 +502,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const out: Stock = { food: 0, wood: 0, gold: 0, stone: 0 };
     for (const [k, v] of Object.entries(c)) out[RES_OF[k]!] = v ?? 0;
     if (kind === 'tech') {
+      if (frankMillFree && freeIds.has(id)) return { food: 0, wood: 0, gold: 0, stone: 0 };
       const tm = m.techCost[id] ?? {};
       for (const r of Object.keys(out) as Res[]) out[r] = Math.max(0, Math.round(applyMod(applyMod(out[r] * m.techCostAll, tm.all), tm[r])));
       return out;
@@ -748,7 +768,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         if (c.building === TC) popCap = Math.min(200, popCap + 5);
         if (c.p && !constructions.some((x) => x.p === c.p)) finish(c.p, t);
       } else if (c.p) {
-        if (c.building > -100000 && c.p.a.type === 'research') applyEffects(m, eco.ecoTechs[c.p.a.tech]?.effects ?? []);
+        if (c.building > -100000 && c.p.a.type === 'research') applyEcoTech(c.p.a.tech, false);
         stock.gold += m.techReward; // 西班牙：科技/单位升级完成时返金
         finish(c.p, t);
       }
@@ -792,17 +812,12 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
             stock.gold += m.techReward;
             for (const r of Object.keys(stock) as Res[]) stock[r] += m.grant[r];
             m.grant = { food: 0, wood: 0, gold: 0, stone: 0 };
-            for (const [id, et] of Object.entries(eco.ecoTechs))
-              if (freeNames.has(((et as { en?: string }).en ?? '').toLowerCase()) || freeNames.has(((et as { name?: string }).name ?? '').toLowerCase())) {
-                const ta = (et as { age?: number }).age ?? 1;
-                if (ta <= age && !(m as unknown as { _free?: Set<string> })._free?.has(id)) {
-                  const mm = m as unknown as { _free?: Set<string> };
-                  (mm._free ??= new Set()).add(id);
-                  applyEffects(m, et.effects);
-                }
-              }
+            for (const id of freeIds) {
+              const ta = (eco.ecoTechs[id] as { age?: number } | undefined)?.age ?? 1;
+              if (ta <= age) applyEcoTech(id, true);
+            }
           } else if (a.type === 'research') {
-            applyEffects(m, eco.ecoTechs[a.tech]?.effects ?? []);
+            applyEcoTech(a.tech, false);
             stock.gold += m.techReward;
           }
           finish(tcState.p, t);
