@@ -24,6 +24,7 @@ describe('#14 单位总数口径', () => {
   });
   it('源码不再写死单位数', () => {
     expect(readFileSync('src/shared/nav/sections.ts', 'utf8')).not.toMatch(/\d+ 个单位/);
+    expect(readFileSync('src/shared/nav/pageRegistry.ts', 'utf8')).not.toMatch(/\d+ 个单位/);
   });
   it('同中文名不同英文名的单位分开计：楼船 1750/1948、战车 1759/1962', () => {
     const ids = collapse(units, fam).map((x) => x.u.id);

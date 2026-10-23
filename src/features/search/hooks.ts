@@ -7,7 +7,7 @@ import { collapse } from '../../domain/family';
 import { allCivBonuses } from '../../domain/civBonus';
 import { TYPE_ZH } from '../../domain/ratings';
 import { buildOrders } from '../../data/buildOrders';
-import { BUILD_ALIASES, PAGE_ALIASES, TECH_AKA, UNIT_ALIASES } from '../../data/aliases';
+import { BUILD_ALIASES, TECH_AKA, UNIT_ALIASES } from '../../data/aliases';
 import { civNote, dupIdsIn } from '../../domain/dupNames';
 import { glossarySearchItems } from '../../domain/glossary';
 
@@ -23,7 +23,7 @@ export function useSearchIndex(): SearchItem[] {
       en: s.en,
       href: s.path,
       sub: s.desc,
-      aliases: PAGE_ALIASES[s.key],
+      aliases: s.searchAliases ? [...s.searchAliases] : undefined,
     }));
     civs.forEach((c) =>
       items.push({

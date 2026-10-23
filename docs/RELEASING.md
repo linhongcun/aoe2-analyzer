@@ -1,6 +1,6 @@
 # 发行版本
 
-1. 从最新 main 建立 `release/vX.Y.Z` 分支，将 `package.json` 和锁文件中的版本号一起更新，把 Unreleased 内容移入对应日期的 CHANGELOG 小节。
+1. 从最新 main 建立 `release/vX.Y.Z` 分支，将 `package.json` 和锁文件中的版本号一起更新，把 Unreleased 里尚未发布的条目移入新版本小节。新小节用 `scripts/changelog.mjs` 的 `insertVersionSection` 插在 `## [Unreleased]` 之后、已有版本之前，不要插到文首的版本号规则之前。
 2. 提交发行准备 PR。按仓库约定完成检查后，以 merge commit 合入 main，保留 release 分支头部及其 CI 记录。
 3. 等待 release 分支的 CI 和 main 的部署全部成功。
 4. 从 **main** 手动调度 GitHub Actions 的 **Release** 工作流，填写三段版本号，例如 `v0.12.0`。
