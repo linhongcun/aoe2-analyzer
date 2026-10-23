@@ -24,7 +24,7 @@ function UTech({ s, civ }: { s: string; civ: string }) {
   if (!f) return <Linked text={s} />;
   return (
     <>
-      <Link className="ulink tl" to={`/tech/${f.tech.id}`}>
+      <Link className="ulink tlink" to={`/tech/${f.tech.id}`}>
         <TechIcon t={f.tech} />
         {f.zh}
       </Link>
@@ -184,7 +184,7 @@ export default function CivDetail() {
                 <UTech s={c.it} civ={c.en} />
               </p>
               <p>
-                <Link className="ulink tl" to={`/tree/${c.en}`}>
+                <Link className="ulink tlink" to={`/tree/${c.en}`}>
                   <Icon name="tree-deciduous" /> 查看完整科技树 <Icon name="arrow-right" />
                 </Link>
               </p>
@@ -200,7 +200,7 @@ export default function CivDetail() {
             </SideBlock>
           )}
           <SideBlock title="快速入口">
-            <Link className="ulink tl" to={`/tree/${c.en}`}>
+            <Link className="ulink tlink" to={`/tree/${c.en}`}>
               <Icon name="git-branch" /> 科技树
             </Link>
             <Link className="ulink" to="/compare">

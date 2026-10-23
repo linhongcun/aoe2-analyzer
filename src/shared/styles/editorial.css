@@ -544,9 +544,19 @@ a.hcard:hover {
   .dbar button {
     min-width: 44px;
   }
-  .crumbs a,
   .ulink {
     min-height: 24px;
+  }
+  /* issue 361：面包屑链接边框盒补到不少于 44×44。负外边距抵消多出的 padding，文字位置和行高保持紧凑 */
+  nav.crumbs a {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px 9px;
+    margin: -10px -9px;
+    justify-content: center;
+  }
+  nav.crumbs > .ic {
+    pointer-events: none;
   }
   footer.editorial-footer a {
     min-height: 24px;

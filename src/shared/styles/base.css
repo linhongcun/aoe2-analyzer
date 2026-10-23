@@ -339,7 +339,9 @@ a {
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 10px;
 }
-.tl {
+/* 科技链接色。类名不用 .tl：那是开局时间轴容器，窄屏 .pane.tl 还有 padding-bottom（issue 359） */
+.tlink,
+.pane.tl {
   color: var(--color-link);
   border-bottom-color: var(--color-link);
 }

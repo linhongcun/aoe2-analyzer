@@ -26,7 +26,7 @@ export function Linked({ text, nl }: { text: string; nl?: boolean }) {
     <>
       {segs.map((s, i) =>
         s.href ? (
-          <Link key={i} className={s.kind === 'tech' ? 'ulink tl' : 'ulink'} to={'/' + s.href}>
+          <Link key={i} className={s.kind === 'tech' ? 'ulink tlink' : 'ulink'} to={'/' + s.href}>
             {s.text}
           </Link>
         ) : (

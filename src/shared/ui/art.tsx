@@ -36,7 +36,7 @@ export const UnitLinks = ({ list }: { list: FamilyEntry[] }) => (
   </>
 );
 export const TechLink = ({ t }: { t: Tech }) => (
-  <Link className="ulink tl" to={`/tech/${t.id}`}>
+  <Link className="ulink tlink" to={`/tech/${t.id}`}>
     <TechIcon t={t} />
     {t.zh}
   </Link>
