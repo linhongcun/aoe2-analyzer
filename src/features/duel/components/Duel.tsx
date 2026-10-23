@@ -34,6 +34,7 @@ import { AgeComparison } from './AgeComparison';
 import { BattleReplay } from './BattleReplay';
 import { groupReplay, oneReplay } from '../../../domain/battleReplay';
 import { UpgradeComparison } from './UpgradeComparison';
+import { VgNotes } from './VgNotes';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
@@ -530,6 +531,12 @@ function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
           {dpsReason}
         </p>
       )}
+      <VgNotes
+        sides={[
+          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof },
+          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof },
+        ]}
+      />
       <BattleReplay frames={oneReplay(A.F, B.F, r)} duration={r.duration} a={A.u} b={B.u} maxA={A.F.hp} maxB={B.F.hp} unit="生命" />
       <h4>时间线（每个点为一次攻击，竖线为击杀时刻）</h4>
       <div className="duel-tl">
@@ -616,6 +623,12 @@ function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: number; nb
         </tbody>
       </table>
       <TradeRow A={A} B={B} na={na} nb={nb} aAlive={g.aAlive} bAlive={g.bAlive} />
+      <VgNotes
+        sides={[
+          { k: 'a', unitId: A.u.id, civ: A.civ, age: A.age, rof: A.S.rof },
+          { k: 'b', unitId: B.u.id, civ: B.civ, age: B.age, rof: B.S.rof },
+        ]}
+      />
       <BattleReplay frames={groupReplay(g)} duration={g.duration} a={A.u} b={B.u} maxA={na} maxB={nb} unit="个单位" />
       <h4>存活数量随时间变化</h4>
       <svg className="duel-chart" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="存活数量随时间变化">
