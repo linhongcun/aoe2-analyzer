@@ -206,6 +206,39 @@ describe('#108 发版脚本', { timeout: 120_000 }, () => {
   });
 
   it.each([
+    ['没有 check', []],
+    ['只有进行中的 release', [{ name: 'release', status: 'in_progress', conclusion: null }]],
+    ['只有失败的 release', [{ name: 'release', status: 'completed', conclusion: 'failure' }]],
+    ['只有成功的 release', [{ name: 'release', status: 'completed', conclusion: 'success' }]],
+    ['只有成功的无关检查', [{ name: 'lint', status: 'completed', conclusion: 'success' }]],
+    ['只有成功的 deploy', [{ name: 'deploy', status: 'completed', conclusion: 'success' }]],
+    ['test 被跳过', [{ name: 'test', status: 'completed', conclusion: 'skipped' }]],
+    ['test 为 neutral', [{ name: 'test', status: 'completed', conclusion: 'neutral' }]],
+  ] as const)('#394 %s 不能代替实际成功的 test，也不能产生发版副作用', async (label, checks) => {
+    const before = snapshot();
+    const r = await run(['v0.6.0', ...opts()], { FAKE_CHECKS: JSON.stringify(checks) });
+    expect(r.status, `${label}\n${out(r)}`).not.toBe(0);
+    expect(out(r)).toMatch(/CI/);
+    expect(snapshot()).toEqual(before);
+    expect(ghCalls().some((c) => c.args[0] === 'release')).toBe(false);
+    noStateFile();
+  });
+
+  it('#394 真正成功的 test 加上运行中的 release 仍算 CI 绿，release 头不必有 deploy', async () => {
+    const before = snapshot();
+    const r = await run(['v0.6.0', '--dry-run', ...opts()], {
+      FAKE_CHECKS: JSON.stringify([
+        { name: 'test', status: 'completed', conclusion: 'success' },
+        { name: 'release', status: 'in_progress', conclusion: null },
+      ]),
+    });
+    expect(r.status, out(r)).toBe(0);
+    expect(out(r)).toContain('CI 绿');
+    expect(snapshot()).toEqual(before);
+    noStateFile();
+  });
+
+  it.each([
     ['进行中', 'in_progress', null],
     ['失败', 'completed', 'failure'],
   ] as const)('绿的 test/deploy 加上%s的 release check 仍算 CI 绿', async (label, status, conclusion) => {
