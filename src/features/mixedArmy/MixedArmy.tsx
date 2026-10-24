@@ -9,6 +9,7 @@ import {
   decodeMixedArmy,
   encodeMixedArmy,
   mixedArmyGaps,
+  mixedArmyUnlockTechIds,
   mixedFormNeedsConfirmation,
   planMixedArmy,
   type MixedArmyConfig,
@@ -22,10 +23,7 @@ import { Loading } from '../../shared/ui/widgets';
 import './mixedArmy.css';
 
 /** issue 271：每页/每卡第一次出现的站内单位名链到详情（Steve：后面重复不必再链；精锐形态也算「胡斯派战车」） */
-const FIRST_UNIT_NAMES = [
-  { name: '胡斯派战车', id: 1704, elitePrefix: '精锐', eliteId: 1706 },
-  { name: '手推炮', id: 36 },
-] as const;
+const FIRST_UNIT_NAMES = MIXED_ARMY_CONTENT.unitNameLinks;
 
 function linkFirstUnits(text: string, seen: Set<string>): ReactNode {
   type Hit = { start: number; end: number; label: string; id: number; key: string };
@@ -34,9 +32,9 @@ function linkFirstUnits(text: string, seen: Set<string>): ReactNode {
     if (seen.has(row.name)) continue;
     const i = text.indexOf(row.name);
     if (i < 0) continue;
-    const elite = 'elitePrefix' in row && row.elitePrefix && i >= row.elitePrefix.length && text.slice(i - row.elitePrefix.length, i) === row.elitePrefix;
+    const elite = row.elitePrefix && row.eliteId !== undefined && i >= row.elitePrefix.length && text.slice(i - row.elitePrefix.length, i) === row.elitePrefix;
     if (elite) {
-      hits.push({ start: i - row.elitePrefix.length, end: i + row.name.length, label: row.elitePrefix + row.name, id: row.eliteId, key: row.name });
+      hits.push({ start: i - row.elitePrefix!.length, end: i + row.name.length, label: row.elitePrefix + row.name, id: row.eliteId!, key: row.name });
     } else {
       hits.push({ start: i, end: i + row.name.length, label: row.name, id: row.id, key: row.name });
     }
@@ -115,8 +113,8 @@ function MixedGaps({ config }: { config: MixedArmyConfig }) {
   );
 }
 function ExampleConclusion() {
-  const scenario = MIXED_ARMY_CONTENT.scenarios.find((row) => row.id === 'britons-archer-cover')!;
-  const card = MIXED_ARMY_CONTENT.cards.find((row) => row.id === 'britons-halb-screen')!;
+  const scenario = MIXED_ARMY_CONTENT.scenarios.find((row) => row.id === MIXED_ARMY_CONTENT.defaultScenarioId)!;
+  const card = MIXED_ARMY_CONTENT.cards.find((row) => row.id === MIXED_ARMY_CONTENT.exampleCardId)!;
   return (
     <section className="mixed-notice mixed-example" data-testid="mixed-army-result" aria-labelledby="mixed-example-title">
       <h2 id="mixed-example-title" className="calc-dock-target" tabIndex={-1}>
@@ -282,9 +280,9 @@ export default function MixedArmy() {
   const choice = (raw: string): MixedChoice => (raw === 'unknown' || raw === 'other' ? raw : Number(raw));
   const scenario = MIXED_ARMY_CONTENT.scenarios.find((row) => row.id === config.scenario)!;
   const mainChoices = [...new Set([...scenario.ownMainUnitIds, ...(typeof config.ownMain === 'number' ? [config.ownMain] : [])])];
-  const formChoices = [...new Set([...(config.scenario === 'britons-archer-cover' ? [492, 530, 359, 546, 550] : [557, 441]), ...config.completedForms])];
-  const techChoices = [...new Set([47, 10, ...config.completedUnlockTechIds])];
-  const buildingChoices = [...new Set([12, 87, 82, 101, 49, ...config.completedBuildings])];
+  const formChoices = [...new Set([...scenario.confirmationFormIds, ...config.completedForms])];
+  const techChoices = [...new Set([...mixedArmyUnlockTechIds(), ...config.completedUnlockTechIds])];
+  const buildingChoices = [...new Set([...MIXED_ARMY_CONTENT.confirmationBuildingIds, ...config.completedBuildings])];
   const conditionsMet = plan?.cards.filter((row) => row.status === 'conditions-met') ?? [];
   const otherCards = plan?.cards.filter((row) => row.status !== 'conditions-met') ?? [];
   const observationUnknown = [config.terrain, config.formation, config.flank, config.position, config.retreat, config.food, config.woodGold].filter(
@@ -386,7 +384,7 @@ export default function MixedArmy() {
               </label>
               <SelectField label="实际敌军组合" value={config.enemy} options={enemyOptions} change={(enemy) => change({ enemy })} />
               <SelectField label="地图与模式" value={config.mode} options={modeOptions} change={(mode) => change({ mode })} />
-              {config.scenario === 'arena-wagon-cannon' && (
+              {scenario.observationProfile === 'wagon-cannon' && (
                 <>
                   <div className="mixed-links mixed-field-units">
                     <Link to="/unit/1704">胡斯派战车资料</Link>
@@ -398,7 +396,7 @@ export default function MixedArmy() {
                     <select aria-label="已见胡斯派战车（普通或精锐）" value={config.wagon} onChange={(event) => change({ wagon: choice(event.target.value) })}>
                       <option value="unknown">未知，尚未辨认</option>
                       <option value="other">其他，暂未覆盖</option>
-                      {[1704, 1706, ...(typeof config.wagon === 'number' && ![1704, 1706].includes(config.wagon) ? [config.wagon] : [])].map((id) => (
+                      {[...new Set([...(scenario.enemyMainUnitIds ?? []), ...(typeof config.wagon === 'number' ? [config.wagon] : [])])].map((id) => (
                         <option key={id} value={id}>
                           {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
                         </option>
@@ -414,7 +412,7 @@ export default function MixedArmy() {
                     >
                       <option value="unknown">未知，尚未辨认</option>
                       <option value="other">其他，暂未覆盖</option>
-                      {[36, 1709, ...(typeof config.cannon === 'number' && ![36, 1709].includes(config.cannon) ? [config.cannon] : [])].map((id) => (
+                      {[...new Set([...(scenario.enemyCannonUnitIds ?? []), ...(typeof config.cannon === 'number' ? [config.cannon] : [])])].map((id) => (
                         <option key={id} value={id}>
                           {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
                         </option>

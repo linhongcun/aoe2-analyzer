@@ -70,7 +70,9 @@
       "singleThreatNote": "只见骑兵时，防止贴身是当前任务；只见掷矛手时，要先判断能否接近或提供受保护的攻城火力。",
       "mixedThreatNote": "骑兵加入掷矛手后，长戟兵虽能守接近路线，仍不能解决后方掷矛手；负责清掷矛手的兵也不能脱离防骑保护。",
       "cardIds": ["britons-halb-screen", "britons-light-cav-access", "britons-protected-onager"],
-      "notCovered": "其他自方文明、骑射主力、额外攻城或其他敌军组合暂未覆盖；不把缺失观察当成没有掩护。"
+      "notCovered": "其他自方文明、骑射主力、额外攻城或其他敌军组合暂未覆盖；不把缺失观察当成没有掩护。",
+      "observationProfile": "archer-cover",
+      "confirmationFormIds": [492, 530, 359, 546, 550]
     },
     {
       "id": "arena-wagon-cannon",
@@ -85,7 +87,9 @@
       "singleThreatNote": "目前只看到胡斯派战车，尚未出现后排反攻城威胁。本页先提示继续确认增援和护军，纯胡斯派战车的完整应对不在首版行动路线内。",
       "mixedThreatNote": "胡斯派战车后方加入手推炮或榴弹炮后，用来克制胡斯派战车的慢速单位可能先遭反炮；再有长戟兵封住通路时，骑兵也不能直接把单兵相克变成切后排机会。",
       "cardIds": ["turks-protected-artillery", "turks-flank-opening", "turks-reposition"],
-      "notCovered": "首版只整理自方土耳其已有步行火药主力的情况。其他文明、团战、非 Arena 或额外僧侣等组合暂未覆盖；不声称这些文明没有解法。"
+      "notCovered": "首版只整理自方土耳其已有步行火药主力的情况。其他文明、团战、非 Arena 或额外僧侣等组合暂未覆盖；不声称这些文明没有解法。",
+      "observationProfile": "wagon-cannon",
+      "confirmationFormIds": [557, 441]
     }
   ],
   "cards": [
@@ -105,7 +109,9 @@
       "counterexample": "骑兵后面加入掷矛手时，掷矛手能继续威胁步弓和长戟兵。长戟兵前排不等于已经解决整个组合。",
       "alternative": "有已确认的侧向接近机会时查看轻型骑兵路线；无法接近掷矛手时查看受保护的中型投石车，条件不足则保留主力并后撤复查。",
       "next": "观察敌方是否加入掷矛手、攻城，或让骑兵绕过前排；这些变化都要求重看掩护任务。",
-      "sourceIds": ["britons-buffer-2022", "combined-arms-2023"]
+      "sourceIds": ["britons-buffer-2022", "combined-arms-2023"],
+      "strategy": "anti-cavalry-screen",
+      "conditionalUnits": []
     },
     {
       "id": "britons-light-cav-access",
@@ -123,7 +129,14 @@
       "counterexample": "狭窄缺口被护军封住，或敌骑兵仍覆盖接近路线时，不应把轻型骑兵直接送进整个阵容。",
       "alternative": "接近路线不成立但有保护阵地和木金时，查看中型投石车路线；食物吃紧则先保住现有军队，重新查路。",
       "next": "复查护军是否回防、路线是否被堵、己方前排是否因分兵出现缺口。",
-      "sourceIds": ["britons-buffer-2022", "combined-arms-2023"]
+      "sourceIds": ["britons-buffer-2022", "combined-arms-2023"],
+      "strategy": "light-cavalry-access",
+      "conditionalUnits": [
+        {
+          "enemyCompositions": ["cavalry-skirmishers"],
+          "unitIds": [359]
+        }
+      ]
     },
     {
       "id": "britons-protected-onager",
@@ -141,7 +154,14 @@
       "counterexample": "没有保护位置，敌骑兵能直接贴近，或出现敌方反攻城火力时，单加投石车可能继续损失高价值单位。",
       "alternative": "侧路重新打开且食物允许时回看轻型骑兵；两条路线都不成立时先换交战位置，不把本卡当作强行接战命令。",
       "next": "观察掷矛手是否分散、敌军是否绕后或转出攻城，以及自己的护军能否跟上。",
-      "sourceIds": ["britons-buffer-2022", "combined-arms-2023"]
+      "sourceIds": ["britons-buffer-2022", "combined-arms-2023"],
+      "strategy": "protected-onager",
+      "conditionalUnits": [
+        {
+          "enemyCompositions": ["cavalry-skirmishers"],
+          "unitIds": [359]
+        }
+      ]
     },
     {
       "id": "turks-protected-artillery",
@@ -163,7 +183,9 @@
       "counterexample": "仅仅抵达帝王、火炮术尚未完成，或主力无法守住部署位置时，不能把这个方案显示为立即可执行。",
       "alternative": "敌方手推炮或榴弹炮暴露且侧路已查清时查看翼骑兵切入；没有部署空间时先换位置并保住资源。",
       "next": "复查敌方手推炮或榴弹炮的位置、长戟兵或其他护军的移动，以及己方反炮位置是否即将失守。",
-      "sourceIds": ["wagon-cannon-2024", "arena-guide-2024", "artillery-discussion-2023"]
+      "sourceIds": ["wagon-cannon-2024", "arena-guide-2024", "artillery-discussion-2023"],
+      "strategy": "protected-artillery",
+      "conditionalUnits": []
     },
     {
       "id": "turks-flank-opening",
@@ -181,7 +203,9 @@
       "counterexample": "护军仍控制通路、只能经过狭窄正面，或侧路只是没有侦察过时，不显示可以直接切炮。",
       "alternative": "空当不成立则查看保护反炮火力；没有资源维持正面时先重新部署，不靠重复正面冲锋解决。",
       "next": "观察长戟兵是否回头、手推炮或榴弹炮是否退回胡斯派战车后、侧路是否被封，以及主力是否仍能保住原位置。",
-      "sourceIds": ["wagon-cannon-2024", "combined-arms-2023", "arena-guide-2024"]
+      "sourceIds": ["wagon-cannon-2024", "combined-arms-2023", "arena-guide-2024"],
+      "strategy": "flank-opening",
+      "conditionalUnits": []
     },
     {
       "id": "turks-reposition",
@@ -199,7 +223,9 @@
       "counterexample": "退路或替代资源已被封锁，或分兵会立即丢失关键区域时，不能机械套用后撤与骚扰。",
       "alternative": "找到可保护的射击点后回看反炮；确认后排空当后回看侧切。若仍未知，先补观察而不指定胜利路线。",
       "next": "查看安全退路、替代资源、敌军新增护军及侧路是否真的暴露；未来对局也可另查更早施压的时机，本页不提供开局步骤。",
-      "sourceIds": ["wagon-cannon-2024", "arena-guide-2024", "combined-arms-2023"]
+      "sourceIds": ["wagon-cannon-2024", "arena-guide-2024", "combined-arms-2023"],
+      "strategy": "reposition",
+      "conditionalUnits": []
     }
   ],
   "prerequisiteUnitIds": [
@@ -210,5 +236,20 @@
     "5": [47],
     "36": [47]
   },
-  "unlockScopeNote": "只声明本页审计的火枪手、手推炮必要化学解锁；不把原始启用指令全当作强制前置。"
+  "unlockScopeNote": "只声明本页审计的火枪手、手推炮必要化学解锁；不把原始启用指令全当作强制前置。",
+  "defaultScenarioId": "britons-archer-cover",
+  "exampleCardId": "britons-halb-screen",
+  "confirmationBuildingIds": [12, 87, 82, 101, 49],
+  "unitNameLinks": [
+    {
+      "name": "胡斯派战车",
+      "id": 1704,
+      "elitePrefix": "精锐",
+      "eliteId": 1706
+    },
+    {
+      "name": "手推炮",
+      "id": 36
+    }
+  ]
 }
