@@ -6,6 +6,7 @@ import {
   decodeGameClock,
   defaultGameClockConfig,
   encodeGameClock,
+  GAME_CLOCK_DURATION_LIMIT,
   gameClockMinutes,
   gameClockRatioError,
   gameClockSeconds,
@@ -136,7 +137,7 @@ export default function GameClock() {
             </label>
             <p className="note" id="gc-duration-help">
               {config.unit === 'minutes' ? '按“分:秒”填写，秒位为 00–59，可加小数，如 0:05.5。' : '填写非负十进制秒数，可加小数。'}最多{' '}
-              <span className="gc-number">100000000 秒</span>。
+              <span className="gc-number">{GAME_CLOCK_DURATION_LIMIT} 秒</span>。
             </p>
             <label>
               速度倍率
@@ -243,7 +244,7 @@ export default function GameClock() {
           游戏时间除以速度倍率得到理论现实时间，现实时间乘以速度倍率得到游戏时间。这里只做时钟算术，不读取游戏，也不改变本站开局、施工、生产、商路或治疗模型的游戏时间。
         </p>
         <p>
-          输入时长最多 <span className="gc-number">100000000 秒</span>，倍率大于 <span className="gc-number">0</span> 且不超过{' '}
+          输入时长最多 <span className="gc-number">{GAME_CLOCK_DURATION_LIMIT} 秒</span>，倍率大于 <span className="gc-number">0</span> 且不超过{' '}
           <span className="gc-number">1000</span>；换算结果超过安全整数秒范围时暂停显示。空值、负数、指数写法与非法分秒需要先修正。
         </p>
         <p>

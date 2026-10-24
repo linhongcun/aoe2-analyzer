@@ -1,5 +1,6 @@
 /** Issue 224: building capacity, entry compatibility and a documented projectile model. */
 import raw from '../data/garrison_general.json';
+import { DATA_PATCH_BUILD } from '../data/meta';
 import hostIds from '../data/garrison_hosts.json';
 import type { Core } from '../data';
 import type { Building, Tech, Trees } from './types';
@@ -520,7 +521,8 @@ export function calculateGeneralGarrison(
   };
   if (!data.civs[config.civ] || !b.civs.includes(config.civ)) out.errors.push('所选文明不可使用此建筑。');
   if (!data.buildings[b.id]) out.errors.push('该对象不是已核实的可驻军建筑。');
-  if (!Number.isSafeInteger(config.age) || config.age < getGarrisonBuildingAge(b, config.civ, ctx.trees) || config.age > 4) out.errors.push('时代无效或早于此建筑。');
+  if (!Number.isSafeInteger(config.age) || config.age < getGarrisonBuildingAge(b, config.civ, ctx.trees) || config.age > 4)
+    out.errors.push('时代无效或早于此建筑。');
   if (config.rows.length > GENERAL_GARRISON_LIMIT) out.errors.push(`方案最多包含 ${GENERAL_GARRISON_LIMIT} 种驻军记录。`);
   const available = new Set(getGarrisonTechs(ctx, b, config, data).map((t) => t.id));
   for (const id of config.techs)
@@ -560,7 +562,8 @@ export function calculateGeneralGarrison(
     const total = contribution.power === null ? null : contribution.power * countValue;
     if (countValue > 0) power = power === null || total === null ? null : power + total;
     if (total === null && countValue > 0) out.warnings.push(contribution.reason);
-    if (unit && countValue > 0 && unit.firepower > 0 && unit.total > 1) out.warnings.push('多弹丸驻军按公开公式估算，未完成 DE 185872 客户端对账。');
+    if (unit && countValue > 0 && unit.firepower > 0 && unit.total > 1)
+      out.warnings.push(`多弹丸驻军按公开公式估算，未完成 DE ${DATA_PATCH_BUILD} 客户端对账。`);
     if (unit && countValue > 0 && [6, 7].includes(unit.chargeType)) out.warnings.push('充能单位按普通未充能齐射估算，不计临时最大弹丸数与战斗充能状态。');
     if (row.unitId === 434 && countValue > 0) out.warnings.push('国王驻军仅适用于包含国王的对局模式。');
     out.rows.push({

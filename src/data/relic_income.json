@@ -1514,5 +1514,11 @@
       "techId": 506,
       "value": 1.100000023841858
     }
+  },
+  "resourceIds": {
+    "Food": 225,
+    "Gold": 191,
+    "Stone": 265,
+    "Wood": 264
   }
 }

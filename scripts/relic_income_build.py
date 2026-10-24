@@ -12,6 +12,7 @@ from dat_source import CACHE, DAT, ROOT, _venv_python, fetch_dat
 from effects_build import CIV_DAT
 
 OUT = ROOT / 'src/data/relic_income.json'
+RESOURCE_IDS = {'Gold': 191, 'Food': 225, 'Wood': 264, 'Stone': 265}
 SEMANTICS = {
     'resources': 'https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md',
     'effectTypes': 'https://github.com/Tapsa/AGE/blob/0bd1b417ca6d77aa0b8a2e84a37f2d5f178944de/AGE_Frame/Lists.cpp',
@@ -124,7 +125,8 @@ def build(raw):
                  'semanticsEvidence': '字段时间单位及引擎操作语义；文档示例数值不用于游戏参数。',
                  'numberEvidence': '全部游戏参数来自固定.dat；数值计算直接使用EffectCommands原始float；另存displayValue仅用于文案。',
                  'rateUnit': 'resource per game minute'},
-        'baseRates': {r: base[str(i)] for r, i in (('Gold', 191), ('Food', 225), ('Wood', 264), ('Stone', 265))},
+        'resourceIds': RESOURCE_IDS.copy(),
+        'baseRates': {r: base[str(i)] for r, i in RESOURCE_IDS.items()},
         'civs': {c['en']: {'datCiv': by_name[c['en']]['id'], 'baseResources': by_name[c['en']]['resources']} for c in civs},
         'modifiers': modifiers,
         'lithuanians': {'countResource': 7, 'thresholds': thresholds, 'cap': max(t['count'] for t in thresholds),
