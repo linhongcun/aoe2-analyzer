@@ -2,6 +2,7 @@
 import json,re,os
 T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'))
 R=json.load(open('scripts/civ_ratings.json'))
+CORRECTIONS=json.load(open('scripts/civ_text_corrections.json'))
 def strip(s): return re.sub(r'<[^>]+>','',s).strip()
 def parse(h):
     h=h.replace('<br>\n','\n').replace('<br>','\n');p=re.split(r'<b>[^<]*</b>',h)
@@ -17,6 +18,16 @@ def parse(h):
 out=[]
 for k,v in d['civs'].items():
     ez=parse(e[str(v['help_string_id'])]);zz=parse(z[str(v['help_string_id'])]);r=R[k]
-    nm=lambda i:zz[2][i]+'｜'+ez[2][i].split(' (')[0]
+    def nm(i):
+        text=zz[2][i]
+        correction=CORRECTIONS.get(k,{}).get('ct' if i==0 else 'it')
+        if correction:
+            # 原文明介绍必须完全匹配；上游有更新时须重新审查，不能静默覆盖新文本。
+            if text!=correction['original']:
+                raise ValueError(f'{k} unique-tech source changed; review civ_text_corrections.json')
+            name=strip(z[str(correction['name_string_id'])])
+            help_text=z[str(correction['help_string_id'])].split('<br>',1)[1]
+            text=name+' ('+strip(help_text).removesuffix('。')+')'
+        return text+'｜'+ez[2][i].split(' (')[0]
     out.append(dict(en=k,zh=z[str(v['name_string_id'])],ty=r['ty'],desc=zz[0],uu=zz[1]+'（'+ez[1]+'）',ct=nm(0),it=nm(1),bon=zz[3],bonEn=ez[3],tb=zz[4],tbEn=ez[4],s=r['s'],fl=r['fl'],pk=r['pk'],op=r['op']))
 json.dump(out,open('src/data/civs.json','w'),ensure_ascii=False);print('civs',len(out))

@@ -158,6 +158,7 @@ jobs:
             test-results/market215-*/*.png
             test-results/practice216-*/*.png
             test-results/glossary217-*/*.png
+            test-results/civText402-*/*.png
             test-results/garrison218-*/*.png
             test-results/garrison224-*/*.png
             test-results/tradeIncome226-*/*.png

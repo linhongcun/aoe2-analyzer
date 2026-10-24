@@ -1,0 +1,11 @@
+{
+  "Mapuche": {
+    "ct": {
+      "original": "Malon (突袭) (掷石绳骑兵、投石手和掷矛手可可造成穿透伤害)•",
+      "name_string_id": 17495,
+      "help_string_id": 28495,
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/locales/zh/strings.json",
+      "note": "文明介绍120207含重复字和尾随圆点；采用同版本科技名称17495与研究说明28495，不改数值。"
+    }
+  }
+}
