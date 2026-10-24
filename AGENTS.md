@@ -6,16 +6,18 @@
 
 与 CONTRIBUTING 冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
 
+**持续发布授权**：hongcun 已要求已授权更新完成适用审查和测试后直接部署，不再逐次询问发布；不能停在 release 分支便称完成上线。当前 v0.31.0 的发布授权、审阅例外及边界，以 [CONTRIBUTING「维护者的持续发布授权」](CONTRIBUTING.md#维护者的持续发布授权2026-10-24) 为准。
+
 ### 数字不换行（`.num` / `.nw`）
 
 界面上的数值与「数字+单位」必须不折行：用 **`.num`**（tabular 数字）和/或 **`.nw`**（nowrap）包住；360 宽下「1个村民」一类折行视为 bug。详见 CODEX-MAINTENANCE「设计硬规则」。
 
 ### Hold（勿开）
 
-| # | 状态 |
-| --- | --- |
+| #    | 状态                                  |
+| ---- | ------------------------------------- |
 | #364 | Hold — 单位 PK heading-order 整树上移 |
-| #372 | Hold — 波希米亚竞技场火药预置对战 |
+| #372 | Hold — 波希米亚竞技场火药预置对战     |
 
 解 hold 仅 hongcun / Steve 明示后才可开工。
 
@@ -128,8 +130,8 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 1. 一个 issue 一个 PR，一个执行者。版本内的项以当前 `release/vX.Y.Z` 分支为目标（先 rebase 到它的最新提交）；只有线上数据错误的热修直接对 `main`（补丁版本，修订号 +1）。
 2. PR 标题必须是 Conventional Commits，CI 会检查：`类型(#issue): 描述`，类型为 `feat fix docs chore test ci refactor style perf build revert hotfix`。例：`fix(#13): 科技涉及单位只显示一处`。
 3. PR 描述写 `Fixes #N`（合到非默认分支不会自动关 issue，发版时人工核对），附本地测试结果；界面 PR 附 360/375/390/1280 四张截图。按需在 CHANGELOG 当前版本小节写一句玩家能看懂的话。
-4. 门禁（只认 PR 上本人留言，第一句带 SHA）：CI 绿；Kent「ACCEPT @ <SHA>」；涉及界面的加 Steve「设计通过 @ <SHA>」。只改文档或纯样式的 PR CI 绿即可。代理不能自己给这些结论，也不合并、不删分支、不改仓库设置；合并由开发（Linus）按顺序手动做。
-5. 版本号一律三段 `vX.Y.Z`。发版：Kent 整版验收 + Steve Product PASS 后，开发跑 `npm run release -- vX.Y.Z`（`scripts/release.mjs`：合入 main、等部署、核对线上页脚版本号和构建号、打 tag、起草 Release），脚本通过后直接发布 GitHub Release，不再做人工线上复验。
+4. 默认审阅门禁：CI 绿；Kent「ACCEPT @ <SHA>」；涉及界面的加 Steve「设计通过 @ <SHA>」，只认本人在 PR 上写明验证 SHA 的留言。只改文档或纯样式的 PR CI 绿即可。明确批准的审阅例外见 CONTRIBUTING。代理不得冒签，也不删分支或改仓库权限；已获授权时按顺序集成并发布。
+5. 版本号一律三段 `vX.Y.Z`。完成当前版本适用验收后，核对最终 release 头部 test CI，合入 main 并等待 Pages 部署成功，再由 Release 工作流核对真实线上页脚和功能、打 tag、制作附件并正式发布。按持续发布授权自动继续，无需再问是否上线；不要在 main 的完整 CI 尚未结束时让脚本以默认 600 秒等待部署。
 
 ## 提交身份
 
