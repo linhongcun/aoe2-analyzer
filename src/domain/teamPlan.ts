@@ -4,6 +4,7 @@ import shapes from '../data/garrison_general.json';
 import { civs } from '../data';
 import { civStatus } from './simulator';
 import { productionBuildings, productionTechs, type ProductionContext } from './production';
+import { buildingAge } from './availabilityAge';
 
 export const PLAN_AGES = [2, 3, 4] as const;
 export type PlanAge = (typeof PLAN_AGES)[number];
@@ -397,7 +398,7 @@ export function teamPlanErrors(plan: TeamPlan, ctx: ProductionContext): string[]
         if (!b) errors.push(`${prefix}：已建建筑 ID ${id} 不存在。`);
         else if (
           !b.civs.includes(player.civ) ||
-          (b.id === 49 && player.civ === 'Cumans' ? 2 : b.age) > phase.age ||
+          buildingAge(b, player.civ, ctx.trees) > phase.age ||
           !(ctx.trees.t[player.civ] ?? []).some((block) => block[0] === id)
         )
           errors.push(`${prefix}：${b.zh}建造确认与文明或时代不符。`);

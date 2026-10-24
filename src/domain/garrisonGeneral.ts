@@ -5,6 +5,7 @@ import type { Core } from '../data';
 import type { Building, Tech, Trees } from './types';
 import { civStatus } from './simulator';
 import { productionTechAge } from './production';
+import { buildingAge as getGarrisonBuildingAge, EARLY_UNIT_AGES } from './availabilityAge';
 
 export type GarrisonEntry = 'enter' | 'created' | 'deposit';
 export interface GeneralGarrisonRow {
@@ -153,12 +154,6 @@ export interface GeneralGarrisonResult {
 }
 
 const unique = (ids: number[]) => [...new Set(ids)].sort((a, b) => a - b);
-const earlyUnits: Record<string, Record<number, number>> = {
-  Armenians: { 75: 1, 77: 2, 473: 3, 358: 2, 359: 3 },
-  Cumans: { 1258: 2, 422: 3 },
-  Burgundians: { 283: 3 },
-  Bohemians: { 5: 3 },
-};
 const categoryNames: Record<number, string> = { 1: '村民', 2: '步行单位', 4: '骑乘单位', 8: '宗教单位', 16: '牲畜', 32: '攻城武器', 64: '船只' };
 
 /** Modern explicit size class overrides the legacy object class. CreatableType is unrelated. */
@@ -176,14 +171,12 @@ export function garrisonUnitMask(unit: Pick<GeneralGarrisonUnit, 'sizeClass' | '
   return null;
 }
 
-export function getGarrisonBuildingAge(b: Building, civ: string) {
-  return civ === 'Cumans' && b.id === 49 ? 2 : b.age;
-}
+export { getGarrisonBuildingAge };
 function unitAge(ctx: GeneralGarrisonContext, id: number, civ: string, data: GeneralGarrisonData) {
   const u = ctx.core.unitById[id];
   if (id === 293) return 1;
   return (
-    earlyUnits[civ]?.[id] ??
+    EARLY_UNIT_AGES[civ]?.[id] ??
     Math.max(u?.age ?? ctx.core.buildingById[id]?.age ?? data.units[id]?.catalog?.age ?? 1, id === 93 ? 2 : 1, data.herdableIds.includes(id) ? 1 : 0)
   );
 }
@@ -527,7 +520,7 @@ export function calculateGeneralGarrison(
   };
   if (!data.civs[config.civ] || !b.civs.includes(config.civ)) out.errors.push('所选文明不可使用此建筑。');
   if (!data.buildings[b.id]) out.errors.push('该对象不是已核实的可驻军建筑。');
-  if (!Number.isSafeInteger(config.age) || config.age < getGarrisonBuildingAge(b, config.civ) || config.age > 4) out.errors.push('时代无效或早于此建筑。');
+  if (!Number.isSafeInteger(config.age) || config.age < getGarrisonBuildingAge(b, config.civ, ctx.trees) || config.age > 4) out.errors.push('时代无效或早于此建筑。');
   if (config.rows.length > GENERAL_GARRISON_LIMIT) out.errors.push(`方案最多包含 ${GENERAL_GARRISON_LIMIT} 种驻军记录。`);
   const available = new Set(getGarrisonTechs(ctx, b, config, data).map((t) => t.id));
   for (const id of config.techs)

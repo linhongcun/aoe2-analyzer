@@ -48,7 +48,7 @@ export default function GeneralGarrisonPreview({ b }: { b: Building }) {
 function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext }) {
   const [params, setParams] = useSearchParams();
   const { config, errors: parseErrors } = readGeneralGarrison(params, b);
-  const minAge = getGarrisonBuildingAge(b, config.civ);
+  const minAge = getGarrisonBuildingAge(b, config.civ, ctx.trees);
   const result = calculateGeneralGarrison(ctx, b, config);
   const errors = [...new Set([...parseErrors, ...result.errors])];
   const available = getGarrisonTechs(ctx, b, config);

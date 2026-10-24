@@ -28,7 +28,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     );
   const q = new URLSearchParams(loc.search);
   const civ = b.civs.includes(q.get('civ') ?? '') ? q.get('civ')! : b.civs[0]!;
-  const minAge = getGarrisonBuildingAge(b, civ);
+  const minAge = getGarrisonBuildingAge(b, civ, ctx.trees);
   const age = Math.max(minAge, Math.min(4, +(q.get('age') ?? 4) || 4));
   const avail = buildingSimTechs(ctx, b, civ);
   const ok = new Set(avail.filter((x) => x.ef).map((x) => x.t.id));

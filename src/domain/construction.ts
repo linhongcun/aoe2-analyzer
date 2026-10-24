@@ -2,11 +2,12 @@
 import raw from '../data/construction.json';
 import type { Core } from '../data';
 import { civs } from '../data';
-import type { Building, Trees } from './types';
+import type { Trees } from './types';
 import { civStatus } from './simulator';
 import { gatherModel, type GatherModel } from './realCost';
 import { productionTechAge, productionTechs } from './production';
 import { GENERAL_GARRISON_DATA, getFreeGarrisonTechs } from './garrisonGeneral';
+import { buildingAge as constructionBuildingAge } from './availabilityAge';
 
 interface Command {
   Type: number;
@@ -94,11 +95,9 @@ export interface ConstructionResult {
   gather: GatherModel | null;
 }
 const unique = (ids: number[]) => [...new Set(ids)].sort((a, b) => a - b);
-export function constructionBuildingAge(b: Building, civ: string) {
-  return b.id === 49 && civ === 'Cumans' ? 2 : b.age;
-}
+export { constructionBuildingAge };
 export function constructionBuildings(ctx: ConstructionContext, config: Pick<ConstructionConfig, 'civ' | 'age'>) {
-  return ctx.core.buildings.filter((b) => b.civs.includes(config.civ) && constructionBuildingAge(b, config.civ) <= config.age);
+  return ctx.core.buildings.filter((b) => b.civs.includes(config.civ) && constructionBuildingAge(b, config.civ, ctx.trees) <= config.age);
 }
 function legalTechs(ctx: ConstructionContext, config: Pick<ConstructionConfig, 'civ' | 'age'>) {
   const status = civStatus(ctx.trees, config.civ);
@@ -190,7 +189,7 @@ export function calculateConstruction(ctx: ConstructionContext, config: Construc
   if (!b || !bd) errors.push('建筑不存在。');
   else {
     if (!b.civs.includes(config.civ)) errors.push('该文明不能建造此建筑。');
-    if (constructionBuildingAge(b, config.civ) > config.age) errors.push('当前时代尚不能建造此建筑。');
+    if (constructionBuildingAge(b, config.civ, ctx.trees) > config.age) errors.push('当前时代尚不能建造此建筑。');
     if (!bd.supported) errors.push(bd.reason);
   }
   const n = count(config.builders),

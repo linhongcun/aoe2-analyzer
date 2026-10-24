@@ -88,7 +88,7 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
   };
   const changeContext = (patch: Partial<HealingConfig>) => {
     let next = { ...config, ...patch, techs: [] };
-    const allowed = buildings.filter((building) => building.civs.includes(next.civ) && getGarrisonBuildingAge(building, next.civ) <= next.age);
+    const allowed = buildings.filter((building) => building.civs.includes(next.civ) && getGarrisonBuildingAge(building, next.civ, ctx.trees) <= next.age);
     if (!allowed.some((building) => building.id === next.buildingId) && allowed[0]) next = { ...next, buildingId: allowed[0].id };
     const units = getHealingCandidates(ctx, next);
     const unit = units.find((item) => item.id === next.unitId) ?? units.find((item) => item.id === 83) ?? units[0];
@@ -188,7 +188,7 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
                   <option
                     value={building.id}
                     key={building.id}
-                    disabled={!building.civs.includes(config.civ) || getGarrisonBuildingAge(building, config.civ) > config.age}
+                    disabled={!building.civs.includes(config.civ) || getGarrisonBuildingAge(building, config.civ, ctx.trees) > config.age}
                   >
                     {building.zh}
                   </option>
