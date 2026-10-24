@@ -69,6 +69,11 @@ describe('#277 库曼攻城武器厂的时代在四个工具中一致', () => {
     expect(buildingAge(ctx.core.buildingById[70]!, 'Copied', trees)).toBe(ctx.core.buildingById[70]!.age);
   });
 
+  it.each(['constructor', 'toString', '__proto__', 'hasOwnProperty'])('未知文明 %s 不把对象内置属性当作科技树', (civ) => {
+    const workshop = ctx.core.buildingById[49]!;
+    expect(buildingAge(workshop, civ, ctx.trees)).toBe(workshop.age);
+  });
+
   it('其他所有文明/建筑组合保持通用目录时代不变', () => {
     let checked = 0;
     for (const building of ctx.core.buildings)

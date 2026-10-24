@@ -6,7 +6,8 @@ import type { Building, Trees } from './types';
  * 不另加载数据；没有科技树格子的建筑仍使用通用目录时代。
  */
 export function buildingAge(building: Pick<Building, 'id' | 'age'>, civ: string, trees: Trees): number {
-  const block = trees.t[civ]?.find((entry) => entry[0] === building.id);
+  const blocks = trees.t[civ];
+  const block = Array.isArray(blocks) ? blocks.find((entry) => entry[0] === building.id) : undefined;
   return block ? Math.floor(block[1] / 2) + 1 : building.age;
 }
 
