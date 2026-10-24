@@ -61,6 +61,12 @@ class RelicIncome238Test(unittest.TestCase):
         self.assertEqual(d['modifiers']['grandTrunkRoad']['commands'][0]['Type'], 6)
         self.assertGreater(d['modifiers']['aztecs']['commands'][0]['D'], 1.33)
 
+    def test_named_resource_ids_match_the_audited_dat_fields(self):
+        self.assertEqual(self.data['resourceIds'], {'Gold': 191, 'Food': 225, 'Wood': 264, 'Stone': 265})
+        base = self.data['civs']['Franks']['baseResources']
+        for resource, field in self.data['resourceIds'].items():
+            self.assertEqual(self.data['baseRates'][resource], base[str(field)])
+
     def test_exhaustive_paths_and_absence_of_relic_task(self):
         a = self.data['audit']
         self.assertEqual(a['resourceTaskReferences'], [])

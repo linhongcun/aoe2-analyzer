@@ -1,4 +1,5 @@
 import rawContent from '../content/scouting.json';
+import { hasExactKeys as exactKeys, isClockText, isRecord as record, textCharacterProblem, textLength } from './validate';
 
 export const SCOUTING_SCENARIOS = ['early', 'walled'] as const;
 export const SCOUTING_MAPS = ['arabia', 'arena', 'nomad', 'water', 'other', 'unknown'] as const;
@@ -90,22 +91,12 @@ export const SCOUTING_URL_LIMIT = 8000;
 export const SCOUTING_TIME_LIMIT = 32;
 const configKeys = ['scenario', 'map', 'mode', 'stage', 'plan', 'observations'];
 const observationKeys = ['state', 'at', 'area', 'stale'];
-const record = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
-const exactKeys = (value: Record<string, unknown>, keys: readonly string[]) =>
-  Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key));
 function member<T extends readonly string[]>(values: T, value: unknown): value is T[number] {
   return typeof value === 'string' && values.includes(value);
 }
 /** Structural safety only; an editable clock format mistake is checked separately. */
 export function isScoutingTimeText(value: unknown): value is string {
-  return (
-    typeof value === 'string' &&
-    value.length <= SCOUTING_TIME_LIMIT &&
-    !Array.from(value).some((char) => {
-      const cp = char.codePointAt(0)!;
-      return cp < 32 || (cp >= 127 && cp <= 159) || (cp >= 0x202a && cp <= 0x202e) || (cp >= 0x2066 && cp <= 0x2069) || (cp >= 0xd800 && cp <= 0xdfff);
-    })
-  );
+  return typeof value === 'string' && textLength(value) <= SCOUTING_TIME_LIMIT && textCharacterProblem(value, { rejectUnpairedSurrogates: true }) === null;
 }
 export function isScoutingConfig(value: unknown): value is ScoutingConfig {
   if (
@@ -153,7 +144,7 @@ export function exampleScoutingConfig(): ScoutingConfig {
 }
 export function scoutingTimeError(value: string): string | null {
   if (value === '') return null;
-  return /^(?:\d{1,3}:[0-5]\d|\d{1,2}:[0-5]\d:[0-5]\d)$/.test(value) ? null : '游戏时间请填分:秒或时:分:秒，秒和小时后的分须在 00–59；也可留空表示未记录。';
+  return isClockText(value, { minuteDigits: 3, hourDigits: 2 }) ? null : '游戏时间请填分:秒或时:分:秒，秒和小时后的分须在 00–59；也可留空表示未记录。';
 }
 export function scoutingInputErrors(config: ScoutingConfig): string[] {
   if (!isScoutingConfig(config)) return ['情报结构或字段无效，解释已暂停。'];

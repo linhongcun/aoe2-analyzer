@@ -2,6 +2,7 @@
 import content from '../content/team-plan.json';
 import shapes from '../data/garrison_general.json';
 import { civs } from '../data';
+import { DATA_PATCH_BUILD } from '../data/meta';
 import { civStatus } from './simulator';
 import { productionBuildings, productionTechs, type ProductionContext } from './production';
 import { buildingAge } from './availabilityAge';
@@ -62,7 +63,7 @@ export interface PlanPhase {
 }
 export interface TeamPlan {
   version: 1;
-  patch: 185872;
+  patch: number;
   title: string;
   map: { name: string; openness: 'unspecified' | 'open' | 'closed' | 'mixed-land'; conditions: string };
   players: PlanPlayer[];
@@ -90,7 +91,7 @@ export function defaultTeamPlan(): TeamPlan {
   }));
   return {
     version: 1,
-    patch: 185872,
+    patch: DATA_PATCH_BUILD,
     title: '',
     map: { name: '', openness: 'unspecified', conditions: '' },
     players,
@@ -154,7 +155,7 @@ export function teamPlanShape(v: unknown): v is TeamPlan {
     !object(v) ||
     !keys(v, ['version', 'patch', 'title', 'map', 'players', 'phases', 'activeAge', 'example']) ||
     v.version !== 1 ||
-    v.patch !== 185872 ||
+    v.patch !== DATA_PATCH_BUILD ||
     !str(v.title, PLAN_LIMITS.title) ||
     !member(v.activeAge, PLAN_AGES) ||
     !member(v.example, [null, 'open-land-4v4-v1'])

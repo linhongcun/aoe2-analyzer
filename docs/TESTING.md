@@ -2,7 +2,7 @@
 
 Kent 维护。给写测试、跑测试的人（含编码代理）看：目录、命令、四宽、axe、验收用例命名，以及 CI 何时跳过 Playwright。
 
-合并时谁留 `ACCEPT @ <SHA>`、谁留「设计通过」，见 [CONTRIBUTING.md](../CONTRIBUTING.md)「开发和验收」和 [CODEX-MAINTENANCE.md](CODEX-MAINTENANCE.md) §3。本文件与 CONTRIBUTING 冲突时以 CONTRIBUTING 为准。
+合并时谁留 `ACCEPT @ <SHA>`、谁留「设计通过」，以及本批明确批准的独立复核例外，见 [CONTRIBUTING.md](../CONTRIBUTING.md) 的持续发布授权和「开发和验收」。持续发布授权不降低测试要求；本文件与 CONTRIBUTING 冲突时以 CONTRIBUTING 为准。
 
 ## 1. 测试放哪
 
@@ -115,7 +115,7 @@ Issue 里的验收标准，落成先失败的 Vitest 和/或 Playwright。Kent �
 - push 到 `main` 或 `release/**`
 - CI 工作流的 `workflow_dispatch`
 
-Release 工作流（`.github/workflows/release.yml`，须从 `main` 手动调度）是另一条：安装 Chromium，`npm run release` 用 Playwright 核对线上页脚，再设 `BASE_URL=https://linhongcun.github.io/aoe2-analyzer/`，跑该文件里点名的一批 spec。`docs/RELEASING.md` 写「Release 工作流仍跑全量 Playwright」；跑哪些文件以 `release.yml` 里那条命令为准，它不是不带参数的 `npx playwright test`。
+Release 工作流（`.github/workflows/release.yml`）在同仓库 main 的 push CI/Deploy 成功后自动接续，也保留从 main 手动调度的恢复入口。它安装 Chromium，通过脚本核对真实线上页脚，再设线上 `BASE_URL` 跑工作流点名的一批专项；这不是完整 Playwright。不能把依赖本地 dist、自建服务器的 Compare 专项直接当作线上专项。
 
 白名单 PR 若按 CONTRIBUTING 仍要 Kent `ACCEPT`，只等其余还在跑的门禁，不等被跳过的 Playwright。只改文档，或只改样式且不动逻辑和测试的 PR，CI 绿即可，不需要 Kent ACCEPT。`src/` 里的样式不在路径白名单中，Playwright 仍会跑；免 ACCEPT 和免 e2e 是两件事。
 
@@ -123,7 +123,13 @@ Release 工作流（`.github/workflows/release.yml`，须从 `main` 手动调度
 
 本地习惯见 [AGENTS.md](../AGENTS.md)「合并前必须通过」：`npm run lint`、`npx tsc -p . --noEmit`、`npx vitest run`、`npm run build`、Playwright 全套。PR 描述里贴通过条数。CI 还跑 Python、`contrast.py`、`.dat` 可复现、开局数据等，以 `ci.yml` 为准。
 
-只认 PR 上审查人本人留言，第一句是 `ACCEPT @ <SHA>` 或 `设计通过 @ <SHA>`。只改文档或只改样式不需要 Kent ACCEPT。细节在 [CONTRIBUTING.md](../CONTRIBUTING.md) 和 [CODEX-MAINTENANCE.md](CODEX-MAINTENANCE.md) §3，不在本文件。
+默认角色签字只认 PR 上本人写明验证 SHA 的留言；只改文档或只改样式不需要 Kent ACCEPT。明确批准的本批审阅例外见 CONTRIBUTING，不冒签，也不自动扩大例外。已授权发布仍须核对最终 release 头部和 main 的真实检查；空 statuses 或只返回 PR 的查询不是绿灯证据。
+
+### 异步数据就绪（#412）
+
+标题可见只代表页面外壳已渲染。圣物页的数据分包未到时还没有来源 details，此时一次性展开操作会空转；稍后产生的 details 保持关闭，`toHaveCount(1)` 也不能证明内部链接可见。操作依赖数据的内容前，应等真实数据区/来源折叠区就绪，再展开并确认可见后点击。
+
+加载回归用受控请求闸门覆盖这一顺序，先证明旧行为失败，再证明放行后真实内容可操作。不用固定 sleep、提高 timeout、自动 retry 或删除断言代替就绪条件。本地全量失败、单独复跑通过、受控延迟复现和远端整套结果须分别报告；既有竞态已成为 release CI 的真实失败时，应先修复再发布。
 
 ## 8. 局部跑和别的检查
 
@@ -131,3 +137,16 @@ Release 工作流（`.github/workflows/release.yml`，须从 `main` 手动调度
 - `playwright.config.ts` 没有写 `workers`。现有注释里自己传的例子：`tests/e2e/v0290-322-golden.spec.ts` 录制时用 `--workers=1`。这里不另定并发数。
 - 分层边界：`npm run lint:layers -- --strict`（CI，#281，有违规即失败）。不带 `--strict` 只报告，退出码仍是 0。规则见 AGENTS.md「目录」。
 - 入口 JS 的 gzip 上限在 `tests/e2e/v080-123.spec.ts`（#280，注释里有算法）。本文件不复制那个字节数。
+
+### 搜索加载回归（#371）
+
+`searchLoading371.spec.ts` 分别扣住搜索分包和单位数据分包，确认拦截命中后检查占位不是 `option`，再放行并等待真实结果。产品没有 `aria-busy`；按 v0.31.0 冻结范围，以受控请求及结果出现作为加载完成条件，不修改产品属性或原验收期望。别名随搜索依赖加载，没有独立的别名 HTTP 接口。
+
+```bash
+# 单 worker 确定性重复
+npx playwright test tests/e2e/searchLoading371.spec.ts --workers=1 --repeat-each=3 --retries=0 --reporter=line
+# 4 worker ×5 沿用 v0300-343 的加压规模；测试各用独立浏览器上下文
+npx playwright test tests/e2e/searchLoading371.spec.ts tests/e2e/aliases.spec.ts --workers=4 --repeat-each=5 --retries=0 --reporter=line
+```
+
+证明测试灵敏度时，可在未提交的临时副本中恢复“只等任意 li”再立即读取结果，或把加载占位的 `role` 突变为 `option`。闸门仍关闭时应稳定失败，恢复测试/产物后应通过。故障副本不提交；保留实际失败和正常日志，不把人为故障当作当前产品故障。

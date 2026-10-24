@@ -3,45 +3,19 @@ import {
   MATCH_REVIEW_LIMITS as limits,
   MATCH_REVIEW_STORAGE_KEY as storageKey,
   emptyMatchReview,
-  emptyReviewAttempt,
-  emptyReviewEvent,
-  hasReviewGoal,
-  matchReviewContent,
   matchReviewSummary,
-  moveReviewEvent,
-  nextReviewId,
   parseMatchReview,
-  reviewDateProblem,
-  reviewLinkProblem,
-  reviewResultLabels,
   reviewSaveDecision,
-  reviewTextLength,
-  reviewTextProblem,
-  reviewTimeProblem,
   serializeMatchReview,
   type MatchReviewDraft,
-  type ReviewContext,
-  type ReviewEvent,
-  type ReviewGoal,
-  type ReviewOutput,
-  type ReviewResult,
 } from '../../domain/matchReview';
-import { Icon } from '../../shared/ui/Icon';
 import { matchReviewDraftReducer } from './matchReviewDraftState';
+import { ReviewEditor } from './ReviewEditor';
+import { ReviewOutput } from './ReviewOutput';
+import { ReviewSources } from './ReviewSources';
 import './matchReview.css';
 
 type Lock = 'corrupt' | 'conflict' | null;
-function ReviewNote({ text }: { text: string }) {
-  return text.split(/(\d{4}-\d{2}-\d{2})/g).map((part, index) =>
-    index % 2 ? (
-      <span className="mr-number" key={index}>
-        {part}
-      </span>
-    ) : (
-      part
-    ),
-  );
-}
 function loadInitial() {
   try {
     const raw = window.localStorage.getItem(storageKey);
@@ -58,61 +32,6 @@ function loadInitial() {
     return { draft: emptyMatchReview(), raw: null, warning: '浏览器存储不可用。仍可编辑、备份和打印；当前内容没有保存到本机。', lock: null as Lock };
   }
 }
-interface FieldProps {
-  id: string;
-  label: string;
-  value: string;
-  limit?: number;
-  multiline?: boolean;
-  problem?: string | null;
-  hint?: string;
-  onChange: (value: string) => void;
-}
-function Field({ id, label, value, limit = limits.long, multiline = false, problem, hint, onChange }: FieldProps) {
-  const error = reviewTextProblem(value, limit, multiline) ?? problem;
-  const attributes = {
-    id,
-    value,
-    'aria-invalid': !!error,
-    'aria-describedby': id + '-help' + (error ? ' ' + id + '-error' : ''),
-    onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.target.value),
-  };
-  return (
-    <div className="mr-field">
-      <label htmlFor={id}>{label}</label>
-      {multiline ? <textarea {...attributes} rows={3} /> : <input {...attributes} type="text" autoComplete="off" />}
-      <small id={id + '-help'}>
-        {hint ? hint + ' ' : ''}
-        <span className="mr-number">{`${reviewTextLength(value)} / ${limit}`}</span> 个字符
-      </small>
-      {error && (
-        <p id={id + '-error'} className="mr-error">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-const eventLabels: Record<keyof Omit<ReviewEvent, 'id'>, string> = {
-  gameTime: '游戏时间',
-  videoTime: '视频播放位置',
-  visible: '当时可见事实',
-  action: '当时行动',
-  revealed: '回看新事实',
-  explanation: '可能解释（未验证）',
-  question: '未解问题',
-};
-const contextLabels: Record<keyof ReviewContext, string> = {
-  title: '复盘标题',
-  map: '地图',
-  selfCiv: '本方文明',
-  opponentCiv: '对方文明',
-  gameVersion: '已知游戏版本',
-  link: '比赛或视频链接',
-};
-const goalLabels: Record<keyof ReviewGoal, string> = { trigger: '触发情境', action: '想做的动作', evidence: '如何观察是否做到' };
-const outputLabels: Record<keyof ReviewOutput, string> = { context: '对局上下文', events: '关键事件', goal: '下局目标', attempts: '跟进尝试' };
-
 export default function MatchReview() {
   const [initial] = useState(loadInitial);
   const [draftState, dispatchDraft] = useReducer(matchReviewDraftReducer, { draft: initial.draft, beforeClear: null });
@@ -316,18 +235,6 @@ export default function MatchReview() {
     panel?.scrollIntoView({ block: 'start' });
     panel?.focus({ preventScroll: true });
   };
-  const contextField = (key: keyof ReviewContext) => (
-    <Field
-      key={key}
-      id={'mr-context-' + key}
-      label={contextLabels[key]}
-      value={draft.context[key]}
-      limit={key === 'link' ? limits.link : limits.short}
-      hint={key === 'link' ? '可留空；只打开完整 http/https 地址，不自动读取。' : '未知可留空。'}
-      problem={key === 'link' ? reviewLinkProblem(draft.context.link) : null}
-      onChange={(value) => apply((current) => ({ ...current, context: { ...current.context, [key]: value } }))}
-    />
-  );
 
   return (
     <section className="pane match-review-page" aria-labelledby="mr-title" data-testid="match-review-page">
@@ -410,340 +317,33 @@ export default function MatchReview() {
             </div>
           )}
         </div>
-        <section className="mr-panel" aria-labelledby="mr-context-heading">
-          <h2 id="mr-context-heading">对局上下文</h2>
-          <div className="mr-grid">{(Object.keys(contextLabels) as (keyof ReviewContext)[]).map(contextField)}</div>
-          {draft.context.link && !reviewLinkProblem(draft.context.link) && (
-            <a href={draft.context.link} target="_blank" rel="noopener noreferrer">
-              打开已填写的比赛或视频链接
-            </a>
-          )}
-        </section>
-        <details className="mr-panel mr-prompts">
-          <summary>选择一个观察方向，不必填满所有问题</summary>
-          <div className="mr-grid">
-            {matchReviewContent.groups.map((group) => (
-              <article key={group.id}>
-                <h3>{group.title}</h3>
-                <ul>
-                  {group.questions.map((question) => (
-                    <li key={question}>{question}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </details>
-        <section className="mr-panel" aria-labelledby="mr-events-title">
-          <div className="mr-section-head">
-            <h2 id="mr-events-title">关键事件</h2>
-            <span className="mr-number">{`${draft.events.length} / ${limits.events} 个`}</span>
-          </div>
-          <p>保留当时自己的视野，再补回看时发现的事实。推测单独写，未知时间留空。</p>
-          {!draft.events.length && <p className="mr-empty">尚未记录事件。可以先写一个你想请别人帮忙解释的时刻。</p>}
-          {draft.events.map((event, index) => (
-            <fieldset key={event.id} className="mr-row" data-testid="review-event" data-event-id={event.id}>
-              <legend>事件 {index + 1}</legend>
-              <div className="mr-actions">
-                <button
-                  type="button"
-                  disabled={index === 0}
-                  aria-label={'上移事件 ' + (index + 1)}
-                  onClick={() => apply((current) => moveReviewEvent(current, event.id, -1))}
-                >
-                  <Icon name="arrow-up" />
-                  上移
-                </button>
-                <button
-                  type="button"
-                  disabled={index === draft.events.length - 1}
-                  aria-label={'下移事件 ' + (index + 1)}
-                  onClick={() => apply((current) => moveReviewEvent(current, event.id, 1))}
-                >
-                  <Icon name="arrow-down" />
-                  下移
-                </button>
-                <button
-                  type="button"
-                  aria-label={'删除事件 ' + (index + 1)}
-                  onClick={() => apply((current) => ({ ...current, events: current.events.filter((item) => item.id !== event.id) }))}
-                >
-                  删除此事件
-                </button>
-              </div>
-              <div className="mr-grid">
-                {(Object.keys(eventLabels) as (keyof Omit<ReviewEvent, 'id'>)[]).map((key) => {
-                  const clock = key === 'gameTime' || key === 'videoTime';
-                  return (
-                    <Field
-                      key={key}
-                      id={'mr-event-' + event.id + '-' + key}
-                      label={'事件 ' + (index + 1) + '：' + eventLabels[key]}
-                      value={event[key]}
-                      limit={clock ? limits.time : limits.long}
-                      multiline={!clock}
-                      hint={clock ? '分:秒 或 时:分:秒；两个时钟独立，不根据倍速换算。' : undefined}
-                      problem={clock ? reviewTimeProblem(event[key]) : null}
-                      onChange={(value) =>
-                        apply((current) => ({ ...current, events: current.events.map((item) => (item.id === event.id ? { ...item, [key]: value } : item)) }))
-                      }
-                    />
-                  );
-                })}
-              </div>
-            </fieldset>
-          ))}
-          <button
-            type="button"
-            disabled={draft.events.length >= limits.events}
-            onClick={() => apply((current) => ({ ...current, events: [...current.events, emptyReviewEvent(nextReviewId(current.events, 'event'))] }))}
-          >
-            <Icon name="plus" />
-            添加关键事件
-          </button>
-          {draft.events.length >= limits.events && (
-            <p className="note" role="status">
-              已达 8 个事件上限，可修改或删除已有事件。不会截断内容。
-            </p>
-          )}
-        </section>
-        <section className="mr-panel" aria-labelledby="mr-goal-title">
-          <h2 id="mr-goal-title">唯一的下局目标</h2>
-          <p>一次只选一个练习重点；也可以先不设目标。想做的动作和可观察标准分开写。</p>
-          <div className="mr-grid">
-            {(Object.keys(goalLabels) as (keyof ReviewGoal)[]).map((key) => (
-              <Field
-                key={key}
-                id={'mr-goal-' + key}
-                label={'目标：' + goalLabels[key]}
-                value={draft.goal[key]}
-                multiline
-                onChange={(value) => apply((current) => ({ ...current, goal: { ...current.goal, [key]: value } }))}
-              />
-            ))}
-          </div>
-          {!hasReviewGoal(draft) && <p className="mr-empty">暂未设置目标。</p>}
-          {!!draft.attempts.length && !hasReviewGoal(draft) && (
-            <p className="mr-warning">已有尝试但未写目标，记录保留；可以补充目标，网站不会推定你在练什么。</p>
-          )}
-        </section>
-        <section className="mr-panel" aria-labelledby="mr-attempts-title">
-          <div className="mr-section-head">
-            <h2 id="mr-attempts-title">跟进尝试</h2>
-            <span className="mr-number">{`${draft.attempts.length} / ${limits.attempts} 次`}</span>
-          </div>
-          <p className="note">每次练习后自己记一条结果。</p>
-          {draft.attempts.map((attempt, index) => (
-            <fieldset key={attempt.id} className="mr-row" data-testid="review-attempt">
-              <legend>尝试 {index + 1}</legend>
-              <div className="mr-actions">
-                <button
-                  type="button"
-                  aria-label={'删除尝试 ' + (index + 1)}
-                  onClick={() => apply((current) => ({ ...current, attempts: current.attempts.filter((item) => item.id !== attempt.id) }))}
-                >
-                  删除此尝试
-                </button>
-              </div>
-              <div className="mr-grid">
-                <Field
-                  id={'mr-attempt-' + attempt.id + '-date'}
-                  label={'尝试 ' + (index + 1) + '：日期'}
-                  value={attempt.date}
-                  limit={limits.date}
-                  hint="YYYY-MM-DD；未知可留空。"
-                  problem={reviewDateProblem(attempt.date)}
-                  onChange={(value) =>
-                    apply((current) => ({ ...current, attempts: current.attempts.map((item) => (item.id === attempt.id ? { ...item, date: value } : item)) }))
-                  }
-                />
-                <div className="mr-field">
-                  <label htmlFor={'mr-attempt-' + attempt.id + '-result'}>尝试 {index + 1}：自报结果</label>
-                  <select
-                    id={'mr-attempt-' + attempt.id + '-result'}
-                    value={attempt.result}
-                    onChange={(event) => {
-                      const result = event.target.value as ReviewResult;
-                      apply((current) => ({ ...current, attempts: current.attempts.map((item) => (item.id === attempt.id ? { ...item, result } : item)) }));
-                    }}
-                  >
-                    {Object.entries(reviewResultLabels).map(([key, label]) => (
-                      <option key={key} value={key}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {(['scene', 'observation'] as const).map((key) => (
-                  <Field
-                    key={key}
-                    id={'mr-attempt-' + attempt.id + '-' + key}
-                    label={'尝试 ' + (index + 1) + '：' + (key === 'scene' ? '场景' : '观察')}
-                    value={attempt[key]}
-                    multiline
-                    onChange={(value) =>
-                      apply((current) => ({
-                        ...current,
-                        attempts: current.attempts.map((item) => (item.id === attempt.id ? { ...item, [key]: value } : item)),
-                      }))
-                    }
-                  />
-                ))}
-              </div>
-            </fieldset>
-          ))}
-          {!draft.attempts.length && <p className="mr-empty">尚未记录尝试，可以在下次练习后自行填写。</p>}
-          <button
-            type="button"
-            disabled={draft.attempts.length >= limits.attempts}
-            onClick={() => apply((current) => ({ ...current, attempts: [...current.attempts, emptyReviewAttempt(nextReviewId(current.attempts, 'attempt'))] }))}
-          >
-            <Icon name="plus" />
-            添加跟进尝试
-          </button>
-          {draft.attempts.length >= limits.attempts && (
-            <p className="note" role="status">
-              已达 8 次尝试上限，可以备份当前记录后另建复盘。
-            </p>
-          )}
-        </section>
-        <section id="mr-output" tabIndex={-1} className="mr-panel" aria-labelledby="mr-output-title">
-          <h2 id="mr-output-title">求助摘要与打印</h2>
-          <p>勾选希望包含的区段。预览、复制与打印使用同一份内容；完整 JSON 备份始终包含所有草稿字段。</p>
-          <div className="mr-output-choices">
-            {(Object.keys(outputLabels) as (keyof ReviewOutput)[]).map((key) => (
-              <label className="mr-check" key={key}>
-                <input
-                  type="checkbox"
-                  checked={draft.output[key]}
-                  onChange={(event) => {
-                    const checked = event.target.checked;
-                    apply((current) => ({ ...current, output: { ...current.output, [key]: checked } }));
-                  }}
-                />
-                包含{outputLabels[key]}
-              </label>
-            ))}
-          </div>
-          <div className="mr-actions">
-            <button type="button" onClick={copySummary}>
-              <Icon name="copy" />
-              复制选定求助摘要
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                summaryRef.current?.focus();
-                summaryRef.current?.select();
-              }}
-            >
-              手动选择摘要
-            </button>
-            <button type="button" onClick={() => window.print()}>
-              <Icon name="printer" />
-              打印选定内容
-            </button>
-          </div>
-          <label htmlFor="mr-summary">选定内容的完整求助摘要</label>
-          <textarea id="mr-summary" ref={summaryRef} readOnly value={summary} rows={12} />
-          <details>
-            <summary>查看完整静态预览</summary>
-            <pre className="mr-summary">{summary}</pre>
-          </details>
-        </section>
-        <section id="mr-backup" tabIndex={-1} className="mr-panel" aria-labelledby="mr-backup-title">
-          <h2 id="mr-backup-title">完整备份与恢复</h2>
-          <p>备份包含全部事件、单一目标、尝试和输出设置；最多 256 KiB。这里没有上传操作，文件在此浏览器中读取。</p>
-          {!backup.ok && (
-            <p className="mr-warning" role="alert">
-              {backup.error} 下方仍提供当前原始内容，可先复制留存，修正后才能作为有效备份恢复。
-            </p>
-          )}
-          <button type="button" disabled={!backup.ok} onClick={downloadBackup}>
-            下载完整 JSON 备份
-          </button>
-          <details>
-            <summary>复制完整 JSON 或当前原始内容</summary>
-            <label htmlFor="mr-backup-text">完整草稿 JSON（含所有区段）</label>
-            <textarea id="mr-backup-text" readOnly rows={8} value={backup.ok ? backup.raw : rawDraft} />
-          </details>
-          <div className="mr-import">
-            <label htmlFor="mr-import-file">从本机 JSON 文件读取到待恢复区</label>
-            <input
-              id="mr-import-file"
-              type="file"
-              accept=".json,application/json"
-              onChange={(event) => {
-                void readFile(event.target.files?.[0]);
-                event.target.value = '';
-              }}
-            />
-            <label htmlFor="mr-import-text">待恢复 JSON</label>
-            <textarea
-              id="mr-import-text"
-              rows={6}
-              value={restoreRaw}
-              onChange={(event) => {
-                importRevision.current += 1;
-                setRestoreRaw(event.target.value);
-                setPrepared(null);
-                setImportError('');
-              }}
-            />
-            <button type="button" onClick={inspectImport}>
-              检查备份并预览
-            </button>
-            {importError && (
-              <p role="alert" className="mr-warning">
-                {importError}
-              </p>
-            )}
-            {prepared && (
-              <div className="mr-import-preview" data-testid="review-import-preview">
-                <h3>准备替换本页的备份</h3>
-                <p>
-                  标题：{prepared.context.title || '未记录'}；<span className="mr-number">{`${prepared.events.length} 个事件`}</span>、
-                  <span className="mr-number">{`${prepared.attempts.length} 次尝试`}</span>。本页现有内容将被替换，请先备份。
-                </p>
-                <pre className="mr-summary">{matchReviewSummary(prepared)}</pre>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const next = prepared;
-                    setPrepared(null);
-                    apply(() => next);
-                  }}
-                >
-                  使用此备份替换本页草稿
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
-        <details className="mr-panel" data-testid="scope-sources">
-          <summary>适用范围与来源</summary>
-          <p>{matchReviewContent.scope}</p>
-          <p className="mr-boundary">{matchReviewContent.boundary}</p>
-          <p>
-            核对日期：<span className="mr-number">{matchReviewContent.checkedAt}</span>
-            。原始问题来自围绕 YouTube 学习的 Reddit 问答；没有读取 YouTube 评论。引导是本站整理，不采用旧游戏数值或能力承诺。
-          </p>
-          <ul>
-            {matchReviewContent.sources.map((source) => (
-              <li key={source.id}>
-                <a href={source.url} target="_blank" rel="noopener noreferrer">
-                  {source.title}
-                </a>
-                <p className="note">
-                  <ReviewNote text={source.note} />
-                </p>
-              </li>
-            ))}
-          </ul>
-          <p>游戏版本由你记录，不默认认定录像使用本站数据版本。可以复盘胜局或败局，不预设你一定犯错，也不自动给出原因。</p>
-          <p>自报结果不等于水平提升。未评估和无法判断不会被自动算成失败，不展示成功率。</p>
-          <p>不上传或解析录像，不读取游戏、截图或视频，不自动统计闲置/APM/资源，不生成败因、最优打法或 Elo 评价。</p>
-        </details>
+        <ReviewEditor draft={draft} apply={apply} />
+        <ReviewOutput
+          draft={draft}
+          apply={apply}
+          summary={summary}
+          summaryRef={summaryRef}
+          copySummary={copySummary}
+          backup={backup}
+          rawDraft={rawDraft}
+          downloadBackup={downloadBackup}
+          readFile={readFile}
+          restoreRaw={restoreRaw}
+          onRestoreRawChange={(raw) => {
+            importRevision.current += 1;
+            setRestoreRaw(raw);
+            setPrepared(null);
+            setImportError('');
+          }}
+          inspectImport={inspectImport}
+          importError={importError}
+          prepared={prepared}
+          onUsePrepared={(next) => {
+            setPrepared(null);
+            apply(() => next);
+          }}
+        />
+        <ReviewSources />
       </div>
       <section className="mr-print" aria-label="选定内容打印稿" data-testid="review-print">
         <pre>{summary}</pre>

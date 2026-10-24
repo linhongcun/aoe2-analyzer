@@ -1,4 +1,5 @@
 import content from '../content/hotkeys.json';
+import { hasExactKeys as exactKeys, isRecord as record, textCharacterProblem, textLength } from './validate';
 
 export interface HotkeySource {
   id: string;
@@ -51,23 +52,10 @@ export function findHotkeys(query: string): readonly HotkeyAction[] {
 }
 
 export function hotkeyBindingError(value: string): string | null {
-  if (value.length > HOTKEY_BINDING_LIMIT) return `按键说明最多 ${HOTKEY_BINDING_LIMIT} 个字符，请缩短后再保存。`;
+  if (textLength(value) > HOTKEY_BINDING_LIMIT) return `按键说明最多 ${HOTKEY_BINDING_LIMIT} 个字符，请缩短后再保存。`;
   // 不接受换行、控制字符、双向覆盖字符，避免速查/打印时隐藏实际内容。
-  if (
-    Array.from(value).some((char) => {
-      const cp = char.codePointAt(0)!;
-      return cp < 32 || (cp >= 127 && cp <= 159) || (cp >= 0x202a && cp <= 0x202e) || (cp >= 0x2066 && cp <= 0x2069);
-    })
-  )
-    return '按键说明不能包含换行或隐藏的控制字符。';
+  if (textCharacterProblem(value)) return '按键说明不能包含换行或隐藏的控制字符。';
   return null;
-}
-
-function record(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-function exactKeys(value: Record<string, unknown>, keys: string[]): boolean {
-  return Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key));
 }
 
 /** 严格解析浏览器数据；未知版本、动作、配置和额外字段都不能静默并入表。 */

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "defaultScenarioId": "britons-archer-cover",
+  "exampleCardId": "britons-halb-screen",
+  "confirmationBuildingIds": [12, 87, 82, 101, 49],
+  "unitNameLinks": [
+    {
+      "name": "胡斯派战车",
+      "id": 1704,
+      "elitePrefix": "精锐",
+      "eliteId": 1706
+    },
+    {
+      "name": "手推炮",
+      "id": 36
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "britons-archer-cover",
+      "observationProfile": "archer-cover",
+      "confirmationFormIds": [492, 530, 359, 546, 550]
+    },
+    {
+      "id": "arena-wagon-cannon",
+      "observationProfile": "wagon-cannon",
+      "confirmationFormIds": [557, 441]
+    }
+  ],
+  "cards": [
+    {
+      "id": "britons-halb-screen",
+      "strategy": "anti-cavalry-screen",
+      "conditionalUnits": []
+    },
+    {
+      "id": "britons-light-cav-access",
+      "strategy": "light-cavalry-access",
+      "conditionalUnits": [
+        {
+          "enemyCompositions": ["cavalry-skirmishers"],
+          "unitIds": [359]
+        }
+      ]
+    },
+    {
+      "id": "britons-protected-onager",
+      "strategy": "protected-onager",
+      "conditionalUnits": [
+        {
+          "enemyCompositions": ["cavalry-skirmishers"],
+          "unitIds": [359]
+        }
+      ]
+    },
+    {
+      "id": "turks-protected-artillery",
+      "strategy": "protected-artillery",
+      "conditionalUnits": []
+    },
+    {
+      "id": "turks-flank-opening",
+      "strategy": "flank-opening",
+      "conditionalUnits": []
+    },
+    {
+      "id": "turks-reposition",
+      "strategy": "reposition",
+      "conditionalUnits": []
+    }
+  ]
+}

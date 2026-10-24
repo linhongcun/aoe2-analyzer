@@ -1,4 +1,5 @@
 import raw from '../content/game-guide.json';
+import { DATA_PATCH_BUILD } from '../data/meta';
 
 export const GAME_GUIDE_CARD_IDS = ['goal', 'roles', 'resources', 'ages', 'counters', 'watching'] as const;
 export type GameGuideCardId = (typeof GAME_GUIDE_CARD_IDS)[number];
@@ -113,7 +114,7 @@ export function gameGuideShareUrl(state: GameGuideState, base: string): string {
 }
 export function gameGuideCatalogErrors(catalog: GameGuideCatalog = GAME_GUIDE_CATALOG): string[] {
   const errors: string[] = [];
-  if (catalog.schemaVersion !== 1 || catalog.dataVersion !== 'DE185872') errors.push('资料版本未识别。');
+  if (catalog.schemaVersion !== 1 || catalog.dataVersion !== `DE${DATA_PATCH_BUILD}`) errors.push('资料版本未识别。');
   if (!/^\d{4}-\d{2}-\d{2}$/.test(catalog.checkedAt) || !catalog.scope) errors.push('资料范围或核对日期缺失。');
   if (catalog.cards.map((card) => card.id).join('|') !== GAME_GUIDE_CARD_IDS.join('|')) errors.push('六卡清单、顺序或编号无效。');
   for (const card of catalog.cards) {

@@ -1,4 +1,5 @@
 import content from '../content/match-review.json';
+import { hasExactKeys as exactKeys, isClockText, isRecord as record, textCharacterProblem, textLength } from './validate';
 
 export const MATCH_REVIEW_STORAGE_KEY = 'aoe2-match-review-v1';
 export const MATCH_REVIEW_LIMITS = { events: 8, attempts: 8, short: 120, long: 400, link: 2048, time: 32, date: 10, bytes: 256 * 1024 } as const;
@@ -73,30 +74,19 @@ export function nextReviewId(rows: readonly { id: string }[], prefix: 'event' | 
   while (rows.some((row) => row.id === prefix + '-' + n)) n += 1;
   return prefix + '-' + n;
 }
-export const reviewTextLength = (value: string): number => Array.from(value).length;
+export const reviewTextLength = (value: string): number => textLength(value, 'code-points');
 export const reviewByteLength = (value: string): number => new TextEncoder().encode(value).byteLength;
 
 export function reviewTextProblem(value: string, limit: number, multiline = false): string | null {
   if (reviewTextLength(value) > limit) return '最多 ' + limit + ' 个字符；当前内容未截断，请缩短。';
-  for (const char of value) {
-    const cp = char.codePointAt(0)!;
-    if (cp >= 0xd800 && cp <= 0xdfff) return '含不完整的 Unicode 字符，请修正。';
-    if (
-      (cp < 32 && !(multiline && [9, 10, 13].includes(cp))) ||
-      (cp >= 127 && cp <= 159) ||
-      cp === 0x061c ||
-      cp === 0x200e ||
-      cp === 0x200f ||
-      (cp >= 0x202a && cp <= 0x202e) ||
-      (cp >= 0x2066 && cp <= 0x2069)
-    )
-      return '不能包含隐藏控制字符；长文仅允许换行和制表符。';
-  }
+  const problem = textCharacterProblem(value, { multiline, rejectUnpairedSurrogates: true, rejectDirectionalMarks: true });
+  if (problem === 'unicode') return '含不完整的 Unicode 字符，请修正。';
+  if (problem === 'control') return '不能包含隐藏控制字符；长文仅允许换行和制表符。';
   return null;
 }
 export function reviewTimeProblem(value: string): string | null {
   if (!value) return null;
-  return /^(?:\d{1,4}:[0-5]\d|\d{1,3}:[0-5]\d:[0-5]\d)$/.test(value) ? null : '使用 分:秒 或 时:分:秒；未知请留空。原文已保留。';
+  return isClockText(value, { minuteDigits: 4, hourDigits: 3 }) ? null : '使用 分:秒 或 时:分:秒；未知请留空。原文已保留。';
 }
 export function reviewDateProblem(value: string): string | null {
   if (!value) return null;
@@ -122,12 +112,6 @@ export function reviewLinkProblem(value: string): string | null {
 }
 export const hasReviewGoal = (draft: MatchReviewDraft): boolean => Object.values(draft.goal).some(Boolean);
 
-function record(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-function exactKeys(value: Record<string, unknown>, keys: readonly string[]): boolean {
-  return Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key));
-}
 function textRecord(value: unknown, fields: Record<string, { limit: number; multiline?: boolean }>, label: string): string | null {
   if (!record(value) || !exactKeys(value, Object.keys(fields))) return label + '字段缺失或含未知字段。';
   for (const [name, rule] of Object.entries(fields)) {

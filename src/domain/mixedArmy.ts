@@ -1,5 +1,6 @@
 /** Issue 241: finite, conditional reading cards. No mixed-army combat simulation. */
-import content from '../content/mixed-army.json';
+import editorial from '../content/mixed-army.json';
+import rules from '../content/mixed-army-rules.json';
 import units from '../data/raw/units';
 import techs from '../data/raw/techs';
 import buildings from '../data/raw/buildings';
@@ -7,10 +8,29 @@ import { civs } from '../data';
 import { GENERAL_GARRISON_DATA } from './garrisonGeneral';
 import { productionBuildings, productionTechAge, productionTechs, type ProductionContext } from './production';
 
+// Keep the reviewed prose intact; finite execution metadata is maintained by the same IDs.
+const content = {
+  ...editorial,
+  defaultScenarioId: rules.defaultScenarioId,
+  exampleCardId: rules.exampleCardId,
+  confirmationBuildingIds: rules.confirmationBuildingIds,
+  unitNameLinks: rules.unitNameLinks,
+  scenarios: editorial.scenarios.map((scenario) => {
+    const rule = rules.scenarios.find((row) => row.id === scenario.id);
+    if (!rule) throw new Error(`Missing mixed-army scenario rules: ${scenario.id}`);
+    return { ...scenario, observationProfile: rule.observationProfile, confirmationFormIds: rule.confirmationFormIds };
+  }),
+  cards: editorial.cards.map((card) => {
+    const rule = rules.cards.find((row) => row.id === card.id);
+    if (!rule) throw new Error(`Missing mixed-army card rules: ${card.id}`);
+    return { ...card, strategy: rule.strategy, conditionalUnits: rule.conditionalUnits };
+  }),
+};
+
 export const MIXED_ARMY_CONTENT = content;
 export const MIXED_ARMY_BUILD = content.build;
 export const MIXED_ARMY_URL_LIMIT = 6000;
-export const MIXED_ARMY_SCENARIOS = ['britons-archer-cover', 'arena-wagon-cannon'] as const;
+export const MIXED_ARMY_SCENARIOS = content.scenarios.map((scenario) => scenario.id);
 export const MIXED_ARMY_MODES = ['unknown', 'one-v-one-arena', 'one-v-one-other', 'team'] as const;
 export const MIXED_ARMY_ENEMIES = [
   'unknown',
@@ -86,7 +106,6 @@ const knownUnits = new Set(units.map((unit) => unit.id));
 const knownTechs = new Set(techs.map((tech) => tech.id));
 const knownBuildings = new Set(buildings.map((building) => building.id));
 const supportedUnits = new Set(content.prerequisiteUnitIds);
-const requiredUnlocks = content.requiredUnlocks as Record<string, number[] | undefined>;
 const has = (values: readonly string[], value: unknown): value is string => typeof value === 'string' && values.includes(value);
 const integer = /^(0|[1-9]\d*)$/;
 const unique = <T>(values: T[]) => [...new Set(values)];
@@ -108,7 +127,7 @@ const keys = ['mv', 'build', 'civ', 'age', ...Object.keys(enumFields), ...choice
 
 export function defaultMixedArmyConfig(): MixedArmyConfig {
   return {
-    scenario: 'britons-archer-cover',
+    scenario: content.defaultScenarioId,
     civ: 'Britons',
     age: 4,
     mode: 'unknown',
@@ -137,7 +156,7 @@ export function mixedArmyGaps(config: MixedArmyConfig): string[] {
   add(config.ownMain === 'unknown', '现有主力准确形态');
   add(config.enemy === 'unknown', '实际敌军组合');
   add(config.mode === 'unknown', '地图与模式');
-  if (config.scenario === 'arena-wagon-cannon') {
+  if (content.scenarios.find((scenario) => scenario.id === config.scenario)?.observationProfile === 'wagon-cannon') {
     add(config.wagon === 'unknown', '已见胡斯派战车（普通或精锐）');
     if (config.enemy !== 'wagons') add(config.cannon === 'unknown', '已见后排炮（手推炮或榴弹炮）');
   }
@@ -275,7 +294,9 @@ export function mixedUnitPrerequisites(ctx: ProductionContext, input: MixedPrere
     result.reasons.push(`尚未明确确认${unit.zh}所需形态升级实际完成。`);
   }
   // Audited required unlocks for this finite tool; raw enable commands are not all mandatory prerequisites.
-  result.missingUnlockTechIds = (requiredUnlocks[unit.id] ?? []).filter((id) => !input.completedUnlockTechIds.includes(id));
+  result.missingUnlockTechIds = ((content.requiredUnlocks as Record<string, number[] | undefined>)[unit.id] ?? []).filter(
+    (id) => !input.completedUnlockTechIds.includes(id),
+  );
   for (const id of result.missingUnlockTechIds) result.reasons.push(`尚未明确确认${ctx.core.techById[id]!.zh}实际完成；免费获得也需确认。`);
   result.confirmedBuildingIds = result.potentialBuildingIds.filter((id) => input.completedBuildings.includes(id));
   if (!result.confirmedBuildingIds.length) {
@@ -285,6 +306,10 @@ export function mixedUnitPrerequisites(ctx: ProductionContext, input: MixedPrere
     );
   }
   return { ...result, status: result.reasons.length ? 'missing-prerequisites' : 'conditions-met' };
+}
+/** Necessary unit unlocks and card-specific research share one finite confirmation list. */
+export function mixedArmyUnlockTechIds(): number[] {
+  return unique([...Object.values(content.requiredUnlocks).flat(), ...content.cards.flatMap((card) => card.techIds ?? [])]);
 }
 /** Stale confirmations are retained and shown, never silently carried into a new civilization/age. */
 export function mixedArmyConfirmationErrors(ctx: ProductionContext, config: MixedArmyConfig): string[] {
@@ -298,7 +323,7 @@ export function mixedArmyConfirmationErrors(ctx: ProductionContext, config: Mixe
   for (const id of config.completedUnlockTechIds) {
     const tech = ctx.core.techById[id];
     if (!tech) continue;
-    if (![47, 10].includes(id)) errors.push(`${tech.zh}不是本页收录的必要研究，请移除此确认。`);
+    if (!mixedArmyUnlockTechIds().includes(id)) errors.push(`${tech.zh}不是本页收录的必要研究，请移除此确认。`);
     else if (
       !tech.civs.includes(config.civ) ||
       productionTechAge(tech, config.civ) > config.age ||
@@ -342,9 +367,10 @@ function evaluateCard(ctx: ProductionContext, config: MixedArmyConfig, card: Mix
     else if (config.woodGold !== 'sustainable' && !(woodOnly && config.woodGold === 'gold-tight'))
       blocked.push(woodOnly ? '当前木材持续投入不足。' : '当前木材或黄金持续投入不足。');
   };
-  if (config.age < 4) return { card, status: 'age-unavailable', reasons: ['本情境的帝王路线尚未到时代，只作后续准备阅读。'] };
+  const scenario = content.scenarios.find((row) => row.id === card.scenario)!;
+  if (config.age < scenario.age) return { card, status: 'age-unavailable', reasons: ['本情境的帝王路线尚未到时代，只作后续准备阅读。'] };
   const mixedCavalry = config.enemy === 'cavalry-skirmishers';
-  const cardUnits = [...card.unitIds, ...(['britons-light-cav-access', 'britons-protected-onager'].includes(card.id) && mixedCavalry ? [359] : [])];
+  const cardUnits = [...card.unitIds, ...card.conditionalUnits.filter((rule) => rule.enemyCompositions.includes(config.enemy)).flatMap((rule) => rule.unitIds)];
   const requirements = unique([...cardUnits, ...(typeof config.ownMain === 'number' ? [config.ownMain] : [])]).map((unitId) =>
     mixedUnitPrerequisites(ctx, { ...config, unitId }),
   );
@@ -355,16 +381,16 @@ function evaluateCard(ctx: ProductionContext, config: MixedArmyConfig, card: Mix
     if (!config.completedUnlockTechIds.includes(id)) prerequisiteReasons.push(`尚未明确确认${ctx.core.techById[id]!.zh}实际完成。`);
   need(config.ownMain !== 'unknown', '先确认现有主力的精确形态。');
   need(config.enemy !== 'unknown', '先确认实际敌军主力与掩护。');
-  if (card.id.startsWith('britons-')) {
+  if (['anti-cavalry-screen', 'light-cavalry-access', 'protected-onager'].includes(card.strategy)) {
     const hasCavalry = config.enemy === 'cavalry' || mixedCavalry,
       hasSkirmishers = config.enemy === 'skirmishers' || mixedCavalry;
-    if (card.id === 'britons-halb-screen') {
+    if (card.strategy === 'anti-cavalry-screen') {
       if (config.enemy !== 'unknown' && !hasCavalry) blocked.push('当前未记录近战骑兵，防骑前排不能代替清掷矛手的任务。');
       checkFood();
       checkWoodGold(true);
     } else {
       if (config.enemy !== 'unknown' && !hasSkirmishers) blocked.push('当前未记录掷矛手，不把本路线当通用补兵指令。');
-      if (card.id === 'britons-light-cav-access') {
+      if (card.strategy === 'light-cavalry-access') {
         observation(config.terrain, 'open', '地形允许侧向接近。');
         observation(config.flank, 'clear', '存在无需穿过护军的到场路线。');
         observation(config.retreat, 'safe', '到场后能够安全撤回。');
@@ -376,17 +402,17 @@ function evaluateCard(ctx: ProductionContext, config: MixedArmyConfig, card: Mix
         checkWoodGold();
       }
     }
-  } else {
+  } else if (['protected-artillery', 'flank-opening', 'reposition'].includes(card.strategy)) {
     need(config.mode !== 'unknown', '先确认是否为1v1 Arena。');
     need(config.wagon !== 'unknown', '先确认胡斯派战车是普通还是精锐。');
     if (config.enemy !== 'wagons') need(config.cannon !== 'unknown', '先辨认后排是手推炮还是榴弹炮。');
-    if (card.id !== 'turks-reposition' && config.enemy === 'wagons')
+    if (card.strategy !== 'reposition' && config.enemy === 'wagons')
       blocked.push('目前只记录胡斯派战车，未见后排手推炮或榴弹炮；纯胡斯派战车完整应对暂未覆盖。');
-    if (card.id === 'turks-protected-artillery') {
+    if (card.strategy === 'protected-artillery') {
       observation(config.position, 'safe', '需要受保护的射击位置。');
       observation(config.retreat, 'safe', '需要可撤回的位置和资源。');
       checkWoodGold();
-    } else if (card.id === 'turks-flank-opening') {
+    } else if (card.strategy === 'flank-opening') {
       observation(config.terrain, 'open', '地形允许侧向接近。');
       observation(config.flank, 'clear', '后排暴露且侧向到场路线已查清。');
       observation(config.retreat, 'safe', '侧切后能够撤回。');
@@ -404,7 +430,7 @@ function evaluateCard(ctx: ProductionContext, config: MixedArmyConfig, card: Mix
         else blocked.push('当前填报未显示必须转移的条件；保留此卡作条件变化时参考。');
       }
     }
-  }
+  } else return { card, status: 'unsupported', reasons: ['本卡片的条件策略暂未支持。'] };
   const reasons = unique([...prerequisiteReasons, ...pending, ...blocked]);
   return {
     card,
@@ -424,11 +450,11 @@ export function planMixedArmy(ctx: ProductionContext, config: MixedArmyConfig): 
     outside.push('当前主力形态不在本情境收录范围，不自动替换为相近兵种。');
   if (config.enemy === 'other' || (config.enemy !== 'unknown' && !scenario.enemyCompositions.includes(config.enemy)))
     outside.push('实际敌军组合暂未收录；额外攻城、僧侣或其他护军不能当作不存在。');
-  if (config.scenario === 'arena-wagon-cannon') {
+  if (scenario.observationProfile === 'wagon-cannon') {
     if (config.mode !== 'unknown' && config.mode !== 'one-v-one-arena') outside.push('本情境只整理1v1 Arena，其他模式暂未覆盖。');
-    if (config.wagon === 'other' || (typeof config.wagon === 'number' && ![1704, 1706].includes(config.wagon)))
+    if (config.wagon === 'other' || (typeof config.wagon === 'number' && !(scenario.enemyMainUnitIds ?? []).includes(config.wagon)))
       outside.push('这种胡斯派战车暂未覆盖，请保留观察或修正。');
-    if (config.cannon === 'other' || (typeof config.cannon === 'number' && ![36, 1709].includes(config.cannon)))
+    if (config.cannon === 'other' || (typeof config.cannon === 'number' && !(scenario.enemyCannonUnitIds ?? []).includes(config.cannon)))
       outside.push('这种后排炮暂未覆盖，请保留观察或修正。');
   }
   const confirmationErrors = mixedArmyConfirmationErrors(ctx, config);
@@ -440,7 +466,7 @@ export function planMixedArmy(ctx: ProductionContext, config: MixedArmyConfig): 
   const unknown =
     config.ownMain === 'unknown' ||
     config.enemy === 'unknown' ||
-    (config.scenario === 'arena-wagon-cannon' &&
+    (scenario.observationProfile === 'wagon-cannon' &&
       (config.mode === 'unknown' || config.wagon === 'unknown' || (config.enemy !== 'wagons' && config.cannon === 'unknown')));
   const single = ['cavalry', 'skirmishers', 'wagons'].includes(config.enemy);
   return {

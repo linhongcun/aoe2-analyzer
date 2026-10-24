@@ -1,0 +1,32 @@
+.compare-share {
+  margin-bottom: var(--space-4);
+}
+
+.compare-share .detail-copy {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
+  min-width: 0;
+}
+
+.compare-share .detail-copy-button {
+  min-width: 44px;
+}
+
+.compare-share .detail-copy-fallback {
+  position: static;
+  width: min(100%, 32rem);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.compare-share .detail-copy-fallback input {
+  min-width: 0;
+  min-height: 44px;
+}
+
+@media (max-width: 600px) {
+  .compare-share .detail-copy-button {
+    width: 100%;
+  }
+}
