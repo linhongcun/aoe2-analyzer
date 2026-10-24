@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { findTerms, glossary, termById, type GlossaryTerm } from '../../domain/glossary';
+import { findTerms, glossary, groupTerms, termById, type GlossaryTerm } from '../../domain/glossary';
 import { sharePageUrl } from '../../domain/sharePage';
 import { Icon } from '../../shared/ui/Icon';
 import './glossary.css';
@@ -60,7 +60,9 @@ function Term({ term }: { term: GlossaryTerm }) {
             </li>
           ))}
         </ul>
-        <p className="note">2026-10-19 已打开核对。社区来源用于解释用法与理解障碍；数学例子是明确假设。游戏实际属性请查看本站 DE 185872 固定数据。</p>
+        <p className="note">
+          {term.checkedAt ?? '2026-10-19'} 已打开核对。社区来源用于解释用法与理解障碍；数学例子是明确假设。游戏实际属性请查看本站 DE 185872 固定数据。
+        </p>
       </details>
       <div className="gl-actions">
         <button type="button" onClick={copy}>
@@ -132,7 +134,9 @@ export default function Glossary() {
       </label>
       <div className="gl-count">
         <p className="note" role="status">
-          {terms.length} / {glossary.length} 个条目
+          <span className="num nw">
+            {terms.length} / {glossary.length} 个条目
+          </span>
         </p>
         {query && (
           <button type="button" onClick={() => setSp({}, { replace: true })}>
@@ -140,22 +144,27 @@ export default function Glossary() {
           </button>
         )}
       </div>
-      <div className="gl-list">
-        {terms.map((term) => (
-          <article key={term.id}>
-            <Link to={`/glossary/${term.id}`}>
-              <div>
-                <h2>{term.zh}</h2>
-                <span className="gl-en" lang="en">
-                  {term.en}
-                </span>
-              </div>
-              <Icon name="arrow-right" />
-            </Link>
-            <p>{term.meaning}</p>
-          </article>
-        ))}
-      </div>
+      {groupTerms(terms).map((group) => (
+        <section key={group.category} aria-label={group.category} className="gl-group">
+          <h2>{group.category}</h2>
+          <div className="gl-list">
+            {group.terms.map((term) => (
+              <article key={term.id}>
+                <Link to={`/glossary/${term.id}`}>
+                  <div>
+                    <h3>{term.zh}</h3>
+                    <span className="gl-en" lang="en">
+                      {term.en}
+                    </span>
+                  </div>
+                  <Icon name="arrow-right" />
+                </Link>
+                <p>{term.meaning}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
       {!terms.length && (
         <div className="gl-empty">
           <h2>没有匹配的术语</h2>

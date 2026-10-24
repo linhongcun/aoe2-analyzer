@@ -39,7 +39,7 @@ describe('#217 术语的规范条目与检索', () => {
     expect(search(glossarySearchItems, 'sulvyuhaoshi')[0]?.id).toBe('rate-and-time');
   });
   it('每个稳定 ID 唯一，有来源、语境与有效实体/开局关联', () => {
-    expect(new Set(glossary.map((t) => t.id)).size).toBe(9);
+    expect(new Set(glossary.map((t) => t.id)).size).toBe(glossary.length);
     for (const term of glossary) {
       expect(term.meaning && term.example && term.note).toBeTruthy();
       expect(term.sources.length).toBeGreaterThan(0);
