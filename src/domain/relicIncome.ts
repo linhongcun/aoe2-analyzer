@@ -35,6 +35,7 @@ export interface RelicIncomeData {
     fieldSemantics: { resources: string; effectTypes: string };
     semanticsChecked: string;
   };
+  resourceIds: Record<RelicResource, number>;
   baseRates: Record<RelicResource, number>;
   civs: Record<string, { datCiv: number; baseResources: Record<string, number> }>;
   modifiers: Record<'aztecs' | 'burgundians' | 'grandTrunkRoad' | 'atheism', RelicModifier>;
@@ -57,7 +58,6 @@ export const newRelicIncomeConfig = (): RelicIncomeConfig => ({
   grandTrunkRoad: false,
   atheism: 'none',
 });
-const code: Record<RelicResource, number> = { Gold: 191, Food: 225, Wood: 264, Stone: 265 };
 const knownCiv = (civ: string) => civs.some((c) => c.en === civ);
 const numeric = (s: string, whole = false) =>
   typeof s === 'string' && s.length <= 32 && (whole ? /^\d+$/ : /^\d+(?:\.\d+)?$/).test(s) && Number.isFinite(+s) && +s >= 0 && +s <= RELIC_INPUT_MAX;
@@ -89,11 +89,23 @@ export function validRelicIncomeData(value: unknown): value is RelicIncomeData {
     d.meta.engineVerifiedInPinnedBuild === false &&
     d.civs &&
     civs.every((c) => d.civs[c.en]) &&
+    d.resourceIds &&
+    typeof d.resourceIds === 'object' &&
+    !Array.isArray(d.resourceIds) &&
+    Object.keys(d.resourceIds).length === RELIC_RESOURCES.length &&
+    RELIC_RESOURCES.every((r) => Number.isSafeInteger(d.resourceIds[r]) && d.resourceIds[r] >= 0) &&
+    new Set(RELIC_RESOURCES.map((r) => d.resourceIds[r])).size === RELIC_RESOURCES.length &&
     RELIC_RESOURCES.every((r) => Number.isFinite(d.baseRates?.[r]) && d.baseRates[r] >= 0) &&
     ['aztecs', 'burgundians', 'grandTrunkRoad', 'atheism'].every((id) => {
       const m = d.modifiers?.[id as keyof RelicIncomeData['modifiers']];
       return (
-        m && Array.isArray(m.resources) && ['mul', 'set'].includes(m.operation) && Number.isFinite(m.value) && m.value >= 0 && Number.isFinite(m.displayValue)
+        m &&
+        Array.isArray(m.resources) &&
+        m.resources.every((id) => Number.isSafeInteger(id) && RELIC_RESOURCES.some((resource) => d.resourceIds[resource] === id)) &&
+        ['mul', 'set'].includes(m.operation) &&
+        Number.isFinite(m.value) &&
+        m.value >= 0 &&
+        Number.isFinite(m.displayValue)
       );
     }) &&
     Array.isArray(d.lithuanians?.units) &&
@@ -160,7 +172,7 @@ export function calculateRelicIncome(c: RelicIncomeConfig, d: RelicIncomeData): 
   const players = [{ civ: c.civ, label: '本方' }, ...c.allies.map((civ, i) => ({ civ, label: `队友${i + 1}` }))];
   const apply = (id: keyof RelicIncomeData['modifiers'], label: string, providers: string[]) => {
     const m = d.modifiers[id];
-    for (const r of RELIC_RESOURCES.filter((resource) => m.resources.includes(code[resource]))) {
+    for (const r of RELIC_RESOURCES.filter((resource) => m.resources.includes(d.resourceIds[resource]))) {
       const before = rates[r];
       rates[r] = m.operation === 'mul' ? before * m.value : m.value;
       add(id, label, r, providers, `${m.operation === 'mul' ? '倍率' : '每件每游戏分钟设为'} ${m.displayValue}`, rates[r] - before, m.effectId);

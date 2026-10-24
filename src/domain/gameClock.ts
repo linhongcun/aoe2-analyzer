@@ -40,7 +40,7 @@ export function parseGameClockDuration(value: string, unit: GameClockUnit): Game
   }
   const seconds = Number(`${whole}${fraction ? '.' + fraction : ''}`);
   if (!Number.isFinite(seconds) || whole > GAME_CLOCK_DURATION_LIMIT || (whole === GAME_CLOCK_DURATION_LIMIT && /[1-9]/.test(fraction)))
-    return { ok: false, error: '时长最多为 100000000 秒，请缩短输入时长。' };
+    return { ok: false, error: `时长最多为 ${GAME_CLOCK_DURATION_LIMIT} 秒，请缩短输入时长。` };
   return { ok: true, seconds, whole, fraction };
 }
 

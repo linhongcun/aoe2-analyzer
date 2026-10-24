@@ -1,5 +1,6 @@
 /** Issue 229: one already-garrisoned unit, static building healing only. */
 import raw from '../data/garrison_healing.json';
+import { DATA_PATCH_BUILD } from '../data/meta';
 import type { Building, Tech } from './types';
 import {
   GENERAL_GARRISON_DATA,
@@ -211,11 +212,12 @@ function compare(ctx: HealingContext, c: HealingConfig, data: GarrisonHealingDat
 
 export function calculateGarrisonHealing(ctx: HealingContext, c: HealingConfig, data = GARRISON_HEALING_DATA): HealingResult {
   const errors: string[] = [];
-  const warnings = ['固定 DE 185872 数据模型，尚未完成该版本客户端实测；不计单位自身再生、主动僧侣、范围治疗、行军及继续受伤。'];
+  const warnings = [`固定 DE ${DATA_PATCH_BUILD} 数据模型，尚未完成该版本客户端实测；不计单位自身再生、主动僧侣、范围治疗、行军及继续受伤。`];
   const building = ctx.core.buildingById[c.buildingId];
   if (!building || !data.hostIds.includes(c.buildingId)) errors.push('建筑参数无效或不是支持的驻军宿主。');
   if (!GENERAL_GARRISON_DATA.civs[c.civ] || !building?.civs.includes(c.civ)) errors.push('此文明不可使用所选建筑。');
-  if (!Number.isSafeInteger(c.age) || c.age < (building ? getGarrisonBuildingAge(building, c.civ, ctx.trees) : 1) || c.age > 4) errors.push('时代无效或早于此建筑。');
+  if (!Number.isSafeInteger(c.age) || c.age < (building ? getGarrisonBuildingAge(building, c.civ, ctx.trees) : 1) || c.age > 4)
+    errors.push('时代无效或早于此建筑。');
   if (!Number.isSafeInteger(c.unitId) || c.unitId <= 0 || !['enter', 'created', 'deposit'].includes(c.entry)) errors.push('单位或驻留方式无效。');
   const available = new Set(availableHealingTechs(ctx, c).map((t) => t.id));
   if (new Set(c.techs).size !== c.techs.length) errors.push('科技不能重复。');
