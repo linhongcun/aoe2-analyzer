@@ -6,44 +6,120 @@ on:
         description: '待发布的版本号，例如 v0.12.0'
         required: true
         type: string
-permissions: { contents: write, actions: read, checks: read }
+  workflow_run:
+    workflows: ['CI / Deploy']
+    types: [completed]
+    branches: [main]
+permissions: { contents: read, actions: read, checks: read }
 concurrency: { group: release, cancel-in-progress: false }
 jobs:
-  release:
+  prepare:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_run' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      RELEASE_VERSION: ${{ inputs.version }}
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      should_release: ${{ steps.release.outputs.should_release }}
+      deployed_sha: ${{ steps.release.outputs.deployed_sha }}
+      release_sha: ${{ steps.release.outputs.release_sha }}
     steps:
-      # 从 main 调度，签出 release 分支；发版任务自身的 check 不占用 release 头部的 CI 门禁。
-      - name: Validate dispatch
+      # Validate event data before checking out any workflow_run head, even with a read-only token.
+      - name: Validate release source
+        id: source
         run: |
-          test "$GITHUB_REF" = refs/heads/main
-          [[ "$RELEASE_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          node <<'NODE'
+          const fs = require('node:fs');
+          const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+          const repository = process.env.GITHUB_REPOSITORY;
+          const run = event.workflow_run;
+          if (event.repository?.full_name !== repository || process.env.GITHUB_REF !== 'refs/heads/main') throw new Error('Untrusted release repository or ref');
+          let sha;
+          if (process.env.GITHUB_EVENT_NAME === 'workflow_run') {
+            if (run?.name !== 'CI / Deploy' || run.path !== '.github/workflows/ci.yml' || run.event !== 'push' ||
+                run.status !== 'completed' || run.conclusion !== 'success' || run.head_branch !== 'main' ||
+                run.head_repository?.full_name !== repository || !Number.isSafeInteger(run.id) || run.id <= 0)
+              throw new Error('Untrusted deployment event');
+            sha = run.head_sha;
+          } else if (process.env.GITHUB_EVENT_NAME === 'workflow_dispatch') {
+            const version = event.inputs?.version;
+            if (typeof version !== 'string' || version !== version.trim() || !/^v\d+\.\d+\.\d+$/.test(version)) throw new Error('Invalid release version');
+            sha = process.env.GITHUB_SHA;
+          } else throw new Error('Unsupported release event');
+          if (typeof sha !== 'string' || sha.length !== 40 || !/^[0-9a-f]{40}$/.test(sha)) throw new Error('Invalid deployment SHA');
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `sha=${sha}\n`);
+          NODE
       - uses: actions/checkout@v4
         with:
-          ref: release/${{ inputs.version }}
+          ref: ${{ steps.source.outputs.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Prepare deployed release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/prepare-release.mjs
+  release:
+    needs: prepare
+    if: needs.prepare.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    permissions: { contents: write, actions: read, checks: read }
+    timeout-minutes: 20
+    env:
+      RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+      EXPECTED_DEPLOYED_SHA: ${{ needs.prepare.outputs.deployed_sha }}
+      EXPECTED_RELEASE_SHA: ${{ needs.prepare.outputs.release_sha }}
+    steps:
+      # The successful deployed main SHA is immutable; never run privileged code from a PR head.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.deployed_sha }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with: { node-version: 20, cache: npm }
       - name: Check package version
         run: |
-          node --input-type=module -e "import fs from 'node:fs'; import assert from 'node:assert/strict'; assert.equal('v' + JSON.parse(fs.readFileSync('package.json')).version, process.env.RELEASE_VERSION);"
+          node --input-type=module <<'NODE'
+          import { execFileSync } from 'node:child_process';
+          import assert from 'node:assert/strict';
+          const raw = execFileSync('git', ['show', process.env.EXPECTED_RELEASE_SHA + ':package.json'], { encoding: 'utf8' });
+          assert.equal('v' + JSON.parse(raw).version, process.env.RELEASE_VERSION);
+          NODE
+      - name: Recheck deployment and restrict git pushes to the version tag
+        id: verify
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/prepare-release.mjs --guard-git
       - run: npm ci --legacy-peer-deps
+        if: steps.verify.outputs.should_release == 'true'
       - name: Install Playwright chromium
+        if: steps.verify.outputs.should_release == 'true'
         run: npx playwright install --with-deps chromium
       - name: Verify deployment, tag and draft Release
+        if: steps.verify.outputs.should_release == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name 'hongcun lin'
           git config user.email 'linhongcun2021@gmail.com'
           npm run release -- "$RELEASE_VERSION"
+      - name: Verify deployed Compare links
+        if: steps.verify.outputs.should_release == 'true'
+        run: node scripts/release-online-smoke.mjs
       - name: Verify published pages
+        if: steps.verify.outputs.should_release == 'true'
         env:
           BASE_URL: https://linhongcun.github.io/aoe2-analyzer/
         run: npx playwright test tests/e2e/maps34.spec.ts tests/e2e/patches16.spec.ts tests/e2e/share78.spec.ts tests/e2e/production204.spec.ts tests/e2e/upgrades205.spec.ts tests/e2e/civRequirements206.spec.ts tests/e2e/ecoPayoff214.spec.ts tests/e2e/market215.spec.ts tests/e2e/practice216.spec.ts tests/e2e/glossary217.spec.ts tests/e2e/garrison218.spec.ts tests/e2e/garrison224.spec.ts tests/e2e/tradeIncome226.spec.ts tests/e2e/construction227.spec.ts tests/e2e/teamBonuses228.spec.ts tests/e2e/garrisonHealing229.spec.ts tests/e2e/communityIntegration230.spec.ts tests/e2e/gameClock237.spec.ts tests/e2e/hotkeys236.spec.ts tests/e2e/castleDefense242.spec.ts tests/e2e/communityIntegration244.spec.ts tests/e2e/contentGuide239.spec.ts tests/e2e/mixedArmy241.spec.ts tests/e2e/teamPlan243.spec.ts tests/e2e/campaigns240.spec.ts tests/e2e/relicIncome238.spec.ts tests/e2e/communityIntegration249.spec.ts tests/e2e/gameGuide256.spec.ts tests/e2e/matchReview257.spec.ts tests/e2e/scouting258.spec.ts tests/e2e/learningIntegration259.spec.ts --reporter=line
       - name: Build downloadable site from the verified tag
+        if: steps.verify.outputs.should_release == 'true'
         run: |
           git switch --detach "$RELEASE_VERSION"
           npm run build
@@ -55,6 +131,7 @@ jobs:
           cd "$asset_dir"
           sha256sum "aoe2-analyzer-$RELEASE_VERSION.zip" > SHA256SUMS.txt
       - name: Upload assets and publish
+        if: steps.verify.outputs.should_release == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
