@@ -1,4 +1,8 @@
 {
+  "CA：骑射手": {
+    "py": "qisheshou",
+    "pyi": "qss"
+  },
   "DLC": {
     "py": "",
     "pyi": ""
@@ -11,13 +15,25 @@
     "py": "mankeji",
     "pyi": "mkj"
   },
+  "GG：打得好": {
+    "py": "dadehao",
+    "pyi": "ddh"
+  },
   "MAA：武士": {
     "py": "wushi",
     "pyi": "ws"
   },
+  "UU：独特单位": {
+    "py": "dutedanwei",
+    "pyi": "dtdw"
+  },
   "boom：发展经济": {
     "py": "fazhanjingji",
     "pyi": "fzjj"
+  },
+  "deer push：推鹿": {
+    "py": "tuilu",
+    "pyi": "tl"
   },
   "double range：双靶场": {
     "py": "shuangbachang",
@@ -27,9 +43,41 @@
     "py": "heianshidaikuaigong",
     "pyi": "hasdkg"
   },
+  "eco：经济": {
+    "py": "jingji",
+    "pyi": "jj"
+  },
+  "flank：边位": {
+    "py": "bianwei",
+    "pyi": "bw"
+  },
+  "forward：前置": {
+    "py": "qianzhi",
+    "pyi": "qz"
+  },
   "idle TC：城镇中心空闲": {
     "py": "chengzhenzhongxinkongxian",
     "pyi": "czzxkx"
+  },
+  "lure：引野猪": {
+    "py": "yinyezhu",
+    "pyi": "yyz"
+  },
+  "pocket：口袋位": {
+    "py": "koudaiwei",
+    "pyi": "kdw"
+  },
+  "scouts：侦察骑兵快攻": {
+    "py": "zhenchaqibingkuaigong",
+    "pyi": "zcqbkg"
+  },
+  "trush：塔攻": {
+    "py": "tagong",
+    "pyi": "tg"
+  },
+  "xbow：弩手": {
+    "py": "nushou",
+    "pyi": "ns"
   },
   "一局与观赛": {
     "py": "yijuyuguansai",

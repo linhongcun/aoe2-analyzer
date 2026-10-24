@@ -1,5 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+const glossary: unknown[] = JSON.parse(readFileSync('src/content/glossary.json', 'utf8'));
 
 const messages = new WeakMap<Page, string[]>();
 test.beforeEach(async ({ page }) => {
@@ -28,7 +30,7 @@ test('#217 列表检索、清空、失效条目和实体跳转', async ({ page }
   await page.goto('./#/glossary?q=missing-term');
   await expect(page.getByRole('heading', { name: '没有匹配的术语' })).toBeVisible();
   await page.getByRole('button', { name: '清空搜索' }).click();
-  await expect(page.locator('.gl-list article')).toHaveCount(9);
+  await expect(page.locator('.gl-list article')).toHaveCount(glossary.length);
   await page.goto('./#/glossary/not-a-valid-id');
   await expect(page.getByRole('heading', { name: '没有这个术语' })).toBeVisible();
   expect((await page.getByRole('link', { name: '返回全部术语' }).boundingBox())!.height).toBeGreaterThanOrEqual(44);
@@ -69,7 +71,7 @@ for (const width of [360, 375, 390, 1280])
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/glossary');
-      await expect(page.locator('.gl-list article')).toHaveCount(9);
+      await expect(page.locator('.gl-list article')).toHaveCount(glossary.length);
       await page.screenshot({ path: info.outputPath(`glossary-list-${theme}-${width}.png`), fullPage: true });
       await page.goto('./#/glossary/rate-and-time');
       await expect(page.getByText(/前提是工作量固定/)).toBeVisible();
