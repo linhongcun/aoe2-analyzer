@@ -93,6 +93,17 @@ jobs:
         run: npm run dat:check
       - name: Data check (site stats vs pinned dat; unlisted diffs fail)
         run: npm run stats:check
+      - name: Cache pinned aoe2techtree downloads
+        uses: actions/cache@v4
+        with:
+          path: scripts/.cache/aoe2techtree-*
+          key: aoe2techtree-${{ hashFiles('scripts/data_sources.json') }}
+      - name: Install image generation dependency
+        run: python3 -m pip install Pillow==12.3.0
+      - name: Data check (core data, icons and pinyin reproducible)
+        run: python3 scripts/build_data.py && node scripts/pinyin_build.mjs && git diff --exit-code -- src/data public/img
+      - name: Data check (pinyin index current)
+        run: npm run pinyin:check
       - name: Data check (effects.json reproducible from pinned dat)
         run: python3 scripts/effects_build.py && git diff --exit-code -- src/data/effects.json
       - name: Data check (eco.json reproducible from pinned dat)

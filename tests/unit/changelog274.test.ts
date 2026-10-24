@@ -48,8 +48,10 @@ describe('CHANGELOG 结构 #274', () => {
   it('已发布条目不留在 Unreleased，并进入 v0.13.0', () => {
     const open = unreleasedBody(changelog);
     for (const issue of SHIPPED) expect(open, issue).not.toContain(`（${issue}）`);
-    expect(open).toContain('（#383）');
-    expect(open).toContain('（#270）');
+    for (const issue of ['#383', '#270']) {
+      expect(open).not.toContain(`（${issue}）`);
+      expect(section('0.30.1')).toContain(`（${issue}）`);
+    }
     const v13 = section('0.13.0');
     expect(v13).toContain('（#190）');
     expect(v13).toContain('（#62）');
