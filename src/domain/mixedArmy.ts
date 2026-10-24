@@ -1,11 +1,31 @@
 /** Issue 241: finite, conditional reading cards. No mixed-army combat simulation. */
-import content from '../content/mixed-army.json';
+import editorial from '../content/mixed-army.json';
+import rules from '../content/mixed-army-rules.json';
 import units from '../data/raw/units';
 import techs from '../data/raw/techs';
 import buildings from '../data/raw/buildings';
 import { civs } from '../data';
 import { GENERAL_GARRISON_DATA } from './garrisonGeneral';
 import { productionBuildings, productionTechAge, productionTechs, type ProductionContext } from './production';
+
+// Keep the reviewed prose intact; finite execution metadata is maintained by the same IDs.
+const content = {
+  ...editorial,
+  defaultScenarioId: rules.defaultScenarioId,
+  exampleCardId: rules.exampleCardId,
+  confirmationBuildingIds: rules.confirmationBuildingIds,
+  unitNameLinks: rules.unitNameLinks,
+  scenarios: editorial.scenarios.map((scenario) => {
+    const rule = rules.scenarios.find((row) => row.id === scenario.id);
+    if (!rule) throw new Error(`Missing mixed-army scenario rules: ${scenario.id}`);
+    return { ...scenario, observationProfile: rule.observationProfile, confirmationFormIds: rule.confirmationFormIds };
+  }),
+  cards: editorial.cards.map((card) => {
+    const rule = rules.cards.find((row) => row.id === card.id);
+    if (!rule) throw new Error(`Missing mixed-army card rules: ${card.id}`);
+    return { ...card, strategy: rule.strategy, conditionalUnits: rule.conditionalUnits };
+  }),
+};
 
 export const MIXED_ARMY_CONTENT = content;
 export const MIXED_ARMY_BUILD = content.build;

@@ -1,4 +1,5 @@
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import rules from '../../src/content/mixed-army-rules.json';
 import { loadCore, loadTrees } from '../../src/data';
 import { productionTechAge, type ProductionContext } from '../../src/domain/production';
 import {
@@ -13,10 +14,14 @@ import {
 
 let ctx: ProductionContext;
 const originalContent = structuredClone(MIXED_ARMY_CONTENT);
+const originalRules = structuredClone(rules);
 beforeAll(async () => {
   ctx = { core: await loadCore(), trees: await loadTrees() };
 });
-afterEach(() => Object.assign(MIXED_ARMY_CONTENT, structuredClone(originalContent)));
+afterEach(() => {
+  Object.assign(MIXED_ARMY_CONTENT, structuredClone(originalContent));
+  Object.assign(rules, structuredClone(originalRules));
+});
 
 const britons = (patch: Partial<MixedArmyConfig> = {}): MixedArmyConfig => ({
   ...defaultMixedArmyConfig(),
@@ -54,6 +59,40 @@ const outcomes = (config: MixedArmyConfig) => {
 };
 
 describe('#278 finite mixed-army content policies', () => {
+  it('pairs every reviewed card and scenario with exactly one maintained rule', () => {
+    for (const kind of ['cards', 'scenarios'] as const) {
+      const ids = rules[kind].map((row) => row.id);
+      expect(new Set(ids).size).toBe(ids.length);
+      expect(ids.slice().sort()).toEqual(MIXED_ARMY_CONTENT[kind].map((row) => row.id).sort());
+    }
+    expect(MIXED_ARMY_CONTENT.scenarios.some((row) => row.id === rules.defaultScenarioId)).toBe(true);
+    expect(MIXED_ARMY_CONTENT.cards.some((row) => row.id === rules.exampleCardId)).toBe(true);
+  });
+
+  it('loads policy changes from the separate rule file and joins by ID regardless of row order', async () => {
+    const changedRules = structuredClone(originalRules);
+    changedRules.cards.reverse();
+    changedRules.scenarios.reverse();
+    const card = changedRules.cards.find((row) => row.strategy === 'light-cavalry-access')!;
+    card.strategy = 'anti-cavalry-screen';
+    const scenario = changedRules.scenarios.find((row) => row.observationProfile === 'archer-cover')!;
+    scenario.confirmationFormIds = [550, 546];
+    vi.doMock('../../src/content/mixed-army-rules.json', () => ({ default: changedRules }));
+    vi.resetModules();
+    try {
+      const changed = await import('../../src/domain/mixedArmy');
+      const config = britons({ enemy: 'cavalry', terrain: 'narrow', flank: 'blocked', woodGold: 'gold-tight' });
+      const outcome = changed.planMixedArmy(ctx, config).cards.find((row) => row.card.id === card.id)!;
+      expect(outcome.status).toBe('conditions-met');
+      expect(outcome.card.title).toBe(originalContent.cards.find((row) => row.id === card.id)!.title);
+      expect(changed.MIXED_ARMY_CONTENT.scenarios.find((row) => row.id === scenario.id)!.confirmationFormIds).toEqual([550, 546]);
+      expect(changed.MIXED_ARMY_CONTENT.cards.map((row) => row.id)).toEqual(originalContent.cards.map((row) => row.id));
+    } finally {
+      vi.doUnmock('../../src/content/mixed-army-rules.json');
+      vi.resetModules();
+    }
+  });
+
   it('renaming every card leaves all six policies and reason ordering unchanged', () => {
     const configurations = [
       britons(),
