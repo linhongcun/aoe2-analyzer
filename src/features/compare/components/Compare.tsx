@@ -1,14 +1,17 @@
+import { useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
-import { civs } from '../../../data';
+import { CopyPageLink } from '../../../shared/ui/DetailBlocks';
+import { civByEn } from '../../../data';
+import { resolveCompareQuery, selectCompareCivilization } from '../../../domain/compare';
 import { AXES } from '../../../domain/ratings';
 import type { Civ } from '../../../domain/types';
 import { CivIcon } from '../../../shared/ui/art';
 import { RatingHeading } from '../../../shared/ui/RatingHelp';
 import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
-import { useSticky } from '../../../shared/utils/sticky';
-import { Link } from 'react-router-dom';
 import { defaultTeamBonusConfig, encodeTeamBonuses, updateTeamRoster } from '../../../domain/teamBonuses';
+import './compare.css';
 
 const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
   ['特色兵种', 'uu'],
@@ -20,10 +23,18 @@ const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
 const cell = (c: Civ, k: (typeof ROWS)[number][1]) => (k === 'op' ? <Steps s={c.op} /> : c[k]);
 
 export default function Compare() {
-  const [ia, setA] = useSticky('cmp.a', 16),
-    [ib, setB] = useSticky('cmp.b', 5);
-  const a = civs[ia]!,
-    b = civs[ib]!;
+  const { pathname, search: query } = useLocation();
+  const navigate = useNavigate();
+  const { a: aName, b: bName, search, needsReplace } = resolveCompareQuery(query);
+  const a = civByEn(aName)!,
+    b = civByEn(bName)!;
+  useEffect(() => {
+    if (needsReplace || pathname !== '/compare') navigate({ pathname: '/compare', search }, { replace: true });
+  }, [pathname, search, needsReplace, navigate]);
+  const selectCivilization = (side: 'a' | 'b', civ: string) => {
+    const next = selectCompareCivilization(query, side, civ);
+    if (next !== null) navigate({ pathname: '/compare', search: next });
+  };
   return (
     <section id="compare" className="pane">
       <ListHead title="文明对比" desc="两个文明的能力雷达与关键差异" />
@@ -33,8 +44,11 @@ export default function Compare() {
         </Link>
       </p>
       <div className="bar fbar">
-        <CivPicker id="ca" label="文明 A" value={civs[ia]!.en} onChange={(en) => setA(civs.findIndex((c) => c.en === en))} /> VS{' '}
-        <CivPicker id="cb" label="文明 B" value={civs[ib]!.en} onChange={(en) => setB(civs.findIndex((c) => c.en === en))} />
+        <CivPicker id="ca" label="文明 A" value={a.en} onChange={(en) => selectCivilization('a', en)} /> VS{' '}
+        <CivPicker id="cb" label="文明 B" value={b.en} onChange={(en) => selectCivilization('b', en)} />
+      </div>
+      <div className="compare-share">
+        <CopyPageLink key={search} />
       </div>
       <div className="two">
         <table id="ctab">
