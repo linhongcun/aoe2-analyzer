@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
+import { openAllDetails } from './relicDetails412';
 
 /**
  * v0.30.0 验收：#338（含 2026-10-21 23:55 北京时间的范围补充，issue comment 6320295954）。Kent 写，先失败。
@@ -29,10 +30,6 @@ function hashesIn(text: string): string[] {
     .map((m) => m[0])
     .filter((run) => run.length >= 64 || [...KNOWN].some((h) => h.startsWith(run.toLowerCase().slice(0, 16))));
 }
-async function openAllDetails(page: Page) {
-  await page.evaluate(() => document.querySelectorAll('main details').forEach((d) => ((d as HTMLDetailsElement).open = true)));
-}
-
 test.describe('#338 「关于数据」页显示完整 sha256', () => {
   test('守卫：各数据文件记录的 sha256 都是固定版本文件里的 .dat 来源（市场、文物收入同一份）', () => {
     expect(DAT_SOURCES.length, '至少一个带 sha256 的 .dat 来源').toBeGreaterThan(0);
