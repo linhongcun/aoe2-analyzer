@@ -215,7 +215,7 @@ export function calculateGarrisonHealing(ctx: HealingContext, c: HealingConfig, 
   const building = ctx.core.buildingById[c.buildingId];
   if (!building || !data.hostIds.includes(c.buildingId)) errors.push('建筑参数无效或不是支持的驻军宿主。');
   if (!GENERAL_GARRISON_DATA.civs[c.civ] || !building?.civs.includes(c.civ)) errors.push('此文明不可使用所选建筑。');
-  if (!Number.isSafeInteger(c.age) || c.age < (building ? getGarrisonBuildingAge(building, c.civ) : 1) || c.age > 4) errors.push('时代无效或早于此建筑。');
+  if (!Number.isSafeInteger(c.age) || c.age < (building ? getGarrisonBuildingAge(building, c.civ, ctx.trees) : 1) || c.age > 4) errors.push('时代无效或早于此建筑。');
   if (!Number.isSafeInteger(c.unitId) || c.unitId <= 0 || !['enter', 'created', 'deposit'].includes(c.entry)) errors.push('单位或驻留方式无效。');
   const available = new Set(availableHealingTechs(ctx, c).map((t) => t.id));
   if (new Set(c.techs).size !== c.techs.length) errors.push('科技不能重复。');

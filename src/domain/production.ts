@@ -5,6 +5,7 @@ import { DAT, type DatEco } from './datEffects';
 import { discountedCost, roundHalfPrice } from './costDiscount';
 import { gatherModel, type GatherRes } from './realCost';
 import type { Cost, Tech, Trees, Unit } from './types';
+import { buildingAge, EARLY_UNIT_AGES } from './availabilityAge';
 
 interface EcoEffect {
   kind: string;
@@ -57,12 +58,6 @@ export interface ProductionContext {
   trees: Trees;
 }
 export const DEFAULT_PRODUCTION: ProductionConfig = { civ: 'Franks', age: 3, techs: [], walk: 3, farm: 1, rows: [{ unit: 83, building: 109, count: '1' }] };
-const earlyUnits: Record<string, Record<number, number>> = {
-  Armenians: { 75: 1, 77: 2, 473: 3, 358: 2, 359: 3 },
-  Cumans: { 1258: 2, 422: 3 },
-  Burgundians: { 283: 3 },
-  Bohemians: { 5: 3 },
-};
 const task = { Food: 'farm', Wood: 'wood', Gold: 'gold', Stone: 'stone' } as const;
 const costAttrs: Record<number, GatherRes | 'all'> = { 100: 'all', 103: 'Food', 104: 'Wood', 105: 'Gold', 106: 'Stone' };
 const change = (base: number, op: string | undefined, v: number) => (op === 'set' ? v : op === 'mul' ? base * v : base + v);
@@ -155,11 +150,10 @@ export function productionBuildings(ctx: ProductionContext, config: ProductionCo
     .filter((block) => {
       const b = ctx.core.buildingById[block[0]];
       if (!b || !b.civs.includes(config.civ) || !data.at.includes(b.id)) return false;
-      const buildingAge = config.civ === 'Cumans' && b.id === 49 ? 2 : b.age;
-      if (buildingAge > config.age) return false;
+      if (buildingAge(b, config.civ, ctx.trees) > config.age) return false;
       const cell = block[3].find((c) => c[2] === 'u' && c[3] === u.id && c[4] === 1);
       if (!cell) return false;
-      const unitAge = earlyUnits[config.civ]?.[u.id] ?? u.age;
+      const unitAge = EARLY_UNIT_AGES[config.civ]?.[u.id] ?? u.age;
       // 部分原始目录把长矛兵归为黑暗时代；实际科技树位于封建栏。
       if (Math.max(unitAge, u.id === 93 ? 2 : 1) > config.age) return false;
       if ([759, 761].includes(u.id) && b.id === 12 && !selected.has(16)) return false;
