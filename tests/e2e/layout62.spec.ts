@@ -100,7 +100,8 @@ for (const width of WIDTHS)
 
       await ready(page, 'civs', '#grid .card');
       const civRoot = page.locator('#list');
-      await expect(civRoot.locator('.dbar')).toHaveCount(0);
+      await expect(civRoot.getByRole('group', { name: 'DLC 快捷筛选' })).toBeVisible();
+      await expect(civRoot.locator('.dbar button')).toHaveCount(DLCS.length + 2);
       await expect(civRoot.locator('#q')).toBeVisible();
       await expect(civRoot.locator('#cnt')).toBeVisible();
       await screenshot(page, info, 'civs', width, theme);

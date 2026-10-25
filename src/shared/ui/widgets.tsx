@@ -205,12 +205,12 @@ export function DlcSelect({
 }
 export function DlcBar({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const b = (v: string, c: ReactNode) => (
-    <button key={v} data-v={v} className={value === v ? 'on' : undefined} onClick={() => onChange(v)}>
+    <button type="button" key={v} data-v={v} className={value === v ? 'on' : undefined} aria-pressed={value === v} onClick={() => onChange(v)}>
       {c}
     </button>
   );
   return (
-    <div className="dbar">
+    <div className="dbar" role="group" aria-label="DLC 快捷筛选">
       {b('', '全部')}
       {DLCS.map((_, i) => b(String(i), <DlcImg i={i} />))}
       {b('none', '未标注')}
