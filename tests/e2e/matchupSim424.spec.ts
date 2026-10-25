@@ -74,7 +74,7 @@ test('#424 旧单位/文明/科技状态不覆盖入口，切换本方与直接�
   await page.evaluate(() => {
     location.hash = '/civ/Mayans';
   });
-  await expect(page.locator('#civ h1')).toContainText('玛雅');
+  await expect(page.locator('#detail h1')).toContainText('玛雅');
   await page.evaluate(() => {
     location.hash = '/matchup';
   });

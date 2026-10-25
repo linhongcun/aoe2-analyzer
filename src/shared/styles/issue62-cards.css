@@ -33,9 +33,9 @@
 }
 
 #matchup .matchup-counter-link:hover {
-  border-color: var(--color-accent);
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
+  border-color: var(--color-link);
+  background: var(--color-link-soft);
+  color: var(--color-link);
 }
 
 .matchup-counter-link .uico {

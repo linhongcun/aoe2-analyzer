@@ -4,7 +4,7 @@ v0.34.0 第二项，每执行者仅负责一项，使用独立工作目录准备
 
 复用 unitPath(unitId, 本方文明英文键, 4, [], []) + '?tab=sim'，显式指定单位、文明、帝王时代、空科技和空团队科技。为避免仅生成链接就加载效果数据，将现有SimRoute/parseUnitPath/unitPath原样移到domain/simRoute.ts，simulator.ts重导出以兼容原调用，Matchup只依赖轻量路由模块。模拟器已有URL优先规则保持不变，不改计算公式或全局状态。入口列表附近说明「默认帝王时代，未勾选科技与团队加成；仍计入已建模文明加成，可在模拟器调整，不代表本局进度。」不推断对局实际时代与研究状态。
 
-布局保留原单位图标和名称，兄弟链接复用 community-tool-entry 按钮样式，li使用flex-wrap、现有space-2间距；窄屏允许自然换行，不固定卡片宽度。现有color-link/border/surface令牌、16px正文与fs-sm（14px）入口、44px最低触控高宽和统一focus-visible轮廓。360/375/390/1280、明暗主题，检查可读可点、无溢出、AA及键盘聚焦/激活。
+布局保留原单位图标和名称，兄弟链接复用 community-tool-entry 按钮样式，li使用flex-wrap、现有space-2间距；窄屏允许自然换行，不固定卡片宽度。现有color-link/border/surface令牌（同列表单位链接悬停态使用color-link/link-soft，避免浅色accent组合低于AA）、16px正文与fs-sm（14px）入口、44px最低触控高宽和统一focus-visible轮廓。360/375/390/1280、明暗主题，检查可读可点、无溢出、AA及键盘聚焦/激活。
 
 验收：法兰克vs不列颠骑士入口使用 unitPath 的 /unit/38/Franks/4//?tab=sim，React Router 的实际链接规范化为 /unit/38/Franks/4/?tab=sim（两种路径均解析为空科技与团队科技）。进入后，显示骑士、法兰克、帝王时代和零选中科技/团队加成。切换本方到柏柏尔时链接同步，对手法兰克且本方玛雅时不出现骑士/骆驼入口；每个链接均匹配当前推荐单位和文明。既有通用单位链接仍 /unit/{id}。
 
