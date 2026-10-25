@@ -5,7 +5,7 @@ import { useCore, useTrees } from '../../../data/hooks';
 import { TYPE_ZH } from '../../../domain/ratings';
 import type { CivType } from '../../../domain/types';
 import { CivIcon, DlcBadge } from '../../../shared/ui/art';
-import { DlcSelect, SearchInput } from '../../../shared/ui/widgets';
+import { DlcBar, DlcSelect, SearchInput } from '../../../shared/ui/widgets';
 import CatalogFilters from '../../../shared/ui/CatalogFilters';
 import { useSticky } from '../../../shared/utils/sticky';
 import { filterCivs } from '../logic/filter';
@@ -73,6 +73,7 @@ export default function CivList() {
           <option value="pk">适合口袋 Pocket (7分及以上)</option>
         </select>
       </CatalogFilters>
+      <DlcBar value={dlc} onChange={(dlc) => changeFilter({ dlc })} />
       <CivRequirements
         context={context}
         conditions={conditions}
