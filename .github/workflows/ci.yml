@@ -151,6 +151,7 @@ jobs:
             test-results/units192-*/*.png
             test-results/relatedTechs193-*/*.png
             test-results/matchup194-*/*.png
+            test-results/matchupSim424-*/*.png
             test-results/introductions195-*/*.png
             test-results/unitFilters196-*/*.png
             test-results/production204-*/*.png
