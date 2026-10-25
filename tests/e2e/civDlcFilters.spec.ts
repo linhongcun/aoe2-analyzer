@@ -22,6 +22,7 @@ test.afterEach(async ({ page }) => {
 
 async function expectCivs(page: Page, names: string[]) {
   await expect(page.locator('#grid .card')).toHaveCount(names.length);
+  await expect(page.locator('#grid .card .cdl, #grid .card .dlcb, #grid .card img[src*="/img/dlc/"]')).toHaveCount(0);
   await expect
     .poll(() => page.locator('#grid .card').evaluateAll((cards) => cards.map((card) => card.getAttribute('data-civ')).sort()))
     .toEqual([...names].sort());
@@ -53,6 +54,21 @@ for (const width of [360, 375, 390, 1280])
       await expect(bar.getByRole('img')).toHaveCount(DLCS.length);
       await expectSelected(page, '');
       if (width <= 600) await expect(page.locator('.catalog-filter-panel')).toBeHidden();
+      await expectCivs(
+        page,
+        civs.map((civ) => civ.en),
+      );
+      await page.evaluate(() => document.fonts.ready);
+      await page.locator('#grid .card').first().scrollIntoViewIfNeeded();
+      await expect
+        .poll(() =>
+          page
+            .locator('#grid .card img.ico')
+            .first()
+            .evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
+        )
+        .toBe(true);
+      await page.screenshot({ path: info.outputPath(`civ-cards-${theme}-${width}.png`) });
 
       // 快捷按钮在手机筛选面板收起时也可操作。
       await bar.locator(`button[data-v="${latestDlc}"]`).click();
