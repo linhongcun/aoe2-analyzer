@@ -94,36 +94,25 @@ expect(violations).toEqual([]);
 
 后来的历史验收用例还有 `tests/unit/v0290-*.test.ts`、`tests/e2e/v0300-*.spec.ts` 这类，文件名不含 `acceptance`，不在上面这条 glob 里。改之前读该文件头；历史作者或重录说明保留为背景，现行期望值变更统一遵守上述维护者明确授权＋独立复核规则。
 
-## 6. CI 何时跳过 Playwright
+## 6. 按风险选择 CI 范围
 
-来源：`.github/workflows/ci.yml`（#375）和 [docs/RELEASING.md](RELEASING.md)。
+维护者已明确要求测试辅助交付，不让简单 UI 修改等待整站回归。`scripts/ci-scope.mjs` 是共享判定入口，PR、release push 和 main push 使用同一规则；不能只优化 PR 后又在 main 重跑全套。
 
-只在 `pull_request` 上按路径判断。`dorny/paths-filter` 使用 `predicate-quantifier: every`。本次改动**全部**落在下面这些路径里，才跳过 `npx playwright test` 以及对应的产物上传：
+| 范围          | 适用变化                                                         | 检查                                                                                                                    |
+| ------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `civ-ui`      | 文明列表展示、限定的文明卡样式、相应 e2e、普通文档及仅版本号变化 | lint、类型、分层、构建、对比度，以及 `civDlcFilters`、`civRequirements206`、`v0290-326`、`catalogLayout187`、`layout62` |
+| `maintenance` | 允许的文档和发布流程维护                                         | 静态检查、构建与相关发布单元测试，不跑整站浏览器回归                                                                    |
+| `full`        | 领域逻辑、游戏数据、依赖、未知或无法可靠确定的范围               | 原有完整单测、Python、数据再生成、完整 Playwright                                                                       |
 
-- `.github/**`
-- `docs/**`，但 **`docs/PATCH-NOTES/**` 除外**（补丁说明会进构建）
-- `scripts/release.mjs`
-- `scripts/check-pr-title.mjs`
-- `tests/unit/release*.test.ts`
+`package.json` 和锁文件必须结构化比较，除了版本号之外的变化不能走小 UI 通道。共享 CSS 仅允许限定的文明卡规则和注释变化；其他全局样式变化退回完整验证。`docs/PATCH-NOTES/**` 会进入产品构建，不作为普通文档例外。
 
-任一文件在白名单外，或改了 `docs/PATCH-NOTES/**`，就跑全量 e2e。
-
-跳过 Playwright 测试时，CI 仍会 `npx playwright install --with-deps chromium`：发版单测会 `chromium.launch()`（`tests/unit/release108.test.ts`、`scripts/release.mjs`）。装浏览器不等于跑 `playwright test`。
-
-下面这些不看路径，CI 里的 `npx playwright test` 全量都跑：
-
-- push 到 `main` 或 `release/**`
-- CI 工作流的 `workflow_dispatch`
-
-Release 工作流（`.github/workflows/release.yml`）在同仓库 main 的 push CI/Deploy 成功后自动接续，也保留从 main 手动调度的恢复入口。它安装 Chromium，通过脚本核对真实线上页脚，再设线上 `BASE_URL` 跑工作流点名的一批专项；这不是完整 Playwright。不能把依赖本地 dist、自建服务器的 Compare 专项直接当作线上专项。
-
-白名单 PR 按 CONTRIBUTING 完成适用的独立复核及其余实际运行的 CI 检查，不把按路径跳过的 Playwright 记成已运行。只改文档，或只改样式且不动逻辑和测试的 PR，可采用 CI 绿的轻量审阅规则。`src/` 里的样式不在路径白名单中，Playwright 仍会跑；轻量审阅不等于免 e2e。
+Release 只信任同仓库、已通过的 main CI 范围产物，并核对准确 head SHA；缺失或不符时完整验证。`civ-ui` 上线后仅检查文明筛选、卡片/模拟器布局，保留实际页脚版本、构建、tag 和附件验证。
 
 ## 7. 合并前要绿什么（摘要）
 
-本地习惯见 [AGENTS.md](../AGENTS.md)「合并前必须通过」：`npm run lint`、`npx tsc -p . --noEmit`、`npx vitest run`、`npm run build`、Playwright 全套。PR 描述里贴通过条数。CI 还跑 Python、`contrast.py`、`.dat` 可复现、开局数据等，以 `ci.yml` 为准。
+按变更范围做必要的本地检查和对应 CI。没有新修改、失败或未解决问题时不扩大测试范围，不因简单图标或文案改动跑无关计算与全站静态扫描。记录实际通过、跳过或中止的数量，不能将部分执行写成全量通过。
 
-默认门禁为实现者之外的独立代理复核＋完整 CI，记录实际提交 SHA、范围、结果和未解决问题；只改文档或纯样式且不动逻辑和测试时可按 CONTRIBUTING 采用轻量审阅规则。完整 CI 按现有工作流实际范围执行，push 到 `main` / `release/**` 必须完整；PR 按路径跳过的步骤须如实记录。禁止伪造他人结论、删除分支、修改权限或放宽测试。已授权发布仍须核对最终 release 头部和 main 的真实检查；空 statuses 或只返回 PR 的查询不是绿灯证据。
+独立代理复核实际提交，界面核对受影响状态和四宽。最终 release 头部及 main 的真实 test/deploy 检查仍须成功；空 statuses 或只列 PR 的查询不代表绿灯。不得伪造结论、提高超时、增加重试或放宽产品断言。
 
 ### 异步数据就绪（#412）
 

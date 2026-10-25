@@ -2,7 +2,7 @@
 
 ## Codex / 无人值守维护（必读）
 
-批量或无人值守改代码前，先读 **[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（独立代理复核＋完整 CI）、Hold 表（**#364 / #372 勿开**）、跳过条件与选 issue checklist。
+批量或无人值守改代码前，先读 **[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（独立代理复核＋按风险选择的 CI）、Hold 表（**#364 / #372 勿开**）、跳过条件与选 issue checklist。
 
 与 CONTRIBUTING 冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
 
@@ -97,7 +97,7 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 ## 合并前必须通过
 
-`npm run lint`、`npx tsc -p . --noEmit`、`npx vitest run`、`npm run build`、Playwright 全套。PR 描述里贴出本地结果（单测/e2e 通过条数）。CI 另外跑 Python 测试、对比度、`.dat` 数据校验和开局数据校验。只改文档或纯样式且不动逻辑和测试时可按 CONTRIBUTING 走轻量审阅；CI 按现有工作流实际范围执行，PR 的路径例外见 [TESTING](docs/TESTING.md)，push 到 `main` / `release/**` 必须跑完整 CI。
+按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 选择检查。小 UI 改动保留 lint、类型、分层、构建与相关页面检查，不运行无关计算、数据再生成和整站回归；未知范围、逻辑、数据和依赖变化完整验证。PR 描述记录实际执行、跳过或中止范围及结果。PR/main/release 使用相同范围规则，详见 [TESTING](docs/TESTING.md)。
 
 ## 测试规则
 
@@ -130,8 +130,8 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 1. 一个 issue 一个 PR，一个执行者。版本内的项以当前 `release/vX.Y.Z` 分支为目标（先 rebase 到它的最新提交）；只有线上数据错误的热修直接对 `main`（补丁版本，修订号 +1）。
 2. PR 标题必须是 Conventional Commits，CI 会检查：`类型(#issue): 描述`，类型为 `feat fix docs chore test ci refactor style perf build revert hotfix`。例：`fix(#13): 科技涉及单位只显示一处`。
 3. PR 描述写 `Fixes #N`（合到非默认分支不会自动关 issue，发版时人工核对），附本地测试结果；界面 PR 附 360/375/390/1280 四张截图。按需在 CHANGELOG 当前版本小节写一句玩家能看懂的话。
-4. 默认审阅门禁：实现者之外的独立代理复核＋完整 CI；PR 留下实际验证的提交 SHA、复核范围、结果和未解决问题，界面改动同时核对规格与四宽。执行者可在已授权范围补齐规格和失败用例并交独立复核；大功能或新页面须先具备这些材料再实现。只改文档或纯样式且不动逻辑和测试的 PR 可走 CI 绿的轻量规则；CI 范围按现有工作流执行，`main` / `release/**` push 必须完整。不得伪造他人结论、删除分支、修改仓库权限或放宽测试；已获授权时按顺序集成并发布。
-5. 版本号一律三段 `vX.Y.Z`。完成当前版本适用验收后，核对最终 release 头部 test CI，合入 main 并等待 Pages 部署成功，再由 Release 工作流核对真实线上页脚和功能、打 tag、制作附件并正式发布。按持续发布授权自动继续，无需再问是否上线；不要在 main 的完整 CI 尚未结束时让脚本以默认 600 秒等待部署。
+4. 默认审阅门禁：实现者之外的独立代理复核＋按风险选择的 CI；PR 留下实际验证的提交 SHA、复核范围、结果和未解决问题，界面改动同时核对规格与四宽。执行者可在已授权范围补齐规格和失败用例并交独立复核；大功能或新页面须先具备这些材料再实现。只改文档或纯样式且不动逻辑和测试的 PR 可走 CI 绿的轻量规则；CI 范围按现有工作流执行，`main` / `release/**` push 使用同一范围判定。不得伪造他人结论、删除分支、修改仓库权限或放宽测试；已获授权时按顺序集成并发布。
+5. 版本号一律三段 `vX.Y.Z`。完成当前版本适用验收后，核对最终 release 头部 test CI，合入 main 并等待 Pages 部署成功，再由 Release 工作流核对真实线上页脚和功能、打 tag、制作附件并正式发布。按持续发布授权自动继续，无需再问是否上线；不要在 main 的适用 CI 尚未结束时让脚本以默认 600 秒等待部署。
 
 ## 提交身份
 

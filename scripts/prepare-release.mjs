@@ -168,7 +168,7 @@ function main() {
     { repository, sha: source.deployedSha },
   );
   if (process.argv.includes('--guard-git')) installGitGuard(version);
-  output({ version, should_release: true, deployed_sha: source.deployedSha, release_sha: releaseSha });
+  output({ version, should_release: true, deployed_sha: source.deployedSha, release_sha: releaseSha, ci_run_id: run.id });
 }
 
 if (import.meta.url === pathToFileURL(resolve(process.argv[1] ?? '')).href) {
