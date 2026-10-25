@@ -24,7 +24,8 @@ export async function checkSite({ site, version, commit, features = [] }) {
   const errors = [];
   const visited = [];
   try {
-    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const page = await context.newPage();
     const observe = (opened) => {
       opened.on('pageerror', (error) => errors.push(error.message));
       opened.on('console', (message) => {
