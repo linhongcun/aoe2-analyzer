@@ -134,7 +134,7 @@ describe('#22 对建筑小字格式', () => {
     expect(src).toContain('对建筑 {n}');
     expect(src).toContain('建筑 {n}');
     expect(src).toContain('对建筑射程 ${n}');
-    for (const f of ['src/features/units/components/UnitDetail.tsx', 'src/features/duel/components/Duel.tsx'])
+    for (const f of ['src/features/units/components/UnitDetail.tsx', 'src/features/duel/components/DuelSelection.tsx'])
       expect(readFileSync(f, 'utf8')).not.toContain('（对建筑');
   });
 });
@@ -153,7 +153,7 @@ describe('Jony review 追加断言', () => {
   });
   it('#27 PK 攻击间隔用全角 em dash + 原因小字，不用半角 -', () => {
     // 单位页已改为共享统计卡，其破折号与说明小字在 smoke 的 #27 用例检查真实 DOM。
-    const s = readFileSync('src/features/duel/components/Duel.tsx', 'utf8');
+    const s = readFileSync('src/features/duel/components/DuelSelection.tsx', 'utf8');
     expect(s).toMatch(/—\s*<small className="note rof-reason"/);
     expect(s).not.toContain("? '-' :");
     expect(s).not.toContain('`— ${DPS_UNAVAILABLE_REASON}`');
