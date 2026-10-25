@@ -1,0 +1,786 @@
+{
+  "id": "81058",
+  "bullets": [
+    {
+      "id": "81058-b001",
+      "text": "Effect: Militia-Line +1 Pierce Armor",
+      "heading": "New Technology – Gambesons",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b002",
+      "text": "Cost: 100 Food and 100 Gold, 25 seconds",
+      "heading": "New Technology – Gambesons",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b003",
+      "text": "Available in Castle Age after Supplies has been researched",
+      "heading": "New Technology – Gambesons",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b004",
+      "text": "Civilizations gaining Gambesons are also listed in the civilization specific balance changes category:\n  + Gambesons Available for:  \n    Aztecs, Bengalis, Bulgarians, Burmese, Byzantines, Celts, Dravidians, Franks, Japanese, Koreans, Malay, Persians, Portuguese, Saracens, Sicilians, Slavs, Spanish, Teutons, Vikings\n  + Gambesons Disabled for:  \n    Berbers, Bohemians, Britons, Burgundians, Chinese, Cumans, Ethiopians, Goths, Gurjaras, Hindustanis, Huns, Incas, Italians, Khmer, Lithuanians, Magyars, Malians, Mayans, Mongols, Poles, Tatars, Turks, Vietnamese",
+      "heading": "New Technology – Gambesons",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b005",
+      "text": "Eagle Scout, Eagle Warrior, and Elite Eagle Warrior cost increased from 20 food and 50 gold ▶ 25 food and 50 gold",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b006",
+      "text": "Long Swordsman upgrade research time decreased from 45 seconds ▶ 40 seconds",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b007",
+      "text": "Two-Handed Swordsman upgrade research time decreased from 75 seconds ▶ 60 seconds",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b008",
+      "text": "Champion upgrade research time decreased from 100 seconds ▶ 85 seconds",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b009",
+      "text": "Pikeman upgrade research time decreased from 45 ▶ 35 seconds",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b010",
+      "text": "Pikeman upgrade cost decreased from 215 food and 90 gold ▶ 160 food and 90 gold",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b011",
+      "text": "Supplies research time decreased from 35 seconds ▶ 20 seconds",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b012",
+      "text": "Fishing Ship collision size reduced from 0.5 ▶ 0.4",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b013",
+      "text": "Trade Cog collision size reduced from 0.5 ▶ 0.3",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b014",
+      "text": "Elite Steppe Lancer pierce armor increased from 1 ▶ 2",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b015",
+      "text": "Heavy Scorpion upgrade cost decreased from 1000 food and 1100 wood ▶ 800 food and 900 wood",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b016",
+      "text": "Murder Holes research time decreased from 60 seconds ▶ 35 seconds",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b017",
+      "text": "Sappers research cost changed from 400 food and 200 gold ▶ 400 food and 200 wood",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b018",
+      "text": "Sappers research now also adds +3 bonus damage vs rams for villagers",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b019",
+      "text": "**(Elite) Elephant Archer train time decreased from 34 seconds ▶ 32 seconds**",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b020",
+      "text": "**Elite Elephant Archer upgrade cost reduced from 1000 food and 800 gold ▶ 900 food and 500 gold**",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b021",
+      "text": "Siege Elephant upgrade cost increased from 650 food ▶ 850 food",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b022",
+      "text": "(Elite) Genitours are now affected by Recurve Bow, Tower Shields, and Byzantine skirmisher discount",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b023",
+      "text": "Cannon Galleon Adjustments:\n  + (Elite) Cannon Galleon damage increased from 35 (45) ▶ 50 (60)\n  + (Elite) Cannon Galleon bonus damage vs Infantry, Archers, Cavalry and Mamelukes decreased from 15 ▶ 0\n  + (Elite) Cannon Galleon bonus damage vs Siege decreased from 40 ▶ 25\n  + (Elite) Cannon Galleon accuracy increased from 50% ▶ 100%\n  + (Elite) Cannon Galleon blast radius increased from 0 ▶ 0.25 (0.3)\n  + (Elite) Cannon Galleon receives attack ground ability\n  + Fixed an issue where Cannon Galleons sometimes wouldn’t damage the targeted unit.",
+      "heading": "General",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b024",
+      "text": "**Jaguar Warrior (Elite) pierce armor increased from 1 ▶ 2**",
+      "heading": "Aztecs",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b025",
+      "text": "Receive Gambesons",
+      "heading": "Aztecs",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b026",
+      "text": "50 extra starting gold is received after completing the first Town Center",
+      "heading": "Aztecs",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b027",
+      "text": "New Bonus – Melee Cavalry gain +2 bonus damage vs Skirmishers",
+      "heading": "Bengalis",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b028",
+      "text": "Mahayana effect now also applies to Monks",
+      "heading": "Bengalis",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b029",
+      "text": "Receive Supplies and Gambesons",
+      "heading": "Bengalis",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b030",
+      "text": "Villager movement speed bonus adjusted to 5% in Dark Age and 10% in Feudal Age",
+      "heading": "Berbers",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b031",
+      "text": "Hussite Reforms research cost reduced from 800 food and 450 gold ▶ 500 food and 450 gold",
+      "heading": "Bohemians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b032",
+      "text": "Team Bonus decreased from 20% ▶ 10% faster working archery ranges",
+      "heading": "Britons",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b033",
+      "text": "Fixed an issue where the Town Center cost discount was not reducing the cost of repairing.",
+      "heading": "Britons",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b034",
+      "text": "Receive Gambesons",
+      "heading": "Bulgarians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b035",
+      "text": "Stone discount does not apply to starting Town Center",
+      "heading": "Bulgarians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b036",
+      "text": "Flemish Militia cost decreased from 60 food and 25 gold ▶ 50 food and 15 gold",
+      "heading": "Burgundians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b037",
+      "text": "Flemish Militia production after researching Flemish Revolution moved from Town Center to Barracks",
+      "heading": "Burgundians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b038",
+      "text": "Flemish Militia HP decreased from 75 ▶ 60",
+      "heading": "Burgundians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b039",
+      "text": "Flemish Militia damage decreased from 12 ▶ 11",
+      "heading": "Burgundians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b040",
+      "text": "Flemish Militia pierce armor decreased from 1 ▶ 0",
+      "heading": "Burgundians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b041",
+      "text": "Flemish Revolution cost changed from 1200 food and 650 gold ▶ 200 food +10 food per villager converted and 150 gold +5 gold per villager converted",
+      "heading": "Burgundians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b042",
+      "text": "Elite Arambai upgrade cost adjusted from 1100 food and 675 gold ▶ 1000 food and 750 gold",
+      "heading": "Burmese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b043",
+      "text": "Receive Gambesons",
+      "heading": "Burmese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b044",
+      "text": "Greek Fire now additionally provides 5 splash damage to Bombard Towers",
+      "heading": "Byzantines",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b045",
+      "text": "Receive Gambesons",
+      "heading": "Byzantines",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b046",
+      "text": "Stronghold effect increased from 25% ▶ 33% attack speed to towers and castles",
+      "heading": "Celts",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b047",
+      "text": "Stronghold now additionally heals allied infantry near castles by 30 HP per minute",
+      "heading": "Celts",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b048",
+      "text": "**Woad Raider (Elite) HP increased from 65 (80) ▶ 70 (85)**",
+      "heading": "Celts",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b049",
+      "text": "**Woad Raider (Elite) Attack increased from 10 (13) ▶ 11 (14)**",
+      "heading": "Celts",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b050",
+      "text": "Receive Gambesons",
+      "heading": "Celts",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b051",
+      "text": "**No changes**",
+      "heading": "Chinese",
+      "status": "excluded",
+      "reason": "正式版明确 No changes；不收录 PUP 中未上线提案。"
+    },
+    {
+      "id": "81058-b052",
+      "text": "New Bonus: Siege units cost -33% wood",
+      "heading": "Dravidians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b053",
+      "text": "**Medical Corps cost reduced from 350 food and 250 gold ▶ 300 food and 200 gold**",
+      "heading": "Dravidians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b054",
+      "text": "**Medical Corps effect increased from 20 HP/minute ▶ 30 HP/minute**",
+      "heading": "Dravidians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b055",
+      "text": "Receive Gambesons",
+      "heading": "Dravidians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b056",
+      "text": "Team bonus effect changed from towers and outposts +3 line of sight ▶ outposts +3 line of sight and stone cost removed",
+      "heading": "Ethiopians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b057",
+      "text": "Royal Heirs effect changed from Shotel Warriors trained 100% faster to Shotels and Camel units receive -3 damage from Mounted Units",
+      "heading": "Ethiopians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b058",
+      "text": "Elite Shotel Warrior train time decreased from 8 seconds ▶ 4 seconds",
+      "heading": "Ethiopians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b059",
+      "text": "Receive Gambesons",
+      "heading": "Franks",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b060",
+      "text": "New Bonus: Hunt lasts 20% longer",
+      "heading": "Goths",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b061",
+      "text": "Kshatriyas cost increased from 200 food and 400 gold ▶ 500 food and 450 gold",
+      "heading": "Gurjaras",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b062",
+      "text": "(Elite) Shrivamsha cost increased from 70 food and 20 gold ▶ 70 food and 30 gold",
+      "heading": "Gurjaras",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b063",
+      "text": "(Elite) Shrivamsha reload time increased from 1.75 ▶ 2.0 (1.9)",
+      "heading": "Gurjaras",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b064",
+      "text": "Atheism cost decreased from 500 food and 500 gold ▶ 500 food and 300 wood",
+      "heading": "Huns",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b065",
+      "text": "Andean sling now additionally provides +1 attack to Slingers",
+      "heading": "Incas",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b066",
+      "text": "Fixed an issue where Slingers incorrectly gained attack speed from thumb ring",
+      "heading": "Incas",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b067",
+      "text": "New Bonus: Military units cost -15/20/25/30% food in Dark/Feudal/Castle/Imperial\n  + List of affected units: Militia-line, Spearman-line, Eagle-line, Skirmisher-line, Slinger, Kamayuk, Genitour, Condottieri, Petards and Xolotl Warriors.",
+      "heading": "Incas",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b068",
+      "text": "Lose access to Supplies",
+      "heading": "Incas",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b069",
+      "text": "(Elite) Kamayuk cost increased from 60 food and 30 gold ▶ 65 food and 30 gold",
+      "heading": "Incas",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b070",
+      "text": "Slinger cost increased from 30 food and 40 gold ▶ 40 food and 40 gold",
+      "heading": "Incas",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b071",
+      "text": "Bonus Removed: Start with a free Llama",
+      "heading": "Incas",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b072",
+      "text": "Team Bonus effect changed from Spearman and Skirmisher +2 line of sight ▶ Start with a free Llama",
+      "heading": "Incas",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b073",
+      "text": "Stone discount does not apply to starting Town Center",
+      "heading": "Incas",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b074",
+      "text": "Now have access to Hoardings",
+      "heading": "Japanese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b075",
+      "text": "**(Elite) Samurai cost reduced from 60 food and 30 gold ▶ 50 food and 30 gold**",
+      "heading": "Japanese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b076",
+      "text": "Kataparuto cost reduced from 750 wood and 400 gold ▶ 550 wood and 300 gold",
+      "heading": "Japanese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b077",
+      "text": "Receive Gambesons",
+      "heading": "Japanese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b078",
+      "text": "(Elite) Ballista Elephant armor changed from -2 ▶ 0, cavalry armor from -2 ▶ 0, siege armor from -2 ▶ 0",
+      "heading": "Khmer",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b079",
+      "text": "(Elite) Ballista Elephant gain hussite wagon armor class with a value of +20",
+      "heading": "Khmer",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b080",
+      "text": "Elite Turtle ship range increased from 6 ▶ 7",
+      "heading": "Koreans",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b081",
+      "text": "Receive Gambesons",
+      "heading": "Koreans",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b082",
+      "text": "Bonus for starting with 150 food changed to each Town Center providing 100 food",
+      "heading": "Lithuanians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b083",
+      "text": "New Bonus: Receive infantry armor upgrades for free",
+      "heading": "Malay",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b084",
+      "text": "Receive Gambesons",
+      "heading": "Malay",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b085",
+      "text": "(Elite) Gbeto HP increased from 35 (45) ▶ 40 (50)",
+      "heading": "Malians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b086",
+      "text": "The 30% longer lasting Gold Mines bonus changed to villagers drop off 15% more gold",
+      "heading": "Malians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b087",
+      "text": "Tigui additional arrows changed from 5 ▶ 8",
+      "heading": "Malians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b088",
+      "text": "Wood discount does not apply to starting Town Center",
+      "heading": "Malians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b089",
+      "text": "Receive Gambesons",
+      "heading": "Persians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b090",
+      "text": "50 extra starting food and wood are received after completing the first Town Center",
+      "heading": "Persians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b091",
+      "text": "Villager regeneration bonus now starts in Feudal Age",
+      "heading": "Poles",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b092",
+      "text": "(Elite) Organ Gun damage decreased from 16 ▶ 7 (20 ▶ 9)\n  + Secondary projectile damage changed from 2 flat to same as main projectile\n  + (Elite) Organ Gun total projectiles increased from 5 (5) ▶ 6 (7)\n  + (Elite) Organ Gun accuracy decreased from 50% ▶ 0%\n  + (Elite) Organ Gun attack dispersion decreased from 0.75 ▶ 0.25\n  + (Elite) Organ Gun Bonus vs Infantry increased from 0 ▶ 1\n  + Elite Organ Gun Bonus vs Buildings increased from 0 ▶ 1",
+      "heading": "Portuguese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b093",
+      "text": "Elite Caravel upgrade cost adjusted from 750 food and 475 gold ▶ 700 food and 525 gold",
+      "heading": "Portuguese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b094",
+      "text": "Receive Gambesons",
+      "heading": "Portuguese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b095",
+      "text": "Zealotry cost reduced from 500 food and 450 gold ▶ 400 food and 400 gold",
+      "heading": "Saracens",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b096",
+      "text": "Receive Gambesons",
+      "heading": "Saracens",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b097",
+      "text": "Castles and Town centers built 100% faster changed to Castle build 50% and Town Centers build 100% faster",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b098",
+      "text": "**Farm upgrade bonus increased from +100% ▶ +125% food per upgrade**",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b099",
+      "text": "Donjon affected by Hoardings",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b100",
+      "text": "Donjon can now train Spearman-line",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b101",
+      "text": "Donjon now functions as a prerequisite for Archery Range and Stable",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b102",
+      "text": "First Crusade effect reduced from 7 ▶ 5 Serjeants per Town Center",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b103",
+      "text": "First Crusade cost adjusted from 300 food and 600 gold ▶ 400 food and 300 gold",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b104",
+      "text": "Serjeant HP increased from 45 ▶ 50 in Feudal Age",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b105",
+      "text": "Serjeant HP increased from 65 ▶ 75 in Castle Age",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b106",
+      "text": "Serjeant Elite upgrade cost reduced from 1100 food and 800 gold ▶ 800 food and 675 gold",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b107",
+      "text": "Serjeant build/repair 25% slower in Feudal Age",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b108",
+      "text": "Receive Gambesons",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b109",
+      "text": "100 extra starting stone is received after completing the first Town Center",
+      "heading": "Sicilians",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b110",
+      "text": "Boyar cost adjusted from 50 food and 80 gold ▶ 60 food and 70 gold",
+      "heading": "Slavs",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b111",
+      "text": "Druzhina cost reduced from 1200 food and 500 gold ▶ 900 food and 500 gold",
+      "heading": "Slavs",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b112",
+      "text": "Receive Gambesons",
+      "heading": "Slavs",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b113",
+      "text": "Free Supplies bonus also includes Gambesons",
+      "heading": "Slavs",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b114",
+      "text": "Inquisition also gives Missionaries +1 range",
+      "heading": "Spanish",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b115",
+      "text": "Conquistador -1 Pierce Armor (Elite unchanged)",
+      "heading": "Spanish",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b116",
+      "text": "New Bonus: Gain 20 gold for each technology researched",
+      "heading": "Spanish",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b117",
+      "text": "Receive Gambesons",
+      "heading": "Spanish",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b118",
+      "text": "Build speed bonus does not apply to starting Town Center",
+      "heading": "Spanish",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b119",
+      "text": "(Elite) Keshik train time increased from 16 (14) ▶ 17 (15)",
+      "heading": "Tatars",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b120",
+      "text": "Artillery cost increased from 450 wood and 500 gold ▶ 600 food and 650 gold",
+      "heading": "Turks",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b121",
+      "text": "**(Elite) Teutonic Knight cost reduced from 85 food and 40 gold ▶ 85 food and 30 gold**",
+      "heading": "Teutons",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b122",
+      "text": "Receive Gambesons",
+      "heading": "Teutons",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b123",
+      "text": "Paper Money cost reduced from 600 wood and 350 gold ▶ 550 food and 200 wood",
+      "heading": "Vietnamese",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b124",
+      "text": "Chieftains effect now also provides infantry with gold generation while attacking villagers, trade units, and monks. This is in addition to infantry gain bonus damage vs cavalry\n  + 5 gold per Villager\n  + 20 gold per Monk/Trade unit",
+      "heading": "Vikings",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b125",
+      "text": "Chieftains cost reduced from 700 food and 500 gold ▶ 600 food and 450 gold",
+      "heading": "Vikings",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b126",
+      "text": "Berserkergang replaced with Bogsveigar (650 food and 500 gold): Archer-line and Longboats +1 Attack",
+      "heading": "Vikings",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b127",
+      "text": "(Elite) Berserk healing increased from 20 HP per minute ▶ 40 HP per minute",
+      "heading": "Vikings",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b128",
+      "text": "Elite Longboats Bonus vs Ships 11 ▶ 10",
+      "heading": "Vikings",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b129",
+      "text": "Elite Longboats Bonus vs Buildings 8 ▶ 7",
+      "heading": "Vikings",
+      "status": "mapped"
+    },
+    {
+      "id": "81058-b130",
+      "text": "Receive Gambesons",
+      "heading": "Vikings",
+      "status": "mapped"
+    }
+  ]
+}

@@ -1,0 +1,3557 @@
+{
+  "id": "81058",
+  "date": "2023-04-11",
+  "announcedAt": "2023-04-11",
+  "branch": "DE",
+  "releaseType": "release",
+  "title": "软甲引入与步兵、文明平衡调整",
+  "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+  "coverage": "完整收录官方 Civilization Balance 栏目；排除明确的 No changes，不包含战役、地图、寻路等其他栏目。",
+  "verifiedAt": "2026-10-25",
+  "note": "前后变化取自本次正式版官方说明；未持有该历史版本完整 .dat，不用当前数据替代历史数值。官方加粗内容为测试后定稿变化，中国最终明确无改动。",
+  "archivedTargets": [
+    {
+      "targetType": "tech",
+      "targetId": 716,
+      "targetNameZh": "补给",
+      "nameEn": "Supplies",
+      "status": "retired"
+    },
+    {
+      "targetType": "tech",
+      "targetId": "legacy-berserkergang",
+      "targetNameZh": "旧狂战士科技",
+      "nameEn": "Berserkergang",
+      "status": "retired"
+    },
+    {
+      "targetType": "tech",
+      "targetId": "legacy-zealotry",
+      "targetNameZh": "旧狂热科技",
+      "nameEn": "Zealotry",
+      "status": "retired"
+    }
+  ],
+  "entries": [
+    {
+      "id": "81058-1",
+      "kind": "new",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [],
+      "summaryZh": "新增软甲效果：民兵系获得 1 点远程护甲。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Effect: Militia-Line +1 Pierce Armor",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b001",
+      "before": "尚未引入",
+      "after": "民兵系远程护甲 +1",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 74,
+          "targetNameZh": "民兵",
+          "relation": "研究软甲后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 75,
+          "targetNameZh": "武士",
+          "relation": "研究软甲后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 77,
+          "targetNameZh": "长剑士",
+          "relation": "研究软甲后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 473,
+          "targetNameZh": "双手剑士",
+          "relation": "研究软甲后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 567,
+          "targetNameZh": "冠军剑士",
+          "relation": "研究软甲后适用"
+        }
+      ],
+      "affectedCivIds": [
+        "Aztecs",
+        "Bengalis",
+        "Bulgarians",
+        "Burmese",
+        "Byzantines",
+        "Celts",
+        "Dravidians",
+        "Franks",
+        "Japanese",
+        "Koreans",
+        "Malay",
+        "Persians",
+        "Portuguese",
+        "Saracens",
+        "Sicilians",
+        "Slavs",
+        "Spanish",
+        "Teutons",
+        "Vikings"
+      ]
+    },
+    {
+      "id": "81058-2",
+      "kind": "new",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [],
+      "summaryZh": "软甲的研究费用为 100 食物、100 黄金，研究时间为 25 秒。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Cost: 100 Food and 100 Gold, 25 seconds",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b002",
+      "affectedCivIds": [
+        "Aztecs",
+        "Bengalis",
+        "Bulgarians",
+        "Burmese",
+        "Byzantines",
+        "Celts",
+        "Dravidians",
+        "Franks",
+        "Japanese",
+        "Koreans",
+        "Malay",
+        "Persians",
+        "Portuguese",
+        "Saracens",
+        "Sicilians",
+        "Slavs",
+        "Spanish",
+        "Teutons",
+        "Vikings"
+      ]
+    },
+    {
+      "id": "81058-3",
+      "kind": "new",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [],
+      "summaryZh": "软甲在城堡时代开放，研究前需先完成补给。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Available in Castle Age after Supplies has been researched",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b003",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 716,
+          "targetNameZh": "补给",
+          "relation": "前置科技"
+        }
+      ],
+      "affectedCivIds": [
+        "Aztecs",
+        "Bengalis",
+        "Bulgarians",
+        "Burmese",
+        "Byzantines",
+        "Celts",
+        "Dravidians",
+        "Franks",
+        "Japanese",
+        "Koreans",
+        "Malay",
+        "Persians",
+        "Portuguese",
+        "Saracens",
+        "Sicilians",
+        "Slavs",
+        "Spanish",
+        "Teutons",
+        "Vikings"
+      ]
+    },
+    {
+      "id": "81058-4",
+      "kind": "new",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [],
+      "summaryZh": "官方列出的 19 个文明获得软甲；其余当时文明不开放。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Civilizations gaining Gambesons are also listed in the civilization specific balance changes category:\n  + Gambesons Available for:  \n    Aztecs, Bengalis, Bulgarians, Burmese, Byzantines, Celts, Dravidians, Franks, Japanese, Koreans, Malay, Persians, Portuguese, Saracens, Sicilians, Slavs, Spanish, Teutons, Vikings\n  + Gambesons Disabled for:  \n    Berbers, Bohemians, Britons, Burgundians, Chinese, Cumans, Ethiopians, Goths, Gurjaras, Hindustanis, Huns, Incas, Italians, Khmer, Lithuanians, Magyars, Malians, Mayans, Mongols, Poles, Tatars, Turks, Vietnamese",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b004",
+      "affectedCivIds": [
+        "Aztecs",
+        "Bengalis",
+        "Bulgarians",
+        "Burmese",
+        "Byzantines",
+        "Celts",
+        "Dravidians",
+        "Franks",
+        "Japanese",
+        "Koreans",
+        "Malay",
+        "Persians",
+        "Portuguese",
+        "Saracens",
+        "Sicilians",
+        "Slavs",
+        "Spanish",
+        "Teutons",
+        "Vikings"
+      ],
+      "scopeNote": "适用文明按此版本官方清单记录，不从当前科技树推导。"
+    },
+    {
+      "id": "81058-5",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 751,
+      "targetNameZh": "鹰斥候",
+      "civIds": [],
+      "summaryZh": "鹰勇士系的训练食物费用提高，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Eagle Scout, Eagle Warrior, and Elite Eagle Warrior cost increased from 20 food and 50 gold ▶ 25 food and 50 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b005",
+      "before": "20 食物、50 黄金",
+      "after": "25 食物、50 黄金"
+    },
+    {
+      "id": "81058-6",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 753,
+      "targetNameZh": "鹰勇士",
+      "civIds": [],
+      "summaryZh": "鹰勇士系的训练食物费用提高，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Eagle Scout, Eagle Warrior, and Elite Eagle Warrior cost increased from 20 food and 50 gold ▶ 25 food and 50 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b005",
+      "before": "20 食物、50 黄金",
+      "after": "25 食物、50 黄金"
+    },
+    {
+      "id": "81058-7",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 752,
+      "targetNameZh": "精锐鹰勇士",
+      "civIds": [],
+      "summaryZh": "鹰勇士系的训练食物费用提高，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Eagle Scout, Eagle Warrior, and Elite Eagle Warrior cost increased from 20 food and 50 gold ▶ 25 food and 50 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b005",
+      "before": "20 食物、50 黄金",
+      "after": "25 食物、50 黄金"
+    },
+    {
+      "id": "81058-8",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 77,
+      "targetNameZh": "长剑士",
+      "civIds": [],
+      "summaryZh": "升级研究时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Long Swordsman upgrade research time decreased from 45 seconds ▶ 40 seconds",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b006",
+      "before": "45 秒",
+      "after": "40 秒"
+    },
+    {
+      "id": "81058-9",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 473,
+      "targetNameZh": "双手剑士",
+      "civIds": [],
+      "summaryZh": "升级研究时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Two-Handed Swordsman upgrade research time decreased from 75 seconds ▶ 60 seconds",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b007",
+      "before": "75 秒",
+      "after": "60 秒"
+    },
+    {
+      "id": "81058-10",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 567,
+      "targetNameZh": "冠军剑士",
+      "civIds": [],
+      "summaryZh": "升级研究时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Champion upgrade research time decreased from 100 seconds ▶ 85 seconds",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b008",
+      "before": "100 秒",
+      "after": "85 秒"
+    },
+    {
+      "id": "81058-11",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 358,
+      "targetNameZh": "长枪兵",
+      "civIds": [],
+      "summaryZh": "升级研究时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Pikeman upgrade research time decreased from 45 ▶ 35 seconds",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b009",
+      "before": "45 秒",
+      "after": "35 秒"
+    },
+    {
+      "id": "81058-12",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 358,
+      "targetNameZh": "长枪兵",
+      "civIds": [],
+      "summaryZh": "升级研究食物费用降低，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Pikeman upgrade cost decreased from 215 food and 90 gold ▶ 160 food and 90 gold",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b010",
+      "before": "215 食物、90 黄金",
+      "after": "160 食物、90 黄金"
+    },
+    {
+      "id": "81058-13",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 716,
+      "targetNameZh": "补给",
+      "civIds": [],
+      "summaryZh": "补给研究时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Supplies research time decreased from 35 seconds ▶ 20 seconds",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b011",
+      "before": "35 秒",
+      "after": "20 秒",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 74,
+          "targetNameZh": "民兵",
+          "relation": "完成补给后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 75,
+          "targetNameZh": "武士",
+          "relation": "完成补给后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 77,
+          "targetNameZh": "长剑士",
+          "relation": "完成补给后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 473,
+          "targetNameZh": "双手剑士",
+          "relation": "完成补给后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 567,
+          "targetNameZh": "冠军剑士",
+          "relation": "完成补给后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-14",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 13,
+      "targetNameZh": "渔船",
+      "civIds": [],
+      "summaryZh": "碰撞尺寸减小。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Fishing Ship collision size reduced from 0.5 ▶ 0.4",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b012",
+      "before": "0.5",
+      "after": "0.4"
+    },
+    {
+      "id": "81058-15",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 17,
+      "targetNameZh": "贸易船",
+      "civIds": [],
+      "summaryZh": "碰撞尺寸减小。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Trade Cog collision size reduced from 0.5 ▶ 0.3",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b013",
+      "before": "0.5",
+      "after": "0.3"
+    },
+    {
+      "id": "81058-16",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1372,
+      "targetNameZh": "精锐草原枪兵",
+      "civIds": [],
+      "summaryZh": "基础远程护甲提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Elite Steppe Lancer pierce armor increased from 1 ▶ 2",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b014",
+      "before": "1",
+      "after": "2"
+    },
+    {
+      "id": "81058-17",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 542,
+      "targetNameZh": "重型弩炮",
+      "civIds": [],
+      "summaryZh": "重型弩炮升级的食物与木材费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Heavy Scorpion upgrade cost decreased from 1000 food and 1100 wood ▶ 800 food and 900 wood",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b015",
+      "before": "1000 食物、1100 木材",
+      "after": "800 食物、900 木材"
+    },
+    {
+      "id": "81058-18",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 322,
+      "targetNameZh": "近射孔",
+      "civIds": [],
+      "summaryZh": "近射孔研究时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Murder Holes research time decreased from 60 seconds ▶ 35 seconds",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b016",
+      "before": "60 秒",
+      "after": "35 秒"
+    },
+    {
+      "id": "81058-19",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 321,
+      "targetNameZh": "工兵",
+      "civIds": [],
+      "summaryZh": "工兵研究费用中的黄金改为木材，食物费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Sappers research cost changed from 400 food and 200 gold ▶ 400 food and 200 wood",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b017",
+      "before": "400 食物、200 黄金",
+      "after": "400 食物、200 木材"
+    },
+    {
+      "id": "81058-20",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 321,
+      "targetNameZh": "工兵",
+      "civIds": [],
+      "summaryZh": "工兵额外使村民对冲车护甲类的攻击加成增加 3；最终伤害还受目标护甲影响。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Sappers research now also adds +3 bonus damage vs rams for villagers",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b018",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 83,
+          "targetNameZh": "村民",
+          "relation": "研究工兵后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-21",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 873,
+      "targetNameZh": "骑象射手",
+      "civIds": [],
+      "summaryZh": "骑象射手训练时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**(Elite) Elephant Archer train time decreased from 34 seconds ▶ 32 seconds**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b019",
+      "before": "34 秒",
+      "after": "32 秒"
+    },
+    {
+      "id": "81058-22",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 875,
+      "targetNameZh": "精锐骑象射手",
+      "civIds": [],
+      "summaryZh": "骑象射手训练时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**(Elite) Elephant Archer train time decreased from 34 seconds ▶ 32 seconds**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b019",
+      "before": "34 秒",
+      "after": "32 秒"
+    },
+    {
+      "id": "81058-23",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 875,
+      "targetNameZh": "精锐骑象射手",
+      "civIds": [],
+      "summaryZh": "精锐骑象射手升级费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Elite Elephant Archer upgrade cost reduced from 1000 food and 800 gold ▶ 900 food and 500 gold**",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b020",
+      "before": "1000 食物、800 黄金",
+      "after": "900 食物、500 黄金"
+    },
+    {
+      "id": "81058-24",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1746,
+      "targetNameZh": "攻城战象",
+      "civIds": [],
+      "summaryZh": "攻城战象升级食物费用提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Siege Elephant upgrade cost increased from 650 food ▶ 850 food",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b021",
+      "before": "650 食物",
+      "after": "850 食物"
+    },
+    {
+      "id": "81058-25",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1010,
+      "targetNameZh": "标枪骑兵",
+      "civIds": [],
+      "summaryZh": "标枪骑兵现在受反曲弓、塔盾和拜占庭掷矛手费用折扣影响。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Genitours are now affected by Recurve Bow, Tower Shields, and Byzantine skirmisher discount",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b022",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 515,
+          "targetNameZh": "反曲弓",
+          "relation": "现在影响此单位"
+        },
+        {
+          "targetType": "tech",
+          "targetId": 692,
+          "targetNameZh": "塔盾",
+          "relation": "现在影响此单位"
+        },
+        {
+          "targetType": "civ",
+          "targetId": "Byzantines",
+          "targetNameZh": "拜占庭",
+          "relation": "掷矛手费用折扣适用"
+        }
+      ],
+      "affectedCivIds": [
+        "Magyars",
+        "Lithuanians",
+        "Byzantines"
+      ],
+      "scopeNote": "标枪骑兵须通过柏柏尔盟友的团队加成获得。"
+    },
+    {
+      "id": "81058-26",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1012,
+      "targetNameZh": "精锐标枪骑兵",
+      "civIds": [],
+      "summaryZh": "标枪骑兵现在受反曲弓、塔盾和拜占庭掷矛手费用折扣影响。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Genitours are now affected by Recurve Bow, Tower Shields, and Byzantine skirmisher discount",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b022",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 515,
+          "targetNameZh": "反曲弓",
+          "relation": "现在影响此单位"
+        },
+        {
+          "targetType": "tech",
+          "targetId": 692,
+          "targetNameZh": "塔盾",
+          "relation": "现在影响此单位"
+        },
+        {
+          "targetType": "civ",
+          "targetId": "Byzantines",
+          "targetNameZh": "拜占庭",
+          "relation": "掷矛手费用折扣适用"
+        }
+      ],
+      "affectedCivIds": [
+        "Magyars",
+        "Lithuanians",
+        "Byzantines"
+      ],
+      "scopeNote": "标枪骑兵须通过柏柏尔盟友的团队加成获得。"
+    },
+    {
+      "id": "81058-27",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 420,
+      "targetNameZh": "炮舰",
+      "civIds": [],
+      "summaryZh": "炮舰重做：基础攻击力 35 改为 50，对步兵、弓兵、骑兵和马穆鲁克的额外伤害从 15 改为 0，对攻城武器的额外伤害从 40 改为 25；精度从 50% 改为 100%，爆炸范围从 0 改为 0.25，获得攻击地面能力，并修复偶尔无法造成伤害的问题。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Cannon Galleon Adjustments:\n  + (Elite) Cannon Galleon damage increased from 35 (45) ▶ 50 (60)\n  + (Elite) Cannon Galleon bonus damage vs Infantry, Archers, Cavalry and Mamelukes decreased from 15 ▶ 0\n  + (Elite) Cannon Galleon bonus damage vs Siege decreased from 40 ▶ 25\n  + (Elite) Cannon Galleon accuracy increased from 50% ▶ 100%\n  + (Elite) Cannon Galleon blast radius increased from 0 ▶ 0.25 (0.3)\n  + (Elite) Cannon Galleon receives attack ground ability\n  + Fixed an issue where Cannon Galleons sometimes wouldn’t damage the targeted unit.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b023"
+    },
+    {
+      "id": "81058-28",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 691,
+      "targetNameZh": "精锐炮舰",
+      "civIds": [],
+      "summaryZh": "炮舰重做：基础攻击力 45 改为 60，对步兵、弓兵、骑兵和马穆鲁克的额外伤害从 15 改为 0，对攻城武器的额外伤害从 40 改为 25；精度从 50% 改为 100%，爆炸范围从 0 改为 0.3，获得攻击地面能力，并修复偶尔无法造成伤害的问题。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Cannon Galleon Adjustments:\n  + (Elite) Cannon Galleon damage increased from 35 (45) ▶ 50 (60)\n  + (Elite) Cannon Galleon bonus damage vs Infantry, Archers, Cavalry and Mamelukes decreased from 15 ▶ 0\n  + (Elite) Cannon Galleon bonus damage vs Siege decreased from 40 ▶ 25\n  + (Elite) Cannon Galleon accuracy increased from 50% ▶ 100%\n  + (Elite) Cannon Galleon blast radius increased from 0 ▶ 0.25 (0.3)\n  + (Elite) Cannon Galleon receives attack ground ability\n  + Fixed an issue where Cannon Galleons sometimes wouldn’t damage the targeted unit.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b023"
+    },
+    {
+      "id": "81058-29",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 725,
+      "targetNameZh": "豹勇士",
+      "civIds": [
+        "Aztecs"
+      ],
+      "summaryZh": "豹勇士的基础远程护甲提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Jaguar Warrior (Elite) pierce armor increased from 1 ▶ 2**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b024",
+      "before": "1",
+      "after": "2"
+    },
+    {
+      "id": "81058-30",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 726,
+      "targetNameZh": "精锐豹勇士",
+      "civIds": [
+        "Aztecs"
+      ],
+      "summaryZh": "豹勇士的基础远程护甲提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Jaguar Warrior (Elite) pierce armor increased from 1 ▶ 2**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b024",
+      "before": "1",
+      "after": "2"
+    },
+    {
+      "id": "81058-31",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Aztecs"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b025",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-32",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Aztecs",
+      "targetNameZh": "阿兹特克",
+      "civIds": [
+        "Aztecs"
+      ],
+      "summaryZh": "额外的 50 起始黄金改为完成第一座城镇中心后发放。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "50 extra starting gold is received after completing the first Town Center",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b026",
+      "scopeNote": "改变发放时点；不表示总奖励增加。"
+    },
+    {
+      "id": "81058-33",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Bengalis",
+      "targetNameZh": "孟加拉",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "新增加成：近战骑兵对掷矛手额外造成 2 点伤害。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "New Bonus – Melee Cavalry gain +2 bonus damage vs Skirmishers",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b027"
+    },
+    {
+      "id": "81058-34",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 834,
+      "targetNameZh": "大乘佛教",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "大乘佛教的人口空间效果现在也适用于僧侣。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Mahayana effect now also applies to Monks",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b028",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 125,
+          "targetNameZh": "僧侣",
+          "relation": "研究大乘佛教后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-35",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 716,
+      "targetNameZh": "补给",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Supplies and Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b029",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-36",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Supplies and Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b029",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-37",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Berbers",
+      "targetNameZh": "柏柏尔",
+      "civIds": [
+        "Berbers"
+      ],
+      "summaryZh": "村民移速加成调整为黑暗时代 5%、封建时代起 10%。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Villager movement speed bonus adjusted to 5% in Dark Age and 10% in Feudal Age",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b030",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 83,
+          "targetNameZh": "村民",
+          "relation": "柏柏尔文明加成"
+        }
+      ]
+    },
+    {
+      "id": "81058-38",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 785,
+      "targetNameZh": "胡斯革新",
+      "civIds": [
+        "Bohemians"
+      ],
+      "summaryZh": "胡斯革新的食物费用降低，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Hussite Reforms research cost reduced from 800 food and 450 gold ▶ 500 food and 450 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b031",
+      "before": "800 食物、450 黄金",
+      "after": "500 食物、450 黄金"
+    },
+    {
+      "id": "81058-39",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Britons",
+      "targetNameZh": "不列颠",
+      "civIds": [
+        "Britons"
+      ],
+      "summaryZh": "团队加成的靶场工作速度提升幅度降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Team Bonus decreased from 20% ▶ 10% faster working archery ranges",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b032",
+      "before": "20%",
+      "after": "10%",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 87,
+          "targetNameZh": "靶场",
+          "relation": "团队加成适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-40",
+      "kind": "adjust",
+      "targetType": "building",
+      "targetId": 109,
+      "targetNameZh": "城镇中心",
+      "civIds": [
+        "Britons"
+      ],
+      "summaryZh": "修复不列颠城镇中心费用折扣未降低修理费用的问题。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Fixed an issue where the Town Center cost discount was not reducing the cost of repairing.",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "81058-b033"
+    },
+    {
+      "id": "81058-41",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Bulgarians"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b034",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-42",
+      "kind": "adjust",
+      "targetType": "building",
+      "targetId": 109,
+      "targetNameZh": "城镇中心",
+      "civIds": [
+        "Bulgarians"
+      ],
+      "summaryZh": "保加利亚石料折扣不再作用于起始城镇中心。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Stone discount does not apply to starting Town Center",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b035"
+    },
+    {
+      "id": "81058-43",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1699,
+      "targetNameZh": "弗拉芒民兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "弗拉芒民兵训练费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Flemish Militia cost decreased from 60 food and 25 gold ▶ 50 food and 15 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b036",
+      "before": "60 食物、25 黄金",
+      "after": "50 食物、15 黄金"
+    },
+    {
+      "id": "81058-44",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1699,
+      "targetNameZh": "弗拉芒民兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "研究弗拉芒革命后的弗拉芒民兵训练建筑由城镇中心改为兵营。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Flemish Militia production after researching Flemish Revolution moved from Town Center to Barracks",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b037",
+      "before": "城镇中心",
+      "after": "兵营",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 755,
+          "targetNameZh": "弗拉芒革命",
+          "relation": "完成研究后生效"
+        }
+      ]
+    },
+    {
+      "id": "81058-45",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1699,
+      "targetNameZh": "弗拉芒民兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "弗拉芒民兵基础生命值降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Flemish Militia HP decreased from 75 ▶ 60",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b038",
+      "before": "75",
+      "after": "60"
+    },
+    {
+      "id": "81058-46",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1699,
+      "targetNameZh": "弗拉芒民兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "弗拉芒民兵基础攻击力降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Flemish Militia damage decreased from 12 ▶ 11",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b039",
+      "before": "12",
+      "after": "11"
+    },
+    {
+      "id": "81058-47",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1699,
+      "targetNameZh": "弗拉芒民兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "弗拉芒民兵基础远程护甲降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Flemish Militia pierce armor decreased from 1 ▶ 0",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b040",
+      "before": "1",
+      "after": "0"
+    },
+    {
+      "id": "81058-48",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 755,
+      "targetNameZh": "弗拉芒革命",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "研究费用由固定费用改为基础费用加每名被转换村民的费用。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Flemish Revolution cost changed from 1200 food and 650 gold ▶ 200 food +10 food per villager converted and 150 gold +5 gold per villager converted",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b041",
+      "before": "1200 食物、650 黄金",
+      "after": "200 食物 + 每名村民 10 食物；150 黄金 + 每名村民 5 黄金",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 1699,
+          "targetNameZh": "弗拉芒民兵",
+          "relation": "研究后的转换单位"
+        }
+      ]
+    },
+    {
+      "id": "81058-49",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1128,
+      "targetNameZh": "精锐飞镖骑兵",
+      "civIds": [
+        "Burmese"
+      ],
+      "summaryZh": "精锐飞镖骑兵升级费用调整：食物降低，黄金提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Elite Arambai upgrade cost adjusted from 1100 food and 675 gold ▶ 1000 food and 750 gold",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b042",
+      "before": "1100 食物、675 黄金",
+      "after": "1000 食物、750 黄金"
+    },
+    {
+      "id": "81058-50",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Burmese"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b043",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-51",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 464,
+      "targetNameZh": "希腊之火",
+      "civIds": [
+        "Byzantines"
+      ],
+      "summaryZh": "希腊之火额外使炮塔造成 5 点溅射伤害。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Greek Fire now additionally provides 5 splash damage to Bombard Towers",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b044",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 236,
+          "targetNameZh": "炮塔",
+          "relation": "研究希腊之火后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-52",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Byzantines"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b045",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-53",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 482,
+      "targetNameZh": "堡垒",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "堡垒对城堡和箭塔的攻击速度加成提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Stronghold effect increased from 25% ▶ 33% attack speed to towers and castles",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b046",
+      "before": "25%",
+      "after": "33%",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 82,
+          "targetNameZh": "城堡",
+          "relation": "研究堡垒后适用"
+        },
+        {
+          "targetType": "building",
+          "targetId": 79,
+          "targetNameZh": "瞭望箭塔",
+          "relation": "研究堡垒后适用"
+        },
+        {
+          "targetType": "building",
+          "targetId": 234,
+          "targetNameZh": "警戒箭塔",
+          "relation": "研究堡垒后适用"
+        },
+        {
+          "targetType": "building",
+          "targetId": 235,
+          "targetNameZh": "大型箭塔",
+          "relation": "研究堡垒后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-54",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 482,
+      "targetNameZh": "堡垒",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "堡垒额外使城堡每分钟治疗附近盟军步兵 30 点生命值。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Stronghold now additionally heals allied infantry near castles by 30 HP per minute",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b047",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 82,
+          "targetNameZh": "城堡",
+          "relation": "研究堡垒后获得治疗能力"
+        }
+      ]
+    },
+    {
+      "id": "81058-55",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 232,
+      "targetNameZh": "靛蓝突袭者",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "靛蓝突袭者基础生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Woad Raider (Elite) HP increased from 65 (80) ▶ 70 (85)**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b048",
+      "before": "65",
+      "after": "70"
+    },
+    {
+      "id": "81058-56",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 534,
+      "targetNameZh": "精锐靛蓝突袭者",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "靛蓝突袭者基础生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Woad Raider (Elite) HP increased from 65 (80) ▶ 70 (85)**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b048",
+      "before": "80",
+      "after": "85"
+    },
+    {
+      "id": "81058-57",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 232,
+      "targetNameZh": "靛蓝突袭者",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "靛蓝突袭者基础攻击力提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Woad Raider (Elite) Attack increased from 10 (13) ▶ 11 (14)**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b049",
+      "before": "10",
+      "after": "11"
+    },
+    {
+      "id": "81058-58",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 534,
+      "targetNameZh": "精锐靛蓝突袭者",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "靛蓝突袭者基础攻击力提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Woad Raider (Elite) Attack increased from 10 (13) ▶ 11 (14)**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b049",
+      "before": "13",
+      "after": "14"
+    },
+    {
+      "id": "81058-59",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Celts"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b050",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-60",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Dravidians",
+      "targetNameZh": "达罗毗荼",
+      "civIds": [
+        "Dravidians"
+      ],
+      "summaryZh": "新增加成：攻城武器的木材费用降低 33%。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "New Bonus: Siege units cost -33% wood",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b052"
+    },
+    {
+      "id": "81058-61",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 831,
+      "targetNameZh": "医疗部队",
+      "civIds": [
+        "Dravidians"
+      ],
+      "summaryZh": "医疗部队研究费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Medical Corps cost reduced from 350 food and 250 gold ▶ 300 food and 200 gold**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b053",
+      "before": "350 食物、250 黄金",
+      "after": "300 食物、200 黄金"
+    },
+    {
+      "id": "81058-62",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 831,
+      "targetNameZh": "医疗部队",
+      "civIds": [
+        "Dravidians"
+      ],
+      "summaryZh": "医疗部队的每分钟治疗量提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Medical Corps effect increased from 20 HP/minute ▶ 30 HP/minute**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b054",
+      "before": "20 生命值/分钟",
+      "after": "30 生命值/分钟"
+    },
+    {
+      "id": "81058-63",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Dravidians"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b055",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-64",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Ethiopians",
+      "targetNameZh": "埃塞俄比亚",
+      "civIds": [
+        "Ethiopians"
+      ],
+      "summaryZh": "团队加成由箭塔和哨站视野 +3 改为哨站视野 +3 且免除哨站石料费用。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Team bonus effect changed from towers and outposts +3 line of sight ▶ outposts +3 line of sight and stone cost removed",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b056",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 598,
+          "targetNameZh": "哨站",
+          "relation": "团队加成范围调整"
+        },
+        {
+          "targetType": "building",
+          "targetId": 79,
+          "targetNameZh": "瞭望箭塔",
+          "relation": "团队加成范围调整"
+        },
+        {
+          "targetType": "building",
+          "targetId": 234,
+          "targetNameZh": "警戒箭塔",
+          "relation": "团队加成范围调整"
+        },
+        {
+          "targetType": "building",
+          "targetId": 235,
+          "targetNameZh": "大型箭塔",
+          "relation": "团队加成范围调整"
+        }
+      ]
+    },
+    {
+      "id": "81058-65",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 574,
+      "targetNameZh": "龙脉",
+      "civIds": [
+        "Ethiopians"
+      ],
+      "summaryZh": "龙脉效果由弯刀勇士训练速度提升 100% 改为弯刀勇士和骆驼单位受到骑乘单位伤害减少 3。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Royal Heirs effect changed from Shotel Warriors trained 100% faster to Shotels and Camel units receive -3 damage from Mounted Units",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b057",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 1016,
+          "targetNameZh": "弯刀勇士",
+          "relation": "研究龙脉后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 1018,
+          "targetNameZh": "精锐弯刀勇士",
+          "relation": "研究龙脉后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 329,
+          "targetNameZh": "骆驼兵",
+          "relation": "研究龙脉后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 330,
+          "targetNameZh": "重装骆驼兵",
+          "relation": "研究龙脉后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-66",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1018,
+      "targetNameZh": "精锐弯刀勇士",
+      "civIds": [
+        "Ethiopians"
+      ],
+      "summaryZh": "精锐弯刀勇士的基础训练时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Elite Shotel Warrior train time decreased from 8 seconds ▶ 4 seconds",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b058",
+      "before": "8 秒",
+      "after": "4 秒"
+    },
+    {
+      "id": "81058-67",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Franks"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b059",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-68",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Goths",
+      "targetNameZh": "哥特",
+      "civIds": [
+        "Goths"
+      ],
+      "summaryZh": "新增加成：猎物资源可持续采集更久，增加 20%。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "New Bonus: Hunt lasts 20% longer",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b060"
+    },
+    {
+      "id": "81058-69",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 835,
+      "targetNameZh": "刹帝利",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "刹帝利研究费用提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Kshatriyas cost increased from 200 food and 400 gold ▶ 500 food and 450 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b061",
+      "before": "200 食物、400 黄金",
+      "after": "500 食物、450 黄金"
+    },
+    {
+      "id": "81058-70",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1751,
+      "targetNameZh": "施里瓦姆沙骑手",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "施里瓦姆沙骑手黄金费用提高，食物费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Shrivamsha cost increased from 70 food and 20 gold ▶ 70 food and 30 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b062",
+      "before": "70 食物、20 黄金",
+      "after": "70 食物、30 黄金"
+    },
+    {
+      "id": "81058-71",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1753,
+      "targetNameZh": "精锐施里瓦姆沙骑手",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "施里瓦姆沙骑手黄金费用提高，食物费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Shrivamsha cost increased from 70 food and 20 gold ▶ 70 food and 30 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b062",
+      "before": "70 食物、20 黄金",
+      "after": "70 食物、30 黄金"
+    },
+    {
+      "id": "81058-72",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1751,
+      "targetNameZh": "施里瓦姆沙骑手",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "攻击间隔增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Shrivamsha reload time increased from 1.75 ▶ 2.0 (1.9)",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b063",
+      "before": "1.75 秒",
+      "after": "2.0 秒"
+    },
+    {
+      "id": "81058-73",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1753,
+      "targetNameZh": "精锐施里瓦姆沙骑手",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "攻击间隔增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Shrivamsha reload time increased from 1.75 ▶ 2.0 (1.9)",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b063",
+      "before": "1.75 秒",
+      "after": "1.9 秒"
+    },
+    {
+      "id": "81058-74",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 21,
+      "targetNameZh": "无神论",
+      "civIds": [
+        "Huns"
+      ],
+      "summaryZh": "无神论研究费用中的黄金改为木材，食物费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Atheism cost decreased from 500 food and 500 gold ▶ 500 food and 300 wood",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b064",
+      "before": "500 食物、500 黄金",
+      "after": "500 食物、300 木材"
+    },
+    {
+      "id": "81058-75",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 516,
+      "targetNameZh": "安第斯弹弓",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "安第斯弹弓额外使投石手攻击力增加 1。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Andean sling now additionally provides +1 attack to Slingers",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b065",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 185,
+          "targetNameZh": "投石手",
+          "relation": "研究安第斯弹弓后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-76",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 185,
+      "targetNameZh": "投石手",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "修复投石手错误地从扳指获得攻击速度加成的问题。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Fixed an issue where Slingers incorrectly gained attack speed from thumb ring",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "81058-b066",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 437,
+          "targetNameZh": "扳指",
+          "relation": "移除错误加成"
+        }
+      ]
+    },
+    {
+      "id": "81058-77",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Incas",
+      "targetNameZh": "印加",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "新增军事单位食物折扣：黑暗、封建、城堡、帝王时代分别为 15%、20%、25%、30%。官方明确列出民兵系、长矛兵系、鹰勇士系、掷矛手系、投石手、印加枪兵长、标枪骑兵、意大利佣兵、爆破兵和索罗托勇士。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "New Bonus: Military units cost -15/20/25/30% food in Dark/Feudal/Castle/Imperial\n  + List of affected units: Militia-line, Spearman-line, Eagle-line, Skirmisher-line, Slinger, Kamayuk, Genitour, Condottieri, Petards and Xolotl Warriors.",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b067",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 74,
+          "targetNameZh": "民兵",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 75,
+          "targetNameZh": "武士",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 77,
+          "targetNameZh": "长剑士",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 473,
+          "targetNameZh": "双手剑士",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 567,
+          "targetNameZh": "冠军剑士",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 93,
+          "targetNameZh": "长矛兵",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 358,
+          "targetNameZh": "长枪兵",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 359,
+          "targetNameZh": "长戟兵",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 751,
+          "targetNameZh": "鹰斥候",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 753,
+          "targetNameZh": "鹰勇士",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 752,
+          "targetNameZh": "精锐鹰勇士",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 7,
+          "targetNameZh": "掷矛手",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 6,
+          "targetNameZh": "精锐掷矛手",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 185,
+          "targetNameZh": "投石手",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 879,
+          "targetNameZh": "印加枪兵长",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 881,
+          "targetNameZh": "精锐印加枪兵长",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 1010,
+          "targetNameZh": "标枪骑兵",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 1012,
+          "targetNameZh": "精锐标枪骑兵",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 882,
+          "targetNameZh": "意大利佣兵",
+          "relation": "印加文明食物折扣适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 440,
+          "targetNameZh": "爆破兵",
+          "relation": "印加文明食物折扣适用"
+        }
+      ],
+      "scopeNote": "盟友提供的特殊单位须先满足其获得条件；未以当前科技树推导历史开放状态。"
+    },
+    {
+      "id": "81058-78",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 716,
+      "targetNameZh": "补给",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "科技树移除此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Lose access to Supplies",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b068",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "81058-79",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 879,
+      "targetNameZh": "印加枪兵长",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "印加枪兵长食物费用提高，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Kamayuk cost increased from 60 food and 30 gold ▶ 65 food and 30 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b069",
+      "before": "60 食物、30 黄金",
+      "after": "65 食物、30 黄金"
+    },
+    {
+      "id": "81058-80",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 881,
+      "targetNameZh": "精锐印加枪兵长",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "印加枪兵长食物费用提高，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Kamayuk cost increased from 60 food and 30 gold ▶ 65 food and 30 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b069",
+      "before": "60 食物、30 黄金",
+      "after": "65 食物、30 黄金"
+    },
+    {
+      "id": "81058-81",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 185,
+      "targetNameZh": "投石手",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "投石手食物费用提高，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Slinger cost increased from 30 food and 40 gold ▶ 40 food and 40 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b070",
+      "before": "30 食物、40 黄金",
+      "after": "40 食物、40 黄金"
+    },
+    {
+      "id": "81058-82",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Incas",
+      "targetNameZh": "印加",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "移除文明自身免费获得一头美洲驼的起始加成；此效果改至团队加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Bonus Removed: Start with a free Llama",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b071"
+    },
+    {
+      "id": "81058-83",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Incas",
+      "targetNameZh": "印加",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "团队加成由长矛兵与掷矛手视野 +2 改为起始免费获得一头美洲驼。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Team Bonus effect changed from Spearman and Skirmisher +2 line of sight ▶ Start with a free Llama",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b072"
+    },
+    {
+      "id": "81058-84",
+      "kind": "adjust",
+      "targetType": "building",
+      "targetId": 109,
+      "targetNameZh": "城镇中心",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "印加石料折扣不再作用于起始城镇中心。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Stone discount does not apply to starting Town Center",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b073"
+    },
+    {
+      "id": "81058-85",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 379,
+      "targetNameZh": "围墙",
+      "civIds": [
+        "Japanese"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Now have access to Hoardings",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b074",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-86",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 291,
+      "targetNameZh": "日本武士",
+      "civIds": [
+        "Japanese"
+      ],
+      "summaryZh": "日本武士食物费用降低，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**(Elite) Samurai cost reduced from 60 food and 30 gold ▶ 50 food and 30 gold**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b075",
+      "before": "60 食物、30 黄金",
+      "after": "50 食物、30 黄金"
+    },
+    {
+      "id": "81058-87",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 560,
+      "targetNameZh": "精锐日本武士",
+      "civIds": [
+        "Japanese"
+      ],
+      "summaryZh": "日本武士食物费用降低，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**(Elite) Samurai cost reduced from 60 food and 30 gold ▶ 50 food and 30 gold**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b075",
+      "before": "60 食物、30 黄金",
+      "after": "50 食物、30 黄金"
+    },
+    {
+      "id": "81058-88",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 59,
+      "targetNameZh": "弹射器",
+      "civIds": [
+        "Japanese"
+      ],
+      "summaryZh": "弹射器研究费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Kataparuto cost reduced from 750 wood and 400 gold ▶ 550 wood and 300 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b076",
+      "before": "750 木材、400 黄金",
+      "after": "550 木材、300 黄金"
+    },
+    {
+      "id": "81058-89",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Japanese"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b077",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-90",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1120,
+      "targetNameZh": "重弩战象",
+      "civIds": [
+        "Khmer"
+      ],
+      "summaryZh": "重弩战象的常规、骑兵与攻城武器护甲类数值从 -2 改为 0，修复额外承受伤害的问题。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Ballista Elephant armor changed from -2 ▶ 0, cavalry armor from -2 ▶ 0, siege armor from -2 ▶ 0",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b078",
+      "before": "-2",
+      "after": "0"
+    },
+    {
+      "id": "81058-91",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1122,
+      "targetNameZh": "精锐重弩战象",
+      "civIds": [
+        "Khmer"
+      ],
+      "summaryZh": "重弩战象的常规、骑兵与攻城武器护甲类数值从 -2 改为 0，修复额外承受伤害的问题。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Ballista Elephant armor changed from -2 ▶ 0, cavalry armor from -2 ▶ 0, siege armor from -2 ▶ 0",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b078",
+      "before": "-2",
+      "after": "0"
+    },
+    {
+      "id": "81058-92",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1120,
+      "targetNameZh": "重弩战象",
+      "civIds": [
+        "Khmer"
+      ],
+      "summaryZh": "重弩战象获得数值为 20 的胡斯派战车护甲类；这会改变其承受特定攻城武器攻击的伤害。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Ballista Elephant gain hussite wagon armor class with a value of +20",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b079"
+    },
+    {
+      "id": "81058-93",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1122,
+      "targetNameZh": "精锐重弩战象",
+      "civIds": [
+        "Khmer"
+      ],
+      "summaryZh": "重弩战象获得数值为 20 的胡斯派战车护甲类；这会改变其承受特定攻城武器攻击的伤害。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Ballista Elephant gain hussite wagon armor class with a value of +20",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b079"
+    },
+    {
+      "id": "81058-94",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 832,
+      "targetNameZh": "精锐龟甲船",
+      "civIds": [
+        "Koreans"
+      ],
+      "summaryZh": "精锐龟甲船基础射程增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Elite Turtle ship range increased from 6 ▶ 7",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b080",
+      "before": "6 格",
+      "after": "7 格"
+    },
+    {
+      "id": "81058-95",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Koreans"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b081",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-96",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Lithuanians",
+      "targetNameZh": "立陶宛",
+      "civIds": [
+        "Lithuanians"
+      ],
+      "summaryZh": "起始 150 食物加成改为每座城镇中心提供 100 食物。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Bonus for starting with 150 food changed to each Town Center providing 100 food",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b082",
+      "before": "起始 150 食物",
+      "after": "每座城镇中心 100 食物",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 109,
+          "targetNameZh": "城镇中心",
+          "relation": "建成后获得食物"
+        }
+      ]
+    },
+    {
+      "id": "81058-97",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Malay",
+      "targetNameZh": "马来",
+      "civIds": [
+        "Malay"
+      ],
+      "summaryZh": "新增加成：免费获得步兵护甲升级。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "New Bonus: Receive infantry armor upgrades for free",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b083",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 74,
+          "targetNameZh": "步兵鳞甲",
+          "relation": "马来文明免费升级"
+        },
+        {
+          "targetType": "tech",
+          "targetId": 76,
+          "targetNameZh": "步兵锁甲",
+          "relation": "马来文明免费升级"
+        },
+        {
+          "targetType": "tech",
+          "targetId": 77,
+          "targetNameZh": "步兵钢甲",
+          "relation": "马来文明免费升级"
+        }
+      ]
+    },
+    {
+      "id": "81058-98",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Malay"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b084",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-99",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1013,
+      "targetNameZh": "飞刀女兵",
+      "civIds": [
+        "Malians"
+      ],
+      "summaryZh": "飞刀女兵基础生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Gbeto HP increased from 35 (45) ▶ 40 (50)",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b085",
+      "before": "35",
+      "after": "40"
+    },
+    {
+      "id": "81058-100",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1015,
+      "targetNameZh": "精锐飞刀女兵",
+      "civIds": [
+        "Malians"
+      ],
+      "summaryZh": "飞刀女兵基础生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Gbeto HP increased from 35 (45) ▶ 40 (50)",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b085",
+      "before": "45",
+      "after": "50"
+    },
+    {
+      "id": "81058-101",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Malians",
+      "targetNameZh": "马里",
+      "civIds": [
+        "Malians"
+      ],
+      "summaryZh": "金矿可多采集 30% 的加成改为村民每次交回的黄金增加 15%。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "The 30% longer lasting Gold Mines bonus changed to villagers drop off 15% more gold",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b086",
+      "before": "金矿持续更久 30%",
+      "after": "村民交回黄金 +15%",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 83,
+          "targetNameZh": "村民",
+          "relation": "马里文明采金加成"
+        }
+      ]
+    },
+    {
+      "id": "81058-102",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 576,
+      "targetNameZh": "蛮王",
+      "civIds": [
+        "Malians"
+      ],
+      "summaryZh": "蛮王提供的额外箭矢数量增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Tigui additional arrows changed from 5 ▶ 8",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b087",
+      "before": "5 支",
+      "after": "8 支",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 109,
+          "targetNameZh": "城镇中心",
+          "relation": "研究蛮王后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-103",
+      "kind": "adjust",
+      "targetType": "building",
+      "targetId": 109,
+      "targetNameZh": "城镇中心",
+      "civIds": [
+        "Malians"
+      ],
+      "summaryZh": "马里木材折扣不再作用于起始城镇中心。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Wood discount does not apply to starting Town Center",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b088"
+    },
+    {
+      "id": "81058-104",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Persians"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b089",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-105",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Persians",
+      "targetNameZh": "波斯",
+      "civIds": [
+        "Persians"
+      ],
+      "summaryZh": "额外的 50 起始食物和木材改为完成第一座城镇中心后发放。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "50 extra starting food and wood are received after completing the first Town Center",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b090",
+      "scopeNote": "改变发放时点；不表示总奖励增加。"
+    },
+    {
+      "id": "81058-106",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Poles",
+      "targetNameZh": "波兰",
+      "civIds": [
+        "Poles"
+      ],
+      "summaryZh": "村民自动恢复生命值的加成改为从封建时代开始生效。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Villager regeneration bonus now starts in Feudal Age",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b091",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 83,
+          "targetNameZh": "村民",
+          "relation": "波兰文明回血加成"
+        }
+      ]
+    },
+    {
+      "id": "81058-107",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1001,
+      "targetNameZh": "风琴炮",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "风琴炮重做：主弹攻击力 16 改为 7，副弹由固定 2 点改为与主弹相同；总弹数从 5 改为 6，精度从 50% 改为 0%，散布从 0.75 改为 0.25，对步兵的额外伤害从 0 改为 1。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Organ Gun damage decreased from 16 ▶ 7 (20 ▶ 9)\n  + Secondary projectile damage changed from 2 flat to same as main projectile\n  + (Elite) Organ Gun total projectiles increased from 5 (5) ▶ 6 (7)\n  + (Elite) Organ Gun accuracy decreased from 50% ▶ 0%\n  + (Elite) Organ Gun attack dispersion decreased from 0.75 ▶ 0.25\n  + (Elite) Organ Gun Bonus vs Infantry increased from 0 ▶ 1\n  + Elite Organ Gun Bonus vs Buildings increased from 0 ▶ 1",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b092",
+      "scopeNote": "多个属性同时重做，不能仅凭主弹攻击力降低判定整体强弱。"
+    },
+    {
+      "id": "81058-108",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1003,
+      "targetNameZh": "精锐风琴炮",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "风琴炮重做：主弹攻击力 20 改为 9，副弹由固定 2 点改为与主弹相同；总弹数从 5 改为 7，精度从 50% 改为 0%，散布从 0.75 改为 0.25，对步兵的额外伤害从 0 改为 1；对建筑的额外伤害从 0 改为 1。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Organ Gun damage decreased from 16 ▶ 7 (20 ▶ 9)\n  + Secondary projectile damage changed from 2 flat to same as main projectile\n  + (Elite) Organ Gun total projectiles increased from 5 (5) ▶ 6 (7)\n  + (Elite) Organ Gun accuracy decreased from 50% ▶ 0%\n  + (Elite) Organ Gun attack dispersion decreased from 0.75 ▶ 0.25\n  + (Elite) Organ Gun Bonus vs Infantry increased from 0 ▶ 1\n  + Elite Organ Gun Bonus vs Buildings increased from 0 ▶ 1",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b092",
+      "scopeNote": "多个属性同时重做，不能仅凭主弹攻击力降低判定整体强弱。"
+    },
+    {
+      "id": "81058-109",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1006,
+      "targetNameZh": "精锐卡拉维尔战舰",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "精锐卡拉维尔战舰升级费用调整：食物降低，黄金提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Elite Caravel upgrade cost adjusted from 750 food and 475 gold ▶ 700 food and 525 gold",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b093",
+      "before": "750 食物、475 黄金",
+      "after": "700 食物、525 黄金"
+    },
+    {
+      "id": "81058-110",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b094",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-111",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": "legacy-zealotry",
+      "targetNameZh": "旧狂热科技",
+      "civIds": [
+        "Saracens"
+      ],
+      "summaryZh": "旧狂热科技的研究费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Zealotry cost reduced from 500 food and 450 gold ▶ 400 food and 400 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b095",
+      "before": "500 食物、450 黄金",
+      "after": "400 食物、400 黄金"
+    },
+    {
+      "id": "81058-112",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Saracens"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b096",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-113",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Sicilians",
+      "targetNameZh": "西西里",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "城堡建造速度加成从 100% 降至 50%；城镇中心的 100% 加成不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Castles and Town centers built 100% faster changed to Castle build 50% and Town Centers build 100% faster",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b097",
+      "before": "城堡 +100%",
+      "after": "城堡 +50%",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 82,
+          "targetNameZh": "城堡",
+          "relation": "西西里建造速度加成"
+        }
+      ]
+    },
+    {
+      "id": "81058-114",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Sicilians",
+      "targetNameZh": "西西里",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "农田升级带来的额外食物加成提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**Farm upgrade bonus increased from +100% ▶ +125% food per upgrade**",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b098",
+      "before": "100%",
+      "after": "125%",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 14,
+          "targetNameZh": "马轭",
+          "relation": "西西里农田升级加成"
+        },
+        {
+          "targetType": "tech",
+          "targetId": 13,
+          "targetNameZh": "重犁",
+          "relation": "西西里农田升级加成"
+        },
+        {
+          "targetType": "tech",
+          "targetId": 12,
+          "targetNameZh": "轮作",
+          "relation": "西西里农田升级加成"
+        }
+      ]
+    },
+    {
+      "id": "81058-115",
+      "kind": "buff",
+      "targetType": "building",
+      "targetId": 1665,
+      "targetNameZh": "城楼",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "城楼现在受到围墙科技的生命值加成影响。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Donjon affected by Hoardings",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b099",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 379,
+          "targetNameZh": "围墙",
+          "relation": "现在影响城楼"
+        }
+      ]
+    },
+    {
+      "id": "81058-116",
+      "kind": "buff",
+      "targetType": "building",
+      "targetId": 1665,
+      "targetNameZh": "城楼",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "城楼现在可以训练长矛兵系。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Donjon can now train Spearman-line",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b100",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 1786,
+          "targetNameZh": "长矛兵",
+          "relation": "城楼训练单位"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 1787,
+          "targetNameZh": "长枪兵",
+          "relation": "城楼训练单位"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 1788,
+          "targetNameZh": "长戟兵",
+          "relation": "城楼训练单位"
+        }
+      ]
+    },
+    {
+      "id": "81058-117",
+      "kind": "buff",
+      "targetType": "building",
+      "targetId": 1665,
+      "targetNameZh": "城楼",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "城楼现在可以作为建造靶场与马厩的前置建筑。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Donjon now functions as a prerequisite for Archery Range and Stable",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b101",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 87,
+          "targetNameZh": "靶场",
+          "relation": "满足前置条件"
+        },
+        {
+          "targetType": "building",
+          "targetId": 101,
+          "targetNameZh": "马厩",
+          "relation": "满足前置条件"
+        }
+      ]
+    },
+    {
+      "id": "81058-118",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 756,
+      "targetNameZh": "第一次十字军东征",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "第一次十字军东征每座城镇中心提供的萨金特卫兵数量减少。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "First Crusade effect reduced from 7 ▶ 5 Serjeants per Town Center",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b102",
+      "before": "7 名",
+      "after": "5 名"
+    },
+    {
+      "id": "81058-119",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 756,
+      "targetNameZh": "第一次十字军东征",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "第一次十字军东征研究费用调整：食物提高，黄金降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "First Crusade cost adjusted from 300 food and 600 gold ▶ 400 food and 300 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b103",
+      "before": "300 食物、600 黄金",
+      "after": "400 食物、300 黄金"
+    },
+    {
+      "id": "81058-120",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1658,
+      "targetNameZh": "萨金特卫兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "封建时代萨金特卫兵基础生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Serjeant HP increased from 45 ▶ 50 in Feudal Age",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b104",
+      "before": "45",
+      "after": "50",
+      "scopeNote": "仅封建时代。"
+    },
+    {
+      "id": "81058-121",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1660,
+      "targetNameZh": "萨金特卫兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "封建时代萨金特卫兵基础生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Serjeant HP increased from 45 ▶ 50 in Feudal Age",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b104",
+      "before": "45",
+      "after": "50",
+      "scopeNote": "仅封建时代。"
+    },
+    {
+      "id": "81058-122",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1658,
+      "targetNameZh": "萨金特卫兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "城堡时代萨金特卫兵基础生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Serjeant HP increased from 65 ▶ 75 in Castle Age",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b105",
+      "before": "65",
+      "after": "75",
+      "scopeNote": "仅城堡时代。"
+    },
+    {
+      "id": "81058-123",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1660,
+      "targetNameZh": "萨金特卫兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "城堡时代萨金特卫兵基础生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Serjeant HP increased from 65 ▶ 75 in Castle Age",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b105",
+      "before": "65",
+      "after": "75",
+      "scopeNote": "仅城堡时代。"
+    },
+    {
+      "id": "81058-124",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1659,
+      "targetNameZh": "精锐萨金特卫兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "精锐萨金特卫兵升级费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Serjeant Elite upgrade cost reduced from 1100 food and 800 gold ▶ 800 food and 675 gold",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b106",
+      "before": "1100 食物、800 黄金",
+      "after": "800 食物、675 黄金"
+    },
+    {
+      "id": "81058-125",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1661,
+      "targetNameZh": "精锐萨金特卫兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "精锐萨金特卫兵升级费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Serjeant Elite upgrade cost reduced from 1100 food and 800 gold ▶ 800 food and 675 gold",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "81058-b106",
+      "before": "1100 食物、800 黄金",
+      "after": "800 食物、675 黄金"
+    },
+    {
+      "id": "81058-126",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1658,
+      "targetNameZh": "萨金特卫兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "萨金特卫兵在封建时代的建造与修理速度降低 25%。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Serjeant build/repair 25% slower in Feudal Age",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b107",
+      "scopeNote": "仅封建时代。"
+    },
+    {
+      "id": "81058-127",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1660,
+      "targetNameZh": "萨金特卫兵",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "萨金特卫兵在封建时代的建造与修理速度降低 25%。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Serjeant build/repair 25% slower in Feudal Age",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b107",
+      "scopeNote": "仅封建时代。"
+    },
+    {
+      "id": "81058-128",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b108",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-129",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Sicilians",
+      "targetNameZh": "西西里",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "额外的 100 起始石料改为完成第一座城镇中心后发放。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "100 extra starting stone is received after completing the first Town Center",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b109",
+      "scopeNote": "改变发放时点；不表示总奖励增加。"
+    },
+    {
+      "id": "81058-130",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 876,
+      "targetNameZh": "贵族铁骑",
+      "civIds": [
+        "Slavs"
+      ],
+      "summaryZh": "贵族铁骑训练费用调整：食物提高，黄金降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Boyar cost adjusted from 50 food and 80 gold ▶ 60 food and 70 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b110",
+      "before": "50 食物、80 黄金",
+      "after": "60 食物、70 黄金",
+      "scopeNote": "官方此项仅具名普通贵族铁骑；不推断未单列的精锐形态旧值。"
+    },
+    {
+      "id": "81058-132",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 513,
+      "targetNameZh": "皇家卫队",
+      "civIds": [
+        "Slavs"
+      ],
+      "summaryZh": "皇家卫队研究食物费用降低，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Druzhina cost reduced from 1200 food and 500 gold ▶ 900 food and 500 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b111",
+      "before": "1200 食物、500 黄金",
+      "after": "900 食物、500 黄金"
+    },
+    {
+      "id": "81058-133",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Slavs"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b112",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-134",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Slavs",
+      "targetNameZh": "斯拉夫",
+      "civIds": [
+        "Slavs"
+      ],
+      "summaryZh": "免费补给的文明加成扩大为补给和软甲均免费。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Free Supplies bonus also includes Gambesons",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b113",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 716,
+          "targetNameZh": "补给",
+          "relation": "斯拉夫免费科技加成"
+        },
+        {
+          "targetType": "tech",
+          "targetId": 875,
+          "targetNameZh": "软甲",
+          "relation": "斯拉夫免费科技加成"
+        }
+      ]
+    },
+    {
+      "id": "81058-135",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 492,
+      "targetNameZh": "宗教法庭",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "宗教法庭额外使传教士射程增加 1。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Inquisition also gives Missionaries +1 range",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b114",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 775,
+          "targetNameZh": "传教士",
+          "relation": "研究宗教法庭后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-136",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 771,
+      "targetNameZh": "西班牙征服者",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "西班牙征服者基础远程护甲降低 1；精锐不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Conquistador -1 Pierce Armor (Elite unchanged)",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b115",
+      "scopeNote": "仅普通单位。"
+    },
+    {
+      "id": "81058-137",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Spanish",
+      "targetNameZh": "西班牙",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "新增加成：每研究一项科技获得 20 黄金。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "New Bonus: Gain 20 gold for each technology researched",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b116"
+    },
+    {
+      "id": "81058-138",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b117",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-139",
+      "kind": "adjust",
+      "targetType": "building",
+      "targetId": 109,
+      "targetNameZh": "城镇中心",
+      "civIds": [
+        "Spanish"
+      ],
+      "summaryZh": "西班牙建造速度加成不再作用于起始城镇中心。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Build speed bonus does not apply to starting Town Center",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "81058-b118"
+    },
+    {
+      "id": "81058-140",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1228,
+      "targetNameZh": "怯薛骑兵",
+      "civIds": [
+        "Tatars"
+      ],
+      "summaryZh": "怯薛骑兵训练时间增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Keshik train time increased from 16 (14) ▶ 17 (15)",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b119",
+      "before": "16 秒",
+      "after": "17 秒"
+    },
+    {
+      "id": "81058-141",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1230,
+      "targetNameZh": "精锐怯薛骑兵",
+      "civIds": [
+        "Tatars"
+      ],
+      "summaryZh": "怯薛骑兵训练时间增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Keshik train time increased from 16 (14) ▶ 17 (15)",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b119",
+      "before": "14 秒",
+      "after": "15 秒"
+    },
+    {
+      "id": "81058-142",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 10,
+      "targetNameZh": "火炮术",
+      "civIds": [
+        "Turks"
+      ],
+      "summaryZh": "火炮术研究费用调整，木材费用改为食物且黄金费用提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Artillery cost increased from 450 wood and 500 gold ▶ 600 food and 650 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b120",
+      "before": "450 木材、500 黄金",
+      "after": "600 食物、650 黄金"
+    },
+    {
+      "id": "81058-143",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 25,
+      "targetNameZh": "条顿骑士",
+      "civIds": [
+        "Teutons"
+      ],
+      "summaryZh": "条顿骑士黄金费用降低，食物费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**(Elite) Teutonic Knight cost reduced from 85 food and 40 gold ▶ 85 food and 30 gold**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b121",
+      "before": "85 食物、40 黄金",
+      "after": "85 食物、30 黄金"
+    },
+    {
+      "id": "81058-144",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 554,
+      "targetNameZh": "精锐条顿骑士",
+      "civIds": [
+        "Teutons"
+      ],
+      "summaryZh": "条顿骑士黄金费用降低，食物费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "**(Elite) Teutonic Knight cost reduced from 85 food and 40 gold ▶ 85 food and 30 gold**",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b121",
+      "before": "85 食物、40 黄金",
+      "after": "85 食物、30 黄金"
+    },
+    {
+      "id": "81058-145",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Teutons"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b122",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "81058-146",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 629,
+      "targetNameZh": "纸币",
+      "civIds": [
+        "Vietnamese"
+      ],
+      "summaryZh": "纸币研究费用调整：资源组合由木材和黄金改为食物和木材。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Paper Money cost reduced from 600 wood and 350 gold ▶ 550 food and 200 wood",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b123",
+      "before": "600 木材、350 黄金",
+      "after": "550 食物、200 木材"
+    },
+    {
+      "id": "81058-147",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 463,
+      "targetNameZh": "酋长",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "酋长新增步兵战斗获取黄金效果：官方列出每名村民 5 黄金、每名僧侣或贸易单位 20 黄金；保留对骑兵的额外伤害。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Chieftains effect now also provides infantry with gold generation while attacking villagers, trade units, and monks. This is in addition to infantry gain bonus damage vs cavalry\n  + 5 gold per Villager\n  + 20 gold per Monk/Trade unit",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b124",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 74,
+          "targetNameZh": "民兵",
+          "relation": "研究酋长后的步兵效果"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 75,
+          "targetNameZh": "武士",
+          "relation": "研究酋长后的步兵效果"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 77,
+          "targetNameZh": "长剑士",
+          "relation": "研究酋长后的步兵效果"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 473,
+          "targetNameZh": "双手剑士",
+          "relation": "研究酋长后的步兵效果"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 567,
+          "targetNameZh": "冠军剑士",
+          "relation": "研究酋长后的步兵效果"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 93,
+          "targetNameZh": "长矛兵",
+          "relation": "研究酋长后的步兵效果"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 358,
+          "targetNameZh": "长枪兵",
+          "relation": "研究酋长后的步兵效果"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 692,
+          "targetNameZh": "狂战士",
+          "relation": "研究酋长后的步兵效果"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 694,
+          "targetNameZh": "精锐狂战士",
+          "relation": "研究酋长后的步兵效果"
+        }
+      ],
+      "scopeNote": "官方使用 attacking 描述触发条件，本条不据此模拟触发时机。"
+    },
+    {
+      "id": "81058-148",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 463,
+      "targetNameZh": "酋长",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "酋长研究费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Chieftains cost reduced from 700 food and 500 gold ▶ 600 food and 450 gold",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b125",
+      "before": "700 食物、500 黄金",
+      "after": "600 食物、450 黄金"
+    },
+    {
+      "id": "81058-149",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": "legacy-berserkergang",
+      "targetNameZh": "旧狂战士科技",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "旧狂战士科技被博格斯维加尔替换；保留旧科技独立历史身份。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Berserkergang replaced with Bogsveigar (650 food and 500 gold): Archer-line and Longboats +1 Attack",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b126",
+      "before": "旧狂战士科技",
+      "after": "被博格斯维加尔替换",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 49,
+          "targetNameZh": "博格斯维加尔",
+          "relation": "替换为"
+        }
+      ]
+    },
+    {
+      "id": "81058-150",
+      "kind": "new",
+      "targetType": "tech",
+      "targetId": 49,
+      "targetNameZh": "博格斯维加尔",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "新增博格斯维加尔：弓兵系与维京长船攻击力 +1，研究费用为 650 食物、500 黄金。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Berserkergang replaced with Bogsveigar (650 food and 500 gold): Archer-line and Longboats +1 Attack",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "81058-b126",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 4,
+          "targetNameZh": "步弓手",
+          "relation": "研究博格斯维加尔后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 24,
+          "targetNameZh": "弩手",
+          "relation": "研究博格斯维加尔后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 492,
+          "targetNameZh": "劲弩手",
+          "relation": "研究博格斯维加尔后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 250,
+          "targetNameZh": "维京长船",
+          "relation": "研究博格斯维加尔后适用"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 533,
+          "targetNameZh": "精锐维京长船",
+          "relation": "研究博格斯维加尔后适用"
+        }
+      ]
+    },
+    {
+      "id": "81058-151",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 692,
+      "targetNameZh": "狂战士",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "狂战士每分钟自动恢复的生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Berserk healing increased from 20 HP per minute ▶ 40 HP per minute",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b127",
+      "before": "20 生命值/分钟",
+      "after": "40 生命值/分钟"
+    },
+    {
+      "id": "81058-152",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 694,
+      "targetNameZh": "精锐狂战士",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "狂战士每分钟自动恢复的生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Berserk healing increased from 20 HP per minute ▶ 40 HP per minute",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b127",
+      "before": "20 生命值/分钟",
+      "after": "40 生命值/分钟"
+    },
+    {
+      "id": "81058-153",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 533,
+      "targetNameZh": "精锐维京长船",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "精锐维京长船对船只的额外伤害降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Elite Longboats Bonus vs Ships 11 ▶ 10",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b128",
+      "before": "11",
+      "after": "10"
+    },
+    {
+      "id": "81058-154",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 533,
+      "targetNameZh": "精锐维京长船",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "精锐维京长船对建筑的额外伤害降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Elite Longboats Bonus vs Buildings 8 ▶ 7",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "81058-b129",
+      "before": "8",
+      "after": "7"
+    },
+    {
+      "id": "81058-155",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 875,
+      "targetNameZh": "软甲",
+      "civIds": [
+        "Vikings"
+      ],
+      "summaryZh": "科技树开放此科技。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/",
+      "provenance": "official-history",
+      "originalText": "Receive Gambesons",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "81058-b130",
+      "before": "未开放",
+      "after": "已开放"
+    }
+  ]
+}
