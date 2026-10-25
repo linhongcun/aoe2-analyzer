@@ -1,6 +1,5 @@
 {
   "id": "66692",
-  "date": "2022-08-29",
   "announcedAt": "2022-08-29",
   "branch": "DE",
   "releaseType": "release",
@@ -891,5 +890,8 @@
       "before": "已开放",
       "after": "未开放"
     }
-  ]
+  ],
+  "releaseDate": "2022-08-29",
+  "sourcePublishedAt": "2022-08-29T16:10:00-07:00",
+  "publishedAt": "2022-08-30"
 }

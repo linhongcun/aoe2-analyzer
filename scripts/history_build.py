@@ -5,24 +5,28 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent.parent
 PATCHES = {
     '66692': {
-        'date': '2022-08-29', 'announcedAt': '2022-08-29', 'count': 32,
+        'releaseDate': '2022-08-29', 'announcedAt': '2022-08-29', 'count': 32,
+        'sourcePublishedAt': '2022-08-29T16:10:00-07:00',
         'source': 'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/',
         'digest': '27591d9882cc381115aaf0becbeabc22ddae21c2944c0b1ca8aaba585fc5552c',
     },
     '81058': {
-        'date': '2023-04-11', 'announcedAt': '2023-04-11', 'count': 130,
+        'releaseDate': '2023-04-11', 'announcedAt': '2023-04-11', 'count': 130,
+        'sourcePublishedAt': '2023-04-11T15:20:00-07:00',
         'source': 'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/',
         'digest': 'a820469e928d543a12649561875897bd4255dec0367ebe04b692c48e396457b1',
     },
     '125283': {
-        'date': '2024-10-15', 'announcedAt': '2024-10-14', 'count': 25,
+        'releaseDate': '2024-10-15', 'announcedAt': '2024-10-14', 'count': 25,
+        'sourcePublishedAt': '2024-10-14T12:13:32-07:00',
         'source': 'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/',
         'digest': '06132c6fbec123ce4e946435d85d5fceeb87ecbe478b1b01f501728c0b6bf25e',
     },
@@ -57,10 +61,14 @@ def validate_patch(patch: dict[str, Any], coverage: dict[str, Any], identities: 
     assert ident in PATCHES, f'未登记历史版本：{ident}'
     expected = PATCHES[ident]
     assert coverage['id'] == ident, f'{ident}: 覆盖表版本不匹配'
-    for key in ['date', 'announcedAt', 'source']:
+    for key in ['releaseDate', 'announcedAt', 'sourcePublishedAt', 'source']:
         assert patch[key] == expected[key], f'{ident}: {key} 与已核实来源不符'
     assert patch['branch'] == 'DE' and patch['releaseType'] == 'release', f'{ident}: 分支或正式版状态错误'
-    assert date.fromisoformat(patch['announcedAt']) <= date.fromisoformat(patch['date']), f'{ident}: 公告晚于正式发行日'
+    assert 'date' not in patch, f'{ident}: 正式发行日必须用 releaseDate，与来源公开日期分开'
+    assert date.fromisoformat(patch['announcedAt']) <= date.fromisoformat(patch['releaseDate']), f'{ident}: 公告晚于正式发行日'
+    published = datetime.fromisoformat(patch['sourcePublishedAt'])
+    assert published.tzinfo is not None, f'{ident}: 来源公开时间戳缺少时区'
+    assert patch['publishedAt'] == published.astimezone(ZoneInfo('Asia/Shanghai')).date().isoformat(), f'{ident}: publishedAt 必须是来源公开时间换算的北京时间日期'
     date.fromisoformat(patch['verifiedAt'])
     for key in ['title', 'note', 'coverage']:
         assert isinstance(patch[key], str) and patch[key].strip(), f'{ident}: 缺少 {key}'
@@ -141,16 +149,17 @@ def coverage_report(patches: list[dict[str, Any]], coverages: list[dict[str, Any
         '# 历史补丁收录与证据', '',
         '<!-- 由 scripts/history_build.py 生成；手工校对输入见 scripts/history_inputs/。 -->', '',
         '本批仅收录下表列出的 DE 正式版平衡栏目。版本号之间的其他补丁、同页后续热修、原版/征服者/HD 历史尚未补齐；不能把无记录理解为从未改动。', '',
-        '| 正式版 | 发行日 | 公告日 | 官方项目 | 已映射 | 明确排除 | 实体记录 |',
-        '| --- | --- | --- | ---: | ---: | ---: | ---: |',
+        '| 正式版 | 官方发行日 | 公告当地日 | 公告公开（北京时间） | 官方项目 | 已映射 | 明确排除 | 实体记录 |',
+        '| --- | --- | --- | --- | ---: | ---: | ---: | ---: |',
     ]
     for patch, coverage in zip(patches, coverages):
         mapped = sum(b['status'] == 'mapped' for b in coverage['bullets'])
         excluded = len(coverage['bullets']) - mapped
-        lines.append(f'| [{patch["id"]}]({patch["source"]}) | {patch["date"]} | {patch["announcedAt"]} | {len(coverage["bullets"])} | {mapped} | {excluded} | {len(patch["entries"])} |')
+        lines.append(f'| [{patch["id"]}]({patch["source"]}) | {patch["releaseDate"]} | {patch["announcedAt"]} | {patch["publishedAt"]} | {len(coverage["bullets"])} | {mapped} | {excluded} | {len(patch["entries"])} |')
     lines += [
         '', '## 核对口径', '',
         '- 核对日期：2026-10-25。逐条保存官方英文项目与中文摘要、所属版本、来源链接和核对状态；数值描述当时的变化，不表示当前游戏数值。',
+        '- `releaseDate` 保留官方标注的发行日历日期，不代表已核实发行时刻；`announcedAt` 保留公告当地日期。`sourcePublishedAt` 保存官方网页 `article:published_time` 的完整带时区时间戳，`publishedAt` 严格换算为北京时间日期。来源发布时间不能当作正式版发行时刻。',
         '- 完整覆盖只针对指定平衡栏目。每个官方顶层项目必须对应一条或多条实体记录，或明确的排除理由。嵌套子项目随其父项目保留，不以拆分后的实体条数冒充官方项目数。',
         '- `history_build.py` 固定三份已打开核实的官方项目清单摘要，校验来源、发行日、公告日、身份及双向覆盖关系。它不在线爬站，也不自动判断加强/削弱。',
         '- 实体身份与当前目录校对；历史前后数值直接依据对应正式公告，不拿 DE 185872 的现值验证 2022/2023/2024 的历史值，未声称有这些历史版本的完整 `.dat`。',
@@ -162,6 +171,14 @@ def coverage_report(patches: list[dict[str, Any]], coverages: list[dict[str, Any
         '- 81058 采用正式版文字，加粗内容是 PUP 后定稿。中国的 “No changes” 显式排除，不把测试服提案当作已上线改动。',
         '- 125283 的官方文章标题含 Preview，发表于 2024-10-14，开头写明次日更新；发行日按 2024-10-15。该日的[官方论坛正式客户端报告](https://forums.ageofempires.com/t/set-gather-point-hotkey-is-not-working/264288)记录 Steam build #125283，作为发行日期的交叉证据。同页后续 Minor Update 127161 不纳入。',
         '- 原版、征服者、HD、PUP、Return of Rome 和 Chronicles 不与本批常规 DE 规则混合。', '',
+        '## 来源公开时间戳', '',
+        '| 版本 | 官方 article:published_time | 北京时间日期 |',
+        '| --- | --- | --- |',
+    ]
+    for patch in patches:
+        lines.append(f'| {patch["id"]} | `{patch["sourcePublishedAt"]}` | {patch["publishedAt"]} |')
+    lines += [
+        '',
         '## 明确排除项', '',
     ]
     for coverage in coverages:

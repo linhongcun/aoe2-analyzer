@@ -59,9 +59,33 @@ class HistoryBuild(unittest.TestCase):
     def test_release_date_is_separate_from_preview_publication(self):
         patch, coverage = self.patch('125283')
         self.assertEqual(patch['announcedAt'], '2024-10-14')
-        self.assertEqual(patch['date'], '2024-10-15')
-        patch['date'] = patch['announcedAt']
-        with self.assertRaisesRegex(AssertionError, 'date'):
+        self.assertEqual(patch['releaseDate'], '2024-10-15')
+        self.assertEqual(patch['sourcePublishedAt'], '2024-10-14T12:13:32-07:00')
+        self.assertEqual(patch['publishedAt'], '2024-10-15')
+        patch['releaseDate'] = patch['announcedAt']
+        with self.assertRaisesRegex(AssertionError, 'releaseDate'):
+            history.validate_patch(patch, coverage, self.identities)
+
+    def test_source_dates_use_actual_beijing_conversion(self):
+        expected = {'66692': '2022-08-30', '81058': '2023-04-12', '125283': '2024-10-15'}
+        for ident, public_date in expected.items():
+            patch, coverage = self.patch(ident)
+            self.assertNotIn('date', patch)
+            self.assertEqual(patch['publishedAt'], public_date)
+            patch['publishedAt'] = patch['announcedAt']
+            with self.assertRaisesRegex(AssertionError, 'publishedAt'):
+                history.validate_patch(patch, coverage, self.identities)
+
+    def test_source_timestamp_cannot_be_invented_from_release_date(self):
+        patch, coverage = self.patch('66692')
+        patch['sourcePublishedAt'] = '2022-08-29T00:00:00+08:00'
+        with self.assertRaisesRegex(AssertionError, 'sourcePublishedAt'):
+            history.validate_patch(patch, coverage, self.identities)
+
+    def test_ambiguous_date_field_is_rejected(self):
+        patch, coverage = self.patch('81058')
+        patch['date'] = patch['releaseDate']
+        with self.assertRaisesRegex(AssertionError, 'releaseDate'):
             history.validate_patch(patch, coverage, self.identities)
 
     def test_historical_crossbow_cost_is_not_current_cost(self):

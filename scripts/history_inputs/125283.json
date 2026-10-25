@@ -1,6 +1,5 @@
 {
   "id": "125283",
-  "date": "2024-10-15",
   "announcedAt": "2024-10-14",
   "branch": "DE",
   "releaseType": "release",
@@ -696,5 +695,8 @@
       ],
       "scopeNote": "说明文字调整，不据此判定罗马弩炮再次获得独立数值加强。"
     }
-  ]
+  ],
+  "releaseDate": "2024-10-15",
+  "sourcePublishedAt": "2024-10-14T12:13:32-07:00",
+  "publishedAt": "2024-10-15"
 }

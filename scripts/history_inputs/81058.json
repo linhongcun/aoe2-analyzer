@@ -1,6 +1,5 @@
 {
   "id": "81058",
-  "date": "2023-04-11",
   "announcedAt": "2023-04-11",
   "branch": "DE",
   "releaseType": "release",
@@ -3553,5 +3552,8 @@
       "before": "未开放",
       "after": "已开放"
     }
-  ]
+  ],
+  "releaseDate": "2023-04-11",
+  "sourcePublishedAt": "2023-04-11T15:20:00-07:00",
+  "publishedAt": "2023-04-12"
 }
