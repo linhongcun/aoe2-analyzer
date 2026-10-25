@@ -10,42 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # #375：只在 pull_request 上按路径决定要不要跑 Playwright。
-      # push（main、release/**）和 workflow_dispatch 不跑这两步，后面的条件因此仍会跑全量。
-      # 白名单：.github/**、docs/**（不含 docs/PATCH-NOTES/**）、scripts/release.mjs、
-      # scripts/check-pr-title.mjs、tests/unit/release*.test.ts。任一文件在白名单外就要跑 e2e。
-      # predicate-quantifier: every 让一个文件必须同时满足全部规则才算 needed；否定规则挖掉白名单。
-      # docs/PATCH-NOTES/** 被 !docs/** 一起挖掉，所以单独再记一笔，两条里有一条命中就跑 e2e。
-      - name: Classify pull request paths
-        id: paths
-        if: github.event_name == 'pull_request'
-        uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3.0.4
-        with:
-          predicate-quantifier: every
-          filters: |
-            needed:
-              - '**'
-              - '!.github/**'
-              - '!docs/**'
-              - '!scripts/release.mjs'
-              - '!scripts/check-pr-title.mjs'
-              - '!tests/unit/release*.test.ts'
-            patch_notes:
-              - 'docs/PATCH-NOTES/**'
-      - name: Decide whether Playwright runs
-        id: playwright
-        if: github.event_name == 'pull_request'
-        env:
-          NEEDED: ${{ steps.paths.outputs.needed }}
-          PATCH_NOTES: ${{ steps.paths.outputs.patch_notes }}
-        run: |
-          if [ "$NEEDED" = "true" ] || [ "$PATCH_NOTES" = "true" ]; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-            echo "运行 Playwright：变更里有白名单以外的路径，或改了 docs/PATCH-NOTES。"
-          else
-            echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "跳过 Playwright：本次 PR 的变更全部在白名单内。"
-          fi
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: 20, cache: npm }
       - uses: actions/setup-python@v5
@@ -55,6 +20,9 @@ jobs:
         env: { PR_TITLE: '${{ github.event.pull_request.title }}' }
         run: node scripts/check-pr-title.mjs
       - run: npm ci --legacy-peer-deps
+      - name: Classify validation scope
+        id: scope
+        run: node scripts/ci-scope.mjs
       - name: Lint
         run: npm run lint
       - name: Typecheck
@@ -63,25 +31,25 @@ jobs:
       - name: Layer boundaries (strict, #281)
         run: npm run lint:layers -- --strict
       - name: Catalog introduction audit
+        if: steps.scope.outputs.scope == 'full'
         run: npm run introductions:check
+      # Release unit checks also launch Chromium; maintenance skips only the browser suite.
       - name: Install Playwright chromium
-        if: github.event_name != 'pull_request' || steps.playwright.outputs.run == 'true'
         run: npx playwright install --with-deps chromium
-      # 发版单测会 chromium.launch()（tests/unit/release108.test.ts、scripts/release.mjs）。
-      # 白名单 PR 跳过上面的安装时，这里补装，Vitest 才能保持绿色；不跑 playwright test。
-      - name: Install Chromium for release unit tests
-        if: github.event_name == 'pull_request' && steps.playwright.outputs.run != 'true'
-        run: |
-          echo "跳过 Playwright 测试；为发版单测安装 Chromium。"
-          npx playwright install --with-deps chromium
       - name: Vitest
+        if: steps.scope.outputs.scope == 'full'
         run: npm test
+      - name: Release policy unit checks
+        if: steps.scope.outputs.scope != 'full'
+        run: npx vitest run tests/unit/release*.test.ts
       - name: Python tests (patch detection, diff summary, markers)
+        if: steps.scope.outputs.scope == 'full'
         run: npm run test:py
       - name: Design contrast check (WCAG AA)
         run: python3 docs/design/contrast.py
       # .dat（© Microsoft）只缓存在 runner，不进仓库；key 跟随固定版本
       - name: Cache pinned .dat + genieutils venv
+        if: steps.scope.outputs.scope == 'full'
         uses: actions/cache@v4
         with:
           path: |
@@ -90,58 +58,88 @@ jobs:
             scripts/.cache/venv
           key: dat-${{ hashFiles('scripts/data_sources.json') }}-py312
       - name: Data check (dat sha256 + patch markers)
+        if: steps.scope.outputs.scope == 'full'
         run: npm run dat:check
       - name: Data check (site stats vs pinned dat; unlisted diffs fail)
+        if: steps.scope.outputs.scope == 'full'
         run: npm run stats:check
       - name: Cache pinned aoe2techtree downloads
+        if: steps.scope.outputs.scope == 'full'
         uses: actions/cache@v4
         with:
           path: scripts/.cache/aoe2techtree-*
           key: aoe2techtree-${{ hashFiles('scripts/data_sources.json') }}
       - name: Install image generation dependency
+        if: steps.scope.outputs.scope == 'full'
         run: python3 -m pip install Pillow==12.3.0
       - name: Data check (map previews reproducible from pinned source)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/map_previews.py --check
       - name: Data check (map catalog reproducible from archived sources)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/map_catalog_build.py --check
       - name: Data check (core data, icons and pinyin reproducible)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/build_data.py && node scripts/pinyin_build.mjs && git diff --exit-code -- src/data public/img
       - name: Data check (pinyin index current)
+        if: steps.scope.outputs.scope == 'full'
         run: npm run pinyin:check
       - name: Data check (effects.json reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/effects_build.py && git diff --exit-code -- src/data/effects.json
       - name: Data check (eco.json reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/eco_build.py && git diff --exit-code -- src/data/eco.json docs/ECO-DATA.md
       - name: Data check (market.json reproducible from pinned dat and reviewed rules)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/market_build.py --check
       - name: Data check (garrison.json reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/garrison_build.py --check
       - name: Data check (general garrison inputs reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/garrison_general_build.py --check
       - name: Data check (trade population reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/trade_income_build.py --check
       - name: Data check (construction inputs reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/construction_build.py --check
       - name: Data check (team sources reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/team_bonuses_build.py --check
       - name: Data check (garrison healing inputs reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/garrison_healing_build.py --check
       - name: Data check (relic income inputs reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/relic_income_build.py --check
       - name: Data check (generate-resource tasks reproducible from pinned dat)
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/generate_resource_build.py --check
       - name: Patch notes match pinned data
+        if: steps.scope.outputs.scope == 'full'
         run: python3 scripts/patches_build.py --check
       - name: Build-order data check
+        if: steps.scope.outputs.scope == 'full'
         run: npm run bo:check
       - name: Build
         run: npm run build && git diff --exit-code -- src/data/page-metadata.json
       - name: Playwright smoke (chromium)
-        if: github.event_name != 'pull_request' || steps.playwright.outputs.run == 'true'
+        if: steps.scope.outputs.scope == 'full'
         run: npx playwright test --reporter=line
+      - name: Civilization visual and filter checks
+        if: steps.scope.outputs.scope == 'civ-ui'
+        run: npx playwright test tests/e2e/civDlcFilters.spec.ts tests/e2e/civRequirements206.spec.ts tests/e2e/v0290-326.spec.ts tests/e2e/catalogLayout187.spec.ts tests/e2e/layout62.spec.ts --reporter=line
+      - name: Save validation scope
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-validation-scope
+          path: ${{ runner.temp }}/ci-scope.json
+          if-no-files-found: error
       - name: Save editorial viewport screenshots
         uses: actions/upload-artifact@v4
-        if: always() && (github.event_name != 'pull_request' || steps.playwright.outputs.run == 'true')
+        if: always() && steps.scope.outputs.scope != 'maintenance'
         with:
           name: editorial-viewport-screenshots
           path: |
@@ -159,6 +157,7 @@ jobs:
             test-results/upgrades205-*/*.png
             test-results/civRequirements206-*/*.png
             test-results/civDlcFilters-*/*.png
+            test-results/v0290-326-*/*.png
             test-results/ecoPayoff214-*/*.png
             test-results/market215-*/*.png
             test-results/practice216-*/*.png
@@ -192,7 +191,7 @@ jobs:
             test-results/communityIntegration249-*/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
-        if: failure() && (github.event_name != 'pull_request' || steps.playwright.outputs.run == 'true')
+        if: failure() && steps.scope.outputs.scope != 'maintenance'
         with: { name: playwright-report, path: test-results, if-no-files-found: ignore }
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
