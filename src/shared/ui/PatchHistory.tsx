@@ -67,6 +67,11 @@ export function PatchHistory({ target }: { target: HistoryTarget }) {
   return <HistoryTimeline archives={state.archives} target={target} />;
 }
 
+function HistoryScope({ entry }: { entry: PatchEntry }) {
+  const ids = [...new Set([...entry.civIds, ...(entry.affectedCivIds ?? [])])];
+  return ids.length ? <p className="note">适用文明：{ids.map((id) => civByEn(id)?.zh ?? id).join('、')}</p> : null;
+}
+
 function HistoryTimeline({ archives, target }: { archives: PatchArchive[]; target: HistoryTarget }) {
   const [params, setParams] = useSearchParams();
   const records = historyFor(archives, target);
@@ -216,7 +221,7 @@ function HistoryTimeline({ archives, target }: { archives: PatchArchive[]; targe
                     <NumericText text={entry.scopeNote} />
                   </p>
                 )}
-                {!!entry.civIds.length && <p className="note">适用文明：{entry.civIds.map((id) => civByEn(id)?.zh ?? id).join('、')}</p>}
+                <HistoryScope entry={entry} />
                 {!!entry.relatedTargets?.length && (
                   <p className="history-related">
                     相关档案：

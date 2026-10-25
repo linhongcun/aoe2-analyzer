@@ -9,6 +9,7 @@
 .entity-history a {
   display: inline-flex;
   align-items: center;
+  min-width: 44px;
 }
 .history-coverage {
   margin-block: var(--space-4);

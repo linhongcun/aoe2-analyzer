@@ -136,7 +136,9 @@ jobs:
         run: python3 scripts/generate_resource_build.py --check
       - name: Patch notes match pinned data
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
-        run: python3 scripts/patches_build.py --check
+        run: |
+          python3 scripts/patches_build.py --check
+          python3 scripts/history_build.py --check
       - name: Build-order data check
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: npm run bo:check

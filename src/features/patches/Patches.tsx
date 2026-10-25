@@ -361,7 +361,7 @@ export default function Patches() {
                     <p className="note">
                       {e.verification === 'official'
                         ? '已核对官方原文'
-                        : e.verification === 'conflict'
+                        : e.verification === 'conflict' || e.provenance === 'source-conflict'
                           ? '来源冲突，尚未核实'
                           : e.verification === 'unverified'
                             ? '未核实'
