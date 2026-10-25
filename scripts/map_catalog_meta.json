@@ -1,0 +1,583 @@
+{
+  "arabia": {
+    "group": "open",
+    "featured": true,
+    "priority": 1,
+    "scouting": "先查看高地、零散树林和基地之间的开阔路线，再确认哪些采集点容易受到侧面进攻。",
+    "opening": "保持侦察并保护暴露资源，结合敌方位置选择前期施压或补充防守，避免只靠地形求稳。"
+  },
+  "arena": {
+    "group": "closed",
+    "featured": true,
+    "priority": 2,
+    "scouting": "先核对墙内资源、城门方向和墙外路线，再侦察敌方前置位置与能够争夺的圣物。",
+    "opening": "利用城墙争取发展时间，同时观察墙外动向；扩张和外出争夺前先准备防守与支援。"
+  },
+  "black-forest": {
+    "group": "closed",
+    "featured": true,
+    "priority": 3,
+    "scouting": "树林把基地分隔开，先找清狭窄通路与盟友方向，确认需要围口的位置及侧面缺口。",
+    "opening": "先围口并稳住通道再发展经济；持续留意敌方开林和新通路，避免防线被绕开。"
+  },
+  "nomad": {
+    "group": "nomad",
+    "featured": true,
+    "priority": 4,
+    "scouting": "先汇合分散的村民并寻找适合落城的位置，核对附近食物、树林和其他玩家的动向。",
+    "opening": "先建立能够持续运作的经济，再决定施压或发展；落城前兼顾近邻距离与之后的防守空间。"
+  },
+  "four-lakes": {
+    "group": "hybrid",
+    "featured": true,
+    "priority": 5,
+    "scouting": "先确认湖泊与出生点的距离、岸边资源和敌方可接近的路线，再判断哪些水域容易保护。",
+    "opening": "兼顾陆上经济与湖区经营，按侦察决定水域投入，保护渔业时也要防止陆军绕到基地侧面。"
+  },
+  "hideout": {
+    "group": "closed",
+    "featured": true,
+    "priority": 6,
+    "scouting": "先核对木栅栏、树林缺口和外部资源的位置，持续查看敌方接近基地与绕后的路线。",
+    "opening": "利用已有遮蔽稳住经济，同时准备处理木栅栏遭突破的情况，扩张前先补足外侧视野。"
+  },
+  "michi": {
+    "group": "closed",
+    "featured": true,
+    "priority": 7,
+    "scouting": "树林将对阵双方隔开，先核对本方可发展空间和林线，留意可能被打开的道路与支援位置。",
+    "opening": "利用隔离地形发展经济，准备具备开林能力的单位后再开通路线，并防范敌方先打通树林绕后。"
+  },
+  "islands": {
+    "group": "water",
+    "featured": true,
+    "priority": 8,
+    "scouting": "先查看本岛海岸、敌方航道和无人岛资源，确认哪些岸段容易遭到登陆。",
+    "opening": "先保护海上通行和近岸经济，再评估向无人岛扩张；运输途中和落地之后都要有掩护。"
+  },
+  "fortress": {
+    "group": "closed",
+    "featured": true,
+    "priority": 9,
+    "scouting": "先理清既有建筑、城门和城外资源的位置，确认敌方能接近的方向与可扩张空间。",
+    "opening": "利用已有防御组织经济与军队，向城外扩张时补足保护，避免把城墙当成长期安全保证。"
+  },
+  "oasis": {
+    "group": "closed",
+    "featured": true,
+    "priority": 10,
+    "scouting": "先查看中央树林边缘和外围通路，确认可用伐木点、近邻位置与绕后的进攻方向。",
+    "opening": "围绕能够保护的树林发展，保持外围视野，避免只守一侧而被敌军沿地图外圈绕行。"
+  },
+  "amazon_tunnels": {
+    "group": "closed",
+    "featured": true,
+    "priority": 11,
+    "scouting": "先找清林间主通道、盟友位置与侧面树林边界，确认能够围守和持续支援的地段。",
+    "opening": "围绕通道稳住防线并协调支援，再发展经济；持续观察树林变化，防止新路线绕过原有防守。"
+  },
+  "gold-rush": {
+    "group": "open",
+    "featured": true,
+    "priority": 12,
+    "scouting": "先侦察沙漠中心的金矿与周边坡位，注意狼群和敌方通往中央资源的路线。",
+    "opening": "在保护基地经济的同时争取中央视野，外出取金前先保证通路安全及持续支援的条件。"
+  },
+  "golden-pit": {
+    "group": "open",
+    "featured": true,
+    "priority": 13,
+    "scouting": "先侦察金矿谷的入口、谷底与周围高处，确认敌方能否从另一侧接近正在采集的村民。",
+    "opening": "保持对中央金矿和高处的视野，进入谷底前准备撤退与支援路线，避免只看资源而忽略地形。"
+  },
+  "runestones": {
+    "group": "open",
+    "featured": true,
+    "priority": 14,
+    "scouting": "先查看开阔地上的近邻位置、树林和资源点，确认基地间可以绕行的进攻路线。",
+    "opening": "保护暴露资源并保持侦察，按敌方动向安排机动兵力与防守，再选择能够持续施压的方向。"
+  },
+  "land_madness": {
+    "group": "open",
+    "featured": true,
+    "priority": 15,
+    "scouting": "先确认分散资源和森林边缘的不可建造地形，找出敌军可能穿过的缺口与绕行路线。",
+    "opening": "以侦察和军事存在保护经济，围墙可用程度要以实图核对，不要把主要防守寄托在封口上。"
+  },
+  "acropolis": {
+    "group": "open",
+    "featured": true,
+    "priority": 16,
+    "scouting": "先查看基地高地的坡道和周围可用资源，确认敌军上坡及自己向外扩张的路线。",
+    "opening": "把高地视野与资源保护结合起来，外出采集时安排掩护，不要只靠高处位置维持安全。"
+  },
+  "socotra": {
+    "group": "open",
+    "featured": true,
+    "priority": 17,
+    "scouting": "先确定近距离敌人的方向和岛内资源位置，检查基地周围能够退让或转移采集的空间。",
+    "opening": "优先保住能够继续采集的经济与村民，按近邻压力调整投入，避免在缺乏保护时过度外出。"
+  },
+  "valley": {
+    "group": "open",
+    "featured": true,
+    "priority": 18,
+    "scouting": "先查看干涸河谷、聚集的野生动物和两侧高处，确认进入中央后能否安全撤回。",
+    "opening": "在基地经济稳定的基础上争取河谷资源，外出采集时保持侦察，不要孤立地深入双方之间。"
+  },
+  "lombardia": {
+    "group": "open",
+    "featured": true,
+    "priority": 19,
+    "scouting": "先与盟友确认各自的资源范围和支援路线，再侦察两端城镇之间的开阔通道。",
+    "opening": "协调资源使用与出兵方向，优先保护能够互相支援的经济，避免分散行动给敌人逐个施压。"
+  },
+  "yucatan": {
+    "group": "open",
+    "featured": true,
+    "priority": 20,
+    "scouting": "先找清雨林中的食物、树林缺口和近邻方向，外出采集时留意美洲豹等危险。",
+    "opening": "围绕可安全取得的食物发展，保护在树林边缘工作的村民，再按侦察结果选择施压方向。"
+  },
+  "land_nomad": {
+    "group": "nomad",
+    "featured": true,
+    "priority": 21,
+    "scouting": "先汇合散落村民，寻找靠近树林和食物的落城位置，同时确认附近是否已有其他玩家。",
+    "opening": "以实际能取得的陆上资源建立稳定经济，落城后保住采集点，再根据近邻距离决定发展方向。"
+  },
+  "african_clearing": {
+    "group": "nomad",
+    "featured": true,
+    "priority": 22,
+    "scouting": "先查看村民周围的空地、食物和近邻位置，确认有限资源与未来落脚点能否得到保护。",
+    "opening": "先建立能够持续采集的经济，再按近邻压力安排防守与扩张，不要只追求落脚位置而忽略资源。"
+  },
+  "baltic": {
+    "group": "hybrid",
+    "featured": true,
+    "priority": 23,
+    "scouting": "先查看海湾、半岛出口和沿岸资源，确认陆路与水路分别能从什么方向接近基地。",
+    "opening": "陆上防守与海岸经营一起规划，先保护易受攻击的出入口，再决定对海上投入的程度。"
+  },
+  "scandinavia": {
+    "group": "hybrid",
+    "featured": true,
+    "priority": 24,
+    "scouting": "先找到可持续取得的猎物和金矿，结合海岸与树林位置确认陆路、近岸经济的风险。",
+    "opening": "按实际食物来源安排发展，同时观察沿海动向；不要依赖预览中的出生位置规划采集。"
+  },
+  "mediterranean": {
+    "group": "hybrid",
+    "featured": true,
+    "priority": 25,
+    "scouting": "先侦察内陆海岸线、陆地绕行路线和敌方可能的码头方向，核对水陆两面的压力。",
+    "opening": "在稳定陆上经济的同时判断内海控制的价值，别因关注海面而放空沿岸与侧面的防守。"
+  },
+  "golden-swamp": {
+    "group": "hybrid",
+    "featured": true,
+    "priority": 26,
+    "scouting": "先核对通向中央金岛的陆水路线、周围沼泽和敌方位置，确认争夺资源时的撤退方向。",
+    "opening": "保持对中央的侦察与经济保护，投入之前先查清通行方式，避免把采集点放在无法支援的位置。"
+  },
+  "coastal_forest": {
+    "group": "hybrid",
+    "featured": true,
+    "priority": 27,
+    "scouting": "先查看城镇周围的森林边缘、南侧陆地和北侧海岸，确认敌军从哪里能接近资源点。",
+    "opening": "同时留意林间通道与沿海动向，选择可保护的经济位置，再按侦察调整陆军和水域投入。"
+  },
+  "team-islands": {
+    "group": "water",
+    "featured": true,
+    "priority": 28,
+    "scouting": "先与盟友核对共享岛屿的海岸和资源分工，再检查敌岛航道与可被登陆的岸段。",
+    "opening": "协调海上保护和扩张方向，保持对运输路线的侦察，不要因为没有浅滩就忽略登陆威胁。"
+  },
+  "migration": {
+    "group": "water",
+    "featured": true,
+    "priority": 29,
+    "scouting": "先确认出生小岛上可用的资源，再探索大陆的落脚点、运输航线与敌方可能的位置。",
+    "opening": "提前准备离岛后的经济衔接，迁移前核对运输和落地保护，避免小岛资源耗尽才仓促行动。"
+  },
+  "megarandom": {
+    "group": "other",
+    "featured": true,
+    "priority": 30,
+    "scouting": "先确认这次生成的陆水分布、出生资源和玩家连接方式，避免套用预览或其他地图的经验。",
+    "opening": "根据实际侦察调整开局，先解决眼前资源与防守需求，再决定是否经营水域或争夺外侧位置。"
+  },
+  "acclivity": {
+    "group": "open",
+    "featured": false,
+    "priority": 31,
+    "scouting": "先寻找峭壁间的通路、可用资源与周围高处，确认哪些方向最容易受到敌军进攻。",
+    "opening": "保护初期有限资源并保持侦察，逐步争取能够支援的高地，不要在没有掩护时分散扩张。"
+  },
+  "aftermath": {
+    "group": "other",
+    "featured": false,
+    "priority": 32,
+    "scouting": "先侦察战场遗留建筑、周围资源与敌方位置，确认哪些现成建筑能够安全取得并持续利用。",
+    "opening": "在恢复基础经济的同时保护已有建筑和通路，再评估向外争夺的收益，避免为建筑孤立兵力。"
+  },
+  "alpine-lakes": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 33,
+    "scouting": "先侦察高山间的湖泊、可用鱼群与陆地资源，确认湖岸和狭窄通路的防守条件。",
+    "opening": "按实际能取得的食物安排经济，同时保护岸边与陆路采集，扩张时留意山地造成的支援阻隔。"
+  },
+  "archipelago": {
+    "group": "water",
+    "featured": false,
+    "priority": 34,
+    "scouting": "先确认同一岛上是否还有其他玩家，再查看岛间航道、海岸和可能的登陆位置。",
+    "opening": "先保证岛内经济安全，再按航道与近邻情况组织海上保护，扩张前确认目的地能否立足。"
+  },
+  "atacama": {
+    "group": "open",
+    "featured": false,
+    "priority": 35,
+    "scouting": "先寻找沙漠深处的树林和可用食物，再查看沿途开阔地及基地之间的进攻路线。",
+    "opening": "围绕可取得的资源安排经济与保护，避免让远行村民孤立在外，再决定向哪一侧施压。"
+  },
+  "bog-islands": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 36,
+    "scouting": "先找清草地小岛之间的连接与沼泽通路，核对哪些位置可以落脚、采集或绕行。",
+    "opening": "先保护能够持续运作的经济，再根据实际通行方式选择兵力，扩张前确认新位置可得到支援。"
+  },
+  "bogland": {
+    "group": "closed",
+    "featured": false,
+    "priority": 37,
+    "scouting": "先查看森林与草地迷宫中的出口、近邻和可用资源，确认是否存在尚未发现的绕行通道。",
+    "opening": "优先稳住已查明的采集路线与通道，保持对树林边缘的侦察，再向能够支援的位置扩张。"
+  },
+  "budapest": {
+    "group": "other",
+    "featured": false,
+    "priority": 38,
+    "scouting": "先核对分散城镇的资源、野生动物和互相支援的路线，找出容易被单独攻击的位置。",
+    "opening": "兼顾各处城镇的经济和防守，先建立可持续的采集安排，再选择能够得到支援的进攻方向。"
+  },
+  "cenotes": {
+    "group": "open",
+    "featured": false,
+    "priority": 39,
+    "scouting": "先查看小树林、岩坑池地和开阔地的分布，确认采集点周围可绕行的进攻路线。",
+    "opening": "用侦察保护分散经济，选择能兼顾资源与支援的落点，不要假设小片树林能够完整挡敌。"
+  },
+  "city-of-lakes": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 40,
+    "scouting": "先探索交错湖河之间的通路与可用树林，确认各块陆地的连接和扩张时的绕行距离。",
+    "opening": "根据通行情况组织经济与防守，跨越湖河前先检查支援路线，避免把村民送入孤立区域。"
+  },
+  "coastal": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 41,
+    "scouting": "先确认海岸形状和陆地连通路线，再判断敌方可能从陆路、航道还是登陆点接近。",
+    "opening": "根据侦察平衡陆地防守与海上经营，保护岸边采集点，避免只盯着单一方向。"
+  },
+  "continental": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 42,
+    "scouting": "先沿周围海岸和可能出现的河流侦察，核对各片陆地之间的通行方式及绕行距离。",
+    "opening": "确认陆水连接后再安排扩张与军事投入，跨河或沿海发展时给新经济补上保护。"
+  },
+  "crater": {
+    "group": "open",
+    "featured": false,
+    "priority": 43,
+    "scouting": "先查看弹坑中的金矿、开阔地与外围森林，确认敌军能从哪些方向接近采集点。",
+    "opening": "先稳住能够保护的经济，再争夺暴露的财富，扩张和推进时持续留意侧翼与撤退路线。"
+  },
+  "crater-lake": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 44,
+    "scouting": "先查看火山湖岸线、通向中心金岛的方式和可用树林，留意陡坡上的落脚空间。",
+    "opening": "先守住稳定的陆上经济，再评估向中心取金的运输与防守条件，不要贸然迁入险地。"
+  },
+  "crossroads": {
+    "group": "open",
+    "featured": false,
+    "priority": 45,
+    "scouting": "先核对中央林丘与丘间道路，找出可保护的伐木点、视野位置和通向基地的绕行路线。",
+    "opening": "围绕木材来源规划经济与防守，进入丘间通道前确认敌情，避免采集区与支援相互脱节。"
+  },
+  "enclosed": {
+    "group": "closed",
+    "featured": false,
+    "priority": 46,
+    "scouting": "先找清雨林内的空间、外侧资源和崎岖通路，确认哪些地段无法依靠建筑封住。",
+    "opening": "利用林内空间稳住经济，再准备向外争取资源；防守时注意不可建造的通路与敌方绕行。"
+  },
+  "eruption": {
+    "group": "open",
+    "featured": false,
+    "priority": 47,
+    "scouting": "先查看火山的上山道路、山顶资源与沿途高处，核对登山时可能遭受攻击的位置。",
+    "opening": "先保证基础经济与支援，再逐步推进到山地；登高时注意侧翼，避免兵力孤立在坡道上。"
+  },
+  "frigid_lake": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 48,
+    "scouting": "先核对湖岸、食物与基地之间的连接，查看暴露城镇周围可能被绕入的陆上路线。",
+    "opening": "利用可取得的食物发展经济，同时保持对湖岸和侧面的侦察，扩张时补足暴露采集点的保护。"
+  },
+  "ghost-lake": {
+    "group": "open",
+    "featured": false,
+    "priority": 49,
+    "scouting": "先核对冰封湖面周围的可通行地形与基地连通路线，不要把冰面当成天然防线。",
+    "opening": "按实际能通行的位置组织防守与采集，注意从中央和侧面接近的兵力，再决定扩张方向。"
+  },
+  "greenland": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 50,
+    "scouting": "先查看大陆上的可用食物、沿海鱼群与冰帽周围水域，确认哪些位置容易遭到海上袭击。",
+    "opening": "按实际食物来源平衡陆上与近岸经济，向海边发展前先确认防守与撤退条件，不要孤立经营。"
+  },
+  "haboob": {
+    "group": "open",
+    "featured": false,
+    "priority": 51,
+    "scouting": "先寻找稀疏树林、暴露资源和通向近邻的开阔路线，确认采集点周围是否有可守的位置。",
+    "opening": "用侦察与机动防守保护经济，不要依赖树林形成完整围墙，推进时也要留下必要的采集保护。"
+  },
+  "hamburger": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 52,
+    "scouting": "先确认中间土地的通行方式与外围航路，留意敌方是否能从海上绕到基地后方。",
+    "opening": "按已经查明的路线安排防守与进攻，兼顾中间和外围，不要把注意力只放在正面通道。"
+  },
+  "highland": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 53,
+    "scouting": "先找出河流渡口、开阔地和树林边缘，确认河岸两侧能否快速互相支援。",
+    "opening": "围绕安全渡口安排防守与扩张，水域投入以实际侦察为准，不要忽略陆路绕行的进攻。"
+  },
+  "hill-fort": {
+    "group": "closed",
+    "featured": false,
+    "priority": 54,
+    "scouting": "先查看山顶空间、上下山路线和山脚资源，确认哪些扩张位置能够得到基地支援。",
+    "opening": "借助已有防御稳住发展，再逐步争取山下资源；不要等安全空间耗尽才开始寻找落脚点。"
+  },
+  "kawasan": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 55,
+    "scouting": "先核对中央浆果、池塘和圣物的位置，查看从基地前往这些暴露资源时会经过哪些路线。",
+    "opening": "先保护能够持续取得的食物，再判断中央资源的争夺条件，外出发展时不要忽略侧面来敌。"
+  },
+  "kilimanjaro": {
+    "group": "open",
+    "featured": false,
+    "priority": 56,
+    "scouting": "先侦察中央山地的上山路径、关键资源与敌方位置，找出能够持续支援的坡口。",
+    "opening": "先保护基础经济，再逐步争取中央山地；推进时确认后续支援，不要只追求高处而远离补给。"
+  },
+  "lowland": {
+    "group": "open",
+    "featured": false,
+    "priority": 57,
+    "scouting": "先查看高处视野、深谷中的分散资源和通行路线，确认外出采集能否得到基地支援。",
+    "opening": "在稳定已有经济后逐步向谷地扩张，保护暴露的采集点，不要等安全资源紧缺才寻找出路。"
+  },
+  "mangrove-jungle": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 58,
+    "scouting": "先查看环绕基地的浅河、密林边缘与可扩张空间，核对能够通过和建造的位置。",
+    "opening": "在有限空间内组织稳定经济，扩张前先查明出路与敌方动向，避免把浅水当成完整屏障。"
+  },
+  "marketplace": {
+    "group": "other",
+    "featured": false,
+    "priority": 59,
+    "scouting": "先核对既有市场、周围资源和敌军接近路线，确认哪些位置需要保护才能持续利用建筑。",
+    "opening": "结合实际可用建筑组织经济与防守，先保住贸易站周围的通路，再决定如何向外施压或扩张。"
+  },
+  "meadow": {
+    "group": "open",
+    "featured": false,
+    "priority": 60,
+    "scouting": "先确认稀少树林与基地间的开阔路线，找出伐木点周围最容易被绕入的方向。",
+    "opening": "保护木材采集并保持机动侦察，选择能够支援的扩张位置，不要只凭开阔视野判断基地安全。"
+  },
+  "mongolia": {
+    "group": "open",
+    "featured": false,
+    "priority": 61,
+    "scouting": "先沿悬崖寻找可通行缺口和高处视野，确认开阔草原上通向基地的绕行路线。",
+    "opening": "利用已侦察的地形保护资源，保持机动与视野，避免误以为悬崖已经封住所有进攻方向。"
+  },
+  "morass": {
+    "group": "other",
+    "featured": false,
+    "priority": 62,
+    "scouting": "先查看雨林外围的泥泞沼泽、野生动物与资源，确认可通行地段和安全往返基地的路线。",
+    "opening": "先稳住可保护的经济，再根据实际地形向外围发展，采集野外资源时保持侦察并准备撤退。"
+  },
+  "mountain-pass": {
+    "group": "nomad",
+    "featured": false,
+    "priority": 63,
+    "scouting": "先汇合分散在雪山周围的村民，查看可落城的空地、资源以及穿过山地的路线。",
+    "opening": "优先建立稳定的采集与生产，落城后核对防守空间，再决定向山地外侧扩张或接近敌人。"
+  },
+  "mountain_range": {
+    "group": "open",
+    "featured": false,
+    "priority": 64,
+    "scouting": "先侦察山脉之间的通道、山脊与相邻资源，确认敌军绕行和自己持续支援的路线。",
+    "opening": "把基础经济与山地控制结合起来，推进前核对通路，避免只占高处却失去采集点和后续支援。"
+  },
+  "mountain-ridge": {
+    "group": "open",
+    "featured": false,
+    "priority": 65,
+    "scouting": "先找出雪山通道、石矿和周围可用的食物来源，确认远处采集点能否安全往返。",
+    "opening": "不要因石矿丰富就忽略食物与防守，先建立持续经济，再根据山脊通路决定扩张与投入。"
+  },
+  "nile-delta": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 66,
+    "scouting": "先查看河流、肥沃陆地和近邻的连通方式，确认沿河扩张与来回支援需要经过哪些位置。",
+    "opening": "围绕可保护的资源发展，保持对河岸与陆路的侦察，跨越河流扩张时准备持续支援。"
+  },
+  "northern_isles": {
+    "group": "water",
+    "featured": false,
+    "priority": 67,
+    "scouting": "先查看本岛四周海岸、相邻岛屿与敌方可能的航道，确认哪些岸段容易被突袭或登陆。",
+    "opening": "先保护海上通行和岛内经济，再争取岛间资源，不能因本岛资源充足就忽略各个方向的海上威胁。"
+  },
+  "pacific-islands": {
+    "group": "water",
+    "featured": false,
+    "priority": 68,
+    "scouting": "先侦察附近岛屿分别提供哪些资源，核对海岸、航线和途中可能遭到拦截的位置。",
+    "opening": "根据资源需要安排岛间迁移，先准备运输与落地保护，再逐步争取能够维持发展的岛屿。"
+  },
+  "ravines": {
+    "group": "other",
+    "featured": false,
+    "priority": 69,
+    "scouting": "先侦察山涧周围的坡口、树林和外侧空地，确认从狭小聚落向外发展的安全路线。",
+    "opening": "在保护已有经济的同时寻找扩张空间，进入周围森林前保留视野，避免资源点与支援相互脱节。"
+  },
+  "ring_fortress": {
+    "group": "closed",
+    "featured": false,
+    "priority": 70,
+    "scouting": "先找出残破栅栏的缺口、周围树林与外侧资源，确认敌军容易突破的方向和可扩张路线。",
+    "opening": "先修补能够保护经济的防线，再逐步向外争取资源，同时保持侦察，不要把已有栅栏当成完整屏障。"
+  },
+  "rivers": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 71,
+    "scouting": "先找全河流之间的浅滩与陆路连接，确认哪些渡口连接敌人、盟友和外侧资源。",
+    "opening": "以渡口和支援路线为防守重点，跨河扩张前留好视野，避免只封住眼前的通道。"
+  },
+  "sacred_springs": {
+    "group": "other",
+    "featured": false,
+    "priority": 72,
+    "scouting": "先找出远离基地的岸鱼、圣物与宝塔位置，确认往返路线和敌军能接近的方向。",
+    "opening": "先经营容易保护的资源，再准备争夺远处目标；村民与兵力外出时保持视野，避免孤立在外。"
+  },
+  "salt-marsh": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 73,
+    "scouting": "先确认浅滩、河流和能够建造的干地，找出基地之间可以绕行的路径。",
+    "opening": "把建筑放在确认可用的位置，先保住连续的支援与采集路线，再决定向沼泽另一侧扩张。"
+  },
+  "sandbank": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 74,
+    "scouting": "先查看岛屿之间的浅滩、树林分界与沿海路线，确认哪些缺口无法靠围墙完全封闭。",
+    "opening": "兼顾陆地通路和海岸保护，围绕可用木材发展经济，并留意敌方穿过浅滩或绕行的动作。"
+  },
+  "seize_the_mountain": {
+    "group": "other",
+    "featured": false,
+    "priority": 75,
+    "scouting": "先核对中央山地、浅滩通路与周围资源，观察哪些入口能为持续争夺提供支援。",
+    "opening": "在保住基础经济的同时逐步争取山地，控制之后也要维护通路，避免只有前进而没有支援。"
+  },
+  "serengeti": {
+    "group": "open",
+    "featured": false,
+    "priority": 76,
+    "scouting": "先确认稀少树林、暴露资源和基地间的开阔路线，找出敌军可能绕到采集点的方向。",
+    "opening": "用持续侦察和机动防守保护经济，不要依靠稀疏树林求稳，进攻前也要留住资源保护。"
+  },
+  "shoals": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 77,
+    "scouting": "先核对浅水中的食物、可通航水路与近岸金矿，确认敌军能从哪些海上方向快速接近。",
+    "opening": "不要只依赖浅水区的食物，先保护经济与航路，再结合近岸资源决定海上争夺和陆地支援。"
+  },
+  "steppe": {
+    "group": "other",
+    "featured": false,
+    "priority": 78,
+    "scouting": "先侦察树林外的猎物、近邻位置和开阔路线，确认外出采集能否安全往返。",
+    "opening": "依据实际出生配置安排经济，离开树林取得食物时准备保护，并持续观察敌军的移动方向。"
+  },
+  "team_moats": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 79,
+    "scouting": "先查看护城河、浅水连接和外围土地，确认哪些通路能离开有限空间并得到盟友支援。",
+    "opening": "不要把周围溪流当成安全保证，先保护经济与出路，再逐步争取能够持续采集的外侧土地。"
+  },
+  "volcanic_island": {
+    "group": "hybrid",
+    "featured": false,
+    "priority": 80,
+    "scouting": "先查看火山地形、周围浅滩和石料分布，核对通向岛内资源及相邻区域的路线。",
+    "opening": "按实际连通情况建立经济与防守，争夺火山周围资源前先确认通路，并为扩张保留支援。"
+  },
+  "wade": {
+    "group": "open",
+    "featured": false,
+    "priority": 81,
+    "scouting": "先核对浅水区中的通行与可建造空地；这里的水域不能供船只航行，不宜照搬海图思路。",
+    "opening": "围绕可用陆地空间安排建筑与经济，用陆上路线组织保护和支援，再逐步争取能够站稳的位置。"
+  },
+  "water-nomad": {
+    "group": "nomad",
+    "featured": false,
+    "priority": 82,
+    "scouting": "先寻找能够安家的陆地与食物，核对现有渔船能活动的水域和沼泽树林之间的通路。",
+    "opening": "先保证村民与已有捕鱼经济能继续运作，落城时兼顾后续扩张，不要在未侦察的沼泽间盲目前进。"
+  },
+  "wolf-hill": {
+    "group": "other",
+    "featured": false,
+    "priority": 83,
+    "scouting": "先查看中央山顶的圣物、树林通路与狼群位置，避免让侦察单位或村民孤立地深入危险区域。",
+    "opening": "先保护经济并清理安全路线，具备争夺条件后再向山顶推进，不要为了中央目标打乱全部发展。"
+  }
+}

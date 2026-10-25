@@ -2,10 +2,10 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 const maps = [
-  { id: 'arabia', name: '阿拉伯', file: 'arabia' },
-  { id: 'arena', name: '竞技场', file: 'arena' },
-  { id: 'nomad', name: '游牧', file: 'nomad' },
-  { id: 'water', name: '海图', file: 'islands' },
+  { name: '阿拉伯半岛', en: 'Arabia', file: 'arabia' },
+  { name: '黑森林', en: 'Black Forest', file: 'black-forest' },
+  { name: '游牧', en: 'Nomad', file: 'nomad' },
+  { name: '岛屿', en: 'Islands', file: 'islands' },
 ];
 
 for (const width of [360, 375, 390, 1280]) {
@@ -29,8 +29,23 @@ for (const width of [360, 375, 390, 1280]) {
       await page.goto('./#/maps');
       const guide = page.locator('.map-guide');
       const nav = page.getByRole('navigation', { name: '选择地图' });
+      const search = page.getByRole('searchbox', { name: '搜索地图', exact: true });
+      const group = page.getByRole('combobox', { name: '地图类型', exact: true });
+      for (const control of [search, group, page.getByRole('button', { name: '清除筛选', exact: true })]) {
+        const size = await control.boundingBox();
+        expect(size!.height).toBeGreaterThanOrEqual(44);
+      }
       for (const map of maps) {
-        const article = page.getByRole('article', { name: map.name, exact: true });
+        await search.fill(map.en);
+        const button = nav.getByRole('button', { name: `${map.name} ${map.en}`, exact: true });
+        const buttonSize = await button.boundingBox();
+        expect(buttonSize!.width).toBeGreaterThanOrEqual(44);
+        expect(buttonSize!.height).toBeGreaterThanOrEqual(44);
+        await button.focus();
+        await button.press('Enter');
+        const article = page.getByRole('article', { name: `${map.name} ${map.en}`, exact: true });
+        await expect(article).toBeFocused();
+        await expect(article.getByRole('heading', { level: 3 })).toBeInViewport();
         const preview = article.getByRole('img', { name: /地图预览/ });
         await preview.scrollIntoViewIfNeeded();
         await expect(preview).toBeVisible();
@@ -38,28 +53,22 @@ for (const width of [360, 375, 390, 1280]) {
         await expect.poll(() => preview.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth >= 224)).toBe(true);
         const imageSize = await preview.boundingBox();
         expect(imageSize!.width).toBeGreaterThanOrEqual(200);
-        await expect(article.getByRole('heading', { name: '地形与侦察' })).toBeVisible();
+        await expect(article).toContainText('侦察');
         await article.locator('summary').click();
-        await expect(article.getByRole('link', { name: /AoE2 Companion.*预览图/ })).toHaveAttribute(
+        await expect(article.locator('a[href*="github.com/denniske/aoe2companion/blob/"]')).toHaveAttribute(
           'href',
-          /github\.com\/denniske\/aoe2companion\/blob\/[a-f0-9]{40}\/assets\/maps\/rm_/,
+          /github\.com\/denniske\/aoe2companion\/blob\/[a-f0-9]{40}\/app\/assets\/maps\/rm_/,
         );
+        await expect(article.locator('a[href*="language=zh-hans"]')).toBeVisible();
         await article.locator('summary').click();
-        const button = nav.getByRole('button', { name: map.name, exact: true });
-        const buttonSize = await button.boundingBox();
-        expect(buttonSize!.width).toBeGreaterThanOrEqual(44);
-        expect(buttonSize!.height).toBeGreaterThanOrEqual(44);
-        await button.focus();
-        await button.press('Enter');
-        await expect(article).toBeFocused();
-        await expect(article.getByRole('heading', { level: 3 })).toBeInViewport();
       }
-      await expect(page.locator('#map-water figcaption')).toContainText('岛屿 Islands');
-      await expect(page.locator('#map-water figcaption')).toContainText('海图示例');
+      await expect(page.locator('#map-details figcaption')).toContainText('岛屿 Islands');
+      await page.getByRole('button', { name: '清除筛选', exact: true }).click();
+      await expect(nav.getByRole('button', { name: '岛屿 Islands', exact: true })).toHaveAttribute('aria-pressed', 'true');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       const violations = (await new AxeBuilder({ page }).include('.map-guide').withTags(['wcag2a', 'wcag2aa']).analyze()).violations;
       expect(violations).toEqual([]);
-      await nav.scrollIntoViewIfNeeded();
+      await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: info.outputPath(`maps-${theme}-${width}.png`), fullPage: true });
       expect(externalRequests).toEqual([]);
       expect(errors).toEqual([]);

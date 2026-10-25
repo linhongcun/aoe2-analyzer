@@ -70,6 +70,8 @@ npm run lint         # ESLint；npm run format 用 Prettier 格式化
 npm run data         # 从 aoe2techtree 重新生成 src/data/*.json 与 public/img/*
 python3 scripts/map_previews.py          # 生成地图预览及 mapPreviews.json（依赖 Pillow==12.3.0）
 python3 scripts/map_previews.py --check  # 核对固定原图哈希、生成预览及来源清单
+python3 scripts/map_catalog_build.py          # 从固定双语快照和人工分类生成地图目录
+python3 scripts/map_catalog_build.py --check  # 核对目录与名称、说明和预览来源一致
 npm run dat:check    # 下载并校验 .dat（sha256 + 补丁标记）
 npm run effects      # 由 .dat 生成 effects.json 并重写 docs/EFFECTS-AUDIT.md
 npm run stats:check  # 基础数值与 .dat 对账
@@ -99,7 +101,7 @@ npm run test:py      # Python 测试：补丁号识别、差异摘要、标记�
 - 单位/科技数据与图标（`public/img/units/`、`img/techs/`）：高清版取自 [denniske/aoe2companion](https://github.com/denniske/aoe2companion) 的 256px DE 图标（缩放为 128px WebP，`scripts/icons_hires.py`），未覆盖的少数图标回退到 aoe2techtree 48px 原图（游戏图像 © Microsoft）
 - 属性/资源图标（`public/img/stats/`，40px WebP）：来自 [Age of Empires Fandom Wiki](https://ageofempires.fandom.com/)（如 Hpicon_aoe2de.png、Attack_cur.png、Armoricon_aoe2de.png、AoE2DE_icon_*.png、Aoe2de_food.png 等；Wiki 内容 CC BY-SA，游戏图像 © Microsoft）
 - 文明图标（`public/img/civs/`）：取自 [denniske/aoe2companion](https://github.com/denniske/aoe2companion)（`assets/civilizations/de/`），缩放为 96px WebP。原始素材 © Microsoft Corporation。
-- 地图预览（`public/img/maps/`）：取自 [denniske/aoe2companion 固定提交 `3ce039d`](https://github.com/denniske/aoe2companion/tree/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps)（2020-07-09）的 420px 地图选择图片，由 `scripts/map_previews.py` 校验 `scripts/data_sources.json` 中的 SHA256 后转为 WebP，随站点发布，无运行时 CDN。图片仅表示地图形态，不是当前版本的随机对局实图；海图以岛屿（Islands）为例。原始游戏美术 © Microsoft Corporation，依 Microsoft Game Content Usage Rules 使用，不属于本项目 MIT 许可。
+- 地图目录与预览（`src/data/mapCatalog.json`、`public/img/maps/`）：中英名称和地图说明来自 [AoE2 Companion 简中](https://data.aoe2companion.com/api/maps?language=zh-hans)及[英文接口](https://data.aoe2companion.com/api/maps?language=en)的 2026-10-25 归档快照（`scripts/map_catalog_source/`，以解析后的 normalized JSON 保存并校验 SHA256）；图像取自 [denniske/aoe2companion 固定提交 `155d645`](https://github.com/denniske/aoe2companion/tree/155d64511a22570ff49b47edb73355464063e428/app/assets/maps)（2023-05-19）。`scripts/map_previews.py` 逐张校验原图 SHA256 和已核实尺寸，保持原比例生成本地 WebP；`scripts/map_catalog_build.py` 联合双语来源、预览清单和 `scripts/map_catalog_meta.json` 的本站分类及提示生成目录。仅收录两种来源都可核实的 83 张具名标准随机地图，排除模式选项，不声称覆盖当前全部地图或实时天梯池；常见优先是编辑排序。大部分原图为 420×420，阿塔卡马为 423×420，不裁剪地形。原始游戏美术和游戏内地图说明 © Microsoft Corporation，依 Microsoft Game Content Usage Rules 使用，不属于本项目 MIT 许可。图片与目录随站点发布，无运行时 CDN/API 请求。
 
 Age of Empires II © Microsoft Corporation. 本项目依据 Microsoft 的 [Game Content Usage Rules](https://www.xbox.com/en-us/developers/rules) 使用游戏素材，为非商业粉丝项目，未获 Microsoft 认可或赞助。
 
