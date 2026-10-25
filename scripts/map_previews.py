@@ -58,7 +58,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='核对地图预览及 src/data/mapPreviews.json，不写入生成文件')
     args = parser.parse_args()
-    source = json.loads(SOURCES_FILE.read_text())['sources']['mapPreviews']
+    source = json.loads(SOURCES_FILE.read_text())['assetSources']['mapPreviews']
     cache = ROOT / 'scripts/.cache' / f'map-previews-{source["commit"]}'
     directory = ROOT / 'public/img/maps'
     try:

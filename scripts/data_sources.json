@@ -1,5 +1,5 @@
 {
-  "_doc": "全部上游数据的固定版本（单一文件）。由 npm run data:update 更新；请勿手改 sha256。",
+  "_doc": "全部上游固定版本（单一文件）：sources 为游戏补丁数据上游，由 npm run data:update 更新；assetSources 为独立素材上游。请勿手改 sha256。",
   "patch": { "build": 185872, "date": "2026-09-23", "name": "DE Update 185872", "detectedFrom": "SiegeEngineers/halfon@abb48fd: Implement DE Update 185872" },
   "updated": "2026-10-11",
   "sources": {
@@ -19,6 +19,15 @@
       "date": "2026-09-23",
       "use": "文明/单位/科技/建筑/科技树、中英文本、图标"
     },
+    "halfon": {
+      "repo": "SiegeEngineers/halfon",
+      "commit": "abb48fdbedba57d5afe2b7941d6ae85cf6e0e803",
+      "path": "data/units_buildings_techs.de.json",
+      "date": "2026-09-23",
+      "use": "补丁号识别（提交信息「Implement DE Update N」）"
+    }
+  },
+  "assetSources": {
     "mapPreviews": {
       "repo": "denniske/aoe2companion",
       "commit": "3ce039d8bfdb54da36b2ea40f25cf1dac4063a13",
@@ -31,13 +40,6 @@
         "nomad": { "path": "assets/maps/rm_nomad.png", "sha256": "b7a4850ffcb23f526b1e68d5501371ac78284831bdb6dfae24eeeb4ee968dae8" },
         "islands": { "path": "assets/maps/rm_islands.png", "sha256": "959159fa8a2fca8cc8ff8855bc72d42c829b745ab9bbd2443a223e30bd044faa" }
       }
-    },
-    "halfon": {
-      "repo": "SiegeEngineers/halfon",
-      "commit": "abb48fdbedba57d5afe2b7941d6ae85cf6e0e803",
-      "path": "data/units_buildings_techs.de.json",
-      "date": "2026-09-23",
-      "use": "补丁号识别（提交信息「Implement DE Update N」）"
     }
   }
 }
