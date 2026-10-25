@@ -20,6 +20,14 @@ export function releaseVersionForSource(packageVersion, requestedVersion = null)
   return version;
 }
 
+/** Direct-main releases and optional integrated release branches share the same guards. */
+export function releaseReference(branchSha, deployedSha) {
+  requireSha(deployedSha, 'Deployed main');
+  const selected = branchSha ?? deployedSha;
+  requireSha(selected, 'Release source');
+  return selected;
+}
+
 /** Only a successful push deployment from this repository's main can start an automatic release. */
 export function releaseSource({ eventName, event, repository, ref, sha }) {
   if (!/^[\w.-]+\/[\w.-]+$/.test(repository) || event?.repository?.full_name !== repository || ref !== 'refs/heads/main')
@@ -131,7 +139,8 @@ function main() {
   const packageVersion = JSON.parse(git('show', `${source.deployedSha}:package.json`)).version;
   const version = releaseVersionForSource(packageVersion, source.requestedVersion);
   const mainSha = api(`repos/${repository}/git/ref/heads/main`).object.sha;
-  const releaseSha = api(`repos/${repository}/git/ref/heads/release/${version}`, { missing: true })?.object.sha ?? null;
+  // Ordinary approved changes deploy directly from main; a release branch is optional.
+  const releaseSha = releaseReference(api(`repos/${repository}/git/ref/heads/release/${version}`, { missing: true })?.object.sha, source.deployedSha);
   if (process.env.EXPECTED_DEPLOYED_SHA && mainSha !== process.env.EXPECTED_DEPLOYED_SHA) throw new Error('Main moved after release preparation');
   if (process.env.EXPECTED_RELEASE_SHA && releaseSha !== process.env.EXPECTED_RELEASE_SHA) throw new Error('Release branch moved after preparation');
   if (mainSha !== source.deployedSha) {
