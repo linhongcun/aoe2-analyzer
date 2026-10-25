@@ -17,7 +17,7 @@
  * 结论 = 去掉这些效果后全部开局方案重跑是否变化（见 TREE_SIM / tests/unit/v0300-332.test.ts）；核对不了的写「无法核实」再写具体原因。
  */
 import ecoRaw from '../data/raw/eco';
-import constructionRaw from '../data/construction.json';
+import { CONSTRUCTION_DATA as construction } from '../data/construction';
 import unitsRaw from '../data/raw/units';
 import { buildOrders } from '../data/buildOrders';
 import { classifyCivEffect, simScope, techAtomicOk, type EcoData } from './buildSim';
@@ -31,9 +31,6 @@ const eco = ecoRaw as unknown as EcoData;
 /** PK 与真实成本只给单位算折后价（建筑费用折扣不在这两个工具里） */
 const UNIT_IDS = new Set((unitsRaw as unknown as { id: number }[]).map((u) => u.id));
 type Cmd = { C: number; A: number; B: number };
-const construction = constructionRaw as unknown as {
-  civs: Record<string, { automatic: { id: number; commands: Cmd[] }[]; team: Cmd[]; units: Record<string, { class: number }> }>;
-};
 const relicMods = Object.values((relicRaw as unknown as { modifiers: Record<string, { civ: string; scope: string }> }).modifiers);
 
 export type UsageTool = 'sim' | 'gather' | 'cost' | 'construction' | 'relic' | 'repair';

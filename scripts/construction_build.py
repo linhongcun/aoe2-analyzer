@@ -91,10 +91,32 @@ def build(d, units):
     return out
 
 
+def compact(data):
+    """Intern identical inputs without dropping any calculation/provenance field."""
+    result = dict(data, civs={})
+    for field, pool in (('units', 'unitSets'), ('automatic', 'automaticSets')):
+        result[pool] = []
+        keys = {}
+        for name, civ in data['civs'].items():
+            key = json.dumps(civ[field], sort_keys=True, separators=(',', ':'))
+            if key not in keys:
+                keys[key] = len(result[pool])
+                result[pool].append(civ[field])
+            result['civs'].setdefault(name, dict(civ))[field] = keys[key]
+    return result
+
+
+def expand(data):
+    """The source regressions inspect the exact same expanded inputs as the UI."""
+    return dict((key, value) for key, value in data.items() if key not in ('unitSets', 'automaticSets')) | {
+        'civs': {name: dict(civ, units=data['unitSets'][civ['units']], automatic=data['automaticSets'][civ['automatic']])
+                 for name, civ in data['civs'].items()}}
+
+
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
     buildings = [b['id'] for b in json.loads((ROOT / 'src/data/buildings.json').read_text())]
-    result = json.dumps(build(load(), raw_units(buildings)), ensure_ascii=False, separators=(',', ':'), sort_keys=True) + '\n'
+    result = json.dumps(compact(build(load(), raw_units(buildings))), ensure_ascii=False, separators=(',', ':'), sort_keys=True) + '\n'
     if args.check:
         if not OUT.exists() or OUT.read_text() != result: raise SystemExit('construction.json is not reproducible')
         print('construction.json reproducible: 38 buildings / 56 civilizations')

@@ -1,43 +1,16 @@
 /** Issue 227: audited ordinary-villager construction, independent of historical opening simulations. */
-import raw from '../data/construction.json';
+import { CONSTRUCTION_DATA } from '../data/construction';
+import type { ConstructionData } from '../data/construction';
 import type { Core } from '../data';
 import { civs } from '../data';
 import type { Trees } from './types';
 import { civStatus } from './simulator';
 import { gatherModel, type GatherModel } from './realCost';
 import { productionTechAge, productionTechs } from './production';
-import { GENERAL_GARRISON_DATA, getFreeGarrisonTechs } from './garrisonGeneral';
+import { GARRISON_TECH_DATA, freeGarrisonTechs } from './garrisonTechs';
 import { buildingAge as constructionBuildingAge } from './availabilityAge';
 
-interface Command {
-  Type: number;
-  A: number;
-  B: number;
-  C: number;
-  D: number;
-  index: number;
-}
-interface Rule {
-  id: number;
-  name: string;
-  effect: number;
-  requires: number[];
-  count: number;
-  commands: Command[];
-}
-interface ObjectData {
-  class: number;
-  time: number;
-  at: number[];
-  rate: number;
-}
-interface ConstructionData {
-  meta: { patch: string; sha256: string; source: string; engineVerifiedInPinnedBuild: boolean };
-  buildings: Record<string, { forms: number[]; supported: boolean; reason: string }>;
-  research: Record<string, Rule>;
-  civs: Record<string, { units: Record<string, ObjectData>; tree: Command[]; team: Command[]; automatic: Rule[] }>;
-}
-export const CONSTRUCTION_DATA = raw as unknown as ConstructionData;
+export { CONSTRUCTION_DATA } from '../data/construction';
 export const CONSTRUCTION_LIMIT = 200;
 export interface ConstructionContext {
   core: Core;
@@ -103,7 +76,7 @@ function legalTechs(ctx: ConstructionContext, config: Pick<ConstructionConfig, '
   const status = civStatus(ctx.trees, config.civ);
   return ctx.core.techs.filter((t) => t.civs.includes(config.civ) && productionTechAge(t, config.civ) <= config.age && status['t' + t.id]);
 }
-const shapeTechs = (id: number) => (id === 236 ? [64] : (GENERAL_GARRISON_DATA.unitUpgradeTechs?.[id] ?? []));
+const shapeTechs = (id: number) => (id === 236 ? [64] : (GARRISON_TECH_DATA.unitUpgradeTechs?.[id] ?? []));
 export function constructionTechs(ctx: ConstructionContext, config: ConstructionConfig) {
   const gatherIds = new Set(
     productionTechs(ctx, config)
@@ -115,7 +88,7 @@ export function constructionTechs(ctx: ConstructionContext, config: Construction
 }
 export function freeConstructionTechs(ctx: ConstructionContext, config: ConstructionConfig) {
   const b = ctx.core.buildingById[config.buildingId];
-  return b ? new Set(getFreeGarrisonTechs(ctx, b, { civ: config.civ, age: config.age, techs: config.techs, rows: [] })) : new Set<number>();
+  return b ? new Set(freeGarrisonTechs(ctx, b, { civ: config.civ, age: config.age, techs: config.techs, rows: [] })) : new Set<number>();
 }
 export function effectiveConstructionTechs(ctx: ConstructionContext, config: ConstructionConfig) {
   const available = new Set(legalTechs(ctx, config).map((t) => t.id));
@@ -157,6 +130,8 @@ export function idealConstructionSeconds(single: number, builders: number) {
 }
 const count = (s: string) => (/^[1-9]\d{0,2}$/.test(s) && +s <= CONSTRUCTION_LIMIT ? +s : null);
 const distance = (s: string) => (/^(?:0|[1-9]\d?)(?:\.\d{1,3})?$/.test(s) && +s <= 10 ? +s : null);
+type Command = ConstructionData['civs'][string]['tree'][number];
+type ObjectData = ConstructionData['civs'][string]['units'][string];
 function matches(c: Command, id: number, u: ObjectData) {
   return c.A === id || (c.A === -1 && c.B === u.class);
 }
