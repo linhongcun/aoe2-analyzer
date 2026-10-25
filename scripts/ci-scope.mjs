@@ -7,16 +7,57 @@ import postcss from 'postcss';
 
 const sha = /^[0-9a-f]{40}$/;
 const version = /^\d+\.\d+\.\d+$/;
-const civFiles = new Set([
-  'src/features/civs/components/CivList.tsx',
-  'tests/e2e/civDlcFilters.spec.ts',
-  'tests/e2e/civRequirements206.spec.ts',
-  'tests/e2e/v0290-326.spec.ts',
-  'tests/e2e/catalogLayout187.spec.ts',
-  'tests/e2e/layout62.spec.ts',
-]);
 const cssFiles = new Set(['src/shared/styles/base.css', 'src/shared/styles/editorial.css']);
-const maintenanceFiles = new Set(['scripts/release.mjs', 'scripts/prepare-release.mjs', 'scripts/check-pr-title.mjs', 'scripts/ci-scope.mjs']);
+const maintenanceFiles = new Set([
+  'scripts/release.mjs',
+  'scripts/prepare-release.mjs',
+  'scripts/check-pr-title.mjs',
+  'scripts/ci-scope.mjs',
+  'scripts/ci-run.mjs',
+  'scripts/ci-evidence.mjs',
+  'scripts/deployment-smoke.mjs',
+  'scripts/site-artifact.mjs',
+  'scripts/release-online-smoke.mjs',
+]);
+const unit = (...names) => names.map((name) => `tests/unit/${name}.test.ts`);
+const e2e = (...names) => names.map((name) => `tests/e2e/${name}.spec.ts`);
+const profile = (unitNames, e2eNames) => ({ unit: unit(...unitNames), e2e: e2e(...e2eNames) });
+
+/** Page-local changes use the page's real existing regression coverage, including its helpers. */
+export const PROFILES = {
+  patches: profile(['patches16', 'patchTree417', 'patchSearch16'], ['patches16', 'patchTree417']),
+  matchup: profile(['matchup194', 'p0Batch', 'simRoute424', 'simulator'], ['matchup194', 'matchupSim424', 'rush35']),
+  civs: profile(
+    ['civRequirements206', 'civText402', 'civOpening77', 'civBonus', 'dlc-linker'],
+    ['civDlcFilters', 'civRequirements206', 'civText402', 'civ77', 'v0290-326', 'layout62', 'catalogLayout187'],
+  ),
+  units: profile(
+    ['unitFilters192', 'unitFilters196', 'unitCount14', 'unitNames271', 'unitAge11', 'upgradeLine10', 'relatedTechs193', 'family', 'simRoute424', 'simulator'],
+    ['unitCards6', 'unitFilters196', 'units192', 'unitCount14', 'dupNames44', 'upgradeLine10', 'relatedTechs193', 'sidebar44', 'catalogLayout187'],
+  ),
+  simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
+  techs: profile(
+    ['affects', 'techUnits13', 'techBuilding12', 'techCost355', 'relatedTechs193'],
+    ['techCards6', 'techUnits13', 'relatedTechs193', 'catalogLayout187'],
+  ),
+  buildings: profile(
+    ['buildings', 'buildingSim', 'buildingAge357', 'garrison218', 'garrisonGeneral224'],
+    ['garrison218', 'garrison224', 'sidebar44', 'catalogLayout187'],
+  ),
+  maps: profile([], ['maps34', 'mapPreviews', 'mapCatalog422']),
+  compare: profile(['compare403', 'teamBonuses228'], ['compare403', 'civText402', 'teamBonuses228']),
+};
+const sorted = (values) => [...new Set(values)].sort();
+const validPath = (path) =>
+  typeof path === 'string' && !!path && !/[\\\0]/.test(path) && path.split('/').every((part) => part && part !== '.' && part !== '..');
+
+function fullPlan(data = true, features = []) {
+  return { scope: 'full', features: sorted(['all', ...features]), unit: [], e2e: [], data, full: true };
+}
+
+function maintenancePlan() {
+  return { scope: 'maintenance', features: [], unit: ['tests/unit/release*.test.ts'], e2e: [], data: false, full: false };
+}
 
 /** Dependency, script, lock resolution and integrity changes always retain full checks. */
 export function versionOnly(path, before, after) {
@@ -62,42 +103,99 @@ export function civCssOnly(before, after) {
   }
 }
 
-export function classifyChanges(changes) {
-  if (!Array.isArray(changes) || !changes.length) return 'full';
-  let civ = false;
-  for (const change of changes) {
-    if (!change || typeof change.path !== 'string') return 'full';
-    const { path, before, after } = change;
-    if (civFiles.has(path)) civ = true;
-    else if (cssFiles.has(path)) {
-      if (!civCssOnly(before, after)) return 'full';
-      civ = true;
-    } else if (path === 'package.json' || path === 'package-lock.json') {
-      if (!versionOnly(path, before, after)) return 'full';
-    } else if (
-      path === 'CHANGELOG.md' ||
-      path === 'AGENTS.md' ||
-      path === 'CONTRIBUTING.md' ||
-      (path.startsWith('docs/') && !path.startsWith('docs/PATCH-NOTES/')) ||
-      path.startsWith('.github/') ||
-      maintenanceFiles.has(path) ||
-      /^tests\/unit\/release[^/]*\.test\.ts$/.test(path)
-    ) {
-      // Maintenance uses release-policy unit checks, while mixed UI changes also run visual checks.
-    } else return 'full';
+function cardsCssOnly(before, after) {
+  try {
+    return [before, after].every((source) => {
+      if (typeof source !== 'string') return false;
+      const root = postcss.parse(source);
+      let scoped = true;
+      root.walkAtRules((rule) => {
+        if (!['media', 'supports'].includes(rule.name)) scoped = false;
+      });
+      root.walkRules((rule) => {
+        if (
+          rule.selectors.some(
+            (selector) => !/^(?:#matchup|\.matchup-counter-[a-z-]+|\.same-dlc-(?:civs|toggle))(?=$|\s|[.:#>\[])/.test(selector) || /[+~]/.test(selector),
+          )
+        )
+          scoped = false;
+      });
+      return scoped;
+    });
+  } catch {
+    return false;
   }
-  return civ ? 'civ-ui' : 'maintenance';
+}
+
+/** A missing range remains conservative; unchanged pipelines are not regenerated for core/UI code. */
+export function planChanges(changes) {
+  if (!Array.isArray(changes) || !changes.length) return fullPlan();
+  const features = new Set(),
+    extraUnit = new Set(),
+    extraE2e = new Set();
+  let full = false,
+    data = false,
+    policy = false;
+  for (const change of changes) {
+    if (!change || !validPath(change.path)) return fullPlan();
+    const { path, before, after } = change;
+    if (path === 'package.json' || path === 'package-lock.json') {
+      if (!versionOnly(path, before, after)) full = data = true;
+    } else if (path === '.npmrc' || path.startsWith('src/data/') || path.startsWith('public/img/') || path.startsWith('docs/PATCH-NOTES/')) {
+      full = data = true;
+    } else if (path.startsWith('.github/') || maintenanceFiles.has(path) || /^tests\/unit\/release[^/]*\.test\.ts$/.test(path)) {
+      policy = true;
+    } else if ((path.startsWith('docs/') && !path.startsWith('docs/PATCH-NOTES/')) || /^[^/]+\.md$/.test(path) || path === 'LICENSE') {
+      // Ordinary documentation does not change product logic or generated data.
+    } else if (cssFiles.has(path)) {
+      if (civCssOnly(before, after)) features.add('civs');
+      else full = true;
+    } else if (path === 'src/shared/styles/issue62-cards.css') {
+      if (cardsCssOnly(before, after)) {
+        features.add('civs');
+        features.add('matchup');
+      } else full = true;
+    } else if (path === 'src/domain/patches.ts') {
+      features.add('patches');
+    } else if (path === 'src/domain/simRoute.ts') {
+      for (const feature of ['matchup', 'units', 'simulator']) features.add(feature);
+    } else if (path.startsWith('src/features/')) {
+      const feature = path.split('/')[2];
+      if (Object.hasOwn(PROFILES, feature)) features.add(feature);
+      else full = true;
+    } else if (/^tests\/unit\/[^/]+\.test\.ts$/.test(path) || /^tests\/e2e\/[^/]+\.spec\.ts$/.test(path)) {
+      (path.startsWith('tests/unit/') ? extraUnit : extraE2e).add(path);
+    } else {
+      full = true;
+      // Generation inputs/scripts and dependencies may change the exported game data.
+      if (/^scripts\/(?:.*\.py|.*\.json|pinyin_build\.mjs|catalog_introductions\.mjs|effects_audit\.ts)$/.test(path)) data = true;
+    }
+  }
+  if (full) return fullPlan(data, features);
+  const selected = sorted(features);
+  for (const feature of selected) {
+    for (const path of PROFILES[feature].unit) extraUnit.add(path);
+    for (const path of PROFILES[feature].e2e) extraE2e.add(path);
+  }
+  const scope = selected.length === 1 && selected[0] === 'civs' ? 'civ-ui' : selected.length || extraUnit.size || extraE2e.size ? 'targeted' : 'maintenance';
+  if (policy || scope === 'maintenance') extraUnit.add('tests/unit/release*.test.ts');
+  return { scope, features: selected, unit: sorted(extraUnit), e2e: sorted(extraE2e), data: false, full: false };
+}
+
+export function classifyChanges(changes) {
+  return planChanges(changes).scope;
 }
 
 function git(...args) {
   return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 }
 
-export function classifyRange(base, head) {
+export function planRange(base, head) {
   try {
-    if (!sha.test(base) || !sha.test(head) || base === head) return 'full';
-    if (spawnSync('git', ['merge-base', '--is-ancestor', base, head]).status !== 0) return 'full';
+    if (!sha.test(base) || !sha.test(head)) return fullPlan();
+    if (spawnSync('git', ['merge-base', '--is-ancestor', base, head]).status !== 0) return fullPlan();
     const paths = git('diff', '--name-only', '--no-renames', '-z', base, head).split('\0').filter(Boolean);
+    if (!paths.length) return maintenancePlan();
     const content = (ref, path) => {
       try {
         return git('show', `${ref}:${path}`);
@@ -105,10 +203,14 @@ export function classifyRange(base, head) {
         return null;
       }
     };
-    return classifyChanges(paths.map((path) => ({ path, before: content(base, path), after: content(head, path) })));
+    return planChanges(paths.map((path) => ({ path, before: content(base, path), after: content(head, path) })));
   } catch {
-    return 'full';
+    return fullPlan();
   }
+}
+
+export function classifyRange(base, head) {
+  return planRange(base, head).scope;
 }
 
 /** No implicit HEAD^ fallback: a multi-commit push must include every changed source. */
@@ -128,10 +230,11 @@ export function releaseScope(manifest, expectedHead, classify = classifyRange) {
 }
 
 function main() {
-  let scope = 'full';
+  let plan = fullPlan();
   if (process.argv[2] === '--release') {
     try {
-      scope = releaseScope(JSON.parse(readFileSync(process.argv[3], 'utf8')), process.env.EXPECTED_DEPLOYED_SHA);
+      const scope = releaseScope(JSON.parse(readFileSync(process.argv[3], 'utf8')), process.env.EXPECTED_DEPLOYED_SHA);
+      if (scope !== 'full') plan = { ...planChanges([{ path: 'docs/legacy-release.md' }]), scope };
     } catch {
       // Older deployments or missing/invalid artifacts retain the complete online verification.
     }
@@ -144,14 +247,17 @@ function main() {
       if (process.env.GITHUB_EVENT_NAME === 'push' && event.before === '0'.repeat(40) && process.env.GITHUB_REF?.startsWith('refs/heads/release/'))
         initialReleaseBase = git('merge-base', 'origin/main', head);
       base = eventBase(process.env.GITHUB_EVENT_NAME, event, process.env.GITHUB_REF, initialReleaseBase);
-      scope = classifyRange(base, head);
+      plan = planRange(base, head);
     } catch {
       // Missing history or an unsupported event cannot select a reduced test profile.
     }
-    writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-scope.json'), JSON.stringify({ base, head, scope }) + '\n');
+    if (process.env.CI_FULL === 'true' || process.env.GITHUB_EVENT_NAME === 'schedule') plan = fullPlan();
+    writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-scope.json'), JSON.stringify({ base, head, scope: plan.scope }) + '\n');
+    writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-plan.json'), JSON.stringify(plan) + '\n');
   }
-  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `scope=${scope}\n`);
-  console.log(`Validation scope: ${scope}`);
+  if (process.env.GITHUB_OUTPUT)
+    appendFileSync(process.env.GITHUB_OUTPUT, `scope=${plan.scope}\ndata=${plan.data}\nfull=${plan.full}\nbrowser=${plan.full || !!plan.e2e.length}\n`);
+  console.log(`Validation plan: ${JSON.stringify(plan)}`);
 }
 
 if (import.meta.url === pathToFileURL(resolve(process.argv[1] ?? '')).href) main();

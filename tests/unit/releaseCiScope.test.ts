@@ -57,16 +57,19 @@ describe('#427 按实际变更选择验证范围', () => {
     'scripts/build_data.py',
     'scripts/data_sources.json',
     'public/img/dlc/0.webp',
-    'src/features/units/components/UnitList.tsx',
     'src/shared/ui/widgets.tsx',
     'src/shared/nav/pageRegistry.ts',
     'src/shared/styles/tokens.css',
-    'tests/unit/buildSim.test.ts',
-    'tests/e2e/newUnknown.spec.ts',
     'docs/PATCH-NOTES/185872.md',
     'vite.config.ts',
   ])('%s 变化即使用完整验证，不因同时含文明 UI 或工作流而跳过', (path) => {
     expect(classifyChanges([change('src/features/civs/components/CivList.tsx'), change('.github/workflows/ci.yml'), change(path)])).toBe('full');
+  });
+
+  it('#431 测试文件本身变化仅验证明确选择，不让未变的产品触发整站检查', () => {
+    expect(classifyChanges([change('tests/unit/buildSim.test.ts')])).toBe('targeted');
+    expect(classifyChanges([change('tests/e2e/newUnknown.spec.ts')])).toBe('targeted');
+    expect(classifyChanges([change('src/features/units/components/UnitList.tsx')])).toBe('targeted');
   });
 
   it.each([null, [], [null], [{}]])('缺失或无效的变更证据 %j 使用完整验证', (changes) => {
