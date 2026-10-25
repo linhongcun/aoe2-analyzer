@@ -5,7 +5,7 @@ import { useCore, useTrees } from '../../../data/hooks';
 import { TYPE_ZH } from '../../../domain/ratings';
 import type { CivType } from '../../../domain/types';
 import { CivIcon, DlcBadge } from '../../../shared/ui/art';
-import { DlcBar, DlcSelect, SearchInput } from '../../../shared/ui/widgets';
+import { DlcBar, SearchInput } from '../../../shared/ui/widgets';
 import CatalogFilters from '../../../shared/ui/CatalogFilters';
 import { useSticky } from '../../../shared/utils/sticky';
 import { filterCivs } from '../logic/filter';
@@ -66,7 +66,6 @@ export default function CivList() {
             </option>
           ))}
         </select>
-        <DlcSelect id="cdlc" value={dlc} onChange={(dlc) => changeFilter({ dlc })} />
         <select id="pos" aria-label="团战位置" value={pos} onChange={(e) => changeFilter({ pos: e.target.value })}>
           <option value="">全部位置</option>
           <option value="fl">适合边位 Flank (7分及以上)</option>
