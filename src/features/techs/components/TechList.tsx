@@ -5,9 +5,10 @@ import { useCore } from '../../../data/hooks';
 import { techReleaseMatches } from '../../../domain/introductions';
 import { AGE_ZH } from '../../../domain/ratings';
 import { CostView, TechReleaseBadge, TechIcon } from '../../../shared/ui/art';
-import { DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
+import { Loading, SearchInput } from '../../../shared/ui/widgets';
 import CatalogFilters from '../../../shared/ui/CatalogFilters';
 import { useSticky } from '../../../shared/utils/sticky';
+import TechReleaseBar from './TechReleaseBar';
 
 export default function TechList() {
   const core = useCore();
@@ -59,7 +60,6 @@ export default function TechList() {
           <option value="3">城堡</option>
           <option value="4">帝王</option>
         </select>
-        <DlcSelect id="tdlc" value={dlc} onChange={setDlc} includeUpdates />
         <select id="tb" aria-label="研究建筑" value={b} onChange={(e) => setB(e.target.value)}>
           <option value="">全部建筑</option>
           {[...new Set(all.map((t) => t.bz))].map((x) => (
@@ -67,6 +67,7 @@ export default function TechList() {
           ))}
         </select>
       </CatalogFilters>
+      <TechReleaseBar value={dlc} onChange={setDlc} />
       {!core ? (
         <Loading />
       ) : (
