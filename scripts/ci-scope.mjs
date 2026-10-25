@@ -165,6 +165,7 @@ export function planChanges(changes) {
       for (const feature of ['patches', 'civs', 'units', 'techs', 'buildings']) features.add(feature);
       extraUnit.add('tests/unit/entityHistory435.test.ts');
       extraE2e.add('tests/e2e/entityHistory435.spec.ts');
+      extraE2e.add('tests/e2e/buildingHistory.spec.ts');
     } else if (path.startsWith('src/features/')) {
       const feature = path.split('/')[2];
       if (Object.hasOwn(PROFILES, feature)) features.add(feature);

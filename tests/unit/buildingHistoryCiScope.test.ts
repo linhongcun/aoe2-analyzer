@@ -17,6 +17,7 @@ describe('#437 建筑历史展示的 CI 影响范围', () => {
     }
     expect(plan.unit).toContain('tests/unit/entityHistory435.test.ts');
     expect(plan.e2e).toContain('tests/e2e/entityHistory435.spec.ts');
+    expect(plan.e2e).toContain('tests/e2e/buildingHistory.spec.ts');
     for (const path of [...plan.unit, ...plan.e2e]) expect(existsSync(path), path).toBe(true);
     expect(new Set(plan.unit).size).toBe(plan.unit.length);
     expect(new Set(plan.e2e).size).toBe(plan.e2e.length);
