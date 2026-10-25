@@ -46,6 +46,9 @@ jobs:
       - name: Typecheck
         if: steps.reuse.outputs.reused != 'true'
         run: npx tsc -p . --noEmit
+      - name: Unused exports report (non-blocking findings, #288)
+        if: steps.reuse.outputs.reused != 'true'
+        run: npm run unused:check
       - name: Layer boundaries (strict, #281)
         run: npm run lint:layers -- --strict
         if: steps.reuse.outputs.reused != 'true'
