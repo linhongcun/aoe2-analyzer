@@ -27,9 +27,13 @@ async function expectCivs(page: Page, names: string[]) {
 }
 
 async function expectLegacyFilters(page: Page, values: { q: string; ty: string; pos: string; dlc: string }) {
-  for (const [id, value] of Object.entries({ q: values.q, ty: values.ty, pos: values.pos, cdlc: values.dlc })) {
+  for (const [id, value] of Object.entries({ q: values.q, ty: values.ty, pos: values.pos })) {
     await expect(page.locator(`#${id}`)).toHaveValue(value);
   }
+  const bar = page.getByRole('group', { name: 'DLC 快捷筛选', exact: true });
+  await expect(page.locator('#cdlc')).toHaveCount(0);
+  await expect(bar.locator('button[aria-pressed="true"]')).toHaveCount(1);
+  await expect(bar.locator(`button[data-v="${values.dlc}"]`)).toHaveAttribute('aria-pressed', 'true');
 }
 
 async function addRequirement(page: Page, kind: '单位' | '科技', name: string) {
@@ -86,7 +90,7 @@ test('#206 旧筛选组合、清空条件和复制链接刷新还原', async ({ 
   await page.locator('#q').fill('Huns');
   await page.locator('#ty').selectOption('cav');
   await page.locator('#pos').selectOption('pk');
-  await page.locator('#cdlc').selectOption('1');
+  await page.getByRole('group', { name: 'DLC 快捷筛选', exact: true }).locator('button[data-v="1"]').click();
   await expectCivs(page, ['Huns']);
   await page.getByRole('button', { name: '复制筛选链接', exact: true }).click();
   await expect(page.getByText('筛选链接已复制，包含全部条件。', { exact: true })).toBeVisible();
@@ -113,7 +117,7 @@ test('#206 裸入口旧筛选保持临时记忆，复制和新增条件才生成
   await page.locator('#q').fill('Huns');
   await page.locator('#ty').selectOption('cav');
   await page.locator('#pos').selectOption('pk');
-  await page.locator('#cdlc').selectOption('1');
+  await page.getByRole('group', { name: 'DLC 快捷筛选', exact: true }).locator('button[data-v="1"]').click();
   await expectCivs(page, ['Huns']);
   expect(new URL(page.url()).hash).toBe('#/civs');
   await page.getByRole('button', { name: '复制筛选链接', exact: true }).click();
@@ -173,7 +177,7 @@ test('#206 分享参数覆盖收件人的 sticky，裸路由沿用原筛选', as
   await page.locator('#q').fill('Turks');
   await page.locator('#ty').selectOption('cav');
   await page.locator('#pos').selectOption('pk');
-  await page.locator('#cdlc').selectOption('0');
+  await page.getByRole('group', { name: 'DLC 快捷筛选', exact: true }).locator('button[data-v="0"]').click();
   await expectCivs(page, ['Turks']);
   await page.evaluate(() => (location.hash = '#/units'));
   await expect(page.locator('#uq')).toBeVisible();
