@@ -92,10 +92,64 @@ test('#435 已删除科技可直接打开历史档案，不回退到当前科技
   await expect(version(page, '81058')).toContainText('20');
   await expect(history(page).getByRole('link', { name: /81058/ }).first()).toHaveAttribute('href', '#/patches/81058');
   await openHistory(page, '/tech/legacy-berserkergang?tab=history');
-  await expect(page.getByRole('heading', { name: /狂战士帮/ }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Berserkergang/ }).first()).toBeVisible();
   await expect(page.getByText('历史档案，当前数据目录未收录', { exact: true })).toBeVisible();
   await expect(history(page)).toContainText('81058');
   expect(errors).toEqual([]);
+});
+
+test('#435 尚未收录的当前科技与筛选无结果使用不同空态', async ({ page }) => {
+  await page.goto('./#/tech/22?tab=history');
+  await expect(history(page)).toContainText('尚未收录该对象的更新历史');
+  await expect(history(page)).not.toContainText('没有符合筛选条件的记录');
+  await expect(history(page).locator('[data-history-entry]')).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: /织布机/ }).first()).toBeVisible();
+});
+
+test('#435 更新历史真实数据请求被延迟时显示加载，放行后再展示记录', async ({ page }) => {
+  let release!: () => void;
+  let intercepted!: () => void;
+  const requestSeen = new Promise<void>((resolve) => {
+    intercepted = resolve;
+  });
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route('**/*66692*.json', async (route) => {
+    intercepted();
+    await gate;
+    await route.continue();
+  });
+  try {
+    await page.goto('./#/unit/24?tab=history');
+    await requestSeen;
+    await expect(page.getByRole('status').filter({ hasText: '正在加载更新历史' })).toBeVisible();
+    await expect(page.locator('[data-history-entry]')).toHaveCount(0);
+    release();
+    await expect(version(page, '66692').locator('[data-history-entry]').first()).toBeVisible();
+    await expect(page.getByRole('status').filter({ hasText: '正在加载更新历史' })).toHaveCount(0);
+  } finally {
+    release();
+  }
+});
+
+test('#435 数据请求失败后重试会重新请求并恢复原有筛选', async ({ page }) => {
+  let requests = 0;
+  const pageErrors: string[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  await page.route('**/*66692*.json', async (route) => {
+    requests += 1;
+    if (requests === 1) await route.fulfill({ status: 503, body: 'temporary failure', headers: { 'cache-control': 'no-store' } });
+    else await route.continue();
+  });
+  await page.goto('./#/unit/24?tab=history&histKind=nerf');
+  await expect(page.getByRole('alert')).toContainText('更新历史加载失败');
+  await page.getByRole('button', { name: '重试', exact: true }).click();
+  await expect(version(page, '66692').locator('[data-history-entry]').first()).toBeVisible();
+  await expect(page.getByLabel('改动类型', { exact: true })).toHaveValue('nerf');
+  await expect(page).toHaveURL(/histKind=nerf/);
+  expect(requests).toBe(2);
+  expect(pageErrors).toEqual([]);
 });
 
 test('#435 按版本浏览四份档案，旧版不混入后来热修和最新版说明', async ({ page }) => {
