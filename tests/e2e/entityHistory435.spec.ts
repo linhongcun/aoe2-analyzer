@@ -112,8 +112,10 @@ test('#435 历史科技复制静态链接后新上下文打开和刷新仍保留
     ['legacy-berserkergang', 'Berserkergang'],
   ]) {
     await openHistory(page, `/tech/${id}?tab=history&histFrom=2023-04-11&histTo=2023-04-11`);
+    await expect(page.getByRole('heading', { name: new RegExp(name!) }).first()).toBeVisible();
     // Like compare403, capture this page's Clipboard API output without sharing the OS clipboard between parallel tests.
     await page.evaluate(() => {
+      delete (window as Window & { copiedHistory435?: string }).copiedHistory435;
       Object.defineProperty(navigator, 'clipboard', {
         configurable: true,
         value: {
@@ -124,6 +126,7 @@ test('#435 历史科技复制静态链接后新上下文打开和刷新仍保留
       });
     });
     await page.locator('.dhead').getByRole('button', { name: '复制链接', exact: true }).click();
+    await expect.poll(() => page.evaluate(() => (window as Window & { copiedHistory435?: string }).copiedHistory435)).toBeTruthy();
     await expect(page.locator('.dhead [role="status"]')).toHaveText('链接已复制');
     const copied = await page.evaluate(() => (window as Window & { copiedHistory435?: string }).copiedHistory435);
     expect(copied).toBeTruthy();
