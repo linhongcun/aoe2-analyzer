@@ -378,11 +378,9 @@ export default function Patches() {
                         <p lang="en">{e.originalText}</p>
                       </details>
                     )}
-                    {e.targetType !== 'building' && (
-                      <Link to={`${patchTarget(e)}?tab=history`} aria-label={`查看${e.targetNameZh}更新历史`}>
-                        查看更新历史
-                      </Link>
-                    )}
+                    <Link to={`${patchTarget(e)}?tab=history`} aria-label={`查看${e.targetNameZh}更新历史`}>
+                      查看更新历史
+                    </Link>
                   </article>
                 ))}
               </section>

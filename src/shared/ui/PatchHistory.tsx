@@ -191,7 +191,7 @@ function HistoryTimeline({ archives, target }: { archives: PatchArchive[]; targe
                   {entry.changeType === 'upgrade' && <span>升级科技</span>}
                 </div>
                 <h4>
-                  <Link to={`${patchTarget(entry)}${entry.targetType === 'building' ? '' : '?tab=history'}`}>{entry.targetNameZh}</Link>
+                  <Link to={`${patchTarget(entry)}?tab=history`}>{entry.targetNameZh}</Link>
                 </h4>
                 <p>
                   <NumericText text={entry.summaryZh} />
@@ -227,10 +227,7 @@ function HistoryTimeline({ archives, target }: { archives: PatchArchive[]; targe
                   <p className="history-related">
                     相关档案：
                     {entry.relatedTargets.map((related) => (
-                      <Link
-                        key={`${related.targetType}:${related.targetId}`}
-                        to={`${patchTarget(related)}${related.targetType === 'building' ? '' : '?tab=history'}`}
-                      >
+                      <Link key={`${related.targetType}:${related.targetId}`} to={`${patchTarget(related)}?tab=history`}>
                         {related.targetNameZh ?? String(related.targetId)}
                       </Link>
                     ))}
