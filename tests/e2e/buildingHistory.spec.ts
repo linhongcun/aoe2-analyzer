@@ -133,6 +133,13 @@ test('#437 建筑历史：版本条目与关联档案都直接进入建筑历史
   await building.click();
   await expect(page).toHaveURL(/building\/1665\?tab=history/);
   await expect(records(page)).toHaveCount(3);
+  const archeryRange = history(page).locator('[data-history-entry="81058-117"] .history-related').getByRole('link', { name: '靶场', exact: true });
+  await expect(archeryRange).toHaveAttribute('href', '#/building/87?tab=history');
+  await archeryRange.click();
+  await expect(page).toHaveURL(/building\/87\?tab=history/);
+  await expect(page.getByRole('tab', { name: '更新历史', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(history(page).locator('[data-history-entry="81058-117"]')).toContainText('满足前置条件');
+  await expect(history(page).locator('[data-history-entry="81058-117"]')).toContainText('关联影响');
   expect(errors).toEqual([]);
 });
 
