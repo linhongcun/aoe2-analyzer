@@ -10,6 +10,8 @@
 .patches a {
   display: inline-flex;
   align-items: center;
+  min-width: 44px;
+  max-width: 100%;
 }
 .patch-version,
 .patch-civs,
@@ -88,7 +90,20 @@
   font-variant-numeric: tabular-nums;
 }
 .patch-values b {
+  min-width: 0;
+}
+.patch-values .num,
+.patch-values .nw {
   white-space: nowrap;
+}
+.patch-layout > div,
+.patch-entry,
+.patch-version,
+.patch-values > span {
+  min-width: 0;
+}
+.patch-original p {
+  overflow-wrap: anywhere;
 }
 .patch-tree-summary a {
   min-width: 44px;

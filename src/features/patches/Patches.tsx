@@ -1,17 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import raw from '../../data/patches/185872.json';
 import { civs } from '../../data';
-import { filterPatch, groupTreeChanges, patchTarget, PATCH_KINDS, PATCH_TYPES, type PatchEntry, type PatchKind } from '../../domain/patches';
+import { usePatchArchives } from '../../data/patchHistory';
+import { filterPatch, groupTreeChanges, patchTarget, PATCH_KINDS, PATCH_TYPES, type PatchKind } from '../../domain/patches';
 import { Icon, type IconName } from '../../shared/ui/Icon';
+import { NumericText } from '../../shared/ui/PatchHistory';
 import './patches.css';
 
-const entries = raw.entries as PatchEntry[];
 const kinds = Object.keys(PATCH_KINDS) as PatchKind[];
 const icons: Record<PatchKind, IconName> = { new: 'plus', buff: 'arrow-up', nerf: 'arrow-down', adjust: 'info', fix: 'info' };
 
 export default function Patches() {
   const { id } = useParams();
+  const { archives, error, retry } = usePatchArchives();
+  const raw = archives?.find((patch) => patch.id === id);
+  const entries = raw?.entries ?? [];
+  const current = id === '185872';
   const [params, setParams] = useSearchParams();
   const [draft, setDraft] = useState<{ base: string; value: string } | null>(null);
   const search = draft?.base === params.toString() ? draft.value : (params.get('q') ?? '');
@@ -84,31 +88,55 @@ export default function Patches() {
       <button onClick={clear}>清除筛选</button>
     </>
   );
+  if (!archives)
+    return (
+      <section className="pane patches">
+        <h2>版本补丁</h2>
+        {error ? (
+          <>
+            <p role="alert">更新历史加载失败，请重试。</p>
+            <button type="button" onClick={retry}>
+              重试
+            </button>
+          </>
+        ) : (
+          <p role="status">正在加载更新历史</p>
+        )}
+      </section>
+    );
   if (!id)
     return (
       <section className="pane patches">
         <h2>版本补丁</h2>
-        <p>按版本列出加强、削弱和新内容；数值以本站解析的游戏数据为准</p>
+        <p>按版本列出加强、削弱和新内容；历史改动来自当时官方记录。</p>
+        <p className="note">正在分批收录 DE 正式版。以下版本并非连续完整历史，未收录不代表没有改动；历史数值不代表当前数值。</p>
         <Link to="/about-data">关于数据</Link>
-        <article className="patch-version">
-          <Link to="/patches/185872">
-            <h3>DE Update 185872</h3>
-            <time>{raw.date}</time>
-            <p>维京传奇新内容与通用、文明平衡调整</p>
-            <p>
-              {kinds
-                .filter((k) => entries.some((e) => e.kind === k))
-                .map((k) => (
-                  <span className="patch-count" key={k}>
-                    {PATCH_KINDS[k]} {entries.filter((e) => e.kind === k).length}
-                  </span>
-                ))}
-            </p>
-          </Link>
-        </article>
+        {[...archives]
+          .sort((a, b) => b.date.localeCompare(a.date))
+          .map((patch) => (
+            <article className="patch-version" key={patch.id}>
+              <Link to={`/patches/${patch.id}`}>
+                <h3>DE Update {patch.id}</h3>
+                <time className="num" dateTime={patch.date}>
+                  {patch.date}
+                </time>
+                {patch.title && <p>{patch.title}</p>}
+                <p className="note">收录范围：{patch.coverage === 'balance-section' ? '文明平衡栏目' : patch.coverage}</p>
+                <p>
+                  {kinds
+                    .filter((k) => patch.entries.some((e) => e.kind === k))
+                    .map((k) => (
+                      <span className="patch-count" key={k}>
+                        {PATCH_KINDS[k]} {patch.entries.filter((e) => e.kind === k).length}
+                      </span>
+                    ))}
+                </p>
+              </Link>
+            </article>
+          ))}
       </section>
     );
-  if (id !== raw.id)
+  if (!raw)
     return (
       <section className="pane patches">
         <h2>找不到版本 {id}</h2>
@@ -121,13 +149,27 @@ export default function Patches() {
       <Link to="/patches">返回版本补丁</Link>
       <h2>DE Update {id}</h2>
       <p>
-        <time>{raw.date}</time> · <Link to="/about-data">当前数据版本：DE 185872 · 关于数据</Link>
+        <time className="num" dateTime={raw.date}>
+          {raw.date}
+        </time>{' '}
+        · DE 正式版 · <Link to="/about-data">当前数据版本：DE 185872 · 关于数据</Link>
       </p>
+      {raw.announcedAt && raw.announcedAt !== raw.date && (
+        <p className="note">
+          公告日期：<span className="num">{raw.announcedAt}</span>；上方为正式发行日期。
+        </p>
+      )}
       <p className="note">{raw.note}</p>
-      <p className="note">仅展示基础数值，文明与科技的最终效果请看详情。条目数按属性和目标拆分，不等于官方项目数；“来源冲突”归入调整，不判定为已验证削弱。</p>
+      <p className="note">
+        收录范围：{raw.coverage === 'balance-section' ? '文明平衡栏目' : raw.coverage}。条目数按属性和目标拆分，不等于官方项目数。
+        {current
+          ? '仅展示基础数值，文明与科技的最终效果请看详情；“来源冲突”归入调整，不判定为已验证削弱。'
+          : '数值依据当时公告，不代表当前属性；不以改动次数判断整体对局强弱。'}
+      </p>
       <section className="patch-civs" aria-label="按文明看">
         <h3>按文明看</h3>
         <p>选你玩的文明，只看它的专属改动和全局改动</p>
+        {!current && <p className="note">全局记录按当时公告分类展示；是否适用于某个文明，请查看条目中的适用条件。</p>}
         <div className="patch-chips">
           {selectedCivs.map((en) => (
             <button key={en} onClick={() => toggle('civ', en)} aria-label={`移除${civs.find((c) => c.en === en)?.zh ?? en}`}>
@@ -221,7 +263,11 @@ export default function Patches() {
           </p>
           <details className="patch-tree-summary patch-civs">
             <summary>按文明汇总科技树得失</summary>
-            <p className="note">按当前筛选汇总科技树开放与移除项；改动前来自官方记录，改动后已核对本站固定数据，不是两个 .dat 的自动差分。</p>
+            <p className="note">
+              {current
+                ? '按当前筛选汇总科技树开放与移除项；改动前来自官方记录，改动后已核对本站固定数据，不是两个 .dat 的自动差分。'
+                : '按当前筛选汇总科技树开放与移除项；前后状态来自当时官方记录，不代表当前科技树。'}
+            </p>
             {!treeChanges.size && <p role="status">当前筛选下没有科技树开放或移除项</p>}
             {civs
               .filter((c) => treeChanges.has(c.en))
@@ -236,10 +282,16 @@ export default function Patches() {
                         <Link to={patchTarget(entry)}>{entry.targetNameZh}</Link>
                         <div className="patch-values">
                           <span>
-                            改动前 <b>{entry.before}</b>
+                            改动前{' '}
+                            <b>
+                              <NumericText text={entry.before ?? ''} />
+                            </b>
                           </span>
                           <span>
-                            改动后 <b>{entry.after}</b>
+                            改动后{' '}
+                            <b>
+                              <NumericText text={entry.after ?? ''} />
+                            </b>
                           </span>
                         </div>
                       </li>
@@ -265,22 +317,40 @@ export default function Patches() {
                   <article className={`patch-entry patch-${kind}`} key={e.id} data-civs={e.civIds.join(',')}>
                     <span className="patch-kind">
                       <Icon name={icons[kind]} />
-                      {PATCH_KINDS[kind]} · {PATCH_TYPES[e.targetType]}
+                      {e.changeType === 'fix' ? '游戏修复' : PATCH_KINDS[kind]} · {PATCH_TYPES[e.targetType]}
                     </span>
                     <h4>
                       <Link to={patchTarget(e)}>{e.targetNameZh}</Link>
                     </h4>
-                    <p>{e.summaryZh}</p>
-                    {e.before !== undefined && (
+                    <p>
+                      <NumericText text={e.summaryZh} />
+                    </p>
+                    {(e.before !== undefined || e.after !== undefined) && (
                       <div className="patch-values">
-                        <span>
-                          改动前 <b>{e.before}</b>
-                        </span>
-                        <Icon name="arrow-right" />
-                        <span>
-                          改动后 <b>{e.after}</b>
-                        </span>
+                        {e.before !== undefined && (
+                          <span>
+                            改动前{' '}
+                            <b>
+                              <NumericText text={e.before} />
+                            </b>
+                          </span>
+                        )}
+                        {e.before !== undefined && e.after !== undefined && <Icon name="arrow-right" />}
+                        {e.after !== undefined && (
+                          <span>
+                            改动后{' '}
+                            <b>
+                              <NumericText text={e.after} />
+                            </b>
+                          </span>
+                        )}
                       </div>
+                    )}
+                    {e.scopeNote && (
+                      <p className="note">
+                        适用条件：
+                        <NumericText text={e.scopeNote} />
+                      </p>
                     )}
                     <p className="note">
                       {e.civIds.map((en) => civs.find((c) => c.en === en)?.zh ?? en).join('、') || '全局改动'} ·{' '}
@@ -288,6 +358,24 @@ export default function Patches() {
                         官方记录
                       </a>
                     </p>
+                    <p className="note">
+                      {e.verification === 'official'
+                        ? '已核对官方原文'
+                        : e.verification === 'conflict'
+                          ? '来源冲突，尚未核实'
+                          : e.verification === 'unverified'
+                            ? '未核实'
+                            : '既有来源记录，尚未完成逐条原文核对'}
+                    </p>
+                    {e.originalText && (
+                      <details className="patch-original">
+                        <summary>查看官方原文</summary>
+                        <p lang="en">{e.originalText}</p>
+                      </details>
+                    )}
+                    <Link to={`${patchTarget(e)}?tab=history`} aria-label={`查看${e.targetNameZh}更新历史`}>
+                      查看更新历史
+                    </Link>
                   </article>
                 ))}
               </section>
@@ -295,7 +383,11 @@ export default function Patches() {
           })}
           <section>
             <h3>其他</h3>
-            <p>新增地图 Arabian Desert；排位死亡竞赛开放队伍位置与 Turbo 设置。地图与天梯细节见官方原文。</p>
+            {current ? (
+              <p>新增地图 Arabian Desert；排位死亡竞赛开放队伍位置与 Turbo 设置。地图与天梯细节见官方原文。</p>
+            ) : (
+              <p>本版仅收录上方说明的平衡栏目；战役、地图及其他更新见官方完整说明。</p>
+            )}
             <details>
               <summary>Bug 修复</summary>
               <p>本页不展开战役、寻路和编辑器修复清单；完整记录见官方说明。</p>
