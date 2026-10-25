@@ -46,9 +46,9 @@ jobs:
       - name: Typecheck
         if: steps.reuse.outputs.reused != 'true'
         run: npx tsc -p . --noEmit
-      - name: Layer boundaries (strict)
-        if: steps.reuse.outputs.reused != 'true'
+      - name: Layer boundaries (strict, #281)
         run: npm run lint:layers -- --strict
+        if: steps.reuse.outputs.reused != 'true'
       - name: Catalog introduction audit
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.full == 'true'
         run: npm run introductions:check
@@ -136,7 +136,9 @@ jobs:
         run: python3 scripts/generate_resource_build.py --check
       - name: Patch notes match pinned data
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
-        run: python3 scripts/patches_build.py --check
+        run: |
+          python3 scripts/patches_build.py --check
+          python3 scripts/history_build.py --check
       - name: Build-order data check
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: npm run bo:check

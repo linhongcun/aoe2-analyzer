@@ -1,0 +1,130 @@
+{
+  "id": "125283",
+  "bullets": [
+    {
+      "id": "125283-b001",
+      "text": "(Elite) Battle Elephant conversion resistance increased from 0 → 2, increasing minimum/maximum conversion times by +2.5 in-game seconds.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b002",
+      "text": "Crossbowman upgrade cost reduced from 175 food 125 gold → 175 food 100 gold.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b003",
+      "text": "Arbalester upgrade cost reduced from 450 food 400 gold → 450 food 350 gold.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b004",
+      "text": "Battering Ram attack vs. buildings increased from 125 → 150.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b005",
+      "text": "Capped Ram attack vs. buildings increased from 150 → 160.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b006",
+      "text": "Armored Elephant attack vs. buildings increased from 75 → 90.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b007",
+      "text": "(Heavy) Scorpion projectiles now affected by Ballistics.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b008",
+      "text": "Palisade Gate base armor increased from 2/2 → 2/4.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b009",
+      "text": "Trade Cart and Trade Cog collision size multiplier reduced from 0.5 → 0.25, making bumping while trading less likely.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b010",
+      "text": "Market base exchange rates for food prices increased from 100 → 115, so initial food prices are more expensive and selling provides more gold. Wood and Stone exchange rates are unchanged.\n+ Initial standard gold price for buying 100 food increased from 130 gold → 150 gold.\n+ Initial standard gold reward for selling 100 food increased from 70 gold → 81 gold.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b011",
+      "text": "Military units create faster civilization bonus increased from 11% → 15%.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b012",
+      "text": "Hussite Wagon train time increased from 26 seconds → 30 seconds.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b013",
+      "text": "Fire Ships and Dromons attack faster civilization bonus reduced from 25% → 20%.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b014",
+      "text": "Fixed an issue where the team bonus effect was providing slightly different than intended bonus farm food amounts.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b015",
+      "text": "Thirisadai base range increased from 6 → 7.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b016",
+      "text": "(Elite) Monaspa HP reduced from 75 (90) → 70 (80).",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b017",
+      "text": "Hunnic Horse that spawns on Nomadic maps movement speed reduced from 1.2 → 1.05.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b018",
+      "text": "(Elite) Ballista Elephant projectiles now affected by Ballistics.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b019",
+      "text": "Elite Turtle Ship upgrade cost reduced from 1000 food 800 gold → 650 food 500 gold.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b020",
+      "text": "(Elite) Turtle Ship base movement speed increased from 0.9 (1.035) → 1.05.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b021",
+      "text": "(Elite) War Elephant conversion resistance increased from 0 → 2, increasing minimum/maximum conversion times by +2.5 in-game seconds.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b022",
+      "text": "NEW civilization bonus: Bloodlines and Scout-line upgrades cost -50% food.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b023",
+      "text": "(Elite) Caravel train time reduced from 36 seconds → 25 seconds.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b024",
+      "text": "Organ Gun train time increased from 21 seconds → 25 seconds.",
+      "status": "mapped"
+    },
+    {
+      "id": "125283-b025",
+      "text": "Civilization bonus that benefits Scorpions wording adjusted, since all civilizations’ Scorpions are now affected by Ballistics.",
+      "status": "mapped"
+    }
+  ]
+}

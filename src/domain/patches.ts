@@ -1,4 +1,10 @@
 export type PatchKind = 'new' | 'buff' | 'nerf' | 'adjust' | 'fix';
+export interface HistoryTarget {
+  targetType: 'unit' | 'tech' | 'building' | 'civ';
+  targetId: number | string;
+  targetNameZh?: string;
+  relation?: string;
+}
 export interface PatchEntry {
   id: string;
   kind: PatchKind;
@@ -11,6 +17,13 @@ export interface PatchEntry {
   after?: string;
   source: string;
   provenance: string;
+  originalText?: string;
+  verification?: 'official' | 'conflict' | 'unverified';
+  changeType?: 'stats' | 'upgrade' | 'tree' | 'bonus' | 'mechanic' | 'fix';
+  relatedTargets?: HistoryTarget[];
+  affectedCivIds?: string[];
+  scopeNote?: string;
+  sourceBullet?: string;
 }
 export const PATCH_KINDS: Record<PatchKind, string> = { new: '新内容', buff: '加强', nerf: '削弱', adjust: '调整', fix: '数据修正' };
 export const PATCH_TYPES: Record<string, string> = { unit: '单位', tech: '科技', building: '建筑', civ: '文明加成' };
@@ -28,7 +41,7 @@ export function filterPatch(entries: readonly PatchEntry[], query: URLSearchPara
       (!q || `${e.targetNameZh} ${e.summaryZh}`.toLowerCase().includes(q)),
   );
 }
-export function patchTarget(e: PatchEntry) {
+export function patchTarget(e: Pick<PatchEntry, 'targetType' | 'targetId'>) {
   return `/${e.targetType}/${encodeURIComponent(String(e.targetId))}`;
 }
 

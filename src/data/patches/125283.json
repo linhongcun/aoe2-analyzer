@@ -1,0 +1,702 @@
+{
+  "id": "125283",
+  "announcedAt": "2024-10-14",
+  "branch": "DE",
+  "releaseType": "release",
+  "title": "DE Update 125283",
+  "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+  "verifiedAt": "2026-10-25",
+  "coverage": "完整收录本版文明平衡栏目；不含战役、地图、其他栏目及同页后续热修。",
+  "note": "历史改动前后值来自当时官方公告；只用当前目录核对实体身份，不以当前数值验证旧补丁。全局条目不推定所有文明当时均可使用。 本公告于2024年10月14日预告次日正式更新；标题中的Preview不代表本档案属于PUP测试版。",
+  "archivedTargets": [],
+  "entries": [
+    {
+      "id": "125283-001-001",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1132,
+      "targetNameZh": "象兵",
+      "civIds": [],
+      "summaryZh": "招降抗性从0提高为2，最短和最长招降时间均增加2.5游戏秒。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Battle Elephant conversion resistance increased from 0 → 2, increasing minimum/maximum conversion times by +2.5 in-game seconds.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b001",
+      "before": "招降抗性0",
+      "after": "招降抗性2",
+      "scopeNote": "招降时间使用游戏时间。"
+    },
+    {
+      "id": "125283-001-002",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1134,
+      "targetNameZh": "精锐象兵",
+      "civIds": [],
+      "summaryZh": "招降抗性从0提高为2，最短和最长招降时间均增加2.5游戏秒。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Battle Elephant conversion resistance increased from 0 → 2, increasing minimum/maximum conversion times by +2.5 in-game seconds.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b001",
+      "before": "招降抗性0",
+      "after": "招降抗性2",
+      "scopeNote": "招降时间使用游戏时间。"
+    },
+    {
+      "id": "125283-002-003",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 24,
+      "targetNameZh": "弩手",
+      "civIds": [],
+      "summaryZh": "升级为弩手的黄金费用降低，食物费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Crossbowman upgrade cost reduced from 175 food 125 gold → 175 food 100 gold.",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "125283-b002",
+      "before": "175 食物、125 黄金",
+      "after": "175 食物、100 黄金"
+    },
+    {
+      "id": "125283-003-004",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 492,
+      "targetNameZh": "劲弩手",
+      "civIds": [],
+      "summaryZh": "升级为劲弩手的黄金费用降低，食物费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Arbalester upgrade cost reduced from 450 food 400 gold → 450 food 350 gold.",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "125283-b003",
+      "before": "450 食物、400 黄金",
+      "after": "450 食物、350 黄金"
+    },
+    {
+      "id": "125283-004-005",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1258,
+      "targetNameZh": "攻城锤",
+      "civIds": [],
+      "summaryZh": "对建筑的攻击力提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Battering Ram attack vs. buildings increased from 125 → 150.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b004",
+      "before": "125",
+      "after": "150"
+    },
+    {
+      "id": "125283-005-006",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 422,
+      "targetNameZh": "中型冲车",
+      "civIds": [],
+      "summaryZh": "对建筑的攻击力提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Capped Ram attack vs. buildings increased from 150 → 160.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b005",
+      "before": "150",
+      "after": "160"
+    },
+    {
+      "id": "125283-006-007",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1744,
+      "targetNameZh": "装甲战象",
+      "civIds": [],
+      "summaryZh": "对建筑的攻击力提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Armored Elephant attack vs. buildings increased from 75 → 90.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b006",
+      "before": "75",
+      "after": "90"
+    },
+    {
+      "id": "125283-007-008",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 279,
+      "targetNameZh": "弩炮",
+      "civIds": [],
+      "summaryZh": "投射物现在受弹道学影响。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Heavy) Scorpion projectiles now affected by Ballistics.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b007",
+      "before": "不受弹道学影响",
+      "after": "受弹道学影响",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 93,
+          "targetNameZh": "弹道学",
+          "relation": "使弩炮投射物受弹道学影响"
+        }
+      ],
+      "scopeNote": "研究弹道学后。"
+    },
+    {
+      "id": "125283-007-009",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 542,
+      "targetNameZh": "重型弩炮",
+      "civIds": [],
+      "summaryZh": "投射物现在受弹道学影响。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Heavy) Scorpion projectiles now affected by Ballistics.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b007",
+      "before": "不受弹道学影响",
+      "after": "受弹道学影响",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 93,
+          "targetNameZh": "弹道学",
+          "relation": "使弩炮投射物受弹道学影响"
+        }
+      ],
+      "scopeNote": "研究弹道学后。"
+    },
+    {
+      "id": "125283-008-010",
+      "kind": "buff",
+      "targetType": "building",
+      "targetId": 792,
+      "targetNameZh": "木城门",
+      "civIds": [],
+      "summaryZh": "基础远程护甲提高，近战护甲不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Palisade Gate base armor increased from 2/2 → 2/4.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b008",
+      "before": "2 近战护甲、2 远程护甲",
+      "after": "2 近战护甲、4 远程护甲"
+    },
+    {
+      "id": "125283-009-011",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 128,
+      "targetNameZh": "贸易车",
+      "civIds": [],
+      "summaryZh": "碰撞体积系数减小，贸易时更少相互阻挡。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Trade Cart and Trade Cog collision size multiplier reduced from 0.5 → 0.25, making bumping while trading less likely.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b009",
+      "before": "0.5",
+      "after": "0.25"
+    },
+    {
+      "id": "125283-009-012",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 17,
+      "targetNameZh": "贸易船",
+      "civIds": [],
+      "summaryZh": "碰撞体积系数减小，贸易时更少相互阻挡。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Trade Cart and Trade Cog collision size multiplier reduced from 0.5 → 0.25, making bumping while trading less likely.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b009",
+      "before": "0.5",
+      "after": "0.25"
+    },
+    {
+      "id": "125283-010-013",
+      "kind": "adjust",
+      "targetType": "building",
+      "targetId": 84,
+      "targetNameZh": "市场",
+      "civIds": [],
+      "summaryZh": "食物基础交易价提高；标准初始买入100食物的价格由130黄金提高到150黄金，卖出所得由70黄金提高到81黄金；木材和石料不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Market base exchange rates for food prices increased from 100 → 115, so initial food prices are more expensive and selling provides more gold. Wood and Stone exchange rates are unchanged.\n+ Initial standard gold price for buying 100 food increased from 130 gold → 150 gold.\n+ Initial standard gold reward for selling 100 food increased from 70 gold → 81 gold.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b010",
+      "before": "食物基础交易价100",
+      "after": "食物基础交易价115",
+      "scopeNote": "初始标准价格；买卖两端均变化，不单向判断为加强或削弱。"
+    },
+    {
+      "id": "125283-011-014",
+      "kind": "buff",
+      "targetType": "civ",
+      "targetId": "Aztecs",
+      "targetNameZh": "阿兹特克",
+      "civIds": [
+        "Aztecs"
+      ],
+      "summaryZh": "军事单位训练速度的文明加成提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Military units create faster civilization bonus increased from 11% → 15%.",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "125283-b011",
+      "before": "训练速度+11%",
+      "after": "训练速度+15%"
+    },
+    {
+      "id": "125283-012-015",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1704,
+      "targetNameZh": "胡斯派战车",
+      "civIds": [
+        "Bohemians"
+      ],
+      "summaryZh": "普通胡斯派战车的训练时间增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Hussite Wagon train time increased from 26 seconds → 30 seconds.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b012",
+      "before": "26 秒",
+      "after": "30 秒"
+    },
+    {
+      "id": "125283-013-016",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Byzantines",
+      "targetNameZh": "拜占庭",
+      "civIds": [
+        "Byzantines"
+      ],
+      "summaryZh": "喷火船和德罗蒙战舰的攻击速度加成降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Fire Ships and Dromons attack faster civilization bonus reduced from 25% → 20%.",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "125283-b013",
+      "before": "攻击速度+25%",
+      "after": "攻击速度+20%",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 529,
+          "targetNameZh": "喷火船",
+          "relation": "拜占庭喷火船攻击速度加成"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 1795,
+          "targetNameZh": "德罗蒙战舰",
+          "relation": "拜占庭德罗蒙战舰攻击速度加成"
+        }
+      ]
+    },
+    {
+      "id": "125283-014-017",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Chinese",
+      "targetNameZh": "中国",
+      "civIds": [
+        "Chinese"
+      ],
+      "summaryZh": "修复：团队加成提供的农田额外食物量与预期略有偏差的问题。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Fixed an issue where the team bonus effect was providing slightly different than intended bonus farm food amounts.",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "125283-b014",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 50,
+          "targetNameZh": "农田",
+          "relation": "中国团队农田食物加成"
+        }
+      ]
+    },
+    {
+      "id": "125283-015-018",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1750,
+      "targetNameZh": "楼船",
+      "civIds": [
+        "Dravidians"
+      ],
+      "summaryZh": "基础射程增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Thirisadai base range increased from 6 → 7.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b015",
+      "before": "6 格",
+      "after": "7 格"
+    },
+    {
+      "id": "125283-016-019",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1803,
+      "targetNameZh": "莫纳斯帕",
+      "civIds": [
+        "Georgians"
+      ],
+      "summaryZh": "普通莫纳斯帕的基础生命值降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Monaspa HP reduced from 75 (90) → 70 (80).",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b016",
+      "before": "75 生命值",
+      "after": "70 生命值"
+    },
+    {
+      "id": "125283-016-020",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1805,
+      "targetNameZh": "精锐莫纳斯帕",
+      "civIds": [
+        "Georgians"
+      ],
+      "summaryZh": "精锐莫纳斯帕的基础生命值降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Monaspa HP reduced from 75 (90) → 70 (80).",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b016",
+      "before": "90 生命值",
+      "after": "80 生命值"
+    },
+    {
+      "id": "125283-017-021",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Huns",
+      "targetNameZh": "匈奴",
+      "civIds": [
+        "Huns"
+      ],
+      "summaryZh": "游牧地图生成的匈奴马移动速度降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Hunnic Horse that spawns on Nomadic maps movement speed reduced from 1.2 → 1.05.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b017",
+      "before": "1.2",
+      "after": "1.05",
+      "scopeNote": "仅游牧地图生成的 Hunnic Horse；不套用于斥候骑兵或其他骑兵。"
+    },
+    {
+      "id": "125283-018-022",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1120,
+      "targetNameZh": "重弩战象",
+      "civIds": [
+        "Khmer"
+      ],
+      "summaryZh": "投射物现在受弹道学影响。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Ballista Elephant projectiles now affected by Ballistics.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b018",
+      "before": "不受弹道学影响",
+      "after": "受弹道学影响",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 93,
+          "targetNameZh": "弹道学",
+          "relation": "使高棉重弩战象投射物受弹道学影响"
+        }
+      ],
+      "scopeNote": "高棉研究弹道学后。"
+    },
+    {
+      "id": "125283-018-023",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1122,
+      "targetNameZh": "精锐重弩战象",
+      "civIds": [
+        "Khmer"
+      ],
+      "summaryZh": "投射物现在受弹道学影响。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Ballista Elephant projectiles now affected by Ballistics.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b018",
+      "before": "不受弹道学影响",
+      "after": "受弹道学影响",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 93,
+          "targetNameZh": "弹道学",
+          "relation": "使高棉重弩战象投射物受弹道学影响"
+        }
+      ],
+      "scopeNote": "高棉研究弹道学后。"
+    },
+    {
+      "id": "125283-019-024",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 832,
+      "targetNameZh": "精锐龟甲船",
+      "civIds": [
+        "Koreans"
+      ],
+      "summaryZh": "精锐龟甲船的升级费用降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Elite Turtle Ship upgrade cost reduced from 1000 food 800 gold → 650 food 500 gold.",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "125283-b019",
+      "before": "1000 食物、800 黄金",
+      "after": "650 食物、500 黄金"
+    },
+    {
+      "id": "125283-020-025",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 831,
+      "targetNameZh": "龟甲船",
+      "civIds": [
+        "Koreans"
+      ],
+      "summaryZh": "普通龟甲船的基础移动速度提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Turtle Ship base movement speed increased from 0.9 (1.035) → 1.05.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b020",
+      "before": "0.9",
+      "after": "1.05"
+    },
+    {
+      "id": "125283-020-026",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 832,
+      "targetNameZh": "精锐龟甲船",
+      "civIds": [
+        "Koreans"
+      ],
+      "summaryZh": "精锐龟甲船的基础移动速度提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Turtle Ship base movement speed increased from 0.9 (1.035) → 1.05.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b020",
+      "before": "1.035",
+      "after": "1.05"
+    },
+    {
+      "id": "125283-021-027",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 239,
+      "targetNameZh": "战象",
+      "civIds": [
+        "Persians"
+      ],
+      "summaryZh": "招降抗性从0提高为2，最短和最长招降时间均增加2.5游戏秒。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) War Elephant conversion resistance increased from 0 → 2, increasing minimum/maximum conversion times by +2.5 in-game seconds.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b021",
+      "before": "招降抗性0",
+      "after": "招降抗性2",
+      "scopeNote": "招降时间使用游戏时间。"
+    },
+    {
+      "id": "125283-021-028",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 558,
+      "targetNameZh": "精锐战象",
+      "civIds": [
+        "Persians"
+      ],
+      "summaryZh": "招降抗性从0提高为2，最短和最长招降时间均增加2.5游戏秒。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) War Elephant conversion resistance increased from 0 → 2, increasing minimum/maximum conversion times by +2.5 in-game seconds.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b021",
+      "before": "招降抗性0",
+      "after": "招降抗性2",
+      "scopeNote": "招降时间使用游戏时间。"
+    },
+    {
+      "id": "125283-022-029",
+      "kind": "new",
+      "targetType": "civ",
+      "targetId": "Poles",
+      "targetNameZh": "波兰",
+      "civIds": [
+        "Poles"
+      ],
+      "summaryZh": "新增文明加成：血统和斥候骑兵系升级的食物费用减半。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "NEW civilization bonus: Bloodlines and Scout-line upgrades cost -50% food.",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "125283-b022",
+      "before": "无此加成",
+      "after": "食物费用-50%",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 435,
+          "targetNameZh": "血统",
+          "relation": "波兰研究血统的食物折扣"
+        }
+      ],
+      "scopeNote": "仅食物费用；斥候骑兵系的升级费用，不是单位训练费用。"
+    },
+    {
+      "id": "125283-023-030",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1004,
+      "targetNameZh": "卡拉维尔战舰",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "训练时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Caravel train time reduced from 36 seconds → 25 seconds.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b023",
+      "before": "36 秒",
+      "after": "25 秒"
+    },
+    {
+      "id": "125283-023-031",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1006,
+      "targetNameZh": "精锐卡拉维尔战舰",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "训练时间缩短。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "(Elite) Caravel train time reduced from 36 seconds → 25 seconds.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b023",
+      "before": "36 秒",
+      "after": "25 秒"
+    },
+    {
+      "id": "125283-024-032",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1001,
+      "targetNameZh": "风琴炮",
+      "civIds": [
+        "Portuguese"
+      ],
+      "summaryZh": "普通风琴炮的训练时间增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Organ Gun train time increased from 21 seconds → 25 seconds.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "125283-b024",
+      "before": "21 秒",
+      "after": "25 秒"
+    },
+    {
+      "id": "125283-025-033",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Romans",
+      "targetNameZh": "罗马",
+      "civIds": [
+        "Romans"
+      ],
+      "summaryZh": "调整弩炮相关文明加成的文字说明，以配合所有文明的弩炮都受弹道学影响；公告未列额外数值改动。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/",
+      "provenance": "official-history",
+      "originalText": "Civilization bonus that benefits Scorpions wording adjusted, since all civilizations’ Scorpions are now affected by Ballistics.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "125283-b025",
+      "relatedTargets": [
+        {
+          "targetType": "unit",
+          "targetId": 279,
+          "targetNameZh": "弩炮",
+          "relation": "罗马弩炮加成说明"
+        },
+        {
+          "targetType": "unit",
+          "targetId": 542,
+          "targetNameZh": "重型弩炮",
+          "relation": "罗马重型弩炮加成说明"
+        }
+      ],
+      "scopeNote": "说明文字调整，不据此判定罗马弩炮再次获得独立数值加强。"
+    }
+  ],
+  "releaseDate": "2024-10-15",
+  "sourcePublishedAt": "2024-10-14T12:13:32-07:00",
+  "publishedAt": "2024-10-15"
+}

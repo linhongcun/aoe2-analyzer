@@ -72,6 +72,14 @@ tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 
 ## 路由（与旧版兼容）
 
+### 实体更新历史（#435）
+
+`scripts/history_*` 的独立历史输入生成 `src/data/patches/<build>.json`；历史前后值依据当时官方公告，不用当前游戏数值校验旧补丁。覆盖报告将官方平衡项目映射到记录或明确的排除原因。
+
+`src/data/patchHistory.ts` 仅登记 JSON 资源 URL，在打开版本页或更新历史页签时按需读取并缓存；失败后可重试真实 JSON 请求。`domain/patchHistory.ts` 负责实体主目标/历史关系匹配、去重、日期与交集筛选。`shared/ui/PatchHistory.tsx` 共用时间线与档案缺失状态，三类详情通过 `?tab=history` 接入，历史筛选使用 `hist` 前缀参数。
+
+文明关系只采用记录中明确保存的历史范围；普通/精锐和被替换科技分别保留身份。`archivedTargets` 为当前目录未收录的科技保留地址与名称，元数据脚本据此生成独立静态分享入口，避免分享时退回首页。已有数值模拟、科技树及当前数据加载链不读历史记录。
+
 旧链接 `#civ/X` 与新链接 `#/civ/X` 等价（HashRouter 会补全前导 `/`）。
 路径、重定向和详情页都在页面登记表里（见下节），`routes.tsx` 按登记表生成 `<Route>`。
 模拟器状态全部写入 URL（replace），可分享。

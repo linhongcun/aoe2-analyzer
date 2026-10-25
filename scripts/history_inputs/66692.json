@@ -1,0 +1,897 @@
+{
+  "id": "66692",
+  "announcedAt": "2022-08-29",
+  "branch": "DE",
+  "releaseType": "release",
+  "title": "DE Update 66692",
+  "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+  "verifiedAt": "2026-10-25",
+  "coverage": "完整收录本版文明平衡栏目；不含战役、地图、其他栏目及同页后续热修。",
+  "note": "历史改动前后值来自当时官方公告；只用当前目录核对实体身份，不以当前数值验证旧补丁。全局条目不推定所有文明当时均可使用。",
+  "archivedTargets": [],
+  "entries": [
+    {
+      "id": "66692-001-001",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 24,
+      "targetNameZh": "弩手",
+      "civIds": [],
+      "summaryZh": "升级为弩手的食物和黄金费用提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Crossbowman research cost increased from 125 food 75 gold ▶175 food 125 gold.",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "66692-b001",
+      "before": "125 食物、75 黄金",
+      "after": "175 食物、125 黄金"
+    },
+    {
+      "id": "66692-002-002",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 492,
+      "targetNameZh": "劲弩手",
+      "civIds": [],
+      "summaryZh": "升级为劲弩手的食物和黄金费用提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Arbalester research cost increased from 350 food 300 gold ▶ 450 food 400 gold.",
+      "verification": "official",
+      "changeType": "upgrade",
+      "sourceBullet": "66692-b002",
+      "before": "350 食物、300 黄金",
+      "after": "450 食物、400 黄金"
+    },
+    {
+      "id": "66692-003-003",
+      "kind": "buff",
+      "targetType": "building",
+      "targetId": 117,
+      "targetNameZh": "石墙",
+      "civIds": [],
+      "summaryZh": "黑暗和封建时代的石墙生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Dark and Feudal Age Stone Walls HP increased from 900 ▶ 1080; Dark and Feudal Age Stone Gates HP increased from 1375 ▶ 1650.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b003",
+      "before": "900 生命值",
+      "after": "1080 生命值",
+      "scopeNote": "仅黑暗和封建时代。"
+    },
+    {
+      "id": "66692-003-004",
+      "kind": "buff",
+      "targetType": "building",
+      "targetId": 487,
+      "targetNameZh": "城门",
+      "civIds": [],
+      "summaryZh": "黑暗和封建时代的石质城门生命值提高。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Dark and Feudal Age Stone Walls HP increased from 900 ▶ 1080; Dark and Feudal Age Stone Gates HP increased from 1375 ▶ 1650.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b003",
+      "before": "1375 生命值",
+      "after": "1650 生命值",
+      "scopeNote": "仅黑暗和封建时代。"
+    },
+    {
+      "id": "66692-004-005",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 873,
+      "targetNameZh": "骑象射手",
+      "civIds": [],
+      "summaryZh": "骑射手护甲类别的数值提高，受到掷矛手的额外伤害减少。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Elephant Archer has its cavalry archer armor increased from -7 ▶ -4, resulting in less bonus damage from skirmishers.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b004",
+      "before": "-7",
+      "after": "-4",
+      "scopeNote": "公告以 Elephant Archer 具名描述，未单列精锐形态；本条不推定精锐数值。"
+    },
+    {
+      "id": "66692-005-006",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 873,
+      "targetNameZh": "骑象射手",
+      "civIds": [],
+      "summaryZh": "训练食物费用降低，黄金费用不变。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Elephant Archer cost decreased from 90 food 70 gold ▶ 80 food 70 gold.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b005",
+      "before": "90 食物、70 黄金",
+      "after": "80 食物、70 黄金",
+      "scopeNote": "公告未单列精锐形态；本条按普通单位归档。"
+    },
+    {
+      "id": "66692-006-007",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1744,
+      "targetNameZh": "装甲战象",
+      "civIds": [],
+      "summaryZh": "装甲战象系现在受攻城技师影响，对建筑的额外伤害提高20%。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Armored Elephant line is now affected by Siege Engineers (+20% damage bonus).",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "66692-b006",
+      "before": "不受攻城技师影响",
+      "after": "受攻城技师影响",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 377,
+          "targetNameZh": "攻城技师",
+          "relation": "对装甲战象系生效"
+        }
+      ],
+      "scopeNote": "研究攻城技师后。"
+    },
+    {
+      "id": "66692-006-008",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 1746,
+      "targetNameZh": "攻城战象",
+      "civIds": [],
+      "summaryZh": "装甲战象系现在受攻城技师影响，对建筑的额外伤害提高20%。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Armored Elephant line is now affected by Siege Engineers (+20% damage bonus).",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "66692-b006",
+      "before": "不受攻城技师影响",
+      "after": "受攻城技师影响",
+      "relatedTargets": [
+        {
+          "targetType": "tech",
+          "targetId": 377,
+          "targetNameZh": "攻城技师",
+          "relation": "对装甲战象系生效"
+        }
+      ],
+      "scopeNote": "研究攻城技师后。"
+    },
+    {
+      "id": "66692-007-009",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Aztecs",
+      "targetNameZh": "阿兹特克",
+      "civIds": [
+        "Aztecs"
+      ],
+      "summaryZh": "修复：帝国战争模式不再禁用起始资源和村民的文明加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b007",
+      "scopeNote": "仅帝国战争模式。"
+    },
+    {
+      "id": "66692-007-010",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Chinese",
+      "targetNameZh": "中国",
+      "civIds": [
+        "Chinese"
+      ],
+      "summaryZh": "修复：帝国战争模式不再禁用起始资源和村民的文明加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b007",
+      "scopeNote": "仅帝国战争模式。"
+    },
+    {
+      "id": "66692-007-011",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Huns",
+      "targetNameZh": "匈奴",
+      "civIds": [
+        "Huns"
+      ],
+      "summaryZh": "修复：帝国战争模式不再禁用起始资源和村民的文明加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b007",
+      "scopeNote": "仅帝国战争模式。"
+    },
+    {
+      "id": "66692-007-012",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Incas",
+      "targetNameZh": "印加",
+      "civIds": [
+        "Incas"
+      ],
+      "summaryZh": "修复：帝国战争模式不再禁用起始资源和村民的文明加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b007",
+      "scopeNote": "仅帝国战争模式。"
+    },
+    {
+      "id": "66692-007-013",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Lithuanians",
+      "targetNameZh": "立陶宛",
+      "civIds": [
+        "Lithuanians"
+      ],
+      "summaryZh": "修复：帝国战争模式不再禁用起始资源和村民的文明加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b007",
+      "scopeNote": "仅帝国战争模式。"
+    },
+    {
+      "id": "66692-007-014",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Mayans",
+      "targetNameZh": "玛雅",
+      "civIds": [
+        "Mayans"
+      ],
+      "summaryZh": "修复：帝国战争模式不再禁用起始资源和村民的文明加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b007",
+      "scopeNote": "仅帝国战争模式。"
+    },
+    {
+      "id": "66692-007-015",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Persians",
+      "targetNameZh": "波斯",
+      "civIds": [
+        "Persians"
+      ],
+      "summaryZh": "修复：帝国战争模式不再禁用起始资源和村民的文明加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b007",
+      "scopeNote": "仅帝国战争模式。"
+    },
+    {
+      "id": "66692-007-016",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Sicilians",
+      "targetNameZh": "西西里",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "修复：帝国战争模式不再禁用起始资源和村民的文明加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b007",
+      "scopeNote": "仅帝国战争模式。"
+    },
+    {
+      "id": "66692-007-017",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Gurjaras",
+      "targetNameZh": "瞿折罗",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "修复：帝国战争模式不再禁用起始资源和村民的文明加成。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b007",
+      "scopeNote": "仅帝国战争模式。"
+    },
+    {
+      "id": "66692-008-018",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Ethiopians",
+      "targetNameZh": "埃塞俄比亚",
+      "civIds": [
+        "Ethiopians"
+      ],
+      "summaryZh": "修复：从非黑暗时代开始时，仅正确触发起始时代的升级时代加成，跳过时代的加成仍不生效。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Age-advancement bonuses are correctly applied for the starting age only when an age other than Dark Age is selected (affects Ethiopians, Bengalis, Dravidians). Bonuses for skipped ages (before starting age) are still disabled.",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b008",
+      "scopeNote": "起始时代设为黑暗时代以后的对局。"
+    },
+    {
+      "id": "66692-008-019",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Bengalis",
+      "targetNameZh": "孟加拉",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "修复：从非黑暗时代开始时，仅正确触发起始时代的升级时代加成，跳过时代的加成仍不生效。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Age-advancement bonuses are correctly applied for the starting age only when an age other than Dark Age is selected (affects Ethiopians, Bengalis, Dravidians). Bonuses for skipped ages (before starting age) are still disabled.",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b008",
+      "scopeNote": "起始时代设为黑暗时代以后的对局。"
+    },
+    {
+      "id": "66692-008-020",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Dravidians",
+      "targetNameZh": "达罗毗荼",
+      "civIds": [
+        "Dravidians"
+      ],
+      "summaryZh": "修复：从非黑暗时代开始时，仅正确触发起始时代的升级时代加成，跳过时代的加成仍不生效。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Age-advancement bonuses are correctly applied for the starting age only when an age other than Dark Age is selected (affects Ethiopians, Bengalis, Dravidians). Bonuses for skipped ages (before starting age) are still disabled.",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b008",
+      "scopeNote": "起始时代设为黑暗时代以后的对局。"
+    },
+    {
+      "id": "66692-009-021",
+      "kind": "adjust",
+      "targetType": "tech",
+      "targetId": 15,
+      "targetNameZh": "行会",
+      "civIds": [],
+      "summaryZh": "研究行会后，非萨拉森文明的市场最低买入价格重设为23。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Minimum buy price for all non-Saracen civilizations, with Guilds researched, is (re)set to 23 instead of 25.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "66692-b009",
+      "before": "25",
+      "after": "23",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 84,
+          "targetNameZh": "市场",
+          "relation": "市场交易价格"
+        }
+      ],
+      "scopeNote": "研究行会后；萨拉森不适用。"
+    },
+    {
+      "id": "66692-010-022",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 125,
+      "targetNameZh": "僧侣",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "孟加拉僧侣获得3点近战护甲和3点远程护甲。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Monks receive +3/+3 armor.",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "66692-b010",
+      "before": "无此文明护甲加成",
+      "after": "+3 近战护甲、+3 远程护甲"
+    },
+    {
+      "id": "66692-011-023",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 873,
+      "targetNameZh": "骑象射手",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "修复：反制单位的额外伤害先扣除护甲，再应用孟加拉的额外伤害减免，恢复预期伤害。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Elephant Archers and Armored Elephants now receive the intended bonus damage from their counter units (the bonus resistance modifier applies after the armor subtraction from the damage instead of before).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b011",
+      "scopeNote": "孟加拉的额外伤害减免计算顺序修正；公告未列各形态具体伤害值。"
+    },
+    {
+      "id": "66692-011-024",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1744,
+      "targetNameZh": "装甲战象",
+      "civIds": [
+        "Bengalis"
+      ],
+      "summaryZh": "修复：反制单位的额外伤害先扣除护甲，再应用孟加拉的额外伤害减免，恢复预期伤害。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Elephant Archers and Armored Elephants now receive the intended bonus damage from their counter units (the bonus resistance modifier applies after the armor subtraction from the damage instead of before).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b011",
+      "scopeNote": "孟加拉的额外伤害减免计算顺序修正；公告未列各形态具体伤害值。"
+    },
+    {
+      "id": "66692-012-025",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Britons"
+      ],
+      "summaryZh": "科技树新增脚踏起重机。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Receive access to Treadmill Crane.",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "66692-b012",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "66692-013-030",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1655,
+      "targetNameZh": "马上轻装兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "蓄力冲锋伤害降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Coustillier charge damage reduced from 25 ▶ 20.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b013",
+      "before": "25",
+      "after": "20"
+    },
+    {
+      "id": "66692-014-031",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1657,
+      "targetNameZh": "精锐马上轻装兵",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "蓄力冲锋伤害降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Elite Coustillier charge damage reduced from 30 ▶ 25.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b014",
+      "before": "30",
+      "after": "25"
+    },
+    {
+      "id": "66692-015-032",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Burgundians",
+      "targetNameZh": "勃艮第",
+      "civIds": [
+        "Burgundians"
+      ],
+      "summaryZh": "经济科技的食物费用折扣减少，研究需要更多食物。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Economy technology food discount reduced from -50% ▶ -40%.",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "66692-b015",
+      "before": "折扣50%",
+      "after": "折扣40%"
+    },
+    {
+      "id": "66692-016-026",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Byzantines"
+      ],
+      "summaryZh": "科技树新增脚踏起重机。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Receive access to Treadmill Crane.",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "66692-b016",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "66692-017-033",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Cumans",
+      "targetNameZh": "库曼",
+      "civIds": [
+        "Cumans"
+      ],
+      "summaryZh": "修复：部分库曼可驯养动物错误地多出50%食物的问题。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Fixed an issue where some Cuman herdable animals had 50% more food in them than intended.",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b017"
+    },
+    {
+      "id": "66692-018-034",
+      "kind": "buff",
+      "targetType": "unit",
+      "targetId": 36,
+      "targetNameZh": "手推炮",
+      "civIds": [
+        "Dravidians"
+      ],
+      "summaryZh": "达罗毗荼科技树开放手推炮。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Receive Bombard Cannon.",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "66692-b018",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "66692-019-035",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1753,
+      "targetNameZh": "精锐施里瓦姆沙骑手",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "闪避能力完全恢复所需时间增加。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Elite Shrivamsha Rider full agility recharge time increased from 15s ▶ 20s.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b019",
+      "before": "15 秒",
+      "after": "20 秒"
+    },
+    {
+      "id": "66692-020-036",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Gurjaras",
+      "targetNameZh": "瞿折罗",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "骑乘单位的额外伤害加成降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Mounted units additional bonus damage reduced from +50% ▶ +40%.",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "66692-b020",
+      "before": "+50%",
+      "after": "+40%"
+    },
+    {
+      "id": "66692-021-037",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1753,
+      "targetNameZh": "精锐施里瓦姆沙骑手",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "修复：精锐升级费用恢复为预期的850食物和500黄金；公告未列修复前费用。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Elite Shrivamsha Rider upgrade cost now matches the intended amount (850 food 500 gold).",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b021"
+    },
+    {
+      "id": "66692-022-038",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Gurjaras",
+      "targetNameZh": "瞿折罗",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "磨坊驻扎动物的食物收入改为收益递减；标准资源地图驻扎己方全部动物时，收入约比此前少15%。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "The calculation of the food income from garrisoned herdable animals now uses a non-linear calculation, where garrisoning additional herdable animals has diminishing returns. 15 \\*(ln FoodAmount/200+1), where FoodAmount is the sum of food in all garrisoned herdable animals. This means garrisoning more herdables will have diminishing returns. Garrisoning all of a player’s own herdables on a map with standard resources (like Arabia) now grants ~15% less food income than before.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "66692-b022",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 68,
+          "targetNameZh": "磨坊",
+          "relation": "驻扎动物产食"
+        }
+      ],
+      "scopeNote": "动物越多，新增动物的边际收益越低；约15%为官方给定标准地图场景，不适用于任意驻扎数量。计算公式保留在官方原文摘录中。"
+    },
+    {
+      "id": "66692-023-039",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1751,
+      "targetNameZh": "施里瓦姆沙骑手",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "修复：施里瓦姆沙骑手现在可以闪避投射物附近的爆炸伤害。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Fixed an issue where Shrivamsha Riders could not dodge the nearby blast damage of projectiles.",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b023"
+    },
+    {
+      "id": "66692-023-040",
+      "kind": "adjust",
+      "targetType": "unit",
+      "targetId": 1753,
+      "targetNameZh": "精锐施里瓦姆沙骑手",
+      "civIds": [
+        "Gurjaras"
+      ],
+      "summaryZh": "修复：施里瓦姆沙骑手现在可以闪避投射物附近的爆炸伤害。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Fixed an issue where Shrivamsha Riders could not dodge the nearby blast damage of projectiles.",
+      "verification": "official",
+      "changeType": "fix",
+      "sourceBullet": "66692-b023"
+    },
+    {
+      "id": "66692-024-041",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1747,
+      "targetNameZh": "古拉姆",
+      "civIds": [
+        "Hindustanis"
+      ],
+      "summaryZh": "普通古拉姆的基础生命值降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Ghulam HP reduced from 65 ▶ 55.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b024",
+      "before": "65 生命值",
+      "after": "55 生命值"
+    },
+    {
+      "id": "66692-025-042",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 1749,
+      "targetNameZh": "精锐古拉姆",
+      "civIds": [
+        "Hindustanis"
+      ],
+      "summaryZh": "精锐古拉姆的基础生命值降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Elite Ghulam HP reduced from 75 ▶ 65.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b025",
+      "before": "75 生命值",
+      "after": "65 生命值"
+    },
+    {
+      "id": "66692-026-043",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 359,
+      "targetNameZh": "长戟兵",
+      "civIds": [
+        "Hindustanis"
+      ],
+      "summaryZh": "印度斯坦科技树移除长戟兵。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Lose access to Halberdier.",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "66692-b026",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "66692-027-044",
+      "kind": "nerf",
+      "targetType": "unit",
+      "targetId": 829,
+      "targetNameZh": "精锐高丽战车",
+      "civIds": [
+        "Koreans"
+      ],
+      "summaryZh": "骑射手护甲类别数值降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Elite War Wagon cavalry archer armor reduced from 0 ▶ -1.",
+      "verification": "official",
+      "changeType": "stats",
+      "sourceBullet": "66692-b027",
+      "before": "0",
+      "after": "-1"
+    },
+    {
+      "id": "66692-028-027",
+      "kind": "buff",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Malay"
+      ],
+      "summaryZh": "科技树新增脚踏起重机。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Receive access to Treadmill Crane.",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "66692-b028",
+      "before": "未开放",
+      "after": "已开放"
+    },
+    {
+      "id": "66692-029-045",
+      "kind": "adjust",
+      "targetType": "civ",
+      "targetId": "Saracens",
+      "targetNameZh": "萨拉森",
+      "civIds": [
+        "Saracens"
+      ],
+      "summaryZh": "萨拉森市场的最低买入价格重设为21。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "The Saracen Market’s minimum buy price is now (re)set to 21 instead of 25.",
+      "verification": "official",
+      "changeType": "mechanic",
+      "sourceBullet": "66692-b029",
+      "before": "25",
+      "after": "21",
+      "relatedTargets": [
+        {
+          "targetType": "building",
+          "targetId": 84,
+          "targetNameZh": "市场",
+          "relation": "萨拉森市场价格"
+        }
+      ]
+    },
+    {
+      "id": "66692-030-046",
+      "kind": "nerf",
+      "targetType": "civ",
+      "targetId": "Sicilians",
+      "targetNameZh": "西西里",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "陆地军事单位抵抗额外伤害的比例降低。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Bonus damage resistance for land military units reduced from 50% ▶ 33%.",
+      "verification": "official",
+      "changeType": "bonus",
+      "sourceBullet": "66692-b030",
+      "before": "50%",
+      "after": "33%"
+    },
+    {
+      "id": "66692-031-028",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Sicilians"
+      ],
+      "summaryZh": "科技树移除脚踏起重机。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Lose access to Treadmill Crane.",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "66692-b031",
+      "before": "已开放",
+      "after": "未开放"
+    },
+    {
+      "id": "66692-032-029",
+      "kind": "nerf",
+      "targetType": "tech",
+      "targetId": 54,
+      "targetNameZh": "脚踏起重机",
+      "civIds": [
+        "Teutons"
+      ],
+      "summaryZh": "科技树移除脚踏起重机。",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/",
+      "provenance": "official-history",
+      "originalText": "Lose access to Treadmill Crane.",
+      "verification": "official",
+      "changeType": "tree",
+      "sourceBullet": "66692-b032",
+      "before": "已开放",
+      "after": "未开放"
+    }
+  ],
+  "releaseDate": "2022-08-29",
+  "sourcePublishedAt": "2022-08-29T16:10:00-07:00",
+  "publishedAt": "2022-08-30"
+}

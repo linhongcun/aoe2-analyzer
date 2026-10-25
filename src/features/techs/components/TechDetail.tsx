@@ -8,11 +8,11 @@ import { BLink } from '../../../shared/ui/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
-import TechList from './TechList';
 import TechAffects from './TechAffects';
 import { techAffects } from '../../../domain/affects';
 import { affectedUnits } from '../../../domain/family';
 import { TECH_AKA } from '../../../data/aliases';
+import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 
 const TT: Record<string, string> = { UniqueTech: '独特科技', Research: '通用科技', RegionalTech: '区域科技' };
 
@@ -29,7 +29,7 @@ export default function TechDetail() {
       </section>
     );
   const t = core.techById[+id];
-  if (!t) return <TechList />;
+  if (!t) return <HistoricalEntityDetail target={{ targetType: 'tech', targetId: id }} />;
   const pre = t.pre != null ? core.techById[t.pre] : undefined;
   const aliases = TECH_AKA[t.id]?.filter((name) => name.toLowerCase() !== t.en.toLowerCase() && name !== t.zh);
   const nxt = core.techs.filter((x) => x.pre === t.id);
@@ -159,6 +159,7 @@ export default function TechDetail() {
         },
         { key: 'affects', label: '作用对象', content: <TechAffects t={t} /> },
         { key: 'civs', label: '文明', content: civList },
+        { key: 'history', label: '更新历史', content: <PatchHistory target={{ targetType: 'tech', targetId: t.id, targetNameZh: t.zh }} /> },
       ]}
       sidebar={
         <>

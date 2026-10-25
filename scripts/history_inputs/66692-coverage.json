@@ -1,0 +1,165 @@
+{
+  "id": "66692",
+  "bullets": [
+    {
+      "id": "66692-b001",
+      "text": "Crossbowman research cost increased from 125 food 75 gold ▶175 food 125 gold.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b002",
+      "text": "Arbalester research cost increased from 350 food 300 gold ▶ 450 food 400 gold.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b003",
+      "text": "Dark and Feudal Age Stone Walls HP increased from 900 ▶ 1080; Dark and Feudal Age Stone Gates HP increased from 1375 ▶ 1650.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b004",
+      "text": "Elephant Archer has its cavalry archer armor increased from -7 ▶ -4, resulting in less bonus damage from skirmishers.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b005",
+      "text": "Elephant Archer cost decreased from 90 food 70 gold ▶ 80 food 70 gold.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b006",
+      "text": "Armored Elephant line is now affected by Siege Engineers (+20% damage bonus).",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b007",
+      "text": "Starting resource and villager bonuses are no longer disabled in Empire Wars (affects Aztecs, Chinese, Huns, Incas, Lithuanians, Mayans, Persians, Sicilians, Gurjaras).",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b008",
+      "text": "Age-advancement bonuses are correctly applied for the starting age only when an age other than Dark Age is selected (affects Ethiopians, Bengalis, Dravidians). Bonuses for skipped ages (before starting age) are still disabled.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b009",
+      "text": "Minimum buy price for all non-Saracen civilizations, with Guilds researched, is (re)set to 23 instead of 25.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b010",
+      "text": "Monks receive +3/+3 armor.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b011",
+      "text": "Elephant Archers and Armored Elephants now receive the intended bonus damage from their counter units (the bonus resistance modifier applies after the armor subtraction from the damage instead of before).",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b012",
+      "text": "Receive access to Treadmill Crane.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b013",
+      "text": "Coustillier charge damage reduced from 25 ▶ 20.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b014",
+      "text": "Elite Coustillier charge damage reduced from 30 ▶ 25.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b015",
+      "text": "Economy technology food discount reduced from -50% ▶ -40%.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b016",
+      "text": "Receive access to Treadmill Crane.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b017",
+      "text": "Fixed an issue where some Cuman herdable animals had 50% more food in them than intended.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b018",
+      "text": "Receive Bombard Cannon.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b019",
+      "text": "Elite Shrivamsha Rider full agility recharge time increased from 15s ▶ 20s.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b020",
+      "text": "Mounted units additional bonus damage reduced from +50% ▶ +40%.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b021",
+      "text": "Elite Shrivamsha Rider upgrade cost now matches the intended amount (850 food 500 gold).",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b022",
+      "text": "The calculation of the food income from garrisoned herdable animals now uses a non-linear calculation, where garrisoning additional herdable animals has diminishing returns. 15 \\*(ln FoodAmount/200+1), where FoodAmount is the sum of food in all garrisoned herdable animals. This means garrisoning more herdables will have diminishing returns. Garrisoning all of a player’s own herdables on a map with standard resources (like Arabia) now grants ~15% less food income than before.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b023",
+      "text": "Fixed an issue where Shrivamsha Riders could not dodge the nearby blast damage of projectiles.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b024",
+      "text": "Ghulam HP reduced from 65 ▶ 55.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b025",
+      "text": "Elite Ghulam HP reduced from 75 ▶ 65.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b026",
+      "text": "Lose access to Halberdier.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b027",
+      "text": "Elite War Wagon cavalry archer armor reduced from 0 ▶ -1.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b028",
+      "text": "Receive access to Treadmill Crane.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b029",
+      "text": "The Saracen Market’s minimum buy price is now (re)set to 21 instead of 25.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b030",
+      "text": "Bonus damage resistance for land military units reduced from 50% ▶ 33%.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b031",
+      "text": "Lose access to Treadmill Crane.",
+      "status": "mapped"
+    },
+    {
+      "id": "66692-b032",
+      "text": "Lose access to Treadmill Crane.",
+      "status": "mapped"
+    }
+  ]
+}

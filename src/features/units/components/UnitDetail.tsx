@@ -25,6 +25,7 @@ import UnitList from './UnitList';
 import { discountedCost, priceAge } from '../../../domain/costDiscount';
 import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/realCost';
 import { Basis } from '../../../shared/ui/RealCost';
+import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 
 /** #88 S8：费用下面一行「采集时间 ≈ 1 个村民 m:ss」；时代跟页面所选，未选默认城堡；未选文明按通用速度 */
 function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {
@@ -118,7 +119,8 @@ export default function UnitDetail() {
         <Loading />
       </section>
     );
-  if (!u || !rt) return <UnitList />;
+  if (!rt) return <UnitList />;
+  if (!u) return <HistoricalEntityDetail target={{ targetType: 'unit', targetId: rt.id }} />;
   const base = baseUnit(u, core.fam);
   const elite = core.fam.eliteOf[base.id];
   const isE = u.id !== base.id;
@@ -307,6 +309,7 @@ export default function UnitDetail() {
             </>
           ),
         },
+        { key: 'history', label: '更新历史', content: <PatchHistory target={{ targetType: 'unit', targetId: u.id, targetNameZh: u.zh }} /> },
       ]}
       sidebar={
         <>
