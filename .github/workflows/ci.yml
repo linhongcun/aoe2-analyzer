@@ -154,6 +154,7 @@ jobs:
             test-results/production204-*/*.png
             test-results/upgrades205-*/*.png
             test-results/civRequirements206-*/*.png
+            test-results/civDlcFilters-*/*.png
             test-results/ecoPayoff214-*/*.png
             test-results/market215-*/*.png
             test-results/practice216-*/*.png
