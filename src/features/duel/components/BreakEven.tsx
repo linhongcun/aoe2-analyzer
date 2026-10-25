@@ -132,8 +132,11 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
               <Icon name="arrow-right" /> 在 N vs M 中打开 {r.n} vs {r.nb}
             </button>
             <button type="button" className="be-sec" onClick={copy}>
-              <span {...statusProps}>{copied ? '已复制' : '复制链接'}</span>
+              {copied ? '已复制' : '复制链接'}
             </button>
+            <span className="sr-only" {...statusProps}>
+              {copied ? status : ''}
+            </span>
           </div>
         )}
         {manualLink && (
