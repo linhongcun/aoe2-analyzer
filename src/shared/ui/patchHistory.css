@@ -1,0 +1,101 @@
+.entity-history {
+  min-width: 0;
+}
+.entity-history a,
+.entity-history button,
+.entity-history summary {
+  min-height: 44px;
+}
+.entity-history a {
+  display: inline-flex;
+  align-items: center;
+}
+.history-coverage {
+  margin-block: var(--space-4);
+}
+.history-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-block: var(--space-4);
+}
+.history-filters label {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--fs-sm);
+}
+.history-filters input,
+.history-filters select {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+}
+.history-version {
+  margin-block: var(--space-6);
+}
+.history-entry {
+  padding: var(--space-4);
+  margin-block: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow-wrap: anywhere;
+}
+.history-entry h4 {
+  font-size: var(--fs-h3);
+  margin-block: var(--space-2);
+}
+.history-labels,
+.history-related {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+}
+.history-labels {
+  color: var(--color-muted);
+}
+.history-kind-buff {
+  color: var(--color-good);
+}
+.history-kind-nerf {
+  color: var(--color-bad);
+}
+.history-values {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-sm);
+}
+.history-values dt {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+.history-values dd {
+  margin: var(--space-2) 0 0;
+}
+.history-evidence {
+  font-size: var(--fs-sm);
+}
+.history-evidence blockquote {
+  margin: var(--space-2) 0;
+  padding-inline-start: var(--space-3);
+  border-inline-start: 2px solid var(--color-border);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 699px) {
+  .history-filters,
+  .history-values {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

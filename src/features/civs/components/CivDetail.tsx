@@ -17,6 +17,7 @@ import { session } from '../../../shared/utils/sticky';
 import CivList from './CivList';
 import { BonusRows } from './BonusRows';
 import { CivOpening } from './CivOpening';
+import { PatchHistory } from '../../../shared/ui/PatchHistory';
 
 function UTech({ s, civ }: { s: string; civ: string }) {
   const core = useCore();
@@ -191,6 +192,7 @@ export default function CivDetail() {
             </>
           ),
         },
+        { key: 'history', label: '更新历史', content: <PatchHistory target={{ targetType: 'civ', targetId: c.en, targetNameZh: c.zh }} /> },
       ]}
       sidebar={
         <>

@@ -100,6 +100,20 @@ try {
   for (const f of readdirSync(path.join(root, 'src/data/patches')).filter((f) => f.endsWith('.json'))) {
     const p = read('patches/' + f.slice(0, -5));
     add(`/patches/${p.id}`, `DE Update ${p.id}`, `查看 ${p.id} 的平衡调整、新内容和文明改动。`);
+    for (const target of p.archivedTargets ?? []) {
+      const route = `/${target.targetType}/${target.targetId}`;
+      if (!pages[route]) {
+        add(
+          route,
+          target.targetNameZh,
+          `${target.targetNameZh}${target.nameEn ? `（${target.nameEn}）` : ''}的更新历史与当时官方记录。当前数据目录未收录，不代表当前可用。`,
+          {
+            kind: 'history',
+            note: '历史档案分批收录；历史数值不代表当前数值。',
+          },
+        );
+      }
+    }
   }
 } catch (error) {
   if (error.code !== 'ENOENT') throw error;
