@@ -4,7 +4,7 @@ import { civs } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
 import { TYPE_ZH } from '../../../domain/ratings';
 import type { CivType } from '../../../domain/types';
-import { CivIcon, DlcBadge } from '../../../shared/ui/art';
+import { CivIcon } from '../../../shared/ui/art';
 import { DlcBar, SearchInput } from '../../../shared/ui/widgets';
 import CatalogFilters from '../../../shared/ui/CatalogFilters';
 import { useSticky } from '../../../shared/utils/sticky';
@@ -98,9 +98,6 @@ export default function CivList() {
           r.map((c) => (
             <div className="card" key={c.en} data-civ={c.en} onClick={() => nav('/civ/' + c.en)}>
               <CivIcon c={c} />
-              <span className="cdl">
-                <DlcBadge i={c.dlc} />
-              </span>
               <h3>{c.zh}</h3>
               <small>{c.en}</small>
               <div>
