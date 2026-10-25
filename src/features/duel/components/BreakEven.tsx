@@ -1,8 +1,10 @@
 /** #25 PK 盈亏平衡点（v3 样稿 docs/design/mockups/issue25-v3/）。只负责展示，计算见 domain/breakEven.ts */
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { breakEven, BREAK_EVEN_CAP, type BreakEvenResult } from '../../../domain/breakEven';
 import type { Fighter } from '../../../domain/duel';
 import { Icon } from '../../../shared/ui/Icon';
+import { useShareLink } from '../../../shared/ui/useShareLink';
 
 const r1 = (x: number) => String(Math.round(x * 10) / 10);
 
@@ -22,18 +24,27 @@ export interface BreakEvenProps {
 }
 
 export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: BreakEvenProps) {
+  const route = useLocation();
   const compute = () => ({ sig, r: breakEven(a, b, nb, BREAK_EVEN_CAP), aName: a.name, bName: b.name, summary });
   // URL 带 be=1（分享链接）时首次渲染即计算
   const [res, setRes] = useState<{ sig: string; r: BreakEvenResult; aName: string; bName: string; summary: string } | null>(() => (auto ? compute() : null));
-  const [copied, setCopied] = useState(false);
+  const {
+    copy: copyLink,
+    copied,
+    status,
+    manualLink,
+    statusProps,
+  } = useShareLink({
+    stateKey: JSON.stringify([sig, auto, route.pathname, route.search]),
+    successMessage: '链接已复制。',
+    failureMessage: '自动复制失败，请手动复制下方完整链接。',
+  });
   const run = () => {
     setRes(compute());
     onComputed();
   };
   const stale = !!res && res.sig !== sig;
-  const copy = () => {
-    void navigator.clipboard?.writeText(location.href).then(() => setCopied(true));
-  };
+  const copy = () => copyLink(location.href);
   if (!res)
     return (
       <div className="be-entry" data-t="be-entry">
@@ -121,9 +132,20 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
               <Icon name="arrow-right" /> 在 N vs M 中打开 {r.n} vs {r.nb}
             </button>
             <button type="button" className="be-sec" onClick={copy}>
-              {copied ? '已复制' : '复制链接'}
+              <span {...statusProps}>{copied ? '已复制' : '复制链接'}</span>
             </button>
           </div>
+        )}
+        {manualLink && (
+          <>
+            <p className="note" {...statusProps}>
+              {status}
+            </p>
+            <label className="note share-link-manual">
+              手动复制盈亏平衡链接
+              <textarea aria-label="手动复制盈亏平衡链接" readOnly value={manualLink} rows={3} onFocus={(e) => e.currentTarget.select()} />
+            </label>
+          </>
         )}
       </section>
     </div>

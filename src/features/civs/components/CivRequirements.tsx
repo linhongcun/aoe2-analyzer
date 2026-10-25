@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../../../shared/ui/Icon';
+import { useShareLink } from '../../../shared/ui/useShareLink';
 import { TechIcon, UnitIcon } from '../../../shared/ui/art';
 import { DATA_SOURCES, versionLabel } from '../../../shared/utils/dataInfo';
 import { requirementToken, resolveRequirements, searchRequirements, type RequirementCondition, type RequirementContext } from '../../../domain/civRequirements';
@@ -22,27 +23,26 @@ export default function CivRequirements({
 }) {
   const [query, setQuery] = useState('');
   const [kind, setKind] = useState<'all' | 'unit' | 'tech'>('all');
-  const [feedback, setFeedback] = useState<{ key: string; status: string; link: string } | null>(null);
-  const shareStatus = feedback?.key === stateKey ? feedback.status : '';
-  const manualLink = feedback?.key === stateKey ? feedback.link : '';
+  const {
+    copy: copyLink,
+    status: shareStatus,
+    manualLink,
+    reset,
+    statusProps,
+  } = useShareLink({
+    stateKey,
+    successMessage: '筛选链接已复制，包含全部条件。',
+    failureMessage: '自动复制失败，请复制下方链接。',
+  });
   const input = useRef<HTMLInputElement>(null);
   const resolved = context ? resolveRequirements(conditions, context) : [];
   const selected = new Set(conditions.map((r) => r.token));
   const options = context && query.trim() ? searchRequirements(context, query, kind).filter((r) => !selected.has(requirementToken(r.ref))) : [];
   const shown = options.slice(0, 20);
-  const copy = async () => {
-    const link = await share();
-    try {
-      if (!navigator.clipboard) throw new Error('Clipboard unavailable');
-      await navigator.clipboard.writeText(link);
-      setFeedback({ key: stateKey, status: '筛选链接已复制，包含全部条件。', link: '' });
-    } catch {
-      setFeedback({ key: stateKey, status: '自动复制失败，请复制下方链接。', link });
-    }
-  };
+  const copy = () => copyLink(share);
   const update = (next: RequirementCondition[]) => {
     onChange(next);
-    setFeedback(null);
+    reset();
   };
   return (
     <section className="civ-requirements" data-testid="civ-requirements" aria-labelledby="requirements-title">
@@ -150,7 +150,7 @@ export default function CivRequirements({
       </div>
       {!conditions.length && <p className="note">尚未添加组合条件，当前仅按上方筛选显示文明。</p>}
       {shareStatus && (
-        <p className="note" role="status">
+        <p className="note" {...statusProps}>
           {shareStatus}
         </p>
       )}
