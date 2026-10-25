@@ -2,11 +2,11 @@
 
 ## Codex / 无人值守维护（必读）
 
-批量或无人值守改代码前，先读 **[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（Kent `ACCEPT @ <SHA>` / Steve `设计通过 @ <SHA>`）、Hold 表（**#364 / #372 勿开**）、跳过条件与选 issue checklist。
+批量或无人值守改代码前，先读 **[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（独立代理复核＋完整 CI）、Hold 表（**#364 / #372 勿开**）、跳过条件与选 issue checklist。
 
 与 CONTRIBUTING 冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
 
-**持续发布授权**：hongcun 已要求已授权更新完成适用审查和测试后直接部署，不再逐次询问发布；不能停在 release 分支便称完成上线。当前 v0.31.0 的发布授权、审阅例外及边界，以 [CONTRIBUTING「维护者的持续发布授权」](CONTRIBUTING.md#维护者的持续发布授权2026-10-24) 为准。
+**持续发布授权**：hongcun 已要求已授权更新完成适用审查和测试后直接部署，不再逐次询问发布；不能停在 release 分支便称完成上线。发布授权及边界以 [CONTRIBUTING「维护者的持续发布授权」](CONTRIBUTING.md#维护者的持续发布授权2026-10-24) 为准；现行审阅流程以 [「维护者的持续审阅授权」](CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) 为准，由实现者之外的独立代理复核，记录实际提交 SHA、复核范围、结果和未解决问题，不再依赖指定人员签字。
 
 ### 数字不换行（`.num` / `.nw`）
 
@@ -19,7 +19,7 @@
 | #364 | Hold — 单位 PK heading-order 整树上移 |
 | #372 | Hold — 波希米亚竞技场火药预置对战     |
 
-解 hold 仅 hongcun / Steve 明示后才可开工。
+解 hold 必须获得维护者明确授权后才可开工；审阅流程变更不解除 Hold。
 
 给批量处理 issue 的 AI 代理（DeepSeek、Codex 等）看的入口文件。人类贡献者看 [CONTRIBUTING.md](CONTRIBUTING.md)；两者冲突时以 CONTRIBUTING.md 为准，并在 issue 里指出。
 
@@ -97,11 +97,11 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 ## 合并前必须通过
 
-`npm run lint`、`npx tsc -p . --noEmit`、`npx vitest run`、`npm run build`、Playwright 全套。PR 描述里贴出本地结果（单测/e2e 通过条数）。CI 另外跑 Python 测试、对比度、`.dat` 数据校验和开局数据校验。
+`npm run lint`、`npx tsc -p . --noEmit`、`npx vitest run`、`npm run build`、Playwright 全套。PR 描述里贴出本地结果（单测/e2e 通过条数）。CI 另外跑 Python 测试、对比度、`.dat` 数据校验和开局数据校验。只改文档或纯样式且不动逻辑和测试时可按 CONTRIBUTING 走轻量审阅；CI 按现有工作流实际范围执行，PR 的路径例外见 [TESTING](docs/TESTING.md)，push 到 `main` / `release/**` 必须跑完整 CI。
 
 ## 测试规则
 
-- **不要改 `tests/**/v0*-acceptance*` 里的期望值。** 这些是 Kent（测试）写的验收用例。验收用例和产品决定冲突时，不改测试，在 issue 里写清楚冲突，等人决定。
+- **未经维护者明确授权，不要改 `tests/**/v0*-acceptance*` 及其他受保护验收用例的期望值。** 验收用例和产品决定冲突时，在 issue 里写清楚冲突，交维护者决定；获授权的修改须独立复核，不能通过放宽期望凑绿，也不要求指定历史作者重录。
 - 改了领域逻辑就补 `tests/unit/` 单测；修 bug 先写能复现的失败用例。
 - 界面改动在 **360 / 375 / 390 / 1280** 四个宽度检查：没有横向滚动、没有页面报错（console error / pageerror）。
 
@@ -111,7 +111,7 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 - **数字不换行**：数值、「数字+单位」不能被折到两行（例如「1个村民」在 360 宽折行就是 bug）。
 - 图标只用 Lucide（在 `src/shared/ui/Icon.tsx` 登记后 `<Icon name="..." />`），禁止 emoji 和 Unicode 符号当图标（ESLint 会拦）；游戏美术图标除外。
 - 文字不小于 12px；可点区域不小于 44×44；颜色只用设计令牌，对比度满足 WCAG AA。
-- 完整设计规范：[docs/design/DESIGN-SYSTEM.md](docs/design/DESIGN-SYSTEM.md)，已签字的设计稿和规格索引：[docs/design/README.md](docs/design/README.md)（`ERRATA.md` 优先于 SPEC）。
+- 完整设计规范：[docs/design/DESIGN-SYSTEM.md](docs/design/DESIGN-SYSTEM.md)，既有设计稿和规格索引：[docs/design/README.md](docs/design/README.md)（`ERRATA.md` 优先于 SPEC）。
 
 ## 怎么读 issue
 
@@ -120,7 +120,7 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 - 标签分三组：
   - 类型：`bug`、`feature`、`data`（游戏数据、开局数据的补充或校正）、`docs`、`chore`
   - 优先级：`P0`（尽快）、`P1`（下一两个版本内）、`P2`（排期时再定）
-  - 状态：`候选`（版本候选，未进入范围）、`待确认`（等村长或团队决定）、`阻塞`（被其他 issue 或决定卡住）
+  - 状态：`候选`（版本候选，未进入范围）、`待确认`（等维护者明确决定）、`阻塞`（被其他 issue 或决定卡住）
 - **带 `待确认` 或 `阻塞` 的 issue 不要动手。**
 - issue 类型看标签，不看标题前缀。验收标准写在 issue 里，按它做。
 - 动手前先查这个 issue 有没有已打开的 PR，有就跳过。
@@ -130,7 +130,7 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 1. 一个 issue 一个 PR，一个执行者。版本内的项以当前 `release/vX.Y.Z` 分支为目标（先 rebase 到它的最新提交）；只有线上数据错误的热修直接对 `main`（补丁版本，修订号 +1）。
 2. PR 标题必须是 Conventional Commits，CI 会检查：`类型(#issue): 描述`，类型为 `feat fix docs chore test ci refactor style perf build revert hotfix`。例：`fix(#13): 科技涉及单位只显示一处`。
 3. PR 描述写 `Fixes #N`（合到非默认分支不会自动关 issue，发版时人工核对），附本地测试结果；界面 PR 附 360/375/390/1280 四张截图。按需在 CHANGELOG 当前版本小节写一句玩家能看懂的话。
-4. 默认审阅门禁：CI 绿；Kent「ACCEPT @ <SHA>」；涉及界面的加 Steve「设计通过 @ <SHA>」，只认本人在 PR 上写明验证 SHA 的留言。只改文档或纯样式的 PR CI 绿即可。明确批准的审阅例外见 CONTRIBUTING。代理不得冒签，也不删分支或改仓库权限；已获授权时按顺序集成并发布。
+4. 默认审阅门禁：实现者之外的独立代理复核＋完整 CI；PR 留下实际验证的提交 SHA、复核范围、结果和未解决问题，界面改动同时核对规格与四宽。执行者可在已授权范围补齐规格和失败用例并交独立复核；大功能或新页面须先具备这些材料再实现。只改文档或纯样式且不动逻辑和测试的 PR 可走 CI 绿的轻量规则；CI 范围按现有工作流执行，`main` / `release/**` push 必须完整。不得伪造他人结论、删除分支、修改仓库权限或放宽测试；已获授权时按顺序集成并发布。
 5. 版本号一律三段 `vX.Y.Z`。完成当前版本适用验收后，核对最终 release 头部 test CI，合入 main 并等待 Pages 部署成功，再由 Release 工作流核对真实线上页脚和功能、打 tag、制作附件并正式发布。按持续发布授权自动继续，无需再问是否上线；不要在 main 的完整 CI 尚未结束时让脚本以默认 600 秒等待部署。
 
 ## 提交身份
