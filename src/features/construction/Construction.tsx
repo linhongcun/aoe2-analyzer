@@ -18,6 +18,7 @@ import {
   type ConstructionConfig,
   type ConstructionTask,
 } from '../../domain/construction';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './construction.css';
 
 const num = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
@@ -28,8 +29,17 @@ export default function Construction() {
     nav = useNavigate();
   const decoded = useMemo(() => decodeConstruction(loc.search, core && trees ? { core, trees } : undefined), [loc.search, core, trees]);
   const [draft, setDraft] = useState<{ search: string; config: ConstructionConfig } | null>(null);
-  const [status, setStatus] = useState(''),
-    [manual, setManual] = useState('');
+  const config = draft?.search === loc.search ? draft.config : decoded.config;
+  const {
+    copy,
+    status,
+    manualLink: manual,
+    reset: resetShare,
+  } = useShareLink({
+    stateKey: JSON.stringify([loc.search, config]),
+    successMessage: '链接已复制，包含当前全部设置。',
+    failureMessage: '自动复制失败，请手动复制下方链接。',
+  });
   if (!core || !trees)
     return (
       <section className="pane">
@@ -37,7 +47,6 @@ export default function Construction() {
       </section>
     );
   const ctx = { core, trees },
-    config = draft?.search === loc.search ? draft.config : decoded.config,
     result = calculateConstruction(ctx, config);
   const errors = [...decoded.errors, ...result.errors],
     locked = decoded.errors.length > 0;
@@ -49,27 +58,20 @@ export default function Construction() {
       setDraft(null);
       nav({ pathname: '/construction', search }, { replace: true });
     }
-    setStatus('');
-    setManual('');
+    resetShare();
   };
   const reset = () => {
     setDraft(null);
     nav({ pathname: '/construction', search: '?' + encodeConstruction({ ...DEFAULT_CONSTRUCTION, techs: [] }) }, { replace: true });
-    setStatus('');
-    setManual('');
+    resetShare();
   };
-  const share = async () => {
-    const url = new URL(window.location.href);
-    url.hash = '/construction?' + encodeConstruction(config);
-    try {
-      await navigator.clipboard.writeText(url.href);
-      setStatus('链接已复制，包含当前全部设置。');
-      setManual('');
-    } catch {
-      setStatus('自动复制失败，请手动复制下方链接。');
-      setManual(url.href);
-    }
-  };
+  const share = () =>
+    copy(() => {
+      const url = new URL(window.location.href);
+      url.hash = '/construction?' + encodeConstruction(config);
+      return url.href;
+    });
+
   const available = constructionTechs(ctx, config),
     buildings = constructionBuildings(ctx, config);
   const changeScope = (civ: string, age: number) => {

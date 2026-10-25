@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civs } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
@@ -19,6 +19,7 @@ import {
   type EcoPayoffResult,
 } from '../../domain/ecoPayoff';
 import type { ProductionContext } from '../../domain/production';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './eco-payoff.css';
 
 const number = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
@@ -36,29 +37,37 @@ export default function EcoPayoff() {
     location = useLocation(),
     navigate = useNavigate();
   const decoded = useMemo(() => decodeEcoPayoff(location.search), [location.search]);
-  const [shared, setShared] = useState<{ key: string; text: string; link: string } | null>(null);
+  const {
+    copy: copyLink,
+    status,
+    manualLink,
+    reset: resetShare,
+  } = useShareLink({
+    stateKey: JSON.stringify([location.search, decoded.config]),
+    successMessage: '方案链接已复制。',
+    failureMessage: '自动复制失败，请手动复制下方方案链接。',
+  });
   if (!core || !trees)
     return (
       <section className="pane">
         <Loading />
       </section>
     );
-  const write = (config: EcoPayoffConfig) => navigate({ pathname: '/eco-payoff', search: '?' + encodeEcoPayoff(config) }, { replace: true });
+  const write = (config: EcoPayoffConfig) => {
+    resetShare();
+    navigate({ pathname: '/eco-payoff', search: '?' + encodeEcoPayoff(config) }, { replace: true });
+  };
   const update = (config: EcoPayoffConfig) => {
     if (decoded.errors.length) return;
     write(config);
   };
   const reset = () => write({ ...DEFAULT_PAYOFF, workers: { ...DEFAULT_PAYOFF.workers } });
   const copy = async () => {
-    const url = new URL(window.location.href);
-    url.hash = '/eco-payoff?' + encodeEcoPayoff(decoded.config);
-    const key = location.search;
-    try {
-      await navigator.clipboard.writeText(url.href);
-      setShared({ key, text: '方案链接已复制。', link: '' });
-    } catch {
-      setShared({ key, text: '自动复制失败，请手动复制下方方案链接。', link: url.href });
-    }
+    await copyLink(() => {
+      const url = new URL(window.location.href);
+      url.hash = '/eco-payoff?' + encodeEcoPayoff(decoded.config);
+      return url.href;
+    });
   };
   return (
     <EcoPayoffBody
@@ -68,7 +77,7 @@ export default function EcoPayoff() {
       update={update}
       reset={reset}
       copy={copy}
-      shared={shared?.key === location.search ? shared : null}
+      shared={status ? { text: status, link: manualLink } : null}
     />
   );
 }

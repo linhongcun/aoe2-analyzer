@@ -19,6 +19,7 @@ import {
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './relicIncome.css';
 
 const resourceNames = { Gold: '黄金', Food: '食物', Wood: '木材', Stone: '石料' };
@@ -43,7 +44,6 @@ export default function RelicIncome() {
   const [draft, setDraft] = useState<{ search: string; config: RelicIncomeConfig } | null>(null);
   const [loaded, setLoaded] = useState<{ data: RelicIncomeData | null; error: boolean }>({ data: null, error: false });
   const [retry, setRetry] = useState(0);
-  const [shared, setShared] = useState<{ key: string; message: string; manual: string } | null>(null);
   useEffect(() => {
     let active = true;
     import('../../data/relic_income.json')
@@ -66,29 +66,31 @@ export default function RelicIncome() {
   const errors = [...decoded.structuralErrors, ...(r?.errors ?? [])];
   // issue 273：收入为 0 的资源不出卡片、不进计算步骤；黄金始终显示（与目标金耗对比），未核实（null）也显示
   const shownResources = RELIC_RESOURCES.filter((res) => res === 'Gold' || !r || r.resources[res].perMinute !== 0);
-  const key = encodeRelicIncome(c);
-  const feedback = shared?.key === key ? shared : null;
+  const {
+    copy: copyLink,
+    status,
+    manualLink,
+    reset: resetShare,
+  } = useShareLink({
+    stateKey: JSON.stringify([location.search, c]),
+    successMessage: '方案链接已复制，包含数量、时长、队友与研究状态。',
+    failureMessage: '自动复制失败，请手动复制完整方案链接。',
+    invalidMessage: '无法生成完整方案链接，请核对输入。',
+  });
   const write = (next: RelicIncomeConfig) => {
     setDraft(null);
-    setShared(null);
+    resetShare();
     navigate({ pathname: '/relic-income', search: '?' + encodeRelicIncome(next) }, { replace: true });
   };
   const update = (next: RelicIncomeConfig) => {
     if (locked) return;
-    setShared(null);
+    resetShare();
     if (validateRelicIncomeConfig(next).length) setDraft({ search: location.search, config: next });
     else write(next);
   };
   const copy = async () => {
     if (errors.length || !data) return;
-    let link = '';
-    try {
-      link = relicIncomeShareUrl(c, document.baseURI);
-      await navigator.clipboard.writeText(link);
-      setShared({ key, message: '方案链接已复制，包含数量、时长、队友与研究状态。', manual: '' });
-    } catch {
-      setShared({ key, message: link ? '自动复制失败，请手动复制完整方案链接。' : '无法生成完整方案链接，请核对输入。', manual: link });
-    }
+    await copyLink(() => relicIncomeShareUrl(c, document.baseURI));
   };
   const selectCiv = (value: string, change: (civ: string) => void, label: string, optional = false) => (
     <select aria-label={label} value={value} onChange={(e) => change(e.target.value)}>
@@ -132,17 +134,17 @@ export default function RelicIncome() {
         r && (
           <>
             <CalcDock
-              note={feedback?.message}
+              note={status}
               resultId="relic-result-title"
               actions={[
                 { label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void copy() },
                 { label: '重置圣物方案', onClick: () => write(newRelicIncomeConfig()) },
               ]}
             />
-            {feedback?.manual && (
+            {manualLink && (
               <label className="relic-manual">
                 完整方案链接
-                <textarea aria-label="完整方案链接" readOnly value={feedback.manual} onFocus={(e) => e.currentTarget.select()} />
+                <textarea aria-label="完整方案链接" readOnly value={manualLink} onFocus={(e) => e.currentTarget.select()} />
               </label>
             )}
             {errors.length > 0 && (

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn } from '../../data';
 import {
@@ -21,6 +21,7 @@ import {
   type CampaignSource,
 } from '../../domain/campaigns';
 import { Icon } from '../../shared/ui/Icon';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './campaigns.css';
 
 const DATA_ERRORS = campaignCatalogErrors();
@@ -130,29 +131,31 @@ export default function Campaigns() {
   const { filters, locked, errors } = decoded;
   const valid = !locked && errors.length === 0;
   const entries = valid ? filterCampaigns(filters) : [];
-  const [copy, setCopy] = useState<{ key: string; message: string; link?: string } | null>(null);
-  const copyState = copy?.key === location.search ? copy : null;
+  const {
+    copy,
+    status,
+    manualLink,
+    reset: resetShare,
+    statusProps,
+  } = useShareLink({
+    stateKey: JSON.stringify([location.search, filters]),
+    successMessage: '目录链接已复制，包含名称、地区、类型、首发内容包和排序。',
+    failureMessage: '自动复制失败，请手动复制下方完整链接。',
+  });
   const update = (patch: Partial<CampaignFilters>, replace = false) => {
     if (locked) return;
     // Do not discard other invalid semantic fields while one field is being corrected.
     const search = new URLSearchParams({ v: '1', ...filters, ...patch }).toString();
     navigate({ pathname: '/campaigns', search: '?' + search }, { replace });
-    setCopy(null);
+    resetShare();
   };
   const reset = () => {
     navigate({ pathname: '/campaigns', search: '?' + encodeCampaignFilters(defaultCampaignFilters()) });
-    setCopy(null);
+    resetShare();
   };
   const share = async () => {
     if (!valid) return;
-    const key = location.search;
-    const url = campaignShareUrl(filters, document.baseURI);
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopy({ key, message: '目录链接已复制，包含名称、地区、类型、首发内容包和排序。' });
-    } catch {
-      setCopy({ key, message: '自动复制失败，请手动复制下方完整链接。', link: url });
-    }
+    await copy(() => campaignShareUrl(filters, document.baseURI));
   };
   if (DATA_ERRORS.length)
     return (
@@ -241,11 +244,11 @@ export default function Campaigns() {
           </button>
         </div>
       </form>
-      {copyState && <p role="status">{copyState.message}</p>}
-      {copyState?.link && (
+      {status && <p {...statusProps}>{status}</p>}
+      {manualLink && (
         <label className="campaign-manual">
           手动复制目录链接
-          <textarea readOnly rows={3} value={copyState.link} onFocus={(event) => event.currentTarget.select()} />
+          <textarea readOnly rows={3} value={manualLink} onFocus={(event) => event.currentTarget.select()} />
         </label>
       )}
       <aside className="campaign-coverage" aria-label="收录范围">
