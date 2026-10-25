@@ -98,6 +98,54 @@ test('#435 已删除科技可直接打开历史档案，不回退到当前科技
   expect(errors).toEqual([]);
 });
 
+test('#435 历史科技复制静态链接后新上下文打开和刷新仍保留档案与筛选', async ({ page, browser }) => {
+  const errors = recordErrors(page);
+  for (const [id, name] of [
+    ['716', '补给'],
+    ['legacy-berserkergang', 'Berserkergang'],
+  ]) {
+    await openHistory(page, `/tech/${id}?tab=history&histFrom=2023-04-11&histTo=2023-04-11`);
+    // Like compare403, capture this page's Clipboard API output without sharing the OS clipboard between parallel tests.
+    await page.evaluate(() => {
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: {
+          writeText: async (value: string) => {
+            (window as Window & { copiedHistory435?: string }).copiedHistory435 = value;
+          },
+        },
+      });
+    });
+    await page.locator('.dhead').getByRole('button', { name: '复制链接', exact: true }).click();
+    await expect(page.locator('.dhead [role="status"]')).toHaveText('链接已复制');
+    const copied = await page.evaluate(() => (window as Window & { copiedHistory435?: string }).copiedHistory435);
+    expect(copied).toBeTruthy();
+    const url = new URL(copied!);
+    expect(url.pathname).toMatch(new RegExp(`/tech/${id}/$`));
+    expect(url.hash).toBe('');
+    expect(url.searchParams.get('tab')).toBe('history');
+    expect(url.searchParams.get('histFrom')).toBe('2023-04-11');
+    expect(url.searchParams.get('histTo')).toBe('2023-04-11');
+    const context = await browser.newContext();
+    try {
+      const fresh = await context.newPage();
+      const freshErrors = recordErrors(fresh);
+      await fresh.goto(copied!);
+      await expect(fresh.getByRole('heading', { name: new RegExp(name!) }).first()).toBeVisible();
+      await expect(version(fresh, '81058').locator('[data-history-entry]').first()).toBeVisible();
+      await expect(fresh.getByLabel('开始日期', { exact: true })).toHaveValue('2023-04-11');
+      await fresh.reload();
+      await expect(version(fresh, '81058').locator('[data-history-entry]').first()).toBeVisible();
+      await expect(fresh.getByLabel('结束日期', { exact: true })).toHaveValue('2023-04-11');
+      await expect(fresh.getByRole('tab', { name: '更新历史', exact: true })).toHaveAttribute('aria-selected', 'true');
+      expect(freshErrors).toEqual([]);
+    } finally {
+      await context.close();
+    }
+  }
+  expect(errors).toEqual([]);
+});
+
 test('#435 尚未收录的当前科技与筛选无结果使用不同空态', async ({ page }) => {
   await page.goto('./#/tech/22?tab=history');
   await expect(history(page)).toContainText('尚未收录该对象的更新历史');
