@@ -47,6 +47,10 @@ describe('#427 按实际变更选择验证范围', () => {
     expect(classifyChanges([...maintenance, change('src/features/civs/components/CivList.tsx')])).toBe('civ-ui');
   });
 
+  it('仓库根目录的代理和贡献政策文档属于维护范围', () => {
+    expect(classifyChanges([change('AGENTS.md'), change('CONTRIBUTING.md'), change('scripts/ci-scope.mjs')])).toBe('maintenance');
+  });
+
   it.each([
     'src/domain/buildSim.ts',
     'src/data/civs.json',

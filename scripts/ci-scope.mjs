@@ -76,6 +76,8 @@ export function classifyChanges(changes) {
       if (!versionOnly(path, before, after)) return 'full';
     } else if (
       path === 'CHANGELOG.md' ||
+      path === 'AGENTS.md' ||
+      path === 'CONTRIBUTING.md' ||
       (path.startsWith('docs/') && !path.startsWith('docs/PATCH-NOTES/')) ||
       path.startsWith('.github/') ||
       maintenanceFiles.has(path) ||
