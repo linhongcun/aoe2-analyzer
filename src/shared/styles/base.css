@@ -48,6 +48,14 @@ body {
   min-height: 44px;
   box-sizing: border-box;
 }
+.share-link-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 header {
   text-align: center;
   padding: 18px;

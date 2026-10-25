@@ -134,7 +134,7 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
             <button type="button" className="be-sec" onClick={copy}>
               {copied ? '已复制' : '复制链接'}
             </button>
-            <span className="sr-only" {...statusProps}>
+            <span className="share-link-status" {...statusProps}>
               {copied ? status : ''}
             </span>
           </div>
