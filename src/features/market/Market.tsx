@@ -22,6 +22,7 @@ import {
 } from '../../domain/market';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { Icon } from '../../shared/ui/Icon';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './market.css';
 
 const number = (value: number) => value.toLocaleString('zh-CN');
@@ -47,28 +48,30 @@ export default function Market() {
   const location = useLocation(),
     navigate = useNavigate();
   const decoded = useMemo(() => decodeMarket(location.search), [location.search]);
-  const [active, setActive] = useState<0 | 1>(0),
-    [status, setStatus] = useState(''),
-    [manualLink, setManualLink] = useState('');
+  const [active, setActive] = useState<0 | 1>(0);
+  const {
+    copy,
+    status,
+    manualLink,
+    reset: resetShare,
+  } = useShareLink({
+    stateKey: location.search,
+    successMessage: '方案链接已复制，包含两份方案、库存与交易顺序。',
+    failureMessage: '自动复制失败，请手动复制下方链接。',
+  });
   const config = decoded.config;
   const results = config.plans.map(calculateMarket);
   const update = (next: MarketConfig) => {
     navigate({ pathname: '/market', search: '?' + encodeMarket(next) }, { replace: true });
-    setStatus('');
-    setManualLink('');
+    resetShare();
   };
   const updatePlan = (next: MarketPlan) => update({ plans: config.plans.map((plan, index) => (index === active ? next : plan)) as MarketConfig['plans'] });
   const share = async () => {
-    const url = new URL(document.baseURI);
-    url.hash = '/market?' + encodeMarket(config);
-    try {
-      await navigator.clipboard.writeText(url.href);
-      setStatus('方案链接已复制，包含两份方案、库存与交易顺序。');
-      setManualLink('');
-    } catch {
-      setStatus('自动复制失败，请手动复制下方链接。');
-      setManualLink(url.href);
-    }
+    await copy(() => {
+      const url = new URL(document.baseURI);
+      url.hash = '/market?' + encodeMarket(config);
+      return url.href;
+    });
   };
   return (
     <section className="pane market-page" data-testid="market-page">
