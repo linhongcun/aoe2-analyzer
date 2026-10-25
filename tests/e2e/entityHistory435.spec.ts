@@ -24,8 +24,15 @@ async function noOverflow(page: Page) {
 
 test('#435 弩手跨版本升级费用可追溯，历史筛选可分享并恢复', async ({ page }) => {
   const errors = recordErrors(page);
+  const sourceResponse = page.waitForResponse((response) => /\/66692[^/]*\.json$/.test(new URL(response.url()).pathname));
   await openHistory(page, '/unit/24?tab=history&civ=Britons');
+  const sourceArchive = await (await sourceResponse).json();
+  expect(sourceArchive).not.toHaveProperty('date');
+  expect(sourceArchive.releaseDate).toBe('2022-08-29');
+  expect(sourceArchive.publishedAt).toBe('2022-08-30');
   await expect(page.getByRole('tab', { name: '更新历史', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(version(page, '66692')).toContainText(/官方发行日（公告当地日期）：\s*2022-08-29/);
+  await expect(version(page, '66692')).toContainText(/公告公开（北京时间）：\s*2022-08-30/);
   await expect(version(page, '66692')).toContainText(/125\s*食物/);
   await expect(version(page, '66692')).toContainText(/175\s*食物/);
   await expect(version(page, '66692')).toContainText('升级');
