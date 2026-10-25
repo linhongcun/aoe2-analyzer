@@ -10,7 +10,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import eco from '../../src/data/eco.json';
 import units from '../../src/data/units.json';
-import constructionJson from '../../src/data/construction.json';
+import { CONSTRUCTION_DATA as constructionJson } from '../../src/data/construction';
 import { civs, loadCore, loadTrees, type Core } from '../../src/data';
 import { buildOrders } from '../../src/data/buildOrders';
 import { civBonuses, type CivBonusEnt } from '../../src/domain/civBonus';
