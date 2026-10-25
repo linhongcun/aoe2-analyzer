@@ -38,6 +38,7 @@ function normalizePlan(plan) {
   if (!plan || !['maintenance', 'civ-ui', 'targeted', 'full'].includes(plan.scope) || typeof plan.full !== 'boolean' || typeof plan.data !== 'boolean')
     return null;
   if ((plan.scope === 'full') !== plan.full) return null;
+  if (plan.data && !plan.full) return null;
   const list = (value) => Array.isArray(value) && value.every((entry) => typeof entry === 'string' && entry.length > 0 && entry.length < 300);
   if (!['features', 'unit', 'e2e'].every((key) => list(plan[key]))) return null;
   return Object.fromEntries([
@@ -305,13 +306,21 @@ async function main() {
       head_repository: payload.pull_request?.head?.repo?.full_name ?? payload.repository?.full_name,
       ...(payload.pull_request ? { base_sha: payload.pull_request.base.sha, head_sha: payload.pull_request.head.sha } : {}),
     };
+    const pullRequest = event.name === 'pull_request';
+    const sourceValid = pullRequest
+      ? payload.pull_request?.base?.repo?.full_name === current.repository &&
+        repositoryPattern.test(event.head_repository ?? '') &&
+        SHA.test(event.base_sha ?? '') &&
+        SHA.test(event.head_sha ?? '')
+      : !payload.pull_request && event.head_repository === current.repository;
     if (
       !positive(current.run_id) ||
       !positive(current.run_attempt) ||
       !repositoryPattern.test(current.repository) ||
+      payload.repository?.full_name !== current.repository ||
       !normalizePlan(current.plan) ||
       event.sha !== current.commit ||
-      event.head_repository !== current.repository
+      !sourceValid
     )
       throw new Error('Invalid CI context');
   } catch {
@@ -321,6 +330,11 @@ async function main() {
     return;
   }
   if (mode === '--find') {
+    if (event.head_repository !== current.repository) {
+      output({ reused: false, reuse_run_id: '' });
+      console.log('Fork pull requests run their own validation; their evidence is not reused');
+      return;
+    }
     let reuse = null;
     try {
       const runs = ghApi(`repos/${current.repository}/actions/workflows/ci.yml/runs?status=success&per_page=30`).workflow_runs;

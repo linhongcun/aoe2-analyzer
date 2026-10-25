@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -277,6 +277,7 @@ describe('#431 validation coverage and lineage', () => {
     expect(planCovers({ ...targeted, unit: [] }, targeted)).toBe(false);
     expect(planCovers({ ...targeted, e2e: [] }, targeted)).toBe(false);
     expect(planCovers({ ...targeted, features: [] }, targeted)).toBe(false);
+    expect(planCovers({ ...targeted, data: true }, targeted)).toBe(false);
   });
 
   it('supports explicit files covered by an already run release test glob without assuming arbitrary glob inclusion', () => {
@@ -424,4 +425,84 @@ it('#431 scheduled and explicitly full validation cannot reuse prior results', (
     expect(readFileSync(githubOutput, 'utf8')).toContain('reused=false\n');
     expect(existsSync(join(directory, 'ci-reuse.json'))).toBe(false);
   }
+});
+
+function cliFixture(eventName: string, payload: unknown) {
+  const directory = mkdtempSync(join(tmpdir(), 'validation-cli-'));
+  directories.push(directory);
+  const eventPath = join(directory, 'event.json'),
+    outputPath = join(directory, 'outputs'),
+    ghCalled = join(directory, 'gh-called');
+  const bin = join(directory, 'bin');
+  mkdirSync(bin);
+  writeFileSync(join(bin, 'gh'), '#!/usr/bin/env node\nrequire("node:fs").writeFileSync(process.env.CI_GH_CALLED, "called"); process.exit(17);\n', {
+    mode: 0o755,
+  });
+  writeFileSync(eventPath, JSON.stringify(payload));
+  writeFileSync(outputPath, '');
+  writeFileSync(join(directory, 'ci-plan.json'), JSON.stringify(targeted));
+  const commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+  const env = {
+    ...process.env,
+    CI_FULL: 'false',
+    GITHUB_EVENT_NAME: eventName,
+    GITHUB_EVENT_PATH: eventPath,
+    GITHUB_SHA: commit,
+    GITHUB_REPOSITORY: repository,
+    GITHUB_RUN_ID: '300',
+    GITHUB_RUN_ATTEMPT: '1',
+    GITHUB_OUTPUT: outputPath,
+    RUNNER_TEMP: directory,
+    PATH: bin + ':' + process.env.PATH,
+    CI_GH_CALLED: ghCalled,
+  };
+  const run = (mode: string) => execFileSync(process.execPath, ['scripts/ci-evidence.mjs', mode], { encoding: 'utf8', env, stdio: ['ignore', 'pipe', 'pipe'] });
+  return { directory, outputPath, ghCalled, run };
+}
+
+it('#431 fork PR CLI runs its own checks and records them without making reusable evidence for main', () => {
+  const f = cliFixture('pull_request', {
+    repository: { full_name: repository },
+    pull_request: {
+      base: { sha: hash('f'), repo: { full_name: repository } },
+      head: { sha: hash('a'), repo: { full_name: 'external/contribution' } },
+    },
+  });
+  expect(f.run('--find')).toContain('Fork pull requests run their own validation');
+  expect(readFileSync(f.outputPath, 'utf8')).toContain('reused=false\n');
+  expect(existsSync(f.ghCalled)).toBe(false);
+  expect(f.run('--record')).toContain('Recorded validation executed by this run');
+  const recorded = JSON.parse(readFileSync(join(f.directory, 'ci-evidence.json'), 'utf8'));
+  expect(recorded).toMatchObject({
+    executed: true,
+    run_id: 300,
+    source_run_id: 300,
+    event: { name: 'pull_request', head_repository: 'external/contribution' },
+  });
+  // Even if GitHub's run envelope names the base repo, the recorded fork source is not reusable.
+  const candidate = fixture(300, recorded.event.head_sha);
+  candidate.run.event = 'pull_request';
+  candidate.current.tree = recorded.tested_tree;
+  candidate.current.policy = recorded.policy_digest;
+  candidate.manifest = recorded;
+  candidate.commit = { sha: recorded.tested_commit, tree: { sha: recorded.tested_tree }, parents: [] };
+  expect(validateEvidence(candidate)).toEqual({ ok: false, reason: 'event-mismatch' });
+});
+
+it.each(['push', 'schedule'])('#431 %s CLI does not accept a payload from another repository', (eventName) => {
+  const f = cliFixture(eventName, { repository: { full_name: 'external/contribution' } });
+  expect(() => f.run('--record')).toThrow();
+  expect(existsSync(join(f.directory, 'ci-evidence.json'))).toBe(false);
+});
+
+it('#431 PR CLI cannot record a wrong base repository as a valid fork contribution', () => {
+  const f = cliFixture('pull_request', {
+    repository: { full_name: repository },
+    pull_request: {
+      base: { sha: hash('f'), repo: { full_name: 'external/target' } },
+      head: { sha: hash('a'), repo: { full_name: 'external/contribution' } },
+    },
+  });
+  expect(() => f.run('--record')).toThrow();
+  expect(existsSync(join(f.directory, 'ci-evidence.json'))).toBe(false);
 });
