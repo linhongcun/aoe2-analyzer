@@ -31,3 +31,19 @@ export function filterPatch(entries: readonly PatchEntry[], query: URLSearchPara
 export function patchTarget(e: PatchEntry) {
   return `/${e.targetType}/${encodeURIComponent(String(e.targetId))}`;
 }
+
+/** 科技树得失由明确的开放状态判定，不能把普通数值加强/削弱当作得失。 */
+export function groupTreeChanges(entries: readonly PatchEntry[]) {
+  const groups = new Map<string, PatchEntry[]>();
+  for (const entry of entries) {
+    if (entry.targetType !== 'tech' && entry.targetType !== 'unit') continue;
+    const changed = (entry.before === '未开放' && entry.after === '已开放') || (entry.before === '已开放' && entry.after === '未开放');
+    if (!changed) continue;
+    for (const civ of new Set(entry.civIds)) {
+      const group = groups.get(civ) ?? [];
+      group.push(entry);
+      groups.set(civ, group);
+    }
+  }
+  return groups;
+}

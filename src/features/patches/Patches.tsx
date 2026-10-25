@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import raw from '../../data/patches/185872.json';
 import { civs } from '../../data';
-import { filterPatch, patchTarget, PATCH_KINDS, PATCH_TYPES, type PatchEntry, type PatchKind } from '../../domain/patches';
+import { filterPatch, groupTreeChanges, patchTarget, PATCH_KINDS, PATCH_TYPES, type PatchEntry, type PatchKind } from '../../domain/patches';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import './patches.css';
 
@@ -56,6 +56,7 @@ export default function Patches() {
     filterButton.current?.focus();
   };
   const shown = filterPatch(entries, params);
+  const treeChanges = groupTreeChanges(shown);
   const filters = (
     <>
       <label>
@@ -218,6 +219,35 @@ export default function Patches() {
           <p role="status">
             显示 {shown.length} / {entries.length} 条
           </p>
+          <details className="patch-tree-summary patch-civs">
+            <summary>按文明汇总科技树得失</summary>
+            <p className="note">按当前筛选汇总科技树开放与移除项；改动前来自官方记录，改动后已核对本站固定数据，不是两个 .dat 的自动差分。</p>
+            {!treeChanges.size && <p role="status">当前筛选下没有科技树开放或移除项</p>}
+            {civs
+              .filter((c) => treeChanges.has(c.en))
+              .map((c) => (
+                <section key={c.en} aria-label={`${c.zh}科技树得失`}>
+                  <h4>
+                    <Link to={`/tree/${c.en}`}>{c.zh}</Link>
+                  </h4>
+                  <ul>
+                    {treeChanges.get(c.en)!.map((entry) => (
+                      <li key={entry.id}>
+                        <Link to={patchTarget(entry)}>{entry.targetNameZh}</Link>
+                        <div className="patch-values">
+                          <span>
+                            改动前 <b>{entry.before}</b>
+                          </span>
+                          <span>
+                            改动后 <b>{entry.after}</b>
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+          </details>
           {!shown.length && (
             <div>
               <h3>没有符合筛选条件的改动</h3>

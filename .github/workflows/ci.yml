@@ -185,6 +185,7 @@ jobs:
             test-results/matchReview257-*/*.png
             test-results/scouting258-*/*.png
             test-results/learningIntegration259-*/*.png
+            test-results/patchTree417-*/*.png
             test-results/mapPreviews-*/*.png
             test-results/mapCatalog422-*/*.png
             test-results/relicIncome238-*/*.png
