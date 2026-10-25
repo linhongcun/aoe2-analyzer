@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { loadCore, loadTrees } from '../../data';
 import type { ProductionContext } from '../../domain/production';
@@ -6,6 +6,7 @@ import { decodeTeamPlan, defaultTeamPlan, encodeTeamPlan, teamPlanShareUrl, type
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { PlanEditor } from './PlanEditor';
 import { PrintPlan } from './PrintPlan';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './teamPlan.css';
 
 export { unitOptionLabel } from './teamPlanLabels';
@@ -16,9 +17,22 @@ export default function TeamPlanPage() {
   const decoded = useMemo(() => decodeTeamPlan(location.search), [location.search]);
   const [ctx, setContext] = useState<ProductionContext | null>(null),
     [loadError, setLoadError] = useState('');
-  const [notice, setNotice] = useState(''),
-    [manualLink, setManualLink] = useState(''),
-    [editError, setEditError] = useState('');
+  const [editError, setEditError] = useState('');
+  const noticeKey = useRef(location.search);
+  useEffect(() => {
+    noticeKey.current = location.search;
+  }, [location.search]);
+  const {
+    copy,
+    status: notice,
+    manualLink,
+    reset: resetShare,
+    announce,
+  } = useShareLink({
+    stateKey: location.search,
+    successMessage: '链接已复制，包含全部三个阶段与备注。',
+    failureMessage: '自动复制失败，请手动复制下方完整链接。',
+  });
   useEffect(() => {
     let active = true;
     void Promise.all([loadCore(), loadTrees()])
@@ -36,8 +50,8 @@ export default function TeamPlanPage() {
     try {
       const search = '?' + encodeTeamPlan(plan);
       navigate({ pathname: '/team-plan', search }, { replace: !push });
-      setNotice('');
-      setManualLink('');
+      noticeKey.current = search;
+      resetShare();
       setEditError('');
       return true;
     } catch (error) {
@@ -54,14 +68,7 @@ export default function TeamPlanPage() {
       setEditError(error instanceof Error ? error.message : '无法生成完整链接。');
       return;
     }
-    try {
-      await navigator.clipboard.writeText(url);
-      setNotice('链接已复制，包含全部三个阶段与备注。');
-      setManualLink('');
-    } catch {
-      setNotice('自动复制失败，请手动复制下方完整链接。');
-      setManualLink(url);
-    }
+    await copy(url);
   };
   const plan = decoded.plan;
   return (
@@ -117,7 +124,7 @@ export default function TeamPlanPage() {
             )}
           </div>
         ) : (
-          <PlanEditor ctx={ctx} plan={plan} update={update} notice={setNotice} />
+          <PlanEditor ctx={ctx} plan={plan} update={update} notice={(message) => announce(message, noticeKey.current)} />
         )}
       </div>
       {plan && ctx && <PrintPlan ctx={ctx} plan={plan} />}

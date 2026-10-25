@@ -20,6 +20,7 @@ import { AGE_ZH } from '../../domain/ratings';
 import { sharePageUrl } from '../../domain/sharePage';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { Loading } from '../../shared/ui/widgets';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './mixedArmy.css';
 
 /** issue 271：每页/每卡第一次出现的站内单位名链到详情（Steve：后面重复不必再链；精锐形态也算「胡斯派战车」） */
@@ -234,9 +235,18 @@ export default function MixedArmy() {
     navigate = useNavigate();
   const decoded = useMemo(() => decodeMixedArmy(location.search), [location.search]);
   const [ctx, setContext] = useState<ProductionContext | null>(() => (coreCache && treesCache ? { core: coreCache, trees: treesCache } : null));
-  const [loadError, setLoadError] = useState(false),
-    [shareStatus, setShareStatus] = useState(''),
-    [manualLink, setManualLink] = useState('');
+  const [loadError, setLoadError] = useState(false);
+  const {
+    copy,
+    status: shareStatus,
+    manualLink,
+    reset: resetShare,
+    announce,
+  } = useShareLink({
+    stateKey: location.search,
+    successMessage: '情境链接已复制，包含全部观察和各项完成确认。',
+    failureMessage: '自动复制失败，请手动复制下方完整链接。',
+  });
   useEffect(() => {
     let active = true;
     void Promise.all([loadCore(), loadTrees()])
@@ -255,25 +265,16 @@ export default function MixedArmy() {
   const change = (patch: Partial<MixedArmyConfig>) => {
     if (decoded.locked) return;
     navigate({ pathname: '/mixed-army', search: '?' + encodeMixedArmy({ ...config, ...patch }) }, { replace: true });
-    setShareStatus('');
-    setManualLink('');
+    resetShare();
   };
   const reset = () => {
-    navigate({ pathname: '/mixed-army', search: '?' + encodeMixedArmy(defaultMixedArmyConfig()) }, { replace: true });
-    setShareStatus('情境已重置，关键观察与完成确认均保留为未知或未确认。');
-    setManualLink('');
+    const search = '?' + encodeMixedArmy(defaultMixedArmyConfig());
+    navigate({ pathname: '/mixed-army', search }, { replace: true });
+    announce('情境已重置，关键观察与完成确认均保留为未知或未确认。', search);
   };
   const share = async () => {
     if (decoded.locked || decoded.errors.length || plan?.status === 'invalid') return;
-    const url = sharePageUrl('/mixed-army', '?' + encodeMixedArmy(config), document.baseURI);
-    try {
-      await navigator.clipboard.writeText(url);
-      setShareStatus('情境链接已复制，包含全部观察和各项完成确认。');
-      setManualLink('');
-    } catch {
-      setShareStatus('自动复制失败，请手动复制下方完整链接。');
-      setManualLink(url);
-    }
+    await copy(() => sharePageUrl('/mixed-army', '?' + encodeMixedArmy(config), document.baseURI));
   };
   const toggle = (field: 'completedForms' | 'completedUnlockTechIds' | 'completedBuildings', id: number) =>
     change({ [field]: config[field].includes(id) ? config[field].filter((old) => old !== id) : [...config[field], id] });

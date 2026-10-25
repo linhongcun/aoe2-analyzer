@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCore, useTrees } from '../../../data/hooks';
 import {
@@ -20,6 +19,7 @@ import { sharePageUrl } from '../../../domain/sharePage';
 import type { Building } from '../../../domain/types';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Loading } from '../../../shared/ui/widgets';
+import { useShareLink } from '../../../shared/ui/useShareLink';
 import './garrison.css';
 import './garrisonGeneral.css';
 import { healingLink } from '../../../domain/garrisonHealing';
@@ -56,8 +56,16 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
   const selected = new Set([...config.techs, ...free]);
   const candidates = getGarrisonCandidates(ctx, b, config);
   const compatible = candidates.filter((u) => u.canEnter || u.canCreate || u.canDeposit);
-  const [copied, setCopied] = useState('');
-  const [manual, setManual] = useState('');
+  const {
+    copy: copyLink,
+    status,
+    manualLink,
+    statusProps,
+  } = useShareLink({
+    stateKey: `${b.id}:${params.toString()}`,
+    successMessage: '驻军方案链接已复制。',
+    failureMessage: '无法自动复制，请手动复制链接',
+  });
   const shareUrl = sharePageUrl(`/building/${b.id}`, writeGeneralGarrison(config).toString(), document.baseURI);
   const update = (next: GeneralGarrisonConfig) => {
     if (!parseErrors.length) setParams(writeGeneralGarrison(next), { replace: true });
@@ -74,14 +82,7 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
     );
   const copy = async () => {
     if (errors.length) return;
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopied(shareUrl);
-      setManual('');
-    } catch {
-      setCopied('');
-      setManual(shareUrl);
-    }
+    await copyLink(shareUrl);
   };
   const entries = (id: number): GarrisonEntry[] => {
     const u = candidates.find((item) => item.id === id);
@@ -421,11 +422,11 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
           </ul>
         </aside>
       )}
-      {copied === shareUrl && <p role="status">驻军方案链接已复制。</p>}
-      {manual === shareUrl && (
+      {status && !manualLink && <p {...statusProps}>{status}</p>}
+      {manualLink && (
         <label className="garrison-manual">
-          无法自动复制，请手动复制链接
-          <input aria-label="驻军方案链接" readOnly value={shareUrl} onFocus={(e) => e.target.select()} />
+          <span {...statusProps}>{status}</span>
+          <input aria-label="驻军方案链接" readOnly value={manualLink} onFocus={(e) => e.target.select()} />
         </label>
       )}
       <div className="garrison-notes">

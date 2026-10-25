@@ -1,8 +1,8 @@
 # 测试指南 / TESTING
 
-Kent 维护。给写测试、跑测试的人（含编码代理）看：目录、命令、四宽、axe、验收用例命名，以及 CI 何时跳过 Playwright。
+给写测试、跑测试的人（含编码代理）看：目录、命令、四宽、axe、验收用例命名，以及 CI 何时跳过 Playwright。
 
-合并时谁留 `ACCEPT @ <SHA>`、谁留「设计通过」，以及本批明确批准的独立复核例外，见 [CONTRIBUTING.md](../CONTRIBUTING.md) 的持续发布授权和「开发和验收」。持续发布授权不降低测试要求；本文件与 CONTRIBUTING 冲突时以 CONTRIBUTING 为准。
+现行流程是执行者准备实现、规格、失败用例和证据，由实现者之外的独立代理复核，在 PR 记录实际提交 SHA、复核范围、结果和未解决问题；不再依赖指定人员签字。见 [CONTRIBUTING.md「持续审阅授权」](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) 与「开发和验收」。持续审阅和发布授权不降低测试要求；本文件与 CONTRIBUTING 冲突时以 CONTRIBUTING 为准。
 
 ## 1. 测试放哪
 
@@ -73,11 +73,11 @@ expect(violations).toEqual([]);
 
 设计令牌对比度另跑 `python3 docs/design/contrast.py`（WCAG AA，CI 会跑）。文字不小于 12px、可点区域不小于 44×44，仍以设计规范和四宽用例为准。
 
-## 5. 验收用例（Kent）
+## 5. 验收用例
 
-Issue 里的验收标准，落成先失败的 Vitest 和/或 Playwright。Kent 写的这批文件名匹配 `v0*-acceptance*`，放在 `tests/unit/` 和 `tests/e2e/`。
+执行者将 issue 的验收标准落成先失败的 Vitest 和/或 Playwright，并交独立代理复核。大功能或新页面先备齐规格与失败用例，再实现；缺少材料时可在已授权范围内补齐。历史上 Kent 写的这批文件名匹配 `v0*-acceptance*`，放在 `tests/unit/` 和 `tests/e2e/`。
 
-**禁止修改** `tests/**/v0*-acceptance*` 里的期望值。和产品决定冲突时，在 issue 里写清楚冲突，等人决定，不改测试。
+**未经维护者明确授权，禁止修改** `tests/**/v0*-acceptance*` 及其他受保护验收用例的期望值。和产品决定冲突时，在 issue 写清冲突并交维护者明确决定；获授权的修改由执行者完成并独立复核，不要求指定历史作者重录，不得以删断言、跳过用例或放宽期望凑绿。
 
 当前 `main` 上对上这个名字的文件如下（只说明命名，不把其中任一版写成「现网版本」；版本号以 `package.json` 和页脚为准）：
 
@@ -92,7 +92,7 @@ Issue 里的验收标准，落成先失败的 Vitest 和/或 Playwright。Kent �
 | `tests/unit/v0270-acceptance.test.ts` | v0.27.0 验收（#299）     |
 | `tests/e2e/v0270-acceptance.spec.ts`  | v0.27.0 验收（#299）     |
 
-后来的 Kent 用例还有 `tests/unit/v0290-*.test.ts`、`tests/e2e/v0300-*.spec.ts` 这类，文件名不含 `acceptance`，不在上面这条 glob 里。改之前读该文件头（有的写明期望值只能由 Kent 重录）。
+后来的历史验收用例还有 `tests/unit/v0290-*.test.ts`、`tests/e2e/v0300-*.spec.ts` 这类，文件名不含 `acceptance`，不在上面这条 glob 里。改之前读该文件头；历史作者或重录说明保留为背景，现行期望值变更统一遵守上述维护者明确授权＋独立复核规则。
 
 ## 6. CI 何时跳过 Playwright
 
@@ -117,13 +117,13 @@ Issue 里的验收标准，落成先失败的 Vitest 和/或 Playwright。Kent �
 
 Release 工作流（`.github/workflows/release.yml`）在同仓库 main 的 push CI/Deploy 成功后自动接续，也保留从 main 手动调度的恢复入口。它安装 Chromium，通过脚本核对真实线上页脚，再设线上 `BASE_URL` 跑工作流点名的一批专项；这不是完整 Playwright。不能把依赖本地 dist、自建服务器的 Compare 专项直接当作线上专项。
 
-白名单 PR 若按 CONTRIBUTING 仍要 Kent `ACCEPT`，只等其余还在跑的门禁，不等被跳过的 Playwright。只改文档，或只改样式且不动逻辑和测试的 PR，CI 绿即可，不需要 Kent ACCEPT。`src/` 里的样式不在路径白名单中，Playwright 仍会跑；免 ACCEPT 和免 e2e 是两件事。
+白名单 PR 按 CONTRIBUTING 完成适用的独立复核及其余实际运行的 CI 检查，不把按路径跳过的 Playwright 记成已运行。只改文档，或只改样式且不动逻辑和测试的 PR，可采用 CI 绿的轻量审阅规则。`src/` 里的样式不在路径白名单中，Playwright 仍会跑；轻量审阅不等于免 e2e。
 
 ## 7. 合并前要绿什么（摘要）
 
 本地习惯见 [AGENTS.md](../AGENTS.md)「合并前必须通过」：`npm run lint`、`npx tsc -p . --noEmit`、`npx vitest run`、`npm run build`、Playwright 全套。PR 描述里贴通过条数。CI 还跑 Python、`contrast.py`、`.dat` 可复现、开局数据等，以 `ci.yml` 为准。
 
-默认角色签字只认 PR 上本人写明验证 SHA 的留言；只改文档或只改样式不需要 Kent ACCEPT。明确批准的本批审阅例外见 CONTRIBUTING，不冒签，也不自动扩大例外。已授权发布仍须核对最终 release 头部和 main 的真实检查；空 statuses 或只返回 PR 的查询不是绿灯证据。
+默认门禁为实现者之外的独立代理复核＋完整 CI，记录实际提交 SHA、范围、结果和未解决问题；只改文档或纯样式且不动逻辑和测试时可按 CONTRIBUTING 采用轻量审阅规则。完整 CI 按现有工作流实际范围执行，push 到 `main` / `release/**` 必须完整；PR 按路径跳过的步骤须如实记录。禁止伪造他人结论、删除分支、修改权限或放宽测试。已授权发布仍须核对最终 release 头部和 main 的真实检查；空 statuses 或只返回 PR 的查询不是绿灯证据。
 
 ### 异步数据就绪（#412）
 

@@ -2,10 +2,12 @@
 
 本项目已获 hongcun 的[持续发布授权](../CONTRIBUTING.md#维护者的持续发布授权2026-10-24)：已授权更新完成适用审查和必要测试后直接发布，无需每次再确认。实现范围、Hold 和审阅要求仍按各自约定执行。
 
+当前审阅按[持续审阅授权](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25)执行：独立代理复核实际提交并记录证据，完整 CI 通过后继续发布，不再要求另一团队代表签字。历史审阅记录保留；适用测试、受保护验收期望及范围授权继续有效。
+
 ## 准备、合并与网站部署
 
 1. 从最新 main 建立 `release/vX.Y.Z` 分支，将 `package.json` 和锁文件中的版本号一起更新，把 Unreleased 里尚未发布的条目移入新版本小节。新小节用 `scripts/changelog.mjs` 的 `insertVersionSection` 插在 `## [Unreleased]` 之后、已有版本之前，不要插到文首的版本号规则之前。
-2. 为最终发行内容准备 PR，核对**最终 release 头部**的实际 `test` 检查成功。PR 的另一提交曾通过、源码树相同、空的 commit statuses、只列 PR 的 Actions 查询，都不能代替该检查。
+2. 为最终发行内容准备 PR，完成独立复核并核对**最终 release 头部**的实际 `test` 检查成功。PR 的另一提交曾通过、源码树相同、空的 commit statuses、只列 PR 的 Actions 查询，都不能代替该检查。
 3. 完成适用验收后，以 **merge commit** 将 release 合入 main，保留发行提交和 CI 记录。由已获授权的正常 git / GitHub 连接器执行，不依赖 Actions 内的 `GITHUB_TOKEN` 首次推 main 后触发另一条工作流。
 4. 等 main 的 **CI / Deploy** 实际完成：完整测试成功，Pages deploy job 成功。release 分支只有测试，不会更新网站。
 

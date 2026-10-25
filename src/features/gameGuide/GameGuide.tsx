@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   GAME_GUIDE_CARDS,
@@ -16,6 +16,7 @@ import {
   type GameGuideVictory,
 } from '../../domain/gameGuide';
 import { Icon } from '../../shared/ui/Icon';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './gameGuide.css';
 
 const DATA_ERRORS = gameGuideCatalogErrors();
@@ -27,33 +28,30 @@ export default function GameGuide() {
   const invalid = errors.length > 0;
   const scope = gameGuideScope(state);
   const card = GAME_GUIDE_CARDS.find((item) => item.id === state.card);
-  const [copy, setCopy] = useState<{ key: string; message: string; url?: string } | null>(null);
-  const currentCopy = copy?.key === location.search ? copy : null;
+  const {
+    copy,
+    status,
+    manualLink,
+    reset: resetShare,
+    statusProps,
+  } = useShareLink({
+    stateKey: JSON.stringify([location.search, state]),
+    successMessage: '入门卡链接已复制，包含卡片、开局或模式与胜利设置。',
+    failureMessage: '自动复制失败，请手动复制下方完整链接。',
+    invalidMessage: '地址无法生成，请检查当前站点地址；没有复制或截断链接。',
+  });
   const update = (patch: Partial<GameGuideState>) => {
     if (invalid) return;
     navigate({ pathname: '/game-guide', search: '?' + encodeGameGuideState({ ...state, ...patch }) }, { replace: true });
-    setCopy(null);
+    resetShare();
   };
   const reset = () => {
     navigate({ pathname: '/game-guide', search: '?' + encodeGameGuideState(defaultGameGuideState()) }, { replace: true });
-    setCopy(null);
+    resetShare();
   };
   const share = async () => {
     if (invalid) return;
-    const key = location.search;
-    let url: string;
-    try {
-      url = gameGuideShareUrl(state, document.baseURI);
-    } catch {
-      setCopy({ key, message: '地址无法生成，请检查当前站点地址；没有复制或截断链接。' });
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopy({ key, message: '入门卡链接已复制，包含卡片、开局或模式与胜利设置。' });
-    } catch {
-      setCopy({ key, message: '自动复制失败，请手动复制下方完整链接。', url });
-    }
+    await copy(() => gameGuideShareUrl(state, document.baseURI));
   };
   if (DATA_ERRORS.length)
     return (
@@ -121,13 +119,13 @@ export default function GameGuide() {
         </div>
       )}
 
-      {currentCopy && (
+      {status && (
         <div className="gg-copy">
-          <p role="status">{currentCopy.message}</p>
-          {currentCopy.url && (
+          <p {...statusProps}>{status}</p>
+          {manualLink && (
             <label>
               手动复制完整链接
-              <textarea readOnly value={currentCopy.url} />
+              <textarea readOnly value={manualLink} />
             </label>
           )}
         </div>

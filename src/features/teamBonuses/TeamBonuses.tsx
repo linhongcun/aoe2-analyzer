@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { useCore } from '../../data/hooks';
@@ -27,6 +27,7 @@ import type { Core } from '../../data';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { Linked, Loading } from '../../shared/ui/widgets';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './teamBonuses.css';
 
 export default function TeamBonuses() {
@@ -34,34 +35,38 @@ export default function TeamBonuses() {
     navigate = useNavigate(),
     core = useCore();
   const decoded = useMemo(() => decodeTeamBonuses(location.search), [location.search]);
-  const [status, setStatus] = useState(''),
-    [manualLink, setManualLink] = useState('');
+  const {
+    copy,
+    status,
+    manualLink,
+    reset: resetShare,
+    announce,
+    statusProps,
+  } = useShareLink({
+    stateKey: location.search,
+    successMessage: '阵容链接已复制，包含玩家顺序、筛选和此页的研究状态。',
+    failureMessage: '自动复制失败，请手动复制下方链接。',
+  });
   const config = decoded.config,
     sources = teamBonusSources(config);
   const valid = !decoded.locked && !teamBonusErrors(config).length;
   const update = (next: TeamBonusConfig) => {
     if (decoded.locked) return;
     navigate({ pathname: '/team-bonuses', search: '?' + encodeTeamBonuses(next) }, { replace: true });
-    setStatus('');
-    setManualLink('');
+    resetShare();
   };
   const reset = () => {
-    navigate({ pathname: '/team-bonuses', search: '?' + encodeTeamBonuses(defaultTeamBonusConfig()) }, { replace: true });
-    setStatus('阵容已重置。');
-    setManualLink('');
+    const search = '?' + encodeTeamBonuses(defaultTeamBonusConfig());
+    navigate({ pathname: '/team-bonuses', search }, { replace: true });
+    announce('阵容已重置。', search);
   };
   const share = async () => {
     if (!valid) return;
-    const url = new URL(document.baseURI);
-    url.hash = '/team-bonuses?' + encodeTeamBonuses(config);
-    try {
-      await navigator.clipboard.writeText(url.href);
-      setStatus('阵容链接已复制，包含玩家顺序、筛选和此页的研究状态。');
-      setManualLink('');
-    } catch {
-      setStatus('自动复制失败，请手动复制下方链接。');
-      setManualLink(url.href);
-    }
+    await copy(() => {
+      const url = new URL(document.baseURI);
+      url.hash = '/team-bonuses?' + encodeTeamBonuses(config);
+      return url.href;
+    });
   };
   if (!core) return <Loading />;
   const permanent = sources.permanent.filter((row) => teamTargetMatch(row.source, config) === 'match');
@@ -102,7 +107,7 @@ export default function TeamBonuses() {
           </button>
         </div>
       )}
-      {status && <p role="status">{status}</p>}
+      {status && <p {...statusProps}>{status}</p>}
       {manualLink && (
         <label className="team-manual-link">
           手动复制队伍链接

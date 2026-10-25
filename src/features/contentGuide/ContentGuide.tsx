@@ -23,6 +23,7 @@ import {
   type ContentProduct,
 } from '../../domain/contentCatalog';
 import { Icon } from '../../shared/ui/Icon';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './contentGuide.css';
 
 const evidenceLabels = { verified: '已核实', unverified: '暂未核实', stale: '证据待重新核对', conflict: '来源存在冲突' };
@@ -186,8 +187,17 @@ export default function ContentGuide() {
   const decoded = useMemo(() => decodeContentGuide(location.search), [location.search]);
   const dataErrors = useMemo(() => validateContentCatalog(), []);
   const state = decoded.state;
-  const [notice, setNotice] = useState('');
-  const [manualLink, setManualLink] = useState('');
+  const {
+    copy: copyLink,
+    status: notice,
+    manualLink,
+    reset: resetShare,
+    statusProps,
+  } = useShareLink({
+    stateKey: location.search,
+    successMessage: '内容导航链接已复制，包含完整筛选条件。',
+    failureMessage: '自动复制失败，请手动复制下方完整链接。',
+  });
   const [shareError, setShareError] = useState('');
   const sharedSources = contentProducts
     .flatMap((product) => product.sources)
@@ -196,8 +206,7 @@ export default function ContentGuide() {
   const results = valid ? filterContentProducts(state) : [];
   const update = (next: ContentGuideState) => {
     navigate({ pathname: '/content-guide', search: `?${encodeContentGuide(next)}` }, { replace: true });
-    setNotice('');
-    setManualLink('');
+    resetShare();
     setShareError('');
   };
   const copy = async () => {
@@ -209,14 +218,7 @@ export default function ContentGuide() {
       setShareError(error instanceof Error ? error.message : '分享链接未生成，请修正筛选后重试。');
       return;
     }
-    try {
-      await navigator.clipboard.writeText(url);
-      setNotice('内容导航链接已复制，包含完整筛选条件。');
-      setManualLink('');
-    } catch {
-      setNotice('自动复制失败，请手动复制下方完整链接。');
-      setManualLink(url);
-    }
+    await copyLink(url);
   };
   return (
     <section className="pane content-guide-page" data-testid="content-guide-page">
@@ -331,7 +333,7 @@ export default function ContentGuide() {
           </div>
         </section>
       )}
-      {notice && <p role="status">{notice}</p>}
+      {notice && <p {...statusProps}>{notice}</p>}
       {shareError && (
         <p className="cg-error" role="alert">
           {shareError}

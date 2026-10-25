@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useShareLink } from '../../../shared/ui/useShareLink';
 import { civByEn } from '../../../data';
 import { DATA_SOURCES, versionLabel } from '../../../shared/utils/dataInfo';
 import { upgradeComparison, upgradePlan, type UpgradeSide } from '../../../domain/upgradeComparison';
@@ -64,17 +65,17 @@ export function UpgradeComparison({
   onNormalize: (values: Record<string, string>) => void;
   available: boolean;
 }) {
-  const [copied, setCopied] = useState<{ url: string; manual: boolean } | null>(null);
-  const copy = async () => {
-    const url = window.location.href;
-    try {
-      if (!navigator.clipboard) throw new Error('Clipboard unavailable');
-      await navigator.clipboard.writeText(url);
-      setCopied({ url, manual: false });
-    } catch {
-      setCopied({ url, manual: true });
-    }
-  };
+  const {
+    copy: copyLink,
+    status,
+    manualLink,
+    statusProps,
+  } = useShareLink({
+    stateKey: params.toString(),
+    successMessage: '比较链接已复制。',
+    failureMessage: '自动复制不可用，请选中下面的完整链接手动复制。',
+  });
+  const copy = () => copyLink(window.location.href);
   const a = parseUpgradeSide(params.get('a'));
   const b = parseUpgradeSide(params.get('b'));
   const base = parseUpgradeSide(params.get('base'), false);
@@ -202,16 +203,10 @@ export function UpgradeComparison({
           </button>
         )}
       </div>
-      {comparison && copied?.url === window.location.href && (
-        <div className="upgrade-copy" data-t="upgrade-copy-status" role="status">
-          {copied.manual ? (
-            <>
-              <p className="note">自动复制不可用，请选中下面的完整链接手动复制。</p>
-              <input aria-label="手动复制比较链接" readOnly value={copied.url} onFocus={(e) => e.target.select()} />
-            </>
-          ) : (
-            <p className="note">比较链接已复制。</p>
-          )}
+      {comparison && status && (
+        <div className="upgrade-copy" data-t="upgrade-copy-status" {...statusProps}>
+          <p className="note">{status}</p>
+          {manualLink && <input aria-label="手动复制比较链接" readOnly value={manualLink} onFocus={(e) => e.target.select()} />}
         </div>
       )}
       {!comparison ? (
