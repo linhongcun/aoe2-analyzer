@@ -578,13 +578,11 @@ h2 .dlcb {
 .card {
   position: relative;
 }
-.cdl {
-  position: absolute;
-  left: 8px;
-  bottom: 6px;
-}
 .card .mini {
   padding-left: 28px;
+}
+#grid .card .mini {
+  padding-left: 0;
 }
 .dlct .dn {
   width: 210px;
