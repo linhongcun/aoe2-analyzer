@@ -151,6 +151,7 @@ jobs:
             test-results/units192-*/*.png
             test-results/relatedTechs193-*/*.png
             test-results/matchup194-*/*.png
+            test-results/matchupSim424-*/*.png
             test-results/introductions195-*/*.png
             test-results/unitFilters196-*/*.png
             test-results/production204-*/*.png
@@ -185,6 +186,7 @@ jobs:
             test-results/matchReview257-*/*.png
             test-results/scouting258-*/*.png
             test-results/learningIntegration259-*/*.png
+            test-results/patchTree417-*/*.png
             test-results/mapPreviews-*/*.png
             test-results/mapCatalog422-*/*.png
             test-results/relicIncome238-*/*.png

@@ -4,6 +4,7 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { COUNTER_EXTRA, EMPTY_COUNTERS_COPY, EMPTY_STRENGTHS_COPY, STRONG_THRESHOLD, TYPE_ZH, filterCounterUnits, matchup } from '../../../domain/ratings';
+import { unitPath } from '../../../domain/simRoute';
 import { CivIcon, UnitIcon } from '../../../shared/ui/art';
 import { RatingLabel } from '../../../shared/ui/RatingHelp';
 import { useSticky } from '../../../shared/utils/sticky';
@@ -92,11 +93,21 @@ export default function Matchup() {
                       {unit && <UnitIcon u={unit} />}
                       <span>{u.nameZh}</span>
                     </Link>
+                    {unit?.civs.includes(a.en) && (
+                      <Link
+                        className="community-tool-entry matchup-sim-link"
+                        to={unitPath(u.id, a.en, 4, [], []) + '?tab=sim'}
+                        aria-label={`${u.nameZh}：用${a.zh}模拟`}
+                      >
+                        用{a.zh}模拟
+                      </Link>
+                    )}
                   </li>
                 );
               })}
             </ul>
           )}
+          {counters.length > 0 && <p className="note">默认帝王时代，未勾选科技与团队加成；仍计入已建模文明加成，可在模拟器调整，不代表本局进度。</p>}
           <p>
             <b>建议：</b>
             {m.tips}
