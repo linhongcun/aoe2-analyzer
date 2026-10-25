@@ -17,6 +17,9 @@ for (const width of [360, 375, 390, 1280])
       await summary.locator('summary').focus();
       await summary.locator('summary').press('Enter');
       await expect(summary.locator('h4')).toHaveCount(21);
+      const shortestCiv = await summary.getByRole('link', { name: '蜀', exact: true }).boundingBox();
+      expect(shortestCiv!.width).toBeGreaterThanOrEqual(44);
+      expect(shortestCiv!.height).toBeGreaterThanOrEqual(44);
       await expect(summary.getByRole('listitem')).toHaveCount(57);
       await expect(page.locator('.patch-entry')).not.toHaveCount(0);
       await expect(summary.getByRole('link', { name: '萨拉森', exact: true })).toHaveAttribute('href', '#/tree/Saracens');

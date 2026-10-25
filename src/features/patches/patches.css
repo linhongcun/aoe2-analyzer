@@ -90,6 +90,9 @@
 .patch-values b {
   white-space: nowrap;
 }
+.patch-tree-summary a {
+  min-width: 44px;
+}
 .patch-values > span {
   display: flex;
   flex-wrap: wrap;
