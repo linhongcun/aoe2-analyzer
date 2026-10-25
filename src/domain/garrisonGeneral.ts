@@ -1,5 +1,6 @@
 /** Issue 224: building capacity, entry compatibility and a documented projectile model. */
 import raw from '../data/garrison_general.json';
+import { freeGarrisonTechs, implicitShapeTechs } from './garrisonTechs';
 import { DATA_PATCH_BUILD } from '../data/meta';
 import hostIds from '../data/garrison_hosts.json';
 import type { Core } from '../data';
@@ -86,7 +87,7 @@ export interface GeneralGarrisonUnit {
   rechargeRate: number;
   specialAbility: number;
   food: number;
-  catalog?: { age: number; pic: number | string | null; civs: string[]; en: string; zh: string };
+  catalog?: { age: number; pic: number | string | null; civs: string[] };
   garrisonTasks: { classId: number; unitId: number }[];
   specialTasks?: { action: number; classId: number; unitId: number; value: number }[];
   trainLocations: { unitId: number; time: number }[];
@@ -202,19 +203,6 @@ function availableTechs(ctx: GeneralGarrisonContext, config: GeneralGarrisonConf
     (t) =>
       t.civs.includes(config.civ) && status['t' + t.id] === 1 && !disabled.has(t.id) && productionTechAge(t, config.civ) <= config.age && !!data.techs[t.id],
   );
-}
-
-function implicitShapeTechs(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarrisonConfig, data: GeneralGarrisonData): number[] {
-  const all = new Set(Object.values(data.unitUpgradeTechs ?? {}).flat());
-  const found = new Set<number>();
-  const add = (id: number) => {
-    if (found.has(id)) return;
-    found.add(id);
-    const pre = ctx.core.techById[id]?.pre;
-    if (pre && all.has(pre)) add(pre);
-  };
-  for (const id of [b.id, ...config.rows.map((r) => r.unitId)]) for (const tid of data.unitUpgradeTechs?.[id] ?? []) add(tid);
-  return [...found];
 }
 
 interface Snapshot {
@@ -395,30 +383,7 @@ export function getGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, confi
 }
 
 export function getFreeGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarrisonConfig, data = GENERAL_GARRISON_DATA): number[] {
-  const available = new Set(availableTechs(ctx, config, data).map((t) => t.id));
-  const known = new Set(config.techs);
-  for (const tid of implicitShapeTechs(ctx, b, config, data)) known.add(tid);
-  const shapeUpgrades = new Set(Object.values(data.unitUpgradeTechs ?? {}).flat());
-  for (const tid of [...known]) {
-    let pre = ctx.core.techById[tid]?.pre;
-    while (pre && shapeUpgrades.has(pre) && !known.has(pre)) {
-      known.add(pre);
-      pre = ctx.core.techById[pre]?.pre;
-    }
-  }
-  const accepted: number[] = [];
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const id of data.civs[config.civ]?.free ?? []) {
-      const pre = ctx.core.techById[id]?.pre;
-      if (accepted.includes(id) || !available.has(id) || (shapeUpgrades.has(id) && !known.has(id)) || (pre && available.has(pre) && !known.has(pre))) continue;
-      accepted.push(id);
-      known.add(id);
-      changed = true;
-    }
-  }
-  return unique(accepted);
+  return freeGarrisonTechs(ctx, b, config, data);
 }
 
 export function toggleGeneralGarrisonTech(

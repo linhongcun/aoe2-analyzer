@@ -2,6 +2,8 @@
 
 固定版本为 DE Update 185872。`scripts/construction_build.py` 从 `scripts/data_sources.json` 固定的原版 DAT 导出 `src/data/construction.json`；`--check` 校验逐字复现。原始 DAT 与缓存不提交。元数据保留来源提交、SHA256、补丁、生成脚本，以及 `engineVerifiedInPinnedBuild=false`。以下为原字段及公开规则推算，未运行固定版本游戏客户端。
 
+#282 将各文明重复的对象与自动规则保存为 `unitSets` / `automaticSets` 共享字典，`civs[name].units` / `automatic` 为字典索引。前端统一通过 `src/data/construction.ts` 读取展开后的 `CONSTRUCTION_DATA`；计算结构、命令顺序、原始索引、前置闭包和来源字段保持不变。Python 源回归通过生成脚本的 `expand` 读取同一逻辑结构。
+
 ## 产品口径
 
 同一文明的普通村民全部到场后同时从零施工一座新建筑。目标人数与基准人数为 1–200 的整数。不给统一的“最佳人数”；不模拟行走、挤占、分批到场、攻击、维修、施工途中升时代、完整开局或提前完工后的次生收益。特殊建造者（如军士）、盟友施工加成不在首版范围。

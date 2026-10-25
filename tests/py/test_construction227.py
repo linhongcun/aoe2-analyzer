@@ -1,15 +1,18 @@
 """Construction source-field regressions; no game client or network needed."""
 import json
+import sys
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'scripts'))
+from construction_build import expand
 
 
 class Construction227Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data = json.loads((ROOT / 'src/data/construction.json').read_text())
+        cls.data = expand(json.loads((ROOT / 'src/data/construction.json').read_text()))
 
     def test_support_matrix_and_provenance(self):
         self.assertEqual(len(self.data['buildings']), 38)

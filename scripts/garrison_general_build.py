@@ -17,6 +17,7 @@ from effects_build import CIV_DAT
 
 OUT = ROOT / 'src/data/garrison_general.json'
 HOSTS = ROOT / 'src/data/garrison_hosts.json'
+TECHS = ROOT / 'src/data/garrison_techs.json'
 ATTRS = {2: 'capacity', 9: 'attack', 10: 'reload', 16: 'projectile', 30: 'garrisonType',
          54: 'trait', 63: 'combatAbility', 65: 'secondaryProjectile', 102: 'total',
          107: 'max', 130: 'firepower', 163: 'sizeClass'}
@@ -296,7 +297,25 @@ def generate(d, raw):
         if any(effect['unit'] == int(key) and effect['stat'] == 'capacity' and effect['value'] > 0
                for civ in result['civs'].values() for auto in civ['automatic'] for effect in auto['effects']):
             hosts.add(int(key))
+    # Export only fields read by the application. Keep source-only records in
+    # the parser cache; numeric mechanics and all hidden rule dependencies stay.
+    for unit in result['units'].values():
+        for field in ('name', 'languageId', 'minRange', 'resourceCapacity'):
+            unit.pop(field, None)
+        for field in ('en', 'zh'):
+            unit['catalog'].pop(field, None)
+    for building in result['buildings'].values():
+        building.pop('civs', None)
+    result.pop('unitUnlockTechs', None)
     return result, sorted(hosts)
+
+
+def tech_data(data):
+    """The construction calculator needs technology eligibility, not occupants."""
+    return {'meta': data['meta'], 'techs': {key: True for key in data['techs']},
+            'unitUpgradeTechs': data['unitUpgradeTechs'],
+            'civs': {name: {field: civ[field] for field in ('free', 'disabled')}
+                     for name, civ in data['civs'].items()}}
 
 
 def main():
@@ -304,7 +323,7 @@ def main():
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     data, hosts = generate(load(), raw_data())
-    for path, value in ((OUT, data), (HOSTS, hosts)):
+    for path, value in ((OUT, data), (HOSTS, hosts), (TECHS, tech_data(data))):
         text = json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + '\n'
         if args.check:
             if not path.exists() or path.read_text() != text:
