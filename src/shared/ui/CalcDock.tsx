@@ -1,4 +1,5 @@
 import { Icon, type IconName } from './Icon';
+import { SHARE_STATUS_PROPS } from './useShareLink';
 import './calcDock.css';
 
 export type CalcDockAction = {
@@ -20,7 +21,7 @@ export function CalcDock({ actions, resultId, note }: { actions: CalcDockAction[
   return (
     <nav className="calc-dock" aria-label="方案操作" data-testid="calc-dock">
       {note && (
-        <p className="calc-dock-note" role="status">
+        <p className="calc-dock-note" {...SHARE_STATUS_PROPS}>
           {note}
         </p>
       )}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from '../../shared/ui/Icon';
 import { sharePageUrl } from '../../domain/sharePage';
@@ -22,6 +22,7 @@ import {
   type CastleDefenseConfig,
   type CastleStage,
 } from '../../domain/castleDefense';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './castleDefense.css';
 
 const stages: { id: CastleStage; label: string }[] = [
@@ -66,32 +67,32 @@ export default function CastleDefense() {
   const location = useLocation(),
     navigate = useNavigate();
   const decoded = useMemo(() => decodeCastleDefense(location.search), [location.search]);
-  const [status, setStatus] = useState(''),
-    [manualLink, setManualLink] = useState('');
+  const {
+    copy,
+    status,
+    manualLink,
+    reset: resetShare,
+    statusProps,
+  } = useShareLink({
+    stateKey: location.search,
+    successMessage: '链接已复制，包含观察、时代、护军、通路和资源状态。',
+    failureMessage: '自动复制失败，请手动复制下方完整链接。',
+  });
   const config = decoded.config,
     locked = decoded.errors.length > 0;
   const plan = locked ? null : planCastleDefense(config);
   const change = (patch: Partial<CastleDefenseConfig>) => {
     if (locked) return;
     navigate({ pathname: '/castle-defense', search: '?' + encodeCastleDefense({ ...config, ...patch }) }, { replace: true });
-    setStatus('');
-    setManualLink('');
+    resetShare();
   };
   const reset = () => {
     navigate({ pathname: '/castle-defense', search: '?' + encodeCastleDefense(defaultCastleDefense()) }, { replace: true });
-    setStatus('');
-    setManualLink('');
+    resetShare();
   };
   const share = async () => {
-    const url = sharePageUrl('/castle-defense', '?' + encodeCastleDefense(config), document.baseURI);
-    try {
-      await navigator.clipboard.writeText(url);
-      setStatus('链接已复制，包含观察、时代、护军、通路和资源状态。');
-      setManualLink('');
-    } catch {
-      setStatus('自动复制失败，请手动复制下方完整链接。');
-      setManualLink(url);
-    }
+    if (locked) return;
+    await copy(() => sharePageUrl('/castle-defense', '?' + encodeCastleDefense(config), document.baseURI));
   };
   return (
     <section className="pane castle-defense-page" data-testid="castle-defense-page">
@@ -114,7 +115,7 @@ export default function CastleDefense() {
         </div>
       </header>
       <p className="castle-defense-example">例如：堡已经造好，但还没查过后方金矿？先把资源保留为“未知”，查清退路后再决定迁移或解围。</p>
-      {status && <p role="status">{status}</p>}
+      {status && <p {...statusProps}>{status}</p>}
       {manualLink && (
         <label className="castle-defense-manual">
           观察链接

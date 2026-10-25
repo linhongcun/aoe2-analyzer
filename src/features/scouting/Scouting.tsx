@@ -20,6 +20,7 @@ import {
 } from '../../domain/scouting';
 import { sharePageUrl } from '../../domain/sharePage';
 import { Icon } from '../../shared/ui/Icon';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './scouting.css';
 
 const maps: Record<ScoutingConfig['map'], string> = {
@@ -90,9 +91,19 @@ export default function Scouting() {
   const location = useLocation(),
     navigate = useNavigate();
   const decoded = useMemo(() => decodeScouting(location.search), [location.search]);
-  const [notice, setNotice] = useState('');
-  const [manualLink, setManualLink] = useState('');
   const [timeDrafts, setTimeDrafts] = useState<Partial<Record<ScoutingObservationId, string>>>({});
+  const {
+    copy,
+    status: notice,
+    manualLink,
+    reset: resetShare,
+    announce,
+    statusProps,
+  } = useShareLink({
+    stateKey: JSON.stringify([location.search, timeDrafts]),
+    successMessage: '情报链接已复制，包含两组全部观察与各自时刻、范围和陈旧标记。',
+    failureMessage: '自动复制失败，请手动复制下方完整情报链接。',
+  });
   const config = decoded.config;
   const isExample = encodeScouting(config) === encodeScouting(exampleScoutingConfig());
   const scenario = SCOUTING_CONTENT.scenarios.find((row) => row.id === config.scenario)!;
@@ -102,16 +113,15 @@ export default function Scouting() {
   const change = (patch: Partial<ScoutingConfig>) => {
     if (decoded.locked) return;
     navigate({ pathname: '/scouting', search: '?' + encodeScouting({ ...config, ...patch }) }, { replace: true });
-    setNotice('');
-    setManualLink('');
+    resetShare();
   };
   const changeObservation = (id: ScoutingObservationId, patch: Partial<ScoutingObservation>) =>
     change({ observations: { ...config.observations, [id]: { ...config.observations[id], ...patch } } });
   const changeTime = (id: ScoutingObservationId, value: string) => {
     if (!isScoutingTimeText(value)) {
-      setTimeDrafts((old) => ({ ...old, [id]: value }));
-      setNotice('时间原文留在输入框，尚未进入链接；请修正长度或异常字符后再分享。');
-      setManualLink('');
+      const nextDrafts = { ...timeDrafts, [id]: value };
+      setTimeDrafts(nextDrafts);
+      announce('时间原文留在输入框，尚未进入链接；请修正长度或异常字符后再分享。', JSON.stringify([location.search, nextDrafts]));
       return;
     }
     setTimeDrafts((old) => {
@@ -123,10 +133,10 @@ export default function Scouting() {
   };
   const reset = () => {
     const empty = decoded.locked ? defaultScoutingConfig() : { ...config, observations: defaultScoutingConfig().observations };
-    navigate({ pathname: '/scouting', search: '?' + encodeScouting(empty) }, { replace: true });
+    const search = '?' + encodeScouting(empty);
+    navigate({ pathname: '/scouting', search }, { replace: true });
     setTimeDrafts({});
-    setManualLink('');
-    setNotice('观察已清空，可以填写自己的观察。');
+    announce('观察已清空，可以填写自己的观察。', JSON.stringify([search, {}]));
   };
   const print = () => {
     const folded = Array.from(document.querySelectorAll<HTMLDetailsElement>('.scouting-result details:not([open]), .scouting-boundaries:not([open])'));
@@ -145,15 +155,7 @@ export default function Scouting() {
   };
   const share = async () => {
     if (!canShare) return;
-    const url = sharePageUrl('/scouting', '?' + encodeScouting(config), document.baseURI);
-    try {
-      await navigator.clipboard.writeText(url);
-      setNotice('情报链接已复制，包含两组全部观察与各自时刻、范围和陈旧标记。');
-      setManualLink('');
-    } catch {
-      setNotice('自动复制失败，请手动复制下方完整情报链接。');
-      setManualLink(url);
-    }
+    await copy(() => sharePageUrl('/scouting', '?' + encodeScouting(config), document.baseURI));
   };
   return (
     <section className="pane scouting-page" data-testid="scouting-page" aria-labelledby="scouting-title">
@@ -175,7 +177,7 @@ export default function Scouting() {
         </div>
       </header>
       {notice && (
-        <p role="status" className="scouting-feedback">
+        <p {...statusProps} className="scouting-feedback">
           {notice}
         </p>
       )}

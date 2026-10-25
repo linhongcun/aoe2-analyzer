@@ -16,6 +16,7 @@ import {
 } from '../../domain/gameClock';
 import { sharePageUrl } from '../../domain/sharePage';
 import { CalcDock } from '../../shared/ui/CalcDock';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './gameClock.css';
 
 const SPEED_PRESETS = [
@@ -46,15 +47,22 @@ export default function GameClock() {
   const result = calculateGameClock(config);
   const durationInvalid = !parseGameClockDuration(config.duration, config.unit).ok;
   const ratioInvalid = gameClockRatioError(config.ratio) !== null;
-  const [notice, setNotice] = useState('');
-  const [manualLink, setManualLink] = useState('');
+  const {
+    copy,
+    status: notice,
+    manualLink,
+    reset: resetShare,
+  } = useShareLink({
+    stateKey: location.search,
+    successMessage: '换算链接已复制，包含原始时长、单位、方向和倍率。',
+    failureMessage: '自动复制失败，请手动复制下方链接。',
+  });
   const [unitError, setUnitError] = useState('');
   const locked = decoded.errors.length > 0;
   const gameInput = config.direction === 'game-to-real';
   const update = (next: GameClockConfig) => {
     navigate({ pathname: '/game-clock', search: '?' + encodeGameClock(next) }, { replace: true });
-    setNotice('');
-    setManualLink('');
+    resetShare();
     setUnitError('');
   };
   const changeUnit = (unit: GameClockUnit) => {
@@ -64,15 +72,7 @@ export default function GameClock() {
   };
   const share = async () => {
     if (locked || !result.ok) return;
-    const url = sharePageUrl('/game-clock', '?' + encodeGameClock(config), document.baseURI);
-    try {
-      await navigator.clipboard.writeText(url);
-      setNotice('换算链接已复制，包含原始时长、单位、方向和倍率。');
-      setManualLink('');
-    } catch {
-      setNotice('自动复制失败，请手动复制下方链接。');
-      setManualLink(url);
-    }
+    await copy(() => sharePageUrl('/game-clock', '?' + encodeGameClock(config), document.baseURI));
   };
   return (
     <section className="pane game-clock-page" data-testid="game-clock-page">

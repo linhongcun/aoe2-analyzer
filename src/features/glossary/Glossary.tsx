@@ -1,20 +1,22 @@
-import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { findTerms, glossary, groupTerms, termById, type GlossaryTerm } from '../../domain/glossary';
 import { sharePageUrl } from '../../domain/sharePage';
 import { Icon } from '../../shared/ui/Icon';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './glossary.css';
 
 function Term({ term }: { term: GlossaryTerm }) {
-  const [notice, setNotice] = useState('');
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(sharePageUrl(`/glossary/${term.id}`, '', document.baseURI));
-      setNotice('术语链接已复制。');
-    } catch {
-      setNotice('复制未成功，可复制浏览器地址。');
-    }
-  };
+  const {
+    copy: copyLink,
+    status: notice,
+    manualLink,
+    statusProps,
+  } = useShareLink({
+    stateKey: term.id,
+    successMessage: '术语链接已复制。',
+    failureMessage: '复制未成功，可复制浏览器地址。',
+  });
+  const copy = () => copyLink(() => sharePageUrl(`/glossary/${term.id}`, '', document.baseURI));
   return (
     <article className="gl-term" aria-labelledby="gl-title" data-testid="glossary-term">
       <header>
@@ -71,9 +73,15 @@ function Term({ term }: { term: GlossaryTerm }) {
         </button>
         <Link to="/glossary">查看全部术语</Link>
       </div>
-      <p className="note" role="status">
+      <p className="note" {...statusProps}>
         {notice}
       </p>
+      {manualLink && (
+        <label className="note share-link-manual">
+          手动复制术语链接
+          <textarea aria-label="手动复制术语链接" readOnly value={manualLink} rows={3} onFocus={(e) => e.currentTarget.select()} />
+        </label>
+      )}
     </article>
   );
 }

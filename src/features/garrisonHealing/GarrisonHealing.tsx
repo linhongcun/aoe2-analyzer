@@ -20,6 +20,7 @@ import { AGE_ZH } from '../../domain/ratings';
 import { Icon } from '../../shared/ui/Icon';
 import { Loading } from '../../shared/ui/widgets';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './garrisonHealing.css';
 
 const num = (value: number) => value.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
@@ -56,13 +57,20 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
   const decoded = useMemo(() => readHealingConfig(new URLSearchParams(source), { core: ctx.core, trees: ctx.trees }, source), [source, ctx.core, ctx.trees]);
   const [draft, setDraft] = useState({ source, config: decoded.config });
   const config = draft.source === source ? draft.config : decoded.config;
-  const [share, setShare] = useState({ source, status: '', manual: '' });
+  const {
+    copy: copyLink,
+    status: shareStatus,
+    manualLink,
+    reset: resetShare,
+    statusProps,
+  } = useShareLink({
+    stateKey: JSON.stringify([source, config]),
+    successMessage: '链接已复制，包含当前全部设置。',
+    failureMessage: '自动复制失败，请手动复制下方链接。',
+  });
   // Discard an unfinished draft when history navigation selects another URL.
   // Returning to its old URL must restore that URL rather than revive the draft.
   if (draft.source !== source) setDraft({ source, config: decoded.config });
-  if (share.source !== source) setShare({ source, status: '', manual: '' });
-  const shareStatus = share.source === source ? share.status : '';
-  const manualLink = share.source === source ? share.manual : '';
   const result = calculateGarrisonHealing(ctx, config);
   const buildings = getHealingBuildings(ctx);
   const candidates = getHealingCandidates(ctx, config);
@@ -80,7 +88,7 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
   const update = (next: HealingConfig) => {
     if (locked) return;
     setDraft({ source, config: next });
-    setShare({ source, status: '', manual: '' });
+    resetShare();
     // Keep unfinished HP input editable without turning it into a broken URL.
     // Directly opened malformed links remain locked until the explicit reset.
     const nextStatus = calculateGarrisonHealing(ctx, next).status;
@@ -100,19 +108,16 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
     const next = { ...DEFAULT_HEALING_CONFIG, techs: [] };
     setDraft({ source: '?' + writeHealingConfig(next).toString(), config: next });
     setParams(writeHealingConfig(next), { replace: true });
-    setShare({ source, status: '', manual: '' });
+    resetShare();
   };
   const copy = async () => {
     if (unshareable) return;
-    const url = new URL(document.baseURI);
-    url.search = '';
-    url.hash = '/garrison-healing?' + writeHealingConfig(config).toString();
-    try {
-      await navigator.clipboard.writeText(url.href);
-      setShare({ source, status: '链接已复制，包含当前全部设置。', manual: '' });
-    } catch {
-      setShare({ source, status: '自动复制失败，请手动复制下方链接。', manual: url.href });
-    }
+    await copyLink(() => {
+      const url = new URL(document.baseURI);
+      url.search = '';
+      url.hash = '/garrison-healing?' + writeHealingConfig(config).toString();
+      return url.href;
+    });
   };
   const comparison = [
     { label: '未研究草药', value: result.beforeHerbal, testId: 'healing-before' },
@@ -134,7 +139,7 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
           复制回血方案
         </button>
       </header>
-      {shareStatus && <p role="status">{shareStatus}</p>}
+      {shareStatus && <p {...statusProps}>{shareStatus}</p>}
       {manualLink && (
         <label className="healing-manual">
           回血方案链接
