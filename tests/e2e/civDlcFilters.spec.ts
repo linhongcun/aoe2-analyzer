@@ -37,18 +37,18 @@ async function expectSelected(page: Page, value: string) {
   await expect(bar.locator(`button[data-v="${value}"]`)).toHaveAttribute('aria-pressed', 'true');
   await expect(bar.locator('button[aria-pressed="true"]')).toHaveCount(1);
   await expect(bar.locator('button[aria-pressed="false"]')).toHaveCount(DLCS.length + 1);
-  await expect(page.locator('#cdlc')).toHaveValue(value);
 }
 
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['light', 'dark'])
-    test(`文明 DLC 快捷筛选 ${theme} @${width}：图标、下拉同步与清空筛选`, async ({ page }, info) => {
+    test(`文明 DLC 快捷筛选 ${theme} @${width}：仅保留图标入口与清空筛选`, async ({ page }, info) => {
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/civs');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       const bar = dlcBar(page);
       await expect(bar).toBeVisible();
+      await expect(page.locator('#cdlc')).toHaveCount(0);
       await expect(bar.getByRole('button')).toHaveCount(DLCS.length + 2);
       await expect(bar.getByRole('img')).toHaveCount(DLCS.length);
       await expectSelected(page, '');
@@ -59,7 +59,7 @@ for (const width of [360, 375, 390, 1280])
       await expectSelected(page, String(latestDlc));
       await expectCivs(page, releaseCivs(latestDlc));
       if (width <= 600) await page.locator('.catalog-filter-toggle').click();
-      await page.locator('#cdlc').selectOption('0');
+      await bar.locator('button[data-v="0"]').click();
       await expectSelected(page, '0');
       await expectCivs(page, releaseCivs(0));
       await bar.locator(`button[data-v="${latestDlc}"]`).click();
