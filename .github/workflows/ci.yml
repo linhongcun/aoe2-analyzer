@@ -100,6 +100,8 @@ jobs:
           key: aoe2techtree-${{ hashFiles('scripts/data_sources.json') }}
       - name: Install image generation dependency
         run: python3 -m pip install Pillow==12.3.0
+      - name: Data check (map previews reproducible from pinned source)
+        run: python3 scripts/map_previews.py --check
       - name: Data check (core data, icons and pinyin reproducible)
         run: python3 scripts/build_data.py && node scripts/pinyin_build.mjs && git diff --exit-code -- src/data public/img
       - name: Data check (pinyin index current)
@@ -181,6 +183,7 @@ jobs:
             test-results/matchReview257-*/*.png
             test-results/scouting258-*/*.png
             test-results/learningIntegration259-*/*.png
+            test-results/mapPreviews-*/*.png
             test-results/relicIncome238-*/*.png
             test-results/communityIntegration249-*/*.png
           if-no-files-found: ignore
