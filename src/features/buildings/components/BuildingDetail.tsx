@@ -10,6 +10,7 @@ import { BuildingIcon, CivChip, CostView, DlcBadgeL, StatIcon, TechLink, UnitLin
 import { Icon } from '../../../shared/ui/Icon';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles, type DetailStat } from '../../../shared/ui/DetailBlocks';
+import { PatchHistory } from '../../../shared/ui/PatchHistory';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import BuildingList from './BuildingList';
 import BuildingSimulator from './BuildingSimulator';
@@ -195,6 +196,7 @@ export default function BuildingDetail() {
             </>
           ),
         },
+        { key: 'history', label: '更新历史', content: <PatchHistory target={{ targetType: 'building', targetId: b.id, targetNameZh: b.zh }} /> },
       ]}
       sidebar={
         <>
