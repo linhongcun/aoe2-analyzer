@@ -6,6 +6,8 @@
 
 与 CONTRIBUTING 冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
 
+**一次验证与快速发布（#431）**：普通已授权更新默认一个 issue、一个 PR 直接合入 `main`；只有需要多项冻结集成时才建 `release/vX.Y.Z`。同一代码树的真实成功验证可由 release/main 复用，main 仍构建真实 SHA 并做短烟测，发布 ZIP 使用已部署产物。全量回归在夜间后台或重大变更时执行一次，不作为普通 UI 更新逐阶段重复等待的门槛。现行规则见 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
+
 **持续发布授权**：hongcun 已要求已授权更新完成适用审查和测试后直接部署，不再逐次询问发布；不能停在 release 分支便称完成上线。发布授权及边界以 [CONTRIBUTING「维护者的持续发布授权」](CONTRIBUTING.md#维护者的持续发布授权2026-10-24) 为准；现行审阅流程以 [「维护者的持续审阅授权」](CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) 为准，由实现者之外的独立代理复核，记录实际提交 SHA、复核范围、结果和未解决问题，不再依赖指定人员签字。
 
 ### 数字不换行（`.num` / `.nw`）
@@ -72,14 +74,14 @@ npm run dev                # http://localhost:5173
 npm run lint               # ESLint + 颜色令牌检查 + CSS 检查
 npx tsc -p . --noEmit      # 类型检查（与 CI 一致）
 npx prettier --check .     # 格式检查（CI 不跑；改格式用 npm run format）
-npx vitest run             # 单测，等同 npm test
+npx vitest run             # 完整单测；仅在需要完整范围时运行，等同 npm test
 npm run build              # tsc + vite build → dist/
 npm run pinyin:check       # 拼音索引 search-py.json 是否最新（改了名称/别名/加成文本后跑）
 npm run test:py            # Python 测试
 python3 docs/design/contrast.py   # 设计令牌对比度（WCAG AA，CI 会跑）
 ```
 
-e2e：Playwright 默认自己起 `vite preview --port 4173 --strictPort`（先 `npm run build`）。端口被旧进程占用时先释放：
+以下 e2e 全量命令用于手动完整检查；普通更新按相关测试计划执行，不默认跑整站。Playwright 默认自己起 `vite preview --port 4173 --strictPort`（先 `npm run build`）。端口被旧进程占用时先释放：
 
 ```bash
 fuser -k 4173/tcp; npm run build && npx playwright test --reporter=line
@@ -97,7 +99,9 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 ## 合并前必须通过
 
-按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 选择检查。小 UI 改动保留 lint、类型、分层、构建与相关页面检查，不运行无关计算、数据再生成和整站回归；未知范围、逻辑、数据和依赖变化完整验证。PR 描述记录实际执行、跳过或中止范围及结果。PR/main/release 使用相同范围规则，详见 [TESTING](docs/TESTING.md)。
+按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。`ci-scope` 选择 `maintenance`、`civ-ui`、`targeted` 或 `full`，功能页面及纯展示/路由辅助改动使用相关单测、交互和布局检查；UI 改动不重生成未变数据。核心计算、依赖、共享基础设施、未知或不可靠范围仍做一次完整验证；只有确需再生成时才执行数据管线。
+
+`ci-validation-evidence` 记录实际测试提交、Git tree、策略指纹、范围和来源 run。release/main 仅在同仓库真实成功的 CI、代码树、策略和必要范围均匹配时复用；缺少有效证据就执行当前必要范围，不因发布阶段变化重复全量。main 仍重建真实 SHA，执行短烟测并部署。PR 描述记录实际执行、复用、跳过或中止的范围及结果，不把复用结果写成当前提交重新跑过全套。详见 [TESTING](docs/TESTING.md)。
 
 ## 测试规则
 
@@ -127,11 +131,11 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 ## 工作流
 
-1. 一个 issue 一个 PR，一个执行者。版本内的项以当前 `release/vX.Y.Z` 分支为目标（先 rebase 到它的最新提交）；只有线上数据错误的热修直接对 `main`（补丁版本，修订号 +1）。
+1. 一个 issue 一个 PR，一个执行者。普通已授权更新默认直接对最新 `main` 提 PR；仅需要多项冻结集成时以 `release/vX.Y.Z` 为目标。使用版本分支时先更新到其最新提交，不为简单更新额外建立发布分支。
 2. PR 标题必须是 Conventional Commits，CI 会检查：`类型(#issue): 描述`，类型为 `feat fix docs chore test ci refactor style perf build revert hotfix`。例：`fix(#13): 科技涉及单位只显示一处`。
 3. PR 描述写 `Fixes #N`（合到非默认分支不会自动关 issue，发版时人工核对），附本地测试结果；界面 PR 附 360/375/390/1280 四张截图。按需在 CHANGELOG 当前版本小节写一句玩家能看懂的话。
-4. 默认审阅门禁：实现者之外的独立代理复核＋按风险选择的 CI；PR 留下实际验证的提交 SHA、复核范围、结果和未解决问题，界面改动同时核对规格与四宽。执行者可在已授权范围补齐规格和失败用例并交独立复核；大功能或新页面须先具备这些材料再实现。只改文档或纯样式且不动逻辑和测试的 PR 可走 CI 绿的轻量规则；CI 范围按现有工作流执行，`main` / `release/**` push 使用同一范围判定。不得伪造他人结论、删除分支、修改仓库权限或放宽测试；已获授权时按顺序集成并发布。
-5. 版本号一律三段 `vX.Y.Z`。完成当前版本适用验收后，核对最终 release 头部 test CI，合入 main 并等待 Pages 部署成功，再由 Release 工作流核对真实线上页脚和功能、打 tag、制作附件并正式发布。按持续发布授权自动继续，无需再问是否上线；不要在 main 的适用 CI 尚未结束时让脚本以默认 600 秒等待部署。
+4. 默认审阅门禁：实现者之外的独立代理复核＋按风险选择的一次验证；PR 留下实际验证的提交 SHA、复核范围、结果和未解决问题，界面改动同时核对规格与四宽。执行者可在已授权范围补齐规格和失败用例并交独立复核；大功能或新页面须先具备这些材料再实现。只改文档或纯样式且不动逻辑和测试的 PR 可走 CI 绿的轻量规则。release/main 可以按代码树、策略、范围和真实来源复用成功证据，不机械重跑相同验证。不得伪造他人结论、删除分支、修改仓库权限或放宽测试；已获授权时按顺序集成并发布。
+5. 版本号一律三段 `vX.Y.Z`。完成独立复核和适用验证后合入 main；main 的真实 `test` 检查可记录可信复用结果，仍须完成真实 SHA 构建、短烟测和 Pages 部署。Release 核对线上版本/构建、本次功能及 tag，直接打包同一已部署产物和校验文件后正式发布，不再二次构建或默认跑大范围线上回归。按持续发布授权自动继续，无需再问是否上线；不要在 main 的检查和部署尚未结束时让脚本等待部署。
 
 ## 提交身份
 
