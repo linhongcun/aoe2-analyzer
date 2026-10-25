@@ -170,14 +170,15 @@ function HistoryTimeline({ archives, target }: { archives: PatchArchive[]; targe
             </Link>
           </h3>
           <p className="note">
+            {patch.releaseDate ? '官方发行日（公告当地日期）：' : '补丁说明公开（北京时间）：'}
             <time dateTime={patch.date} className="num nw">
               {patch.date}
             </time>{' '}
             · DE 正式版
           </p>
-          {patch.announcedAt && patch.announcedAt !== patch.date && (
+          {patch.publishedAt && (
             <p className="note">
-              公告日期：<time className="num nw">{patch.announcedAt}</time>
+              公告公开（北京时间）：<time className="num nw">{patch.publishedAt}</time>
             </p>
           )}
           {shown

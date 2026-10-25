@@ -46,9 +46,9 @@ jobs:
       - name: Typecheck
         if: steps.reuse.outputs.reused != 'true'
         run: npx tsc -p . --noEmit
-      - name: Layer boundaries (strict)
-        if: steps.reuse.outputs.reused != 'true'
+      - name: Layer boundaries (strict, #281)
         run: npm run lint:layers -- --strict
+        if: steps.reuse.outputs.reused != 'true'
       - name: Catalog introduction audit
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.full == 'true'
         run: npm run introductions:check

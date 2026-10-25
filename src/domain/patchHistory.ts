@@ -9,6 +9,9 @@ export interface ArchivedTarget extends HistoryTarget {
 export interface PatchArchive {
   id: string;
   date: string;
+  releaseDate?: string;
+  publishedAt?: string;
+  sourcePublishedAt?: string;
   source: string;
   note: string;
   title?: string;

@@ -109,7 +109,10 @@ export default function Patches() {
       <section className="pane patches">
         <h2>版本补丁</h2>
         <p>按版本列出加强、削弱和新内容；历史改动来自当时官方记录。</p>
-        <p className="note">正在分批收录 DE 正式版。以下版本并非连续完整历史，未收录不代表没有改动；历史数值不代表当前数值。</p>
+        <p className="note">
+          正在分批收录 DE
+          正式版。以下版本并非连续完整历史，未收录不代表没有改动；历史数值不代表当前数值。历史版保留官方公告当地的发行日，公告公开日期另按北京时间标注。
+        </p>
         <Link to="/about-data">关于数据</Link>
         {[...archives]
           .sort((a, b) => b.date.localeCompare(a.date))
@@ -117,6 +120,7 @@ export default function Patches() {
             <article className="patch-version" key={patch.id}>
               <Link to={`/patches/${patch.id}`}>
                 <h3>DE Update {patch.id}</h3>
+                <p className="note">{patch.releaseDate ? '官方发行日（公告当地日期）' : '补丁说明公开（北京时间）'}</p>
                 <time className="num" dateTime={patch.date}>
                   {patch.date}
                 </time>
@@ -149,14 +153,15 @@ export default function Patches() {
       <Link to="/patches">返回版本补丁</Link>
       <h2>DE Update {id}</h2>
       <p>
+        {raw.releaseDate ? '官方发行日（公告当地日期）：' : '补丁说明公开（北京时间）：'}
         <time className="num" dateTime={raw.date}>
           {raw.date}
         </time>{' '}
         · DE 正式版 · <Link to="/about-data">当前数据版本：DE 185872 · 关于数据</Link>
       </p>
-      {raw.announcedAt && raw.announcedAt !== raw.date && (
+      {raw.publishedAt && (
         <p className="note">
-          公告日期：<span className="num">{raw.announcedAt}</span>；上方为正式发行日期。
+          公告公开（北京时间）：<span className="num nw">{raw.publishedAt}</span>；上方发行日按官方公告当地日期保留。
         </p>
       )}
       <p className="note">{raw.note}</p>

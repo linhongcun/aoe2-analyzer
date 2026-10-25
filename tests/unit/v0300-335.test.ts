@@ -15,6 +15,19 @@ import { describe, expect, it } from 'vitest';
 type Stamp = { ts: string; how: string };
 /** key：`${url} ${字段}`；字段为 published（publishedAt / published / date）或 updated（updatedAt） */
 const STAMPS: Record<string, Stamp> = {
+  // #435 新来源仅登记实际读取的公开时间戳；发行日独立保存在 releaseDate，不充当来源公开日期。
+  'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/ published': {
+    ts: '2022-08-29T16:10:00-07:00',
+    how: '2026-10-25 核对官方页面 article:published_time；北京时间 2022-08-30',
+  },
+  'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/ published': {
+    ts: '2023-04-11T15:20:00-07:00',
+    how: '2026-10-25 核对官方页面 article:published_time；北京时间 2023-04-12',
+  },
+  'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-preview-125283/ published': {
+    ts: '2024-10-14T12:13:32-07:00',
+    how: '2026-10-25 核对官方页面 article:published_time；北京时间 2024-10-15，发行日另存独立事实字段',
+  },
   'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/ published': {
     ts: '2026-09-22T10:16:33-07:00',
     how: 'article:published_time',
