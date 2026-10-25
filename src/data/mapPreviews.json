@@ -1,18 +1,500 @@
 {
+  "acclivity": {
+    "image": "img/maps/acclivity.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_acclivity.png",
+    "width": 420,
+    "height": 420
+  },
+  "acropolis": {
+    "image": "img/maps/acropolis.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_acropolis.png",
+    "width": 420,
+    "height": 420
+  },
+  "african_clearing": {
+    "image": "img/maps/african_clearing.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_african_clearing.png",
+    "width": 420,
+    "height": 420
+  },
+  "aftermath": {
+    "image": "img/maps/aftermath.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_aftermath.png",
+    "width": 420,
+    "height": 420
+  },
+  "alpine-lakes": {
+    "image": "img/maps/alpine-lakes.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_alpine-lakes.png",
+    "width": 420,
+    "height": 420
+  },
+  "amazon_tunnels": {
+    "image": "img/maps/amazon_tunnels.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_amazon_tunnels.png",
+    "width": 420,
+    "height": 420
+  },
   "arabia": {
     "image": "img/maps/arabia.webp",
-    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps/rm_arabia.png"
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_arabia.png",
+    "width": 420,
+    "height": 420
+  },
+  "archipelago": {
+    "image": "img/maps/archipelago.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_archipelago.png",
+    "width": 420,
+    "height": 420
   },
   "arena": {
     "image": "img/maps/arena.webp",
-    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps/rm_arena.png"
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_arena.png",
+    "width": 420,
+    "height": 420
   },
-  "nomad": {
-    "image": "img/maps/nomad.webp",
-    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps/rm_nomad.png"
+  "atacama": {
+    "image": "img/maps/atacama.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_atacama.png",
+    "width": 423,
+    "height": 420
+  },
+  "baltic": {
+    "image": "img/maps/baltic.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_baltic.png",
+    "width": 420,
+    "height": 420
+  },
+  "black-forest": {
+    "image": "img/maps/black-forest.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_black-forest.png",
+    "width": 420,
+    "height": 420
+  },
+  "bog-islands": {
+    "image": "img/maps/bog-islands.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_bog-islands.png",
+    "width": 420,
+    "height": 420
+  },
+  "bogland": {
+    "image": "img/maps/bogland.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_bogland.png",
+    "width": 420,
+    "height": 420
+  },
+  "budapest": {
+    "image": "img/maps/budapest.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_budapest.png",
+    "width": 420,
+    "height": 420
+  },
+  "cenotes": {
+    "image": "img/maps/cenotes.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_cenotes.png",
+    "width": 420,
+    "height": 420
+  },
+  "city-of-lakes": {
+    "image": "img/maps/city-of-lakes.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_city-of-lakes.png",
+    "width": 420,
+    "height": 420
+  },
+  "coastal": {
+    "image": "img/maps/coastal.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_coastal.png",
+    "width": 420,
+    "height": 420
+  },
+  "coastal_forest": {
+    "image": "img/maps/coastal_forest.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_coastal_forest.png",
+    "width": 420,
+    "height": 420
+  },
+  "continental": {
+    "image": "img/maps/continental.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_continental.png",
+    "width": 420,
+    "height": 420
+  },
+  "crater": {
+    "image": "img/maps/crater.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_crater.png",
+    "width": 420,
+    "height": 420
+  },
+  "crater-lake": {
+    "image": "img/maps/crater-lake.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_crater-lake.png",
+    "width": 420,
+    "height": 420
+  },
+  "crossroads": {
+    "image": "img/maps/crossroads.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_crossroads.png",
+    "width": 420,
+    "height": 420
+  },
+  "enclosed": {
+    "image": "img/maps/enclosed.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_enclosed.png",
+    "width": 420,
+    "height": 420
+  },
+  "eruption": {
+    "image": "img/maps/eruption.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_eruption.png",
+    "width": 420,
+    "height": 420
+  },
+  "fortress": {
+    "image": "img/maps/fortress.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_fortress.png",
+    "width": 420,
+    "height": 420
+  },
+  "four-lakes": {
+    "image": "img/maps/four-lakes.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_four-lakes.png",
+    "width": 420,
+    "height": 420
+  },
+  "frigid_lake": {
+    "image": "img/maps/frigid_lake.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_frigid_lake.png",
+    "width": 420,
+    "height": 420
+  },
+  "ghost-lake": {
+    "image": "img/maps/ghost-lake.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_ghost-lake.png",
+    "width": 420,
+    "height": 420
+  },
+  "gold-rush": {
+    "image": "img/maps/gold-rush.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_gold-rush.png",
+    "width": 420,
+    "height": 420
+  },
+  "golden-pit": {
+    "image": "img/maps/golden-pit.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_golden-pit.png",
+    "width": 420,
+    "height": 420
+  },
+  "golden-swamp": {
+    "image": "img/maps/golden-swamp.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_golden-swamp.png",
+    "width": 420,
+    "height": 420
+  },
+  "greenland": {
+    "image": "img/maps/greenland.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_greenland.png",
+    "width": 420,
+    "height": 420
+  },
+  "haboob": {
+    "image": "img/maps/haboob.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_haboob.png",
+    "width": 420,
+    "height": 420
+  },
+  "hamburger": {
+    "image": "img/maps/hamburger.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_hamburger.png",
+    "width": 420,
+    "height": 420
+  },
+  "hideout": {
+    "image": "img/maps/hideout.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_hideout.png",
+    "width": 420,
+    "height": 420
+  },
+  "highland": {
+    "image": "img/maps/highland.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_highland.png",
+    "width": 420,
+    "height": 420
+  },
+  "hill-fort": {
+    "image": "img/maps/hill-fort.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_hill-fort.png",
+    "width": 420,
+    "height": 420
   },
   "islands": {
     "image": "img/maps/islands.webp",
-    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps/rm_islands.png"
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_islands.png",
+    "width": 420,
+    "height": 420
+  },
+  "kawasan": {
+    "image": "img/maps/kawasan.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_kawasan.png",
+    "width": 420,
+    "height": 420
+  },
+  "kilimanjaro": {
+    "image": "img/maps/kilimanjaro.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_kilimanjaro.png",
+    "width": 420,
+    "height": 420
+  },
+  "land_madness": {
+    "image": "img/maps/land_madness.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_land_madness.png",
+    "width": 420,
+    "height": 420
+  },
+  "land_nomad": {
+    "image": "img/maps/land_nomad.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_land_nomad.png",
+    "width": 420,
+    "height": 420
+  },
+  "lombardia": {
+    "image": "img/maps/lombardia.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_lombardia.png",
+    "width": 420,
+    "height": 420
+  },
+  "lowland": {
+    "image": "img/maps/lowland.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_lowland.png",
+    "width": 420,
+    "height": 420
+  },
+  "mangrove-jungle": {
+    "image": "img/maps/mangrove-jungle.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_mangrove-jungle.png",
+    "width": 420,
+    "height": 420
+  },
+  "marketplace": {
+    "image": "img/maps/marketplace.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_marketplace.png",
+    "width": 420,
+    "height": 420
+  },
+  "meadow": {
+    "image": "img/maps/meadow.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_meadow.png",
+    "width": 420,
+    "height": 420
+  },
+  "mediterranean": {
+    "image": "img/maps/mediterranean.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_mediterranean.png",
+    "width": 420,
+    "height": 420
+  },
+  "megarandom": {
+    "image": "img/maps/megarandom.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_megarandom.png",
+    "width": 420,
+    "height": 420
+  },
+  "michi": {
+    "image": "img/maps/michi.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_michi.png",
+    "width": 420,
+    "height": 420
+  },
+  "migration": {
+    "image": "img/maps/migration.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_migration.png",
+    "width": 420,
+    "height": 420
+  },
+  "mongolia": {
+    "image": "img/maps/mongolia.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_mongolia.png",
+    "width": 420,
+    "height": 420
+  },
+  "morass": {
+    "image": "img/maps/morass.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_morass.png",
+    "width": 420,
+    "height": 420
+  },
+  "mountain-pass": {
+    "image": "img/maps/mountain-pass.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_mountain-pass.png",
+    "width": 420,
+    "height": 420
+  },
+  "mountain-ridge": {
+    "image": "img/maps/mountain-ridge.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_mountain-ridge.png",
+    "width": 420,
+    "height": 420
+  },
+  "mountain_range": {
+    "image": "img/maps/mountain_range.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_mountain_range.png",
+    "width": 420,
+    "height": 420
+  },
+  "nile-delta": {
+    "image": "img/maps/nile-delta.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_nile-delta.png",
+    "width": 420,
+    "height": 420
+  },
+  "nomad": {
+    "image": "img/maps/nomad.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_nomad.png",
+    "width": 420,
+    "height": 420
+  },
+  "northern_isles": {
+    "image": "img/maps/northern_isles.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_northern_isles.png",
+    "width": 420,
+    "height": 420
+  },
+  "oasis": {
+    "image": "img/maps/oasis.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_oasis.png",
+    "width": 420,
+    "height": 420
+  },
+  "pacific-islands": {
+    "image": "img/maps/pacific-islands.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_pacific-islands.png",
+    "width": 420,
+    "height": 420
+  },
+  "ravines": {
+    "image": "img/maps/ravines.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_ravines.png",
+    "width": 420,
+    "height": 420
+  },
+  "ring_fortress": {
+    "image": "img/maps/ring_fortress.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_ring_fortress.png",
+    "width": 420,
+    "height": 420
+  },
+  "rivers": {
+    "image": "img/maps/rivers.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_rivers.png",
+    "width": 420,
+    "height": 420
+  },
+  "runestones": {
+    "image": "img/maps/runestones.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_runestones.png",
+    "width": 420,
+    "height": 420
+  },
+  "sacred_springs": {
+    "image": "img/maps/sacred_springs.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_sacred_springs.png",
+    "width": 420,
+    "height": 420
+  },
+  "salt-marsh": {
+    "image": "img/maps/salt-marsh.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_salt-marsh.png",
+    "width": 420,
+    "height": 420
+  },
+  "sandbank": {
+    "image": "img/maps/sandbank.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_sandbank.png",
+    "width": 420,
+    "height": 420
+  },
+  "scandinavia": {
+    "image": "img/maps/scandinavia.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_scandinavia.png",
+    "width": 420,
+    "height": 420
+  },
+  "seize_the_mountain": {
+    "image": "img/maps/seize_the_mountain.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_seize_the_mountain.png",
+    "width": 420,
+    "height": 420
+  },
+  "serengeti": {
+    "image": "img/maps/serengeti.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_serengeti.png",
+    "width": 420,
+    "height": 420
+  },
+  "shoals": {
+    "image": "img/maps/shoals.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_shoals.png",
+    "width": 420,
+    "height": 420
+  },
+  "socotra": {
+    "image": "img/maps/socotra.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_socotra.png",
+    "width": 420,
+    "height": 420
+  },
+  "steppe": {
+    "image": "img/maps/steppe.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_steppe.png",
+    "width": 420,
+    "height": 420
+  },
+  "team-islands": {
+    "image": "img/maps/team-islands.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_team-islands.png",
+    "width": 420,
+    "height": 420
+  },
+  "team_moats": {
+    "image": "img/maps/team_moats.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_team_moats.png",
+    "width": 420,
+    "height": 420
+  },
+  "valley": {
+    "image": "img/maps/valley.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_valley.png",
+    "width": 420,
+    "height": 420
+  },
+  "volcanic_island": {
+    "image": "img/maps/volcanic_island.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_volcanic_island.png",
+    "width": 420,
+    "height": 420
+  },
+  "wade": {
+    "image": "img/maps/wade.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_wade.png",
+    "width": 420,
+    "height": 420
+  },
+  "water-nomad": {
+    "image": "img/maps/water-nomad.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_water-nomad.png",
+    "width": 420,
+    "height": 420
+  },
+  "wolf-hill": {
+    "image": "img/maps/wolf-hill.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_wolf-hill.png",
+    "width": 420,
+    "height": 420
+  },
+  "yucatan": {
+    "image": "img/maps/yucatan.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/155d64511a22570ff49b47edb73355464063e428/app/assets/maps/rm_yucatan.png",
+    "width": 420,
+    "height": 420
   }
 }

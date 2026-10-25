@@ -1,6 +1,11 @@
 {
   "_doc": "全部上游固定版本（单一文件）：sources 为游戏补丁数据上游，由 npm run data:update 更新；assetSources 为独立素材上游。请勿手改 sha256。",
-  "patch": { "build": 185872, "date": "2026-09-23", "name": "DE Update 185872", "detectedFrom": "SiegeEngineers/halfon@abb48fd: Implement DE Update 185872" },
+  "patch": {
+    "build": 185872,
+    "date": "2026-09-23",
+    "name": "DE Update 185872",
+    "detectedFrom": "SiegeEngineers/halfon@abb48fd: Implement DE Update 185872"
+  },
   "updated": "2026-10-11",
   "sources": {
     "dat": {
@@ -10,7 +15,12 @@
       "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
       "date": "2026-10-07",
       "use": "全部 EffectCommands（战斗 + 经济/费用）、科技前置、文明科技树/团队加成；基础数值对账",
-      "markers": { "civs": 63, "techs": 1510, "effects": 1500, "newestCivs": ["Saxons", "Varangians", "Danes"] }
+      "markers": {
+        "civs": 63,
+        "techs": 1510,
+        "effects": 1500,
+        "newestCivs": ["Saxons", "Varangians", "Danes"]
+      }
     },
     "aoe2techtree": {
       "repo": "SiegeEngineers/aoe2techtree",
@@ -30,15 +40,528 @@
   "assetSources": {
     "mapPreviews": {
       "repo": "denniske/aoe2companion",
-      "commit": "3ce039d8bfdb54da36b2ea40f25cf1dac4063a13",
-      "path": "assets/maps/",
-      "date": "2020-07-09",
-      "use": "地图选择预览（形态示意，非当前对局实图）；原始游戏美术 © Microsoft",
+      "commit": "155d64511a22570ff49b47edb73355464063e428",
+      "path": "app/assets/maps/",
+      "date": "2023-05-19",
+      "committedAt": "2023-05-19T00:11:24Z",
+      "use": "83张具名标准随机地图的选择预览（固定历史素材，非当前对局实图）；原始游戏美术 © Microsoft",
       "assets": {
-        "arabia": { "path": "assets/maps/rm_arabia.png", "sha256": "87df50321118d00e5c25f350c28ea59ec57c777ef853b5ed40827add7b757938" },
-        "arena": { "path": "assets/maps/rm_arena.png", "sha256": "9091cc7463ca6b97850b7a9383fa4e435302a49da2331faa031428f8d7ccc946" },
-        "nomad": { "path": "assets/maps/rm_nomad.png", "sha256": "b7a4850ffcb23f526b1e68d5501371ac78284831bdb6dfae24eeeb4ee968dae8" },
-        "islands": { "path": "assets/maps/rm_islands.png", "sha256": "959159fa8a2fca8cc8ff8855bc72d42c829b745ab9bbd2443a223e30bd044faa" }
+        "acclivity": {
+          "path": "app/assets/maps/rm_acclivity.png",
+          "sha256": "925cf09661ab112fd8c0af4569cd2301adc262688a0c02a58324a137fb252bf0",
+          "width": 420,
+          "height": 420
+        },
+        "acropolis": {
+          "path": "app/assets/maps/rm_acropolis.png",
+          "sha256": "6190a343934d04fb4a66c22eb0f71c3466b141ec5e57a2188816ab7809906cc9",
+          "width": 420,
+          "height": 420
+        },
+        "african_clearing": {
+          "path": "app/assets/maps/rm_african_clearing.png",
+          "sha256": "9d9fafdb366674f8df2a17e68ca5f6b165a897c3c9074af572e813d5e29fcad4",
+          "width": 420,
+          "height": 420
+        },
+        "aftermath": {
+          "path": "app/assets/maps/rm_aftermath.png",
+          "sha256": "836ea130eac99fd2b58cd8914bd965a4eb02e28d2d259902d49d56f8ea4fd8df",
+          "width": 420,
+          "height": 420
+        },
+        "alpine-lakes": {
+          "path": "app/assets/maps/rm_alpine-lakes.png",
+          "sha256": "a973ed895492c1eb150b1cc8071dae344f97ff70e56df6f176e2f2754a297034",
+          "width": 420,
+          "height": 420
+        },
+        "amazon_tunnels": {
+          "path": "app/assets/maps/rm_amazon_tunnels.png",
+          "sha256": "9d1a3fa37428b1ea54498151c2c9a028e69afbba6b6f99dad09d76293883906a",
+          "width": 420,
+          "height": 420
+        },
+        "arabia": {
+          "path": "app/assets/maps/rm_arabia.png",
+          "sha256": "87df50321118d00e5c25f350c28ea59ec57c777ef853b5ed40827add7b757938",
+          "width": 420,
+          "height": 420
+        },
+        "archipelago": {
+          "path": "app/assets/maps/rm_archipelago.png",
+          "sha256": "a90e417ec326e9b4ad4e93a7a305cf2ec80484b82c79b26f5e7819152be5949c",
+          "width": 420,
+          "height": 420
+        },
+        "arena": {
+          "path": "app/assets/maps/rm_arena.png",
+          "sha256": "9091cc7463ca6b97850b7a9383fa4e435302a49da2331faa031428f8d7ccc946",
+          "width": 420,
+          "height": 420
+        },
+        "atacama": {
+          "path": "app/assets/maps/rm_atacama.png",
+          "sha256": "ad12ee230466cf9aa85f102983840902ece3b3217e7d21484929cbd25b0c0e91",
+          "width": 423,
+          "height": 420
+        },
+        "baltic": {
+          "path": "app/assets/maps/rm_baltic.png",
+          "sha256": "80a6bdd9a952cb5bfdd74e1d46592a4ad4215c81a6d14136fb1ba3971c69bfd9",
+          "width": 420,
+          "height": 420
+        },
+        "black-forest": {
+          "path": "app/assets/maps/rm_black-forest.png",
+          "sha256": "41aeed5a9c402523e5bf62258c37a7dc9e2634716d725b0a9b0c7298fb73d40f",
+          "width": 420,
+          "height": 420
+        },
+        "bog-islands": {
+          "path": "app/assets/maps/rm_bog-islands.png",
+          "sha256": "11ea985794b6e14b9cad54a958f4d2459beec4c66681e6f7f00ba45e2b8106f4",
+          "width": 420,
+          "height": 420
+        },
+        "bogland": {
+          "path": "app/assets/maps/rm_bogland.png",
+          "sha256": "5c1e3369603228ab1c9ca9940f11a3337ed0e73cdd945a3ff79f1b5ec3368e54",
+          "width": 420,
+          "height": 420
+        },
+        "budapest": {
+          "path": "app/assets/maps/rm_budapest.png",
+          "sha256": "99c1cac43873b7f4e559a39672f816782d6e071d68b4ed7f11f120ae6c7b2aff",
+          "width": 420,
+          "height": 420
+        },
+        "cenotes": {
+          "path": "app/assets/maps/rm_cenotes.png",
+          "sha256": "6abac545d5fbeaff386f420315fddddcdc61a58f7941adf9fc63f5a4f4d850d5",
+          "width": 420,
+          "height": 420
+        },
+        "city-of-lakes": {
+          "path": "app/assets/maps/rm_city-of-lakes.png",
+          "sha256": "44e89a635670c30c302c35603a70d0b7c652ae2f86884a4c0b18368d68098ff1",
+          "width": 420,
+          "height": 420
+        },
+        "coastal": {
+          "path": "app/assets/maps/rm_coastal.png",
+          "sha256": "3df3b53f1ef7dd6b0940193518cc70ca7449d29012a3213627d402eae553bc33",
+          "width": 420,
+          "height": 420
+        },
+        "coastal_forest": {
+          "path": "app/assets/maps/rm_coastal_forest.png",
+          "sha256": "32bbedbc7d5d333435a083b0578c22a172b414aac67c17453dfe52fb93d3adff",
+          "width": 420,
+          "height": 420
+        },
+        "continental": {
+          "path": "app/assets/maps/rm_continental.png",
+          "sha256": "0c9569efb39f4bc1eace53b496324807e6c10513f6b4d3fd8efe5d07315d9b52",
+          "width": 420,
+          "height": 420
+        },
+        "crater": {
+          "path": "app/assets/maps/rm_crater.png",
+          "sha256": "22b462069c66e3773755aa43d803bfc65c9cd6904ab549630b331048ccf13266",
+          "width": 420,
+          "height": 420
+        },
+        "crater-lake": {
+          "path": "app/assets/maps/rm_crater-lake.png",
+          "sha256": "f8f1099ef8dc461e6a5ceff880e2fdd9542e036cfd686890a524565d21e0b629",
+          "width": 420,
+          "height": 420
+        },
+        "crossroads": {
+          "path": "app/assets/maps/rm_crossroads.png",
+          "sha256": "462c457a51e884de583338dae45b21074a411a3793f6f71fe52c26eb30ddc7e9",
+          "width": 420,
+          "height": 420
+        },
+        "enclosed": {
+          "path": "app/assets/maps/rm_enclosed.png",
+          "sha256": "7347f81637b367f08819d69208a07a09b4b30a9e704caa9096f3205b2f721da8",
+          "width": 420,
+          "height": 420
+        },
+        "eruption": {
+          "path": "app/assets/maps/rm_eruption.png",
+          "sha256": "fb5ee892b97e938cf4c323d24561e9994fa39b091c952d8ea6071f00c769e217",
+          "width": 420,
+          "height": 420
+        },
+        "fortress": {
+          "path": "app/assets/maps/rm_fortress.png",
+          "sha256": "ea4de59c9b051103ffff998d0cc55fd14797826617325af42f4640e9b91710c9",
+          "width": 420,
+          "height": 420
+        },
+        "four-lakes": {
+          "path": "app/assets/maps/rm_four-lakes.png",
+          "sha256": "de18f9605b7956e087584e1829789501d22c8c0ceb569894492c1b21a563b02b",
+          "width": 420,
+          "height": 420
+        },
+        "frigid_lake": {
+          "path": "app/assets/maps/rm_frigid_lake.png",
+          "sha256": "965987726de3a01120ac9f405705a5c7f6c6729bdba755e564236c44e8af3765",
+          "width": 420,
+          "height": 420
+        },
+        "ghost-lake": {
+          "path": "app/assets/maps/rm_ghost-lake.png",
+          "sha256": "69673e994a966dbabc69ea3dc5bc8b9973dd58045d774cd95c343160075287e3",
+          "width": 420,
+          "height": 420
+        },
+        "gold-rush": {
+          "path": "app/assets/maps/rm_gold-rush.png",
+          "sha256": "c515eaa38924bfcf02264763ce271e23e306cac0d3901c6cef8fadca9c6a4baa",
+          "width": 420,
+          "height": 420
+        },
+        "golden-pit": {
+          "path": "app/assets/maps/rm_golden-pit.png",
+          "sha256": "df1703e6ef522562473149d2f7e79ae9ddf33d0ace72ae07b277f47dde53530d",
+          "width": 420,
+          "height": 420
+        },
+        "golden-swamp": {
+          "path": "app/assets/maps/rm_golden-swamp.png",
+          "sha256": "e6a481e630033800386f93ce427b64d1f4a34ab5e86edcd629e1f1ba6672c1e0",
+          "width": 420,
+          "height": 420
+        },
+        "greenland": {
+          "path": "app/assets/maps/rm_greenland.png",
+          "sha256": "653bf1025b3ce265e72947ef99f9aaff52401d2622e77942e209a04356d07fd2",
+          "width": 420,
+          "height": 420
+        },
+        "haboob": {
+          "path": "app/assets/maps/rm_haboob.png",
+          "sha256": "a6f19f044ebc2158d751b6c6c724e0106a4d98a3458af2b9b95e1e901f35f20c",
+          "width": 420,
+          "height": 420
+        },
+        "hamburger": {
+          "path": "app/assets/maps/rm_hamburger.png",
+          "sha256": "68f17f9a3b29d66454dde13d22bbf6a8ccf2222cca751a01dfa19400d6161ce2",
+          "width": 420,
+          "height": 420
+        },
+        "hideout": {
+          "path": "app/assets/maps/rm_hideout.png",
+          "sha256": "755e5adbd07181f98126f3b0f2bc40eb777f66082394d0a8cc6c6973ae33bf27",
+          "width": 420,
+          "height": 420
+        },
+        "highland": {
+          "path": "app/assets/maps/rm_highland.png",
+          "sha256": "98464260463b01b688c3d5c37a869526060d3f44af7c2e52764fcaa920644d9a",
+          "width": 420,
+          "height": 420
+        },
+        "hill-fort": {
+          "path": "app/assets/maps/rm_hill-fort.png",
+          "sha256": "702927fa1c5575323d952f814e15b2e9baeab1c553a9c2a7d02692f8ef613f91",
+          "width": 420,
+          "height": 420
+        },
+        "islands": {
+          "path": "app/assets/maps/rm_islands.png",
+          "sha256": "959159fa8a2fca8cc8ff8855bc72d42c829b745ab9bbd2443a223e30bd044faa",
+          "width": 420,
+          "height": 420
+        },
+        "kawasan": {
+          "path": "app/assets/maps/rm_kawasan.png",
+          "sha256": "2291d8c5510af02a78cbe456b392b90767505aa6e902a7ec4de7a91d1b618774",
+          "width": 420,
+          "height": 420
+        },
+        "kilimanjaro": {
+          "path": "app/assets/maps/rm_kilimanjaro.png",
+          "sha256": "b710d914c420f3a6bb9ce7248a88b1c80994330f742732f4270a7ff0d721ab03",
+          "width": 420,
+          "height": 420
+        },
+        "land_madness": {
+          "path": "app/assets/maps/rm_land_madness.png",
+          "sha256": "fae4271ac88f7084952f0621aa4e36410ac7b309c2144ba0b960e63856cc2db9",
+          "width": 420,
+          "height": 420
+        },
+        "land_nomad": {
+          "path": "app/assets/maps/rm_land_nomad.png",
+          "sha256": "8eeb7af3ff11b2c71c56708f0da1be2ee22a990a212a3319be544abc9ba1ef51",
+          "width": 420,
+          "height": 420
+        },
+        "lombardia": {
+          "path": "app/assets/maps/rm_lombardia.png",
+          "sha256": "2ba6ff57e1d04da7094d882f72863ae9fb3c65e8710fde317884655deb672781",
+          "width": 420,
+          "height": 420
+        },
+        "lowland": {
+          "path": "app/assets/maps/rm_lowland.png",
+          "sha256": "b41f949da2146f5efdc2b31ed3b85c478c4d02c92a6ff4971510cb645df827c9",
+          "width": 420,
+          "height": 420
+        },
+        "mangrove-jungle": {
+          "path": "app/assets/maps/rm_mangrove-jungle.png",
+          "sha256": "0753bdecf4fa563bb320331fbd6b2eb25391b5356c370d34eabbc876f0357053",
+          "width": 420,
+          "height": 420
+        },
+        "marketplace": {
+          "path": "app/assets/maps/rm_marketplace.png",
+          "sha256": "16ba9b7814aaf5ae4f13949dff4cf0889e2967e53145d17702e20f4e92e7dbd2",
+          "width": 420,
+          "height": 420
+        },
+        "meadow": {
+          "path": "app/assets/maps/rm_meadow.png",
+          "sha256": "974d0d4b7fc2c80c13d80bad18eca9b078014cc4b4db7a4db9894e3d0088e898",
+          "width": 420,
+          "height": 420
+        },
+        "mediterranean": {
+          "path": "app/assets/maps/rm_mediterranean.png",
+          "sha256": "ae50fed9d307ea888c1b7743533a39bdfb58d9b0b412c335a1b230e6a763ab1a",
+          "width": 420,
+          "height": 420
+        },
+        "megarandom": {
+          "path": "app/assets/maps/rm_megarandom.png",
+          "sha256": "daaf99dc3c4239ec17193e112525b48fb186a3a94ec52f58b8e94635e8789810",
+          "width": 420,
+          "height": 420
+        },
+        "michi": {
+          "path": "app/assets/maps/rm_michi.png",
+          "sha256": "86885135915da6912d7dcf17cd84899e9ab60bc5c52990fbbc4ec11164546a14",
+          "width": 420,
+          "height": 420
+        },
+        "migration": {
+          "path": "app/assets/maps/rm_migration.png",
+          "sha256": "3563d974d78b85c1c764b9f258a6b94f771a0a5a7110ff82add61eaec4976d4f",
+          "width": 420,
+          "height": 420
+        },
+        "mongolia": {
+          "path": "app/assets/maps/rm_mongolia.png",
+          "sha256": "e2c48eac3180884d1cd84b15a4d83f7384f8e3b942715f1ce3d0c7ed12b98123",
+          "width": 420,
+          "height": 420
+        },
+        "morass": {
+          "path": "app/assets/maps/rm_morass.png",
+          "sha256": "01f671ff602fc89bbb5f079bc693185801b4638208549dc81d0fdc1f7ddf968f",
+          "width": 420,
+          "height": 420
+        },
+        "mountain-pass": {
+          "path": "app/assets/maps/rm_mountain-pass.png",
+          "sha256": "7d0244020a7798ec22bc50d4e15e3a4f17565f83d21d3832984e36aaf42f537f",
+          "width": 420,
+          "height": 420
+        },
+        "mountain-ridge": {
+          "path": "app/assets/maps/rm_mountain-ridge.png",
+          "sha256": "08b190281b5e8dc820e14eeb1d1cfdf0d77ec35ddf8dce542ee66f704469ff58",
+          "width": 420,
+          "height": 420
+        },
+        "mountain_range": {
+          "path": "app/assets/maps/rm_mountain_range.png",
+          "sha256": "148d388c82828f8137d5d6cc080366cf64a89230e1ddbe7d2c2270e47207d33c",
+          "width": 420,
+          "height": 420
+        },
+        "nile-delta": {
+          "path": "app/assets/maps/rm_nile-delta.png",
+          "sha256": "6beae64a7426a81bcc4d7d4a4c95bcd94cbef1da75e0c132f8c3b47783de6bdb",
+          "width": 420,
+          "height": 420
+        },
+        "nomad": {
+          "path": "app/assets/maps/rm_nomad.png",
+          "sha256": "b7a4850ffcb23f526b1e68d5501371ac78284831bdb6dfae24eeeb4ee968dae8",
+          "width": 420,
+          "height": 420
+        },
+        "northern_isles": {
+          "path": "app/assets/maps/rm_northern_isles.png",
+          "sha256": "b102a4a532509d57d1a22cd53fa6692098e00d54a930e932a384c11a69ae4937",
+          "width": 420,
+          "height": 420
+        },
+        "oasis": {
+          "path": "app/assets/maps/rm_oasis.png",
+          "sha256": "0cdceeb72f97a2b24addd8cb847f141e4a413ee1bd49cf3d562b7e34b1a57729",
+          "width": 420,
+          "height": 420
+        },
+        "pacific-islands": {
+          "path": "app/assets/maps/rm_pacific-islands.png",
+          "sha256": "02afb0ac7a24b8deeeff376d5bca338fe81d613501b9f03278b2fe06c64e8231",
+          "width": 420,
+          "height": 420
+        },
+        "ravines": {
+          "path": "app/assets/maps/rm_ravines.png",
+          "sha256": "20ffd5ebf07dd1a00392c9e77cfe93324431771412e38e826174c0260be26254",
+          "width": 420,
+          "height": 420
+        },
+        "ring_fortress": {
+          "path": "app/assets/maps/rm_ring_fortress.png",
+          "sha256": "90f212ff0f98c63b53d9bc0ef2b0603ea5c926f740b9e532cf9f1f5301120175",
+          "width": 420,
+          "height": 420
+        },
+        "rivers": {
+          "path": "app/assets/maps/rm_rivers.png",
+          "sha256": "606eca59e1fe48ba0ddf254affccdcbb9b03b5f1982b6d55644520e6ea0f35cf",
+          "width": 420,
+          "height": 420
+        },
+        "runestones": {
+          "path": "app/assets/maps/rm_runestones.png",
+          "sha256": "b4ef79ed6dce41705dc3fb3450e5efc8f3c5b34b8219a75674828a9094c9ac37",
+          "width": 420,
+          "height": 420
+        },
+        "sacred_springs": {
+          "path": "app/assets/maps/rm_sacred_springs.png",
+          "sha256": "a0e59def1833d2d4082a949f704b6bb01cb13ccf7bf2c8bcf8b1d37861d0c7c1",
+          "width": 420,
+          "height": 420
+        },
+        "salt-marsh": {
+          "path": "app/assets/maps/rm_salt-marsh.png",
+          "sha256": "81752b859bdfebf1c0eedeaade8ee34567c4d3b177fa6b9742d2faf352dbd6b9",
+          "width": 420,
+          "height": 420
+        },
+        "sandbank": {
+          "path": "app/assets/maps/rm_sandbank.png",
+          "sha256": "d04a5f3875d3511a5d69c9d08f5e6630ba614b208bc8a9ad196049a7f3e13e34",
+          "width": 420,
+          "height": 420
+        },
+        "scandinavia": {
+          "path": "app/assets/maps/rm_scandinavia.png",
+          "sha256": "cf21506f69a721ecd33f5ddf092868579b84e6fb5dd2ae0f2c8c219d6f0b72ec",
+          "width": 420,
+          "height": 420
+        },
+        "seize_the_mountain": {
+          "path": "app/assets/maps/rm_seize_the_mountain.png",
+          "sha256": "d85fe655be9811cf4c027e1359c5d6c5157bf8c0cac0aec8cf51122dcd155acd",
+          "width": 420,
+          "height": 420
+        },
+        "serengeti": {
+          "path": "app/assets/maps/rm_serengeti.png",
+          "sha256": "fbf62b2e788f04c3224007d3b587d237539facfc9e291b1e86f1c2a295a368b1",
+          "width": 420,
+          "height": 420
+        },
+        "shoals": {
+          "path": "app/assets/maps/rm_shoals.png",
+          "sha256": "ee481888259220057038056c74ad3be53fce3e40a86655558edb41a8e7674f35",
+          "width": 420,
+          "height": 420
+        },
+        "socotra": {
+          "path": "app/assets/maps/rm_socotra.png",
+          "sha256": "855d824cba73111f409163b71ccbb089d4ce8fcacc099865e7285bcc2eaabb76",
+          "width": 420,
+          "height": 420
+        },
+        "steppe": {
+          "path": "app/assets/maps/rm_steppe.png",
+          "sha256": "36624237df7ccf6d420a2a28fa3327bb95ce2ac6671ab8cd455fc5a28ec9b8ca",
+          "width": 420,
+          "height": 420
+        },
+        "team-islands": {
+          "path": "app/assets/maps/rm_team-islands.png",
+          "sha256": "189360abcb5aed04baec329cf54b4dceafeed4bc7d8b7b8aa785ab17bbf64382",
+          "width": 420,
+          "height": 420
+        },
+        "team_moats": {
+          "path": "app/assets/maps/rm_team_moats.png",
+          "sha256": "6a968cafb2d7ccf54aadc3f020d17852f9a12904ebe90bd56687580cc197d178",
+          "width": 420,
+          "height": 420
+        },
+        "valley": {
+          "path": "app/assets/maps/rm_valley.png",
+          "sha256": "62db1a311e331f1de7b0c245757224fc06f1d07bd2c63ee42836f37a4f1452b4",
+          "width": 420,
+          "height": 420
+        },
+        "volcanic_island": {
+          "path": "app/assets/maps/rm_volcanic_island.png",
+          "sha256": "18d06523327a23d8d52fac4d8c1bb153ed4e17aefb0786ced9e15d1b470c08a6",
+          "width": 420,
+          "height": 420
+        },
+        "wade": {
+          "path": "app/assets/maps/rm_wade.png",
+          "sha256": "36e21be225ef0047b8df09a4dd0736f163388c6213a419e279284086832fc0df",
+          "width": 420,
+          "height": 420
+        },
+        "water-nomad": {
+          "path": "app/assets/maps/rm_water-nomad.png",
+          "sha256": "db32c187590b6b9afe243385786b85844680a229304a5f6f7a24f126c8d8a603",
+          "width": 420,
+          "height": 420
+        },
+        "wolf-hill": {
+          "path": "app/assets/maps/rm_wolf-hill.png",
+          "sha256": "a7d163e92f1330f8b90ee4901141ff457df56ea53766dfff7b513897f3c6dd04",
+          "width": 420,
+          "height": 420
+        },
+        "yucatan": {
+          "path": "app/assets/maps/rm_yucatan.png",
+          "sha256": "ced482b25885d988dcd0bbc985e4919c51a67f9b7f2fc99c561d9575bad6ccfc",
+          "width": 420,
+          "height": 420
+        }
+      }
+    },
+    "mapCatalog": {
+      "date": "2026-10-25",
+      "fetchedAt": "2026-10-25 05:25:37 UTC",
+      "format": "normalized JSON：解析 API 响应后以 UTF-8、两空格缩进归档，非原 HTTP 字节",
+      "use": "地图官方中英名称及游戏内形态说明；只取固定图源可覆盖的具名标准RM地图，不代表当前全部地图或天梯池",
+      "snapshots": {
+        "zh-hans": {
+          "url": "https://data.aoe2companion.com/api/maps?language=zh-hans",
+          "path": "scripts/map_catalog_source/zh-hans.json",
+          "sha256": "bafd82f835582897369bef9b62c041de6b604a1a407a21662dfeb23b43712bb5"
+        },
+        "en": {
+          "url": "https://data.aoe2companion.com/api/maps?language=en",
+          "path": "scripts/map_catalog_source/en.json",
+          "sha256": "1a7b644c19315b7af64e277d9a0e8ed650da508e8c541b42ade5b93c028fc107"
+        }
       }
     }
   }

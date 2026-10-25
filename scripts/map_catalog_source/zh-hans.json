@@ -1,0 +1,1166 @@
+[
+  {
+    "mapId": "rm_arabia",
+    "mapName": "阿拉伯半岛",
+    "description": "阿拉伯半岛：干旱，贫瘠的沙漠，有战略高地，但植物和水源稀少。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_arabia.png"
+  },
+  {
+    "mapId": "rm_archipelago",
+    "mapName": "群岛",
+    "description": "群岛：一群大型岛屿，你可能不是岛上唯一的居民。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_archipelago.png"
+  },
+  {
+    "mapId": "rm_baltic",
+    "mapName": "波罗的海",
+    "description": "波罗的海：一个海洋和半岛以及许多隐蔽点组成。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_baltic.png"
+  },
+  {
+    "mapId": "rm_black-forest",
+    "mapName": "黑森林",
+    "description": "黑森林：被树海分割的草地小岛。中间有小路通向敌人和盟友。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_black-forest.png"
+  },
+  {
+    "mapId": "rm_coastal",
+    "mapName": "沿海",
+    "description": "沿海：陆地和海洋交汇的地方，由大量的水域和沙滩组成，可以进行陆战或海战。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_coastal.png"
+  },
+  {
+    "mapId": "rm_continental",
+    "mapName": "大陆",
+    "description": "大陆：大片的陆地被海洋环绕，可能有河流分割各个玩家和组队。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_continental.png"
+  },
+  {
+    "mapId": "rm_crater-lake",
+    "mapName": "火山湖",
+    "description": "火山湖：火山湖的中央有一个满布黄金的小岛。陡峭的地形和缺乏树木导致很难在上面立足。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_crater-lake.png"
+  },
+  {
+    "mapId": "rm_fortress",
+    "mapName": "堡垒",
+    "description": "堡垒：带城们的围墙环绕，你需要赶紧建设自己的部队。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_fortress.png"
+  },
+  {
+    "mapId": "rm_gold-rush",
+    "mapName": "淘金潮",
+    "description": "淘金潮：沙漠的中心有一大堆黄金和凶恶的狼群。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_gold-rush.png"
+  },
+  {
+    "mapId": "rm_highland",
+    "mapName": "高地",
+    "description": "高地：远离海洋，有广阔的森林。但有一些河流和一些开阔地，便于机动作战。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_highland.png"
+  },
+  {
+    "mapId": "rm_islands",
+    "mapName": "岛屿",
+    "description": "岛屿：每个玩家开始都在一个孤独的岛上；某些无人岛可能有丰富的资源。所以一定要掌握制海权。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_islands.png"
+  },
+  {
+    "mapId": "rm_mediterranean",
+    "mapName": "地中海",
+    "description": "地中海：一个被陆地包围的内陆海，似乎是一种令人迷惑的和平。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mediterranean.png"
+  },
+  {
+    "mapId": "rm_migration",
+    "mapName": "迁移",
+    "description": "迁移：一个小岛，不能提供足够长时间的发展，必须转移到大陆并在那里战斗。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_migration.png"
+  },
+  {
+    "mapId": "rm_rivers",
+    "mapName": "河流",
+    "description": "河流：玩家被狭窄的河流分割；众多的浅滩连接口必须重兵防守。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_rivers.png"
+  },
+  {
+    "mapId": "rm_team-islands",
+    "mapName": "团队岛屿",
+    "description": "团队岛屿：一个岛屿上只有你和你的盟友，敌人在其他岛屿，必须通过敌方运输船作战，没有浅滩可以通过。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_team-islands.png"
+  },
+  {
+    "mapId": "rm_scandinavia",
+    "mapName": "斯堪的纳维亚",
+    "description": "斯堪的纳维亚：北方的野地，浆果灌木丛都被冻住了，但有大量饥饿的野兽可以捕猎，黄金也很充足。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_scandinavia.png"
+  },
+  {
+    "mapId": "rm_mongolia",
+    "mapName": "蒙古",
+    "description": "蒙古：无边的大草原上有众多的悬崖。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mongolia.png"
+  },
+  {
+    "mapId": "rm_yucatan",
+    "mapName": "尤卡坦",
+    "description": "尤卡坦：热带雨林，食物十分充足，但是美洲豹也不少。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_yucatan.png"
+  },
+  {
+    "mapId": "rm_salt-marsh",
+    "mapName": "盐碱沼泽",
+    "description": "盐碱沼泽：低洼沼泽地，大量浅浅的溪流，阻止了建筑扩张的速度。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_salt-marsh.png"
+  },
+  {
+    "mapId": "rm_arena",
+    "mapName": "竞技场",
+    "description": "竞技场：你的周围有城墙的保护；树林也被清除干净。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_arena.png"
+  },
+  {
+    "mapId": "rm_oasis",
+    "mapName": "绿洲",
+    "description": "绿洲：几乎所有的木头都在地图中央，可能在周围展开追击战。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_oasis.png"
+  },
+  {
+    "mapId": "rm_ghost-lake",
+    "mapName": "幽灵湖",
+    "description": "幽灵湖：湖中心是被冰冻的无人区。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ghost-lake.png"
+  },
+  {
+    "mapId": "rm_nomad",
+    "mapName": "游牧",
+    "description": "游牧民族：你的村民开始没有城镇中心和斥候骑兵。你可以马上就地造基地，或找一个好地方去建造基地。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_nomad.png"
+  },
+  {
+    "mapId": "cm_canals",
+    "mapName": "运河",
+    "description": "运河：纵横交错的河网既连通又分隔。掌控河道至关重要，但要提防敌军从侧翼突袭。山谷周围的森林辽阔却缺少掩护。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_canals.png"
+  },
+  {
+    "mapId": "cm_capricious",
+    "mapName": "变幻莫测",
+    "description": "变幻莫测：有时饥荒肆虐，有时资源充沛，命运的轮盘摇摆不定。探索并利用这难以预测的环境，适应才是取胜之道。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_capricious.png"
+  },
+  {
+    "mapId": "cm_dingos",
+    "mapName": "澳洲野犬",
+    "description": "澳洲野犬：迅速收拢牲畜，否则潜伏的澳洲野犬会不期而至。利用海路避开掠食者，或把它们巧妙引到敌人基地里饱餐一顿。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_dingos.png"
+  },
+  {
+    "mapId": "cm_graveyards",
+    "mapName": "坟墓",
+    "description": "坟墓：一处弥漫着往昔战火残影的阴森之地。穿越迷雾，在敌人现身并向你发起挑战前夺下坟墓中的关键资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_graveyards.png"
+  },
+  {
+    "mapId": "cm_metropolis",
+    "mapName": "大都市",
+    "description": "大都市：三座城镇中心任你调度。你必须立刻承担起庞大的人口压力，在混乱中迅速展开帝国的对决。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_metropolis.png"
+  },
+  {
+    "mapId": "rm_moats",
+    "mapName": "护城河",
+    "description": "护城河：狭窄水带环绕，不要被虚假的安全感麻痹。你终究得冲出这片安逸之地，探索未知以夺取更多资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_moats.png"
+  },
+  {
+    "mapId": "cm_paradise-island",
+    "mapName": "天堂岛",
+    "description": "天堂岛：在这片被时光遗忘的孤岛，丛林深处危机四伏。揭开它的秘密，或沦为它古老力量的牺牲品——小心岛上的守护者。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_paradise-island.png"
+  },
+  {
+    "mapId": "cm_pilgrims",
+    "mapName": "朝圣者",
+    "description": "朝圣者：争分夺秒占领那片富饶的大陆，抢夺它的馈赠。你是选择沿海安家，还是孤注一掷深入腹地，迎接未知的危险来换取更大的财富？",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_pilgrims.png"
+  },
+  {
+    "mapId": "cm_prairie",
+    "mapName": "大草原",
+    "description": "大草原：风吹草低，一片辽阔的原野展现在你眼前，稀疏的林地只能提供有限的庇护。资源丰富却容易暴露，任何犹豫都将使你在对手的迅猛攻势下溃败。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_prairie.png"
+  },
+  {
+    "mapId": "cm_seasons",
+    "mapName": "四季",
+    "description": "四季：严冬、韶春、盛夏、金秋，四季轮转带来不同的挑战与机遇。你必须随天时调整策略方能笑到最后。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_seasons.png"
+  },
+  {
+    "mapId": "cm_sherwood-forest",
+    "mapName": "雪伍德森林",
+    "description": "雪伍德森林：穿越树海迷宫，在森林腹地立足。驯服野生动物探索密林，并善用潜藏于暗影中的野兽资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_sherwood-forest.png"
+  },
+  {
+    "mapId": "cm_shipwreck",
+    "mapName": "船只遗骸",
+    "description": "船只遗骸：潮水拍打着残骸，而你的对手近在咫尺。寻找资源、重建文明的竞赛即刻开始。你会留守船骸周围，还是冒险深入寻找更多资源？",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_shipwreck.png"
+  },
+  {
+    "mapId": "cm_team-glaciers",
+    "mapName": "团队冰川",
+    "description": "团队冰川：一条严寒的冰河分割出这片残酷之地。忍受酷寒、掌控冰岛资源，并争夺冰河水道的控制权，在这片无情的极地战场中坚持到最后。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_team-glaciers.png"
+  },
+  {
+    "mapId": "rwm_iberia",
+    "mapName": "伊比利亚",
+    "description": "伊比利亚半岛，包括西班牙和葡萄牙",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_iberia.png"
+  },
+  {
+    "mapId": "rwm_britain",
+    "mapName": "不列颠",
+    "description": "希望通过海军控制北海并穿越英吉利海峡。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_britain.png"
+  },
+  {
+    "mapId": "rwm_mideast",
+    "mapName": "中东",
+    "description": "大陆，文化，和世界宗教信仰",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_mideast.png"
+  },
+  {
+    "mapId": "rwm_texas",
+    "mapName": "德克萨斯",
+    "description": "再次体验玛雅人和高丽人在这个孤星州里发生的冲突。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_texas.png"
+  },
+  {
+    "mapId": "rwm_italy",
+    "mapName": "意大利半岛",
+    "description": "罗马灭亡后半岛变成了列强抢夺的对象。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_italy.png"
+  },
+  {
+    "mapId": "rwm_central_america",
+    "mapName": "中美洲",
+    "description": "中美洲——阿兹特克和玛雅人争夺中美洲的控制权，并与越洋而来的侵略者作战。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_central_america.png"
+  },
+  {
+    "mapId": "rwm_france",
+    "mapName": "法兰西",
+    "description": "重新进行穆斯林的入侵和百年战争。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_france.png"
+  },
+  {
+    "mapId": "rwm_norse_lands",
+    "mapName": "北欧",
+    "description": "挪威，瑞典，芬兰，丹麦和荷兰。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_norse_lands.png"
+  },
+  {
+    "mapId": "rwm_sea_of_japan",
+    "mapName": "日本海 (东海)",
+    "description": "日本战船与高丽龟甲船曾在这片暗礁密布的海域展开激烈的战斗。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_sea_of_japan.png"
+  },
+  {
+    "mapId": "rwm_byzantium",
+    "mapName": "拜占庭",
+    "description": "罗马没有真正的灭亡，它改头换面继续存在。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_byzantium.png"
+  },
+  {
+    "mapId": "rm_acropolis",
+    "mapName": "雅典卫城",
+    "description": "雅典卫城：为了守护你的高地和征服敌人的领土，一场场战斗发生在那贫瘠的卫城坡上。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_acropolis.png"
+  },
+  {
+    "mapId": "rm_budapest",
+    "mapName": "布达佩斯",
+    "description": "布达佩斯：两个主城和富足的野味让战斗变得异常激烈。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_budapest.png"
+  },
+  {
+    "mapId": "rm_cenotes",
+    "mapName": "岩坑池地",
+    "description": "岩坑池地：无边的墨西哥土地上散落着大小不一的岩坑池地和小树林。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_cenotes.png"
+  },
+  {
+    "mapId": "rm_city-of-lakes",
+    "mapName": "百湖之城",
+    "description": "百湖之城：湖泊河流纵横交错如同迷宫般遍布在这荒漠上。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_city-of-lakes.png"
+  },
+  {
+    "mapId": "rm_golden-pit",
+    "mapName": "金矿谷",
+    "description": "金矿谷：布满金矿的峡谷召唤着所有贪婪的淘金者，而当你深陷金谷时才会发现杀机四伏。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_golden-pit.png"
+  },
+  {
+    "mapId": "rm_hideout",
+    "mapName": "藏身之处",
+    "description": "藏身之处：一层木栅栏只能给你暂时安全的幻觉，谁都知道潜伏在树林深处的敌人随时都可能杀进来。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hideout.png"
+  },
+  {
+    "mapId": "rm_hill-fort",
+    "mapName": "山寨",
+    "description": "山寨：即便身处坚不可破的山寨，为了扩张领土掠夺资源，你仍然选择了下山去面对最原始野蛮的血斗。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hill-fort.png"
+  },
+  {
+    "mapId": "rm_lombardia",
+    "mapName": "伦巴第",
+    "description": "伦巴第：你要和你身边的同盟一起分享资源土地，度过这个血腥的寒冬。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_lombardia.png"
+  },
+  {
+    "mapId": "rm_steppe",
+    "mapName": "干草原",
+    "description": "干草原：你可敢越过前方的遮风林去中间的平地上寻找肥美的鹿群？",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_steppe.png"
+  },
+  {
+    "mapId": "rm_valley",
+    "mapName": "峡谷",
+    "description": "峡谷：一条干涸的小溪分开了两个敌对的势力，它也给周围饥渴的野生动物提供最后的泉水。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_valley.png"
+  },
+  {
+    "mapId": "rm_megarandom",
+    "mapName": "超级随机",
+    "description": "超级随机：你是否曾幻想过一种完全无法预料、一切皆有可能的地图？把你这种想象再放大十倍就会是...超级随机地图。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_megarandom.png"
+  },
+  {
+    "mapId": "rm_hamburger",
+    "mapName": "汉堡包",
+    "description": "汉堡包：意外的彩蛋地图。你总会被分到夹心汉堡包的其中一端，你会选择吃透中间的那一层，还是沿着外围航行到另一端从敌人身后突袭呢？",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hamburger.png"
+  },
+  {
+    "mapId": "rm_ctr_random",
+    "mapName": "争夺圣物随机地图",
+    "description": "一个专为“争夺圣物”模式设计的随机地图。数十个完全不一样的竞技场面让您全方位挑战这个新的游戏模式所带来的前所未有的乐趣和体验。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ctr_random.png"
+  },
+  {
+    "mapId": "rm_ctr_monsoon",
+    "mapName": "争夺圣物雨季沼泽",
+    "description": "三大最有挑战性的针对“争夺圣物”模式的地图。该地图只有很少的地方能建造建筑，因为放眼过去尽是沼泽，而冬天一来则结为薄冰。圣物位于中间被神圣树丛包围处。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ctr_monsoon.png"
+  },
+  {
+    "mapId": "rm_ctr_pyramid-descent",
+    "mapName": "争夺圣物决战金字塔之巅",
+    "description": "三大最有挑战性的针对“争夺圣物”模式的地图。圣物处在巨型的金字塔之巅而玩家开始就离金字塔顶不远，只是，他们各种的修道院却在金字塔底下。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ctr_pyramid-descent.png"
+  },
+  {
+    "mapId": "rm_ctr_spiral",
+    "mapName": "争夺圣物漩涡迷航",
+    "description": "三大最有挑战性的针对“争夺圣物”模式的地图。地图中心是一个巨大的深海漩涡，所以要想夺得圣物就得随着洋流一步步得旋转绕圈",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ctr_spiral.png"
+  },
+  {
+    "mapId": "rm_kilimanjaro",
+    "mapName": "乞力马扎罗山",
+    "description": "乞力马扎罗山：非洲屋脊，一座大山脉突出在地图中间。占据这座山，你就能控制地图的重要资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_kilimanjaro.png"
+  },
+  {
+    "mapId": "rm_mountain-pass",
+    "mapName": "雪山地",
+    "description": "雪山地：你的村民走散在一片雪原草地中，你要重新召集他们，在此建功立业，称霸这片山地。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mountain-pass.png"
+  },
+  {
+    "mapId": "rm_nile-delta",
+    "mapName": "尼罗河三角洲",
+    "description": "尼罗河三角洲：这里繁茂的水草和肥沃的土地吸引来了朋友和敌人，群雄逐鹿，你能成为这条充满神话色彩的河流的唯一统治者吗？",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_nile-delta.png"
+  },
+  {
+    "mapId": "rm_serengeti",
+    "mapName": "塞伦盖蒂平原",
+    "description": "塞伦盖蒂平原：广袤的贫瘠土地上没有什么遮荫的森林，在这里你无处可藏，塞伦盖蒂平原上的激战一触即发。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_serengeti.png"
+  },
+  {
+    "mapId": "rm_socotra",
+    "mapName": "索科特拉岛",
+    "description": "索科特拉岛：这里只有与世隔绝的封闭岛屿，你无处可逃，索科特拉岛上只有死战到底才能活下去。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_socotra.png"
+  },
+  {
+    "mapId": "rwm_amazon",
+    "mapName": "亚马逊流域",
+    "description": "茂盛的丛林包围着这片充满诱惑和血腥的亚马逊流域。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_amazon.png"
+  },
+  {
+    "mapId": "rwm_china",
+    "mapName": "华夏",
+    "description": "古老的中华大地 (隋朝地图) 在您脚下，群雄逐鹿，您能否封狼居胥，一统天下？",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_china.png"
+  },
+  {
+    "mapId": "rwm_horn_of_africa",
+    "mapName": "非洲之角",
+    "description": "包括阿拉伯和红海地区在内的非洲东部海岸。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_horn_of_africa.png"
+  },
+  {
+    "mapId": "rwm_india",
+    "mapName": "印度",
+    "description": "古印度战神会帮助您夺下这片充满象牙和羊毛的土地。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_india.png"
+  },
+  {
+    "mapId": "rwm_madagascar",
+    "mapName": "马达加斯加岛",
+    "description": "尽情探索神秘的马达加斯加岛和上面神奇的动植物吧！",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_madagascar.png"
+  },
+  {
+    "mapId": "rwm_west_africa",
+    "mapName": "西非",
+    "description": "这里的南部是茂密的繁林，而北边又是寸草不生的撒哈拉沙漠……西非一直都是让历代诸国将军温至变色的土地。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_west_africa.png"
+  },
+  {
+    "mapId": "rwm_bohemia",
+    "mapName": "波希米亚",
+    "description": "一张描述中世纪时期捷克共和国的地图。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_bohemia.png"
+  },
+  {
+    "mapId": "rwm_earth",
+    "mapName": "世界",
+    "description": "一次攻下一个大陆，直到您征服整个世界！",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_earth.png"
+  },
+  {
+    "mapId": "sm_canyons",
+    "mapName": "大峡谷",
+    "description": "最快杀到敌军的进攻路径也是最危险的，您可以沿着狭隘的峡谷底，冒着被敌人从上面攻击您的危险，冲向敌军...",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_canyons.png"
+  },
+  {
+    "mapId": "sm_enemy-archipelago",
+    "mapName": "敌对群岛",
+    "description": "敌对群岛：四个岛屿，每个岛屿上都有两个互相敌对的势力。您能干掉您的死敌然后去援助盟友吗，还是您就是那个需要盟友施援手的人呢？",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_enemy-archipelago.png"
+  },
+  {
+    "mapId": "sm_enemy-islands",
+    "mapName": "敌对大岛",
+    "description": "敌对大岛：两个大岛，每方势力都控制每个岛的一部分地盘。同盟之间联手，围绕着陆地和海域的争斗会愈发激烈。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_enemy-islands.png"
+  },
+  {
+    "mapId": "sm_far-out",
+    "mapName": "塞外",
+    "description": "塞外：一片广袤，干旱的土地。每个势力都散布在地图边缘。边翼的摩擦早早就开始了，随着越来越多的势力参战，战斗将会愈演愈烈。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_far-out.png"
+  },
+  {
+    "mapId": "sm_front-line",
+    "mapName": "前线",
+    "description": "前线：一片茂密的森林中间只有一条狭长的陆地。由于会有大量军队集聚前线，大路中段将尸横遍野。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_front-line.png"
+  },
+  {
+    "mapId": "sm_inner-circle",
+    "mapName": "内圈",
+    "description": "内圈：所有势力的围挤在山旁。大家必须冲进树林才能占据更多的领土。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_inner-circle.png"
+  },
+  {
+    "mapId": "sm_motherland",
+    "mapName": "故土",
+    "description": "故土：一开始只有两方的对决，而等到同盟拿下了海面，开始往内陆推进时，争斗会更加激烈。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_motherland.png"
+  },
+  {
+    "mapId": "sm_open-plains",
+    "mapName": "开阔草原",
+    "description": "开阔草原：在荒芜的大草原上扩张您的领地。“箭”在弦上，您的同盟和敌人都已准备好一决死战了。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_open-plains.png"
+  },
+  {
+    "mapId": "sm_ring-of-water",
+    "mapName": "水环",
+    "description": "水环：河流的两边分别各有两个国家。两岸陆地都很重要，您们要共同合作才能保家卫国。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_ring-of-water.png"
+  },
+  {
+    "mapId": "sm_snake-pit",
+    "mapName": "羊肠小道",
+    "description": "羊肠小道：狭路相逢勇者胜。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_snake-pit.png"
+  },
+  {
+    "mapId": "sm_the-eye",
+    "mapName": "眼睛",
+    "description": "眼睛：两个大半岛中间有一个小岛，但敌对双方却就是为了这个小岛展开了世纪之战。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_the-eye.png"
+  },
+  {
+    "mapId": "rwm_australia",
+    "mapName": "澳洲",
+    "description": "探索南半球下面的澳洲并和詹姆斯·库克争夺澳洲的洪荒之地。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_australia.png"
+  },
+  {
+    "mapId": "rwm_indochina",
+    "mapName": "中南半岛",
+    "description": "深入中国以南，丛林密布的中南半岛 ，这片美丽的土地既生机勃勃，又杀机四起。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_indochina.png"
+  },
+  {
+    "mapId": "rwm_indonesia",
+    "mapName": "印度尼西亚",
+    "description": "行驶在印度尼西亚群岛的海域上，打下越来越多的岛屿。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_indonesia.png"
+  },
+  {
+    "mapId": "rwm_strait_of_malacca",
+    "mapName": "马六甲海峡",
+    "description": "在印度尼西亚和马来西亚之间的这条海峡是至关重要的贸易路线。您能否掌控这条海峡并占领两边的岛屿？",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_strait_of_malacca.png"
+  },
+  {
+    "mapId": "rwm_phillipines",
+    "mapName": "菲律宾",
+    "description": "迂回在无数岛屿中，在暗礁遍布的水域中来回穿梭，只为征服富饶的菲律宾海域。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_phillipines.png"
+  },
+  {
+    "mapId": "rm_bog-islands",
+    "mapName": "禁闭岛",
+    "description": "禁闭岛：在沼泽遍布的荒野泥泞之地有数个长满绿草的岛屿。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_bog-islands.png"
+  },
+  {
+    "mapId": "rm_mangrove-jungle",
+    "mapName": "红树林",
+    "description": "红树林：玩家被困在一环浅滩中间，外面是茂密的丛林，只有发展的空间很小。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mangrove-jungle.png"
+  },
+  {
+    "mapId": "rm_pacific-islands",
+    "mapName": "太平洋岛屿",
+    "description": "太平洋岛屿：从一个岛屿迁移到下一个岛屿，只为了夺取不同的资源。最终，为了生存你可能要打下所有的岛屿。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_pacific-islands.png"
+  },
+  {
+    "mapId": "rm_sandbank",
+    "mapName": "沙坝",
+    "description": "沙坝：一个浅滩上的一排树林分开了不同的岛屿势力。你无法把树林完全封住，而这海可能成为你最后要争夺的木材资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_sandbank.png"
+  },
+  {
+    "mapId": "rm_water-nomad",
+    "mapName": "水上游牧",
+    "description": "水上游牧：几个村民和捕鱼船在寻找着重建家园的地方。一不小心你可能会迷失在沼泽树林里。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_water-nomad.png"
+  },
+  {
+    "mapId": "sm_jungle-islands",
+    "mapName": "丛林岛屿",
+    "description": "丛林岛屿：玩家一开始成对地出现在地图的四个角落。如果您想抵达地图中央的话您就要在一望无际的汪洋上征服一个又一个的岛屿。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_jungle-islands.png"
+  },
+  {
+    "mapId": "sm_holy-line",
+    "mapName": "圣界",
+    "description": "圣界：每个玩家的岛屿都只有少量的矿物资源，但是中间的岛屿上不仅有金矿和石头，还有一排圣物形成的边界线。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_holy-line.png"
+  },
+  {
+    "mapId": "sm_border-stones",
+    "mapName": "石界",
+    "description": "石矿形成了一条狭长的边界，把不同势力的玩家都划分开来。为了征服敌人您必须采穿这些石料。很快，您就会发现石料多得用不完。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_border-stones.png"
+  },
+  {
+    "mapId": "sm_yin-yang",
+    "mapName": "阴阳",
+    "description": "被森林包围着的玩家分布在一条蛇形的小溪的两边。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_yin-yang.png"
+  },
+  {
+    "mapId": "sm_jungle-lanes",
+    "mapName": "丛林小道",
+    "description": "一开始在地图中间就有紧张急促的交战。随着玩家慢慢地往树林里发展，战争也开始延伸到那里去。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_jungle-lanes.png"
+  },
+  {
+    "mapId": "rm_alpine-lakes",
+    "mapName": "高山湖泊",
+    "description": "高山湖泊：除丰富的淡水和新鲜的鱼类外，白雪皑皑的高山上没什么其他资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_alpine-lakes.png"
+  },
+  {
+    "mapId": "rm_bogland",
+    "mapName": "沼泽",
+    "description": "沼泽：这里是森林与草地交织的迷宫，你永远无法预料下个转角会发现什么。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_bogland.png"
+  },
+  {
+    "mapId": "rm_mountain-ridge",
+    "mapName": "山脊",
+    "description": "山脊：山脊覆满了白雪，在你的眼前乍隐乍现，这里生灵稀少，却蕴藏着丰富的石矿。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mountain-ridge.png"
+  },
+  {
+    "mapId": "rm_ravines",
+    "mapName": "山涧",
+    "description": "山涧：这是山间的一处凹陷，向远处延伸进黑暗的森林。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ravines.png"
+  },
+  {
+    "mapId": "rm_wolf-hill",
+    "mapName": "狼山",
+    "description": "狼山：一座被森林覆盖的山，山里到处是狼群，山顶装饰着珍贵的文物，等待着走近它们的勇士。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_wolf-hill.png"
+  },
+  {
+    "mapId": "sm_swirling-river",
+    "mapName": "旋涡河",
+    "description": "一条蜿蜒的河流横跨地图，形成一片三角区域，它将沿途的一切冲刷殆尽。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_swirling-river.png"
+  },
+  {
+    "mapId": "sm_twin-forests",
+    "mapName": "双子森林",
+    "description": "这座巨大幽深的森林能将两支队伍远远分隔，而这两队却没那么走运了，他们已经被困在了里面。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_twin-forests.png"
+  },
+  {
+    "mapId": "sm_journey-south",
+    "mapName": "南方之旅",
+    "description": "此处资源稀少，战争一触即发，现在玩家必须做出抉择。往南区吧，那里温暖如春，资源丰富，定能让您满意。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_journey-south.png"
+  },
+  {
+    "mapId": "sm_snake-forest",
+    "mapName": "蛇行森林",
+    "description": "在这条横穿森林的狭窄蜿蜒小径间，玩家争夺的不只是生存空间，还有各类资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_snake-forest.png"
+  },
+  {
+    "mapId": "sm_sprawling-stream",
+    "mapName": "源远之流",
+    "description": "一条条细长的河流向远处蔓延，形成了众多富饶的岛屿，它们将盟友分隔，也让敌人遥遥相望。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_sprawling-stream.png"
+  },
+  {
+    "mapId": "rwm_antarctica",
+    "mapName": "南极",
+    "description": "在冰冷的荒原上为征服南极而战。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_antarctica.png"
+  },
+  {
+    "mapId": "rwm_aral_sea",
+    "mapName": "咸海",
+    "description": "这中间有一片深海，充满了各色生灵和岛屿，您可以在这里发现丰富的宝藏。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_aral_sea.png"
+  },
+  {
+    "mapId": "rwm_black_sea",
+    "mapName": "黑海",
+    "description": "这里横跨欧亚大陆，是兵家的必争之地。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_black_sea.png"
+  },
+  {
+    "mapId": "rwm_caucasus",
+    "mapName": "高加索",
+    "description": "这是一座被高山和海洋包围的安全山谷，目前尚未有人占领。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_caucasus.png"
+  },
+  {
+    "mapId": "rwm_siberia",
+    "mapName": "西伯利亚",
+    "description": "北方广阔的大海和凛冽的寒风被向南延伸的沙漠所阻断。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_siberia.png"
+  },
+  {
+    "mapId": "rm_golden-swamp",
+    "mapName": "金沼泽",
+    "description": "金沼泽：一片位于丛林中心的热带沼泽，环抱着一座遍地黄金的小岛。丛林的其余部分仍然荒芜，这使得这片沼泽太诱人，让人无法放弃追求。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_golden-swamp.png"
+  },
+  {
+    "mapId": "rm_four-lakes",
+    "mapName": "四片湖泊",
+    "description": "四片湖泊：初看平淡无奇的一片陆地，地图上散落着四片宁静的湖泊，这些水域有最丰富的鱼类资源，让人垂涎，很快打响了一场争夺水域控制权的竞赛。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_four-lakes.png"
+  },
+  {
+    "mapId": "rm_land_nomad",
+    "mapName": "陆地游牧",
+    "description": "陆地游牧：孤独而又希望定居下来的村民，四散在开阔的土地上，游牧迁徙。在没有水的情况下，他们必须利用一切资源来建造一座城镇并为战斗做好准备。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_land_nomad.png"
+  },
+  {
+    "mapId": "br_battle_on_the_ice",
+    "mapName": "大逃杀冰上战斗",
+    "description": "冰上战斗 - 在恶劣气候、包覆层层冰雪的北方山岳，条顿人坚守保卫那座耸立于山巅的堡垒。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_battle_on_the_ice.png"
+  },
+  {
+    "mapId": "br_el_dorado",
+    "mapName": "大逃杀黄金国",
+    "description": "黄金国 - 神话中的黄金城，吸引无数入侵者深入热带丛林。西班牙人所率领的探险队正步步逼近，亚马逊部落枕戈待旦，准备全力捍卫自己的家园。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_el_dorado.png"
+  },
+  {
+    "mapId": "br_fall_of_axum",
+    "mapName": "大逃杀阿克苏姆的衰落",
+    "description": "阿克苏姆的衰落 - 阿克苏姆帝国的防御堡垒位于绵延不决的干燥土地之中，侵略者正试图攻破它的城墙。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_fall_of_axum.png"
+  },
+  {
+    "mapId": "br_fall_of_rome",
+    "mapName": "大逃杀罗马的衰落",
+    "description": "罗马的衰落 - 曾经不可一世的帝国已成废墟，其军队溃散各处，成为掠夺成性的哥特人和匈奴人眼中待宰的肥羊。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_fall_of_rome.png"
+  },
+  {
+    "mapId": "br_the_majapahit_empire",
+    "mapName": "大逃杀满者伯夷帝国",
+    "description": "满者伯夷帝国：在河流交汇处形成了一片红树林迷宫，马来人在这里隐藏着一个巨大的秘密。他们的军队实力强大，不会轻易向即将到来的加扎·玛达大军屈服。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_the_majapahit_empire.png"
+  },
+  {
+    "mapId": "rm_amazon_tunnels",
+    "mapName": "亚马逊隧道",
+    "description": "亚马逊隧道：在茂密的亚马逊丛林中，一条因森林砍伐而形成的宽广带状土地，成为联系两组竞争对手领地间唯一的交通要道。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_amazon_tunnels.png"
+  },
+  {
+    "mapId": "rm_coastal_forest",
+    "mapName": "沿海森林",
+    "description": "沿海森林：由于所有城镇都位于被森林覆盖的山丘外围，南方贫瘠的黑森林与北方的大海成为了唯二的战场。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_coastal_forest.png"
+  },
+  {
+    "mapId": "rm_african_clearing",
+    "mapName": "非洲林中空地",
+    "description": "非洲林中空地：孤独的村民游荡至林中空地，如今必须为争夺当地稀少资源的控制权而战。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_african_clearing.png"
+  },
+  {
+    "mapId": "rm_atacama",
+    "mapName": "阿塔卡马",
+    "description": "阿塔卡马：这片贫瘠的沙漠没有足够的水源可以维生，但随着占领者持续深入探索，干旱的景象很快就会被茂盛的树林取代。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_atacama.png"
+  },
+  {
+    "mapId": "rm_seize_the_mountain",
+    "mapName": "攻占山头",
+    "description": "攻占山头：探矿者的梦想在浅滩上突起的一座山乍隐乍现。山的主权归属不仅取决于谁最先宣示主权，而是谁能维持主权最久。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_seize_the_mountain.png"
+  },
+  {
+    "mapId": "rm_crater",
+    "mapName": "弹坑",
+    "description": "弹坑：西伯利亚森林深处出现了一片铺满灰烬的荒原，虽然掩蔽不佳，但充满着黄金与财富。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_crater.png"
+  },
+  {
+    "mapId": "rm_crossroads",
+    "mapName": "十字路口",
+    "description": "十字路口：四座树林密布的山丘于中央耸现，是唯一的木材来源，这使得山丘之间的道路相当艰险。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_crossroads.png"
+  },
+  {
+    "mapId": "rm_michi",
+    "mapName": "开道",
+    "description": "开道：一片坚不可摧的森林隔开了玩家队伍，直到一方突破藩篱并淌下第一滴血，才得以在这恶名昭彰的战场上开通一条道路。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_michi.png"
+  },
+  {
+    "mapId": "rm_team_moats",
+    "mapName": "团队护城河",
+    "description": "团队护城河：周围的溪流只能给人微不足道的错误安全感。因为扩张空间很小，所以玩家必须尽快突破现状，好占领附近的大片土地。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_team_moats.png"
+  },
+  {
+    "mapId": "rm_volcanic_island",
+    "mapName": "火山岛",
+    "description": "火山岛：曾经不断喷火的火山，如今长满了葱郁的植被，浅滩上石料四散，而这座岛正静待着征服的到来。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_volcanic_island.png"
+  },
+  {
+    "mapId": "rm_acclivity",
+    "mapName": "上坡",
+    "description": "上坡：身处在岩石峭壁围绕的环境中，玩家发现自己易受攻击，可用的资源也相当有限，因此当务之急就是要探索并占领四周的高地。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_acclivity.png"
+  },
+  {
+    "mapId": "rm_eruption",
+    "mapName": "火山喷发",
+    "description": "火山喷发：这座崎岖火山的山顶有珍贵的宝藏，但在爬到山顶的过程中，你将无法抵御来自上方的敌人攻击。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_eruption.png"
+  },
+  {
+    "mapId": "rm_frigid_lake",
+    "mapName": "酷寒之湖",
+    "description": "酷寒之湖：玩家的周遭已不见冰雪，取而代之的是容易取得且充足的食物；不过，他们的城镇暴露在风险中，难以抵御敌人的劫掠。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_frigid_lake.png"
+  },
+  {
+    "mapId": "rm_greenland",
+    "mapName": "格陵兰",
+    "description": "格陵兰：寒冷的大海中漂浮着寒气逼人、未受保护的冰帽。虽然大陆上食物短缺，但这些冰帽附近却有捕不完的鱼。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_greenland.png"
+  },
+  {
+    "mapId": "rm_lowland",
+    "mapName": "低地",
+    "description": "低地：尽管有绝佳的制高点，但玩家很快就发现自己资源匮乏，于是只能被迫承受较大的风险，将就于四散在深谷各处的资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_lowland.png"
+  },
+  {
+    "mapId": "rm_marketplace",
+    "mapName": "市场",
+    "description": "市场：您已征服一个伟大的贸易站，但敌军也想从这场非凡的胜利中获利。利用市集取得优势，击败敌对势力。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_marketplace.png"
+  },
+  {
+    "mapId": "rm_meadow",
+    "mapName": "草地",
+    "description": "草地：这片开阔的草地几乎没有任何防护。由于林地稀少，玩家必须努力奋战，掌控这片开着花的草原上极少量的木材资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_meadow.png"
+  },
+  {
+    "mapId": "rm_mountain_range",
+    "mapName": "山脉",
+    "description": "山脉：受到巨大山脉的阻隔，玩家必须克服难关，控制山脊，好在每场战役中取得优势。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mountain_range.png"
+  },
+  {
+    "mapId": "rm_northern_isles",
+    "mapName": "北方群岛",
+    "description": "北方群岛：北海有许多气候严寒、环境恶劣的岛屿，您可在此获得丰富的资源，但也得不时担心敌人从四面八方来袭。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_northern_isles.png"
+  },
+  {
+    "mapId": "rm_ring_fortress",
+    "mapName": "环形要塞",
+    "description": "环形要塞：由于频频受到攻击，您的栅栏已残破不全，导致您容易受到敌人的劫掠。不过是时候做出反击，取回那片森林遍布的丰饶土地了。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ring_fortress.png"
+  },
+  {
+    "mapId": "rm_runestones",
+    "mapName": "符文石群",
+    "description": "符文石群：玩家周围的这片土地地形单纯又开阔，想要找出最强大、最耀眼又渴求霸权的战士，这里是绝佳的战场。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_runestones.png"
+  },
+  {
+    "mapId": "rm_aftermath",
+    "mapName": "余波荡漾",
+    "description": "余波荡漾：在玩家尝试重建帝国及控制仍然屹立且有助其未来经济发展的建筑时，仍受到前一场战斗的余波影响。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_aftermath.png"
+  },
+  {
+    "mapId": "rm_enclosed",
+    "mapName": "与世隔绝",
+    "description": "与世隔绝：虽然一开始躲在茂密雨林中较为安全，但玩家必须尽快前往无法进行建造的崎岖小路另一侧获取资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_enclosed.png"
+  },
+  {
+    "mapId": "rm_haboob",
+    "mapName": "哈布风暴",
+    "description": "哈布风暴：一座极为空旷的沙漠，几乎无法从中获取资源。森林稀疏、无遮蔽且不利防御。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_haboob.png"
+  },
+  {
+    "mapId": "rm_kawasan",
+    "mapName": "卡瓦森",
+    "description": "卡瓦森：食物丰富，但容易受到敌人攻击。可在中心区域找到一大片浆果灌木丛，池塘周围散落着许多圣物。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_kawasan.png"
+  },
+  {
+    "mapId": "rm_land_madness",
+    "mapName": "癫狂之地",
+    "description": "癫狂之地：由于资源分散地图各处且森林四周全是无法进行建造的崎岖地形，砌墙几乎不可行，因此建立军备力量至关重要。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_land_madness.png"
+  },
+  {
+    "mapId": "rm_sacred_springs",
+    "mapName": "圣泉",
+    "description": "圣泉：神圣宝塔拥有许多圣物及大量海滨鱼群。由于这些资源的位置离玩家较远，因此容易受到突袭。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_sacred_springs.png"
+  },
+  {
+    "mapId": "rm_wade",
+    "mapName": "浅滩",
+    "description": "浅滩：湿地沼泽因水位太浅，船只无法航行，并不适合建造建筑。玩家必须善用有限空间和资源来获取胜利。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_wade.png"
+  },
+  {
+    "mapId": "rm_morass",
+    "mapName": "沼泽",
+    "description": "沼泽：充分利用热带雨林周围的泥泞沼泽。外围地区拥有丰富的宝贵资源和脆弱的野生动物。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_morass.png"
+  },
+  {
+    "mapId": "rm_shoals",
+    "mapName": "浅滩",
+    "description": "浅滩：浅水区只能有小群的鱼类，但征服大海可以让你快速到达敌人身边，并控制海岸附近的大型金矿。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_shoals.png"
+  },
+  {
+    "mapId": "rm_cliffbound",
+    "mapName": "紧邻悬崖",
+    "description": "紧邻悬崖：干旱的悬崖环绕在玩家周围，使其只能在条件恶劣的稀树草原范围内活动。资源匮乏，寸土寸金。尽早攻打其他玩家至关重要，唯有如此才能在这片无情之地站稳脚跟。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_cliffbound.png"
+  },
+  {
+    "mapId": "rm_isthmus",
+    "mapName": "地峡",
+    "description": "地峡：狭长的沙漠地带，两侧有水资源。掌控住海上至关重要，能够收获丰富的鱼类，确保取得胜利。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_isthmus.png"
+  },
+  {
+    "mapId": "rm_dunesprings",
+    "mapName": "沙丘泉",
+    "description": "沙丘泉：在严酷的沙漠中生存下来，将势利范围扩展到草原，进而在地中海森林中繁荣发展。掌握丰富的泉水资源，占领中央位置的深水池，至于何时以及如何占领由你自己决定。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_dunesprings.png"
+  },
+  {
+    "mapId": "rm_golden_stream",
+    "mapName": "金色溪流",
+    "description": "黄金溪流：游戏开局阶段，留给你的土地不多，而红树林河流就是你的命脉。虽然扩张邻土存在风险，但中心地带却蕴藏着丰富的黄金。勇敢直面危险，控制住这片中心地带，胜利是顺理成章的事情。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_golden_stream.png"
+  },
+  {
+    "mapId": "rm_mountain_dunes",
+    "mapName": "山地沙丘",
+    "description": "山地沙丘：玩家开局位于高耸的山丘之上，目力所及之处皆是流沙。沙漠中生长着大量棕榈树，但丘陵地形让扩张变得十分困难。在危机四伏的茫茫沙海中会找到裸露的石料沉积物，富贵险中求。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mountain_dunes.png"
+  },
+  {
+    "mapId": "rm_river_divide",
+    "mapName": "河流分叉口",
+    "description": "河流分岔口：游戏开局阶段，你手中的资源非常少，但机会就藏在河对岸。利用运输船探索茂密的森林，并派出侦察兵寻找可能的岔道。保护好重要资源，控制住水道，并击败一个个敌人。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_river_divide.png"
+  },
+  {
+    "mapId": "rm_sandrift",
+    "mapName": "流沙",
+    "description": "流沙：在流沙之地生存下来，这是一片寸草不生的荒芜之地。广袤的荒漠让你与世隔绝，但在追求统治的过程中，冲突是不可避免的。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_sandrift.png"
+  },
+  {
+    "mapId": "rm_shrubland",
+    "mapName": "灌木丛",
+    "description": "灌木丛：外围有大片大片的果树丛，可提供享用不尽的食物。占领这片肥沃的土地，一路快速发展实现统治大业。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_shrubland.png"
+  },
+  {
+    "mapId": "rm_the_passage",
+    "mapName": "走廊",
+    "description": "走廊：一条狭长的水道将你与敌人分隔开来。这处狭窄的岔道注定要成为兵家必争之地。控制住海上，夺取隐藏在深海之中的圣物。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_the_passage.png"
+  },
+  {
+    "mapId": "rm_hollow_woodlands",
+    "mapName": "山谷林地",
+    "description": "山谷林地：猴面包树标志着你所在的这片和平之地与世隔绝，在无情的茫茫沙海之中宛如一叶扁舟承载着生命。棕榈树林和难看到踪影的野生动物提供了食物来源，但荒芜的地形也让安全无从谈起。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hollow_woodlands.png"
+  },
+  {
+    "mapId": "rm_karsts",
+    "mapName": "喀斯特地貌",
+    "description": "喀斯特地貌：开阔的湿地和崎岖难行的喀斯特石阵召唤着你，周围环绕着闪闪发光的黄金和坚实的石料沉积物。守护好财富，在这里勇敢穿行，并取得胜利。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_karsts.png"
+  },
+  {
+    "mapId": "rm_glade",
+    "mapName": "林间空地",
+    "description": "林中空地：隐藏在茂密的森林深处，必须深入广阔的空地才能采集资源，并建立统治地位。只有勇于冒险并夺取地图的控制权，才有希望征服你的敌人。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_glade.png"
+  },
+  {
+    "mapId": "rm_fortified_clearing",
+    "mapName": "强化空地",
+    "description": "强化空地：虽然你的正面防线固若金汤，但后方却很容易遭到突袭。保护好中心区域，以便快速发动反击，或者通过侧翼攻击智取敌军。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_fortified_clearing.png"
+  },
+  {
+    "mapId": "rm_qs_arabia",
+    "mapName": "QS 阿拉伯",
+    "description": "如你所知的阿拉伯，但开局时你会有 9 个村民而不是常规开局时的 3 个。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_arabia.png"
+  },
+  {
+    "mapId": "rm_qs_fortified_clearing",
+    "mapName": "QS 强化空地",
+    "description": "如你所知的强化空地，但开局时你会有 9 个村民而不是常规开局时的 3 个。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_fortified_clearing.png"
+  },
+  {
+    "mapId": "rm_qs_glade",
+    "mapName": "QS 林中空地",
+    "description": "如你所知的林中空地，但开局时你会有 9 个村民而不是常规开局时的 3 个。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_glade.png"
+  },
+  {
+    "mapId": "rm_qs_nomad",
+    "mapName": "QS 游牧",
+    "description": "如你所知的游牧，但开局时你会有 9 个村民而不是常规开局时的 3 个。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_nomad.png"
+  },
+  {
+    "mapId": "rm_qs_runestones",
+    "mapName": "QS 符文石",
+    "description": "如你所知的符文石，但开局时你会有 9 个村民而不是常规开局时的 3 个。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_runestones.png"
+  },
+  {
+    "mapId": "rm_qs_arena",
+    "mapName": "QS 竞技场",
+    "description": "如你所知的竞技场，但开局时你会有 9 个村民而不是常规开局时的 3 个。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_arena.png"
+  },
+  {
+    "mapId": "rm_qs_black-forest",
+    "mapName": "QS 黑森林",
+    "description": "如你所知的黑森林，但开局时你会有 9 个村民而不是常规开局时的 3 个。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_black-forest.png"
+  },
+  {
+    "mapId": "rwm_manchuria",
+    "mapName": "长城",
+    "description": "长城——屹立不倒的堡垒，抵御着从北方席卷而来的蒙古部落大军。中国的王朝能否坚守，抑或朝鲜能否掌控这动荡的海洋局势？",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_manchuria.png"
+  },
+  {
+    "mapId": "rm_border_dispute",
+    "mapName": "边境纷争",
+    "description": "边境纷争：盟友与敌人比邻而居，中部沼泽的食物必将引发激烈争夺。尽快把尽可能多的动物引诱到你的城镇中心，以免错失良机。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_border_dispute.png"
+  },
+  {
+    "mapId": "rm_graupel",
+    "mapName": "霰雪",
+    "description": "霰雪：利用你的运输船迅速抢滩登陆，建立基地。尽管天气恶劣，食物却很充足。留心对战对手可能落脚的位置。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_graupel.png"
+  },
+  {
+    "mapId": "rm_stranded",
+    "mapName": "孤岛求生",
+    "description": "孤岛求生：迅速放弃起始岛屿，寻找附近更肥沃的土地。建造城镇中心夺取资源丰富的岛屿，但要提防密林中潜伏的野兽。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_stranded.png"
+  },
+  {
+    "mapId": "rm_sardis",
+    "mapName": "萨迪斯",
+    "description": "萨迪斯：从被围困的基地突围，占领正熊熊燃烧的萨迪斯城！夺取中央的贸易工房以生产额外资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_sardis.png"
+  },
+  {
+    "mapId": "rm_aquarena",
+    "mapName": "水上竞技场",
+    "description": "水上竞技场：海墙保护着玩家的基地免受早期攻击，但丰美的牡蛎滩与可供交易的中立港口注定将掀起一场席卷全图的海战。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_aquarena.png"
+  },
+  {
+    "mapId": "sm_forest_breach",
+    "mapName": "森林缺口",
+    "description": "有的玩家被困在茂密森林中，有的则从一开始就与邻居短兵相接。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_forest_breach.png"
+  },
+  {
+    "mapId": "rm_chaos_pit",
+    "mapName": "混沌之坑",
+    "description": "混沌之坑：被困在没有金矿的林间空地上，你必须开辟出一条穿越密林的道路，夺取外面的财富。记得警惕藏在暗处的敌人！",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_chaos_pit.png"
+  },
+  {
+    "mapId": "rm_mired",
+    "mapName": "泥沼",
+    "description": "泥沼：赶紧从低洼沼地中突围，在附近野生动物丰富的地方建立城镇中心。敌人亦在暗中窥伺，不可迟疑！",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mired.png"
+  },
+  {
+    "mapId": "rm_murkwood",
+    "mapName": "黑雾林",
+    "description": "黑雾林：在阴影笼罩的沼泽深处建立城镇中心。资源充裕，周围水域鱼群繁盛，野生动物丰美，任你收获。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_murkwood.png"
+  },
+  {
+    "mapId": "rm_crownwood",
+    "mapName": "克朗伍德",
+    "description": "克朗伍德：一片山丘之地，森林盘踞在山巅之上。高地环境让保护林带更加困难。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_crownwood.png"
+  },
+  {
+    "mapId": "rm_dorothea_quarry",
+    "mapName": "多罗西亚采石场",
+    "description": "多罗西亚采石场：一个下沉深坑，中央的水池里牡蛎满溢，等待勇者来探索。登上周围高地抵达环绕的森林并获取额外资源。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_dorothea_quarry.png"
+  },
+  {
+    "mapId": "rm_glacis",
+    "mapName": "格拉西斯",
+    "description": "格拉西斯：虽有部分城墙，你也必须离开城墙的庇护，前往地图中央掌控无人之地；否则，你就有可能将所有额外资源留给你的敌人。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_glacis.png"
+  },
+  {
+    "mapId": "rm_hengehold",
+    "mapName": "亨格霍尔德",
+    "description": "亨格霍尔德：巨石阵矗立在中心地带，周围尽是遗迹和游荡的野生动物，等待勇者前来获取。外围则布满许多中立的资源和森林。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hengehold.png"
+  },
+  {
+    "mapId": "rm_loch_ness",
+    "mapName": "尼斯湖",
+    "description": "尼斯湖：一条细长的河流把地图一分为二，中间有一个小渡口。湖泊周围大多数是中立的资源，因此控制水域是制胜关键。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_loch_ness.png"
+  },
+  {
+    "mapId": "rm_rampart",
+    "mapName": "壁垒",
+    "description": "防御墙：在一个高低起伏的地形迷宫之中，蜿蜒的防御土墙将每个玩家紧紧联系在一起。最初，玩家周围散布着不多的林带，却有大量的野生动物游荡在这片土地上。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_rampart.png"
+  },
+  {
+    "mapId": "rm_stonefront",
+    "mapName": "石阵防线",
+    "description": "石阵防线：玩家周围几乎没有资源。财富集中在附近的采石场，石阵环绕四周，因此机动性变得困难。掌控地图是制胜关键。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_stonefront.png"
+  },
+  {
+    "mapId": "rm_thames",
+    "mapName": "泰晤士河",
+    "description": "泰晤士河：泰晤士河沿岸战斗不断。夺取皇家阿尔伯特大厅以获得独特的奖励，或控制地图的南部以获得源源不断的黄金和石料供应。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_thames.png"
+  },
+  {
+    "mapId": "rm_vulpine",
+    "mapName": "狐影林",
+    "description": "狐影林：周围地形不可建造，因此扩张充满风险。猎捕游荡的狐狸来获得大量黄金奖励，并劈开中央森林来夺取其中的秘密。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_vulpine.png"
+  },
+  {
+    "mapId": "rm_arabian_desert",
+    "mapName": "阿拉伯沙漠",
+    "description": "阿拉伯沙漠：一个极其干旱，残酷无情的战场。一望无际的沙海之中，只零星分布着几片森林，资源稀缺，几乎无处可以躲避敌人的侵袭。",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_arabian_desert.png"
+  }
+]

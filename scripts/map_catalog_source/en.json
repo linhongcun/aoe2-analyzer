@@ -1,0 +1,1166 @@
+[
+  {
+    "mapId": "rm_arabia",
+    "mapName": "Arabia",
+    "description": "Arid desert with strategic elevations, but sparse vegetation and water.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_arabia.png"
+  },
+  {
+    "mapId": "rm_archipelago",
+    "mapName": "Archipelago",
+    "description": "A group of large islands. You might not be the only inhabitant on yours.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_archipelago.png"
+  },
+  {
+    "mapId": "rm_baltic",
+    "mapName": "Baltic",
+    "description": "An ocean with peninsulas and sheltered bays.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_baltic.png"
+  },
+  {
+    "mapId": "rm_black-forest",
+    "mapName": "Black Forest",
+    "description": "Islands of grass in a sea of trees. Follow the paths through the forest to find your allies and enemies.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_black-forest.png"
+  },
+  {
+    "mapId": "rm_coastal",
+    "mapName": "Coastal",
+    "description": "Where the land meets the ocean, with plenty of water and a large landmass for battles by land or by sea.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_coastal.png"
+  },
+  {
+    "mapId": "rm_continental",
+    "mapName": "Continental",
+    "description": "A large body of land surrounded by the sea; rivers may separate players and teams.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_continental.png"
+  },
+  {
+    "mapId": "rm_crater-lake",
+    "mapName": "Crater Lake",
+    "description": "An island brimming with gold in the center of a caldera lake. Steep elevation and lack of trees make it hard to build there.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_crater-lake.png"
+  },
+  {
+    "mapId": "rm_fortress",
+    "mapName": "Fortress",
+    "description": "A walled city with gates and all the buildings you need to build up your forces quickly.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_fortress.png"
+  },
+  {
+    "mapId": "rm_gold-rush",
+    "mapName": "Gold Rush",
+    "description": "A whole heap of gold and a few wolves in the middle of a desert.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_gold-rush.png"
+  },
+  {
+    "mapId": "rm_highland",
+    "mapName": "Highland",
+    "description": "Far from the ocean and heavily forested but with plenty of rivers and open space for maneuvers.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_highland.png"
+  },
+  {
+    "mapId": "rm_islands",
+    "mapName": "Islands",
+    "description": "Each player starts alone on an island; uninhabited islands may be rich with resources so be prepared to rule the sea.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_islands.png"
+  },
+  {
+    "mapId": "rm_mediterranean",
+    "mapName": "Mediterranean",
+    "description": "An inland sea surrounded by land; sounds deceptively peaceful.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mediterranean.png"
+  },
+  {
+    "mapId": "rm_migration",
+    "mapName": "Migration",
+    "description": "A tiny island that can't support you for long before you must move to the mainland, where the fighting is fierce.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_migration.png"
+  },
+  {
+    "mapId": "rm_rivers",
+    "mapName": "Rivers",
+    "description": "Players are isolated by narrow rivers; numerous shallows must be guarded at all cost.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_rivers.png"
+  },
+  {
+    "mapId": "rm_team-islands",
+    "mapName": "Team Islands",
+    "description": "One island shared by you and your allies, and another inhabited by your enemies. The islands are not connected by shallows, so beware of enemy Transport Ships.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_team-islands.png"
+  },
+  {
+    "mapId": "rm_scandinavia",
+    "mapName": "Scandinavia",
+    "description": "In the northern wilderness the berry bushes have all frozen, but there are hungry animals to be hunted and plenty of gold to be found.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_scandinavia.png"
+  },
+  {
+    "mapId": "rm_mongolia",
+    "mapName": "Mongolia",
+    "description": "Cliffs abound on these parched and endless steppes.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mongolia.png"
+  },
+  {
+    "mapId": "rm_yucatan",
+    "mapName": "Yucatan",
+    "description": "In the tropical rainforest food is abundant, but jaguars stalk beneath the canopy.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_yucatan.png"
+  },
+  {
+    "mapId": "rm_salt-marsh",
+    "mapName": "Salt Marsh",
+    "description": "Swampy lowlands full of shallows and rivers that can prohibit expansionistic building.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_salt-marsh.png"
+  },
+  {
+    "mapId": "rm_arena",
+    "mapName": "Arena",
+    "description": "The walls around your forest clearing are your only protection from the carnage in the middle.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_arena.png"
+  },
+  {
+    "mapId": "rm_oasis",
+    "mapName": "Oasis",
+    "description": "Nearly all of the wood is in the center of the map, so prepare to be chased around and around.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_oasis.png"
+  },
+  {
+    "mapId": "rm_ghost-lake",
+    "mapName": "Ghost Lake",
+    "description": "The central lake is frozen over, creating a no-man's land.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ghost-lake.png"
+  },
+  {
+    "mapId": "rm_nomad",
+    "mapName": "Nomad",
+    "description": "Your villagers begin scattered without a Town Center or Scout Cavalry. Will you build a town immediately or struggle to find the perfect location to settle?",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_nomad.png"
+  },
+  {
+    "mapId": "cm_canals",
+    "mapName": "Canals",
+    "description": "A network of winding rivers forms a complex web that both connects and divides. Take control of the rivers, but be wary of any flanking manoeuvres from your enemies. The forests surrounding the valley are vast but exposed.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_canals.png"
+  },
+  {
+    "mapId": "cm_capricious",
+    "mapName": "Capricious",
+    "description": "Some generations will leave you starving, while others will grant you an endless source of neutral resources. Explore and use the unpredictable environment to your advantage. Adaptation will be the key to victory.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_capricious.png"
+  },
+  {
+    "mapId": "cm_dingos",
+    "mapName": "Dingos",
+    "description": "Quickly gather all your livestock before the numerous lurking dingos make an unexpected visit. Use the sea to bypass the predators entirely or strategically invite them into the enemy base for a feast.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_dingos.png"
+  },
+  {
+    "mapId": "cm_graveyards",
+    "mapName": "Graveyards",
+    "description": "An eerie environment, littered with remnants of past conflicts. You must navigate the dense mist and secure the vital resources hidden in the graveyards before your opponent emerges from the gloom to challenge you.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_graveyards.png"
+  },
+  {
+    "mapId": "cm_metropolis",
+    "mapName": "Metropolis",
+    "description": "A total of three town centres await your command. You're immediately plunged into a chaotic environment of having to support a significant population. The clash of great empires begins instantly.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_metropolis.png"
+  },
+  {
+    "mapId": "rm_moats",
+    "mapName": "Moats",
+    "description": "Surrounded by a thin strip of water, don't let the false sense of security fool you. It's only a matter of time before you must escape the safe confines and venture out into the unknown to secure more resources.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_moats.png"
+  },
+  {
+    "mapId": "cm_paradise-island",
+    "mapName": "Paradise Island",
+    "description": "Cast away on an island lost to time, where the jungle breathes, and danger lurks in every shadow. Unravel its mysteries, or become another victim of its ancient power - beware the island's guardians.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_paradise-island.png"
+  },
+  {
+    "mapId": "cm_pilgrims",
+    "mapName": "Pilgrims",
+    "description": "It's a race to inhabit the lush and fertile mainland and take advantage of everything it has to offer. Do you immediately settle near the coast or gamble on a deeper expedition, facing unknown perils for the chance at greater riches?",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_pilgrims.png"
+  },
+  {
+    "mapId": "cm_prairie",
+    "mapName": "Prairie",
+    "description": "A vast, windswept expanse stretches before you, and scattered pockets of woodland offer meagre shelter. Resources are abundant but exposed, and hesitation will leave you vulnerable to your rivals' swift and decisive actions.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_prairie.png"
+  },
+  {
+    "mapId": "cm_seasons",
+    "mapName": "Seasons",
+    "description": "Four distinct seasons cycle through this map, each bringing its own challenges and opportunities. From the harsh winter to the hopeful spring, the bountiful summer and the fruitful autumn - you must adapt your strategies accordingly.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_seasons.png"
+  },
+  {
+    "mapId": "cm_sherwood-forest",
+    "mapName": "Sherwood Forest",
+    "description": "Navigate through a maze of trees and carve out your foothold in the heart of the woods. Use the tamed wildlife to explore the deep forest and take advantage of the many animals hiding in the shadows.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_sherwood-forest.png"
+  },
+  {
+    "mapId": "cm_shipwreck",
+    "mapName": "Shipwreck",
+    "description": "The tide washes against the wreckage, and your rivals are not far away. The race to locate resources and rebuild your civilisation begins immediately. Will you remain near the shipwreck or venture further out in search of more resources?",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_shipwreck.png"
+  },
+  {
+    "mapId": "cm_team-glaciers",
+    "mapName": "Team Glaciers",
+    "description": "A frigid river carves a divide in the harsh arctic environment. Endure the harsh conditions, secure the precious resources of the frozen isles, and control the flow of the glacial river to outlast your opponents in this unforgiving arctic battleground.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/cm_team-glaciers.png"
+  },
+  {
+    "mapId": "rwm_iberia",
+    "mapName": "Iberia",
+    "description": "The Iberian Peninsula, including Spain and Portugal.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_iberia.png"
+  },
+  {
+    "mapId": "rwm_britain",
+    "mapName": "Britain",
+    "description": "Expect lots of naval combat in the North Sea and across the English Channel.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_britain.png"
+  },
+  {
+    "mapId": "rwm_mideast",
+    "mapName": "Mideast",
+    "description": "Where continents, cultures, and world religions collide.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_mideast.png"
+  },
+  {
+    "mapId": "rwm_texas",
+    "mapName": "Texas",
+    "description": "Relive the classic Mayan and Korean skirmish over the Lone Star state.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_texas.png"
+  },
+  {
+    "mapId": "rwm_italy",
+    "mapName": "Italy",
+    "description": "Rome has fallen and the peninsula is up for grabs.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_italy.png"
+  },
+  {
+    "mapId": "rwm_central_america",
+    "mapName": "Central America",
+    "description": "The Aztecs and Maya vie for domination of Central America with invaders from across the sea.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_central_america.png"
+  },
+  {
+    "mapId": "rwm_france",
+    "mapName": "France",
+    "description": "Re-enact the Muslim invasion and the Hundred Years War.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_france.png"
+  },
+  {
+    "mapId": "rwm_norse_lands",
+    "mapName": "Norse Lands",
+    "description": "Norway, Sweden, Finland, Denmark, and Holland.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_norse_lands.png"
+  },
+  {
+    "mapId": "rwm_sea_of_japan",
+    "mapName": "Sea of Japan (East Sea)",
+    "description": "Japanese warships and Korean Turtle Ships do battle in this rocky sea.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_sea_of_japan.png"
+  },
+  {
+    "mapId": "rwm_byzantium",
+    "mapName": "Byzantium",
+    "description": "Rome never truly fell, it just changed continents.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_byzantium.png"
+  },
+  {
+    "mapId": "rm_acropolis",
+    "mapName": "Acropolis",
+    "description": "Battle on the barren slopes of your base as you defend your hill and conquer the enemy's.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_acropolis.png"
+  },
+  {
+    "mapId": "rm_budapest",
+    "mapName": "Budapest",
+    "description": "Two towns and a plethora of wildlife offer unconventionally intense battles.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_budapest.png"
+  },
+  {
+    "mapId": "rm_cenotes",
+    "mapName": "Cenotes",
+    "description": "An open land studded with sinkholes but only a few clusters of trees.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_cenotes.png"
+  },
+  {
+    "mapId": "rm_city-of-lakes",
+    "mapName": "City of Lakes",
+    "description": "An endless maze of lakes and rivers winding through a sparsely forested desert.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_city-of-lakes.png"
+  },
+  {
+    "mapId": "rm_golden-pit",
+    "mapName": "Golden Pit",
+    "description": "A ravine filled with gold beckons but its depths loom treacherously as enemies lie in wait on the other side.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_golden-pit.png"
+  },
+  {
+    "mapId": "rm_hideout",
+    "mapName": "Hideout",
+    "description": "A palisade wall provides only false comfort over the palpable feeling of enemy lurking just around the corner.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hideout.png"
+  },
+  {
+    "mapId": "rm_hill-fort",
+    "mapName": "Hill Fort",
+    "description": "A fortified stronghold perched on a mountain top may be virtually impregnable but scarce resources and lack of space drive players to expand their empires into the lowlands around. ",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hill-fort.png"
+  },
+  {
+    "mapId": "rm_lombardia",
+    "mapName": "Lombardia",
+    "description": "A handful of cities on opposite ends of a wintry landscape must share, trade and coordinate in their efforts to defeat the enemy. ",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_lombardia.png"
+  },
+  {
+    "mapId": "rm_steppe",
+    "mapName": "Steppe",
+    "description": "Dare you leave the safe shelter of the trees to hunt the graceful deer roaming the open ground? ",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_steppe.png"
+  },
+  {
+    "mapId": "rm_valley",
+    "mapName": "Valley",
+    "description": "A dried up river stands between enemy towns but also poses an opportunity as animals gather there to gulp down the last drops. ",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_valley.png"
+  },
+  {
+    "mapId": "rm_megarandom",
+    "mapName": "MegaRandom",
+    "description": "Ever dreamed of an endlessly unpredictable map where anything is possible and nothing is guaranteed? Multiply it by ten and you have... MegaRandom.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_megarandom.png"
+  },
+  {
+    "mapId": "rm_hamburger",
+    "mapName": "Hamburger",
+    "description": "The ultimate Easter Egg map. Located on either side of the tasty burger, will you eat through it, or sail around the bun and surprise the enemy?",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hamburger.png"
+  },
+  {
+    "mapId": "rm_ctr_random",
+    "mapName": "CtR Random",
+    "description": "A compilation of gameplay-enhancing maps designed specifically for Capture the Relic mode! Dozens of wildly different layouts further challenge the aspects of the game mode, and guarantee an unpredictable, yet highly fulfilling experience.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ctr_random.png"
+  },
+  {
+    "mapId": "rm_ctr_monsoon",
+    "mapName": "CtR Monsoon",
+    "description": "One of the three most challenging Capture the Relic maps. There is only limited space to build on as most of the map is covered in endless marshes, which in the coldest seasons turn to ice. The relic stands in the center, enclosed in a sacred grove of trees.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ctr_monsoon.png"
+  },
+  {
+    "mapId": "rm_ctr_pyramid-descent",
+    "mapName": "CtR Pyramid Descent",
+    "description": "One of the three most challenging Capture the Relic maps. Players appear huddled up around the relic atop a vast pyramid but their monasteries lie all the way on the bottom stair.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ctr_pyramid-descent.png"
+  },
+  {
+    "mapId": "rm_ctr_spiral",
+    "mapName": "CtR Spiral",
+    "description": "One of the three most challenging Capture the Relic maps. The center of the map has been engulfed in a spiral of deep waters and the only way to reach the relic is to follow the current in long and treacherous circles.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ctr_spiral.png"
+  },
+  {
+    "mapId": "rm_kilimanjaro",
+    "mapName": "Kilimanjaro",
+    "description": "A massive mountain looms in the center, whoever conquers it gains control over the map's key resources.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_kilimanjaro.png"
+  },
+  {
+    "mapId": "rm_mountain-pass",
+    "mapName": "Mountain Pass",
+    "description": "Lost and scattered in snowy mountains, regroup your villagers, build a strong town and conquer the lands around.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mountain-pass.png"
+  },
+  {
+    "mapId": "rm_nile-delta",
+    "mapName": "Nile Delta",
+    "description": "The lush vegetation and fertile soil draw both allies and enemies, can you win the battles over the legendary river?",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_nile-delta.png"
+  },
+  {
+    "mapId": "rm_serengeti",
+    "mapName": "Serengeti",
+    "description": "Vast arid land and not much forest canopies to take shelter in, battles in Serengeti are fast and fierce.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_serengeti.png"
+  },
+  {
+    "mapId": "rm_socotra",
+    "mapName": "Socotra",
+    "description": "Close quarters and nowhere to run, fight to the death on the mystical island of Socotra.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_socotra.png"
+  },
+  {
+    "mapId": "rwm_amazon",
+    "mapName": "Amazon",
+    "description": "A thick jungle surrounding the greatest river of them all, the Amazon is as tempting as it is treacherous.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_amazon.png"
+  },
+  {
+    "mapId": "rwm_china",
+    "mapName": "China",
+    "description": "The vast lands of ancient China are up for grabs, be the first to conquer them!",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_china.png"
+  },
+  {
+    "mapId": "rwm_horn_of_africa",
+    "mapName": "Horn of Africa",
+    "description": "The eastern coast of Africa, including Arabia and the Red Sea.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_horn_of_africa.png"
+  },
+  {
+    "mapId": "rwm_india",
+    "mapName": "India",
+    "description": "The Hindu god of war will help you seize the land of ivory and cashmere.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_india.png"
+  },
+  {
+    "mapId": "rwm_madagascar",
+    "mapName": "Madagascar",
+    "description": "Explore the mystical island of Madagascar and discover its fascinating fauna and flora.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_madagascar.png"
+  },
+  {
+    "mapId": "rwm_west_africa",
+    "mapName": "West Africa",
+    "description": "Thick jungle in the south and deadly Sahara in the north, West Africa will not be easy to conquer.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_west_africa.png"
+  },
+  {
+    "mapId": "rwm_bohemia",
+    "mapName": "Bohemia",
+    "description": "A bonus map featuring the Czech Republic in the medieval times! Complete with ruins and bears who are sadly no longer residing in these lands.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_bohemia.png"
+  },
+  {
+    "mapId": "rwm_earth",
+    "mapName": "Earth",
+    "description": "Conquer the world one continent at a time!",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_earth.png"
+  },
+  {
+    "mapId": "sm_canyons",
+    "mapName": "Canyons",
+    "description": "The fastest way to reach the enemy is also the most dangerous one - through narrow canyons with enemies firing from above.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_canyons.png"
+  },
+  {
+    "mapId": "sm_enemy-archipelago",
+    "mapName": "Enemy Archipelago",
+    "description": "Four islands, an ally and enemy on each. Will you beat your opponent and help others or will you be the one that needs saving?",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_enemy-archipelago.png"
+  },
+  {
+    "mapId": "sm_enemy-islands",
+    "mapName": "Enemy Islands",
+    "description": "Two large islands, each team controlling a portion of both. Fierce battles on both water and land ensue as alliances strive to conquer all there is.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_enemy-islands.png"
+  },
+  {
+    "mapId": "sm_far-out",
+    "mapName": "Far Out",
+    "description": "A vast, dry landscape with teams spread far and wide, battles on the flank begin early and only become fiercer as more allies join in.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_far-out.png"
+  },
+  {
+    "mapId": "sm_front-line",
+    "mapName": "Front Line",
+    "description": "A dense forest, one way through. The front lines are at their most vulnerable as massive armies try to push through.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_front-line.png"
+  },
+  {
+    "mapId": "sm_inner-circle",
+    "mapName": "Inner Circle",
+    "description": "Huddled around a mountain range and too close for comfort, players must descend into the jungle and seize control of as much land as they can.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_inner-circle.png"
+  },
+  {
+    "mapId": "sm_motherland",
+    "mapName": "Motherland",
+    "description": "Only a single duel rages on the large motherland until allies seize the coasts and begin advancing inwards.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_motherland.png"
+  },
+  {
+    "mapId": "sm_open-plains",
+    "mapName": "Open Plains",
+    "description": "Expanding savannah with sparse vegetation, both allies and enemies stand ready in an arrow formation.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_open-plains.png"
+  },
+  {
+    "mapId": "sm_ring-of-water",
+    "mapName": "Ring of Water",
+    "description": "Two in, two out, river in between. Prepare to work together as both lands hold equal importance and neither can be conquered alone.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_ring-of-water.png"
+  },
+  {
+    "mapId": "sm_snake-pit",
+    "mapName": "Snakepit",
+    "description": "When enemies meet in a narrow passage through the jungle, teamwork and endurance determines who becomes the victor.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_snake-pit.png"
+  },
+  {
+    "mapId": "sm_the-eye",
+    "mapName": "The Eye",
+    "description": "Two massive peninsulas and a small island in between. And it is this island that sparks the beginning of the battle.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_the-eye.png"
+  },
+  {
+    "mapId": "rwm_australia",
+    "mapName": "Australia",
+    "description": "Embark on a journey to the land of down under and beat James Cook to discovering the wilderness of the Australian Outback.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_australia.png"
+  },
+  {
+    "mapId": "rwm_indochina",
+    "mapName": "Indochina",
+    "description": "Conquer the lands south of the Chinese border and delve into the dense jungle, which is as beautiful as it is treacherous.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_indochina.png"
+  },
+  {
+    "mapId": "rwm_indonesia",
+    "mapName": "Indonesia",
+    "description": "Sail around the Indonesian archipelago and claim as many islands as you can.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_indonesia.png"
+  },
+  {
+    "mapId": "rwm_strait_of_malacca",
+    "mapName": "Strait of Malacca",
+    "description": "The strait between Indonesia and Malaysia is an important trade route. Will you manage to control it and capture both islands?",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_strait_of_malacca.png"
+  },
+  {
+    "mapId": "rwm_phillipines",
+    "mapName": "Philippines",
+    "description": "Venture into a myriad of islands, traverse shallow waters, and harness the riches of the Philippines.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_phillipines.png"
+  },
+  {
+    "mapId": "rm_bog-islands",
+    "mapName": "Bog Islands",
+    "description": "Small grassy islands lost in a maze of swampy wilderness.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_bog-islands.png"
+  },
+  {
+    "mapId": "rm_mangrove-jungle",
+    "mapName": "Mangrove Jungle",
+    "description": "Players are locked in a circle of shallow rivers, surrounded by dense jungle, and with little room to expand.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mangrove-jungle.png"
+  },
+  {
+    "mapId": "rm_pacific-islands",
+    "mapName": "Pacific Islands",
+    "description": "A migration from one island to the next, where each island holds different resources. Prepare to have to fight for all of them.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_pacific-islands.png"
+  },
+  {
+    "mapId": "rm_sandbank",
+    "mapName": "Sandbank",
+    "description": "A swampy forest line divides the team islands. It cannot be sealed and it may become the last source of wood.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_sandbank.png"
+  },
+  {
+    "mapId": "rm_water-nomad",
+    "mapName": "Water Nomad",
+    "description": "A handful of villagers with fishing ships look to settle. And there is a plenty of marsh jungle to get lost in.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_water-nomad.png"
+  },
+  {
+    "mapId": "sm_jungle-islands",
+    "mapName": "Jungle Islands",
+    "description": "Players begin in pairs in the four corners of the map. To make one's way to the center means crossing and conquering a neverending sea of islands.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_jungle-islands.png"
+  },
+  {
+    "mapId": "sm_holy-line",
+    "mapName": "Holy Line",
+    "description": "Few mineral resources lie on the players' lands, but in between loom islands of gold, stone, and a row of ancient relics that is the only border between the waging parties.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_holy-line.png"
+  },
+  {
+    "mapId": "sm_border-stones",
+    "mapName": "Border Stones",
+    "description": "Stone mines run wide and deep, separating both allies and enemies. Mining is the only way through and the use of stone soon becomes abundant.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_border-stones.png"
+  },
+  {
+    "mapId": "sm_yin-yang",
+    "mapName": "Yin Yang",
+    "description": "A river winds its way through the map, separating and sealing off a forest-bound player on each side.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_yin-yang.png"
+  },
+  {
+    "mapId": "sm_jungle-lanes",
+    "mapName": "Jungle Lanes",
+    "description": "It begins with rapid close-quarter battles in the middle, but slowly draws out as players gradually extend their foothold in the jungle.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_jungle-lanes.png"
+  },
+  {
+    "mapId": "rm_alpine-lakes",
+    "mapName": "Alpine Lakes",
+    "description": "Snowy mountain tops offer little in resources except for the plentiful waters teeming with fresh fish.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_alpine-lakes.png"
+  },
+  {
+    "mapId": "rm_bogland",
+    "mapName": "Bogland",
+    "description": "A maze of forests and grasslands where one can never know what they might find around the next corner.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_bogland.png"
+  },
+  {
+    "mapId": "rm_mountain-ridge",
+    "mapName": "Mountain Ridge",
+    "description": "A snowy mountain range looms ahead, bereft of life but rich in stone mines.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mountain-ridge.png"
+  },
+  {
+    "mapId": "rm_ravines",
+    "mapName": "Ravines",
+    "description": "A small hilly settlement that must expand into the dark forests around. ",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ravines.png"
+  },
+  {
+    "mapId": "rm_wolf-hill",
+    "mapName": "Wolf Hill",
+    "description": "A forested hill overrun with wolves stands in the middle, its hilltop adorned with precious relics waiting for anyone who dares to come close.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_wolf-hill.png"
+  },
+  {
+    "mapId": "sm_swirling-river",
+    "mapName": "Swirling River",
+    "description": "A long winding river slices through the map, forming deltas and taking anything in its path.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_swirling-river.png"
+  },
+  {
+    "mapId": "sm_twin-forests",
+    "mapName": "Twin Forests",
+    "description": "Large, deep forests separate the two teams, except for the unlucky two, who find themselves trapped within.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_twin-forests.png"
+  },
+  {
+    "mapId": "sm_journey-south",
+    "mapName": "Journey South",
+    "description": "With sparse resources nearby and an imminent battle at the door, the player must make a choice. The further south one travels, the warmer and richer the environment becomes.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_journey-south.png"
+  },
+  {
+    "mapId": "sm_snake-forest",
+    "mapName": "Snake Forest",
+    "description": "On a narrow path winding through a deep forest, players battle for space as well as resources.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_snake-forest.png"
+  },
+  {
+    "mapId": "sm_sprawling-stream",
+    "mapName": "Sprawling Streams",
+    "description": "Narrow rivers flow in unison, forming islands awash with treasures and separating both friends and foes.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_sprawling-stream.png"
+  },
+  {
+    "mapId": "rwm_antarctica",
+    "mapName": "Antarctica",
+    "description": "Fight through the icy wasteland in a race to conquer the South Pole.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_antarctica.png"
+  },
+  {
+    "mapId": "rwm_aral_sea",
+    "mapName": "Aral Sea",
+    "description": "A deep sea filled with life lies at the center, with many an island where treasures may be found.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_aral_sea.png"
+  },
+  {
+    "mapId": "rwm_black_sea",
+    "mapName": "Black Sea",
+    "description": "Spanning the gap between Europe and Asia, the Black Sea lies waiting for battles over its control.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_black_sea.png"
+  },
+  {
+    "mapId": "rwm_caucasus",
+    "mapName": "Caucasus",
+    "description": "A valley surrounded by mountains and seas, the Caucasus is a haven waiting to be claimed.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_caucasus.png"
+  },
+  {
+    "mapId": "rwm_siberia",
+    "mapName": "Siberia",
+    "description": "Vast seas and cold winds in the north give way to deserts the further south one goes.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_siberia.png"
+  },
+  {
+    "mapId": "rm_golden-swamp",
+    "mapName": "Golden Swamp",
+    "description": "A tropical marsh lies at the center of a jungle, enshrouding a small island brimming with gold. The rest of the jungle remains bereft of riches, rendering this swampland too enticing to pass up.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_golden-swamp.png"
+  },
+  {
+    "mapId": "rm_four-lakes",
+    "mapName": "Four Lakes",
+    "description": "An ordinary land at first sight, with four serene lakes resting in the corners of the map, it rapidly breaks into a race for control of the much-coveted waters, for they hold the greatest abundance of fish.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_four-lakes.png"
+  },
+  {
+    "mapId": "rm_land_nomad",
+    "mapName": "Land Nomad",
+    "description": "Lone villagers looking to settle travel scattered across open land. With no water in sight, they must use all resources they find to build a town and ready themselves for battle.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_land_nomad.png"
+  },
+  {
+    "mapId": "br_battle_on_the_ice",
+    "mapName": "BR Battle On Ice",
+    "description": "In the unforgiving weather of the north, the Teutons stand to defend their stronghold atop an ice-covered hill.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_battle_on_the_ice.png"
+  },
+  {
+    "mapId": "br_el_dorado",
+    "mapName": "BR El Dorado",
+    "description": "The mythical Golden City lures many invaders into the depths of a tropical jungle. As the Spanish expedition ventures forth, Amazonian tribes await, ready to fiercely defend their homeland.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_el_dorado.png"
+  },
+  {
+    "mapId": "br_fall_of_axum",
+    "mapName": "BR Fall of Axum",
+    "description": "Surrounded by long stretches of arid land, the Axumite Empire's fortified stronghold towers in the center as invaders seek to break through its walls.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_fall_of_axum.png"
+  },
+  {
+    "mapId": "br_fall_of_rome",
+    "mapName": "BR Fall of Rome",
+    "description": "Ruins of a once majestic empire, whose armies have all but scattered, have become ripe for picking by the marauding Goths and Huns.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_fall_of_rome.png"
+  },
+  {
+    "mapId": "br_the_majapahit_empire",
+    "mapName": "BR Majapahit Empire",
+    "description": "A maze of mangroves forms at the confluence of rivers, where the Malay harbour a great secret. Their military is strong and will not give in easily to the impending armies of Gajah Mada.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/br_the_majapahit_empire.png"
+  },
+  {
+    "mapId": "rm_amazon_tunnels",
+    "mapName": "Amazon Tunnel",
+    "description": "In the dense jungle of the Amazon, a wide strip of deforested land serves as the only path between two sets of rivals.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_amazon_tunnels.png"
+  },
+  {
+    "mapId": "rm_coastal_forest",
+    "mapName": "Coastal Forest",
+    "description": "With all the towns positioned on the outskirts of a forested hill, battles are certain to ensue both in the barren south, in the dark woods, and on the sea waves in the north.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_coastal_forest.png"
+  },
+  {
+    "mapId": "rm_african_clearing",
+    "mapName": "African Clearing",
+    "description": "Lone villagers have wandered into a forest clearing and must now battle for the control of its sparse resources.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_african_clearing.png"
+  },
+  {
+    "mapId": "rm_atacama",
+    "mapName": "Atacama",
+    "description": "This barren desert is unlikely to quench anyone's thirst, but with its occupants' unrelenting search, its aridity soon gives way to lush trees the deeper one goes.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_atacama.png"
+  },
+  {
+    "mapId": "rm_seize_the_mountain",
+    "mapName": "Seize The Mountain",
+    "description": "A prospector's dream looms ahead, on a mountain protruding out of shallows. It is not merely down to who claims it first, but rather whose claim will outlast the others.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_seize_the_mountain.png"
+  },
+  {
+    "mapId": "rm_crater",
+    "mapName": "Crater",
+    "description": "In the depths of a Siberian forest, an ash-covered wasteland appears, offering little shelter but plenty in gold and riches.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_crater.png"
+  },
+  {
+    "mapId": "rm_crossroads",
+    "mapName": "Crossroads",
+    "description": "Four forest-capped hills loom at the center, serving as the only source of wood and rendering the paths between them most treacherous.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_crossroads.png"
+  },
+  {
+    "mapId": "rm_michi",
+    "mapName": "Michi",
+    "description": "An impenetrable forest separates the teams of players, until one breaks through and draws the first blood on this infamous battlefield.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_michi.png"
+  },
+  {
+    "mapId": "rm_team_moats",
+    "mapName": "Team Moats",
+    "description": "The surrounding streams offer little but a false sense of security. And with little room for expansion, players must soon break out and claim the vast lands around.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_team_moats.png"
+  },
+  {
+    "mapId": "rm_volcanic_island",
+    "mapName": "Volcanic Island",
+    "description": "With stone scattered around in the shallows, the once fire-breathing mountain has since overgrown with lush vegetation and now awaits to be conquered.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_volcanic_island.png"
+  },
+  {
+    "mapId": "rm_acclivity",
+    "mapName": "Acclivity",
+    "description": "Surrounded by rocky cliffs, players find themselves exposed with only a few resources at their disposal. It is, therefore, crucial to seek out and secure the surrounding heights.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_acclivity.png"
+  },
+  {
+    "mapId": "rm_eruption",
+    "mapName": "Eruption",
+    "description": "The mountainous volcano holds valuable treasures at its peak, but climbing it will leave you defenseless to enemy attacks from above.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_eruption.png"
+  },
+  {
+    "mapId": "rm_frigid_lake",
+    "mapName": "Frigid Lake",
+    "description": "With the ice vanishing around the players, food is easily accessible and plentiful; however, their towns are left exposed and unprotected from enemy raids.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_frigid_lake.png"
+  },
+  {
+    "mapId": "rm_greenland",
+    "mapName": "Greenland",
+    "description": "While food is scarce on the mainland, there is no limit to the fish that can be found near the cold and exposed ice caps drifting in the freezing water.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_greenland.png"
+  },
+  {
+    "mapId": "rm_lowland",
+    "mapName": "Lowland",
+    "description": "Despite the excellent vantage point, players quickly find themselves running out of resources, forcing them to settle for the more unsafe resources scattered in the deep valley.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_lowland.png"
+  },
+  {
+    "mapId": "rm_marketplace",
+    "mapName": "Marketplace",
+    "description": "You have conquered a great trading post, but enemy soldiers are also looking to benefit from this impressive victory. Use the markets to gain an advantage and vanquish the opposition.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_marketplace.png"
+  },
+  {
+    "mapId": "rm_meadow",
+    "mapName": "Meadow",
+    "description": "The open meadow offers little to no protection. Forests are limited, and players must fight to gain control of the little wood that the flowering grasslands offer.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_meadow.png"
+  },
+  {
+    "mapId": "rm_mountain_range",
+    "mapName": "Mountain Range",
+    "description": "With the enormous mountain range dividing the players, it will be crucial to surmount and control the spine of the mountain so that every battle will be in your favour.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mountain_range.png"
+  },
+  {
+    "mapId": "rm_northern_isles",
+    "mapName": "Northern Isles",
+    "description": "The cold and unforgiving islands of the North Sea leaves you with plenty of resources but in constant fear of enemy aggression from any direction.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_northern_isles.png"
+  },
+  {
+    "mapId": "rm_ring_fortress",
+    "mapName": "Ring Fortress",
+    "description": "Your palisades are partially crushed from the constant attacks, leaving you open to enemy raids, but it is time you fight back and reclaim the rich and heavily forested land.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_ring_fortress.png"
+  },
+  {
+    "mapId": "rm_runestones",
+    "mapName": "Runestones",
+    "description": "The open and uncomplicated land surrounding the players makes it the perfect battleground to find the most potent and brightest warrior thirsting for supremacy.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_runestones.png"
+  },
+  {
+    "mapId": "rm_aftermath",
+    "mapName": "Aftermath",
+    "description": "The remnants of a previous battle remain as players try to rebuild their empire and control the still-standing buildings that will aid the players economy.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_aftermath.png"
+  },
+  {
+    "mapId": "rm_enclosed",
+    "mapName": "Enclosed",
+    "description": "While initially safe inside the dense rainforest, players must quickly venture out to secure resources on the other side of the jagged unbuildable path.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_enclosed.png"
+  },
+  {
+    "mapId": "rm_haboob",
+    "mapName": "Haboob",
+    "description": "An incredibly open and spacious desert with little to no opportunity to secure your resources. Forest are sparse, exposed and challenging to defend.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_haboob.png"
+  },
+  {
+    "mapId": "rm_kawasan",
+    "mapName": "Kawasan",
+    "description": "Food is plentiful but easily exposed to enemies. A massive cluster of berry bushes can be found in the middle, and scattered around the ponds are many relics.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_kawasan.png"
+  },
+  {
+    "mapId": "rm_land_madness",
+    "mapName": "Land Madness",
+    "description": "With resources scattered across the map and forests surrounded by unbuildable rugged terrain, walling is nearly impossible and military presence will be crucial.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_land_madness.png"
+  },
+  {
+    "mapId": "rm_sacred_springs",
+    "mapName": "Sacred Springs",
+    "description": "The sacred pagodas are home to numerous holy relics and vast amounts of shore fish. These resources are far from the players, leaving them exposed to raids.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_sacred_springs.png"
+  },
+  {
+    "mapId": "rm_wade",
+    "mapName": "Wade",
+    "description": "The marshy swamp is too shallow for ships to travel and not suitable for buildings to be constructed. Players must use the limited space and resources to secure victory.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_wade.png"
+  },
+  {
+    "mapId": "rm_morass",
+    "mapName": "Morass",
+    "description": "Take advantage of the muddy morass surrounding the great tropical rainforest. The outskirts are rich in valuable resources and vulnerable wildlife.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_morass.png"
+  },
+  {
+    "mapId": "rm_shoals",
+    "mapName": "Shoals",
+    "description": "The shallow waters only allow for small groups of fish, but conquering the sea will allow you to quickly reach your enemy, as well as take control of the large gold deposits near the coasts.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_shoals.png"
+  },
+  {
+    "mapId": "rm_cliffbound",
+    "mapName": "Cliffbound",
+    "description": "Arid cliffs encircle the players, confining them within a harsh savannah. Resources are scarce, and space is precious. Early aggression will be crucial to secure a foothold on this unforgiving landscape.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_cliffbound.png"
+  },
+  {
+    "mapId": "rm_isthmus",
+    "mapName": "Isthmus",
+    "description": "A narrow strip of desert land flanked by water. Control of the seas will be paramount to harnessing the abundant fish and securing victory.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_isthmus.png"
+  },
+  {
+    "mapId": "rm_dunesprings",
+    "mapName": "Dunesprings",
+    "description": "Survive the harsh desert, expand into the grasslands, and thrive in the Mediterranean forests. Claim the rich springs, and seize the deep pond in the centre - the choice of when and how is yours.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_dunesprings.png"
+  },
+  {
+    "mapId": "rm_golden_stream",
+    "mapName": "Golden Stream",
+    "description": "Your starting lands are deficient, but the mangrove river offers a lifeline. Expansion is risky, but the heartland beckons with a wealth of gold. Brave the perils, control the golden centre and claim your rightful victory.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_golden_stream.png"
+  },
+  {
+    "mapId": "rm_mountain_dunes",
+    "mapName": "Mountain Dunes",
+    "description": "Players begin atop towering dunes, overlooking a landscape of shifting sands. The desert is rich in palm trees, but the hilly terrain makes expansion difficult. Exposed stone deposits can be found in the dangerous desert, a perilous prize for those who dare.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mountain_dunes.png"
+  },
+  {
+    "mapId": "rm_river_divide",
+    "mapName": "River Divide",
+    "description": "Your starting lands hold little resources, but opportunity lies across the rivers. Utilise your transport ship to explore the dense forests and scout potential crossings. Secure the vital resources, control the waterways, and outmanoeuvre your foes.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_river_divide.png"
+  },
+  {
+    "mapId": "rm_sandrift",
+    "mapName": "Sandrift",
+    "description": "Survive amidst the shifting sands, a stark expanse devoid of life. A vast wasteland separates you - yet conflict is inevitable in this struggle for dominance.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_sandrift.png"
+  },
+  {
+    "mapId": "rm_shrubland",
+    "mapName": "Shrubland",
+    "description": "Vast fields of forage bushes sprawl across the outskirts, offering immense sustenance. Claim this fertile expanse and forge your path to dominance.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_shrubland.png"
+  },
+  {
+    "mapId": "rm_the_passage",
+    "mapName": "The Passage",
+    "description": "A narrow stretch of water separates you from your foes. This narrow crossing is destined to become a battleground. Control the seas and claim the sacred relics hidden in the deep.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_the_passage.png"
+  },
+  {
+    "mapId": "rm_hollow_woodlands",
+    "mapName": "Hollow Woodlands",
+    "description": "Baobab trees mark your isolated haven, a pocket of life within the unforgiving desert. Palm groves and elusive wildlife offer sustenance, but the rough terrain hinders safety.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hollow_woodlands.png"
+  },
+  {
+    "mapId": "rm_karsts",
+    "mapName": "Karsts",
+    "description": "The open wetlands and rugged karst formations beckon, surrounded by glittering gold and sturdy stone deposits. Secure the riches, navigate the terrain, and emerge victorious.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_karsts.png"
+  },
+  {
+    "mapId": "rm_glade",
+    "mapName": "Glade",
+    "description": "Hidden deep within the dense forest, you must emerge into the extensive clearing to gather resources and establish your dominance. Only by venturing out and seizing control of the map can you hope to conquer your enemies.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_glade.png"
+  },
+  {
+    "mapId": "rm_fortified_clearing",
+    "mapName": "Fortified Clearing",
+    "description": "Your forward defenses are strong, but your rear is vulnerable to raids. Secure the central area for a quick counterattack, or outmaneuver your enemies with a flanking maneuver.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_fortified_clearing.png"
+  },
+  {
+    "mapId": "rm_qs_arabia",
+    "mapName": "QS Arabia",
+    "description": "Arabia as you know it, but you start with nine villagers instead of the regular three.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_arabia.png"
+  },
+  {
+    "mapId": "rm_qs_fortified_clearing",
+    "mapName": "QS Fortified Clearing",
+    "description": "Fortified Clearing as you know it, but you start with nine villagers instead of the regular three.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_fortified_clearing.png"
+  },
+  {
+    "mapId": "rm_qs_glade",
+    "mapName": "QS Glade",
+    "description": "Glade as you know it, but you start with nine villagers instead of the regular three.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_glade.png"
+  },
+  {
+    "mapId": "rm_qs_nomad",
+    "mapName": "QS Nomad",
+    "description": "Nomad as you know it, but you start with nine villagers instead of the regular three.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_nomad.png"
+  },
+  {
+    "mapId": "rm_qs_runestones",
+    "mapName": "QS Runestones",
+    "description": "Runestones as you know it, but you start with nine villagers instead of the regular three.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_runestones.png"
+  },
+  {
+    "mapId": "rm_qs_arena",
+    "mapName": "QS Arena",
+    "description": "Arena as you know it, but you start with nine villagers instead of the regular three.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_arena.png"
+  },
+  {
+    "mapId": "rm_qs_black-forest",
+    "mapName": "QS Black Forest",
+    "description": "Black Forest as you know it, but you start with nine villagers instead of the regular three.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_qs_black-forest.png"
+  },
+  {
+    "mapId": "rwm_manchuria",
+    "mapName": "Great Wall",
+    "description": "Standing firm, a bastion against the Mongol hordes sweeping down from the north. Will the Chinese dynasties hold, or will Korea seize control of the turbulent seas?",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rwm_manchuria.png"
+  },
+  {
+    "mapId": "rm_border_dispute",
+    "mapName": "Border Dispute",
+    "description": "With both allies and foes right next to each other, there will be an immediate clash for food in the central swamp. Lure in as many animals as possible to your town center before it's too late.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_border_dispute.png"
+  },
+  {
+    "mapId": "rm_graupel",
+    "mapName": "Graupel",
+    "description": "Use your transport ship to quickly reach the mainland and settle your base. Despite the harsh weather, food is plentiful. Keep an eye out for where your opponents may have settled.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_graupel.png"
+  },
+  {
+    "mapId": "rm_stranded",
+    "mapName": "Stranded",
+    "description": "Quickly abandon your starting island to look for more prosperous land nearby. Construct a town center to seize the resource-rich island, but beware of predators lurking in the dense jungles.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_stranded.png"
+  },
+  {
+    "mapId": "rm_sardis",
+    "mapName": "Sardis",
+    "description": "Break out of your walled base and seize the burning city of Sardis! Capture the central Trade Workshop to generate extra resources.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_sardis.png"
+  },
+  {
+    "mapId": "rm_aquarena",
+    "mapName": "Aquarena",
+    "description": "Sea walls shelter players' bases from early aggression, but rich oyster beds and neutral Ports for trading will create a naval struggle across the map.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_aquarena.png"
+  },
+  {
+    "mapId": "sm_forest_breach",
+    "mapName": "Forest Breach",
+    "description": "Some players find themselves trapped within forests, while others immediately clash with their neighbors.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/sm_forest_breach.png"
+  },
+  {
+    "mapId": "rm_chaos_pit",
+    "mapName": "Chaos Pit",
+    "description": "Trapped in a forest clearing with no gold in sight, you'll need to carve a path through dense woods to reach the riches beyond. Stay alert - enemies lurk nearby.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_chaos_pit.png"
+  },
+  {
+    "mapId": "rm_mired",
+    "mapName": "Mired",
+    "description": "Rush out of the boggy lowlands to build your town centre and claim the rich wildlife nearby. But act fast - your enemy is close and aiming to do the same.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_mired.png"
+  },
+  {
+    "mapId": "rm_murkwood",
+    "mapName": "Murkwood",
+    "description": "Establish your Town Center deep within the shadowy swamps. Resources are plentiful, and the surrounding waters teem with fish and wildlife ripe for harvesting.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_murkwood.png"
+  },
+  {
+    "mapId": "rm_crownwood",
+    "mapName": "Crownwood",
+    "description": "A land of hills where forests cling to the summits. The high ground makes protecting your woodlines challenging.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_crownwood.png"
+  },
+  {
+    "mapId": "rm_dorothea_quarry",
+    "mapName": "Dorothea Quarry",
+    "description": "A sunken pit with a central water basin brimming with oysters for those brave enough. Scale the surrounding heights to reach the surrounding forests and additional resources.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_dorothea_quarry.png"
+  },
+  {
+    "mapId": "rm_glacis",
+    "mapName": "Glacis",
+    "description": "While partially walled, you must leave the safety of your walls to take control of the no-man's-land in the centre of the map; otherwise, you risk leaving all the additional resources to your foes.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_glacis.png"
+  },
+  {
+    "mapId": "rm_hengehold",
+    "mapName": "Hengehold",
+    "description": "Stonehenge stands in the center, encircled by relics and roaming wildlife for those bold enough to claim it. The outer perimeter holds many neutral resources and forests.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_hengehold.png"
+  },
+  {
+    "mapId": "rm_loch_ness",
+    "mapName": "Loch Ness",
+    "description": "A slender river slices the map in half, with a small crossing through the middle. With most neutral resources surrounding the lake, controlling the waters will be crucial for victory.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_loch_ness.png"
+  },
+  {
+    "mapId": "rm_rampart",
+    "mapName": "Rampart",
+    "description": "Twisting earthen ramparts link every player in a maze of elevation. Only few woodlines surround the player initially, but abundant wildlife can be found roaming the lands.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_rampart.png"
+  },
+  {
+    "mapId": "rm_stonefront",
+    "mapName": "Stonefront",
+    "description": "Few resources surround the players. Wealth lies in nearby quarries surrounded by rock formations that make maneuverability difficult. Map control is key to victory.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_stonefront.png"
+  },
+  {
+    "mapId": "rm_thames",
+    "mapName": "Thames",
+    "description": "Battle along the River Thames. Seize the Royal Albert Hall to gain a unique bonus or control the south of the map for an unlimited supply of gold and stone.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_thames.png"
+  },
+  {
+    "mapId": "rm_vulpine",
+    "mapName": "Vulpine",
+    "description": "Unbuildable terrain surrounding you makes expansion a gamble. Hunt the roaming foxes for a significant gold boost and chop through the central forest to take control of the secrets within.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_vulpine.png"
+  },
+  {
+    "mapId": "rm_arabian_desert",
+    "mapName": "Arabian Desert",
+    "description": "An arid, brutal, and unforgiving battlefield. The open landscape holds only a few forests and scarce resources, leaving little shelter from enemy raids.",
+    "imageUrl": "https://backend.cdn.aoe2companion.com/public/aoe2/de/maps/rm_arabian_desert.png"
+  }
+]
