@@ -3,7 +3,6 @@ import raw from '../content/campaigns.json';
 export type CampaignKind = 'tutorial' | 'campaign' | 'historical-battle';
 export type CampaignRegion = 'europe' | 'asia' | 'africa' | 'americas';
 export type CampaignReleasePack = 'age-of-kings' | 'the-conquerors';
-export type CampaignSort = 'release' | 'history';
 export interface CampaignEvidence {
   sourceIds: string[];
   status: string;
