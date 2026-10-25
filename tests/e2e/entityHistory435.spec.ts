@@ -77,7 +77,7 @@ test('#435 古拉姆普通和精锐历史分开，文明与科技都有来源记
   await expect(version(page, '81058')).toContainText('新增');
   await expect(version(page, '81058')).toContainText(/护甲/);
   await openHistory(page, '/unit/74?tab=history');
-  await page.getByLabel('影响关系', { exact: true }).selectOption('related');
+  await page.getByRole('combobox', { name: '影响关系', exact: true }).selectOption('related');
   await expect(history(page)).toContainText('软甲');
   await expect(history(page)).toContainText('关联影响');
   expect(errors).toEqual([]);
@@ -194,7 +194,7 @@ test('#435 数据请求失败后重试会重新请求并恢复原有筛选', asy
   await expect(page.getByRole('alert')).toContainText('更新历史加载失败');
   await page.getByRole('button', { name: '重试', exact: true }).click();
   await expect(version(page, '66692').locator('[data-history-entry]').first()).toBeVisible();
-  await expect(page.getByLabel('改动类型', { exact: true })).toHaveValue('nerf');
+  await expect(page.getByRole('combobox', { name: '改动类型', exact: true })).toHaveValue('nerf');
   await expect(page).toHaveURL(/histKind=nerf/);
   expect(requests).toBe(2);
   expect(pageErrors).toEqual([]);
