@@ -159,6 +159,12 @@ export function planChanges(changes) {
       features.add('patches');
     } else if (path === 'src/domain/simRoute.ts') {
       for (const feature of ['matchup', 'units', 'simulator']) features.add(feature);
+    } else if (path === 'src/shared/ui/PatchHistory.tsx') {
+      // This history display is consumed by four entity details and patch pages.
+      // Its loader, domain logic, styles and all other shared files remain conservative.
+      for (const feature of ['patches', 'civs', 'units', 'techs', 'buildings']) features.add(feature);
+      extraUnit.add('tests/unit/entityHistory435.test.ts');
+      extraE2e.add('tests/e2e/entityHistory435.spec.ts');
     } else if (path.startsWith('src/features/')) {
       const feature = path.split('/')[2];
       if (Object.hasOwn(PROFILES, feature)) features.add(feature);
