@@ -14,6 +14,7 @@ import { simSupport } from '../../domain/simSupport';
 import { civSimNotes, noHouseCompare, simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Breadcrumbs } from '../../shared/ui/layout';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import { RowSegs } from './RowSegs';
 import { SHARE_DISABLED_NOTE, buildShareCard } from './shareCard';
 import { shareCardBlob } from './shareCardImage';
@@ -98,7 +99,23 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
     [noHouses, bo, q.dist, q.house],
   );
   const [showAssume, setShowAssume] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const {
+    copy: copyLink,
+    copied,
+    status,
+    manualLink,
+    reset: resetShare,
+    statusProps,
+  } = useShareLink({
+    stateKey: sp.toString(),
+    successMessage: '链接已复制',
+    failureMessage: '自动复制失败，请手动复制下方完整链接。',
+  });
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(resetShare, 2000);
+    return () => clearTimeout(timer);
+  }, [copied, resetShare]);
   const [drawer, setDrawer] = useState(false);
   const setBtn = useRef<HTMLButtonElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
@@ -185,15 +202,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
     if (el && row) row.scrollLeft = el.offsetLeft - row.offsetLeft - 8;
   }, [bo.id]);
 
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(sharePageUrl('/builds', sp.toString(), document.baseURI));
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      /* 剪贴板不可用时静默：地址栏仍是可分享链接 */
-    }
-  };
+  const copy = () => copyLink(() => sharePageUrl('/builds', sp.toString(), document.baseURI));
 
   // #19 分享卡：置灰文明（simSupport=false）不生成卡，避免通用数字配上该文明的名字传出去（Steve 定）
   const canCard = !unsupported;
@@ -825,9 +834,20 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
         {shareNote('mob')}
       </div>
       {copied && (
-        <div className="tl-toast" role="status" data-t="toast-copied">
+        <div className="tl-toast" {...statusProps} data-t="toast-copied">
           <Check size={16} strokeWidth={2} aria-hidden />
           链接已复制
+        </div>
+      )}
+      {manualLink && (
+        <div>
+          <p className="note" {...statusProps}>
+            {status}
+          </p>
+          <label className="note share-link-manual">
+            手动复制开局链接
+            <textarea aria-label="手动复制开局链接" readOnly value={manualLink} rows={3} onFocus={(e) => e.currentTarget.select()} />
+          </label>
         </div>
       )}
       {cardOpen && (

@@ -16,7 +16,7 @@
 | `steps[].split`   | 来源给出的分配检查点（食/木/金/石/建造），校验器按动作累计比对                                                 |
 | `sources[]`       | `title`、`url`、`author`、`section`、`ref`（固定版本）、`accessed`                                             |
 | `license`         | 转写与许可说明                                                                                                 |
-| `review`          | `draft` → Steve 审核后改为 `reviewed`（填 `by`、`date`）                                                       |
+| `review`          | `draft` → 实现者之外的独立代理复核后改为 `reviewed`（`by`、`date` 填实际复核者和日期）                         |
 
 `gather.from: "hunt"` 表示「城镇中心下的肉类」，依次从 hunt/sheep/boar/deer 调人。
 

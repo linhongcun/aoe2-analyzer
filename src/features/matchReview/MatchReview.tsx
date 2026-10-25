@@ -9,6 +9,7 @@ import {
   serializeMatchReview,
   type MatchReviewDraft,
 } from '../../domain/matchReview';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import { matchReviewDraftReducer } from './matchReviewDraftState';
 import { ReviewEditor } from './ReviewEditor';
 import { ReviewOutput } from './ReviewOutput';
@@ -46,7 +47,7 @@ export default function MatchReview() {
   const [recoveryRaw, setRecoveryRaw] = useState(initial.lock ? (initial.raw ?? '') : '');
   const blockedSnapshot = useRef<string | null>(initial.raw);
   const [warning, setWarning] = useState(initial.warning);
-  const [notice, setNotice] = useState(initial.raw && !initial.lock ? '已载入本机草稿。' : '开始编辑时保存；空白字段表示未记录。');
+  const [notice, updateNotice] = useState(initial.raw && !initial.lock ? '已载入本机草稿。' : '开始编辑时保存；空白字段表示未记录。');
   const [restoreRaw, setRestoreRaw] = useState('');
   const [importError, setImportError] = useState('');
   const [prepared, setPrepared] = useState<MatchReviewDraft | null>(null);
@@ -55,6 +56,20 @@ export default function MatchReview() {
   const summary = matchReviewSummary(draft);
   const backup = serializeMatchReview(draft, true);
   const rawDraft = JSON.stringify(draft, null, 2);
+  const {
+    copy: copyText,
+    status: copyNotice,
+    reset: resetCopy,
+    statusProps,
+  } = useShareLink({
+    stateKey: rawDraft,
+    successMessage: '已复制选定内容的求助摘要，由你自行分享。',
+    failureMessage: '复制失败，请在摘要文本框中手动选择并复制；内容仍完整保留。',
+  });
+  const setNotice = (message: string) => {
+    resetCopy();
+    updateNotice(message);
+  };
 
   const block = (kind: Exclude<Lock, null>, raw: string | null, message: string) => {
     lockRef.current = kind;
@@ -176,11 +191,7 @@ export default function MatchReview() {
     }
   };
   const copySummary = async () => {
-    try {
-      await navigator.clipboard.writeText(summary);
-      setNotice('已复制选定内容的求助摘要，由你自行分享。');
-    } catch {
-      setNotice('复制失败，请在摘要文本框中手动选择并复制；内容仍完整保留。');
+    if ((await copyText(summary)) === 'manual') {
       summaryRef.current?.focus();
       summaryRef.current?.select();
     }
@@ -305,8 +316,8 @@ export default function MatchReview() {
               </div>
             </div>
           )}
-          <p role="status" className="mr-notice" aria-live="polite">
-            {notice}
+          <p className="mr-notice" {...statusProps}>
+            {copyNotice || notice}
           </p>
           {beforeClear && (
             <div className="mr-notice mr-actions">

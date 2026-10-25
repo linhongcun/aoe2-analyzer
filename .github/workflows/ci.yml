@@ -169,6 +169,7 @@ jobs:
             test-results/team-bonuses228-*.png
             test-results/garrisonHealing229-*/*.png
             test-results/gameClock237-*/*.png
+            test-results/shareLink286-*/*.png
             test-results/hotkeys236-*/*.png
             test-results/castleDefense242-*/*.png
             test-results/communityIntegration244-*/*.png

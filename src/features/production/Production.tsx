@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civs } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
@@ -24,6 +24,7 @@ import {
   type ProductionContext,
   type ProductionRow,
 } from '../../domain/production';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './production.css';
 
 const num = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2, minimumFractionDigits: 0 });
@@ -35,8 +36,17 @@ export default function Production() {
   const decoded = useMemo(() => decodeProduction(location.search), [location.search]);
   const config = decoded.config;
   const context = useMemo(() => (core && trees ? { core, trees } : null), [core, trees]);
-  const [shareStatus, setShareStatus] = useState(''),
-    [manualLink, setManualLink] = useState('');
+  const {
+    copy,
+    status: shareStatus,
+    manualLink,
+    reset: resetShare,
+    statusProps,
+  } = useShareLink({
+    stateKey: JSON.stringify([location.search, config]),
+    successMessage: '链接已复制，包含当前全部设置。',
+    failureMessage: '自动复制失败，请手动复制下方链接。',
+  });
   if (!context)
     return (
       <section className="pane">
@@ -45,8 +55,7 @@ export default function Production() {
     );
   const update = (next: ProductionConfig) => {
     navigate({ pathname: '/production', search: '?' + encodeProduction(next) }, { replace: true });
-    setShareStatus('');
-    setManualLink('');
+    resetShare();
   };
   return (
     <ProductionBody
@@ -56,17 +65,13 @@ export default function Production() {
       update={update}
       shareStatus={shareStatus}
       manualLink={manualLink}
+      statusProps={statusProps}
       share={async () => {
-        const url = new URL(window.location.href);
-        url.hash = '/production?' + encodeProduction(config);
-        try {
-          await navigator.clipboard.writeText(url.href);
-          setShareStatus('链接已复制，包含当前全部设置。');
-          setManualLink('');
-        } catch {
-          setShareStatus('自动复制失败，请手动复制下方链接。');
-          setManualLink(url.href);
-        }
+        await copy(() => {
+          const url = new URL(window.location.href);
+          url.hash = '/production?' + encodeProduction(config);
+          return url.href;
+        });
       }}
     />
   );
@@ -80,6 +85,7 @@ function ProductionBody({
   share,
   shareStatus,
   manualLink,
+  statusProps,
 }: {
   context: ProductionContext;
   config: ProductionConfig;
@@ -88,6 +94,7 @@ function ProductionBody({
   share: () => Promise<void>;
   shareStatus: string;
   manualLink: string;
+  statusProps: ReturnType<typeof useShareLink>['statusProps'];
 }) {
   const result = calculateProduction(ctx, config);
   const units = productionUnits(ctx, config),
@@ -140,7 +147,7 @@ function ProductionBody({
       </nav>
       {linkErrors.length > 0 && <p className="note">请先修正链接错误，再复制方案。</p>}
       {shareStatus && (
-        <p className="note" role="status">
+        <p className="note" {...statusProps}>
           {shareStatus}
         </p>
       )}

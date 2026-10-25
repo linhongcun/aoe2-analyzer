@@ -18,6 +18,7 @@ import { Breadcrumbs } from '../../shared/ui/layout';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
+import { useShareLink } from '../../shared/ui/useShareLink';
 import './trade-income.css';
 
 const number = (n: number) =>
@@ -33,8 +34,18 @@ export default function TradeIncome() {
   const decoded = useMemo(() => decodeTradeIncome(location.search), [location.search]);
   // Invalid in-progress input stays editable and is never serialized as a valid share link.
   const [draft, setDraft] = useState<{ search: string; config: TradeIncomeConfig } | null>(null);
-  const [shared, setShared] = useState<{ key: string; text: string; link: string } | null>(null);
   const config = draft?.search === location.search ? draft.config : decoded.config;
+  const {
+    copy: copyLink,
+    status,
+    manualLink,
+    reset: resetShare,
+    statusProps,
+  } = useShareLink({
+    stateKey: JSON.stringify([location.search, config]),
+    successMessage: '方案链接已复制。',
+    failureMessage: '自动复制失败，请手动复制下方方案链接。',
+  });
   if (!core || !trees)
     return (
       <section className="pane">
@@ -44,25 +55,22 @@ export default function TradeIncome() {
   const ctx = { core, trees };
   const result = calculateTradeIncome(ctx, config);
   const write = (next: TradeIncomeConfig) => {
+    resetShare();
     setDraft(null);
     navigate({ pathname: '/trade-income', search: '?' + encodeTradeIncome(next) }, { replace: true });
   };
   const update = (next: TradeIncomeConfig) => {
     if (decoded.errors.length) return;
-    setShared(null);
+    resetShare();
     if (decodeTradeIncome(encodeTradeIncome(next)).errors.length) setDraft({ search: location.search, config: next });
     else write(next);
   };
   const copy = async () => {
-    const url = new URL(window.location.href);
-    url.hash = '/trade-income?' + encodeTradeIncome(config);
-    const key = encodeTradeIncome(config);
-    try {
-      await navigator.clipboard.writeText(url.href);
-      setShared({ key, text: '方案链接已复制。', link: '' });
-    } catch {
-      setShared({ key, text: '自动复制失败，请手动复制下方方案链接。', link: url.href });
-    }
+    await copyLink(() => {
+      const url = new URL(window.location.href);
+      url.hash = '/trade-income?' + encodeTradeIncome(config);
+      return url.href;
+    });
   };
   return (
     <TradeIncomeBody
@@ -72,7 +80,8 @@ export default function TradeIncome() {
       update={update}
       reset={() => write(newTradeIncomeConfig())}
       copy={copy}
-      shared={shared?.key === encodeTradeIncome(config) ? shared : null}
+      shared={status ? { text: status, link: manualLink } : null}
+      statusProps={statusProps}
       result={result}
     />
   );
@@ -86,6 +95,7 @@ function TradeIncomeBody({
   reset,
   copy,
   shared,
+  statusProps,
   result: r,
 }: {
   ctx: ProductionContext;
@@ -95,6 +105,7 @@ function TradeIncomeBody({
   reset: () => void;
   copy: () => Promise<void>;
   shared: { text: string; link: string } | null;
+  statusProps: ReturnType<typeof useShareLink>['statusProps'];
   result: ReturnType<typeof calculateTradeIncome>;
 }) {
   const errors = [...parseErrors, ...r.errors];
@@ -131,7 +142,7 @@ function TradeIncomeBody({
         </button>
       </div>
       {shared && (
-        <p role="status" className="note">
+        <p {...statusProps} className="note">
           {shared.text}
         </p>
       )}
