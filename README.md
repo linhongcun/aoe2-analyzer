@@ -68,6 +68,8 @@ npm test             # Vitest 单元测试（domain 逻辑与生成数据）
 npm run e2e          # Playwright 冒烟测试（需 npx playwright install chromium）；BASE_URL=<线上地址> 可测线上
 npm run lint         # ESLint；npm run format 用 Prettier 格式化
 npm run data         # 从 aoe2techtree 重新生成 src/data/*.json 与 public/img/*
+python3 scripts/map_previews.py          # 生成地图预览及 mapPreviews.json（依赖 Pillow==12.3.0）
+python3 scripts/map_previews.py --check  # 核对固定原图哈希、生成预览及来源清单
 npm run dat:check    # 下载并校验 .dat（sha256 + 补丁标记）
 npm run effects      # 由 .dat 生成 effects.json 并重写 docs/EFFECTS-AUDIT.md
 npm run stats:check  # 基础数值与 .dat 对账
@@ -97,6 +99,7 @@ npm run test:py      # Python 测试：补丁号识别、差异摘要、标记�
 - 单位/科技数据与图标（`public/img/units/`、`img/techs/`）：高清版取自 [denniske/aoe2companion](https://github.com/denniske/aoe2companion) 的 256px DE 图标（缩放为 128px WebP，`scripts/icons_hires.py`），未覆盖的少数图标回退到 aoe2techtree 48px 原图（游戏图像 © Microsoft）
 - 属性/资源图标（`public/img/stats/`，40px WebP）：来自 [Age of Empires Fandom Wiki](https://ageofempires.fandom.com/)（如 Hpicon_aoe2de.png、Attack_cur.png、Armoricon_aoe2de.png、AoE2DE_icon_*.png、Aoe2de_food.png 等；Wiki 内容 CC BY-SA，游戏图像 © Microsoft）
 - 文明图标（`public/img/civs/`）：取自 [denniske/aoe2companion](https://github.com/denniske/aoe2companion)（`assets/civilizations/de/`），缩放为 96px WebP。原始素材 © Microsoft Corporation。
+- 地图预览（`public/img/maps/`）：取自 [denniske/aoe2companion 固定提交 `3ce039d`](https://github.com/denniske/aoe2companion/tree/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps)（2020-07-09）的 420px 地图选择图片，由 `scripts/map_previews.py` 校验 `scripts/data_sources.json` 中的 SHA256 后转为 WebP，随站点发布，无运行时 CDN。图片仅表示地图形态，不是当前版本的随机对局实图；海图以岛屿（Islands）为例。原始游戏美术 © Microsoft Corporation，依 Microsoft Game Content Usage Rules 使用，不属于本项目 MIT 许可。
 
 Age of Empires II © Microsoft Corporation. 本项目依据 Microsoft 的 [Game Content Usage Rules](https://www.xbox.com/en-us/developers/rules) 使用游戏素材，为非商业粉丝项目，未获 Microsoft 认可或赞助。
 

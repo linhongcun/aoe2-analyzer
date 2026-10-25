@@ -1,0 +1,18 @@
+{
+  "arabia": {
+    "image": "img/maps/arabia.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps/rm_arabia.png"
+  },
+  "arena": {
+    "image": "img/maps/arena.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps/rm_arena.png"
+  },
+  "nomad": {
+    "image": "img/maps/nomad.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps/rm_nomad.png"
+  },
+  "islands": {
+    "image": "img/maps/islands.webp",
+    "sourceUrl": "https://github.com/denniske/aoe2companion/blob/3ce039d8bfdb54da36b2ea40f25cf1dac4063a13/assets/maps/rm_islands.png"
+  }
+}
