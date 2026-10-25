@@ -59,6 +59,13 @@ async function expectCivDlc(root: Locator, value: string) {
   await expect(bar.locator(`button[data-v="${value}"]`)).toHaveAttribute('aria-pressed', 'true');
 }
 
+async function expectTechRelease(root: Locator, value: string) {
+  const bar = root.getByRole('group', { name: '科技首发版本快捷筛选', exact: true });
+  await expect(root.locator('#tdlc')).toHaveCount(0);
+  await expect(bar.locator('button[aria-pressed="true"]')).toHaveCount(1);
+  await expect(bar.locator(`button[data-v="${value}"]`)).toHaveAttribute('aria-pressed', 'true');
+}
+
 test('#62 首页入口按用途分组，桌面每行四张卡片', async ({ page }) => {
   await page.goto('./#/');
   const cards = page.locator('#home .home-group').first().locator('.hcard');
@@ -160,14 +167,19 @@ for (const width of WIDTHS)
 
       await ready(page, 'techs', '#tgrid .card');
       const techRoot = page.locator('#techs');
-      await expect(techRoot.locator('.dbar')).toHaveCount(0);
+      const techBar = techRoot.getByRole('group', { name: '科技首发版本快捷筛选', exact: true });
+      await expect(techBar).toBeVisible();
+      await expect(techBar.getByRole('button')).toHaveCount(DLCS.length + 3);
+      await expect(techBar.getByRole('img')).toHaveCount(DLCS.length);
+      await expectTechRelease(techRoot, '');
       await expect(techRoot.locator('#tq')).toBeVisible();
       await expect(techRoot.locator('#tcnt')).toBeVisible();
       await screenshot(page, info, 'techs', width, theme);
       const techFilters = await openFilters(techRoot, mobile);
       await techRoot.locator('#tt').selectOption(FIRST_TECH.type);
       await techRoot.locator('#ta').selectOption(String(FIRST_TECH.age));
-      await techRoot.locator('#tdlc').selectOption(String(techDlc(FIRST_TECH)));
+      await techBar.locator(`button[data-v="${techDlc(FIRST_TECH)}"]`).click();
+      await expectTechRelease(techRoot, String(techDlc(FIRST_TECH)));
       await techRoot.locator('#tb').selectOption(FIRST_TECH.bz);
       const filteredTechs = TECHS.filter(
         (tech) => tech.type === FIRST_TECH.type && tech.age === FIRST_TECH.age && techDlc(tech) === techDlc(FIRST_TECH) && tech.bz === FIRST_TECH.bz,
@@ -183,10 +195,12 @@ for (const width of WIDTHS)
       await expect(page.locator('#home .hcard').first()).toBeVisible();
       await page.evaluate(() => (location.hash = '#/techs'));
       await expect(techRoot.locator('#tt')).toHaveValue(FIRST_TECH.type);
+      await expectTechRelease(techRoot, String(techDlc(FIRST_TECH)));
       await expect(techRoot.locator('#tcnt')).toHaveText(`${filteredTechs.length} / ${TECHS.length}`);
       if (mobile) await techFilters.toggle.click();
       await techRoot.getByRole('button', { name: '清空筛选', exact: true }).click();
-      for (const id of ['tt', 'ta', 'tdlc', 'tb']) await expect(techRoot.locator('#' + id)).toHaveValue('');
+      for (const id of ['tt', 'ta', 'tb']) await expect(techRoot.locator('#' + id)).toHaveValue('');
+      await expectTechRelease(techRoot, '');
       await expect(techRoot.locator('#tcnt')).toHaveText(`${TECHS.length} / ${TECHS.length}`);
 
       await ready(page, 'builds', '[data-t="build-order"] summary');
