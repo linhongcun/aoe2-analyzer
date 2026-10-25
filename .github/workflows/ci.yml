@@ -2,9 +2,21 @@ name: CI / Deploy
 on:
   push: { branches: [main, 'release/**'] }
   pull_request: { branches: [main, 'release/**'] }
+  schedule:
+    - cron: '17 20 * * *' # 04:17 Asia/Shanghai; background only
   workflow_dispatch:
-permissions: { contents: read, pull-requests: read }
-concurrency: { group: 'ci-${{ github.ref }}', cancel-in-progress: true }
+    inputs:
+      full:
+        description: '完整后台回归（不部署）'
+        type: boolean
+        default: true
+permissions: { contents: read, pull-requests: read, actions: read }
+# Background runs never cancel or queue in front of delivery runs.
+concurrency:
+  group: ci-${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'background' || 'delivery' }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  CI_FULL: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.full) }}
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -20,36 +32,41 @@ jobs:
         env: { PR_TITLE: '${{ github.event.pull_request.title }}' }
         run: node scripts/check-pr-title.mjs
       - run: npm ci --legacy-peer-deps
-      - name: Classify validation scope
+      - name: Select affected validation plan
         id: scope
         run: node scripts/ci-scope.mjs
+      - name: Reuse verified validation for the identical source tree
+        id: reuse
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/ci-evidence.mjs --find
       - name: Lint
+        if: steps.reuse.outputs.reused != 'true'
         run: npm run lint
       - name: Typecheck
+        if: steps.reuse.outputs.reused != 'true'
         run: npx tsc -p . --noEmit
-      # #281：分层边界检查，--strict 下有任何违规即失败（违规同时显示为 ::error 注解）
-      - name: Layer boundaries (strict, #281)
+      - name: Layer boundaries (strict)
+        if: steps.reuse.outputs.reused != 'true'
         run: npm run lint:layers -- --strict
       - name: Catalog introduction audit
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.full == 'true'
         run: npm run introductions:check
-      # Release unit checks also launch Chromium; maintenance skips only the browser suite.
+      # Chromium is also needed to build static OG images and for short build checks.
       - name: Install Playwright chromium
         run: npx playwright install --with-deps chromium
-      - name: Vitest
-        if: steps.scope.outputs.scope == 'full'
-        run: npm test
-      - name: Release policy unit checks
-        if: steps.scope.outputs.scope != 'full'
-        run: npx vitest run tests/unit/release*.test.ts
+      - name: Affected unit checks
+        if: steps.reuse.outputs.reused != 'true'
+        run: node scripts/ci-run.mjs --unit
       - name: Python tests (patch detection, diff summary, markers)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: npm run test:py
       - name: Design contrast check (WCAG AA)
+        if: steps.reuse.outputs.reused != 'true'
         run: python3 docs/design/contrast.py
       # .dat（© Microsoft）只缓存在 runner，不进仓库；key 跟随固定版本
       - name: Cache pinned .dat + genieutils venv
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         uses: actions/cache@v4
         with:
           path: |
@@ -58,149 +75,129 @@ jobs:
             scripts/.cache/venv
           key: dat-${{ hashFiles('scripts/data_sources.json') }}-py312
       - name: Data check (dat sha256 + patch markers)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: npm run dat:check
       - name: Data check (site stats vs pinned dat; unlisted diffs fail)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: npm run stats:check
       - name: Cache pinned aoe2techtree downloads
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         uses: actions/cache@v4
         with:
           path: scripts/.cache/aoe2techtree-*
           key: aoe2techtree-${{ hashFiles('scripts/data_sources.json') }}
       - name: Install image generation dependency
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 -m pip install Pillow==12.3.0
       - name: Data check (map previews reproducible from pinned source)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/map_previews.py --check
       - name: Data check (map catalog reproducible from archived sources)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/map_catalog_build.py --check
       - name: Data check (core data, icons and pinyin reproducible)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/build_data.py && node scripts/pinyin_build.mjs && git diff --exit-code -- src/data public/img
       - name: Data check (pinyin index current)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: npm run pinyin:check
       - name: Data check (effects.json reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/effects_build.py && git diff --exit-code -- src/data/effects.json
       - name: Data check (eco.json reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/eco_build.py && git diff --exit-code -- src/data/eco.json docs/ECO-DATA.md
       - name: Data check (market.json reproducible from pinned dat and reviewed rules)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/market_build.py --check
       - name: Data check (garrison.json reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/garrison_build.py --check
       - name: Data check (general garrison inputs reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/garrison_general_build.py --check
       - name: Data check (trade population reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/trade_income_build.py --check
       - name: Data check (construction inputs reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/construction_build.py --check
       - name: Data check (team sources reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/team_bonuses_build.py --check
       - name: Data check (garrison healing inputs reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/garrison_healing_build.py --check
       - name: Data check (relic income inputs reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/relic_income_build.py --check
       - name: Data check (generate-resource tasks reproducible from pinned dat)
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/generate_resource_build.py --check
       - name: Patch notes match pinned data
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: python3 scripts/patches_build.py --check
       - name: Build-order data check
-        if: steps.scope.outputs.scope == 'full'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: npm run bo:check
-      - name: Build
+      # Build again only to identify the actual checkout SHA in the published footer.
+      - name: Build actual checkout
         run: npm run build && git diff --exit-code -- src/data/page-metadata.json
-      - name: Playwright smoke (chromium)
-        if: steps.scope.outputs.scope == 'full'
-        run: npx playwright test --reporter=line
-      - name: Civilization visual and filter checks
-        if: steps.scope.outputs.scope == 'civ-ui'
-        run: npx playwright test tests/e2e/civDlcFilters.spec.ts tests/e2e/civRequirements206.spec.ts tests/e2e/v0290-326.spec.ts tests/e2e/catalogLayout187.spec.ts tests/e2e/layout62.spec.ts --reporter=line
-      - name: Save validation scope
+      - name: Affected browser checks
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.browser == 'true'
+        run: node scripts/ci-run.mjs --e2e
+      - name: Short check of the actual build
+        if: steps.reuse.outputs.reused == 'true' || steps.scope.outputs.browser != 'true'
+        run: |
+          python3 -m http.server 4189 --bind 127.0.0.1 --directory dist > "$RUNNER_TEMP/build-smoke-server.log" 2>&1 &
+          smoke_pid=$!
+          trap 'kill "$smoke_pid" 2>/dev/null || true' EXIT
+          node --input-type=module <<'NODE'
+          const end = Date.now() + 5000;
+          for (;;) {
+            try { const response = await fetch('http://127.0.0.1:4189/'); if (response.ok) break; } catch {}
+            if (Date.now() >= end) throw new Error('Local build server did not become ready');
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+          NODE
+          node scripts/deployment-smoke.mjs --site http://127.0.0.1:4189/ --plan "$RUNNER_TEMP/ci-plan.json"
+      - name: Record completed validation and provenance
+        run: node scripts/ci-evidence.mjs --record
+      - name: Save validation evidence
         uses: actions/upload-artifact@v4
         with:
-          name: ci-validation-scope
-          path: ${{ runner.temp }}/ci-scope.json
+          name: ci-validation-evidence
+          overwrite: true
+          path: ${{ runner.temp }}/ci-evidence.json
           if-no-files-found: error
-      - name: Save editorial viewport screenshots
+      - name: Save affected viewport screenshots
         uses: actions/upload-artifact@v4
-        if: always() && steps.scope.outputs.scope != 'maintenance'
+        if: always() && steps.reuse.outputs.reused != 'true' && steps.scope.outputs.browser == 'true'
         with:
           name: editorial-viewport-screenshots
-          path: |
-            test-results/editorial6-*/home-light-*.png
-            test-results/catalogLayout187-*/*.png
-            test-results/layout62-*/*.png
-            test-results/searchLoading395-*/*.png
-            test-results/introductions190-*/*.png
-            test-results/units192-*/*.png
-            test-results/relatedTechs193-*/*.png
-            test-results/matchup194-*/*.png
-            test-results/matchupSim424-*/*.png
-            test-results/introductions195-*/*.png
-            test-results/unitFilters196-*/*.png
-            test-results/production204-*/*.png
-            test-results/upgrades205-*/*.png
-            test-results/civRequirements206-*/*.png
-            test-results/civDlcFilters-*/*.png
-            test-results/v0290-326-*/*.png
-            test-results/ecoPayoff214-*/*.png
-            test-results/market215-*/*.png
-            test-results/practice216-*/*.png
-            test-results/glossary217-*/*.png
-            test-results/civText402-*/*.png
-            test-results/compare403-*/*.png
-            test-results/garrison218-*/*.png
-            test-results/garrison224-*/*.png
-            test-results/tradeIncome226-*/*.png
-            test-results/construction227-*/*.png
-            test-results/teamBonuses228-*/*.png
-            test-results/team-bonuses228-*.png
-            test-results/garrisonHealing229-*/*.png
-            test-results/gameClock237-*/*.png
-            test-results/shareLink286-*/*.png
-            test-results/hotkeys236-*/*.png
-            test-results/castleDefense242-*/*.png
-            test-results/communityIntegration244-*/*.png
-            test-results/contentGuide239-*/*.png
-            test-results/mixedArmy241-*/*.png
-            test-results/teamPlan243-*/*.png
-            test-results/campaigns240-*/*.png
-            test-results/gameGuide256-*/*.png
-            test-results/gameGuide256-*.png
-            test-results/matchReview257-*/*.png
-            test-results/scouting258-*/*.png
-            test-results/learningIntegration259-*/*.png
-            test-results/patchTree417-*/*.png
-            test-results/mapPreviews-*/*.png
-            test-results/mapCatalog422-*/*.png
-            test-results/relicIncome238-*/*.png
-            test-results/communityIntegration249-*/*.png
+          overwrite: true
+          path: test-results/**/*.png
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
-        if: failure() && steps.scope.outputs.scope != 'maintenance'
-        with: { name: playwright-report, path: test-results, if-no-files-found: ignore }
+        if: failure()
+        with: { name: playwright-report, path: test-results, if-no-files-found: ignore, overwrite: true }
+      - name: Identify the exact Pages and ZIP artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: node scripts/site-artifact.mjs --write
+      - name: Save deployed site for Release
+        uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          name: deployed-site
+          overwrite: true
+          path: dist
+          if-no-files-found: error
       - uses: actions/upload-pages-artifact@v3
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with: { path: dist }
   deploy:
     needs: test
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions: { pages: write, id-token: write }
     concurrency: { group: pages, cancel-in-progress: false }

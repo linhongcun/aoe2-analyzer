@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 发版脚本（#108 / #134）：release/vX.Y.Z → main（merge commit）→ 等部署并核对线上页脚 → annotated tag → 起草 GitHub Release
+// 发版脚本：已部署 main → 线上页脚 → annotated tag → draft；兼容可选 release 分支集成。
 // 新版本的 CHANGELOG 小节用 insertVersionSection（scripts/changelog.mjs，#274）插在 [Unreleased] 之后，不要插到文首说明之前。
 //
 // 用法：npm run release -- vX.Y.Z [--dry-run] [--site-url URL] [--footer-timeout 秒]
@@ -170,11 +170,20 @@ async function main() {
 
   // ── 前置检查（只读）──
   let refs = remoteRefs();
-  const relHead = refs.get(`refs/heads/${branch}`);
+  const releaseRef = refs.get(`refs/heads/${branch}`);
   const mainHead0 = refs.get('refs/heads/main');
-  if (!relHead) fail(`远端没有分支 ${branch}`);
   if (!mainHead0) fail('远端没有 main 分支');
-  if (!dryRun) git('fetch', '-q', REMOTE, `refs/heads/${branch}:refs/remotes/${REMOTE}/${branch}`, `refs/heads/main:refs/remotes/${REMOTE}/main`);
+  const relHead = releaseRef ?? mainHead0;
+  if (!releaseRef) log(`直接发布 main：无需 ${branch} 分支`);
+  if (!dryRun) {
+    const fetch = [`refs/heads/main:refs/remotes/${REMOTE}/main`];
+    if (releaseRef) fetch.push(`refs/heads/${branch}:refs/remotes/${REMOTE}/${branch}`);
+    git('fetch', '-q', REMOTE, ...fetch);
+  }
+  if (!releaseRef) {
+    const packageVersion = JSON.parse(git('show', `${mainHead0}:package.json`)).version;
+    if (`v${packageVersion}` !== version) fail(`main 版本 v${packageVersion} 与请求 ${version} 不一致`);
+  }
   const merged = isAncestor(relHead, mainHead0);
   // 已合入时，认「release 合入 main 的那个提交」；main 之后有新提交也不影响重跑（#145 B）
   const relCommit = merged ? (findReleaseCommit(relHead, mainHead0) ?? mainHead0) : null;
