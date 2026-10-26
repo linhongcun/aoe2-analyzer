@@ -219,6 +219,67 @@ export async function checkSite({ site, version, commit, features = [] }) {
         await page.locator('[data-t="rc-basis-btn"]').first().click();
         await check(page.locator('[data-t="rc-pop"]').getByRole('heading', { level: 4, name: '采集时间怎么算', exact: true })).toBeVisible();
         console.log('Verified Duel heading-order: default, expanded, time popup, unavailable; Unit/Building default headings and Unit Basis retained');
+        await goto('/duel?a=569.Franks.4.f.0-1&b=359.Japanese.4.f.2&m=t&vil=19&min=13&bud=8800&be=1');
+        const presets = page.getByRole('region', { name: '波希米亚预置对战', exact: true });
+        const dataBuild = JSON.parse(readFileSync(new URL('./data_sources.json', import.meta.url), 'utf8')).patch.build;
+        if (dataBuild === 185872) {
+          const configurations = [
+            { key: 'castle-hussite-mangonel', query: 'a=1704.Bohemians.3.c.&b=280.Franks.3.c.&m=1', a: '胡斯派战车', b: '轻型投石车', age: '城堡时代' },
+            { key: 'imperial-hussite-onager', query: 'a=1706.Bohemians.4.c.&b=550.Franks.4.c.&m=1', a: '精锐胡斯派战车', b: '中型投石车', age: '帝王时代' },
+          ];
+          const selected = async (preset) => {
+            await check(page.locator('#duel-res')).toBeVisible();
+            assertFooter(
+              {
+                version: await page.locator('[data-t="footer-app-version"]').first().textContent(),
+                build: await page.locator('[data-t="footer-build"]').first().textContent(),
+              },
+              { version, commit },
+            );
+            assert.equal(new URL(page.url()).hash, '#/duel?' + preset.query);
+            for (const [side, unit, civ] of [
+              ['a', preset.a, '波希米亚'],
+              ['b', preset.b, '法兰克'],
+            ]) {
+              await check(page.locator('#duel-' + side + ' .duel-head')).toContainText(unit);
+              await check(page.locator('#duel-' + side + ' .duel-head')).toContainText(civ);
+              await check(page.locator('#duel-' + side + ' .duel-age')).toHaveText(preset.age);
+              await check(page.locator('#duel-' + side).getByRole('radio', { name: '当前时代满科技', exact: true })).toHaveAttribute('aria-checked', 'true');
+            }
+            await check(page.getByRole('radio', { name: '1v1', exact: true })).toHaveAttribute('aria-checked', 'true');
+          };
+          await check(presets.locator('article[data-preset]')).toHaveCount(2);
+          await check(presets).toContainText(/DE\s*185872/);
+          await page.getByRole('button', { name: '查看波希米亚预置', exact: true }).click();
+          await check(presets).toBeFocused();
+          for (const preset of configurations) {
+            const open = presets.locator('[data-preset="' + preset.key + '"]').getByRole('link', { name: '打开对照', exact: true });
+            await check(open).toHaveAttribute('href', '#/duel?' + preset.query);
+            await open.click();
+            await selected(preset);
+          }
+          await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: root.origin });
+          const before = page.url();
+          const first = presets.locator('[data-preset="castle-hussite-mangonel"]');
+          await first.getByRole('button', { name: /复制对照链接/ }).click();
+          await check(first.getByRole('status')).toHaveText('对照链接已复制。');
+          assert.equal(page.url(), before);
+          const copied = new URL(await page.evaluate(() => navigator.clipboard.readText()));
+          assert.equal(copied.origin, root.origin);
+          assert.equal(copied.pathname, new URL('duel/', root).pathname);
+          assert.equal(copied.hash, '');
+          assert.equal(copied.searchParams.toString(), configurations[0].query);
+          await page.goto(copied.href);
+          await selected(configurations[0]);
+          await page.reload();
+          await selected(configurations[0]);
+          console.log(
+            'Verified two DE185872 Bohemian presets: exact links, current-age settings, fresh query, discoverability, real clipboard, static entry and reload',
+          );
+        } else {
+          await check(presets).toHaveCount(0);
+          await check(page.getByRole('button', { name: '查看波希米亚预置', exact: true })).toHaveCount(0);
+        }
       } else if (feature === 'simulator' || feature === 'simRoute') {
         await goto('/unit/38/Franks/4/?tab=sim');
         await check(page.locator('#simciv')).toHaveAttribute('data-value', 'Franks');

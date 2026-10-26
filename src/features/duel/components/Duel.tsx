@@ -15,6 +15,7 @@ import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 import { BreakEven } from './BreakEven';
+import { BohemianPresetCards, BohemianPresetJump } from './BohemianPresetCards';
 import { DamageBreakdown } from './DamageBreakdown';
 import { AgeComparison } from './AgeComparison';
 import { UpgradeComparison } from './UpgradeComparison';
@@ -26,6 +27,16 @@ const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] 
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
 
 export default function Duel() {
+  return (
+    <>
+      <BohemianPresetJump />
+      <DuelCalculator />
+      <BohemianPresetCards />
+    </>
+  );
+}
+
+function DuelCalculator() {
   const core = useCore(),
     trees = useTrees();
   const [sp, setSp] = useSearchParams();

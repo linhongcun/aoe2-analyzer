@@ -27,6 +27,8 @@
 
 复用全局既有 .two、.posbox、.bar、.note、.ulink、.share-link-manual、.num.nw。宽屏两列，既有窄屏规则单列；卡片自然高度、文本可折行，动作可换行，不设固定宽度。颜色沿设计令牌，note13px，正文15px，h2/h3沿既有标题规则。按钮由现有全局规则保证44px；打开Link本地inline-flex/center/gap变量/min-height44px，文本宽度超过44px。不增加样式表或修改现有CSS范围守护。
 
+在原#duel之前增加同一185872数据门禁下的本地按钮“查看波希米亚预置”，复用 .bar 和既有44px button样式。普通点击或键盘激活只scroll并focus到末尾兄弟section #duel-presets（tabIndex=-1），不产生新URL/路由/配置，便于手机发现两卡；两个方向均按实际header.topbar底边加8px空隙定位目标标题，避免吸顶栏遮挡，并实测标题top不小于顶栏bottom。回计算器时临时聚焦section，blur后清理新增tabindex；保持原#duel全文和标题不变。此可用性细化已由root与独立reviewer确认属于本轮两预置范围。新增用例先在当前无快捷按钮产物实际失败，再实现并检查同页URL不变与键盘focus/视口。
+
 每卡一个标准React Router Link“打开对照”和一个带具体卡标题aria-label的“复制链接”按钮，Lucide图标只复用现有swords/copy/check。普通鼠标点击/键盘激活打开后将原#duel滚入视口，使结果与单位选择立即可见；Ctrl/Meta/Shift/Alt及非主键保留Link原生语义，不替当前页面滚动。
 
 成功复制采用现有useShareLink的polite/status反馈。失败时保留完整只读可选textarea，label为“完整对照链接”，不截断URL；只读框用现有 .share-link-manual，完整URL在框内滚动，不撑宽页面。URL状态变化时沿用hook清理旧反馈，不改共享hook。
@@ -62,4 +64,4 @@
 
 ## 交付顺序
 
-规格与真实first-red先交bug_scope_audit独立preflight，再由root确认允许改产品。实施者不代写独立结论。适用本地检查、四宽明暗与finalreview通过后，确认无已有PR，再push单issue PR，Fixes #372，标题按feat(#372):格式，提交身份沿既有非noreply邮箱。不自行合并；root负责GitHub授权状态、CI/merge、实际部署/正式Release。
+规格与真实first-red先交bug_scope_audit独立preflight，再由root确认允许改产品。实施者不代写独立结论。适用本地检查和四宽明暗通过、最终实际HEAD构建短烟测完成后，确认无已有PR，再push单issue PR；独立finalreview可与远端CI并行，root合并前两者均须通过。PR，Fixes #372，标题按feat(#372):格式，提交身份沿既有非noreply邮箱。不自行合并；root负责GitHub授权状态、CI/merge、实际部署/正式Release。

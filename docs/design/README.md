@@ -10,6 +10,8 @@ v0.40.1 来源展示修复见 [开局与一局入门的公开来源](source-pres
 
 v0.40.2 标题层级修复见 [单位 PK 标题大纲](duel-heading-order-364.md)（#364）：共享组件默认保持，PK 子树语义连续，局部 class 保留原外观；[视觉验证工具](duel-heading-364-visual/README.md)记录全页零像素差的核对方式。
 
+v0.41.0 两条单位 PK 入口见 [波希米亚预置对战](bohemian-duel-presets-372.md)（#372）：精确真实文明、当前时代科技与静态分享链接；兄弟预置区与本地快捷跳转保留原计算器金标准，[真实先红摘要](duel-preset372-first-red.json)记录准备基线与独立preflight。
+
 这里只放已签字或产品定稿的样稿和规格。生成脚本、评审截图、未签字的 v0.5 储备稿（#44 文明详情、#16）以及 #17 都留在归档分支 `design/jony-archive`，不进这里。
 SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分支上。样稿里的数字都以数据为准，和数据不一致时以数据为准。
 

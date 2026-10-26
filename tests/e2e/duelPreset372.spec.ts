@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page, type Locator } from '@playwright/test';
 
 const CASES = [
   {
@@ -42,6 +42,12 @@ async function configured(page: Page, item: (typeof CASES)[number]) {
   }
   await expect(page.getByRole('radio', { name: '1v1', exact: true })).toHaveAttribute('aria-checked', 'true');
 }
+async function unblockedTitle(page: Page, title: Locator) {
+  await expect(title).toBeInViewport();
+  const heading = await title.boundingBox();
+  const bar = await page.locator('header.topbar').boundingBox();
+  expect(heading!.y).toBeGreaterThanOrEqual(bar!.y + bar!.height);
+}
 const errors = new WeakMap<Page, string[]>();
 test.beforeEach(async ({ page }) => {
   const list: string[] = [];
@@ -52,6 +58,20 @@ test.beforeEach(async ({ page }) => {
   });
 });
 test.afterEach(async ({ page }) => expect(errors.get(page)).toEqual([]));
+
+test('#372 页首发现入口键盘跳转同页预置节', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 900 });
+  await page.goto('./#/duel');
+  await expect(page.locator('#duel-res')).toBeVisible();
+  const before = page.url();
+  const jump = page.getByRole('button', { name: '查看波希米亚预置', exact: true });
+  await expect(jump).toBeInViewport();
+  await jump.focus();
+  await jump.press('Enter');
+  await expect(region(page)).toBeFocused();
+  await unblockedTitle(page, region(page).getByRole('heading', { level: 2 }));
+  expect(page.url()).toBe(before);
+});
 
 test('#372 精确两卡和兄弟语义区不进入旧计算器全文', async ({ page }) => {
   await page.goto('./#/duel');
@@ -91,7 +111,7 @@ for (const item of CASES) {
       await open.scrollIntoViewIfNeeded();
       await open.click();
       await configured(page, item);
-      await expect(page.locator('#duel .lhead h1')).toBeInViewport();
+      await unblockedTitle(page, page.locator('#duel .lhead h1'));
       const params = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
       expect([...params.keys()]).toEqual(['a', 'b', 'm']);
     }
@@ -162,6 +182,9 @@ for (const width of [360, 375, 390, 1280])
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/duel');
       await expect(region(page)).toBeVisible();
+      await page.getByRole('button', { name: '查看波希米亚预置', exact: true }).click();
+      await expect(region(page)).toBeFocused();
+      await unblockedTitle(page, region(page).getByRole('heading', { level: 2 }));
       await page.evaluate(() => document.fonts.ready);
       for (const action of await region(page).locator('a,button').all()) {
         const box = await action.boundingBox();
@@ -175,5 +198,9 @@ for (const width of [360, 375, 390, 1280])
       expect((await new AxeBuilder({ page }).include('main').withRules(['heading-order', 'page-has-heading-one']).analyze()).violations).toEqual([]);
       await page.screenshot({ path: info.outputPath('duel-presets-' + width + '-' + theme + '.png'), fullPage: true, animations: 'disabled' });
       await region(page).screenshot({ path: info.outputPath('duel-presets-cards-' + width + '-' + theme + '.png'), animations: 'disabled' });
+      await card(page, CASES[0].key).getByRole('link', { name: '打开对照', exact: true }).click();
+      await configured(page, CASES[0]);
+      await unblockedTitle(page, page.locator('#duel .lhead h1'));
+      await expect(page.locator('#duel')).toBeFocused();
     });
   }

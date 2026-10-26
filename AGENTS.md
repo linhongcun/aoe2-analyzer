@@ -2,7 +2,7 @@
 
 ## Codex / 无人值守维护（必读）
 
-批量或无人值守改代码前，先读 **[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（独立代理复核＋按风险选择的 CI）、Hold 表（**#372 勿开**）、跳过条件与选 issue checklist。
+批量或无人值守改代码前，先读 **[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（独立代理复核＋按风险选择的 CI）、当前 Hold 表、跳过条件与选 issue checklist。
 
 与 CONTRIBUTING 冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
 
@@ -16,13 +16,13 @@
 
 ### Hold（勿开）
 
-| #    | 状态                              |
-| ---- | --------------------------------- |
-| #372 | Hold — 波希米亚竞技场火药预置对战 |
+当前没有暂停条目。仅本轮已明确解除的 #372 按下方记录更新，其它issue仍需各自范围授权。
 
 解 hold 必须获得维护者明确授权后才可开工；审阅流程变更不解除 Hold。
 
 2026-10-26 维护者定向要求修复当时仅有的两条 bug（#442、#364），#364 已按[本轮具体授权](CONTRIBUTING.md#364-标题层级定向修复授权2026-10-26)纳入实施。此项授权不涉及 #372。
+
+随后维护者针对 #372 两条预置明确回复“嗯，解除暂停，实施吧”，已按[本轮定向解除暂停记录](CONTRIBUTING.md#372-两条预置定向解除暂停2026-10-26)纳入实施；上方 #364 的旧授权范围作为历史保留。
 
 给批量处理 issue 的 AI 代理（DeepSeek、Codex 等）看的入口文件。人类贡献者看 [CONTRIBUTING.md](CONTRIBUTING.md)；两者冲突时以 CONTRIBUTING.md 为准，并在 issue 里指出。
 

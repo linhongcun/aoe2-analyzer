@@ -75,9 +75,11 @@ export const PROFILES = {
       'v0280-281',
       'v0290-322',
       'headingScope364',
+      'duelPreset372',
     ],
     [
       'duelHeading364',
+      'duelPreset372',
       'listHeadH1296',
       'v0280-duel-url',
       'v0290-322-golden',
