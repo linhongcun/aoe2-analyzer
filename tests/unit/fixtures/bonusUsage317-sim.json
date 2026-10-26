@@ -1,5 +1,5 @@
 {
-  "inputs": "f5be5464d4860659067494ed3a80a0c922ef4d09e2c5936b995203a32375c38b",
+  "inputs": "a6f13e06f341d6e54c00d37bdd05681074e91e61256d2a9957825e5bf52f62aa",
   "firstChanged": {
     "Aztecs-0": "feudal-drush-18",
     "Berbers-1": null,
@@ -45,6 +45,8 @@
     "Muisca-3": null,
     "Muisca-4": null,
     "Persians-0": "feudal-drush-18",
+    "Portuguese-0": "feudal-drush-18",
+    "Portuguese-1": "feudal-drush-18",
     "Saracens-0": "fast-castle-boom",
     "Saxons-2": null,
     "Spanish-1": "feudal-drush-18",

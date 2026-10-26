@@ -168,8 +168,46 @@ describe('#331 所有数值不变：22 个文明的开局模拟、真实成本�
     expect(Object.fromEntries(TEAM22.map((b) => [b.civ, constructionOut(b.civ)]))).toMatchSnapshot();
   });
   it('开局模拟（全部开局方案，支持的文明）', () => {
-    expect(Object.fromEntries(TEAM22.filter((b) => simSupport(b.civ)).map((b) => [b.civ, simOut(b.civ)]))).toMatchSnapshot();
+    // #197：此快照合同冻结f856c9e的历史数值；葡萄牙首次完整支持不冒充历史基准。
+    const historical = [
+      'Aztecs',
+      'Bohemians',
+      'Britons',
+      'Bulgarians',
+      'Burgundians',
+      'Burmese',
+      'Byzantines',
+      'Celts',
+      'Goths',
+      'Huns',
+      'Incas',
+      'Lithuanians',
+      'Muisca',
+      'Spanish',
+      'Teutons',
+      'Vikings',
+    ];
+    const supported = TEAM22.filter((b) => simSupport(b.civ));
+    expect(supported.map((b) => b.civ).sort()).toEqual([...historical, 'Portuguese'].sort());
+    const old = supported.filter((b) => historical.includes(b.civ));
+    expect(old.map((b) => b.civ).sort()).toEqual(historical);
+    expect(Object.fromEntries(old.map((b) => [b.civ, simOut(b.civ)]))).toMatchSnapshot();
   }, 120_000);
+});
+
+// #197新增支持独立核验：保留上面的22条动态检查，并完整覆盖新葡萄牙全部开局。
+describe('#197 葡萄牙默认不计团队', () => {
+  it('全部8个开局去掉团队行后，完整模拟结果相同', () => {
+    expect(buildOrders).toHaveLength(8);
+    expect(simSupport('Portuguese')).toBe(true);
+    for (const bo of buildOrders) {
+      const withTeam = simulateBuild(bo, 'Portuguese', E, ups);
+      expect(
+        withoutTeam('Portuguese', () => simulateBuild(bo, 'Portuguese', E, ups)),
+        bo.id,
+      ).toEqual(withTeam);
+    }
+  });
 });
 
 describe('#331 正向对照：去掉团队加成后工具结果确实会变（对照方法本身有效）', () => {

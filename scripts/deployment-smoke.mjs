@@ -18,6 +18,10 @@ export function smokeFeatures(features) {
   assert.ok(Array.isArray(features) && features.every((x) => typeof x === 'string'), 'Invalid feature smoke plan');
   return [...new Set(features.includes('all') ? ['units', 'simulator', ...features.filter((x) => x !== 'all')] : features)].sort();
 }
+/** Core full plans must exercise the supported build economy as well as page-local builds plans. */
+export function needsBuildsSmoke(features) {
+  return features.includes('all') || features.includes('builds');
+}
 export async function checkSite({ site, version, commit, features = [] }) {
   const root = new URL(site);
   assert.ok(['http:', 'https:'].includes(root.protocol), 'Smoke checks need an HTTP site');
@@ -55,6 +59,53 @@ export async function checkSite({ site, version, commit, features = [] }) {
     const metadata = JSON.parse(readFileSync(new URL('../src/data/page-metadata.json', import.meta.url), 'utf8'));
     const internalSourceText =
       /\b(?:sha(?:-?[0-9]+)?|csv|commit)\b|提交(?:号|哈希)?\s*[0-9a-f]{7,40}|\b(?:main|master)\s+[0-9a-f]{7,40}\b|src\/(?:content|data)\/|themkdemiiir\/aoe2-guide@/iu;
+    if (needsBuildsSmoke(features)) {
+      // Compare real rendered inventory at the same early step, before later build-resource waits diverge.
+      const inventory = async () => {
+        const detail = page.getByRole('region', { name: '步骤详情', exact: true });
+        await check(detail).toBeVisible();
+        const amount = async (resource) =>
+          Number(
+            await detail
+              .locator(':scope > span')
+              .filter({ hasText: new RegExp('^' + resource + '\\s') })
+              .locator('b')
+              .textContent(),
+          );
+        return { food: await amount('食物'), wood: await amount('木头') };
+      };
+      await goto('/builds?bo=drush-fc&step=8');
+      const generic = await inventory();
+      await goto('/builds?bo=drush-fc&civ=Portuguese&step=8');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按葡萄牙计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await check(page.locator('[data-t="civ-note"]')).toHaveText('采果兼产木材按连续收入估算');
+      const portuguese = await inventory();
+      assert.equal(portuguese.food, generic.food, 'Forager wood must preserve the main food income');
+      assert.ok(portuguese.wood > generic.wood, 'Portuguese foragers must increase the actual wood stock');
+      await page.locator('#tlciv').click();
+      const picker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(picker.locator('[data-civ="Portuguese"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(picker.locator('[data-civ="Shu"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      await goto('/builds?bo=drush-fc&civ=Portuguese&step=6');
+      const eco = JSON.parse(readFileSync(new URL('../src/data/eco.json', import.meta.url), 'utf8'));
+      const goldMultiplier = eco.civEco.Portuguese.find((row) => row.tech === 559).effects.find(
+        (effect) => effect.target === 'class:' + eco.units['74'].class,
+      ).v;
+      await check(page.locator('[data-t="step-cost"]')).toContainText('黄金 ' + eco.units['74'].cost.Gold * goldMultiplier);
+      const share = page.locator('[data-t="share-card-btn"]:visible').first();
+      await check(share).not.toHaveAttribute('aria-disabled', 'true');
+      await share.click();
+      await check(page.locator('[data-t="share-card"]')).toContainText('按葡萄牙计');
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Portuguese');
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      await goto('/duel?a=74.Portuguese.3.f.&b=74.Magyars.3.f.&m=t');
+      await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveText('未计入：葡萄牙 采浆果同时产木头（采果兼产木材，未建模）');
+      console.log(
+        'Verified Portuguese economy: selectable, actual Food/Wood inventory, gold discount, share card, continuous estimate and unchanged real-cost boundary',
+      );
+    }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {
         const order = JSON.parse(readFileSync(new URL('../src/data/build-orders/scouts-18.json', import.meta.url), 'utf8'));

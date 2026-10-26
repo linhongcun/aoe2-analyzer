@@ -232,6 +232,8 @@ interface Mods {
   techReward: number;
   /** 猎物食物倍率（res 268，哥特 ×1.23）：每采 1 单位猎物，入账 ×倍率 */
   huntFoodMul: number;
+  /** 葡萄牙 res267：每单位采果食物的额外木材（百分数 / 100），不改变携带量或主资源率 */
+  foragerWood: number;
   start: Stock;
 }
 /** 数值修正：按 .dat 效果顺序累积，set 覆盖之前的一切，mul/add 依次叠加。值 = (set ?? 原值) × mul + add */
@@ -268,6 +270,7 @@ function baseMods(): Mods {
     farmNoWalk: false,
     techReward: 0,
     huntFoodMul: 1,
+    foragerWood: 0,
     start: { ...START },
   };
 }
@@ -283,6 +286,13 @@ const RES_DEPOSIT: Record<number, Res> = { 299: 'food' };
  * 是否也作用于狩猎以外的采集：未核实（res 268 是玩家级资源，.dat 看不出限定范围），模型只按狩猎算。
  */
 const RES_HUNT_FOOD = 268;
+/** tech453 / effect510，res267 add33.333302；公开Function12的 .01×267 语义与连续模型边界见 docs/design/portuguese197.md。 */
+const RES_FORAGER_WOOD = 267;
+const FORAGER_WOOD_NOTE = '采果兼产木材按连续收入估算';
+const FORAGER_WOOD_ASSUMPTION =
+  '采果兼产木材按采果有效食物收入的比例连续流入；共用采果的携带量和往返时间，不增加伐木走路。不模拟客户端逐笔到账、取整和走路期间的触发时序。';
+/** 额外收入以采果率为基数，不从食物库存余额或存放加成反推。 */
+const foragerWoodIncome = (m: Mods, task: string, rate: number) => (task === 'berries' ? rate * m.foragerWood : 0);
 /**
  * 高棉 tech 654「C-Bonus, Instant Farmers」在 .dat（185872，effect 690）里只有三条命令：
  * res 33 set 50、农民（214/259）workRate ×0.95。res 33 是各文明加成的标记值（丹麦 35/36、格鲁吉亚 9…），
@@ -301,7 +311,7 @@ const SPANISH_TECH_REWARD_GOLD = 20;
 // https://ageofempires.fandom.com/wiki/Civilization_bonus#Khmer 「Farmers don't carry food but rather add it directly to the stockpile without any drop-off, but work 5% slower」
 // https://ageofempires.fandom.com/wiki/Farm_(Age_of_Empires_II)（update 34699 起农民无需回仓）。详见 docs/BUILD-SIM.md「文明加成」
 
-function applyEffects(m: Mods, effects: EffectRow['effects']) {
+function applyEffects(m: Mods, effects: EffectRow['effects'], applyForagerWood = false) {
   for (const x of effects) {
     const v = x.v ?? 0;
     if (x.kind === 'attr' && x.target && x.attr && (x.op === 'mul' || x.op === 'add')) {
@@ -337,6 +347,7 @@ function applyEffects(m: Mods, effects: EffectRow['effects']) {
       else if (x.res === 33 && x.op === 'set' && v === RES33_INSTANT_FARMERS) m.farmNoWalk = true;
       else if (x.res === 269 && x.op === 'set' && v > 0) m.techReward = SPANISH_TECH_REWARD_GOLD;
       else if (x.res === RES_HUNT_FOOD && x.op === 'mul') m.huntFoodMul *= v;
+      else if (applyForagerWood && x.res === RES_FORAGER_WOOD && x.op === 'add') m.foragerWood += v / 100;
     } else if (x.kind === 'techTime' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) m.techTime[x.tech] = pushMod(m.techTime[x.tech], x.op, v);
     else if (x.kind === 'techCost' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) {
       const r = TECH_RES[String(x.res)];
@@ -379,7 +390,7 @@ interface Construction {
 /**
  * PR 127（Steve 口径 PR 评论 6195034241）：白名单（不支持）文明页面标「未计入」并按通用计，但直接调 simulateBuild 时
  * 仍保持 release/v0.7.0 的旧算法：不应用按类别（class:*）的费用/训练时间倍率、折后价按整数取整。
- * 否则葡萄牙黄金 −20% 等会被这次修正悄悄带进去。按文明缓存（eco 对象 + 文明）。
+ * 已经完整支持的文明走当前算法（issue 197 葡萄牙已迁出）；其余按文明缓存（eco 对象 + 文明）。
  */
 const legacyCache = new WeakMap<EcoData, Map<string, boolean>>();
 function legacyCiv(eco: EcoData, civ: string): boolean {
@@ -406,6 +417,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         applyEffects(
           m,
           r.effects.filter((e) => e.kind !== 'freeTech'),
+          (r as { tech?: number }).tech === 453,
         );
     void freeByAge;
   };
@@ -881,7 +893,11 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     // 6) 采集（本 tick 结束时入账）
     for (const k of Object.keys(alloc) as Task[]) {
       const r = RES_TASK[k];
-      if (r && alloc[k] > 0) stock[r] += alloc[k] * rate(k) * TICK * (1 + (m.depositBonus[r] ?? 0));
+      if (r && alloc[k] > 0) {
+        const q = rate(k);
+        stock[r] += alloc[k] * q * TICK * (1 + (m.depositBonus[r] ?? 0));
+        if (m.foragerWood) stock.wood += alloc[k] * foragerWoodIncome(m, ECO_TASK[k], q) * TICK;
+      }
     }
     if (fishingShips && eco.fishingShip) {
       const fish = eco.fishingShip;
@@ -1007,9 +1023,13 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
     tcIdleTotal: R.tcIdleTotal,
     model: {
       version: MODEL_VERSION,
-      assumptions: bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
-        ? [...ASSUMPTIONS, '渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
-        : ASSUMPTIONS,
+      assumptions: [
+        ...ASSUMPTIONS,
+        ...(civ === 'Portuguese' ? [FORAGER_WOOD_ASSUMPTION] : []),
+        ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
+          ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
+          : []),
+      ],
     },
   };
 }
@@ -1187,6 +1207,7 @@ export function classifyCivEffect(e: Effect, row: { source?: string; tech?: numb
     if (e.res === undefined) return { kind: 'unknown' };
     if (e.res === 269 && e.op === 'set') return { kind: 'handled' };
     if (e.res === RES_HUNT_FOOD && e.op === 'mul') return { kind: 'handled' };
+    if (e.res === RES_FORAGER_WOOD && row.tech === 453 && e.op === 'add') return { kind: 'handled' };
     if (HANDLED_RES(e.res, e.op) || (e.res === 33 && e.op === 'set' && e.v === RES33_INSTANT_FARMERS)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_IRRELEVANT_TECH[row.tech]) return { kind: 'irrelevant', reason: RES234_IRRELEVANT_TECH[row.tech]! };
@@ -1308,26 +1329,32 @@ export function animalFood(eco: EcoData, civ: string, animal: string): number | 
 }
 /**
  * 黑暗时代的采集效率（每秒入账食物/木头…），与 runOnce 的 rate() 同一公式：carry / (carry / workRate + 往返走路)。
- * #42 用例按任务（eco 任务名，如 hunt）核对文明加成。
+ * #42 用例按任务（eco 任务名，如 hunt）核对文明加成。extraIncome 是兼产的其它资源，不占主资源携带量。
  */
 export function gatherRate(
   eco: EcoData,
   civ: string,
   ecoTask: string,
   tiles: number = DEFAULT_PARAMS.nearTiles,
-): { carry: number; workRate: number; rate: number } {
+): { carry: number; workRate: number; rate: number; extraIncome: Partial<Stock> } {
   const m = baseMods();
-  for (const r of eco.civEco[civ] ?? []) if (r.age === 1 && r.source !== 'team') applyEffects(m, r.effects);
+  const scope = simScope(eco, ALL_BOS);
+  for (const r of eco.civEco[civ] ?? [])
+    if (r.age === 1 && r.source !== 'team') applyEffects(m, r.effects, (r as { tech?: number }).tech === 453 && techAtomicOk(r, scope));
   const base = eco.villager.tasks[ecoTask]!;
   const workRate = base.workRate * (m.rate[ecoTask] ?? 1) * (m.rate.villager ?? 1) * (ecoTask === 'hunt' ? m.huntFoodMul : 1);
   const carry = base.carry * (m.carry[ecoTask] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + ecoTask] ?? 0) + (m.carry['add:villager'] ?? 0);
   const walk = (2 * tiles) / (eco.villager.speed * m.speed);
-  return { carry, workRate, rate: carry / (carry / workRate + walk) };
+  const rate = carry / (carry / workRate + walk);
+  const wood = foragerWoodIncome(m, ecoTask, rate);
+  return { carry, workRate, rate, extraIncome: wood ? { wood } : {} };
 }
 /** 页面「按某文明计」下方的附注：已计入但有未核实部分、或明确不计入的加成 */
 export function civSimNotes(eco: EcoData, civ: string): string[] {
   const out: string[] = [];
   const rows = (eco.civEco[civ] ?? []).filter((r) => r.source !== 'team');
+  if (rows.some((r) => (r as { tech?: number }).tech === 453 && r.effects.some((e) => e.res === RES_FORAGER_WOOD && e.op === 'add')))
+    out.push(FORAGER_WOOD_NOTE);
   if (
     rows.some((r) => {
       const t = (r as { tech?: number }).tech;
