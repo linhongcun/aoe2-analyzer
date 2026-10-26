@@ -1,5 +1,7 @@
 /** Issue 228: a source viewer only. These selections never enter a simulator. */
 import raw from '../data/team_bonuses.json';
+import validateTeamBonuses from '../content/schema/compiled/team-bonuses.mjs';
+import { readValidatedJson } from '../data/validatedJson';
 import civsRaw from '../data/raw/civs';
 import unitsRaw from '../data/raw/units';
 import type { Cost } from './types';
@@ -62,7 +64,7 @@ export interface TeamBonusData {
   permanent: PermanentTeamSource[];
   technologies: TeamTechnologySource[];
 }
-export const TEAM_BONUS_DATA = raw as unknown as TeamBonusData;
+export const TEAM_BONUS_DATA = readValidatedJson(raw, validateTeamBonuses, '团队来源');
 export const TEAM_TARGETS = ['all', 'units', 'buildings', 'attack', 'economy', 'production', 'unlock', 'research'] as const;
 export type TeamTarget = (typeof TEAM_TARGETS)[number];
 export const TEAM_TARGET_ZH: Record<TeamTarget, string> = {

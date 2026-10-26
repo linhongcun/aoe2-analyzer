@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-page-metadata.json",
+  "type": "object",
+  "propertyNames": {
+    "pattern": "^/"
+  },
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "$ref": "common.defs.json#/$defs/nonEmptyString"
+      },
+      "description": {
+        "type": "string"
+      },
+      "kind": {
+        "type": "string"
+      },
+      "icon": {
+        "type": "string"
+      },
+      "stats": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": ["string", "number"]
+            }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "note": {
+        "type": "string"
+      },
+      "route": {
+        "type": "string"
+      }
+    },
+    "required": ["title", "description"],
+    "additionalProperties": false
+  }
+}

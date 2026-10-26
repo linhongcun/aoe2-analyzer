@@ -1,5 +1,7 @@
 /** Issue 229: one already-garrisoned unit, static building healing only. */
 import raw from '../data/garrison_healing.json';
+import validateHealing from '../content/schema/compiled/garrison-healing.mjs';
+import { readValidatedJson } from '../data/validatedJson';
 import { DATA_PATCH_BUILD } from '../data/meta';
 import type { Building, Tech } from './types';
 import {
@@ -58,7 +60,7 @@ export interface GarrisonHealingData {
   rateTechs: Record<string, { requires: number[]; count: number; effects: { units: number[]; op: 'set' | 'add' | 'mul'; value: number }[] }>;
   hostIds: number[];
 }
-export const GARRISON_HEALING_DATA = raw as unknown as GarrisonHealingData;
+export const GARRISON_HEALING_DATA = readValidatedJson(raw, validateHealing, '驻军回血');
 export const DEFAULT_HEALING_CONFIG: HealingConfig = {
   buildingId: 109,
   civ: 'Britons',

@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-scouting.json",
+  "title": "Curated scouting content",
+  "type": "object",
+  "properties": {
+    "checkedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "dataVersion": {
+      "type": "string",
+      "pattern": "^DE[0-9]+$"
+    },
+    "editorialNotice": {
+      "$ref": "common.defs.json#/$defs/sourceText"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 1
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": ["military-building", "field-army", "army-departure", "new-town-center", "forward-production", "forward-move"]
+          },
+          "title": {
+            "allOf": [
+              {
+                "$ref": "common.defs.json#/$defs/sourceText"
+              },
+              {
+                "type": "string",
+                "minLength": 1
+              }
+            ]
+          },
+          "meaning": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        },
+        "required": ["id", "title", "meaning"],
+        "additionalProperties": false
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/scenario"
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["checkedAt", "dataVersion", "editorialNotice", "sources", "observations", "scenarios"],
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "url": {
+          "$ref": "common.defs.json#/$defs/publicUrl"
+        },
+        "publishedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "kind": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "note": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["id", "title", "url", "publishedAt", "kind", "note"],
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "properties": {
+        "observation": {
+          "type": "string",
+          "enum": ["military-building", "field-army", "army-departure", "new-town-center", "forward-production", "forward-move"]
+        },
+        "state": {
+          "type": "string",
+          "enum": ["seen", "absent"]
+        }
+      },
+      "required": ["observation", "state"],
+      "additionalProperties": false
+    },
+    "hypothesis": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "body": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "support": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        },
+        "counter": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        },
+        "evidenceMeaning": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "counterMeaning": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "next": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": ["id", "title", "body", "support", "counter", "evidenceMeaning", "counterMeaning", "next", "sourceIds"],
+      "additionalProperties": false
+    },
+    "signal": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "seen": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "meaning": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "next": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "editorial": {
+          "type": "boolean"
+        }
+      },
+      "required": ["id", "seen", "meaning", "next", "sourceIds", "editorial"],
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["early", "walled"]
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "stage": {
+          "type": "string",
+          "enum": ["feudal", "castle"]
+        },
+        "observationIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["military-building", "field-army", "army-departure", "new-town-center", "forward-production", "forward-move"]
+          },
+          "uniqueItems": true
+        },
+        "summary": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "signals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/signal"
+          }
+        },
+        "hypotheses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hypothesis"
+          }
+        }
+      },
+      "required": ["id", "title", "stage", "observationIds", "summary", "signals", "hypotheses"],
+      "additionalProperties": false
+    }
+  }
+}

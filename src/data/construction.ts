@@ -1,4 +1,7 @@
 import raw from './construction.json';
+import validateConstruction from '../content/schema/compiled/construction.mjs';
+import { constructionReferenceProblems } from '../content/schema/policy.mjs';
+import { readValidatedJson } from './validatedJson';
 
 interface Command {
   Type: number;
@@ -29,11 +32,28 @@ export interface ConstructionData {
   civs: Record<string, { units: Record<string, ObjectData>; tree: Command[]; team: Command[]; automatic: Rule[] }>;
 }
 
-export const CONSTRUCTION_DATA: ConstructionData = {
-  meta: raw.meta,
-  buildings: raw.buildings,
-  research: raw.research,
-  civs: Object.fromEntries(
-    Object.entries(raw.civs).map(([name, civ]) => [name, { ...civ, units: raw.unitSets[civ.units]!, automatic: raw.automaticSets[civ.automatic]! }]),
-  ),
-};
+export interface CompactConstructionData extends Omit<ConstructionData, 'civs'> {
+  unitSets: Record<string, ObjectData>[];
+  automaticSets: Rule[][];
+  civs: Record<string, { units: number; automatic: number; tree: Command[]; team: Command[] }>;
+}
+
+export function parseConstructionData(value: unknown): ConstructionData {
+  const data = readValidatedJson(value, validateConstruction, '多人施工');
+  const invalidReference = constructionReferenceProblems(data)[0];
+  if (invalidReference) throw new Error(`数据校验失败（多人施工）：${invalidReference.path} ${invalidReference.message}`);
+  return {
+    meta: data.meta,
+    buildings: data.buildings,
+    research: data.research,
+    civs: Object.fromEntries(
+      Object.entries(data.civs).map(([name, civ]): [string, ConstructionData['civs'][string]] => {
+        const units = data.unitSets[civ.units],
+          automatic = data.automaticSets[civ.automatic];
+        if (!units || !automatic) throw new Error(`数据校验失败（多人施工）：${name} 共享字典索引不存在`);
+        return [name, { ...civ, units, automatic }];
+      }),
+    ),
+  };
+}
+export const CONSTRUCTION_DATA = parseConstructionData(raw);

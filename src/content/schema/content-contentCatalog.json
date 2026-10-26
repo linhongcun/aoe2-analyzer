@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-contentCatalog.json",
+  "title": "Curated contentCatalog content",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "platform": {
+      "const": "steam"
+    },
+    "verifiedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "region": {
+      "allOf": [
+        {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ]
+    },
+    "scope": {
+      "$ref": "common.defs.json#/$defs/sourceText"
+    },
+    "baseProductId": {
+      "$ref": "common.defs.json#/$defs/nonEmptyString"
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/product"
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["schemaVersion", "platform", "verifiedAt", "region", "scope", "baseProductId", "products"],
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "url": {
+          "$ref": "common.defs.json#/$defs/publicUrl"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "verifiedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "publishedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["verified", "unverified", "stale", "conflict"]
+        },
+        "note": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["id", "url", "title", "verifiedAt", "status", "note"],
+      "additionalProperties": false
+    },
+    "name": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "en": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "zh": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "siteCivEn": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        }
+      },
+      "required": ["id", "en"],
+      "additionalProperties": false
+    },
+    "block": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["aoe2", "return-of-rome", "chronicles", "appearance", "audio", "graphics"]
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["civilizations", "campaigns", "scenarios", "cosmetics", "soundtrack", "graphics"]
+        },
+        "summary": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "names": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/name"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "scenarioCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": ["mode", "kind", "summary", "names", "sourceIds"],
+      "additionalProperties": false
+    },
+    "product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "steamAppId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "zh": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "en": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "releaseDate": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "acquisition": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": ["base-game", "included-with-base", "paid-add-on", "free-download", "unverified"]
+            },
+            "sourceIds": {
+              "type": "array",
+              "items": {
+                "$ref": "common.defs.json#/$defs/nonEmptyString"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": ["kind", "sourceIds"],
+          "additionalProperties": false
+        },
+        "prerequisites": {
+          "type": "object",
+          "properties": {
+            "productIds": {
+              "type": "array",
+              "items": {
+                "$ref": "common.defs.json#/$defs/nonEmptyString"
+              },
+              "uniqueItems": true
+            },
+            "status": {
+              "type": "string",
+              "enum": ["verified", "unverified", "stale", "conflict"]
+            },
+            "note": {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            "sourceIds": {
+              "type": "array",
+              "items": {
+                "$ref": "common.defs.json#/$defs/nonEmptyString"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": ["productIds", "status", "sourceIds"],
+          "additionalProperties": false
+        },
+        "includedProductIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "includedProductSourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "historicalReleaseIndex": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "contents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/block"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "minItems": 1
+        },
+        "modeNotes": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        },
+        "modeNotesSourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "translationNote": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "verificationNotes": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        }
+      },
+      "required": ["id", "steamAppId", "zh", "en", "releaseDate", "acquisition", "prerequisites", "contents", "sources"],
+      "additionalProperties": false
+    }
+  }
+}

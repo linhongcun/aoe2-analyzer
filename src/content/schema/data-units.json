@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-units.json",
+  "title": "AoE2 units data",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "en": {
+        "$ref": "common.defs.json#/$defs/nonEmptyString"
+      },
+      "zh": {
+        "$ref": "common.defs.json#/$defs/nonEmptyString"
+      },
+      "type": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "age": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 4
+      },
+      "b": {
+        "type": "integer"
+      },
+      "pic": {
+        "type": ["integer", "string"]
+      },
+      "from_": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "cost": {
+        "$ref": "common.defs.json#/$defs/cost"
+      },
+      "hp": {
+        "type": "number"
+      },
+      "atk": {
+        "type": "number"
+      },
+      "ma": {
+        "type": "number"
+      },
+      "pa": {
+        "type": "number"
+      },
+      "rng": {
+        "type": "number"
+      },
+      "rngBd": {
+        "type": "number"
+      },
+      "minr": {
+        "type": "number"
+      },
+      "spd": {
+        "type": "number"
+      },
+      "los": {
+        "type": "number"
+      },
+      "rof": {
+        "type": "number"
+      },
+      "tt": {
+        "type": "number"
+      },
+      "acc": {
+        "type": "number"
+      },
+      "blast": {
+        "type": "number"
+      },
+      "atks": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "arms": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "armc": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "desc": {
+        "type": "string"
+      },
+      "civs": {
+        "type": "array",
+        "items": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        }
+      },
+      "cls": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "up": {
+        "anyOf": [
+          {
+            "type": "array",
+            "prefixItems": [
+              {
+                "$ref": "common.defs.json#/$defs/cost"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "bz": {
+        "type": "string"
+      },
+      "ben": {
+        "type": "string"
+      },
+      "py": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      },
+      "pyi": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      }
+    },
+    "required": [
+      "id",
+      "en",
+      "zh",
+      "type",
+      "age",
+      "b",
+      "pic",
+      "from_",
+      "cost",
+      "hp",
+      "atk",
+      "ma",
+      "pa",
+      "rng",
+      "minr",
+      "spd",
+      "los",
+      "rof",
+      "tt",
+      "acc",
+      "blast",
+      "atks",
+      "arms",
+      "armc",
+      "desc",
+      "civs",
+      "cls",
+      "up",
+      "bz",
+      "ben",
+      "py",
+      "pyi"
+    ],
+    "additionalProperties": false
+  },
+  "minItems": 1
+}

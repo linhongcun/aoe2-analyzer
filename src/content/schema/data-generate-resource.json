@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-generate-resource.json",
+  "title": "AoE2 generate-resource data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generatedBy": {
+          "type": "string"
+        },
+        "patch": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{7,40}$"
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "formula": {
+          "type": "string"
+        },
+        "formulaNote": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/publicUrl"
+          }
+        },
+        "engineVerifiedInPinnedBuild": {
+          "const": false
+        },
+        "rounding": {
+          "type": "string"
+        }
+      },
+      "required": ["generatedBy", "patch", "repo", "commit", "path", "sha256", "formula", "formulaNote", "sources", "engineVerifiedInPinnedBuild", "rounding"],
+      "additionalProperties": false
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "const": 151
+          },
+          "resOut": {
+            "type": "integer"
+          },
+          "resMul": {
+            "type": "integer"
+          },
+          "value": {
+            "type": "number"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": ["action", "resOut", "resMul", "value", "classes"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "number"
+          },
+          "autoMul": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            },
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": ["base", "autoMul"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "modifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "res": {
+            "type": "integer"
+          },
+          "civ": {
+            "type": "string"
+          },
+          "tech": {
+            "type": "integer"
+          },
+          "op": {
+            "type": "string",
+            "enum": ["set", "mul"]
+          },
+          "v": {
+            "type": "number"
+          },
+          "auto": {
+            "type": "boolean"
+          }
+        },
+        "required": ["res", "civ", "tech", "op", "v", "auto"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["meta", "units", "resources", "modifiers"],
+  "additionalProperties": false
+}

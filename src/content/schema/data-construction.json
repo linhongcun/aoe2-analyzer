@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-construction.json",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "engineVerifiedInPinnedBuild": {
+          "type": "boolean"
+        },
+        "generatedBy": {
+          "type": "string"
+        },
+        "patch": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "required": ["engineVerifiedInPinnedBuild", "generatedBy", "patch", "sha256", "source"],
+      "additionalProperties": false
+    },
+    "buildings": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+$": {
+          "type": "object",
+          "properties": {
+            "forms": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            "supported": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": ["forms", "supported", "reason"],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "research": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+$": {
+          "$ref": "#/$defs/rule"
+        }
+      },
+      "additionalProperties": false
+    },
+    "unitSets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "patternProperties": {
+          "^[0-9]+$": {
+            "$ref": "#/$defs/unit"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "automaticSets": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/rule"
+        }
+      }
+    },
+    "civs": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "\\S"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "units": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "automatic": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "tree": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/command"
+            }
+          },
+          "team": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/command"
+            }
+          }
+        },
+        "required": ["units", "automatic", "tree", "team"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["meta", "buildings", "research", "unitSets", "automaticSets", "civs"],
+  "additionalProperties": false,
+  "$defs": {
+    "command": {
+      "type": "object",
+      "properties": {
+        "Type": {
+          "enum": [0, 4, 5, 10, 14, 15]
+        },
+        "A": {
+          "type": "integer"
+        },
+        "B": {
+          "type": "integer"
+        },
+        "C": {
+          "enum": [13, 101]
+        },
+        "D": {
+          "type": "number"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["Type", "A", "B", "C", "D", "index"],
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "effect": {
+          "type": "integer"
+        },
+        "requires": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/command"
+          }
+        }
+      },
+      "required": ["id", "name", "effect", "requires", "count", "commands"],
+      "additionalProperties": false
+    },
+    "unit": {
+      "type": "object",
+      "properties": {
+        "class": {
+          "type": "integer"
+        },
+        "time": {
+          "type": "number"
+        },
+        "at": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "rate": {
+          "type": "number"
+        }
+      },
+      "required": ["class", "time", "at", "rate"],
+      "additionalProperties": false
+    }
+  }
+}

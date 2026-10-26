@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-castle-defense.json",
+  "title": "Curated castle-defense content",
+  "type": "object",
+  "properties": {
+    "reviewedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 1
+    },
+    "stages": {
+      "type": "object",
+      "properties": {
+        "stone": {
+          "$ref": "#/$defs/stage"
+        },
+        "construction": {
+          "$ref": "#/$defs/stage"
+        },
+        "relocate": {
+          "$ref": "#/$defs/stage"
+        },
+        "blocked": {
+          "$ref": "#/$defs/stage"
+        },
+        "resources-unknown": {
+          "$ref": "#/$defs/stage"
+        }
+      },
+      "required": ["stone", "construction", "relocate", "blocked", "resources-unknown"],
+      "additionalProperties": false
+    },
+    "actions": {
+      "type": "object",
+      "properties": {
+        "observe": {
+          "$ref": "#/$defs/action"
+        },
+        "prepare": {
+          "$ref": "#/$defs/action"
+        },
+        "intercept": {
+          "$ref": "#/$defs/action"
+        },
+        "verify": {
+          "$ref": "#/$defs/action"
+        },
+        "relocate": {
+          "$ref": "#/$defs/action"
+        },
+        "hold": {
+          "$ref": "#/$defs/action"
+        },
+        "remnant": {
+          "$ref": "#/$defs/action"
+        },
+        "castle": {
+          "$ref": "#/$defs/action"
+        },
+        "siege": {
+          "$ref": "#/$defs/action"
+        },
+        "trebuchet": {
+          "$ref": "#/$defs/action"
+        },
+        "future-castle": {
+          "$ref": "#/$defs/action"
+        },
+        "future-trebuchet": {
+          "$ref": "#/$defs/action"
+        }
+      },
+      "required": [
+        "observe",
+        "prepare",
+        "intercept",
+        "verify",
+        "relocate",
+        "hold",
+        "remnant",
+        "castle",
+        "siege",
+        "trebuchet",
+        "future-castle",
+        "future-trebuchet"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": ["reviewedAt", "sources", "stages", "actions"],
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "url": {
+          "$ref": "common.defs.json#/$defs/publicUrl"
+        },
+        "date": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "scope": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["id", "title", "url", "date", "scope"],
+      "additionalProperties": false
+    },
+    "stage": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "summary": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "observe",
+              "prepare",
+              "intercept",
+              "verify",
+              "relocate",
+              "hold",
+              "remnant",
+              "castle",
+              "siege",
+              "trebuchet",
+              "future-castle",
+              "future-trebuchet"
+            ]
+          }
+        }
+      },
+      "required": ["title", "summary", "checks", "actions"],
+      "additionalProperties": false
+    },
+    "action": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "body": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "cost": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "counterexample": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "next": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": ["title", "body", "cost", "counterexample", "next", "sources"],
+      "additionalProperties": false
+    }
+  }
+}

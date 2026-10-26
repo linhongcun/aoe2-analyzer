@@ -1,0 +1,332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-build-order.json",
+  "title": "AoE2 build-order data",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "object",
+      "properties": {
+        "zh": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "en": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        }
+      },
+      "required": ["zh", "en"],
+      "additionalProperties": false
+    },
+    "style": {
+      "type": "string",
+      "enum": ["scouts", "drush", "militia", "fast-castle", "archers", "maa", "other"]
+    },
+    "civs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "map": {
+      "$ref": "common.defs.json#/$defs/nonEmptyString"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["beginner", "intermediate", "advanced"]
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "enum": [2, 3, 4]
+        },
+        "vils": {
+          "type": "integer",
+          "minimum": 3
+        },
+        "time": {
+          "type": "string"
+        }
+      },
+      "required": ["age", "vils"],
+      "additionalProperties": false
+    },
+    "summary": {
+      "$ref": "common.defs.json#/$defs/nonEmptyString"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "allOf": [
+              {
+                "$ref": "common.defs.json#/$defs/sourceText"
+              },
+              {
+                "$ref": "common.defs.json#/$defs/nonEmptyString"
+              }
+            ]
+          },
+          "url": {
+            "$ref": "common.defs.json#/$defs/publicUrl"
+          },
+          "author": {
+            "allOf": [
+              {
+                "$ref": "common.defs.json#/$defs/sourceText"
+              },
+              {
+                "$ref": "common.defs.json#/$defs/nonEmptyString"
+              }
+            ]
+          },
+          "section": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          },
+          "ref": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          },
+          "accessed": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        },
+        "required": ["title", "url", "author", "accessed"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "license": {
+      "allOf": [
+        {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        }
+      ]
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["draft", "reviewed"]
+        },
+        "by": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "required": ["status"],
+      "additionalProperties": false
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/step"
+      },
+      "minItems": 3
+    }
+  },
+  "required": ["id", "name", "style", "civs", "map", "difficulty", "target", "summary", "sources", "license", "review", "steps"],
+  "additionalProperties": false,
+  "$defs": {
+    "action": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "gather"
+            },
+            "task": {
+              "type": "string",
+              "enum": ["sheep", "boar", "deer", "hunt", "berries", "farm", "fish", "wood", "gold", "stone", "build"]
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "from": {
+              "type": "string",
+              "enum": ["sheep", "boar", "deer", "hunt", "berries", "farm", "fish", "wood", "gold", "stone", "build"]
+            }
+          },
+          "required": ["type", "task", "count"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "build"
+            },
+            "building": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": ["type", "building"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "train"
+            },
+            "unit": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": ["type", "unit"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "research"
+            },
+            "tech": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": ["type", "tech"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "upgrade"
+            },
+            "unit": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": ["type", "unit"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "ageUp"
+            },
+            "age": {
+              "type": "integer",
+              "enum": [2, 3, 4]
+            }
+          },
+          "required": ["type", "age"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "lure"
+            },
+            "target": {
+              "type": "string",
+              "enum": ["boar", "deer"]
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": ["type", "target"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "step": {
+      "type": "object",
+      "properties": {
+        "vils": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 200
+        },
+        "phase": {
+          "type": "string",
+          "enum": ["feudal-click", "feudal", "castle-click", "castle", "imperial-click", "imperial"]
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/action"
+          }
+        },
+        "note": {
+          "type": "string"
+        },
+        "split": {
+          "type": "object",
+          "properties": {
+            "food": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "wood": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "gold": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "stone": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "build": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": ["food", "wood", "gold", "stone"],
+          "additionalProperties": false
+        },
+        "houseText": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          }
+        },
+        "siteAdded": {
+          "type": "boolean"
+        }
+      },
+      "required": ["vils", "actions"],
+      "additionalProperties": false
+    }
+  }
+}

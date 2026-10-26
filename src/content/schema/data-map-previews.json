@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-map-previews.json",
+  "title": "AoE2 map-previews data",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "image": {
+        "type": "string",
+        "pattern": "^img/maps/[a-z0-9_-]+\\.webp$"
+      },
+      "sourceUrl": {
+        "$ref": "common.defs.json#/$defs/publicUrl"
+      },
+      "width": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "height": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "required": ["image", "sourceUrl", "width", "height"],
+    "additionalProperties": false
+  },
+  "propertyNames": {
+    "type": "string",
+    "minLength": 1,
+    "pattern": "^[a-z0-9_-]+$"
+  }
+}

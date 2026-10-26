@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-patch.json",
+  "title": "AoE2 patch data",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "common.defs.json#/$defs/nonEmptyString"
+    },
+    "source": {
+      "$ref": "common.defs.json#/$defs/publicUrl"
+    },
+    "note": {
+      "$ref": "common.defs.json#/$defs/sourceText"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "title": {
+      "$ref": "common.defs.json#/$defs/sourceText"
+    },
+    "announcedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "releaseDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "publishedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "sourcePublishedAt": {
+      "type": "string"
+    },
+    "branch": {
+      "const": "DE"
+    },
+    "releaseType": {
+      "const": "release"
+    },
+    "coverage": {
+      "$ref": "common.defs.json#/$defs/sourceText"
+    },
+    "verifiedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "archivedTargets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "targetType": {
+            "type": "string",
+            "enum": ["unit", "tech", "building", "civ"]
+          },
+          "targetId": {
+            "type": ["integer", "string"]
+          },
+          "targetNameZh": {
+            "type": "string"
+          },
+          "relation": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          },
+          "nameEn": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["retired", "upgrade"]
+          }
+        },
+        "required": ["targetType", "targetId", "targetNameZh", "status"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "source", "note", "entries"],
+  "additionalProperties": false,
+  "$defs": {
+    "target": {
+      "type": "object",
+      "properties": {
+        "targetType": {
+          "type": "string",
+          "enum": ["unit", "tech", "building", "civ"]
+        },
+        "targetId": {
+          "type": ["integer", "string"]
+        },
+        "targetNameZh": {
+          "type": "string"
+        },
+        "relation": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["targetType", "targetId"],
+      "additionalProperties": false
+    },
+    "entry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["new", "buff", "nerf", "adjust", "fix"]
+        },
+        "targetType": {
+          "type": "string",
+          "enum": ["unit", "tech", "building", "civ"]
+        },
+        "targetId": {
+          "type": ["integer", "string"]
+        },
+        "targetNameZh": {
+          "type": "string"
+        },
+        "civIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "summaryZh": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "before": {
+          "type": "string"
+        },
+        "after": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "common.defs.json#/$defs/publicUrl"
+        },
+        "provenance": {
+          "type": "string",
+          "enum": ["dat", "fixed-data", "official-and-effects", "official-history", "source-conflict"]
+        },
+        "originalText": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "verification": {
+          "type": "string",
+          "enum": ["official", "conflict", "unverified"]
+        },
+        "changeType": {
+          "type": "string",
+          "enum": ["stats", "upgrade", "tree", "bonus", "mechanic", "fix"]
+        },
+        "relatedTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/target"
+          }
+        },
+        "affectedCivIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scopeNote": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "sourceBullet": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["id", "kind", "targetType", "targetId", "targetNameZh", "civIds", "summaryZh", "source", "provenance"],
+      "additionalProperties": false
+    }
+  }
+}

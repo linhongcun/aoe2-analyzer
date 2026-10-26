@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-garrison.json",
+  "title": "AoE2 garrison data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generatedBy": {
+          "type": "string"
+        },
+        "patch": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "repo": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{7,40}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
+      },
+      "required": ["generatedBy", "patch", "repo", "commit", "sha256"],
+      "additionalProperties": false
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "class": {
+            "type": "integer"
+          },
+          "attack": {
+            "type": "number"
+          },
+          "reload": {
+            "type": "number"
+          },
+          "capacity": {
+            "type": "integer"
+          },
+          "firepower": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "projectile": {
+            "type": "integer"
+          }
+        },
+        "required": ["class", "attack", "reload", "capacity", "firepower", "total", "max", "projectile"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "techs": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/rule"
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "conditional": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "civs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "automatic": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/rule"
+            }
+          },
+          "free": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": ["automatic", "free"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": ["meta", "units", "techs", "conditional", "civs"],
+  "additionalProperties": false,
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "type": "integer"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effect"
+          }
+        }
+      },
+      "required": ["id", "requires", "count", "effects"],
+      "additionalProperties": false
+    },
+    "effect": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "integer"
+        },
+        "stat": {
+          "type": "string",
+          "enum": ["attack", "reload", "capacity", "firepower", "total", "max"]
+        },
+        "op": {
+          "type": "string",
+          "enum": ["add", "mul", "set"]
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": ["unit", "stat", "op", "value"],
+      "additionalProperties": false
+    }
+  }
+}

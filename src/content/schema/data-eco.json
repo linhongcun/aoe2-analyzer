@@ -1,0 +1,714 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-eco.json",
+  "title": "AoE2 eco data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generated_by": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "patch": {
+          "type": "string"
+        },
+        "units": {
+          "type": "string"
+        },
+        "tasks": {
+          "type": "string"
+        }
+      },
+      "required": ["generated_by", "source", "patch", "units", "tasks"],
+      "additionalProperties": false
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "en": {
+            "type": "string"
+          },
+          "trainTime": {
+            "type": "number"
+          },
+          "at": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "cost": {
+            "$ref": "common.defs.json#/$defs/cost"
+          },
+          "class": {
+            "type": "integer"
+          },
+          "timeAt": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            },
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^-?[0-9]+$"
+            }
+          }
+        },
+        "required": ["en", "trainTime", "at", "cost", "class"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "buildings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "en": {
+            "type": "string"
+          },
+          "buildTime": {
+            "type": "number"
+          },
+          "at": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "cost": {
+            "$ref": "common.defs.json#/$defs/cost"
+          }
+        },
+        "required": ["en", "buildTime", "at", "cost"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "techs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "en": {
+            "type": "string"
+          },
+          "researchTime": {
+            "type": "number"
+          },
+          "at": {
+            "type": "integer"
+          },
+          "cost": {
+            "$ref": "common.defs.json#/$defs/cost"
+          }
+        },
+        "required": ["en", "researchTime", "at", "cost"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "villager": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "integer"
+        },
+        "trainTime": {
+          "type": "number"
+        },
+        "cost": {
+          "$ref": "common.defs.json#/$defs/cost"
+        },
+        "speed": {
+          "type": "number"
+        },
+        "carry": {
+          "type": "number"
+        },
+        "hp": {
+          "type": "number"
+        },
+        "tasks": {
+          "type": "object",
+          "properties": {
+            "build": {
+              "$ref": "#/$defs/workTask"
+            },
+            "sheep": {
+              "$ref": "#/$defs/workTask"
+            },
+            "hunt": {
+              "$ref": "#/$defs/workTask"
+            },
+            "berries": {
+              "$ref": "#/$defs/workTask"
+            },
+            "farm": {
+              "$ref": "#/$defs/workTask"
+            },
+            "fish": {
+              "$ref": "#/$defs/workTask"
+            },
+            "wood": {
+              "$ref": "#/$defs/workTask"
+            },
+            "gold": {
+              "$ref": "#/$defs/workTask"
+            },
+            "stone": {
+              "$ref": "#/$defs/workTask"
+            }
+          },
+          "required": ["build", "sheep", "hunt", "berries", "farm", "fish", "wood", "gold", "stone"],
+          "additionalProperties": false
+        },
+        "female": {
+          "type": "object",
+          "properties": {
+            "build": {
+              "$ref": "#/$defs/workTask"
+            },
+            "sheep": {
+              "$ref": "#/$defs/workTask"
+            },
+            "hunt": {
+              "$ref": "#/$defs/workTask"
+            },
+            "berries": {
+              "$ref": "#/$defs/workTask"
+            },
+            "farm": {
+              "$ref": "#/$defs/workTask"
+            },
+            "fish": {
+              "$ref": "#/$defs/workTask"
+            },
+            "wood": {
+              "$ref": "#/$defs/workTask"
+            },
+            "gold": {
+              "$ref": "#/$defs/workTask"
+            },
+            "stone": {
+              "$ref": "#/$defs/workTask"
+            }
+          },
+          "required": ["build", "sheep", "hunt", "berries", "farm", "fish", "wood", "gold", "stone"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["unit", "trainTime", "cost", "speed", "carry", "hp", "tasks", "female"],
+      "additionalProperties": false
+    },
+    "animals": {
+      "type": "object",
+      "properties": {
+        "boar": {
+          "type": "object",
+          "properties": {
+            "unit": {
+              "type": "integer"
+            },
+            "en": {
+              "type": "string"
+            },
+            "food": {
+              "type": "number"
+            }
+          },
+          "required": ["unit", "en", "food"],
+          "additionalProperties": false
+        },
+        "deer": {
+          "type": "object",
+          "properties": {
+            "unit": {
+              "type": "integer"
+            },
+            "en": {
+              "type": "string"
+            },
+            "food": {
+              "type": "number"
+            }
+          },
+          "required": ["unit", "en", "food"],
+          "additionalProperties": false
+        },
+        "sheep": {
+          "type": "object",
+          "properties": {
+            "unit": {
+              "type": "integer"
+            },
+            "en": {
+              "type": "string"
+            },
+            "food": {
+              "type": "number"
+            }
+          },
+          "required": ["unit", "en", "food"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["boar", "deer", "sheep"],
+      "additionalProperties": false
+    },
+    "fishingShip": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "integer"
+        },
+        "workRate": {
+          "type": "number"
+        },
+        "carry": {
+          "type": "number"
+        },
+        "speed": {
+          "type": "number"
+        },
+        "trainTime": {
+          "type": "number"
+        },
+        "cost": {
+          "$ref": "common.defs.json#/$defs/cost"
+        },
+        "deepFishMultiplier": {
+          "type": "number"
+        }
+      },
+      "required": ["unit", "workRate", "carry", "speed", "trainTime", "cost", "deepFishMultiplier"],
+      "additionalProperties": false
+    },
+    "ecoTechs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "en": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string",
+            "enum": ["Town Center", "Mill", "Lumber Camp", "Mining Camp", "Market", "Dock"]
+          },
+          "researchTime": {
+            "type": "number"
+          },
+          "cost": {
+            "$ref": "common.defs.json#/$defs/cost"
+          },
+          "age": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "effects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/effect"
+            }
+          }
+        },
+        "required": ["name", "en", "at", "researchTime", "cost", "age", "effects"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "civEco": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "tree"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "age": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 4
+                },
+                "effects": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/effect"
+                  }
+                }
+              },
+              "required": ["source", "name", "age", "effects"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "team"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "age": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 4
+                },
+                "effects": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/effect"
+                  }
+                }
+              },
+              "required": ["source", "name", "age", "effects"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "bonus"
+                },
+                "tech": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "age": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 4
+                },
+                "requires": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "effects": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/effect"
+                  }
+                }
+              },
+              "required": ["source", "tech", "name", "age", "requires", "effects"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "ageReq": {
+      "type": "object",
+      "properties": {
+        "2": {
+          "type": "object",
+          "properties": {
+            "tech": {
+              "type": "integer"
+            },
+            "req": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/ageRequirement"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": ["tech", "req"],
+          "additionalProperties": false
+        },
+        "3": {
+          "type": "object",
+          "properties": {
+            "tech": {
+              "type": "integer"
+            },
+            "req": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/ageRequirement"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": ["tech", "req"],
+          "additionalProperties": false
+        },
+        "4": {
+          "type": "object",
+          "properties": {
+            "tech": {
+              "type": "integer"
+            },
+            "req": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/ageRequirement"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": ["tech", "req"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["2", "3", "4"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["meta", "units", "buildings", "techs", "villager", "animals", "fishingShip", "ecoTechs", "civEco", "ageReq"],
+  "additionalProperties": false,
+  "$defs": {
+    "effect": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "attr"
+            },
+            "target": {
+              "type": "string"
+            },
+            "attr": {
+              "type": "string",
+              "enum": ["speed", "workRate", "carry", "cost", "trainTime", "foodCost", "woodCost", "goldCost", "stoneCost"]
+            },
+            "op": {
+              "type": "string",
+              "enum": ["set", "add", "mul"]
+            },
+            "v": {
+              "type": "number"
+            }
+          },
+          "required": ["kind", "target", "attr", "op", "v"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "res"
+            },
+            "res": {
+              "type": "integer"
+            },
+            "label": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "op": {
+              "type": "string",
+              "enum": ["set", "add", "mul"]
+            },
+            "v": {
+              "type": "number"
+            }
+          },
+          "required": ["kind", "res", "label", "op", "v"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "techCost"
+            },
+            "tech": {
+              "type": "integer"
+            },
+            "techName": {
+              "type": "string"
+            },
+            "res": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string",
+                  "enum": ["Food", "Wood", "Gold", "Stone"]
+                }
+              ]
+            },
+            "op": {
+              "type": "string",
+              "enum": ["set", "add", "mul"]
+            },
+            "v": {
+              "type": "number"
+            }
+          },
+          "required": ["kind", "tech", "techName", "res", "op", "v"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "techTime"
+            },
+            "tech": {
+              "type": "integer"
+            },
+            "techName": {
+              "type": "string"
+            },
+            "op": {
+              "type": "string",
+              "enum": ["set", "add", "mul"]
+            },
+            "v": {
+              "type": "number"
+            }
+          },
+          "required": ["kind", "tech", "techName", "op", "v"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "freeTech"
+            },
+            "techName": {
+              "type": "string"
+            }
+          },
+          "required": ["kind", "techName"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "workTask": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "integer"
+        },
+        "workRate": {
+          "type": "number"
+        },
+        "carry": {
+          "type": "number"
+        },
+        "speed": {
+          "type": "number"
+        }
+      },
+      "required": ["unit", "workRate", "carry", "speed"],
+      "additionalProperties": false
+    },
+    "ageRequirement": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "of": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ageRequirement"
+              }
+            }
+          },
+          "required": ["n", "of"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "b": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 1
+            },
+            "zh": {
+              "type": "string"
+            }
+          },
+          "required": ["b", "zh"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "civ": {
+              "type": "array",
+              "items": {
+                "$ref": "common.defs.json#/$defs/nonEmptyString"
+              },
+              "minItems": 1
+            }
+          },
+          "required": ["civ"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,297 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-team-plan.json",
+  "title": "Curated team-plan content",
+  "$comment": "unlockRequirements[].evidence is non-rendered source metadata; displayed Sources uses title/url/published/kind/claim. The example schema matches TeamPlan, including intentionally blank notes and nullable forces.",
+  "type": "object",
+  "properties": {
+    "checked": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "patch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "unitIds": {
+      "$ref": "common.defs.json#/$defs/integerArray"
+    },
+    "baseFormIds": {
+      "$ref": "common.defs.json#/$defs/integerArray"
+    },
+    "unlockRequirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "units": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          },
+          "techs": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          },
+          "evidence": {
+            "type": "string"
+          }
+        },
+        "required": ["units", "techs", "evidence"],
+        "additionalProperties": false
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 1
+    },
+    "example": {
+      "$ref": "#/$defs/example"
+    }
+  },
+  "required": ["checked", "patch", "unitIds", "baseFormIds", "unlockRequirements", "sources", "example"],
+  "additionalProperties": false,
+  "$defs": {
+    "force": {
+      "type": "object",
+      "properties": {
+        "unitId": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "buildingId": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["unitId", "buildingId"],
+      "additionalProperties": false
+    },
+    "player": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["p1", "p2", "p3", "p4"]
+        },
+        "name": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "civ": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "position": {
+          "type": "string",
+          "enum": ["unspecified", "flank", "pocket", "custom"]
+        },
+        "positionNote": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["id", "name", "civ", "position", "positionNote"],
+      "additionalProperties": false
+    },
+    "phasePlayer": {
+      "type": "object",
+      "properties": {
+        "playerId": {
+          "type": "string",
+          "enum": ["p1", "p2", "p3", "p4"]
+        },
+        "main": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/force"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "secondary": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/force"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completedBuildings": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "completedUnlockTechIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "completedForms": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "supply": {
+          "type": "string",
+          "enum": ["unchecked", "self-reported-ready", "self-reported-short"]
+        },
+        "supplyNote": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["playerId", "main", "secondary", "completedBuildings", "completedUnlockTechIds", "completedForms", "supply", "supplyNote"],
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["scout", "breach", "screen", "support"]
+        },
+        "owners": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["p1", "p2", "p3", "p4"]
+          },
+          "uniqueItems": true
+        },
+        "intentionalGap": {
+          "type": "boolean"
+        },
+        "gapReason": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "note": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["kind", "owners", "intentionalGap", "gapReason", "note"],
+      "additionalProperties": false
+    },
+    "phase": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "enum": [2, 3, 4]
+        },
+        "players": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/phasePlayer"
+          },
+          "minItems": 2,
+          "maxItems": 4
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/task"
+          }
+        },
+        "supportTrigger": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "rally": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "retreat": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "notApplicable": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["age", "players", "tasks", "supportTrigger", "rally", "retreat", "notApplicable"],
+      "additionalProperties": false
+    },
+    "example": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "patch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "title": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "map": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            "openness": {
+              "type": "string",
+              "enum": ["unspecified", "open", "closed", "mixed-land"]
+            },
+            "conditions": {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            }
+          },
+          "required": ["name", "openness", "conditions"],
+          "additionalProperties": false
+        },
+        "players": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/player"
+          },
+          "minItems": 2,
+          "maxItems": 4
+        },
+        "phases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/phase"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "activeAge": {
+          "type": "integer",
+          "enum": [2, 3, 4]
+        },
+        "example": {
+          "enum": [null, "open-land-4v4-v1"]
+        }
+      },
+      "required": ["version", "patch", "title", "map", "players", "phases", "activeAge", "example"],
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "url": {
+          "$ref": "common.defs.json#/$defs/publicUrl"
+        },
+        "published": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "kind": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "claim": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["id", "title", "url", "published", "kind", "claim"],
+      "additionalProperties": false
+    }
+  }
+}

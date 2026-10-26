@@ -1,0 +1,563 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-team-bonuses.json",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generated_by": {
+          "type": "string"
+        },
+        "patch": {
+          "type": "integer"
+        },
+        "dat": {
+          "type": "object",
+          "properties": {
+            "repo": {
+              "type": "string"
+            },
+            "commit": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": ["repo", "commit", "path", "sha256"],
+          "additionalProperties": false
+        },
+        "interpretationSources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "repo": {
+                "type": "string"
+              },
+              "commit": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "use": {
+                "type": "string"
+              }
+            },
+            "required": ["repo", "commit", "path", "use"],
+            "additionalProperties": false
+          }
+        },
+        "engineVerifiedInPinnedBuild": {
+          "const": false
+        },
+        "scopeNotes": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        },
+        "counts": {
+          "type": "object",
+          "properties": {
+            "civilizations": {
+              "type": "integer"
+            },
+            "researchableTeamTechnologies": {
+              "type": "integer"
+            },
+            "catalogUnits": {
+              "type": "integer"
+            },
+            "catalogBuildings": {
+              "type": "integer"
+            }
+          },
+          "required": ["civilizations", "researchableTeamTechnologies", "catalogUnits", "catalogBuildings"],
+          "additionalProperties": false
+        },
+        "teamCommandAudit": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "techId": {
+                "type": "integer"
+              },
+              "effectId": {
+                "type": "integer"
+              },
+              "researchable": {
+                "type": "boolean"
+              },
+              "catalogued": {
+                "type": "boolean"
+              },
+              "teamIndices": {
+                "$ref": "common.defs.json#/$defs/integerArray"
+              }
+            },
+            "required": ["techId", "effectId", "researchable", "catalogued", "teamIndices"],
+            "additionalProperties": false
+          }
+        },
+        "unclassifiedHiddenTeamCommands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "civ": {
+                "type": "string"
+              },
+              "techId": {
+                "type": "integer"
+              },
+              "effectId": {
+                "type": "integer"
+              },
+              "commands": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/command"
+                }
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": ["civ", "techId", "effectId", "commands", "reason"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "generated_by",
+        "patch",
+        "dat",
+        "interpretationSources",
+        "engineVerifiedInPinnedBuild",
+        "scopeNotes",
+        "counts",
+        "teamCommandAudit",
+        "unclassifiedHiddenTeamCommands"
+      ],
+      "additionalProperties": false
+    },
+    "permanent": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "effectId": {
+            "type": "integer"
+          },
+          "targetUnits": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          },
+          "targetBuildings": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          },
+          "productionUnits": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          },
+          "kinds": {
+            "type": "array",
+            "items": {
+              "enum": ["attributes", "production", "unlock", "economy", "research", "other"]
+            }
+          },
+          "effectTypes": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "attack",
+                "attack-speed",
+                "health",
+                "armor",
+                "range",
+                "vision",
+                "production",
+                "cost",
+                "attributes",
+                "resource",
+                "unlock",
+                "research",
+                "other"
+              ]
+            }
+          },
+          "targetCoverage": {
+            "enum": ["complete", "partial", "unknown"]
+          },
+          "unknownTargets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/unknown"
+            }
+          },
+          "targetRelations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/relation"
+            }
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "civ": {
+            "type": "string"
+          },
+          "commands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/command"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          },
+          "chain": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/chain"
+            }
+          }
+        },
+        "required": [
+          "effectId",
+          "targetUnits",
+          "targetBuildings",
+          "productionUnits",
+          "kinds",
+          "effectTypes",
+          "targetCoverage",
+          "unknownTargets",
+          "targetRelations",
+          "notes",
+          "id",
+          "civ",
+          "commands",
+          "sources",
+          "chain"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "technologies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "effectId": {
+            "type": "integer"
+          },
+          "targetUnits": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          },
+          "targetBuildings": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          },
+          "productionUnits": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          },
+          "kinds": {
+            "type": "array",
+            "items": {
+              "enum": ["attributes", "production", "unlock", "economy", "research", "other"]
+            }
+          },
+          "effectTypes": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "attack",
+                "attack-speed",
+                "health",
+                "armor",
+                "range",
+                "vision",
+                "production",
+                "cost",
+                "attributes",
+                "resource",
+                "unlock",
+                "research",
+                "other"
+              ]
+            }
+          },
+          "targetCoverage": {
+            "enum": ["complete", "partial", "unknown"]
+          },
+          "unknownTargets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/unknown"
+            }
+          },
+          "targetRelations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/relation"
+            }
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            }
+          },
+          "id": {
+            "type": "integer"
+          },
+          "civs": {
+            "$ref": "common.defs.json#/$defs/stringArray"
+          },
+          "commands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/command"
+            }
+          },
+          "teamCommands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/command"
+            }
+          },
+          "chain": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/chain"
+            }
+          },
+          "age": {
+            "type": "integer"
+          },
+          "building": {
+            "type": "integer"
+          },
+          "prerequisites": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          },
+          "requiredCount": {
+            "type": "integer"
+          },
+          "cost": {
+            "$ref": "common.defs.json#/$defs/cost"
+          },
+          "researchTime": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "effectId",
+          "targetUnits",
+          "targetBuildings",
+          "productionUnits",
+          "kinds",
+          "effectTypes",
+          "targetCoverage",
+          "unknownTargets",
+          "targetRelations",
+          "notes",
+          "id",
+          "civs",
+          "commands",
+          "teamCommands",
+          "chain",
+          "age",
+          "building",
+          "prerequisites",
+          "requiredCount",
+          "cost",
+          "researchTime"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["meta", "permanent", "technologies"],
+  "additionalProperties": false,
+  "$defs": {
+    "command": {
+      "type": "object",
+      "properties": {
+        "Type": {
+          "type": "integer"
+        },
+        "A": {
+          "type": "integer"
+        },
+        "B": {
+          "type": "integer"
+        },
+        "C": {
+          "type": "integer"
+        },
+        "D": {
+          "type": "number"
+        },
+        "index": {
+          "type": "integer"
+        },
+        "effectId": {
+          "type": "integer"
+        }
+      },
+      "required": ["Type", "A", "B", "C", "D", "index", "effectId"],
+      "additionalProperties": false
+    },
+    "chain": {
+      "type": "object",
+      "properties": {
+        "techId": {
+          "type": "integer"
+        },
+        "effectId": {
+          "type": "integer"
+        },
+        "mode": {
+          "enum": ["research-time-zero", "enable", "research"]
+        },
+        "sourceEffectId": {
+          "type": "integer"
+        },
+        "sourceIndex": {
+          "type": "integer"
+        },
+        "prerequisites": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "requiredCount": {
+          "type": "integer"
+        },
+        "researchLocations": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/command"
+          }
+        }
+      },
+      "required": ["techId", "effectId", "mode", "sourceEffectId", "sourceIndex", "prerequisites", "requiredCount", "researchLocations", "commands"],
+      "additionalProperties": false
+    },
+    "unknown": {
+      "type": "object",
+      "properties": {
+        "effectId": {
+          "type": "integer"
+        },
+        "index": {
+          "type": "integer"
+        },
+        "reason": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "rawIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        }
+      },
+      "required": ["effectId", "index", "reason"],
+      "additionalProperties": false
+    },
+    "relation": {
+      "type": "object",
+      "properties": {
+        "effectId": {
+          "type": "integer"
+        },
+        "index": {
+          "type": "integer"
+        },
+        "unitIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "buildingIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "classIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "productionUnitIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        }
+      },
+      "required": ["effectId", "index", "unitIds", "buildingIds", "classIds", "productionUnitIds"],
+      "additionalProperties": false
+    },
+    "source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "civ-team-bonus"
+            },
+            "effectId": {
+              "type": "integer"
+            },
+            "datCiv": {
+              "type": "integer"
+            }
+          },
+          "required": ["kind", "effectId", "datCiv"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "civ-tech-tree-team"
+            },
+            "effectId": {
+              "type": "integer"
+            },
+            "indices": {
+              "$ref": "common.defs.json#/$defs/integerArray"
+            }
+          },
+          "required": ["kind", "effectId", "indices"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "hidden-civ-team-tech"
+            },
+            "effectId": {
+              "type": "integer"
+            },
+            "techId": {
+              "type": "integer"
+            },
+            "indices": {
+              "$ref": "common.defs.json#/$defs/integerArray"
+            }
+          },
+          "required": ["kind", "effectId", "techId", "indices"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

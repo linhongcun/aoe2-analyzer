@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-garrison-techs.json",
+  "title": "AoE2 garrison-techs data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generatedBy": {
+          "type": "string"
+        },
+        "patch": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{7,40}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "labelsCommit": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{7,40}$"
+        },
+        "engineVerifiedInPinnedBuild": {
+          "const": false
+        }
+      },
+      "required": ["generatedBy", "patch", "repo", "commit", "sha256", "labelsCommit", "engineVerifiedInPinnedBuild"],
+      "additionalProperties": false
+    },
+    "techs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "boolean",
+        "const": true
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "unitUpgradeTechs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "civs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "free": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "disabled": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": ["free", "disabled"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": ["meta", "techs", "unitUpgradeTechs", "civs"],
+  "additionalProperties": false
+}

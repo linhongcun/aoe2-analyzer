@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-catalog-introductions.json",
+  "title": "AoE2 catalog-introductions data",
+  "type": "object",
+  "properties": {
+    "units": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "buildings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "techs": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "techUpdates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^\\d{4,6}$"
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    }
+  },
+  "required": ["units", "buildings", "techs", "techUpdates"],
+  "additionalProperties": false
+}

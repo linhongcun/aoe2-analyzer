@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-search-py.json",
+  "title": "AoE2 search-py data",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "py": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      },
+      "pyi": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      }
+    },
+    "required": ["py", "pyi"],
+    "additionalProperties": false
+  },
+  "propertyNames": {
+    "type": "string",
+    "minLength": 1
+  }
+}

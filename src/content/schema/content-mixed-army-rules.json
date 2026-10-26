@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-mixed-army-rules.json",
+  "title": "Curated mixed-army-rules content",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "defaultScenarioId": {
+      "$ref": "common.defs.json#/$defs/nonEmptyString"
+    },
+    "exampleCardId": {
+      "$ref": "common.defs.json#/$defs/nonEmptyString"
+    },
+    "confirmationBuildingIds": {
+      "$ref": "common.defs.json#/$defs/integerArray"
+    },
+    "unitNameLinks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "name": {
+            "allOf": [
+              {
+                "$ref": "common.defs.json#/$defs/sourceText"
+              },
+              {
+                "type": "string",
+                "minLength": 1
+              }
+            ]
+          },
+          "eliteId": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "elitePrefix": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        },
+        "required": ["id", "name"],
+        "additionalProperties": false
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "observationProfile": {
+            "type": "string",
+            "enum": ["archer-cover", "wagon-cannon"]
+          },
+          "confirmationFormIds": {
+            "$ref": "common.defs.json#/$defs/integerArray"
+          }
+        },
+        "required": ["id", "observationProfile", "confirmationFormIds"],
+        "additionalProperties": false
+      }
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/card"
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["schemaVersion", "defaultScenarioId", "exampleCardId", "confirmationBuildingIds", "unitNameLinks", "scenarios", "cards"],
+  "additionalProperties": false,
+  "$defs": {
+    "card": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "strategy": {
+          "type": "string",
+          "enum": ["anti-cavalry-screen", "light-cavalry-access", "protected-onager", "protected-artillery", "flank-opening", "reposition"]
+        },
+        "conditionalUnits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "enemyCompositions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["unknown", "cavalry", "skirmishers", "cavalry-skirmishers", "wagons", "wagons-cannon", "wagons-cannon-halberdiers", "other"]
+                }
+              },
+              "unitIds": {
+                "$ref": "common.defs.json#/$defs/integerArray"
+              }
+            },
+            "required": ["enemyCompositions", "unitIds"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["id", "strategy", "conditionalUnits"],
+      "additionalProperties": false
+    }
+  }
+}
