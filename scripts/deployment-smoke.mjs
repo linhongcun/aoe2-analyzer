@@ -86,7 +86,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const picker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(picker.locator('[data-civ="Portuguese"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(picker.locator('[data-civ="Shu"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(picker.locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await goto('/builds?bo=drush-fc&civ=Portuguese&step=6');
       const eco = JSON.parse(readFileSync(new URL('../src/data/eco.json', import.meta.url), 'utf8'));
@@ -104,6 +104,40 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveText('未计入：葡萄牙 采浆果同时产木头（采果兼产木材，未建模）');
       console.log(
         'Verified Portuguese economy: selectable, actual Food/Wood inventory, gold discount, share card, continuous estimate and unchanged real-cost boundary',
+      );
+      // This checkpoint has the same actual start clock for both civilizations; later clocks can diverge.
+      await goto('/builds?bo=scouts-18&step=4');
+      const genericWoodCheckpoint = await inventory();
+      const genericClock = Number(await page.locator('[data-step="3"]').getAttribute('data-start-at'));
+      await goto('/builds?bo=scouts-18&civ=Shu&step=4');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按蜀计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await check(page.locator('[data-t="civ-note"]')).toContainText('伐木兼产食物按连续收入估算');
+      const knightNote = '蜀不能训练骑士；骑士方案仅供通用模板经济估算。';
+      await check(page.locator('[data-t="civ-note"]')).toContainText(knightNote);
+      const shu = await inventory();
+      const shuClock = Number(await page.locator('[data-step="3"]').getAttribute('data-start-at'));
+      assert.ok(Number.isFinite(genericClock) && genericClock > 0);
+      assert.equal(shuClock, genericClock, 'Compare the actual same-clock checkpoint, not just the same step number');
+      assert.equal(shu.wood, genericWoodCheckpoint.wood, 'Lumberjack food must preserve the primary wood stock at this checkpoint');
+      assert.ok(shu.food > genericWoodCheckpoint.food, 'Shu lumberjacks must increase the actual food stock');
+      await page.locator('#tlciv').click();
+      const shuPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(shuPicker.locator('[data-civ="Shu"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(shuPicker.locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      await page.locator('[data-t="share-card-btn"]:visible').first().click();
+      await check(page.locator('[data-t="share-card"]')).toContainText('按蜀计');
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Shu');
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      await goto('/builds?bo=fast-castle-knights&civ=Shu');
+      await page.locator('[data-t="share-card-btn"]:visible').first().click();
+      await check(page.locator('[data-t="card-basis"]')).toContainText(knightNote);
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      await goto('/duel?a=74.Shu.3.f.&b=74.Magyars.3.f.&m=t');
+      await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveText('未计入：蜀 伐木同时产食物（伐木兼产食物，未建模）');
+      console.log(
+        'Verified Shu economy: same-clock actual Food/Wood inventory, selectable, share card, knight-template limit and unchanged real-cost boundary',
       );
     }
     for (const feature of smokeFeatures(features)) {

@@ -117,10 +117,12 @@ describe('#197 葡萄牙采果兼产木材', () => {
       civEco: { ...E.civEco, Portuguese: E.civEco.Portuguese!.filter((r) => (r as { tech?: number }).tech !== tech) },
     });
     const p = run(bo);
-    expect(p.steps).not.toEqual(run(bo, 'Portuguese', without(453)).steps);
-    expect(p.steps).not.toEqual(run(bo, 'Portuguese', without(559)).steps);
-    expect(run(bo, 'Portuguese', without(453)).steps.find((s) => s.entity?.id === '74')!.cost!.gold).toBe(16);
-    expect(run(bo, 'Portuguese', without(559)).steps.find((s) => s.entity?.id === '74')!.cost!.gold).toBe(20);
+    const no453 = run(bo, 'Portuguese', without(453));
+    const no559 = run(bo, 'Portuguese', without(559));
+    expect(p.steps).not.toEqual(no453.steps);
+    expect(p.steps).not.toEqual(no559.steps);
+    expect(no453.steps.find((s) => s.entity?.id === '74')!.cost!.gold).toBe(16);
+    expect(no559.steps.find((s) => s.entity?.id === '74')!.cost!.gold).toBe(20);
   });
   it.each([74, 4, 38])('单位%s实际付费黄金×0.8，其它资源和训练时长保留', (unit) => {
     const e = structuredClone(E);

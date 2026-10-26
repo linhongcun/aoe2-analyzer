@@ -1,0 +1,186 @@
+{
+  "baseline": "768cd7146184d1d85b4cc08429c50378fafe46eb",
+  "productionUntouched": true,
+  "passed": 22,
+  "failed": 13,
+  "skipped": 0,
+  "command": "npx vitest run tests/unit/shu197.test.ts tests/unit/shu197Share.test.ts --reporter=json --outputFile=/tmp/shu197-first-red-final.json",
+  "boundary": "Earlier draft harness mistakes (missing research.cost, clamped walkTiles=0, params.team metadata) were corrected before this run and are not counted as product failures.",
+  "cases": [
+    {
+      "title": "来源行：1071的502 set7为百分数，marker33 set16不当作倍率",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "距离1：实际库存保留木材，另增有效伐木收入×res502/100食物",
+      "status": "failed",
+      "failure": "AssertionError: expected 150 to be 151 // Object.is equality"
+    },
+    {
+      "title": "距离3：实际库存保留木材，另增有效伐木收入×res502/100食物",
+      "status": "failed",
+      "failure": "AssertionError: expected 150 to be 151 // Object.is equality"
+    },
+    {
+      "title": "距离7：实际库存保留木材，另增有效伐木收入×res502/100食物",
+      "status": "failed",
+      "failure": "AssertionError: expected 150 to be 151 // Object.is equality"
+    },
+    {
+      "title": "辅助读数允许零距离，兼产仍为有效主资源率的百分比",
+      "status": "failed",
+      "failure": "AssertionError: expected {} to deeply equal { food: 0.027300000000000005 }"
+    },
+    {
+      "title": "携带量改变伐木往返效率，食物兼产共用同一次携带和走路",
+      "status": "failed",
+      "failure": "AssertionError: expected { food: 150, wood: 226, …(2) } to match object { wood: 226, food: 151 }"
+    },
+    {
+      "title": "sheep不产生伐木兼产食物，库存及时间与通用相同",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "boar不产生伐木兼产食物，库存及时间与通用相同",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "deer不产生伐木兼产食物，库存及时间与通用相同",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "hunt不产生伐木兼产食物，库存及时间与通用相同",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "berries不产生伐木兼产食物，库存及时间与通用相同",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "farm不产生伐木兼产食物，库存及时间与通用相同",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "fish不产生伐木兼产食物，库存及时间与通用相同",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "gold不产生伐木兼产食物，库存及时间与通用相同",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "stone不产生伐木兼产食物，库存及时间与通用相同",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "换时代不叠加1071，费用隔离后升级时刻与通用相同",
+      "status": "failed",
+      "failure": "AssertionError: expected { food: 200, wood: 219, …(2) } to match object { wood: 219, food: 201 }"
+    },
+    {
+      "title": "科技202改变同一伐木有效率；兼产仍只乘固定比例一次",
+      "status": "failed",
+      "failure": "AssertionError: expected { food: 150, wood: 228, …(2) } to match object { wood: 228, food: 152 }"
+    },
+    {
+      "title": "科技213改变同一伐木有效率；兼产仍只乘固定比例一次",
+      "status": "failed",
+      "failure": "AssertionError: expected { food: 150, wood: 225, …(2) } to match object { wood: 225, food: 151 }"
+    },
+    {
+      "title": "木材支出不减少兼产基数，食物不是从库存余额变化推算",
+      "status": "failed",
+      "failure": "AssertionError: expected { food: 150, wood: 174, …(2) } to match object { wood: 174, food: 151 }"
+    },
+    {
+      "title": "研究科技199实际支付75%费用，沿用既有逐资源Math.round，研究时间不变",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "研究科技200实际支付75%费用，沿用既有逐资源Math.round，研究时间不变",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "研究科技211实际支付75%费用，沿用既有逐资源Math.round，研究时间不变",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "真实弓手开局分别移除兼产/折扣，实际库存或费用都能独立变化",
+      "status": "failed",
+      "failure": "AssertionError: expected [ Array(11) ] to not deeply equal [ Array(11) ]"
+    },
+    {
+      "title": "502护栏：other-tech不让辅助读数或库存漏算半条科技",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "502护栏：unknown-companion不让辅助读数或库存漏算半条科技",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "502护栏：wrong-op不让辅助读数或库存漏算半条科技",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "502护栏：missing-marker不让辅助读数或库存漏算半条科技",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "502护栏：wrong-marker不让辅助读数或库存漏算半条科技",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "支持、附注与独立真实成本边界一致",
+      "status": "failed",
+      "failure": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"
+    },
+    {
+      "title": "提示明确骑士模板不是蜀合法开局，不自动替换黑光铠骑兵",
+      "status": "failed",
+      "failure": "AssertionError: expected [] to include '蜀不能训练骑士；骑士方案仅供通用模板经济估算。'"
+    },
+    {
+      "title": "全部8个开局默认不计团队；显式team参数对当前非经济团队效果也不改变结果",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "蜀骑士模板卡片basis携带明确限制，同一model同时供预览和PNG绘制",
+      "status": "failed",
+      "failure": "AssertionError: expected '按蜀计 · 走路 4 格 · 游戏版本 185872' to be '按蜀计 · 走路 4 格 · 游戏版本 185872\\n蜀不能训练骑士；骑…' // Object.is equality"
+    },
+    {
+      "title": "archers-19/Shu旧basis逐字保留，不把蜀的限制加到其它卡片",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "fast-castle-knights/Franks旧basis逐字保留，不把蜀的限制加到其它卡片",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "title": "fast-castle-knights/Portuguese旧basis逐字保留，不把蜀的限制加到其它卡片",
+      "status": "passed",
+      "failure": null
+    }
+  ]
+}
