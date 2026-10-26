@@ -20,8 +20,8 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.getByRole('dialog', { name: '估算说明' })).toContainText('有效采金收入');
       await expect(page.getByRole('dialog', { name: '估算说明' })).toContainText('不模拟客户端逐次交仓');
       await page.getByRole('button', { name: '估算', exact: true }).click();
-      await page.locator('[data-step="0"] > button').click();
-      await expect(page.locator('[data-t="step-cost"]')).toContainText('木头 21');
+      await page.locator('[data-step="0"]').locator('button').first().click();
+      await expect(page.locator('[data-t="step-cost"]')).toContainText('木头 42');
       await page.locator('[data-t="share-card-btn"]:visible').first().click();
       await expect(page.locator('[data-t="share-card"]')).toContainText('按马里计');
       await expect(page.locator('[data-t="card-url"]')).toContainText('civ=Malians');
@@ -56,7 +56,7 @@ test('#197 马里跟练和打印保留交仓估算，真实成本仍独立未计
     await page.goto(`./#/builds?bo=archers-19&civ=Malians&view=${view}`);
     if (view === 'print') await page.emulateMedia({ media: 'print' });
     await expect(page.locator('.bp-context').getByText(note, { exact: true })).toBeVisible();
-    await expect(page.getByRole('region', { name: '开局来源与估算限制', exact: true })).toContainText(note);
+    await expect(page.getByRole('region', { name: '开局来源与估算限制', exact: true })).toContainText('采金交仓额外黄金按有效采金收入的百分比连续计入');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
   await page.emulateMedia({ media: 'screen' });

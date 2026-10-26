@@ -222,7 +222,7 @@ interface Mods {
   costAdd: Record<string, Partial<Record<Res, number>>>;
   /** 存放资源时额外比例（丹麦 res 299：食物 +5%） */
   depositBonus: Partial<Record<Res, number>>;
-  /** #197：仅已核马里595的建筑class木费倍率；不扩展其它文明的建筑class支付口径 */
+  /** issue197：仅已核马里595的建筑class木费倍率；不扩展其它文明的建筑class支付口径 */
   buildingWoodCost: Record<number, number>;
   /** 到达新时代时直接发放的资源（res 0–3） */
   grant: Stock;
