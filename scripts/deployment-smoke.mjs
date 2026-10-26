@@ -52,8 +52,44 @@ export async function checkSite({ site, version, commit, features = [] }) {
     };
     await goto('/');
     const metadata = JSON.parse(readFileSync(new URL('../src/data/page-metadata.json', import.meta.url), 'utf8'));
+    const internalSourceText =
+      /\b(?:sha(?:-?[0-9]+)?|csv|commit)\b|提交(?:号|哈希)?\s*[0-9a-f]{7,40}|\b(?:main|master)\s+[0-9a-f]{7,40}\b|src\/(?:content|data)\/|themkdemiiir\/aoe2-guide@/iu;
     for (const feature of smokeFeatures(features)) {
-      if (feature === 'patches') {
+      if (feature === 'builds') {
+        const order = JSON.parse(readFileSync(new URL('../src/data/build-orders/scouts-18.json', import.meta.url), 'utf8'));
+        for (const view of ['practice', 'print']) {
+          await goto(`/builds?bo=scouts-18&view=${view}`);
+          const sources = page.getByRole('region', { name: '开局来源与估算限制', exact: true });
+          if (view === 'print') await page.emulateMedia({ media: 'print' });
+          await check(sources).toBeVisible();
+          await check(sources).not.toContainText(internalSourceText);
+          await check(sources).toContainText('MIT License，© 2026 Mehmet Kaan Demir');
+          await check(sources).toContainText('游戏内容 © Microsoft');
+          await check(sources).toContainText('中文步骤说明为本项目原创表述，未复制原文');
+          for (const source of order.sources) {
+            await check(sources.getByRole('link', { name: source.title, exact: true })).toHaveAttribute('href', source.url);
+            await check(sources).toContainText(source.url);
+            await check(sources).toContainText(source.author);
+            await check(sources).toContainText(source.accessed);
+          }
+          await page.emulateMedia({ media: 'screen' });
+        }
+        console.log('Verified public build sources: practice, print, public links, dates and complete MIT attribution');
+      } else if (feature === 'gameGuide') {
+        const guide = JSON.parse(readFileSync(new URL('../src/content/game-guide.json', import.meta.url), 'utf8'));
+        const pinned = guide.sources['pinned-techs'];
+        const version = pinned.version.match(/\bDE[0-9]+\b/u)?.[0];
+        assert.ok(version, 'Fixed technology citation must retain its game version');
+        await goto('/game-guide?v=1&card=ages&context=standard&victory=conquest');
+        const sources = page.locator('.gg-sources');
+        await sources.locator('summary').click();
+        await check(sources).not.toContainText(internalSourceText);
+        const fixed = sources.locator('.gg-source').filter({ has: page.getByRole('link', { name: pinned.title, exact: true }) });
+        await check(fixed.getByRole('link', { name: pinned.title, exact: true })).toHaveAttribute('href', pinned.url);
+        await check(fixed).toContainText(version);
+        await check(fixed).toContainText(pinned.checkedAt);
+        console.log('Verified public game-guide sources: DE version, checked date and fixed public link');
+      } else if (feature === 'patches') {
         await goto('/patches/185872');
         const summary = page.locator('.patch-tree-summary');
         await summary.locator('summary').click();

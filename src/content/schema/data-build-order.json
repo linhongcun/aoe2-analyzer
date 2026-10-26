@@ -62,54 +62,32 @@
     "sources": {
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "allOf": [
-              {
-                "$ref": "common.defs.json#/$defs/sourceText"
-              },
-              {
-                "$ref": "common.defs.json#/$defs/nonEmptyString"
-              }
-            ]
+        "oneOf": [
+          {
+            "$ref": "#/$defs/publicSource"
           },
-          "url": {
-            "$ref": "common.defs.json#/$defs/publicUrl"
-          },
-          "author": {
-            "allOf": [
-              {
-                "$ref": "common.defs.json#/$defs/sourceText"
-              },
-              {
-                "$ref": "common.defs.json#/$defs/nonEmptyString"
-              }
-            ]
-          },
-          "section": {
-            "$ref": "common.defs.json#/$defs/sourceText"
-          },
-          "ref": {
-            "$ref": "common.defs.json#/$defs/sourceText"
-          },
-          "accessed": {
-            "type": "string",
-            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          {
+            "$ref": "#/$defs/aoe2GuideProvenance"
           }
-        },
-        "required": ["title", "url", "author", "accessed"],
-        "additionalProperties": false
+        ]
       },
       "minItems": 1
     },
     "license": {
-      "allOf": [
+      "anyOf": [
         {
-          "$ref": "common.defs.json#/$defs/sourceText"
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "$ref": "common.defs.json#/$defs/nonEmptyString"
+            }
+          ]
         },
         {
-          "$ref": "common.defs.json#/$defs/nonEmptyString"
+          "type": "string",
+          "pattern": "^步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 [0-9a-f]{7,40}），[^\\r\\n]+$"
         }
       ]
     },
@@ -327,6 +305,119 @@
       },
       "required": ["vils", "actions"],
       "additionalProperties": false
+    },
+    "publicSource": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "$ref": "common.defs.json#/$defs/nonEmptyString"
+            }
+          ]
+        },
+        "url": {
+          "$ref": "common.defs.json#/$defs/publicUrl"
+        },
+        "author": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "$ref": "common.defs.json#/$defs/nonEmptyString"
+            }
+          ]
+        },
+        "section": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "ref": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "accessed": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      },
+      "required": ["title", "url", "author", "accessed"],
+      "additionalProperties": false
+    },
+    "aoe2GuideProvenance": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "$ref": "common.defs.json#/$defs/nonEmptyString"
+            }
+          ]
+        },
+        "url": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/publicUrl"
+            },
+            {
+              "type": "string",
+              "pattern": "^https://aoe2guide\\.com/en/builds/[a-z0-9-]+/$"
+            }
+          ]
+        },
+        "author": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "$ref": "common.defs.json#/$defs/nonEmptyString"
+            }
+          ]
+        },
+        "section": {
+          "type": "string",
+          "pattern": "^src/content/build-orders/[a-z0-9-]+\\.yaml$"
+        },
+        "ref": {
+          "type": "string",
+          "pattern": "^themkdemiiir/aoe2-guide@[0-9a-f]{7,40}$"
+        },
+        "accessed": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      },
+      "required": ["title", "url", "author", "accessed", "section", "ref"],
+      "additionalProperties": false
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "license": {
+            "type": "string",
+            "pattern": "^步骤中的村民数与分配转写自 aoe2-guide（MIT License，© 2026 Mehmet Kaan Demir，提交 [0-9a-f]{7,40}），[^\\r\\n]+$"
+          }
+        },
+        "required": ["license"]
+      },
+      "then": {
+        "properties": {
+          "sources": {
+            "contains": {
+              "$ref": "#/$defs/aoe2GuideProvenance"
+            },
+            "type": "array"
+          }
+        }
+      }
+    }
+  ]
 }

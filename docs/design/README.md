@@ -6,18 +6,20 @@ v0.39.0 数据维护规格见 [JSON 数据校验边界](issue285-json-validation
 
 v0.40.0 补丁页骑弩对照入口见 [骑马弩兵与骑射手预置](mounted-crossbow-presets-441.md)（#441）：185872 上下文中的三组真实文明、无可选科技对照及可复制链接；规格与失败用例已独立复核，不改变单位 PK 的计算与界面。
 
+v0.40.1 来源展示修复见 [开局与一局入门的公开来源](source-presentation-442.md)（#442）：保留原始证据及完整归属，页面和独立 checker 共用严格公开投影，清空旧迁移告警；规格与实际失败用例已独立复核。
+
 这里只放已签字或产品定稿的样稿和规格。生成脚本、评审截图、未签字的 v0.5 储备稿（#44 文明详情、#16）以及 #17 都留在归档分支 `design/jony-archive`，不进这里。
 SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分支上。样稿里的数字都以数据为准，和数据不一致时以数据为准。
 
-| Issue | 内容 | 路径 | 状态 / 签字 |
-|---|---|---|---|
-| #24 / #25 | PK 等资源计入文明训练费用加成（v3）、盈亏平衡；勘误：柏柏尔骆驼城堡 −15% = 30（v3 图上的 32 作废）、.5 结尾按原价标「未计入」、韩国「折扣未计入」、「已计入」用加成原文 muted 12px、「按X时代价格」放价格旁 | `mockups/issue24-v3/`（SPEC.md、**ERRATA.md 优先**）、`mockups/issue25-v3/`（SPEC.md） | v3 已签字；勘误 2026-10-12（Steve 裁定） |
-| #44 | 同名单位 / 易混淆（「别和 X 混淆」）/ 相关链接 | `mockups/issue44-dup-names/`（SPEC.md） | Steve 已签字（2026-10-11，a50f739 版；SPEC 出处补充 e6c5381） |
-| #19 | 分享卡：主要卡点规则（卡在木头）、卡人口变体、「链接已复制」toast（Lucide check）、置灰文明不能生成分享卡的提示 | `mockups/issue19/share-card/`（SPEC.md）、`mockups/issue19/share-controls/` | v0.4 定稿（Steve，#58） |
-| #42 | 匈奴：置灰兜底（v0.4.0 主状态）、置灰时的分享提示、flag 后的状态（示例数据） | `mockups/issue42-huns/`（README.md） | v0.4 定稿；匈奴在 v0.4.0 保持置灰 |
-| #14 | 首页单位数「163 个单位（精锐版并入对应单位计）…」 | `mockups/issue14-count/`（README.md） | 定稿；Steve 改为 163（按 unit id 去重），数字从数据计算 |
-| #3 | 2×2 摘要（390）、误差行「误差 m:ss–m:ss」（有范围 / 无范围） | `mockups/issue3-summary-2x2/`、`range-390/`；规格见 `issue3-timeline-spec.md` | Steve 已定（#56） |
-| #10 | 升级路线分叉（通用 / 选文明） | `mockups/issue10/` | 定稿（#59） |
-| #39 | 文明支持 / 置灰样式 | `mockups/issue39-civ-support/` | 定稿 |
-| #6 | 设计系统，阶段 2 导航 / 首页卡 / 文明页头，阶段 3 详情页模板，阶段 4 暗色 | `DESIGN-SYSTEM.md`、`mockups/issue6-stage2/`、`issue6-stage3/`（SPEC.md）、`issue6-stage4/`（SPEC.md） | 已签字；暗色（阶段 4）尚未上线，暗色对比度待上线后复核 |
-| M3 | 发布封面（scouts-18 法兰克 house=0 step=13，线上构建截取） | `mockups/m3-cover/`（README.md，含复现步骤） | 定稿 |
+| Issue     | 内容                                                                                                                                                                                                        | 路径                                                                                                   | 状态 / 签字                                                   |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| #24 / #25 | PK 等资源计入文明训练费用加成（v3）、盈亏平衡；勘误：柏柏尔骆驼城堡 −15% = 30（v3 图上的 32 作废）、.5 结尾按原价标「未计入」、韩国「折扣未计入」、「已计入」用加成原文 muted 12px、「按X时代价格」放价格旁 | `mockups/issue24-v3/`（SPEC.md、**ERRATA.md 优先**）、`mockups/issue25-v3/`（SPEC.md）                 | v3 已签字；勘误 2026-10-12（Steve 裁定）                      |
+| #44       | 同名单位 / 易混淆（「别和 X 混淆」）/ 相关链接                                                                                                                                                              | `mockups/issue44-dup-names/`（SPEC.md）                                                                | Steve 已签字（2026-10-11，a50f739 版；SPEC 出处补充 e6c5381） |
+| #19       | 分享卡：主要卡点规则（卡在木头）、卡人口变体、「链接已复制」toast（Lucide check）、置灰文明不能生成分享卡的提示                                                                                             | `mockups/issue19/share-card/`（SPEC.md）、`mockups/issue19/share-controls/`                            | v0.4 定稿（Steve，#58）                                       |
+| #42       | 匈奴：置灰兜底（v0.4.0 主状态）、置灰时的分享提示、flag 后的状态（示例数据）                                                                                                                                | `mockups/issue42-huns/`（README.md）                                                                   | v0.4 定稿；匈奴在 v0.4.0 保持置灰                             |
+| #14       | 首页单位数「163 个单位（精锐版并入对应单位计）…」                                                                                                                                                           | `mockups/issue14-count/`（README.md）                                                                  | 定稿；Steve 改为 163（按 unit id 去重），数字从数据计算       |
+| #3        | 2×2 摘要（390）、误差行「误差 m:ss–m:ss」（有范围 / 无范围）                                                                                                                                                | `mockups/issue3-summary-2x2/`、`range-390/`；规格见 `issue3-timeline-spec.md`                          | Steve 已定（#56）                                             |
+| #10       | 升级路线分叉（通用 / 选文明）                                                                                                                                                                               | `mockups/issue10/`                                                                                     | 定稿（#59）                                                   |
+| #39       | 文明支持 / 置灰样式                                                                                                                                                                                         | `mockups/issue39-civ-support/`                                                                         | 定稿                                                          |
+| #6        | 设计系统，阶段 2 导航 / 首页卡 / 文明页头，阶段 3 详情页模板，阶段 4 暗色                                                                                                                                   | `DESIGN-SYSTEM.md`、`mockups/issue6-stage2/`、`issue6-stage3/`（SPEC.md）、`issue6-stage4/`（SPEC.md） | 已签字；暗色（阶段 4）尚未上线，暗色对比度待上线后复核        |
+| M3        | 发布封面（scouts-18 法兰克 house=0 step=13，线上构建截取）                                                                                                                                                  | `mockups/m3-cover/`（README.md，含复现步骤）                                                           | 定稿                                                          |
