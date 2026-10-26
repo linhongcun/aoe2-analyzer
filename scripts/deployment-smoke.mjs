@@ -59,6 +59,53 @@ export async function checkSite({ site, version, commit, features = [] }) {
         await summary.locator('summary').click();
         await check(summary.getByRole('link', { name: '萨拉森', exact: true })).toHaveAttribute('href', '#/tree/Saracens');
         await check(summary.locator('a[href="#/tech/54"]').first()).toBeVisible();
+        const sources = JSON.parse(readFileSync(new URL('./data_sources.json', import.meta.url), 'utf8'));
+        if (sources.patch.build === 185872) {
+          const presets = page.getByRole('region', { name: '骑马弩兵与骑射手预置', exact: true });
+          const configurations = [
+            ['castle-britons-byzantines', 'a=2700.Britons.3..&b=39.Byzantines.3..&m=1'],
+            ['castle-franks-byzantines', 'a=2700.Franks.3..&b=39.Byzantines.3..&m=1'],
+            ['imperial-britons-byzantines', 'a=2701.Britons.4..&b=474.Byzantines.4..&m=1'],
+          ];
+          await check(presets).toBeVisible();
+          await check(presets.locator('[data-preset]')).toHaveCount(3);
+          await check(presets.getByRole('link', { name: '打开对照', exact: true })).toHaveCount(3);
+          for (const [key, query] of configurations)
+            await check(presets.locator(`[data-preset="${key}"]`).getByRole('link', { name: '打开对照', exact: true })).toHaveAttribute(
+              'href',
+              `#/duel?${query}`,
+            );
+          await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: root.origin });
+          const franks = presets.locator('[data-preset="castle-franks-byzantines"]');
+          await franks.getByRole('button', { name: /复制对照链接/ }).click();
+          await check(franks.getByRole('status')).toHaveText('对照链接已复制。');
+          const copied = new URL(await page.evaluate(() => navigator.clipboard.readText()));
+          assert.equal(copied.origin, root.origin);
+          assert.equal(copied.pathname, new URL('duel/', root).pathname);
+          assert.equal(copied.hash, '');
+          assert.equal(copied.searchParams.toString(), configurations[1][1]);
+          const fresh = await page.context().newPage();
+          try {
+            await fresh.goto(copied.href);
+            for (const reload of [false, true]) {
+              if (reload) await fresh.reload();
+              await check(fresh.locator('#duel-res')).toBeVisible();
+              assert.equal(new URL(fresh.url()).hash, `#/duel?${configurations[1][1]}`);
+              await check(fresh.locator('#duel-a .duel-head')).toContainText('骑马弩兵');
+              await check(fresh.locator('#duel-a .duel-head')).toContainText('法兰克');
+              await check(fresh.locator('#duel-b .duel-head')).toContainText('骑射手');
+              await check(fresh.locator('#duel-b .duel-head')).toContainText('拜占庭');
+              for (const side of ['a', 'b']) {
+                await check(fresh.locator(`#duel-${side} .duel-age`)).toHaveText('城堡时代');
+                await check(fresh.locator(`#duel-${side}`).getByRole('radio', { name: '无科技', exact: true })).toHaveAttribute('aria-checked', 'true');
+              }
+              await check(fresh.getByRole('radio', { name: '1v1', exact: true })).toHaveAttribute('aria-checked', 'true');
+            }
+          } finally {
+            await fresh.close();
+          }
+          console.log('Verified DE185872 presets: three exact links, real clipboard, stable Duel entry and refresh');
+        }
       } else if (feature === 'matchup') {
         await goto('/matchup');
         await check(page.locator('#mres')).toBeVisible();

@@ -94,3 +94,11 @@ worktree `/workspace/aoe2-issue441`、分支`feature/issue-441`，从main `6e71f
 - 同固定依赖、包含#285的基线提交38a35d5与本次生产构建分别冷加载，均禁缓存/Service Worker，按同源JS解压正文计量。补丁详情565154→570332 bytes（+5178）；新增仅useShareLink1397与duelState1007 bytes，Patches展示增加2762 bytes、入口包增加12 bytes。未加载Duel/simulator/realCost/buildSim/datEffects/units/techs/trees等PK或经济依赖。独立PK与经济工具各仅入口包增加12 bytes，其他所加载JS尺寸与基线一致。
 
 以上为本地实现者验证，最终独立代码/界面复核、CI与上线由交付记录另行给出，不将本地检查写成已经发布。
+
+## 交付短烟测补充
+
+`scripts/deployment-smoke.mjs` 的既有patches分支在固定数据build为185872时，还必须检查本批主题region、三项配置及三条精确href。该版本缺卡或错误参数会失败，不能回退为只核对旧科技树汇总。未来数据build改变、产品隐藏旧预置后，才跳过这一批特定配置。
+
+烟测沿用compare分支的同源clipboard权限，实际复制法兰克组并核对成功状态、完整URL的origin、稳定`/duel/`路径、a/b/m与空hash；新开复制地址并刷新，核对结果区、双方单位/文明/城堡时代/无科技/1v1及canonical hash。只打开这一组，不扩大整站检查；主线与Release复用同一短烟测。
+
+补充验证：既有releaseSmoke单测2项通过；本地生产dist的`checkSite(features:['patches'])`实际浏览器执行上述新分支，真实clipboard、稳定入口和刷新均通过。沿用已测v0.40.0产物（编译页脚仍为c10ca51），因此本地checkSite明确采用该已知构建SHA；CI将按实际部署提交重建并核对新页脚，不把本地验证当作线上成功。lint、tsc、格式与差异检查通过，104个生产JS资产名称及SHA256保持不变，沿用既有27项页面用例和截图；不改CI策略、计算、数据或受保护期望。
