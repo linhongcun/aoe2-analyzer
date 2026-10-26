@@ -17,6 +17,7 @@ import { session } from '../../../shared/utils/sticky';
 import CivList from './CivList';
 import { BonusRows } from './BonusRows';
 import { CivOpening } from './CivOpening';
+import { CivRegionalUnits } from './CivRegionalUnits';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
 
 function UTech({ s, civ }: { s: string; civ: string }) {
@@ -130,6 +131,7 @@ export default function CivDetail() {
                 <b>特色兵种：</b>
                 <Linked text={c.uu} />
               </p>
+              <CivRegionalUnits civ={c.en} units={core?.units ?? null} />
               <p>
                 <b>文明加成：</b>
                 <Link className="ulink" to="/bonuses">
