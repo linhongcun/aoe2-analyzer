@@ -114,6 +114,14 @@ jobs:
         env:
           SOURCE_CI_RUN_ID: ${{ steps.verify.outputs.ci_run_id }}
         run: node scripts/site-artifact.mjs --verify
+      - name: Use Ubuntu public package mirror
+        if: steps.verify.outputs.should_release == 'true'
+        run: |
+          for source_file in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources; do
+            if [ -f "$source_file" ]; then
+              sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|g' "$source_file"
+            fi
+          done
       - name: Install Playwright chromium
         if: steps.verify.outputs.should_release == 'true'
         run: npx playwright install --with-deps chromium

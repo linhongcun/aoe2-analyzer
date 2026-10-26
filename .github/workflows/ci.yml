@@ -59,6 +59,13 @@ jobs:
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.full == 'true'
         run: npm run introductions:check
       # Chromium is also needed to build static OG images and for short build checks.
+      - name: Use Ubuntu public package mirror
+        run: |
+          for source_file in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources; do
+            if [ -f "$source_file" ]; then
+              sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|g' "$source_file"
+            fi
+          done
       - name: Install Playwright chromium
         run: npx playwright install --with-deps chromium
       - name: Affected unit checks
