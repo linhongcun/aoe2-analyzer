@@ -1,0 +1,128 @@
+{
+  "baseline": "768cd7146184d1d85b4cc08429c50378fafe46eb",
+  "candidateVersion": "0.43.0",
+  "stage": "necessary local checks, before final commit; remote full and final independent review still required",
+  "preflight": {
+    "reviewer": "/root/bug_scope_audit",
+    "passed": true,
+    "record": "/tmp/shu197-review/preflight.json"
+  },
+  "firstRed": {
+    "files": 2,
+    "tests": 35,
+    "passed": 22,
+    "failed": 13,
+    "skipped": 0,
+    "report": "/tmp/shu197-first-red-final.json",
+    "earlyDraftHarnessMistakesExcluded": true
+  },
+  "newShuTests": 36,
+  "localCommands": [
+    {
+      "command": "npx vitest run tests/unit/shu197.test.ts tests/unit/shu197Share.test.ts tests/unit/portuguese197.test.ts tests/unit/buildSim.test.ts tests/unit/civ42v060.test.ts tests/unit/civ42v070.test.ts tests/unit/v0300-289.test.ts tests/unit/shareCard.test.ts",
+      "files": 8,
+      "passed": 192,
+      "skipped": 1,
+      "todo": 1,
+      "report": "/tmp/shu197-direct-unit.json",
+      "note": "Before the one later added strict317 observation-boundary control; that control passed in final related run."
+    },
+    {
+      "command": "npx vitest run tests/unit/releaseSmoke.test.ts tests/unit/releaseEvidence.test.ts tests/unit/realCost88.test.ts tests/unit/v090-acceptance.test.ts tests/unit/v0110-acceptance.test.ts",
+      "files": 5,
+      "passed": 169,
+      "report": "/tmp/shu197-boundary-unit.json"
+    },
+    {
+      "command": "npx vitest run tests/unit/shu197.test.ts tests/unit/shu197Share.test.ts tests/unit/bonusUsage317.test.ts",
+      "files": 3,
+      "passed": 48,
+      "skipped": 1,
+      "report": "/tmp/shu197-final-related-unit.json"
+    },
+    {
+      "command": "UPDATE_BONUS317=1 npx vitest run tests/unit/bonusUsage317.test.ts",
+      "generated": true,
+      "initialResult": "12 passed/1 failed: newly supported Shu-1 paid research has no later stock checkpoint in existing BO outputs; fixed by a narrow documented observation-boundary entry and independent strict checks, not by changing snapshot data or old assertions",
+      "report": "/tmp/shu197-317-generation.log"
+    },
+    {
+      "command": "Shu+Portuguese related Playwright, then focused test-selector/print and fallback checks",
+      "uniqueCases": 23,
+      "initialResult": "18 passed/1 new-test strict locator failure: exact knight sentence appeared twice",
+      "correction": "Scope context and source-region assertions separately; use real print media",
+      "finalFocusedPassed": 5,
+      "reports": ["/tmp/shu197-ui.log", "/tmp/shu197-ui-focused.log", "/tmp/shu197-ui-fallback.log"]
+    },
+    {
+      "command": "tsc --noEmit, lint, strict layers, build, bo:check",
+      "passed": true,
+      "lintErrors": 0,
+      "lintExistingWarnings": 8,
+      "buildOrdersChecked": 8
+    }
+  ],
+  "numericAndCompleteRegression": {
+    "baseline": "768cd7146184d1d85b4cc08429c50378fafe46eb",
+    "compared": 304,
+    "numericChanged": [],
+    "fullChanged": [],
+    "notesChanged": [],
+    "addedSupport": ["Shu"],
+    "removedSupport": [],
+    "unchangedUnsupported": true,
+    "supportedCount": 39,
+    "unsupportedCount": 17
+  },
+  "fixture317": {
+    "oldKeys": 59,
+    "oldValuesChanged": 0,
+    "added": {
+      "Shu-0": "feudal-drush-18",
+      "Shu-1": null
+    },
+    "inputs": "db344f448941eacaa170bf6fb66ef0b75136a8836702eb242bda38c7da2ed4cf",
+    "generatedWithOriginalCommand": true
+  },
+  "visual": {
+    "widths": [360, 375, 390, 1280],
+    "themes": ["light", "dark"],
+    "shuPageScreenshots": 8,
+    "shuKnightShareScreenshots": 8,
+    "actualPNGDownloads": 1,
+    "location": "/tmp/shu197-ui",
+    "productionMarker": "v0.43.0 / 768cd71, uncommitted stage build; final-head smoke required"
+  },
+  "smoke": {
+    "fullAllPassed": true,
+    "buildsPassed": true,
+    "reports": ["/tmp/shu197-smoke-stage.log", "/tmp/shu197-smoke-builds-stage.log"],
+    "inventoryCheckpoint": {
+      "bo": "scouts-18",
+      "step": 4,
+      "clock": 150.1,
+      "generic": {
+        "food": 48,
+        "wood": 64
+      },
+      "Shu": {
+        "food": 49,
+        "wood": 64
+      }
+    },
+    "researchFeeEvidence": "strict same-clock no-income and real-BO added checkpoint unit budgets, not a nonexistent UI research.cost row"
+  },
+  "riskPlan": "core calculation requires one real remote full; no data/generator change; actual CI plan decides data; no CI exception",
+  "boundaries": [
+    "continuous model, no client per-drop timing claim",
+    "Shu cannot train Knight38; template not replaced by HeiKuang1944",
+    "realCost res502 remains independently uncounted",
+    "parent197 remains open after Shu-only delivery"
+  ],
+  "localFullRegressionRun": false,
+  "finalInputConsistencyCheck": {
+    "passed": 1,
+    "filteredOut": 12,
+    "report": "/tmp/shu197-final-input-check.json"
+  }
+}

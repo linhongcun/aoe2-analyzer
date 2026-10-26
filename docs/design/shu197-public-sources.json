@@ -1,0 +1,42 @@
+{
+  "retrieved": "2026-10-26",
+  "sources": [
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L3758-L3771",
+      "lineStart": 3758,
+      "lineEnd": 3771,
+      "excerpt": "## 502. Athenian Chopping Food Productivity\n\n- ID: 502\n\n- Purpose: Chopping food gathering percent of main work rate\n\n- Default Values:\n\n    - 0:  Default\n    - 4:  Athenians\n    - 7:  Shu\n\n- Note: `EffectFunction16` must be called for this resource to work. While the name only contains Athenians, this resource is also used for Shu.\n"
+    },
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L251-L256",
+      "lineStart": 251,
+      "lineEnd": 256,
+      "excerpt": "## 33. Effect Function Number\n\n- ID: 33\n\n- Purpose: Used to invoke functions in XS from data. When set to a non zero value `N`, it will automatically call a function named `EffectFunctionN` from the `Effects.xs` file.\n"
+    },
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L3891-L3901",
+      "lineStart": 3891,
+      "lineEnd": 3901,
+      "excerpt": "## 515. Scythian Horse Archer Productivity\n\n- ID: 515\n\n- Purpose: Modifies how much gold `Scythian Horse Archer` and `Elite Scythian Horse Archer` gain when killing units\n\n- Default Values:\n\n    - 1: Default\n    - 0: Shu, Wu, Wei, Jurchens, Khitans\n"
+    },
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L4229-L4239",
+      "lineStart": 4229,
+      "lineEnd": 4239,
+      "excerpt": "## 561. Pattiyodha Longbowman Default\n\n- ID: 561\n\n- Purpose: Turns on base `Pattiyodha Longbowman` aura\n\n- Default Values:\n\n    - 1: Default\n    - 0: Macedonians, Thracians, Puru or after Leaf-Headed Shafts is researched\n"
+    }
+  ],
+  "boundary": "UGC community reference explains percentage and required marker; no claim of pinned185872 Effects.xs or actual client timing."
+}

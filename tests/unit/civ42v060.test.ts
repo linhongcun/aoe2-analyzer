@@ -72,7 +72,7 @@ describe('#42 放开：其他', () => {
 // 白名单：留 v0.7.0，必须仍被 unhandledEffects 报出且带原因（不能被悄悄标成 handled/irrelevant）
 const DEFERRED: Record<string, string[]> = {
   送村民: ['Bengalis', 'Wei'],
-  边采集边产: ['Shu', 'Varangians'],
+  边采集边产: ['Varangians'],
   资源总量与狩猎: ['Tatars', 'Mayans', 'Jurchens', 'Malians', 'Sicilians'],
   其他: ['Khmer', 'Chinese', 'Slavs', 'Romans'],
 };
