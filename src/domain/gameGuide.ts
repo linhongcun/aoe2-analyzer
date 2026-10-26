@@ -1,5 +1,6 @@
 import raw from '../content/game-guide.json';
 import { DATA_PATCH_BUILD } from '../data/meta';
+import { publicGameGuideSources } from './sourcePresentation.mjs';
 
 export const GAME_GUIDE_CARD_IDS = ['goal', 'roles', 'resources', 'ages', 'counters', 'watching'] as const;
 export type GameGuideCardId = (typeof GAME_GUIDE_CARD_IDS)[number];
@@ -50,6 +51,7 @@ interface GameGuideCatalog {
   cards: GameGuideCard[];
 }
 export const GAME_GUIDE_CATALOG = raw as GameGuideCatalog;
+export const GAME_GUIDE_PUBLIC_SOURCES = publicGameGuideSources(GAME_GUIDE_CATALOG.sources);
 export const GAME_GUIDE_CARDS: readonly GameGuideCard[] = GAME_GUIDE_CATALOG.cards;
 export const GAME_GUIDE_URL_LIMIT = 1024;
 const KEYS = ['v', 'card', 'context', 'victory'] as const;

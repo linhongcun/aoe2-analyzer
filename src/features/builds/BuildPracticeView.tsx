@@ -6,6 +6,7 @@ import { useCore } from '../../data/hooks';
 import { HOUSE, type BuildOrder } from '../../domain/buildOrder';
 import type { BuildTimeline } from '../../domain/buildSim';
 import { practiceAction, practiceProgress, practiceSteps, type PracticeNames, type PracticeStep } from '../../domain/buildPractice';
+import { publicBuildLicense } from '../../domain/sourcePresentation.mjs';
 import { simSupport } from '../../domain/simSupport';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
@@ -321,14 +322,14 @@ export default function BuildPracticeView({
                 <a href={source.url} target="_blank" rel="noopener noreferrer">
                   {source.title}
                 </a>
-                {source.section && `（${source.section}）`} · {source.author} · 核对 {source.accessed}
+                {source.section && `（${source.section}）`} · {source.author} · 核对 <span className="num nw">{source.accessed}</span>
                 {source.ref && <span className="bp-source-url">固定版本：{source.ref}</span>}
                 <span className="bp-source-url">{source.url}</span>
               </li>
             ))}
           </ul>
         )}
-        <p className="note">{order.license}</p>
+        <p className="note">{publicBuildLicense(order.license, order.sources)}</p>
         <h3>完整估算假设</h3>
         <ul className="note">
           {timeline.model.assumptions.map((assumption, i) => (

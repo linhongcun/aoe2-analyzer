@@ -79,7 +79,8 @@ npm run build              # tsc + vite build → dist/
 npm run pinyin:check       # 拼音索引 search-py.json 是否最新（改了名称/别名/加成文本后跑）
 npm run test:py            # Python 测试
 npm run content:check      # 全部内容/数据 JSON 的结构与公开来源检查；默认告警
-npm run content:check -- --ratchet # CI：仅冻结的旧来源文案告警，其余问题阻断
+npm run content:check -- --strict # CI：全部原始内容与数据结构严格检查
+node scripts/check-source-presentation.mjs # 开局与一局入门实际公开来源的严格检查
 npm run content:validators -- --check # 五处读取边界的预编译校验器与 schema 一致
 python3 docs/design/contrast.py   # 设计令牌对比度（WCAG AA，CI 会跑）
 ```

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   GAME_GUIDE_CARDS,
   GAME_GUIDE_CATALOG,
+  GAME_GUIDE_PUBLIC_SOURCES,
   GAME_GUIDE_CONTEXTS,
   GAME_GUIDE_VICTORIES,
   decodeGameGuideState,
@@ -193,7 +194,7 @@ export default function GameGuide() {
                     <span className="gg-number">{GAME_GUIDE_CATALOG.dataVersion}</span>。
                   </p>
                   {card.sourceIds.map((id) => {
-                    const source = GAME_GUIDE_CATALOG.sources[id]!;
+                    const source = GAME_GUIDE_PUBLIC_SOURCES[id]!;
                     return (
                       <section key={id} className="gg-source">
                         <a href={source.url} target="_blank" rel="noopener noreferrer">
@@ -211,7 +212,7 @@ export default function GameGuide() {
                         </p>
                         <p>{source.locator}</p>
                         <p className="note">
-                          {source.version}。{source.note}
+                          {/^DE[0-9]+$/.test(source.version) ? <span className="gg-number">{source.version}</span> : source.version}。{source.note}
                         </p>
                       </section>
                     );

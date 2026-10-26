@@ -6,6 +6,7 @@ import { visibleSources } from './sources';
 import { Ban, ChartGantt } from 'lucide-react';
 import { buildOrders } from '../../data/buildOrders';
 import type { Phase } from '../../domain/buildOrder';
+import { publicBuildLicense } from '../../domain/sourcePresentation.mjs';
 import { ListHead } from '../../shared/ui/layout';
 import FeedbackLink from '../../shared/ui/FeedbackLink';
 import TimelineLoader from './TimelineLoader';
@@ -155,10 +156,10 @@ export default function BuildOrderList() {
                   {s.section ? `（${s.section}）` : ''}
                 </span>
               ))}
-              。{b.license}
+              。{publicBuildLicense(b.license, b.sources)}
             </p>
           ) : (
-            b.license && <p className="note">{b.license}</p>
+            b.license && <p className="note">{publicBuildLicense(b.license, b.sources)}</p>
           )}
         </details>
       ))}

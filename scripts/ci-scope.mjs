@@ -22,9 +22,23 @@ const maintenanceFiles = new Set([
 const unit = (...names) => names.map((name) => `tests/unit/${name}.test.ts`);
 const e2e = (...names) => names.map((name) => `tests/e2e/${name}.spec.ts`);
 const profile = (unitNames, e2eNames) => ({ unit: unit(...unitNames), e2e: e2e(...e2eNames) });
+const sourceChecks = [
+  'contentSchema285',
+  'contentSources285',
+  'generatedSchemas285',
+  'jsonBoundary285',
+  'sourcePolicy285',
+  'sourcePresentation442',
+  'sourcePresentationScope442',
+];
 
 /** Page-local changes use the page's real existing regression coverage, including its helpers. */
 export const PROFILES = {
+  builds: profile(
+    [...sourceChecks, 'sources', 'boSources', 'buildOrders', 'buildOrders.content', 'buildPractice216', 'buildSim', 'build41', 'v0300-335'],
+    ['sourcePresentation442', 'practice216', 'build41', 'v0290-322-golden'],
+  ),
+  gameGuide: profile([...sourceChecks, 'gameGuide256', 'v0300-335'], ['sourcePresentation442', 'gameGuide256']),
   patches: profile(['patches16', 'patchTree417', 'patchSearch16'], ['patches16', 'patchTree417']),
   matchup: profile(['matchup194', 'p0Batch', 'simRoute424', 'simulator'], ['matchup194', 'matchupSim424', 'rush35']),
   civs: profile(
@@ -47,6 +61,58 @@ export const PROFILES = {
   maps: profile([], ['maps34', 'mapPreviews', 'mapCatalog422']),
   compare: profile(['compare403', 'teamBonuses228'], ['compare403', 'civText402', 'teamBonuses228']),
 };
+const sourcePresentationFiles = new Map([
+  ['src/domain/sourcePresentation.mjs', ['builds', 'gameGuide']],
+  ['src/domain/sourcePresentation.d.mts', ['builds', 'gameGuide']],
+  ['src/domain/gameGuide.ts', ['gameGuide']],
+  ['scripts/check-source-presentation.mjs', ['builds', 'gameGuide']],
+  ['scripts/check-source-presentation.d.mts', ['builds', 'gameGuide']],
+  ['src/content/schema/public-build-sources.json', ['builds']],
+  ['src/content/schema/public-game-guide-sources.json', ['gameGuide']],
+]);
+const rawSourceSchemas = new Map([
+  ['src/content/schema/data-build-order.json', 'builds'],
+  ['src/content/schema/content-game-guide.json', 'gameGuide'],
+]);
+const emptySourceBaseline = 'export const LEGACY_SOURCE_BASELINE = Object.freeze([]);';
+
+/** Only the complete, canonical empty module can remove the frozen migration debt. */
+export function removesSourceBaseline(before, after) {
+  return typeof before === 'string' && before.trim() !== emptySourceBaseline && typeof after === 'string' && after.trim() === emptySourceBaseline;
+}
+
+/** Only citation subtrees may use the source UI plan; step/card structures stay conservative. */
+export function sourceSchemaOnly(path, before, after) {
+  if (!rawSourceSchemas.has(path) || typeof before !== 'string' || typeof after !== 'string') return false;
+  const normalize = (text) => {
+    const schema = JSON.parse(text);
+    if (!schema || typeof schema !== 'object' || !schema.properties || !schema.$defs) throw new Error('Missing raw schema shape');
+    if (path === 'src/content/schema/data-build-order.json') {
+      if (schema.allOf !== undefined) {
+        const pattern = schema.properties.license?.anyOf?.[1]?.pattern;
+        if (typeof pattern !== 'string') throw new Error('Unknown source condition');
+        const condition = [
+          {
+            if: { properties: { license: { type: 'string', pattern } }, required: ['license'] },
+            then: { properties: { sources: { type: 'array', contains: { $ref: '#/$defs/aoe2GuideProvenance' } } } },
+          },
+        ];
+        if (!isDeepStrictEqual(schema.allOf, condition)) throw new Error('Non-source condition');
+        delete schema.allOf;
+      }
+      delete schema.properties.license;
+      delete schema.$defs.publicSource;
+      delete schema.$defs.aoe2GuideProvenance;
+    } else delete schema.$defs.pinnedTechProvenance;
+    delete schema.properties.sources;
+    return schema;
+  };
+  try {
+    return isDeepStrictEqual(normalize(before), normalize(after));
+  } catch {
+    return false;
+  }
+}
 const sorted = (values) => [...new Set(values)].sort();
 const validPath = (path) =>
   typeof path === 'string' && !!path && !/[\\\0]/.test(path) && path.split('/').every((part) => part && part !== '.' && part !== '..');
@@ -147,6 +213,16 @@ export function planChanges(changes) {
       policy = true;
     } else if ((path.startsWith('docs/') && !path.startsWith('docs/PATCH-NOTES/')) || /^[^/]+\.md$/.test(path) || path === 'LICENSE') {
       // Ordinary documentation does not change product logic or generated data.
+    } else if (sourcePresentationFiles.has(path)) {
+      for (const feature of sourcePresentationFiles.get(path)) features.add(feature);
+    } else if (rawSourceSchemas.has(path)) {
+      if (sourceSchemaOnly(path, before, after)) features.add(rawSourceSchemas.get(path));
+      else full = true;
+    } else if (path === 'scripts/content-baseline.mjs') {
+      if (removesSourceBaseline(before, after)) {
+        features.add('builds');
+        features.add('gameGuide');
+      } else full = true;
     } else if (cssFiles.has(path)) {
       if (civCssOnly(before, after)) features.add('civs');
       else full = true;

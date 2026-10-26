@@ -132,33 +132,42 @@ describe('#285 每份内容和生成 JSON 都有可诊断的 schema', () => {
     }
   });
 
-  it('新问题不能通过新增或修改候选 baseline 放行', () => {
-    const problems = checkDirectory(process.cwd()).problems;
+  it('迁移清单清零后，新问题不能通过任意候选 baseline 放行', () => {
+    expect(LEGACY_SOURCE_BASELINE).toEqual([]);
     const bad = structuredClone(scouting);
     bad.sources[0]!.title = 'commit abcdef12';
     const fresh = validateDocument('src/content/scouting.json', bad).problems;
     const issue = fresh.find((entry) => entry.keyword === 'format')!;
     const extra = { file: issue.file, path: issue.path, format: 'source-text', valueSha256: issue.valueSha256! };
-    expect(ratchetProblems([...problems, ...fresh], [...LEGACY_SOURCE_BASELINE, extra]).errors.some((entry) => entry.code === 'baseline')).toBe(true);
-    const modified = LEGACY_SOURCE_BASELINE.map((entry, index) => (index === 0 ? { ...entry, valueSha256: '0'.repeat(64) } : entry));
-    expect(ratchetProblems(problems, modified).errors.some((entry) => entry.code === 'baseline')).toBe(true);
+    for (const candidate of [extra, { ...extra, valueSha256: '0'.repeat(64) }]) {
+      const result = ratchetProblems(fresh, [candidate]);
+      expect(result.warnings).toEqual([]);
+      expect(result.errors.some((entry) => entry.code === 'baseline')).toBe(true);
+      expect(result.errors).toEqual(expect.arrayContaining(fresh));
+    }
   });
 
-  it('同一路径和旧指纹也不能豁免结构或 URL 错误', () => {
-    const problems = checkDirectory(process.cwd()).problems;
-    const legacy = problems[0]!;
-    for (const forged of [
-      { ...legacy, keyword: 'additionalProperties', params: { additionalProperty: 'privateCsv' } },
-      { ...legacy, keyword: 'format', params: { format: 'public-url' } },
-    ])
-      expect(ratchetProblems([...problems, forged]).errors).toContainEqual(forged);
+  it('任何新的结构或 URL 错误都必须是错误而非迁移告警', () => {
+    const badUrl = structuredClone(scouting);
+    badUrl.sources[0]!.url = 'file:///internal/source.json';
+    const problems = [
+      ...validateDocument('src/content/scouting.json', { ...scouting, privateCsv: 'internal.csv' }).problems,
+      ...validateDocument('src/content/scouting.json', badUrl).problems,
+    ];
+    expect(problems.length).toBeGreaterThan(0);
+    expect(ratchetProblems(problems)).toEqual({ warnings: [], errors: problems });
   });
 
-  it('陈旧 baseline 必须删掉，清理后不能留下未来回归豁免', () => {
-    const first = LEGACY_SOURCE_BASELINE[0]!;
-    const remaining = checkDirectory(process.cwd()).problems.filter((entry) => entry.file !== first.file || entry.path !== first.path);
-    expect(ratchetProblems(remaining).errors.some((entry) => entry.code === 'baseline-stale')).toBe(true);
-    const reduced = LEGACY_SOURCE_BASELINE.filter((entry) => entry !== first);
-    expect(ratchetProblems(remaining, reduced).errors).toEqual([]);
+  it('历史来源迁移条目也不能重新成为未来回归豁免', () => {
+    const historic = {
+      file: 'src/data/build-orders/archers-19.json',
+      path: '/license',
+      format: 'source-text',
+      valueSha256: '624f4dae4528cf46c931b8f79bdbfa33fc41f278217a2044b640ef1600d845f5',
+    };
+    const result = ratchetProblems([], [historic]);
+    expect(result.warnings).toEqual([]);
+    expect(result.errors.some((entry) => entry.code === 'baseline')).toBe(true);
+    expect(checkDirectory(process.cwd()).problems).toEqual([]);
   });
 });

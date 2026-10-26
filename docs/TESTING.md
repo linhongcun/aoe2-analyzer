@@ -165,8 +165,10 @@ npx playwright test tests/e2e/searchLoading371.spec.ts tests/e2e/aliases.spec.ts
 
 ### JSON 结构与公开来源（#285）
 
-`npm run content:check` 从文件系统发现 `src/content`、`src/data` 中的全部 JSON（排除 schema 目录），按登记的明确结构检查，默认列出告警。`--strict` 对所有问题返回非零；CI 迁移期使用 `--ratchet`，只有冻结清单中的 22 处既有来源文案可以告警，任何新的文案、URL、结构、施工字典索引或未登记文件问题都会失败。
+`npm run content:check` 从文件系统发现 `src/content`、`src/data` 中的全部 JSON（排除 schema 目录），按登记的明确结构检查，默认列出告警。`--strict` 对所有问题返回非零；#442 清理完全部 22 处旧来源展示后，CI 使用 `--strict`，当前 46 份原始输入必须零告警、零错误。
 
-旧问题按文件、JSON Pointer 和原值指纹固定在 `scripts/content-baseline.mjs`，不得自动扩展；清理某条时同步删除条目，陈旧条目也会失败。旧来源展示由 #442 跟进，归属和许可需保留。清单清零后改用 `--strict`。策略及来源/内部证据的边界见 [规格](design/issue285-json-validation.md)。
+`scripts/content-baseline.mjs` 现在仅导出空冻结清单，不能再新增迁移豁免；兼容的 `--ratchet` 与严格模式具有相同阻断效果。开局与入门的原始来源证据保留，页面读取共享公开投影；独立 `node scripts/check-source-presentation.mjs` 再验证这 9 份输入对应的公开 DTO，拒绝内部定位、伪造或不一致的 pin、未知字段和坏链接。原编译器、登记表、公开格式 policy 与五个运行时边界保持不变。边界与归属规则见 [公开来源规格](design/source-presentation-442.md)，初始迁移过程见 [#285 规格](design/issue285-json-validation.md)。
+
+来源 UI 的 CI 范围明确限定在两类页面、纯公开投影、独立 checker 和四份来源 schema。两份 raw schema 仅来源子树变化可走相关检查；步骤、卡片、其它结构、通用引擎、共享 policy、预编译校验器或未知文件变化仍走 full，原始数据或依赖变化仍 full/data。清空基线的例外要求整个文件精确等于空冻结导出；任何新增条目或其它代码仍 full。规则及反例由 `sourcePresentationScope442` 验证。
 
 五处前端读取边界使用独立的预编译校验器。修改对应 schema 或共享格式后运行 `npm run content:validators`；`npm run content:validators -- --check` 验证生成结果可复现。不要手改 `src/content/schema/compiled`。相关单测为 `contentSchema285`、`contentSources285`、`generatedSchemas285`、`jsonBoundary285`、`sourcePolicy285`；体积继续由 `v080-123` 入口 gzip 和 `pageBudget282` 的施工冷加载预算保护。

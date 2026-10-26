@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/public-build-sources.json",
+  "title": "Player-visible build sources",
+  "type": "object",
+  "properties": {
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "data-build-order.json#/$defs/publicSource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "$ref": "#/$defs/publicText"
+              },
+              "author": {
+                "$ref": "#/$defs/publicText"
+              },
+              "section": {
+                "$ref": "#/$defs/publicText"
+              },
+              "ref": {
+                "$ref": "#/$defs/publicText"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "license": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/publicText"
+        },
+        {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        }
+      ]
+    }
+  },
+  "required": ["sources", "license"],
+  "additionalProperties": false,
+  "$defs": {
+    "publicText": {
+      "allOf": [
+        {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        {
+          "not": {
+            "type": "string",
+            "pattern": "\\b(?:[mM][aA][iI][nN]|[mM][aA][sS][tT][eE][rR])\\s+[0-9a-fA-F]{7,40}\\b"
+          }
+        }
+      ]
+    }
+  }
+}
