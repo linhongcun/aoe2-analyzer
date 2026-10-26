@@ -1,4 +1,6 @@
 import rawContent from '../content/scouting.json';
+import validateScouting from '../content/schema/compiled/scouting.mjs';
+import { readValidatedJson } from '../data/validatedJson';
 import { hasExactKeys as exactKeys, isClockText, isRecord as record, textCharacterProblem, textLength } from './validate';
 
 export const SCOUTING_SCENARIOS = ['early', 'walled'] as const;
@@ -67,14 +69,15 @@ export interface ScoutingScenario {
   signals: ScoutingSignal[];
   hypotheses: ScoutingHypothesis[];
 }
-export const SCOUTING_CONTENT = rawContent as unknown as {
+export interface ScoutingContent {
   checkedAt: string;
   dataVersion: string;
   editorialNotice: string;
   sources: ScoutingSource[];
   observations: { id: ScoutingObservationId; title: string; meaning: string }[];
   scenarios: ScoutingScenario[];
-};
+}
+export const SCOUTING_CONTENT = readValidatedJson(rawContent, validateScouting, '侦察内容');
 export const SCOUTING_STATE_ZH: Record<ScoutingObservationState, string> = {
   unknown: '未知',
   unseen: '没看到',

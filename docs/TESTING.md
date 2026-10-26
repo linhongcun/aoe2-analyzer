@@ -162,3 +162,11 @@ npx playwright test tests/e2e/searchLoading371.spec.ts tests/e2e/aliases.spec.ts
 `npm run lint` 对全部 TS/TSX 的 500 行以上文件报警，对未列入固定存量基线的 600 行以上文件报错；计数包含空行与注释。`eslint.config.js` 的基线固定于本次改造前的提交，不会自动加入新文件。CSS 超过 800 行只报警，语法错误仍阻断。
 
 `npm run unused:check` 使用固定版本 ts-prune 输出未使用导出；发现本身不阻断 CI，工具安装或执行故障仍失败。报告用于后续逐项核实，不应据此直接删除动态入口或测试导出。阈值与报告退出行为由 `tests/unit/fileSize288.test.ts` 保护。
+
+### JSON 结构与公开来源（#285）
+
+`npm run content:check` 从文件系统发现 `src/content`、`src/data` 中的全部 JSON（排除 schema 目录），按登记的明确结构检查，默认列出告警。`--strict` 对所有问题返回非零；CI 迁移期使用 `--ratchet`，只有冻结清单中的 22 处既有来源文案可以告警，任何新的文案、URL、结构、施工字典索引或未登记文件问题都会失败。
+
+旧问题按文件、JSON Pointer 和原值指纹固定在 `scripts/content-baseline.mjs`，不得自动扩展；清理某条时同步删除条目，陈旧条目也会失败。旧来源展示由 #442 跟进，归属和许可需保留。清单清零后改用 `--strict`。策略及来源/内部证据的边界见 [规格](design/issue285-json-validation.md)。
+
+五处前端读取边界使用独立的预编译校验器。修改对应 schema 或共享格式后运行 `npm run content:validators`；`npm run content:validators -- --check` 验证生成结果可复现。不要手改 `src/content/schema/compiled`。相关单测为 `contentSchema285`、`contentSources285`、`generatedSchemas285`、`jsonBoundary285`、`sourcePolicy285`；体积继续由 `v080-123` 入口 gzip 和 `pageBudget282` 的施工冷加载预算保护。

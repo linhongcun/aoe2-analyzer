@@ -1,0 +1,595 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-garrison-general.json",
+  "title": "AoE2 garrison-general data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generatedBy": {
+          "type": "string"
+        },
+        "patch": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{7,40}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "labelsCommit": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{7,40}$"
+        },
+        "engineVerifiedInPinnedBuild": {
+          "const": false
+        }
+      },
+      "required": ["generatedBy", "patch", "repo", "commit", "sha256", "labelsCommit", "engineVerifiedInPinnedBuild"],
+      "additionalProperties": false
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/unit"
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "rosterIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "herdableIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "specialOccupantIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "relicIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "unitUpgradeTechs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "buildings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "eraForms": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "predecessors": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "produces": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": ["eraForms", "aliases", "predecessors", "produces"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "techs": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/rule"
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "ageRules": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/rule"
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "conditional": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "civs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "automatic": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/rule"
+            }
+          },
+          "free": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "disabled": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "baseOverrides": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/$defs/override"
+            },
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          },
+          "startingScoutId": {
+            "type": "integer"
+          }
+        },
+        "required": ["automatic", "free", "disabled", "baseOverrides", "startingScoutId"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "units",
+    "rosterIds",
+    "herdableIds",
+    "specialOccupantIds",
+    "relicIds",
+    "unitUpgradeTechs",
+    "buildings",
+    "techs",
+    "ageRules",
+    "conditional",
+    "civs"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "unit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "class": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "en": {
+          "type": "string"
+        },
+        "zh": {
+          "type": "string"
+        },
+        "attack": {
+          "type": "number"
+        },
+        "meleeAttack": {
+          "type": "number"
+        },
+        "reload": {
+          "type": "number"
+        },
+        "firepower": {
+          "type": "number"
+        },
+        "total": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "secondaryAttack": {
+          "type": "number"
+        },
+        "maxCharge": {
+          "type": "number"
+        },
+        "rechargeRate": {
+          "type": "number"
+        },
+        "food": {
+          "type": "number"
+        },
+        "capacity": {
+          "type": "integer"
+        },
+        "projectile": {
+          "type": "integer"
+        },
+        "secondaryProjectile": {
+          "type": "integer"
+        },
+        "garrisonType": {
+          "type": "integer"
+        },
+        "sizeClass": {
+          "type": "integer"
+        },
+        "trait": {
+          "type": "integer"
+        },
+        "combatAbility": {
+          "type": "integer"
+        },
+        "chargeType": {
+          "type": "integer"
+        },
+        "chargeEvent": {
+          "type": "integer"
+        },
+        "chargeProjectile": {
+          "type": "integer"
+        },
+        "specialAbility": {
+          "type": "integer"
+        },
+        "catalog": {
+          "type": "object",
+          "properties": {
+            "age": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "pic": {
+              "$ref": "common.defs.json#/$defs/picture"
+            },
+            "civs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["age", "pic", "civs"],
+          "additionalProperties": false
+        },
+        "garrisonTasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "classId": {
+                "type": "integer"
+              },
+              "unitId": {
+                "type": "integer"
+              }
+            },
+            "required": ["classId", "unitId"],
+            "additionalProperties": false
+          }
+        },
+        "specialTasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "integer"
+              },
+              "classId": {
+                "type": "integer"
+              },
+              "unitId": {
+                "type": "integer"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": ["action", "classId", "unitId", "value"],
+            "additionalProperties": false
+          }
+        },
+        "trainLocations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "unitId": {
+                "type": "integer"
+              },
+              "time": {
+                "type": "number"
+              }
+            },
+            "required": ["unitId", "time"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "id",
+        "class",
+        "type",
+        "en",
+        "zh",
+        "attack",
+        "meleeAttack",
+        "reload",
+        "firepower",
+        "total",
+        "max",
+        "secondaryAttack",
+        "maxCharge",
+        "rechargeRate",
+        "food",
+        "capacity",
+        "projectile",
+        "secondaryProjectile",
+        "garrisonType",
+        "sizeClass",
+        "trait",
+        "combatAbility",
+        "chargeType",
+        "chargeEvent",
+        "chargeProjectile",
+        "specialAbility",
+        "catalog",
+        "garrisonTasks",
+        "specialTasks",
+        "trainLocations"
+      ],
+      "additionalProperties": false
+    },
+    "effect": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "integer"
+        },
+        "stat": {
+          "type": "string",
+          "enum": [
+            "attack",
+            "reload",
+            "capacity",
+            "firepower",
+            "total",
+            "max",
+            "projectile",
+            "secondaryProjectile",
+            "garrisonType",
+            "sizeClass",
+            "trait",
+            "combatAbility"
+          ]
+        },
+        "op": {
+          "type": "string",
+          "enum": ["set", "add", "mul"]
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": ["unit", "stat", "op", "value"],
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "type": "integer"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effect"
+          }
+        },
+        "trainingLocations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "unit": {
+                "type": "integer"
+              },
+              "slot": {
+                "type": "integer"
+              },
+              "location": {
+                "type": "integer"
+              }
+            },
+            "required": ["unit", "slot", "location"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["id", "requires", "count", "effects"],
+      "additionalProperties": false
+    },
+    "override": {
+      "type": "object",
+      "properties": {
+        "attack": {
+          "type": "number"
+        },
+        "reload": {
+          "type": "number"
+        },
+        "capacity": {
+          "type": "integer"
+        },
+        "firepower": {
+          "type": "number"
+        },
+        "total": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "projectile": {
+          "type": "integer"
+        },
+        "secondaryProjectile": {
+          "type": "integer"
+        },
+        "garrisonType": {
+          "type": "integer"
+        },
+        "sizeClass": {
+          "type": "integer"
+        },
+        "trait": {
+          "type": "integer"
+        },
+        "combatAbility": {
+          "type": "integer"
+        },
+        "meleeAttack": {
+          "type": "number"
+        },
+        "secondaryAttack": {
+          "type": "number"
+        },
+        "chargeType": {
+          "type": "integer"
+        },
+        "chargeEvent": {
+          "type": "integer"
+        },
+        "chargeProjectile": {
+          "type": "integer"
+        },
+        "maxCharge": {
+          "type": "number"
+        },
+        "rechargeRate": {
+          "type": "number"
+        },
+        "specialAbility": {
+          "type": "integer"
+        },
+        "food": {
+          "type": "number"
+        },
+        "resourceCapacity": {
+          "type": "number"
+        },
+        "garrisonTasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "classId": {
+                "type": "integer"
+              },
+              "unitId": {
+                "type": "integer"
+              }
+            },
+            "required": ["classId", "unitId"],
+            "additionalProperties": false
+          }
+        },
+        "trainLocations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "unitId": {
+                "type": "integer"
+              },
+              "time": {
+                "type": "number"
+              }
+            },
+            "required": ["unitId", "time"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    }
+  }
+}

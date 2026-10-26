@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-glossary.json",
+  "title": "Curated glossary content",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/term"
+  },
+  "minItems": 1,
+  "$defs": {
+    "term": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "zh": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "en": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "category": {
+          "type": "string",
+          "enum": ["开局", "单位", "团战", "经济", "常见措辞"]
+        },
+        "checkedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        },
+        "meaning": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "example": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "note": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "allOf": [
+                  {
+                    "$ref": "common.defs.json#/$defs/sourceText"
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "href": {
+                "type": "string",
+                "pattern": "^/(?!/)[^\\s]*$"
+              }
+            },
+            "required": ["label", "href"],
+            "additionalProperties": false
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "allOf": [
+                  {
+                    "$ref": "common.defs.json#/$defs/sourceText"
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "url": {
+                "$ref": "common.defs.json#/$defs/publicUrl"
+              },
+              "date": {
+                "$ref": "common.defs.json#/$defs/sourceText"
+              }
+            },
+            "required": ["title", "url", "date"],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": ["id", "zh", "en", "category", "aliases", "meaning", "example", "note", "links", "sources"],
+      "additionalProperties": false
+    }
+  }
+}

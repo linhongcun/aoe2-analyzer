@@ -1,0 +1,829 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-relic-income.json",
+  "title": "AoE2 relic-income data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generatedBy": {
+          "type": "string"
+        },
+        "datSha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "patch": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "datSource": {
+          "type": "object",
+          "properties": {
+            "repo": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{7,40}$"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": ["repo", "commit", "path"],
+          "additionalProperties": false
+        },
+        "engineVerifiedInPinnedBuild": {
+          "const": false
+        },
+        "fieldSemantics": {
+          "type": "object",
+          "properties": {
+            "resources": {
+              "$ref": "common.defs.json#/$defs/publicUrl"
+            },
+            "effectTypes": {
+              "$ref": "common.defs.json#/$defs/publicUrl"
+            }
+          },
+          "required": ["resources", "effectTypes"],
+          "additionalProperties": false
+        },
+        "semanticsChecked": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "semanticsEvidence": {
+          "type": "string"
+        },
+        "numberEvidence": {
+          "type": "string"
+        },
+        "rateUnit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "generatedBy",
+        "datSha256",
+        "patch",
+        "datSource",
+        "engineVerifiedInPinnedBuild",
+        "fieldSemantics",
+        "semanticsChecked",
+        "semanticsEvidence",
+        "numberEvidence",
+        "rateUnit"
+      ],
+      "additionalProperties": false
+    },
+    "resourceIds": {
+      "type": "object",
+      "properties": {
+        "Food": {
+          "type": "integer"
+        },
+        "Wood": {
+          "type": "integer"
+        },
+        "Gold": {
+          "type": "integer"
+        },
+        "Stone": {
+          "type": "integer"
+        }
+      },
+      "required": ["Food", "Wood", "Gold", "Stone"],
+      "additionalProperties": false
+    },
+    "baseRates": {
+      "type": "object",
+      "properties": {
+        "Food": {
+          "type": "number"
+        },
+        "Wood": {
+          "type": "number"
+        },
+        "Gold": {
+          "type": "number"
+        },
+        "Stone": {
+          "type": "number"
+        }
+      },
+      "required": ["Food", "Wood", "Gold", "Stone"],
+      "additionalProperties": false
+    },
+    "civs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "datCiv": {
+            "type": "integer"
+          },
+          "baseResources": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            },
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          }
+        },
+        "required": ["datCiv", "baseResources"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "modifiers": {
+      "type": "object",
+      "properties": {
+        "aztecs": {
+          "$ref": "#/$defs/modifier"
+        },
+        "burgundians": {
+          "$ref": "#/$defs/modifier"
+        },
+        "grandTrunkRoad": {
+          "$ref": "#/$defs/modifier"
+        },
+        "atheism": {
+          "type": "object",
+          "properties": {
+            "effectId": {
+              "type": "integer"
+            },
+            "commandIndices": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "commands": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/command"
+              }
+            },
+            "resources": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "operation": {
+              "type": "string",
+              "enum": ["set", "mul"]
+            },
+            "value": {
+              "type": "number"
+            },
+            "displayValue": {
+              "type": "number"
+            },
+            "civ": {
+              "type": "string"
+            },
+            "scope": {
+              "type": "string",
+              "enum": ["team", "self", "enemy-or-neutral"]
+            },
+            "techId": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "neutralCommands": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/command"
+              }
+            }
+          },
+          "required": [
+            "effectId",
+            "commandIndices",
+            "commands",
+            "resources",
+            "operation",
+            "value",
+            "displayValue",
+            "civ",
+            "scope",
+            "techId",
+            "neutralCommands"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": ["aztecs", "burgundians", "grandTrunkRoad", "atheism"],
+      "additionalProperties": false
+    },
+    "lithuanians": {
+      "type": "object",
+      "properties": {
+        "countResource": {
+          "type": "integer"
+        },
+        "thresholds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "count": {
+                "type": "integer"
+              },
+              "tech": {
+                "$ref": "#/$defs/tech"
+              },
+              "effect": {
+                "$ref": "#/$defs/effect"
+              }
+            },
+            "required": ["count", "tech", "effect"],
+            "additionalProperties": false
+          }
+        },
+        "cap": {
+          "type": "integer"
+        },
+        "attackIncrement": {
+          "type": "number"
+        },
+        "attackClass": {
+          "type": "integer"
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/namedUnit"
+          }
+        },
+        "extraRawTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/namedUnit"
+          }
+        }
+      },
+      "required": ["countResource", "thresholds", "cap", "attackIncrement", "attackClass", "units", "extraRawTargets"],
+      "additionalProperties": false
+    },
+    "armenianChain": {
+      "type": "object",
+      "properties": {
+        "techs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tech"
+          }
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effect"
+          }
+        },
+        "helper": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/unit"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["techs", "effects", "helper"],
+      "additionalProperties": false
+    },
+    "audit": {
+      "type": "object",
+      "properties": {
+        "civCount": {
+          "type": "integer"
+        },
+        "techCount": {
+          "type": "integer"
+        },
+        "effectCount": {
+          "type": "integer"
+        },
+        "unitTaskCount": {
+          "type": "integer"
+        },
+        "headerTaskCount": {
+          "type": "integer"
+        },
+        "generateResourceTaskCount": {
+          "type": "integer"
+        },
+        "resourceTaskReferences": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/$defs/task"
+              }
+            ],
+            "items": false,
+            "minItems": 4,
+            "maxItems": 4
+          }
+        },
+        "headerResourceTaskReferences": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/$defs/task"
+              }
+            ],
+            "items": false,
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        "resourceCommands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "effectId": {
+                "type": "integer"
+              },
+              "index": {
+                "type": "integer"
+              },
+              "command": {
+                "$ref": "#/$defs/command"
+              }
+            },
+            "required": ["effectId", "index", "command"],
+            "additionalProperties": false
+          }
+        },
+        "gaiaRelics": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/unit"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(0|[1-9][0-9]*)$"
+          }
+        },
+        "monasteries": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/unit"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(0|[1-9][0-9]*)$"
+          }
+        },
+        "armenianHelper": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/unit"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "civCount",
+        "techCount",
+        "effectCount",
+        "unitTaskCount",
+        "headerTaskCount",
+        "generateResourceTaskCount",
+        "resourceTaskReferences",
+        "headerResourceTaskReferences",
+        "resourceCommands",
+        "gaiaRelics",
+        "monasteries",
+        "armenianHelper"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": ["meta", "resourceIds", "baseRates", "civs", "modifiers", "lithuanians", "armenianChain", "audit"],
+  "additionalProperties": false,
+  "$defs": {
+    "command": {
+      "type": "object",
+      "properties": {
+        "Type": {
+          "type": "integer"
+        },
+        "A": {
+          "type": "integer"
+        },
+        "B": {
+          "type": "integer"
+        },
+        "C": {
+          "type": "integer"
+        },
+        "D": {
+          "type": "number"
+        }
+      },
+      "required": ["Type", "A", "B", "C", "D"],
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "properties": {
+        "action_type": {
+          "type": "integer"
+        },
+        "auto_search_targets": {
+          "type": "integer"
+        },
+        "carry_check": {
+          "type": "integer"
+        },
+        "carrying_graphic_id": {
+          "type": "integer"
+        },
+        "class_id": {
+          "type": "integer"
+        },
+        "combat_level_flag": {
+          "type": "integer"
+        },
+        "enable_targeting": {
+          "type": "integer"
+        },
+        "enabled": {
+          "type": "integer"
+        },
+        "gather_type": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "is_default": {
+          "type": "integer"
+        },
+        "moving_graphic_id": {
+          "type": "integer"
+        },
+        "pick_for_construction": {
+          "type": "integer"
+        },
+        "proceeding_graphic_id": {
+          "type": "integer"
+        },
+        "resource_deposit_sound_id": {
+          "type": "integer"
+        },
+        "resource_gathering_sound_id": {
+          "type": "integer"
+        },
+        "resource_in": {
+          "type": "integer"
+        },
+        "resource_multiplier": {
+          "type": "integer"
+        },
+        "resource_out": {
+          "type": "integer"
+        },
+        "search_wait_time": {
+          "type": "number"
+        },
+        "target_diplomacy": {
+          "type": "integer"
+        },
+        "task_type": {
+          "type": "integer"
+        },
+        "terrain_id": {
+          "type": "integer"
+        },
+        "unit_id": {
+          "type": "integer"
+        },
+        "unused_resource": {
+          "type": "integer"
+        },
+        "work_flag_2": {
+          "type": "integer"
+        },
+        "work_range": {
+          "type": "number"
+        },
+        "work_value_1": {
+          "type": "number"
+        },
+        "work_value_2": {
+          "type": "number"
+        },
+        "working_graphic_id": {
+          "type": "integer"
+        },
+        "wwise_resource_deposit_sound_id": {
+          "type": "integer"
+        },
+        "wwise_resource_gathering_sound_id": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "action_type",
+        "auto_search_targets",
+        "carry_check",
+        "carrying_graphic_id",
+        "class_id",
+        "combat_level_flag",
+        "enable_targeting",
+        "enabled",
+        "gather_type",
+        "id",
+        "is_default",
+        "moving_graphic_id",
+        "pick_for_construction",
+        "proceeding_graphic_id",
+        "resource_deposit_sound_id",
+        "resource_gathering_sound_id",
+        "resource_in",
+        "resource_multiplier",
+        "resource_out",
+        "search_wait_time",
+        "target_diplomacy",
+        "task_type",
+        "terrain_id",
+        "unit_id",
+        "unused_resource",
+        "work_flag_2",
+        "work_range",
+        "work_value_1",
+        "work_value_2",
+        "working_graphic_id",
+        "wwise_resource_deposit_sound_id",
+        "wwise_resource_gathering_sound_id"
+      ],
+      "additionalProperties": false
+    },
+    "unit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "class": {
+          "type": "integer"
+        },
+        "workRate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/task"
+          }
+        },
+        "buildingTech": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["id", "name", "class", "workRate", "tasks", "buildingTech"],
+      "additionalProperties": false
+    },
+    "tech": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "civ": {
+          "type": "integer"
+        },
+        "effectId": {
+          "type": "integer"
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "requiredCount": {
+          "type": "integer"
+        },
+        "costs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "integer"
+              },
+              "amount": {
+                "type": "number"
+              },
+              "flag": {
+                "type": "integer"
+              }
+            },
+            "required": ["type", "amount", "flag"],
+            "additionalProperties": false
+          }
+        },
+        "researchLocations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "button_id": {
+                "type": "integer"
+              },
+              "hot_key_id": {
+                "type": "integer"
+              },
+              "location_id": {
+                "type": "integer"
+              },
+              "research_time": {
+                "type": "number"
+              }
+            },
+            "required": ["button_id", "hot_key_id", "location_id", "research_time"],
+            "additionalProperties": false
+          }
+        },
+        "repeatable": {
+          "type": "integer"
+        }
+      },
+      "required": ["id", "name", "civ", "effectId", "requires", "requiredCount", "costs", "researchLocations", "repeatable"],
+      "additionalProperties": false
+    },
+    "effect": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/command"
+          }
+        }
+      },
+      "required": ["id", "name", "commands"],
+      "additionalProperties": false
+    },
+    "modifier": {
+      "type": "object",
+      "properties": {
+        "effectId": {
+          "type": "integer"
+        },
+        "commandIndices": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/command"
+          }
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "operation": {
+          "type": "string",
+          "enum": ["set", "mul"]
+        },
+        "value": {
+          "type": "number"
+        },
+        "displayValue": {
+          "type": "number"
+        },
+        "civ": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string",
+          "enum": ["team", "self", "enemy-or-neutral"]
+        },
+        "techId": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["effectId", "commandIndices", "commands", "resources", "operation", "value", "displayValue", "civ", "scope", "techId"],
+      "additionalProperties": false
+    },
+    "namedUnit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "zh": {
+          "type": "string"
+        },
+        "en": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "zh", "en"],
+      "additionalProperties": false
+    }
+  }
+}

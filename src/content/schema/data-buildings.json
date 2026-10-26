@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-buildings.json",
+  "title": "AoE2 buildings data",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "en": {
+        "$ref": "common.defs.json#/$defs/nonEmptyString"
+      },
+      "zh": {
+        "$ref": "common.defs.json#/$defs/nonEmptyString"
+      },
+      "age": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 4
+      },
+      "pic": {
+        "type": "integer"
+      },
+      "cost": {
+        "$ref": "common.defs.json#/$defs/cost"
+      },
+      "hp": {
+        "type": "number"
+      },
+      "ma": {
+        "type": "number"
+      },
+      "pa": {
+        "type": "number"
+      },
+      "barm": {
+        "type": "number"
+      },
+      "bt": {
+        "type": "number"
+      },
+      "gar": {
+        "type": "number"
+      },
+      "atk": {
+        "type": "number"
+      },
+      "rng": {
+        "type": "number"
+      },
+      "rngB": {
+        "type": "number"
+      },
+      "minr": {
+        "type": "number"
+      },
+      "rof": {
+        "type": "number"
+      },
+      "los": {
+        "type": "number"
+      },
+      "pop": {
+        "type": "number"
+      },
+      "desc": {
+        "type": "string"
+      },
+      "descEn": {
+        "type": "string"
+      },
+      "civs": {
+        "type": "array",
+        "items": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        }
+      },
+      "units": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "techs": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "py": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      },
+      "pyi": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      }
+    },
+    "required": [
+      "id",
+      "en",
+      "zh",
+      "age",
+      "pic",
+      "cost",
+      "hp",
+      "ma",
+      "pa",
+      "barm",
+      "bt",
+      "gar",
+      "atk",
+      "rng",
+      "minr",
+      "rof",
+      "los",
+      "pop",
+      "desc",
+      "descEn",
+      "civs",
+      "units",
+      "techs",
+      "py",
+      "pyi"
+    ],
+    "additionalProperties": false
+  },
+  "minItems": 1
+}

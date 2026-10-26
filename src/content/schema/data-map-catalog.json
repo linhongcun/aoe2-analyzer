@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-map-catalog.json",
+  "title": "AoE2 map-catalog data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "checkedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "sourceUrls": {
+          "type": "object",
+          "properties": {
+            "zh": {
+              "$ref": "common.defs.json#/$defs/publicUrl"
+            },
+            "en": {
+              "$ref": "common.defs.json#/$defs/publicUrl"
+            }
+          },
+          "required": ["zh", "en"],
+          "additionalProperties": false
+        },
+        "previewCommit": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{7,40}$"
+        },
+        "copyright": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["checkedAt", "sourceUrls", "previewCommit", "copyright"],
+      "additionalProperties": false
+    },
+    "maps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+$"
+          },
+          "name": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "en": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "description": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string",
+            "enum": ["open", "closed", "hybrid", "water", "nomad", "other"]
+          },
+          "featured": {
+            "type": "boolean"
+          },
+          "scouting": {
+            "type": "string"
+          },
+          "opening": {
+            "type": "string"
+          },
+          "preview": {
+            "type": "object",
+            "properties": {
+              "image": {
+                "type": "string",
+                "pattern": "^img/maps/[a-z0-9_-]+\\.webp$"
+              },
+              "sourceUrl": {
+                "$ref": "common.defs.json#/$defs/publicUrl"
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": ["image", "sourceUrl", "width", "height"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["id", "name", "en", "description", "group", "featured", "scouting", "opening", "preview"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["meta", "maps"],
+  "additionalProperties": false
+}

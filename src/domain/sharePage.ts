@@ -1,4 +1,6 @@
 import raw from '../data/page-metadata.json';
+import validateMetadata from '../content/schema/compiled/page-metadata.mjs';
+import { readValidatedJson } from '../data/validatedJson';
 export interface PageMeta {
   title: string;
   description: string;
@@ -8,7 +10,7 @@ export interface PageMeta {
   note?: string;
   route?: string;
 }
-export const PAGE_META = raw as unknown as Record<string, PageMeta>;
+export const PAGE_META = readValidatedJson(raw, validateMetadata, '分享元信息');
 export const SITE_NAME = '帝国时代 II 分析器';
 export function pageKey(pathname: string, search = '') {
   const p = pathname.replace(/\/+$/, '') || '/';

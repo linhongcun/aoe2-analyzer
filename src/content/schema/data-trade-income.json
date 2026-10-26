@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-trade-income.json",
+  "title": "AoE2 trade-income data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generatedBy": {
+          "type": "string"
+        },
+        "datSha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "patch": {
+          "type": "string"
+        },
+        "populationSource": {
+          "type": "string"
+        },
+        "engineVerifiedInPinnedBuild": {
+          "const": false
+        }
+      },
+      "required": ["generatedBy", "datSha256", "patch", "populationSource", "engineVerifiedInPinnedBuild"],
+      "additionalProperties": false
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "population": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "exclusiveMaximum": 100
+          }
+        },
+        "required": ["population"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    }
+  },
+  "required": ["meta", "units"],
+  "additionalProperties": false
+}

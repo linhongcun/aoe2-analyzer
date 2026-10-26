@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-civs.json",
+  "title": "AoE2 civs data",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "en": {
+        "$ref": "common.defs.json#/$defs/nonEmptyString"
+      },
+      "zh": {
+        "$ref": "common.defs.json#/$defs/nonEmptyString"
+      },
+      "ty": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["cav", "arch", "inf", "naval", "monk", "siege", "def", "eco"]
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      },
+      "desc": {
+        "type": "string"
+      },
+      "uu": {
+        "type": "string"
+      },
+      "ct": {
+        "type": "string"
+      },
+      "it": {
+        "type": "string"
+      },
+      "bon": {
+        "type": "array",
+        "items": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "bonEn": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "tb": {
+        "type": "string"
+      },
+      "tbEn": {
+        "type": "string"
+      },
+      "s": {
+        "type": "array",
+        "items": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "minItems": 8,
+        "maxItems": 8
+      },
+      "fl": {
+        "type": "number"
+      },
+      "pk": {
+        "type": "number"
+      },
+      "op": {
+        "type": "string"
+      },
+      "py": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      },
+      "pyi": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      }
+    },
+    "required": ["en", "zh", "ty", "desc", "uu", "ct", "it", "bon", "bonEn", "tb", "tbEn", "s", "fl", "pk", "op", "py", "pyi"],
+    "additionalProperties": false
+  },
+  "minItems": 1
+}

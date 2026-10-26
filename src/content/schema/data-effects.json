@@ -1,0 +1,564 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-effects.json",
+  "title": "AoE2 effects data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generated_by": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "repo": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+              },
+              "commit": {
+                "type": "string",
+                "pattern": "^[a-fA-F0-9]{7,40}$"
+              },
+              "file": {
+                "$ref": "common.defs.json#/$defs/nonEmptyString"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-fA-F0-9]{64}$"
+              },
+              "patch": {
+                "type": "string"
+              },
+              "use": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "repo", "commit", "file", "patch", "use"],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "newIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "unmatchedCivs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["generated_by", "sources", "newIds", "unmatchedCivs"],
+      "additionalProperties": false
+    },
+    "techs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "combat": {
+            "type": "boolean"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/rule"
+            }
+          },
+          "eco": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/eco"
+            }
+          }
+        },
+        "required": ["id", "combat", "rules", "eco"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "civs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "dat": {
+            "type": "boolean"
+          },
+          "bonus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/entry"
+            }
+          },
+          "team": {
+            "type": "object",
+            "properties": {
+              "combat": {
+                "type": "boolean"
+              },
+              "rules": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/rule"
+                }
+              },
+              "eco": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/eco"
+                }
+              }
+            },
+            "required": ["combat", "rules", "eco"],
+            "additionalProperties": false
+          },
+          "fresh": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/$defs/fresh"
+            },
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": ["dat", "bonus", "team", "fresh"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "generic": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tech": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "req": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "any": {
+            "type": "boolean"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/rule"
+            }
+          }
+        },
+        "required": ["tech", "name", "age", "req", "any", "rules"],
+        "additionalProperties": false
+      }
+    },
+    "costDiscounts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/discount"
+        }
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": ["meta", "techs", "civs", "generic", "costDiscounts"],
+  "additionalProperties": false,
+  "$defs": {
+    "fx": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "s": {
+              "const": "rof"
+            },
+            "v": {
+              "type": "number"
+            }
+          },
+          "required": ["s", "v"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "s": {
+              "type": "string",
+              "enum": ["bonus", "armc"]
+            },
+            "op": {
+              "type": "string",
+              "enum": ["add", "mul", "set"]
+            },
+            "v": {
+              "type": "number"
+            },
+            "vs": {
+              "type": "string"
+            }
+          },
+          "required": ["s", "v", "vs"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "s": {
+              "type": "string",
+              "enum": ["hp", "los", "gar", "spd", "acc", "rng", "minr", "atk", "ma", "pa", "barm", "bt"]
+            },
+            "op": {
+              "type": "string",
+              "enum": ["add", "mul", "set"]
+            },
+            "v": {
+              "type": "number"
+            }
+          },
+          "required": ["s", "v"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "rule": {
+      "type": "object",
+      "properties": {
+        "t": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1
+        },
+        "fx": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fx"
+          },
+          "minItems": 1
+        },
+        "b": {
+          "const": 1
+        }
+      },
+      "required": ["t", "fx"],
+      "additionalProperties": false
+    },
+    "eco": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "a": {
+              "type": "integer"
+            },
+            "op": {
+              "type": "string",
+              "enum": ["add", "mul", "set"]
+            },
+            "v": {
+              "type": "number"
+            },
+            "t": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "cls": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "unit": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "byAge": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": ["a", "op", "v", "t", "cls", "unit"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "res": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "op": {
+              "type": "string",
+              "enum": ["add", "mul", "set"]
+            },
+            "v": {
+              "type": "number"
+            }
+          },
+          "required": ["res", "name", "op", "v"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tech": {
+              "type": "string"
+            },
+            "tid": {
+              "type": "integer"
+            },
+            "what": {
+              "type": "string"
+            },
+            "op": {
+              "type": "string",
+              "enum": ["add", "mul", "set"]
+            },
+            "v": {
+              "type": "number"
+            }
+          },
+          "required": ["tech", "tid", "what", "op", "v"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "entry": {
+      "type": "object",
+      "properties": {
+        "tech": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "req": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "combat": {
+          "type": "boolean"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        },
+        "eco": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/eco"
+          }
+        },
+        "idx": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "linked": {
+          "type": "string",
+          "enum": ["auto", "manual"]
+        }
+      },
+      "required": ["tech", "name", "age", "req", "combat", "rules", "eco", "idx", "linked"],
+      "additionalProperties": false
+    },
+    "fresh": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dat": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "items": false,
+                "minItems": 2,
+                "maxItems": 2
+              }
+            ]
+          }
+        },
+        "text": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      },
+      "required": ["ok", "dat", "text"],
+      "additionalProperties": false
+    },
+    "costGroup": {
+      "type": "object",
+      "properties": {
+        "units": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1
+        },
+        "res": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["Food", "Wood", "Gold", "Stone"]
+          },
+          "minItems": 1
+        },
+        "tiers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          },
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[1-4]$"
+          }
+        }
+      },
+      "required": ["units", "res", "tiers"],
+      "additionalProperties": false
+    },
+    "discount": {
+      "type": "object",
+      "properties": {
+        "idx": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "techs": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/costGroup"
+          }
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              },
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[1-4]$"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "required": ["idx", "techs", "groups", "text", "ok"],
+      "additionalProperties": false
+    }
+  }
+}

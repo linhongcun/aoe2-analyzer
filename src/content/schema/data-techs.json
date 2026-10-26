@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-techs.json",
+  "title": "AoE2 techs data",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "en": {
+        "$ref": "common.defs.json#/$defs/nonEmptyString"
+      },
+      "zh": {
+        "$ref": "common.defs.json#/$defs/nonEmptyString"
+      },
+      "type": {
+        "type": "string"
+      },
+      "age": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 4
+      },
+      "b": {
+        "type": "integer"
+      },
+      "pic": {
+        "type": ["integer", "string"]
+      },
+      "pre": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "cost": {
+        "$ref": "common.defs.json#/$defs/cost"
+      },
+      "rt": {
+        "type": "number"
+      },
+      "desc": {
+        "type": "string"
+      },
+      "descEn": {
+        "type": "string"
+      },
+      "civs": {
+        "type": "array",
+        "items": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        }
+      },
+      "bz": {
+        "type": "string"
+      },
+      "ben": {
+        "type": "string"
+      },
+      "py": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      },
+      "pyi": {
+        "type": "string",
+        "pattern": "^[a-z]*$"
+      }
+    },
+    "required": ["id", "en", "zh", "type", "age", "b", "pic", "pre", "cost", "rt", "desc", "descEn", "civs", "bz", "ben", "py", "pyi"],
+    "additionalProperties": false
+  },
+  "minItems": 1
+}

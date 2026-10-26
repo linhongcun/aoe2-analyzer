@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/common.defs.json",
+  "$defs": {
+    "nonEmptyString": { "type": "string", "pattern": "\\S" },
+    "publicUrl": { "type": "string", "format": "public-url" },
+    "sourceText": { "type": "string", "format": "source-text" },
+    "integerArray": { "type": "array", "items": { "type": "integer" } },
+    "numberArray": { "type": "array", "items": { "type": "number" } },
+    "stringArray": { "type": "array", "items": { "type": "string" } },
+    "cost": {
+      "type": "object",
+      "properties": {
+        "Food": { "type": "number", "minimum": 0 },
+        "Wood": { "type": "number", "minimum": 0 },
+        "Gold": { "type": "number", "minimum": 0 },
+        "Stone": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "picture": { "type": ["string", "integer", "null"] }
+  }
+}

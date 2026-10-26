@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-garrison-healing.json",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "commit": {
+          "type": "string"
+        },
+        "eligibilityPolicy": {
+          "type": "string"
+        },
+        "engineVerifiedInPinnedBuild": {
+          "type": "boolean"
+        },
+        "fields": {
+          "$ref": "common.defs.json#/$defs/stringArray"
+        },
+        "generatedBy": {
+          "type": "string"
+        },
+        "patch": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": ["commit", "eligibilityPolicy", "engineVerifiedInPinnedBuild", "fields", "generatedBy", "patch", "repo", "sha256"],
+      "additionalProperties": false
+    },
+    "units": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+$": {
+          "type": "object",
+          "properties": {
+            "hp": {
+              "type": "number"
+            },
+            "class": {
+              "type": "integer"
+            },
+            "type": {
+              "type": "integer"
+            },
+            "healRate": {
+              "type": ["number", "null"]
+            },
+            "repairRate": {
+              "type": ["number", "null"]
+            },
+            "eligibility": {
+              "enum": ["organic", "ineligible", "unverified"]
+            }
+          },
+          "required": ["hp", "class", "type", "healRate", "repairRate", "eligibility"],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "baseOverrides": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "\\S"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "patternProperties": {
+          "^[0-9]+$": {
+            "type": "object",
+            "properties": {
+              "hp": {
+                "type": "number"
+              },
+              "class": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "integer"
+              },
+              "healRate": {
+                "type": ["number", "null"]
+              },
+              "repairRate": {
+                "type": ["number", "null"]
+              }
+            },
+            "required": ["hp", "class", "type", "healRate", "repairRate"],
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "rateTechs": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+$": {
+          "type": "object",
+          "properties": {
+            "requires": {
+              "$ref": "common.defs.json#/$defs/integerArray"
+            },
+            "count": {
+              "type": "integer"
+            },
+            "effects": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "units": {
+                    "$ref": "common.defs.json#/$defs/integerArray"
+                  },
+                  "op": {
+                    "enum": ["set", "add", "mul"]
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": ["units", "op", "value"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": ["requires", "count", "effects"],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "hostIds": {
+      "$ref": "common.defs.json#/$defs/integerArray"
+    },
+    "organicClasses": {
+      "$ref": "common.defs.json#/$defs/integerArray"
+    }
+  },
+  "required": ["meta", "units", "baseOverrides", "rateTechs", "hostIds", "organicClasses"],
+  "additionalProperties": false
+}

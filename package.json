@@ -2,7 +2,7 @@
   "name": "aoe2-analyzer",
   "private": true,
   "license": "MIT",
-  "version": "0.38.0",
+  "version": "0.39.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -31,7 +31,9 @@
     "release": "node scripts/release.mjs",
     "patches": "python3 scripts/patches_build.py",
     "metadata:check": "node scripts/page_metadata.mjs --check",
-    "unused:check": "ts-prune --project tsconfig.json"
+    "unused:check": "ts-prune --project tsconfig.json",
+    "content:check": "node scripts/check-content.mjs",
+    "content:validators": "node scripts/compile-json-validators.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.54.0",
@@ -48,6 +50,7 @@
     "@types/react-dom": "^18.3.7",
     "@types/react-test-renderer": "18.3.1",
     "@vitejs/plugin-react": "^4.7.0",
+    "ajv": "8.20.0",
     "eslint": "^9.39.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.13.0",

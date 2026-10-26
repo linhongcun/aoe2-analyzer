@@ -49,6 +49,9 @@ jobs:
       - name: Unused exports report (non-blocking findings, #288)
         if: steps.reuse.outputs.reused != 'true'
         run: npm run unused:check
+      - name: JSON structure and visible sources (frozen migration baseline)
+        if: steps.reuse.outputs.reused != 'true'
+        run: npm run content:check -- --ratchet && npm run content:validators -- --check
       - name: Layer boundaries (strict, #281)
         run: npm run lint:layers -- --strict
         if: steps.reuse.outputs.reused != 'true'

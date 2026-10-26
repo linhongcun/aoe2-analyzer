@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-market.json",
+  "title": "AoE2 market data",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generatedBy": {
+          "type": "string"
+        },
+        "patch": {
+          "type": "string"
+        },
+        "datCommit": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{7,40}$"
+        },
+        "datSha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "feeResource": {
+          "type": "integer"
+        },
+        "engineVerifiedInPinnedBuild": {
+          "const": false
+        }
+      },
+      "required": ["generatedBy", "patch", "datCommit", "datSha256", "feeResource", "engineVerifiedInPinnedBuild"],
+      "additionalProperties": false
+    },
+    "baseFee": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "guilds": {
+      "type": "object",
+      "properties": {
+        "tech": {
+          "type": "integer"
+        },
+        "fee": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "civs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["tech", "fee", "civs"],
+      "additionalProperties": false
+    },
+    "civFees": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "tech": {
+            "type": "integer"
+          },
+          "fee": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": ["tech", "fee"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "uniqueFees": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "tech": {
+            "type": "integer"
+          },
+          "fee": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["tech", "fee", "name"],
+        "additionalProperties": false
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "engine": {
+      "type": "object",
+      "properties": {
+        "lot": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "step": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minBase": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxBase": {
+          "type": "number",
+          "minimum": 0
+        },
+        "initial": {
+          "type": "object",
+          "properties": {
+            "Food": {
+              "type": "number",
+              "minimum": 0
+            },
+            "Wood": {
+              "type": "number",
+              "minimum": 0
+            },
+            "Stone": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": ["Food", "Wood", "Stone"],
+          "additionalProperties": false
+        },
+        "rounding": {
+          "const": "nearest-per-lot"
+        },
+        "status": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "$ref": "common.defs.json#/$defs/publicUrl"
+              },
+              "scope": {
+                "$ref": "common.defs.json#/$defs/sourceText"
+              }
+            },
+            "required": ["url", "scope"],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": ["lot", "step", "minBase", "maxBase", "initial", "rounding", "status", "sources"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["meta", "baseFee", "guilds", "civFees", "uniqueFees", "engine"],
+  "additionalProperties": false
+}

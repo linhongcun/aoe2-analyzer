@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-game-guide.json",
+  "title": "Curated game-guide content",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "checkedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "dataVersion": {
+      "type": "string",
+      "pattern": "^DE[0-9]+$"
+    },
+    "scope": {
+      "$ref": "common.defs.json#/$defs/sourceText"
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/card"
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["schemaVersion", "checkedAt", "dataVersion", "scope", "sources", "cards"],
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "url": {
+          "$ref": "common.defs.json#/$defs/publicUrl"
+        },
+        "kind": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "checkedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "publishedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "version": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "locator": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "note": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["title", "url", "kind", "checkedAt", "publishedAt", "version", "locator", "note"],
+      "additionalProperties": false
+    },
+    "card": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["goal", "roles", "resources", "ages", "counters", "watching"]
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "shortTitle": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "summary": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "paragraphs": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        },
+        "example": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "question": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "answer": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "boundary": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "allOf": [
+                  {
+                    "$ref": "common.defs.json#/$defs/sourceText"
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "to": {
+                "type": "string",
+                "pattern": "^/(?!/)[^\\s]*$"
+              }
+            },
+            "required": ["label", "to"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["id", "title", "shortTitle", "summary", "paragraphs", "example", "question", "answer", "boundary", "sourceIds", "links"],
+      "additionalProperties": false
+    }
+  }
+}

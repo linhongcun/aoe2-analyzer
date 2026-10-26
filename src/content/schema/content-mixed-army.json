@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-mixed-army.json",
+  "title": "Curated mixed-army content",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "build": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "reviewedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "editorialNotice": {
+      "$ref": "common.defs.json#/$defs/sourceText"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 1
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/scenario"
+      },
+      "minItems": 1
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/card"
+      },
+      "minItems": 1
+    },
+    "prerequisiteUnitIds": {
+      "$ref": "common.defs.json#/$defs/integerArray"
+    },
+    "requiredUnlocks": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "common.defs.json#/$defs/integerArray"
+      },
+      "propertyNames": {
+        "pattern": "^(0|[1-9][0-9]*)$"
+      }
+    },
+    "unlockScopeNote": {
+      "$ref": "common.defs.json#/$defs/sourceText"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "build",
+    "reviewedAt",
+    "editorialNotice",
+    "sources",
+    "scenarios",
+    "cards",
+    "prerequisiteUnitIds",
+    "requiredUnlocks",
+    "unlockScopeNote"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "url": {
+          "$ref": "common.defs.json#/$defs/publicUrl"
+        },
+        "kind": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "publishedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "checkedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "note": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        }
+      },
+      "required": ["id", "title", "url", "kind", "publishedAt", "checkedAt", "note"],
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "civs": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "age": {
+          "type": "integer",
+          "enum": [1, 2, 3, 4]
+        },
+        "ownMainUnitIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "enemyCompositions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["unknown", "cavalry", "skirmishers", "cavalry-skirmishers", "wagons", "wagons-cannon", "wagons-cannon-halberdiers", "other"]
+          }
+        },
+        "singleThreatNote": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "mixedThreatNote": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "cardIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "notCovered": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "enemyCannonUnitIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "enemyCiv": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "enemyMainUnitIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        }
+      },
+      "required": ["id", "title", "civs", "age", "ownMainUnitIds", "enemyCompositions", "singleThreatNote", "mixedThreatNote", "cardIds", "notCovered"],
+      "additionalProperties": false
+    },
+    "card": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "scenario": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "problem": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "roles": {
+          "type": "object",
+          "properties": {
+            "main": {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            "cover": {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            "siege": {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            }
+          },
+          "required": ["main", "cover", "siege"],
+          "additionalProperties": false
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        },
+        "unitIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "techIds": {
+          "$ref": "common.defs.json#/$defs/integerArray"
+        },
+        "cost": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "counterexample": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "alternative": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "next": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": ["id", "scenario", "title", "problem", "roles", "conditions", "unitIds", "cost", "counterexample", "alternative", "next", "sourceIds"],
+      "additionalProperties": false
+    }
+  }
+}

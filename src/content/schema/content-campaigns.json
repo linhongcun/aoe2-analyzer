@@ -1,0 +1,349 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-campaigns.json",
+  "title": "Curated campaigns content",
+  "$comment": "Campaign source version/sha256 and fieldEvidence are hidden provenance. Only titles, external URLs, mapped kinds and dates are rendered; editorial metadata without a URL is excluded from the public source list.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "verifiedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "complete": {
+          "type": "boolean"
+        },
+        "modeIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["aoe2", "chronicles", "return-of-rome"]
+          },
+          "uniqueItems": true
+        },
+        "includedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "excludedModes": {
+          "$ref": "common.defs.json#/$defs/stringArray"
+        },
+        "excludedExamples": {
+          "$ref": "common.defs.json#/$defs/stringArray"
+        }
+      },
+      "required": ["complete", "modeIds", "includedCount", "excludedModes", "excludedExamples"],
+      "additionalProperties": false
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "campaigns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/campaign"
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["schemaVersion", "verifiedAt", "coverage", "sources", "campaigns"],
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["developer", "official", "client-mirror", "community-client-transcription", "media", "editorial"]
+        },
+        "checkedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "version": {
+          "type": "string"
+        },
+        "url": {
+          "$ref": "common.defs.json#/$defs/publicUrl"
+        },
+        "publishedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": ["title", "kind", "checkedAt", "version"],
+      "additionalProperties": false,
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "editorial"
+          }
+        },
+        "required": ["kind"]
+      },
+      "else": {
+        "properties": {
+          "url": {
+            "$ref": "common.defs.json#/$defs/publicUrl"
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "status": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "locator": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": ["sourceIds", "status"],
+      "additionalProperties": false
+    },
+    "campaign": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "nameZh": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "nameEn": {
+          "allOf": [
+            {
+              "$ref": "common.defs.json#/$defs/sourceText"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/sourceText"
+          }
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["tutorial", "campaign", "historical-battle"]
+        },
+        "modeId": {
+          "type": "string",
+          "enum": ["aoe2", "chronicles", "return-of-rome"]
+        },
+        "civilizationIds": {
+          "type": "array",
+          "items": {
+            "$ref": "common.defs.json#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "regionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["europe", "asia", "africa", "americas"]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "settingZh": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "originalContentPackId": {
+          "type": "string",
+          "enum": ["age-of-kings", "the-conquerors"]
+        },
+        "contentPackId": {
+          "$ref": "common.defs.json#/$defs/nonEmptyString"
+        },
+        "releaseYear": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "not": {
+                "const": 0
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "releaseDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "historicalStartYear": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "not": {
+                "const": 0
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "historicalEndYear": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "not": {
+                "const": 0
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "swords": {
+          "enum": [1, 2, 3, null]
+        },
+        "verifiedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "fieldEvidence": {
+          "type": "object",
+          "properties": {
+            "aliases": {
+              "$ref": "#/$defs/evidence"
+            },
+            "civilizationIds": {
+              "$ref": "#/$defs/evidence"
+            },
+            "contentPackId": {
+              "$ref": "#/$defs/evidence"
+            },
+            "historicalRange": {
+              "$ref": "#/$defs/evidence"
+            },
+            "kind": {
+              "$ref": "#/$defs/evidence"
+            },
+            "modeId": {
+              "$ref": "#/$defs/evidence"
+            },
+            "nameEn": {
+              "$ref": "#/$defs/evidence"
+            },
+            "nameZh": {
+              "$ref": "#/$defs/evidence"
+            },
+            "originalContentPackId": {
+              "$ref": "#/$defs/evidence"
+            },
+            "regionIds": {
+              "$ref": "#/$defs/evidence"
+            },
+            "releaseDate": {
+              "$ref": "#/$defs/evidence"
+            },
+            "releaseYear": {
+              "$ref": "#/$defs/evidence"
+            },
+            "swords": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "civilizationIds",
+            "historicalRange",
+            "kind",
+            "modeId",
+            "nameEn",
+            "nameZh",
+            "originalContentPackId",
+            "regionIds",
+            "releaseYear",
+            "swords"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "nameZh",
+        "nameEn",
+        "aliases",
+        "kind",
+        "modeId",
+        "civilizationIds",
+        "regionIds",
+        "settingZh",
+        "originalContentPackId",
+        "contentPackId",
+        "releaseYear",
+        "releaseDate",
+        "historicalStartYear",
+        "historicalEndYear",
+        "swords",
+        "verifiedAt",
+        "fieldEvidence"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

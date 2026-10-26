@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-garrison-hosts.json",
+  "title": "AoE2 garrison-hosts data",
+  "type": "array",
+  "items": {
+    "type": "integer",
+    "minimum": 0
+  },
+  "minItems": 1,
+  "uniqueItems": true
+}
