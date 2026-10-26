@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page, type Request } from '@playwright/test';
 
 const PKG_VERSION = (JSON.parse(readFileSync('package.json', 'utf8')) as { version: string }).version;
 
@@ -525,12 +525,56 @@ test('rating help on mobile: 44px target, popover spans the card width', async (
 });
 
 test('rating label also on compare and matchup; old yellow note removed', async ({ page }) => {
-  await page.goto('./#/compare');
-  await expect(page.locator('#compare .ratehead')).toContainText('主观评分，仅供参考');
-  await page.goto('./#/matchup');
-  await expect(page.locator('#mres .rating-foot')).toContainText('主观评分，仅供参考');
-  await page.locator('#mres .rating-foot').getByRole('button', { name: '评分说明' }).click();
-  await expect(page.getByRole('dialog', { name: '评分是怎么来的' })).toBeVisible();
+  const pageErrors: string[] = [];
+  const failedRequests: { url: string; error: string }[] = [];
+  const recordError = (error: Error) => {
+    if (pageErrors.length < 20) pageErrors.push(error.message.slice(0, 500));
+  };
+  const recordRequest = (request: Request) => {
+    if (failedRequests.length < 20) failedRequests.push({ url: request.url().slice(0, 500), error: (request.failure()?.errorText ?? '').slice(0, 500) });
+  };
+  page.on('pageerror', recordError);
+  page.on('requestfailed', recordRequest);
+  try {
+    await page.goto('./#/compare');
+    await expect(page.locator('#compare .ratehead')).toContainText('主观评分，仅供参考');
+    await page.goto('./#/matchup');
+    await expect(page.locator('#mres .rating-foot')).toContainText('主观评分，仅供参考');
+    await page.locator('#mres .rating-foot').getByRole('button', { name: '评分说明' }).click();
+    await expect(page.getByRole('dialog', { name: '评分是怎么来的' })).toBeVisible();
+  } catch (error) {
+    // Keep the original failure; a stalled renderer must not prevent a bounded log snapshot.
+    try {
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      let state: unknown;
+      try {
+        state = await Promise.race([
+          page.evaluate(() => ({
+            url: location.href.slice(0, 500),
+            readyState: document.readyState,
+            compare: !!document.querySelector('#compare'),
+            matchup: !!document.querySelector('#matchup'),
+            mres: !!document.querySelector('#mres'),
+            mainText: (document.querySelector('main')?.innerText ?? '').slice(0, 1600),
+          })),
+          new Promise((resolve) => {
+            timer = setTimeout(() => resolve({ snapshot: 'unavailable after 500ms' }), 500);
+          }),
+        ]);
+      } catch (snapshotError) {
+        state = { snapshotError: snapshotError instanceof Error ? snapshotError.message.slice(0, 500) : 'snapshot rejected' };
+      } finally {
+        if (timer !== undefined) clearTimeout(timer);
+      }
+      console.info('rating-label-failure-diagnostic ' + JSON.stringify({ currentURL: page.url().slice(0, 500), state, pageErrors, failedRequests }));
+    } catch {
+      // Diagnostic errors must not replace the assertion or navigation error.
+    }
+    throw error;
+  } finally {
+    page.off('pageerror', recordError);
+    page.off('requestfailed', recordRequest);
+  }
 });
 
 test('#31 Ctrl+K 搜到开局流程与开局名；工具菜单首项为开局流程', async ({ page }) => {
