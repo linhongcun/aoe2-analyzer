@@ -1,0 +1,20 @@
+{
+  "status": "preliminary baseline before product implementation; not post-442 main and not a candidate visual pass",
+  "sourceCommit": "a0ed295de41bf835b41ea80be4fd8a1c20f99c10",
+  "sourceTree": "3f499a8e9f146acfc1fffaa790c62a07699eb70e",
+  "runtimeVersion": "v0.40.0",
+  "runtimeBuild": "a0ed295de41bf835b41ea80be4fd8a1c20f99c10",
+  "browserVersion": "156.0.8078.4",
+  "mode": "all",
+  "scenarioCount": 23,
+  "widths": [360, 375, 390, 1280],
+  "themes": ["light", "dark"],
+  "screenshots": 184,
+  "allPngHashesRecomputed": true,
+  "pngBytes": 108886592,
+  "captureManifestSha256": "0b5ba732d33f81494267cafa200ca79b04ed6b019e4749ec0b478861ba70f0d9",
+  "captureScriptSha256": "136b90f1e2aff288bfce74f61ed915f5a42b2291591a621cb00cc8e67dafbb54",
+  "pngInventorySha256": "72dd3eae2050dafaea166c6bae25f4e4a394656414b7937bcf6ead5b416b1288",
+  "normalizations": ["[data-t=\"footer-app-version\"] textContent=VERSION", "[data-t=\"footer-build\"] textContent=BUILD"],
+  "candidateComparison": "pending implementation on the post-442 base and independent verification of baseline reuse"
+}
