@@ -95,3 +95,7 @@
 root独立从两git tree复算上述blob与8项目录身份，并审核真实401过渡样本后，准许复用原184张预备基线。旧图仍明确标注来自a0ed295/v0.40.0，不能称为401新采184张。最终候选须由实际已提交HEAD生产构建采完整184张后严格比较；原始PNG、capture.json及精确像素报告保存在本地验证工件，交独立复核，不提交PNG。
 
 `scripts/deployment-smoke.mjs` 的 `duel` 分支对实际发布构建检查默认及全详情展开的heading-order、不可用卡、时间口径浮层，以及Unit/Building共享默认标题完整序列与原有语义违规身份、Unit的默认Basis h4。main构建复用和Release发布检查消费相同CI plan，因此保留本次实际变化的duel覆盖，同时继续核对真实版本和构建页脚。
+
+完整候选现已实际完成：source `2cc9b2b04a2826c960c70b732fd21c035b02b3ae`、tree `f56dea117a9eb55b7a4396b74023206398f2a7eb` 的已提交生产构建采集184张，和准用的原184张基线逐对比较，全部RGBA差异像素为0。route、canonicalHash、PNG重算摘要、同浏览器/脚本和固定两项归一化检查均通过。精确报告见 [candidate-2cc9b2b-report.json](duel-heading-364-visual/candidate-2cc9b2b-report.json)，采集身份与真实401过渡关系见 [implementation-summary.json](duel-heading-364-visual/implementation-summary.json)。后续范围守护补强仅改CI脚本、测试及验证文档，须保持产品blob与该候选一致，并用最终提交构建短烟测核对真实页脚，不能把184图的编译SHA改写成后来提交。
+
+实施阶段受影响验证实际通过：41个单元测试文件的767项、32个E2E文件的512项（含8张默认artifact目录的四宽明暗图）、TypeScript、lint（仅8项既有warning）、strict分层和格式检查，#442公开来源校验9份输入0错误。独立复核随后发现消费者动态模板import与Vite的pcss/postcss后缀两个CI范围守护边界，补强后相关scope/releasePlan/#442scope共38项通过；原产品、既有fixture和验收期望不变。

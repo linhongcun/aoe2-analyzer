@@ -78,3 +78,7 @@ python3 docs/design/duel-heading-364-visual/compare.py \
 `v0401-bridge-sample-report.json` 来自正式v0.40.1 Release ZIP（SHA256 `46ee964d42653890dd1c5225c9b0af4f9b899511838ab191d7a74bb17208faa4`，main `72e9c4df4152641eab1007024bf3335aa0f9421b`，main CI run40280930528）的真实7样本，和a0ed295预备基线对应样本的像素均为0差。它是基线版本之间的过渡证据，不是候选完整184对结果。
 
 另有固定refs的只读源码闭包报告（SHA256 `f057c12611ae3b6011213d9dd417cf432e20f34d5d518e28fcf0b383eefe273c`），确认150个组件闭包模块、181个Duel/Unit/Building入口闭包模块以及全public、数据、样式、字体与构建输入相同；排除37个其他lazy路由，不声称全部app或Vite字节相等。root独立重算通过后准许复用原184张a0ed295基线。最终候选完整报告必须继续保留这个真实来源关系和实际已提交构建身份。
+
+## 实施候选结果
+
+`candidate-2cc9b2b-report.json` 记录真实已提交候选2cc9b2b/v0.40.2的完整184对结果：全部RGBA不同像素数为0，输入route/canonicalHash、PNG重算摘要及固定归一化均通过。`implementation-summary.json` 记录source/tree、实际捕获身份和401过渡关系。原图不提交；报告不是远端CI或正式Release已完成的声明。后续若仅补CI范围守护与文档，需证明产品blob与已捕获候选相同，并在最终提交重建后跑短烟测核真实页脚，不重复184矩阵或改写旧图身份。

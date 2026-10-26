@@ -9,6 +9,28 @@ const change = (path: string, before: string | null = '', after: string | null =
 const stylesheet = 'src/features/duel/duel-headings.css';
 const localCss = readFileSync(stylesheet, 'utf8');
 
+function moduleReferences(text: string, path: string) {
+  const source = ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true);
+  const references = new Set<string>();
+  const visit = (node: ts.Node) => {
+    const specifier =
+      ts.isImportDeclaration(node) || ts.isExportDeclaration(node)
+        ? node.moduleSpecifier
+        : ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword
+          ? node.arguments[0]
+          : ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument)
+            ? node.argument.literal
+            : undefined;
+    if (specifier) {
+      if (!ts.isStringLiteralLike(specifier)) throw new Error(`Nonliteral import in ${path}: consumer scope needs review`);
+      references.add(specifier.text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  return [...references];
+}
+
 describe('#364 bounded Duel presentation plan', () => {
   it('Duel includes its real calculation, URL, golden and heading regressions', () => {
     const plan = planChanges([change('src/features/duel/components/Duel.tsx')]);
@@ -65,26 +87,25 @@ describe('#364 bounded Duel presentation plan', () => {
     for (const entry of readdirSync('src', { recursive: true, encoding: 'utf8' })) {
       if (!/\.(?:tsx?|mts|mjs)$/.test(entry)) continue;
       const path = `src/${entry}`;
-      const source = ts.createSourceFile(path, readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true);
-      const visit = (node: ts.Node) => {
-        const specifier =
-          ts.isImportDeclaration(node) || ts.isExportDeclaration(node)
-            ? node.moduleSpecifier
-            : ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword
-              ? node.arguments[0]
-              : undefined;
-        if (specifier && ts.isStringLiteral(specifier)) {
-          const module = ts.resolveModuleName(specifier.text, resolve(path), options, ts.sys).resolvedModule;
-          if (module) {
-            const target = relative(process.cwd(), module.resolvedFileName).replaceAll('\\', '/');
-            consumers[target]?.add(path);
-          }
+      for (const specifier of moduleReferences(readFileSync(path, 'utf8'), path)) {
+        const module = ts.resolveModuleName(specifier, resolve(path), options, ts.sys).resolvedModule;
+        if (module) {
+          const target = relative(process.cwd(), module.resolvedFileName).replaceAll('\\', '/');
+          consumers[target]?.add(path);
         }
-        ts.forEachChild(node, visit);
-      };
-      visit(source);
+      }
     }
     for (const [path, paths] of Object.entries(expected)) expect([...consumers[path]!].sort(), path).toEqual(paths);
+  });
+
+  it('consumer evidence includes static, re-export, dynamic quote/template and type imports; unresolved dynamic evidence fails', () => {
+    expect(
+      moduleReferences(
+        "import Panel from './panel'; export { Basis } from './basis'; const a=import('./quoted'); const b=import(`./template`); type T=import('./typed').T;",
+        'fixture.tsx',
+      ),
+    ).toEqual(['./panel', './basis', './quoted', './template', './typed']);
+    expect(() => moduleReferences('const panel = import(target);', 'fixture.tsx')).toThrow(/consumer scope needs review/);
   });
 
   it('local CSS requires actual range evidence and every selector stays below #duel', () => {
@@ -112,6 +133,11 @@ describe('#364 bounded Duel presentation plan', () => {
     ] as const)
       expect(planChanges([change(stylesheet, before, after)])).toMatchObject({ full: true, data: false });
     expect(planChanges([change('src/features/duel/other.css', null, 'body { display:none }')])).toMatchObject({ full: true, data: false });
+    // Vite natively treats pcss/postcss as CSS; alternate suffixes must not bypass the guard.
+    for (const extension of ['pcss', 'postcss', 'less', 'sass', 'scss', 'styl', 'stylus', 'sss', 'CSS']) {
+      for (const source of ['body { display:none }', '#duel .title { margin:0 }'])
+        expect(planChanges([change(`src/features/duel/global.${extension}`, null, source)]), extension).toMatchObject({ full: true, data: false });
+    }
   });
 
   it('core calculations, global CSS, unknown shared files, dependencies and data keep conservative checks', () => {

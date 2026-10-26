@@ -318,8 +318,9 @@ export function planChanges(changes) {
       // Audited presentation consumers only; state, calculations and other shared files stay full.
       for (const feature of ['duel', 'units', 'buildings']) features.add(feature);
       for (const name of ['matchupSim424', 'v070-88', 'garrison218', 'garrison224']) extraE2e.add(`tests/e2e/${name}.spec.ts`);
-    } else if (path.startsWith('src/features/duel/') && path.endsWith('.css')) {
-      if (duelCssOnly(before, after)) features.add('duel');
+    } else if (path.startsWith('src/features/duel/') && /\.(?:css|pcss|postcss|less|sass|scss|styl|stylus|sss)$/i.test(path)) {
+      // Vite also accepts pcss/postcss and preprocessor suffixes; unknown syntax stays full.
+      if (path.endsWith('.css') && duelCssOnly(before, after)) features.add('duel');
       else full = true;
     } else if (path.startsWith('src/features/')) {
       const feature = path.split('/')[2];

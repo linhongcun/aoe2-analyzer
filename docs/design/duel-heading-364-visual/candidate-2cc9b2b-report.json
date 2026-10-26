@@ -1,0 +1,1309 @@
+{
+  "mode": "all",
+  "captureScriptSha256": "136b90f1e2aff288bfce74f61ed915f5a42b2291591a621cb00cc8e67dafbb54",
+  "comparisonScriptSha256": "360d776669ad665604c041c4c56f252e8f504411f968254059d3d0c6ae2065b8",
+  "baseline": {
+    "site": "http://127.0.0.1:3643/",
+    "build": "a0ed295de41bf835b41ea80be4fd8a1c20f99c10",
+    "version": "v0.40.0",
+    "manifestSha256": "0b5ba732d33f81494267cafa200ca79b04ed6b019e4749ec0b478861ba70f0d9"
+  },
+  "candidate": {
+    "site": "http://127.0.0.1:3641/",
+    "build": "2cc9b2b04a2826c960c70b732fd21c035b02b3ae",
+    "version": "v0.40.2",
+    "manifestSha256": "96d4a4dd54760589af8282bf642dfd144d949323d49aa446ad62d2fca48d0a6a"
+  },
+  "normalizations": ["[data-t=\"footer-app-version\"] textContent=VERSION", "[data-t=\"footer-build\"] textContent=BUILD"],
+  "comparisons": [
+    {
+      "id": "one-default",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 4001],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-expanded",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 13576],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-default",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 4188],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-expanded",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 13762],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-default",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 4445],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-expanded",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 13863],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-default",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 4438],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-expanded",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 14012],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-default",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 2123],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-expanded",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 5086],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-default",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 1824],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-expanded",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 1824],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-default",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 5938],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-expanded",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 13951],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-default",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 3986],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-expanded",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 13580],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-applied",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 13863],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-unsupported",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 13547],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-research",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 14088],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-basis",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 14012],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-sim",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 4394],
+      "differentPixels": 0
+    },
+    {
+      "id": "building-sim",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 4316],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-basis",
+      "width": 360,
+      "theme": "light",
+      "size": [360, 3649],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-default",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 4001],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-expanded",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 13576],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-default",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 4188],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-expanded",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 13762],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-default",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 4445],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-expanded",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 13863],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-default",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 4438],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-expanded",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 14012],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-default",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 2123],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-expanded",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 5086],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-default",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 1824],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-expanded",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 1824],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-default",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 5938],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-expanded",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 13951],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-default",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 3986],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-expanded",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 13580],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-applied",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 13863],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-unsupported",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 13547],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-research",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 14088],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-basis",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 14012],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-sim",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 4394],
+      "differentPixels": 0
+    },
+    {
+      "id": "building-sim",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 4316],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-basis",
+      "width": 360,
+      "theme": "dark",
+      "size": [360, 3649],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-default",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 3914],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-expanded",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13401],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-default",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 4123],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-expanded",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13611],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-default",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 4381],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-expanded",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13714],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-default",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 4355],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-expanded",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13842],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-default",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 2080],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-expanded",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 5020],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-default",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 1781],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-expanded",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 1781],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-default",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 5855],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-expanded",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13741],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-default",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 3909],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-expanded",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13384],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-applied",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13714],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-unsupported",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13396],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-research",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13986],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-basis",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 13842],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-sim",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 4381],
+      "differentPixels": 0
+    },
+    {
+      "id": "building-sim",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 4238],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-basis",
+      "width": 375,
+      "theme": "light",
+      "size": [375, 3649],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-default",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 3914],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-expanded",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13401],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-default",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 4123],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-expanded",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13611],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-default",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 4381],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-expanded",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13714],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-default",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 4355],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-expanded",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13842],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-default",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 2080],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-expanded",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 5020],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-default",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 1781],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-expanded",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 1781],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-default",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 5855],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-expanded",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13741],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-default",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 3909],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-expanded",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13384],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-applied",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13714],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-unsupported",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13396],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-research",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13986],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-basis",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 13842],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-sim",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 4381],
+      "differentPixels": 0
+    },
+    {
+      "id": "building-sim",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 4238],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-basis",
+      "width": 375,
+      "theme": "dark",
+      "size": [375, 3649],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-default",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 3843],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-expanded",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13216],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-default",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 4061],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-expanded",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13434],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-default",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 4339],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-expanded",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13537],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-default",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 4296],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-expanded",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13669],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-default",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 2060],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-expanded",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 4947],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-default",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 1762],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-expanded",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 1762],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-default",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 5812],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-expanded",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13555],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-default",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 3889],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-expanded",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13263],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-applied",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13537],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-unsupported",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13268],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-research",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13844],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-basis",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13669],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-sim",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 4320],
+      "differentPixels": 0
+    },
+    {
+      "id": "building-sim",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 4139],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-basis",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 3649],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-default",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 3843],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-expanded",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13216],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-default",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 4061],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-expanded",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13434],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-default",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 4339],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-expanded",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13537],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-default",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 4296],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-expanded",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13669],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-default",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 2060],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-expanded",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 4947],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-default",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 1762],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-expanded",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 1762],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-default",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 5812],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-expanded",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13555],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-default",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 3889],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-expanded",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13263],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-applied",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13537],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-unsupported",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13268],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-research",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13844],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-basis",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 13669],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-sim",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 4320],
+      "differentPixels": 0
+    },
+    {
+      "id": "building-sim",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 4139],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-basis",
+      "width": 390,
+      "theme": "dark",
+      "size": [390, 3649],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-default",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 3030],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-expanded",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 9223],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-default",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 3090],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-expanded",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 9283],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-default",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 3005],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-expanded",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 9059],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-default",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 2991],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-expanded",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 9185],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-default",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 1510],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-expanded",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 3880],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-default",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 1212],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-expanded",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 1212],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-default",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 4411],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-expanded",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 9169],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-default",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 2913],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-expanded",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 8956],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-applied",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 9059],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-unsupported",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 8582],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-research",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 9202],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-basis",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 9185],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-sim",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 2036],
+      "differentPixels": 0
+    },
+    {
+      "id": "building-sim",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 2145],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-basis",
+      "width": 1280,
+      "theme": "light",
+      "size": [1280, 3505],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-default",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 3030],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-expanded",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 9223],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-default",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 3090],
+      "differentPixels": 0
+    },
+    {
+      "id": "group-expanded",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 9283],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-default",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 3005],
+      "differentPixels": 0
+    },
+    {
+      "id": "resource-expanded",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 9059],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-default",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 2991],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-expanded",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 9185],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-default",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 1510],
+      "differentPixels": 0
+    },
+    {
+      "id": "unavailable-expanded",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 3880],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-default",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 1212],
+      "differentPixels": 0
+    },
+    {
+      "id": "both-unavailable-expanded",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 1212],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-default",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 4411],
+      "differentPixels": 0
+    },
+    {
+      "id": "upgrade-expanded",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 9169],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-default",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 2913],
+      "differentPixels": 0
+    },
+    {
+      "id": "varangian-expanded",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 8956],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-applied",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 9059],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-unsupported",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 8582],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-research",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 9202],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-basis",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 9185],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-sim",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 2036],
+      "differentPixels": 0
+    },
+    {
+      "id": "building-sim",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 2145],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-basis",
+      "width": 1280,
+      "theme": "dark",
+      "size": [1280, 3505],
+      "differentPixels": 0
+    }
+  ],
+  "allZero": true
+}
