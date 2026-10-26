@@ -137,7 +137,8 @@ describe('D 按类别打折带出的其他文明（Steve 口径 PR 评论 619503
 });
 
 describe('C 白名单', () => {
-  const WHITELIST = [
+  // 冻结v0.7.0历史fixture的19个文明；当前不支持集合在下方单独派生。
+  const HISTORICAL_WHITELIST = [
     'Armenians',
     'Bengalis',
     'Chinese',
@@ -149,6 +150,7 @@ describe('C 白名单', () => {
     'Mapuche',
     'Mayans',
     'Poles',
+    'Portuguese',
     'Romans',
     'Shu',
     'Sicilians',
@@ -157,6 +159,17 @@ describe('C 白名单', () => {
     'Varangians',
     'Wei',
   ];
+  const WHITELIST = HISTORICAL_WHITELIST.filter((c) => c !== 'Portuguese');
+  it('历史v0.7.0 fixture完整保留19个文明（包含葡萄牙）', () => {
+    const B = baseline as Record<string, Record<string, unknown>>;
+    // 本用例的WHITELIST明确指历史19文明，不是当前剩余18个未支持文明。
+    // 保留原历史断言真实执行，同时让v0300-289继续保护全部原断言。
+    const WHITELIST = HISTORICAL_WHITELIST;
+    expect(WHITELIST).toHaveLength(19);
+    expect(Object.keys(B).sort()).toEqual([...WHITELIST].sort());
+    const historicalBuilds = ['archers-19', 'drush-fc', 'fast-castle-boom', 'feudal-drush-18', 'maa-archers-18', 'scouts-18'];
+    for (const c of WHITELIST) expect(Object.keys(B[c]!).sort(), c).toEqual(historicalBuilds);
+  });
   it('不支持的文明正好是这 18 个（#197 葡萄牙已支持）', () => {
     const uns = Object.keys(E.civEco).filter((c) => !simSupport(E, c, buildOrders).supported);
     expect(new Set(uns)).toEqual(new Set(WHITELIST));
@@ -169,8 +182,6 @@ describe('C 白名单', () => {
   });
   it('剩余 18 个白名单文明 × v0.7.0 原有开局：每步库存、时间和升时代与基线完全相同', () => {
     const B = baseline as Record<string, Record<string, unknown>>;
-    // 历史19文明数据原样保留；葡萄牙新模型由portuguese197.test.ts核对，不能重录旧fixture。
-    expect(Object.keys(B).sort()).toEqual([...WHITELIST, 'Portuguese'].sort());
     for (const c of WHITELIST) {
       expect(Object.keys(B[c]!)).toHaveLength(6);
       for (const id of Object.keys(B[c]!)) {
