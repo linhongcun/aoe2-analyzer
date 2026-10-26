@@ -150,3 +150,69 @@
 .patch-new .patch-kind {
   color: var(--color-link);
 }
+.mounted-crossbow-presets {
+  margin-block: var(--space-5);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.mounted-crossbow-presets > h3 {
+  margin-top: 0;
+  font-size: var(--fs-h3);
+}
+.mounted-crossbow-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+.mounted-crossbow-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-3);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.mounted-crossbow-card > h4,
+.mounted-crossbow-card > p {
+  margin: 0;
+}
+.mounted-crossbow-card > h4 {
+  font-size: var(--fs-body);
+}
+.mounted-crossbow-card .note,
+.mounted-crossbow-fallback {
+  font-size: var(--fs-sm);
+}
+.mounted-crossbow-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: auto;
+}
+.mounted-crossbow-actions :is(a, button) {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-link);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+}
+.mounted-crossbow-fallback {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--color-text);
+}
+@media (min-width: 900px) {
+  .mounted-crossbow-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

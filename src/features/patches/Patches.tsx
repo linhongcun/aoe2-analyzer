@@ -5,6 +5,7 @@ import { usePatchArchives } from '../../data/patchHistory';
 import { filterPatch, groupTreeChanges, patchTarget, PATCH_KINDS, PATCH_TYPES, type PatchKind } from '../../domain/patches';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { NumericText } from '../../shared/ui/PatchHistory';
+import { MountedCrossbowPresets } from './MountedCrossbowPresetCards';
 import './patches.css';
 
 const kinds = Object.keys(PATCH_KINDS) as PatchKind[];
@@ -171,6 +172,7 @@ export default function Patches() {
           ? '仅展示基础数值，文明与科技的最终效果请看详情；“来源冲突”归入调整，不判定为已验证削弱。'
           : '数值依据当时公告，不代表当前属性；不以改动次数判断整体对局强弱。'}
       </p>
+      <MountedCrossbowPresets patchId={id} />
       <section className="patch-civs" aria-label="按文明看">
         <h3>按文明看</h3>
         <p>选你玩的文明，只看它的专属改动和全局改动</p>
