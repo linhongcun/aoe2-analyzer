@@ -401,11 +401,13 @@ export async function checkSite({ site, version, commit, features = [] }) {
           if (feature === 'civs') {
             await check(page.locator('#grid .card').first()).toBeVisible();
             await goto('/civ/Franks');
-            const regional = page.getByRole('region', { name: '区域单位', exact: true });
+            const regional = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '区域单位', exact: true }) });
+            await check(page.locator('.dside .sideblk > h4').nth(1)).toHaveText('区域单位');
+            await check(page.locator('.dmain').getByRole('heading', { name: '区域单位', exact: true })).toHaveCount(0);
             await check(regional.getByRole('link', { name: '骑马弩兵', exact: true })).toHaveAttribute('href', '#/unit/2700/Franks/3/');
             await check(regional.getByRole('link', { name: '重装骑马弩兵', exact: true })).toHaveAttribute('href', '#/unit/2701/Franks/4/');
             await goto('/civ/Japanese');
-            await check(page.getByRole('region', { name: '区域单位', exact: true })).toContainText('本文明没有区域单位。');
+            await check(regional).toContainText('本文明没有区域单位。');
           }
         }
       }

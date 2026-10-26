@@ -131,7 +131,6 @@ export default function CivDetail() {
                 <b>特色兵种：</b>
                 <Linked text={c.uu} />
               </p>
-              <CivRegionalUnits civ={c.en} units={core?.units ?? null} />
               <p>
                 <b>文明加成：</b>
                 <Link className="ulink" to="/bonuses">
@@ -203,6 +202,7 @@ export default function CivDetail() {
               <div className="uchips">{core && <UnitLinks list={collapse(myU, core.fam)} />}</div>
             </SideBlock>
           )}
+          <CivRegionalUnits civ={c.en} units={core?.units ?? null} families={core?.fam ?? null} />
           <SideBlock title="快速入口">
             <Link className="ulink tlink" to={`/tree/${c.en}`}>
               <Icon name="git-branch" /> 科技树
