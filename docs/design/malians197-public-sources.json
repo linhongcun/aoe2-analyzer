@@ -1,0 +1,48 @@
+{
+  "topic": "Malians res276 semantic public evidence",
+  "sources": [
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "lineStart": 251,
+      "lineEnd": 256,
+      "excerpt": "## 33. Effect Function Number\n\n- ID: 33\n\n- Purpose: Used to invoke functions in XS from data. When set to a non zero value `N`, it will automatically call a function named `EffectFunctionN` from the `Effects.xs` file.\n",
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L251-L256"
+    },
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "lineStart": 2202,
+      "lineEnd": 2214,
+      "excerpt": "## 276. Bonus Gold Productivity\n\n- ID: 276\n\n- Purpose: Bonus gold miner gold gathering percent of main work rate\n\n- Default Values:\n\n    - 0:  Default\n    - 10:  Malians\n\n- Note: `EffectFunction11` must be called in order for this resource to work\n",
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L2202-L2214"
+    },
+    {
+      "repo": "KSneijders/AoE2ScenarioParser",
+      "commit": "07603c3d81e62f1ced5cd1199afe1e4a1fbf0348",
+      "path": "AoE2ScenarioParser/datasets/trigger_lists/attribute.py",
+      "lineStart": 1683,
+      "lineEnd": 1694,
+      "excerpt": "    BONUS_GOLD_PRODUCTIVITY = 276\n    \"\"\"\n    - Purpose: Bonus gold miner gold gathering percent of main work rate\n    \n    - Defaults:\n    \n        - 0: Default\n        - 10: Malians\n    \n    - Note: `EffectFunction11` must be called in order for this resource to work\n    \"\"\"\n    RED_CLIFFS_TACTICS_DAMAGE = 277",
+      "note": "Documentation repeats guide semantics; not independent engine measurement."
+    }
+  ],
+  "facts": [
+    "Resource276 describes bonus gold miner gold gathering percentage of main work rate, with Malians default10.",
+    "Resource33 setting nonzero N invokes EffectFunctionN in Effects.xs; resource276 specifically requires Function11."
+  ],
+  "modelBoundary": "These docs justify percent /100 and restricting to gold miners. Applying this to the existing carry/walk effective gold income is a declared continuous approximation, not proof of actual engine collection/deposit/frame/travel timing. Do not claim workRate itself increases by10%, or that source depletion/return trip timing/client rounding were measured.",
+  "excludedBodies": [
+    {
+      "url": "https://github.com/ayzg/adex/blob/980e7e96a93b8f3613bb41893088111d8f99f378/res/xs-refs/AOE2FunctionsReference.xs#L1313-L1341",
+      "reason": "Actual fetched Function11 is Khitans shepherd/herder food productivity, not Malians gold. Version/provenance not pinned185872; cannot use as correct Function11 body."
+    },
+    {
+      "url": "https://github.com/MisumiSoyo/Legacy-of-Empires/blob/61ba020b9e6c00d82ee59568a78e2ee4077dbb52/resources/_common/xs/Effects.xs#L561-L589",
+      "reason": "Actual fetched mod Function11 also Khitans shepherd/herder, not Malians gold. Must exclude as wrong mapping/provenance."
+    }
+  ],
+  "function11BodyStatus": "No trusted pinned185872 Function11 body found in bounded public search. This absence must remain explicit."
+}

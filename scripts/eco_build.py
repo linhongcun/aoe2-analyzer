@@ -83,7 +83,7 @@ def main():
         u = U[i] if i < len(U) else None
         if not u: diffs.append((kind, i, en, '.dat 中不存在', '', '')); return
         rec = {'en': en, time_key: u['TrainTime'], 'at': [x[0] for x in u['TrainAt']], 'cost': cost(u['Cost'])}
-        if kind == 'units': rec['class'] = u['Class']  # #42 按类别的折扣（哥特步兵 class 6）
+        if kind in ('units', 'buildings'): rec['class'] = u['Class']  # #42/#197：按类别的单位/建筑费用
         if len({x[1] for x in u['TrainAt']}) > 1: rec['timeAt'] = {str(x[0]): x[1] for x in u['TrainAt']}
         out[kind][str(i)] = rec
         if ref_time is not None and ref_time != rec[time_key] and ref_time not in rec.get('timeAt', {}).values(): diffs.append((kind, i, en, time_key, ref_time, rec[time_key]))

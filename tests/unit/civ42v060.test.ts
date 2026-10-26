@@ -73,7 +73,7 @@ describe('#42 放开：其他', () => {
 const DEFERRED: Record<string, string[]> = {
   送村民: ['Bengalis', 'Wei'],
   边采集边产: ['Varangians'],
-  资源总量与狩猎: ['Tatars', 'Mayans', 'Jurchens', 'Malians', 'Sicilians'],
+  资源总量与狩猎: ['Tatars', 'Mayans', 'Jurchens', 'Sicilians'],
   其他: ['Khmer', 'Chinese', 'Slavs', 'Romans'],
 };
 describe('#42 白名单（v0.7.0）：仍置灰且写明原因', () => {
@@ -84,7 +84,7 @@ describe('#42 白名单（v0.7.0）：仍置灰且写明原因', () => {
       expect(r.reasons.length).toBeGreaterThan(0);
     });
   it('放开清单里的文明（不在白名单的）simSupport=true', () => {
-    for (const c of ['Persians', 'Aztecs', 'Tupi', 'Ethiopians', 'Dravidians', 'Malay', 'Italians', 'Muisca', 'Burgundians', 'Vietnamese', 'Cumans', 'Danes'])
+    for (const c of ['Persians', 'Aztecs', 'Tupi', 'Ethiopians', 'Dravidians', 'Malay', 'Italians', 'Muisca', 'Burgundians', 'Vietnamese', 'Cumans', 'Danes', 'Malians'])
       expect(sim.simSupport(E, c, buildOrders).reasons, c).toEqual([]);
   });
   it('未知效果要报错：unhandledEffects 检查保留（#42 正文回归）', () => {

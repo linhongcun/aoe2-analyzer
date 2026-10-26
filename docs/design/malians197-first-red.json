@@ -1,0 +1,255 @@
+{
+  "baseline": "36b0668142146ee8443198e712655725adc6a8dc",
+  "createdAtUTC": "2026-10-26T23:33:22.234824+00:00",
+  "command": "npx vitest run tests/unit/malians197.test.ts --reporter=json --outputFile=/tmp/malians197-first-red-final.json",
+  "allTrackedProductionUnchanged": true,
+  "total": 48,
+  "passed": 23,
+  "failed": 25,
+  "skipped": 0,
+  "baselineFileSHA256": "c07710d760d3a48feca0d494bdcc87dd92f8643d36724af3160936dad11ad3a9",
+  "rawReportSHA256": "83e2ae751b951a396334fa3782a5906a224ffc6ef14ea12bc240ebdb167f369d",
+  "harnessDraftsExcluded": "Draft nonexistent builders/note fields, worker-less construction/auto-house and combined gold/build oracle were corrected before this formal run; typecheck passes. Draft failures are not product bugs.",
+  "assertions": [
+    {
+      "name": "固定来源：594的276 add10与33 set11；156/595仍是原始乘数",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "建筑类别与同一固定dat审计记录一致，农田49与建筑/木墙类别区分",
+      "status": "failed",
+      "failure": "AssertionError: 12: expected undefined to be 3 // Object.is equality"
+    },
+    {
+      "name": "距离1：实际黄金库存为有效采金收入加百分数，主率/携带量不变",
+      "status": "failed",
+      "failure": "AssertionError: expected 126 to be 128 // Object.is equality"
+    },
+    {
+      "name": "距离3：实际黄金库存为有效采金收入加百分数，主率/携带量不变",
+      "status": "failed",
+      "failure": "AssertionError: expected 122 to be 124 // Object.is equality"
+    },
+    {
+      "name": "距离7：实际黄金库存为有效采金收入加百分数，主率/携带量不变",
+      "status": "failed",
+      "failure": "AssertionError: expected 117 to be 118 // Object.is equality"
+    },
+    {
+      "name": "采金携带量变化只改变同一次往返效率，不另设交仓距离",
+      "status": "failed",
+      "failure": "AssertionError: expected 126 to be 128 // Object.is equality"
+    },
+    {
+      "name": "sheep不产生黄金交仓加成",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "boar不产生黄金交仓加成",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "deer不产生黄金交仓加成",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "hunt不产生黄金交仓加成",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "berries不产生黄金交仓加成",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "farm不产生黄金交仓加成",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "fish不产生黄金交仓加成",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "wood不产生黄金交仓加成",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "stone不产生黄金交仓加成",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "黄金支出和开局额外黄金不增加交仓基数",
+      "status": "failed",
+      "failure": "AssertionError: expected 274 to be 276 // Object.is equality"
+    },
+    {
+      "name": "采金科技改变同一主率，额外交仓收入只乘一次",
+      "status": "failed",
+      "failure": "AssertionError: expected 127 to be 129 // Object.is equality"
+    },
+    {
+      "name": "升级时代不重复应用采金加成",
+      "status": "failed",
+      "failure": "AssertionError: expected 109 to be 110 // Object.is equality"
+    },
+    {
+      "name": "升级时代不重复应用建筑折扣",
+      "status": "failed",
+      "failure": "AssertionError: expected 25 to be 21 // Object.is equality"
+    },
+    {
+      "name": "采金整条守护：other-tech不让辅助或库存只应用半条",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "采金整条守护：wrong-op不让辅助或库存只应用半条",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "采金整条守护：missing-marker不让辅助或库存只应用半条",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "采金整条守护：wrong-marker不让辅助或库存只应用半条",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "采金整条守护：unknown-companion不让辅助或库存只应用半条",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "建筑70实际支付21木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 25 to be 21 // Object.is equality"
+    },
+    {
+      "name": "建筑12实际支付149木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 175 to be 149 // Object.is equality"
+    },
+    {
+      "name": "建筑109实际支付234木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 275 to be 234 // Object.is equality"
+    },
+    {
+      "name": "建筑72实际支付2.5木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 3 to be 2.5 // Object.is equality"
+    },
+    {
+      "name": "建筑50实际支付60木，与独立既有费用表一致，农田除外",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "建筑45实际支付127.5木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 150 to be 127.5 // Object.is equality"
+    },
+    {
+      "name": "建筑68实际支付85木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 100 to be 85 // Object.is equality"
+    },
+    {
+      "name": "建筑562实际支付85木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 100 to be 85 // Object.is equality"
+    },
+    {
+      "name": "建筑584实际支付85木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 100 to be 85 // Object.is equality"
+    },
+    {
+      "name": "建筑84实际支付149木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 175 to be 149 // Object.is equality"
+    },
+    {
+      "name": "建筑87实际支付149木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 175 to be 149 // Object.is equality"
+    },
+    {
+      "name": "建筑101实际支付149木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 175 to be 149 // Object.is equality"
+    },
+    {
+      "name": "建筑103实际支付127.5木，与独立既有费用表一致，农田除外",
+      "status": "failed",
+      "failure": "AssertionError: expected 150 to be 127.5 // Object.is equality"
+    },
+    {
+      "name": "TC去掉156后实际木费275，不硬套全局展示价",
+      "status": "failed",
+      "failure": "AssertionError: expected 324 to be 275 // Object.is equality"
+    },
+    {
+      "name": "TC去掉595后实际木费234，不硬套全局展示价",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "TC去掉both后实际木费275，不硬套全局展示价",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "改变595原始class木费倍率会改变实际支付，排除硬写85%或全局费用表",
+      "status": "failed",
+      "failure": "AssertionError: expected 25 to be 20 // Object.is equality"
+    },
+    {
+      "name": "自动补房也实际付折扣木材",
+      "status": "failed",
+      "failure": "AssertionError: expected 175 to be 179 // Object.is equality"
+    },
+    {
+      "name": "建筑整条守护：wrong-op不能声称马里完整支持",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "建筑整条守护：wrong-class不能声称马里完整支持",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "建筑整条守护：unknown-companion不能声称马里完整支持",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "建筑整条守护：missing-class不能声称马里完整支持",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "支持、附注与真实成本旧边界一致",
+      "status": "failed",
+      "failure": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"
+    },
+    {
+      "name": "当前八开局不建大学，原团队研究加成不改变结果或额外计入采金",
+      "status": "passed",
+      "failure": null
+    }
+  ]
+}
