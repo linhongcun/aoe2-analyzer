@@ -78,20 +78,44 @@ test('#364 采集时间口径浮层展开后无标题跳级', async ({ page }) =
   await noSkippedLevel(page, '采集时间口径浮层');
 });
 
-for (const route of ['/unit/38/Franks/4/?tab=sim', '/building/82?tab=sim&civ=Britons&age=4']) {
+const PANEL_TITLE = '科技模拟器 选择文明与科技，查看属性变化与累计研究费用';
+for (const [route, children] of [
+  [
+    '/unit/38/Franks/4/?tab=sim',
+    ['马厩', '铁匠铺', '城堡（独特科技）', '城堡', '团队加成（开关）', '累计研究费用（0 项）', '克制加成 / Bonus damage', '护甲类别（防御）'],
+  ],
+  [
+    '/building/82?tab=sim&civ=Britons&age=4',
+    ['城堡', '铁匠铺', '城镇中心', '大学', '城堡（独特科技）', '团队加成（开关）', '累计研究费用（0 项）', '克制加成 / Bonus damage'],
+  ],
+] as const) {
   test(`#364 共享模拟器默认标题层级保留 ${route}`, async ({ page }) => {
     await page.goto(`./#${route}`);
     const panel = page.locator('#sim');
     await expect(panel).toBeVisible();
     await expect(panel.getByRole('heading', { level: 3, name: /科技模拟器/ })).toHaveCount(1);
     await expect(panel.locator('.simg > h4')).not.toHaveCount(0);
-    // a0ed295 actual control: the panel keeps one h3 + eight h4 children;
-    // its pre-existing page-level h1→h3 report is outside this Duel repair.
-    expect(await panel.getByRole('heading').evaluateAll((headings) => headings.map((heading) => heading.tagName))).toEqual(['H3', ...Array(8).fill('H4')]);
+    // Freeze semantic identities, not axe's incidental CSS-selector spelling.
+    // The baseline's page-level h1→this h3 report is outside this Duel repair.
+    expect(
+      await panel
+        .getByRole('heading')
+        .evaluateAll((headings) => headings.map((heading) => ({ tag: heading.tagName, text: heading.textContent!.replace(/\s+/g, ' ').trim() }))),
+    ).toEqual([{ tag: 'H3', text: PANEL_TITLE }, ...children.map((text) => ({ tag: 'H4', text }))]);
     const result = await new AxeBuilder({ page }).include('main').withRules(['heading-order']).analyze();
-    expect(result.violations.map((violation) => ({ id: violation.id, targets: violation.nodes.map((node) => node.target) }))).toEqual([
-      { id: 'heading-order', targets: [['h3']] },
-    ]);
+    const violations = await Promise.all(
+      result.violations.map(async (violation) => ({
+        id: violation.id,
+        targets: await Promise.all(
+          violation.nodes.map(async (node) => {
+            const selector = node.target[0];
+            if (typeof selector !== 'string') throw new Error('Unexpected non-document heading target');
+            return page.locator(selector).evaluate((heading) => ({ tag: heading.tagName, text: heading.textContent!.replace(/\s+/g, ' ').trim() }));
+          }),
+        ),
+      })),
+    );
+    expect(violations).toEqual([{ id: 'heading-order', targets: [{ tag: 'H3', text: PANEL_TITLE }] }]);
     if (route.startsWith('/unit/')) {
       await page.goto('./#/unit/38');
       await page.locator('[data-t="rc-basis-btn"]').first().click();

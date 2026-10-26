@@ -38,6 +38,8 @@
 
 `RealCostBlock` 的层级须传至其内部 `Basis`；真正的 h4 位于导出的 `Basis`，后者还被 UnitDetail 的紧凑费用说明直接使用。建议 `headingLevel?: 3 | 4` 默认 4，Duel 传 3，UnitDetail 维持默认。只传语义层级，不引入 React 上下文、运行时数据依赖或新的计算分支。
 
+未传层级时，最好连默认 DOM classes 都保持原样，只在 Duel 显式选择层级时添加新标题 class；父面板默认路径也不要显式向子组件传入会启用新 class 的参数。控制测试以 rule id、实际目标的标题 tag/文字身份与完整标题序列冻结语义，不把 axe 自动生成的 CSS selector 拼法当作产品契约。
+
 ## 样式守恒
 
 保留 base.css、editorial.css、layout.css、upgrade-comparison.css 的全部现有全局规则，新增 `src/features/duel/duel-headings.css`，仅用 `#duel` 前缀加稳定 class。这样未改标签的共享消费者继续沿用旧样式，Duel 新标签不再依赖旧 tag selector。
