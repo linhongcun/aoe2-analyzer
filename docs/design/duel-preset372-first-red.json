@@ -1,0 +1,19 @@
+{
+  "baselineCommit": "d38793edec80e295fed4073a71cfc5c8513d6b39",
+  "baselineTree": "872f1f707b7b7d0c2d2052f6caf707a2ed88ff15",
+  "baselineVersion": "v0.40.2",
+  "dataBuild": 185872,
+  "productWasUnmodifiedWhenRun": true,
+  "command": "BASE_URL=http://127.0.0.1:3721/ npx playwright test tests/e2e/duelPreset372.spec.ts --grep '精确两卡|原生query|脏状态|真实复制' --workers=2 --reporter=line",
+  "actualWorkers": 1,
+  "failed": 5,
+  "passed": 2,
+  "duration": "2.1m",
+  "failureCause": "Preset section/cards do not exist on the baseline. First assertion fails with element(s) not found; open/copy actions on missing cards reach the original action timeout. No pageerror/console error or data/environment failure.",
+  "greenControls": ["exact castle a/b/m query and reload", "exact imperial a/b/m query and reload"],
+  "specSha256": "ec1b9fd2ceb21d349542ce022eaed3268d7797f7207211765e3979ffed39fa7c",
+  "e2eSha256": "9f51153a43c9e80023e100e0b9397ab7bee3037b0405dd1a1efb917d1abfd4c3",
+  "fullLogSha256": "30c800825cb58e1ccccf2770efc2b89eb39fb0624e4199ecf9860b7b2b68956c",
+  "localLog": "/tmp/issue372-prep/first-red.log",
+  "independentPreflight": "bug_scope_audit read the full log and exact spec/test hashes and returned PASS with no unresolved issue before implementation. This is a preflight verdict, not final product verification."
+}
