@@ -32,9 +32,9 @@ test('#124 造不了的一方卡片置灰：data-unavailable、标题用 --color
     el.remove();
     return c;
   });
-  await expect(a.locator('.duel-head h3')).toHaveCSS('color', muted);
+  await expect(a.locator('.duel-head .duel-side-title')).toHaveCSS('color', muted);
   await expect(a.locator('.duel-head img').first()).toHaveCSS('filter', 'grayscale(1)');
-  await expect(page.locator('#duel-b .duel-head h3')).not.toHaveCSS('color', muted);
+  await expect(page.locator('#duel-b .duel-head .duel-side-title')).not.toHaveCSS('color', muted);
 });
 
 test('#124 无替代提示在 360px 不横向溢出提示框', async ({ page }) => {
@@ -47,12 +47,7 @@ test('#124 无替代提示在 360px 不横向溢出提示框', async ({ page }) 
     const span = document.querySelector('[data-t="pk-unavail-a"]') as HTMLElement;
     const br = box.getBoundingClientRect();
     const sr = span.getBoundingClientRect();
-    return (
-      sr.right <= br.right + 1 &&
-      sr.left >= br.left - 1 &&
-      span.scrollWidth <= span.clientWidth + 1 &&
-      box.scrollWidth <= box.clientWidth + 1
-    );
+    return sr.right <= br.right + 1 && sr.left >= br.left - 1 && span.scrollWidth <= span.clientWidth + 1 && box.scrollWidth <= box.clientWidth + 1;
   });
   expect(ok).toBe(true);
 });

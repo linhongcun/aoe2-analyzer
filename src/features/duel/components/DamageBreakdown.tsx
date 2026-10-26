@@ -33,9 +33,9 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
         const trace = damageSources(ctx, attacker.u, attacker.civ, attacker.age, attacker.sel, new Set(attacker.spec.team));
         return (
           <section key={side} aria-label={`${side} 伤害拆解`}>
-            <h4>
+            <h3 className="damage-heading">
               {side} · {attacker.u.zh} 攻击 {defender.u.zh}
-            </h4>
+            </h3>
             <ul className="damage-classes">
               {d.rows.map((row) => (
                 <li key={row.category}>
@@ -56,7 +56,7 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
               </b>
               ；期望每击：<b className="nw">{n(d.expected)}</b>
             </p>
-            <h5>{civByEn(attacker.civ)?.zh ?? attacker.civ} · 攻击与护甲来源</h5>
+            <h4 className="damage-source-heading">{civByEn(attacker.civ)?.zh ?? attacker.civ} · 攻击与护甲来源</h4>
             <p>
               单位基础：攻击 <span className="nw">{attacker.u.atk}</span>，近战护甲 <span className="nw">{attacker.u.ma}</span>，穿刺护甲{' '}
               <span className="nw">{attacker.u.pa}</span>

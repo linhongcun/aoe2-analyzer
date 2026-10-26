@@ -49,6 +49,7 @@ export function RealCostBlock({
   d,
   vils,
   min,
+  headingLevel,
 }: {
   k: 'a' | 'b';
   civ: string;
@@ -57,6 +58,8 @@ export function RealCostBlock({
   d: CostDiscount;
   vils: number;
   min: number;
+  /** 默认保持共享说明的 h4；单位 PK 显式使用 h3。 */
+  headingLevel?: 3 | 4;
 }) {
   const { g, rc } = realCostOf(d, age, civ);
   const count = countForTime(rc.total, vils, min);
@@ -130,13 +133,14 @@ export function RealCostBlock({
           <span title={uncountedText(civ, civZh, a.label)}>{uncountedText(civ, civZh, a.label)}</span>
         </div>
       ))}
-      <Basis age={age} food={rc.hasFood} />
+      <Basis age={age} food={rc.hasFood} headingLevel={headingLevel} />
     </div>
   );
 }
 
 /** 口径行 + 浮层（与 #97「来源」浮层同一套 pk-pop 样式） */
-export function Basis({ age, food, compact }: { age: number; food: boolean; compact?: boolean }) {
+export function Basis({ age, food, compact, headingLevel }: { age: number; food: boolean; compact?: boolean; headingLevel?: 3 | 4 }) {
+  const Heading = headingLevel === 3 ? 'h3' : 'h4';
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -162,7 +166,7 @@ export function Basis({ age, food, compact }: { age: number; food: boolean; comp
       </button>
       {open && (
         <div id={id} className="pk-pop" role="dialog" aria-label="采集时间怎么算" data-t="rc-pop">
-          <h4>采集时间怎么算</h4>
+          <Heading className={headingLevel === undefined ? undefined : 'rc-pop-title'}>采集时间怎么算</Heading>
           <ol>
             <li>采集速度按{a}，该时代能研究的经济科技全部算上；选了文明就叠加文明加成。</li>
             <li>食物按农田算，播种耗时未核实，不计入。</li>

@@ -172,3 +172,9 @@ npx playwright test tests/e2e/searchLoading371.spec.ts tests/e2e/aliases.spec.ts
 来源 UI 的 CI 范围明确限定在两类页面、纯公开投影、独立 checker 和四份来源 schema。两份 raw schema 仅来源子树变化可走相关检查；步骤、卡片、其它结构、通用引擎、共享 policy、预编译校验器或未知文件变化仍走 full，原始数据或依赖变化仍 full/data。清空基线的例外要求整个文件精确等于空冻结导出；任何新增条目或其它代码仍 full。规则及反例由 `sourcePresentationScope442` 验证。
 
 五处前端读取边界使用独立的预编译校验器。修改对应 schema 或共享格式后运行 `npm run content:validators`；`npm run content:validators -- --check` 验证生成结果可复现。不要手改 `src/content/schema/compiled`。相关单测为 `contentSchema285`、`contentSources285`、`generatedSchemas285`、`jsonBoundary285`、`sourcePolicy285`；体积继续由 `v080-123` 入口 gzip 和 `pageBudget282` 的施工冷加载预算保护。
+
+### #364 Duel标题与共享展示闭包
+
+`duel` profile覆盖标题语义、四宽明暗截图、URL/金标准、伤害/时代/回放/升级/费用/盈亏平衡的原有回归。仅 `src/shared/ui/sim/SimPanel.tsx` 和 `src/shared/ui/RealCost.tsx` 两个展示文件使用已核消费者的Duel、单位、建筑联合范围，并补共享默认标题合同检查；直接消费者新增时，`headingScope364` 的实际导入审计会失败，要求重新核对范围。其他shared文件、核心domain算式、全局CSS仍使用完整检查。
+
+所有Duel局部CSS修改都要有前后源码证据：每个selector以 `#duel` 限定，不能有外部兄弟选择器、未限定的嵌套规则或全局at-rule；不满足则回退完整检查。#442既有source-only schema与内部字段检查保持。main/Release短烟测检查实际构建的Duel默认/展开/不可用/浮层和共享默认大纲；184对零容差视觉守恒的本地工具、固定两项页脚元数据归一化与真实基线复用说明见 [验证工具](design/duel-heading-364-visual/README.md)。

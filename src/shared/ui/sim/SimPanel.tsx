@@ -32,6 +32,8 @@ export interface SimPanelProps {
   setCmp: (c: string) => void;
   /** 嵌入模式（单位 PK 等）：不显示标题、文明与对比选择器；id 加前缀以免重复 */
   embedded?: string;
+  /** 默认保留 h3/h4；单位 PK 显式传 2，使其子标题使用 h3。 */
+  headingLevel?: 2 | 3;
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
@@ -74,19 +76,22 @@ export function BonusTable({
   S,
   C,
   cmpLabel,
+  headingLevel,
 }: {
   B: Record<string, number>;
   S?: Record<string, number>;
   C?: Record<string, number> | null;
   cmpLabel?: string;
+  headingLevel?: 3 | 4;
 }) {
+  const Heading = headingLevel === 3 ? 'h3' : 'h4';
   const cur = S ?? B;
   const ks = [...new Set([...Object.keys(B), ...Object.keys(cur), ...Object.keys(C ?? {})])].filter((k) => B[k] || cur[k] || C?.[k]);
   return (
     <div className="bonusbox">
-      <h4>
+      <Heading className={headingLevel === undefined ? undefined : 'sim-bonus-title'}>
         <Icon name="crosshair" /> 克制加成 / Bonus damage
-      </h4>
+      </Heading>
       <p className="note">{BONUS_NOTE}</p>
       {ks.length ? (
         <table className="stat bonustab">
@@ -134,13 +139,14 @@ export function BonusTable({
 export const CLASS_AKA: Record<string, string> = { 冲击步兵: '旧称：鹰战士类' };
 
 /** 护甲类别（防御向）：决定该对象会受到哪些克制加成 */
-export function ArmorClasses({ list }: { list: [string, number][] }) {
+export function ArmorClasses({ list, headingLevel }: { list: [string, number][]; headingLevel?: 3 | 4 }) {
+  const Heading = headingLevel === 3 ? 'h3' : 'h4';
   const l = list.filter(([n]) => !/^类别\d+$/.test(n));
   return (
     <div className="bonusbox">
-      <h4>
+      <Heading className={headingLevel === undefined ? undefined : 'sim-armor-title'}>
         <Icon name="shield" /> 护甲类别（防御）
-      </h4>
+      </Heading>
       <p className="note">敌方对这些类别有克制加成时会对其造成额外伤害；数值为该类别护甲</p>
       <div>
         {l.length
@@ -157,6 +163,9 @@ export function ArmorClasses({ list }: { list: [string, number][] }) {
 }
 
 export default function SimPanel(p: SimPanelProps) {
+  const Heading = p.headingLevel === 2 ? 'h2' : 'h3';
+  const Subheading = p.headingLevel === 2 ? 'h3' : 'h4';
+  const childLevel = p.headingLevel === undefined ? undefined : p.headingLevel === 2 ? 3 : 4;
   const tot = totalCost(p.avail, p.sel);
   const groups: Record<string, SimTech[]> = {};
   p.avail.forEach((x) => (groups[simGroup(x.t)] ??= []).push(x));
@@ -182,9 +191,9 @@ export default function SimPanel(p: SimPanelProps) {
   return (
     <div id={p.embedded ? p.embedded + '-sim' : 'sim'} className={p.embedded ? 'posbox simemb' : 'posbox'}>
       {!p.embedded && (
-        <h3>
+        <Heading className={p.headingLevel === undefined ? undefined : 'sim-title'}>
           <Icon name="flask-conical" /> 科技模拟器 <small className="note">选择文明与科技，查看属性变化与累计研究费用</small>
-        </h3>
+        </Heading>
       )}
       <div className="bar">
         {!p.embedded && (
@@ -249,7 +258,7 @@ export default function SimPanel(p: SimPanelProps) {
         <div>
           {Object.entries(groups).map(([g, l]) => (
             <div className="simg" key={g}>
-              <h4>{g}</h4>
+              <Subheading className={p.headingLevel === undefined ? undefined : 'sim-group-title'}>{g}</Subheading>
               {l.map(({ t, ef }) => {
                 const on = p.sel.has(t.id);
                 return (
@@ -272,7 +281,7 @@ export default function SimPanel(p: SimPanelProps) {
           ))}
           {!p.avail.length && <p className="note">该文明没有可影响此对象的已编码科技</p>}
           <div className="simg">
-            <h4>团队加成（开关）</h4>
+            <Subheading className={p.headingLevel === undefined ? undefined : 'sim-group-title'}>团队加成（开关）</Subheading>
             {p.teamBonuses.some((x) => x.ok) ? (
               p.teamBonuses.map(
                 (x, i) =>
@@ -291,7 +300,7 @@ export default function SimPanel(p: SimPanelProps) {
         <div>
           <section className="sim-summary" aria-label="累计研究">
             <div>
-              <h4>累计研究费用（{p.sel.size} 项）</h4>
+              <Subheading className={p.headingLevel === undefined ? undefined : 'sim-summary-title'}>累计研究费用（{p.sel.size} 项）</Subheading>
               <div className="sim-summary-cost">
                 <CostView c={tot.cost} />
               </div>
@@ -316,8 +325,8 @@ export default function SimPanel(p: SimPanelProps) {
               <StatRows rows={p.rows} B={p.base} S={p.cur} C={p.cmpStats} />
             </tbody>
           </table>
-          <BonusTable B={p.base.bonus} S={p.cur.bonus} C={p.cmpStats?.bonus ?? null} cmpLabel={`${civByEn(p.cmp)?.zh ?? ''} 满`} />
-          {p.armorClasses && <ArmorClasses list={p.armorClasses} />}
+          <BonusTable B={p.base.bonus} S={p.cur.bonus} C={p.cmpStats?.bonus ?? null} cmpLabel={`${civByEn(p.cmp)?.zh ?? ''} 满`} headingLevel={childLevel} />
+          {p.armorClasses && <ArmorClasses list={p.armorClasses} headingLevel={childLevel} />}
           <p className="note">
             <Icon name="triangle-alert" className="ic warn" />
             数值为近似：基于 aoe2techtree 基础属性 + 手工编码的通用科技与部分文明加成（来源：游戏内说明与 AoE2 Fandom

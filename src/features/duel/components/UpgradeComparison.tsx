@@ -31,7 +31,7 @@ const techList = (items: Tech[], empty = '无') =>
 function PlanCard({ label, plan, opponent, testId }: { label: string; plan: Plan; opponent: Plan; testId: string }) {
   return (
     <section className="upgrade-plan" data-t={testId} aria-label={label}>
-      <h4>{label}</h4>
+      <h3 className="upgrade-subtitle">{label}</h3>
       <p>{sideText(plan)}</p>
       <p className="note">完整科技（{plan.techs.length} 项）</p>
       {techList(plan.techs, '无科技')}
@@ -186,7 +186,7 @@ export function UpgradeComparison({
   const winner = (w: 'a' | 'b' | 'draw') => (w === 'draw' ? '平局' : `${w.toUpperCase()} 获胜`);
   return (
     <section className="upgrade-comparison posbox" data-t="upgrade-comparison" aria-label="升级前后对比">
-      <h3>升级前后对比</h3>
+      <h2 className="upgrade-title">升级前后对比</h2>
       <p className="note">保存当前 A 为升级前，固定 B；在上方 A 的科技详情选择方案。同一单位形态、文明、时代和团队加成，仅比较 1v1。</p>
       <div className="upgrade-actions">
         <button type="button" disabled={!canSave} onClick={save}>
@@ -273,15 +273,15 @@ export function UpgradeComparison({
           {!comparison.added.length && !comparison.removed.length && <p className="note">尚无科技变化。</p>}
           <div className="upgrade-investment">
             <section data-t="upgrade-added">
-              <h4>新增科技</h4>
+              <h3 className="upgrade-subtitle">新增科技</h3>
               {techList(comparison.added)}
             </section>
             <section data-t="upgrade-prerequisites">
-              <h4>其中新增前置</h4>
+              <h3 className="upgrade-subtitle">其中新增前置</h3>
               {techList(comparison.addedPrerequisites)}
             </section>
             <section data-t="upgrade-removed">
-              <h4>取消科技（不退款）</h4>
+              <h3 className="upgrade-subtitle">取消科技（不退款）</h3>
               {techList(comparison.removed)}
             </section>
           </div>

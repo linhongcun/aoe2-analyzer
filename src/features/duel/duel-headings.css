@@ -1,0 +1,65 @@
+/* Preserve the former h3/h4/h5 appearance while fixing Duel's document outline. */
+#duel .duel-side-title {
+  margin: 0;
+  font-size: var(--fs-h3);
+}
+#duel .duel-side[data-unavailable] .duel-side-title {
+  color: var(--color-muted);
+}
+#duel .duel-win {
+  margin-block: 1em;
+}
+#duel .upgrade-title {
+  margin: 1em 0;
+  font-size: 1.17em;
+}
+#duel .duel-timeline-title,
+#duel .duel-replay-title,
+#duel .pk-vg-title,
+#duel .upgrade-subtitle {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text);
+  font-size: 1em;
+}
+#duel .damage-heading,
+#duel .age-heading {
+  margin: 1.33em 0;
+  font-size: 1em;
+}
+#duel .damage-source-heading {
+  margin: 1.67em 0;
+  font-size: 0.83em;
+  line-height: 1.65;
+  letter-spacing: normal;
+}
+#duel .sim-group-title {
+  margin: 6px 0;
+  border-bottom: 1px solid var(--color-tag);
+  color: var(--color-text);
+  font-size: 1em;
+}
+#duel .sim-bonus-title,
+#duel .sim-armor-title {
+  margin: 6px 0 2px;
+  color: var(--color-text);
+  font-size: 1em;
+}
+#duel .sim-summary-title {
+  margin: 0 0 var(--space-2);
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+#duel .pk-pop-title,
+#duel .rc-pop-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-sm);
+}
+#duel .pk-pop-subtitle {
+  margin: var(--space-2) 0 var(--space-1);
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.65;
+  letter-spacing: normal;
+}

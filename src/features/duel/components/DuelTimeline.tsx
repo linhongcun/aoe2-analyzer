@@ -5,7 +5,7 @@ export function OneTimeline({ A, B, result }: { A: Resolved; B: Resolved; result
   const T = Math.max(result.ab.time ?? 0, result.ba.time ?? 0, result.duration, 0.01);
   return (
     <>
-      <h4>时间线（每个点为一次攻击，竖线为击杀时刻）</h4>
+      <h3 className="duel-timeline-title">时间线（每个点为一次攻击，竖线为击杀时刻）</h3>
       <div className="duel-tl">
         {(
           [
@@ -45,7 +45,7 @@ export function GroupTimeline({ result, na, nb }: { result: GroupResult; na: num
     result.timeline.map(([t, a, b], j) => `${j ? 'L' : 'M'}${((t / T) * W).toFixed(1)},${(H - ((i === 1 ? a : b) / M) * H).toFixed(1)}`).join(' ');
   return (
     <>
-      <h4>存活数量随时间变化</h4>
+      <h3 className="duel-timeline-title">存活数量随时间变化</h3>
       <svg className="duel-chart" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="存活数量随时间变化">
         <path d={path(1)} className="ln-a" />
         <path d={path(2)} className="ln-b" />

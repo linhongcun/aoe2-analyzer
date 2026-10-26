@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
 import { countForBudget } from '../../../domain/duel';
+import '../duel-headings.css';
 import { collapse } from '../../../domain/family';
 import { makeSimContext } from '../../../domain/simulator';
 import { fmtSide, parseSide, type SideSpec } from '../../../domain/duelState';

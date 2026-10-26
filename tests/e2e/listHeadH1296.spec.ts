@@ -37,7 +37,7 @@ test('读屏可按一级标题找到两页主标题', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1, name: '单位 PK', exact: true })).toBeVisible();
 });
 
-test('#/builds、#/duel 通过 axe page-has-heading-one；#/builds 标题层级无跳级', async ({ page }) => {
+test('#/builds、#/duel 通过 axe page-has-heading-one；两页标题层级无跳级', async ({ page }) => {
   for (const route of ['/builds', '/duel']) {
     await go(page, route, 'light');
     const r = await new AxeBuilder({ page }).withRules(['page-has-heading-one']).analyze();
@@ -46,10 +46,26 @@ test('#/builds、#/duel 通过 axe page-has-heading-one；#/builds 标题层级�
       route,
     ).toEqual([]);
   }
-  // #/duel 下方双方卡片用 h3，h1 之后跳过 h2（axe heading-order 提示 1 处），层级整理不在 #296 范围
-  await go(page, '/builds', 'light');
-  const r = await new AxeBuilder({ page }).withRules(['heading-order']).analyze();
-  expect(r.violations.map((v) => v.id)).toEqual([]);
+  for (const route of ['/builds', '/duel']) {
+    await go(page, route, 'light');
+    const r = await new AxeBuilder({ page }).withRules(['heading-order']).analyze();
+    expect(
+      r.violations.map((v) => v.id),
+      route,
+    ).toEqual([]);
+    if (route === '/duel') {
+      await page.locator('#duel details').evaluateAll((elements) =>
+        elements.forEach((element) => {
+          (element as HTMLDetailsElement).open = true;
+        }),
+      );
+      const expanded = await new AxeBuilder({ page }).withRules(['heading-order']).analyze();
+      expect(
+        expanded.violations.map((v) => v.id),
+        '展开后的单位 PK',
+      ).toEqual([]);
+    }
+  }
 });
 
 test('不在范围的列表页仍用 h2 标题（#/civs、#/units、#/techs）', async ({ page }) => {

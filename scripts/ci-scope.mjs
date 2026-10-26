@@ -54,6 +54,51 @@ export const PROFILES = {
     ['affects', 'techUnits13', 'techBuilding12', 'techCost355', 'relatedTechs193'],
     ['techCards6', 'techUnits13', 'relatedTechs193', 'catalogLayout187'],
   ),
+  duel: profile(
+    [
+      'duel',
+      'duelParams281',
+      'costDiscount24',
+      'realCost88',
+      'simulator',
+      'buildingSim',
+      'prereq',
+      'damage105',
+      'age106',
+      'replay104',
+      'breakEven',
+      'breakEven.gaps',
+      'upgrades205',
+      'upgradesState205',
+      'varangianPk350',
+      'varangianGold383',
+      'v0280-281',
+      'v0290-322',
+      'headingScope364',
+    ],
+    [
+      'duelHeading364',
+      'listHeadH1296',
+      'v0280-duel-url',
+      'v0290-322-golden',
+      'damage105',
+      'age106',
+      'replay104',
+      'upgrades205',
+      'varangian350',
+      'pkDiscount24',
+      'v070-88',
+      'pkUnavail124',
+      'v080-124',
+      'breakEven25',
+      'breakEven.stale',
+      'breakEven.colors',
+      'breakEven.gaps',
+      'smoke',
+      'overflow64',
+      'refactor288',
+    ],
+  ),
   buildings: profile(
     ['buildings', 'buildingSim', 'buildingAge357', 'garrison218', 'garrisonGeneral224'],
     ['garrison218', 'garrison224', 'sidebar44', 'catalogLayout187'],
@@ -193,6 +238,33 @@ function cardsCssOnly(before, after) {
   }
 }
 
+/** A local Duel stylesheet cannot escape its page root or introduce global at-rules. */
+export function duelCssOnly(before, after) {
+  const sources = [before, after].filter((source) => source !== null);
+  if (!sources.length) return false;
+  try {
+    return sources.every((source) => {
+      if (typeof source !== 'string') return false;
+      const root = postcss.parse(source);
+      let scoped = true,
+        rules = 0;
+      root.walkAtRules((rule) => {
+        if (!['media', 'supports'].includes(rule.name)) scoped = false;
+      });
+      root.walkRules((rule) => {
+        rules++;
+        if (rule.selectors.some((selector) => !/^#duel(?=$|\s|[.:#>\[])/.test(selector) || /[+~]/.test(selector))) scoped = false;
+      });
+      root.walkDecls((declaration) => {
+        if (declaration.parent.type !== 'rule') scoped = false;
+      });
+      return scoped && rules > 0;
+    });
+  } catch {
+    return false;
+  }
+}
+
 /** A missing range remains conservative; unchanged pipelines are not regenerated for core/UI code. */
 export function planChanges(changes) {
   if (!Array.isArray(changes) || !changes.length) return fullPlan();
@@ -242,6 +314,14 @@ export function planChanges(changes) {
       extraUnit.add('tests/unit/entityHistory435.test.ts');
       extraE2e.add('tests/e2e/entityHistory435.spec.ts');
       extraE2e.add('tests/e2e/buildingHistory.spec.ts');
+    } else if (['src/shared/ui/sim/SimPanel.tsx', 'src/shared/ui/RealCost.tsx'].includes(path)) {
+      // Audited presentation consumers only; state, calculations and other shared files stay full.
+      for (const feature of ['duel', 'units', 'buildings']) features.add(feature);
+      for (const name of ['matchupSim424', 'v070-88', 'garrison218', 'garrison224']) extraE2e.add(`tests/e2e/${name}.spec.ts`);
+    } else if (path.startsWith('src/features/duel/') && /\.(?:css|pcss|postcss|less|sass|scss|styl|stylus|sss)$/i.test(path)) {
+      // Vite also accepts pcss/postcss and preprocessor suffixes; unknown syntax stays full.
+      if (path.endsWith('.css') && duelCssOnly(before, after)) features.add('duel');
+      else full = true;
     } else if (path.startsWith('src/features/')) {
       const feature = path.split('/')[2];
       if (Object.hasOwn(PROFILES, feature)) features.add(feature);

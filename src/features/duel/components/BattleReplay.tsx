@@ -41,7 +41,7 @@ export function BattleReplay({
   const play = () => setPlayback((p) => ({ time: p.time >= duration ? 0 : p.time, playing: !p.playing }));
   return (
     <section className="battle-replay" aria-label="战斗回放" data-t="battle-replay">
-      <h4>战斗回放</h4>
+      <h3 className="duel-replay-title">战斗回放</h3>
       <div className="replay-field">
         {(
           [

@@ -1,0 +1,70 @@
+{
+  "mode": "sample",
+  "captureScriptSha256": "136b90f1e2aff288bfce74f61ed915f5a42b2291591a621cb00cc8e67dafbb54",
+  "comparisonScriptSha256": "360d776669ad665604c041c4c56f252e8f504411f968254059d3d0c6ae2065b8",
+  "baseline": {
+    "site": "http://127.0.0.1:3643/",
+    "build": "a0ed295de41bf835b41ea80be4fd8a1c20f99c10",
+    "version": "v0.40.0",
+    "manifestSha256": "d1c5920ddeb8072af906a2e0ff29db21c35f506d762880cfb3afc1e8a7c18e70"
+  },
+  "candidate": {
+    "site": "http://127.0.0.1:3643/",
+    "build": "a0ed295de41bf835b41ea80be4fd8a1c20f99c10",
+    "version": "v0.40.0",
+    "manifestSha256": "d1c5920ddeb8072af906a2e0ff29db21c35f506d762880cfb3afc1e8a7c18e70"
+  },
+  "normalizations": ["[data-t=\"footer-app-version\"] textContent=VERSION", "[data-t=\"footer-build\"] textContent=BUILD"],
+  "comparisons": [
+    {
+      "id": "one-default",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 3843],
+      "differentPixels": 0
+    },
+    {
+      "id": "one-expanded",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13216],
+      "differentPixels": 0
+    },
+    {
+      "id": "cost-applied",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13537],
+      "differentPixels": 0
+    },
+    {
+      "id": "time-basis",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 13669],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-sim",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 4320],
+      "differentPixels": 0
+    },
+    {
+      "id": "building-sim",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 4139],
+      "differentPixels": 0
+    },
+    {
+      "id": "unit-basis",
+      "width": 390,
+      "theme": "light",
+      "size": [390, 3649],
+      "differentPixels": 0
+    }
+  ],
+  "allZero": true
+}
