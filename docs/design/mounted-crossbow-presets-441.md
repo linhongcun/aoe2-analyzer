@@ -1,6 +1,6 @@
 # #441 骑弩与骑射手预置入口：开工前规格
 
-基线：2026-10-26 GitHub `main` 与本地均为 `6e71f655509487da69bb4f5a1d1592de19fa95f4`（v0.38.0），数据 DE185872。#285 合并前仅准备规格/新增失败测试；之后更新基底再实施，预计产品版本 v0.40.0，不照搬 issue 的建议版本。#308 因投石车次弹丸规则缺证据保持未实施。
+准备基线：2026-10-26 `main` 的 `6e71f655509487da69bb4f5a1d1592de19fa95f4`（v0.38.0），数据 DE185872。规格与失败用例独立预审后，实施分支更新到 #285 合入的 `38a35d5da27839e3bcd44eb511a8ffcdef1c29c3`（v0.39.0），本批产品版本 v0.40.0。#308 因投石车次弹丸规则缺证据保持未实施。
 
 已读 AGENTS、CONTRIBUTING、docs/CODEX-MAINTENANCE；现行流程为执行者准备、独立代理复核，不沿用历史具名签字。已读取 GitHub #441 正文/空评论，查询无已打开实现 PR。开工时须再查最新 main 和 PR。
 
@@ -83,3 +83,14 @@ worktree `/workspace/aoe2-issue441`、分支`feature/issue-441`，从main `6e71f
 - `BASE_URL=http://127.0.0.1:4411/ npx playwright test tests/e2e/mountedCrossbowPresets441.spec.ts --grep '185872补丁有三条' --workers=1 --reporter=line`：1 failed；正常加载DE Update185872标题后，新主题region不存在，`toBeVisible`在2秒失败。不是安装、路由加载或浏览器错误。
 
 此阶段未运行整套新用例或声称实现已通过；实际实施后才对约定功能、静态复制入口和四宽明暗执行绿灯验证。
+
+## 实施与本地验证（2026-10-26）
+
+实现前补齐最小helper空集合与真实URL格式化骨架，再运行已写unit：11项中8失败/3通过；明确失败包括“空集合应有3项”及三组配置key逐字断言，不再仅为missing-module收集错误。随后填入已审核三组配置并实现补丁上下文卡片，保持测试期望。
+
+- 相关unit共17项通过，覆盖三组a/b/m、原生文明/时代、实际resolve、空科技/团队、法兰克54HP、未来数据版本隐藏及稳定子路径URL。
+- 新入口与既有patches16/patchTree417页面共27项通过，包含静态补丁路径复制后重开/reload、自动复制失败的完整地址回退、360/375/390/1280明暗、WCAG AA、44px控件、无横向滚动和页面错误；保留8张全页及8张主题区域截图。
+- lint、严格分层与含TypeScript检查的构建通过；JSON ratchet检查仍为既有22条告警、0错误，五份预编译校验器复现一致。未改生成JSON、校验器、共享计算、Duel子树或受保护期望。
+- 同固定依赖、包含#285的基线提交38a35d5与本次生产构建分别冷加载，均禁缓存/Service Worker，按同源JS解压正文计量。补丁详情565154→570332 bytes（+5178）；新增仅useShareLink1397与duelState1007 bytes，Patches展示增加2762 bytes、入口包增加12 bytes。未加载Duel/simulator/realCost/buildSim/datEffects/units/techs/trees等PK或经济依赖。独立PK与经济工具各仅入口包增加12 bytes，其他所加载JS尺寸与基线一致。
+
+以上为本地实现者验证，最终独立代码/界面复核、CI与上线由交付记录另行给出，不将本地检查写成已经发布。

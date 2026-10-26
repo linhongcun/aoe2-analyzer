@@ -151,5 +151,6 @@ for (const width of [360, 375, 390, 1280])
       await noOverflow(page);
       expect((await new AxeBuilder({ page }).include('[aria-label="骑马弩兵与骑射手预置"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
       await page.screenshot({ path: info.outputPath(`mounted-crossbow-presets-${width}-${theme}.png`), fullPage: true });
+      await region.screenshot({ path: info.outputPath(`mounted-crossbow-presets-card-${width}-${theme}.png`) });
     });
   }
