@@ -1,24 +1,4 @@
-.civ-regional-units ul {
-  padding: 0;
-  margin: 16px 0;
-  list-style: none;
-}
-.civ-regional-units li + li {
-  margin-top: 16px;
-}
-.civ-regional-units .uchips {
-  margin: 0 0 8px;
-  gap: 8px 16px;
-}
-.civ-regional-units .civ-regional-form {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 8px;
-  max-width: 100%;
-}
 .civ-regional-units .ulink {
   min-width: 44px;
   min-height: 44px;
-  max-width: 100%;
 }
