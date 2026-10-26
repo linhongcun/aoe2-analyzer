@@ -1,0 +1,61 @@
+{
+  "baseline": "27eff145c1155ea4c867303dd19a5862bffa958e",
+  "candidateVersion": "0.42.0",
+  "preflight": {
+    "reviewer": "/root/bug_scope_audit",
+    "result": "PASS",
+    "productionChangedAtPreflight": false,
+    "firstRedPassed": 10,
+    "firstRedFailed": 13
+  },
+  "local": {
+    "newPortugueseUnitTestsPassed": 25,
+    "directAffectedUnitFiles": 6,
+    "directAffectedUnitTestsPassed": 217,
+    "directAffectedUnitUpdateOnlySkipped": 1,
+    "releaseSmokeUnitFiles": 3,
+    "releaseSmokeUnitTestsPassed": 34,
+    "buildSimFocusedPassed": 5,
+    "uiPassed": 15,
+    "additionalMobileFallbackPassed": 2,
+    "static": ["tsc --noEmit", "lint (0 errors; existing max-lines warnings)", "lint:layers --strict", "build", "bo:check (8 orders; 0 errors)"],
+    "fullRegression": "Not run locally; existing remote full CI required"
+  },
+  "numericComparison": {
+    "baseline": "27eff145c1155ea4c867303dd19a5862bffa958e",
+    "compared": 296,
+    "changed": [],
+    "addedSupport": ["Portuguese"],
+    "removedSupport": [],
+    "unchangedUnsupported": true,
+    "supportedCount": 38,
+    "unsupportedCount": 18
+  },
+  "derived317": {
+    "oldKeys": 57,
+    "newKeys": 59,
+    "oldValuesUnchanged": true,
+    "added": {
+      "Portuguese-0": "feudal-drush-18",
+      "Portuguese-1": "feudal-drush-18"
+    },
+    "inputs": "a6f13e06f341d6e54c00d37bdd05681074e91e61256d2a9957825e5bf52f62aa",
+    "fingerprintGeneratedBy": "UPDATE_BONUS317=1 npx vitest run tests/unit/bonusUsage317.test.ts",
+    "finalInputConsistencyCheckPassed": true
+  },
+  "historical331SnapshotByteUnchanged": true,
+  "localDeploymentSmoke": {
+    "renderedVersion": "v0.42.0",
+    "renderedBuild": "27eff14 (precommit local build)",
+    "features": ["all"],
+    "checks": [
+      "actual Food preserved / Wood increased",
+      "Portuguese selectable; Shu disabled",
+      "gold cost from fixed eco discount",
+      "share card and continuous estimate",
+      "realCost exact old uncounted text"
+    ],
+    "finalCommitSmoke": "Required after final commit build; this record does not claim a released build"
+  },
+  "screenshots": "Not committed (AGENTS.md); final four widths × two themes in local /tmp/issue197-visual and CI editorial-viewport-screenshots artifact"
+}

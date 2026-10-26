@@ -1,0 +1,61 @@
+{
+  "baseline": "27eff145c1155ea4c867303dd19a5862bffa958e",
+  "command": "npx vitest run tests/unit/portuguese197.test.ts --reporter=json --outputFile=/tmp/issue197-first-red.json",
+  "implementationChanged": false,
+  "passed": 10,
+  "failed": 13,
+  "failures": [
+    {
+      "name": "距离 0：实际库存保留食物，并增加采果收入×res267/100的木材",
+      "message": "AssertionError: expected 200 to be 207 // Object.is equality"
+    },
+    {
+      "name": "距离 2：实际库存保留食物，并增加采果收入×res267/100的木材",
+      "message": "AssertionError: expected 200 to be 206 // Object.is equality"
+    },
+    {
+      "name": "距离 7：实际库存保留食物，并增加采果收入×res267/100的木材",
+      "message": "AssertionError: expected 200 to be 205 // Object.is equality"
+    },
+    {
+      "name": "携带量改变往返效率，不被额外木材占用；兼产倍率仍为固定比例",
+      "message": "AssertionError: expected { food: 171, wood: 200, …(2) } to match object { food: 171, wood: 207 }"
+    },
+    {
+      "name": "换时代不叠加兼产；无团队参数时研发时间与通用相同",
+      "message": "AssertionError: expected { food: 208, wood: 200, …(2) } to match object { food: 208, wood: 202 }"
+    },
+    {
+      "name": "独轮手推车的携带/移速影响同一采果往返，伐木科技不改变兼产木材倍率",
+      "message": "AssertionError: expected { food: 171, wood: 200, …(2) } to match object { food: 171, wood: 207 }"
+    },
+    {
+      "name": "真实开局移除453只去除兼产、移除559只去除黄金折扣，两条确实分别改变结果",
+      "message": "AssertionError: expected [ Array(14) ] to not deeply equal [ Array(14) ]"
+    },
+    {
+      "name": "单位74实际付费黄金×0.8，其它资源和训练时长保留",
+      "message": "AssertionError: expected { food: 50, wood: +0, gold: 20, …(1) } to deeply equal { food: 50, wood: +0, gold: 16, …(1) }"
+    },
+    {
+      "name": "单位4实际付费黄金×0.8，其它资源和训练时长保留",
+      "message": "AssertionError: expected { food: +0, wood: 25, gold: 45, …(1) } to deeply equal { food: +0, wood: 25, gold: 36, …(1) }"
+    },
+    {
+      "name": "单位38实际付费黄金×0.8，其它资源和训练时长保留",
+      "message": "AssertionError: expected { food: 60, wood: +0, gold: 75, …(1) } to deeply equal { food: 60, wood: +0, gold: 60, …(1) }"
+    },
+    {
+      "name": "drush-fc 的真实单位74步骤同样付折后黄金",
+      "message": "AssertionError: expected 20 to be 16 // Object.is equality"
+    },
+    {
+      "name": "fast-castle-knights 的真实单位38步骤同样付折后黄金",
+      "message": "AssertionError: expected 75 to be 60 // Object.is equality"
+    },
+    {
+      "name": "完整支持后按葡萄牙计；附注说明连续估算，等采集时间仍保留原独立边界",
+      "message": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"
+    }
+  ]
+}

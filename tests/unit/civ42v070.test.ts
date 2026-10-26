@@ -149,7 +149,6 @@ describe('C 白名单', () => {
     'Mapuche',
     'Mayans',
     'Poles',
-    'Portuguese',
     'Romans',
     'Shu',
     'Sicilians',
@@ -158,7 +157,7 @@ describe('C 白名单', () => {
     'Varangians',
     'Wei',
   ];
-  it('不支持的文明正好是这 19 个', () => {
+  it('不支持的文明正好是这 18 个（#197 葡萄牙已支持）', () => {
     const uns = Object.keys(E.civEco).filter((c) => !simSupport(E, c, buildOrders).supported);
     expect(new Set(uns)).toEqual(new Set(WHITELIST));
   });
@@ -168,9 +167,10 @@ describe('C 白名单', () => {
       expect(simSupport(E, c, buildOrders).supported, c).toBe(true);
     }
   });
-  it('19 个白名单文明 × v0.7.0 原有开局：每步库存、时间和升时代与基线完全相同', () => {
+  it('剩余 18 个白名单文明 × v0.7.0 原有开局：每步库存、时间和升时代与基线完全相同', () => {
     const B = baseline as Record<string, Record<string, unknown>>;
-    expect(Object.keys(B).sort()).toEqual([...WHITELIST].sort());
+    // 历史19文明数据原样保留；葡萄牙新模型由portuguese197.test.ts核对，不能重录旧fixture。
+    expect(Object.keys(B).sort()).toEqual([...WHITELIST, 'Portuguese'].sort());
     for (const c of WHITELIST) {
       expect(Object.keys(B[c]!)).toHaveLength(6);
       for (const id of Object.keys(B[c]!)) {
