@@ -42,8 +42,18 @@ export const PROFILES = {
   patches: profile(['patches16', 'patchTree417', 'patchSearch16'], ['patches16', 'patchTree417']),
   matchup: profile(['matchup194', 'p0Batch', 'simRoute424', 'simulator'], ['matchup194', 'matchupSim424', 'rush35']),
   civs: profile(
-    ['civRequirements206', 'civText402', 'civOpening77', 'civBonus', 'dlc-linker', 'civRegionalUnits450'],
-    ['civDlcFilters', 'civRequirements206', 'civText402', 'civ77', 'v0290-326', 'layout62', 'catalogLayout187', 'civRegionalUnits450'],
+    ['civRequirements206', 'civText402', 'civOpening77', 'civBonus', 'dlc-linker', 'civRegionalUnits450', 'civRegionalBuildings456'],
+    [
+      'civDlcFilters',
+      'civRequirements206',
+      'civText402',
+      'civ77',
+      'v0290-326',
+      'layout62',
+      'catalogLayout187',
+      'civRegionalUnits450',
+      'civRegionalBuildings456',
+    ],
   ),
   units: profile(
     ['unitFilters192', 'unitFilters196', 'unitCount14', 'unitNames271', 'unitAge11', 'upgradeLine10', 'relatedTechs193', 'family', 'simRoute424', 'simulator'],
@@ -305,8 +315,8 @@ export function planChanges(changes) {
         features.add('civs');
         features.add('matchup');
       } else full = true;
-    } else if (path === 'src/domain/civUnits.ts') {
-      // Read-only civilization unit presentation; no simulation or generated data changes.
+    } else if (path === 'src/domain/civUnits.ts' || path === 'src/domain/civBuildings.ts') {
+      // Read-only civilization presentation; no simulation or generated data changes.
       features.add('civs');
     } else if (path === 'src/domain/patches.ts') {
       features.add('patches');
