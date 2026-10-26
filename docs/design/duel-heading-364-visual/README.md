@@ -72,3 +72,9 @@ python3 docs/design/duel-heading-364-visual/compare.py \
 工具完整性还实测拒绝了六种只改 manifest 的反例：PNG 摘要不符、输入 route 不符、canonicalHash 不符、空矩阵、重复 key，以及前后共同添加第三个归一化字段。反例没有修改 PNG 文件。这些结果只验证工具，不表示标题修复已经实施。
 
 最终 E2E 可另加8个四宽×主题的代表展开态检查，包含 heading-order、溢出、console/pageerror 与截图，使用默认 test-results 目录供 PR CI 上传四宽明暗产物。完整184对像素矩阵只做一次必要本地验证，不在 PR/main/Release 每个阶段机械重复。
+
+## v0.40.1 实施基底过渡
+
+`v0401-bridge-sample-report.json` 来自正式v0.40.1 Release ZIP（SHA256 `46ee964d42653890dd1c5225c9b0af4f9b899511838ab191d7a74bb17208faa4`，main `72e9c4df4152641eab1007024bf3335aa0f9421b`，main CI run40280930528）的真实7样本，和a0ed295预备基线对应样本的像素均为0差。它是基线版本之间的过渡证据，不是候选完整184对结果。
+
+另有固定refs的只读源码闭包报告（SHA256 `f057c12611ae3b6011213d9dd417cf432e20f34d5d518e28fcf0b383eefe273c`），确认150个组件闭包模块、181个Duel/Unit/Building入口闭包模块以及全public、数据、样式、字体与构建输入相同；排除37个其他lazy路由，不声称全部app或Vite字节相等。root独立重算通过后准许复用原184张a0ed295基线。最终候选完整报告必须继续保留这个真实来源关系和实际已提交构建身份。

@@ -35,6 +35,26 @@ async function noSkippedLevel(page: Page, context: string) {
   await expect(page.locator('.duel-head').getByRole('heading', { level: 2 })).toHaveCount(2);
 }
 
+for (const width of [360, 375, 390, 1280]) {
+  for (const theme of ['light', 'dark'] as const) {
+    test(`#364 四宽明暗展开态 ${width} ${theme}`, async ({ page }, info) => {
+      const errors: string[] = [];
+      page.on('pageerror', (error) => errors.push(error.message));
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
+      await go(page, MODES[0].query);
+      await expand(page);
+      await noSkippedLevel(page, `${width} ${theme}`);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.screenshot({ path: info.outputPath(`duel-heading-${width}-${theme}.png`), fullPage: true, animations: 'disabled' });
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
 for (const item of MODES) {
   for (const expanded of [false, true]) {
     test(`#364 ${item.name} ${expanded ? '展开全部详情' : '默认'}无标题跳级`, async ({ page }) => {

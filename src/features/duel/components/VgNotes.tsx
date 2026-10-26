@@ -73,7 +73,7 @@ export function VgNotes({ sides }: { sides: VgSide[] }) {
   return (
     <div className="pk-vg" data-t="pk-vg">
       {gold.length > 0 && gold.map((g) => <GoldLine key={g.k} k={g.k} gold={g.gold} showSide={showSide} />)}
-      {groups.length > 0 && <h4>相关加成是否计入</h4>}
+      {groups.length > 0 && <h3 className="pk-vg-title">相关加成是否计入</h3>}
       {groups.flatMap((g) => g.notes.map((note) => <Line key={`${g.k}-${note.id}`} k={g.k} civ={g.civ} note={note} showSide={showSide} />))}
     </div>
   );

@@ -57,12 +57,12 @@ for (const w of WIDTHS) {
       await noHScroll(page);
       // 「在 N vs M 中打开」后，主 PK 结果与第 N 档一致
       await page.getByRole('button', { name: /在 N vs M 中打开 16 vs 10/ }).click();
-      await expect(page.locator('#duel-res h3')).toContainText('A · 长戟兵 获胜');
+      await expect(page.locator('#duel-res .duel-win')).toContainText('A · 长戟兵 获胜');
     });
 
     test('N−1 档与手动 N vs M 一致：15 vs 10 游侠获胜', async ({ page }) => {
       await page.goto(`./#/duel?${AB}&m=n&na=15&nb=10`);
-      await expect(page.locator('#duel-res h3')).toContainText('B · 游侠 获胜');
+      await expect(page.locator('#duel-res .duel-win')).toContainText('B · 游侠 获胜');
     });
 
     test('1v1 入口：2 个长戟兵才能打赢 1 个游侠；改参数后旧结果变灰', async ({ page }) => {

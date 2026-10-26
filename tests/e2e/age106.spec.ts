@@ -27,7 +27,7 @@ for (const width of [360, 375, 390, 1280]) {
     await page.screenshot({ path: info.outputPath(`ages-${width}.png`), fullPage: true });
     await castle.getByRole('link').click();
     await expect(page).toHaveURL(/\.3\.f\./);
-    await expect(page.locator('#duel-res h3')).toContainText(winner === '平局' ? '平局' : `${winner![0]} ·`);
+    await expect(page.locator('#duel-res .duel-win')).toContainText(winner === '平局' ? '平局' : `${winner![0]} ·`);
     const resultDps = page
       .locator('#duel-res tr')
       .filter({ has: page.getByText('DPS', { exact: true }) })

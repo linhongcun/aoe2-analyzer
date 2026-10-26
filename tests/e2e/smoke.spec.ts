@@ -34,7 +34,7 @@ const ROUTES: [string, string][] = [
   ['#dlc', '.dlct tr'],
   ['#compare', '#ctab tr'],
   ['#matchup', '#mres h3'],
-  ['#/duel', '#duel-res h3'],
+  ['#/duel', '#duel-res .duel-win'],
   ['#/bonuses', '#blist li'],
   ['#/civ/Franks/bonus/2', '#bonus h1'],
 ];
@@ -116,7 +116,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/compare', '#ctab tr'],
     ['#/matchup', '#mres h3'],
     ['#/simulator', '#simhub .card'],
-    ['#/duel', '#duel-res h3'],
+    ['#/duel', '#duel-res .duel-win'],
     ['#/builds', '#builds [data-t="build-order"]'],
     ['#/production', '[data-testid="production-page"]'],
   ];
@@ -342,13 +342,13 @@ test('unit duel: default Paladin vs Halberdier, URL state, modes', async ({ page
   await page.locator('#duel-b-unit').click();
   await page.locator('.cp-panel .cp-q').fill('Champion');
   await page.keyboard.press('Enter');
-  await expect(page.locator('#duel-b h3')).toContainText('冠军剑士');
+  await expect(page.locator('#duel-b .duel-side-title')).toContainText('冠军剑士');
   await page.locator('#duel-b').getByRole('radio', { name: '无科技', exact: true }).click();
   await expect(page).toHaveURL(/b=\d+\.[A-Za-z]+\.\d\.\./);
   const url = page.url();
   await page.reload();
   expect(page.url()).toBe(url);
-  await expect(page.locator('#duel-b h3')).toContainText('冠军剑士');
+  await expect(page.locator('#duel-b .duel-side-title')).toContainText('冠军剑士');
   // 等资源
   await page.getByRole('radio', { name: '等资源' }).click();
   await expect(page.locator('#duel-res')).toContainText('预算 3000');

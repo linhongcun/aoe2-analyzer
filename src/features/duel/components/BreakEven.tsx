@@ -71,9 +71,9 @@ export function BreakEven({ a, b, nb, summary, sig, auto, onComputed, onOpen }: 
         </div>
       )}
       <section className={'be-card' + (stale ? ' is-stale' : '')} aria-label="盈亏平衡点">
-        <h3 className="be-title">
+        <h2 className="be-title">
           <Icon name="scale" /> 盈亏平衡点
-        </h3>
+        </h2>
         {r.n !== null ? (
           <p className="be-hero">
             <b className="be-n" data-t="be-n">

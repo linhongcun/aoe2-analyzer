@@ -14,7 +14,7 @@ export function AgeComparison({ ctx, byId, a, b }: { ctx: SimContext; byId: Reco
       <p className="note">保留所选文明与团队加成，使用每个时代的满科技；所选单位尚未解锁时回溯其前置版本。每行可打开对应的 1v1 对阵。</p>
       {rows.map((row) => (
         <section key={row.age} aria-label={`${AGE_ZH[row.age]}对比`}>
-          <h4>{AGE_ZH[row.age]}</h4>
+          <h3 className="age-heading">{AGE_ZH[row.age]}</h3>
           <table className="stat age-table">
             <thead>
               <tr>

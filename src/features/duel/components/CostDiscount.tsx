@@ -124,12 +124,12 @@ function SourcePop({ civ, unit, d }: { civ: string; unit: string; d: CostDiscoun
       </button>
       {open && (
         <div id={id} className="pk-pop" role="dialog" aria-label={`${civ} · ${unit} 的费用`} data-t="pk-pop">
-          <h4>
+          <h3 className="pk-pop-title">
             {civ} · {unit} 的费用
-          </h4>
+          </h3>
           {d.applied.length > 0 && (
             <section>
-              <h5>已计入</h5>
+              <h4 className="pk-pop-subtitle">已计入</h4>
               {d.applied.map((a) => (
                 <p key={a.techs.join()}>
                   <Icon name="check" className="ic" /> {minus(a.label)} −{a.pct}%（{AGE[d.age]}）
@@ -140,7 +140,7 @@ function SourcePop({ civ, unit, d }: { civ: string; unit: string; d: CostDiscoun
           )}
           {d.unsupported.length > 0 && (
             <section>
-              <h5>折扣未计入</h5>
+              <h4 className="pk-pop-subtitle">折扣未计入</h4>
               {d.unsupported.map((a) => (
                 <p key={a.techs.join()}>
                   <Icon name="info" className="ic" /> {a.label}
@@ -151,7 +151,7 @@ function SourcePop({ civ, unit, d }: { civ: string; unit: string; d: CostDiscoun
           )}
           {d.half.length > 0 && (
             <section data-t="pk-pop-half">
-              <h5>未计入</h5>
+              <h4 className="pk-pop-subtitle">未计入</h4>
               {d.half.map((a) => (
                 <p key={a.techs.join()}>
                   <Icon name="info" className="ic" /> {a.label}
@@ -162,7 +162,7 @@ function SourcePop({ civ, unit, d }: { civ: string; unit: string; d: CostDiscoun
           )}
           {d.noCost.length > 0 && (
             <section data-t="pk-nocost">
-              <h5>不影响费用</h5>
+              <h4 className="pk-pop-subtitle">不影响费用</h4>
               {d.noCost.map((a) => (
                 <p key={a.techs.join()}>
                   <Icon name="info" className="ic" /> {minus(a.text)}（科技费用或研究时间，仍需研究）

@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 const check = expect.configure({ timeout: 10_000 });
 export function assertFooter(actual, expected) {
@@ -156,6 +157,68 @@ export async function checkSite({ site, version, commit, features = [] }) {
         await check(page.locator('#simciv')).toHaveAttribute('data-value', 'Franks');
         await check(page.locator('#simage')).toHaveValue('4');
         await check(page.locator('#sim input[type="checkbox"]:checked')).toHaveCount(0);
+      } else if (feature === 'duel') {
+        const expand = () => page.locator('#duel details').evaluateAll((details) => details.forEach((element) => (element.open = true)));
+        const duelHeadings = async () => {
+          const result = await new AxeBuilder({ page }).include('#duel').withRules(['heading-order']).analyze();
+          assert.deepEqual(result.violations, [], 'Published Duel headings skip a level');
+          await check(page.locator('.duel-head').getByRole('heading', { level: 2 })).toHaveCount(2);
+        };
+        const sides = 'a=569.Franks.4.f.&b=359.Japanese.4.f.';
+        await goto(`/duel?${sides}&m=1&be=1`);
+        await check(page.locator('#duel-res')).toBeVisible();
+        await duelHeadings();
+        await expand();
+        await duelHeadings();
+        await goto(`/duel?${sides}&m=t&vil=10&min=10`);
+        await check(page.locator('#duel-res')).toBeVisible();
+        await expand();
+        await page.locator('#duel-a [data-t="rc-basis-btn"]').click();
+        await check(page.locator('#duel-a [data-t="rc-pop"]')).toBeVisible();
+        await duelHeadings();
+        await goto('/duel?a=569.Britons.4.f.&b=359.Japanese.4.f.&m=1');
+        await check(page.locator('#duel-pending')).toBeVisible();
+        await expand();
+        await duelHeadings();
+        const panelTitle = '科技模拟器 选择文明与科技，查看属性变化与累计研究费用';
+        for (const [route, children] of [
+          [
+            '/unit/38/Franks/4/?tab=sim',
+            ['马厩', '铁匠铺', '城堡（独特科技）', '城堡', '团队加成（开关）', '累计研究费用（0 项）', '克制加成 / Bonus damage', '护甲类别（防御）'],
+          ],
+          [
+            '/building/82?tab=sim&civ=Britons&age=4',
+            ['城堡', '铁匠铺', '城镇中心', '大学', '城堡（独特科技）', '团队加成（开关）', '累计研究费用（0 项）', '克制加成 / Bonus damage'],
+          ],
+        ]) {
+          await goto(route);
+          const panel = page.locator('#sim');
+          await check(panel).toBeVisible();
+          assert.deepEqual(
+            await panel
+              .getByRole('heading')
+              .evaluateAll((headings) => headings.map((heading) => ({ tag: heading.tagName, text: heading.textContent.replace(/\s+/g, ' ').trim() }))),
+            [{ tag: 'H3', text: panelTitle }, ...children.map((text) => ({ tag: 'H4', text }))],
+            'Published shared simulator default headings changed',
+          );
+          const result = await new AxeBuilder({ page }).include('main').withRules(['heading-order']).analyze();
+          const violations = await Promise.all(
+            result.violations.map(async (violation) => ({
+              id: violation.id,
+              targets: await Promise.all(
+                violation.nodes.map(async (node) => {
+                  assert.equal(typeof node.target[0], 'string', 'Expected a document heading target');
+                  return page.locator(node.target[0]).evaluate((heading) => ({ tag: heading.tagName, text: heading.textContent.replace(/\s+/g, ' ').trim() }));
+                }),
+              ),
+            })),
+          );
+          assert.deepEqual(violations, [{ id: 'heading-order', targets: [{ tag: 'H3', text: panelTitle }] }], 'Published shared simulator baseline changed');
+        }
+        await goto('/unit/38');
+        await page.locator('[data-t="rc-basis-btn"]').first().click();
+        await check(page.locator('[data-t="rc-pop"]').getByRole('heading', { level: 4, name: '采集时间怎么算', exact: true })).toBeVisible();
+        console.log('Verified Duel heading-order: default, expanded, time popup, unavailable; Unit/Building default headings and Unit Basis retained');
       } else if (feature === 'simulator' || feature === 'simRoute') {
         await goto('/unit/38/Franks/4/?tab=sim');
         await check(page.locator('#simciv')).toHaveAttribute('data-value', 'Franks');

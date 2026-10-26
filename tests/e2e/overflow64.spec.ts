@@ -41,7 +41,7 @@ for (const width of WIDTHS) {
 
     test('/duel 无横向溢出，刻度贴齐轨道两端', async ({ page }) => {
       await page.goto('./#/duel');
-      await expect(page.locator('#duel-res h3')).toBeVisible();
+      await expect(page.locator('#duel-res .duel-win')).toBeVisible();
       await noHScroll(page);
       const box = await page.evaluate(() => {
         const tl = document.querySelector('.duel-tl')!;

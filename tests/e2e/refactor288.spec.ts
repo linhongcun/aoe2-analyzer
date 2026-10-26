@@ -15,7 +15,7 @@ for (const width of [360, 375, 390, 1280]) {
       });
       await page.goto(`./#/duel?${AB}&m=1`);
       await expect(page.locator('#duel-res .duel-tab')).toBeVisible();
-      await expect(page.locator('#duel-a .duel-head h3')).toContainText('游侠');
+      await expect(page.locator('#duel-a .duel-head .duel-side-title')).toContainText('游侠');
       await expect(page.locator('.duel-tl .tl-hit').first()).toBeAttached();
       await noOverflow(page);
       await page.screenshot({ path: info.outputPath(`duel-${width}-${theme}.png`), fullPage: true });

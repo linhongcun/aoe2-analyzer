@@ -26,7 +26,7 @@ export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
   const dpsReason = r.ab.dpsReason || r.ba.dpsReason;
   return (
     <div id="duel-res" className="posbox">
-      <h3 className={'duel-win w-' + r.winner}>
+      <h2 className={'duel-win w-' + r.winner}>
         <Icon name="trophy" /> {wn}
         {r.winner !== 'draw' && (
           <small className="note">
@@ -34,7 +34,7 @@ export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
             · 用时 {r1(r.duration)}s · 剩余生命 {r1(r.remaining)} / {r1((r.winner === 'a' ? A : B).F.hp)}
           </small>
         )}
-      </h3>
+      </h2>
       <ShareImage
         title={`${A.u.zh} 对 ${B.u.zh}：${wn}`}
         stats={[
@@ -91,13 +91,13 @@ export function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: num
   const wn = g.winner === 'draw' ? '平局 / 同归于尽' : `${g.winner === 'a' ? 'A' : 'B'} · ${(g.winner === 'a' ? A : B).u.zh} 获胜`;
   return (
     <div id="duel-res" className="posbox">
-      <h3 className={'duel-win w-' + g.winner}>
+      <h2 className={'duel-win w-' + g.winner}>
         <Icon name="trophy" /> {wn}
         <small className="note">
           {' '}
           · 用时 {r1(g.duration)}s · 剩余 {g.winner === 'b' ? g.bAlive : g.aAlive} 个单位、总生命 {g.hpLeft}
         </small>
-      </h3>
+      </h2>
       <ShareImage
         title={`${na} ${A.u.zh} 对 ${nb} ${B.u.zh}：${wn}`}
         stats={[

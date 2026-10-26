@@ -49,15 +49,26 @@ export function Side({
       <div className="duel-head">
         <UnitIcon u={u} big />
         <div>
-          <h3>
+          <h2 className="duel-side-title">
             {k.toUpperCase()} · {u.zh} {count > 1 && <span className="tag">× {count}</span>}
-          </h3>
+          </h2>
           <small className="note">
             {civByEn(side.civ)?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span> · <CostView c={u.cost} />
           </small>
         </div>
       </div>
-      {time && <RealCostBlock k={k} civ={side.civ} civZh={civByEn(side.civ)?.zh ?? side.civ} age={side.age} d={side.disc} vils={time[0]} min={time[1]} />}
+      {time && (
+        <RealCostBlock
+          headingLevel={3}
+          k={k}
+          civ={side.civ}
+          civZh={civByEn(side.civ)?.zh ?? side.civ}
+          age={side.age}
+          d={side.disc}
+          vils={time[0]}
+          min={time[1]}
+        />
+      )}
       {bud > 0 && <CostDiscountBlock k={k} unit={u.zh} civ={civByEn(side.civ)?.zh ?? side.civ} d={side.disc} bud={bud} count={count} />}
       <div className="bar">
         <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
@@ -147,6 +158,7 @@ export function Side({
       <details className="duel-tech">
         <summary>科技详情（已选 {side.sel.size} 项，可逐项勾选）</summary>
         <SimPanel
+          headingLevel={2}
           embedded={`duel-${k}`}
           civs={u.civs}
           minAge={u.age}
@@ -182,9 +194,9 @@ function UnavailSide({ k, side, fams, onChange }: { k: 'a' | 'b'; side: Unavail;
       <div className="duel-head">
         <UnitIcon u={u} big />
         <div>
-          <h3>
+          <h2 className="duel-side-title">
             {k.toUpperCase()} · {u.zh}
-          </h3>
+          </h2>
           <small className="note">
             {civZh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
           </small>
