@@ -280,6 +280,39 @@ export async function checkSite({ site, version, commit, features = [] }) {
       console.log(
         'Verified Mayans economy: own4-villager150Food start,571.9s Food477/Wood376/Gold50/Stone200,pop20/25, paired-source explanation, both generic cavalry shares and original real-cost boundary; no pure-productivity Generic comparison claimed',
       );
+      await goto('/builds?bo=fast-castle-boom&civ=Sicilians&step=13');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按西西里计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await check(page.locator('[data-t="civ-note"]')).toContainText('按实际施工形态计入城镇中心、城堡和防御工事加成');
+      await check(page.locator('[data-t="civ-note"]')).toContainText('农田升级额外储量、耗尽和续种未模拟');
+      assert.equal(Number(await page.locator('[data-step="12"]').getAttribute('data-start-at')), 932.6);
+      assert.deepEqual(await inventory(), { food: 931, wood: 469, gold: 133 });
+      const sicilianDetail = page.getByRole('region', { name: '步骤详情', exact: true });
+      await check(sicilianDetail.locator(':scope > span').filter({ hasText: /^石头\s/ })).toHaveText('石头 300');
+      await check(page.locator('[data-t="step-cost"]')).toContainText('木头 550');
+      await check(page.locator('[data-t="step-cost"]')).toContainText('石头 200');
+      await page.locator('#tlciv').click();
+      const sicilianPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(sicilianPicker.locator('[data-civ="Sicilians"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(sicilianPicker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      await page.locator('[data-t="share-card-btn"]:visible').first().click();
+      await check(page.locator('[data-t="share-card"]')).toContainText('按西西里计');
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Sicilians');
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      await goto('/civ/Sicilians/bonus/4');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText('实际施工工期');
+      await goto('/civ/Sicilians/bonus/1');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'false');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText('也未估算节省的木材');
+      await goto('/construction?cv=1&building=109&civ=Sicilians&age=3&techs=&builders=1&baseline=1&tc=1&task=&walk=3&farm=0');
+      await check(page.getByTestId('construction-seconds')).toHaveText('75 秒');
+      await goto('/duel?a=74.Sicilians.3.f.&b=74.Magyars.3.f.&m=t');
+      await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveText('未计入：西西里 农田食物储量（农田升级，未建模）');
+      console.log(
+        'Verified Sicilians economy: own932.6s Food931/Wood469/Gold133/Stone300, actual two-TC cost550Wood/200Stone, sourced75s one-builder TC, selector/share/source usage and original real-cost boundary',
+      );
     }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {

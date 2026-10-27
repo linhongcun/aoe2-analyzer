@@ -5,7 +5,7 @@ import { civBonuses } from '../../../domain/civBonus';
 import { bonusUsage, usageLevel } from '../../../domain/bonusUsage';
 import type { Civ } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
-import BonusBody from '../../../shared/ui/BonusBody';
+import BonusBody, { BonusText } from '../../../shared/ui/BonusBody';
 
 /** issue 317：经济/费用类加成看各工具是否真的计入（bonusUsage），不再一律标「仅文本」 */
 function RowTag({ b }: { b: ReturnType<typeof civBonuses>[number] }) {
@@ -23,7 +23,7 @@ export function BonusRows({ c }: { c: Civ }) {
       <li key={b.id} className={'brow' + (on ? ' open' : '')} data-bonus={b.idx}>
         <button type="button" className="brow-h" aria-expanded={on} aria-controls={'bb-' + b.id} onClick={() => setOpen(on ? null : b.id)}>
           <Icon name="chevron-right" className={'ic chev' + (on ? ' rot' : '')} />
-          <span className="brow-t">{b.zh}</span>
+          <span className="brow-t">{b.civ === 'Sicilians' ? <BonusText b={b} linked={false} /> : b.zh}</span>
           <RowTag b={b} />
         </button>
         {on && (
