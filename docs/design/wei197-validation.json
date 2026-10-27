@@ -1,0 +1,1409 @@
+{
+  "version": "0.53.0",
+  "scope": "Refs #197 eighth batch Wei only;45supported/11unsupported of56; parent issue remains open",
+  "createdAtUTC": "2026-10-27T16:02:06.916517+00:00",
+  "runtimeCommit": "2bdca97b06e7d024d49c8a25e4c8aafe32f43226",
+  "runtimeTree": "11ef34ef54b94cd1952b6e57cbfee7fa99cf5728",
+  "artifactManifest": "/tmp/wei197-runtime-artifacts-final.json",
+  "artifactManifestSHA256": "97665acf333a1a20efd75af6b8350513faa48067d3febc2b5e3321004d8274ab",
+  "runtimeAssets": [
+    {
+      "path": "dist/assets/125283-CLqOw_yr.json",
+      "sha256": "bc7d1e86da0b03eeadae5fa5478793743f926a2bb406aab8d735b677a3563b84",
+      "bytes": 26756
+    },
+    {
+      "path": "dist/assets/185872-CJXeCPw4.json",
+      "sha256": "13aac16199d5ff637b88758520390e707d7c338ddbd595eeea29ac0d5c6e7b2b",
+      "bytes": 54916
+    },
+    {
+      "path": "dist/assets/66692-Hnm5JaUY.json",
+      "sha256": "96381e88ebd867b89bd60685040e53e2586efdd2723883aa82a4396d15636250",
+      "bytes": 35521
+    },
+    {
+      "path": "dist/assets/81058-CDb7LaCh.json",
+      "sha256": "95f2acaa4c555369748b778664940a06077edc14c7eda1fb90db82b35eb3a33a",
+      "bytes": 124282
+    },
+    {
+      "path": "dist/assets/AboutData-DSIehGYj.js",
+      "sha256": "e175c0e4c6018dff774a91ca9016f2969ef11c1d2b1ddb2539e8e4fda7758988",
+      "bytes": 2314
+    },
+    {
+      "path": "dist/assets/BLink-N7ZvqZ_L.js",
+      "sha256": "659d14e4216a19bdb8b15062db8d204e9285835ae69a881d76623ab065f252c4",
+      "bytes": 228
+    },
+    {
+      "path": "dist/assets/BonusBody-Cdyw_ZGw.js",
+      "sha256": "dae0ace1b54c3322cab5250424e9e659f292f0c91181a54d4fb363c2e1ceb3a6",
+      "bytes": 14832
+    },
+    {
+      "path": "dist/assets/BonusDetail-CPJ7zXSU.js",
+      "sha256": "7821cf2abce015b87a567151080511a3f51bdcadb37200ef773c40e5cdfe2532",
+      "bytes": 1664
+    },
+    {
+      "path": "dist/assets/BonusList-ChtBFMeM.js",
+      "sha256": "1f8f28fae6a8c117ba6ec4a9b4f7e97b356e42c180b85a25f904a41d79be6896",
+      "bytes": 2427
+    },
+    {
+      "path": "dist/assets/BuildOrderList-CRiCmxMA.js",
+      "sha256": "cf0678ecf39fe1ff9b799d03a452770b84e5d3125c347a0272a3b62fd9ab5334",
+      "bytes": 8065
+    },
+    {
+      "path": "dist/assets/BuildTimelineView-B9f2iaT1.js",
+      "sha256": "456dd4f7d4249ef3f988243365305135d331f303aafe8a652e4a35b377f160a4",
+      "bytes": 43992
+    },
+    {
+      "path": "dist/assets/BuildTimelineView-BJ93x43I.css",
+      "sha256": "63fe9c62883090fa9e345342c30f47813d7080474335922ce5bda92add03eb66",
+      "bytes": 5573
+    },
+    {
+      "path": "dist/assets/BuildingDetail-4sxCTmbl.js",
+      "sha256": "f3e25f2a45939943a43a17d0cf1e7d1b958f7920787eeb0b9b53a2f98c7cefa1",
+      "bytes": 8906
+    },
+    {
+      "path": "dist/assets/BuildingList-Bb485PHV.js",
+      "sha256": "33ecc6f168903104f5c37c6ec4434f2b10a2159ccc7208ddc79a96876cddfa98",
+      "bytes": 1904
+    },
+    {
+      "path": "dist/assets/CalcDock-C5Uwhewp.js",
+      "sha256": "e0c35eb64801fdb3211303eebb7a7a40d32ffc3afc17dab86a195ccdc2e7f409",
+      "bytes": 790
+    },
+    {
+      "path": "dist/assets/CalcDock-DEmERChS.css",
+      "sha256": "19110725246f94904c56b094333ee7533331706b8f38df174b6388d1cae6b25b",
+      "bytes": 1752
+    },
+    {
+      "path": "dist/assets/Campaigns-B9ox8LYO.css",
+      "sha256": "3f2e01c24af35285568a2ae0706ea5af50fd014e029881f8a9b2a48f1bf83931",
+      "bytes": 3981
+    },
+    {
+      "path": "dist/assets/Campaigns-BVCnPrvy.js",
+      "sha256": "9b6238f39ca05d660dc4c129bb3df8aba6dbba55d794ebd371a707f3cea1bda4",
+      "bytes": 39220
+    },
+    {
+      "path": "dist/assets/CastleDefense-Bg5ds5VQ.js",
+      "sha256": "b473fda722a94c76d7eb8ec075e7a75a8aaaf70b673d364db806c4505080332e",
+      "bytes": 23011
+    },
+    {
+      "path": "dist/assets/CastleDefense-DmVacrAT.css",
+      "sha256": "f396312958dbc5699655e105549ba8505ff20056e2f56fd1720f698e6fc3b1ef",
+      "bytes": 4398
+    },
+    {
+      "path": "dist/assets/CatalogFilters-CElqdz3V.js",
+      "sha256": "eccc469dedebc63b5c4f587cdbb48c21f57bbbe306972d9e408daffe6eddc23b",
+      "bytes": 937
+    },
+    {
+      "path": "dist/assets/CivDetail-BPosAwZe.css",
+      "sha256": "b5417df560ffaca1652f517d6ed67d92af0fdb2f3f22707d7f0148d35940aa2f",
+      "bytes": 119
+    },
+    {
+      "path": "dist/assets/CivDetail-C5nH3R0b.js",
+      "sha256": "fa762b689b21c100a0f5cfdddc5046c1ec0a7ea6817574800d90fe3caa3ef49a",
+      "bytes": 10529
+    },
+    {
+      "path": "dist/assets/CivList-B5BGUa8y.css",
+      "sha256": "6231fba89996d8b5c6e80767b2c2aeeaa855bac5de6757eebda4fe071efdbd4a",
+      "bytes": 2813
+    },
+    {
+      "path": "dist/assets/CivList-CuOtqPf-.js",
+      "sha256": "821532bdf811d564fae8de35905822509295c811d6a3ff6eea46e886544d4aa0",
+      "bytes": 9013
+    },
+    {
+      "path": "dist/assets/CivPicker-kW6JV3Bo.js",
+      "sha256": "3814b262496f6b8745de7f015f89684202af9d815832b223a06cd422968178e7",
+      "bytes": 5764
+    },
+    {
+      "path": "dist/assets/CommandPalette-71g_FJGR.js",
+      "sha256": "e136e03df8b4388a47b2467a9a30f66823868e0eb7501a14774ce75809b43b89",
+      "bytes": 4414
+    },
+    {
+      "path": "dist/assets/Compare-CI3HhgRf.js",
+      "sha256": "7c7d21587d88cede71b81ae9a2cf866af1ac0cda9d6262ebfae1783833157988",
+      "bytes": 2997
+    },
+    {
+      "path": "dist/assets/Compare-DFTW6qpQ.css",
+      "sha256": "e386edddb8381aad44a14aaadcf12c0b6d12db6908e0d178984eed57b46d8903",
+      "bytes": 438
+    },
+    {
+      "path": "dist/assets/Construction-BGanczie.css",
+      "sha256": "9c97894c376eaa409bd13ba8160dc27e4c4caaa616cd963b7274811a18292091",
+      "bytes": 3858
+    },
+    {
+      "path": "dist/assets/Construction-Ddj48q8q.js",
+      "sha256": "de7bf01059b0147ac3291ab6290d3c760fde54f511287296430552a2fb37b1df",
+      "bytes": 11889
+    },
+    {
+      "path": "dist/assets/ContentGuide-CxZJr7J9.js",
+      "sha256": "4270a5dedeae50587059228a2932f8d50ba9a3b1d596ee08d716b8b27d0f3054",
+      "bytes": 46021
+    },
+    {
+      "path": "dist/assets/ContentGuide-TNRHSVbq.css",
+      "sha256": "b3aa2ed3e6600530e5fae8a9dfaaab80a6aa520d8b41209ae21de52b47ef11d6",
+      "bytes": 3646
+    },
+    {
+      "path": "dist/assets/DlcView-CttC-TGv.js",
+      "sha256": "5d3f9f7acc6af3898d29dfcff63d50f670af87f833ada955d74aad606a56bca3",
+      "bytes": 1636
+    },
+    {
+      "path": "dist/assets/Duel-DXRc2kRe.js",
+      "sha256": "fcd9f98297c72ed347f686c824fe042fe8f61c36c50c466b5c253e3f9eccdf54",
+      "bytes": 60241
+    },
+    {
+      "path": "dist/assets/Duel-QBzNYx2O.css",
+      "sha256": "84871231fb0f6f86adfbce2bd2cff860975743b297e0d628197d380202bb1edf",
+      "bytes": 2507
+    },
+    {
+      "path": "dist/assets/EcoPayoff-Cf--Bidg.css",
+      "sha256": "ef31be7bf4a5d7fe53421039efbf6bc17cf5ba29c5fa8c4fdb3ba6e8eb57bad2",
+      "bytes": 3654
+    },
+    {
+      "path": "dist/assets/EcoPayoff-Qy9osvV-.js",
+      "sha256": "4a935fcde08cc2d5348c3a08ef2974b6cfb362765fb3879a431a647ff43dffa2",
+      "bytes": 17686
+    },
+    {
+      "path": "dist/assets/GameClock-BGutmoHi.css",
+      "sha256": "2d40cbbe5f52d644186833b9e15740eccbb8d980e62eb10f7cbfccd35e1475c7",
+      "bytes": 3019
+    },
+    {
+      "path": "dist/assets/GameClock-D7QfaPn0.js",
+      "sha256": "6b08c4c95f1f3085fc11af7be26f1b18c6906e13a6eb0b219b8a18672b7f0cde",
+      "bytes": 9260
+    },
+    {
+      "path": "dist/assets/GameClockLink-BbgyIvm7.js",
+      "sha256": "4db067f3a975b3ce8e5e011ad7d1cbfed1b12a1e3281aa64465685f73c3a4b83",
+      "bytes": 236
+    },
+    {
+      "path": "dist/assets/GameGuide-3Hl-ioMu.js",
+      "sha256": "7846e271f25f92aa7932bdd71ca789141ba5d0b24396df9aafe40b21927bde07",
+      "bytes": 21191
+    },
+    {
+      "path": "dist/assets/GameGuide-BQfF5flS.css",
+      "sha256": "52f7409db80edc5a5107c71ec2b4f714786805161623a24d0956ae9d697ba220",
+      "bytes": 4529
+    },
+    {
+      "path": "dist/assets/GarrisonHealing-CNgGw70Y.css",
+      "sha256": "92be7b31812037f57240847fc9eb80a425291773b368e6308be3672d9882a103",
+      "bytes": 3507
+    },
+    {
+      "path": "dist/assets/GarrisonHealing-b3lcaOFc.js",
+      "sha256": "a85a0d77f42f0a3ba782364c967f9a48d80f1a1d2bcbfa7ff563e42f4fcf0d09",
+      "bytes": 12320
+    },
+    {
+      "path": "dist/assets/GeneralGarrisonPreview-Ctiz4yaD.js",
+      "sha256": "7ff16dbc6d315c6a53e1d7fec9151a714ce91053adcae2a775a9784857c69a13",
+      "bytes": 13102
+    },
+    {
+      "path": "dist/assets/GeneralGarrisonPreview-DV73yNqw.css",
+      "sha256": "6e1ce217e6af684a9c5470c37be5aad0c55f7c3d1323c1c7f4b9f7b270f043e9",
+      "bytes": 4376
+    },
+    {
+      "path": "dist/assets/Glossary-DEPaOfM5.js",
+      "sha256": "a9cf3b1890e06f6bb6ca172344d9ad559384defa90ca704e2f4dcff314816003",
+      "bytes": 5063
+    },
+    {
+      "path": "dist/assets/Glossary-d8EpO9xw.css",
+      "sha256": "4cd0a076e52daf489869d82f1d5f61529f56def022822f9feb30deb65c5ad0d3",
+      "bytes": 2265
+    },
+    {
+      "path": "dist/assets/Hotkeys-CV69Xq2l.css",
+      "sha256": "79b2ea6be370e790685799e26b10fa115357f18b859993e6fcd9b0f06f38fd6a",
+      "bytes": 4094
+    },
+    {
+      "path": "dist/assets/Hotkeys-CpwwUR8Y.js",
+      "sha256": "08ba48b957a96b6fc945e6d019445ad34d48b50df1341b7e044753fb8e7f2b9d",
+      "bytes": 16550
+    },
+    {
+      "path": "dist/assets/LineChip-DWVwQdBf.js",
+      "sha256": "148727640564365ab4e8b48c90419b2d30b8ac95dc58daecd4212532655f1354",
+      "bytes": 585
+    },
+    {
+      "path": "dist/assets/Maps-D5UGrg2I.css",
+      "sha256": "5c740637b1c1bffde49360e236049f83a74478c152d3e57b308a37131d9b2996",
+      "bytes": 2020
+    },
+    {
+      "path": "dist/assets/Maps-Du60SLD2.js",
+      "sha256": "bcff390ec79938649eab0f32390ef290b5be4317901d6c83577e19aa531d3e61",
+      "bytes": 67063
+    },
+    {
+      "path": "dist/assets/Market-BG8RAtGG.css",
+      "sha256": "a0cadad8550d5d8571d9d343fbcd650411ce8402e727278138f39ce3288d3122",
+      "bytes": 5741
+    },
+    {
+      "path": "dist/assets/Market-DlRuHw_-.js",
+      "sha256": "353943d5540ad4bb70513b93387fa518ca84be78a3ef743ed237b85dd64636f5",
+      "bytes": 19880
+    },
+    {
+      "path": "dist/assets/MatchReview-D2LKYkgP.css",
+      "sha256": "fd36ca3f53efc4611a95bc573f68ca893656b4afae1cc4ce4ab4e0ce79eb0878",
+      "bytes": 4386
+    },
+    {
+      "path": "dist/assets/MatchReview-Divg08PJ.js",
+      "sha256": "ed61064c68cdca225ebf76c99459977625afc29591461d915400bfd96a50eab2",
+      "bytes": 30617
+    },
+    {
+      "path": "dist/assets/Matchup-BZPIC0ml.js",
+      "sha256": "8e5eae9a245b16333e7d7aabdd62499aedcdf618dccba8ca7fbc38d9de13bbd2",
+      "bytes": 8460
+    },
+    {
+      "path": "dist/assets/Matchup-CNqp7JyF.css",
+      "sha256": "6514c82b58a9d7b45206d0decb6a108822c345f3244b842d6283c2211d01354e",
+      "bytes": 362
+    },
+    {
+      "path": "dist/assets/MixedArmy-BYPOoZt4.css",
+      "sha256": "9c4d17371b0d50d9a38aa11396451166e20a7be4caa1426479ff7aa93b3737ea",
+      "bytes": 6255
+    },
+    {
+      "path": "dist/assets/MixedArmy-Csx5YqwS.js",
+      "sha256": "8694261b415094a7333b1e3da54985eca73c1f42e059c1d53948f38e7eb32cd8",
+      "bytes": 48154
+    },
+    {
+      "path": "dist/assets/NotFound-DFSk2T1n.js",
+      "sha256": "7099e82a53330e2964cd2498c2b11a4a09b8fe08e2a604ec5e90c215d8bae41f",
+      "bytes": 2823
+    },
+    {
+      "path": "dist/assets/NotFound-T15LJMtf.css",
+      "sha256": "af49ed6ee172b2f3158abc069907be5967e8fd19fdf3b50b4de104d40bc27bfa",
+      "bytes": 564
+    },
+    {
+      "path": "dist/assets/PageMeta-CVegDsEw.js",
+      "sha256": "d3e42bb7d9f5aa3ff3a52997fc4893cd799f8597d7f24fc4158bf1b33fd4b80e",
+      "bytes": 1456
+    },
+    {
+      "path": "dist/assets/PatchHistory-BWmBQ9KZ.js",
+      "sha256": "d423b6a4dabd836454067b2c320f2ea25e0fd564bbcb86624e9e0490cd0d0659",
+      "bytes": 11401
+    },
+    {
+      "path": "dist/assets/PatchHistory-d5j_EnSR.css",
+      "sha256": "9b0f3d491156dffff0a7c0cdf8a300716b6372e937877cd6bc2608a9ee569b17",
+      "bytes": 1838
+    },
+    {
+      "path": "dist/assets/Patches-CBiTc37f.js",
+      "sha256": "946c64f7b21b97201fd61a8e71c43d61633913399310f614ed7e87e834ae0b1b",
+      "bytes": 14162
+    },
+    {
+      "path": "dist/assets/Patches-DShs7dGB.css",
+      "sha256": "47588fd4d0a7a6d7a1323fd10f19c9ebeaf053a0ebb4148cc692c85b05acaac6",
+      "bytes": 3458
+    },
+    {
+      "path": "dist/assets/Planned-iBiCKku5.js",
+      "sha256": "b702409156b22c9a88fde2a6e0e02d8d16ae1b7ebd406aaec2f1af1c69e9fac6",
+      "bytes": 524
+    },
+    {
+      "path": "dist/assets/Production-D5MDUgPY.js",
+      "sha256": "a3e6f41ffe29f428636d7e4479f214d36f71765ab4687a7d30adc0e03c830e9a",
+      "bytes": 11896
+    },
+    {
+      "path": "dist/assets/Production-DKK8ajSi.css",
+      "sha256": "6ce7d03e4f079de3c91634b7e55257c87b26eb9f5b9d781e4b10df956b22bf2b",
+      "bytes": 3900
+    },
+    {
+      "path": "dist/assets/RatingHelp-JawWUa0q.js",
+      "sha256": "b6496e58aceb7eeeb8b5a2b99fcb5f1ec22f8e294cdf1937e784806ae9d1f569",
+      "bytes": 1772
+    },
+    {
+      "path": "dist/assets/RealCost-CeQ96I6b.css",
+      "sha256": "c6cca7a688297ae9e29eccb3c3292c27a3ea04904d9ab7a806193f1beac4b5bc",
+      "bytes": 69
+    },
+    {
+      "path": "dist/assets/RealCost-CufIUXKs.js",
+      "sha256": "981b0427c628f80a1d87dd4baa301e0fd0fc6ff0355f28968b28026967c7278b",
+      "bytes": 7592
+    },
+    {
+      "path": "dist/assets/RelicIncome-B0AhAQ3V.js",
+      "sha256": "68fe687022ab9482c719093bb679ba21153727d18a398aedb872684a35ed3fc5",
+      "bytes": 20689
+    },
+    {
+      "path": "dist/assets/RelicIncome-CzHv_S1Y.css",
+      "sha256": "1b3ef296eef26bd29c7c515f64290d844bda30e13e3b386172f5fb59593a56a7",
+      "bytes": 3822
+    },
+    {
+      "path": "dist/assets/Scouting-DYf4Eyun.css",
+      "sha256": "3ef69ea980ab56813f63a28503b2050aeb7fe8f34d0b4841a919b4f5644eb44c",
+      "bytes": 5531
+    },
+    {
+      "path": "dist/assets/Scouting-hL6pqHTm.js",
+      "sha256": "251e2381d182e9b044acc7bea7e4afa7b684aec86f33499ce038e1742dcf0a65",
+      "bytes": 56468
+    },
+    {
+      "path": "dist/assets/ShareImage-BPg0n6eJ.css",
+      "sha256": "7f79ca1887996cc75a24813a3d3a3408d54046df6802c477f407d1243592134b",
+      "bytes": 389
+    },
+    {
+      "path": "dist/assets/ShareImage-wFhLQC65.js",
+      "sha256": "d3b6eb6c380571fc5cf832ba2bd6fa6ec02c20d206953a5b5ad3c1af032decf1",
+      "bytes": 2594
+    },
+    {
+      "path": "dist/assets/SimPanel-BAneJb_o.js",
+      "sha256": "9034deacb9cc457cbe710c157832dc639bf583d7e029d7ecfe16217289e6e5fd",
+      "bytes": 7656
+    },
+    {
+      "path": "dist/assets/SimulatorHub-CZSk7Bz8.js",
+      "sha256": "31b0c979eafa82939a52412009732b2f0cb7f237bf4b0b7182b18e17704c6398",
+      "bytes": 1174
+    },
+    {
+      "path": "dist/assets/TeamBonuses-C13z78XF.css",
+      "sha256": "580fe4d11f328ab6bce87c1a7bb49d996e5a7f17bd29efccffe756ddf7b20129",
+      "bytes": 5623
+    },
+    {
+      "path": "dist/assets/TeamBonuses-chHmZ1-p.js",
+      "sha256": "2915f788d300f790e45055795c2be694bb02c51301ad70d2e1ed3b8efcfaab0e",
+      "bytes": 16059
+    },
+    {
+      "path": "dist/assets/TeamPlan-CXgBtQ2r.css",
+      "sha256": "fbb7c99fc8065050cf6e003a80aab4ae5849ead37d5653ea34d5e86647c47e5d",
+      "bytes": 4648
+    },
+    {
+      "path": "dist/assets/TeamPlan-DB-25vN_.js",
+      "sha256": "3dd5e048544acdb1a2049b0d922efd63bf37ea4a1d3a3e9f675e0e100ca5e0e4",
+      "bytes": 39216
+    },
+    {
+      "path": "dist/assets/TechDetail-Bkiq8rlu.js",
+      "sha256": "111af703d19a2fc783f733089c91802ea1440ee2821a7221fc06721fd574b491",
+      "bytes": 6633
+    },
+    {
+      "path": "dist/assets/TechList-D9lutrhX.js",
+      "sha256": "5296fc481fd3440f7930dde683242def4e44077b5f264aed9f897feeda9b9bb5",
+      "bytes": 2808
+    },
+    {
+      "path": "dist/assets/TradeIncome-CLw3reI9.js",
+      "sha256": "429e15c2b5641393d1859cd43406cb3b73ba52b85b5e8f5f7dfbbd766ac0b018",
+      "bytes": 13154
+    },
+    {
+      "path": "dist/assets/TradeIncome-DdTDnueU.css",
+      "sha256": "6bbacb176229c7547ae7ed4dad3c7bc19ea32196ebbbe3d2d79d8228ca8e4660",
+      "bytes": 2921
+    },
+    {
+      "path": "dist/assets/TreeView-BgbEKq_S.js",
+      "sha256": "91dfb93b6c5773c6539133655bbcfc19d802b81885ac2e2cfd59e380d0407401",
+      "bytes": 4903
+    },
+    {
+      "path": "dist/assets/UnitDetail-BkSIuIwe.js",
+      "sha256": "634c583572a8bcaa19e1be945b4ce887c2cc3b89e9b825eeb7c7684d536db538",
+      "bytes": 14617
+    },
+    {
+      "path": "dist/assets/UnitList-KrPXz6V4.css",
+      "sha256": "09569da1a9edcf07b4464178f0c19300155b859dd48f017a195b05cea1d3f867",
+      "bytes": 1662
+    },
+    {
+      "path": "dist/assets/UnitList-ubWvBNam.js",
+      "sha256": "03080c289fb33d4f8443621548e54c8da2a2ced0741170abdd78d7d5f4867037",
+      "bytes": 4890
+    },
+    {
+      "path": "dist/assets/affects-DUlhumET.js",
+      "sha256": "e48c581a1c204633139074f382f895ab683a89c84f4b46a71c3278ec398a7f61",
+      "bytes": 2372
+    },
+    {
+      "path": "dist/assets/aliases-CuTbKudy.js",
+      "sha256": "ba2da708a367a42afa8d90c55197b7faba07af51ad1d5db7b5e5c9c909b592a3",
+      "bytes": 1078
+    },
+    {
+      "path": "dist/assets/ban-5CyHbzfq.js",
+      "sha256": "662619047a3e59422083369752cf59bed9afe5f5a5c1c9fedf9cd62b17d229c3",
+      "bytes": 387
+    },
+    {
+      "path": "dist/assets/buildOrders-BRR45gN8.js",
+      "sha256": "85ec290a0d59b2b201ce011a3cc65d51180ee61a865cda70d088095d836a1238",
+      "bytes": 32469
+    },
+    {
+      "path": "dist/assets/buildSim-C0_YISWs.js",
+      "sha256": "c59a6a4ed681ee201dd27cac79c87d2537e568c722c377f0eb95d868b67e5ef9",
+      "bytes": 282774
+    },
+    {
+      "path": "dist/assets/buildingSim-BAHvjvOM.js",
+      "sha256": "23a0a85d349c76c9f47e0fe810cd6af7265bef0f4d143f2cf739ade63497de72",
+      "bytes": 1130
+    },
+    {
+      "path": "dist/assets/buildings-hPCqwEhn.js",
+      "sha256": "d1bafcbd748546202d46c60d4d3afb5620d83cec4d33621bedbd107e5ec6fbc9",
+      "bytes": 45560
+    },
+    {
+      "path": "dist/assets/civBonus-CXnuSq38.js",
+      "sha256": "db9e5af2cb440905ddab908c09f9e9dcf417cd719b94552156c75b668cc51c2f",
+      "bytes": 4211
+    },
+    {
+      "path": "dist/assets/construction-DWsRrbJc.js",
+      "sha256": "d89d755e6ecd160927d91bff5384a0758c49e47831a4c8a713e308f581cd8474",
+      "bytes": 9015
+    },
+    {
+      "path": "dist/assets/costDiscount-CTUopcaa.js",
+      "sha256": "d39bfdd5f94525d7bd9772fbb8c7801ac281de7f5c8fa81aecd589c45d346442",
+      "bytes": 1586
+    },
+    {
+      "path": "dist/assets/datEffects-xOzcGp0n.js",
+      "sha256": "a42256bae6463ee52fd8e9a1450981f82bb79a6a0bc1b903b2fea629f6925158",
+      "bytes": 248140
+    },
+    {
+      "path": "dist/assets/duelState-DrvOlBaS.js",
+      "sha256": "3ca633d7ed052de732349d0e215f03aa24bbf10527e84bc2c1881557276df99a",
+      "bytes": 1007
+    },
+    {
+      "path": "dist/assets/dupNames-cYvZfG_n.js",
+      "sha256": "c330fa433cfffbd31fd9f4aed7c45f4dab870dcb150389cbf96c09ed4f5a9ab7",
+      "bytes": 556
+    },
+    {
+      "path": "dist/assets/effects-D_FZZp23.js",
+      "sha256": "0da52754d577bdda68bccd70da07bf28ef302e96f000e9a3ac51caffd308c208",
+      "bytes": 12585
+    },
+    {
+      "path": "dist/assets/gameClock-D-cRUHw5.js",
+      "sha256": "00d20e8f9d8776297cf49bf2d27ca397cbaccd7cdc4ae5d57040a0e42043bac7",
+      "bytes": 4195
+    },
+    {
+      "path": "dist/assets/garrisonGeneral-Btv3AaJ4.js",
+      "sha256": "e7326544afb461028afcc987aa1e47589e2a84a9f8c4708d28a6ed7834800985",
+      "bytes": 14714
+    },
+    {
+      "path": "dist/assets/garrisonHealing-DE_k9qsA.js",
+      "sha256": "50fc7e284263bc152ed42f3f0ad9bd7e4da6c3bf32df1d4c223ee403e3499504",
+      "bytes": 72576
+    },
+    {
+      "path": "dist/assets/garrisonTechs-DwU0dCCM.js",
+      "sha256": "09544ce7a3f0ee415705d3b989a326a33d954f4f042dea89b0adb72d78461f84",
+      "bytes": 12016
+    },
+    {
+      "path": "dist/assets/garrison_general-DFRUcIb0.js",
+      "sha256": "e47c556988ab1bad5e1f1ff284003c76048439a20411a66fe6726406f01efaa5",
+      "bytes": 469748
+    },
+    {
+      "path": "dist/assets/glossary-DnXxbZUf.js",
+      "sha256": "ac7c18214040bff3a27dae0dec189c9eb7b3e3bfbb28bca46a6ce640b7347d21",
+      "bytes": 17192
+    },
+    {
+      "path": "dist/assets/index-3KkHs7bQ.css",
+      "sha256": "163b8c1d512a6ee60a4e20dbd6c3cb1f5f1aedaa52d90927d16322e4d733bb8f",
+      "bytes": 84477
+    },
+    {
+      "path": "dist/assets/index-CQ59PwER.js",
+      "sha256": "f6358c2052a97b80ba04fae4a7cbb8fd755bf22b8093461d3682e312db101731",
+      "bytes": 307486
+    },
+    {
+      "path": "dist/assets/inter-latin-400-normal-C38fXH4l.woff2",
+      "sha256": "8909904ab6c872eb994093482a88a28eca2cd95912d7b6fecd72103b0dc07edc",
+      "bytes": 23664
+    },
+    {
+      "path": "dist/assets/inter-latin-600-normal-LgqL8muc.woff2",
+      "sha256": "f9a06e79cd3a2a20951c0f0e28f66dd0e6d3fda73911d640a2125c8fcb78f21a",
+      "bytes": 24452
+    },
+    {
+      "path": "dist/assets/inter-latin-700-normal-Yt3aPRUw.woff2",
+      "sha256": "6f56409fd3d64bb85f7d070bce20749db2d66b6d63cec586cc22d1c761be2491",
+      "bytes": 24356
+    },
+    {
+      "path": "dist/assets/introductions-k0CATOrk.js",
+      "sha256": "b84d01983ad8f47bdfcd96fa734537b469dfd26851aab244e023bd73b2040f0d",
+      "bytes": 3624
+    },
+    {
+      "path": "dist/assets/layout-B3at5z7H.js",
+      "sha256": "adfc8f0aa3dc5438fa36def4bb63a615caf828612b15e7650a0c5711f4348fa8",
+      "bytes": 4987
+    },
+    {
+      "path": "dist/assets/layout-a028cYIN.css",
+      "sha256": "e6fd3fd6704b8b4c7350831a43a15b5b910b3b1799520c46f926915c8a18d649",
+      "bytes": 6598
+    },
+    {
+      "path": "dist/assets/listMeta-hZkFRQAh.js",
+      "sha256": "8143e4850f886ddbda162ba58c62bc020a48bb9676a8ddc132d1089d51d1847b",
+      "bytes": 758
+    },
+    {
+      "path": "dist/assets/meta-y45R2KbN.js",
+      "sha256": "a0acf1ec7a40b71585c1e556b19b78c01b15f5b3791ce9908d732e88a69a736e",
+      "bytes": 67
+    },
+    {
+      "path": "dist/assets/policy-DybAQiiP.js",
+      "sha256": "a78ade8775895de1ed8f9b2f2827ef0ba7ddb87653f536aeb68aa204525270fe",
+      "bytes": 2196
+    },
+    {
+      "path": "dist/assets/production-DwQzrdQ9.js",
+      "sha256": "a2486f12202ee450693aad28fde4c080c95fbfc9d1ee654a84e8d8ab23b11e95",
+      "bytes": 8986
+    },
+    {
+      "path": "dist/assets/realCost-nXgcnRGF.js",
+      "sha256": "9ac9037746892ebef9231f74d200ff4487e774204258238c3f82536db9bd2098",
+      "bytes": 3278
+    },
+    {
+      "path": "dist/assets/relic_income-CIVgLhfJ.js",
+      "sha256": "1befc35225c771b60bee5185dcb363686b1f70726c750abd2773593d16d2de74",
+      "bytes": 11984
+    },
+    {
+      "path": "dist/assets/search-DsyrMtPa.js",
+      "sha256": "6ab03ef4c5e88f6d369a92e43280b60f62ad981534b0af1e7124da62a2c37ee3",
+      "bytes": 34191
+    },
+    {
+      "path": "dist/assets/sharePage-Cz_Ei1qH.js",
+      "sha256": "d700fe05257ca52e72181bdca206c467aa77a9588249e50add47d53c9fc1490c",
+      "bytes": 225740
+    },
+    {
+      "path": "dist/assets/simFormat-CGrXdBAQ.js",
+      "sha256": "eee77a1365a799f63c601fb55bf5f0ea62c8166d7fe59fc3a614643a9444ff71",
+      "bytes": 431
+    },
+    {
+      "path": "dist/assets/simRoute-Cn_fj8_u.js",
+      "sha256": "a9d0f50453da4d46358e3c5b71054daca1faf871c7c1584c4c814782263a925a",
+      "bytes": 355
+    },
+    {
+      "path": "dist/assets/simSupport-BV2XceFV.js",
+      "sha256": "e63601b5fb916ccbb2826f733a79e86c45ca3e8320ed8d0a84d3224a5c6b89d6",
+      "bytes": 203
+    },
+    {
+      "path": "dist/assets/simulator-BS6g_Ohi.js",
+      "sha256": "7cd95c10a3bdb844952ea462b9aab2d90f2acbad071c3ff80760398b90f5a679",
+      "bytes": 2803
+    },
+    {
+      "path": "dist/assets/sourcePresentation-BWG2yJyi.js",
+      "sha256": "f5faba932f65b3b0e4ca5845055e4c018e9dd680b2755cf9504c2c2ef460135e",
+      "bytes": 1097
+    },
+    {
+      "path": "dist/assets/sticky-BJ7CRCr4.js",
+      "sha256": "8a72e0ccf3f773830b742ef609a555abdeb4f57b03b0e82148f0a62da2adaf9e",
+      "bytes": 207
+    },
+    {
+      "path": "dist/assets/teamBonuses-CNgeW_52.js",
+      "sha256": "51e3db99ab108e3529c1e8907156730467b59c369102db4c2eb1be4a8e4d8186",
+      "bytes": 169667
+    },
+    {
+      "path": "dist/assets/techs-BjnIEky3.js",
+      "sha256": "f25e62ef5a6267ee0bbab8e23bd69f2b7c4377fee554cc85aff1768f850c5b47",
+      "bytes": 109949
+    },
+    {
+      "path": "dist/assets/timelineModel-CmUDV4nr.js",
+      "sha256": "3cbf9fdb3a28971dd9d386b76e94a1cc528798c6a7ab2933e2419a78828e4fb5",
+      "bytes": 7641
+    },
+    {
+      "path": "dist/assets/tradeIncome-D5ku6IX5.js",
+      "sha256": "b69ff7c9637aa421c428862dc3595980a4f3eab46768612b41eeee8c6a0751b4",
+      "bytes": 7259
+    },
+    {
+      "path": "dist/assets/trees-Iix4RRpm.js",
+      "sha256": "cb3ffcb2a23a2c72ef8fea0673533a8746ef2b4818db3a53ffbfc6ecfe2a3957",
+      "bytes": 174664
+    },
+    {
+      "path": "dist/assets/unitClass-DYRPWu_Y.js",
+      "sha256": "3f4e181314325243db8c80d9da1a73f92f2f5bfedfb36e19717373705f60b0b2",
+      "bytes": 512
+    },
+    {
+      "path": "dist/assets/units-k_Lzk_z1.js",
+      "sha256": "8220e9b2e630944894b004f26d81648e39ecb13d34360d6936f17967ef77ef0b",
+      "bytes": 233104
+    },
+    {
+      "path": "dist/assets/useShareLink-C42Vxwn0.js",
+      "sha256": "872479af039840515a065dacf8820900fe62d726bb99307537fb6f701bd63be0",
+      "bytes": 1397
+    },
+    {
+      "path": "dist/assets/validate-C41mksCG.js",
+      "sha256": "8585f60571329f7cd3e7253821b6c30fa3f3fbc017fbac42d24e875f5bb22496",
+      "bytes": 717
+    },
+    {
+      "path": "dist/assets/validatedJson-nOnWShWG.js",
+      "sha256": "281e4df0cad5594e9cdc7c00367369c43cffc4a6edb63f06bf7b6592083039c5",
+      "bytes": 167
+    }
+  ],
+  "images": [
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-bonus0-1280-dark.png",
+      "sha256": "8e5f1e4254258247f3b8d908ab6b1250fa7a180e9ab9a8312cad2bd746099e78",
+      "bytes": 168269,
+      "width": 1280,
+      "height": 1095,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-knights-age-1280-dark.png",
+      "sha256": "e628e703d1e135b3f076017b9530c7ca62ef508b77335a520b99cb71cb0127bf",
+      "bytes": 352056,
+      "width": 1280,
+      "height": 2346,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-practice-1280-dark.png",
+      "sha256": "91fedcc759bfb2e94302353ada65ea255725a12ad27ec0d09d90c88a9a1dfc64",
+      "bytes": 359180,
+      "width": 1280,
+      "height": 2148,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-print-1280-dark.png",
+      "sha256": "8317fa63576254c0f55c416b3cf98313cdc0ead87049bf846aa299002337e387",
+      "bytes": 555221,
+      "width": 1280,
+      "height": 4859,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-share-1280-dark.png",
+      "sha256": "e7b54b451edfccef73f744358941090f6155846ad6d27eaecd1de10157aa2176",
+      "bytes": 322442,
+      "width": 1280,
+      "height": 2118,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-timeline-1280-dark.png",
+      "sha256": "535ea3f461e37feb08759a34609aba185da8791a3c2c2dcdadf290fbe54c6497",
+      "bytes": 313677,
+      "width": 1280,
+      "height": 2118,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-bonus0-1280-light.png",
+      "sha256": "ae5dbb7eb941815cb196dba8e1a43e446f286a3ec3a5a5007f3c45aaa48145ff",
+      "bytes": 169623,
+      "width": 1280,
+      "height": 1095,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-knights-age-1280-light.png",
+      "sha256": "68f6b22c27bba32d79d703f0061e0118d49e3d58f853f1a48f6c31331497b385",
+      "bytes": 355302,
+      "width": 1280,
+      "height": 2346,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-practice-1280-light.png",
+      "sha256": "05d1c4a23c448763689f3d6e61161a38e3afefc3f54cb418fbddca16b191c800",
+      "bytes": 361248,
+      "width": 1280,
+      "height": 2148,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-print-1280-light.png",
+      "sha256": "8317fa63576254c0f55c416b3cf98313cdc0ead87049bf846aa299002337e387",
+      "bytes": 555221,
+      "width": 1280,
+      "height": 4859,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-share-1280-light.png",
+      "sha256": "8687712fd819de8961518f428249a551f8df5c4fc522028a75158c6515fb53bd",
+      "bytes": 332439,
+      "width": 1280,
+      "height": 2118,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-timeline-1280-light.png",
+      "sha256": "2bd8da1c646f84ee5bfcb74cf6b75dcd024a4021f675f1d055be3b336bd72de2",
+      "bytes": 315870,
+      "width": 1280,
+      "height": 2118,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-bonus0-360-dark.png",
+      "sha256": "ce6903f90b9a9e7af0b3fa996893a2784b76cff6abc12d143e64eb1418faa91b",
+      "bytes": 141737,
+      "width": 360,
+      "height": 1652,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-knights-age-360-dark.png",
+      "sha256": "257f0088578d23c0128cad652151255cfa5d190c075ffedf9666d1b81f1223ee",
+      "bytes": 261812,
+      "width": 360,
+      "height": 3060,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-practice-360-dark.png",
+      "sha256": "56d0d61f67b6cd8c993eeba87e1de9fd0e489a04470e0a3134b1259b2b8e4ed2",
+      "bytes": 337745,
+      "width": 360,
+      "height": 3547,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-print-360-dark.png",
+      "sha256": "972bcce518066dfde74ff4be5e1d3348170c8968ad5db7d6a5ab03cfd7f33bf6",
+      "bytes": 489072,
+      "width": 360,
+      "height": 5825,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-share-360-dark.png",
+      "sha256": "94e333103184b1cc7d54a8a9bff5355d4dda7e3f4b62679276f3c775d504c764",
+      "bytes": 229988,
+      "width": 360,
+      "height": 2738,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-timeline-360-dark.png",
+      "sha256": "c720d446c67c74dc5fa96745d250589a167afb256fa5298261eb5d01bd06f227",
+      "bytes": 234358,
+      "width": 360,
+      "height": 2738,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-bonus0-360-light.png",
+      "sha256": "98eb571d91afa139dbca7dafb932bfc0f3776f7bc7f83fc37e130ee50d35724a",
+      "bytes": 142733,
+      "width": 360,
+      "height": 1652,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-knight-download.png",
+      "sha256": "71b4b03cd62817a5e3b3177f542523b9ed2479c2c1207a74af8cafec3735e198",
+      "bytes": 203760,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-knights-age-360-light.png",
+      "sha256": "5973565d2ffd1e8aceb788b8010546f537d2f86448c9c1e107eccc459f70c416",
+      "bytes": 263482,
+      "width": 360,
+      "height": 3060,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-practice-360-light.png",
+      "sha256": "f483e2986675f433ddb17fcf651ba4ba3a6e4c9993c3934d09fb0f074b147ef6",
+      "bytes": 338598,
+      "width": 360,
+      "height": 3547,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-print-360-light.png",
+      "sha256": "972bcce518066dfde74ff4be5e1d3348170c8968ad5db7d6a5ab03cfd7f33bf6",
+      "bytes": 489072,
+      "width": 360,
+      "height": 5825,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-share-360-light.png",
+      "sha256": "032d58357e2c7d6bba8e85e05f807308ab884b37e96d26a0c6fb189006095257",
+      "bytes": 234188,
+      "width": 360,
+      "height": 2738,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-timeline-360-light.png",
+      "sha256": "1339a8ffc52eb5d4467605a1be118b0ab3333e48dcf788b65570924974e24a03",
+      "bytes": 235565,
+      "width": 360,
+      "height": 2738,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-bonus0-375-dark.png",
+      "sha256": "1db8ca005eb9a019355f4e2559eec62ffb0b485f283920317aa93fbacbc21acd",
+      "bytes": 141312,
+      "width": 375,
+      "height": 1597,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-knights-age-375-dark.png",
+      "sha256": "8975cc1f19db202ad3063c2ccb26dde2a10fed58c280e91d0476b8ef4d9e1071",
+      "bytes": 262387,
+      "width": 375,
+      "height": 3010,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-practice-375-dark.png",
+      "sha256": "6710102a5ece94e36756d40d68896f23f1f97144abff1d38623a65178ff8e5e0",
+      "bytes": 338872,
+      "width": 375,
+      "height": 3459,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-print-375-dark.png",
+      "sha256": "0be9a4d2110f836dee727f04bb5ec4c1a65c7ee5d713f26e6e61e1d04b8d9971",
+      "bytes": 489903,
+      "width": 375,
+      "height": 5782,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-share-375-dark.png",
+      "sha256": "55af84cd965ce8abc00d0d42bb8a959aa95942f2d872ca18ada7380500d77779",
+      "bytes": 229157,
+      "width": 375,
+      "height": 2689,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-timeline-375-dark.png",
+      "sha256": "a3329ff9c1441d89b9bd19355d3be951d141b432f0f366d91e156ef7a3a6a93e",
+      "bytes": 233823,
+      "width": 375,
+      "height": 2689,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-bonus0-375-light.png",
+      "sha256": "edb0c72609b80a6bb2a082b47cbf4e827031c68cc1f025e971b7ed0c46d8b21f",
+      "bytes": 142881,
+      "width": 375,
+      "height": 1597,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-knights-age-375-light.png",
+      "sha256": "ed0f4749c231e6f010d415ba4f9d22564bc3d8535db5e3124c19a02b30030482",
+      "bytes": 264283,
+      "width": 375,
+      "height": 3010,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-practice-375-light.png",
+      "sha256": "8239490b88c440d283f1d966bf2fd95b9d4fed6b2f20c1ea8835695db340e051",
+      "bytes": 340113,
+      "width": 375,
+      "height": 3459,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-print-375-light.png",
+      "sha256": "0be9a4d2110f836dee727f04bb5ec4c1a65c7ee5d713f26e6e61e1d04b8d9971",
+      "bytes": 489903,
+      "width": 375,
+      "height": 5782,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-share-375-light.png",
+      "sha256": "c2402175b9eddd39ded573060be85a7f0f0fbca1c5086e911ea5cb25d1583330",
+      "bytes": 233501,
+      "width": 375,
+      "height": 2689,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-timeline-375-light.png",
+      "sha256": "115ac08a0020ff4d4b9f85bd9dfda07ee9b71a5d78ca5742d5a259acff6e0ac3",
+      "bytes": 235410,
+      "width": 375,
+      "height": 2689,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-bonus0-390-dark.png",
+      "sha256": "d5c2782e0a93e1e44fa393de9551407ef97e672209aae7e492de53ae6a45ad53",
+      "bytes": 141200,
+      "width": 390,
+      "height": 1573,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-knights-age-390-dark.png",
+      "sha256": "bad2ce7a0f89f63d1bc2c810c28b05bcee9c53c0831c8de1cac82886b46c782d",
+      "bytes": 263579,
+      "width": 390,
+      "height": 2986,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-practice-390-dark.png",
+      "sha256": "321bed5061a4e9ea12616aa1578db3984fd74a8a06b60c61448094e1111d2996",
+      "bytes": 337658,
+      "width": 390,
+      "height": 3414,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-print-390-dark.png",
+      "sha256": "3c6d6faae9915b089811c1f2af54fe1f54767b70da48bad0f93700568a87d8c3",
+      "bytes": 489290,
+      "width": 390,
+      "height": 5718,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-share-390-dark.png",
+      "sha256": "6a499a23bdcc2b31615860c2f38677034a838a4ca38f1939d4a1a864e79a72b4",
+      "bytes": 229844,
+      "width": 390,
+      "height": 2665,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-timeline-390-dark.png",
+      "sha256": "c7c980aaf97cf686e002f169b793fc4942d28a3ec4f424450e0c069423752f76",
+      "bytes": 233761,
+      "width": 390,
+      "height": 2665,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-bonus0-390-light.png",
+      "sha256": "56d7ab3af287e44346392f90e7797f7c0764afc4e06fcedbcd707b011a0f9994",
+      "bytes": 142380,
+      "width": 390,
+      "height": 1573,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-knights-age-390-light.png",
+      "sha256": "8222daeff91b453e3ad681fd9e281a8e5dacdb388104dea922aab0c15ca9ee3f",
+      "bytes": 265086,
+      "width": 390,
+      "height": 2986,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-practice-390-light.png",
+      "sha256": "ac191b7016037c942ad4f5fdab99be5f3ba362f9222df5557261814eb178939c",
+      "bytes": 338907,
+      "width": 390,
+      "height": 3414,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-print-390-light.png",
+      "sha256": "3c6d6faae9915b089811c1f2af54fe1f54767b70da48bad0f93700568a87d8c3",
+      "bytes": 489290,
+      "width": 390,
+      "height": 5718,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-share-390-light.png",
+      "sha256": "aea1ff0dd475d9f2e1c124c8b5489efc37c8ca841cc3b2cb8a768a920d1a7b45",
+      "bytes": 233594,
+      "width": 390,
+      "height": 2665,
+      "actualDownload": false
+    },
+    {
+      "path": "/tmp/wei197-e2e-final-2bdca97/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-timeline-390-light.png",
+      "sha256": "1c9991965aa2a5a839879e8a0f3e28a0f76d1ad29eeb308cde7b9c77e90a8754",
+      "bytes": 234796,
+      "width": 390,
+      "height": 2665,
+      "actualDownload": false
+    }
+  ],
+  "originalFirstRed": {
+    "file": "docs/design/wei197-first-red.json",
+    "SHA256": "0b18f9bbf156bada78a0012b95b241224cf8c0d4a8abd40644197fd2fd698f3a",
+    "unit": "66total/36pass/30meaningful assertionfail/0skip",
+    "python": "4total/2pass/2meaningful assertionfail",
+    "historicalManifestUnchanged": true
+  },
+  "ageViewFirstRed": {
+    "report": "/tmp/wei197-age-count-first-red-final.json",
+    "reportSHA256": "3d01c74d3cc8171b7876da0f5a5b291784a9c85995acc7984249831a08c9630a",
+    "total": 9,
+    "passed": 7,
+    "failed": 2,
+    "pending": 0,
+    "failures": "Two true25vs27age-view assertions; scouts and55nonWei identity-view controls passed",
+    "independentPreflight": "/tmp/batch8-wei-age-preflight.json",
+    "independentPreflightSHA256": "a3b4597db2a198e40c5184296624ec21bbdda4c7bbf4711d2deb2ab8f7c5bc51"
+  },
+  "checks": {
+    "targetedUnit": {
+      "report": "/tmp/wei197-targeted-unit.json",
+      "total": 308,
+      "passed": 305,
+      "failed": 0,
+      "skipped": 2,
+      "todo": 1,
+      "files": 16,
+      "phase": "Original implementation selected checks; overlaps with subsequent age-view check, do not add counts.",
+      "reportSHA256": "661f75357d8b3af56129f51124e9215281fed9cc44d80866cb725636550ba584"
+    },
+    "ageViewUnit": {
+      "report": "/tmp/wei197-age-count-green.json",
+      "total": 27,
+      "passed": 27,
+      "failed": 0,
+      "files": 5,
+      "phase": "Actual narrow Wei view fix plus unchanged share/smoke contracts.",
+      "reportSHA256": "c95a06e5ac14b884c4bf763852d60402e0b86a669ee514e2ec53ee22aa54ff1e"
+    },
+    "bonus317ActualRegeneration": {
+      "report": "/tmp/wei197-317-update-final.json",
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "command": "UPDATE_BONUS317=1 npx vitest run tests/unit/bonusUsage317.test.ts",
+      "old72ValuesUnchanged": true,
+      "naturalNewKeys": {
+        "Wei-0": "feudal-drush-18",
+        "Wei-2": null
+      },
+      "inputs": "28b9087aa287c93603933a17f7d71fcc68d5755791a2f5031fdffe224deed9f4",
+      "reportSHA256": "80990c0f6ffe85dbd820e578ad1c6aabf4b0380bf6dbe6c83365521769ca83a0"
+    },
+    "fixedDatPython": {
+      "log": "/tmp/wei197-eco-tests.log",
+      "command": "python3 -m unittest discover -s tests/py -p test_wei197.py -v",
+      "total": 4,
+      "passed": 4,
+      "actualGeneratorUsed": true,
+      "logSHA256": "1dcba05f4cfac26ad253232d83f05b56859ef7761b40b42b30bbdcc54940e026"
+    },
+    "build": {
+      "log": "/tmp/wei197-build-2bdca97.log",
+      "command": "npm run build",
+      "exitCode": 0,
+      "actualCommit": "2bdca97b06e7d024d49c8a25e4c8aafe32f43226",
+      "tree": "11ef34ef54b94cd1952b6e57cbfee7fa99cf5728",
+      "logSHA256": "b47a0e63fb3371e6307118771380623c7d9d152f7540f10495d189da94b924a1"
+    },
+    "browser": {
+      "report": "/tmp/wei197-e2e-final-2bdca97.json",
+      "command": "BASE_URL=http://127.0.0.1:4206/ npx playwright test tests/e2e/wei197.spec.ts tests/e2e/v060-42.spec.ts --output=/tmp/wei197-e2e-final-2bdca97 --reporter=json",
+      "stats": {
+        "startTime": "2026-10-27T15:55:17.979Z",
+        "duration": 31142.553,
+        "expected": 20,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "screenshots": 48,
+      "actualPngDownloads": 1,
+      "widths": [360, 375, 390, 1280],
+      "themes": ["light", "dark"],
+      "assertions": [
+        "No overflow or browser errors",
+        "Numeric/unit Range and same-span free-villager check",
+        "Actual model0.1秒 nowrap",
+        "Knight27/age27-pop28/35; boom27 and scouts18",
+        "Real source and notes/share/practice/print",
+        "Actual bonus0 eco/encodedfalse via unit and real DOM usage"
+      ],
+      "reportSHA256": "e8ea3db3b8f31136c693b1aebc0384f62646380e67882f1aaf59bd7e36b100ea"
+    },
+    "deploymentSmoke": {
+      "log": "/tmp/wei197-deployment-smoke-2bdca97.log",
+      "command": "RELEASE_VERSION=v0.53.0 EXPECTED_DEPLOYED_SHA=2bdca97b06e7d024d49c8a25e4c8aafe32f43226 node scripts/deployment-smoke.mjs --site http://127.0.0.1:4206/ --plan /tmp/wei197-local-actual-plan-2bdca97.json",
+      "exitCode": 0,
+      "scope": "Actual local build/footer, all7prior civilization checks+Wei, public practice/print sources and Winged Hussar retained. Not a main deployment claim.",
+      "logSHA256": "4bdeeab15401dec30d8ac591f08812ec0b6248627ae825e8492552e7eadeaeca"
+    },
+    "static": {
+      "typescript": "Passed via final actual build",
+      "lint": {
+        "log": "/tmp/wei197-lint-final.log",
+        "exitCode": 0,
+        "existingWarnings": 10,
+        "logSHA256": "dacb9beb80a40824066ecf232eed1413896a575e38c3fbd8a3b3497e5784716e"
+      },
+      "layers": {
+        "log": "/tmp/wei197-layers.log",
+        "exitCode": 0,
+        "logSHA256": "29f14f74b2a02e99b7e3245521226ba5f2de2b6e68d62a52e8c5f541114330e0"
+      },
+      "strictContent": {
+        "log": "/tmp/wei197-content.log",
+        "exitCode": 0,
+        "logSHA256": "1c936bf56819f207fe660e940a6b335b8dfba61313bae1f66b3008c4a87ddc68"
+      },
+      "buildOrders": {
+        "log": "/tmp/wei197-bo.log",
+        "exitCode": 0,
+        "logSHA256": "cebe8cb427f7183235ccf7a5e174c3768ccda5682bde2385eaf923385937f69a"
+      },
+      "compiledValidators": {
+        "command": "npm run content:validators -- --check",
+        "boundaries": 6,
+        "reproducible": true
+      },
+      "finalAgeDeltaEslint": {
+        "log": "/tmp/wei197-age-count-eslint.log",
+        "exitCode": 0,
+        "logSHA256": "ed8e5d1cf78a3834b3ae8467e88214fd79a81aae4d66407f4626552e4d131c1e"
+      }
+    }
+  },
+  "independentNumericBaseline": {
+    "report": "/tmp/wei197-independent-invariants.json",
+    "SHA256": "6d6a326b2d093a530ae1e36ab02f554dca7435f8a2445e43921c0446666ddf52",
+    "actualHead": "dd313eb529bf40e5785398d3d1a947247a4b221a",
+    "actualTree": "0aa6bc5f64f4bcedc9d2a31ce3bcc34219cde099",
+    "status": "PASS_INDEPENDENT_FROZEN_INVARIANTS",
+    "other55Full": 440,
+    "other55Numeric": 440,
+    "other55NotesAndSupport": 55,
+    "other55Helpers": 1485,
+    "all56RealCost": 224,
+    "differences": 0,
+    "protectedGuardsAtThatHead": {
+      "total": 367,
+      "unchanged": 353,
+      "authorizedDelta": 14,
+      "unexpected": 0
+    },
+    "eco": "Other55 raw and semantic JSON and all9global sections unchanged; only16Wei spawn metadata additions",
+    "reuseBoundary": "After this actual execution, product change only Wei-only timelineModel age-village view. All numeric inputs remained byte-identical; narrow27-unit+20-browser checks cover that delta. No global execution repeated or relabelled."
+  },
+  "actualEightBuilds": {
+    "quantified": "docs/design/wei197-runtime-quantified.json",
+    "SHA256": "d8c3e6978f2195371fc06bf829ea743bab623d0479f7f6404bbcd0006a3487e5",
+    "freeEvents": 12,
+    "preFirstSnapshotsMatchingBaseline": 86,
+    "handControls": [
+      "Real202 cost after paidTC job leaves50food, worker assignment produces101/131gold in tiny probe",
+      "Actualarchers has17paid vs18paid,573vs523Food,167vs160Gold at same744.6s; one worker adds25*.27536231884057977=6.884057971014494Gold",
+      "Actualboom203 starts1017.2 completes1067.1; old1055.6post-reward time not copied"
+    ],
+    "noNewResearchEventsApi": true
+  },
+  "honestFailuresAndCorrections": {
+    "tc249Oracle": "New test used0.1+0.2 which evaluates0.30000000000000004; replaced with hand-checked exact tenths0.3/25.3/26.3/51.3/51.4. Strict equality retained; original first-red history was not rewritten.",
+    "lintComment": "New #197 comment was interpreted as a3digit hex color; changed comment toIssue197, checker unchanged; actual317regenerated afterward.",
+    "firstBrowserAttempt": {
+      "runtime": "3a2bbdeb977adb24fe1d824ddd34e0c5a2cc2e7d",
+      "report": "/tmp/wei197-e2e-3a2bbde.json",
+      "reportBytes": 0,
+      "validCompleteReport": false,
+      "completeTestCounts": null,
+      "terminatedExitCode": 143,
+      "terminationObservedUTC": "2026-10-27T15:41:47.975905+00:00",
+      "terminationClockSource": "mtime of shell stderr Terminated line",
+      "stderr": "/tmp/wei197-e2e-3a2bbde.stderr.log",
+      "stderrSHA256": "b4a6c06672677cf0e25ec72bec83beae33305cee4b8087f168962014373b02bb",
+      "contexts": [
+        {
+          "path": "/tmp/wei197-e2e-3a2bbde/wei197--197-魏研究赠村、clock、来源与分享-360-dark/error-context.md",
+          "sha256": "d64b479bb55f593c46c525fad7985eadd3cab424e1c912f485c5be2e3da4cf9e"
+        },
+        {
+          "path": "/tmp/wei197-e2e-3a2bbde/wei197--197-魏研究赠村、clock、来源与分享-360-light/error-context.md",
+          "sha256": "205eae149e0022b491717fab30e017dd7ec347f38f7828b947c8291884a88b3d"
+        },
+        {
+          "path": "/tmp/wei197-e2e-3a2bbde/wei197--197-魏研究赠村、clock、来源与分享-375-dark/error-context.md",
+          "sha256": "6557f8cda030a813bc9a433bc7a6fecf37c20b49f631634fbe791ab1b7d411a4"
+        },
+        {
+          "path": "/tmp/wei197-e2e-3a2bbde/wei197--197-魏研究赠村、clock、来源与分享-375-light/error-context.md",
+          "sha256": "d9005725cfa32407e86ee08e595361e8e670678518da1fe4f07206dabd74c5bb"
+        },
+        {
+          "path": "/tmp/wei197-e2e-3a2bbde/wei197--197-魏研究赠村、clock、来源与分享-390-dark/error-context.md",
+          "sha256": "f29030e9537790a8d106138d2d7e7eac4f9ec5b5ff894dde060bb00f757c2592"
+        },
+        {
+          "path": "/tmp/wei197-e2e-3a2bbde/wei197--197-魏研究赠村、clock、来源与分享-390-light/error-context.md",
+          "sha256": "a8146fe7598259d4272773a87a8b54cdda6787e640314acde3377aba6916b250"
+        }
+      ],
+      "partialImageDirectory": "/tmp/wei197-e2e-3a2bbde/",
+      "cause": "New test kept share modal open across hash navigation; the added full-builds axe scope also caught pre-existing shared list ARIA issues. Explicit modal close and a scope covering both new Wei controls fixed the new harness without timeout/retry/assertion weakening."
+    },
+    "legacyAxeEvidence": {
+      "file": "/tmp/wei197-axe-scope-evidence.json",
+      "SHA256": "67f2dfbfba7b1da7882c2747da6d018f9c4e5738a54e024dd1ff366473a638dc",
+      "actualGenericAndWei": "Both full builds scopes had aria-allowed-attr13nodes/listitem4nodes; TimelineSteps source exactbaseline hash unchanged",
+      "newWeiGroupAndMarkersViolations": 0,
+      "fullPageAccessibilityPassClaimed": false
+    },
+    "supersededCorrected3a2": {
+      "report": "/tmp/wei197-e2e-corrected-3a2bbde.json",
+      "reportSHA256": "67895df674cae1d5015119fc4a918a4f57c1ce72c8619406cc4e41bdf1b995b9",
+      "passed": 20,
+      "status": "Superseded after independent review found true Wei age count25vs27. Old40screens/PNG preserved and never relabelled as final."
+    },
+    "ageCountProductFix": "Independent review found actual27villagers/pop28atCastle while old BO-threshold view showed25. Wei-only actual3+completedpaid+completedfree count fixes AgeMark and naturally top summary. Other55 fallback expression preserved; no simulation,317orrealCost changes."
+  },
+  "localPlan": {
+    "base": "42d9b3a12fd41ced39feec1b9954bd06de8d0f43",
+    "head": "2bdca97b06e7d024d49c8a25e4c8aafe32f43226",
+    "plan": {
+      "scope": "full",
+      "features": ["all", "builds"],
+      "unit": [],
+      "e2e": [],
+      "data": true,
+      "full": true
+    }
+  },
+  "ci": "Owner did not run full CI or push; root will execute one actual full/data=true delivery plan at final head. Actual main deployment and release are outside this local result.",
+  "previewIdentity": {
+    "recordedAtUTC": "2026-10-27T15:55:17.303721+00:00",
+    "port": 4206,
+    "pid": 249770,
+    "cwd": "/workspace/aoe2-issue197-batch8",
+    "argv": ["node", "/workspace/aoe2-issue197-batch8/node_modules/.bin/vite", "preview", "--host", "127.0.0.1", "--port", "4206", "--strictPort"],
+    "parentPids": [249769, 249756],
+    "toolSession": 20179,
+    "runtimeCommit": "2bdca97b06e7d024d49c8a25e4c8aafe32f43226",
+    "runtimeTree": "11ef34ef54b94cd1952b6e57cbfee7fa99cf5728",
+    "listenURL": "http://127.0.0.1:4206/",
+    "ownership": "batch8 sole owner; verify exact PID/cwd/argv before cleanup"
+  },
+  "independentFinalUiReview": {
+    "report": "/tmp/batch8-wei-final-review.json",
+    "reportSHA256": "e57224f8328b2169fc6d563f980c43a16b6d1033c2eecf12fb7c144e4665836e",
+    "markdown": "/tmp/batch8-wei-final-review.md",
+    "markdownSHA256": "7006881d7b6d16ac8cf872313749568c1a0be79814478971ae520d577ce373b8",
+    "actualVerdict": "GO_CODE_SOURCE_QUANTITY_AND_LOCAL_RUNTIME_UI",
+    "runtimeCommit": "2bdca97b06e7d024d49c8a25e4c8aafe32f43226",
+    "scope": "Source/code/actual8quantity/49image hash-dimensions/147assets/actual20browser+smoke; independent AgeMark finding resolved, no remaining blockers. See reviewer-authored report for exact parent/subreview visual scopes."
+  },
+  "scopeBoundaries": [
+    "No .dat/cache/node_modules/dist/PNG committed",
+    "Unverified current-client housing policy explicitly disclosed in timeline/model/share/practice/print",
+    "Only fast-castle-knights gets魏没有骑士 warning; no automatic regional-unit replacement",
+    "Source and encoded values stay actualeco/false forWei0; independentrealCost rate/applied[]/unsupported[] and empty warning state preserved",
+    "No CI classifier/workflow/retry/timeout policy changed"
+  ]
+}
