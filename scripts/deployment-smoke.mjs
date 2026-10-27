@@ -348,6 +348,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await check(page.locator('#bonus .bonusbody [data-usage="gather"]')).toHaveAttribute('data-on', 'false');
       await check(page.locator('#bonus .bonusbody [data-usage="gather"]')).toContainText('赠送村民未计入真实成本');
       await goto('/duel?a=74.Wei.3.f.&b=74.Magyars.3.f.&m=t');
+      await check(page.locator('[data-t="rc-a"]')).toBeVisible();
       await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveCount(0);
       console.log(
         'Verified Wei economy: own744.6s Food573/Wood429/Gold167/Stone200 pop23/30; 17paid/1free, tech202 completion609.4 vs start584.5; Knight-template-only warning, client-untested housing disclosure, source usage and unchanged real-cost empty warning state',
