@@ -337,6 +337,8 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.keyboard.press('Escape');
       await goto('/builds?bo=fast-castle-knights&civ=Wei');
       await check(page.locator('[data-t="civ-note"]')).toContainText('魏没有骑士；骑士方案仅供通用模板经济估算');
+      await check(page.locator('.tl-summary li').nth(3).locator('b')).toHaveText('27');
+      await check(page.locator('.tl-age[data-age="castle"]')).toContainText('27 村民 · 人口 28/35');
       await page.locator('[data-t="share-card-btn"]:visible').first().click();
       await check(page.locator('[data-t="card-basis"]')).toContainText('满住房仍计入赠送');
       await check(page.locator('[data-t="card-basis"]')).toContainText('未经当前版本客户端实测');

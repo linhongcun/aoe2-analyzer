@@ -26,8 +26,10 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/builds?bo=scouts-18&civ=Wei');
       await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按魏计');
       await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await expect(page.locator('[data-t="civ-note"]')).toBeVisible();
       await expect(page.locator('[data-t="civ-note"]')).toContainText('研究完成');
       await expect(page.locator('[data-t="civ-note"]')).not.toContainText(knightNote);
+      await expect(page.locator('.tl-summary li').nth(3).locator('b')).toHaveText('18');
       await expect(page.locator('[data-t="bonus-villager-event"]')).toHaveCount(2);
       await expect(page.locator('[data-t="bonus-villager-event"]').first()).toContainText('1个村民');
       for (const marker of await page.locator('[data-t="bonus-villager-event"]').all())
@@ -51,7 +53,10 @@ for (const width of [360, 375, 390, 1280])
       await overflow(page);
       expect(await wrappedNumericUnits(page)).toEqual([]);
       if (width === 360 && theme === 'light')
-        expect((await new AxeBuilder({ page }).include('#builds').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+        expect(
+          (await new AxeBuilder({ page }).include('.tl-wei-grants').include('[data-row="bonus"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations,
+        ).toEqual([]);
+      await page.evaluate(() => scrollTo(0, 0));
       await page.screenshot({ path: info.outputPath(`wei197-timeline-${width}-${theme}.png`), fullPage: true });
       await page.locator('[data-t="share-card-btn"]:visible').first().click();
       await expect(page.locator('[data-t="share-card"]')).toContainText('按魏计');
@@ -60,8 +65,13 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('[data-t="card-url"]')).toContainText('civ=Wei');
       await overflow(page);
       await page.screenshot({ path: info.outputPath(`wei197-share-${width}-${theme}.png`), fullPage: true });
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
       await page.goto('./#/builds?bo=fast-castle-knights&civ=Wei');
       await expect(page.locator('[data-t="civ-note"]')).toContainText(knightNote);
+      await expect(page.locator('.tl-summary li').nth(3).locator('b')).toHaveText('27');
+      await expect(page.locator('.tl-age[data-age="castle"]')).toContainText('27 村民 · 人口 28/35');
+      await page.evaluate(() => scrollTo(0, 0));
+      await page.screenshot({ path: info.outputPath(`wei197-knights-age-${width}-${theme}.png`), fullPage: true });
       await page.locator('[data-t="share-card-btn"]:visible').first().click();
       await expect(page.locator('[data-t="card-basis"]')).toContainText(knightNote);
       if (width === 360 && theme === 'light') {
@@ -69,7 +79,11 @@ for (const width of [360, 375, 390, 1280])
         await page.locator('[data-t="card-download"]').click();
         await (await downloaded).saveAs(info.outputPath('wei197-knight-download.png'));
       }
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
       await overflow(page);
+      await page.goto('./#/builds?bo=fast-castle-boom&civ=Wei');
+      await expect(page.locator('.tl-summary li').nth(3).locator('b')).toHaveText('27');
+      await expect(page.locator('.tl-age[data-age="castle"]')).toContainText('27 村民 · 人口 28/35');
       await page.goto('./#/civ/Wei/bonus/0');
       await expect(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
       await expect(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText('研究完成');

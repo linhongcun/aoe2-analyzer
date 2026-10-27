@@ -12,6 +12,7 @@ import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/
 import BonusBody from '../../src/shared/ui/BonusBody';
 import { buildView } from '../../src/features/builds/timelineModel';
 import { buildShareCard } from '../../src/features/builds/shareCard';
+import { TimelineChart } from '../../src/features/builds/TimelineChart';
 
 beforeAll(async () => {
   await loadCore();
@@ -38,6 +39,29 @@ const card = (id: string) => {
   });
 };
 describe('#197 魏公开说明与分享', () => {
+  it('all other55 view identities retain the original planned-count expression even with pasted grant events', () => {
+    const tl = simulateBuild(
+      buildOrders.find((bo) => bo.id === 'fast-castle-knights')!,
+      'Wei',
+      eco as unknown as EcoData,
+      ups,
+    );
+    const generic = buildView({ ...tl, civ: 'Generic' }, (name) => name);
+    expect(generic.ages.find((mark) => mark.age === 'castle')!.vils).toBe(25);
+    for (const civ of civs.filter((c) => c.en !== 'Wei')) expect(buildView({ ...tl, civ: civ.en }, (name) => name)).toEqual(generic);
+  });
+  it.each([
+    ['fast-castle-knights', 'castle', 27, 28, 35],
+    ['fast-castle-boom', 'castle', 27, 28, 35],
+    ['scouts-18', 'feudal', 18, 19, 25],
+  ] as const)('%s actual age mark includes only births completed by its age clock', (id, age, vils, used, cap) => {
+    const bo = buildOrders.find((bo) => bo.id === id)!;
+    const tl = simulateBuild(bo, 'Wei', eco as unknown as EcoData, ups);
+    const view = buildView(tl, (name) => name);
+    expect(view.ages.find((mark) => mark.age === age)).toMatchObject({ vils, pop: { used, cap } });
+    const html = renderToStaticMarkup(createElement(TimelineChart, { v: view, tl, selectedStep: null, showAssume: false, setShowAssume: () => undefined }));
+    expect(html).toContain(`${vils} 村民 · 人口 ${used}/${cap}`);
+  });
   it('actual bonus0 source and encoded values remain truthful; actual DOM shows completed-research usage', () => {
     const b = civBonuses(civs.find((c) => c.en === 'Wei')!).find((b) => b.idx === 0)!;
     expect(b.src).toBe('eco');
