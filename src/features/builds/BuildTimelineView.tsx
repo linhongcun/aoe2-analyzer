@@ -66,7 +66,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   const target = v.ages.find((a) => a.age === (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]) ?? v.ages[v.ages.length - 1];
   const targetZh = AGE_ZH[bo.target.age]!;
   const civLabel = simCiv !== 'Generic' ? `按${civByEn(simCiv)?.zh ?? simCiv}计` : '按通用计';
-  const civNotes = useMemo(() => (simCiv !== 'Generic' ? civSimNotes(eco as unknown as EcoData, simCiv) : []), [simCiv]);
+  const civNotes = useMemo(() => (simCiv !== 'Generic' ? civSimNotes(eco as unknown as EcoData, simCiv, bo.id) : []), [simCiv, bo.id]);
   const sel = q.step !== null ? tl.steps[q.step] : undefined;
   const sumT = summaryText(v.top, targetZh);
   const cmp = genericTl

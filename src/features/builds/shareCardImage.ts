@@ -50,7 +50,6 @@ export function drawShareCard(canvas: HTMLCanvasElement, m: ShareCardModel) {
   const LAB = 28;
   const inner = CARD_W - PAD * 2;
   const [basis, ...basisNotes] = m.basis.split('\n');
-  const basisNote = basisNotes.join(' ');
   g.textBaseline = 'alphabetic';
 
   g.fillStyle = C.bg;
@@ -85,7 +84,7 @@ export function drawShareCard(canvas: HTMLCanvasElement, m: ShareCardModel) {
   // 三格：格 1 整行，格 2/3 两列
   const c1H = 56 + LAB + 8 + 132 + (m.cells[0].sub ? 8 + LAB : 0);
   const c2H = 56 + LAB + 8 + 48 + (m.cells[1].sub || m.cells[2].sub ? 8 + LAB : 0);
-  const blockH = lh * 2 + 56 + c1H + 16 + c2H + 56 + 28 + LAB + (basisNote ? 48 : 0);
+  const blockH = lh * 2 + 56 + c1H + 16 + c2H + 56 + 28 + LAB + basisNotes.length * 48;
   let y = BAR + (CARD_H - BAR * 2 - blockH) / 2;
 
   g.fillStyle = C.text;
@@ -144,11 +143,12 @@ export function drawShareCard(canvas: HTMLCanvasElement, m: ShareCardModel) {
   g.textAlign = 'right';
   g.fillText(m.site, CARD_W - PAD, y);
   g.textAlign = 'left';
-  if (basisNote) {
-    g.font = `400 24px ${sans}`;
+  basisNotes.forEach((note, i) => {
+    const size = basisNotes.length > 1 ? fit(g, note, 400, 24, sans, inner) : 24;
+    g.font = `400 ${size}px ${sans}`;
     g.fillStyle = C.text2;
-    g.fillText(basisNote, PAD, y + 48);
-  }
+    g.fillText(note, PAD, y + 48 * (i + 1));
+  });
 }
 
 export async function shareCardBlob(m: ShareCardModel): Promise<Blob | null> {

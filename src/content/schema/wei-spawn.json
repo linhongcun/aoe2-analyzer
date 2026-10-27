@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/wei-spawn.json",
+  "title": "Wei reviewed automatic spawn raw context",
+  "type": "object",
+  "properties": {
+    "effectId": { "type": "integer" },
+    "requiredCount": { "type": "integer" },
+    "researchLocation": { "type": "integer" },
+    "researchAt": {
+      "type": "array",
+      "items": { "type": "array", "prefixItems": [{ "type": "integer" }, { "type": "number" }], "minItems": 2, "maxItems": 2, "items": false }
+    },
+    "researchTime": { "type": "number" },
+    "cost": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [{ "type": "integer" }, { "type": "number" }, { "type": "integer" }],
+        "minItems": 3,
+        "maxItems": 3,
+        "items": false
+      }
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Type": { "type": "integer" },
+          "A": { "type": "integer" },
+          "B": { "type": "integer" },
+          "C": { "type": "integer" },
+          "D": { "type": "number" }
+        },
+        "required": ["Type", "A", "B", "C", "D"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["effectId", "requiredCount", "researchLocation", "researchAt", "researchTime", "cost", "commands"],
+  "additionalProperties": false
+}

@@ -2,6 +2,8 @@ import { Info, Landmark } from 'lucide-react';
 import { timelineAxis, timelineBottleneckLayout } from '../../domain/buildTimelineLayout';
 import type { BuildTimeline } from '../../domain/buildSim';
 import { RES_ZH, mmss, type RowKey, type Seg, type TimelineView } from './timelineModel';
+import './wei.css';
+import { NumUnitText } from './NumUnitText';
 
 const ROWS: { key: RowKey; zh: string }[] = [
   { key: 'tc', zh: '城镇中心' },
@@ -55,6 +57,22 @@ export function TimelineChart({
             </div>
           </div>
         ))}
+        {!!tl.bonusVillagerEvents?.length && (
+          <div className="tl-row" data-row="bonus">
+            <span className="tl-lab">研究赠村</span>
+            <div className="tl-track">
+              {tl.bonusVillagerEvents.map((event) => (
+                <span
+                  key={event.tech}
+                  className="tl-wei-point"
+                  style={{ left: pct(event.at) }}
+                  title={`经济研究完成 · 约${mmss(event.at)} · 赠送${event.count}个村民`}
+                  aria-hidden="true"
+                />
+              ))}
+            </div>
+          </div>
+        )}
         <div className="tl-row" data-row="age">
           <span className="tl-lab">到达时代</span>
           <div className="tl-track">
@@ -106,6 +124,32 @@ export function TimelineChart({
           )}
         </div>
       </div>
+      {tl.bonusVillagerEvents && (
+        <div className="tl-civ-note tl-wei-grants" role="group" aria-label="魏研究赠送村民">
+          <p>
+            城镇中心训练：
+            <span className="nw" data-t="paid-villager-total" data-count={tl.villagerEvents?.length ?? 0}>
+              {tl.villagerEvents?.length ?? 0}个村民
+            </span>
+            ；研究赠送：
+            <span className="nw" data-t="bonus-villager-total">
+              {tl.bonusVillagerEvents.reduce((n, event) => n + event.count, 0)}个村民
+            </span>
+          </p>
+          {!!tl.bonusVillagerEvents.length && (
+            <ul>
+              {tl.bonusVillagerEvents.map((event) => (
+                <li key={event.tech} data-t="bonus-villager-event" data-at={event.at} data-trigger={event.trigger} data-count={event.count}>
+                  <span className="num nw">约{mmss(event.at)}</span> 经济研究完成，赠送<span className="nw">{event.count}个村民</span>； 人口
+                  <span className="num nw">
+                    {event.pop.used}/{event.pop.cap}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
       <div className="tl-legend">
         {(['food', 'wood', 'gold'] as const).map((r) => (
           <span key={r}>
@@ -141,7 +185,7 @@ export function TimelineChart({
         <div role="dialog" aria-label="估算说明" className="tl-assume">
           <ul>
             {tl.model.assumptions.map((a, i) => (
-              <li key={i}>{a}</li>
+              <li key={i}>{tl.civ === 'Wei' ? <NumUnitText text={a} /> : a}</li>
             ))}
           </ul>
           <span className="note">模型版本 {tl.model.version}</span>

@@ -313,6 +313,48 @@ export async function checkSite({ site, version, commit, features = [] }) {
       console.log(
         'Verified Sicilians economy: own932.6s Food931/Wood469/Gold133/Stone300, actual two-TC cost550Wood/200Stone, sourced75s one-builder TC, selector/share/source usage and original real-cost boundary',
       );
+      await goto('/builds?bo=archers-19&civ=Wei&step=11');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按魏计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      assert.equal(Number(await page.locator('[data-step="10"]').getAttribute('data-start-at')), 744.6);
+      assert.deepEqual(await inventory(), { food: 573, wood: 429, gold: 167 });
+      const weiDetail = page.getByRole('region', { name: '步骤详情', exact: true });
+      await check(weiDetail).toContainText('23/30');
+      await check(weiDetail.locator(':scope > span').filter({ hasText: /^石头\s/ })).toHaveText('石头 200');
+      await check(page.locator('[data-t="paid-villager-total"]')).toHaveAttribute('data-count', '17');
+      await check(page.locator('[data-t="bonus-villager-total"]')).toHaveText('1个村民');
+      const weiGrant = page.locator('[data-t="bonus-villager-event"]');
+      await check(weiGrant).toHaveCount(1);
+      await check(weiGrant).toHaveAttribute('data-at', '609.4');
+      await check(weiGrant).toHaveAttribute('data-trigger', '202');
+      assert.notEqual(Number(await weiGrant.getAttribute('data-at')), 584.5, 'Wei grant must use research completion, not its independently observed start');
+      await check(page.locator('[data-t="civ-note"]')).toContainText('住房政策未经当前版本客户端实测');
+      await check(page.locator('[data-t="civ-note"]')).not.toContainText('魏没有骑士');
+      await page.locator('#tlciv').click();
+      const weiPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(weiPicker.locator('[data-civ="Wei"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(weiPicker.locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      await goto('/builds?bo=fast-castle-knights&civ=Wei');
+      await check(page.locator('[data-t="civ-note"]')).toContainText('魏没有骑士；骑士方案仅供通用模板经济估算');
+      await check(page.locator('.tl-summary li').nth(3).locator('b')).toHaveText('27');
+      await check(page.locator('.tl-age[data-age="castle"]')).toContainText('27 村民 · 人口 28/35');
+      await page.locator('[data-t="share-card-btn"]:visible').first().click();
+      await check(page.locator('[data-t="card-basis"]')).toContainText('满住房仍计入赠送');
+      await check(page.locator('[data-t="card-basis"]')).toContainText('未经当前版本客户端实测');
+      await check(page.locator('[data-t="card-basis"]')).toContainText('魏没有骑士');
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Wei');
+      await goto('/civ/Wei/bonus/0');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText('研究完成');
+      await check(page.locator('#bonus .bonusbody [data-usage="gather"]')).toHaveAttribute('data-on', 'false');
+      await check(page.locator('#bonus .bonusbody [data-usage="gather"]')).toContainText('赠送村民未计入真实成本');
+      await goto('/duel?a=74.Wei.3.f.&b=74.Magyars.3.f.&m=t');
+      await check(page.locator('[data-t="rc-a"]')).toBeVisible();
+      await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveCount(0);
+      console.log(
+        'Verified Wei economy: own744.6s Food573/Wood429/Gold167/Stone200 pop23/30; 17paid/1free, tech202 completion609.4 vs start584.5; Knight-template-only warning, client-untested housing disclosure, source usage and unchanged real-cost empty warning state',
+      );
     }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {

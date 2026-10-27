@@ -333,7 +333,7 @@ export default function BuildPracticeView({
         <h3>完整估算假设</h3>
         <ul className="note">
           {timeline.model.assumptions.map((assumption, i) => (
-            <li key={i}>{assumption}</li>
+            <li key={i}>{timeline.civ === 'Wei' ? <NumUnitText text={assumption} /> : assumption}</li>
           ))}
         </ul>
       </section>

@@ -145,7 +145,16 @@ def main():
         for i, t in enumerate(T):
             if t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']: continue
             ef = decode(eff(d, t['EffectID']), T)
-            if ef: rows.append({'source': 'bonus', 'tech': i, 'name': t['Name'], 'age': age_of(i), 'requires': [x for x in t['RequiredTechs'] if x >= 0], 'effects': ef})
+            if ef:
+                row = {'source': 'bonus', 'tech': i, 'name': t['Name'], 'age': age_of(i), 'requires': [x for x in t['RequiredTechs'] if x >= 0], 'effects': ef}
+                # #197: retain the COMPLETE raw context for this reviewed Wei family only.
+                # Unknown/extra commands must reach the closed runtime guard, never disappear in decode().
+                if c['en'] == 'Wei' and 1039 <= i <= 1054:
+                    row['spawn'] = {'effectId': t['EffectID'], 'requiredCount': t['RequiredTechCount'],
+                                    'researchLocation': t['ResearchLocation'], 'researchAt': t['ResearchAt'],
+                                    'researchTime': t['ResearchTime'], 'cost': t['Cost'],
+                                    'commands': eff(d, t['EffectID'])}
+                rows.append(row)
         team = decode(eff(d, dc['TeamBonusID']), T)
         if team: rows.append({'source': 'team', 'name': 'Team bonus', 'age': 1, 'effects': team})
         out['civEco'][c['en']] = rows

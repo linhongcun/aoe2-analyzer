@@ -430,6 +430,9 @@
                   "items": {
                     "$ref": "#/$defs/effect"
                   }
+                },
+                "spawn": {
+                  "$ref": "wei-spawn.json"
                 }
               },
               "required": ["source", "tech", "name", "age", "requires", "effects"],

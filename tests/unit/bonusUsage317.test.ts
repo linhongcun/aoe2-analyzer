@@ -46,8 +46,11 @@ const inputsHash = () =>
     JSON.stringify(E),
     JSON.stringify(buildOrders),
     JSON.stringify(ups),
-    ...['buildSim.ts', 'roundHalfPrice.ts', 'buildOrder.ts'].map((f) => readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8')),
+    ...['buildSim.ts', 'roundHalfPrice.ts', 'buildOrder.ts', 'weiEconomy.ts'].map((f) =>
+      readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8'),
+    ),
     ...['construction.json', 'construction.ts'].map((f) => readFileSync(fileURLToPath(new URL(`../../src/data/${f}`, import.meta.url)), 'utf8')),
+    readFileSync(fileURLToPath(new URL('../../src/content/schema/compiled/wei-spawn.mjs', import.meta.url)), 'utf8'),
   );
 type Snap = { inputs: string; firstChanged: Record<string, string | null> };
 const UPDATE = !!process.env.UPDATE_BONUS317;

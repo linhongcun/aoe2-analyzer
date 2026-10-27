@@ -201,7 +201,15 @@ export function buildView(tl: BuildTimeline, unitName: (id: string) => string): 
   // 城镇中心行：造村民段 + 升时代段（琥珀），TC 闲置由卡点层叠加
   const tc: Seg[] = [];
   let cur = 0;
-  const vilsAt = (t: number) => steps.filter((s) => s.startAt <= t + 1e-6).reduce((m, s) => Math.max(m, s.vils), steps[0]?.vils ?? 0);
+  const vilsAt = (t: number) => {
+    if (tl.civ === 'Wei' && tl.villagerEvents && tl.bonusVillagerEvents)
+      return (
+        3 +
+        tl.villagerEvents.filter((event) => event.to <= t + 1e-6).length +
+        tl.bonusVillagerEvents.filter((event) => event.at <= t + 1e-6).reduce((n, event) => n + event.count, 0)
+      );
+    return steps.filter((s) => s.startAt <= t + 1e-6).reduce((m, s) => Math.max(m, s.vils), steps[0]?.vils ?? 0);
+  };
   for (const a of tl.ageUps) {
     if (a.clickAt > cur)
       tc.push({ from: cur, to: a.clickAt, label: `村民 ×${vilsAt(a.clickAt) - vilsAt(cur)} · 约 ${mmss(cur)}–${mmss(a.clickAt)}`, kind: 'villager' });

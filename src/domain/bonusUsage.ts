@@ -26,6 +26,7 @@ import { DAT } from './datEffects';
 import { gatherBonusIdx, gatherModel, touchesGather } from './realCost';
 import relicRaw from '../data/relic_income.json';
 import { simSupport } from './simSupport';
+import { WEI_SPAWN_NOTE } from './weiEconomy';
 
 const eco = ecoRaw as unknown as EcoData;
 /** PK 与真实成本只给单位算折后价（建筑费用折扣不在这两个工具里） */
@@ -110,7 +111,7 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
   if (b.id === 'Sicilians-1') return { tool: 'sim', name, on: false, note: '未计入：农田升级额外储量、耗尽和续种未模拟，也未估算节省的木材' };
   const { techs, treeOnly } = bonusTechs(b);
-  const currentScope = b.civ === 'Sicilians' ? simScope(eco, buildOrders, b.civ) : scope();
+  const currentScope = ['Sicilians', 'Wei'].includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
     const t = (r as { tech?: number }).tech;
     return r.source !== 'team' && t !== undefined && techs.includes(t);
@@ -124,11 +125,13 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
       name,
       on: true,
       note:
-        b.civ === 'Tatars' && b.idx === 0 && techs.includes(704)
-          ? '已计入牧羊产量与工作率配对；羊总量和耗尽未模拟'
-          : b.id === 'Sicilians-4'
-            ? '已计入城镇中心、城堡和防御工事的实际施工工期'
-            : '已计入',
+        b.id === 'Wei-0'
+          ? WEI_SPAWN_NOTE
+          : b.civ === 'Tatars' && b.idx === 0 && techs.includes(704)
+            ? '已计入牧羊产量与工作率配对；羊总量和耗尽未模拟'
+            : b.id === 'Sicilians-4'
+              ? '已计入城镇中心、城堡和防御工事的实际施工工期'
+              : '已计入',
     };
   if (relevant) return { tool: 'sim', name, on: false, note: '本条效果待核实，未计入' };
   if (treeOnly) {
@@ -149,6 +152,16 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
  * 其余加成返回空数组。
  */
 export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
+  if (b.id === 'Wei-0')
+    return [
+      ...usageLines(b as CivBonusEnt & { idx: number }),
+      {
+        tool: 'gather',
+        name: USAGE_TOOL_ZH.gather,
+        on: false,
+        note: '赠送村民未计入真实成本；单个村民的采集速度不变',
+      },
+    ];
   if (b.id === 'Sicilians-4') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Mayans-1') {
     const tree = eco.civEco.Mayans?.find((row) => row.source === 'tree');
