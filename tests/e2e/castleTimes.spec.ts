@@ -65,8 +65,8 @@ for (const width of [1280, 390])
   test(`列表页 @${width}：未计入加成的推荐文明整项置灰 + aria-disabled；「按通用计」单独一行 12px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('#/builds');
-    const scouts = page.locator('[data-t="build-order"]', { hasText: '18 人口侦察骑兵' });
-    const off = scouts.locator('[data-t="bo-civ"][data-off]').first();
+    const archers = page.locator('[data-t="build-order"]', { hasText: '19 人口单靶场弓手' });
+    const off = archers.locator('[data-t="bo-civ"][data-off]').first();
     await expect(off).toHaveAttribute('aria-disabled', 'true');
     const muted = await page.evaluate(() => {
       const d = document.createElement('span');
@@ -77,13 +77,13 @@ for (const width of [1280, 390])
       return c;
     });
     expect(await off.evaluate((el) => getComputedStyle(el).color)).toBe(muted);
-    const on = scouts.locator('[data-t="bo-civ"]:not([data-off])').first();
+    const on = archers.locator('[data-t="bo-civ"]:not([data-off])').first();
     await expect(on).not.toHaveAttribute('aria-disabled', 'true');
     expect(await on.evaluate((el) => getComputedStyle(el).color)).not.toBe(muted);
-    const basis = scouts.locator('[data-t="bo-basis"]');
+    const basis = archers.locator('[data-t="bo-basis"]');
     expect(await basis.evaluate((el) => getComputedStyle(el).display)).toBe('block');
     expect(await basis.evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
-    const t = (await scouts.locator('[data-t="bo-time"]').boundingBox())!;
+    const t = (await archers.locator('[data-t="bo-time"]').boundingBox())!;
     const b = (await basis.boundingBox())!;
     expect(b.y).toBeGreaterThanOrEqual(t.y + t.height - 1);
   });
