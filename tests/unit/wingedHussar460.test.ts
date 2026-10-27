@@ -27,9 +27,10 @@ describe('#460 波兰翼骑兵统一归区域单位', () => {
     ).toEqual([winged]);
     expect(units.filter((u) => u.type === 'UniqueUnit' && u.civs.includes(civ)).map((u) => u.id)).not.toContain(1707);
     const status = civStatus(trees, civ);
+    const available = (id: number) => status['u' + id] === 1;
     expect(status.u1707).toBe(1);
-    expect(status.u441).toBe(0);
-    expect(upgradeLine(byId[448]!, units, byId, (id) => status['u' + id] === 1).map((u) => u.id)).toEqual([448, 546, 1707]);
+    expect(available(441)).toBe(false);
+    expect(upgradeLine(byId[448]!, units, byId, available).map((u) => u.id)).toEqual([448, 546, 1707]);
   });
   it('通用升级路线保持普通翼骑兵，单位总数及原始数目不变', () => {
     expect(upgradeLine(byId[448]!, units, byId).map((u) => u.id)).toEqual([448, 546, 441]);
