@@ -17,6 +17,16 @@ import {
   WEI_KNIGHT_TEMPLATE_NOTE,
   type WeiSpawnContext,
 } from './weiEconomy';
+import {
+  isBengaliRewardRow,
+  bengaliRewardFamily,
+  bengaliRewardsForReachedAge,
+  BENGALI_CONTEXT_REASON,
+  BENGALI_SPAWN_NOTE,
+  BENGALI_SPAWN_ASSUMPTION,
+  BENGALI_KNIGHT_TEMPLATE_NOTE,
+  type BengaliSpawnContext,
+} from './bengaliEconomy';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -27,6 +37,7 @@ interface EffectRow {
   tech?: number;
   requires?: number[];
   spawn?: WeiSpawnContext;
+  ageSpawn?: BengaliSpawnContext;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];
 }
 /** eco.json 中模拟需要的部分 */
@@ -146,7 +157,7 @@ export interface BonusVillagerEvent {
 export interface BuildTimeline {
   /** 实际村民训练事件，仅用于时间线展示，不改变模拟。 */
   villagerEvents?: VillagerEvent[];
-  /** Wei research grants are instantaneous; never paid TC training intervals. */
+  /** Reviewed Wei research and Bengali age grants are instantaneous, never paid TC intervals. */
   bonusVillagerEvents?: BonusVillagerEvent[];
   buildId: string;
   civ: string;
@@ -719,6 +730,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
   const scope = simScope(eco, [bo], civ);
   const weiFamily = civ === 'Wei' ? scope.weiRewards : null;
+  const bengaliFamily = civ === 'Bengalis' ? scope.bengaliRewards : null;
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   const uniqueMayanTeam = (eco.civEco.Mayans ?? []).filter((row) => row.source === 'team').length === 1;
   const rows = (eco.civEco[civ] ?? []).filter(
@@ -823,6 +835,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const bonusVillagerEvents: BonusVillagerEvent[] = [];
   const completedResearch = new Set<number>();
   const rewardedWei = new Set<number>();
+  const rewardedBengalis = new Set<number>();
   let drainPaidBirth = false;
   let villagerStartedAt = 0;
   let tcIdleFrom: number | null = null;
@@ -908,6 +921,23 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       });
       // Only a grant that reaches the final goal can make the old step exit discard an already-paid job.
       if (born >= finalVils && tcState?.kind === 'vil') drainPaidBirth = true;
+    }
+  };
+
+  const completeBengaliAge = (p: Pending, t: number) => {
+    if (p.a.type !== 'ageUp') return;
+    for (const reward of bengaliRewardsForReachedAge(bengaliFamily ?? null, p.a.age, built.get(TC) ?? 0, rewardedBengalis)) {
+      const tasks = Array.from({ length: reward.count }, assign);
+      rewardedBengalis.add(reward.tech);
+      bonusVillagerEvents.push({
+        at: r1(t),
+        tech: reward.tech,
+        trigger: reward.trigger,
+        count: reward.count,
+        step: p.step,
+        pop: { used: popUsed(), cap: popCap },
+        task: tasks.every((task) => task === tasks[0]) ? tasks[0]! : 'mixed',
+      });
     }
   };
 
@@ -1209,6 +1239,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
               const ta = (eco.ecoTechs[id] as { age?: number } | undefined)?.age ?? 1;
               if (ta <= age) applyEcoTech(id, true);
             }
+            if (civ === 'Bengalis') completeBengaliAge(tcState.p, t);
           } else if (a.type === 'research') {
             completeResearch(tcState.p, t);
             stock.gold += m.techReward;
@@ -1324,7 +1355,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   });
   return {
     villagerEvents,
-    ...(civ === 'Wei' ? { bonusVillagerEvents } : {}),
+    ...(civ === 'Wei' || civ === 'Bengalis' ? { bonusVillagerEvents } : {}),
     startAt,
     doneAt,
     snap,
@@ -1423,6 +1454,9 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
         ...(civ === 'Sicilians' && sicilianGroupOk(simScope(eco, ALL_BOS, civ), 772) ? [SICILIAN_FARM_ASSUMPTION] : []),
         ...(civ === 'Wei' && weiRewardFamily(eco.civEco.Wei)
           ? [WEI_SPAWN_ASSUMPTION, ...(bo.id === 'fast-castle-knights' ? [WEI_KNIGHT_TEMPLATE_NOTE] : [])]
+          : []),
+        ...(civ === 'Bengalis' && bengaliRewardFamily(eco.civEco.Bengalis)
+          ? [BENGALI_SPAWN_ASSUMPTION, ...(bo.id === 'fast-castle-knights' ? [BENGALI_KNIGHT_TEMPLATE_NOTE] : [])]
           : []),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
@@ -1595,6 +1629,7 @@ export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
     sicilianBuildings: civ === 'Sicilians' ? eco.buildings : undefined,
     civ,
     weiRewards: civ === 'Wei' ? weiRewardFamily(eco.civEco.Wei) : null,
+    ...(civ === 'Bengalis' ? { bengaliRewards: bengaliRewardFamily(eco.civEco.Bengalis) } : {}),
   };
 }
 
@@ -1616,6 +1651,10 @@ export function classifyCivEffect(
     return scope.civ === 'Wei' && scope.weiRewards?.some((reward) => reward.row === row)
       ? { kind: 'handled' }
       : { kind: 'unhandled', reason: WEI_CONTEXT_REASON };
+  if (isBengaliRewardRow(row))
+    return scope.civ === 'Bengalis' && scope.bengaliRewards?.some((reward) => reward.row === row)
+      ? { kind: 'handled' }
+      : { kind: 'unhandled', reason: BENGALI_CONTEXT_REASON };
   if (scope.sicilianRows && !sicilianRowAllowed(scope, row as EffectRow)) return { kind: 'unhandled', reason: '西西里加成缺少完整已核上下文，未计入' };
   if (row.tech === 704 && !hasTatarShepherdContext(row)) return { kind: 'unhandled', reason: '鞑靼牧羊产量与工作率缺少完整已核配对，未计入' };
   if (row.source === 'team') return { kind: 'irrelevant', reason: '团队加成，默认不计团队' };
@@ -1714,6 +1753,7 @@ export function simSupport(
   if (civ === 'Sicilians' && SICILIAN_GROUPS.some((group) => !sicilianGroupOk(simScope(eco, bos, civ), group)))
     reasons.push('西西里加成缺少完整已核上下文，未计入');
   if (civ === 'Wei' && !weiRewardFamily(eco.civEco.Wei)) reasons.push(WEI_CONTEXT_REASON);
+  if (civ === 'Bengalis' && !bengaliRewardFamily(eco.civEco.Bengalis)) reasons.push(BENGALI_CONTEXT_REASON);
   if (!opts.ignoreSourceGate && !FORCED_CIVS.has(civ) && SOURCE_PENDING_CIVS[civ]) reasons.push(SOURCE_PENDING_CIVS[civ]!);
   return { supported: reasons.length === 0, reasons };
 }
@@ -1873,6 +1913,10 @@ export function civSimNotes(eco: EcoData, civ: string, boId?: string): string[] 
   if (civ === 'Wei' && weiRewardFamily(eco.civEco.Wei)) {
     out.push(WEI_SPAWN_NOTE);
     if (boId === 'fast-castle-knights') out.push(WEI_KNIGHT_TEMPLATE_NOTE);
+  }
+  if (civ === 'Bengalis' && bengaliRewardFamily(eco.civEco.Bengalis)) {
+    out.push(BENGALI_SPAWN_NOTE);
+    if (boId === 'fast-castle-knights') out.push(BENGALI_KNIGHT_TEMPLATE_NOTE);
   }
   if (
     rows.some((r) => {

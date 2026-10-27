@@ -154,6 +154,12 @@ def main():
                                     'researchLocation': t['ResearchLocation'], 'researchAt': t['ResearchAt'],
                                     'researchTime': t['ResearchTime'], 'cost': t['Cost'],
                                     'commands': eff(d, t['EffectID'])}
+                # Bengali cap0 age rewards use a separate reviewed family; keep raw companions intact.
+                if c['en'] == 'Bengalis' and i in (847, 848, 849, 873):
+                    row['ageSpawn'] = {'effectId': t['EffectID'], 'requiredCount': t['RequiredTechCount'],
+                                       'researchLocation': t['ResearchLocation'], 'researchAt': t['ResearchAt'],
+                                       'researchTime': t['ResearchTime'], 'cost': t['Cost'],
+                                       'commands': eff(d, t['EffectID'])}
                 rows.append(row)
         team = decode(eff(d, dc['TeamBonusID']), T)
         if team: rows.append({'source': 'team', 'name': 'Team bonus', 'age': 1, 'effects': team})

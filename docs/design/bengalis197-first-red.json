@@ -1,0 +1,205 @@
+{
+  "baseline": "43f308f2d039ec9ac8ab3cfbc3766b00e1e56ef1",
+  "checkedAtUTC": "2026-10-27T22:56:05.327361+00:00",
+  "verdict": "GO_FOR_BOUNDED_IMPLEMENTATION",
+  "blockingFindings": [],
+  "package": {
+    "path": "/tmp/bengalis197-preflight-package-final.json",
+    "sha256": "b7eb9c4991d80568a520863b34195f79b0ccc27af7d806bc50eae1216f0a8d52",
+    "originalPackagePath": "/tmp/bengalis197-preflight-package.json",
+    "originalPackageSHA256": "e1b2457a80140aac2429e9412f965206f2dbc05829ef7e917ccf69e478b3cbb0",
+    "files": {
+      "docs/design/bengalis197.md": "f8d500d40e987660fc0dc642cc9845c540b85d7b038d42dbc27b0ca9f0b63250",
+      "docs/design/bengalis197-source.json": "9e0342ba796c98f4112f22c64be457d66cf9a16324a3d4291affe7c25abb1785",
+      "tests/unit/bengalis197.test.ts": "e2102053a681941533369e9dc75df58834af83922e583a23d5a9d92654d53cee",
+      "tests/py/test_bengalis197.py": "39a488ac53938b0926a0f459843d7599ece5369bbc6be119cdb9f381d4e228da"
+    }
+  },
+  "sourceAudit": {
+    "path": "/tmp/batch9-bengalis-source.json",
+    "sha256": "934cf42c1a081113820aa797541f60e930c449994d360010a76b290d25e2e492",
+    "rawPath": "/tmp/batch9-bengalis-raw.json",
+    "rawSHA256": "9e0342ba796c98f4112f22c64be457d66cf9a16324a3d4291affe7c25abb1785"
+  },
+  "actualExecution": {
+    "unit": {
+      "command": "npx vitest run tests/unit/bengalis197.test.ts --reporter=json --outputFile=/tmp/bengalis197-first-red-unit.json",
+      "report": "/tmp/bengalis197-first-red-unit.json",
+      "reportSHA256": "d6c0acc3c73027e888e9bb89a51f153415ac771fd8af66bbf87cf97e8dd28773",
+      "log": "/tmp/bengalis197-first-red-unit.log",
+      "logSHA256": "ac059ccaa8dd010783618e342dec72c06f1bbe3a49dd876db08b5e2c8b7e5196",
+      "exit": 1,
+      "total": 50,
+      "passed": 29,
+      "failed": 21,
+      "skipped": 0,
+      "todo": 0,
+      "allFailedAreAssertionError": true,
+      "failedCases": [
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual exporter must contain all four contexts instead of relying on the projected fixture",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: 847: expected undefined to deeply equal { effectId: 866, …(6) }"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 the existing shared structural schema accepts actual projected ageSpawn input",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected false to be true // Object.is equality"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 complete projected family supports only Bengalis without globally allowing resource234",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual feudal-drush-18 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual hybrid-fish-18 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual maa-archers-18 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual scouts-18 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual archers-19 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual fast-castle-boom grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 2 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual fast-castle-knights grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 2 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual drush-fc grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 2 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 completion1.0 grants2 free; observer records arrival1.0, no50food charge or TC training interval",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ { at: 1, tech: 847, …(5) } ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 last step can itself be ageUp: actual arrival view is5villagers/pop6/5 without a later snapshot",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected undefined to match object { at: 1, count: 2, …(1) }"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 already completed3TCs produce6free, not Wei cap1, no paid-food queue",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ { at: 1, tech: 847, …(5) } ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 TC still under construction at arrival is excluded and its later completion does not catch up",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ [ 1, 2 ] ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 full housing autoHousesfalse still gives2, with explicit client-untested model disclosure",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ [ 1, 2 ] ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 full housing autoHousestrue still gives2, with explicit client-untested model disclosure",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ [ 1, 2 ] ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 zero food at completion does not block a free age reward",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected undefined to match object { at: 1, count: 2 }"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 all three normal ages fire their own source once; special873 never joins them",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ [ 847, 101, 2 ], …(2) ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 repeating the same age completion never duplicates a source reward",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ 847 ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 only knight template carries the data-verified unavailable-unit warning",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected '' to contain '孟加拉没有骑士'"
+        }
+      ]
+    },
+    "python": {
+      "command": "scripts/.cache/venv/bin/python -m unittest discover -s tests/py -p test_bengalis197.py -v",
+      "log": "/tmp/bengalis197-first-red-python.log",
+      "logSHA256": "e46de7725d9d54696d9bec198e8b4b6e940def6f1e9771328ac1b6458546ebdc",
+      "exit": 1,
+      "total": 4,
+      "passed": 2,
+      "failedAssertions": 2,
+      "errors": 0
+    }
+  },
+  "integrity": {
+    "trackedProductionDiff": false,
+    "newOnlyFiles": [
+      "docs/design/bengalis197.md",
+      "docs/design/bengalis197-source.json",
+      "tests/unit/bengalis197.test.ts",
+      "tests/py/test_bengalis197.py"
+    ],
+    "frozenHashesUnchangedAfterRuns": true,
+    "missingAPIImportFailures": false,
+    "globalDomainBaselineRerun": false,
+    "fullSuiteRun": false
+  },
+  "sourceFindings": {
+    "family": [
+      847,
+      848,
+      849,
+      873
+    ],
+    "effect": 866,
+    "cap234": 0,
+    "rawType7C": 2,
+    "normalTriggers": [
+      101,
+      102,
+      103
+    ],
+    "specialStartTrigger298NotNormal": true,
+    "completedTCStateOnly": true,
+    "staticCurrent8ExpectedEvents": 11,
+    "staticCurrent8ExpectedFreeVillagers": 22,
+    "current185872ClientTested": false,
+    "olderEngineCorroborationOnly": 158041,
+    "UGCNonzeroContradictionNotUsedAsProof": true
+  },
+  "requirementsToCompleteDuringImplementation": [
+    "Add pure new helper tests for0/1/2/3completedTCs and unsafe/fractional/negativecounts; existingrunOnce normalstart staysfixed, no test-onlyglobalTCparameter",
+    "Add mixedassignment/same-tickincome checks and before-age-event control observations whenactualimplementationisquantified",
+    "Keep malformedwholefamily rejection, unknown rawcompanion retention, exactC2 guard, eventonlyatrealageUpcompletion and noGS/ordinaryresearch/backfill",
+    "Keep final-ageUp-without-nextstep actualvils/pop proof; onlyBengali choosesnormal3+paid+free/eventpop; WeieventsrelabeledBengali retainoriginalfallback",
+    "Exactcurrentnegative Bengalis→Georgians migrations reviewed separately; historical19/frozenv0/#289/#331/old74#317/other55/all224realCost unchanged",
+    "Actualfourwidthlightdark/allnewstates+actualPNG andlocalnecessarychecks; rootfull/dataCIonce; finalsource/code/UIindependentreviewstillrequired"
+  ],
+  "specCorrectionsAlreadyFrozen": [
+    "214closure includesallcommandreferences notonlyType102",
+    "11events/22vils remainsstaticexpected untilactualruntimeobservation"
+  ]
+}
