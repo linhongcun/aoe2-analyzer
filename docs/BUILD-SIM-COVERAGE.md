@@ -16,7 +16,7 @@
 
 2026-10-27 #197 第七批补充：西西里迁入支持集合，普通开局已有首座TC，按既有实际施工形态读取工期并计入TC、城堡和防御工事加成；起始石料只计一次。农田升级额外储量不变成采集速度，储量、失效、续种和节省木材未模拟，独立真实成本保持原口径。见[规格](design/sicilians197.md)和[实际验证记录](design/sicilians197-validation.json)。其余55文明440份完整结果及所有224份真实成本由独立代理对14f8b9c运行核对保持。
 
-2026-10-28 #197 第九批补充：孟加拉迁入支持集合，固定4条来源整族核验，仅在正常到达新时代时按每座已完成TC赠送2村；特殊起始时代分支不自动应用。满住房赠送按未经当前版本客户端实测的本站模型，出生位置/集结/驻扎不模拟；仅骑士方案提示通用经济模板。独立真实成本原值和空提示保持。见[规格](design/bengalis197.md)、[先红](design/bengalis197-first-red.json)、[固定来源](design/bengalis197-source.json)与[公开语义](design/bengalis197-public-sources.json)。
+2026-10-28 #197 第九批补充：孟加拉迁入支持集合，固定4条来源整族核验，仅在正常到达新时代时按每座已完成TC赠送2村；特殊起始时代分支不自动应用。满住房赠送按未经当前版本客户端实测的本站模型，出生位置/集结/驻扎不模拟；仅骑士方案提示通用经济模板。独立真实成本原值和空提示保持。见[规格](design/bengalis197.md)、[先红](design/bengalis197-first-red.json)、[固定来源](design/bengalis197-source.json)与[公开语义](design/bengalis197-public-sources.json)与[实际验证](design/bengalis197-validation.json)。
 
 ## 核对结果
 
