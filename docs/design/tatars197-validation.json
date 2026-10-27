@@ -1,0 +1,242 @@
+{
+  "preparedBaseline": "fc51fc86bc751c50db58660dd5cf12ba61fda76e",
+  "baselineVersion": "v0.48.1",
+  "targetVersion": "v0.50.0",
+  "checkpoint": "b8db4c5294492e7dab9fd90f18e45aad61c44bef",
+  "upstream": "d8df89b8d4e5fbd824bdb43446f14a602f4acbfa",
+  "integration": "41d7643b640b8c14f91774e2ee1664e6a4801e7c",
+  "runtimeCommit": "fefc2824746840b68b95dd39f2fcc82ce2bcbb8e",
+  "runtimeTree": "395b7056e14c5372c082c52d047b48c93d0156ff",
+  "formalRed": {
+    "baseline": "fc51fc86bc751c50db58660dd5cf12ba61fda76e",
+    "total": 44,
+    "passed": 18,
+    "failed": 26,
+    "skipped": 0,
+    "trackedDiff": "",
+    "history": "Draft42test baseline already showed functionality26fail16pass. Before formal red, corrected an unexecuted realCost whole-object check to preserve civ=Tatars (instead of generic emptyciv), split that actual baseline control and added ship-only negative control; production unchanged."
+  },
+  "attributionRed": {
+    "baseline": "fc51fc86bc751c50db58660dd5cf12ba61fda76e",
+    "state": "Approved Tatars runtime implementation dirty; source links/effects/bonusUsage still exact fc51 before attribution correction",
+    "total": 3,
+    "passed": 0,
+    "failed": 3,
+    "skipped": 0,
+    "unchangedSourceFiles": {
+      "scripts/effects_links.json": "29a41241967c9801b9d0cd92f65b427405851e19f6e5c36adb40beebefadbf17",
+      "src/data/effects.json": "a927eff68929d250bf841c6399db6d8ea2148e377c0e75b9ae1565a516689d2e",
+      "src/domain/bonusUsage.ts": "43b4745cdc33eb4ac8b90739450e826d2e3db706b631cf0991d46d07946fa2db"
+    },
+    "runtimeSha256": "80f9277d6c01f4834bc96e86e50afb884634f8e0010e860f6da14e8631cf0d12"
+  },
+  "newUnitFinal": {
+    "total": 47,
+    "pass": 47,
+    "skip": 0,
+    "executionState": "After runtime+source correction before integration; core/data/test inputs unchanged through41d/273/fef; not claimed rerun atfef"
+  },
+  "localUnits": {
+    "primary": {
+      "files": 12,
+      "total": 354,
+      "pass": 352,
+      "fail": 0,
+      "skip": 1,
+      "todo": 1
+    },
+    "boundary": {
+      "files": 8,
+      "total": 324,
+      "pass": 323,
+      "fail": 0,
+      "skip": 1,
+      "todo": 0
+    },
+    "uniqueFiles": 20,
+    "total": 678,
+    "pass": 675,
+    "originalSkip": 2,
+    "originalTodo": 1,
+    "executionState": "Actual integrated41d runtime/core, before e2e+smoke and selected-text-only commits273/fef; not claimed localfull"
+  },
+  "original317": {
+    "oldKeys": 64,
+    "changedOld": {},
+    "added": {
+      "Tatars-0": "feudal-drush-18",
+      "Tatars-1": null,
+      "Tatars-3": null
+    }
+  },
+  "old55Comparison": {
+    "baseline": "fc51fc86bc751c50db58660dd5cf12ba61fda76e",
+    "compared": 440,
+    "oldSupportedCompared": 328,
+    "fullChanged": [],
+    "numericChanged": [],
+    "notesChanged": [],
+    "supportChanged": [],
+    "helpersCompared": 1485,
+    "helperChanged": [],
+    "realCostChanged": [],
+    "protectedChanged": [
+      "tests/unit/fixtures/bonusUsage317-sim.json"
+    ],
+    "supportedCount": 42,
+    "unsupportedCount": 14,
+    "addedSupport": [
+      "Tatars"
+    ],
+    "executionState": "Owner comparison before checkpoint b8db, preserved exact core/data through41d/273/fef; not relabeled as run on final UI SHA"
+  },
+  "independentComparison": "Actual integrated41d: /tmp/tatars197-review/invariants.json,440full/numeric/support/notes and1320helpers unchanged; exact core/data/BO unchanged through273/fef, so reused without falsely claiming rerun.",
+  "upstreamPreserved": [
+    "docs/design/civ-unique-buildings-463.md",
+    "scripts/ci-scope.mjs",
+    "src/domain/civBuildings.ts",
+    "src/features/civs/components/CivDetail.tsx",
+    "src/features/civs/components/CivUniqueBuildings.tsx",
+    "src/features/civs/components/civ-unique-buildings.css",
+    "tests/e2e/civRegionalBuildings456.spec.ts",
+    "tests/e2e/civRegionalUnits450.spec.ts",
+    "tests/e2e/civUniqueBuildings463.spec.ts",
+    "tests/unit/civUniqueBuildings463.test.ts",
+    "tests/unit/releaseUniqueBuildings463.test.ts"
+  ],
+  "sourceChange": {
+    "manualInput": "scripts/effects_links.json: Tatars704=0",
+    "effectsOther55Changed": [],
+    "effectsNonCivDomainsChanged": [],
+    "oldIdx": 2,
+    "newIdx": 0,
+    "numericCommandsUnchanged": true
+  },
+  "auditRecovery": {
+    "reference": "ebda6797389596ffe0ea11f431d12e0a15c52d12:src/data/effects.json",
+    "bytes": 189859,
+    "sha256": "9a3c6cdf422bf3c2f931e2530b2380405b1cd4f0a400c2355b809cd7d8323a3e",
+    "currentGeneratedEffectsSha256": "e7167a162963d9c2efa225342640c1607c2061fe80c448dfd1be4aee93b28858",
+    "fullNpmEffectsAfterRecovery": "success",
+    "firstNpmEffects": "generator success, historical audit failed missing effects.prev.json",
+    "auditMd": "regenerated with actual old source,38lines unrelated drift saved/tmp and original fc51 docs restored",
+    "sharedCacheModified": false,
+    "ownedOverlayRemoved": true
+  },
+  "localCorrections": [
+    "First runtime draft put helper guard in huntFoodMul; corrected to gatherRate and restored huntFoodMul exact before freeze. Draft44 tests28pass16fail retained.",
+    "Next runtime44 tests43pass1fail exposed existing display startAt clamping versus inventory snapshot one tick later. New age test now uses actual researchAt/empty-step doneAt; original44 red not relabeled. Independent review confirmed exact215/230 Food at10.1/20.2s."
+  ],
+  "static": [
+    {
+      "name": "types",
+      "exit": 0,
+      "log": "/tmp/tatars197-types.log"
+    },
+    {
+      "name": "lint",
+      "exit": 0,
+      "log": "/tmp/tatars197-lint.log"
+    },
+    {
+      "name": "layers",
+      "exit": 0,
+      "log": "/tmp/tatars197-layers.log"
+    },
+    {
+      "name": "content",
+      "exit": 0,
+      "log": "/tmp/tatars197-content.log"
+    },
+    {
+      "name": "validators",
+      "exit": 0,
+      "log": "/tmp/tatars197-validators.log"
+    },
+    {
+      "name": "bo",
+      "exit": 0,
+      "log": "/tmp/tatars197-bo.log"
+    }
+  ],
+  "stage": {
+    "version": "v0.50.0",
+    "commit": "27340a1486d2bff303c2a5d345d8ce7d20b0e97b",
+    "cleanBuild": true,
+    "build": "pass",
+    "browsers": {
+      "total": 38,
+      "passed": 38,
+      "new": 18,
+      "oldNegative": 12,
+      "castleTimes": 7,
+      "focusedTimeline": 1
+    },
+    "screenshots": 33,
+    "manifest": "/tmp/tatars197-ui-manifest.json",
+    "actualDownloadPNG": true,
+    "smokeFeatures": [
+      "all",
+      "builds",
+      "civs"
+    ],
+    "smoke": "pass actual v0.50.0/27340a1;5econ,379.6sFood245vs244,source0/2,originalfarmrealCost,explicitpublicpractice-print-source,civsregionalandunique,wingedHussar",
+    "reviewFinding": "Browser assertions passed, but independent manual review found360px bonus2 main andbonus0/2 sidebar number+measure wrapping. Original33 images and manifest preserved; original33 not claimed visual-all-pass."
+  },
+  "ci": "pending actual full/all/data=true; not claiming localfull or differenttree evidence",
+  "ciPolicy": "a30ab1a12d763d7e18148a1d765beeed2c419c2887fff9fd31c1bae5f8b02326",
+  "realCost": "All4Tatars outputs exactly unchanged including civTatars and original empty applied/unsupported; no invented warning",
+  "protectedNotes": "Originalfc51ci-scope hash changed solely via unchanged d8df upstream; deployment-smoke preserves upstream and addsTatars; original317 regenerated; other historic fixtures/289/331/roundHalfPrice/realCost remain exact.",
+  "nowrapIncrement": {
+    "red": {
+      "stageCommit": "27340a1486d2bff303c2a5d345d8ce7d20b0e97b",
+      "stageVersion": "v0.50.0",
+      "productionUnchangedAtRed": true,
+      "productionFiles": [
+        "src/shared/ui/BonusBody.tsx",
+        "src/features/bonuses/components/BonusDetail.tsx"
+      ],
+      "command": "BASE_URL=http://127.0.0.1:4203/ npx playwright test tests/e2e/tatars197.spec.ts --grep '牧羊与新TC来源归属 360 dark' --workers=1 --reporter=json --output=/tmp/tatars197-wrap-red-ui",
+      "result": "1/1 unexpected AssertionError, 0 skipped; both main and sidebar sourced quantity token crossed lines",
+      "resultPath": "/tmp/tatars197-wrap-red.json",
+      "scope": "UI-only Tatars bonus2, dynamic sourced count+measure; no game/source/core changes"
+    },
+    "runtimeCommit": "fefc2824746840b68b95dd39f2fcc82ce2bcbb8e",
+    "runtimeTree": "395b7056e14c5372c082c52d047b48c93d0156ff",
+    "changedRuntimeFiles": [
+      "src/shared/ui/BonusBody.tsx",
+      "src/features/bonuses/components/BonusDetail.tsx"
+    ],
+    "scope": "Tatars idx2 original numeric token+measure uses existing num/nw. Original Linked and plain string early returns for all other bonus text; original team single-string DOM retained. No core/data/BO/globalCSS change.",
+    "green": {
+      "tests": 8,
+      "pass": 8,
+      "skip": 0,
+      "flaky": 0,
+      "path": "/tmp/tatars197-nowrap-green.json",
+      "coverage": "4widths x2themes, bonus0sidebar plusbonus2main/sidebar via actual DOM Range; overflow/errors/source attribution retained"
+    },
+    "build": {
+      "commit": "fefc2824746840b68b95dd39f2fcc82ce2bcbb8e",
+      "cleanTrackedBuild": true,
+      "result": "pass",
+      "log": "/tmp/tatars197-nowrap-build.log"
+    },
+    "static": {
+      "types": "pass",
+      "lint": "pass,0errors/8existingwarnings",
+      "strictLayers": "pass",
+      "changedFilesEslint": "pass",
+      "logPrefix": "/tmp/tatars197-nowrap-"
+    },
+    "toolCorrection": "First command used nonexistent check:layers script after types/lint passed; corrected to npm run lint:layers -- --strict and passed, with final types/changed-file eslint passed.",
+    "manifest": "/tmp/tatars197-final-ui-manifest.json",
+    "screenshots": {
+      "retained17Stage": "27340a1486d2bff303c2a5d345d8ce7d20b0e97b",
+      "new16Stage": "fefc2824746840b68b95dd39f2fcc82ce2bcbb8e",
+      "newOutput": "/tmp/tatars197-nowrap-ui",
+      "old33PreservedWithOriginalHashes": true
+    },
+    "reuse": "Original47 and440/1320/1485 proofs retain real earlier execution provenance; final selected text rendering did not alter their inputs."
+  }
+}
