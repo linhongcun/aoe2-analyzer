@@ -173,6 +173,37 @@ export async function checkSite({ site, version, commit, features = [] }) {
       console.log(
         'Verified Malians economy: same-clock actual Gold inventory, selectable, share card, paid house/TC wood, unchanged farm cost and real-cost boundary',
       );
+      for (const step of [4, 8]) {
+        await goto(`/builds?bo=hybrid-fish-18&step=${step}`);
+        const genericVarangianCheckpoint = await inventory();
+        const genericVarangianClock = Number(await page.locator(`[data-step="${step - 1}"]`).getAttribute('data-start-at'));
+        await goto(`/builds?bo=hybrid-fish-18&civ=Varangians&step=${step}`);
+        await check(page.locator('[data-t="sum-civ"]')).toHaveText('按瓦兰吉人计');
+        await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+        await check(page.locator('[data-t="civ-note"]')).toHaveText('牧羊、狩猎和捕鱼兼产黄金按连续收入估算');
+        const varangianCheckpoint = await inventory();
+        const varangianClock = Number(await page.locator(`[data-step="${step - 1}"]`).getAttribute('data-start-at'));
+        assert.ok(Number.isFinite(genericVarangianClock) && genericVarangianClock > 0);
+        assert.equal(varangianClock, genericVarangianClock, 'Compare Varangian inventory at the same actual clock');
+        assert.equal(varangianCheckpoint.food, genericVarangianCheckpoint.food, 'Varangian extra gold preserves primary food income');
+        assert.equal(varangianCheckpoint.wood, genericVarangianCheckpoint.wood);
+        assert.ok(varangianCheckpoint.gold > genericVarangianCheckpoint.gold, 'Varangian food gathering must increase the actual gold inventory');
+      }
+      await page.locator('#tlciv').click();
+      const varangianPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(varangianPicker.locator('[data-civ="Varangians"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(varangianPicker.locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      await page.locator('[data-t="share-card-btn"]:visible').first().click();
+      await check(page.locator('[data-t="share-card"]')).toContainText('按瓦兰吉人计');
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Varangians');
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      await goto('/duel?a=74.Varangians.3.f.&b=74.Magyars.3.f.&m=t');
+      await check(page.locator('[data-t="rc-a"]')).toBeVisible();
+      await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveCount(0);
+      console.log(
+        'Verified Varangians economy: same-clock early and hybrid fishing Gold inventory, primary Food/Wood preserved, selectable, share card and original farm-based real cost',
+      );
     }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {

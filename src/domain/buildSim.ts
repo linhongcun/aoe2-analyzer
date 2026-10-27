@@ -238,6 +238,8 @@ interface Mods {
   foragerWood: number;
   /** 蜀 res502：有效伐木收入兼产食物的百分比，不改变木材主收入或携带量 */
   lumberFood: number;
+  /** 瓦兰吉 res298：牧羊/狩猎/捕鱼有效食物收入兼产黄金的百分比 */
+  varangianGold: number;
   start: Stock;
 }
 /** 数值修正：按 .dat 效果顺序累积，set 覆盖之前的一切，mul/add 依次叠加。值 = (set ?? 原值) × mul + add */
@@ -277,6 +279,7 @@ function baseMods(): Mods {
     huntFoodMul: 1,
     foragerWood: 0,
     lumberFood: 0,
+    varangianGold: 0,
     start: { ...START },
   };
 }
@@ -317,6 +320,17 @@ const hasMalianGoldContext = (row: { source?: string; tech?: number; effects?: E
   row.source === 'bonus' &&
   row.tech === 594 &&
   row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 11);
+/** tech1475的298 set10.01配33 set34；固定公开百分比及连续近似边界见docs/design/varangians197.md。 */
+const RES_WILD_FOOD_GOLD = 298;
+const VARANGIAN_GOLD_NOTE = '牧羊、狩猎和捕鱼兼产黄金按连续收入估算';
+const VARANGIAN_GOLD_ASSUMPTION =
+  '牧羊、狩猎和捕鱼兼产黄金按有效食物收入的比例连续计入；村民和渔船共用各自主资源的携带量与往返参数，不占用食物携带空间。不模拟客户端逐笔到账、取整或行走期间的触发时序。';
+const VARANGIAN_GOLD_TASKS = new Set(['sheep', 'hunt', 'fish']);
+const varangianGoldIncome = (m: Mods, task: string, rate: number) => (VARANGIAN_GOLD_TASKS.has(task) ? rate * m.varangianGold : 0);
+const hasVarangianGoldContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }) =>
+  row.source === 'bonus' &&
+  row.tech === 1475 &&
+  row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 34);
 /** 固定595的四个建筑类别命令；数值倍率仍从实际effects读取。农田class49不在其中。 */
 const MALIAN_BUILDING_CLASSES = new Set([3, 39, 52, 27]);
 const hasMalianBuildingContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }, scope: ReturnType<typeof simScope>) => {
@@ -356,6 +370,7 @@ function applyEffects(
   applyForagerWood = false,
   applyLumberFood = false,
   malians: { gold?: boolean; buildingWood?: boolean } = {},
+  applyVarangianGold = false,
 ) {
   for (const x of effects) {
     const v = x.v ?? 0;
@@ -399,6 +414,7 @@ function applyEffects(
       else if (applyForagerWood && x.res === RES_FORAGER_WOOD && x.op === 'add') m.foragerWood += v / 100;
       else if (applyLumberFood && x.res === RES_LUMBER_FOOD && x.op === 'set') m.lumberFood = v / 100;
       else if (malians.gold && x.res === RES_GOLD_PRODUCTIVITY && x.op === 'add') m.depositBonus.gold = (m.depositBonus.gold ?? 0) + v / 100;
+      else if (applyVarangianGold && x.res === RES_WILD_FOOD_GOLD && x.op === 'set') m.varangianGold = v / 100;
     } else if (x.kind === 'techTime' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) m.techTime[x.tech] = pushMod(m.techTime[x.tech], x.op, v);
     else if (x.kind === 'techCost' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) {
       const r = TECH_RES[String(x.res)];
@@ -441,7 +457,7 @@ interface Construction {
 /**
  * PR 127（Steve 口径 PR 评论 6195034241）：白名单（不支持）文明页面标「未计入」并按通用计，但直接调 simulateBuild 时
  * 仍保持 release/v0.7.0 的旧算法：不应用按类别（class:*）的费用/训练时间倍率、折后价按整数取整。
- * 已经完整支持的文明走当前算法（issue 197 葡萄牙、蜀、马里已迁出）；其余按文明缓存（eco 对象 + 文明）。
+ * 已经完整支持的文明走当前算法（issue 197 葡萄牙、蜀、马里、瓦兰吉已迁出）；其余按文明缓存（eco 对象 + 文明）。
  */
 const legacyCache = new WeakMap<EcoData, Map<string, boolean>>();
 function legacyCiv(eco: EcoData, civ: string): boolean {
@@ -474,6 +490,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
             gold: civ === 'Malians' && hasMalianGoldContext(r as EffectRow & { tech?: number }) === true,
             buildingWood: civ === 'Malians' && hasMalianBuildingContext(r as EffectRow & { tech?: number }, scope),
           },
+          civ === 'Varangians' && hasVarangianGoldContext(r as EffectRow & { tech?: number }) === true,
         );
     void freeByAge;
   };
@@ -962,6 +979,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         stock[r] += alloc[k] * q * TICK * (1 + (m.depositBonus[r] ?? 0));
         if (m.foragerWood) stock.wood += alloc[k] * foragerWoodIncome(m, ECO_TASK[k], q) * TICK;
         if (m.lumberFood) stock.food += alloc[k] * lumberFoodIncome(m, ECO_TASK[k], q) * TICK;
+        if (m.varangianGold) stock.gold += alloc[k] * varangianGoldIncome(m, ECO_TASK[k], q) * TICK;
       }
     }
     if (fishingShips && eco.fishingShip) {
@@ -971,7 +989,11 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       const wr = fish.workRate * (fish.deepFishMultiplier ?? 1) * (m.rate[key] ?? 1) * (m.rate[cls] ?? 1);
       const carry = fish.carry * (m.carry[key] ?? 1) * (m.carry[cls] ?? 1) + (m.carry['add:' + key] ?? 0) + (m.carry['add:' + cls] ?? 0);
       const speed = fish.speed * (m.unitSpeed[key] ?? 1) * (m.unitSpeed[cls] ?? 1);
-      if (wr > 0 && carry > 0 && speed > 0) stock.food += ((fishingShips * carry) / (carry / wr + (2 * P.walkTiles) / speed)) * TICK;
+      if (wr > 0 && carry > 0 && speed > 0) {
+        const q = (fishingShips * carry) / (carry / wr + (2 * P.walkTiles) / speed);
+        stock.food += q * TICK;
+        if (m.varangianGold) stock.gold += q * m.varangianGold * TICK;
+      }
     }
     if (nextStep >= nSteps && doneAt.every((x) => x !== null)) break;
     if (t >= MAX_T) {
@@ -1093,6 +1115,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
         ...(civ === 'Portuguese' ? [FORAGER_WOOD_ASSUMPTION] : []),
         ...(civ === 'Shu' ? [LUMBER_FOOD_ASSUMPTION, SHU_KNIGHT_TEMPLATE_NOTE] : []),
         ...(civ === 'Malians' ? [MALIAN_GOLD_ASSUMPTION] : []),
+        ...(civ === 'Varangians' ? [VARANGIAN_GOLD_ASSUMPTION] : []),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
           : []),
@@ -1287,6 +1310,7 @@ export function classifyCivEffect(
     if (e.res === RES_FORAGER_WOOD && row.tech === 453 && e.op === 'add') return { kind: 'handled' };
     if (e.res === RES_LUMBER_FOOD && e.op === 'set' && hasLumberFoodContext(row)) return { kind: 'handled' };
     if (e.res === RES_GOLD_PRODUCTIVITY && e.op === 'add' && hasMalianGoldContext(row)) return { kind: 'handled' };
+    if (e.res === RES_WILD_FOOD_GOLD && e.op === 'set' && Number.isFinite(e.v) && e.v! >= 0 && hasVarangianGoldContext(row)) return { kind: 'handled' };
     if (HANDLED_RES(e.res, e.op) || (e.res === 33 && e.op === 'set' && e.v === RES33_INSTANT_FARMERS)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_IRRELEVANT_TECH[row.tech]) return { kind: 'irrelevant', reason: RES234_IRRELEVANT_TECH[row.tech]! };
@@ -1429,6 +1453,7 @@ export function gatherRate(
         (r as { tech?: number }).tech === 453 && techAtomicOk(r, scope),
         hasLumberFoodContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope),
         { gold: civ === 'Malians' && hasMalianGoldContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope) },
+        civ === 'Varangians' && hasVarangianGoldContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope),
       );
   const base = eco.villager.tasks[ecoTask]!;
   const workRate = base.workRate * (m.rate[ecoTask] ?? 1) * (m.rate.villager ?? 1) * (ecoTask === 'hunt' ? m.huntFoodMul : 1);
@@ -1437,7 +1462,7 @@ export function gatherRate(
   const rate = carry / (carry / workRate + walk);
   const wood = foragerWoodIncome(m, ecoTask, rate);
   const food = lumberFoodIncome(m, ecoTask, rate);
-  const gold = ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0;
+  const gold = (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) + varangianGoldIncome(m, ecoTask, rate);
   return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}), ...(gold ? { gold } : {}) } };
 }
 /** 页面「按某文明计」下方的附注：已计入但有未核实部分、或明确不计入的加成 */
@@ -1470,6 +1495,18 @@ export function civSimNotes(eco: EcoData, civ: string): string[] {
       )
     )
       out.push(MALIAN_GOLD_NOTE);
+  }
+  if (civ === 'Varangians') {
+    const scope = simScope(eco, ALL_BOS);
+    if (
+      rows.some(
+        (row) =>
+          hasVarangianGoldContext(row as EffectRow & { tech?: number }) &&
+          row.effects.some((effect) => effect.kind === 'res' && effect.res === RES_WILD_FOOD_GOLD && effect.op === 'set') &&
+          techAtomicOk(row, scope),
+      )
+    )
+      out.push(VARANGIAN_GOLD_NOTE);
   }
   if (
     rows.some((r) => {
