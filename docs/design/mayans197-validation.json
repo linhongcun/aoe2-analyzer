@@ -1,6 +1,6 @@
 {
-  "status": "LOCAL_COMPLETE_AWAITING_INDEPENDENT_FINAL_REVIEW_AND_REAL_CI",
-  "recordedAtUTC": "2026-10-27T10:32:02.043303+00:00",
+  "status": "CI1_FAILED_CURRENT_RECOMMENDATION_TEST_MIGRATION_FIXED_AWAITING_INDEPENDENT_REVIEW_AND_NEW_REAL_CI",
+  "recordedAtUTC": "2026-10-27T11:26:25.907162+00:00",
   "baseline": "88852f4b199518a81bcdb469c9a28ec28dcec27f",
   "baselineVersion": "v0.50.0",
   "version": "v0.51.0",
@@ -647,7 +647,54 @@
     "args": ["python3", "-m", "http.server", "4204"],
     "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
   },
-  "actualCI": null,
+  "actualCI": {
+    "firstRun": {
+      "pr": 474,
+      "run": 40489502490,
+      "job": 122139573943,
+      "status": "FAILURE",
+      "head": "041621e5e156f5fc365e4476bff40c9886740cb1",
+      "actualCheckoutFromCompletedLog": "ba0fcc17a209fdba80205f45563702faee37561a",
+      "browser": {
+        "passed": 2323,
+        "failed": 2,
+        "skipped": 13,
+        "total": 2338,
+        "minutes": 38.6
+      },
+      "failedCases": ["castleTimes.spec.ts:65 @1280", "castleTimes.spec.ts:65 @390"],
+      "cause": "archers-19 recommendations now all supported; old test assumes there is a data-off item, so locator element not found",
+      "localRed": {
+        "startTime": "2026-10-27T11:22:40.625Z",
+        "duration": 11258.844000000001,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "localRuntime": "252c3a2b3c5274872d259117a5ea4a1fc25f612b",
+      "testFileSha256": "d76257fe2e318648b0842bb82f11af04467ebf878fa46265fe493d42d9d0ceed",
+      "localRedJson": "/tmp/mayans197-ci1-castle-red.json",
+      "completedLogExcerpt": "/tmp/mayans197-ci1-owner-failure.log",
+      "recordedAtUTC": "2026-10-27T11:24:06.360430+00:00",
+      "productionUnchanged": true,
+      "actualTestedTree": "861610f1c42557eb8e277984363c10b8673c0da3",
+      "unit": {
+        "files": 198,
+        "passed": 4148,
+        "skipped": 2,
+        "todo": 1,
+        "total": 4151
+      },
+      "plan": {
+        "scope": "full",
+        "features": ["all", "builds"],
+        "data": false
+      },
+      "reused": false
+    },
+    "status": "failure; never recorded or reused as success"
+  },
   "deployment": null,
   "release": null,
   "remaining": "Root owns final independent review, actual PR CI, merge/main/deploy/online/formalRelease/tag/same-deployed-ZIP verification. No remote push or PR creation by implementation owner.",
@@ -691,5 +738,35 @@
     "src/data/eco.json": "9fd02e622a5d2532904f1433e894015ad099de62aa025db49aaa997263bbe74b",
     "src/domain/realCost.ts": "e1804bcafc710a81696259d831a109e28e25b9dc77269b83d19136a3d5e000cf",
     "src/domain/roundHalfPrice.ts": "506e39f19728e59aabe8dc760660a7b2a7a38983f692f18fa400a6b56a55610c"
+  },
+  "ciFailureFollowup": {
+    "cause": "Current unsupported recommendation example missed during the batch support migration: archers19 became all-supported",
+    "testOnlyFix": "Explicit Slavs negative from actual knights recommendations; add supported/visible Maya positive on archers",
+    "originalAssertionLinesPreserved": 27,
+    "allOriginalAssertionLinesPresent": true,
+    "castleTimeGoldenLiteralsUnchanged": true,
+    "productionAndUnitAndPolicyBytesUnchanged": true,
+    "testSha256": "9ab00e9c935a3927d97850014c54ac091a82c7082b1000135391fb302e469a08",
+    "localBefore": {
+      "startTime": "2026-10-27T11:22:40.625Z",
+      "duration": 11258.844000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "localAfter": {
+      "startTime": "2026-10-27T11:24:08.658Z",
+      "duration": 1906.443,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "runtime": "252c3a2b3c5274872d259117a5ea4a1fc25f612b",
+    "selectorAudit": "/tmp/mayans197-ci1-selector-audit.json",
+    "noAdditionalStaleArchersNegativeFound": true,
+    "eslint": "passed",
+    "recordedAtUTC": "2026-10-27T11:26:25.906683+00:00"
   }
 }
