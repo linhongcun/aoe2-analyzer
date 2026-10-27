@@ -1,0 +1,65 @@
+{
+  "topic": "Varangians #197 source audit; direct fixed public reads",
+  "sources": [
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "lineStart": 251,
+      "lineEnd": 256,
+      "excerpt": "## 33. Effect Function Number\n\n- ID: 33\n\n- Purpose: Used to invoke functions in XS from data. When set to a non zero value `N`, it will automatically call a function named `EffectFunctionN` from the `Effects.xs` file.\n",
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L251-L256"
+    },
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "lineStart": 2377,
+      "lineEnd": 2386,
+      "excerpt": "## 297. Varangian Gold Generation\n\n- ID: 297\n\n- Purpose: Varangian Guard gold generation multiplier\n\n- Default Values:\n\n    - 1:  Default\n    - 1.33:  Varangians",
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L2377-L2386"
+    },
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "lineStart": 2388,
+      "lineEnd": 2399,
+      "excerpt": "## 298. Butcher Gold Productivity\n\n- ID: 298\n\n- Purpose: Varangians Shepherd/Hunter/Fisher/Fishing Ship additional gold gathering percent of main work rate\n\n- Default Values:\n\n    - 0:  Default\n    - 10.01:  Varangians\n\n- Note: `EffectFunction34` must be called for this resource to work.",
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L2388-L2399"
+    }
+  ],
+  "verifiedClaims": {
+    "resource298": "Varangians Shepherd/Hunter/Fisher/Fishing Ship additional gold gathering percent of main work rate",
+    "defaultValue": 10.01,
+    "requiredFunction": 34,
+    "resource33": "Nonzero N dispatches EffectFunctionN",
+    "resource297": "Varangian Guard gold generation multiplier; distinct from resource298"
+  },
+  "modelBoundary": "Use eco export10.01 /100 as a declared continuous extra-income estimate on the existing effective main food gathering rate, scoped to shepherd/hunter/fisher/fishing-ship tasks. This does not prove client frame/deposit timing, source depletion, walk/carry/rounding behavior or the actual185872 Function34 body.",
+  "boundedFunction34Search": {
+    "foundTrustedPinned185872Body": false,
+    "searchTerms": [
+      "EffectFunction34",
+      "EffectFunction34 Varangians"
+    ],
+    "fetchedExcludedFiles": [
+      {
+        "url": "https://github.com/ayzg/adex/blob/980e7e96a93b8f3613bb41893088111d8f99f378/res/xs-refs/AOE2FunctionsReference.xs",
+        "hasFunction34": false,
+        "hasVarangians": false
+      },
+      {
+        "url": "https://github.com/MisumiSoyo/Legacy-of-Empires/blob/61ba020b9e6c00d82ee59568a78e2ee4077dbb52/resources/_common/xs/Effects.xs",
+        "hasFunction34": false,
+        "hasVarangians": false
+      }
+    ],
+    "fixedAutoModsTree": {
+      "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+      "truncated": false,
+      "entries": 32,
+      "xsFiles": []
+    }
+  }
+}

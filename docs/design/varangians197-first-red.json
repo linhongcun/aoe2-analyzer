@@ -1,0 +1,9 @@
+{
+  "baseline": "c9b561dc6eb7eb3e62dfa4600af5546fd8c571c7",
+  "total": 44,
+  "passed": 20,
+  "failed": 24,
+  "skipped": 0,
+  "trackedDiff": "",
+  "history": "Draft harness corrected before formal red: short ship observation interval rounded Gold to100, lengthened synthetic villager training; removed imaginary realCost298 warning because original unsupported=[]; production unchanged."
+}
