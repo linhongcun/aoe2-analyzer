@@ -3,6 +3,7 @@ import { timelineAxis, timelineBottleneckLayout } from '../../domain/buildTimeli
 import type { BuildTimeline } from '../../domain/buildSim';
 import { RES_ZH, mmss, type RowKey, type Seg, type TimelineView } from './timelineModel';
 import './wei.css';
+import { NumUnitText } from './NumUnitText';
 
 const ROWS: { key: RowKey; zh: string }[] = [
   { key: 'tc', zh: '城镇中心' },
@@ -184,7 +185,7 @@ export function TimelineChart({
         <div role="dialog" aria-label="估算说明" className="tl-assume">
           <ul>
             {tl.model.assumptions.map((a, i) => (
-              <li key={i}>{a}</li>
+              <li key={i}>{tl.civ === 'Wei' ? <NumUnitText text={a} /> : a}</li>
             ))}
           </ul>
           <span className="note">模型版本 {tl.model.version}</span>

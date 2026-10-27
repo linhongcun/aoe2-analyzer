@@ -40,6 +40,13 @@ for (const width of [360, 375, 390, 1280])
       await page.getByRole('button', { name: '估算', exact: true }).click();
       await expect(page.getByRole('dialog', { name: '估算说明' })).toContainText(housingNote);
       await expect(page.getByRole('dialog', { name: '估算说明' })).toContainText('任务分配');
+      await expect(
+        page
+          .getByRole('dialog', { name: '估算说明' })
+          .locator('.nw')
+          .filter({ hasText: /^0\.1秒$/ }),
+      ).toBeVisible();
+      expect(await wrappedNumericUnits(page)).toEqual([]);
       await page.getByRole('button', { name: '估算', exact: true }).click();
       await overflow(page);
       expect(await wrappedNumericUnits(page)).toEqual([]);
