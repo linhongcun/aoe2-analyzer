@@ -96,7 +96,8 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
   const core = useCore();
   if (!core) return <Loading />;
   const groups = bonusAffects(b, core.units, core.buildings);
-  const usage = b.encoded ? [] : bonusUsage(b);
+  const mayanTimeline = b.id === 'Mayans-1';
+  const usage = b.encoded && !mayanTimeline ? [] : bonusUsage(b);
   const ex = bonusExample(b, core.units, core.buildings, b.civ === 'Franks' && b.idx === 2 ? 'Paladin' : undefined);
   // 未编码：根据文字识别出的单位/建筑（不计入数值）
   const mentions = !b.encoded
@@ -147,7 +148,7 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
           </table>
         </div>
       )}
-      {!b.encoded && usage.length > 0 && (
+      {usage.length > 0 && (
         <div className="note busage">
           <p>各工具计入情况：</p>
           {b.team && usage.every((l) => l.on === false) && <p>各工具均未计入：本文明自己的和队友给的这条团队加成都不计，逐项如下。</p>}
@@ -168,7 +169,11 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
               </li>
             ))}
           </ul>
-          <p>单位模拟器属性面板不计算经济/费用类效果{b.dat.length + b.eco.length > 0 ? '，结构化数值见下方「.dat 原始效果」' : ''}。</p>
+          {mayanTimeline ? (
+            <p>开局按连续采集估算，资源储量和耗尽未模拟；其它工具沿用各自的计算口径。</p>
+          ) : (
+            <p>单位模拟器属性面板不计算经济/费用类效果{b.dat.length + b.eco.length > 0 ? '，结构化数值见下方「.dat 原始效果」' : ''}。</p>
+          )}
         </div>
       )}
       {!b.encoded && usage.length === 0 && (

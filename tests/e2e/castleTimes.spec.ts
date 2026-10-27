@@ -66,7 +66,11 @@ for (const width of [1280, 390])
     await page.setViewportSize({ width, height: 900 });
     await page.goto('#/builds');
     const archers = page.locator('[data-t="build-order"]', { hasText: '19 人口单靶场弓手' });
-    const off = archers.locator('[data-t="bo-civ"][data-off]').first();
+    const mayans = archers.locator('[data-t="bo-civ"]', { hasText: '玛雅' });
+    await expect(mayans).toBeVisible();
+    await expect(mayans).not.toHaveAttribute('aria-disabled', 'true');
+    const knights = page.locator('[data-t="build-order"]', { hasText: '直城后转骑士' });
+    const off = knights.locator('[data-t="bo-civ"][data-off]', { hasText: '斯拉夫' });
     await expect(off).toHaveAttribute('aria-disabled', 'true');
     const muted = await page.evaluate(() => {
       const d = document.createElement('span');

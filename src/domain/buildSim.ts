@@ -242,6 +242,10 @@ interface Mods {
   varangianGold: number;
   /** 鞑靼res216：与同条牧羊工作率配对的收集产量倍率，不是库存赠送 */
   sheepFoodMul: number;
+  /** 玛雅：各原始任务独立读取的产量倍率，不把190叠到其它食物任务。 */
+  mayanProductivity: Record<string, number>;
+  /** 仅玛雅显式team开关下的完整墙/门类别费用。 */
+  mayanWallCost: Record<number, number>;
   start: Stock;
 }
 /** 数值修正：按 .dat 效果顺序累积，set 覆盖之前的一切，mul/add 依次叠加。值 = (set ?? 原值) × mul + add */
@@ -283,6 +287,8 @@ function baseMods(): Mods {
     lumberFood: 0,
     varangianGold: 0,
     sheepFoodMul: 1,
+    mayanProductivity: {},
+    mayanWallCost: {},
     start: { ...START },
   };
 }
@@ -353,6 +359,71 @@ const hasTatarShepherdContext = (row: { source?: string; tech?: number; effects?
     })
   );
 };
+/** tree449：每个实际采集对象只读取一个resource_multiplier。 */
+const MAYAN_RESOURCE_TASKS: Record<number, string> = {
+  47: 'gold',
+  79: 'stone',
+  189: 'wood',
+  190: 'farm',
+  216: 'sheep',
+  268: 'hunt',
+  219: 'fish',
+  296: 'berries',
+};
+const MAYAN_TREE_MARKERS = new Set([47, 79, 189, 190, 219, 296]);
+const MAYAN_WORK_TARGETS = [
+  'task:gold',
+  'task:stone',
+  'task:wood',
+  'task:farm',
+  'task:sheep',
+  'task:hunt',
+  'task:fish',
+  'task:berries',
+  'class:21',
+  'villager',
+  'unit:1891',
+  'unit:1892',
+  'unit:2333',
+  'unit:2334',
+];
+const MAYAN_TREE_SIGNATURES = new Set([
+  ...Object.keys(MAYAN_RESOURCE_TASKS).map((res) => 'res:' + res),
+  ...MAYAN_WORK_TARGETS.map((target) => 'attr:' + target + ':workRate'),
+  ...[4, 24, 492, 763, 765].map((id) => 'attr:unit:' + id + ':cost'),
+  'attr:unit:199:trainTime',
+]);
+const mayanSignature = (e: EffectRow['effects'][number]) => (e.kind === 'res' ? 'res:' + e.res : e.kind === 'attr' ? 'attr:' + e.target + ':' + e.attr : '');
+const positiveMultiplier = (e: EffectRow['effects'][number]) => e.op === 'mul' && Number.isFinite(e.v) && e.v! > 0;
+const hasMayanTreeContext = (row: { source?: string; age?: number; tech?: number; effects?: EffectRow['effects'] }) =>
+  row.source === 'tree' &&
+  row.age === 1 &&
+  row.tech === undefined &&
+  row.effects?.length === MAYAN_TREE_SIGNATURES.size &&
+  new Set(row.effects.map(mayanSignature)).size === MAYAN_TREE_SIGNATURES.size &&
+  row.effects.every((effect) => MAYAN_TREE_SIGNATURES.has(mayanSignature(effect)) && positiveMultiplier(effect));
+const hasMayanTreeMarker = (row: { effects?: EffectRow['effects'] }) =>
+  row.effects?.some((effect) => effect.kind === 'res' && MAYAN_TREE_MARKERS.has(effect.res ?? -1));
+const hasUniqueMayanTree = (eco: EcoData) => {
+  const rows = (eco.civEco.Mayans ?? []).filter((row) => row.source === 'tree' || hasMayanTreeMarker(row));
+  return rows.length === 1 && hasMayanTreeContext(rows[0]!);
+};
+const mayanRowAllowed = (civ: string, row: EffectRow, uniqueMayanTree: boolean) =>
+  ((civ !== 'Mayans' || row.source !== 'tree') && !hasMayanTreeMarker(row)) || (civ === 'Mayans' && uniqueMayanTree && hasMayanTreeContext(row));
+const hasMayanWallContext = (row: EffectRow, scope: ReturnType<typeof simScope>) =>
+  row.source === 'team' &&
+  row.age === 1 &&
+  row.effects.length === 2 &&
+  [...scope.buildingClass.values()].every((cls) => Number.isInteger(cls) && cls >= 0) &&
+  [27, 39].every(
+    (cls) =>
+      row.effects.filter((effect) => effect.kind === 'attr' && effect.target === 'class:' + cls && effect.attr === 'cost' && positiveMultiplier(effect))
+        .length === 1,
+  );
+const MAYAN_RESOURCE_NOTE = '资源产量与工作率配对估算；储量和耗尽未模拟';
+export const MAYAN_CAVALRY_TEMPLATE_NOTE = '玛雅无马厩；侦察骑兵、骑士方案仅供通用模板经济估算';
+const MAYAN_RESOURCE_ASSUMPTION =
+  '玛雅各资源产量与专职工作率配对后再计算携带和往返，一般净系数1.0005、农田0.9315；近城镇中心肉类仍用牧羊代理。资源储量、耗尽、农田续种和客户端逐帧行为未模拟。沿用玛雅的起始人数，织布按原开局实际研发；墙费只在显式计入团队时折半。';
 /** 固定595的四个建筑类别命令；数值倍率仍从实际effects读取。农田class49不在其中。 */
 const MALIAN_BUILDING_CLASSES = new Set([3, 39, 52, 27]);
 const hasMalianBuildingContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }, scope: ReturnType<typeof simScope>) => {
@@ -394,6 +465,7 @@ function applyEffects(
   malians: { gold?: boolean; buildingWood?: boolean } = {},
   applyVarangianGold = false,
   applyTatarShepherd = false,
+  mayans: { resource?: boolean; wall?: boolean } = {},
 ) {
   for (const x of effects) {
     const v = x.v ?? 0;
@@ -404,6 +476,8 @@ function applyEffects(
         if (x.op === 'mul') o[k] = (o[k] ?? 1) * v;
       };
       if (x.attr === 'workRate') {
+        // 83/293是独立的闲置对象，已核玛雅任务不可再叠乘这条0.87。
+        if (mayans.resource && t === 'villager') continue;
         if (key.startsWith('unit:') && TC_UNITS.has(Number(key.slice(5)))) mul(m.tcRate, key);
         else mul(m.rate, key);
       } else if (x.attr === 'carry') {
@@ -420,12 +494,21 @@ function applyEffects(
           const cls = Number(key.slice(6));
           m.buildingWoodCost[cls] = (m.buildingWoodCost[cls] ?? 1) * v;
         }
+        if (mayans.wall && x.attr === 'cost' && key.startsWith('class:')) {
+          const cls = Number(key.slice(6));
+          m.mayanWallCost[cls] = (m.mayanWallCost[cls] ?? 1) * v;
+        }
       } else if (x.attr in COST_ATTR && x.op === 'add' && COST_ATTR[x.attr] !== 'all') {
         const o = (m.costAdd[key] ??= {});
         const r = COST_ATTR[x.attr] as Res;
         o[r] = (o[r] ?? 0) + v;
       } else if (x.attr === 'trainTime' && x.op === 'mul') mul(m.timeMul, key === 'villager' ? 'unit:83' : key);
     } else if (x.kind === 'res' && x.res !== undefined) {
+      if (mayans.resource && MAYAN_RESOURCE_TASKS[x.res]) {
+        const task = MAYAN_RESOURCE_TASKS[x.res]!;
+        m.mayanProductivity[task] = (m.mayanProductivity[task] ?? 1) * v;
+        continue;
+      }
       if (RES_START[x.res] && x.op === 'add') m.start[RES_START[x.res]!] += v;
       else if (RES_STOCK[x.res] && x.op === 'add') m.grant[RES_STOCK[x.res]!] += v;
       else if (RES_DEPOSIT[x.res] && x.op === 'add') m.depositBonus[RES_DEPOSIT[x.res]!] = (m.depositBonus[RES_DEPOSIT[x.res]!] ?? 0) + v / 100;
@@ -481,7 +564,7 @@ interface Construction {
 /**
  * PR 127（Steve 口径 PR 评论 6195034241）：白名单（不支持）文明页面标「未计入」并按通用计，但直接调 simulateBuild 时
  * 仍保持 release/v0.7.0 的旧算法：不应用按类别（class:*）的费用/训练时间倍率、折后价按整数取整。
- * 已经完整支持的文明走当前算法（issue 197 葡萄牙、蜀、马里、瓦兰吉、鞑靼已迁出）；其余按文明缓存（eco 对象 + 文明）。
+ * 已经完整支持的文明走当前算法（issue 197 葡萄牙、蜀、马里、瓦兰吉、鞑靼、玛雅已迁出）；其余按文明缓存（eco 对象 + 文明）。
  */
 const legacyCache = new WeakMap<EcoData, Map<string, boolean>>();
 function legacyCiv(eco: EcoData, civ: string): boolean {
@@ -499,8 +582,15 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   // 按 tech 整条判定（#43 Steve）：只要有一条效果是未实现或未分类，这个 tech 的效果一条都不应用，
   // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
   const scope = simScope(eco, [bo]);
+  const uniqueMayanTree = hasUniqueMayanTree(eco);
+  const uniqueMayanTeam = (eco.civEco.Mayans ?? []).filter((row) => row.source === 'team').length === 1;
   const rows = (eco.civEco[civ] ?? []).filter(
-    (r) => (P.team || r.source !== 'team') && ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') && techAtomicOk(r, scope),
+    (r) =>
+      (P.team || r.source !== 'team') &&
+      ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') &&
+      mayanRowAllowed(civ, r, uniqueMayanTree) &&
+      (civ !== 'Mayans' || r.source !== 'team' || (uniqueMayanTeam && hasMayanWallContext(r, scope))) &&
+      techAtomicOk(r, scope),
   );
   const freeByAge: Record<number, string[]> = {};
   let age = 1;
@@ -518,6 +608,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           },
           civ === 'Varangians' && hasVarangianGoldContext(r as EffectRow & { tech?: number }) === true,
           civ === 'Tatars' && hasTatarShepherdContext(r as EffectRow & { tech?: number }),
+          { resource: civ === 'Mayans' && hasMayanTreeContext(r), wall: civ === 'Mayans' && hasMayanWallContext(r, scope) },
         );
     void freeByAge;
   };
@@ -626,15 +717,16 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const cls = !legacy && kind === 'unit' && eco.units[id]?.class !== undefined ? m.costMul['class:' + eco.units[id]!.class] : undefined;
     const mul = m.costMul['unit:' + id];
     const buildingWood = kind === 'building' ? m.buildingWoodCost[eco.buildings[id]?.class ?? -1] : undefined;
+    const mayanWall = kind === 'building' ? m.mayanWallCost[eco.buildings[id]?.class ?? -1] : undefined;
     const rnd = legacy ? Math.round : roundHalfPrice;
-    if ((mul || cls || buildingWood !== undefined) && kind !== 'up')
+    if ((mul || cls || buildingWood !== undefined || mayanWall !== undefined) && kind !== 'up')
       for (const r of Object.keys(out) as Res[]) {
         if (r === 'wood' && buildingWood !== undefined) {
           const factor = (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1);
           // 与effects_build.py累计tiers的6位规范一致；仅新马里建筑木费，保留原half-price及其它文明路径。
           const combined = Math.round(factor * buildingWood * 1e6) / 1e6;
           out[r] = rnd(out[r] * combined);
-        } else out[r] = rnd(out[r] * (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1));
+        } else out[r] = rnd(out[r] * (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1) * (mayanWall ?? 1));
       }
     return out;
   };
@@ -649,7 +741,13 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const et = ECO_TASK[t];
     const base = eco.villager.tasks[et]!;
     // 猎物倍率（res 268）只作用于狩猎：每次采集动作入账 ×倍率，等效于 workRate ×倍率
-    const wr = base.workRate * (m.rate[et] ?? 1) * (m.rate.villager ?? 1) * (et === 'hunt' ? m.huntFoodMul : 1) * (et === 'sheep' ? m.sheepFoodMul : 1);
+    const wr =
+      base.workRate *
+      (m.rate[et] ?? 1) *
+      (m.rate.villager ?? 1) *
+      (et === 'hunt' ? m.huntFoodMul : 1) *
+      (et === 'sheep' ? m.sheepFoodMul : 1) *
+      (m.mayanProductivity[et] ?? 1);
     const carry = base.carry * (m.carry[et] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + et] ?? 0) + (m.carry['add:villager'] ?? 0);
     const d = t === 'farm' && m.farmNoWalk ? 0 : NEAR.includes(t) ? P.nearTiles : P.walkTiles;
     const walk = (2 * d) / (eco.villager.speed * m.speed);
@@ -1013,7 +1111,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       const fish = eco.fishingShip;
       const key = 'unit:' + fish.unit,
         cls = 'class:' + eco.units[fish.unit]?.class;
-      const wr = fish.workRate * (fish.deepFishMultiplier ?? 1) * (m.rate[key] ?? 1) * (m.rate[cls] ?? 1);
+      const wr = fish.workRate * (fish.deepFishMultiplier ?? 1) * (m.rate[key] ?? 1) * (m.rate[cls] ?? 1) * (m.mayanProductivity.fish ?? 1);
       const carry = fish.carry * (m.carry[key] ?? 1) * (m.carry[cls] ?? 1) + (m.carry['add:' + key] ?? 0) + (m.carry['add:' + cls] ?? 0);
       const speed = fish.speed * (m.unitSpeed[key] ?? 1) * (m.unitSpeed[cls] ?? 1);
       if (wr > 0 && carry > 0 && speed > 0) {
@@ -1144,6 +1242,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
         ...(civ === 'Malians' ? [MALIAN_GOLD_ASSUMPTION] : []),
         ...(civ === 'Varangians' ? [VARANGIAN_GOLD_ASSUMPTION] : []),
         ...(civ === 'Tatars' ? [TATAR_SHEPHERD_ASSUMPTION] : []),
+        ...(civ === 'Mayans' ? [MAYAN_RESOURCE_ASSUMPTION, MAYAN_CAVALRY_TEMPLATE_NOTE] : []),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
           : []),
@@ -1319,7 +1418,7 @@ export function techAtomicOk(row: EffectRow, scope: ReturnType<typeof simScope>)
 /** 判定一条文明效果 */
 export function classifyCivEffect(
   e: Effect,
-  row: { source?: string; tech?: number; effects?: EffectRow['effects'] },
+  row: { source?: string; age?: number; tech?: number; effects?: EffectRow['effects'] },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
   if (row.tech === 704 && !hasTatarShepherdContext(row)) return { kind: 'unhandled', reason: '鞑靼牧羊产量与工作率缺少完整已核配对，未计入' };
@@ -1334,6 +1433,7 @@ export function classifyCivEffect(
   }
   if (e.kind === 'res') {
     if (e.res === undefined) return { kind: 'unknown' };
+    if (MAYAN_RESOURCE_TASKS[e.res] && hasMayanTreeContext(row)) return { kind: 'handled' };
     if (e.res === 269 && e.op === 'set') return { kind: 'handled' };
     if (e.res === RES_HUNT_FOOD && e.op === 'mul') return { kind: 'handled' };
     if (e.res === RES_FORAGER_WOOD && row.tech === 453 && e.op === 'add') return { kind: 'handled' };
@@ -1412,6 +1512,7 @@ export function simSupport(
 ): { supported: boolean; reasons: string[] } {
   const u = unhandledEffects(eco, civ, bos);
   const reasons = [...new Set(u.map((x) => x.reason))];
+  if (civ === 'Mayans' && !hasUniqueMayanTree(eco)) reasons.push('玛雅资源产量与工作率缺少完整已核配对，未计入');
   if (!opts.ignoreSourceGate && !FORCED_CIVS.has(civ) && SOURCE_PENDING_CIVS[civ]) reasons.push(SOURCE_PENDING_CIVS[civ]!);
   return { supported: reasons.length === 0, reasons };
 }
@@ -1475,8 +1576,15 @@ export function gatherRate(
 ): { carry: number; workRate: number; rate: number; extraIncome: Partial<Stock> } {
   const m = baseMods();
   const scope = simScope(eco, ALL_BOS);
+  const uniqueMayanTree = hasUniqueMayanTree(eco);
   for (const r of eco.civEco[civ] ?? [])
-    if (r.age === 1 && r.source !== 'team' && ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') && (civ !== 'Tatars' || techAtomicOk(r, scope)))
+    if (
+      r.age === 1 &&
+      r.source !== 'team' &&
+      ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') &&
+      mayanRowAllowed(civ, r, uniqueMayanTree) &&
+      (!['Tatars', 'Mayans'].includes(civ) || techAtomicOk(r, scope))
+    )
       applyEffects(
         m,
         r.effects,
@@ -1485,10 +1593,16 @@ export function gatherRate(
         { gold: civ === 'Malians' && hasMalianGoldContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope) },
         civ === 'Varangians' && hasVarangianGoldContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope),
         civ === 'Tatars' && hasTatarShepherdContext(r as EffectRow & { tech?: number }) && techAtomicOk(r, scope),
+        { resource: civ === 'Mayans' && hasMayanTreeContext(r) && techAtomicOk(r, scope) },
       );
   const base = eco.villager.tasks[ecoTask]!;
   const workRate =
-    base.workRate * (m.rate[ecoTask] ?? 1) * (m.rate.villager ?? 1) * (ecoTask === 'hunt' ? m.huntFoodMul : 1) * (ecoTask === 'sheep' ? m.sheepFoodMul : 1);
+    base.workRate *
+    (m.rate[ecoTask] ?? 1) *
+    (m.rate.villager ?? 1) *
+    (ecoTask === 'hunt' ? m.huntFoodMul : 1) *
+    (ecoTask === 'sheep' ? m.sheepFoodMul : 1) *
+    (m.mayanProductivity[ecoTask] ?? 1);
   const carry = base.carry * (m.carry[ecoTask] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + ecoTask] ?? 0) + (m.carry['add:villager'] ?? 0);
   const walk = (2 * tiles) / (eco.villager.speed * m.speed);
   const rate = carry / (carry / workRate + walk);
@@ -1544,6 +1658,11 @@ export function civSimNotes(eco: EcoData, civ: string): string[] {
     const scope = simScope(eco, ALL_BOS);
     if (rows.some((row) => hasTatarShepherdContext(row as EffectRow & { tech?: number }) && techAtomicOk(row, scope))) out.push(TATAR_SHEPHERD_NOTE);
   }
+  if (civ === 'Mayans') {
+    const scope = simScope(eco, ALL_BOS);
+    if (hasUniqueMayanTree(eco) && rows.some((row) => hasMayanTreeContext(row) && techAtomicOk(row, scope))) out.push(MAYAN_RESOURCE_NOTE);
+    out.push(MAYAN_CAVALRY_TEMPLATE_NOTE);
+  }
   if (
     rows.some((r) => {
       const t = (r as { tech?: number }).tech;
@@ -1551,7 +1670,7 @@ export function civSimNotes(eco: EcoData, civ: string): string[] {
     })
   )
     out.push('马的食物未计入');
-  if (rows.some((r) => r.effects.some((e) => e.kind === 'res' && e.res === RES_HUNT_FOOD))) {
+  if (civ !== 'Mayans' && rows.some((r) => r.effects.some((e) => e.kind === 'res' && e.res === RES_HUNT_FOOD))) {
     const k = huntFoodMul(eco, civ);
     out.push(`猎物食物 ×${Math.round(k * 100) / 100}；对其他采集的作用未核实`);
   }

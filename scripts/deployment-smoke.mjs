@@ -240,6 +240,46 @@ export async function checkSite({ site, version, commit, features = [] }) {
       console.log(
         'Verified Tatars economy: same-clock379.6s Food245vs244, paired coefficients, selectable, share, correct sheep/TC attribution and original farm-based real cost',
       );
+      await goto('/builds?bo=archers-19&civ=Mayans&step=1');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按玛雅计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await check(page.locator('[data-t="civ-note"]')).toContainText('资源产量与工作率配对估算；储量和耗尽未模拟');
+      await check(page.locator('[data-t="civ-note"]')).toContainText('玛雅无马厩；侦察骑兵、骑士方案仅供通用模板经济估算');
+      assert.deepEqual(await inventory(), { food: 150, wood: 200, gold: 100 });
+      await check(page.getByRole('region', { name: '步骤详情', exact: true })).toContainText('5/5');
+      await goto('/builds?bo=archers-19&civ=Mayans&step=8');
+      assert.equal(Number(await page.locator('[data-step="7"]').getAttribute('data-start-at')), 571.9);
+      assert.deepEqual(await inventory(), { food: 477, wood: 376, gold: 50 });
+      const mayanDetail = page.getByRole('region', { name: '步骤详情', exact: true });
+      await check(mayanDetail).toContainText('20/25');
+      await check(
+        mayanDetail
+          .locator(':scope > span')
+          .filter({ hasText: /^石头\s/ })
+          .locator('b'),
+      ).toHaveText('200');
+      await page.locator('#tlciv').click();
+      const mayanPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(mayanPicker.locator('[data-civ="Mayans"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(mayanPicker.locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      for (const bo of ['scouts-18', 'fast-castle-knights']) {
+        await goto(`/builds?bo=${bo}&civ=Mayans`);
+        await page.locator('[data-t="share-card-btn"]:visible').first().click();
+        await check(page.locator('[data-t="card-basis"]')).toContainText('玛雅无马厩；侦察骑兵、骑士方案仅供通用模板经济估算');
+        await check(page.locator('[data-t="card-url"]')).toContainText('civ=Mayans');
+        await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      }
+      await goto('/civ/Mayans/bonus/1');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText('已计入资源产量与工作率配对；储量和耗尽未模拟');
+      await goto('/duel?a=4.Mayans.4.f.&b=4.Franks.4.f.&m=t');
+      const mayanUncounted = page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]');
+      await check(mayanUncounted).toHaveCount(4);
+      await check(mayanUncounted).toContainText(Array(4).fill('资源多持续 15%，不是采集变快，暂不计入'));
+      console.log(
+        'Verified Mayans economy: own4-villager150Food start,571.9s Food477/Wood376/Gold50/Stone200,pop20/25, paired-source explanation, both generic cavalry shares and original real-cost boundary; no pure-productivity Generic comparison claimed',
+      );
     }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {

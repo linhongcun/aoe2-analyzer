@@ -4,7 +4,7 @@
  * 纯函数，不碰 DOM；数字全部来自 simulateBuild → buildView。
  */
 import { formatClock } from '../../domain/formatTime';
-import { SHU_KNIGHT_TEMPLATE_NOTE } from '../../domain/buildSim';
+import { MAYAN_CAVALRY_TEMPLATE_NOTE, SHU_KNIGHT_TEMPLATE_NOTE } from '../../domain/buildSim';
 import { RES_ZH, rangeLabel, summaryParts, summaryText, type AgeMark, type TimelineView } from './timelineModel';
 
 export interface ShareCell {
@@ -96,7 +96,8 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
     ],
     basis:
       [`按${i.civZh}计`, `走路 ${i.dist} 格`, ...(i.house ? [] : ['关自动建房']), `游戏版本 ${i.patchBuild}`].join(' · ') +
-      (i.civEn === 'Shu' && i.boId === 'fast-castle-knights' ? `\n${SHU_KNIGHT_TEMPLATE_NOTE}` : ''),
+      (i.civEn === 'Shu' && i.boId === 'fast-castle-knights' ? `\n${SHU_KNIGHT_TEMPLATE_NOTE}` : '') +
+      (i.civEn === 'Mayans' && ['scouts-18', 'fast-castle-knights'].includes(i.boId) ? `\n${MAYAN_CAVALRY_TEMPLATE_NOTE}` : ''),
     site: SHARE_SITE,
     kind: '开局时间线',
     url: shareUrl(i),
