@@ -1,6 +1,8 @@
 # #197 第五批：鞑靼牧羊产量与工作率配对
 
-基线 main `fc51fc86bc751c50db58660dd5cf12ba61fda76e`（v0.48.1），目标 v0.49.0。维护者再次要求“ok，接着处理下一批的文明吧”；执行者据此选定鞑靼，并非维护者逐字点名，见[范围记录](https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6435153620)。只交付Tatars，父#197保持开放，PR使用`Refs #197`；其它14文明不纳入。
+基线 main `fc51fc86bc751c50db58660dd5cf12ba61fda76e`（v0.48.1），目标 v0.50.0。维护者再次要求“ok，接着处理下一批的文明吧”；执行者据此选定鞑靼，并非维护者逐字点名，见[范围记录](https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6435153620)。只交付Tatars，父#197保持开放，PR使用`Refs #197`；其它14文明不纳入。
+
+实现检查点b8db4c5基于原fc51；并行独特建筑功能已进入main `d8df89b8d4e5fbd824bdb43446f14a602f4acbfa`（v0.49.0），本批正常合并并完整保留上游UI、CI范围和烟测，目标顺延v0.50.0。原fc51的来源/先红/448份基线保持真实出处，不假称整合后重录；旧ci-scope/deployment-smoke文件hash的变化按上游整合如实区分，不伪称全部保护文件字节不变。
 
 ## 固定来源与模型边界
 
