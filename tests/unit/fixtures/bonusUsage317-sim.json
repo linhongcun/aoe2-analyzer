@@ -1,5 +1,5 @@
 {
-  "inputs": "fc6125f25082e109e86e152ad9578b1d274ced716783af357a0e388ce7bc5fcf",
+  "inputs": "942ce885a766349dc70b5343c0e697c1fa21845fdfae23538ba7f499c47864bc",
   "firstChanged": {
     "Aztecs-0": "feudal-drush-18",
     "Berbers-1": null,
@@ -54,6 +54,9 @@
     "Shu-0": "feudal-drush-18",
     "Shu-1": null,
     "Spanish-1": "feudal-drush-18",
+    "Tatars-0": "feudal-drush-18",
+    "Tatars-1": null,
+    "Tatars-3": null,
     "Teutons-0": "maa-archers-18",
     "Teutons-3": null,
     "Tupi-0": "feudal-drush-18",

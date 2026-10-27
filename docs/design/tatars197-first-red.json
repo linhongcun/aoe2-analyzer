@@ -1,0 +1,9 @@
+{
+  "baseline": "fc51fc86bc751c50db58660dd5cf12ba61fda76e",
+  "total": 44,
+  "passed": 18,
+  "failed": 26,
+  "skipped": 0,
+  "trackedDiff": "",
+  "history": "Draft42test baseline already showed functionality26fail16pass. Before formal red, corrected an unexecuted realCost whole-object check to preserve civ=Tatars (instead of generic emptyciv), split that actual baseline control and added ship-only negative control; production unchanged."
+}

@@ -224,14 +224,16 @@ describe('#42 P0 buildSim 文明加成不得静默忽略', () => {
     expect(unknownCivEffects(e, buildOrders)).toEqual(['Danes tech -1: res res 9999 add 1']);
   });
   it('真实 eco.json：没有未分类的效果（bo:check 同一检查）', () => expect(unknownCivEffects(E, buildOrders)).toEqual([]));
-  it('simSupport：丹麦/马来/不列颠支持；汉、罗马、斯拉夫（待核实）不支持；葡萄牙、蜀已支持（#197）', () => {
-    for (const c of ['Danes', 'Malay', 'Britons', 'Generic', 'Persians', 'Portuguese', 'Shu', 'Malians'])
+  it('simSupport：已支持和待核实文明集合，鞑靼按197第五批迁入', () => {
+    for (const c of ['Danes', 'Malay', 'Britons', 'Generic', 'Persians', 'Portuguese', 'Shu', 'Malians', 'Tatars'])
       expect(simSupport(E, c, buildOrders), c).toEqual({ supported: true, reasons: [] });
-    for (const c of ['Chinese', 'Romans', 'Slavs', 'Mayans', 'Tatars', 'Mapuche', 'Sicilians', 'Jurchens', 'Khmer'])
+    for (const c of ['Chinese', 'Romans', 'Slavs', 'Mayans', 'Mapuche', 'Sicilians', 'Jurchens', 'Khmer'])
       expect(simSupport(E, c, buildOrders).supported, c).toBe(false);
   });
-  it('按 tech 整条判定：鞑靼 704 不能只生效 workRate 那一半（去掉 704 结果相同）', () => {
-    expect(simulateBuild(fcb, 'Tatars', E, ups, { walkTiles: 4 }).ageUps).toEqual(
+  it('按 tech 整条判定：鞑靼704混入未知伴随时两半均不生效（去掉704结果相同）', () => {
+    const e = structuredClone(E);
+    e.civEco.Tatars!.find((row) => (row as { tech?: number }).tech === 704)!.effects.push({ kind: 'res', res: 9999, op: 'add', v: 1 });
+    expect(simulateBuild(fcb, 'Tatars', e, ups, { walkTiles: 4 }).ageUps).toEqual(
       simulateBuild(fcb, 'Tatars', without('Tatars', 704), ups, { walkTiles: 4 }).ageUps,
     );
     expect(feudal('Tatars')).toBeLessThan(700);

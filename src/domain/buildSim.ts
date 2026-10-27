@@ -240,6 +240,8 @@ interface Mods {
   lumberFood: number;
   /** 瓦兰吉 res298：牧羊/狩猎/捕鱼有效食物收入兼产黄金的百分比 */
   varangianGold: number;
+  /** 鞑靼res216：与同条牧羊工作率配对的收集产量倍率，不是库存赠送 */
+  sheepFoodMul: number;
   start: Stock;
 }
 /** 数值修正：按 .dat 效果顺序累积，set 覆盖之前的一切，mul/add 依次叠加。值 = (set ?? 原值) × mul + add */
@@ -280,6 +282,7 @@ function baseMods(): Mods {
     foragerWood: 0,
     lumberFood: 0,
     varangianGold: 0,
+    sheepFoodMul: 1,
     start: { ...START },
   };
 }
@@ -331,6 +334,25 @@ const hasVarangianGoldContext = (row: { source?: string; tech?: number; effects?
   row.source === 'bonus' &&
   row.tech === 1475 &&
   row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 34);
+/** 固定704的标准牧羊任务与两个额外牧羊变体；各自倍率从实际输入读取，不重复作用同一任务。 */
+const RES_SHEPHERD_PRODUCTIVITY = 216;
+const TATAR_SHEPHERD_TARGETS = ['task:sheep', 'unit:1891', 'unit:1892'];
+const TATAR_SHEPHERD_NOTE = '牧羊按产量与工作率配对估算；新增羊和资源耗尽未模拟';
+const TATAR_SHEPHERD_ASSUMPTION =
+  '鞑靼牧羊先按固定数据的产量与工作率配对，再计算携带和往返；近城镇中心肉类沿用牧羊速率代理，不表示真正狩猎也有羊加成。不模拟新增羊实体、羊总食物可采量、资源耗尽或客户端逐帧行为。';
+const hasTatarShepherdContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }) => {
+  if (row.source !== 'bonus' || row.tech !== 704 || !row.effects) return false;
+  const food = row.effects.filter((effect) => effect.kind === 'res' && effect.res === RES_SHEPHERD_PRODUCTIVITY);
+  const valid = (effect: EffectRow['effects'][number]) => effect.op === 'mul' && Number.isFinite(effect.v) && effect.v! > 0;
+  return (
+    food.length === 1 &&
+    valid(food[0]!) &&
+    TATAR_SHEPHERD_TARGETS.every((target) => {
+      const rates = row.effects!.filter((effect) => effect.kind === 'attr' && effect.target === target && effect.attr === 'workRate');
+      return rates.length === 1 && valid(rates[0]!);
+    })
+  );
+};
 /** 固定595的四个建筑类别命令；数值倍率仍从实际effects读取。农田class49不在其中。 */
 const MALIAN_BUILDING_CLASSES = new Set([3, 39, 52, 27]);
 const hasMalianBuildingContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }, scope: ReturnType<typeof simScope>) => {
@@ -371,6 +393,7 @@ function applyEffects(
   applyLumberFood = false,
   malians: { gold?: boolean; buildingWood?: boolean } = {},
   applyVarangianGold = false,
+  applyTatarShepherd = false,
 ) {
   for (const x of effects) {
     const v = x.v ?? 0;
@@ -415,6 +438,7 @@ function applyEffects(
       else if (applyLumberFood && x.res === RES_LUMBER_FOOD && x.op === 'set') m.lumberFood = v / 100;
       else if (malians.gold && x.res === RES_GOLD_PRODUCTIVITY && x.op === 'add') m.depositBonus.gold = (m.depositBonus.gold ?? 0) + v / 100;
       else if (applyVarangianGold && x.res === RES_WILD_FOOD_GOLD && x.op === 'set') m.varangianGold = v / 100;
+      else if (applyTatarShepherd && x.res === RES_SHEPHERD_PRODUCTIVITY && x.op === 'mul') m.sheepFoodMul *= v;
     } else if (x.kind === 'techTime' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) m.techTime[x.tech] = pushMod(m.techTime[x.tech], x.op, v);
     else if (x.kind === 'techCost' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) {
       const r = TECH_RES[String(x.res)];
@@ -457,7 +481,7 @@ interface Construction {
 /**
  * PR 127（Steve 口径 PR 评论 6195034241）：白名单（不支持）文明页面标「未计入」并按通用计，但直接调 simulateBuild 时
  * 仍保持 release/v0.7.0 的旧算法：不应用按类别（class:*）的费用/训练时间倍率、折后价按整数取整。
- * 已经完整支持的文明走当前算法（issue 197 葡萄牙、蜀、马里、瓦兰吉已迁出）；其余按文明缓存（eco 对象 + 文明）。
+ * 已经完整支持的文明走当前算法（issue 197 葡萄牙、蜀、马里、瓦兰吉、鞑靼已迁出）；其余按文明缓存（eco 对象 + 文明）。
  */
 const legacyCache = new WeakMap<EcoData, Map<string, boolean>>();
 function legacyCiv(eco: EcoData, civ: string): boolean {
@@ -475,7 +499,9 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   // 按 tech 整条判定（#43 Steve）：只要有一条效果是未实现或未分类，这个 tech 的效果一条都不应用，
   // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
   const scope = simScope(eco, [bo]);
-  const rows = (eco.civEco[civ] ?? []).filter((r) => (P.team || r.source !== 'team') && techAtomicOk(r, scope));
+  const rows = (eco.civEco[civ] ?? []).filter(
+    (r) => (P.team || r.source !== 'team') && ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') && techAtomicOk(r, scope),
+  );
   const freeByAge: Record<number, string[]> = {};
   let age = 1;
   const applyAge = () => {
@@ -491,6 +517,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
             buildingWood: civ === 'Malians' && hasMalianBuildingContext(r as EffectRow & { tech?: number }, scope),
           },
           civ === 'Varangians' && hasVarangianGoldContext(r as EffectRow & { tech?: number }) === true,
+          civ === 'Tatars' && hasTatarShepherdContext(r as EffectRow & { tech?: number }),
         );
     void freeByAge;
   };
@@ -622,7 +649,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const et = ECO_TASK[t];
     const base = eco.villager.tasks[et]!;
     // 猎物倍率（res 268）只作用于狩猎：每次采集动作入账 ×倍率，等效于 workRate ×倍率
-    const wr = base.workRate * (m.rate[et] ?? 1) * (m.rate.villager ?? 1) * (et === 'hunt' ? m.huntFoodMul : 1);
+    const wr = base.workRate * (m.rate[et] ?? 1) * (m.rate.villager ?? 1) * (et === 'hunt' ? m.huntFoodMul : 1) * (et === 'sheep' ? m.sheepFoodMul : 1);
     const carry = base.carry * (m.carry[et] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + et] ?? 0) + (m.carry['add:villager'] ?? 0);
     const d = t === 'farm' && m.farmNoWalk ? 0 : NEAR.includes(t) ? P.nearTiles : P.walkTiles;
     const walk = (2 * d) / (eco.villager.speed * m.speed);
@@ -1116,6 +1143,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
         ...(civ === 'Shu' ? [LUMBER_FOOD_ASSUMPTION, SHU_KNIGHT_TEMPLATE_NOTE] : []),
         ...(civ === 'Malians' ? [MALIAN_GOLD_ASSUMPTION] : []),
         ...(civ === 'Varangians' ? [VARANGIAN_GOLD_ASSUMPTION] : []),
+        ...(civ === 'Tatars' ? [TATAR_SHEPHERD_ASSUMPTION] : []),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
           : []),
@@ -1294,6 +1322,7 @@ export function classifyCivEffect(
   row: { source?: string; tech?: number; effects?: EffectRow['effects'] },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
+  if (row.tech === 704 && !hasTatarShepherdContext(row)) return { kind: 'unhandled', reason: '鞑靼牧羊产量与工作率缺少完整已核配对，未计入' };
   if (row.source === 'team') return { kind: 'irrelevant', reason: '团队加成，默认不计团队' };
   if (row.tech === 595 && !hasMalianBuildingContext(row, scope)) return { kind: 'unhandled', reason: '马里建筑木费折扣缺少已核效果或当前建筑类别，未计入' };
   if (row.tech !== undefined && PENDING_TECH[row.tech]) return { kind: 'unhandled', reason: PENDING_TECH[row.tech]! };
@@ -1311,6 +1340,7 @@ export function classifyCivEffect(
     if (e.res === RES_LUMBER_FOOD && e.op === 'set' && hasLumberFoodContext(row)) return { kind: 'handled' };
     if (e.res === RES_GOLD_PRODUCTIVITY && e.op === 'add' && hasMalianGoldContext(row)) return { kind: 'handled' };
     if (e.res === RES_WILD_FOOD_GOLD && e.op === 'set' && Number.isFinite(e.v) && e.v! >= 0 && hasVarangianGoldContext(row)) return { kind: 'handled' };
+    if (e.res === RES_SHEPHERD_PRODUCTIVITY && e.op === 'mul' && hasTatarShepherdContext(row)) return { kind: 'handled' };
     if (HANDLED_RES(e.res, e.op) || (e.res === 33 && e.op === 'set' && e.v === RES33_INSTANT_FARMERS)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_IRRELEVANT_TECH[row.tech]) return { kind: 'irrelevant', reason: RES234_IRRELEVANT_TECH[row.tech]! };
@@ -1446,7 +1476,7 @@ export function gatherRate(
   const m = baseMods();
   const scope = simScope(eco, ALL_BOS);
   for (const r of eco.civEco[civ] ?? [])
-    if (r.age === 1 && r.source !== 'team')
+    if (r.age === 1 && r.source !== 'team' && ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') && (civ !== 'Tatars' || techAtomicOk(r, scope)))
       applyEffects(
         m,
         r.effects,
@@ -1454,9 +1484,11 @@ export function gatherRate(
         hasLumberFoodContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope),
         { gold: civ === 'Malians' && hasMalianGoldContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope) },
         civ === 'Varangians' && hasVarangianGoldContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope),
+        civ === 'Tatars' && hasTatarShepherdContext(r as EffectRow & { tech?: number }) && techAtomicOk(r, scope),
       );
   const base = eco.villager.tasks[ecoTask]!;
-  const workRate = base.workRate * (m.rate[ecoTask] ?? 1) * (m.rate.villager ?? 1) * (ecoTask === 'hunt' ? m.huntFoodMul : 1);
+  const workRate =
+    base.workRate * (m.rate[ecoTask] ?? 1) * (m.rate.villager ?? 1) * (ecoTask === 'hunt' ? m.huntFoodMul : 1) * (ecoTask === 'sheep' ? m.sheepFoodMul : 1);
   const carry = base.carry * (m.carry[ecoTask] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + ecoTask] ?? 0) + (m.carry['add:villager'] ?? 0);
   const walk = (2 * tiles) / (eco.villager.speed * m.speed);
   const rate = carry / (carry / workRate + walk);
@@ -1507,6 +1539,10 @@ export function civSimNotes(eco: EcoData, civ: string): string[] {
       )
     )
       out.push(VARANGIAN_GOLD_NOTE);
+  }
+  if (civ === 'Tatars') {
+    const scope = simScope(eco, ALL_BOS);
+    if (rows.some((row) => hasTatarShepherdContext(row as EffectRow & { tech?: number }) && techAtomicOk(row, scope))) out.push(TATAR_SHEPHERD_NOTE);
   }
   if (
     rows.some((r) => {

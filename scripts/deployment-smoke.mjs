@@ -204,6 +204,42 @@ export async function checkSite({ site, version, commit, features = [] }) {
       console.log(
         'Verified Varangians economy: same-clock early and hybrid fishing Gold inventory, primary Food/Wood preserved, selectable, share card and original farm-based real cost',
       );
+      await goto('/builds?bo=feudal-drush-18&step=9');
+      const genericShepherd = await inventory();
+      const genericShepherdClock = Number(await page.locator('[data-step="8"]').getAttribute('data-start-at'));
+      await goto('/builds?bo=feudal-drush-18&civ=Tatars&step=9');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按鞑靼计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await check(page.locator('[data-t="civ-note"]')).toHaveText('牧羊按产量与工作率配对估算；新增羊和资源耗尽未模拟');
+      const tatars = await inventory();
+      const tatarClock = Number(await page.locator('[data-step="8"]').getAttribute('data-start-at'));
+      assert.equal(genericShepherdClock, 379.6);
+      assert.equal(tatarClock, genericShepherdClock, 'Compare paired shepherd income at the same actual clock');
+      assert.equal(genericShepherd.food, 244);
+      assert.equal(tatars.food, 245, 'Preserve the real1.00009 paired-data residual rather than normalize to1 or claim50% speed');
+      assert.equal(tatars.wood, genericShepherd.wood);
+      assert.equal(tatars.gold, genericShepherd.gold);
+      await page.locator('#tlciv').click();
+      const tatarPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(tatarPicker.locator('[data-civ="Tatars"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(tatarPicker.locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      await page.locator('[data-t="share-card-btn"]:visible').first().click();
+      await check(page.locator('[data-t="share-card"]')).toContainText('按鞑靼计');
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Tatars');
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      await goto('/civ/Tatars/bonus/0');
+      await check(page.locator('#bonus [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+      await check(page.locator('#bonus [data-usage="sim"]')).toContainText('已计入牧羊产量与工作率配对；羊总量和耗尽未模拟');
+      await goto('/civ/Tatars/bonus/2');
+      await check(page.locator('#bonus')).toContainText('城镇中心会产生 2 头绵羊');
+      await check(page.locator('#bonus [data-usage="sim"][data-on="true"]')).toHaveCount(0);
+      await goto('/duel?a=74.Tatars.3.f.&b=74.Magyars.3.f.&m=t');
+      await check(page.locator('[data-t="rc-a"]')).toBeVisible();
+      await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveCount(0);
+      console.log(
+        'Verified Tatars economy: same-clock379.6s Food245vs244, paired coefficients, selectable, share, correct sheep/TC attribution and original farm-based real cost',
+      );
     }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {
