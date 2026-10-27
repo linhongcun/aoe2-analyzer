@@ -224,8 +224,8 @@ describe('#42 P0 buildSim 文明加成不得静默忽略', () => {
     expect(unknownCivEffects(e, buildOrders)).toEqual(['Danes tech -1: res res 9999 add 1']);
   });
   it('真实 eco.json：没有未分类的效果（bo:check 同一检查）', () => expect(unknownCivEffects(E, buildOrders)).toEqual([]));
-  it('simSupport：已支持和待核实文明集合，魏按197第八批迁入', () => {
-    for (const c of ['Danes', 'Malay', 'Britons', 'Generic', 'Persians', 'Portuguese', 'Shu', 'Malians', 'Tatars', 'Mayans', 'Sicilians', 'Wei'])
+  it('simSupport：已支持和待核实文明集合，孟加拉按197第九批迁入', () => {
+    for (const c of ['Danes', 'Malay', 'Britons', 'Generic', 'Persians', 'Portuguese', 'Shu', 'Malians', 'Tatars', 'Mayans', 'Sicilians', 'Wei', 'Bengalis'])
       expect(simSupport(E, c, buildOrders), c).toEqual({ supported: true, reasons: [] });
     for (const c of ['Chinese', 'Romans', 'Slavs', 'Mapuche', 'Jurchens', 'Khmer']) expect(simSupport(E, c, buildOrders).supported, c).toBe(false);
   });

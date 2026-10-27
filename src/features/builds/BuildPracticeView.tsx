@@ -231,7 +231,7 @@ export default function BuildPracticeView({
         {civNotes.length > 0 && (
           <ul className="note">
             {civNotes.map((note, i) => (
-              <li key={i}>{note}</li>
+              <li key={i}>{timeline.civ === 'Bengalis' ? <NumUnitText text={note} /> : note}</li>
             ))}
           </ul>
         )}
@@ -333,7 +333,7 @@ export default function BuildPracticeView({
         <h3>完整估算假设</h3>
         <ul className="note">
           {timeline.model.assumptions.map((assumption, i) => (
-            <li key={i}>{timeline.civ === 'Wei' ? <NumUnitText text={assumption} /> : assumption}</li>
+            <li key={i}>{timeline.civ === 'Wei' || timeline.civ === 'Bengalis' ? <NumUnitText text={assumption} /> : assumption}</li>
           ))}
         </ul>
       </section>

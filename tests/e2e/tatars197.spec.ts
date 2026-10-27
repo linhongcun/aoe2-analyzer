@@ -88,19 +88,19 @@ for (const width of [360, 375, 390, 1280])
     });
   }
 
-test('#197 鞑靼可选、刷新与深链保留，孟加拉仍置灰', async ({ page }) => {
+test('#197 鞑靼可选、刷新与深链保留，格鲁吉亚仍置灰', async ({ page }) => {
   await page.goto('./#/builds?bo=archers-19');
   await page.locator('#tlciv').click();
   const picker = page.getByRole('dialog', { name: '文明', exact: true });
   await expect(picker.locator('[data-civ="Tatars"]')).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(picker.locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
+  await expect(picker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
   await picker.locator('[data-civ="Tatars"]').click();
   await expect(page).toHaveURL(/[?&]civ=Tatars/);
   await page.reload();
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按鞑靼计');
-  await page.goto('./#/builds?bo=archers-19&civ=Bengalis');
+  await page.goto('./#/builds?bo=archers-19&civ=Georgians');
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toHaveText('链接里的孟加拉加成尚未计入，已按通用计算。');
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveText('链接里的格鲁吉亚加成尚未计入，已按通用计算。');
 });
 
 test('#197 鞑靼跟练和打印保留羊实体边界，真实成本保持原农田口径', async ({ page }) => {

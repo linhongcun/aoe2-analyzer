@@ -159,10 +159,10 @@ describe('C 白名单', () => {
     'Varangians',
     'Wei',
   ];
-  const WHITELIST = HISTORICAL_WHITELIST.filter((c) => !['Portuguese', 'Shu', 'Malians', 'Varangians', 'Tatars', 'Mayans', 'Sicilians', 'Wei'].includes(c));
+  const WHITELIST = HISTORICAL_WHITELIST.filter((c) => !['Portuguese', 'Shu', 'Malians', 'Varangians', 'Tatars', 'Mayans', 'Sicilians', 'Wei', 'Bengalis'].includes(c));
   it('历史v0.7.0 fixture完整保留19个文明（包含葡萄牙）', () => {
     const B = baseline as Record<string, Record<string, unknown>>;
-    // 本用例的WHITELIST明确指历史19文明，不是当前剩余11个未支持文明。
+    // 本用例的WHITELIST明确指历史19文明，不是当前剩余10个未支持文明。
     // 保留原历史断言真实执行，同时让v0300-289继续保护全部原断言。
     const WHITELIST = HISTORICAL_WHITELIST;
     expect(WHITELIST).toHaveLength(19);
@@ -170,7 +170,7 @@ describe('C 白名单', () => {
     const historicalBuilds = ['archers-19', 'drush-fc', 'fast-castle-boom', 'feudal-drush-18', 'maa-archers-18', 'scouts-18'];
     for (const c of WHITELIST) expect(Object.keys(B[c]!).sort(), c).toEqual(historicalBuilds);
   });
-  it('不支持的文明正好是这 11 个（#197 葡萄牙、蜀、马里、瓦兰吉、鞑靼、玛雅、西西里、魏已支持）', () => {
+  it('不支持的文明正好是这 10 个（#197 葡萄牙、蜀、马里、瓦兰吉、鞑靼、玛雅、西西里、魏、孟加拉已支持）', () => {
     const uns = Object.keys(E.civEco).filter((c) => !simSupport(E, c, buildOrders).supported);
     expect(new Set(uns)).toEqual(new Set(WHITELIST));
   });
@@ -180,7 +180,7 @@ describe('C 白名单', () => {
       expect(simSupport(E, c, buildOrders).supported, c).toBe(true);
     }
   });
-  it('剩余 11 个白名单文明 × v0.7.0 原有开局：每步库存、时间和升时代与基线完全相同', () => {
+  it('剩余 10 个白名单文明 × v0.7.0 原有开局：每步库存、时间和升时代与基线完全相同', () => {
     const B = baseline as Record<string, Record<string, unknown>>;
     for (const c of WHITELIST) {
       expect(Object.keys(B[c]!)).toHaveLength(6);

@@ -6,6 +6,7 @@
 import { formatClock } from '../../domain/formatTime';
 import { MAYAN_CAVALRY_TEMPLATE_NOTE, SHU_KNIGHT_TEMPLATE_NOTE } from '../../domain/buildSim';
 import { WEI_KNIGHT_TEMPLATE_NOTE } from '../../domain/weiEconomy';
+import { BENGALI_KNIGHT_TEMPLATE_NOTE } from '../../domain/bengaliEconomy';
 import { RES_ZH, rangeLabel, summaryParts, summaryText, type AgeMark, type TimelineView } from './timelineModel';
 
 export interface ShareCell {
@@ -100,7 +101,11 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
       (i.civEn === 'Shu' && i.boId === 'fast-castle-knights' ? `\n${SHU_KNIGHT_TEMPLATE_NOTE}` : '') +
       (i.civEn === 'Mayans' && ['scouts-18', 'fast-castle-knights'].includes(i.boId) ? `\n${MAYAN_CAVALRY_TEMPLATE_NOTE}` : '') +
       (i.civEn === 'Wei' ? '\n经济研究完成赠村民，按开局任务分配\n满住房仍计入赠送；该住房政策未经当前版本客户端实测\n出生位置、集结与驻扎未模拟' : '') +
-      (i.civEn === 'Wei' && i.boId === 'fast-castle-knights' ? `\n${WEI_KNIGHT_TEMPLATE_NOTE}` : ''),
+      (i.civEn === 'Wei' && i.boId === 'fast-castle-knights' ? `\n${WEI_KNIGHT_TEMPLATE_NOTE}` : '') +
+      (i.civEn === 'Bengalis'
+        ? '\n到达新时代时，每座完成城镇中心赠送2个村民\n满住房仍计入赠送；该住房政策未经当前版本客户端实测\n出生位置、集结与驻扎未模拟'
+        : '') +
+      (i.civEn === 'Bengalis' && i.boId === 'fast-castle-knights' ? `\n${BENGALI_KNIGHT_TEMPLATE_NOTE}` : ''),
     site: SHARE_SITE,
     kind: '开局时间线',
     url: shareUrl(i),
