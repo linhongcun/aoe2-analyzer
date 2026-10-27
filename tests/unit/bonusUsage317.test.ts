@@ -47,6 +47,7 @@ const inputsHash = () =>
     JSON.stringify(buildOrders),
     JSON.stringify(ups),
     ...['buildSim.ts', 'roundHalfPrice.ts', 'buildOrder.ts'].map((f) => readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8')),
+    ...['construction.json', 'construction.ts'].map((f) => readFileSync(fileURLToPath(new URL(`../../src/data/${f}`, import.meta.url)), 'utf8')),
   );
 type Snap = { inputs: string; firstChanged: Record<string, string | null> };
 const UPDATE = !!process.env.UPDATE_BONUS317;
@@ -63,7 +64,8 @@ const UNTRIGGERED: Record<string, string> = {
   'Incas-1': '建筑石料 -15%：现有开局方案不建花石料的建筑',
   'Muisca-4': '篷车、行会免费：现有开局方案不研究这两项科技',
   'Shu-1': '弓兵科技折扣已实际付费；现有3个相关方案均在末步研究199，原结果只记录步骤开始库存和完成时间，付费后无新检查点；shu197.test.ts另以检查点严格核对扣款',
-  'Mayans-2': '现有8套开局不在城堡或帝王时代训练弓手；53/56的正tech折扣没有触发，树中的封建折扣不被正tech移除对照覆盖；mayans197.test.ts另以三个时代的真实训练支付严格核对',
+  'Mayans-2':
+    '现有8套开局不在城堡或帝王时代训练弓手；53/56的正tech折扣没有触发，树中的封建折扣不被正tech移除对照覆盖；mayans197.test.ts另以三个时代的真实训练支付严格核对',
 };
 
 let core: Core;

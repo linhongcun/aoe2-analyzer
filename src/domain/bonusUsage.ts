@@ -108,20 +108,27 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
 
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
+  if (b.id === 'Sicilians-1') return { tool: 'sim', name, on: false, note: '未计入：农田升级额外储量、耗尽和续种未模拟，也未估算节省的木材' };
   const { techs, treeOnly } = bonusTechs(b);
+  const currentScope = b.civ === 'Sicilians' ? simScope(eco, buildOrders, b.civ) : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
     const t = (r as { tech?: number }).tech;
     return r.source !== 'team' && t !== undefined && techs.includes(t);
   });
-  const kinds = rows.map((r) => ({ r, ks: r.effects.map((e) => classifyCivEffect(e, r as { source?: string; tech?: number }, scope()).kind) }));
+  const kinds = rows.map((r) => ({ r, ks: r.effects.map((e) => classifyCivEffect(e, r as { source?: string; tech?: number }, currentScope).kind) }));
   const relevant = kinds.some(({ ks }) => ks.some((k) => k !== 'irrelevant'));
   if (!simSupport(b.civ)) return relevant || treeOnly ? { tool: 'sim', name, on: false, note: '暂不支持该文明，整页按通用文明计算，本条未计入' } : null;
-  if (rows.some((r) => techAtomicOk(r, scope())) && kinds.some(({ r, ks }) => techAtomicOk(r, scope()) && ks.includes('handled')))
+  if (rows.some((r) => techAtomicOk(r, currentScope)) && kinds.some(({ r, ks }) => techAtomicOk(r, currentScope) && ks.includes('handled')))
     return {
       tool: 'sim',
       name,
       on: true,
-      note: b.civ === 'Tatars' && b.idx === 0 && techs.includes(704) ? '已计入牧羊产量与工作率配对；羊总量和耗尽未模拟' : '已计入',
+      note:
+        b.civ === 'Tatars' && b.idx === 0 && techs.includes(704)
+          ? '已计入牧羊产量与工作率配对；羊总量和耗尽未模拟'
+          : b.id === 'Sicilians-4'
+            ? '已计入城镇中心、城堡和防御工事的实际施工工期'
+            : '已计入',
     };
   if (relevant) return { tool: 'sim', name, on: false, note: '本条效果待核实，未计入' };
   if (treeOnly) {
@@ -142,6 +149,7 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
  * 其余加成返回空数组。
  */
 export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
+  if (b.id === 'Sicilians-4') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Mayans-1') {
     const tree = eco.civEco.Mayans?.find((row) => row.source === 'tree');
     const on = currentSimSupport(eco, b.civ, buildOrders).supported && !!tree && techAtomicOk(tree, scope());

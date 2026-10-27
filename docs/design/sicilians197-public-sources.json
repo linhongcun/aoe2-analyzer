@@ -1,0 +1,25 @@
+{
+  "sources": [
+    {
+      "resource": 69,
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "lineStart": 528,
+      "lineEnd": 536,
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L528",
+      "excerpt": "## 69. Farm Food Multiplier\n\n- ID: 69\n\n- Purpose: Multiplier for the amount of extra food granted by mill upgrades\n\n- Default Values:\n\n    - 1: No multiplier (default)"
+    },
+    {
+      "resource": 292,
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "lineStart": 2336,
+      "lineEnd": 2340,
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L2336",
+      "excerpt": "## 292. Animal Decay Prevention\n\n- ID: 292\n\n- Purpose: Prevents animal corpses from losing food when being gathered by a villager"
+    }
+  ],
+  "scope": "Directly fetched pinned public resource definitions; not client experiments or EffectFunction body evidence."
+}

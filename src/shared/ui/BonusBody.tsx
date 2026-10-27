@@ -75,10 +75,10 @@ function UsageTags({ lines }: { lines: BonusUsageLine[] }) {
 }
 const USAGE_ICON = { true: 'check', false: 'x', null: 'circle-help' } as const;
 
-/** Keep the sourced Tatar complete sheep quantity phrase together in both detail and sidebar text. */
+/** Keep the scoped sourced quantity phrases together in both detail and sidebar text. */
 export function BonusText({ b, linked = true }: { b: CivBonusEnt; linked?: boolean }) {
-  if (b.civ !== 'Tatars' || b.idx !== 2) return linked ? <Linked text={b.zh} /> : b.zh;
-  const parts = b.zh.split(/(\d+(?:\.\d+)?\s*头绵羊)/g);
+  if (b.civ !== 'Sicilians' && (b.civ !== 'Tatars' || b.idx !== 2)) return linked ? <Linked text={b.zh} /> : b.zh;
+  const parts = b.zh.split(b.civ === 'Sicilians' ? /([+−-]?\d+(?:\.\d+)?\s*%?)/g : /(\d+(?:\.\d+)?\s*头绵羊)/g);
   return parts.map((part, index) =>
     index % 2 ? (
       <span className="num nw" key={index}>
@@ -97,7 +97,8 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
   if (!core) return <Loading />;
   const groups = bonusAffects(b, core.units, core.buildings);
   const mayanTimeline = b.id === 'Mayans-1';
-  const usage = b.encoded && !mayanTimeline ? [] : bonusUsage(b);
+  const sicilianConstruction = b.id === 'Sicilians-4';
+  const usage = b.encoded && !mayanTimeline && !sicilianConstruction ? [] : bonusUsage(b);
   const ex = bonusExample(b, core.units, core.buildings, b.civ === 'Franks' && b.idx === 2 ? 'Paladin' : undefined);
   // 未编码：根据文字识别出的单位/建筑（不计入数值）
   const mentions = !b.encoded
@@ -169,7 +170,9 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
               </li>
             ))}
           </ul>
-          {mayanTimeline ? (
+          {sicilianConstruction ? (
+            <p>普通开局已有首座城镇中心，施工加成从起点计入；新城镇中心按实际施工形态计算。农田储量和续种未模拟，各工具沿用各自的计算口径。</p>
+          ) : mayanTimeline ? (
             <p>开局按连续采集估算，资源储量和耗尽未模拟；其它工具沿用各自的计算口径。</p>
           ) : (
             <p>单位模拟器属性面板不计算经济/费用类效果{b.dat.length + b.eco.length > 0 ? '，结构化数值见下方「.dat 原始效果」' : ''}。</p>

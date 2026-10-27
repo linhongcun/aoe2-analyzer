@@ -1,0 +1,1662 @@
+{
+  "109": {
+    "name": "RTWC",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": 355,
+      "snow_graphic_id": 6406,
+      "destruction_graphic_id": 423,
+      "destruction_rubble_graphic_id": 556,
+      "researching_graphic": 12291,
+      "research_completed_graphic": 12294,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": 722,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": 618,
+          "misplacement_x": 1.0,
+          "misplacement_y": -1.0
+        },
+        {
+          "unit_id": 619,
+          "misplacement_x": -0.5,
+          "misplacement_y": 0.5
+        },
+        {
+          "unit_id": 620,
+          "misplacement_x": -1.0,
+          "misplacement_y": 1.0
+        },
+        {
+          "unit_id": 890,
+          "misplacement_x": -1.0,
+          "misplacement_y": 1.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": 444,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 11,
+      "garrison_heal_rate": 0.10000000149011612,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        4,
+        5.0,
+        4
+      ],
+      [
+        506,
+        1.0,
+        16
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "71": {
+    "name": "RTWC2",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": 355,
+      "snow_graphic_id": 9213,
+      "destruction_graphic_id": 423,
+      "destruction_rubble_graphic_id": 556,
+      "researching_graphic": 12291,
+      "research_completed_graphic": 12294,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": 722,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": 618,
+          "misplacement_x": 1.0,
+          "misplacement_y": -1.0
+        },
+        {
+          "unit_id": 619,
+          "misplacement_x": -0.5,
+          "misplacement_y": 0.5
+        },
+        {
+          "unit_id": 620,
+          "misplacement_x": -1.0,
+          "misplacement_y": 1.0
+        },
+        {
+          "unit_id": 890,
+          "misplacement_x": -1.0,
+          "misplacement_y": 1.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": 444,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 11,
+      "garrison_heal_rate": 0.10000000149011612,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        4,
+        5.0,
+        4
+      ],
+      [
+        506,
+        1.0,
+        16
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "141": {
+    "name": "RTWC3",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": 355,
+      "snow_graphic_id": 8307,
+      "destruction_graphic_id": 423,
+      "destruction_rubble_graphic_id": 556,
+      "researching_graphic": 12291,
+      "research_completed_graphic": 12294,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": 618,
+          "misplacement_x": 1.0,
+          "misplacement_y": -1.0
+        },
+        {
+          "unit_id": 619,
+          "misplacement_x": -0.5,
+          "misplacement_y": 0.5
+        },
+        {
+          "unit_id": 620,
+          "misplacement_x": -1.0,
+          "misplacement_y": 1.0
+        },
+        {
+          "unit_id": 890,
+          "misplacement_x": -1.0,
+          "misplacement_y": 1.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": 444,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 11,
+      "garrison_heal_rate": 0.10000000149011612,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        4,
+        5.0,
+        4
+      ],
+      [
+        506,
+        1.0,
+        16
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "142": {
+    "name": "RTWC4",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": 355,
+      "snow_graphic_id": 12261,
+      "destruction_graphic_id": 423,
+      "destruction_rubble_graphic_id": 556,
+      "researching_graphic": 12291,
+      "research_completed_graphic": 12294,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": 618,
+          "misplacement_x": 1.0,
+          "misplacement_y": -1.0
+        },
+        {
+          "unit_id": 619,
+          "misplacement_x": -0.5,
+          "misplacement_y": 0.5
+        },
+        {
+          "unit_id": 620,
+          "misplacement_x": -1.0,
+          "misplacement_y": 1.0
+        },
+        {
+          "unit_id": 890,
+          "misplacement_x": -1.0,
+          "misplacement_y": 1.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": 444,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 11,
+      "garrison_heal_rate": 0.10000000149011612,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        4,
+        5.0,
+        4
+      ],
+      [
+        506,
+        1.0,
+        16
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "618": {
+    "name": "RTWC1A",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": -1,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "619": {
+    "name": "RTWC1B",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": -1,
+      "old_overlap_id": -1,
+      "tech_id": 307,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": 1649,
+          "misplacement_x": 0.75,
+          "misplacement_y": -0.75
+        },
+        {
+          "unit_id": 2160,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "620": {
+    "name": "RTWC1C",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": -1,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "621": {
+    "name": "RTWC1X",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": 355,
+      "snow_graphic_id": 6404,
+      "destruction_graphic_id": 423,
+      "destruction_rubble_graphic_id": 556,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 1,
+      "stack_unit_id": 109,
+      "foundation_terrain_id": -1,
+      "old_overlap_id": -1,
+      "tech_id": 308,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": -1,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        118,
+        150
+      ]
+    ]
+  },
+  "614": {
+    "name": "RTWC2A",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "615": {
+    "name": "RTWC2B",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": 307,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": 1649,
+          "misplacement_x": 0.75,
+          "misplacement_y": -0.75
+        },
+        {
+          "unit_id": 2160,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "616": {
+    "name": "RTWC2C",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "617": {
+    "name": "RTWC2X",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": 355,
+      "snow_graphic_id": 9233,
+      "destruction_graphic_id": 423,
+      "destruction_rubble_graphic_id": 556,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 1,
+      "stack_unit_id": 109,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": 308,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": -1,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        118,
+        150
+      ]
+    ]
+  },
+  "481": {
+    "name": "RTWC3A",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "482": {
+    "name": "RTWC3B",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": 307,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": 1649,
+          "misplacement_x": 0.75,
+          "misplacement_y": -0.75
+        },
+        {
+          "unit_id": 2160,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "483": {
+    "name": "RTWC3C",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "484": {
+    "name": "RTWC3X",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": 355,
+      "snow_graphic_id": 6145,
+      "destruction_graphic_id": 423,
+      "destruction_rubble_graphic_id": 556,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 1,
+      "stack_unit_id": 109,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": 308,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": -1,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        118,
+        150
+      ]
+    ]
+  },
+  "611": {
+    "name": "RTWC4A",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "612": {
+    "name": "RTWC4B",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": 307,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": 1649,
+          "misplacement_x": 0.75,
+          "misplacement_y": -0.75
+        },
+        {
+          "unit_id": 2160,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "613": {
+    "name": "RTWC4C",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": -1,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        -1,
+        100
+      ]
+    ]
+  },
+  "597": {
+    "name": "RTWC4X",
+    "class": 3,
+    "building": {
+      "construction_graphic_id": 355,
+      "snow_graphic_id": 6154,
+      "destruction_graphic_id": 423,
+      "destruction_rubble_graphic_id": 556,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 1,
+      "stack_unit_id": 109,
+      "foundation_terrain_id": 27,
+      "old_overlap_id": -1,
+      "tech_id": 308,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": -1,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "resources": [
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ],
+      [
+        -1,
+        0.0,
+        0
+      ]
+    ],
+    "trainAt": [
+      [
+        118,
+        150
+      ]
+    ]
+  }
+}

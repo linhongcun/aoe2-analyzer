@@ -6,6 +6,7 @@
 import type { Action, BuildOrder, Task } from './buildOrder';
 import { buildOrders as ALL_BOS } from '../data/buildOrders';
 import { roundHalfPrice } from './roundHalfPrice';
+import { CONSTRUCTION_DATA } from '../data/construction';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -13,6 +14,8 @@ type Cost = Partial<Record<'Food' | 'Wood' | 'Gold' | 'Stone', number>>;
 interface EffectRow {
   source: string;
   age: number;
+  tech?: number;
+  requires?: number[];
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];
 }
 /** eco.json 中模拟需要的部分 */
@@ -424,6 +427,116 @@ const MAYAN_RESOURCE_NOTE = '资源产量与工作率配对估算；储量和耗
 export const MAYAN_CAVALRY_TEMPLATE_NOTE = '玛雅无马厩；侦察骑兵、骑士方案仅供通用模板经济估算';
 const MAYAN_RESOURCE_ASSUMPTION =
   '玛雅各资源产量与专职工作率配对后再计算携带和往返，一般净系数1.0005、农田0.9315；近城镇中心肉类仍用牧羊代理。资源储量、耗尽、农田续种和客户端逐帧行为未模拟。沿用玛雅的起始人数，织布按原开局实际研发；墙费只在显式计入团队时折半。';
+const SICILIAN_CONSTRUCTION_NOTE = '按实际施工形态计入城镇中心、城堡和防御工事加成';
+const SICILIAN_FARM_NOTE = '农田升级额外储量、耗尽和续种未模拟';
+const SICILIAN_CONSTRUCTION_ASSUMPTION =
+  '西西里施工从开局已有的城镇中心完成状态计入一次加成；新城镇中心按实际施工形态的工期计算，城堡和防御工事按各自工期计算。建造者完工后返回原任务，建造费用与停采时间沿用同一模型；增建城镇中心不会再赠石料，额外城镇中心的产村民队列未模拟。';
+const SICILIAN_FARM_ASSUMPTION = '西西里农田升级额外储量不改变采集速度；资源点不会耗尽，农田升级额外储量、失效和续种未模拟，也不估算由此节省的木材。';
+const SICILIAN_FORT_CLASSES = new Set([27, 39, 52]);
+const SICILIAN_TC_FORMS = [621, 617, 484, 597];
+const SICILIAN_TIME_TARGETS = new Set(['unit:82', ...SICILIAN_TC_FORMS.map((id) => 'unit:' + id), ...[...SICILIAN_FORT_CLASSES].map((id) => 'class:' + id)]);
+type SicilianGroup = 228 | 261 | 770 | 772 | 'team';
+const SICILIAN_GROUPS: SicilianGroup[] = [228, 261, 770, 772, 'team'];
+/** Identify displaced known rows too, so a wrong source/tech cannot bypass the complete-row guard. */
+function sicilianGroup(row: EffectRow): SicilianGroup | undefined {
+  if ([228, 261, 770, 772].includes(row.tech ?? -1)) return row.tech as Exclude<SicilianGroup, 'team'>;
+  if (!Array.isArray(row.effects)) return undefined;
+  if (row.source === 'team' || row.effects.some((e) => e.target === 'unit:545')) return 'team';
+  if (row.effects.some((e) => SICILIAN_TIME_TARGETS.has(e.target ?? '') && e.attr === 'trainTime')) return 770;
+  if (row.effects.some((e) => e.kind === 'res' && e.res === 69)) return 772;
+  if (row.effects.some((e) => e.kind === 'res' && e.res === 93)) return 228;
+  if (row.effects.some((e) => e.kind === 'res' && e.res === 2)) return 261;
+  return undefined;
+}
+const onlyEffectKeys = (effect: EffectRow['effects'][number], keys: string[]) => Object.keys(effect).every((key) => keys.includes(key));
+const sameIds = (actual: number[] | undefined, expected: readonly number[]) =>
+  Array.isArray(actual) && actual.length === expected.length && actual.every((id, index) => id === expected[index]);
+function sicilianRowContext(row: EffectRow, group: SicilianGroup): boolean {
+  if (!Array.isArray(row.effects)) return false;
+  if (row.age !== 1 || row.source !== (group === 'team' ? 'team' : 'bonus') || row.tech !== (group === 'team' ? undefined : group)) return false;
+  if (group === 'team') {
+    const e = row.effects[0];
+    return (
+      row.requires === undefined &&
+      row.effects.length === 1 &&
+      !!e &&
+      onlyEffectKeys(e, ['kind', 'target', 'attr', 'op', 'v']) &&
+      e.kind === 'attr' &&
+      e.target === 'unit:545' &&
+      e.attr === 'cost' &&
+      positiveMultiplier(e)
+    );
+  }
+  const requires = group === 228 ? [639, 307] : group === 261 ? [228] : group === 770 ? [307] : [];
+  if (!sameIds(row.requires, requires)) return false;
+  if (group === 770)
+    return (
+      row.effects.length === SICILIAN_TIME_TARGETS.size &&
+      new Set(row.effects.map((e) => e.target)).size === SICILIAN_TIME_TARGETS.size &&
+      row.effects.every(
+        (e) =>
+          onlyEffectKeys(e, ['kind', 'target', 'attr', 'op', 'v']) &&
+          e.kind === 'attr' &&
+          SICILIAN_TIME_TARGETS.has(e.target ?? '') &&
+          e.attr === 'trainTime' &&
+          positiveMultiplier(e),
+      )
+    );
+  const e = row.effects[0];
+  return (
+    row.effects.length === 1 &&
+    !!e &&
+    onlyEffectKeys(e, ['kind', 'label', 'res', 'op', 'v']) &&
+    e.kind === 'res' &&
+    e.res === (group === 228 ? 93 : group === 261 ? 2 : 69) &&
+    e.op === (group === 772 ? 'mul' : 'add') &&
+    Number.isFinite(e.v) &&
+    (group !== 772 || e.v! > 0)
+  );
+}
+/** Reuse the validated physical construction source; completed TC109 has a different time. */
+function sicilianConstructionSource(scope: ReturnType<typeof simScope>): boolean {
+  const data = CONSTRUCTION_DATA.civs.Sicilians;
+  const forms = CONSTRUCTION_DATA.buildings[TC];
+  const rules = data?.automatic.filter((r) => r.id === 770);
+  return (
+    !!data &&
+    !!forms?.supported &&
+    sameIds(forms.forms, SICILIAN_TC_FORMS) &&
+    rules?.length === 1 &&
+    sameIds(rules[0]!.requires, [307]) &&
+    rules[0]!.count === 1 &&
+    rules[0]!.commands.length === SICILIAN_TIME_TARGETS.size &&
+    new Set(rules[0]!.commands.map((c) => (c.A >= 0 ? 'unit:' + c.A : 'class:' + c.B))).size === SICILIAN_TIME_TARGETS.size &&
+    rules[0]!.commands.every(
+      (c) => c.Type === 5 && c.C === 101 && Number.isFinite(c.D) && c.D > 0 && SICILIAN_TIME_TARGETS.has(c.A >= 0 ? 'unit:' + c.A : 'class:' + c.B),
+    ) &&
+    [...scope.buildingClass.values()].every((cls) => Number.isInteger(cls) && cls >= 0) &&
+    Object.entries(scope.sicilianBuildings ?? {}).every(([id, unit]) => {
+      const physical = Number(id) === TC ? data.units[forms.forms[0]!] : data.units[id];
+      return physical?.class === unit.class;
+    }) &&
+    SICILIAN_TC_FORMS.every((id) => {
+      const unit = data.units[id];
+      return (
+        unit?.class === 3 &&
+        Number.isFinite(unit.time) &&
+        unit.time > 0 &&
+        sameIds(unit.at, [118]) &&
+        [118, 212].every((builder) => data.units[builder]?.class === 4 && data.units[builder]?.rate === 1)
+      );
+    })
+  );
+}
+function sicilianGroupOk(scope: ReturnType<typeof simScope>, group: SicilianGroup): boolean {
+  const rows = scope.sicilianRows?.filter((row) => sicilianGroup(row) === group);
+  return rows?.length === 1 && sicilianRowContext(rows[0]!, group) && (group !== 770 || sicilianConstructionSource(scope));
+}
+const sicilianRowAllowed = (scope: ReturnType<typeof simScope>, row: EffectRow) => {
+  if (!scope.sicilianRows) return true;
+  const group = sicilianGroup(row);
+  return group !== undefined && sicilianGroupOk(scope, group);
+};
 /** 固定595的四个建筑类别命令；数值倍率仍从实际effects读取。农田class49不在其中。 */
 const MALIAN_BUILDING_CLASSES = new Set([3, 39, 52, 27]);
 const hasMalianBuildingContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }, scope: ReturnType<typeof simScope>) => {
@@ -581,7 +694,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const legacy = legacyCiv(eco, civ);
   // 按 tech 整条判定（#43 Steve）：只要有一条效果是未实现或未分类，这个 tech 的效果一条都不应用，
   // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
-  const scope = simScope(eco, [bo]);
+  const scope = simScope(eco, [bo], civ);
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   const uniqueMayanTeam = (eco.civEco.Mayans ?? []).filter((row) => row.source === 'team').length === 1;
   const rows = (eco.civEco[civ] ?? []).filter(
@@ -589,6 +702,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       (P.team || r.source !== 'team') &&
       ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') &&
       mayanRowAllowed(civ, r, uniqueMayanTree) &&
+      sicilianRowAllowed(scope, r) &&
       (civ !== 'Mayans' || r.source !== 'team' || (uniqueMayanTeam && hasMayanWallContext(r, scope))) &&
       techAtomicOk(r, scope),
   );
@@ -613,6 +727,16 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     void freeByAge;
   };
   applyAge();
+  const buildingTime = (id: number, fallback = 0) => {
+    if (civ === 'Sicilians' && sicilianGroupOk(scope, 770)) {
+      if (id === TC) {
+        const form = CONSTRUCTION_DATA.buildings[TC]!.forms[age - 1]!;
+        return CONSTRUCTION_DATA.civs.Sicilians!.units[form]!.time * (m.timeMul['unit:' + form] ?? 1);
+      }
+      return (eco.buildings[id]?.buildTime ?? fallback) * (m.timeMul['unit:' + id] ?? 1) * (m.timeMul['class:' + eco.buildings[id]?.class] ?? 1);
+    }
+    return (eco.buildings[id]?.buildTime ?? fallback) * (m.timeMul['unit:' + id] ?? 1);
+  };
   // res 0–3 的黑暗时代条目：若同一文明对该资源也有 res 91–94 条目（波斯、图皮、阿兹特克、西西里），两者是同一加成的两种写法，只算一次；
   // 否则（埃塞俄比亚、德拉威「开局及每次升级时代」）开局直接发放
   const startRes = new Set(
@@ -910,7 +1034,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       }
       if (a.type === 'build') {
         const n = a.count ?? 1;
-        const bt = (eco.buildings[a.building]?.buildTime ?? 0) * (m.timeMul['unit:' + a.building] ?? 1);
+        const bt = buildingTime(a.building);
         for (let k = 0; k < n; k++) constructions.push({ building: a.building, progress: 0, bt, step: p.step, p });
         if (a.building === HOUSE) for (let k = 0; k < n; k++) housePaidAt.push(r1(t));
       } else if (a.type === 'train') {
@@ -944,7 +1068,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         constructions.push({
           building: HOUSE,
           progress: 0,
-          bt: (eco.buildings[HOUSE]?.buildTime ?? 25) * (m.timeMul['unit:' + HOUSE] ?? 1),
+          bt: buildingTime(HOUSE, 25),
           step: -1,
           auto: true,
         });
@@ -1243,6 +1367,8 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
         ...(civ === 'Varangians' ? [VARANGIAN_GOLD_ASSUMPTION] : []),
         ...(civ === 'Tatars' ? [TATAR_SHEPHERD_ASSUMPTION] : []),
         ...(civ === 'Mayans' ? [MAYAN_RESOURCE_ASSUMPTION, MAYAN_CAVALRY_TEMPLATE_NOTE] : []),
+        ...(civ === 'Sicilians' && sicilianGroupOk(simScope(eco, ALL_BOS, civ), 770) ? [SICILIAN_CONSTRUCTION_ASSUMPTION] : []),
+        ...(civ === 'Sicilians' && sicilianGroupOk(simScope(eco, ALL_BOS, civ), 772) ? [SICILIAN_FARM_ASSUMPTION] : []),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
           : []),
@@ -1386,7 +1512,7 @@ const HANDLED_RES = (res: number, op?: string) => ((RES_START[res] || RES_STOCK[
 const HANDLED_ATTR = new Set(['workRate', 'carry', 'trainTime', ...Object.keys(COST_ATTR)]);
 
 /** 开局涉及的对象：村民、城镇中心（含升级后形态）、房子、时代升级、经济科技 + 所有开局里出现的单位/建筑/科技 */
-export function simScope(eco: EcoData, bos: BuildOrder[]) {
+export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
   const units = new Set<number>([83]);
   const buildings = new Set<number>([...TC_UNITS, HOUSE, ...FARM_UNITS]);
   const techs = new Set<number>([101, 102, 103, ...Object.keys(eco.ecoTechs).map(Number)]);
@@ -1404,7 +1530,15 @@ export function simScope(eco: EcoData, bos: BuildOrder[]) {
   pricedBuildings.add(HOUSE);
   for (const bo of bos) for (const step of bo.steps) for (const action of step.actions) if (action.type === 'build') pricedBuildings.add(action.building);
   const buildingClass = new Map([...pricedBuildings].map((id) => [id, eco.buildings[id]?.class ?? -1] as const));
-  return { units, buildings, techs, unitClass, buildingClass };
+  return {
+    units,
+    buildings,
+    techs,
+    unitClass,
+    buildingClass,
+    sicilianRows: civ === 'Sicilians' ? (eco.civEco.Sicilians ?? []) : undefined,
+    sicilianBuildings: civ === 'Sicilians' ? eco.buildings : undefined,
+  };
 }
 
 /** tech 是否可以应用：整条 tech 里没有未实现/未分类的效果 */
@@ -1421,6 +1555,7 @@ export function classifyCivEffect(
   row: { source?: string; age?: number; tech?: number; effects?: EffectRow['effects'] },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
+  if (scope.sicilianRows && !sicilianRowAllowed(scope, row as EffectRow)) return { kind: 'unhandled', reason: '西西里加成缺少完整已核上下文，未计入' };
   if (row.tech === 704 && !hasTatarShepherdContext(row)) return { kind: 'unhandled', reason: '鞑靼牧羊产量与工作率缺少完整已核配对，未计入' };
   if (row.source === 'team') return { kind: 'irrelevant', reason: '团队加成，默认不计团队' };
   if (row.tech === 595 && !hasMalianBuildingContext(row, scope)) return { kind: 'unhandled', reason: '马里建筑木费折扣缺少已核效果或当前建筑类别，未计入' };
@@ -1433,6 +1568,7 @@ export function classifyCivEffect(
   }
   if (e.kind === 'res') {
     if (e.res === undefined) return { kind: 'unknown' };
+    if (e.res === 69 && scope.sicilianRows && sicilianGroupOk(scope, 772)) return { kind: 'irrelevant', reason: SICILIAN_FARM_NOTE };
     if (MAYAN_RESOURCE_TASKS[e.res] && hasMayanTreeContext(row)) return { kind: 'handled' };
     if (e.res === 269 && e.op === 'set') return { kind: 'handled' };
     if (e.res === RES_HUNT_FOOD && e.op === 'mul') return { kind: 'handled' };
@@ -1455,6 +1591,7 @@ export function classifyCivEffect(
     // 类别目标（#42 哥特步兵 class:6）：开局里有该类别的单位时，费用倍率已按类别实现；其余属性不影响开局时间
     if (t.startsWith('class:') && !vil) {
       const cls = Number(t.slice(6));
+      if (scope.sicilianRows && row.tech === 770 && SICILIAN_FORT_CLASSES.has(cls) && sicilianGroupOk(scope, 770)) return { kind: 'handled' };
       if (row.tech === 595 && e.attr === 'woodCost' && e.op === 'mul') return { kind: 'handled' };
       if (MALIAN_BUILDING_CLASSES.has(cls) && e.attr === 'woodCost' && [...scope.buildingClass.values()].includes(cls))
         return { kind: 'unhandled', reason: '尚未核实的建筑类别木费效果，未计入' };
@@ -1492,7 +1629,7 @@ const describeEffect = (civ: string, row: { tech?: number }, e: Effect) =>
 
 /** 某文明未处理的效果：影响开局但未实现 + 未分类（Kent #42 草稿接口） */
 export function unhandledEffects(eco: EcoData, civ: string, bos: BuildOrder[] = []): { effect: string; kind: 'unhandled' | 'unknown'; reason: string }[] {
-  const scope = simScope(eco, bos);
+  const scope = simScope(eco, bos, civ);
   const out: { effect: string; kind: 'unhandled' | 'unknown'; reason: string }[] = [];
   for (const r of eco.civEco[civ] ?? [])
     for (const e of r.effects) {
@@ -1513,6 +1650,8 @@ export function simSupport(
   const u = unhandledEffects(eco, civ, bos);
   const reasons = [...new Set(u.map((x) => x.reason))];
   if (civ === 'Mayans' && !hasUniqueMayanTree(eco)) reasons.push('玛雅资源产量与工作率缺少完整已核配对，未计入');
+  if (civ === 'Sicilians' && SICILIAN_GROUPS.some((group) => !sicilianGroupOk(simScope(eco, bos, civ), group)))
+    reasons.push('西西里加成缺少完整已核上下文，未计入');
   if (!opts.ignoreSourceGate && !FORCED_CIVS.has(civ) && SOURCE_PENDING_CIVS[civ]) reasons.push(SOURCE_PENDING_CIVS[civ]!);
   return { supported: reasons.length === 0, reasons };
 }
@@ -1575,7 +1714,7 @@ export function gatherRate(
   tiles: number = DEFAULT_PARAMS.nearTiles,
 ): { carry: number; workRate: number; rate: number; extraIncome: Partial<Stock> } {
   const m = baseMods();
-  const scope = simScope(eco, ALL_BOS);
+  const scope = simScope(eco, ALL_BOS, civ);
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   for (const r of eco.civEco[civ] ?? [])
     if (
@@ -1583,7 +1722,8 @@ export function gatherRate(
       r.source !== 'team' &&
       ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') &&
       mayanRowAllowed(civ, r, uniqueMayanTree) &&
-      (!['Tatars', 'Mayans'].includes(civ) || techAtomicOk(r, scope))
+      sicilianRowAllowed(scope, r) &&
+      (!['Tatars', 'Mayans', 'Sicilians'].includes(civ) || techAtomicOk(r, scope))
     )
       applyEffects(
         m,
@@ -1662,6 +1802,11 @@ export function civSimNotes(eco: EcoData, civ: string): string[] {
     const scope = simScope(eco, ALL_BOS);
     if (hasUniqueMayanTree(eco) && rows.some((row) => hasMayanTreeContext(row) && techAtomicOk(row, scope))) out.push(MAYAN_RESOURCE_NOTE);
     out.push(MAYAN_CAVALRY_TEMPLATE_NOTE);
+  }
+  if (civ === 'Sicilians') {
+    const scope = simScope(eco, ALL_BOS, civ);
+    if (sicilianGroupOk(scope, 770)) out.push(SICILIAN_CONSTRUCTION_NOTE);
+    if (sicilianGroupOk(scope, 772)) out.push(SICILIAN_FARM_NOTE);
   }
   if (
     rows.some((r) => {

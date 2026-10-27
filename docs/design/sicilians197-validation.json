@@ -1,0 +1,422 @@
+{
+  "status": "LOCAL_VALIDATION_COMPLETE_AWAITING_INDEPENDENT_REVIEW_AND_ROOT_CI",
+  "recordedAtUTC": "2026-10-27T13:15:30.476696+00:00",
+  "baseline": "7098ff0cba6a915766f38ca8c152ce35cc3cfcc6",
+  "baselineVersion": "v0.51.0",
+  "version": "v0.52.0",
+  "scope": "#197 seventh batch Sicilians only",
+  "scopeComment": "https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6442193044",
+  "runtimeCommit": "14f8b9c1f56e0e4713917a97e82cf22062ab3f2e",
+  "runtimeTree": "942dd78541a1c4e879030f2778673006e3a7571f",
+  "clientFileSha256": {
+    "src/domain/buildSim.ts": "ad035589171e542bc656b68ed3029a18ecf078bae1008902669f04d9a82c8b23",
+    "src/domain/bonusUsage.ts": "7c883bfa47728539480c0cfb7a657341482afd746ee7dfcd24f418336e5b8138",
+    "src/shared/ui/BonusBody.tsx": "0ea690d2c2f3b29d601efd4756d7a79392fb5bc3a6a6c762f99374078da50a6e",
+    "src/features/civs/components/BonusRows.tsx": "bf1ee014f67c5888617cdac4a8a8e306fe857ebd52e4ec7bf86ca517ed59611b",
+    "src/data/eco.json": "9fd02e622a5d2532904f1433e894015ad099de62aa025db49aaa997263bbe74b",
+    "src/data/construction.json": "8ffdecfc304c606341b812bf6a7d6fccfbeb802405562cc7de1441110608f552",
+    "src/data/construction.ts": "ef366451ffb5ee589113bddd3087ae27e0d98e28e9b6f9fd27972727ce4e2182",
+    "src/domain/realCost.ts": "e1804bcafc710a81696259d831a109e28e25b9dc77269b83d19136a3d5e000cf",
+    "src/domain/roundHalfPrice.ts": "506e39f19728e59aabe8dc760660a7b2a7a38983f692f18fa400a6b56a55610c",
+    "scripts/deployment-smoke.mjs": "2b89360932ac18f3e507ee9f441dd74e888359f231ee0be178890404945e0945"
+  },
+  "source": {
+    "raw": "sicilians197-source.json",
+    "rawSha256": "7a16074c45daec94371cf94cac752bf7519275c337f91a5e683bfe3e7ea4c174",
+    "dedicatedTechs": 11,
+    "closure": 133,
+    "trackedObjects": 44,
+    "annexObjects": 4,
+    "actualBuildActions": 228,
+    "dataRegeneration": false
+  },
+  "firstRed": "sicilians197-first-red.json",
+  "localChecks": [
+    {
+      "command": "npx vitest run tests/unit/sicilians197.test.ts tests/unit/buildSim.test.ts tests/unit/civ42v060.test.ts tests/unit/civ42v070.test.ts tests/unit/construction227.test.ts",
+      "files": 5,
+      "passed": 259,
+      "todo": 1,
+      "log": "/tmp/sicilians197-related.log"
+    },
+    {
+      "command": "npx vitest run tests/unit/sicilians197.test.ts tests/unit/sicilians197Body.test.ts tests/unit/bonusUsage317.test.ts",
+      "files": 3,
+      "passed": 111,
+      "skipped": 1,
+      "log": "/tmp/sicilians197-freeze-targeted.log"
+    },
+    {
+      "command": "UPDATE_BONUS317=1 npx vitest run tests/unit/bonusUsage317.test.ts",
+      "passed": 13,
+      "log": "/tmp/sicilians197-317-generate.log",
+      "oldKeysRetained": 69,
+      "newKeys": {
+        "Sicilians-0": "feudal-drush-18",
+        "Sicilians-1": null,
+        "Sicilians-2": null
+      },
+      "algorithm": "original SIM_CHECKED/firstChanged unchanged; append construction.json and construction.ts input bytes to fingerprint; construction bonus4 is src=dat and not eligible for this generator"
+    },
+    {
+      "command": "npx tsc -p . --noEmit",
+      "result": "passed",
+      "log": "/tmp/sicilians197-freeze-tsc.log"
+    },
+    {
+      "command": "npm run lint",
+      "result": "passed,0errors9existing warnings",
+      "log": "/tmp/sicilians197-final-lint.log"
+    },
+    {
+      "command": "npm run lint:layers -- --strict",
+      "result": "passed,0violations",
+      "log": "/tmp/sicilians197-layers.log"
+    },
+    {
+      "command": "npm run bo:check",
+      "result": "passed,8builds0errors",
+      "log": "/tmp/sicilians197-bo.log"
+    },
+    {
+      "command": "npm run build",
+      "result": "passed real14f8b9c runtimeSHA",
+      "log": "/tmp/sicilians197-build.log"
+    },
+    {
+      "command": "BASE_URL=http://localhost:4205/ npx playwright test tests/e2e/sicilians197.spec.ts tests/e2e/v060-42.spec.ts tests/e2e/castleTimes.spec.ts --reporter=line --output=/tmp/sicilians197-playwright",
+      "passed": 29,
+      "log": "/tmp/sicilians197-e2e.log",
+      "coverage": "10new Sicilians including fourwidth/theme,actualbonus0/1/4 DOM+numeric Range,share+actualdownload,practice/print/publicsource/realCost;12current disabled cases;7castleTimes cases"
+    },
+    {
+      "command": "node scripts/deployment-smoke.mjs --site http://localhost:4205/ --plan /tmp/sicilians197-smoke-plan.json",
+      "result": "passed",
+      "features": [
+        "all",
+        "builds"
+      ],
+      "log": "/tmp/sicilians197-smoke.log",
+      "retained": "previous6civilizations,publicsources,Winged Hussar hooks",
+      "new": "Sicilians own932.6s Food931/Wood469/Gold133/Stone300,TCpaid550Wood/200Stone,physicalconstruction75s,selector/share/source4true/farm1false/realCost"
+    }
+  ],
+  "artifacts": {
+    "screenshots": 40,
+    "actualDownloadedPNGs": 1,
+    "runtimeCommit": "14f8b9c1f56e0e4713917a97e82cf22062ab3f2e",
+    "files": [
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-dark/sicilians-bonus0-1280-dark.png",
+        "sha256": "d805b197e2486b6bfe4cdfe1f89d2c5e6b50f135a7fe77f5de553db5033dd127",
+        "width": 1280,
+        "height": 914,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-dark/sicilians-bonus1-1280-dark.png",
+        "sha256": "f8946b0f08403a3f0297eabfacb9baf97662c6df0c6ff96c09ab83bc90888797",
+        "width": 1280,
+        "height": 1050,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-dark/sicilians-bonus4-1280-dark.png",
+        "sha256": "8d6a7281af8c7a5c776f8d3976d100436b2bbe5bc2c6dab987375fe0974b6d2b",
+        "width": 1280,
+        "height": 1257,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-dark/sicilians-share-1280-dark.png",
+        "sha256": "8cb7a4723e929c3a76f5a6b919795dac422146ac722095701b86a826067bcba1",
+        "width": 1280,
+        "height": 2209,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-dark/sicilians-timeline-1280-dark.png",
+        "sha256": "2226898c4c69aeb9d5a3e1fb7b7f1afb774635c97e148d9354ab0f6a312026c8",
+        "width": 1280,
+        "height": 2209,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-light/sicilians-bonus0-1280-light.png",
+        "sha256": "a88097a1fa2f18206af88e152a53625ac47d5f738626391b20e052cccea60283",
+        "width": 1280,
+        "height": 914,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-light/sicilians-bonus1-1280-light.png",
+        "sha256": "c98e1a3b5c95fa4715e86d4a33e079e67fa0bf6357538e1c7d5b7e6a46713c83",
+        "width": 1280,
+        "height": 1050,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-light/sicilians-bonus4-1280-light.png",
+        "sha256": "3593b62a61eab6281ecc7ddf15b9d301d0417a815de6ac1fda0421e325b7c081",
+        "width": 1280,
+        "height": 1257,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-light/sicilians-share-1280-light.png",
+        "sha256": "97dc9cbacbe703bdd63167b99cfaf72fea1bd024c33e61f8b97eda302d2ca8d9",
+        "width": 1280,
+        "height": 2209,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-1280-light/sicilians-timeline-1280-light.png",
+        "sha256": "a1b5dcb149e93aa6b6eb1f5697c5dda7bc6bef4e71c40baccde946b897baa409",
+        "width": 1280,
+        "height": 2209,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-dark/sicilians-bonus0-360-dark.png",
+        "sha256": "28993d1af316a7e4b882f5a8e2cc795d757eb6d72c4b776427e7db9062340651",
+        "width": 360,
+        "height": 1368,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-dark/sicilians-bonus1-360-dark.png",
+        "sha256": "1cc6558eaefdcf4e6712fe61250c49ec91805a5ae6da052e1ee12ffd30a3a59b",
+        "width": 360,
+        "height": 1590,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-dark/sicilians-bonus4-360-dark.png",
+        "sha256": "9d8df68bba40712188726964337b655fc494a3c50c434e4782741ad41eece190",
+        "width": 360,
+        "height": 2069,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-dark/sicilians-share-360-dark.png",
+        "sha256": "714e35c8fec6b52ca5ba856171a15a6f1f0ac43f54ea941a1e9eb1eef780375c",
+        "width": 360,
+        "height": 2909,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-dark/sicilians-timeline-360-dark.png",
+        "sha256": "c3a1d0eb13ee9230084f81a16d8ee0e4b437e4c551ac5c902ab794254e67afb6",
+        "width": 360,
+        "height": 2909,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-light/sicilians-bonus0-360-light.png",
+        "sha256": "106b3039540e2a81fd53d2f7aa393115beef5e62fbc3dd7981f3fbd07d219a06",
+        "width": 360,
+        "height": 1368,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-light/sicilians-bonus1-360-light.png",
+        "sha256": "24bd135b603c322ac39f081891fdb16459ead5bbb5efadf9cb30834c03019e19",
+        "width": 360,
+        "height": 1590,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-light/sicilians-bonus4-360-light.png",
+        "sha256": "de7cf0ce7df594c606209092815c0b2a5b521b92e8229b25ebb277a68e56adb1",
+        "width": 360,
+        "height": 2069,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-light/sicilians-download.png",
+        "sha256": "5bd4de32f67392bcf39faef2c1d61ea27b36b243a82fcb3f4f1f1a63444386eb",
+        "width": 1080,
+        "height": 1350,
+        "actualDownload": true
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-light/sicilians-share-360-light.png",
+        "sha256": "1acd1f8d2894207caa57f4164092de09fff17171e29cf07fc1109224eab91536",
+        "width": 360,
+        "height": 2909,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-360-light/sicilians-timeline-360-light.png",
+        "sha256": "66fbe9fea14d059a95b797b2d71166c3e9ed33c328eb7fc6c8c455ac00b2960a",
+        "width": 360,
+        "height": 2909,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-dark/sicilians-bonus0-375-dark.png",
+        "sha256": "0a1235ac5de76a635f4882e90a40277ff72a53b331694390b1f444ef63fb4f63",
+        "width": 375,
+        "height": 1368,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-dark/sicilians-bonus1-375-dark.png",
+        "sha256": "c40d017a90a1788c6e715b74320d5e15f98e66a8051c5d3c7977a56c6ed43f41",
+        "width": 375,
+        "height": 1590,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-dark/sicilians-bonus4-375-dark.png",
+        "sha256": "8a0af876d3922c4123ffa9c175fbcb22a1be3df1830822ef25a53b28f71e0d72",
+        "width": 375,
+        "height": 2069,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-dark/sicilians-share-375-dark.png",
+        "sha256": "22fde9d3e54aa0a784a1591a4b436f28e6b223fd3ac3a570fc5b4d2e3555f571",
+        "width": 375,
+        "height": 2860,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-dark/sicilians-timeline-375-dark.png",
+        "sha256": "bcc8d1d485c7f54b2e1bc0306de0c88382fa9e104e9d6ca3683a11ee69e8cd44",
+        "width": 375,
+        "height": 2860,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-light/sicilians-bonus0-375-light.png",
+        "sha256": "ab2c597ad1e00d17df1422d4694af50f3cad7c8fba2adb918fdc4f5a3a29cf27",
+        "width": 375,
+        "height": 1368,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-light/sicilians-bonus1-375-light.png",
+        "sha256": "c98768d873726c204c48e6e775dba3c507e59af1f1b86964d267411cd30f9560",
+        "width": 375,
+        "height": 1590,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-light/sicilians-bonus4-375-light.png",
+        "sha256": "a9574aaefe5ecd6f804fa9b3845ade1707379c99a021b175e62699591ba4c970",
+        "width": 375,
+        "height": 2069,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-light/sicilians-share-375-light.png",
+        "sha256": "b09ab9291a4b922812495d9ea5efb21e526c74af6de97712b76cb53759425abe",
+        "width": 375,
+        "height": 2860,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-375-light/sicilians-timeline-375-light.png",
+        "sha256": "4fc75d974dcd0691bd88eefe7a4b772d413dc27c9fcf46ebe7e1da7c4e075f68",
+        "width": 375,
+        "height": 2860,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-dark/sicilians-bonus0-390-dark.png",
+        "sha256": "24d496c49f750558b16821f9565a004c4968c5c5963f361a5bc52b5e2bcdbb6f",
+        "width": 390,
+        "height": 1312,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-dark/sicilians-bonus1-390-dark.png",
+        "sha256": "9981fb18eda3561108441a5cd53310ee2f11df9dd2d87280aa2075337193b329",
+        "width": 390,
+        "height": 1534,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-dark/sicilians-bonus4-390-dark.png",
+        "sha256": "a07475711cef74476c5a38f1248dbd1c0e3ee345379096fdb6584b0e7da57827",
+        "width": 390,
+        "height": 1985,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-dark/sicilians-share-390-dark.png",
+        "sha256": "dd366f07e8f04e7a1bd183367add6b69c6eb68ae0d645f60261fc0f7f9d34471",
+        "width": 390,
+        "height": 2836,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-dark/sicilians-timeline-390-dark.png",
+        "sha256": "46906d0bc55f60d487f77ab1a66545391607aadd75384d5ff13e0a0f40384bb2",
+        "width": 390,
+        "height": 2836,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-light/sicilians-bonus0-390-light.png",
+        "sha256": "cd71d10d4348e8a2736c3da3bc8fdcea4d8ed94cf2e83c60f3a290dc15a59d28",
+        "width": 390,
+        "height": 1312,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-light/sicilians-bonus1-390-light.png",
+        "sha256": "f8441787d95bbfd3c5ebe97774f6f15276a39b3f93188cc86ee18a79361954b4",
+        "width": 390,
+        "height": 1534,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-light/sicilians-bonus4-390-light.png",
+        "sha256": "6f86b4b6676890d5ebcf53663e9e081ef8ed69ffe90a04395e22c73827510607",
+        "width": 390,
+        "height": 1985,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-light/sicilians-share-390-light.png",
+        "sha256": "e40f10a258c9aed5803304d9ab851a38dca97ae3bcfbcbd9377c4b2982901829",
+        "width": 390,
+        "height": 2836,
+        "actualDownload": false
+      },
+      {
+        "path": "/tmp/sicilians197-playwright/sicilians197--197-西西里施工、分享及真实来源详情-390-light/sicilians-timeline-390-light.png",
+        "sha256": "918c8a70b3226466cc315e6c2750d2c4787563477d38bd64416bfe6c22cde94a",
+        "width": 390,
+        "height": 2836,
+        "actualDownload": false
+      }
+    ]
+  },
+  "logSha256": {
+    "/tmp/sicilians197-related.log": "b3f422ed8c1fe620e4d38c8c4ea3e940a90f31d8c13a3e846d60731ab01b5c6a",
+    "/tmp/sicilians197-freeze-targeted.log": "e49b54c4681d2d5d6e405cadb537075013970234f8059a1274e5807dcb27a9a6",
+    "/tmp/sicilians197-317-generate.log": "df669c2488726df5a6af6e2d92eec0e05ea035b2b8c4eda63466a39cb697d557",
+    "/tmp/sicilians197-freeze-tsc.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/tmp/sicilians197-final-lint.log": "ef54d22ce016da3ac1d0388a6c5515c9e5cf14ca23d6a1c3d6ef77f930a2d3e2",
+    "/tmp/sicilians197-layers.log": "b7a9af9cda1c5a6752fe47c876a4edde1d609362578e25dcd067dbb93296b6bb",
+    "/tmp/sicilians197-bo.log": "77d03f158c128fb114f576aceb17c8623b52a7f8b625d3be357a5c6ee102ccc1",
+    "/tmp/sicilians197-build.log": "cdc6c05fe402c5912377487eba6ac83412f027a6a111874869ddcea76513c2be",
+    "/tmp/sicilians197-e2e.log": "2631a52e309e3c6b001c939a656f200eef878eeac84beb3168feb38d3f41f732",
+    "/tmp/sicilians197-smoke.log": "efd8b230abd97960d5d43778af0fb66af688c08aee8885e8c4e87012fe269ae5",
+    "/tmp/sicilians197-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  "notes": [
+    "Runtime/source/tests/317 bytes remain14f8b9c; later coverage/validation-only documentation does not claim another numerical or UI run.",
+    "The two TC objects finish25s earlier than removing770, while last-step completion is only5.2s earlier due to concurrent Bow Saw research203; do not advertise25s total-step saving.",
+    "TC75seconds is a150-source-form times0.5 result, not a Generic100 vs75 claim of game50percent speed.",
+    "Independent source/spec/code/UI and baseline results will be supplied by their actual agents/root; no reviewer conclusions authored here."
+  ],
+  "independentEvidence": {
+    "numericalInvariants": "/tmp/sicilians197-independent-invariants.json",
+    "numericalInvariantsSha256": "bff3f4a0dc833d368e4454286843131d8ae9580abc2e58afb19eee8547bbf8e0",
+    "attribution": "actual independent agent /root/batch7_regression_audit report; implementation owner only records its location, no impersonated review"
+  }
+}

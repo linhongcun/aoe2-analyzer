@@ -1,0 +1,127 @@
+{
+  "baseline": "7098ff0cba6a915766f38ca8c152ce35cc3cfcc6",
+  "tree": "4fa754e10739fddd81b4a83f1b6574b5d7bcc2a1",
+  "command": "npx vitest run tests/unit/sicilians197.test.ts --reporter=json --outputFile=/tmp/sicilians197-first-red.json > /tmp/sicilians197-first-red.log 2>&1",
+  "exitCode": 1,
+  "tests": 91,
+  "passed": 67,
+  "failed": 24,
+  "failures": [
+    "1人建TC：从实际annex读取工期后应用半时长和既有多人公式",
+    "2人建TC：从实际annex读取工期后应用半时长和既有多人公式",
+    "3人建TC：从实际annex读取工期后应用半时长和既有多人公式",
+    "建筑72按完整770的对应目标缩短真实工期",
+    "建筑487按完整770的对应目标缩短真实工期",
+    "建筑79按完整770的对应目标缩短真实工期",
+    "真实输入倍率改变会改变施工，不能硬编码75或三分之二",
+    "TC真实施工输入改变时读取数据；缺失或非法源形态不能退回完成态100并放行",
+    "真实drush木栅栏更早建成，费用和此前房屋保持；不是仅解除69警告",
+    "真实boom两TC按城堡annex施工，不新增村民队列或重复送100石",
+    "借用施工者完工回伐木，节省占用时间进入实际库存，支付木费不变",
+    "228坏上下文unknown-companion必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "261坏上下文unknown-companion必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "770坏上下文wrong-source必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "770坏上下文wrong-requires必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "770坏上下文missing-effect必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "770坏上下文duplicate-row必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "770坏上下文duplicate-effect必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "770坏上下文unknown-companion必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "772坏上下文missing-row必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "772坏上下文missing-effect必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "772坏上下文unknown-companion必须禁用文明及相应整条效果，helper不能残留半边效果",
+    "770缺少任一annex或类别时不能部分套城堡加成",
+    "支持声明、附注和估算边界一致；独立真实成本保留原提示及数值"
+  ],
+  "productionChanged": false,
+  "artifactSha256": {
+    "docs/design/sicilians197.md": "a109ced76b5dd6403e5906dcaa5e44bc6e1ba00d62a7de067c9678be2c1267f8",
+    "tests/unit/sicilians197.test.ts": "8fd356a2cd2da3b8d79c68c8f72168165481ff1bef4bce4026e458b50216f9ec",
+    "docs/design/sicilians197-source.json": "7a16074c45daec94371cf94cac752bf7519275c337f91a5e683bfe3e7ea4c174",
+    "docs/design/sicilians197-tc-gates.json": "4821973afc8910dfe72823f7a6f5845d23a8a54d1d8a85fd679a8c1022a2ef12",
+    "docs/design/sicilians197-public-sources.json": "122d50f8e223a2b15e1672b71bad2ea16654580b25fb54fc84c3ae443718b55d",
+    "/tmp/sicilians197-first-red.json": "b429d6da92941f1b5f103855c8956d631028043bddac152f2bb46e77a8274b66",
+    "/tmp/sicilians197-first-red.log": "ea2084c99361fb2036e7b43a641bf7ef516194d28a2769dca715d6f0a666060a",
+    "src/domain/buildSim.ts": "8bfe3b935c53d6aad5e158c81f4d85a43ecdb665fac2b9874e373bdfabd0e142",
+    "src/data/construction.json": "8ffdecfc304c606341b812bf6a7d6fccfbeb802405562cc7de1441110608f552"
+  },
+  "draftHarnessNote": "Earlier local draft used array length/order assumptions for source closure/actions. Corrected harness then rerecorded this run. No harness failures remain; earlier draft reports retained under /tmp/sicilians197-first-red-draft-harness.*.",
+  "originalFormalRun": {
+    "tests": 91,
+    "passed": 67,
+    "failed": 24,
+    "report": "/tmp/sicilians197-first-red-v1.json",
+    "log": "/tmp/sicilians197-first-red-v1.log",
+    "record": "/tmp/sicilians197-first-red-v1-record.json",
+    "sha256": "b429d6da92941f1b5f103855c8956d631028043bddac152f2bb46e77a8274b66",
+    "source": "/tmp/sicilians197-first-red-v1.test.ts"
+  },
+  "teamPaymentIncrement": {
+    "command": "npx vitest run tests/unit/sicilians197.test.ts --reporter=json --outputFile=/tmp/sicilians197-team-red.json > /tmp/sicilians197-team-red.log 2>&1",
+    "tests": 91,
+    "passed": 62,
+    "failed": 29,
+    "report": "/tmp/sicilians197-team-red.json",
+    "log": "/tmp/sicilians197-team-red.log",
+    "failures": [
+      "1人建TC：从实际annex读取工期后应用半时长和既有多人公式",
+      "2人建TC：从实际annex读取工期后应用半时长和既有多人公式",
+      "3人建TC：从实际annex读取工期后应用半时长和既有多人公式",
+      "建筑72按完整770的对应目标缩短真实工期",
+      "建筑487按完整770的对应目标缩短真实工期",
+      "建筑79按完整770的对应目标缩短真实工期",
+      "真实输入倍率改变会改变施工，不能硬编码75或三分之二",
+      "TC真实施工输入改变时读取数据；缺失或非法源形态不能退回完成态100并放行",
+      "真实drush木栅栏更早建成，费用和此前房屋保持；不是仅解除69警告",
+      "真实boom两TC按城堡annex施工，不新增村民队列或重复送100石",
+      "借用施工者完工回伐木，节省占用时间进入实际库存，支付木费不变",
+      "228坏上下文unknown-companion必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "261坏上下文unknown-companion必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "770坏上下文wrong-source必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "770坏上下文wrong-requires必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "770坏上下文missing-effect必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "770坏上下文duplicate-row必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "770坏上下文duplicate-effect必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "770坏上下文unknown-companion必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "772坏上下文missing-row必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "772坏上下文missing-effect必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "772坏上下文unknown-companion必须禁用文明及相应整条效果，helper不能残留半边效果",
+      "770缺少任一annex或类别时不能部分套城堡加成",
+      "运输团队坏上下文duplicate不能让支持声明和显式费用生效",
+      "运输团队坏上下文wrong-source不能让支持声明和显式费用生效",
+      "运输团队坏上下文unknown-companion不能让支持声明和显式费用生效",
+      "运输团队坏上下文extra-attribute不能让支持声明和显式费用生效",
+      "运输团队坏上下文nonfinite不能让支持声明和显式费用生效",
+      "支持声明、附注和估算边界一致；独立真实成本保留原提示及数值"
+    ],
+    "sha256": {
+      "tests/unit/sicilians197.test.ts": "2c48f70d40401dc693225bf76951b2e16cf937e0d7cce2b80134cc90b00e43fe",
+      "/tmp/sicilians197-team-red.json": "713b0b2edb1742b3476e614971f343d8aa2deba844f20df920901d20bfc1402e",
+      "/tmp/sicilians197-team-red.log": "02011b5bf70953285da8b7629cfdd50095578b3a5b09ad00a2147e07872dc28d"
+    }
+  },
+  "laterRedIncrements": {
+    "wrongIntegerClass": {
+      "report": "/tmp/sicilians197-class-red.json",
+      "log": "/tmp/sicilians197-class-red.log",
+      "sha256": "8f767c33ff4417e6642a78bc65763cfd2e16562b68f21b3a033e96e2e7d3e6ac"
+    },
+    "actualBonusUsageAndBody": {
+      "report": "/tmp/sicilians197-body-red.json",
+      "log": "/tmp/sicilians197-body-red.log",
+      "sha256": "4512d492126b47e25a5dd86b1532660e7958e8f3b8414e03fe9dca90102234e0"
+    }
+  },
+  "runtimeHarnessCorrections": {
+    "originalAttempt": "/tmp/sicilians197-first-green-attempt.json",
+    "counts": {
+      "tests": 91,
+      "passed": 89,
+      "failed": 2
+    },
+    "reason": [
+      "The boom final step also waits for concurrent research203; assert each actual buildingsDone TC25s earlier and keep step completion earlier without asserting an unrelated25s total-step saving.",
+      "realCost.unsupported is the original structured label农田食物储量/techs772; farm-upgrade explanation is UI text, checked separately."
+    ],
+    "originalAttemptSha256": "30024148a495b6f40a2e799d65f54ac8537f84232a2f5bf3df8cb9783f92a35d"
+  }
+}
