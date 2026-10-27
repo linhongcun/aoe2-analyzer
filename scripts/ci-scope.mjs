@@ -54,6 +54,7 @@ export const PROFILES = {
       'civRegionalUnits450',
       'civRegionalBuildings456',
       'civUniqueBuildings463',
+      'civEmptyModules465',
     ],
   ),
   units: profile(

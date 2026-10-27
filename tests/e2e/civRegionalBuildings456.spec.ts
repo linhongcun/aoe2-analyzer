@@ -26,9 +26,8 @@ for (const width of [360, 375, 390, 1280])
       await expect(region).toBeVisible();
       await expect(page.locator('.dside .sideblk > h4').first()).toHaveText('独特单位');
       await expect(page.locator('.dside .sideblk > h4').nth(1)).toHaveText('区域单位');
-      await expect(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('独特建筑');
-      await expect(page.locator('.dside .sideblk > h4').nth(3)).toHaveText('区域建筑');
-      await expect(page.locator('.dside .sideblk > h4').nth(4)).toHaveText('快速入口');
+      await expect(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('区域建筑');
+      await expect(page.locator('.dside .sideblk > h4').nth(3)).toHaveText('快速入口');
       await expect(region.getByRole('link')).toHaveText(['骡车', '强化教堂']);
       await expect(page.locator('.dmain').getByRole('heading', { name: '区域建筑', exact: true })).toHaveCount(0);
       await expect(region).not.toContainText(/训练建筑|黑暗时代|城堡时代|点击建筑|共享建筑/);
@@ -69,7 +68,8 @@ test('#456 各文明区域归属与详情保留文明时代', async ({ page }) =
   }
   for (const civ of ['Chinese', 'Japanese', 'Sicilians', 'Poles', 'Malay', 'Bulgarians', 'Portuguese']) {
     await page.goto(`./#/civ/${civ}`);
-    await expect(block(page)).toContainText('本文明没有区域建筑。');
+    await expect(page.locator('.dside').getByRole('heading', { name: '独特单位', exact: true })).toBeVisible();
+    await expect(block(page)).toHaveCount(0);
     await expect(block(page).getByRole('link')).toHaveCount(0);
   }
   // Use in-app navigation to catch state retained across a civilization change.

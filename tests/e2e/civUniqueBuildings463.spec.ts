@@ -26,7 +26,7 @@ for (const width of [360, 375, 390, 1280])
       const link = unique.getByRole('link', { name: '营垒', exact: true });
       await expect(link).toHaveAttribute('href', '#/building/1251?civ=Bulgarians&age=3');
       await expect(unique.getByRole('link')).toHaveCount(1);
-      for (const [index, name] of ['独特单位', '区域单位', '独特建筑', '区域建筑', '快速入口'].entries())
+      for (const [index, name] of ['独特单位', '独特建筑', '快速入口'].entries())
         await expect(page.locator('.dside .sideblk > h4').nth(index)).toHaveText(name);
       await expect(page.locator('.dmain').getByRole('heading', { name: '独特建筑', exact: true })).toHaveCount(0);
       await expect(unique).not.toContainText(/训练建筑|城堡时代|点击建筑/);
@@ -59,7 +59,8 @@ test('#463 五类独特建筑、区域不混入及营垒详情上下文', async 
   }
   for (const civ of ['Khitans', 'Armenians', 'Persians', 'Incas', 'Chinese']) {
     await page.goto(`./#/civ/${civ}`);
-    await expect(block(page)).toContainText('本文明没有独特建筑。');
+    await expect(page.locator('.dside').getByRole('heading', { name: '独特单位', exact: true })).toBeVisible();
+    await expect(block(page)).toHaveCount(0);
     await expect(block(page).getByRole('link')).toHaveCount(0);
   }
   await page.goto('./#/civ/Poles');
