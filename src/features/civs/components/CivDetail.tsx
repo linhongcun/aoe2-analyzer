@@ -19,6 +19,7 @@ import { BonusRows } from './BonusRows';
 import { CivOpening } from './CivOpening';
 import { CivRegionalUnits } from './CivRegionalUnits';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
+import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
 
 function UTech({ s, civ }: { s: string; civ: string }) {
@@ -204,6 +205,7 @@ export default function CivDetail() {
             </SideBlock>
           )}
           <CivRegionalUnits civ={c.en} units={core?.units ?? null} families={core?.fam ?? null} />
+          <CivUniqueBuildings civ={c.en} buildings={core?.buildings ?? null} />
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
           <SideBlock title="快速入口">
             <Link className="ulink tlink" to={`/tree/${c.en}`}>

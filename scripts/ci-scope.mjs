@@ -42,7 +42,7 @@ export const PROFILES = {
   patches: profile(['patches16', 'patchTree417', 'patchSearch16'], ['patches16', 'patchTree417']),
   matchup: profile(['matchup194', 'p0Batch', 'simRoute424', 'simulator'], ['matchup194', 'matchupSim424', 'rush35']),
   civs: profile(
-    ['civRequirements206', 'civText402', 'civOpening77', 'civBonus', 'dlc-linker', 'civRegionalUnits450', 'civRegionalBuildings456'],
+    ['civRequirements206', 'civText402', 'civOpening77', 'civBonus', 'dlc-linker', 'civRegionalUnits450', 'civRegionalBuildings456', 'civUniqueBuildings463'],
     [
       'civDlcFilters',
       'civRequirements206',
@@ -53,6 +53,7 @@ export const PROFILES = {
       'catalogLayout187',
       'civRegionalUnits450',
       'civRegionalBuildings456',
+      'civUniqueBuildings463',
     ],
   ),
   units: profile(
