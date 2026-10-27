@@ -25,9 +25,7 @@ for (const width of [360, 375, 390, 1280])
       const region = regionalBlock(page);
       await expect(page.locator('.dside .sideblk > h4').first()).toHaveText('独特单位');
       await expect(page.locator('.dside .sideblk > h4').nth(1)).toHaveText('区域单位');
-      await expect(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('独特建筑');
-      await expect(page.locator('.dside .sideblk > h4').nth(3)).toHaveText('区域建筑');
-      await expect(page.locator('.dside .sideblk > h4').nth(4)).toHaveText('快速入口');
+      await expect(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('快速入口');
       await expect(page.locator('.dmain').getByRole('heading', { name: '区域单位', exact: true })).toHaveCount(0);
       const base = region.getByRole('link', { name: '骑马弩兵', exact: true });
       await expect(base).toHaveAttribute('href', '#/unit/2700/Franks/3/');
@@ -79,7 +77,8 @@ for (const width of [360, 375, 390, 1280])
         await page.screenshot({ path: info.outputPath(`${civ}-${width}-${theme}.png`), fullPage: true });
       }
       await page.goto('./#/civ/Japanese');
-      await expect(regionalBlock(page)).toContainText('本文明没有区域单位。');
+      await expect(page.locator('.dside').getByRole('heading', { name: '独特单位', exact: true })).toBeVisible();
+      await expect(regionalBlock(page)).toHaveCount(0);
     });
 
 test('#450 核心数据加载期间不显示无区域单位', async ({ page }) => {

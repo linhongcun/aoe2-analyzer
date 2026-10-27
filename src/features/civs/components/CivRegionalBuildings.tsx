@@ -7,11 +7,12 @@ import './civ-regional-buildings.css';
 
 export function CivRegionalBuildings({ civ, buildings }: { civ: string; buildings: readonly Building[] | null }) {
   const list = buildings ? regionalBuildings(civ, buildings) : [];
+  if (buildings && !list.length) return null;
   return (
     <SideBlock title="区域建筑">
       {!buildings ? (
         <p role="status">正在加载区域建筑…</p>
-      ) : list.length ? (
+      ) : (
         <div className="uchips civ-regional-buildings">
           {list.map((b) => (
             <Link key={b.id} className="ulink" to={`/building/${b.id}?${new URLSearchParams({ civ, age: String(b.age) })}`}>
@@ -20,8 +21,6 @@ export function CivRegionalBuildings({ civ, buildings }: { civ: string; building
             </Link>
           ))}
         </div>
-      ) : (
-        <p>本文明没有区域建筑。</p>
       )}
     </SideBlock>
   );
