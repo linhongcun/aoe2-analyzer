@@ -423,7 +423,7 @@ const hasMayanWallContext = (row: EffectRow, scope: ReturnType<typeof simScope>)
 const MAYAN_RESOURCE_NOTE = '资源产量与工作率配对估算；储量和耗尽未模拟';
 export const MAYAN_CAVALRY_TEMPLATE_NOTE = '玛雅无马厩；侦察骑兵、骑士方案仅供通用模板经济估算';
 const MAYAN_RESOURCE_ASSUMPTION =
-  '玛雅各资源产量与专职工作率配对后再计算携带和往返，一般净系数1.0005、农田0.9315；近城镇中心肉类仍用牧羊代理。资源储量、耗尽、农田续种和客户端逐帧行为未模拟。沿用起始4村，织布按原开局实际研发；墙费只在显式计入团队时折半。';
+  '玛雅各资源产量与专职工作率配对后再计算携带和往返，一般净系数1.0005、农田0.9315；近城镇中心肉类仍用牧羊代理。资源储量、耗尽、农田续种和客户端逐帧行为未模拟。沿用玛雅的起始人数，织布按原开局实际研发；墙费只在显式计入团队时折半。';
 /** 固定595的四个建筑类别命令；数值倍率仍从实际effects读取。农田class49不在其中。 */
 const MALIAN_BUILDING_CLASSES = new Set([3, 39, 52, 27]);
 const hasMalianBuildingContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }, scope: ReturnType<typeof simScope>) => {

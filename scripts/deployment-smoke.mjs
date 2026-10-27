@@ -274,7 +274,9 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
       await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText('已计入资源产量与工作率配对；储量和耗尽未模拟');
       await goto('/duel?a=4.Mayans.4.f.&b=4.Franks.4.f.&m=t');
-      await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toContainText('资源多持续 15%，不是采集变快，暂不计入');
+      const mayanUncounted = page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]');
+      await check(mayanUncounted).toHaveCount(4);
+      await check(mayanUncounted).toContainText(Array(4).fill('资源多持续 15%，不是采集变快，暂不计入'));
       console.log(
         'Verified Mayans economy: own4-villager150Food start,571.9s Food477/Wood376/Gold50/Stone200,pop20/25, paired-source explanation, both generic cavalry shares and original real-cost boundary; no pure-productivity Generic comparison claimed',
       );

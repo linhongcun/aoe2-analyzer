@@ -1,0 +1,593 @@
+{
+  "status": "LOCAL_COMPLETE_AWAITING_INDEPENDENT_FINAL_REVIEW_AND_REAL_CI",
+  "recordedAtUTC": "2026-10-27T10:24:10.206103+00:00",
+  "baseline": "88852f4b199518a81bcdb469c9a28ec28dcec27f",
+  "baselineVersion": "v0.50.0",
+  "version": "v0.51.0",
+  "scope": "#197 sixth batch Mayans only",
+  "scopeComment": "https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6438543991",
+  "runtimeCommit": "cf6b09c87d1188d77665ca5fa59d752507e004c0",
+  "runtimeTree": "c5412c1e536038d625ce6bcb7af3146fbbcf8d05",
+  "clientFileSha256": {
+    "src/domain/buildSim.ts": "b3cc305cd75a236fe86021566bd7c75a11e8e7ff8f60b94945795fe93198ca79",
+    "src/domain/bonusUsage.ts": "1e6aaa2754732deafa91a72b9bec14c448ab774786220695d8668752dd7e036b",
+    "src/features/builds/shareCard.ts": "89d171ce42b33d77ca55c0da67f39afc888dfcba33b481878f96a252f0abc035",
+    "src/shared/ui/BonusBody.tsx": "cec4579f6988f38ad339dec77ccb193cf85b95260a10a97b789f6507aa88e6cd",
+    "src/data/eco.json": "9fd02e622a5d2532904f1433e894015ad099de62aa025db49aaa997263bbe74b",
+    "src/domain/realCost.ts": "e1804bcafc710a81696259d831a109e28e25b9dc77269b83d19136a3d5e000cf",
+    "src/domain/roundHalfPrice.ts": "506e39f19728e59aabe8dc760660a7b2a7a38983f692f18fa400a6b56a55610c"
+  },
+  "source": {
+    "raw": "mayans197-source.json",
+    "rawSha256": "b98b19132f81f80dda29a695fd3356ae3953bac54d982f7458aaa332a25573a8",
+    "dedicatedTechs": 9,
+    "closure": 133,
+    "trackedObjects": 51,
+    "pipelineRegeneration": false
+  },
+  "firstRed": {
+    "final": {
+      "head": "88852f4b199518a81bcdb469c9a28ec28dcec27f",
+      "recordedAt": "2026-10-27T09:54:00.881326+00:00",
+      "trackedDiff": "",
+      "total": 115,
+      "pass": 16,
+      "fail": 99,
+      "skip": 0,
+      "exitCode": 1,
+      "file": "tests/unit/mayans197.test.ts",
+      "sha256": "b7dc88abb8a2356c781446dc0ed847ec27fdce63ec79241df37fe2b4dbd43d71",
+      "log": "/tmp/mayans197-first-red-final.log",
+      "json": "/tmp/mayans197-first-red-final.json",
+      "previousRecord": "/tmp/mayans197-first-red-record.json",
+      "previousRecordRetained": true,
+      "previous98Sha256": "dca9b8cbbff4afefe099433ba5fd6817cd03c37ba70fe860d97a2bb3f7761640",
+      "corrections": [
+        "ecoTask hunt inventory probes now use BO boar; BO hunt remains existing sheep proxy and has separate test",
+        "16 resource/work input doubling inventory assertions run before helper comparisons, so real budget sensitivity does not depend on rounded1.0005 residual",
+        "additional resource47x2 age-once test uses actual researchAt/doneAt clocks"
+      ],
+      "incrementalInventoryCases": 17,
+      "incrementalInventoryAllFailed": true
+    },
+    "previous98": {
+      "head": "88852f4b199518a81bcdb469c9a28ec28dcec27f",
+      "createdAt": "2026-10-27T09:51:44.559117+00:00",
+      "trackedDiff": "",
+      "exitCode": 1,
+      "total": 98,
+      "pass": 15,
+      "fail": 83,
+      "skip": 0,
+      "test": "tests/unit/mayans197.test.ts",
+      "sha256": "dca9b8cbbff4afefe099433ba5fd6817cd03c37ba70fe860d97a2bb3f7761640",
+      "log": "/tmp/mayans197-first-red.log",
+      "json": "/tmp/mayans197-first-red.json",
+      "draftPreserved": "/tmp/mayans197-first-red-draft.json",
+      "corrections": [
+        "Loom cost field only tracks unit/build: validate actual next snapshot gold and research duration",
+        "Fifth villager probe needs gather/build allocation so zero-time house can complete; no timeout default snapshot"
+      ],
+      "passCount": 15,
+      "failCount": 83,
+      "pass_": 15,
+      "fail_": 83,
+      "typecheck": "success",
+      "typeChanges": "Use typed civ data loader and restrict controlled age to 2|3|4; expectations unchanged",
+      "previousExactRun": "/tmp/mayans197-first-red-before-types-record.json"
+    },
+    "wallIncremental": {
+      "head": "88852f4b199518a81bcdb469c9a28ec28dcec27f",
+      "recordedAt": "2026-10-27T09:56:55.222378+00:00",
+      "trackedDiff": "",
+      "file": "tests/unit/mayans197.test.ts",
+      "sha256": "573a0a960f7c5d4a671a5631024a4b432ded450698c2fdadcb0ba0a348a65b84",
+      "selected": 4,
+      "pass": 0,
+      "fail": 4,
+      "unselected": 115,
+      "filter": "class39|真实drush|原始drush",
+      "fullSuiteNotClaimed": true,
+      "exitCode": 1,
+      "log": "/tmp/mayans197-wall-incremental-red.log",
+      "json": "/tmp/mayans197-wall-incremental-red.json",
+      "typecheck": "success",
+      "before115RedRecord": "/tmp/mayans197-first-red-final-record.json",
+      "protectedDiff": "none"
+    },
+    "bodyIncremental": {
+      "file": "tests/unit/mayans197Body.test.ts",
+      "sha256": "0f5939329eebe981ccb760b62a17ede7d9e6f732598ed919d63d6c44cddaf99e",
+      "head": "88852f4b199518a81bcdb469c9a28ec28dcec27f",
+      "total": 3,
+      "pass": 1,
+      "fail": 2,
+      "skip": 0,
+      "exit": 1,
+      "scope": "SSR encoded-body gate, bonusUsage mocked only for Maya1; not a real browser claim",
+      "recordedAt": "2026-10-27T09:58:48.885032+00:00",
+      "log": "/tmp/mayans197-body-red.log",
+      "json": "/tmp/mayans197-body-red.json"
+    },
+    "shareIncremental": {
+      "head": "88852f4b199518a81bcdb469c9a28ec28dcec27f",
+      "file": "tests/unit/mayans197Share.test.ts",
+      "sha256": "e374a9773131e1636e0424427093a63c4c963eb091bd246826aa03b19754e809",
+      "total": 4,
+      "pass": 2,
+      "fail": 2,
+      "skip": 0,
+      "productionScope": "shareCard.ts exact baseline bytes; core changed previously, not claimed all production unchanged",
+      "log": "/tmp/mayans197-share-red.log",
+      "json": "/tmp/mayans197-share-red.json"
+    },
+    "groupIncremental": {
+      "head": "88852f4b199518a81bcdb469c9a28ec28dcec27f",
+      "file": "tests/unit/mayans197.test.ts",
+      "sha256": "69fcfefcfd684df65548161038c408a6ea02b5db11735ee0f7a0825e43195bf4",
+      "selected": 2,
+      "pass": 0,
+      "fail": 2,
+      "unselected": 119,
+      "fullSuiteNotClaimed": true,
+      "recordedAt": "2026-10-27T10:09:24.567181+00:00",
+      "productionState": "Initial paired implementation, after real126green; detects root-discovered group duplication hole",
+      "coreSha256": "5eb06b389433382067e96c1f09d311123a2d0bf91949d614ab570c18282fe232",
+      "json": "/tmp/mayans197-group-red.json",
+      "log": "/tmp/mayans197-group-red.log"
+    },
+    "greenHarnessCorrection": {
+      "run": "/tmp/mayans197-green-draft.json",
+      "passed": 121,
+      "failed": 1,
+      "cause": "Timeline stock is floored; paid wall1.5 was correct but test expected198.5 instead ofMath.floor(200-1.5)",
+      "correctedExpectation": "Math.floor(200 - paidWood)",
+      "followup": "/tmp/mayans197-green.json126passed"
+    }
+  },
+  "newUnit": {
+    "json": "/tmp/mayans197-group-green.json",
+    "passed": 128,
+    "failed": 0,
+    "skipped": 0,
+    "provenance": "after full-tree/team duplicate fix; before nonsemantic smoke/test locator followup; later independent static canonical code identity confirmed"
+  },
+  "localRelated": {
+    "distinctFiles": 20,
+    "total": 652,
+    "passed": 649,
+    "skipped": 2,
+    "todo": 1,
+    "failed": 0,
+    "migration": {
+      "json": "/tmp/mayans197-migration-unit.json",
+      "total": 169,
+      "passed": 167,
+      "skip": 1,
+      "todo": 1
+    },
+    "boundary": {
+      "json": "/tmp/mayans197-boundary-unit.json",
+      "total": 355,
+      "passed": 354,
+      "skip": 1
+    },
+    "notClaimedLocalFull": true
+  },
+  "bonus317": {
+    "generation": "/tmp/mayans197-317-generation-final.json",
+    "total": 13,
+    "passed": 13,
+    "oldKeys": 67,
+    "oldChanged": [],
+    "newKeys": {
+      "Mayans-0": "feudal-drush-18",
+      "Mayans-2": null
+    },
+    "totalKeys": 69,
+    "originalGeneratorAndSimCheckedUnchanged": true,
+    "untriggeredReason": "Only53/56 positive-tech counterfactual does not remove treeFeudal discount; current8BO no Castle/Imperial archer training; three-age actual-payment controls cover it",
+    "initialGeneration": "12pass1failure due missing untriggered reason; raw output kept, not forged"
+  },
+  "invariants": {
+    "report": "/tmp/mayans197-independent-invariants.json",
+    "verifiedCommit": "cf6b09c87d1188d77665ca5fa59d752507e004c0",
+    "tree": "c5412c1e536038d625ce6bcb7af3146fbbcf8d05",
+    "full": 440,
+    "helper": 1485,
+    "realCost": 56,
+    "allUnchanged": true,
+    "protected": {
+      "unchanged": 36,
+      "allowedChanged": [
+        "tests/unit/fixtures/bonusUsage317-sim.json",
+        "tests/unit/v0300-331.test.ts",
+        "tests/unit/bonusUsage317.test.ts",
+        "tests/unit/civ42v070.test.ts",
+        "tests/unit/civ42v060.test.ts",
+        "scripts/deployment-smoke.mjs",
+        "tests/e2e/v060-42.spec.ts",
+        "tests/e2e/timeline.spec.ts",
+        "tests/unit/tatars197.test.ts"
+      ],
+      "unexpected": []
+    }
+  },
+  "static": {
+    "build": "success /tmp/mayans197-runtime-build.log",
+    "lint": "0errors9warnings;8 existing and timeline ordinary migration502-line warning; thresholds unchanged",
+    "strictLayers": "success /tmp/mayans197-layers.log",
+    "content": "46inputs0warning0errors strict",
+    "compiledValidators": "5reproducible",
+    "boCheck": "8builds0errors",
+    "types": "final npm build includes successful tsc"
+  },
+  "browser": {
+    "distinctCases": 32,
+    "firstRun": "/tmp/mayans197-ui.json",
+    "firstCounts": {
+      "pass": 29,
+      "fail": 1,
+      "skip": 0,
+      "retry": 0
+    },
+    "firstFailure": "strict locator resolved4 original realCost warnings; original product content correct",
+    "scopedFollowup": "/tmp/mayans197-ui-followup.json",
+    "scopedPass": 1,
+    "ordinaryMigration": "/tmp/mayans197-timeline.json",
+    "migrationPass": 2,
+    "productionClientChangesForFollowup": false,
+    "fourWidths": [360, 375, 390, 1280],
+    "themes": ["light", "dark"]
+  },
+  "images": {
+    "manifest": "/tmp/mayans197-ui-manifest.json",
+    "runtimeCommit": "cf6b09c87d1188d77665ca5fa59d752507e004c0",
+    "count": 43,
+    "kinds": {
+      "timeline": 8,
+      "share": 24,
+      "bonus1": 8,
+      "download": 3
+    },
+    "files": [
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：已编码来源详情实际显示时间线说明-1280-dark/mayans-bonus1-1280-dark.png",
+        "name": "mayans-bonus1-1280-dark.png",
+        "bytes": 160648,
+        "sha256": "307ca7aa247b9dfc4e08f3d8a8f6e70f3593f41349ac9748139b52ccab7c2d92",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：已编码来源详情实际显示时间线说明-1280-light/mayans-bonus1-1280-light.png",
+        "name": "mayans-bonus1-1280-light.png",
+        "bytes": 162155,
+        "sha256": "2f837ac6ff598eeed9c95c42765cef289975234749586ea895d58b1578a4cdc6",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：已编码来源详情实际显示时间线说明-360-dark/mayans-bonus1-360-dark.png",
+        "name": "mayans-bonus1-360-dark.png",
+        "bytes": 132192,
+        "sha256": "29d8a5e639da1bcb2976168c7c6235437036a0165be9e324f56aff3529be8f29",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：已编码来源详情实际显示时间线说明-360-light/mayans-bonus1-360-light.png",
+        "name": "mayans-bonus1-360-light.png",
+        "bytes": 132631,
+        "sha256": "98579e51a939e97c4b581bb5399d8772a57df642c8130ffa70f257da3176bffa",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：已编码来源详情实际显示时间线说明-375-dark/mayans-bonus1-375-dark.png",
+        "name": "mayans-bonus1-375-dark.png",
+        "bytes": 132634,
+        "sha256": "56931cf5e1336a5c589476da0f2fab5efd984c63654a8538241cf66cdc0299fa",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：已编码来源详情实际显示时间线说明-375-light/mayans-bonus1-375-light.png",
+        "name": "mayans-bonus1-375-light.png",
+        "bytes": 133665,
+        "sha256": "67c5c516d7e8cf3af43c4983128ec4db1a428354e816c80dcaa2e0b1fa8b6d6d",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：已编码来源详情实际显示时间线说明-390-dark/mayans-bonus1-390-dark.png",
+        "name": "mayans-bonus1-390-dark.png",
+        "bytes": 130639,
+        "sha256": "fd1fd45f0f6a787a909999a69bf5782535573722afda28106ff5627ff032f99b",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：已编码来源详情实际显示时间线说明-390-light/mayans-bonus1-390-light.png",
+        "name": "mayans-bonus1-390-light.png",
+        "bytes": 131564,
+        "sha256": "fe49aeac0b11ba7ce2e810a51056f2f9bff0d36cf71be77afbeff6dde1a35394",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-1280-dark/mayans-share-archers-19-1280-dark.png",
+        "name": "mayans-share-archers-19-1280-dark.png",
+        "bytes": 270152,
+        "sha256": "085375ad54f9a7b2dd84a4b569a4928cb188f491dff20fe7525c6fddb79fafe8",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-1280-dark/mayans-share-fast-castle-knights-1280-dark.png",
+        "name": "mayans-share-fast-castle-knights-1280-dark.png",
+        "bytes": 324989,
+        "sha256": "1e52aefbe95277ce81111eac086e1f3b3ec74197cca33f2da50d5aa6e9e76dee",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-1280-dark/mayans-share-scouts-18-1280-dark.png",
+        "name": "mayans-share-scouts-18-1280-dark.png",
+        "bytes": 299418,
+        "sha256": "11ac7138ee140763714e73e0b4c57a02945ebb429b974e0d03b7ff3710fd4a8e",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-1280-dark/mayans-timeline-1280-dark.png",
+        "name": "mayans-timeline-1280-dark.png",
+        "bytes": 270507,
+        "sha256": "2be102fa676d0407d836068df6a2e2e92db3d0f14637a65abafd2c3980fef3fd",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-1280-light/mayans-share-archers-19-1280-light.png",
+        "name": "mayans-share-archers-19-1280-light.png",
+        "bytes": 278712,
+        "sha256": "a49842cd0d7aa559f92f3326cb09222bf024f9220d72015a0d01850fd1e50f41",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-1280-light/mayans-share-fast-castle-knights-1280-light.png",
+        "name": "mayans-share-fast-castle-knights-1280-light.png",
+        "bytes": 333320,
+        "sha256": "e15b1ff534a14ffb9cdcec3b1df9f28c5bfb0bccc517f2f5fabc38eaa4987d43",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-1280-light/mayans-share-scouts-18-1280-light.png",
+        "name": "mayans-share-scouts-18-1280-light.png",
+        "bytes": 306985,
+        "sha256": "d60177ed95f783257241ff8b5a73439a6c81a2b5bd1125496a87faaeedc83c69",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-1280-light/mayans-timeline-1280-light.png",
+        "name": "mayans-timeline-1280-light.png",
+        "bytes": 273209,
+        "sha256": "e45e12ce14f83d2a504bf0228be2a471aaaa23985ddbd2854f334d121ee5ffcd",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-dark/mayans-share-archers-19-360-dark.png",
+        "name": "mayans-share-archers-19-360-dark.png",
+        "bytes": 192545,
+        "sha256": "1d0c3dd660a56fd5d9c9bb8c6616712def9a7059e8e408b06f4e3a0099dbc91c",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-dark/mayans-share-fast-castle-knights-360-dark.png",
+        "name": "mayans-share-fast-castle-knights-360-dark.png",
+        "bytes": 228875,
+        "sha256": "fa7292316561f184b38b07eab7692d9db479168d9eb57aa68498f57342ba1832",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-dark/mayans-share-scouts-18-360-dark.png",
+        "name": "mayans-share-scouts-18-360-dark.png",
+        "bytes": 220333,
+        "sha256": "720becdf35625adbfa83b22fb514ab43506122c7ad58e402a0e2221d383029f4",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-dark/mayans-timeline-360-dark.png",
+        "name": "mayans-timeline-360-dark.png",
+        "bytes": 201327,
+        "sha256": "1f0ac4d00377dee2e241b6d20c57da439052dd0406fe74832f195452d9a23f77",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-light/mayans-download-archers-19.png",
+        "name": "mayans-download-archers-19.png",
+        "bytes": 148714,
+        "sha256": "61ef4d766c144fd1550b3456cfc3bc01020038879c76bf228f80eafa95c9faf8",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-light/mayans-download-fast-castle-knights.png",
+        "name": "mayans-download-fast-castle-knights.png",
+        "bytes": 171195,
+        "sha256": "f88b3ee1e287f300e2d4043292d1d59daf87d047693bca090d98ff39c726c528",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-light/mayans-download-scouts-18.png",
+        "name": "mayans-download-scouts-18.png",
+        "bytes": 168424,
+        "sha256": "a2d5bf741c3f4a7f56010026e168916869c2dc399cff48b1f18325032c6f45b8",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-light/mayans-share-archers-19-360-light.png",
+        "name": "mayans-share-archers-19-360-light.png",
+        "bytes": 195325,
+        "sha256": "15f8f6b8c5fbc81d2a6225325e6e19d6167708aaf4c2ebcfd1eaf9697aa7c4dc",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-light/mayans-share-fast-castle-knights-360-light.png",
+        "name": "mayans-share-fast-castle-knights-360-light.png",
+        "bytes": 232553,
+        "sha256": "a515fefd66ced9a29c49c8b80dd3eddc11058d59f75d01f4d2f23cd557d006b1",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-light/mayans-share-scouts-18-360-light.png",
+        "name": "mayans-share-scouts-18-360-light.png",
+        "bytes": 222706,
+        "sha256": "3a52c4574844d4d3abeae87f6d0f8719f33ce549931d391f0d80115de8f98988",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-360-light/mayans-timeline-360-light.png",
+        "name": "mayans-timeline-360-light.png",
+        "bytes": 202849,
+        "sha256": "9d8a21ab4f44ed93d328146eea9c7b3d2773c3a7020dac417c4672672a6486e0",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-375-dark/mayans-share-archers-19-375-dark.png",
+        "name": "mayans-share-archers-19-375-dark.png",
+        "bytes": 192187,
+        "sha256": "3caa714d73ef166e260cf54e067b5959b2a2f4473d0ab8cd75c2fd376e4e1256",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-375-dark/mayans-share-fast-castle-knights-375-dark.png",
+        "name": "mayans-share-fast-castle-knights-375-dark.png",
+        "bytes": 229825,
+        "sha256": "212d8ebab603c73be6f7a0b02029a74be964c8369937714f1559a805ab61a15b",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-375-dark/mayans-share-scouts-18-375-dark.png",
+        "name": "mayans-share-scouts-18-375-dark.png",
+        "bytes": 219178,
+        "sha256": "f59af06b7ad88b6a9ebbe8973ec82f7a6845208caca287a7e13709d003052e05",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-375-dark/mayans-timeline-375-dark.png",
+        "name": "mayans-timeline-375-dark.png",
+        "bytes": 201180,
+        "sha256": "34d13064c5d83582d64bd41c9cf4cbcb2f9c503ae575e37fdebf9585f3a35889",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-375-light/mayans-share-archers-19-375-light.png",
+        "name": "mayans-share-archers-19-375-light.png",
+        "bytes": 194786,
+        "sha256": "ab541ef7fef6ad269e78826fd9fbdd63120de25a9e8d2abf53762e7727fc2e68",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-375-light/mayans-share-fast-castle-knights-375-light.png",
+        "name": "mayans-share-fast-castle-knights-375-light.png",
+        "bytes": 232585,
+        "sha256": "34f1e88d0eb9446b9fdeff4acc18ef8be8e4add93fa96eba5fa610ed84bd646d",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-375-light/mayans-share-scouts-18-375-light.png",
+        "name": "mayans-share-scouts-18-375-light.png",
+        "bytes": 221879,
+        "sha256": "f3eaf3b945115f3665078336e388115c90561c4ec1e3d495fb5c6938ae0175a4",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-375-light/mayans-timeline-375-light.png",
+        "name": "mayans-timeline-375-light.png",
+        "bytes": 202837,
+        "sha256": "0903de35466315ade78989d76212a4287f326ec13f62ed88a6f94d8a5ffe5a9c",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-390-dark/mayans-share-archers-19-390-dark.png",
+        "name": "mayans-share-archers-19-390-dark.png",
+        "bytes": 192720,
+        "sha256": "89f7783e25934720feb9e0d4a293e5463f320351282ba5292bb194c8a69d1b05",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-390-dark/mayans-share-fast-castle-knights-390-dark.png",
+        "name": "mayans-share-fast-castle-knights-390-dark.png",
+        "bytes": 228024,
+        "sha256": "f6e6cca727a4296c3ddc43195681adcff2783b140e7542f2de3896fb4dff74df",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-390-dark/mayans-share-scouts-18-390-dark.png",
+        "name": "mayans-share-scouts-18-390-dark.png",
+        "bytes": 218122,
+        "sha256": "28869f33c884f8cc84a005a38f522f3740c799bf497cfd719332099225cef895",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-390-dark/mayans-timeline-390-dark.png",
+        "name": "mayans-timeline-390-dark.png",
+        "bytes": 200916,
+        "sha256": "055a6223f22ffabd35ed4873e52cdd73a1a88b1dc9d1d19435f2ee09a9b1208b",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-390-light/mayans-share-archers-19-390-light.png",
+        "name": "mayans-share-archers-19-390-light.png",
+        "bytes": 195617,
+        "sha256": "ac514df8bbc5d28084bbf0fd424f530805b7fda3a29c38846180cc85eb687bd7",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-390-light/mayans-share-fast-castle-knights-390-light.png",
+        "name": "mayans-share-fast-castle-knights-390-light.png",
+        "bytes": 231759,
+        "sha256": "d89c181faa665e52af927318466467fa9247701af449940f0c43064f790e294b",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-390-light/mayans-share-scouts-18-390-light.png",
+        "name": "mayans-share-scouts-18-390-light.png",
+        "bytes": 220600,
+        "sha256": "2649397be0ed19f063030bc5d3d5759b0c898d5ad534907516e76fe973a2bff5",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-ui/mayans197--197-玛雅：时间线与三类分享-390-light/mayans-timeline-390-light.png",
+        "name": "mayans-timeline-390-light.png",
+        "bytes": 202296,
+        "sha256": "e248d5435d860f7950d9d1984c53f98e77e724b51f076446ded3a604293cca5e",
+        "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      }
+    ],
+    "ownerPersonallyViewed": ["mayans-download-fast-castle-knights.png", "mayans-bonus1-390-dark.png"],
+    "notClaimedAllImagesPersonallyViewedByOwner": true
+  },
+  "localSmoke": {
+    "plan": "/tmp/mayans197-local-plan.json",
+    "features": ["all", "builds", "civs"],
+    "log": "/tmp/mayans197-local-smoke.log",
+    "result": "success",
+    "checkpoint": {
+      "bo": "archers-19",
+      "step": 8,
+      "clock": 571.9,
+      "stock": {
+        "food": 477,
+        "wood": 376,
+        "gold": 50,
+        "stone": 200
+      },
+      "pop": {
+        "used": 20,
+        "cap": 25
+      }
+    },
+    "noPureProductivityGenericComparison": true,
+    "actualOnlineCheck": false
+  },
+  "preview": {
+    "pid": 228207,
+    "port": 4204,
+    "cwd": "/workspace/aoe2-issue197-batch6/dist",
+    "args": ["python3", "-m", "http.server", "4204"],
+    "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+  },
+  "actualCI": null,
+  "deployment": null,
+  "release": null,
+  "remaining": "Root owns final independent review, actual PR CI, merge/main/deploy/online/formalRelease/tag/same-deployed-ZIP verification. No remote push or PR creation by implementation owner."
+}
