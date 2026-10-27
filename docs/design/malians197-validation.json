@@ -1,0 +1,136 @@
+{
+  "baseline": "36b0668142146ee8443198e712655725adc6a8dc",
+  "target": "v0.47.0",
+  "integrationBase": "4ac05c032a46cb40f688a662f05cb35e5f5c7e4f",
+  "productionCheckpoint": "ddec2f6831f6829e5b7e1392629cccc80efc360b",
+  "preflight": "/tmp/malians197-review/preflight.json",
+  "firstRed": {
+    "total": 48,
+    "passed": 23,
+    "functionalFailed": 25,
+    "skipped": 0,
+    "trackedProductionUnchanged": true
+  },
+  "newUnitGreen": {
+    "passed": 48,
+    "failed": 0,
+    "skipped": 0
+  },
+  "localUniqueUnitCoverage": {
+    "files": 14,
+    "tests": 424,
+    "passedAfterFocusedCorrection": 421,
+    "originalSkipped": 2,
+    "originalTodo": 1,
+    "history": "Related236:234pass/1skip/1todo. Boundary188:186pass/1fail/1skip. Only331 current supported set changed by approved one-line Malians migration; failed single test then passed (other32 deliberately filtered), no repeated full file."
+  },
+  "baselineComparison": {
+    "baseline": "36b0668142146ee8443198e712655725adc6a8dc",
+    "compared": 312,
+    "numericChanged": [],
+    "fullChanged": [],
+    "notesChanged": [],
+    "addedSupport": [
+      "Malians"
+    ],
+    "removedSupport": [],
+    "unchangedUnsupported": true,
+    "supportedCount": 40,
+    "unsupportedCount": 16,
+    "protectedChanged": [
+      "tests/unit/v0300-331.test.ts"
+    ],
+    "realCostChanged": [],
+    "approvedProtectionChanges": [
+      "331 current supported set adds Malians; historical16/old filter/numeric snapshot and all other bytes unchanged"
+    ],
+    "unapprovedChanged": [],
+    "fullComparisonReusedFromCheckpoint": "ddec2f6831f6829e5b7e1392629cccc80efc360b",
+    "fullComparisonRecomputed": false,
+    "comparisonReuseReason": "Integration preserves all economy code/data; only buildSim comment #197 -> issue197 changed for color lint. Numeric/full/model/notes comparison was performed before that nonfunctional comment edit."
+  },
+  "generation": {
+    "eco": "Real fixed-dat generator adds exactly38 building.class fields; remove those additions and whole prior eco data is unchanged. Reproduction is byte-identical.",
+    "ecoSHA256": "9fd02e622a5d2532904f1433e894015ad099de62aa025db49aaa997263bbe74b",
+    "schema": "data-eco requires generated building.class; EcoData.class optional for old constructed fixtures, but Malians support fails closed for missing billable classes.",
+    "validators": "5 existing compiled boundaries reproduce exactly; eco uses strict schema checking.",
+    "bonus317": {
+      "oldKeysPreserved": 61,
+      "newKeys": {
+        "Malians-0": "feudal-drush-18",
+        "Malians-1": "hybrid-fish-18"
+      },
+      "inputs": "9d459a71572896a65ee32a4b915e3e3320a52c7c5b46be81b145463fe1572464",
+      "generatedByOriginalUpdateCommand": true
+    }
+  },
+  "static": {
+    "typecheck": "pass",
+    "lint": "0 errors,8 existing max-lines warnings; a new comment #197 was initially read as hex color, changed only comment to issue197 and passed.",
+    "strictLayers": "0 violations",
+    "strictContent": "46 inputs,0 errors/0 warnings",
+    "boCheck": "8 build orders,0 errors"
+  },
+  "stageUI": {
+    "actualVersion": "v0.47.0",
+    "actualBuild": "5ea5995",
+    "uncommittedChanges": "New smoke/test corrections and a nonfunctional buildSim comment; production math same as checkpoint. This is stage evidence, not claimed final-head rebuild.",
+    "viewports": [
+      360,
+      375,
+      390,
+      1280
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "screenshots": "8 pages +8 share previews +1 actual downloaded PNG; 17 PNGs under /tmp/malians197-ui",
+    "uniqueTestsPassed": 10,
+    "history": "Initial9 pass/1 failed because new test wrongly expected context short-note inside sources long assumption. Correct existing UI text left unchanged; only precise new assertion corrected, single case1.4s pass, separate output directory preserved screenshots.",
+    "practicePrint": "Context short note and sources full continuous assumption checked; actual print media checked.",
+    "card": "Malians title/settings/version/link and numbers; no claim that PNG has full continuous assumption."
+  },
+  "stageSmoke": {
+    "version": "v0.47.0",
+    "build": "5ea5995",
+    "features": [
+      "all",
+      "builds"
+    ],
+    "portugueseAndShuPreserved": true,
+    "malians": {
+      "sameClock": 650.7,
+      "genericGold": 52,
+      "maliansGold": 58,
+      "houses2Wood": 42,
+      "farms4Wood": 240,
+      "townCenters2Wood": 468,
+      "townCenters2Stone": 200,
+      "shareAndSelector": true,
+      "realCostOriginalUncountedBoundary": true
+    },
+    "publicBuildSources": true,
+    "explicitCivs": "Separate features=[civs] smoke includes regional units and new regional buildings. all does not implicitly run civs."
+  },
+  "fullCI": "Not run locally; final PR tree requires one real full/data=true, records via PR; main/Release reuse trustworthy same-tree evidence and still real rebuild/smoke/deploy/online/ZIP.",
+  "evidenceSHA256": {
+    "/tmp/malians197-full-baseline.json": "c07710d760d3a48feca0d494bdcc87dd92f8643d36724af3160936dad11ad3a9",
+    "/tmp/malians197-first-red-final.json": "83e2ae751b951a396334fa3782a5906a224ffc6ef14ea12bc240ebdb167f369d",
+    "/tmp/malians197-green.json": "54e2aa6990ce30cbb99533bf28b8020f07236133dee472ff6e7326063bc98e55",
+    "/tmp/malians197-related-unit.json": "c6ce1ad4a83aa75957a2da32c9196e59c3c4e0d3c9bca0ada5cef015e0e137f7",
+    "/tmp/malians197-boundary-unit.json": "6fdebe1cbdeea918e76c10a76799a16ce7650f4412ba29921d9237343c585b6a",
+    "/tmp/malians197-331-focused.json": "d39875c85eda88337dcafddf25d69d2d1329f90d5adcc557219d900fe1467496",
+    "/tmp/malians197-317-generation-final.json": "f32ea45c0e07e7d47efc95bef2cb425480d51614bdaf5eb55481f8ad8f67d7eb",
+    "/tmp/malians197-comparison.json": "9170c3b900ca4dcbd80d154cb6490bc983344f2ca8371e6ab9fd4bda660ef407",
+    "/tmp/malians197-lint.log": "74ff9c0d878ee987ee755af0b088007690ce55cdd64663b8216fef6b29757a67",
+    "/tmp/malians197-layers.log": "ad27f728359e54195811621ed939c4002f18179976f5e79e92df78412a99982d",
+    "/tmp/malians197-content.log": "67c91ffd5869d286092ab636163a81759fc9fe29c597819ac6581f619a114b1a",
+    "/tmp/malians197-bo.log": "d8e9f83e898baf176751954f71ea8685a050e7d97dc39f0c666448f8e0e2bd06",
+    "/tmp/malians197-build-stage.log": "662611979b4a5f16ba89375afaed26aa061df78d3d6f6b06f7ab0e2de2022e2f",
+    "/tmp/malians197-ui.log": "9ee8c86978eb02a5930be7b9273554b557ac84946a58e4951fa10487878150a1",
+    "/tmp/malians197-ui-focused.log": "62421c5538948cd923069eb96e7c0a81fab658db48a4fcdd366cd55e333cf232",
+    "/tmp/malians197-smoke-stage.log": "1d1c087cced03838c62788088c39c7897afa72e30454468a6a0bb4970a2ecc8d",
+    "/tmp/malians197-civs-smoke-stage.log": "8d4723a84c1c14c14bf2b541fdd043d4cefbcdf55d89eb43306fb517b3a5117a"
+  }
+}

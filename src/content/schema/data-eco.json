@@ -81,6 +81,9 @@
           "buildTime": {
             "type": "number"
           },
+          "class": {
+            "type": "integer"
+          },
           "at": {
             "type": "array",
             "items": {
@@ -91,7 +94,7 @@
             "$ref": "common.defs.json#/$defs/cost"
           }
         },
-        "required": ["en", "buildTime", "at", "cost"],
+        "required": ["en", "buildTime", "at", "cost", "class"],
         "additionalProperties": false
       },
       "propertyNames": {

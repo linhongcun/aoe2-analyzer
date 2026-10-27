@@ -20,7 +20,7 @@ export interface EcoData {
   fishingShip?: { unit: number; workRate: number; carry: number; speed: number; deepFishMultiplier?: number };
   villager: { trainTime: number; cost: Cost; speed: number; carry: number; tasks: Record<string, { workRate: number; carry: number }> };
   units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number>; class?: number }>;
-  buildings: Record<string, { buildTime: number; cost: Cost }>;
+  buildings: Record<string, { buildTime: number; cost: Cost; class?: number }>;
   techs: Record<string, { researchTime: number; at: number; cost: Cost }>;
   ecoTechs: Record<string, { effects: EffectRow['effects'] }>;
   civEco: Record<string, EffectRow[]>;
@@ -222,6 +222,8 @@ interface Mods {
   costAdd: Record<string, Partial<Record<Res, number>>>;
   /** 存放资源时额外比例（丹麦 res 299：食物 +5%） */
   depositBonus: Partial<Record<Res, number>>;
+  /** issue197：仅已核马里595的建筑class木费倍率；不扩展其它文明的建筑class支付口径 */
+  buildingWoodCost: Record<number, number>;
   /** 到达新时代时直接发放的资源（res 0–3） */
   grant: Stock;
   /** 额外人口上限（匈奴 res 4） */
@@ -267,6 +269,7 @@ function baseMods(): Mods {
     techTime: {},
     costAdd: {},
     depositBonus: {},
+    buildingWoodCost: {},
     grant: { food: 0, wood: 0, gold: 0, stone: 0 },
     popBonus: 0,
     farmNoWalk: false,
@@ -305,6 +308,30 @@ export const SHU_KNIGHT_TEMPLATE_NOTE = '蜀不能训练骑士；骑士方案仅
 const lumberFoodIncome = (m: Mods, task: string, rate: number) => (task === 'wood' ? rate * m.lumberFood : 0);
 const hasLumberFoodContext = (row: { tech?: number; effects?: EffectRow['effects'] }) =>
   row.tech === 1071 && row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 16);
+/** tech594的276 add10配33 set11；公开百分比及连续近似边界见 docs/design/malians197.md。 */
+const RES_GOLD_PRODUCTIVITY = 276;
+const MALIAN_GOLD_NOTE = '采金交仓额外黄金按连续收入估算';
+const MALIAN_GOLD_ASSUMPTION =
+  '采金交仓额外黄金按有效采金收入的百分比连续计入，共用采金携带量和往返时间；不增加基础工作速率或矿物储量。不模拟客户端逐次交仓、取整或行走期间的触发时序。';
+const hasMalianGoldContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }) =>
+  row.source === 'bonus' &&
+  row.tech === 594 &&
+  row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 11);
+/** 固定595的四个建筑类别命令；数值倍率仍从实际effects读取。农田class49不在其中。 */
+const MALIAN_BUILDING_CLASSES = new Set([3, 39, 52, 27]);
+const hasMalianBuildingContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }, scope: ReturnType<typeof simScope>) => {
+  if (row.source !== 'bonus' || row.tech !== 595 || !row.effects || [...scope.buildingClass.values()].some((cls) => !Number.isInteger(cls) || cls < 0))
+    return false;
+  const classes = row.effects.filter((effect) => effect.kind === 'attr' && effect.target?.startsWith('class:'));
+  return (
+    classes.length === MALIAN_BUILDING_CLASSES.size &&
+    [...MALIAN_BUILDING_CLASSES].every((cls) =>
+      classes.some(
+        (effect) => effect.target === 'class:' + cls && effect.attr === 'woodCost' && effect.op === 'mul' && Number.isFinite(effect.v) && effect.v! > 0,
+      ),
+    )
+  );
+};
 /**
  * 高棉 tech 654「C-Bonus, Instant Farmers」在 .dat（185872，effect 690）里只有三条命令：
  * res 33 set 50、农民（214/259）workRate ×0.95。res 33 是各文明加成的标记值（丹麦 35/36、格鲁吉亚 9…），
@@ -323,7 +350,13 @@ const SPANISH_TECH_REWARD_GOLD = 20;
 // https://ageofempires.fandom.com/wiki/Civilization_bonus#Khmer 「Farmers don't carry food but rather add it directly to the stockpile without any drop-off, but work 5% slower」
 // https://ageofempires.fandom.com/wiki/Farm_(Age_of_Empires_II)（update 34699 起农民无需回仓）。详见 docs/BUILD-SIM.md「文明加成」
 
-function applyEffects(m: Mods, effects: EffectRow['effects'], applyForagerWood = false, applyLumberFood = false) {
+function applyEffects(
+  m: Mods,
+  effects: EffectRow['effects'],
+  applyForagerWood = false,
+  applyLumberFood = false,
+  malians: { gold?: boolean; buildingWood?: boolean } = {},
+) {
   for (const x of effects) {
     const v = x.v ?? 0;
     if (x.kind === 'attr' && x.target && x.attr && (x.op === 'mul' || x.op === 'add')) {
@@ -345,6 +378,10 @@ function applyEffects(m: Mods, effects: EffectRow['effects'], applyForagerWood =
         const r = COST_ATTR[x.attr]!;
         const o = (m.costMul[id] ??= {});
         o[r] = (o[r] ?? 1) * v;
+        if (malians.buildingWood && x.attr === 'woodCost' && key.startsWith('class:')) {
+          const cls = Number(key.slice(6));
+          m.buildingWoodCost[cls] = (m.buildingWoodCost[cls] ?? 1) * v;
+        }
       } else if (x.attr in COST_ATTR && x.op === 'add' && COST_ATTR[x.attr] !== 'all') {
         const o = (m.costAdd[key] ??= {});
         const r = COST_ATTR[x.attr] as Res;
@@ -361,6 +398,7 @@ function applyEffects(m: Mods, effects: EffectRow['effects'], applyForagerWood =
       else if (x.res === RES_HUNT_FOOD && x.op === 'mul') m.huntFoodMul *= v;
       else if (applyForagerWood && x.res === RES_FORAGER_WOOD && x.op === 'add') m.foragerWood += v / 100;
       else if (applyLumberFood && x.res === RES_LUMBER_FOOD && x.op === 'set') m.lumberFood = v / 100;
+      else if (malians.gold && x.res === RES_GOLD_PRODUCTIVITY && x.op === 'add') m.depositBonus.gold = (m.depositBonus.gold ?? 0) + v / 100;
     } else if (x.kind === 'techTime' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) m.techTime[x.tech] = pushMod(m.techTime[x.tech], x.op, v);
     else if (x.kind === 'techCost' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) {
       const r = TECH_RES[String(x.res)];
@@ -403,7 +441,7 @@ interface Construction {
 /**
  * PR 127（Steve 口径 PR 评论 6195034241）：白名单（不支持）文明页面标「未计入」并按通用计，但直接调 simulateBuild 时
  * 仍保持 release/v0.7.0 的旧算法：不应用按类别（class:*）的费用/训练时间倍率、折后价按整数取整。
- * 已经完整支持的文明走当前算法（issue 197 葡萄牙、蜀已迁出）；其余按文明缓存（eco 对象 + 文明）。
+ * 已经完整支持的文明走当前算法（issue 197 葡萄牙、蜀、马里已迁出）；其余按文明缓存（eco 对象 + 文明）。
  */
 const legacyCache = new WeakMap<EcoData, Map<string, boolean>>();
 function legacyCiv(eco: EcoData, civ: string): boolean {
@@ -432,6 +470,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           r.effects.filter((e) => e.kind !== 'freeTech'),
           (r as { tech?: number }).tech === 453,
           hasLumberFoodContext(r as EffectRow & { tech?: number }) === true,
+          {
+            gold: civ === 'Malians' && hasMalianGoldContext(r as EffectRow & { tech?: number }) === true,
+            buildingWood: civ === 'Malians' && hasMalianBuildingContext(r as EffectRow & { tech?: number }, scope),
+          },
         );
     void freeByAge;
   };
@@ -539,9 +581,17 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     // 单位折扣：按单位 id 与按类别（哥特步兵 class:6，#42）两种写法相乘
     const cls = !legacy && kind === 'unit' && eco.units[id]?.class !== undefined ? m.costMul['class:' + eco.units[id]!.class] : undefined;
     const mul = m.costMul['unit:' + id];
+    const buildingWood = kind === 'building' ? m.buildingWoodCost[eco.buildings[id]?.class ?? -1] : undefined;
     const rnd = legacy ? Math.round : roundHalfPrice;
-    if ((mul || cls) && kind !== 'up')
-      for (const r of Object.keys(out) as Res[]) out[r] = rnd(out[r] * (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1));
+    if ((mul || cls || buildingWood !== undefined) && kind !== 'up')
+      for (const r of Object.keys(out) as Res[]) {
+        if (r === 'wood' && buildingWood !== undefined) {
+          const factor = (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1);
+          // 与effects_build.py累计tiers的6位规范一致；仅新马里建筑木费，保留原half-price及其它文明路径。
+          const combined = Math.round(factor * buildingWood * 1e6) / 1e6;
+          out[r] = rnd(out[r] * combined);
+        } else out[r] = rnd(out[r] * (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1));
+      }
     return out;
   };
   /** 科技研究时间：.dat 原值经文明修正（set 为绝对秒数，如哥特织布机 1 s；mul 为倍率，如马来升时代 ×0.6） */
@@ -1042,6 +1092,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
         ...ASSUMPTIONS,
         ...(civ === 'Portuguese' ? [FORAGER_WOOD_ASSUMPTION] : []),
         ...(civ === 'Shu' ? [LUMBER_FOOD_ASSUMPTION, SHU_KNIGHT_TEMPLATE_NOTE] : []),
+        ...(civ === 'Malians' ? [MALIAN_GOLD_ASSUMPTION] : []),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
           : []),
@@ -1198,7 +1249,12 @@ export function simScope(eco: EcoData, bos: BuildOrder[]) {
       }
   /** 开局单位 → .dat 类别（类别折扣判定用） */
   const unitClass = new Map([...units].map((u) => [u, eco.units[u]?.class ?? -1] as const));
-  return { units, buildings, techs, unitClass };
+  // TC时代形态和替代农田不一定有单独计价记录；实际build入口及已有记录必须有class，缺失时不能少算马里折扣。
+  const pricedBuildings = new Set([...buildings].filter((id) => eco.buildings[id]));
+  pricedBuildings.add(HOUSE);
+  for (const bo of bos) for (const step of bo.steps) for (const action of step.actions) if (action.type === 'build') pricedBuildings.add(action.building);
+  const buildingClass = new Map([...pricedBuildings].map((id) => [id, eco.buildings[id]?.class ?? -1] as const));
+  return { units, buildings, techs, unitClass, buildingClass };
 }
 
 /** tech 是否可以应用：整条 tech 里没有未实现/未分类的效果 */
@@ -1216,6 +1272,7 @@ export function classifyCivEffect(
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
   if (row.source === 'team') return { kind: 'irrelevant', reason: '团队加成，默认不计团队' };
+  if (row.tech === 595 && !hasMalianBuildingContext(row, scope)) return { kind: 'unhandled', reason: '马里建筑木费折扣缺少已核效果或当前建筑类别，未计入' };
   if (row.tech !== undefined && PENDING_TECH[row.tech]) return { kind: 'unhandled', reason: PENDING_TECH[row.tech]! };
   if (e.kind === 'freeTech') return { kind: 'handled' };
   if (e.kind === 'techCost' || e.kind === 'techTime') {
@@ -1229,6 +1286,7 @@ export function classifyCivEffect(
     if (e.res === RES_HUNT_FOOD && e.op === 'mul') return { kind: 'handled' };
     if (e.res === RES_FORAGER_WOOD && row.tech === 453 && e.op === 'add') return { kind: 'handled' };
     if (e.res === RES_LUMBER_FOOD && e.op === 'set' && hasLumberFoodContext(row)) return { kind: 'handled' };
+    if (e.res === RES_GOLD_PRODUCTIVITY && e.op === 'add' && hasMalianGoldContext(row)) return { kind: 'handled' };
     if (HANDLED_RES(e.res, e.op) || (e.res === 33 && e.op === 'set' && e.v === RES33_INSTANT_FARMERS)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_IRRELEVANT_TECH[row.tech]) return { kind: 'irrelevant', reason: RES234_IRRELEVANT_TECH[row.tech]! };
@@ -1243,6 +1301,9 @@ export function classifyCivEffect(
     // 类别目标（#42 哥特步兵 class:6）：开局里有该类别的单位时，费用倍率已按类别实现；其余属性不影响开局时间
     if (t.startsWith('class:') && !vil) {
       const cls = Number(t.slice(6));
+      if (row.tech === 595 && e.attr === 'woodCost' && e.op === 'mul') return { kind: 'handled' };
+      if (MALIAN_BUILDING_CLASSES.has(cls) && e.attr === 'woodCost' && [...scope.buildingClass.values()].includes(cls))
+        return { kind: 'unhandled', reason: '尚未核实的建筑类别木费效果，未计入' };
       if (![...scope.units].some((u) => scope.unitClass.get(u) === cls)) return { kind: 'irrelevant', reason: '开局不涉及的单位/建筑/类别' };
       if (
         cls === scope.unitClass.get(13) &&
@@ -1350,7 +1411,7 @@ export function animalFood(eco: EcoData, civ: string, animal: string): number | 
 }
 /**
  * 黑暗时代的采集效率（每秒入账食物/木头…），与 runOnce 的 rate() 同一公式：carry / (carry / workRate + 往返走路)。
- * #42 用例按任务（eco 任务名，如 hunt）核对文明加成。extraIncome 是兼产的其它资源，不占主资源携带量。
+ * #42 用例按任务（eco 任务名，如 hunt）核对文明加成。extraIncome是额外收入（含同种资源的交仓加成），不占主资源携带量。
  */
 export function gatherRate(
   eco: EcoData,
@@ -1367,6 +1428,7 @@ export function gatherRate(
         r.effects,
         (r as { tech?: number }).tech === 453 && techAtomicOk(r, scope),
         hasLumberFoodContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope),
+        { gold: civ === 'Malians' && hasMalianGoldContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope) },
       );
   const base = eco.villager.tasks[ecoTask]!;
   const workRate = base.workRate * (m.rate[ecoTask] ?? 1) * (m.rate.villager ?? 1) * (ecoTask === 'hunt' ? m.huntFoodMul : 1);
@@ -1375,7 +1437,8 @@ export function gatherRate(
   const rate = carry / (carry / workRate + walk);
   const wood = foragerWoodIncome(m, ecoTask, rate);
   const food = lumberFoodIncome(m, ecoTask, rate);
-  return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}) } };
+  const gold = ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0;
+  return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}), ...(gold ? { gold } : {}) } };
 }
 /** 页面「按某文明计」下方的附注：已计入但有未核实部分、或明确不计入的加成 */
 export function civSimNotes(eco: EcoData, civ: string): string[] {
@@ -1395,6 +1458,18 @@ export function civSimNotes(eco: EcoData, civ: string): string[] {
     )
       out.push(LUMBER_FOOD_NOTE);
     out.push(SHU_KNIGHT_TEMPLATE_NOTE);
+  }
+  if (civ === 'Malians') {
+    const scope = simScope(eco, ALL_BOS);
+    if (
+      rows.some(
+        (row) =>
+          hasMalianGoldContext(row as EffectRow & { tech?: number }) &&
+          row.effects.some((effect) => effect.kind === 'res' && effect.res === RES_GOLD_PRODUCTIVITY && effect.op === 'add') &&
+          techAtomicOk(row, scope),
+      )
+    )
+      out.push(MALIAN_GOLD_NOTE);
   }
   if (
     rows.some((r) => {

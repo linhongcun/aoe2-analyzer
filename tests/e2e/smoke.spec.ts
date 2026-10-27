@@ -264,7 +264,10 @@ test('tech affects tab: Bracer lists archers + Keep; civ filter narrows', async 
 
 test('elite dedup: civ chips, unit list, toggle keeps URL working', async ({ page }) => {
   await page.goto('./#/civ/Vikings');
-  const chips = page.locator('.dside .uchips a');
+  const chips = page
+    .locator('.dside .sideblk')
+    .filter({ has: page.getByRole('heading', { name: '独特单位', exact: true }) })
+    .locator('.uchips a');
   await expect(chips).toHaveCount(1);
   await expect(chips.first()).toContainText('精锐');
   await page.goto('./#/units');

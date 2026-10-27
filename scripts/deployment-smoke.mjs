@@ -72,7 +72,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
               .locator('b')
               .textContent(),
           );
-        return { food: await amount('食物'), wood: await amount('木头') };
+        return { food: await amount('食物'), wood: await amount('木头'), gold: await amount('黄金') };
       };
       await goto('/builds?bo=drush-fc&step=8');
       const generic = await inventory();
@@ -138,6 +138,40 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveText('未计入：蜀 伐木同时产食物（伐木兼产食物，未建模）');
       console.log(
         'Verified Shu economy: same-clock actual Food/Wood inventory, selectable, share card, knight-template limit and unchanged real-cost boundary',
+      );
+      await goto('/builds?bo=drush-fc&step=10');
+      const genericGold = await inventory();
+      const genericGoldClock = Number(await page.locator('[data-step="9"]').getAttribute('data-start-at'));
+      await goto('/builds?bo=drush-fc&civ=Malians&step=10');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按马里计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await check(page.locator('[data-t="civ-note"]')).toHaveText('采金交仓额外黄金按连续收入估算');
+      const malians = await inventory();
+      const maliansClock = Number(await page.locator('[data-step="9"]').getAttribute('data-start-at'));
+      assert.ok(Number.isFinite(genericGoldClock) && genericGoldClock > 0);
+      assert.equal(maliansClock, genericGoldClock, 'Malian gold stock must be compared at the same actual clock');
+      assert.ok(malians.gold > genericGold.gold, 'Malian gold miners must increase the actual gold inventory');
+      await page.locator('#tlciv').click();
+      const maliansPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(maliansPicker.locator('[data-civ="Malians"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(maliansPicker.locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      await page.locator('[data-t="share-card-btn"]:visible').first().click();
+      await check(page.locator('[data-t="share-card"]')).toContainText('按马里计');
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Malians');
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      // The pinned build has 2 houses, 4 farms and 2 TCs; compare actual paid amounts, including the half-price boundary.
+      await goto('/builds?bo=fast-castle-boom&civ=Malians&step=1');
+      await check(page.locator('[data-t="step-cost"]')).toContainText('木头 42');
+      await goto('/builds?bo=fast-castle-boom&civ=Malians&step=8');
+      await check(page.locator('[data-t="step-cost"]')).toContainText('木头 240');
+      await goto('/builds?bo=fast-castle-boom&civ=Malians&step=13');
+      await check(page.locator('[data-t="step-cost"]')).toContainText('木头 468');
+      await check(page.locator('[data-t="step-cost"]')).toContainText('石头 200');
+      await goto('/duel?a=74.Malians.3.f.&b=74.Magyars.3.f.&m=t');
+      await check(page.locator('[data-t="rc-a"] [data-t="rc-unsupported"]')).toHaveText('未计入：马里 采金加成（存放黄金加成，未建模）');
+      console.log(
+        'Verified Malians economy: same-clock actual Gold inventory, selectable, share card, paid house/TC wood, unchanged farm cost and real-cost boundary',
       );
     }
     for (const feature of smokeFeatures(features)) {
