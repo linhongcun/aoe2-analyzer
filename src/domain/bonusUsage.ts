@@ -117,7 +117,12 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const relevant = kinds.some(({ ks }) => ks.some((k) => k !== 'irrelevant'));
   if (!simSupport(b.civ)) return relevant || treeOnly ? { tool: 'sim', name, on: false, note: '暂不支持该文明，整页按通用文明计算，本条未计入' } : null;
   if (rows.some((r) => techAtomicOk(r, scope())) && kinds.some(({ r, ks }) => techAtomicOk(r, scope()) && ks.includes('handled')))
-    return { tool: 'sim', name, on: true, note: '已计入' };
+    return {
+      tool: 'sim',
+      name,
+      on: true,
+      note: b.civ === 'Tatars' && b.idx === 0 && techs.includes(704) ? '已计入牧羊产量与工作率配对；羊总量和耗尽未模拟' : '已计入',
+    };
   if (relevant) return { tool: 'sim', name, on: false, note: '本条效果待核实，未计入' };
   if (treeOnly) {
     const t = TREE_SIM[b.id];

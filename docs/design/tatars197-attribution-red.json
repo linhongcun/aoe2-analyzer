@@ -1,0 +1,14 @@
+{
+  "baseline": "fc51fc86bc751c50db58660dd5cf12ba61fda76e",
+  "state": "Approved Tatars runtime implementation dirty; source links/effects/bonusUsage still exact fc51 before attribution correction",
+  "total": 3,
+  "passed": 0,
+  "failed": 3,
+  "skipped": 0,
+  "unchangedSourceFiles": {
+    "scripts/effects_links.json": "29a41241967c9801b9d0cd92f65b427405851e19f6e5c36adb40beebefadbf17",
+    "src/data/effects.json": "a927eff68929d250bf841c6399db6d8ea2148e377c0e75b9ae1565a516689d2e",
+    "src/domain/bonusUsage.ts": "43b4745cdc33eb4ac8b90739450e826d2e3db706b631cf0991d46d07946fa2db"
+  },
+  "runtimeSha256": "80f9277d6c01f4834bc96e86e50afb884634f8e0010e860f6da14e8631cf0d12"
+}

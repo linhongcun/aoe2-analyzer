@@ -1,5 +1,7 @@
 # 设计稿索引（v0.4.0 已签字 / 定稿）
 
+v0.49.0 鞑靼开局经济支持见 [#197第五批规格](tatars197.md)：牧羊工作率/产量真实配对、完整行原子性、既有TC肉类代理与新增羊/耗尽边界；[正式先红](tatars197-first-red.json)、[来源摘录](tatars197-source.json)及[公开语义](tatars197-public-sources.json)。
+
 v0.48.0 瓦兰吉人开局经济支持见 [#197第四批规格](varangians197.md)：牧羊、狩猎、村民和渔船捕鱼兼产黄金的连续库存模型，固定百分比及完整上下文防护；[真实先红](varangians197-first-red.json)、[原始摘录](varangians197-source.json)与[公开语义](varangians197-public-sources.json)。
 
 v0.47.0 马里开局经济支持见 [#197第三批规格](malians197.md)：采金交仓收益、完整建筑木费与农田排除、固定来源/类别生成及旧39文明保护；[真实先红](malians197-first-red.json)、[原始摘录](malians197-source.json)。

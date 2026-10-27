@@ -1,0 +1,44 @@
+{
+  "topic": "Tatars #197 independent source audit",
+  "dat": {
+    "repo": "SiegeEngineers/auto-mods",
+    "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "path": "dat/empires2_x2_p1.dat",
+    "patch": 185872,
+    "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa"
+  },
+  "sources": [
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/resources/resources.md",
+      "lineStart": 1650,
+      "lineEnd": 1662,
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md#L1650-L1662",
+      "excerpt": "## 216. Shepherd Productivity\n\n- ID: 216\n\n- Purpose: Amount of food collected from sheep multiplier\n\n- Default Values:\n\n    - 1:  Default\n    - 1.57:  Tatars\n\n- Note: Since this works by multiplying the amount of resources gathered by a villager, it has a side effect of increasing the gather rate. In the case of Tatars, This is compensated for by reducing villager work rate by 57%\n"
+    },
+    {
+      "repo": "Divy1211/AoE2DE_UGC_Guide",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "path": "docs/general/attributes/attributes.md",
+      "lineStart": 468,
+      "lineEnd": 472,
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/attributes/attributes.md#L468-L472",
+      "excerpt": "## 57. Dead Unit ID\n\n - ID: 57\n\n - This is the ID of the unit to spawn after the current unit dies. This is whats used to make the dismounted konniks possible"
+    }
+  ],
+  "verifiedClaims": {
+    "resource216": "Amount of food collected from sheep multiplier; changes gather productivity, not merely a dead-animal storage scalar",
+    "task216": "Actual raw task110 for male592/female590 has food0→food0 and resource_multiplier216, WorkValue1=1",
+    "raw704": "resource216 mul1.5700000524520874 +590/592/1891/1892 workRate mul0.6370000243186951",
+    "ecoProduct": 1.00009,
+    "deadUnit57": "Attribute57 changes unit spawned after current unit dies",
+    "newTC": "Same-version civ text says new TCs spawn2sheep from Castle; raw annex/death chain captured rather than inventing Type7"
+  },
+  "boundaries": [
+    "Public guide's prose 'reducing ... by57%' is mathematically imprecise; authoritative raw operation is multiplier0.637, not subtract57%.",
+    "No client gather/walk/depletion/decay experiment claimed.",
+    "Resource nodes never deplete in current model. Existing extra-food total and new-TC sheep-entity availability are explicitly not simulated; do not add Food stock grants or villagers.",
+    "Independent realCost outputs need actual baseline read; do not assume existing warning from UNHANDLED_RES import."
+  ]
+}
