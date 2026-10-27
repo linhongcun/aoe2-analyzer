@@ -1,4 +1,33 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
+
+async function expectSheepQuantityOnOneLine(texts: Locator, expectedCount: number) {
+  const quantities = await texts.evaluateAll((elements) =>
+    elements.flatMap((element) => {
+      const text = element.textContent ?? '';
+      return [...text.matchAll(/\d+(?:\.\d+)?\s*头/g)].map((match) => {
+        const position = (offset: number) => {
+          const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+          let node: Node | null;
+          while ((node = walker.nextNode())) {
+            if (offset < (node.textContent?.length ?? 0)) return { node, offset };
+            offset -= node.textContent?.length ?? 0;
+          }
+          throw new Error('Quantity offset was not found');
+        };
+        const top = (offset: number) => {
+          const point = position(offset);
+          const range = document.createRange();
+          range.setStart(point.node, point.offset);
+          range.setEnd(point.node, point.offset + 1);
+          return range.getBoundingClientRect().top;
+        };
+        return { token: match[0], sameLine: Math.abs(top(match.index!) - top(match.index! + match[0].length - 1)) < 1 };
+      });
+    }),
+  );
+  expect(quantities).toHaveLength(expectedCount);
+  expect(quantities.filter((quantity) => !quantity.sameLine)).toEqual([]);
+}
 
 const note = '牧羊按产量与工作率配对估算；新增羊和资源耗尽未模拟';
 const usageNote = '已计入牧羊产量与工作率配对；羊总量和耗尽未模拟';
@@ -47,10 +76,12 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('#bonus [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
       await expect(page.locator('#bonus [data-usage="sim"]')).toContainText(usageNote);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await expectSheepQuantityOnOneLine(page.locator('#bonus .bside a'), 1);
       await page.screenshot({ path: info.outputPath(`tatars-bonus0-${width}-${theme}.png`), fullPage: true });
       await page.goto('./#/civ/Tatars/bonus/2');
       await expect(page.locator('#bonus')).toContainText('城镇中心会产生 2 头绵羊');
       await expect(page.locator('#bonus [data-usage="sim"][data-on="true"]')).toHaveCount(0);
+      await expectSheepQuantityOnOneLine(page.locator('#bonus .bz, #bonus .bside a'), 2);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: info.outputPath(`tatars-bonus2-${width}-${theme}.png`), fullPage: true });
       expect(errors).toEqual([]);

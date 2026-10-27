@@ -3,7 +3,7 @@ import { civByEn } from '../../../data';
 import { civBonuses } from '../../../domain/civBonus';
 import { CivIcon } from '../../../shared/ui/art';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
-import BonusBody, { BonusTags } from '../../../shared/ui/BonusBody';
+import BonusBody, { BonusTags, BonusText } from '../../../shared/ui/BonusBody';
 import BonusList from './BonusList';
 
 /** #/civ/:en/bonus/:idx（idx 为序号或 team） */
@@ -31,7 +31,9 @@ export default function BonusDetail() {
           <ul className="bside">
             {list.map((x) => (
               <li key={x.id} className={x.id === b.id ? 'cur' : undefined}>
-                <Link to={`/civ/${c.en}/bonus/${x.idx}`}>{x.team ? '团队：' + x.zh : x.zh}</Link>
+                <Link to={`/civ/${c.en}/bonus/${x.idx}`}>
+                  {x.team ? '团队：' + x.zh : <BonusText b={x} linked={false} />}
+                </Link>
               </li>
             ))}
           </ul>
