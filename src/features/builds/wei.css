@@ -1,0 +1,15 @@
+#builds .tl-wei-point {
+  position: absolute;
+  top: 0;
+  width: 3px;
+  height: 20px;
+  border-radius: 2px;
+  background: var(--color-accent);
+}
+#builds .tl-wei-grants p {
+  margin: 0;
+}
+#builds .tl-wei-grants ul {
+  margin: var(--space-1) 0 0;
+  padding-left: var(--space-4);
+}

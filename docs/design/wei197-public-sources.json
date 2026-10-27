@@ -1,0 +1,210 @@
+{
+  "baseline": "42d9b3a12fd41ced39feec1b9954bd06de8d0f43",
+  "date": "2026-10-27",
+  "patch": 185872,
+  "scope": "Read-only public-source SpawnUnit/research-completion audit; no game client experiments, repo/GitHub writes or tests/builds",
+  "method": {
+    "networkSkillRead": true,
+    "networkPolicy": "Restricted and enforced; GitHub connector only for network reads; no credential inspection or blocked-host bypass",
+    "boundedSearches": [
+      "UGC SpawnCap/cSpawnUnit/population searches and repository spawn issue search (zero issues)",
+      "Pinned librematch tree and direct relevant source reads",
+      "Broad cSpawnUnit code search yielded UGC mirrors; broad population search produced irrelevant repositories and was not used as evidence"
+    ],
+    "notEstablished": "No public current-DE185872 engine or client experiment located for population-cap policy, TC order, upgraded TC matching, or runtime completion of tech639."
+  },
+  "sources": [
+    {
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/xs/constants/constants.md",
+      "pin": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "commitDate": "2026-10-10",
+      "version": "Community UGC documentation; does not pin statement to current client build",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "767-787",
+          "text": "### 8.8. cSpawnUnit\n\nValue: `#!xs int 7`\n\nThis is the ID of the `Spawn Unit` effect for the [xsEffectAmount](../../functions/functions/#71-xseffectamount \"Jump To: XS > Functions > xsEffectAmount\") function\n\nSyntax:\n\n```xs\n xsEffectAmount(cModResource, cAttributeSpawnCap, cAttributeSet, numBuildings);\n xsEffectAmount(cSpawnUnit, unitID, buildingID, numUnits)\n```\n\nExample:\n\n```xs\n xsEffectAmount(cModResource, cAttributeSpawnCap, cAttributeSet, 2);\n xsEffectAmount(cSpawnUnit, 83, 109, 5)\n```\n\nThis will spawn 5 villagers (83) from each town centre (109), for a maximum of 2 town centres. Note that setting the `cAttributeCap` resource to a non 0 value is required for using this effect. If you prefer spawning the units garrisoned set resource `cAttributeSpawnStayInside` to 1."
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/resources/resources.md",
+      "pin": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "version": "Community UGC documentation",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "1815-1822",
+          "text": "## 234. Spawn Limit\n\n- ID: 234\n\n- Purpose: The limit to the number of spawning buildings that can spawn units from spawn command in a technology\n\n- Note: This is usually overridden by techs\n"
+        },
+        {
+          "lines": "2258-2270",
+          "text": "## 283. Spawn Inside\n\n- ID: 283\n\n- Purpose: Determines whenever spawned unit via `xsEffectAmount(cSpawnUnit,...)` or certain techs is spawned garrisoned or outside\n\n- Default Values:\n\n    - 0: All Civs\n    - 1: Set briefly for the Armenians after their first Fortified Church is built to spawn the relic garrisoned.\n\n- Note: This is usually overridden by techs\n"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/README.md",
+      "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "version": "158041 (source README; not DE185872 verification)",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "1-5",
+          "text": "# `genie-core/src`: the simulation core\n\nThis is the source of `genie-core`, genie's deterministic simulation core. It plays a recorded\ngame of Age of Empires II: Definitive Edition (build 158041) tick by tick and gives the same\nstate as the game, bit for bit."
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/technology/effect/commands.rs",
+      "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "version": "158041 (source README; not DE185872 verification)",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "227-237",
+          "text": "            }\n            kind::SPAWN => {\n                for q in self.party(p, party) {\n                    self.spawn_at(q, c.a, c.b, c.c)?;\n                }\n            }\n            _ => {\n                for q in self.party(p, party) {\n                    self.modify_tech(q, c.a, c.b, c.d, c.c)?;\n                }\n            }"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/technology/effect/upgrade.rs",
+      "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "version": "158041 (source README; not DE185872 verification)",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "158-242",
+          "text": "    /// Slot 0x1a8 (`FUN_1416136f0`) of player `p`: `count` objects of master `master` (Gaia's when\n    /// the player lacks it) at each of its built objects of building master `at` (state 2, in its\n    /// list's order), up to attribute 234's count of buildings when above 0, in a playback (the\n    /// screen's mode is not 4). Each object: a male villager (0x53) draws its sex from the Player\n    /// stream (\"SpawnObject\": `r % 100` above 49 a female, 0x125); the owner's slot 0x1c0 makes\n    /// it at the building's place with its flag ([`World::make_new_object`]); its slot 0x1a0 takes\n    /// it into the building where the building has room for one more (slot 0x198,\n    /// [`World::has_room`]); unless the player's attribute 283 is above 0 it comes out at once\n    /// toward no point (`FUN_1411e7220`, [`World::let_out`]); a relic (0x11d) counts in the\n    /// world's `+0x844` ([`World::spawned_relics`]). The local player's statistics of effect\n    /// 0x318's spawns are not simulation.\n    pub(super) fn spawn_at(\n        &mut self,\n        p: usize,\n        master: i16,\n        at: i16,\n        count: i16,\n    ) -> Result<(), GenieError> {\n        /// The male and female villagers' masters.\n        const MALE_VILLAGER: i16 = 0x53;\n        const FEMALE_VILLAGER: i16 = 0x125;\n        /// The relic's master, which the world counts.\n        const RELIC: i16 = 0x11d;\n        let has = |q: usize, id: i16| self.masters.get(q).is_some_and(|m| m.get(id).is_some());\n        let building = self\n            .masters\n            .get(p)\n            .and_then(|m| m.get(at))\n            .is_some_and(|m| m.kind == master_type::BUILDING);\n        if !building || !(has(p, master) || has(0, master)) || count <= 0 {\n            return Ok(());\n        }\n        let owner = if has(p, master) { p } else { 0 };\n        let attribute =\n            |q: &crate::world::Player, i: usize| q.attributes.get(i).copied().unwrap_or(0.0);\n        let limit = attribute(&self.players[p], 234) as i32;\n        let buildings: Vec<i32> = self.players[p]\n            .objects\n            .iter()\n            .filter(|u| u.life.master_id == at && u.life.state == 2)\n            .map(|u| u.id)\n            .collect();\n        for (k, &b) in buildings.iter().enumerate() {\n            if 0 < limit && limit <= k as i32 {\n                return Ok(());\n            }\n            for _ in 0..count {\n                let made = if master == MALE_VILLAGER {\n                    let r = self.streams.get(Stream::Player).rand15() as i32;\n                    if 49 < r % 100 {\n                        FEMALE_VILLAGER\n                    } else {\n                        MALE_VILLAGER\n                    }\n                } else {\n                    master\n                };\n                let Some((_, building)) = self.object(b) else {\n                    break;\n                };\n                let position = building.position;\n                let Some(new) = self.make_new_object(owner, made, position, true)? else {\n                    continue;\n                };\n                let Some((bp, bu)) = self.object(b) else {\n                    break;\n                };\n                if self.has_room(bp, bu, None)? {\n                    let Some(crate::orders::Place::Live(np, ni)) = self.place(new) else {\n                        continue;\n                    };\n                    self.enter_forced(np, ni, b)?;\n                }\n                if attribute(&self.players[p], 283) <= 0.0 {\n                    let Some(crate::orders::Place::Live(bp, bi)) = self.place(b) else {\n                        break;\n                    };\n                    let _ = self.let_out(bp, bi, new, [-1.0, -1.0], (None, false))?;\n                }\n                if master == RELIC {\n                    self.spawned_relics += 1;\n                }\n            }\n        }\n        Ok(())"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/construction/build/world_side.rs",
+      "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "version": "158041 (source README; not DE185872 verification)",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "415-448",
+          "text": "    /// The player's slot 0x1c0 (`FUN_14162ce00`) for `master` at `at`: the master's slot 0x40\n    /// makes the object (none for a master the player has not got, `FUN_141666a60`); with its\n    /// flag its footprint is cleared with `param_6` ([`crate::world::World::clear_footprint`]) and\n    /// a building is worked 10000 seconds at once ([`crate::world::World::work_building`]: a stack\n    /// unit completes there); a master that gathers by itself joins the visible-resource lists\n    /// ([`crate::world::World::made_new_object`]). The editor's part (mode 4) never runs in a game.\n    /// Its id.\n    ///\n    /// # Errors\n    ///\n    /// What the parts do not model ([`crate::world::World::combat_object`],\n    /// [`crate::world::World::plain_object`], [`crate::world::World::make_building`]).\n    pub(crate) fn make_new_object(\n        &mut self,\n        p: usize,\n        master: i16,\n        at: [f32; 3],\n        flagged: bool,\n    ) -> Result<Option<i32>, GenieError> {\n        let Some(made) = self.masters.get(p).and_then(|m| m.get(master)).cloned() else {\n            return Ok(None);\n        };\n        // a combat unit (type 70, an effect's spawn): the master's slot 0x40 there, its footprint\n        // cleared with the flag, its visible resources for one that gathers by itself\n        if made.kind == crate::garrison::COMBAT_KIND {\n            let idx = self.combat_object(p, master, &made, at)?;\n            let id = self.players[p].objects[idx].id;\n            if flagged {\n                self.clear_footprint(p, master, [at[0], at[1]], true)?;\n            }\n            if made.auto_gather {\n                self.made_new_object(p)?;\n            }\n            return Ok(Some(id));"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/production/spawn/new_unit.rs",
+      "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "version": "158041 (source README; not DE185872 verification)",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "236-260",
+          "text": "    pub(crate) fn combat_object(\n        &mut self,\n        p: usize,\n        master: i16,\n        made: &crate::objects::masters::Master,\n        position: [f32; 3],\n    ) -> Result<usize, GenieError> {\n        if self.players[p].computer {\n            return Err(GenieError::unsupported(\n                \"a computer player's new unit (its AI's slot 0x398)\",\n            ));\n        }\n        if self.spatial.sight.is_none() {\n            return Err(GenieError::unsupported(\n                \"a spawn without the players' sight\",\n            ));\n        }\n        if made.recyclable {\n            return Err(GenieError::unsupported(\n                \"a new object of a recyclable master (a negative id)\",\n            ));\n        }\n        let moving = made.moving.ok_or(GenieError::unsupported(\n            \"a new unit of a master that does not move\",\n        ))?;"
+        },
+        {
+          "lines": "333-353",
+          "text": "        let owner = &mut self.players[p];\n        for &(kind, amount, flag) in &made.storage {\n            if kind >= 0 && matches!(flag, 1 | 2 | 32) {\n                owner.add_attribute(kind, amount)?;\n            }\n        }\n        let cost: i32 = made\n            .cost\n            .iter()\n            .filter(|&&(resource, _, paid)| resource >= 0 && paid)\n            .map(|&(_, amount, _)| i32::from(amount))\n            .sum();\n        owner.add_attribute(98, cost as f32)?;\n        owner.add_attribute(164, cost as f32)?;\n        owner.add_attribute(246, cost as f32)?;\n        if made.class == VILLAGER {\n            owner.add_attribute(248, 1.0)?;\n        }\n        // the combat setup's class counters (FUN_141226060)\n        crate::objects::lifecycle::death_parts::count_class(&mut owner.attributes, made, 1.0);\n        owner.objects.push(Unit {"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/garrison/let_out.rs",
+      "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "version": "158041 (source README; not DE185872 verification)",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "24-46",
+          "text": "    /// `FUN_1411e7220`: the unit `id` (any player's, with its own player's masters and orders)\n    /// leaves the building at `building` of player `player` toward `point`, when a spot beside\n    /// it is free ([`World::spot_beside`], toward the point, or the building's gather point when\n    /// not on itself): it takes the spot at the building's\n    /// height (`FUN_14119d610`), leaves the building (slot 0x1a8, `FUN_141213120`: the\n    /// building's slot 0x1c8, `FUN_1411d6ad0` -> `FUN_141217910`, takes its share off the\n    /// volleys, back to its master's volley fire when none is left inside or it fell below it,\n    /// and lets it out of its list, `FUN_141197e10`; the building's sight lets the circle of 5\n    /// go, slot 0x1d8 with 5) and goes on the map there (slot 0x58: its tile's list, its\n    /// obstruction record, the mesh, its sight). With a gather point (`+0xc30` 1) not on the\n    /// building and no point, it then goes to work on the gather point's target when the world\n    /// holds it (its unit AI forgets its target, `FUN_140c5e1e0`; [`World::gather`]); else, or\n    /// with a point, it moves there ([`World::gather_move`] after the same forgetting). False\n    /// when no spot is free. With neither a point nor a gather point its unit AI stops, forgets\n    /// its target and takes its stance again (slots 0xb0 and 0x1c0). With an object to work on\n    /// (`work_on`, `GO_BACK_TO_WORK`'s) its work command (slot 0x128) goes to it at the point first.\n    /// Not modelled: a gather point of kind 0xff,\n    /// class 42's and livestock's counts in a building of a player with `+0x88`, a siege\n    /// building's (class 13) slot 0x1b0; not held: the building's villager count (`+0xba8`) and\n    /// raider count (`+0xc2c`, which the building's slot 0x1c8 `FUN_1411d6ad0` lowers for a unit\n    /// of type 70 whose `+0x9a0` runs: such a unit inside is refused, [`World::garrisoned`]), its\n    /// sound (slot 0x4c0), its garrison sprite. Its work command (slot 0x128) has `+0xa14` 0: the\n    /// unit AI keeps its notifies and its queued orders."
+        },
+        {
+          "lines": "55-75",
+          "text": "        let b = &self.players[player].objects[building];\n        let bid = b.id;\n        let bm = self.master_of(player, b.life.master_id)?.clone();\n        let gather = b.gather_point;\n        // the spot's goal (`FUN_1411d12d0` with x −1): without a gather point the first location\n        // of the building unit AI's command queue (slot 0x218, then slot 0x220), else a gather\n        // point that is not on the building, else none\n        let queue_first =\n            b.ai.as_ref()\n                .and_then(|a| a.building_orders.first())\n                .map(|o| [o.point[0], o.point[1]]);\n        let toward = if point[0] == NO_POINT {\n            match (gather, queue_first) {\n                (None, Some(q)) => Some(q),\n                _ => gather\n                    .filter(|g| g.target != bid)\n                    .map(|g| [g.point[0], g.point[1]]),\n            }\n        } else {\n            Some(point)\n        };"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/technology/effect/completion.rs",
+      "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "version": "158041 (source README; not DE185872 verification)",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "13-22",
+          "text": "impl World {\n    /// `FUN_1413cdcd0` for player `p`'s technology `t` (`param_3` 0) researched at a building of\n    /// master `building`: a technology not in state 0 to 2 is not done (the game's overrides\n    /// are not held). Else it takes state 3, gives its effect (its override's, else its own;\n    /// [`World::do_effect`]) and updates the technologies that depend on it\n    /// ([`World::update_dependents`]); researched at a location with a button, it counts in\n    /// attribute 0x15 and its listed costs (`FUN_1413d4a00`, the amounts summed) in attribute\n    /// 0x63. Last, an age (101 to 103) adds its event to the player's history (`FUN_141560ae0`\n    /// with 0, 1 or 2, [`crate::players::history::History::add_event`]), which the AI's age time reads.\n    /// Not held: the local player's statistics and achievements (`FUN_1409644a0` among them)."
+        },
+        {
+          "lines": "29-45",
+          "text": "        t: usize,\n        building: Option<i16>,\n    ) -> Result<bool, GenieError> {\n        use crate::technology::Attributes;\n        let def = self.techs[t].clone();\n        let state = &self.players[p].techs[t];\n        if !(0..=2).contains(&state.state) {\n            return Ok(false);\n        }\n        if def.costs[0].attribute == 7 {\n            return Err(GenieError::unsupported(\n                \"a research paid in relics (FUN_1413d0e70)\",\n            ));\n        }\n        self.research_effect_known(p, t)?;\n        self.players[p].techs[t].state = 3;\n        self.do_effect(p, &def.effect, None)?;"
+        },
+        {
+          "lines": "203-235",
+          "text": "            counted += 1;\n            let techs = &self.players[p].techs;\n            let met = def\n                .required\n                .iter()\n                .filter(|&&r| 0 <= r && techs.get(r as usize).is_some_and(|s| s.state == 3))\n                .count() as i16;\n            let state = &mut self.players[p].techs[d];\n            if met < def.required_count {\n                if 0 < state.state {\n                    state.state = 0;\n                }\n                continue;\n            }\n            let reached = |l: &crate::technology::Location| {\n                let at = state.location(l.building).copied().unwrap_or(*l);\n                f32::from(l.time as i16) + at.adjustment <= state.research_done\n            };\n            // its research done already: it completes (`FUN_1413cdcd0` with `param_3` 0 and no\n            // building), once per location reached without a building of its own (each\n            // uncounting it; past the first the technology is done and the call does nothing),\n            // else once for its building's\n            if state.building_master == -1 {\n                let reached = state.locations.iter().filter(|l| reached(l)).count();\n                if 0 < reached {\n                    for _ in 0..reached {\n                        let _ = self.complete_research(p, d, None)?;\n                        counted -= 1;\n                    }\n                    continue;\n                }\n            } else if state.location(state.building_master).is_some_and(reached) {\n                let _ = self.complete_research(p, d, None)?;"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/production/spawn/research.rs",
+      "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "version": "158041 (source README; not DE185872 verification)",
+      "fetchedThisAudit": true,
+      "excerpts": [
+        {
+          "lines": "101-123",
+          "text": "        state.research_done = progress;\n        if let Some(Some(Making::Research(r))) = owner.objects[i]\n            .production\n            .as_mut()\n            .map(|q| q.action.as_mut())\n        {\n            r.progress = progress;\n        }\n        let mut time = f32::from(location.time as i16);\n        if !crate::technology::is_age(r.tech) && 0.0 < time_modifier {\n            time *= time_modifier;\n        }\n        if location.adjustment + time <= progress {\n            if 0xff < times {\n                return Err(GenieError::unsupported(\n                    \"a research done 0x100 times (set_state 1)\",\n                ));\n            }\n            self.research_done(p, i, t, master, repeatable)?;\n            return Ok(1);\n        }\n        Ok(0)\n    }"
+        },
+        {
+          "lines": "145-174",
+          "text": "        use crate::technology::Attributes;\n        let owner = &self.players[p];\n        let state = &owner.techs[t];\n        let def = &self.techs[t];\n        if state.state == 2 || repeat {\n            let mut time = def\n                .locations\n                .iter()\n                .find(|l| l.0 == master)\n                .map_or(-1.0, |l| f32::from(l.1));\n            let modifier = owner.get(RESEARCH_TIME_MODIFIER)?;\n            if !crate::technology::is_age(t as i16) && 0.0 < modifier {\n                time *= modifier;\n            }\n            let adjustment = state.location(master).map_or(0.0, |l| l.adjustment);\n            if repeat || time + adjustment <= state.research_done {\n                let _ = self.complete_research(p, t, Some(master))?;\n            }\n        }\n        let building = &mut self.players[p].objects[i];\n        let (id, state) = (building.id, building.life.state);\n        if let Some(Some(Making::Research(r))) =\n            building.production.as_mut().map(|q| q.action.as_mut())\n        {\n            r.state = MakeObj::DONE;\n        }\n        if let Some(ai) = building.ai.as_mut() {\n            ai.post(\n                Notify::own(id, ACTION_COMPLETED, [crate::world::RESEARCH_ACTION, 0, 0]),\n                state,"
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim": "resource234=1 bounds spawning buildings, Type7 A83 B109 C1 yields one villager at at most one TC",
+      "status": "Current dat + UGC documentation supported",
+      "caution": "Does not establish client housing/max-pop behavior."
+    },
+    {
+      "claim": "Research completion, not start/age-up, unlocks dependent reward",
+      "status": "Current dat dependencies + same-version text 'each economic upgrade researched' + older-engine complete_research/update_dependents support",
+      "caution": "Client-exact tick/subtick delay not independently verified for185872."
+    },
+    {
+      "claim": "Spawn bypasses production queue, food costs and housing/max-pop gate",
+      "status": "Direct older158041 implementation path supports; current185872 engine/client not verified",
+      "caution": "Expose housed-spawn policy as model assumption if used."
+    },
+    {
+      "claim": "Always spawns idle",
+      "status": "Not supported; contradicted as general claim by older source",
+      "caution": "Older let_out follows TC gather point if present. Simulator task assignment is a model abstraction."
+    }
+  ],
+  "modelRecommendation": {
+    "event": "On actual completion of a validated Wei reward prerequisite tech, once per reward tech; no age bucket or begin-research grant; retain source/requirement metadata.",
+    "eligibility": "Existing model begins with completed TC; cap1 quantity one. Use completed-TC count only. Do not infer tech639 as building foundation-completion event from its name (source agent found no such raw link).",
+    "allocation": "Create villager directly without charge/training slot and pass through established BO assignment policy; state explicitly that no positions/rally points/blocked exit/garrison states are simulated.",
+    "population": "Most consistent available clue is immediate over-house-cap spawn, then ordinary training remains blocked until housing catches up. Label this policy as declared simulator assumption backed by older158041 source, not verified185872 fact. Maxpop200 cannot be reached by current8 templates (max specified target29, max applicable rewards3, max listed train actions5 plus scout; even generous overshoot stays under40).",
+    "applicability": "Current8BO plus public settings walk1–10/autoHouses on-off cannot be claimed fully current-client-exact without choosing housecap behavior and allocation abstraction. Routine documented choices are within authorized simulator modeling scope and do not require new user approval. Do not silently mark all behavior verified."
+  },
+  "localEvidence": {
+    "currentRaw": "/tmp/batch8-wei-raw.json (source agent fresh parse; read by this audit, not independently parsed here)",
+    "currentRawResource234": 0,
+    "currentRawResource283": 0,
+    "tech639": "Town Center Spawn; civ-1/type0/fullTechMode0/effect-1; no prereqs/count0; location-1/time0; no commands. This record alone does not prove when engine marks it completed.",
+    "BOStatic": [
+      ["archers-19", 21, 2, 4],
+      ["drush-fc", 29, 4, 6],
+      ["fast-castle-boom", 25, 0, 5],
+      ["fast-castle-knights", 25, 2, 5],
+      ["feudal-drush-18", 20, 2, 4],
+      ["hybrid-fish-18", 18, 3, 2],
+      ["maa-archers-18", 25, 5, 4],
+      ["scouts-18", 18, 2, 3]
+    ],
+    "BOStaticColumns": ["id", "max target vils", "listed train count", "explicit houses"],
+    "housecapMaterialExample": "scouts-18 explicitly builds only3 houses (capacity20 with initialTC), targets18vils + initialscout +2trainedscouts before counting2Wei rewards. With autoHouses off, housing cannot be assumed irrelevant. This is a static template observation, not an executed timeline."
+  }
+}

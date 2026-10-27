@@ -7,6 +7,16 @@ import type { Action, BuildOrder, Task } from './buildOrder';
 import { buildOrders as ALL_BOS } from '../data/buildOrders';
 import { roundHalfPrice } from './roundHalfPrice';
 import { CONSTRUCTION_DATA } from '../data/construction';
+import {
+  isWeiRewardRow,
+  weiRewardFamily,
+  weiRewardsForCompletedResearch,
+  WEI_CONTEXT_REASON,
+  WEI_SPAWN_NOTE,
+  WEI_SPAWN_ASSUMPTION,
+  WEI_KNIGHT_TEMPLATE_NOTE,
+  type WeiSpawnContext,
+} from './weiEconomy';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -16,6 +26,7 @@ interface EffectRow {
   age: number;
   tech?: number;
   requires?: number[];
+  spawn?: WeiSpawnContext;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];
 }
 /** eco.json 中模拟需要的部分 */
@@ -122,9 +133,21 @@ export interface VillagerEvent {
   to: number;
   step: number;
 }
+export interface BonusVillagerEvent {
+  at: number;
+  tech: number;
+  trigger: number;
+  count: number;
+  step: number;
+  pop: { used: number; cap: number };
+  /** The existing BO assignment queue; null means idle, mixed can occur in a changed multi-unit raw fixture. */
+  task: Task | 'mixed' | null;
+}
 export interface BuildTimeline {
   /** 实际村民训练事件，仅用于时间线展示，不改变模拟。 */
   villagerEvents?: VillagerEvent[];
+  /** Wei research grants are instantaneous; never paid TC training intervals. */
+  bonusVillagerEvents?: BonusVillagerEvent[];
   buildId: string;
   civ: string;
   variant: 'aggr' | 'cons' | null;
@@ -695,6 +718,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   // 按 tech 整条判定（#43 Steve）：只要有一条效果是未实现或未分类，这个 tech 的效果一条都不应用，
   // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
   const scope = simScope(eco, [bo], civ);
+  const weiFamily = civ === 'Wei' ? scope.weiRewards : null;
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   const uniqueMayanTeam = (eco.civEco.Mayans ?? []).filter((row) => row.source === 'team').length === 1;
   const rows = (eco.civEco[civ] ?? []).filter(
@@ -778,6 +802,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     if (t) alloc[t]++;
     else idleVils++;
     born++;
+    return t ?? null;
   };
   const startVils = START_VILS[civ] ?? 3;
   for (let i = 0; i < startVils; i++) assign();
@@ -795,6 +820,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   let tcState: { kind: 'vil' | 'research'; left: number; p?: Pending; age?: number; tech?: number } | null = null;
   const tcResearch: Pending[] = [];
   const villagerEvents: VillagerEvent[] = [];
+  const bonusVillagerEvents: BonusVillagerEvent[] = [];
+  const completedResearch = new Set<number>();
+  const rewardedWei = new Set<number>();
+  let drainPaidBirth = false;
   let villagerStartedAt = 0;
   let tcIdleFrom: number | null = null;
   let tcIdleCause: 'pop' | 'food' | 'other' = 'other';
@@ -860,6 +889,27 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const pay = (c: Stock) => (Object.keys(c) as Res[]).forEach((r) => (stock[r] -= c[r]));
   const popUsed = () => born + military;
   const activeStep = () => Math.max(0, Math.min(nextStep - 1, nSteps - 1));
+  const completeResearch = (p: Pending, t: number) => {
+    if (p.a.type !== 'research') return;
+    applyEcoTech(p.a.tech, false);
+    if (!weiFamily) return;
+    completedResearch.add(p.a.tech);
+    for (const reward of weiRewardsForCompletedResearch(weiFamily, completedResearch, age, built.get(TC) ?? 0, rewardedWei)) {
+      const tasks = Array.from({ length: reward.count }, assign);
+      rewardedWei.add(reward.tech);
+      bonusVillagerEvents.push({
+        at: r1(t),
+        tech: reward.tech,
+        trigger: reward.trigger,
+        count: reward.count,
+        step: p.step,
+        pop: { used: popUsed(), cap: popCap },
+        task: tasks.every((task) => task === tasks[0]) ? tasks[0]! : 'mixed',
+      });
+      // Only a grant that reaches the final goal can make the old step exit discard an already-paid job.
+      if (born >= finalVils && tcState?.kind === 'vil') drainPaidBirth = true;
+    }
+  };
 
   const rate = (t: Task): number => {
     const et = ECO_TASK[t];
@@ -1111,7 +1161,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         if (c.building === TC) popCap = Math.min(200, popCap + 5);
         if (c.p && !constructions.some((x) => x.p === c.p)) finish(c.p, t);
       } else if (c.p) {
-        if (c.building > -100000 && c.p.a.type === 'research') applyEcoTech(c.p.a.tech, false);
+        if (c.building > -100000 && c.p.a.type === 'research') completeResearch(c.p, t);
         stock.gold += m.techReward; // 西班牙：科技/单位升级完成时返金
         finish(c.p, t);
       }
@@ -1160,7 +1210,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
               if (ta <= age) applyEcoTech(id, true);
             }
           } else if (a.type === 'research') {
-            applyEcoTech(a.tech, false);
+            completeResearch(tcState.p, t);
             stock.gold += m.techReward;
           }
           finish(tcState.p, t);
@@ -1244,7 +1294,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         if (m.varangianGold) stock.gold += q * m.varangianGold * TICK;
       }
     }
-    if (nextStep >= nSteps && doneAt.every((x) => x !== null)) break;
+    if (nextStep >= nSteps && doneAt.every((x) => x !== null) && !(drainPaidBirth && tcState?.kind === 'vil')) break;
     if (t >= MAX_T) {
       timedOut = true;
       break;
@@ -1274,6 +1324,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   });
   return {
     villagerEvents,
+    ...(civ === 'Wei' ? { bonusVillagerEvents } : {}),
     startAt,
     doneAt,
     snap,
@@ -1346,6 +1397,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
   return {
     buildId: input.id,
     villagerEvents: R.villagerEvents,
+    ...(R.bonusVillagerEvents ? { bonusVillagerEvents: R.bonusVillagerEvents } : {}),
     civ,
     noHouses,
     housePaidAt: R.housePaidAt,
@@ -1369,6 +1421,9 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
         ...(civ === 'Mayans' ? [MAYAN_RESOURCE_ASSUMPTION, MAYAN_CAVALRY_TEMPLATE_NOTE] : []),
         ...(civ === 'Sicilians' && sicilianGroupOk(simScope(eco, ALL_BOS, civ), 770) ? [SICILIAN_CONSTRUCTION_ASSUMPTION] : []),
         ...(civ === 'Sicilians' && sicilianGroupOk(simScope(eco, ALL_BOS, civ), 772) ? [SICILIAN_FARM_ASSUMPTION] : []),
+        ...(civ === 'Wei' && weiRewardFamily(eco.civEco.Wei)
+          ? [WEI_SPAWN_ASSUMPTION, ...(bo.id === 'fast-castle-knights' ? [WEI_KNIGHT_TEMPLATE_NOTE] : [])]
+          : []),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
           : []),
@@ -1538,6 +1593,8 @@ export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
     buildingClass,
     sicilianRows: civ === 'Sicilians' ? (eco.civEco.Sicilians ?? []) : undefined,
     sicilianBuildings: civ === 'Sicilians' ? eco.buildings : undefined,
+    civ,
+    weiRewards: civ === 'Wei' ? weiRewardFamily(eco.civEco.Wei) : null,
   };
 }
 
@@ -1555,6 +1612,10 @@ export function classifyCivEffect(
   row: { source?: string; age?: number; tech?: number; effects?: EffectRow['effects'] },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
+  if (isWeiRewardRow(row))
+    return scope.civ === 'Wei' && scope.weiRewards?.some((reward) => reward.row === row)
+      ? { kind: 'handled' }
+      : { kind: 'unhandled', reason: WEI_CONTEXT_REASON };
   if (scope.sicilianRows && !sicilianRowAllowed(scope, row as EffectRow)) return { kind: 'unhandled', reason: '西西里加成缺少完整已核上下文，未计入' };
   if (row.tech === 704 && !hasTatarShepherdContext(row)) return { kind: 'unhandled', reason: '鞑靼牧羊产量与工作率缺少完整已核配对，未计入' };
   if (row.source === 'team') return { kind: 'irrelevant', reason: '团队加成，默认不计团队' };
@@ -1652,6 +1713,7 @@ export function simSupport(
   if (civ === 'Mayans' && !hasUniqueMayanTree(eco)) reasons.push('玛雅资源产量与工作率缺少完整已核配对，未计入');
   if (civ === 'Sicilians' && SICILIAN_GROUPS.some((group) => !sicilianGroupOk(simScope(eco, bos, civ), group)))
     reasons.push('西西里加成缺少完整已核上下文，未计入');
+  if (civ === 'Wei' && !weiRewardFamily(eco.civEco.Wei)) reasons.push(WEI_CONTEXT_REASON);
   if (!opts.ignoreSourceGate && !FORCED_CIVS.has(civ) && SOURCE_PENDING_CIVS[civ]) reasons.push(SOURCE_PENDING_CIVS[civ]!);
   return { supported: reasons.length === 0, reasons };
 }
@@ -1752,7 +1814,7 @@ export function gatherRate(
   return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}), ...(gold ? { gold } : {}) } };
 }
 /** 页面「按某文明计」下方的附注：已计入但有未核实部分、或明确不计入的加成 */
-export function civSimNotes(eco: EcoData, civ: string): string[] {
+export function civSimNotes(eco: EcoData, civ: string, boId?: string): string[] {
   const out: string[] = [];
   const rows = (eco.civEco[civ] ?? []).filter((r) => r.source !== 'team');
   if (rows.some((r) => (r as { tech?: number }).tech === 453 && r.effects.some((e) => e.res === RES_FORAGER_WOOD && e.op === 'add')))
@@ -1807,6 +1869,10 @@ export function civSimNotes(eco: EcoData, civ: string): string[] {
     const scope = simScope(eco, ALL_BOS, civ);
     if (sicilianGroupOk(scope, 770)) out.push(SICILIAN_CONSTRUCTION_NOTE);
     if (sicilianGroupOk(scope, 772)) out.push(SICILIAN_FARM_NOTE);
+  }
+  if (civ === 'Wei' && weiRewardFamily(eco.civEco.Wei)) {
+    out.push(WEI_SPAWN_NOTE);
+    if (boId === 'fast-castle-knights') out.push(WEI_KNIGHT_TEMPLATE_NOTE);
   }
   if (
     rows.some((r) => {

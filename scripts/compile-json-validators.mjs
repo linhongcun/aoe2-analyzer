@@ -7,6 +7,7 @@ import { createSchemaCompiler, SCHEMA_ID_BASE } from './content-schema.mjs';
 
 const output = resolve(dirname(fileURLToPath(import.meta.url)), '../src/content/schema/compiled');
 const targets = [
+  ['wei-spawn', 'wei-spawn.json', "import type { WeiSpawnContext } from '../../../domain/weiEconomy';", 'WeiSpawnContext'],
   ['construction', 'data-construction.json', "import type { CompactConstructionData } from '../../../data/construction';", 'CompactConstructionData'],
   ['garrison-healing', 'data-garrison-healing.json', "import type { GarrisonHealingData } from '../../../domain/garrisonHealing';", 'GarrisonHealingData'],
   ['scouting', 'content-scouting.json', "import type { ScoutingContent } from '../../../domain/scouting';", 'ScoutingContent'],

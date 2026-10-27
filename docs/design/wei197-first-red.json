@@ -1,0 +1,387 @@
+{
+  "baseline": "42d9b3a12fd41ced39feec1b9954bd06de8d0f43",
+  "baselineTree": "4852fdbd8f8c4543c3d6187fc833fcbd0fa54e68",
+  "createdAtUTC": "2026-10-27T15:13:51.628113+00:00",
+  "productionUnchanged": true,
+  "scopeComment": "https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6445532594",
+  "scopeCreatedAtUTC": "2026-10-27T15:06:12Z",
+  "filesSHA256": {
+    "docs/design/wei197.md": "c14988fc83abe52bed83e40158fad0cdc839487f1dc585b0875b32b798730399",
+    "docs/design/wei197-source.json": "cb7a19121fadef1fdb7845aaa5af9a727c2828d37788ccf2ae109f1b2da7fd5a",
+    "docs/design/wei197-public-sources.json": "2b098c0cec288adbbcf5c5dfac2190643f1bcd714994c9beab6de9536d7551bf",
+    "tests/unit/wei197.test.ts": "7634d3d53a41d15ef3e7cfc8ff44d2056ae9070bf59b00b6ae284cfc09cde030",
+    "tests/unit/wei197Presentation.test.ts": "67c718b4da83bc26598943a042cf3568b11523805022b1bacb269be3916c147e",
+    "tests/py/test_wei197.py": "a5af1af33774e1003825195474a5a3a9de7833dbbbd84069a92e6bace62dc490",
+    "tests/e2e/wei197.spec.ts": "9cd98c530bd135e643c2e0eef92a177e5147d3bf7100c610de15b18bec70ffba"
+  },
+  "unit": {
+    "command": "npx vitest run tests/unit/wei197.test.ts tests/unit/wei197Presentation.test.ts --reporter=json --outputFile=/tmp/wei197-first-red-formal.json > /tmp/wei197-first-red-formal.log 2>&1",
+    "report": "/tmp/wei197-first-red-formal.json",
+    "reportSHA256": "ed6c722356eb7d2c56f7eb246480c090b88966e35eecab49cfea02989ec9d0a5",
+    "log": "/tmp/wei197-first-red-formal.log",
+    "logSHA256": "68043866fc8fc70550148a60073ea72b385bec30884a834a1fd3dd7a7ae747a8",
+    "total": 66,
+    "passed": 36,
+    "failed": 30,
+    "skipped": 0,
+    "allFailuresMeaningfulAssertions": true,
+    "assertions": [
+      {
+        "name": "actual E must contain all16 generated spawn contexts; fixture is not substituted for exporter",
+        "status": "failed",
+        "failure": "AssertionError: 1039: expected undefined to deeply equal { effectId: 1039, …(6) }"
+      },
+      {
+        "name": "pinned16 source one-to-one mapping includes906 and retains raw two-command order",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "complete projected source makes Wei supported without globally allowing res234",
+        "status": "failed",
+        "failure": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"
+      },
+      {
+        "name": "actual feudal-drush-18 yields1 free events and preserves first completion602.1",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 1 but got +0"
+      },
+      {
+        "name": "actual hybrid-fish-18 yields0 free events and preserves first completionnull",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "actual maa-archers-18 yields1 free events and preserves first completion686.5",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 1 but got +0"
+      },
+      {
+        "name": "actual scouts-18 yields2 free events and preserves first completion667.2",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 2 but got +0"
+      },
+      {
+        "name": "actual archers-19 yields1 free events and preserves first completion609.4",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 1 but got +0"
+      },
+      {
+        "name": "actual fast-castle-boom yields3 free events and preserves first completion761.3",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 3 but got +0"
+      },
+      {
+        "name": "actual fast-castle-knights yields2 free events and preserves first completion761.3",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 2 but got +0"
+      },
+      {
+        "name": "actual drush-fc yields2 free events and preserves first completion1050.8",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 2 but got +0"
+      },
+      {
+        "name": "completion1.1 precedes observer1.2; free birth costs0 and in-flight paid birth survives target",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to deeply equal [ { at: 1.1, tech: 1039, …(5) } ]"
+      },
+      {
+        "name": "free worker follows remaining task and gathers in same completion tick, no50food charge",
+        "status": "failed",
+        "failure": "AssertionError: expected { index: 2, vils: 4, …(8) } to match object { startAt: 1.2, stock: { …(2) }, …(1) }"
+      },
+      {
+        "name": "before/after observer pins stock50 and gold131 independently of whole research step",
+        "status": "failed",
+        "failure": "AssertionError: expected { index: 3, vils: 4, …(8) } to match object { Object (startAt, pop, ...) }"
+      },
+      {
+        "name": "zero food at completion does not block or charge the free villager",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 1 but got +0"
+      },
+      {
+        "name": "TCtech213 grants at its own completed research and resumes paid TC training",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 1 but got +0"
+      },
+      {
+        "name": "TCtech249 grants at its own completed research and resumes paid TC training",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 1 but got +0"
+      },
+      {
+        "name": "same tick two nonTC completions and paid birth remain three distinct events",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to deeply equal [ [ 25.1, 14, 1 ], [ 25.1, 202, 1 ] ]"
+      },
+      {
+        "name": "fullhousing model autoHousesfalse grants immediately; ordinary training obeys existing gates",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to deeply equal [ [ 25.1, 1 ] ]"
+      },
+      {
+        "name": "fullhousing model autoHousestrue grants immediately; ordinary training obeys existing gates",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to deeply equal [ [ 25.1, 1 ] ]"
+      },
+      {
+        "name": "two extra completedTCs do not multiply one capped grant",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 1 but got +0"
+      },
+      {
+        "name": "quantity comes from raw Type7.C and never from resource234 or TC count",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to have a length of 1 but got +0"
+      },
+      {
+        "name": "repeat economic research and zero-time completions grant once per source reward",
+        "status": "failed",
+        "failure": "AssertionError: expected [] to deeply equal [ [ 0.2, 1039, 1 ] ]"
+      },
+      {
+        "name": "research22 is not an economic reward trigger",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "research199 is not an economic reward trigger",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "age/start and unit upgrade never grant; current model starts normal3 villagers",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "research202 reward is before whole archers step completion; boom203 final reward remains visible",
+        "status": "failed",
+        "failure": "AssertionError: expected undefined to be defined"
+      },
+      {
+        "name": "notes disclose spawn/housing abstraction and independent realCost stays outside scope",
+        "status": "failed",
+        "failure": "AssertionError: expected '' to contain '研究完成'"
+      },
+      {
+        "name": "missing-metadata fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "missing-family-row fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "duplicate-row fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "duplicate-whole-family fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-tech fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-source fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-age fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-trigger fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-condition-order fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "missing639 fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-required-count fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-effect fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "manual-location fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "manual-researchAt fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "nonzero-time fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "nonempty-cost fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "unknown-raw-command fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "reordered-commands fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "missing-spawn-command fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-spawn-target fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-building-target fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "invalid-cap fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-cap-operation fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "wrong-spawn-mode fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "zero-count fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "fraction-count fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "negative-count fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "infinite-count fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "nan-count fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "decoded-unknown-companion fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "decoded-cap-mismatch fails support and atomically removes entire reward family",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "strict eco schema accepts complete projected metadata and rejects extra/missing/wrong primitive fields",
+        "status": "failed",
+        "failure": "AssertionError: expected false to be true // Object.is equality"
+      },
+      {
+        "name": "unknown raw commands remain structurally preserved for runtime rejection",
+        "status": "failed",
+        "failure": "AssertionError: expected false to be true // Object.is equality"
+      },
+      {
+        "name": "actual bonus0 source and encoded values remain truthful; actual DOM shows completed-research usage",
+        "status": "failed",
+        "failure": "AssertionError: expected { tool: 'sim', name: '开局模拟', …(2) } to match object { on: true }"
+      },
+      {
+        "name": "knight template share preserves restriction and housing model; actual renderer uses same card model",
+        "status": "failed",
+        "failure": "AssertionError: expected '按魏计 · 走路 4 格 · 游戏版本 185872' to contain '魏没有骑士；骑士方案仅供通用模板经济估算'"
+      },
+      {
+        "name": "scouts-18 has model disclosure and no knight-template restriction",
+        "status": "failed",
+        "failure": "AssertionError: expected '按魏计 · 走路 4 格 · 游戏版本 185872' to contain '满住房仍计入赠送'"
+      },
+      {
+        "name": "archers-19 has model disclosure and no knight-template restriction",
+        "status": "failed",
+        "failure": "AssertionError: expected '按魏计 · 走路 4 格 · 游戏版本 185872' to contain '满住房仍计入赠送'"
+      },
+      {
+        "name": "fast-castle-boom has model disclosure and no knight-template restriction",
+        "status": "failed",
+        "failure": "AssertionError: expected '按魏计 · 走路 4 格 · 游戏版本 185872' to contain '满住房仍计入赠送'"
+      }
+    ]
+  },
+  "python": {
+    "command": "python3 -m unittest discover -s tests/py -p test_wei197.py -v > /tmp/wei197-first-red-python-formal.log 2>&1",
+    "log": "/tmp/wei197-first-red-python-formal.log",
+    "logSHA256": "f45604db5e00859567319b2bc4b3b85fe5f508f766aaeb56723f42826d0c9372",
+    "total": 4,
+    "passed": 2,
+    "failed": 2,
+    "failures": ["actual fixed-DAT exporter omits all16 spawn contexts", "unknown raw companion currently disappears because exporter omits spawn metadata"],
+    "passedClaims": ["actual current eco generator reproduces checked E exactly", "all other55 and all global sections are unchanged; noType7 spread"]
+  },
+  "static": {
+    "command": "npx tsc -p . --noEmit",
+    "exitCode": 0,
+    "prettier": "all6TS/JSON/MD matched inputs checked successfully"
+  },
+  "browser": {
+    "file": "tests/e2e/wei197.spec.ts",
+    "cases": 9,
+    "status": "prepared, not run before production GO; no screenshot or download claimed"
+  },
+  "draftCorrectionsExcluded": [
+    "gatherModel signature/unsupported field corrected to existing API before formalrun",
+    "missing card helper closing brace corrected before formalrun",
+    "zero-food expected existingpaidTC birth corrected before final formalrun; paidpreservation never relaxed"
+  ],
+  "remainingPostImplementationOracles": "8BO count/firstcompletion is first-red coverage only; after runtime implementation pin and handcheck each currentBO actual researchstart/completion, observerinventory/pop, paid/freecounts and compare first-before fields to protected baseline; do not copy old postreward clocks. Add authoritative smallspawn schema/compiled drift and runtime noTC pureentry tests once API exists."
+}
