@@ -1,6 +1,6 @@
 {
   "status": "LOCAL_COMPLETE_AWAITING_INDEPENDENT_FINAL_REVIEW_AND_REAL_CI",
-  "recordedAtUTC": "2026-10-27T10:24:10.206103+00:00",
+  "recordedAtUTC": "2026-10-27T10:32:02.043303+00:00",
   "baseline": "88852f4b199518a81bcdb469c9a28ec28dcec27f",
   "baselineVersion": "v0.50.0",
   "version": "v0.51.0",
@@ -175,7 +175,7 @@
     "notClaimedLocalFull": true
   },
   "bonus317": {
-    "generation": "/tmp/mayans197-317-generation-final.json",
+    "generation": "/tmp/mayans197-317-copy-final.json",
     "total": 13,
     "passed": 13,
     "oldKeys": 67,
@@ -187,7 +187,10 @@
     "totalKeys": 69,
     "originalGeneratorAndSimCheckedUnchanged": true,
     "untriggeredReason": "Only53/56 positive-tech counterfactual does not remove treeFeudal discount; current8BO no Castle/Imperial archer training; three-age actual-payment controls cover it",
-    "initialGeneration": "12pass1failure due missing untriggered reason; raw output kept, not forged"
+    "initialGeneration": "12pass1failure due missing untriggered reason; raw output kept, not forged",
+    "previousGeneration": "/tmp/mayans197-317-generation-final.json",
+    "inputs": "3935ab81fc048c51947bc52e7d3ca90ad0b5171783ff655a29ae2e8cabb8c893",
+    "copyOnlyRegenerationNecessary": true
   },
   "invariants": {
     "report": "/tmp/mayans197-independent-invariants.json",
@@ -220,10 +223,11 @@
     "content": "46inputs0warning0errors strict",
     "compiledValidators": "5reproducible",
     "boCheck": "8builds0errors",
-    "types": "final npm build includes successful tsc"
+    "types": "final npm build includes successful tsc",
+    "copyRuntimeBuild": "success /tmp/mayans197-copy-runtime-build.log (includes tsc)"
   },
   "browser": {
-    "distinctCases": 32,
+    "distinctCases": 40,
     "firstRun": "/tmp/mayans197-ui.json",
     "firstCounts": {
       "pass": 29,
@@ -238,17 +242,16 @@
     "migrationPass": 2,
     "productionClientChangesForFollowup": false,
     "fourWidths": [360, 375, 390, 1280],
-    "themes": ["light", "dark"]
+    "themes": ["light", "dark"],
+    "additionalAssumptionCases": 8,
+    "copyFollowup": "8DOMRange cases on252c; first32 retained exact original runtime with single-copy identity proof, not relabeled rerun"
   },
   "images": {
-    "manifest": "/tmp/mayans197-ui-manifest.json",
-    "runtimeCommit": "cf6b09c87d1188d77665ca5fa59d752507e004c0",
-    "count": 43,
-    "kinds": {
-      "timeline": 8,
-      "share": 24,
-      "bonus1": 8,
-      "download": 3
+    "manifest": "/tmp/mayans197-final-ui-manifest.json",
+    "count": 51,
+    "stages": {
+      "cf6b09c87d1188d77665ca5fa59d752507e004c0": 43,
+      "252c3a2b3c5274872d259117a5ea4a1fc25f612b": 8
     },
     "files": [
       {
@@ -551,10 +554,66 @@
         "bytes": 202296,
         "sha256": "e248d5435d860f7950d9d1984c53f98e77e724b51f076446ded3a604293cca5e",
         "runtimeHead": "cf6b09c87d1188d77665ca5fa59d752507e004c0"
+      },
+      {
+        "path": "/tmp/mayans197-assumption-green/mayans197--197-玛雅估算说明的数字单位不拆行-1280-dark/mayans-assumption-1280-dark.png",
+        "name": "mayans-assumption-1280-dark.png",
+        "bytes": 371087,
+        "sha256": "4fe997897e6c053d04f9582c65e1db08066b799aa474ba1aa46bc054dc16fb2e",
+        "runtimeHead": "252c3a2b3c5274872d259117a5ea4a1fc25f612b"
+      },
+      {
+        "path": "/tmp/mayans197-assumption-green/mayans197--197-玛雅估算说明的数字单位不拆行-1280-light/mayans-assumption-1280-light.png",
+        "name": "mayans-assumption-1280-light.png",
+        "bytes": 372693,
+        "sha256": "c7080b5b43314cbb2316884c99d290c97903e286442f2203e2269adb15f643a2",
+        "runtimeHead": "252c3a2b3c5274872d259117a5ea4a1fc25f612b"
+      },
+      {
+        "path": "/tmp/mayans197-assumption-green/mayans197--197-玛雅估算说明的数字单位不拆行-360-dark/mayans-assumption-360-dark.png",
+        "name": "mayans-assumption-360-dark.png",
+        "bytes": 312742,
+        "sha256": "e96aebf9a6f6e78545159381266df5b4b6235fcef1fedc6c257422099d43c24b",
+        "runtimeHead": "252c3a2b3c5274872d259117a5ea4a1fc25f612b"
+      },
+      {
+        "path": "/tmp/mayans197-assumption-green/mayans197--197-玛雅估算说明的数字单位不拆行-360-light/mayans-assumption-360-light.png",
+        "name": "mayans-assumption-360-light.png",
+        "bytes": 314287,
+        "sha256": "2f36d88c758c036ee3e750f7f8e53040cffcc827d3b0a53b08f66e7c619751ad",
+        "runtimeHead": "252c3a2b3c5274872d259117a5ea4a1fc25f612b"
+      },
+      {
+        "path": "/tmp/mayans197-assumption-green/mayans197--197-玛雅估算说明的数字单位不拆行-375-dark/mayans-assumption-375-dark.png",
+        "name": "mayans-assumption-375-dark.png",
+        "bytes": 312936,
+        "sha256": "405474b90df87c225d3e4ab95eba918c219a6cd41738c573abb898d6d99f859e",
+        "runtimeHead": "252c3a2b3c5274872d259117a5ea4a1fc25f612b"
+      },
+      {
+        "path": "/tmp/mayans197-assumption-green/mayans197--197-玛雅估算说明的数字单位不拆行-375-light/mayans-assumption-375-light.png",
+        "name": "mayans-assumption-375-light.png",
+        "bytes": 314337,
+        "sha256": "a20029fe1a02f7e220f1a1d48dd7931cc40137ef3804010488883ea71be304e2",
+        "runtimeHead": "252c3a2b3c5274872d259117a5ea4a1fc25f612b"
+      },
+      {
+        "path": "/tmp/mayans197-assumption-green/mayans197--197-玛雅估算说明的数字单位不拆行-390-dark/mayans-assumption-390-dark.png",
+        "name": "mayans-assumption-390-dark.png",
+        "bytes": 310934,
+        "sha256": "6e6f92c3a470340af58a1705c70ef5efc45841c84ec8a0457bf2410aee7e40eb",
+        "runtimeHead": "252c3a2b3c5274872d259117a5ea4a1fc25f612b"
+      },
+      {
+        "path": "/tmp/mayans197-assumption-green/mayans197--197-玛雅估算说明的数字单位不拆行-390-light/mayans-assumption-390-light.png",
+        "name": "mayans-assumption-390-light.png",
+        "bytes": 311964,
+        "sha256": "9f3114f50a73c4247ea5a88d3dbe92af352343040c5f711f7cd56ea6a103581e",
+        "runtimeHead": "252c3a2b3c5274872d259117a5ea4a1fc25f612b"
       }
     ],
-    "ownerPersonallyViewed": ["mayans-download-fast-castle-knights.png", "mayans-bonus1-390-dark.png"],
-    "notClaimedAllImagesPersonallyViewedByOwner": true
+    "ownerPersonallyViewed": ["mayans-download-fast-castle-knights.png", "mayans-bonus1-390-dark.png", "mayans-assumption-1280-light.png"],
+    "notClaimedAll51PersonallyViewedByOwner": true
   },
   "localSmoke": {
     "plan": "/tmp/mayans197-local-plan.json",
@@ -577,7 +636,9 @@
       }
     },
     "noPureProductivityGenericComparison": true,
-    "actualOnlineCheck": false
+    "actualOnlineCheck": false,
+    "runtimeCommit": "cf6b09c87d1188d77665ca5fa59d752507e004c0",
+    "laterCopyBoundary": "AllMaya numeric/notes except oneassumptioncopy remained exact; 252c eightDOMRange is separate; no repeated full smoke claimed"
   },
   "preview": {
     "pid": 228207,
@@ -589,5 +650,46 @@
   "actualCI": null,
   "deployment": null,
   "release": null,
-  "remaining": "Root owns final independent review, actual PR CI, merge/main/deploy/online/formalRelease/tag/same-deployed-ZIP verification. No remote push or PR creation by implementation owner."
+  "remaining": "Root owns final independent review, actual PR CI, merge/main/deploy/online/formalRelease/tag/same-deployed-ZIP verification. No remote push or PR creation by implementation owner.",
+  "latestRuntimeCommit": "252c3a2b3c5274872d259117a5ea4a1fc25f612b",
+  "latestRuntimeTree": "8ee97f01f750d523d6140a39876549a444b6d8f1",
+  "copyFollowup": {
+    "independentRed": "/tmp/mayans197-independent-assumption-red.json",
+    "ownerRed": "/tmp/mayans197-assumption-red-record.json",
+    "redCounts": {
+      "pass": 6,
+      "fail": 2,
+      "skip": 0
+    },
+    "cause": "New4村 phrase split at1280 both themes; independent and owner DOMRange confirmed",
+    "productionFix": "OnlyMayan assumption:沿用起始4村->沿用玛雅的起始人数",
+    "identity": {
+      "earlierRuntime": "cf6b09c87d1188d77665ca5fa59d752507e004c0",
+      "onlyClientChange": "Mayan assumption wording 沿用起始4村 -> 沿用玛雅的起始人数",
+      "exactInverseReconstruction": true,
+      "otherClientFilesChanged": ["src/domain/buildSim.ts"],
+      "numericAndDomainLogicUnchanged": true,
+      "old67KeyValuesUnchanged": true,
+      "current317Keys": 69,
+      "current317Inputs": "3935ab81fc048c51947bc52e7d3ca90ad0b5171783ff655a29ae2e8cabb8c893",
+      "generation": "/tmp/mayans197-317-copy-final.json"
+    },
+    "green": "/tmp/mayans197-assumption-green.json",
+    "greenCounts": {
+      "pass": 8,
+      "fail": 0,
+      "skip": 0
+    },
+    "noGlobalCSSChange": true,
+    "old43RetainedAtOriginalCommit": true
+  },
+  "clientLatestSha256": {
+    "src/domain/buildSim.ts": "8bfe3b935c53d6aad5e158c81f4d85a43ecdb665fac2b9874e373bdfabd0e142",
+    "src/domain/bonusUsage.ts": "1e6aaa2754732deafa91a72b9bec14c448ab774786220695d8668752dd7e036b",
+    "src/features/builds/shareCard.ts": "89d171ce42b33d77ca55c0da67f39afc888dfcba33b481878f96a252f0abc035",
+    "src/shared/ui/BonusBody.tsx": "cec4579f6988f38ad339dec77ccb193cf85b95260a10a97b789f6507aa88e6cd",
+    "src/data/eco.json": "9fd02e622a5d2532904f1433e894015ad099de62aa025db49aaa997263bbe74b",
+    "src/domain/realCost.ts": "e1804bcafc710a81696259d831a109e28e25b9dc77269b83d19136a3d5e000cf",
+    "src/domain/roundHalfPrice.ts": "506e39f19728e59aabe8dc760660a7b2a7a38983f692f18fa400a6b56a55610c"
+  }
 }
