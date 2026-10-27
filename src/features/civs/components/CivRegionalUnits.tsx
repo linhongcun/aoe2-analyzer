@@ -9,11 +9,12 @@ import './civ-regional-units.css';
 
 export function CivRegionalUnits({ civ, units, families }: { civ: string; units: readonly Unit[] | null; families: Families | null }) {
   const list = units && families ? collapse(regionalUnitLines(civ, units).flat(), families) : [];
+  if (units && families && !list.length) return null;
   return (
     <SideBlock title="区域单位">
       {!units || !families ? (
         <p role="status">正在加载区域单位…</p>
-      ) : list.length ? (
+      ) : (
         <div className="uchips civ-regional-units">
           {list.map(({ u, elite }) => (
             <Link key={u.id} className="ulink" to={unitPath(u.id, civ, u.age, [], [])} title={elite ? `${u.zh} / ${elite.zh}` : undefined}>
@@ -23,8 +24,6 @@ export function CivRegionalUnits({ civ, units, families }: { civ: string; units:
             </Link>
           ))}
         </div>
-      ) : (
-        <p>本文明没有区域单位。</p>
       )}
     </SideBlock>
   );
