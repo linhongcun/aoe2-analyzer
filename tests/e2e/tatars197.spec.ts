@@ -4,7 +4,7 @@ async function expectSheepQuantityOnOneLine(texts: Locator, expectedCount: numbe
   const quantities = await texts.evaluateAll((elements) =>
     elements.flatMap((element) => {
       const text = element.textContent ?? '';
-      return [...text.matchAll(/\d+(?:\.\d+)?\s*头/g)].map((match) => {
+      return [...text.matchAll(/\d+(?:\.\d+)?\s*头绵羊/g)].map((match) => {
         const position = (offset: number) => {
           const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
           let node: Node | null;

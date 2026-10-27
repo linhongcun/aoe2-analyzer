@@ -75,10 +75,10 @@ function UsageTags({ lines }: { lines: BonusUsageLine[] }) {
 }
 const USAGE_ICON = { true: 'check', false: 'x', null: 'circle-help' } as const;
 
-/** Keep the sourced Tatar sheep count and its measure word together in both detail and sidebar text. */
+/** Keep the sourced Tatar complete sheep quantity phrase together in both detail and sidebar text. */
 export function BonusText({ b, linked = true }: { b: CivBonusEnt; linked?: boolean }) {
   if (b.civ !== 'Tatars' || b.idx !== 2) return linked ? <Linked text={b.zh} /> : b.zh;
-  const parts = b.zh.split(/(\d+(?:\.\d+)?\s*头)/g);
+  const parts = b.zh.split(/(\d+(?:\.\d+)?\s*头绵羊)/g);
   return parts.map((part, index) =>
     index % 2 ? (
       <span className="num nw" key={index}>
