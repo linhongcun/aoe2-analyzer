@@ -462,7 +462,18 @@ export async function checkSite({ site, version, commit, features = [] }) {
         const route = '/' + feature.replace(/[A-Z]/g, (c) => '-' + c.toLowerCase());
         if (metadata[route]) {
           await goto(route);
-          if (feature === 'units') await check(page.locator('a[href^="#/unit/"]').first()).toBeVisible();
+          if (feature === 'units') {
+            await check(page.locator('a[href^="#/unit/"]').first()).toBeVisible();
+            for (const civ of ['Poles', 'Lithuanians']) {
+              await goto(`/civ/${civ}`);
+              const unique = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '独特单位', exact: true }) });
+              const regional = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '区域单位', exact: true }) });
+              await check(unique.getByRole('link', { name: '波兰翼骑兵', exact: true })).toHaveCount(0);
+              await check(regional.getByRole('link', { name: '波兰翼骑兵', exact: true })).toHaveAttribute('href', `#/unit/1707/${civ}/4/`);
+            }
+            await goto('/unit/1707/Lithuanians/4/');
+            await check(page.locator('.dhead-tags')).toContainText('区域单位');
+          }
           if (feature === 'civs') {
             await check(page.locator('#grid .card').first()).toBeVisible();
             await goto('/civ/Franks');

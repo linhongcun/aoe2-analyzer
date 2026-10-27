@@ -1,4 +1,5 @@
 import json,glob,re,os,urllib.request
+from unit_types import unit_type
 import os;T=os.environ['AOE_CACHE']+'/';d=json.load(open(T+'data.json'));e=json.load(open(T+'en.json'));z=json.load(open(T+'zh.json'));U=d['data']['Unit']
 civn={v['internal_name'].upper():k for k,v in d['civs'].items()};civn['HINDUSTANIS']='Hindustanis'
 CL={1:'步兵',3:'穿刺',4:'近战',5:'战象',8:'骑兵',11:'所有建筑',13:'石质防御',15:'弓手',16:'船只',17:'冲车',18:'树木',19:'独特单位',20:'攻城武器',21:'标准建筑',22:'城墙/城门',23:'火药单位',25:'僧侣',26:'城堡',27:'长矛兵',28:'骑射手',29:'冲击步兵',30:'骆驼',32:'雇佣兵',34:'渔船',35:'马穆鲁克',36:'英雄/国王',39:'村民',2:'重型战舰',31:'特殊近战',37:'重型攻城武器',38:'掷矛手',41:'喷火船',60:'远程战船'}
@@ -14,7 +15,7 @@ for f in sorted(glob.glob(T+'trees/*.json')):
         if i not in units:
             hz=re.sub(r'<[^>]+>','\n',z.get(str(u['LanguageNameId']+21000),'')).replace('‹cost›','').split('‹')[0]
             hz=re.sub(r'\n+','\n',hz).strip();hz=re.sub(r'^生产\n[^\n]*\n\s*\(\s*\)\n','',hz)
-            units[i]=dict(id=i,en=x['name'],zh=re.sub(r'<br>\s*','',z.get(str(x['name_string_id']),x['name'])),type=x['node_type'],age=x['age_id'],b=x['building_id'],pic=x['picture_index'],
+            units[i]=dict(id=i,en=x['name'],zh=re.sub(r'<br>\s*','',z.get(str(x['name_string_id']),x['name'])),type=unit_type(i,x['node_type']),age=x['age_id'],b=x['building_id'],pic=x['picture_index'],
               from_=x['link_id'] if x['link_node_type'] in('Unit','UniqueUnit','RegionalUnit','UnitUpgrade') else None,
               cost=u['Cost'],hp=u['HP'],atk=u['Attack'],ma=u['MeleeArmor'],pa=u['PierceArmor'],rng=u['Range'],minr=u['MinRange'],spd=u['Speed'],los=u['LineOfSight'],rof=u['ReloadTime'],tt=u['TrainTime'],acc=u['AccuracyPercent'],blast=u['BlastWidth'],
               atks=[[CL.get(a['Class'],'类别%d'%a['Class']),a['Amount']] for a in u['Attacks'] if a['Amount']],
