@@ -1,0 +1,113 @@
+{
+  "baseline": "c9b561dc6eb7eb3e62dfa4600af5546fd8c571c7",
+  "target": "v0.48.0",
+  "productionCommit": "4cae5ae45cca6cff21e15bc58e32909fc287a416",
+  "productionTree": "212af5f091850cc4e53d6d6d74ed27de0a912a4c",
+  "preflight": "/tmp/varangians197-review/preflight.json",
+  "firstRed": {
+    "total": 44,
+    "passed": 20,
+    "functionalFailed": 24,
+    "skipped": 0,
+    "trackedProductionUnchanged": true,
+    "history": "Draft synthetic ship observation lengthened to observe nonzero rounded gold; draft imaginary realCost298 warning corrected to original empty arrays before formal red. Four extra invalid-value controls added after preflight; all48 new cases passed in related unit run."
+  },
+  "localUniqueUnitCoverage": {
+    "files": 16,
+    "tests": 606,
+    "passed": 604,
+    "originalSkipped": 1,
+    "originalTodo": 1,
+    "details": "6 related files218pass +9 boundary files373pass/1oldskip/1oldtodo +original317 UPDATE command13pass. First317 attempt omitted UPDATE env and correctly rejected stale fingerprint; original generation then succeeded. No local full."
+  },
+  "baselineComparison": {
+    "baseline": "c9b561dc6eb7eb3e62dfa4600af5546fd8c571c7",
+    "compared": 320,
+    "numericChanged": [],
+    "fullChanged": [],
+    "notesChanged": [],
+    "addedSupport": [
+      "Varangians"
+    ],
+    "removedSupport": [],
+    "unchangedUnsupported": true,
+    "supportedCount": 41,
+    "unsupportedCount": 15,
+    "protectedChanged": [],
+    "realCostChanged": []
+  },
+  "generation": {
+    "data": "No generated data, generators, source pins or schemas changed; no local data regeneration. Actual CI decides data separately.",
+    "bonus317": {
+      "oldKeysPreserved": 63,
+      "oldValuesChanged": [],
+      "newKeys": {
+        "Varangians-0": "feudal-drush-18"
+      },
+      "inputs": "fc6125f25082e109e86e152ad9578b1d274ced716783af357a0e388ce7bc5fcf",
+      "originalGeneratorCommand": true
+    }
+  },
+  "static": {
+    "typecheck": "pass",
+    "lint": "0 errors,8 existing max-lines warnings. Initial lint saw temporary comparison script; script removed and final lint rerun passed, both logs retained.",
+    "strictLayers": "0 violations",
+    "strictContent": "46 inputs,0 errors/0 warnings",
+    "validators": "5 precompiled boundaries reproduce",
+    "boCheck": "8 build orders,0 errors"
+  },
+  "stageUI": {
+    "actualVersion": "v0.48.0",
+    "actualBuild": "4cae5ae",
+    "committedCleanRuntime": true,
+    "viewports": [
+      360,
+      375,
+      390,
+      1280
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "screenshots": "17 PNGs under /tmp/varangians197-ui:8 pages+8 share previews+1 real download; exact inventory/hash in /tmp/varangians197-ui-manifest.json",
+    "testsPassed": 30,
+    "details": "10 new Varangians +12 retained uncounted negatives(v060-42)+7castleTimes=29pass20.4s; unchanged timeline recommended-card case separately1pass1.4s. No added skip/retry/timeout.",
+    "practicePrint": "Same context note and full continuous assumption, actual print media.",
+    "realCost": "Original farm-based output remains unchanged, including empty applied/unsupported arrays for Varangians; no claimed pre-existing warning.",
+    "share": "Real PNG inspected for civilization, time, food bottleneck,TC idle,settings,data version,local stage result URL; no claim PNG contains whole continuous assumption."
+  },
+  "stageSmoke": {
+    "version": "v0.48.0",
+    "build": "4cae5ae",
+    "features": [
+      "all",
+      "builds"
+    ],
+    "oldThreeCivChecksPreserved": true,
+    "varangians": "Same-clock early and later hybrid fishing Gold inventory increase while primary Food/Wood equal; selectable,share,original farm-based realCost empty warning state.",
+    "publicBuildSources": true,
+    "scopeCaveat": "CI all alone does not run explicit builds public-source hook or civs hooks; only claim actual logs."
+  },
+  "fullCI": "Not run locally; pending one real full CI on final PR merge tree. Data flag and features recorded from actual plan. Main/Release can reuse trusted same-tree successful evidence, still real SHA build/deploy/online/ZIP.",
+  "evidenceSHA256": {
+    "/tmp/batch4197-full-baseline.json": "d76720f3ab56305fc9ead2c6846c7eeb099a7b28e87215cba792f56f00c6681f",
+    "/tmp/varangians197-first-red.json": "23f9b4408a23f023f6545c91ce9bf582f735a4a727ed5b1e166a2f6efb2c75fb",
+    "/tmp/varangians197-green-draft.json": "e6624f0840d87d33777984fa4d3c88693376536fcf35a2741db9520a7ce471ff",
+    "/tmp/varangians197-related-unit.json": "85c8b17210b3ad2b58921e1e64e9358241f9cc3faf58c007add9669c453a68ce",
+    "/tmp/varangians197-boundary-unit.json": "cea3aa2e7d2de55c4123ff55c4b162e3abf40407ef9fc79933b65120a3427859",
+    "/tmp/varangians197-317-generation.json": "9104634475064cd95615092c12d0adbf41f46d312493cb18c1327426498ae6ab",
+    "/tmp/varangians197-comparison.json": "9e06b94d57a02c19de931c950dddfec164dcba6c6a0969409b47c6962ecf0bde",
+    "/tmp/varangians197-types.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/tmp/varangians197-lint-final.log": "f1aebe80c9487e83df47a82877a1aa128511e67d06db94670fe4aa391d39f1b0",
+    "/tmp/varangians197-layers.log": "ee217c189dc72ad99a341c5b8197b3f8f96c64c3a2ac541fb677142df53eb26a",
+    "/tmp/varangians197-content.log": "e7d7224d68a7d57c643a33d7b29280deb182446b7c96526f773a7a7bd6adfd44",
+    "/tmp/varangians197-validators.log": "396d42a0fe160bc469ca100deb6d129a04290bcc72cc9d676b0dcb89afd86449",
+    "/tmp/varangians197-bo.log": "d8d001c70e3c264a7cd59a0a2272099dbffd059cebb7014c7aa51ca72aeb7e56",
+    "/tmp/varangians197-build-stage.log": "973594cc6d69b435758c27a186b9a2650de28c17331616b6d75ed0e2a3535bc1",
+    "/tmp/varangians197-ui.log": "41583b93025bcef3777daf32238be03506673945a259d60e317aff146e3e82f8",
+    "/tmp/varangians197-ui-manifest.json": "41e35f60f0748ddfaf9c9b5318307d97476dfd37406bf2b17076b3485feca85f",
+    "/tmp/varangians197-timeline-focused.log": "5b269c71cf6a41a367bb02fefbfcab93ef6c13abb200c5167bc1a1dbac7eb815",
+    "/tmp/varangians197-smoke-stage.log": "2e199589c72024274fe4b6f20d38fb29a1e3cda8a86ee6efda4746e072f64972"
+  }
+}
