@@ -247,7 +247,7 @@ describe('#197 鞑靼牧羊产量与工作率配对', () => {
     expect(assumptions).toContain('不模拟新增羊实体');
   });
   it('其它未支持者和独立真实成本的完整原农田模型保持', () => {
-    expect(simSupport(E, 'Mayans', buildOrders).supported).toBe(false);
+    expect(simSupport(E, 'Slavs', buildOrders).supported).toBe(false);
     expect(simSupport(E, 'Bengalis', buildOrders).supported).toBe(false);
     for (const age of [1, 2, 3, 4]) {
       expect(gatherModel(age, 'Tatars')).toEqual({ ...gatherModel(age), civ: 'Tatars' });

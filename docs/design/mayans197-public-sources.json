@@ -1,0 +1,72 @@
+{
+  "repo": "Divy1211/AoE2DE_UGC_Guide",
+  "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+  "actualFetch": true,
+  "resources": [
+    {
+      "id": 47,
+      "start": 358,
+      "end": 370,
+      "excerpt": "## 47. Gold Mining Productivity\n\n- ID: 47\n\n- Purpose: Multiplier for gold mined by gold miners\n\n- Default Values:\n\n    - 1:  Default\n    - 1.15:  Mayans\n\n- Note: Since this works by multiplying the amount of resources gathered by a villager, it has a side effect of increasing the gather rate. In the case of Mayans, This is compensated for by reducing villager work rate by 15%\n"
+    },
+    {
+      "id": 79,
+      "start": 604,
+      "end": 616,
+      "excerpt": "## 79. Stone Mining Productivity\n\n- ID: 79\n\n- Purpose: Multiplier for stone mined by stone miners\n\n- Default Values:\n\n    - 1:  Default\n    - 1.15:  Mayans\n\n- Note: Since this works by multiplying the amount of resources gathered by a villager, it has a side effect of increasing the gather rate. In the case of Mayans, This is compensated for by reducing villager work rate by 15%\n"
+    },
+    {
+      "id": 189,
+      "start": 1359,
+      "end": 1371,
+      "excerpt": "## 189. Chopping Productivity\n\n- ID: 189\n\n- Purpose: Multiplier for wood chopped by lumberjacks\n\n- Default Values:\n\n    - 1:  Default\n    - 1.15:  Mayans\n\n- Note: Since this works by multiplying the amount of resources gathered by a villager, it has a side effect of increasing the gather rate. In the case of Mayans, This is compensated for by reducing villager work rate by 15%\n"
+    },
+    {
+      "id": 190,
+      "start": 1372,
+      "end": 1384,
+      "excerpt": "## 190. Food Gathering Productivity\n\n- ID: 190\n\n- Purpose: Multiplier for food gathered from all sources\n\n- Default Values:\n\n    - 1:  Default\n    - 1.15:  Mayans\n\n- Note: Since this works by multiplying the amount of resources gathered by a villager, it has a side effect of increasing the gather rate. In the case of Mayans, This is compensated for by reducing villager work rate by 15%. The work rate for farmers is reduced by about 23.4%\n"
+    },
+    {
+      "id": 216,
+      "start": 1650,
+      "end": 1663,
+      "excerpt": "## 216. Shepherd Productivity\n\n- ID: 216\n\n- Purpose: Amount of food collected from sheep multiplier\n\n- Default Values:\n\n    - 1:  Default\n    - 1.57:  Tatars\n\n- Note: Since this works by multiplying the amount of resources gathered by a villager, it has a side effect of increasing the gather rate. In the case of Tatars, This is compensated for by reducing villager work rate by 57%\n\n## 217. Shared Line of Sight"
+    },
+    {
+      "id": 219,
+      "start": 1682,
+      "end": 1694,
+      "excerpt": "## 219. Fishing Productivity\n\n- ID: 219\n\n- Purpose: Multiplier for food gathered by fishing ships\n\n- Default Values:\n\n    - 1:  Default\n\n- Note: Since this works by multiplying the amount of resources gathered by a fishing ship, it has a side effect of increasing the gather rate\n\n## 220. Enable Certain Hero Level Up (Unused Resource 220)"
+    },
+    {
+      "id": 234,
+      "start": 1815,
+      "end": 1822,
+      "excerpt": "## 234. Spawn Limit\n\n- ID: 234\n\n- Purpose: The limit to the number of spawning buildings that can spawn units from spawn command in a technology\n\n- Note: This is usually overridden by techs\n"
+    },
+    {
+      "id": 268,
+      "start": 2141,
+      "end": 2147,
+      "excerpt": "## 268. Hunter Productivity\n\n- ID: 268\n\n- Purpose: Hunter hunting gold production rate per 100 seconds\n"
+    },
+    {
+      "id": 296,
+      "start": 2367,
+      "end": 2377,
+      "excerpt": "## 296. Forager Productivity\n\n- ID: 296\n\n- Purpose: Multiplier for food collected by foragers\n\n- Default Values:\n\n    - 1:  Default\n\n## 297. Varangian Gold Generation"
+    }
+  ],
+  "constants": {
+    "start": 760,
+    "end": 790,
+    "excerpt": "\n```xs\n xsEffectAmount(cMulResource, cAttributeFood, 0, 10)\n```\n\nThis multiplies the food amount by 10 (the value)\n\n### 8.8. cSpawnUnit\n\nValue: `#!xs int 7`\n\nThis is the ID of the `Spawn Unit` effect for the [xsEffectAmount](../../functions/functions/#71-xseffectamount \"Jump To: XS > Functions > xsEffectAmount\") function\n\nSyntax:\n\n```xs\n xsEffectAmount(cModResource, cAttributeSpawnCap, cAttributeSet, numBuildings);\n xsEffectAmount(cSpawnUnit, unitID, buildingID, numUnits)\n```\n\nExample:\n\n```xs\n xsEffectAmount(cModResource, cAttributeSpawnCap, cAttributeSet, 2);\n xsEffectAmount(cSpawnUnit, 83, 109, 5)\n```\n\nThis will spawn 5 villagers (83) from each town centre (109), for a maximum of 2 town centres. Note that setting the `cAttributeCap` resource to a non 0 value is required for using this effect. If you prefer spawning the units garrisoned set resource `cAttributeSpawnStayInside` to 1.\n\n### 8.9. cModifyTech\n"
+  },
+  "boundaries": [
+    "Guide prose says reduce by15% but raw multiplication is0.87; use actual raw values.",
+    "190 is not stacked with all specialized food multipliers: actual worker task ResMul chooses one resource per gather task.",
+    "Actual raw219 appears on shore fishermen as well as boats; guide description only names boats.",
+    "Fixed guide268 wording conflicts with actual raw action110 res15→0 with ResMul268 on hunters; use the actual task/commands as food-output evidence, do not interpret268 as gold income."
+  ]
+}

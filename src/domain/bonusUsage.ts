@@ -20,7 +20,7 @@ import ecoRaw from '../data/raw/eco';
 import { CONSTRUCTION_DATA as construction } from '../data/construction';
 import unitsRaw from '../data/raw/units';
 import { buildOrders } from '../data/buildOrders';
-import { classifyCivEffect, simScope, techAtomicOk, type EcoData } from './buildSim';
+import { classifyCivEffect, simScope, simSupport as currentSimSupport, techAtomicOk, type EcoData } from './buildSim';
 import type { CivBonusEnt } from './civBonus';
 import { DAT } from './datEffects';
 import { gatherBonusIdx, gatherModel, touchesGather } from './realCost';
@@ -142,6 +142,18 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
  * 其余加成返回空数组。
  */
 export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
+  if (b.id === 'Mayans-1') {
+    const tree = eco.civEco.Mayans?.find((row) => row.source === 'tree');
+    const on = currentSimSupport(eco, b.civ, buildOrders).supported && !!tree && techAtomicOk(tree, scope());
+    return [
+      {
+        tool: 'sim',
+        name: USAGE_TOOL_ZH.sim,
+        on,
+        note: on ? '已计入资源产量与工作率配对；储量和耗尽未模拟' : '暂不支持该文明，整页按通用文明计算，本条未计入',
+      },
+    ];
+  }
   if (b.team) return b.src === 'eco' ? teamUsageLines(b) : [];
   if (typeof b.idx !== 'number') return [];
   const nb = b as CivBonusEnt & { idx: number };
