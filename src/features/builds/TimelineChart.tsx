@@ -3,7 +3,9 @@ import { timelineAxis, timelineBottleneckLayout } from '../../domain/buildTimeli
 import type { BuildTimeline } from '../../domain/buildSim';
 import { RES_ZH, mmss, type RowKey, type Seg, type TimelineView } from './timelineModel';
 import './wei.css';
+import './timeline-labels.css';
 import { NumUnitText } from './NumUnitText';
+import { TimelineSegment } from './TimelineSegment';
 
 const ROWS: { key: RowKey; zh: string }[] = [
   { key: 'tc', zh: '城镇中心' },
@@ -12,6 +14,30 @@ const ROWS: { key: RowKey; zh: string }[] = [
   { key: 'gold', zh: '金子' },
   { key: 'military', zh: '军事' },
 ];
+
+export function TimelineSegmentList({ v }: { v: TimelineView }) {
+  return (
+    <ul className="tl-segment-list" aria-label="全部时间线分段">
+      {ROWS.flatMap((row) =>
+        v.rows[row.key].map((segment, index) => (
+          <li key={`${row.key}-${index}`}>
+            {row.zh}{' '}
+            <span className="nw">
+              <NumUnitText text={segment.label} />
+              {['food', 'wood', 'gold'].includes(row.key) && '人'}
+            </span>
+            {!segment.label.includes(`约 ${mmss(segment.from)}–${mmss(segment.to)}`) && (
+              <>
+                {' · 约 '}
+                <span className="num nw">{mmss(segment.from)}</span> 到 <span className="num nw">{mmss(segment.to)}</span>
+              </>
+            )}
+          </li>
+        )),
+      )}
+    </ul>
+  );
+}
 
 export function TimelineChart({
   v,
@@ -46,16 +72,14 @@ export function TimelineChart({
             <span className="tl-lab">{r.zh}</span>
             <div className="tl-track">
               {v.rows[r.key].map((s: Seg, i) => (
-                <span
+                <TimelineSegment
                   key={i}
-                  role="listitem"
-                  className={`tl-bar k-${s.kind}${s.step !== undefined && s.step === selectedStep ? ' is-sel' : ''}`}
-                  style={{ left: pct(s.from), width: width(s.from, s.to) }}
-                  title={`${s.label} · 约 ${mmss(s.from)}–${mmss(s.to)}`}
-                  aria-label={`${r.zh} ${s.label} 约 ${mmss(s.from)} 到 ${mmss(s.to)}`}
-                >
-                  {s.label}
-                </span>
+                  segment={s}
+                  row={r.zh}
+                  selected={s.step !== undefined && s.step === selectedStep}
+                  left={pct(s.from)}
+                  width={width(s.from, s.to)}
+                />
               ))}
             </div>
           </div>

@@ -15,8 +15,8 @@ const items: SearchItem[] = fams.map(({ u }) => ({ kind: 'unit', id: String(u.id
 const U = (id: number) => byId[id]!;
 
 describe('#44 单位别名', () => {
-  it('上线名单：有 2020 年以后出处的 7 个', () => {
-    expect(UNIT_ALIAS_ROWS.map(([, a]) => a).sort()).toEqual(['冲车', '和尚', '投石车', '斥候', '波斯象', '骆驼', '骑射'].sort());
+  it('上线名单：有 2020 年以后出处的 8 个', () => {
+    expect(UNIT_ALIAS_ROWS.map(([, a]) => a).sort()).toEqual(['冲车', '和尚', '圣骑士', '投石车', '斥候', '波斯象', '骆驼', '骑射'].sort());
   });
   for (const [id, a] of UNIT_ALIAS_ROWS)
     it(`「${a}」搜出 ${U(id).zh}（${id}），别名档或更高`, () => {
@@ -29,7 +29,7 @@ describe('#44 单位别名', () => {
     const names = new Set(units.map((u) => nameKey(u.zh)));
     for (const [, a] of UNIT_ALIAS_ROWS) expect(names.has(a)).toBe(false);
   });
-  it('不作别名：散兵、投石机、游侠骑兵、战象、侦察骑；待定的 4 个不上线', () => {
+  it('不作别名：散兵、投石机、游侠骑兵、战象、侦察骑；待定的 3 个不上线', () => {
     const all = Object.values(UNIT_ALIASES).flat();
     for (const x of ['散兵', '投石机', '游侠骑兵', '战象', '侦察骑', '条顿', '芒古代']) expect(all).not.toContain(x);
     for (const [, a] of PENDING_UNIT_ALIASES) expect(all).not.toContain(a);

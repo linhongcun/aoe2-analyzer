@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildOrders } from '../../src/data/buildOrders';
+import units from '../../src/data/raw/units';
 import { HOUSE, type BuildOrder, type Step } from '../../src/domain/buildOrder';
 
 const loadBo = (id: string): BuildOrder => {
@@ -72,6 +73,25 @@ describe('Reid/Steve 合并前必改（内容回归）', () => {
   it('scouts-18：马厩开造后注明城镇中心继续排村民', () => {
     const bo = loadBo('scouts-18');
     expect(bo.steps.some((s) => /继续排村民|不要停在\s*18/.test(s.note ?? ''))).toBe(true);
+  });
+
+  it('#473 scouts-18：第 13 步说明与实际训练的长矛兵一致', () => {
+    const step = loadBo('scouts-18').steps[12]!;
+    expect(step.vils).toBe(18);
+    expect(step.actions.find((action) => action.type === 'train')).toEqual({ type: 'train', unit: 93 });
+    expect(step.note).toContain(units.find((unit) => unit.id === 93)!.zh);
+    expect(step.note).not.toContain(units.find((unit) => unit.id === 358)!.zh);
+  });
+
+  it('#471 scouts-18：不承诺尚未实现的保守打法切换，实际分配保持', () => {
+    const step = loadBo('scouts-18').steps[9]!;
+    expect(step.vils).toBe(18);
+    expect(step.phase).toBe('feudal');
+    expect(step.actions).toEqual([
+      { type: 'gather', task: 'wood', count: 4, from: 'hunt' },
+      { type: 'gather', task: 'berries', count: 4, from: 'hunt' },
+    ]);
+    expect(step.note).not.toMatch(/界面可切换|可切换保守打法|保守打法[^。]*可切换/);
   });
 
   it('全部开局保持 reviewed', () => {

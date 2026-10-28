@@ -1,6 +1,7 @@
 /** issue 206：文明的必备单位/科技交集。条件保留具体形态和类型；非法条件不会放宽结果。 */
 import type { Civ, Tech, Trees, Unit } from './types';
 import { civStatus } from './simulator';
+import { UNIT_ALIASES } from '../data/aliases';
 
 export interface RequirementRef {
   kind: 'unit' | 'tech';
@@ -75,7 +76,11 @@ export function searchRequirements(ctx: Pick<RequirementContext, 'units' | 'tech
   const q = query.trim().toLowerCase();
   const matches = (entity: Unit | Tech) => `${entity.zh} ${entity.en} ${entity.py ?? ''} ${entity.pyi ?? ''}`.toLowerCase().includes(q);
   return [
-    ...(kind === 'tech' ? [] : ctx.units.filter(matches).map((entity) => ({ ref: { kind: 'unit' as const, id: entity.id }, entity }))),
+    ...(kind === 'tech'
+      ? []
+      : ctx.units
+          .filter((entity) => matches(entity) || UNIT_ALIASES[entity.id]?.some((alias) => alias.toLowerCase().includes(q)))
+          .map((entity) => ({ ref: { kind: 'unit' as const, id: entity.id }, entity }))),
     ...(kind === 'unit' ? [] : ctx.techs.filter(matches).map((entity) => ({ ref: { kind: 'tech' as const, id: entity.id }, entity }))),
   ];
 }

@@ -82,7 +82,7 @@ describe('#3 收尾：390 摘要 is-long（>14 个显示字符，按码点计）
 describe('#3 收尾：搜索提示带上开局', () => {
   it('首页搜索框与命令面板占位文案提到开局', () => {
     expect(readFileSync('src/features/home/components/Home.tsx', 'utf8')).toContain('搜索文明、单位、科技、开局…');
-    expect(readFileSync('src/features/search/components/CommandPalette.tsx', 'utf8')).toContain('搜索文明、单位、科技、开局…（中/英）');
+    expect(readFileSync('src/features/search/components/CommandPalette.tsx', 'utf8')).toContain('搜索文明、单位、科技、开局');
   });
   it('开局搜索结果直达对应时间线', () => {
     expect(readFileSync('src/features/search/hooks.ts', 'utf8')).toContain('href: `/builds?bo=${b.id}`');

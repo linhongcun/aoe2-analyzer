@@ -387,6 +387,9 @@ a.hcard:hover {
 }
 .cmdk-in input {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   border: none;
   background: transparent;
   font-size: 17px;
@@ -674,6 +677,14 @@ a.tbld:hover span {
 }
 .bo summary {
   cursor: pointer;
+}
+.bo-glossary-link {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
+  vertical-align: middle;
 }
 .bo-steps {
   padding-left: 0;

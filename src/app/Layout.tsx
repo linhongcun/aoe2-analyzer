@@ -49,7 +49,7 @@ function PalettePending({ onType, onClose }: { onType: (value: string) => void; 
             ref={input}
             autoFocus
             aria-label="全局搜索"
-            placeholder="搜索文明、单位、科技、开局…（中/英）"
+            placeholder="搜索文明、单位、科技、开局"
             value={value}
             onChange={(e) => {
               setValue(e.target.value);

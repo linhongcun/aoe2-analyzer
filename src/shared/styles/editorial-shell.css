@@ -225,8 +225,15 @@ footer.editorial-footer .fbfoot {
 footer.editorial-footer .fmeta .fitem {
   display: inline-flex;
   align-items: center;
-  min-height: 24px;
+  min-height: 44px;
   vertical-align: middle;
+}
+footer.editorial-footer a[href]:not(.fblink) {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
 }
 footer.editorial-footer .note {
   margin: 8px 0;

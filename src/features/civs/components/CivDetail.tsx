@@ -14,25 +14,26 @@ import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/Detai
 import { RatingHeading, RatingLabel } from '../../../shared/ui/RatingHelp';
 import { Linked, PosBox, Radar } from '../../../shared/ui/widgets';
 import { session } from '../../../shared/utils/sticky';
-import CivList from './CivList';
+import CivNotFound from './CivNotFound';
 import { BonusRows } from './BonusRows';
 import { CivOpening } from './CivOpening';
 import { CivRegionalUnits } from './CivRegionalUnits';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
 import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
+import { civDisplayText } from '../displayNames';
 
 function UTech({ s, civ }: { s: string; civ: string }) {
   const core = useCore();
   const f = core && findUniqueTech(s, civ, core.techs);
-  if (!f) return <Linked text={s} />;
+  if (!f) return <Linked text={civDisplayText(s, civ, core)} />;
   return (
     <>
       <Link className="ulink tlink" to={`/tech/${f.tech.id}`}>
         <TechIcon t={f.tech} />
         {f.zh}
       </Link>
-      <Linked text={f.rest} />｜{f.en}
+      <Linked text={civDisplayText(f.rest, civ, core)} />｜{f.en}
     </>
   );
 }
@@ -67,7 +68,7 @@ export default function CivDetail() {
       scrollTo(0, 0);
     }
   }, [c]);
-  if (!c) return <CivList />;
+  if (!c) return <CivNotFound en={en} />;
   const [s, w] = strengths(c);
   const myU = core ? core.units.filter((u) => u.type === 'UniqueUnit' && u.civs.includes(c.en)) : [];
   const highlights = new Set(
@@ -131,7 +132,7 @@ export default function CivDetail() {
               </p>
               <p>
                 <b>特色兵种：</b>
-                <Linked text={c.uu} />
+                <Linked text={civDisplayText(c.uu, c.en, core)} />
               </p>
               <p>
                 <b>文明加成：</b>
