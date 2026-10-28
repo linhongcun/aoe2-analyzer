@@ -26,6 +26,7 @@ import { discountedCost, priceAge } from '../../../domain/costDiscount';
 import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/realCost';
 import { Basis } from '../../../shared/ui/RealCost';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
+import { unitDisplayAge } from '../displayAge';
 
 /** #88 S8：费用下面一行「采集时间 ≈ 1 个村民 m:ss」；时代跟页面所选，未选默认城堡；未选文明按通用速度 */
 function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {
@@ -121,6 +122,7 @@ export default function UnitDetail() {
     );
   if (!rt) return <UnitList />;
   if (!u) return <HistoricalEntityDetail target={{ targetType: 'unit', targetId: rt.id }} />;
+  const displayAge = unitDisplayAge(u, rt.civ);
   const base = baseUnit(u, core.fam);
   const elite = core.fam.eliteOf[base.id];
   const isE = u.id !== base.id;
@@ -190,20 +192,23 @@ export default function UnitDetail() {
         <>
           <span className="tag">{UT[u.type] ?? u.type}</span>
           <BLink id={u.b} zh={u.bz} />
-          <span className="tag">{AGE_ZH[u.age] ?? u.age}</span>
+          <span className="tag">{AGE_ZH[displayAge] ?? displayAge}</span>
         </>
       }
       tabsTop={
-        elite ? (
-          <div className="eseg" role="radiogroup" aria-label="普通/精锐">
-            <Link role="radio" aria-checked={!isE} className={isE ? undefined : 'on'} to={swap(base.id)} replace>
-              普通
-            </Link>
-            <Link role="radio" aria-checked={isE} className={isE ? 'on' : undefined} to={swap(elite.id)} replace>
-              精锐
-            </Link>
-          </div>
-        ) : undefined
+        <>
+          {u.id === 93 && <p className="note">通常在封建时代可用；亚美尼亚可在黑暗时代训练长矛兵。</p>}
+          {elite && (
+            <div className="eseg" role="radiogroup" aria-label="普通/精锐">
+              <Link role="radio" aria-checked={!isE} className={isE ? undefined : 'on'} to={swap(base.id)} replace>
+                普通
+              </Link>
+              <Link role="radio" aria-checked={isE} className={isE ? 'on' : undefined} to={swap(elite.id)} replace>
+                精锐
+              </Link>
+            </div>
+          )}
+        </>
       }
       initialTab={wantSim && u.civs.length ? 'sim' : 'ov'}
       tabs={[

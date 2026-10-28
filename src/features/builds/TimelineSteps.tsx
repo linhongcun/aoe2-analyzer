@@ -4,6 +4,7 @@ import { useCore } from '../../data/hooks';
 import type { BuildOrder } from '../../domain/buildOrder';
 import type { BuildTimeline } from '../../domain/buildSim';
 import { RowSegs } from './RowSegs';
+import { TimelineSegmentList } from './TimelineChart';
 import { NumUnitText } from './NumUnitText';
 import { stepEntities, villagerGroups } from './timelineFollowups';
 import { RES_ZH, ROW_SEG_MAX, mmss, noteParts, prereqDetail, rowSegments, rowTime, segLabel, type TimelineQuery, type TimelineView } from './timelineModel';
@@ -44,7 +45,8 @@ export function TimelineSteps({
   return (
     <>
       <details className="tl-extra-controls">
-        <summary>时间线操作与村民生产</summary>
+        <summary>时间线分段、操作与村民生产</summary>
+        <TimelineSegmentList v={v} />
         <nav className="tl-node-list" aria-label="时间线节点">
           {bo.steps.map((_, i) => (
             <button

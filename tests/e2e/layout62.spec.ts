@@ -206,7 +206,7 @@ for (const width of WIDTHS)
       await ready(page, 'builds', '[data-t="build-order"] summary');
       await screenshot(page, info, 'builds', width, theme);
       const shortcuts = page.locator('.tl-empty-btns .tl-chip');
-      await expect(shortcuts).toHaveCount(6);
+      await expect(shortcuts).toHaveCount(8);
       const shortcut = shortcuts.first();
       await expect(shortcut).toHaveJSProperty('tagName', 'BUTTON');
       await shortcut.focus();

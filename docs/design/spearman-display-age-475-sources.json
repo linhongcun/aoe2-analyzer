@@ -1,0 +1,44 @@
+[
+  {
+    "tree": "ARMENIANS",
+    "url": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/trees/ARMENIANS.json",
+    "sha256": "2642080f1b8f7f3888dac303a7e8311140e415d955f187489f7466dff5d851bd",
+    "entries": [
+      {
+        "node_id": 93,
+        "name": "Spearman",
+        "age_id": 1,
+        "node_status": "ResearchedCompleted",
+        "use_type": "Unit"
+      }
+    ]
+  },
+  {
+    "tree": "FRANKS",
+    "url": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/trees/FRANKS.json",
+    "sha256": "6cac478c4429edd704acb6bad6c1bf323b6d8f92cf5fece66dc021358497a915",
+    "entries": [
+      {
+        "node_id": 93,
+        "name": "Spearman",
+        "age_id": 2,
+        "node_status": "ResearchedCompleted",
+        "use_type": "Unit"
+      }
+    ]
+  },
+  {
+    "tree": "BRITONS",
+    "url": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/trees/BRITONS.json",
+    "sha256": "f2b4ba0dc2b8b9932a55eb72de17070088f9bf5484308b5d8fa660195342c0b0",
+    "entries": [
+      {
+        "node_id": 93,
+        "name": "Spearman",
+        "age_id": 2,
+        "node_status": "ResearchedCompleted",
+        "use_type": "Unit"
+      }
+    ]
+  }
+]

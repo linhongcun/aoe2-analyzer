@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import { buildOrders } from '../../../data/buildOrders';
 import { useCore } from '../../../data/hooks';
-import { openingBuildIds, openingText } from '../../../domain/civOpening';
+import { openingBuildIds } from '../../../domain/civOpening';
 import type { Civ } from '../../../domain/types';
 import { Linked } from '../../../shared/ui/widgets';
+import { civOpeningDisplayText } from '../displayNames';
 
 export function CivOpening({ c }: { c: Civ }) {
   const core = useCore();
@@ -19,7 +20,7 @@ export function CivOpening({ c }: { c: Civ }) {
         {c.op.split('->').map((text, i) => (
           <li key={i}>
             <b>{i === 0 ? '黑暗至封建' : text.includes('帝王') ? '帝王时代' : '城堡及后续'}：</b>
-            <Linked text={core ? openingText(text.trim(), core.units) : text.trim()} />
+            <Linked text={civOpeningDisplayText(text.trim(), c.en, core)} />
           </li>
         ))}
       </ol>
