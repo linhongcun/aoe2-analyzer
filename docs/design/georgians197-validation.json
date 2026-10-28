@@ -185,7 +185,7 @@
     "startingFreeCarts": 8,
     "paidCarts": 13,
     "campActions": 13,
-    "campSteps": 12,
+    "campSteps": 13,
     "costAPI": "cost records the first train/build action in a step, not necessarily the primary entity:12 records80W20F include10 primary carts and2 primary ageups; the compound primary House records25W.",
     "researchAPI": "Only2 primary matching research starts are individually exposed;19 compound research starts are not. Offline comparisons use declared0.1s tick/order bounds, not stronger same-tick assumptions."
   },
