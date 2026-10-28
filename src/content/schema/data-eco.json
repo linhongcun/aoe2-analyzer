@@ -433,6 +433,9 @@
                 },
                 "spawn": {
                   "$ref": "wei-spawn.json"
+                },
+                "ageSpawn": {
+                  "$ref": "wei-spawn.json"
                 }
               },
               "required": ["source", "tech", "name", "age", "requires", "effects"],

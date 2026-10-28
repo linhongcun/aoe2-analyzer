@@ -1,0 +1,2640 @@
+{
+  "runtime": "3fc699c3ec54c34d00b072846c818676275b0f18",
+  "tree": "0e3962ac068a2dc81403950a45a5d8142dc1adef",
+  "startedUTC": "2026-10-27T23:04:04.186Z",
+  "completedUTC": "2026-10-27T23:04:04.413Z",
+  "provenance": "Independent source reviewer ONE8pointobservations onclean3fc;69prefirstsnapshots/paidbirths matchactual43fbaseline; laterpublicsimulateBuild tests validate this fixed oracle. Sourceengineobservation identity stays3fc, never relabeled tofinalUIbuild.",
+  "reportSHA256": "dfd9260bf08ba06fe24e9e5af032451d1c4bb330c8b9c6895129743c33d6a8ee",
+  "cases": [
+    {
+      "id": "feudal-drush-18",
+      "paidCount": 15,
+      "freeCount": 2,
+      "endingVillagers": 20,
+      "rewards": [
+        {
+          "at": 577,
+          "tech": 847,
+          "trigger": 101,
+          "count": 2,
+          "step": 8,
+          "pop": {
+            "used": 21,
+            "cap": 25
+          },
+          "task": "build"
+        }
+      ],
+      "lastStep": {
+        "index": 11,
+        "startAt": 577.3,
+        "doneAt": 577.3,
+        "stock": {
+          "food": 293,
+          "wood": 76,
+          "gold": 10,
+          "stone": 200
+        },
+        "pop": {
+          "used": 23,
+          "cap": 25
+        },
+        "villagers": {
+          "food": 9,
+          "wood": 7,
+          "gold": 0,
+          "stone": 0,
+          "build": 3,
+          "idle": 0
+        }
+      },
+      "preFirstSnapshots": [
+        {
+          "startAt": 0,
+          "stock": {
+            "food": 200,
+            "wood": 200,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 4,
+            "cap": 5
+          },
+          "villagers": {
+            "food": 0,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 3,
+            "idle": 0
+          },
+          "index": 0
+        },
+        {
+          "startAt": 75.1,
+          "stock": {
+            "food": 21,
+            "wood": 150,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 7,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 1
+        },
+        {
+          "startAt": 150.1,
+          "stock": {
+            "food": 48,
+            "wood": 171,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 10,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 2
+        },
+        {
+          "startAt": 176,
+          "stock": {
+            "food": 42,
+            "wood": 85,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 11,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 7,
+            "wood": 2,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 3
+        },
+        {
+          "startAt": 204.6,
+          "stock": {
+            "food": 2,
+            "wood": 107,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 12,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 8,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 4
+        },
+        {
+          "startAt": 304.6,
+          "stock": {
+            "food": 75,
+            "wood": 166,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 16,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 12,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 5
+        },
+        {
+          "startAt": 329.6,
+          "stock": {
+            "food": 112,
+            "wood": 187,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 17,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 12,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 6
+        },
+        {
+          "startAt": 354.6,
+          "stock": {
+            "food": 150,
+            "wood": 8,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 18,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 13,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 7
+        },
+        {
+          "startAt": 379.6,
+          "stock": {
+            "food": 244,
+            "wood": 29,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 19,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 13,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 8
+        }
+      ],
+      "preFirstPaid": [
+        {
+          "from": 0,
+          "to": 25,
+          "step": 0
+        },
+        {
+          "from": 25,
+          "to": 50,
+          "step": 0
+        },
+        {
+          "from": 50,
+          "to": 75,
+          "step": 0
+        },
+        {
+          "from": 75,
+          "to": 100,
+          "step": 1
+        },
+        {
+          "from": 100,
+          "to": 125,
+          "step": 1
+        },
+        {
+          "from": 125,
+          "to": 150,
+          "step": 1
+        },
+        {
+          "from": 150.9,
+          "to": 175.9,
+          "step": 2
+        },
+        {
+          "from": 179.5,
+          "to": 204.5,
+          "step": 3
+        },
+        {
+          "from": 204.5,
+          "to": 229.5,
+          "step": 4
+        },
+        {
+          "from": 229.5,
+          "to": 254.5,
+          "step": 4
+        },
+        {
+          "from": 254.5,
+          "to": 279.5,
+          "step": 4
+        },
+        {
+          "from": 279.5,
+          "to": 304.5,
+          "step": 4
+        },
+        {
+          "from": 304.5,
+          "to": 329.5,
+          "step": 5
+        },
+        {
+          "from": 329.5,
+          "to": 354.5,
+          "step": 6
+        },
+        {
+          "from": 354.5,
+          "to": 379.5,
+          "step": 7
+        }
+      ]
+    },
+    {
+      "id": "hybrid-fish-18",
+      "paidCount": 15,
+      "freeCount": 2,
+      "endingVillagers": 20,
+      "rewards": [
+        {
+          "at": 625,
+          "tech": 847,
+          "trigger": 101,
+          "count": 2,
+          "step": 6,
+          "pop": {
+            "used": 24,
+            "cap": 25
+          },
+          "task": null
+        }
+      ],
+      "lastStep": {
+        "index": 8,
+        "startAt": 625,
+        "doneAt": 625.1,
+        "stock": {
+          "food": 176,
+          "wood": 571,
+          "gold": 193,
+          "stone": 200
+        },
+        "pop": {
+          "used": 24,
+          "cap": 25
+        },
+        "villagers": {
+          "food": 1,
+          "wood": 13,
+          "gold": 4,
+          "stone": 0,
+          "build": 0,
+          "idle": 2
+        }
+      },
+      "preFirstSnapshots": [
+        {
+          "startAt": 0,
+          "stock": {
+            "food": 200,
+            "wood": 200,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 4,
+            "cap": 5
+          },
+          "villagers": {
+            "food": 0,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 3,
+            "idle": 0
+          },
+          "index": 0
+        },
+        {
+          "startAt": 75.1,
+          "stock": {
+            "food": 21,
+            "wood": 150,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 7,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 1
+        },
+        {
+          "startAt": 176,
+          "stock": {
+            "food": 42,
+            "wood": 192,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 11,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 2
+        },
+        {
+          "startAt": 205.4,
+          "stock": {
+            "food": 42,
+            "wood": 117,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 12,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 3
+        },
+        {
+          "startAt": 258,
+          "stock": {
+            "food": 32,
+            "wood": 0,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 13,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 5,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 4
+        },
+        {
+          "startAt": 390,
+          "stock": {
+            "food": 78,
+            "wood": 0,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 21,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 10,
+            "wood": 7,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 5
+        },
+        {
+          "startAt": 402.9,
+          "stock": {
+            "food": 124,
+            "wood": 25,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 22,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 11,
+            "wood": 7,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 6
+        },
+        {
+          "startAt": 495.1,
+          "stock": {
+            "food": 0,
+            "wood": 206,
+            "gold": 50,
+            "stone": 200
+          },
+          "pop": {
+            "used": 22,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 1,
+            "wood": 13,
+            "gold": 4,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 7
+        }
+      ],
+      "preFirstPaid": [
+        {
+          "from": 0,
+          "to": 25,
+          "step": 0
+        },
+        {
+          "from": 25,
+          "to": 50,
+          "step": 0
+        },
+        {
+          "from": 50,
+          "to": 75,
+          "step": 0
+        },
+        {
+          "from": 75,
+          "to": 100,
+          "step": 1
+        },
+        {
+          "from": 100,
+          "to": 125,
+          "step": 1
+        },
+        {
+          "from": 125,
+          "to": 150,
+          "step": 1
+        },
+        {
+          "from": 150.9,
+          "to": 175.9,
+          "step": 1
+        },
+        {
+          "from": 180.3,
+          "to": 205.3,
+          "step": 2
+        },
+        {
+          "from": 209.7,
+          "to": 234.7,
+          "step": 3
+        },
+        {
+          "from": 239.1,
+          "to": 264.1,
+          "step": 4
+        },
+        {
+          "from": 270.6,
+          "to": 295.6,
+          "step": 4
+        },
+        {
+          "from": 302.6,
+          "to": 327.6,
+          "step": 4
+        },
+        {
+          "from": 327.8,
+          "to": 352.8,
+          "step": 4
+        },
+        {
+          "from": 352.8,
+          "to": 377.8,
+          "step": 4
+        },
+        {
+          "from": 377.8,
+          "to": 402.8,
+          "step": 5
+        }
+      ]
+    },
+    {
+      "id": "maa-archers-18",
+      "paidCount": 20,
+      "freeCount": 2,
+      "endingVillagers": 25,
+      "rewards": [
+        {
+          "at": 570.6,
+          "tech": 847,
+          "trigger": 101,
+          "count": 2,
+          "step": 5,
+          "pop": {
+            "used": 21,
+            "cap": 30
+          },
+          "task": "berries"
+        }
+      ],
+      "lastStep": {
+        "index": 11,
+        "startAt": 732.2,
+        "doneAt": 850.4,
+        "stock": {
+          "food": 458,
+          "wood": 0,
+          "gold": 65,
+          "stone": 200
+        },
+        "pop": {
+          "used": 29,
+          "cap": 35
+        },
+        "villagers": {
+          "food": 13,
+          "wood": 8,
+          "gold": 3,
+          "stone": 0,
+          "build": 0,
+          "idle": 0
+        }
+      },
+      "preFirstSnapshots": [
+        {
+          "startAt": 0,
+          "stock": {
+            "food": 200,
+            "wood": 200,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 4,
+            "cap": 5
+          },
+          "villagers": {
+            "food": 0,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 3,
+            "idle": 0
+          },
+          "index": 0
+        },
+        {
+          "startAt": 75.1,
+          "stock": {
+            "food": 21,
+            "wood": 150,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 7,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 1
+        },
+        {
+          "startAt": 150.1,
+          "stock": {
+            "food": 48,
+            "wood": 171,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 10,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 2
+        },
+        {
+          "startAt": 176,
+          "stock": {
+            "food": 42,
+            "wood": 53,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 11,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 7,
+            "wood": 2,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 3
+        },
+        {
+          "startAt": 304.6,
+          "stock": {
+            "food": 82,
+            "wood": 159,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 16,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 12,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 4
+        },
+        {
+          "startAt": 379.6,
+          "stock": {
+            "food": 252,
+            "wood": 190,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 19,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 5
+        }
+      ],
+      "preFirstPaid": [
+        {
+          "from": 0,
+          "to": 25,
+          "step": 0
+        },
+        {
+          "from": 25,
+          "to": 50,
+          "step": 0
+        },
+        {
+          "from": 50,
+          "to": 75,
+          "step": 0
+        },
+        {
+          "from": 75,
+          "to": 100,
+          "step": 1
+        },
+        {
+          "from": 100,
+          "to": 125,
+          "step": 1
+        },
+        {
+          "from": 125,
+          "to": 150,
+          "step": 1
+        },
+        {
+          "from": 150.9,
+          "to": 175.9,
+          "step": 2
+        },
+        {
+          "from": 179.5,
+          "to": 204.5,
+          "step": 3
+        },
+        {
+          "from": 204.5,
+          "to": 229.5,
+          "step": 3
+        },
+        {
+          "from": 229.5,
+          "to": 254.5,
+          "step": 3
+        },
+        {
+          "from": 254.5,
+          "to": 279.5,
+          "step": 3
+        },
+        {
+          "from": 279.5,
+          "to": 304.5,
+          "step": 3
+        },
+        {
+          "from": 304.5,
+          "to": 329.5,
+          "step": 4
+        },
+        {
+          "from": 329.5,
+          "to": 354.5,
+          "step": 4
+        },
+        {
+          "from": 354.5,
+          "to": 379.5,
+          "step": 4
+        }
+      ]
+    },
+    {
+      "id": "scouts-18",
+      "paidCount": 15,
+      "freeCount": 2,
+      "endingVillagers": 20,
+      "rewards": [
+        {
+          "at": 555.5,
+          "tech": 847,
+          "trigger": 101,
+          "count": 2,
+          "step": 7,
+          "pop": {
+            "used": 21,
+            "cap": 25
+          },
+          "task": null
+        }
+      ],
+      "lastStep": {
+        "index": 12,
+        "startAt": 684.9,
+        "doneAt": 716.5,
+        "stock": {
+          "food": 532,
+          "wood": 0,
+          "gold": 50,
+          "stone": 200
+        },
+        "pop": {
+          "used": 22,
+          "cap": 25
+        },
+        "villagers": {
+          "food": 8,
+          "wood": 8,
+          "gold": 0,
+          "stone": 0,
+          "build": 2,
+          "idle": 2
+        }
+      },
+      "preFirstSnapshots": [
+        {
+          "startAt": 0,
+          "stock": {
+            "food": 200,
+            "wood": 200,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 4,
+            "cap": 5
+          },
+          "villagers": {
+            "food": 0,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 3,
+            "idle": 0
+          },
+          "index": 0
+        },
+        {
+          "startAt": 75.1,
+          "stock": {
+            "food": 21,
+            "wood": 150,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 7,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 1
+        },
+        {
+          "startAt": 125.1,
+          "stock": {
+            "food": 6,
+            "wood": 157,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 9,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 2,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 2
+        },
+        {
+          "startAt": 150.1,
+          "stock": {
+            "food": 48,
+            "wood": 64,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 10,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 7,
+            "wood": 1,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 3
+        },
+        {
+          "startAt": 175.8,
+          "stock": {
+            "food": 2,
+            "wood": 75,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 11,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 8,
+            "wood": 2,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 4
+        },
+        {
+          "startAt": 263.8,
+          "stock": {
+            "food": 85,
+            "wood": 0,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 14,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 10,
+            "wood": 2,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 5
+        },
+        {
+          "startAt": 325.8,
+          "stock": {
+            "food": 146,
+            "wood": 34,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 17,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 2,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 6
+        },
+        {
+          "startAt": 375.8,
+          "stock": {
+            "food": 298,
+            "wood": 38,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 19,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 7
+        },
+        {
+          "startAt": 425.6,
+          "stock": {
+            "food": 0,
+            "wood": 93,
+            "gold": 50,
+            "stone": 200
+          },
+          "pop": {
+            "used": 19,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 13,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 8
+        }
+      ],
+      "preFirstPaid": [
+        {
+          "from": 0,
+          "to": 25,
+          "step": 0
+        },
+        {
+          "from": 25,
+          "to": 50,
+          "step": 0
+        },
+        {
+          "from": 50,
+          "to": 75,
+          "step": 0
+        },
+        {
+          "from": 75,
+          "to": 100,
+          "step": 1
+        },
+        {
+          "from": 100,
+          "to": 125,
+          "step": 1
+        },
+        {
+          "from": 125,
+          "to": 150,
+          "step": 2
+        },
+        {
+          "from": 150.7,
+          "to": 175.7,
+          "step": 3
+        },
+        {
+          "from": 175.7,
+          "to": 200.7,
+          "step": 4
+        },
+        {
+          "from": 200.7,
+          "to": 225.7,
+          "step": 4
+        },
+        {
+          "from": 225.7,
+          "to": 250.7,
+          "step": 4
+        },
+        {
+          "from": 250.7,
+          "to": 275.7,
+          "step": 5
+        },
+        {
+          "from": 275.7,
+          "to": 300.7,
+          "step": 5
+        },
+        {
+          "from": 300.7,
+          "to": 325.7,
+          "step": 5
+        },
+        {
+          "from": 325.7,
+          "to": 350.7,
+          "step": 6
+        },
+        {
+          "from": 350.7,
+          "to": 375.7,
+          "step": 6
+        }
+      ]
+    },
+    {
+      "id": "archers-19",
+      "paidCount": 16,
+      "freeCount": 2,
+      "endingVillagers": 21,
+      "rewards": [
+        {
+          "at": 584.4,
+          "tech": 847,
+          "trigger": 101,
+          "count": 2,
+          "step": 6,
+          "pop": {
+            "used": 22,
+            "cap": 25
+          },
+          "task": "gold"
+        }
+      ],
+      "lastStep": {
+        "index": 10,
+        "startAt": 744.6,
+        "doneAt": 784.5,
+        "stock": {
+          "food": 623,
+          "wood": 429,
+          "gold": 181,
+          "stone": 200
+        },
+        "pop": {
+          "used": 23,
+          "cap": 30
+        },
+        "villagers": {
+          "food": 5,
+          "wood": 12,
+          "gold": 4,
+          "stone": 0,
+          "build": 0,
+          "idle": 0
+        }
+      },
+      "preFirstSnapshots": [
+        {
+          "startAt": 0,
+          "stock": {
+            "food": 200,
+            "wood": 200,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 4,
+            "cap": 5
+          },
+          "villagers": {
+            "food": 0,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 3,
+            "idle": 0
+          },
+          "index": 0
+        },
+        {
+          "startAt": 75.1,
+          "stock": {
+            "food": 21,
+            "wood": 150,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 7,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 1
+        },
+        {
+          "startAt": 150.1,
+          "stock": {
+            "food": 48,
+            "wood": 171,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 10,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 2
+        },
+        {
+          "startAt": 176,
+          "stock": {
+            "food": 42,
+            "wood": 85,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 11,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 7,
+            "wood": 2,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 3
+        },
+        {
+          "startAt": 204.6,
+          "stock": {
+            "food": 2,
+            "wood": 107,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 12,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 8,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 4
+        },
+        {
+          "startAt": 354.6,
+          "stock": {
+            "food": 145,
+            "wood": 108,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 18,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 5
+        },
+        {
+          "startAt": 404.6,
+          "stock": {
+            "food": 298,
+            "wood": 125,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 20,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 5,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 6
+        }
+      ],
+      "preFirstPaid": [
+        {
+          "from": 0,
+          "to": 25,
+          "step": 0
+        },
+        {
+          "from": 25,
+          "to": 50,
+          "step": 0
+        },
+        {
+          "from": 50,
+          "to": 75,
+          "step": 0
+        },
+        {
+          "from": 75,
+          "to": 100,
+          "step": 1
+        },
+        {
+          "from": 100,
+          "to": 125,
+          "step": 1
+        },
+        {
+          "from": 125,
+          "to": 150,
+          "step": 1
+        },
+        {
+          "from": 150.9,
+          "to": 175.9,
+          "step": 2
+        },
+        {
+          "from": 179.5,
+          "to": 204.5,
+          "step": 3
+        },
+        {
+          "from": 204.5,
+          "to": 229.5,
+          "step": 4
+        },
+        {
+          "from": 229.5,
+          "to": 254.5,
+          "step": 4
+        },
+        {
+          "from": 254.5,
+          "to": 279.5,
+          "step": 4
+        },
+        {
+          "from": 279.5,
+          "to": 304.5,
+          "step": 4
+        },
+        {
+          "from": 304.5,
+          "to": 329.5,
+          "step": 4
+        },
+        {
+          "from": 329.5,
+          "to": 354.5,
+          "step": 4
+        },
+        {
+          "from": 354.5,
+          "to": 379.5,
+          "step": 5
+        },
+        {
+          "from": 379.5,
+          "to": 404.5,
+          "step": 5
+        }
+      ]
+    },
+    {
+      "id": "fast-castle-boom",
+      "paidCount": 20,
+      "freeCount": 4,
+      "endingVillagers": 27,
+      "rewards": [
+        {
+          "at": 673.6,
+          "tech": 847,
+          "trigger": 101,
+          "count": 2,
+          "step": 9,
+          "pop": {
+            "used": 26,
+            "cap": 30
+          },
+          "task": "wood"
+        },
+        {
+          "at": 924.6,
+          "tech": 848,
+          "trigger": 102,
+          "count": 2,
+          "step": 11,
+          "pop": {
+            "used": 28,
+            "cap": 30
+          },
+          "task": null
+        }
+      ],
+      "lastStep": {
+        "index": 12,
+        "startAt": 924.6,
+        "doneAt": 1064,
+        "stock": {
+          "food": 994,
+          "wood": 470,
+          "gold": 128,
+          "stone": 200
+        },
+        "pop": {
+          "used": 28,
+          "cap": 30
+        },
+        "villagers": {
+          "food": 14,
+          "wood": 9,
+          "gold": 2,
+          "stone": 0,
+          "build": 0,
+          "idle": 2
+        }
+      },
+      "preFirstSnapshots": [
+        {
+          "startAt": 0,
+          "stock": {
+            "food": 200,
+            "wood": 200,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 4,
+            "cap": 5
+          },
+          "villagers": {
+            "food": 0,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 3,
+            "idle": 0
+          },
+          "index": 0
+        },
+        {
+          "startAt": 75.1,
+          "stock": {
+            "food": 21,
+            "wood": 150,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 7,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 1
+        },
+        {
+          "startAt": 150.1,
+          "stock": {
+            "food": 48,
+            "wood": 171,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 10,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 2
+        },
+        {
+          "startAt": 176,
+          "stock": {
+            "food": 42,
+            "wood": 85,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 11,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 7,
+            "wood": 2,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 3
+        },
+        {
+          "startAt": 204.6,
+          "stock": {
+            "food": 2,
+            "wood": 107,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 12,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 8,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 4
+        },
+        {
+          "startAt": 254.6,
+          "stock": {
+            "food": 12,
+            "wood": 24,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 14,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 9,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 5
+        },
+        {
+          "startAt": 354.6,
+          "stock": {
+            "food": 143,
+            "wood": 108,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 18,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 6
+        },
+        {
+          "startAt": 354.7,
+          "stock": {
+            "food": 143,
+            "wood": 83,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 18,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 13,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 7
+        },
+        {
+          "startAt": 470.1,
+          "stock": {
+            "food": 460,
+            "wood": 0,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 22,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 13,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 8
+        },
+        {
+          "startAt": 504.6,
+          "stock": {
+            "food": 563,
+            "wood": 26,
+            "gold": 106,
+            "stone": 200
+          },
+          "pop": {
+            "used": 24,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 6,
+            "gold": 2,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 9
+        }
+      ],
+      "preFirstPaid": [
+        {
+          "from": 0,
+          "to": 25,
+          "step": 0
+        },
+        {
+          "from": 25,
+          "to": 50,
+          "step": 0
+        },
+        {
+          "from": 50,
+          "to": 75,
+          "step": 0
+        },
+        {
+          "from": 75,
+          "to": 100,
+          "step": 1
+        },
+        {
+          "from": 100,
+          "to": 125,
+          "step": 1
+        },
+        {
+          "from": 125,
+          "to": 150,
+          "step": 1
+        },
+        {
+          "from": 150.9,
+          "to": 175.9,
+          "step": 2
+        },
+        {
+          "from": 179.5,
+          "to": 204.5,
+          "step": 3
+        },
+        {
+          "from": 204.5,
+          "to": 229.5,
+          "step": 4
+        },
+        {
+          "from": 229.5,
+          "to": 254.5,
+          "step": 4
+        },
+        {
+          "from": 254.5,
+          "to": 279.5,
+          "step": 5
+        },
+        {
+          "from": 279.5,
+          "to": 304.5,
+          "step": 5
+        },
+        {
+          "from": 304.5,
+          "to": 329.5,
+          "step": 5
+        },
+        {
+          "from": 329.5,
+          "to": 354.5,
+          "step": 5
+        },
+        {
+          "from": 354.5,
+          "to": 379.5,
+          "step": 7
+        },
+        {
+          "from": 379.5,
+          "to": 404.5,
+          "step": 7
+        },
+        {
+          "from": 404.5,
+          "to": 429.5,
+          "step": 7
+        },
+        {
+          "from": 429.5,
+          "to": 454.5,
+          "step": 7
+        },
+        {
+          "from": 454.5,
+          "to": 479.5,
+          "step": 8
+        },
+        {
+          "from": 479.5,
+          "to": 504.5,
+          "step": 8
+        }
+      ]
+    },
+    {
+      "id": "fast-castle-knights",
+      "paidCount": 20,
+      "freeCount": 4,
+      "endingVillagers": 27,
+      "rewards": [
+        {
+          "at": 673.6,
+          "tech": 847,
+          "trigger": 101,
+          "count": 2,
+          "step": 9,
+          "pop": {
+            "used": 26,
+            "cap": 30
+          },
+          "task": "wood"
+        },
+        {
+          "at": 924.6,
+          "tech": 848,
+          "trigger": 102,
+          "count": 2,
+          "step": 11,
+          "pop": {
+            "used": 28,
+            "cap": 30
+          },
+          "task": null
+        }
+      ],
+      "lastStep": {
+        "index": 13,
+        "startAt": 979.9,
+        "doneAt": 1059.7,
+        "stock": {
+          "food": 1245,
+          "wood": 0,
+          "gold": 206,
+          "stone": 200
+        },
+        "pop": {
+          "used": 28,
+          "cap": 35
+        },
+        "villagers": {
+          "food": 13,
+          "wood": 5,
+          "gold": 5,
+          "stone": 0,
+          "build": 0,
+          "idle": 2
+        }
+      },
+      "preFirstSnapshots": [
+        {
+          "startAt": 0,
+          "stock": {
+            "food": 200,
+            "wood": 200,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 4,
+            "cap": 5
+          },
+          "villagers": {
+            "food": 0,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 3,
+            "idle": 0
+          },
+          "index": 0
+        },
+        {
+          "startAt": 75.1,
+          "stock": {
+            "food": 21,
+            "wood": 150,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 7,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 1
+        },
+        {
+          "startAt": 150.1,
+          "stock": {
+            "food": 48,
+            "wood": 171,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 10,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 2
+        },
+        {
+          "startAt": 176,
+          "stock": {
+            "food": 42,
+            "wood": 85,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 11,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 7,
+            "wood": 2,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 3
+        },
+        {
+          "startAt": 204.6,
+          "stock": {
+            "food": 2,
+            "wood": 107,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 12,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 8,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 4
+        },
+        {
+          "startAt": 254.6,
+          "stock": {
+            "food": 12,
+            "wood": 24,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 14,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 9,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 5
+        },
+        {
+          "startAt": 354.6,
+          "stock": {
+            "food": 143,
+            "wood": 108,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 18,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 6
+        },
+        {
+          "startAt": 354.7,
+          "stock": {
+            "food": 143,
+            "wood": 83,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 18,
+            "cap": 20
+          },
+          "villagers": {
+            "food": 13,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 7
+        },
+        {
+          "startAt": 470.1,
+          "stock": {
+            "food": 460,
+            "wood": 0,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 22,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 13,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 8
+        },
+        {
+          "startAt": 504.6,
+          "stock": {
+            "food": 563,
+            "wood": 26,
+            "gold": 106,
+            "stone": 200
+          },
+          "pop": {
+            "used": 24,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 6,
+            "gold": 2,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 9
+        }
+      ],
+      "preFirstPaid": [
+        {
+          "from": 0,
+          "to": 25,
+          "step": 0
+        },
+        {
+          "from": 25,
+          "to": 50,
+          "step": 0
+        },
+        {
+          "from": 50,
+          "to": 75,
+          "step": 0
+        },
+        {
+          "from": 75,
+          "to": 100,
+          "step": 1
+        },
+        {
+          "from": 100,
+          "to": 125,
+          "step": 1
+        },
+        {
+          "from": 125,
+          "to": 150,
+          "step": 1
+        },
+        {
+          "from": 150.9,
+          "to": 175.9,
+          "step": 2
+        },
+        {
+          "from": 179.5,
+          "to": 204.5,
+          "step": 3
+        },
+        {
+          "from": 204.5,
+          "to": 229.5,
+          "step": 4
+        },
+        {
+          "from": 229.5,
+          "to": 254.5,
+          "step": 4
+        },
+        {
+          "from": 254.5,
+          "to": 279.5,
+          "step": 5
+        },
+        {
+          "from": 279.5,
+          "to": 304.5,
+          "step": 5
+        },
+        {
+          "from": 304.5,
+          "to": 329.5,
+          "step": 5
+        },
+        {
+          "from": 329.5,
+          "to": 354.5,
+          "step": 5
+        },
+        {
+          "from": 354.5,
+          "to": 379.5,
+          "step": 7
+        },
+        {
+          "from": 379.5,
+          "to": 404.5,
+          "step": 7
+        },
+        {
+          "from": 404.5,
+          "to": 429.5,
+          "step": 7
+        },
+        {
+          "from": 429.5,
+          "to": 454.5,
+          "step": 7
+        },
+        {
+          "from": 454.5,
+          "to": 479.5,
+          "step": 8
+        },
+        {
+          "from": 479.5,
+          "to": 504.5,
+          "step": 8
+        }
+      ]
+    },
+    {
+      "id": "drush-fc",
+      "paidCount": 24,
+      "freeCount": 4,
+      "endingVillagers": 31,
+      "rewards": [
+        {
+          "at": 780.7,
+          "tech": 847,
+          "trigger": 101,
+          "count": 2,
+          "step": 9,
+          "pop": {
+            "used": 33,
+            "cap": 45
+          },
+          "task": "gold"
+        },
+        {
+          "at": 1030.8,
+          "tech": 848,
+          "trigger": 102,
+          "count": 2,
+          "step": 12,
+          "pop": {
+            "used": 35,
+            "cap": 45
+          },
+          "task": null
+        }
+      ],
+      "lastStep": {
+        "index": 13,
+        "startAt": 1030.8,
+        "doneAt": 1065.8,
+        "stock": {
+          "food": 916,
+          "wood": 884,
+          "gold": 408,
+          "stone": 200
+        },
+        "pop": {
+          "used": 35,
+          "cap": 45
+        },
+        "villagers": {
+          "food": 14,
+          "wood": 8,
+          "gold": 6,
+          "stone": 0,
+          "build": 1,
+          "idle": 2
+        }
+      },
+      "preFirstSnapshots": [
+        {
+          "startAt": 0,
+          "stock": {
+            "food": 200,
+            "wood": 200,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 4,
+            "cap": 5
+          },
+          "villagers": {
+            "food": 0,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 3,
+            "idle": 0
+          },
+          "index": 0
+        },
+        {
+          "startAt": 75.1,
+          "stock": {
+            "food": 21,
+            "wood": 150,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 7,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 0,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 1
+        },
+        {
+          "startAt": 176,
+          "stock": {
+            "food": 42,
+            "wood": 192,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 11,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 6,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 2
+        },
+        {
+          "startAt": 205.4,
+          "stock": {
+            "food": 42,
+            "wood": 117,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 12,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 7,
+            "wood": 3,
+            "gold": 0,
+            "stone": 0,
+            "build": 0,
+            "idle": 0
+          },
+          "index": 3
+        },
+        {
+          "startAt": 234,
+          "stock": {
+            "food": 2,
+            "wood": 148,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 13,
+            "cap": 15
+          },
+          "villagers": {
+            "food": 7,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 4
+        },
+        {
+          "startAt": 305.2,
+          "stock": {
+            "food": 72,
+            "wood": 0,
+            "gold": 100,
+            "stone": 200
+          },
+          "pop": {
+            "used": 15,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 9,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 5
+        },
+        {
+          "startAt": 361.7,
+          "stock": {
+            "food": 0,
+            "wood": 63,
+            "gold": 40,
+            "stone": 200
+          },
+          "pop": {
+            "used": 21,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 12,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 6
+        },
+        {
+          "startAt": 425.7,
+          "stock": {
+            "food": 85,
+            "wood": 135,
+            "gold": 40,
+            "stone": 200
+          },
+          "pop": {
+            "used": 23,
+            "cap": 25
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 4,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 7
+        },
+        {
+          "startAt": 525.7,
+          "stock": {
+            "food": 295,
+            "wood": 157,
+            "gold": 40,
+            "stone": 200
+          },
+          "pop": {
+            "used": 27,
+            "cap": 30
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 8,
+            "gold": 0,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 8
+        },
+        {
+          "startAt": 650.7,
+          "stock": {
+            "food": 657,
+            "wood": 356,
+            "gold": 52,
+            "stone": 200
+          },
+          "pop": {
+            "used": 31,
+            "cap": 45
+          },
+          "villagers": {
+            "food": 14,
+            "wood": 8,
+            "gold": 4,
+            "stone": 0,
+            "build": 1,
+            "idle": 0
+          },
+          "index": 9
+        }
+      ],
+      "preFirstPaid": [
+        {
+          "from": 0,
+          "to": 25,
+          "step": 0
+        },
+        {
+          "from": 25,
+          "to": 50,
+          "step": 0
+        },
+        {
+          "from": 50,
+          "to": 75,
+          "step": 0
+        },
+        {
+          "from": 75,
+          "to": 100,
+          "step": 1
+        },
+        {
+          "from": 100,
+          "to": 125,
+          "step": 1
+        },
+        {
+          "from": 125,
+          "to": 150,
+          "step": 1
+        },
+        {
+          "from": 150.9,
+          "to": 175.9,
+          "step": 1
+        },
+        {
+          "from": 180.3,
+          "to": 205.3,
+          "step": 2
+        },
+        {
+          "from": 208.9,
+          "to": 233.9,
+          "step": 3
+        },
+        {
+          "from": 233.9,
+          "to": 258.9,
+          "step": 4
+        },
+        {
+          "from": 258.9,
+          "to": 283.9,
+          "step": 4
+        },
+        {
+          "from": 283.9,
+          "to": 308.9,
+          "step": 5
+        },
+        {
+          "from": 308.9,
+          "to": 333.9,
+          "step": 5
+        },
+        {
+          "from": 333.9,
+          "to": 358.9,
+          "step": 5
+        },
+        {
+          "from": 375.6,
+          "to": 400.6,
+          "step": 6
+        },
+        {
+          "from": 400.6,
+          "to": 425.6,
+          "step": 6
+        },
+        {
+          "from": 425.6,
+          "to": 450.6,
+          "step": 7
+        },
+        {
+          "from": 450.6,
+          "to": 475.6,
+          "step": 7
+        },
+        {
+          "from": 475.6,
+          "to": 500.6,
+          "step": 7
+        },
+        {
+          "from": 500.6,
+          "to": 525.6,
+          "step": 7
+        },
+        {
+          "from": 525.6,
+          "to": 550.6,
+          "step": 8
+        },
+        {
+          "from": 550.6,
+          "to": 575.6,
+          "step": 8
+        },
+        {
+          "from": 575.6,
+          "to": 600.6,
+          "step": 8
+        },
+        {
+          "from": 625.6,
+          "to": 650.6,
+          "step": 8
+        }
+      ]
+    }
+  ]
+}

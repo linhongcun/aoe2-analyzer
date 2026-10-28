@@ -76,7 +76,20 @@ function UsageTags({ lines }: { lines: BonusUsageLine[] }) {
 const USAGE_ICON = { true: 'check', false: 'x', null: 'circle-help' } as const;
 
 /** Keep the scoped sourced quantity phrases together in both detail and sidebar text. */
+const bengaliQuantity = (text: string, linked: boolean) =>
+  text.split(/(\d+\s*个村民)/g).map((part, index) =>
+    index % 2 ? (
+      <span className="num nw" key={index}>
+        {linked ? <Linked text={part} /> : part}
+      </span>
+    ) : linked ? (
+      <Linked text={part} key={index} />
+    ) : (
+      part
+    ),
+  );
 export function BonusText({ b, linked = true }: { b: CivBonusEnt; linked?: boolean }) {
+  if (b.id === 'Bengalis-0') return bengaliQuantity(b.zh, linked);
   if (b.civ !== 'Sicilians' && (b.civ !== 'Tatars' || b.idx !== 2)) return linked ? <Linked text={b.zh} /> : b.zh;
   const parts = b.zh.split(b.civ === 'Sicilians' ? /([+−-]?\d+(?:\.\d+)?\s*%?)/g : /(\d+(?:\.\d+)?\s*头绵羊)/g);
   return parts.map((part, index) =>
@@ -166,7 +179,7 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
                     l.name
                   )}
                 </b>
-                ：{l.note}
+                ：{b.id === 'Bengalis-0' ? bengaliQuantity(l.note, false) : l.note}
               </li>
             ))}
           </ul>

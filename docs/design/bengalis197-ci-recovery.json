@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "issue": 197,
+  "batch": 9,
+  "civilization": "Bengalis",
+  "version": "v0.54.0",
+  "dateAsiaShanghai": "2026-10-28",
+  "preparedUTC": "2026-10-27T23:37:41.629847+00:00",
+  "originalLocalValidationPreserved": {
+    "path": "/workspace/aoe2-issue197-batch9/docs/design/bengalis197-validation.json",
+    "sha256": "f65416e0db9eef534946fd9802e1f30e35df411abda14ba37c4d16a673b9685f",
+    "bytes": 106003
+  },
+  "failedCI": {
+    "url": "https://github.com/linhongcun/aoe2-analyzer/actions/runs/40602134156",
+    "run": {
+      "id": 40602134156,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "pull_request",
+      "created_at": "2026-10-27T23:26:23Z",
+      "updated_at": "2026-10-27T23:31:20Z",
+      "repository": "linhongcun/aoe2-analyzer",
+      "head_repository": "linhongcun/aoe2-analyzer",
+      "head_sha": "5319dccdd7963d36df004d5b2894319fe705d965"
+    },
+    "actualTestedCommit": "a40661409b8eda49d4b79fcddea6e7728133c454",
+    "actualTestedTree": "d255c5197b13127f594f73ece306547f4b2b3520",
+    "parents": [
+      "43f308f2d039ec9ac8ab3cfbc3766b00e1e56ef1",
+      "5319dccdd7963d36df004d5b2894319fe705d965"
+    ],
+    "plan": {
+      "scope": "full",
+      "features": [
+        "all",
+        "builds"
+      ],
+      "unit": [],
+      "e2e": [],
+      "data": true,
+      "full": true
+    },
+    "policy": "2d7d65fc56d6da49e0cc673361ee263fdf51b2380f23f4e6a04943618228f69f",
+    "unit": {
+      "files": 208,
+      "filesPassed": 207,
+      "filesFailed": 1,
+      "total": 4444,
+      "passed": 4440,
+      "failed": 1,
+      "skipped": 2,
+      "todo": 1,
+      "durationSeconds": 151.23
+    },
+    "failure": {
+      "file": "tests/unit/v0300-331.test.ts",
+      "line": 191,
+      "name": "#331 所有数值不变：22 个文明的开局模拟、真实成本、施工工具结果与 f856c9e 相同 > 开局模拟（全部开局方案，支持的文明）",
+      "type": "AssertionError",
+      "difference": "Received current TEAM22 supported cohort contains newly supported Bengalis; expected current cohort historical16+Portuguese/Malians/Mayans omits Bengalis",
+      "historicalNumericSnapshotReached": false,
+      "numericMismatchReported": false,
+      "narrowRemediationCandidate": "Append Bengalis only to current-derived cohort; preserve historical16 and all snapshot bytes/assertions. Root/owner to decide and independently review; this agent made no edits."
+    },
+    "completedLog": {
+      "path": "/tmp/bengalis197-pr-ci-failed-40602134156.log",
+      "sha256": "cca3080c1e2921fb5452dac1ef8c077b5c5a9519a61e03745e746ad22491dac3",
+      "bytes": 220487
+    },
+    "independentAudit": {
+      "path": "/tmp/bengalis197-independent-pr-ci-failure.json",
+      "sha256": "75bf8446558a9d9628e60010f19ddab85b3568610ea2215af4692a10c0a9e1d7",
+      "bytes": 12468
+    },
+    "laterPythonDataBuildBrowserStages": "Skipped after actual unit failure; never claimed passed by this run",
+    "successfulReusableValidationEvidence": false
+  },
+  "classification": {
+    "kind": "Derived CURRENT supported TEAM22 membership extension within authorized next-civilization scope",
+    "rootFIXGO": "Explicit root instruction after independent baseline classification; no historical numeric expectation change or extra product decision",
+    "independentBaselinePreflight": {
+      "path": "/tmp/bengalis197-331-current-cohort-preflight.json",
+      "sha256": "f3f4d2dcb32049b7e4815c509ef84d623e2fd5b01a2bdc2bc824eac02a60e5f0",
+      "bytes": 403
+    },
+    "independentBaselinePreflightDescription": {
+      "path": "/tmp/bengalis197-331-current-cohort-preflight.md",
+      "sha256": "b537cc690b8f441b791cc88707d8641c66aba939fcb019692b402a14c576536b",
+      "bytes": 1972
+    },
+    "expandedCurrentMigrationOracle": {
+      "path": "/tmp/batch9197-current-migration-oracle-13.json",
+      "sha256": "73379fed121f6276a164157d1bd6fdf6bafcfacd246346fbd379a27e257503fd",
+      "bytes": 339071
+    },
+    "scope": "Only append Bengalis to one currently-supported cohort assertion. Frozen historical16 literal, historical filtering and snapshot assertions, all22 dynamic team comparisons including Bengalis, all numeric expectations and timeouts remain byte-identical.",
+    "independentSourcePreflight": {
+      "path": "/tmp/bengalis197-ci331-independent-preflight.json",
+      "sha256": "dc32fa71127c6a0dab109d2cc589691595c09546673e2941fe20b33f7ff09ba2",
+      "bytes": 5663
+    }
+  },
+  "change": {
+    "file": "tests/unit/v0300-331.test.ts",
+    "oldLine": "expect(supported.map((b) => b.civ).sort()).toEqual([...historical, 'Portuguese', 'Malians', 'Mayans'].sort());",
+    "newLine": "expect(supported.map((b) => b.civ).sort()).toEqual([...historical, 'Portuguese', 'Malians', 'Mayans', 'Bengalis'].sort());",
+    "beforeSHA256": "262fbb06965351ee7fca46cd942e4b9bb33f4c626fdc693f8cc246db69a3bf11",
+    "afterSHA256": "5f1d39365feec0f6d5ca3e8b23848157559d9e270c24953b6629c1b0f9b6171a",
+    "allOtherFileBytesUnchanged": true,
+    "existingSnapshotFilesUnchanged": [
+      {
+        "path": "/workspace/aoe2-issue197-batch9/tests/unit/__snapshots__/v0300-331.test.ts.snap",
+        "sha256": "61aa8ade3a64bb0f3b0373f2db5c6b5da574570c21871800d011f87b3cb7ffaa",
+        "bytes": 103266
+      }
+    ],
+    "productionDataSchemaDependencyPackage317WorkflowOrPolicyChanges": false
+  },
+  "actualLocalRegression": {
+    "actualHeadAtExecution": "5319dccdd7963d36df004d5b2894319fe705d965",
+    "executionIdentity": "Working tree contains only reviewed one-line test correction; later commit identity is recorded externally by root, not falsely used as tested HEAD.",
+    "command": "npx vitest run tests/unit/v0300-331.test.ts --reporter=json --outputFile=/tmp/bengalis197-ci331-corrected-unit.json",
+    "report": {
+      "path": "/tmp/bengalis197-ci331-corrected-unit.json",
+      "sha256": "57187dbc0872fd63f04e714afe77c6c0b5b0ac6ba9517346d4ba4e7f71ff59f1",
+      "bytes": 18316
+    },
+    "log": {
+      "path": "/tmp/bengalis197-ci331-corrected-unit.log",
+      "sha256": "8f5cb4b9e9f4a8699d3cca69d46d2ee277f4c0a8e2bc41976c487cb505538a36",
+      "bytes": 66
+    },
+    "files": 1,
+    "total": 33,
+    "passed": 33,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "snapshots": {
+      "added": 0,
+      "failure": false,
+      "filesAdded": 0,
+      "filesRemoved": 0,
+      "filesRemovedList": [],
+      "filesUnmatched": 0,
+      "filesUpdated": 0,
+      "matched": 3,
+      "total": 3,
+      "unchecked": 0,
+      "uncheckedKeysByFile": [],
+      "unmatched": 0,
+      "updated": 0,
+      "didUpdate": false
+    },
+    "assertions": "The entire original test file was executed, including all22 dynamic team checks, all3 unchanged snapshots and historical16 filtering; no -u/UPDATE/snapshot regeneration, -t filtering, timeout or retry configuration change."
+  },
+  "retainedRuntimeEvidence": {
+    "actualBuildBrowserAndImagesCommit": "daa0f81647bfae3fc045cb458834470252340e20",
+    "actualBuildBrowserAndImagesTree": "8f1930dca04785515cd2971133647717def5706a",
+    "actualIndependentTargetProbeCommit": "3fc699c3ec54c34d00b072846c818676275b0f18",
+    "artifactManifest": {
+      "path": "/tmp/bengalis197-runtime-artifacts.json",
+      "sha256": "6f7646cd171ba0aa3bf28a5194c29687c1e1350dab3203cd916874cfe2d2a375",
+      "bytes": 79454
+    },
+    "sourceCodeUIRuntimeReview": {
+      "path": "/tmp/batch9-bengalis-final-review.json",
+      "sha256": "5e29cb59c6675e02dc2ba3a421fd0aaabcab2d9d261b09d65c8d73ee9e081029",
+      "bytes": 5755
+    },
+    "globalNumericalComparison": {
+      "path": "/tmp/bengalis197-independent-invariants.json",
+      "sha256": "b9225a20b4260d89e8b3f6d6f71043f4cd5a37fc75fe4bf4c5fd9f1d4aadf64f",
+      "bytes": 130164
+    },
+    "boundary": "Test/doc-only correction does not change source or runtime assets. Original observations/images remain3fc/daa identities; no new global domain/view/browser/build/PNG execution was performed or claimed. Original global report684guard661same23authorized remains runtimeDAA; final static closure separately includes this13th current assertion migration,660same24authorized."
+  },
+  "nextActualValidation": "Root must push corrected head and obtain successful actual CI with full/data plan on its real checkout/tree. The incomplete failed run cannot be reused as success; actual CI/main/deploy/Release receipts will record new run identities. No workflow, timeout, retry configuration or production workaround was introduced."
+}

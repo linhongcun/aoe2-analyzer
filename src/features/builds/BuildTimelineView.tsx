@@ -20,6 +20,7 @@ import { Breadcrumbs } from '../../shared/ui/layout';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { SHARE_DISABLED_NOTE, buildShareCard } from './shareCard';
 import { shareCardBlob } from './shareCardImage';
+import { NumUnitText } from './NumUnitText';
 import BuildPracticeView, { buildPracticeUrl } from './BuildPracticeView';
 import { buildView, rowTime, mmss, rangeLabel, summaryText, isLongBottleneck, noHouseCompareText } from './timelineModel';
 
@@ -351,7 +352,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
           </ul>
           {civNotes.length > 0 && (
             <p className="tl-civ-note" data-t="civ-note">
-              {civNotes.join('；')}
+              {tl.civ === 'Bengalis' ? <NumUnitText text={civNotes.join('；')} /> : civNotes.join('；')}
             </p>
           )}
         </TimelineSummary>
@@ -447,7 +448,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
                     </li>
                   ))}
                 </ul>
-                <figcaption data-t="card-basis">{card.basis}</figcaption>
+                <figcaption data-t="card-basis">{tl.civ === 'Bengalis' ? <NumUnitText text={card.basis} /> : card.basis}</figcaption>
                 <span className="tl-cardprev-url" data-t="card-url">
                   {card.url}
                 </span>
