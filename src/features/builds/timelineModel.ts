@@ -107,7 +107,8 @@ export function bottleneckLabel(a: Anomaly, tOut = Infinity): string {
 
 const AGE_N_ZH: Record<number, string> = { 1: '黑暗', 2: '封建', 3: '城堡', 4: '帝王' };
 /** 等前置建筑的详情灰字：升城堡需先建完 2 座封建建筑（还差：市场） */
-export function prereqDetail(a: Pick<Anomaly, 'age' | 'need' | 'missing'>): string {
+export function prereqDetail(a: Pick<Anomaly, 'age' | 'need' | 'missing' | 'researchSite'>): string {
+  if (a.researchSite) return `研究前需等${a.researchSite}建成`;
   const age = a.age ?? 3;
   const miss = a.missing?.length ? `（还差：${a.missing.join('、')}）` : '';
   return `升${AGE_N_ZH[age]}需先建完 ${a.need ?? 2} 座${AGE_N_ZH[age - 1]}建筑${miss}`;

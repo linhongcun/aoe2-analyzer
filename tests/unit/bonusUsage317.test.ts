@@ -46,7 +46,7 @@ const inputsHash = () =>
     JSON.stringify(E),
     JSON.stringify(buildOrders),
     JSON.stringify(ups),
-    ...['buildSim.ts', 'roundHalfPrice.ts', 'buildOrder.ts', 'weiEconomy.ts', 'bengaliEconomy.ts'].map((f) =>
+    ...['buildSim.ts', 'roundHalfPrice.ts', 'buildOrder.ts', 'weiEconomy.ts', 'bengaliEconomy.ts', 'armenianEconomy.ts'].map((f) =>
       readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8'),
     ),
     ...['construction.json', 'construction.ts'].map((f) => readFileSync(fileURLToPath(new URL(`../../src/data/${f}`, import.meta.url)), 'utf8')),
@@ -69,6 +69,8 @@ const UNTRIGGERED: Record<string, string> = {
   'Shu-1': '弓兵科技折扣已实际付费；现有3个相关方案均在末步研究199，原结果只记录步骤开始库存和完成时间，付费后无新检查点；shu197.test.ts另以检查点严格核对扣款',
   'Mayans-2':
     '现有8套开局不在城堡或帝王时代训练弓手；53/56的正tech折扣没有触发，树中的封建折扣不被正tech移除对照覆盖；mayans197.test.ts另以三个时代的真实训练支付严格核对',
+  'Armenians-3': '当前8套开局不建强化教堂，不触发两段圣物生成；移除949/957保留独立骡车来源和研究加成',
+  'Armenians-4': '海军战斗加成不改变当前8套的渔船经济；当前方案不训练或交战对应军事舰船',
 };
 
 let core: Core;
@@ -122,9 +124,10 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
     expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(112);
     expect(ECO.filter((b) => b.src === 'text')).toHaveLength(37);
   });
-  it('src = text 中被真实成本计入的三条：凯尔特伐木、朝鲜采石、突厥采金，标「已计入」并写明工具', () => {
+  it('src = text 中实际被工具计入的四条：亚美尼亚经济研究、凯尔特伐木、朝鲜采石、突厥采金', () => {
     const counted = ECO.filter((b) => b.src === 'text' && bonusUsage(b).some((l) => l.on === true)).map((b) => b.id);
-    expect(counted).toEqual(['Celts-0', 'Koreans-0', 'Turks-0']);
+    expect(counted).toEqual(['Armenians-1', 'Celts-0', 'Koreans-0', 'Turks-0']);
+    expect(line(bon('Armenians-1'), 'sim')[0]).toMatchObject({ on: true, note: '伐木、采矿科技增强仅在对应研究完成后计入' });
     for (const [id, label] of [
       ['Celts-0', '伐木 +15%'],
       ['Koreans-0', '采石 +20%'],
@@ -212,10 +215,10 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
     }
     expect(hidden).toBeGreaterThan(0);
     expect(hidden).toBeLessThan(112);
-    // src = text 的橙色「无 .dat 数据」同样规则：凯尔特 / 朝鲜 / 突厥被工具计入，不显示；其余 34 条没有工具计入，仍显示
+    // src = text 同样规则：四条被工具计入，不显示；其余 33 条没有工具计入，仍显示
     const text = ECO.filter((x) => x.src === 'text');
-    for (const b of text) expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !['Celts-0', 'Koreans-0', 'Turks-0'].includes(b.id)]);
-    expect(text.filter((b) => showEcoSourceTag(b))).toHaveLength(34);
+    for (const b of text) expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !['Armenians-1', 'Celts-0', 'Koreans-0', 'Turks-0'].includes(b.id)]);
+    expect(text.filter((b) => showEcoSourceTag(b))).toHaveLength(33);
   });
   it('没有任何工具计入的加成保持「仅文本」', () => {
     for (const b of ECO) if (!bonusUsage(b).some((l) => l.on)) expect([b.id, usageLevel(bonusUsage(b))]).toEqual([b.id, 'none']);

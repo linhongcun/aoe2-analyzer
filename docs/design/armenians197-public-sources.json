@@ -1,0 +1,611 @@
+{
+  "schema": 1,
+  "status": "GO_FOR_BOUNDED_EXPLICIT_MULECART_CONSTRUCTION_MODEL_NOT_CLIENT_MEASUREMENT",
+  "scope": "read-only public/engine corroboration for Armenians #197",
+  "sources": [
+    {
+      "url": "https://github.com/SiegeEngineers/aoe2techtree/blob/3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/trees/ARMENIANS.json",
+      "commit": "3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f",
+      "role": "Same pinned tech-tree source as repository data_sources.json (DE185872)",
+      "selectors": {
+        "buildings": [
+          {
+            "age_id": 1,
+            "building_id": 584,
+            "building_in_new_column": false,
+            "building_upgraded_from_id": -1,
+            "grid": [
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ]
+            ],
+            "help_string_id": 105487,
+            "id": "Building_584_584",
+            "link_id": null,
+            "link_node_type": "BuildingTech",
+            "name": "Mining Camp",
+            "name_string_id": 14487,
+            "node_id": 584,
+            "node_status": "NotAvailable",
+            "node_type": "BuildingTech",
+            "picture_index": 39,
+            "row": 0,
+            "use_type": "Building"
+          },
+          {
+            "age_id": 1,
+            "building_id": 562,
+            "building_in_new_column": false,
+            "building_upgraded_from_id": -1,
+            "grid": [
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ]
+            ],
+            "help_string_id": 105464,
+            "id": "Building_562_562",
+            "link_id": null,
+            "link_node_type": "BuildingTech",
+            "name": "Lumber Camp",
+            "name_string_id": 14464,
+            "node_id": 562,
+            "node_status": "NotAvailable",
+            "node_type": "BuildingTech",
+            "picture_index": 40,
+            "row": 0,
+            "use_type": "Building"
+          },
+          {
+            "age_id": 1,
+            "building_id": 1808,
+            "building_in_new_column": false,
+            "building_upgraded_from_id": -1,
+            "grid": [
+              [
+                null,
+                null,
+                null
+              ],
+              [
+                null,
+                null,
+                null
+              ],
+              [
+                "Tech_55_1808",
+                "Tech_278_1808",
+                "Tech_202_1808"
+              ],
+              [
+                null,
+                null,
+                null
+              ],
+              [
+                "Tech_182_1808",
+                "Tech_279_1808",
+                "Tech_203_1808"
+              ],
+              [
+                null,
+                null,
+                null
+              ],
+              [
+                null,
+                null,
+                "Tech_221_1808"
+              ],
+              [
+                null,
+                null,
+                null
+              ]
+            ],
+            "help_string_id": 105045,
+            "id": "Building_1808_1808",
+            "link_id": null,
+            "link_node_type": "BuildingNonTech",
+            "name": "Mule Cart",
+            "name_string_id": 14045,
+            "node_id": 1808,
+            "node_status": "ResearchedCompleted",
+            "node_type": "RegionalBuilding",
+            "picture_index": 89,
+            "row": 0,
+            "use_type": "Building"
+          },
+          {
+            "age_id": 1,
+            "building_id": 68,
+            "building_in_new_column": false,
+            "building_upgraded_from_id": -1,
+            "grid": [
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                "Tech_14_68"
+              ],
+              [
+                null
+              ],
+              [
+                "Tech_13_68"
+              ],
+              [
+                null
+              ],
+              [
+                "Tech_12_68"
+              ],
+              [
+                null
+              ]
+            ],
+            "help_string_id": 105157,
+            "id": "Building_68_68",
+            "link_id": null,
+            "link_node_type": "BuildingTech",
+            "name": "Mill",
+            "name_string_id": 14157,
+            "node_id": 68,
+            "node_status": "ResearchedCompleted",
+            "node_type": "BuildingTech",
+            "picture_index": 19,
+            "row": 0,
+            "use_type": "Building"
+          },
+          {
+            "age_id": 1,
+            "building_id": 68,
+            "building_in_new_column": false,
+            "building_upgraded_from_id": -1,
+            "grid": [
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ],
+              [
+                null
+              ]
+            ],
+            "help_string_id": 105149,
+            "id": "Building_50_68",
+            "link_id": 68,
+            "link_node_type": "BuildingTech",
+            "name": "Farm",
+            "name_string_id": 14149,
+            "node_id": 50,
+            "node_status": "ResearchedCompleted",
+            "node_type": "BuildingNonTech",
+            "picture_index": 35,
+            "row": 0,
+            "use_type": "Building"
+          }
+        ],
+        "research": [
+          {
+            "age_id": 2,
+            "building_id": 1808,
+            "building_in_new_column": null,
+            "building_upgraded_from_id": null,
+            "grid": null,
+            "help_string_id": 107055,
+            "id": "Tech_55_1808",
+            "link_id": null,
+            "link_node_type": "BuildingTech",
+            "name": "Gold Mining",
+            "name_string_id": 17055,
+            "node_id": 55,
+            "node_status": "ResearchedCompleted",
+            "node_type": "Research",
+            "picture_index": 15,
+            "row": 2,
+            "use_type": "Tech"
+          },
+          {
+            "age_id": 3,
+            "building_id": 1808,
+            "building_in_new_column": null,
+            "building_upgraded_from_id": null,
+            "grid": null,
+            "help_string_id": 107180,
+            "id": "Tech_182_1808",
+            "link_id": 55,
+            "link_node_type": "Research",
+            "name": "Gold Shaft Mining",
+            "name_string_id": 17180,
+            "node_id": 182,
+            "node_status": "ResearchedCompleted",
+            "node_type": "Research",
+            "picture_index": 62,
+            "row": 4,
+            "use_type": "Tech"
+          },
+          {
+            "age_id": 2,
+            "building_id": 1808,
+            "building_in_new_column": null,
+            "building_upgraded_from_id": null,
+            "grid": null,
+            "help_string_id": 107276,
+            "id": "Tech_278_1808",
+            "link_id": null,
+            "link_node_type": "BuildingTech",
+            "name": "Stone Mining",
+            "name_string_id": 17276,
+            "node_id": 278,
+            "node_status": "ResearchedCompleted",
+            "node_type": "Research",
+            "picture_index": 87,
+            "row": 2,
+            "use_type": "Tech"
+          },
+          {
+            "age_id": 3,
+            "building_id": 1808,
+            "building_in_new_column": null,
+            "building_upgraded_from_id": null,
+            "grid": null,
+            "help_string_id": 107277,
+            "id": "Tech_279_1808",
+            "link_id": 278,
+            "link_node_type": "Research",
+            "name": "Stone Shaft Mining",
+            "name_string_id": 17277,
+            "node_id": 279,
+            "node_status": "NotAvailable",
+            "node_type": "Research",
+            "picture_index": 88,
+            "row": 4,
+            "use_type": "Tech"
+          },
+          {
+            "age_id": 2,
+            "building_id": 1808,
+            "building_in_new_column": null,
+            "building_upgraded_from_id": null,
+            "grid": null,
+            "help_string_id": 107189,
+            "id": "Tech_202_1808",
+            "link_id": null,
+            "link_node_type": "BuildingTech",
+            "name": "Double-Bit Axe",
+            "name_string_id": 17189,
+            "node_id": 202,
+            "node_status": "ResearchedCompleted",
+            "node_type": "Research",
+            "picture_index": 70,
+            "row": 2,
+            "use_type": "Tech"
+          },
+          {
+            "age_id": 3,
+            "building_id": 1808,
+            "building_in_new_column": null,
+            "building_upgraded_from_id": null,
+            "grid": null,
+            "help_string_id": 107190,
+            "id": "Tech_203_1808",
+            "link_id": 202,
+            "link_node_type": "Research",
+            "name": "Bow Saw",
+            "name_string_id": 17190,
+            "node_id": 203,
+            "node_status": "ResearchedCompleted",
+            "node_type": "Research",
+            "picture_index": 71,
+            "row": 4,
+            "use_type": "Tech"
+          },
+          {
+            "age_id": 4,
+            "building_id": 1808,
+            "building_in_new_column": null,
+            "building_upgraded_from_id": null,
+            "grid": null,
+            "help_string_id": 107231,
+            "id": "Tech_221_1808",
+            "link_id": 203,
+            "link_node_type": "Research",
+            "name": "Two-Man Saw",
+            "name_string_id": 17231,
+            "node_id": 221,
+            "node_status": "NotAvailable",
+            "node_type": "Research",
+            "picture_index": 81,
+            "row": 6,
+            "use_type": "Tech"
+          },
+          {
+            "age_id": 2,
+            "building_id": 68,
+            "building_in_new_column": null,
+            "building_upgraded_from_id": null,
+            "grid": null,
+            "help_string_id": 107014,
+            "id": "Tech_14_68",
+            "link_id": 50,
+            "link_node_type": "BuildingTech",
+            "name": "Horse Collar",
+            "name_string_id": 17014,
+            "node_id": 14,
+            "node_status": "ResearchedCompleted",
+            "node_type": "Research",
+            "picture_index": 2,
+            "row": 2,
+            "use_type": "Tech"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://github.com/SiegeEngineers/aoe2techtree/blob/3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/data.json",
+      "commit": "3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f",
+      "role": "Same pinned independent public stats corroboration",
+      "jsonPaths": {
+        "$.data.Building.1808": {
+          "AccuracyPercent": 0,
+          "Armours": [
+            {
+              "Amount": 0,
+              "Class": 21
+            },
+            {
+              "Amount": 0,
+              "Class": 11
+            },
+            {
+              "Amount": 1,
+              "Class": 4
+            },
+            {
+              "Amount": 2,
+              "Class": 3
+            },
+            {
+              "Amount": 1,
+              "Class": 31
+            }
+          ],
+          "Attack": 0,
+          "Attacks": [],
+          "Cost": {
+            "Food": 20,
+            "Wood": 80
+          },
+          "GarrisonCapacity": 0,
+          "HP": 300,
+          "ID": 1808,
+          "LanguageNameId": 5045,
+          "LineOfSight": 4,
+          "MeleeArmor": 1,
+          "MinRange": 0,
+          "PierceArmor": 2,
+          "Range": 0,
+          "ReloadTime": 0,
+          "TrainTime": 25,
+          "internal_name": "MULECART"
+        }
+      }
+    },
+    {
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/attributes/attributes.md",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "role": "Public generic engine/modding attribute vocabulary, not version185872 client verification",
+      "excerpts": [
+        {
+          "lineStart": 267,
+          "lineEnd": 273,
+          "text": " - ID: 34\n\n - This is the ID of the terrain created under a building when its construction is finished\n\n - Only affects units of Type 80 (Building)\n\n    "
+        },
+        {
+          "lineStart": 310,
+          "lineEnd": 316,
+          "text": "## 42. Train Location\n\n - ID: 42\n\n - The ID of the unit that trains any given unit. Barracks train Militia, so the train location of a Militia is the ID of the Barracks\n\n## 43. Train Button"
+        },
+        {
+          "lineStart": 829,
+          "lineEnd": 835,
+          "text": "## 101. Train Time\n\n - ID: 101\n\n - This is the amount of time it takes to create a unit\n\n## 102. Total Missiles"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/tasks/tasks.md",
+      "commit": "3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d",
+      "role": "Public construction task101 description",
+      "excerpts": [
+        {
+          "lineStart": 219,
+          "lineEnd": 246,
+          "text": "## 101. Build\n\n- XS constant: [cTaskTypeBuild](../../xs/constants/constants/#1615-ctasktypebuild)\n\n- Ability for units to build buildings. Building seems hardcoded for villagers and fishing ships. Military units can use this task to build 1 building.\n\n<h3>Object attributes</h3>\n\n| XS constant | Description |\n| :-- | :-- |\n| [cWorkRate](../../xs/constants/constants/#1113-cworkrate) | Rate at which the unit builds. |\n| [cTraits](../../xs/constants/constants/#1147-ctraits) | Set this bitfield 3rd bit (4) to enable military units to build 1 building. |\n| [cTraitPiece](../../xs/constants/constants/#1148-ctraitpiece) | Building id to build. |\n\n<h3>Task attributes</h3>\n\n| XS constant | Description |\n| :-- | :-- |\n| [cTaskAttrWorkValue1](../../xs/constants/constants/#151-ctaskattrworkvalue1) | Multiplier for **[Work rate (13)](../../attributes/attributes/#13-work-rate)**. |\n| [cTaskAttrWorkRange](../../xs/constants/constants/#153-ctaskattrworkrange) | Build range. |\n| [cTaskAttrSearchWaitTime](../../xs/constants/constants/#155-ctaskattrsearchwaittime) | Unknown. |\n| [cTaskAttrProceedingGraphic](../../xs/constants/constants/#1514-ctaskattrproceedinggraphic) | Graphic used while the unit is building. |\n| [cTaskAttrWorkingGraphic](../../xs/constants/constants/#1515-ctaskattrworkinggraphic) | Graphic of the unit building a secondary building. |\n| [cTaskAttrDepositSound](../../xs/constants/constants/#1520-ctaskattrdepositsound) | Sound id of the unit building. |\n| [cTaskAttrAutoSearch](../../xs/constants/constants/#1523-ctaskattrautosearch) | Unknown. |\n| [cTaskAttrBuildingPick](../../xs/constants/constants/#1525-ctaskattrbuildingpick) | Unknown. |\n| [cTaskAttrObjectId](../../xs/constants/constants/#1530-ctaskattrobjectid) | For units building 1 building must be the id of the building and match the **[Trait piece (56)](../../attributes/attributes/#56-trait-piece)** field, for villagers this value is -1. |\n| [cTaskAttrObjectClass](../../xs/constants/constants/#1531-ctaskattrobjectclass) | For units building 1 building must be the id of the building and match the **[Trait piece (56)](../../attributes/attributes/#56-trait-piece)** field, for villagers this value is -1. |"
+        }
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/librematch/genie/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/construction/building_update.rs",
+      "commit": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "role": "Older158041 implementation corroboration ONLY",
+      "excerpts": [
+        {
+          "lineStart": 141,
+          "lineEnd": 149,
+          "text": "\n    /// `TRIBE_Building_Object::update` (`0x1411c9000`) before its combat update: a building in\n    /// state 0 whose build points (`+0xc50`, the construction's progress) reached its build time\n    /// (its master's first train time, `FUN_140ace5e0`) completes (`set_state(2)`,\n    /// [`Construction::complete`]); outside the walls' branch (class 27, master 70) only one that\n    /// is not an annex (`+0xbb8`). A builder's work completes a foundation itself\n    /// (`FUN_1411cc430`); this one completes a building made without a build time (a death\n    /// spawn's). The walls' branch's facet and the other branch's work before it are not modelled\n    /// for such a building."
+        }
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/librematch/genie/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/construction/build/construction.rs",
+      "commit": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "role": "Older158041 building completion invokes building.tech",
+      "excerpts": [
+        {
+          "lineStart": 337,
+          "lineEnd": 347,
+          "text": "        if vanishes {\n            site.life.hp = 0.0;\n        }\n        Ok(Built {\n            attributes,\n            history,\n            tech: (0 <= building.tech).then_some(building.tech),\n            cart: first.cart.then_some(before),\n            stack,\n            vanishes,\n            started,"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/README.md",
+      "commit": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "role": "Version boundary personally read through GitHub connector",
+      "excerpt": "It plays a recorded game of Age of Empires II: Definitive Edition (build 158041) tick by tick and gives the same state as the game, bit for bit."
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/formats/genie-dat/src/de/unit_parts.rs",
+      "commit": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "role": "Old158041 parser naming of creatable_type; not build-mode/assist cap",
+      "excerpts": [
+        {
+          "lineStart": 246,
+          "lineEnd": 251,
+          "text": "    pub flank_attack_modifier: f32,\n    /// Kind of creatable unit; DE's `mFormationCategory` (`+0x8bc`): the sub-formation of a\n    /// group the unit joins, 0 for units the order splitter never groups (villagers).\n    pub creatable_type: u8,\n    /// Hero bit flags (e.g. no conversion, healing); DE's `hero_flag` (`+0x8d9`).\n    pub hero_mode: u8,"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/Tapsa/AGE/blob/eb1202b70bf3a45d4264212b53b70bbad4369e98/AGE_Frame/Units.cpp",
+      "commit": "eb1202b70bf3a45d4264212b53b70bbad4369e98",
+      "role": "AGE current source independently names CreatableType as category, not BuildMode",
+      "excerpts": [
+        {
+          "lineStart": 4995,
+          "lineEnd": 4999,
+          "text": "    Units_FlankAttackModifier = new NumberControl(CFloat, Units_Scroller, this, &uiGroupUnit);\n    Units_CreatableType = new NumberControl(CUByte, Units_Scroller, this, &uiGroupUnit);\n    Units_CreatableType->SetToolTip(\"0   None\\n1   Villager\\n2   Infantry\\n3   Cavalry\\n4   Relic\\n5   Archer\\n6   Monk\\n\");\n\n    Units_CanBurn = new NumberControl(CUByte, Units_Scroller, this, &uiGroupUnit);"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/SFTtech/openage/blob/6d147f488b1f19669e7e113c594a0c09a8dbb63a/openage/convert/value_object/read/media/datfile/lookup_dicts.py",
+      "commit": "6d147f488b1f19669e7e113c594a0c09a8dbb63a",
+      "role": "Independent open format vocabulary; version not current game-client proof",
+      "excerpts": [
+        {
+          "lineStart": 788,
+          "lineEnd": 799,
+          "text": "CREATABLE_TYPES = {\n    0: \"NONHUMAN\",  # animal, ship\n    1: \"VILLAGER\",  # villager, king\n    2: \"MELEE\",  # soldier, siege, predator, trader\n    3: \"MOUNTED\",  # camel rider\n    4: \"RELIC\",\n    5: \"RANGED_PROJECTILE\",  # archer\n    6: \"RANGED_MAGIC\",  # monk\n    21: \"TRANSPORT_SHIP\",\n    255: \"OTHER\",  # building, relic\n}\n"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/commands/builders.rs",
+      "commit": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "role": "Older158041 normal Build command loops through all packet builders",
+      "excerpts": [
+        {
+          "lineStart": 37,
+          "lineEnd": 52,
+          "text": "        (queued, commits): (bool, bool),\n    ) -> Result<(), GenieError> {\n        // the builders go through the order splitter, which counts the command\n        self.groups.count_command();\n        let site = (player, foundation, master);\n        for &id in builders {\n            let Some((q, unit)) = self.object(id) else {\n                continue;\n            };\n            let m = self.master_of(q, unit.life.master_id)?;\n            let speed = m.moving.map_or(0.0, |s| s.speed);\n            let kind = m.kind;\n            let moves = 0x1d < kind && crate::math::fmath::below_or_unordered(0.0, speed);\n            if !moves && !queued {\n                continue;\n            }"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/construction/build/placing.rs",
+      "commit": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+      "role": "Older158041 normal construction work applies builder count without creatable_type/id1808 guard in inspected function",
+      "excerpts": [
+        {
+          "lineStart": 155,
+          "lineEnd": 169,
+          "text": "    }\n\n    /// The work (state 7, `0x140ab0370` case 6): the builder adds its rate times dt to the\n    /// foundation's construction: its work rate times the task's work value, times the owner's\n    /// construction rate (attribute 195) when that is above 0 (the Wonder's at most 1.2), each\n    /// builder after the first adding a third ([`Construction::work`]). A finished building, a\n    /// farm's reseeding and the instant-build cheat (`game+0xc14`) are not modelled.\n    pub(super) fn work(\n        &mut self,\n        mut walk: Walk<'_>,\n        site: Option<Site<'_>>,\n        load: Load,\n    ) -> Result<(Option<Built>, Dropped, Option<f32>), GenieError> {\n        let mut site = site.ok_or(FOREIGN_SITE)?;\n        let plan = walk"
+        },
+        {
+          "lineStart": 171,
+          "lineEnd": 185,
+          "text": "            .as_mut()\n            .ok_or(GenieError::unsupported(\"work without the world's planners\"))?;\n        let mut rate = self.task.work_rate * self.task.work_value * walk.dt;\n        let mut factor = plan.construction_rate;\n        if site.life.master_id == WONDER && WONDER_RATE < factor {\n            factor = WONDER_RATE;\n        }\n        if 0.0 < factor {\n            rate *= factor;\n        }\n        let n = f32::from(*site.builders());\n        if 1.0 < n {\n            rate *= ((n - 1.0) * EXTRA_BUILDER + 1.0) / n;\n        }\n        let (pathing, now) = (&mut *plan.pathing, plan.now);"
+        },
+        {
+          "lineStart": 179,
+          "lineEnd": 193,
+          "text": "            rate *= factor;\n        }\n        let n = f32::from(*site.builders());\n        if 1.0 < n {\n            rate *= ((n - 1.0) * EXTRA_BUILDER + 1.0) / n;\n        }\n        let (pathing, now) = (&mut *plan.pathing, plan.now);\n        let worked = Construction::work(&mut site, rate, walk.world, pathing, now)?;\n        let (completed, passed) = match worked {\n            Worked::Going => return Ok((None, None, None)),\n            Worked::Main {\n                amount,\n                going: true,\n            } => return Ok((None, None, Some(amount))),\n            Worked::Main { amount, .. } => (None, Some(amount)),"
+        }
+      ]
+    }
+  ],
+  "findings": {
+    "construction": "Public same-pin tech tree marks1808 RegionalBuilding age1/use_typeBuilding, ordinary562/584 NotAvailable. Same-pin stats give80W20F TrainTime25. GenericUGC task101 is Build and Type80 denotesBuilding. Old158041 engine explicitly identifies building build time as first train time; corroborates interpreting raw25 atbuilder118 as construction rather than TC paid train queue.",
+    "research": "Same-pin public Armenian tech tree places202/203/55/182/278 at1808. Mill68 remainsavailable and HorseCollar14 stays at68. TwoManSaw221 andStoneShaft279 are unavailable. Current185872 rawResearchAt list, not maxResearchLocation, must be used for scoped location identity.",
+    "prerequisites": "Cached185872 projection:1808 completion tech933;1358 OR933/1357;120 requires2 distinct techs from110/258/1221/122/282/1358;659 OR120/638/1357;101 needs104+659. Multiplecarts do not produce two distinct prerequisite categories. Parent should independently include these in fresh .dat source closure.",
+    "creatableType": "Armenian freshraw file records1808.creatable.creatable_type=0 vsordinary562/584=-1. This is formation/category, not an evidenced BuildMode0 or single-builder cap: AGE tooltip0None,1Villager,2Infantry,3Cavalry...; oldgenie names mFormationCategory; openage enum agrees. Do not infer an assist restriction from this field.",
+    "multiBuilder": "Inspected old158041 Build command takes all packet builders; construction work uses common n-builder factor and no1808/creatable_type conditional in that path. This corroborates using the existing project construction approximation for a scoped Type80 MuleCart model. It does not establish exact185872 client assist/selection/pathing behavior. No direct current-client experiment or explicit contemporaneous MuleCart-assist statement was found."
+  },
+  "boundaries": [
+    "No185872client experiment, current-client pathing/dropoff/multiworker exacttiming not verified.",
+    "EACH generic camp-action to a separately paid cart is an explicit simulator template model, not a claim that the game automatically transforms strategy orders.",
+    "Do not make one cart complete botholdcamp shadowtech258+282; retain authentic933/1358 identity.",
+    "Generic workrate/construction approximation inherited from project should be disclosed. Shared location/research queues must not be silently assumed to equal two ordinary camps.",
+    "Live Fandom Mule_Cart fetch was bot_blocked; no Fandom page content used as directly read source. Irrelevant search snippets omitted.",
+    "No tests/domain/simulator/build/repository writes or external mutations by this auditor."
+  ],
+  "failedReferenceReads": [
+    {
+      "url": "https://ageofempires.fandom.com/wiki/Mule_Cart",
+      "result": "bot_blocked via TinyFish fetch_content"
+    }
+  ]
+}

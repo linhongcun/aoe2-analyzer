@@ -1,0 +1,51 @@
+{
+  "baseline": "6470fafbb258a4076f6c0c0630624ab6893e2bb4",
+  "tree": "9d797f4d494325fc1d9f47b95e442ba7a7f6ded6",
+  "sourceState": "originalbaseline+newSPECand21newtests,no productionchanges",
+  "unit": {
+    "report": "/tmp/batch10-armenians-first-red-unit-freeze2.json",
+    "total": 21,
+    "passed": 5,
+    "failedAssertion": 16,
+    "skipped": 0,
+    "importsOrEnvironmentFailures": 0,
+    "frozenTestSHA256": "fdfe8e5a5348844794b12d1e9ae9132caec6697d3fcb0dd8d23e88951ffeacbf"
+  },
+  "python": {
+    "log": "/tmp/batch10-armenians-first-red-python.log",
+    "total": 4,
+    "passed": 1,
+    "failedAssertion": 3,
+    "errors": 0,
+    "sourceState": "beforegeneratorchanges,realexistingexporterinvokedintemporaryroot"
+  },
+  "preflightSpecSHA256": "e90f3516c84a07fcc50814a8f93b0d6d27a11df86556e06f6cdcd59d1d579416",
+  "administrativeSpecDelta": "v056tentative→v0541 independentcompatiblepatch; preflightoriginalsavedunchanged",
+  "earlierHarnessTrials": "Originalpopulation5/noHouse,overlystrongfirstwood-beforecompletion,nearTilesinsteadwalkTilesformula trials preservedin/tmp; NOTcleanproductredproof. Freeze2correctedcontrolsproveaffordability,uncompletedsite,actualpostresearchwindowandindependentincomeintegral.",
+  "references": {
+    "/tmp/batch10-armenians-first-red-unit-freeze2.json": {
+      "bytes": 25256,
+      "sha256": "f948300f576aba43709b769a1d2644eec8dd9453f4278a09923adbc05cbff15e"
+    },
+    "/tmp/batch10-armenians-first-red-unit-freeze2.log": {
+      "bytes": 74,
+      "sha256": "39718b52f1cc02a96a21ef6e05e597890b4f74bfa9c99cdbb4d718b483cb132d"
+    },
+    "/tmp/batch10-armenians-first-red-python.log": {
+      "bytes": 7549,
+      "sha256": "733b6c1989908c15c833e4a189bae96122582c451a4c38eefd068edd40139275"
+    },
+    "/tmp/batch10-armenians-spec-preflight-e90f.md": {
+      "bytes": 11213,
+      "sha256": "e90f3516c84a07fcc50814a8f93b0d6d27a11df86556e06f6cdcd59d1d579416"
+    },
+    "/tmp/batch10-armenians-source-preflight.json": {
+      "bytes": 6310,
+      "sha256": "1a40b2910cccce5f1cdfdc461bcd0b0e11b2358c832bbf035a5ca9c7a9a16e09"
+    },
+    "/tmp/batch10-armenians-preflight.json": {
+      "bytes": 8306,
+      "sha256": "fa87aef6ce3bf4da38ae20ad4c44e4255ffe0b390cc614549a255aafb2c88ee2"
+    }
+  }
+}

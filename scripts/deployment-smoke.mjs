@@ -403,6 +403,39 @@ export async function checkSite({ site, version, commit, features = [] }) {
       console.log(
         'Verified Bengalis economy: own744.6s Food623/Wood429/Gold181/Stone200 pop23/30; 16paid/2free, reachedFeudal584.4 vs click454.4; castle27/pop28/30 and4free; completed-TC/housing disclosure, Knight-template-only warning, source usage and original real-cost empty state',
       );
+      await goto('/builds?bo=scouts-18&civ=Armenians&step=3');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按亚美尼亚计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await check(page.locator('[data-step="2"] .n')).toContainText('每辆骡车按60木、15食物计费');
+      const armenianDetail = page.getByRole('region', { name: '步骤详情', exact: true });
+      await check(armenianDetail.getByRole('link', { name: '骡车', exact: true })).toHaveAttribute('href', '#/building/1808');
+      await check(armenianDetail.locator('[data-t="step-cost"]')).toContainText('食物 15');
+      await check(armenianDetail.locator('[data-t="step-cost"]')).toContainText('木头 60');
+      await check(page.locator('[data-t="civ-note"]')).toContainText('对应研究完成后');
+      await page.locator('#tlciv').click();
+      const armenianPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(armenianPicker.locator('[data-civ="Armenians"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(armenianPicker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      await goto('/builds?bo=archers-19&civ=Armenians&step=9');
+      await check(page.locator('[data-step="8"] .n')).toContainText('60木、15食物');
+      await check(page.locator('[data-t="step-cost"]')).toContainText('木头 25');
+      await check(page.getByRole('region', { name: '步骤详情', exact: true }).getByRole('link', { name: '骡车', exact: true })).toBeVisible();
+      await page.locator('[data-t="share-card-btn"]:visible').first().click();
+      await check(page.locator('[data-t="card-basis"]')).toContainText('逐次改为付费骡车');
+      await check(page.locator('[data-t="card-basis"]')).toContainText('对应研究完成后');
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Armenians');
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      for (const index of [0, 1]) {
+        await goto('/civ/Armenians/bonus/' + index);
+        await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+        await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText(index === 0 ? '逐次付费骡车费用' : '对应研究完成后');
+      }
+      await goto('/duel?a=74.Armenians.3.f.&b=74.Magyars.3.f.&m=t');
+      await check(page.locator('[data-t="rc-a"]')).toContainText('需研究科技，未建模');
+      console.log(
+        'Verified Armenian economy: physical Mule Cart60Wood/15Food and source-backed site mapping, primary House cost preserved in compound block, research-completion disclosure, selectable/share/source usage, fixed-distance model disclosure and original real-cost boundary',
+      );
     }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {

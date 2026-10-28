@@ -7,6 +7,7 @@ import units from '../../data/raw/units';
 import { buildOrders } from '../../data/buildOrders';
 import { civByEn } from '../../data';
 import type { BuildOrder } from '../../domain/buildOrder';
+import { armenianBuildOrder } from '../../domain/armenianEconomy';
 import { visibleSources } from './sources';
 import { followupHint } from './timelineFollowups';
 import { simSupport } from '../../domain/simSupport';
@@ -35,6 +36,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   // #42：链接里的文明加成还没计入 → 保留 URL 里的 civ，按通用计算并提示
   const unsupported = !!q.civ && !simSupport(q.civ);
   const simCiv = q.civ && !unsupported ? q.civ : 'Generic';
+  const displayOrder = useMemo(() => armenianBuildOrder(bo, simCiv, eco as unknown as EcoData), [bo, simCiv]);
   const tl = useMemo(
     () => simulateBuild(bo, simCiv, eco as unknown as EcoData, UPS, { walkTiles: q.dist, autoHouses: q.house }),
     [bo, simCiv, q.dist, q.house],
@@ -204,7 +206,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
     return (
       <BuildPracticeView
         key={`${bo.id}:${q.civ}:${q.dist}:${q.house}`}
-        order={bo}
+        order={displayOrder}
         timeline={tl}
         query={q}
         params={sp}
@@ -352,7 +354,11 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
           </ul>
           {civNotes.length > 0 && (
             <p className="tl-civ-note" data-t="civ-note">
-              {tl.civ === 'Bengalis' ? <NumUnitText text={civNotes.join('；')} /> : civNotes.join('；')}
+              {tl.civ === 'Bengalis' || tl.civ === 'Armenians' ? (
+                <NumUnitText text={civNotes.join('；')} cartUnits={tl.civ === 'Armenians'} />
+              ) : (
+                civNotes.join('；')
+              )}
             </p>
           )}
         </TimelineSummary>
@@ -368,7 +374,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
       <TimelineChart v={v} selectedStep={q.step} tl={tl} showAssume={showAssume} setShowAssume={setShowAssume} />
 
       <TimelineSteps
-        bo={bo}
+        bo={displayOrder}
         tl={tl}
         v={v}
         q={q}
@@ -448,7 +454,9 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
                     </li>
                   ))}
                 </ul>
-                <figcaption data-t="card-basis">{tl.civ === 'Bengalis' ? <NumUnitText text={card.basis} /> : card.basis}</figcaption>
+                <figcaption data-t="card-basis">
+                  {tl.civ === 'Bengalis' || tl.civ === 'Armenians' ? <NumUnitText text={card.basis} cartUnits={tl.civ === 'Armenians'} /> : card.basis}
+                </figcaption>
                 <span className="tl-cardprev-url" data-t="card-url">
                   {card.url}
                 </span>
