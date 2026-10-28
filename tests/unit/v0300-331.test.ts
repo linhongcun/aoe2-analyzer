@@ -188,7 +188,7 @@ describe('#331 所有数值不变：22 个文明的开局模拟、真实成本�
       'Vikings',
     ];
     const supported = TEAM22.filter((b) => simSupport(b.civ));
-    expect(supported.map((b) => b.civ).sort()).toEqual([...historical, 'Portuguese', 'Malians', 'Mayans', 'Bengalis'].sort());
+    expect(supported.map((b) => b.civ).sort()).toEqual([...historical, 'Portuguese', 'Malians', 'Mayans', 'Bengalis', 'Georgians'].sort());
     const old = supported.filter((b) => historical.includes(b.civ));
     expect(old.map((b) => b.civ).sort()).toEqual(historical);
     expect(Object.fromEntries(old.map((b) => [b.civ, simOut(b.civ)]))).toMatchSnapshot();

@@ -107,18 +107,18 @@ for (const width of [360, 375, 390, 1280])
       expect(errors).toEqual([]);
     });
 
-test('#197 魏可选、刷新/深链、hybrid零触发与格鲁吉亚仍置灰', async ({ page }) => {
+test('#197 魏可选、刷新/深链、hybrid零触发与中国仍置灰', async ({ page }) => {
   await page.goto('./#/builds?bo=hybrid-fish-18');
   await page.locator('#tlciv').click();
   const picker = page.getByRole('dialog', { name: '文明', exact: true });
   await expect(picker.locator('[data-civ="Wei"]')).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(picker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+  await expect(picker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
   await picker.locator('[data-civ="Wei"]').click();
   await expect(page).toHaveURL(/[?&]civ=Wei/);
   await page.reload();
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按魏计');
   await expect(page.locator('[data-t="bonus-villager-event"]')).toHaveCount(0);
-  await page.goto('./#/builds?bo=hybrid-fish-18&civ=Georgians');
+  await page.goto('./#/builds?bo=hybrid-fish-18&civ=Chinese');
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('格鲁吉亚');
+  await expect(page.locator('[data-t="civ-warn"]')).toContainText('中国');
 });

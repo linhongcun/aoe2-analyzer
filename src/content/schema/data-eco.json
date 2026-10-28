@@ -439,6 +439,9 @@
                 },
                 "armenianTech": {
                   "$ref": "#/$defs/armenianTech"
+                },
+                "georgianTech": {
+                  "$ref": "#/$defs/georgianTech"
                 }
               },
               "required": ["source", "tech", "name", "age", "requires", "effects"],
@@ -521,6 +524,9 @@
     },
     "armenianInfrastructure": {
       "$ref": "#/$defs/armenianInfrastructure"
+    },
+    "georgianInfrastructure": {
+      "$ref": "#/$defs/georgianInfrastructure"
     }
   },
   "required": ["meta", "units", "buildings", "techs", "villager", "animals", "fishingShip", "ecoTechs", "civEco", "ageReq"],
@@ -857,6 +863,226 @@
         },
         "buildingTech": {
           "$ref": "#/$defs/armenianTech"
+        },
+        "cart": {
+          "type": "object",
+          "properties": {
+            "unit": {
+              "type": "integer"
+            },
+            "type": {
+              "type": "integer"
+            },
+            "class": {
+              "type": "integer"
+            },
+            "buildTech": {
+              "type": "integer"
+            },
+            "trainAt": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "minItems": 2,
+                "maxItems": 2,
+                "items": false
+              }
+            },
+            "trainTime": {
+              "type": "number",
+              "minimum": 0
+            },
+            "cost": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "minItems": 3,
+                "maxItems": 3,
+                "items": false
+              }
+            }
+          },
+          "required": ["unit", "type", "class", "buildTech", "trainAt", "trainTime", "cost"],
+          "additionalProperties": false
+        },
+        "researchSites": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2,
+              "items": false
+            }
+          },
+          "propertyNames": {
+            "pattern": "^[0-9]+$"
+          }
+        }
+      },
+      "required": ["civId", "treeId", "treeCommands", "enable", "buildingTech", "cart", "researchSites"],
+      "additionalProperties": false
+    },
+    "georgianTech": {
+      "type": "object",
+      "properties": {
+        "tech": {
+          "type": "integer"
+        },
+        "civ": {
+          "type": "integer"
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "effectId": {
+          "type": "integer"
+        },
+        "requiredCount": {
+          "type": "integer"
+        },
+        "researchLocation": {
+          "type": "integer"
+        },
+        "researchAt": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "minItems": 2,
+            "maxItems": 2,
+            "items": false
+          }
+        },
+        "researchTime": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "minItems": 3,
+            "maxItems": 3,
+            "items": false
+          }
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Type": {
+                "type": "integer"
+              },
+              "A": {
+                "type": "integer"
+              },
+              "B": {
+                "type": "integer"
+              },
+              "C": {
+                "type": "integer"
+              },
+              "D": {
+                "type": "number"
+              }
+            },
+            "required": ["Type", "A", "B", "C", "D"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["tech", "civ", "requires", "effectId", "requiredCount", "researchLocation", "researchAt", "researchTime", "cost", "commands"],
+      "additionalProperties": false
+    },
+    "georgianInfrastructure": {
+      "type": "object",
+      "properties": {
+        "civId": {
+          "type": "integer"
+        },
+        "treeId": {
+          "type": "integer"
+        },
+        "treeCommands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Type": {
+                "type": "integer"
+              },
+              "A": {
+                "type": "integer"
+              },
+              "B": {
+                "type": "integer"
+              },
+              "C": {
+                "type": "integer"
+              },
+              "D": {
+                "type": "number"
+              }
+            },
+            "required": ["Type", "A", "B", "C", "D"],
+            "additionalProperties": false
+          }
+        },
+        "enable": {
+          "$ref": "#/$defs/georgianTech"
+        },
+        "buildingTech": {
+          "$ref": "#/$defs/georgianTech"
         },
         "cart": {
           "type": "object",

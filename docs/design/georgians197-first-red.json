@@ -1,0 +1,339 @@
+{
+  "status": "MEANINGFUL_FIRST_RED_CAPTURED_PRODUCTION_HOLD",
+  "head": "ab85d540813a8ce9432576a6c0dee9ff0de09b0a",
+  "tree": "ae42601ed054d2c62f73c4361cd143cbe4515601",
+  "startedUTC": "2026-10-28T06:18:54.708986+00:00",
+  "completedUTC": "2026-10-28T06:19:50.481715+00:00",
+  "results": {
+    "unit": {
+      "total": 77,
+      "passed": 34,
+      "failed": 43,
+      "files": [
+        {
+          "file": "/workspace/aoe2-issue197-batch11/tests/unit/georgians197.test.ts",
+          "total": 17,
+          "passed": 3,
+          "failed": 14,
+          "failures": [
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 当前八套格鲁吉亚受支持",
+              "message": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 起始免费车是真实at0完成建筑，正常三村、库存和人口不变",
+              "message": "AssertionError: expected [] to deeply equal [ { building: 1808, at: +0 } ]",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 原营地562仍付80木20食物建新车，不能抵消起始车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 原营地584仍付80木20食物建新车，不能抵消起始车",
+              "message": "AssertionError: expected { kind: 'building', id: '584' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 两个显式动作对应两辆新付费车，不能自动复用免费车",
+              "message": "AssertionError: expected { food: +0, wood: 200, gold: +0, …(1) } to deeply equal { food: 40, wood: 160, gold: +0, …(1) }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 1村施工继承25秒及既有衰减公式，免费车不参加施工",
+              "message": "AssertionError: expected 584 to be 1808 // Object.is equality",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 2村施工继承25秒及既有衰减公式，免费车不参加施工",
+              "message": "AssertionError: expected 584 to be 1808 // Object.is equality",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 3村施工继承25秒及既有衰减公式，免费车不参加施工",
+              "message": "AssertionError: expected 584 to be 1808 // Object.is equality",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 原317移除925只取消免费起始车，付费替换和25秒仍生效",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 原317移除934只移除Church来源，免费和付费车均保持",
+              "message": "AssertionError: expected [ 584 ] to deeply equal [ 1808, 1808 ]",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 免费起始车从起点就是双刃斧研究地点，不必等原营地动作",
+              "message": "AssertionError: expected [] to deeply equal [ { building: 1808, at: +0 } ]",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 移除925后没有车必须等研究地点，不能仅到封建便研究",
+              "message": "AssertionError: expected false to be true // Object.is equality",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 移除925后付费车完成才允许双刃斧付款和研究",
+              "message": "AssertionError: expected undefined to be defined",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚起始免费骡车与显式付费骡车 起始车与磨坊满足两种时代建筑；移除925后同一计划不能升时代",
+              "message": "AssertionError: expected [] to have a length of 1 but got +0",
+              "classification": "semantic_assertion_failure"
+            }
+          ]
+        },
+        {
+          "file": "/workspace/aoe2-issue197-batch11/tests/unit/georgians197Presentation.test.ts",
+          "total": 6,
+          "passed": 3,
+          "failed": 3,
+          "failures": [
+            {
+              "name": "#197 格鲁吉亚免费起始与付费模板公开口径 起始车保留真实src/encoded，使用说明披露免费与显式付费两种车",
+              "message": "AssertionError: expected { tool: 'sim', name: '开局模拟', …(2) } to match object { on: true }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚免费起始与付费模板公开口径 普通时间线公开说明含起始车、不占人口和逐次付费，骑士方案无额外可用性警告",
+              "message": "AssertionError: expected [] to include '开局已有1辆免费骡车，不占人口；原营地动作仍逐次新增付费骡车'",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚免费起始与付费模板公开口径 分享预览和PNG共用basis必须包含免费起始、付费80木20食物及固定距离",
+              "message": "AssertionError: expected '按格鲁吉亚计 · 走路 4 格 · 游戏版本 185872' to be '按格鲁吉亚计 · 走路 4 格 · 游戏版本 185872\\n开局已有1辆…' // Object.is equality",
+              "classification": "semantic_assertion_failure"
+            }
+          ]
+        },
+        {
+          "file": "/workspace/aoe2-issue197-batch11/tests/unit/georgians197SourceGuard.test.ts",
+          "total": 54,
+          "passed": 28,
+          "failed": 26,
+          "failures": [
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 完整已核fixture可用，正例不被来源门控统统拒绝",
+              "message": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925缺raw不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925重复不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误来源不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected true to be false // Object.is equality",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误时代不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误前置不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误原civ不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误effect不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误requiredCount不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925原前置缺annex不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误研究地点不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误付费不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925伪造村民不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误anchor不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误数量不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误flag不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925未知伴随不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925错误decoded不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925多余decoded不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected { kind: 'building', id: '562' } to deeply equal { kind: 'building', id: '1808' }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 925unknown-only不发免费车，完整独立基础设施仍建全价付费车",
+              "message": "AssertionError: expected true to be false // Object.is equality",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 整条移除925是合法counterfactual，不能破坏其它能力",
+              "message": "AssertionError: expected { food: +0, wood: 100, gold: +0, …(1) } to deeply equal { food: 20, wood: 80, gold: +0, …(1) }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 整条移除926是合法counterfactual，不能破坏其它能力",
+              "message": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 整条移除934是合法counterfactual，不能破坏其它能力",
+              "message": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 926未知伴随或空解码不借无关分类放行，起始车不被误删",
+              "message": "AssertionError: expected [] to deeply equal [ { building: 1808, at: +0 } ]",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 934未知伴随或空解码不借无关分类放行，起始车不被误删",
+              "message": "AssertionError: expected [] to deeply equal [ { building: 1808, at: +0 } ]",
+              "classification": "semantic_assertion_failure"
+            },
+            {
+              "name": "#197 格鲁吉亚完整来源、独立能力和跨文明隔离 279在格鲁吉亚树合法，不复制亚美尼亚279禁用",
+              "message": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }",
+              "classification": "semantic_assertion_failure"
+            }
+          ]
+        }
+      ]
+    },
+    "python": {
+      "total": 6,
+      "passed": 1,
+      "failed": 5,
+      "errors": 0,
+      "failureNames": [
+        "test_actual_fixed_export_keeps_infrastructure_independent_of_start_bonus (test_georgians197.Georgians197Export.test_actual_fixed_export_keeps_infrastructure_independent_of_start_bonus)",
+        "test_three_existing_canonical_rows_gain_complete_raw_context_in_original_order (test_georgians197.Georgians197Export.test_three_existing_canonical_rows_gain_complete_raw_context_in_original_order)",
+        "test_unknown_companions_are_not_lost_from_start_church_or_enable (test_georgians197.Georgians197Export.test_unknown_companions_are_not_lost_from_start_church_or_enable)",
+        "test_unknown_only_canonical_rows_do_not_disappear_as_legitimate_whole_omission (test_georgians197.Georgians197Export.test_unknown_only_canonical_rows_do_not_disappear_as_legitimate_whole_omission)",
+        "test_wrong_civ_site_and_missing_effect_remain_visible_to_runtime_refusal (test_georgians197.Georgians197Export.test_wrong_civ_site_and_missing_effect_remain_visible_to_runtime_refusal)"
+      ]
+    }
+  },
+  "failureClassification": {
+    "semanticUnitAssertions": 43,
+    "semanticProducerAssertions": 5,
+    "importFailures": 0,
+    "environmentFailures": 0,
+    "fixtureOrSyntaxFailures": 0,
+    "pythonErrors": 0,
+    "existingExporterResourceWarnings": "Actual ResourceWarning from pre-existing unclosed json file reads; warnings did not cause failure and no suppression/source edits applied"
+  },
+  "commands": [
+    {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/georgians197.test.ts",
+        "tests/unit/georgians197SourceGuard.test.ts",
+        "tests/unit/georgians197Presentation.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/batch11-georgians-first-red-unit.json"
+      ],
+      "startedUTC": "2026-10-28T06:19:01.496438+00:00",
+      "completedUTC": "2026-10-28T06:19:03.895851+00:00",
+      "exitCode": 1,
+      "log": "/tmp/batch11-georgians-first-red-unit.log",
+      "json": "/tmp/batch11-georgians-first-red-unit.json"
+    },
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/py",
+        "-p",
+        "test_georgians197.py",
+        "-v"
+      ],
+      "startedUTC": "2026-10-28T06:19:13.712963+00:00",
+      "completedUTC": "2026-10-28T06:19:14.611439+00:00",
+      "exitCode": 1,
+      "log": "/tmp/batch11-georgians-first-red-python.log"
+    }
+  ],
+  "sourceInputsUnchanged": 473,
+  "protectedFilesUnchanged": 497,
+  "executionRecord": "/tmp/batch11-georgians-first-red-execution.json",
+  "executionRecordSHA256": "2540777c566a2c1eaaf80ca634b2caa1d6122b400b1701eb0676072687d33cbc",
+  "artifactHashes": {
+    "/tmp/batch11-georgians-first-red-unit.json": "9a68dd9254f9f4db64e57b7bf0dcc1aa31cde34c5cb295e811d050ab721f9afd",
+    "/tmp/batch11-georgians-first-red-unit.log": "33b8ab4305f8d814bb2a6ffcdc91ed747f17c9233a9d0791c77a63a39b1e518c",
+    "/tmp/batch11-georgians-first-red-python.log": "850ea24911f924be69eb3d00c0b0f8888de6d9ecb75dd06718227881fcbf7ff4"
+  },
+  "newFileHashes": {
+    "docs/design/georgians197.md": "eea5557ae31af119c9d80833d29f8f4c78bfb06841746650807f5d490397daa9",
+    "tests/unit/georgians197.test.ts": "5a7068344ab6e210007b5be1c39bef66738dd0a197effb807adfe0ec2fb9a1ea",
+    "tests/unit/georgians197SourceGuard.test.ts": "bb798956c656f114908f6d15ff312356b34df68ce3af5a783c7982f5b27ce632",
+    "tests/unit/georgians197Presentation.test.ts": "79704ceb32209b891a5e795ecf1da4c9ab1ec48f49000f4a2e6b806fd2aeb552",
+    "tests/py/test_georgians197.py": "4d661b5c7f27a399dd67449119e208f2609943d14bba830386081df5a3dd1a19"
+  },
+  "unexecuted": [
+    "baseline recapture",
+    "existing tests migration",
+    "production changes",
+    "production eco export",
+    "UPDATE317",
+    "domain/full suite",
+    "build/browser",
+    "commit/push/PR"
+  ]
+}

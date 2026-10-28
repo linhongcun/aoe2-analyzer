@@ -41,6 +41,19 @@ import {
   type ArmenianInfrastructure,
   type ArmenianRawTech,
 } from './armenianEconomy';
+import {
+  georgianBuildOrder,
+  georgianContext,
+  georgianHasChurch,
+  georgianResearchSites,
+  georgianRowClass,
+  GEORGIAN_ASSUMPTION,
+  GEORGIAN_CART_NOTE,
+  GEORGIAN_START_NOTE,
+  GEORGIAN_CHURCH_REASON,
+  type GeorgianInfrastructure,
+  type GeorgianRawTech,
+} from './georgianEconomy';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -53,11 +66,13 @@ interface EffectRow {
   spawn?: WeiSpawnContext;
   ageSpawn?: BengaliSpawnContext;
   armenianTech?: ArmenianRawTech;
+  georgianTech?: GeorgianRawTech;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];
 }
 /** eco.json 中模拟需要的部分 */
 export interface EcoData {
   armenianInfrastructure?: ArmenianInfrastructure;
+  georgianInfrastructure?: GeorgianInfrastructure;
   fishingShip?: { unit: number; workRate: number; carry: number; speed: number; deepFishMultiplier?: number };
   villager: { trainTime: number; cost: Cost; speed: number; carry: number; tasks: Record<string, { workRate: number; carry: number }> };
   units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number>; class?: number }>;
@@ -125,7 +140,7 @@ export interface Anomaly {
   age?: number;
   /** prereq_wait：需要几座前一时代建筑 */
   need?: number;
-  /** Armenian-only non-TC source-backed research-site wait. */
+  /** Source-backed Armenian/Georgian non-TC research-site wait. */
   researchSite?: string;
   resource?: Res;
   shortfall?: number;
@@ -183,7 +198,7 @@ export interface BuildTimeline {
   params: SimParams & { carryModel: string };
   ageUps: { age: 'feudal' | 'castle' | 'imperial'; clickAt: number; reachAt: number; errSec: ErrBand }[];
   steps: TimelineStep[];
-  /** 每座建筑（不含自动补的房子）建成时刻，按时间排序（#3 护栏用） */
+  /** 每座建筑（不含自动补的房子）建成时刻；格鲁吉亚起始免费骡车记录at0，按时间排序（#3 护栏用） */
   buildingsDone: { building: number; at: number }[];
   /** 全部异常（按优先级：idle_tc > pop_block > resource_short），便于摘要 */
   anomalies: Anomaly[];
@@ -752,6 +767,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const weiFamily = civ === 'Wei' ? scope.weiRewards : null;
   const bengaliFamily = civ === 'Bengalis' ? scope.bengaliRewards : null;
   const armenians = civ === 'Armenians' ? scope.armenians : undefined;
+  const georgians = civ === 'Georgians' ? scope.georgians : undefined;
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   const uniqueMayanTeam = (eco.civEco.Mayans ?? []).filter((row) => row.source === 'team').length === 1;
   const rows = (eco.civEco[civ] ?? []).filter(
@@ -845,6 +861,11 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const built = new Map<number, number>([[TC, 1]]); // building id → 数量
   const constructions: Construction[] = [];
   const buildingsDone: { building: number; at: number }[] = [];
+  // The reviewed starting cart is already complete; it consumes no stock, worker, TC time or population.
+  if (georgians?.start) {
+    built.set(1808, 1);
+    buildingsDone.push({ building: 1808, at: 0 });
+  }
   /** 每座房子（含自动补房）付木开工的时刻，#42 匈奴对比「省下的木头」用 */
   const housePaidAt: number[] = [];
   const unitQueues = new Map<number, { p: Pending; left: number; unit: number }[]>(); // 训练建筑 → 队列
@@ -926,8 +947,9 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const activeStep = () => Math.max(0, Math.min(nextStep - 1, nSteps - 1));
   const completeResearch = (p: Pending, t: number) => {
     if (p.a.type !== 'research') return;
-    if (armenians && completedResearch.has(p.a.tech)) return;
+    if ((armenians || georgians) && completedResearch.has(p.a.tech)) return;
     applyEcoTech(p.a.tech, false);
+    if (georgians) completedResearch.add(p.a.tech);
     if (armenians) {
       completedResearch.add(p.a.tech);
       for (const bonus of armenianResearchBonus(armenians, p.a.tech, age, appliedArmenianResearch)) {
@@ -1073,7 +1095,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     while (payQ.length) {
       const p = payQ[0]!;
       const a = p.a;
-      if (armenians?.infrastructure && a.type === 'research') {
+      if ((armenians?.infrastructure || georgians?.infrastructure) && a.type === 'research') {
         if (completedResearch.has(a.tech)) {
           p.paid = true;
           p.done = true;
@@ -1083,7 +1105,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         }
         const duplicate = constructions.some((construction) => construction.p?.a.type === 'research' && construction.p.a.tech === a.tech);
         if (duplicate) break;
-        const sites = armenianResearchSites(armenians, a.tech);
+        const sites = georgians?.infrastructure ? georgianResearchSites(georgians, a.tech) : armenianResearchSites(armenians, a.tech);
         if (sites && !sites.some((building) => (built.get(building) ?? 0) > 0)) {
           p.siteBlockedSince ??= t;
           p.siteIds = sites;
@@ -1452,7 +1474,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
   // #42 匈奴：人口不受房子限制 → 开局里的造房动作不执行、不扣木，自动补房也关掉；步骤数与编号不变
   const noHouses = civNoHouses(eco, civ);
   const input = bo;
-  bo = armenianBuildOrder(bo, civ, eco);
+  bo = georgianBuildOrder(armenianBuildOrder(bo, civ, eco), civ, eco);
   if (noHouses) {
     bo = stripHouses(bo);
     P.autoHouses = false;
@@ -1522,6 +1544,13 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
           ? [BENGALI_SPAWN_ASSUMPTION, ...(bo.id === 'fast-castle-knights' ? [BENGALI_KNIGHT_TEMPLATE_NOTE] : [])]
           : []),
         ...(civ === 'Armenians' && armenianContext(eco).infrastructure ? [ARMENIAN_ASSUMPTION, ARMENIAN_RESEARCH_NOTE] : []),
+        ...(civ === 'Georgians' && georgianContext(eco).infrastructure
+          ? [
+              georgianContext(eco).start
+                ? GEORGIAN_ASSUMPTION
+                : GEORGIAN_ASSUMPTION.replace('起始免费骡车已作为完成实体和一种时代前置；', '未应用起始免费骡车；'),
+            ]
+          : []),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
           : []),
@@ -1668,8 +1697,11 @@ const HANDLED_ATTR = new Set(['workRate', 'carry', 'trainTime', ...Object.keys(C
 export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
   const armenians = civ === 'Armenians' ? armenianContext(eco) : undefined;
   if (armenians?.infrastructure) bos = bos.map((order) => armenianBuildOrder(order, civ!, eco));
+  const georgians = civ === 'Georgians' ? georgianContext(eco) : undefined;
+  if (georgians?.infrastructure) bos = bos.map((order) => georgianBuildOrder(order, civ!, eco));
   const units = new Set<number>([83]);
   const buildings = new Set<number>([...TC_UNITS, HOUSE, ...FARM_UNITS]);
+  if (georgians?.start) buildings.add(1808);
   const techs = new Set<number>([101, 102, 103, ...Object.keys(eco.ecoTechs).map(Number)]);
   for (const b of bos)
     for (const st of b.steps)
@@ -1697,6 +1729,7 @@ export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
     weiRewards: civ === 'Wei' ? weiRewardFamily(eco.civEco.Wei) : null,
     ...(civ === 'Bengalis' ? { bengaliRewards: bengaliRewardFamily(eco.civEco.Bengalis) } : {}),
     ...(armenians ? { armenians } : {}),
+    ...(georgians ? { georgians } : {}),
   };
 }
 
@@ -1711,11 +1744,21 @@ export function techAtomicOk(row: EffectRow, scope: ReturnType<typeof simScope>)
 /** 判定一条文明效果 */
 export function classifyCivEffect(
   e: Effect,
-  row: { source?: string; age?: number; tech?: number; requires?: number[]; effects?: EffectRow['effects']; armenianTech?: ArmenianRawTech },
+  row: {
+    source?: string;
+    age?: number;
+    tech?: number;
+    requires?: number[];
+    effects?: EffectRow['effects'];
+    armenianTech?: ArmenianRawTech;
+    georgianTech?: GeorgianRawTech;
+  },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
   const armenian = armenianRowClass(row as EffectRow, scope.civ, scope.armenians, scope.buildings);
   if (armenian) return armenian;
+  const georgian = georgianRowClass(row as EffectRow, scope.civ, scope.georgians, scope.buildings);
+  if (georgian) return georgian;
   if (isWeiRewardRow(row))
     return scope.civ === 'Wei' && scope.weiRewards?.some((reward) => reward.row === row)
       ? { kind: 'handled' }
@@ -1836,6 +1879,19 @@ export function simSupport(
     )
       reasons.push('该研究在亚美尼亚当前已核科技与地点范围外，未计入');
   }
+  if (civ === 'Georgians') {
+    const context = georgianContext(eco);
+    reasons.push(...context.reasons);
+    if (georgianHasChurch(simScope(eco, bos, civ).buildings)) reasons.push(GEORGIAN_CHURCH_REASON);
+    // simScope.techs contains all standard ecoTechs; availability concerns only requested actions.
+    if (
+      context.infrastructure &&
+      bos.some((order) =>
+        order.steps.some((step) => step.actions.some((action) => action.type === 'research' && !georgianResearchSites(context, action.tech)?.length)),
+      )
+    )
+      reasons.push('该研究在格鲁吉亚当前已核科技与地点范围外，未计入');
+  }
   if (!opts.ignoreSourceGate && !FORCED_CIVS.has(civ) && SOURCE_PENDING_CIVS[civ]) reasons.push(SOURCE_PENDING_CIVS[civ]!);
   return { supported: reasons.length === 0, reasons };
 }
@@ -1939,6 +1995,10 @@ export function gatherRate(
 export function civSimNotes(eco: EcoData, civ: string, boId?: string): string[] {
   const out: string[] = [];
   if (civ === 'Armenians' && armenianContext(eco).reasons.length === 0) out.push(ARMENIAN_CART_NOTE, ARMENIAN_RESEARCH_NOTE);
+  if (civ === 'Georgians') {
+    const context = georgianContext(eco);
+    if (context.reasons.length === 0) out.push(...(context.start ? [GEORGIAN_START_NOTE] : []), GEORGIAN_CART_NOTE);
+  }
   const rows = (eco.civEco[civ] ?? []).filter((r) => r.source !== 'team');
   if (rows.some((r) => (r as { tech?: number }).tech === 453 && r.effects.some((e) => e.res === RES_FORAGER_WOOD && e.op === 'add')))
     out.push(FORAGER_WOOD_NOTE);

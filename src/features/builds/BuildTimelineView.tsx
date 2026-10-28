@@ -8,6 +8,7 @@ import { buildOrders } from '../../data/buildOrders';
 import { civByEn } from '../../data';
 import type { BuildOrder } from '../../domain/buildOrder';
 import { armenianBuildOrder } from '../../domain/armenianEconomy';
+import { georgianBuildOrder } from '../../domain/georgianEconomy';
 import { visibleSources } from './sources';
 import { followupHint } from './timelineFollowups';
 import { simSupport } from '../../domain/simSupport';
@@ -36,7 +37,10 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   // #42：链接里的文明加成还没计入 → 保留 URL 里的 civ，按通用计算并提示
   const unsupported = !!q.civ && !simSupport(q.civ);
   const simCiv = q.civ && !unsupported ? q.civ : 'Generic';
-  const displayOrder = useMemo(() => armenianBuildOrder(bo, simCiv, eco as unknown as EcoData), [bo, simCiv]);
+  const displayOrder = useMemo(
+    () => georgianBuildOrder(armenianBuildOrder(bo, simCiv, eco as unknown as EcoData), simCiv, eco as unknown as EcoData),
+    [bo, simCiv],
+  );
   const tl = useMemo(
     () => simulateBuild(bo, simCiv, eco as unknown as EcoData, UPS, { walkTiles: q.dist, autoHouses: q.house }),
     [bo, simCiv, q.dist, q.house],
@@ -44,6 +48,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   const v = useMemo(() => buildView(tl, (id) => UNIT_ZH[id] ?? id), [tl]);
   // #42 匈奴（huns-flag-* 稿）：只有文明被支持、按它计算且它不需要房子时才出现；置灰时 simCiv 是 Generic，这里恒为 false
   const noHouses = tl.noHouses;
+  const cartUnits = tl.civ === 'Armenians' || tl.civ === 'Georgians';
   const noNeedZh = `${civByEn(simCiv)?.zh ?? simCiv}不需要`;
   const genericTl = useMemo(
     () => (noHouses ? simulateBuild(bo, 'Generic', eco as unknown as EcoData, UPS, { walkTiles: q.dist, autoHouses: q.house }) : null),
@@ -354,11 +359,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
           </ul>
           {civNotes.length > 0 && (
             <p className="tl-civ-note" data-t="civ-note">
-              {tl.civ === 'Bengalis' || tl.civ === 'Armenians' ? (
-                <NumUnitText text={civNotes.join('；')} cartUnits={tl.civ === 'Armenians'} />
-              ) : (
-                civNotes.join('；')
-              )}
+              {tl.civ === 'Bengalis' || cartUnits ? <NumUnitText text={civNotes.join('；')} cartUnits={cartUnits} /> : civNotes.join('；')}
             </p>
           )}
         </TimelineSummary>
@@ -455,7 +456,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
                   ))}
                 </ul>
                 <figcaption data-t="card-basis">
-                  {tl.civ === 'Bengalis' || tl.civ === 'Armenians' ? <NumUnitText text={card.basis} cartUnits={tl.civ === 'Armenians'} /> : card.basis}
+                  {tl.civ === 'Bengalis' || cartUnits ? <NumUnitText text={card.basis} cartUnits={cartUnits} /> : card.basis}
                 </figcaption>
                 <span className="tl-cardprev-url" data-t="card-url">
                   {card.url}

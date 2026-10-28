@@ -436,6 +436,6 @@ describe('#197 玛雅起始、队列与墙团队开关', () => {
     expect(civSimNotes(E, 'Mayans')).toContain(note);
     expect(civSimNotes(E, 'Mayans')).toContain(templateNote);
     expect(simSupport(E, 'Mayans', buildOrders)).toEqual({ supported: true, reasons: [] });
-    expect(simSupport(E, 'Georgians', buildOrders).supported).toBe(false);
+    expect(simSupport(E, 'Chinese', buildOrders).supported).toBe(false);
   });
 });

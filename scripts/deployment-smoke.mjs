@@ -86,7 +86,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const picker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(picker.locator('[data-civ="Portuguese"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(picker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(picker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await goto('/builds?bo=drush-fc&civ=Portuguese&step=6');
       const eco = JSON.parse(readFileSync(new URL('../src/data/eco.json', import.meta.url), 'utf8'));
@@ -124,7 +124,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const shuPicker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(shuPicker.locator('[data-civ="Shu"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(shuPicker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(shuPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await page.locator('[data-t="share-card-btn"]:visible').first().click();
       await check(page.locator('[data-t="share-card"]')).toContainText('按蜀计');
@@ -154,7 +154,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const maliansPicker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(maliansPicker.locator('[data-civ="Malians"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(maliansPicker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(maliansPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await page.locator('[data-t="share-card-btn"]:visible').first().click();
       await check(page.locator('[data-t="share-card"]')).toContainText('按马里计');
@@ -192,7 +192,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const varangianPicker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(varangianPicker.locator('[data-civ="Varangians"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(varangianPicker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(varangianPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await page.locator('[data-t="share-card-btn"]:visible').first().click();
       await check(page.locator('[data-t="share-card"]')).toContainText('按瓦兰吉人计');
@@ -222,7 +222,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const tatarPicker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(tatarPicker.locator('[data-civ="Tatars"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(tatarPicker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(tatarPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await page.locator('[data-t="share-card-btn"]:visible').first().click();
       await check(page.locator('[data-t="share-card"]')).toContainText('按鞑靼计');
@@ -261,7 +261,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const mayanPicker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(mayanPicker.locator('[data-civ="Mayans"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(mayanPicker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(mayanPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       for (const bo of ['scouts-18', 'fast-castle-knights']) {
         await goto(`/builds?bo=${bo}&civ=Mayans`);
@@ -333,7 +333,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const weiPicker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(weiPicker.locator('[data-civ="Wei"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(weiPicker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(weiPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await goto('/builds?bo=fast-castle-knights&civ=Wei');
       await check(page.locator('[data-t="civ-note"]')).toContainText('魏没有骑士；骑士方案仅供通用模板经济估算');
@@ -378,7 +378,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const bengaliPicker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(bengaliPicker.locator('[data-civ="Bengalis"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(bengaliPicker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(bengaliPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await goto('/builds?bo=fast-castle-knights&civ=Bengalis');
       await check(page.locator('[data-t="civ-note"]')).toContainText('孟加拉没有骑士；骑士方案仅供通用模板经济估算');
@@ -415,7 +415,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await page.locator('#tlciv').click();
       const armenianPicker = page.getByRole('dialog', { name: '文明', exact: true });
       await check(armenianPicker.locator('[data-civ="Armenians"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await check(armenianPicker.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+      await check(armenianPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await goto('/builds?bo=archers-19&civ=Armenians&step=9');
       await check(page.locator('[data-step="8"] .n')).toContainText('60木、15食物');
@@ -435,6 +435,35 @@ export async function checkSite({ site, version, commit, features = [] }) {
       await check(page.locator('[data-t="rc-a"]')).toContainText('需研究科技，未建模');
       console.log(
         'Verified Armenian economy: physical Mule Cart60Wood/15Food and source-backed site mapping, primary House cost preserved in compound block, research-completion disclosure, selectable/share/source usage, fixed-distance model disclosure and original real-cost boundary',
+      );
+      await goto('/builds?bo=scouts-18&civ=Georgians&step=1');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按格鲁吉亚计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      assert.deepEqual(await inventory(), { food: 200, wood: 200, gold: 100 });
+      await check(page.getByRole('region', { name: '步骤详情', exact: true })).toContainText(/人口\s+4\/5/);
+      await check(page.locator('[data-t="civ-note"]')).toContainText('开局已有1辆免费骡车，不占人口');
+      await check(page.locator('[data-t="civ-note"]')).toContainText('原营地动作仍逐次新增付费骡车');
+      await goto('/builds?bo=scouts-18&civ=Georgians&step=3');
+      const georgianDetail = page.getByRole('region', { name: '步骤详情', exact: true });
+      await check(georgianDetail.getByRole('link', { name: '骡车', exact: true })).toHaveAttribute('href', '#/building/1808');
+      await check(georgianDetail.locator('[data-t="step-cost"]')).toContainText('食物 20');
+      await check(georgianDetail.locator('[data-t="step-cost"]')).toContainText('木头 80');
+      await page.locator('#tlciv').click();
+      const georgianPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(georgianPicker.locator('[data-civ="Georgians"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(georgianPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      await page.locator('[data-t="share-card-btn"]:visible').first().click();
+      await check(page.locator('[data-t="card-basis"]')).toContainText('开局已有1辆免费骡车，不占人口');
+      await check(page.locator('[data-t="card-basis"]')).toContainText('每辆80木、20食物');
+      await check(page.locator('[data-t="card-basis"]')).toContainText('移动和自动复用未模拟');
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Georgians');
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      await goto('/civ/Georgians/bonus/0');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText('起始免费骡车与逐次付费骡车');
+      console.log(
+        'Verified Georgian economy: normal initial stock/population, separate starting free cart, paid80Wood/20Food cart, selectable civilization and consistent share/source disclosure',
       );
     }
     for (const feature of smokeFeatures(features)) {

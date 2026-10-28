@@ -1,0 +1,63 @@
+{
+  "status": "ACTUAL_EXTRA_NARROW_RED_GREEN_FOR_CLOSED_UNKNOWN_ROW_RUNTIME_REJECTION",
+  "original83TestsUnchanged": true,
+  "test": "tests/unit/georgians197UnknownRow.test.ts",
+  "testSHA256": "00d95331ccc14af91e5b4d5ae190508d985768597b256d7ce29c0bc4d37a1081",
+  "helperAfterSHA256": "da2cb6ab1a8fdcf61188c120f639b77b0b3c63ba8a6253d3411610aadf7243ee",
+  "reason": "Unknown non-team Georgian rows must be refused in both support and direct execution, including otherwise-known generic gathering attributes. Team and other civilizations are unchanged.",
+  "runs": [
+    {
+      "label": "unknown-row-red",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/georgians197UnknownRow.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/batch11-georgians-unknown-row-red.json"
+      ],
+      "exitCode": 1,
+      "startedUTC": "2026-10-28T06:43:44.216363+00:00",
+      "completedUTC": "2026-10-28T06:43:45.629110+00:00",
+      "inputSHA256": "a392c43c301246d20553cc5d8d2ee928c453ce20e17060a6d8e997588b3af879",
+      "HEAD": "1c26e4d3bc419223c5f837640b0f2c57c1e91e3a",
+      "HEADTree": "776b74d300d5f4b43df390ff216adf04710946be",
+      "WIP": true,
+      "reportSHA256": "6d1c1a075dc38c3c049791fffbc5389d05851e44b9b34cd4a081559cb615168c",
+      "executionSHA256": "a4c2d69e297e263c4c6493be8b69e5101c2a140397a43f5966703f6b8ac4882a",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "failures": [
+        {
+          "name": "#197 格鲁吉亚未知bonus行须整行拒绝，direct API不能借通用属性路径应用wood×2",
+          "message": "AssertionError: expected [ [ +0, 10, …(3) ], …(2) ] to deeply equal [ [ +0, 10, …(3) ], …(2) ]"
+        }
+      ]
+    },
+    {
+      "label": "unknown-row-green",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/georgians197UnknownRow.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/batch11-georgians-unknown-row-green.json"
+      ],
+      "exitCode": 0,
+      "startedUTC": "2026-10-28T06:44:10.471288+00:00",
+      "completedUTC": "2026-10-28T06:44:11.869222+00:00",
+      "inputSHA256": "ab0bbd348342f45794cfb9e983b58a9066fb75b5762ca59bf2bc2bff5c19ca85",
+      "HEAD": "1c26e4d3bc419223c5f837640b0f2c57c1e91e3a",
+      "HEADTree": "776b74d300d5f4b43df390ff216adf04710946be",
+      "WIP": true,
+      "reportSHA256": "1aa3c8abf83d125c8c1b63d6cf6e6417faff47197702428ea7379bf53c89ab4a",
+      "executionSHA256": "b494433a0864a2e8f729bfc3466e175e8d164063fb5bcbc8762c947de74166d6",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "failures": []
+    }
+  ]
+}
