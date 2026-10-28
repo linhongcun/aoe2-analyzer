@@ -1,0 +1,388 @@
+{
+  "baseline": {
+    "head": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+    "tree": "42920cb5a52902655733aee02f6d85419819d97e",
+    "version": "0.57.0",
+    "sourceInputs": 481,
+    "protectedFiles": 540
+  },
+  "scopeComment": "https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6469372915",
+  "status": "Actual first-red before production edits",
+  "distinctCases": 117,
+  "passed": 29,
+  "assertionFailed": 88,
+  "runtimeOrImportOrEnvironmentErrors": 0,
+  "core": {
+    "baseline": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d/v057",
+    "total": 37,
+    "passed": 18,
+    "failed": 19,
+    "failedAssertions": [
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock complete current Khmer source supports all eight legal templates",
+        "message": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock distance 1: helper reports .5035 consumer work but caps effective income at .4",
+        "message": "AssertionError: expected 0.447207727323193 to be close to 0.4, received difference is 0.047207727323193005, but expected 5e-13"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock distance 2: helper reports .5035 consumer work but caps effective income at .4",
+        "message": "AssertionError: expected 0.402236868384262 to be close to 0.4, received difference is 0.0022368683842619586, but expected 5e-13"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock distance 7: helper reports .5035 consumer work but caps effective income at .4",
+        "message": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock distance 2: real 100/200s checkpoints agree with the same capped helper",
+        "message": "AssertionError: expected 4.8799999999999955 to be less than or equal to 1.2"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock distance 7: real 100/200s checkpoints agree with the same capped helper",
+        "message": "AssertionError: expected 38.120000000000005 to be less than or equal to 1.2"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock a consumer below the cap still uses no-return-walk, rather than always hardcoding .4",
+        "message": "AssertionError: expected 0.2660443407234539 to be close to 0.285, received difference is 0.018955659276546077, but expected 5e-13"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock whole654 removal keeps physical .4 but restores ordinary walking and base farmer work",
+        "message": "AssertionError: expected 232 to be less than 232"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock whole638 removal leaves654 and independent farm supply active",
+        "message": "AssertionError: expected false to be true // Object.is equality"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock without638 a no-building age probe does not bypass the same raw age requirements",
+        "message": "AssertionError: expected [ { age: 'feudal', …(3) }, …(2) ] to deeply equal []"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock building 50:638 unlocks without its normal building prerequisite, and removing638 stops that bypass",
+        "message": "AssertionError: expected true to be false // Object.is equality"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock building 87:638 unlocks without its normal building prerequisite, and removing638 stops that bypass",
+        "message": "AssertionError: expected true to be false // Object.is equality"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock building 101:638 unlocks without its normal building prerequisite, and removing638 stops that bypass",
+        "message": "AssertionError: expected true to be false // Object.is equality"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock building 84:638 unlocks without its normal building prerequisite, and removing638 stops that bypass",
+        "message": "AssertionError: expected true to be false // Object.is equality"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock an unknown non-team row cannot double wood through the direct generic-attribute fallback",
+        "message": "AssertionError: expected { carry: 10, workRate: 0.78, …(2) } to deeply equal { carry: 10, workRate: 0.39, …(2) }"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock bad654 onlyFarmer refuses both paired effects and retains independent physical supply",
+        "message": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock bad654 duplicate refuses both paired effects and retains independent physical supply",
+        "message": "AssertionError: expected 0.2603740333615713 to be close to 0.27496757457846954, received difference is 0.014593541216898265, but expected 5e-13"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock bad654 extraKnown refuses both paired effects and retains independent physical supply",
+        "message": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+      },
+      {
+        "title": "Khmer no-return-walk and separate supply in the public helper and real stock bad654 unknownOnly refuses both paired effects and retains independent physical supply",
+        "message": "AssertionError: expected true to be false // Object.is equality"
+      }
+    ],
+    "assertionOnly": true,
+    "execution": "/tmp/batch13-khmer-first-red-core.execution.json",
+    "reportSHA256": "2d420f207292ea5d3061e926e42cc3c70854974f6330ba7ae4ad8c16ec10e737"
+  },
+  "laterNewGroups": {
+    "corePrior": {
+      "total": 37,
+      "passed": 18,
+      "assertionFailed": 19
+    },
+    "newTS": {
+      "total": 70,
+      "passed": 10,
+      "failed": 60,
+      "suites": [
+        {
+          "name": "/workspace/aoe2-issue197-batch13/tests/unit/khmer197Presentation.test.ts",
+          "total": 15,
+          "passed": 5,
+          "failed": 10,
+          "assertionOnly": true,
+          "failures": [
+            {
+              "title": "Khmer source identity and honest current-template presentation Khmer0 remains text-sourced without a fabricated positive tech638 mapping, while reporting current prerequisites counted",
+              "firstLine": "AssertionError: expected undefined to match object { on: true }"
+            },
+            {
+              "title": "Khmer source identity and honest current-template presentation Khmer1 is the farm bonus, distinguishes counted steady mechanism from guaranteed net benefit",
+              "firstLine": "AssertionError: expected { tool: 'sim', name: '开局模拟', …(2) } to match object { on: true }"
+            },
+            {
+              "title": "Khmer source identity and honest current-template presentation fast-castle-boom carries both638 and actual assigned-farm notes into assumptions and share basis",
+              "firstLine": "AssertionError: expected [] to deeply equal [ '当前开局免建筑前置已计入，显式建筑照常付费建造', …(1) ]"
+            },
+            {
+              "title": "Khmer source identity and honest current-template presentation fast-castle-knights carries both638 and actual assigned-farm notes into assumptions and share basis",
+              "firstLine": "AssertionError: expected [] to deeply equal [ '当前开局免建筑前置已计入，显式建筑照常付费建造', …(1) ]"
+            },
+            {
+              "title": "Khmer source identity and honest current-template presentation archers-19 has638 disclosure but no farm-income claim",
+              "firstLine": "AssertionError: expected [] to deeply equal [ '当前开局免建筑前置已计入，显式建筑照常付费建造' ]"
+            },
+            {
+              "title": "Khmer source identity and honest current-template presentation drush-fc has638 disclosure but no farm-income claim",
+              "firstLine": "AssertionError: expected [] to deeply equal [ '当前开局免建筑前置已计入，显式建筑照常付费建造' ]"
+            },
+            {
+              "title": "Khmer source identity and honest current-template presentation feudal-drush-18 has638 disclosure but no farm-income claim",
+              "firstLine": "AssertionError: expected [] to deeply equal [ '当前开局免建筑前置已计入，显式建筑照常付费建造' ]"
+            },
+            {
+              "title": "Khmer source identity and honest current-template presentation hybrid-fish-18 has638 disclosure but no farm-income claim",
+              "firstLine": "AssertionError: expected [] to deeply equal [ '当前开局免建筑前置已计入，显式建筑照常付费建造' ]"
+            },
+            {
+              "title": "Khmer source identity and honest current-template presentation maa-archers-18 has638 disclosure but no farm-income claim",
+              "firstLine": "AssertionError: expected [] to deeply equal [ '当前开局免建筑前置已计入，显式建筑照常付费建造' ]"
+            },
+            {
+              "title": "Khmer source identity and honest current-template presentation scouts-18 has638 disclosure but no farm-income claim",
+              "firstLine": "AssertionError: expected [] to deeply equal [ '当前开局免建筑前置已计入，显式建筑照常付费建造' ]"
+            }
+          ]
+        },
+        {
+          "name": "/workspace/aoe2-issue197-batch13/tests/unit/khmer197SourceGuard.test.ts",
+          "total": 55,
+          "passed": 5,
+          "failed": 50,
+          "assertionOnly": true,
+          "failures": [
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers the independent exact source fixture is accepted rather than rejecting every Khmer context",
+              "firstLine": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers missing physical physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers wrong civ physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers missing variant physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers duplicate variant physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers wrong unit physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers wrong type physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers wrong class physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers wrong workRate physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers wrong capacity physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers NaN physical cannot claim the new farm model",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw companion rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw partial rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw only unknown rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected true to be false // Object.is equality"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw duplicated farmer rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw multiplier rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw marker rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw civ rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw effect rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw site rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw cost rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw requires rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw count rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 raw time rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 missing raw rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 row source rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 row name rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 row requires rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.27496757457846954, received difference is 0.007308593915302586, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 654 row duplicate rejects the whole noWalk/.95 pair while retaining physical .4",
+              "firstLine": "AssertionError: expected 0.2603740333615713 to be close to 0.27496757457846954, received difference is 0.014593541216898265, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers missing topology refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers missing incoming node refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers extra node refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers civ identity refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers node civ refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers node effect refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers node requires refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers node count refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers node unknown command refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers Stable required age refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers Range required age refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers Market required age refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 638 wrong header refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected 0.26765898066316696 to be close to 0.4, received difference is 0.13234101933683307, but expected 5e-13"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers 638 decoded extra refuses prerequisite support independently of the farm bonus",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.78, …(2) } to deeply equal { carry: 10, workRate: 0.39, …(2) }"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers foreign khmerTech marker with empty effects cannot bypass source support",
+              "firstLine": "AssertionError: expected true to be false // Object.is equality"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers foreign khmerTree marker with empty effects cannot bypass source support",
+              "firstLine": "AssertionError: expected true to be false // Object.is equality"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers foreign khmerTeam marker with empty effects cannot bypass source support",
+              "firstLine": "AssertionError: expected true to be false // Object.is equality"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers foreign khmerTech field present as null is still refused even with empty effects",
+              "firstLine": "AssertionError: expected true to be false // Object.is equality"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers foreign khmerTree field present as null is still refused even with empty effects",
+              "firstLine": "AssertionError: expected true to be false // Object.is equality"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers foreign khmerTeam field present as null is still refused even with empty effects",
+              "firstLine": "AssertionError: expected true to be false // Object.is equality"
+            },
+            {
+              "title": "Khmer complete source, canonical empty rows and foreign markers copied654 effects cannot enable noWalk or .95 in a foreign direct helper",
+              "firstLine": "AssertionError: expected { carry: 10, workRate: 0.5035, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"
+            }
+          ]
+        }
+      ]
+    },
+    "pythonLogTail": [
+      "AssertionError: 0 != 1",
+      "",
+      "----------------------------------------------------------------------",
+      "Ran 10 tests in 1.208s",
+      "",
+      "FAILED (failures=9)"
+    ],
+    "pythonFailCount": 9,
+    "pythonErrorCount": 0,
+    "unitReportSHA256": "820c16ace8fb351efc0f4d3185713798c95d7c8a43a33ade56a26e563b56a6ba"
+  },
+  "history": "Two building negative fixture drafts were corrected by static source review before execution; they were never run and are not product failures. Core37 ran once; later70TS+10py were separate new groups, without rerunningcore. Producer main wrote only independent TemporaryDirectory roots.",
+  "inputsStable": true,
+  "originalDraftsPreserved": "Exact original drafts and full runtime/source hashes are archived in /tmp/batch13-khmer-first-red-*.execution.json for this session; fixed public source links are in the source report."
+}

@@ -1,0 +1,384 @@
+{
+  "schema": 1,
+  "reviewer": "/root/batch11_ui_review",
+  "reviewedUTC": "2026-10-28T13:37:43.362321+00:00",
+  "verdict": "PASS_BOUNDED_KHMER_UI_AND_PNG_REVIEW",
+  "unresolvedBatchBlockers": [],
+  "actualRuntime": {
+    "head": "359e124c3a8135d7ddf97ca6d3d5da76647cc443",
+    "tree": "88593b1135da4260dff2140077d5973126cb402e",
+    "version": "0.58.0",
+    "distTreeSHA256": "a819d1068e41d61fdf45862264fb6e76611c829c246639e24b418cf063e3a598"
+  },
+  "actualBuildByRoot": {
+    "path": "/tmp/batch13-build-A.execution.json",
+    "sha256": "c77d706a995491b56948d25c88a3e4f5dd3adb692930d4bf10c53c321440dbf3",
+    "sourceInputs": 484,
+    "distFiles": 1695,
+    "reviewerBuildRuns": 0
+  },
+  "actualBrowserRun": {
+    "path": "/tmp/batch13-khmer-browser.execution.json",
+    "sha256": "ed737892ad2ef0dd61646092a29fb615b6b00ca58a5647b8a075e9996d6bd3b1",
+    "startedUTC": "2026-10-28T13:32:13.588545+00:00",
+    "completedUTC": "2026-10-28T13:32:44.902371+00:00",
+    "exitCode": 0,
+    "stats": {
+      "startTime": "2026-10-28T13:32:14.458Z",
+      "duration": 30417.664,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "argv": ["npx", "playwright", "test", "tests/e2e/khmer197.spec.ts", "--workers=1", "--output=/tmp/batch13-khmer-browser-results", "--reporter=line,json"],
+    "inputBeforeAfterExactlyUnchanged": true,
+    "all1695DistFilesMatchBuildBeforeAfter": true,
+    "jsonReport": {
+      "path": "/tmp/batch13-khmer-browser.json",
+      "sha256": "920495fdd272fad7bd2d881602ac41524bab8f8e543c00ff6e3380a1d6ac4603"
+    },
+    "log": {
+      "path": "/tmp/batch13-khmer-browser.log",
+      "sha256": "baa6aa04287d49b08225724bc20d089effef22d5180e885037872793c6a3a15d"
+    }
+  },
+  "reviewedSpecification": {
+    "path": "/tmp/batch13-khmer-spec-proposal.md",
+    "sha256": "065c82ef1b867002171f67977ac6ba9b078e52fbfacdc18cb91cf740acbc246f",
+    "presentationDraft": "/tmp/batch13-khmer-red-presentation.test.ts",
+    "presentationSHA256": "6b2688eabde10333cd814d61093411385520eee60bc374c91b7e7265a240951f",
+    "fullSourceModelScope": "Source reviewer/root own the full source/model audit; this role verifies the frozen public UI scope."
+  },
+  "actualAssertionsCovered": [
+    "FC2 have PREREQ plus FARM and detailed no-return/internal-walk/pool/exhaustion/binding limitations; current-template wording does not promise a fixed gain or full client equivalence.",
+    "FC step8 farm50 remains linked and has positive wood cost; houses are not marked skipped; scouts initial stock200F200W100G200S and population4/5 preserved.",
+    "All6 no-farm templates retain only PREREQ and no farm benefit/DETAIL copy in notes, assumptions and share.",
+    "Khmer is enabled in desktop/real mobile picker, Chinese remains disabled; original recommendation lists contain no invented Khmer chip.",
+    "Bonus0 current prerequisite usage and bonus1 farm usage separately on; bonus1 independent gather usage remains off.",
+    "Existing Chinese direct-link fallback stays Generic with no Khmer notes and disabled share.",
+    "Four widths x two themes, per-state overflow/numeric nowrap; case-wide console/pageerror assertions; three localized share-figure WCAG2A/AA checks at360light.",
+    "Share URLs retain civ=Khmer; four actual1080x1350 downloads cover638-only and638+farm in both themes; necessary shared practice/print at360light and1280dark."
+  ],
+  "personalVisualScope": {
+    "personallyViewedOriginals": 24,
+    "allOriginalImages": 48,
+    "notPersonallyViewed": 24,
+    "boomFourWidthDualTheme": 8,
+    "knightsNarrowWide": 2,
+    "638OnlyShareFourWidths": 4,
+    "FCShareSamples": 2,
+    "practicePrintSamples": 4,
+    "actualDownloadedPNG": 4,
+    "noCropRedrawOrTransformation": true
+  },
+  "visualConclusions": [
+    "All4 actual PNGs were personally viewed:638-only shows just the explicit-building-payment policy; FC shows both policy and full no-return/supply-cap/legacy-comparison caveat without clipping the last characters. Both themes are legible.",
+    "Four-width dual-theme primary timeline samples show both clauses clearly, preserve numerical units, and keep explicit farm construction paid (observed240 wood).",
+    "Knights narrow/wide samples contain no erroneous knight-unavailability warning. No-farm share samples keep only the prerequisite clause.",
+    "Sampled shared practice/print states carry the same policy and detailed limits. The two actual print samples did not show an overlay obscuring the new text; no all-print-state/global overlay guarantee is made.",
+    "Actual full-page screenshot footers visibly reportv0.58.0 and build359e124, matching Candidate A rather than a previous runtime."
+  ],
+  "limits": [
+    "This role executed only the new nine-case suite once; no old322, smoke, second capture, domain probe, build or data generation.",
+    "Remaining24 originals were physically hashed/dimension-checked but not personally viewed.",
+    "Three local axe runs do not establish whole-site accessibility; observed screenshots do not establish every shared focus/print state.",
+    "A later documentation/test-only commit must preserve attribution to actual A; this report does not label future heads as browser reruns."
+  ],
+  "imageManifest": {
+    "path": "/tmp/batch13-khmer-image-manifest.json",
+    "sha256": "efc6154b213bbb0748cf4a4a3ebd4885399f947007e7942227b45cfdd9737b33",
+    "all48PhysicalHashesAndDimensionsMatch": true,
+    "requiredFourLightNames": ["khmer-farm-light-360.png", "khmer-farm-light-375.png", "khmer-farm-light-390.png", "khmer-farm-light-1280.png"],
+    "publication": "No PNG committed; actual final CI editorial-viewport-screenshots artifact links and these filenames are to be used after the artifact exists."
+  },
+  "personallyViewedPathsHashesDimensions": [
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-dark/khmer-farm-dark-1280.png",
+      "sha256": "4be9e1a1d1cef65bdcfc7bffe75722d1ffd7f34fc2a175db066c9fc73b915915",
+      "bytes": 314327,
+      "width": 1280,
+      "height": 2305,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-dark/khmer-farm-practice-dark-1280.png",
+      "sha256": "9a16c311d7b698ce5def09c9bc32e34006dc6c530f76c72c69f9bf267df808b1",
+      "bytes": 335274,
+      "width": 1280,
+      "height": 2127,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-dark/khmer-farm-print-dark-1280.png",
+      "sha256": "84adf3eab95e97ba7169b0f2d6bdfddfe8e609e0c26675dc5b110fcedc51bd5f",
+      "bytes": 496535,
+      "width": 1280,
+      "height": 4496,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-dark/khmer-knights-farm-dark-1280.png",
+      "sha256": "7a1eec88acd54fe2dffb2ffbd93e14eaa9efb344ca2503ef6f002a19bd9f04f9",
+      "bytes": 341482,
+      "width": 1280,
+      "height": 2411,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-dark/khmer-prereq-only-share-dark-1280.png",
+      "sha256": "5b511914a1a622b2209ae5e912a3be7f17dc700df94341a02011a38b5eaffd46",
+      "bytes": 310756,
+      "width": 1280,
+      "height": 2202,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-dark/khmer-share-download-prereq-only-dark.png",
+      "sha256": "2da5505c37beba079fa23634e693994040990f5ebceabd4014818b31452d1166",
+      "bytes": 156060,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-dark/khmer-share-fast-castle-knights-dark-1280.png",
+      "sha256": "0594e42c9ffbe4217b591f97d4779e2cd63d0e77fe8e53cfa59d50ef0b6feecc",
+      "bytes": 353158,
+      "width": 1280,
+      "height": 2411,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-light/khmer-farm-light-1280.png",
+      "sha256": "340df381046b0e0bab2688b60398e1f25202f92066941fe2c235b1d6fb9b4f1c",
+      "bytes": 319041,
+      "width": 1280,
+      "height": 2305,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-light/khmer-share-download-prereq-only-light.png",
+      "sha256": "808e9f5f2b6637b2c4126e4c27a55668a7d860b03427a16b893f430328a083f2",
+      "bytes": 159798,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-dark/khmer-farm-dark-360.png",
+      "sha256": "76846b955ba670cd493372ff1ed5f089abcd588ebac4ff9dfd35a1dcbf73b413",
+      "bytes": 236598,
+      "width": 360,
+      "height": 3037,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-dark/khmer-share-download-fc-dark.png",
+      "sha256": "64390ef1bf57329a5e28f24b09900a528295a68c073f7459c01839970961cac6",
+      "bytes": 191242,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-light/khmer-farm-light-360.png",
+      "sha256": "ba776982079b7abab9cf0386a1d2734c8b8ea534513bdc7111508dc18da46724",
+      "bytes": 240841,
+      "width": 360,
+      "height": 3037,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-light/khmer-farm-practice-light-360.png",
+      "sha256": "909c437f4df308f44ac0060650da9af359a7eae3b5a67ce61929140e838b50c8",
+      "bytes": 314330,
+      "width": 360,
+      "height": 3440,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-light/khmer-farm-print-light-360.png",
+      "sha256": "94c6051fcddb404597dedaa9e34de6d8c57f8b10f0db92c3415ff0d10629bd8a",
+      "bytes": 430413,
+      "width": 360,
+      "height": 5260,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-light/khmer-knights-farm-light-360.png",
+      "sha256": "1bf1a5d32ffc9de8dfe55633aefc60777739fd7e0dc1b0fefa5ae803af66e9ae",
+      "bytes": 263082,
+      "width": 360,
+      "height": 3221,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-light/khmer-prereq-only-share-light-360.png",
+      "sha256": "35ab3a487a59f5021afd13d40952531f207fe340e9f015e66f9472ad9a9cf82b",
+      "bytes": 234482,
+      "width": 360,
+      "height": 2883,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-light/khmer-share-download-fc-light.png",
+      "sha256": "f60d28b6d78dff6bf484d7c33845873abce8e95af8ec6e5dd4619c92bfcf0baf",
+      "bytes": 194503,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-light/khmer-share-fast-castle-boom-light-360.png",
+      "sha256": "813897c84084128f8b77ab1d0a33e9c1b9d2f41c387ac0e732628560f7113fe4",
+      "bytes": 237362,
+      "width": 360,
+      "height": 3037,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-375-dark/khmer-farm-dark-375.png",
+      "sha256": "9e51a80f3e3d8c93fb5d9d22c1d7e69ad74c17e7b65e9f94d3d9cd9922362fa4",
+      "bytes": 236948,
+      "width": 375,
+      "height": 2967,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-375-dark/khmer-prereq-only-share-dark-375.png",
+      "sha256": "9312c8ee98066c9ef370d47faf2e6855f707df70e2f80bdcef773609d5ef8b3d",
+      "bytes": 229799,
+      "width": 375,
+      "height": 2838,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-375-light/khmer-farm-light-375.png",
+      "sha256": "b817f3d5346c0a193b03027fdd8bb6fef44249b0cc355375137739425645fd3c",
+      "bytes": 241260,
+      "width": 375,
+      "height": 2967,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-390-dark/khmer-farm-dark-390.png",
+      "sha256": "a9aff153ebd86031dc2b969ab3a3bcfc36b62029a219695b3f377aaffe378073",
+      "bytes": 237119,
+      "width": 390,
+      "height": 2923,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-390-light/khmer-farm-light-390.png",
+      "sha256": "f4a13b38340e1b3136a4fb63447e2061e476e7109fcae65f74ee9a3675f3ded0",
+      "bytes": 241014,
+      "width": 390,
+      "height": 2923,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-390-light/khmer-prereq-only-share-light-390.png",
+      "sha256": "529ecee4266363f1d019bacb7d02464f175cd5aad63ffb2156f3d6d398ee6edf",
+      "bytes": 233510,
+      "width": 390,
+      "height": 2769,
+      "actualDownload": false,
+      "personallyViewedOriginal": true
+    }
+  ],
+  "actualDownloads": [
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-dark/khmer-share-download-prereq-only-dark.png",
+      "sha256": "2da5505c37beba079fa23634e693994040990f5ebceabd4014818b31452d1166",
+      "bytes": 156060,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-1280-light/khmer-share-download-prereq-only-light.png",
+      "sha256": "808e9f5f2b6637b2c4126e4c27a55668a7d860b03427a16b893f430328a083f2",
+      "bytes": 159798,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-dark/khmer-share-download-fc-dark.png",
+      "sha256": "64390ef1bf57329a5e28f24b09900a528295a68c073f7459c01839970961cac6",
+      "bytes": 191242,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch13-khmer-browser-results/khmer197--197-高棉免前置、FC农田与分享-360-light/khmer-share-download-fc-light.png",
+      "sha256": "f60d28b6d78dff6bf484d7c33845873abce8e95af8ec6e5dd4619c92bfcf0baf",
+      "bytes": 194503,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedOriginal": true
+    }
+  ],
+  "cleanupRequestedAfterReview": {
+    "status": "CLEANUP_COMPLETE",
+    "path": "/tmp/batch13-khmer-preview4211-cleanup.json",
+    "sha256": "dfaa1b2b9a6da978be8a66986204da8c84984951a6c53ed4b18682360de4a666",
+    "rawEvidence": {
+      "path": "/tmp/batch13-khmer-preview4211-cleanup.raw.json",
+      "sha256": "9a05e4aca48d0289f507b4120fba60f483d90a1b9b8febdd8e5540088fde4ea3"
+    },
+    "freshOwnershipExactlyMatched": true,
+    "singleSignalPID": 25204,
+    "signal": "SIGTERM",
+    "processGone": true,
+    "port4211NoListener": true,
+    "explicitRootFollowupAuthorization": true
+  },
+  "directDomainCalls": 0,
+  "browserInvocations": 1,
+  "actualNewCases": 9,
+  "oldGoldenRuns": 0,
+  "smokeRuns": 0,
+  "repositoryWrites": 0,
+  "PNGCommits": 0,
+  "reviewerBuildRuns": 0,
+  "rootOwnedPreviewAtRunStart": {
+    "path": "/tmp/batch13-khmer-preview4211.json",
+    "sha256": "a92a660b47fc420b428e5d7f0a417dc375aff8aade25e7c9f3364d1571119d22",
+    "pid": 25204,
+    "startTicks": 2995048,
+    "port": 4211,
+    "ownershipMatchedReadOnly": true,
+    "willNotStop": true
+  },
+  "finalizedUTC": "2026-10-28T13:39:26.748707+00:00"
+}

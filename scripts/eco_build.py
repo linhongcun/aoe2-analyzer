@@ -31,6 +31,8 @@ AGE_TECHS = {101: 'Feudal Age', 102: 'Castle Age', 103: 'Imperial Age'}
 ARMENIAN_CONTEXT_TECHS = (949, 957, 958, 960, 961, 962, 963, 964, 965, 966)
 GEORGIAN_CONTEXT_TECHS = (925, 926, 934)
 SLAVIC_CONTEXT_TECHS = (510, 511, 721)
+KHMER_CONTEXT_TECHS = (638, 654, 657, 672)
+KHMER_PREREQUISITE_TECHS = (216, 659, 660, 661, 666, 667, 668, 25, 147, 148)
 
 
 def raw_tech_context(d, tech):
@@ -185,10 +187,12 @@ def main():
         if k is None: continue
         dc = d['Civs'][k]; rows = []
         tree, free = split_tree_effects(decode(eff(d, dc['TechTreeID']), T))
-        if tree or c['en'] == 'Slavs':
+        if tree or c['en'] in ('Slavs', 'Khmer'):
             row = {'source': 'tree', 'name': 'Tech tree', 'age': 1, 'effects': tree}
             if c['en'] == 'Slavs':
                 row['slavicTree'] = {'civId': k, 'treeId': dc['TechTreeID'], 'commands': eff(d, dc['TechTreeID'])}
+            if c['en'] == 'Khmer':
+                row['khmerTree'] = {'civId': k, 'treeId': dc['TechTreeID'], 'commands': eff(d, dc['TechTreeID'])}
             rows.append(row)
         if free: rows.append({'source': 'tree', 'name': 'Free techs', 'age': 1, 'effects': [{'kind': 'freeTech', 'techName': n} for n in free]})
         # 加成科技：本文明专属、无研究地点（引擎自动生效），与 effects_build 相同的选取规则，但不过滤「站内无对应单位」的经济效果
@@ -196,9 +200,10 @@ def main():
             armenian_context = c['en'] == 'Armenians' and i in ARMENIAN_CONTEXT_TECHS
             georgian_context = c['en'] == 'Georgians' and i in GEORGIAN_CONTEXT_TECHS
             slavic_context = c['en'] == 'Slavs' and i in SLAVIC_CONTEXT_TECHS
-            if not (armenian_context or georgian_context or slavic_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
+            khmer_context = c['en'] == 'Khmer' and i in KHMER_CONTEXT_TECHS
+            if not (armenian_context or georgian_context or slavic_context or khmer_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
             ef = decode(eff(d, t['EffectID']), T)
-            if ef or armenian_context or georgian_context or slavic_context:
+            if ef or armenian_context or georgian_context or slavic_context or khmer_context:
                 row = {'source': 'bonus', 'tech': i, 'name': t['Name'], 'age': age_of(i), 'requires': [x for x in t['RequiredTechs'] if x >= 0], 'effects': ef}
                 # #197: retain the COMPLETE raw context for this reviewed Wei family only.
                 # Unknown/extra commands must reach the closed runtime guard, never disappear in decode().
@@ -221,9 +226,15 @@ def main():
                     row['slavicTech'] = raw_tech_context(d, i)
                     if i == 721:
                         row['source'] = 'team'
+                if khmer_context:
+                    row['khmerTech'] = raw_tech_context(d, i)
                 rows.append(row)
         team = decode(eff(d, dc['TeamBonusID']), T)
-        if team: rows.append({'source': 'team', 'name': 'Team bonus', 'age': 1, 'effects': team})
+        if team or c['en'] == 'Khmer':
+            row = {'source': 'team', 'name': 'Team bonus', 'age': 1, 'effects': team}
+            if c['en'] == 'Khmer':
+                row['khmerTeam'] = {'civId': k, 'teamId': dc['TeamBonusID'], 'commands': eff(d, dc['TeamBonusID'])}
+            rows.append(row)
         out['civEco'][c['en']] = rows
         if c['en'] == 'Armenians':
             out['armenianInfrastructure'] = armenian_infrastructure(d, k)
@@ -231,6 +242,9 @@ def main():
             out['georgianInfrastructure'] = georgian_infrastructure(d, k)
         if c['en'] == 'Slavs':
             out['slavicFarm'] = slavic_farm(d, k)
+        if c['en'] == 'Khmer':
+            out['khmerFarm'] = slavic_farm(d, k)
+            out['khmerPrerequisites'] = {'civId': k, 'nodes': {str(tid): raw_tech_context(d, tid) for tid in KHMER_PREREQUISITE_TECHS}}
     # 升级时代的前置建筑（#3 根因 3）：时代科技 101/102/103 的非时代前置（Shadow Node+ 659/660/661）按 .dat 展开成条件树。
     # 叶子：建成时触发该科技的建筑（Building.tech_id，dat_source BuildTech）；或本文明专属、无前置的科技（如高棉 638，自动满足）。
     # 节点：{n: 需满足的子项个数, of: [...]}；叶子：{b: [建筑 id], zh: 名称} / {civ: [文明]}；无法在开局中满足的叶子（由效果触发的 Port built 等）略去。

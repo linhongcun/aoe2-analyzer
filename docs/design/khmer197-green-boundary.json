@@ -1,0 +1,596 @@
+{
+  "status": "Actual local WIP evidence before immutable candidateA build/browser/quantification; no future CI or release claim",
+  "original117": {
+    "initialRed": {
+      "core": {
+        "total": 37,
+        "pass": 18,
+        "assertionFailure": 19
+      },
+      "newUnit": {
+        "total": 70,
+        "pass": 10,
+        "assertionFailure": 60
+      },
+      "python": {
+        "total": 10,
+        "pass": 1,
+        "assertionFailure": 9
+      },
+      "runtimeOrImportOrEnvironmentErrors": 0
+    },
+    "firstGreenAttempt": {
+      "unit": {
+        "numTotalTests": 107,
+        "numPassedTests": 104,
+        "numFailedTests": 3,
+        "numPendingTests": 0
+      },
+      "unitExecution": {
+        "executionArtifact": "/tmp/batch13-khmer-first-green-unit.execution.json",
+        "executionSHA256": "33344089e17faf0ff775a12683ea08a13981ca85bf437c6890b3314843a43f7c",
+        "command": [
+          "npx",
+          "vitest",
+          "run",
+          "tests/unit/khmer197.test.ts",
+          "tests/unit/khmer197SourceGuard.test.ts",
+          "tests/unit/khmer197Presentation.test.ts",
+          "--reporter=json",
+          "--outputFile=/tmp/batch13-khmer-first-green-unit.json"
+        ],
+        "startedUTC": "2026-10-28T13:08:52.229217+00:00",
+        "completedUTC": "2026-10-28T13:08:58.277980+00:00",
+        "exitCode": 1,
+        "inputStable": true,
+        "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+        "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+        "actualVersion": "0.57.0",
+        "workingInputDigest": "e314f96c8471f81d63d69ef6e6a8316bba3de7107ed738a2db0d04b52bad97ff",
+        "sourceInputCount": 482,
+        "logSHA256": "ae4cc70da2d25c7eea89b8ba5388216d230a5c64c796c797a496031f42c869db"
+      },
+      "pythonExecution": {
+        "executionArtifact": "/tmp/batch13-khmer-first-green-python.execution.json",
+        "executionSHA256": "21806b9a99a46a58932089569d50fa9365950d28a85dc67ee974392fc3fad5e7",
+        "command": ["python3", "-m", "unittest", "discover", "-s", "tests/py", "-p", "test_khmer197.py", "-v"],
+        "startedUTC": "2026-10-28T13:08:52.236630+00:00",
+        "completedUTC": "2026-10-28T13:08:53.862184+00:00",
+        "exitCode": 0,
+        "inputStable": true,
+        "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+        "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+        "actualVersion": "0.57.0",
+        "workingInputDigest": "e314f96c8471f81d63d69ef6e6a8316bba3de7107ed738a2db0d04b52bad97ff",
+        "sourceInputCount": 482,
+        "logSHA256": "4f2257e3b29df47d556e693fd30f8038e2a27aa14bf555e3c72af0415e6875c4"
+      },
+      "pythonPassed": 10,
+      "failures": [
+        "Khmer1 realCost usage line missing",
+        "FCboom explicit buildings incomplete because multi-site ResearchLocation2556 was incorrectly used",
+        "FCknights same research-location block"
+      ],
+      "recovery": "Read existing ecoTechs.at canonical ordinary site before fallback techs.at; no global cache/other55 research changes; add independent realCost uncounted usage line without changing realCost itself"
+    },
+    "threeFailureOnlyRecovery": {
+      "counts": {
+        "numTotalTests": 15,
+        "numPassedTests": 3,
+        "numFailedTests": 0,
+        "numPendingTests": 12
+      },
+      "execution": {
+        "executionArtifact": "/tmp/batch13-khmer-green-three-recovery.execution.json",
+        "executionSHA256": "29255b507f12d0717bc729b08350c01554507bc280ed57f388f25815f520dc45",
+        "command": [
+          "npx",
+          "vitest",
+          "run",
+          "tests/unit/khmer197Presentation.test.ts",
+          "--testNamePattern",
+          "Khmer1 is|preserves each original explicit building",
+          "--reporter=json",
+          "--outputFile=/tmp/batch13-khmer-green-three-recovery.json"
+        ],
+        "startedUTC": "2026-10-28T13:10:19.153216+00:00",
+        "completedUTC": "2026-10-28T13:10:20.965834+00:00",
+        "exitCode": 0,
+        "inputStable": true,
+        "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+        "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+        "actualVersion": "0.57.0",
+        "workingInputDigest": "bfd2324179cdb61305b0d779c303b7797771976093469ff6109da56f10a6a244",
+        "sourceInputCount": 482,
+        "logSHA256": "d077486bf544e748b7053092dcc91086a6841a79b14ae96610423412db73e66a"
+      }
+    }
+  },
+  "additional2": {
+    "reason": "Whole654 was absent but notes/model still advertised noReturnWalk; source/root found independent counterfactual display boundary",
+    "red": {
+      "counts": {
+        "numTotalTests": 2,
+        "numPassedTests": 0,
+        "numFailedTests": 2,
+        "numPendingTests": 0
+      },
+      "execution": {
+        "executionArtifact": "/tmp/batch13-khmer-counterfactual-red.execution.json",
+        "executionSHA256": "13d14f11c4424dca81ae6d7a881d56def7326f3dac49fc3e643aa57bca572182",
+        "command": [
+          "npx",
+          "vitest",
+          "run",
+          "tests/unit/khmer197Counterfactual.test.ts",
+          "--reporter=json",
+          "--outputFile=/tmp/batch13-khmer-counterfactual-red.json"
+        ],
+        "startedUTC": "2026-10-28T13:15:56.399826+00:00",
+        "completedUTC": "2026-10-28T13:15:57.902896+00:00",
+        "exitCode": 1,
+        "inputStable": true,
+        "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+        "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+        "actualVersion": "0.57.0",
+        "workingInputDigest": "2d32c93c57503d03ce15925088480eff913bd21c8b0219af99040ccc7601b4c9",
+        "sourceInputCount": 484,
+        "logSHA256": "8f7c6b751d726e8fe0b1d2b1b8404ce7f8acf960f090695a376037e439924d99"
+      }
+    },
+    "repair": "Only gate farm notes and model detail on context.bonus; valid full source/other55 unchanged",
+    "green": {
+      "counts": {
+        "numTotalTests": 2,
+        "numPassedTests": 2,
+        "numFailedTests": 0,
+        "numPendingTests": 0
+      },
+      "execution": {
+        "executionArtifact": "/tmp/batch13-khmer-counterfactual-green.execution.json",
+        "executionSHA256": "6973aa4d00da9c5845613fac7b38501183290b841d10a725911fb2b70f25dba1",
+        "command": [
+          "npx",
+          "vitest",
+          "run",
+          "tests/unit/khmer197Counterfactual.test.ts",
+          "--reporter=json",
+          "--outputFile=/tmp/batch13-khmer-counterfactual-green.json"
+        ],
+        "startedUTC": "2026-10-28T13:16:05.274993+00:00",
+        "completedUTC": "2026-10-28T13:16:06.747484+00:00",
+        "exitCode": 0,
+        "inputStable": true,
+        "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+        "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+        "actualVersion": "0.57.0",
+        "workingInputDigest": "6b67ebe7fa888cd846238ccd0e4b3d2345522edd00e8845f714df7a15711f9af",
+        "sourceInputCount": 484,
+        "logSHA256": "2ae0aac9618d3ffdb95fe48d4a2f626e159a4ee3a079fb35abeb9e232031a3d8"
+      }
+    }
+  },
+  "distinctNewCases": 119,
+  "semanticProtection": {
+    "originalExactDraftsArchived": true,
+    "testsNeverRelaxed": true,
+    "proof": {
+      "path": "/tmp/batch13-khmer-format-and-source-split-proof.json",
+      "sha256": "8c098e33019d1306a242f00a1b9670823409410c1fe12064b5e70b741d3b748e",
+      "normalizedASTEqualFiles": 5,
+      "independentJSONValuesEqual": true,
+      "productionLiteralSplitEqual": true
+    }
+  },
+  "compatibility": {
+    "counts": {
+      "numTotalTests": 322,
+      "numPassedTests": 321,
+      "numFailedTests": 0,
+      "numPendingTests": 0
+    },
+    "execution": {
+      "executionArtifact": "/tmp/batch13-khmer-compatible.execution.json",
+      "executionSHA256": "44bfa412c1985ee7673c01f5c9b652e05f008167fed159d69799dc2d0ee2b959",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/buildSim.test.ts",
+        "tests/unit/civ42v060.test.ts",
+        "tests/unit/civ42v070.test.ts",
+        "tests/unit/tatars197.test.ts",
+        "tests/unit/v0300-332.test.ts",
+        "tests/unit/slavs197.test.ts",
+        "tests/unit/slavs197SourceGuard.test.ts",
+        "tests/unit/slavs197Presentation.test.ts",
+        "tests/unit/georgians197.test.ts",
+        "tests/unit/bengalis197.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/batch13-khmer-compatible.json"
+      ],
+      "startedUTC": "2026-10-28T13:11:44.755312+00:00",
+      "completedUTC": "2026-10-28T13:12:38.544470+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "93e315716b916733bc777ed22214f0bb59c38cd8bc24d17bd001f295a9791ec8",
+      "sourceInputCount": 482,
+      "logSHA256": "0e0e00b814fd636476110ad8c9118cc03103bef8ccb085f1b8a141471c95dba9"
+    },
+    "existingTodo": 1,
+    "files": 10
+  },
+  "lintHistory": {
+    "initial": {
+      "executionArtifact": "/tmp/batch13-khmer-lint.execution.json",
+      "executionSHA256": "523473cb14c88a5254fd3e1795f79c2441977122fcf1eeaee493d33c8384bbb1",
+      "command": ["npm", "run", "lint"],
+      "startedUTC": "2026-10-28T13:11:44.755294+00:00",
+      "completedUTC": "2026-10-28T13:12:18.597208+00:00",
+      "exitCode": 1,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "93e315716b916733bc777ed22214f0bb59c38cd8bc24d17bd001f295a9791ec8",
+      "sourceInputCount": 482,
+      "logSHA256": "ddec0b5eac7f82fa6938e4c56eb3a8f6e2c2309ca7cf37658b3375a609361c2c"
+    },
+    "failure": "ESLint stopped on two new files exceeding600 lines; colors/CSS did not execute in this command.13warnings included two new max-lines warnings.",
+    "recovery": "Raw source/logic split by responsibility into401/166/169-line production files; independent test raw moved to JSON. No rule/config changes.",
+    "eslintRecovery": {
+      "executionArtifact": "/tmp/batch13-khmer-lint-recovery.execution.json",
+      "executionSHA256": "8e528d477af46e3217189afc340e72cb7ca86dafcaf7e514da784ca4fc0c390a",
+      "command": [
+        "npx",
+        "eslint",
+        "src/domain/khmerEconomy.ts",
+        "src/domain/khmerSource.ts",
+        "src/domain/khmerPrerequisiteSource.ts",
+        "src/domain/buildSim.ts",
+        "src/domain/bonusUsage.ts",
+        "src/features/builds/shareCard.ts",
+        "scripts/deployment-smoke.mjs",
+        "tests/unit/khmer197.test.ts",
+        "tests/unit/khmer197SourceGuard.test.ts",
+        "tests/unit/khmer197Presentation.test.ts",
+        "tests/e2e/khmer197.spec.ts"
+      ],
+      "startedUTC": "2026-10-28T13:14:57.416618+00:00",
+      "completedUTC": "2026-10-28T13:14:59.872267+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "2d32c93c57503d03ce15925088480eff913bd21c8b0219af99040ccc7601b4c9",
+      "sourceInputCount": 484,
+      "logSHA256": "19f966a0582fdbbbdff634ea6e829602da2779f7ec5a2c9468ec5a831b2957db"
+    },
+    "counterfactualDeltaESLint": {
+      "executionArtifact": "/tmp/batch13-khmer-counterfactual-lint.execution.json",
+      "executionSHA256": "e6ea28a63dc87535c418847332545999effc7f7331d1499cb99534757250a386",
+      "command": ["npx", "eslint", "src/domain/buildSim.ts", "src/domain/khmerEconomy.ts", "tests/unit/khmer197Counterfactual.test.ts"],
+      "startedUTC": "2026-10-28T13:23:58.678889+00:00",
+      "completedUTC": "2026-10-28T13:24:00.884118+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.58.0",
+      "workingInputDigest": "1c41c6306ffcf38b161400c90b59c18b273620673c811ef752110fece0bac0aa",
+      "sourceInputCount": 484,
+      "logSHA256": "5752b83029bbbbac05aff1fd6d27a8e36e997c86bf51043094eed49b4b15bccc"
+    }
+  },
+  "checks": {
+    "eco-build": {
+      "executionArtifact": "/tmp/batch13-khmer-eco-build.execution.json",
+      "executionSHA256": "101b6065432378dc904becaeb5fe2d752b9993dfae4fd87d56d024c16d43054b",
+      "command": ["python3", "scripts/eco_build.py"],
+      "startedUTC": "2026-10-28T13:08:26.152858+00:00",
+      "completedUTC": "2026-10-28T13:08:26.348328+00:00",
+      "exitCode": 0,
+      "inputStable": false,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "37de260ddd3e73f7e0dd23f5445bcdb7484e0a516b6d0216cab9bfdc64390654",
+      "sourceInputCount": 482,
+      "logSHA256": "622c2eb254338eee272c7a715e1d75e8daefe5b0c5a35de54d32a349788c4185"
+    },
+    "compiled": {
+      "executionArtifact": "/tmp/batch13-khmer-compiled.execution.json",
+      "executionSHA256": "3e4dec33961f5195622486e925057604ed08bcfefa0fbec720571d3ce6b16ad2",
+      "command": ["npm", "run", "content:validators"],
+      "startedUTC": "2026-10-28T13:10:40.281452+00:00",
+      "completedUTC": "2026-10-28T13:10:41.407891+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "bfd2324179cdb61305b0d779c303b7797771976093469ff6109da56f10a6a244",
+      "sourceInputCount": 482,
+      "logSHA256": "bdf75eaadd987f7ef60ab7ca9f0e78aa716fc28b5889ec09bd03284abd10ba28"
+    },
+    "type": {
+      "executionArtifact": "/tmp/batch13-khmer-type.execution.json",
+      "executionSHA256": "01c5355da5850cb8a3aede1709109c60197f8677bdf9982f4c07e13f93aee8d9",
+      "command": ["npx", "tsc", "-p", ".", "--noEmit"],
+      "startedUTC": "2026-10-28T13:11:44.743715+00:00",
+      "completedUTC": "2026-10-28T13:12:13.927292+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "93e315716b916733bc777ed22214f0bb59c38cd8bc24d17bd001f295a9791ec8",
+      "sourceInputCount": 482,
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "type-split": {
+      "executionArtifact": "/tmp/batch13-khmer-type-split.execution.json",
+      "executionSHA256": "f9f6a974517176c84429c7d0fcc9dc3b118b3606d4b514a00c32b26021055d84",
+      "command": ["npx", "tsc", "-p", ".", "--noEmit"],
+      "startedUTC": "2026-10-28T13:14:57.414134+00:00",
+      "completedUTC": "2026-10-28T13:15:13.658532+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "2d32c93c57503d03ce15925088480eff913bd21c8b0219af99040ccc7601b4c9",
+      "sourceInputCount": 484,
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "colors": {
+      "executionArtifact": "/tmp/batch13-khmer-colors.execution.json",
+      "executionSHA256": "1e9f8f8873782d90f586682a6333f84d3c3e4d391faa3c7f73d1f4cfc6fbf26f",
+      "command": ["npm", "run", "lint:colors"],
+      "startedUTC": "2026-10-28T13:17:51.801101+00:00",
+      "completedUTC": "2026-10-28T13:17:52.143451+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "e08acb4b8b57216b3c2e18cef0da800c13d164e9add7268b31833b5daad89152",
+      "sourceInputCount": 484,
+      "logSHA256": "7bf22e0744146afda74aaca60b77fc4fd20aff108eea6c2ee26d73646bf6e0f3"
+    },
+    "css": {
+      "executionArtifact": "/tmp/batch13-khmer-css.execution.json",
+      "executionSHA256": "c751e098910d0d5aa7627811c9fecc0c490958227c1a312a3049fb6d0b5b284c",
+      "command": ["npm", "run", "lint:css"],
+      "startedUTC": "2026-10-28T13:17:51.816030+00:00",
+      "completedUTC": "2026-10-28T13:17:52.146246+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "e08acb4b8b57216b3c2e18cef0da800c13d164e9add7268b31833b5daad89152",
+      "sourceInputCount": 484,
+      "logSHA256": "c278597e36ce844b27394ff8dbb06083c606f09dd8a10eb5ce95a9962ea673b7"
+    },
+    "layers": {
+      "executionArtifact": "/tmp/batch13-khmer-layers.execution.json",
+      "executionSHA256": "9713a7d00d61ccafc919c9612a013f6b1f24ecd1ee71e588b0dd000d33178d77",
+      "command": ["npm", "run", "lint:layers", "--", "--strict"],
+      "startedUTC": "2026-10-28T13:17:51.813305+00:00",
+      "completedUTC": "2026-10-28T13:17:52.958847+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "e08acb4b8b57216b3c2e18cef0da800c13d164e9add7268b31833b5daad89152",
+      "sourceInputCount": 484,
+      "logSHA256": "24096e2d0eeaa354ea2258c752c658a02c4f6a98de83d03ad91a06173f7c66a5"
+    },
+    "bo": {
+      "executionArtifact": "/tmp/batch13-khmer-bo.execution.json",
+      "executionSHA256": "75130603998321cba156abdd48d077cc2e3c1838d9423022943cfade6db4c45b",
+      "command": ["npm", "run", "bo:check"],
+      "startedUTC": "2026-10-28T13:17:51.825636+00:00",
+      "completedUTC": "2026-10-28T13:17:52.869229+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.57.0",
+      "workingInputDigest": "e08acb4b8b57216b3c2e18cef0da800c13d164e9add7268b31833b5daad89152",
+      "sourceInputCount": 484,
+      "logSHA256": "018a9f090bc44f22d166ad1224016871e7c4cb82d6e922f0f1b0b141d75409dc"
+    },
+    "content": {
+      "executionArtifact": "/tmp/batch13-khmer-content.execution.json",
+      "executionSHA256": "f7a42f75c2bde251ce1ef847bd8452fe6f5c37c702c30b6933264d9260396830",
+      "command": ["npm", "run", "content:check", "--", "--strict"],
+      "startedUTC": "2026-10-28T13:20:41.838270+00:00",
+      "completedUTC": "2026-10-28T13:20:42.698818+00:00",
+      "exitCode": 0,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.58.0",
+      "workingInputDigest": "1c41c6306ffcf38b161400c90b59c18b273620673c811ef752110fece0bac0aa",
+      "sourceInputCount": 484,
+      "logSHA256": "f75cbd395fbe3d07d2100db439eaf41bf96940a19d54f00fce58eb8b55897583"
+    },
+    "prettier": {
+      "executionArtifact": "/tmp/batch13-khmer-prettier.execution.json",
+      "executionSHA256": "40bf460e2e270cbe45f47f3d5fe42e5a196bde2c733747d9ae9ab69d396bd179",
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "CHANGELOG.md",
+        "docs/BUILD-SIM-COVERAGE.md",
+        "docs/design/README.md",
+        "docs/design/khmer197-first-red.json",
+        "docs/design/khmer197-public-sources.json",
+        "docs/design/khmer197-source.json",
+        "docs/design/khmer197.md",
+        "package-lock.json",
+        "package.json",
+        "scripts/deployment-smoke.mjs",
+        "src/content/schema/data-eco.json",
+        "src/domain/bonusUsage.ts",
+        "src/domain/buildSim.ts",
+        "src/domain/khmerEconomy.ts",
+        "src/domain/khmerPrerequisiteSource.ts",
+        "src/domain/khmerSource.ts",
+        "src/features/builds/shareCard.ts",
+        "tests/e2e/khmer197.spec.ts",
+        "tests/e2e/v060-42.spec.ts",
+        "tests/unit/bonusUsage317.test.ts",
+        "tests/unit/buildSim.test.ts",
+        "tests/unit/civ42v060.test.ts",
+        "tests/unit/civ42v070.test.ts",
+        "tests/unit/fixtures/bonusUsage317-sim.json",
+        "tests/unit/fixtures/khmer197-source.json",
+        "tests/unit/khmer197.test.ts",
+        "tests/unit/khmer197Counterfactual.test.ts",
+        "tests/unit/khmer197Presentation.test.ts",
+        "tests/unit/khmer197SourceGuard.test.ts"
+      ],
+      "startedUTC": "2026-10-28T13:23:56.445031+00:00",
+      "completedUTC": "2026-10-28T13:23:58.598228+00:00",
+      "exitCode": 1,
+      "inputStable": true,
+      "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+      "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+      "actualVersion": "0.58.0",
+      "workingInputDigest": "1c41c6306ffcf38b161400c90b59c18b273620673c811ef752110fece0bac0aa",
+      "sourceInputCount": 484,
+      "logSHA256": "87219c045b5a1787233065faacfeffd637eaa17e4c2e632b1424ec28d5d6c42c"
+    }
+  },
+  "formattingScope": {
+    "existingCurrentOnlyFailure": {
+      "status": "Existing CURRENT files compared to actual cleanHEAD formatting; no repository mutation",
+      "results": [
+        {
+          "path": "tests/e2e/v060-42.spec.ts",
+          "baselineFormatted": false,
+          "currentFormatted": false,
+          "baselineSHA256": "dd04f31b811fa56a8a03cb20aea593424098b2003c8df7e63de2e786959b1b81"
+        },
+        {
+          "path": "tests/unit/bonusUsage317.test.ts",
+          "baselineFormatted": false,
+          "currentFormatted": false,
+          "baselineSHA256": "beaa1c7b1de6a57881e2292e7c6f41d6d0f12aa96b67ed978fd4125765f7fa14"
+        },
+        {
+          "path": "tests/unit/buildSim.test.ts",
+          "baselineFormatted": false,
+          "currentFormatted": false,
+          "baselineSHA256": "82a00b7751b4dde700339e90fe66b2d140b68b63357c25d6184456620cf9944a"
+        },
+        {
+          "path": "tests/unit/civ42v060.test.ts",
+          "baselineFormatted": false,
+          "currentFormatted": false,
+          "baselineSHA256": "5cd99fa7f4a394c4762c51bd91180eaee98d4d69561f3cbd763bdde92e41a9e8"
+        },
+        {
+          "path": "tests/unit/civ42v070.test.ts",
+          "baselineFormatted": false,
+          "currentFormatted": false,
+          "baselineSHA256": "766a87902df13814bb7e5355c80d76df30439bad5c5a3c6823d9398509c23f74"
+        }
+      ]
+    },
+    "newAndProductionAndDocsWarningCount": 0,
+    "notReformattedInheritedCurrentBodies": true
+  },
+  "bonus317": {
+    "fingerprintSources": ["khmerEconomy.ts", "khmerSource.ts", "khmerPrerequisiteSource.ts"],
+    "algorithmUnchanged": true,
+    "generator": {
+      "counts": {
+        "numTotalTests": 13,
+        "numPassedTests": 1,
+        "numFailedTests": 0,
+        "numPendingTests": 12
+      },
+      "execution": {
+        "executionArtifact": "/tmp/batch13-khmer-317-generator.execution.json",
+        "executionSHA256": "bc3d11f3fc5aae8eb8bf9de73e6bf56aeed9db7621a67198c872e39ca406c9df",
+        "command": [
+          "env",
+          "UPDATE_BONUS317=1",
+          "npx",
+          "vitest",
+          "run",
+          "tests/unit/bonusUsage317.test.ts",
+          "--testNamePattern",
+          "重新生成开局模拟快照",
+          "--reporter=json",
+          "--outputFile=/tmp/batch13-khmer-317-generator.json"
+        ],
+        "startedUTC": "2026-10-28T13:21:36.251965+00:00",
+        "completedUTC": "2026-10-28T13:22:26.928370+00:00",
+        "exitCode": 0,
+        "inputStable": true,
+        "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+        "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+        "actualVersion": "0.58.0",
+        "workingInputDigest": "1c41c6306ffcf38b161400c90b59c18b273620673c811ef752110fece0bac0aa",
+        "sourceInputCount": 484,
+        "logSHA256": "e09c9e27654e3b7743a92cedcc2ba7ce6c3e662fb60b1b2ab11397f3269486d4"
+      }
+    },
+    "actualDiff": {
+      "oldKeys": 85,
+      "newKeys": 86,
+      "added": {
+        "Khmer-1": null
+      },
+      "removed": [],
+      "changed": {},
+      "oldFixtureSHA256": "0f77f419fb1f276b8dbb20faff080147449ae690febfc3fdfaafea6a0d0374e5",
+      "newFixtureSHA256": "debaf7fe6f82087ffd48506344afd681f4fd6ff6a50b1cd89426e22e8d15baff",
+      "oldInputs": "dc2925fb2a981569546c984b7d2fe0b23ce59941c9b9e84177da91def4bb21a7",
+      "newInputs": "98d84be0e99b331072b02a8af3f7cdaf2c47ac9e6d7dee2faac67ee08c654b04",
+      "generatorCounts": {
+        "numTotalTests": 13,
+        "numPassedTests": 1,
+        "numFailedTests": 0,
+        "numPendingTests": 12
+      }
+    },
+    "normal": {
+      "counts": {
+        "numTotalTests": 13,
+        "numPassedTests": 12,
+        "numFailedTests": 0,
+        "numPendingTests": 1
+      },
+      "execution": {
+        "executionArtifact": "/tmp/batch13-khmer-317-normal.execution.json",
+        "executionSHA256": "d6b1c6b4848bd1d0f6808dfc12674969e7dd0ae6db62c002f7faa83249a27730",
+        "command": ["npx", "vitest", "run", "tests/unit/bonusUsage317.test.ts", "--reporter=json", "--outputFile=/tmp/batch13-khmer-317-normal.json"],
+        "startedUTC": "2026-10-28T13:24:40.830878+00:00",
+        "completedUTC": "2026-10-28T13:24:43.279008+00:00",
+        "exitCode": 0,
+        "inputStable": true,
+        "actualHead": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+        "actualTree": "42920cb5a52902655733aee02f6d85419819d97e",
+        "actualVersion": "0.58.0",
+        "workingInputDigest": "1c41c6306ffcf38b161400c90b59c18b273620673c811ef752110fece0bac0aa",
+        "sourceInputCount": 484,
+        "logSHA256": "b10d719f948b6835bc2f38993c345825a53cbc1faaaad6b81f61f5500bdb6c16"
+      }
+    },
+    "reason": "Default near2: complete654 and whole654-removal consumer are both capped by independent.4 supply. Original projection observes doneAt/stock, not far errorbands. Far7/low-consumer stock windows independently verify model. No fabricated638 positive-tech mapping."
+  },
+  "notYetExecuted": ["immutable candidateA build", "new9 browser cases", "original322 whole browser", "actual8+other55 comparison", "Pages/formal Release"],
+  "boundaries": "Current local checks were at actual WIP identities shown, not at a future commit. Complete CI/full/data and deployment are recorded by root in the eventual PR/run history."
+}

@@ -31,6 +31,7 @@ import { BENGALI_SPAWN_NOTE } from './bengaliEconomy';
 import { armenianContext, ARMENIAN_RESEARCH_NOTE } from './armenianEconomy';
 import { georgianContext } from './georgianEconomy';
 import { slavicContext, SLAVIC_FARM_NOTE } from './slavicEconomy';
+import { khmerContext, KHMER_FARM_NOTE, KHMER_PREREQUISITE_NOTE } from './khmerEconomy';
 
 const eco = ecoRaw as unknown as EcoData;
 /** PK 与真实成本只给单位算折后价（建筑费用折扣不在这两个工具里） */
@@ -116,6 +117,11 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
   if (b.id === 'Sicilians-1') return { tool: 'sim', name, on: false, note: '未计入：农田升级额外储量、耗尽和续种未模拟，也未估算节省的木材' };
+  if (b.id === 'Khmer-1') {
+    const context = khmerContext(eco);
+    const on = currentSimSupport(eco, b.civ, buildOrders).supported && context.bonus;
+    return { tool: 'sim', name, on, note: on ? `已计入；${KHMER_FARM_NOTE}` : '暂不支持该文明，整页按通用文明计算，本条未计入' };
+  }
   if (b.id === 'Slavs-0') {
     const context = slavicContext(eco);
     const on = currentSimSupport(eco, b.civ, buildOrders).supported && !!context.physical && context.bonus;
@@ -137,7 +143,9 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
     };
   }
   const { techs, treeOnly } = bonusTechs(b);
-  const currentScope = ['Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs'].includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
+  const currentScope = ['Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer'].includes(b.civ)
+    ? simScope(eco, buildOrders, b.civ)
+    : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
     const t = (r as { tech?: number }).tech;
     return r.source !== 'team' && t !== undefined && techs.includes(t);
@@ -182,6 +190,16 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
  * 其余加成返回空数组。
  */
 export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
+  if (b.id === 'Khmer-1')
+    return [
+      ...usageLines(b as CivBonusEnt & { idx: number }),
+      { tool: 'gather', name: USAGE_TOOL_ZH.gather, on: false, note: '免回仓与农田供给未计入真实成本，仍按原通用采集速度计算' },
+    ];
+  if (b.id === 'Khmer-0') {
+    const context = khmerContext(eco);
+    const on = currentSimSupport(eco, b.civ, buildOrders).supported && context.noPrerequisites;
+    return [{ tool: 'sim', name: USAGE_TOOL_ZH.sim, on, note: on ? KHMER_PREREQUISITE_NOTE : '暂不支持该文明，整页按通用文明计算，本条未计入' }];
+  }
   if (b.id === 'Armenians-1') {
     const context = armenianContext(eco);
     const on = currentSimSupport(eco, b.civ, buildOrders).supported && !!context.research?.length;

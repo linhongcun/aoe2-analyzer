@@ -1,0 +1,1142 @@
+{
+  "schema": 1,
+  "status": "PASS_WITH_EXACT_SITE_CLASSIFICATION_AND_PRESERVED_ORIGINAL_STRICT_FAILURE",
+  "runtime": {
+    "head": "359e124c3a8135d7ddf97ca6d3d5da76647cc443",
+    "tree": "88593b1135da4260dff2140077d5973126cb402e",
+    "version": "0.58.0",
+    "baseline": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d"
+  },
+  "captureBoundary": "Two unique actual captures on immutableA; this document summarizes saved outputs only, with0 additionaldomain calls, no recapture or comparator rerun.",
+  "actualExecutionUTC": {
+    "eight": {
+      "started": "2026-10-28T13:38:54.236Z",
+      "completed": "2026-10-28T13:38:55.357Z"
+    },
+    "other55": {
+      "started": "2026-10-28T13:38:54.238Z",
+      "completed": "2026-10-28T13:39:36.053Z"
+    }
+  },
+  "originalStrictEightComparison": {
+    "original": "/tmp/batch13197-runtime-A-khmer-eight-offline.json",
+    "sha256": "2cb94a8861cce50bfd73da9549a58c5e919cb13026aab0f3163b0a03c0b55a5d",
+    "bytes": 456111,
+    "status": "FAIL_KHMER_EIGHT_OFFLINE_BOUNDARY_CHECKS",
+    "checks": {
+      "exactCalls": true,
+      "exactEightIDs": true,
+      "defaultPublicOptions": true,
+      "exactFarmPair": true,
+      "exactSixNoFarm": true,
+      "old12GlobalsPreserved": true,
+      "allRootReviewedDisclosureChecks": true,
+      "allPerOrderChecks": false
+    },
+    "preserved": true,
+    "failedAssumption": "All six nofarm numeric vectors equal; two final compound research-site sequences legitimately changed6numeric leaves. This originalFAIL is never relabeled as passed.",
+    "fullLedgerNotCommitted": true
+  },
+  "scopeClassification": {
+    "rootAmendment": {
+      "original": "/tmp/batch13197-runtime-A-exact-site-amendment.json",
+      "sha256": "f215244f6c6fc00f234204bd465f5e0a2cfdb23af8780206d8ac058efe9aca3f",
+      "bytes": 460588,
+      "status": "PASS_KHMER_EIGHT_EXACT_SITE_AMENDMENT",
+      "offlineExecutionUTC": {
+        "started": "2026-10-28T13:51:08.626Z",
+        "completed": "2026-10-28T13:51:08.765Z"
+      },
+      "actualOriginalCaptureUTC": {
+        "started": "2026-10-28T13:38:54.236Z",
+        "completed": "2026-10-28T13:38:55.357Z"
+      },
+      "approvedAmendment": {
+        "path": "/tmp/batch13197-khmer-six-leaf-root-amendment.json",
+        "sha256": "c686c0f078d51a95b8382fd3051e0e74e4238467d00f724920fd7b1beb21360e",
+        "scopeComment": 6469372915,
+        "basis": "Existing approved scope requires actual research sites:638 does not waive the building in which research takes place. Fixed199 at103/time30 and source/FIFO plus saved building-at/compound-done justify these six differences. This is a correction to the overly strong temporary nofarm-equality expectation, not an implementation change or a historical fixture rewrite."
+      },
+      "evidencePins": {
+        "baseline": {
+          "path": "/tmp/batch13197-baseline-capture.json",
+          "sha256": "16f1d61a5fa436a5b21808ce2640f4d5167d86bd65beef83658b5838ba04ed91"
+        },
+        "currentCapture": {
+          "path": "/tmp/batch13197-runtime-A-khmer-eight-capture.json",
+          "sha256": "4647bf2da074e9446410f9d80c9fc4347a86a5e1efafd1e353103ace7e112cb2"
+        },
+        "currentRaw": {
+          "path": "/tmp/batch13197-runtime-A-khmer-eight-actual-results.json",
+          "sha256": "074f989cd393f377c2c190e1d66d1de6655d05b466251110924f22dc11e47a53"
+        },
+        "originalFail": {
+          "path": "/tmp/batch13197-runtime-A-khmer-eight-offline.json",
+          "sha256": "2cb94a8861cce50bfd73da9549a58c5e919cb13026aab0f3163b0a03c0b55a5d"
+        },
+        "originalComparator": {
+          "path": "/tmp/batch13197-khmer-eight-compare-offline.mjs",
+          "sha256": "b76b9e9770d7e83462637b77ae327a5ba0ef144233dbcf592899e92bfbc1c5a3"
+        },
+        "other55Pass": {
+          "path": "/tmp/batch13197-runtime-A-other55-offline.json",
+          "sha256": "edb396475d696b0d58d0a5dfe77ed7bc0082a6b344eaa7cdce41cb2c5878d7e7"
+        },
+        "other55Capture": {
+          "path": "/tmp/batch13197-runtime-A-capture.json",
+          "sha256": "ca4241ec564490f0e33d76123fce0e91ff2115768e2d1e2bb6aec8e5e40e9d95"
+        },
+        "originalStatic": {
+          "path": "/tmp/batch13197-candidateA-postcode-static-classification.json",
+          "sha256": "76c480c2e74a5b6c470c8ae392169ade7e11038a6e1075570e44d666b8195cdc"
+        },
+        "originalIdentity": {
+          "path": "/tmp/batch13197-runtime-A-identity.json",
+          "sha256": "b0fc1fe91b37a731931e5070824730ad3f37ff22d09face80096549a133891c5"
+        }
+      },
+      "exactNoFarmNumericChanges": {
+        "maa-archers-18": [
+          {
+            "path": "$.steps.11.doneAt",
+            "kind": "changed",
+            "before": 850.7,
+            "after": 880.7
+          }
+        ],
+        "archers-19": [
+          {
+            "path": "$.steps.10.doneAt",
+            "kind": "changed",
+            "before": 784.5,
+            "after": 814.5
+          },
+          {
+            "path": "$.buildingsDone.9.building",
+            "kind": "changed",
+            "before": 50,
+            "after": 103
+          },
+          {
+            "path": "$.buildingsDone.9.at",
+            "kind": "changed",
+            "before": 759.5,
+            "after": 784.5
+          },
+          {
+            "path": "$.buildingsDone.10.building",
+            "kind": "changed",
+            "before": 103,
+            "after": 50
+          },
+          {
+            "path": "$.buildingsDone.10.at",
+            "kind": "changed",
+            "before": 784.5,
+            "after": 799.5
+          }
+        ]
+      },
+      "counts": {
+        "actualOriginalTimelines": 8,
+        "noFarmCompleteNumericUnchanged": 4,
+        "noFarmExactSiteCorrection": 2,
+        "approvedSiteNumericLeaves": 6,
+        "noFarmStockAgeUpsHousePaymentsUnchanged": 6,
+        "FC2FullDiffRetained": 2,
+        "additionalProductCalls": 0
+      },
+      "originalChecksRetainedExceptRootApprovedExactNumericEqualityReclassification": true,
+      "other55PassReusedByExactHash": true,
+      "originalFAILRetained": true,
+      "originalComparatorRetained": true,
+      "classificationBoundary": "The original expectation that all six nofarm numeric vectors stay identical was too strong for the existing approved actual-research-site scope. It genuinely failed and remains FAIL. Only the six full path/before/after leaves above are accepted under that existing requirement. No fields are filtered. Four nofarm vectors remain exact, all other fields of both site-corrected orders are exact, notes/model/12oldglobals/original checks remain, and both FC2 complete diffs are verbatim unchanged. Original low-level Khmer is not relabeled as an old UI Generic run.",
+      "execution": {
+        "additionalDomainCalls": 0,
+        "recaptures": 0,
+        "originalComparatorReruns": 0,
+        "tests": 0,
+        "build": 0,
+        "producer": 0,
+        "browser": 0,
+        "repoWrites": 0
+      },
+      "unresolvedIssues": 0
+    },
+    "independentSource": {
+      "original": "/tmp/batch13-khmer-six-leaf-independent-source-classification.json",
+      "sha256": "21bbc9a8a297e2ad16b65fa1f0d8a0f206bf40b3ec7993bb3e9945fb1120618d",
+      "bytes": 8469,
+      "verdict": "SIX_SAVEDRAW_DELTAS_ARE_NECESSARY_KHMER_RESEARCH_SITE_BEHAVIOR_WITHIN_EXISTING_SCOPE",
+      "unresolvedIssues": 0,
+      "directObservations": {
+        "nofarmOrders": [
+          {
+            "id": "feudal-drush-18",
+            "numericDiff": [],
+            "savedStepStartStockVectorsExact": true,
+            "completeAgeUpsExact": true,
+            "housePaymentsExact": true
+          },
+          {
+            "id": "hybrid-fish-18",
+            "numericDiff": [],
+            "savedStepStartStockVectorsExact": true,
+            "completeAgeUpsExact": true,
+            "housePaymentsExact": true
+          },
+          {
+            "id": "maa-archers-18",
+            "numericDiff": [
+              {
+                "path": "$.steps.11.doneAt",
+                "before": 850.7,
+                "after": 880.7
+              }
+            ],
+            "savedStepStartStockVectorsExact": true,
+            "completeAgeUpsExact": true,
+            "housePaymentsExact": true
+          },
+          {
+            "id": "scouts-18",
+            "numericDiff": [],
+            "savedStepStartStockVectorsExact": true,
+            "completeAgeUpsExact": true,
+            "housePaymentsExact": true
+          },
+          {
+            "id": "archers-19",
+            "numericDiff": [
+              {
+                "path": "$.buildingsDone.10.at",
+                "before": 784.5,
+                "after": 799.5
+              },
+              {
+                "path": "$.buildingsDone.10.building",
+                "before": 103,
+                "after": 50
+              },
+              {
+                "path": "$.buildingsDone.9.at",
+                "before": 759.5,
+                "after": 784.5
+              },
+              {
+                "path": "$.buildingsDone.9.building",
+                "before": 50,
+                "after": 103
+              },
+              {
+                "path": "$.steps.10.doneAt",
+                "before": 784.5,
+                "after": 814.5
+              }
+            ],
+            "savedStepStartStockVectorsExact": true,
+            "completeAgeUpsExact": true,
+            "housePaymentsExact": true
+          },
+          {
+            "id": "drush-fc",
+            "numericDiff": [],
+            "savedStepStartStockVectorsExact": true,
+            "completeAgeUpsExact": true,
+            "housePaymentsExact": true
+          }
+        ],
+        "exactNumericLeaves": 6,
+        "changedOrders": 2,
+        "otherFourNoFarmNumericChanges": 0,
+        "smithEntityTimesUnchanged": true,
+        "compoundStepDoneEqualsObservedSmithCompletionPlusSource30": true,
+        "archersFinalConstructionOrder": [
+          {
+            "building": 103,
+            "at": 784.5
+          },
+          {
+            "building": 50,
+            "at": 799.5
+          }
+        ],
+        "noFarmAssignmentInEitherAffectedBO": true,
+        "fullNumericLeafInventory": {
+          "feudal-drush-18": {
+            "numericLeafCount": 347,
+            "noAddedOrRemovedNumericLeaf": true,
+            "changed": 0
+          },
+          "hybrid-fish-18": {
+            "numericLeafCount": 320,
+            "noAddedOrRemovedNumericLeaf": true,
+            "changed": 0
+          },
+          "maa-archers-18": {
+            "numericLeafCount": 409,
+            "noAddedOrRemovedNumericLeaf": true,
+            "changed": 1
+          },
+          "scouts-18": {
+            "numericLeafCount": 393,
+            "noAddedOrRemovedNumericLeaf": true,
+            "changed": 0
+          },
+          "archers-19": {
+            "numericLeafCount": 340,
+            "noAddedOrRemovedNumericLeaf": true,
+            "changed": 5
+          },
+          "drush-fc": {
+            "numericLeafCount": 473,
+            "noAddedOrRemovedNumericLeaf": true,
+            "changed": 0
+          }
+        }
+      },
+      "fixedSource199": {
+        "Name": "Fletching",
+        "EffectID": 192,
+        "Civ": -1,
+        "RequiredTechs": [101, -1, -1, -1, -1, -1],
+        "RequiredTechCount": 1,
+        "ResearchLocation": 103,
+        "ResearchTime": 30,
+        "ResearchAt": [[103, 30]],
+        "Cost": [
+          [0, 100, 1],
+          [3, 50, 1]
+        ]
+      },
+      "staticCausalEvidence": {
+        "code": {
+          "path": "src/domain/buildSim.ts",
+          "sha256": "b36eba4e100dd109a346d25b2a804eebdf2ee8a85cb0d5fac6b2b94671563d72",
+          "researchSiteGate": "Khmer-only payQ research waits for built(site)>0;199 has no ecoTechs alias so falls back to103.",
+          "followingActions": "Ordered payQ stops at waiting199; laterpaidfarm50 cannot be enqueued until site completion. Gather reassignment occurs at stepstart independently, as in existing model.",
+          "durations": "199 is nonTC, normal30s with no Khmer techTime effect; building103 uses source40s, farm50 uses15s. New individual starts are not exposed by the compoundpublictimeline.",
+          "completion": "Public step.doneAt is finish() once every pending action is done; it can now be governed by30s research afterBlacksmith rather thanBlacksmith itself."
+        },
+        "maa": "ObservedBlacksmith850.7 unchanged; observedcompounddone850.7→880.7 is consistent with actualsite then30sresearch.",
+        "archers": "ObservedBlacksmith784.5 unchanged; researchwait delays following paidfarm, observedfarm759.5→799.5 and lasttwoarrayentriesreorder; observedcompounddone784.5→814.5 is consistent withsite then30sresearch.",
+        "inferenceBoundary": "Start784.6 forpostsite work is inferred from0.1stick/queueorder, not an individually capturedresearchAt. No invented compoundresearch timestamp is reported."
+      },
+      "honestyBoundaries": [
+        "Stockequal means allsavedsteps[].stock startsnapshots areequal. It is not a continuousbank trace or end-of-stepstockexperiment.",
+        "No publicindividualresearchstart/completion is extracted from compoundstepfields. Only observedbuildingat/compounddone and staticcode+30s source are combined.",
+        "Other55 savedreportPASS/hash was read; no other55collector orofflinecompare was rerun inthis focusedreview.",
+        "No clockgain or game-client-equivalence claim is made."
+      ]
+    }
+  },
+  "eightOrders": [
+    {
+      "id": "feudal-drush-18",
+      "fullChanged": 1,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "farmAssigned": false,
+      "originalChecks": {
+        "defaultParametersExactlyEqual": true,
+        "targetAgeReached": true,
+        "noNewTimeouts": true,
+        "notesExactlyApproved": true,
+        "hasPrerequisiteNote": true,
+        "assumptionsOnlyApproved": true,
+        "oldAssumptionOrderPreserved": true,
+        "noDuplicateAssumptions": true,
+        "otherModelFieldsSame": true,
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "noFarmDisclosure": true
+      },
+      "finalClassification": "All original numeric fields exactly equal.",
+      "exactApprovedSiteDiff": [],
+      "allOtherNumericFieldsExactlyEqual": true,
+      "originalNumericEqualityWasFalse": false
+    },
+    {
+      "id": "hybrid-fish-18",
+      "fullChanged": 2,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "farmAssigned": false,
+      "originalChecks": {
+        "defaultParametersExactlyEqual": true,
+        "targetAgeReached": true,
+        "noNewTimeouts": true,
+        "notesExactlyApproved": true,
+        "hasPrerequisiteNote": true,
+        "assumptionsOnlyApproved": true,
+        "oldAssumptionOrderPreserved": true,
+        "noDuplicateAssumptions": true,
+        "otherModelFieldsSame": true,
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "noFarmDisclosure": true
+      },
+      "finalClassification": "All original numeric fields exactly equal.",
+      "exactApprovedSiteDiff": [],
+      "allOtherNumericFieldsExactlyEqual": true,
+      "originalNumericEqualityWasFalse": false
+    },
+    {
+      "id": "maa-archers-18",
+      "fullChanged": 2,
+      "numericChanged": 1,
+      "numericDiff": [
+        {
+          "path": "$.steps.11.doneAt",
+          "kind": "changed",
+          "before": 850.7,
+          "after": 880.7
+        }
+      ],
+      "farmAssigned": false,
+      "originalChecks": {
+        "defaultParametersExactlyEqual": true,
+        "targetAgeReached": true,
+        "noNewTimeouts": true,
+        "notesExactlyApproved": true,
+        "hasPrerequisiteNote": true,
+        "assumptionsOnlyApproved": true,
+        "oldAssumptionOrderPreserved": true,
+        "noDuplicateAssumptions": true,
+        "otherModelFieldsSame": true,
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": false,
+        "noFarmDisclosure": true
+      },
+      "finalClassification": "Root-approved exact site correction; every other complete numeric field equal.",
+      "exactApprovedSiteDiff": [
+        {
+          "path": "$.steps.11.doneAt",
+          "kind": "changed",
+          "before": 850.7,
+          "after": 880.7
+        }
+      ],
+      "allOtherNumericFieldsExactlyEqual": true,
+      "originalNumericEqualityWasFalse": true
+    },
+    {
+      "id": "scouts-18",
+      "fullChanged": 1,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "farmAssigned": false,
+      "originalChecks": {
+        "defaultParametersExactlyEqual": true,
+        "targetAgeReached": true,
+        "noNewTimeouts": true,
+        "notesExactlyApproved": true,
+        "hasPrerequisiteNote": true,
+        "assumptionsOnlyApproved": true,
+        "oldAssumptionOrderPreserved": true,
+        "noDuplicateAssumptions": true,
+        "otherModelFieldsSame": true,
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "noFarmDisclosure": true
+      },
+      "finalClassification": "All original numeric fields exactly equal.",
+      "exactApprovedSiteDiff": [],
+      "allOtherNumericFieldsExactlyEqual": true,
+      "originalNumericEqualityWasFalse": false
+    },
+    {
+      "id": "archers-19",
+      "fullChanged": 6,
+      "numericChanged": 5,
+      "numericDiff": [
+        {
+          "path": "$.steps.10.doneAt",
+          "kind": "changed",
+          "before": 784.5,
+          "after": 814.5
+        },
+        {
+          "path": "$.buildingsDone.9.building",
+          "kind": "changed",
+          "before": 50,
+          "after": 103
+        },
+        {
+          "path": "$.buildingsDone.9.at",
+          "kind": "changed",
+          "before": 759.5,
+          "after": 784.5
+        },
+        {
+          "path": "$.buildingsDone.10.building",
+          "kind": "changed",
+          "before": 103,
+          "after": 50
+        },
+        {
+          "path": "$.buildingsDone.10.at",
+          "kind": "changed",
+          "before": 784.5,
+          "after": 799.5
+        }
+      ],
+      "farmAssigned": false,
+      "originalChecks": {
+        "defaultParametersExactlyEqual": true,
+        "targetAgeReached": true,
+        "noNewTimeouts": true,
+        "notesExactlyApproved": true,
+        "hasPrerequisiteNote": true,
+        "assumptionsOnlyApproved": true,
+        "oldAssumptionOrderPreserved": true,
+        "noDuplicateAssumptions": true,
+        "otherModelFieldsSame": true,
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": false,
+        "noFarmDisclosure": true
+      },
+      "finalClassification": "Root-approved exact site correction; every other complete numeric field equal.",
+      "exactApprovedSiteDiff": [
+        {
+          "path": "$.steps.10.doneAt",
+          "kind": "changed",
+          "before": 784.5,
+          "after": 814.5
+        },
+        {
+          "path": "$.buildingsDone.9.building",
+          "kind": "changed",
+          "before": 50,
+          "after": 103
+        },
+        {
+          "path": "$.buildingsDone.9.at",
+          "kind": "changed",
+          "before": 759.5,
+          "after": 784.5
+        },
+        {
+          "path": "$.buildingsDone.10.building",
+          "kind": "changed",
+          "before": 103,
+          "after": 50
+        },
+        {
+          "path": "$.buildingsDone.10.at",
+          "kind": "changed",
+          "before": 784.5,
+          "after": 799.5
+        }
+      ],
+      "allOtherNumericFieldsExactlyEqual": true,
+      "originalNumericEqualityWasFalse": true
+    },
+    {
+      "id": "fast-castle-boom",
+      "fullChanged": 11,
+      "numericChanged": 8,
+      "numericDiff": [
+        {
+          "path": "$.ageUps.1.errSec.early",
+          "kind": "changed",
+          "before": 40.4,
+          "after": 34
+        },
+        {
+          "path": "$.steps.8.stock.food",
+          "kind": "changed",
+          "before": 460,
+          "after": 452
+        },
+        {
+          "path": "$.steps.9.stock.food",
+          "kind": "changed",
+          "before": 563,
+          "after": 552
+        },
+        {
+          "path": "$.steps.10.stock.food",
+          "kind": "changed",
+          "before": 780,
+          "after": 756
+        },
+        {
+          "path": "$.steps.11.errSec.early",
+          "kind": "changed",
+          "before": 40.4,
+          "after": 34
+        },
+        {
+          "path": "$.steps.11.stock.food",
+          "kind": "changed",
+          "before": 987,
+          "after": 956
+        },
+        {
+          "path": "$.steps.12.errSec.early",
+          "kind": "changed",
+          "before": 72.3,
+          "after": 65.9
+        },
+        {
+          "path": "$.steps.12.stock.food",
+          "kind": "changed",
+          "before": 914,
+          "after": 870
+        }
+      ],
+      "farmAssigned": true,
+      "originalChecks": {
+        "defaultParametersExactlyEqual": true,
+        "targetAgeReached": true,
+        "noNewTimeouts": true,
+        "notesExactlyApproved": true,
+        "hasPrerequisiteNote": true,
+        "assumptionsOnlyApproved": true,
+        "oldAssumptionOrderPreserved": true,
+        "noDuplicateAssumptions": true,
+        "otherModelFieldsSame": true,
+        "hasFarmAssignment": true,
+        "hasFarmNote": true
+      },
+      "finalClassification": "Original FC2 complete/full numeric diff unchanged and retained verbatim; no clock benefit is claimed."
+    },
+    {
+      "id": "fast-castle-knights",
+      "fullChanged": 13,
+      "numericChanged": 10,
+      "numericDiff": [
+        {
+          "path": "$.ageUps.1.errSec.early",
+          "kind": "changed",
+          "before": 40.4,
+          "after": 34
+        },
+        {
+          "path": "$.steps.8.stock.food",
+          "kind": "changed",
+          "before": 460,
+          "after": 452
+        },
+        {
+          "path": "$.steps.9.stock.food",
+          "kind": "changed",
+          "before": 563,
+          "after": 552
+        },
+        {
+          "path": "$.steps.10.stock.food",
+          "kind": "changed",
+          "before": 780,
+          "after": 756
+        },
+        {
+          "path": "$.steps.11.errSec.early",
+          "kind": "changed",
+          "before": 40.4,
+          "after": 34
+        },
+        {
+          "path": "$.steps.11.stock.food",
+          "kind": "changed",
+          "before": 987,
+          "after": 956
+        },
+        {
+          "path": "$.steps.12.errSec.early",
+          "kind": "changed",
+          "before": 82.1,
+          "after": 75.7
+        },
+        {
+          "path": "$.steps.12.stock.food",
+          "kind": "changed",
+          "before": 914,
+          "after": 870
+        },
+        {
+          "path": "$.steps.13.errSec.early",
+          "kind": "changed",
+          "before": 82.1,
+          "after": 75.7
+        },
+        {
+          "path": "$.steps.13.stock.food",
+          "kind": "changed",
+          "before": 1104,
+          "after": 1057
+        }
+      ],
+      "farmAssigned": true,
+      "originalChecks": {
+        "defaultParametersExactlyEqual": true,
+        "targetAgeReached": true,
+        "noNewTimeouts": true,
+        "notesExactlyApproved": true,
+        "hasPrerequisiteNote": true,
+        "assumptionsOnlyApproved": true,
+        "oldAssumptionOrderPreserved": true,
+        "noDuplicateAssumptions": true,
+        "otherModelFieldsSame": true,
+        "hasFarmAssignment": true,
+        "hasFarmNote": true
+      },
+      "finalClassification": "Original FC2 complete/full numeric diff unchanged and retained verbatim; no clock benefit is claimed."
+    },
+    {
+      "id": "drush-fc",
+      "fullChanged": 1,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "farmAssigned": false,
+      "originalChecks": {
+        "defaultParametersExactlyEqual": true,
+        "targetAgeReached": true,
+        "noNewTimeouts": true,
+        "notesExactlyApproved": true,
+        "hasPrerequisiteNote": true,
+        "assumptionsOnlyApproved": true,
+        "oldAssumptionOrderPreserved": true,
+        "noDuplicateAssumptions": true,
+        "otherModelFieldsSame": true,
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "noFarmDisclosure": true
+      },
+      "finalClassification": "All original numeric fields exactly equal.",
+      "exactApprovedSiteDiff": [],
+      "allOtherNumericFieldsExactlyEqual": true,
+      "originalNumericEqualityWasFalse": false
+    }
+  ],
+  "FC2Observation": [
+    {
+      "id": "fast-castle-boom",
+      "numericDiff": [
+        {
+          "path": "$.ageUps.1.errSec.early",
+          "kind": "changed",
+          "before": 40.4,
+          "after": 34
+        },
+        {
+          "path": "$.steps.8.stock.food",
+          "kind": "changed",
+          "before": 460,
+          "after": 452
+        },
+        {
+          "path": "$.steps.9.stock.food",
+          "kind": "changed",
+          "before": 563,
+          "after": 552
+        },
+        {
+          "path": "$.steps.10.stock.food",
+          "kind": "changed",
+          "before": 780,
+          "after": 756
+        },
+        {
+          "path": "$.steps.11.errSec.early",
+          "kind": "changed",
+          "before": 40.4,
+          "after": 34
+        },
+        {
+          "path": "$.steps.11.stock.food",
+          "kind": "changed",
+          "before": 987,
+          "after": 956
+        },
+        {
+          "path": "$.steps.12.errSec.early",
+          "kind": "changed",
+          "before": 72.3,
+          "after": 65.9
+        },
+        {
+          "path": "$.steps.12.stock.food",
+          "kind": "changed",
+          "before": 914,
+          "after": 870
+        }
+      ],
+      "allStockVectorsSame": false,
+      "ageUpsExactlySame": false,
+      "housePaymentsExactlySame": true,
+      "notesAndAssumptionsPassed": true,
+      "ageUps": {
+        "before": [
+          {
+            "age": "feudal",
+            "clickAt": 543.6,
+            "reachAt": 673.6,
+            "errSec": {
+              "early": 35.3,
+              "late": 68.8
+            }
+          },
+          {
+            "age": "castle",
+            "clickAt": 768.9,
+            "reachAt": 928.9,
+            "errSec": {
+              "early": 40.4,
+              "late": 106.2
+            }
+          }
+        ],
+        "actual": [
+          {
+            "age": "feudal",
+            "clickAt": 543.6,
+            "reachAt": 673.6,
+            "errSec": {
+              "early": 35.3,
+              "late": 68.8
+            }
+          },
+          {
+            "age": "castle",
+            "clickAt": 768.9,
+            "reachAt": 928.9,
+            "errSec": {
+              "early": 34,
+              "late": 106.2
+            }
+          }
+        ]
+      },
+      "buildEntitiesExactlySame": true,
+      "farmActions": [
+        {
+          "step": 7,
+          "action": 0,
+          "count": 4,
+          "from": "hunt",
+          "beforeStepStart": 354.7,
+          "actualStepStart": 354.7,
+          "exposure": "Task assignment source at public step boundary; first internal tick may follow by0.1s."
+        }
+      ]
+    },
+    {
+      "id": "fast-castle-knights",
+      "numericDiff": [
+        {
+          "path": "$.ageUps.1.errSec.early",
+          "kind": "changed",
+          "before": 40.4,
+          "after": 34
+        },
+        {
+          "path": "$.steps.8.stock.food",
+          "kind": "changed",
+          "before": 460,
+          "after": 452
+        },
+        {
+          "path": "$.steps.9.stock.food",
+          "kind": "changed",
+          "before": 563,
+          "after": 552
+        },
+        {
+          "path": "$.steps.10.stock.food",
+          "kind": "changed",
+          "before": 780,
+          "after": 756
+        },
+        {
+          "path": "$.steps.11.errSec.early",
+          "kind": "changed",
+          "before": 40.4,
+          "after": 34
+        },
+        {
+          "path": "$.steps.11.stock.food",
+          "kind": "changed",
+          "before": 987,
+          "after": 956
+        },
+        {
+          "path": "$.steps.12.errSec.early",
+          "kind": "changed",
+          "before": 82.1,
+          "after": 75.7
+        },
+        {
+          "path": "$.steps.12.stock.food",
+          "kind": "changed",
+          "before": 914,
+          "after": 870
+        },
+        {
+          "path": "$.steps.13.errSec.early",
+          "kind": "changed",
+          "before": 82.1,
+          "after": 75.7
+        },
+        {
+          "path": "$.steps.13.stock.food",
+          "kind": "changed",
+          "before": 1104,
+          "after": 1057
+        }
+      ],
+      "allStockVectorsSame": false,
+      "ageUpsExactlySame": false,
+      "housePaymentsExactlySame": true,
+      "notesAndAssumptionsPassed": true,
+      "ageUps": {
+        "before": [
+          {
+            "age": "feudal",
+            "clickAt": 543.6,
+            "reachAt": 673.6,
+            "errSec": {
+              "early": 35.3,
+              "late": 68.8
+            }
+          },
+          {
+            "age": "castle",
+            "clickAt": 768.9,
+            "reachAt": 928.9,
+            "errSec": {
+              "early": 40.4,
+              "late": 106.2
+            }
+          }
+        ],
+        "actual": [
+          {
+            "age": "feudal",
+            "clickAt": 543.6,
+            "reachAt": 673.6,
+            "errSec": {
+              "early": 35.3,
+              "late": 68.8
+            }
+          },
+          {
+            "age": "castle",
+            "clickAt": 768.9,
+            "reachAt": 928.9,
+            "errSec": {
+              "early": 34,
+              "late": 106.2
+            }
+          }
+        ]
+      },
+      "buildEntitiesExactlySame": true,
+      "farmActions": [
+        {
+          "step": 7,
+          "action": 0,
+          "count": 4,
+          "from": "hunt",
+          "beforeStepStart": 354.7,
+          "actualStepStart": 354.7,
+          "exposure": "Task assignment source at public step boundary; first internal tick may follow by0.1s."
+        }
+      ]
+    }
+  ],
+  "FC2Boundary": "Actual default feudal/castle click/reach remain543.6/673.6 and768.9/928.9. Food stocks and early error bands change as listed, while building entities and house payments remain unchanged. These are direct low-level Khmer baseline deltas, not a captured old UI Generic comparison.",
+  "other55": {
+    "original": "/tmp/batch13197-runtime-A-other55-offline.json",
+    "sha256": "edb396475d696b0d58d0a5dfe77ed7bc0082a6b344eaa7cdce41cb2c5878d7e7",
+    "bytes": 10755,
+    "status": "PASS_OTHER55_OFFLINE_COMPARISON",
+    "counts": {
+      "other55Full": 440,
+      "other55Numeric": 440,
+      "other55Notes": 55,
+      "other55Support": 55,
+      "other55Helpers": 1485,
+      "KhmerNonFarmHelpers": 24,
+      "KhmerFarmHelpers": 3,
+      "allCapturedHelpers": 1512,
+      "allIndependentRealCost": 224,
+      "oldRawCivSections": 55,
+      "oldGlobalSections": 12,
+      "historicalRemainingCases": 36
+    },
+    "delta": {
+      "full": [],
+      "numeric": [],
+      "notes": [],
+      "support": [],
+      "helpers": [],
+      "realCost": []
+    },
+    "KhmerNonFarmHelperChanges": [],
+    "KhmerFarmChecks": [
+      {
+        "key": "farm:1",
+        "before": {
+          "carry": 10,
+          "workRate": 0.5035,
+          "rate": 0.447207727323193,
+          "extraIncome": {}
+        },
+        "actual": {
+          "carry": 10,
+          "workRate": 0.5035,
+          "rate": 0.4,
+          "extraIncome": {}
+        },
+        "expected": {
+          "carry": 10,
+          "workRate": 0.5035,
+          "rate": 0.4,
+          "extraIncome": {}
+        },
+        "requestedTiles": 1,
+        "appliedReturnTiles": 0,
+        "physicalSupply": 0.4,
+        "rule": "Complete654: consumer workRate*.95 and no return trip; min(C/(C/Wc+2*d/V), independent farm supply), d=0. Capacity15 gives no initial food.",
+        "valid": true
+      },
+      {
+        "key": "farm:4",
+        "before": {
+          "carry": 10,
+          "workRate": 0.5035,
+          "rate": 0.3348852677086797,
+          "extraIncome": {}
+        },
+        "actual": {
+          "carry": 10,
+          "workRate": 0.5035,
+          "rate": 0.4,
+          "extraIncome": {}
+        },
+        "expected": {
+          "carry": 10,
+          "workRate": 0.5035,
+          "rate": 0.4,
+          "extraIncome": {}
+        },
+        "requestedTiles": 4,
+        "appliedReturnTiles": 0,
+        "physicalSupply": 0.4,
+        "rule": "Complete654: consumer workRate*.95 and no return trip; min(C/(C/Wc+2*d/V), independent farm supply), d=0. Capacity15 gives no initial food.",
+        "valid": true
+      },
+      {
+        "key": "farm:7",
+        "before": {
+          "carry": 10,
+          "workRate": 0.5035,
+          "rate": 0.26765898066316696,
+          "extraIncome": {}
+        },
+        "actual": {
+          "carry": 10,
+          "workRate": 0.5035,
+          "rate": 0.4,
+          "extraIncome": {}
+        },
+        "expected": {
+          "carry": 10,
+          "workRate": 0.5035,
+          "rate": 0.4,
+          "extraIncome": {}
+        },
+        "requestedTiles": 7,
+        "appliedReturnTiles": 0,
+        "physicalSupply": 0.4,
+        "rule": "Complete654: consumer workRate*.95 and no return trip; min(C/(C/Wc+2*d/V), independent farm supply), d=0. Capacity15 gives no initial food.",
+        "valid": true
+      }
+    ],
+    "support": {
+      "supported50": true,
+      "remaining6": true,
+      "KhmerSupportClear": true,
+      "supported": 50,
+      "unsupported": 6,
+      "remaining": ["Chinese", "Gurjaras", "Jurchens", "Mapuche", "Poles", "Romans"]
+    },
+    "sourceChecks": {
+      "old12GlobalCount": true,
+      "old12RawUnchanged": true,
+      "oldMetaRawUnchanged": true,
+      "other55RawUnchanged": true,
+      "civOrderUnchanged": true,
+      "onlyTwoReviewedNewGlobals": true,
+      "independentPhysicalExact": true,
+      "prerequisiteTopologyExact": true,
+      "oldTwoKhmerRowsAndOrderExact": true,
+      "canonicalTreeExact": true,
+      "canonicalTeamExact": true,
+      "fourCanonicalTechMetadata": true,
+      "twoNewEmptyCanonicalTechRows": true,
+      "noUnclassifiedKhmerRows": true
+    },
+    "globalRawChanges": [],
+    "otherRawChanges": [],
+    "newGlobalKeys": ["khmerFarm", "khmerPrerequisites"],
+    "historicalMismatches": [],
+    "evidence": {
+      "capture": "/tmp/batch13197-runtime-A-capture.json",
+      "captureSHA256": "ca4241ec564490f0e33d76123fce0e91ff2115768e2d1e2bb6aec8e5e40e9d95",
+      "raw": {
+        "/tmp/batch13197-runtime-A-actual-results.json": {
+          "sha256": "9a599f2dd09ed0cd870da808628704a7c7fec313bfc9b28c6501e2a5b7fa873c",
+          "bytes": 8880110
+        },
+        "/tmp/batch13197-runtime-A-helpers.json": {
+          "sha256": "360ef2710d1b06df85ed239336bc1d8744f206185a1bad3f702100b6621d418f",
+          "bytes": 209656
+        },
+        "/tmp/batch13197-runtime-A-realcost.json": {
+          "sha256": "eafc77dad596526e680bbdc92aa798c43e1b871a146409060918bc5ea2ad8024",
+          "bytes": 79087
+        },
+        "/tmp/batch13197-runtime-A-eco-sections.json": {
+          "sha256": "ee16d14d2f634e726ab16915de34bce4c09e639c90420e06a17b767012b64612",
+          "bytes": 367305
+        }
+      },
+      "staticReview": {
+        "path": "/tmp/batch13197-candidateA-postcode-static-classification.json",
+        "sha256": "76c480c2e74a5b6c470c8ae392169ade7e11038a6e1075570e44d666b8195cdc"
+      },
+      "policy": "117d8964c22c0f6a110feafa480308301c8010b24c219de77e825e0742223ce8",
+      "sourceFixture": {
+        "path": "/tmp/batch13-khmer-source-fixture.json",
+        "sha256": "f2d15cf2340a60e9d9365bf86dd65e8f2b97e293f914113be8c113d07b39bae4"
+      }
+    },
+    "baselineSemantics": "Saved baseline is direct public low-level Khmer, which was unsupported in the previous UI. It is not a saved old UI Generic timeline; old helper values also do not establish old runOnce income semantics.",
+    "additionalDomainCalls": 0,
+    "repositoryWrites": 0
+  },
+  "interpretation": {
+    "nonFarm": "Four nofarm numeric vectors are wholly equal. The other two differ only in the exact6classified numeric leaves; every saved step-start stock vector, full ageUps and house-payment vector remains equal across all six. This is not a continuousbank trace.",
+    "researchSite": "Pinned199 needs completedBlacksmith103 and30s. Observed compound step end shifts+30s inmaa/archers; orderedpayQ also moves the explicitarchersfarm aftersitewait, changing completion-array order. No individual researchstart/completion timestamp is exposed or inferred as captured.",
+    "farm": "FC2 have4assignedfarmworkers at354.7s,8/10numeric paths change (Food/earlyerrorbands). Both actual default ageclick/reach clocks remain543.6/673.6 and768.9/928.9; no default speedup claim.",
+    "baseline": "All source-level oldKhmer results were directsimulateBuild(bo,Khmer), while oldUI markedKhmer unsupported. Old direct-helper rates also differed from oldrunOnce income. These are not an actual pairedoldUIGenericor in-game gain/loss measurement.",
+    "model": "New full654 effectivefarm min(.53*.95,.4)=.4 withno configuredreturnleg; assignment-based independent supply, no initialFood15/plotbinding/internalmovement/pooltransient/exhaustion/reseed/client calibration."
+  },
+  "smallAuditProvenance": [
+    {
+      "original": "/tmp/batch13197-runtime-A-savedraw-delta-interpretation.json",
+      "sha256": "8953116e414f6738efe151e0d2f640821cc791e789c31a5929231fb7a6bbfc6a",
+      "bytes": 15344
+    },
+    {
+      "original": "/tmp/batch13-khmer-six-leaf-independent-source-classification.json",
+      "sha256": "21bbc9a8a297e2ad16b65fa1f0d8a0f206bf40b3ec7993bb3e9945fb1120618d",
+      "bytes": 8469
+    }
+  ],
+  "rawArtifactsCommitted": false,
+  "repositoryPNGCommitted": false
+}

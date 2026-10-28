@@ -376,6 +376,9 @@
                 },
                 "slavicTree": {
                   "$ref": "#/$defs/slavicTree"
+                },
+                "khmerTree": {
+                  "$ref": "#/$defs/khmerTree"
                 }
               },
               "required": ["source", "name", "age", "effects"],
@@ -412,6 +415,9 @@
                 },
                 "slavicTech": {
                   "$ref": "#/$defs/slavicTech"
+                },
+                "khmerTeam": {
+                  "$ref": "#/$defs/khmerTeam"
                 }
               },
               "required": ["source", "name", "age", "effects"],
@@ -460,6 +466,9 @@
                 },
                 "slavicTech": {
                   "$ref": "#/$defs/slavicTech"
+                },
+                "khmerTech": {
+                  "$ref": "#/$defs/khmerTech"
                 }
               },
               "required": ["source", "tech", "name", "age", "requires", "effects"],
@@ -548,6 +557,12 @@
     },
     "slavicFarm": {
       "$ref": "#/$defs/slavicFarm"
+    },
+    "khmerFarm": {
+      "$ref": "#/$defs/khmerFarm"
+    },
+    "khmerPrerequisites": {
+      "$ref": "#/$defs/khmerPrerequisites"
     }
   },
   "required": ["meta", "units", "buildings", "techs", "villager", "animals", "fishingShip", "ecoTechs", "civEco", "ageReq"],
@@ -1356,6 +1371,226 @@
         }
       },
       "required": ["civId", "farms"],
+      "additionalProperties": false
+    },
+    "khmerTech": {
+      "type": "object",
+      "properties": {
+        "tech": {
+          "type": "integer"
+        },
+        "civ": {
+          "type": "integer"
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "effectId": {
+          "type": "integer"
+        },
+        "requiredCount": {
+          "type": "integer"
+        },
+        "researchLocation": {
+          "type": "integer"
+        },
+        "researchAt": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "minItems": 2,
+            "maxItems": 2,
+            "items": false
+          }
+        },
+        "researchTime": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "minItems": 3,
+            "maxItems": 3,
+            "items": false
+          }
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Type": {
+                "type": "integer"
+              },
+              "A": {
+                "type": "integer"
+              },
+              "B": {
+                "type": "integer"
+              },
+              "C": {
+                "type": "integer"
+              },
+              "D": {
+                "type": "number"
+              }
+            },
+            "required": ["Type", "A", "B", "C", "D"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["tech", "civ", "requires", "effectId", "requiredCount", "researchLocation", "researchAt", "researchTime", "cost", "commands"],
+      "additionalProperties": false
+    },
+    "khmerTree": {
+      "type": "object",
+      "properties": {
+        "civId": {
+          "type": "integer"
+        },
+        "treeId": {
+          "type": "integer"
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Type": {
+                "type": "integer"
+              },
+              "A": {
+                "type": "integer"
+              },
+              "B": {
+                "type": "integer"
+              },
+              "C": {
+                "type": "integer"
+              },
+              "D": {
+                "type": "number"
+              }
+            },
+            "required": ["Type", "A", "B", "C", "D"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["civId", "treeId", "commands"],
+      "additionalProperties": false
+    },
+    "khmerFarm": {
+      "type": "object",
+      "properties": {
+        "civId": {
+          "type": "integer"
+        },
+        "farms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "unit": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "integer"
+              },
+              "class": {
+                "type": "integer"
+              },
+              "workRate": {
+                "type": "number"
+              },
+              "capacity": {
+                "type": "number"
+              }
+            },
+            "required": ["unit", "type", "class", "workRate", "capacity"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["civId", "farms"],
+      "additionalProperties": false
+    },
+    "khmerTeam": {
+      "type": "object",
+      "properties": {
+        "civId": {
+          "type": "integer"
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Type": {
+                "type": "integer"
+              },
+              "A": {
+                "type": "integer"
+              },
+              "B": {
+                "type": "integer"
+              },
+              "C": {
+                "type": "integer"
+              },
+              "D": {
+                "type": "number"
+              }
+            },
+            "required": ["Type", "A", "B", "C", "D"],
+            "additionalProperties": false
+          }
+        },
+        "teamId": {
+          "type": "integer"
+        }
+      },
+      "required": ["civId", "teamId", "commands"],
+      "additionalProperties": false
+    },
+    "khmerPrerequisites": {
+      "type": "object",
+      "properties": {
+        "civId": {
+          "type": "integer"
+        },
+        "nodes": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/khmerTech"
+          }
+        }
+      },
+      "required": ["civId", "nodes"],
       "additionalProperties": false
     }
   }

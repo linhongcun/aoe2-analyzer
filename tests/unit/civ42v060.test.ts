@@ -72,7 +72,7 @@ describe('#42 放开：其他', () => {
 // 白名单：留 v0.7.0，必须仍被 unhandledEffects 报出且带原因（不能被悄悄标成 handled/irrelevant）
 const DEFERRED: Record<string, string[]> = {
   资源总量与狩猎: ['Jurchens'],
-  其他: ['Khmer', 'Chinese', 'Romans'],
+  其他: ['Chinese', 'Romans'],
 };
 describe('#42 白名单（v0.7.0）：仍置灰且写明原因', () => {
   for (const [g, civs] of Object.entries(DEFERRED))

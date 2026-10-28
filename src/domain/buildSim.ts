@@ -69,6 +69,23 @@ import {
   type SlavicRawTech,
 } from './slavicEconomy';
 
+import {
+  khmerContext,
+  khmerRowClass,
+  khmerHasMarker,
+  khmerFarmRate,
+  khmerBuildingReady,
+  khmerNotes,
+  khmerHasFarmAssignment,
+  KHMER_SOURCE_REASON,
+  KHMER_FARM_DETAIL,
+  type KhmerFarm,
+  type KhmerPrerequisites,
+  type KhmerRawTech,
+  type KhmerRawTree,
+  type KhmerRawTeam,
+} from './khmerEconomy';
+
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
 type Cost = Partial<Record<'Food' | 'Wood' | 'Gold' | 'Stone', number>>;
@@ -83,6 +100,9 @@ interface EffectRow {
   georgianTech?: GeorgianRawTech;
   slavicTree?: SlavicRawTree;
   slavicTech?: SlavicRawTech;
+  khmerTech?: KhmerRawTech;
+  khmerTree?: KhmerRawTree;
+  khmerTeam?: KhmerRawTeam;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];
 }
 /** eco.json 中模拟需要的部分 */
@@ -90,12 +110,14 @@ export interface EcoData {
   armenianInfrastructure?: ArmenianInfrastructure;
   georgianInfrastructure?: GeorgianInfrastructure;
   slavicFarm?: SlavicFarm;
+  khmerFarm?: KhmerFarm;
+  khmerPrerequisites?: KhmerPrerequisites;
   fishingShip?: { unit: number; workRate: number; carry: number; speed: number; deepFishMultiplier?: number };
   villager: { trainTime: number; cost: Cost; speed: number; carry: number; tasks: Record<string, { workRate: number; carry: number }> };
   units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number>; class?: number }>;
   buildings: Record<string, { buildTime: number; cost: Cost; class?: number }>;
   techs: Record<string, { researchTime: number; at: number; cost: Cost }>;
-  ecoTechs: Record<string, { effects: EffectRow['effects'] }>;
+  ecoTechs: Record<string, { effects: EffectRow['effects']; at?: string }>;
   civEco: Record<string, EffectRow[]>;
   /** 升级时代前置建筑条件树（scripts/eco_build.py 从 .dat 时代科技 101/102/103 的前置展开；缺省视为无条件） */
   ageReq?: Record<string, { tech: number; req: AgeReqNode | null }>;
@@ -636,12 +658,7 @@ const hasMalianBuildingContext = (row: { source?: string; tech?: number; effects
     )
   );
 };
-/**
- * 高棉 tech 654「C-Bonus, Instant Farmers」在 .dat（185872，effect 690）里只有三条命令：
- * res 33 set 50、农民（214/259）workRate ×0.95。res 33 是各文明加成的标记值（丹麦 35/36、格鲁吉亚 9…），
- * 50 对应「农民直接入库、无需回仓」，引擎按这个标记取消耕作的回仓走路。×0.95 已通过 task:farm 生效。
- */
-const RES33_INSTANT_FARMERS = 50;
+/** 高棉只在完整来源门控下应用本站免回仓连续近似；不声称已证明DE185872选择器的可执行映射。见docs/design/khmer197.md。 */
 /**
  * 西班牙 tech 186「C-Bonus, Tech reward」在 .dat 里只有 res 269 set 300 一条命令（#42）。
  * 金额：https://ageofempires.fandom.com/wiki/Spanish_(Age_of_Empires_II) 「Receive 20 gold for each technology researched.」（已打开核对，见 #42 issuecomment-6106638881）
@@ -650,9 +667,6 @@ const RES33_INSTANT_FARMERS = 50;
  * 升级时代那一次返金由 tech 323/324/326（res 3 −20，到达新时代时发放）抵消，升时代净 0 金（.dat 确认）。
  */
 const SPANISH_TECH_REWARD_GOLD = 20;
-// 来源：.dat 本身没有定义 res 33=50 的含义（只是 set 50 这一条命令），含义来自玩法说明：
-// https://ageofempires.fandom.com/wiki/Civilization_bonus#Khmer 「Farmers don't carry food but rather add it directly to the stockpile without any drop-off, but work 5% slower」
-// https://ageofempires.fandom.com/wiki/Farm_(Age_of_Empires_II)（update 34699 起农民无需回仓）。详见 docs/BUILD-SIM.md「文明加成」
 
 function applyEffects(
   m: Mods,
@@ -711,7 +725,6 @@ function applyEffects(
       else if (RES_DEPOSIT[x.res] && x.op === 'add') m.depositBonus[RES_DEPOSIT[x.res]!] = (m.depositBonus[RES_DEPOSIT[x.res]!] ?? 0) + v / 100;
       else if (x.res === 85 && x.op === 'set') m.techCostAll = v;
       else if (x.res === 4 && x.op === 'add') m.popBonus += v;
-      else if (x.res === 33 && x.op === 'set' && v === RES33_INSTANT_FARMERS) m.farmNoWalk = true;
       else if (x.res === 269 && x.op === 'set' && v > 0) m.techReward = SPANISH_TECH_REWARD_GOLD;
       else if (x.res === RES_HUNT_FOOD && x.op === 'mul') m.huntFoodMul *= v;
       else if (applyForagerWood && x.res === RES_FORAGER_WOOD && x.op === 'add') m.foragerWood += v / 100;
@@ -785,11 +798,13 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const bengaliFamily = civ === 'Bengalis' ? scope.bengaliRewards : null;
   const armenians = civ === 'Armenians' ? scope.armenians : undefined;
   const georgians = civ === 'Georgians' ? scope.georgians : undefined;
+  m.farmNoWalk = civ === 'Khmer' && !!scope.khmer?.bonus;
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   const uniqueMayanTeam = (eco.civEco.Mayans ?? []).filter((row) => row.source === 'team').length === 1;
   const rows = (eco.civEco[civ] ?? []).filter(
     (r) =>
       (P.team || r.source !== 'team') &&
+      khmerRowClass(r, civ, scope.khmer)?.kind !== 'unhandled' &&
       ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') &&
       mayanRowAllowed(civ, r, uniqueMayanTree) &&
       sicilianRowAllowed(scope, r) &&
@@ -1025,6 +1040,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const d = t === 'farm' && m.farmNoWalk ? 0 : NEAR.includes(t) ? P.nearTiles : P.walkTiles;
     const walk = (2 * d) / (eco.villager.speed * m.speed);
     const average = carry / (carry / wr + walk);
+    if (civ === 'Khmer' && et === 'farm') return khmerFarmRate(scope.khmer, average);
     return civ === 'Slavs' && et === 'farm' ? slavicFarmRate(scope.slavs, average) : average;
   };
   const actionCost = (a: Action): Stock => {
@@ -1145,6 +1161,26 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           p.siteBlockedSince = undefined;
         }
       }
+      if (civ === 'Khmer' && a.type === 'build' && !khmerBuildingReady(scope.khmer, a.building, age, built)) break;
+      // 638 exempts prerequisite buildings, not the actual research location.
+      if (civ === 'Khmer' && a.type === 'research') {
+        const siteName = eco.ecoTechs[a.tech]?.at;
+        const sites =
+          siteName === 'Mill'
+            ? [68, 129, 130, 131]
+            : siteName === 'Lumber Camp'
+              ? [562, 563, 564, 565]
+              : siteName === 'Mining Camp'
+                ? [584, 585, 586, 587]
+                : siteName === 'Town Center'
+                  ? TC_BY_AGE
+                  : siteName === 'Market'
+                    ? [84, 116, 137]
+                    : siteName === 'Dock'
+                      ? [45, 47, 51, 133]
+                      : [eco.techs[a.tech]?.at ?? -1];
+        if (sites.some((site) => site > 0) && !sites.some((site) => (built.get(site) ?? 0) > 0)) break;
+      }
       // 训练需要建筑；人口检查
       if (a.type === 'train') {
         const at = eco.units[a.unit]?.at ?? [];
@@ -1154,7 +1190,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           break;
         }
       }
-      if (a.type === 'ageUp' && !ageReqOk(eco.ageReq?.[String(a.age)]?.req, built, civ)) {
+      if (a.type === 'ageUp' && !ageReqOk(eco.ageReq?.[String(a.age)]?.req, built, civ === 'Khmer' && !scope.khmer?.noPrerequisites ? '' : civ)) {
         if (!p.prereq) {
           p.blockedSince ??= t;
           p.prereq = true;
@@ -1488,6 +1524,7 @@ const primary = (acts: Action[]): Pick<TimelineStep, 'action' | 'entity'> => {
 /** 主入口：模拟 + 误差带（近/远走路距离各跑一次） */
 export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, params: Partial<SimParams> = {}): BuildTimeline {
   const P: SimParams = { ...DEFAULT_PARAMS, ...params };
+  const khmer = civ === 'Khmer' ? khmerContext(eco) : undefined;
   P.walkTiles = Math.min(WALK.max, Math.max(WALK.min, Math.round(P.walkTiles)));
   // #42 匈奴：人口不受房子限制 → 开局里的造房动作不执行、不扣木，自动补房也关掉；步骤数与编号不变
   const noHouses = civNoHouses(eco, civ);
@@ -1553,6 +1590,8 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
         ...(civ === 'Varangians' ? [VARANGIAN_GOLD_ASSUMPTION] : []),
         ...(civ === 'Slavs' && slavicContext(eco).physical && slavicHasFarmAssignment(bo) ? [SLAVIC_FARM_NOTE, SLAVIC_FARM_DETAIL] : []),
         ...(civ === 'Slavs' && P.team ? [SLAVIC_TEAM_NOTE] : []),
+        ...(khmer ? khmerNotes(khmer, bo) : []),
+        ...(khmer?.physical && khmer.bonus && khmerHasFarmAssignment(bo) ? [KHMER_FARM_DETAIL] : []),
         ...(civ === 'Tatars' ? [TATAR_SHEPHERD_ASSUMPTION] : []),
         ...(civ === 'Mayans' ? [MAYAN_RESOURCE_ASSUMPTION, MAYAN_CAVALRY_TEMPLATE_NOTE] : []),
         ...(civ === 'Sicilians' && sicilianGroupOk(simScope(eco, ALL_BOS, civ), 770) ? [SICILIAN_CONSTRUCTION_ASSUMPTION] : []),
@@ -1702,9 +1741,7 @@ const FORCED_CIVS = new Set(
 /** 已在 START_VILS 建模送村民的文明 tech（汉 302、玛雅 554） */
 const RES234_HANDLED = new Set([302, 554]);
 /** 整条待核实的文明 tech → 原因 */
-const PENDING_TECH: Record<number, string> = {
-  654: '高棉「农民无需回仓」：res 33=50 的含义 .dat 本身没有定义，现有开局里也没能证明它影响结果，先置灰（代码保留）',
-};
+const PENDING_TECH: Record<number, string> = {};
 const FARM_UNITS = new Set([50, 1187]);
 /** 各时代的城镇中心单位：黑暗 109、封建 71、城堡 141、帝王 142；升时代即换成下一个，村民训练与升时代研究都按当前这一个计工作速度 */
 const TC_BY_AGE = [TC, 71, 141, 142];
@@ -1747,6 +1784,7 @@ export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
     sicilianBuildings: civ === 'Sicilians' ? eco.buildings : undefined,
     civ,
     ...(civ === 'Slavs' ? { slavs: slavicContext(eco) } : {}),
+    ...(civ === 'Khmer' ? { khmer: khmerContext(eco) } : {}),
     weiRewards: civ === 'Wei' ? weiRewardFamily(eco.civEco.Wei) : null,
     ...(civ === 'Bengalis' ? { bengaliRewards: bengaliRewardFamily(eco.civEco.Bengalis) } : {}),
     ...(armenians ? { armenians } : {}),
@@ -1775,9 +1813,14 @@ export function classifyCivEffect(
     georgianTech?: GeorgianRawTech;
     slavicTree?: SlavicRawTree;
     slavicTech?: SlavicRawTech;
+    khmerTech?: KhmerRawTech;
+    khmerTree?: KhmerRawTree;
+    khmerTeam?: KhmerRawTeam;
   },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
+  const khmer = khmerRowClass(row as EffectRow, scope.civ, scope.khmer);
+  if (khmer) return khmer;
   const slavic = slavicRowClass(row as EffectRow, scope.civ, scope.slavs);
   if (slavic) return slavic;
   const armenian = armenianRowClass(row as EffectRow, scope.civ, scope.armenians, scope.buildings);
@@ -1814,7 +1857,7 @@ export function classifyCivEffect(
     if (e.res === RES_GOLD_PRODUCTIVITY && e.op === 'add' && hasMalianGoldContext(row)) return { kind: 'handled' };
     if (e.res === RES_WILD_FOOD_GOLD && e.op === 'set' && Number.isFinite(e.v) && e.v! >= 0 && hasVarangianGoldContext(row)) return { kind: 'handled' };
     if (e.res === RES_SHEPHERD_PRODUCTIVITY && e.op === 'mul' && hasTatarShepherdContext(row)) return { kind: 'handled' };
-    if (HANDLED_RES(e.res, e.op) || (e.res === 33 && e.op === 'set' && e.v === RES33_INSTANT_FARMERS)) return { kind: 'handled' };
+    if (HANDLED_RES(e.res, e.op)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
     if (e.res === 234 && row.tech !== undefined && RES234_IRRELEVANT_TECH[row.tech]) return { kind: 'irrelevant', reason: RES234_IRRELEVANT_TECH[row.tech]! };
     if (UNHANDLED_RES[e.res]) return { kind: 'unhandled', reason: UNHANDLED_RES[e.res]! };
@@ -1886,6 +1929,8 @@ export function simSupport(
 ): { supported: boolean; reasons: string[] } {
   const u = unhandledEffects(eco, civ, bos);
   const reasons = [...new Set(u.map((x) => x.reason))];
+  if (civ === 'Khmer') reasons.push(...khmerContext(eco).reasons);
+  else if ((eco.civEco[civ] ?? []).some((row) => khmerHasMarker(row) || [638, 654, 657, 672].includes(row.tech ?? -1))) reasons.push(KHMER_SOURCE_REASON);
   if (civ === 'Slavs') reasons.push(...slavicContext(eco).reasons);
   else if ((eco.civEco[civ] ?? []).some((row) => 'slavicTree' in row || 'slavicTech' in row)) reasons.push(SLAVIC_SOURCE_REASON);
   if (civ === 'Mayans' && !hasUniqueMayanTree(eco)) reasons.push('玛雅资源产量与工作率缺少完整已核配对，未计入');
@@ -1982,16 +2027,18 @@ export function gatherRate(
 ): { carry: number; workRate: number; rate: number; extraIncome: Partial<Stock> } {
   const m = baseMods();
   const scope = simScope(eco, ALL_BOS, civ);
+  m.farmNoWalk = civ === 'Khmer' && !!scope.khmer?.bonus;
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   for (const r of eco.civEco[civ] ?? [])
     if (
       r.age === 1 &&
       r.source !== 'team' &&
+      khmerRowClass(r, civ, scope.khmer)?.kind !== 'unhandled' &&
       ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') &&
       mayanRowAllowed(civ, r, uniqueMayanTree) &&
       sicilianRowAllowed(scope, r) &&
       (!('slavicTree' in r || 'slavicTech' in r) || civ === 'Slavs') &&
-      (!['Tatars', 'Mayans', 'Sicilians', 'Slavs'].includes(civ) || techAtomicOk(r, scope))
+      (!['Tatars', 'Mayans', 'Sicilians', 'Slavs', 'Khmer'].includes(civ) || techAtomicOk(r, scope))
     )
       applyEffects(
         m,
@@ -2012,9 +2059,14 @@ export function gatherRate(
     (ecoTask === 'sheep' ? m.sheepFoodMul : 1) *
     (m.mayanProductivity[ecoTask] ?? 1);
   const carry = base.carry * (m.carry[ecoTask] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + ecoTask] ?? 0) + (m.carry['add:villager'] ?? 0);
-  const walk = (2 * tiles) / (eco.villager.speed * m.speed);
+  const walk = (2 * (ecoTask === 'farm' && m.farmNoWalk ? 0 : tiles)) / (eco.villager.speed * m.speed);
   const average = carry / (carry / workRate + walk);
-  const rate = civ === 'Slavs' && ecoTask === 'farm' ? slavicFarmRate(scope.slavs, average) : average;
+  const rate =
+    civ === 'Khmer' && ecoTask === 'farm'
+      ? khmerFarmRate(scope.khmer, average)
+      : civ === 'Slavs' && ecoTask === 'farm'
+        ? slavicFarmRate(scope.slavs, average)
+        : average;
   const wood = foragerWoodIncome(m, ecoTask, rate);
   const food = lumberFoodIncome(m, ecoTask, rate);
   const gold = (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) + varangianGoldIncome(m, ecoTask, rate);
@@ -2023,6 +2075,13 @@ export function gatherRate(
 /** 页面「按某文明计」下方的附注：已计入但有未核实部分、或明确不计入的加成 */
 export function civSimNotes(eco: EcoData, civ: string, boId?: string): string[] {
   const out: string[] = [];
+  if (civ === 'Khmer')
+    out.push(
+      ...khmerNotes(
+        khmerContext(eco),
+        ALL_BOS.find((order) => order.id === boId),
+      ),
+    );
   if (civ === 'Slavs') {
     const context = slavicContext(eco);
     const bo = ALL_BOS.find((order) => order.id === boId);
