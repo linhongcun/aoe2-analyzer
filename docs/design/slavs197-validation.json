@@ -1,0 +1,498 @@
+{
+  "schema": 1,
+  "status": "ACTUAL_LOCAL_CANDIDATE_A_EVIDENCE_SNAPSHOT",
+  "actualLocalRuntime": {
+    "head": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+    "tree": "8fc5044af6fc84965e6433176cb4c28f0bcdfa6a",
+    "version": "0.57.0",
+    "distTreeSHA256": "fd1345ef90a3dd3f524acf27805249b1c10f57a1f2f5adb3679413ff7bd13354"
+  },
+  "laterDocsAndTestOnlyBoundary": "The local build, browser, deployment smoke and quantitative capture belong to Candidate A. A later docs/test-only head is not described as a local rebuild or rerun. Its source/policy equivalence is checked separately; final CI/online/Release outcomes belong to actual PR/run records.",
+  "baseline": {
+    "head": "7d748918e4708934a10b34631488b38a7ffd40b3",
+    "tree": "560d74b342f315e516fd4e1ede8b839711078a19",
+    "version": "0.56.0",
+    "captureSHA256": "016f3eabf65ff1300b1e0312e8c3c6c93edb915fb91efbab43860486d8a66230",
+    "protected": 527,
+    "source": 480,
+    "oldGlobals": 11,
+    "old317": 84
+  },
+  "localWIPFirstRed": {
+    "evidence": "slavs197-first-red.json",
+    "TS": {
+      "total": 89,
+      "passed": 25,
+      "assertionFailed": 64
+    },
+    "python": {
+      "total": 10,
+      "passed": 1,
+      "assertionFailed": 9,
+      "errors": 0
+    },
+    "importEnvironmentOrRuntimeErrors": 0,
+    "note": "Actual original-M new-only first red, not Candidate A execution."
+  },
+  "localWIPGreensAndAdditionalBoundary": {
+    "evidence": "slavs197-green-boundary.json",
+    "original99": {
+      "TS": 89,
+      "python": 10,
+      "allPassed": true
+    },
+    "additionalBoundaryActualSequence": [
+      {
+        "pass": 0,
+        "assertionFail": 2,
+        "filtered": 38
+      },
+      {
+        "pass": 1,
+        "assertionFail": 1,
+        "filtered": 38
+      },
+      {
+        "pass": 1,
+        "assertionFail": 0,
+        "filtered": 39
+      }
+    ],
+    "distinctNewCases": 101,
+    "noSingleFull101Claim": true,
+    "formatting": "Comments and formatting only; original assertions/inputs retained, normalized AST evidence archived."
+  },
+  "relatedCompatibility": {
+    "initial": {
+      "passed": 164,
+      "assertionFailed": 1,
+      "todo": 1
+    },
+    "initialExecution": {
+      "path": "/tmp/batch12-slavs-compat-unit.execution.json",
+      "sha256": "2ee4ca50dd3cb14241ac19ac77004746a8fa1374b8e8291c76dbe1b49fd9a592",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/buildSim.test.ts",
+        "tests/unit/civ42v060.test.ts",
+        "tests/unit/civ42v070.test.ts",
+        "tests/unit/tatars197.test.ts",
+        "tests/unit/v0300-332.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/batch12-slavs-compat-unit.json"
+      ],
+      "startedUTC": "2026-10-28T10:29:37.473184+00:00",
+      "completedUTC": "2026-10-28T10:30:32.152929+00:00",
+      "exitCode": 1,
+      "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+      "inputSHA256Before": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386",
+      "inputSHA256After": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386"
+    },
+    "actualFailure": "Slavs-1 newly enabled military-free-tech bonus lacked an explicit usage conclusion. Added production on:false reason; historical15 EFFECTS and13-civ snapshot unchanged.",
+    "onlyFailureRecovery": {
+      "passed": 1,
+      "execution": {
+        "path": "/tmp/batch12-slavs-compat-332-recovery.execution.json",
+        "sha256": "bff011727d52b4f75cb93a70ffe6adef07c9715b62a975cf0b1771bc5a8a7a20",
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "tests/unit/v0300-332.test.ts",
+          "--testNamePattern=全站开局模拟里不再出现通用",
+          "--reporter=json",
+          "--outputFile=/tmp/batch12-slavs-compat-332-recovery.json"
+        ],
+        "startedUTC": "2026-10-28T10:32:55.684715+00:00",
+        "completedUTC": "2026-10-28T10:32:57.378651+00:00",
+        "exitCode": 0,
+        "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+        "inputSHA256Before": "897f89bfd37a40b8ac34bb51f2e42658bc7b154f018b172175d649ec195152a3",
+        "inputSHA256After": "897f89bfd37a40b8ac34bb51f2e42658bc7b154f018b172175d649ec195152a3"
+      }
+    },
+    "noFull166PassClaim": true
+  },
+  "bonus317": {
+    "generator": {
+      "passed": 1,
+      "filtered": 12,
+      "execution": {
+        "path": "/tmp/batch12-slavs-317-generator.execution.json",
+        "sha256": "82b6470c934cfc389f4d7fa24585e8e7cf28e73c01980bfe7592cf9874295469",
+        "argv": [
+          "env",
+          "UPDATE_BONUS317=1",
+          "npx",
+          "vitest",
+          "run",
+          "tests/unit/bonusUsage317.test.ts",
+          "-t",
+          "重新生成开局模拟快照",
+          "--reporter=json",
+          "--outputFile=/tmp/batch12-slavs-317-generator.json"
+        ],
+        "startedUTC": "2026-10-28T10:36:27.004524+00:00",
+        "completedUTC": "2026-10-28T10:37:16.501545+00:00",
+        "exitCode": 0,
+        "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+        "inputSHA256Before": "8e5c34f679cdef7ad6568a1e7e001b8dd2769002a516b92d025d64400c0abd51",
+        "inputSHA256After": "79c0aca388f4a3e631714f7c4eac6af55254c23a6c4be73aece07a3b77fe6190"
+      }
+    },
+    "normal": {
+      "passed": 12,
+      "intentionalUpdateDisabledSkip": 1,
+      "execution": {
+        "path": "/tmp/batch12-slavs-317-normal.execution.json",
+        "sha256": "ac3f96c958a6051896281802f5ef6c0988bda2757fa67ddf7e04728fcf102c33",
+        "argv": ["npx", "vitest", "run", "tests/unit/bonusUsage317.test.ts", "--reporter=json", "--outputFile=/tmp/batch12-slavs-317-normal.json"],
+        "startedUTC": "2026-10-28T10:39:08.578734+00:00",
+        "completedUTC": "2026-10-28T10:39:10.908666+00:00",
+        "exitCode": 0,
+        "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+        "inputSHA256Before": "79c0aca388f4a3e631714f7c4eac6af55254c23a6c4be73aece07a3b77fe6190",
+        "inputSHA256After": "79c0aca388f4a3e631714f7c4eac6af55254c23a6c4be73aece07a3b77fe6190"
+      }
+    },
+    "actualKeys": 85,
+    "old84Changed": {},
+    "added": {
+      "Slavs-2": null
+    },
+    "inputs": "dc2925fb2a981569546c984b7d2fe0b23ce59941c9b9e84177da91def4bb21a7",
+    "fixtureSHA256": "0f77f419fb1f276b8dbb20faff080147449ae690febfc3fdfaafea6a0d0374e5",
+    "nullReason": "Current eight BOs do not train the affected siege classes/units. No simulation-on claim; no mechanical UNTRIGGERED addition. Farm is treeOnly with no fabricated positive-tech snapshot key."
+  },
+  "localChecks": {
+    "typecheck": {
+      "path": "/tmp/batch12-slavs-typecheck.execution.json",
+      "sha256": "3b30f1cea8914d3d1273933894207666516c7ac8681855fb147e106c4b222646",
+      "argv": ["npx", "tsc", "-p", ".", "--noEmit"],
+      "startedUTC": "2026-10-28T10:29:37.411833+00:00",
+      "completedUTC": "2026-10-28T10:30:07.707424+00:00",
+      "exitCode": 0,
+      "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+      "inputSHA256Before": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386",
+      "inputSHA256After": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386"
+    },
+    "lint": {
+      "path": "/tmp/batch12-slavs-lint.execution.json",
+      "sha256": "4412645243d66faf223a840ba2f458d15232fe0cc022f2051bb6012435fd3c1f",
+      "argv": ["npm", "run", "lint"],
+      "startedUTC": "2026-10-28T10:29:37.465434+00:00",
+      "completedUTC": "2026-10-28T10:30:13.089388+00:00",
+      "exitCode": 0,
+      "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+      "inputSHA256Before": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386",
+      "inputSHA256After": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386"
+    },
+    "layers": {
+      "path": "/tmp/batch12-slavs-layers.execution.json",
+      "sha256": "7111eb1c46c5ebe207978702082c31f7ad5c5d8e9ecfe4c080e69ae52fe9623a",
+      "argv": ["npm", "run", "lint:layers", "--", "--strict"],
+      "startedUTC": "2026-10-28T10:29:37.415943+00:00",
+      "completedUTC": "2026-10-28T10:29:40.344647+00:00",
+      "exitCode": 0,
+      "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+      "inputSHA256Before": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386",
+      "inputSHA256After": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386"
+    },
+    "content-strict": {
+      "path": "/tmp/batch12-slavs-content-strict.execution.json",
+      "sha256": "17a5b596cdf7733a03de06973476f42706cec1a3e649ff0ba0b56257059716d3",
+      "argv": ["npm", "run", "content:check", "--", "--strict"],
+      "startedUTC": "2026-10-28T10:29:37.442382+00:00",
+      "completedUTC": "2026-10-28T10:29:40.437534+00:00",
+      "exitCode": 0,
+      "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+      "inputSHA256Before": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386",
+      "inputSHA256After": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386"
+    },
+    "bo-check": {
+      "path": "/tmp/batch12-slavs-bo-check.execution.json",
+      "sha256": "3ba2cefc809324704459465a1711eba3e6cd26ee7ef5fdaaea78a8734de14b25",
+      "argv": ["npm", "run", "bo:check"],
+      "startedUTC": "2026-10-28T10:29:37.424830+00:00",
+      "completedUTC": "2026-10-28T10:29:40.164767+00:00",
+      "exitCode": 0,
+      "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+      "inputSHA256Before": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386",
+      "inputSHA256After": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386"
+    },
+    "validators": {
+      "path": "/tmp/batch12-slavs-validators.execution.json",
+      "sha256": "55500d1b266a0288c7fdfe74af302e99319847f85e57ae67acc064e673ee9443",
+      "argv": ["npm", "run", "content:validators"],
+      "startedUTC": "2026-10-28T10:24:22.634088+00:00",
+      "completedUTC": "2026-10-28T10:24:23.760832+00:00",
+      "exitCode": 0,
+      "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+      "inputSHA256Before": "4ce8ab57107fa30b8ad47372a4dc77aa53ac78ea9dbd7e248d878cd432148d41",
+      "inputSHA256After": "4ce8ab57107fa30b8ad47372a4dc77aa53ac78ea9dbd7e248d878cd432148d41"
+    },
+    "final-format": {
+      "path": "/tmp/batch12-slavs-final-format.execution.json",
+      "sha256": "ecc70eb0df0f973769d6fa486aa7611a5a6461ca04a66f58e695032333c4cfeb",
+      "argv": [
+        "npx",
+        "prettier",
+        "--check",
+        "src/domain/slavicEconomy.ts",
+        "src/domain/buildSim.ts",
+        "src/domain/bonusUsage.ts",
+        "src/features/builds/shareCard.ts",
+        "src/content/schema/data-eco.json",
+        "tests/unit/slavs197.test.ts",
+        "tests/unit/slavs197SourceGuard.test.ts",
+        "tests/unit/slavs197Presentation.test.ts",
+        "tests/e2e/slavs197.spec.ts",
+        "docs/design/slavs197.md",
+        "docs/design/slavs197-source.json",
+        "docs/design/slavs197-public-sources.json",
+        "docs/design/slavs197-first-red.json",
+        "docs/design/slavs197-green-boundary.json",
+        "docs/BUILD-SIM-COVERAGE.md",
+        "docs/design/README.md"
+      ],
+      "startedUTC": "2026-10-28T10:42:57.756135+00:00",
+      "completedUTC": "2026-10-28T10:42:59.218572+00:00",
+      "exitCode": 0,
+      "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+      "inputSHA256Before": "c0608a50f68d3ca7774e80f35f0b7a47bed005def05672db3e9642e1fae2fbf0",
+      "inputSHA256After": "c0608a50f68d3ca7774e80f35f0b7a47bed005def05672db3e9642e1fae2fbf0"
+    },
+    "delta-eslint": {
+      "path": "/tmp/batch12-slavs-delta-eslint.execution.json",
+      "sha256": "54e67ac4ed16897ab95cd842a1b7c176727fbc0a8c02ebe39098c4fe76dfba98",
+      "argv": [
+        "npx",
+        "eslint",
+        "src/domain/bonusUsage.ts",
+        "tests/unit/slavs197.test.ts",
+        "tests/unit/slavs197SourceGuard.test.ts",
+        "tests/unit/slavs197Presentation.test.ts",
+        "tests/e2e/slavs197.spec.ts"
+      ],
+      "startedUTC": "2026-10-28T10:41:35.527882+00:00",
+      "completedUTC": "2026-10-28T10:41:37.061175+00:00",
+      "exitCode": 0,
+      "headBefore": "7d748918e4708934a10b34631488b38a7ffd40b3",
+      "inputSHA256Before": "27cd21efaaa088b1abeea40cda3141efd795ebbb70c7d24f5b1d91e7f253ee3b",
+      "inputSHA256After": "27cd21efaaa088b1abeea40cda3141efd795ebbb70c7d24f5b1d91e7f253ee3b"
+    }
+  },
+  "oneActualBuild": {
+    "evidence": {
+      "path": "/tmp/batch12-build-a.execution.json",
+      "sha256": "015e46b1c3f109e3497e1c135491832e156b71c2f7babd63c257f6f3db8f6159",
+      "argv": ["npm", "run", "build"],
+      "startedUTC": "2026-10-28T10:47:45.070403+00:00",
+      "completedUTC": "2026-10-28T10:48:08.729027+00:00",
+      "exitCode": 0,
+      "headBefore": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+      "inputSHA256Before": null,
+      "inputSHA256After": null
+    },
+    "runs": 1,
+    "success": true,
+    "sourceIdentityStable": true,
+    "distFiles": 1695,
+    "distTreeSHA256": "fd1345ef90a3dd3f524acf27805249b1c10f57a1f2f5adb3679413ff7bd13354"
+  },
+  "oneActualNewUIRun": {
+    "evidence": {
+      "path": "/tmp/batch12-slavs-browser.execution.json",
+      "sha256": "5b606159baabdc5a88e692a6e0c4b8f528d67b2313be602ef219a67ea1537238",
+      "argv": ["npx", "playwright", "test", "tests/e2e/slavs197.spec.ts", "--workers=1", "--output=/tmp/batch12-slavs-browser-results", "--reporter=line,json"],
+      "startedUTC": "2026-10-28T10:51:58.188436+00:00",
+      "completedUTC": "2026-10-28T10:52:27.770003+00:00",
+      "exitCode": 0,
+      "headBefore": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+      "inputSHA256Before": null,
+      "inputSHA256After": null
+    },
+    "actualStats": {
+      "startTime": "2026-10-28T10:51:59.122Z",
+      "duration": 28623.68,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": 9,
+    "review": "slavs197-ui-review.json",
+    "reviewSHA256Original": "306a12bd83fdba3ba689f467c4bae51e036a36143f01714962ffe9af2a4ade78",
+    "personalVisualScope": {
+      "personallyViewedOriginals": 22,
+      "allCapturedImages": 40,
+      "notPersonallyViewed": 18,
+      "fourWidthsBothThemesBoomTimelineOriginals": 8,
+      "knightsNarrowWideTimelineSamples": 2,
+      "sharePreviewSamples": 4,
+      "actualDownloadedPNG": 4,
+      "practicePrintSamples": 4,
+      "noCropRedrawOrTransformation": true
+    },
+    "observationalLimits": [
+      "No claim of client-calibrated accuracy, constant15% gain, or supply effects in the six no-farm templates.",
+      "UI only exposes existingwalkTiles; no claim that changing URLdist alters farmnearTiles or provides d1/d7 core evidence.",
+      "The remaining18 originals were inventoried and hashed but not personally viewed; their state assertions passed in the same actual9-case run.",
+      "This is bounded source A evidence. A later docs/test-only head is not described as a browser rerun; final root provenance must preserve actual A identity."
+    ],
+    "imageManifestSHA256Original": "7f93a7a5c1283c4e3db203eadefe6ff186fcba6fb74531c88e2a19a44e41c832",
+    "requiredLightScreenshotNames": ["slavs-farm-light-360.png", "slavs-farm-light-375.png", "slavs-farm-light-390.png", "slavs-farm-light-1280.png"],
+    "pngCommitted": false,
+    "sourceIdentityStable": true,
+    "all1695DistFilesMatchBeforeAfter": true
+  },
+  "oneActualLocalDeploymentSmoke": {
+    "evidence": {
+      "path": "/tmp/batch12-slavs-smoke-a.execution.json",
+      "sha256": "70b762319e2604a63dccf0787b0363d3a6b063d6dd4ebc9e5718e77ccfe8bde1",
+      "argv": ["node", "scripts/deployment-smoke.mjs", "--site", "http://127.0.0.1:4210/", "--plan", "/tmp/batch12-slavs-builds-smoke-plan.json"],
+      "startedUTC": "2026-10-28T10:57:07.842412+00:00",
+      "completedUTC": "2026-10-28T10:57:40.569395+00:00",
+      "exitCode": 0,
+      "headBefore": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+      "inputSHA256Before": null,
+      "inputSHA256After": null
+    },
+    "routesVisited": 57,
+    "sourceAndDistStable": true,
+    "newSlavicScope": ["FCboom summary+estimate caveat+shareURL", "Slavs enabled/Chinese disabled picker", "scouts no-farm-note", "bonus0 simulation usage on"],
+    "notClaimed": "This local UI smoke is not DE client calibration or future main deployment success."
+  },
+  "independentAReviews": {
+    "source": {
+      "path": "/tmp/batch12-slavs-A-independent-source-code-review.json",
+      "sha256": "d42bef80428f8426d5c3142b4566975f3d6ae7dfec3cccd4a7a815c870a8d00b",
+      "verdict": "PASS_INDEPENDENT_CANDIDATE_A_SOURCE_CODE_REVIEW",
+      "unresolved": []
+    },
+    "staticProtection": {
+      "path": "/tmp/batch12197-candidateA-postcode-static-classification.json",
+      "sha256": "c91a1e664fd0a390e24daa6435f646b21d75099eac2673a03129b6fcdf0a0813",
+      "verdict": "PASS_STATIC_PRODUCTION_CLASSIFICATION",
+      "protection": {
+        "baseline527": 527,
+        "unchangedOldFiles": 517,
+        "exactCurrentFiles": 8,
+        "approved317Files": 2,
+        "currentProtectedFiles": 537,
+        "sourceInputs": 481,
+        "old317Keys": 84,
+        "actual317Keys": 85,
+        "added317": {
+          "Slavs-2": null
+        },
+        "original317SourceOtherBytesAndAlgorithmsUnchanged": true,
+        "whole331SourceAnd3SnapshotsUnchanged": true,
+        "unit322All6048Unchanged": true,
+        "e2e322All21CasesStillUnchangedOnA": true,
+        "old11GlobalsAndOther55RawExact": true,
+        "originalSlavic4RowsEffectsOrderPreserved": true,
+        "dataScope": "Only new slavicFarm, farm row0 slavicTree,510/511slavicTech and canonical team721 added; original other55/source data preserved."
+      },
+      "unresolved": 0
+    }
+  },
+  "quantifiedRuntime": {
+    "report": "slavs197-runtime-quantified.json",
+    "originalOfflineSHA256": "6d0b92be86c17db3b0b14f219fd75e63af0428a1bc31dc5e0eea137f6b59a3c0",
+    "actualExecutionUTC": {
+      "started": "2026-10-28T11:03:39.563Z",
+      "completed": "2026-10-28T11:03:40.643Z"
+    },
+    "calls": 8,
+    "sixNoFarmFullAndNumericChanges": 0,
+    "FC2NumericChangedPaths": {
+      "fast-castle-boom": 8,
+      "fast-castle-knights": 10
+    },
+    "allActualAgeClickAndReachClocksUnchanged": true,
+    "noClaimOfFasterTargetAge": true,
+    "baselineComparisonBoundary": "Saved baseline eight calls used direct simulateBuild(bo,Slavs,...); Slavs was unsupported in the UI at that head. Their deltas are not automatically a comparison with the previous UI Generic fallback or proof of in-game gain/loss."
+  },
+  "other55Comparison": {
+    "report": "slavs197-runtime-quantified.json",
+    "section": "other55",
+    "originalOfflineSHA256": "556941c190bbed6133df924bc8d4d19919f858db8ec1bab99564d1bc1efb3f4d",
+    "actualExecutionUTC": {
+      "started": "2026-10-28T11:03:39.563Z",
+      "completed": "2026-10-28T11:04:20.198Z"
+    },
+    "counts": {
+      "other55Full": 440,
+      "other55Numeric": 440,
+      "notes": 55,
+      "support": 55,
+      "other55Helpers": 1485,
+      "SlavicNonFarmHelpers": 24,
+      "SlavicFarmHelpers": 3,
+      "allCapturedHelpers": 1512,
+      "allIndependentRealCost": 224,
+      "oldRawCivSections": 55,
+      "oldGlobalSections": 11,
+      "historicalRemainingCases": 42
+    },
+    "delta": {
+      "full": [],
+      "numeric": [],
+      "notes": [],
+      "support": [],
+      "helpers": [],
+      "realCost": []
+    },
+    "support": {
+      "supported49": true,
+      "remaining7": true,
+      "SlavicSupportClear": true,
+      "supported": 49,
+      "unsupported": 7,
+      "remaining": ["Chinese", "Gurjaras", "Jurchens", "Khmer", "Mapuche", "Poles", "Romans"]
+    },
+    "original11GlobalsAnd55RawUnchanged": true,
+    "additionalDomainCallsByOfflineReviewer": 0
+  },
+  "golden322ActualFourCurrentTextsAndOriginalCaseRun": {
+    "patch": {
+      "stage": "LIMITED_CURRENT_SLV_SUPPORT_EXPECTATION_PATCH_AFTER_ACTUAL_UI_AND448",
+      "recordedUTC": "2026-10-28T11:07:04.760157+00:00",
+      "runtime": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+      "fixture": "tests/e2e/fixtures/v0290-322-golden.json",
+      "beforeSHA256": "4da976b2f606a6e4b20ca12d79eeeb346ab6f045b14e2c5e8f6d0eb904461114",
+      "afterSHA256": "eb1141aea3c89ea4f5ce0baf909457c4f94db742b3dd7d0308cfe435f99e8aca",
+      "case": "bo:scouts-18-slavs",
+      "currentStringEdits": 4,
+      "other126LinesExact": true,
+      "allOldNumbersExact": true,
+      "other20CasesAndRawPrefixSuffixExact": true,
+      "comparatorUnchanged": true,
+      "recordNeverUsed": true,
+      "basis": "Necessary current supported-civilization state migration under this selected-civ request; independently classified actual DOM, not a claim maintainer dictated exact strings."
+    },
+    "patchEvidenceSHA256": "57881bc8c24ba5a583e07445de9566b3b066c40e5bd3cd2c0ac46e97a87c37bc",
+    "actualApplicationHead": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+    "recordMode": false,
+    "stats": {
+      "startTime": "2026-10-28T11:07:48.377Z",
+      "duration": 35288.320999999996,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "startedUTC": "2026-10-28T11:07:47.518911+00:00",
+    "completedUTC": "2026-10-28T11:08:23.794888+00:00",
+    "exitCode": 0,
+    "sourceDistFixtureComparatorStable": true,
+    "executionPath": "/tmp/batch12-slavs-golden322.execution.json",
+    "executionSHA256": "d8fcda2c52b8c289472ac6ec21863a5a3e34c4ba625e8abc9a0479381fe50054",
+    "reportSHA256": "ce37a6d1befea36fc482039b9bb94fff30bcb3914eb1a5af64b6fd3ac409353e"
+  },
+  "recordedUTC": "2026-10-28T11:13:35.196265+00:00",
+  "ciDeploymentReleaseEvidence": "Full/data CI, deployed main and formal Release are recorded separately in actual PR/run history; this snapshot only asserts local Candidate A evidence."
+}

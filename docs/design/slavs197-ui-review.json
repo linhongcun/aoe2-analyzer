@@ -1,0 +1,312 @@
+{
+  "schema": 1,
+  "reviewer": "/root/batch11_ui_review",
+  "reviewedUTC": "2026-10-28T10:57:12.938344+00:00",
+  "verdict": "PASS_BOUNDED_UI_AND_PNG_REVIEW",
+  "unresolvedBatchBlockers": [],
+  "actualRuntime": {
+    "head": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+    "tree": "8fc5044af6fc84965e6433176cb4c28f0bcdfa6a",
+    "version": "0.57.0",
+    "distTreeSHA256": "fd1345ef90a3dd3f524acf27805249b1c10f57a1f2f5adb3679413ff7bd13354"
+  },
+  "buildExecutedByRoot": {
+    "path": "/tmp/batch12-build-a.execution.json",
+    "sha256": "015e46b1c3f109e3497e1c135491832e156b71c2f7babd63c257f6f3db8f6159",
+    "ownBuildRuns": 0
+  },
+  "actualBrowserRun": {
+    "path": "/tmp/batch12-slavs-browser.execution.json",
+    "sha256": "5b606159baabdc5a88e692a6e0c4b8f528d67b2313be602ef219a67ea1537238",
+    "startedUTC": "2026-10-28T10:51:58.188436+00:00",
+    "completedUTC": "2026-10-28T10:52:27.770003+00:00",
+    "exitCode": 0,
+    "stats": {
+      "startTime": "2026-10-28T10:51:59.122Z",
+      "duration": 28623.68,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "workers": 1,
+    "wholeRuntimeInputBeforeAfterUnchanged": true,
+    "all1695DistFilesMatchBuildBeforeAndAfter": true,
+    "originalJSONReport": {
+      "path": "/tmp/batch12-slavs-browser.json",
+      "sha256": "d92a3d452534ce5037661e79e86073e0bfbde11dcc1351bbcc5e03711e3536ed"
+    },
+    "originalLog": {
+      "path": "/tmp/batch12-slavs-browser.log",
+      "sha256": "247a9e35d4f59b9249895d6d2cf87af8c4bcf0011e504f6db7ff5e718cf98e54"
+    }
+  },
+  "scope": "One actual invocation of nine related Slavic UI cases on root-built Candidate A; no second capture run, no rebuild, no record/update mode, no retries, no repository writes. UI budget60s was fixed before the first execution, matching existing editorial cases.",
+  "actualChecksCovered": [
+    "FC2 correct note and detailed assumptions; share basis/URLs and four actual PNG downloads",
+    "360/375/390/1280 each light/dark, per-state overflow and numeric nowrap; console errors and pageerror remain empty by actual assertions",
+    "Two local share-figure WCAG2A/AA axe analyses at360light, not an all-site a11y claim",
+    "Scouts supported with no farm note; real mobile settings entry and Slavs-enabled/Chinese-disabled picker",
+    "Six actual no-farm templates have no benefit copy in notes/assumptions/share; recommended Slavs in unchanged fast-castle-knights list enabled and no ban",
+    "Bonus0 counted description; true unsupported Chinese direct link Generic fallback/share disabled",
+    "Practice and print shared notes/assumptions propagation at360light and1280dark"
+  ],
+  "personalVisualScope": {
+    "personallyViewedOriginals": 22,
+    "allCapturedImages": 40,
+    "notPersonallyViewed": 18,
+    "fourWidthsBothThemesBoomTimelineOriginals": 8,
+    "knightsNarrowWideTimelineSamples": 2,
+    "sharePreviewSamples": 4,
+    "actualDownloadedPNG": 4,
+    "practicePrintSamples": 4,
+    "noCropRedrawOrTransformation": true
+  },
+  "visualConclusions": [
+    "All four actual1080x1350 PNGs were personally viewed: both FC titles and both theme token sets are readable; the complete supply-cap/near-distance/legacy-comparison caveat fits without clipping.",
+    "Four-width, dual-theme boom timeline originals show the caveat at the summary; farm step notes and cost/population detail remain legible and numerical unit fragments do not visibly split.",
+    "Knights narrow/wide samples and their actual PNGs contain no erroneous knight-unavailability warning.",
+    "Sampled mobile/desktop share dialogs retain the full near-distance caveat and Slavs link; the long URL wraps inside the card rather than widening the page.",
+    "Sampled practice/print states retain the caveat and detailed limitations. No overlay was observed obscuring the new text in these two print originals; this is not a claim about all shared print/focus states."
+  ],
+  "observationalLimits": [
+    "No claim of client-calibrated accuracy, constant15% gain, or supply effects in the six no-farm templates.",
+    "UI only exposes existingwalkTiles; no claim that changing URLdist alters farmnearTiles or provides d1/d7 core evidence.",
+    "The remaining18 originals were inventoried and hashed but not personally viewed; their state assertions passed in the same actual9-case run.",
+    "This is bounded source A evidence. A later docs/test-only head is not described as a browser rerun; final root provenance must preserve actual A identity."
+  ],
+  "imageManifest": {
+    "path": "/tmp/batch12-slavs-image-manifest.json",
+    "sha256": "7f93a7a5c1283c4e3db203eadefe6ff186fcba6fb74531c88e2a19a44e41c832",
+    "all40PhysicalHashesAndDimensionsVerified": true,
+    "requiredPRLightScreenshotNames": ["slavs-farm-light-360.png", "slavs-farm-light-375.png", "slavs-farm-light-390.png", "slavs-farm-light-1280.png"],
+    "publicationPlan": "No PNG committed. Existing CI editorial-viewport-screenshots will upload these info.outputPath filenames in the actual final run; a future artifact URL is not invented here."
+  },
+  "personallyViewedImagePathsAndHashes": [
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-1280-dark/slavs-farm-dark-1280.png",
+      "sha256": "c96265f1aa47810ed578a6e3e178c748ce643c1347fb42b18f7a7a9aba240cbd",
+      "bytes": 313640,
+      "width": 1280,
+      "height": 2305,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-1280-dark/slavs-farm-download-fast-castle-knights-dark.png",
+      "sha256": "0664527065a51a68f7f59626b657f2a51b93e8afa643155cc89306b8c2ae1a40",
+      "bytes": 177274,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-1280-dark/slavs-farm-practice-dark-1280.png",
+      "sha256": "e14d2eefc3ec090356ff938ab0fb8e08c7efdde9692ec229e72a8ac870ea4eb8",
+      "bytes": 330861,
+      "width": 1280,
+      "height": 2076,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-1280-dark/slavs-farm-print-dark-1280.png",
+      "sha256": "f97034abe0a6d2d410b4b146b596835707f3b79cf94f360b519d8f16a42c5d83",
+      "bytes": 492022,
+      "width": 1280,
+      "height": 4467,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-1280-dark/slavs-farm-share-fast-castle-knights-dark-1280.png",
+      "sha256": "406e320b60efe9459ea5e950f47d4bcc0b0900b1bb8a8580ed32caf44e4b61a3",
+      "bytes": 352602,
+      "width": 1280,
+      "height": 2411,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-1280-dark/slavs-knights-farm-dark-1280.png",
+      "sha256": "a5c8aa13cb8cab18dc41776b3f13761744eab0811c0692e21458a3c92487119b",
+      "bytes": 344690,
+      "width": 1280,
+      "height": 2411,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-1280-light/slavs-farm-download-fast-castle-knights-light.png",
+      "sha256": "45cab8768a3f9fefdf4351b09feb9899ee1fab46d7dfa6ba98a7cef706395ce4",
+      "bytes": 181256,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-1280-light/slavs-farm-light-1280.png",
+      "sha256": "333580aa389e2c98a36deecb10ec95f746891d1a28be4d7941668f0b3de1d8dc",
+      "bytes": 318593,
+      "width": 1280,
+      "height": 2305,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-360-dark/slavs-farm-dark-360.png",
+      "sha256": "e807de2f03395eb79044d50a507c53986ddc58ac60156cffccbde35efab79868",
+      "bytes": 237461,
+      "width": 360,
+      "height": 3045,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-360-dark/slavs-farm-download-fast-castle-boom-dark.png",
+      "sha256": "1b6c9187e81d750ac6abf10a3b13eeb03e4ead1cc00fa4b0964dae02a5c7b1cf",
+      "bytes": 176734,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-360-light/slavs-farm-download-fast-castle-boom-light.png",
+      "sha256": "93872f73a09bdba3a34429ce2f23cb3b3c6ea3b7a693cb7b384ae0559922f417",
+      "bytes": 180109,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-360-light/slavs-farm-light-360.png",
+      "sha256": "810c6dbbd6b9fc992e9c5eaed1a7bb1ff6ac98d57ed6676214cadb692a7361e1",
+      "bytes": 241328,
+      "width": 360,
+      "height": 3045,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-360-light/slavs-farm-practice-light-360.png",
+      "sha256": "3c0b7b27e852972e454fadd73bcc24c41edae8f4c6af8c37f59d102e7d0582be",
+      "bytes": 311009,
+      "width": 360,
+      "height": 3346,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-360-light/slavs-farm-print-light-360.png",
+      "sha256": "a6663ebf817e28e915f4b63a10472d4d024ebbd1ba5d282503a1112edafbca31",
+      "bytes": 428099,
+      "width": 360,
+      "height": 5277,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-360-light/slavs-farm-share-fast-castle-boom-light-360.png",
+      "sha256": "1b6b1a956e44ea615d70e6ee0620aa5a5a7be87b67c80eb7c54e401806cfcf3f",
+      "bytes": 237479,
+      "width": 360,
+      "height": 3045,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-360-light/slavs-knights-farm-light-360.png",
+      "sha256": "4702c26adbf5bfe025fc7e3dca9bcc192273cbf1a9f4467949d08b3d9bab3dcd",
+      "bytes": 261155,
+      "width": 360,
+      "height": 3229,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-375-dark/slavs-farm-dark-375.png",
+      "sha256": "b6d83a03b6b29fd3b5cdaec16bbe066a45b9c190d2fa02c525198a22cc852263",
+      "bytes": 237245,
+      "width": 375,
+      "height": 2976,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-375-dark/slavs-farm-share-fast-castle-knights-dark-375.png",
+      "sha256": "584b2e02c5a4e2297b9dde90b9d98a3aa691c788c7e7b4fdf160840c01d29698",
+      "bytes": 248248,
+      "width": 375,
+      "height": 3159,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-375-light/slavs-farm-light-375.png",
+      "sha256": "5c6bcd12d863e2be09045aff2b6db7a2bfd1606b12fa8799eccd8c09597bbae5",
+      "bytes": 241600,
+      "width": 375,
+      "height": 2976,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-390-dark/slavs-farm-dark-390.png",
+      "sha256": "1753451daee2465d2dc14682f2927f387f87c53ef660f2e63d9daf9a4a92d5c6",
+      "bytes": 237805,
+      "width": 390,
+      "height": 2932,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-390-light/slavs-farm-light-390.png",
+      "sha256": "30eff97957f630e75b7bf4272cddd1c35701e4d5a0708fc0be0da87ef592a613",
+      "bytes": 241561,
+      "width": 390,
+      "height": 2932,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    },
+    {
+      "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫FC农田说明、分享与支持状态-390-light/slavs-farm-share-fast-castle-boom-light-390.png",
+      "sha256": "d69d42c3e943e69593bc8e31a131a0a8a36543224959694081107cd9bfdddc9f",
+      "bytes": 241752,
+      "width": 390,
+      "height": 2932,
+      "actualDownload": false,
+      "personallyViewedByIndependentUIReviewer": true
+    }
+  ],
+  "scoutsCurrentDOM": {
+    "path": "/tmp/batch12-slavs-browser-results/slavs197--197-斯拉夫无farm六模板、推荐与未支持文明回退/slavs197-scouts-current-dom.json",
+    "sha256": "36cdbe2a1ebccc456ef4aafad9969bde42c3b9a87a99e14ce51f4433f8eae665",
+    "keys": ["hash", "lines"],
+    "hash": "#/builds?bo=scouts-18&civ=Slavs",
+    "lines": 128,
+    "selectedLabel": "斯拉夫 Slavs",
+    "basis": "按斯拉夫计",
+    "hasFarmCaveat": false,
+    "captureMethod": "Unchanged capturePage imported without registering old tests, emitted naturally within the ninth case; no expected values, fixture edit or added normalizer. Root/baseline handle subsequent strict comparison."
+  },
+  "previewKeptForRoot322": {
+    "identityPath": "/tmp/batch12-slavs-preview4210.json",
+    "identitySHA256": "093906c358e168f1738b73f4770442c43f618f839efe2dc1093668235fdabc18",
+    "pid": 15483,
+    "startTicks": "2040118",
+    "sessionId": 82692,
+    "port": 4210,
+    "owner": "/root/batch11_ui_review",
+    "doNotSignalAnUnverifiedReusedPID": true
+  },
+  "directDomainCallsByReviewer": 0,
+  "actualReviewerBrowserInvocations": 1,
+  "actualReviewerCases": 9,
+  "old322RunsByReviewer": 0,
+  "repositoryWrites": 0,
+  "PNGCommits": 0
+}

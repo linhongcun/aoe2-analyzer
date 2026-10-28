@@ -1,0 +1,460 @@
+{
+  "verdict": "SEMANTIC_CORROBORATION_FOR_EXPLICIT_SLAVS_ONLY_CONTINUOUS_APPROXIMATION; NOT_DE185872_CLIENT_EQUIVALENCE",
+  "recordedUTC": "2026-10-28T09:41:03.017Z",
+  "scope": {
+    "issue": 197,
+    "batch": 12,
+    "candidateSelected": false,
+    "repo": "/workspace/aoe2-analyzer",
+    "HEAD": "7d748918e4708934a10b34631488b38a7ffd40b3",
+    "version": "v0.56.0",
+    "assignment": "Read-only semantic audit; parent independently handles fixed DAT extraction. Only these /tmp report files written.",
+    "excluded": [
+      "DAT parsing/downloading",
+      "repository writes",
+      "proposed batch12 design as authority",
+      "domain execution",
+      "producer/generator",
+      "tests/build/browser",
+      "PR/external messages"
+    ]
+  },
+  "rules": {
+    "read": ["AGENTS.md", "CONTRIBUTING.md (full first read; source rules108-111 re-read)", "docs/CODEX-MAINTENANCE.md1-40"],
+    "sourceRule": "Only actually opened sources; fixed DAT controls numeric values; community sources2020+; unverified facts marked."
+  },
+  "numericEvidence": {
+    "kind": "Previously saved fixed-DAT extraction independently read; not re-parsed DAT in this audit.",
+    "path": "/tmp/batch11-farming-candidates-raw.json",
+    "sha256": "6d8e2ea7ce211ecc66421642d02946a93b5fb270bd46df7d044c06ce099b8785",
+    "baseline": "ab85d540813a8ce9432576a6c0dee9ff0de09b0a",
+    "source": {
+      "DE": 185872,
+      "repo": "SiegeEngineers/auto-mods",
+      "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+      "datSHA256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa"
+    },
+    "farm50_1187": {
+      "workRate": 0.4000000059604645,
+      "Capacity": 15,
+      "Food": 15,
+      "role": "Supplier stock container; the cached Food field alone does not prove live initial stock or lifetime food."
+    },
+    "farmer214_259": {
+      "workRate": 0.5299999713897705,
+      "Capacity": 10,
+      "Speed": 0.800000011920929,
+      "role": "Resource consumer"
+    },
+    "farmerTasks": {
+      "Action": 5,
+      "Unit": [50, 1187],
+      "ResIn": 16,
+      "ResOut": 0,
+      "ResMul": 190,
+      "Value": 1
+    },
+    "SlavsTree7": {
+      "consumer": {
+        "Type": 5,
+        "A": [214, 259],
+        "B": -1,
+        "C": 13,
+        "D": 1.2300000190734863
+      },
+      "supplier": {
+        "Type": 5,
+        "A": [50, 1187],
+        "B": -1,
+        "C": 13,
+        "D": 1.149999976158142
+      }
+    },
+    "exactSavedRawLineReferences": {
+      "farm50": 74,
+      "farm1187": 130,
+      "farmer214": 200,
+      "farmer259": 270,
+      "farmerTask": 575,
+      "consumerEffects": 3058,
+      "supplierEffects": 3184
+    }
+  },
+  "publicCode": {
+    "repository": "librematch/genie",
+    "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+    "commitDate": "2026-10-27T04:04:34Z",
+    "metadataURL": "https://github.com/librematch/genie/commit/74331ec61ff1a2462f219d5a0bda6e4523537aff",
+    "status": "Public non-official implementation; README asserts build158041 equivalence, not independently established here; no DE185872 executable or game recording was used.",
+    "sources": [
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/README.md",
+        "path": "crates/engine/genie-core/src/README.md",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "8182a4c74f790c2e2888d5c08330d0fff72357ef",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Explicit public project scope: reimplementation claiming deterministic equivalence for build158041; no DE185872 client validation.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 1,
+            "endLine": 5,
+            "text": "# `genie-core/src`: the simulation core\n\nThis is the source of `genie-core`, genie's deterministic simulation core. It plays a recorded\ngame of Age of Empires II: Definitive Edition (build 158041) tick by tick and gives the same\nstate as the game, bit for bit."
+          }
+        ]
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/README.md",
+        "path": "crates/engine/genie-core/src/gathering/README.md",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "f0ada67de15cd6ec740c022359e6bbf6b881e64a",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Independent producer Make action and consumer Gather action.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 1,
+            "endLine": 15,
+            "text": "# `gathering`: gathering resources\n\nVillagers and fishing ships gather food, wood, gold and stone, and carry it to a drop site. This\nfolder holds every part of that work:\n\n- `gather/` holds the Gather action: walk to the resource, gather, carry the load to a drop site,\n  and walk back.\n- `hunt/` holds the Hunt action: kill the animal or fell the tree first, then gather it.\n- `make.rs` holds a farm's food: the Make action that farms, fish traps and pastures run, and\n  its part in the farm's update.\n- `gather_search.rs` and `closest_resource.rs` search for a resource to gather.\n- `drop_sites.rs` and `drop_off.rs` find the drop site and walk the gatherer there.\n- `farm_queue.rs` holds the farms and fish traps that a player paid for in advance.\n- `pasture.rs` puts a new pasture's livestock on its edges.\n- `mule_cart.rs` holds the mule cart's resource searches."
+          },
+          {
+            "startLine": 34,
+            "endLine": 41,
+            "text": "| [`closest_resource.rs`](closest_resource.rs) | `ClosestResourceObject` (`FUN_140c49760`): where it searches from and what it finds; a herded sheep. |\n| [`drop_off.rs`](drop_off.rs) | A gatherer's walk after a drop and the drop sites it walks to. |\n| [`drop_sites.rs`](drop_sites.rs) | The drop-site searches (`FUN_1411671e0`): from a unit, or from a point without one. |\n| [`farm_queue.rs`](farm_queue.rs) | The mill's and the dock's queues: the farms and pastures (`farm_queue_count`, `+0x141c`) and the fish traps (`fishTrapQueueCount`, `+0x1420`) a player paid for ahead, which GAME's sub-commands 0xd, 0x15 and 0x11 buy and 0xe, 0x16 and 0x12 give back. |\n| [`gather_search.rs`](gather_search.rs) | The searches for a resource to gather: a builder's search for more work around the building it completed (`FUN_1415cc4e0`, over the tiles `FUN_1415cc1a0` reaches) and the unit AI's `ClosestResourceObject` (`FUN_140c49760`, slot 0x80), which the builder's Build asks next (`0x140ab0370` case 0xdf). |\n| [`make.rs`](make.rs) | A farm's food: `RGE_Action_Make` (action type 21, vtable `RGE_Action_Make::vftable`), the default task of the farms (50, 1187), the fish trap (199) and the pastures (1893, 1897). |\n| [`mod.rs`](mod.rs) | Gathering resources: the Gather and Hunt actions with each gatherer's part of its update, a farm's food, the searches for a resource, the drop sites and drop-offs, the mill's and the dock's queues and the pastures. |\n| [`mule_cart.rs`](mule_cart.rs) | The mule cart: the resources a finished cart searches (its completion, `FUN_1411c6bd0`'s tail) and its unit AI's own search (slot 0x1e8), then the work command toward the one it found. |"
+          }
+        ]
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/make.rs",
+        "path": "crates/engine/genie-core/src/gathering/make.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "032fbc4c7e003a650fa8c3f74b5d0808432344c9",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Stock capacity and replenishment; player resource36 lifetime budget; kind-change initialization; tests are inspected source, not executed.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 1,
+            "endLine": 10,
+            "text": "//! A farm's food: `RGE_Action_Make` (action type 21, vtable `RGE_Action_Make::vftable`), the\n//! default task of the farms (50, 1187), the fish trap (199) and the pastures (1893, 1897). The\n//! RGE factory makes it (`FUN_140a97e00`, case 0x15, constructor `FUN_140a99430`); the TRIBE\n//! factory (`FUN_140aca4b0`) has no case of its own for it.\n//!\n//! The farm holds what it made (`+0x308`, `+0x310`) up to its master's capacity\n//! (`attribute_max_amount`, `+0x61c`): the Make adds its master's work rate (plus the farm's\n//! powerup) times the task's `work_val1` per second, and the farmers take from it. The food\n//! still to make starts at the player's farm food (attribute 36) or fish trap food (88); once it\n//! is made and the farmers took the last of it, the farm's slot 0xd8 sets its hit points to 0."
+          },
+          {
+            "startLine": 26,
+            "endLine": 36,
+            "text": "/// The task's resource for which `set_state(6)` reads the farm food (`FUN_140a99d60`'s\n/// `task+0x20 == 0x10`): the farms' and the pastures' food kind.\npub const FARM_FOOD_KIND: i16 = 16;\n\n/// The player's attribute `set_state(6)` reads for a task of [`FARM_FOOD_KIND`]\n/// (`player+0x100` at `+0x120`): Farm Food Amount.\npub const FARM_FOOD: usize = 36;\n\n/// The player's attribute `set_state(6)` reads for any other task (`player+0x100` at `+0x2c0`):\n/// Fish Trap Food Amount.\npub const FISH_TRAP_FOOD: usize = 88;"
+          },
+          {
+            "startLine": 50,
+            "endLine": 62,
+            "text": "/// `RGE_Action_Make`: its state (`+0x18`), the food still to make (`+0x44`, the base's\n/// `mTimer`), the food it makes in all (`+0x68`, the save's `work_timer`) and its task (`+0x48`).\n#[derive(Clone, Copy, Debug, PartialEq)]\npub struct MakeAction {\n    /// `+0x18`.\n    pub state: u8,\n    /// `+0x44`: the food still to make.\n    pub remaining: f32,\n    /// `+0x68`: the food made in all; the constructor's 120.0 never shows, as\n    /// [`MakeAction::start`] sets it at once.\n    pub total: f32,\n    /// `+0x48`: the master's default task.\n    pub task: Task,"
+          },
+          {
+            "startLine": 103,
+            "endLine": 175,
+            "text": "impl MakeAction {\n    /// The default task's start (slot 0x7f0, `FUN_14106eb40`): the factory's action\n    /// (`FUN_140a99430`), then `set_only_action` (slot 0x808, `FUN_14106e990`), whose push\n    /// (`FUN_140a977e0`) runs `first_in_stack` (`FUN_140a99980`): `set_state(6)`, then a task\n    /// resource other than the farm's own holding replaces it, with nothing held\n    /// (`FUN_14119d310` with 0).\n    #[must_use]\n    pub fn start(task: Task, attributes: &[f32], held: &mut Held<'_>) -> Self {\n        // the factory's constructor (FUN_140a99430) sets +0x68 to 120.0, which set_state(6)\n        // replaces at once\n        let mut make = Self {\n            state: 0,\n            remaining: 0.0,\n            total: 120.0,\n            task,\n        };\n        make.set_state(MAKING, attributes);\n        if 0 <= task.attribute_type && *held.attribute_type != task.attribute_type {\n            *held.attribute_type = task.attribute_type;\n            *held.amount = 0.0;\n        }\n        make\n    }\n\n    /// `set_state` (`FUN_140a99d60`): state 6 takes the player's food to make (attribute 36 for\n    /// a task of the farm food kind, else 88) as both what is left and what is made in all.\n    pub fn set_state(&mut self, state: u8, attributes: &[f32]) {\n        self.state = state;\n        if state == MAKING {\n            let kind = if self.task.attribute_type == FARM_FOOD_KIND {\n                FARM_FOOD\n            } else {\n                FISH_TRAP_FOOD\n            };\n            self.remaining = attributes.get(kind).copied().unwrap_or(0.0);\n            self.total = self.remaining;\n        }\n    }\n\n    /// The update (`FUN_140a99e30`). State 1 is done. In state 6, while food is left to make (or\n    /// none was ever to be made), the farm's holding grows by its work rate times the task's\n    /// `work_val1` and the update's seconds, within its capacity (`FUN_14119d320` with 1 and 1),\n    /// and what it gained is no longer left to make; a task with a work flag (`+0x34`) adds to\n    /// its player instead, so nothing is taken off. Once all is made, a farm that holds nothing\n    /// (not a pasture) runs its slot 0xd8. The game's `+0xc14` (`FUN_140c884c0`), which makes\n    /// 1000 at once, is 0, as the tick oracle holds it. The other states do nothing.\n    pub fn update(&mut self, held: &mut Held<'_>, farm: Farm) -> MakeStep {\n        let mut step = MakeStep::default();\n        match self.state {\n            DONE => step.done = true,\n            MAKING if 0.0 < self.remaining || self.total <= 0.0 => {\n                let rate = farm.work_rate * self.task.work_val1 * farm.dt;\n                let before = *held.amount;\n                if self.task.work_flag == 0 {\n                    // FUN_14119d320: add, then at most the capacity\n                    *held.amount += rate;\n                    let capacity = f32::from(farm.capacity);\n                    if capacity < *held.amount {\n                        *held.amount = capacity;\n                    }\n                } else {\n                    step.to_player = Some((self.task.attribute_type, rate));\n                }\n                self.remaining -= *held.amount - before;\n            }\n            // slot 0xd8: a combat object's or building's (FUN_141211340) spares class 42, then\n            // FUN_14118f580\n            MAKING if !UNEXHAUSTED.contains(&farm.master_id) && *held.amount <= 0.0 => {\n                step.exhausted =\n                    farm.kind < TRIBE_COMBAT_TYPE || farm.class != NEVER_EXHAUSTED_CLASS;\n            }\n            _ => {}\n        }"
+          },
+          {
+            "startLine": 180,
+            "endLine": 207,
+            "text": "impl Unit {\n    /// A farm's Make in its update: the food it makes, the player's share, the farm that runs\n    /// out, and the end. A Make that this update started (`makes_from_now`) waits for the next\n    /// update.\n    pub(crate) fn make_part(\n        &mut self,\n        c: &mut Context<'_>,\n        makes_from_now: bool,\n    ) -> Result<(), GenieError> {\n        if let Some(make) = self.make.as_mut().filter(|_| !makes_from_now) {\n            let master = c.masters.and_then(|m| m.get(self.life.master_id)).ok_or(\n                GenieError::unsupported(\"a Make of a master the slice does not have\"),\n            )?;\n            let farm = Farm {\n                master_id: master.id,\n                kind: master.kind,\n                class: master.class,\n                work_rate: master.work_rate + self.work_rate_powerup,\n                capacity: master.capacity,\n                dt: c.dt_seconds,\n            };\n            let step = make.update(\n                &mut Held {\n                    attribute_type: &mut self.life.attribute_type,\n                    amount: &mut self.life.amount,\n                },\n                farm,\n            );"
+          },
+          {
+            "startLine": 229,
+            "endLine": 272,
+            "text": "    /// The farm's default task in build 158041's `.dat` (master 50, task 0).\n    fn farm_task() -> Task {\n        Task {\n            action_type: MAKE,\n            attribute_type: FARM_FOOD_KIND,\n            attribute_type2: 0,\n            work_val1: 1.0,\n            ..Task::default()\n        }\n    }\n\n    fn farm(master_id: i16) -> Farm {\n        Farm {\n            master_id,\n            kind: 80,\n            class: 49,\n            work_rate: 0.4,\n            capacity: 15,\n            dt: 0.104,\n        }\n    }\n\n    fn attributes() -> Vec<f32> {\n        let mut a = vec![0.0; 100];\n        (a[FARM_FOOD], a[FISH_TRAP_FOOD]) = (175.0, 225.0);\n        a\n    }\n\n    #[test]\n    fn the_start_takes_the_farm_food_and_holds_the_task_s_resource_from_nothing() {\n        let (mut kind, mut amount) = (0, 15.0);\n        let make = MakeAction::start(\n            farm_task(),\n            &attributes(),\n            &mut Held {\n                attribute_type: &mut kind,\n                amount: &mut amount,\n            },\n        );\n        assert_eq!(\n            (make.state, make.remaining, make.total),\n            (MAKING, 175.0, 175.0)\n        );\n        assert_eq!((kind, amount), (FARM_FOOD_KIND, 0.0));"
+          },
+          {
+            "startLine": 293,
+            "endLine": 318,
+            "text": "    #[test]\n    fn the_update_fills_the_farm_within_its_capacity_and_counts_what_it_made() {\n        let (mut kind, mut amount) = (FARM_FOOD_KIND, 14.98);\n        let mut make = MakeAction {\n            state: MAKING,\n            remaining: 100.0,\n            total: 175.0,\n            task: farm_task(),\n        };\n        let mut held = Held {\n            attribute_type: &mut kind,\n            amount: &mut amount,\n        };\n        let step = make.update(&mut held, farm(50));\n        assert_eq!(step, MakeStep::default());\n        let gained = 15.0f32 - 14.98;\n        assert_eq!((*held.amount, make.remaining), (15.0, 100.0 - gained));\n        // at the capacity nothing more is made\n        let _ = make.update(&mut held, farm(50));\n        assert_eq!(make.remaining, 100.0 - gained);\n        // a farmer took 5: the rate's share comes back\n        *held.amount = 10.0;\n        let _ = make.update(&mut held, farm(50));\n        let rate = 0.4f32 * 1.0 * 0.104;\n        assert_eq!(*held.amount, 10.0 + rate);\n        assert_eq!(make.remaining, 100.0 - gained - (10.0 + rate - 10.0));"
+          }
+        ]
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/work.rs",
+        "path": "crates/engine/genie-core/src/gathering/gather/work.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "7101d6c8ba4c93e8b8ec55a625fed87c445e9e87",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Consumer takes no more than current target amount; productivity and tail-rounding details; discrete delivery.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 79,
+            "endLine": 124,
+            "text": "    /// State 7 (case 6) with one stop: the work, `(work rate) × work_val1 × dt`, at most what the\n    /// target holds, times the productivity. A load that would pass the capacity ends the\n    /// gathering ([`Next::Drop`]); else the target loses the work, its last bit (above 0, below\n    /// 0.1) going with a thousandth of its master's first storage amount, the unit gains, and a\n    /// remainder below 0.1 of the capacity rounds the load up. A farm's food under the player's\n    /// attribute 96 is sold at once ([`Gatherer::sold`]); else a full load, or an empty target\n    /// that cannot be gathered empty (the combat object's slot 0x2b8), ends it. The game's\n    /// `+0xc14` (`FUN_140c884c0`) is 0, as the tick oracle holds it.\n    pub(super) fn gather(&self, target: &mut Victim, g: &mut Gatherer<'_>, dt: f32) -> Next {\n        let work = (g.work_rate * self.task.work_value) * dt;\n        let take = if work <= target.amount {\n            work\n        } else {\n            target.amount\n        };\n        let capacity = g.capacity;\n        let mut gain = g.productivity * take;\n        if capacity < gain + *g.held {\n            return Next::Drop;\n        }\n        target.amount += -take;\n        // the last bit and the storage's share summed first (`0x140a8f751`)\n        if target.amount < REMAINDER && 0.0 < target.amount {\n            gain += target.storage * LAST_BIT + target.amount;\n            target.amount = 0.0;\n        }\n        *g.held += gain;\n        let over = (*g.held - capacity).abs();\n        if *g.held < capacity && over < REMAINDER && over <= target.amount {\n            target.amount += -over;\n            *g.held += over;\n        }\n        // a farm's food sold at once (attribute 96): the load goes to the player as food (slot\n        // 0xf8 with 1, the caller's), the unit holds none, and the gathering goes on\n        if 0.0 < g.food_sold && target.class == FARM_CLASS && *g.held_kind == FARM_FOOD_KIND {\n            g.sold += *g.held;\n            *g.held = 0.0;\n            return Next::Stay;\n        }\n        let empty = target.amount <= 0.0 && !REGATHERED.contains(&target.master_id);\n        if over < REMAINDER || empty {\n            Next::Drop\n        } else {\n            Next::Stay\n        }\n    }"
+          },
+          {
+            "startLine": 126,
+            "endLine": 133,
+            "text": "    /// State 8's update (case 7): the `MoveTo` to the drop site walks; once it ended (its update\n    /// in state 1 returns 1: the list deletes it and its destructor stops the unit) the load goes\n    /// to the player at a drop site that takes it (`site`) within `DROP_REACH` (squared): the\n    /// resource of what the unit carries ([`crate::gathering::hunt::resource_kind`]), which the caller adds;\n    /// the unit carries nothing after (`FUN_14119d310` with −1). Returns the resource and the\n    /// amount; the caller lets the drop site go and walks back to the target (`set_state(4)`).\n    /// Not modelled: the timer's wait, a `MoveTo` that waits or failed (codes 3 to 5), a site that\n    /// does not take the load (`set_state` 2) or is out of reach (the wait)."
+          },
+          {
+            "startLine": 216,
+            "endLine": 232,
+            "text": "        // the drop site gone: set_state(8) again\n        let Some(site) = site else {\n            return Ok(Dropped::Again);\n        };\n        if !site.takes {\n            self.set_idle(g);\n            return Ok(Dropped::Idle);\n        }\n        if DROP_REACH < site.gap_squared {\n            self.random_wait(g);\n            return Ok(Dropped::Going);\n        }\n        let kind = crate::gathering::hunt::resource_kind(*g.held_kind, attributes);\n        let amount = *g.held;\n        *g.held_kind = -1;\n        *g.held = 0.0;\n        Ok(Dropped::Load(kind, amount))"
+          }
+        ]
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/start.rs",
+        "path": "crates/engine/genie-core/src/gathering/gather/start.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "e7886f1f156803560b86dcbe74940101c63334cd",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Consumer capacity/work rate/productivity determine four-stop timings.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 16,
+            "endLine": 35,
+            "text": "/// What the constructor reads to time a farm's stops: the gatherer's work rate (its master's\n/// `+0x798` plus its powerup, slot 0x6e8), its capacity (`+0x61c`) and the player's attribute the\n/// task's `attribute_type2` names (none: 1.0).\n#[derive(Clone, Copy, Debug, PartialEq)]\npub struct StopRate {\n    /// The work rate.\n    pub work_rate: f32,\n    /// The capacity.\n    pub capacity: f32,\n    /// The productivity.\n    pub productivity: f32,\n}\n\nimpl StopRate {\n    /// The time per stop (`+0x70`): the capacity times the productivity over the work a second,\n    /// shared out over the stops.\n    #[must_use]\n    pub fn time_per_stop(self, work_value: f32, stops: u8) -> f32 {\n        ((self.capacity * self.productivity) / (self.work_rate * work_value)) / f32::from(stops)\n    }"
+          },
+          {
+            "startLine": 52,
+            "endLine": 64,
+            "text": "/// The productivity the time per stop reads (the constructor's and the update's): the player's\n/// attribute the task's `attribute_type2` names, as it is, or 1.0 for none (`DAT_14330eb8c`).\n#[must_use]\npub fn productivity_of(attribute_type2: i16, attributes: &[f32]) -> f32 {\n    if attribute_type2 == -1 {\n        return DEFAULT_PRODUCTIVITY;\n    }\n    usize::try_from(attribute_type2)\n        .ok()\n        .and_then(|i| attributes.get(i))\n        .copied()\n        .unwrap_or(0.0)\n}"
+          },
+          {
+            "startLine": 98,
+            "endLine": 124,
+            "text": "impl GatherAction {\n    /// The factory's constructor with a target (`FUN_140a88310`; the target's add, slot 0x178, is\n    /// the caller's): the target's place is the point and its class the target type; a farm (class\n    /// 49) or masters 357 and 1188 keep their place as the farm's. One stop, `mGatherX` and\n    /// `mGatherY` at −1. A farm of master 50 or 1187 with the game's farm setting has four stops,\n    /// each [`StopRate::time_per_stop`] long.\n    ///\n    /// # Errors\n    ///\n    /// None yet.\n    pub fn new(\n        task: HuntTask,\n        target: &Resource,\n        farm_stops: bool,\n        rate: StopRate,\n    ) -> Result<Self, GenieError> {\n        let farm = if target.class == FARM_CLASS || SPECIAL_TARGETS.contains(&target.master) {\n            [target.position[0], target.position[1]]\n        } else {\n            [0.0; 2]\n        };\n        let (stops, time_per_stop) =\n            if farm_stops && target.class == FARM_CLASS && STOP_FARMS.contains(&target.master) {\n                (FARM_STOPS, rate.time_per_stop(task.work_value, FARM_STOPS))\n            } else {\n                (1, 0.0)\n            };"
+          }
+        ]
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/update.rs",
+        "path": "crates/engine/genie-core/src/gathering/gather/update.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "b44ed4af57417e87c4d470b5eecd96cd703c219c",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "One farmer per farm path and intra-farm walking; multiple workers wait; engine state machine differs from average-rate candidate.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 171,
+            "endLine": 243,
+            "text": "    /// Case 5, the face: a farm not built yet is searched past (`set_state(3)`), a pasture short\n    /// of its animals is not modelled, a farm another farmer works waits for another (0xf3; the\n    /// search's notify is the caller's). Else the unit turns to its target (`FUN_141162db0`;\n    /// turning over time it faces next update) and works (`set_state(7)`, its time at the stop\n    /// 0) on a target holding something or one regathered; an empty one is not modelled.\n    fn update_face(\n        &mut self,\n        mut walk: Walk<'_>,\n        target: &Victim,\n        g: &mut Gatherer<'_>,\n    ) -> Result<Next, GenieError> {\n        if target.class == FARM_CLASS {\n            if target.state < 2 {\n                return self.begin_search(walk.mover.as_deref_mut(), g);\n            }\n            if (target.master_id - 0x765) & !4 == 0 {\n                return Err(GenieError::unsupported(\n                    \"a gather facing a pasture (its animals, slot 0x780)\",\n                ));\n            }\n            if 1 < target.workers {\n                return self.begin_farm_wait(walk.mover.as_deref_mut(), g);\n            }\n        }\n        let at = walk\n            .world\n            .get(walk.me.id)\n            .map_or(walk.me.position, |p| p.position);\n        let mover = walk\n            .mover\n            .as_deref_mut()\n            .ok_or(GenieError::unsupported(\"a gatherer without movement state\"))?;\n        if !crate::combat::attack::face_target(mover, at, target.position, g.world_time)? {\n            return Ok(Next::Stay);\n        }\n        if 0.0 < target.amount || REGATHERED.contains(&target.master_id) {\n            self.set_work(walk.me.position, g);\n            self.time_at_stop = 0.0;\n            return Ok(Next::Stay);\n        }\n        Err(GenieError::unsupported(\n            \"a gather's target empty when faced (set_state 3)\",\n        ))\n    }\n\n    /// Case 6, the work: on a farm's stops (the game's `+0xc14` being 0) the time at the stop\n    /// runs; past the time per stop with a stop left the farmer walks to the next (its count\n    /// stays when the food is sold at once, attribute 96). Else it gathers\n    /// ([`GatherAction::gather`]).\n    fn update_work(\n        &mut self,\n        mut walk: Walk<'_>,\n        target: &mut Victim,\n        g: &mut Gatherer<'_>,\n        dt: f32,\n    ) -> Result<Next, GenieError> {\n        if 1 < self.stops {\n            self.time_at_stop += dt;\n            if self.time_per_stop <= self.time_at_stop\n                && u32::from(self.current_stop) + 1 < u32::from(self.stops)\n            {\n                if g.food_sold <= 0.0 {\n                    self.current_stop += 1;\n                }\n                let mover = walk\n                    .mover\n                    .as_deref_mut()\n                    .ok_or(GenieError::unsupported(\"a gatherer without movement state\"))?;\n                self.set_walk(target.position, target.radius, 0.0, mover, g.action_rng)?;\n                return Ok(Next::Stay);\n            }\n        }\n        Ok(self.gather(target, g, dt))"
+          }
+        ]
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/README.md",
+        "path": "crates/engine/genie-core/src/gathering/gather/README.md",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "e7c96da772364763ef61fb5e377dd185013c3eb3",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Four random stops and discrete carry/drop cycle.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 1,
+            "endLine": 15,
+            "text": "# `gathering/gather`: the Gather action\n\nA forager sent to a resource walks to it (state 4, a quiet `MoveTo`), faces it (state 6) and\ngathers (state 7). With a full load it walks to a drop site (state 8) and comes back to the\nresource. Under the game's farm setting, a farm has four stops, and the farmer walks to a random\npoint on the farm for each stop.\n\n- `mod.rs` holds the action's state and its constants.\n- `start.rs` builds and starts the action, and holds its retarget and its halt.\n- `update.rs` is one update in the walking, facing and gathering states.\n- `work.rs` holds the face, the work, the drop-off's update and the random waits.\n- `point_walks.rs` holds the walks to a point, the searches and the waits for a farm.\n- `unit.rs` is the gatherer's part of its update: the drop-off, the search and the update in the\n  world.\n"
+          }
+        ]
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/objects/unit/default_task.rs",
+        "path": "crates/engine/genie-core/src/objects/unit/default_task.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "30d254c8fcbe52f49af97621c6a55928296d249f",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Finished idle farm starts own Make task.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 29,
+            "endLine": 69,
+            "text": "    /// `RGE_Action_Object::update` (`0x14106ac90`) on a unit in state 2 without an action or a\n    /// production: the master's default task starts (slot 0x7f0). A default task that the slice\n    /// does not hold is an error.\n    pub(crate) fn start_default_task(\n        &mut self,\n        c: &mut Context<'_>,\n    ) -> Result<DefaultTaskStarted, GenieError> {\n        // RGE_Action_Object::update with no action in state 2 starts the master's default task\n        // (slot 0x7f0): a bird's Fly, whose first update comes in the next tick\n        let mut flies_from_now = false;\n        if self.life.state == 2\n            && self.top_action_kind().is_none()\n            && self.production.is_none()\n            && let Some(task) = self.default_fly\n        {\n            self.start_fly(c, task)?;\n            flies_from_now = true;\n        }\n        let mut makes_from_now = false;\n        if self.life.state == 2\n            && self.top_action_kind().is_none()\n            && self.production.is_none()\n            && std::mem::take(&mut self.default_make)\n        {\n            let task = c\n                .masters\n                .and_then(|m| m.get(self.life.master_id))\n                .and_then(Master::default_task)\n                .copied()\n                .ok_or(GenieError::unsupported(\n                    \"a Make whose master the slice does not have\",\n                ))?;\n            self.make = Some(crate::gathering::make::MakeAction::start(\n                task,\n                c.attributes,\n                &mut crate::gathering::make::Held {\n                    attribute_type: &mut self.life.attribute_type,\n                    amount: &mut self.life.amount,\n                },\n            ));\n            makes_from_now = true;"
+          }
+        ]
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/objects/unit/update.rs",
+        "path": "crates/engine/genie-core/src/objects/unit/update.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "4552875aadbb2a4649dfb6de6b5fe9271113902b",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Make is farm object's update; no condition requiring farmer actively gathering.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 70,
+            "endLine": 104,
+            "text": "        let started = self.start_default_task(c)?;\n        // The default action exists from tick 1 on, but its first update is in tick 2: fitted to\n        // 16 checkpoints of idle players with livestock (workspace FD-008).\n        let me = Me {\n            id: self.id,\n            position: self.position,\n            group: self.group.id,\n            action_state: self.top_action().map_or(0, |a| a.state),\n        };\n        // RGE_Action_Object::update runs the actions of an object not inside another (`+0x2f0`\n        // none as it reaches them), else the inside update, never both\n        let inside_at_start = self.life.inside.is_some();\n        let captured = self.artifact_part(c, others, me, inside_at_start, started.artifact)?;\n        self.build_part(c, others, me)?;\n        if self.repair.is_some() {\n            self.repair_part(c, others, me)?;\n        }\n        self.garrison_part(c, others, me, inside_at_start, started.any())?;\n        // the wait for a foundation (FUN_140ae8b70) on its build points, none when the world\n        // does not hold it; its 1 removes it (FUN_140a98e20: the base teardown lets no target go,\n        // and no action follows it, the wait having replaced the list)\n        if let Some(w) = self.wait_solidify\n            && w.update(wait_progress(w.target, others, c.foreign))\n        {\n            self.wait_solidify = None;\n        }\n        if self.missile.as_ref().is_some_and(|m| m.action.is_some()) {\n            self.fly(c, others)?;\n        }\n        self.move_to_part(c, me)?;\n        self.explore_part(c, me)?;\n        self.fly_part(c, me, started.fly)?;\n        self.make_part(c, started.make)?;\n        if self.gather.is_some() {\n            self.gather_update(c, others, me)?;"
+          }
+        ]
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/farm_queue.rs",
+        "path": "crates/engine/genie-core/src/gathering/farm_queue.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "cf728d9c26b5cb190d0aa94c9c8a0e6559325d62",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Reseeding exists separately; not reproduced by continuous approximation.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false,
+        "excerpts": [
+          {
+            "startLine": 208,
+            "endLine": 235,
+            "text": "    /// other gatherer, with the automatic fish trap queue (`+0x1425`) or fish traps queued\n    /// (`+0x1420`), makes a fish trap when it is a fishing ship (class 21); else none. (For the\n    /// farm the game looks the spot's terrain up, `FUN_140f690e0`, `FUN_1413fbec0`,\n    /// `FUN_1413fc220`, `FUN_1413fc100`, and drops the answers: the master stays.) The master's\n    /// placement test (slot 0x50 with the explored test on, `p6` 1, whatever the player; for a\n    /// farm its scan passes over the gather's target and that building's annexes, `p12`,\n    /// [`World::placement_code_beside`]) must pass. With the automatic queue the player pays one\n    /// when it can without the population (`FUN_141618db0`, `FUN_14162fb60` with 1: [`cost_test`],\n    /// [`pay`]), else it takes one from the queue, which must hold one (else the interface's\n    /// event 0x7e); without the automatic queue it takes one from the queue. The master's slot\n    /// 0x108 makes the foundation there ([`World::make_building`], its unit AI by\n    /// [`crate::unit_ai::factory_type`]), the queue loses the one it gave (`FUN_14163c5b0`,\n    /// `FUN_14163c590`: only while above 0); the target's workers (slot 0x790, a building's\n    /// `+0xcb8`, which only a pasture fills: a farm's is empty, and a pasture's gather is not\n    /// modelled) would build it too; then the gatherer's ignore list empties (`FUN_141197da0`)\n    /// and its slot 0x128 sends it to build the foundation at the spot ([`World::build_task`],\n    /// [`World::build_directly`]). True when the foundation was made.\n    pub(crate) fn reseed(&mut self, p: usize, idx: usize) -> Result<bool, GenieError> {\n        let unit = &self.players[p].objects[idx];\n        let Some(gather) = unit.gather else {\n            return Ok(false);\n        };\n        let farm = gather.farm;\n        if farm[0] == NO_FARM {\n            return Ok(false);\n        }\n        let class = self.master_of(p, unit.life.master_id)?.class;\n        let owner = &self.players[p];"
+          }
+        ]
+      }
+    ]
+  },
+  "inheritedCommunityCorroboration": [
+    {
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=2169547705",
+      "readStatus": "Reused parent-authorized previously actually read batch11 summary; not freshly reopened in this subaudit.",
+      "savedRecord": "/tmp/batch11-farming-candidates.json.publicReferences[0]",
+      "published": "2020-07-19",
+      "updated": "2021-11-19",
+      "meaning": "Separate farm production and farmer collection; intra-farm and drop-off walking matter.",
+      "restriction": "DE56005-era author analysis; no current numeric pin or client validation."
+    },
+    {
+      "url": "https://aoebuddy.com/studies/quelle-civ-farme-le-mieux",
+      "readStatus": "Reused parent-authorized previously actually read batch11 summary; not freshly reopened in this subaudit.",
+      "savedRecord": "/tmp/batch11-farming-candidates.json.publicReferences[1]",
+      "updated": "2026-10-26",
+      "meaning": "Farm regrowth ceiling separate from harvest; distinct Slavic/Roman supplier bonuses.",
+      "restriction": "Author's own engine-measurement claim; no official current client verification or proof of our simulator."
+    }
+  ],
+  "staticProductCode": {
+    "source": "Current existing implementation only; not engine authority.",
+    "HEAD": "7d748918e4708934a10b34631488b38a7ffd40b3",
+    "file": "src/domain/buildSim.ts",
+    "lineReferences": {
+      "defaultNear2": [127, 128],
+      "simulationRate": [996, 1010],
+      "farmUnimplemented": [1824, 1825],
+      "publicGatherRate": [1950, 1988]
+    },
+    "formula": "carry/(carry/rawConsumerWorkRate+2*tiles/speed)",
+    "farmSupplyApplied": false,
+    "domainCalled": false,
+    "realCostBoundary": "Independent reviewer inspected realCost.ts80-91/108/154-158: existing Slavs textual15% override is legacy product behavior, not source authority; realCost default farmTiles0 differs from buildSim near2. Slavs-only buildSim candidate does not silently resolve that separate context."
+  },
+  "arithmetic": {
+    "kind": "Direct static arithmetic, not domain calls or game experiment.",
+    "nearTiles": 2,
+    "carry": 10,
+    "speed": 0.800000011920929,
+    "genericRawConsumer": 0.5299999713897705,
+    "walkSeconds": 4.999999925494195,
+    "genericLegacyAverage": 0.4189723154447894,
+    "genericSupplier": 0.4000000059604645,
+    "slavsRawConsumer": 0.6518999749183649,
+    "slavsConsumerLegacyWalkAverage": 0.49164748555524307,
+    "slavsSupplier": 0.45999999731779084,
+    "declaredMinCandidate": 0.45999999731779084,
+    "candidateVsPreservedGeneric": 0.09792456532466987,
+    "incorrectCapBeforeWalk": 0.37398373910657257,
+    "resource190Qualification": "This arithmetic assumes productivity res190=1 and no other relevant modifier, matching the prior simple comparison. Parent must pin current per-civ resource190 and Make task21 Value/work flag/default task before production source GO."
+  },
+  "semanticFindings": [
+    {
+      "status": "SUPPORTED_BY_FIXED_SAVED_DAT_AND_OLDER_CODE",
+      "claim": "Farm50/1187 and farmer214/259 are different supplier/consumer objects. Their work multipliers cannot be collapsed to1.23*1.15 or a text-derived1.15 gather coefficient."
+    },
+    {
+      "status": "SUPPORTED_BY_OLDER158041_CODE_ONLY",
+      "claim": "Make adds supplier rate*taskValue*dt to current farm holding, clamped to capacity15. Gather independently takes at most current holding. The farm can refill while its farmer walks; current holding is a buffer."
+    },
+    {
+      "status": "SUPPORTED_BY_OLDER158041_CODE_ONLY",
+      "claim": "Make tracks remaining lifetime food from resource36 separately from current holding. At full holding, no lifetime budget is consumed; once the budget and holding are exhausted, farm dies. Capacity15 and lifetime food are distinct."
+    },
+    {
+      "status": "SUPPORTED_BY_OLDER158041_CODE_ONLY_NOT_CURRENT_INIT_PROOF",
+      "claim": "Make.start replaces a different live holding kind with task.attribute_type and amount0. The inspected source test starts with kind0/amount15 then expects kind16/amount0. Therefore cached Food15 cannot honestly be promoted to verified DE185872 initial available stock15."
+    },
+    {
+      "status": "ANALYTIC_BOUND_WITH_ASSUMPTIONS",
+      "claim": "Ignoring engine tail corrections, if q0 lies in[0,15] and supply S is constant while food remains, cumulative harvested<=q0+S*T and long-run average<=S. Instantaneous collection may exceed S by drawing buffer, so per-tick hard min is not literal engine behavior."
+    },
+    {
+      "status": "DECLARED_MODEL_CHOICE",
+      "claim": "min(consumer average including inherited carry/walk overhead, independent supplier rate) is a compact steady continuous approximation. It removes buffer/activation/drop transients by choice. Public sources support the two-stage motivation but do not establish this formula as exact finite-start engine output."
+    },
+    {
+      "status": "DECLARED_MODEL_CHOICE",
+      "claim": "Taking min after inherited walk-average fits continuous replenishment during walking. Capping raw work first then applying walk incurs a different extra penalty; old Make does not stop when farmer walks."
+    }
+  ],
+  "minimalCandidateContract": {
+    "candidate": "Slavs-only continuous farm rate when this civilization's bonus is enabled; preserve inherited Generic/other-civilization formulas unless separately authorized.",
+    "formula": "consumerAverage=C/(C/(baseFarmerWorkRate*consumerModifiers)+inheritedWalkSeconds); supplierRate=baseFarmWorkRate*supplierModifiers*MakeTaskValue; rate=min(consumerAverage,supplierRate), subject to pinned productivity semantics.",
+    "requiredDeclaredApproximations": [
+      "A worker has an adequately supplied logical farm as inherited from the existing global simulator; no spatial farm assignment is inferred by this audit.",
+      "Steady continuous rate is credited from effective farm work time; no initial15 credit or live stock state is invented.",
+      "No random four-stop walking, actual collision/pathing, discrete drop-off or refill-order matching.",
+      "No modeled farm food exhaustion/reseeding cost or delay unless already covered elsewhere; current finite8 templates and farm11 alone do not prove no exhaustion.",
+      "No guarantee of exactly15% relative to preserved legacy Generic, whose old rate already exceeds generic raw supply.",
+      "Bonus-disabled branch and other civilizations must retain whichever prior formula the parent explicitly freezes; applying generic0.4 cap there would be a separate behavioral change."
+    ],
+    "sourcePreconditionsOwnedByParent": [
+      "Full fixed185872 Slavs/generic farm50/1187 and farmer214/259 object/task/start-resource capture.",
+      "Make Action21 resource16/value1/work_flag0/default task and consumer Action5 resource16->food0/productivity190 relation.",
+      "Resource190 baseline/Slavs value and applicable tech modifiers pinned; source-scoped support guard rejects changed/extra semantic commands.",
+      "No multiplication of supplier modifier into consumer work; handle both source targets without disguising one as irrelevant."
+    ]
+  },
+  "verified": [
+    "Read saved numeric target fields and current legacy average-rate implementation.",
+    "Actually fetched fixed-public-code Make and Gather sources plus explicit158041 scope; retained exact blobSHAs and excerpts.",
+    "Direct arithmetic .4189723154 generic, .4916474856 Slavs consumer, .4599999973 Slavs supplier.",
+    "Independent child review of saved raw and static consumer formula agreed; no write or runtime calls."
+  ],
+  "unverified": [
+    "DE185872 client operation, recordings or controlled farming experiment.",
+    "DE185872 live initial farm stock/Make activation ordering; Food15 is not sufficient.",
+    "Exact finite-start harvesting, per-tick delivery, intra-farm stop timing/spatial effects.",
+    "Current Slavs res190 and raw Make task21 are parent extraction responsibilities.",
+    "Farm lifetime budget/exhaustion relative to actual current8 schedule; no trace was executed."
+  ],
+  "blockers": {
+    "mustResolveBeforeProductionCandidate": ["Parent current185872 source preconditions above and explicit Slavs-only model/compatibility contract."],
+    "blocksExactClientClaims": [
+      "No direct185872 client validation; inherited legacy Generic exceeds raw supply and is deliberately preserved.",
+      "Older public engine code and community studies do not certify exact185872 behavior."
+    ],
+    "notAutomaticBlock": "Lack of current-client experiment need not prohibit a transparently declared bounded continuous approximation. It does prohibit presenting that approximation or an initial15 pool as verified current-client fact."
+  },
+  "independentReview": {
+    "agent": "/root/batch11_georgians_source/batch12_farm_semantics/savedraw_consumer_check",
+    "scope": "Savedraw object/target arithmetic and existing static buildSim/realCost reading; no new sources or execution.",
+    "result": "Agreed distinct target multipliers and .46 steady candidate; .46 vs preserved Generic+9.7924565%, not guaranteed15%."
+  },
+  "failedNonEvidence": [
+    {
+      "path": "crates/engine/genie-core/src/objects/unit/create.rs",
+      "note": "Probed a nonexistent path while finding default task. No content used as authority."
+    }
+  ],
+  "execution": {
+    "repositoryWrites": 0,
+    "DATParses": 0,
+    "DATDownloads": 0,
+    "domainCalls": 0,
+    "producerOrGenerator": 0,
+    "tests": 0,
+    "builds": 0,
+    "browser": 0,
+    "externalMutations": 0,
+    "reportPaths": ["/tmp/batch12-slavs-farm-semantics.json", "/tmp/batch12-slavs-farm-semantics.md"]
+  }
+}

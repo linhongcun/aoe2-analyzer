@@ -224,10 +224,10 @@ describe('#42 P0 buildSim 文明加成不得静默忽略', () => {
     expect(unknownCivEffects(e, buildOrders)).toEqual(['Danes tech -1: res res 9999 add 1']);
   });
   it('真实 eco.json：没有未分类的效果（bo:check 同一检查）', () => expect(unknownCivEffects(E, buildOrders)).toEqual([]));
-  it('simSupport：已支持和待核实文明集合，格鲁吉亚按197第十一批迁入', () => {
-    for (const c of ['Danes', 'Malay', 'Britons', 'Generic', 'Persians', 'Portuguese', 'Shu', 'Malians', 'Tatars', 'Mayans', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians'])
+  it('simSupport：已支持和待核实文明集合，斯拉夫按197第十二批迁入', () => {
+    for (const c of ['Danes', 'Malay', 'Britons', 'Generic', 'Persians', 'Portuguese', 'Shu', 'Malians', 'Tatars', 'Mayans', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs'])
       expect(simSupport(E, c, buildOrders), c).toEqual({ supported: true, reasons: [] });
-    for (const c of ['Chinese', 'Romans', 'Slavs', 'Mapuche', 'Jurchens', 'Khmer']) expect(simSupport(E, c, buildOrders).supported, c).toBe(false);
+    for (const c of ['Chinese', 'Romans', 'Mapuche', 'Jurchens', 'Khmer']) expect(simSupport(E, c, buildOrders).supported, c).toBe(false);
   });
   it('按 tech 整条判定：鞑靼704混入未知伴随时两半均不生效（去掉704结果相同）', () => {
     const e = structuredClone(E);

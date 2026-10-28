@@ -1,0 +1,4585 @@
+{
+  "schema": 1,
+  "verdict": "SOURCE_GO_FOR_DECLARED_SLAVS_ONLY_STEADY_CONTINUOUS_SPEC_AND_RED_REVIEW",
+  "productionStatus": "NOT_PRODUCTION_GO: root must approve final SPEC/closed-source guards and actual first-red before implementation; no product execution performed here.",
+  "recordedUTC": "2026-10-28T09:48:49.157776+00:00",
+  "reviewer": "/root/batch11_georgians_source",
+  "baseline": {
+    "head": "7d748918e4708934a10b34631488b38a7ffd40b3",
+    "tree": "560d74b342f315e516fd4e1ede8b839711078a19",
+    "version": "0.56.0",
+    "status": ""
+  },
+  "source": {
+    "DE": 185872,
+    "datCommit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "datSHA256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+    "cacheSHA256": "99e0503aad127b56f7a37e1a15c362f3192aa25c9a2f1ee3cdec4965591928b2",
+    "raw": {
+      "path": "/tmp/batch12-slavs-raw.json",
+      "sha256": "9b9bff802552cc83d3f1e77b0c6a3fe51f210a7558c8d349059641525c3c50b7",
+      "bytes": 4608930,
+      "parseStartedUTC": "2026-10-28T09:38:36.924780+00:00",
+      "parseCompletedUTC": "2026-10-28T09:38:54.311952+00:00",
+      "narrowOwnCurrentClosure": 163,
+      "actualSlavicObjects": 380
+    },
+    "full178Closure": {
+      "path": "/tmp/batch12-slavs-closure178.json",
+      "sha256": "8c0436ce26d89cf809c8d8561e81e39871f7bd48479128305692e3be165ff456",
+      "count": 178,
+      "equalsPrior178IDs": true,
+      "method": "Add all26 generated standard economic techs to the already complete own/current163 roots and recursively inspect RequiredTechs plus Type8/101/103A,102D tech targets. Each full command list is retained. Generic availability and disabled references are reads, not assertions all entries are enabled. Additional15 are outside current8 actions and do not add an own Slavic mechanism.",
+      "additional15BeyondNarrowRaw": [8, 12, 13, 17, 23, 48, 55, 182, 221, 280, 759, 761, 764, 766, 767],
+      "extraCommandObjectBoundary": "Only generic Caravan48 targets trade units128/204/846/2149, absent current8; own and current source target objects were captured as actual Slavic raw. This supplement does not falsely claim complete civilization unit-array capture."
+    },
+    "priorCandidate": {
+      "path": "/tmp/batch11-farming-candidates.json",
+      "sha256": "c9cdb223a3bdb05e901ad229e097126dbfdb4b404bb1530f5757824b604d389f",
+      "scope": "Read inherited candidate, then independently filled missing per-civilization start/resources/objects/tasks from the same already cached DAT; did not treat previous candidate as implementation authorization."
+    }
+  },
+  "counts": {
+    "ownTechs": 9,
+    "readTechClosure": 178,
+    "actualCapturedSlavicObjects": 380,
+    "currentBOs": 8,
+    "currentActions": 228,
+    "paidFarmBuildActionSites": 5,
+    "paidFarmCount": 11,
+    "farmTaskAssignmentSites": 2,
+    "assignedFarmWorkersTotalAcrossEightBOs": 8,
+    "farmEconomicTriggerBOs": ["fast-castle-boom", "fast-castle-knights"],
+    "otherSixNoFarmAssignment": ["archers-19", "drush-fc", "feudal-drush-18", "hybrid-fish-18", "maa-archers-18", "scouts-18"],
+    "currentTrains": [4, 13, 38, 74, 93, 448],
+    "currentUpgradeOutputs": [75]
+  },
+  "normalStart": {
+    "rawAllResourcesDiffersFromBritonsOnly": [
+      {
+        "index": 73,
+        "Britons": 9466.0,
+        "Slavs": 9488.0
+      }
+    ],
+    "resources": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "3": 0.0,
+      "33": 0.0,
+      "36": 175.0,
+      "73": 9488.0,
+      "84": 3.0,
+      "91": 0.0,
+      "92": 0.0,
+      "93": 0.0,
+      "94": 0.0,
+      "96": 0.0,
+      "190": 1.0
+    },
+    "existingTemplate": {
+      "villagers": 3,
+      "scout": 1,
+      "population": {
+        "used": 4,
+        "cap": 5
+      },
+      "stock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      }
+    },
+    "interpretation": "Raw84 proves3 villagers; total4 includes existing scout. Fixed full resource comparison supplies no extra initial stock/pop/housing/grant delta. 200F200W100G200S is the existing ordinary model template, not an all-RMS/client-initialization proof. Identity5511Wood is not an extra paid action."
+  },
+  "treeFamily": {
+    "civId": 23,
+    "treeEffectId": 7,
+    "teamEffectId": 9,
+    "teamEffectCommands": [],
+    "completeTreeCommandCount": 34,
+    "completeTreeCommands": [
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 15.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 51.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 54.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 63.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 64.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 201.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 244.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 279.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 252.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 439.0
+      },
+      {
+        "Type": 5,
+        "A": 214,
+        "B": -1,
+        "C": 13,
+        "D": 1.2300000190734863
+      },
+      {
+        "Type": 5,
+        "A": 259,
+        "B": -1,
+        "C": 13,
+        "D": 1.2300000190734863
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 188.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 265.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 237.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 85.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 436.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 437.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 380.0
+      },
+      {
+        "Type": 103,
+        "A": 602,
+        "B": -1,
+        "C": 0,
+        "D": 0.0
+      },
+      {
+        "Type": 101,
+        "A": 602,
+        "B": 0,
+        "C": 0,
+        "D": 0.0
+      },
+      {
+        "Type": 101,
+        "A": 602,
+        "B": 3,
+        "C": 0,
+        "D": 0.0
+      },
+      {
+        "Type": 103,
+        "A": 875,
+        "B": -1,
+        "C": 0,
+        "D": 0.0
+      },
+      {
+        "Type": 101,
+        "A": 875,
+        "B": 0,
+        "C": 0,
+        "D": 0.0
+      },
+      {
+        "Type": 101,
+        "A": 875,
+        "B": 3,
+        "C": 0,
+        "D": 0.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 376.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 373.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 608.0
+      },
+      {
+        "Type": 5,
+        "A": 50,
+        "B": -1,
+        "C": 13,
+        "D": 1.149999976158142
+      },
+      {
+        "Type": 5,
+        "A": 1187,
+        "B": -1,
+        "C": 13,
+        "D": 1.149999976158142
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1138.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1142.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 909.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 910.0
+      }
+    ],
+    "farmCommands": [
+      {
+        "Type": 5,
+        "A": 214,
+        "B": -1,
+        "C": 13,
+        "D": 1.2300000190734863
+      },
+      {
+        "Type": 5,
+        "A": 259,
+        "B": -1,
+        "C": 13,
+        "D": 1.2300000190734863
+      },
+      {
+        "Type": 5,
+        "A": 50,
+        "B": -1,
+        "C": 13,
+        "D": 1.149999976158142
+      },
+      {
+        "Type": 5,
+        "A": 1187,
+        "B": -1,
+        "C": 13,
+        "D": 1.149999976158142
+      }
+    ],
+    "decodedTreeRows": [
+      {
+        "age": 1,
+        "effects": [
+          {
+            "attr": "workRate",
+            "kind": "attr",
+            "op": "mul",
+            "target": "task:farm",
+            "v": 1.23
+          },
+          {
+            "attr": "workRate",
+            "kind": "attr",
+            "op": "mul",
+            "target": "unit:50",
+            "v": 1.15
+          },
+          {
+            "attr": "workRate",
+            "kind": "attr",
+            "op": "mul",
+            "target": "unit:1187",
+            "v": 1.15
+          }
+        ],
+        "name": "Tech tree",
+        "source": "tree"
+      },
+      {
+        "age": 1,
+        "effects": [
+          {
+            "kind": "freeTech",
+            "techName": "Arson"
+          },
+          {
+            "kind": "freeTech",
+            "techName": "Gambesons"
+          }
+        ],
+        "name": "Free techs",
+        "source": "tree"
+      }
+    ],
+    "importantDistinction": "Civ tree EFFECT7 is not technology7. Farmer and supplier effects are different objects and must never multiply into one gather multiplier. Arson602/Gambesons875 are free-research combat effects; current8 does not research them, and combat is outside economy timing."
+  },
+  "dedicatedTechs": [
+    {
+      "id": 455,
+      "Name": "Detinets",
+      "EffectID": 481,
+      "Civ": 23,
+      "RequiredTechs": [102, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": 82,
+      "ResearchTime": 40,
+      "ResearchAt": [[82, 40]],
+      "Cost": [
+        [1, 400, 1],
+        [3, 200, 1]
+      ],
+      "commands": [
+        {
+          "Type": 4,
+          "A": 79,
+          "B": -1,
+          "C": 104,
+          "D": 50.0
+        },
+        {
+          "Type": 4,
+          "A": 79,
+          "B": -1,
+          "C": 106,
+          "D": -50.0
+        },
+        {
+          "Type": 4,
+          "A": 234,
+          "B": -1,
+          "C": 104,
+          "D": 50.0
+        },
+        {
+          "Type": 4,
+          "A": 234,
+          "B": -1,
+          "C": 106,
+          "D": -50.0
+        },
+        {
+          "Type": 4,
+          "A": 235,
+          "B": -1,
+          "C": 104,
+          "D": 50.0
+        },
+        {
+          "Type": 4,
+          "A": 235,
+          "B": -1,
+          "C": 106,
+          "D": -50.0
+        },
+        {
+          "Type": 4,
+          "A": 236,
+          "B": -1,
+          "C": 104,
+          "D": 50.0
+        },
+        {
+          "Type": 4,
+          "A": 236,
+          "B": -1,
+          "C": 106,
+          "D": -50.0
+        },
+        {
+          "Type": 4,
+          "A": 82,
+          "B": -1,
+          "C": 104,
+          "D": 260.0
+        },
+        {
+          "Type": 4,
+          "A": 82,
+          "B": -1,
+          "C": 106,
+          "D": -260.0
+        }
+      ],
+      "currentScopeAssessment": "Castle/Tower wood/stone cost swap requires research455 atCastle; no current79/82 tower/castle construction or455 research."
+    },
+    {
+      "id": 503,
+      "Name": "Boyar (make avail)",
+      "EffectID": 556,
+      "Civ": 23,
+      "RequiredTechs": [102, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 2,
+          "A": 876,
+          "B": 1,
+          "C": -1,
+          "D": 0.0
+        }
+      ],
+      "currentScopeAssessment": "Castle Boyar876 availability; no current876/878 train action."
+    },
+    {
+      "id": 504,
+      "Name": "Elite Siege Tower",
+      "EffectID": 557,
+      "Civ": 23,
+      "RequiredTechs": [103, 503, -1, -1, -1, -1],
+      "RequiredTechCount": 2,
+      "ResearchLocation": 82,
+      "ResearchTime": 60,
+      "ResearchAt": [[82, 60]],
+      "Cost": [
+        [0, 1000, 1],
+        [3, 600, 1]
+      ],
+      "commands": [
+        {
+          "Type": 3,
+          "A": 876,
+          "B": 878,
+          "C": -1,
+          "D": 0.0
+        }
+      ],
+      "currentScopeAssessment": "Internal Name says Elite Siege Tower but actual command upgrades876→878; requiresImperial103+503, no current action."
+    },
+    {
+      "id": 510,
+      "Name": "C-Bonus, Monks 20% faster",
+      "EffectID": 566,
+      "Civ": 23,
+      "RequiredTechs": [-1, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 5,
+          "A": -1,
+          "B": 18,
+          "C": 5,
+          "D": 1.2000000476837158
+        },
+        {
+          "Type": 5,
+          "A": -1,
+          "B": 43,
+          "C": 5,
+          "D": 1.2000000476837158
+        },
+        {
+          "Type": 5,
+          "A": 1811,
+          "B": -1,
+          "C": 5,
+          "D": 1.2000000476837158
+        },
+        {
+          "Type": 5,
+          "A": 1826,
+          "B": -1,
+          "C": 5,
+          "D": 1.2000000476837158
+        },
+        {
+          "Type": 5,
+          "A": 1827,
+          "B": -1,
+          "C": 5,
+          "D": 1.2000000476837158
+        }
+      ],
+      "currentScopeAssessment": "Complete monk class18/43 and listed monk-form speed×1.2; current units are not targets."
+    },
+    {
+      "id": 511,
+      "Name": "C-Bonus, Siege Units Cheaper",
+      "EffectID": 567,
+      "Civ": 23,
+      "RequiredTechs": [-1, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 5,
+          "A": -1,
+          "B": 13,
+          "C": 100,
+          "D": 0.8500000238418579
+        },
+        {
+          "Type": 5,
+          "A": -1,
+          "B": 55,
+          "C": 100,
+          "D": 0.8500000238418579
+        },
+        {
+          "Type": 5,
+          "A": 1923,
+          "B": -1,
+          "C": 100,
+          "D": 0.8500000238418579
+        },
+        {
+          "Type": 5,
+          "A": 1120,
+          "B": -1,
+          "C": 100,
+          "D": 0.8500000238418579
+        },
+        {
+          "Type": 5,
+          "A": 1122,
+          "B": -1,
+          "C": 100,
+          "D": 0.8500000238418579
+        },
+        {
+          "Type": 5,
+          "A": 1744,
+          "B": -1,
+          "C": 100,
+          "D": 0.8500000238418579
+        },
+        {
+          "Type": 5,
+          "A": 1746,
+          "B": -1,
+          "C": 100,
+          "D": 0.8500000238418579
+        },
+        {
+          "Type": 5,
+          "A": 1962,
+          "B": -1,
+          "C": 100,
+          "D": 0.8500000238418579
+        },
+        {
+          "Type": 5,
+          "A": 1980,
+          "B": -1,
+          "C": 100,
+          "D": 0.8500000238418579
+        }
+      ],
+      "currentScopeAssessment": "Complete siege class13/55/listed siege-form cost×.85; current6trains+75 are not targets."
+    },
+    {
+      "id": 512,
+      "Name": "Slavs UT",
+      "EffectID": 568,
+      "Civ": 23,
+      "RequiredTechs": [-1, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": 82,
+      "ResearchTime": 40,
+      "ResearchAt": [[82, 40]],
+      "Cost": [
+        [3, 300, 1],
+        [0, 200, 1]
+      ],
+      "commands": [
+        {
+          "Type": 4,
+          "A": -1,
+          "B": 18,
+          "C": 8,
+          "D": 771.0
+        },
+        {
+          "Type": 4,
+          "A": -1,
+          "B": 18,
+          "C": 8,
+          "D": 1027.0
+        },
+        {
+          "Type": 4,
+          "A": -1,
+          "B": 43,
+          "C": 8,
+          "D": 771.0
+        },
+        {
+          "Type": 4,
+          "A": -1,
+          "B": 43,
+          "C": 8,
+          "D": 1027.0
+        },
+        {
+          "Type": 4,
+          "A": 1811,
+          "B": -1,
+          "C": 8,
+          "D": 771.0
+        },
+        {
+          "Type": 4,
+          "A": 1811,
+          "B": -1,
+          "C": 8,
+          "D": 1027.0
+        },
+        {
+          "Type": 4,
+          "A": 1826,
+          "B": -1,
+          "C": 8,
+          "D": 771.0
+        },
+        {
+          "Type": 4,
+          "A": 1826,
+          "B": -1,
+          "C": 8,
+          "D": 1027.0
+        },
+        {
+          "Type": 4,
+          "A": 1827,
+          "B": -1,
+          "C": 8,
+          "D": 771.0
+        },
+        {
+          "Type": 4,
+          "A": 1827,
+          "B": -1,
+          "C": 8,
+          "D": 1027.0
+        }
+      ],
+      "currentScopeAssessment": "Legacy monk armor UT raw effect568; no current manual research."
+    },
+    {
+      "id": 513,
+      "Name": "Slavs UT",
+      "EffectID": 569,
+      "Civ": 23,
+      "RequiredTechs": [103, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": 82,
+      "ResearchTime": 40,
+      "ResearchAt": [[82, 40]],
+      "Cost": [
+        [0, 900, 1],
+        [3, 500, 1]
+      ],
+      "commands": [
+        {
+          "Type": 4,
+          "A": -1,
+          "B": 6,
+          "C": 22,
+          "D": 0.5
+        },
+        {
+          "Type": 4,
+          "A": 281,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 531,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 879,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 881,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 1013,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 1015,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 165,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 424,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 426,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 1066,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 1741,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 1743,
+          "B": -1,
+          "C": 22,
+          "D": -0.5
+        },
+        {
+          "Type": 4,
+          "A": 1831,
+          "B": -1,
+          "C": 22,
+          "D": 0.5
+        }
+      ],
+      "currentScopeAssessment": "Infantry combat splash UT raw effect569, requiresImperial103; no current manual research."
+    },
+    {
+      "id": 551,
+      "Name": "Slavs",
+      "EffectID": -1,
+      "Civ": 23,
+      "RequiredTechs": [104, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": 0,
+      "ResearchTime": 0,
+      "ResearchAt": [[0, 0]],
+      "Cost": [[1, 1, 1]],
+      "commands": [],
+      "currentScopeAssessment": "Civilization identity dummy, no effect; same legacy1Wood identity shape, not an added paid BO action."
+    },
+    {
+      "id": 721,
+      "Name": "Slavic team bonus",
+      "EffectID": 758,
+      "Civ": 23,
+      "RequiredTechs": [-1, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 10,
+          "A": 12,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 20,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 132,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 498,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 10,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 14,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 87,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 86,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 101,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 153,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 150,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 49,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        }
+      ],
+      "currentScopeAssessment": "Own automatic tech with Type10 +5 population on military buildings. This is the real team-bonus mechanism despite Civ.TeamBonusID9 effect being empty. Current default team=false excludes it; no global Type10 support or population grant is added."
+    }
+  ],
+  "farmObjects": {
+    "50": {
+      "id": 50,
+      "name": "FARM",
+      "type": 80,
+      "class": 49,
+      "workRateRaw": 0.4000000059604645,
+      "capacity": 15,
+      "speedRaw": 0.0,
+      "defaultTaskId": 0,
+      "resourceStorages": [
+        {
+          "type": 0,
+          "amount": 15.0,
+          "flag": 0
+        },
+        {
+          "type": -1,
+          "amount": 0.0,
+          "flag": 0
+        },
+        {
+          "type": -1,
+          "amount": 0.0,
+          "flag": 0
+        }
+      ],
+      "tasks": [
+        {
+          "task_type": 1,
+          "id": 0,
+          "is_default": 0,
+          "action_type": 21,
+          "class_id": -1,
+          "unit_id": -1,
+          "terrain_id": -1,
+          "resource_in": 16,
+          "resource_multiplier": 0,
+          "resource_out": -1,
+          "unused_resource": -1,
+          "work_value_1": 1.0,
+          "work_value_2": 0.0,
+          "work_range": 0.0,
+          "auto_search_targets": 0,
+          "search_wait_time": 0.0,
+          "enable_targeting": 0,
+          "combat_level_flag": 0,
+          "gather_type": 0,
+          "work_flag_2": 0,
+          "target_diplomacy": 0,
+          "carry_check": 0,
+          "pick_for_construction": 0,
+          "moving_graphic_id": -1,
+          "proceeding_graphic_id": -1,
+          "working_graphic_id": -1,
+          "carrying_graphic_id": -1,
+          "resource_gathering_sound_id": -1,
+          "resource_deposit_sound_id": -1,
+          "wwise_resource_gathering_sound_id": 0,
+          "wwise_resource_deposit_sound_id": 0,
+          "enabled": -1
+        },
+        {
+          "task_type": 1,
+          "id": 1,
+          "is_default": 0,
+          "action_type": 121,
+          "class_id": -1,
+          "unit_id": -1,
+          "terrain_id": -1,
+          "resource_in": 16,
+          "resource_multiplier": -1,
+          "resource_out": -1,
+          "unused_resource": -1,
+          "work_value_1": 1.0,
+          "work_value_2": 0.0,
+          "work_range": 0.0,
+          "auto_search_targets": 0,
+          "search_wait_time": 0.0,
+          "enable_targeting": 0,
+          "combat_level_flag": 0,
+          "gather_type": 0,
+          "work_flag_2": 0,
+          "target_diplomacy": 0,
+          "carry_check": 0,
+          "pick_for_construction": 0,
+          "moving_graphic_id": -1,
+          "proceeding_graphic_id": -1,
+          "working_graphic_id": -1,
+          "carrying_graphic_id": -1,
+          "resource_gathering_sound_id": -1,
+          "resource_deposit_sound_id": -1,
+          "wwise_resource_gathering_sound_id": 0,
+          "wwise_resource_deposit_sound_id": 0,
+          "enabled": -1
+        }
+      ],
+      "cost": [
+        {
+          "type": 1,
+          "amount": 60,
+          "flag": 1
+        },
+        {
+          "type": -1,
+          "amount": 0,
+          "flag": 0
+        },
+        {
+          "type": -1,
+          "amount": 0,
+          "flag": 0
+        }
+      ],
+      "trainAt": [
+        {
+          "train_time": 15,
+          "unit_id": 118,
+          "button_id": 6,
+          "hot_key_id": 16149
+        }
+      ]
+    },
+    "1187": {
+      "id": 1187,
+      "name": "RFARM",
+      "type": 80,
+      "class": 49,
+      "workRateRaw": 0.4000000059604645,
+      "capacity": 15,
+      "speedRaw": 0.0,
+      "defaultTaskId": 0,
+      "resourceStorages": [
+        {
+          "type": 0,
+          "amount": 15.0,
+          "flag": 0
+        },
+        {
+          "type": -1,
+          "amount": 0.0,
+          "flag": 0
+        },
+        {
+          "type": -1,
+          "amount": 0.0,
+          "flag": 0
+        }
+      ],
+      "tasks": [
+        {
+          "task_type": 1,
+          "id": 0,
+          "is_default": 0,
+          "action_type": 21,
+          "class_id": -1,
+          "unit_id": -1,
+          "terrain_id": -1,
+          "resource_in": 16,
+          "resource_multiplier": 0,
+          "resource_out": -1,
+          "unused_resource": -1,
+          "work_value_1": 1.0,
+          "work_value_2": 0.0,
+          "work_range": 0.0,
+          "auto_search_targets": 0,
+          "search_wait_time": 0.0,
+          "enable_targeting": 0,
+          "combat_level_flag": 0,
+          "gather_type": 0,
+          "work_flag_2": 0,
+          "target_diplomacy": 0,
+          "carry_check": 0,
+          "pick_for_construction": 0,
+          "moving_graphic_id": -1,
+          "proceeding_graphic_id": -1,
+          "working_graphic_id": -1,
+          "carrying_graphic_id": -1,
+          "resource_gathering_sound_id": -1,
+          "resource_deposit_sound_id": -1,
+          "wwise_resource_gathering_sound_id": 0,
+          "wwise_resource_deposit_sound_id": 0,
+          "enabled": -1
+        },
+        {
+          "task_type": 1,
+          "id": 1,
+          "is_default": 0,
+          "action_type": 121,
+          "class_id": -1,
+          "unit_id": -1,
+          "terrain_id": -1,
+          "resource_in": 16,
+          "resource_multiplier": -1,
+          "resource_out": -1,
+          "unused_resource": -1,
+          "work_value_1": 1.0,
+          "work_value_2": 0.0,
+          "work_range": 0.0,
+          "auto_search_targets": 0,
+          "search_wait_time": 0.0,
+          "enable_targeting": 0,
+          "combat_level_flag": 0,
+          "gather_type": 0,
+          "work_flag_2": 0,
+          "target_diplomacy": 0,
+          "carry_check": 0,
+          "pick_for_construction": 0,
+          "moving_graphic_id": -1,
+          "proceeding_graphic_id": -1,
+          "working_graphic_id": -1,
+          "carrying_graphic_id": -1,
+          "resource_gathering_sound_id": -1,
+          "resource_deposit_sound_id": -1,
+          "wwise_resource_gathering_sound_id": 0,
+          "wwise_resource_deposit_sound_id": 0,
+          "enabled": -1
+        }
+      ],
+      "cost": [
+        {
+          "type": 1,
+          "amount": 60,
+          "flag": 1
+        },
+        {
+          "type": -1,
+          "amount": 0,
+          "flag": 0
+        },
+        {
+          "type": -1,
+          "amount": 0,
+          "flag": 0
+        }
+      ],
+      "trainAt": [
+        {
+          "train_time": 15,
+          "unit_id": 118,
+          "button_id": 0,
+          "hot_key_id": -1
+        }
+      ]
+    },
+    "214": {
+      "id": 214,
+      "name": "VFFAR",
+      "type": 70,
+      "class": 4,
+      "workRateRaw": 0.5299999713897705,
+      "capacity": 10,
+      "speedRaw": 0.800000011920929,
+      "defaultTaskId": -1,
+      "resourceStorages": [
+        {
+          "type": 4,
+          "amount": -1.0,
+          "flag": 2
+        },
+        {
+          "type": 11,
+          "amount": 1.0,
+          "flag": 2
+        },
+        {
+          "type": 19,
+          "amount": 1.0,
+          "flag": 1
+        }
+      ],
+      "tasks": [
+        {
+          "task_type": 1,
+          "id": 0,
+          "is_default": 0,
+          "action_type": 5,
+          "class_id": -1,
+          "unit_id": 50,
+          "terrain_id": -1,
+          "resource_in": 16,
+          "resource_multiplier": 190,
+          "resource_out": 0,
+          "unused_resource": -1,
+          "work_value_1": 1.0,
+          "work_value_2": 0.0,
+          "work_range": 0.0,
+          "auto_search_targets": 1,
+          "search_wait_time": 3.0,
+          "enable_targeting": 0,
+          "combat_level_flag": 0,
+          "gather_type": 1,
+          "work_flag_2": 0,
+          "target_diplomacy": 0,
+          "carry_check": 0,
+          "pick_for_construction": 0,
+          "moving_graphic_id": -1,
+          "proceeding_graphic_id": 1953,
+          "working_graphic_id": -1,
+          "carrying_graphic_id": 1952,
+          "resource_gathering_sound_id": -1,
+          "resource_deposit_sound_id": -1,
+          "wwise_resource_gathering_sound_id": 0,
+          "wwise_resource_deposit_sound_id": 0,
+          "enabled": -1
+        },
+        {
+          "task_type": 1,
+          "id": 5,
+          "is_default": 0,
+          "action_type": 5,
+          "class_id": -1,
+          "unit_id": 1187,
+          "terrain_id": -1,
+          "resource_in": 16,
+          "resource_multiplier": 190,
+          "resource_out": 0,
+          "unused_resource": -1,
+          "work_value_1": 1.0,
+          "work_value_2": 0.0,
+          "work_range": 0.0,
+          "auto_search_targets": 1,
+          "search_wait_time": 3.0,
+          "enable_targeting": 0,
+          "combat_level_flag": 0,
+          "gather_type": 1,
+          "work_flag_2": 0,
+          "target_diplomacy": 0,
+          "carry_check": 0,
+          "pick_for_construction": 0,
+          "moving_graphic_id": -1,
+          "proceeding_graphic_id": 1953,
+          "working_graphic_id": -1,
+          "carrying_graphic_id": 1952,
+          "resource_gathering_sound_id": -1,
+          "resource_deposit_sound_id": -1,
+          "wwise_resource_gathering_sound_id": 0,
+          "wwise_resource_deposit_sound_id": 0,
+          "enabled": -1
+        }
+      ],
+      "cost": [
+        {
+          "type": 0,
+          "amount": 50,
+          "flag": 1
+        },
+        {
+          "type": -1,
+          "amount": 0,
+          "flag": 0
+        },
+        {
+          "type": 4,
+          "amount": 1,
+          "flag": 0
+        }
+      ],
+      "trainAt": [
+        {
+          "train_time": 25,
+          "unit_id": -1,
+          "button_id": 0,
+          "hot_key_id": 16123
+        }
+      ]
+    },
+    "259": {
+      "id": 259,
+      "name": "VMFAR",
+      "type": 70,
+      "class": 4,
+      "workRateRaw": 0.5299999713897705,
+      "capacity": 10,
+      "speedRaw": 0.800000011920929,
+      "defaultTaskId": -1,
+      "resourceStorages": [
+        {
+          "type": 4,
+          "amount": -1.0,
+          "flag": 2
+        },
+        {
+          "type": 11,
+          "amount": 1.0,
+          "flag": 2
+        },
+        {
+          "type": 19,
+          "amount": 1.0,
+          "flag": 1
+        }
+      ],
+      "tasks": [
+        {
+          "task_type": 1,
+          "id": 0,
+          "is_default": 0,
+          "action_type": 5,
+          "class_id": -1,
+          "unit_id": 50,
+          "terrain_id": -1,
+          "resource_in": 16,
+          "resource_multiplier": 190,
+          "resource_out": 0,
+          "unused_resource": -1,
+          "work_value_1": 1.0,
+          "work_value_2": 0.0,
+          "work_range": 0.0,
+          "auto_search_targets": 1,
+          "search_wait_time": 3.0,
+          "enable_targeting": 0,
+          "combat_level_flag": 0,
+          "gather_type": 1,
+          "work_flag_2": 0,
+          "target_diplomacy": 0,
+          "carry_check": 0,
+          "pick_for_construction": 0,
+          "moving_graphic_id": -1,
+          "proceeding_graphic_id": 1600,
+          "working_graphic_id": -1,
+          "carrying_graphic_id": 1599,
+          "resource_gathering_sound_id": -1,
+          "resource_deposit_sound_id": -1,
+          "wwise_resource_gathering_sound_id": 0,
+          "wwise_resource_deposit_sound_id": 0,
+          "enabled": -1
+        },
+        {
+          "task_type": 1,
+          "id": 5,
+          "is_default": 0,
+          "action_type": 5,
+          "class_id": -1,
+          "unit_id": 1187,
+          "terrain_id": -1,
+          "resource_in": 16,
+          "resource_multiplier": 190,
+          "resource_out": 0,
+          "unused_resource": -1,
+          "work_value_1": 1.0,
+          "work_value_2": 0.0,
+          "work_range": 0.0,
+          "auto_search_targets": 1,
+          "search_wait_time": 3.0,
+          "enable_targeting": 0,
+          "combat_level_flag": 0,
+          "gather_type": 1,
+          "work_flag_2": 0,
+          "target_diplomacy": 0,
+          "carry_check": 0,
+          "pick_for_construction": 0,
+          "moving_graphic_id": -1,
+          "proceeding_graphic_id": 1600,
+          "working_graphic_id": -1,
+          "carrying_graphic_id": 1599,
+          "resource_gathering_sound_id": -1,
+          "resource_deposit_sound_id": -1,
+          "wwise_resource_gathering_sound_id": 0,
+          "wwise_resource_deposit_sound_id": 0,
+          "enabled": -1
+        }
+      ],
+      "cost": [
+        {
+          "type": 0,
+          "amount": 50,
+          "flag": 1
+        },
+        {
+          "type": -1,
+          "amount": 0,
+          "flag": 0
+        },
+        {
+          "type": 4,
+          "amount": 1,
+          "flag": 0
+        }
+      ],
+      "trainAt": [
+        {
+          "train_time": 25,
+          "unit_id": 109,
+          "button_id": 0,
+          "hot_key_id": 16123
+        }
+      ]
+    }
+  },
+  "taskSemantics": {
+    "Make": "Farm50/1187 default_task_id0 selects Action21task0, ResIn16, multiplier0, work_value1=1, range0/workflag0; Action121 companion retained. Raw workRate~.4 and capacity15 differ from farmer fields.",
+    "Gather": "214/259 Action5 tasks target50/1187, ResIn16→ResOut0 with resource multiplier190 and work1/range0. Slavic resource190=1,96=0. Range0 is not proof of no walking. Consumer carry10/speed~.8/workRate~.53.",
+    "noSourceDoubleCounting": "NoRomanclass4 bonus or other workrate delta exists; relevant raw objects matchBritons. Slavic tree separately boosts consumer and supplier. Food15 storage is not a verified current live pool initializer; no15Food stock grant is authorized."
+  },
+  "sourceGateToday": {
+    "SOURCE_PENDING_CIVS": "Empty object at buildSim.ts:1675; no Slavic pending-source entry.",
+    "actualBlockingBranch": "buildSim.ts:1824-1825 rejects FARM_UNITS50/1187 workRate with reason 农田单位 workRate 与 task:farm 是否重复待 .dat 核实（罗马、斯拉夫）. Whole techAtomicOk prevents partial apply in runOnce.",
+    "helperAsymmetry": "gatherRate currently atomically filters only selected families, notSlavs; it currently appliesSlavic consumer×1.23 while ignoring supply. New boundedSlavs path must source-guard both helper and runOnce, not merely whitelist the supplier classifier.",
+    "realCostBoundary": "realCost.ts retains legacy SOURCED Slavs task:farm value1.15 from text. This is a distinct existing tool model and remains byte/numerically unchanged under root scope."
+  },
+  "currentScopeLegality": {
+    "treeDisabledTechIDs": [15, 51, 54, 63, 64, 201, 244, 279, 252, 439, 188, 265, 237, 85, 436, 437, 380, 376, 373, 608, 1138, 1142, 909, 910],
+    "currentManualAgeUpgradeTechs": [
+      {
+        "tech": 14,
+        "name": "Horse collar",
+        "requires": [101, 758],
+        "requiredCount": 1,
+        "researchAt": [
+          [68, 20],
+          [2556, 20]
+        ],
+        "treeDisabled": false,
+        "commands": [
+          {
+            "Type": 1,
+            "A": 36,
+            "B": 1,
+            "C": 69,
+            "D": 75.0
+          },
+          {
+            "Type": 5,
+            "A": 259,
+            "B": -1,
+            "C": 13,
+            "D": 1.0
+          },
+          {
+            "Type": 5,
+            "A": 214,
+            "B": -1,
+            "C": 13,
+            "D": 1.0
+          },
+          {
+            "Type": 1,
+            "A": 237,
+            "B": 0,
+            "C": 36,
+            "D": 0.10000000149011612
+          }
+        ]
+      },
+      {
+        "tech": 22,
+        "name": "Loom",
+        "requires": [104],
+        "requiredCount": 1,
+        "researchAt": [[109, 25]],
+        "treeDisabled": false,
+        "commands": [
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 4,
+            "C": 0,
+            "D": 15.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 4,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 4,
+            "C": 8,
+            "D": 770.0
+          }
+        ]
+      },
+      {
+        "tech": 101,
+        "name": "Middle Age",
+        "requires": [104, 659],
+        "requiredCount": 2,
+        "researchAt": [[109, 130]],
+        "treeDisabled": false,
+        "commands": [
+          {
+            "Type": 1,
+            "A": 6,
+            "B": 0,
+            "C": -1,
+            "D": 1.0
+          },
+          {
+            "Type": 3,
+            "A": 109,
+            "B": 71,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 618,
+            "B": 614,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 619,
+            "B": 615,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 620,
+            "B": 616,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 621,
+            "B": 617,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 103,
+            "B": 105,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 68,
+            "B": 129,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 104,
+            "B": 30,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 45,
+            "B": 133,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 70,
+            "B": 463,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 12,
+            "B": 498,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 562,
+            "B": 563,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 584,
+            "B": 585,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 4,
+            "A": 598,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 3,
+            "A": 805,
+            "B": 806,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 6,
+            "A": 242,
+            "B": 0,
+            "C": -1,
+            "D": 1.5
+          },
+          {
+            "Type": 6,
+            "A": 243,
+            "B": 0,
+            "C": -1,
+            "D": 1.5
+          },
+          {
+            "Type": 6,
+            "A": 244,
+            "B": 0,
+            "C": -1,
+            "D": 1.5
+          },
+          {
+            "Type": 6,
+            "A": 245,
+            "B": 0,
+            "C": -1,
+            "D": 1.5
+          },
+          {
+            "Type": 3,
+            "A": 2172,
+            "B": 2143,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 2173,
+            "B": 2144,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 5,
+            "A": 1665,
+            "B": -1,
+            "C": 0,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 2415,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 201,
+            "A": 2415,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 102,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 107,
+            "D": 5.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 12,
+            "D": 8.0
+          },
+          {
+            "Type": 0,
+            "A": 1665,
+            "B": -1,
+            "C": 47,
+            "D": 8.0
+          },
+          {
+            "Type": 0,
+            "A": 1665,
+            "B": -1,
+            "C": 46,
+            "D": 5.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 9,
+            "D": 6914.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 9,
+            "D": 4102.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 9,
+            "D": 773.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 9,
+            "D": 7681.0
+          },
+          {
+            "Type": 4,
+            "A": 2415,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 201,
+            "A": 2415,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 5,
+            "A": 2414,
+            "B": -1,
+            "C": 0,
+            "D": 1.25
+          },
+          {
+            "Type": 4,
+            "A": 2414,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2414,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 4,
+            "A": 2414,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2414,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2631,
+            "B": -1,
+            "C": 9,
+            "D": 4098.0
+          },
+          {
+            "Type": 4,
+            "A": 2632,
+            "B": -1,
+            "C": 9,
+            "D": 4098.0
+          }
+        ]
+      },
+      {
+        "tech": 102,
+        "name": "Feudal Age",
+        "requires": [101, 660],
+        "requiredCount": 2,
+        "researchAt": [[109, 160]],
+        "treeDisabled": false,
+        "commands": [
+          {
+            "Type": 1,
+            "A": 6,
+            "B": 0,
+            "C": -1,
+            "D": 2.0
+          },
+          {
+            "Type": 3,
+            "A": 87,
+            "B": 10,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 12,
+            "B": 132,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 103,
+            "B": 18,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 104,
+            "B": 31,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 45,
+            "B": 47,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 84,
+            "B": 116,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 68,
+            "B": 130,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 101,
+            "B": 86,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 109,
+            "B": 141,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 618,
+            "B": 481,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 619,
+            "B": 482,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 620,
+            "B": 483,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 621,
+            "B": 484,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 70,
+            "B": 464,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 562,
+            "B": 564,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 4,
+            "A": 448,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 546,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 3,
+            "A": 584,
+            "B": 586,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 4,
+            "A": 598,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 448,
+            "B": -1,
+            "C": 23,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 546,
+            "B": -1,
+            "C": 23,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 441,
+            "B": -1,
+            "C": 23,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 441,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 3,
+            "A": 805,
+            "B": 807,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 5,
+            "A": 79,
+            "B": -1,
+            "C": 0,
+            "D": 1.2000000476837158
+          },
+          {
+            "Type": 4,
+            "A": 1658,
+            "B": -1,
+            "C": 0,
+            "D": 25.0
+          },
+          {
+            "Type": 4,
+            "A": 1658,
+            "B": -1,
+            "C": 9,
+            "D": 1027.0
+          },
+          {
+            "Type": 4,
+            "A": 1658,
+            "B": -1,
+            "C": 8,
+            "D": 1026.0
+          },
+          {
+            "Type": 4,
+            "A": 1658,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 5,
+            "A": 1658,
+            "B": -1,
+            "C": 13,
+            "D": 1.3333333730697632
+          },
+          {
+            "Type": 4,
+            "A": 1660,
+            "B": -1,
+            "C": 0,
+            "D": 25.0
+          },
+          {
+            "Type": 4,
+            "A": 1660,
+            "B": -1,
+            "C": 9,
+            "D": 1027.0
+          },
+          {
+            "Type": 4,
+            "A": 1660,
+            "B": -1,
+            "C": 8,
+            "D": 1026.0
+          },
+          {
+            "Type": 4,
+            "A": 1660,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 5,
+            "A": 1660,
+            "B": -1,
+            "C": 13,
+            "D": 1.3333333730697632
+          },
+          {
+            "Type": 5,
+            "A": 1660,
+            "B": -1,
+            "C": 101,
+            "D": 0.75
+          },
+          {
+            "Type": 5,
+            "A": 1665,
+            "B": -1,
+            "C": 0,
+            "D": 1.2000000476837158
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 102,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 107,
+            "D": 3.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1658,
+            "B": -1,
+            "C": 46,
+            "D": 3.0
+          },
+          {
+            "Type": 4,
+            "A": 1658,
+            "B": -1,
+            "C": 48,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 1658,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1660,
+            "B": -1,
+            "C": 46,
+            "D": 3.0
+          },
+          {
+            "Type": 4,
+            "A": 1660,
+            "B": -1,
+            "C": 48,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 1660,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1707,
+            "B": -1,
+            "C": 23,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": 1707,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 6,
+            "A": 242,
+            "B": 0,
+            "C": -1,
+            "D": 1.5
+          },
+          {
+            "Type": 6,
+            "A": 243,
+            "B": 0,
+            "C": -1,
+            "D": 1.5
+          },
+          {
+            "Type": 6,
+            "A": 244,
+            "B": 0,
+            "C": -1,
+            "D": 1.5
+          },
+          {
+            "Type": 6,
+            "A": 245,
+            "B": 0,
+            "C": -1,
+            "D": 1.5
+          },
+          {
+            "Type": 3,
+            "A": 2119,
+            "B": 2117,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 2172,
+            "B": 2142,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 2173,
+            "B": 2145,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 2143,
+            "B": 2142,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 2144,
+            "B": 2145,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 200,
+            "A": 2275,
+            "B": -1,
+            "C": 71,
+            "D": 15560.0
+          },
+          {
+            "Type": 200,
+            "A": 2276,
+            "B": -1,
+            "C": 71,
+            "D": 15566.0
+          },
+          {
+            "Type": 200,
+            "A": 2277,
+            "B": -1,
+            "C": 71,
+            "D": 15563.0
+          },
+          {
+            "Type": 0,
+            "A": 2275,
+            "B": -1,
+            "C": 71,
+            "D": 15560.0
+          },
+          {
+            "Type": 0,
+            "A": 2276,
+            "B": -1,
+            "C": 71,
+            "D": 15566.0
+          },
+          {
+            "Type": 0,
+            "A": 2277,
+            "B": -1,
+            "C": 71,
+            "D": 15563.0
+          },
+          {
+            "Type": 201,
+            "A": 2275,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 201,
+            "A": 2275,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 201,
+            "A": 2276,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 201,
+            "A": 2276,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 201,
+            "A": 2277,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 201,
+            "A": 2277,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 201,
+            "A": 2275,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2275,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2276,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2276,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2277,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2277,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2275,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 4,
+            "A": 2275,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2276,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 4,
+            "A": 2276,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2277,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 4,
+            "A": 2277,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2275,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2275,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2276,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2276,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2277,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2277,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 200,
+            "A": 2275,
+            "B": -1,
+            "C": 73,
+            "D": 14590.0
+          },
+          {
+            "Type": 200,
+            "A": 2276,
+            "B": -1,
+            "C": 73,
+            "D": 14590.0
+          },
+          {
+            "Type": 200,
+            "A": 2277,
+            "B": -1,
+            "C": 73,
+            "D": 14590.0
+          },
+          {
+            "Type": 0,
+            "A": 2275,
+            "B": -1,
+            "C": 73,
+            "D": 14590.0
+          },
+          {
+            "Type": 0,
+            "A": 2276,
+            "B": -1,
+            "C": 73,
+            "D": 14590.0
+          },
+          {
+            "Type": 0,
+            "A": 2277,
+            "B": -1,
+            "C": 73,
+            "D": 14590.0
+          },
+          {
+            "Type": 200,
+            "A": 2275,
+            "B": -1,
+            "C": 57,
+            "D": 1432.0
+          },
+          {
+            "Type": 200,
+            "A": 2276,
+            "B": -1,
+            "C": 57,
+            "D": 1432.0
+          },
+          {
+            "Type": 200,
+            "A": 2277,
+            "B": -1,
+            "C": 57,
+            "D": 1432.0
+          },
+          {
+            "Type": 0,
+            "A": 2275,
+            "B": -1,
+            "C": 57,
+            "D": 1432.0
+          },
+          {
+            "Type": 0,
+            "A": 2276,
+            "B": -1,
+            "C": 57,
+            "D": 1432.0
+          },
+          {
+            "Type": 0,
+            "A": 2277,
+            "B": -1,
+            "C": 57,
+            "D": 1432.0
+          },
+          {
+            "Type": 4,
+            "A": 2415,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 201,
+            "A": 2415,
+            "B": -1,
+            "C": 1,
+            "D": 2.0
+          },
+          {
+            "Type": 5,
+            "A": 2414,
+            "B": -1,
+            "C": 0,
+            "D": 1.2000000476837158
+          },
+          {
+            "Type": 4,
+            "A": 2414,
+            "B": -1,
+            "C": 8,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2414,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0
+          },
+          {
+            "Type": 4,
+            "A": 2414,
+            "B": -1,
+            "C": 48,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2414,
+            "B": -1,
+            "C": 49,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2631,
+            "B": -1,
+            "C": 9,
+            "D": 4097.0
+          },
+          {
+            "Type": 4,
+            "A": 2632,
+            "B": -1,
+            "C": 9,
+            "D": 4097.0
+          }
+        ]
+      },
+      {
+        "tech": 199,
+        "name": "Fletching",
+        "requires": [101],
+        "requiredCount": 1,
+        "researchAt": [[103, 30]],
+        "treeDisabled": false,
+        "commands": [
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 0,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 36,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 0,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 36,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 0,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 36,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 54,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 52,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 52,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 328,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 52,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 0,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 36,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 109,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 71,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 141,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 142,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 82,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 109,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 71,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 141,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 142,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 82,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 82,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 109,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 71,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 141,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 142,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 82,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 539,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 539,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 539,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 539,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 21,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 21,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 21,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 21,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 442,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 442,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 442,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 442,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 250,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 250,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 250,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 250,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 52,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 52,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 533,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 533,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 533,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 533,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 505,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 518,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 746,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 747,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 885,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 885,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 885,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 885,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1004,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1004,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1004,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1004,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1006,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1006,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1006,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1006,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1251,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1251,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1251,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1251,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 778,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 778,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 778,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 778,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 786,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 787,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1738,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1738,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1740,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1740,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1750,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1750,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1750,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1750,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1830,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2130,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2130,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2130,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2130,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2131,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2131,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2131,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2131,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2132,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2132,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2132,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2132,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2101,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2101,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2102,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2102,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2328,
+            "B": -1,
+            "C": 1,
+            "D": -1.0
+          },
+          {
+            "Type": 4,
+            "A": 2328,
+            "B": -1,
+            "C": 23,
+            "D": -1.0
+          },
+          {
+            "Type": 4,
+            "A": 2328,
+            "B": -1,
+            "C": 12,
+            "D": -1.0
+          },
+          {
+            "Type": 201,
+            "A": 2275,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 201,
+            "A": 2275,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2275,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2276,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 201,
+            "A": 2276,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2276,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2277,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 201,
+            "A": 2277,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2277,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2275,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2275,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2275,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2276,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2276,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2276,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2277,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2277,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2277,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 1983,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1982,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1936,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1937,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1931,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1971,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1948,
+            "B": -1,
+            "C": 61,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 4,
+            "C": 130,
+            "D": -0.5
+          },
+          {
+            "Type": 4,
+            "A": 1879,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2415,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2415,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2415,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2415,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2417,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2417,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2417,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2415,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 201,
+            "A": 2415,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2415,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2417,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 201,
+            "A": 2417,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2417,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2417,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2415,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 2417,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2467,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2467,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 82,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 201,
+            "A": 82,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 82,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 201,
+            "A": 82,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 21,
+            "C": 130,
+            "D": -0.3333339989185333
+          },
+          {
+            "Type": 4,
+            "A": 2631,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2632,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 133,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1189,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 45,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 47,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 51,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2574,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2575,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 1548,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2705,
+            "B": -1,
+            "C": 61,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2705,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2705,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2706,
+            "B": -1,
+            "C": 61,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2706,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2706,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2702,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2707,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 106,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 106,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 106,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 106,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          },
+          {
+            "Type": 4,
+            "A": 2728,
+            "B": -1,
+            "C": 23,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2728,
+            "B": -1,
+            "C": 1,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2728,
+            "B": -1,
+            "C": 12,
+            "D": 1.0
+          },
+          {
+            "Type": 4,
+            "A": 2728,
+            "B": -1,
+            "C": 9,
+            "D": 769.0
+          }
+        ]
+      },
+      {
+        "tech": 202,
+        "name": "Double Bit Axe",
+        "requires": [101, 758],
+        "requiredCount": 1,
+        "researchAt": [
+          [562, 25],
+          [1808, 25],
+          [2556, 25]
+        ],
+        "treeDisabled": false,
+        "commands": [
+          {
+            "Type": 5,
+            "A": 218,
+            "B": -1,
+            "C": 13,
+            "D": 1.2000000476837158
+          },
+          {
+            "Type": 5,
+            "A": 123,
+            "B": -1,
+            "C": 13,
+            "D": 1.2000000476837158
+          }
+        ]
+      },
+      {
+        "tech": 203,
+        "name": "Bow Saw",
+        "requires": [102, 202, 762],
+        "requiredCount": 2,
+        "researchAt": [
+          [562, 50],
+          [1808, 50],
+          [2556, 50]
+        ],
+        "treeDisabled": false,
+        "commands": [
+          {
+            "Type": 5,
+            "A": 218,
+            "B": -1,
+            "C": 13,
+            "D": 1.2000000476837158
+          },
+          {
+            "Type": 5,
+            "A": 123,
+            "B": -1,
+            "C": 13,
+            "D": 1.2000000476837158
+          },
+          {
+            "Type": 4,
+            "A": 218,
+            "B": -1,
+            "C": 14,
+            "D": 0.0
+          },
+          {
+            "Type": 4,
+            "A": 123,
+            "B": -1,
+            "C": 14,
+            "D": 0.0
+          }
+        ]
+      },
+      {
+        "tech": 222,
+        "name": "Man-At-Arms",
+        "requires": [101],
+        "requiredCount": 1,
+        "researchAt": [[12, 40]],
+        "treeDisabled": false,
+        "commands": [
+          {
+            "Type": 3,
+            "A": 74,
+            "B": 75,
+            "C": -1,
+            "D": 0.0
+          }
+        ]
+      }
+    ],
+    "currentDisabledConflict": [],
+    "units": [
+      {
+        "unit": 4,
+        "class": 0,
+        "baseEnabled": 0,
+        "baseDisabled": 0,
+        "sourceAvailabilityOrUpgradeWitnesses": [
+          {
+            "tech": 151,
+            "name": "Archer (make avail)",
+            "requires": [101],
+            "requiredCount": 1,
+            "treeDisabled": false,
+            "commands": [
+              {
+                "Type": 2,
+                "A": 4,
+                "B": 1,
+                "C": -1,
+                "D": 0.0
+              }
+            ]
+          }
+        ],
+        "legalCurrentScope": true
+      },
+      {
+        "unit": 13,
+        "class": 21,
+        "baseEnabled": 1,
+        "baseDisabled": 0,
+        "sourceAvailabilityOrUpgradeWitnesses": [],
+        "legalCurrentScope": true
+      },
+      {
+        "unit": 38,
+        "class": 12,
+        "baseEnabled": 0,
+        "baseDisabled": 0,
+        "sourceAvailabilityOrUpgradeWitnesses": [
+          {
+            "tech": 166,
+            "name": "Knight (make avail)",
+            "requires": [102],
+            "requiredCount": 1,
+            "treeDisabled": false,
+            "commands": [
+              {
+                "Type": 2,
+                "A": 38,
+                "B": 1,
+                "C": -1,
+                "D": 0.0
+              }
+            ]
+          }
+        ],
+        "legalCurrentScope": true
+      },
+      {
+        "unit": 74,
+        "class": 6,
+        "baseEnabled": 1,
+        "baseDisabled": 0,
+        "sourceAvailabilityOrUpgradeWitnesses": [],
+        "legalCurrentScope": true
+      },
+      {
+        "unit": 75,
+        "class": 6,
+        "baseEnabled": 0,
+        "baseDisabled": 0,
+        "sourceAvailabilityOrUpgradeWitnesses": [
+          {
+            "tech": 222,
+            "name": "Man-At-Arms",
+            "requires": [101],
+            "requiredCount": 1,
+            "treeDisabled": false,
+            "commands": [
+              {
+                "Type": 3,
+                "A": 74,
+                "B": 75,
+                "C": -1,
+                "D": 0.0
+              }
+            ]
+          }
+        ],
+        "legalCurrentScope": true
+      },
+      {
+        "unit": 93,
+        "class": 6,
+        "baseEnabled": 0,
+        "baseDisabled": 0,
+        "sourceAvailabilityOrUpgradeWitnesses": [
+          {
+            "tech": 87,
+            "name": "Spearman (make avail)",
+            "requires": [101, 950],
+            "requiredCount": 1,
+            "treeDisabled": false,
+            "commands": [
+              {
+                "Type": 2,
+                "A": 93,
+                "B": 1,
+                "C": -1,
+                "D": 0.0
+              }
+            ]
+          }
+        ],
+        "legalCurrentScope": true
+      },
+      {
+        "unit": 448,
+        "class": 47,
+        "baseEnabled": 0,
+        "baseDisabled": 0,
+        "sourceAvailabilityOrUpgradeWitnesses": [
+          {
+            "tech": 204,
+            "name": "Scout (make avail)",
+            "requires": [101],
+            "requiredCount": 1,
+            "treeDisabled": false,
+            "commands": [
+              {
+                "Type": 2,
+                "A": 448,
+                "B": 1,
+                "C": -1,
+                "D": 0.0
+              }
+            ]
+          }
+        ],
+        "legalCurrentScope": true
+      }
+    ],
+    "allCurrentMilitaryTemplatesLegal": true,
+    "militaryWarning": "No false knight-only Generic warning is required. Slavic siege cost and monk speed do not touch current output unit classes.",
+    "farmActions": [
+      {
+        "bo": "archers-19",
+        "step": 10,
+        "actionIndex": 4,
+        "action": {
+          "type": "build",
+          "building": 50
+        }
+      },
+      {
+        "bo": "fast-castle-boom",
+        "step": 7,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 50,
+          "count": 4
+        }
+      },
+      {
+        "bo": "fast-castle-knights",
+        "step": 7,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 50,
+          "count": 4
+        }
+      },
+      {
+        "bo": "maa-archers-18",
+        "step": 9,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 50
+        }
+      },
+      {
+        "bo": "scouts-18",
+        "step": 11,
+        "actionIndex": 2,
+        "action": {
+          "type": "build",
+          "building": 50
+        }
+      }
+    ],
+    "farmAssignments": [
+      {
+        "bo": "fast-castle-boom",
+        "step": 7,
+        "actionIndex": 0,
+        "action": {
+          "type": "gather",
+          "task": "farm",
+          "count": 4,
+          "from": "hunt"
+        }
+      },
+      {
+        "bo": "fast-castle-knights",
+        "step": 7,
+        "actionIndex": 0,
+        "action": {
+          "type": "gather",
+          "task": "farm",
+          "count": 4,
+          "from": "hunt"
+        }
+      }
+    ],
+    "sourceAgeAndLocationBoundary": "Current standard research14/22/199/202/203 and age101/102 plusupgrade222 are source-legal; do not expand the shared simulator into a new global tech-availability/age/queue engine."
+  },
+  "declaredMinimalModelAcceptedByRoot": {
+    "consumer": "Use existing normalized eco workRate0.53×decoded1.23 with current carry/speed/eco modifiers, then original carry/(carry/workRate+2*distance/speed) average.",
+    "supplier": "Use independentfarm50/1187 cacheWorkRate normalizedround4=.4 ×decoded1.15; normalized steady supply~.46. Rawcommands keep fullfloatD and closed raw identity; .4599999973 raw-field product is not mislabeled as an executed client result.",
+    "combine": "Slavs farm only, complete own source context: min(consumerAverageIncludingWalk, independentSupplierAverage). Never multiply1.23×1.15 into consumer; never cap rawconsumer then applywalk again.",
+    "assignmentBoundary": "Retain current step-start task assignment income. No new completed-plot/count binding, initial pool buffer, startup, pathing/four-stop, discrete deliveries, exhaustion or reseeding model. Current5buildsites/11farms are not5economic-trigger BOs; only2BOs explicitly assignfarm tasks.",
+    "counterfactual": "Physical farm source is independent from the removable Slavic farm-bonus row. Whole bonus removal retains the Slavs-specific continuous model with W=.53 (no×1.23) and Qs=.4 (no×1.15), NOT legacyGeneric. Malformed existing bonus grants neither modifier but does not delete independently valid physical source. UI unsupported fallback and direct low-level capability are separate. Other55 legacy formulas remain unchanged.",
+    "precisionRecommendation": "Keep normalizedeco.53×decoded1.23 and normalizedsupplier.4×decoded1.15, consistent with existing generator precision. Tests/code must agree; do not mix exactrawfloatexpected values into normalized rate assertions.",
+    "arithmeticNotExecution": [
+      {
+        "tiles": 1,
+        "legacyGeneric": 0.467991169977925,
+        "existingSlavConsumerOnlyHelper": 0.5605451535931555,
+        "proposedSlavSteady": 0.45999999999999996,
+        "kind": "Direct arithmetic on saved numeric fields; no domain/model invocation"
+      },
+      {
+        "tiles": 2,
+        "legacyGeneric": 0.4189723320158103,
+        "existingSlavConsumerOnlyHelper": 0.4916474980202874,
+        "proposedSlavSteady": 0.45999999999999996,
+        "kind": "Direct arithmetic on saved numeric fields; no domain/model invocation"
+      },
+      {
+        "tiles": 4,
+        "legacyGeneric": 0.34640522875817,
+        "existingSlavConsumerOnlyHelper": 0.39463647920576306,
+        "proposedSlavSteady": 0.39463647920576306,
+        "kind": "Direct arithmetic on saved numeric fields; no domain/model invocation"
+      },
+      {
+        "tiles": 7,
+        "legacyGeneric": 0.27496757457846954,
+        "existingSlavConsumerOnlyHelper": 0.304508775822405,
+        "proposedSlavSteady": 0.304508775822405,
+        "kind": "Direct arithmetic on saved numeric fields; no domain/model invocation"
+      }
+    ],
+    "relativeBonusClaim": "At defaultnear2 the proposed~.46 is about+9.79% vs preserved legacyGeneric~.418972, not guaranteed+15%; attiles1 it may be below oldGeneric.46799 because that legacy model lacks supply. Tool copy must make the distinct approximation clear.",
+    "otherModels": "Preserve allother55 and independentrealCost values/code; no global Type/res allowlist or shared generic farm cap.",
+    "physicalVsBonusSeparation": "Keep independent normalized farm50/1187 supplier base/civ identity metadata separate from fullSlavic tree7 bonus-row raw commands/effects. Missing or invalidphysical source means no claimed newfarm model; validphysical source persists through wholebonus removal or badbonus withholding. Whole-group removal is an authorized counterfactual, not source drift."
+  },
+  "team721Boundary": {
+    "technology": 721,
+    "effectId": 758,
+    "fullRaw": {
+      "Name": "Slavic team bonus",
+      "EffectID": 758,
+      "Civ": 23,
+      "RequiredTechs": [-1, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 10,
+          "A": 12,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 20,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 132,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 498,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 10,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 14,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 87,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 86,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 101,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 153,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 150,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        },
+        {
+          "Type": 10,
+          "A": 49,
+          "B": -1,
+          "C": 21,
+          "D": 5.0
+        }
+      ]
+    },
+    "currentDefault": "Defaultparams.team=false is the accepted complete-support scope. Do not describe the +5 military-building population as nonexistent just because decoded TeamBonusID9 is empty.",
+    "teamTrue": "No +5pop implementation is authorized by this minimal farm batch. Keep complete721raw/source guard and explicitly disclose team military-building population unmodeled for team=true; do not claim full team-on support or globally permitType10. If adding a narrow team=true unsupported option, root must approve its bounded API contract first."
+  },
+  "publicSemanticEvidence": {
+    "path": "/tmp/batch12-slavs-farm-semantics.json",
+    "sha256": "dc6254abbc1f5217ea5173a4fb61ee8e1bde02e334ee3cc114084c70e918f917",
+    "markdown": "/tmp/batch12-slavs-farm-semantics.md",
+    "markdownSHA256": "96af0b0552fe853503481eb51d770cdb20ad323d74159b6e4bec07d35f20c835",
+    "reviewer": "/root/batch11_georgians_source/batch12_farm_semantics",
+    "sources": [
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/README.md",
+        "path": "crates/engine/genie-core/src/README.md",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "8182a4c74f790c2e2888d5c08330d0fff72357ef",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Explicit public project scope: reimplementation claiming deterministic equivalence for build158041; no DE185872 client validation.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/README.md",
+        "path": "crates/engine/genie-core/src/gathering/README.md",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "f0ada67de15cd6ec740c022359e6bbf6b881e64a",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Independent producer Make action and consumer Gather action.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/make.rs",
+        "path": "crates/engine/genie-core/src/gathering/make.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "032fbc4c7e003a650fa8c3f74b5d0808432344c9",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Stock capacity and replenishment; player resource36 lifetime budget; kind-change initialization; tests are inspected source, not executed.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/work.rs",
+        "path": "crates/engine/genie-core/src/gathering/gather/work.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "7101d6c8ba4c93e8b8ec55a625fed87c445e9e87",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Consumer takes no more than current target amount; productivity and tail-rounding details; discrete delivery.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/start.rs",
+        "path": "crates/engine/genie-core/src/gathering/gather/start.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "e7886f1f156803560b86dcbe74940101c63334cd",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Consumer capacity/work rate/productivity determine four-stop timings.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/update.rs",
+        "path": "crates/engine/genie-core/src/gathering/gather/update.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "b44ed4af57417e87c4d470b5eecd96cd703c219c",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "One farmer per farm path and intra-farm walking; multiple workers wait; engine state machine differs from average-rate candidate.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/README.md",
+        "path": "crates/engine/genie-core/src/gathering/gather/README.md",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "e7c96da772364763ef61fb5e377dd185013c3eb3",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Four random stops and discrete carry/drop cycle.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/objects/unit/default_task.rs",
+        "path": "crates/engine/genie-core/src/objects/unit/default_task.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "30d254c8fcbe52f49af97621c6a55928296d249f",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Finished idle farm starts own Make task.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/objects/unit/update.rs",
+        "path": "crates/engine/genie-core/src/objects/unit/update.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "4552875aadbb2a4649dfb6de6b5fe9271113902b",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Make is farm object's update; no condition requiring farmer actively gathering.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      },
+      {
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/farm_queue.rs",
+        "path": "crates/engine/genie-core/src/gathering/farm_queue.rs",
+        "pin": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "blobSHA": "cf728d9c26b5cb190d0aa94c9c8a0e6559325d62",
+        "read": "Full UTF-8 file actually fetched via GitHub connector in this audit; excerpts retained below.",
+        "role": "Reseeding exists separately; not reproduced by continuous approximation.",
+        "engineVersionBoundary": 158041,
+        "independentlyValidatedAgainstClient": false
+      }
+    ],
+    "criticalReadExcerpts": "Parent read saved README/Make/Gather excerpts, including start(kind0,15)→(kind16,0), buffer refill during walking and finitefood36 budget. These are unofficial older158041 code semantics, not185872client measurements.",
+    "claimScope": "Supports the two-stage motivation and limitation disclosures. Root has chosen the steady continuous approximation as a model contract; no public code proves exact currentclient behavior."
+  },
+  "remainingUnknownsNotBlockersForDeclaredModel": [
+    "ExactDE185872client initialization/order/transients for farmMake/Gather; Food15 is not asserted as live initialpool.",
+    "Real farm positions, four-stop walking, worker/plot matching, finitefarmfood/exhaustion and reseeding; explicitly outside the preserved assignment model.",
+    "Fullteam=true military-building population behavior not implemented; defaultoff support scope and explicit disclosure required."
+  ],
+  "unresolvedCurrentDefaultScopeMechanisms": [],
+  "beforeProductionGates": [
+    "Parent must approve a concrete SPEC/realred design matching this declared approximation and current scope; this candidate is not implementation approval.",
+    "Producer must export complete canonical tree7 and own raw context needed by closed groups even if wrongCiv/site/EffectID/unknown-only would otherwise disappear; no drop-then-treat-as-legitimate-removal.",
+    "OptionalSlavic namespace, closedcommands/objects, exactwholefamily/duplicates/sourceidentity/othercivilization guards; raw task semantic facts not exported must not be falsely claimed dynamically validated. No globaldat_sourcecache expansion is necessary for the declarednormalizedmodel.",
+    "runOnce andgatherRate must use independently guarded physical source, and jointly apply consumer1.23/supplier1.15 onlywhen the completeSlavic bonus group is valid. Wholebonus removal keeps baseSlavic .53/.4 steady model; invalidexistingbonus applies neither modifier but preserves validphysical capability. Other55/realCost unchanged; current8 capture distinguishes2farmBOs vs6nonfarm.",
+    "Farmtree group has no positive techID; original#317SIM_CHECKED excludes thattree-onlybonus. Do not manufacturetech7 or change algorithm/screening to force a newkey; separate removed-group/currentBO tests and truthfulUI usage label are needed. Anyactual#317newkeys/nulls remain actual generator observations only.",
+    "Team721context and omission disclosure must be honest; do not silently activate militarypopulation or claim it is absent."
+  ],
+  "execution": {
+    "repositoryWrites": 0,
+    "DATDownloads": 0,
+    "DATRawReadParses": 1,
+    "domainCalls": 0,
+    "producer": 0,
+    "tests": 0,
+    "builds": 0,
+    "browser": 0,
+    "note": "One later static-reader command had a Python ternary-spacing SyntaxError before any file logic ran; corrected read succeeded. It is an audit-harness error, not a product red."
+  },
+  "modelContractCorrection": {
+    "recordedUTC": "2026-10-28T09:50:07.920360+00:00",
+    "provenance": "Root latest explicit independent-physical capability/counterfactual contract conveyed by implementation owner; source agent informed root and updated this candidate accordingly.",
+    "previousDraftSHA256": "9f81dd51c81befe9692800823b7eaed2340b1461e63bb2e03223a14bd0801faa",
+    "previousMarkdownSHA256": "fb3935ac871416b81cef6af26f3d2f57b0fc41dda27a84aaa31337e9ed0b35c0",
+    "previousDraftPreserved": "/tmp/batch12-slavs-candidate-before-independent-physical-contract.json",
+    "correction": "Earlier source-agent draft had inferred bonus removal must restore uncapped legacyGeneric from other55 compatibility; that was not root explicit contract. Corrected to retainSlavs physicalbase steady cap. No raw/source/closure facts or product files changed."
+  }
+}

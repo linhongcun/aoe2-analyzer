@@ -1,0 +1,894 @@
+{
+  "schema": 1,
+  "status": "PASS_SAVED_CANDIDATE_A_QUANTITATIVE_EVIDENCE",
+  "actualRuntime": {
+    "head": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+    "tree": "8fc5044af6fc84965e6433176cb4c28f0bcdfa6a",
+    "version": "0.57.0",
+    "baseline": "7d748918e4708934a10b34631488b38a7ffd40b3"
+  },
+  "slavicEight": {
+    "status": "PASS_SLAVS_EIGHT_OFFLINE_BOUNDARY_CHECKS",
+    "actualExecutionUTC": {
+      "started": "2026-10-28T11:03:39.563Z",
+      "completed": "2026-10-28T11:03:40.643Z"
+    },
+    "checks": {
+      "exact8Calls": true,
+      "exact8IDs": true,
+      "exactDefaultOptions": true,
+      "exactFC2": true,
+      "exactSixNoFarm": true,
+      "elevenOldGlobalValuesPreserved": true,
+      "allBoundedPerOrderChecks": true
+    },
+    "oldGlobalValueChanges": [],
+    "counts": {
+      "actualPublicTimelines": 8,
+      "actualPerBONotes": 8,
+      "noFarmNumericProtected": 6,
+      "FCObserved": 2,
+      "otherCivTimelineCalls": 0
+    },
+    "baselineCallSemantics": "Saved baseline eight calls used direct simulateBuild(bo,Slavs,...); Slavs was unsupported in the UI at that head. Their deltas are not automatically a comparison with the previous UI Generic fallback or proof of in-game gain/loss.",
+    "classificationScope": "Six nofarm numeric vectors are exact-isDeepStrictEqual protected; FC2 actual time/stock/construction differences and source/research ledgers are observed without preselecting a particular delta, direction, click time or completion time. Existing controlled tests and separate code/source review validate the farm formula; raw comparison is not a second simulator or current-client calibration.",
+    "additionalDomainCalls": 0
+  },
+  "perOrder": [
+    {
+      "id": "feudal-drush-18",
+      "classification": "six nofarm: all original numeric fields must be exactly equal",
+      "farmAssigned": false,
+      "farmActions": [],
+      "notes": {
+        "actual": [],
+        "baselinePerCivOnly": [],
+        "baselineWasNotAPerBOCall": true
+      },
+      "fullChanged": 0,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "protectedChecks": {
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "originalAssumptionsExactlyEqual": true,
+        "notesEmpty": true,
+        "noNewFarmDisclosure": true
+      },
+      "changedPathCountsByCategory": {
+        "timing": 0,
+        "stock": 0,
+        "construction": 0,
+        "allocationPopulationCost": 0,
+        "model": 0,
+        "other": 0
+      },
+      "actualAgeClocks": [
+        {
+          "age": "feudal",
+          "clickAt": 447,
+          "reachAt": 577
+        }
+      ],
+      "allAgeClickAndReachClocksEqualSavedBaseline": true
+    },
+    {
+      "id": "hybrid-fish-18",
+      "classification": "six nofarm: all original numeric fields must be exactly equal",
+      "farmAssigned": false,
+      "farmActions": [],
+      "notes": {
+        "actual": [],
+        "baselinePerCivOnly": [],
+        "baselineWasNotAPerBOCall": true
+      },
+      "fullChanged": 0,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "protectedChecks": {
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "originalAssumptionsExactlyEqual": true,
+        "notesEmpty": true,
+        "noNewFarmDisclosure": true
+      },
+      "changedPathCountsByCategory": {
+        "timing": 0,
+        "stock": 0,
+        "construction": 0,
+        "allocationPopulationCost": 0,
+        "model": 0,
+        "other": 0
+      },
+      "actualAgeClocks": [
+        {
+          "age": "feudal",
+          "clickAt": 495,
+          "reachAt": 625
+        }
+      ],
+      "allAgeClickAndReachClocksEqualSavedBaseline": true
+    },
+    {
+      "id": "maa-archers-18",
+      "classification": "six nofarm: all original numeric fields must be exactly equal",
+      "farmAssigned": false,
+      "farmActions": [],
+      "notes": {
+        "actual": [],
+        "baselinePerCivOnly": [],
+        "baselineWasNotAPerBOCall": true
+      },
+      "fullChanged": 0,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "protectedChecks": {
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "originalAssumptionsExactlyEqual": true,
+        "notesEmpty": true,
+        "noNewFarmDisclosure": true
+      },
+      "changedPathCountsByCategory": {
+        "timing": 0,
+        "stock": 0,
+        "construction": 0,
+        "allocationPopulationCost": 0,
+        "model": 0,
+        "other": 0
+      },
+      "actualAgeClocks": [
+        {
+          "age": "feudal",
+          "clickAt": 440.6,
+          "reachAt": 570.6
+        }
+      ],
+      "allAgeClickAndReachClocksEqualSavedBaseline": true
+    },
+    {
+      "id": "scouts-18",
+      "classification": "six nofarm: all original numeric fields must be exactly equal",
+      "farmAssigned": false,
+      "farmActions": [],
+      "notes": {
+        "actual": [],
+        "baselinePerCivOnly": [],
+        "baselineWasNotAPerBOCall": true
+      },
+      "fullChanged": 0,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "protectedChecks": {
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "originalAssumptionsExactlyEqual": true,
+        "notesEmpty": true,
+        "noNewFarmDisclosure": true
+      },
+      "changedPathCountsByCategory": {
+        "timing": 0,
+        "stock": 0,
+        "construction": 0,
+        "allocationPopulationCost": 0,
+        "model": 0,
+        "other": 0
+      },
+      "actualAgeClocks": [
+        {
+          "age": "feudal",
+          "clickAt": 425.5,
+          "reachAt": 555.5
+        }
+      ],
+      "allAgeClickAndReachClocksEqualSavedBaseline": true
+    },
+    {
+      "id": "archers-19",
+      "classification": "six nofarm: all original numeric fields must be exactly equal",
+      "farmAssigned": false,
+      "farmActions": [],
+      "notes": {
+        "actual": [],
+        "baselinePerCivOnly": [],
+        "baselineWasNotAPerBOCall": true
+      },
+      "fullChanged": 0,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "protectedChecks": {
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "originalAssumptionsExactlyEqual": true,
+        "notesEmpty": true,
+        "noNewFarmDisclosure": true
+      },
+      "changedPathCountsByCategory": {
+        "timing": 0,
+        "stock": 0,
+        "construction": 0,
+        "allocationPopulationCost": 0,
+        "model": 0,
+        "other": 0
+      },
+      "actualAgeClocks": [
+        {
+          "age": "feudal",
+          "clickAt": 454.4,
+          "reachAt": 584.4
+        }
+      ],
+      "allAgeClickAndReachClocksEqualSavedBaseline": true
+    },
+    {
+      "id": "fast-castle-boom",
+      "classification": "FC2: observe actual differences attributable to the independently reviewed farm/standard-tech completion model; no target clock or stock is forecast",
+      "farmAssigned": true,
+      "farmActions": [
+        {
+          "step": 7,
+          "action": 0,
+          "count": 4,
+          "from": "hunt",
+          "beforeStepStart": 354.7,
+          "actualStepStart": 354.7,
+          "observation": "Source task action at recorded step boundary; internal income tick may follow by0.1s."
+        }
+      ],
+      "notes": {
+        "actual": ["农田按供给上限连续估算，近距离可能低于原通用估算，不代表游戏内加成减益"],
+        "baselinePerCivOnly": [],
+        "baselineWasNotAPerBOCall": true
+      },
+      "fullChanged": 10,
+      "numericChanged": 8,
+      "numericDiff": [
+        {
+          "path": "$.ageUps.1.errSec.early",
+          "kind": "changed",
+          "before": 44.1,
+          "after": 57.1
+        },
+        {
+          "path": "$.steps.8.stock.food",
+          "kind": "changed",
+          "before": 460,
+          "after": 479
+        },
+        {
+          "path": "$.steps.9.stock.food",
+          "kind": "changed",
+          "before": 563,
+          "after": 588
+        },
+        {
+          "path": "$.steps.10.stock.food",
+          "kind": "changed",
+          "before": 780,
+          "after": 833
+        },
+        {
+          "path": "$.steps.11.errSec.early",
+          "kind": "changed",
+          "before": 44.1,
+          "after": 57.1
+        },
+        {
+          "path": "$.steps.11.stock.food",
+          "kind": "changed",
+          "before": 987,
+          "after": 1055
+        },
+        {
+          "path": "$.steps.12.errSec.early",
+          "kind": "changed",
+          "before": 72.3,
+          "after": 85.3
+        },
+        {
+          "path": "$.steps.12.stock.food",
+          "kind": "changed",
+          "before": 931,
+          "after": 1026
+        }
+      ],
+      "protectedChecks": {
+        "hasFarmAssignment": true,
+        "disclosureInNotes": true,
+        "disclosureInAssumptions": true
+      },
+      "changedPathCountsByCategory": {
+        "timing": 1,
+        "stock": 5,
+        "construction": 0,
+        "allocationPopulationCost": 0,
+        "model": 2,
+        "other": 2
+      },
+      "actualAgeClocks": [
+        {
+          "age": "feudal",
+          "clickAt": 543.6,
+          "reachAt": 673.6
+        },
+        {
+          "age": "castle",
+          "clickAt": 772.6,
+          "reachAt": 932.6
+        }
+      ],
+      "allAgeClickAndReachClocksEqualSavedBaseline": true,
+      "farmFormula": {
+        "nearTiles": 2,
+        "baseFarmerWorkRate": 0.53,
+        "baseCarry": 10,
+        "baseSpeed": 0.8,
+        "farmerMultiplier": 1.23,
+        "physicalFarmBase": 0.4,
+        "supplierMultiplier": 1.15,
+        "unupgradedConsumerTripRate": 0.4916474980202874,
+        "independentSupply": 0.45999999999999996,
+        "effectiveUnupgradedRate": 0.45999999999999996,
+        "rule": "C/(C/Wc+2*d/V), then min with independent supply; apply completed ordinary carry/speed/work effects to consumer only. Farm storage/capacity is not an income multiplier.",
+        "completionBoundary": "Individually observable research completion is listed above. Compound completion times are not invented; this report does not replay the simulator or integrate predicted stock."
+      }
+    },
+    {
+      "id": "fast-castle-knights",
+      "classification": "FC2: observe actual differences attributable to the independently reviewed farm/standard-tech completion model; no target clock or stock is forecast",
+      "farmAssigned": true,
+      "farmActions": [
+        {
+          "step": 7,
+          "action": 0,
+          "count": 4,
+          "from": "hunt",
+          "beforeStepStart": 354.7,
+          "actualStepStart": 354.7,
+          "observation": "Source task action at recorded step boundary; internal income tick may follow by0.1s."
+        }
+      ],
+      "notes": {
+        "actual": ["农田按供给上限连续估算，近距离可能低于原通用估算，不代表游戏内加成减益"],
+        "baselinePerCivOnly": [],
+        "baselineWasNotAPerBOCall": true
+      },
+      "fullChanged": 12,
+      "numericChanged": 10,
+      "numericDiff": [
+        {
+          "path": "$.ageUps.1.errSec.early",
+          "kind": "changed",
+          "before": 44.1,
+          "after": 57.1
+        },
+        {
+          "path": "$.steps.8.stock.food",
+          "kind": "changed",
+          "before": 460,
+          "after": 479
+        },
+        {
+          "path": "$.steps.9.stock.food",
+          "kind": "changed",
+          "before": 563,
+          "after": 588
+        },
+        {
+          "path": "$.steps.10.stock.food",
+          "kind": "changed",
+          "before": 780,
+          "after": 833
+        },
+        {
+          "path": "$.steps.11.errSec.early",
+          "kind": "changed",
+          "before": 44.1,
+          "after": 57.1
+        },
+        {
+          "path": "$.steps.11.stock.food",
+          "kind": "changed",
+          "before": 987,
+          "after": 1055
+        },
+        {
+          "path": "$.steps.12.errSec.early",
+          "kind": "changed",
+          "before": 79.2,
+          "after": 92.2
+        },
+        {
+          "path": "$.steps.12.stock.food",
+          "kind": "changed",
+          "before": 931,
+          "after": 1026
+        },
+        {
+          "path": "$.steps.13.errSec.early",
+          "kind": "changed",
+          "before": 79.2,
+          "after": 92.2
+        },
+        {
+          "path": "$.steps.13.stock.food",
+          "kind": "changed",
+          "before": 1090,
+          "after": 1191
+        }
+      ],
+      "protectedChecks": {
+        "hasFarmAssignment": true,
+        "disclosureInNotes": true,
+        "disclosureInAssumptions": true
+      },
+      "changedPathCountsByCategory": {
+        "timing": 1,
+        "stock": 6,
+        "construction": 0,
+        "allocationPopulationCost": 0,
+        "model": 2,
+        "other": 3
+      },
+      "actualAgeClocks": [
+        {
+          "age": "feudal",
+          "clickAt": 543.6,
+          "reachAt": 673.6
+        },
+        {
+          "age": "castle",
+          "clickAt": 772.6,
+          "reachAt": 932.6
+        }
+      ],
+      "allAgeClickAndReachClocksEqualSavedBaseline": true,
+      "farmFormula": {
+        "nearTiles": 2,
+        "baseFarmerWorkRate": 0.53,
+        "baseCarry": 10,
+        "baseSpeed": 0.8,
+        "farmerMultiplier": 1.23,
+        "physicalFarmBase": 0.4,
+        "supplierMultiplier": 1.15,
+        "unupgradedConsumerTripRate": 0.4916474980202874,
+        "independentSupply": 0.45999999999999996,
+        "effectiveUnupgradedRate": 0.45999999999999996,
+        "rule": "C/(C/Wc+2*d/V), then min with independent supply; apply completed ordinary carry/speed/work effects to consumer only. Farm storage/capacity is not an income multiplier.",
+        "completionBoundary": "Individually observable research completion is listed above. Compound completion times are not invented; this report does not replay the simulator or integrate predicted stock."
+      }
+    },
+    {
+      "id": "drush-fc",
+      "classification": "six nofarm: all original numeric fields must be exactly equal",
+      "farmAssigned": false,
+      "farmActions": [],
+      "notes": {
+        "actual": [],
+        "baselinePerCivOnly": [],
+        "baselineWasNotAPerBOCall": true
+      },
+      "fullChanged": 0,
+      "numericChanged": 0,
+      "numericDiff": [],
+      "protectedChecks": {
+        "hasNoFarmAssignment": true,
+        "numericExactlyEqual": true,
+        "originalAssumptionsExactlyEqual": true,
+        "notesEmpty": true,
+        "noNewFarmDisclosure": true
+      },
+      "changedPathCountsByCategory": {
+        "timing": 0,
+        "stock": 0,
+        "construction": 0,
+        "allocationPopulationCost": 0,
+        "model": 0,
+        "other": 0
+      },
+      "actualAgeClocks": [
+        {
+          "age": "feudal",
+          "clickAt": 650.7,
+          "reachAt": 780.7
+        },
+        {
+          "age": "castle",
+          "clickAt": 870.8,
+          "reachAt": 1030.8
+        }
+      ],
+      "allAgeClickAndReachClocksEqualSavedBaseline": true
+    }
+  ],
+  "other55": {
+    "schema": 1,
+    "status": "PASS_OTHER55_OFFLINE_COMPARISON",
+    "reviewedUTC": "2026-10-28T11:05:29.072Z",
+    "head": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+    "tree": "8fc5044af6fc84965e6433176cb4c28f0bcdfa6a",
+    "version": "0.57.0",
+    "baseline": "7d748918e4708934a10b34631488b38a7ffd40b3",
+    "actualExecutionUTC": {
+      "started": "2026-10-28T11:03:39.563Z",
+      "completed": "2026-10-28T11:04:20.198Z"
+    },
+    "inventory": {
+      "exact55OtherCivs": true,
+      "exact8Orders": true,
+      "exact56CostCivs": true,
+      "exactCalls": true
+    },
+    "counts": {
+      "other55Full": 440,
+      "other55Numeric": 440,
+      "notes": 55,
+      "support": 55,
+      "other55Helpers": 1485,
+      "SlavicNonFarmHelpers": 24,
+      "SlavicFarmHelpers": 3,
+      "allCapturedHelpers": 1512,
+      "allIndependentRealCost": 224,
+      "oldRawCivSections": 55,
+      "oldGlobalSections": 11,
+      "historicalRemainingCases": 42
+    },
+    "delta": {
+      "full": [],
+      "numeric": [],
+      "notes": [],
+      "support": [],
+      "helpers": [],
+      "realCost": []
+    },
+    "slavicNonFarmHelperChanges": [],
+    "slavicFarmChecks": [
+      {
+        "key": "farm:1",
+        "before": {
+          "carry": 10,
+          "workRate": 0.6519,
+          "rate": 0.5605451535931555,
+          "extraIncome": {}
+        },
+        "actual": {
+          "carry": 10,
+          "workRate": 0.6519,
+          "rate": 0.45999999999999996,
+          "extraIncome": {}
+        },
+        "expected": {
+          "carry": 10,
+          "workRate": 0.6519,
+          "rate": 0.45999999999999996,
+          "extraIncome": {}
+        },
+        "valid": true
+      },
+      {
+        "key": "farm:4",
+        "before": {
+          "carry": 10,
+          "workRate": 0.6519,
+          "rate": 0.39463647920576306,
+          "extraIncome": {}
+        },
+        "actual": {
+          "carry": 10,
+          "workRate": 0.6519,
+          "rate": 0.39463647920576306,
+          "extraIncome": {}
+        },
+        "expected": {
+          "carry": 10,
+          "workRate": 0.6519,
+          "rate": 0.39463647920576306,
+          "extraIncome": {}
+        },
+        "valid": true
+      },
+      {
+        "key": "farm:7",
+        "before": {
+          "carry": 10,
+          "workRate": 0.6519,
+          "rate": 0.304508775822405,
+          "extraIncome": {}
+        },
+        "actual": {
+          "carry": 10,
+          "workRate": 0.6519,
+          "rate": 0.304508775822405,
+          "extraIncome": {}
+        },
+        "expected": {
+          "carry": 10,
+          "workRate": 0.6519,
+          "rate": 0.304508775822405,
+          "extraIncome": {}
+        },
+        "valid": true
+      }
+    ],
+    "support": {
+      "supported49": true,
+      "remaining7": true,
+      "SlavicSupportClear": true,
+      "supported": 49,
+      "unsupported": 7,
+      "remaining": ["Chinese", "Gurjaras", "Jurchens", "Khmer", "Mapuche", "Poles", "Romans"]
+    },
+    "data": {
+      "onlyNewSlavicOptionalNamespace": true,
+      "old11Globals": true,
+      "oldGlobalRawChanges": [],
+      "other55RawChanges": [],
+      "same56CivOrder": true,
+      "originalFourSlavicRowsEffectsOrderPreserved": true,
+      "oneCanonicalTreeMetadata": true,
+      "exactCanonical3TechMetadata": true,
+      "oneNewRawTeam721": true,
+      "newPhysicalObject": true
+    },
+    "historicalMismatches": [],
+    "evidence": {
+      "capture": "/tmp/batch12197-runtime-A-capture.json",
+      "captureSHA256": "75ec3ce219cdd51d57170231b5dfc715b9caab240d5c442e2a283a5fd60882bb",
+      "raw": {
+        "/tmp/batch12197-runtime-A-actual-results.json": {
+          "sha256": "5e4ca54761f3fedb6846b5f0d467a235eee5dfb978daac330c563152f8c7da6f",
+          "bytes": 8876234
+        },
+        "/tmp/batch12197-runtime-A-helpers.json": {
+          "sha256": "73b5c4bd7cbd59fcebd62ea639c8eb84418cc63a1adc1679c52c73d4abe017b5",
+          "bytes": 208524
+        },
+        "/tmp/batch12197-runtime-A-realcost.json": {
+          "sha256": "160802db70cd82376545e8e74dde29ab22413f1bc8701e98442efed3cc9b517b",
+          "bytes": 77910
+        },
+        "/tmp/batch12197-runtime-A-eco-sections.json": {
+          "sha256": "95f296d50647b635c7ab856a5899386093ea7c2d4699f16b807dc88c7fb6a3f0",
+          "bytes": 356774
+        }
+      },
+      "staticReview": {
+        "path": "/tmp/batch12197-candidateA-postcode-static-classification.json",
+        "sha256": "c91a1e664fd0a390e24daa6435f646b21d75099eac2673a03129b6fcdf0a0813"
+      },
+      "policy": "515796d8c0fbc36500ef87cdb0b660cc214ceba90ea4dc7fb813ce96f4f7632e"
+    },
+    "comparison": "isDeepStrictEqual on complete parsed public results and numeric projection excluding model; raw captured artifacts/eco sections retain byte SHA protection.",
+    "boundary": "Offline classification only. No project imports/domain/test/build/browser/generation runs, no final or future SHA relabel. Source-family, CURRENT8, golden322 exact current-state text, whole331 and original31784 protections are separate static review evidence.",
+    "additionalDomainCalls": 0
+  },
+  "originalEightOffline": {
+    "path": "/tmp/batch12197-runtime-A-slavs-eight-offline.json",
+    "sha256": "6d0b92be86c17db3b0b14f219fd75e63af0428a1bc31dc5e0eea137f6b59a3c0",
+    "bytes": 221460,
+    "selection": "Per-order ledgers omitted from this compact saved report; numeric differences, exact clocks, checks, formulas and original evidence hashes retained."
+  },
+  "eightEvidence": {
+    "capture": "/tmp/batch12197-runtime-A-slavs-eight-capture.json",
+    "captureSHA256": "e9f611a50dca7fc86d3ceeb2c30189b48d6aa6ae8bce37e78a6bf6cf4e1a8d9d",
+    "raw": {
+      "/tmp/batch12197-runtime-A-slavs-eight-actual-results.json": {
+        "sha256": "0c9c0cddc91129e026933b750ef4f93e7909f9432c57c4651bd95e729dda3461",
+        "bytes": 641630
+      }
+    },
+    "rootIdentityPath": "/tmp/batch12197-runtime-A-identity.json",
+    "rootIdentitySHA256": "c5003814f437b41b1abdd685cad56a05e49db154e2ab75663d757c6a45cdaccb",
+    "staticReview": {
+      "path": "/tmp/batch12197-candidateA-postcode-static-classification.json",
+      "sha256": "c91a1e664fd0a390e24daa6435f646b21d75099eac2673a03129b6fcdf0a0813"
+    },
+    "policy": "515796d8c0fbc36500ef87cdb0b660cc214ceba90ea4dc7fb813ce96f4f7632e"
+  },
+  "fc2StockConsistency": {
+    "schema": 1,
+    "status": "PASS_FC2_SAVED_DATA_CONSISTENCY_INTERPRETATION",
+    "reviewer": "/root/batch10_public_closure",
+    "reviewedUTC": "2026-10-28T11:10:21.906606+00:00",
+    "head": "c61bfc82cefd1bf920e377c7c67136386ba56a7e",
+    "tree": "8fc5044af6fc84965e6433176cb4c28f0bcdfa6a",
+    "rawSHA256": "0c9c0cddc91129e026933b750ef4f93e7909f9432c57c4651bd95e729dda3461",
+    "perOrder": [
+      {
+        "id": "fast-castle-boom",
+        "checks": {
+          "allStepStartDoneExactlyEqual": true,
+          "allAgeClickReachExactlyEqual": true,
+          "allConstructionEventsExactlyEqual": true,
+          "allHousePaymentTimesExactlyEqual": true,
+          "allNumericDifferencesOnlyFoodStocksOrEarlyErrorBands": true
+        },
+        "farmStartStepIndex0": 7,
+        "farmStartAt": 354.7,
+        "assignedFarmers": 4,
+        "baselineFarmerRateUsedInRunOnce": 0.4189723320158103,
+        "currentPhysicalSupplyCappedRate": 0.45999999999999996,
+        "perFarmerRateDifference": 0.041027667984189664,
+        "foodStockChanges": [
+          {
+            "stepIndex0": 8,
+            "actualStartAt": 470.1,
+            "beforeFood": 460,
+            "actualFood": 479,
+            "observedDelta": 19,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 18.938371541501954,
+            "floorTickResidual": 0.061628458498045546
+          },
+          {
+            "stepIndex0": 9,
+            "actualStartAt": 504.6,
+            "beforeFood": 563,
+            "actualFood": 588,
+            "observedDelta": 25,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 24.600189723320128,
+            "floorTickResidual": 0.39981027667987235
+          },
+          {
+            "stepIndex0": 10,
+            "actualStartAt": 673.6,
+            "beforeFood": 780,
+            "actualFood": 833,
+            "observedDelta": 53,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 52.33489328063234,
+            "floorTickResidual": 0.6651067193676568
+          },
+          {
+            "stepIndex0": 11,
+            "actualStartAt": 768.9,
+            "beforeFood": 987,
+            "actualFood": 1055,
+            "observedDelta": 68,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 67.97464031620544,
+            "floorTickResidual": 0.025359683794562216
+          },
+          {
+            "stepIndex0": 12,
+            "actualStartAt": 932.6,
+            "beforeFood": 931,
+            "actualFood": 1026,
+            "observedDelta": 95,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 94.83955731225284,
+            "floorTickResidual": 0.16044268774716386
+          }
+        ],
+        "earlyErrorBandChanges": [
+          {
+            "path": "$.ageUps.1.errSec.early",
+            "kind": "changed",
+            "before": 44.1,
+            "after": 57.1
+          },
+          {
+            "path": "$.steps.11.errSec.early",
+            "kind": "changed",
+            "before": 44.1,
+            "after": 57.1
+          },
+          {
+            "path": "$.steps.12.errSec.early",
+            "kind": "changed",
+            "before": 72.3,
+            "after": 85.3
+          }
+        ],
+        "requestedResearchIDs": [202, 14, 203],
+        "researchInterpretation": "202/203 affectwood;14 hasstorage effects andneutral farm workRate×1. Current two FC orders request no213. No nontrivial completed carry/speed/farmwork modifier changes this unupgraded .46 reference. Compound technology completion timestamps are not independently exposed and are not invented here."
+      },
+      {
+        "id": "fast-castle-knights",
+        "checks": {
+          "allStepStartDoneExactlyEqual": true,
+          "allAgeClickReachExactlyEqual": true,
+          "allConstructionEventsExactlyEqual": true,
+          "allHousePaymentTimesExactlyEqual": true,
+          "allNumericDifferencesOnlyFoodStocksOrEarlyErrorBands": true
+        },
+        "farmStartStepIndex0": 7,
+        "farmStartAt": 354.7,
+        "assignedFarmers": 4,
+        "baselineFarmerRateUsedInRunOnce": 0.4189723320158103,
+        "currentPhysicalSupplyCappedRate": 0.45999999999999996,
+        "perFarmerRateDifference": 0.041027667984189664,
+        "foodStockChanges": [
+          {
+            "stepIndex0": 8,
+            "actualStartAt": 470.1,
+            "beforeFood": 460,
+            "actualFood": 479,
+            "observedDelta": 19,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 18.938371541501954,
+            "floorTickResidual": 0.061628458498045546
+          },
+          {
+            "stepIndex0": 9,
+            "actualStartAt": 504.6,
+            "beforeFood": 563,
+            "actualFood": 588,
+            "observedDelta": 25,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 24.600189723320128,
+            "floorTickResidual": 0.39981027667987235
+          },
+          {
+            "stepIndex0": 10,
+            "actualStartAt": 673.6,
+            "beforeFood": 780,
+            "actualFood": 833,
+            "observedDelta": 53,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 52.33489328063234,
+            "floorTickResidual": 0.6651067193676568
+          },
+          {
+            "stepIndex0": 11,
+            "actualStartAt": 768.9,
+            "beforeFood": 987,
+            "actualFood": 1055,
+            "observedDelta": 68,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 67.97464031620544,
+            "floorTickResidual": 0.025359683794562216
+          },
+          {
+            "stepIndex0": 12,
+            "actualStartAt": 932.6,
+            "beforeFood": 931,
+            "actualFood": 1026,
+            "observedDelta": 95,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 94.83955731225284,
+            "floorTickResidual": 0.16044268774716386
+          },
+          {
+            "stepIndex0": 13,
+            "actualStartAt": 967.9,
+            "beforeFood": 1090,
+            "actualFood": 1191,
+            "observedDelta": 101,
+            "fourFarmersRateDifferenceTimesObservedElapsed": 100.63266403162042,
+            "floorTickResidual": 0.36733596837957805
+          }
+        ],
+        "earlyErrorBandChanges": [
+          {
+            "path": "$.ageUps.1.errSec.early",
+            "kind": "changed",
+            "before": 44.1,
+            "after": 57.1
+          },
+          {
+            "path": "$.steps.11.errSec.early",
+            "kind": "changed",
+            "before": 44.1,
+            "after": 57.1
+          },
+          {
+            "path": "$.steps.12.errSec.early",
+            "kind": "changed",
+            "before": 79.2,
+            "after": 92.2
+          },
+          {
+            "path": "$.steps.13.errSec.early",
+            "kind": "changed",
+            "before": 79.2,
+            "after": 92.2
+          }
+        ],
+        "requestedResearchIDs": [202, 14],
+        "researchInterpretation": "202/203 affectwood;14 hasstorage effects andneutral farm workRate×1. Current two FC orders request no213. No nontrivial completed carry/speed/farmwork modifier changes this unupgraded .46 reference. Compound technology completion timestamps are not independently exposed and are not invented here."
+      }
+    ],
+    "baselineSemantics": "Actual saved baseline runOnce rejects the whole Slavic farm tree group because unit50/1187workRate was unhandled; the source-row consumer/supplier bonuses were not partially applied there. Its direct dark gatherRate helper historically used another gate, so helper-before values must not be substituted for baseline full-timeline farm income. This is still directAPI evidence, not a new captured old UI Generic run.",
+    "interpretation": "Default step/age/施工 clocks do not improve in these actual two templates. Food stocks rise after the four-farmer assignment; the observed changes fit four times the independently reviewed rate difference times actual elapsed within stockfloor/tick error. Only early distance-band values additionally change by13s; internal near/far branch timelines are not separately exposed or assigned invented completion times.",
+    "scope": "Read-only arithmetic consistency check of existing raw; not a second simulator, forecast, new capture, client experiment or claim of universal15% benefit.",
+    "additionalDomainCalls": 0,
+    "tests": 0,
+    "build": 0,
+    "browser": 0,
+    "repositoryWrites": 0
+  },
+  "fc2ConsistencyOriginalSHA256": "e27c148cd1cea52197ab87aa4780a8a876b98dadc95282f307932869a2932a0a",
+  "derivation": "Read saved JSON only; no new product, domain, generator, tests, build or browser calls."
+}

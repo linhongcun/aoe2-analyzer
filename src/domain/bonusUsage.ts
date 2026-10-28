@@ -30,6 +30,7 @@ import { WEI_SPAWN_NOTE } from './weiEconomy';
 import { BENGALI_SPAWN_NOTE } from './bengaliEconomy';
 import { armenianContext, ARMENIAN_RESEARCH_NOTE } from './armenianEconomy';
 import { georgianContext } from './georgianEconomy';
+import { slavicContext, SLAVIC_FARM_NOTE } from './slavicEconomy';
 
 const eco = ecoRaw as unknown as EcoData;
 /** PK 与真实成本只给单位算折后价（建筑费用折扣不在这两个工具里） */
@@ -104,6 +105,8 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
   'Koreans-0': { en: 'Stone miners work +20% faster', on: false, note: '未计入：现有开局方案不采石' },
   'Magyars-2': { en: 'Melee attack upgrades free', on: false, note: '未计入：近战攻击升级是战斗科技，不影响开局时间与库存' },
   'Malay-1': { en: 'Infantry armor upgrades free', on: false, note: '未计入：步兵护甲升级是战斗科技，不影响开局时间与库存' },
+  // Newly supported Slavic military free techs, separate from the historical 15.
+  'Slavs-1': { en: 'Arson, Gambesons free', on: false, note: '未计入：纵火、软甲是战斗科技，当前开局不研究，也不影响时间与库存' },
   'Teutons-4': { en: 'Murder Holes, Herbal Medicine free', on: false, note: '未计入：近射孔 / 草药不影响开局方案的资源与时间' },
   'Turks-2': { en: 'Chemistry free; Gunpowder technologies costs -50%', on: false, note: '未计入：化学与火药科技费用，现有开局方案不涉及' },
   'Vietnamese-3': { en: 'Conscription free', on: false, note: '未计入：征招是军事单位训练加速，现有开局方案不研究征招' },
@@ -113,6 +116,16 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
   if (b.id === 'Sicilians-1') return { tool: 'sim', name, on: false, note: '未计入：农田升级额外储量、耗尽和续种未模拟，也未估算节省的木材' };
+  if (b.id === 'Slavs-0') {
+    const context = slavicContext(eco);
+    const on = currentSimSupport(eco, b.civ, buildOrders).supported && !!context.physical && context.bonus;
+    return {
+      tool: 'sim',
+      name,
+      on,
+      note: on ? `已计入；${SLAVIC_FARM_NOTE}` : '暂不支持该文明，整页按通用文明计算，本条未计入',
+    };
+  }
   if (b.id === 'Georgians-0') {
     const context = georgianContext(eco);
     const on = currentSimSupport(eco, b.civ, buildOrders).supported && context.start;
@@ -124,7 +137,7 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
     };
   }
   const { techs, treeOnly } = bonusTechs(b);
-  const currentScope = ['Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians'].includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
+  const currentScope = ['Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs'].includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
     const t = (r as { tech?: number }).tech;
     return r.source !== 'team' && t !== undefined && techs.includes(t);

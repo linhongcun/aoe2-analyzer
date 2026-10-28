@@ -1,0 +1,531 @@
+{
+  "stage": "ACTUAL_FIRST_RED_COMPLETE_PRODUCTION_NOT_STARTED",
+  "head": "7d748918e4708934a10b34631488b38a7ffd40b3",
+  "tree": "560d74b342f315e516fd4e1ede8b839711078a19",
+  "baseVersion": "0.56.0",
+  "targetVersion": "0.57.0",
+  "planSHA256": "6dcd854cc20f893e2a52c264f35dc06dcff2f137a81ed4095037418342cb3fbc",
+  "materialization": {
+    "path": "/tmp/batch12-slavs-first-red-materialization.json",
+    "sha256": "d9fcc70d0b59dc672a474ca038a3cd1ec78f6a51db6552f5eee6d29006fa56d0"
+  },
+  "typescript": {
+    "report": "/tmp/batch12-slavs-first-red-unit.json",
+    "reportSHA256": "cc1b8b03572c9d2174995e0d91a98c166bf71bdf09c0f0ee98fa82646149e169",
+    "total": 89,
+    "passed": 25,
+    "failed": 64,
+    "pending": 0,
+    "files": [
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "total": 37,
+        "passed": 16,
+        "failed": 21,
+        "pending": 0
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197Presentation.test.ts",
+        "total": 14,
+        "passed": 8,
+        "failed": 6,
+        "pending": 0
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "total": 38,
+        "passed": 1,
+        "failed": 37,
+        "pending": 0
+      }
+    ],
+    "failures": [
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption current eight BOs are supported from their complete Slavic source",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption distance 1: cap the carry/walk consumer average by independent supply",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": [
+          "AssertionError: expected 0.5605451535931555 to be close to 0.45999999999999996, received difference is 0.10054515359315552, but expected 5e-13"
+        ]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption distance 2: cap the carry/walk consumer average by independent supply",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": [
+          "AssertionError: expected 0.4916474980202874 to be close to 0.45999999999999996, received difference is 0.031647498020287435, but expected 5e-13"
+        ]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption near2 preserves the old Generic .419 rate and does not promise a constant 15% uplift",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": [
+          "AssertionError: expected 0.4916474980202874 to be close to 0.45999999999999996, received difference is 0.031647498020287435, but expected 5e-13"
+        ]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption carry 20 remains inside the consumer trip, while supplier stays .46",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": [
+          "AssertionError: expected 0.4916474980202874 to be close to 0.45999999999999996, received difference is 0.031647498020287435, but expected 5e-13"
+        ]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption speed 1.6 changes the consumer trip without multiplying supply",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": [
+          "AssertionError: expected 0.4916474980202874 to be close to 0.45999999999999996, received difference is 0.031647498020287435, but expected 5e-13"
+        ]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption distance 2: real 100s/200s stock windows use exactly three farmers",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 13.137999999999977 to be less than or equal to 1.2"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption distance 7: real 100s/200s stock windows use exactly three farmers",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 9.443985379468216 to be less than or equal to 1.2"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption distance 2: standard Wheelbarrow changes carry/speed only after completion",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 15.437999999999988 to be less than or equal to 1.2"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption distance 4: standard Wheelbarrow changes carry/speed only after completion",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 31.079336439495762 to be less than or equal to 1.2"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption whole farm-bonus omission preserves the independent physical Slavic supply model",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.53, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption the original #317 positive-tech removal 510 leaves farm source active",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected false to be true // Object.is equality"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption the original #317 positive-tech removal 511 leaves farm source active",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected false to be true // Object.is equality"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption an unknown non-team row cannot enter the direct generic-attribute path",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.78, …(2) } to deeply equal { carry: 10, workRate: 0.39, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption bad farm family partial is rejected atomically by public APIs",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption bad farm family duplicate is rejected atomically by public APIs",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.801837, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption bad farm family wrongAge is rejected atomically by public APIs",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.53, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption bad farm family wrongSource is rejected atomically by public APIs",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption bad farm family extraKnown is rejected atomically by public APIs",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption bad farm family unknownOnly is rejected atomically by public APIs",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected true to be false // Object.is equality"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197.test.ts",
+        "fullName": "#197 Slavs-only steady farm supply and farmer consumption canonical Slavic farm source copied to another civ is refused",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197Presentation.test.ts",
+        "fullName": "#197 Slavic farm presentation follows actual template task scope Slavs0 preserves its source identity and distinguishes steady build simulation from legacy realCost",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { tool: 'sim', name: '开局模拟', …(2) } to match object { on: true }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197Presentation.test.ts",
+        "fullName": "#197 Slavic farm presentation follows actual template task scope fast-castle-boom: actual assigned farmers receive the explicit estimate caveat in notes and assumptions",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected [] to include '农田按供给上限连续估算，近距离可能低于原通用估算，不代表游戏内加成减益'"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197Presentation.test.ts",
+        "fullName": "#197 Slavic farm presentation follows actual template task scope fast-castle-knights: actual assigned farmers receive the explicit estimate caveat in notes and assumptions",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected [] to include '农田按供给上限连续估算，近距离可能低于原通用估算，不代表游戏内加成减益'"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197Presentation.test.ts",
+        "fullName": "#197 Slavic farm presentation follows actual template task scope fast-castle-boom: share preview and PNG basis state the near-distance comparison limit",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": [
+          "AssertionError: expected '按斯拉夫计 · 走路 4 格 · 游戏版本 185872' to be '按斯拉夫计 · 走路 4 格 · 游戏版本 185872\\n农田按供给上限…' // Object.is equality"
+        ]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197Presentation.test.ts",
+        "fullName": "#197 Slavic farm presentation follows actual template task scope fast-castle-knights: share preview and PNG basis state the near-distance comparison limit",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": [
+          "AssertionError: expected '按斯拉夫计 · 走路 4 格 · 游戏版本 185872' to be '按斯拉夫计 · 走路 4 格 · 游戏版本 185872\\n农田按供给上限…' // Object.is equality"
+        ]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197Presentation.test.ts",
+        "fullName": "#197 Slavic farm presentation follows actual template task scope team=true explicitly discloses unmodeled military-building population after a real completed barracks",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected '采集收入 = 携带量 ÷（携带量 ÷ 采集速率 + 往返走路时间），走路时…' to contain '团队军事建筑提供人口未模拟'"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 完整fixture可用且当前真实supplier=.46，不能一律拒绝",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 缺physical不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 physical错文明不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 缺一块供应对象不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 重复供应对象不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 供应对象id不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 供应对象type不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 供应对象class不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 供应基础workRate不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 供应capacity不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 供应负数不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 供应NaN不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 供应无限不启用任何新farm能力",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 缺tree raw整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 tree错civ整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 tree错effect整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 缺female214整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 缺male259整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 缺farm1187整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 重复raw工作率整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw倍率漂移整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw未知伴随整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw unknown-only整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected true to be false // Object.is equality"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 decoded consumer漂移整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 1.06, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 decoded supplier漂移整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 decoded未知伴随整组bonus拒绝但保留独立physical=.4",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 whole bonus omission is legal, while physical omission then cancels the independent model",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4189723320158103 to be close to 0.4, received difference is 0.018972332015810278, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw规范tech510缺上下文时不能因effects空或无当前作用而放行",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4916474980202874 to be close to 0.46, received difference is 0.03164749802028738, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw规范tech511缺上下文时不能因effects空或无当前作用而放行",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4916474980202874 to be close to 0.46, received difference is 0.03164749802028738, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw规范tech721缺上下文时不能因effects空或无当前作用而放行",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4916474980202874 to be close to 0.46, received difference is 0.03164749802028738, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw规范tech510的unknown-only仍被拒，farm独立组不丢失",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4916474980202874 to be close to 0.46, received difference is 0.03164749802028738, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw规范tech511的unknown-only仍被拒，farm独立组不丢失",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4916474980202874 to be close to 0.46, received difference is 0.03164749802028738, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw规范tech721的unknown-only仍被拒，farm独立组不丢失",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4916474980202874 to be close to 0.46, received difference is 0.03164749802028738, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw规范tech510的wrongciv/site拒绝，不能扩大源族",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4916474980202874 to be close to 0.46, received difference is 0.03164749802028738, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw规范tech511的wrongciv/site拒绝，不能扩大源族",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4916474980202874 to be close to 0.46, received difference is 0.03164749802028738, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 raw规范tech721的wrongciv/site拒绝，不能扩大源族",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected 0.4916474980202874 to be close to 0.46, received difference is 0.03164749802028738, but expected 5e-13"]
+      },
+      {
+        "file": "/workspace/aoe2-issue197-batch12/tests/unit/slavs197SourceGuard.test.ts",
+        "fullName": "#197 斯拉夫独立physical与可移除bonus完整来源 copied rawtree to Generic is refused at row level in direct gatherRate too",
+        "classification": "PRODUCT_ASSERTION",
+        "firstMessages": ["AssertionError: expected { carry: 10, workRate: 0.6519, …(2) } to deeply equal { carry: 10, workRate: 0.53, …(2) }"]
+      }
+    ],
+    "allFailuresAssertionErrors": true
+  },
+  "python": {
+    "total": 10,
+    "passed": 1,
+    "failed": 9,
+    "errors": 0,
+    "failures": [
+      "test_fixed_physical_supplier_metadata_is_independent_of_bonus_row (test_slavs197.Slavs197Export.test_fixed_physical_supplier_metadata_is_independent_of_bonus_row)",
+      "test_physical_source_fields_are_read_from_cache_not_replaced_by_constants (test_slavs197.Slavs197Export.test_physical_source_fields_are_read_from_cache_not_replaced_by_constants)",
+      "test_tree34_and_three_canonical_tech_contexts_are_preserved_in_own_rows (test_slavs197.Slavs197Export.test_tree34_and_three_canonical_tech_contexts_are_preserved_in_own_rows)",
+      "test_unknown_companions_of_510_511_and_team721_are_not_lost (test_slavs197.Slavs197Export.test_unknown_companions_of_510_511_and_team721_are_not_lost)",
+      "test_unknown_only_canonical_techs_do_not_disappear (test_slavs197.Slavs197Export.test_unknown_only_canonical_techs_do_not_disappear)",
+      "test_unknown_only_tree_keeps_empty_canonical_row_instead_of_legal_omission (test_slavs197.Slavs197Export.test_unknown_only_tree_keeps_empty_canonical_row_instead_of_legal_omission)",
+      "test_unknown_tree_companion_survives_complete_raw_not_just_decoded_farm_commands (test_slavs197.Slavs197Export.test_unknown_tree_companion_survives_complete_raw_not_just_decoded_farm_commands)",
+      "test_wrong_civ_site_missing_effect_stay_visible_for_atomic_runtime_refusal (test_slavs197.Slavs197Export.test_wrong_civ_site_missing_effect_stay_visible_for_atomic_runtime_refusal)",
+      "test_wrong_tree_id_stays_visible_for_runtime_refusal (test_slavs197.Slavs197Export.test_wrong_tree_id_stays_visible_for_runtime_refusal)"
+    ],
+    "allFailuresAssertionErrors": true,
+    "nonCausalWarnings": "Existing exporter unclosed JSON files emit ResourceWarning; retained in raw log, not used as failure evidence."
+  },
+  "executions": {
+    "unit": {
+      "path": "/tmp/batch12-slavs-first-red-unit.execution.json",
+      "sha256": "6c468065d565bb7cb4959c9f1bfecb02e61d074f1511b6fa4543ef46110931b9",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/slavs197.test.ts",
+        "tests/unit/slavs197SourceGuard.test.ts",
+        "tests/unit/slavs197Presentation.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/batch12-slavs-first-red-unit.json"
+      ],
+      "startedUTC": "2026-10-28T10:17:11.146226+00:00",
+      "completedUTC": "2026-10-28T10:17:14.715554+00:00",
+      "exitCode": 1,
+      "inputSHA256": "f2695f65b02cc5d17c543d1c0a38a056602f865746492d9f53101e40eac914d3",
+      "log": "/tmp/batch12-slavs-first-red-unit.log",
+      "logSHA256": "2143c9e64327d0f34f8a756be70b8b6e0cf847dfe571fd963e5c8008ff62b2dc"
+    },
+    "python": {
+      "path": "/tmp/batch12-slavs-first-red-python.execution.json",
+      "sha256": "e78d0c4bc75da02e23f2ff9317e6d8f885cce2df4aa8319698f1770e39f3e6c2",
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tests/py", "-p", "test_slavs197.py", "-v"],
+      "startedUTC": "2026-10-28T10:17:11.154211+00:00",
+      "completedUTC": "2026-10-28T10:17:13.243425+00:00",
+      "exitCode": 1,
+      "inputSHA256": "f2695f65b02cc5d17c543d1c0a38a056602f865746492d9f53101e40eac914d3",
+      "log": "/tmp/batch12-slavs-first-red-python.log",
+      "logSHA256": "08deca5a67ffe26c94d53831de78ad33c01706c6e224399fbdb9177155a300b7"
+    }
+  },
+  "inputSHA256": "f2695f65b02cc5d17c543d1c0a38a056602f865746492d9f53101e40eac914d3",
+  "originalSourceCount": 480,
+  "protectedCount": 527,
+  "oldSourceAndProtectedUnchanged": true,
+  "newFiles": [
+    {
+      "draft": "/tmp/batch12-slavs-spec-proposal.md",
+      "destination": "docs/design/slavs197.md",
+      "sha256": "bd580cafdd3f64a2ff3bb367e0fe8bdb299995f18b5b3abf6f7cbe16e7875a78"
+    },
+    {
+      "draft": "/tmp/batch12-slavs-red-core.test.ts",
+      "destination": "tests/unit/slavs197.test.ts",
+      "sha256": "f6da88c264ebf9d89ff035baf589b21766178691b76c53b41296721e1ae42298"
+    },
+    {
+      "draft": "/tmp/batch12-slavs-red-sourceguard.test.ts",
+      "destination": "tests/unit/slavs197SourceGuard.test.ts",
+      "sha256": "224e4f3467da95cf67991d25107c44a2c3368fed2e597e4caf45ddf5e5bcb38f"
+    },
+    {
+      "draft": "/tmp/batch12-slavs-red-presentation.test.ts",
+      "destination": "tests/unit/slavs197Presentation.test.ts",
+      "sha256": "8f2a8362eb5c9a48e5761bdb4b876198d95e7a9a04a01d97af37c28a147bea1c"
+    },
+    {
+      "draft": "/tmp/batch12-slavs-red-producer.py",
+      "destination": "tests/py/test_slavs197.py",
+      "sha256": "685024aa0d76256b816c47ae778e5af0004e72dd57a37e2726221f3a613bc4d1"
+    }
+  ],
+  "noImportEnvironmentOrHarnessFailures": true,
+  "productOrExistingTestEdits": false,
+  "repositoryStatus": "?? docs/design/slavs197.md\n?? tests/py/test_slavs197.py\n?? tests/unit/slavs197.test.ts\n?? tests/unit/slavs197Presentation.test.ts\n?? tests/unit/slavs197SourceGuard.test.ts\n",
+  "interpretation": "64TS+9Python semantic assertions expose missing Slavic supply cap, independent physical counterfactual, closed source refusals, canonical exporter preservation and player-facing caveats. Original test count/expected values unchanged; static fixture clarifications before this run are not product-red evidence."
+}

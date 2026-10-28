@@ -62,7 +62,7 @@ test('列表页时间 = 时间线页模拟时间（8 个开局），没有旧的
 });
 
 for (const width of [1280, 390])
-  test(`列表页 @${width}：未计入加成的推荐文明整项置灰 + aria-disabled；「按通用计」单独一行 12px`, async ({ page }) => {
+  test(`列表页 @${width}：斯拉夫推荐文明已支持且不置灰；「按通用计」单独一行 12px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('#/builds');
     const archers = page.locator('[data-t="build-order"]', { hasText: '19 人口单靶场弓手' });
@@ -70,8 +70,10 @@ for (const width of [1280, 390])
     await expect(mayans).toBeVisible();
     await expect(mayans).not.toHaveAttribute('aria-disabled', 'true');
     const knights = page.locator('[data-t="build-order"]', { hasText: '直城后转骑士' });
-    const off = knights.locator('[data-t="bo-civ"][data-off]', { hasText: '斯拉夫' });
-    await expect(off).toHaveAttribute('aria-disabled', 'true');
+    const slavs = knights.locator('[data-t="bo-civ"]', { hasText: '斯拉夫' });
+    await expect(slavs).toBeVisible();
+    await expect(slavs).not.toHaveAttribute('aria-disabled', 'true');
+    await expect(knights.locator('[data-t="bo-civ"][data-off]', { hasText: '斯拉夫' })).toHaveCount(0);
     const muted = await page.evaluate(() => {
       const d = document.createElement('span');
       d.style.color = 'var(--color-muted)';
@@ -80,7 +82,7 @@ for (const width of [1280, 390])
       d.remove();
       return c;
     });
-    expect(await off.evaluate((el) => getComputedStyle(el).color)).toBe(muted);
+    expect(await slavs.evaluate((el) => getComputedStyle(el).color)).not.toBe(muted);
     const on = archers.locator('[data-t="bo-civ"]:not([data-off])').first();
     await expect(on).not.toHaveAttribute('aria-disabled', 'true');
     expect(await on.evaluate((el) => getComputedStyle(el).color)).not.toBe(muted);
