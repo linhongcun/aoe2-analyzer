@@ -72,6 +72,13 @@ for (const width of [360, 375, 390, 1280])
       expect(await nowrap(page)).toEqual([]);
       await page.screenshot({ path: info.outputPath(`armenians197-compound-${width}-${theme}.png`), fullPage: true });
 
+      // Source observer's existing BO has an unfinished Blacksmith when 199 is requested.
+      await page.goto('./#/builds?bo=maa-archers-18&civ=Armenians&step=12');
+      await expect(page.getByRole('region', { name: '步骤详情', exact: true })).toContainText('研究前需等铁匠铺建成');
+      await overflow(page);
+      expect(await nowrap(page)).toEqual([]);
+      await page.screenshot({ path: info.outputPath(`armenians197-research-site-${width}-${theme}.png`), fullPage: true });
+
       for (const index of [0, 1]) {
         await page.goto(`./#/civ/Armenians/bonus/${index}`);
         const usage = page.locator('#bonus .bonusbody [data-usage="sim"]');
