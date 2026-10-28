@@ -41,13 +41,13 @@ function StepContent({ item, timeline, name }: { item: PracticeStep; timeline: B
             part.skip ? (
               <span key={i}>
                 <s>
-                  <NumUnitText text={part.text} />
+                  <NumUnitText text={part.text} cartUnits={timeline.civ === 'Armenians'} />
                 </s>
                 <small>（{noNeed}）</small>
               </span>
             ) : (
               <span key={i}>
-                <NumUnitText text={part.text} />
+                <NumUnitText text={part.text} cartUnits={timeline.civ === 'Armenians'} />
               </span>
             ),
           )}
@@ -64,12 +64,12 @@ function StepContent({ item, timeline, name }: { item: PracticeStep; timeline: B
                 {skip ? (
                   <>
                     <s>
-                      <NumUnitText text={text} />
+                      <NumUnitText text={text} cartUnits={timeline.civ === 'Armenians'} />
                     </s>
                     （跳过，{noNeed}）
                   </>
                 ) : (
-                  <NumUnitText text={text} />
+                  <NumUnitText text={text} cartUnits={timeline.civ === 'Armenians'} />
                 )}
               </li>
             );
@@ -231,7 +231,9 @@ export default function BuildPracticeView({
         {civNotes.length > 0 && (
           <ul className="note">
             {civNotes.map((note, i) => (
-              <li key={i}>{timeline.civ === 'Bengalis' ? <NumUnitText text={note} /> : note}</li>
+              <li key={i}>
+                {timeline.civ === 'Bengalis' || timeline.civ === 'Armenians' ? <NumUnitText text={note} cartUnits={timeline.civ === 'Armenians'} /> : note}
+              </li>
             ))}
           </ul>
         )}
@@ -333,7 +335,13 @@ export default function BuildPracticeView({
         <h3>完整估算假设</h3>
         <ul className="note">
           {timeline.model.assumptions.map((assumption, i) => (
-            <li key={i}>{timeline.civ === 'Wei' || timeline.civ === 'Bengalis' ? <NumUnitText text={assumption} /> : assumption}</li>
+            <li key={i}>
+              {timeline.civ === 'Wei' || timeline.civ === 'Bengalis' || timeline.civ === 'Armenians' ? (
+                <NumUnitText text={assumption} cartUnits={timeline.civ === 'Armenians'} />
+              ) : (
+                assumption
+              )}
+            </li>
           ))}
         </ul>
       </section>
