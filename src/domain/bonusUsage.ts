@@ -105,7 +105,7 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
   'Koreans-0': { en: 'Stone miners work +20% faster', on: false, note: '未计入：现有开局方案不采石' },
   'Magyars-2': { en: 'Melee attack upgrades free', on: false, note: '未计入：近战攻击升级是战斗科技，不影响开局时间与库存' },
   'Malay-1': { en: 'Infantry armor upgrades free', on: false, note: '未计入：步兵护甲升级是战斗科技，不影响开局时间与库存' },
-  // #197: newly supported Slavic military free techs, separate from the historical 15.
+  // Newly supported Slavic military free techs, separate from the historical 15.
   'Slavs-1': { en: 'Arson, Gambesons free', on: false, note: '未计入：纵火、软甲是战斗科技，当前开局不研究，也不影响时间与库存' },
   'Teutons-4': { en: 'Murder Holes, Herbal Medicine free', on: false, note: '未计入：近射孔 / 草药不影响开局方案的资源与时间' },
   'Turks-2': { en: 'Chemistry free; Gunpowder technologies costs -50%', on: false, note: '未计入：化学与火药科技费用，现有开局方案不涉及' },
