@@ -1,3 +1,30 @@
+export { civSimNotes } from './buildSimNotes';
+import {
+  civMechanism,
+  mechanismAssumptions,
+  mechanismFarmRate,
+  rowApplication,
+  mechanismRowAllowed,
+  mechanismTeamRowAllowed,
+  mechanismGatherMarkerAllowed,
+} from './buildSimMechanisms';
+import { TC_BY_AGE, applyMod, baseMods, RES_START, RES_HUNT_FOOD, applyEffects } from './buildSimEffects';
+import { foragerWoodIncome, lumberFoodIncome, varangianGoldIncome, hasUniqueMayanTree } from './buildSimCivRules';
+import { simScope, techAtomicOk, simSupport } from './buildSimCoverage';
+export { pushMod, applyMod, type NumMod } from './buildSimEffects';
+export { SHU_KNIGHT_TEMPLATE_NOTE, MAYAN_CAVALRY_TEMPLATE_NOTE } from './buildSimCivRules';
+export {
+  simScope,
+  classifyCivEffect,
+  techAtomicOk,
+  simSupport,
+  unhandledEffects,
+  unknownCivEffects,
+  IRRELEVANT_RES,
+  UNHANDLED_RES,
+  SOURCE_PENDING_CIVS,
+  type EffectClass,
+} from './buildSimCoverage';
 /**
  * M2 开局时间线模拟（纯函数、确定性：无随机数，固定 0.1 秒步长，同输入同输出）。
  * 输入：开局（M1 BuildOrder）+ 文明 + 参数；游戏数值全部来自 src/data/eco.json（DE .dat 导出）。
@@ -6,90 +33,20 @@
 import type { Action, BuildOrder, Task } from './buildOrder';
 import { buildOrders as ALL_BOS } from '../data/buildOrders';
 import { roundHalfPrice } from './roundHalfPrice';
-import { CONSTRUCTION_DATA } from '../data/construction';
-import {
-  isWeiRewardRow,
-  weiRewardFamily,
-  weiRewardsForCompletedResearch,
-  WEI_CONTEXT_REASON,
-  WEI_SPAWN_NOTE,
-  WEI_SPAWN_ASSUMPTION,
-  WEI_KNIGHT_TEMPLATE_NOTE,
-  type WeiSpawnContext,
-} from './weiEconomy';
-import {
-  isBengaliRewardRow,
-  bengaliRewardFamily,
-  bengaliRewardsForReachedAge,
-  BENGALI_CONTEXT_REASON,
-  BENGALI_SPAWN_NOTE,
-  BENGALI_SPAWN_ASSUMPTION,
-  BENGALI_KNIGHT_TEMPLATE_NOTE,
-  type BengaliSpawnContext,
-} from './bengaliEconomy';
-import {
-  armenianBuildOrder,
-  armenianContext,
-  armenianResearchBonus,
-  armenianResearchSites,
-  armenianRowClass,
-  armenianSiteName,
-  ARMENIAN_ASSUMPTION,
-  ARMENIAN_CART_NOTE,
-  ARMENIAN_RESEARCH_IDS,
-  ARMENIAN_RESEARCH_NOTE,
-  type ArmenianInfrastructure,
-  type ArmenianRawTech,
-} from './armenianEconomy';
-import {
-  georgianBuildOrder,
-  georgianContext,
-  georgianHasChurch,
-  georgianResearchSites,
-  georgianRowClass,
-  GEORGIAN_ASSUMPTION,
-  GEORGIAN_CART_NOTE,
-  GEORGIAN_START_NOTE,
-  GEORGIAN_CHURCH_REASON,
-  type GeorgianInfrastructure,
-  type GeorgianRawTech,
-} from './georgianEconomy';
 
-import {
-  slavicContext,
-  slavicRowClass,
-  slavicFarmRate,
-  slavicHasFarmAssignment,
-  SLAVIC_FARM_NOTE,
-  SLAVIC_FARM_DETAIL,
-  SLAVIC_TEAM_NOTE,
-  SLAVIC_SOURCE_REASON,
-  type SlavicFarm,
-  type SlavicRawTree,
-  type SlavicRawTech,
-} from './slavicEconomy';
+import { weiRewardsForCompletedResearch, type WeiSpawnContext } from './weiEconomy';
+import { bengaliRewardsForReachedAge, type BengaliSpawnContext } from './bengaliEconomy';
+import { armenianResearchBonus, armenianResearchSites, armenianSiteName, type ArmenianInfrastructure, type ArmenianRawTech } from './armenianEconomy';
+import { georgianResearchSites, type GeorgianInfrastructure, type GeorgianRawTech } from './georgianEconomy';
 
-import {
-  khmerContext,
-  khmerRowClass,
-  khmerHasMarker,
-  khmerFarmRate,
-  khmerBuildingReady,
-  khmerNotes,
-  khmerHasFarmAssignment,
-  KHMER_SOURCE_REASON,
-  KHMER_FARM_DETAIL,
-  type KhmerFarm,
-  type KhmerPrerequisites,
-  type KhmerRawTech,
-  type KhmerRawTree,
-  type KhmerRawTeam,
-} from './khmerEconomy';
+import { type SlavicFarm, type SlavicRawTree, type SlavicRawTech } from './slavicEconomy';
+
+import { type KhmerFarm, type KhmerPrerequisites, type KhmerRawTech, type KhmerRawTree, type KhmerRawTeam } from './khmerEconomy';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
 type Cost = Partial<Record<'Food' | 'Wood' | 'Gold' | 'Stone', number>>;
-interface EffectRow {
+export interface EffectRow {
   source: string;
   age: number;
   tech?: number;
@@ -296,7 +253,6 @@ const ECO_TASK: Record<Task, string> = {
   build: 'build',
 };
 const NEAR: Task[] = ['sheep', 'boar', 'deer', 'hunt', 'berries', 'farm', 'fish'];
-const START: Stock = { food: 200, wood: 200, gold: 100, stone: 200 };
 /** 起始村民数：.dat 中由引擎资源（编号 234 等）控制、含义未完全解码，按文明加成文字手工给出 */
 export const START_VILS: Record<string, number> = { Chinese: 6, Mayans: 4 };
 const HOUSE = 70;
@@ -309,438 +265,6 @@ export function idleAnomaly(from: number, to: number, cause: 'pop' | 'food' | 'o
   if (!(sec > threshold + 1e-9)) return null;
   const why = cause === 'pop' ? '卡人口' : cause === 'food' ? '食物不足' : '等待';
   return { type: 'idle_tc', waitSec: sec, from: r1(from), to: r1(to), reasonZh: `城镇中心闲置 约 ${sec} 秒（${why}）` };
-}
-
-/** 文明修正 */
-interface Mods {
-  rate: Record<string, number>;
-  carry: Record<string, number>;
-  speed: number;
-  unitSpeed: Record<string, number>;
-  /** 城镇中心工作速度倍率，键为 unit:<TC 单位 id>；计时时取当前时代的 TC（见 TC_BY_AGE） */
-  tcRate: Record<string, number>;
-  costMul: Record<string, Partial<Record<Res | 'all', number>>>;
-  timeMul: Record<string, number>;
-  /** 科技费用修正（按资源；all = 全部资源），保留 .dat 的 set/mul/add 语义 */
-  techCost: Record<number, Partial<Record<Res | 'all', NumMod>>>;
-  /** 全部科技费用倍率（中国 res 85） */
-  techCostAll: number;
-  /** 科技研究时间修正（.dat 效果 103：set 为绝对秒数，mul 为倍率） */
-  techTime: Record<number, NumMod>;
-  /** 单位/建筑费用加减（如库曼马厩 -75 木） */
-  costAdd: Record<string, Partial<Record<Res, number>>>;
-  /** 存放资源时额外比例（丹麦 res 299：食物 +5%） */
-  depositBonus: Partial<Record<Res, number>>;
-  /** issue197：仅已核马里595的建筑class木费倍率；不扩展其它文明的建筑class支付口径 */
-  buildingWoodCost: Record<number, number>;
-  /** 到达新时代时直接发放的资源（res 0–3） */
-  grant: Stock;
-  /** 额外人口上限（匈奴 res 4） */
-  popBonus: number;
-  /** 农民不需要回仓（高棉）：耕作无走路时间 */
-  farmNoWalk: boolean;
-  /** 每完成一项科技（含升级时代、单位升级）返还的黄金（西班牙 res 269） */
-  techReward: number;
-  /** 猎物食物倍率（res 268，哥特 ×1.23）：每采 1 单位猎物，入账 ×倍率 */
-  huntFoodMul: number;
-  /** 葡萄牙 res267：每单位采果食物的额外木材（百分数 / 100），不改变携带量或主资源率 */
-  foragerWood: number;
-  /** 蜀 res502：有效伐木收入兼产食物的百分比，不改变木材主收入或携带量 */
-  lumberFood: number;
-  /** 瓦兰吉 res298：牧羊/狩猎/捕鱼有效食物收入兼产黄金的百分比 */
-  varangianGold: number;
-  /** 鞑靼res216：与同条牧羊工作率配对的收集产量倍率，不是库存赠送 */
-  sheepFoodMul: number;
-  /** 玛雅：各原始任务独立读取的产量倍率，不把190叠到其它食物任务。 */
-  mayanProductivity: Record<string, number>;
-  /** 仅玛雅显式team开关下的完整墙/门类别费用。 */
-  mayanWallCost: Record<number, number>;
-  start: Stock;
-}
-/** 数值修正：按 .dat 效果顺序累积，set 覆盖之前的一切，mul/add 依次叠加。值 = (set ?? 原值) × mul + add */
-export interface NumMod {
-  set?: number;
-  mul: number;
-  add: number;
-}
-export function pushMod(cur: NumMod | undefined, op: string | undefined, v: number): NumMod {
-  const m = cur ?? { mul: 1, add: 0 };
-  if (op === 'set') return { set: v, mul: 1, add: 0 };
-  if (op === 'mul') return { set: m.set, mul: m.mul * v, add: m.add * v };
-  return { set: m.set, mul: m.mul, add: m.add + v };
-}
-export const applyMod = (base: number, m?: NumMod): number => (m ? (m.set ?? base) * m.mul + m.add : base);
-const TECH_OPS = new Set(['set', 'mul', 'add']);
-
-function baseMods(): Mods {
-  return {
-    rate: {},
-    carry: {},
-    speed: 1,
-    unitSpeed: {},
-    tcRate: {},
-    costMul: {},
-    timeMul: {},
-    techCost: {},
-    techCostAll: 1,
-    techTime: {},
-    costAdd: {},
-    depositBonus: {},
-    buildingWoodCost: {},
-    grant: { food: 0, wood: 0, gold: 0, stone: 0 },
-    popBonus: 0,
-    farmNoWalk: false,
-    techReward: 0,
-    huntFoodMul: 1,
-    foragerWood: 0,
-    lumberFood: 0,
-    varangianGold: 0,
-    sheepFoodMul: 1,
-    mayanProductivity: {},
-    mayanWallCost: {},
-    start: { ...START },
-  };
-}
-const RES_START: Record<number, Res> = { 91: 'food', 92: 'wood', 93: 'stone', 94: 'gold' };
-const COST_ATTR: Record<string, Res | 'all'> = { cost: 'all', foodCost: 'food', woodCost: 'wood', goldCost: 'gold', stoneCost: 'stone' };
-/** res 0–3：当前库存 */
-const RES_STOCK: Record<number, Res> = { 0: 'food', 1: 'wood', 2: 'stone', 3: 'gold' };
-const TECH_RES: Record<string, Res | 'all'> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone', '-1': 'all' };
-const RES_DEPOSIT: Record<number, Res> = { 299: 'food' };
-/**
- * res 268：猎物所含食物倍率（issue 120 评论 6157775069 解码）。哥特 tech 402 里与狩猎 workRate ×0.813008 成对出现，
- * 每从猎物扣 1 入账 ×1.23，净采集速度 = workRate × 0.813008 × 1.23 ≈ 原值。只作用于狩猎（eco 任务 hunt）；
- * 是否也作用于狩猎以外的采集：未核实（res 268 是玩家级资源，.dat 看不出限定范围），模型只按狩猎算。
- */
-const RES_HUNT_FOOD = 268;
-/** tech453 / effect510，res267 add33.333302；公开Function12的 .01×267 语义与连续模型边界见 docs/design/portuguese197.md。 */
-const RES_FORAGER_WOOD = 267;
-const FORAGER_WOOD_NOTE = '采果兼产木材按连续收入估算';
-const FORAGER_WOOD_ASSUMPTION =
-  '采果兼产木材按采果有效食物收入的比例连续流入；共用采果的携带量和往返时间，不增加伐木走路。不模拟客户端逐笔到账、取整和走路期间的触发时序。';
-/** 额外收入以采果率为基数，不从食物库存余额或存放加成反推。 */
-const foragerWoodIncome = (m: Mods, task: string, rate: number) => (task === 'berries' ? rate * m.foragerWood : 0);
-/** tech1071的502 set7配33 set16；百分比及连续近似边界见 docs/design/shu197.md。 */
-const RES_LUMBER_FOOD = 502;
-const LUMBER_FOOD_NOTE = '伐木兼产食物按连续收入估算';
-const LUMBER_FOOD_ASSUMPTION =
-  '伐木兼产食物按伐木有效收入的比例连续流入；共用伐木的携带量和往返时间，不额外增加食物走路。不模拟客户端逐笔到账、取整、砍倒树阶段或走路期间的触发时序。';
-export const SHU_KNIGHT_TEMPLATE_NOTE = '蜀不能训练骑士；骑士方案仅供通用模板经济估算。';
-const lumberFoodIncome = (m: Mods, task: string, rate: number) => (task === 'wood' ? rate * m.lumberFood : 0);
-const hasLumberFoodContext = (row: { tech?: number; effects?: EffectRow['effects'] }) =>
-  row.tech === 1071 && row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 16);
-/** tech594的276 add10配33 set11；公开百分比及连续近似边界见 docs/design/malians197.md。 */
-const RES_GOLD_PRODUCTIVITY = 276;
-const MALIAN_GOLD_NOTE = '采金交仓额外黄金按连续收入估算';
-const MALIAN_GOLD_ASSUMPTION =
-  '采金交仓额外黄金按有效采金收入的百分比连续计入，共用采金携带量和往返时间；不增加基础工作速率或矿物储量。不模拟客户端逐次交仓、取整或行走期间的触发时序。';
-const hasMalianGoldContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }) =>
-  row.source === 'bonus' &&
-  row.tech === 594 &&
-  row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 11);
-/** tech1475的298 set10.01配33 set34；固定公开百分比及连续近似边界见docs/design/varangians197.md。 */
-const RES_WILD_FOOD_GOLD = 298;
-const VARANGIAN_GOLD_NOTE = '牧羊、狩猎和捕鱼兼产黄金按连续收入估算';
-const VARANGIAN_GOLD_ASSUMPTION =
-  '牧羊、狩猎和捕鱼兼产黄金按有效食物收入的比例连续计入；村民和渔船共用各自主资源的携带量与往返参数，不占用食物携带空间。不模拟客户端逐笔到账、取整或行走期间的触发时序。';
-const VARANGIAN_GOLD_TASKS = new Set(['sheep', 'hunt', 'fish']);
-const varangianGoldIncome = (m: Mods, task: string, rate: number) => (VARANGIAN_GOLD_TASKS.has(task) ? rate * m.varangianGold : 0);
-const hasVarangianGoldContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }) =>
-  row.source === 'bonus' &&
-  row.tech === 1475 &&
-  row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 34);
-/** 固定704的标准牧羊任务与两个额外牧羊变体；各自倍率从实际输入读取，不重复作用同一任务。 */
-const RES_SHEPHERD_PRODUCTIVITY = 216;
-const TATAR_SHEPHERD_TARGETS = ['task:sheep', 'unit:1891', 'unit:1892'];
-const TATAR_SHEPHERD_NOTE = '牧羊按产量与工作率配对估算；新增羊和资源耗尽未模拟';
-const TATAR_SHEPHERD_ASSUMPTION =
-  '鞑靼牧羊先按固定数据的产量与工作率配对，再计算携带和往返；近城镇中心肉类沿用牧羊速率代理，不表示真正狩猎也有羊加成。不模拟新增羊实体、羊总食物可采量、资源耗尽或客户端逐帧行为。';
-const hasTatarShepherdContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }) => {
-  if (row.source !== 'bonus' || row.tech !== 704 || !row.effects) return false;
-  const food = row.effects.filter((effect) => effect.kind === 'res' && effect.res === RES_SHEPHERD_PRODUCTIVITY);
-  const valid = (effect: EffectRow['effects'][number]) => effect.op === 'mul' && Number.isFinite(effect.v) && effect.v! > 0;
-  return (
-    food.length === 1 &&
-    valid(food[0]!) &&
-    TATAR_SHEPHERD_TARGETS.every((target) => {
-      const rates = row.effects!.filter((effect) => effect.kind === 'attr' && effect.target === target && effect.attr === 'workRate');
-      return rates.length === 1 && valid(rates[0]!);
-    })
-  );
-};
-/** tree449：每个实际采集对象只读取一个resource_multiplier。 */
-const MAYAN_RESOURCE_TASKS: Record<number, string> = {
-  47: 'gold',
-  79: 'stone',
-  189: 'wood',
-  190: 'farm',
-  216: 'sheep',
-  268: 'hunt',
-  219: 'fish',
-  296: 'berries',
-};
-const MAYAN_TREE_MARKERS = new Set([47, 79, 189, 190, 219, 296]);
-const MAYAN_WORK_TARGETS = [
-  'task:gold',
-  'task:stone',
-  'task:wood',
-  'task:farm',
-  'task:sheep',
-  'task:hunt',
-  'task:fish',
-  'task:berries',
-  'class:21',
-  'villager',
-  'unit:1891',
-  'unit:1892',
-  'unit:2333',
-  'unit:2334',
-];
-const MAYAN_TREE_SIGNATURES = new Set([
-  ...Object.keys(MAYAN_RESOURCE_TASKS).map((res) => 'res:' + res),
-  ...MAYAN_WORK_TARGETS.map((target) => 'attr:' + target + ':workRate'),
-  ...[4, 24, 492, 763, 765].map((id) => 'attr:unit:' + id + ':cost'),
-  'attr:unit:199:trainTime',
-]);
-const mayanSignature = (e: EffectRow['effects'][number]) => (e.kind === 'res' ? 'res:' + e.res : e.kind === 'attr' ? 'attr:' + e.target + ':' + e.attr : '');
-const positiveMultiplier = (e: EffectRow['effects'][number]) => e.op === 'mul' && Number.isFinite(e.v) && e.v! > 0;
-const hasMayanTreeContext = (row: { source?: string; age?: number; tech?: number; effects?: EffectRow['effects'] }) =>
-  row.source === 'tree' &&
-  row.age === 1 &&
-  row.tech === undefined &&
-  row.effects?.length === MAYAN_TREE_SIGNATURES.size &&
-  new Set(row.effects.map(mayanSignature)).size === MAYAN_TREE_SIGNATURES.size &&
-  row.effects.every((effect) => MAYAN_TREE_SIGNATURES.has(mayanSignature(effect)) && positiveMultiplier(effect));
-const hasMayanTreeMarker = (row: { effects?: EffectRow['effects'] }) =>
-  row.effects?.some((effect) => effect.kind === 'res' && MAYAN_TREE_MARKERS.has(effect.res ?? -1));
-const hasUniqueMayanTree = (eco: EcoData) => {
-  const rows = (eco.civEco.Mayans ?? []).filter((row) => row.source === 'tree' || hasMayanTreeMarker(row));
-  return rows.length === 1 && hasMayanTreeContext(rows[0]!);
-};
-const mayanRowAllowed = (civ: string, row: EffectRow, uniqueMayanTree: boolean) =>
-  ((civ !== 'Mayans' || row.source !== 'tree') && !hasMayanTreeMarker(row)) || (civ === 'Mayans' && uniqueMayanTree && hasMayanTreeContext(row));
-const hasMayanWallContext = (row: EffectRow, scope: ReturnType<typeof simScope>) =>
-  row.source === 'team' &&
-  row.age === 1 &&
-  row.effects.length === 2 &&
-  [...scope.buildingClass.values()].every((cls) => Number.isInteger(cls) && cls >= 0) &&
-  [27, 39].every(
-    (cls) =>
-      row.effects.filter((effect) => effect.kind === 'attr' && effect.target === 'class:' + cls && effect.attr === 'cost' && positiveMultiplier(effect))
-        .length === 1,
-  );
-const MAYAN_RESOURCE_NOTE = '资源产量与工作率配对估算；储量和耗尽未模拟';
-export const MAYAN_CAVALRY_TEMPLATE_NOTE = '玛雅无马厩；侦察骑兵、骑士方案仅供通用模板经济估算';
-const MAYAN_RESOURCE_ASSUMPTION =
-  '玛雅各资源产量与专职工作率配对后再计算携带和往返，一般净系数1.0005、农田0.9315；近城镇中心肉类仍用牧羊代理。资源储量、耗尽、农田续种和客户端逐帧行为未模拟。沿用玛雅的起始人数，织布按原开局实际研发；墙费只在显式计入团队时折半。';
-const SICILIAN_CONSTRUCTION_NOTE = '按实际施工形态计入城镇中心、城堡和防御工事加成';
-const SICILIAN_FARM_NOTE = '农田升级额外储量、耗尽和续种未模拟';
-const SICILIAN_CONSTRUCTION_ASSUMPTION =
-  '西西里施工从开局已有的城镇中心完成状态计入一次加成；新城镇中心按实际施工形态的工期计算，城堡和防御工事按各自工期计算。建造者完工后返回原任务，建造费用与停采时间沿用同一模型；增建城镇中心不会再赠石料，额外城镇中心的产村民队列未模拟。';
-const SICILIAN_FARM_ASSUMPTION = '西西里农田升级额外储量不改变采集速度；资源点不会耗尽，农田升级额外储量、失效和续种未模拟，也不估算由此节省的木材。';
-const SICILIAN_FORT_CLASSES = new Set([27, 39, 52]);
-const SICILIAN_TC_FORMS = [621, 617, 484, 597];
-const SICILIAN_TIME_TARGETS = new Set(['unit:82', ...SICILIAN_TC_FORMS.map((id) => 'unit:' + id), ...[...SICILIAN_FORT_CLASSES].map((id) => 'class:' + id)]);
-type SicilianGroup = 228 | 261 | 770 | 772 | 'team';
-const SICILIAN_GROUPS: SicilianGroup[] = [228, 261, 770, 772, 'team'];
-/** Identify displaced known rows too, so a wrong source/tech cannot bypass the complete-row guard. */
-function sicilianGroup(row: EffectRow): SicilianGroup | undefined {
-  if ([228, 261, 770, 772].includes(row.tech ?? -1)) return row.tech as Exclude<SicilianGroup, 'team'>;
-  if (!Array.isArray(row.effects)) return undefined;
-  if (row.source === 'team' || row.effects.some((e) => e.target === 'unit:545')) return 'team';
-  if (row.effects.some((e) => SICILIAN_TIME_TARGETS.has(e.target ?? '') && e.attr === 'trainTime')) return 770;
-  if (row.effects.some((e) => e.kind === 'res' && e.res === 69)) return 772;
-  if (row.effects.some((e) => e.kind === 'res' && e.res === 93)) return 228;
-  if (row.effects.some((e) => e.kind === 'res' && e.res === 2)) return 261;
-  return undefined;
-}
-const onlyEffectKeys = (effect: EffectRow['effects'][number], keys: string[]) => Object.keys(effect).every((key) => keys.includes(key));
-const sameIds = (actual: number[] | undefined, expected: readonly number[]) =>
-  Array.isArray(actual) && actual.length === expected.length && actual.every((id, index) => id === expected[index]);
-function sicilianRowContext(row: EffectRow, group: SicilianGroup): boolean {
-  if (!Array.isArray(row.effects)) return false;
-  if (row.age !== 1 || row.source !== (group === 'team' ? 'team' : 'bonus') || row.tech !== (group === 'team' ? undefined : group)) return false;
-  if (group === 'team') {
-    const e = row.effects[0];
-    return (
-      row.requires === undefined &&
-      row.effects.length === 1 &&
-      !!e &&
-      onlyEffectKeys(e, ['kind', 'target', 'attr', 'op', 'v']) &&
-      e.kind === 'attr' &&
-      e.target === 'unit:545' &&
-      e.attr === 'cost' &&
-      positiveMultiplier(e)
-    );
-  }
-  const requires = group === 228 ? [639, 307] : group === 261 ? [228] : group === 770 ? [307] : [];
-  if (!sameIds(row.requires, requires)) return false;
-  if (group === 770)
-    return (
-      row.effects.length === SICILIAN_TIME_TARGETS.size &&
-      new Set(row.effects.map((e) => e.target)).size === SICILIAN_TIME_TARGETS.size &&
-      row.effects.every(
-        (e) =>
-          onlyEffectKeys(e, ['kind', 'target', 'attr', 'op', 'v']) &&
-          e.kind === 'attr' &&
-          SICILIAN_TIME_TARGETS.has(e.target ?? '') &&
-          e.attr === 'trainTime' &&
-          positiveMultiplier(e),
-      )
-    );
-  const e = row.effects[0];
-  return (
-    row.effects.length === 1 &&
-    !!e &&
-    onlyEffectKeys(e, ['kind', 'label', 'res', 'op', 'v']) &&
-    e.kind === 'res' &&
-    e.res === (group === 228 ? 93 : group === 261 ? 2 : 69) &&
-    e.op === (group === 772 ? 'mul' : 'add') &&
-    Number.isFinite(e.v) &&
-    (group !== 772 || e.v! > 0)
-  );
-}
-/** Reuse the validated physical construction source; completed TC109 has a different time. */
-function sicilianConstructionSource(scope: ReturnType<typeof simScope>): boolean {
-  const data = CONSTRUCTION_DATA.civs.Sicilians;
-  const forms = CONSTRUCTION_DATA.buildings[TC];
-  const rules = data?.automatic.filter((r) => r.id === 770);
-  return (
-    !!data &&
-    !!forms?.supported &&
-    sameIds(forms.forms, SICILIAN_TC_FORMS) &&
-    rules?.length === 1 &&
-    sameIds(rules[0]!.requires, [307]) &&
-    rules[0]!.count === 1 &&
-    rules[0]!.commands.length === SICILIAN_TIME_TARGETS.size &&
-    new Set(rules[0]!.commands.map((c) => (c.A >= 0 ? 'unit:' + c.A : 'class:' + c.B))).size === SICILIAN_TIME_TARGETS.size &&
-    rules[0]!.commands.every(
-      (c) => c.Type === 5 && c.C === 101 && Number.isFinite(c.D) && c.D > 0 && SICILIAN_TIME_TARGETS.has(c.A >= 0 ? 'unit:' + c.A : 'class:' + c.B),
-    ) &&
-    [...scope.buildingClass.values()].every((cls) => Number.isInteger(cls) && cls >= 0) &&
-    Object.entries(scope.sicilianBuildings ?? {}).every(([id, unit]) => {
-      const physical = Number(id) === TC ? data.units[forms.forms[0]!] : data.units[id];
-      return physical?.class === unit.class;
-    }) &&
-    SICILIAN_TC_FORMS.every((id) => {
-      const unit = data.units[id];
-      return (
-        unit?.class === 3 &&
-        Number.isFinite(unit.time) &&
-        unit.time > 0 &&
-        sameIds(unit.at, [118]) &&
-        [118, 212].every((builder) => data.units[builder]?.class === 4 && data.units[builder]?.rate === 1)
-      );
-    })
-  );
-}
-function sicilianGroupOk(scope: ReturnType<typeof simScope>, group: SicilianGroup): boolean {
-  const rows = scope.sicilianRows?.filter((row) => sicilianGroup(row) === group);
-  return rows?.length === 1 && sicilianRowContext(rows[0]!, group) && (group !== 770 || sicilianConstructionSource(scope));
-}
-const sicilianRowAllowed = (scope: ReturnType<typeof simScope>, row: EffectRow) => {
-  if (!scope.sicilianRows) return true;
-  const group = sicilianGroup(row);
-  return group !== undefined && sicilianGroupOk(scope, group);
-};
-/** 固定595的四个建筑类别命令；数值倍率仍从实际effects读取。农田class49不在其中。 */
-const MALIAN_BUILDING_CLASSES = new Set([3, 39, 52, 27]);
-const hasMalianBuildingContext = (row: { source?: string; tech?: number; effects?: EffectRow['effects'] }, scope: ReturnType<typeof simScope>) => {
-  if (row.source !== 'bonus' || row.tech !== 595 || !row.effects || [...scope.buildingClass.values()].some((cls) => !Number.isInteger(cls) || cls < 0))
-    return false;
-  const classes = row.effects.filter((effect) => effect.kind === 'attr' && effect.target?.startsWith('class:'));
-  return (
-    classes.length === MALIAN_BUILDING_CLASSES.size &&
-    [...MALIAN_BUILDING_CLASSES].every((cls) =>
-      classes.some(
-        (effect) => effect.target === 'class:' + cls && effect.attr === 'woodCost' && effect.op === 'mul' && Number.isFinite(effect.v) && effect.v! > 0,
-      ),
-    )
-  );
-};
-/** 高棉只在完整来源门控下应用本站免回仓连续近似；不声称已证明DE185872选择器的可执行映射。见docs/design/khmer197.md。 */
-/**
- * 西班牙 tech 186「C-Bonus, Tech reward」在 .dat 里只有 res 269 set 300 一条命令（#42）。
- * 金额：https://ageofempires.fandom.com/wiki/Spanish_(Age_of_Empires_II) 「Receive 20 gold for each technology researched.」（已打开核对，见 #42 issuecomment-6106638881）
- * 时机：研发完成时到账，https://ageofempires.fandom.com/wiki/Atonement 「receive 20 gold after researching」（wiki 措辞，引擎层面未核实）
- * 300 怎么换算成 20 金：未核实（.dat 定不了），所以金额用常量，不从 300 推算。
- * 升级时代那一次返金由 tech 323/324/326（res 3 −20，到达新时代时发放）抵消，升时代净 0 金（.dat 确认）。
- */
-const SPANISH_TECH_REWARD_GOLD = 20;
-
-function applyEffects(
-  m: Mods,
-  effects: EffectRow['effects'],
-  applyForagerWood = false,
-  applyLumberFood = false,
-  malians: { gold?: boolean; buildingWood?: boolean } = {},
-  applyVarangianGold = false,
-  applyTatarShepherd = false,
-  mayans: { resource?: boolean; wall?: boolean } = {},
-) {
-  for (const x of effects) {
-    const v = x.v ?? 0;
-    if (x.kind === 'attr' && x.target && x.attr && (x.op === 'mul' || x.op === 'add')) {
-      const t = x.target;
-      const key = t.startsWith('task:') ? t.slice(5) : t === 'villager' || t === 'class:4' || t === 'unit:83' ? 'villager' : t;
-      const mul = (o: Record<string, number>, k: string) => {
-        if (x.op === 'mul') o[k] = (o[k] ?? 1) * v;
-      };
-      if (x.attr === 'workRate') {
-        // 83/293是独立的闲置对象，已核玛雅任务不可再叠乘这条0.87。
-        if (mayans.resource && t === 'villager') continue;
-        if (key.startsWith('unit:') && TC_UNITS.has(Number(key.slice(5)))) mul(m.tcRate, key);
-        else mul(m.rate, key);
-      } else if (x.attr === 'carry') {
-        if (x.op === 'mul') mul(m.carry, key);
-        else m.carry['add:' + key] = (m.carry['add:' + key] ?? 0) + v;
-      } else if (x.attr === 'speed' && key === 'villager' && x.op === 'mul') m.speed *= v;
-      else if (x.attr === 'speed' && x.op === 'mul') mul(m.unitSpeed, key);
-      else if (x.attr in COST_ATTR && x.op === 'mul') {
-        const id = key === 'villager' ? 'unit:83' : key;
-        const r = COST_ATTR[x.attr]!;
-        const o = (m.costMul[id] ??= {});
-        o[r] = (o[r] ?? 1) * v;
-        if (malians.buildingWood && x.attr === 'woodCost' && key.startsWith('class:')) {
-          const cls = Number(key.slice(6));
-          m.buildingWoodCost[cls] = (m.buildingWoodCost[cls] ?? 1) * v;
-        }
-        if (mayans.wall && x.attr === 'cost' && key.startsWith('class:')) {
-          const cls = Number(key.slice(6));
-          m.mayanWallCost[cls] = (m.mayanWallCost[cls] ?? 1) * v;
-        }
-      } else if (x.attr in COST_ATTR && x.op === 'add' && COST_ATTR[x.attr] !== 'all') {
-        const o = (m.costAdd[key] ??= {});
-        const r = COST_ATTR[x.attr] as Res;
-        o[r] = (o[r] ?? 0) + v;
-      } else if (x.attr === 'trainTime' && x.op === 'mul') mul(m.timeMul, key === 'villager' ? 'unit:83' : key);
-    } else if (x.kind === 'res' && x.res !== undefined) {
-      if (mayans.resource && MAYAN_RESOURCE_TASKS[x.res]) {
-        const task = MAYAN_RESOURCE_TASKS[x.res]!;
-        m.mayanProductivity[task] = (m.mayanProductivity[task] ?? 1) * v;
-        continue;
-      }
-      if (RES_START[x.res] && x.op === 'add') m.start[RES_START[x.res]!] += v;
-      else if (RES_STOCK[x.res] && x.op === 'add') m.grant[RES_STOCK[x.res]!] += v;
-      else if (RES_DEPOSIT[x.res] && x.op === 'add') m.depositBonus[RES_DEPOSIT[x.res]!] = (m.depositBonus[RES_DEPOSIT[x.res]!] ?? 0) + v / 100;
-      else if (x.res === 85 && x.op === 'set') m.techCostAll = v;
-      else if (x.res === 4 && x.op === 'add') m.popBonus += v;
-      else if (x.res === 269 && x.op === 'set' && v > 0) m.techReward = SPANISH_TECH_REWARD_GOLD;
-      else if (x.res === RES_HUNT_FOOD && x.op === 'mul') m.huntFoodMul *= v;
-      else if (applyForagerWood && x.res === RES_FORAGER_WOOD && x.op === 'add') m.foragerWood += v / 100;
-      else if (applyLumberFood && x.res === RES_LUMBER_FOOD && x.op === 'set') m.lumberFood = v / 100;
-      else if (malians.gold && x.res === RES_GOLD_PRODUCTIVITY && x.op === 'add') m.depositBonus.gold = (m.depositBonus.gold ?? 0) + v / 100;
-      else if (applyVarangianGold && x.res === RES_WILD_FOOD_GOLD && x.op === 'set') m.varangianGold = v / 100;
-      else if (applyTatarShepherd && x.res === RES_SHEPHERD_PRODUCTIVITY && x.op === 'mul') m.sheepFoodMul *= v;
-    } else if (x.kind === 'techTime' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) m.techTime[x.tech] = pushMod(m.techTime[x.tech], x.op, v);
-    else if (x.kind === 'techCost' && x.tech !== undefined && TECH_OPS.has(x.op ?? '')) {
-      const r = TECH_RES[String(x.res)];
-      if (r) {
-        const o = (m.techCost[x.tech] ??= {});
-        o[r] = pushMod(o[r], x.op, v);
-      }
-    }
-  }
 }
 
 interface Pending {
@@ -794,52 +318,37 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   // 按 tech 整条判定（#43 Steve）：只要有一条效果是未实现或未分类，这个 tech 的效果一条都不应用，
   // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
   const scope = simScope(eco, [bo], civ);
-  const weiFamily = civ === 'Wei' ? scope.weiRewards : null;
-  const bengaliFamily = civ === 'Bengalis' ? scope.bengaliRewards : null;
-  const armenians = civ === 'Armenians' ? scope.armenians : undefined;
-  const georgians = civ === 'Georgians' ? scope.georgians : undefined;
-  m.farmNoWalk = civ === 'Khmer' && !!scope.khmer?.bonus;
+  const mechanism = civMechanism(civ);
+  const weiFamily = scope.weiRewards;
+  const bengaliFamily = scope.bengaliRewards;
+  const armenians = scope.armenians;
+  const georgians = scope.georgians;
+  m.farmNoWalk = !!civMechanism(civ).farmNoWalk?.(scope);
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   const uniqueMayanTeam = (eco.civEco.Mayans ?? []).filter((row) => row.source === 'team').length === 1;
   const rows = (eco.civEco[civ] ?? []).filter(
     (r) =>
       (P.team || r.source !== 'team') &&
-      khmerRowClass(r, civ, scope.khmer)?.kind !== 'unhandled' &&
-      ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') &&
-      mayanRowAllowed(civ, r, uniqueMayanTree) &&
-      sicilianRowAllowed(scope, r) &&
-      (civ !== 'Mayans' || r.source !== 'team' || (uniqueMayanTeam && hasMayanWallContext(r, scope))) &&
+      mechanismRowAllowed(r, scope, uniqueMayanTree) &&
+      mechanismTeamRowAllowed(r, scope, uniqueMayanTeam) &&
       techAtomicOk(r, scope),
   );
   const freeByAge: Record<number, string[]> = {};
   let age = 1;
   const applyAge = () => {
     for (const r of rows)
-      if (r.age === age && !(civ === 'Armenians' && ARMENIAN_RESEARCH_IDS.includes(r.tech as (typeof ARMENIAN_RESEARCH_IDS)[number])))
+      if (r.age === age && !mechanism.deferAgeTechs?.includes(r.tech ?? -1))
         applyEffects(
           m,
           r.effects.filter((e) => e.kind !== 'freeTech'),
-          (r as { tech?: number }).tech === 453,
-          hasLumberFoodContext(r as EffectRow & { tech?: number }) === true,
-          {
-            gold: civ === 'Malians' && hasMalianGoldContext(r as EffectRow & { tech?: number }) === true,
-            buildingWood: civ === 'Malians' && hasMalianBuildingContext(r as EffectRow & { tech?: number }, scope),
-          },
-          civ === 'Varangians' && hasVarangianGoldContext(r as EffectRow & { tech?: number }) === true,
-          civ === 'Tatars' && hasTatarShepherdContext(r as EffectRow & { tech?: number }),
-          { resource: civ === 'Mayans' && hasMayanTreeContext(r), wall: civ === 'Mayans' && hasMayanWallContext(r, scope) },
+          rowApplication(civ, r, scope, 'timeline', () => true),
         );
     void freeByAge;
   };
   applyAge();
   const buildingTime = (id: number, fallback = 0) => {
-    if (civ === 'Sicilians' && sicilianGroupOk(scope, 770)) {
-      if (id === TC) {
-        const form = CONSTRUCTION_DATA.buildings[TC]!.forms[age - 1]!;
-        return CONSTRUCTION_DATA.civs.Sicilians!.units[form]!.time * (m.timeMul['unit:' + form] ?? 1);
-      }
-      return (eco.buildings[id]?.buildTime ?? fallback) * (m.timeMul['unit:' + id] ?? 1) * (m.timeMul['class:' + eco.buildings[id]?.class] ?? 1);
-    }
+    const special = mechanism.buildingTime?.(scope, eco, m, id, age, fallback);
+    if (special !== undefined) return special;
     return (eco.buildings[id]?.buildTime ?? fallback) * (m.timeMul['unit:' + id] ?? 1);
   };
   // res 0–3 的黑暗时代条目：若同一文明对该资源也有 res 91–94 条目（波斯、图皮、阿兹特克、西西里），两者是同一加成的两种写法，只算一次；
@@ -860,7 +369,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   }
   // 法兰克磨坊科技开局会再点一次研究。费用按 0，已经随时代生效的效果不再套第二遍。
   // 其他文明的真正免费科技保持既有研究动作处理，不在本次费用导出修复中扩展。
-  const frankMillFree = civ === 'Franks';
+  const frankMillFree = !!mechanism.freeResearchOnce;
   const freeApplied = new Set<number>();
   const applyEcoTech = (id: number, granted: boolean) => {
     const et = eco.ecoTechs[id];
@@ -1040,8 +549,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const d = t === 'farm' && m.farmNoWalk ? 0 : NEAR.includes(t) ? P.nearTiles : P.walkTiles;
     const walk = (2 * d) / (eco.villager.speed * m.speed);
     const average = carry / (carry / wr + walk);
-    if (civ === 'Khmer' && et === 'farm') return khmerFarmRate(scope.khmer, average);
-    return civ === 'Slavs' && et === 'farm' ? slavicFarmRate(scope.slavs, average) : average;
+    return mechanismFarmRate(scope, et, average);
   };
   const actionCost = (a: Action): Stock => {
     if (a.type === 'build') {
@@ -1161,24 +669,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           p.siteBlockedSince = undefined;
         }
       }
-      if (civ === 'Khmer' && a.type === 'build' && !khmerBuildingReady(scope.khmer, a.building, age, built)) break;
+      if (a.type === 'build' && mechanism.buildingReady?.(scope, a.building, age, built) === false) break;
       // 638 exempts prerequisite buildings, not the actual research location.
-      if (civ === 'Khmer' && a.type === 'research') {
-        const siteName = eco.ecoTechs[a.tech]?.at;
-        const sites =
-          siteName === 'Mill'
-            ? [68, 129, 130, 131]
-            : siteName === 'Lumber Camp'
-              ? [562, 563, 564, 565]
-              : siteName === 'Mining Camp'
-                ? [584, 585, 586, 587]
-                : siteName === 'Town Center'
-                  ? TC_BY_AGE
-                  : siteName === 'Market'
-                    ? [84, 116, 137]
-                    : siteName === 'Dock'
-                      ? [45, 47, 51, 133]
-                      : [eco.techs[a.tech]?.at ?? -1];
+      if (mechanism.researchSites && a.type === 'research') {
+        const sites = mechanism.researchSites(eco, a.tech);
         if (sites.some((site) => site > 0) && !sites.some((site) => (built.get(site) ?? 0) > 0)) break;
       }
       // 训练需要建筑；人口检查
@@ -1190,7 +684,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           break;
         }
       }
-      if (a.type === 'ageUp' && !ageReqOk(eco.ageReq?.[String(a.age)]?.req, built, civ === 'Khmer' && !scope.khmer?.noPrerequisites ? '' : civ)) {
+      if (a.type === 'ageUp' && !ageReqOk(eco.ageReq?.[String(a.age)]?.req, built, mechanism.prerequisiteCiv?.(scope, civ) ?? civ)) {
         if (!p.prereq) {
           p.blockedSince ??= t;
           p.prereq = true;
@@ -1377,7 +871,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
               const ta = (eco.ecoTechs[id] as { age?: number } | undefined)?.age ?? 1;
               if (ta <= age) applyEcoTech(id, true);
             }
-            if (civ === 'Bengalis') completeBengaliAge(tcState.p, t);
+            if (bengaliFamily) completeBengaliAge(tcState.p, t);
           } else if (a.type === 'research') {
             completeResearch(tcState.p, t);
             stock.gold += m.techReward;
@@ -1493,7 +987,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   });
   return {
     villagerEvents,
-    ...(civ === 'Wei' || civ === 'Bengalis' ? { bonusVillagerEvents } : {}),
+    ...(mechanism.bonusVillagerEvents ? { bonusVillagerEvents } : {}),
     startAt,
     doneAt,
     snap,
@@ -1524,12 +1018,11 @@ const primary = (acts: Action[]): Pick<TimelineStep, 'action' | 'entity'> => {
 /** 主入口：模拟 + 误差带（近/远走路距离各跑一次） */
 export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, params: Partial<SimParams> = {}): BuildTimeline {
   const P: SimParams = { ...DEFAULT_PARAMS, ...params };
-  const khmer = civ === 'Khmer' ? khmerContext(eco) : undefined;
   P.walkTiles = Math.min(WALK.max, Math.max(WALK.min, Math.round(P.walkTiles)));
   // #42 匈奴：人口不受房子限制 → 开局里的造房动作不执行、不扣木，自动补房也关掉；步骤数与编号不变
   const noHouses = civNoHouses(eco, civ);
   const input = bo;
-  bo = georgianBuildOrder(armenianBuildOrder(bo, civ, eco), civ, eco);
+  bo = civMechanism(civ).prepare?.(bo, civ, eco) ?? bo;
   if (noHouses) {
     bo = stripHouses(bo);
     P.autoHouses = false;
@@ -1584,32 +1077,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
       version: MODEL_VERSION,
       assumptions: [
         ...ASSUMPTIONS,
-        ...(civ === 'Portuguese' ? [FORAGER_WOOD_ASSUMPTION] : []),
-        ...(civ === 'Shu' ? [LUMBER_FOOD_ASSUMPTION, SHU_KNIGHT_TEMPLATE_NOTE] : []),
-        ...(civ === 'Malians' ? [MALIAN_GOLD_ASSUMPTION] : []),
-        ...(civ === 'Varangians' ? [VARANGIAN_GOLD_ASSUMPTION] : []),
-        ...(civ === 'Slavs' && slavicContext(eco).physical && slavicHasFarmAssignment(bo) ? [SLAVIC_FARM_NOTE, SLAVIC_FARM_DETAIL] : []),
-        ...(civ === 'Slavs' && P.team ? [SLAVIC_TEAM_NOTE] : []),
-        ...(khmer ? khmerNotes(khmer, bo) : []),
-        ...(khmer?.physical && khmer.bonus && khmerHasFarmAssignment(bo) ? [KHMER_FARM_DETAIL] : []),
-        ...(civ === 'Tatars' ? [TATAR_SHEPHERD_ASSUMPTION] : []),
-        ...(civ === 'Mayans' ? [MAYAN_RESOURCE_ASSUMPTION, MAYAN_CAVALRY_TEMPLATE_NOTE] : []),
-        ...(civ === 'Sicilians' && sicilianGroupOk(simScope(eco, ALL_BOS, civ), 770) ? [SICILIAN_CONSTRUCTION_ASSUMPTION] : []),
-        ...(civ === 'Sicilians' && sicilianGroupOk(simScope(eco, ALL_BOS, civ), 772) ? [SICILIAN_FARM_ASSUMPTION] : []),
-        ...(civ === 'Wei' && weiRewardFamily(eco.civEco.Wei)
-          ? [WEI_SPAWN_ASSUMPTION, ...(bo.id === 'fast-castle-knights' ? [WEI_KNIGHT_TEMPLATE_NOTE] : [])]
-          : []),
-        ...(civ === 'Bengalis' && bengaliRewardFamily(eco.civEco.Bengalis)
-          ? [BENGALI_SPAWN_ASSUMPTION, ...(bo.id === 'fast-castle-knights' ? [BENGALI_KNIGHT_TEMPLATE_NOTE] : [])]
-          : []),
-        ...(civ === 'Armenians' && armenianContext(eco).infrastructure ? [ARMENIAN_ASSUMPTION, ARMENIAN_RESEARCH_NOTE] : []),
-        ...(civ === 'Georgians' && georgianContext(eco).infrastructure
-          ? [
-              georgianContext(eco).start
-                ? GEORGIAN_ASSUMPTION
-                : GEORGIAN_ASSUMPTION.replace('起始免费骡车已作为完成实体和一种时代前置；', '未应用起始免费骡车；'),
-            ]
-          : []),
+        ...mechanismAssumptions(civ, { eco, bo, params: P, scope: () => simScope(eco, ALL_BOS, civ) }),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
           : []),
@@ -1654,327 +1122,6 @@ export function stripHouses(bo: BuildOrder): BuildOrder {
     return { ...st, actions };
   });
   return { ...bo, steps };
-}
-
-// ───────── 文明加成覆盖（#42）：每条效果必须是 已处理 / 不影响开局（带原因）/ 影响开局但未实现 之一 ─────────
-
-type Effect = EffectRow['effects'][number];
-export type EffectClass = { kind: 'handled' } | { kind: 'irrelevant'; reason: string } | { kind: 'unhandled'; reason: string } | { kind: 'unknown' };
-
-/** res 属性：不影响开局（模型层面）的，写明原因 */
-export const IRRELEVANT_RES: Record<number, string> = {
-  32: '帝王时代人口 +10（哥特），开局只到城堡',
-  33: '文明加成标记值，不影响经济（高棉的 50 = 农民无需回仓，已处理）',
-  78: '市场交易手续费（萨拉森），开局不交易',
-  86: '团队加成，默认不计团队',
-  88: '马来非经济属性',
-  89: '团队加成（拜占庭僧侣）',
-  90: '僧侣转化抗性（条顿）',
-  97: '羊不会被敌方转走（凯尔特），单人模拟无关',
-  178: '团队加成（条顿）',
-  179: '团队加成（条顿）',
-  191: '团队加成（阿兹特克圣物）',
-  204: '马普切非经济属性',
-  209: '开局显示敌方位置（越南）',
-  210: '团队加成（缅甸圣物）',
-  211: '高地伤害加成（鞑靼）',
-  212: '高地伤害加成（鞑靼）',
-  218: '封建时代可建城镇中心（库曼），开局不多建城镇中心',
-  225: '团队加成（勃艮第）',
-  251: '团队加成（孟加拉）',
-  266: '帝王时代加成（越南）',
-  271: '团队加成（格鲁吉亚）',
-  272: '格鲁吉亚修理/建筑属性',
-  273: '格鲁吉亚修理/建筑属性',
-  283: '亚美尼亚特殊机制开关',
-  291: '摧毁建筑抢掠资源（丹麦）',
-  295: '图皮非经济属性',
-  297: '瓦兰吉非经济属性',
-  504: '团队加成（西班牙）',
-};
-/** res 属性：影响开局但本批未实现（对应文明标为不支持） */
-export const UNHANDLED_RES: Record<number, string> = {
-  69: '农田食物储量（西西里）：#43 不加新机制，有不确定就先置灰',
-  292: '动物尸体不腐烂（女真）：#43 不加新机制，有不确定就先置灰',
-  // 下列条目和同一文明的采集 workRate 成对出现：玛雅 ×0.87 配资源 ×1.15，鞑靼羊 ×0.637 配 ×1.57，哥特狩猎 ×0.813 配 ×1.23，乘起来约等于 1。
-  // 模型已经算了 workRate 的减速，却没算这一半，到封建的时间会偏慢，所以属于影响开局但未实现
-  47: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  79: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  189: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  190: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  216: '家畜食物倍率，和牧羊 workRate 成对出现（鞑靼 ×0.637/×1.57），未建模',
-  219: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  296: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  215: '采果工存放的食物 +25%（马普切 1381），未建模',
-  85: '科技费用折扣是否作用于升级时代待 .dat 核实（汉）',
-  234: '开局/升级时代/经济科技送村民（孟加拉、魏等）未建模',
-  237: '波兰庄园农田加成未建模',
-  238: '波兰庄园农田加成未建模',
-  239: '波兰庄园农田加成未建模',
-  241: '波兰采石换金未建模',
-  254: '古尔贾拉家畜机制未建模',
-  267: '采浆果同时产木头（葡萄牙）未建模',
-  276: '采金加成（马里）未建模',
-  298: '羊/猎物/渔船额外产金（瓦兰吉）未建模',
-  502: '伐木同时产食物（蜀）未建模',
-};
-/**
- * 匈奴 tech 238「C-Bonus, Start w/ Horse」/ 241「C-Bonus, Disable Horse」（res 234 set 1）：
- * 前置分别含 tech 308 / 307，名称表示开局送马/禁用马。307/308 的具体含义（哪种游戏模式）未核实。
- * 送的是马（非村民），不改变村民数和资源，开局模拟不涉及。
- */
-const RES234_IRRELEVANT_TECH: Record<number, string> = {
-  238: '匈奴开局送马（tech 238，前置 308，含义未核实），马的食物未计入，不改变村民数与资源',
-  241: '匈奴禁用开局马（tech 241，前置 307，含义未核实），马的食物未计入，不改变村民数与资源',
-};
-/**
- * 加成逻辑已实现、但出处不足，本版仍按不支持处理（UI 置灰）的文明。
- * v0.7.0：匈奴补齐第二条出处 St4rk（2020），已解除（issue 120 Q1）。
- */
-export const SOURCE_PENDING_CIVS: Record<string, string> = {};
-/** 仅测试构建用：VITE_FORCE_SIM_CIVS=Huns 时跳过出处门槛（e2e 验 flag 打开后的界面）；正式构建不设 */
-const FORCED_CIVS = new Set(
-  String((import.meta as { env?: Record<string, string | undefined> }).env?.VITE_FORCE_SIM_CIVS ?? '')
-    .split(',')
-    .filter(Boolean),
-);
-/** 已在 START_VILS 建模送村民的文明 tech（汉 302、玛雅 554） */
-const RES234_HANDLED = new Set([302, 554]);
-/** 整条待核实的文明 tech → 原因 */
-const PENDING_TECH: Record<number, string> = {};
-const FARM_UNITS = new Set([50, 1187]);
-/** 各时代的城镇中心单位：黑暗 109、封建 71、城堡 141、帝王 142；升时代即换成下一个，村民训练与升时代研究都按当前这一个计工作速度 */
-const TC_BY_AGE = [TC, 71, 141, 142];
-const TC_UNITS = new Set(TC_BY_AGE);
-
-const HANDLED_RES = (res: number, op?: string) => ((RES_START[res] || RES_STOCK[res] || RES_DEPOSIT[res] || res === 4) && op === 'add') || false;
-const HANDLED_ATTR = new Set(['workRate', 'carry', 'trainTime', ...Object.keys(COST_ATTR)]);
-
-/** 开局涉及的对象：村民、城镇中心（含升级后形态）、房子、时代升级、经济科技 + 所有开局里出现的单位/建筑/科技 */
-export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
-  const armenians = civ === 'Armenians' ? armenianContext(eco) : undefined;
-  if (armenians?.infrastructure) bos = bos.map((order) => armenianBuildOrder(order, civ!, eco));
-  const georgians = civ === 'Georgians' ? georgianContext(eco) : undefined;
-  if (georgians?.infrastructure) bos = bos.map((order) => georgianBuildOrder(order, civ!, eco));
-  const units = new Set<number>([83]);
-  const buildings = new Set<number>([...TC_UNITS, HOUSE, ...FARM_UNITS]);
-  if (georgians?.start) buildings.add(1808);
-  const techs = new Set<number>([101, 102, 103, ...Object.keys(eco.ecoTechs).map(Number)]);
-  for (const b of bos)
-    for (const st of b.steps)
-      for (const a of st.actions) {
-        if (a.type === 'build') buildings.add(a.building);
-        if (a.type === 'train' || a.type === 'upgrade') units.add(a.unit);
-        if (a.type === 'research') techs.add(a.tech);
-      }
-  /** 开局单位 → .dat 类别（类别折扣判定用） */
-  const unitClass = new Map([...units].map((u) => [u, eco.units[u]?.class ?? -1] as const));
-  // TC时代形态和替代农田不一定有单独计价记录；实际build入口及已有记录必须有class，缺失时不能少算马里折扣。
-  const pricedBuildings = new Set([...buildings].filter((id) => eco.buildings[id]));
-  pricedBuildings.add(HOUSE);
-  for (const bo of bos) for (const step of bo.steps) for (const action of step.actions) if (action.type === 'build') pricedBuildings.add(action.building);
-  const buildingClass = new Map([...pricedBuildings].map((id) => [id, eco.buildings[id]?.class ?? -1] as const));
-  return {
-    units,
-    buildings,
-    techs,
-    unitClass,
-    buildingClass,
-    sicilianRows: civ === 'Sicilians' ? (eco.civEco.Sicilians ?? []) : undefined,
-    sicilianBuildings: civ === 'Sicilians' ? eco.buildings : undefined,
-    civ,
-    ...(civ === 'Slavs' ? { slavs: slavicContext(eco) } : {}),
-    ...(civ === 'Khmer' ? { khmer: khmerContext(eco) } : {}),
-    weiRewards: civ === 'Wei' ? weiRewardFamily(eco.civEco.Wei) : null,
-    ...(civ === 'Bengalis' ? { bengaliRewards: bengaliRewardFamily(eco.civEco.Bengalis) } : {}),
-    ...(armenians ? { armenians } : {}),
-    ...(georgians ? { georgians } : {}),
-  };
-}
-
-/** tech 是否可以应用：整条 tech 里没有未实现/未分类的效果 */
-export function techAtomicOk(row: EffectRow, scope: ReturnType<typeof simScope>): boolean {
-  return row.effects.every((e) => {
-    const k = classifyCivEffect(e, row as { source?: string; tech?: number }, scope).kind;
-    return k !== 'unhandled' && k !== 'unknown';
-  });
-}
-
-/** 判定一条文明效果 */
-export function classifyCivEffect(
-  e: Effect,
-  row: {
-    source?: string;
-    age?: number;
-    tech?: number;
-    requires?: number[];
-    effects?: EffectRow['effects'];
-    armenianTech?: ArmenianRawTech;
-    georgianTech?: GeorgianRawTech;
-    slavicTree?: SlavicRawTree;
-    slavicTech?: SlavicRawTech;
-    khmerTech?: KhmerRawTech;
-    khmerTree?: KhmerRawTree;
-    khmerTeam?: KhmerRawTeam;
-  },
-  scope: ReturnType<typeof simScope>,
-): EffectClass {
-  const khmer = khmerRowClass(row as EffectRow, scope.civ, scope.khmer);
-  if (khmer) return khmer;
-  const slavic = slavicRowClass(row as EffectRow, scope.civ, scope.slavs);
-  if (slavic) return slavic;
-  const armenian = armenianRowClass(row as EffectRow, scope.civ, scope.armenians, scope.buildings);
-  if (armenian) return armenian;
-  const georgian = georgianRowClass(row as EffectRow, scope.civ, scope.georgians, scope.buildings);
-  if (georgian) return georgian;
-  if (isWeiRewardRow(row))
-    return scope.civ === 'Wei' && scope.weiRewards?.some((reward) => reward.row === row)
-      ? { kind: 'handled' }
-      : { kind: 'unhandled', reason: WEI_CONTEXT_REASON };
-  if (isBengaliRewardRow(row))
-    return scope.civ === 'Bengalis' && scope.bengaliRewards?.some((reward) => reward.row === row)
-      ? { kind: 'handled' }
-      : { kind: 'unhandled', reason: BENGALI_CONTEXT_REASON };
-  if (scope.sicilianRows && !sicilianRowAllowed(scope, row as EffectRow)) return { kind: 'unhandled', reason: '西西里加成缺少完整已核上下文，未计入' };
-  if (row.tech === 704 && !hasTatarShepherdContext(row)) return { kind: 'unhandled', reason: '鞑靼牧羊产量与工作率缺少完整已核配对，未计入' };
-  if (row.source === 'team') return { kind: 'irrelevant', reason: '团队加成，默认不计团队' };
-  if (row.tech === 595 && !hasMalianBuildingContext(row, scope)) return { kind: 'unhandled', reason: '马里建筑木费折扣缺少已核效果或当前建筑类别，未计入' };
-  if (row.tech !== undefined && PENDING_TECH[row.tech]) return { kind: 'unhandled', reason: PENDING_TECH[row.tech]! };
-  if (e.kind === 'freeTech') return { kind: 'handled' };
-  if (e.kind === 'techCost' || e.kind === 'techTime') {
-    if (e.tech === undefined || !scope.techs.has(e.tech)) return { kind: 'irrelevant', reason: '开局不涉及的科技' };
-    if (TECH_OPS.has(e.op ?? '') && (e.kind === 'techTime' || TECH_RES[String(e.res)])) return { kind: 'handled' };
-    return { kind: 'unknown' };
-  }
-  if (e.kind === 'res') {
-    if (e.res === undefined) return { kind: 'unknown' };
-    if (e.res === 69 && scope.sicilianRows && sicilianGroupOk(scope, 772)) return { kind: 'irrelevant', reason: SICILIAN_FARM_NOTE };
-    if (MAYAN_RESOURCE_TASKS[e.res] && hasMayanTreeContext(row)) return { kind: 'handled' };
-    if (e.res === 269 && e.op === 'set') return { kind: 'handled' };
-    if (e.res === RES_HUNT_FOOD && e.op === 'mul') return { kind: 'handled' };
-    if (e.res === RES_FORAGER_WOOD && row.tech === 453 && e.op === 'add') return { kind: 'handled' };
-    if (e.res === RES_LUMBER_FOOD && e.op === 'set' && hasLumberFoodContext(row)) return { kind: 'handled' };
-    if (e.res === RES_GOLD_PRODUCTIVITY && e.op === 'add' && hasMalianGoldContext(row)) return { kind: 'handled' };
-    if (e.res === RES_WILD_FOOD_GOLD && e.op === 'set' && Number.isFinite(e.v) && e.v! >= 0 && hasVarangianGoldContext(row)) return { kind: 'handled' };
-    if (e.res === RES_SHEPHERD_PRODUCTIVITY && e.op === 'mul' && hasTatarShepherdContext(row)) return { kind: 'handled' };
-    if (HANDLED_RES(e.res, e.op)) return { kind: 'handled' };
-    if (e.res === 234 && row.tech !== undefined && RES234_HANDLED.has(row.tech)) return { kind: 'handled' };
-    if (e.res === 234 && row.tech !== undefined && RES234_IRRELEVANT_TECH[row.tech]) return { kind: 'irrelevant', reason: RES234_IRRELEVANT_TECH[row.tech]! };
-    if (UNHANDLED_RES[e.res]) return { kind: 'unhandled', reason: UNHANDLED_RES[e.res]! };
-    if (IRRELEVANT_RES[e.res]) return { kind: 'irrelevant', reason: IRRELEVANT_RES[e.res]! };
-    return { kind: 'unknown' };
-  }
-  if (e.kind === 'attr' && e.target) {
-    const t = e.target;
-    const id = t.startsWith('unit:') ? Number(t.slice(5)) : NaN;
-    const vil = t.startsWith('task:') || t === 'villager' || t === 'class:4' || id === 83;
-    // 类别目标（#42 哥特步兵 class:6）：开局里有该类别的单位时，费用倍率已按类别实现；其余属性不影响开局时间
-    if (t.startsWith('class:') && !vil) {
-      const cls = Number(t.slice(6));
-      if (scope.sicilianRows && row.tech === 770 && SICILIAN_FORT_CLASSES.has(cls) && sicilianGroupOk(scope, 770)) return { kind: 'handled' };
-      if (row.tech === 595 && e.attr === 'woodCost' && e.op === 'mul') return { kind: 'handled' };
-      if (MALIAN_BUILDING_CLASSES.has(cls) && e.attr === 'woodCost' && [...scope.buildingClass.values()].includes(cls))
-        return { kind: 'unhandled', reason: '尚未核实的建筑类别木费效果，未计入' };
-      if (![...scope.units].some((u) => scope.unitClass.get(u) === cls)) return { kind: 'irrelevant', reason: '开局不涉及的单位/建筑/类别' };
-      if (
-        cls === scope.unitClass.get(13) &&
-        scope.units.has(13) &&
-        ['workRate', 'carry', 'speed'].includes(e.attr ?? '') &&
-        (e.op === 'mul' || (e.attr === 'carry' && e.op === 'add'))
-      )
-        return { kind: 'handled' };
-      if (e.attr && (e.attr in COST_ATTR || e.attr === 'trainTime') && e.op === 'mul') return { kind: 'handled' };
-      if (e.attr === 'trainTime' || e.attr === 'workRate' || e.attr === 'carry' || (e.attr ?? '') in COST_ATTR) return { kind: 'unknown' };
-      return { kind: 'irrelevant', reason: '开局单位类别的非经济属性（攻防、生命等）不影响开局时间' };
-    }
-    if (!vil && !scope.units.has(id) && !scope.buildings.has(id)) return { kind: 'irrelevant', reason: '开局不涉及的单位/建筑/类别' };
-    if (e.attr === 'speed') return (vil || id === 13) && e.op === 'mul' ? { kind: 'handled' } : { kind: 'irrelevant', reason: '非村民移速不影响开局时间' };
-    if (FARM_UNITS.has(id) && e.attr === 'workRate')
-      return { kind: 'unhandled', reason: '农田单位 workRate 与 task:farm 是否重复待 .dat 核实（罗马、斯拉夫）' };
-    // issue 317：农田费用倍率由 applyEffects 计入 costMul（条顿农田 -40% 会改变开局结果），归为已实现；只影响分类，不改数值
-    if (FARM_UNITS.has(id) && e.attr && e.attr in COST_ATTR && e.op === 'mul') return { kind: 'handled' };
-    if (FARM_UNITS.has(id) || (TC_UNITS.has(id) && id !== TC && e.attr !== 'workRate'))
-      return { kind: 'irrelevant', reason: '农田/升级后城镇中心的非速度属性不影响开局' };
-    if (e.attr && HANDLED_ATTR.has(e.attr) && (e.op === 'mul' || (e.op === 'add' && (e.attr === 'carry' || (e.attr in COST_ATTR && e.attr !== 'cost')))))
-      return { kind: 'handled' };
-    return { kind: 'unknown' };
-  }
-  return { kind: 'unknown' };
-}
-
-const describeEffect = (civ: string, row: { tech?: number }, e: Effect) =>
-  `${civ} tech ${row.tech ?? '?'}: ${e.kind} ${e.kind === 'res' ? 'res ' + e.res : (e.target ?? e.tech ?? '')} ${e.attr ?? ''} ${e.op ?? ''} ${e.v ?? ''}`
-    .replace(/\s+/g, ' ')
-    .trim();
-
-/** 某文明未处理的效果：影响开局但未实现 + 未分类（Kent #42 草稿接口） */
-export function unhandledEffects(eco: EcoData, civ: string, bos: BuildOrder[] = []): { effect: string; kind: 'unhandled' | 'unknown'; reason: string }[] {
-  const scope = simScope(eco, bos, civ);
-  const out: { effect: string; kind: 'unhandled' | 'unknown'; reason: string }[] = [];
-  for (const r of eco.civEco[civ] ?? [])
-    for (const e of r.effects) {
-      const c = classifyCivEffect(e, r as { source?: string; tech?: number }, scope);
-      if (c.kind === 'unhandled') out.push({ effect: describeEffect(civ, r as { tech?: number }, e), kind: 'unhandled', reason: c.reason });
-      else if (c.kind === 'unknown') out.push({ effect: describeEffect(civ, r as { tech?: number }, e), kind: 'unknown', reason: '未分类的效果类型' });
-    }
-  return out;
-}
-
-/** 文明是否被开局模拟完整支持：没有「影响开局但未实现」也没有未分类效果；UI（#39）据此置灰 */
-export function simSupport(
-  eco: EcoData,
-  civ: string,
-  bos: BuildOrder[] = [],
-  opts: { ignoreSourceGate?: boolean } = {},
-): { supported: boolean; reasons: string[] } {
-  const u = unhandledEffects(eco, civ, bos);
-  const reasons = [...new Set(u.map((x) => x.reason))];
-  if (civ === 'Khmer') reasons.push(...khmerContext(eco).reasons);
-  else if ((eco.civEco[civ] ?? []).some((row) => khmerHasMarker(row) || [638, 654, 657, 672].includes(row.tech ?? -1))) reasons.push(KHMER_SOURCE_REASON);
-  if (civ === 'Slavs') reasons.push(...slavicContext(eco).reasons);
-  else if ((eco.civEco[civ] ?? []).some((row) => 'slavicTree' in row || 'slavicTech' in row)) reasons.push(SLAVIC_SOURCE_REASON);
-  if (civ === 'Mayans' && !hasUniqueMayanTree(eco)) reasons.push('玛雅资源产量与工作率缺少完整已核配对，未计入');
-  if (civ === 'Sicilians' && SICILIAN_GROUPS.some((group) => !sicilianGroupOk(simScope(eco, bos, civ), group)))
-    reasons.push('西西里加成缺少完整已核上下文，未计入');
-  if (civ === 'Wei' && !weiRewardFamily(eco.civEco.Wei)) reasons.push(WEI_CONTEXT_REASON);
-  if (civ === 'Bengalis' && !bengaliRewardFamily(eco.civEco.Bengalis)) reasons.push(BENGALI_CONTEXT_REASON);
-  if (civ === 'Armenians') {
-    const context = armenianContext(eco);
-    reasons.push(...context.reasons);
-    if (bos.some((order) => order.steps.some((step) => step.actions.some((action) => action.type === 'build' && [104, 1806, 1118].includes(action.building)))))
-      reasons.push('强化教堂与圣物经济不在当前开局模型内，未计入');
-    if (
-      context.infrastructure &&
-      bos.some((order) =>
-        order.steps.some((step) => step.actions.some((action) => action.type === 'research' && !armenianResearchSites(context, action.tech)?.length)),
-      )
-    )
-      reasons.push('该研究在亚美尼亚当前已核科技与地点范围外，未计入');
-  }
-  if (civ === 'Georgians') {
-    const context = georgianContext(eco);
-    reasons.push(...context.reasons);
-    if (georgianHasChurch(simScope(eco, bos, civ).buildings)) reasons.push(GEORGIAN_CHURCH_REASON);
-    // simScope.techs contains all standard ecoTechs; availability concerns only requested actions.
-    if (
-      context.infrastructure &&
-      bos.some((order) =>
-        order.steps.some((step) => step.actions.some((action) => action.type === 'research' && !georgianResearchSites(context, action.tech)?.length)),
-      )
-    )
-      reasons.push('该研究在格鲁吉亚当前已核科技与地点范围外，未计入');
-  }
-  if (!opts.ignoreSourceGate && !FORCED_CIVS.has(civ) && SOURCE_PENDING_CIVS[civ]) reasons.push(SOURCE_PENDING_CIVS[civ]!);
-  return { supported: reasons.length === 0, reasons };
-}
-
-/** 所有文明里未分类的效果（bo:check 遇到即失败） */
-export function unknownCivEffects(eco: EcoData, bos: BuildOrder[] = []): string[] {
-  return Object.keys(eco.civEco).flatMap((c) =>
-    unhandledEffects(eco, c, bos)
-      .filter((x) => x.kind === 'unknown')
-      .map((x) => x.effect),
-  );
 }
 
 /**
@@ -2027,28 +1174,20 @@ export function gatherRate(
 ): { carry: number; workRate: number; rate: number; extraIncome: Partial<Stock> } {
   const m = baseMods();
   const scope = simScope(eco, ALL_BOS, civ);
-  m.farmNoWalk = civ === 'Khmer' && !!scope.khmer?.bonus;
+  m.farmNoWalk = !!civMechanism(civ).farmNoWalk?.(scope);
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   for (const r of eco.civEco[civ] ?? [])
     if (
       r.age === 1 &&
       r.source !== 'team' &&
-      khmerRowClass(r, civ, scope.khmer)?.kind !== 'unhandled' &&
-      ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') &&
-      mayanRowAllowed(civ, r, uniqueMayanTree) &&
-      sicilianRowAllowed(scope, r) &&
-      (!('slavicTree' in r || 'slavicTech' in r) || civ === 'Slavs') &&
-      (!['Tatars', 'Mayans', 'Sicilians', 'Slavs', 'Khmer'].includes(civ) || techAtomicOk(r, scope))
+      mechanismRowAllowed(r, scope, uniqueMayanTree) &&
+      mechanismGatherMarkerAllowed(r, scope) &&
+      (!civMechanism(civ).atomicGather || techAtomicOk(r, scope))
     )
       applyEffects(
         m,
         r.effects,
-        (r as { tech?: number }).tech === 453 && techAtomicOk(r, scope),
-        hasLumberFoodContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope),
-        { gold: civ === 'Malians' && hasMalianGoldContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope) },
-        civ === 'Varangians' && hasVarangianGoldContext(r as EffectRow & { tech?: number }) === true && techAtomicOk(r, scope),
-        civ === 'Tatars' && hasTatarShepherdContext(r as EffectRow & { tech?: number }) && techAtomicOk(r, scope),
-        { resource: civ === 'Mayans' && hasMayanTreeContext(r) && techAtomicOk(r, scope) },
+        rowApplication(civ, r, scope, 'gather', () => techAtomicOk(r, scope)),
       );
   const base = eco.villager.tasks[ecoTask]!;
   const workRate =
@@ -2061,109 +1200,9 @@ export function gatherRate(
   const carry = base.carry * (m.carry[ecoTask] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + ecoTask] ?? 0) + (m.carry['add:villager'] ?? 0);
   const walk = (2 * (ecoTask === 'farm' && m.farmNoWalk ? 0 : tiles)) / (eco.villager.speed * m.speed);
   const average = carry / (carry / workRate + walk);
-  const rate =
-    civ === 'Khmer' && ecoTask === 'farm'
-      ? khmerFarmRate(scope.khmer, average)
-      : civ === 'Slavs' && ecoTask === 'farm'
-        ? slavicFarmRate(scope.slavs, average)
-        : average;
+  const rate = mechanismFarmRate(scope, ecoTask, average);
   const wood = foragerWoodIncome(m, ecoTask, rate);
   const food = lumberFoodIncome(m, ecoTask, rate);
   const gold = (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) + varangianGoldIncome(m, ecoTask, rate);
   return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}), ...(gold ? { gold } : {}) } };
-}
-/** 页面「按某文明计」下方的附注：已计入但有未核实部分、或明确不计入的加成 */
-export function civSimNotes(eco: EcoData, civ: string, boId?: string): string[] {
-  const out: string[] = [];
-  if (civ === 'Khmer')
-    out.push(
-      ...khmerNotes(
-        khmerContext(eco),
-        ALL_BOS.find((order) => order.id === boId),
-      ),
-    );
-  if (civ === 'Slavs') {
-    const context = slavicContext(eco);
-    const bo = ALL_BOS.find((order) => order.id === boId);
-    if (context.physical && context.reasons.length === 0 && bo && slavicHasFarmAssignment(bo)) out.push(SLAVIC_FARM_NOTE);
-  }
-  if (civ === 'Armenians' && armenianContext(eco).reasons.length === 0) out.push(ARMENIAN_CART_NOTE, ARMENIAN_RESEARCH_NOTE);
-  if (civ === 'Georgians') {
-    const context = georgianContext(eco);
-    if (context.reasons.length === 0) out.push(...(context.start ? [GEORGIAN_START_NOTE] : []), GEORGIAN_CART_NOTE);
-  }
-  const rows = (eco.civEco[civ] ?? []).filter((r) => r.source !== 'team');
-  if (rows.some((r) => (r as { tech?: number }).tech === 453 && r.effects.some((e) => e.res === RES_FORAGER_WOOD && e.op === 'add')))
-    out.push(FORAGER_WOOD_NOTE);
-  if (civ === 'Shu') {
-    const scope = simScope(eco, ALL_BOS);
-    if (
-      rows.some(
-        (row) =>
-          hasLumberFoodContext(row as EffectRow & { tech?: number }) &&
-          row.effects.some((effect) => effect.kind === 'res' && effect.res === RES_LUMBER_FOOD && effect.op === 'set') &&
-          techAtomicOk(row, scope),
-      )
-    )
-      out.push(LUMBER_FOOD_NOTE);
-    out.push(SHU_KNIGHT_TEMPLATE_NOTE);
-  }
-  if (civ === 'Malians') {
-    const scope = simScope(eco, ALL_BOS);
-    if (
-      rows.some(
-        (row) =>
-          hasMalianGoldContext(row as EffectRow & { tech?: number }) &&
-          row.effects.some((effect) => effect.kind === 'res' && effect.res === RES_GOLD_PRODUCTIVITY && effect.op === 'add') &&
-          techAtomicOk(row, scope),
-      )
-    )
-      out.push(MALIAN_GOLD_NOTE);
-  }
-  if (civ === 'Varangians') {
-    const scope = simScope(eco, ALL_BOS);
-    if (
-      rows.some(
-        (row) =>
-          hasVarangianGoldContext(row as EffectRow & { tech?: number }) &&
-          row.effects.some((effect) => effect.kind === 'res' && effect.res === RES_WILD_FOOD_GOLD && effect.op === 'set') &&
-          techAtomicOk(row, scope),
-      )
-    )
-      out.push(VARANGIAN_GOLD_NOTE);
-  }
-  if (civ === 'Tatars') {
-    const scope = simScope(eco, ALL_BOS);
-    if (rows.some((row) => hasTatarShepherdContext(row as EffectRow & { tech?: number }) && techAtomicOk(row, scope))) out.push(TATAR_SHEPHERD_NOTE);
-  }
-  if (civ === 'Mayans') {
-    const scope = simScope(eco, ALL_BOS);
-    if (hasUniqueMayanTree(eco) && rows.some((row) => hasMayanTreeContext(row) && techAtomicOk(row, scope))) out.push(MAYAN_RESOURCE_NOTE);
-    out.push(MAYAN_CAVALRY_TEMPLATE_NOTE);
-  }
-  if (civ === 'Sicilians') {
-    const scope = simScope(eco, ALL_BOS, civ);
-    if (sicilianGroupOk(scope, 770)) out.push(SICILIAN_CONSTRUCTION_NOTE);
-    if (sicilianGroupOk(scope, 772)) out.push(SICILIAN_FARM_NOTE);
-  }
-  if (civ === 'Wei' && weiRewardFamily(eco.civEco.Wei)) {
-    out.push(WEI_SPAWN_NOTE);
-    if (boId === 'fast-castle-knights') out.push(WEI_KNIGHT_TEMPLATE_NOTE);
-  }
-  if (civ === 'Bengalis' && bengaliRewardFamily(eco.civEco.Bengalis)) {
-    out.push(BENGALI_SPAWN_NOTE);
-    if (boId === 'fast-castle-knights') out.push(BENGALI_KNIGHT_TEMPLATE_NOTE);
-  }
-  if (
-    rows.some((r) => {
-      const t = (r as { tech?: number }).tech;
-      return t !== undefined && !!RES234_IRRELEVANT_TECH[t];
-    })
-  )
-    out.push('马的食物未计入');
-  if (civ !== 'Mayans' && rows.some((r) => r.effects.some((e) => e.kind === 'res' && e.res === RES_HUNT_FOOD))) {
-    const k = huntFoodMul(eco, civ);
-    out.push(`猎物食物 ×${Math.round(k * 100) / 100}；对其他采集的作用未核实`);
-  }
-  return out;
 }
