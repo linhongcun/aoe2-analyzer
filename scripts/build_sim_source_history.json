@@ -1,0 +1,16 @@
+{
+  "baseline": "08ad03b0335f9b98a3b893694b793674c1f21b3b",
+  "reason": "Historical source-review records consumed by existing tests; exact bytes only, no new exemptions.",
+  "files": {
+    "docs/design/bengalis197-source.json": "9e0342ba796c98f4112f22c64be457d66cf9a16324a3d4291affe7c25abb1785",
+    "docs/design/georgians197-public-sources.json": "e08827ed30689385a3ad0e93babdd80d28ea68fe4043b9d78d5757a94a98a6fe",
+    "docs/design/malians197-source.json": "b315822950496550cd148c451734cb7f1c4c1ba856b33cd1082c49d23783ba1b",
+    "docs/design/mayans197-source.json": "b98b19132f81f80dda29a695fd3356ae3953bac54d982f7458aaa332a25573a8",
+    "docs/design/shu197-source.json": "8ba4f9c5c1995069b8ce1dc5243ec30f5fdb2be1cdd5a811802cc1a725e7dd15",
+    "docs/design/sicilians197-source.json": "7a16074c45daec94371cf94cac752bf7519275c337f91a5e683bfe3e7ea4c174",
+    "docs/design/slavs197-source.json": "ed4db80688018b87981be00c3092ab2f7a3c3e9f8533b1c347ff227e0e734a5c",
+    "docs/design/tatars197-source.json": "32ba395b0714d5b4c068bdf074cef33e3808a874a84c5c4b952f34d4af1b9c45",
+    "docs/design/varangians197-source.json": "f7698515563c666718d2a9fd4a1c339921a01bdd00d07416ab13d0e63232e742",
+    "docs/design/wei197-source.json": "cb7a19121fadef1fdb7845aaa5af9a727c2828d37788ccf2ae109f1b2da7fd5a"
+  }
+}
