@@ -21,10 +21,10 @@ const FIX = {
 
 async function openBuild(page: Page, q: string) {
   await page.goto(`${BUILDS}?${q}`);
-  await expect(page.getByRole('list', { name: /时间线/ })).toBeVisible();
+  await expect(page.getByRole('list', { name: '时间线', exact: true })).toBeVisible();
 }
 
-const nodes = (page: Page) => page.getByRole('list', { name: /时间线/ }).getByRole('listitem');
+const nodes = (page: Page) => page.getByRole('list', { name: '时间线', exact: true }).getByRole('listitem');
 const summary = (page: Page) => page.getByRole('region', { name: /摘要/ });
 const steps = (page: Page) => page.getByRole('list', { name: '步骤' }).getByRole('listitem');
 
@@ -63,7 +63,7 @@ test.describe('#3 开局时间线', () => {
     const hrefs = await links.evaluateAll((as) => as.map((a) => a.getAttribute('href')));
     for (const h of hrefs) {
       await page.goto(h!);
-      await expect(page.getByRole('list', { name: /时间线/ })).toBeVisible();
+      await expect(page.getByRole('list', { name: '时间线', exact: true })).toBeVisible();
     }
   });
 
@@ -350,7 +350,7 @@ test.describe('#3 开局时间线', () => {
     await warn.getByRole('button', { name: '关闭提示' }).click();
     await expect(warn).toHaveCount(0);
     await page.reload();
-    await expect(page.getByRole('list', { name: /时间线/ })).toBeVisible();
+    await expect(page.getByRole('list', { name: '时间线', exact: true })).toBeVisible();
     await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0); // 本次会话不再出现
   });
 
@@ -417,10 +417,10 @@ test.describe('#3 开局时间线', () => {
     await page.goto(`${BUILDS}?bo=scouts-18&civ=Franks`);
     const err = page.locator('[data-t="timeline-error"]');
     await expect(err.getByRole('alert')).toContainText('时间线没能加载出来');
-    await expect(page.getByRole('list', { name: /时间线/ })).toHaveCount(0);
+    await expect(page.getByRole('list', { name: '时间线', exact: true })).toHaveCount(0);
     block = false;
     await err.getByRole('button', { name: '重试' }).click();
-    await expect(page.getByRole('list', { name: /时间线/ })).toBeVisible();
+    await expect(page.getByRole('list', { name: '时间线', exact: true })).toBeVisible();
     await expect(err).toHaveCount(0);
   });
 
