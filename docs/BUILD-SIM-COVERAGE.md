@@ -24,7 +24,7 @@
 
 2026-10-28 #197 第十二批补充：斯拉夫迁入默认团队关闭的支持集合。农田先算农民携带/往返均速，再取独立供给上限；仅两套FC显式分配农田村民，其余6套不宣传农田收益。近距离估算可能低于保留的旧通用公式，不代表游戏内加成减益；食物池启动、耗尽、续种和团队军事建筑人口未模拟。独立真实成本仍保持原×1.15口径。见[规格](design/slavs197.md)、[固定来源](design/slavs197-source.json)、[公开语义](design/slavs197-public-sources.json)、[真实先红](design/slavs197-first-red.json)和[原99转绿及追加边界](design/slavs197-green-boundary.json)；[本地A实际验证](design/slavs197-validation.json)、[量化](design/slavs197-runtime-quantified.json)与[独立图审](design/slavs197-ui-review.json)记录一次构建、9项四宽双主题及22项原金标准通过。无farm六套无数值变化，两FC仅Food/early误差带变化，实际时代时刻未变；其它55文明440完整/数值、1485采集辅助、斯拉夫24非farm辅助和全部224独立真实成本均无差异；3个farm辅助另按新公式核验。
 
-2026-10-28 #197 第十三批补充：高棉迁入支持集合。完整638来源控制当前时代和农田/靶场/马厩/市场免前置，原显式建筑仍付费施工；完整654按免回仓与独立供给上限连续估算，只有两套FC有farm任务。结果可能低于保留的旧通用估算，不代表游戏内减益；田内走点、池瞬态、耗尽和续种未模拟，独立真实成本保持。见[规格](design/khmer197.md)、[固定来源](design/khmer197-source.json)、[公开语义](design/khmer197-public-sources.json)及[真实先红](design/khmer197-first-red.json)。本地必要检查和后续不可变运行时量化分别按实际证据记录。
+2026-10-28 #197 第十三批补充：高棉迁入支持集合。完整638来源控制当前时代和农田/靶场/马厩/市场免前置，原显式建筑仍付费施工；完整654按免回仓与独立供给上限连续估算，只有两套FC有farm任务。结果可能低于保留的旧通用估算，不代表游戏内减益；田内走点、池瞬态、耗尽和续种未模拟，独立真实成本保持。见[规格](design/khmer197.md)、[固定来源](design/khmer197-source.json)、[公开语义](design/khmer197-public-sources.json)及[真实先红](design/khmer197-first-red.json)。[A实际本地验证](design/khmer197-validation.json)、[量化](design/khmer197-runtime-quantified.json)及[独立图审](design/khmer197-ui-review.json)记录一次构建、新9项及原金标准22项通过、同dist62路由烟测。其它55完整440/辅助1485与全部224真实成本保持；高棉4套无farm全数值同，另2套仅6处已核研究地点时间/完成顺序变化，全部6套已保存起始库存/时代/房屋付款同；两FC Food/误差带变化，默认时代时刻未变。原过强“六套全数值同”离线FAIL保留，独立来源与单独精确六叶分类通过，无重新采集。
 
 ## 核对结果
 

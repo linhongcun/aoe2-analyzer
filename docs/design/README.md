@@ -1,6 +1,6 @@
 # 设计稿索引（v0.4.0 已签字 / 定稿）
 
-v0.58.0 高棉开局支持见 [第十三批规格](khmer197.md)：完整来源门控、独立农田供给、638免前置与显式付费建筑政策；[固定来源](khmer197-source.json)、[公开语义](khmer197-public-sources.json)及[真实先红](khmer197-first-red.json)及[分段转绿与必要本地检查](khmer197-green-boundary.json)。本地量化/浏览器证据随实际不可变运行时补充，CI与发布以PR记录为准。
+v0.58.0 高棉开局支持见 [第十三批规格](khmer197.md)：完整来源门控、独立农田供给、638免前置与显式付费建筑政策；[固定来源](khmer197-source.json)、[公开语义](khmer197-public-sources.json)及[真实先红](khmer197-first-red.json)及[分段转绿与必要本地检查](khmer197-green-boundary.json)。[实际A本地验证](khmer197-validation.json)、[量化](khmer197-runtime-quantified.json)及[独立图审](khmer197-ui-review.json)记录一次构建、新9项/原22项/62路由烟测，以及原严格比较FAIL与单独精确六叶分类；CI与发布以实际PR记录为准。
 
 v0.57.0 斯拉夫开局支持见 [#197第十二批规格](slavs197.md)：独立农田供需稳态模型、近距离旧通用估算差异、FC2真实任务披露与团队人口未模拟；[真实先红](slavs197-first-red.json)、[固定来源](slavs197-source.json)、[公开语义](slavs197-public-sources.json)及[原99转绿和追加边界](slavs197-green-boundary.json)，另见[本地A实际验证](slavs197-validation.json)、[量化](slavs197-runtime-quantified.json)和[独立图审](slavs197-ui-review.json)。
 

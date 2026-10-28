@@ -1,0 +1,301 @@
+{
+  "schema": 1,
+  "status": "Local actual CandidateA evidence snapshot; B changes documentation only; CI/Pages/Release not claimed",
+  "issue": 197,
+  "batch": 13,
+  "scopeComment": "https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6469372915",
+  "runtime": {
+    "head": "359e124c3a8135d7ddf97ca6d3d5da76647cc443",
+    "tree": "88593b1135da4260dff2140077d5973126cb402e",
+    "version": "0.58.0"
+  },
+  "baseline": {
+    "head": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+    "tree": "42920cb5a52902655733aee02f6d85419819d97e",
+    "version": "0.57.0",
+    "report": {
+      "original": "/tmp/batch13197-baseline-capture.json",
+      "sha256": "16f1d61a5fa436a5b21808ce2640f4d5167d86bd65beef83658b5838ba04ed91",
+      "bytes": 151355
+    }
+  },
+  "sourceIdentity": {
+    "inputs": 484,
+    "inventory": {
+      "path": "/tmp/batch13-khmer-A-source-inputs.json",
+      "sha256": "01572638762a4c1ce442f8a4bcd3e7dac87250a4fda98eaa27190659bca817fb",
+      "inputs": 484,
+      "mapSHA256": "1c41c6306ffcf38b161400c90b59c18b273620673c811ef752110fece0bac0aa"
+    },
+    "policySHA256": "117d8964c22c0f6a110feafa480308301c8010b24c219de77e825e0742223ce8",
+    "fullFixedRawBoundary": "DE185872 with independent pinned158041 public semantics only; no client-equivalence claim",
+    "independentSourceReview": {
+      "original": "/tmp/batch13-khmer-A-independent-source-code-review.json",
+      "sha256": "213705116f1468930c9873ffdf9bdec5165339be18f5b5e80120c3a39019d20a",
+      "bytes": 8086,
+      "verdict": "SOURCE_CODE_IMMUTABLE_A_REVIEW_PASS",
+      "findings": [],
+      "unresolvedIssues": 0
+    },
+    "independentProtectionReview": {
+      "original": "/tmp/batch13197-candidateA-postcode-static-classification.json",
+      "sha256": "76c480c2e74a5b6c470c8ae392169ade7e11038a6e1075570e44d666b8195cdc",
+      "bytes": 71630,
+      "status": "PASS_STATIC_PRODUCTION_CLASSIFICATION",
+      "sourceInputCount": 484,
+      "baselineProtected": 540,
+      "candidateProtected": 552,
+      "unchangedOld": 534,
+      "approvedChangedOld": 6,
+      "currentOracle": {
+        "path": "/tmp/batch13197-current-khmer-migration-oracle-with-text317.json",
+        "sha256": "7f1f0c37db578ab67d2e91440ccf65dfb873c92c76f08f142f33add77af51483",
+        "exactFiles": 5,
+        "exactSpans": 15
+      },
+      "oldGlobals12Exact": true,
+      "other55RawExact": true
+    }
+  },
+  "localBeforeA": {
+    "document": "khmer197-green-boundary.json",
+    "newDistinctCases": 119,
+    "original117": "107TS first104pass/3assertionfail; Python10pass; only failed3recovered",
+    "additional2": "Two display assertions for legal whole654 omission ran2AssertionError red then2green; original117notrerun",
+    "compatibility": "10files321pass+1existingTODO",
+    "producer": "Real eco_build once; zero reconciliation differences. Python10 TempDirectory exports passed. Other55/raw12globals preserved.",
+    "static": "type/type-after-source-split, applicable ESLint/color/CSS/strictlayers/content46/BO8/compiled6 passed; actual lint line-limit failure/recovery retained. Only5preexistingCURRENTfiles produce Prettier warnings and each was also unformatted at actual baseline; source/test bodies preserved.",
+    "historicalSnapshotBoundary": "The older green-boundary report records tests and not-yet-executed items at that earlier WIP phase; the build/browser/runtime evidence below happened later on A."
+  },
+  "build": {
+    "original": "/tmp/batch13-build-A.execution.json",
+    "sha256": "c77d706a995491b56948d25c88a3e4f5dd3adb692930d4bf10c53c321440dbf3",
+    "bytes": 364395,
+    "command": ["npm", "run", "build"],
+    "startedUTC": "2026-10-28T13:29:23.899718+00:00",
+    "completedUTC": "2026-10-28T13:29:47.198591+00:00",
+    "exitCode": 0,
+    "sourceStable": true,
+    "count": 1,
+    "sourceInputs": 484,
+    "distFiles": 1695,
+    "distTreeSHA256": "a819d1068e41d61fdf45862264fb6e76611c829c246639e24b418cf063e3a598"
+  },
+  "browser": {
+    "original": "/tmp/batch13-khmer-browser.execution.json",
+    "sha256": "ed737892ad2ef0dd61646092a29fb615b6b00ca58a5647b8a075e9996d6bd3b1",
+    "bytes": 125404,
+    "argv": ["npx", "playwright", "test", "tests/e2e/khmer197.spec.ts", "--workers=1", "--output=/tmp/batch13-khmer-browser-results", "--reporter=line,json"],
+    "startedUTC": "2026-10-28T13:32:13.588545+00:00",
+    "completedUTC": "2026-10-28T13:32:44.902371+00:00",
+    "exitCode": 0,
+    "sourceIdentityStable": true,
+    "actualStats": {
+      "startTime": "2026-10-28T13:32:14.458Z",
+      "duration": 30417.664,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "jsonReport": {
+      "path": "/tmp/batch13-khmer-browser.json",
+      "sha256": "920495fdd272fad7bd2d881602ac41524bab8f8e543c00ff6e3380a1d6ac4603"
+    },
+    "scope": "Only new9 Khmer cases, four widths×dualtheme plus6nofarm/bonus0/1/fallback; no retries",
+    "sourceInputs": 484,
+    "distFiles": 1695,
+    "actualRuntime": {
+      "head": "359e124c3a8135d7ddf97ca6d3d5da76647cc443",
+      "tree": "88593b1135da4260dff2140077d5973126cb402e",
+      "version": "0.58.0"
+    }
+  },
+  "golden322": {
+    "original": "/tmp/batch13-khmer-golden322.execution.json",
+    "sha256": "f66a0a977f144dfdda074e70f538d71ab9b7e42ef04e802c8415b05424bb8be4",
+    "bytes": 1571,
+    "command": [
+      "npx",
+      "playwright",
+      "test",
+      "tests/e2e/v0290-322-golden.spec.ts",
+      "--workers=1",
+      "--retries=0",
+      "--reporter=json",
+      "--output=/tmp/batch13-khmer-golden322-results"
+    ],
+    "startedUTC": "2026-10-28T13:31:33.559668+00:00",
+    "completedUTC": "2026-10-28T13:32:09.903219+00:00",
+    "exitCode": 0,
+    "stable": true,
+    "stats": {
+      "startTime": "2026-10-28T13:31:34.498Z",
+      "duration": 35381.897,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "protectedHashes": {
+      "tests/e2e/v0290-322-golden.spec.ts": "ab378de371363fdc21cae5ca3ad02d6b0a44d88c4965f6af434bcdc10c4a3812",
+      "tests/e2e/v0280-golden-cases.ts": "d9e15c2977e3357286c8219255c36c18a9c2518609940625b99100811cefc7a4",
+      "tests/e2e/fixtures/v0290-322-golden.json": "eb1141aea3c89ea4f5ce0baf909457c4f94db742b3dd7d0308cfe435f99e8aca"
+    },
+    "reportSHA256": "3e73a694211032036cabfed32bae3edd2126acab74c03c70fcbd0090105c2904",
+    "count": 1,
+    "scope": "Original whole22case suite; all fixture numbers/text and comparator/spec unchanged from baseline, no record/filter/normalizer edits"
+  },
+  "deploymentSmoke": {
+    "original": "/tmp/batch13-khmer-smoke-A.execution.json",
+    "sha256": "d77b748c6e945023323c6ee951aad9ee948fa040d77ac0806cce27428e054f44",
+    "bytes": 5877,
+    "command": ["node", "scripts/deployment-smoke.mjs", "--site", "http://127.0.0.1:4211/", "--plan", "/tmp/batch13-builds-smoke-plan.json"],
+    "startedUTC": "2026-10-28T13:33:15.413529+00:00",
+    "completedUTC": "2026-10-28T13:33:51.256332+00:00",
+    "exitCode": 0,
+    "stable": true,
+    "verifiedLines": [
+      "Verified Portuguese economy: selectable, actual Food/Wood inventory, gold discount, share card, continuous estimate and unchanged real-cost boundary",
+      "Verified Shu economy: same-clock actual Food/Wood inventory, selectable, share card, knight-template limit and unchanged real-cost boundary",
+      "Verified Malians economy: same-clock actual Gold inventory, selectable, share card, paid house/TC wood, unchanged farm cost and real-cost boundary",
+      "Verified Varangians economy: same-clock early and hybrid fishing Gold inventory, primary Food/Wood preserved, selectable, share card and original farm-based real cost",
+      "Verified Tatars economy: same-clock379.6s Food245vs244, paired coefficients, selectable, share, correct sheep/TC attribution and original farm-based real cost",
+      "Verified Mayans economy: own4-villager150Food start,571.9s Food477/Wood376/Gold50/Stone200,pop20/25, paired-source explanation, both generic cavalry shares and original real-cost boundary; no pure-productivity Generic comparison claimed",
+      "Verified Sicilians economy: own932.6s Food931/Wood469/Gold133/Stone300, actual two-TC cost550Wood/200Stone, sourced75s one-builder TC, selector/share/source usage and original real-cost boundary",
+      "Verified Wei economy: own744.6s Food573/Wood429/Gold167/Stone200 pop23/30; 17paid/1free, tech202 completion609.4 vs start584.5; Knight-template-only warning, client-untested housing disclosure, source usage and unchanged real-cost empty warning state",
+      "Verified Bengalis economy: own744.6s Food623/Wood429/Gold181/Stone200 pop23/30; 16paid/2free, reachedFeudal584.4 vs click454.4; castle27/pop28/30 and4free; completed-TC/housing disclosure, Knight-template-only warning, source usage and original real-cost empty state",
+      "Verified Armenian economy: physical Mule Cart60Wood/15Food and source-backed site mapping, primary House cost preserved in compound block, research-completion disclosure, selectable/share/source usage, fixed-distance model disclosure and original real-cost boundary",
+      "Verified Georgian economy: normal initial stock/population, separate starting free cart, paid80Wood/20Food cart, selectable civilization and consistent share/source disclosure",
+      "Verified Slavic public UI: fast-castle-boom summary, steady-estimate caveat and share URL; Slavs-enabled/Chinese-disabled selector; scouts without farm note; bonus0 simulation usage",
+      "Verified Khmer public UI: both FC summaries, prerequisite and bounded-farm notes/share URLs; Khmer-enabled/Chinese-disabled selector; scouts prerequisite-only note; bonus0/1 simulation usage",
+      "Verified public build sources: practice, print, public links, dates and complete MIT attribution",
+      "Verified v0.58.0 / 359e124: /, /builds?bo=drush-fc&step=8, /builds?bo=drush-fc&civ=Portuguese&step=8, /builds?bo=drush-fc&civ=Portuguese&step=6, /duel?a=74.Portuguese.3.f.&b=74.Magyars.3.f.&m=t, /builds?bo=scouts-18&step=4, /builds?bo=scouts-18&civ=Shu&step=4, /builds?bo=fast-castle-knights&civ=Shu, /duel?a=74.Shu.3.f.&b=74.Magyars.3.f.&m=t, /builds?bo=drush-fc&step=10, /builds?bo=drush-fc&civ=Malians&step=10, /builds?bo=fast-castle-boom&civ=Malians&step=1, /builds?bo=fast-castle-boom&civ=Malians&step=8, /builds?bo=fast-castle-boom&civ=Malians&step=13, /duel?a=74.Malians.3.f.&b=74.Magyars.3.f.&m=t, /builds?bo=hybrid-fish-18&step=4, /builds?bo=hybrid-fish-18&civ=Varangians&step=4, /builds?bo=hybrid-fish-18&step=8, /builds?bo=hybrid-fish-18&civ=Varangians&step=8, /duel?a=74.Varangians.3.f.&b=74.Magyars.3.f.&m=t, /builds?bo=feudal-drush-18&step=9, /builds?bo=feudal-drush-18&civ=Tatars&step=9, /civ/Tatars/bonus/0, /civ/Tatars/bonus/2, /duel?a=74.Tatars.3.f.&b=74.Magyars.3.f.&m=t, /builds?bo=archers-19&civ=Mayans&step=1, /builds?bo=archers-19&civ=Mayans&step=8, /builds?bo=scouts-18&civ=Mayans, /builds?bo=fast-castle-knights&civ=Mayans, /civ/Mayans/bonus/1, /duel?a=4.Mayans.4.f.&b=4.Franks.4.f.&m=t, /builds?bo=fast-castle-boom&civ=Sicilians&step=13, /civ/Sicilians/bonus/4, /civ/Sicilians/bonus/1, /construction?cv=1&building=109&civ=Sicilians&age=3&techs=&builders=1&baseline=1&tc=1&task=&walk=3&farm=0, /duel?a=74.Sicilians.3.f.&b=74.Magyars.3.f.&m=t, /builds?bo=archers-19&civ=Wei&step=11, /builds?bo=fast-castle-knights&civ=Wei, /civ/Wei/bonus/0, /duel?a=74.Wei.3.f.&b=74.Magyars.3.f.&m=t, /builds?bo=archers-19&civ=Bengalis&step=11, /builds?bo=fast-castle-knights&civ=Bengalis, /civ/Bengalis/bonus/0, /duel?a=74.Bengalis.3.f.&b=74.Magyars.3.f.&m=t, /builds?bo=scouts-18&civ=Armenians&step=3, /builds?bo=archers-19&civ=Armenians&step=9, /civ/Armenians/bonus/0, /civ/Armenians/bonus/1, /duel?a=74.Armenians.3.f.&b=74.Magyars.3.f.&m=t, /builds?bo=scouts-18&civ=Georgians&step=1, /builds?bo=scouts-18&civ=Georgians&step=3, /civ/Georgians/bonus/0, /builds?bo=fast-castle-boom&civ=Slavs, /builds?bo=scouts-18&civ=Slavs, /civ/Slavs/bonus/0, /builds?bo=fast-castle-boom&civ=Khmer, /builds?bo=fast-castle-knights&civ=Khmer, /builds?bo=scouts-18&civ=Khmer, /civ/Khmer/bonus/0, /civ/Khmer/bonus/1, /builds?bo=scouts-18&view=practice, /builds?bo=scouts-18&view=print"
+    ],
+    "visitedRoutes": 62,
+    "scope": "Existing builds smoke feature, including bothFC notes/share, selector, scouts638-only and Khmerbonus0/1. Actual local public UI checks, not a client numerical calibration."
+  },
+  "bonus317": {
+    "keys": 86,
+    "old85Exact": true,
+    "added": {
+      "Khmer-1": null
+    },
+    "fixtureSHA256": "debaf7fe6f82087ffd48506344afd681f4fd6ff6a50b1cd89426e22e8d15baff",
+    "inputs": "98d84be0e99b331072b02a8af3f7cdaf2c47ac9e6d7dee2faac67ee08c654b04",
+    "generator": "Unique originalcase1pass/12filteredskip",
+    "normal": "Wholefile12pass/1UPDATEdisabledskip",
+    "algorithmUnchanged": true,
+    "638NotFabricatedAsPositiveTech": true,
+    "interpretation": "Original defaultnear2 complete654 and whole654-removal both cap at independent.4; doneAt/stock projection has no difference. Far7 and lowconsumer real-stock tests separately verify no-return/supply behavior; no forced key/value or time-speedup claim."
+  },
+  "uiReview": {
+    "document": "khmer197-ui-review.json",
+    "original": {
+      "original": "/tmp/batch13-khmer-independent-ui-review.json",
+      "sha256": "8f46f5308e67044ebba829c0316dd8965d71d4c53072abbc2b77b03f9c05634d",
+      "bytes": 17591
+    },
+    "manifest": {
+      "original": "/tmp/batch13-khmer-image-manifest.json",
+      "sha256": "efc6154b213bbb0748cf4a4a3ebd4885399f947007e7942227b45cfdd9737b33",
+      "bytes": 19213
+    },
+    "images": 48,
+    "personallyViewed": 24,
+    "notPersonallyViewed": 24,
+    "actualDownloadedPNG": 4,
+    "noCropRedrawOrTransform": true,
+    "noPNGCommits": true,
+    "requiredFourWidthFiles": ["khmer-farm-light-360.png", "khmer-farm-light-375.png", "khmer-farm-light-390.png", "khmer-farm-light-1280.png"],
+    "futureCIArtifact": "editorial-viewport-screenshots; actual run link and files belong to PR after CI exists, no invented URL here"
+  },
+  "runtimeQuantified": {
+    "document": "khmer197-runtime-quantified.json",
+    "status": "PASS_WITH_EXACT_SITE_CLASSIFICATION_AND_PRESERVED_ORIGINAL_STRICT_FAILURE",
+    "eightOriginalStrict": {
+      "original": "/tmp/batch13197-runtime-A-khmer-eight-offline.json",
+      "sha256": "2cb94a8861cce50bfd73da9549a58c5e919cb13026aab0f3163b0a03c0b55a5d",
+      "bytes": 456111,
+      "status": "FAIL_KHMER_EIGHT_OFFLINE_BOUNDARY_CHECKS",
+      "checks": {
+        "exactCalls": true,
+        "exactEightIDs": true,
+        "defaultPublicOptions": true,
+        "exactFarmPair": true,
+        "exactSixNoFarm": true,
+        "old12GlobalsPreserved": true,
+        "allRootReviewedDisclosureChecks": true,
+        "allPerOrderChecks": false
+      },
+      "preserved": true,
+      "failedAssumption": "All six nofarm numeric vectors equal; two final compound research-site sequences legitimately changed6numeric leaves. This originalFAIL is never relabeled as passed.",
+      "fullLedgerNotCommitted": true
+    },
+    "exactSixLeafAmendment": {
+      "original": "/tmp/batch13197-runtime-A-exact-site-amendment.json",
+      "sha256": "f215244f6c6fc00f234204bd465f5e0a2cfdb23af8780206d8ac058efe9aca3f",
+      "bytes": 460588,
+      "status": "PASS_KHMER_EIGHT_EXACT_SITE_AMENDMENT",
+      "counts": {
+        "actualOriginalTimelines": 8,
+        "noFarmCompleteNumericUnchanged": 4,
+        "noFarmExactSiteCorrection": 2,
+        "approvedSiteNumericLeaves": 6,
+        "noFarmStockAgeUpsHousePaymentsUnchanged": 6,
+        "FC2FullDiffRetained": 2,
+        "additionalProductCalls": 0
+      },
+      "unresolvedIssues": 0
+    },
+    "other55": {
+      "report": "/tmp/batch13197-runtime-A-other55-offline.json",
+      "sha256": "edb396475d696b0d58d0a5dfe77ed7bc0082a6b344eaa7cdce41cb2c5878d7e7",
+      "status": "PASS_OTHER55_OFFLINE_COMPARISON",
+      "counts": {
+        "other55Full": 440,
+        "other55Numeric": 440,
+        "other55Notes": 55,
+        "other55Support": 55,
+        "other55Helpers": 1485,
+        "KhmerNonFarmHelpers": 24,
+        "KhmerFarmHelpers": 3,
+        "allCapturedHelpers": 1512,
+        "allIndependentRealCost": 224,
+        "oldRawCivSections": 55,
+        "oldGlobalSections": 12,
+        "historicalRemainingCases": 36
+      },
+      "delta": {
+        "full": [],
+        "numeric": [],
+        "notes": [],
+        "support": [],
+        "helpers": [],
+        "realCost": []
+      }
+    },
+    "support": {
+      "supported50": true,
+      "remaining6": true,
+      "KhmerSupportClear": true,
+      "supported": 50,
+      "unsupported": 6,
+      "remaining": ["Chinese", "Gurjaras", "Jurchens", "Mapuche", "Poles", "Romans"]
+    },
+    "disclosure": "Four nofarm numeric vectors unchanged; two differ in exactly6source-backed researchsite leaves. Allsix savedstep-startstocks/completeageUps/housepayments remain identical. FC2 Food/earlyerror changes with actualnominal ageclocks unchanged. OriginalFAIL not relabeled as passed; exact amendment uses saved data only."
+  },
+  "limits": [
+    "Every local immutable build/browser/capture result is attributed to A. A later documentation-only B head was not locally rebuilt or rerun.",
+    "Fixed .4 supplier and no-return approximation retain assignment-based continuous income; no plot binding/start pool/internal path/exhaustion/reseeding or client calibration.",
+    "Remaining24 images were inventoried and hashed, not personally viewed; narrow print/focus samples do not prove every shared UI state.",
+    "Full CI/data, main build/Pages and formalRelease are future actual PR/run records and are not claimed in this local snapshot."
+  ],
+  "documentationOnlyBProofBeforeWrite": {
+    "sourceInputs": 484,
+    "allSourceHashesMatchA": true,
+    "policySHA256": "117d8964c22c0f6a110feafa480308301c8010b24c219de77e825e0742223ce8",
+    "allPolicyFilesMatchA": true,
+    "inputMapSHA256": "1c41c6306ffcf38b161400c90b59c18b273620673c811ef752110fece0bac0aa"
+  }
+}
