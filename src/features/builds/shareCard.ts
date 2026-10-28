@@ -8,6 +8,7 @@ import { MAYAN_CAVALRY_TEMPLATE_NOTE, SHU_KNIGHT_TEMPLATE_NOTE } from '../../dom
 import { WEI_KNIGHT_TEMPLATE_NOTE } from '../../domain/weiEconomy';
 import { BENGALI_KNIGHT_TEMPLATE_NOTE } from '../../domain/bengaliEconomy';
 import { ARMENIAN_CART_NOTE, ARMENIAN_RESEARCH_NOTE } from '../../domain/armenianEconomy';
+import { GEORGIAN_CART_NOTE, GEORGIAN_START_NOTE } from '../../domain/georgianEconomy';
 import { RES_ZH, rangeLabel, summaryParts, summaryText, type AgeMark, type TimelineView } from './timelineModel';
 
 export interface ShareCell {
@@ -107,7 +108,8 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
         ? '\n到达新时代时，每座完成城镇中心赠送2个村民\n满住房仍计入赠送；该住房政策未经当前版本客户端实测\n出生位置、集结与驻扎未模拟'
         : '') +
       (i.civEn === 'Bengalis' && i.boId === 'fast-castle-knights' ? `\n${BENGALI_KNIGHT_TEMPLATE_NOTE}` : '') +
-      (i.civEn === 'Armenians' ? `\n${ARMENIAN_CART_NOTE}\n${ARMENIAN_RESEARCH_NOTE}` : ''),
+      (i.civEn === 'Armenians' ? `\n${ARMENIAN_CART_NOTE}\n${ARMENIAN_RESEARCH_NOTE}` : '') +
+      (i.civEn === 'Georgians' ? `\n${GEORGIAN_START_NOTE}\n${GEORGIAN_CART_NOTE}` : ''),
     site: SHARE_SITE,
     kind: '开局时间线',
     url: shareUrl(i),

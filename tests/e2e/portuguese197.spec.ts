@@ -33,20 +33,20 @@ for (const width of [360, 375, 390, 1280])
       expect(errors).toEqual([]);
     });
 
-test('#197 选择葡萄牙并刷新保留；格鲁吉亚仍不可选且直链回退通用', async ({ page }) => {
+test('#197 选择葡萄牙并刷新保留；中国仍不可选且直链回退通用', async ({ page }) => {
   await page.goto('./#/builds?bo=scouts-18');
   await page.locator('#tlciv').click();
   const dialog = page.getByRole('dialog', { name: '文明' });
   const portuguese = dialog.locator('[data-civ="Portuguese"]');
   await expect(portuguese).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(dialog.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
+  await expect(dialog.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
   await portuguese.click();
   await expect(page).toHaveURL(/[?&]civ=Portuguese/);
   await page.reload();
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按葡萄牙计');
-  await page.goto('./#/builds?bo=scouts-18&civ=Georgians');
+  await page.goto('./#/builds?bo=scouts-18&civ=Chinese');
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toHaveText('链接里的格鲁吉亚加成尚未计入，已按通用计算。');
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveText('链接里的中国加成尚未计入，已按通用计算。');
   await expect(page.locator('[data-t="share-card-btn"]:visible').first()).toHaveAttribute('aria-disabled', 'true');
-  await expect(page).toHaveURL(/[?&]civ=Georgians/);
+  await expect(page).toHaveURL(/[?&]civ=Chinese/);
 });

@@ -38,6 +38,7 @@ export function TimelineSteps({
   set: (key: string, value: string | null) => void;
 }) {
   const core = useCore();
+  const cartUnits = tl.civ === 'Armenians' || tl.civ === 'Georgians';
   const bad = new Set(tl.steps.filter((s) => s.anomalies.length).map((s) => s.index));
   const sel = q.step !== null ? tl.steps[q.step] : undefined;
   const groups = villagerGroups(tl);
@@ -117,11 +118,11 @@ export function TimelineSteps({
                   {noteParts(st.note ?? '', st.houseText, noHouses).map((x, k) =>
                     x.skip ? (
                       <span key={k} className="tl-skip" data-t="house-skip">
-                        <s>{tl.civ === 'Armenians' ? <NumUnitText text={x.text} cartUnits /> : x.text}</s>
+                        <s>{cartUnits ? <NumUnitText text={x.text} cartUnits /> : x.text}</s>
                         <span className="tl-no-need">{noNeedZh}</span>
                       </span>
                     ) : (
-                      <span key={k}>{tl.civ === 'Armenians' ? <NumUnitText text={x.text} cartUnits /> : x.text}</span>
+                      <span key={k}>{cartUnits ? <NumUnitText text={x.text} cartUnits /> : x.text}</span>
                     ),
                   )}
                   {st.siteAdded && (

@@ -29,6 +29,7 @@ import { simSupport } from './simSupport';
 import { WEI_SPAWN_NOTE } from './weiEconomy';
 import { BENGALI_SPAWN_NOTE } from './bengaliEconomy';
 import { armenianContext, ARMENIAN_RESEARCH_NOTE } from './armenianEconomy';
+import { georgianContext } from './georgianEconomy';
 
 const eco = ecoRaw as unknown as EcoData;
 /** PK 与真实成本只给单位算折后价（建筑费用折扣不在这两个工具里） */
@@ -112,8 +113,18 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
   if (b.id === 'Sicilians-1') return { tool: 'sim', name, on: false, note: '未计入：农田升级额外储量、耗尽和续种未模拟，也未估算节省的木材' };
+  if (b.id === 'Georgians-0') {
+    const context = georgianContext(eco);
+    const on = currentSimSupport(eco, b.civ, buildOrders).supported && context.start;
+    return {
+      tool: 'sim',
+      name,
+      on,
+      note: on ? '已计入起始免费骡车与逐次付费骡车；移动和自动复用未模拟' : '暂不支持该文明，整页按通用文明计算，本条未计入',
+    };
+  }
   const { techs, treeOnly } = bonusTechs(b);
-  const currentScope = ['Sicilians', 'Wei', 'Bengalis', 'Armenians'].includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
+  const currentScope = ['Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians'].includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
     const t = (r as { tech?: number }).tech;
     return r.source !== 'team' && t !== undefined && techs.includes(t);
