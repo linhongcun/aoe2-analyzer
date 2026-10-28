@@ -1,0 +1,1456 @@
+{
+  "verdict": "SOURCE_GO_FOR_BOUNDED_ARMENIAN_SPEC_AND_RED_PREFLIGHT",
+  "notYetProductionGate": "Implementation remains on hold until independently reviewed SPEC and meaningful red cases; this report does not claim tests/UI/runtime/domain validation.",
+  "recordedUTC": "2026-10-28T02:25:13.208380+00:00",
+  "baseline": "6470fafbb258a4076f6c0c0630624ab6893e2bb4",
+  "source": {
+    "patch": 185872,
+    "datCommit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "datSHA256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+    "rawPath": "/tmp/batch10-armenians-raw.json",
+    "rawSHA256": "c6654efbdc9d83db0b1ea45826725b06e7f6d20f66019bd98d5e3222b4ad2ccc",
+    "rawBytes": 1365682,
+    "dedicatedTechs": 26,
+    "fullPrereqCommandClosure": 173,
+    "trackedIds": 67,
+    "nonNullArmenianObjects": 66,
+    "GaiaRelicTargetSupplement": 1,
+    "currentBOs": 8,
+    "currentActions": 228,
+    "closureMethod": "Start26dedicated+28economic/current action techs/buildingcounter/availability; recursively prerequisites and effectcommand tech targets Types8/101/103A,102D; tree/team references included. Does not mean all included techs activate for Armenians: retain requiredCount/civ/research locations.",
+    "sourceParseWindows": [
+      {
+        "started": "2026-10-28T02:11:05.362991+00:00",
+        "completed": "2026-10-28T02:11:18.136056+00:00"
+      },
+      "2026-10-28T02:21:19.936180+00:00"
+    ]
+  },
+  "public": {
+    "path": "/tmp/armenians197-public-semantics.json",
+    "sha256": "aeb670a382be84cc48a12972ba3aa6e03b6df87ea4415f27e50dfbc2fe05247e",
+    "md": "/tmp/armenians197-public-semantics.md",
+    "actualOpenedPinnedSources": 12,
+    "currentClientExperiment": false,
+    "constructionAssistBoundary": "Samepin raw/publictechtree provestype80RegionalBuilding/25s/workerconstruction. Old158041engine genericbuilderpath supports inheritedMODEL; no185872clientmultiassist/movement/pathing experiment. CreatableType is formationcategory, NOTBuildMode orassistlimit."
+  },
+  "normalStart": {
+    "villagers": 3,
+    "Food": 200,
+    "Wood": 200,
+    "Gold": 100,
+    "Stone": 200,
+    "context": "Existing normal8BOmodel, not all-game-modes claim. ActualArmenianrawresources identical toBritons exceptidentity73; noArmenianstartingcart/villager/stockbonus."
+  },
+  "infrastructure": {
+    "enableTech": 940,
+    "effect": 944,
+    "completeCommands": [
+      {
+        "Type": 2,
+        "A": 1808,
+        "B": 1,
+        "C": -1,
+        "D": 0.0
+      },
+      {
+        "Type": 2,
+        "A": 562,
+        "B": 0,
+        "C": -1,
+        "D": 0.0
+      },
+      {
+        "Type": 2,
+        "A": 584,
+        "B": 0,
+        "C": -1,
+        "D": 0.0
+      }
+    ],
+    "unit": 1808,
+    "baseCost": {
+      "Wood": 80,
+      "Food": 20
+    },
+    "baseTimeSeconds": 25,
+    "type": 80,
+    "class": 3,
+    "trainLocation": 118,
+    "buildingTech": 933,
+    "formationCategory": 0,
+    "formationNotConstructionMode": true,
+    "worker118And212BuildTask": {
+      "action": 101,
+      "workRate": 1,
+      "workValue1": 1,
+      "pickForConstruction": 1
+    },
+    "discountTech": 958,
+    "discountEffect": 953,
+    "discountCommands": [
+      {
+        "Type": 5,
+        "A": 1808,
+        "B": -1,
+        "C": 100,
+        "D": 0.75
+      }
+    ],
+    "discountedCost": {
+      "Wood": 60,
+      "Food": 15
+    },
+    "cartCurrentActionCount": 13,
+    "eachCampActionCreatesPaidCart": true,
+    "startingCart": false,
+    "automaticCartReuse": false,
+    "siteMovementOrRelocationOptimization": false,
+    "buildingCounterRule": "built1808→933→1358(one OR category)→120needs2 distinct categories→659→101. Never fake258+282; multiplecarts count onlyone category.",
+    "ageReqAlreadyHas1808": true,
+    "sourceResearchSiteMap": {
+      "14": [
+        {
+          "location_id": 68,
+          "research_time": 20,
+          "button_id": 1,
+          "hot_key_id": 18014
+        },
+        {
+          "location_id": 2556,
+          "research_time": 20,
+          "button_id": 11,
+          "hot_key_id": 18184
+        }
+      ],
+      "202": [
+        {
+          "location_id": 562,
+          "research_time": 25,
+          "button_id": 1,
+          "hot_key_id": 18189
+        },
+        {
+          "location_id": 1808,
+          "research_time": 25,
+          "button_id": 1,
+          "hot_key_id": 18190
+        },
+        {
+          "location_id": 2556,
+          "research_time": 25,
+          "button_id": 12,
+          "hot_key_id": 18191
+        }
+      ],
+      "203": [
+        {
+          "location_id": 562,
+          "research_time": 50,
+          "button_id": 1,
+          "hot_key_id": 18189
+        },
+        {
+          "location_id": 1808,
+          "research_time": 50,
+          "button_id": 1,
+          "hot_key_id": 18190
+        },
+        {
+          "location_id": 2556,
+          "research_time": 50,
+          "button_id": 12,
+          "hot_key_id": 18191
+        }
+      ],
+      "221": [
+        {
+          "location_id": 562,
+          "research_time": 100,
+          "button_id": 1,
+          "hot_key_id": 18189
+        },
+        {
+          "location_id": 1808,
+          "research_time": 100,
+          "button_id": 1,
+          "hot_key_id": 18190
+        },
+        {
+          "location_id": 2556,
+          "research_time": 100,
+          "button_id": 12,
+          "hot_key_id": 18191
+        }
+      ],
+      "55": [
+        {
+          "location_id": 584,
+          "research_time": 30,
+          "button_id": 1,
+          "hot_key_id": 18055
+        },
+        {
+          "location_id": 1808,
+          "research_time": 30,
+          "button_id": 2,
+          "hot_key_id": 18180
+        },
+        {
+          "location_id": 2556,
+          "research_time": 30,
+          "button_id": 13,
+          "hot_key_id": 18182
+        }
+      ],
+      "182": [
+        {
+          "location_id": 584,
+          "research_time": 75,
+          "button_id": 1,
+          "hot_key_id": 18055
+        },
+        {
+          "location_id": 1808,
+          "research_time": 75,
+          "button_id": 2,
+          "hot_key_id": 18180
+        },
+        {
+          "location_id": 2556,
+          "research_time": 75,
+          "button_id": 13,
+          "hot_key_id": 18182
+        }
+      ],
+      "278": [
+        {
+          "location_id": 584,
+          "research_time": 30,
+          "button_id": 2,
+          "hot_key_id": 18276
+        },
+        {
+          "location_id": 1808,
+          "research_time": 30,
+          "button_id": 3,
+          "hot_key_id": 18277
+        },
+        {
+          "location_id": 2556,
+          "research_time": 30,
+          "button_id": 14,
+          "hot_key_id": 18183
+        }
+      ],
+      "279": [
+        {
+          "location_id": 584,
+          "research_time": 75,
+          "button_id": 2,
+          "hot_key_id": 18276
+        },
+        {
+          "location_id": 1808,
+          "research_time": 75,
+          "button_id": 3,
+          "hot_key_id": 18277
+        },
+        {
+          "location_id": 2556,
+          "research_time": 75,
+          "button_id": 14,
+          "hot_key_id": 18183
+        }
+      ]
+    },
+    "berriesDropSiteIncludes1808": false,
+    "woodGoldStoneDropSitesInclude1808": true,
+    "Mill68StillRequiredFor14": true,
+    "researchQueueBoundary": "Current8has7DoubleBit202 and1BowSaw203 separated byCastle160s; HorseCollar14 inparallel steps uses separateMill. GenericnonTCparallelmodel is inherited, no new currentcart research-conflict assumption; future arbitrary simultaneouscarttechqueues not simulated."
+  },
+  "automaticResearchBonuses": {
+    "family": [
+      960,
+      961,
+      962,
+      963,
+      964,
+      965,
+      966
+    ],
+    "requiresActualCompletion": [
+      202,
+      203,
+      221,
+      55,
+      182,
+      278,
+      279
+    ],
+    "familyCompleteOrNoneRequired": true,
+    "readRowVNotHardcodedPoint4": true,
+    "exportRoundedVsRaw": "Producer roundsD to5decimals; compare canonicalrows to round(rawD,5), preserve raw fullfloats in context and explicitrounding.",
+    "currentTriggers": {
+      "202": 7,
+      "203": 1
+    },
+    "notResearchedCurrent8": [
+      221,
+      55,
+      182,
+      278,
+      279
+    ],
+    "disabledArmenianTechs": [
+      221,
+      279
+    ],
+    "neverAgeOnlyApply": true,
+    "repeatGrant": false
+  },
+  "relicFamily": {
+    "completeOrNoneRows": [
+      949,
+      957
+    ],
+    "949Requires107": true,
+    "1118IsRelicBuildingClass27": true,
+    "1118BuildingCounter957": true,
+    "957RequiredCount1DespiteAllMinusOne": true,
+    "285IsGaiaRelicClass42": true,
+    "currentBOChurches": 0,
+    "spawnVillagers": false,
+    "startGift": false,
+    "noGeneric234OrType7Allowance": true
+  },
+  "currentSourceLegality": {
+    "method": "Independent source-only abstract prefix graph over raw228actions: all requested buildings for a step recognized, physicalpaidcart substitution; phase markers, research/train sites, non-disabled availability checked. Not a runtime resource/cost/queue/completion test.",
+    "matrix": [
+      {
+        "id": "archers-19",
+        "cartActions": [
+          {
+            "step0": 2,
+            "original": 562,
+            "physical": 1808,
+            "count": 1
+          },
+          {
+            "step0": 8,
+            "original": 584,
+            "physical": 1808,
+            "count": 1
+          }
+        ],
+        "research": [
+          {
+            "step0": 6,
+            "tech": 22,
+            "explicitSourcePhase": 1,
+            "legalRequestedResearchSites": [
+              109
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 8,
+            "tech": 202,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              1808
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 10,
+            "tech": 199,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              103
+            ],
+            "researchTimes": [
+              30
+            ]
+          }
+        ],
+        "ages": [
+          {
+            "step0": 6,
+            "age": 2,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              68,
+              70,
+              109,
+              1808
+            ]
+          }
+        ],
+        "trainAndUpgrade": [
+          {
+            "step0": 9,
+            "kind": "train",
+            "unit": 4,
+            "phase": 2,
+            "legalRequestedSites": [
+              87
+            ],
+            "disabled": false
+          },
+          {
+            "step0": 10,
+            "kind": "train",
+            "unit": 93,
+            "phase": 2,
+            "legalRequestedSites": [
+              12
+            ],
+            "disabled": false
+          }
+        ],
+        "unresolvedSourceLegality": [],
+        "cartCount": 2,
+        "nominalFullCartCosts": {
+          "Wood": 160,
+          "Food": 40
+        },
+        "nominalDiscountedCartCosts": {
+          "Wood": 120,
+          "Food": 30
+        }
+      },
+      {
+        "id": "drush-fc",
+        "cartActions": [
+          {
+            "step0": 2,
+            "original": 562,
+            "physical": 1808,
+            "count": 1
+          }
+        ],
+        "research": [
+          {
+            "step0": 8,
+            "tech": 22,
+            "explicitSourcePhase": 1,
+            "legalRequestedResearchSites": [
+              109
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 13,
+            "tech": 202,
+            "explicitSourcePhase": 3,
+            "legalRequestedResearchSites": [
+              1808
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 13,
+            "tech": 14,
+            "explicitSourcePhase": 3,
+            "legalRequestedResearchSites": [
+              68
+            ],
+            "researchTimes": [
+              20
+            ]
+          },
+          {
+            "step0": 13,
+            "tech": 199,
+            "explicitSourcePhase": 3,
+            "legalRequestedResearchSites": [
+              103
+            ],
+            "researchTimes": [
+              30
+            ]
+          }
+        ],
+        "ages": [
+          {
+            "step0": 9,
+            "age": 2,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              12,
+              68,
+              70,
+              72,
+              109,
+              1808
+            ]
+          },
+          {
+            "step0": 12,
+            "age": 3,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              12,
+              68,
+              70,
+              72,
+              87,
+              103,
+              109,
+              1808
+            ]
+          }
+        ],
+        "trainAndUpgrade": [
+          {
+            "step0": 5,
+            "kind": "train",
+            "unit": 74,
+            "phase": 1,
+            "legalRequestedSites": [
+              12
+            ],
+            "disabled": false
+          },
+          {
+            "step0": 13,
+            "kind": "train",
+            "unit": 4,
+            "phase": 3,
+            "legalRequestedSites": [
+              87
+            ],
+            "disabled": false
+          }
+        ],
+        "unresolvedSourceLegality": [],
+        "cartCount": 1,
+        "nominalFullCartCosts": {
+          "Wood": 80,
+          "Food": 20
+        },
+        "nominalDiscountedCartCosts": {
+          "Wood": 60,
+          "Food": 15
+        }
+      },
+      {
+        "id": "fast-castle-boom",
+        "cartActions": [
+          {
+            "step0": 2,
+            "original": 562,
+            "physical": 1808,
+            "count": 1
+          },
+          {
+            "step0": 9,
+            "original": 584,
+            "physical": 1808,
+            "count": 1
+          }
+        ],
+        "research": [
+          {
+            "step0": 10,
+            "tech": 202,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              1808
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 10,
+            "tech": 14,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              68
+            ],
+            "researchTimes": [
+              20
+            ]
+          },
+          {
+            "step0": 12,
+            "tech": 203,
+            "explicitSourcePhase": 3,
+            "legalRequestedResearchSites": [
+              1808
+            ],
+            "researchTimes": [
+              50
+            ]
+          }
+        ],
+        "ages": [
+          {
+            "step0": 9,
+            "age": 2,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              50,
+              68,
+              70,
+              109,
+              1808
+            ]
+          },
+          {
+            "step0": 11,
+            "age": 3,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              50,
+              68,
+              70,
+              84,
+              103,
+              109,
+              1808
+            ]
+          }
+        ],
+        "trainAndUpgrade": [],
+        "unresolvedSourceLegality": [],
+        "cartCount": 2,
+        "nominalFullCartCosts": {
+          "Wood": 160,
+          "Food": 40
+        },
+        "nominalDiscountedCartCosts": {
+          "Wood": 120,
+          "Food": 30
+        }
+      },
+      {
+        "id": "fast-castle-knights",
+        "cartActions": [
+          {
+            "step0": 2,
+            "original": 562,
+            "physical": 1808,
+            "count": 1
+          },
+          {
+            "step0": 9,
+            "original": 584,
+            "physical": 1808,
+            "count": 1
+          }
+        ],
+        "research": [
+          {
+            "step0": 10,
+            "tech": 202,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              1808
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 10,
+            "tech": 14,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              68
+            ],
+            "researchTimes": [
+              20
+            ]
+          }
+        ],
+        "ages": [
+          {
+            "step0": 9,
+            "age": 2,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              50,
+              68,
+              70,
+              109,
+              1808
+            ]
+          },
+          {
+            "step0": 11,
+            "age": 3,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              50,
+              68,
+              70,
+              84,
+              103,
+              109,
+              1808
+            ]
+          }
+        ],
+        "trainAndUpgrade": [
+          {
+            "step0": 13,
+            "kind": "train",
+            "unit": 38,
+            "phase": 3,
+            "legalRequestedSites": [
+              101
+            ],
+            "disabled": false
+          }
+        ],
+        "unresolvedSourceLegality": [],
+        "cartCount": 2,
+        "nominalFullCartCosts": {
+          "Wood": 160,
+          "Food": 40
+        },
+        "nominalDiscountedCartCosts": {
+          "Wood": 120,
+          "Food": 30
+        }
+      },
+      {
+        "id": "feudal-drush-18",
+        "cartActions": [
+          {
+            "step0": 2,
+            "original": 562,
+            "physical": 1808,
+            "count": 1
+          }
+        ],
+        "research": [
+          {
+            "step0": 8,
+            "tech": 22,
+            "explicitSourcePhase": 1,
+            "legalRequestedResearchSites": [
+              109
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 10,
+            "tech": 202,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              1808
+            ],
+            "researchTimes": [
+              25
+            ]
+          }
+        ],
+        "ages": [
+          {
+            "step0": 8,
+            "age": 2,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              12,
+              70,
+              109,
+              1808
+            ]
+          }
+        ],
+        "trainAndUpgrade": [
+          {
+            "step0": 9,
+            "kind": "train",
+            "unit": 74,
+            "phase": 2,
+            "legalRequestedSites": [
+              12
+            ],
+            "disabled": false
+          }
+        ],
+        "unresolvedSourceLegality": [],
+        "cartCount": 1,
+        "nominalFullCartCosts": {
+          "Wood": 80,
+          "Food": 20
+        },
+        "nominalDiscountedCartCosts": {
+          "Wood": 60,
+          "Food": 15
+        }
+      },
+      {
+        "id": "hybrid-fish-18",
+        "cartActions": [
+          {
+            "step0": 2,
+            "original": 562,
+            "physical": 1808,
+            "count": 1
+          },
+          {
+            "step0": 7,
+            "original": 584,
+            "physical": 1808,
+            "count": 1
+          }
+        ],
+        "research": [
+          {
+            "step0": 6,
+            "tech": 22,
+            "explicitSourcePhase": 1,
+            "legalRequestedResearchSites": [
+              109
+            ],
+            "researchTimes": [
+              25
+            ]
+          }
+        ],
+        "ages": [
+          {
+            "step0": 6,
+            "age": 2,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              45,
+              70,
+              109,
+              1808
+            ]
+          }
+        ],
+        "trainAndUpgrade": [
+          {
+            "step0": 4,
+            "kind": "train",
+            "unit": 13,
+            "phase": 1,
+            "legalRequestedSites": [
+              45
+            ],
+            "disabled": false
+          }
+        ],
+        "unresolvedSourceLegality": [],
+        "cartCount": 2,
+        "nominalFullCartCosts": {
+          "Wood": 160,
+          "Food": 40
+        },
+        "nominalDiscountedCartCosts": {
+          "Wood": 120,
+          "Food": 30
+        }
+      },
+      {
+        "id": "maa-archers-18",
+        "cartActions": [
+          {
+            "step0": 2,
+            "original": 562,
+            "physical": 1808,
+            "count": 1
+          },
+          {
+            "step0": 7,
+            "original": 584,
+            "physical": 1808,
+            "count": 1
+          }
+        ],
+        "research": [
+          {
+            "step0": 5,
+            "tech": 22,
+            "explicitSourcePhase": 1,
+            "legalRequestedResearchSites": [
+              109
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 8,
+            "tech": 202,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              1808
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 11,
+            "tech": 199,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              103
+            ],
+            "researchTimes": [
+              30
+            ]
+          }
+        ],
+        "ages": [
+          {
+            "step0": 5,
+            "age": 2,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              12,
+              70,
+              109,
+              1808
+            ]
+          }
+        ],
+        "trainAndUpgrade": [
+          {
+            "step0": 7,
+            "kind": "train",
+            "unit": 74,
+            "phase": 2,
+            "legalRequestedSites": [
+              12
+            ],
+            "disabled": false
+          },
+          {
+            "step0": 7,
+            "kind": "upgrade",
+            "unit": 75,
+            "viaTech": 222,
+            "phase": 2,
+            "legalRequestedSite": 12,
+            "disabled": false
+          },
+          {
+            "step0": 11,
+            "kind": "train",
+            "unit": 4,
+            "phase": 2,
+            "legalRequestedSites": [
+              87
+            ],
+            "disabled": false
+          },
+          {
+            "step0": 11,
+            "kind": "train",
+            "unit": 93,
+            "phase": 2,
+            "legalRequestedSites": [
+              12
+            ],
+            "disabled": false
+          }
+        ],
+        "unresolvedSourceLegality": [],
+        "cartCount": 2,
+        "nominalFullCartCosts": {
+          "Wood": 160,
+          "Food": 40
+        },
+        "nominalDiscountedCartCosts": {
+          "Wood": 120,
+          "Food": 30
+        }
+      },
+      {
+        "id": "scouts-18",
+        "cartActions": [
+          {
+            "step0": 2,
+            "original": 562,
+            "physical": 1808,
+            "count": 1
+          }
+        ],
+        "research": [
+          {
+            "step0": 7,
+            "tech": 22,
+            "explicitSourcePhase": 1,
+            "legalRequestedResearchSites": [
+              109
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 11,
+            "tech": 202,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              1808
+            ],
+            "researchTimes": [
+              25
+            ]
+          },
+          {
+            "step0": 11,
+            "tech": 14,
+            "explicitSourcePhase": 2,
+            "legalRequestedResearchSites": [
+              68
+            ],
+            "researchTimes": [
+              20
+            ]
+          }
+        ],
+        "ages": [
+          {
+            "step0": 7,
+            "age": 2,
+            "sourcePrefixCanSatisfyPrereqTypes": true,
+            "requestedBuildingsNotCompletionProof": [
+              68,
+              70,
+              109,
+              1808
+            ]
+          }
+        ],
+        "trainAndUpgrade": [
+          {
+            "step0": 10,
+            "kind": "train",
+            "unit": 448,
+            "phase": 2,
+            "legalRequestedSites": [
+              101
+            ],
+            "disabled": false
+          },
+          {
+            "step0": 12,
+            "kind": "train",
+            "unit": 93,
+            "phase": 2,
+            "legalRequestedSites": [
+              12
+            ],
+            "disabled": false
+          }
+        ],
+        "unresolvedSourceLegality": [],
+        "cartCount": 1,
+        "nominalFullCartCosts": {
+          "Wood": 80,
+          "Food": 20
+        },
+        "nominalDiscountedCartCosts": {
+          "Wood": 60,
+          "Food": 15
+        }
+      }
+    ],
+    "allLegalAfterProjection": true,
+    "unprojected562584RemainDisabled": true,
+    "knightTemplateAvailable": true,
+    "allCurrentResearchIds": [
+      14,
+      22,
+      199,
+      202,
+      203
+    ],
+    "ageIds": [
+      101,
+      102
+    ],
+    "currentUpgrade75Via222": true,
+    "unresolved": []
+  },
+  "dedicatedTechClassification": [
+    {
+      "tech": 915,
+      "name": "Armenians",
+      "currentScopeDisposition": "Civ identity; no direct economic effect."
+    },
+    {
+      "tech": 917,
+      "name": "Composite Bowman (make avail)",
+      "currentScopeDisposition": "CompositeBowman availability; no current8 train."
+    },
+    {
+      "tech": 918,
+      "name": "Elite Composite Bowman",
+      "currentScopeDisposition": "Manual eliteBowman upgrade; not current8."
+    },
+    {
+      "tech": 921,
+      "name": "Fereters",
+      "currentScopeDisposition": "Manual imperialFereters combat/healing; not current8."
+    },
+    {
+      "tech": 922,
+      "name": "Cilician Fleet",
+      "currentScopeDisposition": "Manual CilicianFleet combat; not current8."
+    },
+    {
+      "tech": 940,
+      "name": "Mule Cart (make avail)",
+      "currentScopeDisposition": "REQUIRED infrastructure: enable1808/disable562+584; each originalcamp action projects one paid cart, no reuse/optimization."
+    },
+    {
+      "tech": 941,
+      "name": "Fortified Church (Armenians)",
+      "currentScopeDisposition": "Monastery104→FortifiedChurch1806 replacement; none current8."
+    },
+    {
+      "tech": 948,
+      "name": "Warrior Priest (make avail)",
+      "currentScopeDisposition": "WarriorPriest availability; none current8."
+    },
+    {
+      "tech": 949,
+      "name": "C-Bonus, Free Relic",
+      "currentScopeDisposition": "Churchcounter107 causes spawn1118RelicBuilding at104; no current8church, exactsource-backed nonvillager irrelevant."
+    },
+    {
+      "tech": 950,
+      "name": "C-Bonus, Early Barracks techs",
+      "currentScopeDisposition": "Armenian DarkAge earlyBarracks marker; current93Spear already afterFeudal, current75via222stillrequires101; no new planner earlyresearch."
+    },
+    {
+      "tech": 951,
+      "name": "Castle Barracks tech requirement",
+      "currentScopeDisposition": "EarlyBarracks shadow prerequisite marker; no current8economic change."
+    },
+    {
+      "tech": 952,
+      "name": "Long Swordsman requirement",
+      "currentScopeDisposition": "LongSwordsman prerequisite; no current8research."
+    },
+    {
+      "tech": 953,
+      "name": "Two-Handed Swordsman requirement",
+      "currentScopeDisposition": "TwoHandedSword prerequisite; no current8research."
+    },
+    {
+      "tech": 954,
+      "name": "Champion requirement",
+      "currentScopeDisposition": "Champion prerequisite; no current8research."
+    },
+    {
+      "tech": 955,
+      "name": "Pikeman requirement",
+      "currentScopeDisposition": "Pikeman prerequisite; no current8upgrade."
+    },
+    {
+      "tech": 956,
+      "name": "Halberdier requirement",
+      "currentScopeDisposition": "Halberdier prerequisite; no current8upgrade."
+    },
+    {
+      "tech": 957,
+      "name": "C-Bonus, Free Relic2",
+      "currentScopeDisposition": "1118building completion counter957 causes Gaia285Relic at104 with283marker; neverstartingvillager/normalemptyrequires auto; no current8church."
+    },
+    {
+      "tech": 958,
+      "name": "C-Bonus, Cheaper Mule Cart",
+      "currentScopeDisposition": "REQUIRED independent discount row: cart80W20F×.75=60W15F; dropping958mustleave infrastructure+fullpricecart."
+    },
+    {
+      "tech": 959,
+      "name": "C-Bonus, Navy +1 projectile",
+      "currentScopeDisposition": "Naval military projectiles; notFishingShip13 and no current8warship."
+    },
+    {
+      "tech": 960,
+      "name": "C-Bonus, +% Double-Bit Axe",
+      "currentScopeDisposition": "REQUIRED deferred exactly-once after actual202 completion; seven current8 triggers."
+    },
+    {
+      "tech": 961,
+      "name": "C-Bonus, +% Bow Saw",
+      "currentScopeDisposition": "REQUIRED deferred exactly-once after actual203 completion; one current8trigger."
+    },
+    {
+      "tech": 962,
+      "name": "C-Bonus, +% Two-Man Saw",
+      "currentScopeDisposition": "Preserve source row after221;221disabled for Armenians, no current8trigger, neverage-only apply/advertiseavailable."
+    },
+    {
+      "tech": 963,
+      "name": "C-Bonus, +% Gold Mining",
+      "currentScopeDisposition": "Preserve source row after55; no current8research, neverage-only apply."
+    },
+    {
+      "tech": 964,
+      "name": "C-Bonus, +% Gold Shaft Mining",
+      "currentScopeDisposition": "Preserve source row after182; no current8research, neverage-only apply."
+    },
+    {
+      "tech": 965,
+      "name": "C-Bonus, +% Stone Mining",
+      "currentScopeDisposition": "Preserve source row after278; no current8research, neverage-only apply."
+    },
+    {
+      "tech": 966,
+      "name": "C-Bonus, +% Stone Shaft Mining",
+      "currentScopeDisposition": "Preserve source row after279;279disabled, no current8trigger, neverage-only apply/advertiseavailable."
+    }
+  ],
+  "team": {
+    "effect": 926,
+    "commands": [
+      {
+        "Type": 4,
+        "A": -1,
+        "B": 6,
+        "C": 1,
+        "D": 2.0
+      },
+      {
+        "Type": 4,
+        "A": -1,
+        "B": 6,
+        "C": 23,
+        "D": 2.0
+      },
+      {
+        "Type": 4,
+        "A": 1831,
+        "B": -1,
+        "C": 1,
+        "D": 2.0
+      },
+      {
+        "Type": 4,
+        "A": 1831,
+        "B": -1,
+        "C": 23,
+        "D": 2.0
+      }
+    ],
+    "reason": "Infantry/WarriorPriest LOS/search-radius only; no economic gather/train/construction modifiers."
+  },
+  "rawObjectDifferencesFromBritons": {
+    "count": 13,
+    "allCosmeticGraphicsOnly": true,
+    "differences": {
+      "30": [
+        [
+          ".building.snow_graphic_id",
+          4884,
+          5744
+        ],
+        [
+          ".creatable.garrison_graphic",
+          4885,
+          4786
+        ]
+      ],
+      "31": [
+        [
+          ".building.snow_graphic_id",
+          4884,
+          5748
+        ],
+        [
+          ".creatable.garrison_graphic",
+          4885,
+          4786
+        ]
+      ],
+      "32": [
+        [
+          ".building.snow_graphic_id",
+          4884,
+          5752
+        ],
+        [
+          ".creatable.garrison_graphic",
+          4885,
+          4786
+        ]
+      ],
+      "71": [
+        [
+          ".building.snow_graphic_id",
+          9213,
+          6134
+        ],
+        [
+          ".creatable.garrison_graphic",
+          9214,
+          5066
+        ]
+      ],
+      "84": [
+        [
+          ".building.snow_graphic_id",
+          9180,
+          6078
+        ],
+        [
+          ".creatable.garrison_graphic",
+          9181,
+          5006
+        ]
+      ],
+      "87": [
+        [
+          ".building.snow_graphic_id",
+          9168,
+          5588
+        ],
+        [
+          ".creatable.garrison_graphic",
+          9169,
+          4682
+        ]
+      ],
+      "101": [
+        [
+          ".building.construction_graphic_id",
+          353,
+          352
+        ],
+        [
+          ".building.destruction_graphic_id",
+          421,
+          420
+        ],
+        [
+          ".building.destruction_rubble_graphic_id",
+          554,
+          537
+        ],
+        [
+          ".building.snow_graphic_id",
+          9219,
+          6202
+        ],
+        [
+          ".creatable.garrison_graphic",
+          9220,
+          5142
+        ]
+      ],
+      "103": [
+        [
+          ".building.snow_graphic_id",
+          9194,
+          5670
+        ]
+      ],
+      "104": [
+        [
+          ".building.snow_graphic_id",
+          4884,
+          5756
+        ],
+        [
+          ".creatable.garrison_graphic",
+          4885,
+          4786
+        ]
+      ],
+      "141": [
+        [
+          ".building.snow_graphic_id",
+          8307,
+          6142
+        ],
+        [
+          ".creatable.garrison_graphic",
+          2701,
+          5082
+        ]
+      ],
+      "142": [
+        [
+          ".building.snow_graphic_id",
+          12261,
+          6150
+        ],
+        [
+          ".creatable.garrison_graphic",
+          2700,
+          5098
+        ]
+      ],
+      "562": [
+        [
+          ".building.snow_graphic_id",
+          3204,
+          6186
+        ]
+      ],
+      "584": [
+        [
+          ".building.snow_graphic_id",
+          3197,
+          6052
+        ]
+      ]
+    }
+  },
+  "inputHashes": {
+    "scripts/data_sources.json": "60912e84abb412507f8f412bc4c817cd6f19aa16b251aa75b090658464643f29",
+    "src/data/eco.json": "42f937f6447c2b0ae6004358f044c8b15305ab90ba6b2396829eaa1dfe18eebc",
+    "src/data/civs.json": "6ed1a26840ba7aca9eed97b92c55b55ae2e8cc552f9a3fce36d24988a8f1dda4",
+    "src/data/buildOrders.ts": "54ffccc945097c263d0180a1e7148e1c8d3b764ff0f0f0a4b27b61d0c66dc649",
+    "src/data/build-orders/archers-19.json": "71f26aad6090d2c79aca1ecf4b89ae61477d12c6710cc131786e6a70f69fe34b",
+    "src/data/build-orders/drush-fc.json": "81b51d299d7216f604f8459937b943c8ef755ff318c530e53e27b13c8029439d",
+    "src/data/build-orders/fast-castle-boom.json": "3e486deb216ae15357f423f87f450b276e65f5f99d677ea574c16c7097047a34",
+    "src/data/build-orders/fast-castle-knights.json": "a941be570f36fd00dc534072571e6c3f65b393fc72b7d28613d82f7aa6d1fd03",
+    "src/data/build-orders/feudal-drush-18.json": "7fb16b7cc3e81cf5ed970fd1b23eb126ee15527200091cd81d0448e654f388e9",
+    "src/data/build-orders/hybrid-fish-18.json": "4ea9175c1d0483baf7d0438f2823d832c60917a25f4326f69f4710a20eef20aa",
+    "src/data/build-orders/maa-archers-18.json": "194f604804c124ca5c2042b9583f9523a2192353e52371f0dc7ddfb45d5b04aa",
+    "src/data/build-orders/scouts-18.json": "48022ea7b4b09807252148ba105ce61e2779d1381b3c747f7a4041e691423fe2",
+    "src/domain/buildSim.ts": "c06047533058381f37d0dae2258f9c8c4f93316abe278cf6aa5ef4348e1c7f0f",
+    "src/domain/simSupport.ts": "9c97f91b0583d967c5776e78d505d27f0b2f7dfc599a70fac60d270a57ea5d77",
+    "scripts/eco_build.py": "0c855c78b1ffc0f875772db61af57fd9031e844502fd739a46ec254d95888dc6",
+    "scripts/dat_source.py": "65a502734128c605e12d768db8cf24b438d324a9a63ab1ff4c37a71d1b73a0fe",
+    "scripts/res_names.py": "ef75ce580f2a8e400c4c6d51f266668471143806636c3a508e5b172ab0bc32a2"
+  },
+  "sourceRequiredSpecTests": [
+    "Wrong/missing/duplicate infrastructure context refuses wholefeature; original9globalsections and55othercivrows unchanged.",
+    "Remove958 discount preserves fullpricecart infrastructure/researchsites; removeauto row family refuses its7bonusgroup withoutaffectingothercivs.",
+    "Actualcartbuildtime25s normalconstruction MODEL; physical1808events; one/2cartagecategoryguard.",
+    "No bonus before actual202/203 completion; exactlyonce after, nofree mining bonus onageup; correct current8trigger counts7+1.",
+    "14Mill vs202/203Cart source locations; malformed researchsite failsclosed; noglobalmax2556 rewrite.",
+    "949/957 complete family only nonvillager irrelevant for current8; count1/alldep-1 not startup activation.",
+    "Knight/cavalry templates legal; do notintroducefalse unavailable warning.",
+    "Preserve224realCost outputs and historicalsnapshots; current-supportmembership migrations recordedexplicitly."
+  ],
+  "unresolvedSourceBlockers": [],
+  "limitations": [
+    "25s is sourcebase time, actualtimeline duration still needs runtimeverification under existingconstructionmodel.",
+    "No185872clientmultiassist/pathing/cartmovement experiment.",
+    "No normalcurrent8church/relicgold orfuture arbitrarycartresearchqueue/economicpostCastle extension.",
+    "Initialnormal3vils/stock is existingBOframe, notrawresourcearraydirectspawnproof."
+  ],
+  "testsRunByAuditor": 0,
+  "domainSimulatorCalls": 0,
+  "browserRuns": 0,
+  "repositoryWritesByAuditor": false
+}

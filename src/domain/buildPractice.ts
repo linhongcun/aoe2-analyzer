@@ -41,7 +41,7 @@ export function practiceAction(action: Action, name: PracticeNames): string {
     case 'gather':
       return action.from ? `从${TASK_ZH[action.from]}调 ${action.count} 名村民去${TASK_ZH[action.task]}` : `安排 ${action.count} 名村民${TASK_ZH[action.task]}`;
     case 'build':
-      return `建造 ${action.count ?? 1} 座${name('building', action.building)}`;
+      return `建造 ${action.count ?? 1} ${action.building === 1808 ? '辆' : '座'}${name('building', action.building)}`;
     case 'train':
       return `训练 ${action.count ?? 1} 个${name('unit', action.unit)}`;
     case 'research':

@@ -28,6 +28,28 @@ OP = {0: 'set', 4: 'add', 5: 'mul'}
 TECH_OP = {0: 'set', 1: 'add', 2: 'mul', -1: 'add'}
 ECO_BLDG = {109: 'Town Center', 68: 'Mill', 562: 'Lumber Camp', 584: 'Mining Camp', 84: 'Market', 45: 'Dock'}
 AGE_TECHS = {101: 'Feudal Age', 102: 'Castle Age', 103: 'Imperial Age'}
+ARMENIAN_CONTEXT_TECHS = (949, 957, 958, 960, 961, 962, 963, 964, 965, 966)
+
+
+def raw_tech_context(d, tech):
+    """Keep complete commands for the reviewed Armenian technology, including unknown companions."""
+    row = d['Techs'][tech]
+    return {'tech': tech, 'civ': row['Civ'], 'effectId': row['EffectID'],
+            'requiredCount': row['RequiredTechCount'], 'requires': [tid for tid in row['RequiredTechs'] if tid >= 0],
+            'researchLocation': row['ResearchLocation'], 'researchAt': row['ResearchAt'],
+            'researchTime': row['ResearchTime'], 'cost': row['Cost'], 'commands': eff(d, row['EffectID'])}
+
+
+def armenian_infrastructure(d, civ):
+    """Independent of removable bonus rows: removing958 must retain the paid cart replacement."""
+    dc = d['Civs'][civ]
+    unit = d['Civs'][1]['Units'][1808]
+    return {'civId': civ, 'treeId': dc['TechTreeID'], 'treeCommands': eff(d, dc['TechTreeID']),
+            'enable': raw_tech_context(d, 940), 'buildingTech': raw_tech_context(d, 933),
+            'cart': {'unit': 1808, 'type': unit['Type'], 'class': unit['Class'],
+                     'buildTech': d['BuildTech'].get('1808', -1), 'trainAt': unit['TrainAt'],
+                     'trainTime': unit['TrainTime'], 'cost': unit['Cost']},
+            'researchSites': {str(tid): d['Techs'][tid]['ResearchAt'] for tid in (14, 22, 199, 202, 203, 55, 182, 278, 221, 279)}}
 
 
 def cost(c):
@@ -143,9 +165,10 @@ def main():
         if free: rows.append({'source': 'tree', 'name': 'Free techs', 'age': 1, 'effects': [{'kind': 'freeTech', 'techName': n} for n in free]})
         # 加成科技：本文明专属、无研究地点（引擎自动生效），与 effects_build 相同的选取规则，但不过滤「站内无对应单位」的经济效果
         for i, t in enumerate(T):
-            if t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']: continue
+            armenian_context = c['en'] == 'Armenians' and i in ARMENIAN_CONTEXT_TECHS
+            if not armenian_context and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
             ef = decode(eff(d, t['EffectID']), T)
-            if ef:
+            if ef or armenian_context:
                 row = {'source': 'bonus', 'tech': i, 'name': t['Name'], 'age': age_of(i), 'requires': [x for x in t['RequiredTechs'] if x >= 0], 'effects': ef}
                 # #197: retain the COMPLETE raw context for this reviewed Wei family only.
                 # Unknown/extra commands must reach the closed runtime guard, never disappear in decode().
@@ -160,10 +183,14 @@ def main():
                                        'researchLocation': t['ResearchLocation'], 'researchAt': t['ResearchAt'],
                                        'researchTime': t['ResearchTime'], 'cost': t['Cost'],
                                        'commands': eff(d, t['EffectID'])}
+                if c['en'] == 'Armenians' and i in ARMENIAN_CONTEXT_TECHS:
+                    row['armenianTech'] = raw_tech_context(d, i)
                 rows.append(row)
         team = decode(eff(d, dc['TeamBonusID']), T)
         if team: rows.append({'source': 'team', 'name': 'Team bonus', 'age': 1, 'effects': team})
         out['civEco'][c['en']] = rows
+        if c['en'] == 'Armenians':
+            out['armenianInfrastructure'] = armenian_infrastructure(d, k)
     # 升级时代的前置建筑（#3 根因 3）：时代科技 101/102/103 的非时代前置（Shadow Node+ 659/660/661）按 .dat 展开成条件树。
     # 叶子：建成时触发该科技的建筑（Building.tech_id，dat_source BuildTech）；或本文明专属、无前置的科技（如高棉 638，自动满足）。
     # 节点：{n: 需满足的子项个数, of: [...]}；叶子：{b: [建筑 id], zh: 名称} / {civ: [文明]}；无法在开局中满足的叶子（由效果触发的 Port built 等）略去。

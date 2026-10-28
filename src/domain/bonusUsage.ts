@@ -28,6 +28,7 @@ import relicRaw from '../data/relic_income.json';
 import { simSupport } from './simSupport';
 import { WEI_SPAWN_NOTE } from './weiEconomy';
 import { BENGALI_SPAWN_NOTE } from './bengaliEconomy';
+import { armenianContext, ARMENIAN_RESEARCH_NOTE } from './armenianEconomy';
 
 const eco = ecoRaw as unknown as EcoData;
 /** PK 与真实成本只给单位算折后价（建筑费用折扣不在这两个工具里） */
@@ -112,7 +113,7 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
   if (b.id === 'Sicilians-1') return { tool: 'sim', name, on: false, note: '未计入：农田升级额外储量、耗尽和续种未模拟，也未估算节省的木材' };
   const { techs, treeOnly } = bonusTechs(b);
-  const currentScope = ['Sicilians', 'Wei', 'Bengalis'].includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
+  const currentScope = ['Sicilians', 'Wei', 'Bengalis', 'Armenians'].includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
     const t = (r as { tech?: number }).tech;
     return r.source !== 'team' && t !== undefined && techs.includes(t);
@@ -126,15 +127,17 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
       name,
       on: true,
       note:
-        b.id === 'Wei-0'
-          ? WEI_SPAWN_NOTE
-          : b.id === 'Bengalis-0'
-            ? BENGALI_SPAWN_NOTE
-            : b.civ === 'Tatars' && b.idx === 0 && techs.includes(704)
-              ? '已计入牧羊产量与工作率配对；羊总量和耗尽未模拟'
-              : b.id === 'Sicilians-4'
-                ? '已计入城镇中心、城堡和防御工事的实际施工工期'
-                : '已计入',
+        b.id === 'Armenians-0'
+          ? '已计入逐次付费骡车费用；移动和自动复用未模拟'
+          : b.id === 'Wei-0'
+            ? WEI_SPAWN_NOTE
+            : b.id === 'Bengalis-0'
+              ? BENGALI_SPAWN_NOTE
+              : b.civ === 'Tatars' && b.idx === 0 && techs.includes(704)
+                ? '已计入牧羊产量与工作率配对；羊总量和耗尽未模拟'
+                : b.id === 'Sicilians-4'
+                  ? '已计入城镇中心、城堡和防御工事的实际施工工期'
+                  : '已计入',
     };
   if (relevant) return { tool: 'sim', name, on: false, note: '本条效果待核实，未计入' };
   if (treeOnly) {
@@ -155,6 +158,11 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
  * 其余加成返回空数组。
  */
 export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
+  if (b.id === 'Armenians-1') {
+    const context = armenianContext(eco);
+    const on = currentSimSupport(eco, b.civ, buildOrders).supported && !!context.research?.length;
+    return [{ tool: 'sim', name: USAGE_TOOL_ZH.sim, on, note: on ? ARMENIAN_RESEARCH_NOTE : '暂不支持该文明，整页按通用文明计算，本条未计入' }];
+  }
   if (b.id === 'Bengalis-0')
     return [
       ...usageLines(b as CivBonusEnt & { idx: number }),

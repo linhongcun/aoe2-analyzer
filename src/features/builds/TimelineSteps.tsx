@@ -4,6 +4,7 @@ import { useCore } from '../../data/hooks';
 import type { BuildOrder } from '../../domain/buildOrder';
 import type { BuildTimeline } from '../../domain/buildSim';
 import { RowSegs } from './RowSegs';
+import { NumUnitText } from './NumUnitText';
 import { stepEntities, villagerGroups } from './timelineFollowups';
 import { RES_ZH, ROW_SEG_MAX, mmss, noteParts, prereqDetail, rowSegments, rowTime, segLabel, type TimelineQuery, type TimelineView } from './timelineModel';
 
@@ -116,11 +117,11 @@ export function TimelineSteps({
                   {noteParts(st.note ?? '', st.houseText, noHouses).map((x, k) =>
                     x.skip ? (
                       <span key={k} className="tl-skip" data-t="house-skip">
-                        <s>{x.text}</s>
+                        <s>{tl.civ === 'Armenians' ? <NumUnitText text={x.text} cartUnits /> : x.text}</s>
                         <span className="tl-no-need">{noNeedZh}</span>
                       </span>
                     ) : (
-                      <span key={k}>{x.text}</span>
+                      <span key={k}>{tl.civ === 'Armenians' ? <NumUnitText text={x.text} cartUnits /> : x.text}</span>
                     ),
                   )}
                   {st.siteAdded && (
