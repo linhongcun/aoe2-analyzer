@@ -18,7 +18,7 @@
 
 2026-10-28 #197 第九批补充：孟加拉迁入支持集合，固定4条来源整族核验，仅在正常到达新时代时按每座已完成TC赠送2村；特殊起始时代分支不自动应用。满住房赠送按未经当前版本客户端实测的本站模型，出生位置/集结/驻扎不模拟；仅骑士方案提示通用经济模板。独立真实成本原值和空提示保持。见[规格](design/bengalis197.md)、[先红](design/bengalis197-first-red.json)、[固定来源](design/bengalis197-source.json)与[公开语义](design/bengalis197-public-sources.json)与[实际验证](design/bengalis197-validation.json)。
 
-2026-10-28 #197 第十批补充：亚美尼亚迁入支持集合。当前8套的13个营地动作逐次改为付费骡车，保留普通起始人数；骡车完成后才能作为研究地点或一种时代前置。经济研究增强在对应研究实际完成后生效，不按时代提前应用。施工继承本站模型、未经当前客户端实测；固定距离，不模拟移动或自动复用，独立真实成本原值与提示保持。见[规格](design/armenians197.md)、[真实先红](design/armenians197-first-red.json)、[固定来源](design/armenians197-source.json)及[公开语义](design/armenians197-public-sources.json)。
+2026-10-28 #197 第十批补充：亚美尼亚迁入支持集合。当前8套的13个营地动作逐次改为付费骡车，保留普通起始人数；骡车完成后才能作为研究地点或一种时代前置。经济研究增强在对应研究实际完成后生效，不按时代提前应用。施工继承本站模型、未经当前客户端实测；固定距离，不模拟移动或自动复用，独立真实成本原值与提示保持。其它55文明440份完整结果与1485份采集辅助计算、亚美尼亚27份黑暗时代辅助计算，以及全部224份独立真实成本均无差异；四宽双主题与旧孟加拉共18项浏览器验收通过。见[规格](design/armenians197.md)、[真实先红](design/armenians197-first-red.json)、[固定来源](design/armenians197-source.json)及[公开语义](design/armenians197-public-sources.json)与[实际验证](design/armenians197-validation.json)。
 
 ## 核对结果
 

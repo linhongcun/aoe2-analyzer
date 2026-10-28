@@ -1,0 +1,583 @@
+{
+  "schemaVersion": 1,
+  "issue": 197,
+  "batch": 10,
+  "civilization": "Armenians",
+  "version": "v0.54.1",
+  "dateAsiaShanghai": "2026-10-28",
+  "authorization": {
+    "request": "ok，可以处理下一批的文明了",
+    "scopeComment": "https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6458754342",
+    "selectedByExecutor": true,
+    "parentIssueRemainsOpen": true,
+    "current317ConsequenceExplicitlyAddedToSameScopeComment": true
+  },
+  "identities": {
+    "baseline": {
+      "HEAD": "6470fafbb258a4076f6c0c0630624ab6893e2bb4",
+      "tree": "9d797f4d494325fc1d9f47b95e442ba7a7f6ded6",
+      "version": "0.54.0",
+      "supported": 46,
+      "unsupported": 10
+    },
+    "core": {
+      "HEAD": "328ac177226372abe062e7e20a80563e4894010b",
+      "tree": "c05241d1386eaf0089f9aefae6569c8a4fc913c2",
+      "status": "",
+      "createdUTC": "2026-10-28T03:21:02.703292+00:00",
+      "noBuildBrowserGlobalRuntime": true
+    },
+    "actualBuildBrowser": {
+      "HEAD": "df1aca6d9a06f7ff6622ed5f321ebc797168665f",
+      "tree": "2f7c2532746207367cce57dbefc9b82fc38e320c",
+      "version": "0.54.1",
+      "cleanBeforeAndAfter": true,
+      "core262SourceInputsUnchanged": true
+    },
+    "targetSupported": 47,
+    "targetUnsupported": 9,
+    "laterDocsOnlyCommitDoesNotClaimReexecution": true
+  },
+  "fixedSource": {
+    "DE": 185872,
+    "autoModsPin": "0c38027504532826c9922e4db77e2c1d33554291",
+    "datSHA256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+    "civ": 44,
+    "tree": 925,
+    "team": 926,
+    "dedicatedTechnologies": 26,
+    "completePrerequisiteAndCommandClosure": 173,
+    "trackedObjects": 67,
+    "currentBuildOrders": 8,
+    "currentActions": 228,
+    "sourceAudit": {
+      "path": "docs/design/armenians197-source.json",
+      "bytes": 37504,
+      "sha256": "9e6c142a800dd0f5dcaff45cf6917da702aa52ccffd8c718eaf078c1927f4b3c"
+    },
+    "publicSemantics": {
+      "path": "docs/design/armenians197-public-sources.json",
+      "bytes": 27655,
+      "sha256": "aeb670a382be84cc48a12972ba3aa6e03b6df87ea4415f27e50dfbc2fe05247e"
+    },
+    "construction185872ClientTested": false,
+    "olderEngineEvidenceOnly": 158041,
+    "creatableTypeMeansFormationCategory": true
+  },
+  "preflight": {
+    "frozenSpec": {
+      "path": "/tmp/batch10-armenians-spec-preflight-e90f.md",
+      "bytes": 11213,
+      "sha256": "e90f3516c84a07fcc50814a8f93b0d6d27a11df86556e06f6cdcd59d1d579416"
+    },
+    "sourcePreflight": {
+      "path": "/tmp/batch10-armenians-source-preflight.json",
+      "bytes": 6310,
+      "sha256": "1a40b2910cccce5f1cdfdc461bcd0b0e11b2358c832bbf035a5ca9c7a9a16e09"
+    },
+    "baselinePreflight": {
+      "path": "/tmp/batch10-armenians-preflight.json",
+      "bytes": 8306,
+      "sha256": "fa87aef6ce3bf4da38ae20ad4c44e4255ffe0b390cc614549a255aafb2c88ee2"
+    },
+    "canonicalRed": {
+      "testSHA256": "fdfe8e5a5348844794b12d1e9ae9132caec6697d3fcb0dd8d23e88951ffeacbf",
+      "unchangedFromFrozen21": true,
+      "redTotal": 21,
+      "redPass": 5,
+      "redAssertionFail": 16,
+      "green": 21
+    },
+    "canonicalActualRedReport": {
+      "path": "/tmp/batch10-armenians-first-red-unit-freeze2.json",
+      "bytes": 25256,
+      "sha256": "f948300f576aba43709b769a1d2644eec8dd9453f4278a09923adbc05cbff15e"
+    },
+    "earlierHarnessTrialsExcludedFromProductRed": "Housing deadlock, income-window/rate-fixture revisions, and one later3-cart arithmetic mistake are preserved as harness iterations; canonical frozen21=5pass16Assertionfail remains exact, and all21 subsequently passed."
+  },
+  "targetedChecks": {
+    "ownerReport": {
+      "path": "/tmp/batch10-armenians-owner-core-checks.json",
+      "bytes": 11720,
+      "sha256": "015375a1c59aa037d5d34bbeac7145e5505e4fb24afb22df27bbf5ec6819719b"
+    },
+    "ArmenianDistinctCurrentCases": {
+      "frozen21": 21,
+      "finalSourceGuards": 53,
+      "finalPresentation": 6,
+      "total": 80,
+      "passed": 80,
+      "note": "union of actual bound runs, not a claim the obsolete combined79/80 harness report passed"
+    },
+    "actualRuns": {
+      "green-core-final": {
+        "path": "/tmp/batch10-armenians-green-core-final.json",
+        "sha256": "b45628ac78dd0c6dc0d8d736745c5c65fd5b66923a4a008a49b7a1ad49e44254",
+        "counts": {
+          "numTotalTests": 78,
+          "numPassedTests": 78,
+          "numFailedTests": 0,
+          "numPendingTests": 0
+        }
+      },
+      "green-sourceguard-freeze": {
+        "path": "/tmp/batch10-armenians-green-sourceguard-freeze.json",
+        "sha256": "f0ab2f5fbcdb7de1d9bdad2fb42844401195e559a126a87f020e201169e75716",
+        "counts": {
+          "numTotalTests": 53,
+          "numPassedTests": 53,
+          "numFailedTests": 0,
+          "numPendingTests": 0
+        }
+      },
+      "317-share-final": {
+        "path": "/tmp/batch10-armenians-317-share-final.json",
+        "sha256": "a7e574ea83591f54b07eba3108ad4f3a9b39d0fd4958fc139bff5191ffb70726",
+        "counts": {
+          "numTotalTests": 26,
+          "numPassedTests": 25,
+          "numFailedTests": 0,
+          "numPendingTests": 1
+        }
+      },
+      "compat-unit": {
+        "path": "/tmp/batch10-armenians-compat-unit.json",
+        "sha256": "3648d70529a7c19720d04b0c4dc144d5deaca9663d42006469f2420ee35ee147",
+        "counts": {
+          "numTotalTests": 134,
+          "numPassedTests": 134,
+          "numFailedTests": 0,
+          "numPendingTests": 0
+        }
+      },
+      "current-positive": {
+        "path": "/tmp/batch10-armenians-current-positive.json",
+        "sha256": "ba2ea4dee6a680b30aa2dfd402a3adcb29c9eccc65bd7e854a61cae7bfc54ea4",
+        "counts": {
+          "numTotalTests": 51,
+          "numPassedTests": 1,
+          "numFailedTests": 0,
+          "numPendingTests": 50
+        }
+      }
+    },
+    "python": {
+      "tests": 6,
+      "passed": 6,
+      "log": "/tmp/batch10-armenians-green-python-final.log"
+    },
+    "gates": {
+      "typecheck": {
+        "path": "/tmp/batch10-armenians-final-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "lint": {
+        "path": "/tmp/batch10-armenians-final-lint.log",
+        "sha256": "06eb8a5586a65621743ec652c7cc4d4889d16c6e11cd458ac5e61db34067fe3d"
+      },
+      "layers": {
+        "path": "/tmp/batch10-armenians-final-layers.log",
+        "sha256": "152a18bec69ef1bb784e68121892fea1bd2a2dd3775960078a955094072dd58f"
+      },
+      "content": {
+        "path": "/tmp/batch10-armenians-final-content.log",
+        "sha256": "6dda93ff85fcd7d0b402b3c015af8b49f7ff6cc395bbd892c1c35815b8de185d"
+      },
+      "validators": {
+        "path": "/tmp/batch10-armenians-final-validators.log",
+        "sha256": "bd937041fc1119680b3b6e26840780f7521a1c8d84fd871cd2dbd47f9f006590"
+      },
+      "bo": {
+        "path": "/tmp/batch10-armenians-final-bo.log",
+        "sha256": "7255dab2903001ca39b21cfeafca1eae1cfa75019c3fbc65facdfcb63efe2ff1"
+      },
+      "format-check": {
+        "path": "/tmp/batch10-armenians-final-format-check.log",
+        "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+      }
+    },
+    "canonicalData": {
+      "originalNineGlobalSectionsIdentical": true,
+      "other55CivEcoIdentical": true,
+      "canonicalGenerationLog": "/tmp/batch10-armenians-eco-generation-final.log"
+    }
+  },
+  "independentCurrent8SourceObservation": {
+    "report": {
+      "path": "/tmp/batch10-armenians-independent-runtime.json",
+      "bytes": 60299,
+      "sha256": "aeff4e279910e562fa81fabee9cd80cd4e132b281628dcc266278a50e2553d4d"
+    },
+    "raw": {
+      "path": "/tmp/batch10-armenians-independent-runtime-raw.json",
+      "bytes": 365803,
+      "sha256": "65a71b231d6242af0e133c907c6fe50ca99ff06845a10e2069a201e8230be33a"
+    },
+    "actualSimulatorCalls": 8,
+    "counts": {
+      "physicalCarts": 13,
+      "directCartCostObservations": 12,
+      "sourceBoundCompoundCartCosts": 1,
+      "exactFirstCart25sObservations": 7,
+      "prefirstCartFullSnapshots": 16,
+      "prepaidBirthPrefixObjects": 50,
+      "sourceDerivedExtra202": 7,
+      "sourceDerivedExtra203": 1,
+      "directBonusTriggerEvents": 0
+    },
+    "unresolvedFindings": [],
+    "observationBoundaries": [
+      "No source-side or simulator test rerun in offline analyzer.",
+      "Only12of13cart per-action costs are direct publicstep.cost; archerscompoundstep reports firstHousecost.",
+      "Sevenfirstcart request→completion durations observe source25s; Scoutsrequestinitialfood6<15causesrealpaymentwait, notextra25stime.",
+      "Current202203steps arecompound; no exact202/203complete or960/961grant ledger exposed. Actualstep/site/startobservations and source-derivedbounds are separate from expected7+1extra trigger ledger.",
+      "Exactextraeffect timing/nonduplication/mining-no-free behavior comes from frozenquantitative red→green andstaticcompleted-research-hook review, notinventedinternalruntimeevents.",
+      "No same-clock postcart baselinecomparison: changedcartcost/time altersactualclocks; only unchanged prefirstcart prefix compared.",
+      "MuleCartmovement/pathing/185872clientassist experiment notperformed; inheritedconstructionandfixedwalkmodel staysdeclared."
+    ],
+    "summary": "13 physical carts,12 directly observable cart fees plus1 compound-step source boundary; actual completion/prerequisite/paid births checked. Nominal25s construction is24.9s at0.1tick in observer; Scouts30.1 includes5.2food shortage wait. Extra7×202+1×203 is a source-derived expected ledger rather than hidden runtime event telemetry."
+  },
+  "browser": {
+    "execution": {
+      "path": "/tmp/batch10-armenians-runtime-execution.json",
+      "bytes": 3846,
+      "sha256": "bc8d862960db65e264fbe730be7336c999d8c86e47b9f7d6d21b35c7e4528f4b"
+    },
+    "actualBuild": {
+      "exit": 0,
+      "log": {
+        "path": "/tmp/batch10-armenians-runtime-build.log",
+        "sha256": "4394c786a5a14acd0c48ba9dc3da072f9968828c560d77d16b2c066fe59754c7"
+      },
+      "distManifest": {
+        "path": "/tmp/batch10-armenians-runtime-dist-manifest.json",
+        "files": 1695,
+        "bytes": 16185526,
+        "sha256": "698fba8b2ecb5ef2dd22560821475766688dcb98ed0360126ccafd66027861bd"
+      }
+    },
+    "tests": {
+      "exit": 0,
+      "stats": {
+        "startTime": "2026-10-28T03:34:29.656Z",
+        "duration": 25138.117,
+        "expected": 18,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "json": "/tmp/batch10-armenians-runtime-e2e.json",
+      "jsonSHA256": "d19193e8dde5873a6194818c935f2766dad373acff3f76f162efc5e8dc7c0dd2",
+      "log": "/tmp/batch10-armenians-runtime-e2e.log",
+      "command": "BASE_URL=http://127.0.0.1:4208/ PLAYWRIGHT_JSON_OUTPUT_NAME=/tmp/batch10-armenians-runtime-e2e.json npx playwright test tests/e2e/armenians197.spec.ts tests/e2e/bengalis197.spec.ts --workers=2 --reporter=json --output=/tmp/batch10-armenians-runtime-e2e-assets",
+      "retries": 0,
+      "timeoutChanges": false
+    },
+    "assets": {
+      "manifest": "/tmp/batch10-armenians-runtime-asset-manifest.json",
+      "manifestSHA256": "354eb547329e7759ffa5952c1992354ac3b1ca1e988ded4f4df7b0c1bf58014f",
+      "allFiles": 115,
+      "PNG": 114,
+      "ArmenianPNG": 65,
+      "BengaliPNG": 49,
+      "actualDownloads": [
+        "/tmp/batch10-armenians-runtime-e2e-assets/armenians197--197-亚美尼亚骡车、真实费用、研究口径与分享-1280-light/armenians197-share-download.png",
+        "/tmp/batch10-armenians-runtime-e2e-assets/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-light/bengalis197-knight-download.png"
+      ]
+    },
+    "ownerViewed": {
+      "actualImagesViewed": [
+        "armenians197-share-download.png",
+        "armenians197-share-360-light.png",
+        "armenians197-print-360-light.png",
+        "armenians197-cart-360-light.png",
+        "armenians197-research-site-360-dark.png",
+        "armenians197-practice-360-light.png",
+        "bengalis197-knight-download.png"
+      ],
+      "result": "Readable cartfees/actions/units and actual Blacksmith-site wait; modeldisclosure appears inactualPNG and mobile preview; oldBengali donation/knight warnings retained; no clipping observed. Independent visualreview still belongs to root stage.",
+      "timestampUTC": "2026-10-28T03:36:05.793369+00:00"
+    },
+    "independentVisual": {
+      "path": "/tmp/batch10-armenians-ui-source-personal-review.json",
+      "bytes": 16835,
+      "sha256": "cad1119d5781542e05250fe358eea2416192b5cee1f846100e3e796b9a5576f3"
+    },
+    "independentAll114MetadataRecheck": {
+      "path": "/tmp/batch10-armenians-runtime-images-reverified.json",
+      "bytes": 41867,
+      "sha256": "3426e58142fd98f42e595643f1babb602320dcd95327b692b0d7aa8526f7bcef"
+    },
+    "ArmenianPersonallyViewedByIndependentAuditor": 33,
+    "rootVisualAndActualSmoke": {
+      "path": "/tmp/batch10-armenians-root-visual-smoke.json",
+      "bytes": 2777,
+      "sha256": "894a2bb3e4611d7048cae59c8eae5ec56ecc5cee018e3aa6a8fa3943a6541f8c"
+    },
+    "inheritedPrintResidual": "Existing sticky navigation/skip-link overlay in print was seen, accepted as inherited and outside this civilization scope; this validation does not claim a print redesign.",
+    "smokeChronology": "An earlier invocation lacked its plan file and failed ENOENT before browser. The plan was supplied, then exactly one actual local deployment smoke ran. No rebuild or product retry.",
+    "actualDownloadedPNG": [
+      {
+        "path": "/tmp/batch10-armenians-runtime-e2e-assets/armenians197--197-亚美尼亚骡车、真实费用、研究口径与分享-1280-light/armenians197-share-download.png",
+        "bytes": 187665,
+        "sha256": "996a0a9d30e6577dbef5889b74b9a32d5701bec683bd5c9382d1ec20bb22a3ee",
+        "width": 1080,
+        "height": 1350
+      },
+      {
+        "path": "/tmp/batch10-armenians-runtime-e2e-assets/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-light/bengalis197-knight-download.png",
+        "bytes": 206918,
+        "sha256": "49901c8657af4e417557512387ed1c5877f9640235a20f4a7a4d7f10f01fd554",
+        "width": 1080,
+        "height": 1350
+      }
+    ]
+  },
+  "bonus317": {
+    "actualOriginalUpdateRun": "/tmp/batch10-armenians-317-update.json",
+    "updateRunNote": "snapshot generated naturally; two current text-membership assertions initially failed and were narrowly migrated. Normal final check green. UPDATE generation body unchanged.",
+    "oldCount": 77,
+    "newCount": 80,
+    "all77OldValuesPreserved": true,
+    "onlyNewKeys": {
+      "Armenians-0": "feudal-drush-18",
+      "Armenians-3": null,
+      "Armenians-4": null
+    },
+    "inputs": "6b14e70a0843b3f452c183259f4d106c1a80046cc31fe94c6e60a2051525ad07",
+    "ECO": 112,
+    "Text": 37,
+    "pairedExecutionIdentity": {
+      "HEAD": "6470fafbb258a4076f6c0c0630624ab6893e2bb4",
+      "sourceState": "DIRTY owner implementation WIP before cleanCORE328ac; numericinput6b14 matches laterCORE/runtime, but test-source membership and share basis evolved between the two runs. Neither is attributed to finalruntimeHEAD."
+    },
+    "actualUpdate": {
+      "command": "UPDATE_BONUS317=1 npx vitest run tests/unit/bonusUsage317.test.ts --reporter=json --outputFile=/tmp/batch10-armenians-317-update.json > /tmp/batch10-armenians-317-update.log 2>&1",
+      "report": {
+        "path": "/tmp/batch10-armenians-317-update.json",
+        "bytes": 8595,
+        "sha256": "c11d9c7bb124a6a518300d641eec1eaea727314723c18c3df7df343cdf8b279e"
+      },
+      "log": {
+        "path": "/tmp/batch10-armenians-317-update.log",
+        "bytes": 62,
+        "sha256": "1b48c515caf4d5d2cdc82c713f4cf6862c27ab30478c0eb36fd37ae2db39244f"
+      },
+      "exit": 1,
+      "total": 13,
+      "passed": 11,
+      "failed": 2,
+      "generationCasePassed": true,
+      "twoFailures": "Old text-positive list/source-tag list did not yet include newly supported Armenian1; actual fixture generation succeeded."
+    },
+    "normalCheck": {
+      "command": "npx vitest run tests/unit/bonusUsage317.test.ts tests/unit/armenians197Presentation.test.ts tests/unit/shareCard.test.ts --reporter=json --outputFile=/tmp/batch10-armenians-317-share-final.json > /tmp/batch10-armenians-317-share-final.log 2>&1",
+      "report": {
+        "path": "/tmp/batch10-armenians-317-share-final.json",
+        "bytes": 11074,
+        "sha256": "a7e574ea83591f54b07eba3108ad4f3a9b39d0fd4958fc139bff5191ffb70726"
+      },
+      "log": {
+        "path": "/tmp/batch10-armenians-317-share-final.log",
+        "bytes": 67,
+        "sha256": "e54c62ed5114ca377d41b6ba4b6aece1be3b1e47700effb5bad6dc3ed6a33c15"
+      },
+      "exit": 0,
+      "allFiles": {
+        "passed": 25,
+        "skippedUpdateOnly": 1
+      },
+      "bonus317Only": {
+        "passed": 12,
+        "skippedUpdateOnly": 1
+      },
+      "firstChangedRerunInNormalCheck": false
+    }
+  },
+  "current4FileMigrationOracle": {
+    "path": "/tmp/batch10197-current-migration-oracle-4.json",
+    "bytes": 137422,
+    "sha256": "04231471de91d4932c9327af2b6f8af4a2f62b050643798c974b32568e10253d"
+  },
+  "globalRegression": {
+    "report": {
+      "path": "/tmp/batch10197-root-global-offline.json",
+      "bytes": 174934,
+      "sha256": "822de35517d9c304010a3a238b5c566b58d996a95819de1713885688a8e8cc5f"
+    },
+    "HEAD": "df1aca6d9a06f7ff6622ed5f321ebc797168665f",
+    "tree": "2f7c2532746207367cce57dbefc9b82fc38e320c",
+    "version": "0.54.1",
+    "status": "PASS_OFFLINE_RUNTIME_INVARIANTS",
+    "actualExecutionUTC": {
+      "started": "2026-10-28T03:49:53.681Z",
+      "completed": "2026-10-28T03:50:11.912Z"
+    },
+    "actualCollectorExit": 0,
+    "exactlyOneCollector": true,
+    "runtimeBehaviorPass": true,
+    "capturedDataContractPass": true,
+    "counts": {
+      "other55CompleteResults": 440,
+      "other55NumericResults": 440,
+      "other55Notes": 55,
+      "other55Support": 55,
+      "other55DarkHelpers": 1485,
+      "ArmenianDarkHelpers": 27,
+      "all56IndependentRealCost": 224,
+      "oldCivEcoRawSections": 55,
+      "originalGlobalRawSections": 9,
+      "currentHistoricalRemainingProjections": 54
+    },
+    "delta": {
+      "full": [],
+      "numeric": [],
+      "notes": [],
+      "support": [],
+      "helpers": [],
+      "realCost": []
+    },
+    "ArmenianDarkHelperChanges": [],
+    "capturedEco": {
+      "oldGlobalCount9": true,
+      "onlyOneNewOptionalTopKey": true,
+      "newInfrastructurePresentObject": true,
+      "same56CivKeysAndOrder": true,
+      "other55RawChanges": [],
+      "other55SemanticChanges": [],
+      "original9GlobalRawChanges": [],
+      "original9GlobalSemanticChanges": [],
+      "ArmenianOriginalEffectsRowsOrderPreserved": true,
+      "exact10MetadataRows": true,
+      "metadataOnlyObjects": true,
+      "WeiRawUnchanged": true,
+      "BengaliRawUnchanged": true,
+      "currentArmenianRows": 10,
+      "metadataRows": 10,
+      "infrastructureSHA256": "2a15d4b2de99475e2a696a1f4caba182a3d46f5cff0e8adf03cbe25eff7e4e57"
+    },
+    "historicalWhitelist": {
+      "originalCivs": 19,
+      "currentRemaining": 9,
+      "originalFixtureNotModified": true,
+      "cases": 54,
+      "mismatches": []
+    },
+    "support": {
+      "supportedExactly47": true,
+      "unsupportedExactly9": true,
+      "ArmenianSupportedWithNoReasons": true,
+      "supported": 47,
+      "unsupported": 9,
+      "unsupportedCivs": ["Chinese", "Georgians", "Gurjaras", "Jurchens", "Khmer", "Mapuche", "Poles", "Romans", "Slavs"]
+    },
+    "executionProof": {
+      "capture": "/tmp/batch10197-root-global-capture.json",
+      "captureSHA256": "87cf7377eb48a58a76be60cd81e1fd2de425050414abe9b0de94fdc561ab8128",
+      "script": "/tmp/batch10197-runtime-collector.ts",
+      "scriptSHA256": "89cd6ef2d12dc7ebab46c9b706bd9e138d5e4b8ae0f5b3a6ed52c1c958bd424b",
+      "calls": {
+        "simulateBuild": 440,
+        "gatherRateOther55": 1485,
+        "gatherRateArmenians": 27,
+        "gatherModel": 224,
+        "simSupport": 56,
+        "civSimNotes": 56
+      },
+      "artifacts": {
+        "/tmp/batch10197-root-global-actual-results.json": {
+          "sha256": "2d06c3254fe072d775c0fadf0ca58507f8246c87d9aa909e9f253c533357433b",
+          "bytes": 8869637
+        },
+        "/tmp/batch10197-root-global-helpers.json": {
+          "sha256": "5b8b67ae90d789338dde42196b667491a0754988f332d274ccf70ff4b162f86e",
+          "bytes": 208882
+        },
+        "/tmp/batch10197-root-global-realcost.json": {
+          "sha256": "98eeaf86d819e5f4942b6f7513844d0f771c1b6af0321738301fb91c9b3c97d2",
+          "bytes": 78066
+        },
+        "/tmp/batch10197-root-global-eco-sections.json": {
+          "sha256": "ef5c45f1b7670cfef6f63bc7e52e29d96d07f3aa1b0521a06aa41c6214bf78ab",
+          "bytes": 344713
+        }
+      },
+      "policy": "ff2e769c5999e36bf58f86e3cd7c05632efb6939e3412eaec4c4281653c6969b",
+      "POLICY_FILES": [
+        ".github/workflows/ci.yml",
+        "scripts/ci-evidence.mjs",
+        "scripts/ci-scope.mjs",
+        "scripts/ci-run.mjs",
+        "scripts/site-artifact.mjs",
+        "scripts/deployment-smoke.mjs",
+        "package-lock.json"
+      ],
+      "staticPreflight": {
+        "path": "/tmp/batch10197-root-static-runtime.json",
+        "sha256": "9840e4423fb453555c5143deaeaa7c1c4f0ebc11a269c288c39bfab926c6b585"
+      },
+      "approvedPathsManifest": {
+        "path": "/tmp/batch10197-root-approved-paths-runtime.json",
+        "sha256": "a71fed22e21d9a6a54cfb602bf85fcc9b02cf2edb4ee1fa89c2e6e6d743e4103"
+      },
+      "runtimeSourceHashVector": {
+        "entries": 472,
+        "canonicalSortedJSONSHA256": "f9afed658e21982bac9d3c456372cba7fe45434f25fc59bf3cb10f9a86b306c8",
+        "completeVectorPreservedInReferencedGlobalReport": true
+      }
+    },
+    "sourceContextBoundary": "This invariant audit checks original data preservation and the only permitted metadata additions. Full command/trigger/closed-schema/producer conformance is verified by the independent source audit and scoped tests; it is not newly claimed as a domain function call here.",
+    "honestBoundary": "This is offline comparison of the captured immutable runtime. No project modules were imported, no domain/test/browser/build/data generation was rerun, and no subsequent final HEAD is relabeled as this execution. Static path classification is a distinct preflight report and cannot change this collector execution outcome.",
+    "additionalDomainCalls": 0,
+    "independentOfflineReview": {
+      "path": "/tmp/batch10197-independent-global-review.json",
+      "bytes": 4264,
+      "sha256": "cb237fd2d60ae0fc4184ad60f52c0ad19fdfc02c29bce522789dc0a5d40139c2",
+      "newDomainBuildBrowserCalls": 0
+    }
+  },
+  "modelsAndLimits": [
+    "Each original camp action pays for a new cart; fixed walk distance, no movement/reuse/spatial placement optimization.",
+    "Actual standard research completion plus extra source effect once; disabled221/279 are not granted.",
+    "Cart25s/multi-builder construction uses inherited model, not185872client experiment.",
+    "Current no-church BO scope only;104/1806/1118 actions unsupported, relic gold/villagers not introduced.",
+    "Primary compound-step cost contract preserved: House25W remains displayed while appended cartfee sentence discloses60W15F.",
+    "Armenian realCost/payoff independent-tool policy remains unchanged."
+  ],
+  "pendingStages": [
+    "final docs-only static review",
+    "one appropriate full/data CI",
+    "merge/main actual build+short smoke+Pages",
+    "release of deployed artifact"
+  ],
+  "preparedUTC": "2026-10-28T03:51:29.466810+00:00",
+  "validationState": "Bounded local source/runtime/browser/compatibility gates passed; CI and publishing remain separate subsequent stages.",
+  "staticRuntimeClosure": {
+    "report": {
+      "path": "/tmp/batch10197-root-static-runtime.json",
+      "bytes": 121462,
+      "sha256": "9840e4423fb453555c5143deaeaa7c1c4f0ebc11a269c288c39bfab926c6b585"
+    },
+    "HEAD": "df1aca6d9a06f7ff6622ed5f321ebc797168665f",
+    "tree": "2f7c2532746207367cce57dbefc9b82fc38e320c",
+    "verdict": "PASS_STATIC_PREFLIGHT",
+    "current4FileOracleExact": true,
+    "whole331AndAllThreeSnapshotsExact": true,
+    "protection812": {
+      "unchanged": 791,
+      "exactApprovedChanged": 21,
+      "unexpectedChanged": []
+    },
+    "inputManifest": {
+      "path": "/tmp/batch10-armenians-core-execution-go.json",
+      "bytes": 27937,
+      "sha256": "4725864ba38355f3c74d0b38e5310bbd9a6d7500e115c8098dcccd46d84b731b"
+    },
+    "executionBoundary": "Git/blob/source/JSON byte reads and one builtin-only Node JSON fingerprint reconstruction. No project imports, tests or domain executions; no automatic retry/fallback.",
+    "actualDomainCalls": 0,
+    "actualTests": 0,
+    "actualBuildBrowserCalls": 0,
+    "policyDigest": "ff2e769c5999e36bf58f86e3cd7c05632efb6939e3412eaec4c4281653c6969b"
+  },
+  "noReexecutionForDocs": true
+}
