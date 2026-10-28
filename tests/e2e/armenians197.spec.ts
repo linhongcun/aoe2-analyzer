@@ -95,12 +95,14 @@ for (const width of [360, 375, 390, 1280])
       await page.screenshot({ path: info.outputPath(`armenians197-practice-${width}-${theme}.png`), fullPage: true });
 
       await page.goto('./#/builds?bo=scouts-18&civ=Armenians&view=print');
+      await page.emulateMedia({ media: 'print' });
       await expect(page.locator('[data-testid="practice-checklist"]')).toContainText('建造 1 辆骡车');
       await expect(page.locator('[data-testid="practice-checklist"]')).not.toContainText('建造 1 座骡车');
       await expect(page.locator('[data-testid="build-practice"]')).toContainText('移动和自动复用未模拟');
       await overflow(page);
       expect(await nowrap(page)).toEqual([]);
       await page.screenshot({ path: info.outputPath(`armenians197-print-${width}-${theme}.png`), fullPage: true });
+      await page.emulateMedia({ media: 'screen' });
       expect(errors).toEqual([]);
     });
 
