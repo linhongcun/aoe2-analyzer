@@ -60,11 +60,15 @@
 
 必要type、lint、prettier、strict layers、46份strict内容和8套BO检查通过；真实eco_build对账0，现有6个compiled边界生成一致。相关旧5文件首次164通过/1失败/1既有TODO；失败为新启用Slavs1缺工具结论，生产说明补齐后仅该标题通过。旧#332十五项与13文明snapshot在首轮实际执行并通过，没有改录。
 
-独立原main基线仅一次采集（UTC09:56:30.691→09:57:10.836），448完整/1512helpers/224cost/56notes/56support，48/8，保护527/源480/11旧globals/原317旧84，SHA256 `016f3eabf65ff1300b1e0312e8c3c6c93edb915fb91efbab43860486d8a66230`。CURRENT8文件25精确span按独立oracle迁移；#331 TEAM22及3历史snapshot不含Slavs，整组保护。#322 scouts-Slavs旧数值与其它20个e2e对象、6048个unit keys保持，只有待真实原DOM观察后才决定4处当前文字，不自动record或过滤。
+独立原main基线仅一次采集（UTC09:56:30.691→09:57:10.836），448完整/1512helpers/224cost/56notes/56support，48/8，保护527/源480/11旧globals/原317旧84，SHA256 `016f3eabf65ff1300b1e0312e8c3c6c93edb915fb91efbab43860486d8a66230`。CURRENT8文件25精确span按独立oracle迁移；#331 TEAM22及3历史snapshot不含Slavs，整组保护。#322 scouts-Slavs旧数值与其它20个e2e对象、6048个unit keys保持，在A实际原DOM观察及独立精确分类后仅迁移4处当前支持文字；其余126行、全部数字、其它20对象和raw前后缀精确保持。原22项金标准随后一次22/22通过，0跳过/不稳定，不使用record或过滤。
 
 原#317只追加真实slavicEconomy源码指纹，without/runBo/firstChanged/SIM_CHECKED/UPDATE算法与旧84值保护。farm bonus为treeOnly，无正tech，不能捏造tech7或改筛选强造农田键；整行bonus取消已由独立库存测试核对。原生成case唯一实际执行为1通过/12过滤跳过，实际84→85，仅新增`Slavs-2:null`，原84逐值不变；它是当前8套不训练对应单位的攻城费用项，没有模拟on=true声明，不机械新增UNTRIGGERED。正常whole-file随后实际12通过/1个UPDATE关闭跳过，没有再次生成。fixture实际inputs为`dc2925fb2a981569546c984b7d2fe0b23ce59941c9b9e84177da91def4bb21a7`。
 
-当前尚未对最终不可变候选执行8份Slavs公开量化、其它55×8完整对照、构建或浏览器；这些由该候选的实际结果补充，不能以WIP单测或计划冒称完成。后续文档/当前UI期望记录绑定实际runtime身份；保持一次适用验证和真实证据复用，不新增反复审批或重复全套。
+本地不可变运行时A为`c61bfc82cefd1bf920e377c7c67136386ba56a7e`、tree`8fc5044af6fc84965e6433176cb4c28f0bcdfa6a`、v0.57.0；[实际验证快照](slavs197-validation.json)记录其唯一构建、一次9项浏览器验收和57路由既有部署烟测，源输入与1695份dist前后稳定。四宽双主题9/9首轮通过，0跳过/不稳定；[独立图审](slavs197-ui-review.json)亲看40原图中的22张（含4张真实下载PNG），其余18张仅清单/哈希核验，不冒称全部亲看，图片不提交。
+
+量化与最终文档边界：[8份斯拉夫及其它55量化](slavs197-runtime-quantified.json)分别实际捕获，6套无farm的完整/数值结果无差异；两FC分别8/10条数值路径变化，涉及Food和early误差带，真实封建/城堡clickAt与reachAt均未改变，不承诺提速。比较基线是当时直接调用Slavs低层API的保存结果，不自动等于旧UI的Generic回退，更不证明游戏内收益。其它55的440完整/数值、1485辅助、斯拉夫24非farm辅助、全部224独立真实成本，以及55附注/支持和11旧全局/55raw均无差异；斯拉夫3个farm helper按距离1/4/7分别核验，当前支持49/7。
+
+后续文档与4处当前UI期望提交只补证据，不冒称在未来head重建或重跑本地A。实际A的481输入、policy与dist身份保持；完整CI、正式main部署和Release仅在后续PR/run中按真实结果记录，本快照不预报成功。
 
 ## 不在范围
 

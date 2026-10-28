@@ -22,7 +22,7 @@
 
 2026-10-28 #197 第十一批补充：格鲁吉亚迁入支持集合。当前8套各有1辆已完成免费起始骡车，原13个营地动作仍逐次付费新增骡车，每辆80木/20食物；免费车不占人口或住房，保留3村、人口4/5及普通库存。地点与时代前置按实际完成车核验，教堂范围经济不在当前模板内，移动与自动复用未模拟。其它55文明440份完整结果、1485份辅助计算、格鲁吉亚27份黑暗时代辅助计算和全部224份真实成本均无差异。四宽双主题及旧亚美尼亚/孟加拉覆盖18个不同浏览器场景，首轮12通过，修正新测试移动端设置入口后仅余6项通过；未重建运行时。见[规格](design/georgians197.md)、[真实先红](design/georgians197-first-red.json)、[来源](design/georgians197-source.json)、[量化核验](design/georgians197-runtime-quantified.json)及[实际验证](design/georgians197-validation.json)。
 
-2026-10-28 #197 第十二批补充：斯拉夫迁入默认团队关闭的支持集合。农田先算农民携带/往返均速，再取独立供给上限；仅两套FC显式分配农田村民，其余6套不宣传农田收益。近距离估算可能低于保留的旧通用公式，不代表游戏内加成减益；食物池启动、耗尽、续种和团队军事建筑人口未模拟。独立真实成本仍保持原×1.15口径。见[规格](design/slavs197.md)、[固定来源](design/slavs197-source.json)、[公开语义](design/slavs197-public-sources.json)、[真实先红](design/slavs197-first-red.json)和[原99转绿及追加边界](design/slavs197-green-boundary.json)；最终不可变树的量化与四宽记录另按真实运行补齐。
+2026-10-28 #197 第十二批补充：斯拉夫迁入默认团队关闭的支持集合。农田先算农民携带/往返均速，再取独立供给上限；仅两套FC显式分配农田村民，其余6套不宣传农田收益。近距离估算可能低于保留的旧通用公式，不代表游戏内加成减益；食物池启动、耗尽、续种和团队军事建筑人口未模拟。独立真实成本仍保持原×1.15口径。见[规格](design/slavs197.md)、[固定来源](design/slavs197-source.json)、[公开语义](design/slavs197-public-sources.json)、[真实先红](design/slavs197-first-red.json)和[原99转绿及追加边界](design/slavs197-green-boundary.json)；[本地A实际验证](design/slavs197-validation.json)、[量化](design/slavs197-runtime-quantified.json)与[独立图审](design/slavs197-ui-review.json)记录一次构建、9项四宽双主题及22项原金标准通过。无farm六套无数值变化，两FC仅Food/early误差带变化，实际时代时刻未变；其它55文明440完整/数值、1485采集辅助、斯拉夫24非farm辅助和全部224独立真实成本均无差异；3个farm辅助另按新公式核验。
 
 ## 核对结果
 
