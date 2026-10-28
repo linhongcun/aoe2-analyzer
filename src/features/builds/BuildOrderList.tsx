@@ -69,14 +69,17 @@ export default function BuildOrderList() {
         </Link>
       </nav>
       <p className="note">
-        看不懂 FC、drush 等用语？<Link to="/glossary">查看术语与缩写</Link>
+        看不懂 FC、drush 等用语？
+        <Link className="bo-glossary-link" to="/glossary">
+          查看术语与缩写
+        </Link>
       </p>
       <div className="tl-empty" data-t="timeline-empty">
         <div className="tl-empty-axis" aria-hidden />
         <p>选一个开局，看看你会卡在哪</p>
         <p className="note">快速定位下方开局详情，再打开时间线。</p>
         <div className="tl-empty-btns">
-          {buildOrders.slice(0, 6).map((b) => (
+          {buildOrders.map((b) => (
             <button key={b.id} type="button" className="tl-chip" aria-controls={`bo-${b.id}`} onClick={() => showOrder(b.id)}>
               开局：{b.name.zh}
             </button>

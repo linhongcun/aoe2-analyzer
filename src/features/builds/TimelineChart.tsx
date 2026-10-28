@@ -3,7 +3,9 @@ import { timelineAxis, timelineBottleneckLayout } from '../../domain/buildTimeli
 import type { BuildTimeline } from '../../domain/buildSim';
 import { RES_ZH, mmss, type RowKey, type Seg, type TimelineView } from './timelineModel';
 import './wei.css';
+import './timeline-labels.css';
 import { NumUnitText } from './NumUnitText';
+import { TimelineSegment } from './TimelineSegment';
 
 const ROWS: { key: RowKey; zh: string }[] = [
   { key: 'tc', zh: '城镇中心' },
@@ -12,6 +14,30 @@ const ROWS: { key: RowKey; zh: string }[] = [
   { key: 'gold', zh: '金子' },
   { key: 'military', zh: '军事' },
 ];
+
+export function TimelineSegmentList({ v }: { v: TimelineView }) {
+  return (
+    <ul className="tl-segment-list" aria-label="全部时间线分段">
+      {ROWS.flatMap((row) =>
+        v.rows[row.key].map((segment, index) => (
+          <li key={`${row.key}-${index}`}>
+            {row.zh}{' '}
+            <span className="nw">
+              <NumUnitText text={segment.label} />
+              {['food', 'wood', 'gold'].includes(row.key) && '人'}
+            </span>
+            {!segment.label.includes(`约 ${mmss(segment.from)}–${mmss(segment.to)}`) && (
+              <>
+                {' · 约 '}
+                <span className="num nw">{mmss(segment.from)}</span> 到 <span className="num nw">{mmss(segment.to)}</span>
+              </>
+            )}
+          </li>
+        )),
+      )}
+    </ul>
+  );
+}
 
 export function TimelineChart({
   v,
@@ -28,6 +54,9 @@ export function TimelineChart({
 }) {
   const { span, every, ticks, pct, width } = timelineAxis(v.end);
   const { tagged, merged } = timelineBottleneckLayout(v.bottlenecks, v.top);
+  const bengali = tl.civ === 'Bengalis';
+  const grantTrigger = (trigger: number) =>
+    bengali ? `到达${({ 101: '封建', 102: '城堡', 103: '帝王' } as Record<number, string>)[trigger]}时代` : '经济研究完成';
   return (
     <div className="tl-card">
       <div className="tl-chart" role="list" aria-label="时间线">
@@ -43,30 +72,28 @@ export function TimelineChart({
             <span className="tl-lab">{r.zh}</span>
             <div className="tl-track">
               {v.rows[r.key].map((s: Seg, i) => (
-                <span
+                <TimelineSegment
                   key={i}
-                  role="listitem"
-                  className={`tl-bar k-${s.kind}${s.step !== undefined && s.step === selectedStep ? ' is-sel' : ''}`}
-                  style={{ left: pct(s.from), width: width(s.from, s.to) }}
-                  title={`${s.label} · 约 ${mmss(s.from)}–${mmss(s.to)}`}
-                  aria-label={`${r.zh} ${s.label} 约 ${mmss(s.from)} 到 ${mmss(s.to)}`}
-                >
-                  {s.label}
-                </span>
+                  segment={s}
+                  row={r.zh}
+                  selected={s.step !== undefined && s.step === selectedStep}
+                  left={pct(s.from)}
+                  width={width(s.from, s.to)}
+                />
               ))}
             </div>
           </div>
         ))}
         {!!tl.bonusVillagerEvents?.length && (
           <div className="tl-row" data-row="bonus">
-            <span className="tl-lab">研究赠村</span>
+            <span className="tl-lab">{bengali ? '时代赠村' : '研究赠村'}</span>
             <div className="tl-track">
               {tl.bonusVillagerEvents.map((event) => (
                 <span
                   key={event.tech}
                   className="tl-wei-point"
                   style={{ left: pct(event.at) }}
-                  title={`经济研究完成 · 约${mmss(event.at)} · 赠送${event.count}个村民`}
+                  title={`${grantTrigger(event.trigger)} · 约${mmss(event.at)} · 赠送${event.count}个村民`}
                   aria-hidden="true"
                 />
               ))}
@@ -125,13 +152,13 @@ export function TimelineChart({
         </div>
       </div>
       {tl.bonusVillagerEvents && (
-        <div className="tl-civ-note tl-wei-grants" role="group" aria-label="魏研究赠送村民">
+        <div className="tl-civ-note tl-wei-grants" role="group" aria-label={bengali ? '孟加拉时代赠送村民' : '魏研究赠送村民'}>
           <p>
             城镇中心训练：
             <span className="nw" data-t="paid-villager-total" data-count={tl.villagerEvents?.length ?? 0}>
               {tl.villagerEvents?.length ?? 0}个村民
             </span>
-            ；研究赠送：
+            {bengali ? '；时代赠送：' : '；研究赠送：'}
             <span className="nw" data-t="bonus-villager-total">
               {tl.bonusVillagerEvents.reduce((n, event) => n + event.count, 0)}个村民
             </span>
@@ -140,7 +167,7 @@ export function TimelineChart({
             <ul>
               {tl.bonusVillagerEvents.map((event) => (
                 <li key={event.tech} data-t="bonus-villager-event" data-at={event.at} data-trigger={event.trigger} data-count={event.count}>
-                  <span className="num nw">约{mmss(event.at)}</span> 经济研究完成，赠送<span className="nw">{event.count}个村民</span>； 人口
+                  <span className="num nw">约{mmss(event.at)}</span> {grantTrigger(event.trigger)}，赠送<span className="nw">{event.count}个村民</span>； 人口
                   <span className="num nw">
                     {event.pop.used}/{event.pop.cap}
                   </span>
@@ -185,7 +212,7 @@ export function TimelineChart({
         <div role="dialog" aria-label="估算说明" className="tl-assume">
           <ul>
             {tl.model.assumptions.map((a, i) => (
-              <li key={i}>{tl.civ === 'Wei' ? <NumUnitText text={a} /> : a}</li>
+              <li key={i}>{tl.civ === 'Wei' || bengali ? <NumUnitText text={a} /> : a}</li>
             ))}
           </ul>
           <span className="note">模型版本 {tl.model.version}</span>

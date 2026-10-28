@@ -83,6 +83,17 @@ describe('Reid/Steve 合并前必改（内容回归）', () => {
     expect(step.note).not.toContain(units.find((unit) => unit.id === 358)!.zh);
   });
 
+  it('#471 scouts-18：不承诺尚未实现的保守打法切换，实际分配保持', () => {
+    const step = loadBo('scouts-18').steps[9]!;
+    expect(step.vils).toBe(18);
+    expect(step.phase).toBe('feudal');
+    expect(step.actions).toEqual([
+      { type: 'gather', task: 'wood', count: 4, from: 'hunt' },
+      { type: 'gather', task: 'berries', count: 4, from: 'hunt' },
+    ]);
+    expect(step.note).not.toMatch(/界面可切换|可切换保守打法|保守打法[^。]*可切换/);
+  });
+
   it('全部开局保持 reviewed', () => {
     for (const bo of buildOrders) {
       expect(bo.review.status, bo.id).toBe('reviewed');

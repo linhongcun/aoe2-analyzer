@@ -1,0 +1,2454 @@
+{
+  "schemaVersion": 1,
+  "issue": 197,
+  "batch": 9,
+  "civilization": "Bengalis",
+  "version": "v0.54.0",
+  "dateAsiaShanghai": "2026-10-28",
+  "preparedUTC": "2026-10-27T23:22:55.182505+00:00",
+  "authorization": {
+    "request": "OK，接着处理下一批的文明吧。",
+    "selectedByExecutor": true,
+    "scopeComment": "https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6455520387",
+    "rootImplementationGO": "2026-10-27T22:56:48.734581Z",
+    "parentIssueRemainsOpen": true
+  },
+  "baseline": {
+    "commit": "43f308f2d039ec9ac8ab3cfbc3766b00e1e56ef1",
+    "tree": "6c8da1717b29fd261e5b184598100337a3d5efae",
+    "version": "v0.53.0",
+    "supported": 45,
+    "unsupported": 11
+  },
+  "resultSupport": {
+    "supported": 46,
+    "unsupported": 10
+  },
+  "fixedSource": {
+    "patch": 185872,
+    "repo": "SiegeEngineers/auto-mods",
+    "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "datSHA256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+    "dedicatedTechnologies": 13,
+    "completePrerequisiteAndCommandReferenceClosure": 214,
+    "objects": 44,
+    "currentBuildOrders": 8,
+    "actions": 228,
+    "family": [
+      847,
+      848,
+      849,
+      873
+    ],
+    "effectId": 866,
+    "rawResource234Cap": 0,
+    "rawType7CountC": 2,
+    "normalAgeTriggers": [
+      101,
+      102,
+      103
+    ],
+    "specialStart298IsExcluded": true,
+    "rawAudit": {
+      "path": "/workspace/aoe2-issue197-batch9/docs/design/bengalis197-source.json",
+      "sha256": "9e0342ba796c98f4112f22c64be457d66cf9a16324a3d4291affe7c25abb1785",
+      "bytes": 494255
+    },
+    "publicSemantics": {
+      "path": "/workspace/aoe2-issue197-batch9/docs/design/bengalis197-public-sources.json",
+      "sha256": "934cf42c1a081113820aa797541f60e930c449994d360010a76b290d25e2e492",
+      "bytes": 38831
+    },
+    "current185872ClientHousingTested": false,
+    "olderEngineCorroborationOnly": 158041,
+    "conflictingCommunityNonzeroCapProseNotUsedAsProof": true
+  },
+  "preflight": {
+    "report": {
+      "path": "/tmp/batch9-bengalis-preflight.json",
+      "sha256": "227730f01368bbf24c73f05c13bc77691b5355d645025cd7d1675e9d265bb479",
+      "bytes": 10451
+    },
+    "frozenFinalPackage": {
+      "path": "/tmp/bengalis197-preflight-package-final.json",
+      "sha256": "b7eb9c4991d80568a520863b34195f79b0ccc27af7d806bc50eae1216f0a8d52",
+      "bytes": 1054
+    },
+    "originalPackagePreserved": {
+      "path": "/tmp/bengalis197-preflight-package.json",
+      "sha256": "e1b2457a80140aac2429e9412f965206f2dbc05829ef7e917ccf69e478b3cbb0",
+      "bytes": 925
+    },
+    "unit": {
+      "command": "npx vitest run tests/unit/bengalis197.test.ts --reporter=json --outputFile=/tmp/bengalis197-first-red-unit.json",
+      "report": "/tmp/bengalis197-first-red-unit.json",
+      "reportSHA256": "d6c0acc3c73027e888e9bb89a51f153415ac771fd8af66bbf87cf97e8dd28773",
+      "log": "/tmp/bengalis197-first-red-unit.log",
+      "logSHA256": "ac059ccaa8dd010783618e342dec72c06f1bbe3a49dd876db08b5e2c8b7e5196",
+      "exit": 1,
+      "total": 50,
+      "passed": 29,
+      "failed": 21,
+      "skipped": 0,
+      "todo": 0,
+      "allFailedAreAssertionError": true,
+      "failedCases": [
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual exporter must contain all four contexts instead of relying on the projected fixture",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: 847: expected undefined to deeply equal { effectId: 866, …(6) }"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 the existing shared structural schema accepts actual projected ageSpawn input",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected false to be true // Object.is equality"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 complete projected family supports only Bengalis without globally allowing resource234",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected { supported: false, …(1) } to deeply equal { supported: true, reasons: [] }"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual feudal-drush-18 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual hybrid-fish-18 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual maa-archers-18 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual scouts-18 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual archers-19 grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 1 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual fast-castle-boom grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 2 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual fast-castle-knights grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 2 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 actual drush-fc grants2 per actual reached age, and no economic research grant",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to have a length of 2 but got +0"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 completion1.0 grants2 free; observer records arrival1.0, no50food charge or TC training interval",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ { at: 1, tech: 847, …(5) } ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 last step can itself be ageUp: actual arrival view is5villagers/pop6/5 without a later snapshot",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected undefined to match object { at: 1, count: 2, …(1) }"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 already completed3TCs produce6free, not Wei cap1, no paid-food queue",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ { at: 1, tech: 847, …(5) } ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 TC still under construction at arrival is excluded and its later completion does not catch up",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ [ 1, 2 ] ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 full housing autoHousesfalse still gives2, with explicit client-untested model disclosure",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ [ 1, 2 ] ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 full housing autoHousestrue still gives2, with explicit client-untested model disclosure",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ [ 1, 2 ] ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 zero food at completion does not block a free age reward",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected undefined to match object { at: 1, count: 2 }"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 all three normal ages fire their own source once; special873 never joins them",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ [ 847, 101, 2 ], …(2) ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 repeating the same age completion never duplicates a source reward",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected [] to deeply equal [ 847 ]"
+        },
+        {
+          "name": "#197 孟加拉实际到达时代赠村 only knight template carries the data-verified unavailable-unit warning",
+          "type": "AssertionError",
+          "firstLine": "AssertionError: expected '' to contain '孟加拉没有骑士'"
+        }
+      ]
+    },
+    "python": {
+      "command": "scripts/.cache/venv/bin/python -m unittest discover -s tests/py -p test_bengalis197.py -v",
+      "log": "/tmp/bengalis197-first-red-python.log",
+      "logSHA256": "e46de7725d9d54696d9bec198e8b4b6e940def6f1e9771328ac1b6458546ebdc",
+      "exit": 1,
+      "total": 4,
+      "passed": 2,
+      "failedAssertions": 2,
+      "errors": 0
+    },
+    "noMissingAPIOrHarnessFailures": true,
+    "productionWasUnchanged": true
+  },
+  "localUnitExecutions": [
+    {
+      "path": "/tmp/bengalis197-first-green-unit.json",
+      "sha256": "e9df9a8f3a85a1c5fa619346fc58536aa5db2f538966fcd2aaadd1437a6415cc",
+      "bytes": 17744,
+      "actualHeadAtExecution": "43f308f2d039ec9ac8ab3cfbc3766b00e1e56ef1",
+      "executionIdentity": "Pre-commit implementation working tree; tested production/test bytes subsequently frozen at core3fc699c.",
+      "actualFiles": 1,
+      "total": 50,
+      "passed": 50,
+      "failed": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "path": "/tmp/bengalis197-core-green.json",
+      "sha256": "258efc1708034da08d5571b792e7899e9e35ecedf5443e5f0c88af4a8a762a8b",
+      "bytes": 37286,
+      "actualHeadAtExecution": "43f308f2d039ec9ac8ab3cfbc3766b00e1e56ef1",
+      "executionIdentity": "Pre-commit core working tree: new pure TC/mixed-task tests plus three existing Wei files; code subsequently frozen at3fc699c.",
+      "actualFiles": 4,
+      "total": 100,
+      "passed": 100,
+      "failed": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "path": "/tmp/bengalis197-ui-current-green.json",
+      "sha256": "0a099c4d7f2f8c548d39d2a8051c3f615aaba5b5396672198bad4c658f0a10f3",
+      "bytes": 90604,
+      "actualHeadAtExecution": "3fc699c3ec54c34d00b072846c818676275b0f18",
+      "executionIdentity": "Pre-commit UI/current-migration working tree, subsequently frozen at runtime daa0f816; one original UPDATE-only generator case skipped.",
+      "actualFiles": 8,
+      "total": 259,
+      "passed": 258,
+      "failed": 0,
+      "skipped": 1,
+      "todo": 0
+    },
+    {
+      "path": "/tmp/bengalis197-317-update.json",
+      "sha256": "2dd9e9cbfeeef358289be74c1767ff2231c86486f8e57e848bff764c929137e9",
+      "bytes": 6507,
+      "actualHeadAtExecution": "3fc699c3ec54c34d00b072846c818676275b0f18",
+      "executionIdentity": "Actual UPDATE_BONUS317=1 execution in pre-commit working tree; produces natural77-key snapshot, not a hand-edited fixture.",
+      "actualFiles": 1,
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  ],
+  "localUnitCountingBoundary": "Bins overlap (WeiPresentation and317); do not add their totals into a fictitious full suite. No local complete unit/browser suite was run.",
+  "python": {
+    "newActualDatExport": {
+      "path": "/tmp/bengalis197-green-python.log",
+      "sha256": "f1e82631d47599ccacbc90d36c54b237e1934613489a548e8b621e6656cec5c9",
+      "bytes": 5464,
+      "passed": 4,
+      "failed": 0
+    },
+    "existingWeiExport": {
+      "path": "/tmp/bengalis197-wei-python.log",
+      "sha256": "b0cb0b1f9f550789309f470b5009366aaf1837e07cb00d059499b7a7e30da7bf",
+      "bytes": 5408,
+      "passed": 4,
+      "failed": 0
+    }
+  },
+  "staticChecks": {
+    "lint": {
+      "path": "/tmp/bengalis197-lint.log",
+      "sha256": "d4daa706e3b15f3196e4ae3e0309b2cf2bcafc05ed39d9200f7d614ced99a5b8",
+      "bytes": 2032,
+      "errors": 0,
+      "existingSizeWarnings": 10
+    },
+    "typecheck": {
+      "path": "/tmp/bengalis197-ts.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "exit": 0
+    },
+    "strictLayers": {
+      "path": "/tmp/bengalis197-layers.log",
+      "sha256": "4cbc3d70ebd15ea69e1b58ac7c2721741f48908bcc142613b706754f61169732",
+      "bytes": 472,
+      "violations": 0
+    },
+    "strictContent": {
+      "path": "/tmp/bengalis197-content.log",
+      "sha256": "2fb65a8303e8e0a95f475a07411ff8abc3b70801dee59f8a6dbbe7af04d96098",
+      "bytes": 152,
+      "inputs": 46,
+      "warnings": 0,
+      "errors": 0
+    },
+    "buildOrders": {
+      "path": "/tmp/bengalis197-bo.log",
+      "sha256": "f05383de5b371ac4e2b2c8d7c586d1e22e753cdfdfd663072ac0776b7c61b221",
+      "bytes": 948,
+      "buildOrders": 8,
+      "errors": 0
+    },
+    "compiledValidators": {
+      "boundaries": 6,
+      "checkPassed": true,
+      "WeiStructuralSchemaAndCompiledBytesUnchanged": true
+    }
+  },
+  "independentTargetObservation": {
+    "report": {
+      "path": "/tmp/batch9-bengalis-runtime-independent.json",
+      "sha256": "dfd9260bf08ba06fe24e9e5af032451d1c4bb330c8b9c6895129743c33d6a8ee",
+      "bytes": 169834
+    },
+    "inputs": {
+      "path": "/tmp/batch9-bengalis-runtime-inputs.json",
+      "sha256": "f014f93bfcb9229bc73b574099cb731b5933e46aee25e515eccf1b90aeb2929a",
+      "bytes": 3330
+    },
+    "actualExecutedCommit": "3fc699c3ec54c34d00b072846c818676275b0f18",
+    "actualExecutedTree": "0e3962ac068a2dc81403950a45a5d8142dc1adef",
+    "domainCalls": 8,
+    "events": 11,
+    "freeVillagers": 22,
+    "completedTCsAtAllActualEvents": 1,
+    "preFirstSnapshotsUnchanged": 69,
+    "paidBirthsBeforeFirstAgeUnchanged": true,
+    "manualFormula": {
+      "path": "/tmp/batch9-bengalis-manual-formula.json",
+      "sha256": "f6db2d7c91023b1d4992c38366d42843678cd9a0c0312e2dfe961d22ba42a122",
+      "bytes": 1052
+    },
+    "goldFormulaBoundary": "Independent75worker-seconds predicts20.652173913 extra gold; frozen old/new displayed rounded stocks160→181 are consistent. Do not claim old unrounded inventory was observed. Food523→623 saves exactly100."
+  },
+  "independentGlobalComparison": {
+    "report": {
+      "path": "/tmp/bengalis197-independent-invariants.json",
+      "sha256": "b9225a20b4260d89e8b3f6d6f71043f4cd5a37fc75fe4bf4c5fd9f1d4aadf64f",
+      "bytes": 130164
+    },
+    "originalRawReportPreserved": {
+      "path": "/tmp/bengalis197-independent-invariants-runtime-raw.json",
+      "sha256": "36895db80d0406e168fb46d5afc3297bddcfd594a181b7afc7781c1819034478",
+      "bytes": 128135
+    },
+    "executionLog": {
+      "path": "/tmp/bengalis197-independent-invariants-execution.log",
+      "sha256": "6266e9c68a1b78567091946766005d0677170e7bbefb61b1c054e70468d67bdc",
+      "bytes": 10921
+    },
+    "actualExecutedCommit": "daa0f81647bfae3fc045cb458834470252340e20",
+    "actualExecutedTree": "8f1930dca04785515cd2971133647717def5706a",
+    "startedUTC": "2026-10-27T23:15:24.937Z",
+    "completedUTC": "2026-10-27T23:15:51.020Z",
+    "domainLoopDurationSeconds": 26.083,
+    "counts": {
+      "full": 440,
+      "numeric": 440,
+      "notes": 55,
+      "support": 55,
+      "defaultDarkAgeHelpers": 1485,
+      "targetHelpers": 27,
+      "fullRealCost": 224,
+      "protected684": 684,
+      "protectedStrictUnchanged": 661,
+      "migrationOracleFiles": 12,
+      "sourceFingerprints": 240
+    },
+    "other55CompleteAndNumericDiffs": 0,
+    "all224FullRealCostDiffs": 0,
+    "other55RawEcoAndGlobal9Diffs": 0,
+    "onlyFourBengaliRowsGainAgeSpawn": true,
+    "protection": {
+      "completedUTC": "2026-10-27T23:21:00.732563+00:00",
+      "method": "Pure immutablegit source/rawbyte/diff review only; correct one omitted authorized UI path, with everyother runtime domain result/hash unchanged",
+      "viewSourceProof": "/tmp/bengalis197-timeline-static-closure.json",
+      "independentProtectionReview": "/tmp/bengalis197-protection-runtime.json",
+      "independentProtectionReviewSHA256": "6a4f01a313bffcd2d365279642654b7e597ad82315136db80762b088b7248a89",
+      "checksPassed": 22,
+      "protectedFileCount": 684,
+      "unchanged": 661,
+      "authorizedChanged": 23,
+      "unexpected": 0,
+      "sourceAndViewFunctionsExecuted": 0,
+      "allTwelveOracleFullBytesMatch": true,
+      "oldWeiHelperSchemaCompiledUnitPresentationUntouched": true
+    },
+    "boundary": "ONE actual global domain loop. Original wrapper exit1 was solely an omitted already-authorized timelineModel UI path in its static allowlist; original report/log/script preserved. Offline22checks/inverse-byte review corrected classification without executing domain/view functions again. Do not claim original collector exited0 or relabel actual runtime."
+  },
+  "bonus317": {
+    "oldKeys": 74,
+    "currentKeys": 77,
+    "oldChanged": [],
+    "naturalNewKeys": {
+      "Bengalis-0": "feudal-drush-18",
+      "Bengalis-2": null,
+      "Bengalis-4": null
+    },
+    "actualInputs": "fb72c0d6e9db8f2e50418f16f68be4a91c1e2ae62d7eadab43e52e72b7013398",
+    "recordedInputs": "fb72c0d6e9db8f2e50418f16f68be4a91c1e2ae62d7eadab43e52e72b7013398",
+    "correct": true,
+    "originalAlgorithmUnchanged": true,
+    "actualUPDATEExecutionNotProvenByThisScript": true,
+    "actualUPDATEExecution": {
+      "path": "/tmp/bengalis197-317-update.json",
+      "sha256": "2dd9e9cbfeeef358289be74c1767ff2231c86486f8e57e848bff764c929137e9",
+      "bytes": 6507
+    },
+    "inputDependencyChange": "Append only actual bengaliEconomy.ts alongside original inputs; original ECO/SIM_CHECKED/runBo/firstChanged/UPDATE algorithms retained."
+  },
+  "runtime": {
+    "commit": "daa0f81647bfae3fc045cb458834470252340e20",
+    "tree": "8f1930dca04785515cd2971133647717def5706a",
+    "buildLog": {
+      "path": "/tmp/bengalis197-build-daa0f81.log",
+      "sha256": "93ba4fddf9a6d6d4ed8fa9bba7b936669d253a25e9d57f7c46c73aa2c759b26a"
+    },
+    "distIndex": {
+      "path": "/workspace/aoe2-issue197-batch9/dist/index.html",
+      "sha256": "26d356317c47123895256ec8acc58bd8c1180a3f22ef986061f0aadf48b65d8a"
+    },
+    "assetCount": 147,
+    "assets": [
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/125283-CLqOw_yr.json",
+        "relative": "assets/125283-CLqOw_yr.json",
+        "bytes": 26756,
+        "sha256": "bc7d1e86da0b03eeadae5fa5478793743f926a2bb406aab8d735b677a3563b84"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/185872-CJXeCPw4.json",
+        "relative": "assets/185872-CJXeCPw4.json",
+        "bytes": 54916,
+        "sha256": "13aac16199d5ff637b88758520390e707d7c338ddbd595eeea29ac0d5c6e7b2b"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/66692-Hnm5JaUY.json",
+        "relative": "assets/66692-Hnm5JaUY.json",
+        "bytes": 35521,
+        "sha256": "96381e88ebd867b89bd60685040e53e2586efdd2723883aa82a4396d15636250"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/81058-CDb7LaCh.json",
+        "relative": "assets/81058-CDb7LaCh.json",
+        "bytes": 124282,
+        "sha256": "95f2acaa4c555369748b778664940a06077edc14c7eda1fb90db82b35eb3a33a"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/AboutData-BvGWJiH_.js",
+        "relative": "assets/AboutData-BvGWJiH_.js",
+        "bytes": 2314,
+        "sha256": "c52817ad72802b8fd060077126256240842d0edbfc6113e8962c9bccbd7cc881"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/BLink-iFrSmsao.js",
+        "relative": "assets/BLink-iFrSmsao.js",
+        "bytes": 228,
+        "sha256": "ff5476f5318f6a4db4b7eed621beaec2e0f1a0d45eed3e7ca8c16aea91a4d5eb"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/BonusBody-BXX_2hbQ.js",
+        "relative": "assets/BonusBody-BXX_2hbQ.js",
+        "bytes": 15243,
+        "sha256": "a411e71be719bccac7d5e8f4453a56d61a771a0ba639301bca9ecdb9948fa891"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/BonusDetail-BulHF9Ly.js",
+        "relative": "assets/BonusDetail-BulHF9Ly.js",
+        "bytes": 1664,
+        "sha256": "d7cdecfe8b9795ae02297a588831f903e6e36ae08790bd4e11675d9a1852184f"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/BonusList-BlSCxWYs.js",
+        "relative": "assets/BonusList-BlSCxWYs.js",
+        "bytes": 2427,
+        "sha256": "c90742b8788e82c2b2886b2786b207ce93f11ebfb2e7521fd8420acb0d4ab4df"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/BuildOrderList-CnDuk0kg.js",
+        "relative": "assets/BuildOrderList-CnDuk0kg.js",
+        "bytes": 8065,
+        "sha256": "1af13eefc7b0f707b33efdb2199158c33becb7a014de3cb621985130b29a2de6"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/BuildTimelineView-BJ93x43I.css",
+        "relative": "assets/BuildTimelineView-BJ93x43I.css",
+        "bytes": 5573,
+        "sha256": "63fe9c62883090fa9e345342c30f47813d7080474335922ce5bda92add03eb66"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/BuildTimelineView-DcuqfehG.js",
+        "relative": "assets/BuildTimelineView-DcuqfehG.js",
+        "bytes": 44603,
+        "sha256": "52cadfc179cc162f0a348d2414316655e0d3bb1570a8d05c4d128f51d68d0928"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/BuildingDetail-okzgFUfB.js",
+        "relative": "assets/BuildingDetail-okzgFUfB.js",
+        "bytes": 8906,
+        "sha256": "f433dbd9a8cccea43bed7f61d265d6ae51a809d1be07153393882dccbc57e2b1"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/BuildingList-CzwPHzvv.js",
+        "relative": "assets/BuildingList-CzwPHzvv.js",
+        "bytes": 1904,
+        "sha256": "01acac961e7ed8a5e66126f6291c5ec9127089dec646369f2c098dcea8acfab6"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CalcDock-DE0vclxm.js",
+        "relative": "assets/CalcDock-DE0vclxm.js",
+        "bytes": 790,
+        "sha256": "8e40d4ea20500dad89a3fd9bf1bde08660962dbf067d6bdc0a018b88087499f0"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CalcDock-DEmERChS.css",
+        "relative": "assets/CalcDock-DEmERChS.css",
+        "bytes": 1752,
+        "sha256": "19110725246f94904c56b094333ee7533331706b8f38df174b6388d1cae6b25b"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Campaigns-B9ox8LYO.css",
+        "relative": "assets/Campaigns-B9ox8LYO.css",
+        "bytes": 3981,
+        "sha256": "3f2e01c24af35285568a2ae0706ea5af50fd014e029881f8a9b2a48f1bf83931"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Campaigns-DzaBPIVH.js",
+        "relative": "assets/Campaigns-DzaBPIVH.js",
+        "bytes": 39220,
+        "sha256": "4c4fcff48e7d58313d8a6a4f7ef4f40da3408a9ed464bd7b12a4a9014ead949d"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CastleDefense-DmVacrAT.css",
+        "relative": "assets/CastleDefense-DmVacrAT.css",
+        "bytes": 4398,
+        "sha256": "f396312958dbc5699655e105549ba8505ff20056e2f56fd1720f698e6fc3b1ef"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CastleDefense-h4eTUpvd.js",
+        "relative": "assets/CastleDefense-h4eTUpvd.js",
+        "bytes": 23011,
+        "sha256": "7db0c0a65e135c1b636fab5243c10eb016910a2e0db97b134f315b6437d2cb61"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CatalogFilters-BcfsyKxM.js",
+        "relative": "assets/CatalogFilters-BcfsyKxM.js",
+        "bytes": 937,
+        "sha256": "28ba19a5b8d730f253ea2b1f8907c37f3ab8294415ec8f252a13632211d2181e"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CivDetail-BPosAwZe.css",
+        "relative": "assets/CivDetail-BPosAwZe.css",
+        "bytes": 119,
+        "sha256": "b5417df560ffaca1652f517d6ed67d92af0fdb2f3f22707d7f0148d35940aa2f"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CivDetail-CwSd4aul.js",
+        "relative": "assets/CivDetail-CwSd4aul.js",
+        "bytes": 10529,
+        "sha256": "03256e8ef3be4ff134f23befd0183b8bb005eba3c6f580e69bc6a40a24f2115a"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CivList-B5BGUa8y.css",
+        "relative": "assets/CivList-B5BGUa8y.css",
+        "bytes": 2813,
+        "sha256": "6231fba89996d8b5c6e80767b2c2aeeaa855bac5de6757eebda4fe071efdbd4a"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CivList-Bu4UiQXZ.js",
+        "relative": "assets/CivList-Bu4UiQXZ.js",
+        "bytes": 9013,
+        "sha256": "ae4970cc4caaf22eaa74f9baa6dabc114aa26ae165f091e7ba0e1fdd42b5947b"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CivPicker-CZqxlHp6.js",
+        "relative": "assets/CivPicker-CZqxlHp6.js",
+        "bytes": 5764,
+        "sha256": "3a581599595c9b00c152cb5293f788e8e5f916bf0b2bcadc79ebb548ef8b781c"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/CommandPalette-WXprCQFj.js",
+        "relative": "assets/CommandPalette-WXprCQFj.js",
+        "bytes": 4414,
+        "sha256": "01f0c83de98dfee55515388b85cc756467d92710d3dc651a2470b3cb90e1e4ac"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Compare-DFTW6qpQ.css",
+        "relative": "assets/Compare-DFTW6qpQ.css",
+        "bytes": 438,
+        "sha256": "e386edddb8381aad44a14aaadcf12c0b6d12db6908e0d178984eed57b46d8903"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Compare-bRJbJ7jz.js",
+        "relative": "assets/Compare-bRJbJ7jz.js",
+        "bytes": 2997,
+        "sha256": "ff26b026edcc6db2bd1b7701fbb074d3efc81c633fbf867232985c05af157578"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Construction-BGanczie.css",
+        "relative": "assets/Construction-BGanczie.css",
+        "bytes": 3858,
+        "sha256": "9c97894c376eaa409bd13ba8160dc27e4c4caaa616cd963b7274811a18292091"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Construction-Ckgb2IqT.js",
+        "relative": "assets/Construction-Ckgb2IqT.js",
+        "bytes": 11889,
+        "sha256": "015fbb24d2dbf8626c3cefe9b999c8813acb677dc2299914911a17bb77c392bc"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/ContentGuide-B3916ZTn.js",
+        "relative": "assets/ContentGuide-B3916ZTn.js",
+        "bytes": 46021,
+        "sha256": "fd835caeab292c7afc1bea550b449f0fd40e39fa5a84744735795165d16c8903"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/ContentGuide-TNRHSVbq.css",
+        "relative": "assets/ContentGuide-TNRHSVbq.css",
+        "bytes": 3646,
+        "sha256": "b3aa2ed3e6600530e5fae8a9dfaaab80a6aa520d8b41209ae21de52b47ef11d6"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/DlcView-4xAAtwkr.js",
+        "relative": "assets/DlcView-4xAAtwkr.js",
+        "bytes": 1636,
+        "sha256": "3a9e85be4ef934ea477c08eed530052bd460f04644ddc701ea66627369b643bc"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Duel-D_K0aPrY.js",
+        "relative": "assets/Duel-D_K0aPrY.js",
+        "bytes": 60241,
+        "sha256": "a37060bab83f6b7bacc9dcd88aed5b240faa506dc96f2ca462a880b924f0e1ce"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Duel-QBzNYx2O.css",
+        "relative": "assets/Duel-QBzNYx2O.css",
+        "bytes": 2507,
+        "sha256": "84871231fb0f6f86adfbce2bd2cff860975743b297e0d628197d380202bb1edf"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/EcoPayoff-C-B9T4sP.js",
+        "relative": "assets/EcoPayoff-C-B9T4sP.js",
+        "bytes": 17686,
+        "sha256": "c9aab5f72abae396bf7064557704bccfb29f2fee65c66e682b2ed833274dd809"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/EcoPayoff-Cf--Bidg.css",
+        "relative": "assets/EcoPayoff-Cf--Bidg.css",
+        "bytes": 3654,
+        "sha256": "ef31be7bf4a5d7fe53421039efbf6bc17cf5ba29c5fa8c4fdb3ba6e8eb57bad2"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/GameClock-BGutmoHi.css",
+        "relative": "assets/GameClock-BGutmoHi.css",
+        "bytes": 3019,
+        "sha256": "2d40cbbe5f52d644186833b9e15740eccbb8d980e62eb10f7cbfccd35e1475c7"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/GameClock-D4XpDh82.js",
+        "relative": "assets/GameClock-D4XpDh82.js",
+        "bytes": 9260,
+        "sha256": "d9931093f5ea1025d1029bddda7032fc900b6d24efc933c897d2e19f6393852f"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/GameClockLink-DjVqpG-C.js",
+        "relative": "assets/GameClockLink-DjVqpG-C.js",
+        "bytes": 236,
+        "sha256": "f8341e7a82b49f708d830aa8a98f4ae2eb624cdf8f624ea9f3a27f150363edc0"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/GameGuide-BQfF5flS.css",
+        "relative": "assets/GameGuide-BQfF5flS.css",
+        "bytes": 4529,
+        "sha256": "52f7409db80edc5a5107c71ec2b4f714786805161623a24d0956ae9d697ba220"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/GameGuide-CkD7tqCe.js",
+        "relative": "assets/GameGuide-CkD7tqCe.js",
+        "bytes": 21191,
+        "sha256": "6ea2ba59dd10eceb54342675deb9fee939089116408836b576329b5044f646b7"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/GarrisonHealing-CNgGw70Y.css",
+        "relative": "assets/GarrisonHealing-CNgGw70Y.css",
+        "bytes": 3507,
+        "sha256": "92be7b31812037f57240847fc9eb80a425291773b368e6308be3672d9882a103"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/GarrisonHealing-DqpHiLfy.js",
+        "relative": "assets/GarrisonHealing-DqpHiLfy.js",
+        "bytes": 12320,
+        "sha256": "8270534c636e0d18e425fff273aed2eb06d0a166a3642ff90a3115c0c1903e7c"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/GeneralGarrisonPreview-DJLrpTfq.js",
+        "relative": "assets/GeneralGarrisonPreview-DJLrpTfq.js",
+        "bytes": 13102,
+        "sha256": "81872de068f16382a290e7164e32178ae1f0c8aca1d341e9c1e9f3048a3a93a4"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/GeneralGarrisonPreview-DV73yNqw.css",
+        "relative": "assets/GeneralGarrisonPreview-DV73yNqw.css",
+        "bytes": 4376,
+        "sha256": "6e1ce217e6af684a9c5470c37be5aad0c55f7c3d1323c1c7f4b9f7b270f043e9"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Glossary-D1b5l-3E.js",
+        "relative": "assets/Glossary-D1b5l-3E.js",
+        "bytes": 5063,
+        "sha256": "b46094ce7df8a0c60f3b0fe50f05612b1b509685e7832cdac2de4b8d9f2b5a80"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Glossary-d8EpO9xw.css",
+        "relative": "assets/Glossary-d8EpO9xw.css",
+        "bytes": 2265,
+        "sha256": "4cd0a076e52daf489869d82f1d5f61529f56def022822f9feb30deb65c5ad0d3"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Hotkeys-CV69Xq2l.css",
+        "relative": "assets/Hotkeys-CV69Xq2l.css",
+        "bytes": 4094,
+        "sha256": "79b2ea6be370e790685799e26b10fa115357f18b859993e6fcd9b0f06f38fd6a"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Hotkeys-D6chN1a0.js",
+        "relative": "assets/Hotkeys-D6chN1a0.js",
+        "bytes": 16550,
+        "sha256": "620843c9ff1001d55aa88d1d87cfc1ac428009ea1b212577568a0ee4fcafe1ed"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/LineChip-BJ248QBa.js",
+        "relative": "assets/LineChip-BJ248QBa.js",
+        "bytes": 585,
+        "sha256": "a97e9f2c4883884fe8c3ff709d8e015a1a1740eaaf892190b60707d697aa0fed"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Maps-BO8uXMhS.js",
+        "relative": "assets/Maps-BO8uXMhS.js",
+        "bytes": 67063,
+        "sha256": "cf8512d4a874d24a9875f6520054404000ef62f2cbc5b63cda6ee77261768a26"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Maps-D5UGrg2I.css",
+        "relative": "assets/Maps-D5UGrg2I.css",
+        "bytes": 2020,
+        "sha256": "5c740637b1c1bffde49360e236049f83a74478c152d3e57b308a37131d9b2996"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Market-BG8RAtGG.css",
+        "relative": "assets/Market-BG8RAtGG.css",
+        "bytes": 5741,
+        "sha256": "a0cadad8550d5d8571d9d343fbcd650411ce8402e727278138f39ce3288d3122"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Market-DG4a9AJi.js",
+        "relative": "assets/Market-DG4a9AJi.js",
+        "bytes": 19880,
+        "sha256": "ffea33ace329521daba1286e59295cae137b95944b3943ab8a45eef6767afa1d"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/MatchReview-Ce9Qq_-i.js",
+        "relative": "assets/MatchReview-Ce9Qq_-i.js",
+        "bytes": 30617,
+        "sha256": "c5e1699644c33e74f66f530da0d94461cedffcd4b85aa9e2d61a4cfde36efd89"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/MatchReview-D2LKYkgP.css",
+        "relative": "assets/MatchReview-D2LKYkgP.css",
+        "bytes": 4386,
+        "sha256": "fd36ca3f53efc4611a95bc573f68ca893656b4afae1cc4ce4ab4e0ce79eb0878"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Matchup-BQbn2EBb.js",
+        "relative": "assets/Matchup-BQbn2EBb.js",
+        "bytes": 8460,
+        "sha256": "688306b60b84c7ecfaf2b9b1dbc04ea8493c018ceaee049c4a3d44e0547f9283"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Matchup-CNqp7JyF.css",
+        "relative": "assets/Matchup-CNqp7JyF.css",
+        "bytes": 362,
+        "sha256": "6514c82b58a9d7b45206d0decb6a108822c345f3244b842d6283c2211d01354e"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/MixedArmy-BYPOoZt4.css",
+        "relative": "assets/MixedArmy-BYPOoZt4.css",
+        "bytes": 6255,
+        "sha256": "9c4d17371b0d50d9a38aa11396451166e20a7be4caa1426479ff7aa93b3737ea"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/MixedArmy-BrxcCels.js",
+        "relative": "assets/MixedArmy-BrxcCels.js",
+        "bytes": 48154,
+        "sha256": "80d2f3602f7a21ebb39d737161679e20d4560a030ac5eeafd498c21e2bc0e5f5"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/NotFound-Dy5BvDDn.js",
+        "relative": "assets/NotFound-Dy5BvDDn.js",
+        "bytes": 2823,
+        "sha256": "f5e664c8a014c013b89055b079c9912d996485ebe2df9b6f746829191eb17d64"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/NotFound-T15LJMtf.css",
+        "relative": "assets/NotFound-T15LJMtf.css",
+        "bytes": 564,
+        "sha256": "af49ed6ee172b2f3158abc069907be5967e8fd19fdf3b50b4de104d40bc27bfa"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/PageMeta-BivEmhAt.js",
+        "relative": "assets/PageMeta-BivEmhAt.js",
+        "bytes": 1456,
+        "sha256": "e901e925a2dbac23c7f4f82bb0b482898ddfcf503568293ed1e2c722a6f2d992"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/PatchHistory-O8npvThq.js",
+        "relative": "assets/PatchHistory-O8npvThq.js",
+        "bytes": 11401,
+        "sha256": "5b3a9fe35dec4102a0926f955e85e779d9b8397734e015d371514d4f31b4d997"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/PatchHistory-d5j_EnSR.css",
+        "relative": "assets/PatchHistory-d5j_EnSR.css",
+        "bytes": 1838,
+        "sha256": "9b0f3d491156dffff0a7c0cdf8a300716b6372e937877cd6bc2608a9ee569b17"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Patches-CW4rMfoX.js",
+        "relative": "assets/Patches-CW4rMfoX.js",
+        "bytes": 14162,
+        "sha256": "37f6789bb3e45c310ed8081871c707e2559627d5dab12c4dce91a9f6bdfa2519"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Patches-DShs7dGB.css",
+        "relative": "assets/Patches-DShs7dGB.css",
+        "bytes": 3458,
+        "sha256": "47588fd4d0a7a6d7a1323fd10f19c9ebeaf053a0ebb4148cc692c85b05acaac6"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Planned-BuWwQcLk.js",
+        "relative": "assets/Planned-BuWwQcLk.js",
+        "bytes": 524,
+        "sha256": "63cf96ac2721e3903a81726d4c1c6f9b552601c5375d512c835a0d2addb560fc"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Production-BooCppwD.js",
+        "relative": "assets/Production-BooCppwD.js",
+        "bytes": 11896,
+        "sha256": "077e7135a2b76856090630f2a27a2c3f98d7cc89d6be76119842d120dd06b137"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Production-DKK8ajSi.css",
+        "relative": "assets/Production-DKK8ajSi.css",
+        "bytes": 3900,
+        "sha256": "6ce7d03e4f079de3c91634b7e55257c87b26eb9f5b9d781e4b10df956b22bf2b"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/RatingHelp-C3CSvePx.js",
+        "relative": "assets/RatingHelp-C3CSvePx.js",
+        "bytes": 1772,
+        "sha256": "900e180d8becd72ddc021f28f494b7e12bb923882e502ce4c6ae6e8d77f8b706"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/RealCost-CeJcixkf.js",
+        "relative": "assets/RealCost-CeJcixkf.js",
+        "bytes": 7592,
+        "sha256": "aa86c3782d0c453e4107004690bca508199a0a439d0769362b9a926699e13db7"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/RealCost-CeQ96I6b.css",
+        "relative": "assets/RealCost-CeQ96I6b.css",
+        "bytes": 69,
+        "sha256": "c6cca7a688297ae9e29eccb3c3292c27a3ea04904d9ab7a806193f1beac4b5bc"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/RelicIncome-CyScszKw.js",
+        "relative": "assets/RelicIncome-CyScszKw.js",
+        "bytes": 20689,
+        "sha256": "4162212a7b318cc6da5333bfb6a85631b93c822a75a43343158b8fdb044c2a48"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/RelicIncome-CzHv_S1Y.css",
+        "relative": "assets/RelicIncome-CzHv_S1Y.css",
+        "bytes": 3822,
+        "sha256": "1b3ef296eef26bd29c7c515f64290d844bda30e13e3b386172f5fb59593a56a7"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Scouting-DYf4Eyun.css",
+        "relative": "assets/Scouting-DYf4Eyun.css",
+        "bytes": 5531,
+        "sha256": "3ef69ea980ab56813f63a28503b2050aeb7fe8f34d0b4841a919b4f5644eb44c"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/Scouting-wnLxF65u.js",
+        "relative": "assets/Scouting-wnLxF65u.js",
+        "bytes": 56468,
+        "sha256": "7104d9ea46df957dd46c5f06a461d6af06801858a763f59c5394b51f1c0f18be"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/ShareImage-BPg0n6eJ.css",
+        "relative": "assets/ShareImage-BPg0n6eJ.css",
+        "bytes": 389,
+        "sha256": "7f79ca1887996cc75a24813a3d3a3408d54046df6802c477f407d1243592134b"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/ShareImage-DKTgG768.js",
+        "relative": "assets/ShareImage-DKTgG768.js",
+        "bytes": 2594,
+        "sha256": "eeea4f048826c0556487692b0f9237de9b397ca6c8e3ec3028e7313f687ee652"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/SimPanel-TGxHPz7Z.js",
+        "relative": "assets/SimPanel-TGxHPz7Z.js",
+        "bytes": 7656,
+        "sha256": "67083d7c93c6b277a6a49c41fc3f810eaf1f73a881add2a845de80f59e2d75a5"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/SimulatorHub-CB4jdXYn.js",
+        "relative": "assets/SimulatorHub-CB4jdXYn.js",
+        "bytes": 1174,
+        "sha256": "08c8d0de50782ca180d87470ff0d12cafd55539c9ec745462f661435694a3540"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/TeamBonuses-BClN2fNa.js",
+        "relative": "assets/TeamBonuses-BClN2fNa.js",
+        "bytes": 16059,
+        "sha256": "93848d868c83d17837c52acf2406c20233b47db8e63e23987777356b39f6d953"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/TeamBonuses-C13z78XF.css",
+        "relative": "assets/TeamBonuses-C13z78XF.css",
+        "bytes": 5623,
+        "sha256": "580fe4d11f328ab6bce87c1a7bb49d996e5a7f17bd29efccffe756ddf7b20129"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/TeamPlan-CXgBtQ2r.css",
+        "relative": "assets/TeamPlan-CXgBtQ2r.css",
+        "bytes": 4648,
+        "sha256": "fbb7c99fc8065050cf6e003a80aab4ae5849ead37d5653ea34d5e86647c47e5d"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/TeamPlan-D7sQ8Ee-.js",
+        "relative": "assets/TeamPlan-D7sQ8Ee-.js",
+        "bytes": 39216,
+        "sha256": "1db6aa4a8240b0d6c794f69c1895fc8509c285200e115c5cc36860005cc3f673"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/TechDetail-DWaFtUQA.js",
+        "relative": "assets/TechDetail-DWaFtUQA.js",
+        "bytes": 6633,
+        "sha256": "e720e61020398b2724f0503fef95a4ef6df72032d95f52e7988c305d0e77d08f"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/TechList-DzzKEuR5.js",
+        "relative": "assets/TechList-DzzKEuR5.js",
+        "bytes": 2808,
+        "sha256": "8d5aa189e9964bfafb7c9495ac4acb72d900043b3ec58c2c932b0e52274f095c"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/TradeIncome-DdTDnueU.css",
+        "relative": "assets/TradeIncome-DdTDnueU.css",
+        "bytes": 2921,
+        "sha256": "6bbacb176229c7547ae7ed4dad3c7bc19ea32196ebbbe3d2d79d8228ca8e4660"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/TradeIncome-Dtx8H5Sq.js",
+        "relative": "assets/TradeIncome-Dtx8H5Sq.js",
+        "bytes": 13154,
+        "sha256": "944223198ce53bbfbd54ede24ad92d92c4c8db579193b847fe5d2f6e07ec6ead"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/TreeView-e0TFp5qM.js",
+        "relative": "assets/TreeView-e0TFp5qM.js",
+        "bytes": 4903,
+        "sha256": "f8195c4436b7758b9b60b24e962360a8aee63fc48e5623f7d1b47fbb638709fd"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/UnitDetail-CEl_mItT.js",
+        "relative": "assets/UnitDetail-CEl_mItT.js",
+        "bytes": 14617,
+        "sha256": "67ee57d9702710b8c80455d9a4798df2604a0af73d507e1853d85e8be95c258b"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/UnitList-B9YbSJ85.js",
+        "relative": "assets/UnitList-B9YbSJ85.js",
+        "bytes": 4890,
+        "sha256": "6d84881b96dea637cfa1bc5ff26cb453d37106ee66390d871c5aa71091ccfa4a"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/UnitList-KrPXz6V4.css",
+        "relative": "assets/UnitList-KrPXz6V4.css",
+        "bytes": 1662,
+        "sha256": "09569da1a9edcf07b4464178f0c19300155b859dd48f017a195b05cea1d3f867"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/affects-BhKnDGtl.js",
+        "relative": "assets/affects-BhKnDGtl.js",
+        "bytes": 2372,
+        "sha256": "b8f80994d0c277667ed757641422b98952e7d003af9525fddf2a9a60635a933b"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/aliases-CuTbKudy.js",
+        "relative": "assets/aliases-CuTbKudy.js",
+        "bytes": 1078,
+        "sha256": "ba2da708a367a42afa8d90c55197b7faba07af51ad1d5db7b5e5c9c909b592a3"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/ban-D9QV7Fl4.js",
+        "relative": "assets/ban-D9QV7Fl4.js",
+        "bytes": 387,
+        "sha256": "7777965d17e014d6a6c27044e855f0de78cb7f4ea840e88570bcb5796309a185"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/buildOrders-BRR45gN8.js",
+        "relative": "assets/buildOrders-BRR45gN8.js",
+        "bytes": 32469,
+        "sha256": "85ec290a0d59b2b201ce011a3cc65d51180ee61a865cda70d088095d836a1238"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/buildSim-LvRWZC_N.js",
+        "relative": "assets/buildSim-LvRWZC_N.js",
+        "bytes": 286092,
+        "sha256": "d4f9bdb61bffce9c70f66a37f2586491b30f011957e8b79b3367757cb61790e6"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/buildingSim-D8eK_tQV.js",
+        "relative": "assets/buildingSim-D8eK_tQV.js",
+        "bytes": 1130,
+        "sha256": "a0d2707271d2260a48c96d6c44e9277e454bc9717c5e58371af12617697f4cd0"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/buildings-hPCqwEhn.js",
+        "relative": "assets/buildings-hPCqwEhn.js",
+        "bytes": 45560,
+        "sha256": "d1bafcbd748546202d46c60d4d3afb5620d83cec4d33621bedbd107e5ec6fbc9"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/civBonus-B_7BroqA.js",
+        "relative": "assets/civBonus-B_7BroqA.js",
+        "bytes": 4211,
+        "sha256": "3ff7cf092912bd139cea6cbe10394615538365ed9c9a90f98f1fadfdf5bd1531"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/construction-U1iRJvp3.js",
+        "relative": "assets/construction-U1iRJvp3.js",
+        "bytes": 9015,
+        "sha256": "6bf7340f58d93e4c21be59eaf97bb7eb30e2dc01ae59741dd4bf926127e8a7e9"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/costDiscount-04f3pDIi.js",
+        "relative": "assets/costDiscount-04f3pDIi.js",
+        "bytes": 1586,
+        "sha256": "55f3340a6efd8a112ad844ed9e0df3f021b9221a011232260f04bf9c04f39418"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/datEffects-xOzcGp0n.js",
+        "relative": "assets/datEffects-xOzcGp0n.js",
+        "bytes": 248140,
+        "sha256": "a42256bae6463ee52fd8e9a1450981f82bb79a6a0bc1b903b2fea629f6925158"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/duelState-DrvOlBaS.js",
+        "relative": "assets/duelState-DrvOlBaS.js",
+        "bytes": 1007,
+        "sha256": "3ca633d7ed052de732349d0e215f03aa24bbf10527e84bc2c1881557276df99a"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/dupNames-cYvZfG_n.js",
+        "relative": "assets/dupNames-cYvZfG_n.js",
+        "bytes": 556,
+        "sha256": "c330fa433cfffbd31fd9f4aed7c45f4dab870dcb150389cbf96c09ed4f5a9ab7"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/effects-CbPBb4ej.js",
+        "relative": "assets/effects-CbPBb4ej.js",
+        "bytes": 12585,
+        "sha256": "acc69cf923adab9e7418e70a1519118c417e709bb74cd6942729cb35db5a9c08"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/gameClock-D-cRUHw5.js",
+        "relative": "assets/gameClock-D-cRUHw5.js",
+        "bytes": 4195,
+        "sha256": "00d20e8f9d8776297cf49bf2d27ca397cbaccd7cdc4ae5d57040a0e42043bac7"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/garrisonGeneral-CewEaAQY.js",
+        "relative": "assets/garrisonGeneral-CewEaAQY.js",
+        "bytes": 14714,
+        "sha256": "1bb2eb4a6b59a88e959df76a299c0b4755c4eb57ec8a2e57d8d863ce87251f91"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/garrisonHealing-C8Wf40-0.js",
+        "relative": "assets/garrisonHealing-C8Wf40-0.js",
+        "bytes": 72576,
+        "sha256": "9694ece7e40729beb58fdce3cb960e5402d9e2c2b85b82874a2189ed034bee99"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/garrisonTechs-HAKRTNRW.js",
+        "relative": "assets/garrisonTechs-HAKRTNRW.js",
+        "bytes": 12016,
+        "sha256": "938291b330d501ee2f201bc5528dd4352df4c0b7b23ca97a9876f5da64734a03"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/garrison_general-DFRUcIb0.js",
+        "relative": "assets/garrison_general-DFRUcIb0.js",
+        "bytes": 469748,
+        "sha256": "e47c556988ab1bad5e1f1ff284003c76048439a20411a66fe6726406f01efaa5"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/glossary-DnXxbZUf.js",
+        "relative": "assets/glossary-DnXxbZUf.js",
+        "bytes": 17192,
+        "sha256": "ac7c18214040bff3a27dae0dec189c9eb7b3e3bfbb28bca46a6ce640b7347d21"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/index-3KkHs7bQ.css",
+        "relative": "assets/index-3KkHs7bQ.css",
+        "bytes": 84477,
+        "sha256": "163b8c1d512a6ee60a4e20dbd6c3cb1f5f1aedaa52d90927d16322e4d733bb8f"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/index-Ytdk9wfS.js",
+        "relative": "assets/index-Ytdk9wfS.js",
+        "bytes": 307486,
+        "sha256": "2b357a3e4be63ee7c5f9fafb066ebf8a0326d6b73e5bee2bd53336b75103a207"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/inter-latin-400-normal-C38fXH4l.woff2",
+        "relative": "assets/inter-latin-400-normal-C38fXH4l.woff2",
+        "bytes": 23664,
+        "sha256": "8909904ab6c872eb994093482a88a28eca2cd95912d7b6fecd72103b0dc07edc"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/inter-latin-600-normal-LgqL8muc.woff2",
+        "relative": "assets/inter-latin-600-normal-LgqL8muc.woff2",
+        "bytes": 24452,
+        "sha256": "f9a06e79cd3a2a20951c0f0e28f66dd0e6d3fda73911d640a2125c8fcb78f21a"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/inter-latin-700-normal-Yt3aPRUw.woff2",
+        "relative": "assets/inter-latin-700-normal-Yt3aPRUw.woff2",
+        "bytes": 24356,
+        "sha256": "6f56409fd3d64bb85f7d070bce20749db2d66b6d63cec586cc22d1c761be2491"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/introductions-CZ3UHoKm.js",
+        "relative": "assets/introductions-CZ3UHoKm.js",
+        "bytes": 3624,
+        "sha256": "655fb3f94aca69feadcd017a2340c1938b210717e19f5ac146387c785c3834f9"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/layout-LkNxql1F.js",
+        "relative": "assets/layout-LkNxql1F.js",
+        "bytes": 4987,
+        "sha256": "b3ed1e5be5bc729bb9c12c25d81248d589d23322de67fb4020fc0fb7a1b02e0c"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/layout-a028cYIN.css",
+        "relative": "assets/layout-a028cYIN.css",
+        "bytes": 6598,
+        "sha256": "e6fd3fd6704b8b4c7350831a43a15b5b910b3b1799520c46f926915c8a18d649"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/listMeta-CiwI5Li-.js",
+        "relative": "assets/listMeta-CiwI5Li-.js",
+        "bytes": 758,
+        "sha256": "b4ebc91a533afec57b552f84a923e0071da80d3e3b942f129522477eb4c82ae1"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/meta-y45R2KbN.js",
+        "relative": "assets/meta-y45R2KbN.js",
+        "bytes": 67,
+        "sha256": "a0acf1ec7a40b71585c1e556b19b78c01b15f5b3791ce9908d732e88a69a736e"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/policy-DybAQiiP.js",
+        "relative": "assets/policy-DybAQiiP.js",
+        "bytes": 2196,
+        "sha256": "a78ade8775895de1ed8f9b2f2827ef0ba7ddb87653f536aeb68aa204525270fe"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/production-DTBqhF8F.js",
+        "relative": "assets/production-DTBqhF8F.js",
+        "bytes": 8986,
+        "sha256": "fa1b7d3d74da90fe093900f73a219e8b2ec4119c0567cee9eb8aa0722f5d28cc"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/realCost-FqOiHE2R.js",
+        "relative": "assets/realCost-FqOiHE2R.js",
+        "bytes": 3278,
+        "sha256": "2d3458c39fdb9b89b8eec0abfc102a6130bc5d9f68c29850519a396b20d813e5"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/relic_income-CIVgLhfJ.js",
+        "relative": "assets/relic_income-CIVgLhfJ.js",
+        "bytes": 11984,
+        "sha256": "1befc35225c771b60bee5185dcb363686b1f70726c750abd2773593d16d2de74"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/search-DsyrMtPa.js",
+        "relative": "assets/search-DsyrMtPa.js",
+        "bytes": 34191,
+        "sha256": "6ab03ef4c5e88f6d369a92e43280b60f62ad981534b0af1e7124da62a2c37ee3"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/sharePage-Cz_Ei1qH.js",
+        "relative": "assets/sharePage-Cz_Ei1qH.js",
+        "bytes": 225740,
+        "sha256": "d700fe05257ca52e72181bdca206c467aa77a9588249e50add47d53c9fc1490c"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/simFormat-CGrXdBAQ.js",
+        "relative": "assets/simFormat-CGrXdBAQ.js",
+        "bytes": 431,
+        "sha256": "eee77a1365a799f63c601fb55bf5f0ea62c8166d7fe59fc3a614643a9444ff71"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/simRoute-Cn_fj8_u.js",
+        "relative": "assets/simRoute-Cn_fj8_u.js",
+        "bytes": 355,
+        "sha256": "a9d0f50453da4d46358e3c5b71054daca1faf871c7c1584c4c814782263a925a"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/simSupport-B_WZRRc4.js",
+        "relative": "assets/simSupport-B_WZRRc4.js",
+        "bytes": 203,
+        "sha256": "9e0198f4c2b67ccb95cff6e34849b924301ac11ecbb1040c568638075cc6ed18"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/simulator-7SOuTn3t.js",
+        "relative": "assets/simulator-7SOuTn3t.js",
+        "bytes": 2803,
+        "sha256": "aba3c069aead79b759d4e87955198ad84ab8143b2b723e44a13cb65293e77795"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/sourcePresentation-BWG2yJyi.js",
+        "relative": "assets/sourcePresentation-BWG2yJyi.js",
+        "bytes": 1097,
+        "sha256": "f5faba932f65b3b0e4ca5845055e4c018e9dd680b2755cf9504c2c2ef460135e"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/sticky-CfaAGRI-.js",
+        "relative": "assets/sticky-CfaAGRI-.js",
+        "bytes": 207,
+        "sha256": "4083c3445a6a0df77f71fb992311f4c2e9a52351948451734fb2492b39a81f0e"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/teamBonuses-VdEglsl_.js",
+        "relative": "assets/teamBonuses-VdEglsl_.js",
+        "bytes": 169667,
+        "sha256": "73d9764bc1b7f98a967ee59aa31aab82493ed78a997436e4ffa5b9aad7067e4c"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/techs-BjnIEky3.js",
+        "relative": "assets/techs-BjnIEky3.js",
+        "bytes": 109949,
+        "sha256": "f25e62ef5a6267ee0bbab8e23bd69f2b7c4377fee554cc85aff1768f850c5b47"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/timelineModel-mazt_zm2.js",
+        "relative": "assets/timelineModel-mazt_zm2.js",
+        "bytes": 8207,
+        "sha256": "e52ef9ef9b19f31507c5d7b19fa5c6ddb3e7759797ced62371c13470d73fa052"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/tradeIncome-ClszdbzN.js",
+        "relative": "assets/tradeIncome-ClszdbzN.js",
+        "bytes": 7259,
+        "sha256": "ba9b175faf5df6186880e5cc4fc28034babbd00e9329a9309b9ca78015b8b78e"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/trees-Iix4RRpm.js",
+        "relative": "assets/trees-Iix4RRpm.js",
+        "bytes": 174664,
+        "sha256": "cb3ffcb2a23a2c72ef8fea0673533a8746ef2b4818db3a53ffbfc6ecfe2a3957"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/unitClass-DYRPWu_Y.js",
+        "relative": "assets/unitClass-DYRPWu_Y.js",
+        "bytes": 512,
+        "sha256": "3f4e181314325243db8c80d9da1a73f92f2f5bfedfb36e19717373705f60b0b2"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/units-k_Lzk_z1.js",
+        "relative": "assets/units-k_Lzk_z1.js",
+        "bytes": 233104,
+        "sha256": "8220e9b2e630944894b004f26d81648e39ecb13d34360d6936f17967ef77ef0b"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/useShareLink-AXZyrbcn.js",
+        "relative": "assets/useShareLink-AXZyrbcn.js",
+        "bytes": 1397,
+        "sha256": "b8f176bc8cb41e0aa9b4734615f8260b48b3dfbef28b768f120f5cbb93a2beb5"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/validate-C41mksCG.js",
+        "relative": "assets/validate-C41mksCG.js",
+        "bytes": 717,
+        "sha256": "8585f60571329f7cd3e7253821b6c30fa3f3fbc017fbac42d24e875f5bb22496"
+      },
+      {
+        "path": "/workspace/aoe2-issue197-batch9/dist/assets/validatedJson-nOnWShWG.js",
+        "relative": "assets/validatedJson-nOnWShWG.js",
+        "bytes": 167,
+        "sha256": "281e4df0cad5594e9cdc7c00367369c43cffc4a6edb63f06bf7b6592083039c5"
+      }
+    ],
+    "preview": {
+      "pid": 259294,
+      "cwd": "/workspace/aoe2-issue197-batch9",
+      "argv": [
+        "node",
+        "/workspace/aoe2-issue197-batch9/node_modules/.bin/vite",
+        "preview",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "4207",
+        "--strictPort"
+      ],
+      "startTicks": "17500269",
+      "recordedUTC": "2026-10-27T23:14:46.081361+00:00",
+      "port": 4207,
+      "toolSession": 14910,
+      "runtimeCommit": "daa0f81647bfae3fc045cb458834470252340e20",
+      "runtimeTree": "8f1930dca04785515cd2971133647717def5706a",
+      "buildLog": "/tmp/bengalis197-build-daa0f81.log",
+      "ownership": "batch9 soleimplementationowner; verify PID/cwd/argv/startTicks before cleanup"
+    },
+    "browser": {
+      "path": "/tmp/bengalis197-e2e-daa0f81.json",
+      "sha256": "ee65b04e3a76c3ec589d321c90c5e024f91e750f0f1a1f3e7c87cc27a13532c1",
+      "stats": {
+        "startTime": "2026-10-27T23:14:46.762Z",
+        "duration": 25176.593,
+        "expected": 18,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    "BengaliCases": 9,
+    "WeiSharedPresentationCases": 9,
+    "BengaliScreenshots": 48,
+    "BengaliActualPNGDownloads": 1,
+    "WeiScreenshots": 48,
+    "WeiActualPNGDownloads": 1,
+    "images": [
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-dark/bengalis197-bonus0-1280-dark.png",
+        "name": "bengalis197-bonus0-1280-dark.png",
+        "width": 1280,
+        "height": 1095,
+        "bytes": 183327,
+        "sha256": "03a0e08ea2f162fab16059ec77d5cb1fc5d61395526e210652a734e47b4c3b1c",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-dark/bengalis197-knights-age-1280-dark.png",
+        "name": "bengalis197-knights-age-1280-dark.png",
+        "width": 1280,
+        "height": 2346,
+        "bytes": 355129,
+        "sha256": "071b5740539b268ef39b9503a97584ce43eeae9796dcf87b8f509180c20d2d83",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-dark/bengalis197-practice-1280-dark.png",
+        "name": "bengalis197-practice-1280-dark.png",
+        "width": 1280,
+        "height": 2170,
+        "bytes": 369479,
+        "sha256": "1d215fdf99d856abc2400813930f9be1976e422a2d18cc89fcef082f49e640d0",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-dark/bengalis197-print-1280-dark.png",
+        "name": "bengalis197-print-1280-dark.png",
+        "width": 1280,
+        "height": 4881,
+        "bytes": 562605,
+        "sha256": "b0501a657dc2d2e1fdfe0cf3424362fe0bc6a031da9743e37dad017d13c8fac7",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-dark/bengalis197-share-1280-dark.png",
+        "name": "bengalis197-share-1280-dark.png",
+        "width": 1280,
+        "height": 2118,
+        "bytes": 324737,
+        "sha256": "4d03d37670de2961a444243c0d109519624c5afa9de8e9f8ff4a469a01ed5ea8",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-dark/bengalis197-timeline-1280-dark.png",
+        "name": "bengalis197-timeline-1280-dark.png",
+        "width": 1280,
+        "height": 2118,
+        "bytes": 313105,
+        "sha256": "96f5e5e0b99057bbcfc1c7e40b03194777a4d01953e05898ce275457a04e838d",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-light/bengalis197-bonus0-1280-light.png",
+        "name": "bengalis197-bonus0-1280-light.png",
+        "width": 1280,
+        "height": 1095,
+        "bytes": 184847,
+        "sha256": "4b4f23c78b7230aa6b8487cc1eefa070d3ac98aa17a61556abd895ee9b553d18",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-light/bengalis197-knights-age-1280-light.png",
+        "name": "bengalis197-knights-age-1280-light.png",
+        "width": 1280,
+        "height": 2346,
+        "bytes": 358277,
+        "sha256": "8dc1cc4f807461633e3954cde57c938dc2b4f5e52c2255f2b8cf4007d95e50c9",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-light/bengalis197-practice-1280-light.png",
+        "name": "bengalis197-practice-1280-light.png",
+        "width": 1280,
+        "height": 2170,
+        "bytes": 371532,
+        "sha256": "bb2e3343f96d20c2f62f534a392dd53441055f8646937656f68455e9e48e11ce",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-light/bengalis197-print-1280-light.png",
+        "name": "bengalis197-print-1280-light.png",
+        "width": 1280,
+        "height": 4881,
+        "bytes": 562605,
+        "sha256": "b0501a657dc2d2e1fdfe0cf3424362fe0bc6a031da9743e37dad017d13c8fac7",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-light/bengalis197-share-1280-light.png",
+        "name": "bengalis197-share-1280-light.png",
+        "width": 1280,
+        "height": 2118,
+        "bytes": 335090,
+        "sha256": "9898c03ee6789b1dbf6b5774b0d814b67115eb726296ba32fcfafaae1d2118df",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-1280-light/bengalis197-timeline-1280-light.png",
+        "name": "bengalis197-timeline-1280-light.png",
+        "width": 1280,
+        "height": 2118,
+        "bytes": 315627,
+        "sha256": "63ddda527a490d9b6346643bc256a2aefbd8737ad60ef5ca138089450a603714",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-dark/bengalis197-bonus0-360-dark.png",
+        "name": "bengalis197-bonus0-360-dark.png",
+        "width": 360,
+        "height": 1694,
+        "bytes": 153980,
+        "sha256": "a8b2c55aa57639de8b37b13c63199421fdfd96c4bf2625dd3619737a31b947bf",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-dark/bengalis197-knights-age-360-dark.png",
+        "name": "bengalis197-knights-age-360-dark.png",
+        "width": 360,
+        "height": 3079,
+        "bytes": 264834,
+        "sha256": "7bcec21273cbe6c8cbe93c53c3aa0e1e3ee0d338974a5b2e26c2afa869e9ed47",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-dark/bengalis197-practice-360-dark.png",
+        "name": "bengalis197-practice-360-dark.png",
+        "width": 360,
+        "height": 3590,
+        "bytes": 348244,
+        "sha256": "1d3841776ddab4ad4af44c91b554a935d1d0de505a8641a7c5f0a760e5941188",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-dark/bengalis197-print-360-dark.png",
+        "name": "bengalis197-print-360-dark.png",
+        "width": 360,
+        "height": 5871,
+        "bytes": 495399,
+        "sha256": "1753f23ed34337ccfde8baa05519178a7b3e3d5a27dc45dd34c3e513a64346ec",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-dark/bengalis197-share-360-dark.png",
+        "name": "bengalis197-share-360-dark.png",
+        "width": 360,
+        "height": 2738,
+        "bytes": 230441,
+        "sha256": "6554bca410a3ab5262d8e7587cfda6b1e7a8195f5fab10cf9908d84adf5696d4",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-dark/bengalis197-timeline-360-dark.png",
+        "name": "bengalis197-timeline-360-dark.png",
+        "width": 360,
+        "height": 2738,
+        "bytes": 235724,
+        "sha256": "fc7db7995b720318fceba4ec6ba04fede148ce77709068a0b46a102de6dd84b1",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-light/bengalis197-bonus0-360-light.png",
+        "name": "bengalis197-bonus0-360-light.png",
+        "width": 360,
+        "height": 1694,
+        "bytes": 155273,
+        "sha256": "310dc72b4c37aa6a5ff7f073b6066f452a6ecc2a7cc89a27b29a04120d57a650",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-light/bengalis197-knight-download.png",
+        "name": "bengalis197-knight-download.png",
+        "width": 1080,
+        "height": 1350,
+        "bytes": 206497,
+        "sha256": "8ebcea544ffb2b330a12e1902b42b7ece85c07cc0dad3ef1049ee5555c5fbafc",
+        "civ": "Bengalis",
+        "kind": "actual-download"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-light/bengalis197-knights-age-360-light.png",
+        "name": "bengalis197-knights-age-360-light.png",
+        "width": 360,
+        "height": 3079,
+        "bytes": 266092,
+        "sha256": "11cf1f413d2ba74ef51699b879605d06c16e9a459f91588c4a1ad2091c296880",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-light/bengalis197-practice-360-light.png",
+        "name": "bengalis197-practice-360-light.png",
+        "width": 360,
+        "height": 3590,
+        "bytes": 349080,
+        "sha256": "d4b231548ee276674fe6e8bdbbeb26b07bb99c06b06321a23f296f4c82a7d093",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-light/bengalis197-print-360-light.png",
+        "name": "bengalis197-print-360-light.png",
+        "width": 360,
+        "height": 5871,
+        "bytes": 495399,
+        "sha256": "1753f23ed34337ccfde8baa05519178a7b3e3d5a27dc45dd34c3e513a64346ec",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-light/bengalis197-share-360-light.png",
+        "name": "bengalis197-share-360-light.png",
+        "width": 360,
+        "height": 2738,
+        "bytes": 234014,
+        "sha256": "dbac5deee9fa2f5961337f8e0464ec1bd6c98e9065dd0f45f5889ebb249e5f8c",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-360-light/bengalis197-timeline-360-light.png",
+        "name": "bengalis197-timeline-360-light.png",
+        "width": 360,
+        "height": 2738,
+        "bytes": 237043,
+        "sha256": "56838338462f9ca3606589251d8298d2f4f5543e0bb3608810ee79165c4b02ac",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-dark/bengalis197-bonus0-375-dark.png",
+        "name": "bengalis197-bonus0-375-dark.png",
+        "width": 375,
+        "height": 1694,
+        "bytes": 154257,
+        "sha256": "23a9a12ae1dcdaf1efc321011976110c040574a0e24d58a410822739abb2b55f",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-dark/bengalis197-knights-age-375-dark.png",
+        "name": "bengalis197-knights-age-375-dark.png",
+        "width": 375,
+        "height": 3030,
+        "bytes": 265180,
+        "sha256": "8c7c0cac16e949050366217566a763c58e7fce13f623e7439c9773428b06fd36",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-dark/bengalis197-practice-375-dark.png",
+        "name": "bengalis197-practice-375-dark.png",
+        "width": 375,
+        "height": 3506,
+        "bytes": 347452,
+        "sha256": "fb10092c7da00baaedadd535e16ecef117449b9e57a7d5c061d451c4fe813007",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-dark/bengalis197-print-375-dark.png",
+        "name": "bengalis197-print-375-dark.png",
+        "width": 375,
+        "height": 5803,
+        "bytes": 496144,
+        "sha256": "c8b38bef54b553fe7b20de2bee9587b66f419577f3c2a89812ecb62bde32a171",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-dark/bengalis197-share-375-dark.png",
+        "name": "bengalis197-share-375-dark.png",
+        "width": 375,
+        "height": 2689,
+        "bytes": 229864,
+        "sha256": "99205bf6b9fb710ff61aba4a73d7814f879dcca291eb594f6b19b673f5b583a1",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-dark/bengalis197-timeline-375-dark.png",
+        "name": "bengalis197-timeline-375-dark.png",
+        "width": 375,
+        "height": 2689,
+        "bytes": 235383,
+        "sha256": "e2a84cbc9734694d22e09a4cc485060eeaf3e6fcaafca09befb20ece6f8d058b",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-light/bengalis197-bonus0-375-light.png",
+        "name": "bengalis197-bonus0-375-light.png",
+        "width": 375,
+        "height": 1694,
+        "bytes": 155912,
+        "sha256": "b4c88d0f10e1a82cbbd43631c16dbc53dada366e57c905cf601186a40fa3f328",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-light/bengalis197-knights-age-375-light.png",
+        "name": "bengalis197-knights-age-375-light.png",
+        "width": 375,
+        "height": 3030,
+        "bytes": 266426,
+        "sha256": "3b54181cf38d9e6d3a14301ac93736a31a9f1220e731b9256b3c84a0e49cde4f",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-light/bengalis197-practice-375-light.png",
+        "name": "bengalis197-practice-375-light.png",
+        "width": 375,
+        "height": 3506,
+        "bytes": 348659,
+        "sha256": "34d1dfebe1171b6ed982fab829d8b3617fbd08c5560f30bdd6b37659aea57e90",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-light/bengalis197-print-375-light.png",
+        "name": "bengalis197-print-375-light.png",
+        "width": 375,
+        "height": 5803,
+        "bytes": 496144,
+        "sha256": "c8b38bef54b553fe7b20de2bee9587b66f419577f3c2a89812ecb62bde32a171",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-light/bengalis197-share-375-light.png",
+        "name": "bengalis197-share-375-light.png",
+        "width": 375,
+        "height": 2689,
+        "bytes": 233470,
+        "sha256": "95d8daaa0394530a99c528b2c13ea40b6813395cf615a15433930998f7995666",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-375-light/bengalis197-timeline-375-light.png",
+        "name": "bengalis197-timeline-375-light.png",
+        "width": 375,
+        "height": 2689,
+        "bytes": 236916,
+        "sha256": "761a5f9f146b94911c8e69e32dda30583bf950151b3ed735c012042648bdea8e",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-dark/bengalis197-bonus0-390-dark.png",
+        "name": "bengalis197-bonus0-390-dark.png",
+        "width": 390,
+        "height": 1637,
+        "bytes": 152452,
+        "sha256": "1820d76f00f71566ee56f74b41506fa73089ef5bd35022eed76fbd6287315d8f",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-dark/bengalis197-knights-age-390-dark.png",
+        "name": "bengalis197-knights-age-390-dark.png",
+        "width": 390,
+        "height": 2986,
+        "bytes": 265149,
+        "sha256": "fc53a5868325cd87e1b0010532979073a729395b87a79319836dbdbc6af52237",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-dark/bengalis197-practice-390-dark.png",
+        "name": "bengalis197-practice-390-dark.png",
+        "width": 390,
+        "height": 3460,
+        "bytes": 345321,
+        "sha256": "07cdb4d81bcd7bf2a86e723bef2541e77313be539366fdecdea9c26a7b9376d3",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-dark/bengalis197-print-390-dark.png",
+        "name": "bengalis197-print-390-dark.png",
+        "width": 390,
+        "height": 5760,
+        "bytes": 496197,
+        "sha256": "c8f2f78a2aa77206a2125e4ad2e74a33db8e4ae4b7a2fd11f372968899ae0c3e",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-dark/bengalis197-share-390-dark.png",
+        "name": "bengalis197-share-390-dark.png",
+        "width": 390,
+        "height": 2665,
+        "bytes": 230663,
+        "sha256": "e4af926f16e72211502e0e2537e5fae706e99bd8c257376a2369f68d86634636",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-dark/bengalis197-timeline-390-dark.png",
+        "name": "bengalis197-timeline-390-dark.png",
+        "width": 390,
+        "height": 2665,
+        "bytes": 234518,
+        "sha256": "ea6889838589615e95d3e1973814c7cab9a15610b8e52ab1c54c7ee626d012c3",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-light/bengalis197-bonus0-390-light.png",
+        "name": "bengalis197-bonus0-390-light.png",
+        "width": 390,
+        "height": 1637,
+        "bytes": 154199,
+        "sha256": "cd5c4451ee3354c2aa8881661bbdec0a9276af9a57b30f0b7eea671968fe1c98",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-light/bengalis197-knights-age-390-light.png",
+        "name": "bengalis197-knights-age-390-light.png",
+        "width": 390,
+        "height": 2986,
+        "bytes": 266212,
+        "sha256": "129e0ba2d7c820a09876d37131d6fce56f46ffc7bd5f7352364e4e09911e58cf",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-light/bengalis197-practice-390-light.png",
+        "name": "bengalis197-practice-390-light.png",
+        "width": 390,
+        "height": 3460,
+        "bytes": 346791,
+        "sha256": "abfc2a82257e723d5530897d601f9454cb5e53555bf8ddf39161ff6c4e74f5ac",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-light/bengalis197-print-390-light.png",
+        "name": "bengalis197-print-390-light.png",
+        "width": 390,
+        "height": 5760,
+        "bytes": 496197,
+        "sha256": "c8f2f78a2aa77206a2125e4ad2e74a33db8e4ae4b7a2fd11f372968899ae0c3e",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-light/bengalis197-share-390-light.png",
+        "name": "bengalis197-share-390-light.png",
+        "width": 390,
+        "height": 2665,
+        "bytes": 234485,
+        "sha256": "e126fc9b054f401245037919f6e4cee42ebbd696609fa39bf80640abf3fcb1eb",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/bengalis197--197-孟加拉时代赠村、实际人口与分享-390-light/bengalis197-timeline-390-light.png",
+        "name": "bengalis197-timeline-390-light.png",
+        "width": 390,
+        "height": 2665,
+        "bytes": 235602,
+        "sha256": "d7bb9812954597c204f359476556108f029982e9ab5f5b770ea73e146c8ec937",
+        "civ": "Bengalis",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-bonus0-1280-dark.png",
+        "name": "wei197-bonus0-1280-dark.png",
+        "width": 1280,
+        "height": 1095,
+        "bytes": 168243,
+        "sha256": "b3d91d0004035c183bc31447851806999e7975771677968605a30926cd020fe8",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-knights-age-1280-dark.png",
+        "name": "wei197-knights-age-1280-dark.png",
+        "width": 1280,
+        "height": 2346,
+        "bytes": 352030,
+        "sha256": "f376cb2385257c44a3b8132dcf3e75a48e6494d95918d6963c5e327835842ac5",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-practice-1280-dark.png",
+        "name": "wei197-practice-1280-dark.png",
+        "width": 1280,
+        "height": 2148,
+        "bytes": 359145,
+        "sha256": "c13ef6c9fece684d0c4196767e152729c89f283ca436d01caa78957ffca70a0f",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-print-1280-dark.png",
+        "name": "wei197-print-1280-dark.png",
+        "width": 1280,
+        "height": 4859,
+        "bytes": 555221,
+        "sha256": "8317fa63576254c0f55c416b3cf98313cdc0ead87049bf846aa299002337e387",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-share-1280-dark.png",
+        "name": "wei197-share-1280-dark.png",
+        "width": 1280,
+        "height": 2118,
+        "bytes": 322267,
+        "sha256": "dd519ff898a385d87add79691364c8428a29d86e967159117e4a105ccd5f6f41",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-dark/wei197-timeline-1280-dark.png",
+        "name": "wei197-timeline-1280-dark.png",
+        "width": 1280,
+        "height": 2118,
+        "bytes": 313651,
+        "sha256": "e0b342f3f17bf7107500d7330d30537ce0a54b49775751ee2a6aa24d634e1d9b",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-bonus0-1280-light.png",
+        "name": "wei197-bonus0-1280-light.png",
+        "width": 1280,
+        "height": 1095,
+        "bytes": 169579,
+        "sha256": "42cf4b3736fe813a7e75c46e8c4713c1093a7b29eec1335eac7476e8e37eda1e",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-knights-age-1280-light.png",
+        "name": "wei197-knights-age-1280-light.png",
+        "width": 1280,
+        "height": 2346,
+        "bytes": 355261,
+        "sha256": "ab780079cdaf36fb32fdca537e7db23100c2ae830df0e6b4addaf89020f93aba",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-practice-1280-light.png",
+        "name": "wei197-practice-1280-light.png",
+        "width": 1280,
+        "height": 2148,
+        "bytes": 361221,
+        "sha256": "c55ba52789f78ba8965c30998a76ae879fdd8c9dbd6379db744969aa3c60d50f",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-print-1280-light.png",
+        "name": "wei197-print-1280-light.png",
+        "width": 1280,
+        "height": 4859,
+        "bytes": 555221,
+        "sha256": "8317fa63576254c0f55c416b3cf98313cdc0ead87049bf846aa299002337e387",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-share-1280-light.png",
+        "name": "wei197-share-1280-light.png",
+        "width": 1280,
+        "height": 2118,
+        "bytes": 332143,
+        "sha256": "b13870f1d5f15a0d18bfc2440b31ccf598cdcf985f6c872efa841757db035885",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-1280-light/wei197-timeline-1280-light.png",
+        "name": "wei197-timeline-1280-light.png",
+        "width": 1280,
+        "height": 2118,
+        "bytes": 315829,
+        "sha256": "0d3cb250aa29f2df190494aa2b46c19aefc5cf5f2e6b7421593afc0bccc0dd48",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-bonus0-360-dark.png",
+        "name": "wei197-bonus0-360-dark.png",
+        "width": 360,
+        "height": 1652,
+        "bytes": 141637,
+        "sha256": "596aadc81b629d48c36e3782cdcdd584bf26d13fe150d19815019f4df3640dd9",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-knights-age-360-dark.png",
+        "name": "wei197-knights-age-360-dark.png",
+        "width": 360,
+        "height": 3060,
+        "bytes": 261710,
+        "sha256": "9697cf42078c975c8f04a7a85c4b4b8bce7367e5acb85561faf2d46b53e82953",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-practice-360-dark.png",
+        "name": "wei197-practice-360-dark.png",
+        "width": 360,
+        "height": 3547,
+        "bytes": 337650,
+        "sha256": "70a46b084c76245dc0e1e170f4bfe20beefeef1244991010a652618c0283149a",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-print-360-dark.png",
+        "name": "wei197-print-360-dark.png",
+        "width": 360,
+        "height": 5825,
+        "bytes": 489072,
+        "sha256": "972bcce518066dfde74ff4be5e1d3348170c8968ad5db7d6a5ab03cfd7f33bf6",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-share-360-dark.png",
+        "name": "wei197-share-360-dark.png",
+        "width": 360,
+        "height": 2738,
+        "bytes": 230167,
+        "sha256": "73dcd05935a452d4d98f5e3b731f1f408b507ab56df364c162f75a074f216b9a",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-dark/wei197-timeline-360-dark.png",
+        "name": "wei197-timeline-360-dark.png",
+        "width": 360,
+        "height": 2738,
+        "bytes": 234256,
+        "sha256": "d88ba249cc820998d81ff7612b4c01d067ab470eb8d3c487d72484f8152a3220",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-bonus0-360-light.png",
+        "name": "wei197-bonus0-360-light.png",
+        "width": 360,
+        "height": 1652,
+        "bytes": 142662,
+        "sha256": "cf35ea35f8534a0c1be551b505a2c2b00fc1a3e0c48a2da985a91c20c5a3c298",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-knight-download.png",
+        "name": "wei197-knight-download.png",
+        "width": 1080,
+        "height": 1350,
+        "bytes": 203346,
+        "sha256": "50ed19126c7c3a03f9f9ef5a5814b878d361f56c8063dbe79b89a548d382161d",
+        "civ": "Wei",
+        "kind": "actual-download"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-knights-age-360-light.png",
+        "name": "wei197-knights-age-360-light.png",
+        "width": 360,
+        "height": 3060,
+        "bytes": 263409,
+        "sha256": "87bf6a0969446cca69a9a927d4771b9ce58ba67d7ad5e5420951b58c33b184d2",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-practice-360-light.png",
+        "name": "wei197-practice-360-light.png",
+        "width": 360,
+        "height": 3547,
+        "bytes": 338530,
+        "sha256": "f119cf733115f4f3eba728bba12b123126834c19f6b8fde8feb27b774d988601",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-print-360-light.png",
+        "name": "wei197-print-360-light.png",
+        "width": 360,
+        "height": 5825,
+        "bytes": 489072,
+        "sha256": "972bcce518066dfde74ff4be5e1d3348170c8968ad5db7d6a5ab03cfd7f33bf6",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-share-360-light.png",
+        "name": "wei197-share-360-light.png",
+        "width": 360,
+        "height": 2738,
+        "bytes": 233985,
+        "sha256": "ed98799a9529def566de2a489b93dbffbc7e16e75489b2265563c65c45e9e36b",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-360-light/wei197-timeline-360-light.png",
+        "name": "wei197-timeline-360-light.png",
+        "width": 360,
+        "height": 2738,
+        "bytes": 235499,
+        "sha256": "6058d8849d0da9cd128f616d62b1a2fd030dadbced3a7e6ef87330a3eb0f64b5",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-bonus0-375-dark.png",
+        "name": "wei197-bonus0-375-dark.png",
+        "width": 375,
+        "height": 1597,
+        "bytes": 141383,
+        "sha256": "7474b679c532464df56b32e540c6a400a35ef5034658b050143b4fdb734a6285",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-knights-age-375-dark.png",
+        "name": "wei197-knights-age-375-dark.png",
+        "width": 375,
+        "height": 3010,
+        "bytes": 262458,
+        "sha256": "ebcd9574e6ed1820ea048fbe54ca1414462524501168f344663fc5e172f23522",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-practice-375-dark.png",
+        "name": "wei197-practice-375-dark.png",
+        "width": 375,
+        "height": 3459,
+        "bytes": 338947,
+        "sha256": "74612bcd7d83b1eb2ea6814b13f71069baf5a32e971cbb7e6ebf769a41316fb4",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-print-375-dark.png",
+        "name": "wei197-print-375-dark.png",
+        "width": 375,
+        "height": 5782,
+        "bytes": 489903,
+        "sha256": "0be9a4d2110f836dee727f04bb5ec4c1a65c7ee5d713f26e6e61e1d04b8d9971",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-share-375-dark.png",
+        "name": "wei197-share-375-dark.png",
+        "width": 375,
+        "height": 2689,
+        "bytes": 229494,
+        "sha256": "6aa5d245c5ed044561026c3a1865848161412469e8cd20da9bcc0d2eb564969c",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-dark/wei197-timeline-375-dark.png",
+        "name": "wei197-timeline-375-dark.png",
+        "width": 375,
+        "height": 2689,
+        "bytes": 233898,
+        "sha256": "c82bd588be08cb7ce56b9134a933e55cd597b9feac83fb43de60956611ebc654",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-bonus0-375-light.png",
+        "name": "wei197-bonus0-375-light.png",
+        "width": 375,
+        "height": 1597,
+        "bytes": 142851,
+        "sha256": "feab64e787af132141d41a265d6defbbd6dffd83581f888aa6540b2dab45d5df",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-knights-age-375-light.png",
+        "name": "wei197-knights-age-375-light.png",
+        "width": 375,
+        "height": 3010,
+        "bytes": 264253,
+        "sha256": "34876a8aeadce14471e53583af9d8df9bfdca08e603e7eaf4a43953371afb339",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-practice-375-light.png",
+        "name": "wei197-practice-375-light.png",
+        "width": 375,
+        "height": 3459,
+        "bytes": 340080,
+        "sha256": "3e06ca9691a6a9c9bb03b126a6516924fecd1f129aca8641b58c8bb16b54bc69",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-print-375-light.png",
+        "name": "wei197-print-375-light.png",
+        "width": 375,
+        "height": 5782,
+        "bytes": 489903,
+        "sha256": "0be9a4d2110f836dee727f04bb5ec4c1a65c7ee5d713f26e6e61e1d04b8d9971",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-share-375-light.png",
+        "name": "wei197-share-375-light.png",
+        "width": 375,
+        "height": 2689,
+        "bytes": 233330,
+        "sha256": "f7313ddacceb24bf728f71c5f88cc45b4ce94f6026cb957545079dbc56032626",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-375-light/wei197-timeline-375-light.png",
+        "name": "wei197-timeline-375-light.png",
+        "width": 375,
+        "height": 2689,
+        "bytes": 235379,
+        "sha256": "523bde1e003a2603dbc17f35bf12c249ceb974adeecdb41b358dd63f87b77b85",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-bonus0-390-dark.png",
+        "name": "wei197-bonus0-390-dark.png",
+        "width": 390,
+        "height": 1573,
+        "bytes": 140479,
+        "sha256": "4d3d86b0e59b2bb556662abca6f76c4ea6297f77343462cdd91507854faa418d",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-knights-age-390-dark.png",
+        "name": "wei197-knights-age-390-dark.png",
+        "width": 390,
+        "height": 2986,
+        "bytes": 262822,
+        "sha256": "ea123ed504e63a02cce7d6eb86a2a41ab0158f954f6437ee13421dafc485612a",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-practice-390-dark.png",
+        "name": "wei197-practice-390-dark.png",
+        "width": 390,
+        "height": 3414,
+        "bytes": 336946,
+        "sha256": "c315c8450a88185aff911817f87d2bc8e5f4060afd8dff194764a08484f4d27e",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-print-390-dark.png",
+        "name": "wei197-print-390-dark.png",
+        "width": 390,
+        "height": 5718,
+        "bytes": 489290,
+        "sha256": "3c6d6faae9915b089811c1f2af54fe1f54767b70da48bad0f93700568a87d8c3",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-share-390-dark.png",
+        "name": "wei197-share-390-dark.png",
+        "width": 390,
+        "height": 2665,
+        "bytes": 229006,
+        "sha256": "3b4baadc5ba8ba628e2530b3f7ae6739a52c047e81c2d61493e7251aba3d3c8c",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-dark/wei197-timeline-390-dark.png",
+        "name": "wei197-timeline-390-dark.png",
+        "width": 390,
+        "height": 2665,
+        "bytes": 233038,
+        "sha256": "ae068d99fd144d546f2218cd64a5703b926bafa654389f3a5f748a77f5110d44",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-bonus0-390-light.png",
+        "name": "wei197-bonus0-390-light.png",
+        "width": 390,
+        "height": 1573,
+        "bytes": 141679,
+        "sha256": "5aaa8c04b84f1b3685b1f025362d597cfae51bf19143414bce7cbae5f4115be1",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-knights-age-390-light.png",
+        "name": "wei197-knights-age-390-light.png",
+        "width": 390,
+        "height": 2986,
+        "bytes": 264369,
+        "sha256": "74e3a940ac1229b18e18682e8cec8650d88d2794c3e9fcfd5977288c13784f30",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-practice-390-light.png",
+        "name": "wei197-practice-390-light.png",
+        "width": 390,
+        "height": 3414,
+        "bytes": 338202,
+        "sha256": "a8dc503bcfa5aececedd637cd07e0e0cd978b48dece02d90e2314f26a0ff15fe",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-print-390-light.png",
+        "name": "wei197-print-390-light.png",
+        "width": 390,
+        "height": 5718,
+        "bytes": 489290,
+        "sha256": "3c6d6faae9915b089811c1f2af54fe1f54767b70da48bad0f93700568a87d8c3",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-share-390-light.png",
+        "name": "wei197-share-390-light.png",
+        "width": 390,
+        "height": 2665,
+        "bytes": 232748,
+        "sha256": "9f46c101684aa06ff2d5a30a39deedc9d98a50f8de1eed74d9ddd21a1748a99a",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      },
+      {
+        "path": "/tmp/bengalis197-e2e-daa0f81/wei197--197-魏研究赠村、clock、来源与分享-390-light/wei197-timeline-390-light.png",
+        "name": "wei197-timeline-390-light.png",
+        "width": 390,
+        "height": 2665,
+        "bytes": 234078,
+        "sha256": "afd059aa58b5f923d7fef2cbe7c9992cc993fdf4923328dc9b9a7ec5e197c6cc",
+        "civ": "Wei",
+        "kind": "viewport-screenshot"
+      }
+    ],
+    "artifactManifest": {
+      "path": "/tmp/bengalis197-runtime-artifacts.json",
+      "sha256": "6f7646cd171ba0aa3bf28a5194c29687c1e1350dab3203cd916874cfe2d2a375",
+      "bytes": 79454
+    },
+    "ownerViewedActualBengali": [
+      "bengalis197-knight-download.png",
+      "bengalis197-timeline-360-light.png",
+      "bengalis197-share-375-dark.png",
+      "bengalis197-knights-age-390-light.png",
+      "bengalis197-bonus0-1280-dark.png"
+    ]
+  },
+  "independentRuntimeUIReview": {
+    "reviewer": "/root/batch9_bengalis_source (not implementation owner), plus independent auxiliary UI reviewer",
+    "parent25ActualImages": {
+      "path": "/tmp/batch9-bengalis-ui-parent.json",
+      "sha256": "a5c9c0576e7b33234c095e104ca5d03dfb765e53d0f11ce179814a9f56db56a2",
+      "bytes": 12331
+    },
+    "auxiliary24ActualImages": {
+      "path": "/tmp/batch9-bengalis-ui-aux.json",
+      "sha256": "e1f0890f26bc2deebf33dddf0caeb1e5eb4b6648bb45dec6765d0e3c2334ee7d",
+      "bytes": 14487
+    },
+    "all49ActualBengaliImagesAnd147AssetsChecked": true,
+    "verdict": "GO no blockers",
+    "newGiftRegionAxeViolations": 0,
+    "boundary": "Scoped new controls only; no claim of clearing inherited whole-page ARIA findings. Original source/code numerical probe is3fc; actual UI build/browser/images aredaa, kept separate.",
+    "immutableCombinedReview": {
+      "path": "/tmp/batch9-bengalis-final-review.json",
+      "sha256": "5e29cb59c6675e02dc2ba3a421fd0aaabcab2d9d261b09d65c8d73ee9e081029",
+      "bytes": 5755
+    }
+  },
+  "actualLocalSmoke": {
+    "path": "/tmp/bengalis197-deployment-smoke-daa0f81.log",
+    "sha256": "9160bc1d9d13622d25ae11bd5a055b3033110fe8fefb4b890b2cf21ee44016fd",
+    "bytes": 3738,
+    "exit": 0,
+    "runtimeCommit": "daa0f81647bfae3fc045cb458834470252340e20",
+    "version": "v0.54.0",
+    "features": [
+      "all",
+      "builds"
+    ],
+    "origin": "explicit local short-smoke plan, not an actual CI execution plan or online Pages check",
+    "civilizations": [
+      "Portuguese",
+      "Shu",
+      "Malians",
+      "Varangians",
+      "Tatars",
+      "Mayans",
+      "Sicilians",
+      "Wei",
+      "Bengalis"
+    ],
+    "publicPracticePrintRoutes": "Generic scouts-18, not online Bengali four-width",
+    "winged": true,
+    "bengaliActualCheckpoint": {
+      "at": 744.6,
+      "stock": {
+        "food": 623,
+        "wood": 429,
+        "gold": 181,
+        "stone": 200
+      },
+      "population": "23/30",
+      "paidTotal": 16,
+      "freeTotal": 2,
+      "ageGiftAt": 584.4,
+      "ageClickAt": 454.4,
+      "castleVillagers": 27,
+      "castlePopulation": "28/30",
+      "castleFreeTotal": 4
+    }
+  },
+  "ciPreflight": {
+    "origin": "explicit local plan/policy preflight, not actual CI execution",
+    "base": "43f308f2d039ec9ac8ab3cfbc3766b00e1e56ef1",
+    "head": "daa0f81647bfae3fc045cb458834470252340e20",
+    "plan": {
+      "scope": "full",
+      "features": [
+        "all",
+        "builds"
+      ],
+      "unit": [],
+      "e2e": [],
+      "data": true,
+      "full": true
+    },
+    "policy": "2d7d65fc56d6da49e0cc673361ee263fdf51b2380f23f4e6a04943618228f69f",
+    "boundary": "Necessary full/data scope computed from actual40SHA locally; fullCI/main/Release evidence will be added to PR/issue delivery receipts by root after actual execution."
+  },
+  "deliveryBoundary": "Subsequent closure changes only coverage/index/this validation document. Runtime marker/artifacts staydaa; independent target numerical observations stay3fc. Root must verify final delta, final policy/plan and actual PR/fullCI checkout/tree before merge, main rebuild/short smoke/Pages, formalRelease/tag/publicZIP verification.",
+  "modelLimits": [
+    "Normal completed-TC start assumes639; not client startup/nomad/rebuild proof.",
+    "Fullhousing gifts immediate in site model, not185872client-tested.",
+    "Concrete birthTC/rally/garrison/spatial and200population boundary not simulated.",
+    "MultiplecompletedTCs multiply age gifts only; existing paidTC training model not expanded.",
+    "GS298/873, trade and manual late-game economy are outside current8 normal templates.",
+    "Knight plan is a generic economy template; no automatic replacement.",
+    "Independent realCost original rates/applied/unsupported objects and empty Bengali/Wei warning states retained."
+  ]
+}

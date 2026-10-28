@@ -1,5 +1,7 @@
 # 设计稿索引（v0.4.0 已签字 / 定稿）
 
+v0.54.0 孟加拉开局支持见 [#197第九批规格](bengalis197.md)：完整4条时代赠村来源、完成TC计数、正常起点及住房/骑士模板边界；[正式先红](bengalis197-first-red.json)、[固定来源](bengalis197-source.json)与[公开语义](bengalis197-public-sources.json)与[实际验证](bengalis197-validation.json)。
+
 v0.53.0 魏开局支持见 [#197第八批规格](wei197.md)：完整16条研究完成奖励、独立免费出生事件、正常TC起点、满住房人口模型及骑士模板限制；[正式先红](wei197-first-red.json)、[固定来源](wei197-source.json)、[公开语义](wei197-public-sources.json)与[实际验证](wei197-validation.json)。
 
 v0.52.0 西西里开局支持见 [#197第七批规格](sicilians197.md)：真实TC施工形态、城堡及防御工事工期，农田升级额外储量/失效/续种边界；[先红记录](sicilians197-first-red.json)、[固定来源](sicilians197-source.json)与[TC门控](sicilians197-tc-gates.json)。

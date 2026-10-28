@@ -29,10 +29,10 @@ const summary = (page: Page) => page.getByRole('region', { name: /摘要/ });
 const steps = (page: Page) => page.getByRole('list', { name: '步骤' }).getByRole('listitem');
 
 test.describe('#3 开局时间线', () => {
-  test('1. 无参数打开：空状态提示 + 6 个开局入口，无时间线无摘要', async ({ page }) => {
+  test('1. 无参数打开：空状态提示 + 8 个开局入口，无时间线无摘要', async ({ page }) => {
     await page.goto(BUILDS);
     await expect(page.getByText('选一个开局，看看你会卡在哪')).toBeVisible();
-    await expect(page.locator('[data-t="timeline-empty"]').getByRole('button', { name: /开局/ })).toHaveCount(6);
+    await expect(page.locator('[data-t="timeline-empty"]').getByRole('button', { name: /开局/ })).toHaveCount(8);
     await expect(nodes(page)).toHaveCount(0);
     await expect(summary(page)).toHaveCount(0);
   });
@@ -337,13 +337,13 @@ test.describe('#3 开局时间线', () => {
     if (m) expect(m[1]).not.toBe(m[2]);
   });
 
-  test('19. 链接带未支持文明（civ=Bengalis）：保留 URL、按通用算、摘要上方一行提示可关闭', async ({ page }) => {
-    await openBuild(page, 'bo=scouts-18&civ=Bengalis');
+  test('19. 链接带未支持文明（civ=Georgians）：保留 URL、按通用算、摘要上方一行提示可关闭', async ({ page }) => {
+    await openBuild(page, 'bo=scouts-18&civ=Georgians');
     const warn = page.locator('[data-t="civ-warn"]');
-    await expect(warn).toHaveText('链接里的孟加拉加成尚未计入，已按通用计算。');
+    await expect(warn).toHaveText('链接里的格鲁吉亚加成尚未计入，已按通用计算。');
     await expect(warn).toHaveAttribute('role', 'status');
     await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-    await expect(page).toHaveURL(/[?&]civ=Bengalis/);
+    await expect(page).toHaveURL(/[?&]civ=Georgians/);
     const wb = (await warn.boundingBox())!;
     const sb = (await summary(page).boundingBox())!;
     expect(wb.y + wb.height).toBeLessThanOrEqual(sb.y);
@@ -365,7 +365,7 @@ test.describe('#3 开局时间线', () => {
     await page.locator('#tlciv').click();
     const dlg = page.getByRole('dialog', { name: '文明' });
     await expect(dlg.getByText('暂不支持 · 文明加成尚未计入')).toBeVisible();
-    const row = dlg.locator('[data-civ="Bengalis"]');
+    const row = dlg.locator('[data-civ="Georgians"]');
     await expect(row).toHaveAttribute('aria-disabled', 'true');
     await expect(row).toContainText('文明加成尚未计入');
     await expect(row.locator('svg.lucide-ban')).toHaveCount(1);
@@ -374,15 +374,15 @@ test.describe('#3 开局时间线', () => {
     expect((await lastOk.boundingBox())!.y).toBeLessThan((await row.boundingBox())!.y);
     await row.click({ force: true });
     await expect(dlg).toBeVisible();
-    await expect(page).not.toHaveURL(/civ=Bengalis/);
+    await expect(page).not.toHaveURL(/civ=Georgians/);
     await expect(dlg.getByText(/个文明已支持/)).toHaveCount(0);
-    // 键盘：搜到的只有禁用项时 Enter 不会选中（等可选项滤空；Bengalis 打字前就在，不能拿它当过滤信号）
-    await dlg.getByRole('combobox').fill('孟加拉');
+    // 键盘：搜到的只有禁用项时 Enter 不会选中（等可选项滤空；Georgians 打字前就在，不能拿它当过滤信号）
+    await dlg.getByRole('combobox').fill('格鲁吉亚');
     await expect(dlg.getByRole('listbox').locator('[role="option"]:not([aria-disabled])')).toHaveCount(0);
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('Enter');
-    await expect(page).not.toHaveURL(/civ=Bengalis/);
-    await expect(dlg.locator('[data-civ="Bengalis"]')).toBeVisible(); // 搜索时禁用组仍保留
+    await expect(page).not.toHaveURL(/civ=Georgians/);
+    await expect(dlg.locator('[data-civ="Georgians"]')).toBeVisible(); // 搜索时禁用组仍保留
   });
 
   test('20b. 手机「设置」里的文明选择器同样分组置灰', async ({ page }) => {
@@ -392,7 +392,7 @@ test.describe('#3 开局时间线', () => {
     await page.getByRole('dialog', { name: '设置' }).locator('#tlciv').click();
     const dlg = page.getByRole('dialog', { name: '文明' });
     await expect(dlg.getByText('暂不支持 · 文明加成尚未计入')).toBeAttached();
-    await expect(dlg.locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
+    await expect(dlg.locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
   });
 
   test('20c. #42 西班牙已支持：选择器里可选，选中后按西班牙计、不出「未计入」提示', async ({ page }) => {
@@ -406,9 +406,9 @@ test.describe('#3 开局时间线', () => {
     await expect(page).toHaveURL(/[?&]civ=Spanish/);
     await expect(page.locator('[data-t="sum-civ"]')).not.toHaveText('按通用计');
     await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
-    // 未支持文明（孟加拉）仍然置灰
+    // 未支持文明（格鲁吉亚）仍然置灰
     await page.locator('#tlciv').click();
-    await expect(page.getByRole('dialog', { name: '文明' }).locator('[data-civ="Bengalis"]')).toHaveAttribute('aria-disabled', 'true');
+    await expect(page.getByRole('dialog', { name: '文明' }).locator('[data-civ="Georgians"]')).toHaveAttribute('aria-disabled', 'true');
   });
 
   test('21. 加载失败：数据分包取不到时显示说明和「重试」，不白屏；重试后恢复', async ({ page }) => {

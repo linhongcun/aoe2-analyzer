@@ -1,0 +1,1901 @@
+{
+  "verdict": "GO_FOR_BOUNDED_BENGALIS_SPEC_AND_RED_PREFLIGHT",
+  "auditor": "/root/batch9_bengalis_source",
+  "auditedAtUTC": "2026-10-27T22:52:13.934860+00:00",
+  "baseline": "43f308f2d039ec9ac8ab3cfbc3766b00e1e56ef1",
+  "patch": 185872,
+  "method": "Fresh independent DatFile.parse from pinned actual .dat with cachedgenieutilsvenv; existingprobe adapted toBengalis and complete command tech-reference closure; source/code reads only, no repo mutation/test/build/clientexperiment",
+  "datSource": {
+    "repo": "SiegeEngineers/auto-mods",
+    "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "path": "dat/empires2_x2_p1.dat",
+    "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa"
+  },
+  "version": "VER 8.9",
+  "rawFile": "/tmp/batch9-bengalis-raw.json",
+  "rawSHA256": "9e0342ba796c98f4112f22c64be457d66cf9a16324a3d4291affe7c25abb1785",
+  "rawBytes": 494255,
+  "probe": "/tmp/batch9_bengalis_raw_probe.py",
+  "civ": {
+    "id": 41,
+    "name": "Bengalis",
+    "tree": 840,
+    "team": 841
+  },
+  "counts": {
+    "dedicatedTechs": 13,
+    "recursiveTechClosure": 214,
+    "recordedTechReferenceEdgesIncludingRepeated": 94,
+    "trackedObjects": 44,
+    "current8Actions": 228,
+    "treeCommands": 31,
+    "treeDisabledTechs": 25
+  },
+  "sourceText": {
+    "en": "Bengalis",
+    "zh": "孟加拉",
+    "ty": [
+      "cav",
+      "naval"
+    ],
+    "desc": "象兵和海军文明",
+    "uu": "战车 (骑射手)（Ratha (Mounted Archer)）",
+    "ct": "派 (战车和象兵单位的攻击速度 +20%)｜Paiks",
+    "it": "大乘佛教 (村民和僧侣所占人口空间 -10%)｜Mahayana",
+    "bon": [
+      "到达下一时代时，城镇中心产生 2 个村民",
+      "骑兵对掷矛手的攻击力 +2",
+      "象兵单位受到的额外伤害 -25% 并提升该单位抵抗招降的能力",
+      "僧侣近战护甲 +3/远程护甲 +3",
+      "船舰每分钟恢复 15 生命值"
+    ],
+    "bonEn": [
+      "Town Centers spawn 2 Villagers when the next Age is reached",
+      "Cavalry +2 attack vs. Skirmishers",
+      "Elephant Units receive -25% bonus damage and are more resistant to conversion",
+      "Monks +3 melee/+3 pierce armor",
+      "Ships regenerate 15 HP per minute"
+    ],
+    "tb": "贸易单位不仅能产生黄金，还能额外产生 10% 的食物",
+    "tbEn": "Trade Units generate +10% food in addition to gold",
+    "s": [
+      7,
+      6,
+      3,
+      6,
+      5,
+      5,
+      6,
+      8
+    ],
+    "fl": 5,
+    "pk": 7,
+    "op": "侦察骑兵 -> 城堡战车 + 战象",
+    "py": "mengjiala",
+    "pyi": "mjl"
+  },
+  "dedicatedTechInventory": [
+    {
+      "id": 823,
+      "name": "Bengalis",
+      "civ": 41,
+      "fullTechMode": 1,
+      "type": 0,
+      "effect": -1,
+      "requires": [
+        104,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 1,
+      "researchLocations": [
+        {
+          "location": 0,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 0,
+      "scopeReason": "文明选择标记；非当前开局研究动作，不产生收益"
+    },
+    {
+      "id": 827,
+      "name": "Ratha (make avail)",
+      "civ": 41,
+      "fullTechMode": 1,
+      "type": 0,
+      "effect": 846,
+      "requires": [
+        102,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 1,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 1,
+      "scopeReason": "城堡战车解锁；当前8套不训练该单位"
+    },
+    {
+      "id": 828,
+      "name": "Elite Ratha",
+      "civ": 41,
+      "fullTechMode": 1,
+      "type": 0,
+      "effect": 847,
+      "requires": [
+        103,
+        827,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 2,
+      "researchLocations": [
+        {
+          "location": 82,
+          "time": 45
+        }
+      ],
+      "cost": [
+        [
+          0,
+          800,
+          1
+        ],
+        [
+          1,
+          800,
+          1
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 2,
+      "scopeReason": "精锐战车升级；帝王时代、手动费用，当前8套不涉及"
+    },
+    {
+      "id": 833,
+      "name": "Paiks",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 852,
+      "requires": [
+        102,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 1,
+      "researchLocations": [
+        {
+          "location": 82,
+          "time": 45
+        }
+      ],
+      "cost": [
+        [
+          1,
+          375,
+          1
+        ],
+        [
+          3,
+          275,
+          1
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 14,
+      "scopeReason": "派：战车及象兵攻击间隔；手动城堡科技，不改当前8套经济"
+    },
+    {
+      "id": 834,
+      "name": "Mahayana",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 853,
+      "requires": [
+        103,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 1,
+      "researchLocations": [
+        {
+          "location": 82,
+          "time": 60
+        }
+      ],
+      "cost": [
+        [
+          1,
+          800,
+          1
+        ],
+        [
+          3,
+          650,
+          1
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 3,
+      "scopeReason": "大乘佛教：人口属性110；帝王时代手动科技，当前8套不研究，绝不能自动套到村民人口"
+    },
+    {
+      "id": 846,
+      "name": "C-Bonus, Elephant resistance",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 865,
+      "requires": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 0,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 30,
+      "scopeReason": "象兵战斗/抗招降属性；当前8套不训练象兵，非采集、费用、工期"
+    },
+    {
+      "id": 847,
+      "name": "C-Bonus, Villagers in age2",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 866,
+      "requires": [
+        101,
+        639,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 2,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 2,
+      "scopeReason": "封建完成赠送；本批正常开局实际触发"
+    },
+    {
+      "id": 848,
+      "name": "C-Bonus, Villagers in age3",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 866,
+      "requires": [
+        102,
+        639,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 2,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 2,
+      "scopeReason": "城堡完成赠送；本批直城3套实际触发"
+    },
+    {
+      "id": 849,
+      "name": "C-Bonus, Villagers in age4",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 866,
+      "requires": [
+        103,
+        639,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 2,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 2,
+      "scopeReason": "帝王完成赠送；完整来源保留，当前8套不升帝王"
+    },
+    {
+      "id": 850,
+      "name": "C-Bonus, Ships regenerate",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 867,
+      "requires": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 0,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 5,
+      "scopeReason": "船只生命恢复属性109；不等于渔船采集速度，不改无战斗经济"
+    },
+    {
+      "id": 870,
+      "name": "C-Bonus, Monk armor",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 568,
+      "requires": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 0,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 10,
+      "scopeReason": "僧侣护甲；非经济，当前8套无僧侣"
+    },
+    {
+      "id": 873,
+      "name": "C-Bonus, +2vill GS",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 866,
+      "requires": [
+        298,
+        639,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 2,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 2,
+      "scopeReason": "封建时代开局/特殊GS分支；前置298，不能当普通开局赠村或普通封建升级"
+    },
+    {
+      "id": 877,
+      "name": "C-Bonus, Cavalry vs Skirm",
+      "civ": 41,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 888,
+      "requires": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 0,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commandCount": 2,
+      "scopeReason": "骑兵对掷矛手攻击力；战斗属性，不改当前8套经济"
+    }
+  ],
+  "rewardFamily": [
+    {
+      "tech": 847,
+      "generatedAge": 2,
+      "trigger": 101,
+      "normalCurrent8": true,
+      "raw": {
+        "id": 847,
+        "name": "C-Bonus, Villagers in age2",
+        "civ": 41,
+        "fullTechMode": 0,
+        "type": 0,
+        "effect": 866,
+        "requires": [
+          101,
+          639,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "requiredCount": 2,
+        "researchLocations": [
+          {
+            "location": -1,
+            "time": 0
+          }
+        ],
+        "cost": [
+          [
+            -1,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0
+          ]
+        ],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 7,
+            "A": 83,
+            "B": 109,
+            "C": 2,
+            "D": 0.0
+          }
+        ]
+      },
+      "cacheV8": {
+        "Name": "C-Bonus, Villagers in age2",
+        "EffectID": 866,
+        "Civ": 41,
+        "RequiredTechs": [
+          101,
+          639,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 2,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": []
+      },
+      "expectedContext": {
+        "effectId": 866,
+        "requiredCount": 2,
+        "researchLocation": -1,
+        "researchAt": [],
+        "researchTime": 0,
+        "cost": [],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 7,
+            "A": 83,
+            "B": 109,
+            "C": 2,
+            "D": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "tech": 848,
+      "generatedAge": 3,
+      "trigger": 102,
+      "normalCurrent8": true,
+      "raw": {
+        "id": 848,
+        "name": "C-Bonus, Villagers in age3",
+        "civ": 41,
+        "fullTechMode": 0,
+        "type": 0,
+        "effect": 866,
+        "requires": [
+          102,
+          639,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "requiredCount": 2,
+        "researchLocations": [
+          {
+            "location": -1,
+            "time": 0
+          }
+        ],
+        "cost": [
+          [
+            -1,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0
+          ]
+        ],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 7,
+            "A": 83,
+            "B": 109,
+            "C": 2,
+            "D": 0.0
+          }
+        ]
+      },
+      "cacheV8": {
+        "Name": "C-Bonus, Villagers in age3",
+        "EffectID": 866,
+        "Civ": 41,
+        "RequiredTechs": [
+          102,
+          639,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 2,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": []
+      },
+      "expectedContext": {
+        "effectId": 866,
+        "requiredCount": 2,
+        "researchLocation": -1,
+        "researchAt": [],
+        "researchTime": 0,
+        "cost": [],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 7,
+            "A": 83,
+            "B": 109,
+            "C": 2,
+            "D": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "tech": 849,
+      "generatedAge": 4,
+      "trigger": 103,
+      "normalCurrent8": false,
+      "raw": {
+        "id": 849,
+        "name": "C-Bonus, Villagers in age4",
+        "civ": 41,
+        "fullTechMode": 0,
+        "type": 0,
+        "effect": 866,
+        "requires": [
+          103,
+          639,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "requiredCount": 2,
+        "researchLocations": [
+          {
+            "location": -1,
+            "time": 0
+          }
+        ],
+        "cost": [
+          [
+            -1,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0
+          ]
+        ],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 7,
+            "A": 83,
+            "B": 109,
+            "C": 2,
+            "D": 0.0
+          }
+        ]
+      },
+      "cacheV8": {
+        "Name": "C-Bonus, Villagers in age4",
+        "EffectID": 866,
+        "Civ": 41,
+        "RequiredTechs": [
+          103,
+          639,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 2,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": []
+      },
+      "expectedContext": {
+        "effectId": 866,
+        "requiredCount": 2,
+        "researchLocation": -1,
+        "researchAt": [],
+        "researchTime": 0,
+        "cost": [],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 7,
+            "A": 83,
+            "B": 109,
+            "C": 2,
+            "D": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "tech": 873,
+      "generatedAge": 1,
+      "trigger": 298,
+      "normalCurrent8": false,
+      "raw": {
+        "id": 873,
+        "name": "C-Bonus, +2vill GS",
+        "civ": 41,
+        "fullTechMode": 0,
+        "type": 0,
+        "effect": 866,
+        "requires": [
+          298,
+          639,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "requiredCount": 2,
+        "researchLocations": [
+          {
+            "location": -1,
+            "time": 0
+          }
+        ],
+        "cost": [
+          [
+            -1,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0
+          ]
+        ],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 7,
+            "A": 83,
+            "B": 109,
+            "C": 2,
+            "D": 0.0
+          }
+        ]
+      },
+      "cacheV8": {
+        "Name": "C-Bonus, +2vill GS",
+        "EffectID": 866,
+        "Civ": 41,
+        "RequiredTechs": [
+          298,
+          639,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 2,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": []
+      },
+      "expectedContext": {
+        "effectId": 866,
+        "requiredCount": 2,
+        "researchLocation": -1,
+        "researchAt": [],
+        "researchTime": 0,
+        "cost": [],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 7,
+            "A": 83,
+            "B": 109,
+            "C": 2,
+            "D": 0.0
+          }
+        ]
+      }
+    }
+  ],
+  "closureTechIds": [
+    8,
+    12,
+    13,
+    14,
+    15,
+    17,
+    19,
+    22,
+    23,
+    25,
+    34,
+    35,
+    37,
+    47,
+    48,
+    54,
+    55,
+    57,
+    64,
+    65,
+    74,
+    76,
+    77,
+    85,
+    87,
+    96,
+    100,
+    101,
+    102,
+    103,
+    104,
+    106,
+    107,
+    108,
+    109,
+    110,
+    113,
+    115,
+    117,
+    120,
+    122,
+    128,
+    130,
+    132,
+    135,
+    138,
+    142,
+    146,
+    147,
+    148,
+    151,
+    162,
+    166,
+    180,
+    182,
+    186,
+    188,
+    192,
+    197,
+    199,
+    202,
+    203,
+    204,
+    207,
+    209,
+    213,
+    216,
+    217,
+    218,
+    220,
+    221,
+    222,
+    237,
+    240,
+    244,
+    246,
+    249,
+    254,
+    255,
+    257,
+    258,
+    264,
+    265,
+    266,
+    278,
+    279,
+    280,
+    281,
+    282,
+    291,
+    292,
+    295,
+    298,
+    315,
+    320,
+    321,
+    323,
+    359,
+    373,
+    374,
+    375,
+    376,
+    379,
+    408,
+    428,
+    429,
+    436,
+    437,
+    439,
+    480,
+    481,
+    523,
+    525,
+    587,
+    604,
+    605,
+    630,
+    631,
+    638,
+    639,
+    659,
+    660,
+    661,
+    666,
+    667,
+    706,
+    711,
+    716,
+    717,
+    722,
+    755,
+    758,
+    759,
+    760,
+    761,
+    762,
+    763,
+    764,
+    765,
+    766,
+    767,
+    768,
+    786,
+    788,
+    789,
+    800,
+    801,
+    823,
+    827,
+    828,
+    833,
+    834,
+    837,
+    838,
+    846,
+    847,
+    848,
+    849,
+    850,
+    851,
+    870,
+    873,
+    877,
+    886,
+    903,
+    904,
+    905,
+    906,
+    907,
+    908,
+    909,
+    910,
+    911,
+    912,
+    913,
+    933,
+    950,
+    952,
+    953,
+    954,
+    955,
+    956,
+    967,
+    968,
+    969,
+    970,
+    971,
+    972,
+    973,
+    974,
+    975,
+    976,
+    977,
+    1004,
+    1136,
+    1137,
+    1138,
+    1141,
+    1142,
+    1150,
+    1151,
+    1169,
+    1170,
+    1171,
+    1174,
+    1209,
+    1218,
+    1221,
+    1222,
+    1262,
+    1267,
+    1357,
+    1358,
+    1387
+  ],
+  "closureTechRecords": "Full context, cost, requires and complete commands for every214closure row are in rawFile; closure includes disabled/manual/foreign prerequisite branches and is not an auto-apply list",
+  "tree": {
+    "id": 840,
+    "name": "Bengalis Tech Tree",
+    "commands": [
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 244.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 321.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 77.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 166.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 439.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 255.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 85.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 188.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 379.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 279.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 64.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 320.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 209.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 265.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 428.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 436.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 437.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 192.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 218.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 96.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 162.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1138.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1142.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 910.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 54.0
+      },
+      {
+        "Type": 8,
+        "A": 837,
+        "B": 12,
+        "C": -1,
+        "D": 1.0
+      },
+      {
+        "Type": 8,
+        "A": 838,
+        "B": 12,
+        "C": -1,
+        "D": 1.0
+      },
+      {
+        "Type": 8,
+        "A": 630,
+        "B": 12,
+        "C": -1,
+        "D": 1.0
+      },
+      {
+        "Type": 8,
+        "A": 631,
+        "B": 12,
+        "C": -1,
+        "D": 1.0
+      },
+      {
+        "Type": 8,
+        "A": 480,
+        "B": 12,
+        "C": -1,
+        "D": 1.0
+      },
+      {
+        "Type": 8,
+        "A": 481,
+        "B": 12,
+        "C": -1,
+        "D": 1.0
+      }
+    ]
+  },
+  "team": {
+    "id": 841,
+    "name": "Bengalis Team Bonus",
+    "commands": [
+      {
+        "Type": 1,
+        "A": 251,
+        "B": -1,
+        "C": -1,
+        "D": 10.0
+      }
+    ]
+  },
+  "resourceDifferencesFromBritons": [
+    {
+      "id": 73,
+      "bengalis": 9506.0,
+      "base": 9466.0
+    }
+  ],
+  "trackedUnitDifferencesFromBritons": {},
+  "current8BuildOrders": [
+    {
+      "id": "archers-19",
+      "actions": 32,
+      "ageActions": [
+        {
+          "step": 6,
+          "actionIndex": 2,
+          "action": {
+            "type": "ageUp",
+            "age": 2
+          }
+        }
+      ],
+      "extraTCBuilds": [],
+      "completedTCsAtEachAgeEventStatic": 1,
+      "expectedEventCountStatic": 1,
+      "expectedBonusVillagersStatic": 2,
+      "knightTemplateOnly": false,
+      "normalModesOnly": true
+    },
+    {
+      "id": "drush-fc",
+      "actions": 31,
+      "ageActions": [
+        {
+          "step": 9,
+          "actionIndex": 1,
+          "action": {
+            "type": "ageUp",
+            "age": 2
+          }
+        },
+        {
+          "step": 12,
+          "actionIndex": 0,
+          "action": {
+            "type": "ageUp",
+            "age": 3
+          }
+        }
+      ],
+      "extraTCBuilds": [],
+      "completedTCsAtEachAgeEventStatic": 1,
+      "expectedEventCountStatic": 2,
+      "expectedBonusVillagersStatic": 4,
+      "knightTemplateOnly": false,
+      "normalModesOnly": true
+    },
+    {
+      "id": "fast-castle-boom",
+      "actions": 30,
+      "ageActions": [
+        {
+          "step": 9,
+          "actionIndex": 2,
+          "action": {
+            "type": "ageUp",
+            "age": 2
+          }
+        },
+        {
+          "step": 11,
+          "actionIndex": 1,
+          "action": {
+            "type": "ageUp",
+            "age": 3
+          }
+        }
+      ],
+      "extraTCBuilds": [
+        {
+          "step": 12,
+          "actionIndex": 0,
+          "action": {
+            "type": "build",
+            "building": 109,
+            "count": 2
+          }
+        }
+      ],
+      "completedTCsAtEachAgeEventStatic": 1,
+      "expectedEventCountStatic": 2,
+      "expectedBonusVillagersStatic": 4,
+      "knightTemplateOnly": false,
+      "normalModesOnly": true
+    },
+    {
+      "id": "fast-castle-knights",
+      "actions": 32,
+      "ageActions": [
+        {
+          "step": 9,
+          "actionIndex": 2,
+          "action": {
+            "type": "ageUp",
+            "age": 2
+          }
+        },
+        {
+          "step": 11,
+          "actionIndex": 1,
+          "action": {
+            "type": "ageUp",
+            "age": 3
+          }
+        }
+      ],
+      "extraTCBuilds": [],
+      "completedTCsAtEachAgeEventStatic": 1,
+      "expectedEventCountStatic": 2,
+      "expectedBonusVillagersStatic": 4,
+      "knightTemplateOnly": true,
+      "normalModesOnly": true
+    },
+    {
+      "id": "feudal-drush-18",
+      "actions": 25,
+      "ageActions": [
+        {
+          "step": 8,
+          "actionIndex": 2,
+          "action": {
+            "type": "ageUp",
+            "age": 2
+          }
+        }
+      ],
+      "extraTCBuilds": [],
+      "completedTCsAtEachAgeEventStatic": 1,
+      "expectedEventCountStatic": 1,
+      "expectedBonusVillagersStatic": 2,
+      "knightTemplateOnly": false,
+      "normalModesOnly": true
+    },
+    {
+      "id": "hybrid-fish-18",
+      "actions": 17,
+      "ageActions": [
+        {
+          "step": 6,
+          "actionIndex": 2,
+          "action": {
+            "type": "ageUp",
+            "age": 2
+          }
+        }
+      ],
+      "extraTCBuilds": [],
+      "completedTCsAtEachAgeEventStatic": 1,
+      "expectedEventCountStatic": 1,
+      "expectedBonusVillagersStatic": 2,
+      "knightTemplateOnly": false,
+      "normalModesOnly": true
+    },
+    {
+      "id": "maa-archers-18",
+      "actions": 33,
+      "ageActions": [
+        {
+          "step": 5,
+          "actionIndex": 5,
+          "action": {
+            "type": "ageUp",
+            "age": 2
+          }
+        }
+      ],
+      "extraTCBuilds": [],
+      "completedTCsAtEachAgeEventStatic": 1,
+      "expectedEventCountStatic": 1,
+      "expectedBonusVillagersStatic": 2,
+      "knightTemplateOnly": false,
+      "normalModesOnly": true
+    },
+    {
+      "id": "scouts-18",
+      "actions": 28,
+      "ageActions": [
+        {
+          "step": 7,
+          "actionIndex": 2,
+          "action": {
+            "type": "ageUp",
+            "age": 2
+          }
+        }
+      ],
+      "extraTCBuilds": [],
+      "completedTCsAtEachAgeEventStatic": 1,
+      "expectedEventCountStatic": 1,
+      "expectedBonusVillagersStatic": 2,
+      "knightTemplateOnly": false,
+      "normalModesOnly": true
+    }
+  ],
+  "staticNormalExpected": {
+    "events": 11,
+    "freeVillagers": 22,
+    "meaning": "STATIC source/template inference, not executed simulation clocks or client experiment"
+  },
+  "eligibility": {
+    "normalStart": "Retain existing 3villagers +200Food/200Wood/100Gold/200Stone and onecompletedlogicalTC; raw resource arrays differ fromBritons onlylanguage73, no start modifier; model START/START_VILS/builtmap supplies normal-start abstraction",
+    "tc639": {
+      "id": 639,
+      "name": "Town Center Spawn",
+      "civ": -1,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": -1,
+      "requires": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 0,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 0
+        }
+      ],
+      "cost": [
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commands": []
+    },
+    "tcBuildingTechs": {
+      "109": 722,
+      "71": 722,
+      "141": -1,
+      "142": -1
+    },
+    "tc639Boundary": "639 rawmetadata has no effect/requirements/location/time; building109/71 istech722, not639. .dat alone does not establish runtimecompletion. Normal existingTC satisfying639 is explicitmodel assumption inheritedfromWei; nomad/delayedfirstTC unsupported",
+    "cap0": "Effect866 sets234=0 thenType7/A83/B109/C2/D0. Currentversiontext saysTownCenters plural. Older158041 spawn_at restrictsbuildingcount onlywhenlimit>0, supports2percompletedTC. Use logical completedTC count at actualagecompletion, nevercap1/globaloneeventcount2 for multiTC",
+    "gs298": {
+      "id": 298,
+      "name": "Feudal Age start",
+      "civ": -1,
+      "fullTechMode": 0,
+      "type": 0,
+      "effect": 298,
+      "requires": [
+        104,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "requiredCount": 1,
+      "researchLocations": [
+        {
+          "location": -1,
+          "time": 1
+        }
+      ],
+      "cost": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          -1,
+          0,
+          0
+        ],
+        [
+          -1,
+          0,
+          0
+        ]
+      ],
+      "commands": [
+        {
+          "Type": 102,
+          "A": -1,
+          "B": -1,
+          "C": -1,
+          "D": 323.0
+        },
+        {
+          "Type": 102,
+          "A": -1,
+          "B": -1,
+          "C": -1,
+          "D": 587.0
+        },
+        {
+          "Type": 102,
+          "A": -1,
+          "B": -1,
+          "C": -1,
+          "D": 847.0
+        },
+        {
+          "Type": 102,
+          "A": -1,
+          "B": -1,
+          "C": -1,
+          "D": 851.0
+        }
+      ]
+    },
+    "specialStartBoundary": "298effect disables847;873requires298+639. Retainfullsourcecontext, never set298 orgrant873 in normalcurrent8; no automatic5villagerstart. Do not equate sourceage1 to eligibility",
+    "knightUnavailable": "Bengali tree840Type102D166 disablesKnight(makeavail), whoseeffect166 Type2A38B1 enablesKnight38. No automatic elephant/ratha substitute. fast-castle-knights only clearlymarkedgenericeconomictemplate; scouts/archers/MAA legal",
+    "legalCurrentUnits": {
+      "4": "151unblocked",
+      "13": "baseenabled",
+      "38": "166disabled, templateonly",
+      "74": "baseenabled",
+      "75": "222unblocked",
+      "83": "baseenabled",
+      "93": "87unblocked",
+      "448": "204unblocked"
+    },
+    "researchCurrent8": "14/22/199/202/203 allnotdisabled; rawsharedtechdependencies preserved;279disabledbutnotresearchedbycurrent8"
+  },
+  "publicSources": [
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/README.md",
+      "path": "/tmp/batch9-bengalis-public-engine-readme.txt",
+      "role": "Fresh connector read; expressly build158041, not185872",
+      "sha256": "b0352d5219b5807c7156f7ebaeeafc0479631deb525bb58f83061ac427361850"
+    },
+    {
+      "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/technology/effect/upgrade.rs",
+      "path": "/tmp/batch9-bengalis-public-engine-spawn.txt",
+      "role": "Fresh connector read; spawn_at cap only when0<limit, completedstate2 buildings; older engine corroboration only",
+      "sha256": "6415b00c76592f5784f5e9a2dc14fae29dde1acd7e64a122b226267c3b8af9a2"
+    },
+    {
+      "url": "https://github.com/Divy1211/AoE2DE_UGC_Guide/blob/3dab81b6e8d4e416b8b44eb0b7cb928ef561ae0d/docs/general/xs/constants/constants.md",
+      "path": "/tmp/batch9-bengalis-public-ugc-constants.txt",
+      "role": "Fresh connector read; explains A/B/C and cap buildings but statement requiringnon0 conflictscurrentBengalis0; notcap0proof",
+      "sha256": "4505c210cb3d415a99e78100865524258e7bca22ba145ed89552e53f7327cf06"
+    }
+  ],
+  "modelBoundaries": [
+    "Housing-overcap immediategift is declaredsimulatormodel; no185872clienttest. Keep ordinarytraininghousinggates and paidinflightjob.",
+    "Use existingtaskassignment abstraction; not alwaysidle/clientTCrally or garrison. No spatialblock/whichTC/sexsimulation.",
+    "LogicalTC109group includesupgradedforms71/141/142; matchingcurrentclientinternalmasteridentity notverified.",
+    "No current8 reaches200population; countguards do not establishmaxpopulationclientsemantics.",
+    "No nomad/advancedstart/GS/Imperialcontent expansion. Retaining849/873source is guardcompleteness, not implementingthese gameplaymodes.",
+    "Tradefoodres251=10 is teambranch; current8 has no tradeunits/routes/trading. Not gatherproductivity.",
+    "Mahayana834/manualImperialpopulationattribute110 mustnot beappliedautomatically.",
+    "Paiks833,elephantresistance846,shipsregeneration850,monkarmor870,cavalryattack877 are combat/noncurrenteconomic mechanisms."
+  ],
+  "implementationRecommendation": [
+    "Generate new ageSpawn (notspawn) context onlyforBengali4existingrows using actualcache-v8 fields and complete rawcommandlist; do notadd syntheticfullTechMode/typefields to context, handeditgeneratedJSON, orglobalType7decode.",
+    "Closed4family exact sourcebonus/IDs847848849873/ages2341/triggers101102103298+639/effect866/manualzero metadata/orderedcap0thenType7A83B109C2D0; reject entirefamily missingduplicateunknown/displaced/NaN/negative/wrongtarget.",
+    "Ordinaryactualagecompletion hook101/102/103 only, dedupebyrewardtech, 2×completedlogicalTCcount at completion; excludesfoundations/laterbuiltTCs/researchstart/economictech/GS.",
+    "Reuse existingfreebirthaccounting/taskassignment/paidintervals frameworknarrowlyforBengalis with Wei outputbytes unchanged. Source grantcountC=2 distinctfromTCmultiplier.",
+    "Update support/notes/sourceusage/shares/practice/print and actualAgeMark villagernumber narrowBengalis branch; keep plannedstepcounts labeled.",
+    "Bengali singleworkerrealCost originally hasGenericrate/applied[]/unsupported[] for allages because only234/251rowsnotgather; preserveall224objects/emptywarning, explain bonus0notgather."
+  ],
+  "preflightTests": [
+    "Realexporterfixture generatedbyactualeco_build, four contextscomplete and onlyBengali4rows change; preserveWei16contexts/rawother55/global9.",
+    "Failclosed family malformed/source/age/triggerorder/639/effect866/count2/researchtime/cost/manual/dedup/missing/type7target/unknownextra commands, unrelatedrowwithageSpawn/res234 refused.",
+    "Before actualagecompletion:zeroevents;after:exactonce 2/oneTC,4/twoTC,0/zeroTC;noTCfoundationorpostageconstructionretroactivebirth; economicresearch202/203 noextra reward.",
+    "Normalstart3not5;GS873notgranted; tech298 not markedcompleted by normalage101.",
+    "Preserve paidjob whenfreebirths hitgoal; no food/TCslot charged; ordinary paidtrainingstillhousinggated and notes disclosefreeovercapassumption.",
+    "Current8staticexpect11events/22villagers withallfirstageprestates/paidbirths equalnormalBengalicontrol; laterresources/clocks maylegitimatelychange.",
+    "BothageMark/cardsummary count3+paidbirths+freebirths atactualreach ratherthanplannedtarget; eachfreeborn affectspop/alloc.",
+    "Onlyfastcastleknightsavailabilitywarning;scouts/archersnoKnightwarning.",
+    "Fullother55=440output comparison and224realCost unchanged; oldv0/historical19/#289/#331/Sicilian/Wei assertions preserved; onlyBengali currentnegative/support expectations maymigrate.",
+    "Fourwidth3603753901280 light/dark timeline/share/bonus0/practice/print and actualPNG; targetedAxe newcontrols withoutweakeningoldassertions."
+  ],
+  "supplementalCacheV8Crosschecks": {
+    "BengaliNamedTechs": [
+      823
+    ],
+    "EffectsNamedBengalis": [
+      840,
+      841
+    ],
+    "DirectDownstreamOutsideDedicated": [],
+    "method": "Read cachev8 for anytech outside13dedicated requiring aBengalidicatedtech; none. No extra rawparse/domainexecution."
+  }
+}

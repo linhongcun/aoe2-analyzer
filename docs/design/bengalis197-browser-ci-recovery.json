@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "recordedUTC": "2026-10-28T00:38:27.561063+00:00",
+  "failedRun": {
+    "runId": 40603811866,
+    "head": "0b20094c12c739fadaf39fd262e65d1e4c424097",
+    "actualCheckout": "baf3affdb05b26371a1580356c7467c14a98038f",
+    "tree": "a7d7544a39a42e52e280b57cb821af859e9e55cf",
+    "conclusion": "failure",
+    "unit": {
+      "files": 208,
+      "passed": 4441,
+      "skipped": 2,
+      "todo": 1,
+      "total": 4444
+    },
+    "python": {
+      "passed": 165
+    },
+    "browser": {
+      "passed": 2345,
+      "failed": 6,
+      "skipped": 13,
+      "total": 2364,
+      "reportedDuration": "40.5m"
+    },
+    "reason": "All6 failed assertions were current unsupported Bengalis specimens in shareCard/timeline, after Bengalis became supported. No matching successful evidence reused.",
+    "successEvidenceRecorded": false,
+    "shortSmoke": "skipped after failed full browser",
+    "deploy": "skipped"
+  },
+  "correction": {
+    "sourceHeadBefore": "0b20094c12c739fadaf39fd262e65d1e4c424097",
+    "files": [
+      {
+        "path": "tests/e2e/shareCard.spec.ts",
+        "before": "b4ce8aa4524bd9a16959dcd36133b45db98fd914e44c9a7352bdb14852146801",
+        "after": "1a6be058efa8b7a86eb840d26224c4cf0057c1f41fbfbbeb926a7e0014d8174b",
+        "id_replacements": 4,
+        "zh_replacements": 0,
+        "inverse_exact": true
+      },
+      {
+        "path": "tests/e2e/timeline.spec.ts",
+        "before": "705d2e73ffee2a401472ba9a9a887b22793ee688148f1e3bbf3620affd27934c",
+        "after": "199977ae35952840e2b6cdad879298920af61f59e378c69876587ca538f4f44e",
+        "id_replacements": 10,
+        "zh_replacements": 3,
+        "inverse_exact": true
+      }
+    ],
+    "rule": "ONLY current unsupported specimen IDs/names to still-unsupported Georgians/格鲁吉亚, including negative fourwidth branch; exact inverse returns original bytes. All assertions/counts/styles/widths/timeouts, numeric/history/snapshots and production/data/policy unchanged.",
+    "currentMigrationFileCount": 15
+  },
+  "localActual": {
+    "source": "HEAD0b plus exactly two dirty test specimen files before doc commit",
+    "distActualCommit": "daa0f81647bfae3fc045cb458834470252340e20",
+    "distTree": "8f1930dca04785515cd2971133647717def5706a",
+    "assetsAll147AndIndexVerifiedUnchanged": true,
+    "buildRerun": false,
+    "testCommand": "BASE_URL=http://127.0.0.1:4207/ PLAYWRIGHT_JSON_OUTPUT_NAME=/tmp/bengalis197-browser-corrected-local.json npx playwright test tests/e2e/shareCard.spec.ts tests/e2e/timeline.spec.ts --reporter=line,json --output=/tmp/bengalis197-browser-corrected-local-results",
+    "stats": {
+      "startTime": "2026-10-28T00:37:28.035Z",
+      "duration": 33376.539,
+      "expected": 47,
+      "skipped": 1,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "retries": 0,
+    "skip": "one pre-existing original case, unchanged",
+    "globalDomainProbeRerun": false,
+    "oldUIAndProbeEvidenceRelabeled": false
+  },
+  "references": {
+    "/tmp/bengalis197-pr-ci-failed-40603811866.log": {
+      "bytes": 795616,
+      "sha256": "fb22fa3e405b893c8c65113153970c9485a9afd05a7e3cdc09b1a1b3ed68e07b"
+    },
+    "/tmp/bengalis197-independent-ci2-failure.json": {
+      "bytes": 6635,
+      "sha256": "fef0c95add3f7458eb334048ed620e95716674345927ad548d3d5aa296e2d286"
+    },
+    "/tmp/bengalis197-browser-negative-preflight.json": {
+      "bytes": 10520,
+      "sha256": "867a845d2b0700ae452399b8cd8def5c8b1330483c8b8165f2523a1585c366d3"
+    },
+    "/tmp/batch9197-current-migration-oracle-15.json": {
+      "bytes": 443647,
+      "sha256": "22201ddd8e46870333383a6b65c8fcd188d57a1e9a297f347f8f4813602d18d3"
+    },
+    "/tmp/bengalis197-browser-fix-root-bytes.json": {
+      "bytes": 589,
+      "sha256": "c4c935670188fc2432fcebfaf5d227b58e830686a36ec7754f316e4a9d610e1a"
+    },
+    "/tmp/bengalis197-browser-corrected-local.json": {
+      "bytes": 62068,
+      "sha256": "8917686f7c3dfa3f40cc02dd2380e3fc883cbd8540157f887e7f9e9dd93ab667"
+    },
+    "/tmp/bengalis197-browser-corrected-local.log": {
+      "bytes": 7709,
+      "sha256": "170a167fe110bc8446432a4920b147bfd1a9f0529235bf516c8f22a1b6616aad"
+    },
+    "/tmp/bengalis197-preview-ci-recovery-identity.json": {
+      "bytes": 655,
+      "sha256": "7065eeb5bbcc178c99f0108e623be86b4a3ca51eeda4445b516b2dd1af82fe80"
+    }
+  },
+  "scopeComment": {
+    "id": 6455520387,
+    "updatedAt": "2026-10-28T00:37:16Z",
+    "apiReadbackExact": true
+  },
+  "futureFinalCommit": null,
+  "futureCIResult": "pending new commit independently reviewed then real CI; failure run cannot be reused as successful evidence"
+}

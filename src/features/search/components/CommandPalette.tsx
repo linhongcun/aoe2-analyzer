@@ -64,7 +64,7 @@ export default function CommandPalette({
             aria-expanded={open}
             aria-activedescendant={res[sel] ? `${listId}-option-${sel}` : undefined}
             value={q}
-            placeholder="搜索文明、单位、科技、开局…（中/英）"
+            placeholder="搜索文明、单位、科技…"
             onChange={(e) => {
               setQ(e.target.value);
               setSel(0);

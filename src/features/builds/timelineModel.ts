@@ -201,12 +201,33 @@ export function buildView(tl: BuildTimeline, unitName: (id: string) => string): 
   // 城镇中心行：造村民段 + 升时代段（琥珀），TC 闲置由卡点层叠加
   const tc: Seg[] = [];
   let cur = 0;
+  // Only Bengali age-event provenance can opt into actual counts; pasted Wei events retain the old view contract.
+  const bengaliEvents =
+    tl.civ === 'Bengalis' &&
+    tl.bonusVillagerEvents?.length &&
+    tl.bonusVillagerEvents.every(
+      (event) =>
+        [847, 848, 849].includes(event.tech) &&
+        event.trigger === event.tech - 746 &&
+        Number.isSafeInteger(event.count) &&
+        event.count > 0 &&
+        event.count % 2 === 0 &&
+        tl.ageUps.some((age) => ({ feudal: 101, castle: 102, imperial: 103 })[age.age] === event.trigger && Math.abs(age.reachAt - event.at) < 1e-6),
+    )
+      ? tl.bonusVillagerEvents
+      : null;
   const vilsAt = (t: number) => {
     if (tl.civ === 'Wei' && tl.villagerEvents && tl.bonusVillagerEvents)
       return (
         3 +
         tl.villagerEvents.filter((event) => event.to <= t + 1e-6).length +
         tl.bonusVillagerEvents.filter((event) => event.at <= t + 1e-6).reduce((n, event) => n + event.count, 0)
+      );
+    if (bengaliEvents && tl.villagerEvents)
+      return (
+        3 +
+        tl.villagerEvents.filter((event) => event.to <= t + 1e-6).length +
+        bengaliEvents.filter((event) => event.at <= t + 1e-6).reduce((n, event) => n + event.count, 0)
       );
     return steps.filter((s) => s.startAt <= t + 1e-6).reduce((m, s) => Math.max(m, s.vils), steps[0]?.vils ?? 0);
   };
@@ -245,7 +266,18 @@ export function buildView(tl: BuildTimeline, unitName: (id: string) => string): 
 
   const ages: AgeMark[] = tl.ageUps.map((a) => {
     const at = steps.filter((s) => s.startAt <= a.reachAt + 1e-6).pop() ?? steps[0]!;
-    return { age: a.age, nameZh: AGE_ZH[a.age], clickAt: a.clickAt, reachAt: a.reachAt, errSec: a.errSec, vils: vilsAt(a.reachAt), pop: at.pop };
+    const arrival = bengaliEvents?.find(
+      (event) => event.trigger === { feudal: 101, castle: 102, imperial: 103 }[a.age] && Math.abs(event.at - a.reachAt) < 1e-6,
+    );
+    return {
+      age: a.age,
+      nameZh: AGE_ZH[a.age],
+      clickAt: a.clickAt,
+      reachAt: a.reachAt,
+      errSec: a.errSec,
+      vils: vilsAt(a.reachAt),
+      pop: arrival?.pop ?? at.pop,
+    };
   });
 
   const seen = new Set<string>();

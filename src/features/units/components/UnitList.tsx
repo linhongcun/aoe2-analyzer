@@ -12,6 +12,7 @@ import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widg
 import { useSticky } from '../../../shared/utils/sticky';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
+import { projectUnitDisplayAges } from '../displayAge';
 import './unit-cards.css';
 
 export default function UnitList() {
@@ -22,7 +23,7 @@ export default function UnitList() {
     [dlc, setDlc] = useSticky('u.dlc', ''),
     [civ, setCiv] = useSticky('u.civ', ''),
     [role, setRole] = useSticky<UnitRole | ''>('u.role', '');
-  const all = core?.units ?? [];
+  const all = core ? projectUnitDisplayAges(core.units, civ) : [];
   const fams = core ? collapse(all, core.fam) : [];
   const r = core ? filterUnitFamilies(all, core.fam, { query: q, type: t, age: a, dlc, civ, role }) : [];
   const dirty = Boolean(q || t || a || dlc || civ || role);
