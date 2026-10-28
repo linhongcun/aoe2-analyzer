@@ -1,5 +1,7 @@
 # 设计稿索引（v0.4.0 已签字 / 定稿）
 
+v0.58.0 高棉开局支持见 [第十三批规格](khmer197.md)：完整来源门控、独立农田供给、638免前置与显式付费建筑政策；[固定来源](khmer197-source.json)、[公开语义](khmer197-public-sources.json)及[真实先红](khmer197-first-red.json)及[分段转绿与必要本地检查](khmer197-green-boundary.json)。本地量化/浏览器证据随实际不可变运行时补充，CI与发布以PR记录为准。
+
 v0.57.0 斯拉夫开局支持见 [#197第十二批规格](slavs197.md)：独立农田供需稳态模型、近距离旧通用估算差异、FC2真实任务披露与团队人口未模拟；[真实先红](slavs197-first-red.json)、[固定来源](slavs197-source.json)、[公开语义](slavs197-public-sources.json)及[原99转绿和追加边界](slavs197-green-boundary.json)，另见[本地A实际验证](slavs197-validation.json)、[量化](slavs197-runtime-quantified.json)和[独立图审](slavs197-ui-review.json)。
 
 v0.56.0 格鲁吉亚开局支持见 [#197第十一批规格](georgians197.md)：免费起始车与逐次付费新车独立、完成地点/时代类别及来源门控；[真实先红](georgians197-first-red.json)、[固定来源](georgians197-source.json)、[公开语义](georgians197-public-sources.json)、[实际量化](georgians197-runtime-quantified.json)与[验证记录](georgians197-validation.json)。

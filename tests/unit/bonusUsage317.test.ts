@@ -46,9 +46,19 @@ const inputsHash = () =>
     JSON.stringify(E),
     JSON.stringify(buildOrders),
     JSON.stringify(ups),
-    ...['buildSim.ts', 'roundHalfPrice.ts', 'buildOrder.ts', 'weiEconomy.ts', 'bengaliEconomy.ts', 'armenianEconomy.ts', 'georgianEconomy.ts', 'slavicEconomy.ts'].map((f) =>
-      readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8'),
-    ),
+    ...[
+      'buildSim.ts',
+      'roundHalfPrice.ts',
+      'buildOrder.ts',
+      'weiEconomy.ts',
+      'bengaliEconomy.ts',
+      'armenianEconomy.ts',
+      'georgianEconomy.ts',
+      'slavicEconomy.ts',
+      'khmerEconomy.ts',
+      'khmerSource.ts',
+      'khmerPrerequisiteSource.ts',
+    ].map((f) => readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8')),
     ...['construction.json', 'construction.ts'].map((f) => readFileSync(fileURLToPath(new URL(`../../src/data/${f}`, import.meta.url)), 'utf8')),
     readFileSync(fileURLToPath(new URL('../../src/content/schema/compiled/wei-spawn.mjs', import.meta.url)), 'utf8'),
   );
@@ -62,6 +72,7 @@ const without = (civ: string, techs: number[]): EcoData => ({
 
 /** 模型已实现、但现有开局方案（城堡时代及以前、不造对应单位/建筑、不研究对应科技）都不会触发的加成 */
 const UNTRIGGERED: Record<string, string> = {
+  'Khmer-1': '免回仓与独立农田供给已计入；默认近距离2格时，完整654与整行移除均被同一0.4/秒供给上限限制，原对照只观察步骤完成时间/库存，未触发差异；khmer197.test.ts另以7格与低工作率库存窗口核对免回仓和供给瓶颈',
   'Berbers-1': '马厩单位城堡/帝王时代折扣：现有开局方案不在城堡时代训练马厩单位',
   'Bulgarians-2': '城镇中心石料 -50%：现有开局方案不建新城镇中心',
   'Incas-1': '建筑石料 -15%：现有开局方案不建花石料的建筑',
@@ -125,9 +136,9 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
     expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(112);
     expect(ECO.filter((b) => b.src === 'text')).toHaveLength(37);
   });
-  it('src = text 中实际被工具计入的四条：亚美尼亚经济研究、凯尔特伐木、朝鲜采石、突厥采金', () => {
+  it('src = text 中实际被工具计入的五条：亚美尼亚经济研究、凯尔特伐木、高棉免建筑前置、朝鲜采石、突厥采金', () => {
     const counted = ECO.filter((b) => b.src === 'text' && bonusUsage(b).some((l) => l.on === true)).map((b) => b.id);
-    expect(counted).toEqual(['Armenians-1', 'Celts-0', 'Koreans-0', 'Turks-0']);
+    expect(counted).toEqual(['Armenians-1', 'Celts-0', 'Khmer-0', 'Koreans-0', 'Turks-0']);
     expect(line(bon('Armenians-1'), 'sim')[0]).toMatchObject({ on: true, note: '伐木、采矿科技增强仅在对应研究完成后计入' });
     for (const [id, label] of [
       ['Celts-0', '伐木 +15%'],
@@ -216,10 +227,10 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
     }
     expect(hidden).toBeGreaterThan(0);
     expect(hidden).toBeLessThan(112);
-    // src = text 同样规则：四条被工具计入，不显示；其余 33 条没有工具计入，仍显示
+    // src = text 同样规则：五条被工具计入，不显示；其余 32 条没有工具计入，仍显示
     const text = ECO.filter((x) => x.src === 'text');
-    for (const b of text) expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !['Armenians-1', 'Celts-0', 'Koreans-0', 'Turks-0'].includes(b.id)]);
-    expect(text.filter((b) => showEcoSourceTag(b))).toHaveLength(33);
+    for (const b of text) expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !['Armenians-1', 'Celts-0', 'Khmer-0', 'Koreans-0', 'Turks-0'].includes(b.id)]);
+    expect(text.filter((b) => showEcoSourceTag(b))).toHaveLength(32);
   });
   it('没有任何工具计入的加成保持「仅文本」', () => {
     for (const b of ECO) if (!bonusUsage(b).some((l) => l.on)) expect([b.id, usageLevel(bonusUsage(b))]).toEqual([b.id, 'none']);

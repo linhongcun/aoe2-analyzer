@@ -492,6 +492,39 @@ export async function checkSite({ site, version, commit, features = [] }) {
       console.log(
         'Verified Slavic public UI: fast-castle-boom summary, steady-estimate caveat and share URL; Slavs-enabled/Chinese-disabled selector; scouts without farm note; bonus0 simulation usage',
       );
+      const khmerPrerequisiteNote = '当前开局免建筑前置已计入，显式建筑照常付费建造';
+      const khmerFarmNote = '农田按免回仓与供给上限连续估算，结果可能低于原通用估算，不代表游戏内加成减益';
+      for (const bo of ['fast-castle-boom', 'fast-castle-knights']) {
+        await goto(`/builds?bo=${bo}&civ=Khmer`);
+        await check(page.locator('[data-t="sum-civ"]')).toHaveText('按高棉计');
+        await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+        await check(page.locator('[data-t="civ-note"]').filter({ hasText: khmerPrerequisiteNote })).toHaveCount(1);
+        await check(page.locator('[data-t="civ-note"]').filter({ hasText: khmerFarmNote })).toHaveCount(1);
+        if (bo === 'fast-castle-boom') {
+          await page.locator('#tlciv').click();
+          const picker = page.getByRole('dialog', { name: '文明', exact: true });
+          await check(picker.locator('[data-civ="Khmer"]')).not.toHaveAttribute('aria-disabled', 'true');
+          await check(picker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
+          await page.keyboard.press('Escape');
+        }
+        await page.locator('[data-t="share-card-btn"]:visible').first().click();
+        await check(page.locator('[data-t="card-basis"]')).toContainText(khmerPrerequisiteNote);
+        await check(page.locator('[data-t="card-basis"]')).toContainText(khmerFarmNote);
+        await check(page.locator('[data-t="card-url"]')).toContainText('civ=Khmer');
+        await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      }
+      await goto('/builds?bo=scouts-18&civ=Khmer');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按高棉计');
+      await check(page.locator('[data-t="civ-note"]').filter({ hasText: khmerPrerequisiteNote })).toHaveCount(1);
+      await check(page.locator('[data-t="civ-note"]').filter({ hasText: khmerFarmNote })).toHaveCount(0);
+      for (const idx of [0, 1]) {
+        await goto(`/civ/Khmer/bonus/${idx}`);
+        await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+        await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText(idx === 0 ? khmerPrerequisiteNote : khmerFarmNote);
+      }
+      console.log(
+        'Verified Khmer public UI: both FC summaries, prerequisite and bounded-farm notes/share URLs; Khmer-enabled/Chinese-disabled selector; scouts prerequisite-only note; bonus0/1 simulation usage',
+      );
     }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {

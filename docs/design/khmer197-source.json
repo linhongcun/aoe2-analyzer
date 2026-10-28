@@ -1,0 +1,1115 @@
+{
+  "schema": 1,
+  "verdict": "SOURCE_GO_FOR_EXPLICIT_BOUNDED_KHMER_SPEC_AND_RED; NOT_PRODUCTION_OR_CLIENT_EQUIVALENCE",
+  "recordedUTC": "2026-10-28T12:54:50.660636+00:00",
+  "issue": 197,
+  "batch": 13,
+  "scopeComment": 6469372915,
+  "baseline": {
+    "head": "4373aee3a619fc1435f1cecea4aaa766c3f0f34d",
+    "tree": "42920cb5a52902655733aee02f6d85419819d97e",
+    "version": "v0.57.0",
+    "clean": true
+  },
+  "rulesRead": ["AGENTS.md", "CONTRIBUTING.md", "docs/CODEX-MAINTENANCE.md", "scripts/data_sources.json", "docs/design/slavs197.md"],
+  "fixedSource": {
+    "DE": 185872,
+    "datCommit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "DAT_SHA256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+    "cacheSHA256": "99e0503aad127b56f7a37e1a15c362f3192aa25c9a2f1ee3cdec4965591928b2",
+    "raw": {
+      "path": "/tmp/batch13-khmer-raw.json",
+      "sha256": "27936ca1511614ebc7610ac56d545b567df8dbc70db4e91bc1152b1f22db6028",
+      "bytes": 4389524
+    },
+    "readOnlyParse": {
+      "startedUTC": "2026-10-28T12:47:41.522981+00:00",
+      "completedUTC": "2026-10-28T12:47:55.831841+00:00",
+      "count": 1
+    },
+    "civId": 28,
+    "treeId": 646,
+    "teamId": 647,
+    "ownTechs": 9,
+    "backwardsSourceClosure": 178,
+    "rawObjects": 369,
+    "closureMethod": "Own9 dedicated techs; complete tree/team commands and referenced techs; all current manual/age/upgrade/availability/build counters; optional213/249 and602/875 to inspect farm/free-research effects; recursive RequiredTechs and Type8/101/103A,102D targets. Retain all commands, not only decoded economics. Presence does not mean active or available.",
+    "additional638ForwardNodes": 7,
+    "notAllClosureNodesActive": true
+  },
+  "dedicatedFamily": [
+    {
+      "tech": 614,
+      "Name": "Ballista Elephant (make avail)",
+      "EffectID": 654,
+      "Civ": 28,
+      "RequiredTechs": [102, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 2,
+          "A": 1120,
+          "B": 1,
+          "C": -1,
+          "D": 0.0
+        }
+      ],
+      "currentScopeJudgment": "Castle-age Ballista Elephant availability; no current8 trains1120."
+    },
+    {
+      "tech": 615,
+      "Name": "Elite Ballista Elephant",
+      "EffectID": 655,
+      "Civ": 28,
+      "RequiredTechs": [103, 614, -1, -1, -1, -1],
+      "RequiredTechCount": 2,
+      "ResearchLocation": 82,
+      "ResearchTime": 70,
+      "ResearchAt": [[82, 70]],
+      "Cost": [
+        [0, 1000, 1],
+        [3, 500, 1]
+      ],
+      "commands": [
+        {
+          "Type": 3,
+          "A": 1120,
+          "B": 1122,
+          "C": -1,
+          "D": 0.0
+        }
+      ],
+      "currentScopeJudgment": "Imperial Elite Ballista upgrade, Castle82 research70s/1000F500G; no current8 research615."
+    },
+    {
+      "tech": 622,
+      "Name": "Khmer UT",
+      "EffectID": 662,
+      "Civ": 28,
+      "RequiredTechs": [102, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": 82,
+      "ResearchTime": 40,
+      "ResearchAt": [[82, 40]],
+      "Cost": [
+        [1, 300, 1],
+        [3, 450, 1]
+      ],
+      "commands": [
+        {
+          "Type": 4,
+          "A": 1132,
+          "B": -1,
+          "C": 9,
+          "D": 1027.0
+        },
+        {
+          "Type": 4,
+          "A": 1134,
+          "B": -1,
+          "C": 9,
+          "D": 1027.0
+        },
+        {
+          "Type": 4,
+          "A": 239,
+          "B": -1,
+          "C": 9,
+          "D": 1027.0
+        },
+        {
+          "Type": 4,
+          "A": 558,
+          "B": -1,
+          "C": 9,
+          "D": 1027.0
+        }
+      ],
+      "currentScopeJudgment": "Tusk Swords, Castle82/40s/300W450G; attack-only, not researched in current8."
+    },
+    {
+      "tech": 623,
+      "Name": "Khmer UT",
+      "EffectID": 663,
+      "Civ": 28,
+      "RequiredTechs": [103, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": 82,
+      "ResearchTime": 40,
+      "ResearchAt": [[82, 40]],
+      "Cost": [
+        [0, 700, 1],
+        [3, 400, 1]
+      ],
+      "commands": [
+        {
+          "Type": 4,
+          "A": 542,
+          "B": -1,
+          "C": 107,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 279,
+          "B": -1,
+          "C": 107,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1120,
+          "B": -1,
+          "C": 107,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1122,
+          "B": -1,
+          "C": 107,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 542,
+          "B": -1,
+          "C": 102,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 279,
+          "B": -1,
+          "C": 102,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1120,
+          "B": -1,
+          "C": 102,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1122,
+          "B": -1,
+          "C": 102,
+          "D": 1.0
+        }
+      ],
+      "currentScopeJudgment": "Double Crossbow, Castle82/40s/700F400G; projectiles/max-projectiles combat, current8 does not research623/train Scorpion/Ballista."
+    },
+    {
+      "tech": 638,
+      "Name": "Khmer requirement",
+      "EffectID": -1,
+      "Civ": 28,
+      "RequiredTechs": [-1, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [],
+      "currentScopeJudgment": "Automatic no-effect civilization prerequisite: all seven forward references retained below. Existing ageReq already admits Khmer; current explicit structures stay."
+    },
+    {
+      "tech": 650,
+      "Name": "Khmer",
+      "EffectID": -1,
+      "Civ": 28,
+      "RequiredTechs": [104, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": 0,
+      "ResearchTime": 0,
+      "ResearchAt": [[0, 0]],
+      "Cost": [[1, 1, 1]],
+      "commands": [],
+      "currentScopeJudgment": "Civilization identity row, no effect; site0/time0/cost1W is not a player BO research or a starting-stock grant."
+    },
+    {
+      "tech": 654,
+      "Name": "C-Bonus, Instant Farmers",
+      "EffectID": 690,
+      "Civ": 28,
+      "RequiredTechs": [-1, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 1,
+          "A": 33,
+          "B": 0,
+          "C": -1,
+          "D": 50.0
+        },
+        {
+          "Type": 5,
+          "A": 214,
+          "B": -1,
+          "C": 13,
+          "D": 0.949999988079071
+        },
+        {
+          "Type": 5,
+          "A": 259,
+          "B": -1,
+          "C": 13,
+          "D": 0.949999988079071
+        }
+      ],
+      "currentScopeJudgment": "Only current farm-economic bonus: res33set50 plus male/female farmWorkRate*.95. Whole group atomic."
+    },
+    {
+      "tech": 657,
+      "Name": "C-Bonus, Houses garrison",
+      "EffectID": 693,
+      "Civ": 28,
+      "RequiredTechs": [-1, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 4,
+          "A": 70,
+          "B": -1,
+          "C": 2,
+          "D": 5.0
+        },
+        {
+          "Type": 4,
+          "A": 463,
+          "B": -1,
+          "C": 2,
+          "D": 5.0
+        },
+        {
+          "Type": 4,
+          "A": 464,
+          "B": -1,
+          "C": 2,
+          "D": 5.0
+        },
+        {
+          "Type": 4,
+          "A": 465,
+          "B": -1,
+          "C": 2,
+          "D": 5.0
+        },
+        {
+          "Type": 0,
+          "A": 70,
+          "B": -1,
+          "C": 30,
+          "D": 1.0
+        },
+        {
+          "Type": 0,
+          "A": 463,
+          "B": -1,
+          "C": 30,
+          "D": 1.0
+        },
+        {
+          "Type": 0,
+          "A": 464,
+          "B": -1,
+          "C": 30,
+          "D": 1.0
+        },
+        {
+          "Type": 0,
+          "A": 465,
+          "B": -1,
+          "C": 30,
+          "D": 1.0
+        }
+      ],
+      "currentScopeJudgment": "House garrison capacity+5 and flying-mode setting, not population support or housing; garrison/combat out of current BO model."
+    },
+    {
+      "tech": 672,
+      "Name": "C-Bonus, Battle Ele 10% faster",
+      "EffectID": 703,
+      "Civ": 28,
+      "RequiredTechs": [-1, -1, -1, -1, -1, -1],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 5,
+          "A": 1132,
+          "B": -1,
+          "C": 5,
+          "D": 1.100000023841858
+        },
+        {
+          "Type": 5,
+          "A": 1134,
+          "B": -1,
+          "C": 5,
+          "D": 1.100000023841858
+        }
+      ],
+      "currentScopeJudgment": "Battle Elephant1132/1134 speed*1.1, current8 has no elephant action; no current economic effect."
+    }
+  ],
+  "completeTreeCommands": [
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 264.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 215.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 265.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 437.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 244.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 54.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 64.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 608.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 319.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 230.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 439.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 320.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 77.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 15.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 221.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 373.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 188.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 716.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 875.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 1138.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 1142.0
+    },
+    {
+      "Type": 102,
+      "A": -1,
+      "B": -1,
+      "C": -1,
+      "D": 910.0
+    },
+    {
+      "Type": 8,
+      "A": 630,
+      "B": 12,
+      "C": -1,
+      "D": 1.0
+    },
+    {
+      "Type": 8,
+      "A": 631,
+      "B": 12,
+      "C": -1,
+      "D": 1.0
+    }
+  ],
+  "completeTeamCommands": [
+    {
+      "Type": 4,
+      "A": 279,
+      "B": -1,
+      "C": 1,
+      "D": 1.0
+    },
+    {
+      "Type": 4,
+      "A": 279,
+      "B": -1,
+      "C": 12,
+      "D": 1.0
+    },
+    {
+      "Type": 4,
+      "A": 279,
+      "B": -1,
+      "C": 23,
+      "D": 1.0
+    },
+    {
+      "Type": 4,
+      "A": 542,
+      "B": -1,
+      "C": 1,
+      "D": 1.0
+    },
+    {
+      "Type": 4,
+      "A": 542,
+      "B": -1,
+      "C": 12,
+      "D": 1.0
+    },
+    {
+      "Type": 4,
+      "A": 542,
+      "B": -1,
+      "C": 23,
+      "D": 1.0
+    }
+  ],
+  "638Incoming": [
+    {
+      "tech": 216,
+      "Name": "Farms (make avail)",
+      "EffectID": 205,
+      "Civ": -1,
+      "RequiredTechs": [110, 638, 1357, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 2,
+          "A": 50,
+          "B": 1,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 2,
+          "A": 1187,
+          "B": 1,
+          "C": -1,
+          "D": 0.0
+        }
+      ]
+    },
+    {
+      "tech": 659,
+      "Name": "Shadow Node+ for Age Two",
+      "EffectID": -1,
+      "Civ": -1,
+      "RequiredTechs": [120, 638, 1357, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    },
+    {
+      "tech": 660,
+      "Name": "Shadow Node+ for Age Three",
+      "EffectID": -1,
+      "Civ": -1,
+      "RequiredTechs": [135, 638, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    },
+    {
+      "tech": 661,
+      "Name": "Shadow Node+ for Age Four",
+      "EffectID": -1,
+      "Civ": -1,
+      "RequiredTechs": [142, 638, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    },
+    {
+      "tech": 666,
+      "Name": "Shadow Node Mill + Khmer",
+      "EffectID": -1,
+      "Civ": -1,
+      "RequiredTechs": [110, 638, 1357, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    },
+    {
+      "tech": 667,
+      "Name": "Shadow Node Barracks/Donjon + Khmer",
+      "EffectID": -1,
+      "Civ": -1,
+      "RequiredTechs": [122, 638, 291, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    },
+    {
+      "tech": 668,
+      "Name": "Shadow Node Blacksmith + Khmer",
+      "EffectID": -1,
+      "Civ": -1,
+      "RequiredTechs": [106, 638, -1, -1, -1, -1],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    }
+  ],
+  "638ForwardClosureNote": "The178 backward/context closure does not claim all forward dependents. Seven explicit incoming638 nodes additionally read here, including off-current Blacksmith shadow668; their complete cache commands are retained.",
+  "sourceSemantics": {
+    "actualFullPublicSources": [
+      {
+        "id": "readme",
+        "path": "/tmp/batch13-khmer-public-originals/readme.md",
+        "blobSHA": "8182a4c74f790c2e2888d5c08330d0fff72357ef",
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/README.md",
+        "repository": "librematch/genie",
+        "ref": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "sourcePath": "crates/engine/genie-core/src/README.md",
+        "sha256": "f2beee41249f9b036660efb8653ed1d8284c23078666e5ffe5aefabfe6622b87",
+        "bytes": 4641
+      },
+      {
+        "id": "make",
+        "path": "/tmp/batch13-khmer-public-originals/make.rs",
+        "blobSHA": "032fbc4c7e003a650fa8c3f74b5d0808432344c9",
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/make.rs",
+        "repository": "librematch/genie",
+        "ref": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "sourcePath": "crates/engine/genie-core/src/gathering/make.rs",
+        "sha256": "5c2ad7f87a136773c395ff9eac493f1e6c66df65b9d8b68decd14af5ded9f82a",
+        "bytes": 14395
+      },
+      {
+        "id": "mod",
+        "path": "/tmp/batch13-khmer-public-originals/mod.rs",
+        "blobSHA": "f6bc4421f2af5e43567460c7bb0e4381365757b8",
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/mod.rs",
+        "repository": "librematch/genie",
+        "ref": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "sourcePath": "crates/engine/genie-core/src/gathering/gather/mod.rs",
+        "sha256": "a6a64ae7978d04423973d27ec61aae2e854c59bb871b5dadb88f28b8af45467a",
+        "bytes": 12925
+      },
+      {
+        "id": "english",
+        "path": "/tmp/batch13-khmer-public-originals/english.json",
+        "blobSHA": "c3db0331c195b389615f3353c76561f57556ec02",
+        "url": "https://github.com/SiegeEngineers/aoe2techtree/blob/3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/locales/en/strings.json",
+        "repository": "SiegeEngineers/aoe2techtree",
+        "ref": "3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f",
+        "sourcePath": "data/locales/en/strings.json",
+        "sha256": "94f3077c8011ef3e57a2012d9cc7158499257b4c2dc8e5382c77e007249618b3",
+        "bytes": 192762
+      },
+      {
+        "id": "work",
+        "path": "/tmp/batch13-khmer-public-originals/work.rs",
+        "blobSHA": "7101d6c8ba4c93e8b8ec55a625fed87c445e9e87",
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/work.rs",
+        "repository": "librematch/genie",
+        "ref": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "sourcePath": "crates/engine/genie-core/src/gathering/gather/work.rs",
+        "sha256": "2fc00d4208fa72d8325d53cc287aedad1beda8e387ad478ca1270b25ca37e194",
+        "bytes": 10167
+      },
+      {
+        "id": "update",
+        "path": "/tmp/batch13-khmer-public-originals/update.rs",
+        "blobSHA": "b44ed4af57417e87c4d470b5eecd96cd703c219c",
+        "url": "https://github.com/librematch/genie/blob/74331ec61ff1a2462f219d5a0bda6e4523537aff/crates/engine/genie-core/src/gathering/gather/update.rs",
+        "repository": "librematch/genie",
+        "ref": "74331ec61ff1a2462f219d5a0bda6e4523537aff",
+        "sourcePath": "crates/engine/genie-core/src/gathering/gather/update.rs",
+        "sha256": "1174f5639e6c9a4a6d6eb9cb7a64dd34e1f53aafeb3a9f7ac374ec7679be96eb",
+        "bytes": 15254
+      }
+    ],
+    "inventoryPath": "/tmp/batch13-khmer-public-originals/inventory.json",
+    "inventorySHA256": "d447fcc47e7027cf4524cea966b4be2896a42856d5219123ac8f22b34fb82921",
+    "pinnedDescription": {
+      "source": "SiegeEngineers/aoe2techtree@3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/locales/en/strings.json",
+      "blobSHA": "c3db0331c195b389615f3353c76561f57556ec02",
+      "stringID": 120177,
+      "text": "Siege and Elephant civilization<br>\n<br>\n• No buildings required to advance to the next Age or to unlock other buildings<br>\n• Farmers don't require Mills or Town Centers to drop off food<br>\n• Villagers can garrison in Houses<br>\n• Battle Elephants move +10% faster<br>\n<br>\n<b>Unique Unit:</b><br>\nBallista Elephant (Siege Cavalry)<br>\n<br>\n<b>Unique Techs:</b><br>\n• Tusk Swords (Battle Elephants +3 attack)<br>\n• Double Crossbow (Ballista Elephants and Scorpions fire an additional projectile)<br>\n<br>\n<b>Team Bonus:</b><br>\nScorpions +1 range"
+    },
+    "publicVersionBoundary": "librematch/genie@74331ec61ff1a2462f219d5a0bda6e4523537aff self-describes158041, third-party reimplementation; no current185872 client/replay/scenario validation.",
+    "observedCode": [
+      "make.rs104-165: independent farm Make adds workRate*dt within storage capacity and replaces incompatible held kind with0 at start.",
+      "work.rs78-118: consumer takes min(work,target.amount) and immediate food_sold transfer clears held load but does not bypass resource availability.",
+      "mod.rs118-121 maps immediate-food attribute96, not resource33; update.rs210-243 still allows internal farm-stop movement for instant-food gatherers."
+    ],
+    "mappingBoundary": "DAT proves654/e690 marker33set50 and .95 consumer commands; pinned civilization description proves no Mill/TC needed to drop food. The exact executable transformation33set50→player attribute96 is NOT established by this public158041 code or current-client experiment. Treat noDrop as an explicitly sourced bounded tool approximation, not a decoded formula for50.",
+    "food15Boundary": "Raw farm Food15/capacity15 is not evidence of live starting pool15. Public Make.start can clear held stock; no initial pool grant."
+  },
+  "rawEconomics": {
+    "farmer": {
+      "units": [214, 259],
+      "type": 70,
+      "class": 4,
+      "workRateRaw": 0.5299999713897705,
+      "normalizedWorkRate": 0.53,
+      "carry": 10,
+      "speed": 0.8,
+      "gatherResourceIn": 16,
+      "gatherResourceOut": 0,
+      "productivityResource": 190,
+      "productivityRaw": 1.0
+    },
+    "farm": {
+      "units": [50, 1187],
+      "type": 80,
+      "class": 49,
+      "workRateRaw": 0.4000000059604645,
+      "normalizedWorkRate": 0.4,
+      "capacity": 15,
+      "FoodStorageRaw": 15,
+      "MakeAction": 21,
+      "resourceIn": 16
+    },
+    "bonus654": {
+      "effectId": 690,
+      "rawCommands": [
+        {
+          "Type": 1,
+          "A": 33,
+          "B": 0,
+          "C": -1,
+          "D": 50.0
+        },
+        {
+          "Type": 5,
+          "A": 214,
+          "B": -1,
+          "C": 13,
+          "D": 0.949999988079071
+        },
+        {
+          "Type": 5,
+          "A": 259,
+          "B": -1,
+          "C": 13,
+          "D": 0.949999988079071
+        }
+      ],
+      "normalizedConsumerMultiplier": 0.95,
+      "supplierMultiplier": 1,
+      "incomeMultiplierNotApplied": true
+    },
+    "normalStart": {
+      "rawComparedAgainst": "full Britons resources in same fixed DAT",
+      "onlyResourceDifference": [
+        {
+          "index": 73,
+          "Britons": 9466.0,
+          "Khmer": 9493.0
+        }
+      ],
+      "startingVillagersRes84": 3,
+      "baseHousingRes65": 5,
+      "modelPopulationUsed": 4,
+      "populationInference": "Existing3 villagers + existing military=1 scout; res84 is startingvillagers, not total population.",
+      "modelStock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      },
+      "stockBoundary": "Current simulator normal RM template stock; raw resource0..3 all0 and no civ-specific start grant do not prove all game modes have those stocks.",
+      "newStartEntitiesOrRewards": false
+    },
+    "houseRawDifference": {
+      "unit": 70,
+      "baseResourceCapacity": 0,
+      "workRate": 1,
+      "tasks": 0,
+      "housingStorageType4": 5,
+      "explanation": "Actual Khmer raw differs from generic cached House capacity100/workRate0, but has no Make/Gather tasks; 657 adds garrison only. Do not count workRate as income or garrison as population."
+    }
+  },
+  "currentEight": {
+    "orders": 8,
+    "actions": 228,
+    "currentTrainIDs": [4, 13, 38, 74, 93, 448],
+    "currentUpgradeIDs": [75],
+    "currentBuildingIDs": [12, 45, 50, 68, 70, 72, 84, 87, 101, 103, 109, 562, 584],
+    "currentManualAgeUpgradeTechIDs": [14, 22, 101, 102, 199, 202, 203, 222],
+    "treeDisabledTechIDs": [264, 215, 265, 437, 244, 54, 64, 608, 319, 230, 439, 320, 77, 15, 221, 373, 188, 716, 875, 1138, 1142, 910],
+    "disabledConflict": [],
+    "knightAndMaALegal": true,
+    "noMilitaryTemplateWarningNeeded": true,
+    "farmBuildSites": 5,
+    "farmBuildCount": 11,
+    "farmAssignmentOrders": ["fast-castle-boom", "fast-castle-knights"],
+    "farmAssignments": [
+      {
+        "bo": "fast-castle-boom",
+        "step": 7,
+        "actionIndex": 0,
+        "action": {
+          "type": "gather",
+          "task": "farm",
+          "count": 4,
+          "from": "hunt"
+        }
+      },
+      {
+        "bo": "fast-castle-knights",
+        "step": 7,
+        "actionIndex": 0,
+        "action": {
+          "type": "gather",
+          "task": "farm",
+          "count": 4,
+          "from": "hunt"
+        }
+      }
+    ],
+    "otherSixHaveNoFarmIncomeTask": true,
+    "repairAndGarrisonActions": 0,
+    "team": "647 six commands modify Scorpion279/542 attack/LOS/displayed range; defaultteam=false; no current8 Scorpion, no economy impact. No global Type4 attr allowlist required.",
+    "explicitActionsStay": "Do not remove Mill/Barracks/other paid actions or rewrite strategy because638 permits omission; no optimal-Khmer claim.",
+    "allCurrentManualSources": [
+      {
+        "tech": 14,
+        "Name": "Horse collar",
+        "EffectID": 14,
+        "Civ": -1,
+        "RequiredTechs": [101, 758, -1, -1, -1, -1],
+        "RequiredTechCount": 1,
+        "ResearchLocation": 2556,
+        "ResearchTime": 20,
+        "ResearchAt": [
+          [68, 20],
+          [2556, 20]
+        ],
+        "Cost": [
+          [0, 75, 1],
+          [1, 75, 1]
+        ]
+      },
+      {
+        "tech": 22,
+        "Name": "Loom",
+        "EffectID": 22,
+        "Civ": -1,
+        "RequiredTechs": [104, -1, -1, -1, -1, -1],
+        "RequiredTechCount": 1,
+        "ResearchLocation": 109,
+        "ResearchTime": 25,
+        "ResearchAt": [[109, 25]],
+        "Cost": [[3, 50, 1]]
+      },
+      {
+        "tech": 101,
+        "Name": "Middle Age",
+        "EffectID": 101,
+        "Civ": -1,
+        "RequiredTechs": [104, 659, -1, -1, -1, -1],
+        "RequiredTechCount": 2,
+        "ResearchLocation": 109,
+        "ResearchTime": 130,
+        "ResearchAt": [[109, 130]],
+        "Cost": [[0, 500, 1]]
+      },
+      {
+        "tech": 102,
+        "Name": "Feudal Age",
+        "EffectID": 102,
+        "Civ": -1,
+        "RequiredTechs": [101, 660, -1, -1, -1, -1],
+        "RequiredTechCount": 2,
+        "ResearchLocation": 109,
+        "ResearchTime": 160,
+        "ResearchAt": [[109, 160]],
+        "Cost": [
+          [0, 800, 1],
+          [3, 200, 1]
+        ]
+      },
+      {
+        "tech": 199,
+        "Name": "Fletching",
+        "EffectID": 192,
+        "Civ": -1,
+        "RequiredTechs": [101, -1, -1, -1, -1, -1],
+        "RequiredTechCount": 1,
+        "ResearchLocation": 103,
+        "ResearchTime": 30,
+        "ResearchAt": [[103, 30]],
+        "Cost": [
+          [0, 100, 1],
+          [3, 50, 1]
+        ]
+      },
+      {
+        "tech": 202,
+        "Name": "Double Bit Axe",
+        "EffectID": 195,
+        "Civ": -1,
+        "RequiredTechs": [101, 758, -1, -1, -1, -1],
+        "RequiredTechCount": 1,
+        "ResearchLocation": 2556,
+        "ResearchTime": 25,
+        "ResearchAt": [
+          [562, 25],
+          [1808, 25],
+          [2556, 25]
+        ],
+        "Cost": [
+          [0, 100, 1],
+          [1, 50, 1]
+        ]
+      },
+      {
+        "tech": 203,
+        "Name": "Bow Saw",
+        "EffectID": 196,
+        "Civ": -1,
+        "RequiredTechs": [102, 202, 762, -1, -1, -1],
+        "RequiredTechCount": 2,
+        "ResearchLocation": 2556,
+        "ResearchTime": 50,
+        "ResearchAt": [
+          [562, 50],
+          [1808, 50],
+          [2556, 50]
+        ],
+        "Cost": [
+          [0, 150, 1],
+          [1, 100, 1]
+        ]
+      },
+      {
+        "tech": 222,
+        "Name": "Man-At-Arms",
+        "EffectID": 211,
+        "Civ": -1,
+        "RequiredTechs": [101, -1, -1, -1, -1, -1],
+        "RequiredTechCount": 1,
+        "ResearchLocation": 12,
+        "ResearchTime": 40,
+        "ResearchAt": [[12, 40]],
+        "Cost": [
+          [0, 100, 1],
+          [3, 40, 1]
+        ]
+      }
+    ]
+  },
+  "modelContract": {
+    "scope": "Khmer-only explicit continuous no-drop/supply estimate; preserve Generic/other55 and realCost",
+    "with654": "Wc=actual base consumer * decoded.95 * completed ordinary work modifiers; no configured drop-off walk leg. Effective=min(Wc, independent farmBase.4). Physical supply is not multiplied by.95.",
+    "withoutWhole654": "Same valid Khmer physical supplier.4 remains; remove both marker and.95 atomically; return to normal carry/walk consumer average before min. Do not switch to legacy Generic.",
+    "partialBad654": "Present malformed/duplicate/missing-command/unknown-only654 rejects whole bonus and support; independent physical.4 can remain, and low-level consumer falls back to nonbonus ordinary carry/walk.",
+    "638": "Independent auto-prerequisite capability. A valid638 admits existing ageReq and corresponding building/farm unlock alternatives; normal manual research still needs its research site. Whole638 removal must disable the638 exemption rather than unconditionally retaining civKhmer OR; malformed638 rejects capability/support. Preserve current explicit BOs.",
+    "otherMissingFamilies": "Missing one raw command/one canonical member is not a safe default. Do not accept arbitrary incomplete own-family snapshots; only intentionally supported whole-group counterfactual removals get independent physical fallback.",
+    "ordinaryTechs": "14 workRate*1 is neutral, farm storage changes do not multiply income;13 carry+1 retained;213 carry1.2695/speed1.1 and249 carry1.5/speed1.1 at actual completion. Under no-drop idealization their drop-leg effect vanishes; do not invent extra income or supplier multipliers.",
+    "arithmetic": [
+      {
+        "nearTiles": 0,
+        "whole654RemovedConsumerTrip": 0.53,
+        "whole654RemovedSamePhysical": 0.4,
+        "complete654ConsumerNoDrop": 0.5035,
+        "complete654Effective": 0.4
+      },
+      {
+        "nearTiles": 1,
+        "whole654RemovedConsumerTrip": 0.467991169977925,
+        "whole654RemovedSamePhysical": 0.4,
+        "complete654ConsumerNoDrop": 0.5035,
+        "complete654Effective": 0.4
+      },
+      {
+        "nearTiles": 2,
+        "whole654RemovedConsumerTrip": 0.4189723320158103,
+        "whole654RemovedSamePhysical": 0.4,
+        "complete654ConsumerNoDrop": 0.5035,
+        "complete654Effective": 0.4
+      },
+      {
+        "nearTiles": 4,
+        "whole654RemovedConsumerTrip": 0.34640522875817,
+        "whole654RemovedSamePhysical": 0.34640522875817,
+        "complete654ConsumerNoDrop": 0.5035,
+        "complete654Effective": 0.4
+      },
+      {
+        "nearTiles": 7,
+        "whole654RemovedConsumerTrip": 0.27496757457846954,
+        "whole654RemovedSamePhysical": 0.27496757457846954,
+        "complete654ConsumerNoDrop": 0.5035,
+        "complete654Effective": 0.4
+      }
+    ],
+    "counterfactualDisclosure": "Near0/1/2 complete654 and whole654 removal may both be supply-limited.4; benefits are not guaranteed for every BO/distance. Far4/7 removal is .3464052288/.2749675746 versus .4. Existing TODO demanding any removal always slows currentFC is not a semantic law.",
+    "caveats": [
+      "No literal claim farmers never move; public code has internal farm stops. Model removes configured drop-off leg only.",
+      "No farmer-to-finished-plot binding, start transient/storage pool15, food exhaustion/reseeding, pathing/internal stops or discrete deposit modeled.",
+      "Current oldUIGeneric/defaultnear2=.418972332; newphysical.4 can be lower. That tool-model difference does not mean the game bonus is a disadvantage.",
+      "No BO clock/stock predictions or required positive current8 effect before real collection."
+    ]
+  },
+  "recommendedSourceGuard": {
+    "closedOptionalPhysical": "Export only current cache-available fields for farm50/1187 (civId/type/class/workRate/capacity), independent of removable654. Do not expand global dat_source protocol to pretend runtime can guard unexported task/storage fields.",
+    "canonicalRaw": "At minimum retain zero-decoded638, complete654/657/672 family context, complete24 tree commands and6 team commands as agreed scope. Unknown-only/wrongciv/site/effect canonical rows must survive producer and be rejected at runtime.",
+    "headerAndAtomic": "Verify source/name/age/tech/requires/effects/raw command group identity and duplicate counts, foreign markers even effects[], raw full companions; no globalres33=50/unknownType allowlist.",
+    "fullOffScopeEvidence": "All9 dedicated raw and24tree/6team commands archived above; documentary combat/UT/off-current classification does not mean execute unknown economic commands."
+  },
+  "unresolvedSourceQuestions": [
+    "Exact DE185872 client res33set50→immediate-food implementation and internal spatial dynamics were not experimentally verified. Accepted only as disclosed bounded approximation, not client equivalence."
+  ],
+  "beforeProduction": [
+    "Owner SPEC/red fixtures must match independent physical/654 atomic/638 counterfactual distinctions and actual exported metadata. No product execution or final code review has occurred in this candidate audit."
+  ],
+  "execution": {
+    "domain": 0,
+    "tests": 0,
+    "producer": 0,
+    "dataGeneration": 0,
+    "build": 0,
+    "browser": 0,
+    "repositoryWrites": 0,
+    "DATDownloads": 0,
+    "readOnlyFixedDATParses": 1,
+    "newPublicFullFilesFetched": 6,
+    "failedOutputOnly": "One attempt to save public full text via exec arg exceeded argv size; no process ran, no evidence was substituted. Saved actual fetched text in chunks; all6 computed Git blobSHA match returned blob IDs."
+  }
+}
