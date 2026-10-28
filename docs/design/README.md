@@ -1,5 +1,7 @@
 # 设计稿索引（v0.4.0 已签字 / 定稿）
 
+v0.56.0 格鲁吉亚开局支持见 [#197第十一批规格](georgians197.md)：免费起始车与逐次付费新车独立、完成地点/时代类别及来源门控；[真实先红](georgians197-first-red.json)、[固定来源](georgians197-source.json)、[公开语义](georgians197-public-sources.json)、[实际量化](georgians197-runtime-quantified.json)与[验证记录](georgians197-validation.json)。
+
 v0.54.1 亚美尼亚开局支持见 [#197第十批规格](armenians197.md)：付费骡车、研究地点和实际研究完成增强；[真实先红](armenians197-first-red.json)、[固定来源](armenians197-source.json)与[公开语义](armenians197-public-sources.json)及[实际验证](armenians197-validation.json)。
 
 v0.54.0 孟加拉开局支持见 [#197第九批规格](bengalis197.md)：完整4条时代赠村来源、完成TC计数、正常起点及住房/骑士模板边界；[正式先红](bengalis197-first-red.json)、[固定来源](bengalis197-source.json)与[公开语义](bengalis197-public-sources.json)与[实际验证](bengalis197-validation.json)。

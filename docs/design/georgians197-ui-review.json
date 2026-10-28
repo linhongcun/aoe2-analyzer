@@ -1,0 +1,788 @@
+{
+  "schema": 1,
+  "reviewer": "/root/batch11_ui_review",
+  "reviewedUTC": "2026-10-28T07:19:19.759525+00:00",
+  "verdict": "PASS_BOUNDED_UI_REVIEW_WITH_DISCLOSED_INHERITED_VISUAL_LIMITS",
+  "unresolvedBatchBlockers": [],
+  "actualBuiltRuntime": {
+    "head": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+    "tree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+    "version": "0.56.0",
+    "port": 4209,
+    "distManifestSHA256": "8fabee1cab03f62d32bc5bbc1a578a4035e7bb444b3942c4555073597b79b0bb"
+  },
+  "reviewScope": "Independent static review of SPEC, five UI/usage diffs, NumUnitText and original PNG drawing; personal viewing of all 56 Georgian original state screenshots and actual downloaded PNG; Armenian two-image regression sample. No product or test execution by reviewer.",
+  "visualCoverage": {
+    "widths": [
+      360,
+      375,
+      390,
+      1280
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "states": [
+      "start",
+      "cart",
+      "share",
+      "compound",
+      "bonus0",
+      "practice",
+      "print"
+    ],
+    "GeorgianOriginalStateScreenshotsPersonallyViewed": 56,
+    "imageProcessing": "None; viewed original files with view_image, no crop/redraw/transformation"
+  },
+  "findings": [
+    "Free initial cart disclosure and normal 200F/200W/100G/200S, 4/5 population are consistent across the initial states.",
+    "Paid cart details show 20 food and 80 wood; cart quantity uses 辆 and numerical-unit fragments do not visibly split.",
+    "Compound block retains 25 wood primary House cost while separate cart note discloses 80 wood/20 food; no whole-step total is invented.",
+    "Timeline, share preview, practice and print retain free-start and paid-explicit-action policy plus fixed walking/no movement/no automatic reuse limits.",
+    "Bonus0 describes the implemented cart policy without claiming Church aura or military effects are calculated.",
+    "Actual 1080x1350 PNG has complete, readable two-note disclosure with no clipped new fee/policy text.",
+    "Armenian sampled 360 light paid-cart detail remains 15 food/60 wood; its actual PNG retains existing research enhancement note."
+  ],
+  "reportedBrowserExecutions": {
+    "initial": {
+      "path": "/tmp/batch11-georgians-browser.json",
+      "sha256": "6613e5bd7903acb9d754ddc75b3ecd80cde0e0f54159f8f2b0aa9db66bb5e806",
+      "stats": {
+        "startTime": "2026-10-28T07:07:56.301Z",
+        "duration": 196404.251,
+        "expected": 12,
+        "skipped": 0,
+        "unexpected": 6,
+        "flaky": 0
+      }
+    },
+    "recovery": {
+      "path": "/tmp/batch11-georgians-browser-mobile6-recovery.json",
+      "sha256": "bf61b212bdf1aa9b238f0d4cfdbd7beb52fa70bfd8214a166e925a18b6409e46",
+      "stats": {
+        "startTime": "2026-10-28T07:12:40.250Z",
+        "duration": 25229.018,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  },
+  "executionInterpretation": "Initial execution actually 12 passed and 6 mobile Georgian timed out at hidden desktop #tlciv locator; test-only recovery opens the real mobile Settings entry, keeps assertions and product unchanged, and passed the six affected cases. Combined coverage is 18 distinct scenarios, not a single green 18-case run.",
+  "testOnlyRecoveryStaticReview": "Read exact diff: branch by actual #tlciv visibility, open Settings on mobile, use its picker, assert picker closes and close Settings via existing Done button. No assertion/timeout/retry weakening.",
+  "visualLimitations": [
+    "Existing shared 跳到主内容 floating link is visible in print screenshots: near step 12 at desktop and step 2/3 at mobile. This review does not claim every print pixel is unobscured.",
+    "Some full-page captures taken after scrolling include the fixed global header and focused skip link in the middle of the captured page. This review makes a bounded new-content layout/policy verdict rather than asserting no shared overlay anywhere.",
+    "The reviewer did not run the browser, test runner, build or domain; assertions such as console/pageerror absence and overflow/axe checks are evidenced by actual owner reports, while visual conclusions come from the original images."
+  ],
+  "physicalManifestVerification": {
+    "path": "/tmp/batch11-georgians-image-manifest.json",
+    "sha256": "8cb38b12aa630a408ba778ee1c63cd8e7738b3ef507527be65bc59742281db9b",
+    "allImageEntriesChecked": 128,
+    "allHashesAndDimensionsMatch": true,
+    "allFiveEvidenceCopiesByteIdenticalToOriginals": true
+  },
+  "reviewedGeorgianImages": [
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-light/georgians197-start-360-light.png",
+      "state": "start",
+      "width": 360,
+      "theme": "light",
+      "sha256": "cdb707599a4dc78151ebd09ca6c4911ad736ec1fc9de37d14bd9249c434e1f9e",
+      "pixels": [
+        360,
+        3060
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-light/georgians197-cart-360-light.png",
+      "state": "cart",
+      "width": 360,
+      "theme": "light",
+      "sha256": "d43856c7fe1767d1edf27a3153bc508bcd769d46cee60285ddbf06ea79146b99",
+      "pixels": [
+        360,
+        2964
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-light/georgians197-share-360-light.png",
+      "state": "share",
+      "width": 360,
+      "theme": "light",
+      "sha256": "b7fa1430cd412ab302ad888fdc5c9033f514bfb1044611414fa251f672f63878",
+      "pixels": [
+        360,
+        2964
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-light/georgians197-compound-360-light.png",
+      "state": "compound",
+      "width": 360,
+      "theme": "light",
+      "sha256": "2fad2ef21942cb2a0f6876cff125b4b71d0de41e1cbc4d0f99a28f5d6a056b17",
+      "pixels": [
+        360,
+        2674
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-light/georgians197-bonus0-360-light.png",
+      "state": "bonus0",
+      "width": 360,
+      "theme": "light",
+      "sha256": "e61e11bd36f25aa408dc14e8296959041f7e0f19cd32e3edb629e23986f01286",
+      "pixels": [
+        360,
+        1597
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-light/georgians197-practice-360-light.png",
+      "state": "practice",
+      "width": 360,
+      "theme": "light",
+      "sha256": "e51ef4f6a7be0182a91414dbf7ab77c3fc8f27cab6ebad8410be0d3278688a9c",
+      "pixels": [
+        360,
+        3456
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-light/georgians197-print-360-light.png",
+      "state": "print",
+      "width": 360,
+      "theme": "light",
+      "sha256": "c4e8690bd55b9f81fbe7a2a011614c1bd1167abe0536c79e3df5113fdcca0ad4",
+      "pixels": [
+        360,
+        5328
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-dark/georgians197-start-360-dark.png",
+      "state": "start",
+      "width": 360,
+      "theme": "dark",
+      "sha256": "3b8ef6b6c034662c527ee292033fe26be77328ba887b24aed59b01e95d82b368",
+      "pixels": [
+        360,
+        3060
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-dark/georgians197-cart-360-dark.png",
+      "state": "cart",
+      "width": 360,
+      "theme": "dark",
+      "sha256": "34325e1381441345a2e82c450e579a3582661ec0e55232bb5a3897dd9d8c7ca6",
+      "pixels": [
+        360,
+        2964
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-dark/georgians197-share-360-dark.png",
+      "state": "share",
+      "width": 360,
+      "theme": "dark",
+      "sha256": "e95b8a17bd57638d0c87e6577ddc545ceeaa90533e7fb23f16da3868a4cddc37",
+      "pixels": [
+        360,
+        2964
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-dark/georgians197-compound-360-dark.png",
+      "state": "compound",
+      "width": 360,
+      "theme": "dark",
+      "sha256": "60b323c56129ebc64b3d169d35f951b2053fd9d234c70c7a92da3a4dc39550ce",
+      "pixels": [
+        360,
+        2674
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-dark/georgians197-bonus0-360-dark.png",
+      "state": "bonus0",
+      "width": 360,
+      "theme": "dark",
+      "sha256": "adfd9b5c8eef2145b970e44a07296595d895246911aebc6dc062efad80753894",
+      "pixels": [
+        360,
+        1597
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-dark/georgians197-practice-360-dark.png",
+      "state": "practice",
+      "width": 360,
+      "theme": "dark",
+      "sha256": "b8d6410ba80d18e786486089bfe3ce9ba061dd3140975111200e2062bf399907",
+      "pixels": [
+        360,
+        3456
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-dark/georgians197-print-360-dark.png",
+      "state": "print",
+      "width": 360,
+      "theme": "dark",
+      "sha256": "f350151c0d8f0002de780c82322fd557ce0b01a33ada0691c7b902f073a8fca7",
+      "pixels": [
+        360,
+        5328
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-light/georgians197-start-375-light.png",
+      "state": "start",
+      "width": 375,
+      "theme": "light",
+      "sha256": "92784e4533aad60facef5bb8401311a894fa72a21ab4329889a90db26c61309a",
+      "pixels": [
+        375,
+        2966
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-light/georgians197-cart-375-light.png",
+      "state": "cart",
+      "width": 375,
+      "theme": "light",
+      "sha256": "1320087777464e99ffb88adfc912f9324c40901286d9035d76bb916e65748717",
+      "pixels": [
+        375,
+        2890
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-light/georgians197-share-375-light.png",
+      "state": "share",
+      "width": 375,
+      "theme": "light",
+      "sha256": "366edcad2360d1f7e08842e4a828057f3d63e9188bed76b724587d3ab2b76219",
+      "pixels": [
+        375,
+        2890
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-light/georgians197-compound-375-light.png",
+      "state": "compound",
+      "width": 375,
+      "theme": "light",
+      "sha256": "8b537bc0075582e0366f6c5bb4ba5dba7cc9bc813e77f57c3a91d4a459596890",
+      "pixels": [
+        375,
+        2578
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-light/georgians197-bonus0-375-light.png",
+      "state": "bonus0",
+      "width": 375,
+      "theme": "light",
+      "sha256": "4ad7428e8842c331fe0781216eb06597b09c80ca6a50dbbf039c087ba68b8099",
+      "pixels": [
+        375,
+        1554
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-light/georgians197-practice-375-light.png",
+      "state": "practice",
+      "width": 375,
+      "theme": "light",
+      "sha256": "f2b39971a57ce1565fd61636570713f350fb44f968df6a8076505e5ee7a90472",
+      "pixels": [
+        375,
+        3435
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-light/georgians197-print-375-light.png",
+      "state": "print",
+      "width": 375,
+      "theme": "light",
+      "sha256": "eadb1b434d1709e44172c05914aaf1004fb1eae36aa1588e40ad9dbc67a3a3b9",
+      "pixels": [
+        375,
+        5286
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-dark/georgians197-start-375-dark.png",
+      "state": "start",
+      "width": 375,
+      "theme": "dark",
+      "sha256": "b1d37e1c462e3f834de4eb3745988261b7a94812f8e0ab581b9cf44f6d5e279e",
+      "pixels": [
+        375,
+        2966
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-dark/georgians197-cart-375-dark.png",
+      "state": "cart",
+      "width": 375,
+      "theme": "dark",
+      "sha256": "e8a97c822c616862cc2e9744bd79da7c53791c511014aa96066b618c892bbef7",
+      "pixels": [
+        375,
+        2890
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-dark/georgians197-share-375-dark.png",
+      "state": "share",
+      "width": 375,
+      "theme": "dark",
+      "sha256": "5783fa1802f6604b64b30360d1a22104a5fdb05739725eacb929bd64cf8ee009",
+      "pixels": [
+        375,
+        2890
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-dark/georgians197-compound-375-dark.png",
+      "state": "compound",
+      "width": 375,
+      "theme": "dark",
+      "sha256": "d60cc8c1e861064f58a738b8aaabedfc4e6ba1fd47bfe1f65ddd56cea7412c30",
+      "pixels": [
+        375,
+        2578
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-dark/georgians197-bonus0-375-dark.png",
+      "state": "bonus0",
+      "width": 375,
+      "theme": "dark",
+      "sha256": "317ae43d6fe646185880f6bf1f3ca4529e7df0402d4ba12476375ea1f91bdf34",
+      "pixels": [
+        375,
+        1554
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-dark/georgians197-practice-375-dark.png",
+      "state": "practice",
+      "width": 375,
+      "theme": "dark",
+      "sha256": "f27638b0c425c7eebd2caaacee4daa4b46fce645c62a063fe3a25e4dc77a8384",
+      "pixels": [
+        375,
+        3435
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-dark/georgians197-print-375-dark.png",
+      "state": "print",
+      "width": 375,
+      "theme": "dark",
+      "sha256": "389cb84f7bd6880ec043d271a50312d11b4cbd57e9ef46c7dbb418a3d6c42772",
+      "pixels": [
+        375,
+        5286
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-light/georgians197-start-390-light.png",
+      "state": "start",
+      "width": 390,
+      "theme": "light",
+      "sha256": "7aaf3b63763bb000fcb1be737c181a97d0c60bc8b467b4f5d7513a7e03f47100",
+      "pixels": [
+        390,
+        2897
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-light/georgians197-cart-390-light.png",
+      "state": "cart",
+      "width": 390,
+      "theme": "light",
+      "sha256": "cec08316aba70554311f9fd707e2ce70867728f72fcc451b0718425c13011b60",
+      "pixels": [
+        390,
+        2821
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-light/georgians197-share-390-light.png",
+      "state": "share",
+      "width": 390,
+      "theme": "light",
+      "sha256": "888e6f643f2e8141d83f11be53a5658c9e0f6324ca23a9aaa44c1cc08d681890",
+      "pixels": [
+        390,
+        2821
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-light/georgians197-compound-390-light.png",
+      "state": "compound",
+      "width": 390,
+      "theme": "light",
+      "sha256": "6ef2a8335e51ade9ce34838cf075f761cca548729acfbb1fe9ad82f988fb2dcf",
+      "pixels": [
+        390,
+        2510
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-light/georgians197-bonus0-390-light.png",
+      "state": "bonus0",
+      "width": 390,
+      "theme": "light",
+      "sha256": "daf15e929491af37e72e073538a61c0031bde16de039012c8453149d2cc75fd0",
+      "pixels": [
+        390,
+        1510
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-light/georgians197-practice-390-light.png",
+      "state": "practice",
+      "width": 390,
+      "theme": "light",
+      "sha256": "6dc49ca9ba88ce29b1edeea4f7ed2c7ec619e458d690b96d17ad24ae3f7757d2",
+      "pixels": [
+        390,
+        3361
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-light/georgians197-print-390-light.png",
+      "state": "print",
+      "width": 390,
+      "theme": "light",
+      "sha256": "9c75ad66c9da0078a9fa4edf90166bc2e213d975a548dee0dd47bb32af711f17",
+      "pixels": [
+        390,
+        5193
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-dark/georgians197-start-390-dark.png",
+      "state": "start",
+      "width": 390,
+      "theme": "dark",
+      "sha256": "796083ad600828cabce24ffde8e9a1eac5fd3233c4fddc7abcdfa2b69f1a7be8",
+      "pixels": [
+        390,
+        2897
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-dark/georgians197-cart-390-dark.png",
+      "state": "cart",
+      "width": 390,
+      "theme": "dark",
+      "sha256": "7a59d996d9b56da7cba171e1e898ba06f1ac197cc4e677b6632088a91c2b3b97",
+      "pixels": [
+        390,
+        2821
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-dark/georgians197-share-390-dark.png",
+      "state": "share",
+      "width": 390,
+      "theme": "dark",
+      "sha256": "a2a9804378fa88ea962f18681433322480abde889c661bbb4f0f6ef6e2b3f85c",
+      "pixels": [
+        390,
+        2821
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-dark/georgians197-compound-390-dark.png",
+      "state": "compound",
+      "width": 390,
+      "theme": "dark",
+      "sha256": "7a64f24613eab036210ea5aad626180a71b01fa927a8faa53e9cecba4aeda1a6",
+      "pixels": [
+        390,
+        2510
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-dark/georgians197-bonus0-390-dark.png",
+      "state": "bonus0",
+      "width": 390,
+      "theme": "dark",
+      "sha256": "72df70fe09d4d5a3d2e02bf1611698e118d7eb3ce978a0e6c2198623b94e021b",
+      "pixels": [
+        390,
+        1510
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-dark/georgians197-practice-390-dark.png",
+      "state": "practice",
+      "width": 390,
+      "theme": "dark",
+      "sha256": "3d831b31f30fca17f1d3abef36edab17f40a1b495bb679bcabd023e6b4207a35",
+      "pixels": [
+        390,
+        3361
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-dark/georgians197-print-390-dark.png",
+      "state": "print",
+      "width": 390,
+      "theme": "dark",
+      "sha256": "f1e86b1abc53206dddb1db37b9acbef00818afdd9a3f18301bb3fbdbb4a45391",
+      "pixels": [
+        390,
+        5193
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-start-1280-light.png",
+      "state": "start",
+      "width": 1280,
+      "theme": "light",
+      "sha256": "e6a2e97913ccc4ab496aae58851872d433e8d4e6a18383c9226ac4a2d68a66c3",
+      "pixels": [
+        1280,
+        2202
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-cart-1280-light.png",
+      "state": "cart",
+      "width": 1280,
+      "theme": "light",
+      "sha256": "3b3ede978cb87c6633bf008d9480e72e38714d5b4223d46bf9ae1f18afe881ad",
+      "pixels": [
+        1280,
+        2126
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-share-1280-light.png",
+      "state": "share",
+      "width": 1280,
+      "theme": "light",
+      "sha256": "c1f4b26891e8d3cb19a99781914a46d926d33c868290f60201d4512367fcfce4",
+      "pixels": [
+        1280,
+        2126
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-compound-1280-light.png",
+      "state": "compound",
+      "width": 1280,
+      "theme": "light",
+      "sha256": "31150355b77f070ba7c85a1129c5df3189ccc0e6416827bacd222a4e3743ce21",
+      "pixels": [
+        1280,
+        2022
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-bonus0-1280-light.png",
+      "state": "bonus0",
+      "width": 1280,
+      "theme": "light",
+      "sha256": "6237284df88533d569c88376963a2bcbb004e1d34d31e3f84ca65a00ec18bc81",
+      "pixels": [
+        1280,
+        1070
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-practice-1280-light.png",
+      "state": "practice",
+      "width": 1280,
+      "theme": "light",
+      "sha256": "bf37db50690858a249b86d6e3820aae3d3e21a54b317969387ec9bfc5f263013",
+      "pixels": [
+        1280,
+        2137
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-print-1280-light.png",
+      "state": "print",
+      "width": 1280,
+      "theme": "light",
+      "sha256": "b1237eeb83ebbcd19c0dd494b753711fad45aaaf46e9fe9c4627a15a4620a1ca",
+      "pixels": [
+        1280,
+        4401
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-dark/georgians197-start-1280-dark.png",
+      "state": "start",
+      "width": 1280,
+      "theme": "dark",
+      "sha256": "6f13eb709a15c26da772036a5c030d52c129e7c6e8bb3a3393bb05c3ed37bb7e",
+      "pixels": [
+        1280,
+        2202
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-dark/georgians197-cart-1280-dark.png",
+      "state": "cart",
+      "width": 1280,
+      "theme": "dark",
+      "sha256": "8de25b59890d2af7f04b63306d17d2d812a56ab84a83ac7c1886ce1d49b26ff5",
+      "pixels": [
+        1280,
+        2126
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-dark/georgians197-share-1280-dark.png",
+      "state": "share",
+      "width": 1280,
+      "theme": "dark",
+      "sha256": "468af2c4daf284bbbc350ddbf129c5146e98b9f55c0d6357e8dfda1f79edbee3",
+      "pixels": [
+        1280,
+        2126
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-dark/georgians197-compound-1280-dark.png",
+      "state": "compound",
+      "width": 1280,
+      "theme": "dark",
+      "sha256": "d2be2c5b9878980aafd03bbc39f82875cde98a1809242a48f5105839b561fb6e",
+      "pixels": [
+        1280,
+        2022
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-dark/georgians197-bonus0-1280-dark.png",
+      "state": "bonus0",
+      "width": 1280,
+      "theme": "dark",
+      "sha256": "848b9c8b00975e8da1106f13d3568305c70e7d7ed424731fa582ab00caaa45bd",
+      "pixels": [
+        1280,
+        1070
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-dark/georgians197-practice-1280-dark.png",
+      "state": "practice",
+      "width": 1280,
+      "theme": "dark",
+      "sha256": "f30f5ca30041cee664b550284217e4087770742ae6f641ac7e529f30d18bdfe0",
+      "pixels": [
+        1280,
+        2137
+      ],
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-dark/georgians197-print-1280-dark.png",
+      "state": "print",
+      "width": 1280,
+      "theme": "dark",
+      "sha256": "0696c955a90c414c7ee5a9bf9e65bbc3e97579a57a635f51084dba4c7623206d",
+      "pixels": [
+        1280,
+        4401
+      ],
+      "personallyViewedOriginal": true
+    }
+  ],
+  "actualGeorgianDownload": {
+    "path": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-share-download.png",
+    "sha256": "890db8fce5c481d87a2bd13c2b5f16a125de132f8956d82c704a52b8496686a9",
+    "pixels": [
+      1080,
+      1350
+    ],
+    "personallyViewedOriginal": true
+  },
+  "ArmenianSample": [
+    {
+      "path": "/tmp/batch11-georgians-browser-results/armenians197--197-亚美尼亚骡车、真实费用、研究口径与分享-360-light/armenians197-cart-360-light.png",
+      "sha256": "46636201cfbdf5ceaf64f77c517efb8492c9fbf8b02fb95911b94acf28956b88",
+      "personallyViewedOriginal": true
+    },
+    {
+      "path": "/tmp/batch11-georgians-browser-results/armenians197--197-亚美尼亚骡车、真实费用、研究口径与分享-1280-light/armenians197-share-download.png",
+      "sha256": "e85c88ee58249fbb4cff0786141bb02b42417268e4e4c775353565c23306389a",
+      "personallyViewedOriginal": true
+    }
+  ],
+  "repositoryWrites": 0,
+  "reviewerDomainCalls": 0,
+  "reviewerTests": 0,
+  "reviewerBuilds": 0,
+  "reviewerBrowserRuns": 0,
+  "finalCommit": "Pending owner evidence/test-only final commit; runtime images and execution remain attributed to actual f49420dd, not relabeled as a rerun at a future head."
+}

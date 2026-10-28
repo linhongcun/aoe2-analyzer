@@ -49,11 +49,18 @@ for (const width of [360, 375, 390, 1280])
       await page.reload();
       await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按格鲁吉亚计');
       await expect(page.locator('[data-step="2"] .n')).toContainText('80木、20食物');
-      await page.locator('#tlciv').click();
+      const mobilePicker = !(await page.locator('#tlciv').isVisible());
+      const settings = page.getByRole('dialog', { name: '设置', exact: true });
+      if (mobilePicker) {
+        await page.getByRole('button', { name: /^设置/ }).click();
+        await settings.locator('#tlciv').click();
+      } else await page.locator('#tlciv').click();
       const picker = page.getByRole('dialog', { name: '文明', exact: true });
       await expect(picker.locator('[data-civ="Georgians"]')).not.toHaveAttribute('aria-disabled', 'true');
       await expect(picker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
+      await expect(picker).toHaveCount(0);
+      if (mobilePicker && (await settings.isVisible())) await settings.getByRole('button', { name: '完成', exact: true }).click();
       await overflow(page);
       expect(await nowrap(page)).toEqual([]);
       if (width === 360 && theme === 'light')

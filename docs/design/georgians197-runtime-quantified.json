@@ -1,0 +1,1594 @@
+{
+  "schema": 1,
+  "verdict": "INDEPENDENT_GEORGIAN_EIGHT_SAVEDRAW_PASS",
+  "reviewer": "/root/batch11_georgians_source",
+  "reviewedUTC": "2026-10-28T07:08:23.417600+00:00",
+  "identity": {
+    "head": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+    "tree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+    "version": "0.56.0"
+  },
+  "actualExecution": {
+    "executor": "/root",
+    "startedUTC": "2026-10-28T07:00:32.413Z",
+    "completedUTC": "2026-10-28T07:00:33.807Z",
+    "publicCalls": {
+      "publicInvocationAttempts": 8,
+      "completedPublicInvocations": 8,
+      "directOtherDomainCalls": 0
+    },
+    "sourceInputCount": 480,
+    "sourceInputHashesSHA256": "b5e0b46b19e028ba06fe7e253775db52b8f53ecaa4e17316a06faff12183afba"
+  },
+  "evidence": {
+    "raw": {
+      "path": "/tmp/batch11-georgians-source-core-eight-f49420dd-raw.json",
+      "sha256": "b03cf0f04fe749bd77f980ac7dd9f74bac3e4efec4c9c4a284423f33c499e7da",
+      "bytes": 592083
+    },
+    "execution": {
+      "path": "/tmp/batch11-georgians-source-core-eight-f49420dd-execution.json",
+      "sha256": "d4952c707c6fc5dc2a01b8378fdccc8fdb0c34113fdde19fb739521b12dba8a8",
+      "bytes": 815
+    },
+    "log": {
+      "path": "/tmp/batch11-georgians-source-core-eight-f49420dd-execution.log",
+      "sha256": "8c3b346dda119c2867c3a7fc13bcca43b927ea24d41047f0028065824df61cd1",
+      "bytes": 515
+    },
+    "identity": {
+      "path": "/tmp/batch11-georgians-source-core-eight-identity-ROOT.json",
+      "sha256": "b873003efc6fffc9def63c38e0f6d5fce27d1976ee6e528c5fed1eb161ce3fe9",
+      "bytes": 53078
+    },
+    "script": {
+      "path": "/tmp/batch11-georgians-independent-core-probe.ts",
+      "sha256": "1a54d3fa9e954e8ae36d0c6758e013b61eb944b7fddaa3d6e72d0c839cda4996",
+      "bytes": 11228
+    },
+    "staticReview": {
+      "path": "/tmp/batch11-georgians-source-core-static-review.json",
+      "sha256": "5bbb1a820ae8f03976226c7afb0dd837e197ffdcaa3b77595695ccc844e41834",
+      "bytes": 12185
+    },
+    "M2Report": {
+      "path": "/tmp/batch11197-main055-baseline-capture.json",
+      "sha256": "2de84439ae16c40e2d70606937061df8671cc983c762e8c140bedf35dfb9af42",
+      "bytes": 149648
+    },
+    "M2Raw": {
+      "path": "/tmp/batch11197-main055-baseline-actual-results.json",
+      "sha256": "b808e9d6a4576e42f87872bfaf7ae0f1c34228928210d5252a57c11dbfaaa560",
+      "bytes": 9034309
+    },
+    "independentOther55": {
+      "path": "/tmp/batch11-georgians-independent-other55-savedraw-review.json",
+      "sha256": "f974f14063d0279b4df37db375f7c73a5ad1416d13a1328ff785daf60d0e515a",
+      "bytes": 3925
+    }
+  },
+  "directObservedCounts": {
+    "orders": 8,
+    "originalActions": 228,
+    "freeCartCompletionsAtZero": 8,
+    "paidCartCompletionsLater": 13,
+    "allCartCompletions": 21,
+    "fake562584Completions": 0,
+    "initialSnapshotsThreeVillagersFourOfFive": 8,
+    "initialSnapshots200F200W100G200S": 8,
+    "fullPreFirstCampPrefixMatchesM2": 8,
+    "bonusVillagerEvents": 0,
+    "timeouts": 0,
+    "firstTrainBuildCostRecords80W20F": 12,
+    "ofThoseDisplayedPrimaryIsCart": 10,
+    "ofThoseDisplayedPrimaryIsAgeup": 2,
+    "compoundHouseCostRecord25W": 1,
+    "requestedResearchActions": 21,
+    "primaryMatchingResearchStartsExposed": 2,
+    "compoundResearchStartsNotIndividuallyExposed": 19,
+    "explicitBlacksmithSiteWaits40Seconds": 2,
+    "actualAgeClicksCheckedAgainstCompletedBuildings": 11
+  },
+  "perBuildOrder": [
+    {
+      "bo": "feudal-drush-18",
+      "freeAtZero": 1,
+      "paidLater": 1,
+      "paidCompletionTimes": [
+        175
+      ],
+      "sourceCampSteps": [
+        2
+      ],
+      "initialStock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      },
+      "initialVils": 3,
+      "initialPop": {
+        "used": 4,
+        "cap": 5
+      },
+      "unchangedPrefixStepIndices": [
+        0,
+        1
+      ],
+      "paidVillagerPrefixCount": 6,
+      "paidVillagerPrefixMatchesM2": true,
+      "firstChangedPublicStepVsM2": 2,
+      "actualLastStepDoneAt": 638.8,
+      "actualAgeUps": [
+        {
+          "age": "feudal",
+          "clickAt": 458.7,
+          "reachAt": 588.7,
+          "errSec": {
+            "early": 0,
+            "late": 0
+          }
+        }
+      ],
+      "timeoutCount": 0,
+      "bonusVillagerEventCount": 0
+    },
+    {
+      "bo": "hybrid-fish-18",
+      "freeAtZero": 1,
+      "paidLater": 2,
+      "paidCompletionTimes": [
+        200.9,
+        540.1
+      ],
+      "sourceCampSteps": [
+        2,
+        7
+      ],
+      "initialStock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      },
+      "initialVils": 3,
+      "initialPop": {
+        "used": 4,
+        "cap": 5
+      },
+      "unchangedPrefixStepIndices": [
+        0,
+        1
+      ],
+      "paidVillagerPrefixCount": 7,
+      "paidVillagerPrefixMatchesM2": true,
+      "firstChangedPublicStepVsM2": 2,
+      "actualLastStepDoneAt": 630.9,
+      "actualAgeUps": [
+        {
+          "age": "feudal",
+          "clickAt": 500.8,
+          "reachAt": 630.8,
+          "errSec": {
+            "early": 7.1,
+            "late": 10.5
+          }
+        }
+      ],
+      "timeoutCount": 0,
+      "bonusVillagerEventCount": 0
+    },
+    {
+      "bo": "maa-archers-18",
+      "freeAtZero": 1,
+      "paidLater": 2,
+      "paidCompletionTimes": [
+        175,
+        607.3
+      ],
+      "sourceCampSteps": [
+        2,
+        7
+      ],
+      "initialStock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      },
+      "initialVils": 3,
+      "initialPop": {
+        "used": 4,
+        "cap": 5
+      },
+      "unchangedPrefixStepIndices": [
+        0,
+        1
+      ],
+      "paidVillagerPrefixCount": 6,
+      "paidVillagerPrefixMatchesM2": true,
+      "firstChangedPublicStepVsM2": 2,
+      "actualLastStepDoneAt": 877.3,
+      "actualAgeUps": [
+        {
+          "age": "feudal",
+          "clickAt": 452.3,
+          "reachAt": 582.3,
+          "errSec": {
+            "early": 0,
+            "late": 0
+          }
+        }
+      ],
+      "timeoutCount": 0,
+      "bonusVillagerEventCount": 0
+    },
+    {
+      "bo": "scouts-18",
+      "freeAtZero": 1,
+      "paidLater": 1,
+      "paidCompletionTimes": [
+        158.1
+      ],
+      "sourceCampSteps": [
+        2
+      ],
+      "initialStock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      },
+      "initialVils": 3,
+      "initialPop": {
+        "used": 4,
+        "cap": 5
+      },
+      "unchangedPrefixStepIndices": [
+        0,
+        1
+      ],
+      "paidVillagerPrefixCount": 5,
+      "paidVillagerPrefixMatchesM2": true,
+      "firstChangedPublicStepVsM2": 2,
+      "actualLastStepDoneAt": 713.5,
+      "actualAgeUps": [
+        {
+          "age": "feudal",
+          "clickAt": 435,
+          "reachAt": 565,
+          "errSec": {
+            "early": 0,
+            "late": 0
+          }
+        }
+      ],
+      "timeoutCount": 0,
+      "bonusVillagerEventCount": 0
+    },
+    {
+      "bo": "archers-19",
+      "freeAtZero": 1,
+      "paidLater": 2,
+      "paidCompletionTimes": [
+        175,
+        696.5
+      ],
+      "sourceCampSteps": [
+        2,
+        8
+      ],
+      "initialStock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      },
+      "initialVils": 3,
+      "initialPop": {
+        "used": 4,
+        "cap": 5
+      },
+      "unchangedPrefixStepIndices": [
+        0,
+        1
+      ],
+      "paidVillagerPrefixCount": 6,
+      "paidVillagerPrefixMatchesM2": true,
+      "firstChangedPublicStepVsM2": 2,
+      "actualLastStepDoneAt": 816.6,
+      "actualAgeUps": [
+        {
+          "age": "feudal",
+          "clickAt": 466.5,
+          "reachAt": 596.5,
+          "errSec": {
+            "early": 0,
+            "late": 0
+          }
+        }
+      ],
+      "timeoutCount": 0,
+      "bonusVillagerEventCount": 0
+    },
+    {
+      "bo": "fast-castle-boom",
+      "freeAtZero": 1,
+      "paidLater": 2,
+      "paidCompletionTimes": [
+        175,
+        551.9
+      ],
+      "sourceCampSteps": [
+        2,
+        9
+      ],
+      "initialStock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      },
+      "initialVils": 3,
+      "initialPop": {
+        "used": 4,
+        "cap": 5
+      },
+      "unchangedPrefixStepIndices": [
+        0,
+        1
+      ],
+      "paidVillagerPrefixCount": 6,
+      "paidVillagerPrefixMatchesM2": true,
+      "firstChangedPublicStepVsM2": 2,
+      "actualLastStepDoneAt": 1044.2,
+      "actualAgeUps": [
+        {
+          "age": "feudal",
+          "clickAt": 527,
+          "reachAt": 657,
+          "errSec": {
+            "early": 9.5,
+            "late": 66.7
+          }
+        },
+        {
+          "age": "castle",
+          "clickAt": 756.1,
+          "reachAt": 916.1,
+          "errSec": {
+            "early": 10.1,
+            "late": 100.3
+          }
+        }
+      ],
+      "timeoutCount": 0,
+      "bonusVillagerEventCount": 0
+    },
+    {
+      "bo": "fast-castle-knights",
+      "freeAtZero": 1,
+      "paidLater": 2,
+      "paidCompletionTimes": [
+        175,
+        551.9
+      ],
+      "sourceCampSteps": [
+        2,
+        9
+      ],
+      "initialStock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      },
+      "initialVils": 3,
+      "initialPop": {
+        "used": 4,
+        "cap": 5
+      },
+      "unchangedPrefixStepIndices": [
+        0,
+        1
+      ],
+      "paidVillagerPrefixCount": 6,
+      "paidVillagerPrefixMatchesM2": true,
+      "firstChangedPublicStepVsM2": 2,
+      "actualLastStepDoneAt": 1031,
+      "actualAgeUps": [
+        {
+          "age": "feudal",
+          "clickAt": 527,
+          "reachAt": 657,
+          "errSec": {
+            "early": 9.5,
+            "late": 66.7
+          }
+        },
+        {
+          "age": "castle",
+          "clickAt": 756.1,
+          "reachAt": 916.1,
+          "errSec": {
+            "early": 10.1,
+            "late": 100.3
+          }
+        }
+      ],
+      "timeoutCount": 0,
+      "bonusVillagerEventCount": 0
+    },
+    {
+      "bo": "drush-fc",
+      "freeAtZero": 1,
+      "paidLater": 1,
+      "paidCompletionTimes": [
+        200.9
+      ],
+      "sourceCampSteps": [
+        2
+      ],
+      "initialStock": {
+        "food": 200,
+        "wood": 200,
+        "gold": 100,
+        "stone": 200
+      },
+      "initialVils": 3,
+      "initialPop": {
+        "used": 4,
+        "cap": 5
+      },
+      "unchangedPrefixStepIndices": [
+        0,
+        1
+      ],
+      "paidVillagerPrefixCount": 7,
+      "paidVillagerPrefixMatchesM2": true,
+      "firstChangedPublicStepVsM2": 2,
+      "actualLastStepDoneAt": 1077.5,
+      "actualAgeUps": [
+        {
+          "age": "feudal",
+          "clickAt": 662.4,
+          "reachAt": 792.4,
+          "errSec": {
+            "early": 0,
+            "late": 0
+          }
+        },
+        {
+          "age": "castle",
+          "clickAt": 882.5,
+          "reachAt": 1042.5,
+          "errSec": {
+            "early": 0,
+            "late": 0
+          }
+        }
+      ],
+      "timeoutCount": 0,
+      "bonusVillagerEventCount": 0
+    }
+  ],
+  "paidCartLedger": [
+    {
+      "bo": "feudal-drush-18",
+      "step": 2,
+      "sourceActionIndex": 1,
+      "sourceCamp": 562,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 175
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 562
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 150.1,
+      "stepDoneAt": 175,
+      "requestToOrderedCompletion": 24.9,
+      "stepAnomalies": [
+        {
+          "type": "idle_tc",
+          "waitSec": 12.6,
+          "from": 150,
+          "to": 162.6,
+          "reasonZh": "城镇中心闲置 约 12.6 秒（食物不足）"
+        }
+      ]
+    },
+    {
+      "bo": "hybrid-fish-18",
+      "step": 2,
+      "sourceActionIndex": 1,
+      "sourceCamp": 562,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 200.9
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 562
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 176,
+      "stepDoneAt": 200.9,
+      "requestToOrderedCompletion": 24.9,
+      "stepAnomalies": [
+        {
+          "type": "idle_tc",
+          "waitSec": 16.1,
+          "from": 175.9,
+          "to": 192,
+          "reasonZh": "城镇中心闲置 约 16.1 秒（食物不足）"
+        }
+      ]
+    },
+    {
+      "bo": "hybrid-fish-18",
+      "step": 7,
+      "sourceActionIndex": 2,
+      "sourceCamp": 584,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 540.1
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 584
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 500.9,
+      "stepDoneAt": 540.1,
+      "requestToOrderedCompletion": 39.2,
+      "stepAnomalies": [
+        {
+          "type": "resource_short",
+          "resource": "food",
+          "shortfall": 20,
+          "waitSec": 14.3,
+          "from": 500.9,
+          "to": 515.2,
+          "reasonZh": "食物差 20（等待 约 14.3 秒）"
+        }
+      ]
+    },
+    {
+      "bo": "maa-archers-18",
+      "step": 2,
+      "sourceActionIndex": 1,
+      "sourceCamp": 562,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 175
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 562
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 150.1,
+      "stepDoneAt": 175,
+      "requestToOrderedCompletion": 24.9,
+      "stepAnomalies": [
+        {
+          "type": "idle_tc",
+          "waitSec": 12.6,
+          "from": 150,
+          "to": 162.6,
+          "reasonZh": "城镇中心闲置 约 12.6 秒（食物不足）"
+        }
+      ]
+    },
+    {
+      "bo": "maa-archers-18",
+      "step": 7,
+      "sourceActionIndex": 1,
+      "sourceCamp": 584,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 607.3
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 584
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 582.3,
+      "stepDoneAt": 713.1,
+      "requestToOrderedCompletion": 25.0,
+      "stepAnomalies": [
+        {
+          "type": "resource_short",
+          "resource": "gold",
+          "shortfall": 10,
+          "waitSec": 18.2,
+          "from": 582.4,
+          "to": 600.6,
+          "reasonZh": "黄金差 10（等待 约 18.2 秒）"
+        },
+        {
+          "type": "resource_short",
+          "resource": "gold",
+          "shortfall": 40,
+          "waitSec": 72.6,
+          "from": 600.6,
+          "to": 673.2,
+          "reasonZh": "黄金差 40（等待 约 72.6 秒）"
+        }
+      ]
+    },
+    {
+      "bo": "scouts-18",
+      "step": 2,
+      "sourceActionIndex": 1,
+      "sourceCamp": 562,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 158.1
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 562
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 125.1,
+      "stepDoneAt": 158.1,
+      "requestToOrderedCompletion": 33.0,
+      "stepAnomalies": [
+        {
+          "type": "resource_short",
+          "resource": "food",
+          "shortfall": 14,
+          "waitSec": 8.1,
+          "from": 125.1,
+          "to": 133.2,
+          "reasonZh": "食物差 14（等待 约 8.1 秒）"
+        }
+      ]
+    },
+    {
+      "bo": "archers-19",
+      "step": 2,
+      "sourceActionIndex": 1,
+      "sourceCamp": 562,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 175
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 562
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 150.1,
+      "stepDoneAt": 175,
+      "requestToOrderedCompletion": 24.9,
+      "stepAnomalies": [
+        {
+          "type": "idle_tc",
+          "waitSec": 12.6,
+          "from": 150,
+          "to": 162.6,
+          "reasonZh": "城镇中心闲置 约 12.6 秒（食物不足）"
+        }
+      ]
+    },
+    {
+      "bo": "archers-19",
+      "step": 8,
+      "sourceActionIndex": 4,
+      "sourceCamp": 584,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 696.5
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "70"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 70
+      },
+      "directExposedCostIsCart": false,
+      "directExposedCost": {
+        "food": 0,
+        "wood": 25,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 596.5,
+      "stepDoneAt": 696.5,
+      "requestToOrderedCompletion": 100.0,
+      "stepAnomalies": []
+    },
+    {
+      "bo": "fast-castle-boom",
+      "step": 2,
+      "sourceActionIndex": 1,
+      "sourceCamp": 562,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 175
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 562
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 150.1,
+      "stepDoneAt": 175,
+      "requestToOrderedCompletion": 24.9,
+      "stepAnomalies": [
+        {
+          "type": "idle_tc",
+          "waitSec": 12.6,
+          "from": 150,
+          "to": 162.6,
+          "reasonZh": "城镇中心闲置 约 12.6 秒（食物不足）"
+        }
+      ]
+    },
+    {
+      "bo": "fast-castle-boom",
+      "step": 9,
+      "sourceActionIndex": 1,
+      "sourceCamp": 584,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 551.9
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "ageup",
+      "displayedPrimaryEntity": {
+        "kind": "tech",
+        "id": "101"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 584
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 517.5,
+      "stepDoneAt": 657,
+      "requestToOrderedCompletion": 34.4,
+      "stepAnomalies": [
+        {
+          "type": "idle_tc",
+          "waitSec": 9.6,
+          "from": 517.4,
+          "to": 527,
+          "reasonZh": "城镇中心闲置 约 9.6 秒（等待）"
+        },
+        {
+          "type": "resource_short",
+          "resource": "wood",
+          "shortfall": 19,
+          "waitSec": 9.5,
+          "from": 517.5,
+          "to": 527,
+          "reasonZh": "木头差 19（等待 约 9.5 秒）"
+        }
+      ]
+    },
+    {
+      "bo": "fast-castle-knights",
+      "step": 2,
+      "sourceActionIndex": 1,
+      "sourceCamp": 562,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 175
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 562
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 150.1,
+      "stepDoneAt": 175,
+      "requestToOrderedCompletion": 24.9,
+      "stepAnomalies": [
+        {
+          "type": "idle_tc",
+          "waitSec": 12.6,
+          "from": 150,
+          "to": 162.6,
+          "reasonZh": "城镇中心闲置 约 12.6 秒（食物不足）"
+        }
+      ]
+    },
+    {
+      "bo": "fast-castle-knights",
+      "step": 9,
+      "sourceActionIndex": 1,
+      "sourceCamp": 584,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 551.9
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "ageup",
+      "displayedPrimaryEntity": {
+        "kind": "tech",
+        "id": "101"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 584
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 517.5,
+      "stepDoneAt": 657,
+      "requestToOrderedCompletion": 34.4,
+      "stepAnomalies": [
+        {
+          "type": "idle_tc",
+          "waitSec": 9.6,
+          "from": 517.4,
+          "to": 527,
+          "reasonZh": "城镇中心闲置 约 9.6 秒（等待）"
+        },
+        {
+          "type": "resource_short",
+          "resource": "wood",
+          "shortfall": 19,
+          "waitSec": 9.5,
+          "from": 517.5,
+          "to": 527,
+          "reasonZh": "木头差 19（等待 约 9.5 秒）"
+        }
+      ]
+    },
+    {
+      "bo": "drush-fc",
+      "step": 2,
+      "sourceActionIndex": 1,
+      "sourceCamp": 562,
+      "orderedCompletion": {
+        "building": 1808,
+        "at": 200.9
+      },
+      "completionBinding": "source action order plus observed completion count; buildingsDone has no step/fee/pop fields",
+      "displayedPrimaryAction": "build",
+      "displayedPrimaryEntity": {
+        "kind": "building",
+        "id": "1808"
+      },
+      "firstTrainBuildAction": {
+        "type": "build",
+        "building": 562
+      },
+      "directExposedCostIsCart": true,
+      "directExposedCost": {
+        "food": 20,
+        "wood": 80,
+        "gold": 0,
+        "stone": 0
+      },
+      "stepStartAt": 176,
+      "stepDoneAt": 200.9,
+      "requestToOrderedCompletion": 24.9,
+      "stepAnomalies": [
+        {
+          "type": "idle_tc",
+          "waitSec": 16.1,
+          "from": 175.9,
+          "to": 192,
+          "reasonZh": "城镇中心闲置 约 16.1 秒（食物不足）"
+        }
+      ]
+    }
+  ],
+  "researchCounts": {
+    "22": 6,
+    "202": 7,
+    "199": 3,
+    "14": 4,
+    "203": 1
+  },
+  "researchSiteLedger": [
+    {
+      "bo": "feudal-drush-18",
+      "step": 8,
+      "tech": 22,
+      "legalSourceSites": [
+        109
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "feudal-drush-18",
+      "step": 10,
+      "tech": 202,
+      "legalSourceSites": [
+        1808
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "hybrid-fish-18",
+      "step": 6,
+      "tech": 22,
+      "legalSourceSites": [
+        109
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "maa-archers-18",
+      "step": 5,
+      "tech": 22,
+      "legalSourceSites": [
+        109
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "maa-archers-18",
+      "step": 8,
+      "tech": 202,
+      "legalSourceSites": [
+        1808
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "maa-archers-18",
+      "step": 11,
+      "tech": 199,
+      "legalSourceSites": [
+        103
+      ],
+      "nominalSourceSeconds": 30,
+      "earliestObservedUsableSite": 847.3,
+      "availableByStepStart": false,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "scouts-18",
+      "step": 7,
+      "tech": 22,
+      "legalSourceSites": [
+        109
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "scouts-18",
+      "step": 11,
+      "tech": 202,
+      "legalSourceSites": [
+        1808
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": 657.4,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "scouts-18",
+      "step": 11,
+      "tech": 14,
+      "legalSourceSites": [
+        68
+      ],
+      "nominalSourceSeconds": 20,
+      "earliestObservedUsableSite": 257.9,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "archers-19",
+      "step": 6,
+      "tech": 22,
+      "legalSourceSites": [
+        109
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "archers-19",
+      "step": 8,
+      "tech": 202,
+      "legalSourceSites": [
+        1808
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "archers-19",
+      "step": 10,
+      "tech": 199,
+      "legalSourceSites": [
+        103
+      ],
+      "nominalSourceSeconds": 30,
+      "earliestObservedUsableSite": 786.6,
+      "availableByStepStart": false,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "fast-castle-boom",
+      "step": 10,
+      "tech": 202,
+      "legalSourceSites": [
+        1808
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "fast-castle-boom",
+      "step": 10,
+      "tech": 14,
+      "legalSourceSites": [
+        68
+      ],
+      "nominalSourceSeconds": 20,
+      "earliestObservedUsableSite": 251.2,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "fast-castle-boom",
+      "step": 12,
+      "tech": 203,
+      "legalSourceSites": [
+        1808
+      ],
+      "nominalSourceSeconds": 50,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "fast-castle-knights",
+      "step": 10,
+      "tech": 202,
+      "legalSourceSites": [
+        1808
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "fast-castle-knights",
+      "step": 10,
+      "tech": 14,
+      "legalSourceSites": [
+        68
+      ],
+      "nominalSourceSeconds": 20,
+      "earliestObservedUsableSite": 251.2,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "drush-fc",
+      "step": 8,
+      "tech": 22,
+      "legalSourceSites": [
+        109
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": 612.3,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "drush-fc",
+      "step": 13,
+      "tech": 202,
+      "legalSourceSites": [
+        1808
+      ],
+      "nominalSourceSeconds": 25,
+      "earliestObservedUsableSite": 0,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "drush-fc",
+      "step": 13,
+      "tech": 14,
+      "legalSourceSites": [
+        68
+      ],
+      "nominalSourceSeconds": 20,
+      "earliestObservedUsableSite": 472.3,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    },
+    {
+      "bo": "drush-fc",
+      "step": 13,
+      "tech": 199,
+      "legalSourceSites": [
+        103
+      ],
+      "nominalSourceSeconds": 30,
+      "earliestObservedUsableSite": 882.4,
+      "availableByStepStart": true,
+      "directMatchingPrimaryResearchStart": null,
+      "individualResearchCompletion": "not exposed by this public API",
+      "sourceAndGateInference": "existing fixed-source gate requires a completed legal site; hidden compound completion time is not inferred from step.doneAt"
+    }
+  ],
+  "explicitSiteWaits": [
+    {
+      "bo": "maa-archers-18",
+      "type": "prereq_wait",
+      "from": 807.4,
+      "to": 847.4,
+      "waitSec": 40,
+      "missing": [
+        "铁匠铺"
+      ],
+      "researchSite": "铁匠铺",
+      "reasonZh": "等铁匠铺建成 约 40 秒",
+      "matchingCompletedBuilding": [
+        {
+          "building": 103,
+          "at": 847.3
+        }
+      ],
+      "releaseAfterCompletionSeconds": 0.1
+    },
+    {
+      "bo": "archers-19",
+      "type": "prereq_wait",
+      "from": 746.7,
+      "to": 786.7,
+      "waitSec": 40,
+      "missing": [
+        "铁匠铺"
+      ],
+      "researchSite": "铁匠铺",
+      "reasonZh": "等铁匠铺建成 约 40 秒",
+      "matchingCompletedBuilding": [
+        {
+          "building": 103,
+          "at": 786.6
+        }
+      ],
+      "releaseAfterCompletionSeconds": 0.1
+    }
+  ],
+  "ageClicks": [
+    {
+      "bo": "feudal-drush-18",
+      "age": "feudal",
+      "clickAt": 458.7,
+      "reachAt": 588.7,
+      "errSec": {
+        "early": 0,
+        "late": 0
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 2,
+        "70": 4,
+        "12": 1
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "hybrid-fish-18",
+      "age": "feudal",
+      "clickAt": 500.8,
+      "reachAt": 630.8,
+      "errSec": {
+        "early": 7.1,
+        "late": 10.5
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 2,
+        "70": 2,
+        "45": 1
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "maa-archers-18",
+      "age": "feudal",
+      "clickAt": 452.3,
+      "reachAt": 582.3,
+      "errSec": {
+        "early": 0,
+        "late": 0
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 2,
+        "70": 3,
+        "12": 1
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "scouts-18",
+      "age": "feudal",
+      "clickAt": 435,
+      "reachAt": 565,
+      "errSec": {
+        "early": 0,
+        "late": 0
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 2,
+        "70": 3,
+        "68": 1
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "archers-19",
+      "age": "feudal",
+      "clickAt": 466.5,
+      "reachAt": 596.5,
+      "errSec": {
+        "early": 0,
+        "late": 0
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 2,
+        "70": 3,
+        "68": 1
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "fast-castle-boom",
+      "age": "feudal",
+      "clickAt": 527,
+      "reachAt": 657,
+      "errSec": {
+        "early": 9.5,
+        "late": 66.7
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 2,
+        "70": 5,
+        "68": 1,
+        "50": 4
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "fast-castle-boom",
+      "age": "castle",
+      "clickAt": 756.1,
+      "reachAt": 916.1,
+      "errSec": {
+        "early": 10.1,
+        "late": 100.3
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 3,
+        "70": 5,
+        "68": 1,
+        "50": 4,
+        "103": 1,
+        "84": 1
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "fast-castle-knights",
+      "age": "feudal",
+      "clickAt": 527,
+      "reachAt": 657,
+      "errSec": {
+        "early": 9.5,
+        "late": 66.7
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 2,
+        "70": 5,
+        "68": 1,
+        "50": 4
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "fast-castle-knights",
+      "age": "castle",
+      "clickAt": 756.1,
+      "reachAt": 916.1,
+      "errSec": {
+        "early": 10.1,
+        "late": 100.3
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 3,
+        "70": 5,
+        "68": 1,
+        "50": 4,
+        "103": 1,
+        "84": 1
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "drush-fc",
+      "age": "feudal",
+      "clickAt": 662.4,
+      "reachAt": 792.4,
+      "errSec": {
+        "early": 0,
+        "late": 0
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 2,
+        "70": 6,
+        "12": 1,
+        "72": 1,
+        "68": 1
+      },
+      "requirementsSatisfied": true
+    },
+    {
+      "bo": "drush-fc",
+      "age": "castle",
+      "clickAt": 882.5,
+      "reachAt": 1042.5,
+      "errSec": {
+        "early": 0,
+        "late": 0
+      },
+      "completedAtClick": {
+        "109": 1,
+        "1808": 2,
+        "70": 6,
+        "12": 1,
+        "72": 1,
+        "68": 1,
+        "87": 1,
+        "103": 1
+      },
+      "requirementsSatisfied": true
+    }
+  ],
+  "independentSourceTreeCategoryExamples": {
+    "oneCartOnlyFailsRequiredTwo": true,
+    "threeCartsStillOnlyOneCategory": true,
+    "cartAndMillSatisfyTwo": true
+  },
+  "directObservations": [
+    "Each timeline contains exactly one1808at0 plus its original1or2 paid-cart completions; aggregate8+13=21. No562/584 completed or primary entity survives.",
+    "All8 first-step snapshots show3 villagers,4/5 population,200F200W100G200S and3 assigned builders. Full pre-first-camp steps0/1, clocks/stocks/pop/allocations and paid-birth prefixes match genuine M2.",
+    "All8 timelines finish without timeout or bonus-villager events. Timing values in this report are actual saved output, not predicted balance assertions.",
+    "12 camp-containing steps expose80W20F as the first train/build cost; archers-19 step8 exposes only its firstHouse25W. Two80W20F records are attached to displayed ageup101 steps because primary-action priority and cost selection are separate existing API contracts.",
+    "Two primary matching research starts are directly exposed: scouts202 and drush-fc22. Two Blacksmith40s site waits release on the next0.1s tick after observed103 completion. Other19 individual research starts/completions are not exposed.",
+    "All11 actual age clicks satisfy the captured category tree when evaluated independently against initialTC plus actual completed entities at that time."
+  ],
+  "sourceAndStaticInferences": [
+    "The free cart has zero fee/population/housing/worker/TC impact jointly from the reviewed initialization branch, fixed raw storage evidence, controlled frozen cases and preserved public prefix snapshots. buildingsDone itself has no fee/pop fields.",
+    "The13th paid cart fee is supported by its preserved source action, independently matched80W20F metadata, reviewed per-action charging branch and controlled pay-each-action cases. Its completion is directly observed, but no second per-action public fee record exists in the compoundHouse step.",
+    "Research-source locations and standard nominal202=25s are fixed-source/static guard facts. Existing completed-site gate plus no timeouts and explicit waits are consistent; no hidden research finish timestamp is invented.",
+    "Paid completion association with source camp step uses original action order and exact completion counts, because buildingsDone lacks a step/action identifier. Request-to-completion intervals may include waiting or earlier construction, not only nominal25s."
+  ],
+  "unobservableOrNotClaimed": [
+    "No raw per-free-cart fee/pop event field or complete per-action payment ledger is exposed.",
+    "No individual completion time for hidden compound research is derived from step.doneAt. Even a primary research step may contain another research/build action, so step.doneAt need not equal that research completion.",
+    "No current185872client or EffectFunction9 XS experiment, all-RMS start, optimal cart movement/reuse, Church economics or helper expansion is claimed.",
+    "No extra application call or alternative/counterfactual simulation was made by this audit. The original raw evidence was preserved."
+  ],
+  "offlineAuditAssumptionCorrection": {
+    "path": "/tmp/batch11-georgians-savedraw-site-tick-correction.json",
+    "sha256": "3d7dfc1110f3a04fca1262bc574220cbcdfa21aa1dc4fac20d62793c73c5c0ee",
+    "bytes": 1400
+  },
+  "collectorWordingCorrection": {
+    "originalRawPreserved": true,
+    "overSimplifiedMetadata": "TimelineStep.cost describes the primary action, not all actions in a compound step.",
+    "preciseExistingContract": "TimelineStep.cost is the first paid train/build action in that step. Displayed primary selection separately prioritizes ageUp;10 cart display entities+2 ageup display entities have80W20F, and theHouse compound has25W.",
+    "impact": "A correction to collector explanatory metadata, not a model, public result, fixture, source contract or raw evidence mutation."
+  },
+  "findings": [],
+  "additionalDomainCalls": 0,
+  "repositoryWrites": 0
+}

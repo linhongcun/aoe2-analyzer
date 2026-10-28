@@ -1,0 +1,637 @@
+{
+  "schema": 1,
+  "status": "LOCAL_VALIDATION_COMPLETE_CI_AND_RELEASE_PENDING",
+  "version": "0.56.0",
+  "testedRuntime": {
+    "commit": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+    "tree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+    "shortBuild": "f49420d",
+    "sourceInputs": 480,
+    "sourceInputHashesSHA256": "b5e0b46b19e028ba06fe7e253775db52b8f53ecaa4e17316a06faff12183afba",
+    "baseM2": "47eb649eeed1cb1481f8b982bcf8a27e03b52a69",
+    "docsAndE2EOnlyFollowupDoesNotClaimRebuild": true
+  },
+  "firstRed": {
+    "report": "georgians197-first-red.json",
+    "SHA256": "c876351c7ab06fa249daed0ca4fbc62f1d8d3d9cbd567e12bc8bdd9ab689e3f4",
+    "originalFrozenTS": 77,
+    "originalFrozenPython": 6,
+    "semanticFailures": 48,
+    "importEnvironmentOrFixtureFailures": 0,
+    "extraUnknownRowStrictRedGreen": "georgians197-unknown-row-red-green.json",
+    "extraUnknownRowCase": 1,
+    "distinctNewTS": 78,
+    "distinctNewPython": 6
+  },
+  "separateGreenRuns": [
+    {
+      "label": "first-green",
+      "unit": {
+        "report": "/tmp/batch11-georgians-first-green-unit.json",
+        "reportSHA256": "6666e2b0a5dad2afa105bb7f562b56fa7a95cf32b9267bce587036840bdb8d14",
+        "execution": "/tmp/batch11-georgians-first-green-unit.execution.json",
+        "executionSHA256": "e7adb80ac298be3cc5acdf9af2991fec456d6bc76ba0f83b385a0d2b31a80fee",
+        "total": 77,
+        "passed": 77,
+        "failed": 0
+      },
+      "python": {
+        "execution": "/tmp/batch11-georgians-first-green-python.execution.json",
+        "executionSHA256": "c4b9c9a70957998f7e430ed347581a32d5b98e9d8ffc0a1ef4fd427c366f846b",
+        "log": "/tmp/batch11-georgians-first-green-python.log",
+        "logSHA256": "38f5f7e47008c46d572b5ac205d2c198f5df3ac0aeca68e2085e70e40214b38c",
+        "total": 6,
+        "passed": 6,
+        "failed": 0
+      },
+      "head": "ab85d540813a8ce9432576a6c0dee9ff0de09b0a",
+      "headTree": "ae42601ed054d2c62f73c4361cd143cbe4515601",
+      "inputSHA256": "b74332a49b216434c430c9624630786f0d3f4cb6224b7ee464cded3068550992",
+      "inputStableDuringUnitRun": true,
+      "inputStableDuringPythonRun": true
+    },
+    {
+      "label": "M2-green",
+      "unit": {
+        "report": "/tmp/batch11-georgians-M2-green-unit.json",
+        "reportSHA256": "2d614e7d196a48ef13c818a213303ee9fff3f76fb625bcc550f8aeed179bfacf",
+        "execution": "/tmp/batch11-georgians-M2-green-unit.execution.json",
+        "executionSHA256": "cf6c3e6c3e8d85c8cde94fa665dbc6d2e5d5c10921dea56785d92d4da42245c9",
+        "total": 77,
+        "passed": 77,
+        "failed": 0
+      },
+      "python": {
+        "execution": "/tmp/batch11-georgians-M2-green-python.execution.json",
+        "executionSHA256": "eb98966a223fa6fb68189a190eacf039adec2e960392ea72210f29ad8f64a866",
+        "log": "/tmp/batch11-georgians-M2-green-python.log",
+        "logSHA256": "f1c99abe0a9a8a64f03407169229e917bbdf6a1a99fbc30d8f72d3c6689363e8",
+        "total": 6,
+        "passed": 6,
+        "failed": 0
+      },
+      "head": "1c26e4d3bc419223c5f837640b0f2c57c1e91e3a",
+      "headTree": "776b74d300d5f4b43df390ff216adf04710946be",
+      "inputSHA256": "05f27cc55cdf17fcef69c4940da66c5f955dde2ddfcaafd03dc843016e24b7c4",
+      "inputStableDuringUnitRun": true,
+      "inputStableDuringPythonRun": true
+    }
+  ],
+  "compatibility": {
+    "report": "/tmp/batch11-georgians-M2-compat-unit.json",
+    "SHA256": "7ed499521c5cdb73987f7364427fc14045a970fbd8944c0706873b685992789f",
+    "files": 17,
+    "passed": 656,
+    "failed": 0,
+    "whole331ThreeHistoricalSnapshotsExecuted": true,
+    "ArmenianProducerPassed": 6
+  },
+  "staticChecks": {
+    "tscFinalPassed": true,
+    "initialNewHelperTS2352RepairedBySameValuePerElementTypeAssertions": true,
+    "lintPassedWithOnlyExistingMaxLineWarnings": true,
+    "layersPassed": true,
+    "contentStrict": {
+      "inputs": 46,
+      "warnings": 0,
+      "errors": 0
+    },
+    "compiledValidators": {
+      "boundaries": 6,
+      "reproducible": true,
+      "generatedFilesUnchanged": true
+    },
+    "buildOrderValidation": {
+      "orders": 8,
+      "errors": 0
+    },
+    "publicSourcePresentation": {
+      "inputs": 9,
+      "errors": 0
+    },
+    "newDeploymentScript": "eslint existing config ignores this script; actual node --check passed, followed by actual same-dist deployment smoke"
+  },
+  "bonus317": {
+    "generator": {
+      "record": "/tmp/batch11-georgians-317-update-only.execution.json",
+      "recordSHA256": "11d302b83aeb0b381664fac35beecbcce18ca4871d167d507ec05701387471da",
+      "command": [
+        "env",
+        "UPDATE_BONUS317=1",
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/bonusUsage317.test.ts",
+        "--testNamePattern=重新生成开局模拟快照",
+        "--reporter=json",
+        "--outputFile=/tmp/batch11-georgians-317-update-only.json"
+      ],
+      "startedUTC": "2026-10-28T06:45:45.808402+00:00",
+      "completedUTC": "2026-10-28T06:46:35.606214+00:00",
+      "exitCode": 0,
+      "log": "/tmp/batch11-georgians-317-update-only.log",
+      "logSHA256": "df4da91dfec44057b705f546eb9a23da2ad8b2af2efb50559edf813cd89540e1",
+      "testedHEAD": "1c26e4d3bc419223c5f837640b0f2c57c1e91e3a",
+      "testedHEADTree": "776b74d300d5f4b43df390ff216adf04710946be",
+      "inputSHA256": "ab0bbd348342f45794cfb9e983b58a9066fb75b5762ca59bf2bc2bff5c19ca85",
+      "inputSHA256After": "3275383d7f19951e26f35aa807bc4ba59430bae8f26ea255b6b5d48efa48a27c"
+    },
+    "actualGeneratorCounts": {
+      "passed": 1,
+      "filteredSkip": 12
+    },
+    "normal": {
+      "record": "/tmp/batch11-georgians-317-normal.execution.json",
+      "recordSHA256": "fc6b8c18bed14fab4b95faba6497e46877cb522d4090d0d5719287afcf73fe77",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/bonusUsage317.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/batch11-georgians-317-normal.json"
+      ],
+      "startedUTC": "2026-10-28T06:51:00.039532+00:00",
+      "completedUTC": "2026-10-28T06:51:02.329556+00:00",
+      "exitCode": 0,
+      "log": "/tmp/batch11-georgians-317-normal.log",
+      "logSHA256": "db6eca4878711ef92165b10b73f81a85c326a5b3cdee71dc331643fde944215d",
+      "testedHEAD": "1c26e4d3bc419223c5f837640b0f2c57c1e91e3a",
+      "testedHEADTree": "776b74d300d5f4b43df390ff216adf04710946be",
+      "inputSHA256": "556ce2517412ad54600e9035a8278f8848b4aa72534f87739bd9c776ea05cdfc",
+      "inputSHA256After": "556ce2517412ad54600e9035a8278f8848b4aa72534f87739bd9c776ea05cdfc"
+    },
+    "normalCounts": {
+      "passed": 12,
+      "intentionalUpdateSkip": 1
+    },
+    "old80ValuesIdentical": true,
+    "actualAdded": {
+      "Georgians-0": null,
+      "Georgians-1": null,
+      "Georgians-2": null,
+      "Georgians-3": null
+    },
+    "fixtureSHA256": "641e55af3ca45ad691d4c1de0b5d31f2c220b6c705b36cdc260efaba64f26919",
+    "inputs": "d6b62d34076240ed6a24c8e35bdc536849ed1e2e319df5062b7a94d3614544d2",
+    "algorithmsAndOriginalObservationUnchanged": true,
+    "Geo0Explanation": "Completed entity/category counted; current explicit camp actions remain paid, so the original doneAt/stock-only projection naturally remains unchanged. Separate entity, research-site and category tests verify it."
+  },
+  "runtimeQuantified": {
+    "report": "georgians197-runtime-quantified.json",
+    "SHA256": "1fcafa188db7ac4a95a39d2d4d3b840f2b9489ed33b79bf413e4a5ce10eb01a9",
+    "additionalDomainCallsByOfflineReview": 0,
+    "eightActualPublicCalls": 8,
+    "startingFreeCarts": 8,
+    "paidCarts": 13,
+    "campActions": 13,
+    "campSteps": 12,
+    "costAPI": "cost records the first train/build action in a step, not necessarily the primary entity:12 records80W20F include10 primary carts and2 primary ageups; the compound primary House records25W.",
+    "researchAPI": "Only2 primary matching research starts are individually exposed;19 compound research starts are not. Offline comparisons use declared0.1s tick/order bounds, not stronger same-tick assumptions."
+  },
+  "independentOther55": {
+    "schema": 1,
+    "verdict": "INDEPENDENT_OTHER55_SAVEDRAW_PASS",
+    "reviewer": "/root/batch11_georgians_source",
+    "reviewedUTC": "2026-10-28T07:08:23.416952+00:00",
+    "identity": {
+      "head": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+      "tree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+      "version": "0.56.0"
+    },
+    "evidence": {
+      "capture": {
+        "path": "/tmp/batch11197-main055-core-f49420dd-other55-capture.json",
+        "sha256": "dec1c93408087ba226d25b0913a24ce6e9fad7f8f8b7961c95eda4b6bcf62799",
+        "bytes": 62277
+      },
+      "existingOffline": {
+        "path": "/tmp/batch11197-main055-core-f49420dd-other55-offline.json",
+        "sha256": "e7712708cf109d438f61526b3e73d4d12f7db543efa9eef4619d17c4be8f8fe6",
+        "bytes": 3302
+      },
+      "baseline": {
+        "path": "/tmp/batch11197-main055-baseline-capture.json",
+        "sha256": "2de84439ae16c40e2d70606937061df8671cc983c762e8c140bedf35dfb9af42",
+        "bytes": 149648
+      },
+      "physicalRawAndProtected": [
+        {
+          "path": "/tmp/batch11197-main055-baseline-actual-results.json",
+          "sha256": "b808e9d6a4576e42f87872bfaf7ae0f1c34228928210d5252a57c11dbfaaa560",
+          "bytes": 9034309
+        },
+        {
+          "path": "/tmp/batch11197-main055-baseline-helpers.json",
+          "sha256": "86cdfd786220a9934f9f315655a69afe30ebabc7a5324717359c7b4786b9ea14",
+          "bytes": 208638
+        },
+        {
+          "path": "/tmp/batch11197-main055-baseline-realcost.json",
+          "sha256": "4dd9949609e721c3de886a0af1af9f194eb29109f15ea3ce1511e29449908225",
+          "bytes": 77572
+        },
+        {
+          "path": "/tmp/batch11197-main055-baseline-eco-sections.json",
+          "sha256": "fdd6917758d74dfa8e7da8ecbfb2f20031349274c574bc406e080bec3b342a0e",
+          "bytes": 344175
+        },
+        {
+          "path": "/tmp/batch11197-main055-baseline-protected-files.json",
+          "sha256": "d7ee950721673e9baa8e24f7e30bba45b584f2870bd2fa13e05af3b905e676d7",
+          "bytes": 5823933
+        },
+        {
+          "path": "/tmp/batch11197-main055-core-f49420dd-other55-actual-results.json",
+          "sha256": "6256b8b3b62e4b9e275406096428ede272d5c42670ece98f4dcafcbde1f72de1",
+          "bytes": 8872235
+        },
+        {
+          "path": "/tmp/batch11197-main055-core-f49420dd-other55-helpers.json",
+          "sha256": "f83619e20f38ed1c56922e1183707bee80c3eb8c8e6a1029ef481881ab88789f",
+          "bytes": 208544
+        },
+        {
+          "path": "/tmp/batch11197-main055-core-f49420dd-other55-realcost.json",
+          "sha256": "808f667f29eafe6b9c4664dc53a2c8526169147a821af9b651b46c67f4c1d4a8",
+          "bytes": 77931
+        },
+        {
+          "path": "/tmp/batch11197-main055-core-f49420dd-other55-eco-sections.json",
+          "sha256": "0390b493e172d1f62d422186ae6bdca44c05faa663109599f56789af0a544875",
+          "bytes": 348353
+        }
+      ]
+    },
+    "counts": {
+      "full": 440,
+      "numericExcludingModel": 440,
+      "other55Notes": 55,
+      "other55Support": 55,
+      "other55Helpers": 1485,
+      "GeorgianHelpers": 27,
+      "all56RealCostByFourAges": 224,
+      "rawOtherCivSections": 55,
+      "preexistingRawGlobalSections": 10,
+      "historicalRemainingCases": 48
+    },
+    "deltas": {
+      "full": [],
+      "numeric": [],
+      "notes": [],
+      "support": [],
+      "helpers": [],
+      "georgianHelpers": [],
+      "realCost": [],
+      "rawCiv": [],
+      "rawGlobals": [],
+      "historical": []
+    },
+    "support": {
+      "supported": 48,
+      "unsupported": 8,
+      "remaining": [
+        "Chinese",
+        "Gurjaras",
+        "Jurchens",
+        "Khmer",
+        "Mapuche",
+        "Poles",
+        "Romans",
+        "Slavs"
+      ],
+      "Georgians": {
+        "supported": true,
+        "reasons": []
+      }
+    },
+    "additionalDomainCalls": 0,
+    "executionBoundary": "Independent stdlib-only full deep comparison of saved physical raw artifacts; did not rerun existing collector or offline application script, import any project module, execute tests/build/browser or edit repository.",
+    "findings": []
+  },
+  "build": {
+    "initialFullCommand": {
+      "record": "/tmp/batch11-georgians-core-build.execution.json",
+      "recordSHA256": "8ad24a671b86433af0bbda73991a816784685acd6c8c87bee20ca09aba828823",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedUTC": "2026-10-28T07:00:59.761780+00:00",
+      "completedUTC": "2026-10-28T07:01:20.679157+00:00",
+      "exitCode": 1,
+      "log": "/tmp/batch11-georgians-core-build.log",
+      "logSHA256": "a9dd8159eefc64d17efbad2e27349b1b89420437a39bac02226afcfa46eca887",
+      "testedHEAD": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+      "testedHEADTree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+      "inputSHA256": "311bfcba5be52fa80976b8763f443db14536a379686a5c1e5ae3bb878ad66182",
+      "inputSHA256After": "311bfcba5be52fa80976b8763f443db14536a379686a5c1e5ae3bb878ad66182"
+    },
+    "initialFailure": "Missing fixed Playwright Chromium1248 headless executable at static_pages; tsc and Vite had already completed successfully.",
+    "cacheSetup": {
+      "record": "/tmp/batch11-georgians-chromium-cache-setup.execution.json",
+      "recordSHA256": "e85216cbd82beb63a7f7a4f3074c199cfaea1c47e9ff4cebde44907fdaee7930",
+      "command": [
+        "npx",
+        "playwright",
+        "install",
+        "chromium"
+      ],
+      "startedUTC": "2026-10-28T07:02:38.639635+00:00",
+      "completedUTC": "2026-10-28T07:05:37.450185+00:00",
+      "exitCode": 0,
+      "log": "/tmp/batch11-georgians-chromium-cache-setup.log",
+      "logSHA256": "f652fa68eb6930afb9bccf94129bf00319cddfdb978e2161628d7b72ce41876e",
+      "testedHEAD": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+      "testedHEADTree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+      "inputSHA256": "311bfcba5be52fa80976b8763f443db14536a379686a5c1e5ae3bb878ad66182",
+      "inputSHA256After": "311bfcba5be52fa80976b8763f443db14536a379686a5c1e5ae3bb878ad66182"
+    },
+    "failedStageOnlyRecovery": {
+      "record": "/tmp/batch11-georgians-static-pages-recovery.execution.json",
+      "recordSHA256": "8473704360719600251ed6f3fa458f9c2c2a231031581e2e921ea790028b9452",
+      "command": [
+        "node",
+        "scripts/static_pages.mjs"
+      ],
+      "startedUTC": "2026-10-28T07:07:07.422379+00:00",
+      "completedUTC": "2026-10-28T07:07:10.901036+00:00",
+      "exitCode": 0,
+      "log": "/tmp/batch11-georgians-static-pages-recovery.log",
+      "logSHA256": "50736afa6e2a71fbb9706a1aded9657c6e3396f05467b44a2c7ab830f85dc089",
+      "testedHEAD": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+      "testedHEADTree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+      "inputSHA256": "311bfcba5be52fa80976b8763f443db14536a379686a5c1e5ae3bb878ad66182",
+      "inputSHA256After": "311bfcba5be52fa80976b8763f443db14536a379686a5c1e5ae3bb878ad66182"
+    },
+    "noRepeatedTscOrViteBuild": true,
+    "staticPages": 950,
+    "distFiles": 1695,
+    "distManifestSHA256": "8fabee1cab03f62d32bc5bbc1a578a4035e7bb444b3942c4555073597b79b0bb",
+    "previewIdentityReport": "/tmp/batch11-georgians-preview-identity.json",
+    "previewIdentitySHA256": "586d45a4eaeea2b0e0c84888e72469eb21a2c3580d923a2cbef0699518deb7cb",
+    "preview": {
+      "pid": 7212,
+      "startTicks": "701353",
+      "cwd": "/workspace/aoe2-issue197-batch11",
+      "exe": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cmdline": "node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4209 --strictPort ",
+      "port": 4209,
+      "onlyListenerPID": 7212,
+      "toolSessionId": 13444,
+      "HTTPStatus": 200,
+      "HTTPIndexSHA256": "5c3123f033a52cb4fa88ec55168f23e15e0c79b9e3e820673373e09363b4d02c"
+    }
+  },
+  "browser": {
+    "initial18": {
+      "execution": {
+        "record": "/tmp/batch11-georgians-browser18.execution.json",
+        "recordSHA256": "b23a405cfcbecaa6837f969d76b59107880cf7ed459ed04b8f140e556f544336",
+        "command": [
+          "env",
+          "BASE_URL=http://127.0.0.1:4209/",
+          "PLAYWRIGHT_JSON_OUTPUT_NAME=/tmp/batch11-georgians-browser.json",
+          "npx",
+          "playwright",
+          "test",
+          "tests/e2e/georgians197.spec.ts",
+          "tests/e2e/armenians197.spec.ts",
+          "tests/e2e/bengalis197.spec.ts",
+          "--grep",
+          "#197 格鲁吉亚|#197 亚美尼亚|#197 孟加拉可选、深链刷新及中国仍禁用回退",
+          "--workers=2",
+          "--output=/tmp/batch11-georgians-browser-results",
+          "--reporter=line,json"
+        ],
+        "startedUTC": "2026-10-28T07:07:55.381322+00:00",
+        "completedUTC": "2026-10-28T07:11:12.728120+00:00",
+        "exitCode": 1,
+        "log": "/tmp/batch11-georgians-browser18.log",
+        "logSHA256": "979a0fded66484625ca69b3b5b808a9d27a53b15f46fce16e6b631d643eb3cdf",
+        "testedHEAD": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+        "testedHEADTree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+        "inputSHA256": "311bfcba5be52fa80976b8763f443db14536a379686a5c1e5ae3bb878ad66182",
+        "inputSHA256After": "311bfcba5be52fa80976b8763f443db14536a379686a5c1e5ae3bb878ad66182"
+      },
+      "report": "/tmp/batch11-georgians-browser.json",
+      "reportSHA256": "6613e5bd7903acb9d754ddc75b3ecd80cde0e0f54159f8f2b0aa9db66bb5e806",
+      "stats": {
+        "startTime": "2026-10-28T07:07:56.301Z",
+        "duration": 196404.251,
+        "expected": 12,
+        "skipped": 0,
+        "unexpected": 6,
+        "flaky": 0
+      },
+      "failureClassification": "Six mobile-only new-test harness failures:directly clicked the hidden desktop civilization control instead of entering real mobile Settings."
+    },
+    "mobile6Recovery": {
+      "execution": {
+        "record": "/tmp/batch11-georgians-browser-mobile6-recovery.execution.json",
+        "recordSHA256": "3bf43b336bdd1d69d2e5ec6eedd050b45142a227ba56a55b5d4c9e72facfd7ad",
+        "command": [
+          "env",
+          "BASE_URL=http://127.0.0.1:4209/",
+          "PLAYWRIGHT_JSON_OUTPUT_NAME=/tmp/batch11-georgians-browser-mobile6-recovery.json",
+          "npx",
+          "playwright",
+          "test",
+          "tests/e2e/georgians197.spec.ts",
+          "--grep",
+          "(360|375|390) (light|dark)$",
+          "--workers=2",
+          "--output=/tmp/batch11-georgians-browser-mobile6-results",
+          "--reporter=line,json"
+        ],
+        "startedUTC": "2026-10-28T07:12:39.357131+00:00",
+        "completedUTC": "2026-10-28T07:13:05.508559+00:00",
+        "exitCode": 0,
+        "log": "/tmp/batch11-georgians-browser-mobile6-recovery.log",
+        "logSHA256": "5fa8621f5c1834d82e25fc91980541a07ace30d5303c6269ec62c481eb349428",
+        "testedHEAD": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+        "testedHEADTree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+        "inputSHA256": "25d2c0c35fb615b8ec3d9352bd7bff76f1b7d9226e4ef24bc5be26a0fb586bbd",
+        "inputSHA256After": "25d2c0c35fb615b8ec3d9352bd7bff76f1b7d9226e4ef24bc5be26a0fb586bbd"
+      },
+      "report": "/tmp/batch11-georgians-browser-mobile6-recovery.json",
+      "reportSHA256": "bf61b212bdf1aa9b238f0d4cfdbd7beb52fa70bfd8214a166e925a18b6409e46",
+      "stats": {
+        "startTime": "2026-10-28T07:12:40.250Z",
+        "duration": 25229.018,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "correction": "Only the new Georgian e2e opens the real Settings dialog when the desktop control is hidden, scopes the picker, closes it with Escape and completes Settings. No force click, increased timeout, retry or removed assertion."
+    },
+    "coverageInterpretation": "Initial12passed plus corrected mobile6passed cover18 distinct cases; not one all-green18 run.",
+    "sameRuntimeAndDistAsCore": true,
+    "perScenarioChecks": [
+      "360/375/390/1280",
+      "light/dark",
+      "initial stock/population and free-cart disclosure",
+      "paid cart80W20F and compound primary House cost",
+      "share preview and real downloaded PNG",
+      "bonus0",
+      "practice/print",
+      "refresh/selector and Chinese Generic fallback",
+      "overflow/nowrap/console/pageerror",
+      "new local axe"
+    ]
+  },
+  "deploymentSmoke": {
+    "execution": {
+      "record": "/tmp/batch11-georgians-deployment-smoke.execution.json",
+      "recordSHA256": "67850947717e8f62fd5dce679a5e3e0238c68b772cff09b7e2f2c7b38d75b37b",
+      "command": [
+        "env",
+        "RELEASE_VERSION=v0.56.0",
+        "EXPECTED_DEPLOYED_SHA=f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+        "node",
+        "scripts/deployment-smoke.mjs",
+        "--site",
+        "http://127.0.0.1:4209/",
+        "--plan",
+        "/tmp/batch11-georgians-deployment-smoke-plan.json"
+      ],
+      "startedUTC": "2026-10-28T07:13:54.267035+00:00",
+      "completedUTC": "2026-10-28T07:14:24.885817+00:00",
+      "exitCode": 0,
+      "log": "/tmp/batch11-georgians-deployment-smoke.log",
+      "logSHA256": "334b54d58ac9f89c82bf5ed492329cda52b6f34f417cbf6124c42d9a0d560a69",
+      "testedHEAD": "f49420dd14ccc87bf9d55c83a6869032b7efcba6",
+      "testedHEADTree": "782664c1b488f1795c0f41f27f040d9014db42cc",
+      "inputSHA256": "25d2c0c35fb615b8ec3d9352bd7bff76f1b7d9226e4ef24bc5be26a0fb586bbd",
+      "inputSHA256After": "25d2c0c35fb615b8ec3d9352bd7bff76f1b7d9226e4ef24bc5be26a0fb586bbd"
+    },
+    "plan": {
+      "features": [
+        "builds"
+      ]
+    },
+    "sameDistAndPreview": true,
+    "actualRoutes": [
+      "/",
+      "/builds?bo=drush-fc&step=8",
+      "/builds?bo=drush-fc&civ=Portuguese&step=8",
+      "/builds?bo=drush-fc&civ=Portuguese&step=6",
+      "/duel?a=74.Portuguese.3.f.&b=74.Magyars.3.f.&m=t",
+      "/builds?bo=scouts-18&step=4",
+      "/builds?bo=scouts-18&civ=Shu&step=4",
+      "/builds?bo=fast-castle-knights&civ=Shu",
+      "/duel?a=74.Shu.3.f.&b=74.Magyars.3.f.&m=t",
+      "/builds?bo=drush-fc&step=10",
+      "/builds?bo=drush-fc&civ=Malians&step=10",
+      "/builds?bo=fast-castle-boom&civ=Malians&step=1",
+      "/builds?bo=fast-castle-boom&civ=Malians&step=8",
+      "/builds?bo=fast-castle-boom&civ=Malians&step=13",
+      "/duel?a=74.Malians.3.f.&b=74.Magyars.3.f.&m=t",
+      "/builds?bo=hybrid-fish-18&step=4",
+      "/builds?bo=hybrid-fish-18&civ=Varangians&step=4",
+      "/builds?bo=hybrid-fish-18&step=8",
+      "/builds?bo=hybrid-fish-18&civ=Varangians&step=8",
+      "/duel?a=74.Varangians.3.f.&b=74.Magyars.3.f.&m=t",
+      "/builds?bo=feudal-drush-18&step=9",
+      "/builds?bo=feudal-drush-18&civ=Tatars&step=9",
+      "/civ/Tatars/bonus/0",
+      "/civ/Tatars/bonus/2",
+      "/duel?a=74.Tatars.3.f.&b=74.Magyars.3.f.&m=t",
+      "/builds?bo=archers-19&civ=Mayans&step=1",
+      "/builds?bo=archers-19&civ=Mayans&step=8",
+      "/builds?bo=scouts-18&civ=Mayans",
+      "/builds?bo=fast-castle-knights&civ=Mayans",
+      "/civ/Mayans/bonus/1",
+      "/duel?a=4.Mayans.4.f.&b=4.Franks.4.f.&m=t",
+      "/builds?bo=fast-castle-boom&civ=Sicilians&step=13",
+      "/civ/Sicilians/bonus/4",
+      "/civ/Sicilians/bonus/1",
+      "/construction?cv=1&building=109&civ=Sicilians&age=3&techs=&builders=1&baseline=1&tc=1&task=&walk=3&farm=0",
+      "/duel?a=74.Sicilians.3.f.&b=74.Magyars.3.f.&m=t",
+      "/builds?bo=archers-19&civ=Wei&step=11",
+      "/builds?bo=fast-castle-knights&civ=Wei",
+      "/civ/Wei/bonus/0",
+      "/duel?a=74.Wei.3.f.&b=74.Magyars.3.f.&m=t",
+      "/builds?bo=archers-19&civ=Bengalis&step=11",
+      "/builds?bo=fast-castle-knights&civ=Bengalis",
+      "/civ/Bengalis/bonus/0",
+      "/duel?a=74.Bengalis.3.f.&b=74.Magyars.3.f.&m=t",
+      "/builds?bo=scouts-18&civ=Armenians&step=3",
+      "/builds?bo=archers-19&civ=Armenians&step=9",
+      "/civ/Armenians/bonus/0",
+      "/civ/Armenians/bonus/1",
+      "/duel?a=74.Armenians.3.f.&b=74.Magyars.3.f.&m=t",
+      "/builds?bo=scouts-18&civ=Georgians&step=1",
+      "/builds?bo=scouts-18&civ=Georgians&step=3",
+      "/civ/Georgians/bonus/0",
+      "/builds?bo=scouts-18&view=practice",
+      "/builds?bo=scouts-18&view=print"
+    ],
+    "actualRouteCount": 54,
+    "newGeorgianAndExistingDisabledSelectorsActuallyExecuted": true
+  },
+  "images": {
+    "originalImageCount": 128,
+    "manifest": "/tmp/batch11-georgians-image-manifest.json",
+    "manifestSHA256": "8cb38b12aa630a408ba778ee1c63cd8e7738b3ef507527be65bc59742281db9b",
+    "repositoryOriginalCopies": [
+      {
+        "source": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-360-light/georgians197-cart-360-light.png",
+        "repoPath": "docs/design/evidence/georgians197/georgians197-cart-360-light.png",
+        "SHA256": "d43856c7fe1767d1edf27a3153bc508bcd769d46cee60285ddbf06ea79146b99",
+        "unchangedOriginal": true
+      },
+      {
+        "source": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-375-light/georgians197-cart-375-light.png",
+        "repoPath": "docs/design/evidence/georgians197/georgians197-cart-375-light.png",
+        "SHA256": "1320087777464e99ffb88adfc912f9324c40901286d9035d76bb916e65748717",
+        "unchangedOriginal": true
+      },
+      {
+        "source": "/tmp/batch11-georgians-browser-mobile6-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-390-light/georgians197-cart-390-light.png",
+        "repoPath": "docs/design/evidence/georgians197/georgians197-cart-390-light.png",
+        "SHA256": "cec08316aba70554311f9fd707e2ce70867728f72fcc451b0718425c13011b60",
+        "unchangedOriginal": true
+      },
+      {
+        "source": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-cart-1280-light.png",
+        "repoPath": "docs/design/evidence/georgians197/georgians197-cart-1280-light.png",
+        "SHA256": "3b3ede978cb87c6633bf008d9480e72e38714d5b4223d46bf9ae1f18afe881ad",
+        "unchangedOriginal": true
+      },
+      {
+        "source": "/tmp/batch11-georgians-browser-results/georgians197--197-格鲁吉亚起始免费车、显式付费车与公开口径-1280-light/georgians197-share-download.png",
+        "repoPath": "docs/design/evidence/georgians197/georgians197-share-download.png",
+        "SHA256": "890db8fce5c481d87a2bd13c2b5f16a125de132f8956d82c704a52b8496686a9",
+        "unchangedOriginal": true
+      }
+    ],
+    "noCroppingRedrawingOrTransformation": true,
+    "ownerActuallyViewedDownloadedPNG": true,
+    "rootPersonalVisual": "/tmp/batch11-georgians-root-personal-visual.json",
+    "rootPersonalVisualSHA256": "32c31b3f3f26ecb9942f9d94e213c24176fdfbcf8f4cee098db89cdabf96d337",
+    "independentUIReview": {
+      "report": "georgians197-ui-review.json",
+      "SHA256": "c87fdfecb8f105147f106344adf0f1a9b4643e8bb340f1a1a0f17d67a4450286",
+      "verdict": "passed;0current-batch blockers",
+      "actualViewed": "56Geo four-width/two-theme/seven-state screenshots plus actual downloaded PNG; Armenian360light cost and actual PNG research samples",
+      "retainedInheritedLimits": [
+        "shared print skip-link overlay",
+        "fixed-header/fullpage scrolling artifact; no claim all page pixels unobstructed"
+      ]
+    }
+  },
+  "limits": [
+    "Fixed distances; no cart movement, automatic reuse, placement or Church-area economy.",
+    "Construction inherits the site model and is not a DE185872 client experiment.",
+    "Inherited print skip-link overlay is visible in a root-inspected image; shared global CSS matches M2. No claim that every print pixel is unobstructed."
+  ],
+  "notClaimed": [
+    "Future docs/test-only commit was rebuilt or reran the core captures",
+    "Full local unit/e2e suite",
+    "CI full/data success before the real PR run",
+    "Published Pages or Release before remote deployment"
+  ]
+}
