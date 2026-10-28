@@ -12,7 +12,6 @@ test.describe('#42 白名单文明在开局页有「未计入」标识', () => {
     'Poles',
     'Khmer',
     'Chinese',
-    'Slavs',
     'Romans',
   ])
     test(civ, async ({ page }) => {

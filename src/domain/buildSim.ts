@@ -55,6 +55,20 @@ import {
   type GeorgianRawTech,
 } from './georgianEconomy';
 
+import {
+  slavicContext,
+  slavicRowClass,
+  slavicFarmRate,
+  slavicHasFarmAssignment,
+  SLAVIC_FARM_NOTE,
+  SLAVIC_FARM_DETAIL,
+  SLAVIC_TEAM_NOTE,
+  SLAVIC_SOURCE_REASON,
+  type SlavicFarm,
+  type SlavicRawTree,
+  type SlavicRawTech,
+} from './slavicEconomy';
+
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
 type Cost = Partial<Record<'Food' | 'Wood' | 'Gold' | 'Stone', number>>;
@@ -67,12 +81,15 @@ interface EffectRow {
   ageSpawn?: BengaliSpawnContext;
   armenianTech?: ArmenianRawTech;
   georgianTech?: GeorgianRawTech;
+  slavicTree?: SlavicRawTree;
+  slavicTech?: SlavicRawTech;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];
 }
 /** eco.json 中模拟需要的部分 */
 export interface EcoData {
   armenianInfrastructure?: ArmenianInfrastructure;
   georgianInfrastructure?: GeorgianInfrastructure;
+  slavicFarm?: SlavicFarm;
   fishingShip?: { unit: number; workRate: number; carry: number; speed: number; deepFishMultiplier?: number };
   villager: { trainTime: number; cost: Cost; speed: number; carry: number; tasks: Record<string, { workRate: number; carry: number }> };
   units: Record<string, { trainTime: number; at: number[]; cost: Cost; timeAt?: Record<string, number>; class?: number }>;
@@ -1007,7 +1024,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     const carry = base.carry * (m.carry[et] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + et] ?? 0) + (m.carry['add:villager'] ?? 0);
     const d = t === 'farm' && m.farmNoWalk ? 0 : NEAR.includes(t) ? P.nearTiles : P.walkTiles;
     const walk = (2 * d) / (eco.villager.speed * m.speed);
-    return carry / (carry / wr + walk);
+    const average = carry / (carry / wr + walk);
+    return civ === 'Slavs' && et === 'farm' ? slavicFarmRate(scope.slavs, average) : average;
   };
   const actionCost = (a: Action): Stock => {
     if (a.type === 'build') {
@@ -1533,6 +1551,8 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
         ...(civ === 'Shu' ? [LUMBER_FOOD_ASSUMPTION, SHU_KNIGHT_TEMPLATE_NOTE] : []),
         ...(civ === 'Malians' ? [MALIAN_GOLD_ASSUMPTION] : []),
         ...(civ === 'Varangians' ? [VARANGIAN_GOLD_ASSUMPTION] : []),
+        ...(civ === 'Slavs' && slavicContext(eco).physical && slavicHasFarmAssignment(bo) ? [SLAVIC_FARM_NOTE, SLAVIC_FARM_DETAIL] : []),
+        ...(civ === 'Slavs' && P.team ? [SLAVIC_TEAM_NOTE] : []),
         ...(civ === 'Tatars' ? [TATAR_SHEPHERD_ASSUMPTION] : []),
         ...(civ === 'Mayans' ? [MAYAN_RESOURCE_ASSUMPTION, MAYAN_CAVALRY_TEMPLATE_NOTE] : []),
         ...(civ === 'Sicilians' && sicilianGroupOk(simScope(eco, ALL_BOS, civ), 770) ? [SICILIAN_CONSTRUCTION_ASSUMPTION] : []),
@@ -1726,6 +1746,7 @@ export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
     sicilianRows: civ === 'Sicilians' ? (eco.civEco.Sicilians ?? []) : undefined,
     sicilianBuildings: civ === 'Sicilians' ? eco.buildings : undefined,
     civ,
+    ...(civ === 'Slavs' ? { slavs: slavicContext(eco) } : {}),
     weiRewards: civ === 'Wei' ? weiRewardFamily(eco.civEco.Wei) : null,
     ...(civ === 'Bengalis' ? { bengaliRewards: bengaliRewardFamily(eco.civEco.Bengalis) } : {}),
     ...(armenians ? { armenians } : {}),
@@ -1752,9 +1773,13 @@ export function classifyCivEffect(
     effects?: EffectRow['effects'];
     armenianTech?: ArmenianRawTech;
     georgianTech?: GeorgianRawTech;
+    slavicTree?: SlavicRawTree;
+    slavicTech?: SlavicRawTech;
   },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
+  const slavic = slavicRowClass(row as EffectRow, scope.civ, scope.slavs);
+  if (slavic) return slavic;
   const armenian = armenianRowClass(row as EffectRow, scope.civ, scope.armenians, scope.buildings);
   if (armenian) return armenian;
   const georgian = georgianRowClass(row as EffectRow, scope.civ, scope.georgians, scope.buildings);
@@ -1861,6 +1886,8 @@ export function simSupport(
 ): { supported: boolean; reasons: string[] } {
   const u = unhandledEffects(eco, civ, bos);
   const reasons = [...new Set(u.map((x) => x.reason))];
+  if (civ === 'Slavs') reasons.push(...slavicContext(eco).reasons);
+  else if ((eco.civEco[civ] ?? []).some((row) => 'slavicTree' in row || 'slavicTech' in row)) reasons.push(SLAVIC_SOURCE_REASON);
   if (civ === 'Mayans' && !hasUniqueMayanTree(eco)) reasons.push('玛雅资源产量与工作率缺少完整已核配对，未计入');
   if (civ === 'Sicilians' && SICILIAN_GROUPS.some((group) => !sicilianGroupOk(simScope(eco, bos, civ), group)))
     reasons.push('西西里加成缺少完整已核上下文，未计入');
@@ -1963,7 +1990,8 @@ export function gatherRate(
       ((r as { tech?: number }).tech !== 704 || civ === 'Tatars') &&
       mayanRowAllowed(civ, r, uniqueMayanTree) &&
       sicilianRowAllowed(scope, r) &&
-      (!['Tatars', 'Mayans', 'Sicilians'].includes(civ) || techAtomicOk(r, scope))
+      (!('slavicTree' in r || 'slavicTech' in r) || civ === 'Slavs') &&
+      (!['Tatars', 'Mayans', 'Sicilians', 'Slavs'].includes(civ) || techAtomicOk(r, scope))
     )
       applyEffects(
         m,
@@ -1985,7 +2013,8 @@ export function gatherRate(
     (m.mayanProductivity[ecoTask] ?? 1);
   const carry = base.carry * (m.carry[ecoTask] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + ecoTask] ?? 0) + (m.carry['add:villager'] ?? 0);
   const walk = (2 * tiles) / (eco.villager.speed * m.speed);
-  const rate = carry / (carry / workRate + walk);
+  const average = carry / (carry / workRate + walk);
+  const rate = civ === 'Slavs' && ecoTask === 'farm' ? slavicFarmRate(scope.slavs, average) : average;
   const wood = foragerWoodIncome(m, ecoTask, rate);
   const food = lumberFoodIncome(m, ecoTask, rate);
   const gold = (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) + varangianGoldIncome(m, ecoTask, rate);
@@ -1994,6 +2023,11 @@ export function gatherRate(
 /** 页面「按某文明计」下方的附注：已计入但有未核实部分、或明确不计入的加成 */
 export function civSimNotes(eco: EcoData, civ: string, boId?: string): string[] {
   const out: string[] = [];
+  if (civ === 'Slavs') {
+    const context = slavicContext(eco);
+    const bo = ALL_BOS.find((order) => order.id === boId);
+    if (context.physical && context.reasons.length === 0 && bo && slavicHasFarmAssignment(bo)) out.push(SLAVIC_FARM_NOTE);
+  }
   if (civ === 'Armenians' && armenianContext(eco).reasons.length === 0) out.push(ARMENIAN_CART_NOTE, ARMENIAN_RESEARCH_NOTE);
   if (civ === 'Georgians') {
     const context = georgianContext(eco);

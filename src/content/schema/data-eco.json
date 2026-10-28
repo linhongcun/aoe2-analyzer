@@ -373,6 +373,9 @@
                   "items": {
                     "$ref": "#/$defs/effect"
                   }
+                },
+                "slavicTree": {
+                  "$ref": "#/$defs/slavicTree"
                 }
               },
               "required": ["source", "name", "age", "effects"],
@@ -397,6 +400,18 @@
                   "items": {
                     "$ref": "#/$defs/effect"
                   }
+                },
+                "tech": {
+                  "type": "integer"
+                },
+                "requires": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "slavicTech": {
+                  "$ref": "#/$defs/slavicTech"
                 }
               },
               "required": ["source", "name", "age", "effects"],
@@ -442,6 +457,9 @@
                 },
                 "georgianTech": {
                   "$ref": "#/$defs/georgianTech"
+                },
+                "slavicTech": {
+                  "$ref": "#/$defs/slavicTech"
                 }
               },
               "required": ["source", "tech", "name", "age", "requires", "effects"],
@@ -527,6 +545,9 @@
     },
     "georgianInfrastructure": {
       "$ref": "#/$defs/georgianInfrastructure"
+    },
+    "slavicFarm": {
+      "$ref": "#/$defs/slavicFarm"
     }
   },
   "required": ["meta", "units", "buildings", "techs", "villager", "animals", "fishingShip", "ecoTechs", "civEco", "ageReq"],
@@ -1169,6 +1190,172 @@
         }
       },
       "required": ["civId", "treeId", "treeCommands", "enable", "buildingTech", "cart", "researchSites"],
+      "additionalProperties": false
+    },
+    "slavicTech": {
+      "type": "object",
+      "properties": {
+        "tech": {
+          "type": "integer"
+        },
+        "civ": {
+          "type": "integer"
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "effectId": {
+          "type": "integer"
+        },
+        "requiredCount": {
+          "type": "integer"
+        },
+        "researchLocation": {
+          "type": "integer"
+        },
+        "researchAt": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "minItems": 2,
+            "maxItems": 2,
+            "items": false
+          }
+        },
+        "researchTime": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "minItems": 3,
+            "maxItems": 3,
+            "items": false
+          }
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Type": {
+                "type": "integer"
+              },
+              "A": {
+                "type": "integer"
+              },
+              "B": {
+                "type": "integer"
+              },
+              "C": {
+                "type": "integer"
+              },
+              "D": {
+                "type": "number"
+              }
+            },
+            "required": ["Type", "A", "B", "C", "D"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["tech", "civ", "requires", "effectId", "requiredCount", "researchLocation", "researchAt", "researchTime", "cost", "commands"],
+      "additionalProperties": false
+    },
+    "slavicTree": {
+      "type": "object",
+      "properties": {
+        "civId": {
+          "type": "integer"
+        },
+        "treeId": {
+          "type": "integer"
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Type": {
+                "type": "integer"
+              },
+              "A": {
+                "type": "integer"
+              },
+              "B": {
+                "type": "integer"
+              },
+              "C": {
+                "type": "integer"
+              },
+              "D": {
+                "type": "number"
+              }
+            },
+            "required": ["Type", "A", "B", "C", "D"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["civId", "treeId", "commands"],
+      "additionalProperties": false
+    },
+    "slavicFarm": {
+      "type": "object",
+      "properties": {
+        "civId": {
+          "type": "integer"
+        },
+        "farms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "unit": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "integer"
+              },
+              "class": {
+                "type": "integer"
+              },
+              "workRate": {
+                "type": "number"
+              },
+              "capacity": {
+                "type": "number"
+              }
+            },
+            "required": ["unit", "type", "class", "workRate", "capacity"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["civId", "farms"],
       "additionalProperties": false
     }
   }

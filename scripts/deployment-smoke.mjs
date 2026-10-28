@@ -465,6 +465,33 @@ export async function checkSite({ site, version, commit, features = [] }) {
       console.log(
         'Verified Georgian economy: normal initial stock/population, separate starting free cart, paid80Wood/20Food cart, selectable civilization and consistent share/source disclosure',
       );
+      const slavicFarmNote = '农田按供给上限连续估算，近距离可能低于原通用估算，不代表游戏内加成减益';
+      await goto('/builds?bo=fast-castle-boom&civ=Slavs');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按斯拉夫计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await check(page.locator('[data-t="civ-note"]')).toHaveText(slavicFarmNote);
+      await page.locator('#tlciv').click();
+      const slavicPicker = page.getByRole('dialog', { name: '文明', exact: true });
+      await check(slavicPicker.locator('[data-civ="Slavs"]')).toBeVisible();
+      await check(slavicPicker.locator('[data-civ="Slavs"]')).not.toHaveAttribute('aria-disabled', 'true');
+      await check(slavicPicker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
+      await page.keyboard.press('Escape');
+      const slavicShare = page.locator('[data-t="share-card-btn"]:visible').first();
+      await check(slavicShare).not.toHaveAttribute('aria-disabled', 'true');
+      await slavicShare.click();
+      await check(page.locator('[data-t="card-basis"]')).toContainText(slavicFarmNote);
+      await check(page.locator('[data-t="card-url"]')).toContainText('civ=Slavs');
+      await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      await goto('/builds?bo=scouts-18&civ=Slavs');
+      await check(page.locator('[data-t="sum-civ"]')).toHaveText('按斯拉夫计');
+      await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+      await check(page.locator('[data-t="civ-note"]')).toHaveCount(0);
+      await goto('/civ/Slavs/bonus/0');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+      await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText(slavicFarmNote);
+      console.log(
+        'Verified Slavic public UI: fast-castle-boom summary, steady-estimate caveat and share URL; Slavs-enabled/Chinese-disabled selector; scouts without farm note; bonus0 simulation usage',
+      );
     }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {

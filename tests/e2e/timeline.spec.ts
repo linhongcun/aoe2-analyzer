@@ -449,7 +449,7 @@ test.describe('#3 开局时间线', () => {
 });
 
 test.describe('#3 收尾', () => {
-  test('列表页：时间由模拟器算并标按通用计；置灰推荐文明标「加成未计入」', async ({ page }) => {
+  test('列表页：时间由模拟器算并标按通用计；斯拉夫推荐文明已支持', async ({ page }) => {
     await page.goto('./#/builds');
     const scouts = page.locator('[data-t="build-order"]', { hasText: '18 人口侦察骑兵' });
     await expect(scouts.locator('[data-t="bo-time"]')).toHaveText(/^约 \d+:\d\d 到达封建$/);
@@ -459,17 +459,20 @@ test.describe('#3 收尾', () => {
     const archers = page.locator('[data-t="build-order"]', { hasText: '19 人口单靶场弓手' });
     await expect(archers.locator('[data-t="bo-civ"]', { hasText: '玛雅' })).not.toContainText('加成未计入');
     const knights = page.locator('[data-t="build-order"]', { hasText: '直城后转骑士' });
-    const off = knights.locator('[data-t="bo-civ"]', { hasText: '斯拉夫' });
-    await expect(off).toContainText('加成未计入');
-    await expect(off.locator('small.tl-civ svg.lucide-ban')).toHaveCount(1);
-    expect(await off.locator('small.tl-civ').evaluate((el) => getComputedStyle(el).fontSize)).toBe('12px');
+    const slavs = knights.locator('[data-t="bo-civ"]', { hasText: '斯拉夫' });
+    await expect(slavs).toBeVisible();
+    await expect(slavs).not.toContainText('加成未计入');
+    await expect(slavs).not.toHaveAttribute('aria-disabled', 'true');
+    await expect(knights.locator('[data-t="bo-civ"][data-off]', { hasText: '斯拉夫' })).toHaveCount(0);
+    await expect(slavs.locator('small.tl-civ')).toHaveCount(0);
+    await expect(slavs.locator('svg.lucide-ban')).toHaveCount(0);
     await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '匈奴' })).not.toContainText('加成未计入');
     await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '法兰克' })).not.toContainText('加成未计入');
     await expect(scouts.locator('[data-t="bo-civ"]', { hasText: '马里' })).not.toContainText('加成未计入');
     // 已计入的排前面：data-off 的都在最后
     const offs = await knights.locator('[data-t="bo-civ"]').evaluateAll((els) => els.map((e) => e.hasAttribute('data-off')));
     expect(offs).toEqual([...offs].sort((a, b) => Number(a) - Number(b)));
-    expect(offs.some(Boolean)).toBe(true);
+    expect(offs).toEqual([false, false, false, false]);
   });
   test('390 宽：摘要 2 列，到达时间与主要卡点同在第一行', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -489,12 +492,12 @@ test.describe('#3 收尾', () => {
     expect(await fs('[data-t="sum-arrive"] .k')).toBe('12px');
     expect(await fs('[data-t="sum-arrive"] b')).toBe('17px');
   });
-  test('文明选择器：搜置灰文明「斯拉夫」显示置灰项、不显示空态；真没有匹配时显示空态', async ({ page }) => {
+  test('文明选择器：搜置灰文明「中国」显示置灰项、不显示空态；真没有匹配时显示空态', async ({ page }) => {
     await page.goto('./#/builds?bo=scouts-18');
     await page.locator('#tlciv').click();
     const dlg = page.getByRole('dialog', { name: '文明' });
-    await dlg.getByRole('combobox').fill('斯拉夫');
-    await expect(dlg.locator('[data-civ="Slavs"]')).toHaveAttribute('aria-disabled', 'true');
+    await dlg.getByRole('combobox').fill('中国');
+    await expect(dlg.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
     await expect(dlg.locator('.cp-empty')).toHaveCount(0);
     await dlg.getByRole('combobox').fill('zzzz');
     await expect(dlg.getByText('没有找到“zzzz”')).toBeVisible();

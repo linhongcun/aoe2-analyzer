@@ -3,8 +3,9 @@
  * 原则：卡片不自己算，和页面用同一套函数——rangeLabel（#56）、pickSummaryBottleneck + summaryText（#57）、formatClock。
  * 纯函数，不碰 DOM；数字全部来自 simulateBuild → buildView。
  */
+import ecoRaw from '../../data/raw/eco';
 import { formatClock } from '../../domain/formatTime';
-import { MAYAN_CAVALRY_TEMPLATE_NOTE, SHU_KNIGHT_TEMPLATE_NOTE } from '../../domain/buildSim';
+import { civSimNotes, MAYAN_CAVALRY_TEMPLATE_NOTE, SHU_KNIGHT_TEMPLATE_NOTE, type EcoData } from '../../domain/buildSim';
 import { WEI_KNIGHT_TEMPLATE_NOTE } from '../../domain/weiEconomy';
 import { BENGALI_KNIGHT_TEMPLATE_NOTE } from '../../domain/bengaliEconomy';
 import { ARMENIAN_CART_NOTE, ARMENIAN_RESEARCH_NOTE } from '../../domain/armenianEconomy';
@@ -80,6 +81,7 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
           : sum.main.replace(/ 约 .*$/, '');
   const head = `${i.civZh}·${shortBoName(i.boNameZh)}`;
   const title = reached ? `${head}，约 ${formatClock(target!.reachAt)} 到${i.targetZh}，${phrase}` : `${head}，60 分钟内到不了${i.targetZh}`;
+  const slavicNotes = i.civEn === 'Slavs' ? civSimNotes(ecoRaw as unknown as EcoData, i.civEn, i.boId) : [];
   return {
     title,
     cells: [
@@ -109,7 +111,8 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
         : '') +
       (i.civEn === 'Bengalis' && i.boId === 'fast-castle-knights' ? `\n${BENGALI_KNIGHT_TEMPLATE_NOTE}` : '') +
       (i.civEn === 'Armenians' ? `\n${ARMENIAN_CART_NOTE}\n${ARMENIAN_RESEARCH_NOTE}` : '') +
-      (i.civEn === 'Georgians' ? `\n${GEORGIAN_START_NOTE}\n${GEORGIAN_CART_NOTE}` : ''),
+      (i.civEn === 'Georgians' ? `\n${GEORGIAN_START_NOTE}\n${GEORGIAN_CART_NOTE}` : '') +
+      slavicNotes.map((note) => `\n${note}`).join(''),
     site: SHARE_SITE,
     kind: '开局时间线',
     url: shareUrl(i),

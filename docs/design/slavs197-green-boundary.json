@@ -1,0 +1,134 @@
+{
+  "first99": {
+    "typescript": {
+      "numTotalTests": 89,
+      "numPassedTests": 89,
+      "numFailedTests": 0,
+      "numPendingTests": 0
+    },
+    "python": {
+      "passed": 10,
+      "total": 10
+    },
+    "runtimeStatus": "WIP at original HEAD7d748918, target package0.57.0; not future immutable commit evidence"
+  },
+  "boundaries": [
+    {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/slavs197.test.ts",
+        "tests/unit/slavs197SourceGuard.test.ts",
+        "tests/unit/slavs197Presentation.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/batch12-slavs-first-green-unit.json"
+      ],
+      "startedUTC": "2026-10-28T10:25:32.435776+00:00",
+      "completedUTC": "2026-10-28T10:25:36.424250+00:00",
+      "exitCode": 0,
+      "log": "/tmp/batch12-slavs-first-green-unit.log",
+      "logSHA256": "c46d894ce6498f15983d6514df23613051f74e05145d82481cedd77e08e430e4",
+      "execution": "/tmp/batch12-slavs-first-green-unit.execution.json",
+      "sha256": "35cabfe037d8932af27e0d20a0f0281a014c130db739c4542f3b9ed1406d07ec",
+      "inputSHA256": "ea02e4021c8ca4b41d64d7b10af2abebc80a9cabefef706c3f31d4440f495874",
+      "actualCounts": {
+        "numTotalTests": 89,
+        "numPassedTests": 89,
+        "numFailedTests": 0,
+        "numPendingTests": 0
+      },
+      "reportSHA256": "bcf981f37945374acc04c1a802b0fd26d02497b20373653a89d28e50d4137b41"
+    },
+    {
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tests/py", "-p", "test_slavs197.py", "-v"],
+      "startedUTC": "2026-10-28T10:25:32.429506+00:00",
+      "completedUTC": "2026-10-28T10:25:34.829999+00:00",
+      "exitCode": 0,
+      "log": "/tmp/batch12-slavs-first-green-python.log",
+      "logSHA256": "84705cb2aef76453da59e30084911f7fe2c94406946d02048c7efc7bca3488a5",
+      "execution": "/tmp/batch12-slavs-first-green-python.execution.json",
+      "sha256": "d07f225096fe2638819117d72d743b09183d6400af249054d5a9c39de2901370",
+      "inputSHA256": "ea02e4021c8ca4b41d64d7b10af2abebc80a9cabefef706c3f31d4440f495874"
+    },
+    {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/slavs197SourceGuard.test.ts",
+        "--testNamePattern=#197 Slavic implementation boundary checks",
+        "--reporter=json",
+        "--outputFile=/tmp/batch12-slavs-boundary-red.json"
+      ],
+      "startedUTC": "2026-10-28T10:27:17.979777+00:00",
+      "completedUTC": "2026-10-28T10:27:19.320541+00:00",
+      "exitCode": 1,
+      "log": "/tmp/batch12-slavs-boundary-red.log",
+      "logSHA256": "6ca9e2ec67884ed5a525f9af0757052bc27a3b219c7db7b94d47edd19829f912",
+      "execution": "/tmp/batch12-slavs-boundary-red.execution.json",
+      "sha256": "239e0ba109464798777ae6a57d7d83c5cdb6b2e56c2e1937b148595f195c7cf0",
+      "inputSHA256": "792e757a046968eaeec23816c8c40d5b48704d377c3d9e7c95c10459a131a736",
+      "actualCounts": {
+        "numTotalTests": 40,
+        "numPassedTests": 0,
+        "numFailedTests": 2,
+        "numPendingTests": 38
+      },
+      "reportSHA256": "e2b6edcdfaafab1921bb8172ad636f70acf9b775a45ba80971a9006223f897f0"
+    },
+    {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/slavs197SourceGuard.test.ts",
+        "--testNamePattern=#197 Slavic implementation boundary checks",
+        "--reporter=json",
+        "--outputFile=/tmp/batch12-slavs-boundary-green.json"
+      ],
+      "startedUTC": "2026-10-28T10:27:57.120553+00:00",
+      "completedUTC": "2026-10-28T10:27:58.535733+00:00",
+      "exitCode": 1,
+      "log": "/tmp/batch12-slavs-boundary-green.log",
+      "logSHA256": "413d4a4a92ded7a78798ff6ff0d188b4ed05c39fd0a5a32d14211373e2fb7f86",
+      "execution": "/tmp/batch12-slavs-boundary-green.execution.json",
+      "sha256": "c2882d18ed8bbff0e1272abf22e5e90e905c57bd6394c54ac57937d8bc6a724b",
+      "inputSHA256": "c5d177d2bf5b9147cf677beb45aff37cb52ea749b2543f1939ce8c18d7de3af4",
+      "actualCounts": {
+        "numTotalTests": 40,
+        "numPassedTests": 1,
+        "numFailedTests": 1,
+        "numPendingTests": 38
+      },
+      "reportSHA256": "fd94cb6001f272a9557cecc8b241c4ad1cf0371b4b79a1ba00d46b3c157b6abe"
+    },
+    {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "tests/unit/slavs197SourceGuard.test.ts",
+        "--testNamePattern=noncanonical tree requires header",
+        "--reporter=json",
+        "--outputFile=/tmp/batch12-slavs-boundary-header-recovery.json"
+      ],
+      "startedUTC": "2026-10-28T10:28:30.141677+00:00",
+      "completedUTC": "2026-10-28T10:28:31.508387+00:00",
+      "exitCode": 0,
+      "log": "/tmp/batch12-slavs-boundary-header-recovery.log",
+      "logSHA256": "cf4fc672122ca066fc45dbebc098fea5ab2f17cf8cf041f71a35db50ebc69d14",
+      "execution": "/tmp/batch12-slavs-boundary-header-recovery.execution.json",
+      "sha256": "f3a871686f84908dbb852524ec41914f78c9b6785fd92d7ac506679dcc292492",
+      "inputSHA256": "20e33bef2d3551b38d093c1b38198d5d269eddf9682727484b3d585466808386",
+      "actualCounts": {
+        "numTotalTests": 40,
+        "numPassedTests": 1,
+        "numFailedTests": 0,
+        "numPendingTests": 39
+      },
+      "reportSHA256": "13df85d9617acd2ffb062e1e48367b66131b17eb2a40c94ac99d53482b4a6ee1"
+    }
+  ],
+  "explicitlyNotClaimed": "No single full101 run; original99 first green followed by two new boundary checks with actual partial recovery. Original red inputs preserved separately."
+}
