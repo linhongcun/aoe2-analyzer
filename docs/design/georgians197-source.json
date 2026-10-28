@@ -1,0 +1,1811 @@
+{
+  "verdict": "SOURCE_GO_FOR_BOUNDED_GEORGIAN_SPEC_AND_RED_PREFLIGHT",
+  "productionStatus": "Not a production GO. Root must independently review frozen SPEC and meaningful red evidence before implementation.",
+  "recordedUTC": "2026-10-28T06:03:20.308671+00:00",
+  "baseline": "ab85d540813a8ce9432576a6c0dee9ff0de09b0a",
+  "tree": "ae42601ed054d2c62f73c4361cd143cbe4515601",
+  "repoWrites": 0,
+  "counts": {
+    "dedicatedTechs": 13,
+    "fullPrerequisiteAndCommandTargetClosure": 139,
+    "trackedRawObjects": 345,
+    "nonNullTrackedRawObjects": 335,
+    "currentBOs": 8,
+    "currentActions": 228,
+    "explicitCampActions": 13,
+    "normalStartingFreeCartPerBO": 1
+  },
+  "source": {
+    "DE": 185872,
+    "autoModsPin": "0c38027504532826c9922e4db77e2c1d33554291",
+    "DAT_SHA256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+    "raw": {
+      "path": "/tmp/batch11-georgians-raw.json",
+      "bytes": 3812955,
+      "sha256": "075db295564edd02e9b0771dcf4bf2a4972ccce8e653b62ebca3a2b4eda14a05"
+    },
+    "extractScript": {
+      "path": "/tmp/batch11-georgians-extract.py",
+      "sha256": "d2e9f9b30cf0892bf8c8c37958b1d8933b926bb195301a24abddd97d1e058ef8"
+    },
+    "public": {
+      "path": "/tmp/batch11-georgians-public-sources.json",
+      "bytes": 144011,
+      "sha256": "e08827ed30689385a3ad0e93babdd80d28ea68fe4043b9d78d5757a94a98a6fe",
+      "actualOpenedSources": 6
+    },
+    "rawParseIntervals": [
+      "2026-10-28T05:52:21.250536+00:00–2026-10-28T05:52:36.267096+00:00 inspect only",
+      "2026-10-28T05:56:14.645803+00:00–2026-10-28T05:56:29.577499+00:00 complete structured excerpt"
+    ],
+    "closureSeedIDs": [
+      14,
+      22,
+      25,
+      55,
+      87,
+      101,
+      102,
+      103,
+      104,
+      106,
+      107,
+      108,
+      109,
+      110,
+      117,
+      122,
+      128,
+      130,
+      132,
+      147,
+      148,
+      151,
+      166,
+      182,
+      187,
+      199,
+      202,
+      203,
+      204,
+      210,
+      216,
+      220,
+      221,
+      222,
+      258,
+      278,
+      279,
+      281,
+      282,
+      307,
+      308,
+      523,
+      639,
+      722,
+      916,
+      919,
+      920,
+      923,
+      924,
+      925,
+      926,
+      929,
+      930,
+      932,
+      933,
+      934,
+      937,
+      938,
+      939
+    ],
+    "closureTechIDs": [
+      14,
+      19,
+      22,
+      25,
+      34,
+      35,
+      37,
+      47,
+      55,
+      64,
+      87,
+      100,
+      101,
+      102,
+      103,
+      104,
+      106,
+      107,
+      108,
+      109,
+      110,
+      115,
+      117,
+      120,
+      122,
+      128,
+      130,
+      132,
+      135,
+      138,
+      142,
+      146,
+      147,
+      148,
+      151,
+      166,
+      182,
+      187,
+      188,
+      199,
+      202,
+      203,
+      204,
+      209,
+      210,
+      211,
+      212,
+      216,
+      219,
+      220,
+      221,
+      222,
+      233,
+      237,
+      244,
+      258,
+      265,
+      266,
+      278,
+      279,
+      281,
+      282,
+      291,
+      292,
+      295,
+      307,
+      308,
+      319,
+      359,
+      373,
+      374,
+      375,
+      376,
+      380,
+      408,
+      437,
+      523,
+      605,
+      638,
+      639,
+      659,
+      660,
+      661,
+      666,
+      667,
+      716,
+      722,
+      755,
+      758,
+      762,
+      764,
+      765,
+      767,
+      768,
+      800,
+      904,
+      905,
+      907,
+      908,
+      909,
+      910,
+      916,
+      919,
+      920,
+      923,
+      924,
+      925,
+      926,
+      929,
+      930,
+      932,
+      933,
+      934,
+      937,
+      938,
+      939,
+      950,
+      967,
+      968,
+      969,
+      970,
+      971,
+      972,
+      973,
+      974,
+      975,
+      976,
+      977,
+      1138,
+      1141,
+      1150,
+      1151,
+      1209,
+      1218,
+      1221,
+      1222,
+      1357,
+      1358,
+      1387
+    ],
+    "closureMethod": "13 dedicated+actual current BO research/availability/upgrade+10 economic tech/site/counter roots; include tree/team command targets; recursively RequiredTechs and Type8/101/103A or102D command tech targets, retaining all complete commands. Presence in closure does not mean active for Georgians.",
+    "objectInventoryBoundary": "Tracked345 objects include command objects from broad generic age-up effects and art variants. Not all345 are economic/currently active, and their full objects are not asserted equal to Britons."
+  },
+  "civ": {
+    "id": 45,
+    "treeID": 927,
+    "teamID": 928,
+    "dedicatedTechIDs": [
+      916,
+      919,
+      920,
+      923,
+      924,
+      925,
+      926,
+      930,
+      932,
+      934,
+      937,
+      938,
+      939
+    ],
+    "dedicatedTechnologies": {
+      "916": {
+        "Name": "Georgians",
+        "EffectID": -1,
+        "Civ": 45,
+        "RequiredTechs": [
+          104,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 1,
+        "ResearchLocation": 0,
+        "ResearchTime": 0,
+        "ResearchAt": [
+          [
+            0,
+            0
+          ]
+        ],
+        "Cost": [
+          [
+            1,
+            1,
+            1
+          ]
+        ],
+        "commands": []
+      },
+      "919": {
+        "Name": "Monaspa (make avail)",
+        "EffectID": 931,
+        "Civ": 45,
+        "RequiredTechs": [
+          102,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 1,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": [],
+        "commands": [
+          {
+            "Type": 2,
+            "A": 1803,
+            "B": 1,
+            "C": -1,
+            "D": 0.0
+          }
+        ]
+      },
+      "920": {
+        "Name": "Elite Monaspa",
+        "EffectID": 932,
+        "Civ": 45,
+        "RequiredTechs": [
+          103,
+          919,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 2,
+        "ResearchLocation": 82,
+        "ResearchTime": 45,
+        "ResearchAt": [
+          [
+            82,
+            45
+          ]
+        ],
+        "Cost": [
+          [
+            0,
+            1000,
+            1
+          ],
+          [
+            3,
+            700,
+            1
+          ]
+        ],
+        "commands": [
+          {
+            "Type": 3,
+            "A": 1803,
+            "B": 1805,
+            "C": -1,
+            "D": 0.0
+          }
+        ]
+      },
+      "923": {
+        "Name": "Svan Towers",
+        "EffectID": 935,
+        "Civ": 45,
+        "RequiredTechs": [
+          102,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 1,
+        "ResearchLocation": 82,
+        "ResearchTime": 45,
+        "ResearchAt": [
+          [
+            82,
+            45
+          ]
+        ],
+        "Cost": [
+          [
+            3,
+            200,
+            1
+          ],
+          [
+            0,
+            300,
+            1
+          ]
+        ],
+        "commands": [
+          {
+            "Type": 4,
+            "A": 79,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 234,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 235,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 236,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 785,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 1665,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 505,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 518,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 82,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 746,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 747,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 109,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 71,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 141,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 142,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 54,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 328,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 1867,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 4,
+            "A": 1868,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          },
+          {
+            "Type": 3,
+            "A": 504,
+            "B": 1867,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 505,
+            "B": 1867,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 4,
+            "C": 130,
+            "D": -1.0
+          },
+          {
+            "Type": 4,
+            "A": 1548,
+            "B": -1,
+            "C": 9,
+            "D": 770.0
+          }
+        ]
+      },
+      "924": {
+        "Name": "Aznauri Cavalry",
+        "EffectID": 936,
+        "Civ": 45,
+        "RequiredTechs": [
+          103,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 1,
+        "ResearchLocation": 82,
+        "ResearchTime": 45,
+        "ResearchAt": [
+          [
+            82,
+            45
+          ]
+        ],
+        "Cost": [
+          [
+            0,
+            550,
+            1
+          ],
+          [
+            3,
+            250,
+            1
+          ]
+        ],
+        "commands": [
+          {
+            "Type": 0,
+            "A": -1,
+            "B": 47,
+            "C": 110,
+            "D": -0.800000011920929
+          },
+          {
+            "Type": 0,
+            "A": -1,
+            "B": 12,
+            "C": 110,
+            "D": -0.800000011920929
+          },
+          {
+            "Type": 0,
+            "A": -1,
+            "B": 23,
+            "C": 110,
+            "D": -0.800000011920929
+          },
+          {
+            "Type": 0,
+            "A": -1,
+            "B": 36,
+            "C": 110,
+            "D": -0.800000011920929
+          }
+        ]
+      },
+      "925": {
+        "Name": "C-Bonus, Start w/ mule cart",
+        "EffectID": 937,
+        "Civ": 45,
+        "RequiredTechs": [
+          639,
+          307,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 2,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": [],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 234,
+            "B": 0,
+            "C": -1,
+            "D": 1.0
+          },
+          {
+            "Type": 7,
+            "A": 1808,
+            "B": 619,
+            "C": 1,
+            "D": 0.0
+          }
+        ]
+      },
+      "926": {
+        "Name": "C-Bonus, Elevation Bonus Defense",
+        "EffectID": 938,
+        "Civ": 45,
+        "RequiredTechs": [
+          104,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 1,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": [],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 272,
+            "B": 1,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 1,
+            "A": 273,
+            "B": 1,
+            "C": -1,
+            "D": -0.15000000596046448
+          }
+        ]
+      },
+      "930": {
+        "Name": "Fortified Church (Georgians)",
+        "EffectID": 941,
+        "Civ": 45,
+        "RequiredTechs": [
+          929,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 1,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": [],
+        "commands": [
+          {
+            "Type": 3,
+            "A": 104,
+            "B": 1806,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 30,
+            "B": 1806,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 31,
+            "B": 1806,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 3,
+            "A": 32,
+            "B": 1806,
+            "C": -1,
+            "D": 0.0
+          }
+        ]
+      },
+      "932": {
+        "Name": "Mule Cart (make avail)",
+        "EffectID": 944,
+        "Civ": 45,
+        "RequiredTechs": [
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 0,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": [],
+        "commands": [
+          {
+            "Type": 2,
+            "A": 1808,
+            "B": 1,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 2,
+            "A": 562,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          },
+          {
+            "Type": 2,
+            "A": 584,
+            "B": 0,
+            "C": -1,
+            "D": 0.0
+          }
+        ]
+      },
+      "934": {
+        "Name": "C-Bonus, Fortified Church area effect",
+        "EffectID": 939,
+        "Civ": 45,
+        "RequiredTechs": [
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 0,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": [],
+        "commands": [
+          {
+            "Type": 1,
+            "A": 33,
+            "B": 0,
+            "C": -1,
+            "D": 9.0
+          }
+        ]
+      },
+      "937": {
+        "Name": "C-Bonus, Cavalry regeneration age2",
+        "EffectID": 954,
+        "Civ": 45,
+        "RequiredTechs": [
+          101,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 1,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": [],
+        "commands": [
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 47,
+            "C": 109,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 12,
+            "C": 109,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 23,
+            "C": 109,
+            "D": 2.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 36,
+            "C": 109,
+            "D": 2.0
+          }
+        ]
+      },
+      "938": {
+        "Name": "C-Bonus, Cavalry regeneration age3",
+        "EffectID": 961,
+        "Civ": 45,
+        "RequiredTechs": [
+          102,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 1,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": [],
+        "commands": [
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 47,
+            "C": 109,
+            "D": 6.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 12,
+            "C": 109,
+            "D": 6.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 23,
+            "C": 109,
+            "D": 6.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 36,
+            "C": 109,
+            "D": 6.0
+          }
+        ]
+      },
+      "939": {
+        "Name": "C-Bonus, Cavalry regeneration age4",
+        "EffectID": 961,
+        "Civ": 45,
+        "RequiredTechs": [
+          103,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "RequiredTechCount": 1,
+        "ResearchLocation": -1,
+        "ResearchTime": 0,
+        "ResearchAt": [],
+        "Cost": [],
+        "commands": [
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 47,
+            "C": 109,
+            "D": 6.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 12,
+            "C": 109,
+            "D": 6.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 23,
+            "C": 109,
+            "D": 6.0
+          },
+          {
+            "Type": 4,
+            "A": -1,
+            "B": 36,
+            "C": 109,
+            "D": 6.0
+          }
+        ]
+      }
+    },
+    "treeCommands": [
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 244.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 373.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 375.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 376.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 64.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 380.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 233.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 319.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 265.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 437.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 237.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 219.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 188.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 182.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 221.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 904.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 907.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 909.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 910.0
+      }
+    ],
+    "teamCommands": [
+      {
+        "Type": 6,
+        "A": 271,
+        "B": 1,
+        "C": -1,
+        "D": 0.75
+      }
+    ]
+  },
+  "normalStart": {
+    "existingTemplate": {
+      "villagers": 3,
+      "Food": 200,
+      "Wood": 200,
+      "Gold": 100,
+      "Stone": 200,
+      "startingTC": 109,
+      "populationUsed": 4,
+      "housingCap": 5,
+      "populationDerivation": "Existing simulator initializes startVils=3, military=1 (startingScoutCavalry), popUsed=born+military; initial total population4/5. Resource84=3 counts startingVillagers only. Free1808 has no populationUse or housing and changes neither4 nor5."
+    },
+    "startingCart": {
+      "unit": 1808,
+      "count": 1,
+      "completedAt": 0,
+      "paid": false,
+      "constructionTime": 0,
+      "villagerWorkerSeconds": 0,
+      "populationUse": 0,
+      "housingProvided": 0
+    },
+    "rawAllResourceDifferencesFromBritons": [
+      {
+        "index": 73,
+        "base": 9466.0,
+        "Georgians": 9510.0
+      }
+    ],
+    "startingVillagerResource84": 3.0,
+    "rawStartingResource91to94": {
+      "91": 0.0,
+      "92": 0.0,
+      "93": 0.0,
+      "94": 0.0
+    },
+    "noMinus50FoodEvidence": true,
+    "boundary": "The raw civ array equals Britons at every resource except identity73. No Georgian dedicated/tree/team command changes starting stocks. Resource84 is3. Absolute200/200/100/200 and a completed normal TC are the existing normal8BO template, not a proof of all RMS/scenario/game-mode start inventories. Identity research916 has the same dummy1Wood/location0/no-effect shape as Britons529 and Armenians915 and is not an extra paid BO action.",
+    "currentClientStartExperiment": false
+  },
+  "startFamily": {
+    "technology": 925,
+    "effect": 937,
+    "requiredCount": 2,
+    "requires": [
+      639,
+      307
+    ],
+    "researchLocation": -1,
+    "researchTime": 0,
+    "cost": [],
+    "completeCommands": [
+      {
+        "Type": 1,
+        "A": 234,
+        "B": 0,
+        "C": -1,
+        "D": 1.0
+      },
+      {
+        "Type": 7,
+        "A": 1808,
+        "B": 619,
+        "C": 1,
+        "D": 0.0
+      }
+    ],
+    "target": {
+      "unit1808": "Type80/class3 MuleCart building",
+      "source619": "TC109 annex at offset(-.5,.5); its building.tech_id307 provides required annex shadow",
+      "spawnC": 1,
+      "capResource234": 1
+    },
+    "tcAnnexes": [
+      {
+        "unit_id": 618,
+        "misplacement_x": 1.0,
+        "misplacement_y": -1.0
+      },
+      {
+        "unit_id": 619,
+        "misplacement_x": -0.5,
+        "misplacement_y": 0.5
+      },
+      {
+        "unit_id": 620,
+        "misplacement_x": -1.0,
+        "misplacement_y": 1.0
+      },
+      {
+        "unit_id": 890,
+        "misplacement_x": -1.0,
+        "misplacement_y": 1.0
+      }
+    ],
+    "source619Building": {
+      "construction_graphic_id": -1,
+      "snow_graphic_id": -1,
+      "destruction_graphic_id": -1,
+      "destruction_rubble_graphic_id": -1,
+      "researching_graphic": -1,
+      "research_completed_graphic": -1,
+      "adjacent_mode": 0,
+      "graphics_angle": 0,
+      "disappears_when_built": 0,
+      "stack_unit_id": -1,
+      "foundation_terrain_id": -1,
+      "old_overlap_id": -1,
+      "tech_id": 307,
+      "can_burn": 1,
+      "annexes": [
+        {
+          "unit_id": 1649,
+          "misplacement_x": 0.75,
+          "misplacement_y": -0.75
+        },
+        {
+          "unit_id": 2160,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        },
+        {
+          "unit_id": -1,
+          "misplacement_x": 0.0,
+          "misplacement_y": 0.0
+        }
+      ],
+      "head_unit": 621,
+      "transform_unit": -1,
+      "transform_sound": -1,
+      "construction_sound": 17,
+      "wwise_transform_sound_id": 0,
+      "wwise_construction_sound_id": 1357475385,
+      "garrison_type": 0,
+      "garrison_heal_rate": 0.0,
+      "garrison_repair_rate": 0.0,
+      "pile_unit": -1,
+      "looting_table": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    "normalScope": "Grant exactly one actual completed1808 in the ordinary starting-TC model. No resource fee, no villager increment or train/build event. Do not grant again on age-up/research/newTC. Do not interpret target619 as tech619 (EliteArambai).",
+    "engineBoundary": "639 has requiredCount0, empty prerequisites and no effect; exact185872 engine initial completion path is not directly inspected or client-tested. Normal start with completedTC+annex is the bounded supported context, corroborated by fixed current game text Start with a Mule Cart. Custom/noTC/unusual game-mode starts are not added.",
+    "counterfactual": "Removing whole925 is a legitimate317 contrast: remove only starting cart; independent paid-cart infrastructure/932 and Church934 remain. Partial/malformed commands, wrong unit/source/civ/count/cap/prerequisites must refuse support rather than silently drop."
+  },
+  "infrastructure": {
+    "enableTechnology": 932,
+    "effect": 944,
+    "commands": [
+      {
+        "Type": 2,
+        "A": 1808,
+        "B": 1,
+        "C": -1,
+        "D": 0.0
+      },
+      {
+        "Type": 2,
+        "A": 562,
+        "B": 0,
+        "C": -1,
+        "D": 0.0
+      },
+      {
+        "Type": 2,
+        "A": 584,
+        "B": 0,
+        "C": -1,
+        "D": 0.0
+      }
+    ],
+    "cart": {
+      "unit": 1808,
+      "type": 80,
+      "class": 3,
+      "buildingTech": 933,
+      "baseCost": {
+        "Wood": 80,
+        "Food": 20
+      },
+      "buildTime": 25,
+      "trainAt": [
+        {
+          "train_time": 25,
+          "unit_id": 118,
+          "button_id": 4,
+          "hot_key_id": 16352
+        }
+      ],
+      "populationResourceStores": [
+        {
+          "type": -1,
+          "amount": 0.0,
+          "flag": 0
+        },
+        {
+          "type": -1,
+          "amount": 0.0,
+          "flag": 0
+        },
+        {
+          "type": -1,
+          "amount": 0.0,
+          "flag": 0
+        }
+      ],
+      "formationCategory": 0
+    },
+    "ordinaryConstructionModelRetained": true,
+    "currentClientBuildAssistExperiment": false,
+    "noArmenianDiscount": true,
+    "noArmenianResearchEnhancement": true,
+    "agePrerequisite": "Completed1808→933→1358(OR with Settlement1357) contributes ONE building category to120(required2), then659→101. A starting cart plus later carts still count onlyone category. Never add imaginary562/584 completions.",
+    "researchSites": {
+      "14": [
+        {
+          "location_id": 68,
+          "research_time": 20,
+          "button_id": 1,
+          "hot_key_id": 18014
+        },
+        {
+          "location_id": 2556,
+          "research_time": 20,
+          "button_id": 11,
+          "hot_key_id": 18184
+        }
+      ],
+      "22": [
+        {
+          "location_id": 109,
+          "research_time": 25,
+          "button_id": 6,
+          "hot_key_id": 18022
+        }
+      ],
+      "199": [
+        {
+          "location_id": 103,
+          "research_time": 30,
+          "button_id": 6,
+          "hot_key_id": 18172
+        }
+      ],
+      "202": [
+        {
+          "location_id": 562,
+          "research_time": 25,
+          "button_id": 1,
+          "hot_key_id": 18189
+        },
+        {
+          "location_id": 1808,
+          "research_time": 25,
+          "button_id": 1,
+          "hot_key_id": 18190
+        },
+        {
+          "location_id": 2556,
+          "research_time": 25,
+          "button_id": 12,
+          "hot_key_id": 18191
+        }
+      ],
+      "203": [
+        {
+          "location_id": 562,
+          "research_time": 50,
+          "button_id": 1,
+          "hot_key_id": 18189
+        },
+        {
+          "location_id": 1808,
+          "research_time": 50,
+          "button_id": 1,
+          "hot_key_id": 18190
+        },
+        {
+          "location_id": 2556,
+          "research_time": 50,
+          "button_id": 12,
+          "hot_key_id": 18191
+        }
+      ],
+      "55": [
+        {
+          "location_id": 584,
+          "research_time": 30,
+          "button_id": 1,
+          "hot_key_id": 18055
+        },
+        {
+          "location_id": 1808,
+          "research_time": 30,
+          "button_id": 2,
+          "hot_key_id": 18180
+        },
+        {
+          "location_id": 2556,
+          "research_time": 30,
+          "button_id": 13,
+          "hot_key_id": 18182
+        }
+      ],
+      "182": [
+        {
+          "location_id": 584,
+          "research_time": 75,
+          "button_id": 1,
+          "hot_key_id": 18055
+        },
+        {
+          "location_id": 1808,
+          "research_time": 75,
+          "button_id": 2,
+          "hot_key_id": 18180
+        },
+        {
+          "location_id": 2556,
+          "research_time": 75,
+          "button_id": 13,
+          "hot_key_id": 18182
+        }
+      ],
+      "278": [
+        {
+          "location_id": 584,
+          "research_time": 30,
+          "button_id": 2,
+          "hot_key_id": 18276
+        },
+        {
+          "location_id": 1808,
+          "research_time": 30,
+          "button_id": 3,
+          "hot_key_id": 18277
+        },
+        {
+          "location_id": 2556,
+          "research_time": 30,
+          "button_id": 14,
+          "hot_key_id": 18183
+        }
+      ],
+      "221": [
+        {
+          "location_id": 562,
+          "research_time": 100,
+          "button_id": 1,
+          "hot_key_id": 18189
+        },
+        {
+          "location_id": 1808,
+          "research_time": 100,
+          "button_id": 1,
+          "hot_key_id": 18190
+        },
+        {
+          "location_id": 2556,
+          "research_time": 100,
+          "button_id": 12,
+          "hot_key_id": 18191
+        }
+      ],
+      "279": [
+        {
+          "location_id": 584,
+          "research_time": 75,
+          "button_id": 2,
+          "hot_key_id": 18276
+        },
+        {
+          "location_id": 1808,
+          "research_time": 75,
+          "button_id": 3,
+          "hot_key_id": 18277
+        },
+        {
+          "location_id": 2556,
+          "research_time": 75,
+          "button_id": 14,
+          "hot_key_id": 18183
+        }
+      ]
+    },
+    "disabledGeorgianTechIDs": [
+      182,
+      221
+    ],
+    "notDisabled279": true,
+    "specificity": "Do not copy Armenian940,958 or its [221,279] disabled list. Keep infrastructure ownCiv45/tree927/932 metadata distinct from removable925 start bonus and distinct from Armenian context."
+  },
+  "current8Scope": {
+    "buildOrderIDs": [
+      "archers-19",
+      "drush-fc",
+      "fast-castle-boom",
+      "fast-castle-knights",
+      "feudal-drush-18",
+      "hybrid-fish-18",
+      "maa-archers-18",
+      "scouts-18"
+    ],
+    "originalActionCount": 228,
+    "buildIDs": [
+      12,
+      45,
+      50,
+      68,
+      70,
+      72,
+      84,
+      87,
+      101,
+      103,
+      109,
+      562,
+      584
+    ],
+    "trainIDs": [
+      4,
+      13,
+      38,
+      74,
+      93,
+      448
+    ],
+    "unitUpgradeIDs": [
+      75
+    ],
+    "researchIDs": [
+      14,
+      22,
+      199,
+      202,
+      203
+    ],
+    "researchCounts": {
+      "14": 4,
+      "22": 6,
+      "199": 3,
+      "202": 7,
+      "203": 1
+    },
+    "campActions": [
+      {
+        "bo": "archers-19",
+        "step": 2,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 562
+        }
+      },
+      {
+        "bo": "archers-19",
+        "step": 8,
+        "actionIndex": 4,
+        "action": {
+          "type": "build",
+          "building": 584
+        }
+      },
+      {
+        "bo": "drush-fc",
+        "step": 2,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 562
+        }
+      },
+      {
+        "bo": "fast-castle-boom",
+        "step": 2,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 562
+        }
+      },
+      {
+        "bo": "fast-castle-boom",
+        "step": 9,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 584
+        }
+      },
+      {
+        "bo": "fast-castle-knights",
+        "step": 2,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 562
+        }
+      },
+      {
+        "bo": "fast-castle-knights",
+        "step": 9,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 584
+        }
+      },
+      {
+        "bo": "feudal-drush-18",
+        "step": 2,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 562
+        }
+      },
+      {
+        "bo": "hybrid-fish-18",
+        "step": 2,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 562
+        }
+      },
+      {
+        "bo": "hybrid-fish-18",
+        "step": 7,
+        "actionIndex": 2,
+        "action": {
+          "type": "build",
+          "building": 584
+        }
+      },
+      {
+        "bo": "maa-archers-18",
+        "step": 2,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 562
+        }
+      },
+      {
+        "bo": "maa-archers-18",
+        "step": 7,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 584
+        }
+      },
+      {
+        "bo": "scouts-18",
+        "step": 2,
+        "actionIndex": 1,
+        "action": {
+          "type": "build",
+          "building": 562
+        }
+      }
+    ],
+    "templatPolicyAuthorizedByRoot": "Add the independent completed free starting cart; preserve all13 explicit original camp actions as separate paid new carts80W20F. No first-camp free substitution, relocation, reuse or strategy rewrite. Thus current8 have8free initial cart instances plus13paid actions in total, not13total carts.",
+    "projectionContract": "Only source-backed Georgian display/simulation projection changes camp entity562/584→1808 and adds explicit model notes. Preserve other55 results and original BO JSON, train/research actions, costs and primary compound-step cost contract (e.g.archers step8 primary House25W).",
+    "researchGate": "Standard202/203 only; initial completedcart makes1808 available at0 for site checks. Other paid carts are physically completed separately. HorseCollar14 remains Mill68; Loom22TC109; Fletching199Blacksmith103. No additional40% Armenian research effect.",
+    "militaryTemplateLegality": "Fixed Georgian tree allows current six trained unit IDs4,13,38,74,93,448 and75Man-at-Arms via222. No incorrectKnight-template-only warning. Public tree additionally supports skirmisher7, not a current train action."
+  },
+  "churchBoundary": {
+    "technology": 934,
+    "effect": 939,
+    "requires": [],
+    "requiredCount": 0,
+    "commands": [
+      {
+        "Type": 1,
+        "A": 33,
+        "B": 0,
+        "C": -1,
+        "D": 9.0
+      }
+    ],
+    "resource33Meaning": "EffectFunctionNumber: setting9 calls EffectFunction9 in Effects.xs, not rawradius9.",
+    "fixedCurrentGameHelp": "Fortified Churches provide Villagers in a9tiles radius with+10%workrate.",
+    "churchReplacementTech930": {
+      "Name": "Fortified Church (Georgians)",
+      "EffectID": 941,
+      "Civ": 45,
+      "RequiredTechs": [
+        929,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 3,
+          "A": 104,
+          "B": 1806,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 30,
+          "B": 1806,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 31,
+          "B": 1806,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 32,
+          "B": 1806,
+          "C": -1,
+          "D": 0.0
+        }
+      ]
+    },
+    "churchUnit": 1806,
+    "churchFamilyIDs": [
+      104,
+      30,
+      31,
+      32,
+      1806
+    ],
+    "current8ChurchActions": 0,
+    "current8Verdict": "Whole independently guarded934 may be irrelevant only while no church-family construction/current action is present. No global10%gather or farm speed, no fake completedchurch. Any future Church action must remain unmodeled/fallback until aura/position/radius semantics implemented.",
+    "counterfactual": "Whole934 removal is valid317 contrast and must not invalidate independent startingcart925 or paid infrastructure932. Mutation/unknown-only companions must not silently disappear in producer.",
+    "notClaimed": "No actualEffectFunction9 implementation or current185872 client aura experiment was read/performed. Publicfunction selector and fixedgamehelp, together with zeroChurch in current8, support this boundedirrelevance, not a general aura implementation."
+  },
+  "otherFamilies": {
+    "916": "Identity entry; no effect, same shape as baselineidentity.",
+    "919/920": "Monaspa availability/elite upgrade, absent current8.",
+    "923": "SvanTowers Castle UT affects fortifications attack/projectiles, not current8 economic action; no military combat simulation here.",
+    "924": "Imperial UT changes cavalry population to.8; absent current8 research, not an unconditional cavalry population reduction.",
+    "926": "Elevation damage modifiers272add0 and273add-.15; combat only, no gather/build/stock effects. Keep complete own context if newruntime guard covers it.",
+    "930": "FortifiedChurch conversion104/30/31/32→1806, only relevant futurechurch scope.",
+    "937/938/939": "Cavalry HPregeneration byage, combat state only; no militaryloss/heal model in current8economy, no stock/time modifier.",
+    "team928": "Repair cost resource271×.75; defaultteamoff and currentBOAction union has no repair action. Must not treat it as new-building discount."
+  },
+  "recommendedProducerAndSchema": {
+    "independentOptionalInfrastructure": true,
+    "canonicalOwnContexts": [
+      925,
+      926,
+      934
+    ],
+    "keepCanonicalUnknownOnlyRows": true,
+    "rawContextFields": [
+      "tech",
+      "civ",
+      "effectId",
+      "requiredCount",
+      "requires",
+      "researchLocation",
+      "researchAt",
+      "researchTime",
+      "cost",
+      "commands"
+    ],
+    "closedFamilyRules": "925 and934 are independent optional wholebonus groups; each exactcomplete commands or absent. No crossciv cloning, partial group, duplicate known ID, unexpectedowncontext, unknown companion or invalidsites. 932 infrastructure remains even when925 absent.",
+    "counterfactualPreservesOldAlgorithms": "Use original317 generation only; old80 fixture values remain, newGeorgian keys come naturally. No change to original without/runBo/firstChanged/UPDATE algorithm or historical numeric snapshots.",
+    "noGlobalType7orResourceAllowlist": true
+  },
+  "preflightMustProve": [
+    "normal3vils/sameinitialstocks+onefreecompletecart/noextrafoodwood/population",
+    "all13camp payments80W20F and physical1808 completions/no562584",
+    "freecart source925 removal doesnotremove932 paidinfrastructure; onecap1 not repeated",
+    "freecart contributesonecategory, multiplecarts nevertwo",
+    "sourcebased researchsites and14Mill/199Blacksmith waits, standardresearchonly",
+    "futurechurch family triggersunsupported, nores33D9 globalgather handling",
+    "malformedsource/unknown-only canonical producer rows retain raw andrefuse",
+    "other55 fulloutputs/gather helpers/224realCost andoriginalArmenian mechanics remain",
+    "allcurrentBO militarylegal andfourwidth/no-wrap/share/practice/print disclose paidtemplatepolicy"
+  ],
+  "notExecuted": {
+    "repoEdits": 0,
+    "ecoGeneration": 0,
+    "domainCalls": 0,
+    "tests": 0,
+    "builds": 0,
+    "browserCalls": 0,
+    "PRs": 0
+  },
+  "methodCorrections": "An initial inspection tried Civ45.Units in the compactcache; compactcache storesUnits onlyforGaia/Britons, so that read raisedTypeError. Full source was then read directly from verifiedDAT into/tmp. This was a source-inspection harness issue, not a product test failure. No domain/test was run."
+}

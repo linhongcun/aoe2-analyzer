@@ -149,9 +149,9 @@ function expectedSource(tech: number): { raw: GeorgianRawTech; effects: Row['eff
     return {
       raw: rawTech(926, 938, 45, [104], 1, [command(1, 272, 1, -1, 0), command(1, 273, 1, -1, Math.fround(-0.15))]),
       effects: [
-        { kind: 'res', res: 272, label: null, op: 'add', v: 0 },
-        { kind: 'res', res: 273, label: null, op: 'add', v: -0.15 },
-      ] as Row['effects'],
+        { kind: 'res', res: 272, label: null, op: 'add', v: 0 } as Row['effects'][number],
+        { kind: 'res', res: 273, label: null, op: 'add', v: -0.15 } as Row['effects'][number],
+      ],
     };
   if (tech === 934)
     return {
@@ -195,6 +195,8 @@ export function georgianHasChurch(buildings: ReadonlySet<number>): boolean {
   return CHURCHES.some((building) => buildings.has(building));
 }
 export function georgianRowClass(row: Row, civ: string | undefined, context: GeorgianContext | undefined, buildings: ReadonlySet<number>) {
+  if (civ === 'Georgians' && row.source !== 'team' && !SOURCE_IDS.includes(row.tech ?? -1))
+    return { kind: 'unhandled' as const, reason: GEORGIAN_CONTEXT_REASON };
   if (!row.georgianTech && !(civ === 'Georgians' && SOURCE_IDS.includes(row.tech ?? -1))) return null;
   if (civ !== 'Georgians' || !context?.infrastructure || !rowValid(row)) return { kind: 'unhandled' as const, reason: GEORGIAN_CONTEXT_REASON };
   if (row.tech === 925) return context.start ? { kind: 'handled' as const } : { kind: 'unhandled' as const, reason: GEORGIAN_CONTEXT_REASON };

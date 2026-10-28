@@ -1,6 +1,10 @@
-# #197 第十一批：格鲁吉亚起始骡车与付费营地替换（预审草案，版本待 root 核对）
+# #197 第十一批：格鲁吉亚起始骡车与付费营地替换（v0.56.0）
 
-2026-10-28。维护者要求“ok，可以处理下一批的文明了”，执行者选择格鲁吉亚；[范围记录](https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6461943142)。基线 ab85d540813a8ce9432576a6c0dee9ff0de09b0a（v0.54.1），本批只将格鲁吉亚迁入当前支持集合，47→48/56、未支持9→8；父 issue 保持开放，Refs #197。版本号须由 root 检查最新 main 与另一个活动集成后确定。本文件仍为预审草案；未获 root 分阶段 GO 前不改生产或运行红测试。
+2026-10-28。维护者要求“ok，可以处理下一批的文明了”，执行者选择格鲁吉亚；[范围记录](https://github.com/linhongcun/aoe2-analyzer/issues/197#issuecomment-6461943142)。基线 ab85d540813a8ce9432576a6c0dee9ff0de09b0a（v0.54.1），本批只将格鲁吉亚迁入当前支持集合，47→48/56、未支持9→8；父 issue 保持开放，Refs #197。root已核对v0.55.0正式发布与空闲版本槽位，本批锁定v0.56.0。规格和83项失败用例经两份独立预审，先红后由root批准有界实现；后续核心观察、全局对照与浏览器记录各自实际运行身份，不复用为未来提交重新执行的证据。
+
+行政继承：规格和真实先红基于M `ab85d540813a8ce9432576a6c0dee9ff0de09b0a`（v0.54.1）；冻结原稿仍为/tmp/batch11-georgians-spec-proposal.md SHA256 eea5557ae31af119c9d80833d29f8f4c78bfb06841746650807f5d490397daa9。发布实现正常合并继承M2 `47eb649eeed1cb1481f8b982bcf8a27e03b52a69`（v0.55.0），保留该版本全部功能、开局文字与两处已批准金标准变化；原M基线和先红报告不改标M2。M2已在独立clean main实际一次采集，报告/tmp/batch11197-main055-baseline-capture.json SHA256 2de84439ae16c40e2d70606937061df8671cc983c762e8c140bedf35dfb9af42；当前保护集为508文件、源输入479份。继承审计/tmp/batch11197-main055-baseline-inheritance-audit.json SHA256 2686af9206059f031e1757ae28ba27045a5d59b112976f3eb4e5486d6a9ac955，原M证据保留其历史身份。
+
+行政证据链接：[真实先红](georgians197-first-red.json)、[固定来源](georgians197-source.json)、[公开语义](georgians197-public-sources.json)。有界实现中独立源审另确认未知非团队行不可借通用属性路径执行；新增单独1例严格库存红绿，原83用例保持，见[补充红绿](georgians197-unknown-row-red-green.json)。
 
 ## 固定来源及当前输入边界
 
@@ -60,9 +64,9 @@ DE185872 原始 .dat 固定 auto-mods 0c38027504532826c9922e4db77e2c1d33554291�
 
 新增tests仅从已存在API导入simulateBuild/simSupport/ageReqOk/civNotes/bonusUsage/buildShareCard等，不因缺新模块/导入/环境失败。先红包含：当前8套支持、起始at0完成实体、正常库存/3村/pop4/5、80木20食物25秒付费映射、每次付费、起始研究地点、真实时代前置、925全无仍付费映射；UI基于现有share model/bonusUsage证明披露缺失。来源负例与producerunknown-only使用真实生成器，并将成功与拒绝两边都验收。
 
-root先批准新文件落盘，再批准精确红测试执行；记录真实stdout、退出码、assertion名和输入SHA。不得跑baseline/domain/build/browser/fullsuite/UPDATE317或生成，直至各阶段获GO。
+本次先完成两份独立规格与用例预审，再对原M执行一次精确先红并冻结stdout、退出码、断言名和输入SHA。原77TS+6py共83项分别在M-WIP和M2-WIP转绿；源审发现的未知行绕过另以独立1项库存断言严格先红后绿，当前distinct为78TS+6py。原#317生成器实际只执行一次生成case，记录1通过、12过滤跳过；其4个新格鲁吉亚键均为真实null，保留旧80值和原观察算法。
 
-独立基线已冻结448完整结果、1512helpers、224真实成本、56附注/支持、raw56+10globals，捕获/tmp/batch11197-baseline-capture.json SHA256 e3ea7cd493f05a4863159dca94f476cf06c04829bae658b682b916c7dd26966e。最终一次其它55×8=440完整结果、其helper、附注/支持以及全部224成本对照；格鲁吉亚自身所有与本机制无关helper按既有oracle要求核验。497files/source473保护清单按root确认使用。
+历史M独立基线已冻结448完整结果、1512helpers、224真实成本、56附注/支持、raw56+10globals，捕获/tmp/batch11197-baseline-capture.json SHA256 e3ea7cd493f05a4863159dca94f476cf06c04829bae658b682b916c7dd26966e。最终一次其它55×8=440完整结果、其helper、附注/支持以及全部224成本对照；格鲁吉亚自身所有与本机制无关helper按既有oracle要求核验。历史M的497files/source473清单保持；当前M2比较使用实际508files/source479及其已批准CURRENT迁移oracle。
 
 既有tests迁移严格遵从独立CURRENT迁移oracle：不能全局替Georgians，Armenian/Bengali复制来源负例、历史golden/fixture保留；#331当前supported只追加Georgians，TEAM22与历史snapshot保持。#317原112/text37/SIM_CHECKED/80旧值及UPDATE算法保持，仅追加实际新helper并原命令生成本批新键，具体文件以oracle为准。未经root批准不动既有tests。
 
