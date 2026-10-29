@@ -56,7 +56,7 @@ test.describe('#19 分享卡', () => {
     test(`置灰文明（${w}）：分享按钮 aria-disabled、可聚焦、点了不出卡；灰字逐字；复制链接照常`, async ({ page, context }) => {
       await context.grantPermissions(['clipboard-read', 'clipboard-write']);
       await page.setViewportSize({ width: w, height: w > 600 ? 900 : 844 });
-      await open(page, 'bo=scouts-18&civ=Chinese');
+      await open(page, 'bo=scouts-18&civ=Poles');
       const btn = shareBtn(page);
       await expect(btn).toHaveCount(1);
       await expect(btn).toHaveAttribute('aria-disabled', 'true');
@@ -83,7 +83,7 @@ test.describe('#19 分享卡', () => {
       await expect(toast).toHaveText('链接已复制');
       await expect(toast).toHaveAttribute('role', 'status');
       await expect(toast.locator('svg.lucide-check')).toHaveCount(1);
-      expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('civ=Chinese');
+      expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('civ=Poles');
     });
   }
 
@@ -97,12 +97,12 @@ test.describe('#19 分享卡', () => {
   });
 
   for (const w of [360, 375, 390, 1280])
-    for (const q of ['bo=fast-castle-boom&civ=Franks', 'bo=scouts-18&civ=Chinese'])
+    for (const q of ['bo=fast-castle-boom&civ=Franks', 'bo=scouts-18&civ=Poles'])
       test(`${w} 宽无横向滚动（${q}）`, async ({ page }) => {
         await page.setViewportSize({ width: w, height: w > 600 ? 900 : 800 });
         await open(page, q);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-        if (!q.includes('Chinese')) {
+        if (!q.includes('Poles')) {
           await shareBtn(page).click();
           await expect(page.getByRole('dialog', { name: '分享卡' })).toBeVisible();
           expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);

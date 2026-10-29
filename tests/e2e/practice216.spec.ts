@@ -119,7 +119,7 @@ test('#216 手动末步完成、撤回、重置与配置变更归零', async ({ 
 test('#216 全部真实开局完整清单与A4 PDF保留来源/限制', async ({ page }, info) => {
   test.setTimeout(90_000);
   for (const order of orders) {
-    await page.goto(`./#/builds?bo=${order.id}&view=print&civ=Chinese&dist=7&house=0`);
+    await page.goto(`./#/builds?bo=${order.id}&view=print&civ=Poles&dist=7&house=0`);
     await expect(page.getByTestId('build-practice')).toBeVisible({ timeout: 30_000 });
     const rows = page.getByTestId('practice-checklist-step');
     await expect(rows).toHaveCount(order.steps.length);
@@ -136,7 +136,7 @@ test('#216 全部真实开局完整清单与A4 PDF保留来源/限制', async ({
   await page.reload();
   await expect(page.getByTestId('build-practice')).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await page.goto('./#/builds?bo=fast-castle-knights&view=practice&civ=Chinese&dist=7&house=0');
+  await page.goto('./#/builds?bo=fast-castle-knights&view=practice&civ=Poles&dist=7&house=0');
   await expect(page.getByTestId('build-practice')).toBeVisible({ timeout: 30_000 });
   await expect(page.getByTestId('practice-progress')).toBeVisible();
   await page.emulateMedia({ media: 'print' });

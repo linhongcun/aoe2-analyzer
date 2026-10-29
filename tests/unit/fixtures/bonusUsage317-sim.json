@@ -1,5 +1,5 @@
 {
-  "inputs": "5b63188a552bb1caa8de061a9f5224c914ba5fffb4b2372055ff5541f8cfe6f1",
+  "inputs": "2753a2733d8170eeb72a5e1cf108505281430925a369379e3a18f26be9920539",
   "firstChanged": {
     "Armenians-0": "feudal-drush-18",
     "Armenians-3": null,
@@ -18,6 +18,8 @@
     "Byzantines-1": "maa-archers-18",
     "Celts-0": "feudal-drush-18",
     "Celts-1": null,
+    "Chinese-0": "feudal-drush-18",
+    "Chinese-1": "feudal-drush-18",
     "Cumans-0": null,
     "Cumans-2": "maa-archers-18",
     "Danes-0": "feudal-drush-18",

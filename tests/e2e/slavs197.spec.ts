@@ -104,7 +104,7 @@ for (const width of [360, 375, 390, 1280])
       } else await page.locator('#tlciv').click();
       const picker = page.getByRole('dialog', { name: '文明', exact: true });
       await expect(picker.locator('[data-civ="Slavs"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await expect(picker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
+      await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await expect(picker).toHaveCount(0);
       if (mobile && (await settings.isVisible())) await settings.getByRole('button', { name: '完成', exact: true }).click();
@@ -166,8 +166,8 @@ test('#197 斯拉夫无farm六模板、推荐与未支持文明回退', async ({
   await expect(sim).toContainText(FARM_NOTE);
   await expect(sim).toContainText('已计入');
   await overflow(page);
-  await page.goto('./#/builds?bo=scouts-18&civ=Chinese');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的中国加成尚未计入，已按通用计算');
+  await page.goto('./#/builds?bo=scouts-18&civ=Poles');
+  await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的波兰加成尚未计入，已按通用计算');
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
   await expect(page.locator('[data-t="civ-note"]')).toHaveCount(0);
   await expect(page.locator('[data-t="share-card-btn"]:visible').first()).toHaveAttribute('aria-disabled', 'true');

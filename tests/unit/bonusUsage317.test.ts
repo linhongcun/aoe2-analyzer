@@ -62,6 +62,7 @@ const inputsHash = () =>
       'slavicEconomy.ts',
       'khmerEconomy.ts',
       'jurchenEconomy.ts',
+      'chineseEconomy.ts',
       'khmerSource.ts',
       'khmerPrerequisiteSource.ts',
     ].map((f) => readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8')),
@@ -224,7 +225,7 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
   it('来源标签（eco「.dat 经济/费用效果（文本展示）」、text「无 .dat 数据」）：有工具计入的不显示，没有工具计入的仍显示（Steve 设计审查）', () => {
     expect(showEcoSourceTag(bon('Romans-0'))).toBe(false);
     expect(showEcoSourceTag(bon('Romans-2'))).toBe(false);
-    expect(showEcoSourceTag(bon('Chinese-0'))).toBe(true);
+    expect(showEcoSourceTag(bon('Chinese-0'))).toBe(false);
     let hidden = 0;
     for (const b of ECO.filter((x) => x.src === 'eco')) {
       const counted = bonusUsage(b).some((l) => l.on === true);

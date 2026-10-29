@@ -52,8 +52,8 @@ test.describe('issue 317 罗马加成标签', () => {
   });
 
   test('没有任何工具计入的经济加成仍显示「.dat 经济/费用效果（文本展示）」', async ({ page }) => {
-    // 中国第 1 条「初始村民 +3…」：中国开局模拟不支持，其他工具也不涉及
-    await page.goto('./#/civ/Chinese/bonus/0');
+    // 波兰第 3 条「采石兼产黄金」：波兰开局模拟不支持，其他工具也未计入
+    await page.goto('./#/civ/Poles/bonus/2');
     await expect(page.locator('#bonus')).toContainText('仅文本，未计入数值');
     await expect(page.locator('#bonus')).toContainText('.dat 经济/费用效果（文本展示）');
   });

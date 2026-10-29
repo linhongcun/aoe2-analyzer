@@ -113,7 +113,7 @@ for (const width of [360, 375, 390, 1280])
       expect(errors).toEqual([]);
     });
 
-test('#197 亚美尼亚可选和刷新保留，中国仍为明确未支持样本', async ({ page }) => {
+test('#197 亚美尼亚可选和刷新保留，波兰仍为明确未支持样本', async ({ page }) => {
   await page.goto('./#/builds?bo=scouts-18&civ=Armenians&step=3');
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按亚美尼亚计');
   await page.reload();
@@ -121,8 +121,8 @@ test('#197 亚美尼亚可选和刷新保留，中国仍为明确未支持样本
   await page.locator('#tlciv').click();
   const picker = page.getByRole('dialog', { name: '文明', exact: true });
   await expect(picker.locator('[data-civ="Armenians"]')).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(picker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
+  await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
   await page.keyboard.press('Escape');
-  await page.goto('./#/builds?bo=scouts-18&civ=Chinese');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的中国加成尚未计入，已按通用计算');
+  await page.goto('./#/builds?bo=scouts-18&civ=Poles');
+  await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的波兰加成尚未计入，已按通用计算');
 });
