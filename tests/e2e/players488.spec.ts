@@ -295,6 +295,9 @@ test('#488 invalid profile IDs retain the original route and never borrow a real
     await expect(main(page).getByRole('heading', { level: 1, name: /未收录该选手|找不到该页/ })).toBeVisible();
     expect(new URL(page.url()).hash).toBe(`#${route}`);
     await expect(page).toHaveTitle(/未收录|找不到/);
+    const expectedCanonical = await page.evaluate((path) => new URL(`.${path}/`, document.baseURI).href, route);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', expectedCanonical);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', expectedCanonical);
     const basePath = await page.evaluate(() => new URL(document.baseURI).pathname.replace(/\/$/, ''));
     const canonical = new URL((await page.locator('link[rel="canonical"]').getAttribute('href'))!);
     const ogUrl = new URL((await page.locator('meta[property="og:url"]').getAttribute('content'))!);
