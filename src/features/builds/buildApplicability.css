@@ -40,3 +40,60 @@
 .bo > .build-applicability {
   margin-block: var(--space-3);
 }
+
+/* #480：手机保留资料上下文，并给摘要和首步留出可见空间。 */
+@media (max-width: 600px) {
+  .build-applicability-panel {
+    margin-bottom: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .build-applicability-panel > .build-applicability > .build-applicability-caption {
+    margin-bottom: var(--space-1);
+  }
+  .build-applicability-panel > .build-applicability > .build-applicability-note {
+    margin-top: var(--space-1);
+  }
+  .build-applicability-panel > .build-applicability > .build-applicability-links {
+    gap: var(--space-1);
+  }
+  .build-applicability-panel + .tl > .bp-entry {
+    margin-block: 0;
+    padding: 0;
+  }
+  .build-applicability-panel + .tl > .tl-params {
+    margin-block: var(--space-1);
+  }
+  .build-applicability-panel + .tl > .tl-summary-card {
+    padding: var(--space-1);
+  }
+  .build-applicability-panel + .tl > .tl-summary-card .tl-summary > li:nth-child(n + 3) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-1);
+  }
+  .build-applicability-panel + .tl > .tl-card {
+    margin-block: 0;
+    padding-block: 0;
+    padding-inline: var(--space-3);
+  }
+  .build-applicability-panel + .tl > .tl-card > .tl-legend {
+    display: grid;
+    grid-template-columns: repeat(4, max-content) auto;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+  }
+  .build-applicability-panel + .tl > .tl-card > .tl-legend > .tl-est {
+    grid-column: 5;
+    grid-row: 1 / span 2;
+    align-self: stretch;
+  }
+  .build-applicability-panel + .tl > .tl-extra-controls > summary {
+    padding-block: var(--space-2);
+  }
+  .build-applicability-panel + .tl > .tl-steps {
+    margin-top: var(--space-1);
+  }
+}
