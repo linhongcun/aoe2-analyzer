@@ -256,7 +256,7 @@ function ProductionBody({
         <p className="note">先合计每种资源的开销，再分别向上取整。每行建筑专用于该单位，不模拟同一建筑混排。</p>
         <p className="production-boundary">
           仅估算持续训练：不含农田补种、住房扩建、建筑建设和研究投入；不计资源耗尽、自动赠送单位及额外资源产出。按所选单位形态已解锁计算。数据：DE Update
-          185872。
+          {__DATA_SOURCES__.patch.build}。
         </p>
       </section>
 

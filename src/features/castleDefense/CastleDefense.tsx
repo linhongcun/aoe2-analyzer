@@ -287,7 +287,9 @@ export default function CastleDefense() {
               </li>
             ))}
           </ul>
-          <p className="castle-defense-note">固定 DE Update 185872。不将旧文数字或通用攻略中的时代简述代替本站固定数据；不默认推广到 Nomad、团战或其他地图。</p>
+          <p className="castle-defense-note">
+            固定 DE Update {__DATA_SOURCES__.patch.build}。不将旧文数字或通用攻略中的时代简述代替本站固定数据；不默认推广到 Nomad、团战或其他地图。
+          </p>
         </details>
       </section>
     </section>

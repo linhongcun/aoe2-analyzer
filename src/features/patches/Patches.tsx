@@ -16,7 +16,7 @@ export default function Patches() {
   const { archives, error, retry } = usePatchArchives();
   const raw = archives?.find((patch) => patch.id === id);
   const entries = raw?.entries ?? [];
-  const current = id === '185872';
+  const current = id === String(__DATA_SOURCES__.patch.build);
   const [params, setParams] = useSearchParams();
   const [draft, setDraft] = useState<{ base: string; value: string } | null>(null);
   const search = draft?.base === params.toString() ? draft.value : (params.get('q') ?? '');
@@ -158,7 +158,7 @@ export default function Patches() {
         <time className="num" dateTime={raw.date}>
           {raw.date}
         </time>{' '}
-        · DE 正式版 · <Link to="/about-data">当前数据版本：DE 185872 · 关于数据</Link>
+        · DE 正式版 · <Link to="/about-data">当前数据版本：DE {__DATA_SOURCES__.patch.build} · 关于数据</Link>
       </p>
       {raw.publishedAt && (
         <p className="note">

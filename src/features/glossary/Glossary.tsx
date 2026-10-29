@@ -63,7 +63,8 @@ function Term({ term }: { term: GlossaryTerm }) {
           ))}
         </ul>
         <p className="note">
-          {term.checkedAt ?? '2026-10-19'} 已打开核对。社区来源用于解释用法与理解障碍；数学例子是明确假设。游戏实际属性请查看本站 DE 185872 固定数据。
+          {term.checkedAt ?? '2026-10-19'} 已打开核对。社区来源用于解释用法与理解障碍；数学例子是明确假设。游戏实际属性请查看本站 DE{' '}
+          {__DATA_SOURCES__.patch.build} 固定数据。
         </p>
       </details>
       <div className="gl-actions">

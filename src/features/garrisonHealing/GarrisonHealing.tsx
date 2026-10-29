@@ -382,7 +382,10 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
 
       <section className="healing-card healing-boundary" aria-labelledby="healing-boundary-title">
         <h2 id="healing-boundary-title">来源与计算范围</h2>
-        <p>固定数据：DE Update 185872。建筑速率、相关科技与治疗资格由固定版 .dat 可复现导出，驻留权限复用驻军兼容性模型，最大 HP 使用单位科技模型。</p>
+        <p>
+          固定数据：DE Update {__DATA_SOURCES__.patch.build}。建筑速率、相关科技与治疗资格由固定版 .dat 可复现导出，驻留权限复用驻军兼容性模型，最大 HP
+          使用单位科技模型。
+        </p>
         <p>假定一个目标已在建筑内、没有继续受伤，只计算建筑提供的静态治疗。机械等机制尚未核实的组合会暂停；未经过当前版本游戏客户端实测。</p>
         <p>不计单位自身再生、僧侣主动治疗或范围治疗，不模拟往返、微操、战斗与批次调度，也不据此判断治疗是否回本。</p>
         <p>

@@ -326,7 +326,8 @@ export default function Construction() {
       <section className="construction-panel">
         <h2>来源与支持范围</h2>
         <p>
-          数据固定为 DE185872。当前目录 <span className="construction-number">38 类</span>建筑中，<span className="construction-number">37 类</span>
+          数据固定为 DE{__DATA_SOURCES__.patch.build}。当前目录 <span className="construction-number">38 类</span>建筑中，
+          <span className="construction-number">37 类</span>
           可由村民建造；渔栅由渔船建造，暂停计算。文明、时代、升级前置与特殊条件仍需逐项满足。特殊建造者与盟友施工加成暂不计算。
         </p>
         {result.applied.length > 0 && (

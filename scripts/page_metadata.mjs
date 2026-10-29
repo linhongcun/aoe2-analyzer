@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import ts from 'typescript';
 const root = fileURLToPath(new URL('../', import.meta.url));
+const dataBuild = JSON.parse(readFileSync(path.join(root, 'scripts/data_sources.json'), 'utf8')).patch.build;
 const read = (name) => JSON.parse(readFileSync(path.join(root, 'src/data', name + '.json'), 'utf8'));
 const pages = {};
 const add = (route, title, description, extra = {}) => (pages[route] = { title, description, ...extra });
@@ -58,7 +59,7 @@ for (const [file, type] of [
     add(
       `/${type}/${x.id}`,
       x.zh,
-      `${x.zh}（${x.en}）：${type === 'unit' ? '基础属性、克制与升级路线' : type === 'tech' ? '科技效果、费用与前置' : '建筑属性、单位与科技'}。数据版本 DE 185872。`,
+      `${x.zh}（${x.en}）：${type === 'unit' ? '基础属性、克制与升级路线' : type === 'tech' ? '科技效果、费用与前置' : '建筑属性、单位与科技'}。数据版本 DE ${dataBuild}。`,
       {
         stats,
         icon: `img/${file}/${x.pic}.webp`,

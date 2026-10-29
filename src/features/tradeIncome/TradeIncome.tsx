@@ -403,7 +403,7 @@ function TradeIncomeBody({
             </details>
             <p className="note">大于等于十亿或非零且小于 0.01 的结果采用科学计数法显示，数量按完整精度向上取整。</p>
             <p className="note">
-              费用与可训练性复用本站固定 DE185872 单位及生产模型；人口来自固定 .dat 导出。收益由用户测量，软件校验不代表客户端实测。
+              费用与可训练性复用本站固定 DE{__DATA_SOURCES__.patch.build} 单位及生产模型；人口来自固定 .dat 导出。收益由用户测量，软件校验不代表客户端实测。
               <Link to="/about-data">查看数据来源</Link>
             </p>
           </section>

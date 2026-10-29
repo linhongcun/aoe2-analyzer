@@ -263,7 +263,7 @@ export default function TeamBonuses() {
           )}
           <details className="team-panel team-model">
             <summary>数据版本与覆盖边界</summary>
-            <p>按 DE 185872 版本游戏数据里的团队效果直接整理，没有在游戏里实测。</p>
+            <p>按 DE {__DATA_SOURCES__.patch.build} 版本游戏数据里的团队效果直接整理，没有在游戏里实测。</p>
             <ul>
               {TEAM_BONUS_DATA.meta.scopeNotes.map((note) => (
                 <li key={note}>{playerTeamNote(note, core)}</li>

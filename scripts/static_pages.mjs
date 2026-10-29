@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 const pages = JSON.parse(readFileSync('src/data/page-metadata.json', 'utf8'));
+const dataBuild = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')).patch.build;
 const template = readFileSync('dist/index.html', 'utf8');
 const site = new URL(process.env.SITE_URL ?? 'https://linhongcun.github.io/aoe2-analyzer/');
 if (!site.pathname.endsWith('/')) site.pathname += '/';
@@ -20,7 +21,7 @@ try {
     if (meta.icon && existsSync(path.join('public', meta.icon)))
       icon = `<img alt="" src="data:image/webp;base64,${readFileSync(path.join('public', meta.icon)).toString('base64')}">`;
     await page.setContent(
-      `<!doctype html><html lang="zh-CN"><head><style>${tokens}\nbody{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);box-sizing:border-box;padding:60px;width:1200px;height:630px}header{color:var(--color-muted);font-size:28px}h1{font-size:52px;margin:55px 0 35px;display:flex;align-items:center;gap:24px}img{width:96px;height:96px}p{font-size:28px;line-height:1.7;margin:0;max-height:190px;overflow:hidden}footer{position:absolute;bottom:50px;font-size:24px;color:var(--color-muted)}</style></head><body><header>帝国时代 II 分析器</header><h1>${icon}${escape(meta.title)}</h1><p>${escape(meta.description)}</p><footer>DE 185872 · 文明 · 单位 · 科技 · 开局</footer></body></html>`,
+      `<!doctype html><html lang="zh-CN"><head><style>${tokens}\nbody{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);box-sizing:border-box;padding:60px;width:1200px;height:630px}header{color:var(--color-muted);font-size:28px}h1{font-size:52px;margin:55px 0 35px;display:flex;align-items:center;gap:24px}img{width:96px;height:96px}p{font-size:28px;line-height:1.7;margin:0;max-height:190px;overflow:hidden}footer{position:absolute;bottom:50px;font-size:24px;color:var(--color-muted)}</style></head><body><header>帝国时代 II 分析器</header><h1>${icon}${escape(meta.title)}</h1><p>${escape(meta.description)}</p><footer>DE ${dataBuild} · 文明 · 单位 · 科技 · 开局</footer></body></html>`,
     );
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: `dist/og/${image}.png` });

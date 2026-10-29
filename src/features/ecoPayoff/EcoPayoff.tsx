@@ -379,7 +379,7 @@ function EcoPayoffBody({
             </>
           )}
           <p className="note eco-source">
-            数据：DE Update 185872，固定游戏 .dat 导出。<Link to="/about-data">查看数据来源</Link>
+            数据：DE Update {__DATA_SOURCES__.patch.build}，固定游戏 .dat 导出。<Link to="/about-data">查看数据来源</Link>
           </p>
         </div>
       </div>

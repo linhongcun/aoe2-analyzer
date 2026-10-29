@@ -173,7 +173,7 @@ export function Basis({ age, food, compact, headingLevel }: { age: number; food:
             <li>金和木离放置点 3 格，农田贴着磨坊；每趟 = 携带量 ÷ 采集速度 + 往返路程 ÷ 村民速度。</li>
             <li>有文明折扣先按折扣价，再换算成时间。</li>
           </ol>
-          <small className="note">不模拟地图和资源分布，和实战会有出入。数据：游戏 .dat（DE Update 185872）</small>
+          <small className="note">不模拟地图和资源分布，和实战会有出入。数据：游戏 .dat（DE Update {__DATA_SOURCES__.patch.build}）</small>
         </div>
       )}
     </div>
