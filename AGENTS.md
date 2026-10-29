@@ -64,6 +64,7 @@ Vite 6 + React 18 + TypeScript（strict、`noUncheckedIndexedAccess`）+ react-r
 - **游戏数字只从数据里读，不要凭记忆写。** 来源：`src/data/civs.json` 等生成文件（派生自 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) 固定提交）和由 DE 原版 `.dat` 派生的 `effects.json` / `eco.json`。issue、设计稿、测试里写的数字和数据不一致时，以数据为准，并在 issue 里说明。
 - 生成的 `src/data/*.json` 和 `public/img/*` **是提交在仓库里的**，但只能由脚本生成（`npm run data`、`npm run effects`、`npm run eco`），不要手改；CI 会校验 `effects.json`、`eco.json` 可由固定 `.dat` 原样复现。
 - **`.dat`（© Microsoft）和下载缓存 `scripts/.cache/` 绝不提交**（已 gitignore），只在构建时下载。
+- 新增 #197 开局文明来源证据使用 `scripts/build_sim_source.py` 的有界摘要，完整中间输出留在忽略缓存；`*197*source*.json` 每份限 64 KiB，历史原件仅按固定指纹保留，不追加豁免。命令、固定来源与审阅边界见 [来源证据流程](docs/design/build-sim-source-478.md)。
 - 主观评分改 `scripts/civ_ratings.json`。社区来源（攻略、别名、俗称）只收 2020 年以后的；没能核对的标「未核实」。
 
 ## 命令（均已在仓库核对）

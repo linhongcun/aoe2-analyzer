@@ -1,0 +1,94 @@
+{
+  "issue": 478,
+  "date": "2026-10-29",
+  "kind": "Black-box behavior preservation; separate from the normal unit/e2e suite",
+  "baselineCommit": "08ad03b0335f9b98a3b893694b793674c1f21b3b",
+  "testedHead": "094b526d8c67ca56df603df0dc2ad08bca716a3c",
+  "coreSourceCommit": "b09cfc0a03791ae379e087a2231ba9d42875f823",
+  "candidateWorkingTreeDirty": true,
+  "dirtyScope": "Only the new parity harness, regression test, and this report were uncommitted. Production source fingerprints below bind the comparison to the tested implementation.",
+  "sourceInputSha256": "ece19236901bb76cf5901529b516f36d6834d5ffd27abd8f2ddace1218beef89",
+  "fingerprintAlgorithm": "Sort every tracked or unignored src/domain and src/data path; SHA256 each UTF-8 file; SHA256 JSON.stringify of [path, file SHA256] pairs.",
+  "coreSourceSha256": {
+    "src/domain/buildSim.ts": "2580811e2eef3e3d51c49b2f2a0b432f46954cd82e4d5985c0b32df08e3856f7",
+    "src/domain/buildSimCivRules.ts": "95615813c7a9de48d26e76710f550058e7e33e8b9cb2e0ed9d0e1a61b7b42c29",
+    "src/domain/buildSimCoverage.ts": "56fa46c4b8d08ee484fb7aeee9422536a30a6d11ded2e464e94dc3005820d548",
+    "src/domain/buildSimEffects.ts": "487ea44c09f3d1014cb5e8f33786f725d9730e57a8097c520a372a72349863c4",
+    "src/domain/buildSimMechanisms.ts": "b22bea3019433430b10dec194c1f2e602828aabf6b6f59c0b6f657a91906f41b",
+    "src/domain/buildSimNotes.ts": "537efc750fe2626a5a2e9b2ef96faa03cf0c1e21002de30347fd82e2f57794ac"
+  },
+  "coreGitBlobs": {
+    "src/domain/buildSim.ts": "ef81a522774ac94d9c3ff272f0cb408f6b0fb32f",
+    "src/domain/buildSimCivRules.ts": "d36def911163ffca652e2363067a75062e6b44e5",
+    "src/domain/buildSimCoverage.ts": "e7efde9da58525b17fe7024c4edcef51b4446594",
+    "src/domain/buildSimEffects.ts": "5e05c6a8ed5aa3ce6a05f4563a931e4a7bee29d3",
+    "src/domain/buildSimMechanisms.ts": "42481e1c93be427227a51209afd8d67b55dccb71",
+    "src/domain/buildSimNotes.ts": "691c9fd61aed35a2020ad11fbb47e4afc270b29d"
+  },
+  "comparison": {
+    "result": "PASS",
+    "cases": 721,
+    "differences": 0,
+    "missing": 0,
+    "canonicalOutputSha256": "8def7e387ca7dd2aa78ee284151a327404600983e2899cbcb9b59e3e2bea202c",
+    "comparisonFormat": "JSON serialization preserves object/array order and explicitly marks undefined and non-finite numeric values.",
+    "matrix": {
+      "defaultTimelines": "56 civilizations plus Generic × all 8 build orders = 456",
+      "defaultMetadata": 57,
+      "teamAndHousingVariants": "13 migrated civilizations × boom/knight templates × 2 parameter sets = 52",
+      "sourceMutationCases": "13 civilizations × 6 mutations × metadata/timeline = 156"
+    },
+    "metadataCoverage": [
+      "Support and unhandled reasons",
+      "Per-effect classification and per-row atomicity",
+      "Every public note in order for all 8 templates",
+      "Housing policy",
+      "Every gather task at distances 0, 2, 7"
+    ],
+    "mutations": [
+      "Missing first bonus row",
+      "Duplicated first bonus row",
+      "Unknown companion effect",
+      "Invalid multiplier",
+      "Missing building classes",
+      "Known rows copied to Generic ownership"
+    ],
+    "parameters": [
+      {
+        "team": true,
+        "walkTiles": 7
+      },
+      {
+        "team": true,
+        "autoHouses": false,
+        "walkTiles": 2
+      }
+    ]
+  },
+  "permanentTests": {
+    "path": "tests/unit/buildMechanisms478.test.ts",
+    "cases": 15,
+    "baseline": "PASS on 08ad03b, 3.24 seconds",
+    "candidate": "PASS before the final import/format cleanup, 4.16 seconds; the final 721-case comparison passed after cleanup.",
+    "coverage": [
+      "Existing generic rate-helper partial-row behavior versus timeline atomicity",
+      "Paired-source gate rejection for Tatars, Mayans, Sicilians, Slavs, Khmer",
+      "Unknown Khmer row invalidates its complete advertised source context",
+      "Armenian and Georgian input immutability and repeat-call determinism",
+      "Optional free-villager event property presence for its two owning civilizations"
+    ]
+  },
+  "localArtifacts": {
+    "baseline": "/tmp/issue478-parity-baseline.json",
+    "candidate": "/tmp/issue478-parity-final.json",
+    "log": "/tmp/issue478-parity-final.log",
+    "committedFullOutputFixtures": false
+  },
+  "reproduce": [
+    "git worktree add --detach /tmp/aoe2-478-baseline 08ad03b0335f9b98a3b893694b793674c1f21b3b",
+    "ln -s \"$(pwd)/node_modules\" /tmp/aoe2-478-baseline/node_modules",
+    "cp scripts/build_mechanisms_parity.ts /tmp/aoe2-478-baseline/scripts/",
+    "(cd /tmp/aoe2-478-baseline && PARITY_OUTPUT=/tmp/478-before.json npx vite-node scripts/build_mechanisms_parity.ts)",
+    "PARITY_OUTPUT=/tmp/478-after.json PARITY_BASELINE=/tmp/478-before.json npx vite-node scripts/build_mechanisms_parity.ts"
+  ]
+}
