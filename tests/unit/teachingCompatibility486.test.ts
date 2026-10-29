@@ -99,10 +99,18 @@ describe('#486 fixed 188329 teaching compatibility', () => {
     }
   });
 
-  it('retains all 6552 civilization/age/shape production qualifications from the independent baseline audit', () => {
-    const routes = civs.flatMap((civ) =>
-      ([2, 3, 4] as const).flatMap((age) => planContent.unitIds.map((id) => [civ.en, age, id, planPotentialBuildings(ctx, civ.en, age, id)])),
+  const routesByCiv = new Map<string, [string, number, number, number[]][]>();
+  it.each(civs)('retains all 117 age/shape production qualifications for $en', (civ) => {
+    const routes = ([2, 3, 4] as const).flatMap((age) =>
+      planContent.unitIds.map((id): [string, number, number, number[]] => [civ.en, age, id, planPotentialBuildings(ctx, civ.en, age, id)]),
     );
+    expect(routes).toHaveLength(117);
+    routesByCiv.set(civ.en, routes);
+  });
+
+  it('retains all 6552 civilization/age/shape production qualifications from the independent baseline audit', () => {
+    expect(routesByCiv.size).toBe(civs.length);
+    const routes = civs.flatMap((civ) => routesByCiv.get(civ.en) ?? []);
     expect(routes).toHaveLength(6552);
     expect(sha256(JSON.stringify(routes))).toBe(review.audit.routes);
   });
