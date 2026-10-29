@@ -33,6 +33,7 @@ for (const width of [360, 375, 390, 1280]) {
     }
     await page.locator('.gg-sources summary').click();
     const guideSources = page.locator('.gg-sources');
+    await expect(guideSources).toBeVisible();
     await expect(guideSources).toContainText('2026-10-20');
     await expect(guideSources).toContainText('DE185872');
     await expect(guideSources).toContainText('2026-10-29');
@@ -55,7 +56,9 @@ for (const width of [360, 375, 390, 1280]) {
       await expect(page.getByTestId('p3-main-status')).toContainText('所列前置已满足');
       await expect(page.getByTestId('p4-main-status')).toContainText('所列前置已满足');
     }
+    await page.getByText('核对边界、分享限制与来源', { exact: true }).click();
     const planSources = page.locator('.tp-screen .tp-sources');
+    await expect(planSources).toBeVisible();
     await expect(planSources).toContainText('2026-10-20');
     await expect(planSources).toContainText('DE185872');
     await expect(planSources).toContainText('2026-10-29');
