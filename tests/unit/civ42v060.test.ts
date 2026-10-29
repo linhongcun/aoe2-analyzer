@@ -70,19 +70,21 @@ describe('#42 放开：其他', () => {
 });
 
 // 白名单：留 v0.7.0，必须仍被 unhandledEffects 报出且带原因（不能被悄悄标成 handled/irrelevant）
-const DEFERRED: Record<string, string[]> = {
+const HISTORICAL_DEFERRED: Record<string, string[]> = {
   资源总量与狩猎: ['Jurchens'],
   其他: ['Chinese', 'Romans'],
 };
+// #197：当前女真已有完整来源与明确模型边界，历史白名单原件保留。
+const CURRENT_DEFERRED: Record<string, string[]> = Object.fromEntries(Object.entries(HISTORICAL_DEFERRED).map(([group, civs]) => [group, civs.filter((civ) => civ !== 'Jurchens')]));
 describe('#42 白名单（v0.7.0）：仍置灰且写明原因', () => {
-  for (const [g, civs] of Object.entries(DEFERRED))
+  for (const [g, civs] of Object.entries(CURRENT_DEFERRED))
     it.each(civs)(`${g}：%s simSupport=false 且有原因`, (civ) => {
       const r = sim.simSupport(E, civ, buildOrders);
       expect(r.supported).toBe(false);
       expect(r.reasons.length).toBeGreaterThan(0);
     });
   it('放开清单里的文明（不在白名单的）simSupport=true', () => {
-    for (const c of ['Persians', 'Aztecs', 'Tupi', 'Ethiopians', 'Dravidians', 'Malay', 'Italians', 'Muisca', 'Burgundians', 'Vietnamese', 'Cumans', 'Danes', 'Malians', 'Varangians', 'Tatars', 'Slavs'])
+    for (const c of ['Persians', 'Aztecs', 'Tupi', 'Ethiopians', 'Dravidians', 'Malay', 'Italians', 'Muisca', 'Burgundians', 'Vietnamese', 'Cumans', 'Danes', 'Malians', 'Varangians', 'Tatars', 'Slavs', 'Jurchens'])
       expect(sim.simSupport(E, c, buildOrders).reasons, c).toEqual([]);
   });
   it('未知效果要报错：unhandledEffects 检查保留（#42 正文回归）', () => {

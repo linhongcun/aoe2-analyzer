@@ -469,6 +469,9 @@
                 },
                 "khmerTech": {
                   "$ref": "#/$defs/khmerTech"
+                },
+                "jurchenTech": {
+                  "$ref": "#/$defs/khmerTech"
                 }
               },
               "required": ["source", "tech", "name", "age", "requires", "effects"],

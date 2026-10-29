@@ -264,7 +264,9 @@
       "base": "8600df8530770499a08c39fece5ded228241c532",
       "head": "5fbc588bd80f0485fd7b9326d0d52f017ca09340",
       "scope": "full",
-      "features": ["all"],
+      "features": [
+        "all"
+      ],
       "unit": [],
       "e2e": [],
       "data": false,
@@ -279,5 +281,22 @@
     "/tmp/issue459-errorfix-artifacts",
     "/tmp/issue459-regression-artifacts",
     "/tmp/issue459-independent-ui"
-  ]
+  ],
+  "postMainSync": {
+    "baseline": "c3ef66e3b2eb6d24eb2d557977b2c13d46650c50",
+    "version": "0.63.0",
+    "baselineIncludes": "PR #498 Jurchens opening support; all its source/data/domain/test changes are retained as baseline",
+    "productionSourceSameAs": "5fbc588bd80f0485fd7b9326d0d52f017ca09340",
+    "productionFileHashesVerified": true,
+    "originalEvidenceIdentityPreserved": true,
+    "newCandidateChecks": "Recorded separately after actual execution; earlier 0.62.0 checks are not relabelled as new-baseline execution",
+    "requestInterceptionReadiness": {
+      "path": "tests/e2e/matchupAvailability469.spec.ts",
+      "actualFailureRun": 40836913563,
+      "actualFailure": "Loading DOM was visible before the route callback set intercepted; synchronous assertion failed",
+      "correction": "Await a promise resolved by the actual trees route callback before the original intercepted assertion",
+      "preserved": "All original assertions, request gate, no-link and pressure checks, restoration, timeout/retry policies unchanged"
+    },
+    "publicationGate": "Full/data=false validation and final independent review on this candidate; do not merge/publish #499 before #498 actual Pages and formal Release"
+  }
 }

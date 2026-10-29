@@ -34,6 +34,8 @@ import { slavicContext, slavicRowClass, SLAVIC_SOURCE_REASON, type SlavicRawTree
 
 import { khmerContext, khmerRowClass, khmerHasMarker, KHMER_SOURCE_REASON, type KhmerRawTech, type KhmerRawTree, type KhmerRawTeam } from './khmerEconomy';
 
+import { jurchenContext, jurchenRowClass, hasJurchenMarker, JURCHEN_SOURCE_REASON, type JurchenRawTech } from './jurchenEconomy';
+
 // ───────── 文明加成覆盖（#42）：每条效果必须是 已处理 / 不影响开局（带原因）/ 影响开局但未实现 之一 ─────────
 
 type Effect = EffectRow['effects'][number];
@@ -198,11 +200,14 @@ export function classifyCivEffect(
     slavicTree?: SlavicRawTree;
     slavicTech?: SlavicRawTech;
     khmerTech?: KhmerRawTech;
+    jurchenTech?: JurchenRawTech;
     khmerTree?: KhmerRawTree;
     khmerTeam?: KhmerRawTeam;
   },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
+  const jurchen = jurchenRowClass(row as EffectRow, scope.civ, scope.jurchens);
+  if (jurchen) return jurchen;
   const khmer = khmerRowClass(row as EffectRow, scope.civ, scope.khmer);
   if (khmer) return khmer;
   const slavic = slavicRowClass(row as EffectRow, scope.civ, scope.slavs);
@@ -308,6 +313,8 @@ export function simSupport(
 ): { supported: boolean; reasons: string[] } {
   const u = unhandledEffects(eco, civ, bos);
   const reasons = [...new Set(u.map((x) => x.reason))];
+  if (civ === 'Jurchens') reasons.push(...jurchenContext(eco).reasons);
+  else if ((eco.civEco[civ] ?? []).some(hasJurchenMarker)) reasons.push(JURCHEN_SOURCE_REASON);
   if (civ === 'Khmer') reasons.push(...khmerContext(eco).reasons);
   else if ((eco.civEco[civ] ?? []).some((row) => khmerHasMarker(row) || [638, 654, 657, 672].includes(row.tech ?? -1))) reasons.push(KHMER_SOURCE_REASON);
   if (civ === 'Slavs') reasons.push(...slavicContext(eco).reasons);
