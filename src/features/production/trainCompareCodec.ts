@@ -27,7 +27,7 @@ export function decodeTrainCompare(search: string): { config: TrainCompareConfig
     errors.push('对照链接编码损坏。');
   }
   const required = ['mode', 'v', 'unit', 'age', 'n'];
-  for (const key of params.keys()) if (![...required, 'civs'].includes(key)) errors.push(`对照链接含未知参数 ${key}。`);
+  for (const key of params.keys()) if (![...required, 'civs'].includes(key)) errors.push('对照链接含未知参数，请核对下方原始对照参数。');
   for (const key of required) if (params.getAll(key).length !== 1) errors.push(`对照参数 ${key} 缺失或重复。`);
   if (params.getAll('civs').length > 1) errors.push('对照参数 civs 重复。');
   if (params.get('mode') !== 'train-compare') errors.push('对照模式不支持。');

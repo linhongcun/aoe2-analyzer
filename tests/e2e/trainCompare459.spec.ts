@@ -239,6 +239,22 @@ async function nowrap(page: Page) {
 
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['light', 'dark']) {
+    test(`#459 long unknown parameter ${width} ${theme}: bounded diagnostic preserves the complete raw query`, async ({ page }, info) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
+      for (const key of ['x'.repeat(200), '9'.repeat(200)]) {
+        const raw = comparison + '&' + key + '=1';
+        await page.goto('./#' + raw);
+        await expect(page.getByRole('alert')).toContainText('未知参数');
+        await expect(rows(page)).toHaveCount(0);
+        await expect(copy(page)).toBeDisabled();
+        expect(new URL(page.url()).hash).toBe('#' + raw);
+        await expect(page.getByRole('textbox', { name: '原始对照参数', exact: true })).toHaveValue(raw.slice(raw.indexOf('?')));
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      }
+      await page.screenshot({ path: info.outputPath(`train459-long-unknown-${width}-${theme}.png`), fullPage: true });
+    });
+
     test(`#459 comparison ${width} ${theme}: complete table, empty, unavailable and bad-link states`, async ({ page }, info) => {
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
