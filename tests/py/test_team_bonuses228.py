@@ -25,7 +25,10 @@ class TeamBonuses228Tests(unittest.TestCase):
         cls.techs = json.loads((ROOT / 'src/data/techs.json').read_text())
 
     def test_pinned_metadata_and_every_catalogue_civilization(self):
-        self.assertEqual(self.export['meta']['patch'], 185872)
+        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text())
+        self.assertEqual(self.export['meta']['patch'], pins['patch']['build'])
+        self.assertEqual(self.export['meta']['dat']['commit'], pins['sources']['dat']['commit'])
+        self.assertEqual(self.export['meta']['dat']['sha256'], pins['sources']['dat']['sha256'])
         self.assertFalse(self.export['meta']['engineVerifiedInPinnedBuild'])
         self.assertEqual(set(self.permanent), {c['en'] for c in self.civs})
         self.assertEqual(len(self.permanent), 56)

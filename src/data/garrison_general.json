@@ -14243,13 +14243,13 @@
     2590
   ],
   "meta": {
-    "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+    "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
     "engineVerifiedInPinnedBuild": false,
     "generatedBy": "scripts/garrison_general_build.py",
-    "labelsCommit": "3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f",
-    "patch": "DE Update 185872 (2026-09-23)",
+    "labelsCommit": "e56728e76b7d08301fba7b18d5f16bc8554c109a",
+    "patch": "DE Update 188329 (2026-10-28)",
     "repo": "SiegeEngineers/auto-mods",
-    "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa"
+    "sha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f"
   },
   "relicIds": [
     285

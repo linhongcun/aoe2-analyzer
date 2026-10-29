@@ -1,6 +1,6 @@
 # 经济/开局数据导出与对账
 
-由 `scripts/eco_build.py` 从 SiegeEngineers/auto-mods@0c38027 dat/empires2_x2_p1.dat（DE Update 185872 (2026-09-23)）生成 `src/data/eco.json`。
+由 `scripts/eco_build.py` 从 SiegeEngineers/auto-mods@e293dc1 dat/empires2_x2_p1.dat（DE Update 188329 (2026-10-28)）生成 `src/data/eco.json`。
 
 ## 村民（.dat 原始值）
 

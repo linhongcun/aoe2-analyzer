@@ -6,7 +6,30 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent.parent / 'scripts'))
 from data_diff import detect_patch, load_dir, summarize  # noqa: E402
 from dat_source import check_markers, markers_of  # noqa: E402
-from data_update import beijing_date, beijing_today  # noqa: E402
+from data_update import beijing_date, beijing_today, frozen, parse_args  # noqa: E402
+from unittest.mock import patch
+
+
+class FrozenSources(unittest.TestCase):
+    def test_requires_complete_reviewed_source_set(self):
+        with self.assertRaises(SystemExit):
+            parse_args(['--source-ref', 'dat=' + 'a' * 40])
+        args = parse_args(sum((['--source-ref', name + '=' + 'a' * 40] for name in ('dat', 'aoe2techtree', 'halfon')), []))
+        self.assertEqual(set(args.source_refs), {'dat', 'aoe2techtree', 'halfon'})
+
+    def test_rejects_branches_short_refs_and_duplicates(self):
+        for values in (['dat=main'], ['dat=abcdef0'], ['dat=' + 'a' * 40, 'dat=' + 'a' * 40]):
+            with self.assertRaises(SystemExit):
+                parse_args(sum((['--source-ref', value] for value in values), []))
+
+    def test_exact_ref_metadata_and_response_identity(self):
+        value = {'sha': 'a' * 40, 'commit': {'committer': {'date': '2026-10-27T19:58:16Z'}, 'message': 'Update dat for game update 188329\n\nOfficial URL'}}
+        with patch('data_update.gh', return_value=value) as gh:
+            actual = frozen('SiegeEngineers/auto-mods', 'a' * 40)
+        gh.assert_called_once_with('repos/SiegeEngineers/auto-mods/commits/' + 'a' * 40)
+        self.assertEqual(actual, {'commit': 'a' * 40, 'date': '2026-10-28', 'message': 'Update dat for game update 188329'})
+        with patch('data_update.gh', return_value=value), self.assertRaises(SystemExit):
+            frozen('SiegeEngineers/auto-mods', 'b' * 40)
 
 
 

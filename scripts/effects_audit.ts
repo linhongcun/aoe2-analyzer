@@ -8,6 +8,7 @@ import bldRaw from '../src/data/buildings.json';
 import civsRaw from '../src/data/civs.json';
 import techsRaw from '../src/data/techs.json';
 import treesRaw from '../src/data/trees.json';
+import pins from './data_sources.json';
 import { MANUAL_BUILDING_CIV_BONUSES, MANUAL_BUILDING_EFFECTS } from '../src/domain/buildingEffects.manual';
 import { MANUAL_CIV_BONUSES, MANUAL_TECH_EFFECTS, MANUAL_TEAM_BONUSES } from '../src/domain/effects.manual';
 import { DAT, toEffects, type DatEntry, type DatRule } from '../src/domain/datEffects';
@@ -61,10 +62,13 @@ const datRuleFx = (rules: DatRule[], x: Obj) => rules.filter((r) => r.t.includes
 const out: string[] = [];
 const P = (s = '') => out.push(s);
 const mm = { tech: 0, civ: 0, team: 0 };
+const currentBuild = pins.patch.build;
+const datPin = pins.sources.dat;
+const previousPath = 'scripts/.cache/prev-data/effects.json';
 
 // ---------------- 头部 ----------------
 const cov = bonusCoverage();
-P('# 效果审计：DE 185872 原版 .dat 效果 vs 上一版数据源 vs 历史手工规则');
+P(`# 效果审计：DE ${currentBuild} 原版 .dat 效果 vs 上一版数据源 vs 历史手工规则`);
 P();
 P('> 本文件由 `scripts/effects_audit.ts` 生成（`npx vite-node scripts/effects_audit.ts`），请勿手改。');
 P();
@@ -75,18 +79,22 @@ P('|---|---|---|---|---|');
 DAT.meta.sources.forEach((s) => P(`| ${s.id} | ${s.repo}@${s.commit} | \`${s.file}\` | ${s.patch} | ${s.use} |`));
 P();
 P(
-  `- 唯一数值来源：DE 原版 \`empires2_x2_p1.dat\`（SiegeEngineers/auto-mods@0c38027，DE Update 185872），构建时下载并校验 sha256 与补丁标记（\`python3 scripts/dat_source.py --check\`），用 genieutils-py 解析。.dat © Microsoft，不提交、不随站点发布。`,
+  `- 唯一数值来源：DE 原版 \`empires2_x2_p1.dat\`（${datPin.repo}@${datPin.commit.slice(0, 7)}，DE Update ${currentBuild}），构建时下载并校验 sha256 与补丁标记（\`python3 scripts/dat_source.py --check\`），用 genieutils-py 解析。.dat © Microsoft，不提交、不随站点发布。`,
 );
 P(`- 已移除：HSZemi/aoe2dat（DE 147949，2025-06）与 PeterWhite 快照（仅经济命令）的组合，以及「.dat 过时 → 回退手工表」的新鲜度回退。`);
 P(`- **文本一致性检查**（仅提示，不再回退）：把每条加成的 .dat 累计数值与游戏说明文字（civs.json）里的数字比对；不一致时以 .dat 为准，并在加成页标注。`);
 P(`- .dat 中缺失的站内单位/建筑：${NEW_IDS.size} 个。`);
 P();
-P('## 零、旧组合源（HSZemi 2025-06 + PeterWhite + 手工回退）→ 新 .dat（185872）的数值变化');
+P(`## 零、更新前快照 → 当前 .dat（${currentBuild}）的数值变化`);
 P();
 P('逐科技 / 逐加成、逐单位（帝王时代、仅该条效果）比较最终增量；只列有变化的条目。');
 P();
-{
-  const prev = JSON.parse(readFileSync('scripts/.cache/effects.prev.json', 'utf8')) as typeof DAT;
+if (existsSync(previousPath)) {
+  const prev = JSON.parse(readFileSync(previousPath, 'utf8')) as typeof DAT;
+  P(
+    `更新前快照来源：${prev.meta.sources.map((source) => `${source.repo}@${source.commit}（${source.patch}）`).join('；')}。快照仅用于本次更新差分，不作为当前游戏参数来源。`,
+  );
+  P();
   const rulesFx = (rules: DatRule[] | undefined, o: Obj, b: boolean) =>
     (rules ?? []).filter((r) => !!r.b === b && r.t.includes(o.id)).flatMap((r) => toEffects(r.fx));
   const cmp = (title: string, oldR: DatRule[] | undefined, newR: DatRule[] | undefined, civ?: string) => {
@@ -110,7 +118,7 @@ P();
   P();
   Object.keys(DAT.techs).forEach((en) => {
     const o = prev.techs[en];
-    nt += cmp(`${en}${o && !o.combat ? '（旧：无战斗数据，用手工规则）' : ''}`, o?.combat ? o.rules : [], DAT.techs[en]!.rules);
+    nt += cmp(en, o?.rules, DAT.techs[en]!.rules);
   });
   P();
   P('### 文明加成与团队加成');
@@ -120,21 +128,15 @@ P();
       o = prev.civs[c.en];
     const idxs = new Set([...d.bonus.map((e) => e.idx), ...(o?.bonus ?? []).map((e) => e.idx)].filter((x): x is number => x !== null));
     [...idxs].sort().forEach((i) => {
-      const pick = (es: DatEntry[] | undefined, fr: Record<string, { ok: boolean | null }> | undefined) =>
-        fr?.[String(i)]?.ok === false ? [] : (es ?? []).filter((e) => e.idx === i && !e.req.length && e.combat).flatMap((e) => e.rules);
-      nb += cmp(
-        `${c.zh}（${c.en}）#${i}：${c.bon[i]}${o?.fresh[String(i)]?.ok === false ? '（旧：判定过时，用手工规则/文本）' : !o?.dat ? '（旧：源 A 无该文明）' : ''}`,
-        pick(o?.bonus, o?.fresh),
-        pick(d.bonus, undefined),
-        c.en,
-      );
+      const pick = (es: DatEntry[] | undefined) => (es ?? []).filter((e) => e.idx === i && !e.req.length && e.combat).flatMap((e) => e.rules);
+      nb += cmp(`${c.zh}（${c.en}）#${i}：${c.bon[i]}${!o ? '（更新前无该文明）' : ''}`, pick(o?.bonus), pick(d.bonus), c.en);
     });
-    nb += cmp(`${c.zh}（${c.en}）团队：${c.tb}`, o?.fresh.team?.ok === false || !o?.dat ? [] : o?.team.rules, d.team.rules);
+    nb += cmp(`${c.zh}（${c.en}）团队：${c.tb}`, o?.team.rules, d.team.rules);
   });
   P();
-  P(`小计：科技 ${nt} 个、加成 ${nb} 条有数值变化（旧侧不含手工回退，手工规则 vs 新 .dat 见第一~三节）。`);
+  P(`小计：科技 ${nt} 个、加成 ${nb} 条有数值变化（前后均比较固定 .dat 规则，不按文本一致性提示丢弃旧规则；历史手工规则 vs 当前 .dat 见第一~三节）。`);
   P();
-}
+} else P('（未取得更新前快照；不声称已完成前后版本差分。请由 data_update.py 保留更新前数据。）');
 P('## 覆盖率');
 P();
 const manualCount = Object.values(MANUAL_CIV_BONUSES).flat().length,
@@ -142,7 +144,7 @@ const manualCount = Object.values(MANUAL_CIV_BONUSES).flat().length,
     ...Object.entries(MANUAL_CIV_BONUSES).flatMap(([c, l]) => l.map((x) => c + x[3])),
     ...Object.entries(MANUAL_BUILDING_CIV_BONUSES).flatMap(([c, l]) => l.map((x) => c + x[3])),
   ]).size;
-P(`| | 最初（手工） | 上一版（HSZemi+PeterWhite+回退） | 现在（185872 .dat） |`);
+P(`| | 最初（手工） | 历史组合源（HSZemi+PeterWhite+回退） | 现在（${currentBuild} .dat） |`);
 P(`|---|---|---|---|`);
 P(`| 加成条目总数（文明加成 + 团队加成） | ${cov.total} | 281 | ${cov.total} |`);
 P(
@@ -348,7 +350,7 @@ if (existsSync(lhcPath)) {
     if (bad.length) rows.push(`| ${t.en} | ${bad.map((k) => `${k}: lhc ${lv[k]} / .dat ${dv[k] ?? '—'}`).join('；')} |`);
     else ok++;
   });
-  P(`可比科技 ${n} 个，一致 ${ok} 个；不一致（lhc 的「代表值」取自 2026-08 本机 .dat，本站为 185872 .dat）：`);
+  P(`可比科技 ${n} 个，一致 ${ok} 个；不一致（lhc 的「代表值」取自 2026-08 本机 .dat，本站为 ${currentBuild} .dat）：`);
   P();
   P('| 科技 | 差异 |');
   P('|---|---|');
