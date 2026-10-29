@@ -215,13 +215,19 @@ test('#469 pending data keeps selectable pressure but exposes no verified drill 
     release = resolve;
   });
   let intercepted = false;
+  let markIntercepted!: () => void;
+  const requestIntercepted = new Promise<void>((resolve) => {
+    markIntercepted = resolve;
+  });
   await page.route('**/assets/trees-*.js', async (route) => {
     intercepted = true;
+    markIntercepted();
     await gate;
     await route.continue();
   });
   await page.goto('./#/matchup?rush=scouts');
   await expect(rush(page)).toContainText('正在核对双方文明的单位和科技');
+  await requestIntercepted;
   expect(intercepted).toBe(true);
   await expect(duel(page)).toHaveCount(0);
   await expect(build(page)).toHaveCount(0);

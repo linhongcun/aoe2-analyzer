@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civs } from '../../data';
-import { useCore, useTrees } from '../../data/hooks';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { CostView } from '../../shared/ui/art';
@@ -25,17 +24,63 @@ import {
   type ProductionRow,
 } from '../../domain/production';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { productionMode } from './productionMode';
+import { decodeTrainCompare, TRAIN_COMPARE_ENTRY } from './trainCompareCodec';
+import { ProductionCompareError } from './ProductionCompareError';
+import { ProductionTrainCompare } from './ProductionTrainCompare';
+import { useProductionContext } from './useProductionContext';
 import './production.css';
+import './trainCompare.css';
 
 const num = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2, minimumFractionDigits: 0 });
 export default function Production() {
-  const core = useCore(),
-    trees = useTrees(),
-    location = useLocation(),
+  const location = useLocation();
+  const mode = useMemo(() => productionMode(location.search), [location.search]);
+  const decoded = useMemo(() => (mode.kind === 'compare' ? decodeTrainCompare(location.search) : null), [mode, location.search]);
+  const { context, error } = useProductionContext();
+  const errors = mode.kind === 'error' ? mode.errors : (decoded?.errors ?? []);
+  return (
+    <>
+      <nav className="production-mode-nav" aria-label="生产模式">
+        <Link className="btn" to="/production" aria-current={mode.kind === 'legacy' ? 'page' : undefined}>
+          持续生产
+        </Link>
+        <Link className="btn" to={TRAIN_COMPARE_ENTRY} aria-current={mode.kind !== 'legacy' ? 'page' : undefined}>
+          跨文明训练对照
+        </Link>
+      </nav>
+      {errors.length ? (
+        <ProductionCompareError key={location.search} errors={errors} />
+      ) : error ? (
+        <section className="pane train-compare-page">
+          <h1>{mode.kind === 'legacy' ? '持续生产' : '跨文明训练对照'}</h1>
+          <p role="alert">生产资料加载失败，请刷新页面重试。</p>
+          <button className="btn" type="button" onClick={() => window.location.reload()}>
+            刷新重试
+          </button>
+        </section>
+      ) : !context ? (
+        <section className="pane train-compare-page">
+          <h1>{mode.kind === 'legacy' ? '持续生产' : '跨文明训练对照'}</h1>
+          <Loading />
+          <p className="note" role="status">
+            正在加载文明、单位与生产资料。
+          </p>
+        </section>
+      ) : mode.kind === 'legacy' ? (
+        <LegacyProduction context={context} />
+      ) : (
+        <ProductionTrainCompare context={context} config={decoded!.config!} />
+      )}
+    </>
+  );
+}
+
+function LegacyProduction({ context }: { context: ProductionContext }) {
+  const location = useLocation(),
     navigate = useNavigate();
   const decoded = useMemo(() => decodeProduction(location.search), [location.search]);
   const config = decoded.config;
-  const context = useMemo(() => (core && trees ? { core, trees } : null), [core, trees]);
   const {
     copy,
     status: shareStatus,
@@ -47,12 +92,6 @@ export default function Production() {
     successMessage: '链接已复制，包含当前全部设置。',
     failureMessage: '自动复制失败，请手动复制下方链接。',
   });
-  if (!context)
-    return (
-      <section className="pane">
-        <Loading />
-      </section>
-    );
   const update = (next: ProductionConfig) => {
     navigate({ pathname: '/production', search: '?' + encodeProduction(next) }, { replace: true });
     resetShare();
