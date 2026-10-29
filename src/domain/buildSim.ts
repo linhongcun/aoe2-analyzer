@@ -44,6 +44,7 @@ import { type SlavicFarm, type SlavicRawTree, type SlavicRawTech } from './slavi
 import { type KhmerFarm, type KhmerPrerequisites, type KhmerRawTech, type KhmerRawTree, type KhmerRawTeam } from './khmerEconomy';
 
 import type { JurchenRawTech } from './jurchenEconomy';
+import type { ChineseRawTech } from './chineseEconomy';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -61,6 +62,7 @@ export interface EffectRow {
   slavicTech?: SlavicRawTech;
   khmerTech?: KhmerRawTech;
   jurchenTech?: JurchenRawTech;
+  chineseTech?: ChineseRawTech;
   khmerTree?: KhmerRawTree;
   khmerTeam?: KhmerRawTeam;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];
@@ -397,9 +399,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     born++;
     return t ?? null;
   };
-  const startVils = START_VILS[civ] ?? 3;
+  const startVils = mechanism.startingVillagers?.(scope) ?? START_VILS[civ] ?? 3;
   for (let i = 0; i < startVils; i++) assign();
-  let popCap = Math.min(200, 5 + m.popBonus);
+  const tcPopulation = mechanism.townCenterPopulation?.(scope) ?? 5;
+  let popCap = Math.min(200, tcPopulation + m.popBonus);
   let fishingShips = 0;
   let military = 1; // 侦察骑兵
   const built = new Map<number, number>([[TC, 1]]); // building id → 数量
@@ -461,7 +464,13 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     if (kind === 'tech') {
       if (frankMillFree && freeIds.has(id)) return { food: 0, wood: 0, gold: 0, stone: 0 };
       const tm = m.techCost[id] ?? {};
-      for (const r of Object.keys(out) as Res[]) out[r] = Math.max(0, Math.round(applyMod(applyMod(out[r] * m.techCostAll, tm.all), tm[r])));
+      for (const r of Object.keys(out) as Res[])
+        out[r] = Math.max(0, Math.round(applyMod(applyMod(out[r] * (civ === 'Chinese' && [101, 102, 103].includes(id) ? 1 : m.techCostAll), tm.all), tm[r])));
+      return out;
+    }
+    // Chinese ordinary technologies include unit upgrades; advancing Age is excluded above.
+    if (civ === 'Chinese' && kind === 'up') {
+      for (const r of Object.keys(out) as Res[]) out[r] = Math.max(0, Math.round(out[r] * m.techCostAll));
       return out;
     }
     const add = kind !== 'up' ? m.costAdd['unit:' + id] : undefined;
@@ -823,7 +832,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         built.set(c.building, (built.get(c.building) ?? 0) + 1);
         if (!c.auto) buildingsDone.push({ building: c.building, at: r1(t) });
         if (c.building === HOUSE) popCap = Math.min(200, popCap + 5);
-        if (c.building === TC) popCap = Math.min(200, popCap + 5);
+        if (c.building === TC) popCap = Math.min(200, popCap + tcPopulation);
         if (c.p && !constructions.some((x) => x.p === c.p)) finish(c.p, t);
       } else if (c.p) {
         if (c.building > -100000 && c.p.a.type === 'research') completeResearch(c.p, t);

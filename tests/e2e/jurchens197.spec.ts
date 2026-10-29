@@ -88,7 +88,7 @@ for (const width of [360, 375, 390, 1280])
       } else await page.locator('#tlciv').click();
       const picker = page.getByRole('dialog', { name: '文明', exact: true });
       await expect(picker.locator('[data-civ="Jurchens"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await expect(picker.locator('[data-civ="Chinese"]')).toHaveAttribute('aria-disabled', 'true');
+      await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       if (mobile && (await settings.isVisible())) await settings.getByRole('button', { name: '完成', exact: true }).click();
       if ((width === 360 && theme === 'light') || (width === 1280 && theme === 'dark'))
@@ -126,9 +126,9 @@ test('#197 女真七套合法模板的统一边界、两加成未计入说明和
     await expect(usage).toContainText(idx === 0 ? '腐烂' : '当前8套开局');
     await overflow(page);
   }
-  await page.goto('./#/builds?bo=scouts-18&civ=Chinese');
+  await page.goto('./#/builds?bo=scouts-18&civ=Poles');
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的中国加成尚未计入，已按通用计算');
+  await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的波兰加成尚未计入，已按通用计算');
   await expect(page.locator('[data-t="civ-note"]')).toHaveCount(0);
   await expect(page.locator('[data-t="share-card-btn"]:visible').first()).toHaveAttribute('aria-disabled', 'true');
   await overflow(page);

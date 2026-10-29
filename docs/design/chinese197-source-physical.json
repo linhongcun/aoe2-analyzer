@@ -1,0 +1,743 @@
+{
+  "civ": {
+    "id": 6,
+    "name": "Chinese",
+    "teamId": 402,
+    "treeId": 257
+  },
+  "engineVerifiedInPinnedBuild": false,
+  "generator": "scripts/chinese_source197.py",
+  "researchTypes": [
+    {
+      "raw": {
+        "civ": -1,
+        "effect_id": 101,
+        "full_tech_mode": 0,
+        "icon_id": 30,
+        "language_dll_description": 8101,
+        "language_dll_help": 107101,
+        "language_dll_name": 7101,
+        "language_dll_tech_tree": 157101,
+        "name": "Middle Age",
+        "repeatable": 0,
+        "required_tech_count": 2,
+        "required_techs": [
+          104,
+          659,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "research_locations": [
+          {
+            "button_id": 11,
+            "hot_key_id": 18101,
+            "location_id": 109,
+            "research_time": 130
+          }
+        ],
+        "resource_costs": [
+          {
+            "amount": 500,
+            "flag": 1,
+            "type": 0
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 2
+      },
+      "tech": 101
+    },
+    {
+      "raw": {
+        "civ": -1,
+        "effect_id": 102,
+        "full_tech_mode": 0,
+        "icon_id": 31,
+        "language_dll_description": 8102,
+        "language_dll_help": 107102,
+        "language_dll_name": 7102,
+        "language_dll_tech_tree": 157102,
+        "name": "Feudal Age",
+        "repeatable": 0,
+        "required_tech_count": 2,
+        "required_techs": [
+          101,
+          660,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "research_locations": [
+          {
+            "button_id": 11,
+            "hot_key_id": 18102,
+            "location_id": 109,
+            "research_time": 160
+          }
+        ],
+        "resource_costs": [
+          {
+            "amount": 800,
+            "flag": 1,
+            "type": 0
+          },
+          {
+            "amount": 200,
+            "flag": 1,
+            "type": 3
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 2
+      },
+      "tech": 102
+    },
+    {
+      "raw": {
+        "civ": -1,
+        "effect_id": 103,
+        "full_tech_mode": 0,
+        "icon_id": 32,
+        "language_dll_description": 8103,
+        "language_dll_help": 107103,
+        "language_dll_name": 7103,
+        "language_dll_tech_tree": 157103,
+        "name": "Imperial Age",
+        "repeatable": 0,
+        "required_tech_count": 2,
+        "required_techs": [
+          102,
+          661,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "research_locations": [
+          {
+            "button_id": 11,
+            "hot_key_id": 18103,
+            "location_id": 109,
+            "research_time": 190
+          }
+        ],
+        "resource_costs": [
+          {
+            "amount": 1000,
+            "flag": 1,
+            "type": 0
+          },
+          {
+            "amount": 800,
+            "flag": 1,
+            "type": 3
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 2
+      },
+      "tech": 103
+    },
+    {
+      "raw": {
+        "civ": -1,
+        "effect_id": 14,
+        "full_tech_mode": 0,
+        "icon_id": 2,
+        "language_dll_description": 8014,
+        "language_dll_help": 107014,
+        "language_dll_name": 7014,
+        "language_dll_tech_tree": 157014,
+        "name": "Horse collar",
+        "repeatable": 1,
+        "required_tech_count": 1,
+        "required_techs": [
+          101,
+          758,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "research_locations": [
+          {
+            "button_id": 1,
+            "hot_key_id": 18014,
+            "location_id": 68,
+            "research_time": 20
+          },
+          {
+            "button_id": 11,
+            "hot_key_id": 18184,
+            "location_id": 2556,
+            "research_time": 20
+          }
+        ],
+        "resource_costs": [
+          {
+            "amount": 75,
+            "flag": 1,
+            "type": 0
+          },
+          {
+            "amount": 75,
+            "flag": 1,
+            "type": 1
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 0
+      },
+      "tech": 14
+    },
+    {
+      "raw": {
+        "civ": -1,
+        "effect_id": 22,
+        "full_tech_mode": 0,
+        "icon_id": 6,
+        "language_dll_description": 8022,
+        "language_dll_help": 107022,
+        "language_dll_name": 7022,
+        "language_dll_tech_tree": 157022,
+        "name": "Loom",
+        "repeatable": 1,
+        "required_tech_count": 1,
+        "required_techs": [
+          104,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "research_locations": [
+          {
+            "button_id": 6,
+            "hot_key_id": 18022,
+            "location_id": 109,
+            "research_time": 25
+          }
+        ],
+        "resource_costs": [
+          {
+            "amount": 50,
+            "flag": 1,
+            "type": 3
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 0
+      },
+      "tech": 22
+    },
+    {
+      "raw": {
+        "civ": -1,
+        "effect_id": 192,
+        "full_tech_mode": 0,
+        "icon_id": 34,
+        "language_dll_description": 8172,
+        "language_dll_help": 107172,
+        "language_dll_name": 7172,
+        "language_dll_tech_tree": 157172,
+        "name": "Fletching",
+        "repeatable": 1,
+        "required_tech_count": 1,
+        "required_techs": [
+          101,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "research_locations": [
+          {
+            "button_id": 6,
+            "hot_key_id": 18172,
+            "location_id": 103,
+            "research_time": 30
+          }
+        ],
+        "resource_costs": [
+          {
+            "amount": 100,
+            "flag": 1,
+            "type": 0
+          },
+          {
+            "amount": 50,
+            "flag": 1,
+            "type": 3
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 0
+      },
+      "tech": 199
+    },
+    {
+      "raw": {
+        "civ": -1,
+        "effect_id": 195,
+        "full_tech_mode": 0,
+        "icon_id": 70,
+        "language_dll_description": 8189,
+        "language_dll_help": 107189,
+        "language_dll_name": 7189,
+        "language_dll_tech_tree": 157189,
+        "name": "Double Bit Axe",
+        "repeatable": 1,
+        "required_tech_count": 1,
+        "required_techs": [
+          101,
+          758,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "research_locations": [
+          {
+            "button_id": 1,
+            "hot_key_id": 18189,
+            "location_id": 562,
+            "research_time": 25
+          },
+          {
+            "button_id": 1,
+            "hot_key_id": 18190,
+            "location_id": 1808,
+            "research_time": 25
+          },
+          {
+            "button_id": 12,
+            "hot_key_id": 18191,
+            "location_id": 2556,
+            "research_time": 25
+          }
+        ],
+        "resource_costs": [
+          {
+            "amount": 100,
+            "flag": 1,
+            "type": 0
+          },
+          {
+            "amount": 50,
+            "flag": 1,
+            "type": 1
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 0
+      },
+      "tech": 202
+    },
+    {
+      "raw": {
+        "civ": -1,
+        "effect_id": 196,
+        "full_tech_mode": 0,
+        "icon_id": 71,
+        "language_dll_description": 8190,
+        "language_dll_help": 107190,
+        "language_dll_name": 7190,
+        "language_dll_tech_tree": 157190,
+        "name": "Bow Saw",
+        "repeatable": 1,
+        "required_tech_count": 2,
+        "required_techs": [
+          102,
+          202,
+          762,
+          -1,
+          -1,
+          -1
+        ],
+        "research_locations": [
+          {
+            "button_id": 1,
+            "hot_key_id": 18189,
+            "location_id": 562,
+            "research_time": 50
+          },
+          {
+            "button_id": 1,
+            "hot_key_id": 18190,
+            "location_id": 1808,
+            "research_time": 50
+          },
+          {
+            "button_id": 12,
+            "hot_key_id": 18191,
+            "location_id": 2556,
+            "research_time": 50
+          }
+        ],
+        "resource_costs": [
+          {
+            "amount": 150,
+            "flag": 1,
+            "type": 0
+          },
+          {
+            "amount": 100,
+            "flag": 1,
+            "type": 1
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 0
+      },
+      "tech": 203
+    },
+    {
+      "raw": {
+        "civ": -1,
+        "effect_id": 420,
+        "full_tech_mode": -3,
+        "icon_id": 19,
+        "language_dll_description": 8408,
+        "language_dll_help": 107408,
+        "language_dll_name": 7408,
+        "language_dll_tech_tree": 157408,
+        "name": "Spy Technology",
+        "repeatable": 0,
+        "required_tech_count": 1,
+        "required_techs": [
+          103,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "research_locations": [
+          {
+            "button_id": 14,
+            "hot_key_id": 18408,
+            "location_id": 82,
+            "research_time": 1
+          }
+        ],
+        "resource_costs": [
+          {
+            "amount": 200,
+            "flag": 1,
+            "type": 3
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          },
+          {
+            "amount": 0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 0
+      },
+      "tech": 408
+    }
+  ],
+  "resourcesDifferentFromBase": [
+    {
+      "Chinese": 9471.0,
+      "base": 9466.0,
+      "id": 73
+    }
+  ],
+  "schema": "chinese197-physical/1",
+  "source": {
+    "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+    "path": "dat/empires2_x2_p1.dat",
+    "repo": "SiegeEngineers/auto-mods",
+    "sha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f"
+  },
+  "townCenters": {
+    "Chinese": [
+      {
+        "class": 3,
+        "name": "RTWC",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 1.0,
+            "flag": 16,
+            "type": 506
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 109
+      },
+      {
+        "class": 3,
+        "name": "RTWC2",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 1.0,
+            "flag": 16,
+            "type": 506
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 71
+      },
+      {
+        "class": 3,
+        "name": "RTWC3",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 1.0,
+            "flag": 16,
+            "type": 506
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 141
+      },
+      {
+        "class": 3,
+        "name": "RTWC4",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 1.0,
+            "flag": 16,
+            "type": 506
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 142
+      },
+      {
+        "class": 51,
+        "name": "PTWC",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 444
+      }
+    ],
+    "base": [
+      {
+        "class": 3,
+        "name": "RTWC",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 1.0,
+            "flag": 16,
+            "type": 506
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 109
+      },
+      {
+        "class": 3,
+        "name": "RTWC2",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 1.0,
+            "flag": 16,
+            "type": 506
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 71
+      },
+      {
+        "class": 3,
+        "name": "RTWC3",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 1.0,
+            "flag": 16,
+            "type": 506
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 141
+      },
+      {
+        "class": 3,
+        "name": "RTWC4",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 1.0,
+            "flag": 16,
+            "type": 506
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 142
+      },
+      {
+        "class": 51,
+        "name": "PTWC",
+        "resourceStorages": [
+          {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          },
+          {
+            "amount": 0.0,
+            "flag": 0,
+            "type": -1
+          }
+        ],
+        "type": 80,
+        "unit": 444
+      }
+    ]
+  },
+  "version": "VER 8.9"
+}

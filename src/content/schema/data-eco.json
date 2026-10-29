@@ -472,6 +472,9 @@
                 },
                 "jurchenTech": {
                   "$ref": "#/$defs/khmerTech"
+                },
+                "chineseTech": {
+                  "$ref": "#/$defs/khmerTech"
                 }
               },
               "required": ["source", "tech", "name", "age", "requires", "effects"],

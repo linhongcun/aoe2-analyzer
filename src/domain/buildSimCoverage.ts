@@ -1,3 +1,4 @@
+import { chineseContext, chineseRowClass, hasChineseMarker, CHINESE_SOURCE_REASON, type ChineseRawTech } from './chineseEconomy';
 import { civMechanism, mechanismContext } from './buildSimMechanisms';
 import type { BuildOrder } from './buildOrder';
 import type { EcoData, EffectRow } from './buildSim';
@@ -201,11 +202,14 @@ export function classifyCivEffect(
     slavicTech?: SlavicRawTech;
     khmerTech?: KhmerRawTech;
     jurchenTech?: JurchenRawTech;
+    chineseTech?: ChineseRawTech;
     khmerTree?: KhmerRawTree;
     khmerTeam?: KhmerRawTeam;
   },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
+  const chinese = chineseRowClass(row as EffectRow, scope.civ, scope.chinese);
+  if (chinese) return chinese;
   const jurchen = jurchenRowClass(row as EffectRow, scope.civ, scope.jurchens);
   if (jurchen) return jurchen;
   const khmer = khmerRowClass(row as EffectRow, scope.civ, scope.khmer);
@@ -313,6 +317,8 @@ export function simSupport(
 ): { supported: boolean; reasons: string[] } {
   const u = unhandledEffects(eco, civ, bos);
   const reasons = [...new Set(u.map((x) => x.reason))];
+  if (civ === 'Chinese') reasons.push(...chineseContext(eco).reasons);
+  else if ((eco.civEco[civ] ?? []).some(hasChineseMarker)) reasons.push(CHINESE_SOURCE_REASON);
   if (civ === 'Jurchens') reasons.push(...jurchenContext(eco).reasons);
   else if ((eco.civEco[civ] ?? []).some(hasJurchenMarker)) reasons.push(JURCHEN_SOURCE_REASON);
   if (civ === 'Khmer') reasons.push(...khmerContext(eco).reasons);

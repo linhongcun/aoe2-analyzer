@@ -1,3 +1,4 @@
+import { chineseContext, CHINESE_OPENING_NOTE } from './chineseEconomy';
 /**
  * issue 317：经济/费用类文明加成（src = 'eco'）在各工具里是否真的被计入。
  * 不另立规则，只读各工具自己的判定，保证标签与计算一致：
@@ -117,9 +118,22 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
 
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
+  if (b.id === 'Chinese-2') {
+    const on = chineseContext(eco).complete && currentSimSupport(eco, b.civ, buildOrders).supported;
+    return { tool: 'sim', name, on, note: on ? `已计入人口容量；${CHINESE_OPENING_NOTE}；视野未模拟` : '中国来源不完整，暂按通用文明计算，本条未计入' };
+  }
   if (b.id === 'Jurchens-0' || b.id === 'Jurchens-3') {
     const complete = jurchenContext(eco).complete;
-    return { tool: 'sim', name, on: false, note: complete ? (b.id === 'Jurchens-0' ? `未计入：${JURCHEN_DECAY_NOTE}` : `未计入：${JURCHEN_RESEARCH_NOTE}`) : '女真来源不完整，暂按通用文明计算，本条未计入' };
+    return {
+      tool: 'sim',
+      name,
+      on: false,
+      note: complete
+        ? b.id === 'Jurchens-0'
+          ? `未计入：${JURCHEN_DECAY_NOTE}`
+          : `未计入：${JURCHEN_RESEARCH_NOTE}`
+        : '女真来源不完整，暂按通用文明计算，本条未计入',
+    };
   }
   if (b.id === 'Sicilians-1') return { tool: 'sim', name, on: false, note: '未计入：农田升级额外储量、耗尽和续种未模拟，也未估算节省的木材' };
   if (b.id === 'Khmer-1') {
@@ -148,7 +162,7 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
     };
   }
   const { techs, treeOnly } = bonusTechs(b);
-  const currentScope = ['Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer'].includes(b.civ)
+  const currentScope = ['Chinese', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer'].includes(b.civ)
     ? simScope(eco, buildOrders, b.civ)
     : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
@@ -225,6 +239,7 @@ export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
         note: '赠送村民未计入真实成本；单个村民的采集速度不变',
       },
     ];
+  if (b.id === 'Chinese-2') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Sicilians-4') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Mayans-1') {
     const tree = eco.civEco.Mayans?.find((row) => row.source === 'tree');

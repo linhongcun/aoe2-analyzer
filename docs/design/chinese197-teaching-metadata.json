@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "purpose": "Source metadata continuation; no teaching fact, business content, or historical audit rewrite",
+  "baseCommit": "7844d93fe646b91b0eeec9c6ff867e6c25929c62",
+  "previousEvidence": "jurchens197-teaching-metadata.json",
+  "previousProjection": "af5eeb7121d8c4126c5d16624fdd22d4cda86f228119342062af327547a026bf",
+  "currentProjection": "f7f1b308ab8933ac614afdc74ea201f1952e7d9356f6d3ce194229507f89d29d",
+  "addedMetadata": {
+    "/civEco/Chinese/tech:226/chineseTech": "3cd70f21014f96403d56f843021bb1fed216d6ac614703e37eacd91fd8c74d7b",
+    "/civEco/Chinese/tech:302/chineseTech": "9c3d624c3d5dd9a273f6afbc7e73a31ec63d0b5d71f9b361079a5eed6b67ee98",
+    "/civEco/Chinese/tech:304/chineseTech": "13286464774679a05895ebb51e8184fe4ee850bfec5be7ff9aa0c8839ea7f3cb",
+    "/civEco/Chinese/tech:350/chineseTech": "caf09c612988f1a85f25abb293269869ec536383717aded70158f12cc00e97ce",
+    "/civEco/Chinese/tech:351/chineseTech": "046dcbd8fa77fc62bf76e0f9453626349d3f02871599fd06f4a338f3dbb9d0e7",
+    "/civEco/Chinese/tech:352/chineseTech": "4d8f8583ddc0b1cb8b53f985aa8ce1395871905a4521a905f076467c5333903c",
+    "/civEco/Chinese/tech:425/chineseTech": "9517fc0cb9c2d481920e08be2500469d0b36a2888b4b1afd95a7c4082ab22d3b"
+  },
+  "addedEmptyEffectRow": {
+    "tech": 425,
+    "effects": [],
+    "rawMetadata": "9517fc0cb9c2d481920e08be2500469d0b36a2888b4b1afd95a7c4082ab22d3b"
+  },
+  "reverseProof": {
+    "exactFullEcoRestoration": true,
+    "operations": "Remove seven Chinese chineseTech fields and the new425 row with zero decoded effects",
+    "restoredProjection": "af5eeb7121d8c4126c5d16624fdd22d4cda86f228119342062af327547a026bf",
+    "other55CivRowsAndGlobalSectionsExact": true
+  },
+  "preserved": "All existing teaching content, source pins, remaining audit hashes and test expectations unchanged; previous Jurchen audit retained byte-for-byte"
+}

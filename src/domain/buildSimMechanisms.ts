@@ -12,8 +12,10 @@ import { armenianContext, armenianBuildOrder, ARMENIAN_RESEARCH_IDS, ARMENIAN_AS
 import { georgianContext, georgianBuildOrder, GEORGIAN_ASSUMPTION } from './georgianEconomy';
 import { slavicContext, slavicFarmRate, slavicHasFarmAssignment, SLAVIC_FARM_NOTE, SLAVIC_FARM_DETAIL, SLAVIC_TEAM_NOTE } from './slavicEconomy';
 import { khmerContext, khmerRowClass, khmerFarmRate, khmerBuildingReady, khmerNotes, khmerHasFarmAssignment, KHMER_FARM_DETAIL } from './khmerEconomy';
+import { chineseContext, chinesePopulation, chineseStartingVillagers, chineseRowAllowed, chineseNotes, CHINESE_MODEL_NOTE } from './chineseEconomy';
 import { jurchenContext, jurchenNotes, jurchenRowClass, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 export interface MechanismContext {
+  chinese?: ReturnType<typeof chineseContext>;
   jurchens?: ReturnType<typeof jurchenContext>;
   sicilianRows?: EffectRow[];
   sicilianBuildings?: EcoData['buildings'];
@@ -27,6 +29,8 @@ export interface MechanismContext {
 type Scope = ReturnType<typeof simScope>;
 type Assumptions = { eco: EcoData; bo: BuildOrder; params: SimParams; scope: () => Scope };
 interface CivMechanism {
+  startingVillagers?: (scope: Scope) => number;
+  townCenterPopulation?: (scope: Scope) => number;
   context?: (eco: EcoData) => Partial<MechanismContext>;
   atomicGather?: boolean;
   teamRowAllowed?: (row: EffectRow, scope: Scope, unique: boolean) => boolean;
@@ -45,9 +49,15 @@ interface CivMechanism {
 const knightNote = (bo: BuildOrder, note: string) => (bo.id === 'fast-castle-knights' ? [note] : []);
 /** Numbers are source identities, not copied gameplay multipliers: actual values still come from eco. */
 export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
+  Chinese: {
+    context: (eco) => ({ chinese: chineseContext(eco) }),
+    startingVillagers: (scope) => chineseStartingVillagers(scope.chinese),
+    townCenterPopulation: (scope) => chinesePopulation(scope.chinese),
+    assumptions: ({ eco }) => (chineseContext(eco).complete ? [...chineseNotes(eco), CHINESE_MODEL_NOTE] : []),
+  },
   Jurchens: {
     context: (eco) => ({ jurchens: jurchenContext(eco) }),
-    assumptions: ({ eco, bo }) => jurchenContext(eco).complete ? [...jurchenNotes(eco, bo.id), JURCHEN_RESEARCH_NOTE] : [],
+    assumptions: ({ eco, bo }) => (jurchenContext(eco).complete ? [...jurchenNotes(eco, bo.id), JURCHEN_RESEARCH_NOTE] : []),
   },
   Portuguese: { assumptions: () => [rules.FORAGER_WOOD_ASSUMPTION] },
   Shu: { assumptions: () => [rules.LUMBER_FOOD_ASSUMPTION, rules.SHU_KNIGHT_TEMPLATE_NOTE] },
@@ -168,6 +178,7 @@ export function rowApplication(civ: string, row: EffectRow, scope: Scope, mode: 
 /** Shared source filtering; gather keeps its historical, narrower atomic gate. */
 export function mechanismRowAllowed(row: EffectRow, scope: Scope, uniqueMayanTree: boolean): boolean {
   return (
+    chineseRowAllowed(row, scope.civ, scope.chinese) &&
     jurchenRowClass(row, scope.civ, scope.jurchens)?.kind !== 'unhandled' &&
     khmerRowClass(row, scope.civ, scope.khmer)?.kind !== 'unhandled' &&
     (row.tech !== 704 || scope.civ === 'Tatars') &&
