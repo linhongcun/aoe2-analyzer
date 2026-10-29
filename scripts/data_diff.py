@@ -2,7 +2,7 @@
 """补丁数据差异摘要（纯函数，便于用 fixture 测试）：比较两份 src/data/*.json，输出 Markdown。"""
 import json, re
 
-UNIT_KEYS = ['hp', 'atk', 'ma', 'pa', 'rng', 'minr', 'spd', 'los', 'rof', 'acc', 'tt', 'cost', 'atks', 'arms']
+UNIT_KEYS = ['hp', 'atk', 'ma', 'pa', 'rng', 'minr', 'spd', 'los', 'rof', 'acc', 'tt', 'cost', 'atks', 'armc', 'cls']
 BLD_KEYS = ['hp', 'ma', 'pa', 'barm', 'bt', 'gar', 'atk', 'rng', 'los', 'cost', 'pop']
 TECH_KEYS = ['cost', 'time', 'age', 'descEn']
 
