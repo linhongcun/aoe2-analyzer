@@ -207,7 +207,7 @@ export default function CivDetail() {
               <div className="uchips">{core && <UnitLinks list={collapse(myU, core.fam)} />}</div>
             </SideBlock>
           )}
-          <CivRegionalUnits civ={c.en} units={core?.units ?? null} families={core?.fam ?? null} />
+          <CivRegionalUnits civ={c.en} units={core?.units ?? null} />
           <CivUniqueBuildings civ={c.en} buildings={core?.buildings ?? null} />
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
           <SideBlock title="快速入口">
