@@ -11,6 +11,7 @@ import { ListHead } from '../../shared/ui/layout';
 import FeedbackLink from '../../shared/ui/FeedbackLink';
 import TimelineLoader from './TimelineLoader';
 import { NumUnitText } from './NumUnitText';
+import { BuildApplicability } from './BuildApplicability';
 
 /** 推荐文明：加成已计入的排前面，未计入的沉底（各自保持原顺序） */
 export const sortCivs = (civs: string[], off: string[] = []) => [...civs.filter((c) => !off.includes(c)), ...civs.filter((c) => off.includes(c))];
@@ -126,6 +127,7 @@ export default function BuildOrderList() {
               </small>
             )}
           </summary>
+          <BuildApplicability order={b} />
           <p>{b.summary}</p>
           <p>
             <Link to={`/builds?bo=${b.id}`} className="tl-open">

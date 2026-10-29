@@ -82,6 +82,9 @@ test('#480 an unsupported requested nonmember keeps both applicability and the o
   await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的中国加成尚未计入，已按通用计算。');
   await expect(page.locator('#builds')).toContainText('按通用计');
   await expect(page.locator('#builds')).not.toContainText('按中国计');
+  await page.locator('[data-t="civ-warn"]').getByRole('button', { name: '关闭提示', exact: true }).click();
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+  await expect(applicability(page)).toContainText(genericNote);
   await page.reload();
   expect(new URLSearchParams(page.url().split('?')[1]).get('civ')).toBe('Chinese');
   await expect(applicability(page)).toContainText(genericNote);
