@@ -22,6 +22,7 @@ import { CivRegionalBuildings } from './CivRegionalBuildings';
 import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
 import { civDisplayText } from '../displayNames';
+import CivProfessionalView from './CivProfessionalView';
 
 function UTech({ s, civ }: { s: string; civ: string }) {
   const core = useCore();
@@ -197,6 +198,7 @@ export default function CivDetail() {
           ),
         },
         { key: 'history', label: '更新历史', content: <PatchHistory target={{ targetType: 'civ', targetId: c.en, targetNameZh: c.zh }} /> },
+        { key: 'pro', label: '职业选手视角', content: <CivProfessionalView /> },
       ]}
       sidebar={
         <>

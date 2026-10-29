@@ -11,14 +11,15 @@ const civs: { en: string; s: number[] }[] = JSON.parse(readFileSync(new URL('../
 const franks = civs.find((civ) => civ.en === 'Franks')!;
 const runtimeErrors = new WeakMap<Page, string[]>();
 
-test.beforeEach(({ page }) => {
+function recordErrors(page: Page) {
   const errors: string[] = [];
   runtimeErrors.set(page, errors);
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(message.text());
   });
-});
+}
+test.beforeEach(({ page }) => recordErrors(page));
 test.afterEach(async ({ page }) => {
   expect(runtimeErrors.get(page)).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -120,12 +121,12 @@ test('#487 original tabs, eight reference scores, radar, sidebar and unknown sta
   const radar = await page.locator('#rd').evaluate((canvas: HTMLCanvasElement) => canvas.toDataURL());
   await tab(page, LABEL).click();
   await sourceCard(page);
-  await expect(page.locator('#detail .dside')).toHaveText(sidebar);
+  await expect(page.locator('#detail .dside')).toHaveText(sidebar, { useInnerText: true });
   await tab(page, '数据').click();
-  await expect(page.locator('#detail [role="tabpanel"]')).toHaveText(data);
+  await expect(page.locator('#detail [role="tabpanel"]')).toHaveText(data, { useInnerText: true });
   expect(await page.locator('#rd').evaluate((canvas: HTMLCanvasElement) => canvas.toDataURL())).toBe(radar);
   await tab(page, '概览').click();
-  await expect(page.locator('#detail [role="tabpanel"]')).toHaveText(overview);
+  await expect(page.locator('#detail [role="tabpanel"]')).toHaveText(overview, { useInnerText: true });
   await tab(page, '科技').click();
   await selected(page, '科技');
   await expect(page.locator('#detail [role="tabpanel"]')).toContainText('城堡时代独特科技');
@@ -136,7 +137,7 @@ test('#487 original tabs, eight reference scores, radar, sidebar and unknown sta
   await expect(page.locator('#detail [role="tabpanel"]')).not.toContainText(TITLE);
   await ready(page, 'civ/Franks?tab=unknown487');
   await selected(page, '概览');
-  await expect(page.locator('#detail [role="tabpanel"]')).toHaveText(overview);
+  await expect(page.locator('#detail [role="tabpanel"]')).toHaveText(overview, { useInnerText: true });
   await page.goto('./#/civ/Unknown487?tab=pro');
   await expect(page.getByRole('heading', { name: '没找到这个文明', exact: true })).toBeVisible();
   await expect(page.locator('#detail')).toHaveCount(0);
@@ -168,10 +169,13 @@ test('#487 selection, copied static URL, refresh, back and forward restore pro',
   const context = await browser.newContext();
   try {
     const fresh = await context.newPage();
+    recordErrors(fresh);
     await fresh.goto(copied);
     await sourceCard(fresh);
     await fresh.reload();
     await sourceCard(fresh);
+    expect(runtimeErrors.get(fresh)).toEqual([]);
+    expect(await fresh.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   } finally {
     await context.close();
   }
@@ -254,8 +258,34 @@ for (const width of [360, 375, 390, 1280])
         };
       });
       await info.attach('initial-tab-scroller-bounds', { body: JSON.stringify(initialBounds), contentType: 'application/json' });
+      await fullyInsideTabScroller(page, tab(page, LABEL));
+      // A horizontal wheel gesture exercises the real scroll surface before focus auto-scroll.
+      const scroller = page.locator('#detail .dtabs');
+      await scroller.hover();
+      await page.mouse.wheel(1000, 0);
+      await fullyInsideTabScroller(page, tab(page, LABEL));
+      await tab(page, LABEL).click();
+      await sourceCard(page);
+      await scroller.hover();
+      await page.mouse.wheel(-1000, 0);
+      await expect.poll(() => scroller.evaluate((element) => element.scrollLeft)).toBe(0);
       await page.locator('#detail .dhead').getByRole('button', { name: '复制链接', exact: true }).focus();
+      const beforeFocusY = await page.evaluate(() => scrollY);
       await page.keyboard.press('Tab');
+      await expect(tab(page, LABEL)).toBeFocused();
+      await fullyInsideTabScroller(page, tab(page, LABEL));
+      expect(await page.evaluate(() => scrollY)).toBe(beforeFocusY);
+      await tab(page, LABEL).press('Home');
+      await selected(page, '概览');
+      await expect(tab(page, '概览')).toBeFocused();
+      await tab(page, '概览').press('End');
+      await sourceCard(page);
+      await expect(tab(page, LABEL)).toBeFocused();
+      await fullyInsideTabScroller(page, tab(page, LABEL));
+      await tab(page, LABEL).press('ArrowRight');
+      await selected(page, '概览');
+      await tab(page, '概览').press('ArrowLeft');
+      await sourceCard(page);
       await expect(tab(page, LABEL)).toBeFocused();
       await fullyInsideTabScroller(page, tab(page, LABEL));
       for (const control of [...(await page.locator('#detail [role="tab"]').all()), original(page), discovery(page)]) {

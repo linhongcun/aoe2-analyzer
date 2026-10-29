@@ -58,6 +58,16 @@ describe('#487 verified professional original-source catalogue', () => {
     expect(readProSources([source(), source({ originalTitle: 'Duplicate ID with different text' })])).toEqual({ status: 'unavailable' });
   });
 
+  it('rejects sparse catalogues instead of silently rendering an empty ready state', () => {
+    expect(readProSources(Array(1))).toEqual({ status: 'unavailable' });
+    const sparse = [source()];
+    sparse.length = 2;
+    expect(readProSources(sparse)).toEqual({ status: 'unavailable' });
+    const html = renderToStaticMarkup(createElement(CivProfessionalView, { catalogue: sparse }));
+    expect(html).toContain('资料暂不可用');
+    expect(html).not.toContain('href=');
+  });
+
   it('requires nonempty source and author identity/title strings and the supported source kind', () => {
     for (const key of ['id', 'authorId', 'author', 'originalTitle']) {
       for (const value of ['', '   ', null, 1]) expect(readProSources([source({ [key]: value })]), key).toEqual({ status: 'unavailable' });
