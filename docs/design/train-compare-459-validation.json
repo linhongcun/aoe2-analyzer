@@ -272,7 +272,7 @@
     },
     "remote": "Root owns actual full/data=false PR CI, merge, deployment and release. Implementation agent ran only the recorded focused local coverage; no CI policy change."
   },
-  "independentReviewOwner": "/root/scope_review; final source/UI conclusions recorded separately against delivered exact commit",
+  "independentReviewOwner": "/root/review459 (final exact source/UI review); /root/parity/ui480 (read-only UI audit). Earlier scope_review preflight remains recorded; its later turn ended during remote context compaction, and final review is performed independently by review459.",
   "artifacts": [
     "/tmp/issue459-new-e2e-artifacts",
     "/tmp/issue459-fixed-e2e-artifacts",
