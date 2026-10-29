@@ -85,7 +85,7 @@ civs.forEach((c) => {
     const es = byIdx[k] ?? [];
     const idx = k === 'hidden' ? -1 : +k;
     const label = idx >= 0 ? c.bon[idx]! : '隐藏加成（.dat 中存在、加成文本未列出）';
-    // .dat 为当前补丁（185872）：不再按文本一致性回退；fresh 仅供审计/页面提示
+    // .dat 为当前固定补丁：不再按文本一致性回退；fresh 仅供审计/页面提示
     const numeric = es.filter((e) => e.combat && e.rules.some((r) => toEffects(r.fx).length));
     if (numeric.length) {
       numeric.forEach((e) =>

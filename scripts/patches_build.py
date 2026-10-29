@@ -1,17 +1,33 @@
 #!/usr/bin/env python3
-"""185872 平衡条目：官方旧值 + 固定数据源的新值。生成 JSON/Markdown；不把本站旧源当旧补丁。"""
+"""补丁档案：185872 使用封存来源；188329 使用当前固定 DAT。"""
+import argparse
+import hashlib
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = 'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/'
+HISTORICAL_SHA256 = '94b5ae8e67dbb19382162a9a5d2f7d935ef82f7858b92af681d4397505cb2a42'
 
-def generate():
+
+def historical_input():
+    path = ROOT / 'scripts/patch_inputs/185872.json'
+    raw = path.read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == HISTORICAL_SHA256, '185872 历史来源指纹变化，须独立重新核对'
+    return json.loads(raw)
+
+
+def generate(build='185872'):
+    if str(build) == '188329':
+        from patches_188329 import generate as current
+        return current(ROOT)
+    assert str(build) == '185872', f'未登记补丁：{build}'
+    frozen = historical_input()
     def read(name):
-        return json.loads((ROOT / 'src/data' / (name + '.json')).read_text())
+        return frozen['data'][name]
     data = {k: {x['id']: x for x in read(v)} for k, v in [('unit', 'units'), ('tech', 'techs'), ('building', 'buildings')]}
     civs = {c['en']: c for c in read('civs')}
-    trees = read('trees')['t']
+    trees = {(civ, typ, ident): available for civ, typ, ident, available in frozen['treeAvailability']}
     rows = []
     def add(kind, typ, ident, summary, civ=None, before=None, after=None, provenance='fixed-data'):
         obj = civs[ident] if typ == 'civ' else data[typ].get(ident) if typ in data else None
@@ -30,7 +46,7 @@ def generate():
             after = obj[attr]
         assert after == expected, (ident, attr, after, expected)
         add(kind, typ, ident, label, civ, old, after)
-    # 官方 Balance Changes / General：原值由官方明确列出，现值从本站固定数据读取并校验。
+    # 官方原值 + 当时固定来源的封存事实；绝不拿今天的数据改写历史。
     for uid, old, new in [(75,2,3),(77,6,8),(473,8,9),(567,8,9)]:
         val('buff',uid,'bonus:冲击步兵',old,new,'对冲击步兵的额外伤害增加')
     val('buff',751,'tt',50,46,'训练时间缩短（秒）')
@@ -40,20 +56,16 @@ def generate():
     val('nerf',1105,'los',8,6,'视野缩小（格）')
     val('buff',550,'atk',50,55,'基础攻击提高')
     val('buff',550,'pa',7,8,'远程护甲提高')
-    # 升级科技不在详情库中，读取由 .dat 生成的 eco.json。
-    # 当前已导出的升级科技编号由固定 .dat 提供。
-    from dat_source import load
-    dat=load()
-    demo=next((i,t) for i,t in enumerate(dat['Techs']) if t['Name']=='Demolition Ship')
-    _,t=demo
+    # 升级科技不在详情库中，读取当时固定 DAT 的有界封存事实。
+    t=frozen['dat']['demolition']
     cost={c[0]:c[1] for c in t['Cost']}
     assert cost.get(1)==25 and cost.get(3)==75 and t['ResearchTime']==20
     add('buff','unit',527,'升级为爆破船的费用与时间降低',None,'50 木、100 金、50 秒','25 木、75 金、20 秒','dat')
     for uid, old, new in [(2626,4,3),(2627,5,4)]: val('nerf',uid,'ma',old,new,'近战护甲降低')
-    # 最高阶趸船由当前数据名查找，不依赖攻略俗称。
+    # 最高阶趸船身份来自封存数据，不依赖今天的名称或攻略俗称。
     hulks=[u for u in read('units') if u.get('from_')==2627]
     assert len(hulks)==1
-    assert hulks[0]['ma'] == 6 and dict(dat['Civs'][0]['Units'][hulks[0]['id']]['Armours'])[4] == 6
+    assert hulks[0]['ma'] == 6 and frozen['dat']['hulkArmour'] == 6
     add('adjust','unit',hulks[0]['id'],'来源冲突：官方写近战护甲 6 降为 5；本站固定 .dat 的近战护甲仍为 6。此项削弱未获数据证实，工具按 6 计算。',provenance='source-conflict')
     val('nerf',2626,'hp',90,85,'基础生命降低')
     val('nerf',2627,'hp',115,110,'基础生命降低')
@@ -91,16 +103,15 @@ def generate():
     for uid in [2579,2581]: val('nerf',uid,'cost:Wood',35,40,'木材费用增加，黄金费用不变','Tupi')
     add('adjust','civ','Vietnamese','生命加成的适用对象改为步弓手和掷矛手。','Vietnamese',provenance='official-and-effects')
     for uid,old,new in [(1129,40,35),(1131,45,40)]: val('nerf',uid,'hp',old,new,'基础生命降低（未计文明加成）','Vietnamese')
-    rat=next(t for t in dat['Techs'] if t['Name']=='Elite Rattan Archer')
+    rat=frozen['dat']['eliteRattan']
     ratcost={c[0]:c[1] for c in rat['Cost']}
     assert ratcost.get(0)==800 and ratcost.get(3)==750
     add('buff','unit',1131,'精锐升级食物费用降低；黄金费用不变','Vietnamese','1000 食物、750 金','800 食物、750 金','dat')
     add('nerf','tech',463,'击杀村民、贸易单位和僧侣不再额外获得黄金。','Vikings',provenance='official-and-effects')
     val('nerf',1952,'cost:Gold',25,35,'黄金费用增加，木材费用不变','Wei')
-    # 科技树变动：检查当前版本是否实际可用；改动前的拥有/未拥有来自官方记录。
+    # 科技树变动：检查当时固定来源的可用状态；改动前状态来自官方记录。
     def tree(civ,typ,ident,gain):
-        nodes=[n for b in trees[civ] for n in b[3] if n[2]==('t' if typ=='tech' else 'u') and n[3]==ident]
-        assert any(n[4]==1 for n in nodes)==gain, (civ,typ,ident,gain,nodes)
+        assert trees[civ,typ,ident] == gain, (civ,typ,ident,gain)
         add('buff' if gain else 'nerf',typ,ident,'科技树现在'+('开放' if gain else '移除')+'此项。',civ,'未开放' if gain else '已开放','已开放' if gain else '未开放')
     for civ in ['Armenians','Franks','Goths','Shu']: tree(civ,'tech',54,True)
     for civ in ['Bengalis','Bohemians','Celts','Saracens']: tree(civ,'tech',54,False)
@@ -124,13 +135,17 @@ def generate():
                 note='改动前取自官方 185872 平衡说明；改动后数值取自本站固定数据，科技树已逐项核对。未持有上一补丁的完整 .dat，不声称是两个 .dat 的自动差分。', entries=rows)
 
 if __name__=='__main__':
-    import sys
-    result=generate()
-    target=ROOT/'src/data/patches/185872.json'
-    content=json.dumps(result,ensure_ascii=False,indent=2)+'\n'
-    if '--check' in sys.argv:
-        assert target.read_text()==content, '补丁 JSON 需要重新生成'
-    else:
-        target.parent.mkdir(parents=True,exist_ok=True)
-        target.write_text(content)
-    print(f"185872: {len(result['entries'])} 条，数值/科技树校验通过")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--check', action='store_true')
+    parser.add_argument('--build', choices=['185872', '188329'], help='仅处理指定补丁；默认处理两份档案')
+    args = parser.parse_args()
+    for build in [args.build] if args.build else ['185872', '188329']:
+        result=generate(build)
+        target=ROOT/f'src/data/patches/{build}.json'
+        content=json.dumps(result,ensure_ascii=False,indent=2)+'\n'
+        if args.check:
+            assert target.read_text()==content, f'{build} 补丁 JSON 需要重新生成'
+        else:
+            target.parent.mkdir(parents=True,exist_ok=True)
+            target.write_text(content)
+        print(f"{build}: {len(result['entries'])} 条，固定来源校验通过")

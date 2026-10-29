@@ -19,7 +19,9 @@ class Construction227Test(unittest.TestCase):
         self.assertEqual(sum(b['supported'] for b in self.data['buildings'].values()), 37)
         self.assertEqual(len(self.data['civs']), 56)
         self.assertFalse(self.data['meta']['engineVerifiedInPinnedBuild'])
-        self.assertIn('185872', self.data['meta']['patch'])
+        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text())
+        self.assertEqual(self.data['meta']['patch'], '%s (%s)' % (pins['patch']['name'], pins['patch']['date']))
+        self.assertEqual(self.data['meta']['sha256'], pins['sources']['dat']['sha256'])
 
     def test_tc_uses_actual_annexes(self):
         self.assertEqual(self.data['buildings']['109']['forms'], [621, 617, 484, 597])

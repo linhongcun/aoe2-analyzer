@@ -382,7 +382,7 @@ export default function ContentGuide() {
           Return of Rome 的古代文明属于独立子游戏，常规 AoE2 的 Romans 是同包提供的另一项权益。Chronicles 文明不进排位，但可在自定义和 AI
           对局与常规文明混战；两个 Chronicles 包互不要求先购买。
         </p>
-        <p>版本首发表示何时引入，与当前购买条件分别核对。内容获取快照日期与本站 DE185872 战斗数据版本互不替代。</p>
+        <p>版本首发表示何时引入，与当前购买条件分别核对。内容获取快照日期与本站 DE{__DATA_SOURCES__.patch.build} 战斗数据版本互不替代。</p>
         <div className="cg-sources">
           <ul>
             {sharedSources.map((source) => (

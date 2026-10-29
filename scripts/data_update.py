@@ -6,9 +6,10 @@
    重新生成全部 JSON（npm run data 等价流程）、effects.json、docs/EFFECTS-AUDIT.md，运行基础数值对账；
    把差异摘要写入 docs/PATCH-NOTES/<patch>.md 并打印。
 3. 永不自动提交：请自行检查 git diff 后提交。
+审阅后冻结来源：重复传入 --source-ref dat=<完整SHA>、aoe2techtree=<完整SHA>、halfon=<完整SHA>，三项必须齐全。
 --check：只报告是否有更新（有更新时退出码 10）。--force：即使无更新也重跑生成流程。
 环境变量 GITHUB_TOKEN（可选）：提高 GitHub API 速率限制。"""
-import datetime, hashlib, json, os, shutil, subprocess, sys, urllib.request
+import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys, urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -48,22 +49,50 @@ def latest(repo, path):
     return {'commit': c['sha'], 'date': beijing_date(c['commit']['committer']['date']), 'message': c['commit']['message'].splitlines()[0]}
 
 
+def parse_args(argv):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--check', action='store_true')
+    parser.add_argument('--force', action='store_true')
+    parser.add_argument('--source-ref', action='append', default=[], metavar='SOURCE=SHA')
+    args = parser.parse_args(argv)
+    refs = {}
+    for item in args.source_ref:
+        key, sep, ref = item.partition('=')
+        if not sep or key not in PATHS or key in refs or not re.fullmatch(r'[0-9a-f]{40}', ref):
+            parser.error('--source-ref 必须为不重复的 dat/aoe2techtree/halfon=<40位小写SHA>')
+        refs[key] = ref
+    if refs and set(refs) != set(PATHS):
+        parser.error('冻结来源必须同时提供 dat、aoe2techtree、halfon，不能混用已审阅提交和最新分支')
+    args.source_refs = refs
+    return args
+
+
+def frozen(repo, ref):
+    c = gh('repos/%s/commits/%s' % (repo, ref))
+    if c['sha'] != ref:
+        raise SystemExit('✗ 固定来源返回的提交与已审阅 SHA 不符')
+    return {'commit': c['sha'], 'date': beijing_date(c['commit']['committer']['date']), 'message': c['commit']['message'].splitlines()[0]}
+
+
 def run(*cmd):
     print('$', ' '.join(cmd)); subprocess.run(cmd, cwd=ROOT, check=True)
 
 
 def main():
-    args = sys.argv[1:]
+    args = parse_args(sys.argv[1:])
     pins = json.load(open(SRC)); S = pins['sources']
-    up = {k: latest(S[k]['repo'], PATHS[k]) for k in ('dat', 'aoe2techtree', 'halfon')}
+    up = {k: frozen(S[k]['repo'], args.source_refs[k]) if args.source_refs else latest(S[k]['repo'], PATHS[k]) for k in PATHS}
+    builds = {detect_patch([row['message']]) for row in up.values()} - {None}
+    if args.source_refs and len(builds) > 1:
+        raise SystemExit('✗ 固定来源标示的补丁号不一致，先核实来源后再更新')
     patch = detect_patch([up['halfon']['message'], up['aoe2techtree']['message'], up['dat']['message']]) or pins['patch']['build']
     changed = [k for k in up if up[k]['commit'] != S[k]['commit']]
     print('当前固定：DE %s；上游识别补丁：%s' % (pins['patch']['build'], patch))
     for k in up:
         print('  %-13s 固定 %s（%s） / 上游 %s（%s）%s' % (k, S[k]['commit'][:7], S[k]['date'], up[k]['commit'][:7], up[k]['date'], '  ← 有更新' if k in changed else ''))
-    if '--check' in args:
+    if args.check:
         sys.exit(10 if changed else 0)
-    if not changed and '--force' not in args:
+    if not changed and not args.force:
         print('✓ 已是最新，无需更新。'); return
     if 'dat' in changed and patch == pins['patch']['build']:
         print('⚠ .dat 有新提交但未识别到新补丁号（可能是热修复）；仍按新文件更新，补丁号沿用 %s。' % patch)
@@ -74,7 +103,7 @@ def main():
     # 更新固定版本
     for k in changed:
         S[k].update(commit=up[k]['commit'], date=up[k]['date'])
-    if 'dat' in changed or '--force' in args:
+    if 'dat' in changed or args.force:
         from dat_source import fetch_dat, parse, markers_of, check_markers
         pin = dict(S['dat'], sha256=None)
         p = fetch_dat(pin)
@@ -89,10 +118,15 @@ def main():
     pins['updated'] = beijing_today()
     SRC.write_text(json.dumps(pins, ensure_ascii=False, indent=2) + '\n')
     # 重新生成
-    if 'aoe2techtree' in changed or '--force' in args: run(sys.executable, 'scripts/build_data.py')
+    # 核心生成也读取 .dat（时代前置、双射程）；只变 .dat 时同样需要重新生成。
+    if set(changed) & {'dat', 'aoe2techtree'} or args.force:
+        run(sys.executable, 'scripts/build_data.py')
+        run('node', 'scripts/pinyin_build.mjs')
     run(sys.executable, 'scripts/dat_source.py', '--check')
-    run(sys.executable, 'scripts/effects_build.py')
-    run(sys.executable, 'scripts/eco_build.py')
+    # 顺序保留依赖：garrison_healing 读取 general/hosts；各导出器保留自身来源门禁。
+    for name in ('effects', 'eco', 'market', 'garrison', 'garrison_general', 'trade_income',
+                 'construction', 'team_bonuses', 'garrison_healing', 'relic_income', 'generate_resource'):
+        run(sys.executable, 'scripts/%s_build.py' % name)
     run('npx', 'vite-node', 'scripts/build_orders_check.ts')
     run('npx', 'vite-node', 'scripts/effects_audit.ts')
     run(sys.executable, 'scripts/stats_crosscheck.py')

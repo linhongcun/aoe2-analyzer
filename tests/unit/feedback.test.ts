@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import pins from '../../scripts/data_sources.json';
 import { entityOf, feedbackUrl, ISSUES_NEW } from '../../src/shared/utils/feedback';
 
 describe('feedback link', () => {
@@ -12,6 +13,13 @@ describe('feedback link', () => {
     expect(u.origin + u.pathname).toBe(ISSUES_NEW);
     expect(u.searchParams.get('title')).toBe('单位 4');
     const b = u.searchParams.get('body')!;
-    for (const s of ['https://x/#/unit/4?civ=Britons', '单位 / 4', 'Britons', '185872', 'TestUA/1.0']) expect(b).toContain(s);
+    for (const s of [
+      'https://x/#/unit/4?civ=Britons',
+      '单位 / 4',
+      'Britons',
+      `${pins.patch.name} (${pins.patch.date})；.dat auto-mods@${pins.sources.dat.commit.slice(0, 7)}`,
+      'TestUA/1.0',
+    ])
+      expect(b).toContain(s);
   });
 });

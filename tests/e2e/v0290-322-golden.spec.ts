@@ -10,6 +10,8 @@ import { capturePage, type Captured, type PageCase } from './v0280-golden-cases'
  * 只取 #duel / 工具主区，不含页脚（页脚有版本号和构建号）。
  */
 const FIXTURE = 'tests/e2e/fixtures/v0290-322-golden.json';
+const CURRENT_BUILD = (JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } }).patch
+  .build;
 const duel = (id: string, q: string): PageCase => ({ id: `pk:${id}`, url: `./#/duel?${q}`, sel: '#duel' });
 const construction = (civ: string, task: string, building = 70): PageCase => ({
   id: `construction:${building}-${civ}-${task || 'none'}`,
@@ -76,8 +78,21 @@ for (const c of CASES)
       return;
     }
     const want = golden[c.id]!;
+    let actualLines = got.lines;
+    if (c.id.startsWith('construction:')) {
+      // #486: validate current metadata, then project only its version prefix for the frozen numeric/text baseline.
+      const captions = got.lines.filter((line) => line.startsWith('数据固定为 DE'));
+      const historicalCaptions = want.lines.filter((line) => line.startsWith('数据固定为 DE'));
+      const currentPrefix = `数据固定为 DE${CURRENT_BUILD}。`;
+      const historicalPrefix = '数据固定为 DE185872。';
+      expect(captions, `${c.id} 恰有一条当前版本说明`).toHaveLength(1);
+      expect(captions[0]!.startsWith(currentPrefix), `${c.id} 版本说明使用当前固定版本`).toBe(true);
+      expect(historicalCaptions, `${c.id} 恰有一条历史版本说明`).toHaveLength(1);
+      expect(historicalCaptions[0]!.startsWith(historicalPrefix), `${c.id} 原始金标准版本`).toBe(true);
+      actualLines = got.lines.map((line) => (line === captions[0] ? historicalPrefix + line.slice(currentPrefix.length) : line));
+    }
     // #275 可能用不换行空格把「数字 + 单位」连起来：只把 NBSP / 窄 NBSP 视同普通空格，其余逐字比对
     const norm = (lines: string[]) => lines.map((l) => l.replace(/[\u00a0\u202f]/g, ' '));
     expect(got.hash, `${c.id} 规范化后的地址`).toBe(want.hash);
-    expect(norm(got.lines), `${c.id} 页面文字与数值`).toEqual(norm(want.lines));
+    expect(norm(actualLines), `${c.id} 页面文字与数值`).toEqual(norm(want.lines));
   });

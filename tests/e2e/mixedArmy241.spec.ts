@@ -246,7 +246,8 @@ test('#241 keyboard focus, sources and copy feedback remain usable', async ({ pa
   await expect(page.getByRole('status')).toContainText('情境链接已复制');
   await page.getByText('适用范围与来源', { exact: true }).focus();
   await page.keyboard.press('Enter');
-  await expect(page.getByText('尚未完成该版本客户端交战实测', { exact: false })).toBeVisible();
+  await expect(page.getByText('战术资料保留其来源版本与核对日期，尚未完成当前版本客户端交战实测', { exact: false })).toBeVisible();
+  await expect(page.getByTestId('scope-sources')).toContainText('来源交叉核对不等于 DE185872 客户端交战实测');
   await expect(page.getByRole('link', { name: '单位PK：局部单兵资料', exact: true })).toHaveAttribute('href', /\/duel$/);
 });
 test('#241 asynchronous fixed-tree loading failure has an explicit retry state', async ({ page }) => {

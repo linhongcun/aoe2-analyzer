@@ -65,7 +65,7 @@ export default function ShareImage({ title, stats, icon, note }: ShareImageProps
       });
       g.fillStyle = color('--color-muted');
       text(note, 60, 465, 22);
-      text('数据版本 DE 185872 · 模拟结果仅作参考', 60, 515, 22);
+      text(`数据版本 DE ${__DATA_SOURCES__.patch.build} · 模拟结果仅作参考`, 60, 515, 22);
       text(url, 60, 578, 20);
       setGenerated({ signature, data: canvas.toDataURL('image/png') });
     } catch (e) {

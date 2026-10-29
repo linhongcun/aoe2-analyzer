@@ -541,7 +541,10 @@ export default function MixedArmy() {
       <details className="mixed-details mixed-panel mixed-boundaries" data-testid="scope-sources">
         <summary>适用范围与来源</summary>
         <p>{MIXED_ARMY_CONTENT.editorialNotice}</p>
-        <p className="mixed-note">资料固定为 DE185872；战术文字经来源交叉核对，尚未完成该版本客户端交战实测。主力/掩护职责不能由单位PK或同兵种群战结果证明。</p>
+        <p className="mixed-note">
+          计算数据为 DE{__DATA_SOURCES__.patch.build}
+          ；战术资料保留其来源版本与核对日期，尚未完成当前版本客户端交战实测。主力/掩护职责不能由单位PK或同兵种群战结果证明。
+        </p>
         <p className="mixed-note">
           链接含全部输入及各项完成确认；没有本地存储覆盖链接。结构损坏会暂停，已知但不适用的选择保留供修正，超过链接长度上限时不截断分享。
         </p>

@@ -1,8 +1,10 @@
 /** Issue 243: explicit shared agreements, never a team score or automatic readiness claim. */
 import content from '../content/team-plan.json';
+import teachingSources from '../../scripts/data_sources.json';
 import shapes from '../data/garrison_general.json';
 import { civs } from '../data';
 import { DATA_PATCH_BUILD } from '../data/meta';
+import { reviewedTeachingContent188329, TEACHING_COMPATIBILITY_188329 } from '../data/teachingCompatibility188329';
 import { civStatus } from './simulator';
 import { productionBuildings, productionTechs, type ProductionContext } from './production';
 import { buildingAge } from './availabilityAge';
@@ -24,6 +26,7 @@ export const PLAN_SEARCH_LIMIT = PLAN_TOKEN_LIMIT + 32;
 export const TEAM_PLAN_UNIT_IDS: readonly number[] = content.unitIds;
 export const TEAM_PLAN_SOURCES = content.sources;
 export const TEAM_PLAN_CHECKED = content.checked;
+export const TEAM_PLAN_COMPATIBILITY = reviewedTeachingContent188329('team-plan', content, teachingSources) ? TEACHING_COMPATIBILITY_188329 : null;
 export interface PlanPlayer {
   id: PlayerId;
   name: string;
@@ -108,7 +111,11 @@ export function defaultTeamPlan(): TeamPlan {
     example: null,
   };
 }
-export const exampleTeamPlan = (): TeamPlan => structuredClone(content.example) as TeamPlan;
+export const exampleTeamPlan = (): TeamPlan =>
+  ({
+    ...structuredClone(content.example),
+    patch: TEAM_PLAN_COMPATIBILITY ? TEAM_PLAN_COMPATIBILITY.approvedPatch : content.example.patch,
+  }) as TeamPlan;
 export function addPlanPlayer(plan: TeamPlan): TeamPlan {
   // A damaged imported claim must never acquire a new person merely by reusing its ID.
   if (plan.phases.some((phase) => phase.tasks.some((task) => task.owners.some((owner) => !plan.players.some((p) => p.id === owner))))) return plan;

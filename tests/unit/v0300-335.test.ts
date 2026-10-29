@@ -10,11 +10,24 @@
 //   reddit：arctic-shift 公开存档 API 的 created_utc（reddit 本站拒绝匿名抓取）
 // 以后新加带来源链接的发布/更新日期，必须先把来源时间戳加进下表，否则「清单完整」一条会失败（#335「以后新加条目也照这条检查」）。
 import { readFileSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
+
+// #486：仅把「当时当前版本」的输入封存；旧日期、数字、内容叶子快照仍按原验收锁定。
+const HISTORICAL_INPUT_RAW = readFileSync('scripts/patch_inputs/185872.json', 'utf8');
+const HISTORICAL_INPUT = JSON.parse(HISTORICAL_INPUT_RAW) as {
+  patch: { build: number; date: string; detectedFrom: string };
+  sources: Record<string, { repo: string; commit: string; date: string }>;
+  generatedVersions: Record<string, string[]>;
+};
 
 type Stamp = { ts: string; how: string };
 /** key：`${url} ${字段}`；字段为 published（publishedAt / published / date）或 updated（updatedAt） */
 const STAMPS: Record<string, Stamp> = {
+  'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-188329/ published': {
+    ts: '2026-10-27T10:04:41-07:00',
+    how: '2026-10-29 实际读取官方页面 published_time；北京时间 2026-10-28，发行日另存 releaseDate',
+  },
   // #435 新来源仅登记实际读取的公开时间戳；发行日独立保存在 releaseDate，不充当来源公开日期。
   'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/ published': {
     ts: '2022-08-29T16:10:00-07:00',
@@ -217,18 +230,18 @@ describe('#335 来源日期 = 来源公开时间戳换算成北京时间的日�
   });
 
   // Steve 2026-10-22 确认：站内日期一律北京时间；185872 于 2026-09-23 01:17（北京时间）发布，数据版本日期也是 2026-09-23。
-  it('补丁 185872 的数据版本日期：scripts/data_sources.json 的 patch.date 为 2026-09-23', () => {
-    const ds = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { patch: { build: number; date: string } };
+  it('补丁 185872 的历史输入指纹仍与 #486 封存时相同', () => {
+    expect(createHash('sha256').update(HISTORICAL_INPUT_RAW).digest('hex')).toBe('94b5ae8e67dbb19382162a9a5d2f7d935ef82f7858b92af681d4397505cb2a42');
+  });
+  it('补丁 185872 的数据版本日期：历史 data_sources 的 patch.date 为 2026-09-23', () => {
+    const ds = HISTORICAL_INPUT;
     expect(ds.patch.build).toBe(185872);
     expect(ds.patch.date).toBe('2026-09-23');
   });
-  it('补丁 185872 的数据版本日期：src/data 下生成数据里的「DE Update 185872 (日期)」都写 2026-09-23', () => {
+  it('补丁 185872 的数据版本日期：历史生成数据里的「DE Update 185872 (日期)」都写 2026-09-23', () => {
     const hits: string[] = [];
-    const walkDir = (d: string): string[] =>
-      readdirSync(d, { withFileTypes: true }).flatMap((e) =>
-        e.isDirectory() ? walkDir(`${d}/${e.name}`) : e.name.endsWith('.json') ? [`${d}/${e.name}`] : [],
-      );
-    for (const f of walkDir('src/data')) for (const m of readFileSync(f, 'utf8').matchAll(/185872 \((\d{4}-\d{2}-\d{2})\)/g)) hits.push(`${f}=${m[1]}`);
+    for (const [f, versions] of Object.entries(HISTORICAL_INPUT.generatedVersions))
+      for (const m of versions.join('\n').matchAll(/185872 \((\d{4}-\d{2}-\d{2})\)/g)) hits.push(`${f}=${m[1]}`);
     expect(hits.length, '防空转').toBeGreaterThanOrEqual(5);
     expect(hits.filter((h) => !h.endsWith('=2026-09-23'))).toEqual([]);
   });
@@ -320,8 +333,8 @@ const PIN_STAMPS: Record<string, { commit: string; ts: string; want: string }> =
   // 对照：UTC 11:52，北京时间同日，不变
   dat: { commit: '0c38027504532826c9922e4db77e2c1d33554291', ts: '2026-10-07T11:52:25Z', want: '2026-10-07' },
 };
-describe('#335 scripts/data_sources.json 的上游固定提交日期 = 提交时间的北京时间日期', () => {
-  const ds = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { sources: Record<string, { commit: string; date: string }> };
+describe('#335 历史 data_sources 的上游固定提交日期 = 提交时间的北京时间日期', () => {
+  const ds = HISTORICAL_INPUT;
   it('只有这 3 个上游来源（新加来源须先在本表登记提交时间戳）', () => {
     expect(Object.keys(ds.sources).sort()).toEqual(Object.keys(PIN_STAMPS).sort());
   });
@@ -332,7 +345,7 @@ describe('#335 scripts/data_sources.json 的上游固定提交日期 = 提交时
       expect(ds.sources[k]!.date).toBe(p.want);
     });
   it('patch.date 与识别补丁号的 halfon 提交同一天（北京时间）', () => {
-    const all = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { patch: { date: string; detectedFrom: string } };
+    const all = HISTORICAL_INPUT;
     expect(all.patch.detectedFrom).toContain('halfon@abb48fd');
     expect(all.patch.date).toBe(ds.sources.halfon!.date);
   });
@@ -355,9 +368,9 @@ describe('#335 docs/PATCH-NOTES/185872.md「上游：」行的提交日期 = 北
     it(`${ref}（${want}）`, () => {
       expect(lines[0]).toContain(`${ref}（${want}）`);
     });
-  it('「上游：」行不再有 2026-09-22，且与 scripts/data_sources.json 的固定日期一致', () => {
+  it('「上游：」行不再有 2026-09-22，且与历史 data_sources 的固定日期一致', () => {
     expect(lines[0]).not.toContain('2026-09-22');
-    const ds = JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { sources: Record<string, { repo: string; commit: string; date: string }> };
+    const ds = HISTORICAL_INPUT;
     for (const s of Object.values(ds.sources)) expect(lines[0]).toContain(`${s.repo}@${s.commit.slice(0, 7)}（${s.date}）`);
   });
 });

@@ -1,5 +1,10 @@
 // v0.30.0 #335 验收（页面）：「页面上每一处日期都改对了」。来源时间戳与换算见 tests/unit/v0300-335.test.ts。Kent Beck 2026-10-22。
+import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+
+const PINS = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../scripts/data_sources.json');
+
+const DATA_VERSION = `DE ${PINS.patch.build}（${PINS.patch.date}）`;
 
 async function mainText(page: Page, route: string): Promise<string> {
   await page.goto(`./#${route}`, { waitUntil: 'networkidle' });
@@ -72,32 +77,33 @@ test.describe('#335 页面上的来源日期按北京时间', () => {
   });
 });
 
-// Steve 2026-10-22 确认：站内日期一律北京时间，185872 于 2026-09-23 01:17（北京时间）发布；「关于数据」页与顶栏 / 页脚的数据版本都写 2026-09-23。
-test('#/about-data：当前数据版本 DE 185872 的日期与补丁页一致（2026-09-23）', async ({ page }) => {
+// Steve 2026-10-22 确认：站内日期一律北京时间，185872 于 2026-09-23 01:17（北京时间）发布。
+// #486：当前元信息随固定来源更新；上方历史页面的日期断言继续验证当前站点。
+test('#/about-data：当前数据版本的日期与固定来源一致', async ({ page }) => {
   const text = await mainText(page, '/about-data');
-  expect(text).toContain('DE 185872（2026-09-23）');
+  expect(text).toContain(DATA_VERSION);
   expect(text).not.toContain('DE 185872（2026-09-22）');
 });
-test('顶栏徽章与页脚的数据版本：DE 185872（2026-09-23）', async ({ page }) => {
+test('顶栏徽章与页脚的数据版本与固定来源一致', async ({ page }) => {
   await page.goto('./#/market', { waitUntil: 'networkidle' });
   for (const loc of [page.locator('.verbadge'), page.locator('footer a[href$="#/about-data"]')]) {
     await expect(loc.first()).toHaveAttribute('href', /#\/about-data$/);
-    expect(await loc.first().textContent()).toContain('DE 185872（2026-09-23）');
+    expect(await loc.first().textContent()).toContain(DATA_VERSION);
   }
 });
 
-// Steve 2026-10-22（PR #351 范围追加）：「关于数据」来源表的提交日期按北京时间（提交时间 2026-09-22T19:2xZ → 2026-09-23）。
-test('#/about-data 来源表：aoe2techtree@3bb43b1、halfon@abb48fd 日期为 2026-09-23；auto-mods@0c38027 仍为 2026-10-07', async ({ page }) => {
+// Steve 2026-10-22（PR #351 范围追加）：「关于数据」来源表的提交日期按北京时间。
+// 历史来源的 2026-09-22T19:2xZ → 2026-09-23 换算仍由 tests/unit/v0300-335.test.ts 固定验证。
+test('#/about-data 来源表：当前固定提交和北京时间日期与来源清单一致', async ({ page }) => {
   await mainText(page, '/about-data');
-  const rows: [string, string, string][] = [
-    ['aoe2techtree', 'SiegeEngineers/aoe2techtree@3bb43b1', '2026-09-23'],
-    ['halfon', 'SiegeEngineers/halfon@abb48fd', '2026-09-23'],
-    ['dat', 'SiegeEngineers/auto-mods@0c38027', '2026-10-07'],
-  ];
-  for (const [k, repo, want] of rows) {
+  const rows = Object.entries(PINS.sources);
+  await expect(page.locator('main .src-table tbody tr')).toHaveCount(rows.length);
+  for (const [k, source] of rows) {
+    const repo = `${source.repo}@${source.commit.slice(0, 7)}`;
     const cells = page.locator(`main tr[data-t="src-${k}"] td`);
     await expect(cells, `src-${k} 那一行`).toHaveCount(4);
     await expect(cells.nth(1)).toContainText(repo);
-    expect((await cells.nth(2).innerText()).trim(), `${repo} 的日期`).toBe(want);
+    await expect(cells.nth(1).locator('a')).toHaveAttribute('href', `https://github.com/${source.repo}/tree/${source.commit}/${source.path}`);
+    expect((await cells.nth(2).innerText()).trim(), `${repo} 的日期`).toBe(source.date);
   }
 });

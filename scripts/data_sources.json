@@ -1,39 +1,43 @@
 {
   "_doc": "全部上游固定版本（单一文件）：sources 为游戏补丁数据上游，由 npm run data:update 更新；assetSources 为独立素材上游。请勿手改 sha256。",
   "patch": {
-    "build": 185872,
-    "date": "2026-09-23",
-    "name": "DE Update 185872",
-    "detectedFrom": "SiegeEngineers/halfon@abb48fd: Implement DE Update 185872"
+    "build": 188329,
+    "date": "2026-10-28",
+    "name": "DE Update 188329",
+    "detectedFrom": "SiegeEngineers/halfon@7f96c37: Implement DE Update 188329"
   },
-  "updated": "2026-10-11",
+  "updated": "2026-10-29",
   "sources": {
     "dat": {
       "repo": "SiegeEngineers/auto-mods",
-      "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+      "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
       "path": "dat/empires2_x2_p1.dat",
-      "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
-      "date": "2026-10-07",
+      "sha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f",
+      "date": "2026-10-28",
       "use": "全部 EffectCommands（战斗 + 经济/费用）、科技前置、文明科技树/团队加成；基础数值对账",
       "markers": {
         "civs": 63,
         "techs": 1510,
         "effects": 1500,
-        "newestCivs": ["Saxons", "Varangians", "Danes"]
+        "newestCivs": [
+          "Saxons",
+          "Varangians",
+          "Danes"
+        ]
       }
     },
     "aoe2techtree": {
       "repo": "SiegeEngineers/aoe2techtree",
-      "commit": "3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f",
+      "commit": "e56728e76b7d08301fba7b18d5f16bc8554c109a",
       "path": "data/",
-      "date": "2026-09-23",
+      "date": "2026-10-28",
       "use": "文明/单位/科技/建筑/科技树、中英文本、图标"
     },
     "halfon": {
       "repo": "SiegeEngineers/halfon",
-      "commit": "abb48fdbedba57d5afe2b7941d6ae85cf6e0e803",
+      "commit": "7f96c37fc5f63c7141ec7d88e91c627beb375b28",
       "path": "data/units_buildings_techs.de.json",
-      "date": "2026-09-23",
+      "date": "2026-10-28",
       "use": "补丁号识别（提交信息「Implement DE Update N」）"
     }
   },

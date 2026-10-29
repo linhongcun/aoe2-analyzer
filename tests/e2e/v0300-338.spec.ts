@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
 import { expect, test, type Page } from '@playwright/test';
 import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 import { openAllDetails } from './relicDetails412';
@@ -308,14 +309,56 @@ test.describe('#338 除「关于数据」外全站不显示 sha256', () => {
 //   V0300_RECORD=1 BASE_URL=… npx playwright test tests/e2e/v0300-338.spec.ts -g '其他页面表格' --workers=1
 type TableStyle = { cls: string; display: string; overflowX: string; tr: string | null; td: string | null };
 const TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables.json';
+const PATCH_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-188329.json';
 const TABLE_WIDTHS = [360, 1280] as const;
 const RECORD_TABLES = !!process.env.V0300_RECORD;
-const tableGolden: Record<string, TableStyle[]> = existsSync(TABLES_FIXTURE)
+const historicalTableGolden: Record<string, TableStyle[]> = existsSync(TABLES_FIXTURE)
   ? (JSON.parse(readFileSync(TABLES_FIXTURE, 'utf8')) as Record<string, TableStyle[]>)
   : {};
+// #486: add only the new patch page; keep the original whole-site style baseline intact.
+const patchTableGolden = JSON.parse(readFileSync(PATCH_TABLES_FIXTURE, 'utf8')) as Record<string, TableStyle[]>;
+const patchTableKeys = TABLE_WIDTHS.map((width) => `${width} /patches/188329`);
+assert.deepEqual(Object.keys(patchTableGolden).sort(), [...patchTableKeys].sort(), '188329 table fixture must contain exactly its two width keys');
+for (const key of patchTableKeys) {
+  assert.ok(Array.isArray(patchTableGolden[key]), `Missing explicit table expectation: ${key}`);
+  assert.ok(!Object.hasOwn(historicalTableGolden, key), `New patch fixture cannot replace a historical table expectation: ${key}`);
+}
+const tableGolden = { ...historicalTableGolden, ...patchTableGolden };
+
+function recordTableFixtures(tables: Record<string, TableStyle[]>, write: (file: string, text: string) => void = writeFileSync) {
+  const historical = Object.fromEntries(Object.entries(tables).filter(([key]) => !patchTableKeys.includes(key)));
+  const patch = Object.fromEntries(patchTableKeys.map((key) => [key, tables[key]]));
+  write(TABLES_FIXTURE, JSON.stringify(historical, null, 1) + '\n');
+  write(PATCH_TABLES_FIXTURE, JSON.stringify(patch, null, 1) + '\n');
+}
+
+async function tableStyles(page: Page): Promise<TableStyle[]> {
+  return page.locator('main table').evaluateAll((tables) =>
+    tables.map((t) => {
+      const tr = t.querySelector('tbody tr') ?? t.querySelector('tr');
+      const td = tr?.querySelector('td, th') ?? null;
+      const cs = getComputedStyle(t);
+      return {
+        cls: t.className,
+        display: cs.display,
+        overflowX: cs.overflowX,
+        tr: tr ? getComputedStyle(tr).display : null,
+        td: td ? getComputedStyle(td).display : null,
+      };
+    }),
+  );
+}
+
 test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main ead4c34 相同', () => {
   test.describe.configure({ mode: 'parallel' });
-  if (RECORD_TABLES) test.afterAll(() => writeFileSync(TABLES_FIXTURE, JSON.stringify(tableGolden, null, 1) + '\n'));
+  if (RECORD_TABLES) test.afterAll(() => recordTableFixtures(tableGolden));
+  test('守卫：记录时历史基准与188329补充基准保持分开，不覆盖彼此的键值', () => {
+    const written = new Map<string, Record<string, TableStyle[]>>();
+    recordTableFixtures(tableGolden, (file, text) => written.set(file, JSON.parse(text) as Record<string, TableStyle[]>));
+    expect([...written.keys()]).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE]);
+    expect(written.get(TABLES_FIXTURE)).toEqual(historicalTableGolden);
+    expect(written.get(PATCH_TABLES_FIXTURE)).toEqual(patchTableGolden);
+  });
   test('守卫：基准已录制，覆盖全部非「关于数据」静态页、两个宽度，并且确实录到了表格', () => {
     test.skip(RECORD_TABLES);
     for (const w of TABLE_WIDTHS)
@@ -327,6 +370,14 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
     expect(withTables, '防空转：录到表格的页面×宽度').toBeGreaterThan(20);
   });
   for (const width of TABLE_WIDTHS)
+    test(`新增 #/patches/188329 @${width}：页面已加载，表格与显式补充基准一致`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('./#/patches/188329', { waitUntil: 'networkidle' });
+      await expect(page.getByRole('heading', { name: 'DE Update 188329', exact: true })).toBeVisible();
+      await openAllDetails(page);
+      expect(await tableStyles(page)).toEqual(tableGolden[`${width} /patches/188329`]);
+    });
+  for (const width of TABLE_WIDTHS)
     for (let shard = 0; shard < SHARDS; shard++)
       test(`@${width} 全部静态页（第 ${shard + 1}/${SHARDS} 组）：main 里每张表格的 display、overflow-x 及首行 tr / td 的 display 不变`, async ({ page }) => {
         test.setTimeout(600_000);
@@ -336,22 +387,10 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
           await page.goto('about:blank');
           await page.goto(`./#${route}`, { waitUntil: 'networkidle' });
           await expect(page.locator('main')).not.toBeEmpty();
+          if (route === '/patches/188329') await expect(page.getByRole('heading', { name: 'DE Update 188329', exact: true })).toBeVisible();
           await page.waitForLoadState('networkidle');
           await openAllDetails(page);
-          const got = await page.locator('main table').evaluateAll((tables) =>
-            tables.map((t) => {
-              const tr = t.querySelector('tbody tr') ?? t.querySelector('tr');
-              const td = tr?.querySelector('td, th') ?? null;
-              const cs = getComputedStyle(t);
-              return {
-                cls: t.className,
-                display: cs.display,
-                overflowX: cs.overflowX,
-                tr: tr ? getComputedStyle(tr).display : null,
-                td: td ? getComputedStyle(td).display : null,
-              };
-            }),
-          );
+          const got = await tableStyles(page);
           const key = `${width} ${route}`;
           if (RECORD_TABLES) tableGolden[key] = got;
           else if (JSON.stringify(got) !== JSON.stringify(tableGolden[key]))

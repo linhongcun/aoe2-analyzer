@@ -31,7 +31,7 @@
 帝国时代 II 决定版（AoE2 DE）的中文资料站和计算工具：文明、单位、科技、建筑、科技树、文明加成百科，加上文明对比、对局助手、科技模拟器、单位 PK 等工具。
 
 - 线上：https://linhongcun.github.io/aoe2-analyzer/（GitHub Pages，push 到 `main` 才部署）
-- 数据版本：DE Update 185872，所有上游固定版本见 `scripts/data_sources.json`
+- 数据版本：DE Update 188329，所有上游固定版本见 `scripts/data_sources.json`
 - 界面文字全部是简体中文
 
 ## 技术栈

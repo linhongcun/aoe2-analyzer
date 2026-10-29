@@ -21,7 +21,7 @@ export function PrintPlan({ ctx, plan }: { ctx: ProductionContext; plan: TeamPla
     <div className="tp-print" data-testid="team-plan-print">
       <h1>{plan.title || '团战分工计划'}</h1>
       <p>
-        DE185872 · 地图：{plan.map.name || '未填写'} · {OPEN_NAMES[plan.map.openness]}
+        DE{__DATA_SOURCES__.patch.build} · 地图：{plan.map.name || '未填写'} · {OPEN_NAMES[plan.map.openness]}
       </p>
       <p>{plan.map.conditions || '地图补充条件未填写'}</p>
       <p>各阶段按各玩家到达时代的约定。形态/研究/建筑是用户确认记录，不认证完整研究链、资源、人口、兵力或队友执行。</p>

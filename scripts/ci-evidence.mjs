@@ -19,6 +19,8 @@ export const POLICY_FILES = [
   'scripts/ci-run.mjs',
   'scripts/site-artifact.mjs',
   'scripts/deployment-smoke.mjs',
+  'scripts/historical-ui.mjs',
+  'playwright.config.ts',
   'package-lock.json',
 ];
 

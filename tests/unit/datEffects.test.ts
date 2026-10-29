@@ -1,5 +1,6 @@
 /** 生成效果（scripts/effects_build.py → src/data/effects.json）的已知值断言；来源：HSZemi/aoe2dat（DE 147949）EffectCommands + 当前补丁文本 */
 import { describe, expect, it } from 'vitest';
+import pins from '../../scripts/data_sources.json';
 import { DAT } from '../../src/domain/datEffects';
 import { BONUS_SRC, TEAM_BONUSES, TECH_SRC, bonusCoverage } from '../../src/domain/effects';
 import { simulate } from '../../src/domain/simulator';
@@ -10,11 +11,11 @@ const team = new Set<number>();
 const fx = (en: string) => DAT.techs[en]!.rules.flatMap((r) => r.fx);
 
 describe('generated .dat effects', () => {
-  it('generated from the pinned 185872 .dat (sha256 + patch recorded by scripts/dat_source.py)', () => {
+  it('generated from the current pinned .dat (sha256 + patch recorded by scripts/dat_source.py)', () => {
     const s = DAT.meta.sources.find((x) => x.id === 'DAT') as { sha256?: string; patch: string; commit: string } | undefined;
-    expect(s?.sha256).toBe('4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa');
-    expect(s?.commit).toBe('0c38027');
-    expect(s?.patch).toContain('185872');
+    expect(s?.sha256).toBe(pins.sources.dat.sha256);
+    expect(s?.commit).toBe(pins.sources.dat.commit.slice(0, 7));
+    expect(s?.patch).toBe(`${pins.patch.name} (${pins.patch.date})`);
     expect(DAT.meta.sources.map((x) => x.repo)).not.toContain('HSZemi/aoe2dat');
   });
   it('Blacksmith techs: Forging +1, Blast Furnace +2 attack (techs 67/75)', () => {
@@ -40,7 +41,7 @@ describe('generated .dat effects', () => {
     const u = unit('Scout Cavalry');
     expect(simulate(ctx, u, 'Aztecs', 2, none, team).atk - simulate(ctx, u, 'Aztecs', 1, none, team).atk).toBe(2);
   });
-  it('current-patch values (185872): Byzantine Dromon +25% attack speed, Saracen team +3 vs buildings', () => {
+  it('current-patch values: Byzantine Dromon +25% attack speed, Saracen team +3 vs buildings', () => {
     const d = unit('Dromon');
     expect(simulate(ctx, d, 'Byzantines', 4, none, team).rof).toBeCloseTo(d.rof / 1.25, 2);
     expect(BONUS_SRC.Byzantines!['4']).toBe('dat');
