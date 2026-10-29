@@ -25,7 +25,7 @@ export default function PageMeta({
   useEffect(() => {
     if (pattern !== '/players/:id') return;
     let current = true;
-    // Keep this catalog and its validator out of unrelated page cold loads (#282).
+    // Keep this catalog and its validator out of unrelated page cold loads.
     void import('../../data/players')
       .then(({ PLAYER_CATALOG, playerById, playerPath }) => {
         if (!current) return;
