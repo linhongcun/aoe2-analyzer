@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import ts from 'typescript';
+import { readPlayerCatalog, playerPath } from '../src/domain/playerCatalog.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const dataBuild = JSON.parse(readFileSync(path.join(root, 'scripts/data_sources.json'), 'utf8')).patch.build;
 const read = (name) => JSON.parse(readFileSync(path.join(root, 'src/data', name + '.json'), 'utf8'));
@@ -32,6 +33,17 @@ function staticPagesFromRegistry() {
 }
 for (const [route, [title, description]] of Object.entries(staticPagesFromRegistry())) add(route, title, description);
 for (const term of JSON.parse(readFileSync(path.join(root, 'src/content/glossary.json'), 'utf8'))) add(`/glossary/${term.id}`, term.zh, term.meaning);
+const playerState = readPlayerCatalog(
+  JSON.parse(readFileSync(path.join(root, 'src/content/players.json'), 'utf8')),
+  read('civs').map((civ) => civ.en),
+);
+if (playerState.status === 'unavailable') throw new Error('选手目录未通过校验，不能生成页面元信息');
+for (const player of playerState.catalog.players)
+  add(
+    playerPath(player),
+    `${player.handle} 选手资料`,
+    `${player.fullName}，${player.country}；${player.achievement.year} 年 ${player.achievement.event} ${player.achievement.result}。查阅具体对局文明与来源。`,
+  );
 for (const [file, type] of [
   ['units', 'unit'],
   ['techs', 'tech'],

@@ -7,6 +7,7 @@
 import fs from 'node:fs';
 import { customPinyin, pinyin } from 'pinyin-pro';
 import ts from 'typescript';
+import { readPlayerCatalog } from '../src/domain/playerCatalog.mjs';
 
 /** 词 → 读音（空格分隔，与字数相同）。Steve 定：枪兵长的「长」读 zhǎng（#123 评论 6206063202） */
 const FIX = {
@@ -54,6 +55,12 @@ function labels(node) {
   ts.forEachChild(node, labels);
 }
 labels(sections);
+const playerState = readPlayerCatalog(
+  JSON.parse(fs.readFileSync('src/content/players.json', 'utf8')),
+  JSON.parse(fs.readFileSync('src/data/civs.json', 'utf8')).map((civ) => civ.en),
+);
+if (playerState.status === 'unavailable') throw new Error('选手目录未通过校验，不能生成搜索拼音');
+names.push(...playerState.catalog.players.map((player) => player.handle));
 for (const term of JSON.parse(fs.readFileSync('src/content/glossary.json', 'utf8'))) names.push(term.zh);
 for (const c of JSON.parse(fs.readFileSync('src/data/civs.json', 'utf8'))) names.push(...c.bon, c.tb);
 const extra = Object.fromEntries([...new Set(names)].sort().map((zh) => [zh, toPy(zh)]));

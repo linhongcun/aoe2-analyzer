@@ -41,3 +41,9 @@
     padding: 16px;
   }
 }
+.civ-pro-author a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+}

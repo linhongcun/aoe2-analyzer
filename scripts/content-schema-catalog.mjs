@@ -11,6 +11,7 @@ export const SCHEMA_CATALOG = {
       'match-review',
       'mixed-army-rules',
       'mixed-army',
+      'players',
       'scouting',
       'team-plan',
     ].map((name) => [`src/content/${name}.json`, `content-${name}.json`]),

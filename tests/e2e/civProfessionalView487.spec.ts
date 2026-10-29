@@ -1,12 +1,18 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
+import { PLAYER_CATALOG } from './players488Catalog';
+import { playerById, playerPath } from '../../src/domain/playerCatalog.mjs';
 
 const TITLE = 'I Ranked All 56 Civilizations in Age of Empires 2';
 const ORIGINAL = 'https://www.youtube.com/watch?v=AaxJADJGjvU';
 const DISCOVERY = 'https://ageofnews.com/en/aoe2/2026-10-25/';
 const LABEL = '职业选手视角';
 const AXES = ['骑兵', '弓手', '步兵', '经济', '防御', '攻城', '僧侣', '海军'];
+if (PLAYER_CATALOG.status !== 'ready') throw new Error('Verified player catalogue required for the author profile');
+const hera = playerById(PLAYER_CATALOG.catalog, 'hera');
+if (!hera) throw new Error('Hera author must be an actual catalogue member');
+const HERA_PROFILE = playerPath(hera);
 const civs: { en: string; s: number[] }[] = JSON.parse(readFileSync(new URL('../../src/data/civs.json', import.meta.url), 'utf8'));
 const franks = civs.find((civ) => civ.en === 'Franks')!;
 const runtimeErrors = new WeakMap<Page, string[]>();
@@ -80,7 +86,12 @@ async function sourceCard(page: Page) {
   await expect(panel(page).getByText(ORIGINAL, { exact: true })).toBeVisible();
   await expect(panel(page).getByText(DISCOVERY, { exact: true })).toBeVisible();
   await expect(panel(page).locator('[data-stat^="rating-"], canvas, iframe, video, audio, embed, object, img')).toHaveCount(0);
-  await expect(panel(page).locator('a[href*="/players/"]')).toHaveCount(0);
+  const authorLink = panel(page).getByRole('link', { name: 'Hera', exact: true });
+  await expect(authorLink).toBeVisible();
+  const authorUrl = new URL((await authorLink.getAttribute('href'))!, page.url());
+  expect(authorUrl.origin).toBe(new URL(page.url()).origin);
+  expect(authorUrl.hash).toBe(`#${HERA_PROFILE}`);
+  await expect(panel(page).locator('a[href*="/players/"]')).toHaveCount(1);
   await expect(panel(page)).not.toContainText(/(?:本文明|当前文明).*(?:评分|评级|梯队|Tier)/i);
 }
 
@@ -88,6 +99,20 @@ test('#487 first-red direct pro URL selects the missing professional source view
   await ready(page);
   await selected(page, LABEL);
   await expect(panel(page).getByText(TITLE, { exact: true })).toBeVisible();
+});
+
+test('#488 known source author opens the actual Hera profile and returns to pro', async ({ page }) => {
+  await ready(page);
+  await sourceCard(page);
+  await panel(page).getByRole('link', { name: 'Hera', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`#${HERA_PROFILE}$`));
+  await expect(page.locator('main').getByRole('heading', { level: 1, name: hera.handle, exact: true })).toBeVisible();
+  await expect(page.getByTestId('player-detail')).toContainText(hera.fullName);
+  await page.reload();
+  await expect(page.getByTestId('player-detail')).toContainText(hera.fullName);
+  await page.goBack();
+  await selected(page, LABEL);
+  await sourceCard(page);
 });
 
 test('#487 first-red verified original source and honest unknown metadata are visible', async ({ page }) => {

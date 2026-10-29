@@ -1,0 +1,177 @@
+{
+  "checkedAt": "2026-10-29",
+  "sources": [
+    {
+      "id": "vitality-introduction",
+      "title": "AoE 官方：Vitality 选手介绍",
+      "url": "https://www.ageofempires.com/news/a-new-empire-rises-welcome-team-vitality-to-age-of-empires-ii-de/",
+      "kind": "官方刊登的战队客座介绍",
+      "sourcePublishedAt": "2026-01-26T12:00:27-08:00",
+      "publishedAt": "2026-01-27",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "wololo-londinium-recap",
+      "title": "Red Bull Wololo: Londinium 赛事回顾",
+      "url": "https://www.redbull.com/us-en/red-bull-wololo-londinium-recap-age-of-empires",
+      "kind": "主办方赛事回顾",
+      "sourcePublishedAt": "2026-04-07T10:29:54Z",
+      "publishedAt": "2026-04-07",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "wololo-iv-recap",
+      "title": "Red Bull Wololo IV 赛事回顾",
+      "url": "https://www.redbull.com/pl-pl/podsumowanie-red-bull-wololo-iv-age-of-empires",
+      "kind": "主办方赛事回顾",
+      "sourcePublishedAt": "2021-06-28T17:03:58Z",
+      "publishedAt": "2021-06-29",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "wololo-iv-final",
+      "title": "Red Bull Wololo IV 决赛回顾",
+      "url": "https://www.redbull.com/at-de/red-bull-wololo-iv-finale-recap",
+      "kind": "主办方决赛回顾",
+      "sourcePublishedAt": "2021-07-13T14:12:05Z",
+      "publishedAt": "2021-07-13",
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "wololo-v-recap",
+      "title": "Red Bull Wololo V 赛事回顾",
+      "url": "https://www.redbull.com/int-en/red-bull-wololo-v-recap",
+      "kind": "主办方赛事回顾",
+      "sourcePublishedAt": "2021-09-21T07:00:06Z",
+      "publishedAt": "2021-09-21",
+      "checkedAt": "2026-10-29"
+    }
+  ],
+  "players": [
+    {
+      "id": "hera",
+      "handle": "Hera",
+      "fullName": "Hamzah El-Baher",
+      "country": "加拿大",
+      "identityEvidence": [
+        {
+          "sourceId": "vitality-introduction",
+          "locator": "Vitality 队员介绍中 Hamzah “Hera” El-Baher 的姓名段落。"
+        },
+        {
+          "sourceId": "wololo-londinium-recap",
+          "locator": "介绍 Hamzah “Hera” El-Baher 及其加拿大身份的段落。"
+        }
+      ],
+      "achievement": {
+        "year": 2026,
+        "event": "Red Bull Wololo: Londinium",
+        "result": "冠军",
+        "evidence": [
+          {
+            "sourceId": "wololo-londinium-recap",
+            "locator": "总结 Hera 获得 Londinium 冠军的段落。"
+          }
+        ]
+      },
+      "match": {
+        "year": 2026,
+        "event": "Red Bull Wololo: Londinium",
+        "stage": "决赛",
+        "game": "第八局",
+        "map": null,
+        "civId": "Armenians",
+        "opponentId": "liereyy",
+        "opponentCivId": "Wu",
+        "evidence": [
+          {
+            "sourceId": "wololo-londinium-recap",
+            "locator": "第八局回顾：“With Hera on the Armenians, and Liereyy on Wu…”；该段未给地图名。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "liereyy",
+      "handle": "Liereyy",
+      "fullName": "Kai Kallinger",
+      "country": "奥地利",
+      "identityEvidence": [
+        {
+          "sourceId": "vitality-introduction",
+          "locator": "Vitality 队员介绍中 Kai “Liereyy” Kallinger 的姓名段落。"
+        },
+        {
+          "sourceId": "wololo-iv-recap",
+          "locator": "介绍 Kai “Liereyy” Kallinger、奥地利身份及夺冠的段落。"
+        }
+      ],
+      "achievement": {
+        "year": 2021,
+        "event": "Red Bull Wololo IV",
+        "result": "冠军",
+        "evidence": [
+          {
+            "sourceId": "wololo-iv-recap",
+            "locator": "总结 Liereyy 获得 Wololo IV 冠军的段落。"
+          }
+        ]
+      },
+      "match": {
+        "year": 2021,
+        "event": "Red Bull Wololo IV",
+        "stage": "决赛",
+        "game": "最后一局",
+        "map": "Ring Fortress",
+        "civId": "Franks",
+        "opponentId": "hera",
+        "opponentCivId": "Chinese",
+        "evidence": [
+          {
+            "sourceId": "wololo-iv-final",
+            "locator": "Ring Fortress 最后一局：“Liereyy entschied sich hier für die Franken, während Hera auf die Chinesen setzte.”"
+          }
+        ]
+      }
+    },
+    {
+      "id": "theviper",
+      "handle": "TheViper",
+      "fullName": "Ørjan Larsen",
+      "country": "挪威",
+      "identityEvidence": [
+        {
+          "sourceId": "wololo-v-recap",
+          "locator": "介绍 Ørjan “TheViper” Larsen、挪威身份及夺冠的段落。"
+        }
+      ],
+      "achievement": {
+        "year": 2021,
+        "event": "Red Bull Wololo V",
+        "result": "冠军",
+        "evidence": [
+          {
+            "sourceId": "wololo-v-recap",
+            "locator": "总结 TheViper 获得 Wololo V 冠军的段落。"
+          }
+        ]
+      },
+      "match": {
+        "year": 2021,
+        "event": "Red Bull Wololo V",
+        "stage": "决赛",
+        "game": "首局",
+        "map": "Runestones",
+        "civId": "Vikings",
+        "opponentId": "liereyy",
+        "opponentCivId": "Ethiopians",
+        "evidence": [
+          {
+            "sourceId": "wololo-v-recap",
+            "locator": "决赛首局：“The grand finals started on Runestones, with Liereyy on Ethiopians and TheViper with the Vikings.”"
+          }
+        ]
+      }
+    }
+  ]
+}

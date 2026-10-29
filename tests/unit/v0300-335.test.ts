@@ -24,6 +24,27 @@ const HISTORICAL_INPUT = JSON.parse(HISTORICAL_INPUT_RAW) as {
 type Stamp = { ts: string; how: string };
 /** key：`${url} ${字段}`；字段为 published（publishedAt / published / date）或 updated（updatedAt） */
 const STAMPS: Record<string, Stamp> = {
+  // #488：只追加已核对的人物资料来源公开时间戳；年度战绩不是来源发布日期。
+  'https://www.ageofempires.com/news/a-new-empire-rises-welcome-team-vitality-to-age-of-empires-ii-de/ published': {
+    ts: '2026-01-26T12:00:27-08:00',
+    how: '2026-10-29 已读取官方刊登的 Vitality 客座介绍公开时间戳；北京时间 2026-01-27',
+  },
+  'https://www.redbull.com/us-en/red-bull-wololo-londinium-recap-age-of-empires published': {
+    ts: '2026-04-07T10:29:54Z',
+    how: '2026-10-29 已读取主办方 Londinium 回顾公开时间戳；北京时间 2026-04-07',
+  },
+  'https://www.redbull.com/pl-pl/podsumowanie-red-bull-wololo-iv-age-of-empires published': {
+    ts: '2021-06-28T17:03:58Z',
+    how: '2026-10-29 已读取主办方 Wololo IV 回顾公开时间戳；北京时间 2021-06-29',
+  },
+  'https://www.redbull.com/at-de/red-bull-wololo-iv-finale-recap published': {
+    ts: '2021-07-13T14:12:05Z',
+    how: '2026-10-29 已读取主办方 Wololo IV 决赛回顾公开时间戳；北京时间 2021-07-13',
+  },
+  'https://www.redbull.com/int-en/red-bull-wololo-v-recap published': {
+    ts: '2021-09-21T07:00:06Z',
+    how: '2026-10-29 已读取主办方 Wololo V 回顾公开时间戳；北京时间 2021-09-21',
+  },
   'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-188329/ published': {
     ts: '2026-10-27T10:04:41-07:00',
     how: '2026-10-29 实际读取官方页面 published_time；北京时间 2026-10-28，发行日另存 releaseDate',

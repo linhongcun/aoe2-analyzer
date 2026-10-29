@@ -19,9 +19,21 @@
     "py": "dadehao",
     "pyi": "ddh"
   },
+  "Hera": {
+    "py": "",
+    "pyi": ""
+  },
+  "Liereyy": {
+    "py": "",
+    "pyi": ""
+  },
   "MAA：武士": {
     "py": "wushi",
     "pyi": "ws"
+  },
+  "TheViper": {
+    "py": "",
+    "pyi": ""
   },
   "UU：独特单位": {
     "py": "dutedanwei",
@@ -1058,6 +1070,10 @@
   "羊倌工作速度 +25%": {
     "py": "yangguangongzuosudu",
     "pyi": "yggzsd"
+  },
+  "职业选手资料": {
+    "py": "zhiyexuanshouziliao",
+    "pyi": "zyxszl"
   },
   "聚落可以训练长矛兵系和掷矛手": {
     "py": "juluokeyixunlianchangmaobingxihezhimaoshou",
