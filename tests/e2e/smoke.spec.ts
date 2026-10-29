@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page, type Request } from '@playwright/test';
+import PINS from '../../scripts/data_sources.json';
 
+const DATA_VERSION = `DE ${PINS.patch.build}（${PINS.patch.date}）`;
 const PKG_VERSION = (JSON.parse(readFileSync('package.json', 'utf8')) as { version: string }).version;
 
 /** CivPicker 选择助手：打开选择器、搜索英文名并点击对应选项 */
@@ -445,7 +447,7 @@ test('feedback link: footer + detail page button prefill GitHub issue', async ({
   expect(href.origin + href.pathname).toBe('https://github.com/linhongcun/aoe2-analyzer/issues/new');
   expect(href.searchParams.get('title')).toContain('单位 4');
   expect(href.searchParams.get('body')).toContain('/unit/4');
-  expect(href.searchParams.get('body')).toContain('185872');
+  expect(href.searchParams.get('body')).toContain(String(PINS.patch.build));
   expect(await btn.getAttribute('target')).toBe('_blank');
   await expect(page.locator('footer a[data-t="feedback"]')).toHaveAttribute('href', /issues\/new\?title=/);
   await page.goto('./#/duel');
@@ -455,16 +457,16 @@ test('feedback link: footer + detail page button prefill GitHub issue', async ({
 test('data version badge links to about-data page with pins and patch notes', async ({ page }) => {
   await page.goto('./#/units');
   const badge = page.locator('[data-t="version-badge"]');
-  await expect(badge).toContainText('数据版本：DE 185872（2026-09-23）');
-  await expect(page.locator('[data-t="footer-version"]')).toContainText('DE 185872');
+  await expect(badge).toContainText(`数据版本：${DATA_VERSION}`);
+  await expect(page.locator('[data-t="footer-version"]')).toContainText(`DE ${PINS.patch.build}`);
   await expect(page.locator('footer a[data-t="feature"]')).toHaveAttribute('href', /[?&]labels=feature(&|$)/);
   await badge.click();
   await expect(page).toHaveURL(/#\/about-data$/);
-  await expect(page.locator('[data-t="data-version"]')).toHaveText('DE 185872（2026-09-23）');
-  await expect(page.locator('[data-t="src-dat"]')).toContainText('SiegeEngineers/auto-mods@0c38027');
+  await expect(page.locator('[data-t="data-version"]')).toHaveText(DATA_VERSION);
+  await expect(page.locator('[data-t="src-dat"]')).toContainText(`${PINS.sources.dat.repo}@${PINS.sources.dat.commit.slice(0, 7)}`);
   await expect(page.locator('[data-t="src-dat"]')).toContainText('sha256');
-  await expect(page.locator('[data-t="src-aoe2techtree"]')).toContainText('@3bb43b1');
-  await expect(page.locator('a[data-t="patch-note"]').first()).toHaveAttribute('href', /PATCH-NOTES\/185872\.md$/);
+  await expect(page.locator('[data-t="src-aoe2techtree"]')).toContainText(`@${PINS.sources.aoe2techtree.commit.slice(0, 7)}`);
+  await expect(page.locator('a[data-t="patch-note"]').first()).toHaveAttribute('href', new RegExp(`PATCH-NOTES/${PINS.patch.build}\\.md$`));
 });
 
 test('build orders read-only list renders all entries with sources', async ({ page }) => {

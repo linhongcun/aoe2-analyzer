@@ -1,5 +1,9 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page, type Locator } from '@playwright/test';
+// @ts-expect-error Browser infrastructure scripts are plain Node modules
+import { historicalSuiteURL } from '../../scripts/historical-ui.mjs';
+
+test.use({ baseURL: historicalSuiteURL('duelPreset372.spec.ts') });
 
 const CASES = [
   {

@@ -1,5 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+// @ts-expect-error Browser infrastructure scripts are plain Node modules
+import { historicalSuiteURL } from '../../scripts/historical-ui.mjs';
+
+test.use({ baseURL: historicalSuiteURL('mountedCrossbowPresets441.spec.ts') });
 
 const CASES = [
   {

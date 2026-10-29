@@ -1,8 +1,9 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
+import { DATA_PATCH_BUILD } from '../../src/data/meta';
 
 const KNIGHT = '38.Byzantines.3..';
 const PIKEMAN = '358.Byzantines.3..';
-const VERSION = '185872';
+const VERSION = String(DATA_PATCH_BUILD);
 const pageErrors = new WeakMap<Page, string[]>();
 
 function comparisonUrl({
