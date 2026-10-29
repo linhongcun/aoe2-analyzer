@@ -1,15 +1,27 @@
 import { Link } from 'react-router-dom';
 import { buildOrders } from '../../../data/buildOrders';
 import { useCore } from '../../../data/hooks';
-import { openingBuildIds } from '../../../domain/civOpening';
 import type { Civ } from '../../../domain/types';
 import { Linked } from '../../../shared/ui/widgets';
 import { civOpeningDisplayText } from '../displayNames';
+import { selectOpeningBuilds } from '../openingBuildChoices';
+import '../openingBuildChoices.css';
+
+function BuildName({ text }: { text: string }) {
+  return text.split(/(\d+\s*(?:人口|村民))/g).map((part, index) =>
+    index % 2 ? (
+      <span className="num nw" key={index}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
 
 export function CivOpening({ c }: { c: Civ }) {
   const core = useCore();
-  const ids = openingBuildIds(c.op);
-  const builds = ids.flatMap((id) => buildOrders.filter((b) => b.id === id));
+  const { kind, builds } = selectOpeningBuilds(c, buildOrders);
   return (
     <section className="civ-opening" aria-label="推荐开局">
       <p>
@@ -24,12 +36,20 @@ export function CivOpening({ c }: { c: Civ }) {
           </li>
         ))}
       </ol>
-      <p className="note">对应开局流程（通用参考，请结合文明加成调整）：</p>
+      <p className="note">兵种转型是路线参考；下面按资料适用名单列出流程，无明确匹配时标注通用示意。</p>
+      <p className="note">
+        <b>{kind === 'listed' ? '资料标注适用的开局流程' : '通用流程示意'}</b>
+      </p>
+      {kind === 'generic' && <p className="note">暂无资料标注适用的流程，请结合文明加成调整。</p>}
+      {builds.length === 0 && <p className="note">暂无匹配流程。</p>}
       <div className="civ-opening-links">
         {builds.map((b) => (
-          <Link className="ulink" key={b.id} to={`/builds?bo=${b.id}`}>
-            {b.name.zh}
-          </Link>
+          <div className="civ-opening-choice" key={b.id}>
+            <Link className="ulink" to={`/builds?bo=${b.id}&civ=${encodeURIComponent(c.en)}`} aria-label={b.name.zh}>
+              <BuildName text={b.name.zh} />
+            </Link>
+            {kind === 'generic' && <span className="note civ-opening-generic">通用示意</span>}
+          </div>
         ))}
         <Link className="ulink" to="/builds">
           查看全部开局

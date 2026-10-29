@@ -25,6 +25,7 @@ import { shareCardBlob } from './shareCardImage';
 import { NumUnitText } from './NumUnitText';
 import BuildPracticeView, { buildPracticeUrl } from './BuildPracticeView';
 import { buildView, rowTime, mmss, rangeLabel, summaryText, isLongBottleneck, noHouseCompareText } from './timelineModel';
+import { BuildApplicability } from './BuildApplicability';
 
 const UPS = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const UNIT_ZH = Object.fromEntries((units as { id: number; zh: string }[]).map((u) => [String(u.id), u.zh]));
@@ -221,7 +222,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
       />
     );
 
-  return (
+  const timeline = (
     <section className="pane tl" id="builds" data-t="timeline">
       <div className="tl-desk-only">
         <Breadcrumbs current={bo.name.zh} />
@@ -502,5 +503,13 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
         </div>
       )}
     </section>
+  );
+  return (
+    <>
+      <section className="pane build-applicability-panel" aria-label="开局适用文明">
+        <BuildApplicability order={bo} requestedCiv={q.civ} heading />
+      </section>
+      {timeline}
+    </>
   );
 }
