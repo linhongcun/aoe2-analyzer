@@ -40,6 +40,7 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(guideSources).toContainText('DE188329');
     await expect(guideSources).toContainText('未作客户端实测');
     await guideSources.scrollIntoViewIfNeeded();
+    expect(await guideSources.locator('.gg-number').evaluateAll((nodes) => nodes.every((node) => node.getClientRects().length === 1))).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     const guideScreenshot = testInfo.outputPath(`guide-review-${width}.png`);
     await page.screenshot({ path: guideScreenshot });
@@ -65,6 +66,7 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(planSources).toContainText('DE188329');
     await expect(planSources).toContainText('未作客户端实测');
     await planSources.scrollIntoViewIfNeeded();
+    expect(await planSources.locator('.num').evaluateAll((nodes) => nodes.every((node) => node.getClientRects().length === 1))).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     const teamScreenshot = testInfo.outputPath(`team-review-${width}.png`);
     await page.screenshot({ path: teamScreenshot });
