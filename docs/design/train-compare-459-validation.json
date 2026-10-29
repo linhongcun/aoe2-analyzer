@@ -1,0 +1,283 @@
+{
+  "issue": 459,
+  "date": "2026-10-29",
+  "baseline": "8600df8530770499a08c39fece5ded228241c532",
+  "testedImplementation": "5fbc588bd80f0485fd7b9326d0d52f017ca09340",
+  "initialTestedImplementation": "2e7724742998be1e24f3b6af26de1e8c63be828b",
+  "version": "0.62.0",
+  "specification": "docs/design/train-compare-459.md",
+  "firstRed": {
+    "baselineVersion": "0.61.0",
+    "baselineBuild": {
+      "path": "/tmp/issue459-baseline-build.log",
+      "sha256": "14f2e9a33481921bcd116ee224a08e8d16a95df74c1e1961222378af3059b98b"
+    },
+    "cwd": "/workspace/issue-459-tests",
+    "runs": [
+      {
+        "command": "BASE_URL=http://127.0.0.1:4230/ npx playwright test tests/e2e/trainCompare459.spec.ts --grep regression --workers=3 --retries=0 --reporter=line --output=/tmp/issue459-first-red-artifacts",
+        "result": "3 real browser failures, exit1: selected comparison and unknown/orphan mode all rendered old defaults",
+        "log": {
+          "path": "/tmp/issue459-first-red.log",
+          "sha256": "661fce39c423de69f1352540a3157d47af9c5affc4a5b84ec5f12910142cdb46"
+        },
+        "testSource": {
+          "path": "/tmp/issue459-first-red-test.ts",
+          "sha256": "7c9dc114ec532ab3926a1c2295b5767ab9af6ca167c0294809562a6757314d70"
+        }
+      },
+      {
+        "command": "BASE_URL=http://127.0.0.1:4230/ npx playwright test tests/e2e/trainCompare459.spec.ts --grep \"explicit empty civilization\" --workers=1 --retries=0 --reporter=line --output=/tmp/issue459-first-red-empty-artifacts",
+        "result": "1 additional real browser failure, exit1: explicit empty civilization set rendered old defaults",
+        "log": {
+          "path": "/tmp/issue459-first-red-empty.log",
+          "sha256": "c1a89a9ef0bac4d40ea06b681615e3c786cc7a320a3ff5ee17d704aa70d837d9"
+        },
+        "testSource": {
+          "path": "/tmp/issue459-first-red-final-test.ts",
+          "sha256": "e17bb6046f89b92c1f0df8fd7751b95bdd60953f5809c6a7f942e3c732d4a817"
+        }
+      }
+    ],
+    "noImportOrCollectionFailure": true,
+    "numericApiOraclesWereAlreadySupportedAndNotCountedAsFirstRed": true
+  },
+  "preservation": {
+    "unchangedPathGroups": [
+      "src/data",
+      "src/domain",
+      "scripts",
+      ".github",
+      "tests/e2e/fixtures",
+      "tests/unit/fixtures",
+      "src/features/production/production.css"
+    ],
+    "originalProductionBody": {
+      "sha256": "4411014d5bcf72512da5f6d7a04f0d0630f6abb108df6600069150d4a925f376",
+      "bytes": 15642,
+      "unchanged": true
+    },
+    "protectedBaselineFiles": [
+      {
+        "path": "src/features/production/production.css",
+        "sha256": "97e2010e278a2f2d93e0a937f9b68218bfb9ebf2d9955cb2c052422a5ce50ee4"
+      },
+      {
+        "path": "src/domain/production.ts",
+        "sha256": "d5889b610c0cfc517c8348f33d20a91ad4d124252afcb2ef37f3ab87d771d67d"
+      },
+      {
+        "path": "src/domain/tradeIncome.ts",
+        "sha256": "b5108c9ce60c5ef655c287438f2d2e32325f029ec2f3dbe1a3223ba2825c016c"
+      },
+      {
+        "path": "tests/e2e/production204.spec.ts",
+        "sha256": "fb2adab0e6e5e3260a3b471f883e88890affe397a732ee72ccf5d5a7d52e053a"
+      },
+      {
+        "path": "tests/e2e/tradeIncome226.spec.ts",
+        "sha256": "644cc0f7b91cf3738e94ccb9d61e0510cec154c32673e2e5d0762e4d6a37f3d6"
+      },
+      {
+        "path": "tests/e2e/communityIntegration230.spec.ts",
+        "sha256": "a985706ad0f1c30ae04181efeb81cae3f5b87fa77522b7ca53a948c34cb5e66e"
+      }
+    ],
+    "originalTestsAndNumericalExpectationsUnchanged": true,
+    "packageFilesVersionOnly": true
+  },
+  "sourceFiles": [
+    {
+      "path": "src/features/production/CompareNumberText.tsx",
+      "sha256": "4537bd7634a9dc2ea4e5c33fa31874dd70e375bcb154c1605e95dc620014a1be",
+      "unchangedSinceInitialTest": true
+    },
+    {
+      "path": "src/features/production/Production.tsx",
+      "sha256": "4f199cd1c835f52ca93fa28dbc524820ea9ddcfd4ff9e730f840c6cfa44bf7db",
+      "unchangedSinceInitialTest": true
+    },
+    {
+      "path": "src/features/production/ProductionCompareError.tsx",
+      "sha256": "0df70684e709b74d35c2bd30f5e1a535a6f4ba913ba4dffd068b069718a1ae38",
+      "unchangedSinceInitialTest": true
+    },
+    {
+      "path": "src/features/production/ProductionTrainCompare.tsx",
+      "sha256": "b4590c38900f05ba4f54f27354ffca73f50a6fcd2743843cbcd2d6977a5aa404",
+      "unchangedSinceInitialTest": true
+    },
+    {
+      "path": "src/features/production/productionMode.ts",
+      "sha256": "9772f1152b926139ca91238314a6fb1aade68e93119897ba51d218bb3473cd1a",
+      "unchangedSinceInitialTest": true
+    },
+    {
+      "path": "src/features/production/trainCompare.css",
+      "sha256": "b36bdf41b778e1305506f58bd9213ab01ebbe91eca0aebc54a1df6aad51a85d9",
+      "unchangedSinceInitialTest": false
+    },
+    {
+      "path": "src/features/production/trainCompareCodec.ts",
+      "sha256": "d4606dbb1f2d6be0556f356b41bd9a4cc3bc8129ac9e74c9e55a976348b78cb1",
+      "unchangedSinceInitialTest": false
+    },
+    {
+      "path": "src/features/production/trainCompareModel.ts",
+      "sha256": "e0eda8301806a1271e925373d0a47e42b30f94cf5d6fd67787f5f7aa34c6be99",
+      "unchangedSinceInitialTest": true
+    },
+    {
+      "path": "src/features/production/useProductionContext.ts",
+      "sha256": "6d4c4c50e1479887aff96e93ba62c372f07a0ba158998353cf34d2bb09393d47",
+      "unchangedSinceInitialTest": true
+    }
+  ],
+  "validation": {
+    "static": [
+      {
+        "command": "npx tsc -p . --noEmit",
+        "result": "PASS; final build also includes current TypeScript check",
+        "log": {
+          "path": "/tmp/issue459-typecheck.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "command": "npm run lint",
+        "result": "PASS,0 errors/11 existing warnings; changed codec/test lint rechecked after error fix",
+        "log": {
+          "path": "/tmp/issue459-lint.log",
+          "sha256": "e1a3e524490c0227fa57b9a2aee3c956b2c863fbf4f5567b9b3d59aa91278e5b"
+        }
+      },
+      {
+        "command": "npm run lint:layers -- --strict",
+        "result": "PASS,0 violations; no layer imports changed afterward",
+        "log": {
+          "path": "/tmp/issue459-layers.log",
+          "sha256": "b6f2678b1340fdc118cc7085513dcd02a33eaf5e996456d1f6eb948abf5f68a6"
+        }
+      },
+      {
+        "command": "npm run lint:css",
+        "result": "PASS,54files/0errors after scoped error fix",
+        "log": {
+          "path": "/tmp/issue459-errorfix-css.log",
+          "sha256": "7bccd741f6900809ff92e8aeac88d5cbea5cbc2dcb9639c0787fff4532efcf9b"
+        }
+      }
+    ],
+    "builds": [
+      {
+        "command": "npm run build",
+        "source": "2e7724742998be1e24f3b6af26de1e8c63be828b",
+        "result": "PASS,951pages,embedded0.62.0+2e77247",
+        "log": {
+          "path": "/tmp/issue459-candidate-build.log",
+          "sha256": "6dcd6bdff3c908265084572baa29eef667f378a6875da141c404ae9ad67b510e"
+        }
+      },
+      {
+        "command": "npm run build",
+        "source": "5fbc588bd80f0485fd7b9326d0d52f017ca09340",
+        "result": "PASS,951pages,embedded0.62.0+5fbc588",
+        "log": {
+          "path": "/tmp/issue459-final-build.log",
+          "sha256": "f09fa3e17c5d3e1b4ac04d73cbe9da6154bc636297111c91f87876d2aa88fbc3"
+        }
+      }
+    ],
+    "units": [
+      {
+        "command": "npx vitest run tests/unit/trainCompare459.test.ts tests/unit/production204.test.ts tests/unit/tradeIncome226.test.ts tests/unit/costDiscount24.test.ts tests/unit/availability.test.ts tests/unit/availabilityAge277.test.ts",
+        "result": "140passed across6files,including37new; production/math/codec accepted-input behavior retained",
+        "log": {
+          "path": "/tmp/issue459-unit-focused.log",
+          "sha256": "9c1e4573db361a36654554b4c8c8329510ffc07b2fcca7ce718b870ae98195d9"
+        }
+      },
+      {
+        "command": "npx vitest run tests/unit/trainCompare459.test.ts",
+        "result": "37passed after bounded diagnostic fix; same strict rejection and all actual numeric oracles",
+        "log": {
+          "path": "/tmp/issue459-unit-errorfix.log",
+          "sha256": "d0c642c50dcf81f7ab6ad33ed71b5ddb78b2d3c1c99730eb10ee3c4a30cb6552"
+        }
+      }
+    ],
+    "browser": [
+      {
+        "command": "BASE_URL=http://127.0.0.1:4230/ npx playwright test tests/e2e/trainCompare459.spec.ts --workers=2 --retries=0 --reporter=line --output=/tmp/issue459-new-e2e-artifacts",
+        "source": "2e7724742998be1e24f3b6af26de1e8c63be828b",
+        "result": "30passed/4failed due to new-test harness mismatches; retained actual log, no business failure or source change",
+        "log": {
+          "path": "/tmp/issue459-new-e2e.log",
+          "sha256": "05e2b2e884668b10d408e82a5f3acae9ebbac418d171481fdf748765a7b17285"
+        }
+      },
+      {
+        "command": "BASE_URL=http://127.0.0.1:4230/ npx playwright test tests/e2e/trainCompare459.spec.ts --grep \"an empty selection|clipboard failure|comparison 1280\" --workers=2 --retries=0 --reporter=line --output=/tmp/issue459-fixed-e2e-artifacts",
+        "source": "2e7724742998be1e24f3b6af26de1e8c63be828b",
+        "result": "4passed after only scoped test-locator/absence fixes; same production build;34unique initial cases green",
+        "log": {
+          "path": "/tmp/issue459-fixed-e2e.log",
+          "sha256": "058d07cdf7e2e63d7a498cf101c834e844d295f5ed5e37c78079e0e7d8672178"
+        },
+        "harnessFixProof": {
+          "path": "/tmp/issue459-test-fix-proof.json",
+          "sha256": "22d63ec41080feeacca43388faf11b5b932081e488b77fba3869d34dd3e5b723"
+        }
+      },
+      {
+        "command": "BASE_URL=http://127.0.0.1:4230/ npx playwright test tests/e2e/trainCompare459.spec.ts --grep \"long unknown parameter|comparison (360|375|390|1280)|regression unknown mode|comparison-only parameters|invalid raw links\" --workers=2 --retries=0 --reporter=line --output=/tmp/issue459-errorfix-artifacts",
+        "source": "5fbc588bd80f0485fd7b9326d0d52f017ca09340",
+        "result": "19passed:8new long-key cases plus11 affected existing cases;42unique new-feature browser cases green using preserved unchanged-source evidence",
+        "log": {
+          "path": "/tmp/issue459-errorfix-e2e.log",
+          "sha256": "8daf73e53472841f2b0269d35f99acadc3127cfb270b58084b4ffc0232b870d9"
+        }
+      },
+      {
+        "command": "BASE_URL=http://127.0.0.1:4230/ npx playwright test tests/e2e/production204.spec.ts tests/e2e/tradeIncome226.spec.ts tests/e2e/communityIntegration230.spec.ts --workers=2 --output=/tmp/issue459-regression-artifacts",
+        "source": "2e7724742998be1e24f3b6af26de1e8c63be828b",
+        "result": "33passed; original protected old-body/CSS/domain and those test files byte-identical in final source",
+        "log": {
+          "path": "/tmp/issue459-regression-e2e.log",
+          "sha256": "3d92f4a9a3122fefae86b1f590c6dd21f1f06f08a8e7afcd4d9c2e1bae58824e"
+        }
+      }
+    ],
+    "actualUiDefect": {
+      "redProbe": {
+        "path": "/tmp/issue459-independent-ui/long-unknown-key.json",
+        "sha256": "d2348cd75b716d0a2622cf018d7acd30a816f5ab1d01e3fd313864f3647c8e2b"
+      },
+      "screenshot": "/tmp/issue459-independent-ui/long-unknown-key-360.png",
+      "observed": "200-character unknown key at360 produced documentWidth1671",
+      "fix": "Keep full raw URL/editable textarea, bound inline unknown-parameter diagnostic, scope alert word wrapping. Added both alphabetic and numeric long-key cases at all4widths/themes.",
+      "acceptanceOrMathChange": false
+    },
+    "localUniqueUnitCasesPassed": 140,
+    "localUniqueBrowserCasesPassed": 75,
+    "plan": {
+      "base": "8600df8530770499a08c39fece5ded228241c532",
+      "head": "5fbc588bd80f0485fd7b9326d0d52f017ca09340",
+      "scope": "full",
+      "features": ["all"],
+      "unit": [],
+      "e2e": [],
+      "data": false,
+      "full": true
+    },
+    "remote": "Root owns actual full/data=false PR CI, merge, deployment and release. Implementation agent ran only the recorded focused local coverage; no CI policy change."
+  },
+  "independentReviewOwner": "/root/scope_review; final source/UI conclusions recorded separately against delivered exact commit",
+  "artifacts": [
+    "/tmp/issue459-new-e2e-artifacts",
+    "/tmp/issue459-fixed-e2e-artifacts",
+    "/tmp/issue459-errorfix-artifacts",
+    "/tmp/issue459-regression-artifacts",
+    "/tmp/issue459-independent-ui"
+  ]
+}
