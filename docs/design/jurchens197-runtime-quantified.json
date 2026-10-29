@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "version": "v0.60.0",
+  "gamePatch": "DE188329",
+  "displayTimezone": "Asia/Shanghai",
+  "immutableImplementation": {
+    "head": "77ef757226e13996456c8bbb0251e3b2c6689263",
+    "tree": "be3427005b1df2271a47e68c750b197468f45dc5",
+    "base": "6b9cc7eb3ddef630888145cdedd8be73f7deaf0e",
+    "patch": 188329,
+    "version": "0.60.0",
+    "sourceMapSHA256": "9a4aa0ade616fc9957c981ac8daefcc92f73d8b0e92f09b32bea277b68c9cccd",
+    "policyDigest": "3f7c919946efcc3abbe8086631fe33c0b2cf188ef0e717e15ee8110e6c5cb1b3",
+    "sourceInputs": 498,
+    "policyEntries": 9
+  },
+  "documentationBoundary": "Current build/browser/capture executed only on A2=77ef757. This follow-up changes documentation only; it does not claim that B reran A2. Current79 unit/producer tests ran on integration WIP before the later reviewed teaching audit-record-only change, separately covered by its focused recovery and final typecheck.",
+  "kind": "Once-captured current188329 baseline and A2 exact offline comparison",
+  "baseline": {
+    "head": "6b9cc7eb3ddef630888145cdedd8be73f7deaf0e",
+    "tree": "f6bdead138894a2b1af3b4641c02e7b58f83d466",
+    "version": "0.59.0",
+    "record": {
+      "path": "/tmp/batch14-188329-baseline-actual.json",
+      "sha256": "25566a9aa293b8b9c60dbabf96177693eb56916e77b0ab7901a833eae395384a",
+      "bytes": 10256955
+    },
+    "actualUTC": ["2026-10-29T05:15:55.609Z", "2026-10-29T05:16:26.139Z"],
+    "sourceInputs": 497,
+    "protectedFiles": 566,
+    "support": 50
+  },
+  "candidate": {
+    "record": {
+      "path": "/tmp/batch14-188329-runtime-A2-actual.json",
+      "sha256": "9366a855756d216388d8fad3a68bd9c1206afb65717c421c25fc7b904be0dc37",
+      "bytes": 10262419
+    },
+    "actualUTC": ["2026-10-29T05:40:23.170Z", "2026-10-29T05:40:53.885Z"],
+    "counts": {
+      "civs": 56,
+      "orders": 8,
+      "full": 448,
+      "numeric": 448,
+      "helpers": 1512,
+      "realCost": 224,
+      "notes": 56,
+      "notesByBO": 448,
+      "support": 56,
+      "supported": 51,
+      "unsupported": 5,
+      "rawCivRows": 56,
+      "rawGlobalSections": 14,
+      "protectedFiles": 574,
+      "sourceInputs": 498,
+      "old317Keys": 88,
+      "historicalCivs": 19,
+      "historicalProjections": 114
+    },
+    "execution": {
+      "network": 0,
+      "producer": 0,
+      "testRunner": 0,
+      "build": 0,
+      "browser": 0,
+      "repositoryWrites": 0,
+      "simulateBuild": 448,
+      "gatherRate": 1512,
+      "gatherModel": 224
+    }
+  },
+  "expectations": {
+    "sealedBeforeCapture": {
+      "path": "/tmp/batch14-188329-runtime-A2-expectations-seal.json",
+      "sha256": "25fd14b9fd0ffe0d112dc4b6907020c7795023e6f315d5d7e8eb806fd1a5e924",
+      "bytes": 3111
+    },
+    "rule": "Root-approved exact text/metadata expectations sealed before the capture; afterwards only actual physical pins filled, no broad filters or posthoc numerical exceptions."
+  },
+  "strictOffline": {
+    "record": {
+      "path": "/tmp/batch14-188329-runtime-A2-exact-offline/offline-comparison.json",
+      "sha256": "cc7df408ca2c9707cde849340b92e809d1ec88e358ecb5de6555eca0b841103e",
+      "bytes": 6712
+    },
+    "actualUTC": ["2026-10-29T05:41:57.702651+00:00", "2026-10-29T05:41:57.873210+00:00"],
+    "verdict": "PASS_EXACT_JURCHENS_A2_DE188329_OFFLINE",
+    "all448NumericSame": 448,
+    "JurchensEightNumericSame": 8,
+    "other55FullOutputsSame": 440,
+    "helpersSame": 1512,
+    "independentRealCostSame": 224,
+    "other55DefaultNotesSupportSame": 55,
+    "other55PerBONotesSame": 440,
+    "other55RawCivRowsSame": 55,
+    "oldGlobalSectionsSame": 14,
+    "currentBaselineProtected": {
+      "total": 566,
+      "byteIdentical": 561,
+      "exactCURRENTPaths": 3,
+      "exactCURRENTSpans": 7,
+      "separatelyReviewed317Paths": 2
+    },
+    "old317KeysAndValuesSame": 86,
+    "actualNew317": {
+      "Jurchens-0": null,
+      "Jurchens-3": null
+    },
+    "onlyRawMetadataAdditions": {
+      "993": "504b1809290ce81bc751108477e92a4aecea02414223d077fd34df5e1af896f3",
+      "995": "d8fca530655e29215f319de23bea6337b02b35c64cf59de3b3b55d80178fb62e"
+    },
+    "unresolvedIssues": [],
+    "additionalExecution": {
+      "network": 0,
+      "downloads": 0,
+      "domain": 0,
+      "tests": 0,
+      "producer": 0,
+      "build": 0,
+      "browser": 0,
+      "trackedRepositoryWrites": 0
+    }
+  },
+  "supportAfter": 51,
+  "remainingCivilizations": ["Chinese", "Gurjaras", "Mapuche", "Poles", "Romans"],
+  "JurchensAllowedChanges": "Only the approved assumptions and source/support/visible-boundary metadata. No corpse-decay income or faster current-eight timing is claimed.",
+  "comparisonBoundary": "The old current188 baseline is low-level Jurchen simulation, not a captured old UI Generic fallback. Old185872/A805 captures are separately archived and are not this comparison."
+}

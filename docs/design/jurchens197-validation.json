@@ -1,0 +1,197 @@
+{
+  "schema": 1,
+  "version": "v0.60.0",
+  "gamePatch": "DE188329",
+  "displayTimezone": "Asia/Shanghai",
+  "immutableImplementation": {
+    "head": "77ef757226e13996456c8bbb0251e3b2c6689263",
+    "tree": "be3427005b1df2271a47e68c750b197468f45dc5",
+    "base": "6b9cc7eb3ddef630888145cdedd8be73f7deaf0e",
+    "patch": 188329,
+    "version": "0.60.0",
+    "sourceMapSHA256": "9a4aa0ade616fc9957c981ac8daefcc92f73d8b0e92f09b32bea277b68c9cccd",
+    "policyDigest": "3f7c919946efcc3abbe8086631fe33c0b2cf188ef0e717e15ee8110e6c5cb1b3",
+    "sourceInputs": 498,
+    "policyEntries": 9
+  },
+  "documentationBoundary": "Current build/browser/capture executed only on A2=77ef757. This follow-up changes documentation only; it does not claim that B reran A2. Current79 unit/producer tests ran on integration WIP before the later reviewed teaching audit-record-only change, separately covered by its focused recovery and final typecheck.",
+  "kind": "Actual current188329 local validation, distinct from archived185872 candidate805",
+  "historicalBoundary": {
+    "oldCandidate": "805396e8bfc7ecb2799038fc9be7df6e3a837a45",
+    "patch": 185872,
+    "old79FirstRed": {
+      "passed": 14,
+      "assertionFailures": 65,
+      "newFixtureInputProblemsIncluded": 2,
+      "runtimeImportEnvironmentErrors": 0
+    },
+    "scope": "Old first-red, two input corrections, old build/UI/capture and old317 remain historical originals. They are not relabeled as current188329. Publicv0.59.0 belongs to concurrent#486; this feature usesv0.60.0."
+  },
+  "currentSource": {
+    "independentCandidate": {
+      "path": "/tmp/batch14-188329-jurchens-source-candidate.json",
+      "sha256": "7b2c941dc7804bb10bf4c9775e9c6e58a3e39edc4b37d830f007dec9294eccfa",
+      "bytes": 6192
+    },
+    "summary": {
+      "path": "docs/design/jurchens197-source-summary.json",
+      "bytes": 14865,
+      "sha256": "db6faa6d5a2f7ef5258e7fc06501a48648de6438f92bed8df164bc57e89912c8",
+      "selectedTechs": [166, 993, 995],
+      "loader": "Default actual current188329 source; no historical --pin-from",
+      "source": {
+        "repo": "SiegeEngineers/auto-mods",
+        "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+        "path": "dat/empires2_x2_p1.dat",
+        "sha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f"
+      }
+    },
+    "generation": {
+      "path": "/tmp/batch14-current-generators-execution.json",
+      "sha256": "5fc05323b3dea9e18e90414c11967c25266241f968507168a5923f37105b1477",
+      "bytes": 1314
+    },
+    "canonicalFixtureSHA256": "1013c8675b07147818d9b13a59b473e637d9f19242d7e5d348110a30808fd554",
+    "meaning": "Canonical raw values match both versions only after actual current DAT/public-source parity review; no old source label substitution."
+  },
+  "current79": {
+    "unitPassed": 72,
+    "pythonPassed": 7,
+    "failures": 0,
+    "execution": {
+      "path": "/tmp/batch14-current-green-and-related-execution.json",
+      "sha256": "1c3c95e10fdf2151736f102f10f009253b9bf5e1ec81cbd688c6d4d257a6ff5b",
+      "bytes": 3426
+    },
+    "applicationInputMapAtRun": "9a93665192ccfbf23065f2c8aaa9ab7cd4b5f6e34cf6203b9e4f9fd91eccece0",
+    "laterOnlyApplicationDelta": "src/data/teachingCompatibility188329.ts: exact independently reviewed source-metadata audit record; qualification functions, game facts, all other audit fields, content fingerprints, pins and dates unchanged.",
+    "syntheticChineseName": "Current official Masonry50 display label石工术; no numerical assertion changed."
+  },
+  "currentRelated": {
+    "files": 7,
+    "initialPassed": 225,
+    "initialFailed": 1,
+    "existingTODO": 1,
+    "failure": "Whole-civEco teaching projection SHA changed because of exactly two required raw source metadata fields; not a changed teaching/game fact or a new fixture-input error.",
+    "exactDeltaProof": {
+      "path": "/tmp/batch14-current-teaching-eco-metadata-delta-proof.json",
+      "sha256": "855fca4b4d95afe6be7aaa859e2f342ba13e8f3f17b289d47248436160829675",
+      "bytes": 6222
+    },
+    "independentMigrationReview": {
+      "path": "/tmp/batch14-current-teaching-exact-metadata-migration-review.json",
+      "sha256": "d28e29e3fff261e9aedb67f9073d117b055dc1a6bae96b765982f6d73b2d5e85",
+      "bytes": 2797
+    },
+    "approvedAppliedRecord": {
+      "path": "/tmp/batch14-current-teaching-metadata-applied.json",
+      "sha256": "69d98ca738b63c650209bc6d4c171674c8f56f219fcaa4c1b552375a82ef8134",
+      "bytes": 438
+    },
+    "recordedEvidence": "jurchens197-teaching-metadata.json",
+    "onlyFailedTitleRecovery": {
+      "path": "/tmp/batch14-current-teaching-audit-recovered-execution.json",
+      "sha256": "7e3b644ac19359083b75547e41eb5d4cfc10b5105cdd9bed5781cedc41f3cf0b",
+      "bytes": 671
+    },
+    "recoveredPassed": 1,
+    "finalCoverage": "226passed+1TODO across one7-file run and one isolated-title recovery; no repeated whole group. Original failure and old e62 hash remain.",
+    "teaching486TestsAndComparatorsByteIdenticalToCurrentMain": true
+  },
+  "checks": {
+    "currentStatic": {
+      "path": "/tmp/batch14-current-static-checks.json",
+      "sha256": "97916752f04dddae6ca98a440adeb9a4e3b16cb2bf289d753fc4eca86c082d45",
+      "bytes": 3108
+    },
+    "finalTypecheckExit": 0,
+    "finalTypecheckLogSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "targetESLintExit": 0,
+    "laterAuditModuleESLintExit": 0,
+    "warnings": "Only the existing buildSim max-lines warning; no errors.",
+    "compiledBoundary": "Existing six standalone targets checked unchanged. data-eco schema is validated by validateDocument/content; it is not a seventh standalone target.",
+    "oldTypeAndFormattingTriage": "Old805 first typing needed three never-array annotations; old formatting caught a missing brace before production tests. Those original failures and emitted-JS assertion/input proof remain historical evidence, not current failures."
+  },
+  "current317": {
+    "generator": {
+      "path": "/tmp/batch14-current-original317-generator-execution.json",
+      "sha256": "1499d296a5d70b84316c5984bd0c611aee834547aa87849952839f7a8b543cb0",
+      "bytes": 1225
+    },
+    "executionsForCurrentChangedSource": 1,
+    "oldMainKeys": 86,
+    "newKeys": 88,
+    "oldMainValuesAllExact": true,
+    "onlyNaturalAdditions": {
+      "Jurchens-0": null,
+      "Jurchens-3": null
+    },
+    "algorithm": "Exact current-main algorithm except inclusion of new helper source in input fingerprint; no forced positive use or firstChanged.",
+    "normalCheck": {
+      "path": "/tmp/batch14-current-normal317-execution.json",
+      "sha256": "f6c7731c48c5b0acaa30b421f6735c69931b06537ddb195053f6afae5c57b51a",
+      "bytes": 494
+    },
+    "normalPassed": 12,
+    "normalUPDATEOffSkipped": 1
+  },
+  "currentBuild": {
+    "record": {
+      "path": "/tmp/batch14-188329-local-build-A2.execution.json",
+      "sha256": "c84ec1f59d046e4a39fd99ad66322c7097cacbb6785284a2379a1e5bd7f55409",
+      "bytes": 1125
+    },
+    "actualUTC": ["2026-10-29T05:37:02.559467+00:00", "2026-10-29T05:37:20.709325+00:00"],
+    "executions": 1,
+    "exitCode": 0,
+    "distFiles": 1698,
+    "distMapSHA256": "ac5d1968254bcfeea4675119d430c2b79c03b4297dbf6724f480602d1605b951",
+    "sourcePolicyVersionCommitStable": true
+  },
+  "currentBrowser": {
+    "record": {
+      "path": "/tmp/batch14-188329-browser-A2.execution.json",
+      "sha256": "9a2b9b7f893ce94458d8b89d277af8969c6e75e112b7a9aa7d6b948429458a96",
+      "bytes": 1281
+    },
+    "actualUTC": ["2026-10-29T05:39:29.183058+00:00", "2026-10-29T05:39:48.483234+00:00"],
+    "executions": 1,
+    "passed": 9,
+    "skipped": 0,
+    "flaky": 0,
+    "errors": [],
+    "widths": [360, 375, 390, 1280],
+    "themes": ["light", "dark"],
+    "images": 40,
+    "actual1080x1350Downloads": 4,
+    "sourceAndDistStable": true,
+    "manifest": {
+      "path": "/tmp/batch14-188329-browser-A2-image-manifest.json",
+      "sha256": "321eaf2be64fd2b0d693b5a1140b67862526c0c8b716981a6a325bc1a8d6d03d",
+      "bytes": 17567
+    }
+  },
+  "quantification": "jurchens197-runtime-quantified.json",
+  "independentSourceCode": {
+    "report": {
+      "path": "/tmp/batch14-current-A2-independent-source-code-review.json",
+      "sha256": "a9943d8f5da2bb361ac7b8fb6798e36848b49cd29226522986810aab171fb1f1",
+      "bytes": 9936
+    },
+    "verdict": "GO_IMMUTABLE_CURRENT_DE188329_A2_SOURCE_CODE_PROTECTION_AND_METADATA_AUDIT",
+    "unresolvedIssues": []
+  },
+  "independentCurrentUI": {
+    "report": {
+      "path": "/tmp/batch14-188329-jurchens-independent-ui-review.json",
+      "sha256": "858501f51ceb8f9fb98eeeae756d49cf69fd090391ed9219b3a080ecf342a923",
+      "bytes": 29289
+    },
+    "verdict": "PASS_INDEPENDENT_IMMUTABLE_A2_CURRENT188329_UI_REVIEW",
+    "personallyViewed": 16,
+    "metadataOnly": 24,
+    "allFourCurrentDownloadsViewed": true,
+    "unresolvedBatchBlockers": []
+  },
+  "releaseBoundary": "Full PR merge CI, current main/deploy, formal Release/tag and same-physical-public-ZIP verification are evidenced by actual Actions sidecars and the issue/PR receipt; this local evidence file does not invent those later outcomes."
+}

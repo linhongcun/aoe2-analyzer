@@ -1,0 +1,249 @@
+{
+  "schema": 1,
+  "version": "v0.60.0",
+  "gamePatch": "DE188329",
+  "displayTimezone": "Asia/Shanghai",
+  "immutableImplementation": {
+    "head": "77ef757226e13996456c8bbb0251e3b2c6689263",
+    "tree": "be3427005b1df2271a47e68c750b197468f45dc5",
+    "base": "6b9cc7eb3ddef630888145cdedd8be73f7deaf0e",
+    "patch": 188329,
+    "version": "0.60.0",
+    "sourceMapSHA256": "9a4aa0ade616fc9957c981ac8daefcc92f73d8b0e92f09b32bea277b68c9cccd",
+    "policyDigest": "3f7c919946efcc3abbe8086631fe33c0b2cf188ef0e717e15ee8110e6c5cb1b3",
+    "sourceInputs": 498,
+    "policyEntries": 9
+  },
+  "documentationBoundary": "Current build/browser/capture executed only on A2=77ef757. This follow-up changes documentation only; it does not claim that B reran A2. Current79 unit/producer tests ran on integration WIP before the later reviewed teaching audit-record-only change, separately covered by its focused recovery and final typecheck.",
+  "kind": "Independent review of actual current A2 images, not old805 images",
+  "browserRecord": {
+    "path": "/tmp/batch14-188329-browser-A2.execution.json",
+    "sha256": "9a2b9b7f893ce94458d8b89d277af8969c6e75e112b7a9aa7d6b948429458a96",
+    "bytes": 1281
+  },
+  "imageManifest": {
+    "path": "/tmp/batch14-188329-browser-A2-image-manifest.json",
+    "sha256": "321eaf2be64fd2b0d693b5a1140b67862526c0c8b716981a6a325bc1a8d6d03d",
+    "bytes": 17567
+  },
+  "independentReview": {
+    "report": {
+      "path": "/tmp/batch14-188329-jurchens-independent-ui-review.json",
+      "sha256": "858501f51ceb8f9fb98eeeae756d49cf69fd090391ed9219b3a080ecf342a923",
+      "bytes": 29289
+    },
+    "role": "Independent UI reviewer, not implementation or runtime executor",
+    "verdict": "PASS_INDEPENDENT_IMMUTABLE_A2_CURRENT188329_UI_REVIEW",
+    "reviewedUTC": "2026-10-29T05:44:45.713511+00:00",
+    "personallyViewedCurrent": 16,
+    "metadataOnlyCurrent": 24,
+    "allFourCurrentDownloadsViewed": true,
+    "unresolvedBatchBlockers": []
+  },
+  "actualDownloads": [
+    {
+      "name": "jurchens-share-download-knights-dark.png",
+      "sha256": "fb526183a6d51177c0ce9fe41b27ada266f4617178963c380f50dc8572674897",
+      "bytes": 181535,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true
+    },
+    {
+      "name": "jurchens-share-download-ordinary-dark.png",
+      "sha256": "495c44971b225bc3f7e4e2428458b8381c60e6346e91e8cd2bd7fb993bc2eb99",
+      "bytes": 160226,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true
+    },
+    {
+      "name": "jurchens-share-download-knights-light.png",
+      "sha256": "a7d7889a2226bdb4b5e2a170eb925cae3c1b162b7586acf818daa2a88638fe12",
+      "bytes": 185390,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true
+    },
+    {
+      "name": "jurchens-share-download-ordinary-light.png",
+      "sha256": "74b13bde979ae64e22c7f99faeb8f9ea39abd4639d6ea619d17d08701a5e8ee9",
+      "bytes": 164087,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true
+    }
+  ],
+  "personallyViewedCurrentImages": [
+    {
+      "name": "jurchens-share-download-knights-dark.png",
+      "sha256": "fb526183a6d51177c0ce9fe41b27ada266f4617178963c380f50dc8572674897",
+      "bytes": 181535,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true
+    },
+    {
+      "name": "jurchens-share-download-ordinary-dark.png",
+      "sha256": "495c44971b225bc3f7e4e2428458b8381c60e6346e91e8cd2bd7fb993bc2eb99",
+      "bytes": 160226,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true
+    },
+    {
+      "name": "jurchens-share-download-knights-light.png",
+      "sha256": "a7d7889a2226bdb4b5e2a170eb925cae3c1b162b7586acf818daa2a88638fe12",
+      "bytes": 185390,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true
+    },
+    {
+      "name": "jurchens-share-download-ordinary-light.png",
+      "sha256": "74b13bde979ae64e22c7f99faeb8f9ea39abd4639d6ea619d17d08701a5e8ee9",
+      "bytes": 164087,
+      "width": 1080,
+      "height": 1350,
+      "actualDownload": true
+    },
+    {
+      "name": "jurchens-knights-dark-360.png",
+      "sha256": "bce771732c31da5356dc3bd6e9c17526e54f0da1c2fef00e9c52f3825d6bc669",
+      "bytes": 256210,
+      "width": 360,
+      "height": 3229,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-knights-light-360.png",
+      "sha256": "b6b79a852bfb9679db6771f4f0cfacde4c3925a64f45cadc68148bbc1c5d0f50",
+      "bytes": 261736,
+      "width": 360,
+      "height": 3229,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-knights-dark-375.png",
+      "sha256": "cb65998182376992268d7562ad5579e2042a220b5d8b404822660657cb15eff9",
+      "bytes": 256704,
+      "width": 375,
+      "height": 3159,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-knights-light-375.png",
+      "sha256": "dc0e3c05331c9bf8ffc27b66b7892154532badd568187d65f0a04b4bc659b567",
+      "bytes": 262129,
+      "width": 375,
+      "height": 3159,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-knights-dark-1280.png",
+      "sha256": "86885d28c6ec27c09fc34f6d7590e3159417c15c5f2a7e1f3d938d8f4ba96a60",
+      "bytes": 332056,
+      "width": 1280,
+      "height": 2411,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-knights-light-1280.png",
+      "sha256": "bc49528591a2e1188b0b8e735b3b089c4578d91287d7dd4187b05ca7511d3824",
+      "bytes": 338283,
+      "width": 1280,
+      "height": 2411,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-knights-dark-390.png",
+      "sha256": "e3f8150adf69ce99e8facbf00ca2ad12b3491c4c16bd9325704159d9d51cd967",
+      "bytes": 257462,
+      "width": 390,
+      "height": 3115,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-knights-light-390.png",
+      "sha256": "bf97a1086a9266938d83f8222edebfbef2e311976f9ac758af6c3ecb50a19c0e",
+      "bytes": 262543,
+      "width": 390,
+      "height": 3115,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-print-dark-1280.png",
+      "sha256": "d5a8f21144827511be9405f0857532cc798df37f400e7812708f6834d312ef06",
+      "bytes": 547376,
+      "width": 1280,
+      "height": 4889,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-share-knights-dark-1280.png",
+      "sha256": "c9ff5491beafa31f2344e010a22006b4286a2dfd2fd7bb86bc4f6d6b8b5d8377",
+      "bytes": 349071,
+      "width": 1280,
+      "height": 2411,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-decay-light-360.png",
+      "sha256": "31e30ec0a227243b384dd257f6c485dabba8db53c10152f3ffccf3ccd16c74b9",
+      "bytes": 232804,
+      "width": 360,
+      "height": 2903,
+      "actualDownload": false
+    },
+    {
+      "name": "jurchens-practice-light-360.png",
+      "sha256": "23ccf82734a324eea68d5201f79f06081d79d04f77380092267133b9f15ff85e",
+      "bytes": 328353,
+      "width": 360,
+      "height": 3531,
+      "actualDownload": false
+    }
+  ],
+  "visualFindings": [
+    {
+      "scope": "4 actual current1080x1350 downloads: ordinary/knight x light/dark",
+      "result": "PASS",
+      "observed": "Each PNG visibly states game188329 and4242/civ=Jurchens URL. Ordinary includes one complete readable no-decay note. Knight includes the complete second no-knight generic-template warning. No995 third basis line. Text,statistics,caveats and footer fit the unchanged canvas."
+    },
+    {
+      "scope": "Knight page at360/375/390/1280 x light/dark:8 current images",
+      "result": "PASS_FOR_BATCH_CAVEATS",
+      "observed": "Both caveats remain complete and readable inside the horizontal frame. Local footer visibly showsv0.60.0,DE188329(2026-10-28),build77ef757. Hierarchy and contrast match the frozen note/style scope."
+    },
+    {
+      "scope": "Current ordinary360light,share knight1280dark,practice360light,print1280dark:4 representative images",
+      "result": "PASS",
+      "observed": "Ordinary lacks the knight caveat; share popup retains complete scoped caveats and JurchensURL; practice/print retain both knight-context notes.995 current8 no-benefit explanation remains in detailed assumptions. Print metadata now says DEUpdate188329."
+    }
+  ],
+  "rootReportedViews": "Current360px Knight main page and060/188329/77ef footer; current dark Knight download and light ordinary download. Complete notes and basis readable without clipping. These are separate from the independent16 views.",
+  "historyBoundary": "Old805 reviewer26/40 images are not relabeled. All40 current images have the current A2 manifest hashes; only these16 are personally claimed by the independent reviewer.",
+  "previewCleanup": {
+    "record": {
+      "path": "/tmp/batch14-188329-preview4242-cleanup.json",
+      "sha256": "793091dc0a4026c03d2d2af9ae3c244337f4498ad7270299b069fad186b2a11b",
+      "bytes": 396
+    },
+    "ownedPID": 8610,
+    "identityMatchedBeforeSignal": true,
+    "signals": [
+      {
+        "signal": "SIGTERM",
+        "PID": 8610
+      }
+    ],
+    "port": 4242,
+    "noListenerAfter": true,
+    "observedState": "Z",
+    "exitedNotServing": true,
+    "processGone": false,
+    "otherProcessesTouched": false,
+    "artifactsPreserved": true
+  },
+  "publication": "No PNG committed. Actual CI screenshot artifact link and four width filenames are supplied in the PR after upload; all local originals retained."
+}
