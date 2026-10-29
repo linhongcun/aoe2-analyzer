@@ -41,7 +41,7 @@
   margin-block: var(--space-3);
 }
 
-/* #480：手机保留资料上下文，并给摘要和首步留出可见空间。 */
+/* 手机保留资料上下文，并给摘要和首步留出可见空间。 */
 @media (max-width: 600px) {
   .build-applicability-panel {
     margin-bottom: 0;
