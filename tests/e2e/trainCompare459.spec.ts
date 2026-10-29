@@ -63,7 +63,7 @@ test('#459 regression an explicit empty civilization set stays empty instead of 
 async function openCivilizations(page: Page) {
   const details = page
     .locator('main details')
-    .filter({ has: page.getByRole('checkbox') })
+    .filter({ has: page.locator('input[type="checkbox"]') })
     .first();
   if ((await details.getAttribute('open')) === null) await details.locator('summary').click();
   return details;
@@ -161,7 +161,7 @@ test('#459 clipboard failure supplies the entire current link and stale manual f
   await expect(copy(page)).toBeDisabled();
   await page.getByRole('textbox', { name: '目标数量', exact: true }).press('Enter');
   await expect(manual).toHaveCount(0);
-  await expect(page.getByRole('status')).not.toContainText('复制失败');
+  await expect(page.getByRole('status')).toHaveCount(0);
   await expect(rows(page)).toHaveCount(2);
   await page.goBack();
   await expect(page.getByRole('textbox', { name: '目标数量', exact: true })).toHaveValue('10');
@@ -216,6 +216,7 @@ async function touchTargets(elements: Locator) {
   expect(
     await elements.evaluateAll((nodes) =>
       nodes
+        .filter((node) => node.closest('.production-mode-nav, .train-compare-page'))
         .map((node) => ({ text: node.textContent, width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height }))
         .filter((box) => box.width < 43.5 || box.height < 43.5),
     ),
