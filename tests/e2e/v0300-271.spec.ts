@@ -6,10 +6,7 @@
 //   - Steam 链接去掉 ?l=hungarian
 // 站内单位：胡斯派战车 Hussite Wagon #/unit/1704（精锐 1706），手推炮 Bombard Cannon #/unit/36；「战车」是另两个单位（War Chariot 1962、Ratha 1759）。
 // 「火炮术」是土耳其科技 Artillery（techs.json id 10），不是单位名，保留；「榴弹炮」是另一个单位 Houfnice（1709），保留。
-import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-
-const PINS = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../scripts/data_sources.json');
 
 /** 「战车」只能作为「胡斯派战车」的一部分出现；「火炮」只能作为「火炮术」出现 */
 const badWagon = (t: string) => t.replace(/胡斯派战车/g, '').includes('战车');
@@ -18,7 +15,7 @@ const badCannon = (t: string) => t.replace(/火炮术/g, '').includes('火炮');
 // 让情境卡片真正展开：沿用 tests/e2e/mixedArmy241.spec.ts 的满足条件配置（Arena 情境必须本方土耳其，否则卡片区为空）
 const BASE: Record<string, string> = {
   mv: '1',
-  build: String(PINS.patch.build),
+  build: '185872',
   age: '4',
   mode: 'unknown',
   ownMain: 'unknown',
