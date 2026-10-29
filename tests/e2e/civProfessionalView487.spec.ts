@@ -326,6 +326,10 @@ for (const width of [360, 375, 390, 1280])
           return 0;
         }),
       ).toBe(1);
+      for (const date of await panel(page).locator('.num.nw').all()) {
+        expect(await date.evaluate((element) => element.getClientRects().length)).toBe(1);
+        expect(await date.evaluate((element) => getComputedStyle(element).whiteSpace)).toBe('nowrap');
+      }
       expect((await new AxeBuilder({ page }).include('#detail').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
       await page.screenshot({ path: info.outputPath(`professional-view-${width}-${theme}.png`), fullPage: true });
       await tab(page, '概览').click();

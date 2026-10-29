@@ -3,6 +3,22 @@ import { DetailSection } from '../../../shared/ui/DetailBlocks';
 import { PRO_SOURCES, readProSources } from '../proSources';
 import './civ-professional-view.css';
 
+function SourceUrl({ url }: { url: string }) {
+  return (
+    <p className="civ-pro-url note">
+      {url.split(/(\d{4}-\d{2}-\d{2})/).map((part, index) =>
+        /^\d{4}-\d{2}-\d{2}$/.test(part) ? (
+          <span className="num nw" key={index}>
+            {part}
+          </span>
+        ) : (
+          part
+        ),
+      )}
+    </p>
+  );
+}
+
 export default function CivProfessionalView({ catalogue = PRO_SOURCES }: { catalogue?: unknown }) {
   const state = readProSources(catalogue);
   useEffect(() => {
@@ -47,13 +63,13 @@ export default function CivProfessionalView({ catalogue = PRO_SOURCES }: { catal
                 <a className="ulink" href={source.originalUrl} target="_blank" rel="noopener noreferrer">
                   查看原视频
                 </a>
-                <p className="civ-pro-url note">{source.originalUrl}</p>
+                <SourceUrl url={source.originalUrl} />
               </div>
               <div>
                 <a className="ulink" href={source.discoveryUrl} target="_blank" rel="noopener noreferrer">
                   查看发现索引
                 </a>
-                <p className="civ-pro-url note">{source.discoveryUrl}</p>
+                <SourceUrl url={source.discoveryUrl} />
                 <p className="note">发现线索，索引日期不代表原视频发布日期。</p>
               </div>
             </div>
