@@ -325,6 +325,13 @@ for (const key of patchTableKeys) {
 }
 const tableGolden = { ...historicalTableGolden, ...patchTableGolden };
 
+function recordTableFixtures(tables: Record<string, TableStyle[]>, write: (file: string, text: string) => void = writeFileSync) {
+  const historical = Object.fromEntries(Object.entries(tables).filter(([key]) => !patchTableKeys.includes(key)));
+  const patch = Object.fromEntries(patchTableKeys.map((key) => [key, tables[key]]));
+  write(TABLES_FIXTURE, JSON.stringify(historical, null, 1) + '\n');
+  write(PATCH_TABLES_FIXTURE, JSON.stringify(patch, null, 1) + '\n');
+}
+
 async function tableStyles(page: Page): Promise<TableStyle[]> {
   return page.locator('main table').evaluateAll((tables) =>
     tables.map((t) => {
@@ -344,7 +351,14 @@ async function tableStyles(page: Page): Promise<TableStyle[]> {
 
 test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main ead4c34 相同', () => {
   test.describe.configure({ mode: 'parallel' });
-  if (RECORD_TABLES) test.afterAll(() => writeFileSync(TABLES_FIXTURE, JSON.stringify(tableGolden, null, 1) + '\n'));
+  if (RECORD_TABLES) test.afterAll(() => recordTableFixtures(tableGolden));
+  test('守卫：记录时历史基准与188329补充基准保持分开，不覆盖彼此的键值', () => {
+    const written = new Map<string, Record<string, TableStyle[]>>();
+    recordTableFixtures(tableGolden, (file, text) => written.set(file, JSON.parse(text) as Record<string, TableStyle[]>));
+    expect([...written.keys()]).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE]);
+    expect(written.get(TABLES_FIXTURE)).toEqual(historicalTableGolden);
+    expect(written.get(PATCH_TABLES_FIXTURE)).toEqual(patchTableGolden);
+  });
   test('守卫：基准已录制，覆盖全部非「关于数据」静态页、两个宽度，并且确实录到了表格', () => {
     test.skip(RECORD_TABLES);
     for (const w of TABLE_WIDTHS)
