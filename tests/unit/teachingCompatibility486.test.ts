@@ -76,7 +76,8 @@ describe('#486 fixed 188329 teaching compatibility', () => {
   it('locks every referenced generated fact and its unchanged prerequisite/tree/effect projections to the audited baseline', () => {
     const read = (name: string) => JSON.parse(readFileSync(`src/data/${name}.json`, 'utf8'));
     const withoutMeta = (data: Record<string, unknown>) => {
-      const { meta: _meta, ...payload } = data;
+      const payload = { ...data };
+      delete payload.meta;
       return payload;
     };
     const ids = [...planContent.unitIds, 83];
