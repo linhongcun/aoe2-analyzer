@@ -10,17 +10,27 @@ export const TEACHING_COMPATIBILITY_188329 = {
   reviewedAt: '2026-10-29',
   baselineCommit: '7f3521c2',
   evidence: 'docs/design/teaching-compatibility-486.md',
-  // SHA-256 of the unchanged baseline projections defined in the evidence and CI test.
+  // Baseline teaching facts remain unchanged; eco additionally records the source-only metadata audit below.
   audit: {
     units: '416854add45339048fc7aa19a6b76efa275a62d140f45dbc6f6345cb4ca295b4',
     techs: '2e9c7e21d5e2fd1bfa1a4eb6b1556a6541da359d64ef2ba4cb301233a2743a1e',
     buildings: '9b6b290d946512cdd421c8f7c616d601930d3f3c0bb46eb37087c8e08697e902',
     trees: '27cd18f2a436899f1e3ab1a31996482a9d073a8b1c698670b78466d67b50a9f8',
-    eco: 'e62ff60130ddfd6cc17eb1b3723ccda4549bddc9ec7dc31880f70008c7014368',
+    eco: 'af5eeb7121d8c4126c5d16624fdd22d4cda86f228119342062af327547a026bf',
     effects: 'a78d80cc8d68ecf589b07679c46d78d51aad5d4c17664d8be30422e93d0bfc64',
     garrison: '3e652ce07e4d8a03371b9f7b8b3f01af72ddcb30ed9a5a918d2665fafd452178',
     exampleCivs: '39ad0bd93202b3c71e1ad78e7e4fe304e6f1d5b3fcaa704eac01132db301b92a',
     routes: 'a5dadef9227a892eeb39148d5df07e3ff108209ce17ef4e7309a8733d3419a71',
+  },
+  sourceMetadataAudit: {
+    currentBase: '6b9cc7eb3ddef630888145cdedd8be73f7deaf0e',
+    originalEcoProjection: 'e62ff60130ddfd6cc17eb1b3723ccda4549bddc9ec7dc31880f70008c7014368',
+    currentEcoProjection: 'af5eeb7121d8c4126c5d16624fdd22d4cda86f228119342062af327547a026bf',
+    addedMetadata: {
+      '/civEco/Jurchens/0/jurchenTech': '504b1809290ce81bc751108477e92a4aecea02414223d077fd34df5e1af896f3',
+      '/civEco/Jurchens/1/jurchenTech': 'd8fca530655e29215f319de23bea6337b02b35c64cf59de3b3b55d80178fb62e',
+    },
+    evidence: 'docs/design/jurchens197-teaching-metadata.json',
   },
   content: {
     'game-guide': {

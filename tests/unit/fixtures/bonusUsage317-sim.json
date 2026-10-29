@@ -1,5 +1,5 @@
 {
-  "inputs": "b9358f76dd73af1704a9a6e76aa9914a0b4bb7655d6a4b9f189b163b81d5e3c9",
+  "inputs": "5b63188a552bb1caa8de061a9f5224c914ba5fffb4b2372055ff5541f8cfe6f1",
   "firstChanged": {
     "Armenians-0": "feudal-drush-18",
     "Armenians-3": null,
@@ -43,6 +43,8 @@
     "Incas-1": null,
     "Incas-2": "feudal-drush-18",
     "Japanese-0": "feudal-drush-18",
+    "Jurchens-0": null,
+    "Jurchens-3": null,
     "Khitans-3": null,
     "Khmer-1": null,
     "Koreans-1": "maa-archers-18",

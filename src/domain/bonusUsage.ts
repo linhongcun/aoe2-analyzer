@@ -26,6 +26,7 @@ import { DAT } from './datEffects';
 import { gatherBonusIdx, gatherModel, touchesGather } from './realCost';
 import relicRaw from '../data/relic_income.json';
 import { simSupport } from './simSupport';
+import { jurchenContext, JURCHEN_DECAY_NOTE, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 import { WEI_SPAWN_NOTE } from './weiEconomy';
 import { BENGALI_SPAWN_NOTE } from './bengaliEconomy';
 import { armenianContext, ARMENIAN_RESEARCH_NOTE } from './armenianEconomy';
@@ -116,6 +117,10 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
 
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
+  if (b.id === 'Jurchens-0' || b.id === 'Jurchens-3') {
+    const complete = jurchenContext(eco).complete;
+    return { tool: 'sim', name, on: false, note: complete ? (b.id === 'Jurchens-0' ? `未计入：${JURCHEN_DECAY_NOTE}` : `未计入：${JURCHEN_RESEARCH_NOTE}`) : '女真来源不完整，暂按通用文明计算，本条未计入' };
+  }
   if (b.id === 'Sicilians-1') return { tool: 'sim', name, on: false, note: '未计入：农田升级额外储量、耗尽和续种未模拟，也未估算节省的木材' };
   if (b.id === 'Khmer-1') {
     const context = khmerContext(eco);
