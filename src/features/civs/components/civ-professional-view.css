@@ -1,0 +1,43 @@
+.civ-pro .civ-pro-card {
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-2);
+  overflow-wrap: anywhere;
+}
+.civ-pro .civ-pro-author {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.civ-pro .civ-pro-card h3 {
+  margin: 16px 0;
+  color: var(--color-text);
+  font-size: var(--fs-h3);
+  line-height: 1.4;
+}
+.civ-pro .civ-pro-unknowns {
+  margin: 0 0 16px;
+  padding-left: 20px;
+}
+.civ-pro .civ-pro-links {
+  display: grid;
+  gap: 16px;
+}
+.civ-pro .civ-pro-links .ulink {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 44px;
+}
+.civ-pro .civ-pro-url {
+  margin: 4px 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .civ-pro .civ-pro-card {
+    padding: 16px;
+  }
+}
