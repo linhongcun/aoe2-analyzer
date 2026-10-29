@@ -301,13 +301,19 @@ for (const width of [360, 375, 390, 1280])
         release = resolve;
       });
       let intercepted = false;
+      let signalIntercepted!: () => void;
+      const requestIntercepted = new Promise<void>((resolve) => {
+        signalIntercepted = resolve;
+      });
       await page.route('**/assets/trees-*.js', async (route) => {
         intercepted = true;
+        signalIntercepted();
         await gate;
         await route.continue();
       });
       await page.goto(`./#${comparison}`);
       await expect(page.getByRole('link', { name: '持续生产', exact: true })).toBeVisible();
+      await requestIntercepted;
       expect(intercepted).toBe(true);
       await expect(rows(page)).toHaveCount(0);
       expect((await copy(page).count()) === 0 || (await copy(page).isDisabled())).toBe(true);
