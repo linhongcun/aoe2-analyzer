@@ -245,8 +245,8 @@ for (const width of [360, 375, 390, 1280])
       await expect(rows(page)).toHaveCount(5);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await expect(page.getByRole('columnheader')).toHaveCount(4);
-      await expect(row(page, 'Huns').getByRole('cell').nth(1)).toContainText(/25\s*秒/);
-      await expect(row(page, 'Huns').getByRole('cell').nth(3)).toContainText(/250\s*秒/);
+      await expect(row(page, 'Huns').getByRole('row').first().getByRole('cell').nth(0)).toContainText(/25\s*秒/);
+      await expect(row(page, 'Huns').getByRole('row').first().getByRole('cell').nth(2)).toContainText(/250\s*秒/);
       await touchTargets(page.locator('main').locator('a:visible, button:visible, select:visible, input[type="text"]:visible, summary:visible'));
       await nowrap(page);
       await page.getByRole('textbox', { name: '目标数量', exact: true }).focus();
