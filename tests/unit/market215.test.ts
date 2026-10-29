@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import pins from '../../scripts/data_sources.json';
 import {
   MARKET_DATA,
   MARKET_LOT_LIMIT,
@@ -18,7 +19,9 @@ const funded = (): MarketPlan => ({ ...defaultMarketPlan(), stock: { Food: '1000
 
 describe('issue 215 pinned market fees', () => {
   it('keeps engine assumptions distinct from the pinned fee evidence', () => {
-    expect(MARKET_DATA.meta.datSha256).toBe('4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa');
+    expect(MARKET_DATA.meta.datSha256).toBe(pins.sources.dat.sha256);
+    expect(MARKET_DATA.meta.datCommit).toBe(pins.sources.dat.commit);
+    expect(MARKET_DATA.meta.patch).toBe(`${pins.patch.name} (${pins.patch.date})`);
     expect(MARKET_DATA.meta.feeResource).toBe(78);
     expect(MARKET_DATA.meta.engineVerifiedInPinnedBuild).toBe(false);
     expect(MARKET_DATA.engine.sources.every((source) => source.url.startsWith('https://'))).toBe(true);

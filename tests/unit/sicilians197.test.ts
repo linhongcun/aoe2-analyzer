@@ -1,5 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import pins from '../../scripts/data_sources.json';
+import historicalPins from '../../scripts/patch_inputs/185872.json';
 import eco from '../../src/data/eco.json';
 import units from '../../src/data/units.json';
 import { CONSTRUCTION_DATA } from '../../src/data/construction';
@@ -56,7 +58,17 @@ const duration = (bo: BuildOrder, e = E) => {
 describe('#197 西西里真实施工与农田储量边界', () => {
   it('固定原始11项专属科技、133前置闭包与8套当前动作；770和772不能靠文字猜数', () => {
     expect(raw.baseline).toBe('7098ff0cba6a915766f38ca8c152ce35cc3cfcc6');
-    expect(raw.datSource.sha256).toBe(CONSTRUCTION_DATA.meta.sha256);
+    // The original evidence keeps its original identity; current exports have their own provenance.
+    expect(raw.patch).toBe(185872);
+    expect(raw.datSource).toEqual({
+      repo: historicalPins.sources.dat.repo,
+      commit: historicalPins.sources.dat.commit,
+      path: historicalPins.sources.dat.path,
+      sha256: historicalPins.sources.dat.sha256,
+    });
+    expect(CONSTRUCTION_DATA.meta.sha256).toBe(pins.sources.dat.sha256);
+    expect(CONSTRUCTION_DATA.meta.patch).toBe(`${pins.patch.name} (${pins.patch.date})`);
+    expect(E.civEco.Sicilians).toEqual(raw.currentEcoRows);
     expect(raw.civ).toMatchObject({ id: 37, name: 'Sicilians', tree: 784, team: 785 });
     expect(raw.civTechs.map((t: { id: number }) => t.id)).toEqual([228, 261, 749, 752, 753, 756, 757, 770, 771, 772, 775]);
     expect(Object.keys(raw.techClosure)).toHaveLength(133);
@@ -66,6 +78,9 @@ describe('#197 西西里真实施工与农田储量边界', () => {
     const t = raw.civTechs.find((t: { id: number }) => t.id === 770);
     expect(t.requires.filter((id: number) => id >= 0)).toEqual([307]);
     expect(t.commands).toHaveLength(8);
+    expect(CONSTRUCTION_DATA.civs.Sicilians!.automatic.find((rule) => rule.id === 770)!.commands.map(({ Type, A, B, C, D }) => ({ Type, A, B, C, D }))).toEqual(
+      t.commands,
+    );
     expect(t.commands.map((c: { Type: number; A: number; B: number; C: number }) => [c.Type, c.A, c.B, c.C])).toEqual([
       [5, 82, -1, 101],
       [5, 621, -1, 101],
