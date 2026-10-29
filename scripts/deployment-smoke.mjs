@@ -823,6 +823,14 @@ export async function checkSite({ site, version, commit, features = [] }) {
             const regional = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '区域单位', exact: true }) });
             await check(page.locator('.dside .sideblk > h4').nth(1)).toHaveText('区域单位');
             await check(page.locator('.dmain').getByRole('heading', { name: '区域单位', exact: true })).toHaveCount(0);
+            const line = regional.locator('details');
+            await check(line).toHaveCount(1);
+            await check(line).not.toHaveAttribute('open');
+            await check(regional.getByRole('link')).toHaveCount(0);
+            const summary = line.locator('summary');
+            await check(summary).toHaveText('骑马弩兵升级线');
+            await summary.click();
+            await check(line).toHaveAttribute('open', '');
             await check(regional.getByRole('link', { name: '骑马弩兵', exact: true })).toHaveAttribute('href', '#/unit/2700/Franks/3/');
             await check(regional.getByRole('link', { name: '重装骑马弩兵', exact: true })).toHaveAttribute('href', '#/unit/2701/Franks/4/');
             await goto('/civ/Japanese');
