@@ -1,0 +1,305 @@
+{
+  "_doc": "185872 historical generator input: bounded facts extracted from baseline 7f3521c2; original fixed pins and source-file fingerprints below. Never refresh from current data.",
+  "baseline": "7f3521c2e88a36e7236d290fdbe9bc698df82e81",
+  "patch": {
+    "build": 185872,
+    "date": "2026-09-23",
+    "name": "DE Update 185872",
+    "detectedFrom": "SiegeEngineers/halfon@abb48fd: Implement DE Update 185872"
+  },
+  "sources": {
+    "dat": {
+      "repo": "SiegeEngineers/auto-mods",
+      "commit": "0c38027504532826c9922e4db77e2c1d33554291",
+      "path": "dat/empires2_x2_p1.dat",
+      "sha256": "4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa",
+      "date": "2026-10-07",
+      "use": "全部 EffectCommands（战斗 + 经济/费用）、科技前置、文明科技树/团队加成；基础数值对账",
+      "markers": {
+        "civs": 63,
+        "techs": 1510,
+        "effects": 1500,
+        "newestCivs": ["Saxons", "Varangians", "Danes"]
+      }
+    },
+    "aoe2techtree": {
+      "repo": "SiegeEngineers/aoe2techtree",
+      "commit": "3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f",
+      "path": "data/",
+      "date": "2026-09-23",
+      "use": "文明/单位/科技/建筑/科技树、中英文本、图标"
+    },
+    "halfon": {
+      "repo": "SiegeEngineers/halfon",
+      "commit": "abb48fdbedba57d5afe2b7941d6ae85cf6e0e803",
+      "path": "data/units_buildings_techs.de.json",
+      "date": "2026-09-23",
+      "use": "补丁号识别（提交信息「Implement DE Update N」）"
+    }
+  },
+  "sourceFiles": {
+    "scripts/data_sources.json": "60912e84abb412507f8f412bc4c817cd6f19aa16b251aa75b090658464643f29",
+    "src/data/units.json": "615bd9bc4d76f3dda321443738c59028547838de55e145918d4751154a935690",
+    "src/data/techs.json": "d61da1dfa0ba1d19b944d36bab36d12e8105ede4dc0c15cf96af7f3b569e24f2",
+    "src/data/buildings.json": "9b6b290d946512cdd421c8f7c616d601930d3f3c0bb46eb37087c8e08697e902",
+    "src/data/civs.json": "6ed1a26840ba7aca9eed97b92c55b55ae2e8cc552f9a3fce36d24988a8f1dda4",
+    "src/data/trees.json": "9359bcfadbb5edb5792b3ffbe03a9f0b2fcb3a8a2a05f9b93611bf5d5c62150a",
+    "src/data/patches/185872.json": "13aac16199d5ff637b88758520390e707d7c338ddbd595eeea29ac0d5c6e7b2b",
+    "src/data/construction.json": "8ffdecfc304c606341b812bf6a7d6fccfbeb802405562cc7de1441110608f552",
+    "src/data/eco.json": "a63ed2caafbdd7757b52ebff39f4fe1e36909086c9faab17facfbe7bc0003674",
+    "src/data/effects.json": "e7167a162963d9c2efa225342640c1607c2061fe80c448dfd1be4aee93b28858",
+    "src/data/garrison.json": "e426664a95f2e25d91b7086c4e2384c36927f922ecc56288e56ee9fb64c1a6b2",
+    "src/data/garrison_general.json": "9d9941b962ce075008dd24a00d3c6b8dfabe1501b6e28355460f043e9d08e129",
+    "src/data/garrison_healing.json": "a67a72f2055f665f9208937e94391136c0ef8b951fc1236e27ec42cbb5d6133d",
+    "src/data/garrison_techs.json": "56581b3b40b10eb90ac4b7d7263a10856ef513e48f9da95ac0c6e2b79f6b5c57",
+    "src/data/generate_resource.json": "180b39319cc5438de79e2fa968c9bbeba1d5973693e25a4469ad4bb65ff16839",
+    "src/data/market.json": "33318407c2613cbb77f7844d41c9f55ab4937437f885205f84147dc6cac36ef6",
+    "src/data/relic_income.json": "aed4e8c256e1fef6951f5b24c25ee7861ed49eb72dc99bc97c9229aab918a8ae",
+    "src/data/trade_income.json": "53ba6a3b7abc03b2c43df01f115a875238284a198799d6b6f4b546649f7389d2"
+  },
+  "generatedVersions": {
+    "src/data/construction.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/eco.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/effects.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/garrison.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/garrison_general.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/garrison_healing.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/garrison_techs.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/generate_resource.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/market.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/relic_income.json": ["DE Update 185872 (2026-09-23)"],
+    "src/data/trade_income.json": ["DE Update 185872 (2026-09-23)"]
+  },
+  "data": {
+    "units": [
+      { "id": 1699, "en": "Flemish Militia", "from_": null, "cost": { "Food": 35, "Gold": 25 }, "zh": "弗拉芒民兵", "tt": 16 },
+      { "id": 2586, "en": "Temple Guard", "from_": null, "atk": 11, "zh": "神庙护卫" },
+      { "id": 831, "en": "Turtle Ship", "from_": null, "hp": 260, "zh": "龟甲船" },
+      { "id": 1962, "en": "War Chariot", "from_": null, "cost": { "Food": 75, "Gold": 90 }, "zh": "战车", "tt": 32 },
+      {
+        "id": 40,
+        "en": "Cataphract",
+        "from_": null,
+        "atks": [
+          ["步兵", 13],
+          ["近战", 9],
+          ["村民", -3]
+        ],
+        "zh": "甲胄骑兵"
+      },
+      { "id": 281, "en": "Throwing Axeman", "from_": null, "rng": 5, "zh": "掷斧兵" },
+      { "id": 771, "en": "Conquistador", "from_": null, "cost": { "Food": 75, "Gold": 60 }, "zh": "西班牙征服者", "tt": 26 },
+      { "id": 869, "en": "Magyar Huszar", "from_": null, "tt": 18, "zh": "马扎尔骠骑" },
+      { "id": 1001, "en": "Organ Gun", "from_": null, "tt": 28, "zh": "风琴炮" },
+      { "id": 1129, "en": "Rattan Archer", "from_": null, "hp": 35, "zh": "藤弓兵" },
+      { "id": 1704, "en": "Hussite Wagon", "from_": null, "cost": { "Gold": 80, "Wood": 110 }, "zh": "胡斯派战车" },
+      { "id": 1759, "en": "Ratha", "from_": null, "tt": 24, "zh": "战车" },
+      { "id": 2579, "en": "Blackwood Archer", "from_": null, "cost": { "Gold": 45, "Wood": 40 }, "zh": "黑檀木步弓手" },
+      { "id": 531, "en": "Elite Throwing Axeman", "from_": 281, "rng": 6, "zh": "精锐掷斧兵" },
+      {
+        "id": 553,
+        "en": "Elite Cataphract",
+        "from_": 40,
+        "atks": [
+          ["步兵", 18],
+          ["近战", 12],
+          ["村民", -3]
+        ],
+        "zh": "精锐甲胄骑兵"
+      },
+      { "id": 554, "en": "Elite Teutonic Knight", "from_": 25, "ma": 8, "zh": "精锐条顿骑士" },
+      { "id": 773, "en": "Elite Conquistador", "from_": 771, "cost": { "Food": 75, "Gold": 60 }, "zh": "精锐西班牙征服者" },
+      { "id": 1131, "en": "Elite Rattan Archer", "from_": 1129, "hp": 40, "zh": "精锐藤弓兵" },
+      { "id": 1706, "en": "Elite Hussite Wagon", "from_": 1704, "cost": { "Gold": 80, "Wood": 110 }, "zh": "精锐胡斯派战车" },
+      { "id": 2581, "en": "Elite Blackwood Archer", "from_": 2579, "cost": { "Gold": 45, "Wood": 40 }, "zh": "精锐黑檀木步弓手" },
+      { "id": 1911, "en": "Grenadier", "from_": null, "cost": { "Food": 55, "Gold": 50 }, "zh": "掷弹兵" },
+      { "id": 1952, "en": "Xianbei Raider", "from_": null, "cost": { "Gold": 35, "Wood": 65 }, "zh": "鲜卑掠骑兵" },
+      { "id": 2569, "en": "Bolas Rider", "from_": null, "cost": { "Gold": 55, "Wood": 50 }, "zh": "掷石绳骑兵" },
+      { "id": 2571, "en": "Elite Bolas Rider", "from_": 2569, "cost": { "Gold": 55, "Wood": 50 }, "zh": "精锐掷石绳骑兵" },
+      { "id": 775, "en": "Missionary", "from_": null, "cost": { "Food": 30, "Gold": 100 }, "zh": "传教士" },
+      {
+        "id": 75,
+        "atks": [
+          ["冲击步兵", 3],
+          ["标准建筑", 2],
+          ["近战", 6]
+        ],
+        "zh": "武士",
+        "en": "Man-at-Arms",
+        "from_": 74
+      },
+      { "id": 751, "tt": 46, "zh": "鹰斥候", "en": "Eagle Scout", "from_": null },
+      {
+        "id": 77,
+        "atks": [
+          ["冲击步兵", 8],
+          ["标准建筑", 3],
+          ["近战", 9]
+        ],
+        "zh": "长剑士",
+        "en": "Long Swordsman",
+        "from_": 75
+      },
+      { "id": 2703, "en": "Varangian Guard", "from_": null, "zh": "瓦兰吉卫队" },
+      {
+        "id": 473,
+        "atks": [
+          ["冲击步兵", 9],
+          ["标准建筑", 4],
+          ["近战", 12]
+        ],
+        "zh": "双手剑士",
+        "en": "Two-Handed Swordsman",
+        "from_": 77
+      },
+      {
+        "id": 567,
+        "atks": [
+          ["冲击步兵", 9],
+          ["标准建筑", 4],
+          ["近战", 14]
+        ],
+        "zh": "冠军剑士",
+        "en": "Champion",
+        "from_": 473
+      },
+      { "id": 2704, "en": "Elite Varangian Guard", "from_": 2703, "zh": "精锐瓦兰吉卫队" },
+      {
+        "id": 1103,
+        "en": "Fire Galley",
+        "from_": null,
+        "atks": [
+          ["近战", 2],
+          ["远程战船", 1]
+        ],
+        "zh": "火艨艟"
+      },
+      { "id": 2626, "en": "Hulk", "ma": 3, "zh": "趸船", "from_": null, "hp": 85 },
+      { "id": 527, "en": "Demolition Ship", "zh": "爆破船", "from_": 1104 },
+      { "id": 2627, "en": "War Hulk", "ma": 4, "zh": "战争趸船", "from_": 2626, "hp": 110 },
+      { "id": 420, "en": "Cannon Galleon", "from_": null, "zh": "炮舰" },
+      { "id": 691, "en": "Elite Cannon Galleon", "from_": 420, "zh": "精锐炮舰" },
+      {
+        "id": 1948,
+        "en": "Lou Chuan",
+        "from_": null,
+        "atks": [
+          ["近战", 25],
+          ["所有建筑", 180],
+          ["攻城武器", 10]
+        ],
+        "zh": "楼船"
+      },
+      { "id": 2628, "en": "Carrack", "from_": 2627, "ma": 6, "zh": "大帆船" },
+      { "id": 2633, "en": "Catapult Galleon", "from_": null, "zh": "大型投石战舰" },
+      { "id": 1105, "en": "Siege Tower", "los": 6, "zh": "攻城塔", "from_": null },
+      { "id": 1258, "los": 5, "zh": "攻城锤", "en": "Battering Ram", "from_": null },
+      { "id": 1744, "en": "Armored Elephant", "los": 6, "zh": "装甲战象", "from_": null },
+      { "id": 422, "los": 5, "zh": "中型冲车", "en": "Capped Ram", "from_": 1258 },
+      { "id": 548, "los": 5, "zh": "重型冲车", "en": "Siege Ram", "from_": 422 },
+      { "id": 550, "en": "Onager", "atk": 55, "zh": "中型投石车", "pa": 8, "from_": 280 },
+      { "id": 1746, "en": "Siege Elephant", "los": 6, "zh": "攻城战象", "from_": 1744 },
+      { "id": 39, "en": "Cavalry Archer", "from_": null, "zh": "骑射手" },
+      { "id": 2700, "en": "Mounted Crossbowman", "from_": null, "zh": "骑马弩兵" },
+      { "id": 474, "en": "Heavy Cavalry Archer", "from_": 39, "zh": "重装骑射手" },
+      { "id": 2701, "en": "Heavy Mounted Crossbowman", "from_": 2700, "zh": "重装骑马弩兵" }
+    ],
+    "techs": [
+      { "id": 463, "zh": "酋长" },
+      { "id": 784, "descEn": "Gunpowder Units move +10% faster.", "zh": "大车阵战术" },
+      { "id": 1496, "zh": "王家敕令骑兵" },
+      { "id": 21, "zh": "无神论" },
+      { "id": 61, "zh": "后勤学" },
+      { "id": 875, "zh": "软甲" },
+      { "id": 1452, "zh": "便携弯弩装置" },
+      { "id": 316, "zh": "救赎" },
+      { "id": 50, "zh": "石工术" },
+      { "id": 54, "zh": "脚踏起重机" }
+    ],
+    "buildings": [{ "id": 1806, "bt": 50, "zh": "强化教堂" }],
+    "civs": [
+      { "en": "Danes", "zh": "丹麦人" },
+      { "en": "Gurjaras", "zh": "瞿折罗" },
+      { "en": "Saxons", "zh": "撒克逊人" },
+      { "en": "Teutons", "zh": "条顿" },
+      { "en": "Varangians", "zh": "瓦兰吉人" },
+      { "en": "Vietnamese", "zh": "越南" }
+    ]
+  },
+  "treeAvailability": [
+    ["Armenians", "tech", 54, true],
+    ["Franks", "tech", 54, true],
+    ["Goths", "tech", 54, true],
+    ["Shu", "tech", 54, true],
+    ["Bengalis", "tech", 54, false],
+    ["Bohemians", "tech", 54, false],
+    ["Celts", "tech", 54, false],
+    ["Saracens", "tech", 54, false],
+    ["Bohemians", "unit", 2700, true],
+    ["Britons", "unit", 2700, true],
+    ["Burgundians", "unit", 2700, true],
+    ["Celts", "unit", 2700, true],
+    ["Franks", "unit", 2700, true],
+    ["Italians", "unit", 2700, true],
+    ["Poles", "unit", 2700, true],
+    ["Portuguese", "unit", 2700, true],
+    ["Sicilians", "unit", 2700, true],
+    ["Spanish", "unit", 2700, true],
+    ["Teutons", "unit", 2700, true],
+    ["Vikings", "unit", 2700, true],
+    ["Britons", "unit", 2701, true],
+    ["Celts", "unit", 2701, true],
+    ["Franks", "unit", 2701, true],
+    ["Poles", "unit", 2701, true],
+    ["Sicilians", "unit", 2701, true],
+    ["Spanish", "unit", 2701, true],
+    ["Teutons", "unit", 2701, true],
+    ["Britons", "unit", 39, false],
+    ["Burgundians", "unit", 39, false],
+    ["Celts", "unit", 39, false],
+    ["Franks", "unit", 39, false],
+    ["Italians", "unit", 39, false],
+    ["Poles", "unit", 39, false],
+    ["Portuguese", "unit", 39, false],
+    ["Sicilians", "unit", 39, false],
+    ["Spanish", "unit", 39, false],
+    ["Teutons", "unit", 39, false],
+    ["Vikings", "unit", 39, false],
+    ["Britons", "unit", 474, false],
+    ["Celts", "unit", 474, false],
+    ["Franks", "unit", 474, false],
+    ["Poles", "unit", 474, false],
+    ["Spanish", "unit", 474, false],
+    ["Chinese", "unit", 474, false],
+    ["Britons", "tech", 1452, true],
+    ["Franks", "tech", 1452, true],
+    ["Sicilians", "tech", 1452, true],
+    ["Koreans", "tech", 875, false],
+    ["Vikings", "tech", 875, false],
+    ["Portuguese", "tech", 316, false],
+    ["Vietnamese", "tech", 50, true],
+    ["Byzantines", "unit", 2703, true],
+    ["Byzantines", "unit", 2704, true],
+    ["Vikings", "unit", 2703, true],
+    ["Vikings", "unit", 420, false],
+    ["Vikings", "unit", 691, false],
+    ["Vikings", "unit", 2633, true]
+  ],
+  "dat": {
+    "demolition": {
+      "Cost": [
+        [1, 25, 1],
+        [3, 75, 1]
+      ],
+      "ResearchTime": 20
+    },
+    "eliteRattan": {
+      "Cost": [
+        [0, 800, 1],
+        [3, 750, 1]
+      ],
+      "ResearchTime": 45
+    },
+    "hulkArmour": 6
+  }
+}
