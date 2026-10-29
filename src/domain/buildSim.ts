@@ -43,6 +43,8 @@ import { type SlavicFarm, type SlavicRawTree, type SlavicRawTech } from './slavi
 
 import { type KhmerFarm, type KhmerPrerequisites, type KhmerRawTech, type KhmerRawTree, type KhmerRawTeam } from './khmerEconomy';
 
+import type { JurchenRawTech } from './jurchenEconomy';
+
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
 type Cost = Partial<Record<'Food' | 'Wood' | 'Gold' | 'Stone', number>>;
@@ -58,6 +60,7 @@ export interface EffectRow {
   slavicTree?: SlavicRawTree;
   slavicTech?: SlavicRawTech;
   khmerTech?: KhmerRawTech;
+  jurchenTech?: JurchenRawTech;
   khmerTree?: KhmerRawTree;
   khmerTeam?: KhmerRawTeam;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];

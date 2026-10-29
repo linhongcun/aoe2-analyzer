@@ -11,6 +11,8 @@ import { khmerContext, khmerNotes } from './khmerEconomy';
 import { weiRewardFamily, WEI_SPAWN_NOTE, WEI_KNIGHT_TEMPLATE_NOTE } from './weiEconomy';
 import { bengaliRewardFamily, BENGALI_SPAWN_NOTE, BENGALI_KNIGHT_TEMPLATE_NOTE } from './bengaliEconomy';
 
+import { jurchenNotes } from './jurchenEconomy';
+
 interface NotesInput {
   eco: EcoData;
   civ: string;
@@ -25,6 +27,7 @@ interface CivNotes {
 
 /** Generic-row disclosures remain outside the registry: a displaced Portuguese row still has its old note. */
 const CIV_NOTES: ReadonlyMap<string, CivNotes> = new Map([
+  ['Jurchens', { mechanism: ({ eco, boId }) => jurchenNotes(eco, boId) }],
   [
     'Khmer',
     {

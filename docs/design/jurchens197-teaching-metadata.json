@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "purpose": "Current DE188329 teaching audit provenance for two required Jurchen raw-source fields, not a changed teaching/game fact or rewritten historical audit",
+  "currentBase": "6b9cc7eb3ddef630888145cdedd8be73f7deaf0e",
+  "originalAuditEvidence": "teaching-compatibility-486.md",
+  "originalEcoProjectionSHA256": "e62ff60130ddfd6cc17eb1b3723ccda4549bddc9ec7dc31880f70008c7014368",
+  "currentEcoProjectionSHA256": "af5eeb7121d8c4126c5d16624fdd22d4cda86f228119342062af327547a026bf",
+  "contract": "SHA256(UTF8(JSON.stringify({units,ageReq,ecoTechs,civEco}))) with the exact current teaching test projection and object insertion order.",
+  "onlyAddedFields": {
+    "/civEco/Jurchens/0/jurchenTech": "504b1809290ce81bc751108477e92a4aecea02414223d077fd34df5e1af896f3",
+    "/civEco/Jurchens/1/jurchenTech": "d8fca530655e29215f319de23bea6337b02b35c64cf59de3b3b55d80178fb62e"
+  },
+  "reverseProof": {
+    "reportSHA256": "855fca4b4d95afe6be7aaa859e2f342ba13e8f3f17b289d47248436160829675",
+    "fullGeneratedEcoObjectExactlyRestoredByDeletingOnlyThoseTwoFields": true,
+    "restoredProjectionSHA256": "e62ff60130ddfd6cc17eb1b3723ccda4549bddc9ec7dc31880f70008c7014368",
+    "allOther55CivRowsAnd14GlobalSectionsExact": true
+  },
+  "currentSource": {
+    "patch": 188329,
+    "repo": "SiegeEngineers/auto-mods",
+    "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+    "datSHA256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f",
+    "independentSourceGO_SHA256": "7b2c941dc7804bb10bf4c9775e9c6e58a3e39edc4b37d830f007dec9294eccfa",
+    "canonicalRawPairSHA256": "1013c8675b07147818d9b13a59b473e637d9f19242d7e5d348110a30808fd554"
+  },
+  "preserved": "The original e62 projection and original486 evidence remain recorded. All other audit hashes, content bytes/fingerprints, source/version/date guards, route6552 qualifications and all486 tests/comparators remain unchanged. No broader filtering or alternate subject is introduced.",
+  "status": "APPROVED_AND_APPLIED_SOURCE_ONLY_METADATA_PROVENANCE",
+  "appliedUTC": "2026-10-29T05:31:35.013839+00:00",
+  "independentExactReview": {
+    "reviewer": "/root/batch14_code_review",
+    "reportSHA256": "d28e29e3fff261e9aedb67f9073d117b055dc1a6bae96b765982f6d73b2d5e85",
+    "unresolvedIssues": 0
+  }
+}

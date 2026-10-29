@@ -526,6 +526,28 @@ export async function checkSite({ site, version, commit, features = [] }) {
         'Verified Khmer public UI: both FC summaries, prerequisite and bounded-farm notes/share URLs; Khmer-enabled/Chinese-disabled selector; scouts prerequisite-only note; bonus0/1 simulation usage',
       );
     }
+    if (features.includes('builds') || features.includes('all')) {
+      const jurchenNote = '按资源不耗尽估算，尸体腐烂与耗尽未模拟，不腐烂收益未计入';
+      const jurchenKnight = '女真没有骑士；骑士方案仅供通用模板经济估算。';
+      for (const bo of ['scouts-18', 'fast-castle-knights']) {
+        await goto(`/builds?bo=${bo}&civ=Jurchens`);
+        await check(page.locator('[data-t="sum-civ"]')).toHaveText('按女真计');
+        await check(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+        await check(page.locator('[data-t="civ-note"]')).toContainText(jurchenNote);
+        if (bo === 'fast-castle-knights') await check(page.locator('[data-t="civ-note"]')).toContainText(jurchenKnight);
+        else await check(page.locator('[data-t="civ-note"]')).not.toContainText(jurchenKnight);
+        await page.locator('[data-t="share-card-btn"]:visible').first().click();
+        await check(page.locator('[data-t="card-basis"]')).toContainText(jurchenNote);
+        await check(page.locator('[data-t="card-url"]')).toContainText('civ=Jurchens');
+        await page.getByRole('dialog', { name: '分享卡', exact: true }).getByRole('button', { name: '关闭', exact: true }).click();
+      }
+      for (const idx of [0, 3]) {
+        await goto(`/civ/Jurchens/bonus/${idx}`);
+        await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'false');
+        await check(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText(idx === 0 ? '腐烂' : '当前8套开局');
+      }
+      console.log('Verified Jurchen public UI: explicit decay/exhaustion omission, no fake income, Knight economic-template warning, share URLs and both omitted bonus usages');
+    }
     for (const feature of smokeFeatures(features)) {
       if (feature === 'builds') {
         const order = JSON.parse(readFileSync(new URL('../src/data/build-orders/scouts-18.json', import.meta.url), 'utf8'));
