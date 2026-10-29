@@ -1143,6 +1143,10 @@
     "py": "ziyuanchixushijian",
     "pyi": "zycxsj"
   },
+  "赛事公告": {
+    "py": "saishigonggao",
+    "pyi": "ssgg"
+  },
   "运输船生命值 +100%，运载量 +20": {
     "py": "yunshuchuanshengmingzhiyunzailiang",
     "pyi": "yscsmzyzl"

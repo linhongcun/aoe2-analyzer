@@ -51,6 +51,7 @@ export const LAZY_COMPONENTS = [
   'BuildOrderList',
   'Maps',
   'Players',
+  'Events',
   'PlayerDetail',
   'Planned',
 ] as const;
@@ -103,6 +104,22 @@ export interface PageDef {
 }
 
 export const PAGES: readonly PageDef[] = [
+  {
+    key: 'events',
+    path: '/events',
+    kind: 'page',
+    lane: 'secondary',
+    group: 'reference',
+    label: '赛事公告',
+    en: 'Events',
+    icon: 'trophy',
+    desc: '查看人工维护的赛事公告与部分公布参赛选手',
+    match: /^\/events$/,
+    searchAliases: ['比赛公告', '赛事日期', 'The Garrison', 'events'],
+    component: 'Events',
+    metaTitle: '赛事公告',
+    metaDescription: '查看人工维护的赛事公告、公布日期范围、部分参赛选手与主办方来源。',
+  },
   {
     key: 'players',
     path: '/players',

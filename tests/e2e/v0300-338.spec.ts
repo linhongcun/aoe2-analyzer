@@ -284,6 +284,13 @@ const playerPageRoutes = ['/players', ...playerRoutes(playerCatalog)];
 
 /** A heading shell is insufficient: capture real player cards/facts and expanded citations. */
 async function openDetailsWithPlayerReadiness(page: Page, route: string) {
+  if (route === '/events') {
+    await expect(page.getByRole('heading', { name: '赛事公告', exact: true, level: 1 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'The Garrison 2026', exact: true, level: 2 })).toBeVisible();
+    await expect(page.getByText('2026-11-25', { exact: true })).toBeVisible();
+    await expect(page.getByText('2026-11-29', { exact: true })).toBeVisible();
+    await expect(page.locator('main summary', { hasText: '来源与核对说明' })).toBeVisible();
+  }
   if (route === '/players') {
     await expect(page.getByRole('heading', { name: '职业选手资料', exact: true })).toBeVisible();
     await expect(page.locator('main .player-card')).toHaveCount(playerCatalog.players.length);
@@ -297,6 +304,12 @@ async function openDetailsWithPlayerReadiness(page: Page, route: string) {
     await expect(page.locator('main summary', { hasText: '来源与核对说明' })).toBeVisible();
   }
   await openAllDetails(page);
+  if (route === '/events') {
+    await expect(page.locator('main details[open]')).toHaveCount(1);
+    await expect(page.getByRole('link', { name: '官方赛事公告', exact: true })).toBeVisible();
+    await expect(page.getByRole('link', { name: '主办方公告', exact: true })).toBeVisible();
+    await expect(page.getByRole('link', { name: '主办方公布名单', exact: true })).toBeVisible();
+  }
   if (player && route === playerPath(player)) {
     await expect(page.locator('main details.player-sources[open]')).toHaveCount(1);
     await expect(page.locator('main details.player-sources a').first()).toBeVisible();
@@ -338,6 +351,7 @@ type TableStyle = { cls: string; display: string; overflowX: string; tr: string 
 const TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables.json';
 const PATCH_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-188329.json';
 const PLAYERS_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-players.json';
+const EVENTS_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-events.json';
 const TABLE_WIDTHS = [360, 1280] as const;
 const RECORD_TABLES = !!process.env.V0300_RECORD;
 const historicalTableGolden: Record<string, TableStyle[]> = existsSync(TABLES_FIXTURE)
@@ -363,20 +377,40 @@ for (const key of playerTableKeys) {
   assert.ok(!Object.hasOwn(historicalTableGolden, key), `Players fixture cannot replace a historical table expectation: ${key}`);
   assert.ok(!Object.hasOwn(patchTableGolden, key), `Players fixture cannot replace another companion expectation: ${key}`);
 }
+const eventTableGolden = JSON.parse(readFileSync(EVENTS_TABLES_FIXTURE, 'utf8')) as Record<string, TableStyle[]>;
+const eventTableKeys = TABLE_WIDTHS.map((width) => `${width} /events`);
+assert.deepEqual(Object.keys(eventTableGolden).sort(), [...eventTableKeys].sort(), 'Events table fixture must contain exactly its two loaded width keys');
+for (const key of eventTableKeys) {
+  assert.ok(Array.isArray(eventTableGolden[key]), `Missing explicit table expectation: ${key}`);
+  assert.ok(!Object.hasOwn(historicalTableGolden, key), `Events fixture cannot replace a historical table expectation: ${key}`);
+  assert.ok(!Object.hasOwn(patchTableGolden, key), `Events fixture cannot replace the patch companion expectation: ${key}`);
+  assert.ok(!Object.hasOwn(playerTableGolden, key), `Events fixture cannot replace the players companion expectation: ${key}`);
+}
 const tableFixtureGroups = [
   { file: TABLES_FIXTURE, keys: Object.keys(historicalTableGolden), golden: historicalTableGolden },
   { file: PATCH_TABLES_FIXTURE, keys: patchTableKeys, golden: patchTableGolden },
   { file: PLAYERS_TABLES_FIXTURE, keys: playerTableKeys, golden: playerTableGolden },
+  { file: EVENTS_TABLES_FIXTURE, keys: eventTableKeys, golden: eventTableGolden },
 ];
-const tableKeyOwners = new Map<string, string>();
-for (const group of tableFixtureGroups) {
-  for (const key of group.keys) {
-    assert.ok(!tableKeyOwners.has(key), `Table fixture ownership overlaps: ${key}`);
-    assert.ok(Array.isArray(group.golden[key]), `Missing explicit table expectation: ${key}`);
-    tableKeyOwners.set(key, group.file);
+function explicitTableKeyOwners(groups: typeof tableFixtureGroups) {
+  const owners = new Map<string, string>();
+  for (const group of groups) {
+    assert.deepEqual(Object.keys(group.golden).sort(), [...group.keys].sort(), `Table fixture keys must match explicit owners: ${group.file}`);
+    for (const key of group.keys) {
+      assert.ok(!owners.has(key), `Table fixture ownership overlaps: ${key}`);
+      assert.ok(Array.isArray(group.golden[key]), `Missing explicit table expectation: ${key}`);
+      owners.set(key, group.file);
+    }
   }
+  return owners;
 }
-const tableGolden = { ...historicalTableGolden, ...patchTableGolden, ...playerTableGolden };
+const tableKeyOwners = explicitTableKeyOwners(tableFixtureGroups);
+assert.deepEqual(
+  [...tableKeyOwners.keys()].sort(),
+  TABLE_WIDTHS.flatMap((width) => PAGES.map((route) => `${width} ${route}`)).sort(),
+  'All four table fixture owners must partition exactly the static-page width keys; missing and extra keys are rejected',
+);
+const tableGolden = { ...historicalTableGolden, ...patchTableGolden, ...playerTableGolden, ...eventTableGolden };
 
 function recordTableFixtures(tables: Record<string, TableStyle[]>, write: (file: string, text: string) => void = writeFileSync) {
   assert.deepEqual(
@@ -414,10 +448,21 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
   test('守卫：记录时历史基准与全部补充基准保持分开，不覆盖彼此的键值', () => {
     const written = new Map<string, Record<string, TableStyle[]>>();
     recordTableFixtures(tableGolden, (file, text) => written.set(file, JSON.parse(text) as Record<string, TableStyle[]>));
-    expect([...written.keys()]).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE, PLAYERS_TABLES_FIXTURE]);
+    expect([...written.keys()]).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE, PLAYERS_TABLES_FIXTURE, EVENTS_TABLES_FIXTURE]);
     expect(written.get(TABLES_FIXTURE)).toEqual(historicalTableGolden);
     expect(written.get(PATCH_TABLES_FIXTURE)).toEqual(patchTableGolden);
     expect(written.get(PLAYERS_TABLES_FIXTURE)).toEqual(playerTableGolden);
+    expect(written.get(EVENTS_TABLES_FIXTURE)).toEqual(eventTableGolden);
+    expect(Object.keys(written.get(EVENTS_TABLES_FIXTURE)!).sort()).toEqual([...eventTableKeys].sort());
+    const eventsGroup = tableFixtureGroups.find((group) => group.file === EVENTS_TABLES_FIXTURE)!;
+    const withoutEvents = tableFixtureGroups.filter((group) => group.file !== EVENTS_TABLES_FIXTURE);
+    expect(() => explicitTableKeyOwners([...withoutEvents, { ...eventsGroup, golden: { ...eventTableGolden, '360 /unassigned-new-page': [] } }])).toThrow(
+      /explicit owners/,
+    );
+    const missingEvent = { ...eventTableGolden };
+    delete missingEvent[eventTableKeys[0]!];
+    expect(() => explicitTableKeyOwners([...withoutEvents, { ...eventsGroup, golden: missingEvent }])).toThrow(/explicit owners/);
+    expect(() => explicitTableKeyOwners([...tableFixtureGroups, eventsGroup])).toThrow(/ownership overlaps/);
     const unexpected = { ...tableGolden, '360 /unassigned-new-page': [] };
     expect(() =>
       recordTableFixtures(unexpected, () => {
@@ -449,6 +494,13 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
       await expect(page.getByRole('heading', { name: 'DE Update 188329', exact: true })).toBeVisible();
       await openAllDetails(page);
       expect(await tableStyles(page)).toEqual(tableGolden[`${width} /patches/188329`]);
+    });
+  for (const width of TABLE_WIDTHS)
+    test(`新增 #/events @${width}：真实公告已加载并展开来源，表格与显式补充基准一致`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('./#/events', { waitUntil: 'networkidle' });
+      await openDetailsWithPlayerReadiness(page, '/events');
+      expect(await tableStyles(page)).toEqual(tableGolden[`${width} /events`]);
     });
   for (const width of TABLE_WIDTHS)
     for (const route of playerPageRoutes)

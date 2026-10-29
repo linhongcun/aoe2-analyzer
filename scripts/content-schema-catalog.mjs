@@ -6,6 +6,7 @@ export const SCHEMA_CATALOG = {
       'castle-defense',
       'contentCatalog',
       'game-guide',
+      'events',
       'glossary',
       'hotkeys',
       'match-review',

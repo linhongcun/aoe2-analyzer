@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-29",
+  "sources": [
+    {
+      "id": "e1",
+      "title": "The Garrison 2026",
+      "url": "https://www.ageofempires.com/events/the-garrison-2026/",
+      "kind": "官方赛事公告",
+      "sourcePublishedAt": null,
+      "publishedAt": null,
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "e2",
+      "title": "Announcing: The Garrison 2026!",
+      "url": "https://beingesports.com/en/aoe2/news/thegarrison2026",
+      "kind": "主办方公告",
+      "sourcePublishedAt": null,
+      "publishedAt": null,
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "e3",
+      "title": "Everyone attending The Garrison 2026",
+      "url": "https://beingesports.com/en/aoe2/news/everyone-attending-the-garrison-2026",
+      "kind": "主办方公布名单",
+      "sourcePublishedAt": null,
+      "publishedAt": null,
+      "checkedAt": "2026-10-29"
+    }
+  ],
+  "events": [
+    {
+      "id": "the-garrison-2026",
+      "title": "The Garrison 2026",
+      "game": "帝国时代 II：决定版",
+      "startDate": "2026-11-25",
+      "endDate": "2026-11-29",
+      "formats": ["1v1", "3v3-final"],
+      "evidence": [
+        {
+          "sourceId": "e1",
+          "locator": "Main Event: November 25–November 29, 2026；Game: Age of Empires II: Definitive Edition；Format: 1v1 and 3v3 Final of The League。"
+        },
+        {
+          "sourceId": "e2",
+          "locator": "公告正文公布 November 25–29, 2026 的 1v1 tournament 与 The League 3v3 final。"
+        }
+      ],
+      "participants": [
+        {
+          "playerId": "hera",
+          "roles": [
+            {
+              "format": "1v1",
+              "team": null,
+              "evidence": [
+                {
+                  "sourceId": "e3",
+                  "locator": "1v1 tournament 名单中的 Hera。"
+                }
+              ]
+            },
+            {
+              "format": "3v3-final",
+              "team": "Team Vitality",
+              "evidence": [
+                {
+                  "sourceId": "e3",
+                  "locator": "The League 3v3 final 的 Team Vitality 名单中的 Hera。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "playerId": "liereyy",
+          "roles": [
+            {
+              "format": "1v1",
+              "team": null,
+              "evidence": [
+                {
+                  "sourceId": "e3",
+                  "locator": "1v1 tournament 名单中的 Liereyy。"
+                }
+              ]
+            },
+            {
+              "format": "3v3-final",
+              "team": "Team Vitality",
+              "evidence": [
+                {
+                  "sourceId": "e3",
+                  "locator": "The League 3v3 final 的 Team Vitality 名单中的 Liereyy。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "playerId": "theviper",
+          "roles": [
+            {
+              "format": "3v3-final",
+              "team": "Onimaru Capybaras",
+              "evidence": [
+                {
+                  "sourceId": "e3",
+                  "locator": "The League 3v3 final 的 Onimaru Capybaras 名单中的 TheViper。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
