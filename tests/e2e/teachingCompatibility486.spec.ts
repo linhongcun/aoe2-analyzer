@@ -40,7 +40,9 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(guideSources).toContainText('未作客户端实测');
     await guideSources.scrollIntoViewIfNeeded();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await testInfo.attach(`guide-review-${width}`, { body: await page.screenshot(), contentType: 'image/png' });
+    const guideScreenshot = testInfo.outputPath(`guide-review-${width}.png`);
+    await page.screenshot({ path: guideScreenshot });
+    await testInfo.attach(`guide-review-${width}`, { path: guideScreenshot, contentType: 'image/png' });
 
     await page.goto('./#/team-plan');
     await page.getByRole('button', { name: '载入开放陆地4v4范例', exact: true }).click();
@@ -61,7 +63,9 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(planSources).toContainText('未作客户端实测');
     await planSources.scrollIntoViewIfNeeded();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await testInfo.attach(`team-review-${width}`, { body: await page.screenshot(), contentType: 'image/png' });
+    const teamScreenshot = testInfo.outputPath(`team-review-${width}.png`);
+    await page.screenshot({ path: teamScreenshot });
+    await testInfo.attach(`team-review-${width}`, { path: teamScreenshot, contentType: 'image/png' });
     await page.getByRole('button', { name: '复制完整计划', exact: true }).click();
     const sharedUrl = await page.getByRole('textbox', { name: '手动复制计划链接', exact: true }).inputValue();
     const shared = new URL(sharedUrl);
