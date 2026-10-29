@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import type { BuildOrder } from '../../src/domain/buildOrder';
 
+const pins = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } };
 const orders = readdirSync(new URL('../../src/data/build-orders/', import.meta.url))
   .filter((file) => file.endsWith('.json'))
   .map((file) => JSON.parse(readFileSync(new URL(`../../src/data/build-orders/${file}`, import.meta.url), 'utf8')) as BuildOrder);
@@ -128,7 +129,7 @@ test('#216 全部真实开局完整清单与A4 PDF保留来源/限制', async ({
     }
     await expect(page.getByTestId('practice-civ-warning')).toContainText('加成尚未计入，已按通用计算');
     for (const source of order.sources) await expect(page.locator('.bp-sources')).toContainText(source.url);
-    await expect(page.locator('.bp-sources')).toContainText('DE Update 185872');
+    await expect(page.locator('.bp-sources')).toContainText(`DE Update ${pins.patch.build}`);
     await page.pdf({ path: info.outputPath(`practice216-${order.id}-a4.pdf`), format: 'A4', preferCSSPageSize: true, printBackground: true });
   }
   await page.evaluate(() => localStorage.setItem('aoe2-theme', 'dark'));

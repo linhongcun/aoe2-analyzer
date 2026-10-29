@@ -1,5 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+
+const pins = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } };
 
 const SIDES = 'a=569.Franks.4.f.&b=359.Japanese.4.f.';
 const MODES = [
@@ -66,7 +69,7 @@ for (const item of MODES) {
 }
 
 test('#364 升级比较与条件瓦兰吉加成标题也纳入相同大纲', async ({ page }) => {
-  await go(page, 'a=38.Byzantines.3.67.&b=38.Byzantines.3..&m=1&base=38.Byzantines.3..&fixed=38.Byzantines.3..&basev=185872');
+  await go(page, `a=38.Byzantines.3.67.&b=38.Byzantines.3..&m=1&base=38.Byzantines.3..&fixed=38.Byzantines.3..&basev=${pins.patch.build}`);
   await expand(page);
   await expect(page.locator('[data-t="upgrade-before"]')).toBeVisible();
   await noSkippedLevel(page, '有已保存基准的升级比较');
