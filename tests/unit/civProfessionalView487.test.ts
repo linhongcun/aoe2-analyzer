@@ -1,5 +1,6 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { PRO_SOURCES, readProSources } from '../../src/features/civs/proSources';
 import CivProfessionalView from '../../src/features/civs/components/CivProfessionalView';
@@ -19,7 +20,7 @@ const VERIFIED = {
 } as const;
 
 const source = (changes: Record<string, unknown> = {}) => ({ ...VERIFIED, ...changes });
-const render = (catalogue: unknown) => renderToStaticMarkup(createElement(CivProfessionalView, { catalogue }));
+const render = (catalogue: unknown) => renderToStaticMarkup(createElement(MemoryRouter, null, createElement(CivProfessionalView, { catalogue })));
 
 describe('#487 verified professional original-source catalogue', () => {
   it('publishes only the frozen Hera original record and retains explicit unknown fields', () => {
@@ -63,7 +64,7 @@ describe('#487 verified professional original-source catalogue', () => {
     const sparse = [source()];
     sparse.length = 2;
     expect(readProSources(sparse)).toEqual({ status: 'unavailable' });
-    const html = renderToStaticMarkup(createElement(CivProfessionalView, { catalogue: sparse }));
+    const html = render(sparse);
     expect(html).toContain('资料暂不可用');
     expect(html).not.toContain('href=');
   });
@@ -131,7 +132,7 @@ describe('#487 verified professional original-source catalogue', () => {
 
 describe('#487 actual source component boundary states', () => {
   it('renders the verified source with honest unknown states and no inferred ranking or media', () => {
-    const html = renderToStaticMarkup(createElement(CivProfessionalView));
+    const html = render(PRO_SOURCES);
     expect(html).toContain('职业选手原始资料');
     expect(html).toContain(VERIFIED.originalTitle);
     expect(html).toContain('Hera');
@@ -141,7 +142,16 @@ describe('#487 actual source component boundary states', () => {
       expect(html).toContain(label);
     }
     expect(html).toContain('未摘录本文明的名次、档位或分数，请查看原视频了解完整观点。');
-    expect(html).not.toMatch(/<(?:iframe|video|audio|object|embed|img|canvas)\b|data-stat="rating-|href="[^"]*\/players\//);
+    expect(html).not.toMatch(/<(?:iframe|video|audio|object|embed|img|canvas)\b|data-stat="rating-/);
+    expect(html).toContain('href="/players/hera"');
+    expect(html.match(/href="\/players\//g)).toHaveLength(1);
+  });
+
+  it('keeps an unknown author readable without generating a dead profile link', () => {
+    const html = render([source({ authorId: 'unknown-author', author: 'Unknown author' })]);
+    expect(html).toContain('Unknown author');
+    expect(html).toContain(`href="${VERIFIED.originalUrl}"`);
+    expect(html).not.toMatch(/href="[^"]*\/players\//);
   });
 
   it('renders a genuine empty catalogue without inventing a source or link', () => {

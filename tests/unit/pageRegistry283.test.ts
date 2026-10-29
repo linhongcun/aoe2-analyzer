@@ -3,11 +3,19 @@ import { describe, expect, it } from 'vitest';
 import { PAGE_META } from '../../src/domain/sharePage';
 import { LAZY_COMPONENTS, PAGES, PLACEMENT_ALLOWLIST, hasEntryPlacement } from '../../src/shared/nav/pageRegistry';
 import { HOME_GROUPS, WIKI, sectionOf } from '../../src/shared/nav/sections';
+import { PLAYER_CATALOG } from '../../src/data/players';
+import { playerRoutes } from '../../src/domain/playerCatalog.mjs';
 
 const allow = new Set<string>(PLACEMENT_ALLOWLIST);
-const generated = (path: string) => /^\/(unit|tech|building|civ|tree|builds|glossary|patches)\//.test(path);
+if (PLAYER_CATALOG.status !== 'ready') throw new Error('Verified player catalog required for generated-page membership');
+const playerPaths = new Set(playerRoutes(PLAYER_CATALOG.catalog));
+const generated = (path: string) => playerPaths.has(path) || /^\/(unit|tech|building|civ|tree|builds|glossary|patches)\//.test(path);
 
 describe('页面登记表 #283', () => {
+  it('选手生成路径只接受目录中的真实成员', () => {
+    for (const path of playerPaths) expect(generated(path)).toBe(true);
+    for (const path of ['/players/unknown', '/players/:id', '/players/hera/extra', '/players/Hera']) expect(generated(path)).toBe(false);
+  });
   it('每条登记都有路由，路由表只从登记表生成', () => {
     const routes = readFileSync('src/app/routes.tsx', 'utf8');
     const paths = PAGES.map((page) => page.path);

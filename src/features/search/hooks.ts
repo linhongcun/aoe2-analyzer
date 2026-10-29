@@ -10,6 +10,8 @@ import { buildOrders } from '../../data/buildOrders';
 import { BUILD_ALIASES, TECH_AKA, UNIT_ALIASES } from '../../data/aliases';
 import { civNote, dupIdsIn } from '../../domain/dupNames';
 import { glossarySearchItems } from '../../domain/glossary';
+import { PLAYER_CATALOG } from '../../data/players';
+import { playerPath } from '../../domain/playerCatalog.mjs';
 
 export { TECH_AKA } from '../../data/aliases';
 
@@ -110,6 +112,16 @@ export function useSearchIndex(): SearchItem[] {
         late: true,
       }),
     );
+    if (PLAYER_CATALOG.status === 'ready')
+      for (const player of PLAYER_CATALOG.catalog.players)
+        items.push({
+          kind: 'page',
+          id: `player-${player.id}`,
+          zh: player.handle,
+          en: player.fullName,
+          href: playerPath(player),
+          sub: `${player.country} · 职业选手资料`,
+        });
     return [...items, ...glossarySearchItems].map(withSearchPy);
   }, [core]);
 }

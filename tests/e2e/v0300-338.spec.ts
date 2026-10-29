@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { expect, test, type Page } from '@playwright/test';
 import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 import { openAllDetails } from './relicDetails412';
+import { playerById, playerPath, playerRoutes } from '../../src/domain/playerCatalog.mjs';
+import { PLAYER_CATALOG } from './players488Catalog';
 
 /**
  * v0.30.0 验收：#338（含 2026-10-21 23:55 北京时间的范围补充，issue comment 6320295954）。Kent 写，先失败。
@@ -275,6 +277,31 @@ test.describe('#338 文物收入页不再显示 .dat SHA256', () => {
 const PAGES = Object.entries(JSON.parse(readFileSync('src/data/page-metadata.json', 'utf8')) as Record<string, { route?: string }>)
   .map(([key, meta]) => meta.route ?? key)
   .filter((r) => r !== '/about-data');
+const playerState = PLAYER_CATALOG;
+assert.ok(playerState.status === 'ready', 'The approved player catalog must be valid and loaded');
+const playerCatalog = playerState.catalog;
+const playerPageRoutes = ['/players', ...playerRoutes(playerCatalog)];
+
+/** A heading shell is insufficient: capture real player cards/facts and expanded citations. */
+async function openDetailsWithPlayerReadiness(page: Page, route: string) {
+  if (route === '/players') {
+    await expect(page.getByRole('heading', { name: '职业选手资料', exact: true })).toBeVisible();
+    await expect(page.locator('main .player-card')).toHaveCount(playerCatalog.players.length);
+    for (const player of playerCatalog.players) await expect(page.locator('main .player-card').getByText(player.fullName, { exact: true })).toBeVisible();
+  }
+  const player = playerById(playerCatalog, route.slice('/players/'.length));
+  if (player && route === playerPath(player)) {
+    await expect(page.locator('main').getByRole('heading', { name: player.handle, exact: true })).toBeVisible();
+    await expect(page.locator('main').getByText(player.fullName, { exact: true })).toBeVisible();
+    await expect(page.locator('main').getByRole('heading', { name: '赛事回顾中的对局文明', exact: true })).toBeVisible();
+    await expect(page.locator('main summary', { hasText: '来源与核对说明' })).toBeVisible();
+  }
+  await openAllDetails(page);
+  if (player && route === playerPath(player)) {
+    await expect(page.locator('main details.player-sources[open]')).toHaveCount(1);
+    await expect(page.locator('main details.player-sources a').first()).toBeVisible();
+  }
+}
 const SHARDS = 8;
 test.describe('#338 除「关于数据」外全站不显示 sha256', () => {
   test.describe.configure({ mode: 'parallel' });
@@ -294,7 +321,7 @@ test.describe('#338 除「关于数据」外全站不显示 sha256', () => {
         await page.goto(`./#${route}`, { waitUntil: 'networkidle' });
         await expect(page.locator('main')).not.toBeEmpty();
         await page.waitForLoadState('networkidle');
-        await openAllDetails(page);
+        await openDetailsWithPlayerReadiness(page, route);
         const found = hashesIn((await page.locator('main').textContent()) ?? '');
         if (route === '/relic-income' || route === '/market') seen.push(route);
         if (found.length) bad.push(`#${route}：${found.map((h) => h.slice(0, 16) + '…').join('、')}`);
@@ -310,6 +337,7 @@ test.describe('#338 除「关于数据」外全站不显示 sha256', () => {
 type TableStyle = { cls: string; display: string; overflowX: string; tr: string | null; td: string | null };
 const TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables.json';
 const PATCH_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-188329.json';
+const PLAYERS_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-players.json';
 const TABLE_WIDTHS = [360, 1280] as const;
 const RECORD_TABLES = !!process.env.V0300_RECORD;
 const historicalTableGolden: Record<string, TableStyle[]> = existsSync(TABLES_FIXTURE)
@@ -323,13 +351,44 @@ for (const key of patchTableKeys) {
   assert.ok(Array.isArray(patchTableGolden[key]), `Missing explicit table expectation: ${key}`);
   assert.ok(!Object.hasOwn(historicalTableGolden, key), `New patch fixture cannot replace a historical table expectation: ${key}`);
 }
-const tableGolden = { ...historicalTableGolden, ...patchTableGolden };
+const playerTableGolden = JSON.parse(readFileSync(PLAYERS_TABLES_FIXTURE, 'utf8')) as Record<string, TableStyle[]>;
+const playerTableKeys = TABLE_WIDTHS.flatMap((width) => playerPageRoutes.map((route) => `${width} ${route}`));
+assert.deepEqual(
+  Object.keys(playerTableGolden).sort(),
+  [...playerTableKeys].sort(),
+  'Players table fixture must contain exactly its eight catalog-derived width keys',
+);
+for (const key of playerTableKeys) {
+  assert.ok(Array.isArray(playerTableGolden[key]), `Missing explicit table expectation: ${key}`);
+  assert.ok(!Object.hasOwn(historicalTableGolden, key), `Players fixture cannot replace a historical table expectation: ${key}`);
+  assert.ok(!Object.hasOwn(patchTableGolden, key), `Players fixture cannot replace another companion expectation: ${key}`);
+}
+const tableFixtureGroups = [
+  { file: TABLES_FIXTURE, keys: Object.keys(historicalTableGolden), golden: historicalTableGolden },
+  { file: PATCH_TABLES_FIXTURE, keys: patchTableKeys, golden: patchTableGolden },
+  { file: PLAYERS_TABLES_FIXTURE, keys: playerTableKeys, golden: playerTableGolden },
+];
+const tableKeyOwners = new Map<string, string>();
+for (const group of tableFixtureGroups) {
+  for (const key of group.keys) {
+    assert.ok(!tableKeyOwners.has(key), `Table fixture ownership overlaps: ${key}`);
+    assert.ok(Array.isArray(group.golden[key]), `Missing explicit table expectation: ${key}`);
+    tableKeyOwners.set(key, group.file);
+  }
+}
+const tableGolden = { ...historicalTableGolden, ...patchTableGolden, ...playerTableGolden };
 
 function recordTableFixtures(tables: Record<string, TableStyle[]>, write: (file: string, text: string) => void = writeFileSync) {
-  const historical = Object.fromEntries(Object.entries(tables).filter(([key]) => !patchTableKeys.includes(key)));
-  const patch = Object.fromEntries(patchTableKeys.map((key) => [key, tables[key]]));
-  write(TABLES_FIXTURE, JSON.stringify(historical, null, 1) + '\n');
-  write(PATCH_TABLES_FIXTURE, JSON.stringify(patch, null, 1) + '\n');
+  assert.deepEqual(
+    Object.keys(tables).sort(),
+    [...tableKeyOwners.keys()].sort(),
+    'Recorded table keys must match explicit owners; missing or unassigned records are rejected',
+  );
+  for (const key of tableKeyOwners.keys()) assert.ok(Array.isArray(tables[key]), `Missing explicit recorded table value: ${key}`);
+  for (const group of tableFixtureGroups) {
+    const owned = Object.fromEntries(group.keys.map((key) => [key, tables[key]]));
+    write(group.file, JSON.stringify(owned, null, 1) + '\n');
+  }
 }
 
 async function tableStyles(page: Page): Promise<TableStyle[]> {
@@ -352,12 +411,26 @@ async function tableStyles(page: Page): Promise<TableStyle[]> {
 test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main ead4c34 相同', () => {
   test.describe.configure({ mode: 'parallel' });
   if (RECORD_TABLES) test.afterAll(() => recordTableFixtures(tableGolden));
-  test('守卫：记录时历史基准与188329补充基准保持分开，不覆盖彼此的键值', () => {
+  test('守卫：记录时历史基准与全部补充基准保持分开，不覆盖彼此的键值', () => {
     const written = new Map<string, Record<string, TableStyle[]>>();
     recordTableFixtures(tableGolden, (file, text) => written.set(file, JSON.parse(text) as Record<string, TableStyle[]>));
-    expect([...written.keys()]).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE]);
+    expect([...written.keys()]).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE, PLAYERS_TABLES_FIXTURE]);
     expect(written.get(TABLES_FIXTURE)).toEqual(historicalTableGolden);
     expect(written.get(PATCH_TABLES_FIXTURE)).toEqual(patchTableGolden);
+    expect(written.get(PLAYERS_TABLES_FIXTURE)).toEqual(playerTableGolden);
+    const unexpected = { ...tableGolden, '360 /unassigned-new-page': [] };
+    expect(() =>
+      recordTableFixtures(unexpected, () => {
+        throw new Error('Unassigned records must be rejected before any file is written');
+      }),
+    ).toThrow(/explicit owners/);
+    const missing = { ...tableGolden };
+    delete missing[playerTableKeys[0]!];
+    expect(() =>
+      recordTableFixtures(missing, () => {
+        throw new Error('Missing records must be rejected before any file is written');
+      }),
+    ).toThrow(/explicit owners/);
   });
   test('守卫：基准已录制，覆盖全部非「关于数据」静态页、两个宽度，并且确实录到了表格', () => {
     test.skip(RECORD_TABLES);
@@ -378,6 +451,14 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
       expect(await tableStyles(page)).toEqual(tableGolden[`${width} /patches/188329`]);
     });
   for (const width of TABLE_WIDTHS)
+    for (const route of playerPageRoutes)
+      test(`新增 #${route} @${width}：真实资料已加载并展开来源，表格与显式补充基准一致`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(`./#${route}`, { waitUntil: 'networkidle' });
+        await openDetailsWithPlayerReadiness(page, route);
+        expect(await tableStyles(page)).toEqual(tableGolden[`${width} ${route}`]);
+      });
+  for (const width of TABLE_WIDTHS)
     for (let shard = 0; shard < SHARDS; shard++)
       test(`@${width} 全部静态页（第 ${shard + 1}/${SHARDS} 组）：main 里每张表格的 display、overflow-x 及首行 tr / td 的 display 不变`, async ({ page }) => {
         test.setTimeout(600_000);
@@ -389,7 +470,7 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
           await expect(page.locator('main')).not.toBeEmpty();
           if (route === '/patches/188329') await expect(page.getByRole('heading', { name: 'DE Update 188329', exact: true })).toBeVisible();
           await page.waitForLoadState('networkidle');
-          await openAllDetails(page);
+          await openDetailsWithPlayerReadiness(page, route);
           const got = await tableStyles(page);
           const key = `${width} ${route}`;
           if (RECORD_TABLES) tableGolden[key] = got;

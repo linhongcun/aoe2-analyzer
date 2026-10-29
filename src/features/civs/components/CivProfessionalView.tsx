@@ -1,4 +1,7 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { PLAYER_CATALOG } from '../../../data/players';
+import { playerById, playerPath } from '../../../domain/playerCatalog.mjs';
 import { DetailSection } from '../../../shared/ui/DetailBlocks';
 import { PRO_SOURCES, readProSources } from '../proSources';
 import './civ-professional-view.css';
@@ -43,38 +46,41 @@ export default function CivProfessionalView({ catalogue = PRO_SOURCES }: { catal
       {state.status === 'empty' && <p role="status">暂无已核对原链接</p>}
       {state.status === 'unavailable' && <p role="status">资料暂不可用</p>}
       {state.status === 'ready' &&
-        state.sources.map((source) => (
-          <article className="civ-pro-card" key={source.id} aria-label={`${source.author} 原视频`}>
-            <div className="civ-pro-author">
-              <strong>{source.author}</strong>
-              <span className="tag">仅参考</span>
-            </div>
-            <h3>{source.originalTitle}</h3>
-            <ul className="civ-pro-unknowns">
-              <li>原视频发布日期未核实</li>
-              <li>适用游戏版本未核实</li>
-              <li>地图范围未核实</li>
-            </ul>
-            <p className="note">
-              核对日期 <span className="num nw">{source.checkedAt}</span>
-            </p>
-            <div className="civ-pro-links">
-              <div>
-                <a className="ulink" href={source.originalUrl} target="_blank" rel="noopener noreferrer">
-                  查看原视频
-                </a>
-                <SourceUrl url={source.originalUrl} />
+        state.sources.map((source) => {
+          const author = PLAYER_CATALOG.status === 'ready' ? playerById(PLAYER_CATALOG.catalog, source.authorId) : undefined;
+          return (
+            <article className="civ-pro-card" key={source.id} aria-label={`${source.author} 原视频`}>
+              <div className="civ-pro-author">
+                <strong>{author ? <Link to={playerPath(author)}>{source.author}</Link> : source.author}</strong>
+                <span className="tag">仅参考</span>
               </div>
-              <div>
-                <a className="ulink" href={source.discoveryUrl} target="_blank" rel="noopener noreferrer">
-                  查看发现索引
-                </a>
-                <SourceUrl url={source.discoveryUrl} />
-                <p className="note">发现线索，索引日期不代表原视频发布日期。</p>
+              <h3>{source.originalTitle}</h3>
+              <ul className="civ-pro-unknowns">
+                <li>原视频发布日期未核实</li>
+                <li>适用游戏版本未核实</li>
+                <li>地图范围未核实</li>
+              </ul>
+              <p className="note">
+                核对日期 <span className="num nw">{source.checkedAt}</span>
+              </p>
+              <div className="civ-pro-links">
+                <div>
+                  <a className="ulink" href={source.originalUrl} target="_blank" rel="noopener noreferrer">
+                    查看原视频
+                  </a>
+                  <SourceUrl url={source.originalUrl} />
+                </div>
+                <div>
+                  <a className="ulink" href={source.discoveryUrl} target="_blank" rel="noopener noreferrer">
+                    查看发现索引
+                  </a>
+                  <SourceUrl url={source.discoveryUrl} />
+                  <p className="note">发现线索，索引日期不代表原视频发布日期。</p>
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
     </DetailSection>
   );
 }

@@ -50,6 +50,8 @@ export const LAZY_COMPONENTS = [
   'SimulatorHub',
   'BuildOrderList',
   'Maps',
+  'Players',
+  'PlayerDetail',
   'Planned',
 ] as const;
 export type LazyComponentId = (typeof LAZY_COMPONENTS)[number];
@@ -101,6 +103,29 @@ export interface PageDef {
 }
 
 export const PAGES: readonly PageDef[] = [
+  {
+    key: 'players',
+    path: '/players',
+    kind: 'page',
+    lane: 'secondary',
+    group: 'reference',
+    label: '职业选手资料',
+    en: 'Players',
+    icon: 'users',
+    desc: '查阅公开身份、年度战绩与赛事回顾中的对局文明',
+    match: /^\/players(?:\/.*)?$/,
+    component: 'Players',
+    metaTitle: '职业选手资料',
+    metaDescription: '查阅已收录职业选手的公开身份、年度战绩及具体赛事中的对局文明来源。',
+  },
+  {
+    key: 'player-detail',
+    path: '/players/:id',
+    kind: 'detail',
+    component: 'PlayerDetail',
+    entry: 'none',
+    entryReason: '选手详情，入口在选手目录',
+  },
   {
     key: 'glossary',
     path: '/glossary',

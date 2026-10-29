@@ -1,0 +1,117 @@
+.players-page {
+  padding: var(--space-6);
+}
+.players-page .crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+.player-card {
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.player-card > .ic {
+  color: var(--color-muted);
+}
+.player-card h2 {
+  font-size: var(--fs-h3);
+  margin: var(--space-2) 0;
+}
+.player-card h2 a,
+.player-link,
+.player-sources a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  min-width: 44px;
+  color: var(--color-link);
+}
+.player-card p,
+.player-detail p {
+  margin: var(--space-2) 0;
+}
+.player-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+.player-heading h1 {
+  margin: var(--space-2) 0;
+}
+.player-heading > div {
+  min-width: 0;
+}
+.player-section {
+  margin: var(--space-6) 0;
+}
+.player-section h2 {
+  font-size: var(--fs-h3);
+}
+.player-section p a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  color: var(--color-link);
+}
+.player-sources {
+  margin: var(--space-6) 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.player-sources summary {
+  min-height: 44px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.player-sources ul {
+  padding-left: var(--space-5);
+}
+.player-sources li {
+  margin-bottom: var(--space-3);
+}
+.player-sources a {
+  max-width: 100%;
+}
+.player-manual {
+  display: grid;
+  gap: var(--space-2);
+}
+.player-manual input {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+.players-page p,
+.players-page li,
+.players-page a {
+  overflow-wrap: anywhere;
+}
+.player-video {
+  margin-top: var(--space-4);
+}
+@media (max-width: 700px) {
+  .players-page {
+    padding: var(--space-4);
+  }
+  .players-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .player-heading {
+    flex-direction: column;
+  }
+}

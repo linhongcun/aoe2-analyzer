@@ -11,6 +11,7 @@ const targets = [
   ['construction', 'data-construction.json', "import type { CompactConstructionData } from '../../../data/construction';", 'CompactConstructionData'],
   ['garrison-healing', 'data-garrison-healing.json', "import type { GarrisonHealingData } from '../../../domain/garrisonHealing';", 'GarrisonHealingData'],
   ['scouting', 'content-scouting.json', "import type { ScoutingContent } from '../../../domain/scouting';", 'ScoutingContent'],
+  ['players', 'content-players.json', "import type { PlayerCatalog } from '../../../domain/playerCatalog.mjs';", 'PlayerCatalog'],
   ['page-metadata', 'data-page-metadata.json', "import type { PageMeta } from '../../../domain/sharePage';", 'Record<string, PageMeta>'],
   ['team-bonuses', 'data-team-bonuses.json', "import type { TeamBonusData } from '../../../domain/teamBonuses';", 'TeamBonusData'],
 ];

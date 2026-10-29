@@ -14,6 +14,7 @@ export const PAGE_META = readValidatedJson(raw, validateMetadata, '分享元信�
 export const SITE_NAME = '帝国时代 II 分析器';
 export function pageKey(pathname: string, search = '') {
   const p = pathname.replace(/\/+$/, '') || '/';
+  if (/^\/players\//i.test(pathname)) return pathname;
   const bo = new URLSearchParams(search).get('bo');
   if (p === '/builds' && bo && PAGE_META[`/builds/${bo}`]) return `/builds/${bo}`;
   if (PAGE_META[p]) return p;
@@ -28,6 +29,8 @@ export function pageKey(pathname: string, search = '') {
  */
 export function canonicalMetaKey(pattern: string | undefined, pathname: string, search = '') {
   const p = pathname.replace(/\/+$/, '') || '/';
+  // Player IDs are exact catalogue members; unknown/case variants must not fold to another page or home.
+  if (pattern === '/players/:id' || /^\/players\//i.test(pathname)) return pathname;
   const staticPattern = pattern && !/[:*]/.test(pattern) ? pattern : undefined;
   if (staticPattern === '/builds' || (!staticPattern && p.toLowerCase() === '/builds')) {
     const bo = new URLSearchParams(search).get('bo');
