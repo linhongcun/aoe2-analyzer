@@ -2,11 +2,13 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import type contentSchema from '../../src/content/team-plan.json';
+import { TEACHING_COMPATIBILITY_188329 } from '../../src/data/teachingCompatibility188329';
 
 const content: typeof contentSchema = JSON.parse(readFileSync(new URL('../../src/content/team-plan.json', import.meta.url), 'utf8'));
 
 const panel = (page: Page) => page.getByTestId('team-plan-page');
-const example = () => structuredClone(content.example);
+// Current-version cases use the explicitly reviewed example qualification.
+const example = () => ({ ...structuredClone(content.example), patch: TEACHING_COMPATIBILITY_188329.approvedPatch });
 const query = (plan: unknown) => '?' + new URLSearchParams({ version: '1', plan: Buffer.from(JSON.stringify(plan)).toString('base64url') });
 const url = (plan: unknown) => './#/team-plan' + query(plan);
 const readUrl = (href: string) => {
