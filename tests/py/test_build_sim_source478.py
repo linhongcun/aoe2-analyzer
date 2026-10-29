@@ -12,6 +12,14 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import build_sim_source as source  # noqa: E402
 
+EXAMPLE = ROOT / 'docs/design/mayans197-source-summary.json'
+HISTORICAL_PIN = {
+    'repo': 'SiegeEngineers/auto-mods',
+    'commit': '0c38027504532826c9922e4db77e2c1d33554291',
+    'path': 'dat/empires2_x2_p1.dat',
+    'sha256': '4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa',
+}
+
 
 def raw_data():
     empty = {'Name': 'no effect', 'EffectCommands': []}
@@ -103,10 +111,57 @@ class BuildSimSource478(unittest.TestCase):
         self.assertIn('inside ignored scripts/.cache', result.stderr)
 
     def test_checked_example_is_reproducible_from_verified_fixed_dat(self):
-        report, _ = source.build(source.load(), 'Mayans', [554])
-        self.assertEqual(source.render(report), (ROOT / 'docs/design/mayans197-source-summary.json').read_bytes())
+        original = EXAMPLE.read_bytes()
+        self.assertEqual(json.loads(original)['source'], HISTORICAL_PIN)
+        data, pin = source.load_source(EXAMPLE)
+        report, _ = source.build(data, 'Mayans', [554], pin=pin)
+        self.assertEqual(source.render(report), original)
         self.assertLess(len(source.render(report)), source.MAX_REPORT_BYTES)
-        self.assertEqual(report['source']['sha256'], source.DAT['sha256'])
+        self.assertEqual(report['source'], HISTORICAL_PIN)
+        self.assertEqual(EXAMPLE.read_bytes(), original)
+
+    def test_default_source_still_uses_current_verified_dat(self):
+        data, pin = source.load_source()
+        report, _ = source.build(data, 'Mayans', [554], pin=pin)
+        self.assertEqual(report['source'], {key: source.DAT[key] for key in HISTORICAL_PIN})
+
+    def test_tampered_sha_or_mixed_commit_and_historical_sha_is_rejected(self):
+        self.assertNotEqual(source.DAT['commit'], HISTORICAL_PIN['commit'])
+        original = json.loads(EXAMPLE.read_text())
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'source.json'
+            for changes in ({'sha256': '0' * 64}, {'commit': source.DAT['commit']}):
+                bad = copy.deepcopy(original)
+                bad['source'].update(changes)
+                path.write_text(json.dumps(bad))
+                with self.assertRaisesRegex(SystemExit, 'sha256'):
+                    source.load_source(path)
+
+    def test_recorded_markers_and_normalized_version_are_checked(self):
+        original = json.loads(EXAMPLE.read_text())
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'source.json'
+            bad = copy.deepcopy(original)
+            bad['source']['markers'] = {'civs': 999}
+            path.write_text(json.dumps(bad))
+            with self.assertRaisesRegex(SystemExit, '标记'):
+                source.load_source(path)
+            bad = copy.deepcopy(original)
+            bad['normalizedVersion'] = 'incorrect'
+            path.write_text(json.dumps(bad))
+            with self.assertRaisesRegex(ValueError, 'normalizedVersion'):
+                source.load_source(path)
+
+    def test_historical_cli_check_requires_explicit_pin_from_and_preserves_bytes(self):
+        original = EXAMPLE.read_bytes()
+        command = [sys.executable, str(ROOT / 'scripts/build_sim_source.py'),
+                   '--civ', 'Mayans', '--tech', '554', '--output', str(EXAMPLE), '--check']
+        current = subprocess.run(command, text=True, capture_output=True, check=False)
+        self.assertNotEqual(current.returncode, 0)
+        self.assertIn('--pin-from', current.stderr)
+        historical = subprocess.run(command + ['--pin-from', str(EXAMPLE)], text=True, capture_output=True, check=False)
+        self.assertEqual(historical.returncode, 0, historical.stderr)
+        self.assertEqual(EXAMPLE.read_bytes(), original)
 
 
 if __name__ == '__main__':

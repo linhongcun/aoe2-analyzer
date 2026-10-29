@@ -8,9 +8,10 @@ Full normalized closure records can be regenerated into the ignored cache.
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
-from dat_source import CACHE, DAT, ROOT, load
+from dat_source import CACHE, DAT, ROOT, check_markers, fetch_dat, load, parse
 
 SCHEMA = 'build-sim-source/1'
 MAX_REPORT_BYTES = 64 * 1024
@@ -26,6 +27,28 @@ def canonical(value):
 
 def fingerprint(value):
     return hashlib.sha256(canonical(value)).hexdigest()
+
+
+def load_source(pin_from=None):
+    """Load current data, or verify the actual archived DAT named by a saved summary."""
+    if pin_from is None:
+        return load(), DAT
+    report = json.loads(Path(pin_from).read_text())
+    pin = report.get('source')
+    if report.get('schema') != SCHEMA or not isinstance(pin, dict):
+        raise ValueError('--pin-from requires a build-sim-source/1 summary with a recorded source')
+    if any(not isinstance(pin.get(key), str) or not pin[key] for key in ('repo', 'commit', 'path', 'sha256')):
+        raise ValueError('--pin-from requires repo, commit, path and sha256')
+    if not re.fullmatch(r'[0-9a-f]{40}', pin['commit']) or not re.fullmatch(r'[0-9a-f]{64}', pin['sha256']):
+        raise ValueError('--pin-from requires a complete commit SHA and DAT sha256')
+    # fetch_dat verifies cached bytes too; never attach an old label to load()'s current data.
+    data = parse(fetch_dat(pin))
+    bad = check_markers(data, pin.get('markers'))
+    if bad:
+        raise SystemExit('Archived DAT 标记不符：' + '；'.join(bad))
+    if report.get('normalizedVersion') != data['Version']:
+        raise ValueError('--pin-from normalizedVersion differs from the verified DAT')
+    return data, pin
 
 
 def effect(data, effect_id):
@@ -135,6 +158,7 @@ def main():
     parser.add_argument('--civ', help='public English civilization name, e.g. Mayans')
     parser.add_argument('--tech', type=int, action='append', default=[], help='include complete reviewed tech; repeatable')
     parser.add_argument('--output', type=Path, help='compact summary JSON to commit')
+    parser.add_argument('--pin-from', type=Path, help='explicit historical summary whose recorded DAT source must be verified')
     parser.add_argument('--raw-output', type=Path, help='optional full normalized closure; must be inside scripts/.cache')
     parser.add_argument('--check', action='store_true', help='verify --output is reproducible, without writing')
     parser.add_argument('--check-budget', action='store_true', help='check source-report growth without downloading DAT')
@@ -149,11 +173,12 @@ def main():
         parser.error('--civ and --output are required unless using --check-budget')
     if args.raw_output and not args.raw_output.resolve().is_relative_to(CACHE.resolve()):
         parser.error('--raw-output must be inside ignored scripts/.cache')
-    summary, raw = build(load(), args.civ, args.tech)
+    data, pin = load_source(args.pin_from)
+    summary, raw = build(data, args.civ, args.tech, pin=pin)
     output = render(summary)
     if args.check:
         if not args.output.exists() or args.output.read_bytes() != output:
-            raise SystemExit('%s differs from pinned source; regenerate with the same --civ/--tech options' % args.output)
+            raise SystemExit('%s differs from the selected source/options; use the same --civ/--tech options and, for an intentional historical report, explicitly --pin-from <saved-summary>; preserve historical evidence' % args.output)
     else:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_bytes(output)

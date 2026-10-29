@@ -6,14 +6,18 @@
 
 ```bash
 python3 scripts/build_sim_source.py --civ Mayans --tech 554 \
+  --pin-from docs/design/mayans197-source-summary.json \
   --output docs/design/mayans197-source-summary.json \
   --raw-output scripts/.cache/mayans197-closure.json
 python3 scripts/build_sim_source.py --civ Mayans --tech 554 \
+  --pin-from docs/design/mayans197-source-summary.json \
   --output docs/design/mayans197-source-summary.json --check
 python3 scripts/build_sim_source.py --check-budget
 ```
 
-`--civ` 使用站点英文文明名；重复 `--tech` 选择本批真正要核对的机制科技。命令调用现有 `dat_source.load()`：按 `scripts/data_sources.json` 的固定提交下载 DAT，先验证原文件 SHA256 和补丁标记，再使用固定 `genieutils-py==0.1.2` 解析。缓存已存在时也会核对 DAT 字节，生成过程不改 `src/data`。首次生成需要网络及现有 DAT 管线环境；`--check-budget` 不下载数据。
+`--civ` 使用站点英文文明名；重复 `--tech` 选择本批真正要核对的机制科技。默认调用 `dat_source.load()`，使用 `scripts/data_sources.json` 的当前固定版本（现为 DE188329）。上方命令是重建既有 DE185872 玛雅示例，显式 `--pin-from` 从该摘要读取原 repo/commit/path/SHA256，经 `fetch_dat(pin)` 校验实际历史 DAT 字节，再解析并检查补丁标记与规范化版本；摘要没有记录具体标记时仍执行最小常识检查。`--check` 核验历史示例也必须传入同一选项，不能拿当前 DAT 配上旧来源标签。
+
+新建当前版本摘要时省略 `--pin-from` 并使用新的输出路径；更新当前 pin 不重录历史示例。两条路径都使用固定 `genieutils-py==0.1.2`，缓存已存在时也会核对 DAT 字节，生成过程不改 `src/data`。首次生成需要网络及现有 DAT 管线环境；`--check-budget` 不下载数据。
 
 摘要 `build-sim-source/1` 保留固定上游 repo/commit/path/SHA256、文明 raw ID、完整 tree/team 命令、本批选择科技的完整规范化记录、所有专属科技的 ID/名称/指纹，以及已知科技引用闭包的 ID、数量与整体指纹。闭包递归前置和 `Type8/101/103.A`、`Type102.D`；Type102 的 D 不能漏掉。指纹使用 UTF-8、键排序、无空白 JSON 的 SHA256，数组顺序和命令数值保持原样。未选择的完整闭包只输出到忽略的缓存，禁止用 `--raw-output` 写进文档或数据目录。
 
