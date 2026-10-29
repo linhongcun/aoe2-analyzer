@@ -297,6 +297,69 @@
       "correction": "Await a promise resolved by the actual trees route callback before the original intercepted assertion",
       "preserved": "All original assertions, request gate, no-link and pressure checks, restoration, timeout/retry policies unchanged"
     },
-    "publicationGate": "Full/data=false validation and final independent review on this candidate; do not merge/publish #499 before #498 actual Pages and formal Release"
+    "publicationGate": "Full/data=false validation and final independent review on this candidate; do not merge/publish #499 before #498 actual Pages and formal Release",
+    "actualChecks": {
+      "testedCommit": "2c9341aff5b2bb65f0022419b64191a23daecedb",
+      "version": "0.63.0",
+      "plan": {
+        "scope": "full",
+        "features": [
+          "all"
+        ],
+        "unit": [],
+        "e2e": [],
+        "data": false,
+        "full": true
+      },
+      "policyDigest": "cacfee5e3c02a72310daba8292cf26752578045ca0c2480e4fcdd905ded227fb",
+      "unit": {
+        "command": "npx vitest run tests/unit/trainCompare459.test.ts tests/unit/production204.test.ts tests/unit/tradeIncome226.test.ts tests/unit/costDiscount24.test.ts tests/unit/availability.test.ts tests/unit/availabilityAge277.test.ts --maxWorkers=2",
+        "result": "140 passed across6files",
+        "log": {
+          "path": "/tmp/issue459-synced-unit.log",
+          "sha256": "1b853c6f4662689b0406bdc31831a08b5fff6565114995bc22fe8d8cfe6f5260"
+        }
+      },
+      "lint": {
+        "command": "npm run lint",
+        "result": "PASS; no errors, existing warnings retained",
+        "log": {
+          "path": "/tmp/issue459-synced-lint.log",
+          "sha256": "7c6cfe84dc8f3e61dcc0266bb4725a30010e95b47c37cd120de4c9de855ad409"
+        }
+      },
+      "build": {
+        "command": "npm run build",
+        "result": "PASS,951staticpages, includes actual TypeScript compilation",
+        "log": {
+          "path": "/tmp/issue459-synced-build.log",
+          "sha256": "2cbafdd03e810e5b751685fca725dc7e0d211e169275c09a3d4aa8f2d57c0594"
+        },
+        "identity": {
+          "path": "/tmp/issue459-synced-build-identity.json",
+          "sha256": "9c667dffc088446c5288aa4d2a8e833c755e0addc5e9fe5bf43803137d8d8bf8"
+        },
+        "preview": "http://127.0.0.1:4260/"
+      },
+      "browser": {
+        "command": "BASE_URL=http://127.0.0.1:4260/ npx playwright test tests/e2e/trainCompare459.spec.ts tests/e2e/production204.spec.ts tests/e2e/tradeIncome226.spec.ts tests/e2e/communityIntegration230.spec.ts --workers=2 --retries=0 --reporter=line --output=/tmp/issue459-synced-browser-artifacts",
+        "result": "75 passed in one final-baseline execution",
+        "log": {
+          "path": "/tmp/issue459-synced-browser.log",
+          "sha256": "de88d05bc1406027407c6f700dfaab79a4b236f6dbbfa423746087b005e643ec"
+        },
+        "artifacts": "/tmp/issue459-synced-browser-artifacts"
+      },
+      "requestReadinessStress": {
+        "command": "BASE_URL=http://127.0.0.1:4260/ npx playwright test tests/e2e/matchupAvailability469.spec.ts --grep 'pending data keeps selectable pressure' --repeat-each=10 --workers=4 --retries=0 --reporter=line --output=/tmp/issue459-synced-pending-stress-artifacts",
+        "result": "10/10passed; repeated independent contexts, no retry or timeout increases",
+        "log": {
+          "path": "/tmp/issue459-synced-pending-stress.log",
+          "sha256": "79b818cf6c94d4be210c2afc0a3016f00f1399c588d7ba9e0ed61b250b9a5c60"
+        },
+        "artifacts": "/tmp/issue459-synced-pending-stress-artifacts"
+      },
+      "remote": "Full/data=false CI still required; all recorded checks above were actually executed locally on2c9341a. No success or reusable validation is claimed from cancelled40829319654 or failed external498 PR runs."
+    }
   }
 }
