@@ -1,0 +1,218 @@
+{
+  "issue": 480,
+  "date": "2026-10-29",
+  "baseline": "6b9cc7eb3ddef630888145cdedd8be73f7deaf0e",
+  "testedImplementation": "ceb5c960e8b81c1efe710db8fb2936ebaf17cc02",
+  "version": "0.60.0",
+  "specification": "docs/design/civ-build-applicability-480.md",
+  "firstRed": {
+    "baseline": "6b9cc7eb3ddef630888145cdedd8be73f7deaf0e",
+    "testSource": "d2d5bcd29fb6b04ae80c855a08778997136d67f3",
+    "command": "BASE_URL=http://127.0.0.1:4210/ npx playwright test tests/e2e/civBuildApplicability480.spec.ts --grep regression --workers=3 --retries=0 --reporter=line > /tmp/issue480-first-red.log 2>&1",
+    "result": "3 actual browser assertion failures, exit 1; no collection/import failure; one worker used because tests share a serial file",
+    "cases": ["Tatars missing listed archers-19 link", "Mayans missing listed archers-19 link", "Varangians missing civ parameter and adjacent generic label"],
+    "log": {
+      "path": "/tmp/issue480-first-red.log",
+      "sha256": "6a67be26fe7e2f891dd38722ea8085b00f4b38016b651a655df2ddac1a6b14e7"
+    },
+    "cwd": "/workspace/issue-480-tests",
+    "build": {
+      "version": "0.59.0",
+      "source": "6b9cc7eb3ddef630888145cdedd8be73f7deaf0e",
+      "log": {
+        "path": "/tmp/issue480-baseline-build.log",
+        "sha256": "ad488e5162930f524775cdadd1c59089c11e370988ce1362258cd86e1a7cbb79"
+      }
+    }
+  },
+  "protectedSourceChunks": [
+    {
+      "path": "src/features/builds/BuildTimelineView.tsx",
+      "label": "original calculator JSX",
+      "sha256": "65d433485db18fd055069f13339ef9bf13601597f482100308d42b6562efbdbf",
+      "bytes": 11014,
+      "unchanged": true
+    },
+    {
+      "path": "src/features/civs/components/CivOpening.tsx",
+      "label": "original route list",
+      "sha256": "fdffc00baabf404317fec177504af090279309292c1a32f89585e2c1525332e5",
+      "bytes": 304,
+      "unchanged": true
+    },
+    {
+      "path": "src/features/builds/BuildOrderList.tsx",
+      "label": "original list summary",
+      "sha256": "f7cde562275c5ac2cb87fad87a177dcc1ed2f2c4ac1b448422ef875c9fe0ab1c",
+      "bytes": 1461,
+      "unchanged": true
+    }
+  ],
+  "unchangedPathGroups": [
+    "src/data",
+    "src/domain",
+    "scripts",
+    "tests/e2e/fixtures",
+    "tests/unit/fixtures",
+    "tests/e2e/v0290-322-golden.spec.ts",
+    "tests/e2e/v0280-golden-cases.ts"
+  ],
+  "oldTestsAndExpectationsUnchanged": true,
+  "validation": {
+    "typecheck": {
+      "command": "npx tsc -p . --noEmit",
+      "result": "PASS",
+      "log": {
+        "path": "/tmp/issue480-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "lint": {
+      "command": "npm run lint",
+      "result": "PASS, 0 errors; 11 existing warnings",
+      "log": {
+        "path": "/tmp/issue480-lint.log",
+        "sha256": "7e3d6b304923f76ee56d727be7ca60b47571da779693713d9dad8a77214ec1fd"
+      }
+    },
+    "layers": {
+      "command": "npm run lint:layers -- --strict",
+      "result": "PASS",
+      "log": {
+        "path": "/tmp/issue480-layers.log",
+        "sha256": "eaf4a511eaf2a1e6cf4f3775ba3308a0d3145c9471534d08ec6cd4e2f9aa7ed5"
+      }
+    },
+    "content": {
+      "command": "npm run content:check",
+      "result": "PASS, 47 inputs; 0 warnings/errors",
+      "log": {
+        "path": "/tmp/issue480-content.log",
+        "sha256": "2a503450c25d5392dbed3df08bc0cf1b7e2ba0fd6a25c119001ef88b78be3519"
+      }
+    },
+    "build": {
+      "command": "npm run build",
+      "result": "PASS, 951 static pages; embedded version 0.60.0 and build ceb5c96",
+      "log": {
+        "path": "/tmp/issue480-committed-build.log",
+        "sha256": "c66064fbd74a250625123151e501acf6264ff34910711c1222f041336a197289"
+      }
+    },
+    "unit": {
+      "command": "npx vitest run <all 24 unit paths from actual plan> tests/unit/shuDisplayNames470.test.ts",
+      "result": "25 files; 605 passed, 1 pre-existing todo",
+      "log": {
+        "path": "/tmp/issue480-unit-plan.log",
+        "sha256": "fb47dbf3da84d8f6308b4cc358df5b2bdc6b6a6ab6ff49f332f42a24f6c66c03"
+      }
+    },
+    "browser": {
+      "command": "BASE_URL=http://127.0.0.1:4210/ npx playwright test tests/e2e/civBuildApplicability480.spec.ts tests/e2e/civ77.spec.ts tests/e2e/shuDisplayNames470.spec.ts tests/e2e/build41.spec.ts tests/e2e/practice216.spec.ts tests/e2e/sourcePresentation442.spec.ts --workers=2 --output=/tmp/issue480-final-ui-artifacts",
+      "result": "69 passed; includes 15 new cases and unchanged existing regressions",
+      "log": {
+        "path": "/tmp/issue480-related-e2e.log",
+        "sha256": "2e3744b63654b0f9d535b7d7b2b6531f42661ce325b599f01c2ae5065343edb1"
+      },
+      "artifacts": "/tmp/issue480-final-ui-artifacts"
+    },
+    "boGolden": {
+      "command": "BASE_URL=http://127.0.0.1:4210/ npx playwright test tests/e2e/v0290-322-golden.spec.ts --grep \"bo:\" --workers=2 --output=/tmp/issue480-golden-artifacts",
+      "result": "2 passed: bo:archers-19-romans, bo:scouts-18-slavs; original capture/fixtures/expectations unchanged",
+      "log": {
+        "path": "/tmp/issue480-bo-golden.log",
+        "sha256": "74382582a1819d41763a7fa00d7d4aa6a6cbfc84fb52ba9f9472be581be3d5ef"
+      }
+    },
+    "plan": {
+      "base": "6b9cc7eb3ddef630888145cdedd8be73f7deaf0e",
+      "head": "ceb5c960e8b81c1efe710db8fb2936ebaf17cc02",
+      "scope": "targeted",
+      "features": ["builds", "civs"],
+      "unit": [
+        "tests/unit/boSources.test.ts",
+        "tests/unit/build41.test.ts",
+        "tests/unit/buildOrders.content.test.ts",
+        "tests/unit/buildOrders.test.ts",
+        "tests/unit/buildPractice216.test.ts",
+        "tests/unit/buildSim.test.ts",
+        "tests/unit/civBonus.test.ts",
+        "tests/unit/civBuildApplicability480.test.ts",
+        "tests/unit/civOpening77.test.ts",
+        "tests/unit/civRegionalBuildings456.test.ts",
+        "tests/unit/civRegionalUnits450.test.ts",
+        "tests/unit/civRequirements206.test.ts",
+        "tests/unit/civText402.test.ts",
+        "tests/unit/civUniqueBuildings463.test.ts",
+        "tests/unit/contentSchema285.test.ts",
+        "tests/unit/contentSources285.test.ts",
+        "tests/unit/dlc-linker.test.ts",
+        "tests/unit/generatedSchemas285.test.ts",
+        "tests/unit/jsonBoundary285.test.ts",
+        "tests/unit/sourcePolicy285.test.ts",
+        "tests/unit/sourcePresentation442.test.ts",
+        "tests/unit/sourcePresentationScope442.test.ts",
+        "tests/unit/sources.test.ts",
+        "tests/unit/v0300-335.test.ts"
+      ],
+      "e2e": [
+        "tests/e2e/build41.spec.ts",
+        "tests/e2e/catalogLayout187.spec.ts",
+        "tests/e2e/civ77.spec.ts",
+        "tests/e2e/civBuildApplicability480.spec.ts",
+        "tests/e2e/civDlcFilters.spec.ts",
+        "tests/e2e/civEmptyModules465.spec.ts",
+        "tests/e2e/civRegionalBuildings456.spec.ts",
+        "tests/e2e/civRegionalUnits450.spec.ts",
+        "tests/e2e/civRequirements206.spec.ts",
+        "tests/e2e/civText402.spec.ts",
+        "tests/e2e/civUniqueBuildings463.spec.ts",
+        "tests/e2e/layout62.spec.ts",
+        "tests/e2e/practice216.spec.ts",
+        "tests/e2e/sourcePresentation442.spec.ts",
+        "tests/e2e/v0290-322-golden.spec.ts",
+        "tests/e2e/v0290-326.spec.ts"
+      ],
+      "data": false,
+      "full": false
+    },
+    "remote": "Not executed here; root owns PR, current CI, merge and release."
+  },
+  "independentReview": {
+    "reviewer": "/root/scope_review",
+    "sourceAndTestResult": "PASS at ceb5c960e8b81c1efe710db8fb2936ebaf17cc02; no unresolved findings",
+    "visual": {
+      "reviewer": "/root/parity/ui480",
+      "result": "PASS at ceb5c960e8b81c1efe710db8fb2936ebaf17cc02; no unresolved findings",
+      "report": {
+        "path": "/tmp/issue480-independent-ui/review.txt",
+        "sha256": "93538a79397d15133936623ff1363f2acc548b5faaedd634a6159222c7d3e551"
+      },
+      "measurements": {
+        "path": "/tmp/issue480-independent-ui/facts-final.json",
+        "sha256": "273035546efa96772bd1f1e490958c54b52b3583c852d9ee69c428e95d59753b"
+      },
+      "summary": {
+        "sourceCommit": "ceb5c960e8b81c1efe710db8fb2936ebaf17cc02",
+        "directory": "/tmp/issue480-independent-ui",
+        "openingCases": 24,
+        "numericRanges": 24,
+        "panelCases": 24,
+        "failures": {
+          "errors": [],
+          "wrappedNumbers": [],
+          "missingNumericAudit": [],
+          "undersizedLinks": [],
+          "overflow": [],
+          "wrongHeadingSize": []
+        }
+      },
+      "screenshots": [
+        "/tmp/issue480-independent-ui/panel-{generic,unsupported}-{360,375,390,1280}-{light,dark}.png",
+        "/tmp/issue480-independent-ui/{Franks,Tatars}-{360,1280}-{light,dark}.png",
+        "/tmp/issue480-final-ui-artifacts/**/civ480-generic-*.png",
+        "/tmp/issue480-final-ui-artifacts/**/timeline480-empty-*.png"
+      ]
+    }
+  }
+}
