@@ -32,6 +32,7 @@ ARMENIAN_CONTEXT_TECHS = (949, 957, 958, 960, 961, 962, 963, 964, 965, 966)
 GEORGIAN_CONTEXT_TECHS = (925, 926, 934)
 SLAVIC_CONTEXT_TECHS = (510, 511, 721)
 KHMER_CONTEXT_TECHS = (638, 654, 657, 672)
+JURCHEN_CONTEXT_TECHS = (993, 995)
 KHMER_PREREQUISITE_TECHS = (216, 659, 660, 661, 666, 667, 668, 25, 147, 148)
 
 
@@ -201,9 +202,10 @@ def main():
             georgian_context = c['en'] == 'Georgians' and i in GEORGIAN_CONTEXT_TECHS
             slavic_context = c['en'] == 'Slavs' and i in SLAVIC_CONTEXT_TECHS
             khmer_context = c['en'] == 'Khmer' and i in KHMER_CONTEXT_TECHS
-            if not (armenian_context or georgian_context or slavic_context or khmer_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
+            jurchen_context = c['en'] == 'Jurchens' and i in JURCHEN_CONTEXT_TECHS
+            if not (armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
             ef = decode(eff(d, t['EffectID']), T)
-            if ef or armenian_context or georgian_context or slavic_context or khmer_context:
+            if ef or armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context:
                 row = {'source': 'bonus', 'tech': i, 'name': t['Name'], 'age': age_of(i), 'requires': [x for x in t['RequiredTechs'] if x >= 0], 'effects': ef}
                 # #197: retain the COMPLETE raw context for this reviewed Wei family only.
                 # Unknown/extra commands must reach the closed runtime guard, never disappear in decode().
@@ -228,6 +230,8 @@ def main():
                         row['source'] = 'team'
                 if khmer_context:
                     row['khmerTech'] = raw_tech_context(d, i)
+                if jurchen_context:
+                    row['jurchenTech'] = raw_tech_context(d, i)
                 rows.append(row)
         team = decode(eff(d, dc['TeamBonusID']), T)
         if team or c['en'] == 'Khmer':

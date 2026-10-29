@@ -1,5 +1,7 @@
 # 设计稿索引（v0.4.0 已签字 / 定稿）
 
+v0.60.0 女真开局支持见 [第十四批规格](jurchens197.md)及[有界固定来源摘要](jurchens197-source-summary.json)：明确尸体腐烂与耗尽未模拟，不把不腐烂变成收入；骑士方案仅供通用经济模板。当前8套未研究攻城/防御加成目标；受控石工术验证收费与真实研究完成窗口。必要[教学来源审计](jurchens197-teaching-metadata.json)仅补两条来源字段的投影SHA，保留原事实、旧hash与精确逆恢复证明。实际验证、独立图审、CI和发布以本批PR交付记录为准。
+
 新增开局文明的来源证据按 [#478 有界摘要与固定来源重建流程](build-sim-source-478.md)执行；现有历史原件及对应验收保持。
 
 v0.58.0 高棉开局支持见 [第十三批规格](khmer197.md)：完整来源门控、独立农田供给、638免前置与显式付费建筑政策；[固定来源](khmer197-source.json)、[公开语义](khmer197-public-sources.json)及[真实先红](khmer197-first-red.json)及[分段转绿与必要本地检查](khmer197-green-boundary.json)。[实际A本地验证](khmer197-validation.json)、[量化](khmer197-runtime-quantified.json)及[独立图审](khmer197-ui-review.json)记录一次构建、新9项/原22项/62路由烟测，以及原严格比较FAIL与单独精确六叶分类；CI与发布以实际PR记录为准。
