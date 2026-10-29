@@ -1,5 +1,7 @@
 import raw from '../content/game-guide.json';
+import teachingSources from '../../scripts/data_sources.json';
 import { DATA_PATCH_BUILD } from '../data/meta';
+import { reviewedTeachingContent188329, TEACHING_COMPATIBILITY_188329 } from '../data/teachingCompatibility188329';
 import { publicGameGuideSources } from './sourcePresentation.mjs';
 
 export const GAME_GUIDE_CARD_IDS = ['goal', 'roles', 'resources', 'ages', 'counters', 'watching'] as const;
@@ -50,7 +52,13 @@ interface GameGuideCatalog {
   sources: Record<string, GameGuideSource>;
   cards: GameGuideCard[];
 }
-export const GAME_GUIDE_CATALOG = raw as GameGuideCatalog;
+// Only this reviewed imported catalogue gains the explicitly approved version view.
+// Original source dates, text and the historical JSON remain untouched.
+export const GAME_GUIDE_COMPATIBILITY = reviewedTeachingContent188329('game-guide', raw, teachingSources) ? TEACHING_COMPATIBILITY_188329 : null;
+export const GAME_GUIDE_CATALOG = {
+  ...raw,
+  dataVersion: GAME_GUIDE_COMPATIBILITY ? `DE${GAME_GUIDE_COMPATIBILITY.approvedPatch}` : raw.dataVersion,
+} as GameGuideCatalog;
 export const GAME_GUIDE_PUBLIC_SOURCES = publicGameGuideSources(GAME_GUIDE_CATALOG.sources);
 export const GAME_GUIDE_CARDS: readonly GameGuideCard[] = GAME_GUIDE_CATALOG.cards;
 export const GAME_GUIDE_URL_LIMIT = 1024;

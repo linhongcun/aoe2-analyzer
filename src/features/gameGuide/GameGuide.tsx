@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   GAME_GUIDE_CARDS,
   GAME_GUIDE_CATALOG,
+  GAME_GUIDE_COMPATIBILITY,
   GAME_GUIDE_PUBLIC_SOURCES,
   GAME_GUIDE_CONTEXTS,
   GAME_GUIDE_VICTORIES,
@@ -190,9 +191,16 @@ export default function GameGuide() {
                 <details className="gg-sources">
                   <summary>这张卡的来源与核对范围</summary>
                   <p className="note">
-                    例子、自查与观赛方法由本站整理。资料核对日 <span className="gg-number">{GAME_GUIDE_CATALOG.checkedAt}</span>；本站游戏数据{' '}
+                    例子、自查与观赛方法由本站整理。原始资料核对日 <span className="gg-number">{GAME_GUIDE_CATALOG.checkedAt}</span>；当前适用数据{' '}
                     <span className="gg-number">{GAME_GUIDE_CATALOG.dataVersion}</span>。
                   </p>
+                  {GAME_GUIDE_COMPATIBILITY && (
+                    <p className="note">
+                      本文保留原始 <span className="gg-number">DE{GAME_GUIDE_COMPATIBILITY.originalPatch}</span> 内容；
+                      <span className="gg-number">{GAME_GUIDE_COMPATIBILITY.reviewedAt}</span> 已核对固定{' '}
+                      <span className="gg-number">DE{GAME_GUIDE_COMPATIBILITY.approvedPatch}</span> 数据兼容性，未作客户端实测。
+                    </p>
+                  )}
                   {card.sourceIds.map((id) => {
                     const source = GAME_GUIDE_PUBLIC_SOURCES[id]!;
                     return (
