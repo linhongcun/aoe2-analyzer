@@ -1,6 +1,8 @@
 // v0.30.0 #335 验收（页面）：「页面上每一处日期都改对了」。来源时间戳与换算见 tests/unit/v0300-335.test.ts。Kent Beck 2026-10-22。
+import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import PINS from '../../scripts/data_sources.json';
+
+const PINS = JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as typeof import('../../scripts/data_sources.json');
 
 const DATA_VERSION = `DE ${PINS.patch.build}（${PINS.patch.date}）`;
 
