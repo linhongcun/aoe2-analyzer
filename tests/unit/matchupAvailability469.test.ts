@@ -152,4 +152,23 @@ describe('#469 supplemental counter advice', () => {
     expect(counterExtra(data, 'Mayans', 'siege')).not.toMatch(/骑兵|轻骑|骑射/);
     expect(counterExtra(data, 'Franks', 'def')).toBe(COUNTER_EXTRA.def);
   });
+
+  it('filters absent cavalry-archer, Castle scorpion and light-cavalry families without deleting legal clauses', () => {
+    for (const id of [39, 474]) expect(data.core.unitById[id]!.civs).not.toContain('Franks');
+    expect(counterExtra(data, 'Franks', 'inf')).not.toContain('骑射');
+    expect(counterExtra(data, 'Franks', 'inf')).toContain('骑兵');
+    expect(data.core.unitById[279]!.civs).not.toContain('Shu');
+    expect(counterExtra(data, 'Shu', 'inf')).not.toContain('城堡期蝎子');
+    for (const id of [546, 441, 1707]) expect(data.core.unitById[id]!.civs).not.toContain('Teutons');
+    expect(counterExtra(data, 'Teutons', 'arch')).not.toContain('轻骑');
+    expect(counterExtra(data, 'Teutons', 'arch')).toContain('骑兵');
+  });
+
+  it.each(['Chinese', 'Jurchens', 'Khitans', 'Koreans'])('%s does not inherit a missing Mangonel family through a regional replacement', (civ) => {
+    for (const id of [280, 550, 588]) {
+      expect(data.core.unitById[id]!.civs).not.toContain(civ);
+      expect(trees.t[civ]!.flatMap((block) => block[3]).some((cell) => cell[2] === 'u' && cell[3] === id && cell[4] === 1)).toBe(false);
+    }
+    expect(counterExtra(data, civ, 'arch')).not.toContain('投石');
+  });
 });
