@@ -2,17 +2,19 @@ import RushDefense from './RushDefense';
 import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
-import { useCore } from '../../../data/hooks';
-import { COUNTER_EXTRA, EMPTY_COUNTERS_COPY, EMPTY_STRENGTHS_COPY, STRONG_THRESHOLD, TYPE_ZH, filterCounterUnits, matchup } from '../../../domain/ratings';
+import { EMPTY_COUNTERS_COPY, EMPTY_STRENGTHS_COPY, STRONG_THRESHOLD, TYPE_ZH, filterCounterUnits, matchup } from '../../../domain/ratings';
 import { unitPath } from '../../../domain/simRoute';
 import { CivIcon, UnitIcon } from '../../../shared/ui/art';
 import { RatingLabel } from '../../../shared/ui/RatingHelp';
 import { useSticky } from '../../../shared/utils/sticky';
 import { Loading } from '../../../shared/ui/widgets';
 import { Link } from 'react-router-dom';
+import { counterExtra } from '../availability';
+import { useMatchupData } from '../useMatchupData';
 
 export default function Matchup() {
-  const core = useCore();
+  const { data, error } = useMatchupData();
+  const core = data?.core;
   const [ia, setA] = useSticky('mu.a', 16),
     [ie, setE] = useSticky('mu.e', 5);
   const a = civs[ia]!,
@@ -26,7 +28,7 @@ export default function Matchup() {
         我的文明 <CivPicker id="ma" label="我的文明" value={civs[ia]!.en} onChange={(en) => setA(civs.findIndex((c) => c.en === en))} /> 对手文明{' '}
         <CivPicker id="me" label="对手文明" value={civs[ie]!.en} onChange={(en) => setE(civs.findIndex((c) => c.en === en))} />
       </div>
-      <RushDefense />
+      <RushDefense own={a} enemy={e} data={data} loadError={error} />
       <p>
         <Link className="community-tool-entry" to="/castle-defense">
           城堡前置：按当前局面查看应对
@@ -46,7 +48,9 @@ export default function Matchup() {
           记录队友分工与支援约定
         </Link>
       </nav>
-      {!core ? (
+      {error ? (
+        <p role="alert">对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。</p>
+      ) : !core || !data ? (
         <Loading />
       ) : (
         <div id="mres">
@@ -78,7 +82,7 @@ export default function Matchup() {
           {e.ty.map((t) => (
             <p key={t} className="note">
               <b>{TYPE_ZH[t]}：</b>
-              {COUNTER_EXTRA[t]}
+              {counterExtra(data, a.en, t)}
             </p>
           ))}
           {counters.length === 0 ? (

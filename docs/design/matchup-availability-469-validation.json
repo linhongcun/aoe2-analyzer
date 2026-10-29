@@ -1,0 +1,179 @@
+{
+  "issue": 469,
+  "date": "2026-10-29",
+  "baseline": "4794b0cba28eb2b728cf97c6ad9931ff3ab85b6d",
+  "testedImplementation": "b0bf2cce75dd1cff613f7ec26f4b14f7f638caff",
+  "testedSourceAndTests": "74c6ae3ca0c96056c9cfa8d7ae92caa8ff2c8dbb",
+  "version": "0.61.0",
+  "specification": "docs/design/matchup-availability-469.md",
+  "sourceFiles": [
+    {
+      "path": "src/features/matchup/availability.ts",
+      "sha256": "66155e4fb4f33e05eba4a671e7c5b31ab61ed2f9b98707b8cc78d38b10a82d57"
+    },
+    {
+      "path": "src/features/matchup/useMatchupData.ts",
+      "sha256": "f641d6f9cc17c3ddf63bcc8c3f103552a2e8132e12949e5bb9e1c303eaaa765e"
+    },
+    {
+      "path": "src/features/matchup/components/Matchup.tsx",
+      "sha256": "f316413a946f947a66d1401481fb89a211e9a7d2028727aa0497ce2c351b9ea8"
+    },
+    {
+      "path": "src/features/matchup/components/RushDefense.tsx",
+      "sha256": "00a053ea6de6551c84df66b8add4c425b9dbbea5e98a7ef44a54360f3535b69d"
+    }
+  ],
+  "firstRed": {
+    "baseline": "4794b0cba28eb2b728cf97c6ad9931ff3ab85b6d",
+    "version": "0.60.0",
+    "cwd": "/workspace/issue-469-tests",
+    "command": "BASE_URL=http://127.0.0.1:4220/ npx playwright test tests/e2e/matchupAvailability469.spec.ts --grep regression --workers=3 --retries=0 --reporter=line --output=/tmp/issue469-first-red-artifacts > /tmp/issue469-first-red.log 2>&1",
+    "result": "4 real UI assertion failures, exit 1; no import/collection failure",
+    "cases": [
+      "Franks/Britons drill encoded both Britons and omitted build civ",
+      "Incas unavailable militia still exposed a PK drill",
+      "Mayans unavailable scout build was linked",
+      "Mayans supplemental advice recommended cavalry/light cavalry"
+    ],
+    "sourceSnapshot": {
+      "path": "/tmp/issue469-first-red-test.ts",
+      "sha256": "ed56023dda2ca0abd932a879aaeb64585e1df73f02c438821a1c3b80b511a32d"
+    },
+    "log": {
+      "path": "/tmp/issue469-first-red.log",
+      "sha256": "73c3a2b92e65c64c3849ae20329e17c039e3fe508d4dfad906ccb1ad62330e80"
+    },
+    "baselineBuild": {
+      "path": "/tmp/issue469-baseline-build.log",
+      "sha256": "912b21c9dabe9f626a06f36929b486c1724b7388335f64bb53eeefc660e65aa0"
+    }
+  },
+  "preservation": {
+    "guideArray": {
+      "path": "src/features/matchup/components/RushDefense.tsx",
+      "sha256": "3fb014ecb7871e060eed9be8c825648bec42bbd0a2cc06fc2cbf7b0983b681b3",
+      "bytes": 2596,
+      "unchanged": true
+    },
+    "unchangedPathGroups": ["src/data", "src/domain", "scripts", ".github", "tests/e2e/fixtures", "tests/unit/fixtures"],
+    "oldTestsAndNumericalExpectationsUnchanged": true,
+    "packageFilesVersionOnly": true,
+    "ratingsAndFilterCounterUnitsUnchanged": true
+  },
+  "validation": {
+    "typecheck": {
+      "command": "npx tsc -p . --noEmit",
+      "result": "PASS",
+      "log": {
+        "path": "/tmp/issue469-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "lint": {
+      "command": "npm run lint",
+      "result": "PASS; 0 errors, 11 existing warnings",
+      "log": {
+        "path": "/tmp/issue469-lint.log",
+        "sha256": "49213c803a9839309605524c749f2498aaa2c700419c43ece7f50f6c6f90f555"
+      }
+    },
+    "layers": {
+      "command": "npm run lint:layers -- --strict",
+      "result": "PASS, 0 violations",
+      "log": {
+        "path": "/tmp/issue469-layers.log",
+        "sha256": "7911cb0014b3e5207b0e3488622147f2fedf2f3070a62a87a5ac2e4eb678e7b0"
+      }
+    },
+    "build": {
+      "command": "npm run build",
+      "result": "PASS; 951 static pages, embedded version 0.61.0 and source build b0bf2cc",
+      "log": {
+        "path": "/tmp/issue469-candidate-build.log",
+        "sha256": "66a1501a8b96bf386ad675067ac79b04bbfc17538981b10fb9d31207127a9330"
+      }
+    },
+    "units": [
+      {
+        "command": "npx vitest run tests/unit/matchupAvailability469.test.ts tests/unit/matchup194.test.ts tests/unit/p0Batch.test.ts tests/unit/simRoute424.test.ts",
+        "result": "47 passed (initial 12 new and 35 unchanged regression cases)",
+        "log": {
+          "path": "/tmp/issue469-unit-focused.log",
+          "sha256": "88a2083d42a635c5e0e486f0c19f41cdd6a3ca925d879c8db6301258b51b3898"
+        }
+      },
+      {
+        "command": "npx vitest run tests/unit/matchupAvailability469.test.ts",
+        "result": "17 passed after five supplemental clause cases were added; 52 unique local unit cases overall",
+        "log": {
+          "path": "/tmp/issue469-unit-final.log",
+          "sha256": "3059b0ffe443a0810e0e4e7686603aab359f6e54e9e28aba31a064bfe2bfcecc"
+        }
+      }
+    ],
+    "browser": [
+      {
+        "command": "BASE_URL=http://127.0.0.1:4220/ npx playwright test tests/e2e/matchupAvailability469.spec.ts --workers=2 --retries=0 --reporter=line --output=/tmp/issue469-new-e2e-artifacts",
+        "result": "17 passed",
+        "log": {
+          "path": "/tmp/issue469-new-e2e.log",
+          "sha256": "e4241a1e1ba4ae78f7c3831beca31f9d1ac14b44ec2923de587a9cd19e2cf401"
+        },
+        "artifacts": "/tmp/issue469-new-e2e-artifacts",
+        "includes": [
+          "4 actual initial regression cases",
+          "Both selected civilizations, pressure persistence, complete PK and BO links",
+          "Prior sticky state, destination reload and fresh-page restoration",
+          "Legal Loom 22 on both tower sides only",
+          "360/375/390/1280, light/dark; keyboard/focus, 44px, nowrap, local axe, errors/overflow",
+          "Real delayed trees chunk: no verified links until ready",
+          "Real aborted trees chunk: requestfailed exactly once, caught error alert, no fallback links or unhandled page error; only exact aborted URL ERR_FAILED console message expected"
+        ]
+      },
+      {
+        "command": "BASE_URL=http://127.0.0.1:4220/ npx playwright test tests/e2e/rush35.spec.ts tests/e2e/matchup194.spec.ts tests/e2e/matchupSim424.spec.ts tests/e2e/communityIntegration244.spec.ts --grep \"早期应对|#194|#424|对局助手的城堡入口\" --workers=2 --output=/tmp/issue469-regression-artifacts",
+        "result": "22 passed, all original drill quantity expectations retained",
+        "log": {
+          "path": "/tmp/issue469-regression-e2e.log",
+          "sha256": "e895a3bc5e84deb7888a415dc560edb731dfd5323c517c50d6c5a76682fa97d4"
+        },
+        "artifacts": "/tmp/issue469-regression-artifacts"
+      },
+      {
+        "command": "BASE_URL=http://127.0.0.1:4220/ npx playwright test tests/e2e/communityIntegration244.spec.ts --grep-invert \"对局助手的城堡入口\" --workers=2 --output=/tmp/issue469-community-artifacts",
+        "result": "20 passed; together with the included guard above, the full unchanged 21-case file passed",
+        "log": {
+          "path": "/tmp/issue469-community-e2e.log",
+          "sha256": "3b6ce4da6cc6cd3190d5083141d6d5339a76c91927099129604fc8d7e7b5529b"
+        },
+        "artifacts": "/tmp/issue469-community-artifacts"
+      }
+    ],
+    "browserUniquePassed": 59,
+    "plan": {
+      "base": "4794b0cba28eb2b728cf97c6ad9931ff3ab85b6d",
+      "head": "74c6ae3ca0c96056c9cfa8d7ae92caa8ff2c8dbb",
+      "scope": "targeted",
+      "features": ["matchup"],
+      "unit": [
+        "tests/unit/matchup194.test.ts",
+        "tests/unit/matchupAvailability469.test.ts",
+        "tests/unit/p0Batch.test.ts",
+        "tests/unit/simRoute424.test.ts",
+        "tests/unit/simulator.test.ts"
+      ],
+      "e2e": ["tests/e2e/matchup194.spec.ts", "tests/e2e/matchupAvailability469.spec.ts", "tests/e2e/matchupSim424.spec.ts", "tests/e2e/rush35.spec.ts"],
+      "data": false,
+      "full": false
+    },
+    "remote": "No remote actions or CI performed by implementation agent; root owns actual PR/CI/merge/deployment/release. Local execution is the stated focused subset; current remote policy remains unchanged."
+  },
+  "independentReviewOwner": "/root/scope_review; final exact-source and UI conclusions recorded separately against the delivered commit",
+  "screenshotPatterns": [
+    "/tmp/issue469-new-e2e-artifacts/**/rush469-{legal,unavailable,no-build}-{360,375,390,1280}-{light,dark}.png",
+    "/tmp/issue469-new-e2e-artifacts/**/matchup469-advice-{360,375,390,1280}-{light,dark}.png",
+    "/tmp/issue469-new-e2e-artifacts/**/rush469-pending-360.png",
+    "/tmp/issue469-new-e2e-artifacts/**/matchup469-load-failure-360.png"
+  ]
+}
