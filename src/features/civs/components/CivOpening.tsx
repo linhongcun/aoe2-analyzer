@@ -24,6 +24,7 @@ export function CivOpening({ c, context }: { c: Civ; context?: EntityContext }) 
   const core = useCore();
   const { kind, builds } = selectOpeningBuilds(c, buildOrders);
   const buildPath = (id?: string) => {
+    if (!id && !context) return '/builds';
     const params = new URLSearchParams(id ? { bo: id, civ: c.en } : { civ: c.en });
     return contextPath(`/builds?${params}`, context?.search ?? '', context?.source);
   };
