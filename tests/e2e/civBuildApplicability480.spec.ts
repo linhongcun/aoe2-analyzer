@@ -76,13 +76,12 @@ test('#480 source links round-trip through the timeline and its listed civilizat
   await expect(page.locator('#detail h1')).toContainText('鞑靼');
 });
 
-test('#480 an unsupported requested nonmember keeps both applicability and the original simulation warning', async ({ page }) => {
+test('#480 supported Poles remains outside the curated applicability recommendation', async ({ page }) => {
   await page.goto('./#/builds?bo=archers-19&civ=Poles');
   await expect(applicability(page)).toContainText(genericNote);
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的波兰加成尚未计入，已按通用计算。');
-  await expect(page.locator('#builds')).toContainText('按通用计');
-  await expect(page.locator('#builds')).not.toContainText('按波兰计');
-  await page.locator('[data-t="civ-warn"]').getByRole('button', { name: '关闭提示', exact: true }).click();
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+  await expect(page.locator('#builds')).toContainText('按波兰计');
+  await expect(page.locator('[data-t="civ-note"]')).toContainText('农田即时收获未计入');
   await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
   await expect(applicability(page)).toContainText(genericNote);
   await page.reload();
@@ -160,9 +159,9 @@ for (const width of [360, 375, 390, 1280])
 
       await page.goto('./#/builds?bo=archers-19&civ=Poles');
       await expect(applicability(page)).toContainText(genericNote);
-      await expect(page.locator('[data-t="civ-warn"]')).toContainText('波兰加成尚未计入');
+      await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      await page.screenshot({ path: info.outputPath(`timeline480-unsupported-${width}-${theme}.png`), fullPage: true });
+      await page.screenshot({ path: info.outputPath(`timeline480-poles-${width}-${theme}.png`), fullPage: true });
 
       await page.goto('./#/builds?bo=drush-fc');
       await expect(applicability(page)).toContainText('通用');

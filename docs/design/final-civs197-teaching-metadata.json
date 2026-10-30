@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "purpose": "Source metadata continuation; all historical teaching facts and numeric snapshots retained",
+  "baseCommit": "ed866abd4f6453e8ea57a4f79bb172b0a4072af6",
+  "previousEvidence": "gurjaras197-teaching-metadata.json",
+  "previousProjection": "6d03bb7e7d43d07bb8ed4f276c69518825431056abb79d21c1c721b49814de25",
+  "currentProjection": "58d8c72a7828f04c800f9e633283b453a95191d1c89b62003f075eaa89459a2b",
+  "addedMetadata": {
+    "/polesInfrastructure": "4c55a63f5665ade85ef935cf1d1d607e36b435008958ef6bea81316eec7547b4",
+    "/romanFarm": "4445492774bc708f678c3d74f25542e6acd0722acc0d38004e3f4db898829029",
+    "/civEco/Poles/tech:793/polesTech": "c53812a455df83d85309bc5065c4e3edae6b6b44e03259ff3008dcf7eafa79a6",
+    "/civEco/Poles/tech:794": "3fdfa2efcd13b313475d3b869da07c1ec7490ff7f492ed09d03ba71181058991",
+    "/civEco/Poles/tech:795": "36e6673eea42df2f7fb309889c41113facab09af0b3e4bf2bb035048bd9fc785",
+    "/civEco/Poles/tech:796": "d67449fba232c8d7d8962ee7cec51b54c6fcd1949765c34e20c6535cd6d2a236",
+    "/civEco/Poles/tech:805/polesTech": "b39b6b3731037d96e01b2acfe54d7caefbc73c89880f5de513f7bc4d939308e7",
+    "/civEco/Romans/tree": "87ac479aea62d80292ad3a23a69cebff147a6516d672dc744c03f677d5b14614",
+    "/civEco/Romans/tech:887/romanTech": "1061342e2df000a0c041ff9f6c868ba03b696b8d3fbc7b78712e651d5fc56fb4",
+    "/civEco/Romans/tech:892/romanTech": "2716df776ee10941dafaa51d2fd32d70d6d3f608fc3526c8d2f84e060269f752",
+    "/civEco/Romans/team": "ee283b9a0d0f0e785aad67bd21f405c67a7631b6802d2ea61c954463bb60f7e0"
+  },
+  "reverseProof": {
+    "exactFullEcoRestoration": true,
+    "operations": "Remove only two new physical sections, three empty Poles upgrade rows, two empty Romans tree/team rows, and the four raw-tech fields attached to existing rows",
+    "restoredProjection": "6d03bb7e7d43d07bb8ed4f276c69518825431056abb79d21c1c721b49814de25",
+    "other54CivRowsAndAllOriginalGlobalSectionsExact": true
+  },
+  "preserved": "Original source evidence, all teaching content, other audit hashes, source pins and numerical expectations unchanged"
+}

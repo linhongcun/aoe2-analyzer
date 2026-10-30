@@ -65,19 +65,19 @@ for (const width of [360, 375, 390, 1280])
     });
   }
 
-test('#197 玛雅可选、刷新和深链保留，波兰仍置灰回退', async ({ page }) => {
+test('#197 玛雅可选、刷新和深链保留，波兰也受支持', async ({ page }) => {
   await page.goto('./#/builds?bo=archers-19');
   await page.locator('#tlciv').click();
   const picker = page.getByRole('dialog', { name: '文明', exact: true });
   await expect(picker.locator('[data-civ="Mayans"]')).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
+  await expect(picker.locator('[data-civ="Poles"]')).not.toHaveAttribute('aria-disabled', 'true');
   await picker.locator('[data-civ="Mayans"]').click();
   await expect(page).toHaveURL(/[?&]civ=Mayans/);
   await page.reload();
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按玛雅计');
   await page.goto('./#/builds?bo=archers-19&civ=Poles');
-  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toHaveText('链接里的波兰加成尚未计入，已按通用计算。');
+  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按波兰计');
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
 });
 
 for (const width of [360, 375, 390, 1280])

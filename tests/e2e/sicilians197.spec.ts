@@ -70,19 +70,19 @@ for (const width of [360, 375, 390, 1280])
       expect(errors).toEqual([]);
     });
 
-test('#197 西西里可选、深链刷新、仍禁用的波兰回退', async ({ page }) => {
+test('#197 西西里可选、深链刷新、仍禁用的波兰也受支持', async ({ page }) => {
   await page.goto('./#/builds?bo=drush-fc');
   await page.locator('#tlciv').click();
   const picker = page.getByRole('dialog', { name: '文明', exact: true });
   await expect(picker.locator('[data-civ="Sicilians"]')).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
+  await expect(picker.locator('[data-civ="Poles"]')).not.toHaveAttribute('aria-disabled', 'true');
   await picker.locator('[data-civ="Sicilians"]').click();
   await expect(page).toHaveURL(/[?&]civ=Sicilians/);
   await page.reload();
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按西西里计');
   await page.goto('./#/builds?bo=drush-fc&civ=Poles');
-  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('波兰');
+  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按波兰计');
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
 });
 
 test('#197 西西里跟练、打印保留储量边界和公开来源；独立真实成本原提示', async ({ page }) => {

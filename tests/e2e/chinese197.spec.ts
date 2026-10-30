@@ -69,12 +69,12 @@ for (const width of [360, 375, 390, 1280])
       expect(errors).toEqual([]);
     });
 
-test('#197 中国可选、刷新、八套模板和波兰回退', async ({ page }) => {
+test('#197 中国可选、刷新、八套模板和波兰也受支持', async ({ page }) => {
   await page.goto('./#/builds?bo=scouts-18');
   await page.locator('#tlciv').click();
   const picker = page.getByRole('dialog', { name: '文明', exact: true });
   await expect(picker.locator('[data-civ="Chinese"]')).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
+  await expect(picker.locator('[data-civ="Poles"]')).not.toHaveAttribute('aria-disabled', 'true');
   await picker.locator('[data-civ="Chinese"]').click();
   await expect(page).toHaveURL(/[?&]civ=Chinese/);
   await page.reload();
@@ -88,6 +88,6 @@ test('#197 中国可选、刷新、八套模板和波兰回退', async ({ page }
     await expect(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
   }
   await page.goto('./#/builds?bo=scouts-18&civ=Poles');
-  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('波兰');
+  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按波兰计');
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
 });

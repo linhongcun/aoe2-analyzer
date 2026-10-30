@@ -16,7 +16,7 @@ export const TEACHING_COMPATIBILITY_188329 = {
     techs: '2e9c7e21d5e2fd1bfa1a4eb6b1556a6541da359d64ef2ba4cb301233a2743a1e',
     buildings: '9b6b290d946512cdd421c8f7c616d601930d3f3c0bb46eb37087c8e08697e902',
     trees: '27cd18f2a436899f1e3ab1a31996482a9d073a8b1c698670b78466d67b50a9f8',
-    eco: '6d03bb7e7d43d07bb8ed4f276c69518825431056abb79d21c1c721b49814de25',
+    eco: '58d8c72a7828f04c800f9e633283b453a95191d1c89b62003f075eaa89459a2b',
     effects: 'a78d80cc8d68ecf589b07679c46d78d51aad5d4c17664d8be30422e93d0bfc64',
     garrison: '3e652ce07e4d8a03371b9f7b8b3f01af72ddcb30ed9a5a918d2665fafd452178',
     exampleCivs: '39ad0bd93202b3c71e1ad78e7e4fe304e6f1d5b3fcaa704eac01132db301b92a',
@@ -50,6 +50,12 @@ export const TEACHING_COMPATIBILITY_188329 = {
       previousEcoProjection: '7a1c28887e56c38c8b85059cc29a84651e531e5b426ba4d60720aeb9fde0bc5f',
       currentEcoProjection: '6d03bb7e7d43d07bb8ed4f276c69518825431056abb79d21c1c721b49814de25',
       evidence: 'docs/design/gurjaras197-teaching-metadata.json',
+    },
+    {
+      baseCommit: 'ed866abd4f6453e8ea57a4f79bb172b0a4072af6',
+      previousEcoProjection: '6d03bb7e7d43d07bb8ed4f276c69518825431056abb79d21c1c721b49814de25',
+      currentEcoProjection: '58d8c72a7828f04c800f9e633283b453a95191d1c89b62003f075eaa89459a2b',
+      evidence: 'docs/design/final-civs197-teaching-metadata.json',
     },
   ],
   content: {

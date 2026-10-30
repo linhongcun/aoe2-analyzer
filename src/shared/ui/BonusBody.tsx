@@ -77,7 +77,7 @@ const USAGE_ICON = { true: 'check', false: 'x', null: 'circle-help' } as const;
 
 /** Keep the scoped sourced quantity phrases together in both detail and sidebar text. */
 const bengaliQuantity = (text: string, linked: boolean) =>
-  text.split(/(\d+\s*个村民)/g).map((part, index) =>
+  text.split(/(\d+\s*(?:个村民|人口|个模板))/g).map((part, index) =>
     index % 2 ? (
       <span className="num nw" key={index}>
         {linked ? <Linked text={part} /> : part}
@@ -112,7 +112,15 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
   const mayanTimeline = b.id === 'Mayans-1';
   const sicilianConstruction = b.id === 'Sicilians-4';
   const usage =
-    b.encoded && !mayanTimeline && !sicilianConstruction && b.id !== 'Chinese-2' && b.id !== 'Mapuche-1' && b.id !== 'Gurjaras-0' && b.id !== 'Gurjaras-1'
+    b.encoded &&
+    !mayanTimeline &&
+    !sicilianConstruction &&
+    b.id !== 'Chinese-2' &&
+    b.id !== 'Mapuche-1' &&
+    b.id !== 'Gurjaras-0' &&
+    b.id !== 'Gurjaras-1' &&
+    b.id !== 'Poles-0' &&
+    b.id !== 'Poles-2'
       ? []
       : bonusUsage(b);
   const ex = bonusExample(b, core.units, core.buildings, b.civ === 'Franks' && b.idx === 2 ? 'Paladin' : undefined);
@@ -182,7 +190,7 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
                     l.name
                   )}
                 </b>
-                ：{b.id === 'Bengalis-0' ? bengaliQuantity(l.note, false) : l.note}
+                ：{b.id === 'Bengalis-0' || b.civ === 'Poles' ? bengaliQuantity(l.note, false) : l.note}
               </li>
             ))}
           </ul>

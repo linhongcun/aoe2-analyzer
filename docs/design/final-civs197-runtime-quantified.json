@@ -1,0 +1,2062 @@
+{
+  "schema": 1,
+  "baseCommit": "ed866abd4f6453e8ea57a4f79bb172b0a4072af6",
+  "fixedBuild": 188329,
+  "scope": "Poles/Romans current eight templates; other54+Generic full object equality",
+  "unaffected": {
+    "completeTimelines": 440,
+    "allExact": true,
+    "gatherHelpers": 1485,
+    "allGatherExact": true
+  },
+  "captures": {
+    "/tmp/batch18-before.json": "ec998601ef230e9b09197371a0b2fde76a5d36dbe724693da13a780b71dc177d",
+    "/tmp/batch18-after.json": "93d8d5c017d82f89cab1d0a60abf81cffb175454517a8c7e76b00f9f443b560e"
+  },
+  "civilizations": {
+    "Poles": {
+      "support": {
+        "supported": true,
+        "reasons": []
+      },
+      "orders": [
+        {
+          "order": "feudal-drush-18",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 447,
+              "reachAt": 577,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 447,
+              "reachAt": 577,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "beforeIdleTotal": 47,
+          "currentIdleTotal": 47,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 12,
+              "at": 379.5
+            },
+            {
+              "building": 70,
+              "at": 404.5
+            },
+            {
+              "building": 68,
+              "at": 609.6
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 12,
+              "at": 379.5
+            },
+            {
+              "building": 70,
+              "at": 404.5
+            },
+            {
+              "building": 1711,
+              "at": 613.4
+            }
+          ],
+          "changedStepInventoryOrTime": 1,
+          "timeout": false
+        },
+        {
+          "order": "hybrid-fish-18",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 495,
+              "reachAt": 625,
+              "errSec": {
+                "early": 8.2,
+                "late": 9.2
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 495,
+              "reachAt": 625,
+              "errSec": {
+                "early": 8.2,
+                "late": 9.2
+              }
+            }
+          ],
+          "beforeIdleTotal": 27.8,
+          "currentIdleTotal": 27.8,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 210.9
+            },
+            {
+              "building": 45,
+              "at": 292.8
+            },
+            {
+              "building": 584,
+              "at": 530
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 210.9
+            },
+            {
+              "building": 45,
+              "at": 292.8
+            },
+            {
+              "building": 584,
+              "at": 530
+            }
+          ],
+          "changedStepInventoryOrTime": 0,
+          "timeout": false
+        },
+        {
+          "order": "maa-archers-18",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 440.6,
+              "reachAt": 570.6,
+              "errSec": {
+                "early": 0,
+                "late": 25.3
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 440.6,
+              "reachAt": 570.6,
+              "errSec": {
+                "early": 0,
+                "late": 25.3
+              }
+            }
+          ],
+          "beforeIdleTotal": 40.6,
+          "currentIdleTotal": 40.6,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 70,
+              "at": 175
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 12,
+              "at": 429.5
+            },
+            {
+              "building": 70,
+              "at": 454.5
+            },
+            {
+              "building": 584,
+              "at": 605.6
+            },
+            {
+              "building": 68,
+              "at": 696.5
+            },
+            {
+              "building": 50,
+              "at": 710.6
+            },
+            {
+              "building": 87,
+              "at": 795.6
+            },
+            {
+              "building": 103,
+              "at": 850.7
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 70,
+              "at": 175
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 12,
+              "at": 429.5
+            },
+            {
+              "building": 70,
+              "at": 454.5
+            },
+            {
+              "building": 584,
+              "at": 605.6
+            },
+            {
+              "building": 1711,
+              "at": 701.5
+            },
+            {
+              "building": 50,
+              "at": 716.5
+            },
+            {
+              "building": 87,
+              "at": 795.6
+            },
+            {
+              "building": 103,
+              "at": 838.4
+            }
+          ],
+          "changedStepInventoryOrTime": 4,
+          "timeout": false
+        },
+        {
+          "order": "scouts-18",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 425.5,
+              "reachAt": 555.5,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 425.8,
+              "reachAt": 555.8,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "beforeIdleTotal": 0.7,
+          "currentIdleTotal": 0.7,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 160
+            },
+            {
+              "building": 70,
+              "at": 200.7
+            },
+            {
+              "building": 68,
+              "at": 298.6
+            },
+            {
+              "building": 12,
+              "at": 547.8
+            },
+            {
+              "building": 101,
+              "at": 642.1
+            },
+            {
+              "building": 50,
+              "at": 696
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 160
+            },
+            {
+              "building": 70,
+              "at": 200.7
+            },
+            {
+              "building": 1734,
+              "at": 303.6
+            },
+            {
+              "building": 12,
+              "at": 519.3
+            },
+            {
+              "building": 101,
+              "at": 628
+            },
+            {
+              "building": 50,
+              "at": 681.9
+            }
+          ],
+          "changedStepInventoryOrTime": 8,
+          "timeout": false
+        },
+        {
+          "order": "archers-19",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 454.4,
+              "reachAt": 584.4,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 454.7,
+              "reachAt": 584.7,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "beforeIdleTotal": 29.4,
+          "currentIdleTotal": 29.7,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 68,
+              "at": 260.7
+            },
+            {
+              "building": 70,
+              "at": 609.4
+            },
+            {
+              "building": 12,
+              "at": 659.4
+            },
+            {
+              "building": 584,
+              "at": 694.4
+            },
+            {
+              "building": 87,
+              "at": 744.4
+            },
+            {
+              "building": 50,
+              "at": 759.5
+            },
+            {
+              "building": 103,
+              "at": 784.5
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 1734,
+              "at": 265.7
+            },
+            {
+              "building": 70,
+              "at": 609.7
+            },
+            {
+              "building": 12,
+              "at": 659.7
+            },
+            {
+              "building": 584,
+              "at": 694.7
+            },
+            {
+              "building": 87,
+              "at": 744.7
+            },
+            {
+              "building": 103,
+              "at": 784.8
+            },
+            {
+              "building": 50,
+              "at": 799.8
+            }
+          ],
+          "changedStepInventoryOrTime": 7,
+          "timeout": false
+        },
+        {
+          "order": "fast-castle-boom",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 543.6,
+              "reachAt": 673.6,
+              "errSec": {
+                "early": 35.3,
+                "late": 68.8
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 772.6,
+              "reachAt": 932.6,
+              "errSec": {
+                "early": 44.1,
+                "late": 102.5
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 543.6,
+              "reachAt": 673.6,
+              "errSec": {
+                "early": 35.3,
+                "late": 49.8
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 772.6,
+              "reachAt": 932.6,
+              "errSec": {
+                "early": 43.8,
+                "late": 83.6
+              }
+            }
+          ],
+          "beforeIdleTotal": 43.6,
+          "currentIdleTotal": 43.6,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 68,
+              "at": 260.7
+            },
+            {
+              "building": 70,
+              "at": 379.5
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 70,
+              "at": 514
+            },
+            {
+              "building": 584,
+              "at": 578.5
+            },
+            {
+              "building": 103,
+              "at": 713.6
+            },
+            {
+              "building": 84,
+              "at": 772.5
+            },
+            {
+              "building": 109,
+              "at": 1060.8
+            },
+            {
+              "building": 109,
+              "at": 1060.8
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 1734,
+              "at": 265.7
+            },
+            {
+              "building": 70,
+              "at": 379.5
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 70,
+              "at": 514
+            },
+            {
+              "building": 584,
+              "at": 578.5
+            },
+            {
+              "building": 103,
+              "at": 713.6
+            },
+            {
+              "building": 84,
+              "at": 772.5
+            },
+            {
+              "building": 109,
+              "at": 1060.8
+            },
+            {
+              "building": 109,
+              "at": 1060.8
+            }
+          ],
+          "changedStepInventoryOrTime": 8,
+          "timeout": false
+        },
+        {
+          "order": "fast-castle-knights",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 543.6,
+              "reachAt": 673.6,
+              "errSec": {
+                "early": 35.3,
+                "late": 68.8
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 772.6,
+              "reachAt": 932.6,
+              "errSec": {
+                "early": 44.1,
+                "late": 102.5
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 543.6,
+              "reachAt": 673.6,
+              "errSec": {
+                "early": 35.3,
+                "late": 49.8
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 772.6,
+              "reachAt": 932.6,
+              "errSec": {
+                "early": 43.8,
+                "late": 83.6
+              }
+            }
+          ],
+          "beforeIdleTotal": 43.6,
+          "currentIdleTotal": 43.6,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 68,
+              "at": 260.7
+            },
+            {
+              "building": 70,
+              "at": 379.5
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 70,
+              "at": 514
+            },
+            {
+              "building": 584,
+              "at": 578.5
+            },
+            {
+              "building": 103,
+              "at": 713.6
+            },
+            {
+              "building": 84,
+              "at": 772.5
+            },
+            {
+              "building": 12,
+              "at": 982.6
+            },
+            {
+              "building": 101,
+              "at": 1017.7
+            },
+            {
+              "building": 101,
+              "at": 1017.7
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 1734,
+              "at": 265.7
+            },
+            {
+              "building": 70,
+              "at": 379.5
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 70,
+              "at": 514
+            },
+            {
+              "building": 584,
+              "at": 578.5
+            },
+            {
+              "building": 103,
+              "at": 713.6
+            },
+            {
+              "building": 84,
+              "at": 772.5
+            },
+            {
+              "building": 12,
+              "at": 982.6
+            },
+            {
+              "building": 101,
+              "at": 1017.7
+            },
+            {
+              "building": 101,
+              "at": 1017.7
+            }
+          ],
+          "changedStepInventoryOrTime": 9,
+          "timeout": false
+        },
+        {
+          "order": "drush-fc",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 650.7,
+              "reachAt": 780.7,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 870.8,
+              "reachAt": 1030.8,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 650.7,
+              "reachAt": 780.7,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 870.8,
+              "reachAt": 1030.8,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "beforeIdleTotal": 25.7,
+          "currentIdleTotal": 25.7,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 210.9
+            },
+            {
+              "building": 70,
+              "at": 258.9
+            },
+            {
+              "building": 70,
+              "at": 283.9
+            },
+            {
+              "building": 12,
+              "at": 352.3
+            },
+            {
+              "building": 72,
+              "at": 359.3
+            },
+            {
+              "building": 68,
+              "at": 460.6
+            },
+            {
+              "building": 70,
+              "at": 606.2
+            },
+            {
+              "building": 70,
+              "at": 631.2
+            },
+            {
+              "building": 87,
+              "at": 830.7
+            },
+            {
+              "building": 103,
+              "at": 870.7
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 210.9
+            },
+            {
+              "building": 70,
+              "at": 258.9
+            },
+            {
+              "building": 70,
+              "at": 283.9
+            },
+            {
+              "building": 12,
+              "at": 352.3
+            },
+            {
+              "building": 72,
+              "at": 359.3
+            },
+            {
+              "building": 1734,
+              "at": 465.6
+            },
+            {
+              "building": 70,
+              "at": 606.2
+            },
+            {
+              "building": 70,
+              "at": 631.2
+            },
+            {
+              "building": 87,
+              "at": 830.7
+            },
+            {
+              "building": 103,
+              "at": 870.7
+            }
+          ],
+          "changedStepInventoryOrTime": 6,
+          "timeout": false
+        }
+      ]
+    },
+    "Romans": {
+      "support": {
+        "supported": true,
+        "reasons": []
+      },
+      "orders": [
+        {
+          "order": "feudal-drush-18",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 447,
+              "reachAt": 577,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 433.5,
+              "reachAt": 563.5,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "beforeIdleTotal": 47,
+          "currentIdleTotal": 33.5,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 12,
+              "at": 379.5
+            },
+            {
+              "building": 70,
+              "at": 404.5
+            },
+            {
+              "building": 68,
+              "at": 609.6
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.2
+            },
+            {
+              "building": 70,
+              "at": 28.5
+            },
+            {
+              "building": 562,
+              "at": 183.4
+            },
+            {
+              "building": 70,
+              "at": 224.3
+            },
+            {
+              "building": 12,
+              "at": 373.1
+            },
+            {
+              "building": 70,
+              "at": 397
+            },
+            {
+              "building": 68,
+              "at": 594.9
+            }
+          ],
+          "changedStepInventoryOrTime": 12,
+          "timeout": false
+        },
+        {
+          "order": "hybrid-fish-18",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 495,
+              "reachAt": 625,
+              "errSec": {
+                "early": 8.2,
+                "late": 9.2
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 480.5,
+              "reachAt": 610.5,
+              "errSec": {
+                "early": 7.4,
+                "late": 8.7
+              }
+            }
+          ],
+          "beforeIdleTotal": 27.8,
+          "currentIdleTotal": 17.8,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 210.9
+            },
+            {
+              "building": 45,
+              "at": 292.8
+            },
+            {
+              "building": 584,
+              "at": 530
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.2
+            },
+            {
+              "building": 70,
+              "at": 28.5
+            },
+            {
+              "building": 562,
+              "at": 208.4
+            },
+            {
+              "building": 45,
+              "at": 286.6
+            },
+            {
+              "building": 584,
+              "at": 513.9
+            }
+          ],
+          "changedStepInventoryOrTime": 9,
+          "timeout": false
+        },
+        {
+          "order": "maa-archers-18",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 440.6,
+              "reachAt": 570.6,
+              "errSec": {
+                "early": 0,
+                "late": 25.3
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 427.8,
+              "reachAt": 557.8,
+              "errSec": {
+                "early": 0,
+                "late": 28.7
+              }
+            }
+          ],
+          "beforeIdleTotal": 40.6,
+          "currentIdleTotal": 27.8,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 70,
+              "at": 175
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 12,
+              "at": 429.5
+            },
+            {
+              "building": 70,
+              "at": 454.5
+            },
+            {
+              "building": 584,
+              "at": 605.6
+            },
+            {
+              "building": 68,
+              "at": 696.5
+            },
+            {
+              "building": 50,
+              "at": 710.6
+            },
+            {
+              "building": 87,
+              "at": 795.6
+            },
+            {
+              "building": 103,
+              "at": 850.7
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.2
+            },
+            {
+              "building": 70,
+              "at": 28.5
+            },
+            {
+              "building": 70,
+              "at": 173.9
+            },
+            {
+              "building": 562,
+              "at": 183.4
+            },
+            {
+              "building": 12,
+              "at": 423.1
+            },
+            {
+              "building": 70,
+              "at": 447
+            },
+            {
+              "building": 584,
+              "at": 591.2
+            },
+            {
+              "building": 68,
+              "at": 679
+            },
+            {
+              "building": 50,
+              "at": 697.1
+            },
+            {
+              "building": 87,
+              "at": 780.5
+            },
+            {
+              "building": 103,
+              "at": 827.1
+            }
+          ],
+          "changedStepInventoryOrTime": 12,
+          "timeout": false
+        },
+        {
+          "order": "scouts-18",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 425.5,
+              "reachAt": 555.5,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 414.2,
+              "reachAt": 544.2,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "beforeIdleTotal": 0.7,
+          "currentIdleTotal": 0,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 160
+            },
+            {
+              "building": 70,
+              "at": 200.7
+            },
+            {
+              "building": 68,
+              "at": 298.6
+            },
+            {
+              "building": 12,
+              "at": 547.8
+            },
+            {
+              "building": 101,
+              "at": 642.1
+            },
+            {
+              "building": 50,
+              "at": 696
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.2
+            },
+            {
+              "building": 70,
+              "at": 28.5
+            },
+            {
+              "building": 562,
+              "at": 158.4
+            },
+            {
+              "building": 70,
+              "at": 198.9
+            },
+            {
+              "building": 68,
+              "at": 291.6
+            },
+            {
+              "building": 12,
+              "at": 536.1
+            },
+            {
+              "building": 101,
+              "at": 627.4
+            },
+            {
+              "building": 50,
+              "at": 679.8
+            }
+          ],
+          "changedStepInventoryOrTime": 13,
+          "timeout": false
+        },
+        {
+          "order": "archers-19",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 454.4,
+              "reachAt": 584.4,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 440.9,
+              "reachAt": 570.9,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "beforeIdleTotal": 29.4,
+          "currentIdleTotal": 15.9,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 68,
+              "at": 260.7
+            },
+            {
+              "building": 70,
+              "at": 609.4
+            },
+            {
+              "building": 12,
+              "at": 659.4
+            },
+            {
+              "building": 584,
+              "at": 694.4
+            },
+            {
+              "building": 87,
+              "at": 744.4
+            },
+            {
+              "building": 50,
+              "at": 759.5
+            },
+            {
+              "building": 103,
+              "at": 784.5
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.2
+            },
+            {
+              "building": 70,
+              "at": 28.5
+            },
+            {
+              "building": 562,
+              "at": 183.4
+            },
+            {
+              "building": 70,
+              "at": 224.3
+            },
+            {
+              "building": 68,
+              "at": 255.5
+            },
+            {
+              "building": 70,
+              "at": 594.8
+            },
+            {
+              "building": 12,
+              "at": 642.5
+            },
+            {
+              "building": 584,
+              "at": 675.9
+            },
+            {
+              "building": 87,
+              "at": 723.6
+            },
+            {
+              "building": 50,
+              "at": 738
+            },
+            {
+              "building": 103,
+              "at": 761.8
+            }
+          ],
+          "changedStepInventoryOrTime": 11,
+          "timeout": false
+        },
+        {
+          "order": "fast-castle-boom",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 543.6,
+              "reachAt": 673.6,
+              "errSec": {
+                "early": 35.3,
+                "late": 68.8
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 772.6,
+              "reachAt": 932.6,
+              "errSec": {
+                "early": 44.1,
+                "late": 102.5
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 532.5,
+              "reachAt": 662.5,
+              "errSec": {
+                "early": 32,
+                "late": 68.1
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 753,
+              "reachAt": 913,
+              "errSec": {
+                "early": 43.7,
+                "late": 103.9
+              }
+            }
+          ],
+          "beforeIdleTotal": 43.6,
+          "currentIdleTotal": 32.5,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 68,
+              "at": 260.7
+            },
+            {
+              "building": 70,
+              "at": 379.5
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 70,
+              "at": 514
+            },
+            {
+              "building": 584,
+              "at": 578.5
+            },
+            {
+              "building": 103,
+              "at": 713.6
+            },
+            {
+              "building": 84,
+              "at": 772.5
+            },
+            {
+              "building": 109,
+              "at": 1060.8
+            },
+            {
+              "building": 109,
+              "at": 1060.8
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.2
+            },
+            {
+              "building": 70,
+              "at": 28.5
+            },
+            {
+              "building": 562,
+              "at": 183.4
+            },
+            {
+              "building": 70,
+              "at": 224.3
+            },
+            {
+              "building": 68,
+              "at": 255.5
+            },
+            {
+              "building": 70,
+              "at": 374.3
+            },
+            {
+              "building": 50,
+              "at": 475.7
+            },
+            {
+              "building": 50,
+              "at": 475.7
+            },
+            {
+              "building": 50,
+              "at": 475.7
+            },
+            {
+              "building": 50,
+              "at": 475.7
+            },
+            {
+              "building": 70,
+              "at": 503.7
+            },
+            {
+              "building": 584,
+              "at": 565.8
+            },
+            {
+              "building": 103,
+              "at": 700.6
+            },
+            {
+              "building": 84,
+              "at": 752.9
+            },
+            {
+              "building": 109,
+              "at": 1032.3
+            },
+            {
+              "building": 109,
+              "at": 1032.3
+            }
+          ],
+          "changedStepInventoryOrTime": 13,
+          "timeout": false
+        },
+        {
+          "order": "fast-castle-knights",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 543.6,
+              "reachAt": 673.6,
+              "errSec": {
+                "early": 35.3,
+                "late": 68.8
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 772.6,
+              "reachAt": 932.6,
+              "errSec": {
+                "early": 44.1,
+                "late": 102.5
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 532.5,
+              "reachAt": 662.5,
+              "errSec": {
+                "early": 32,
+                "late": 68.1
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 753,
+              "reachAt": 913,
+              "errSec": {
+                "early": 43.7,
+                "late": 103.9
+              }
+            }
+          ],
+          "beforeIdleTotal": 43.6,
+          "currentIdleTotal": 32.5,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 185
+            },
+            {
+              "building": 70,
+              "at": 229.5
+            },
+            {
+              "building": 68,
+              "at": 260.7
+            },
+            {
+              "building": 70,
+              "at": 379.5
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 50,
+              "at": 484.9
+            },
+            {
+              "building": 70,
+              "at": 514
+            },
+            {
+              "building": 584,
+              "at": 578.5
+            },
+            {
+              "building": 103,
+              "at": 713.6
+            },
+            {
+              "building": 84,
+              "at": 772.5
+            },
+            {
+              "building": 12,
+              "at": 982.6
+            },
+            {
+              "building": 101,
+              "at": 1017.7
+            },
+            {
+              "building": 101,
+              "at": 1017.7
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.2
+            },
+            {
+              "building": 70,
+              "at": 28.5
+            },
+            {
+              "building": 562,
+              "at": 183.4
+            },
+            {
+              "building": 70,
+              "at": 224.3
+            },
+            {
+              "building": 68,
+              "at": 255.5
+            },
+            {
+              "building": 70,
+              "at": 374.3
+            },
+            {
+              "building": 50,
+              "at": 475.7
+            },
+            {
+              "building": 50,
+              "at": 475.7
+            },
+            {
+              "building": 50,
+              "at": 475.7
+            },
+            {
+              "building": 50,
+              "at": 475.7
+            },
+            {
+              "building": 70,
+              "at": 503.7
+            },
+            {
+              "building": 584,
+              "at": 565.8
+            },
+            {
+              "building": 103,
+              "at": 700.6
+            },
+            {
+              "building": 84,
+              "at": 752.9
+            },
+            {
+              "building": 12,
+              "at": 960.7
+            },
+            {
+              "building": 101,
+              "at": 988.6
+            },
+            {
+              "building": 101,
+              "at": 988.6
+            }
+          ],
+          "changedStepInventoryOrTime": 14,
+          "timeout": false
+        },
+        {
+          "order": "drush-fc",
+          "beforeAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 650.7,
+              "reachAt": 780.7,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 870.8,
+              "reachAt": 1030.8,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "currentAgeUps": [
+            {
+              "age": "feudal",
+              "clickAt": 639.6,
+              "reachAt": 769.6,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            },
+            {
+              "age": "castle",
+              "clickAt": 855.5,
+              "reachAt": 1015.5,
+              "errSec": {
+                "early": 0,
+                "late": 0
+              }
+            }
+          ],
+          "beforeIdleTotal": 25.7,
+          "currentIdleTotal": 14.6,
+          "beforeBuildings": [
+            {
+              "building": 70,
+              "at": 14.9
+            },
+            {
+              "building": 70,
+              "at": 29.9
+            },
+            {
+              "building": 562,
+              "at": 210.9
+            },
+            {
+              "building": 70,
+              "at": 258.9
+            },
+            {
+              "building": 70,
+              "at": 283.9
+            },
+            {
+              "building": 12,
+              "at": 352.3
+            },
+            {
+              "building": 72,
+              "at": 359.3
+            },
+            {
+              "building": 68,
+              "at": 460.6
+            },
+            {
+              "building": 70,
+              "at": 606.2
+            },
+            {
+              "building": 70,
+              "at": 631.2
+            },
+            {
+              "building": 87,
+              "at": 830.7
+            },
+            {
+              "building": 103,
+              "at": 870.7
+            }
+          ],
+          "currentBuildings": [
+            {
+              "building": 70,
+              "at": 14.2
+            },
+            {
+              "building": 70,
+              "at": 28.5
+            },
+            {
+              "building": 562,
+              "at": 208.4
+            },
+            {
+              "building": 70,
+              "at": 252
+            },
+            {
+              "building": 70,
+              "at": 275.9
+            },
+            {
+              "building": 12,
+              "at": 344.1
+            },
+            {
+              "building": 72,
+              "at": 350.8
+            },
+            {
+              "building": 68,
+              "at": 447.9
+            },
+            {
+              "building": 70,
+              "at": 593.4
+            },
+            {
+              "building": 70,
+              "at": 617.3
+            },
+            {
+              "building": 87,
+              "at": 817.3
+            },
+            {
+              "building": 103,
+              "at": 855.4
+            }
+          ],
+          "changedStepInventoryOrTime": 14,
+          "timeout": false
+        }
+      ]
+    }
+  }
+}

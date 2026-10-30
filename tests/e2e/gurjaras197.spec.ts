@@ -79,7 +79,7 @@ test('#197 瞿折罗选择、八模板、骑士说明和收益未计入用途', 
   await page.locator('#tlciv').click();
   const picker = page.getByRole('dialog', { name: '文明', exact: true });
   await expect(picker.locator('[data-civ="Gurjaras"]')).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
+  await expect(picker.locator('[data-civ="Poles"]')).not.toHaveAttribute('aria-disabled', 'true');
   await picker.locator('[data-civ="Gurjaras"]').click();
   await expect(page).toHaveURL(/[?&]civ=Gurjaras/);
   await page.reload();
@@ -99,6 +99,6 @@ test('#197 瞿折罗选择、八模板、骑士说明和收益未计入用途', 
     await page.screenshot({ path: info.outputPath(`gurjaras-bonus-${idx}.png`), fullPage: true });
   }
   await page.goto('./#/builds?bo=scouts-18&civ=Poles');
-  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('波兰');
+  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按波兰计');
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
 });

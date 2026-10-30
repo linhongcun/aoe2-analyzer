@@ -379,6 +379,9 @@
                 },
                 "khmerTree": {
                   "$ref": "#/$defs/khmerTree"
+                },
+                "romanTree": {
+                  "$ref": "#/$defs/slavicTree"
                 }
               },
               "required": ["source", "name", "age", "effects"],
@@ -417,6 +420,9 @@
                   "$ref": "#/$defs/slavicTech"
                 },
                 "khmerTeam": {
+                  "$ref": "#/$defs/khmerTeam"
+                },
+                "romanTeam": {
                   "$ref": "#/$defs/khmerTeam"
                 }
               },
@@ -480,6 +486,12 @@
                   "$ref": "#/$defs/khmerTech"
                 },
                 "gurjaraTech": {
+                  "$ref": "#/$defs/khmerTech"
+                },
+                "polesTech": {
+                  "$ref": "#/$defs/khmerTech"
+                },
+                "romanTech": {
                   "$ref": "#/$defs/khmerTech"
                 }
               },
@@ -578,6 +590,12 @@
     },
     "mapucheInfrastructure": {
       "$ref": "#/$defs/mapucheInfrastructure"
+    },
+    "polesInfrastructure": {
+      "$ref": "#/$defs/polesInfrastructure"
+    },
+    "romanFarm": {
+      "$ref": "#/$defs/slavicFarm"
     }
   },
   "required": ["meta", "units", "buildings", "techs", "villager", "animals", "fishingShip", "ecoTechs", "civEco", "ageReq"],
@@ -1606,6 +1624,56 @@
         }
       },
       "required": ["civId", "nodes"],
+      "additionalProperties": false
+    },
+    "polesInfrastructure": {
+      "type": "object",
+      "properties": {
+        "civId": { "type": "integer" },
+        "treeId": { "type": "integer" },
+        "treeCommands": { "$ref": "#/$defs/khmerTech/properties/commands" },
+        "enable": { "$ref": "#/$defs/khmerTech" },
+        "upgrades": { "type": "array", "items": { "$ref": "#/$defs/khmerTech" } },
+        "buildingTech": { "$ref": "#/$defs/khmerTech" },
+        "researchSites": { "$ref": "#/$defs/mapucheInfrastructure/properties/researchSites" },
+        "farmTech": { "$ref": "#/$defs/khmerTech" },
+        "marketRequirement": { "$ref": "#/$defs/khmerTech" },
+        "ageRequirement": { "$ref": "#/$defs/khmerTech" },
+        "ageNode": { "$ref": "#/$defs/khmerTech" },
+        "folwarks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "unit": { "type": "integer" },
+              "type": { "type": "integer" },
+              "class": { "type": "integer" },
+              "buildTech": { "type": "integer" },
+              "trainAt": { "$ref": "#/$defs/khmerTech/properties/researchAt" },
+              "trainTime": { "type": "number", "minimum": 0 },
+              "cost": { "$ref": "#/$defs/khmerTech/properties/cost" },
+              "workRate": { "type": "number" },
+              "populationSource": { "$ref": "#/$defs/mapucheInfrastructure/properties/settlements/items/properties/populationSource" }
+            },
+            "required": ["unit", "type", "class", "buildTech", "trainAt", "trainTime", "cost", "workRate", "populationSource"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "civId",
+        "treeId",
+        "treeCommands",
+        "enable",
+        "upgrades",
+        "buildingTech",
+        "researchSites",
+        "farmTech",
+        "marketRequirement",
+        "ageRequirement",
+        "ageNode",
+        "folwarks"
+      ],
       "additionalProperties": false
     },
     "mapucheInfrastructure": {

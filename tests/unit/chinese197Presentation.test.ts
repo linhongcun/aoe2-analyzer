@@ -12,9 +12,9 @@ import { simSupport } from '../../src/domain/simSupport';
 const E = eco as unknown as EcoData;
 const chinese = civs.find((c) => c.en === 'Chinese')!;
 describe('#197 Chinese current support and shared disclosures', () => {
-  it('admits Chinese while the two other incomplete civilizations retain their reasons', () => {
+  it('admits Chinese alongside the final Poles and Romans batch', () => {
     expect(simSupport('Chinese')).toBe(true);
-    for (const civ of ['Poles', 'Romans']) expect(simSupport(civ)).toBe(false);
+    for (const civ of ['Poles', 'Romans']) expect(simSupport(civ)).toBe(true);
   });
   it('shares the exact source boundary between the normal opening and share-card basis', () => {
     const bo = buildOrders[0]!;

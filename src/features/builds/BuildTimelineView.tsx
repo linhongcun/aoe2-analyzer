@@ -9,6 +9,7 @@ import { civByEn } from '../../data';
 import type { BuildOrder } from '../../domain/buildOrder';
 import { armenianBuildOrder } from '../../domain/armenianEconomy';
 import { georgianBuildOrder } from '../../domain/georgianEconomy';
+import { polishBuildOrder } from '../../domain/polishEconomy';
 import { mapucheBuildOrder } from '../../domain/mapucheEconomy';
 import { visibleSources } from './sources';
 import { followupHint } from './timelineFollowups';
@@ -41,8 +42,12 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   const simCiv = q.civ && !unsupported ? q.civ : 'Generic';
   const displayOrder = useMemo(
     () =>
-      mapucheBuildOrder(
-        georgianBuildOrder(armenianBuildOrder(bo, simCiv, eco as unknown as EcoData), simCiv, eco as unknown as EcoData),
+      polishBuildOrder(
+        mapucheBuildOrder(
+          georgianBuildOrder(armenianBuildOrder(bo, simCiv, eco as unknown as EcoData), simCiv, eco as unknown as EcoData),
+          simCiv,
+          eco as unknown as EcoData,
+        ),
         simCiv,
         eco as unknown as EcoData,
       ),
@@ -366,7 +371,11 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
           </ul>
           {civNotes.length > 0 && (
             <p className="tl-civ-note" data-t="civ-note">
-              {tl.civ === 'Bengalis' || cartUnits ? <NumUnitText text={civNotes.join('；')} cartUnits={cartUnits} /> : civNotes.join('；')}
+              {tl.civ === 'Bengalis' || tl.civ === 'Poles' || cartUnits ? (
+                <NumUnitText text={civNotes.join('；')} cartUnits={cartUnits} />
+              ) : (
+                civNotes.join('；')
+              )}
             </p>
           )}
         </TimelineSummary>
@@ -463,7 +472,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
                   ))}
                 </ul>
                 <figcaption data-t="card-basis">
-                  {tl.civ === 'Bengalis' || cartUnits ? <NumUnitText text={card.basis} cartUnits={cartUnits} /> : card.basis}
+                  {tl.civ === 'Bengalis' || tl.civ === 'Poles' || cartUnits ? <NumUnitText text={card.basis} cartUnits={cartUnits} /> : card.basis}
                 </figcaption>
                 <span className="tl-cardprev-url" data-t="card-url">
                   {card.url}

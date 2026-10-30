@@ -106,18 +106,18 @@ for (const width of [360, 375, 390, 1280])
       expect(errors).toEqual([]);
     });
 
-test('#197 孟加拉可选、深链刷新及波兰仍禁用回退', async ({ page }) => {
+test('#197 孟加拉可选、深链刷新及波兰也受支持', async ({ page }) => {
   await page.goto('./#/builds?bo=hybrid-fish-18');
   await page.locator('#tlciv').click();
   const picker = page.getByRole('dialog', { name: '文明', exact: true });
   await expect(picker.locator('[data-civ="Bengalis"]')).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
+  await expect(picker.locator('[data-civ="Poles"]')).not.toHaveAttribute('aria-disabled', 'true');
   await picker.locator('[data-civ="Bengalis"]').click();
   await expect(page).toHaveURL(/[?&]civ=Bengalis/);
   await page.reload();
   await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按孟加拉计');
   await expect(page.locator('[data-t="bonus-villager-total"]')).toHaveText('2个村民');
   await page.goto('./#/builds?bo=hybrid-fish-18&civ=Poles');
-  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('波兰');
+  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按波兰计');
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
 });

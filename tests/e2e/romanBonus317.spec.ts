@@ -21,10 +21,10 @@ test.describe('issue 317 罗马加成标签', () => {
     await expect(r2.locator('.brow-h .tag')).toHaveText('已计入');
     await r0.locator('.brow-h').click();
     await expect(r0).not.toContainText('仅文本，未计入数值');
-    await expect(r0).toContainText('已计入：真实成本、施工工具');
-    await expect(r0).toContainText('未计入：开局模拟、修理');
-    await expect(r0.locator('[data-usage="sim"]')).toHaveAttribute('data-on', 'false');
-    await expect(r0.locator('[data-usage="sim"]')).toContainText('按通用文明计算');
+    await expect(r0).toContainText('已计入：开局模拟、真实成本、施工工具');
+    await expect(r0).toContainText('未计入：修理');
+    await expect(r0.locator('[data-usage="sim"]')).toHaveAttribute('data-on', 'true');
+    await expect(r0.locator('[data-usage="sim"]')).toContainText('村民采集与建造加成已计入');
     await expect(r0.locator('[data-usage="gather"]')).toHaveAttribute('data-on', 'true');
     await expect(r0.locator('[data-usage="construction"]')).toHaveAttribute('data-on', 'true');
     await expect(r0.locator('[data-usage="repair"]')).toHaveAttribute('data-on', 'false');
@@ -52,7 +52,7 @@ test.describe('issue 317 罗马加成标签', () => {
   });
 
   test('没有任何工具计入的经济加成仍显示「.dat 经济/费用效果（文本展示）」', async ({ page }) => {
-    // 波兰第 3 条「采石兼产黄金」：波兰开局模拟不支持，其他工具也未计入
+    // 波兰已支持；当前8个模板均无采石分工，本条未给模板计入收益，其他工具也未计入
     await page.goto('./#/civ/Poles/bonus/2');
     await expect(page.locator('#bonus')).toContainText('仅文本，未计入数值');
     await expect(page.locator('#bonus')).toContainText('.dat 经济/费用效果（文本展示）');
@@ -64,7 +64,7 @@ test.describe('issue 317 罗马加成标签', () => {
     const li = page.locator('#blist li').filter({ hasText: '罗马' });
     await expect(li).toHaveCount(1);
     await expect(li).not.toContainText('仅文本，未计入数值');
-    await expect(li).toContainText('已计入：真实成本、施工工具');
+    await expect(li).toContainText('已计入：开局模拟、真实成本、施工工具');
     await expect(li).not.toContainText('经济/费用效果（文本展示）');
     await page.goto('./#/civ/Romans/bonus/0');
     await expect(page.locator('#bonus')).not.toContainText('仅文本，未计入数值');

@@ -233,7 +233,7 @@ export default function BuildPracticeView({
         {civNotes.length > 0 && (
           <ul className="note">
             {civNotes.map((note, i) => (
-              <li key={i}>{timeline.civ === 'Bengalis' || cartUnits ? <NumUnitText text={note} cartUnits={cartUnits} /> : note}</li>
+              <li key={i}>{timeline.civ === 'Bengalis' || timeline.civ === 'Poles' || cartUnits ? <NumUnitText text={note} cartUnits={cartUnits} /> : note}</li>
             ))}
           </ul>
         )}
@@ -336,7 +336,11 @@ export default function BuildPracticeView({
         <ul className="note">
           {timeline.model.assumptions.map((assumption, i) => (
             <li key={i}>
-              {timeline.civ === 'Wei' || timeline.civ === 'Bengalis' || cartUnits ? <NumUnitText text={assumption} cartUnits={cartUnits} /> : assumption}
+              {timeline.civ === 'Wei' || timeline.civ === 'Bengalis' || timeline.civ === 'Poles' || cartUnits ? (
+                <NumUnitText text={assumption} cartUnits={cartUnits} />
+              ) : (
+                assumption
+              )}
             </li>
           ))}
         </ul>

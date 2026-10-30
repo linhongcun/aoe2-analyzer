@@ -1,0 +1,1175 @@
+{
+  "schema": "build-sim-source/1",
+  "generator": "scripts/build_sim_source.py",
+  "source": {
+    "repo": "SiegeEngineers/auto-mods",
+    "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+    "path": "dat/empires2_x2_p1.dat",
+    "sha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f"
+  },
+  "normalizedVersion": "VER 8.9",
+  "civ": {
+    "id": 38,
+    "name": "Poles",
+    "rawName": "Poles"
+  },
+  "tree": {
+    "id": 801,
+    "name": "Poles Tech Tree",
+    "commands": [
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 436.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 265.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 428.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 80.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 219.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 244.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 373.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 375.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 376.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 380.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 51.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 85.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 239.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 320.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 319.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 439.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 233.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 182.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 221.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 15.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 429.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 875.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1138.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1142.0
+      },
+      {
+        "Type": 101,
+        "A": 435,
+        "B": 0,
+        "C": 2,
+        "D": 0.5
+      },
+      {
+        "Type": 101,
+        "A": 254,
+        "B": 0,
+        "C": 2,
+        "D": 0.5
+      },
+      {
+        "Type": 101,
+        "A": 786,
+        "B": 0,
+        "C": 2,
+        "D": 0.5
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 909.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 910.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 192.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 218.0
+      },
+      {
+        "Type": 8,
+        "A": 1450,
+        "B": 12,
+        "C": -1,
+        "D": 1.0
+      },
+      {
+        "Type": 8,
+        "A": 1451,
+        "B": 12,
+        "C": -1,
+        "D": 1.0
+      }
+    ]
+  },
+  "team": {
+    "id": 802,
+    "name": "Poles Team Bonus",
+    "commands": [
+      {
+        "Type": 4,
+        "A": 448,
+        "B": -1,
+        "C": 9,
+        "D": 3841.0
+      },
+      {
+        "Type": 4,
+        "A": 546,
+        "B": -1,
+        "C": 9,
+        "D": 3841.0
+      },
+      {
+        "Type": 4,
+        "A": 441,
+        "B": -1,
+        "C": 9,
+        "D": 3841.0
+      },
+      {
+        "Type": 4,
+        "A": 1707,
+        "B": -1,
+        "C": 9,
+        "D": 3841.0
+      }
+    ]
+  },
+  "dedicatedTechs": [
+    {
+      "id": 776,
+      "name": "Poles",
+      "sha256": "91406eaecaa45d709a45774f708fcb87aba433c76bf15e1494e4d4c6c3793f98"
+    },
+    {
+      "id": 778,
+      "name": "Obuch (make avail)",
+      "sha256": "add4bd819e5d117c2b7000d73134b4c8d4ed70f96b09f0a653bc4752c76fcda0"
+    },
+    {
+      "id": 779,
+      "name": "Elite Obuch",
+      "sha256": "a76770923468eeecc8ba5e06dcdfae20f0c2b1543706924346f04ac8c393d7ac"
+    },
+    {
+      "id": 782,
+      "name": "Szlachta Privileges",
+      "sha256": "98698f5e479a45b6df74483511cc1fda1be7270c9983a6e0cd1aa92a1d290cb7"
+    },
+    {
+      "id": 783,
+      "name": "Lechitic Legacy",
+      "sha256": "8c8eae66d1efd91b69d44af0e184031b86cec5be814142e590ead2df76f1ea1f"
+    },
+    {
+      "id": 789,
+      "name": "Winged Hussar (Poles)",
+      "sha256": "4e725abb686a431ae71d03081f6491cac54d42decf74a15d4978d10d9b6b49c7"
+    },
+    {
+      "id": 791,
+      "name": "Winged Hussar (P. post-imperial)",
+      "sha256": "f892b604a1e96c2e280ed4038c8ff664755a412c2e99d4197c5267222e9f3ccf"
+    },
+    {
+      "id": 792,
+      "name": "C-Bonus, Villager regeneration",
+      "sha256": "704bd12b2b7b578d339166433c6524bce3b762a7eeedf0e797a08a720ba62bd5"
+    },
+    {
+      "id": 793,
+      "name": "C-Bonus, Enable Folwark",
+      "sha256": "a402286f2e998df623e76544aeb491cb0fb756f3d9557fec8515473a6e0c0aac"
+    },
+    {
+      "id": 794,
+      "name": "Folwark Age2 upgrade",
+      "sha256": "b38cf55510e3843946f48ade2ef6898580e1368d8db749ad838cf366932cabb8"
+    },
+    {
+      "id": 795,
+      "name": "Folwark Age3 upgrade",
+      "sha256": "671f190d85773f05f88330914921b2507d0e51fab04166eefb82028e98dc1c59"
+    },
+    {
+      "id": 796,
+      "name": "Folwark Age4 upgrade",
+      "sha256": "bbdfc03b63e1ba9be9271a37966b7656c311a5491ea23cad54f56196ce746b04"
+    },
+    {
+      "id": 805,
+      "name": "C-Bonus, Stone Miners generate gold",
+      "sha256": "29a47921c6083588e9e7bd8b79363feb97ec03867f16543cd8fe25212ce292bb"
+    },
+    {
+      "id": 809,
+      "name": "C-Bonus, Villager regeneration age2",
+      "sha256": "1980e3c1eb95ad011ef305ad7eade62804364ae38ae1484183d1199d2af6488d"
+    },
+    {
+      "id": 810,
+      "name": "C-Bonus, Villager regeneration age3",
+      "sha256": "35ae3f95e8155147ed336524a485e1125f40c4e0328ffe1d117088acaac8b21b"
+    },
+    {
+      "id": 811,
+      "name": "C-Bonus, Villager regeneration age4",
+      "sha256": "bcbdc7782035e8404c0b94d2d3dd5ce4b781057ea45f19ca917f9664f8605558"
+    }
+  ],
+  "selectedTechs": [
+    {
+      "id": 14,
+      "Name": "Horse collar",
+      "EffectID": 14,
+      "Civ": -1,
+      "RequiredTechs": [
+        101,
+        758,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 1,
+      "ResearchLocation": 2556,
+      "ResearchTime": 20,
+      "ResearchAt": [
+        [
+          68,
+          20
+        ],
+        [
+          2556,
+          20
+        ]
+      ],
+      "Cost": [
+        [
+          0,
+          75,
+          1
+        ],
+        [
+          1,
+          75,
+          1
+        ]
+      ],
+      "commands": [
+        {
+          "Type": 1,
+          "A": 36,
+          "B": 1,
+          "C": 69,
+          "D": 75.0
+        },
+        {
+          "Type": 5,
+          "A": 259,
+          "B": -1,
+          "C": 13,
+          "D": 1.0
+        },
+        {
+          "Type": 5,
+          "A": 214,
+          "B": -1,
+          "C": 13,
+          "D": 1.0
+        },
+        {
+          "Type": 1,
+          "A": 237,
+          "B": 0,
+          "C": 36,
+          "D": 0.10000000149011612
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "Name": "Shadow Mill -- Age One",
+      "EffectID": 110,
+      "Civ": -1,
+      "RequiredTechs": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    },
+    {
+      "id": 120,
+      "Name": "Shadow Node for Age Two",
+      "EffectID": 120,
+      "Civ": -1,
+      "RequiredTechs": [
+        110,
+        258,
+        1221,
+        122,
+        282,
+        1358
+      ],
+      "RequiredTechCount": 2,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    },
+    {
+      "id": 216,
+      "Name": "Farms (make avail)",
+      "EffectID": 205,
+      "Civ": -1,
+      "RequiredTechs": [
+        110,
+        638,
+        1357,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 2,
+          "A": 50,
+          "B": 1,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 2,
+          "A": 1187,
+          "B": 1,
+          "C": -1,
+          "D": 0.0
+        }
+      ]
+    },
+    {
+      "id": 659,
+      "Name": "Shadow Node+ for Age Two",
+      "EffectID": -1,
+      "Civ": -1,
+      "RequiredTechs": [
+        120,
+        638,
+        1357,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    },
+    {
+      "id": 666,
+      "Name": "Shadow Node Mill + Khmer",
+      "EffectID": -1,
+      "Civ": -1,
+      "RequiredTechs": [
+        110,
+        638,
+        1357,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 1,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": []
+    },
+    {
+      "id": 793,
+      "Name": "C-Bonus, Enable Folwark",
+      "EffectID": 816,
+      "Civ": 38,
+      "RequiredTechs": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 3,
+          "A": 68,
+          "B": 1734,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 129,
+          "B": 1734,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 130,
+          "B": 1734,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 131,
+          "B": 1734,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 1,
+          "A": 237,
+          "B": 0,
+          "C": 36,
+          "D": 0.10000000149011612
+        },
+        {
+          "Type": 1,
+          "A": 238,
+          "B": 0,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 1,
+          "A": 239,
+          "B": 0,
+          "C": -1,
+          "D": 68.0
+        }
+      ]
+    },
+    {
+      "id": 794,
+      "Name": "Folwark Age2 upgrade",
+      "EffectID": 818,
+      "Civ": 38,
+      "RequiredTechs": [
+        101,
+        793,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 2,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 3,
+          "A": 68,
+          "B": 1711,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 129,
+          "B": 1711,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 130,
+          "B": 1711,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 131,
+          "B": 1711,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 1734,
+          "B": 1711,
+          "C": -1,
+          "D": 0.0
+        }
+      ]
+    },
+    {
+      "id": 795,
+      "Name": "Folwark Age3 upgrade",
+      "EffectID": 819,
+      "Civ": 38,
+      "RequiredTechs": [
+        102,
+        793,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 2,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 3,
+          "A": 68,
+          "B": 1720,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 129,
+          "B": 1720,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 130,
+          "B": 1720,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 131,
+          "B": 1720,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 1734,
+          "B": 1720,
+          "C": -1,
+          "D": 0.0
+        },
+        {
+          "Type": 3,
+          "A": 1711,
+          "B": 1720,
+          "C": -1,
+          "D": 0.0
+        }
+      ]
+    },
+    {
+      "id": 796,
+      "Name": "Folwark Age4 upgrade",
+      "EffectID": 820,
+      "Civ": 38,
+      "RequiredTechs": [
+        103,
+        793,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 2,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 4,
+          "A": 68,
+          "B": -1,
+          "C": 8,
+          "D": 1025.0
+        },
+        {
+          "Type": 4,
+          "A": 68,
+          "B": -1,
+          "C": 8,
+          "D": 769.0
+        },
+        {
+          "Type": 4,
+          "A": 129,
+          "B": -1,
+          "C": 8,
+          "D": 1025.0
+        },
+        {
+          "Type": 4,
+          "A": 129,
+          "B": -1,
+          "C": 8,
+          "D": 769.0
+        },
+        {
+          "Type": 4,
+          "A": 130,
+          "B": -1,
+          "C": 8,
+          "D": 1025.0
+        },
+        {
+          "Type": 4,
+          "A": 130,
+          "B": -1,
+          "C": 8,
+          "D": 769.0
+        },
+        {
+          "Type": 4,
+          "A": 131,
+          "B": -1,
+          "C": 8,
+          "D": 1025.0
+        },
+        {
+          "Type": 4,
+          "A": 131,
+          "B": -1,
+          "C": 8,
+          "D": 769.0
+        },
+        {
+          "Type": 4,
+          "A": 1734,
+          "B": -1,
+          "C": 8,
+          "D": 1025.0
+        },
+        {
+          "Type": 4,
+          "A": 1734,
+          "B": -1,
+          "C": 8,
+          "D": 769.0
+        },
+        {
+          "Type": 4,
+          "A": 1711,
+          "B": -1,
+          "C": 8,
+          "D": 1025.0
+        },
+        {
+          "Type": 4,
+          "A": 1711,
+          "B": -1,
+          "C": 8,
+          "D": 769.0
+        },
+        {
+          "Type": 4,
+          "A": 1720,
+          "B": -1,
+          "C": 8,
+          "D": 1025.0
+        },
+        {
+          "Type": 4,
+          "A": 1720,
+          "B": -1,
+          "C": 8,
+          "D": 769.0
+        },
+        {
+          "Type": 4,
+          "A": 68,
+          "B": -1,
+          "C": 48,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 68,
+          "B": -1,
+          "C": 49,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 129,
+          "B": -1,
+          "C": 48,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 129,
+          "B": -1,
+          "C": 49,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 130,
+          "B": -1,
+          "C": 48,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 130,
+          "B": -1,
+          "C": 49,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 131,
+          "B": -1,
+          "C": 48,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 131,
+          "B": -1,
+          "C": 49,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1734,
+          "B": -1,
+          "C": 48,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1734,
+          "B": -1,
+          "C": 49,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1711,
+          "B": -1,
+          "C": 48,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1711,
+          "B": -1,
+          "C": 49,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1720,
+          "B": -1,
+          "C": 48,
+          "D": 1.0
+        },
+        {
+          "Type": 4,
+          "A": 1720,
+          "B": -1,
+          "C": 49,
+          "D": 1.0
+        }
+      ]
+    },
+    {
+      "id": 805,
+      "Name": "C-Bonus, Stone Miners generate gold",
+      "EffectID": 827,
+      "Civ": 38,
+      "RequiredTechs": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 1,
+          "A": 241,
+          "B": -1,
+          "C": -1,
+          "D": 33.33330154418945
+        },
+        {
+          "Type": 1,
+          "A": 33,
+          "B": 0,
+          "C": -1,
+          "D": 13.0
+        }
+      ]
+    }
+  ],
+  "closure": {
+    "rule": "dedicated+selected+tree/team references; recursive RequiredTechs and Type8/101/103.A, Type102.D",
+    "count": 167,
+    "ids": [
+      14,
+      15,
+      19,
+      20,
+      34,
+      35,
+      37,
+      47,
+      50,
+      51,
+      55,
+      57,
+      65,
+      80,
+      81,
+      82,
+      85,
+      87,
+      94,
+      101,
+      102,
+      103,
+      104,
+      106,
+      107,
+      108,
+      110,
+      113,
+      115,
+      120,
+      122,
+      128,
+      130,
+      132,
+      135,
+      138,
+      142,
+      146,
+      166,
+      180,
+      182,
+      192,
+      197,
+      202,
+      203,
+      209,
+      211,
+      212,
+      216,
+      218,
+      219,
+      221,
+      233,
+      239,
+      240,
+      244,
+      246,
+      254,
+      257,
+      258,
+      265,
+      266,
+      282,
+      292,
+      295,
+      307,
+      315,
+      319,
+      320,
+      359,
+      373,
+      374,
+      375,
+      376,
+      380,
+      408,
+      428,
+      429,
+      435,
+      436,
+      439,
+      604,
+      605,
+      638,
+      659,
+      660,
+      661,
+      666,
+      716,
+      717,
+      755,
+      758,
+      760,
+      762,
+      764,
+      767,
+      768,
+      776,
+      778,
+      779,
+      782,
+      783,
+      786,
+      788,
+      789,
+      791,
+      792,
+      793,
+      794,
+      795,
+      796,
+      800,
+      801,
+      805,
+      809,
+      810,
+      811,
+      875,
+      886,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908,
+      909,
+      910,
+      911,
+      912,
+      913,
+      933,
+      950,
+      955,
+      956,
+      967,
+      968,
+      969,
+      970,
+      971,
+      972,
+      973,
+      974,
+      975,
+      976,
+      977,
+      1004,
+      1136,
+      1137,
+      1138,
+      1141,
+      1142,
+      1150,
+      1151,
+      1169,
+      1170,
+      1171,
+      1209,
+      1218,
+      1221,
+      1222,
+      1262,
+      1267,
+      1357,
+      1358,
+      1387,
+      1450,
+      1451
+    ],
+    "sha256": "9fc8776f3c3e94765c9d1ebad3b5a717f96dc97a5fa3e1c0f2625c113b2dbeb2"
+  },
+  "limits": [
+    "Normalized dat_source.py fields only; no per-civ unit/resource dump or public semantic evidence.",
+    "Closure membership does not authorize automatic effects, availability or simulation support.",
+    "Unknown command kinds remain in full tree/team/selected records and require source review."
+  ]
+}

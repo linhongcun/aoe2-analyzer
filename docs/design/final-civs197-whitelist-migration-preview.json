@@ -1,0 +1,3046 @@
+{
+  "status": "PROPOSAL ONLY; historical fixture and protected tests unchanged",
+  "currentVersion": "0.70.0",
+  "scenarios": {
+    "Poles/feudal-drush-18": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 85,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 229.5,
+            "stock": {
+              "food": 2,
+              "wood": 107,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 304.6,
+            "stock": {
+              "food": 75,
+              "wood": 166,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 404.5,
+            "stock": {
+              "food": 112,
+              "wood": 187,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 354.6,
+            "stock": {
+              "food": 150,
+              "wood": 8,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 577,
+            "stock": {
+              "food": 244,
+              "wood": 29,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 619,
+            "stock": {
+              "food": 442,
+              "wood": 251,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 609.6,
+            "stock": {
+              "food": 343,
+              "wood": 251,
+              "gold": 10,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 627.1,
+            "stock": {
+              "food": 324,
+              "wood": 220,
+              "gold": 10,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 447,
+            "reachAt": 577
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 85,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 229.5,
+            "stock": {
+              "food": 2,
+              "wood": 107,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 304.6,
+            "stock": {
+              "food": 75,
+              "wood": 166,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 404.5,
+            "stock": {
+              "food": 112,
+              "wood": 187,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 354.6,
+            "stock": {
+              "food": 150,
+              "wood": 8,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 577,
+            "stock": {
+              "food": 244,
+              "wood": 29,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 619,
+            "stock": {
+              "food": 442,
+              "wood": 251,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 613.4,
+            "stock": {
+              "food": 343,
+              "wood": 251,
+              "gold": 10,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 627.1,
+            "stock": {
+              "food": 324,
+              "wood": 220,
+              "gold": 10,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 447,
+            "reachAt": 577
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Poles/maa-archers-18": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 53,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 304.6,
+            "stock": {
+              "food": 82,
+              "wood": 159,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 570.6,
+            "stock": {
+              "food": 252,
+              "wood": 190,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 570.7,
+            "stock": {
+              "food": 479,
+              "wood": 151,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 701.4,
+            "stock": {
+              "food": 479,
+              "wood": 151,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 696.5,
+            "stock": {
+              "food": 302,
+              "wood": 255,
+              "gold": 0,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 710.6,
+            "stock": {
+              "food": 217,
+              "wood": 174,
+              "gold": 18,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 795.6,
+            "stock": {
+              "food": 347,
+              "wood": 209,
+              "gold": 53,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 850.7,
+            "stock": {
+              "food": 348,
+              "wood": 34,
+              "gold": 53,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 440.6,
+            "reachAt": 570.6
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 53,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 304.6,
+            "stock": {
+              "food": 82,
+              "wood": 159,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 570.6,
+            "stock": {
+              "food": 252,
+              "wood": 190,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 570.7,
+            "stock": {
+              "food": 479,
+              "wood": 151,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 701.4,
+            "stock": {
+              "food": 479,
+              "wood": 151,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 701.5,
+            "stock": {
+              "food": 302,
+              "wood": 255,
+              "gold": 0,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 716.5,
+            "stock": {
+              "food": 217,
+              "wood": 174,
+              "gold": 18,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 795.6,
+            "stock": {
+              "food": 347,
+              "wood": 240,
+              "gold": 53,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 868.4,
+            "stock": {
+              "food": 348,
+              "wood": 65,
+              "gold": 53,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 440.6,
+            "reachAt": 570.6
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Poles/scouts-18": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 160,
+            "stock": {
+              "food": 6,
+              "wood": 157,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 150.1,
+            "stock": {
+              "food": 48,
+              "wood": 64,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 298.6,
+            "stock": {
+              "food": 2,
+              "wood": 75,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 263.8,
+            "stock": {
+              "food": 85,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 325.8,
+            "stock": {
+              "food": 146,
+              "wood": 34,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 555.5,
+            "stock": {
+              "food": 298,
+              "wood": 38,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 547.8,
+            "stock": {
+              "food": 0,
+              "wood": 93,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 555.6,
+            "stock": {
+              "food": 491,
+              "wood": 64,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 672.1,
+            "stock": {
+              "food": 491,
+              "wood": 64,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 696,
+            "stock": {
+              "food": 610,
+              "wood": 84,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 716.5,
+            "stock": {
+              "food": 532,
+              "wood": 0,
+              "gold": 50,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 425.5,
+            "reachAt": 555.5
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 160,
+            "stock": {
+              "food": 6,
+              "wood": 157,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 150.1,
+            "stock": {
+              "food": 48,
+              "wood": 64,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 303.6,
+            "stock": {
+              "food": 2,
+              "wood": 75,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 263.8,
+            "stock": {
+              "food": 85,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 325.8,
+            "stock": {
+              "food": 144,
+              "wood": 34,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 555.8,
+            "stock": {
+              "food": 297,
+              "wood": 70,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 519.3,
+            "stock": {
+              "food": 0,
+              "wood": 126,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 555.9,
+            "stock": {
+              "food": 490,
+              "wood": 97,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 658,
+            "stock": {
+              "food": 490,
+              "wood": 97,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 681.9,
+            "stock": {
+              "food": 576,
+              "wood": 84,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 702.4,
+            "stock": {
+              "food": 499,
+              "wood": 0,
+              "gold": 50,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 425.8,
+            "reachAt": 555.8
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Poles/archers-19": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 85,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 260.7,
+            "stock": {
+              "food": 2,
+              "wood": 107,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 354.6,
+            "stock": {
+              "food": 145,
+              "wood": 108,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 584.4,
+            "stock": {
+              "food": 298,
+              "wood": 125,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 584.5,
+            "stock": {
+              "food": 477,
+              "wood": 378,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 694.4,
+            "stock": {
+              "food": 477,
+              "wood": 378,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 779.4,
+            "stock": {
+              "food": 389,
+              "wood": 207,
+              "gold": 84,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 784.5,
+            "stock": {
+              "food": 523,
+              "wood": 429,
+              "gold": 160,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 454.4,
+            "reachAt": 584.4
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 85,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 265.7,
+            "stock": {
+              "food": 2,
+              "wood": 107,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 354.6,
+            "stock": {
+              "food": 144,
+              "wood": 108,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 584.7,
+            "stock": {
+              "food": 297,
+              "wood": 157,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 584.8,
+            "stock": {
+              "food": 477,
+              "wood": 410,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 694.7,
+            "stock": {
+              "food": 477,
+              "wood": 410,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 779.7,
+            "stock": {
+              "food": 388,
+              "wood": 240,
+              "gold": 84,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 814.8,
+            "stock": {
+              "food": 523,
+              "wood": 461,
+              "gold": 160,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 454.7,
+            "reachAt": 584.7
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Poles/fast-castle-boom": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 85,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 260.7,
+            "stock": {
+              "food": 2,
+              "wood": 107,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 254.6,
+            "stock": {
+              "food": 12,
+              "wood": 24,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 379.5,
+            "stock": {
+              "food": 143,
+              "wood": 108,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 484.9,
+            "stock": {
+              "food": 143,
+              "wood": 83,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 514,
+            "stock": {
+              "food": 460,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 673.6,
+            "stock": {
+              "food": 563,
+              "wood": 26,
+              "gold": 106,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 788.7,
+            "stock": {
+              "food": 780,
+              "wood": 255,
+              "gold": 190,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 932.6,
+            "stock": {
+              "food": 987,
+              "wood": 0,
+              "gold": 242,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1060.8,
+            "stock": {
+              "food": 931,
+              "wood": 469,
+              "gold": 133,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 543.6,
+            "reachAt": 673.6
+          },
+          {
+            "age": "castle",
+            "clickAt": 772.6,
+            "reachAt": 932.6
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 85,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 265.7,
+            "stock": {
+              "food": 2,
+              "wood": 107,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 254.6,
+            "stock": {
+              "food": 12,
+              "wood": 24,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 379.5,
+            "stock": {
+              "food": 142,
+              "wood": 108,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 484.9,
+            "stock": {
+              "food": 142,
+              "wood": 83,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 514,
+            "stock": {
+              "food": 459,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 673.6,
+            "stock": {
+              "food": 562,
+              "wood": 26,
+              "gold": 106,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 788.7,
+            "stock": {
+              "food": 779,
+              "wood": 255,
+              "gold": 190,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 932.6,
+            "stock": {
+              "food": 986,
+              "wood": 0,
+              "gold": 242,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1060.8,
+            "stock": {
+              "food": 929,
+              "wood": 469,
+              "gold": 133,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 543.6,
+            "reachAt": 673.6
+          },
+          {
+            "age": "castle",
+            "clickAt": 772.6,
+            "reachAt": 932.6
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Poles/drush-fc": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 210.9,
+            "stock": {
+              "food": 42,
+              "wood": 192,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 205.4,
+            "stock": {
+              "food": 42,
+              "wood": 117,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 359.3,
+            "stock": {
+              "food": 2,
+              "wood": 148,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 415.3,
+            "stock": {
+              "food": 72,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 361.7,
+            "stock": {
+              "food": 0,
+              "wood": 63,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 460.6,
+            "stock": {
+              "food": 85,
+              "wood": 135,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 631.2,
+            "stock": {
+              "food": 295,
+              "wood": 157,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 780.7,
+            "stock": {
+              "food": 657,
+              "wood": 356,
+              "gold": 52,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 870.7,
+            "stock": {
+              "food": 641,
+              "wood": 648,
+              "gold": 195,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 830.8,
+            "stock": {
+              "food": 796,
+              "wood": 435,
+              "gold": 257,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1030.8,
+            "stock": {
+              "food": 796,
+              "wood": 435,
+              "gold": 257,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1065.8,
+            "stock": {
+              "food": 816,
+              "wood": 884,
+              "gold": 387,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 650.7,
+            "reachAt": 780.7
+          },
+          {
+            "age": "castle",
+            "clickAt": 870.8,
+            "reachAt": 1030.8
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 210.9,
+            "stock": {
+              "food": 42,
+              "wood": 192,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 205.4,
+            "stock": {
+              "food": 42,
+              "wood": 117,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 359.3,
+            "stock": {
+              "food": 2,
+              "wood": 148,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 415.3,
+            "stock": {
+              "food": 72,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 361.7,
+            "stock": {
+              "food": 0,
+              "wood": 63,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 465.6,
+            "stock": {
+              "food": 85,
+              "wood": 135,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 631.2,
+            "stock": {
+              "food": 295,
+              "wood": 157,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 780.7,
+            "stock": {
+              "food": 657,
+              "wood": 388,
+              "gold": 52,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 870.7,
+            "stock": {
+              "food": 641,
+              "wood": 680,
+              "gold": 195,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 830.8,
+            "stock": {
+              "food": 796,
+              "wood": 467,
+              "gold": 257,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1030.8,
+            "stock": {
+              "food": 796,
+              "wood": 467,
+              "gold": 257,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1065.8,
+            "stock": {
+              "food": 816,
+              "wood": 916,
+              "gold": 387,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 650.7,
+            "reachAt": 780.7
+          },
+          {
+            "age": "castle",
+            "clickAt": 870.8,
+            "reachAt": 1030.8
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Romans/feudal-drush-18": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 85,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 229.5,
+            "stock": {
+              "food": 2,
+              "wood": 107,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 304.6,
+            "stock": {
+              "food": 75,
+              "wood": 166,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 404.5,
+            "stock": {
+              "food": 112,
+              "wood": 187,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 354.6,
+            "stock": {
+              "food": 150,
+              "wood": 8,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 577,
+            "stock": {
+              "food": 244,
+              "wood": 29,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 619,
+            "stock": {
+              "food": 442,
+              "wood": 251,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 609.6,
+            "stock": {
+              "food": 343,
+              "wood": 251,
+              "gold": 10,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 627.1,
+            "stock": {
+              "food": 324,
+              "wood": 220,
+              "gold": 10,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 447,
+            "reachAt": 577
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 28.5,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 22,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 183.4,
+            "stock": {
+              "food": 5,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 175.1,
+            "stock": {
+              "food": 49,
+              "wood": 86,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 224.3,
+            "stock": {
+              "food": 4,
+              "wood": 106,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 300.5,
+            "stock": {
+              "food": 89,
+              "wood": 168,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 397,
+            "stock": {
+              "food": 130,
+              "wood": 190,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 350.5,
+            "stock": {
+              "food": 172,
+              "wood": 11,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 563.5,
+            "stock": {
+              "food": 270,
+              "wood": 33,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 605.5,
+            "stock": {
+              "food": 463,
+              "wood": 252,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 594.9,
+            "stock": {
+              "food": 364,
+              "wood": 252,
+              "gold": 10,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 613.6,
+            "stock": {
+              "food": 351,
+              "wood": 226,
+              "gold": 10,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 433.5,
+            "reachAt": 563.5
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Romans/maa-archers-18": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 53,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 304.6,
+            "stock": {
+              "food": 82,
+              "wood": 159,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 570.6,
+            "stock": {
+              "food": 252,
+              "wood": 190,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 570.7,
+            "stock": {
+              "food": 479,
+              "wood": 151,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 701.4,
+            "stock": {
+              "food": 479,
+              "wood": 151,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 696.5,
+            "stock": {
+              "food": 302,
+              "wood": 255,
+              "gold": 0,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 710.6,
+            "stock": {
+              "food": 217,
+              "wood": 174,
+              "gold": 18,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 795.6,
+            "stock": {
+              "food": 347,
+              "wood": 209,
+              "gold": 53,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 850.7,
+            "stock": {
+              "food": 348,
+              "wood": 34,
+              "gold": 53,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 440.6,
+            "reachAt": 570.6
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 28.5,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 22,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 183.4,
+            "stock": {
+              "food": 5,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 175.1,
+            "stock": {
+              "food": 49,
+              "wood": 54,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 300.5,
+            "stock": {
+              "food": 96,
+              "wood": 161,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 557.8,
+            "stock": {
+              "food": 278,
+              "wood": 194,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 557.9,
+            "stock": {
+              "food": 502,
+              "wood": 153,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 685.5,
+            "stock": {
+              "food": 502,
+              "wood": 153,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 679,
+            "stock": {
+              "food": 325,
+              "wood": 257,
+              "gold": 0,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 697.1,
+            "stock": {
+              "food": 255,
+              "wood": 188,
+              "gold": 21,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 780.5,
+            "stock": {
+              "food": 393,
+              "wood": 227,
+              "gold": 57,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 827.1,
+            "stock": {
+              "food": 394,
+              "wood": 52,
+              "gold": 57,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 427.8,
+            "reachAt": 557.8
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Romans/scouts-18": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 160,
+            "stock": {
+              "food": 6,
+              "wood": 157,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 150.1,
+            "stock": {
+              "food": 48,
+              "wood": 64,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 298.6,
+            "stock": {
+              "food": 2,
+              "wood": 75,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 263.8,
+            "stock": {
+              "food": 85,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 325.8,
+            "stock": {
+              "food": 146,
+              "wood": 34,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 555.5,
+            "stock": {
+              "food": 298,
+              "wood": 38,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 547.8,
+            "stock": {
+              "food": 0,
+              "wood": 93,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 555.6,
+            "stock": {
+              "food": 491,
+              "wood": 64,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 672.1,
+            "stock": {
+              "food": 491,
+              "wood": 64,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 696,
+            "stock": {
+              "food": 610,
+              "wood": 84,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 716.5,
+            "stock": {
+              "food": 532,
+              "wood": 0,
+              "gold": 50,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 425.5,
+            "reachAt": 555.5
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 28.5,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 22,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 158.4,
+            "stock": {
+              "food": 10,
+              "wood": 157,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 150.1,
+            "stock": {
+              "food": 5,
+              "wood": 64,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 291.6,
+            "stock": {
+              "food": 9,
+              "wood": 76,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 258.4,
+            "stock": {
+              "food": 87,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 325.1,
+            "stock": {
+              "food": 173,
+              "wood": 38,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 544.2,
+            "stock": {
+              "food": 334,
+              "wood": 43,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 536.1,
+            "stock": {
+              "food": 0,
+              "wood": 88,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 544.3,
+            "stock": {
+              "food": 511,
+              "wood": 64,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 657.4,
+            "stock": {
+              "food": 511,
+              "wood": 64,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 679.8,
+            "stock": {
+              "food": 631,
+              "wood": 83,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 700.5,
+            "stock": {
+              "food": 556,
+              "wood": 0,
+              "gold": 50,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 414.2,
+            "reachAt": 544.2
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Romans/archers-19": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 85,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 260.7,
+            "stock": {
+              "food": 2,
+              "wood": 107,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 354.6,
+            "stock": {
+              "food": 145,
+              "wood": 108,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 584.4,
+            "stock": {
+              "food": 298,
+              "wood": 125,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 584.5,
+            "stock": {
+              "food": 477,
+              "wood": 378,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 694.4,
+            "stock": {
+              "food": 477,
+              "wood": 378,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 779.4,
+            "stock": {
+              "food": 389,
+              "wood": 207,
+              "gold": 84,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 784.5,
+            "stock": {
+              "food": 523,
+              "wood": 429,
+              "gold": 160,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 454.4,
+            "reachAt": 584.4
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 28.5,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 22,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 183.4,
+            "stock": {
+              "food": 5,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 175.1,
+            "stock": {
+              "food": 49,
+              "wood": 86,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 255.5,
+            "stock": {
+              "food": 4,
+              "wood": 106,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 350.5,
+            "stock": {
+              "food": 167,
+              "wood": 111,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 570.9,
+            "stock": {
+              "food": 329,
+              "wood": 130,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 571,
+            "stock": {
+              "food": 500,
+              "wood": 378,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 675.9,
+            "stock": {
+              "food": 500,
+              "wood": 378,
+              "gold": 50,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 758.6,
+            "stock": {
+              "food": 414,
+              "wood": 214,
+              "gold": 85,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 761.8,
+            "stock": {
+              "food": 545,
+              "wood": 421,
+              "gold": 157,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 440.9,
+            "reachAt": 570.9
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Romans/fast-castle-boom": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 185,
+            "stock": {
+              "food": 48,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 176,
+            "stock": {
+              "food": 42,
+              "wood": 85,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 260.7,
+            "stock": {
+              "food": 2,
+              "wood": 107,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 254.6,
+            "stock": {
+              "food": 12,
+              "wood": 24,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 379.5,
+            "stock": {
+              "food": 143,
+              "wood": 108,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 484.9,
+            "stock": {
+              "food": 143,
+              "wood": 83,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 514,
+            "stock": {
+              "food": 460,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 673.6,
+            "stock": {
+              "food": 563,
+              "wood": 26,
+              "gold": 106,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 788.7,
+            "stock": {
+              "food": 780,
+              "wood": 255,
+              "gold": 190,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 932.6,
+            "stock": {
+              "food": 987,
+              "wood": 0,
+              "gold": 242,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1060.8,
+            "stock": {
+              "food": 931,
+              "wood": 469,
+              "gold": 133,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 543.6,
+            "reachAt": 673.6
+          },
+          {
+            "age": "castle",
+            "clickAt": 772.6,
+            "reachAt": 932.6
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 28.5,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 22,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 183.4,
+            "stock": {
+              "food": 5,
+              "wood": 171,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 175.1,
+            "stock": {
+              "food": 49,
+              "wood": 86,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 255.5,
+            "stock": {
+              "food": 4,
+              "wood": 106,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 250.5,
+            "stock": {
+              "food": 20,
+              "wood": 24,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 374.3,
+            "stock": {
+              "food": 165,
+              "wood": 111,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 475.7,
+            "stock": {
+              "food": 165,
+              "wood": 86,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 503.7,
+            "stock": {
+              "food": 477,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 662.5,
+            "stock": {
+              "food": 604,
+              "wood": 36,
+              "gold": 107,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 771.3,
+            "stock": {
+              "food": 811,
+              "wood": 264,
+              "gold": 190,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 913,
+            "stock": {
+              "food": 1001,
+              "wood": 0,
+              "gold": 240,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1032.3,
+            "stock": {
+              "food": 955,
+              "wood": 479,
+              "gold": 133,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 532.5,
+            "reachAt": 662.5
+          },
+          {
+            "age": "castle",
+            "clickAt": 753,
+            "reachAt": 913
+          }
+        ]
+      },
+      "unchanged": false
+    },
+    "Romans/drush-fc": {
+      "historical": {
+        "steps": [
+          {
+            "doneAt": 29.9,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 21,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 210.9,
+            "stock": {
+              "food": 42,
+              "wood": 192,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 205.4,
+            "stock": {
+              "food": 42,
+              "wood": 117,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 359.3,
+            "stock": {
+              "food": 2,
+              "wood": 148,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 415.3,
+            "stock": {
+              "food": 72,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 361.7,
+            "stock": {
+              "food": 0,
+              "wood": 63,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 460.6,
+            "stock": {
+              "food": 85,
+              "wood": 135,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 631.2,
+            "stock": {
+              "food": 295,
+              "wood": 157,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 780.7,
+            "stock": {
+              "food": 657,
+              "wood": 356,
+              "gold": 52,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 870.7,
+            "stock": {
+              "food": 641,
+              "wood": 648,
+              "gold": 195,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 830.8,
+            "stock": {
+              "food": 796,
+              "wood": 435,
+              "gold": 257,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1030.8,
+            "stock": {
+              "food": 796,
+              "wood": 435,
+              "gold": 257,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1065.8,
+            "stock": {
+              "food": 816,
+              "wood": 884,
+              "gold": 387,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 650.7,
+            "reachAt": 780.7
+          },
+          {
+            "age": "castle",
+            "clickAt": 870.8,
+            "reachAt": 1030.8
+          }
+        ]
+      },
+      "current": {
+        "steps": [
+          {
+            "doneAt": 28.5,
+            "stock": {
+              "food": 200,
+              "wood": 200,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 75.1,
+            "stock": {
+              "food": 22,
+              "wood": 150,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 208.4,
+            "stock": {
+              "food": 49,
+              "wood": 193,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 200.6,
+            "stock": {
+              "food": 44,
+              "wood": 115,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 350.8,
+            "stock": {
+              "food": 4,
+              "wood": 145,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 407.1,
+            "stock": {
+              "food": 81,
+              "wood": 0,
+              "gold": 100,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 351,
+            "stock": {
+              "food": 0,
+              "wood": 60,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 447.9,
+            "stock": {
+              "food": 93,
+              "wood": 134,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 617.3,
+            "stock": {
+              "food": 321,
+              "wood": 162,
+              "gold": 40,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 769.6,
+            "stock": {
+              "food": 706,
+              "wood": 370,
+              "gold": 54,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 855.4,
+            "stock": {
+              "food": 712,
+              "wood": 673,
+              "gold": 202,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 819.7,
+            "stock": {
+              "food": 876,
+              "wood": 464,
+              "gold": 266,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1015.5,
+            "stock": {
+              "food": 876,
+              "wood": 464,
+              "gold": 266,
+              "stone": 200
+            }
+          },
+          {
+            "doneAt": 1050.5,
+            "stock": {
+              "food": 914,
+              "wood": 919,
+              "gold": 402,
+              "stone": 200
+            }
+          }
+        ],
+        "ageUps": [
+          {
+            "age": "feudal",
+            "clickAt": 639.6,
+            "reachAt": 769.6
+          },
+          {
+            "age": "castle",
+            "clickAt": 855.5,
+            "reachAt": 1015.5
+          }
+        ]
+      },
+      "unchanged": false
+    }
+  }
+}
