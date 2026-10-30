@@ -49,9 +49,17 @@ function validReturn(raw: string | null): string | null {
 export function returnSnapshot(source: string): string | null {
   const cut = source.indexOf('?');
   const path = cut < 0 ? source : source.slice(0, cut);
-  const query = new URLSearchParams(cut < 0 ? '' : source.slice(cut + 1));
-  for (const key of [...query.keys()]) if (key.toLowerCase() === 'ctxreturn') query.delete(key);
-  return validReturn(path + asSearch(query));
+  const query = (cut < 0 ? '' : source.slice(cut + 1))
+    .split('&')
+    .filter((part) => {
+      try {
+        return decodeURIComponent(part.split('=')[0]!.replace(/\+/g, ' ')) !== 'ctxReturn';
+      } catch {
+        return true;
+      }
+    })
+    .join('&');
+  return validReturn(path + (query ? '?' + query : ''));
 }
 
 export function readNavigation(search: NavigationSearch) {

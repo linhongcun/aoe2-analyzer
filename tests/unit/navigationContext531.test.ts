@@ -11,6 +11,13 @@ describe('#531 navigation context', () => {
     expect(decodeTradeIncome(stripNavigation(broken + '&ctxReturn=%2Fproduction')).errors).toContain('方案链接过长或编码损坏。');
   });
 
+  it('does not repair malformed calculation bytes while storing a source snapshot', () => {
+    const broken = encodeTradeIncome(newTradeIncomeConfig()).replace('priceSource=', 'priceSource=%');
+    const snapshot = returnSnapshot('/trade-income?' + broken + '&ctxReturn=%2Fproduction');
+    expect(snapshot).toBe('/trade-income?' + broken);
+    expect(decodeTradeIncome(stripNavigation(snapshot!.slice(snapshot!.indexOf('?')))).errors).toContain('方案链接过长或编码损坏。');
+  });
+
   it('does not combine a valid opponent with an absent or invalid original self civilization', () => {
     expect(mergeNavigationSearch('civ=Franks', '?me=unknown&opp=Chinese')).toBe('?civ=Franks');
     expect(mergeNavigationSearch('civ=Franks', '?opp=Chinese')).toBe('?civ=Franks');
