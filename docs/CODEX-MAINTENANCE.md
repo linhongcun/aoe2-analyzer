@@ -70,6 +70,35 @@
 - 改领域逻辑补 `tests/unit/`；修 bug 先写能复现的失败用例。
 - e2e 命令、端口、并行 worktree、BASE_URL、四宽、axe 与 CI 跳过条件，见 [docs/TESTING.md](TESTING.md)。
 
+### 壳层 PR 的有界验证（#513）
+
+`scripts/ci-scope.mjs` 只将以下三个精确路径归入 `shell`：`src/app/Layout.tsx`、`src/shared/ui/Icon.tsx`、`src/shared/styles/editorial-shell.css`。仅改这些文件，可附普通文档、CHANGELOG 和仅版本号变更，PR 使用 `targeted`：单测 `nav`、`theme6`、`pageRegistry283`；浏览器固定 6 个 spec：`smoke`、`navigation272`、`editorial6`、`skipLink294`、`searchLoading395`、`feedbackTap295`。覆盖基础页面、首页入口、导航/主题/搜索焦点、跳过导航和页脚，并保留这些用例原有的四宽及明暗主题断言。
+
+| 事件 / 混合改动                       | 验证计划                                                     |
+| ------------------------------------- | ------------------------------------------------------------ |
+| 仅壳层白名单的 PR                     | `targeted`，6 个浏览器 spec，不生成数据                      |
+| 壳层 + 已映射功能                     | 两者测试取并集、去重；6 个 spec 上限只针对纯壳层             |
+| 包含壳层的 `main` / `release/**` push | 保留此前的 `full` 单测和浏览器回归；不因壳层改动生成未变数据 |
+| nightly / `CI_FULL=true`              | `full` + 数据检查，禁用证据复用                              |
+| 仅普通文档 / CI 维护                  | 保持既有短路径；其他功能的 #431 计划与复用规则不变           |
+
+未审计的 `src/app/**`、`src/shared/**`、路由登记、设计令牌和计算逻辑仍可触发 `full`，不能将整个 shared 目录视为壳层。例如 `src/domain/realCost.ts` 仍需全量测试；#512 的原始完整 diff 含此文件，不能宣称其全部改动会因本白名单转为 targeted。`src/data/**`、数据生成脚本/来源、非仅版本号的依赖或锁文件变更仍保留 `full + data`。显式完整验证和未知提交范围也不降级。PR 的壳层 targeted 证据不能冒充 main/release 的 full 成功。
+
+提交前可预估实际 Git 范围（先 `git fetch origin main`；下例为当前分支与 main 的公共祖先到 HEAD）：
+
+```bash
+node --input-type=module <<'NODE'
+import { execFileSync } from 'node:child_process';
+import { planRange } from './scripts/ci-scope.mjs';
+const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+const head = git('rev-parse', 'HEAD');
+const base = git('merge-base', 'origin/main', head);
+console.log(JSON.stringify(planRange(base, head), null, 2));
+NODE
+```
+
+该命令预估路径计划，不包含上表的事件提升；只读取已提交文件，不包含工作区修改。实际 Actions 计划见 `Select affected validation plan` 日志及 `ci-validation-evidence`。6 个 spec 是有界选择，不是固定耗时保证，交付时记录实际执行时间。
+
 ## 8. 选 issue 流程（checklist）
 
 开工前逐项勾选：
