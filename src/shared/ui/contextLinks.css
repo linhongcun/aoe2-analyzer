@@ -1,0 +1,45 @@
+.ctx-bar,
+.ctx-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+
+.ctx-bar {
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.ctx-bar .community-tool-entry,
+.ctx-chips .community-tool-entry {
+  gap: var(--space-2);
+  min-width: 44px;
+  white-space: nowrap;
+}
+
+.ctx-chips .community-tool-entry {
+  border-radius: var(--radius-pill);
+}
+
+.ctx-chips [aria-disabled='true'] {
+  color: var(--color-muted);
+}
+
+.ctx-civ-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.matchup-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}

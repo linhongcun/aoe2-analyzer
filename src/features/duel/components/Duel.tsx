@@ -1,6 +1,6 @@
 /** 工具：单位 PK（1v1 / N vs M / 等资源），URL 与结果协调。 */
-import { useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
 import { countForBudget } from '../../../domain/duel';
@@ -9,6 +9,8 @@ import { collapse } from '../../../domain/family';
 import { makeSimContext } from '../../../domain/simulator';
 import { fmtSide, parseSide, type SideSpec } from '../../../domain/duelState';
 import { canonDuelParams, decodeDuelParams } from '../../../domain/duelParams';
+import { buildsPath, duelCivs, matchupPath } from '../../../domain/matchupRoute';
+import '../../../shared/ui/contextLinks.css';
 import { countForTime, fmtClock, realCostOf } from '../../../domain/realCost';
 import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
@@ -40,6 +42,8 @@ function DuelCalculator() {
   const core = useCore(),
     trees = useTrees();
   const [sp, setSp] = useSearchParams();
+  const [context, setContext] = useState(() => duelCivs(sp));
+  const contextSearch = useRef(sp.toString());
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
   const params = decodeDuelParams(sp);
   const { mode, na, nb, bud, vils, mins } = params;
@@ -67,8 +71,36 @@ function DuelCalculator() {
   }
   const canonStr = canonDuelParams(canon, params).toString();
   useEffect(() => {
+    // 旧 PK 会容错补齐 pack；回链不能把这次自动修复误当作原链接的文明。
+    if (contextSearch.current !== sp.toString()) setContext(duelCivs(sp));
+    contextSearch.current = canonStr;
     if (canonStr !== sp.toString()) setSp(new URLSearchParams(canonStr), { replace: true });
   }, [canonStr, sp, setSp]);
+  const contextBar = (
+    <nav className="ctx-bar" aria-label="对阵相关入口">
+      <Link className="community-tool-entry" to={context.me && context.opp ? matchupPath(context.me, context.opp) : matchupPath()}>
+        <Icon name="arrow-left" />
+        回对局助手
+      </Link>
+      {(['me', 'opp'] as const).map(
+        (side) =>
+          context[side] && (
+            <Link key={side} className="community-tool-entry" to={`/civ/${context[side]}`}>
+              {civByEn(context[side]!)?.zh}
+            </Link>
+          ),
+      )}
+      {(['me', 'opp'] as const).map(
+        (side) =>
+          context[side] && (
+            <Link key={side} className="community-tool-entry" to={buildsPath(context[side], 'duel')}>
+              <Icon name="list-ordered" />
+              {civByEn(context[side]!)?.zh} 开局
+            </Link>
+          ),
+      )}
+    </nav>
+  );
   const fams = useMemo(
     () =>
       core
@@ -83,6 +115,7 @@ function DuelCalculator() {
     return (
       <section id="duel" className="pane">
         <ListHead level={1} title="单位 PK" desc="两个单位对战模拟" />
+        {contextBar}
         <Loading />
       </section>
     );
@@ -104,6 +137,7 @@ function DuelCalculator() {
   return (
     <section id="duel" className="pane">
       <ListHead level={1} title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
+      {contextBar}
       <div className="bar fbar" role="radiogroup" aria-label="模式">
         {(
           [

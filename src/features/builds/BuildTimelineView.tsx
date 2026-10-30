@@ -1,3 +1,4 @@
+import { buildsPath } from '../../domain/matchupRoute';
 import { sharePageUrl } from '../../domain/sharePage';
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
@@ -406,7 +407,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
       />
       <p className="note">
         {source && <span className="tl-mob-only">来源 {source} · </span>}
-        时间为模拟估算（{tl.model.version}）。<Link to="/builds">返回开局列表</Link>
+        时间为模拟估算（{tl.model.version}）。<Link to={buildsPath(q.civ)}>返回开局列表</Link>
       </p>
       <div className="tl-share-sticky">
         <div className="tl-share-row">

@@ -28,9 +28,9 @@ for (const width of [360, 375, 390, 1280])
       await pick(page, 'ma', 'Franks');
       await pick(page, 'me', 'Britons');
       const generic = page.locator('.matchup-counter-link').filter({ hasText: /^骑士$/ });
-      await expect(generic).toHaveAttribute('href', '#/unit/38');
+      await expect(generic).toHaveAttribute('href', '#/unit/38?civ=Franks&from=matchup&me=Franks&opp=Britons');
       await generic.click();
-      await expect(page).toHaveURL(/#\/unit\/38$/);
+      await expect(page).toHaveURL(/#\/unit\/38\?civ=Franks&from=matchup&me=Franks&opp=Britons$/);
       await expect(page.getByRole('tab', { name: '概览', exact: true })).toHaveAttribute('aria-selected', 'true');
       await page.goBack();
       const sim = page.getByRole('link', { name: '骑士：用法兰克模拟', exact: true });
@@ -98,6 +98,8 @@ test('#424 旧单位/文明/科技状态不覆盖入口，切换本方与直接�
   expect(await rows.count()).toBeGreaterThan(0);
   for (const row of await rows.all()) {
     const unitHref = await row.locator('.matchup-counter-link').getAttribute('href');
-    await expect(row.locator('.matchup-sim-link')).toHaveAttribute('href', `${unitHref}/Mayans/4/?tab=sim`);
+    expect(unitHref).toMatch(/^#\/unit\/\d+\?civ=Mayans&from=matchup&me=Mayans&opp=Franks$/);
+    const unitPath = unitHref!.split('?')[0];
+    await expect(row.locator('.matchup-sim-link')).toHaveAttribute('href', `${unitPath}/Mayans/4/?tab=sim`);
   }
 });
