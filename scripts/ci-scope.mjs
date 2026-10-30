@@ -8,6 +8,8 @@ import postcss from 'postcss';
 const sha = /^[0-9a-f]{40}$/;
 const version = /^\d+\.\d+\.\d+$/;
 const cssFiles = new Set(['src/shared/styles/base.css', 'src/shared/styles/editorial.css']);
+// Audited shell presentation only; routing, tokens, state and other shared files stay conservative.
+const shellFiles = new Set(['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src/shared/styles/editorial-shell.css']);
 const maintenanceFiles = new Set([
   'scripts/release.mjs',
   'scripts/prepare-release.mjs',
@@ -34,6 +36,7 @@ const sourceChecks = [
 
 /** Page-local changes use the page's real existing regression coverage, including its helpers. */
 export const PROFILES = {
+  shell: profile(['nav', 'theme6', 'pageRegistry283'], ['smoke', 'navigation272', 'editorial6', 'skipLink294', 'searchLoading395', 'feedbackTap295']),
   builds: profile(
     [...sourceChecks, 'sources', 'boSources', 'buildOrders', 'buildOrders.content', 'buildPractice216', 'buildSim', 'build41', 'v0300-335'],
     ['sourcePresentation442', 'practice216', 'build41', 'v0290-322-golden'],
@@ -299,6 +302,8 @@ export function planChanges(changes) {
       policy = true;
     } else if ((path.startsWith('docs/') && !path.startsWith('docs/PATCH-NOTES/')) || /^[^/]+\.md$/.test(path) || path === 'LICENSE') {
       // Ordinary documentation does not change product logic or generated data.
+    } else if (shellFiles.has(path)) {
+      features.add('shell');
     } else if (sourcePresentationFiles.has(path)) {
       for (const feature of sourcePresentationFiles.get(path)) features.add(feature);
     } else if (rawSourceSchemas.has(path)) {
@@ -431,6 +436,14 @@ function main() {
     } catch {
       // Missing history or an unsupported event cannot select a reduced test profile.
     }
+    // #513 only narrows shell PR checks. Protected shell pushes retain their prior full suite,
+    // without changing #431's existing plans or regenerating unchanged game data.
+    if (
+      process.env.GITHUB_EVENT_NAME === 'push' &&
+      (process.env.GITHUB_REF === 'refs/heads/main' || process.env.GITHUB_REF?.startsWith('refs/heads/release/')) &&
+      plan.features.includes('shell')
+    )
+      plan = fullPlan(plan.data, plan.features);
     if (process.env.CI_FULL === 'true' || process.env.GITHUB_EVENT_NAME === 'schedule') plan = fullPlan();
     writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-scope.json'), JSON.stringify({ base, head, scope: plan.scope }) + '\n');
     writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-plan.json'), JSON.stringify(plan) + '\n');
