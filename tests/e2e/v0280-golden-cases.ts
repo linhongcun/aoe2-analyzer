@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test';
+import { frozenDuelText } from './frozenDuelText520';
 
 /**
  * v0.28.0（#310）纯重构的数值金标准：用例清单与取值方法。Kent 写。
@@ -161,7 +162,11 @@ export async function capturePage(page: Page, c: PageCase): Promise<Captured> {
   await target.first().waitFor();
   // 懒加载分包和数据的占位文字（shared/ui/widgets.tsx Loading）
   await expect(page.getByText('加载中…', { exact: true })).toHaveCount(0);
-  const text = await stableText(page, async () => (await target.allInnerTexts()).join('\n'));
+  const text = await stableText(page, async () =>
+    c.sel === '#duel'
+      ? (await Promise.all((await target.all()).map((root) => root.evaluate(frozenDuelText)))).join('\n')
+      : (await target.allInnerTexts()).join('\n'),
+  );
   return { hash: new URL(page.url()).hash, lines: lines(text) };
 }
 
