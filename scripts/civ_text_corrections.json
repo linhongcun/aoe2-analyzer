@@ -7,5 +7,14 @@
       "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f/data/locales/zh/strings.json",
       "note": "文明介绍120207含重复字和尾随圆点；采用同版本科技名称17495与研究说明28495，不改数值。"
     }
+  },
+  "Jurchens": {
+    "ct": {
+      "original": "加固堡垒 (防御工事每分钟恢复 500 生命值)",
+      "name_string_id": 17466,
+      "name_only": true,
+      "source": "https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/e56728e76b7d08301fba7b18d5f16bc8554c109a/data/locales/zh/strings.json",
+      "note": "#518：文明介绍120201的译名与科技996的名称17466不一致；仅统一名称为强化堡垒，保留原介绍的括号说明与英文。"
+    }
   }
 }
