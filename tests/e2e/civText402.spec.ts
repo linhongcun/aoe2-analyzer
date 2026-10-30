@@ -38,7 +38,7 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/civ/Mapuche');
       await page.getByRole('tab', { name: '科技', exact: true }).click();
       const tech = page.getByRole('link', { name: '突袭', exact: true });
-      await expect(tech).toHaveAttribute('href', '#/tech/1379');
+      await expect(tech).toHaveAttribute('href', '#/tech/1379?civ=Mapuche&ctxReturn=%2Fciv%2FMapuche%3Ftab%3Dtech');
       await expect(page.locator('main')).toContainText('掷石绳骑兵、投石手和掷矛手可造成穿透伤害');
       await expect(page.locator('main')).not.toContainText(/可可|•/);
       await page.screenshot({ path: info.outputPath(`civ-${width}-${theme}.png`), fullPage: true });
