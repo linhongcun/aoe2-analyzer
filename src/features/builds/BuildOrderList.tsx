@@ -11,6 +11,7 @@ import { ListHead } from '../../shared/ui/layout';
 import FeedbackLink from '../../shared/ui/FeedbackLink';
 import TimelineLoader from './TimelineLoader';
 import { NumUnitText } from './NumUnitText';
+import { BuildContext } from './BuildContext';
 import { BuildApplicability } from './BuildApplicability';
 
 /** 推荐文明：加成已计入的排前面，未计入的沉底（各自保持原顺序） */
@@ -43,7 +44,21 @@ export default function BuildOrderList() {
   const [sp] = useSearchParams();
   const meta = useListMeta();
   const bo = sp.get('bo');
-  if (bo && buildOrders.some((b) => b.id === bo)) return <TimelineLoader />;
+  if (bo && buildOrders.some((b) => b.id === bo))
+    return (
+      <>
+        <BuildContext params={sp} />
+        <TimelineLoader />
+      </>
+    );
+  const orderPath = (id: string, practice = false) => {
+    const next = new URLSearchParams(sp);
+    next.set('bo', id);
+    next.delete('step');
+    if (practice) next.set('view', 'practice');
+    else next.delete('view');
+    return `/builds?${next}`;
+  };
   const civName = (en: string) => civByEn(en)?.zh ?? en;
   const showOrder = (id: string) => {
     const group = document.getElementById(`bo-${id}`) as HTMLDetailsElement | null;
@@ -55,6 +70,7 @@ export default function BuildOrderList() {
   return (
     <section className="pane" id="builds">
       <ListHead level={1} title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
+      <BuildContext params={sp} />
       <nav className="bar" aria-label="单人与内容入门">
         <Link className="community-tool-entry" to="/game-guide">
           先看懂一局的目标与角色
@@ -130,11 +146,11 @@ export default function BuildOrderList() {
           <BuildApplicability order={b} />
           <p>{b.summary}</p>
           <p>
-            <Link to={`/builds?bo=${b.id}`} className="tl-open">
+            <Link to={orderPath(b.id)} className="tl-open">
               <ChartGantt size={16} aria-hidden /> 看时间线
             </Link>
             {' · '}
-            <Link to={`/builds?bo=${b.id}&view=practice`} className="bo-practice-open">
+            <Link to={orderPath(b.id, true)} className="bo-practice-open">
               专注跟练
             </Link>
           </p>

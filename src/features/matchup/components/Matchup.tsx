@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import RushDefense from './RushDefense';
 import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
@@ -8,8 +9,12 @@ import { CivIcon, UnitIcon } from '../../../shared/ui/art';
 import { RatingLabel } from '../../../shared/ui/RatingHelp';
 import { useSticky } from '../../../shared/utils/sticky';
 import { Loading } from '../../../shared/ui/widgets';
-import { Link } from 'react-router-dom';
-import { counterExtra } from '../availability';
+import { Link, useSearchParams } from 'react-router-dom';
+import { matchupBuildPath, matchupUnitPath, readMatchupPair, writeMatchupPair } from '../../../domain/matchupRoute';
+import { Icon } from '../../../shared/ui/Icon';
+import '../../../shared/ui/contextLinks.css';
+import { rushGuide } from '../rushGuides';
+import { counterExtra, rushDrill } from '../availability';
 import { useMatchupData } from '../useMatchupData';
 
 export default function Matchup() {
@@ -17,17 +22,68 @@ export default function Matchup() {
   const core = data?.core;
   const [ia, setA] = useSticky('mu.a', 16),
     [ie, setE] = useSticky('mu.e', 5);
-  const a = civs[ia]!,
-    e = civs[ie]!,
-    m = matchup(a, e);
+  const [params, setParams] = useSearchParams();
+  const pair = readMatchupPair(params, { me: (civs[ia] ?? civs[16]!).en, opp: (civs[ie] ?? civs[5]!).en });
+  const a = civs.find((c) => c.en === pair.me)!,
+    e = civs.find((c) => c.en === pair.opp)!;
+  const m = matchup(a, e);
+  // Query 先于 sticky；同步后，从其它页面回到无 query 的助手仍保留这对阵。
+  useEffect(() => {
+    const nextA = civs.indexOf(a),
+      nextE = civs.indexOf(e);
+    if (ia !== nextA) setA(nextA);
+    if (ie !== nextE) setE(nextE);
+  }, [a, e, ia, ie, setA, setE]);
+  const pick = (side: 'me' | 'opp', en: string) => setParams(writeMatchupPair(params, side === 'me' ? en : a.en, side === 'opp' ? en : e.en));
+  const drill = data ? rushDrill(data, a.en, e.en, rushGuide(params.get('rush'))) : null;
   const counters = core ? filterCounterUnits(a.en, e.ty, core.units) : [];
   return (
     <section id="matchup" className="pane">
       <ListHead title="对局助手" desc="根据双方文明给出反制建议" />
       <div className="bar fbar">
-        我的文明 <CivPicker id="ma" label="我的文明" value={civs[ia]!.en} onChange={(en) => setA(civs.findIndex((c) => c.en === en))} /> 对手文明{' '}
-        <CivPicker id="me" label="对手文明" value={civs[ie]!.en} onChange={(en) => setE(civs.findIndex((c) => c.en === en))} />
+        我的文明 <CivPicker id="ma" label="我的文明" value={a.en} onChange={(en) => pick('me', en)} /> 对手文明{' '}
+        <CivPicker id="me" label="对手文明" value={e.en} onChange={(en) => pick('opp', en)} />
       </div>
+      {pair.invalid && <p className="note">链接中的文明无效，已用上次选择</p>}
+      <h3 className="matchup-title">
+        <Link className="ulink ctx-civ-link" to={`/civ/${a.en}`}>
+          <CivIcon c={a} />
+          {a.zh}
+        </Link>
+        <span className="note">vs</span>
+        <Link className="ulink ctx-civ-link" to={`/civ/${e.en}`}>
+          <CivIcon c={e} />
+          {e.zh}
+        </Link>
+      </h3>
+      <nav className="ctx-chips" aria-label="对阵相关入口">
+        {drill?.url ? (
+          <Link className="community-tool-entry" to={drill.url}>
+            <Icon name="swords" />
+            单位 PK
+          </Link>
+        ) : (
+          <span className="community-tool-entry" aria-disabled="true">
+            <Icon name="swords" />
+            单位 PK
+          </span>
+        )}
+        <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'me')}>
+          <Icon name="list-ordered" />
+          我方开局
+        </Link>
+        <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'opp')}>
+          <Icon name="list-ordered" />
+          对手开局
+        </Link>
+        <Link className="community-tool-entry" to={`/civ/${a.en}`}>
+          我方文明
+        </Link>
+        <Link className="community-tool-entry" to={`/civ/${e.en}`}>
+          对手文明
+        </Link>
+      </nav>
+      <p className="note">可复制地址栏链接分享这对阵</p>
       <RushDefense own={a} enemy={e} data={data} loadError={error} />
       <p>
         <Link className="community-tool-entry" to="/castle-defense">
@@ -54,9 +110,6 @@ export default function Matchup() {
         <Loading />
       ) : (
         <div id="mres">
-          <h3>
-            <CivIcon c={a} /> {a.zh} vs <CivIcon c={e} /> {e.zh}
-          </h3>
           <p>
             <b>对手强项：</b>
             {m.oppStrong.length ? (
@@ -93,7 +146,7 @@ export default function Matchup() {
                 const unit = core.units.find((x) => x.id === u.id);
                 return (
                   <li key={u.id}>
-                    <Link className="ulink matchup-counter-link" to={`/unit/${u.id}`}>
+                    <Link className="ulink matchup-counter-link" to={matchupUnitPath(u.id, a.en, e.en)}>
                       {unit && <UnitIcon u={unit} />}
                       <span>{u.nameZh}</span>
                     </Link>

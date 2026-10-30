@@ -17,7 +17,7 @@ for (const width of [360, 375, 390, 1280])
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/matchup');
-      await expect(page.locator('#mres h3')).toBeVisible();
+      await expect(page.locator('#matchup .matchup-title')).toBeVisible();
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await pickCiv(page, 'ma', 'Franks');
       const result = page.locator('#mres');
@@ -26,7 +26,7 @@ for (const width of [360, 375, 390, 1280])
         ['Japanese', '日本'],
       ]) {
         await pickCiv(page, 'me', opponent!);
-        await expect(result.locator('h3')).toContainText(name!);
+        await expect(page.locator('#matchup .matchup-title')).toContainText(name!);
         await expect(result.locator('p').first()).toContainText('相对弱项：');
         await expect(result.locator('p').first()).toContainText('骑兵');
         await expect(result).not.toContainText(/缺骑兵|没有骑兵|不能造骑兵|你可以多用远程单位/);
@@ -41,7 +41,7 @@ for (const width of [360, 375, 390, 1280])
       const counters = result.locator('.matchup-counter-link');
       expect(await counters.count()).toBeGreaterThan(0);
       await expect(result.locator('.matchup-counter-list')).not.toContainText(/骑士|骆驼/);
-      await expect(counters.first()).toHaveAttribute('href', /^#\/unit\/\d+$/);
+      await expect(counters.first()).toHaveAttribute('href', /^#\/unit\/\d+\?civ=Mayans&from=matchup&me=Mayans&opp=Franks$/);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(errors).toEqual([]);
     });
