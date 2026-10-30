@@ -14,7 +14,7 @@ import civs from '../data/raw/civs';
 import type { Cost } from './types';
 import type { CostDiscount } from './costDiscount';
 import type { EcoData } from './buildSim';
-import { UNHANDLED_RES } from './buildSim';
+import { UNHANDLED_RES } from './buildSimCoverage';
 
 const eco = ecoRaw as unknown as EcoData;
 export type GatherRes = 'Food' | 'Wood' | 'Gold' | 'Stone';
