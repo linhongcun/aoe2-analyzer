@@ -1,5 +1,6 @@
 /** 全局搜索：文明/单位/科技/建筑/加成/页面统一索引与打分（纯函数） */
 import extraPy from '../data/search-py.json';
+import { PAGES } from '../shared/nav/pageRegistry';
 
 export interface SearchItem {
   kind: 'civ' | 'unit' | 'tech' | 'building' | 'bonus' | 'page' | 'term';
@@ -33,7 +34,7 @@ export const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
 /** issue 162 加成和页面共用构建时生成的拼音，排序与其他类型一致。 */
 export function withSearchPy(it: SearchItem): SearchItem {
   if (!['bonus', 'page', 'term'].includes(it.kind) || it.id.startsWith('bo-')) return it;
-  const fields = (extraPy as Record<string, { py: string; pyi: string }>)[it.zh];
+  const fields = PAGES.find((page) => page.label === it.zh)?.searchPy ?? (extraPy as Record<string, { py: string; pyi: string }>)[it.zh];
   return fields ? { ...it, ...fields } : it;
 }
 
