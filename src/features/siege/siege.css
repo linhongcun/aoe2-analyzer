@@ -270,6 +270,7 @@
 }
 .siege-compare th,
 .siege-compare td {
+  vertical-align: middle;
   text-align: right;
   border-bottom: 1px solid var(--color-border);
   padding: 0 4px;
