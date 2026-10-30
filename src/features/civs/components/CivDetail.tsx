@@ -23,6 +23,7 @@ import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
 import { civDisplayText } from '../displayNames';
 import CivProfessionalView from './CivProfessionalView';
+import '../../../shared/ui/contextLinks.css';
 
 function UTech({ s, civ }: { s: string; civ: string }) {
   const core = useCore();
@@ -111,6 +112,25 @@ export default function CivDetail() {
           {TYPE_ZH[t]}
         </span>
       ))}
+      tabsTop={
+        <nav className="ctx-bar" aria-label="本页相关工具">
+          <Link className="community-tool-entry" to={`/builds?civ=${c.en}`}>
+            <Icon name="book-open" /> 开局流程
+          </Link>
+          <Link className="community-tool-entry" to={`/production?civ=${c.en}`}>
+            <Icon name="factory" /> 生产对照
+          </Link>
+          <Link className="community-tool-entry" to={`/matchup?me=${c.en}`}>
+            <Icon name="crosshair" /> 对局助手
+          </Link>
+          <Link className="community-tool-entry" to={`/compare?a=${c.en}`}>
+            <Icon name="scale" /> 文明对比
+          </Link>
+          <Link className="community-tool-entry" to={`/civ/${c.en}?tab=pro`}>
+            <Icon name="users" /> 职业选手视角
+          </Link>
+        </nav>
+      }
       tabs={[
         {
           key: 'ov',
@@ -214,10 +234,10 @@ export default function CivDetail() {
             <Link className="ulink tlink" to={`/tree/${c.en}`}>
               <Icon name="git-branch" /> 科技树
             </Link>
-            <Link className="ulink" to="/compare">
+            <Link className="ulink" to={`/compare?a=${c.en}`}>
               <Icon name="scale" /> 文明对比
             </Link>
-            <Link className="ulink" to="/matchup">
+            <Link className="ulink" to={`/matchup?me=${c.en}`}>
               <Icon name="crosshair" /> 对局助手
             </Link>
           </SideBlock>

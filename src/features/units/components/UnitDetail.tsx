@@ -27,6 +27,8 @@ import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/re
 import { Basis } from '../../../shared/ui/RealCost';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { unitDisplayAge } from '../displayAge';
+import '../../../shared/ui/contextLinks.css';
+import './unit-civ-links.css';
 
 /** #88 S8：费用下面一行「采集时间 ≈ 1 个村民 m:ss」；时代跟页面所选，未选默认城堡；未选文明按通用速度 */
 function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {
@@ -109,6 +111,11 @@ export default function UnitDetail() {
   const core = useCore();
   const trees = useTrees();
   const rt = parseUnitPath(loc.pathname);
+  const params = new URLSearchParams(loc.search);
+  const queryCiv = civByEn(params.get('civ') ?? '');
+  const contextCiv = civByEn(rt?.civ ?? '') ?? queryCiv;
+  const me = civByEn(params.get('me') ?? ''),
+    opp = civByEn(params.get('opp') ?? '');
   const u = core && rt ? core.unitById[rt.id] : undefined;
   const hasCiv = !!rt?.civ;
   useEffect(() => {
@@ -178,6 +185,9 @@ export default function UnitDetail() {
         .filter((c) => c.u);
   const showNote = peers.length > 0 || conf.length > 0;
   const wantSim = hasCiv || new URLSearchParams(loc.search).get('tab') === 'sim';
+  const simulatorRoute = !rt.civ && queryCiv && u.civs.includes(queryCiv.en) ? { ...rt, civ: queryCiv.en } : rt;
+  const allCivsParams = new URLSearchParams(params);
+  allCivsParams.set('tab', 'rel');
   return (
     <DetailPage
       key={base.id}
@@ -197,6 +207,20 @@ export default function UnitDetail() {
       }
       tabsTop={
         <>
+          {(contextCiv || (me && opp)) && (
+            <nav className="ctx-bar" aria-label="文明相关入口">
+              {contextCiv && (
+                <Link className="ctx-civ-link ulink" to={`/civ/${contextCiv.en}`}>
+                  <CivIcon c={contextCiv} /> {contextCiv.zh}
+                </Link>
+              )}
+              {me && opp && (
+                <Link className="community-tool-entry" to={`/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}>
+                  <Icon name="arrow-left" /> 回对局助手
+                </Link>
+              )}
+            </nav>
+          )}
           {u.id === 93 && <p className="note">通常在封建时代可用；亚美尼亚可在黑暗时代训练长矛兵。</p>}
           {elite && (
             <div className="eseg" role="radiogroup" aria-label="普通/精锐">
@@ -291,7 +315,7 @@ export default function UnitDetail() {
             </>
           ),
         },
-        ...(u.civs.length ? [{ key: 'sim', label: '科技模拟器', content: <Simulator key={u.id} u={u} route={rt} /> }] : []),
+        ...(u.civs.length ? [{ key: 'sim', label: '科技模拟器', content: <Simulator key={u.id} u={u} route={simulatorRoute} /> }] : []),
         {
           key: 'rel',
           label: '相关',
@@ -363,13 +387,21 @@ export default function UnitDetail() {
           </SideBlock>
           <SideBlock title="相关科技">{rel ? <RelatedTechs items={rel} compact civ={rt.civ} /> : <Loading />}</SideBlock>
           <SideBlock title={`可用文明 ${u.civs.length}/${civs.length}`}>
-            <p className="note">
-              {u.civs
-                .slice(0, 8)
-                .map((n) => civByEn(n)?.zh ?? n)
-                .join('、')}
+            <div className="unit-civ-links">
+              <Join
+                sep=" "
+                items={u.civs.slice(0, 8).map((n) => {
+                  const c = civByEn(n);
+                  return c ? <CivChip c={c} /> : n;
+                })}
+              />
               {u.civs.length > 8 ? ' 等' : ''}
-            </p>
+            </div>
+            {u.civs.length > 8 && (
+              <Link className="ctx-civ-link ulink" to={loc.pathname + '?' + allCivsParams}>
+                查看全部可用文明
+              </Link>
+            )}
           </SideBlock>
         </>
       }
