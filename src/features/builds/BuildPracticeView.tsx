@@ -14,10 +14,13 @@ import { mmss, noteParts, rowTime, type TimelineQuery } from './timelineModel';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { visibleSources } from './sources';
 import { NumUnitText } from './NumUnitText';
+import { buildNavigationParams } from '../../domain/buildNavigation531';
+import { contextPath } from '../../shared/nav/context';
+import { sharePageUrl } from '../../domain/sharePage';
 import './practice.css';
 
 export function buildPracticeUrl(params: URLSearchParams, view: 'practice' | 'print' | null): string {
-  const next = new URLSearchParams(params);
+  const next = buildNavigationParams(params);
   if (view) next.set('view', view);
   else next.delete('view');
   return `/builds?${next.toString()}`;
@@ -182,6 +185,9 @@ export default function BuildPracticeView({
           <Link className="bp-button" to={buildPracticeUrl(params, mode === 'practice' ? 'print' : 'practice')}>
             {mode === 'practice' ? '查看完整清单' : '专注跟练'}
           </Link>
+          <Link className="bp-button" to={contextPath('/match-review', buildNavigationParams(params), `/builds?${buildNavigationParams(params)}`)}>
+            记录一个练习问题
+          </Link>
           <button className="bp-button" type="button" onClick={() => window.print()}>
             <Icon name="printer" />
             打印 / 保存 PDF
@@ -217,6 +223,7 @@ export default function BuildPracticeView({
         </p>
       </div>
       <div className="bp-context">
+        <p className="bp-print-only bp-print-link">原方案：{sharePageUrl('/builds', buildNavigationParams(params).toString(), document.baseURI)}</p>
         <p data-testid="practice-parameters">
           <b>{selectedCiv}</b> · <span className="nw">走路距离 {query.dist} 格</span> · 自动造房{query.house ? '开启' : '关闭'}
           {timeline.noHouses && '（不需要房子，不执行）'} · 团队加成未计入

@@ -3,10 +3,12 @@ import { useSearchParams } from 'react-router-dom';
 import { civs } from '../../data';
 import type { BuildOrder } from '../../domain/buildOrder';
 import { parseQuery } from './timelineModel';
+import { buildNavigationParams, patchBuildParams } from '../../domain/buildNavigation531';
 
 /** 开局设置的URL、会话提示和手机抽屉；模拟与坐标计算由调用方负责。 */
 export function useTimelineSettings(orders: BuildOrder[]) {
-  const [sp, setSp] = useSearchParams();
+  const [rawParams, setSp] = useSearchParams();
+  const sp = buildNavigationParams(rawParams);
   const q = parseQuery(
     sp,
     orders.map((b) => b.id),
@@ -17,12 +19,7 @@ export function useTimelineSettings(orders: BuildOrder[]) {
   const patch = (kv: Record<string, string | null>) =>
     setSp(
       (p) => {
-        const n = new URLSearchParams(p);
-        for (const [k, v] of Object.entries(kv)) {
-          if (v === null) n.delete(k);
-          else n.set(k, v);
-        }
-        return n;
+        return patchBuildParams(p, kv);
       },
       { replace: true },
     );

@@ -7,6 +7,7 @@ import { RowSegs } from './RowSegs';
 import { TimelineSegmentList } from './TimelineChart';
 import { NumUnitText } from './NumUnitText';
 import { stepEntities, villagerGroups } from './timelineFollowups';
+import { entityPath } from '../../shared/nav/context';
 import { RES_ZH, ROW_SEG_MAX, mmss, noteParts, prereqDetail, rowSegments, rowTime, segLabel, type TimelineQuery, type TimelineView } from './timelineModel';
 
 const fmtCost = (x: number) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
@@ -24,6 +25,7 @@ export function TimelineSteps({
   roam,
   jump,
   set,
+  params,
 }: {
   bo: BuildOrder;
   tl: BuildTimeline;
@@ -37,6 +39,7 @@ export function TimelineSteps({
   roam: (event: KeyboardEvent<HTMLButtonElement>, index: number, chart?: boolean) => void;
   jump: (index: number) => void;
   set: (key: string, value: string | null) => void;
+  params: URLSearchParams;
 }) {
   const core = useCore();
   const cartUnits = tl.civ === 'Armenians' || tl.civ === 'Georgians';
@@ -156,7 +159,7 @@ export function TimelineSteps({
                   )}
                   <div className="tl-entities">
                     {stepEntities(st).map((ref) => (
-                      <Link className="ulink" key={`${ref.kind}-${ref.id}`} to={`/${ref.kind}/${ref.id}`}>
+                      <Link className="ulink" key={`${ref.kind}-${ref.id}`} to={entityPath(ref.kind, ref.id, q.civ || undefined, params, `/builds?${params}`)}>
                         {(ref.kind === 'unit' ? core?.unitById[ref.id] : ref.kind === 'tech' ? core?.techById[ref.id] : core?.buildingById[ref.id])?.zh ??
                           `${ref.kind === 'unit' ? '单位' : ref.kind === 'tech' ? '科技' : '建筑'} ${ref.id}`}
                       </Link>

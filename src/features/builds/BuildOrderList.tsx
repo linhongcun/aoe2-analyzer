@@ -13,6 +13,8 @@ import TimelineLoader from './TimelineLoader';
 import { NumUnitText } from './NumUnitText';
 import { BuildContext } from './BuildContext';
 import { BuildApplicability } from './BuildApplicability';
+import { buildNavigationParams, buildOrderPath } from '../../domain/buildNavigation531';
+import { contextPath } from '../../shared/nav/context';
 
 /** 推荐文明：加成已计入的排前面，未计入的沉底（各自保持原顺序） */
 export const sortCivs = (civs: string[], off: string[] = []) => [...civs.filter((c) => !off.includes(c)), ...civs.filter((c) => off.includes(c))];
@@ -41,7 +43,8 @@ function useListMeta(): Record<string, ListMeta> | null {
 }
 
 export default function BuildOrderList() {
-  const [sp] = useSearchParams();
+  const [rawParams] = useSearchParams();
+  const sp = buildNavigationParams(rawParams);
   const meta = useListMeta();
   const bo = sp.get('bo');
   if (bo && buildOrders.some((b) => b.id === bo))
@@ -51,14 +54,7 @@ export default function BuildOrderList() {
         <TimelineLoader />
       </>
     );
-  const orderPath = (id: string, practice = false) => {
-    const next = new URLSearchParams(sp);
-    next.set('bo', id);
-    next.delete('step');
-    if (practice) next.set('view', 'practice');
-    else next.delete('view');
-    return `/builds?${next}`;
-  };
+  const orderPath = (id: string, practice = false) => buildOrderPath(sp, id, practice ? 'practice' : null);
   const civName = (en: string) => civByEn(en)?.zh ?? en;
   const showOrder = (id: string) => {
     const group = document.getElementById(`bo-${id}`) as HTMLDetailsElement | null;
@@ -75,7 +71,7 @@ export default function BuildOrderList() {
         <Link className="community-tool-entry" to="/game-guide">
           先看懂一局的目标与角色
         </Link>
-        <Link className="community-tool-entry" to="/match-review">
+        <Link className="community-tool-entry" to={contextPath('/match-review', sp, `/builds?${sp}`)}>
           赛后整理事实与下局目标
         </Link>
         <Link className="community-tool-entry" to="/campaigns">

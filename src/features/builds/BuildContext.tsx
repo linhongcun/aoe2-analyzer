@@ -1,31 +1,21 @@
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
-import { buildsMatchupReturn, buildsPath } from '../../domain/matchupRoute';
-import { Icon } from '../../shared/ui/Icon';
+import { buildListPath, buildNavigationParams } from '../../domain/buildNavigation531';
+import { NavigationContext } from '../../shared/ui/NavigationContext';
 import '../../shared/ui/contextLinks.css';
 
 export function BuildContext({ params }: { params: URLSearchParams }) {
-  const civ = civByEn(params.get('civ') ?? '');
-  const back = buildsMatchupReturn(params);
-  if (!civ && !back) return null;
+  const normalized = buildNavigationParams(params);
+  const civ = civByEn(normalized.get('civ') ?? '');
   return (
-    <nav className="ctx-bar" aria-label="对阵相关入口">
-      {back && (
-        <Link className="community-tool-entry" to={back}>
-          <Icon name="arrow-left" />
-          回对局助手
-        </Link>
-      )}
-      {civ && (
-        <Link className="community-tool-entry" to={`/civ/${civ.en}`}>
-          {civ.zh}
-        </Link>
-      )}
-      {params.has('bo') && (
-        <Link className="community-tool-entry" to={buildsPath(civ?.en)}>
-          查看全部开局
-        </Link>
-      )}
-    </nav>
+    <div className="build-navigation">
+      <NavigationContext search={normalized.toString()} currentCiv={civ?.en} label="对阵相关入口">
+        {normalized.has('bo') && (
+          <Link className="community-tool-entry" to={buildListPath(normalized)}>
+            查看全部开局
+          </Link>
+        )}
+      </NavigationContext>
+    </div>
   );
 }

@@ -247,6 +247,10 @@
 .bp-print-only {
   display: none;
 }
+.bp-print-link {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
 @media (max-width: 600px) {
   .bo-practice h1 {
     font-size: 22px;
@@ -292,6 +296,7 @@
   body:has(.bo-practice) .topbar,
   body:has(.bo-practice) .editorial-footer,
   body:has(.bo-practice) .fbbar,
+  body:has(.bo-practice) .build-navigation,
   .bo-practice .bp-screen-only {
     display: none !important;
   }

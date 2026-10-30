@@ -1,4 +1,5 @@
-import { buildsPath } from '../../domain/matchupRoute';
+import { buildListPath, buildOrderPath } from '../../domain/buildNavigation531';
+import { contextPath } from '../../shared/nav/context';
 import { sharePageUrl } from '../../domain/sharePage';
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
@@ -252,16 +253,25 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
         <Link className="bp-button" to={buildPracticeUrl(sp, 'print')}>
           打印步骤单
         </Link>
+        <Link className="bp-button" to={contextPath('/match-review', sp, `/builds?${sp}`)}>
+          记录一个练习问题
+        </Link>
       </nav>
+
+      {sp.get('ctxStepReset') === '1' && (
+        <p className="note" role="status">
+          已切换开局，旧步骤位置已重置。
+        </p>
+      )}
 
       {['fast-castle-boom', 'fast-castle-knights'].includes(bo.id) && (
         <p className="note">
           城堡后选择：
-          <Link className="ulink" to="/builds?bo=fast-castle-boom">
+          <Link className="ulink" to={buildOrderPath(sp, 'fast-castle-boom')}>
             暴经济
           </Link>
           {' · '}
-          <Link className="ulink" to="/builds?bo=fast-castle-knights">
+          <Link className="ulink" to={buildOrderPath(sp, 'fast-castle-knights')}>
             转骑士
           </Link>
           （沿用相同前半段）
@@ -404,10 +414,11 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
         roam={roam}
         jump={jump}
         set={set}
+        params={sp}
       />
       <p className="note">
         {source && <span className="tl-mob-only">来源 {source} · </span>}
-        时间为模拟估算（{tl.model.version}）。<Link to={buildsPath(q.civ)}>返回开局列表</Link>
+        时间为模拟估算（{tl.model.version}）。<Link to={buildListPath(sp)}>返回开局列表</Link>
       </p>
       <div className="tl-share-sticky">
         <div className="tl-share-row">
