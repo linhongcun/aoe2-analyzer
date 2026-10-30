@@ -51,6 +51,8 @@ for (const width of [360, 375, 390, 1280])
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
         await page.screenshot({ path: info.outputPath(`player-links-${fact.id}-${width}-${theme}.png`), fullPage: true });
 
+        // 先进入键盘模式；鼠标点击后的 programmatic focus 不应强制触发 :focus-visible。
+        await page.keyboard.press('Tab');
         await opponent.focus();
         await expect(opponent).toBeFocused();
         expect(await opponent.evaluate((element) => element.matches(':focus-visible'))).toBe(true);

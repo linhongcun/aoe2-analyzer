@@ -104,6 +104,11 @@
 .player-video {
   margin-top: var(--space-4);
 }
+.player-returns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
 @media (max-width: 700px) {
   .players-page {
     padding: var(--space-4);
