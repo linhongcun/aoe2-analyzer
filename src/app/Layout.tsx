@@ -7,7 +7,7 @@ import { NavItem } from './nav/NavItem';
 import { ToolsMenu } from './nav/ToolsMenu';
 import FeedbackLink from '../shared/ui/FeedbackLink';
 import { appVersion } from '../shared/utils/feedback';
-import { DATA_SOURCES, versionLabel } from '../shared/utils/dataInfo';
+import { DATA_SOURCES, REPO, versionLabel } from '../shared/utils/dataInfo';
 import { useTheme } from './theme/useTheme';
 import type { ThemePreference } from './theme/theme';
 import '../shared/styles/editorial-shell.css';
@@ -403,6 +403,16 @@ export function Layout({ children }: { children: ReactNode }) {
           <span>搜索</span>
           <kbd>Ctrl K</kbd>
         </button>
+        <a
+          href={REPO}
+          className="iconbtn"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub 仓库（在新标签页打开）"
+          title="GitHub 仓库（在新标签页打开）"
+        >
+          <Icon name="github" />
+        </a>
         <ThemeMenu preference={preference} onSelect={select} />
       </header>
       <main ref={main} id="main-content">

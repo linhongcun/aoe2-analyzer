@@ -453,6 +453,10 @@ footer.editorial-footer .footer-sources a {
   }
 }
 @media (max-width: 600px) {
+  header.topbar.editorial-topbar {
+    gap: 2px;
+    padding-inline: 8px;
+  }
   footer.editorial-footer .fmeta {
     /* 仅扩展版本行，390px 保留完整日期且字号仍为 12px。 */
     margin-inline: calc(-1 * var(--space-2));
