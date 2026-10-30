@@ -36,7 +36,7 @@ describe('determinism & coverage', () => {
     const bo = buildOrders[0]!;
     expect(JSON.stringify(sim(bo, 'Franks', { walkTiles: 7 }))).toBe(JSON.stringify(sim(bo, 'Franks', { walkTiles: 7 })));
   });
-  it('all builds x all civs finish and reach the target age', () => {
+  it('all builds x all civs finish and reach the target age', async () => {
     for (const bo of buildOrders)
       for (const c of civs) {
         const r = sim(bo, c.en);
@@ -45,6 +45,8 @@ describe('determinism & coverage', () => {
           `${bo.id} x ${c.en}`,
         ).toEqual([]);
         expect(r.ageUps.length, `${bo.id} x ${c.en}`).toBe(bo.target.age - 1);
+        // 全矩阵在 CI 可超过60秒；逐组合让 IPC 处理回包，保留原覆盖、断言及用例超时。
+        await new Promise<void>((resolve) => setImmediate(resolve));
       }
   }, 120_000);
   it('fields align with #3 draft', () => {

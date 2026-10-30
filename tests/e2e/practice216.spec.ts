@@ -129,7 +129,7 @@ test('#216 全部真实开局完整清单与A4 PDF保留来源/限制', async ({
     }
     await expect(page.getByTestId('practice-civ-warning')).toHaveCount(0);
     await expect(page.locator('.bp-context')).toContainText('波兰');
-    await expect(page.locator('.bp-context')).toContainText('农田即时收获未计入');
+    await expect(page.locator('.bp-context')).toContainText('不计农田即时收获');
     for (const source of order.sources) await expect(page.locator('.bp-sources')).toContainText(source.url);
     await expect(page.locator('.bp-sources')).toContainText(`DE Update ${pins.patch.build}`);
     await page.pdf({ path: info.outputPath(`practice216-${order.id}-a4.pdf`), format: 'A4', preferCSSPageSize: true, printBackground: true });

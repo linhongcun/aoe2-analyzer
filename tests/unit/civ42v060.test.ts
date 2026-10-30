@@ -74,17 +74,18 @@ const HISTORICAL_DEFERRED: Record<string, string[]> = {
   资源总量与狩猎: ['Jurchens'],
   其他: ['Chinese', 'Romans'],
 };
-// #197：当前女真、中国已有完整来源与明确模型边界，历史白名单原件保留。
-const CURRENT_DEFERRED: Record<string, string[]> = Object.fromEntries(Object.entries(HISTORICAL_DEFERRED).map(([group, civs]) => [group, civs.filter((civ) => !['Jurchens', 'Chinese'].includes(civ))]));
-describe('#42 白名单（v0.7.0）：仍置灰且写明原因', () => {
-  for (const [g, civs] of Object.entries(CURRENT_DEFERRED))
-    it.each(civs)(`${g}：%s simSupport=false 且有原因`, (civ) => {
-      const r = sim.simSupport(E, civ, buildOrders);
-      expect(r.supported).toBe(false);
-      expect(r.reasons.length).toBeGreaterThan(0);
-    });
+// #197：v0.70.0 已补齐罗马，56文明当前均支持；历史白名单原件保留，不用空循环冒称覆盖。
+const CURRENT_DEFERRED: Record<string, string[]> = Object.fromEntries(Object.entries(HISTORICAL_DEFERRED).map(([group, civs]) => [group, civs.filter((civ) => !['Jurchens', 'Chinese', 'Romans'].includes(civ))]));
+describe('#42 历史白名单（v0.7.0）与当前支持状态', () => {
+  it('保留历史白名单，当前56文明均支持且没有未支持原因', () => {
+    expect(HISTORICAL_DEFERRED).toEqual({ 资源总量与狩猎: ['Jurchens'], 其他: ['Chinese', 'Romans'] });
+    expect(Object.values(CURRENT_DEFERRED).flat()).toEqual([]);
+    const civs = Object.keys(E.civEco);
+    expect(civs).toHaveLength(56);
+    for (const civ of civs) expect(sim.simSupport(E, civ, buildOrders), civ).toEqual({ supported: true, reasons: [] });
+  });
   it('放开清单里的文明（不在白名单的）simSupport=true', () => {
-    for (const c of ['Persians', 'Aztecs', 'Tupi', 'Ethiopians', 'Dravidians', 'Malay', 'Italians', 'Muisca', 'Burgundians', 'Vietnamese', 'Cumans', 'Danes', 'Malians', 'Varangians', 'Tatars', 'Slavs', 'Jurchens', 'Chinese'])
+    for (const c of ['Persians', 'Aztecs', 'Tupi', 'Ethiopians', 'Dravidians', 'Malay', 'Italians', 'Muisca', 'Burgundians', 'Vietnamese', 'Cumans', 'Danes', 'Malians', 'Varangians', 'Tatars', 'Slavs', 'Jurchens', 'Chinese', 'Romans'])
       expect(sim.simSupport(E, c, buildOrders).reasons, c).toEqual([]);
   });
   it('未知效果要报错：unhandledEffects 检查保留（#42 正文回归）', () => {
