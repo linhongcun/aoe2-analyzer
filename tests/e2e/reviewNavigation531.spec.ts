@@ -41,7 +41,7 @@ test('#531 source preview has no mount or cancel writes and only explicit confir
   await expect(preview).toHaveCount(0);
   expect(await saved(page)).toBeNull();
   await page.reload();
-  await page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白上下文字段', exact: true }).click();
+  await page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白字段', exact: true }).click();
   await expect(field(page, '本方文明')).toHaveValue('法兰克');
   await expect(field(page, '对方文明')).toHaveValue('不列颠');
   await expect(field(page, '比赛或视频链接')).toHaveValue(new RegExp('#/production\\?civ=Mongols'));
@@ -62,7 +62,7 @@ test('#531 existing records and latest user edits survive confirmation', async (
   await page.goto(route);
   const before = await saved(page);
   await field(page, '对方文明').fill('刚填入的文明');
-  await page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白上下文字段', exact: true }).click();
+  await page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白字段', exact: true }).click();
   await expect(field(page, '本方文明')).toHaveValue('自记文明');
   await expect(field(page, '对方文明')).toHaveValue('刚填入的文明');
   const after = JSON.parse((await saved(page))!);
@@ -78,7 +78,7 @@ test('#531 a storage conflict blocks source confirmation before changing this pa
   await other.goto('./#/match-review');
   await field(other, '复盘标题').fill('另一个标签的草稿');
   await expect(page.getByRole('alert').filter({ hasText: /另一个标签修改或清除了本机草稿/ })).toBeVisible();
-  const button = page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白上下文字段', exact: true });
+  const button = page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白字段', exact: true });
   await expect(button).toBeDisabled();
   await expect(field(page, '本方文明')).toHaveValue('');
   const current = JSON.parse((await saved(page))!);
@@ -90,7 +90,7 @@ test('#531 a storage conflict blocks source confirmation before changing this pa
 test('#531 corrupt storage is preserved and source confirmation stays blocked', async ({ page }) => {
   await page.addInitScript((key) => localStorage.setItem(key, 'corrupt-original'), storageKey);
   await page.goto(route);
-  await expect(page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白上下文字段', exact: true })).toBeDisabled();
+  await expect(page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白字段', exact: true })).toBeDisabled();
   await expect(field(page, '本方文明')).toHaveValue('');
   expect(await saved(page)).toBe('corrupt-original');
 });
@@ -101,7 +101,7 @@ test('#531 a same-document storage race is detected before applying source field
   const otherDraft = blankReview();
   otherDraft.context.title = '尚未触发 storage 事件的新版本';
   await page.evaluate(({ key, raw }) => localStorage.setItem(key, raw), { key: storageKey, raw: JSON.stringify(otherDraft) });
-  await page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白上下文字段', exact: true }).click();
+  await page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白字段', exact: true }).click();
   await expect(field(page, '本方文明')).toHaveValue('');
   await expect(field(page, '对方文明')).toHaveValue('');
   expect(JSON.parse((await saved(page))!)).toEqual(otherDraft);
@@ -115,7 +115,7 @@ test('#531 a failed storage write leaves source fields out of the current draft'
     };
   });
   await page.goto(route);
-  await page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白上下文字段', exact: true }).click();
+  await page.getByTestId('review-source-preview').getByRole('button', { name: '仅补入空白字段', exact: true }).click();
   await expect(field(page, '本方文明')).toHaveValue('');
   await expect(field(page, '对方文明')).toHaveValue('');
   await expect(field(page, '比赛或视频链接')).toHaveValue('');
@@ -128,7 +128,7 @@ test('#531 an overlong source can still add civilizations without storing a trun
   const preview = page.getByTestId('review-source-preview');
   await expect(preview).toContainText('2048');
   await expect(preview.getByRole('link', { name: '查看来源方案', exact: true })).toHaveCount(0);
-  await preview.getByRole('button', { name: '仅补入空白上下文字段', exact: true }).click();
+  await preview.getByRole('button', { name: '仅补入空白字段', exact: true }).click();
   await expect(field(page, '本方文明')).toHaveValue('法兰克');
   await expect(field(page, '比赛或视频链接')).toHaveValue('');
 });
@@ -141,7 +141,7 @@ for (const width of [360, 375, 390, 1280])
       await page.evaluate((value) => (document.documentElement.dataset.theme = value), theme);
       const preview = page.getByTestId('review-source-preview');
       await expect(preview).toBeVisible();
-      const confirm = preview.getByRole('button', { name: '仅补入空白上下文字段', exact: true });
+      const confirm = preview.getByRole('button', { name: '仅补入空白字段', exact: true });
       await confirm.focus();
       await expect(confirm).toBeFocused();
       const dimensions = await confirm.boundingBox();

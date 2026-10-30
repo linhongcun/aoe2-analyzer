@@ -47,7 +47,7 @@ export function ReviewNavigationSource({ draft, preview, blocked, onConfirm, onC
       )}
       <div className="mr-actions">
         <button type="button" disabled={blocked || !changes.length} onClick={onConfirm}>
-          仅补入空白上下文字段
+          仅补入空白字段
         </button>
         <button type="button" onClick={onCancel}>
           取消带入
