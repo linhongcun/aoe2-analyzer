@@ -16,7 +16,7 @@ for (const width of [360, 375, 390, 1280])
       });
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
-      await page.goto('./#/matchup');
+      await page.goto('./#/matchup?rush=archers');
       await expect(page.locator('#matchup .matchup-title')).toBeVisible();
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await pickCiv(page, 'ma', 'Franks');
@@ -41,7 +41,12 @@ for (const width of [360, 375, 390, 1280])
       const counters = result.locator('.matchup-counter-link');
       expect(await counters.count()).toBeGreaterThan(0);
       await expect(result.locator('.matchup-counter-list')).not.toContainText(/骑士|骆驼/);
-      await expect(counters.first()).toHaveAttribute('href', /^#\/unit\/\d+\?civ=Mayans&from=matchup&me=Mayans&opp=Franks$/);
+      const source = '/matchup?rush=archers&me=Mayans&opp=Franks';
+      await expect(counters.first()).toHaveAttribute(
+        'href',
+        new RegExp('^#/unit/\\d+\\?civ=Mayans&from=matchup&me=Mayans&opp=Franks&ctxReturn=' + encodeURIComponent(source) + '$'),
+      );
+      await expect(page.getByRole('region', { name: '应对早期进攻', exact: true }).getByRole('combobox')).toHaveValue('archers');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(errors).toEqual([]);
     });
