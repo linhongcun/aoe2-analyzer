@@ -17,7 +17,8 @@ for (const width of [360, 375, 390, 1280])
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/civ/Shu');
       // The unique-unit sidebar confirms the asynchronous core data has arrived.
-      await expect(page.locator('aside a[href="#/unit/1959"]').first()).toBeVisible();
+      const sidebarHref = `#/unit/${guard.id}?civ=Shu&ctxReturn=%2Fciv%2FShu`;
+      await expect(page.locator(`aside a[href="${sidebarHref}"]`).first()).toBeVisible();
       const opening = page.getByRole('region', { name: '推荐开局', exact: true });
       await expect(opening).toContainText(magazine.zh);
       await expect(opening).not.toContainText(magazine.en);
@@ -37,7 +38,10 @@ for (const width of [360, 375, 390, 1280])
       await expect(castle).not.toContainText('白毦卫');
       await expect(castle).toContainText('Coiled Serpent Array');
       await expect(castle.getByRole('link', { name: guard.zh, exact: true })).toHaveAttribute('href', `#/unit/${guard.id}`);
-      await expect(page.getByRole('link', { name: magazine.zh, exact: true })).toHaveAttribute('href', `#/tech/${magazine.id}`);
+      await expect(page.getByRole('link', { name: magazine.zh, exact: true })).toHaveAttribute(
+        'href',
+        `#/tech/${magazine.id}?civ=Shu&ctxReturn=%2Fciv%2FShu%3Ftab%3Dtech`,
+      );
       await expect(page.locator('main')).toContainText(magazine.en);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

@@ -30,7 +30,7 @@ for (const width of [360, 375, 390, 1280])
         await expect(unique.getByRole('link', { name: '波兰翼骑兵', exact: true })).toHaveCount(0);
         await expect(unique.getByRole('link').first()).toBeVisible();
         await expect(regional).not.toContainText('本文明没有区域单位。');
-        await expect(link).toHaveAttribute('href', `#/unit/1707/${civ}/4/`);
+        await expect(link).toHaveAttribute('href', `#/unit/1707/${civ}/4/?ctxReturn=${encodeURIComponent(`/civ/${civ}`)}`);
         const box = await link.boundingBox();
         expect(box!.height).toBeGreaterThanOrEqual(44);
         expect(box!.width).toBeGreaterThanOrEqual(44);
@@ -52,8 +52,13 @@ test('#460 单位筛选、详情与文明时代上下文', async ({ page }) => {
   await expect(page.locator('#ugrid [data-unit-id="1707"]')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: '没有符合条件的单位' })).toBeVisible();
   for (const civ of ['Poles', 'Lithuanians']) {
-    await page.goto(`./#/civ/${civ}`);
-    await section(page, '区域单位').getByRole('link', { name: '波兰翼骑兵', exact: true }).click();
+    const source = `/civ/${civ}?me=Poles&opp=Lithuanians`;
+    await page.goto('./#' + source);
+    const link = section(page, '区域单位').getByRole('link', { name: '波兰翼骑兵', exact: true });
+    const navigation = new URLSearchParams({ me: 'Poles', opp: 'Lithuanians', ctxReturn: source });
+    await expect(link).toHaveAttribute('href', `#/unit/1707/${civ}/4/?${navigation}`);
+    await link.click();
+    await expect(page).toHaveURL((url) => url.hash === `#/unit/1707/${civ}/4/?${navigation}`);
     await expect(page.locator('.dhead-tags')).toContainText('区域单位');
     await expect(page.locator('.dhead-tags')).not.toContainText('独特单位');
     await page.getByRole('tab', { name: '科技模拟器', exact: true }).click();
@@ -62,5 +67,6 @@ test('#460 单位筛选、详情与文明时代上下文', async ({ page }) => {
     await page.reload();
     await expect(page.locator('#simciv')).toHaveAttribute('data-value', civ);
     await expect(page.locator('#simage')).toHaveValue('4');
+    await expect(page).toHaveURL((url) => url.hash === `#/unit/1707/${civ}/4/?${navigation}&tab=sim`);
   }
 });
