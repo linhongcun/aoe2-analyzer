@@ -91,7 +91,7 @@ type SiteContext = {
 | --- | --- |
 | matchup → duel | 已有深链保留；情境栏回程用 `#/matchup?me={me}&opp={opp}` |
 | matchup → 我方开局 | `#/builds?civ={me}&from=matchup&opp={opp}`（有默认 bo 则再加 `bo=`） |
-| matchup → 对手开局 | `#/builds?civ={opp}&from=matchup&opp={me}`（角色对调说明见 §5） |
+| matchup → 对手开局 | `#/builds?civ={opp}&from=matchup&me={me}`（`me`/`opp` 始终是原对阵双方；回程 `opp` 由 `civ` 还原，见 §5.3） |
 | matchup → 文明 | `#/civ/{me}` 或 `#/civ/{opp}` |
 | matchup → unit | `#/unit/{id}?civ={me}&from=matchup&me={me}&opp={opp}` |
 | civ → matchup | `#/matchup?me={en}`（`opp` 可缺，沿用 sticky 或占位提示选对手） |
