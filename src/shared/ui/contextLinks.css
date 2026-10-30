@@ -43,3 +43,13 @@
   align-items: center;
   gap: var(--space-2);
 }
+
+.integration-context > * {
+  min-width: 0;
+}
+.integration-context .community-tool-entry {
+  white-space: normal;
+}
+.integration-origin {
+  display: block;
+}

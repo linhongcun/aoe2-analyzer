@@ -4,6 +4,7 @@ import type { Building, Civ, Cost, Tech, Unit } from '../../domain/types';
 import type { FamilyEntry } from '../../domain/family';
 import { DLCS } from '../../domain/dlc';
 import { RES_ZH } from '../../domain/ratings';
+import { entityPath, type EntityContext } from '../nav/context';
 
 export const img = (p: string) => `${import.meta.env.BASE_URL}img/${p}`;
 
@@ -15,8 +16,12 @@ export const TechIcon = ({ t, big }: { t: Tech; big?: boolean }) => (
   <img className={big ? 'uico big' : 'uico'} src={img(`techs/${t.pic}.webp`)} alt="" loading="lazy" />
 );
 /** 单位链接；传入 elite 时表示“普通+精锐”合并条目，名称后带「精锐」小标 */
-export const UnitLink = ({ u, elite }: { u: Unit; elite?: Unit }) => (
-  <Link className="ulink" to={`/unit/${u.id}`} title={elite ? `${u.zh} / ${elite.zh}` : undefined}>
+export const UnitLink = ({ u, elite, context }: { u: Unit; elite?: Unit; context?: EntityContext }) => (
+  <Link
+    className="ulink"
+    to={context ? entityPath('unit', u.id, context.civ, context.search, context.source, context.age) : `/unit/${u.id}`}
+    title={elite ? `${u.zh} / ${elite.zh}` : undefined}
+  >
     <UnitIcon u={u} />
     {u.zh}
     {elite && <EliteBadge />}
@@ -28,15 +33,15 @@ export const EliteBadge = () => (
   </span>
 );
 /** 合并精锐后的单位链接列表 */
-export const UnitLinks = ({ list }: { list: FamilyEntry[] }) => (
+export const UnitLinks = ({ list, context }: { list: FamilyEntry[]; context?: EntityContext }) => (
   <>
     {list.map((x) => (
-      <UnitLink key={x.u.id} u={x.u} elite={x.elite} />
+      <UnitLink key={x.u.id} u={x.u} elite={x.elite} context={context} />
     ))}
   </>
 );
-export const TechLink = ({ t }: { t: Tech }) => (
-  <Link className="ulink tlink" to={`/tech/${t.id}`}>
+export const TechLink = ({ t, context }: { t: Tech; context?: EntityContext }) => (
+  <Link className="ulink tlink" to={context ? entityPath('tech', t.id, context.civ, context.search, context.source, context.age) : `/tech/${t.id}`}>
     <TechIcon t={t} />
     {t.zh}
   </Link>
@@ -125,8 +130,8 @@ export function TechReleaseBadge({ t, large = false }: { t: Pick<Tech, 'dlc' | '
 export const BuildingIcon = ({ b, big }: { b: Pick<Building, 'pic'>; big?: boolean }) => (
   <img className={big ? 'uico big' : 'uico'} src={img(`buildings/${b.pic}.webp`)} alt="" loading="lazy" />
 );
-export const BuildingLink = ({ b }: { b: Building }) => (
-  <Link className="ulink bl" to={`/building/${b.id}`}>
+export const BuildingLink = ({ b, context }: { b: Building; context?: EntityContext }) => (
+  <Link className="ulink bl" to={context ? entityPath('building', b.id, context.civ, context.search, context.source, context.age) : `/building/${b.id}`}>
     <BuildingIcon b={b} />
     {b.zh}
   </Link>
