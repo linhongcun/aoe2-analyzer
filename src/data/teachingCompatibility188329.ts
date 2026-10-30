@@ -16,7 +16,7 @@ export const TEACHING_COMPATIBILITY_188329 = {
     techs: '2e9c7e21d5e2fd1bfa1a4eb6b1556a6541da359d64ef2ba4cb301233a2743a1e',
     buildings: '9b6b290d946512cdd421c8f7c616d601930d3f3c0bb46eb37087c8e08697e902',
     trees: '27cd18f2a436899f1e3ab1a31996482a9d073a8b1c698670b78466d67b50a9f8',
-    eco: 'f7f1b308ab8933ac614afdc74ea201f1952e7d9356f6d3ce194229507f89d29d',
+    eco: '7a1c28887e56c38c8b85059cc29a84651e531e5b426ba4d60720aeb9fde0bc5f',
     effects: 'a78d80cc8d68ecf589b07679c46d78d51aad5d4c17664d8be30422e93d0bfc64',
     garrison: '3e652ce07e4d8a03371b9f7b8b3f01af72ddcb30ed9a5a918d2665fafd452178',
     exampleCivs: '39ad0bd93202b3c71e1ad78e7e4fe304e6f1d5b3fcaa704eac01132db301b92a',
@@ -38,6 +38,12 @@ export const TEACHING_COMPATIBILITY_188329 = {
       previousEcoProjection: 'af5eeb7121d8c4126c5d16624fdd22d4cda86f228119342062af327547a026bf',
       currentEcoProjection: 'f7f1b308ab8933ac614afdc74ea201f1952e7d9356f6d3ce194229507f89d29d',
       evidence: 'docs/design/chinese197-teaching-metadata.json',
+    },
+    {
+      baseCommit: '9a5c8decfb520cd876d5ce23de8782e7f1f88b0f',
+      previousEcoProjection: 'f7f1b308ab8933ac614afdc74ea201f1952e7d9356f6d3ce194229507f89d29d',
+      currentEcoProjection: '7a1c28887e56c38c8b85059cc29a84651e531e5b426ba4d60720aeb9fde0bc5f',
+      evidence: 'docs/design/mapuche197-teaching-metadata.json',
     },
   ],
   content: {

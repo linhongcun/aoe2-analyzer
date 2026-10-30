@@ -81,7 +81,7 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
           : sum.main.replace(/ 约 .*$/, '');
   const head = `${i.civZh}·${shortBoName(i.boNameZh)}`;
   const title = reached ? `${head}，约 ${formatClock(target!.reachAt)} 到${i.targetZh}，${phrase}` : `${head}，60 分钟内到不了${i.targetZh}`;
-  const slavicNotes = ['Chinese', 'Slavs', 'Khmer', 'Jurchens'].includes(i.civEn) ? civSimNotes(ecoRaw as unknown as EcoData, i.civEn, i.boId) : [];
+  const slavicNotes = ['Mapuche', 'Chinese', 'Slavs', 'Khmer', 'Jurchens'].includes(i.civEn) ? civSimNotes(ecoRaw as unknown as EcoData, i.civEn, i.boId) : [];
   return {
     title,
     cells: [

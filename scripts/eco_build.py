@@ -34,6 +34,7 @@ SLAVIC_CONTEXT_TECHS = (510, 511, 721)
 KHMER_CONTEXT_TECHS = (638, 654, 657, 672)
 JURCHEN_CONTEXT_TECHS = (993, 995)
 CHINESE_CONTEXT_TECHS = (226, 302, 304, 350, 351, 352, 425)
+MAPUCHE_CONTEXT_TECHS = (1381, 1382, 1405, 1406, 1407)
 KHMER_PREREQUISITE_TECHS = (216, 659, 660, 661, 666, 667, 668, 25, 147, 148)
 
 
@@ -69,6 +70,20 @@ def georgian_infrastructure(d, civ):
                      'buildTech': d['BuildTech'].get('1808', -1), 'trainAt': unit['TrainAt'],
                      'trainTime': unit['TrainTime'], 'cost': unit['Cost']},
             'researchSites': {str(tid): d['Techs'][tid]['ResearchAt'] for tid in (14, 22, 199, 202, 203, 55, 182, 278, 221, 279)}}
+
+
+def mapuche_infrastructure(d, civ):
+    """Settlement source survives removal of the independent forager bonus."""
+    from mapuche_source197 import load_physical
+    physical = load_physical()
+    dc = d['Civs'][civ]
+    return {'civId': civ, 'treeId': dc['TechTreeID'], 'treeCommands': eff(d, dc['TechTreeID']),
+            'enable': raw_tech_context(d, 1353), 'buildingTech': raw_tech_context(d, 1357),
+            'settlements': physical['settlements'],
+            'researchSites': {str(tid): d['Techs'][tid]['ResearchAt'] for tid in (14, 22, 199, 202, 203)},
+            'farmTech': raw_tech_context(d, 216), 'marketRequirement': raw_tech_context(d, 666),
+            'ageRequirement': raw_tech_context(d, 659), 'startingScout': physical['startingScout'],
+            'baseTrain93': physical['baseTrain93']}
 
 
 def slavic_farm(d, civ):
@@ -205,9 +220,10 @@ def main():
             khmer_context = c['en'] == 'Khmer' and i in KHMER_CONTEXT_TECHS
             jurchen_context = c['en'] == 'Jurchens' and i in JURCHEN_CONTEXT_TECHS
             chinese_context = c['en'] == 'Chinese' and i in CHINESE_CONTEXT_TECHS
-            if not (armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
+            mapuche_context = c['en'] == 'Mapuche' and i in MAPUCHE_CONTEXT_TECHS
+            if not (armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
             ef = decode(eff(d, t['EffectID']), T)
-            if ef or armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context:
+            if ef or armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context:
                 row = {'source': 'bonus', 'tech': i, 'name': t['Name'], 'age': age_of(i), 'requires': [x for x in t['RequiredTechs'] if x >= 0], 'effects': ef}
                 # #197: retain the COMPLETE raw context for this reviewed Wei family only.
                 # Unknown/extra commands must reach the closed runtime guard, never disappear in decode().
@@ -236,6 +252,8 @@ def main():
                     row['jurchenTech'] = raw_tech_context(d, i)
                 if chinese_context:
                     row['chineseTech'] = raw_tech_context(d, i)
+                if mapuche_context:
+                    row['mapucheTech'] = raw_tech_context(d, i)
                 rows.append(row)
         team = decode(eff(d, dc['TeamBonusID']), T)
         if team or c['en'] == 'Khmer':
@@ -248,6 +266,8 @@ def main():
             out['armenianInfrastructure'] = armenian_infrastructure(d, k)
         if c['en'] == 'Georgians':
             out['georgianInfrastructure'] = georgian_infrastructure(d, k)
+        if c['en'] == 'Mapuche':
+            out['mapucheInfrastructure'] = mapuche_infrastructure(d, k)
         if c['en'] == 'Slavs':
             out['slavicFarm'] = slavic_farm(d, k)
         if c['en'] == 'Khmer':

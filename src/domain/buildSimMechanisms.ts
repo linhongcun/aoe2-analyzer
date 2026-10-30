@@ -1,3 +1,12 @@
+import {
+  mapucheContext,
+  mapucheBuildOrder,
+  mapucheResearchSites,
+  mapucheNotes,
+  mapucheRowAllowed,
+  MAPUCHE_MODEL_NOTE,
+  type MapucheContext,
+} from './mapucheEconomy';
 /** Declarative extension points for opening mechanics; source guards remain explicit and fail closed. */
 import type { BuildOrder } from './buildOrder';
 import type { EcoData, EffectRow, SimParams } from './buildSim';
@@ -15,6 +24,7 @@ import { khmerContext, khmerRowClass, khmerFarmRate, khmerBuildingReady, khmerNo
 import { chineseContext, chinesePopulation, chineseStartingVillagers, chineseRowAllowed, chineseNotes, CHINESE_MODEL_NOTE } from './chineseEconomy';
 import { jurchenContext, jurchenNotes, jurchenRowClass, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 export interface MechanismContext {
+  mapuche?: MapucheContext;
   chinese?: ReturnType<typeof chineseContext>;
   jurchens?: ReturnType<typeof jurchenContext>;
   sicilianRows?: EffectRow[];
@@ -29,6 +39,7 @@ export interface MechanismContext {
 type Scope = ReturnType<typeof simScope>;
 type Assumptions = { eco: EcoData; bo: BuildOrder; params: SimParams; scope: () => Scope };
 interface CivMechanism {
+  buildingPopulation?: (scope: Scope, id: number) => number;
   startingVillagers?: (scope: Scope) => number;
   townCenterPopulation?: (scope: Scope) => number;
   context?: (eco: EcoData) => Partial<MechanismContext>;
@@ -42,13 +53,23 @@ interface CivMechanism {
   farmRate?: (scope: Scope, average: number) => number;
   buildingTime?: (scope: Scope, eco: EcoData, mods: Mods, id: number, age: number, fallback: number) => number | undefined;
   buildingReady?: (scope: Scope, id: number, age: number, built: ReadonlyMap<number, number>) => boolean;
-  researchSites?: (eco: EcoData, tech: number) => readonly number[];
+  researchSites?: (eco: EcoData, tech: number, scope: Scope) => readonly number[];
   prerequisiteCiv?: (scope: Scope, civ: string) => string;
   assumptions?: (input: Assumptions) => string[];
 }
 const knightNote = (bo: BuildOrder, note: string) => (bo.id === 'fast-castle-knights' ? [note] : []);
 /** Numbers are source identities, not copied gameplay multipliers: actual values still come from eco. */
 export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
+  Mapuche: {
+    context: (eco) => ({ mapuche: mapucheContext(eco) }),
+    prepare: mapucheBuildOrder,
+    buildingReady: (scope, id, _age, built) => !scope.mapuche?.infrastructure || ![50, 1187, 84].includes(id) || (built.get(2556) ?? 0) > 0,
+    buildingPopulation: (scope, id) => (id === 2556 ? (scope.mapuche?.infrastructure?.settlements[0]?.populationSource.amount ?? 0) : 0),
+    researchSites: mapucheResearchSites,
+    deferAgeTechs: [1405, 1406, 1407],
+    atomicGather: true,
+    assumptions: ({ eco, bo }) => (mapucheContext(eco).complete ? [...mapucheNotes(eco, bo.id), MAPUCHE_MODEL_NOTE] : []),
+  },
   Chinese: {
     context: (eco) => ({ chinese: chineseContext(eco) }),
     startingVillagers: (scope) => chineseStartingVillagers(scope.chinese),
@@ -159,6 +180,7 @@ interface ApplicationRule {
   allows: (row: EffectRow, scope: Scope) => boolean;
 }
 const APPLICATION_RULES: readonly ApplicationRule[] = [
+  { flag: 'foragerFood', civ: 'Mapuche', gather: true, allows: (row, scope) => scope.mapuche?.admitted.get(1381) === row },
   { flag: 'foragerWood', gather: true, allows: (row) => row.tech === 453 },
   { flag: 'lumberFood', gather: true, allows: (row) => rules.hasLumberFoodContext(row) === true },
   { flag: 'malianGold', civ: 'Malians', gather: true, allows: (row) => rules.hasMalianGoldContext(row) === true },
@@ -178,6 +200,7 @@ export function rowApplication(civ: string, row: EffectRow, scope: Scope, mode: 
 /** Shared source filtering; gather keeps its historical, narrower atomic gate. */
 export function mechanismRowAllowed(row: EffectRow, scope: Scope, uniqueMayanTree: boolean): boolean {
   return (
+    mapucheRowAllowed(row, scope.civ, scope.mapuche) &&
     chineseRowAllowed(row, scope.civ, scope.chinese) &&
     jurchenRowClass(row, scope.civ, scope.jurchens)?.kind !== 'unhandled' &&
     khmerRowClass(row, scope.civ, scope.khmer)?.kind !== 'unhandled' &&

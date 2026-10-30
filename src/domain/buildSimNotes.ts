@@ -1,3 +1,4 @@
+import { mapucheNotes } from './mapucheEconomy';
 import { chineseNotes } from './chineseEconomy';
 /** Civilization-specific disclosures, in the same prefix / row / mechanism / tail order as the simulator. */
 import { buildOrders as ALL_BOS } from '../data/buildOrders';
@@ -28,6 +29,7 @@ interface CivNotes {
 
 /** Generic-row disclosures remain outside the registry: a displaced Portuguese row still has its old note. */
 const CIV_NOTES: ReadonlyMap<string, CivNotes> = new Map([
+  ['Mapuche', { mechanism: ({ eco, boId }) => mapucheNotes(eco, boId) }],
   ['Chinese', { mechanism: ({ eco }) => chineseNotes(eco) }],
   ['Jurchens', { mechanism: ({ eco, boId }) => jurchenNotes(eco, boId) }],
   [

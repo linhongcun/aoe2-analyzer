@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "purpose": "Source metadata continuation only; preserved historical teaching content and numeric snapshots",
+  "baseCommit": "9a5c8decfb520cd876d5ce23de8782e7f1f88b0f",
+  "previousEvidence": "chinese197-teaching-metadata.json",
+  "previousProjection": "f7f1b308ab8933ac614afdc74ea201f1952e7d9356f6d3ce194229507f89d29d",
+  "currentProjection": "7a1c28887e56c38c8b85059cc29a84651e531e5b426ba4d60720aeb9fde0bc5f",
+  "addedMetadata": {
+    "/civEco/Mapuche/tech:1381/mapucheTech": "143d6abe1dfd60ba97b39d7d28d2f3d433ca2170547e7f46cb0d345e0783b3cc",
+    "/civEco/Mapuche/tech:1382/mapucheTech": "39721624cd93b6cb2a0fc49659d7c88bc139cef908f291035cdc86cc26110955",
+    "/civEco/Mapuche/tech:1405/mapucheTech": "ee2101abf6bcf23ef8a233f1ca6b01f6d084b8358486aaf82eb4018c81b7db74",
+    "/civEco/Mapuche/tech:1406/mapucheTech": "91940b902a2fadcac23196670922a6828146b6480bd319fc0a0a2b37887fd76c",
+    "/civEco/Mapuche/tech:1407/mapucheTech": "b34a2543f68305b03c08f620f95fdb2d9948bb63a9d0818c3019fc8d5d116e68"
+  },
+  "addedEmptyRow": {
+    "tech": 1382,
+    "effects": []
+  },
+  "addedInfrastructureSHA256": "f7124afeaecb8389b1560afe97492e2999e9e0d2da23ab3270c7e2a21152c0cc",
+  "reverseProof": {
+    "exactFullEcoRestoration": true,
+    "operations": "Remove mapucheInfrastructure, five mapucheTech fields and empty-effects1382 row",
+    "restoredProjection": "f7f1b308ab8933ac614afdc74ea201f1952e7d9356f6d3ce194229507f89d29d",
+    "other55CivRowsAndAllOriginalGlobalSectionsExact": true
+  },
+  "preserved": "No teaching content, old Jurchen/Chinese/486 source evidence, other audit hash, source pin or historical expectation changed"
+}
