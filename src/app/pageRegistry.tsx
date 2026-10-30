@@ -18,6 +18,7 @@ const LOADERS: Record<LazyComponentId, LazyExoticComponent<ComponentType>> = {
   BuildingList: lazy(() => import('../features/buildings/components/BuildingList')),
   BuildingDetail: lazy(() => import('../features/buildings/components/BuildingDetail')),
   Duel: lazy(() => import('../features/duel/components/Duel')),
+  Siege: lazy(() => import('../features/siege/Siege')),
   Production: lazy(() => import('../features/production/Production')),
   EcoPayoff: lazy(() => import('../features/ecoPayoff/EcoPayoff')),
   Market: lazy(() => import('../features/market/Market')),

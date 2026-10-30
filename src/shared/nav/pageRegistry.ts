@@ -26,6 +26,7 @@ export const LAZY_COMPONENTS = [
   'BuildingList',
   'BuildingDetail',
   'Duel',
+  'Siege',
   'Production',
   'EcoPayoff',
   'Market',
@@ -90,6 +91,8 @@ export interface PageDef {
   aliases?: readonly string[];
   /** 全局搜索俗称 */
   searchAliases?: readonly string[];
+  /** 新页面可随登记表提供拼音，无需改动实体生成数据。 */
+  searchPy?: { py: string; pyi: string };
   metaTitle?: string;
   metaDescription?: string;
   component?: ComponentId;
@@ -374,6 +377,22 @@ export const PAGES: readonly PageDef[] = [
     component: 'Duel',
     metaTitle: '单位 PK',
     metaDescription: '设置单位、文明、科技和数量，比较击杀时间与模拟结果。',
+  },
+  {
+    key: 'siege',
+    path: '/siege',
+    kind: 'page',
+    lane: 'tool',
+    group: 'planning',
+    label: '攻城拆建筑',
+    en: 'Siege',
+    searchPy: { py: 'gongchengchaijianzhu', pyi: 'gccjz' },
+    icon: 'hammer',
+    desc: '几台攻城单位拆一座建筑要多久',
+    match: /^\/siege\/?$/,
+    component: 'Siege',
+    metaTitle: '攻城拆建筑',
+    metaDescription: '按攻城单位、数量和目标建筑计算理想齐射的击数、游戏秒与现实秒，标明未核实的数据。',
   },
   {
     key: 'production',

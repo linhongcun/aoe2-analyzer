@@ -49,6 +49,8 @@ for (const f of ['civs', 'units', 'techs', 'buildings']) {
 const sections = ts.createSourceFile('pageRegistry.ts', fs.readFileSync('src/shared/nav/pageRegistry.ts', 'utf8'), ts.ScriptTarget.Latest);
 const names = [];
 function labels(node) {
+  // 有源码拼音的页面以登记表为准，不再重复写入生成 JSON。
+  if (ts.isObjectLiteralExpression(node) && node.properties.some((p) => ts.isPropertyAssignment(p) && p.name.getText(sections) === 'searchPy')) return;
   if (ts.isPropertyAssignment(node) && node.name.getText(sections) === 'label' && ts.isStringLiteral(node.initializer)) {
     names.push(node.initializer.text);
   }
