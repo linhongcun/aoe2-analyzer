@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   MATCH_REVIEW_LIMITS as limits,
   MATCH_REVIEW_STORAGE_KEY as storageKey,
@@ -10,10 +11,14 @@ import {
   type MatchReviewDraft,
 } from '../../domain/matchReview';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { readNavigation } from '../../shared/nav/context';
+import { NavigationContext } from '../../shared/ui/NavigationContext';
+import { reviewNavigationMerge, reviewNavigationPreview } from '../../domain/reviewNavigation531';
 import { matchReviewDraftReducer } from './matchReviewDraftState';
 import { ReviewEditor } from './ReviewEditor';
 import { ReviewOutput } from './ReviewOutput';
 import { ReviewSources } from './ReviewSources';
+import { ReviewNavigationSource } from './ReviewNavigationSource';
 import './matchReview.css';
 
 type Lock = 'corrupt' | 'conflict' | null;
@@ -34,6 +39,12 @@ function loadInitial() {
   }
 }
 export default function MatchReview() {
+  const location = useLocation();
+  const navigation = readNavigation(location.search);
+  const sourcePreview = reviewNavigationPreview(navigation, window.location.href);
+  const [dismissedSource, dismissSource] = useState<string | null>(null);
+  const sourceKey = location.pathname + location.search;
+  const showSource = dismissedSource !== sourceKey && (sourcePreview.sourcePath !== null || Object.keys(sourcePreview.context).length > 0);
   const [initial] = useState(loadInitial);
   const [draftState, dispatchDraft] = useReducer(matchReviewDraftReducer, { draft: initial.draft, beforeClear: null });
   const { draft, beforeClear } = draftState;
@@ -130,6 +141,28 @@ export default function MatchReview() {
     draftRef.current = next;
     dispatchDraft({ type: 'edit', draft: next });
     persist(next);
+  };
+  const applySource = () => {
+    // Unlike ordinary editing, navigation must not alter even the in-memory draft while saving is locked.
+    if (lockRef.current) {
+      setNotice('来源尚未带入。请先处理本机草稿的保存暂停。');
+      return;
+    }
+    const next = reviewNavigationMerge(draftRef.current, sourcePreview);
+    if (next === draftRef.current) {
+      dismissSource(sourceKey);
+      setNotice('没有可补入的空白字段，当前草稿保持不变。');
+      return;
+    }
+    // persist rechecks the current local snapshot. A conflict or storage failure leaves the page unchanged.
+    if (!persist(next)) {
+      setNotice('来源尚未带入，本页与本机草稿均未被来源替换。请处理保存提示后重试。');
+      return;
+    }
+    draftRef.current = next;
+    dispatchDraft({ type: 'edit', draft: next });
+    dismissSource(sourceKey);
+    setNotice('已按你的选择补入空白上下文字段，原有记录保持；草稿已保存到此浏览器。');
   };
   const clearDraft = () => {
     const next = matchReviewDraftReducer(draftState, { type: 'clear' });
@@ -254,6 +287,19 @@ export default function MatchReview() {
           <p className="note">把观察变成一个可验证的练习重点</p>
           <h1 id="mr-title">手填复盘与下局目标</h1>
         </header>
+        <NavigationContext search={location.search} />
+        {showSource && (
+          <ReviewNavigationSource
+            draft={draft}
+            preview={sourcePreview}
+            blocked={!!lock}
+            onConfirm={applySource}
+            onCancel={() => {
+              dismissSource(sourceKey);
+              setNotice('已取消来源带入，当前草稿保持不变。');
+            }}
+          />
+        )}
         <div className="mr-panel mr-storage" aria-label="草稿保存状态">
           <p>草稿只保存在此浏览器的本机存储，不会上传。清除网站数据、换设备或存储被拒绝时，请使用 JSON 备份。</p>
           <div className="mr-actions">
