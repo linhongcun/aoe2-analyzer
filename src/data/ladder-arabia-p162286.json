@@ -1,10 +1,10 @@
 {
-  "source": "aoestats.io (Wayback archive https://web.archive.org/web/20260712183553/https://aoestats.io/maps/arabia/ ; live site HTTP 522 at snapshot time)",
+  "source": "aoestats.io",
   "sourceUrl": "https://aoestats.io/maps/arabia/",
   "map": "Arabia",
   "mode": "1v1 RM",
   "fetchedAt": "2026-07-12",
-  "patchNote": "aoestats patch 162286",
+  "patchNote": "aoestats patch 162286 (via Wayback 2026-07-12)",
   "brackets": [
     {
       "key": "all",

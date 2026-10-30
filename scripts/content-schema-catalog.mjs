@@ -50,5 +50,6 @@ export function schemaFileFor(file) {
   if (Object.hasOwn(SCHEMA_CATALOG, file)) return SCHEMA_CATALOG[file];
   if (/^src\/data\/build-orders\/[a-z0-9-]+\.json$/u.test(file)) return 'data-build-order.json';
   if (/^src\/data\/patches\/[0-9]+\.json$/u.test(file)) return 'data-patch.json';
+  if (/^src\/data\/ladder-arabia-[a-z0-9.-]+\.json$/u.test(file)) return 'data-ladder-arabia.json';
   return null;
 }
