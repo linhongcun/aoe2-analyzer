@@ -64,6 +64,7 @@ const inputsHash = () =>
       'jurchenEconomy.ts',
       'chineseEconomy.ts',
       'mapucheEconomy.ts',
+      'gurjaraEconomy.ts',
       'khmerSource.ts',
       'khmerPrerequisiteSource.ts',
     ].map((f) => readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8')),

@@ -1,0 +1,122 @@
+{
+  "civ": {
+    "id": 42,
+    "name": "Gurjaras",
+    "teamId": 843,
+    "treeId": 842
+  },
+  "engineVerifiedInPinnedBuild": false,
+  "extraForageBush": {
+    "class": 7,
+    "name": "FORAGGURJ",
+    "owner": "Gaia",
+    "resourceStorages": [
+      {
+        "amount": 175.0,
+        "flag": 0,
+        "type": 0
+      },
+      {
+        "amount": 0.0,
+        "flag": 0,
+        "type": -1
+      },
+      {
+        "amount": 0.0,
+        "flag": 0,
+        "type": -1
+      }
+    ],
+    "type": 10,
+    "unit": 1549
+  },
+  "generator": "scripts/gurjaras_source197.py",
+  "resourceDifferencesFromBase": [
+    {
+      "Gurjaras": 9507.0,
+      "base": 9466.0,
+      "resource": 73
+    },
+    {
+      "Gurjaras": 1755.0,
+      "base": 448.0,
+      "resource": 263
+    }
+  ],
+  "schema": "gurjaras197-physical/1",
+  "source": {
+    "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+    "path": "dat/empires2_x2_p1.dat",
+    "repo": "SiegeEngineers/auto-mods",
+    "sha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f"
+  },
+  "startingScout": {
+    "name": "CAMELSC",
+    "populationCost": {
+      "amount": 1,
+      "flag": 0,
+      "type": 4
+    },
+    "resource": 263,
+    "unit": 1755
+  },
+  "stockResourceSlots": [
+    {
+      "Gurjaras": 0.0,
+      "base": 0.0,
+      "resource": 0
+    },
+    {
+      "Gurjaras": 0.0,
+      "base": 0.0,
+      "resource": 1
+    },
+    {
+      "Gurjaras": 0.0,
+      "base": 0.0,
+      "resource": 2
+    },
+    {
+      "Gurjaras": 0.0,
+      "base": 0.0,
+      "resource": 3
+    },
+    {
+      "Gurjaras": 0.0,
+      "base": 0.0,
+      "resource": 91
+    },
+    {
+      "Gurjaras": 0.0,
+      "base": 0.0,
+      "resource": 92
+    },
+    {
+      "Gurjaras": 0.0,
+      "base": 0.0,
+      "resource": 93
+    },
+    {
+      "Gurjaras": 0.0,
+      "base": 0.0,
+      "resource": 94
+    }
+  ],
+  "townCenter": {
+    "populationStorage": {
+      "amount": 5.0,
+      "flag": 4,
+      "type": 4
+    },
+    "unit": 109
+  },
+  "version": "VER 8.9",
+  "villager": {
+    "populationCost": {
+      "amount": 1,
+      "flag": 0,
+      "type": 4
+    },
+    "unit": 83
+  }
+}

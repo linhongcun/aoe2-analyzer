@@ -1,3 +1,4 @@
+import type { GurjaraRawTech } from './gurjaraEconomy';
 export { civSimNotes } from './buildSimNotes';
 import {
   civMechanism,
@@ -65,6 +66,7 @@ export interface EffectRow {
   jurchenTech?: JurchenRawTech;
   chineseTech?: ChineseRawTech;
   mapucheTech?: MapucheRawTech;
+  gurjaraTech?: GurjaraRawTech;
   khmerTree?: KhmerRawTree;
   khmerTeam?: KhmerRawTeam;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];

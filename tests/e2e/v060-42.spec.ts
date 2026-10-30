@@ -6,7 +6,6 @@ import { expect, test } from '@playwright/test';
 // 文案是「尚未计入」不是「暂未计入」；两者都接受，是否要统一成「暂未计入」需 Steve 确认。
 test.describe('#42 白名单文明在开局页有「未计入」标识', () => {
   for (const civ of [
-    'Gurjaras',
     'Poles',
     'Romans',
   ])

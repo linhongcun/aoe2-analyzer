@@ -478,6 +478,9 @@
                 },
                 "mapucheTech": {
                   "$ref": "#/$defs/khmerTech"
+                },
+                "gurjaraTech": {
+                  "$ref": "#/$defs/khmerTech"
                 }
               },
               "required": ["source", "tech", "name", "age", "requires", "effects"],

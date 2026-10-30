@@ -111,7 +111,10 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
   const groups = bonusAffects(b, core.units, core.buildings);
   const mayanTimeline = b.id === 'Mayans-1';
   const sicilianConstruction = b.id === 'Sicilians-4';
-  const usage = b.encoded && !mayanTimeline && !sicilianConstruction && b.id !== 'Chinese-2' && b.id !== 'Mapuche-1' ? [] : bonusUsage(b);
+  const usage =
+    b.encoded && !mayanTimeline && !sicilianConstruction && b.id !== 'Chinese-2' && b.id !== 'Mapuche-1' && b.id !== 'Gurjaras-0' && b.id !== 'Gurjaras-1'
+      ? []
+      : bonusUsage(b);
   const ex = bonusExample(b, core.units, core.buildings, b.civ === 'Franks' && b.idx === 2 ? 'Paladin' : undefined);
   // 未编码：根据文字识别出的单位/建筑（不计入数值）
   const mentions = !b.encoded
