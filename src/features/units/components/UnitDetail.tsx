@@ -27,6 +27,10 @@ import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/re
 import { Basis } from '../../../shared/ui/RealCost';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { unitDisplayAge } from '../displayAge';
+import { contextPath, entityPath, readNavigation, type EntityContext } from '../../../shared/nav/context';
+import { NavigationContext } from '../../../shared/ui/NavigationContext';
+import { unitProductionEntry } from '../../../domain/unitProductionEntry';
+import { encodeProduction } from '../../../domain/production';
 import '../../../shared/ui/contextLinks.css';
 import './unit-civ-links.css';
 
@@ -60,13 +64,13 @@ function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {
 const UT: Record<string, string> = { UniqueUnit: '独特单位', Unit: '通用单位', UnitUpgrade: '升级单位', RegionalUnit: '区域单位' };
 
 /** 升级路线中的一项；独特单位带灰色小标签「{单位} · {文明}」+ 文明图标（#10） */
-function UnitLineItem({ x }: { x: Unit }) {
+function UnitLineItem({ x, context }: { x: Unit; context?: EntityContext }) {
   const trees = useTrees();
   const c = trees ? civByEn(uniqueCivs(x, trees)[0] ?? '') : undefined;
-  if (!c) return <UnitLink u={x} />;
+  if (!c) return <UnitLink u={x} context={context} />;
   return (
     <span className="uline-uu">
-      <UnitLink u={x} />
+      <UnitLink u={x} context={context} />
       <span className="uu-tag" data-t="uu-tag">
         <CivIcon c={c} />
         {x.zh} · {c.zh}
@@ -75,12 +79,12 @@ function UnitLineItem({ x }: { x: Unit }) {
   );
 }
 
-function RelatedTechs({ items, compact = false, civ }: { items: UnitRelatedTech[]; compact?: boolean; civ?: string }) {
+function RelatedTechs({ items, compact = false, civ, context }: { items: UnitRelatedTech[]; compact?: boolean; civ?: string; context?: EntityContext }) {
   const chips = (list: UnitRelatedTech[]) => (
     <div className="uchips">
       {list.map(({ t, civs }) => (
         <span key={t.id} className="unit-related-tech">
-          <TechLink t={t} />
+          <TechLink t={t} context={context} />
           {!!civs.length && <small className="note">{civs.map((c) => civByEn(c)?.zh ?? c).join('、')}限定</small>}
         </span>
       ))}
@@ -112,10 +116,11 @@ export default function UnitDetail() {
   const trees = useTrees();
   const rt = parseUnitPath(loc.pathname);
   const params = new URLSearchParams(loc.search);
-  const queryCiv = civByEn(params.get('civ') ?? '');
+  const queryCiv = params.getAll('civ').length === 1 ? civByEn(params.get('civ') ?? '') : undefined;
+  const invalidQueryCiv = !rt?.civ && params.has('civ') && !queryCiv;
   const contextCiv = civByEn(rt?.civ ?? '') ?? queryCiv;
-  const me = civByEn(params.get('me') ?? ''),
-    opp = civByEn(params.get('opp') ?? '');
+  const navigation = readNavigation(loc.search);
+  const queryAge = params.getAll('age').length === 1 && [1, 2, 3, 4].includes(Number(params.get('age'))) ? Number(params.get('age')) : undefined;
   const u = core && rt ? core.unitById[rt.id] : undefined;
   const hasCiv = !!rt?.civ;
   useEffect(() => {
@@ -129,14 +134,26 @@ export default function UnitDetail() {
     );
   if (!rt) return <UnitList />;
   if (!u) return <HistoricalEntityDetail target={{ targetType: 'unit', targetId: rt.id }} />;
-  const displayAge = unitDisplayAge(u, rt.civ);
+  const displayAge = unitDisplayAge(u, contextCiv?.en);
+  const requestedAge = rt.age ?? queryAge;
+  const context: EntityContext | undefined =
+    contextCiv || navigation.back || navigation.me || navigation.opp
+      ? { civ: contextCiv?.en, age: requestedAge, search: loc.search, source: loc.pathname + loc.search }
+      : undefined;
+  const unitHref = (id: number) => (context ? entityPath('unit', id, context.civ, loc.search, context.source, context.age) : `/unit/${id}`);
+  const production =
+    contextCiv && trees ? unitProductionEntry({ core, trees }, { unit: u.id, civ: contextCiv.en, age: requestedAge ?? displayAge, techs: rt.ids }) : null;
+  const productionPath = production ? contextPath('/production?' + encodeProduction(production.config), loc.search, loc.pathname + loc.search) : null;
+  const unavailableCiv = contextCiv && !u.civs.includes(contextCiv.en);
+  const unavailableAge = requestedAge !== undefined && requestedAge < displayAge;
+  const unavailableSim = invalidQueryCiv || unavailableCiv || unavailableAge;
   const base = baseUnit(u, core.fam);
   const elite = core.fam.eliteOf[base.id];
   const isE = u.id !== base.id;
   // 切换普通/精锐时保留路径中的模拟器状态（文明/时代/科技）
   const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
   // 有文明上下文时按该文明科技树选分叉（#10）
-  const st = rt.civ && trees ? civStatus(trees, rt.civ) : null;
+  const st = contextCiv && trees ? civStatus(trees, contextCiv.en) : null;
   const ln = upgradeLine(u, core.units, core.unitById, st ? (id) => st['u' + id] === 1 : undefined).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id);
   const stats: DetailStat[] = [
     { key: 'hp', icon: 'hp', label: '生命值 HP', value: u.hp, accent: true, change: isE ? u.hp - base.hp : undefined },
@@ -174,7 +191,7 @@ export default function UnitDetail() {
         ),
     },
   ];
-  const rel = trees ? unitRelatedTechs(makeSimContext(core.techs, trees), u, rt.civ) : null;
+  const rel = trees ? unitRelatedTechs(makeSimContext(core.techs, trees), u, contextCiv?.en) : null;
   const cz = (en: string) => civByEn(en)?.zh;
   // #44「相关」第一项：完全重名（自动识别）与易混淆（对照表）互斥，一个单位只出现其中一种
   const peers = dupPeers(base, core.units);
@@ -185,7 +202,7 @@ export default function UnitDetail() {
         .filter((c) => c.u);
   const showNote = peers.length > 0 || conf.length > 0;
   const wantSim = hasCiv || new URLSearchParams(loc.search).get('tab') === 'sim';
-  const simulatorRoute = !rt.civ && queryCiv && u.civs.includes(queryCiv.en) ? { ...rt, civ: queryCiv.en } : rt;
+  const simulatorRoute = !rt.civ && contextCiv && u.civs.includes(contextCiv.en) ? { ...rt, civ: contextCiv.en, age: requestedAge } : rt;
   const allCivsParams = new URLSearchParams(params);
   allCivsParams.set('tab', 'rel');
   return (
@@ -201,25 +218,29 @@ export default function UnitDetail() {
       tags={
         <>
           <span className="tag">{UT[u.type] ?? u.type}</span>
-          <BLink id={u.b} zh={u.bz} />
+          <BLink id={u.b} zh={u.bz} context={context} />
           <span className="tag">{AGE_ZH[displayAge] ?? displayAge}</span>
         </>
       }
       tabsTop={
         <>
-          {(contextCiv || (me && opp)) && (
-            <nav className="ctx-bar" aria-label="文明相关入口">
-              {contextCiv && (
-                <Link className="ctx-civ-link ulink" to={`/civ/${contextCiv.en}`}>
-                  <CivIcon c={contextCiv} /> {contextCiv.zh}
-                </Link>
-              )}
-              {me && opp && (
-                <Link className="community-tool-entry" to={`/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}>
-                  <Icon name="arrow-left" /> 回对局助手
-                </Link>
-              )}
+          <NavigationContext label="文明相关入口" currentCiv={contextCiv?.en ?? ''} />
+          {productionPath && production && (
+            <nav className="ctx-chips" aria-label="当前单位的下一步">
+              <Link className="community-tool-entry" to={productionPath}>
+                <Icon name="factory" />
+                按当前单位规划生产
+              </Link>
+              <span className="note">
+                {requestedAge === undefined ? '按单位解锁时代开始设置；' : ''}生产建筑数量需另行填写，战斗科技仅带入生产模型支持的部分。
+              </span>
             </nav>
+          )}
+          {unavailableSim && (
+            <p className="note" role="status">
+              {invalidQueryCiv ? '链接中的文明无效或重复' : unavailableCiv ? `${contextCiv.zh}无法生产该单位` : '当前时代尚未解锁该单位'}
+              ；保留已选条件，仍可查阅基础资料。
+            </p>
           )}
           {u.id === 93 && <p className="note">通常在封建时代可用；亚美尼亚可在黑暗时代训练长矛兵。</p>}
           {elite && (
@@ -259,7 +280,7 @@ export default function UnitDetail() {
                   <div>
                     <dt>生产建筑</dt>
                     <dd>
-                      <BLink id={u.b} zh={u.bz} />
+                      <BLink id={u.b} zh={u.bz} context={context} />
                     </dd>
                   </div>
                 </dl>
@@ -315,14 +336,26 @@ export default function UnitDetail() {
             </>
           ),
         },
-        ...(u.civs.length ? [{ key: 'sim', label: '科技模拟器', content: <Simulator key={u.id} u={u} route={simulatorRoute} /> }] : []),
+        ...(u.civs.length
+          ? [
+              {
+                key: 'sim',
+                label: '科技模拟器',
+                content: unavailableSim ? (
+                  <p className="note">当前文明或时代下无法模拟该单位。请返回来源核对条件，或查看可用文明。</p>
+                ) : (
+                  <Simulator key={u.id} u={u} route={simulatorRoute} />
+                ),
+              },
+            ]
+          : []),
         {
           key: 'rel',
           label: '相关',
           content: (
             <>
               <h4>相关科技</h4>
-              {rel ? <RelatedTechs items={rel} civ={rt.civ} /> : <Loading />}
+              {rel ? <RelatedTechs items={rel} civ={contextCiv?.en} context={context} /> : <Loading />}
               <h4>
                 拥有该单位的文明（{u.civs.length}/{civs.length}）
               </h4>
@@ -346,7 +379,7 @@ export default function UnitDetail() {
             <SideBlock title="相关">
               <div className="rel-first" data-t="rel-first">
                 {peers.map((p) => (
-                  <Link key={p.id} className="rel-row" to={`/unit/${p.id}`} data-t="dup-link">
+                  <Link key={p.id} className="rel-row" to={unitHref(p.id)} data-t="dup-link">
                     <Icon name="copy" />
                     <span className="rel-tx">
                       同名单位：{p.zh}
@@ -356,7 +389,7 @@ export default function UnitDetail() {
                   </Link>
                 ))}
                 {conf.map(({ u: o, reason }) => (
-                  <Link key={o!.id} className="rel-row" to={`/unit/${o!.id}`} data-t="conf-link">
+                  <Link key={o!.id} className="rel-row" to={unitHref(o!.id)} data-t="conf-link">
                     <Icon name="info" />
                     <span className="rel-tx">
                       别和 {o!.zh} 混淆
@@ -379,13 +412,13 @@ export default function UnitDetail() {
                       {x.zh}
                     </b>
                   ) : (
-                    <UnitLineItem x={x} />
+                    <UnitLineItem x={x} context={context} />
                   ),
                 )}
               />
             </div>
           </SideBlock>
-          <SideBlock title="相关科技">{rel ? <RelatedTechs items={rel} compact civ={rt.civ} /> : <Loading />}</SideBlock>
+          <SideBlock title="相关科技">{rel ? <RelatedTechs items={rel} compact civ={contextCiv?.en} context={context} /> : <Loading />}</SideBlock>
           <SideBlock title={`可用文明 ${u.civs.length}/${civs.length}`}>
             <div className="unit-civ-links">
               <Join

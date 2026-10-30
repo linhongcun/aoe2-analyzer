@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { contextPath, type EntityContext } from '../../../shared/nav/context';
 import { regionalUnitLines } from '../../../domain/civUnits';
 import { unitPath } from '../../../domain/simRoute';
 import type { Unit } from '../../../domain/types';
@@ -7,7 +8,7 @@ import { UnitIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import './civ-regional-units.css';
 
-export function CivRegionalUnits({ civ, units }: { civ: string; units: readonly Unit[] | null }) {
+export function CivRegionalUnits({ civ, units, context }: { civ: string; units: readonly Unit[] | null; context?: EntityContext }) {
   const lines = units ? regionalUnitLines(civ, units) : [];
   if (units && !lines.length) return null;
   return (
@@ -20,7 +21,11 @@ export function CivRegionalUnits({ civ, units }: { civ: string; units: readonly 
             const base = line[0]!;
             if (line.length === 1)
               return (
-                <Link key={base.id} className="civ-regional-single" to={unitPath(base.id, civ, base.age, [], [])}>
+                <Link
+                  key={base.id}
+                  className="civ-regional-single"
+                  to={contextPath(unitPath(base.id, civ, base.age, [], []), context?.search ?? '', context?.source)}
+                >
                   <UnitIcon u={base} />
                   {base.zh}
                 </Link>
@@ -36,7 +41,7 @@ export function CivRegionalUnits({ civ, units }: { civ: string; units: readonly 
                 <ol aria-label={`${base.zh}升级路线`}>
                   {line.map((u, index) => (
                     <li key={u.id}>
-                      <Link to={unitPath(u.id, civ, u.age, [], [])}>
+                      <Link to={contextPath(unitPath(u.id, civ, u.age, [], []), context?.search ?? '', context?.source)}>
                         <span>{u.zh}</span>
                         <small aria-hidden="true">{index === 0 ? '基础' : '升级'}</small>
                       </Link>

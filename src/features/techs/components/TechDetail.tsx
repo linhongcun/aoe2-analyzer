@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
-import { CivChip, CivIcon, CostView, TechReleaseBadge, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
+import { CivChip, CostView, TechReleaseBadge, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../../shared/ui/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
@@ -13,7 +13,9 @@ import { techAffects } from '../../../domain/affects';
 import { affectedUnits } from '../../../domain/family';
 import { TECH_AKA } from '../../../data/aliases';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { Icon } from '../../../shared/ui/Icon';
+import { contextPath, type EntityContext } from '../../../shared/nav/context';
+import { NavigationContext } from '../../../shared/ui/NavigationContext';
+import { DEFAULT_PAYOFF, encodeEcoPayoff, PAYOFF_TARGETS } from '../../../domain/ecoPayoff';
 import '../../../shared/ui/contextLinks.css';
 import './tech-civ-links.css';
 
@@ -23,9 +25,8 @@ export default function TechDetail() {
   const { id = '' } = useParams();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const contextCiv = civByEn(params.get('civ') ?? '');
-  const me = civByEn(params.get('me') ?? ''),
-    opp = civByEn(params.get('opp') ?? '');
+  const contextCiv = params.getAll('civ').length === 1 ? civByEn(params.get('civ') ?? '') : undefined;
+  const age = params.getAll('age').length === 1 && [1, 2, 3, 4].includes(Number(params.get('age'))) ? Number(params.get('age')) : undefined;
   const allCivsParams = new URLSearchParams(params);
   allCivsParams.set('tab', 'civs');
   const core = useCore();
@@ -40,6 +41,17 @@ export default function TechDetail() {
     );
   const t = core.techById[+id];
   if (!t) return <HistoricalEntityDetail target={{ targetType: 'tech', targetId: id }} />;
+  const context: EntityContext = { civ: contextCiv?.en, age, search: location.search, source: location.pathname + location.search };
+  const payoffParams = new URLSearchParams(
+    encodeEcoPayoff({
+      ...DEFAULT_PAYOFF,
+      civ: contextCiv?.en ?? 'Byzantines',
+      age: age ?? t.age,
+      target: t.id,
+      workers: { Food: '', Wood: '', Gold: '', Stone: '' },
+    }),
+  );
+  payoffParams.set('ctxPeople', 'none');
   const pre = t.pre != null ? core.techById[t.pre] : undefined;
   const aliases = TECH_AKA[t.id]?.filter((name) => name.toLowerCase() !== t.en.toLowerCase() && name !== t.zh);
   const nxt = core.techs.filter((x) => x.pre === t.id);
@@ -97,26 +109,16 @@ export default function TechDetail() {
       tags={
         <>
           <span className="tag">{TT[t.type] ?? t.type}</span>
-          <BLink id={t.b} zh={t.bz} />
+          <BLink id={t.b} zh={t.bz} context={context} />
           <span className="tag">{AGE_ZH[t.age] ?? t.age}</span>
           {!!aliases?.length && <span className="note">又名：{aliases.join('、')}</span>}
         </>
       }
       tabsTop={
-        (contextCiv || (me && opp)) && (
-          <nav className="ctx-bar" aria-label="文明相关入口">
-            {contextCiv && (
-              <Link className="ctx-civ-link ulink" to={`/civ/${contextCiv.en}`}>
-                <CivIcon c={contextCiv} /> {contextCiv.zh}
-              </Link>
-            )}
-            {me && opp && (
-              <Link className="community-tool-entry" to={`/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}>
-                <Icon name="arrow-left" /> 回对局助手
-              </Link>
-            )}
-          </nav>
-        )
+        <>
+          <NavigationContext label="文明相关入口" currentCiv={contextCiv?.en ?? ''} />
+          {contextCiv && !t.civs.includes(contextCiv.en) && <p className="note">{contextCiv.zh}无法研究此科技；保留当前文明，仍可查阅基础资料。</p>}
+        </>
       }
       tabs={[
         {
@@ -142,16 +144,23 @@ export default function TechDetail() {
                   <div>
                     <dt>研究建筑</dt>
                     <dd>
-                      <BLink id={t.b} zh={t.bz} />
+                      <BLink id={t.b} zh={t.bz} context={context} />
                     </dd>
                   </div>
                 </dl>
               </DetailSection>
-              {[202, 203, 221, 55, 182, 278, 279].includes(t.id) && (
+              {PAYOFF_TARGETS.some((id) => id === t.id) && (
                 <p>
-                  <Link className="ulink tech-payoff-entry" to={`/eco-payoff?civ=Byzantines&target=${t.id}&age=${t.age}`}>
+                  <Link
+                    className="ulink tech-payoff-entry"
+                    to={contextPath(`/eco-payoff?${payoffParams}`, location.search, location.pathname + location.search)}
+                  >
                     查看经济科技收益与研究投入
                   </Link>
+                  <span className="note">
+                    {age ? '沿用当前分析时代；' : '按科技解锁时代开始设置；'}
+                    {contextCiv ? '保留当前文明，采集人数需另行确认。' : '默认使用拜占庭，采集人数需另行确认。'}
+                  </span>
                 </p>
               )}
               {effectCards.length > 0 && (
@@ -174,7 +183,7 @@ export default function TechDetail() {
                   <h4>涉及单位</h4>
                   <div className="uchips">
                     {rel.map((u) => (
-                      <UnitLink key={u.id} u={u} />
+                      <UnitLink key={u.id} u={u} context={context} />
                     ))}
                   </div>
                 </>
@@ -183,7 +192,7 @@ export default function TechDetail() {
             </>
           ),
         },
-        { key: 'affects', label: '作用对象', content: <TechAffects t={t} /> },
+        { key: 'affects', label: '作用对象', content: <TechAffects t={t} context={context} /> },
         { key: 'civs', label: '文明', content: civList },
         { key: 'history', label: '更新历史', content: <PatchHistory target={{ targetType: 'tech', targetId: t.id, targetNameZh: t.zh }} /> },
       ]}
@@ -212,7 +221,7 @@ export default function TechDetail() {
                 {pre && (
                   <>
                     前置：
-                    <TechLink t={pre} />
+                    <TechLink t={pre} context={context} />
                     <br />
                   </>
                 )}
@@ -222,7 +231,7 @@ export default function TechDetail() {
                     <Join
                       sep=" "
                       items={nxt.map((x) => (
-                        <TechLink t={x} />
+                        <TechLink t={x} context={context} />
                       ))}
                     />
                   </>

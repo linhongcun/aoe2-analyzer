@@ -1,3 +1,5 @@
+import { useLocation, useNavigate } from 'react-router-dom';
+import type { EntityContext } from '../../../shared/nav/context';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { useCore, useTrees } from '../../../data/hooks';
 import { techAffects, textMentions } from '../../../domain/affects';
@@ -11,12 +13,25 @@ import { Loading } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 
 /** 作用对象：与科技模拟器使用同一效果表与判定 */
-export default function TechAffects({ t }: { t: Tech }) {
+export default function TechAffects({ t, context }: { t: Tech; context?: EntityContext }) {
   const core = useCore(),
     trees = useTrees();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [civ0, setCiv] = useSticky('affects.civ', '');
   if (!core) return <Loading />;
-  const civ = t.civs.includes(civ0) ? civ0 : '';
+  const chosen = context?.civ ?? civ0;
+  const civ = t.civs.includes(chosen) ? chosen : '';
+  const linkContext = context ? { ...context, civ: civ || context.civ } : undefined;
+  const choose = (next: string) => {
+    setCiv(next);
+    if (context) {
+      const params = new URLSearchParams(location.search);
+      if (next) params.set('civ', next);
+      else params.delete('civ');
+      navigate(location.pathname + (params.size ? '?' + params : ''), { replace: true });
+    }
+  };
   const st = civ && trees ? civStatus(trees, civ) : null;
   const uOk = (id: number, civs: string[]) => !st || st['u' + id] === 1 || civs.includes(civ);
   const bOk = (civs: string[]) => !civ || civs.includes(civ);
@@ -33,7 +48,7 @@ export default function TechAffects({ t }: { t: Tech }) {
   return (
     <div id="affects">
       <div className="bar">
-        文明 <CivPicker id="affciv" label="按文明筛选" value={civ} onChange={setCiv} allowed={t.civs} none="全部单位/建筑" suffix="拥有的" />
+        文明 <CivPicker id="affciv" label="按文明筛选" value={civ} onChange={choose} allowed={t.civs} none="全部单位/建筑" suffix="拥有的" />
         {civ && !trees && <Loading />}
       </div>
       {numeric ? (
@@ -55,10 +70,10 @@ export default function TechAffects({ t }: { t: Tech }) {
                     </div>
                     <div className="uchips">
                       {groupLines(r.units, core.units, core.unitById, core.fam).map((g) => (
-                        <LineChip key={'l' + g.members[0]!.u.id} g={g} />
+                        <LineChip key={'l' + g.members[0]!.u.id} g={g} context={linkContext} />
                       ))}
                       {r.buildings.map((b) => (
-                        <BuildingLink key={'b' + b.id} b={b} />
+                        <BuildingLink key={'b' + b.id} b={b} context={linkContext} />
                       ))}
                     </div>
                   </div>
@@ -77,6 +92,7 @@ export default function TechAffects({ t }: { t: Tech }) {
           {tm && tm.units.length + tm.buildings.length ? (
             <div className="uchips">
               <UnitLinks
+                context={linkContext}
                 list={collapse(
                   tm.units.filter((u) => uOk(u.id, u.civs)),
                   core.fam,
@@ -85,7 +101,7 @@ export default function TechAffects({ t }: { t: Tech }) {
               {tm.buildings
                 .filter((b) => bOk(b.civs))
                 .map((b) => (
-                  <BuildingLink key={'b' + b.id} b={b} />
+                  <BuildingLink key={'b' + b.id} b={b} context={linkContext} />
                 ))}
             </div>
           ) : (

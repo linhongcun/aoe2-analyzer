@@ -16,6 +16,8 @@ import BuildingList from './BuildingList';
 import BuildingSimulator from './BuildingSimulator';
 import { useLocation } from 'react-router-dom';
 import garrisonHosts from '../../../data/garrison_hosts.json';
+import { contextPath, type EntityContext } from '../../../shared/nav/context';
+import { NavigationContext } from '../../../shared/ui/NavigationContext';
 import { DEFAULT_CONSTRUCTION, encodeConstruction } from '../../../domain/construction';
 
 const isUq = (x: Unit | Tech) => x.type === 'UniqueUnit' || x.type === 'UniqueTech';
@@ -25,6 +27,10 @@ export default function BuildingDetail() {
   const { id = '' } = useParams();
   const core = useCore();
   const loc = useLocation();
+  const params = new URLSearchParams(loc.search);
+  const contextCiv = params.getAll('civ').length === 1 ? civByEn(params.get('civ') ?? '') : undefined;
+  const age = params.getAll('age').length === 1 && [1, 2, 3, 4].includes(Number(params.get('age'))) ? Number(params.get('age')) : undefined;
+  const context: EntityContext = { civ: contextCiv?.en, age, search: loc.search, source: loc.pathname + loc.search };
   useEffect(() => {
     scrollTo(0, 0);
   }, [id]);
@@ -103,6 +109,12 @@ export default function BuildingDetail() {
           {b.civs.length <= 4 && <span className="tag">文明独特</span>}
         </>
       }
+      tabsTop={
+        <>
+          <NavigationContext label="文明相关入口" currentCiv={contextCiv?.en ?? ''} />
+          {contextCiv && !b.civs.includes(contextCiv.en) && <p className="note">{contextCiv.zh}无法建造该建筑；保留当前文明，仍可查阅基础资料。</p>}
+        </>
+      }
       initialTab={new URLSearchParams(loc.search).get('tab') ?? undefined}
       tabs={[
         {
@@ -129,7 +141,12 @@ export default function BuildingDetail() {
                 <p>
                   <Link
                     className="btn community-tool-entry"
-                    to={'/construction?' + encodeConstruction({ ...DEFAULT_CONSTRUCTION, buildingId: b.id, civ: b.civs[0]!, age: b.age })}
+                    to={contextPath(
+                      '/construction?' +
+                        encodeConstruction({ ...DEFAULT_CONSTRUCTION, buildingId: b.id, civ: contextCiv?.en ?? b.civs[0]!, age: age ?? b.age }),
+                      loc.search,
+                      loc.pathname + loc.search,
+                    )}
                   >
                     比较多人施工与村民工时
                   </Link>
@@ -168,12 +185,18 @@ export default function BuildingDetail() {
               {
                 key: 'prod',
                 label: `生产（${units.length}）`,
-                content: split(units, (u) => <UnitLink key={u.id} u={u} elite={eliteMap.get(u.id)} />, '该建筑不生产单位'),
+                content: split(units, (u) => <UnitLink key={u.id} u={u} elite={eliteMap.get(u.id)} context={context} />, '该建筑不生产单位'),
               },
             ]
           : []),
         ...(techs.length
-          ? [{ key: 'tech', label: `科技（${techs.length}）`, content: split(techs, (t) => <TechLink key={t.id} t={t} />, '该建筑不研究科技') }]
+          ? [
+              {
+                key: 'tech',
+                label: `科技（${techs.length}）`,
+                content: split(techs, (t) => <TechLink key={t.id} t={t} context={context} />, '该建筑不研究科技'),
+              },
+            ]
           : []),
         {
           key: 'civs',
@@ -214,15 +237,15 @@ export default function BuildingDetail() {
                   .filter((u) => !isUq(u))
                   .slice(0, 6)
                   .map((u) => (
-                    <UnitLink key={u.id} u={u} elite={eliteMap.get(u.id)} />
+                    <UnitLink key={u.id} u={u} elite={eliteMap.get(u.id)} context={context} />
                   ))}
               </div>
             </SideBlock>
           )}
           <SideBlock title="快速入口">
-            <a className="ulink" href="#/tree">
+            <Link className="ulink" to={contextPath(contextCiv ? `/tree/${contextCiv.en}` : '/tree', loc.search, loc.pathname + loc.search)}>
               <Icon name="git-branch" /> 科技树
-            </a>
+            </Link>
           </SideBlock>
         </>
       }
