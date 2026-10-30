@@ -296,6 +296,12 @@ for (const width of [360, 375, 390, 1280])
       await expect.poll(() => scroller.evaluate((element) => element.scrollLeft)).toBe(0);
       await page.locator('#detail .dhead').getByRole('button', { name: '复制链接', exact: true }).focus();
       const beforeFocusY = await page.evaluate(() => scrollY);
+      // S2 inserts five genuine keyboard stops between the copy button and the selected tab.
+      const context = page.locator('#detail').getByRole('navigation', { name: '本页相关工具', exact: true });
+      for (const label of ['开局流程', '生产对照', '对局助手', '文明对比', LABEL]) {
+        await page.keyboard.press('Tab');
+        await expect(context.getByRole('link', { name: label, exact: true })).toBeFocused();
+      }
       await page.keyboard.press('Tab');
       await expect(tab(page, LABEL)).toBeFocused();
       await fullyInsideTabScroller(page, tab(page, LABEL));
