@@ -1,23 +1,52 @@
-// #33 文明强度 `#/ladder`：失败验收（Kent）。只编码 #535 @ 64f2631 已通过的设计 AC，不实现页面。
-// 当前 main 上 `#/ladder` 仍是规划中占位（Planned），这些用例应红。不要改期望去凑绿，也不要改 tests/**/v0*-acceptance*。
-// 本文件不改 pageRegistry。入口会红，直到 ladder 去掉 status:'planned'、lane 改为 secondary、group 仍为 reference。
-//
-// 契约（docs/design/ladder-33/ladder-33.md 第 7、10 节 + Steve 锁定项）：
-//   深链只认 elo。默认分段 key 为 all（无查询时地址不带 elo，或显式 elo=all）。sort / dir / civ 不进地址。
-//   data-testid：ladder-page、ladder-context、ladder-bracket（每个分段一个，带 data-elo）、
-//   ladder-source、ladder-patch-note、ladder-table、ladder-row-{En}、ladder-sort-{win|play|games|name|tier}、
-//   ladder-tier-{En}、ladder-expand-{En}、ladder-reason-{En}、ladder-fallback-toast、ladder-share、ladder-footer。
-//   排序键用规格第 7 节的 win|play|games|name|tier（线框里的 wr/pr/n/civ 只是示意）。
-//   行上 data-games 为该分段样本局数（非负整数，来自快照）。games < 300 时该行样本格含「样本少」，否则不含。
-//   ladder-page[data-patch-mismatch]="true"|"false"：仅 true 时显示补丁提示条，且不挡住主表。
-// 不写死胜率、出场率、样本局数或 fetchedAt。真实 ladder-arabia-*.json 落地前，这些用例保持红色。
+// #33 `#/ladder` 失败验收。不实现页面，不改 pageRegistry / v0*-acceptance。当前 main 仍是规划中占位，用例应红。
+// 设计：docs/design/ladder-33/ladder-33.md（main @ 677d64e）。深链只认 elo，默认 all；其它 Elo 芯片在，内容是空态，不编数。
+// 锚点来自 #536 `src/data/ladder-arabia-p162286.json` @ 98bbf11。winRate/playRate 已是百分数（51.4 = 51.4%），不得再乘 100。
+// testid：ladder-page/context/bracket(data-elo)/source/patch-note/table/row-{En}/sort-{win|play|games|name|tier}/tier/expand/reason-{En}/fallback-toast/share/footer/empty。data-games < 300 标「样本少」。
+import { existsSync, readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
+
+const SNAPSHOT_PATH = 'src/data/ladder-arabia-p162286.json';
+/** 锚点抄自 #536 @ 98bbf11 的快照，不是编出来的。文件还没进本分支时仍用这些常量；文件在时下面会核对。 */
+const FETCHED_AT = '2026-07-12';
+const PATCH_162286 = '162286';
+const ALL_GAMES = 504189;
+const CIV_COUNT = 48;
+const FRANKS = { en: 'Franks', winRate: 51.4, playRate: 5.15, games: 51920 };
+const ROMANS = { en: 'Romans', winRate: 54.04, playRate: 1.67, games: 16815 };
+const ABSENT = ['Jurchens', 'Khitans'] as const;
+const OTHER_LABELS = ['<850', '850-1000', '1000-1200', '1200+', '1900+'] as const;
+
+function normLabel(label: string) {
+  return label.replace(/\s+/g, '').replace(/[–—−]/g, '-');
+}
+
+type SnapCiv = { en: string; winRate: number; playRate: number; games: number };
+if (existsSync(SNAPSHOT_PATH)) {
+  const snap = JSON.parse(readFileSync(SNAPSHOT_PATH, 'utf8')) as {
+    fetchedAt: string;
+    patchNote: string;
+    brackets: { key: string; games: number; civs: SnapCiv[] }[];
+  };
+  const all = snap.brackets.find((bracket) => bracket.key === 'all');
+  const drifted =
+    !all ||
+    snap.brackets.length !== 1 ||
+    snap.fetchedAt !== FETCHED_AT ||
+    !snap.patchNote.includes(PATCH_162286) ||
+    all.games !== ALL_GAMES ||
+    all.civs.length !== CIV_COUNT;
+  if (drifted) throw new Error(`${SNAPSHOT_PATH} 与 all 锚点不一致`);
+  for (const anchor of [FRANKS, ROMANS]) {
+    const civ = all?.civs.find((item) => item.en === anchor.en);
+    if (civ?.winRate !== anchor.winRate || civ.playRate !== anchor.playRate || civ.games !== anchor.games) throw new Error(`${anchor.en} 与快照不一致`);
+  }
+  for (const en of ABSENT) if (all?.civs.some((civ) => civ.en === en)) throw new Error(`${en} 不应出现在 all 快照里`);
+}
 
 const LOW_SAMPLE = 300;
 const TIERS = ['易上手', '中等', '进阶', '待补'] as const;
 const EMOJI = /\p{Extended_Pictographic}/u;
-const RATE = /^\d+\.\d\s*%$/;
 
 function hashParams(url: string): URLSearchParams {
   const hash = new URL(url).hash;
@@ -27,12 +56,7 @@ function hashParams(url: string): URLSearchParams {
 
 function queryFlags(url: string) {
   const query = hashParams(url);
-  return {
-    elo: query.get('elo'),
-    sort: query.get('sort'),
-    dir: query.get('dir'),
-    civ: query.get('civ'),
-  };
+  return { elo: query.get('elo'), sort: query.get('sort'), dir: query.get('dir'), civ: query.get('civ') };
 }
 
 /** 当前 main 会停在「该模块规划中」：还没有 data-testid=ladder-page。 */
@@ -67,9 +91,33 @@ async function expectLadderPage(page: Page) {
   await expect(context.getByRole('radio')).toHaveCount(0);
   const group = page.getByRole('radiogroup', { name: /天梯分段/ });
   await expect(group).toBeVisible();
-  await expect(page.getByTestId('ladder-table')).toBeVisible();
+  const table = page.getByTestId('ladder-table');
+  await expect(table).toBeVisible();
   await expect(page.getByRole('table', { name: /阿拉伯 1v1/ })).toBeVisible();
+  await expect(page.locator('[data-testid^="ladder-row-"]')).toHaveCount(CIV_COUNT);
+  await expect(table).not.toContainText('5140');
+  await expect(table).not.toContainText('5404');
   return root;
+}
+
+function shownPercent(text: string) {
+  const match = text.replace(/\s+/g, '').match(/^(\d+(?:\.\d+)?)%$/);
+  expect(match, `百分数原文「${text}」不应再乘 100`).not.toBeNull();
+  return Number(match?.[1]);
+}
+
+async function cellPercent(row: Locator, index: number) {
+  const text = await row
+    .getByRole('cell')
+    .nth(index)
+    .evaluate((el) => {
+      const target = el.matches('.num') ? el : el.querySelector('.num');
+      return (target?.textContent ?? '').trim();
+    });
+  const value = shownPercent(text);
+  expect(value).toBeGreaterThan(0);
+  expect(value).toBeLessThanOrEqual(100);
+  return value;
 }
 
 async function brackets(page: Page) {
@@ -116,6 +164,34 @@ async function columnIndex(page: Page, pattern: RegExp) {
   return -1;
 }
 
+async function otherBrackets(page: Page) {
+  const { items } = await brackets(page);
+  return OTHER_LABELS.map((label) => {
+    const item = items.find((chip) => normLabel(chip.label) === label);
+    expect(item, `缺少分段「${label}」`).toBeTruthy();
+    return { elo: item?.elo ?? '', label: item?.label ?? label };
+  });
+}
+
+async function expectEmptyBracket(page: Page, elo: string, label: string) {
+  expect(await page.getByRole('heading', { name: '该模块规划中', exact: true }).count(), '#/ladder 仍是规划中占位').toBe(0);
+  await expect(page.getByTestId('ladder-page')).toBeVisible();
+  await expect(await bracket(page, elo)).toHaveAttribute('aria-checked', 'true');
+  const empty = page.getByTestId('ladder-empty');
+  await expect(empty).toBeVisible();
+  await expect(empty).toContainText('这个分段暂无数据');
+  await expect(empty).toContainText(label);
+  await expect(empty).toContainText(/不推算/);
+  await expect(empty).toContainText(/不补数/);
+  await expect(empty).not.toContainText(/%/);
+  await expect(page.getByTestId('ladder-table')).toHaveCount(0);
+  await expect(page.locator('[data-testid^="ladder-row-"]')).toHaveCount(0);
+  await expect(page.getByTestId('ladder-source')).toContainText(FETCHED_AT);
+  await expect(page.getByTestId('ladder-source')).not.toContainText(String(ALL_GAMES));
+  await expect(page.getByTestId('ladder-source')).not.toContainText('504,189');
+  expect(queryFlags(page.url())).toEqual({ elo, sort: null, dir: null, civ: null });
+}
+
 test('#33 #/ladder 不是规划中占位，资料分组的首页和工具菜单都有入口', async ({ page }) => {
   await page.goto('./#/ladder');
   await expect(page.getByRole('heading', { name: '天梯数据' }).first()).toBeVisible();
@@ -153,7 +229,7 @@ test('#33 无查询时默认分段是 all，深链 ?elo= 能还原且不写入 s
   const elos = initial.items.map((item) => item.elo);
   expect(new Set(elos).size).toBe(elos.length);
   expect(elos).toContain('all');
-  expect(elos.length).toBeGreaterThanOrEqual(3);
+  expect(elos).toHaveLength(1 + OTHER_LABELS.length);
   expect(initial.items.find((item) => item.elo === 'all')?.label).toMatch(/全部/);
   expect(initial.items.filter((item) => item.checked).map((item) => item.elo)).toEqual(['all']);
   for (const item of initial.items) expect(item.label.length).toBeGreaterThan(0);
@@ -166,25 +242,31 @@ test('#33 无查询时默认分段是 all，深链 ?elo= 能还原且不写入 s
   await page.goto('./#/ladder?elo=all');
   await expectLadderPage(page);
   await expect(await bracket(page, 'all')).toHaveAttribute('aria-checked', 'true');
+  const others = await otherBrackets(page);
+  expect(new Set(others.map((item) => item.elo)).size).toBe(others.length);
+  for (const item of others) expect(item.elo).not.toBe('all');
 
-  const otherElo = initial.items.find((item) => item.elo !== 'all')?.elo ?? '';
-  expect(otherElo).not.toBe('');
+  const [first] = others;
+  expect(first).toBeTruthy();
   const before = await page.evaluate(() => history.length);
-  await (await bracket(page, otherElo)).click();
-  await expect.poll(() => queryFlags(page.url())).toEqual({ elo: otherElo, sort: null, dir: null, civ: null });
-  await expect(await bracket(page, otherElo)).toHaveAttribute('aria-checked', 'true');
-  await expect(await bracket(page, 'all')).toHaveAttribute('aria-checked', 'false');
+  await (await bracket(page, first?.elo ?? '')).click();
+  await expectEmptyBracket(page, first?.elo ?? '', first?.label ?? '');
   expect(await page.evaluate(() => history.length)).toBe(before);
   await page.reload();
-  await expect(await bracket(page, otherElo)).toHaveAttribute('aria-checked', 'true');
-  expect(queryFlags(page.url())).toEqual({ elo: otherElo, sort: null, dir: null, civ: null });
-
-  await page.goto(`./#/ladder?elo=${encodeURIComponent(otherElo)}`);
+  await expectEmptyBracket(page, first?.elo ?? '', first?.label ?? '');
+  await page.getByTestId('ladder-empty').getByRole('button', { name: /全部/ }).click();
+  await expect
+    .poll(() => {
+      const elo = queryFlags(page.url()).elo;
+      return elo === null || elo === 'all';
+    })
+    .toBe(true);
   await expectLadderPage(page);
-  await expect(await bracket(page, otherElo)).toHaveAttribute('aria-checked', 'true');
-  expect(queryFlags(page.url()).sort).toBeNull();
-  expect(queryFlags(page.url()).dir).toBeNull();
-  expect(queryFlags(page.url()).civ).toBeNull();
+
+  for (const item of others) {
+    await page.goto(`./#/ladder?elo=${encodeURIComponent(item.elo)}`);
+    await expectEmptyBracket(page, item.elo, item.label);
+  }
 });
 
 test('#33 非法 elo 回落全部，sort/dir/civ 不保留', async ({ page }) => {
@@ -202,7 +284,7 @@ test('#33 非法 elo 回落全部，sort/dir/civ 不保留', async ({ page }) =>
 test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本不一致时出现，页面不请求 aoestats', async ({ page }) => {
   const hits: string[] = [];
   page.on('request', (request) => {
-    if (/aoestats\.io/i.test(request.url())) hits.push(request.url());
+    if (/aoestats\.io|web\.archive\.org/i.test(request.url())) hits.push(request.url());
   });
   await page.goto('./#/ladder');
   const root = await expectLadderPage(page);
@@ -210,32 +292,34 @@ test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本
   const source = page.getByTestId('ladder-source');
   await expect(source).toBeVisible();
   const link = source.getByRole('link', { name: /aoestats/ });
-  await expect(link).toHaveAttribute('href', /^https:\/\/aoestats\.io\/?$/);
+  await expect(link).toHaveAttribute('href', /^https:\/\/aoestats\.io\/maps\/arabia\/?$/);
   await expect(link).toHaveAttribute('target', '_blank');
   await expect(link).toHaveAttribute('rel', /noopener/);
   await expect(source).toContainText('外部');
-  await expect(source).toContainText(/统计更新\s*\d{4}-\d{2}-\d{2}/);
+  await expect(source).toContainText(FETCHED_AT);
   await expect(source).toContainText(/本分段样本/);
+  await expect(source).toContainText(/504[,，]?189/);
   await expect(source).toContainText('局');
   const footer = page.getByTestId('ladder-footer');
   await expect(footer).toContainText('aoestats');
-  await expect(footer).toContainText(/统计更新\s*\d{4}-\d{2}-\d{2}/);
+  await expect(footer).toContainText(FETCHED_AT);
   await expect(footer).toContainText('静态快照');
   await expect(footer).toContainText('不实时抓取');
   await expect(footer).toContainText('不自建统计');
   await expect(footer).toContainText('胜率不是平衡建议');
   await expect(footer).toContainText('不是官方推荐');
-  const mismatch = await root.getAttribute('data-patch-mismatch');
-  expect(mismatch, 'ladder-page 要用 data-patch-mismatch 标明快照补丁是否不同于本站数据版本').toMatch(/^(true|false)$/);
+  const sitePatch = String((JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { patch: { build: number } }).patch.build);
   const note = page.getByTestId('ladder-patch-note');
-  if (mismatch === 'true') {
+  if (sitePatch === PATCH_162286) {
+    await expect(note).toHaveCount(0);
+  } else {
+    expect(await root.getAttribute('data-patch-mismatch')).toBe('true');
     await expect(note).toBeVisible();
     await expect(note).toContainText('统计补丁');
-    await expect(note).toContainText('数据版本');
+    await expect(note).toContainText(PATCH_162286);
+    await expect(note).toContainText(sitePatch);
     await expect(note).toContainText('胜率可能未反映最新平衡改动');
     await expect(page.getByTestId('ladder-table')).toBeVisible();
-  } else {
-    await expect(note).toHaveCount(0);
   }
   expect(hits).toEqual([]);
 });
@@ -249,7 +333,8 @@ test('#33 主表默认按胜率降序，点击表头只改排序指示，不把 
   await expect(sortHeader(page, 'name')).toHaveAttribute('aria-sort', 'none');
   await expect(sortHeader(page, 'tier')).toHaveAttribute('aria-sort', 'none');
   const initial = await rowOrder(page);
-  expect(initial.length).toBeGreaterThan(1);
+  expect(initial).toHaveLength(CIV_COUNT);
+  expect(initial[0]).toBe(`ladder-row-${ROMANS.en}`);
 
   await sortButton(page, 'play').click();
   await expect(sortHeader(page, 'play')).toHaveAttribute('aria-sort', 'descending');
@@ -316,59 +401,44 @@ test('#33 行展开显示四档新手友好度，并链到加成与文明详情'
   await expect(page.getByTestId(`ladder-expand-${first}`)).toHaveAttribute('aria-expanded', 'false');
 });
 
-test('#33 样本局数低于 300 标「样本少」，不写死胜率或样本数字', async ({ page }) => {
+test('#33 all 分段对照快照原百分数，不乘 100；样本少于 300 才标样本少', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('./#/ladder');
+  await page.goto('./#/ladder?elo=all');
   await expectLadderPage(page);
-  const { items } = await brackets(page);
-  let sawRow = false;
-  for (const item of items) {
-    if (item.elo !== 'all') await (await bracket(page, item.elo)).click();
-    if ((await page.getByTestId('ladder-empty').count()) > 0) {
-      await expect(page.getByTestId('ladder-empty')).toContainText(/暂无数据/);
-      await expect(page.getByTestId('ladder-empty')).toContainText(/不推算|不补数/);
-      await expect(page.getByTestId('ladder-table')).toHaveCount(0);
-      continue;
-    }
-    await expect(page.getByTestId('ladder-table')).toBeVisible();
-    const gamesIndex = await columnIndex(page, /样本局数/);
-    const winIndex = await columnIndex(page, /胜率/);
-    const playIndex = await columnIndex(page, /出场率/);
-    expect(gamesIndex).toBeGreaterThanOrEqual(0);
-    expect(winIndex).toBeGreaterThanOrEqual(0);
-    expect(playIndex).toBeGreaterThanOrEqual(0);
-    const rows = page.locator('[data-testid^="ladder-row-"]');
-    const count = await rows.count();
-    expect(count).toBeGreaterThan(0);
-    sawRow = true;
-    for (let i = 0; i < count; i++) {
-      const row = rows.nth(i);
-      const en = ((await row.getAttribute('data-testid')) ?? '').slice('ladder-row-'.length);
-      const gamesAttr = await row.getAttribute('data-games');
-      expect(gamesAttr, en).toMatch(/^\d+$/);
-      const games = Number(gamesAttr);
-      const sample = ((await row.getByRole('cell').nth(gamesIndex).innerText()) ?? '').replace(/[,\s]/g, '');
-      expect(sample, en).toContain(String(games));
-      if (games < LOW_SAMPLE) expect(sample, en).toContain('样本少');
-      else expect(sample, en).not.toContain('样本少');
-      const tier = ((await page.getByTestId(`ladder-tier-${en}`).innerText()) ?? '').trim();
-      expect([...TIERS], en).toContain(tier);
-      for (const [index, label] of [
-        [winIndex, '胜率'],
-        [playIndex, '出场率'],
-      ] as const) {
-        const text = await row
-          .getByRole('cell')
-          .nth(index)
-          .evaluate((el) => {
-            const target = el.matches('.num') ? el : el.querySelector('.num');
-            return (target?.textContent ?? '').trim();
-          });
-        expect(text, `${en} ${label}`).toMatch(RATE);
-      }
-    }
+  const winIndex = await columnIndex(page, /胜率/);
+  const playIndex = await columnIndex(page, /出场率/);
+  const gamesIndex = await columnIndex(page, /样本局数/);
+  expect(winIndex).toBeGreaterThanOrEqual(0);
+  expect(playIndex).toBeGreaterThanOrEqual(0);
+  expect(gamesIndex).toBeGreaterThanOrEqual(0);
+  for (const anchor of [FRANKS, ROMANS]) {
+    const row = page.getByTestId(`ladder-row-${anchor.en}`);
+    await expect(row).toHaveAttribute('data-games', String(anchor.games));
+    expect(await cellPercent(row, winIndex)).toBeCloseTo(anchor.winRate, 2);
+    expect(await cellPercent(row, playIndex)).toBeCloseTo(anchor.playRate, 2);
+    const sample = ((await row.getByRole('cell').nth(gamesIndex).innerText()) ?? '').replace(/[,，\s]/g, '');
+    expect(sample).toContain(String(anchor.games));
+    await expect(row).not.toContainText('样本少');
   }
-  expect(sawRow).toBe(true);
+  for (const en of ABSENT) await expect(page.getByTestId(`ladder-row-${en}`)).toHaveCount(0);
+  const rows = page.locator('[data-testid^="ladder-row-"]');
+  const count = await rows.count();
+  expect(count).toBe(CIV_COUNT);
+  for (let i = 0; i < count; i++) {
+    const row = rows.nth(i);
+    const en = ((await row.getAttribute('data-testid')) ?? '').slice('ladder-row-'.length);
+    const gamesAttr = await row.getAttribute('data-games');
+    expect(gamesAttr, en).toMatch(/^\d+$/);
+    const games = Number(gamesAttr);
+    const sample = ((await row.getByRole('cell').nth(gamesIndex).innerText()) ?? '').replace(/[,，\s]/g, '');
+    expect(sample, en).toContain(String(games));
+    if (games < LOW_SAMPLE) expect(sample, en).toContain('样本少');
+    else expect(sample, en).not.toContain('样本少');
+    expect(await cellPercent(row, winIndex), en).toBeLessThanOrEqual(100);
+    expect(await cellPercent(row, playIndex), en).toBeLessThanOrEqual(100);
+    const tier = ((await page.getByTestId(`ladder-tier-${en}`).innerText()) ?? '').trim();
+    expect([...TIERS], en).toContain(tier);
+  }
 });
 
 for (const width of [360, 375, 390, 1280]) {
@@ -376,9 +446,7 @@ for (const width of [360, 375, 390, 1280]) {
     test(`#33 ${theme} @${width} 无横向滚动、数字不折行、触控不小于 44`, async ({ page }) => {
       const errors: string[] = [];
       page.on('pageerror', (error) => errors.push(error.message));
-      page.on('console', (message) => {
-        if (message.type() === 'error') errors.push(message.text());
-      });
+      page.on('console', (message) => void (message.type() === 'error' && errors.push(message.text())));
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/ladder');
@@ -412,11 +480,8 @@ for (const width of [360, 375, 390, 1280]) {
           .map((el) => {
             const rect = el.getBoundingClientRect();
             const labelled = el instanceof HTMLInputElement || el instanceof HTMLSelectElement ? el.labels?.[0]?.textContent : '';
-            return {
-              name: (el.getAttribute('aria-label') || labelled || el.textContent || el.tagName).replace(/\s+/g, ' ').trim(),
-              width: rect.width,
-              height: rect.height,
-            };
+            const name = (el.getAttribute('aria-label') || labelled || el.textContent || el.tagName).replace(/\s+/g, ' ').trim();
+            return { name, width: rect.width, height: rect.height };
           }),
       );
       expect(targets.length).toBeGreaterThan(0);
