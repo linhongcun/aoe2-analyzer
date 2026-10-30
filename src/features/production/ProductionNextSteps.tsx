@@ -53,9 +53,15 @@ export function ProductionNextSteps({ ctx, config, valid }: { ctx: ProductionCon
           <Link className="community-tool-entry" to="/team-plan">
             在团战计划中约定主副兵种
           </Link>
-          <Link className="community-tool-entry" to={relicPath}>
-            另查固定圣物收益
-          </Link>
+          {valid ? (
+            <Link className="community-tool-entry" to={relicPath}>
+              另查固定圣物收益
+            </Link>
+          ) : (
+            <Link className="community-tool-entry" to="/relic-income">
+              新建圣物收益方案
+            </Link>
+          )}
         </nav>
       </details>
     </section>

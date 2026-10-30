@@ -3,6 +3,29 @@ import AxeBuilder from '@axe-core/playwright';
 
 const production = 'civ=Franks&age=3&walk=4&farm=2&techs=202&rows=38%3A101%3A2%2C83%3A109%3A1';
 const meOpp = '&me=Franks&opp=Britons';
+test('生产配置有效时带入圣物来源，无效时可新建独立方案 #531', async ({ page }) => {
+  await page.goto('./#/production?' + production + meOpp);
+  await expect(page.getByTestId('production-total')).toBeVisible();
+  await page.getByText('其他相关工具', { exact: true }).click();
+  const linked = page.getByRole('link', { name: '另查固定圣物收益', exact: true });
+  const target = new URL((await linked.getAttribute('href'))!, page.url());
+  const query = new URLSearchParams(target.hash.split('?')[1]);
+  expect(query.get('civ')).toBe('Franks');
+  expect(query.get('ctxReturn')).toBe('/production?' + production + meOpp);
+  expect(query.get('me')).toBe('Franks');
+  expect(query.get('opp')).toBe('Britons');
+  await page.getByLabel('需求 1 建筑数量', { exact: true }).fill('-1');
+  await expect(page.getByRole('alert')).toContainText('建筑数量须为');
+  await expect(linked).toHaveCount(0);
+  const blank = page.getByRole('link', { name: '新建圣物收益方案', exact: true });
+  await expect(blank).toHaveAttribute('href', '#/relic-income');
+  await blank.click();
+  await expect(page.getByRole('heading', { name: '圣物收益', exact: true })).toBeVisible();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '复制方案链接', exact: true })).toBeEnabled();
+  expect(new URL(page.url()).hash).toBe('#/relic-income');
+});
+
 test('生产与收益带入、人数假设及原多行方案能往返 #531', async ({ page, context }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
