@@ -10,6 +10,13 @@ import { capturePage, type Captured, type PageCase } from './v0280-golden-cases'
  * 只取 #duel / 工具主区，不含页脚（页脚有版本号和构建号）。
  */
 const FIXTURE = 'tests/e2e/fixtures/v0290-322-golden.json';
+// #197: 2026-10-30维护者批准唯一Roman BO迁移；原v0.28金标准仍逐字保留。
+const ROMAN_CASE = 'bo:archers-19-romans';
+const romanCurrent = JSON.parse(readFileSync('tests/e2e/fixtures/v0700-romans197-current.json', 'utf8')) as {
+  version: string;
+  datBuild: number;
+  cases: Record<string, Captured>;
+};
 const CURRENT_BUILD = (JSON.parse(readFileSync(new URL('../../scripts/data_sources.json', import.meta.url), 'utf8')) as { patch: { build: number } }).patch
   .build;
 const duel = (id: string, q: string): PageCase => ({ id: `pk:${id}`, url: `./#/duel?${q}`, sel: '#duel' });
@@ -69,6 +76,10 @@ if (RECORD) {
 test('金标准清单与基线一一对应', () => {
   test.skip(RECORD);
   expect(Object.keys(golden).sort()).toEqual(CASES.map((c) => c.id).sort());
+  expect(romanCurrent.version).toBe('0.70.0');
+  expect(romanCurrent.datBuild).toBe(CURRENT_BUILD);
+  expect(Object.keys(romanCurrent.cases)).toEqual([ROMAN_CASE]);
+  expect(romanCurrent.cases[ROMAN_CASE]!.hash).toBe(golden[ROMAN_CASE]!.hash);
 });
 for (const c of CASES)
   test(c.id, async ({ page }) => {
@@ -77,7 +88,7 @@ for (const c of CASES)
       golden[c.id] = got;
       return;
     }
-    const want = golden[c.id]!;
+    const want = (c.id === ROMAN_CASE ? romanCurrent.cases[c.id] : golden[c.id])!;
     let actualLines = got.lines;
     if (c.id.startsWith('construction:')) {
       // #486: validate current metadata, then project only its version prefix for the frozen numeric/text baseline.

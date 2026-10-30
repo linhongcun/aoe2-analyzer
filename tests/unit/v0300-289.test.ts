@@ -69,6 +69,13 @@ function expects(src: string): string[] {
   return out;
 }
 const SRC = baseline.sources as Record<'formatTime.test.ts' | 'civ42v070.test.ts', string>;
+/** Only #197's explicitly approved final-civ C section is migrated; A/B/D remain protected. */
+function beforeMigratedC(src: string): string {
+  const markers = [...src.matchAll(/^describe\('C 白名单',/gm)];
+  expect(markers, '原始/当前文件均须恰有一个顶层C段').toHaveLength(1);
+  return src.slice(0, markers[0]!.index);
+}
+const protectedSource = (file: string, src: string) => (file === 'civ42v070.test.ts' ? beforeMigratedC(src) : src);
 
 describe('#289 civ42v070 A3 送马有余量', () => {
   it('A3 守护（civ42v070.test.ts 原 74 行）显式 20_000 超时，或在 describe 级别缓存了模拟结果', () => {
@@ -104,14 +111,24 @@ describe('#289 对照：不改变任何断言', () => {
     };
     const all = Object.entries(SRC).flatMap(([f, src]) => expects(src).map((e) => [f, e] as const));
     expect(all.length, '防空转').toBeGreaterThanOrEqual(50);
-    expect(all.filter(([f, e]) => !now[f as keyof typeof now].includes(e)).map(([f, e]) => `${f}: ${e}`)).toEqual([]);
+    // 原56条计数不缩小；其中C段的9条旧未支持断言已获授权迁移，余下47条逐条保护。
+    const retained = Object.entries(SRC).flatMap(([file, src]) => expects(protectedSource(file, src)).map((statement) => [file, statement] as const));
+    expect(retained).toHaveLength(47);
+    const retainedNow = { ...now, 'civ42v070.test.ts': canon(beforeMigratedC(read('civ42v070.test.ts'))) };
+    expect(
+      retained
+        .filter(([file, statement]) => !retainedNow[file as keyof typeof retainedNow].includes(statement))
+        .map(([file, statement]) => `${file}: ${statement}`),
+    ).toEqual([]);
   });
   it('f856c9e 的循环头 for(...) / it.each(...) 都还在（不缩小开局 × 文明 × 建房 × 距离的覆盖面）', () => {
     const helpers = helperFiles().map((p) => readFileSync(p, 'utf8'));
-    const now = [...formatFiles().map(read), read('civ42v070.test.ts'), ...helpers].map(canon).join('\n');
     const all = Object.values(SRC).flatMap(loops);
     expect(all.length, '防空转').toBeGreaterThanOrEqual(5);
-    expect(all.filter((l) => !now.includes(l))).toEqual([]);
+    const retained = Object.entries(SRC).flatMap(([file, src]) => loops(protectedSource(file, src)));
+    const retainedNow = [...formatFiles().map(read), beforeMigratedC(read('civ42v070.test.ts')), ...helpers].map(canon).join('\n');
+    expect(retained.length).toBeGreaterThanOrEqual(5);
+    expect(retained.filter((loop) => !retainedNow.includes(loop))).toEqual([]);
   });
   it('对照自检：注释掉的断言不算数', () => {
     expect(canon("// expect(a).toBe(1);\nexpect(b).toBe('3 人');")).toBe("expect(b).toBe('3 人');");
@@ -155,9 +172,9 @@ describe.runIf(process.env.V0300_289_TIMING === '1')('#289 计时（全量跑一
         .filter((r) => /\/(formatTime[^/]*|civ42v070)\.test\.ts$/.test(r.name))
         .flatMap((r) => r.assertionResults.filter((a) => a.status === 'passed').map((a) => [...a.ancestorTitles, a.title].join(' > '))),
     );
-    const lost = Object.values(baseline.tests)
-      .flat()
-      .filter((n) => !passed.has(n));
+    const lost = Object.entries(baseline.tests)
+      .flatMap(([file, names]) => names.filter((name) => !(file === 'civ42v070.test.ts' && name.startsWith('C 白名单 > '))))
+      .filter((name) => !passed.has(name));
     expect({ wall: Math.round(full.secs), slow, lostCount: lost.length, lost: lost.slice(0, 5) }).toEqual({
       wall: expect.any(Number),
       slow: [],

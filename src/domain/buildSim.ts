@@ -1,4 +1,6 @@
 import type { GurjaraRawTech } from './gurjaraEconomy';
+import type { RomanFarm, RomanRawTech, RomanRawTree, RomanRawTeam } from './romanEconomy';
+import { polishStoneGold, type PolishInfrastructure, type PolishRawTech } from './polishEconomy';
 export { civSimNotes } from './buildSimNotes';
 import {
   civMechanism,
@@ -67,12 +69,18 @@ export interface EffectRow {
   chineseTech?: ChineseRawTech;
   mapucheTech?: MapucheRawTech;
   gurjaraTech?: GurjaraRawTech;
+  romanTech?: RomanRawTech;
+  romanTree?: RomanRawTree;
+  romanTeam?: RomanRawTeam;
+  polesTech?: PolishRawTech;
   khmerTree?: KhmerRawTree;
   khmerTeam?: KhmerRawTeam;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];
 }
 /** eco.json 中模拟需要的部分 */
 export interface EcoData {
+  romanFarm?: RomanFarm;
+  polesInfrastructure?: PolishInfrastructure;
   mapucheInfrastructure?: MapucheInfrastructure;
   armenianInfrastructure?: ArmenianInfrastructure;
   georgianInfrastructure?: GeorgianInfrastructure;
@@ -329,6 +337,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   // 避免成对效果只生效一半（如鞑靼 704 只有羊 workRate ×0.637 生效，加成变成减益）
   const scope = simScope(eco, [bo], civ);
   const mechanism = civMechanism(civ);
+  const builderMultiplier = mechanism.builderMultiplier?.(scope) ?? 1;
   const weiFamily = scope.weiRewards;
   const bengaliFamily = scope.bengaliRewards;
   const armenians = scope.armenians;
@@ -460,7 +469,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           ? eco.villager.cost
           : (eco.units[id]?.cost ?? {})
         : kind === 'building'
-          ? (eco.buildings[id]?.cost ?? {})
+          ? (mechanism.buildingCost?.(scope, id) ?? eco.buildings[id]?.cost ?? {})
           : kind === 'tech'
             ? (eco.techs[id]?.cost ?? {})
             : (ups[id]?.[0] ?? {});
@@ -811,7 +820,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       if (c.building > 0) {
         if (builders > 0 && !c.auto) {
           if (i !== firstBuild) continue; // 建造者依次建造
-          c.progress += c.bt > 0 ? (TICK * (builders + 2)) / (3 * c.bt) : 1;
+          c.progress += c.bt > 0 ? (TICK * (builders + 2) * builderMultiplier) / (3 * c.bt) : 1;
         } else {
           if (!c.borrowed) {
             const st = c.step >= 0 ? bo.steps[c.step]! : undefined;
@@ -824,7 +833,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
               c.borrowed = cand;
             } else continue;
           }
-          c.progress += c.bt > 0 ? (TICK * 3) / (3 * c.bt) : 1;
+          c.progress += c.bt > 0 ? (TICK * 3 * builderMultiplier) / (3 * c.bt) : 1;
         }
       } else c.progress += c.bt > 0 ? TICK / c.bt : 1;
     }
@@ -962,6 +971,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         if (m.foragerFood) stock.food += alloc[k] * mapucheForagerFood(m, ECO_TASK[k], q) * TICK;
         if (m.lumberFood) stock.food += alloc[k] * lumberFoodIncome(m, ECO_TASK[k], q) * TICK;
         if (m.varangianGold) stock.gold += alloc[k] * varangianGoldIncome(m, ECO_TASK[k], q) * TICK;
+        if (scope.poles) stock.gold += alloc[k] * polishStoneGold(scope.poles, ECO_TASK[k], q) * TICK;
       }
     }
     if (fishingShips && eco.fishingShip) {
@@ -1223,6 +1233,7 @@ export function gatherRate(
   const rate = mechanismFarmRate(scope, ecoTask, average);
   const wood = foragerWoodIncome(m, ecoTask, rate);
   const food = lumberFoodIncome(m, ecoTask, rate) + mapucheForagerFood(m, ecoTask, rate);
-  const gold = (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) + varangianGoldIncome(m, ecoTask, rate);
+  const gold =
+    (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) + varangianGoldIncome(m, ecoTask, rate) + polishStoneGold(scope.poles, ecoTask, rate);
   return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}), ...(gold ? { gold } : {}) } };
 }

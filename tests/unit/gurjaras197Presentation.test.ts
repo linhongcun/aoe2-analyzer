@@ -11,9 +11,9 @@ import { simSupport } from '../../src/domain/simSupport';
 const E = eco as unknown as EcoData;
 const civ = civs.find((entry) => entry.en === 'Gurjaras')!;
 describe('#197 Gurjara current-template presentation', () => {
-  it('admits Gurjaras while Poles and Romans remain unsupported', () => {
+  it('admits Gurjaras alongside the final Poles and Romans batch', () => {
     expect(simSupport('Gurjaras')).toBe(true);
-    for (const name of ['Poles', 'Romans']) expect(simSupport(name)).toBe(false);
+    for (const name of ['Poles', 'Romans']) expect(simSupport(name)).toBe(true);
   });
   it('uses the same explicit omission on the timeline and sharing, with only a Knight exception', () => {
     for (const order of buildOrders) {

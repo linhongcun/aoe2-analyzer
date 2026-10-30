@@ -36,6 +36,8 @@ JURCHEN_CONTEXT_TECHS = (993, 995)
 CHINESE_CONTEXT_TECHS = (226, 302, 304, 350, 351, 352, 425)
 MAPUCHE_CONTEXT_TECHS = (1381, 1382, 1405, 1406, 1407)
 GURJARA_CONTEXT_TECHS = (856, 857)
+POLES_CONTEXT_TECHS = (793, 794, 795, 796, 805)
+ROMAN_CONTEXT_TECHS = (887, 892)
 KHMER_PREREQUISITE_TECHS = (216, 659, 660, 661, 666, 667, 668, 25, 147, 148)
 
 
@@ -94,6 +96,27 @@ def slavic_farm(d, civ):
         {'unit': uid, 'type': units[uid]['Type'], 'class': units[uid]['Class'],
          'workRate': round(units[uid]['WorkRate'], 4), 'capacity': units[uid]['Capacity']}
         for uid in (50, 1187)]}
+
+
+def poles_infrastructure(d, civ):
+    """Paid Folwarks and prerequisites remain independent of removable income rows."""
+    from final_civs_source197 import load_physical
+    physical = load_physical()['Poles']
+    dc = d['Civs'][civ]
+    return {'civId': civ, 'treeId': dc['TechTreeID'], 'treeCommands': eff(d, dc['TechTreeID']),
+            'enable': raw_tech_context(d, 793),
+            'upgrades': [raw_tech_context(d, tid) for tid in (794, 795, 796)],
+            'buildingTech': raw_tech_context(d, 110), 'folwarks': physical['folwarks'],
+            'researchSites': {str(tid): d['Techs'][tid]['ResearchAt'] for tid in (14, 22, 199, 202, 203)},
+            'farmTech': raw_tech_context(d, 216), 'marketRequirement': raw_tech_context(d, 666),
+            'ageRequirement': raw_tech_context(d, 659), 'ageNode': raw_tech_context(d, 120)}
+
+
+def roman_farm():
+    """Read actual Roman farm supply rather than infer it from a class multiplier."""
+    from final_civs_source197 import load_physical
+    physical = load_physical()['Romans']
+    return {'civId': physical['civId'], 'farms': physical['farms']}
 
 
 def cost(c):
@@ -205,12 +228,14 @@ def main():
         if k is None: continue
         dc = d['Civs'][k]; rows = []
         tree, free = split_tree_effects(decode(eff(d, dc['TechTreeID']), T))
-        if tree or c['en'] in ('Slavs', 'Khmer'):
+        if tree or c['en'] in ('Slavs', 'Khmer', 'Romans'):
             row = {'source': 'tree', 'name': 'Tech tree', 'age': 1, 'effects': tree}
             if c['en'] == 'Slavs':
                 row['slavicTree'] = {'civId': k, 'treeId': dc['TechTreeID'], 'commands': eff(d, dc['TechTreeID'])}
             if c['en'] == 'Khmer':
                 row['khmerTree'] = {'civId': k, 'treeId': dc['TechTreeID'], 'commands': eff(d, dc['TechTreeID'])}
+            if c['en'] == 'Romans':
+                row['romanTree'] = {'civId': k, 'treeId': dc['TechTreeID'], 'commands': eff(d, dc['TechTreeID'])}
             rows.append(row)
         if free: rows.append({'source': 'tree', 'name': 'Free techs', 'age': 1, 'effects': [{'kind': 'freeTech', 'techName': n} for n in free]})
         # 加成科技：本文明专属、无研究地点（引擎自动生效），与 effects_build 相同的选取规则，但不过滤「站内无对应单位」的经济效果
@@ -223,9 +248,11 @@ def main():
             chinese_context = c['en'] == 'Chinese' and i in CHINESE_CONTEXT_TECHS
             mapuche_context = c['en'] == 'Mapuche' and i in MAPUCHE_CONTEXT_TECHS
             gurjara_context = c['en'] == 'Gurjaras' and i in GURJARA_CONTEXT_TECHS
-            if not (armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context or gurjara_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
+            poles_context = c['en'] == 'Poles' and i in POLES_CONTEXT_TECHS
+            roman_context = c['en'] == 'Romans' and i in ROMAN_CONTEXT_TECHS
+            if not (armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context or gurjara_context or poles_context or roman_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
             ef = decode(eff(d, t['EffectID']), T)
-            if ef or armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context or gurjara_context:
+            if ef or armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context or gurjara_context or poles_context or roman_context:
                 row = {'source': 'bonus', 'tech': i, 'name': t['Name'], 'age': age_of(i), 'requires': [x for x in t['RequiredTechs'] if x >= 0], 'effects': ef}
                 # #197: retain the COMPLETE raw context for this reviewed Wei family only.
                 # Unknown/extra commands must reach the closed runtime guard, never disappear in decode().
@@ -258,12 +285,18 @@ def main():
                     row['mapucheTech'] = raw_tech_context(d, i)
                 if gurjara_context:
                     row['gurjaraTech'] = raw_tech_context(d, i)
+                if poles_context:
+                    row['polesTech'] = raw_tech_context(d, i)
+                if roman_context:
+                    row['romanTech'] = raw_tech_context(d, i)
                 rows.append(row)
         team = decode(eff(d, dc['TeamBonusID']), T)
-        if team or c['en'] == 'Khmer':
+        if team or c['en'] in ('Khmer', 'Romans'):
             row = {'source': 'team', 'name': 'Team bonus', 'age': 1, 'effects': team}
             if c['en'] == 'Khmer':
                 row['khmerTeam'] = {'civId': k, 'teamId': dc['TeamBonusID'], 'commands': eff(d, dc['TeamBonusID'])}
+            if c['en'] == 'Romans':
+                row['romanTeam'] = {'civId': k, 'teamId': dc['TeamBonusID'], 'commands': eff(d, dc['TeamBonusID'])}
             rows.append(row)
         out['civEco'][c['en']] = rows
         if c['en'] == 'Armenians':
@@ -274,6 +307,10 @@ def main():
             out['mapucheInfrastructure'] = mapuche_infrastructure(d, k)
         if c['en'] == 'Slavs':
             out['slavicFarm'] = slavic_farm(d, k)
+        if c['en'] == 'Poles':
+            out['polesInfrastructure'] = poles_infrastructure(d, k)
+        if c['en'] == 'Romans':
+            out['romanFarm'] = roman_farm()
         if c['en'] == 'Khmer':
             out['khmerFarm'] = slavic_farm(d, k)
             out['khmerPrerequisites'] = {'civId': k, 'nodes': {str(tid): raw_tech_context(d, tid) for tid in KHMER_PREREQUISITE_TECHS}}

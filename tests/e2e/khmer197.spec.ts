@@ -118,7 +118,7 @@ for (const width of [360, 375, 390, 1280])
       const khmer = picker.locator('[data-civ="Khmer"]');
       await expect(khmer).not.toHaveAttribute('aria-disabled', 'true');
       await expect(khmer).not.toContainText('加成未计入');
-      await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
+      await expect(picker.locator('[data-civ="Poles"]')).not.toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       await expect(picker).toHaveCount(0);
       if (mobile && (await settings.isVisible())) await settings.getByRole('button', { name: '完成', exact: true }).click();
@@ -155,7 +155,7 @@ for (const width of [360, 375, 390, 1280])
       expect(errors).toEqual([]);
     });
 
-test('#197 高棉六套无farm仅保留免前置说明、双加成用途与未支持回退', async ({ page }) => {
+test('#197 高棉六套无farm仅保留免前置说明、双加成用途与末批文明支持', async ({ page }) => {
   test.setTimeout(CASE_BUDGET_MS);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
@@ -191,10 +191,10 @@ test('#197 高棉六套无farm仅保留免前置说明、双加成用途与未�
   await expect(page.locator('#bonus .bonusbody [data-usage="gather"]')).toHaveAttribute('data-on', 'false');
   await overflow(page);
   await page.goto('./#/builds?bo=scouts-18&civ=Poles');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的波兰加成尚未计入，已按通用计算');
-  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-note"]')).toHaveCount(0);
-  await expect(page.locator('[data-t="share-card-btn"]:visible').first()).toHaveAttribute('aria-disabled', 'true');
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按波兰计');
+  await expect(page.locator('[data-t="civ-note"]')).toContainText('农田即时收获未计入');
+  await expect(page.locator('[data-t="share-card-btn"]:visible').first()).not.toHaveAttribute('aria-disabled', 'true');
   await overflow(page);
   expect(errors).toEqual([]);
 });

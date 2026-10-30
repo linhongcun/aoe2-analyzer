@@ -11,9 +11,9 @@ import { simSupport } from '../../src/domain/simSupport';
 const E = eco as unknown as EcoData;
 const mapuche = civs.find((c) => c.en === 'Mapuche')!;
 describe('#197 Mapuche current support and disclosures', () => {
-  it('admits Mapuche and keeps the other two civilizations disabled', () => {
+  it('admits Mapuche alongside the final Poles and Romans batch', () => {
     expect(simSupport('Mapuche')).toBe(true);
-    for (const civ of ['Poles', 'Romans']) expect(simSupport(civ)).toBe(false);
+    for (const civ of ['Poles', 'Romans']) expect(simSupport(civ)).toBe(true);
   });
   it('keeps notes identical on the timeline and actual share-card basis', () => {
     for (const bo of buildOrders) {

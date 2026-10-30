@@ -1,0 +1,614 @@
+{
+  "schema": "build-sim-source/1",
+  "generator": "scripts/build_sim_source.py",
+  "source": {
+    "repo": "SiegeEngineers/auto-mods",
+    "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+    "path": "dat/empires2_x2_p1.dat",
+    "sha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f"
+  },
+  "normalizedVersion": "VER 8.9",
+  "civ": {
+    "id": 43,
+    "name": "Romans",
+    "rawName": "Romans"
+  },
+  "tree": {
+    "id": 890,
+    "name": "Romans Tech Tree",
+    "commands": [
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 244.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 37.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 376.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 375.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 608.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 64.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 380.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 231.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 438.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 439.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 217.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 264.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 716.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 77.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 85.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 436.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 428.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 265.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 379.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 188.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 54.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 437.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 237.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 201.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 320.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 221.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 279.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 875.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 602.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1138.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1142.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 904.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 909.0
+      },
+      {
+        "Type": 102,
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 910.0
+      },
+      {
+        "Type": 8,
+        "A": 886,
+        "B": 12,
+        "C": -1,
+        "D": 1.0
+      }
+    ]
+  },
+  "team": {
+    "id": 891,
+    "name": "Romans Team Bonus",
+    "commands": [
+      {
+        "Type": 0,
+        "A": 279,
+        "B": -1,
+        "C": 20,
+        "D": 1.0
+      },
+      {
+        "Type": 0,
+        "A": 542,
+        "B": -1,
+        "C": 20,
+        "D": 1.0
+      }
+    ]
+  },
+  "dedicatedTechs": [
+    {
+      "id": 880,
+      "name": "Romans",
+      "sha256": "e68dc6b6e180b0d234339c0ba23e1b82472112ea0cda1f21d8564a7a9e08b769"
+    },
+    {
+      "id": 881,
+      "name": "Centurion (make avail)",
+      "sha256": "351667edd488fd7998ce5d3e9fc78f2057864c45f1b87c0d9dc0eeed340e54b8"
+    },
+    {
+      "id": 882,
+      "name": "Elite Centurion",
+      "sha256": "2d51081d5e4fad5441d8622f62b1ed056261570ae1e76ae6c8e6daa56678144f"
+    },
+    {
+      "id": 883,
+      "name": "Ballistas",
+      "sha256": "8b83d6e1de1d132ad3358e9a1a756088413f2ed0dcad88a81e048f9898670480"
+    },
+    {
+      "id": 884,
+      "name": "Comitatenses",
+      "sha256": "710bbc5fde03d6a55b4b1d20682428f49e5258afa3d99e210a68a6794a12f55f"
+    },
+    {
+      "id": 885,
+      "name": "Legionary",
+      "sha256": "19e160823e3e1f66298be90dbebe04360d73bc0f84ac83e95768b31aa28b6428"
+    },
+    {
+      "id": 887,
+      "name": "C-Bonus, Villagers work faster",
+      "sha256": "dcba1bf4d95fb6be6c7b8fa88cbf5f8f5d4b572ee218079d2c646b0c95825065"
+    },
+    {
+      "id": 888,
+      "name": "C-Bonus, Navy armor",
+      "sha256": "0efa7ab4ab0b074c94557e450aed894f1de875adcbe07c85f731e217f64f1d27"
+    },
+    {
+      "id": 889,
+      "name": "C-Bonus, Double Scale Mail",
+      "sha256": "3e6b4cea44957664782088745da5a5591e82f7a58a2433f1ed2fdb8aab3f65e0"
+    },
+    {
+      "id": 890,
+      "name": "C-Bonus, Double Chain Mail",
+      "sha256": "675d5077dc7f667cd5e689225502d4e89680c5d3a16d3557c779f63a2ed3cdcd"
+    },
+    {
+      "id": 891,
+      "name": "C-Bonus, Double Plate Mail",
+      "sha256": "816cb87b1e52242721eda0234e23b8a38dce2380e24262c74aa54e21688bbef1"
+    },
+    {
+      "id": 892,
+      "name": "C-Bonus, Cheaper scorpions",
+      "sha256": "f07d318aa1268863ecfee14f188c72047cf032ef1b7e6a114ee3c44a9429bd28"
+    },
+    {
+      "id": 895,
+      "name": "[FTT] Disable militia upgrades",
+      "sha256": "5b664f83dc2b28a3ddd837406909616d5de7ef8b5ec02db9584ce1203799898c"
+    }
+  ],
+  "selectedTechs": [
+    {
+      "id": 887,
+      "Name": "C-Bonus, Villagers work faster",
+      "EffectID": 898,
+      "Civ": 43,
+      "RequiredTechs": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 5,
+          "A": -1,
+          "B": 4,
+          "C": 13,
+          "D": 1.0499999523162842
+        },
+        {
+          "Type": 5,
+          "A": 214,
+          "B": -1,
+          "C": 13,
+          "D": 1.038095235824585
+        },
+        {
+          "Type": 5,
+          "A": 259,
+          "B": -1,
+          "C": 13,
+          "D": 1.038095235824585
+        },
+        {
+          "Type": 5,
+          "A": 50,
+          "B": -1,
+          "C": 13,
+          "D": 1.0499999523162842
+        },
+        {
+          "Type": 5,
+          "A": 1187,
+          "B": -1,
+          "C": 13,
+          "D": 1.0499999523162842
+        }
+      ]
+    },
+    {
+      "id": 892,
+      "Name": "C-Bonus, Cheaper scorpions",
+      "EffectID": 900,
+      "Civ": 43,
+      "RequiredTechs": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "RequiredTechCount": 0,
+      "ResearchLocation": -1,
+      "ResearchTime": 0,
+      "ResearchAt": [],
+      "Cost": [],
+      "commands": [
+        {
+          "Type": 5,
+          "A": 279,
+          "B": -1,
+          "C": 105,
+          "D": 0.5
+        },
+        {
+          "Type": 5,
+          "A": 542,
+          "B": -1,
+          "C": 105,
+          "D": 0.5
+        }
+      ]
+    }
+  ],
+  "closure": {
+    "rule": "dedicated+selected+tree/team references; recursive RequiredTechs and Type8/101/103.A, Type102.D",
+    "count": 155,
+    "ids": [
+      19,
+      34,
+      35,
+      37,
+      47,
+      54,
+      57,
+      64,
+      65,
+      74,
+      76,
+      77,
+      85,
+      100,
+      101,
+      102,
+      103,
+      104,
+      106,
+      107,
+      108,
+      110,
+      113,
+      115,
+      120,
+      122,
+      128,
+      130,
+      132,
+      135,
+      138,
+      142,
+      146,
+      166,
+      180,
+      188,
+      199,
+      200,
+      201,
+      202,
+      203,
+      207,
+      209,
+      217,
+      221,
+      222,
+      231,
+      237,
+      240,
+      244,
+      246,
+      254,
+      257,
+      258,
+      264,
+      265,
+      266,
+      278,
+      279,
+      282,
+      292,
+      295,
+      315,
+      320,
+      359,
+      373,
+      374,
+      375,
+      376,
+      379,
+      380,
+      408,
+      428,
+      436,
+      437,
+      438,
+      439,
+      602,
+      604,
+      605,
+      608,
+      638,
+      659,
+      660,
+      661,
+      716,
+      717,
+      755,
+      758,
+      762,
+      765,
+      767,
+      768,
+      800,
+      801,
+      875,
+      880,
+      881,
+      882,
+      883,
+      884,
+      885,
+      886,
+      887,
+      888,
+      889,
+      890,
+      891,
+      892,
+      895,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908,
+      909,
+      910,
+      911,
+      912,
+      913,
+      933,
+      952,
+      953,
+      954,
+      967,
+      968,
+      969,
+      970,
+      971,
+      972,
+      973,
+      974,
+      975,
+      976,
+      977,
+      1136,
+      1137,
+      1138,
+      1141,
+      1142,
+      1150,
+      1151,
+      1169,
+      1170,
+      1171,
+      1209,
+      1218,
+      1221,
+      1222,
+      1262,
+      1267,
+      1357,
+      1358,
+      1387
+    ],
+    "sha256": "37d3fb1d67ff9e2ed142870939beb7ebf196d053cef7f080de2719b29a27d518"
+  },
+  "limits": [
+    "Normalized dat_source.py fields only; no per-civ unit/resource dump or public semantic evidence.",
+    "Closure membership does not authorize automatic effects, availability or simulation support.",
+    "Unknown command kinds remain in full tree/team/selected records and require source review."
+  ]
+}

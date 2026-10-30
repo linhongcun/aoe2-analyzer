@@ -1,4 +1,17 @@
 import { gurjaraContext, gurjaraNotes, gurjaraRowAllowed, GURJARA_MODEL_NOTE } from './gurjaraEconomy';
+import { romanContext, romanRowClass, romanFarmRate, romanBuilderMultiplier, romanNotes } from './romanEconomy';
+import {
+  polishContext,
+  polishRowAllowed,
+  polishBuildOrder,
+  polishResearchSites,
+  polishBuildingReady,
+  polishBuildingPopulation,
+  polishNotes,
+  polishBuildingTime,
+  polishBuildingCost,
+  POLISH_MODEL_NOTE,
+} from './polishEconomy';
 import {
   mapucheContext,
   mapucheBuildOrder,
@@ -25,6 +38,8 @@ import { khmerContext, khmerRowClass, khmerFarmRate, khmerBuildingReady, khmerNo
 import { chineseContext, chinesePopulation, chineseStartingVillagers, chineseRowAllowed, chineseNotes, CHINESE_MODEL_NOTE } from './chineseEconomy';
 import { jurchenContext, jurchenNotes, jurchenRowClass, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 export interface MechanismContext {
+  romans?: ReturnType<typeof romanContext>;
+  poles?: ReturnType<typeof polishContext>;
   gurjaras?: ReturnType<typeof gurjaraContext>;
   mapuche?: MapucheContext;
   chinese?: ReturnType<typeof chineseContext>;
@@ -41,6 +56,8 @@ export interface MechanismContext {
 type Scope = ReturnType<typeof simScope>;
 type Assumptions = { eco: EcoData; bo: BuildOrder; params: SimParams; scope: () => Scope };
 interface CivMechanism {
+  builderMultiplier?: (scope: Scope) => number;
+  buildingCost?: (scope: Scope, id: number) => EcoData['buildings'][string]['cost'] | undefined;
   buildingPopulation?: (scope: Scope, id: number) => number;
   startingVillagers?: (scope: Scope) => number;
   townCenterPopulation?: (scope: Scope) => number;
@@ -62,6 +79,24 @@ interface CivMechanism {
 const knightNote = (bo: BuildOrder, note: string) => (bo.id === 'fast-castle-knights' ? [note] : []);
 /** Numbers are source identities, not copied gameplay multipliers: actual values still come from eco. */
 export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
+  Romans: {
+    context: (eco) => ({ romans: romanContext(eco) }),
+    atomicGather: true,
+    farmRate: (scope, average) => romanFarmRate(scope.romans, average),
+    builderMultiplier: (scope) => romanBuilderMultiplier(scope.romans),
+    assumptions: ({ eco, bo }) => romanNotes(eco, bo),
+  },
+  Poles: {
+    context: (eco) => ({ poles: polishContext(eco) }),
+    prepare: polishBuildOrder,
+    atomicGather: true,
+    buildingReady: (scope, id, _age, built) => polishBuildingReady(scope.poles, id, built),
+    buildingTime: (scope, _eco, _mods, id) => polishBuildingTime(scope.poles, id),
+    buildingCost: (scope, id) => polishBuildingCost(scope.poles, id),
+    buildingPopulation: (scope, id) => polishBuildingPopulation(scope.poles, id),
+    researchSites: (eco, tech, scope) => polishResearchSites(eco, tech, scope),
+    assumptions: ({ eco, bo }) => (polishContext(eco).complete ? [...polishNotes(eco, bo.id), POLISH_MODEL_NOTE] : []),
+  },
   Gurjaras: {
     context: (eco) => ({ gurjaras: gurjaraContext(eco) }),
     assumptions: ({ eco, bo }) => (gurjaraContext(eco).complete ? [...gurjaraNotes(eco, bo.id), GURJARA_MODEL_NOTE] : []),
@@ -206,6 +241,8 @@ export function rowApplication(civ: string, row: EffectRow, scope: Scope, mode: 
 /** Shared source filtering; gather keeps its historical, narrower atomic gate. */
 export function mechanismRowAllowed(row: EffectRow, scope: Scope, uniqueMayanTree: boolean): boolean {
   return (
+    romanRowClass(row, scope.civ, scope.romans)?.kind !== 'unhandled' &&
+    polishRowAllowed(row, scope.civ, scope.poles) &&
     gurjaraRowAllowed(row, scope.civ, scope.gurjaras) &&
     mapucheRowAllowed(row, scope.civ, scope.mapuche) &&
     chineseRowAllowed(row, scope.civ, scope.chinese) &&

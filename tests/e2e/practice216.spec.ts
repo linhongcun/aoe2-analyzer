@@ -127,7 +127,9 @@ test('#216 全部真实开局完整清单与A4 PDF保留来源/限制', async ({
       await expect(rows.nth(index).getByTestId('practice-action')).toHaveCount(order.steps[index]!.actions.length);
       if (order.steps[index]!.siteAdded) await expect(rows.nth(index)).toContainText('本站补充，来源未列');
     }
-    await expect(page.getByTestId('practice-civ-warning')).toContainText('加成尚未计入，已按通用计算');
+    await expect(page.getByTestId('practice-civ-warning')).toHaveCount(0);
+    await expect(page.locator('.bp-context')).toContainText('波兰');
+    await expect(page.locator('.bp-context')).toContainText('农田即时收获未计入');
     for (const source of order.sources) await expect(page.locator('.bp-sources')).toContainText(source.url);
     await expect(page.locator('.bp-sources')).toContainText(`DE Update ${pins.patch.build}`);
     await page.pdf({ path: info.outputPath(`practice216-${order.id}-a4.pdf`), format: 'A4', preferCSSPageSize: true, printBackground: true });

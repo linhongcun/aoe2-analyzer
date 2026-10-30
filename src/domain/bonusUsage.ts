@@ -1,3 +1,5 @@
+import { polishContext, POLISH_OPENING_NOTE, POLISH_FARM_NOTE, POLISH_STONE_NOTE } from './polishEconomy';
+import { romanContext, ROMAN_WORK_NOTE } from './romanEconomy';
 import { gurjaraContext, GURJARA_BUSH_NOTE, GURJARA_GARRISON_NOTE } from './gurjaraEconomy';
 import { mapucheContext, MAPUCHE_TRAIN_NOTE } from './mapucheEconomy';
 import { chineseContext, CHINESE_OPENING_NOTE } from './chineseEconomy';
@@ -112,6 +114,7 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
   'Malay-1': { en: 'Infantry armor upgrades free', on: false, note: '未计入：步兵护甲升级是战斗科技，不影响开局时间与库存' },
   // Newly supported Slavic military free techs, separate from the historical 15.
   'Slavs-1': { en: 'Arson, Gambesons free', on: false, note: '未计入：纵火、软甲是战斗科技，当前开局不研究，也不影响时间与库存' },
+  'Poles-3': { en: 'Bloodlines and Scout Cavalry-line upgrades cost -50% food', on: false, note: '未计入：当前开局方案不研究血统或斥候骑兵系升级' },
   'Teutons-4': { en: 'Murder Holes, Herbal Medicine free', on: false, note: '未计入：近射孔 / 草药不影响开局方案的资源与时间' },
   'Turks-2': { en: 'Chemistry free; Gunpowder technologies costs -50%', on: false, note: '未计入：化学与火药科技费用，现有开局方案不涉及' },
   'Vietnamese-3': { en: 'Conscription free', on: false, note: '未计入：征招是军事单位训练加速，现有开局方案不研究征招' },
@@ -120,6 +123,26 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
 
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
+  if (b.id === 'Poles-0') {
+    const on = polishContext(eco).complete && currentSimSupport(eco, b.civ, buildOrders).supported;
+    return {
+      tool: 'sim',
+      name,
+      on,
+      note: on ? `已计入大庄园实体；${POLISH_OPENING_NOTE}；${POLISH_FARM_NOTE}` : '波兰来源不完整，暂按通用文明计算，本条未计入',
+    };
+  }
+  if (b.id === 'Poles-2')
+    return {
+      tool: 'sim',
+      name,
+      on: false,
+      note: polishContext(eco).complete ? `未计入当前开局收益：${POLISH_STONE_NOTE}` : '波兰来源不完整，暂按通用文明计算，本条未计入',
+    };
+  if (b.id === 'Romans-0') {
+    const on = romanContext(eco).bonus && currentSimSupport(eco, b.civ, buildOrders).supported;
+    return { tool: 'sim', name, on: !!on, note: on ? `已计入；${ROMAN_WORK_NOTE}` : '罗马来源不完整，暂按通用文明计算，本条未计入' };
+  }
   if (b.id === 'Gurjaras-0' || b.id === 'Gurjaras-1') {
     return {
       tool: 'sim',
@@ -182,7 +205,7 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
     };
   }
   const { techs, treeOnly } = bonusTechs(b);
-  const currentScope = ['Mapuche', 'Chinese', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer'].includes(b.civ)
+  const currentScope = ['Poles', 'Romans', 'Mapuche', 'Chinese', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer'].includes(b.civ)
     ? simScope(eco, buildOrders, b.civ)
     : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
@@ -259,6 +282,7 @@ export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
         note: '赠送村民未计入真实成本；单个村民的采集速度不变',
       },
     ];
+  if (b.id === 'Poles-0' || b.id === 'Poles-2') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Gurjaras-0' || b.id === 'Gurjaras-1') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Mapuche-1') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Chinese-2') return usageLines(b as CivBonusEnt & { idx: number });

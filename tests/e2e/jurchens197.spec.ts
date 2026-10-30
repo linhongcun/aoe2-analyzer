@@ -88,7 +88,7 @@ for (const width of [360, 375, 390, 1280])
       } else await page.locator('#tlciv').click();
       const picker = page.getByRole('dialog', { name: '文明', exact: true });
       await expect(picker.locator('[data-civ="Jurchens"]')).not.toHaveAttribute('aria-disabled', 'true');
-      await expect(picker.locator('[data-civ="Poles"]')).toHaveAttribute('aria-disabled', 'true');
+      await expect(picker.locator('[data-civ="Poles"]')).not.toHaveAttribute('aria-disabled', 'true');
       await page.keyboard.press('Escape');
       if (mobile && (await settings.isVisible())) await settings.getByRole('button', { name: '完成', exact: true }).click();
       if ((width === 360 && theme === 'light') || (width === 1280 && theme === 'dark'))
@@ -106,7 +106,7 @@ for (const width of [360, 375, 390, 1280])
         }
       expect(errors).toEqual([]);
     });
-test('#197 女真七套合法模板的统一边界、两加成未计入说明和其它文明回退', async ({ page }) => {
+test('#197 女真七套合法模板的统一边界、两加成未计入说明和末批文明支持', async ({ page }) => {
   test.setTimeout(BUDGET);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -127,10 +127,10 @@ test('#197 女真七套合法模板的统一边界、两加成未计入说明和
     await overflow(page);
   }
   await page.goto('./#/builds?bo=scouts-18&civ=Poles');
-  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按通用计');
-  await expect(page.locator('[data-t="civ-warn"]')).toContainText('链接里的波兰加成尚未计入，已按通用计算');
-  await expect(page.locator('[data-t="civ-note"]')).toHaveCount(0);
-  await expect(page.locator('[data-t="share-card-btn"]:visible').first()).toHaveAttribute('aria-disabled', 'true');
+  await expect(page.locator('[data-t="sum-civ"]')).toHaveText('按波兰计');
+  await expect(page.locator('[data-t="civ-warn"]')).toHaveCount(0);
+  await expect(page.locator('[data-t="civ-note"]')).toContainText('农田即时收获未计入');
+  await expect(page.locator('[data-t="share-card-btn"]:visible').first()).not.toHaveAttribute('aria-disabled', 'true');
   await overflow(page);
   expect(errors).toEqual([]);
 });

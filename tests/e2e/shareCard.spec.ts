@@ -53,31 +53,22 @@ test.describe('#19 分享卡', () => {
   });
 
   for (const w of [1280, 390]) {
-    test(`置灰文明（${w}）：分享按钮 aria-disabled、可聚焦、点了不出卡；灰字逐字；复制链接照常`, async ({ page, context }) => {
+    test(`末批波兰（${w}）：可生成分享卡并保留边界说明；复制链接照常`, async ({ page, context }) => {
       await context.grantPermissions(['clipboard-read', 'clipboard-write']);
       await page.setViewportSize({ width: w, height: w > 600 ? 900 : 844 });
       await open(page, 'bo=scouts-18&civ=Poles');
       const btn = shareBtn(page);
       await expect(btn).toHaveCount(1);
-      await expect(btn).toHaveAttribute('aria-disabled', 'true');
-      const noteId = await btn.getAttribute('aria-describedby');
-      const note = page.locator(`#${noteId}`);
-      await expect(note).toHaveText('加成未计入，暂不能生成分享卡');
-      await expect(note).toHaveCSS('font-size', '12px');
-      const muted = await page.evaluate(() => {
-        const d = document.createElement('span');
-        d.style.color = 'var(--color-muted)';
-        document.body.append(d);
-        const c = getComputedStyle(d).color;
-        d.remove();
-        return c;
-      });
-      await expect(note).toHaveCSS('color', muted);
-      expect(await note.evaluate((n) => n.scrollWidth <= n.clientWidth + 1 && n.getClientRects().length === 1)).toBe(true);
+      await expect(btn).not.toHaveAttribute('aria-disabled', 'true');
       await btn.focus();
       await expect(btn).toBeFocused();
-      await btn.click({ force: true }); // aria-disabled：Playwright 默认不点，强制点一下验证「点了不动」
-      await expect(page.getByRole('dialog', { name: '分享卡' })).toHaveCount(0);
+      await btn.click();
+      const card = page.getByRole('dialog', { name: '分享卡' });
+      await expect(card).toBeVisible();
+      await expect(card.locator('[data-t="card-basis"]')).toContainText('农田即时收获未计入');
+      await expect(card.locator('[data-t="card-url"]')).toContainText('civ=Poles');
+      await page.keyboard.press('Escape');
+      await expect(card).toHaveCount(0);
       await page.getByRole('button', { name: '复制链接' }).filter({ visible: true }).click();
       const toast = page.locator('[data-t="toast-copied"]');
       await expect(toast).toHaveText('链接已复制');
@@ -102,10 +93,8 @@ test.describe('#19 分享卡', () => {
         await page.setViewportSize({ width: w, height: w > 600 ? 900 : 800 });
         await open(page, q);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-        if (!q.includes('Poles')) {
-          await shareBtn(page).click();
-          await expect(page.getByRole('dialog', { name: '分享卡' })).toBeVisible();
-          expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-        }
+        await shareBtn(page).click();
+        await expect(page.getByRole('dialog', { name: '分享卡' })).toBeVisible();
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
       });
 });

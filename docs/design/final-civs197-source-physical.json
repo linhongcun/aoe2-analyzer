@@ -1,0 +1,1279 @@
+{
+  "generator": "scripts/final_civs_source197.py",
+  "physical": {
+    "Poles": {
+      "civId": 38,
+      "currentEconomicActorsIdenticalToBase": [
+        {
+          "identical": true,
+          "unit": 13
+        },
+        {
+          "identical": true,
+          "unit": 50
+        },
+        {
+          "identical": true,
+          "unit": 1187
+        },
+        {
+          "identical": true,
+          "unit": 83
+        },
+        {
+          "identical": true,
+          "unit": 293
+        },
+        {
+          "identical": true,
+          "unit": 118
+        },
+        {
+          "identical": true,
+          "unit": 212
+        },
+        {
+          "identical": true,
+          "unit": 259
+        },
+        {
+          "identical": true,
+          "unit": 214
+        }
+      ],
+      "farmFoodResources": [
+        {
+          "resource": 36,
+          "value": 175.0
+        },
+        {
+          "resource": 69,
+          "value": 1.0
+        },
+        {
+          "resource": 237,
+          "value": 0.0
+        },
+        {
+          "resource": 238,
+          "value": -1.0
+        },
+        {
+          "resource": 239,
+          "value": -1.0
+        }
+      ],
+      "farms": [
+        {
+          "capacity": 15,
+          "class": 49,
+          "type": 80,
+          "unit": 50,
+          "workRate": 0.4
+        },
+        {
+          "capacity": 15,
+          "class": 49,
+          "type": 80,
+          "unit": 1187,
+          "workRate": 0.4
+        }
+      ],
+      "folwarks": [
+        {
+          "buildTech": 110,
+          "class": 3,
+          "cost": [
+            [
+              1,
+              100,
+              1
+            ]
+          ],
+          "populationSource": {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          "trainAt": [
+            [
+              118,
+              40
+            ]
+          ],
+          "trainTime": 40,
+          "type": 80,
+          "unit": 1734,
+          "workRate": 1.0
+        },
+        {
+          "buildTech": 110,
+          "class": 3,
+          "cost": [
+            [
+              1,
+              100,
+              1
+            ]
+          ],
+          "populationSource": {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          "trainAt": [
+            [
+              118,
+              40
+            ]
+          ],
+          "trainTime": 40,
+          "type": 80,
+          "unit": 1711,
+          "workRate": 1.0
+        },
+        {
+          "buildTech": 110,
+          "class": 3,
+          "cost": [
+            [
+              1,
+              100,
+              1
+            ]
+          ],
+          "populationSource": {
+            "amount": 5.0,
+            "flag": 4,
+            "type": 4
+          },
+          "trainAt": [
+            [
+              118,
+              40
+            ]
+          ],
+          "trainTime": 40,
+          "type": 80,
+          "unit": 1720,
+          "workRate": 1.0
+        }
+      ],
+      "mill": {
+        "buildTech": 110,
+        "class": 3,
+        "cost": [
+          [
+            1,
+            100,
+            1
+          ]
+        ],
+        "populationSource": {
+          "amount": 0.0,
+          "flag": 4,
+          "type": 4
+        },
+        "trainAt": [
+          [
+            118,
+            35
+          ]
+        ],
+        "trainTime": 35,
+        "type": 80,
+        "unit": 68,
+        "workRate": 1.0
+      },
+      "resourceDifferencesFromBase": [
+        {
+          "Poles": 9503.0,
+          "base": 9466.0,
+          "resource": 73
+        }
+      ],
+      "startingScout": {
+        "populationSource": {
+          "amount": 1,
+          "flag": 0,
+          "type": 4
+        },
+        "resource": 263,
+        "unit": 448
+      },
+      "stockResourceSlots": [
+        {
+          "Poles": 0.0,
+          "base": 0.0,
+          "resource": 0
+        },
+        {
+          "Poles": 0.0,
+          "base": 0.0,
+          "resource": 1
+        },
+        {
+          "Poles": 0.0,
+          "base": 0.0,
+          "resource": 2
+        },
+        {
+          "Poles": 0.0,
+          "base": 0.0,
+          "resource": 3
+        },
+        {
+          "Poles": 0.0,
+          "base": 0.0,
+          "resource": 91
+        },
+        {
+          "Poles": 0.0,
+          "base": 0.0,
+          "resource": 92
+        },
+        {
+          "Poles": 0.0,
+          "base": 0.0,
+          "resource": 93
+        },
+        {
+          "Poles": 0.0,
+          "base": 0.0,
+          "resource": 94
+        }
+      ],
+      "teamId": 802,
+      "treeId": 801,
+      "villagerPopulation": [
+        {
+          "populationSource": {
+            "amount": 1,
+            "flag": 0,
+            "type": 4
+          },
+          "unit": 83
+        },
+        {
+          "populationSource": {
+            "amount": 1,
+            "flag": 0,
+            "type": 4
+          },
+          "unit": 293
+        }
+      ]
+    },
+    "Romans": {
+      "civId": 43,
+      "currentEconomicActorsIdenticalToBase": [
+        {
+          "identical": true,
+          "unit": 13
+        },
+        {
+          "identical": true,
+          "unit": 50
+        },
+        {
+          "identical": true,
+          "unit": 1187
+        },
+        {
+          "identical": true,
+          "unit": 83
+        },
+        {
+          "identical": true,
+          "unit": 293
+        },
+        {
+          "identical": true,
+          "unit": 118
+        },
+        {
+          "identical": true,
+          "unit": 212
+        },
+        {
+          "identical": true,
+          "unit": 259
+        },
+        {
+          "identical": true,
+          "unit": 214
+        }
+      ],
+      "farms": [
+        {
+          "capacity": 15,
+          "class": 49,
+          "type": 80,
+          "unit": 50,
+          "workRate": 0.4
+        },
+        {
+          "capacity": 15,
+          "class": 49,
+          "type": 80,
+          "unit": 1187,
+          "workRate": 0.4
+        }
+      ],
+      "resourceDifferencesFromBase": [
+        {
+          "Romans": 9508.0,
+          "base": 9466.0,
+          "resource": 73
+        }
+      ],
+      "startingScout": {
+        "populationSource": {
+          "amount": 1,
+          "flag": 0,
+          "type": 4
+        },
+        "resource": 263,
+        "unit": 448
+      },
+      "stockResourceSlots": [
+        {
+          "Romans": 0.0,
+          "base": 0.0,
+          "resource": 0
+        },
+        {
+          "Romans": 0.0,
+          "base": 0.0,
+          "resource": 1
+        },
+        {
+          "Romans": 0.0,
+          "base": 0.0,
+          "resource": 2
+        },
+        {
+          "Romans": 0.0,
+          "base": 0.0,
+          "resource": 3
+        },
+        {
+          "Romans": 0.0,
+          "base": 0.0,
+          "resource": 91
+        },
+        {
+          "Romans": 0.0,
+          "base": 0.0,
+          "resource": 92
+        },
+        {
+          "Romans": 0.0,
+          "base": 0.0,
+          "resource": 93
+        },
+        {
+          "Romans": 0.0,
+          "base": 0.0,
+          "resource": 94
+        }
+      ],
+      "teamId": 891,
+      "treeId": 890,
+      "villagerPopulation": [
+        {
+          "populationSource": {
+            "amount": 1,
+            "flag": 0,
+            "type": 4
+          },
+          "unit": 83
+        },
+        {
+          "populationSource": {
+            "amount": 1,
+            "flag": 0,
+            "type": 4
+          },
+          "unit": 293
+        }
+      ]
+    },
+    "engineVerifiedInPinnedBuild": false,
+    "version": "VER 8.9"
+  },
+  "polesInfrastructure": {
+    "ageNode": {
+      "civ": -1,
+      "commands": [],
+      "cost": [],
+      "effectId": 120,
+      "requiredCount": 2,
+      "requires": [
+        110,
+        258,
+        1221,
+        122,
+        282,
+        1358
+      ],
+      "researchAt": [],
+      "researchLocation": -1,
+      "researchTime": 0,
+      "tech": 120
+    },
+    "ageRequirement": {
+      "civ": -1,
+      "commands": [],
+      "cost": [],
+      "effectId": -1,
+      "requiredCount": 1,
+      "requires": [
+        120,
+        638,
+        1357
+      ],
+      "researchAt": [],
+      "researchLocation": -1,
+      "researchTime": 0,
+      "tech": 659
+    },
+    "buildingTech": {
+      "civ": -1,
+      "commands": [],
+      "cost": [],
+      "effectId": 110,
+      "requiredCount": 1,
+      "requires": [],
+      "researchAt": [],
+      "researchLocation": -1,
+      "researchTime": 0,
+      "tech": 110
+    },
+    "civId": 38,
+    "enable": {
+      "civ": 38,
+      "commands": [
+        {
+          "A": 68,
+          "B": 1734,
+          "C": -1,
+          "D": 0.0,
+          "Type": 3
+        },
+        {
+          "A": 129,
+          "B": 1734,
+          "C": -1,
+          "D": 0.0,
+          "Type": 3
+        },
+        {
+          "A": 130,
+          "B": 1734,
+          "C": -1,
+          "D": 0.0,
+          "Type": 3
+        },
+        {
+          "A": 131,
+          "B": 1734,
+          "C": -1,
+          "D": 0.0,
+          "Type": 3
+        },
+        {
+          "A": 237,
+          "B": 0,
+          "C": 36,
+          "D": 0.10000000149011612,
+          "Type": 1
+        },
+        {
+          "A": 238,
+          "B": 0,
+          "C": -1,
+          "D": 0.0,
+          "Type": 1
+        },
+        {
+          "A": 239,
+          "B": 0,
+          "C": -1,
+          "D": 68.0,
+          "Type": 1
+        }
+      ],
+      "cost": [],
+      "effectId": 816,
+      "requiredCount": 0,
+      "requires": [],
+      "researchAt": [],
+      "researchLocation": -1,
+      "researchTime": 0,
+      "tech": 793
+    },
+    "farmTech": {
+      "civ": -1,
+      "commands": [
+        {
+          "A": 50,
+          "B": 1,
+          "C": -1,
+          "D": 0.0,
+          "Type": 2
+        },
+        {
+          "A": 1187,
+          "B": 1,
+          "C": -1,
+          "D": 0.0,
+          "Type": 2
+        }
+      ],
+      "cost": [],
+      "effectId": 205,
+      "requiredCount": 1,
+      "requires": [
+        110,
+        638,
+        1357
+      ],
+      "researchAt": [],
+      "researchLocation": -1,
+      "researchTime": 0,
+      "tech": 216
+    },
+    "folwarks": [
+      {
+        "buildTech": 110,
+        "class": 3,
+        "cost": [
+          [
+            1,
+            100,
+            1
+          ]
+        ],
+        "populationSource": {
+          "amount": 5.0,
+          "flag": 4,
+          "type": 4
+        },
+        "trainAt": [
+          [
+            118,
+            40
+          ]
+        ],
+        "trainTime": 40,
+        "type": 80,
+        "unit": 1734,
+        "workRate": 1.0
+      },
+      {
+        "buildTech": 110,
+        "class": 3,
+        "cost": [
+          [
+            1,
+            100,
+            1
+          ]
+        ],
+        "populationSource": {
+          "amount": 5.0,
+          "flag": 4,
+          "type": 4
+        },
+        "trainAt": [
+          [
+            118,
+            40
+          ]
+        ],
+        "trainTime": 40,
+        "type": 80,
+        "unit": 1711,
+        "workRate": 1.0
+      },
+      {
+        "buildTech": 110,
+        "class": 3,
+        "cost": [
+          [
+            1,
+            100,
+            1
+          ]
+        ],
+        "populationSource": {
+          "amount": 5.0,
+          "flag": 4,
+          "type": 4
+        },
+        "trainAt": [
+          [
+            118,
+            40
+          ]
+        ],
+        "trainTime": 40,
+        "type": 80,
+        "unit": 1720,
+        "workRate": 1.0
+      }
+    ],
+    "marketRequirement": {
+      "civ": -1,
+      "commands": [],
+      "cost": [],
+      "effectId": -1,
+      "requiredCount": 1,
+      "requires": [
+        110,
+        638,
+        1357
+      ],
+      "researchAt": [],
+      "researchLocation": -1,
+      "researchTime": 0,
+      "tech": 666
+    },
+    "researchSites": {
+      "14": [
+        [
+          68,
+          20
+        ],
+        [
+          2556,
+          20
+        ]
+      ],
+      "199": [
+        [
+          103,
+          30
+        ]
+      ],
+      "202": [
+        [
+          562,
+          25
+        ],
+        [
+          1808,
+          25
+        ],
+        [
+          2556,
+          25
+        ]
+      ],
+      "203": [
+        [
+          562,
+          50
+        ],
+        [
+          1808,
+          50
+        ],
+        [
+          2556,
+          50
+        ]
+      ],
+      "22": [
+        [
+          109,
+          25
+        ]
+      ]
+    },
+    "treeCommands": [
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 436.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 265.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 428.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 80.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 219.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 244.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 373.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 375.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 376.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 380.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 51.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 85.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 239.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 320.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 319.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 439.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 233.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 182.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 221.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 15.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 429.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 875.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1138.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1142.0,
+        "Type": 102
+      },
+      {
+        "A": 435,
+        "B": 0,
+        "C": 2,
+        "D": 0.5,
+        "Type": 101
+      },
+      {
+        "A": 254,
+        "B": 0,
+        "C": 2,
+        "D": 0.5,
+        "Type": 101
+      },
+      {
+        "A": 786,
+        "B": 0,
+        "C": 2,
+        "D": 0.5,
+        "Type": 101
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 909.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 910.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 192.0,
+        "Type": 102
+      },
+      {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 218.0,
+        "Type": 102
+      },
+      {
+        "A": 1450,
+        "B": 12,
+        "C": -1,
+        "D": 1.0,
+        "Type": 8
+      },
+      {
+        "A": 1451,
+        "B": 12,
+        "C": -1,
+        "D": 1.0,
+        "Type": 8
+      }
+    ],
+    "treeId": 801,
+    "upgrades": [
+      {
+        "civ": 38,
+        "commands": [
+          {
+            "A": 68,
+            "B": 1711,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 129,
+            "B": 1711,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 130,
+            "B": 1711,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 131,
+            "B": 1711,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 1734,
+            "B": 1711,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          }
+        ],
+        "cost": [],
+        "effectId": 818,
+        "requiredCount": 2,
+        "requires": [
+          101,
+          793
+        ],
+        "researchAt": [],
+        "researchLocation": -1,
+        "researchTime": 0,
+        "tech": 794
+      },
+      {
+        "civ": 38,
+        "commands": [
+          {
+            "A": 68,
+            "B": 1720,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 129,
+            "B": 1720,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 130,
+            "B": 1720,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 131,
+            "B": 1720,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 1734,
+            "B": 1720,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          },
+          {
+            "A": 1711,
+            "B": 1720,
+            "C": -1,
+            "D": 0.0,
+            "Type": 3
+          }
+        ],
+        "cost": [],
+        "effectId": 819,
+        "requiredCount": 2,
+        "requires": [
+          102,
+          793
+        ],
+        "researchAt": [],
+        "researchLocation": -1,
+        "researchTime": 0,
+        "tech": 795
+      },
+      {
+        "civ": 38,
+        "commands": [
+          {
+            "A": 68,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0,
+            "Type": 4
+          },
+          {
+            "A": 68,
+            "B": -1,
+            "C": 8,
+            "D": 769.0,
+            "Type": 4
+          },
+          {
+            "A": 129,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0,
+            "Type": 4
+          },
+          {
+            "A": 129,
+            "B": -1,
+            "C": 8,
+            "D": 769.0,
+            "Type": 4
+          },
+          {
+            "A": 130,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0,
+            "Type": 4
+          },
+          {
+            "A": 130,
+            "B": -1,
+            "C": 8,
+            "D": 769.0,
+            "Type": 4
+          },
+          {
+            "A": 131,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0,
+            "Type": 4
+          },
+          {
+            "A": 131,
+            "B": -1,
+            "C": 8,
+            "D": 769.0,
+            "Type": 4
+          },
+          {
+            "A": 1734,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0,
+            "Type": 4
+          },
+          {
+            "A": 1734,
+            "B": -1,
+            "C": 8,
+            "D": 769.0,
+            "Type": 4
+          },
+          {
+            "A": 1711,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0,
+            "Type": 4
+          },
+          {
+            "A": 1711,
+            "B": -1,
+            "C": 8,
+            "D": 769.0,
+            "Type": 4
+          },
+          {
+            "A": 1720,
+            "B": -1,
+            "C": 8,
+            "D": 1025.0,
+            "Type": 4
+          },
+          {
+            "A": 1720,
+            "B": -1,
+            "C": 8,
+            "D": 769.0,
+            "Type": 4
+          },
+          {
+            "A": 68,
+            "B": -1,
+            "C": 48,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 68,
+            "B": -1,
+            "C": 49,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 129,
+            "B": -1,
+            "C": 48,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 129,
+            "B": -1,
+            "C": 49,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 130,
+            "B": -1,
+            "C": 48,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 130,
+            "B": -1,
+            "C": 49,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 131,
+            "B": -1,
+            "C": 48,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 131,
+            "B": -1,
+            "C": 49,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 1734,
+            "B": -1,
+            "C": 48,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 1734,
+            "B": -1,
+            "C": 49,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 1711,
+            "B": -1,
+            "C": 48,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 1711,
+            "B": -1,
+            "C": 49,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 1720,
+            "B": -1,
+            "C": 48,
+            "D": 1.0,
+            "Type": 4
+          },
+          {
+            "A": 1720,
+            "B": -1,
+            "C": 49,
+            "D": 1.0,
+            "Type": 4
+          }
+        ],
+        "cost": [],
+        "effectId": 820,
+        "requiredCount": 2,
+        "requires": [
+          103,
+          793
+        ],
+        "researchAt": [],
+        "researchLocation": -1,
+        "researchTime": 0,
+        "tech": 796
+      }
+    ]
+  },
+  "romanFarm": {
+    "civId": 43,
+    "farms": [
+      {
+        "capacity": 15,
+        "class": 49,
+        "type": 80,
+        "unit": 50,
+        "workRate": 0.4
+      },
+      {
+        "capacity": 15,
+        "class": 49,
+        "type": 80,
+        "unit": 1187,
+        "workRate": 0.4
+      }
+    ]
+  },
+  "schema": "final-civs197-physical/1",
+  "source": {
+    "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+    "path": "dat/empires2_x2_p1.dat",
+    "repo": "SiegeEngineers/auto-mods",
+    "sha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f"
+  }
+}

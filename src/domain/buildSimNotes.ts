@@ -1,3 +1,5 @@
+import { polishNotes } from './polishEconomy';
+import { romanNotes } from './romanEconomy';
 import { gurjaraNotes } from './gurjaraEconomy';
 import { mapucheNotes } from './mapucheEconomy';
 import { chineseNotes } from './chineseEconomy';
@@ -30,6 +32,16 @@ interface CivNotes {
 
 /** Generic-row disclosures remain outside the registry: a displaced Portuguese row still has its old note. */
 const CIV_NOTES: ReadonlyMap<string, CivNotes> = new Map([
+  ['Poles', { mechanism: ({ eco, boId }) => polishNotes(eco, boId) }],
+  [
+    'Romans',
+    {
+      mechanism: ({ eco, boId }) => {
+        const bo = ALL_BOS.find((order) => order.id === boId);
+        return bo ? romanNotes(eco, bo) : [];
+      },
+    },
+  ],
   ['Gurjaras', { mechanism: ({ eco, boId }) => gurjaraNotes(eco, boId) }],
   ['Mapuche', { mechanism: ({ eco, boId }) => mapucheNotes(eco, boId) }],
   ['Chinese', { mechanism: ({ eco }) => chineseNotes(eco) }],

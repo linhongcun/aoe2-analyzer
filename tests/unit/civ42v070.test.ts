@@ -4,6 +4,7 @@ import eco from '../../src/data/eco.json';
 import units from '../../src/data/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import baseline from './fixtures/whitelist-v070.json';
+import currentFinalCivs from './fixtures/final-civs197-v0700.json';
 import {
   animalFood,
   civNoHouses,
@@ -136,8 +137,8 @@ describe('D 按类别打折带出的其他文明（Steve 口径 PR 评论 619503
   });
 });
 
+// #197 v0.70.0: 维护者于2026-10-30明确批准迁移最后两文明的旧未支持合同；历史原件保留。
 describe('C 白名单', () => {
-  // 冻结v0.7.0历史fixture的19个文明；当前不支持集合在下方单独派生。
   const HISTORICAL_WHITELIST = [
     'Armenians',
     'Bengalis',
@@ -159,46 +160,42 @@ describe('C 白名单', () => {
     'Varangians',
     'Wei',
   ];
-  const WHITELIST = HISTORICAL_WHITELIST.filter((c) => !['Portuguese', 'Shu', 'Malians', 'Varangians', 'Tatars', 'Mayans', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer', 'Jurchens', 'Chinese', 'Mapuche', 'Gurjaras'].includes(c));
-  it('历史v0.7.0 fixture完整保留19个文明（包含葡萄牙）', () => {
+  const HISTORICAL_BUILDS = ['archers-19', 'drush-fc', 'fast-castle-boom', 'feudal-drush-18', 'maa-archers-18', 'scouts-18'];
+  it('历史v0.7.0 fixture完整保留19个文明与六个原模板，仅核对存档完整性', () => {
     const B = baseline as Record<string, Record<string, unknown>>;
-    // 本用例的WHITELIST明确指历史19文明，不是当前剩余2个未支持文明。
-    // 保留原历史断言真实执行，同时让v0300-289继续保护全部原断言。
-    const WHITELIST = HISTORICAL_WHITELIST;
-    expect(WHITELIST).toHaveLength(19);
-    expect(Object.keys(B).sort()).toEqual([...WHITELIST].sort());
-    const historicalBuilds = ['archers-19', 'drush-fc', 'fast-castle-boom', 'feudal-drush-18', 'maa-archers-18', 'scouts-18'];
-    for (const c of WHITELIST) expect(Object.keys(B[c]!).sort(), c).toEqual(historicalBuilds);
+    expect(HISTORICAL_WHITELIST).toHaveLength(19);
+    expect(Object.keys(B).sort()).toEqual([...HISTORICAL_WHITELIST].sort());
+    for (const civ of HISTORICAL_WHITELIST) expect(Object.keys(B[civ]!).sort(), civ).toEqual(HISTORICAL_BUILDS);
   });
-  it('不支持的文明正好是这 2 个（#197 葡萄牙、蜀、马里、瓦兰吉、鞑靼、玛雅、西西里、魏、孟加拉、亚美尼亚、格鲁吉亚、斯拉夫、高棉、女真、中国、马普切、瞿折罗已支持）', () => {
-    const uns = Object.keys(E.civEco).filter((c) => !simSupport(E, c, buildOrders).supported);
-    expect(new Set(uns)).toEqual(new Set(WHITELIST));
+  it('当前56文明全部支持；没有未支持文明，原因列表均为空', () => {
+    const currentCivs = Object.keys(E.civEco);
+    expect(currentCivs).toHaveLength(56);
+    expect(currentCivs.filter((civ) => !simSupport(E, civ, buildOrders).supported)).toEqual([]);
+    for (const civ of currentCivs) expect(simSupport(E, civ, buildOrders), civ).toEqual({ supported: true, reasons: [] });
   });
-  it('白名单里没有哥特、匈奴、印加、高丽（这四个按加成计算）', () => {
-    for (const c of ['Goths', 'Huns', 'Incas', 'Koreans']) {
-      expect(WHITELIST).not.toContain(c);
-      expect(simSupport(E, c, buildOrders).supported, c).toBe(true);
+  it('历史未支持名单不含哥特、匈奴、印加、高丽；它们当前仍按加成计算', () => {
+    for (const civ of ['Goths', 'Huns', 'Incas', 'Koreans']) {
+      expect(HISTORICAL_WHITELIST).not.toContain(civ);
+      expect(simSupport(E, civ, buildOrders).supported, civ).toBe(true);
     }
   });
-  it('剩余 2 个白名单文明 × v0.7.0 原有开局：每步库存、时间和升时代与基线完全相同', () => {
-    const B = baseline as Record<string, Record<string, unknown>>;
-    for (const c of WHITELIST) {
-      expect(Object.keys(B[c]!)).toHaveLength(6);
-      for (const id of Object.keys(B[c]!)) {
-        const b = buildOrders.find((b) => b.id === id)!;
-        expect(b, `历史开局 ${id} 必须仍存在`).toBeDefined();
-        const tl = run(b.id, c);
-        const got = {
-          steps: tl.steps.map((s) => ({ doneAt: s.doneAt, stock: s.stock })),
-          ageUps: tl.ageUps.map((a) => ({ age: a.age, clickAt: a.clickAt, reachAt: a.reachAt })),
+  it('当前v0.70.0固定基线恰含两文明各六个原模板，全部真实执行', () => {
+    expect(currentFinalCivs.version).toBe('0.70.0');
+    expect(currentFinalCivs.datBuild).toBe(188329);
+    const cases = currentFinalCivs.scenarios as Record<string, unknown>;
+    const expectedKeys = ['Poles', 'Romans'].flatMap((civ) => HISTORICAL_BUILDS.map((id) => `${civ}/${id}`)).sort();
+    expect(expectedKeys).toHaveLength(12);
+    expect(Object.keys(cases).sort()).toEqual(expectedKeys);
+    for (const civ of ['Poles', 'Romans'])
+      for (const id of HISTORICAL_BUILDS) {
+        const order = buildOrders.find((order) => order.id === id);
+        expect(order, `当前开局 ${id} 必须仍存在`).toBeDefined();
+        const timeline = run(order!.id, civ);
+        const actual = {
+          steps: timeline.steps.map((step) => ({ doneAt: step.doneAt, stock: step.stock })),
+          ageUps: timeline.ageUps.map((age) => ({ age: age.age, clickAt: age.clickAt, reachAt: age.reachAt })),
         };
-        expect(got, `${c} ${b.id}`).toEqual(B[c]![b.id]);
+        expect(actual, `${civ}/${id}`).toEqual(cases[`${civ}/${id}`]);
       }
-    }
-  }, 60_000);
-  it.each(WHITELIST)('%s 至少一条中文原因', (c) => {
-    const r = simSupport(E, c, buildOrders).reasons;
-    expect(r.length).toBeGreaterThan(0);
-    for (const x of r) expect(x).toMatch(/[\u4e00-\u9fff]/);
   });
 });

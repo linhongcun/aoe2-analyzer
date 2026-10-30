@@ -65,6 +65,8 @@ const inputsHash = () =>
       'chineseEconomy.ts',
       'mapucheEconomy.ts',
       'gurjaraEconomy.ts',
+      'polishEconomy.ts',
+      'romanEconomy.ts',
       'khmerSource.ts',
       'khmerPrerequisiteSource.ts',
     ].map((f) => readFileSync(fileURLToPath(new URL(`../../src/domain/${f}`, import.meta.url)), 'utf8')),
@@ -81,7 +83,8 @@ const without = (civ: string, techs: number[]): EcoData => ({
 
 /** 模型已实现、但现有开局方案（城堡时代及以前、不造对应单位/建筑、不研究对应科技）都不会触发的加成 */
 const UNTRIGGERED: Record<string, string> = {
-  'Khmer-1': '免回仓与独立农田供给已计入；默认近距离2格时，完整654与整行移除均被同一0.4/秒供给上限限制，原对照只观察步骤完成时间/库存，未触发差异；khmer197.test.ts另以7格与低工作率库存窗口核对免回仓和供给瓶颈',
+  'Khmer-1':
+    '免回仓与独立农田供给已计入；默认近距离2格时，完整654与整行移除均被同一0.4/秒供给上限限制，原对照只观察步骤完成时间/库存，未触发差异；khmer197.test.ts另以7格与低工作率库存窗口核对免回仓和供给瓶颈',
   'Berbers-1': '马厩单位城堡/帝王时代折扣：现有开局方案不在城堡时代训练马厩单位',
   'Bulgarians-2': '城镇中心石料 -50%：现有开局方案不建新城镇中心',
   'Incas-1': '建筑石料 -15%：现有开局方案不建花石料的建筑',
@@ -91,7 +94,8 @@ const UNTRIGGERED: Record<string, string> = {
     '现有8套开局不在城堡或帝王时代训练弓手；53/56的正tech折扣没有触发，树中的封建折扣不被正tech移除对照覆盖；mayans197.test.ts另以三个时代的真实训练支付严格核对',
   'Armenians-3': '当前8套开局不建强化教堂，不触发两段圣物生成；移除949/957保留独立骡车来源和研究加成',
   'Armenians-4': '海军战斗加成不改变当前8套的渔船经济；当前方案不训练或交战对应军事舰船',
-  'Georgians-0': '起始免费骡车已计入完成实体和一种时代前置；当前8套原营地仍逐次付费，原库存/时钟投影未被起始车改变；georgians197.test.ts另以at0实体、起始研究地点和时代前置严格核对',
+  'Georgians-0':
+    '起始免费骡车已计入完成实体和一种时代前置；当前8套原营地仍逐次付费，原库存/时钟投影未被起始车改变；georgians197.test.ts另以at0实体、起始研究地点和时代前置严格核对',
 };
 
 let core: Core;
@@ -104,15 +108,15 @@ describe('issue 317 罗马', () => {
     const b = bon('Romans-0');
     expect(b.encoded).toBe(false);
     expect(bonusUsage(b).map((l) => [l.tool, l.on])).toEqual([
-      ['sim', false],
+      ['sim', true],
       ['gather', true],
       ['construction', true],
       ['repair', false],
     ]);
     expect(usageLevel(bonusUsage(b))).toBe('part');
-    // 开局模拟：罗马整页按通用文明计算（tech 887 含未核实的农田单位效果）
-    expect(simSupport('Romans')).toBe(false);
-    expect(line(b, 'sim')[0]!.note).toContain('按通用文明计算');
+    // #197 最后一批：完整887与独立农田供给核验后，采集与施工均计入。
+    expect(simSupport('Romans')).toBe(true);
+    expect(line(b, 'sim')[0]!.note).toContain('村民采集与建造加成已计入');
     // 真实成本：村民采集 ×1.05 已计入
     const g = gatherModel(4, 'Romans');
     expect(g.applied.map((a) => [a.label, a.techs])).toContainEqual(['村民采集速度 +5%', [887]]);
