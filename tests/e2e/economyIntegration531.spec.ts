@@ -98,3 +98,50 @@ test('训练对照修改和复制保留受控导航 #531', async ({ page, contex
   await page.goto(copied);
   await expect(page.getByRole('link', { name: '回单位', exact: true })).toHaveAttribute('href', '#/unit/38?civ=Franks');
 });
+
+test('重置收益必须重新确认人数并恢复原生产投影 #531', async ({ page }) => {
+  await page.goto('./#/production?' + production + meOpp);
+  await page.getByRole('link', { name: /带着方案核对收益/ }).click();
+  const sourceHref = await page.getByRole('link', { name: '返回原生产方案', exact: true }).getAttribute('href');
+  await page.getByRole('button', { name: '使用原方案的理论供给人数', exact: true }).click();
+  await expect(page.getByTestId('eco-balance')).toBeVisible();
+  await page.getByRole('button', { name: '重置方案', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '先确认用于估算的村民人数', exact: true })).toBeVisible();
+  await expect(page.getByTestId('eco-balance')).toHaveCount(0);
+  await expect(page.getByText('正在使用理论供给人数作为假设')).toHaveCount(0);
+  await expect(page.getByLabel('收益文明', { exact: true })).toHaveValue('Franks');
+  await expect(page.getByLabel('收益时代', { exact: true })).toHaveValue('3');
+  await expect(page.getByLabel('收益单程距离', { exact: true })).toHaveValue('4');
+  await expect(page.getByLabel('木材村民数', { exact: true })).toHaveValue('0');
+  await expect(page.getByRole('link', { name: '返回原生产方案', exact: true })).toHaveAttribute('href', sourceHref!);
+  await expect(page.getByRole('button', { name: '复制方案链接', exact: true })).toBeDisabled();
+});
+
+test('无生产来源的新入口重置重新确认，旧直达重置维持原行为 #531', async ({ page }) => {
+  await page.goto('./#/eco-payoff?civ=Mongols&age=3&target=55&ctxPeople=none');
+  await page.getByRole('button', { name: '我来填写实际人数', exact: true }).click();
+  await page.getByLabel('黄金村民数', { exact: true }).fill('20');
+  await page.getByRole('button', { name: '重置方案', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '先确认用于估算的村民人数', exact: true })).toBeVisible();
+  await expect(page.getByTestId('eco-balance')).toHaveCount(0);
+  await page.goto('./#/eco-payoff?civ=Mongols&age=3&target=55');
+  await page.getByRole('button', { name: '重置方案', exact: true }).click();
+  await expect(page.getByTestId('eco-balance')).toBeVisible();
+  await expect(page.getByLabel('木材村民数', { exact: true })).toHaveValue('10');
+  await expect(page).not.toHaveURL(/ctxPeople/);
+});
+
+test('修改收益条件明确标明与原生产来源的差别 #531', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 900 });
+  await page.goto('./#/production?' + production + meOpp);
+  await page.getByRole('link', { name: /带着方案核对收益/ }).click();
+  await page.getByRole('button', { name: '使用原方案的理论供给人数', exact: true }).click();
+  await page.getByLabel('收益文明', { exact: true }).selectOption('Mongols');
+  await page.getByLabel('收益时代', { exact: true }).selectOption('4');
+  await page.getByLabel('收益单程距离', { exact: true }).fill('7');
+  await expect(page.locator('.eco-carry-list')).toContainText('当前文明：蒙古（来源法兰克）');
+  await expect(page.locator('.eco-carry-list')).toContainText('当前时代：帝王时代（来源城堡时代）');
+  await expect(page.locator('.eco-carry-list')).toContainText('当前木金石距离：7 格（来源4 格）');
+  await expect(page.locator('.eco-production-bridge')).toContainText('原理论人数只作为人数假设');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});

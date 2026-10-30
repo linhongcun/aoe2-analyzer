@@ -17,7 +17,7 @@ import {
   type EcoPayoffResult,
 } from '../../domain/ecoPayoff';
 import { encodeProduction, type ProductionContext } from '../../domain/production';
-import { productionSource, productionAssumption } from '../../domain/productionIntegration';
+import { payoffFromProduction, productionSource, productionAssumption } from '../../domain/productionIntegration';
 import { contextPath, readNavigation } from '../../shared/nav/context';
 import { NavigationContext } from '../../shared/ui/NavigationContext';
 import { EcoProductionBridge } from './EcoProductionBridge';
@@ -66,7 +66,16 @@ export default function EcoPayoff() {
     const people = changedWorkers && (decoded.people === 'theory' || decoded.people === 'adjusted') ? 'adjusted' : decoded.people;
     write(config, people);
   };
-  const reset = () => write({ ...DEFAULT_PAYOFF, workers: { ...DEFAULT_PAYOFF.workers } });
+  const reset = () => {
+    const source = productionSource(readNavigation(location.search).back);
+    if (source.config) {
+      write(payoffFromProduction({ core, trees }, source.config).config, 'none');
+    } else if (decoded.people !== null) {
+      write({ ...DEFAULT_PAYOFF, workers: { Food: '0', Wood: '0', Gold: '0', Stone: '0' } }, 'none');
+    } else {
+      write({ ...DEFAULT_PAYOFF, workers: { ...DEFAULT_PAYOFF.workers } }, null);
+    }
+  };
   const copy = async () => {
     await copyLink(() => {
       const url = new URL(window.location.href);

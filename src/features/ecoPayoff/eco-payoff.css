@@ -32,6 +32,13 @@
 .eco-carry-list .ic {
   color: var(--color-good);
 }
+.eco-carry-list > span {
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.eco-carry-list .eco-carry-changed .ic {
+  color: var(--color-warn);
+}
 .eco-people-choice {
   padding: var(--space-4);
   margin-top: var(--space-4);

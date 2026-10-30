@@ -28,7 +28,14 @@ export function EcoProductionBridge({
 }) {
   if (people === null && !source && !sourceErrors.length) return null;
   const theoretical = source ? theoreticalProductionWorkers(ctx, source) : null;
-  const omitted = source ? payoffFromProduction(ctx, source).omittedTechs : [];
+  const projected = source ? payoffFromProduction(ctx, source) : null;
+  const omitted = projected?.omittedTechs ?? [];
+  const changedCiv = !!source && config.civ !== source.civ;
+  const changedAge = !!source && config.age !== source.age;
+  const changedDistance = !!source && (config.distance.trim() === '' || !Number.isFinite(Number(config.distance)) || Number(config.distance) !== source.walk);
+  const techSet = (ids: number[]) => [...new Set(ids)].sort((a, b) => a - b).join(',');
+  const changedTechs = !!projected && techSet(config.known) !== techSet(projected.config.known);
+  const changedConditions = changedCiv || changedAge || changedDistance || changedTechs;
   return (
     <section className="eco-card eco-production-bridge" aria-labelledby="eco-source-title">
       <div className="eco-source-heading">
@@ -50,19 +57,30 @@ export function EcoProductionBridge({
       {source && (
         <>
           <div className="eco-carry-list">
-            <span>
-              <Icon name="check" />
-              文明与时代
+            <span className={changedCiv ? 'eco-carry-changed' : undefined}>
+              <Icon name={changedCiv ? 'info' : 'check'} />
+              {changedCiv ? `当前文明：${civByEn(config.civ)?.zh ?? config.civ}（来源${civByEn(source.civ)?.zh ?? source.civ}）` : '文明与来源一致'}
             </span>
-            <span>
-              <Icon name="check" />
-              兼容的已有科技
+            <span className={changedAge ? 'eco-carry-changed' : undefined}>
+              <Icon name={changedAge ? 'info' : 'check'} />
+              {changedAge ? `当前时代：${AGE_ZH[config.age] ?? '待修正'}（来源${AGE_ZH[source.age]}）` : '时代与来源一致'}
             </span>
-            <span>
-              <Icon name="check" />
-              木金石采集距离
+            <span className={changedTechs ? 'eco-carry-changed' : undefined}>
+              <Icon name={changedTechs ? 'info' : 'check'} />
+              {changedTechs ? '已有科技已手动调整' : '兼容的已有科技与来源一致'}
+            </span>
+            <span className={changedDistance ? 'eco-carry-changed' : undefined}>
+              <Icon name={changedDistance ? 'info' : 'check'} />
+              {changedDistance ? (
+                <>
+                  当前木金石距离：<span className="num">{config.distance || '待填写'} 格</span>（来源<span className="num">{source.walk} 格</span>）
+                </>
+              ) : (
+                '木金石采集距离与来源一致'
+              )}
             </span>
           </div>
+          {changedConditions && <p className="eco-incomplete">当前收益条件已与原生产方案不同。原理论人数只作为人数假设，不代表这些新条件下的供给需求。</p>}
           <p className="note">农田距离不带入，食物投入按收益工具的固定农田基准折算。目标科技是初始选择，可自行调整，不代表研究推荐。</p>
           {omitted.length > 0 && (
             <p className="note">来源中未带入的科技：{omitted.map((id) => ctx.core.techById[id]?.zh ?? id).join('、')}；收益模型仅接收其支持的已有科技。</p>
