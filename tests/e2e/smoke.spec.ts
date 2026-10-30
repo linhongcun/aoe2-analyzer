@@ -36,7 +36,7 @@ const ROUTES: [string, string][] = [
   ['#tree/Britons', '.tree .tcell'],
   ['#dlc', '.dlct tr'],
   ['#compare', '#ctab tr'],
-  ['#matchup', '#mres h3'],
+  ['#matchup', '#matchup:has(#mres) .matchup-title'],
   ['#/duel', '#duel-res .duel-win'],
   ['#/bonuses', '#blist li'],
   ['#/civ/Franks/bonus/2', '#bonus h1'],
@@ -104,7 +104,7 @@ test('mobile nav opens and navigates', async ({ page }) => {
   await page.getByRole('button', { name: '菜单' }).click();
   await page.getByRole('button', { name: '工具' }).click();
   await page.locator('nav.mainnav a', { hasText: '对局助手' }).click();
-  await expect(page.locator('#mres h3')).toBeVisible();
+  await expect(page.locator('#matchup:has(#mres) .matchup-title')).toBeVisible();
   await expect(page.locator('nav.mainnav')).toBeHidden();
 });
 
@@ -117,7 +117,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/techs', '#tgrid .card'],
     ['#/tree', '.tree .tcell'],
     ['#/compare', '#ctab tr'],
-    ['#/matchup', '#mres h3'],
+    ['#/matchup', '#matchup:has(#mres) .matchup-title'],
     ['#/simulator', '#simhub .card'],
     ['#/duel', '#duel-res .duel-win'],
     ['#/builds', '#builds [data-t="build-order"]'],

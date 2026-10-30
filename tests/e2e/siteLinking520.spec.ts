@@ -78,9 +78,10 @@ async function expectNotClipped(loc: Locator) {
       offLeft: rect.left < -1,
       offRight: rect.right > window.innerWidth + 1,
       textClipped: lines.some((line) => line.left < rect.left - 1 || line.right > rect.right + 1),
+      targetTooSmall: rect.width < 44 || rect.height < 44,
     };
   });
-  expect(box).toEqual({ offLeft: false, offRight: false, textClipped: false });
+  expect(box).toEqual({ offLeft: false, offRight: false, textClipped: false, targetTooSmall: false });
 }
 
 async function noHorizontalScroll(page: Page) {
@@ -348,43 +349,57 @@ test('#520 新界面无 emoji，关键链接可用新标签打开', async ({ pag
   await expectOpensInNewTab(page, page.getByRole('link', { name: '查看全部开局', exact: true }));
 });
 
-for (const width of [390, 1280])
-  test(`#520 @${width}：情境 chips 可换行，主操作不被水平裁切`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 900 });
-    await openMatchup(page);
-    const chips = matchupChips(page);
-    for (const name of ['单位 PK', '我方开局', '对手开局', '我方文明', '对手文明']) await expectNotClipped(chips.getByRole('link', { name, exact: true }));
-    const title = civHeading(page);
-    await expectNotClipped(civTitleLink(title, '蒙古'));
-    await expectNotClipped(civTitleLink(title, '中国'));
-    const chipBox = await chips.boundingBox();
-    const titleBox = await title.boundingBox();
-    expect(chipBox && titleBox && chipBox.y > titleBox.y).toBe(true);
-    await noHorizontalScroll(page);
+for (const width of [360, 375, 390, 1280])
+  for (const theme of ['light', 'dark'])
+    test(`#520 @${width} ${theme}：情境 chips 可换行，主操作不被水平裁切`, async ({ page }, info) => {
+      const errors: string[] = [];
+      page.on('pageerror', (error) => errors.push(error.message));
+      page.on('console', (event) => {
+        if (event.type() === 'error') errors.push(event.text());
+      });
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
+      await openMatchup(page);
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      const chips = matchupChips(page);
+      for (const name of ['单位 PK', '我方开局', '对手开局', '我方文明', '对手文明']) await expectNotClipped(chips.getByRole('link', { name, exact: true }));
+      const title = civHeading(page);
+      await expectNotClipped(civTitleLink(title, '蒙古'));
+      await expectNotClipped(civTitleLink(title, '中国'));
+      const chipBox = await chips.boundingBox();
+      const titleBox = await title.boundingBox();
+      expect(chipBox && titleBox && chipBox.y > titleBox.y).toBe(true);
+      await noHorizontalScroll(page);
+      await page.screenshot({ path: info.outputPath(`matchup520-${width}-${theme}.png`), fullPage: true });
 
-    await page.goto(DUEL);
-    await expect(page.getByRole('radiogroup', { name: '模式' })).toBeVisible();
-    const bar = contextBar(page);
-    for (const link of [
-      bar.getByRole('link', { name: '回对局助手', exact: true }),
-      bar.getByRole('link', { name: '蒙古', exact: true }),
-      bar.getByRole('link', { name: '中国', exact: true }),
-      sideBuildLink(bar, '蒙古'),
-      sideBuildLink(bar, '中国'),
-    ])
-      await expectNotClipped(link);
-    await noHorizontalScroll(page);
+      await page.goto(DUEL);
+      await expect(page.getByRole('radiogroup', { name: '模式' })).toBeVisible();
+      const bar = contextBar(page);
+      for (const link of [
+        bar.getByRole('link', { name: '回对局助手', exact: true }),
+        bar.getByRole('link', { name: '蒙古', exact: true }),
+        bar.getByRole('link', { name: '中国', exact: true }),
+        sideBuildLink(bar, '蒙古'),
+        sideBuildLink(bar, '中国'),
+      ])
+        await expectNotClipped(link);
+      await noHorizontalScroll(page);
+      await page.screenshot({ path: info.outputPath(`duel520-${width}-${theme}.png`), fullPage: true });
 
-    await page.goto(ALLY_BUILDS);
-    await expect(page.locator('#builds')).toBeVisible();
-    const buildsBar = contextBar(page);
-    await expectNotClipped(buildsBar.getByRole('link', { name: '回对局助手', exact: true }));
-    await expectNotClipped(buildsBar.getByRole('link', { name: '蒙古', exact: true }));
-    await page.goto('./#/builds?bo=scouts-18&civ=Mongols&from=matchup&opp=Chinese');
-    await expectNotClipped(page.getByRole('link', { name: '查看全部开局', exact: true }));
-    await expectNotClipped(page.getByRole('link', { name: '回对局助手', exact: true }));
-    await noHorizontalScroll(page);
-  });
+      await page.goto(ALLY_BUILDS);
+      await expect(page.locator('#builds')).toBeVisible();
+      const buildsBar = contextBar(page);
+      await expectNotClipped(buildsBar.getByRole('link', { name: '回对局助手', exact: true }));
+      await expectNotClipped(buildsBar.getByRole('link', { name: '蒙古', exact: true }));
+      await noHorizontalScroll(page);
+      await page.screenshot({ path: info.outputPath(`builds520-${width}-${theme}.png`), fullPage: true });
+      await page.goto('./#/builds?bo=scouts-18&civ=Mongols&from=matchup&opp=Chinese');
+      await expectNotClipped(page.getByRole('link', { name: '查看全部开局', exact: true }));
+      await expectNotClipped(page.getByRole('link', { name: '回对局助手', exact: true }));
+      await noHorizontalScroll(page);
+      await page.screenshot({ path: info.outputPath(`timeline520-${width}-${theme}.png`), fullPage: true });
+      expect(errors).toEqual([]);
+    });
 
 test('#520 往返保持 me/opp，开局页保持 civ', async ({ page }) => {
   await openMatchup(page);
