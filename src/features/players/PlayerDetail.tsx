@@ -58,10 +58,18 @@ function Profile({ player, catalog }: { player: Player; catalog: PlayerCatalog }
           {player.match.game}；{player.match.map ? `地图 ${player.match.map}` : '该段地图未核实'}。
         </p>
         <p>
-          {player.handle} 使用 <Link to={`/civ/${player.match.civId}`}>{civName(player.match.civId)}</Link>；对手 {opponent.handle} 使用{' '}
-          {civName(player.match.opponentCivId)}。
+          {player.handle} 使用 <Link to={`/civ/${player.match.civId}`}>{civName(player.match.civId)}</Link>；对手{' '}
+          <Link to={playerPath(opponent)}>{opponent.handle}</Link> 使用{' '}
+          <Link to={`/civ/${player.match.opponentCivId}`}>{civName(player.match.opponentCivId)}</Link>。
         </p>
         <p className="note">这是赛事回顾中的单局记录，不表示选手的代表、擅长或最爱文明。</p>
+        <p>
+          {civName(player.match.civId)}：
+          <Link className="player-link" to={`/builds?civ=${player.match.civId}`}>
+            该文明开局 <Icon name="arrow-right" />
+          </Link>
+        </p>
+        <p className="note">使用站内现有开局模板，并非该场比赛的实战流程。</p>
         {player.id === 'hera' && (
           <div className="player-video">
             <Link className="player-link" to={`/civ/${player.match.civId}?tab=pro`}>
@@ -109,10 +117,16 @@ function Profile({ player, catalog }: { player: Player; catalog: PlayerCatalog }
           本页核对日：<span className="num nw">{catalog.checkedAt}</span>。原文仅支持所列事实；未核实的日期与偏好不作推断。
         </p>
       </details>
-      <Link className="player-link" to="/players">
-        <Icon name="arrow-left" />
-        返回选手目录
-      </Link>
+      <nav className="player-returns" aria-label="选手相关入口">
+        <Link className="player-link" to="/events">
+          <Icon name="arrow-left" />
+          返回赛事公告
+        </Link>
+        <Link className="player-link" to="/players">
+          <Icon name="arrow-left" />
+          返回选手目录
+        </Link>
+      </nav>
     </>
   );
 }
