@@ -1,3 +1,12 @@
+import {
+  gurjaraContext,
+  gurjaraRowClass,
+  hasGurjaraMarker,
+  gurjaraOrdersSupported,
+  GURJARA_SOURCE_REASON,
+  GURJARA_ACTION_REASON,
+  type GurjaraRawTech,
+} from './gurjaraEconomy';
 import { mapucheContext, mapucheRowClass, hasMapucheMarker, MAPUCHE_SOURCE_REASON, type MapucheRawTech } from './mapucheEconomy';
 import { chineseContext, chineseRowClass, hasChineseMarker, CHINESE_SOURCE_REASON, type ChineseRawTech } from './chineseEconomy';
 import { civMechanism, mechanismContext } from './buildSimMechanisms';
@@ -206,11 +215,14 @@ export function classifyCivEffect(
     jurchenTech?: JurchenRawTech;
     chineseTech?: ChineseRawTech;
     mapucheTech?: MapucheRawTech;
+    gurjaraTech?: GurjaraRawTech;
     khmerTree?: KhmerRawTree;
     khmerTeam?: KhmerRawTeam;
   },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
+  const gurjara = gurjaraRowClass(row as EffectRow, scope.civ, scope.gurjaras);
+  if (gurjara) return gurjara;
   const mapuche = mapucheRowClass(row as EffectRow, scope.civ, scope.mapuche);
   if (mapuche) return mapuche;
   const chinese = chineseRowClass(row as EffectRow, scope.civ, scope.chinese);
@@ -322,6 +334,10 @@ export function simSupport(
 ): { supported: boolean; reasons: string[] } {
   const u = unhandledEffects(eco, civ, bos);
   const reasons = [...new Set(u.map((x) => x.reason))];
+  if (civ === 'Gurjaras') {
+    reasons.push(...gurjaraContext(eco).reasons);
+    if (!gurjaraOrdersSupported(bos)) reasons.push(GURJARA_ACTION_REASON);
+  } else if ((eco.civEco[civ] ?? []).some(hasGurjaraMarker)) reasons.push(GURJARA_SOURCE_REASON);
   if (civ === 'Mapuche') reasons.push(...mapucheContext(eco).reasons);
   else if ((eco.civEco[civ] ?? []).some(hasMapucheMarker)) reasons.push(MAPUCHE_SOURCE_REASON);
   if (civ === 'Chinese') reasons.push(...chineseContext(eco).reasons);

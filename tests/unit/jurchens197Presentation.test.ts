@@ -32,9 +32,9 @@ const input = (id: string): ShareInput => ({
   siteRoot: 'example/',
 });
 describe('Jurchens current model and honest disclosures', () => {
-  it('selector admits Jurchens while the other three incomplete civilizations remain disabled', () => {
+  it('selector admits Jurchens while the other two incomplete civilizations remain disabled', () => {
     expect(simSupport('Jurchens')).toBe(true);
-    for (const civ of ['Gurjaras', 'Poles', 'Romans']) expect(simSupport(civ)).toBe(false);
+    for (const civ of ['Poles', 'Romans']) expect(simSupport(civ)).toBe(false);
   });
   it.each(buildOrders)('$id includes the no-decay boundary and only the Knight economic template has an extra warning', (bo) => {
     const expected = bo.id === 'fast-castle-knights' ? [NOTE, KNIGHT] : [NOTE];

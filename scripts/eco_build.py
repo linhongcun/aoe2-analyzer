@@ -35,6 +35,7 @@ KHMER_CONTEXT_TECHS = (638, 654, 657, 672)
 JURCHEN_CONTEXT_TECHS = (993, 995)
 CHINESE_CONTEXT_TECHS = (226, 302, 304, 350, 351, 352, 425)
 MAPUCHE_CONTEXT_TECHS = (1381, 1382, 1405, 1406, 1407)
+GURJARA_CONTEXT_TECHS = (856, 857)
 KHMER_PREREQUISITE_TECHS = (216, 659, 660, 661, 666, 667, 668, 25, 147, 148)
 
 
@@ -221,9 +222,10 @@ def main():
             jurchen_context = c['en'] == 'Jurchens' and i in JURCHEN_CONTEXT_TECHS
             chinese_context = c['en'] == 'Chinese' and i in CHINESE_CONTEXT_TECHS
             mapuche_context = c['en'] == 'Mapuche' and i in MAPUCHE_CONTEXT_TECHS
-            if not (armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
+            gurjara_context = c['en'] == 'Gurjaras' and i in GURJARA_CONTEXT_TECHS
+            if not (armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context or gurjara_context) and (t['Civ'] != k or t['ResearchLocation'] > 0 or t['EffectID'] < 0 or '+ BL' in t['Name']): continue
             ef = decode(eff(d, t['EffectID']), T)
-            if ef or armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context:
+            if ef or armenian_context or georgian_context or slavic_context or khmer_context or jurchen_context or chinese_context or mapuche_context or gurjara_context:
                 row = {'source': 'bonus', 'tech': i, 'name': t['Name'], 'age': age_of(i), 'requires': [x for x in t['RequiredTechs'] if x >= 0], 'effects': ef}
                 # #197: retain the COMPLETE raw context for this reviewed Wei family only.
                 # Unknown/extra commands must reach the closed runtime guard, never disappear in decode().
@@ -254,6 +256,8 @@ def main():
                     row['chineseTech'] = raw_tech_context(d, i)
                 if mapuche_context:
                     row['mapucheTech'] = raw_tech_context(d, i)
+                if gurjara_context:
+                    row['gurjaraTech'] = raw_tech_context(d, i)
                 rows.append(row)
         team = decode(eff(d, dc['TeamBonusID']), T)
         if team or c['en'] == 'Khmer':

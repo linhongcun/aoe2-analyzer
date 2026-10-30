@@ -1,3 +1,4 @@
+import { gurjaraContext, GURJARA_BUSH_NOTE, GURJARA_GARRISON_NOTE } from './gurjaraEconomy';
 import { mapucheContext, MAPUCHE_TRAIN_NOTE } from './mapucheEconomy';
 import { chineseContext, CHINESE_OPENING_NOTE } from './chineseEconomy';
 /**
@@ -119,6 +120,16 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
 
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
+  if (b.id === 'Gurjaras-0' || b.id === 'Gurjaras-1') {
+    return {
+      tool: 'sim',
+      name,
+      on: false,
+      note: gurjaraContext(eco).complete
+        ? `未计入：${b.id === 'Gurjaras-0' ? GURJARA_BUSH_NOTE : GURJARA_GARRISON_NOTE}`
+        : '瞿折罗来源不完整，暂按通用文明计算，本条未计入',
+    };
+  }
   if (b.id === 'Mapuche-1') {
     return {
       tool: 'sim',
@@ -248,6 +259,7 @@ export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
         note: '赠送村民未计入真实成本；单个村民的采集速度不变',
       },
     ];
+  if (b.id === 'Gurjaras-0' || b.id === 'Gurjaras-1') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Mapuche-1') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Chinese-2') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Sicilians-4') return usageLines(b as CivBonusEnt & { idx: number });

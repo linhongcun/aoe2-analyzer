@@ -1,3 +1,4 @@
+import { gurjaraContext, gurjaraNotes, gurjaraRowAllowed, GURJARA_MODEL_NOTE } from './gurjaraEconomy';
 import {
   mapucheContext,
   mapucheBuildOrder,
@@ -24,6 +25,7 @@ import { khmerContext, khmerRowClass, khmerFarmRate, khmerBuildingReady, khmerNo
 import { chineseContext, chinesePopulation, chineseStartingVillagers, chineseRowAllowed, chineseNotes, CHINESE_MODEL_NOTE } from './chineseEconomy';
 import { jurchenContext, jurchenNotes, jurchenRowClass, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 export interface MechanismContext {
+  gurjaras?: ReturnType<typeof gurjaraContext>;
   mapuche?: MapucheContext;
   chinese?: ReturnType<typeof chineseContext>;
   jurchens?: ReturnType<typeof jurchenContext>;
@@ -60,6 +62,10 @@ interface CivMechanism {
 const knightNote = (bo: BuildOrder, note: string) => (bo.id === 'fast-castle-knights' ? [note] : []);
 /** Numbers are source identities, not copied gameplay multipliers: actual values still come from eco. */
 export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
+  Gurjaras: {
+    context: (eco) => ({ gurjaras: gurjaraContext(eco) }),
+    assumptions: ({ eco, bo }) => (gurjaraContext(eco).complete ? [...gurjaraNotes(eco, bo.id), GURJARA_MODEL_NOTE] : []),
+  },
   Mapuche: {
     context: (eco) => ({ mapuche: mapucheContext(eco) }),
     prepare: mapucheBuildOrder,
@@ -200,6 +206,7 @@ export function rowApplication(civ: string, row: EffectRow, scope: Scope, mode: 
 /** Shared source filtering; gather keeps its historical, narrower atomic gate. */
 export function mechanismRowAllowed(row: EffectRow, scope: Scope, uniqueMayanTree: boolean): boolean {
   return (
+    gurjaraRowAllowed(row, scope.civ, scope.gurjaras) &&
     mapucheRowAllowed(row, scope.civ, scope.mapuche) &&
     chineseRowAllowed(row, scope.civ, scope.chinese) &&
     jurchenRowClass(row, scope.civ, scope.jurchens)?.kind !== 'unhandled' &&

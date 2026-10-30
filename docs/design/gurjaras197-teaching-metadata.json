@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "purpose": "Source metadata continuation; all historical teaching facts and numeric snapshots retained",
+  "baseCommit": "143925426bfa6d92c2c22aed7dfc78ceab82633c",
+  "previousEvidence": "mapuche197-teaching-metadata.json",
+  "previousProjection": "7a1c28887e56c38c8b85059cc29a84651e531e5b426ba4d60720aeb9fde0bc5f",
+  "currentProjection": "6d03bb7e7d43d07bb8ed4f276c69518825431056abb79d21c1c721b49814de25",
+  "addedMetadata": {
+    "/civEco/Gurjaras/tech:856/gurjaraTech": "00066916b7ef3134fd32520fcf18ac270611a2edf432d0509c8bec5c3edeb76a",
+    "/civEco/Gurjaras/tech:857/gurjaraTech": "60296b40b6b863f3f98442a97082889d35d000f04b15cd00b1167d382477b892"
+  },
+  "reverseProof": {
+    "exactFullEcoRestoration": true,
+    "operations": "Delete only the two Gurjaras gurjaraTech fields",
+    "restoredProjection": "7a1c28887e56c38c8b85059cc29a84651e531e5b426ba4d60720aeb9fde0bc5f",
+    "other55CivRowsAndAllGlobalSectionsExact": true
+  },
+  "preserved": "Original Jurchen/Chinese/Mapuche/486 source evidence, all teaching content, other audit hashes, source pins and numerical expectations unchanged"
+}
