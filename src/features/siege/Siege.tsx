@@ -18,6 +18,8 @@ import { useShareLink } from '../../shared/ui/useShareLink';
 import './siege.css';
 
 const num = (n: number) => String(Number(n.toFixed(2)));
+// 现实秒按稿保留 1 位小数（75 → 44.1）。
+const real = (n: number) => n.toFixed(1);
 const buildingIcon = (id: number): IconName => (id === 82 ? 'castle' : id === 79 ? 'tower-control' : 'building-2');
 
 export default function Siege() {
@@ -62,15 +64,14 @@ function SiegeTool({ core }: { core: Core }) {
   const changeCount = (value: number) => update({ n: Math.max(1, Math.min(SIEGE_MAX_COUNT, value)) });
   const shareControls = (
     <div className="siege-share">
-      <button type="button" onClick={() => void share.copy(window.location.href)} aria-live="polite">
+      <button type="button" onClick={() => void share.copy(window.location.href)}>
         <Icon name="link" />
         {share.copied ? '已复制' : '复制分享链接'}
       </button>
-      {share.status && (
-        <p className="siege-note" {...share.statusProps}>
-          {share.status}
-        </p>
-      )}
+      {/* 常驻 live region：只播报「已复制」等状态，改输入不重读结果卡。 */}
+      <p className="siege-note siege-share-status" {...share.statusProps}>
+        {share.status}
+      </p>
       {share.manualLink && (
         <label className="siege-field">
           分享链接
@@ -228,7 +229,7 @@ function SiegeTool({ core }: { core: Core }) {
                   <div>
                     <dt>现实秒</dt>
                     <dd className="num" data-testid="siege-real-seconds">
-                      {num(result.realSeconds)}
+                      {real(result.realSeconds)}
                     </dd>
                   </div>
                 </dl>
@@ -241,13 +242,12 @@ function SiegeTool({ core }: { core: Core }) {
                     <span className="num">DE {__DATA_SOURCES__.patch.build}</span>
                   </span>
                 </div>
-                {shareControls}
               </section>
             ) : (
               <section className="siege-unverified" data-testid="siege-unverified">
                 <h2>
                   <Icon name="circle-alert" />
-                  规则未核实，暂不计算
+                  {[280, 550, 588].includes(u.id) ? '规则未核实' : '数据未核实'}，暂不计算
                 </h2>
                 <p>{result.reason} 核实前不显示击数与用时，避免给出错误数字。</p>
                 <p>可改选攻城锤或冲车等已核实路径。</p>
@@ -255,10 +255,10 @@ function SiegeTool({ core }: { core: Core }) {
                   <Icon name="database" />
                   <span className="num">DE {__DATA_SOURCES__.patch.build}</span>
                 </span>
-                {shareControls}
               </section>
             )}
           </div>
+          {shareControls}
           {result.verified && (
             <section className="siege-panel siege-compare" data-testid="siege-compare">
               <table aria-label={`同组合对照：${config.n} 台${u.zh}`}>
@@ -290,7 +290,7 @@ function SiegeTool({ core }: { core: Core }) {
                           <>
                             <td className="num">{row.hits}</td>
                             <td className="num">{num(row.gameSeconds)}</td>
-                            <td className="num">{num(row.realSeconds)}</td>
+                            <td className="num">{real(row.realSeconds)}</td>
                           </>
                         ) : (
                           <td colSpan={3} className="siege-note">

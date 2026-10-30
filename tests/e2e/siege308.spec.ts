@@ -239,7 +239,9 @@ for (const width of [360, 375, 390, 1280]) {
             return style.visibility !== 'hidden' && style.display !== 'none' && rect.width > 0 && rect.height > 0;
           })
           .map((el) => {
-            const rect = el.getBoundingClientRect();
+            // 复选框本体保持原生约 20px（Jony #532 视觉审），触控区按包裹它的 label 计。
+            const hit = el instanceof HTMLInputElement && el.type === 'checkbox' && el.labels?.[0] ? el.labels[0] : el;
+            const rect = hit.getBoundingClientRect();
             const labelled = el instanceof HTMLInputElement || el instanceof HTMLSelectElement ? el.labels?.[0]?.textContent : '';
             return {
               name: (el.getAttribute('aria-label') || labelled || el.textContent || el.tagName).replace(/\s+/g, ' ').trim(),
