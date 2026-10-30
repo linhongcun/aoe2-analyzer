@@ -23,7 +23,7 @@ import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
 import { civDisplayText } from '../displayNames';
 import CivProfessionalView from './CivProfessionalView';
-import { contextPath, entityPath, type EntityContext } from '../../../shared/nav/context';
+import { contextPath, entityPath, readNavigation, type EntityContext } from '../../../shared/nav/context';
 import { NavigationContext } from '../../../shared/ui/NavigationContext';
 import '../../../shared/ui/contextLinks.css';
 
@@ -76,6 +76,15 @@ export default function CivDetail() {
   if (!c) return <CivNotFound en={en} />;
   const context: EntityContext = { civ: c.en, search: location.search, source: location.pathname + location.search };
   const toolPath = (path: string) => contextPath(path, location.search, location.pathname + location.search);
+  const origin = readNavigation(location.search);
+  const completePair = origin.me && origin.opp;
+  const matchupSource = new URLSearchParams(location.search);
+  if (!completePair) {
+    matchupSource.delete('me');
+    matchupSource.delete('opp');
+  }
+  const matchupTarget = completePair ? new URLSearchParams({ me: origin.me!, opp: origin.opp! }) : new URLSearchParams({ me: c.en });
+  const matchupPath = contextPath('/matchup?' + matchupTarget, matchupSource, location.pathname + location.search);
   const proParams = new URLSearchParams(location.search);
   proParams.set('tab', 'pro');
   const [s, w] = strengths(c);
@@ -129,7 +138,7 @@ export default function CivDetail() {
             <Link className="community-tool-entry" to={toolPath(`/production?civ=${c.en}`)}>
               <Icon name="factory" /> 生产对照
             </Link>
-            <Link className="community-tool-entry" to={toolPath(`/matchup?me=${c.en}`)}>
+            <Link className="community-tool-entry" to={matchupPath}>
               <Icon name="crosshair" /> 对局助手
             </Link>
             <Link className="community-tool-entry" to={toolPath(`/compare?a=${c.en}`)}>
@@ -247,7 +256,7 @@ export default function CivDetail() {
             <Link className="ulink" to={toolPath(`/compare?a=${c.en}`)}>
               <Icon name="scale" /> 文明对比
             </Link>
-            <Link className="ulink" to={toolPath(`/matchup?me=${c.en}`)}>
+            <Link className="ulink" to={matchupPath}>
               <Icon name="crosshair" /> 对局助手
             </Link>
           </SideBlock>

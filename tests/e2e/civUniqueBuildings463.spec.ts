@@ -24,7 +24,7 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/civ/Bulgarians');
       const unique = block(page);
       const link = unique.getByRole('link', { name: '营垒', exact: true });
-      await expect(link).toHaveAttribute('href', '#/building/1251?civ=Bulgarians&age=3');
+      await expect(link).toHaveAttribute('href', '#/building/1251?civ=Bulgarians&age=3&ctxReturn=%2Fciv%2FBulgarians');
       await expect(unique.getByRole('link')).toHaveCount(1);
       for (const [index, name] of ['独特单位', '独特建筑', '快速入口'].entries())
         await expect(page.locator('.dside .sideblk > h4').nth(index)).toHaveText(name);

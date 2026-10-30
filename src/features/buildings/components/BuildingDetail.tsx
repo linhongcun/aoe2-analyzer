@@ -42,6 +42,7 @@ export default function BuildingDetail() {
     );
   const b = core.buildingById[+id];
   if (!b) return <BuildingList />;
+  const unavailableCiv = contextCiv && !b.civs.includes(contextCiv.en);
   const famU = collapse(
     b.units.map((i) => core.unitById[i]).filter((x): x is Unit => !!x),
     core.fam,
@@ -112,7 +113,11 @@ export default function BuildingDetail() {
       tabsTop={
         <>
           <NavigationContext label="文明相关入口" currentCiv={contextCiv?.en ?? ''} />
-          {contextCiv && !b.civs.includes(contextCiv.en) && <p className="note">{contextCiv.zh}无法建造该建筑；保留当前文明，仍可查阅基础资料。</p>}
+          {unavailableCiv && (
+            <p className="note" role="status">
+              {contextCiv.zh}无法建造该建筑；保留当前文明，仍可查阅基础资料。
+            </p>
+          )}
         </>
       }
       initialTab={new URLSearchParams(loc.search).get('tab') ?? undefined}
@@ -166,7 +171,11 @@ export default function BuildingDetail() {
             </>
           ),
         },
-        { key: 'sim', label: '科技模拟器', content: <BuildingSimulator b={b} /> },
+        {
+          key: 'sim',
+          label: '科技模拟器',
+          content: unavailableCiv ? <p className="note">当前文明无法模拟该建筑。请返回来源核对条件，或查看可用文明。</p> : <BuildingSimulator b={b} />,
+        },
         ...(garrisonHosts.includes(b.id)
           ? [
               {

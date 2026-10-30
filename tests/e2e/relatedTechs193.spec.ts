@@ -26,11 +26,16 @@ for (const width of [360, 375, 390, 1280])
       await page.screenshot({ path: info.outputPath(`knight-${theme}-${width}.png`), fullPage: true });
 
       await page.goto('./#/unit/38/Franks/4?tab=rel');
-      await expect(related.locator('a[href="#/tech/67"]')).toBeVisible();
-      await expect(related.locator('a[href="#/tech/81"]')).toBeVisible();
-      await expect(related.locator('a[href="#/tech/39"]')).toBeVisible();
-      await expect(related.locator('a[href="#/tech/435"]')).toHaveCount(0);
-      await expect(related.locator('a[href="#/tech/577"]')).toHaveCount(0);
+      for (const id of [67, 81, 39]) {
+        const link = related.locator(`a[href^="#/tech/${id}?"]`);
+        await expect(link).toBeVisible();
+        const query = new URLSearchParams((await link.getAttribute('href'))!.split('?')[1]);
+        expect(query.get('civ')).toBe('Franks');
+        expect(query.get('age')).toBe('4');
+        expect(query.get('ctxReturn')).toContain('/unit/38/Franks/4');
+      }
+      await expect(related.locator('a[href^="#/tech/435?"]')).toHaveCount(0);
+      await expect(related.locator('a[href^="#/tech/577?"]')).toHaveCount(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: info.outputPath(`franks-${theme}-${width}.png`), fullPage: true });
 

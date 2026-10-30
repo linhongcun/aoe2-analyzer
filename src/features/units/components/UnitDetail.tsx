@@ -233,6 +233,9 @@ export default function UnitDetail() {
               </Link>
               <span className="note">
                 {requestedAge === undefined ? '按单位解锁时代开始设置；' : ''}生产建筑数量需另行填写，战斗科技仅带入生产模型支持的部分。
+                {production.omittedTechs.length > 0 && `未带入科技：${production.omittedTechs.map((id) => core.techById[id]?.zh ?? '未识别科技').join('、')}。`}
+                {rt.team.length > 0 && '队友加成未带入生产模型。'}
+                {production.errors.join(' ')}
               </span>
             </nav>
           )}

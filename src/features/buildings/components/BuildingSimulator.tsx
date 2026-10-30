@@ -10,6 +10,7 @@ import garrisonHosts from '../../../data/garrison_hosts.json';
 import { getGarrisonBuildingAge, getGarrisonTechs, writeGeneralGarrison } from '../../../domain/garrisonGeneral';
 import { constructionLink } from '../../../domain/construction';
 import { healingLink } from '../../../domain/garrisonHealing';
+import { contextPath, mergeNavigationSearch } from '../../../shared/nav/context';
 
 const nums = (s: string | null) => (s ?? '').split(',').filter(Boolean).map(Number);
 
@@ -37,7 +38,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
   const write = (c: string, a: number, s: Iterable<number>, cm: string) => {
     const p = new URLSearchParams({ tab: 'sim', civ: c, age: String(a), techs: [...s].join(',') });
     if (cm) p.set('cmp', cm);
-    nav(`/building/${b.id}?${p.toString()}`, { replace: true });
+    nav(`/building/${b.id}${mergeNavigationSearch(p, loc.search)}`, { replace: true });
   };
   const rows: StatRow[] = [
     ['hp', '生命值', 'hp'],
@@ -67,7 +68,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     <>
       <div className="bar">
         {constructionHref && (
-          <Link className="btn community-tool-entry" to={constructionHref}>
+          <Link className="btn community-tool-entry" to={contextPath(constructionHref, loc.search, loc.pathname + loc.search)}>
             按当前文明与科技比较施工
           </Link>
         )}

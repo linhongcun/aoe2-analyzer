@@ -116,3 +116,40 @@ test('科技树选择写入可独立恢复的 URL，保留未知参数和原对�
   await expect(fresh.locator('#trm')).toHaveValue('3');
   await fresh.close();
 });
+
+test('浏览原对手文明时回助手不反转对局，不完整来源不猜对手', async ({ page }) => {
+  for (const source of ['me=Franks&opp=Britons', 'opp=Franks', 'me=Franks']) {
+    await page.goto('./#/civ/Britons?' + source);
+    const link = page.locator('#detail').getByRole('navigation', { name: '本页相关工具', exact: true }).getByRole('link', { name: '对局助手', exact: true });
+    await expect(link).toBeVisible();
+    const p = query((await link.getAttribute('href'))!);
+    expect(p.get('me')).toBe(source.includes('&') ? 'Franks' : 'Britons');
+    expect(p.get('opp')).toBe(source.includes('&') ? 'Britons' : null);
+    expect(p.get('ctxReturn')).toBe('/civ/Britons?' + source);
+  }
+});
+
+test('建筑模拟调整保留导航，施工入口使用当前条件和原对局', async ({ page }) => {
+  const source = '/unit/38?civ=Franks';
+  await page.goto('./#/building/101?' + new URLSearchParams({ civ: 'Franks', age: '3', tab: 'sim', me: 'Mongols', opp: 'Chinese', ctxReturn: source }));
+  await expect(page.locator('#simciv')).toHaveAttribute('data-value', 'Franks');
+  await page.locator('#simage').selectOption('4');
+  const p = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
+  expect(p.get('me')).toBe('Mongols');
+  expect(p.get('opp')).toBe('Chinese');
+  expect(p.get('ctxReturn')).toBe(source);
+  const next = page.getByRole('link', { name: '按当前文明与科技比较施工', exact: true });
+  const target = query((await next.getAttribute('href'))!);
+  expect(target.get('civ')).toBe('Franks');
+  expect(target.get('age')).toBe('4');
+  expect(target.get('me')).toBe('Mongols');
+  expect(target.get('opp')).toBe('Chinese');
+  expect(target.get('ctxReturn')).toContain('/building/101?');
+});
+
+test('建筑不属于当前文明时保留选择并暂停模拟', async ({ page }) => {
+  await page.goto('./#/building/1251?civ=Britons&tab=sim');
+  await expect(page.locator('#building p[role="status"]')).toContainText('不列颠无法建造该建筑');
+  await expect(page.locator('#simciv')).toHaveCount(0);
+  expect(new URL(page.url()).hash).toContain('civ=Britons');
+});

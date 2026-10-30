@@ -41,8 +41,8 @@ for (const width of [360, 375, 390, 1280])
       await page.keyboard.press('Space');
       await expect(line).toHaveAttribute('open', '');
       const base = region.getByRole('link', { name: '骑马弩兵', exact: true });
-      await expect(base).toHaveAttribute('href', '#/unit/2700/Franks/3/');
-      await expect(region.getByRole('link', { name: '重装骑马弩兵', exact: true })).toHaveAttribute('href', '#/unit/2701/Franks/4/');
+      await expect(base).toHaveAttribute('href', '#/unit/2700/Franks/3/?ctxReturn=%2Fciv%2FFranks');
+      await expect(region.getByRole('link', { name: '重装骑马弩兵', exact: true })).toHaveAttribute('href', '#/unit/2701/Franks/4/?ctxReturn=%2Fciv%2FFranks');
       await page.keyboard.press('Tab');
       await expect(base).toBeFocused();
       await expect(region).not.toContainText(/训练建筑|城堡时代|帝王时代|点击单位|区域兵种/);
@@ -61,7 +61,7 @@ for (const width of [360, 375, 390, 1280])
       await base.focus();
       await expect(base).toBeFocused();
       await base.click();
-      await expect(page).toHaveURL(/#\/unit\/2700\/Franks\/3\/$/);
+      await expect(page).toHaveURL(/#\/unit\/2700\/Franks\/3\/\?ctxReturn=%2Fciv%2FFranks$/);
       await page.getByRole('tab', { name: '科技模拟器', exact: true }).click();
       await expect(page.locator('#simciv')).toHaveAttribute('data-value', 'Franks');
       await page.reload();
@@ -121,9 +121,9 @@ test('#503 不列颠按一条升级线展示，各形态入口保留', async ({ 
   await summary.click();
   await expect(region.getByRole('listitem')).toHaveCount(2);
   const heavy = region.getByRole('link', { name: '重装骑马弩兵', exact: true });
-  await expect(heavy).toHaveAttribute('href', '#/unit/2701/Britons/4/');
+  await expect(heavy).toHaveAttribute('href', '#/unit/2701/Britons/4/?ctxReturn=%2Fciv%2FBritons');
   await heavy.click();
-  await expect(page).toHaveURL(/#\/unit\/2701\/Britons\/4\/$/);
+  await expect(page).toHaveURL(/#\/unit\/2701\/Britons\/4\/\?ctxReturn=%2Fciv%2FBritons$/);
   await page.getByRole('tab', { name: '科技模拟器', exact: true }).click();
   await expect(page.locator('#simciv')).toHaveAttribute('data-value', 'Britons');
   await expect(page.locator('#simage')).toHaveValue('4');

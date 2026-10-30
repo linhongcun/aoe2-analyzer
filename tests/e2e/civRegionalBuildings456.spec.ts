@@ -37,8 +37,14 @@ for (const width of [360, 375, 390, 1280])
         expect(box!.width).toBeGreaterThanOrEqual(44);
         await expect(link.locator('img')).toBeVisible();
       }
-      await expect(region.getByRole('link', { name: '骡车', exact: true })).toHaveAttribute('href', '#/building/1808?civ=Armenians&age=1');
-      await expect(region.getByRole('link', { name: '强化教堂', exact: true })).toHaveAttribute('href', '#/building/1806?civ=Armenians&age=3');
+      await expect(region.getByRole('link', { name: '骡车', exact: true })).toHaveAttribute(
+        'href',
+        '#/building/1808?civ=Armenians&age=1&ctxReturn=%2Fciv%2FArmenians',
+      );
+      await expect(region.getByRole('link', { name: '强化教堂', exact: true })).toHaveAttribute(
+        'href',
+        '#/building/1806?civ=Armenians&age=3&ctxReturn=%2Fciv%2FArmenians',
+      );
       expect((await new AxeBuilder({ page }).include('.civ-regional-buildings').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
       await region.scrollIntoViewIfNeeded();
       await page.screenshot({ path: info.outputPath(`Armenians-${width}-${theme}.png`), fullPage: true });
@@ -80,7 +86,7 @@ test('#456 各文明区域归属与详情保留文明时代', async ({ page }) =
   });
   await expect(block(page).getByRole('link')).toHaveText(['商队旅馆']);
   const link = block(page).getByRole('link', { name: '商队旅馆', exact: true });
-  await expect(link).toHaveAttribute('href', '#/building/1754?civ=Persians&age=4');
+  await expect(link).toHaveAttribute('href', '#/building/1754?civ=Persians&age=4&ctxReturn=%2Fciv%2FPersians');
   await link.click();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('商队旅馆');
   await page.getByRole('tab', { name: '科技模拟器', exact: true }).click();

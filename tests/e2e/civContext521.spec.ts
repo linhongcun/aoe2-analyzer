@@ -30,7 +30,10 @@ test('#521 文明情境入口预填当前文明，单边对比和生产可刷新
     ['文明对比', '#/compare?a=Jurchens'],
     ['职业选手视角', '#/civ/Jurchens?tab=pro'],
   ])
-    await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute('href', href!);
+    await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute(
+      'href',
+      name === '职业选手视角' ? href! : href! + '&ctxReturn=%2Fciv%2FJurchens',
+    );
   await nav.getByRole('link', { name: '生产对照', exact: true }).click();
   await expect(page.getByRole('combobox', { name: '生产文明', exact: true })).toHaveValue('Jurchens');
   await page.reload();
@@ -109,14 +112,16 @@ test('#521 科技文明上下文与概览文明列表可导航，非法文明不
   await expect(page.locator('#detail h1')).toContainText('女真');
   await page.goto('./#/tech/996?civ=Unknown&me=Mongols&opp=Unknown');
   await expect(page.locator('#tech h1')).toContainText('强化堡垒');
-  await expect(page.locator('#tech a[href*="Unknown"]')).toHaveCount(0);
+  await expect(page.locator('#tech a[href^="#/civ/Unknown"]')).toHaveCount(0);
   await expect(page.locator('#tech').getByRole('link', { name: '回对局助手', exact: true })).toHaveCount(0);
 });
 
-test('#521 不可用的查询文明不覆盖模拟器回退，显式模拟器路径优先', async ({ page }) => {
+test('#521 / #531 不可用的查询文明保留并说明，显式模拟器路径优先', async ({ page }) => {
   await page.goto('./#/unit/281?civ=Britons&tab=sim');
-  await expect(page.locator('#simciv')).toHaveAttribute('data-value', 'Franks');
-  await expect(page.locator('#unit nav[aria-label="文明相关入口"] a[href="#/civ/Franks"]')).toBeVisible();
+  await expect(page.locator('#unit p[role="status"]')).toContainText('不列颠无法生产该单位');
+  await expect(page.locator('#simciv')).toHaveCount(0);
+  expect(params(page).get('civ')).toBe('Britons');
+  await expect(page.locator('#unit nav[aria-label="文明相关入口"] a[href="#/civ/Britons"]')).toBeVisible();
   await page.goto('./#/unit/4/Chinese/3/199/?civ=Mongols&tab=sim&x=1&x=2');
   await expect(page.locator('#simciv')).toHaveAttribute('data-value', 'Chinese');
   await expect(page.locator('#unit nav[aria-label="文明相关入口"] a[href="#/civ/Chinese"]')).toBeVisible();

@@ -7,7 +7,11 @@ test('#10 波斯重装骑士：升级路线末级萨瓦尔带「萨瓦尔 · 波
   await expect(tag).toHaveText('萨瓦尔 · 波斯');
   await expect(tag.locator('img.ico')).toHaveCount(1);
   expect(await tag.evaluate((e) => getComputedStyle(e).fontSize)).toBe('12px');
-  await expect(line.locator('a.ulink', { hasText: '萨瓦尔' })).toHaveAttribute('href', /unit\/1813$/);
+  const href = await line.locator('a.ulink', { hasText: '萨瓦尔' }).getAttribute('href');
+  expect(href!.split('?')[0]).toBe('#/unit/1813');
+  const query = new URLSearchParams(href!.split('?')[1]);
+  expect(query.get('civ')).toBe('Persians');
+  expect(query.get('ctxReturn')).toContain('/unit/283/Persians');
 });
 
 test('#10 通用重装骑士：末级游侠，没有独特单位标签', async ({ page }) => {
