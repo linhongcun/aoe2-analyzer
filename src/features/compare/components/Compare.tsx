@@ -12,6 +12,7 @@ import { RatingHeading } from '../../../shared/ui/RatingHelp';
 import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
 import { defaultTeamBonusConfig, encodeTeamBonuses, updateTeamRoster } from '../../../domain/teamBonuses';
 import './compare.css';
+import '../../../shared/ui/contextLinks.css';
 
 const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
   ['特色兵种', 'uu'],
@@ -58,12 +59,16 @@ export default function Compare() {
               <th style={{ color: 'var(--c-gold)' }}>
                 <CivIcon c={a} />
                 <br />
-                {a.zh}
+                <Link className="ctx-civ-link" to={`/civ/${a.en}`}>
+                  {a.zh}
+                </Link>
               </th>
               <th style={{ color: 'var(--c-blue)' }}>
                 <CivIcon c={b} />
                 <br />
-                {b.zh}
+                <Link className="ctx-civ-link" to={`/civ/${b.en}`}>
+                  {b.zh}
+                </Link>
               </th>
             </tr>
             {AXES.map((l, i) => (

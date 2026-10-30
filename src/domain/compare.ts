@@ -13,15 +13,19 @@ export interface CompareQuery {
   needsReplace: boolean;
 }
 
-/** Only a complete, unambiguous pair overrides the defaults; other query entries stay in order. */
+/** A valid single side seeds the pair; malformed supplied values still reset the whole pair. */
 export function resolveCompareQuery(input: string | URLSearchParams): CompareQuery {
   const original = typeof input === 'string' ? input : '?' + input.toString();
   const params = new URLSearchParams(input);
   const valuesA = params.getAll('a'),
     valuesB = params.getAll('b');
-  const valid = valuesA.length === 1 && valuesB.length === 1 && civilizationNames.has(valuesA[0]!) && civilizationNames.has(valuesB[0]!);
-  const a = valid ? valuesA[0]! : DEFAULT_PAIR.a,
-    b = valid ? valuesB[0]! : DEFAULT_PAIR.b;
+  const valid =
+    valuesA.length <= 1 &&
+    valuesB.length <= 1 &&
+    (!valuesA.length || civilizationNames.has(valuesA[0]!)) &&
+    (!valuesB.length || civilizationNames.has(valuesB[0]!));
+  const a = valid && valuesA.length ? valuesA[0]! : DEFAULT_PAIR.a,
+    b = valid && valuesB.length ? valuesB[0]! : DEFAULT_PAIR.b;
   params.set('a', a);
   params.set('b', b);
   const search = '?' + params.toString();

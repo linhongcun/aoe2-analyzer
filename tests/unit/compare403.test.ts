@@ -18,8 +18,6 @@ describe('#403 complete civilization pairs', () => {
   it.each([
     '',
     '?',
-    '?a=Mapuche',
-    '?b=Muisca',
     '?a=&b=Muisca',
     '?a=Mapuche&b=',
     '?a=Unknown&b=Muisca',
@@ -47,6 +45,8 @@ describe('#403 complete civilization pairs', () => {
   });
 
   it.each([
+    ['?a=Mapuche', 'Mapuche', 'Britons'],
+    ['?b=Muisca', 'Franks', 'Muisca'],
     ['?a=Mapuche&b=Muisca', 'Mapuche', 'Muisca'],
     ['a=Mapuche&b=Muisca', 'Mapuche', 'Muisca'],
     ['?b=Mapuche&a=Muisca', 'Muisca', 'Mapuche'],
@@ -160,7 +160,7 @@ describe('#403 selection navigation decisions and static sharing', () => {
   });
 
   it('selects from the whole fallback pair instead of retaining the valid half of an invalid query', () => {
-    const selected = selectCompareCivilization('?a=Mapuche&x=1', 'b', 'Muisca')!;
+    const selected = selectCompareCivilization('?a=Mapuche&b=&x=1', 'b', 'Muisca')!;
     expect(pair(selected)).toEqual({ a: 'Franks', b: 'Muisca' });
     expect(unknownEntries(selected)).toEqual([['x', '1']]);
   });

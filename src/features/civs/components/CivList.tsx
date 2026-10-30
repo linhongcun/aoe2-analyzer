@@ -1,5 +1,5 @@
 import { ListHead } from '../../../shared/ui/layout';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { civs } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
 import { TYPE_ZH } from '../../../domain/ratings';
@@ -19,9 +19,9 @@ import {
   type RequirementCondition,
 } from '../../../domain/civRequirements';
 import CivRequirements from './CivRequirements';
+import './civ-list-links.css';
 
 export default function CivList() {
-  const nav = useNavigate();
   const [params, setParams] = useSearchParams();
   const core = useCore(),
     trees = useTrees();
@@ -96,7 +96,7 @@ export default function CivList() {
           </p>
         ) : invalid ? null : r.length ? (
           r.map((c) => (
-            <div className="card" key={c.en} data-civ={c.en} onClick={() => nav('/civ/' + c.en)}>
+            <Link className="card" key={c.en} data-civ={c.en} to={`/civ/${c.en}`}>
               <CivIcon c={c} />
               <h3>{c.zh}</h3>
               <small>{c.en}</small>
@@ -110,7 +110,7 @@ export default function CivList() {
               <div className="mini">
                 边位 {c.fl} · 口袋 {c.pk}
               </div>
-            </div>
+            </Link>
           ))
         ) : (
           <p>无匹配文明</p>

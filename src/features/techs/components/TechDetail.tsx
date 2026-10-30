@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
-import { CivChip, CostView, TechReleaseBadge, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
+import { CivChip, CivIcon, CostView, TechReleaseBadge, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
 import { BLink } from '../../../shared/ui/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
@@ -13,11 +13,21 @@ import { techAffects } from '../../../domain/affects';
 import { affectedUnits } from '../../../domain/family';
 import { TECH_AKA } from '../../../data/aliases';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
+import { Icon } from '../../../shared/ui/Icon';
+import '../../../shared/ui/contextLinks.css';
+import './tech-civ-links.css';
 
 const TT: Record<string, string> = { UniqueTech: '独特科技', Research: '通用科技', RegionalTech: '区域科技' };
 
 export default function TechDetail() {
   const { id = '' } = useParams();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const contextCiv = civByEn(params.get('civ') ?? '');
+  const me = civByEn(params.get('me') ?? ''),
+    opp = civByEn(params.get('opp') ?? '');
+  const allCivsParams = new URLSearchParams(params);
+  allCivsParams.set('tab', 'civs');
   const core = useCore();
   useEffect(() => {
     scrollTo(0, 0);
@@ -92,6 +102,22 @@ export default function TechDetail() {
           {!!aliases?.length && <span className="note">又名：{aliases.join('、')}</span>}
         </>
       }
+      tabsTop={
+        (contextCiv || (me && opp)) && (
+          <nav className="ctx-bar" aria-label="文明相关入口">
+            {contextCiv && (
+              <Link className="ctx-civ-link ulink" to={`/civ/${contextCiv.en}`}>
+                <CivIcon c={contextCiv} /> {contextCiv.zh}
+              </Link>
+            )}
+            {me && opp && (
+              <Link className="community-tool-entry" to={`/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}>
+                <Icon name="arrow-left" /> 回对局助手
+              </Link>
+            )}
+          </nav>
+        )
+      }
       tabs={[
         {
           key: 'ov',
@@ -163,6 +189,23 @@ export default function TechDetail() {
       ]}
       sidebar={
         <>
+          <SideBlock title={`可用文明 ${t.civs.length}/${civs.length}`}>
+            <div className="tech-civ-links">
+              <Join
+                sep=" "
+                items={t.civs.slice(0, 8).map((n) => {
+                  const c = civByEn(n);
+                  return c ? <CivChip c={c} /> : n;
+                })}
+              />
+              {t.civs.length > 8 ? ' 等' : ''}
+            </div>
+            {t.civs.length > 8 && (
+              <Link className="ctx-civ-link ulink" to={location.pathname + '?' + allCivsParams}>
+                查看全部可用文明
+              </Link>
+            )}
+          </SideBlock>
           {(pre || nxt.length > 0) && (
             <SideBlock title="科技链">
               <div className="uline">

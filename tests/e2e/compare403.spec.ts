@@ -180,7 +180,7 @@ test('#403 两次确认产生历史，搜索和同值选择不增加历史，前
   await expect.poll(() => radar(page)).toBe(finalRadar);
 });
 
-for (const search of ['', '?a=Mapuche', '?a=Unknown&b=Muisca', '?a=Mapuche&a=Franks&b=Muisca', '?a=mapuche&b=Muisca'])
+for (const search of ['', '?a=Unknown&b=Muisca', '?a=Mapuche&a=Franks&b=Muisca', '?a=mapuche&b=Muisca'])
   test(`#403 无效整组回退并replace规范化 ${search || '无查询'}`, async ({ page }) => {
     await page.goto('./#/civs');
     await page.goto(`./#/compare${search}${search ? '&' : '?'}x=1&flag&x=2`);
@@ -192,6 +192,36 @@ for (const search of ['', '?a=Mapuche', '?a=Unknown&b=Muisca', '?a=Mapuche&a=Fra
       ['flag', ''],
       ['x', '2'],
     ]);
+    await page.goBack();
+    await expect(page).toHaveURL(/#\/civs$/);
+  });
+
+for (const [search, a, b] of [
+  ['?a=Mapuche', 'Mapuche', 'Britons'],
+  ['?b=Muisca', 'Franks', 'Muisca'],
+])
+  test(`#521 单边入口保留${search}，复制静态链接、刷新及后退恢复`, async ({ page, browser }) => {
+    await page.goto(prefixedBase + '#/civs');
+    await page.goto(prefixedBase + `#/compare${search}&x=1&flag&x=2`);
+    await pair(page, a!, b!);
+    expect([...query(page)].filter(([key]) => !['a', 'b'].includes(key))).toEqual([
+      ['x', '1'],
+      ['flag', ''],
+      ['x', '2'],
+    ]);
+    await clipboard(page, 'success');
+    await copyButton(page).click();
+    const url = await copied(page);
+    const fresh = await browser.newContext();
+    try {
+      const opened = await fresh.newPage();
+      await opened.goto(url);
+      await pair(opened, a!, b!);
+      await opened.reload();
+      await pair(opened, a!, b!);
+    } finally {
+      await fresh.close();
+    }
     await page.goBack();
     await expect(page).toHaveURL(/#\/civs$/);
   });
