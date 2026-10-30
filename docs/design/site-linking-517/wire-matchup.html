@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#517 线框 · 对局助手顶栏</title>
+  <style>
+    :root {
+      --accent: #a65a14;
+      --muted: #636366;
+      --border: #e5e5ea;
+      --bg: #fafafa;
+      --card: #fff;
+      --text: #1c1c1e;
+      --link: #a65a14;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .frame {
+      max-width: 390px;
+      margin: 16px auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      min-height: 520px;
+    }
+    .crumb { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+    h1 { font-size: 18px; margin: 0 0 4px; font-weight: 600; }
+    .desc { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
+    .bar {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid var(--border); margin-bottom: 12px;
+      font-size: 13px;
+    }
+    .fake-select {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 10px; min-height: 44px; display: inline-flex; align-items: center;
+      background: #fff; min-width: 120px;
+    }
+    .title-row {
+      display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px;
+      margin: 8px 0 6px; font-size: 16px; font-weight: 600;
+    }
+    a.civ {
+      color: var(--link); text-decoration: underline; text-underline-offset: 2px;
+      min-height: 44px; display: inline-flex; align-items: center; padding: 0 2px;
+    }
+    .vs { color: var(--muted); font-weight: 500; }
+    .cap {
+      display: block; color: var(--muted); font-size: 11px; font-weight: 400;
+      margin-top: 2px; margin-bottom: 8px;
+    }
+    .chips {
+      display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 6px;
+    }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      min-height: 44px; padding: 8px 12px;
+      border: 1px solid var(--border); border-radius: 999px;
+      background: #fff; color: var(--text); text-decoration: none;
+      font-size: 13px;
+    }
+    .chip .ic {
+      width: 16px; height: 16px; border-radius: 3px;
+      background: #f0e6da; color: var(--accent);
+      font-size: 9px; display: inline-flex; align-items: center; justify-content: center;
+      font-family: ui-monospace, monospace;
+    }
+    .share {
+      color: var(--muted); font-size: 11px; margin: 0 0 14px;
+      padding: 8px 10px; background: #f5f5f7; border-radius: 8px;
+      word-break: break-all;
+    }
+    .share code { color: var(--accent); font-size: 11px; }
+    .fake-body { color: var(--muted); font-size: 12px; border-top: 1px dashed var(--border); padding-top: 12px; }
+    .anno {
+      margin-top: 16px; padding: 10px; background: #f5f5f7; border-radius: 8px;
+      font-size: 11px; color: var(--muted);
+    }
+    .anno b { color: var(--text); }
+    .tag { font-size: 10px; color: var(--accent); letter-spacing: 0.02em; }
+  </style>
+</head>
+<body>
+  <div class="frame" data-wire="matchup-header">
+    <div class="crumb">首页 / 对局助手</div>
+    <h1>对局助手</h1>
+    <p class="desc">根据双方文明给出反制建议</p>
+
+    <div class="bar" aria-label="文明选择">
+      <span>我的文明</span>
+      <span class="fake-select">蒙古 Mongols</span>
+      <span>对手文明</span>
+      <span class="fake-select">中国 Chinese</span>
+    </div>
+    <span class="cap">注解：CivPicker 变更 → 立刻写入 ?me=&amp;opp=（S1）</span>
+
+    <div class="title-row">
+      <a class="civ" href="#/civ/Mongols">蒙古</a>
+      <span class="vs">vs</span>
+      <a class="civ" href="#/civ/Chinese">中国</a>
+    </div>
+    <span class="cap">注解：标题文明名为真链接 → #/civ/{en}；触控 ≥44px</span>
+
+    <nav class="chips" aria-label="对阵相关入口">
+      <a class="chip" href="#/duel?a=…&amp;b=…"><span class="ic">sw</span>单位 PK</a>
+      <a class="chip" href="#/builds?civ=Mongols&amp;from=matchup&amp;opp=Chinese"><span class="ic">bo</span>我方开局</a>
+      <a class="chip" href="#/builds?civ=Chinese&amp;from=matchup&amp;me=Mongols"><span class="ic">bo</span>对手开局</a>
+      <a class="chip" href="#/civ/Mongols"><span class="ic">cv</span>我方文明</a>
+      <a class="chip" href="#/civ/Chinese"><span class="ic">cv</span>对手文明</a>
+    </nav>
+    <span class="cap">注解：Lucide 实装用 swords / book-open 等；此处 ic 仅占位。对手开局可落到「通用示意」，不填数据。</span>
+
+    <p class="share">
+      <span class="tag">分享</span>
+      可复制地址栏链接分享这对阵<br />
+      <code>#/matchup?me=Mongols&amp;opp=Chinese</code>
+    </p>
+
+    <div class="fake-body">
+      （下方沿用现有：对手强项 / 推荐反制 / RushDefense … 本线框不改）
+    </div>
+
+    <div class="anno">
+      <b>S1 交付要点</b>：URL 可分享 · 标题双链 · 五枚 chips · 开局带 from/opp · 390 宽 chips 换行不裁切。
+    </div>
+  </div>
+</body>
+</html>

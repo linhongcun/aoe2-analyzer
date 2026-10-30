@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#517 线框 · 文明详情情境条</title>
+  <style>
+    :root {
+      --accent: #a65a14;
+      --muted: #636366;
+      --border: #e5e5ea;
+      --bg: #fafafa;
+      --card: #fff;
+      --text: #1c1c1e;
+      --link: #a65a14;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .frame {
+      max-width: 390px;
+      margin: 16px auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      min-height: 480px;
+    }
+    .crumb { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+    .head {
+      display: flex; gap: 10px; align-items: center; margin-bottom: 8px;
+    }
+    .badge {
+      width: 40px; height: 40px; border-radius: 8px; background: #f0e6da;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--accent); font-family: ui-monospace, monospace;
+    }
+    h1 { font-size: 18px; margin: 0; font-weight: 600; }
+    .en { color: var(--muted); font-size: 12px; margin: 0; }
+    .strip {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin: 14px 0 6px; padding: 10px;
+      border: 1px solid var(--border); border-radius: 10px; background: #fafafa;
+    }
+    .strip a {
+      display: inline-flex; align-items: center; gap: 6px;
+      min-height: 44px; padding: 8px 12px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: #fff; color: var(--text); text-decoration: none; font-size: 13px;
+    }
+    .strip a:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .ic {
+      width: 16px; height: 16px; border-radius: 3px;
+      background: #f0e6da; color: var(--accent);
+      font-size: 8px; display: inline-flex; align-items: center; justify-content: center;
+      font-family: ui-monospace, monospace; flex-shrink: 0;
+    }
+    .cap {
+      display: block; color: var(--muted); font-size: 11px; margin: 0 0 10px;
+    }
+    .body-fake {
+      border-top: 1px dashed var(--border); padding-top: 12px;
+      color: var(--muted); font-size: 12px;
+    }
+    .anno {
+      margin-top: 16px; padding: 10px; background: #f5f5f7; border-radius: 8px;
+      font-size: 11px; color: var(--muted);
+    }
+    .anno b { color: var(--text); }
+    table.urls {
+      width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 8px;
+    }
+    table.urls td {
+      border-top: 1px solid var(--border); padding: 6px 0; vertical-align: top;
+    }
+    table.urls code { color: var(--accent); word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div class="frame" data-wire="civ-context-strip">
+    <div class="crumb">首页 / 文明 / 女真</div>
+    <div class="head">
+      <div class="badge">civ</div>
+      <div>
+        <h1>女真</h1>
+        <p class="en">Jurchens</p>
+      </div>
+    </div>
+
+    <nav class="strip" aria-label="本页相关工具">
+      <a href="#/builds?civ=Jurchens"><span class="ic">book</span>开局流程</a>
+      <a href="#/production?civ=Jurchens"><span class="ic">fac</span>生产对照</a>
+      <a href="#/matchup?me=Jurchens"><span class="ic">crs</span>对局助手</a>
+      <a href="#/compare?a=Jurchens"><span class="ic">scl</span>文明对比</a>
+      <a href="#/players?civ=Jurchens"><span class="ic">usr</span>职业选手视角</a>
+    </nav>
+    <span class="cap">注解：实装 Lucide book-open / factory / crosshair / scale / users。对阵预填 me= 当前文明；opp 可缺，沿用 sticky。「职业选手视角」保持现有路由，勿新造。</span>
+
+    <table class="urls" aria-label="目标 URL">
+      <tr><td>开局</td><td><code>#/builds?civ=Jurchens</code></td></tr>
+      <tr><td>生产</td><td><code>#/production?civ=Jurchens</code></td></tr>
+      <tr><td>对阵</td><td><code>#/matchup?me=Jurchens</code></td></tr>
+      <tr><td>对比</td><td><code>#/compare?a=Jurchens</code></td></tr>
+    </table>
+
+    <div class="body-fake" style="margin-top:14px">
+      （下方沿用现有：定位 / 雷达 / 独特单位科技 / 科技树链接 …）
+    </div>
+
+    <div class="anno">
+      <b>S2</b>：统一情境条替换零散「对比/助手」纯链；目录页卡片改为真 &lt;a&gt;（另项）。不大改视觉。
+    </div>
+  </div>
+</body>
+</html>

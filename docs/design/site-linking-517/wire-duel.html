@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#517 线框 · PK 情境栏</title>
+  <style>
+    :root {
+      --accent: #a65a14;
+      --muted: #636366;
+      --border: #e5e5ea;
+      --bg: #fafafa;
+      --card: #fff;
+      --text: #1c1c1e;
+      --link: #a65a14;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .frame {
+      max-width: 390px;
+      margin: 16px auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      min-height: 480px;
+    }
+    .crumb { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+    h1 { font-size: 18px; margin: 0 0 4px; font-weight: 600; }
+    .desc { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
+    .ctx {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 10px; margin-bottom: 8px;
+      background: #f5f5f7; border-radius: 10px; border: 1px solid var(--border);
+    }
+    .ctx a {
+      color: var(--link); text-decoration: none;
+      min-height: 44px; padding: 8px 10px;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fff; border: 1px solid var(--border); border-radius: 8px;
+      font-size: 13px;
+    }
+    .ctx a.back { border-color: #e8d5c0; background: #fbf6f0; }
+    .ic {
+      width: 16px; height: 16px; border-radius: 3px;
+      background: #f0e6da; color: var(--accent);
+      font-size: 9px; display: inline-flex; align-items: center; justify-content: center;
+      font-family: ui-monospace, monospace; flex-shrink: 0;
+    }
+    .cap {
+      display: block; color: var(--muted); font-size: 11px;
+      margin: 0 0 12px;
+    }
+    .modes {
+      display: flex; gap: 6px; margin-bottom: 12px;
+    }
+    .modes span {
+      min-height: 36px; padding: 6px 12px; border-radius: 8px;
+      border: 1px solid var(--border); color: var(--muted); font-size: 12px;
+      display: inline-flex; align-items: center;
+    }
+    .modes .on { background: #1c1c1e; color: #fff; border-color: #1c1c1e; }
+    .sides {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: start;
+      margin-top: 8px;
+    }
+    .side {
+      border: 1px solid var(--border); border-radius: 10px; padding: 10px; min-height: 100px;
+      font-size: 12px; color: var(--muted);
+    }
+    .side b { color: var(--text); display: block; margin-bottom: 4px; }
+    .mid { color: var(--muted); font-weight: 600; padding-top: 36px; font-size: 12px; }
+    .anno {
+      margin-top: 16px; padding: 10px; background: #f5f5f7; border-radius: 8px;
+      font-size: 11px; color: var(--muted);
+    }
+    .anno b { color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="frame" data-wire="duel-context-bar">
+    <div class="crumb">首页 / 单位 PK</div>
+    <h1>单位 PK</h1>
+    <p class="desc">1v1 / N vs M / 等资源 · 本线框只示情境栏</p>
+
+    <nav class="ctx" aria-label="对阵相关入口">
+      <a class="back" href="#/matchup?me=Mongols&amp;opp=Chinese"><span class="ic">←</span>回对局助手</a>
+      <a href="#/civ/Mongols"><span class="ic">cv</span>蒙古</a>
+      <a href="#/civ/Chinese"><span class="ic">cv</span>中国</a>
+      <a href="#/builds?civ=Mongols&amp;from=duel"><span class="ic">bo</span>蒙古开局</a>
+      <a href="#/builds?civ=Chinese&amp;from=duel"><span class="ic">bo</span>中国开局</a>
+    </nav>
+    <span class="cap">注解：← 实装 Lucide arrow-left。me/opp 从 a=/b= pack 解析文明段；解析失败则回 #/matchup 无参，并隐藏缺侧文明链。S1 不重做全局面包屑。</span>
+
+    <div class="modes" aria-hidden="true">
+      <span class="on">1v1</span><span>N vs M</span><span>等资源</span>
+    </div>
+
+    <div class="sides">
+      <div class="side"><b>A · 蒙古</b>单位 pack 区（现有）</div>
+      <div class="mid">VS</div>
+      <div class="side"><b>B · 中国</b>单位 pack 区（现有）</div>
+    </div>
+
+    <div class="anno">
+      <b>S1</b>：回助手必须还原同一对阵；两侧文明与开局均为真链接；390 宽情境栏换行。
+    </div>
+  </div>
+</body>
+</html>
