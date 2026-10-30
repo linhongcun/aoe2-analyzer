@@ -1,3 +1,4 @@
+import { mapucheContext, MAPUCHE_TRAIN_NOTE } from './mapucheEconomy';
 import { chineseContext, CHINESE_OPENING_NOTE } from './chineseEconomy';
 /**
  * issue 317：经济/费用类文明加成（src = 'eco'）在各工具里是否真的被计入。
@@ -118,6 +119,14 @@ const TREE_SIM: Record<string, { en: string; on: boolean | null; note: string }>
 
 function simLine(b: CivBonusEnt): BonusUsageLine | null {
   const name = USAGE_TOOL_ZH.sim;
+  if (b.id === 'Mapuche-1') {
+    return {
+      tool: 'sim',
+      name,
+      on: false,
+      note: mapucheContext(eco).complete ? `未计入：${MAPUCHE_TRAIN_NOTE}` : '马普切来源不完整，暂按通用文明计算，本条未计入',
+    };
+  }
   if (b.id === 'Chinese-2') {
     const on = chineseContext(eco).complete && currentSimSupport(eco, b.civ, buildOrders).supported;
     return { tool: 'sim', name, on, note: on ? `已计入人口容量；${CHINESE_OPENING_NOTE}；视野未模拟` : '中国来源不完整，暂按通用文明计算，本条未计入' };
@@ -162,7 +171,7 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
     };
   }
   const { techs, treeOnly } = bonusTechs(b);
-  const currentScope = ['Chinese', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer'].includes(b.civ)
+  const currentScope = ['Mapuche', 'Chinese', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer'].includes(b.civ)
     ? simScope(eco, buildOrders, b.civ)
     : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
@@ -239,6 +248,7 @@ export function bonusUsage(b: CivBonusEnt): BonusUsageLine[] {
         note: '赠送村民未计入真实成本；单个村民的采集速度不变',
       },
     ];
+  if (b.id === 'Mapuche-1') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Chinese-2') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Sicilians-4') return usageLines(b as CivBonusEnt & { idx: number });
   if (b.id === 'Mayans-1') {

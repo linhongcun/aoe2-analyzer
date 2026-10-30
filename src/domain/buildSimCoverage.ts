@@ -1,3 +1,4 @@
+import { mapucheContext, mapucheRowClass, hasMapucheMarker, MAPUCHE_SOURCE_REASON, type MapucheRawTech } from './mapucheEconomy';
 import { chineseContext, chineseRowClass, hasChineseMarker, CHINESE_SOURCE_REASON, type ChineseRawTech } from './chineseEconomy';
 import { civMechanism, mechanismContext } from './buildSimMechanisms';
 import type { BuildOrder } from './buildOrder';
@@ -133,7 +134,8 @@ const HANDLED_ATTR = new Set(['workRate', 'carry', 'trainTime', ...Object.keys(C
 export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
   const context = mechanismContext(eco, civ);
   const { armenians, georgians } = context;
-  if (armenians?.infrastructure || georgians?.infrastructure) bos = bos.map((order) => civMechanism(civ).prepare!(order, civ!, eco));
+  if (armenians?.infrastructure || georgians?.infrastructure || context.mapuche?.infrastructure)
+    bos = bos.map((order) => civMechanism(civ).prepare!(order, civ!, eco));
   const units = new Set<number>([83]);
   const buildings = new Set<number>([...TC_UNITS, HOUSE, ...FARM_UNITS]);
   if (georgians?.start) buildings.add(1808);
@@ -203,11 +205,14 @@ export function classifyCivEffect(
     khmerTech?: KhmerRawTech;
     jurchenTech?: JurchenRawTech;
     chineseTech?: ChineseRawTech;
+    mapucheTech?: MapucheRawTech;
     khmerTree?: KhmerRawTree;
     khmerTeam?: KhmerRawTeam;
   },
   scope: ReturnType<typeof simScope>,
 ): EffectClass {
+  const mapuche = mapucheRowClass(row as EffectRow, scope.civ, scope.mapuche);
+  if (mapuche) return mapuche;
   const chinese = chineseRowClass(row as EffectRow, scope.civ, scope.chinese);
   if (chinese) return chinese;
   const jurchen = jurchenRowClass(row as EffectRow, scope.civ, scope.jurchens);
@@ -317,6 +322,8 @@ export function simSupport(
 ): { supported: boolean; reasons: string[] } {
   const u = unhandledEffects(eco, civ, bos);
   const reasons = [...new Set(u.map((x) => x.reason))];
+  if (civ === 'Mapuche') reasons.push(...mapucheContext(eco).reasons);
+  else if ((eco.civEco[civ] ?? []).some(hasMapucheMarker)) reasons.push(MAPUCHE_SOURCE_REASON);
   if (civ === 'Chinese') reasons.push(...chineseContext(eco).reasons);
   else if ((eco.civEco[civ] ?? []).some(hasChineseMarker)) reasons.push(CHINESE_SOURCE_REASON);
   if (civ === 'Jurchens') reasons.push(...jurchenContext(eco).reasons);

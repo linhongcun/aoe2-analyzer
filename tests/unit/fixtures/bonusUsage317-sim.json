@@ -1,5 +1,5 @@
 {
-  "inputs": "2753a2733d8170eeb72a5e1cf108505281430925a369379e3a18f26be9920539",
+  "inputs": "56cc6aa83186856c834eb7520775452512c229142a668f33659caf229d27509e",
   "firstChanged": {
     "Armenians-0": "feudal-drush-18",
     "Armenians-3": null,
@@ -57,6 +57,8 @@
     "Malay-3": null,
     "Malians-0": "feudal-drush-18",
     "Malians-1": "hybrid-fish-18",
+    "Mapuche-0": "feudal-drush-18",
+    "Mapuche-3": null,
     "Mayans-0": "feudal-drush-18",
     "Mayans-2": null,
     "Muisca-0": "fast-castle-boom",

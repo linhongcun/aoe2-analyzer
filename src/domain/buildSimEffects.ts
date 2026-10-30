@@ -44,6 +44,8 @@ export interface Mods {
   huntFoodMul: number;
   /** 葡萄牙 res267：每单位采果食物的额外木材（百分数 / 100），不改变携带量或主资源率 */
   foragerWood: number;
+  /** 马普切：仅采果有效交仓收入的额外食物比例。 */
+  foragerFood: number;
   /** 蜀 res502：有效伐木收入兼产食物的百分比，不改变木材主收入或携带量 */
   lumberFood: number;
   /** 瓦兰吉 res298：牧羊/狩猎/捕鱼有效食物收入兼产黄金的百分比 */
@@ -92,6 +94,7 @@ export function baseMods(): Mods {
     techReward: 0,
     huntFoodMul: 1,
     foragerWood: 0,
+    foragerFood: 0,
     lumberFood: 0,
     varangianGold: 0,
     sheepFoodMul: 1,
@@ -124,6 +127,7 @@ export const SPANISH_TECH_REWARD_GOLD = 20;
 
 export interface RowApplication {
   foragerWood?: boolean;
+  foragerFood?: boolean;
   lumberFood?: boolean;
   malianGold?: boolean;
   buildingWood?: boolean;
@@ -139,6 +143,14 @@ const RESOURCE_APPLICATIONS: readonly {
   op: string;
   apply: (mods: Mods, value: number) => void;
 }[] = [
+  {
+    flag: 'foragerFood',
+    res: 215,
+    op: 'add',
+    apply: (m, v) => {
+      m.foragerFood += v / 100;
+    },
+  },
   {
     flag: 'foragerWood',
     res: RES_FORAGER_WOOD,

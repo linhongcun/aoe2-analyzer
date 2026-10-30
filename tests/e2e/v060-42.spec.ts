@@ -7,7 +7,6 @@ import { expect, test } from '@playwright/test';
 test.describe('#42 白名单文明在开局页有「未计入」标识', () => {
   for (const civ of [
     'Gurjaras',
-    'Mapuche',
     'Poles',
     'Romans',
   ])

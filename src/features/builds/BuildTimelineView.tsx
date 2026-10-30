@@ -9,6 +9,7 @@ import { civByEn } from '../../data';
 import type { BuildOrder } from '../../domain/buildOrder';
 import { armenianBuildOrder } from '../../domain/armenianEconomy';
 import { georgianBuildOrder } from '../../domain/georgianEconomy';
+import { mapucheBuildOrder } from '../../domain/mapucheEconomy';
 import { visibleSources } from './sources';
 import { followupHint } from './timelineFollowups';
 import { simSupport } from '../../domain/simSupport';
@@ -39,7 +40,12 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   const unsupported = !!q.civ && !simSupport(q.civ);
   const simCiv = q.civ && !unsupported ? q.civ : 'Generic';
   const displayOrder = useMemo(
-    () => georgianBuildOrder(armenianBuildOrder(bo, simCiv, eco as unknown as EcoData), simCiv, eco as unknown as EcoData),
+    () =>
+      mapucheBuildOrder(
+        georgianBuildOrder(armenianBuildOrder(bo, simCiv, eco as unknown as EcoData), simCiv, eco as unknown as EcoData),
+        simCiv,
+        eco as unknown as EcoData,
+      ),
     [bo, simCiv],
   );
   const tl = useMemo(

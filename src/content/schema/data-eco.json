@@ -475,6 +475,9 @@
                 },
                 "chineseTech": {
                   "$ref": "#/$defs/khmerTech"
+                },
+                "mapucheTech": {
+                  "$ref": "#/$defs/khmerTech"
                 }
               },
               "required": ["source", "tech", "name", "age", "requires", "effects"],
@@ -569,6 +572,9 @@
     },
     "khmerPrerequisites": {
       "$ref": "#/$defs/khmerPrerequisites"
+    },
+    "mapucheInfrastructure": {
+      "$ref": "#/$defs/mapucheInfrastructure"
     }
   },
   "required": ["meta", "units", "buildings", "techs", "villager", "animals", "fishingShip", "ecoTechs", "civEco", "ageReq"],
@@ -1597,6 +1603,234 @@
         }
       },
       "required": ["civId", "nodes"],
+      "additionalProperties": false
+    },
+    "mapucheInfrastructure": {
+      "type": "object",
+      "properties": {
+        "civId": {
+          "type": "integer"
+        },
+        "treeId": {
+          "type": "integer"
+        },
+        "treeCommands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Type": {
+                "type": "integer"
+              },
+              "A": {
+                "type": "integer"
+              },
+              "B": {
+                "type": "integer"
+              },
+              "C": {
+                "type": "integer"
+              },
+              "D": {
+                "type": "number"
+              }
+            },
+            "required": ["Type", "A", "B", "C", "D"],
+            "additionalProperties": false
+          }
+        },
+        "researchSites": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2,
+              "items": false
+            }
+          },
+          "propertyNames": {
+            "pattern": "^[0-9]+$"
+          }
+        },
+        "enable": {
+          "$ref": "#/$defs/khmerTech"
+        },
+        "buildingTech": {
+          "$ref": "#/$defs/khmerTech"
+        },
+        "farmTech": {
+          "$ref": "#/$defs/khmerTech"
+        },
+        "marketRequirement": {
+          "$ref": "#/$defs/khmerTech"
+        },
+        "ageRequirement": {
+          "$ref": "#/$defs/khmerTech"
+        },
+        "settlements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "unit": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "integer"
+              },
+              "class": {
+                "type": "integer"
+              },
+              "trainAt": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": false
+                }
+              },
+              "trainTime": {
+                "type": "number",
+                "minimum": 0
+              },
+              "cost": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ],
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "items": false
+                }
+              },
+              "workRate": {
+                "type": "number"
+              },
+              "populationSource": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "integer"
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "flag": {
+                    "type": "integer"
+                  }
+                },
+                "required": ["type", "amount", "flag"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["unit", "type", "class", "trainAt", "trainTime", "cost", "workRate", "populationSource"],
+            "additionalProperties": false
+          }
+        },
+        "startingScout": {
+          "type": "object",
+          "properties": {
+            "resource": {
+              "type": "integer"
+            },
+            "unit": {
+              "type": "integer"
+            },
+            "populationSource": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "integer"
+                },
+                "amount": {
+                  "type": "number"
+                },
+                "flag": {
+                  "type": "integer"
+                }
+              },
+              "required": ["type", "amount", "flag"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["resource", "unit", "populationSource"],
+          "additionalProperties": false
+        },
+        "baseTrain93": {
+          "type": "object",
+          "properties": {
+            "unit": {
+              "type": "integer"
+            },
+            "trainAt": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "minItems": 2,
+                "maxItems": 2,
+                "items": false
+              }
+            },
+            "trainTime": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": ["unit", "trainAt", "trainTime"],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "civId",
+        "treeId",
+        "treeCommands",
+        "researchSites",
+        "enable",
+        "buildingTech",
+        "farmTech",
+        "marketRequirement",
+        "ageRequirement",
+        "settlements",
+        "startingScout",
+        "baseTrain93"
+      ],
       "additionalProperties": false
     }
   }

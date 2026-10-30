@@ -45,6 +45,7 @@ import { type KhmerFarm, type KhmerPrerequisites, type KhmerRawTech, type KhmerR
 
 import type { JurchenRawTech } from './jurchenEconomy';
 import type { ChineseRawTech } from './chineseEconomy';
+import { mapucheForagerFood, type MapucheInfrastructure, type MapucheRawTech } from './mapucheEconomy';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -63,12 +64,14 @@ export interface EffectRow {
   khmerTech?: KhmerRawTech;
   jurchenTech?: JurchenRawTech;
   chineseTech?: ChineseRawTech;
+  mapucheTech?: MapucheRawTech;
   khmerTree?: KhmerRawTree;
   khmerTeam?: KhmerRawTeam;
   effects: { kind: string; target?: string; attr?: string; op?: string; v?: number; res?: number; tech?: number; techName?: string }[];
 }
 /** eco.json 中模拟需要的部分 */
 export interface EcoData {
+  mapucheInfrastructure?: MapucheInfrastructure;
   armenianInfrastructure?: ArmenianInfrastructure;
   georgianInfrastructure?: GeorgianInfrastructure;
   slavicFarm?: SlavicFarm;
@@ -684,7 +687,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       if (a.type === 'build' && mechanism.buildingReady?.(scope, a.building, age, built) === false) break;
       // 638 exempts prerequisite buildings, not the actual research location.
       if (mechanism.researchSites && a.type === 'research') {
-        const sites = mechanism.researchSites(eco, a.tech);
+        const sites = mechanism.researchSites(eco, a.tech, scope);
         if (sites.some((site) => site > 0) && !sites.some((site) => (built.get(site) ?? 0) > 0)) break;
       }
       // 训练需要建筑；人口检查
@@ -833,6 +836,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         if (!c.auto) buildingsDone.push({ building: c.building, at: r1(t) });
         if (c.building === HOUSE) popCap = Math.min(200, popCap + 5);
         if (c.building === TC) popCap = Math.min(200, popCap + tcPopulation);
+        const extraPopulation = mechanism.buildingPopulation?.(scope, c.building) ?? 0;
+        if (extraPopulation) popCap = Math.min(200, popCap + extraPopulation);
         if (c.p && !constructions.some((x) => x.p === c.p)) finish(c.p, t);
       } else if (c.p) {
         if (c.building > -100000 && c.p.a.type === 'research') completeResearch(c.p, t);
@@ -952,6 +957,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         const q = rate(k);
         stock[r] += alloc[k] * q * TICK * (1 + (m.depositBonus[r] ?? 0));
         if (m.foragerWood) stock.wood += alloc[k] * foragerWoodIncome(m, ECO_TASK[k], q) * TICK;
+        if (m.foragerFood) stock.food += alloc[k] * mapucheForagerFood(m, ECO_TASK[k], q) * TICK;
         if (m.lumberFood) stock.food += alloc[k] * lumberFoodIncome(m, ECO_TASK[k], q) * TICK;
         if (m.varangianGold) stock.gold += alloc[k] * varangianGoldIncome(m, ECO_TASK[k], q) * TICK;
       }
@@ -1214,7 +1220,7 @@ export function gatherRate(
   const average = carry / (carry / workRate + walk);
   const rate = mechanismFarmRate(scope, ecoTask, average);
   const wood = foragerWoodIncome(m, ecoTask, rate);
-  const food = lumberFoodIncome(m, ecoTask, rate);
+  const food = lumberFoodIncome(m, ecoTask, rate) + mapucheForagerFood(m, ecoTask, rate);
   const gold = (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) + varangianGoldIncome(m, ecoTask, rate);
   return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}), ...(gold ? { gold } : {}) } };
 }
