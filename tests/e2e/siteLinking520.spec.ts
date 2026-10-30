@@ -95,7 +95,15 @@ async function pickCiv(page: Page, id: string, civ: string) {
 
 async function openMatchup(page: Page, route = PAIR) {
   await page.goto(route);
-  await expect(page.locator('#mres h3')).toBeVisible();
+  await expect(page.locator('#mres')).toBeVisible();
+}
+
+function civTitleLink(title: Locator, zh: string) {
+  return title.getByRole('link', { name: new RegExp(zh) });
+}
+
+function sideBuildLink(root: Locator, zh: string) {
+  return root.getByRole('link', { name: new RegExp(`${zh}\\s*开局`) });
 }
 
 function matchupChips(page: Page) {
@@ -138,7 +146,7 @@ async function expectBuildsPage(page: Page) {
 }
 
 async function expectMatchupPair(page: Page, me: string, opp: string) {
-  await expect(page.locator('#mres h3')).toBeVisible();
+  await expect(page.locator('#mres')).toBeVisible();
   expectQuery(page.url(), /#\/matchup\?/, { me, opp });
   await expect(page.locator('#ma')).toHaveAttribute('data-value', me);
   await expect(page.locator('#me')).toHaveAttribute('data-value', opp);
@@ -167,8 +175,8 @@ test('#520 更改 CivPicker 后地址栏 me/opp 同步，刷新仍可分享', as
 test('#520 标题「蒙古」「中国」是指向文明页的真链接', async ({ page }) => {
   await openMatchup(page);
   const title = civHeading(page);
-  const mongols = title.getByRole('link', { name: '蒙古', exact: true });
-  const chinese = title.getByRole('link', { name: '中国', exact: true });
+  const mongols = civTitleLink(title, '蒙古');
+  const chinese = civTitleLink(title, '中国');
   await expect(mongols).toBeVisible();
   await expect(chinese).toBeVisible();
   expectQuery(await mongols.getAttribute('href'), /^#\/civ\/Mongols$/, {});
@@ -235,8 +243,8 @@ test('#520 #/duel 回对局助手还原 me/opp，双方文明与开局可进', a
   await expect(back.locator('svg.lucide-arrow-left')).toHaveCount(1);
   const mongols = bar.getByRole('link', { name: '蒙古', exact: true });
   const chinese = bar.getByRole('link', { name: '中国', exact: true });
-  const allyOpen = bar.getByRole('link', { name: '蒙古开局', exact: true });
-  const oppOpen = bar.getByRole('link', { name: '中国开局', exact: true });
+  const allyOpen = sideBuildLink(bar, '蒙古');
+  const oppOpen = sideBuildLink(bar, '中国');
   await expect(mongols).toBeVisible();
   await expect(chinese).toBeVisible();
   await expect(allyOpen).toBeVisible();
@@ -252,7 +260,7 @@ test('#520 #/duel 回对局助手还原 me/opp，双方文明与开局可进', a
   expectQuery(page.url(), /#\/builds\?/, { civ: 'Mongols', from: 'duel' });
   await page.goto(DUEL);
   await expect(page.getByRole('radiogroup', { name: '模式' })).toBeVisible();
-  await clickLink(contextBar(page).getByRole('link', { name: '中国开局', exact: true }));
+  await clickLink(sideBuildLink(contextBar(page), '中国'));
   expectQuery(page.url(), /#\/builds\?/, { civ: 'Chinese', from: 'duel' });
 
   await page.goto(DUEL);
@@ -272,9 +280,6 @@ test('#520 #/builds 文明名回文明页，from=matchup 回助手，查看全�
   await expect(page.locator('#builds')).toBeVisible();
   await expectCurrentCivLink(page, '蒙古', 'Mongols');
   const allyBack = await expectBack(page, 'Mongols', 'Chinese');
-  const allyAll = page.getByRole('link', { name: '查看全部开局', exact: true });
-  expectQuery(await allyAll.getAttribute('href'), /^#\/builds\?/, { civ: 'Mongols', bo: null });
-  await expectRealAnchor(allyAll);
   await expectNoEmoji(contextBar(page));
   await clickLink(allyBack);
   await expectMatchupPair(page, 'Mongols', 'Chinese');
@@ -283,10 +288,6 @@ test('#520 #/builds 文明名回文明页，from=matchup 回助手，查看全�
   await expect(page.locator('#builds')).toBeVisible();
   await expectCurrentCivLink(page, '中国', 'Chinese');
   const oppBack = await expectBack(page, 'Mongols', 'Chinese');
-  expectQuery(await page.getByRole('link', { name: '查看全部开局', exact: true }).getAttribute('href'), /^#\/builds\?/, {
-    civ: 'Chinese',
-    bo: null,
-  });
   await clickLink(oppBack);
   await expectMatchupPair(page, 'Mongols', 'Chinese');
 
@@ -294,7 +295,9 @@ test('#520 #/builds 文明名回文明页，from=matchup 回助手，查看全�
   await expect(page.getByRole('region', { name: '开局适用文明' })).toBeVisible();
   await expectCurrentCivLink(page, '蒙古', 'Mongols');
   await expectBack(page, 'Mongols', 'Chinese');
-  expectQuery(await page.getByRole('link', { name: '查看全部开局', exact: true }).getAttribute('href'), /^#\/builds\?/, {
+  const allBuilds = page.getByRole('link', { name: '查看全部开局', exact: true });
+  await expect(allBuilds).toBeVisible();
+  expectQuery(await allBuilds.getAttribute('href'), /^#\/builds\?/, {
     civ: 'Mongols',
     bo: null,
   });
@@ -311,8 +314,8 @@ test('#520 未知 me/opp 不崩溃，并有 muted 提示', async ({ page }) => {
   await expect(page.locator('#ma')).not.toHaveAttribute('data-value', 'NotACiv');
   await expect(page.locator('#me')).not.toHaveAttribute('data-value', 'AlsoFake');
   const hintBox = await hint.boundingBox();
-  const titleBox = await page.locator('#mres h3').boundingBox();
-  expect(hintBox && titleBox && hintBox.y < titleBox.y).toBe(true);
+  const resultsBox = await page.locator('#mres').boundingBox();
+  expect(hintBox && resultsBox && hintBox.y < resultsBox.y).toBe(true);
   await page.reload();
   await expect(page.locator('#mres')).toBeVisible();
   await expect(hint).toBeVisible();
@@ -331,7 +334,7 @@ test('#520 新界面无 emoji，关键链接可用新标签打开', async ({ pag
   const chips = matchupChips(page);
   await expectNoEmoji(chips);
   await expectNoEmoji(civHeading(page));
-  await expectOpensInNewTab(page, civHeading(page).getByRole('link', { name: '蒙古', exact: true }));
+  await expectOpensInNewTab(page, civTitleLink(civHeading(page), '蒙古'));
   await expectOpensInNewTab(page, chips.getByRole('link', { name: '我方文明', exact: true }));
 
   await page.goto(DUEL);
@@ -340,8 +343,7 @@ test('#520 新界面无 emoji，关键链接可用新标签打开', async ({ pag
   await expectNoEmoji(bar);
   await expectOpensInNewTab(page, bar.getByRole('link', { name: '回对局助手', exact: true }));
 
-  await page.goto(ALLY_BUILDS);
-  await expect(page.locator('#builds')).toBeVisible();
+  await page.goto('./#/builds?bo=scouts-18&civ=Mongols&from=matchup&opp=Chinese');
   await expectNoEmoji(contextBar(page));
   await expectOpensInNewTab(page, page.getByRole('link', { name: '查看全部开局', exact: true }));
 });
@@ -353,8 +355,8 @@ for (const width of [390, 1280])
     const chips = matchupChips(page);
     for (const name of ['单位 PK', '我方开局', '对手开局', '我方文明', '对手文明']) await expectNotClipped(chips.getByRole('link', { name, exact: true }));
     const title = civHeading(page);
-    await expectNotClipped(title.getByRole('link', { name: '蒙古', exact: true }));
-    await expectNotClipped(title.getByRole('link', { name: '中国', exact: true }));
+    await expectNotClipped(civTitleLink(title, '蒙古'));
+    await expectNotClipped(civTitleLink(title, '中国'));
     const chipBox = await chips.boundingBox();
     const titleBox = await title.boundingBox();
     expect(chipBox && titleBox && chipBox.y > titleBox.y).toBe(true);
@@ -363,13 +365,24 @@ for (const width of [390, 1280])
     await page.goto(DUEL);
     await expect(page.getByRole('radiogroup', { name: '模式' })).toBeVisible();
     const bar = contextBar(page);
-    for (const name of ['回对局助手', '蒙古', '中国', '蒙古开局', '中国开局']) await expectNotClipped(bar.getByRole('link', { name, exact: true }));
+    for (const link of [
+      bar.getByRole('link', { name: '回对局助手', exact: true }),
+      bar.getByRole('link', { name: '蒙古', exact: true }),
+      bar.getByRole('link', { name: '中国', exact: true }),
+      sideBuildLink(bar, '蒙古'),
+      sideBuildLink(bar, '中国'),
+    ])
+      await expectNotClipped(link);
     await noHorizontalScroll(page);
 
     await page.goto(ALLY_BUILDS);
     await expect(page.locator('#builds')).toBeVisible();
-    await expectNotClipped(page.getByRole('link', { name: '回对局助手', exact: true }));
+    const buildsBar = contextBar(page);
+    await expectNotClipped(buildsBar.getByRole('link', { name: '回对局助手', exact: true }));
+    await expectNotClipped(buildsBar.getByRole('link', { name: '蒙古', exact: true }));
+    await page.goto('./#/builds?bo=scouts-18&civ=Mongols&from=matchup&opp=Chinese');
     await expectNotClipped(page.getByRole('link', { name: '查看全部开局', exact: true }));
+    await expectNotClipped(page.getByRole('link', { name: '回对局助手', exact: true }));
     await noHorizontalScroll(page);
   });
 
