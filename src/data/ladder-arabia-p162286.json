@@ -1,0 +1,305 @@
+{
+  "source": "aoestats.io (Wayback archive https://web.archive.org/web/20260712183553/https://aoestats.io/maps/arabia/ ; live site HTTP 522 at snapshot time)",
+  "sourceUrl": "https://aoestats.io/maps/arabia/",
+  "map": "Arabia",
+  "mode": "1v1 RM",
+  "fetchedAt": "2026-07-12",
+  "patchNote": "aoestats patch 162286",
+  "brackets": [
+    {
+      "key": "all",
+      "label": "全部",
+      "games": 504189,
+      "civs": [
+        {
+          "en": "Romans",
+          "winRate": 54.04,
+          "playRate": 1.67,
+          "games": 16815
+        },
+        {
+          "en": "Vikings",
+          "winRate": 53.18,
+          "playRate": 1.71,
+          "games": 17286
+        },
+        {
+          "en": "Bulgarians",
+          "winRate": 53.13,
+          "playRate": 2.15,
+          "games": 21678
+        },
+        {
+          "en": "Wu",
+          "winRate": 52.86,
+          "playRate": 0.68,
+          "games": 6905
+        },
+        {
+          "en": "Hindustanis",
+          "winRate": 52.72,
+          "playRate": 2.2,
+          "games": 22153
+        },
+        {
+          "en": "Incas",
+          "winRate": 51.92,
+          "playRate": 1.52,
+          "games": 15297
+        },
+        {
+          "en": "Persians",
+          "winRate": 51.83,
+          "playRate": 4.26,
+          "games": 42931
+        },
+        {
+          "en": "Malians",
+          "winRate": 51.81,
+          "playRate": 1.76,
+          "games": 17751
+        },
+        {
+          "en": "Wei",
+          "winRate": 51.68,
+          "playRate": 1.68,
+          "games": 16911
+        },
+        {
+          "en": "Franks",
+          "winRate": 51.4,
+          "playRate": 5.15,
+          "games": 51920
+        },
+        {
+          "en": "Huns",
+          "winRate": 51.25,
+          "playRate": 2.57,
+          "games": 25930
+        },
+        {
+          "en": "Shu",
+          "winRate": 51.01,
+          "playRate": 0.86,
+          "games": 8629
+        },
+        {
+          "en": "Sicilians",
+          "winRate": 51.01,
+          "playRate": 1.61,
+          "games": 16270
+        },
+        {
+          "en": "Malay",
+          "winRate": 50.95,
+          "playRate": 1.34,
+          "games": 13486
+        },
+        {
+          "en": "Magyars",
+          "winRate": 50.92,
+          "playRate": 4.45,
+          "games": 44849
+        },
+        {
+          "en": "Japanese",
+          "winRate": 50.8,
+          "playRate": 2.57,
+          "games": 25900
+        },
+        {
+          "en": "Berbers",
+          "winRate": 50.61,
+          "playRate": 1.62,
+          "games": 16377
+        },
+        {
+          "en": "Mayans",
+          "winRate": 50.56,
+          "playRate": 2.16,
+          "games": 21760
+        },
+        {
+          "en": "Mongols",
+          "winRate": 50.47,
+          "playRate": 6.23,
+          "games": 62789
+        },
+        {
+          "en": "Goths",
+          "winRate": 50.29,
+          "playRate": 1.88,
+          "games": 18938
+        },
+        {
+          "en": "Ethiopians",
+          "winRate": 50.28,
+          "playRate": 2.96,
+          "games": 29810
+        },
+        {
+          "en": "Chinese",
+          "winRate": 50.01,
+          "playRate": 2.32,
+          "games": 23407
+        },
+        {
+          "en": "Armenians",
+          "winRate": 49.74,
+          "playRate": 1.84,
+          "games": 18597
+        },
+        {
+          "en": "Koreans",
+          "winRate": 49.51,
+          "playRate": 1.82,
+          "games": 18310
+        },
+        {
+          "en": "Lithuanians",
+          "winRate": 49.5,
+          "playRate": 2.49,
+          "games": 25088
+        },
+        {
+          "en": "Tatars",
+          "winRate": 49.46,
+          "playRate": 1.61,
+          "games": 16211
+        },
+        {
+          "en": "Aztecs",
+          "winRate": 49.33,
+          "playRate": 1.57,
+          "games": 15854
+        },
+        {
+          "en": "Celts",
+          "winRate": 49.21,
+          "playRate": 1.62,
+          "games": 16361
+        },
+        {
+          "en": "Bengalis",
+          "winRate": 49.19,
+          "playRate": 1.08,
+          "games": 10844
+        },
+        {
+          "en": "Slavs",
+          "winRate": 49.18,
+          "playRate": 1.39,
+          "games": 13972
+        },
+        {
+          "en": "Teutons",
+          "winRate": 49.05,
+          "playRate": 2.09,
+          "games": 21055
+        },
+        {
+          "en": "Portuguese",
+          "winRate": 49.04,
+          "playRate": 1.87,
+          "games": 18899
+        },
+        {
+          "en": "Italians",
+          "winRate": 49.02,
+          "playRate": 1.46,
+          "games": 14727
+        },
+        {
+          "en": "Khmer",
+          "winRate": 48.73,
+          "playRate": 2.87,
+          "games": 28910
+        },
+        {
+          "en": "Spanish",
+          "winRate": 48.7,
+          "playRate": 2.42,
+          "games": 24427
+        },
+        {
+          "en": "Vietnamese",
+          "winRate": 48.43,
+          "playRate": 3.45,
+          "games": 34820
+        },
+        {
+          "en": "Burgundians",
+          "winRate": 48.19,
+          "playRate": 1.82,
+          "games": 18379
+        },
+        {
+          "en": "Dravidians",
+          "winRate": 48.07,
+          "playRate": 0.9,
+          "games": 9051
+        },
+        {
+          "en": "Gurjaras",
+          "winRate": 48.05,
+          "playRate": 1.07,
+          "games": 10765
+        },
+        {
+          "en": "Cumans",
+          "winRate": 48.05,
+          "playRate": 1.72,
+          "games": 17324
+        },
+        {
+          "en": "Burmese",
+          "winRate": 48.03,
+          "playRate": 1.01,
+          "games": 10205
+        },
+        {
+          "en": "Saracens",
+          "winRate": 47.85,
+          "playRate": 1.65,
+          "games": 16612
+        },
+        {
+          "en": "Poles",
+          "winRate": 47.84,
+          "playRate": 1.64,
+          "games": 16532
+        },
+        {
+          "en": "Byzantines",
+          "winRate": 47.81,
+          "playRate": 2.68,
+          "games": 27019
+        },
+        {
+          "en": "Britons",
+          "winRate": 47.52,
+          "playRate": 2.78,
+          "games": 27999
+        },
+        {
+          "en": "Georgians",
+          "winRate": 47.36,
+          "playRate": 1.09,
+          "games": 11028
+        },
+        {
+          "en": "Bohemians",
+          "winRate": 46.48,
+          "playRate": 1.31,
+          "games": 13231
+        },
+        {
+          "en": "Turks",
+          "winRate": 46.11,
+          "playRate": 1.42,
+          "games": 14366
+        }
+      ]
+    }
+  ]
+}
