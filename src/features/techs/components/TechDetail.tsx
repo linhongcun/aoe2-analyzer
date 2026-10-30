@@ -116,7 +116,11 @@ export default function TechDetail() {
       }
       tabsTop={
         <>
-          <NavigationContext label="文明相关入口" currentCiv={contextCiv?.en ?? ''} />
+          <NavigationContext label="文明相关入口" currentCiv={contextCiv?.en ?? ''}>
+            <Link className="community-tool-entry" to={contextPath('/match-review', location.search, location.pathname + location.search)}>
+              记录一个练习问题
+            </Link>
+          </NavigationContext>
           {contextCiv && !t.civs.includes(contextCiv.en) && <p className="note">{contextCiv.zh}无法研究此科技；保留当前文明，仍可查阅基础资料。</p>}
         </>
       }

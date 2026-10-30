@@ -120,7 +120,11 @@ export default function TreeView() {
   return (
     <section id="tree" className="pane">
       <ListHead title="科技树" desc="按建筑分列、按时代分行；可对比两个文明" />
-      <NavigationContext currentCiv={a.en} />
+      <NavigationContext currentCiv={a.en}>
+        <Link className="community-tool-entry" to={contextPath('/match-review', location.search, location.pathname + location.search)}>
+          记录一个练习问题
+        </Link>
+      </NavigationContext>
       {invalid && <p className="note">链接中的科技树对照条件无效，已使用上次有效选择；可重新选择后分享。</p>}
       <div className="bar fbar">
         <CivPicker id="tra" label="文明" value={a.en} onChange={(en) => nav('/tree/' + en + canonicalSearch, { replace: true })} />

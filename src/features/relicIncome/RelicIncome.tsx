@@ -20,6 +20,8 @@ import { Breadcrumbs } from '../../shared/ui/layout';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { stripNavigation, mergeNavigationSearch, readNavigation, entityPath } from '../../shared/nav/context';
+import { NavigationContext } from '../../shared/ui/NavigationContext';
 import './relicIncome.css';
 
 const resourceNames = { Gold: '黄金', Food: '食物', Wood: '木材', Stone: '石料' };
@@ -40,7 +42,7 @@ const num = (n: number) =>
 export default function RelicIncome() {
   const location = useLocation(),
     navigate = useNavigate();
-  const decoded = useMemo(() => decodeRelicIncome(location.search), [location.search]);
+  const decoded = useMemo(() => decodeRelicIncome(stripNavigation(location.search)), [location.search]);
   const [draft, setDraft] = useState<{ search: string; config: RelicIncomeConfig } | null>(null);
   const [loaded, setLoaded] = useState<{ data: RelicIncomeData | null; error: boolean }>({ data: null, error: false });
   const [retry, setRetry] = useState(0);
@@ -80,7 +82,7 @@ export default function RelicIncome() {
   const write = (next: RelicIncomeConfig) => {
     setDraft(null);
     resetShare();
-    navigate({ pathname: '/relic-income', search: '?' + encodeRelicIncome(next) }, { replace: true });
+    navigate({ pathname: '/relic-income', search: mergeNavigationSearch(encodeRelicIncome(next), location.search) }, { replace: true });
   };
   const update = (next: RelicIncomeConfig) => {
     if (locked) return;
@@ -90,7 +92,11 @@ export default function RelicIncome() {
   };
   const copy = async () => {
     if (errors.length || !data) return;
-    await copyLink(() => relicIncomeShareUrl(c, document.baseURI));
+    await copyLink(() => {
+      const url = new URL(relicIncomeShareUrl(c, document.baseURI));
+      url.hash = '/relic-income' + mergeNavigationSearch(encodeRelicIncome(c), location.search);
+      return url.href;
+    });
   };
   const selectCiv = (value: string, change: (civ: string) => void, label: string, optional = false) => (
     <select aria-label={label} value={value} onChange={(e) => change(e.target.value)}>
@@ -110,6 +116,7 @@ export default function RelicIncome() {
         <h1>圣物收益</h1>
         <p>估算已存放且生效的固定圣物，在一段游戏时间内提供的分资源收入。</p>
       </header>
+      <NavigationContext currentCiv={c.civ} />
       {!data ? (
         <div className="relic-card">
           {loaded.error ? (
@@ -399,13 +406,16 @@ export default function RelicIncome() {
               <Link className="relic-link" to="/team-bonuses">
                 队伍加成来源
               </Link>
-              <Link className="relic-link" to="/building/104?tab=garrison">
+              <Link className="relic-link" to={entityPath('building', 104, c.civ, location.search, location.pathname + location.search) + '&tab=garrison'}>
                 修道院驻军容量
               </Link>
-              <Link className="relic-link" to="/building/1806?tab=garrison">
+              <Link className="relic-link" to={entityPath('building', 1806, c.civ, location.search, location.pathname + location.search) + '&tab=garrison'}>
                 强化教堂驻军容量
               </Link>
-              <Link className="relic-link" to="/production">
+              <Link
+                className="relic-link"
+                to={readNavigation(location.search).back?.startsWith('/production?') ? readNavigation(location.search).back! : '/production'}
+              >
                 持续生产工具
               </Link>
             </nav>

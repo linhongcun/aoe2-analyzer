@@ -16,6 +16,8 @@ import '../../../shared/ui/contextLinks.css';
 import { rushGuide } from '../rushGuides';
 import { counterExtra, rushDrill } from '../availability';
 import { useMatchupData } from '../useMatchupData';
+import { contextPath } from '../../../shared/nav/context';
+import { NavigationContext } from '../../../shared/ui/NavigationContext';
 
 export default function Matchup() {
   const { data, error } = useMatchupData();
@@ -37,9 +39,11 @@ export default function Matchup() {
   const pick = (side: 'me' | 'opp', en: string) => setParams(writeMatchupPair(params, side === 'me' ? en : a.en, side === 'opp' ? en : e.en));
   const drill = data ? rushDrill(data, a.en, e.en, rushGuide(params.get('rush'))) : null;
   const counters = core ? filterCounterUnits(a.en, e.ty, core.units) : [];
+  const source = '/matchup?' + writeMatchupPair(params, a.en, e.en);
   return (
     <section id="matchup" className="pane">
       <ListHead title="对局助手" desc="根据双方文明给出反制建议" />
+      <NavigationContext showMatchup={false} />
       <div className="bar fbar">
         我的文明 <CivPicker id="ma" label="我的文明" value={a.en} onChange={(en) => pick('me', en)} /> 对手文明{' '}
         <CivPicker id="me" label="对手文明" value={e.en} onChange={(en) => pick('opp', en)} />
@@ -58,7 +62,7 @@ export default function Matchup() {
       </h3>
       <nav className="ctx-chips" aria-label="对阵相关入口">
         {drill?.url ? (
-          <Link className="community-tool-entry" to={drill.url}>
+          <Link className="community-tool-entry" to={contextPath(drill.url, writeMatchupPair(params, a.en, e.en), source)}>
             <Icon name="swords" />
             单位 PK
           </Link>
@@ -68,11 +72,11 @@ export default function Matchup() {
             单位 PK
           </span>
         )}
-        <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'me')}>
+        <Link className="community-tool-entry" to={contextPath(matchupBuildPath(a.en, e.en, 'me'), '', source)}>
           <Icon name="list-ordered" />
           我方开局
         </Link>
-        <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'opp')}>
+        <Link className="community-tool-entry" to={contextPath(matchupBuildPath(a.en, e.en, 'opp'), '', source)}>
           <Icon name="list-ordered" />
           对手开局
         </Link>
@@ -94,7 +98,7 @@ export default function Matchup() {
         <Link className="community-tool-entry" to="/scouting">
           先辨析侦察线索与缺失信息
         </Link>
-        <Link className="community-tool-entry" to="/match-review">
+        <Link className="community-tool-entry" to={contextPath('/match-review', writeMatchupPair(params, a.en, e.en), source)}>
           记录本局疑问与下次练习重点
         </Link>
         <Link className="community-tool-entry" to="/mixed-army">
@@ -146,14 +150,14 @@ export default function Matchup() {
                 const unit = core.units.find((x) => x.id === u.id);
                 return (
                   <li key={u.id}>
-                    <Link className="ulink matchup-counter-link" to={matchupUnitPath(u.id, a.en, e.en)}>
+                    <Link className="ulink matchup-counter-link" to={contextPath(matchupUnitPath(u.id, a.en, e.en), params, source)}>
                       {unit && <UnitIcon u={unit} />}
                       <span>{u.nameZh}</span>
                     </Link>
                     {unit?.civs.includes(a.en) && (
                       <Link
                         className="community-tool-entry matchup-sim-link"
-                        to={unitPath(u.id, a.en, 4, [], []) + '?tab=sim'}
+                        to={contextPath(unitPath(u.id, a.en, 4, [], []) + '?tab=sim', writeMatchupPair(params, a.en, e.en), source)}
                         aria-label={`${u.nameZh}：用${a.zh}模拟`}
                       >
                         用{a.zh}模拟

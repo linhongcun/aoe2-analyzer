@@ -41,6 +41,7 @@ function validReturn(raw: string | null): string | null {
   if (!registeredPath(path)) return null;
   const query = new URLSearchParams(cut < 0 ? '' : raw.slice(cut + 1));
   if ([...query.keys()].some((key) => key.toLowerCase() === 'ctxreturn')) return null;
+  if (['me', 'opp'].some((key) => query.getAll(key).length > 1 || (query.has(key) && !knownCiv(query.get(key))))) return null;
   return raw;
 }
 
@@ -65,6 +66,21 @@ export function readNavigation(search: NavigationSearch) {
 
 /** Remove navigation before strict calculation decoders; keep all other keys and order. */
 export function stripNavigation(search: NavigationSearch): string {
+  if (typeof search === 'string') {
+    const raw = search.startsWith('?') ? search.slice(1) : search;
+    const retained = raw
+      .split('&')
+      .filter((part) => {
+        try {
+          const key = decodeURIComponent(part.split('=')[0]!.replace(/\+/g, ' '));
+          return !NAV_KEYS.some((navigationKey) => navigationKey === key);
+        } catch {
+          return true; // The original strict decoder must still see malformed calculation bytes.
+        }
+      })
+      .join('&');
+    return retained ? '?' + retained : '';
+  }
   const params = paramsOf(search);
   NAV_KEYS.forEach((key) => params.delete(key));
   return asSearch(params);
@@ -73,10 +89,11 @@ export function stripNavigation(search: NavigationSearch): string {
 export function mergeNavigationSearch(encodedSearch: NavigationSearch, currentSearch: NavigationSearch): string {
   const target = paramsOf(encodedSearch);
   const context = readNavigation(currentSearch);
+  const hasPair = !!context.me && !!context.opp;
   for (const [key, value] of [
     ['ctxReturn', context.back],
-    ['me', context.me],
-    ['opp', context.opp],
+    ['me', hasPair ? context.me : undefined],
+    ['opp', hasPair ? context.opp : undefined],
   ] as const) {
     if (!target.has(key) && value) target.set(key, value);
   }

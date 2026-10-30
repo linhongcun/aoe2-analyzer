@@ -1,10 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { contextPath, entityPath, mergeNavigationSearch, readNavigation, returnSnapshot, stripNavigation } from '../../src/shared/nav/context';
 import { decodeTrainCompare, TRAIN_COMPARE_ENTRY } from '../../src/features/production/trainCompareCodec';
-import { decodeTradeIncome, tradeIncomeProductionHref } from '../../src/domain/tradeIncome';
+import { decodeTradeIncome, encodeTradeIncome, newTradeIncomeConfig, tradeIncomeProductionHref } from '../../src/domain/tradeIncome';
 import { DEFAULT_PRODUCTION, encodeProduction } from '../../src/domain/production';
 
 describe('#531 navigation context', () => {
+  it('preserves malformed percent encoding in calculation fields for the strict decoder', () => {
+    const broken = encodeTradeIncome(newTradeIncomeConfig()).replace('priceSource=', 'priceSource=%ZZ');
+    expect(decodeTradeIncome(broken).errors).toContain('方案链接过长或编码损坏。');
+    expect(decodeTradeIncome(stripNavigation(broken + '&ctxReturn=%2Fproduction')).errors).toContain('方案链接过长或编码损坏。');
+  });
+
+  it('does not combine a valid opponent with an absent or invalid original self civilization', () => {
+    expect(mergeNavigationSearch('civ=Franks', '?me=unknown&opp=Chinese')).toBe('?civ=Franks');
+    expect(mergeNavigationSearch('civ=Franks', '?opp=Chinese')).toBe('?civ=Franks');
+  });
   it('restores a complete previous tool while keeping the original matchup independent of current civ', () => {
     const production = '/production?' + encodeProduction({ ...DEFAULT_PRODUCTION, civ: 'Mongols' });
     const target = contextPath('/eco-payoff?civ=Mongols&age=3', '?me=Franks&opp=Britons', production);
@@ -32,6 +42,8 @@ describe('#531 navigation context', () => {
     '/missing-tool',
     '/production?ctxReturn=%2Fduel',
     '/production?CTXRETURN=%2Fduel',
+    '/production?me=Franks&me=Mongols&opp=Chinese',
+    '/production?me=unknown&opp=Chinese',
     '/production?' + 'x'.repeat(8193),
   ])('rejects unsafe or unsupported return %s without damaging current tool inputs', (back) => {
     const p = new URLSearchParams({ civ: 'Mongols', ctxReturn: back, rows: '38:101:3' });

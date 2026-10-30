@@ -1,4 +1,4 @@
-/** #531 跨工具只映射输入，不改变生产或收益的计算规则。 */
+/** issue 531：跨工具只映射输入，不改变生产或收益的计算规则。 */
 import { calculateProduction, decodeProduction, effectiveProductionTechs, productionTechs, type ProductionConfig, type ProductionContext } from './production';
 import { calculateEcoPayoff, DEFAULT_PAYOFF, PAYOFF_BASELINE, PAYOFF_TARGETS, payoffAvailable, type EcoPayoffConfig } from './ecoPayoff';
 

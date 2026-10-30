@@ -9,7 +9,11 @@ import { collapse } from '../../../domain/family';
 import { makeSimContext } from '../../../domain/simulator';
 import { fmtSide, parseSide, type SideSpec } from '../../../domain/duelState';
 import { canonDuelParams, decodeDuelParams } from '../../../domain/duelParams';
-import { buildsPath, duelCivs, matchupPath } from '../../../domain/matchupRoute';
+import { buildsPath, duelCivs } from '../../../domain/matchupRoute';
+import { encodeProduction } from '../../../domain/production';
+import { unitProductionEntry } from '../../../domain/unitProductionEntry';
+import { contextPath, readNavigation } from '../../../shared/nav/context';
+import { NavigationContext } from '../../../shared/ui/NavigationContext';
 import '../../../shared/ui/contextLinks.css';
 import { countForTime, fmtClock, realCostOf } from '../../../domain/realCost';
 import { Icon } from '../../../shared/ui/Icon';
@@ -76,12 +80,21 @@ function DuelCalculator() {
     contextSearch.current = canonStr;
     if (canonStr !== sp.toString()) setSp(new URLSearchParams(canonStr), { replace: true });
   }, [canonStr, sp, setSp]);
+  const contextQuery = new URLSearchParams(sp);
+  if (!sp.has('me') && !sp.has('opp')) {
+    if (context.me) contextQuery.set('me', context.me);
+    if (context.opp) contextQuery.set('opp', context.opp);
+  }
+  const rootPair = readNavigation(contextQuery);
+  const source = '/duel?' + canonStr;
   const contextBar = (
-    <nav className="ctx-bar" aria-label="对阵相关入口">
-      <Link className="community-tool-entry" to={context.me && context.opp ? matchupPath(context.me, context.opp) : matchupPath()}>
-        <Icon name="arrow-left" />
-        回对局助手
-      </Link>
+    <NavigationContext search={contextQuery.toString()} label="对阵相关入口">
+      {!(rootPair.me && rootPair.opp) && rootPair.back?.split('?')[0] !== '/matchup' && (
+        <Link className="community-tool-entry" to="/matchup">
+          <Icon name="arrow-left" />
+          回对局助手
+        </Link>
+      )}
       {(['me', 'opp'] as const).map(
         (side) =>
           context[side] && (
@@ -93,13 +106,13 @@ function DuelCalculator() {
       {(['me', 'opp'] as const).map(
         (side) =>
           context[side] && (
-            <Link key={side} className="community-tool-entry" to={buildsPath(context[side], 'duel')}>
+            <Link key={side} className="community-tool-entry" to={contextPath(buildsPath(context[side], 'duel'), contextQuery, source)}>
               <Icon name="list-ordered" />
               {civByEn(context[side]!)?.zh} 开局
             </Link>
           ),
       )}
-    </nav>
+    </NavigationContext>
   );
   const fams = useMemo(
     () =>
@@ -134,10 +147,32 @@ function DuelCalculator() {
             : 1;
   const cntA = cnt(A, na),
     cntB = cnt(B, nb);
+  const productionEntry = (side: SideState, name: 'A' | 'B') => {
+    const entry = unitProductionEntry({ core, trees: trees! }, { unit: side.u.id, civ: side.civ, age: side.age, techs: isUnavail(side) ? [] : [...side.sel] });
+    if (isUnavail(side) || entry.errors.length)
+      return (
+        <span className="note">
+          {name} 方当前条件无法规划生产：{entry.errors[0] ?? '本文明不可用'}
+        </span>
+      );
+    return (
+      <Link className="community-tool-entry" to={contextPath('/production?' + encodeProduction(entry.config), contextQuery, source)}>
+        按 {name} 方规划生产
+      </Link>
+    );
+  };
   return (
     <section id="duel" className="pane">
       <ListHead level={1} title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
       {contextBar}
+      <nav className="ctx-chips" aria-label="将当前单位接到后续分析">
+        {productionEntry(A, 'A')}
+        {productionEntry(B, 'B')}
+        <Link className="community-tool-entry" to={contextPath('/match-review', contextQuery, source)}>
+          记录一个练习问题
+        </Link>
+      </nav>
+      <p className="note">生产入口带入所选一方的单位、文明、时代及生产模型支持的科技；请另行确定生产建筑数量，未支持的团队和战斗条件不用于经济估算。</p>
       <div className="bar fbar" role="radiogroup" aria-label="模式">
         {(
           [

@@ -86,6 +86,8 @@ tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 
 ## 页面登记表（#283 / #388）
 
+跨工具导航由 `shared/nav/context.ts` 与 `shared/ui/NavigationContext.tsx` 统一处理：`ctxReturn` 只记录一个受控站内来源，`me/opp` 与当前 `civ` 分开；返回目标从页面登记表校验，不新增平行路由清单。严格计算页先分离导航字段，保留其余参数原字节送入原解码器，再在编辑、复制时附加合法导航。详见[功能整合实施规格](design/feature-integration/IMPLEMENTATION.md)。
+
 `src/shared/nav/pageRegistry.ts` 的 `PAGES` 是全站页面的唯一登记表。路由、导航、首页和静态页标题/说明都从这里派生。不要在 `routes.tsx`、`sections.ts`、首页或 `scripts/page_metadata.mjs` 里另维护一份平行名单。
 
 一条登记（`PageDef`）写这些：

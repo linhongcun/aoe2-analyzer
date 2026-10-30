@@ -19,6 +19,8 @@ import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { stripNavigation, mergeNavigationSearch, readNavigation, contextPath } from '../../shared/nav/context';
+import { NavigationContext } from '../../shared/ui/NavigationContext';
 import './trade-income.css';
 
 const number = (n: number) =>
@@ -31,7 +33,7 @@ export default function TradeIncome() {
     trees = useTrees(),
     location = useLocation(),
     navigate = useNavigate();
-  const decoded = useMemo(() => decodeTradeIncome(location.search), [location.search]);
+  const decoded = useMemo(() => decodeTradeIncome(stripNavigation(location.search)), [location.search]);
   // Invalid in-progress input stays editable and is never serialized as a valid share link.
   const [draft, setDraft] = useState<{ search: string; config: TradeIncomeConfig } | null>(null);
   const config = draft?.search === location.search ? draft.config : decoded.config;
@@ -57,7 +59,7 @@ export default function TradeIncome() {
   const write = (next: TradeIncomeConfig) => {
     resetShare();
     setDraft(null);
-    navigate({ pathname: '/trade-income', search: '?' + encodeTradeIncome(next) }, { replace: true });
+    navigate({ pathname: '/trade-income', search: mergeNavigationSearch(encodeTradeIncome(next), location.search) }, { replace: true });
   };
   const update = (next: TradeIncomeConfig) => {
     if (decoded.errors.length) return;
@@ -68,7 +70,7 @@ export default function TradeIncome() {
   const copy = async () => {
     await copyLink(() => {
       const url = new URL(window.location.href);
-      url.hash = '/trade-income?' + encodeTradeIncome(config);
+      url.hash = '/trade-income' + mergeNavigationSearch(encodeTradeIncome(config), location.search);
       return url.href;
     });
   };
@@ -108,6 +110,10 @@ function TradeIncomeBody({
   statusProps: ReturnType<typeof useShareLink>['statusProps'];
   result: ReturnType<typeof calculateTradeIncome>;
 }) {
+  const location = useLocation();
+  const back = readNavigation(location.search).back;
+  const originalMatchup = new URLSearchParams(location.search);
+  originalMatchup.delete('ctxReturn');
   const errors = [...parseErrors, ...r.errors];
   const available = tradeIncomeUnits(ctx, c);
   const field = (key: 'gold' | 'cycle' | 'count' | 'target', label: string, whole = false) => (
@@ -128,10 +134,11 @@ function TradeIncomeBody({
           <h1>商路供给规划</h1>
           <p className="note">用本局实测交金与完整周期，规划持续补兵所需的贸易车船。</p>
         </div>
-        <Link className="ulink" to="/production">
+        <Link className="ulink" to={back?.startsWith('/production?') ? back : '/production'}>
           持续生产工具
         </Link>
       </header>
+      <NavigationContext currentCiv={c.civ} />
       <div className="trade-income-actions">
         <button className="btn" type="button" disabled={errors.length > 0} onClick={() => void copy()}>
           <Icon name="copy" />
@@ -216,7 +223,7 @@ function TradeIncomeBody({
                       {civs.find((v) => v.en === r.production!.civ)?.zh} · {AGE_ZH[r.production.age]} ·{' '}
                       <span className="trade-income-number">{r.production.rows.length} 条生产需求</span>
                     </p>
-                    <Link className="ulink" to={'/production?' + encodeProduction(r.production)}>
+                    <Link className="ulink" to={contextPath('/production?' + encodeProduction(r.production), originalMatchup)}>
                       查看原生产方案
                     </Link>
                   </div>

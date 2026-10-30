@@ -224,7 +224,11 @@ export default function UnitDetail() {
       }
       tabsTop={
         <>
-          <NavigationContext label="文明相关入口" currentCiv={contextCiv?.en ?? ''} />
+          <NavigationContext label="文明相关入口" currentCiv={contextCiv?.en ?? ''}>
+            <Link className="community-tool-entry" to={contextPath('/match-review', loc.search, loc.pathname + loc.search)}>
+              记录一个练习问题
+            </Link>
+          </NavigationContext>
           {productionPath && production && (
             <nav className="ctx-chips" aria-label="当前单位的下一步">
               <Link className="community-tool-entry" to={productionPath}>

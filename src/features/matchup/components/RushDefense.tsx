@@ -3,7 +3,8 @@ import { buildOrders } from '../../../data/buildOrders';
 import type { Civ } from '../../../domain/types';
 import { rushDrill, unavailableBuildUnits, unitAvailable, techAvailable, type MatchupData } from '../availability';
 import './rushDefense.css';
-import { matchupBuildPath } from '../../../domain/matchupRoute';
+import { matchupBuildPath, writeMatchupPair } from '../../../domain/matchupRoute';
+import { contextPath } from '../../../shared/nav/context';
 import { guides, rushGuide } from '../rushGuides';
 
 function CountText({ text }: { text: string }) {
@@ -20,6 +21,8 @@ function CountText({ text }: { text: string }) {
 
 export default function RushDefense({ own, enemy, data, loadError }: { own: Civ; enemy: Civ; data: MatchupData | null; loadError: boolean }) {
   const [params, setParams] = useSearchParams();
+  const origin = writeMatchupPair(params, own.en, enemy.en);
+  const source = '/matchup?' + origin;
   const guide = rushGuide(params.get('rush'));
   const drill = data ? rushDrill(data, own.en, enemy.en, guide) : null;
   const order = buildOrders.find((b) => b.id === guide.build)!;
@@ -75,7 +78,7 @@ export default function RushDefense({ own, enemy, data, loadError }: { own: Civ;
       <p>{guide.wall}</p>
       {drill?.url && (
         <p>
-          <Link className="ulink" to={drill.url}>
+          <Link className="ulink" to={contextPath(drill.url, origin, source)}>
             打开 PK 演练：
             <CountText text={guide.label} />
           </Link>
@@ -100,7 +103,7 @@ export default function RushDefense({ own, enemy, data, loadError }: { own: Civ;
           </p>
         ) : (
           <p>
-            <Link className="ulink" to={matchupBuildPath(own.en, enemy.en, 'me', guide.build)}>
+            <Link className="ulink" to={contextPath(matchupBuildPath(own.en, enemy.en, 'me', guide.build), '', source)}>
               参考开局：
               <CountText text={order.name.zh} />
             </Link>

@@ -13,6 +13,8 @@ import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
 import { defaultTeamBonusConfig, encodeTeamBonuses, updateTeamRoster } from '../../../domain/teamBonuses';
 import './compare.css';
 import '../../../shared/ui/contextLinks.css';
+import { contextPath } from '../../../shared/nav/context';
+import { NavigationContext } from '../../../shared/ui/NavigationContext';
 
 const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
   ['特色兵种', 'uu'],
@@ -39,6 +41,21 @@ export default function Compare() {
   return (
     <section id="compare" className="pane">
       <ListHead title="文明对比" desc="两个文明的能力雷达与关键差异" />
+      <NavigationContext />
+      <nav className="ctx-chips" aria-label="继续分析这组文明">
+        <Link className="community-tool-entry" to={contextPath(`/matchup?${new URLSearchParams({ me: a.en, opp: b.en })}`, query, '/compare' + search)}>
+          以左侧为我方分析
+        </Link>
+        <Link className="community-tool-entry" to={contextPath(`/matchup?${new URLSearchParams({ me: b.en, opp: a.en })}`, query, '/compare' + search)}>
+          以右侧为我方分析
+        </Link>
+        <Link
+          className="community-tool-entry"
+          to={contextPath(`/tree/${a.en}?${new URLSearchParams({ mode: '2', compare: b.en })}`, query, '/compare' + search)}
+        >
+          比较科技树差异
+        </Link>
+      </nav>
       <p>
         <Link className="btn community-tool-entry" to={'/team-bonuses?' + encodeTeamBonuses(updateTeamRoster(defaultTeamBonusConfig(), [a.en, b.en]))}>
           查看这两个文明的队伍加成来源

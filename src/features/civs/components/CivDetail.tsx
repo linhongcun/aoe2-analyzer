@@ -130,7 +130,11 @@ export default function CivDetail() {
       ))}
       tabsTop={
         <>
-          <NavigationContext currentCiv={c.en} />
+          <NavigationContext currentCiv={c.en}>
+            <Link className="community-tool-entry" to={contextPath('/match-review', location.search, location.pathname + location.search)}>
+              记录一个练习问题
+            </Link>
+          </NavigationContext>
           <nav className="ctx-bar" aria-label="本页相关工具">
             <Link className="community-tool-entry" to={toolPath(`/builds?civ=${c.en}`)}>
               <Icon name="book-open" /> 开局流程

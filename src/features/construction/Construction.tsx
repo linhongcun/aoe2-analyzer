@@ -19,6 +19,8 @@ import {
   type ConstructionTask,
 } from '../../domain/construction';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { stripNavigation, mergeNavigationSearch, entityPath } from '../../shared/nav/context';
+import { NavigationContext } from '../../shared/ui/NavigationContext';
 import './construction.css';
 
 const num = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
@@ -27,7 +29,7 @@ export default function Construction() {
     trees = useTrees(),
     loc = useLocation(),
     nav = useNavigate();
-  const decoded = useMemo(() => decodeConstruction(loc.search, core && trees ? { core, trees } : undefined), [loc.search, core, trees]);
+  const decoded = useMemo(() => decodeConstruction(stripNavigation(loc.search), core && trees ? { core, trees } : undefined), [loc.search, core, trees]);
   const [draft, setDraft] = useState<{ search: string; config: ConstructionConfig } | null>(null);
   const config = draft?.search === loc.search ? draft.config : decoded.config;
   const {
@@ -56,19 +58,22 @@ export default function Construction() {
     if (decodeConstruction(search, ctx).errors.length) setDraft({ search: loc.search, config: next });
     else {
       setDraft(null);
-      nav({ pathname: '/construction', search }, { replace: true });
+      nav({ pathname: '/construction', search: mergeNavigationSearch(search, loc.search) }, { replace: true });
     }
     resetShare();
   };
   const reset = () => {
     setDraft(null);
-    nav({ pathname: '/construction', search: '?' + encodeConstruction({ ...DEFAULT_CONSTRUCTION, techs: [] }) }, { replace: true });
+    nav(
+      { pathname: '/construction', search: mergeNavigationSearch(encodeConstruction({ ...DEFAULT_CONSTRUCTION, techs: [] }), loc.search) },
+      { replace: true },
+    );
     resetShare();
   };
   const share = () =>
     copy(() => {
       const url = new URL(window.location.href);
-      url.hash = '/construction?' + encodeConstruction(config);
+      url.hash = '/construction' + mergeNavigationSearch(encodeConstruction(config), loc.search);
       return url.href;
     });
 
@@ -88,6 +93,7 @@ export default function Construction() {
           <p className="note">比较提前完工的时间与村民工时。时间均为游戏时间。</p>
         </div>
       </header>
+      <NavigationContext currentCiv={config.civ} />
       <CalcDock
         note={status}
         resultId="construction-result-title"
@@ -359,7 +365,7 @@ export default function Construction() {
           <a href="https://github.com/SFTtech/openage/blob/master/doc/reverse_engineering/game_mechanics/build_speed.md" target="_blank" rel="noreferrer">
             公开多人施工规则
           </a>{' '}
-          · <Link to={`/building/${config.buildingId}`}>返回建筑详情</Link>
+          · <Link to={entityPath('building', config.buildingId, config.civ, loc.search, loc.pathname + loc.search, config.age)}>返回建筑详情</Link>
         </p>
       </section>
     </section>

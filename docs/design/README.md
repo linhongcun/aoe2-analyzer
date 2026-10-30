@@ -44,6 +44,7 @@ v0.41.0 两条单位 PK 入口见 [波希米亚预置对战](bohemian-duel-prese
 SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分支上。样稿里的数字都以数据为准，和数据不一致时以数据为准。
 
 - [#517 站点串联](site-linking-517/)（[#517](https://github.com/linhongcun/aoe2-analyzer/issues/517)）：对阵优先的信息架构稿，供 Steve 拆切片与 Codex S1 前对齐。
+- [#531 功能整合](feature-integration/IMPLEMENTATION.md)：维护者确认的连续分析交互，覆盖资料、对局、开局、生产、经济与练习记录；原型与完整设计保留在同目录，实际发布以实现 PR 为准。
 - [#308 攻城拆建筑](siege-308/)（[#308](https://github.com/linhongcun/aoe2-analyzer/issues/308)）：`#/siege` 视觉交互稿，供 Codex 与 Steve 设计审阅。
 
 | Issue     | 内容                                                                                                                                                                                                        | 路径                                                                                                   | 状态 / 签字                                                   |

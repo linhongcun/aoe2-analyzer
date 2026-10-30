@@ -55,7 +55,7 @@ export function NavigationContext({
             aria-label="回对局助手"
             to={sameMatchup ? context.back! : `/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}
           >
-            <Icon name="swords" />
+            <Icon name="arrow-left" />
             <span>
               回对局助手
               <span className="note integration-origin">
