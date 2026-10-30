@@ -1,10 +1,27 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import ts from 'typescript';
 
 const entries = [
   ['一局与观赛', 'game-guide', 'game-guide-page'],
   ['手填复盘', 'match-review', 'match-review-page'],
   ['侦察辨析', 'scouting', 'scouting-page'],
 ] as const;
+// 对局计划组入口数从 pageRegistry 派生（与 pageBudget282 同样读 TS AST；口径同 sections.ts 的 HOME_GROUPS），新增工具不必改这里。
+const registry = ts.createSourceFile('pageRegistry.ts', readFileSync('src/shared/nav/pageRegistry.ts', 'utf8'), ts.ScriptTarget.Latest, true);
+let PLANNING_COUNT = 0;
+(function visit(node: ts.Node) {
+  if (ts.isObjectLiteralExpression(node)) {
+    const fields = Object.fromEntries(
+      node.properties.flatMap((property) =>
+        ts.isPropertyAssignment(property) && ts.isStringLiteral(property.initializer) ? [[property.name.getText(registry), property.initializer.text]] : [],
+      ),
+    );
+    if (fields.key && fields.lane && fields.group === 'planning' && fields.status !== 'planned') PLANNING_COUNT++;
+  }
+  ts.forEachChild(node, visit);
+})(registry);
+if (PLANNING_COUNT < 1) throw new Error('pageRegistry 未解析出对局计划入口');
 const errors = new WeakMap<Page, string[]>();
 test.beforeEach(async ({ page }) => {
   const messages: string[] = [];
@@ -28,7 +45,7 @@ for (const width of [360, 375, 390, 1280])
       const home = page.locator('#home');
       await expect(home.locator('.home-group')).toHaveCount(4);
       await expect(home.getByRole('region', { name: '新手入门', exact: true }).getByRole('link')).toHaveCount(5);
-      await expect(home.getByRole('region', { name: '对局计划', exact: true }).getByRole('link')).toHaveCount(11);
+      await expect(home.getByRole('region', { name: '对局计划', exact: true }).getByRole('link')).toHaveCount(PLANNING_COUNT);
       await page.screenshot({ path: info.outputPath(`learning259-${theme}-${width}.png`), fullPage: true });
       for (const [label, route, id] of entries) {
         const link = home.getByRole('link', { name: new RegExp(label) });
