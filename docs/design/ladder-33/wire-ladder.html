@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#33 天梯数据 #/ladder · 可点线框（Jony）</title>
+<style>
+:root{--color-bg:#fbfbfd;--color-card:#fff;--color-surface-2:#f5f5f7;--color-control:#ececf0;--color-border:#e5e5ea;--color-line:#f0f0f2;
+--color-text:#1d1d1f;--color-muted:#636366;--color-accent:#a65a14;--color-accent-soft:#fbf3ea;--color-accent-bd:#e8d5c0;--color-link:#0066cc;
+--color-good:#1f7a35;--color-good-soft:#e9f5ec;--color-warn:#a15c00;--color-warn-soft:#fdf3e3;--color-bad:#c4281c;--color-tag:#f0f0f2;
+--shadow-1:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.04);--hdr:rgba(255,255,255,.8);--bar-bg:#ececf0;--skel:#ececf0}
+[data-theme=dark]{--color-bg:#000;--color-card:#1c1c1e;--color-surface-2:#2c2c2e;--color-control:#2c2c2e;--color-border:#38383a;--color-line:#2c2c2e;
+--color-text:#f5f5f7;--color-muted:#a1a1a6;--color-accent:#f0a454;--color-accent-soft:#2e2116;--color-accent-bd:#5a3c1e;--color-link:#4da3ff;
+--color-good:#4cd964;--color-good-soft:#15291a;--color-warn:#ffb340;--color-warn-soft:#2e2412;--color-bad:#ff6b5e;--color-tag:#2c2c2e;
+--shadow-1:none;--hdr:rgba(28,28,30,.8);--bar-bg:#38383a;--skel:#2c2c2e}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:Inter,system-ui,-apple-system,"Segoe UI","PingFang SC","Noto Sans CJK SC",sans-serif;font-size:14px;line-height:1.5}
+a{color:var(--color-link);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px;border-radius:6px}
+.lu{width:16px;height:16px;flex-shrink:0;vertical-align:-3px}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}.nw{white-space:nowrap}
+.mu{color:var(--color-muted)}
+/* 站点壳 */
+.hdr{position:sticky;top:0;z-index:5;height:52px;background:var(--hdr);backdrop-filter:blur(12px);border-bottom:1px solid var(--color-border);display:flex;align-items:center;gap:20px;padding:0 20px}
+.brand{font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand i{width:18px;height:18px;border-radius:4px;background:var(--color-control);display:inline-block}
+.nav{display:flex;gap:14px;font-size:13px;color:var(--color-muted)}
+.nav b{color:var(--color-text)}
+.hsp{flex:1}
+.dver{font-size:12px;color:var(--color-muted);display:flex;gap:6px;align-items:center;white-space:nowrap}
+.hbtn{min-width:44px;height:36px;border:1px solid var(--color-border);border-radius:10px;background:var(--color-card);display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 10px;color:var(--color-text);font-size:13px;cursor:pointer}
+.kbd{font-size:11px;border:1px solid var(--color-border);border-radius:4px;padding:0 4px;color:var(--color-muted)}
+.main{max-width:1200px;margin:0 auto;padding:24px 32px 40px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.back{min-height:44px;min-width:44px;display:inline-flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--color-border);border-radius:10px;background:var(--color-card);color:var(--color-accent);font-size:13px}
+.crumb{font-size:12px;color:var(--color-muted)}
+.fb{margin-left:auto;font-size:12px}
+h1{font-size:22px;font-weight:700;margin:6px 0 2px;display:flex;align-items:center;gap:8px}
+h1 .lu{width:20px;height:20px;color:var(--color-accent)}
+h1 small{font-size:13px;font-weight:400;color:var(--color-muted)}
+.desc{margin:0 0 14px;color:var(--color-muted);font-size:13px}
+/* 上下文 + 分段 */
+.ctx{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.tag{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0 10px;border-radius:999px;background:var(--color-tag);color:var(--color-text);font-size:12px;white-space:nowrap}
+.tag .lu{width:14px;height:14px;color:var(--color-muted)}
+.tag.fixed::after{content:"固定";font-size:11px;color:var(--color-muted);margin-left:2px}
+.seg-l{font-size:12px;color:var(--color-muted);margin:0 0 6px}
+.seg{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;margin:0 -2px 10px;scrollbar-width:none}
+.chip{min-height:44px;min-width:44px;padding:0 14px;border-radius:22px;border:1px solid var(--color-border);background:var(--color-card);color:var(--color-text);font:500 13px Inter,system-ui,sans-serif;display:inline-flex;align-items:center;white-space:nowrap;cursor:pointer;font-variant-numeric:tabular-nums}
+.chip[aria-checked=true]{background:var(--color-accent-soft);border-color:var(--color-accent);color:var(--color-accent);font-weight:600}
+/* 来源条 */
+.src{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;padding:10px 12px;border:1px solid var(--color-border);border-radius:12px;background:var(--color-surface-2);font-size:12px;color:var(--color-muted);margin-bottom:8px}
+.src b{color:var(--color-text);font-weight:600}
+.src .it{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.src a{display:inline-flex;align-items:center;gap:3px;min-height:28px}
+.src a .lu{width:12px;height:12px}
+.ph{border:1px dashed var(--color-muted);border-radius:4px;padding:0 4px;font-family:ui-monospace,monospace;font-size:11px}
+.warn{display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--color-warn-soft);color:var(--color-text);font-size:12px;margin-bottom:12px}
+.warn .lu{color:var(--color-warn);margin-top:1px}
+/* 布局 */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.card{background:var(--color-card);border:1px solid var(--color-border);border-radius:16px;box-shadow:var(--shadow-1);padding:6px 16px 10px}
+.cap{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:10px 0 6px;font-size:13px;font-weight:600}
+.cap span.mu{font-weight:400;font-size:12px}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;font-weight:500;color:var(--color-muted);text-align:right;padding:0;border-bottom:1px solid var(--color-border)}
+th:first-child{text-align:left}
+th button{all:unset;box-sizing:border-box;min-height:44px;display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:0 4px;white-space:nowrap}
+th button:focus-visible{outline:2px solid var(--color-accent)}
+th[aria-sort=ascending] button,th[aria-sort=descending] button{color:var(--color-accent);font-weight:600}
+th .lu{width:13px;height:13px}
+td{height:48px;padding:0 4px;border-bottom:1px solid var(--color-line);text-align:right;font-size:14px}
+td:first-child{text-align:left}
+tr.open>td{border-bottom-color:transparent;background:var(--color-accent-soft)}
+tr.open>td:first-child{box-shadow:inset 3px 0 0 var(--color-accent)}
+.civ{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--color-text);white-space:nowrap}
+.civ img{width:24px;height:24px;border-radius:50%;background:var(--color-control);object-fit:cover}
+.civ small{color:var(--color-muted);font-size:12px}
+.wr{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
+.bar{width:64px;height:6px;border-radius:3px;background:var(--bar-bg);position:relative}
+.bar::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--color-muted);opacity:.6}
+.bar i{position:absolute;top:0;bottom:0;border-radius:3px;background:var(--color-accent)}
+.low{color:var(--color-muted)}
+.lowtag{font-size:11px;color:var(--color-muted);border:1px solid var(--color-border);border-radius:999px;padding:0 6px;margin-left:4px}
+.bd{display:inline-flex;align-items:center;min-height:24px;padding:0 8px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.bd.t1{background:var(--color-good-soft);color:var(--color-good)}
+.bd.t2{background:var(--color-tag);color:var(--color-text)}
+.bd.t3{background:var(--color-warn-soft);color:var(--color-warn)}
+.bd.t0{background:transparent;border:1px dashed var(--color-border);color:var(--color-muted);font-weight:500}
+.exp{all:unset;box-sizing:border-box;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;color:var(--color-muted);cursor:pointer}
+.exp:hover{background:var(--color-surface-2)}
+tr.det td{height:auto;text-align:left;padding:0 12px 14px 15px;background:var(--color-accent-soft);box-shadow:inset 3px 0 0 var(--color-accent);border-bottom:1px solid var(--color-line)}
+.det p{margin:0 0 8px;font-size:13px}
+.det .mt{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--color-muted);margin-bottom:6px}
+.lk{display:flex;flex-wrap:wrap;gap:6px}
+.lk a{min-height:44px;display:inline-flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--color-border);border-radius:10px;background:var(--color-card);font-size:13px}
+.lk a .lu{width:14px;height:14px}
+.ed{font-size:11px;color:var(--color-muted);margin-top:6px}
+.more{font-size:12px;color:var(--color-muted);padding:10px 0 2px}
+/* 侧栏 */
+.side{position:sticky;top:72px;display:flex;flex-direction:column;gap:12px}
+.panel{background:var(--color-card);border:1px solid var(--color-border);border-radius:16px;padding:14px 16px;font-size:12px;color:var(--color-muted);box-shadow:var(--shadow-1)}
+.panel h2{font-size:13px;color:var(--color-text);margin:0 0 8px;display:flex;align-items:center;gap:6px}
+.panel dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center}
+.panel dd{margin:0}
+.share{min-height:44px;display:inline-flex;align-items:center;gap:6px;padding:0 14px;border:1px solid var(--color-border);border-radius:10px;background:var(--color-card);color:var(--color-accent);font-size:13px;cursor:pointer}
+/* 页内来源脚注 + 站点页脚 */
+.pfoot{margin-top:16px;font-size:12px;color:var(--color-muted);display:flex;gap:8px;align-items:flex-start}
+.sfoot{border-top:1px solid var(--color-border);padding:20px;text-align:center;font-size:12px;color:var(--color-muted)}
+/* 状态 */
+.skel td span{display:inline-block;height:12px;border-radius:6px;background:var(--skel)}
+.state{border:1px dashed var(--color-border);border-radius:16px;padding:28px 20px;text-align:center;color:var(--color-muted);background:var(--color-card)}
+.state .lu{width:24px;height:24px}
+.state h3{color:var(--color-text);font-size:15px;margin:8px 0 4px}
+.state p{margin:0 0 12px;font-size:13px}
+.toast{display:flex;gap:8px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--color-surface-2);font-size:12px;color:var(--color-text);margin-bottom:10px}
+/* 线框说明条（不属于页面） */
+.wbar{background:#1d1d1f;color:#f5f5f7;font-size:12px;padding:8px 16px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.wbar b{color:#ffd29a}
+.wbar a{color:#9cc9ff}
+.wm{font-size:11px;color:var(--color-warn);background:var(--color-warn-soft);border-radius:999px;padding:0 8px;white-space:nowrap}
+.m-only{display:none}
+@media (max-width:959px){
+ .grid{grid-template-columns:1fr}.side{position:static}
+ .nav,.dver,.hbtn .kbd,.hbtn .t{display:none}
+ .main{padding:12px 16px 32px}
+ .hdr{padding:0 12px;gap:8px}
+ .d-only{display:none}.m-only{display:revert}
+ .card{padding:2px 10px 8px;border-radius:14px}
+ .bar{display:none}
+ td{padding:0 2px}
+ th button{padding:0 2px}
+ .civ{gap:6px}
+ .civ small{display:none}
+ h1{font-size:20px}
+ .fb .t{display:none}
+}
+@media (max-width:374px){td{font-size:13px}.civ img{width:22px;height:22px}.bd{padding:0 6px}}
+.xi svg{width:12px!important;height:12px!important;margin:0 0 0 2px!important;vertical-align:-1px}
+</style>
+</head>
+<body>
+<div class="wbar" id="wbar"></div>
+<header class="hdr">
+ <span class="brand"><i aria-hidden="true"></i>帝国时代 II 分析器</span>
+ <nav class="nav" aria-label="主导航"><span>首页</span><span>文明</span><span>单位</span><span>建筑</span><span>科技</span><span>科技树</span><span>工具 ▾</span></nav>
+ <span class="hsp"></span>
+ <span class="dver" data-i="database"> 数据版本：DE 188329（2026-10-28）</span>
+ <button class="hbtn" aria-label="搜索"><span data-i="search"></span><span class="t">搜索</span><span class="kbd">Ctrl K</span></button>
+ <button class="hbtn" aria-label="切换主题" onclick="toggleTheme()"><span data-i="sun" id="thIcon"></span></button>
+ <button class="hbtn m-only" aria-label="菜单"><span data-i="menu"></span></button>
+</header>
+<main class="main" data-testid="ladder-page">
+ <div class="top">
+  <a class="back" href="#/"><span data-i="arrow-left"></span>首页</a>
+  <span class="crumb nw">资料 / 天梯数据</span>
+  <a class="fb hbtn" href="#"><span data-i="message-square-warning"></span><span class="t">报错/反馈</span></a>
+ </div>
+ <h1><span data-i="trophy"></span>天梯数据 <small class="d-only">Ladder Stats</small></h1>
+ <p class="desc">阿拉伯 1v1 随机地图：按天梯分段看各文明胜率、出场率，并附本站编辑的新手友好度。</p>
+ <div class="ctx">
+  <span class="tag fixed" data-testid="ladder-map"><span data-i="map"></span>地图 阿拉伯 Arabia</span>
+  <span class="tag"><span data-i="swords"></span>1v1 随机地图（RM）</span>
+ </div>
+ <p class="seg-l" id="segL">天梯分段（Elo）<span class="d-only"> · 分段与 aoestats 一致，标签随快照字段</span></p>
+ <div class="seg" role="radiogroup" aria-labelledby="segL" id="seg" data-testid="ladder-elo"></div>
+ <div class="src" data-testid="ladder-source" id="src"></div>
+ <div class="warn" id="stale" data-testid="ladder-patch-note"><span data-i="triangle-alert"></span><span>统计补丁 <span class="ph">{patchNote}</span> 与本站数据版本 DE 188329 不同，胜率可能未反映最新平衡改动。</span></div>
+ <div id="toast"></div>
+ <div class="grid">
+  <section id="body" aria-live="polite"></section>
+  <aside class="side d-only" id="side"></aside>
+ </div>
+ <div class="side m-only" id="sideM" style="margin-top:12px"></div>
+ <p class="pfoot" data-testid="ladder-footer"><span data-i="info"></span><span>数据来源：<a href="https://aoestats.io/" target="_blank" rel="noopener">aoestats.io</a>（阿拉伯 · RM 1v1）· 统计更新 <span class="ph">{fetchedAt}</span>。本站保存静态快照，不实时抓取、不自建统计；胜率不是平衡建议。新手友好度为本站编辑口径，不是官方推荐。</span></p>
+</main>
+<footer class="sfoot">v0.7x · 数据版本：DE 188329（2026-10-28）· 构建 <span class="ph">{sha}</span><br>报错/反馈 · 功能建议 · 资料来源与使用声明</footer>
+<script>
+const ICONS={"trophy": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2\" /> <path d=\"M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2\" /> <path d=\"M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3\" /> <path d=\"M4 22h16\" /> <path d=\"M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z\" /> <path d=\"M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3\" /> </svg>", "arrow-left": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"m12 19-7-7 7-7\" /> <path d=\"M19 12H5\" /> </svg>", "map": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z\" /> <path d=\"M15 5.764v15\" /> <path d=\"M9 3.236v15\" /> </svg>", "swords": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"m13 19 6-6\" /> <path d=\"M14.5 17.5 3.586 6.586A2 2 0 013 5.172V3h2.172a2 2 0 011.414.586L17.5 14.5\" /> <path d=\"m14.828 6.172 2.586-2.586A2 2 0 0118.828 3H21v2.172a2 2 0 01-.586 1.414l-2.586 2.586\" /> <path d=\"m16 16 4 4\" /> <path d=\"m19 21 2-2\" /> <path d=\"m5 14 4 4\" /> <path d=\"m5 21-2-2\" /> <path d=\"M7.5 16.5 4 20\" /> </svg>", "database": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <ellipse cx=\"12\" cy=\"5\" rx=\"9\" ry=\"3\" /> <path d=\"M3 5V19A9 3 0 0 0 21 19V5\" /> <path d=\"M3 12A9 3 0 0 0 21 12\" /> </svg>", "external-link": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M15 3h6v6\" /> <path d=\"M10 14 21 3\" /> <path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\" /> </svg>", "chevron-down": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"m6 9 6 6 6-6\" /> </svg>", "chevron-up": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"m18 15-6-6-6 6\" /> </svg>", "arrow-up-down": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"m21 16-4 4-4-4\" /> <path d=\"M17 20V4\" /> <path d=\"m3 8 4-4 4 4\" /> <path d=\"M7 4v16\" /> </svg>", "arrow-down": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M12 5v14\" /> <path d=\"m19 12-7 7-7-7\" /> </svg>", "arrow-up": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"m5 12 7-7 7 7\" /> <path d=\"M12 19V5\" /> </svg>", "info": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <circle cx=\"12\" cy=\"12\" r=\"10\" /> <path d=\"M12 16v-4\" /> <path d=\"M12 8h.01\" /> </svg>", "link": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\" /> <path d=\"M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\" /> </svg>", "circle-alert": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <circle cx=\"12\" cy=\"12\" r=\"10\" /> <line x1=\"12\" x2=\"12\" y1=\"8\" y2=\"12\" /> <line x1=\"12\" x2=\"12.01\" y1=\"16\" y2=\"16\" /> </svg>", "triangle-alert": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\" /> <path d=\"M12 9v4\" /> <path d=\"M12 17h.01\" /> </svg>", "rotate-ccw": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8\" /> <path d=\"M3 3v5h5\" /> </svg>", "search": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"m21 21-4.34-4.34\" /> <circle cx=\"11\" cy=\"11\" r=\"8\" /> </svg>", "sun": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <circle cx=\"12\" cy=\"12\" r=\"4\" /> <path d=\"M12 2v2\" /> <path d=\"M12 20v2\" /> <path d=\"m4.93 4.93 1.41 1.41\" /> <path d=\"m17.66 17.66 1.41 1.41\" /> <path d=\"M2 12h2\" /> <path d=\"M20 12h2\" /> <path d=\"m6.34 17.66-1.41 1.41\" /> <path d=\"m19.07 4.93-1.41 1.41\" /> </svg>", "moon": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\" /> </svg>", "menu": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M4 5h16\" /> <path d=\"M4 12h16\" /> <path d=\"M4 19h16\" /> </svg>", "message-square-warning": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z\" /> <path d=\"M12 15h.01\" /> <path d=\"M12 7v4\" /> </svg>", "scroll": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M19 17V5a2 2 0 0 0-2-2H4\" /> <path d=\"M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3\" /> </svg>", "inbox": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <polyline points=\"22 12 16 12 14 15 10 15 8 12 2 12\" /> <path d=\"M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z\" /> </svg>", "loader": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M12 2v4\" /> <path d=\"m16.2 7.8 2.9-2.9\" /> <path d=\"M18 12h4\" /> <path d=\"m16.2 16.2 2.9 2.9\" /> <path d=\"M12 18v4\" /> <path d=\"m4.9 19.1 2.9-2.9\" /> <path d=\"M2 12h4\" /> <path d=\"m4.9 4.9 2.9 2.9\" /> </svg>", "check": "<svg aria-hidden=\"true\" focusable=\"false\" class=\"lu\"  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M20 6 9 17l-5-5\" /> </svg>"};
+const ICON_PATH='../../../public/img/civs/';
+const BR=[['all','全部'],['lt850','<850'],['850-1000','850–1000'],['1000-1200','1000–1200'],['1200plus','1200+'],['1900plus','1900+']];
+// 新手友好度：本站编辑口径（示意文案，引用的是站内现有加成原文）；t0=待补
+const CIVS=[
+ ['Franks','法兰克',1,'骑兵从封建时代起生命值 +20%，磨坊科技免费——认准骑士一条线就能打，操作负担小。',[[2,'骑兵生命值 +20%'],[1,'磨坊科技免费']]],
+ ['Britons','不列颠',1,'步弓手城堡/帝王时代射程 +1/+2，站在后排就能先手输出；羊倌 +25% 让开局更宽容。',[[2,'步弓手射程 +1/+2'],[0,'羊倌工作速度 +25%']]],
+ ['Teutons','条顿',1,'农田费用 -40%、近战护甲加成，打得慢也不容易崩。',[[0,'农田费用 -40%'],[2,'近战护甲 +1/+2']]],
+ ['Persians','波斯',2,'城镇中心生命值翻倍、工作更快，前期好守；但强势兵种转换要看时机。',[[1,'城镇中心生命值 +100%']]],
+ ['Byzantines','拜占庭',2,'克制兵（骆驼、掷矛手、长矛兵）便宜 25%，强在“看对手出兵再反制”，需要侦察判断。',[[1,'克制兵费用 -25%']]],
+ ['Huns','匈奴',2,'不需要盖房子，省掉一类常见卡人口；但初始木材 -100，开局流程要单独记。',[[0,'不需要房屋，初始木材 -100']]],
+ ['Magyars','马扎尔',2,'村民一击杀狼、斥候便宜，侦察压力小；核心打法偏骑兵机动。',[[1,'斥候骑兵系费用 -15%']]],
+ ['Mayans','玛雅',2,'资源持续时间 +15% 很省心；主力步弓手需要拉扯微操。',[[1,'资源持续时间 +15%']]],
+ ['Mongols','蒙古',3,'猎人 +40%、骑射手攻速 +25%，强点都依赖狩猎时机和骑射手微操。',[[0,'猎人工作速度 +40%'],[1,'骑射手攻击速度 +25%']]],
+ ['Chinese','中国',3,'开局多 3 村民但食物 -200、木材 -50，前几分钟流程和其他文明完全不同。',[[0,'初始村民 +3，食物 -200']]],
+ ['Ethiopians','埃塞俄比亚',0,'',[]],
+];
+const T={1:['易上手','t1'],2:['中等','t2'],3:['进阶','t3'],0:['待补','t0']};
+function h(s){let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))>>>0;return x}
+function stat(en,b){const r=h(en+b);const wr=46+(r%800)/100;const pr=0.8+((r>>>10)%520)/100;let n=(b==='1900plus'?120:b==='all'?9000:1500)+((r>>>4)%(b==='1900plus'?900:b==='all'?30000:9000));return{wr,pr,n}}
+const P=new URLSearchParams(location.search);
+let S={elo:P.get('elo')||'all',sort:P.get('sort')||'wr',dir:P.get('dir')||'desc',open:P.get('open')||'',state:P.get('state')||'ok'};
+if(P.get('theme')==='dark')document.documentElement.dataset.theme='dark';
+let fell=false; if(!BR.some(b=>b[0]===S.elo)){fell=S.elo;S.elo='all'}
+function I(n){return ICONS[n]||''}
+function hydrate(root){root.querySelectorAll('[data-i]').forEach(e=>{if(!e.dataset.done){e.insertAdjacentHTML('afterbegin',I(e.dataset.i));e.dataset.done=1}})}
+function toggleTheme(){const d=document.documentElement;d.dataset.theme=d.dataset.theme==='dark'?'light':'dark';render()}
+function link(){const q=new URLSearchParams();if(S.elo!=='all')q.set('elo',S.elo);if(S.sort!=='wr'||S.dir!=='desc'){q.set('sort',S.sort);q.set('dir',S.dir)}if(S.open)q.set('civ',S.open);const s=q.toString();return '#/ladder'+(s?'?'+s:'')}
+function rows(){const R=CIVS.map(c=>({c,...stat(c[0],S.elo)}));const k={wr:r=>r.wr,pr:r=>r.pr,n:r=>r.n,tier:r=>r.c[2]||9,civ:r=>r.c[1]}[S.sort];R.sort((a,b)=>{const x=k(a),y=k(b);const v=typeof x==='string'?x.localeCompare(y,'zh'):x-y;return S.dir==='asc'?v:-v});return R}
+function th(key,label,cls){const on=S.sort===key;const aria=on?(S.dir==='asc'?'ascending':'descending'):'none';const ic=on?(S.dir==='asc'?'arrow-up':'arrow-down'):'arrow-up-down';return `<th scope="col" class="${cls||''}" aria-sort="${aria}"><button onclick="sortBy('${key}')">${label}${I(ic)}</button></th>`}
+function sortBy(k){if(S.sort===k)S.dir=S.dir==='asc'?'desc':'asc';else{S.sort=k;S.dir=(k==='civ'||k==='tier')?'asc':'desc'}render()}
+function setElo(b){S.elo=b;fell=false;render()}
+function tog(en){S.open=S.open===en?'':en;render()}
+function render(){
+ const dark=document.documentElement.dataset.theme==='dark';
+ document.getElementById('thIcon').innerHTML=I(dark?'moon':'sun');
+ const bl=BR.find(b=>b[0]===S.elo)[1];
+ document.getElementById('seg').innerHTML=BR.map(([k,l])=>`<button class="chip" role="radio" aria-checked="${k===S.elo}" onclick="setElo('${k}')">${l}</button>`).join('');
+ const R=rows();const tot=R.reduce((a,r)=>a+r.n,0);
+ document.getElementById('src').innerHTML=`<span class="it">${I('database')}数据来源 <a href="https://aoestats.io/" target="_blank" rel="noopener"><b>aoestats.io</b>${I('external-link')}<span class="d-only">（外部）</span></a></span><span class="it">统计更新 <span class="ph">{fetchedAt}</span></span><span class="it">补丁 <span class="ph">{patchNote}</span></span>${S.state==='ok'?`<span class="it">本分段样本 <b class="num">${tot.toLocaleString('en-US')}</b> 局 <span class="wm">示意</span></span>`:''}`;
+ document.getElementById('stale').style.display=(S.state==='ok'||S.state==='empty')?'flex':'none';
+ document.getElementById('toast').innerHTML=fell?`<div class="toast" role="status">${I('info')}<span>未识别的分段「${fell.replace(/[<>&]/g,'')}」，已显示「全部」。</span></div>`:'';
+ const B=document.getElementById('body');
+ if(S.state==='loading'){B.innerHTML=`<div class="card" aria-busy="true"><div class="cap">阿拉伯 · 1v1 · ${bl}<span class="mu">读取快照…</span></div><table class="skel"><tbody>${Array.from({length:7},()=>`<tr><td><span style="width:110px"></span></td><td><span style="width:44px"></span></td><td><span style="width:40px"></span></td><td><span style="width:48px"></span></td></tr>`).join('')}</tbody></table></div>`}
+ else if(S.state==='empty'){B.innerHTML=`<div class="state" data-testid="ladder-empty">${I('inbox')}<h3>这个分段暂无数据</h3><p>当前快照里没有「${bl}」分段的阿拉伯 1v1 统计。不推算、不补数。</p><button class="share" onclick="setElo('all')">${I('rotate-ccw')}看「全部」分段</button></div>`}
+ else if(S.state==='error'){B.innerHTML=`<div class="state" data-testid="ladder-error">${I('circle-alert')}<h3>天梯快照没有读到</h3><p>页面不会显示任何胜率或出场率，以免给出不准确的数字。</p><button class="share" onclick="location.reload()">${I('rotate-ccw')}重试</button><p style="margin-top:10px;font-size:12px">也可以直接去 <a href="https://aoestats.io/" target="_blank" rel="noopener">aoestats.io<span class="xi">${I('external-link')}</span></a> 看原始统计。</p></div>`}
+ else{
+  const mob=matchMedia('(max-width:959px)').matches;const cols=mob?5:6;
+  let t=`<div class="card"><div class="cap"><span>阿拉伯 · 1v1 · ${bl}</span><span class="mu nw">${R.length} 个文明<span class="d-only">（线框节选）</span> <span class="wm">示意</span></span></div><table data-testid="ladder-table" aria-label="阿拉伯 1v1 ${bl} 分段文明胜率与出场率"><thead><tr>${th('civ','文明')}${th('wr','胜率')}${th('pr','出场率')}${mob?'':th('n','样本局数')}${th('tier',mob?'友好度':'新手友好度')}<th scope="col" style="width:44px"><span class="d-only" style="position:absolute;left:-9999px">展开</span></th></tr></thead><tbody>`;
+  for(const r of R){const [en,zh,tier,why,bon]=r.c;const open=S.open===en;const low=r.n<500;const w=Math.max(-50,Math.min(50,(r.wr-50)*8));
+   t+=`<tr class="${open?'open':''}" data-civ="${en}"><td><a class="civ" href="#/civ/${en}"><img src="${ICON_PATH}${en.toLowerCase()}.webp" alt="" width="24" height="24"><span>${zh}</span><small>${en}</small></a></td>
+   <td class="num ${low?'low':''}"><span class="wr">${mob?'':`<span class="bar" aria-hidden="true"><i style="${w>=0?`left:50%;width:${w}%`:`right:50%;width:${-w}%`}"></i></span>`}${r.wr.toFixed(1)}%</span></td>
+   <td class="num ${low?'low':''}">${r.pr.toFixed(1)}%</td>${mob?'':`<td class="num ${low?'low':''}">${r.n.toLocaleString('en-US')}${low?'<span class="lowtag">样本少</span>':''}</td>`}
+   <td><span class="bd ${T[tier][1]}">${T[tier][0]}</span></td>
+   <td><button class="exp" aria-expanded="${open}" aria-controls="d-${en}" aria-label="${open?'收起':'展开'}${zh}的新手友好度理由" onclick="tog('${en}')">${I(open?'chevron-up':'chevron-down')}</button></td></tr>`;
+   if(open){t+=`<tr class="det" id="d-${en}"><td colspan="${cols}"><div class="det">${mob?`<div class="mt"><span>样本 <b class="num">${r.n.toLocaleString('en-US')}</b> 局${low?'（样本少）':''}</span><span>分段 ${bl}</span></div>`:''}
+    ${tier?`<p><b>${T[tier][0]}</b>：${why}</p><div class="lk">${bon.map(([i,l])=>`<a href="#/civ/${en}/bonus/${i}">${I('scroll')}${l}</a>`).join('')}<a href="#/bonuses">${I('scroll')}全部文明加成</a><a href="#/civ/${en}">${zh}文明详情${I('chevron-right')}</a></div><p class="ed">编辑口径：理由只引用站内加成原文，不由胜率推导。</p>`
+    :`<p><b>待补</b>：这个文明的新手友好度理由还没有编写，胜率与出场率照常显示。</p><div class="lk"><a href="#/bonuses">${I('scroll')}全部文明加成</a><a href="#/civ/${en}">${zh}文明详情${I('chevron-right')}</a></div>`}</div></td></tr>`}
+  }
+  t+=`</tbody></table><p class="more">点文明名进文明详情；点右侧箭头看新手友好度理由。表头可排序。</p></div>`;B.innerHTML=t}
+ const side=`<div class="panel"><h2>${I('info')}怎么读这张表</h2><dl><dt><b class="mu">胜率</b></dt><dd>该分段该文明对局的胜场占比（来源原值）</dd><dt><b class="mu">出场率</b></dt><dd>该分段对局中选用该文明的占比</dd><dt><b class="mu">样本</b></dt><dd>样本少于阈值时数字变灰并标「样本少」</dd></dl></div>
+ <div class="panel"><h2>${I('scroll')}新手友好度</h2><dl><dt><span class="bd t1">易上手</span></dt><dd>核心打法单一、加成直接</dd><dt><span class="bd t2">中等</span></dt><dd>需要一项额外判断或操作</dd><dt><span class="bd t3">进阶</span></dt><dd>开局或主力依赖特殊流程/微操</dd><dt><span class="bd t0">待补</span></dt><dd>理由未编写，不挡胜率</dd></dl><p style="margin:8px 0 0">本站编辑口径，非官方推荐，也不由胜率推导。</p></div>
+ <div class="panel"><button class="share" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.origin+'/'+link())">${I('link')}复制分享链接</button><p style="margin:8px 0 0" class="num">${link()}</p></div>`;
+ document.getElementById('side').innerHTML=side;
+ document.getElementById('sideM').innerHTML=`<div class="panel"><button class="share">${I('link')}复制分享链接</button><p style="margin:8px 0 0" class="num">${link()}</p></div>`;
+ document.getElementById('wbar').innerHTML=`<b>线框 · #33 #/ladder</b><span>页面深链：<code>${link()}</code></span><span>状态：${['ok','loading','empty','error'].map(s=>`<a href="?state=${s}&elo=${S.elo}">${s}</a>`).join(' · ')} · <a href="?elo=bogus">非法 elo</a> · <a href="?elo=1000-1200&open=Franks">展开示例</a></span><span>所有胜率/出场率/样本为<b>示意值</b>，非 aoestats 数据</span>`;
+ hydrate(document.body);
+}
+render();addEventListener('resize',render);
+</script>
+</body>
+</html>
