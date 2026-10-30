@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { buildOrders } from '../../../data/buildOrders';
 import { useCore } from '../../../data/hooks';
 import type { Civ } from '../../../domain/types';
+import { contextPath, type EntityContext } from '../../../shared/nav/context';
 import { Linked } from '../../../shared/ui/widgets';
 import { civOpeningDisplayText } from '../displayNames';
 import { selectOpeningBuilds } from '../openingBuildChoices';
@@ -19,9 +20,13 @@ function BuildName({ text }: { text: string }) {
   );
 }
 
-export function CivOpening({ c }: { c: Civ }) {
+export function CivOpening({ c, context }: { c: Civ; context?: EntityContext }) {
   const core = useCore();
   const { kind, builds } = selectOpeningBuilds(c, buildOrders);
+  const buildPath = (id?: string) => {
+    const params = new URLSearchParams(id ? { bo: id, civ: c.en } : { civ: c.en });
+    return contextPath(`/builds?${params}`, context?.search ?? '', context?.source);
+  };
   return (
     <section className="civ-opening" aria-label="推荐开局">
       <p>
@@ -45,13 +50,13 @@ export function CivOpening({ c }: { c: Civ }) {
       <div className="civ-opening-links">
         {builds.map((b) => (
           <div className="civ-opening-choice" key={b.id}>
-            <Link className="ulink" to={`/builds?bo=${b.id}&civ=${encodeURIComponent(c.en)}`} aria-label={b.name.zh}>
+            <Link className="ulink" to={buildPath(b.id)} aria-label={b.name.zh}>
               <BuildName text={b.name.zh} />
             </Link>
             {kind === 'generic' && <span className="note civ-opening-generic">通用示意</span>}
           </div>
         ))}
-        <Link className="ulink" to="/builds">
+        <Link className="ulink" to={buildPath()}>
           查看全部开局
         </Link>
       </div>

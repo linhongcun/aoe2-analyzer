@@ -2,7 +2,7 @@ import { buildListPath, buildOrderPath } from '../../domain/buildNavigation531';
 import { contextPath } from '../../shared/nav/context';
 import { sharePageUrl } from '../../domain/sharePage';
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Check, Download, TriangleAlert as Warn, Link2, Settings2, Share2, X } from 'lucide-react';
 import eco from '../../data/raw/eco';
 import units from '../../data/raw/units';
@@ -36,6 +36,7 @@ const UNIT_ZH = Object.fromEntries((units as { id: number; zh: string }[]).map((
 const AGE_ZH = ['', '黑暗', '封建', '城堡', '帝王'];
 /** #/builds?bo=…：开局时间线；布局与控件保留原状态和DOM。 */
 export default function BuildTimelineView({ orders = buildOrders }: { orders?: BuildOrder[] }) {
+  const routerLocation = useLocation();
   const { sp, q, bo, patch, set, warnOff, hideWarning, hintOff, hideHint, showAssume, setShowAssume, drawer, setDrawer, setBtn, sheet, close } =
     useTimelineSettings(orders);
 
@@ -534,7 +535,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   return (
     <>
       <section className="pane build-applicability-panel" aria-label="开局适用文明">
-        <BuildApplicability order={bo} requestedCiv={q.civ} heading />
+        <BuildApplicability order={bo} requestedCiv={q.civ} heading context={{ search: sp, source: routerLocation.pathname + routerLocation.search }} />
       </section>
       {timeline}
     </>

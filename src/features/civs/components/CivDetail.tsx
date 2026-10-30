@@ -162,7 +162,7 @@ export default function CivDetail() {
             <>
               {c.op.trim() && (
                 <DetailSection title="开局建议">
-                  <CivOpening c={c} />
+                  <CivOpening c={c} context={context} />
                 </DetailSection>
               )}
               <section className="detail-ratings-heading">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../data';
 import type { ListMeta } from './listMeta';
 import { visibleSources } from './sources';
@@ -43,6 +43,7 @@ function useListMeta(): Record<string, ListMeta> | null {
 }
 
 export default function BuildOrderList() {
+  const routerLocation = useLocation();
   const [rawParams] = useSearchParams();
   const sp = buildNavigationParams(rawParams);
   const meta = useListMeta();
@@ -139,7 +140,7 @@ export default function BuildOrderList() {
               </small>
             )}
           </summary>
-          <BuildApplicability order={b} />
+          <BuildApplicability order={b} context={{ search: sp, source: routerLocation.pathname + routerLocation.search }} />
           <p>{b.summary}</p>
           <p>
             <Link to={orderPath(b.id)} className="tl-open">

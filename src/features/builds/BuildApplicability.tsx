@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
 import type { BuildOrder } from '../../domain/buildOrder';
+import { contextPath, type EntityContext } from '../../shared/nav/context';
 import './buildApplicability.css';
 
 export function BuildApplicability({
   order,
   requestedCiv = '',
   heading = false,
+  context,
 }: {
   order: Pick<BuildOrder, 'civs'>;
   requestedCiv?: string;
   heading?: boolean;
+  context?: EntityContext;
 }) {
   const civs = [...new Set(order.civs)];
   const outsideList = requestedCiv && civs.length > 0 && !civs.includes(requestedCiv);
@@ -21,7 +24,7 @@ export function BuildApplicability({
       {civs.length ? (
         <div className="build-applicability-links">
           {civs.map((civ) => (
-            <Link key={civ} to={`/civ/${encodeURIComponent(civ)}`}>
+            <Link key={civ} to={contextPath(`/civ/${encodeURIComponent(civ)}`, context?.search ?? '', context?.source)}>
               {civByEn(civ)?.zh ?? civ}
             </Link>
           ))}
