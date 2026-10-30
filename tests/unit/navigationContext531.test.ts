@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { contextPath, entityPath, mergeNavigationSearch, readNavigation, returnSnapshot, stripNavigation } from '../../src/shared/nav/context';
-import { decodeTrainCompare } from '../../src/features/production/trainCompareCodec';
+import { decodeTrainCompare, TRAIN_COMPARE_ENTRY } from '../../src/features/production/trainCompareCodec';
 import { decodeTradeIncome, tradeIncomeProductionHref } from '../../src/domain/tradeIncome';
 import { DEFAULT_PRODUCTION, encodeProduction } from '../../src/domain/production';
 
@@ -64,7 +64,10 @@ describe('#531 navigation context', () => {
     const nav = contextPath('/trade-income?' + trade, '?me=Franks&opp=Britons', '/production?' + encodeProduction(DEFAULT_PRODUCTION));
     expect(decodeTradeIncome(stripNavigation(nav.split('?')[1]!)).errors).toEqual([]);
     expect(decodeTradeIncome(stripNavigation(nav.split('?')[1]! + '&untrusted=1')).errors.length).toBeGreaterThan(0);
-    expect(decodeTrainCompare(stripNavigation('?mode=compare&ctxReturn=%2Fproduction&unknown=1')).errors.length).toBeGreaterThan(0);
+    const training = contextPath(TRAIN_COMPARE_ENTRY, '?me=Franks&opp=Britons', '/production');
+    const separated = stripNavigation(training.split('?')[1]!);
+    expect(decodeTrainCompare(separated).errors).toEqual([]);
+    expect(decodeTrainCompare(separated + '&unknown=1').errors.length).toBeGreaterThan(0);
   });
 
   it('does not invent a current civilization for entity links', () => {

@@ -26,18 +26,25 @@ export function NavigationContext({
   const me = civByEn(context.me ?? ''),
     opp = civByEn(context.opp ?? '');
   const hasMatchup = showMatchup && me && opp;
-  const backIsMatchup = !!hasMatchup && context.back?.split('?')[0] === '/matchup';
+  const backIsMatchup = context.back?.split('?')[0] === '/matchup';
+  const backPair = readNavigation(context.back?.split('?')[1] ?? '');
+  const sameMatchup = !!hasMatchup && backIsMatchup && backPair.me === me.en && backPair.opp === opp.en;
   if (!context.back && !context.invalid && !civ && !hasMatchup && !children) return null;
   return (
     <>
       <nav className="ctx-bar integration-context" aria-label={label}>
-        {context.back && !backIsMatchup && (
+        {context.back && !sameMatchup && (
           <Link className="community-tool-entry" to={context.back}>
-            <Icon name="arrow-left" />回{navigationLabel(context.back)}
+            <Icon name="arrow-left" />
+            {backIsMatchup && hasMatchup ? '回上一对局配置' : `回${navigationLabel(context.back)}`}
           </Link>
         )}
         {civ && (
-          <Link className="ctx-civ-link ulink" aria-label={civ.zh} to={contextPath(`/civ/${civ.en}`, input, location.pathname + location.search)}>
+          <Link
+            className="ctx-civ-link ulink"
+            aria-label={civ.zh}
+            to={context.back ? contextPath(`/civ/${civ.en}`, input, location.pathname + location.search) : `/civ/${civ.en}`}
+          >
             <CivIcon c={civ} />
             当前文明：{civ.zh}
           </Link>
@@ -46,7 +53,7 @@ export function NavigationContext({
           <Link
             className="community-tool-entry"
             aria-label="回对局助手"
-            to={backIsMatchup ? context.back! : `/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}
+            to={sameMatchup ? context.back! : `/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}
           >
             <Icon name="swords" />
             <span>
