@@ -4,7 +4,6 @@ import { civs } from '../../data';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { CostView } from '../../shared/ui/art';
-import { tradeIncomeProductionHref } from '../../domain/tradeIncome';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import {
   BUILDING_LIMIT,
@@ -24,6 +23,9 @@ import {
   type ProductionRow,
 } from '../../domain/production';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { contextPath, mergeNavigationSearch, stripNavigation } from '../../shared/nav/context';
+import { NavigationContext } from '../../shared/ui/NavigationContext';
+import { ProductionComparison, ProductionNextSteps } from './ProductionNextSteps';
 import { productionMode } from './productionMode';
 import { decodeTrainCompare, TRAIN_COMPARE_ENTRY } from './trainCompareCodec';
 import { ProductionCompareError } from './ProductionCompareError';
@@ -35,17 +37,17 @@ import './trainCompare.css';
 const num = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 2, minimumFractionDigits: 0 });
 export default function Production() {
   const location = useLocation();
-  const mode = useMemo(() => productionMode(location.search), [location.search]);
-  const decoded = useMemo(() => (mode.kind === 'compare' ? decodeTrainCompare(location.search) : null), [mode, location.search]);
+  const mode = useMemo(() => productionMode(stripNavigation(location.search)), [location.search]);
+  const decoded = useMemo(() => (mode.kind === 'compare' ? decodeTrainCompare(stripNavigation(location.search)) : null), [mode, location.search]);
   const { context, error } = useProductionContext();
   const errors = mode.kind === 'error' ? mode.errors : (decoded?.errors ?? []);
   return (
     <>
       <nav className="production-mode-nav" aria-label="生产模式">
-        <Link className="btn" to="/production" aria-current={mode.kind === 'legacy' ? 'page' : undefined}>
+        <Link className="btn" to={contextPath('/production', location.search)} aria-current={mode.kind === 'legacy' ? 'page' : undefined}>
           持续生产
         </Link>
-        <Link className="btn" to={TRAIN_COMPARE_ENTRY} aria-current={mode.kind !== 'legacy' ? 'page' : undefined}>
+        <Link className="btn" to={contextPath(TRAIN_COMPARE_ENTRY, location.search)} aria-current={mode.kind !== 'legacy' ? 'page' : undefined}>
           跨文明训练对照
         </Link>
       </nav>
@@ -79,7 +81,7 @@ export default function Production() {
 function LegacyProduction({ context }: { context: ProductionContext }) {
   const location = useLocation(),
     navigate = useNavigate();
-  const decoded = useMemo(() => decodeProduction(location.search), [location.search]);
+  const decoded = useMemo(() => decodeProduction(stripNavigation(location.search)), [location.search]);
   const config = decoded.config;
   const {
     copy,
@@ -93,7 +95,7 @@ function LegacyProduction({ context }: { context: ProductionContext }) {
     failureMessage: '自动复制失败，请手动复制下方链接。',
   });
   const update = (next: ProductionConfig) => {
-    navigate({ pathname: '/production', search: '?' + encodeProduction(next) }, { replace: true });
+    navigate({ pathname: '/production', search: mergeNavigationSearch(encodeProduction(next), location.search) }, { replace: true });
     resetShare();
   };
   return (
@@ -108,7 +110,7 @@ function LegacyProduction({ context }: { context: ProductionContext }) {
       share={async () => {
         await copy(() => {
           const url = new URL(window.location.href);
-          url.hash = '/production?' + encodeProduction(config);
+          url.hash = contextPath('/production?' + encodeProduction(config), location.search);
           return url.href;
         });
       }}
@@ -154,36 +156,12 @@ function ProductionBody({
         <Link className="btn" to="/market">
           市场买卖预算
         </Link>
-        <button type="button" className="btn" disabled={linkErrors.length > 0} onClick={() => void share()}>
+        <button type="button" className="btn" disabled={errors.length > 0} onClick={() => void share()}>
           <Icon name="copy" />
           复制方案链接
         </button>
       </header>
-      <p>
-        <Link className="ulink production-payoff-entry" to="/eco-payoff">
-          经济科技收益：固定村民对比研究投入与增量
-        </Link>
-      </p>
-      <p>
-        {!errors.length ? (
-          <Link className="btn community-tool-entry" to={tradeIncomeProductionHref(config)}>
-            按当前生产金耗规划商路供给
-          </Link>
-        ) : (
-          <span className="note">修正当前生产配置后可带入商路供给。</span>
-        )}
-      </p>
-      <nav className="bar" aria-label="生产与战术规划">
-        <Link className="community-tool-entry" to="/mixed-army">
-          结合当前局面查看混兵条件
-        </Link>
-        <Link className="community-tool-entry" to="/team-plan">
-          在团战计划中约定主副兵种
-        </Link>
-        <Link className="community-tool-entry" to="/relic-income">
-          另查固定圣物收益
-        </Link>
-      </nav>
+      <NavigationContext currentCiv={config.civ} />
       {linkErrors.length > 0 && <p className="note">请先修正链接错误，再复制方案。</p>}
       {shareStatus && (
         <p className="note" {...statusProps}>
@@ -239,6 +217,11 @@ function ProductionBody({
         </label>
       </div>
 
+      {config.rows.some((row) => row.count === '') && (
+        <p className="production-boundary" role="status">
+          请确认生产建筑与数量；兵种已带入，军队数量不会作为建筑数量。
+        </p>
+      )}
       <section className="production-summary" aria-labelledby="production-summary-title">
         <div className="production-section-title">
           <h2 id="production-summary-title">村民配置摘要</h2>
@@ -292,6 +275,7 @@ function ProductionBody({
             ))}
           </div>
         )}
+        {!errors.length && <ProductionComparison ctx={ctx} config={config} result={result} />}
         <p className="note">先合计每种资源的开销，再分别向上取整。每行建筑专用于该单位，不模拟同一建筑混排。</p>
         <p className="production-boundary">
           仅估算持续训练：不含农田补种、住房扩建、建筑建设和研究投入；不计资源耗尽、自动赠送单位及额外资源产出。按所选单位形态已解锁计算。数据：DE Update
@@ -299,6 +283,7 @@ function ProductionBody({
         </p>
       </section>
 
+      <ProductionNextSteps ctx={ctx} config={config} valid={!errors.length} />
       <div className="production-columns">
         <section className="production-demands" aria-labelledby="production-demands-title">
           <div className="production-section-title">

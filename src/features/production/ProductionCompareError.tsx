@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { contextPath } from '../../shared/nav/context';
+import { NavigationContext } from '../../shared/ui/NavigationContext';
 import { TRAIN_COMPARE_ENTRY } from './trainCompareCodec';
 import { CompareNumberText } from './CompareNumberText';
 
@@ -10,6 +12,7 @@ export function ProductionCompareError({ errors }: { errors: string[] }) {
   return (
     <section className="pane train-compare-page">
       <h1>跨文明训练对照</h1>
+      <NavigationContext />
       <div role="alert">
         <p>对照链接无法完整恢复，未生成结果。</p>
         <ul>
@@ -35,7 +38,7 @@ export function ProductionCompareError({ errors }: { errors: string[] }) {
           <button className="btn" type="submit">
             应用参数
           </button>
-          <button className="btn" type="button" onClick={() => navigate(TRAIN_COMPARE_ENTRY)}>
+          <button className="btn" type="button" onClick={() => navigate(contextPath(TRAIN_COMPARE_ENTRY, location.search))}>
             重置对照
           </button>
           <button className="btn" type="button" disabled>

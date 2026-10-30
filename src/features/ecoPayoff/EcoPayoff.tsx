@@ -9,16 +9,19 @@ import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import { fmtClock } from '../../domain/realCost';
 import {
   calculateEcoPayoff,
-  decodeEcoPayoff,
   DEFAULT_PAYOFF,
-  encodeEcoPayoff,
   payoffAvailable,
   PAYOFF_RESOURCES,
   PAYOFF_TARGETS,
   type EcoPayoffConfig,
   type EcoPayoffResult,
 } from '../../domain/ecoPayoff';
-import type { ProductionContext } from '../../domain/production';
+import { encodeProduction, type ProductionContext } from '../../domain/production';
+import { productionSource, productionAssumption } from '../../domain/productionIntegration';
+import { contextPath, readNavigation } from '../../shared/nav/context';
+import { NavigationContext } from '../../shared/ui/NavigationContext';
+import { EcoProductionBridge } from './EcoProductionBridge';
+import { readPayoffBridge, writePayoffBridge, type PayoffPeople } from './productionBridge';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './eco-payoff.css';
 
@@ -36,7 +39,7 @@ export default function EcoPayoff() {
     trees = useTrees(),
     location = useLocation(),
     navigate = useNavigate();
-  const decoded = useMemo(() => decodeEcoPayoff(location.search), [location.search]);
+  const decoded = useMemo(() => readPayoffBridge(location.search), [location.search]);
   const {
     copy: copyLink,
     status,
@@ -53,19 +56,21 @@ export default function EcoPayoff() {
         <Loading />
       </section>
     );
-  const write = (config: EcoPayoffConfig) => {
+  const write = (config: EcoPayoffConfig, people = decoded.people) => {
     resetShare();
-    navigate({ pathname: '/eco-payoff', search: '?' + encodeEcoPayoff(config) }, { replace: true });
+    navigate({ pathname: '/eco-payoff', search: writePayoffBridge(config, location.search, people) }, { replace: true });
   };
   const update = (config: EcoPayoffConfig) => {
     if (decoded.errors.length) return;
-    write(config);
+    const changedWorkers = JSON.stringify(config.workers) !== JSON.stringify(decoded.config.workers);
+    const people = changedWorkers && (decoded.people === 'theory' || decoded.people === 'adjusted') ? 'adjusted' : decoded.people;
+    write(config, people);
   };
   const reset = () => write({ ...DEFAULT_PAYOFF, workers: { ...DEFAULT_PAYOFF.workers } });
   const copy = async () => {
     await copyLink(() => {
       const url = new URL(window.location.href);
-      url.hash = '/eco-payoff?' + encodeEcoPayoff(decoded.config);
+      url.hash = '/eco-payoff' + writePayoffBridge(decoded.config, location.search, decoded.people);
       return url.href;
     });
   };
@@ -75,6 +80,8 @@ export default function EcoPayoff() {
       config={decoded.config}
       parseErrors={decoded.errors}
       update={update}
+      choosePeople={write}
+      people={decoded.people}
       reset={reset}
       copy={copy}
       shared={status ? { text: status, link: manualLink } : null}
@@ -87,6 +94,8 @@ function EcoPayoffBody({
   config,
   parseErrors,
   update,
+  choosePeople,
+  people,
   reset,
   copy,
   shared,
@@ -95,10 +104,17 @@ function EcoPayoffBody({
   config: EcoPayoffConfig;
   parseErrors: string[];
   update: (c: EcoPayoffConfig) => void;
+  choosePeople: (c: EcoPayoffConfig, people: PayoffPeople) => void;
+  people: PayoffPeople | null;
   reset: () => void;
   copy: () => Promise<void>;
   shared: { text: string; link: string } | null;
 }) {
+  const location = useLocation();
+  const navigation = readNavigation(location.search);
+  const source = productionSource(navigation.back);
+  const confirmed = people !== 'none';
+  const assumption = source.config ? productionAssumption(ctx, source.config, config) : null;
   const result = calculateEcoPayoff(ctx, config),
     available = payoffAvailable(ctx, config);
   const errors = [...parseErrors, ...result.errors];
@@ -111,20 +127,36 @@ function EcoPayoffBody({
           <h1>经济科技收益</h1>
           <p className="note">固定人数与采集条件，对比现在研究一项科技带来的投入和增量。</p>
         </div>
-        <Link className="ulink" to="/production">
+        <Link
+          className="ulink"
+          to={source.config && navigation.back ? navigation.back : contextPath('/production?civ=' + encodeURIComponent(config.civ), location.search)}
+        >
           持续生产工具
         </Link>
       </header>
+      <NavigationContext currentCiv={config.civ} />
+      <EcoProductionBridge
+        ctx={ctx}
+        source={source.config}
+        back={navigation.back}
+        sourceErrors={source.errors}
+        people={people}
+        config={config}
+        locked={!!parseErrors.length}
+        choose={choosePeople}
+      />
       <CalcDock
         note={shared?.text}
         resultId="eco-result"
         actions={[
-          { label: '复制方案链接', icon: 'copy', disabled: parseErrors.length > 0, onClick: () => void copy() },
+          { label: '复制方案链接', icon: 'copy', disabled: !confirmed || errors.length > 0, onClick: () => void copy() },
           { label: '重置方案', onClick: reset },
         ]}
       />
       <p className="eco-lead" data-testid="eco-lead">
-        {errors.length ? (
+        {!confirmed ? (
+          '先确认用于估算的村民人数。'
+        ) : errors.length ? (
           '当前方案无法计算，请先修正或重置。'
         ) : result.balance !== null && result.state === 'ready' && result.complete ? (
           <>
@@ -205,6 +237,7 @@ function EcoPayoffBody({
                   {RES_ZH[r]}
                   <input
                     aria-label={`${RES_ZH[r]}村民数`}
+                    disabled={!confirmed}
                     inputMode="numeric"
                     value={config.workers[r]}
                     onChange={(e) => update({ ...config, workers: { ...config.workers, [r]: e.target.value } })}
@@ -256,7 +289,12 @@ function EcoPayoffBody({
           </section>
         </fieldset>
         <div className="eco-results calc-dock-target" id="eco-result" tabIndex={-1} aria-live="polite">
-          {errors.length ? (
+          {!confirmed ? (
+            <section className="eco-card eco-waiting" role="status">
+              <h2>先确认用于估算的村民人数</h2>
+              <p className="note">选择原方案的理论供给人数，或主动填写实际人数后，再查看研究投入与增量。</p>
+            </section>
+          ) : errors.length ? (
             <section className="eco-card eco-errors" role="alert">
               <h2>当前方案无法计算</h2>
               <ul>
@@ -377,6 +415,22 @@ function EcoPayoffBody({
                 </section>
               )}
             </>
+          )}
+          {source.config && confirmed && !errors.length && result.state === 'ready' && (
+            <section className="eco-card eco-assumption">
+              <h2>回到生产，验证这项科技假设</h2>
+              <p className="note">主动打开一份新增科技的配置；原生产方案和游戏内状态都不会自动改变。</p>
+              {assumption?.config ? (
+                <Link
+                  className="btn"
+                  to={contextPath('/production?' + encodeProduction(assumption.config), location.search, location.pathname + location.search)}
+                >
+                  用这项科技作生产假设
+                </Link>
+              ) : (
+                <p className="note">{assumption?.errors.join(' ')}</p>
+              )}
+            </section>
           )}
           <p className="note eco-source">
             数据：DE Update {__DATA_SOURCES__.patch.build}，固定游戏 .dat 导出。<Link to="/about-data">查看数据来源</Link>

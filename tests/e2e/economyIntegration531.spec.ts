@@ -1,0 +1,100 @@
+import { expect, test } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+const production = 'civ=Franks&age=3&walk=4&farm=2&techs=202&rows=38%3A101%3A2%2C83%3A109%3A1';
+const meOpp = '&me=Franks&opp=Britons';
+test('生产与收益带入、人数假设及原多行方案能往返 #531', async ({ page, context }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('./#/production?' + production + meOpp);
+  await expect(page.getByTestId('production-page')).toBeVisible();
+  const entry = page.getByRole('link', { name: '带着方案核对收益' });
+  await expect(entry).toHaveAttribute('href', /ctxReturn=/);
+  await entry.click();
+  await expect(page.getByRole('heading', { name: '先确认用于估算的村民人数', exact: true })).toBeVisible();
+  await expect(page.getByTestId('eco-balance')).toHaveCount(0);
+  await page.getByRole('button', { name: '使用原方案的理论供给人数' }).click();
+  await expect(page.getByText('正在使用理论供给人数作为假设')).toBeVisible();
+  await page.getByLabel('黄金村民数').fill('20');
+  await expect(page.getByText('正在使用手动调整的供给假设')).toBeVisible();
+  await page.reload();
+  await expect(page.getByLabel('黄金村民数')).toHaveValue('20');
+  const back = page.getByRole('link', { name: '返回原生产方案', exact: true });
+  const href = await back.getAttribute('href');
+  const fresh = await context.newPage();
+  await fresh.goto(new URL(href!, page.url()).href);
+  await expect(fresh.getByTestId('production-row')).toHaveCount(2);
+  await expect(fresh.getByLabel('需求 1 建筑数量')).toHaveValue('2');
+  await expect(fresh.getByLabel('需求 2 建筑数量')).toHaveValue('1');
+  await expect(fresh.getByLabel('木金石单程距离', { exact: true })).toHaveValue('4');
+  await expect(fresh.getByLabel('农田单程距离', { exact: true })).toHaveValue('2');
+  await expect(fresh.getByRole('link', { name: '回对局助手', exact: true })).toHaveAttribute('href', /me=Franks&opp=Britons/);
+  await fresh.getByLabel('生产文明', { exact: true }).selectOption('Mongols');
+  await expect(fresh.getByRole('link', { name: '回对局助手', exact: true })).toHaveAttribute('href', /me=Franks&opp=Britons/);
+  expect(errors).toEqual([]);
+});
+
+for (const width of [360, 375, 390, 1280])
+  for (const theme of ['light', 'dark'])
+    test(`#531 生产收益情境 ${theme} @${width}`, async ({ page }, info) => {
+      const errors: string[] = [];
+      page.on('pageerror', (error) => errors.push(error.message));
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
+      await page.goto('./#/production?' + production + meOpp);
+      await expect(page.getByTestId('production-total')).toBeVisible();
+      await page.getByRole('button', { name: '对比少一座生产建筑的需求', exact: true }).click();
+      await expect(page.locator('.production-comparison-body')).toContainText('总供给人数差');
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      const productionViolations = (await new AxeBuilder({ page }).include('.production-next').withTags(['wcag2a', 'wcag2aa']).analyze()).violations;
+      expect(productionViolations).toEqual([]);
+      await page.getByRole('link', { name: /带着方案核对收益/ }).click();
+      await expect(page.getByRole('heading', { name: '先确认用于估算的村民人数', exact: true })).toBeVisible();
+      await page.getByRole('button', { name: '使用原方案的理论供给人数', exact: true }).click();
+      await expect(page.getByTestId('eco-balance')).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      const bridgeViolations = (await new AxeBuilder({ page }).include('.eco-production-bridge').withTags(['wcag2a', 'wcag2aa']).analyze()).violations;
+      expect(bridgeViolations).toEqual([]);
+      await page.screenshot({ path: info.outputPath(`economy531-${theme}-${width}.png`), fullPage: true });
+      expect(errors).toEqual([]);
+    });
+
+test('带导航的训练对照仍拒绝其他未知参数 #531', async ({ page }) => {
+  await page.goto('./#/production?mode=train-compare&v=1&unit=38&age=3&n=10&civs=Franks,Britons&ctxReturn=%2Funit%2F38%3Fciv%3DFranks');
+  await expect(page.getByTestId('train-compare-page')).toBeVisible();
+  await page.goto('./#/production?mode=train-compare&v=1&unit=38&age=3&n=10&extra=unknown&ctxReturn=%2Funit%2F38%3Fciv%3DFranks');
+  await expect(page.getByRole('alert')).toContainText('未知参数');
+});
+
+test('主动打开科技假设才改变生产科技，原方案回链仍保持 #531', async ({ page }) => {
+  await page.goto('./#/production?' + production + meOpp);
+  await page.getByRole('link', { name: /带着方案核对收益/ }).click();
+  await page.getByRole('button', { name: '使用原方案的理论供给人数', exact: true }).click();
+  await page.getByRole('combobox', { name: '待研究科技', exact: true }).selectOption('55');
+  const original = await page.getByRole('link', { name: '返回原生产方案', exact: true }).getAttribute('href');
+  await page.getByRole('link', { name: '用这项科技作生产假设', exact: true }).click();
+  await expect(page.getByRole('checkbox', { name: '金矿开采', exact: true })).toBeChecked();
+  await expect(page.getByTestId('production-row')).toHaveCount(2);
+  expect(original).toContain('techs=202');
+  expect(original).not.toContain('techs=202%2C55');
+  const back = page.getByRole('link', { name: '回经济科技收益', exact: true });
+  await back.click();
+  await expect(page.getByRole('combobox', { name: '待研究科技', exact: true })).toHaveValue('55');
+});
+
+test('训练对照修改和复制保留受控导航 #531', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('./#/production?mode=train-compare&v=1&unit=38&age=3&n=10&civs=Franks&ctxReturn=%2Funit%2F38%3Fciv%3DFranks&me=Franks&opp=Britons');
+  await expect(page.getByTestId('train-compare-page')).toBeVisible();
+  await page.getByRole('combobox', { name: '对照单位', exact: true }).selectOption('283');
+  await expect(page).toHaveURL(/ctxReturn=/);
+  await page.getByRole('button', { name: '复制对照链接', exact: true }).click();
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  expect(copied).toContain('ctxReturn=');
+  expect(copied).toContain('me=Franks&opp=Britons');
+  await page.goto(copied);
+  await expect(page.getByRole('link', { name: '回单位', exact: true })).toHaveAttribute('href', '#/unit/38?civ=Franks');
+});

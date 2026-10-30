@@ -5,6 +5,8 @@ import type { ProductionContext } from '../../domain/production';
 import { CostView } from '../../shared/ui/art';
 import { Icon } from '../../shared/ui/Icon';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { contextPath } from '../../shared/nav/context';
+import { NavigationContext } from '../../shared/ui/NavigationContext';
 import { commitUrl } from '../../shared/utils/dataInfo';
 import { encodeTrainCompare, TRAIN_COMPARE_ENTRY, TRAIN_COMPARE_UNITS, type TrainCompareConfig } from './trainCompareCodec';
 import { availableTrainingCivs, compareTraining } from './trainCompareModel';
@@ -32,12 +34,12 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
   const resolved = { ...config, civs: result.civs };
   const update = (fields: Partial<TrainCompareConfig>) => {
     reset();
-    navigate('/production?' + encodeTrainCompare({ ...resolved, ...fields }));
+    navigate(contextPath('/production?' + encodeTrainCompare({ ...resolved, ...fields }), location.search));
   };
   const share = () =>
     copy(() => {
       const url = new URL(window.location.href);
-      url.hash = '/production?' + encodeTrainCompare(resolved);
+      url.hash = contextPath('/production?' + encodeTrainCompare(resolved), location.search);
       return url.href;
     });
   return (
@@ -57,13 +59,14 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
             type="button"
             onClick={() => {
               reset();
-              navigate(TRAIN_COMPARE_ENTRY);
+              navigate(contextPath(TRAIN_COMPARE_ENTRY, location.search));
             }}
           >
             重置对照
           </button>
         </div>
       </header>
+      <NavigationContext />
       {!changed && status && (
         <p className="note" {...statusProps}>
           {status}
@@ -93,7 +96,7 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
             if (invalidDraft) {
               const params = new URLSearchParams(encodeTrainCompare(resolved));
               params.set('n', draft);
-              navigate('/production?' + params.toString());
+              navigate(contextPath('/production?' + params.toString(), location.search));
             } else update({ n: +draft });
           }}
         >
