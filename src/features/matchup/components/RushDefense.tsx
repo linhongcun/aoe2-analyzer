@@ -106,6 +106,7 @@ export default function RushDefense({ own, enemy, data, loadError }: { own: Civ;
       <p className="note">
         当前对局：{own.zh} 对 {enemy.zh}。演练按封建时代核对单位与科技资格。
       </p>
+      <p className="note">以下应对为通用示意，非针对当前对手文明；请按侦察结果调整。</p>
       {!data && (
         <p className="note" role={loadError ? undefined : 'status'}>
           {loadError ? '单位和科技资料加载失败，演练和开局入口暂不可用。' : '正在核对双方文明的单位和科技…'}
