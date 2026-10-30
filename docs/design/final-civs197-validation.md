@@ -1,6 +1,6 @@
 # #197 最后两文明验证记录
 
-基于main ed866abd（v0.69.0），候选v0.70.0，固定DE188329。未合并、未部署；受保护旧合同仍待具体迁移授权，详见[提案](final-civs197-acceptance-migration.md)。
+基于main ed866abd（v0.69.0），候选v0.70.0，固定DE188329。下列记录为授权前实现验证；维护者于2026-10-30批准有限迁移并要求合并，后续26项unit与2项browser通过，详见[授权执行记录](final-civs197-acceptance-approval.md)。原冲突、失败与取消记录保留，不冒称当时已通过。
 
 - 来源：eco producer一次完成、零对账差异；Poles/Romans标准有界摘要和combined physical三报告复现检查通过，schema严格验证通过，来源预算通过。完整DAT与闭包仅留忽略缓存。
 - 计算：Poles34项与Romans52项专测通过；13份相关unit文件206通过、1todo（其中buildSim包含全部模板×文明完成检查）。真实首次失败涉及物理守卫对缺少全局record的后时代实体过严、草稿探针tick/自动建房设置等，已修；不把修前失败算通过。
