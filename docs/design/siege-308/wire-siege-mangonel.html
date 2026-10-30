@@ -1,0 +1,17 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>#308 线框 · 投石车未核实</title><link rel="stylesheet" href="siege.css"></head><body><main class="frame f390" data-testid="siege-page"><div class="top"><a class="back" href="#/" aria-label="返回首页"><span class="ic " aria-hidden="true">arrow-left</span><span>首页</span></a><span class="crumb nw">工具 / 攻城拆建筑</span></div>
+<h1><span class="ic lg" aria-hidden="true">hammer</span>攻城拆建筑</h1>
+<p class="desc">几台攻城单位拆掉一座建筑要多久：击数、游戏秒、1.7× 现实秒。</p>
+<section class="sec" aria-labelledby="h-in"><h2 id="h-in">攻方</h2>
+<div class="field"><label for="u">攻城单位</label><div class="sel" id="u" role="combobox" aria-label="攻城单位"><span class="ic " aria-hidden="true">hammer</span><span class="grow">轻型投石车</span><span class="ic mu" aria-hidden="true">chevron-down</span></div></div>
+<div class="field"><label for="n">数量</label><div class="step"><div class="stepper"><button aria-label="减少一台"><span class="ic " aria-hidden="true">minus</span></button><input id="n" class="num" value="1" inputmode="numeric" aria-label="数量"><button aria-label="增加一台"><span class="ic " aria-hidden="true">plus</span></button></div><span role="group" aria-label="常用数量" style="display:inline-flex;gap:6px"><button class="chip num" aria-pressed="true">1</button><button class="chip num" aria-pressed="false">4</button><button class="chip num" aria-pressed="false">6</button></span></div></div>
+<div class="field" style="margin-bottom:0"><label for="c">攻方文明 <span class="opt">（可选）</span></label><div class="sel" id="c" aria-label="攻方文明"><span class="grow">不限文明（无文明加成）</span><span class="ic mu" aria-hidden="true">chevron-down</span></div></div>
+</section>
+<section class="sec" aria-labelledby="h-tg"><h2 id="h-tg">目标</h2>
+<div class="field"><label for="b">目标建筑</label><div class="sel" id="b" aria-label="目标建筑"><span class="ic " aria-hidden="true">castle</span><span class="grow">城堡</span><span class="ic mu" aria-hidden="true">chevron-down</span></div></div>
+<div class="field"><span class="lbl">守方建筑护甲科技</span><div class="toggles"><label class="tg"><span class="box" role="checkbox" aria-checked="false"></span>砌石</label><label class="tg"><span class="box"></span>建筑学</label></div></div>
+<div class="field"><span class="lbl">驻军</span><div class="toggles"><label class="tg" role="switch" aria-checked="false"><span class="box"></span>驻满村民</label></div>
+</div></section>
+<section class="unver" data-testid="siege-unverified" role="status"><div class="t"><span class="ic mu" aria-hidden="true">alert-circle</span>规则未核实，暂不计算</div>
+<p>投石车系主/副弹伤害来源尚未核实。核实前不显示击数与用时，避免给出错误数字。</p>
+<p>可改选 攻城锤 / 冲车 等已核实路径；手推炮缺「石质防御」数据时同样不给完整用时。</p></section>
+<aside class="model"><span class="ic mu" aria-hidden="true">info</span><span>模型口径：理想射击间隔，首轮 t=0；不含走位、展开、前摇、飞行、修理、反击。</span></aside></main><ul class="anno"><li>URL：<code>#/siege?unit=280&amp;n=1&amp;bldg=82</code>（280/550/588 同态）</li><li>不渲染 siege-result / siege-hits / siege-game-seconds / siege-real-seconds，对照表整块隐藏</li><li>页内不得出现任何「N 游戏秒」字样；选择器仍可用</li><li>提示块用 muted 色 + 虚线框：表示「未知」而非「错误」，不用红色</li></ul></body></html>
