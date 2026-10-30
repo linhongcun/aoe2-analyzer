@@ -153,3 +153,38 @@ test('建筑不属于当前文明时保留选择并暂停模拟', async ({ page 
   await expect(page.locator('#simciv')).toHaveCount(0);
   expect(new URL(page.url()).hash).toContain('civ=Britons');
 });
+
+test('建筑明确时代不足时保留输入，主动选择后才打开可用时代模拟', async ({ page }) => {
+  await page.goto('./#/building/82?civ=Britons&age=2&tab=sim&me=Franks&opp=Mongols');
+  await expect(page.locator('#building p[role="status"]')).toContainText('当前时代尚未解锁该建筑');
+  await expect(page.locator('#simage')).toHaveCount(0);
+  expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('age')).toBe('2');
+  await page.getByRole('link', { name: '按可用时代查看模拟', exact: true }).click();
+  await expect(page.locator('#simage')).toHaveValue('3');
+  const p = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
+  expect(p.get('me')).toBe('Franks');
+  expect(p.get('opp')).toBe('Mongols');
+});
+
+test('提前可用单位与属性模型支持范围分开说明，生产默认使用实际可用时代', async ({ page }) => {
+  await page.goto('./#/unit/75?civ=Armenians&age=1&tab=sim&me=Franks&opp=Mongols');
+  await expect(page.locator('#unit p[role="status"]')).toContainText('属性模拟模型暂不支持当前时代');
+  await expect(page.locator('#unit p[role="status"]')).not.toContainText('未解锁');
+  await expect(page.locator('#simage')).toHaveCount(0);
+  expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('age')).toBe('1');
+  const next = page.getByRole('link', { name: '按当前单位规划生产', exact: true });
+  expect(query((await next.getAttribute('href'))!).get('age')).toBe('1');
+  await page.getByRole('link', { name: '按模型支持时代查看模拟', exact: true }).click();
+  await expect(page.locator('#simage')).toHaveValue('2');
+  expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('me')).toBe('Franks');
+  await page.goto('./#/unit/75?civ=Armenians');
+  await expect(next).toBeVisible();
+  expect(query((await next.getAttribute('href'))!).get('age')).toBe('1');
+});
+
+test('没有明确时代的既有默认模拟模式保持', async ({ page }) => {
+  await page.goto('./#/building/82?civ=Britons&tab=sim');
+  await expect(page.locator('#simage')).toHaveValue('4');
+  await page.goto('./#/unit/75?civ=Armenians&tab=sim');
+  await expect(page.locator('#simage')).toHaveValue('4');
+});

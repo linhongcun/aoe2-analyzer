@@ -30,6 +30,21 @@ export default function BuildingSimulator({ b }: { b: Building }) {
   const q = new URLSearchParams(loc.search);
   const civ = b.civs.includes(q.get('civ') ?? '') ? q.get('civ')! : b.civs[0]!;
   const minAge = getGarrisonBuildingAge(b, civ, ctx.trees);
+  const requestedAge = q.getAll('age').length === 1 && /^[1-4]$/.test(q.get('age') ?? '') ? Number(q.get('age')) : undefined;
+  if (requestedAge !== undefined && requestedAge < minAge) {
+    const next = new URLSearchParams(q);
+    next.set('age', String(minAge));
+    return (
+      <div id="sim" className="posbox">
+        <p className="note" role="status">
+          当前时代尚未解锁该建筑；保留已选条件，仍可查阅基础资料。
+        </p>
+        <Link className="btn community-tool-entry" to={loc.pathname + '?' + next}>
+          按可用时代查看模拟
+        </Link>
+      </div>
+    );
+  }
   const age = Math.max(minAge, Math.min(4, +(q.get('age') ?? 4) || 4));
   const avail = buildingSimTechs(ctx, b, civ);
   const ok = new Set(avail.filter((x) => x.ef).map((x) => x.t.id));

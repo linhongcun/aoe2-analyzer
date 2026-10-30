@@ -7,7 +7,7 @@ import { baseUnit } from '../../../domain/family';
 import type { Unit } from '../../../domain/types';
 import { civByEn, civs } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
-import { civStatus, makeSimContext, parseUnitPath } from '../../../domain/simulator';
+import { civStatus, makeSimContext, parseUnitPath, unitPath } from '../../../domain/simulator';
 import { unitRelatedTechs, type UnitRelatedTech } from '../../../domain/relatedTechs';
 import { AGE_ZH } from '../../../domain/ratings';
 import { uniqueCivs, upgradeLine } from '../../../domain/units';
@@ -29,8 +29,9 @@ import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHi
 import { unitDisplayAge } from '../displayAge';
 import { contextPath, entityPath, readNavigation, type EntityContext } from '../../../shared/nav/context';
 import { NavigationContext } from '../../../shared/ui/NavigationContext';
-import { unitProductionEntry } from '../../../domain/unitProductionEntry';
-import { encodeProduction } from '../../../domain/production';
+import { unitAvailabilityAge } from '../../../domain/availabilityAge';
+import { UnitProductionEntry } from './UnitProductionEntry';
+import { UnitSimulationNotice } from './UnitSimulationNotice';
 import '../../../shared/ui/contextLinks.css';
 import './unit-civ-links.css';
 
@@ -136,17 +137,21 @@ export default function UnitDetail() {
   if (!u) return <HistoricalEntityDetail target={{ targetType: 'unit', targetId: rt.id }} />;
   const displayAge = unitDisplayAge(u, contextCiv?.en);
   const requestedAge = rt.age ?? queryAge;
+  const availabilityAge = unitAvailabilityAge(u, contextCiv?.en);
+  const modelAge = Math.max(u.age, availabilityAge);
   const context: EntityContext | undefined =
     contextCiv || navigation.back || navigation.me || navigation.opp
       ? { civ: contextCiv?.en, age: requestedAge, search: loc.search, source: loc.pathname + loc.search }
       : undefined;
   const unitHref = (id: number) => (context ? entityPath('unit', id, context.civ, loc.search, context.source, context.age) : `/unit/${id}`);
-  const production =
-    contextCiv && trees ? unitProductionEntry({ core, trees }, { unit: u.id, civ: contextCiv.en, age: requestedAge ?? displayAge, techs: rt.ids }) : null;
-  const productionPath = production ? contextPath('/production?' + encodeProduction(production.config), loc.search, loc.pathname + loc.search) : null;
   const unavailableCiv = contextCiv && !u.civs.includes(contextCiv.en);
-  const unavailableAge = requestedAge !== undefined && requestedAge < displayAge;
-  const unavailableSim = invalidQueryCiv || unavailableCiv || unavailableAge;
+  const unavailableAge = requestedAge !== undefined && requestedAge < availabilityAge;
+  const unsupportedAge = requestedAge !== undefined && !unavailableAge && requestedAge < modelAge;
+  const unavailableSim = invalidQueryCiv || unavailableCiv || unavailableAge || unsupportedAge;
+  const supportedParams = new URLSearchParams(loc.search);
+  supportedParams.set('age', String(modelAge));
+  supportedParams.set('tab', 'sim');
+  const supportedPath = contextCiv ? contextPath(unitPath(u.id, contextCiv.en, modelAge, rt.ids, rt.team) + '?' + supportedParams, loc.search) : null;
   const base = baseUnit(u, core.fam);
   const elite = core.fam.eliteOf[base.id];
   const isE = u.id !== base.id;
@@ -229,26 +234,14 @@ export default function UnitDetail() {
               记录一个练习问题
             </Link>
           </NavigationContext>
-          {productionPath && production && (
-            <nav className="ctx-chips" aria-label="当前单位的下一步">
-              <Link className="community-tool-entry" to={productionPath}>
-                <Icon name="factory" />
-                按当前单位规划生产
-              </Link>
-              <span className="note">
-                {requestedAge === undefined ? '按单位解锁时代开始设置；' : ''}生产建筑数量需另行填写，战斗科技仅带入生产模型支持的部分。
-                {production.omittedTechs.length > 0 && `未带入科技：${production.omittedTechs.map((id) => core.techById[id]?.zh ?? '未识别科技').join('、')}。`}
-                {rt.team.length > 0 && '队友加成未带入生产模型。'}
-                {production.errors.join(' ')}
-              </span>
-            </nav>
-          )}
-          {unavailableSim && (
-            <p className="note" role="status">
-              {invalidQueryCiv ? '链接中的文明无效或重复' : unavailableCiv ? `${contextCiv.zh}无法生产该单位` : '当前时代尚未解锁该单位'}
-              ；保留已选条件，仍可查阅基础资料。
-            </p>
-          )}
+          <UnitProductionEntry u={u} route={rt} civ={contextCiv?.en} age={requestedAge ?? availabilityAge} defaultAge={requestedAge === undefined} />
+          <UnitSimulationNotice
+            invalidCiv={invalidQueryCiv}
+            civName={unavailableCiv ? contextCiv.zh : undefined}
+            ageUnavailable={unavailableAge}
+            modelUnsupported={unsupportedAge}
+            to={supportedPath}
+          />
           {u.id === 93 && <p className="note">通常在封建时代可用；亚美尼亚可在黑暗时代训练长矛兵。</p>}
           {elite && (
             <div className="eseg" role="radiogroup" aria-label="普通/精锐">

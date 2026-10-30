@@ -1,4 +1,4 @@
-import type { Building, Trees } from './types';
+import type { Building, Trees, Unit } from './types';
 
 /**
  * 固定科技树的建筑行：0/1 为黑暗、2/3 为封建、4/5 为城堡、6/7 为帝王。
@@ -18,3 +18,8 @@ export const EARLY_UNIT_AGES: Readonly<Record<string, Readonly<Record<number, nu
   Burgundians: { 283: 3 },
   Bohemians: { 5: 3 },
 };
+
+/** 实际解锁时代；属性模拟器仍有各自的时代覆盖范围，不能据此自动放开。 */
+export function unitAvailabilityAge(unit: Pick<Unit, 'id' | 'age'>, civ = ''): number {
+  return EARLY_UNIT_AGES[civ]?.[unit.id] ?? (unit.id === 93 ? (civ === 'Armenians' ? 1 : 2) : unit.age);
+}
