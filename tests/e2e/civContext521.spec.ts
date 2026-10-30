@@ -56,7 +56,16 @@ test('#521 文明目录整卡是真链接，键盘与新标签可打开', async 
   await expect(card).toHaveAttribute('href', '#/civ/Jurchens');
   await expect(card).toHaveJSProperty('tagName', 'A');
   await card.focus();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Shift+Tab');
   await expect(card).toBeFocused();
+  const focus = await card.evaluate((link) => {
+    const style = getComputedStyle(link);
+    return { visible: link.matches(':focus-visible'), width: parseFloat(style.outlineWidth), style: style.outlineStyle };
+  });
+  expect(focus.visible).toBe(true);
+  expect(focus.width).toBeGreaterThan(0);
+  expect(focus.style).not.toBe('none');
   const popupPromise = context.waitForEvent('page');
   await card.click({ modifiers: ['ControlOrMeta'] });
   const popup = await popupPromise;
@@ -104,6 +113,21 @@ test('#521 科技文明上下文与概览文明列表可导航，非法文明不
   await expect(page.locator('#tech').getByRole('link', { name: '回对局助手', exact: true })).toHaveCount(0);
 });
 
+test('#521 不可用的查询文明不覆盖模拟器回退，显式模拟器路径优先', async ({ page }) => {
+  await page.goto('./#/unit/281?civ=Britons&tab=sim');
+  await expect(page.locator('#simciv')).toHaveAttribute('data-value', 'Franks');
+  await expect(page.locator('#unit nav[aria-label="文明相关入口"] a[href="#/civ/Franks"]')).toBeVisible();
+  await page.goto('./#/unit/4/Chinese/3/199/?civ=Mongols&tab=sim&x=1&x=2');
+  await expect(page.locator('#simciv')).toHaveAttribute('data-value', 'Chinese');
+  await expect(page.locator('#unit nav[aria-label="文明相关入口"] a[href="#/civ/Chinese"]')).toBeVisible();
+  await expect(page.locator('#simage')).toHaveValue('3');
+  const all = page.locator('#unit .dside').getByRole('link', { name: '查看全部可用文明', exact: true });
+  const allParams = new URLSearchParams((await all.getAttribute('href'))!.split('?')[1]);
+  expect(allParams.get('civ')).toBe('Mongols');
+  expect(allParams.getAll('x')).toEqual(['1', '2']);
+  expect(allParams.get('tab')).toBe('rel');
+});
+
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['light', 'dark'])
     test(`#521 @${width} ${theme} 情境入口、目录、对比及详情文明链接`, async ({ page }, info) => {
@@ -128,11 +152,20 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/compare?a=Jurchens');
       await expect(page.locator('#ca')).toHaveAttribute('data-value', 'Jurchens');
       await expect(page.locator('#ctab th').nth(1).getByRole('link')).toHaveAttribute('href', '#/civ/Jurchens');
+      const compareBox = await page.locator('#ctab th').nth(1).getByRole('link').boundingBox();
+      expect(compareBox!.width).toBeGreaterThanOrEqual(44);
+      expect(compareBox!.height).toBeGreaterThanOrEqual(44);
       await capture(page, info, `compare-${width}-${theme}`);
       await page.goto('./#/unit/4?civ=Mongols');
       await expect(page.locator('#unit nav[aria-label="文明相关入口"] a[href="#/civ/Mongols"]')).toBeVisible();
+      const unitBox = await page.locator('#unit nav[aria-label="文明相关入口"] a[href="#/civ/Mongols"]').boundingBox();
+      expect(unitBox!.width).toBeGreaterThanOrEqual(44);
+      expect(unitBox!.height).toBeGreaterThanOrEqual(44);
       await capture(page, info, `unit-${width}-${theme}`);
       await page.goto('./#/tech/996?civ=Jurchens');
       await expect(page.locator('#tech nav[aria-label="文明相关入口"] a[href="#/civ/Jurchens"]')).toBeVisible();
+      const techBox = await page.locator('#tech .tech-civ-links .civchip').first().boundingBox();
+      expect(techBox!.width).toBeGreaterThanOrEqual(44);
+      expect(techBox!.height).toBeGreaterThanOrEqual(44);
       await capture(page, info, `tech-${width}-${theme}`);
     });
