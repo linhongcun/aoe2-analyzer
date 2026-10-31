@@ -111,11 +111,10 @@ export function friendliness(en: string, entries: readonly BeginnerEntry[]) {
   return { tier: found.tier, reason: found.reason?.trim() ?? '', bonusIdx: found.bonusIdx ?? [] };
 }
 
-/** 保留快照里的百分数，最多两位小数，不乘 100。 */
+/** 快照百分数原样取两位小数，不乘 100。51.4 显示为 51.40%。 */
 export function formatPercent(value: number): string {
   const rounded = Math.round((value + Number.EPSILON) * 100) / 100;
-  const text = rounded.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
-  return `${text}%`;
+  return `${rounded.toFixed(2)}%`;
 }
 
 export function formatGames(games: number): string {

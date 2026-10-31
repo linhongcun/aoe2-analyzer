@@ -34,6 +34,17 @@ const snapshot = snapshotJson as LadderSnapshot;
 const beginner = beginnerNotes as BeginnerNotes;
 const SITE_BUILD = DATA_SOURCES.patch?.build ?? 0;
 
+function useWideTable() {
+  const [wide, setWide] = useState(() => window.matchMedia('(min-width: 960px)').matches);
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 960px)');
+    const onChange = () => setWide(media.matches);
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, []);
+  return wide;
+}
+
 const TIERS = [
   { tier: 'easy' as const, gloss: '编辑认为上手门槛较低。' },
   { tier: 'mid' as const, gloss: '编辑认为接近常规开局。' },
@@ -41,9 +52,11 @@ const TIERS = [
   { tier: 'pending' as const, gloss: '理由还没写，不影响胜率。' },
 ];
 
+/** 以 50% 为中线。±10 个百分点铺满半边，再大也停在端点，避免几乎看不见。 */
 function WinBar({ rate }: { rate: number }) {
-  const delta = Math.max(-50, Math.min(50, rate - 50));
-  const width = (Math.abs(delta) / 50) * 50;
+  const cap = 10;
+  const delta = Math.max(-cap, Math.min(cap, rate - 50));
+  const width = (Math.abs(delta) / cap) * 50;
   const left = delta >= 0 ? 50 : 50 - width;
   return (
     <span className="ladder-bar" aria-hidden="true">
@@ -71,6 +84,7 @@ export default function Ladder() {
   const [sort, setSort] = useState<{ key: SortKey; dir: SortDir }>({ key: 'win', dir: firstSortDir('win') });
   const [open, setOpen] = useState<string | null>(null);
   const share = useShareLink({ stateKey: elo });
+  const wide = useWideTable();
   const mismatch = isPatchMismatch(snapshot.patchNote, SITE_BUILD);
   const patchBuild = snapshotPatchBuild(snapshot.patchNote);
   const bracket = useMemo(() => viewBracket(snapshot, elo), [elo]);
@@ -193,29 +207,49 @@ export default function Ladder() {
           未识别的分段「{toast}」，已显示「全部」。
         </p>
       )}
+      {/* TODO: 玩家界面只写 aoestats、统计日期和补丁号。Wayback 路径留在快照 JSON 与设计/数据文档，不渲染到页面。 */}
       <div className="ladder-source" data-testid="ladder-source">
         <Icon name="database" />
-        <p>
+        <p className="ladder-copy">
           <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
             {snapshot.source}
             <Icon name="external-link" />
             （外部）
           </a>
-          <span>
-            统计更新 <span className="num nw">{snapshot.fetchedAt}</span>
+          。
+          <span className="nw">
+            统计更新 <span className="num">{snapshot.fetchedAt}</span>
           </span>
+          {patchBuild && (
+            <>
+              。
+              <span className="nw">
+                补丁 <span className="num">{patchBuild}</span>
+              </span>
+            </>
+          )}
           {!bracket.empty && (
-            <span>
-              本分段样本 <span className="num nw">{formatGames(bracket.games)} 局</span>
-            </span>
+            <>
+              。
+              <span className="nw">
+                本分段样本 <span className="num">{formatGames(bracket.games)}</span> 局
+              </span>
+            </>
           )}
         </p>
       </div>
       {mismatch && patchBuild && (
         <p className="ladder-patch" data-testid="ladder-patch-note">
           <Icon name="triangle-alert" />
-          <span>
-            统计补丁 {snapshot.patchNote} 与本站数据版本 DE <span className="num">{SITE_BUILD}</span> 不同，胜率可能未反映最新平衡改动。
+          <span className="ladder-copy">
+            <span className="nw">
+              统计补丁 <span className="num">{patchBuild}</span>
+            </span>{' '}
+            与本站数据版本{' '}
+            <span className="nw">
+              DE <span className="num">{SITE_BUILD}</span>
+            </span>{' '}
+            不同，胜率可能未反映最新平衡改动。
           </span>
         </p>
       )}
@@ -235,12 +269,20 @@ export default function Ladder() {
             <div className="ladder-table-card">
               <table className="ladder-table" data-testid="ladder-table">
                 <caption className="ladder-sr">阿拉伯 1v1 {bracket.label} 各文明胜率</caption>
+                <colgroup>
+                  <col className="ladder-col-name" />
+                  <col className="ladder-col-win" />
+                  <col className="ladder-col-play" />
+                  {wide && <col className="ladder-col-games" />}
+                  <col className="ladder-col-tier" />
+                  <col className="ladder-col-expand" />
+                </colgroup>
                 <thead>
                   <tr>
                     <SortHead id="name" label="文明" sort={sort} onSort={setSort} />
                     <SortHead id="win" label="胜率" sort={sort} onSort={setSort} numeric />
                     <SortHead id="play" label="出场率" sort={sort} onSort={setSort} numeric />
-                    <SortHead id="games" label="样本局数" sort={sort} onSort={setSort} numeric className="ladder-games-col" />
+                    {wide && <SortHead id="games" label="样本局数" sort={sort} onSort={setSort} numeric className="ladder-games-col" />}
                     <SortHead id="tier" label="新手友好度" sort={sort} onSort={setSort} />
                     <th className="ladder-expand-col">
                       <span className="ladder-sr">展开</span>
@@ -262,7 +304,13 @@ export default function Ladder() {
                             <span className="ladder-civ">
                               {row.linked && <CivIcon c={{ en: row.en }} />}
                               <span className="ladder-civ-name">
-                                {row.linked ? <Link to={`/civ/${row.en}`}>{row.zh}</Link> : <span>{row.zh}</span>}
+                                {row.linked ? (
+                                  <Link to={`/civ/${row.en}`}>
+                                    <span className="ladder-zh">{row.zh}</span>
+                                  </Link>
+                                ) : (
+                                  <span className="ladder-zh">{row.zh}</span>
+                                )}
                                 <small className="ladder-en" lang="en">
                                   {row.en}
                                 </small>
@@ -278,10 +326,12 @@ export default function Ladder() {
                           <td className="ladder-num">
                             <span className="num">{formatPercent(row.playRate)}</span>
                           </td>
-                          <td className="ladder-num ladder-games-col">
-                            <span className="num">{formatGames(row.games)}</span>
-                            {isLowSample(row.games) && <span className="ladder-few">样本少</span>}
-                          </td>
+                          {wide && (
+                            <td className="ladder-num ladder-games-col">
+                              <span className="num">{formatGames(row.games)}</span>
+                              {isLowSample(row.games) && <span className="ladder-few">样本少</span>}
+                            </td>
+                          )}
                           <td>
                             <span className="ladder-tier" data-tier={row.tier} data-testid={`ladder-tier-${row.en}`}>
                               {TIER_LABEL[row.tier]}
@@ -303,7 +353,7 @@ export default function Ladder() {
                         </tr>
                         {expanded && (
                           <tr className="ladder-reason-row">
-                            <td colSpan={6}>
+                            <td colSpan={wide ? 6 : 5}>
                               <div id={`ladder-reason-${row.en}`} data-testid={`ladder-reason-${row.en}`} className="ladder-reason">
                                 <p className="ladder-reason-games">
                                   样本局数 <span className="num">{formatGames(row.games)}</span>
@@ -374,8 +424,11 @@ export default function Ladder() {
       </div>
       <p className="ladder-footer" data-testid="ladder-footer">
         <Icon name="info" />
-        <span>
-          数据来源：aoestats.io（阿拉伯 · RM <span className="nw">1v1</span>）· 统计更新 <span className="num nw">{snapshot.fetchedAt}</span>
+        <span className="ladder-copy">
+          数据来源：aoestats.io（阿拉伯 · RM <span className="nw">1v1</span>）·{' '}
+          <span className="nw">
+            统计更新 <span className="num">{snapshot.fetchedAt}</span>
+          </span>
           。本站保存静态快照，不实时抓取、不自建统计；胜率不是平衡建议。新手友好度为本站编辑口径，不是官方推荐。
         </span>
       </p>

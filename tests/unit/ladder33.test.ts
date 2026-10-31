@@ -30,12 +30,12 @@ describe('天梯快照展示 #33', () => {
     for (const civ of all?.civs ?? []) {
       const win = formatPercent(civ.winRate);
       const play = formatPercent(civ.playRate);
-      expect(win.endsWith('%')).toBe(true);
-      expect(play.endsWith('%')).toBe(true);
+      expect(win).toMatch(/^\d+\.\d{2}%$/);
+      expect(play).toMatch(/^\d+\.\d{2}%$/);
       expect(Number(win.slice(0, -1))).toBeCloseTo(civ.winRate, 2);
       expect(Number(play.slice(0, -1))).toBeCloseTo(civ.playRate, 2);
     }
-    expect(formatPercent(51.4)).toBe('51.4%');
+    expect(formatPercent(51.4)).toBe('51.40%');
     expect(formatPercent(54.04)).toBe('54.04%');
     expect(formatPercent(5.15)).toBe('5.15%');
     expect(formatPercent(1.67)).toBe('1.67%');

@@ -1,6 +1,6 @@
 // #33 `#/ladder` 失败验收。不实现页面，不改 pageRegistry / v0*-acceptance。当前 main 仍是规划中占位，用例应红。
 // 设计：docs/design/ladder-33/ladder-33.md（main @ 677d64e）。深链只认 elo，默认 all；其它 Elo 芯片在，内容是空态，不编数。
-// 锚点来自 #536 `src/data/ladder-arabia-p162286.json` @ 98bbf11。winRate/playRate 已是百分数（51.4 = 51.4%），不得再乘 100。
+// 锚点来自 #536 `src/data/ladder-arabia-p162286.json` @ 98bbf11。winRate/playRate 已是百分数，界面固定两位小数（51.4 → 51.40%），不得再乘 100。
 // testid：ladder-page/context/bracket(data-elo)/source/patch-note/table/row-{En}/sort-{win|play|games|name|tier}/tier/expand/reason-{En}/fallback-toast/share/footer/empty。data-games < 300 标「样本少」。
 import { existsSync, readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
@@ -101,8 +101,8 @@ async function expectLadderPage(page: Page) {
 }
 
 function shownPercent(text: string) {
-  const match = text.replace(/\s+/g, '').match(/^(\d+(?:\.\d+)?)%$/);
-  expect(match, `百分数原文「${text}」不应再乘 100`).not.toBeNull();
+  const match = text.replace(/\s+/g, '').match(/^(\d+\.\d{2})%$/);
+  expect(match, `百分数原文「${text}」应为两位小数，且不应再乘 100`).not.toBeNull();
   return Number(match?.[1]);
 }
 
@@ -297,6 +297,12 @@ test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本
   await expect(link).toHaveAttribute('rel', /noopener/);
   await expect(source).toContainText('外部');
   await expect(source).toContainText(FETCHED_AT);
+  await expect(source).toContainText('补丁');
+  await expect(source).toContainText(PATCH_162286);
+  await expect(source).not.toContainText(/wayback/i);
+  await expect(source).not.toContainText('archive.org');
+  await expect(root).not.toContainText(/wayback/i);
+  await expect(root).not.toContainText('archive.org');
   await expect(source).toContainText(/本分段样本/);
   await expect(source).toContainText(/504[,，]?189/);
   await expect(source).toContainText('局');

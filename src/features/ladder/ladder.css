@@ -137,15 +137,10 @@
 .ladder-source {
   background: var(--color-surface-2);
 }
-.ladder-source p,
-.ladder-patch span,
-.ladder-footer span {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  align-items: center;
+.ladder-copy {
   margin: 0;
   min-width: 0;
+  line-height: 1.65;
 }
 .ladder-source a,
 .ladder-reason-links a,
@@ -186,10 +181,27 @@
 .ladder-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+}
+.ladder-col-win {
+  width: 18%;
+}
+.ladder-col-play {
+  width: 12%;
+}
+.ladder-col-games {
+  width: 14%;
+}
+.ladder-col-tier {
+  width: 16%;
+}
+.ladder-col-expand {
+  width: 48px;
 }
 .ladder-page :is(td, th) {
-  padding: 2px;
+  padding: 2px 4px;
   vertical-align: middle;
+  overflow: hidden;
 }
 .ladder-num {
   text-align: right;
@@ -222,6 +234,7 @@
   align-items: center;
   gap: 6px;
   min-width: 0;
+  max-width: 100%;
 }
 .ladder-page .ico {
   width: 24px;
@@ -231,9 +244,31 @@
 }
 .ladder-civ-name {
   min-width: 0;
+  overflow: hidden;
 }
 .ladder-civ-name a {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  overflow: hidden;
   color: var(--color-link);
+  text-decoration: none;
+}
+.ladder-zh {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ladder-civ-name > .ladder-zh {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--color-text);
 }
 .ladder-en {
   display: block;
@@ -321,6 +356,10 @@
   padding: 8px 12px;
   border-left: 3px solid var(--color-accent);
   background: var(--color-accent-soft);
+  overflow-wrap: anywhere;
+}
+.ladder-reason-row td {
+  overflow: visible;
 }
 .ladder-reason p {
   margin: 0 0 8px;
@@ -417,16 +456,34 @@
   }
 }
 @media (max-width: 959px) {
-  .ladder-games-col,
   .ladder-en,
   .ladder-wide-only,
   .ladder-tier-full {
     display: none;
+  }
+  .ladder-col-win {
+    width: 64px;
+  }
+  .ladder-col-play {
+    width: 64px;
+  }
+  .ladder-col-tier {
+    width: 64px;
+  }
+  .ladder-col-expand {
+    width: 44px;
   }
   .ladder-tier-short {
     display: inline;
   }
   .ladder-page h1 {
     font-size: 22px;
+  }
+  .ladder-table-card {
+    padding: 4px;
+  }
+  .ladder-zh,
+  .ladder-table .num {
+    font-size: 12px;
   }
 }
