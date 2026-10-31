@@ -7,8 +7,15 @@ import type { Building, Unit } from './types';
 // 有界的小规模理想齐射工具；避免把任意大军数量误读成包含碰撞/寻路的模拟。
 export const SIEGE_MAX_COUNT = 40;
 export const SIEGE_SPEED = 1.7;
+export const SIEGE_DEFAULT_UNIT_ID = 1258;
+export const SIEGE_DEFAULT_N = 4;
+export const SIEGE_DEFAULT_BUILDING_ID = 82;
 export const SIEGE_UNIT_IDS: readonly number[] = [1258, 422, 548, 331, 280, 550, 588, 36];
 export const SIEGE_COMPARE_IDS: readonly number[] = [109, 82, 79, 117, 487];
+/** 石墙、城门不从建筑页进入攻城工具。对照表仍按既有攻城页显示。 */
+const SIEGE_BUILDING_ENTRY_EXCLUDED = new Set([117, 487]);
+export const SIEGE_MANGONEL_REASON = '主弹与副弹的伤害结算尚未对齐，不推算击数与用时。';
+export const SIEGE_STONE_DEFENSE_REASON = '建筑的「石质防御」护甲数据尚未对齐，不推算击数与用时。';
 export interface SiegeConfig {
   unit: number;
   n: number;
@@ -36,7 +43,7 @@ export function decodeSiege(search: string, catalog: SiegeCatalog): SiegeConfig 
   const unit = Number(params.get('unit'));
   const bldg = Number(params.get('bldg'));
   const n = params.get('n') ?? '';
-  const target = catalog.buildings.find((b) => b.id === bldg) ?? catalog.buildings.find((b) => b.id === 82)!;
+  const target = catalog.buildings.find((b) => b.id === bldg) ?? catalog.buildings.find((b) => b.id === SIEGE_DEFAULT_BUILDING_ID)!;
   const civ = params.get('civ') ?? '';
   const allowed = siegeArmorTechs(target).map((t) => t.id);
   const armor = [
@@ -48,8 +55,8 @@ export function decodeSiege(search: string, catalog: SiegeCatalog): SiegeConfig 
     ),
   ].sort((a, b) => a - b);
   return {
-    unit: SIEGE_UNIT_IDS.includes(unit) && catalog.units.some((u) => u.id === unit) ? unit : 1258,
-    n: /^\d+$/.test(n) && Number(n) > 0 ? Math.min(SIEGE_MAX_COUNT, Number(n)) : 4,
+    unit: SIEGE_UNIT_IDS.includes(unit) && catalog.units.some((u) => u.id === unit) ? unit : SIEGE_DEFAULT_UNIT_ID,
+    n: /^\d+$/.test(n) && Number(n) > 0 ? Math.min(SIEGE_MAX_COUNT, Number(n)) : SIEGE_DEFAULT_N,
     bldg: target.id,
     civ: DAT.civs[civ]?.dat ? civ : '',
     armor,
@@ -63,8 +70,20 @@ export function encodeSiege(config: SiegeConfig): string {
   return params.toString();
 }
 
+/** 单位详情「算拆建筑」：对城堡、缺省数量、无文明、无护甲已核实才显示。 */
+export function siegeUnitEntryVerified(unit: Unit, castle: Building | undefined): boolean {
+  return !!castle && castle.id === SIEGE_DEFAULT_BUILDING_ID && calculateSiege(unit, castle, SIEGE_DEFAULT_N, '', []).verified;
+}
+
+/** 建筑详情「算攻城拆这座」：对照表内、默认攻城锤已核实，且不是石墙或城门。 */
+export function siegeBuildingEntryVerified(building: Building, ram: Unit | undefined): boolean {
+  if (!ram || ram.id !== SIEGE_DEFAULT_UNIT_ID) return false;
+  if (!SIEGE_COMPARE_IDS.includes(building.id) || SIEGE_BUILDING_ENTRY_EXCLUDED.has(building.id)) return false;
+  return calculateSiege(ram, building, SIEGE_DEFAULT_N, '', []).verified;
+}
+
 export function calculateSiege(u: Unit, b: Building, n: number, civ = '', armor: readonly number[] = []): SiegeResult {
-  if ([280, 550, 588].includes(u.id)) return unknown('投石车系主弹与副弹结算规则未核实。');
+  if ([280, 550, 588].includes(u.id)) return unknown(SIEGE_MANGONEL_REASON);
   if (!Number.isInteger(n) || n < 1 || n > SIEGE_MAX_COUNT) return unknown('数量须在允许范围内。');
   if (civ && (!DAT.civs[civ]?.dat || !u.civs.includes(civ))) return unknown('当前文明的单位可用性或效果数据未核实。');
   const attacker = baseStats(u);
@@ -94,7 +113,8 @@ export function calculateSiege(u: Unit, b: Building, n: number, civ = '', armor:
   let sum = 0;
   for (const [category, attack] of Object.entries(attacks)) {
     if (irrelevant.has(category)) continue;
-    if (!(category in armors) || !Number.isFinite(armors[category]) || !Number.isFinite(attack)) return unknown(`建筑缺少「${category}」护甲的可核实数据。`);
+    if (!(category in armors) || !Number.isFinite(armors[category]) || !Number.isFinite(attack))
+      return unknown(category === '石质防御' ? SIEGE_STONE_DEFENSE_REASON : `建筑缺少「${category}」护甲的可核实数据。`);
     sum += Math.max(0, attack - armors[category]!);
   }
   const damage = Math.max(1, sum);

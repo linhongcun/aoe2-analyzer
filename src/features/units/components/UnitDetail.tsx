@@ -23,6 +23,7 @@ import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
 import Simulator from '../../../shared/ui/sim/Simulator';
 import UnitList from './UnitList';
 import { discountedCost, priceAge } from '../../../domain/costDiscount';
+import { siegeUnitEntryVerified } from '../../../domain/siege';
 import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/realCost';
 import { Basis } from '../../../shared/ui/RealCost';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
@@ -188,6 +189,8 @@ export default function UnitDetail() {
   const simulatorRoute = !rt.civ && queryCiv && u.civs.includes(queryCiv.en) ? { ...rt, civ: queryCiv.en } : rt;
   const allCivsParams = new URLSearchParams(params);
   allCivsParams.set('tab', 'rel');
+  const showSiegeEntry = siegeUnitEntryVerified(u, core.buildingById[82]);
+  const showContext = !!(contextCiv || (me && opp));
   return (
     <DetailPage
       key={base.id}
@@ -207,8 +210,8 @@ export default function UnitDetail() {
       }
       tabsTop={
         <>
-          {(contextCiv || (me && opp)) && (
-            <nav className="ctx-bar" aria-label="文明相关入口">
+          {(showContext || showSiegeEntry) && (
+            <nav className="ctx-bar" aria-label={showContext ? '文明相关入口' : '本页相关工具'}>
               {contextCiv && (
                 <Link className="ctx-civ-link ulink" to={`/civ/${contextCiv.en}`}>
                   <CivIcon c={contextCiv} /> {contextCiv.zh}
@@ -217,6 +220,11 @@ export default function UnitDetail() {
               {me && opp && (
                 <Link className="community-tool-entry" to={`/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}>
                   <Icon name="arrow-left" /> 回对局助手
+                </Link>
+              )}
+              {showSiegeEntry && (
+                <Link className="community-tool-entry" to={`/siege?unit=${u.id}`} data-testid="unit-siege-entry">
+                  <Icon name="hammer" /> 算拆建筑
                 </Link>
               )}
             </nav>

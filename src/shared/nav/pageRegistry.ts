@@ -386,6 +386,7 @@ export const PAGES: readonly PageDef[] = [
     group: 'planning',
     label: '攻城拆建筑',
     en: 'Siege',
+    searchAliases: ['冲车'],
     searchPy: { py: 'gongchengchaijianzhu', pyi: 'gccjz' },
     icon: 'hammer',
     desc: '几台攻城单位拆一座建筑要多久',

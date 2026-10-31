@@ -8,10 +8,13 @@ import {
   encodeSiege,
   siegeArmorTechs,
   SIEGE_COMPARE_IDS,
+  SIEGE_MANGONEL_REASON,
   SIEGE_MAX_COUNT,
+  SIEGE_STONE_DEFENSE_REASON,
   SIEGE_UNIT_IDS,
   type SiegeConfig,
 } from '../../domain/siege';
+import FeedbackLink from '../../shared/ui/FeedbackLink';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
@@ -21,6 +24,8 @@ const num = (n: number) => String(Number(n.toFixed(2)));
 // 现实秒按稿保留 1 位小数（75 → 44.1）。
 const real = (n: number) => n.toFixed(1);
 const buildingIcon = (id: number): IconName => (id === 82 ? 'castle' : id === 79 ? 'tower-control' : 'building-2');
+const ONE_REASON = new Set([SIEGE_MANGONEL_REASON, SIEGE_STONE_DEFENSE_REASON]);
+const unverifiedBody = (reason: string) => (ONE_REASON.has(reason) ? reason : `${reason} 核实前不显示击数与用时，避免给出错误数字。`);
 
 export default function Siege() {
   const core = useCore();
@@ -244,17 +249,13 @@ function SiegeTool({ core }: { core: Core }) {
                 </div>
               </section>
             ) : (
-              <section className="siege-unverified" data-testid="siege-unverified">
-                <h2>
+              <section className="siege-unverified" data-testid="siege-unverified" role="status" aria-labelledby="siege-unverified-why">
+                <h2 id="siege-unverified-why">
                   <Icon name="circle-alert" />
                   {[280, 550, 588].includes(u.id) ? '规则未核实' : '数据未核实'}，暂不计算
                 </h2>
-                <p>{result.reason} 核实前不显示击数与用时，避免给出错误数字。</p>
-                <p>可改选攻城锤或冲车等已核实路径。</p>
-                <span className="siege-data">
-                  <Icon name="database" />
-                  <span className="num">DE {__DATA_SOURCES__.patch.build}</span>
-                </span>
+                <p data-testid="siege-unverified-reason">{unverifiedBody(result.reason)}</p>
+                <FeedbackLink kind="data" label="反馈数据缺口" />
               </section>
             )}
           </div>
