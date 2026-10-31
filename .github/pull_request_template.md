@@ -21,7 +21,7 @@ Fixes #
 
 ## 独立复核
 
-<!-- 默认由实现者之外的独立代理复核；只改文档或纯样式且不动逻辑和测试时可按 CONTRIBUTING 采用轻量规则。CI 按现有工作流实际范围执行，main / release/** push 必须完整。 -->
+<!-- 默认由实现者之外的独立代理复核；只改文档或纯样式且不动逻辑和测试时可按 CONTRIBUTING 采用轻量规则。CI 按现有工作流实际范围执行。pull_request 不跑完整 Playwright；main / release 的 full 计划、nightly 与 CI_FULL 仍跑完整浏览器。 -->
 
 - 实际验证的提交 SHA：
 - 复核者（须与实现者不同）：

@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { expect, it } from 'vitest';
 // @ts-expect-error Node release scripts are plain modules
-import { assertFooter, checkSite, needsBuildsSmoke, smokeFeatures } from '../../scripts/deployment-smoke.mjs';
+import { assertFooter, checkSite, deploymentSmokeFeatures, needsBuildsSmoke, smokeFeatures } from '../../scripts/deployment-smoke.mjs';
 const commit = 'a'.repeat(40);
 it('#431 footer cannot accept another version or an ancestor build', () => {
   assertFooter({ version: 'v0.34.1', build: '构建 aaaaaaa' }, { version: 'v0.34.1', commit });
@@ -17,6 +17,10 @@ it('#197 core full and builds plans both run the Portuguese inventory and real-c
   expect(needsBuildsSmoke(['all', 'duel'])).toBe(true);
   expect(needsBuildsSmoke(['duel'])).toBe(false);
   expect(needsBuildsSmoke([])).toBe(false);
+  expect(deploymentSmokeFeatures(['all', 'civs'], { GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'true' })).toEqual(['civs']);
+  expect(deploymentSmokeFeatures(['all', 'civs'], { GITHUB_EVENT_NAME: 'push', CI_E2E_FULL: 'true' })).toEqual(['all', 'civs']);
+  expect(deploymentSmokeFeatures(['all'], { GITHUB_EVENT_NAME: 'schedule', CI_E2E_FULL: 'true' })).toEqual(['all']);
+  expect(deploymentSmokeFeatures(['builds'], {})).toEqual(['builds']);
 });
 it('#431 smoke really reads a rendered footer and fails a mismatched deployment', async () => {
   const server = createServer((_req, res) => {

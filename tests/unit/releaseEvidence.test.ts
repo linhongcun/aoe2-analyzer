@@ -271,6 +271,19 @@ describe('#431 exact tree evidence boundary', () => {
 describe('#431 validation coverage and lineage', () => {
   it('full tests cover targeted tests, but unchanged data must not be claimed as regenerated', () => {
     expect(planCovers(full, targeted)).toBe(true);
+    const capped = {
+      scope: 'full',
+      full: true,
+      data: false,
+      browser: 'capped',
+      features: ['all'],
+      unit: [],
+      e2e: ['tests/e2e/smoke.spec.ts'],
+    };
+    const fullBrowser = { ...full, data: false, browser: 'full' };
+    expect(planCovers(capped, fullBrowser)).toBe(false);
+    expect(planCovers(fullBrowser, capped)).toBe(true);
+    expect(planCovers(full, capped)).toBe(true);
     expect(planCovers({ ...full, data: false }, { ...targeted, data: true })).toBe(false);
     expect(planCovers({ ...full, data: false }, targeted)).toBe(true);
     expect(planCovers(targeted, full)).toBe(false);

@@ -90,6 +90,8 @@ it('#513 real CLI keeps shell PRs targeted, protected pushes full, and forced/ba
           GITHUB_REF: ref,
           GITHUB_OUTPUT: join(directory, 'outputs'),
           CI_FULL: force,
+          // The parent PR workflow sets CI_E2E_FULL=false. A simulated push must not inherit that cap.
+          CI_E2E_FULL: eventName === 'pull_request' ? 'false' : 'true',
         },
       });
       const plan = JSON.parse(readFileSync(join(directory, 'ci-plan.json'), 'utf8'));
@@ -105,7 +107,7 @@ it('#513 real CLI keeps shell PRs targeted, protected pushes full, and forced/ba
     expect(pr).toMatchObject({ scope: 'targeted', full: false, data: false, features: ['shell'] });
     for (const ref of ['refs/heads/main', 'refs/heads/release/v0.71.1']) {
       const push = inspect('push', ref);
-      expect(push).toMatchObject({ scope: 'full', full: true, data: false });
+      expect(push).toMatchObject({ scope: 'full', full: true, data: false, browser: 'full' });
       expect(testCommand(push, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
       expect(planCovers(pr, push)).toBe(false);
     }

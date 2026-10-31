@@ -239,9 +239,15 @@ it('#431 real multi-commit Git ranges preserve earlier data changes and CLI forc
       GITHUB_REF: 'refs/heads/main',
       GITHUB_OUTPUT: output,
       CI_FULL: 'true',
+      CI_E2E_FULL: 'true',
     },
   });
-  expect(JSON.parse(readFileSync(join(directory, 'ci-plan.json'), 'utf8'))).toMatchObject({ scope: 'full', full: true, data: true });
+  expect(JSON.parse(readFileSync(join(directory, 'ci-plan.json'), 'utf8'))).toMatchObject({
+    scope: 'full',
+    full: true,
+    data: true,
+    browser: 'full',
+  });
   expect(readFileSync(output, 'utf8')).toContain('browser=true');
   expect(JSON.parse(readFileSync(join(directory, 'ci-scope.json'), 'utf8'))).toEqual({ base: data, head, scope: 'full' });
   git('-c', 'user.name=Plan test', '-c', 'user.email=plan@example.invalid', 'commit', '--allow-empty', '-qm', 'metadata only');

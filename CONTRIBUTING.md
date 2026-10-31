@@ -40,7 +40,7 @@ hongcun 针对“胡斯派战车对轻型投石车、精锐胡斯派战车对中
 
 hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归，并在 #431 授权实施「每份代码只做一次相关验证、release/main 复用结果、部署后短核验、全量转后台」。本节取代此前逐个阶段等待完整验证，以及只覆盖文明卡片的小 UI 通道限制；独立复核、数据来源和受保护产品验收规则仍保留。
 
-- PR 按实际影响选择 `maintenance`、`civ-ui`、`targeted` 或 `full` 计划，保留必要静态检查、构建、相关单测和相关页面交互/四宽验证。功能页面、纯展示分组和纯路由辅助改动不默认跑整站；UI 改动不重生成未变数据。
+- PR 按实际影响选择 `maintenance`、`civ-ui`、`targeted` 或 `full` 计划，保留必要静态检查、构建、相关单测和相关页面交互/四宽验证。功能页面、纯展示分组和纯路由辅助改动不默认跑整站；UI 改动不重生成未变数据。`pull_request` 即使计划为 `full`，也不跑完整 Playwright：浏览器只保留部署烟测、`tests/e2e/smoke.spec.ts` 和已识别功能的 e2e（识别不到功能时只跑 smoke）。完整浏览器留在 `main`/`release/**` 的 full 计划、每日 schedule，以及 `workflow_dispatch` 且 `CI_FULL`。
 - 核心计算、依赖、共享基础设施、未知或不能可靠判断的范围仍完整验证一次；数据管线仅在数据、生成脚本、来源、依赖等变化确实需要时执行。计划的 `full` 与 `data` 分开记录，不能把「完整测试」等同于每次重新生成所有数据。
 - `ci-validation-evidence` 记录实际 `tested_commit`、`tested_tree`、策略指纹、验证范围及来源 run。release/main 只有在同仓库 CI 真实成功、来源可信、代码树与策略一致且覆盖当前必要范围时才复用；PR 默认测试 merge ref，不能只用 PR head SHA 或祖先关系代替实际被测树。缺少有效证据时执行当前必要范围，不伪报旧 SHA 或全量成功。
 - main 仍重建实际提交的 `__BUILD__`，执行少量构建烟测并部署。Release 下载该成功 main run 的 `deployed-site`，核对 manifest、版本/SHA/tree/tag 和本次功能，再直接压 ZIP 与 SHA256；不再默认运行 594 项线上检查，也不二次构建相同网站。

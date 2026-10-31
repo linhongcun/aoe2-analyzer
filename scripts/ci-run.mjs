@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { lstatSync, readFileSync, readdirSync, realpathSync } from 'node:fs';
 import { join, resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { applyBrowserPolicy } from './ci-scope.mjs';
 
 export function validatePlan(plan) {
   if (
@@ -11,6 +12,10 @@ export function validatePlan(plan) {
     typeof plan.data !== 'boolean' ||
     plan.full !== (plan.scope === 'full') ||
     (plan.data && !plan.full) ||
+    (plan.browser !== undefined && !['full', 'capped', 'none'].includes(plan.browser)) ||
+    (plan.browser === 'full' && !plan.full) ||
+    (plan.browser === 'none' && (plan.full || plan.e2e?.length)) ||
+    (plan.browser === 'capped' && !plan.e2e?.length) ||
     !Array.isArray(plan.features) ||
     plan.features.some((feature) => typeof feature !== 'string' || !/^[A-Za-z][A-Za-z0-9-]*$/.test(feature)) ||
     !Array.isArray(plan.unit) ||
@@ -57,8 +62,10 @@ export function resolveTestFiles(patterns, kind, directory = process.cwd()) {
 export function testCommand(plan, kind, directory = process.cwd()) {
   validatePlan(plan);
   if (!['unit', 'e2e'].includes(kind)) throw new Error('Expected --unit or --e2e');
-  const files = plan.full ? [] : resolveTestFiles(plan[kind], kind, directory);
-  if (!plan.full && !files.length) return null;
+  // browser:"capped" keeps a full unit run but lists Playwright files (#514).
+  const entire = kind === 'unit' ? plan.full : plan.browser === 'full' || (plan.full && plan.browser !== 'capped');
+  const files = entire ? [] : resolveTestFiles(plan[kind], kind, directory);
+  if (!entire && !files.length) return null;
   return { command: 'npx', args: kind === 'unit' ? ['vitest', 'run', ...files] : ['playwright', 'test', ...files, '--reporter=line'] };
 }
 
@@ -79,7 +86,9 @@ function main() {
   const kind = { '--unit': 'unit', '--e2e': 'e2e' }[process.argv[2]];
   if (!kind || process.argv.length !== 3) throw new Error('Usage: node scripts/ci-run.mjs --unit|--e2e');
   const path = process.env.CI_PLAN_PATH ?? join(process.env.RUNNER_TEMP || '.', 'ci-plan.json');
-  const plan = JSON.parse(readFileSync(path, 'utf8'));
+  const plan = validatePlan(applyBrowserPolicy(JSON.parse(readFileSync(path, 'utf8'))));
+  if (kind === 'e2e' && plan.browser === 'capped' && plan.full)
+    console.log(`PR browser cap: ${plan.e2e.length} Playwright files; the full suite stays on main, nightly, and CI_E2E_FULL`);
   process.exitCode = executePlan(plan, kind);
 }
 
