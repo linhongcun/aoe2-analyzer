@@ -46,7 +46,7 @@ const LOADERS: Record<LazyComponentId, LazyExoticComponent<ComponentType>> = {
   Players: lazy(() => import('../features/players/Players')),
   Events: lazy(() => import('../features/events/Events')),
   PlayerDetail: lazy(() => import('../features/players/PlayerDetail')),
-  Planned: lazy(() => import('../features/placeholder/components/Planned')),
+  Ladder: lazy(() => import('../features/ladder/Ladder')),
 };
 
 export interface RegisteredPage extends PageDef {

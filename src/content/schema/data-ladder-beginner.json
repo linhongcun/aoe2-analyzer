@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-ladder-beginner.json",
+  "title": "Ladder beginner-friendliness notes",
+  "type": "object",
+  "required": ["entries"],
+  "additionalProperties": false,
+  "properties": {
+    "note": { "type": "string" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["en", "tier"],
+        "additionalProperties": false,
+        "properties": {
+          "en": { "type": "string", "minLength": 1 },
+          "tier": { "enum": ["easy", "mid", "advanced", "pending"] },
+          "reason": { "type": "string" },
+          "bonusIdx": {
+            "type": "array",
+            "items": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    }
+  }
+}
