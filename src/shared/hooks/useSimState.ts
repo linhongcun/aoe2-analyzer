@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCore, useTrees } from '../../data/hooks';
-import { makeSimContext, simTechs, unitPath, type SimContext, type SimRoute, type SimTech } from '../../domain/simulator';
+import { decideSimCanonical, makeSimContext, simTechs, unitHashLocation, unitPath, type SimContext, type SimRoute, type SimTech } from '../../domain/simulator';
 import type { Unit } from '../../domain/types';
 import { session } from '../utils/sticky';
 
@@ -40,9 +40,12 @@ export function useSimState(u: Unit, rt: SimRoute) {
     nav(unitPath(u.id, civ, age, sel, team) + location.search, { replace: true });
   useEffect(() => {
     if (!state) return;
+    // 读地址栏而不是这次渲染里的 location：下一次导航可能已经写进 hash，旧的 replace 不能把它盖回去。
+    const live = unitHashLocation(window.location.hash);
+    const decision = decideSimCanonical(live.pathname, rt, { civ: state.civ, age: state.age, ids: [...state.sel], team: [...state.team] });
+    if (decision.kind === 'ignore') return;
     session.lastSim = { uid: u.id, civ: state.civ, cmp };
-    const p = unitPath(u.id, state.civ, state.age, state.sel, state.team);
-    if (decodeURIComponent(location.pathname) !== p) nav(p + location.search, { replace: true });
+    if (decision.kind === 'replace') nav(decision.path + (live.search || location.search), { replace: true });
   }, [state, location.pathname, location.search]); // eslint-disable-line react-hooks/exhaustive-deps
   return { state, go, setCmp: setCmpState };
 }

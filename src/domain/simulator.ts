@@ -172,4 +172,4 @@ export function simGroup(t: Tech): string {
   return t.type === 'UniqueTech' ? '城堡（独特科技）' : t.bz;
 }
 
-export { parseUnitPath, unitPath, type SimRoute } from './simRoute';
+export { decideSimCanonical, parseUnitPath, routeWithQueryCiv, unitHashLocation, unitPath, type SimCanonical, type SimRoute } from './simRoute';
