@@ -146,6 +146,48 @@ export const PROFILES = {
 };
 /** Playwright files kept when a pull_request would otherwise run the whole suite (#514). */
 export const PR_CORE_SMOKE_E2E = ['tests/e2e/smoke.spec.ts'];
+/**
+ * Kent §C (#538, under #514). These never join a pull_request `capped` browser list,
+ * including when scope is full or a broad profile is selected. Spec files stay in the tree.
+ * main / nightly / CI_E2E_FULL still run them (full suite, or the unchanged profile list).
+ * Four-width × dual-theme guards are the named files below, not the shell suite's own width checks.
+ */
+export const PR_CAPPED_BLACKLIST_EXACT = [
+  'v0300-338',
+  'screenshots',
+  'stepContrast',
+  'overflow64',
+  'mobile361-359-366',
+  'touchTargets481',
+  'finalCivs197',
+  'civDlcFilters',
+];
+const BUILD41_OWNERS = [
+  /(?:^|\/)build41\./,
+  /^src\/features\/builds\//,
+  /^src\/data\/build-orders\//,
+  /^src\/domain\/buildSim\.ts$/,
+  /^src\/domain\/buildOrders/,
+  /^tests\/unit\/build(?:41|Orders|Sim)\./,
+];
+const RUSH35_OWNERS = [
+  /(?:^|\/)rush35\./,
+  /^src\/features\/matchup\/components\/RushDefense\./,
+  /^src\/features\/matchup\/components\/rushDefense\.css$/,
+  /^src\/features\/matchup\/rushGuides\.ts$/,
+  /^tests\/unit\/rush35\./,
+];
+const RUSH_GENERIC_OWNERS = [/rushGeneric/, /^src\/features\/matchup\/rushGuides\.ts$/, /^src\/features\/matchup\/components\/RushDefense\./];
+const TIMELINE_OWNERS = [
+  /^tests\/(?:e2e|unit)\/timeline/i,
+  /^src\/features\/builds\/.*[Tt]imeline/,
+  /^src\/domain\/buildTimeline/,
+  /timelineModel/,
+  /timelineFollowups/,
+  /timeline-labels/,
+  /Timeline(?:Chart|Segment|Settings|Loader)/,
+  /BuildTimelineView/,
+];
 const sourcePresentationFiles = new Map([
   ['src/domain/sourcePresentation.mjs', ['builds', 'gameGuide']],
   ['src/domain/sourcePresentation.d.mts', ['builds', 'gameGuide']],
@@ -201,6 +243,49 @@ export function sourceSchemaOnly(path, before, after) {
 const sorted = (values) => [...new Set(values)].sort();
 const validPath = (path) =>
   typeof path === 'string' && !!path && !/[\\\0]/.test(path) && path.split('/').every((part) => part && part !== '.' && part !== '..');
+
+function rememberPaths(plan, changes) {
+  const paths = sorted((Array.isArray(changes) ? changes : []).filter((change) => change && validPath(change.path)).map((change) => change.path));
+  return paths.length ? { ...plan, paths } : plan;
+}
+
+export function specBasename(path) {
+  const name =
+    String(path ?? '')
+      .split('/')
+      .pop() ?? '';
+  return name.endsWith('.spec.ts') ? name.slice(0, -'.spec.ts'.length) : name;
+}
+
+function pathsMatch(paths, patterns) {
+  return paths.some((path) => patterns.some((pattern) => pattern.test(path)));
+}
+
+/** One civilization token, including wei197 / shuDisplayNames, not a longer word such as weight. */
+function pathsMentionCiv(paths, civ) {
+  const lower = String(civ).toLowerCase();
+  const exact = new RegExp(`(?:^|[^a-z0-9])${lower}(?:[^a-z0-9]|$)`);
+  const camel = lower
+    .split('')
+    .map((character) => `[${character}${character.toUpperCase()}]`)
+    .join('');
+  const prefix = new RegExp(`(?:^|[^A-Za-z0-9])${camel}(?=[A-Z0-9])`);
+  return paths.some((path) => exact.test(String(path).toLowerCase()) || prefix.test(String(path)));
+}
+
+/** True when a spec must stay out of the pull_request capped list (#514 §C). */
+export function prCappedExcludes(specPath, paths = []) {
+  const base = specBasename(specPath);
+  const changed = Array.isArray(paths) ? paths.filter((path) => typeof path === 'string') : [];
+  if (PR_CAPPED_BLACKLIST_EXACT.includes(base) || base.startsWith('cardWrap')) return true;
+  const civ = /^([a-z]+)197$/.exec(base);
+  if (civ) return !pathsMentionCiv(changed, civ[1]);
+  if (base === 'build41') return !pathsMatch(changed, BUILD41_OWNERS);
+  if (base === 'rush35') return !pathsMatch(changed, RUSH35_OWNERS);
+  if (base === 'rushGeneric507') return !pathsMatch(changed, RUSH_GENERIC_OWNERS);
+  if (base === 'timeline' || base.startsWith('timeline')) return !pathsMatch(changed, TIMELINE_OWNERS);
+  return false;
+}
 
 function fullPlan(data = true, features = []) {
   return { scope: 'full', features: sorted(['all', ...features]), unit: [], e2e: [], data, full: true };
@@ -382,7 +467,7 @@ export function planChanges(changes) {
       if (/^scripts\/(?:.*\.py|.*\.json|pinyin_build\.mjs|catalog_introductions\.mjs|effects_audit\.ts)$/.test(path)) data = true;
     }
   }
-  if (full) return fullPlan(data, features);
+  if (full) return rememberPaths(fullPlan(data, features), changes);
   const selected = sorted(features);
   for (const feature of selected) {
     for (const path of PROFILES[feature].unit) extraUnit.add(path);
@@ -390,7 +475,7 @@ export function planChanges(changes) {
   }
   const scope = selected.length === 1 && selected[0] === 'civs' ? 'civ-ui' : selected.length || extraUnit.size || extraE2e.size ? 'targeted' : 'maintenance';
   if (policy || scope === 'maintenance') extraUnit.add('tests/unit/release*.test.ts');
-  return { scope, features: selected, unit: sorted(extraUnit), e2e: sorted(extraE2e), data: false, full: false };
+  return rememberPaths({ scope, features: selected, unit: sorted(extraUnit), e2e: sorted(extraE2e), data: false, full: false }, changes);
 }
 
 export function classifyChanges(changes) {
@@ -440,20 +525,28 @@ export function allowFullBrowser(env = process.env) {
   return true;
 }
 
-/** pull_request keeps full unit/data scope but never the ~189-spec browser suite (#514). */
+/**
+ * pull_request keeps full unit/data scope but never the ~189-spec browser suite (#514).
+ * §C blacklist is removed from that capped list even when scope is full or a profile would have included it.
+ * pageRegistry / shared CSS therefore contribute smoke plus the feature files actually in the diff, not full-site guards.
+ */
 export function applyBrowserPolicy(plan, env = process.env) {
   if (!plan || typeof plan !== 'object') return plan;
   if (allowFullBrowser(env)) {
     const browser = plan.full ? 'full' : plan.e2e?.length ? 'capped' : 'none';
     return { ...plan, browser };
   }
-  if (!plan.full) return { ...plan, browser: plan.e2e?.length ? 'capped' : 'none' };
-  const e2e = new Set(PR_CORE_SMOKE_E2E);
-  for (const feature of plan.features ?? []) {
-    if (feature === 'all' || !Object.hasOwn(PROFILES, feature)) continue;
-    for (const path of PROFILES[feature].e2e) e2e.add(path);
+  const paths = Array.isArray(plan.paths) ? plan.paths : [];
+  const candidates = new Set(plan.full ? PR_CORE_SMOKE_E2E : (plan.e2e ?? []));
+  if (plan.full) {
+    for (const feature of plan.features ?? []) {
+      if (feature === 'all' || !Object.hasOwn(PROFILES, feature)) continue;
+      for (const path of PROFILES[feature].e2e) candidates.add(path);
+    }
   }
-  return { ...plan, browser: 'capped', e2e: sorted(e2e) };
+  const e2e = sorted([...candidates].filter((path) => !prCappedExcludes(path, paths)));
+  if (!e2e.length) return { ...plan, browser: 'none', e2e };
+  return { ...plan, browser: 'capped', e2e };
 }
 
 /** Called only after prepare-release validates the successful main run that owns this artifact. */

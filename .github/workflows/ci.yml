@@ -49,8 +49,9 @@ jobs:
       - name: Typecheck
         if: steps.reuse.outputs.reused != 'true'
         run: npx tsc -p . --noEmit
+      # Kent §C: unused / introductions / contrast stay on main and nightly, not on pull_request.
       - name: Unused exports report (non-blocking findings, #288)
-        if: steps.reuse.outputs.reused != 'true'
+        if: steps.reuse.outputs.reused != 'true' && github.event_name != 'pull_request'
         run: npm run unused:check
       - name: JSON structure and public source presentation (strict)
         if: steps.reuse.outputs.reused != 'true'
@@ -59,10 +60,12 @@ jobs:
         run: npm run lint:layers -- --strict
         if: steps.reuse.outputs.reused != 'true'
       - name: Catalog introduction audit
-        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.full == 'true'
+        if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.full == 'true' && github.event_name != 'pull_request'
         run: npm run introductions:check
-      # Chromium is also needed to build static OG images and for short build checks.
+      # Chromium builds OG images and runs browser checks. pull_request with browser=false skips the install;
+      # that event also skips OG screenshots and the short smoke. main still installs so a docs push can deploy OG.
       - name: Use Ubuntu public package mirror
+        if: github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true'
         run: |
           for source_file in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources /etc/apt/apt-mirrors.txt; do
             if [ -f "$source_file" ]; then
@@ -70,11 +73,13 @@ jobs:
             fi
           done
       - name: Cache Playwright browsers
+        if: github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true'
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
       - name: Install Playwright chromium
+        if: github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true'
         run: npx playwright install --with-deps chromium
       - name: Affected unit checks
         if: steps.reuse.outputs.reused != 'true'
@@ -83,7 +88,7 @@ jobs:
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.data == 'true'
         run: npm run test:py
       - name: Design contrast check (WCAG AA)
-        if: steps.reuse.outputs.reused != 'true'
+        if: steps.reuse.outputs.reused != 'true' && github.event_name != 'pull_request'
         run: python3 docs/design/contrast.py
       # .dat（© Microsoft）只缓存在 runner，不进仓库；key 跟随固定版本
       - name: Cache pinned .dat + genieutils venv
@@ -165,6 +170,8 @@ jobs:
         run: npm run bo:check
       # Build again only to identify the actual checkout SHA in the published footer.
       - name: Build actual checkout
+        env:
+          CI_SKIP_PLAYWRIGHT: ${{ github.event_name == 'pull_request' && steps.scope.outputs.browser != 'true' && '1' || '0' }}
         run: npm run build && git diff --exit-code -- src/data/page-metadata.json
       - name: Affected browser checks
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.browser == 'true'
@@ -173,7 +180,7 @@ jobs:
         run: node scripts/ci-run.mjs --e2e
       # pull_request full plans still run this short dist check. deployment-smoke drops feature "all" on that event.
       - name: Short check of the actual build
-        if: steps.reuse.outputs.reused == 'true' || steps.scope.outputs.browser != 'true' || (github.event_name == 'pull_request' && steps.scope.outputs.scope == 'full' && steps.scope.outputs.e2e_full != 'true')
+        if: (github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true') && (steps.reuse.outputs.reused == 'true' || steps.scope.outputs.browser != 'true' || (github.event_name == 'pull_request' && steps.scope.outputs.scope == 'full' && steps.scope.outputs.e2e_full != 'true'))
         run: |
           python3 -m http.server 4189 --bind 127.0.0.1 --directory dist > "$RUNNER_TEMP/build-smoke-server.log" 2>&1 &
           smoke_pid=$!
