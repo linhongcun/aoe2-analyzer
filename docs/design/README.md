@@ -45,6 +45,7 @@ SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分
 
 - [#517 站点串联](site-linking-517/)（[#517](https://github.com/linhongcun/aoe2-analyzer/issues/517)）：对阵优先的信息架构稿，供 Steve 拆切片与 Codex S1 前对齐。
 - [#308 攻城拆建筑](siege-308/)（[#308](https://github.com/linhongcun/aoe2-analyzer/issues/308)）：`#/siege` 视觉交互稿，供 Codex 与 Steve 设计审阅。
+- [#533 攻城情境入口](siege-533/)（[#533](https://github.com/linhongcun/aoe2-analyzer/issues/533)）：单位页「算拆建筑」、冲车检索、未核实反馈。短稿，供 Steve 设计通过后由 Linus 实现。
 - [#33 天梯数据](ladder-33/)（[#33](https://github.com/linhongcun/aoe2-analyzer/issues/33)）：`#/ladder` 阿拉伯 1v1 分段胜率与新手友好度视觉交互稿，供 Steve 设计审阅后交 Codex。
 
 | Issue     | 内容                                                                                                                                                                                                        | 路径                                                                                                   | 状态 / 签字                                                   |

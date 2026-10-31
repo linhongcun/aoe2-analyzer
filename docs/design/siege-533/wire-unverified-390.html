@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#533 线框 · 390 · 手推炮未核实</title>
+  <link rel="stylesheet" href="siege.css" />
+</head>
+<body>
+  <main class="frame f390" data-testid="siege-page">
+    <div class="top">
+      <a class="back" href="#/" aria-label="返回首页"><span class="ic" aria-hidden="true" title="arrow-left">arrow-left</span>首页</a>
+      <span class="crumb nw" style="margin:0">工具 / 攻城拆建筑</span>
+    </div>
+    <h2 class="page"><span class="ic lg" aria-hidden="true" title="hammer">hammer</span>攻城拆建筑</h2>
+    <p class="desc">手推炮对城堡：数据未对齐，不推算。</p>
+    <section class="sec" aria-labelledby="h-in">
+      <h2 id="h-in">攻方</h2>
+      <div class="field" style="margin:0">
+        <label for="u">攻城单位</label>
+        <div class="sel" id="u"><span class="ic" aria-hidden="true" title="hammer">hammer</span><span class="grow">手推炮</span><span class="ic mu" aria-hidden="true" title="chevron-down">chevron-down</span></div>
+      </div>
+    </section>
+    <section class="sec" aria-labelledby="h-tg">
+      <h2 id="h-tg">目标</h2>
+      <div class="field" style="margin:0">
+        <label for="b">目标建筑</label>
+        <div class="sel" id="b"><span class="ic" aria-hidden="true" title="castle">castle</span><span class="grow">城堡</span><span class="ic mu" aria-hidden="true" title="chevron-down">chevron-down</span></div>
+      </div>
+    </section>
+    <section class="unver" data-testid="siege-unverified" role="status" aria-labelledby="why">
+      <h2 class="t" id="why"><span class="ic mu" aria-hidden="true" title="circle-alert">circle-alert</span>数据未核实，暂不计算</h2>
+      <p data-testid="siege-unverified-reason">建筑的「石质防御」护甲数据尚未对齐，不推算击数与用时。</p>
+      <a class="fb" href="#feedback" data-kind="data">
+        <span class="ic" aria-hidden="true" title="message-square-warning">message-square-warning</span>
+        反馈数据缺口
+      </a>
+    </section>
+    <aside class="model"><span class="ic mu" aria-hidden="true" title="info">info</span><span>模型口径：理想射击间隔，首轮 t=0；不含走位、展开、前摇、飞行、修理、反击。</span></aside>
+  </main>
+  <ul class="anno">
+    <li>390 只确认能读、能点、不横滑。不精修 360。</li>
+    <li>无击数与用时。反馈按钮 ≥ 44px，Lucide <code>message-square-warning</code>。</li>
+  </ul>
+</body>
+</html>
