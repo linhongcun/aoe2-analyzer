@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-ladder-arabia.json",
+  "title": "AoE2 ladder civ stats snapshot (Arabia 1v1)",
+  "type": "object",
+  "required": ["source", "sourceUrl", "map", "mode", "fetchedAt", "brackets"],
+  "additionalProperties": false,
+  "properties": {
+    "source": { "type": "string", "minLength": 1 },
+    "sourceUrl": { "type": "string", "pattern": "^https?://" },
+    "map": { "type": "string", "minLength": 1 },
+    "mode": { "type": "string", "minLength": 1 },
+    "fetchedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "patchNote": { "type": "string" },
+    "brackets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["key", "label", "games", "civs"],
+        "additionalProperties": false,
+        "properties": {
+          "key": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "games": { "type": "integer", "minimum": 0 },
+          "civs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["en", "winRate", "playRate", "games"],
+              "additionalProperties": false,
+              "properties": {
+                "en": { "type": "string", "minLength": 1 },
+                "winRate": { "type": "number", "minimum": 0, "maximum": 100 },
+                "playRate": { "type": "number", "minimum": 0, "maximum": 100 },
+                "games": { "type": "integer", "minimum": 0 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
