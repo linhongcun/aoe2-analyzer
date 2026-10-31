@@ -487,9 +487,21 @@
     font-size: 12px;
   }
 }
-/* 360 宽藏起文明图标，把列宽留给中文名（保加利亚、埃塞俄比亚）。375 及以上仍显示图标。 */
+/* 360：文明图标保留。收窄胜率、出场率、友好度，把宽度让给中文名。 */
 @media (max-width: 374px) {
-  .ladder-civ .ico {
-    display: none;
+  .ladder-col-win {
+    width: 54px;
+  }
+  .ladder-col-play {
+    width: 50px;
+  }
+  .ladder-col-tier {
+    width: 58px;
+  }
+  .ladder-col-expand {
+    width: 44px;
+  }
+  .ladder-table :is(td, th) {
+    padding-inline: 1px;
   }
 }
