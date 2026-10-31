@@ -166,7 +166,9 @@ test('#533 搜索「冲车」见到攻城锤和攻城拆建筑，主名仍是攻
   await expect(ram.locator('b').first()).toHaveText('攻城锤');
   await expect(tool, '攻城拆建筑页应能通过「冲车」搜到').toHaveCount(1);
   await tool.click();
-  await expect(page).toHaveURL(/#\/siege\/?(?:\?|$)/);
+  // 点击后地址先变成 #/siege，默认参数的 replace 随后才写入。等这次 replace 结束再回首页，
+  // 否则它和 page.goto('#/') 抢同一次同文档导航，首页会留在攻城页上。
+  await expect(page).toHaveURL(/#\/siege\?unit=1258(?:&|$)/);
   const again = await openSearch(page, '冲车');
   await namedOption(again, '攻城锤').click();
   await expect(page).toHaveURL(/#\/unit\/1258(?:[/?#]|$)/);

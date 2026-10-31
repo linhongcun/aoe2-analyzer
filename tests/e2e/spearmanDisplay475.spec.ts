@@ -29,10 +29,11 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/unit/93/Armenians/1');
       await expect(page.locator('#unit .dhead-tags .tag').filter({ hasText: /^黑暗时代$/ })).toHaveCount(1);
       // The header can render before tree data and the simulator's URL-normalizing effect.
-      // Finish that existing navigation before leaving for the unit list.
+      // Finish that navigation before leaving. #550 keeps a path that already parses as the
+      // same route, so #/unit/93/Armenians/1 stays without a trailing slash. Either form still opens this page.
       const simulator = page.locator('#sim');
       await expect(simulator.getByRole('button', { name: '文明：亚美尼亚', exact: true })).toBeVisible();
-      await expect(page).toHaveURL(/#\/unit\/93\/Armenians\/1\/$/);
+      await expect(page).toHaveURL(/#\/unit\/93\/Armenians\/1$/);
       await expect(simulator.locator('#simage')).toHaveValue('1');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 

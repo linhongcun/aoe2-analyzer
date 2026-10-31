@@ -4,6 +4,7 @@ import { UNIT_ALIASES } from '../../src/data/aliases';
 import type { Building } from '../../src/domain/types';
 import {
   calculateSiege,
+  decideSiegeCanonical,
   SIEGE_DEFAULT_N,
   SIEGE_MANGONEL_REASON,
   SIEGE_STONE_DEFENSE_REASON,
@@ -43,6 +44,16 @@ describe('攻城情境入口 #533', () => {
     expect(calculateSiege(unit('Bombard Cannon'), castle, 1)).toEqual({ verified: false, reason: SIEGE_STONE_DEFENSE_REASON });
     expect(calculateSiege(ram, building(109), 1)).toMatchObject({ verified: true, hits: 16, gameSeconds: 75 });
     expect(calculateSiege(ram, castle, 4)).toMatchObject({ verified: true, hits: 9, gameSeconds: 40 });
+  });
+
+  it('离开攻城页后不再把默认参数 replace 回去，尾斜杠不算另一条路径', () => {
+    const canonical = '?unit=1258&n=4&bldg=82';
+    expect(decideSiegeCanonical('#/siege', canonical)).toEqual({ kind: 'replace' });
+    expect(decideSiegeCanonical('#/siege/', canonical)).toEqual({ kind: 'replace' });
+    expect(decideSiegeCanonical('#/siege?unit=1258&n=4&bldg=82', canonical)).toEqual({ kind: 'keep' });
+    expect(decideSiegeCanonical('#/siege/?unit=1258&n=4&bldg=82', canonical)).toEqual({ kind: 'keep' });
+    expect(decideSiegeCanonical('#/', canonical)).toEqual({ kind: 'ignore' });
+    expect(decideSiegeCanonical('#/unit/1258', canonical)).toEqual({ kind: 'ignore' });
   });
 
   it('「冲车」命中攻城锤别名和攻城拆建筑页，官方名仍是攻城锤', () => {
