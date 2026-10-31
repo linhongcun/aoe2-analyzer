@@ -45,7 +45,7 @@ for (const width of [360, 375, 390, 1280]) {
         await button.press('Enter');
         const article = page.getByRole('article', { name: `${map.name} ${map.en}`, exact: true });
         await expect(article).toBeFocused();
-        await expect(article.getByRole('heading', { level: 3 })).toBeInViewport();
+        await expect(article.getByRole('heading', { level: 3 }).first()).toBeInViewport();
         const preview = article.getByRole('img', { name: /地图预览/ });
         await preview.scrollIntoViewIfNeeded();
         await expect(preview).toBeVisible();
