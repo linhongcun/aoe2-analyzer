@@ -10,6 +10,18 @@ const version = /^\d+\.\d+\.\d+$/;
 const cssFiles = new Set(['src/shared/styles/base.css', 'src/shared/styles/editorial.css']);
 // Audited shell presentation only; routing, tokens, state and other shared files stay conservative.
 const shellFiles = new Set(['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src/shared/styles/editorial-shell.css']);
+// Audited display files only. Calculation, tokens, routing and unaudited shared UI stay full.
+const displayFiles = new Map([
+  ['src/domain/formatTime.ts', ['clock']],
+  ['src/domain/dupNames.ts', ['names']],
+  ['src/domain/linker.ts', ['links']],
+  ['src/domain/sharePage.ts', ['share']],
+  ['src/domain/glossary.ts', ['glossary']],
+  ['src/shared/ui/ShareImage.tsx', ['share']],
+  ['src/shared/ui/FeedbackLink.tsx', ['shell']],
+  ['src/shared/utils/feedback.ts', ['shell']],
+]);
+const feedbackPaths = new Set(['src/shared/ui/FeedbackLink.tsx', 'src/shared/utils/feedback.ts']);
 const maintenanceFiles = new Set([
   'scripts/release.mjs',
   'scripts/prepare-release.mjs',
@@ -122,7 +134,18 @@ export const PROFILES = {
   ),
   maps: profile([], ['maps34', 'mapPreviews', 'mapCatalog422']),
   compare: profile(['compare403', 'teamBonuses228'], ['compare403', 'civText402', 'teamBonuses228']),
+  // Display-only helpers. Combat, eco and cost math stay on the full plan.
+  clock: profile(
+    ['formatTime', 'formatTime.consistency-1', 'formatTime.consistency-2', 'formatTime.consistency-3', 'formatTime.consistency-4'],
+    ['timeFormat'],
+  ),
+  names: profile(['aliases44'], ['dupNames44']),
+  links: profile(['dlc-linker'], ['civText402']),
+  share: profile(['share78', 'shareCard'], ['share78', 'shareCard', 'shareLink286']),
+  glossary: profile(['glossary217', 'glossary276'], ['glossary217', 'glossary276']),
 };
+/** Playwright files kept when a pull_request would otherwise run the whole suite (#514). */
+export const PR_CORE_SMOKE_E2E = ['tests/e2e/smoke.spec.ts'];
 const sourcePresentationFiles = new Map([
   ['src/domain/sourcePresentation.mjs', ['builds', 'gameGuide']],
   ['src/domain/sourcePresentation.d.mts', ['builds', 'gameGuide']],
@@ -304,6 +327,9 @@ export function planChanges(changes) {
       // Ordinary documentation does not change product logic or generated data.
     } else if (shellFiles.has(path)) {
       features.add('shell');
+    } else if (displayFiles.has(path)) {
+      for (const feature of displayFiles.get(path)) features.add(feature);
+      if (feedbackPaths.has(path)) extraUnit.add('tests/unit/feedback.test.ts');
     } else if (sourcePresentationFiles.has(path)) {
       for (const feature of sourcePresentationFiles.get(path)) features.add(feature);
     } else if (rawSourceSchemas.has(path)) {
@@ -407,6 +433,29 @@ export function eventBase(eventName, event, ref, initialReleaseBase = null) {
   return null;
 }
 
+/** Complete Playwright is allowed off pull_request. CI_E2E_FULL=false also refuses it. Unset env keeps local/full plans intact. */
+export function allowFullBrowser(env = process.env) {
+  if (env.GITHUB_EVENT_NAME === 'pull_request') return false;
+  if (env.CI_E2E_FULL === 'false') return false;
+  return true;
+}
+
+/** pull_request keeps full unit/data scope but never the ~189-spec browser suite (#514). */
+export function applyBrowserPolicy(plan, env = process.env) {
+  if (!plan || typeof plan !== 'object') return plan;
+  if (allowFullBrowser(env)) {
+    const browser = plan.full ? 'full' : plan.e2e?.length ? 'capped' : 'none';
+    return { ...plan, browser };
+  }
+  if (!plan.full) return { ...plan, browser: plan.e2e?.length ? 'capped' : 'none' };
+  const e2e = new Set(PR_CORE_SMOKE_E2E);
+  for (const feature of plan.features ?? []) {
+    if (feature === 'all' || !Object.hasOwn(PROFILES, feature)) continue;
+    for (const path of PROFILES[feature].e2e) e2e.add(path);
+  }
+  return { ...plan, browser: 'capped', e2e: sorted(e2e) };
+}
+
 /** Called only after prepare-release validates the successful main run that owns this artifact. */
 export function releaseScope(manifest, expectedHead, classify = classifyRange) {
   if (!manifest || !sha.test(expectedHead) || manifest.head !== expectedHead || !sha.test(manifest.base)) return 'full';
@@ -445,11 +494,16 @@ function main() {
     )
       plan = fullPlan(plan.data, plan.features);
     if (process.env.CI_FULL === 'true' || process.env.GITHUB_EVENT_NAME === 'schedule') plan = fullPlan();
+    // #514: pull_request never expands Playwright to the whole suite, even when scope stays full.
+    plan = applyBrowserPolicy(plan);
     writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-scope.json'), JSON.stringify({ base, head, scope: plan.scope }) + '\n');
     writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-plan.json'), JSON.stringify(plan) + '\n');
   }
-  if (process.env.GITHUB_OUTPUT)
-    appendFileSync(process.env.GITHUB_OUTPUT, `scope=${plan.scope}\ndata=${plan.data}\nfull=${plan.full}\nbrowser=${plan.full || !!plan.e2e.length}\n`);
+  if (process.env.GITHUB_OUTPUT) {
+    const runBrowser = plan.browser === 'full' || plan.browser === 'capped' || (plan.browser == null && (plan.full || !!plan.e2e.length));
+    const e2eFull = plan.browser === 'full' || (plan.browser == null && !!plan.full);
+    appendFileSync(process.env.GITHUB_OUTPUT, `scope=${plan.scope}\ndata=${plan.data}\nfull=${plan.full}\nbrowser=${runBrowser}\ne2e_full=${e2eFull}\n`);
+  }
   console.log(`Validation plan: ${JSON.stringify(plan)}`);
 }
 

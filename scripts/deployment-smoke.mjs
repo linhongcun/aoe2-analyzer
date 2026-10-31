@@ -22,6 +22,12 @@ export function smokeFeatures(features) {
 export function needsBuildsSmoke(features) {
   return features.includes('all') || features.includes('builds');
 }
+/** pull_request drops the "all" tour; detected features and the home/footer check remain (#514). */
+export function deploymentSmokeFeatures(features, env = process.env) {
+  if (!Array.isArray(features)) return [];
+  const expandAll = env.GITHUB_EVENT_NAME !== 'pull_request' && env.CI_E2E_FULL !== 'false';
+  return expandAll ? features : features.filter((feature) => feature !== 'all');
+}
 export async function checkSite({ site, version, commit, features = [] }) {
   const root = new URL(site);
   assert.ok(['http:', 'https:'].includes(root.protocol), 'Smoke checks need an HTTP site');
@@ -896,11 +902,14 @@ async function main() {
   const path = planPosition >= 0 ? process.argv[planPosition + 1] : process.env.CI_PLAN_PATH;
   const raw = path ? JSON.parse(readFileSync(path, 'utf8')) : { features: [] };
   const plan = raw.plan ?? raw;
+  const features = deploymentSmokeFeatures(plan.features ?? []);
+  if (Array.isArray(plan.features) && features.length !== plan.features.length)
+    console.log('PR deployment smoke keeps detected features and skips the full-suite tour');
   await checkSite({
     site,
     version: process.env.RELEASE_VERSION || `v${JSON.parse(readFileSync('package.json', 'utf8')).version}`,
     commit: process.env.EXPECTED_DEPLOYED_SHA || execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
-    features: plan.features,
+    features,
   });
 }
 if (import.meta.url === pathToFileURL(resolve(process.argv[1] || '')).href) {

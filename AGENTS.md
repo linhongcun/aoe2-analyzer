@@ -107,6 +107,8 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。`ci-scope` 选择 `maintenance`、`civ-ui`、`targeted` 或 `full`，功能页面及纯展示/路由辅助改动使用相关单测、交互和布局检查；UI 改动不重生成未变数据。核心计算、依赖、共享基础设施、未知或不可靠范围仍做一次完整验证；只有确需再生成时才执行数据管线。
 
+**PR 不跑完整浏览器（#514）**：`pull_request` 即使 `full=true`，也不跑约 189 个 Playwright spec。PR 浏览器是部署烟测 + `tests/e2e/smoke.spec.ts` + 已识别功能的 e2e；没有可识别功能时只跑 smoke。完整浏览器只在 main/release 的 full 计划、夜间 schedule、以及 `workflow_dispatch` 且 `CI_FULL`（环境变量 `CI_E2E_FULL`，pull_request 恒为 false）。Layout / Icon / `editorial-shell.css` 以及已审计的展示文件走 targeted，不会先被标成 full。详见 [CODEX-MAINTENANCE](docs/CODEX-MAINTENANCE.md)「PR 浏览器上限」。
+
 `ci-validation-evidence` 记录实际测试提交、Git tree、策略指纹、范围和来源 run。release/main 仅在同仓库真实成功的 CI、代码树、策略和必要范围均匹配时复用；缺少有效证据就执行当前必要范围，不因发布阶段变化重复全量。main 仍重建真实 SHA，执行短烟测并部署。PR 描述记录实际执行、复用、跳过或中止的范围及结果，不把复用结果写成当前提交重新跑过全套。详见 [TESTING](docs/TESTING.md)。
 
 ## 测试规则

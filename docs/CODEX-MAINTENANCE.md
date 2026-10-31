@@ -72,7 +72,7 @@
 
 ### 壳层 PR 的有界验证（#513）
 
-`scripts/ci-scope.mjs` 只将以下三个精确路径归入 `shell`：`src/app/Layout.tsx`、`src/shared/ui/Icon.tsx`、`src/shared/styles/editorial-shell.css`。仅改这些文件，可附普通文档、CHANGELOG 和仅版本号变更，PR 使用 `targeted`：单测 `nav`、`theme6`、`pageRegistry283`；浏览器固定 6 个 spec：`smoke`、`navigation272`、`editorial6`、`skipLink294`、`searchLoading395`、`feedbackTap295`。覆盖基础页面、首页入口、导航/主题/搜索焦点、跳过导航和页脚，并保留这些用例原有的四宽及明暗主题断言。
+`scripts/ci-scope.mjs` 的壳层白名单是这三个精确路径：`src/app/Layout.tsx`、`src/shared/ui/Icon.tsx`、`src/shared/styles/editorial-shell.css`。仅改这些文件，可附普通文档、CHANGELOG 和仅版本号变更，PR 使用 `targeted`：单测 `nav`、`theme6`、`pageRegistry283`；浏览器固定 6 个 spec：`smoke`、`navigation272`、`editorial6`、`skipLink294`、`searchLoading395`、`feedbackTap295`。覆盖基础页面、首页入口、导航/主题/搜索焦点、跳过导航和页脚，并保留这些用例原有的四宽及明暗主题断言。`FeedbackLink.tsx` 与 `src/shared/utils/feedback.ts` 使用同一套 shell 浏览器检查，并额外跑 `feedback` 单测（#514）。
 
 | 事件 / 混合改动                       | 验证计划                                                     |
 | ------------------------------------- | ------------------------------------------------------------ |
@@ -82,7 +82,54 @@
 | nightly / `CI_FULL=true`              | `full` + 数据检查，禁用证据复用                              |
 | 仅普通文档 / CI 维护                  | 保持既有短路径；其他功能的 #431 计划与复用规则不变           |
 
-未审计的 `src/app/**`、`src/shared/**`、路由登记、设计令牌和计算逻辑仍可触发 `full`，不能将整个 shared 目录视为壳层。例如 `src/domain/realCost.ts` 仍需全量测试；#512 的原始完整 diff 含此文件，不能宣称其全部改动会因本白名单转为 targeted。`src/data/**`、数据生成脚本/来源、非仅版本号的依赖或锁文件变更仍保留 `full + data`。显式完整验证和未知提交范围也不降级。PR 的壳层 targeted 证据不能冒充 main/release 的 full 成功。
+未审计的 `src/app/**`、`src/shared/**`、路由登记、设计令牌和计算逻辑仍可触发 `full`，不能将整个 shared 目录视为壳层。例如 `src/domain/realCost.ts` 仍是 `full`（完整单测；main/nightly 仍跑完整浏览器）。#512 的原始完整 diff 含此文件，不能宣称其全部改动会因壳层白名单转为 targeted。`pull_request` 上这类 full 计划不再跑约 189 个浏览器 spec，见下一节。`src/data/**`、数据生成脚本/来源、非仅版本号的依赖或锁文件变更仍保留 `full + data`。显式完整验证和未知提交范围也不降级。PR 的壳层 targeted 证据，以及只跑了 smoke 的 full 计划，都不能冒充 main/release 的完整浏览器成功。
+
+### PR 浏览器上限（#514）
+
+`pull_request` 永远不跑完整 Playwright。`scope=full` 时单测、内容、分层和 `data` 仍按原计划；浏览器改为：
+
+- 部署烟测（`scripts/deployment-smoke.mjs`；该事件去掉 feature `all` 的长巡游，只留首页/页脚和已识别功能）
+- 核心包 `tests/e2e/smoke.spec.ts`
+- diff 里已经映射到 `PROFILES` 的功能 e2e
+
+识别不到功能时，浏览器只有部署烟测和 `smoke.spec.ts`。`CI_E2E_FULL` 由 `.github/workflows/ci.yml` 设置，`pull_request` 恒为 `false`；`scripts/ci-scope.mjs` 的 `applyBrowserPolicy` 与 `scripts/ci-run.mjs` 都认这个事件，不能靠把 `CI_E2E_FULL=true` 写进 PR 环境把整套 e2e 加回来。
+
+| 事件                                                                 | 浏览器                                                 |
+| -------------------------------------------------------------------- | ------------------------------------------------------ |
+| `pull_request`                                                       | smoke + 已识别功能；无功能则 smoke。不跑约 189 个 spec |
+| `push` 到 `main` / `release/**`，且计划为 `full`（含壳层 push 提升） | 完整 Playwright                                        |
+| `schedule` 夜间、`workflow_dispatch` 且 `inputs.full` / `CI_FULL`    | 完整 Playwright，并做数据检查、禁用证据复用            |
+| 已映射的 targeted / civ-ui / maintenance                             | 与原来相同的文件列表；maintenance 仍走短部署烟测       |
+
+手动 `workflow_dispatch` 即使关掉 `inputs.full`，事件也没有 PR/push 基线，路径计划仍是 full，且 `CI_E2E_FULL` 为 true，浏览器同样是完整套件。浏览器限流只发生在 `pull_request`。
+
+已审计、只影响展示的路径不再标成 `full`（计算、令牌、路由、`realCost.ts`、`widgets.tsx`、`layout.tsx` 等仍会）：
+
+| 路径                                                             | 计划                          |
+| ---------------------------------------------------------------- | ----------------------------- |
+| `Layout.tsx`、`Icon.tsx`、`editorial-shell.css`                  | `shell`（#513，6 个 spec）    |
+| `FeedbackLink.tsx`、`src/shared/utils/feedback.ts`               | `shell`，并加 `feedback` 单测 |
+| `formatTime.ts`                                                  | `clock`                       |
+| `dupNames.ts`                                                    | `names`                       |
+| `linker.ts`                                                      | `links`                       |
+| `sharePage.ts`、`ShareImage.tsx`                                 | `share`                       |
+| `glossary.ts` 与 `src/features/glossary/`、`src/features/share/` | `glossary` / `share`          |
+
+证据里的 `browser:"capped"` 不能覆盖以后的 `browser:"full"`。main 不会把一次只跑了 smoke 的 PR 当成完整浏览器已通过。
+
+本地看 PR 会真正执行的浏览器列表（`planRange` 本身不含事件上限）：
+
+```bash
+node --input-type=module <<'NODE'
+import { execFileSync } from 'node:child_process';
+import { applyBrowserPolicy, planRange } from './scripts/ci-scope.mjs';
+const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+const head = git('rev-parse', 'HEAD');
+const base = git('merge-base', 'origin/main', head);
+const plan = applyBrowserPolicy(planRange(base, head), { GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'false' });
+console.log(JSON.stringify({ scope: plan.scope, full: plan.full, browser: plan.browser, e2e: plan.e2e }, null, 2));
+NODE
+```
 
 提交前可预估实际 Git 范围（先 `git fetch origin main`；下例为当前分支与 main 的公共祖先到 HEAD）：
 

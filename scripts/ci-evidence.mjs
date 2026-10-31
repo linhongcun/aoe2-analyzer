@@ -41,14 +41,25 @@ function normalizePlan(plan) {
     return null;
   if ((plan.scope === 'full') !== plan.full) return null;
   if (plan.data && !plan.full) return null;
+  if (plan.browser !== undefined && !['full', 'capped', 'none'].includes(plan.browser)) return null;
+  if (plan.browser === 'full' && !plan.full) return null;
+  if (plan.browser === 'none' && (plan.full || plan.e2e?.length)) return null;
+  if (plan.browser === 'capped' && !plan.e2e?.length) return null;
   const list = (value) => Array.isArray(value) && value.every((entry) => typeof entry === 'string' && entry.length > 0 && entry.length < 300);
   if (!['features', 'unit', 'e2e'].every((key) => list(plan[key]))) return null;
   return Object.fromEntries([
     ['scope', plan.scope],
     ['full', plan.full],
     ['data', plan.data],
+    ...(plan.browser ? [['browser', plan.browser]] : []),
     ...['features', 'unit', 'e2e'].map((key) => [key, [...new Set(plan[key])].sort()]),
   ]);
+}
+
+function browserOf(plan) {
+  if (plan.browser === 'full' || plan.browser === 'capped' || plan.browser === 'none') return plan.browser;
+  if (plan.full) return 'full';
+  return plan.e2e.length ? 'capped' : 'none';
 }
 
 function containsPattern(patterns, requested) {
@@ -70,8 +81,13 @@ export function planCovers(available, required) {
   const a = normalizePlan(available),
     b = normalizePlan(required);
   if (!a || !b || (b.data && !a.data)) return false;
-  if (a.full) return true;
+  const aBrowser = browserOf(a),
+    bBrowser = browserOf(b);
+  // A pull_request full plan records browser:"capped" and must not skip a later full browser run.
+  if (bBrowser === 'full' && aBrowser !== 'full') return false;
+  if (a.full && aBrowser === 'full') return true;
   if (b.full) return false;
+  if (bBrowser !== 'none' && aBrowser === 'none') return false;
   return (
     b.features.every((feature) => a.features.includes(feature)) &&
     b.unit.every((path) => containsPattern(a.unit, path)) &&

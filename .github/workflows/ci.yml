@@ -16,7 +16,10 @@ concurrency:
   group: ci-${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'background' || 'delivery' }}-${{ github.ref }}
   cancel-in-progress: true
 env:
+  # Nightly and manual full regression: unit, data, and the complete browser suite.
   CI_FULL: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.full) }}
+  # Complete Playwright (~189 specs). Never true for pull_request (#514); main/release push, nightly, and workflow_dispatch may.
+  CI_E2E_FULL: ${{ github.event_name != 'pull_request' }}
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -66,6 +69,11 @@ jobs:
               sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|g' "$source_file"
             fi
           done
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
       - name: Install Playwright chromium
         run: npx playwright install --with-deps chromium
       - name: Affected unit checks
@@ -163,8 +171,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: node scripts/ci-run.mjs --e2e
+      # pull_request full plans still run this short dist check. deployment-smoke drops feature "all" on that event.
       - name: Short check of the actual build
-        if: steps.reuse.outputs.reused == 'true' || steps.scope.outputs.browser != 'true'
+        if: steps.reuse.outputs.reused == 'true' || steps.scope.outputs.browser != 'true' || (github.event_name == 'pull_request' && steps.scope.outputs.scope == 'full' && steps.scope.outputs.e2e_full != 'true')
         run: |
           python3 -m http.server 4189 --bind 127.0.0.1 --directory dist > "$RUNNER_TEMP/build-smoke-server.log" 2>&1 &
           smoke_pid=$!
