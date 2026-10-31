@@ -487,3 +487,9 @@
     font-size: 12px;
   }
 }
+/* 360 宽藏起文明图标，把列宽留给中文名（保加利亚、埃塞俄比亚）。375 及以上仍显示图标。 */
+@media (max-width: 374px) {
+  .ladder-civ .ico {
+    display: none;
+  }
+}
