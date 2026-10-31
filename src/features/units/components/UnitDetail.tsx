@@ -7,7 +7,7 @@ import { baseUnit } from '../../../domain/family';
 import type { Unit } from '../../../domain/types';
 import { civByEn, civs } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
-import { civStatus, makeSimContext, parseUnitPath } from '../../../domain/simulator';
+import { civStatus, makeSimContext, parseUnitPath, routeWithQueryCiv } from '../../../domain/simulator';
 import { unitRelatedTechs, type UnitRelatedTech } from '../../../domain/relatedTechs';
 import { AGE_ZH } from '../../../domain/ratings';
 import { uniqueCivs, upgradeLine } from '../../../domain/units';
@@ -186,7 +186,7 @@ export default function UnitDetail() {
         .filter((c) => c.u);
   const showNote = peers.length > 0 || conf.length > 0;
   const wantSim = hasCiv || new URLSearchParams(loc.search).get('tab') === 'sim';
-  const simulatorRoute = !rt.civ && queryCiv && u.civs.includes(queryCiv.en) ? { ...rt, civ: queryCiv.en } : rt;
+  const simulatorRoute = routeWithQueryCiv(rt, queryCiv?.en, u.civs);
   const allCivsParams = new URLSearchParams(params);
   allCivsParams.set('tab', 'rel');
   const showSiegeEntry = siegeUnitEntryVerified(u, core.buildingById[82]);
