@@ -115,9 +115,19 @@ describe('#431 affected feature plans', () => {
 
   it('an added test runs explicitly; an unmapped test name is not an excuse to run the whole product', () => {
     const plan = planChanges([change('tests/e2e/newBehavior.spec.ts'), change('tests/unit/newBehavior.test.ts')]);
-    expect(plan).toEqual(minimal({ unit: ['tests/unit/newBehavior.test.ts'], e2e: ['tests/e2e/newBehavior.spec.ts'] }));
-    expect(planChanges([change('tests/unit/buildSim.test.ts')])).toEqual(minimal({ unit: ['tests/unit/buildSim.test.ts'] }));
-    expect(planChanges([change('tests/e2e/catalogLayout187.spec.ts')])).toEqual(minimal({ e2e: ['tests/e2e/catalogLayout187.spec.ts'] }));
+    expect(plan).toEqual(
+      minimal({
+        unit: ['tests/unit/newBehavior.test.ts'],
+        e2e: ['tests/e2e/newBehavior.spec.ts'],
+        paths: ['tests/e2e/newBehavior.spec.ts', 'tests/unit/newBehavior.test.ts'],
+      }),
+    );
+    expect(planChanges([change('tests/unit/buildSim.test.ts')])).toEqual(
+      minimal({ unit: ['tests/unit/buildSim.test.ts'], paths: ['tests/unit/buildSim.test.ts'] }),
+    );
+    expect(planChanges([change('tests/e2e/catalogLayout187.spec.ts')])).toEqual(
+      minimal({ e2e: ['tests/e2e/catalogLayout187.spec.ts'], paths: ['tests/e2e/catalogLayout187.spec.ts'] }),
+    );
   });
 
   it('every shipped profile selects real files, so stale test names cannot produce an empty success', () => {
