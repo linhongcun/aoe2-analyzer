@@ -1,11 +1,10 @@
-import { Fragment, useEffect, useMemo, useState, type KeyboardEvent, type MouseEvent } from 'react';
+import { Fragment, useEffect, useMemo, useState, type MouseEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civByEn } from '../../data';
 import beginnerNotes from '../../data/ladder-beginner.json';
 import snapshotJson from '../../data/ladder-arabia-p162286.json';
 import {
   canonicalSearch,
-  DISPLAY_BRACKETS,
   firstSortDir,
   formatGames,
   formatPercent,
@@ -24,6 +23,7 @@ import {
   type SortDir,
   type SortKey,
 } from '../../domain/ladder';
+import { LadderBracketGroup, LadderStaticPill } from './LadderElo';
 import { CivIcon } from '../../shared/ui/art';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { useShareLink } from '../../shared/ui/useShareLink';
@@ -74,12 +74,12 @@ export default function Ladder() {
   const location = useLocation();
   const navigate = useNavigate();
   const rawElo = new URLSearchParams(location.search).get('elo');
-  const { elo, illegal } = resolveElo(rawElo);
-  const [toast, setToast] = useState<string | null>(illegal);
-  const [trackedIllegal, setTrackedIllegal] = useState(illegal);
-  if (illegal !== trackedIllegal) {
-    setTrackedIllegal(illegal);
-    if (illegal) setToast(illegal);
+  const { elo, toast: fallback } = resolveElo(rawElo, snapshot);
+  const [toast, setToast] = useState<string | null>(fallback);
+  const [trackedFallback, setTrackedFallback] = useState(fallback);
+  if (fallback !== trackedFallback) {
+    setTrackedFallback(fallback);
+    if (fallback) setToast(fallback);
   }
   const [sort, setSort] = useState<{ key: SortKey; dir: SortDir }>({ key: 'win', dir: firstSortDir('win') });
   const [open, setOpen] = useState<string | null>(null);
@@ -121,22 +121,13 @@ export default function Ladder() {
   }, [toast]);
 
   const select = (key: string) => {
-    const next = resolveElo(key).elo;
+    const next = resolveElo(key, snapshot).elo;
     navigate({ pathname: '/ladder', search: canonicalSearch(next) }, { replace: true });
     queueMicrotask(() => {
       const node = document.querySelector<HTMLButtonElement>(`[data-testid="ladder-bracket"][data-elo="${CSS.escape(next)}"]`);
       node?.focus();
       node?.scrollIntoView({ inline: 'nearest', block: 'nearest' });
     });
-  };
-
-  const onBracketKey = (event: KeyboardEvent<HTMLDivElement>) => {
-    const index = DISPLAY_BRACKETS.findIndex((item) => item.key === elo);
-    if (event.key !== 'ArrowRight' && event.key !== 'ArrowDown' && event.key !== 'ArrowLeft' && event.key !== 'ArrowUp') return;
-    event.preventDefault();
-    const step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : -1;
-    const next = DISPLAY_BRACKETS[(index + step + DISPLAY_BRACKETS.length) % DISPLAY_BRACKETS.length];
-    if (next) select(next.key);
   };
 
   if (!snapshot.fetchedAt) {
@@ -176,35 +167,12 @@ export default function Ladder() {
           <Icon name="swords" />
           <span className="nw">1v1</span> 随机地图（RM）
         </span>
+        <LadderStaticPill snapshot={snapshot} />
       </div>
-      <div className="ladder-elo">
-        <span id="ladder-elo-label">天梯分段（Elo）</span>
-        <div className="ladder-scroll">
-          <div role="radiogroup" aria-labelledby="ladder-elo-label" className="ladder-brackets" onKeyDown={onBracketKey}>
-            {DISPLAY_BRACKETS.map((item) => {
-              const checked = item.key === elo;
-              return (
-                <button
-                  key={item.key}
-                  type="button"
-                  role="radio"
-                  aria-checked={checked}
-                  tabIndex={checked ? 0 : -1}
-                  data-testid="ladder-bracket"
-                  data-elo={item.key}
-                  className="ladder-bracket"
-                  onClick={() => select(item.key)}
-                >
-                  {item.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      <LadderBracketGroup snapshot={snapshot} elo={elo} onSelect={select} />
       {toast && (
         <p className="ladder-toast" role="status" data-testid="ladder-fallback-toast">
-          未识别的分段「{toast}」，已显示「全部」。
+          {toast}
         </p>
       )}
       {/* TODO: 玩家界面只写 aoestats、统计日期和补丁号。Wayback 路径留在快照 JSON 与设计/数据文档，不渲染到页面。 */}
@@ -457,7 +425,7 @@ function LadderHeading() {
         <Icon name="trophy" />
         天梯数据 <small>Ladder Stats</small>
       </h1>
-      <p className="ladder-desc">阿拉伯 1v1 分段胜率、出场率与新手友好度。</p>
+      <p className="ladder-desc">阿拉伯 1v1 胜率、出场率与新手友好度。</p>
     </>
   );
 }
