@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#545 线框 · 1280 · 空数据深链回落</title>
+  <link rel="stylesheet" href="ladder.css" />
+</head>
+<body>
+  <main class="frame f1280" data-testid="ladder-page">
+    <p class="crumb">
+      <span class="ic mu" aria-hidden="true" title="home">home</span>
+      首页
+      <span class="ic mu" aria-hidden="true" title="chevron-right">chevron-right</span>
+      资料
+      <span class="ic mu" aria-hidden="true" title="chevron-right">chevron-right</span>
+      天梯数据
+    </p>
+    <h1>
+      <span class="ic lg" aria-hidden="true" title="trophy">trophy</span>
+      天梯数据 <small>Ladder Stats</small>
+    </h1>
+    <p class="desc">阿拉伯 1v1 胜率、出场率与新手友好度。</p>
+    <div class="ctx" data-testid="ladder-context">
+      <span class="pill">
+        <span class="ic" aria-hidden="true" title="map">map</span>
+        阿拉伯 <span lang="en">Arabia</span>
+        <span class="fix">固定</span>
+      </span>
+      <span class="pill">
+        <span class="ic" aria-hidden="true" title="swords">swords</span>
+        <span class="nw">1v1</span> 随机地图（RM）
+      </span>
+      <span class="pill" data-testid="ladder-elo-static">
+        天梯分段
+        <span class="nw">全部</span>
+        <span class="fix">当前快照</span>
+      </span>
+    </div>
+    <p class="toast" role="status" data-testid="ladder-fallback-toast">「&lt;850」暂无数据，已显示「全部」。</p>
+    <div class="source" data-testid="ladder-source">
+      <span class="ic" aria-hidden="true" title="database">database</span>
+      <p>
+        <a href="https://aoestats.io/maps/arabia/">aoestats.io <span class="ic mu" aria-hidden="true" title="external-link">external-link</span>（外部）</a>。
+        <span class="nw">统计更新 <span class="num">2026-07-12</span></span>。
+        <span class="nw">补丁 <span class="num">162286</span></span>。
+        <span class="nw">本分段样本 <span class="num">504,189</span> 局</span>
+      </p>
+    </div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>文明</th>
+            <th class="numcol">胜率</th>
+            <th class="numcol">出场率</th>
+            <th class="numcol">样本局数</th>
+            <th>新手友好度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="zh">罗马</span><span class="en" lang="en">Romans</span></td>
+            <td class="numcol"><span class="num">54.04%</span></td>
+            <td class="numcol"><span class="num">1.67%</span></td>
+            <td class="numcol"><span class="num">16,815</span></td>
+            <td><span class="tier">待补</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>打开时地址是 <code>#/ladder?elo=lt850</code>。<code>replace</code> 之后是 <code>#/ladder</code>，查询串里没有 <code>elo</code>。</li>
+    <li>Toast 复用 <code>ladder-fallback-toast</code>（<code>role="status"</code>，约 5 秒）。不新做第二条提示。未识别的 key 仍写「未识别的分段「…」」。</li>
+    <li>没有可点的「&lt;850」芯片，也到不了「这个分段暂无数据」面板。空态组件留在代码里，只作兜底。表仍是「全部」（这里只留一行）。</li>
+  </ul>
+</body>
+</html>
