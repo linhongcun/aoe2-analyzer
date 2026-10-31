@@ -41,7 +41,7 @@ describe('#431 affected feature plans', () => {
   });
 
   it('known UI modules and their helpers have a bounded plan; unknown modules remain full once', () => {
-    for (const feature of ['civs', 'units', 'techs', 'buildings', 'maps', 'compare', 'patches', 'matchup']) {
+    for (const feature of ['civs', 'units', 'techs', 'buildings', 'maps', 'compare', 'patches', 'matchup', 'siege']) {
       const plan = planChanges([change(`src/features/${feature}/logic/helper.ts`)]);
       expect(plan.full).toBe(false);
       expect(plan.data).toBe(false);
@@ -49,6 +49,20 @@ describe('#431 affected feature plans', () => {
       expect(plan.e2e.length).toBeGreaterThan(0);
     }
     expect(planChanges([change('src/features/newUnmapped/View.tsx')])).toMatchObject({ scope: 'full', data: false, full: true });
+  });
+
+  it('#533 siege UI and the unit detail entry own siege533 without the site-wide matrix', () => {
+    const siege = planChanges([change('src/features/siege/Siege.tsx')]);
+    expect(siege).toMatchObject({ scope: 'targeted', features: ['siege'], full: false, data: false });
+    expect(siege.unit).toEqual(['tests/unit/siege308.test.ts']);
+    expect(siege.e2e).toEqual(['tests/e2e/siege308.spec.ts', 'tests/e2e/siege533.spec.ts']);
+    expect(siege.e2e).not.toContain('tests/e2e/v0300-338.spec.ts');
+    const detail = planChanges([change('src/features/units/components/UnitDetail.tsx')]);
+    expect(detail).toMatchObject({ scope: 'targeted', features: ['units'], full: false, data: false });
+    expect(detail.e2e).toContain('tests/e2e/siege533.spec.ts');
+    expect(detail.e2e).toContain('tests/e2e/unitCards6.spec.ts');
+    expect(detail.e2e).not.toContain('tests/e2e/siege308.spec.ts');
+    expect(detail.e2e).not.toContain('tests/e2e/v0300-338.spec.ts');
   });
 
   it('shared card styles cover both matchup and same-DLC civilization details, with union and deduplication', () => {

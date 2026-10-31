@@ -17,6 +17,7 @@ import BuildingSimulator from './BuildingSimulator';
 import { useLocation } from 'react-router-dom';
 import garrisonHosts from '../../../data/garrison_hosts.json';
 import { DEFAULT_CONSTRUCTION, encodeConstruction } from '../../../domain/construction';
+import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
 
 const isUq = (x: Unit | Tech) => x.type === 'UniqueUnit' || x.type === 'UniqueTech';
 const GarrisonPreview = lazy(() => import('./GeneralGarrisonPreview'));
@@ -87,6 +88,7 @@ export default function BuildingDetail() {
       : []),
   ];
   const notAvail = civs.filter((c) => !b.civs.includes(c.en));
+  const showSiegeEntry = siegeBuildingEntryVerified(b, core.unitById[SIEGE_DEFAULT_UNIT_ID]);
   return (
     <DetailPage
       key={b.id}
@@ -126,13 +128,18 @@ export default function BuildingDetail() {
                     </dd>
                   </div>
                 </dl>
-                <p>
+                <p className="community-tool-row">
                   <Link
                     className="btn community-tool-entry"
                     to={'/construction?' + encodeConstruction({ ...DEFAULT_CONSTRUCTION, buildingId: b.id, civ: b.civs[0]!, age: b.age })}
                   >
                     比较多人施工与村民工时
                   </Link>
+                  {showSiegeEntry && (
+                    <Link className="community-tool-entry" to={`/siege?bldg=${b.id}`} data-testid="building-siege-entry">
+                      <Icon name="hammer" /> 算攻城拆这座
+                    </Link>
+                  )}
                 </p>
                 <p className="note">多人施工使用实际施工形态与工作速率，可能与已建建筑的面板工期不同。</p>
               </DetailSection>
