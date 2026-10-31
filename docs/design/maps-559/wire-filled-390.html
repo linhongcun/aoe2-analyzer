@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#559 线框 · 390 · 两节纵向堆叠</title>
+  <link rel="stylesheet" href="maps.css" />
+</head>
+<body>
+  <main class="frame f390" data-testid="map-details">
+    <p class="kicker">地图与开局 · 阿拉伯半岛</p>
+    <article class="detail" data-map-id="arabia">
+      <h4>推荐文明</h4>
+      <ul class="old">
+        <li><a href="#/civ/Franks">法兰克</a>：骑兵和食物经济加成适合侦察转骑士。</li>
+        <li><a href="#/civ/Britons">不列颠</a>：弓手路线清晰，城堡时代可利用射程优势。</li>
+      </ul>
+      <section class="positions" data-testid="map-positions" aria-label="开图 4v4 位置推荐">
+        <div class="meta">
+          <span class="pill" data-testid="map-pos-mode">适用：<span class="nw">开图 4v4</span></span>
+          <p class="disc" data-testid="map-pos-disclaimer">
+            <span class="ic mu" aria-hidden="true" title="info">info</span>
+            编辑口径，非官方推荐
+          </p>
+        </div>
+        <div class="cols">
+          <section class="col" data-testid="map-pos-flank" aria-labelledby="flank-h">
+            <h3 id="flank-h">边路推荐 <small lang="en">Flank</small></h3>
+            <a class="row" href="#/civ/Britons">
+              <img class="civ" src="../../../public/img/civs/britons.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">不列颠</span><span class="en" lang="en">Britons</span></span>
+              <span class="why">步弓射程长，适合边路对射。</span>
+            </a>
+            <a class="row" href="#/civ/Mayans">
+              <img class="civ" src="../../../public/img/civs/mayans.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">玛雅</span><span class="en" lang="en">Mayans</span></span>
+              <span class="why">弓更便宜，边路可以一直补。</span>
+            </a>
+            <a class="row" href="#/civ/Ethiopians">
+              <img class="civ" src="../../../public/img/civs/ethiopians.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">埃塞俄比亚</span><span class="en" lang="en">Ethiopians</span></span>
+              <span class="why">弓射得更快，升时代还有资源。</span>
+            </a>
+            <a class="row" href="#/civ/Huns">
+              <img class="civ" src="../../../public/img/civs/huns.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">匈奴</span><span class="en" lang="en">Huns</span></span>
+              <span class="why">骑射便宜，边路不必只走步弓。</span>
+            </a>
+          </section>
+          <section class="col" data-testid="map-pos-pocket" aria-labelledby="pocket-h">
+            <h3 id="pocket-h">中路推荐 <small lang="en">Pocket</small></h3>
+            <a class="row" href="#/civ/Franks">
+              <img class="civ" src="../../../public/img/civs/franks.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">法兰克</span><span class="en" lang="en">Franks</span></span>
+              <span class="why">骑兵更厚，发育后好去帮边路。</span>
+            </a>
+            <a class="row" href="#/civ/Lithuanians">
+              <img class="civ" src="../../../public/img/civs/lithuanians.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">立陶宛</span><span class="en" lang="en">Lithuanians</span></span>
+              <span class="why">圣物加攻击，骑士能早点出门。</span>
+            </a>
+            <a class="row" href="#/civ/Persians">
+              <img class="civ" src="../../../public/img/civs/persians.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">波斯</span><span class="en" lang="en">Persians</span></span>
+              <span class="why">城镇中心更快，中路先养经济再出骑。</span>
+            </a>
+            <a class="row" href="#/civ/Huns">
+              <img class="civ" src="../../../public/img/civs/huns.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">匈奴</span><span class="en" lang="en">Huns</span></span>
+              <span class="why">不用房屋，中路骑士转得快。</span>
+            </a>
+          </section>
+        </div>
+      </section>
+    </article>
+  </main>
+  <ul class="anno">
+    <li>窄于 900px 时两节上下排：先边路，后中路。理由换到名字下面。不横滑。</li>
+    <li>「开图 4v4」不折行。行高至少 44px。此宽只要求能读、能点，不精修 360。</li>
+    <li>上方图库和地图预览略去。开局用的「推荐文明」仍在新区块上面。</li>
+  </ul>
+</body>
+</html>

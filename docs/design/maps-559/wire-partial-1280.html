@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#559 线框 · 1280 · 一列有稿、一列待补</title>
+  <link rel="stylesheet" href="maps.css" />
+</head>
+<body>
+  <main class="frame f1280" data-testid="map-details">
+    <p class="kicker">地图与开局</p>
+    <article class="detail" data-map-id="black-forest">
+      <h3 class="map">黑森林 <span class="en" lang="en">Black Forest</span><small>封闭陆图</small></h3>
+      <div class="overview">
+        <figure>
+          <img src="../../../public/img/maps/black-forest.webp" width="420" height="420" alt="黑森林 Black Forest地图预览" />
+          <figcaption>地形示意</figcaption>
+        </figure>
+        <div>
+          <h4>地图特点</h4>
+          <p>黑森林：被树海分割的草地小岛。中间有小路通向敌人和盟友。</p>
+          <h4>开局参考</h4>
+          <p>先围口并稳住通道再发展经济；持续留意敌方开林和新通路，避免防线被绕开。</p>
+        </div>
+      </div>
+      <section class="positions" data-testid="map-positions" aria-label="开图 4v4 位置推荐">
+        <div class="meta">
+          <span class="pill" data-testid="map-pos-mode">适用：<span class="nw">开图 4v4</span></span>
+          <p class="disc" data-testid="map-pos-disclaimer">
+            <span class="ic mu" aria-hidden="true" title="info">info</span>
+            编辑口径，非官方推荐
+          </p>
+        </div>
+        <div class="cols">
+          <section class="col" data-testid="map-pos-flank" aria-labelledby="flank-h">
+            <h3 id="flank-h">边路推荐 <small lang="en">Flank</small></h3>
+            <a class="row" href="#/civ/Britons">
+              <img class="civ" src="../../../public/img/civs/britons.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">不列颠</span><span class="en" lang="en">Britons</span></span>
+              <span class="why">步弓射程长，适合边路对射。</span>
+            </a>
+            <a class="row" href="#/civ/Mayans">
+              <img class="civ" src="../../../public/img/civs/mayans.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">玛雅</span><span class="en" lang="en">Mayans</span></span>
+              <span class="why">弓更便宜，边路可以一直补。</span>
+            </a>
+            <a class="row" href="#/civ/Vietnamese">
+              <img class="civ" src="../../../public/img/civs/vietnamese.webp" alt="" width="28" height="28" />
+              <span class="who"><span class="zh">越南</span><span class="en" lang="en">Vietnamese</span></span>
+              <span class="why">弓和掷矛手更耐打，边路被压时好守。</span>
+            </a>
+          </section>
+          <section class="col" data-testid="map-pos-pocket" aria-labelledby="pocket-h">
+            <h3 id="pocket-h">中路推荐 <small lang="en">Pocket</small></h3>
+            <div class="empty" role="status" data-testid="map-pos-empty">
+              <span class="ic lg mu" aria-hidden="true" title="inbox">inbox</span>
+              <p>中路推荐待补</p>
+              <a class="fb" href="#feedback" data-kind="data">
+                <span class="ic" aria-hidden="true" title="message-square-warning">message-square-warning</span>
+                反馈数据缺口
+              </a>
+            </div>
+          </section>
+        </div>
+      </section>
+      <p class="src">来源与核对日期</p>
+    </article>
+  </main>
+  <ul class="anno">
+    <li>黑森林今天没有「推荐文明」列表。新区块仍然出现，不因为上面没有 guide 就整段隐藏。</li>
+    <li>只有边路有稿时，中路仍占右列。待补是灰虚线，Lucide <code>inbox</code>，不用红。反馈是现有 <code>FeedbackLink</code>，<code>kind="data"</code>，文案「反馈数据缺口」。</li>
+    <li>两列都没有稿时，左右各一只同样的盒子，文案分别是「边路推荐待补」「中路推荐待补」。模式 pill 和页级免责声明仍在。</li>
+    <li>黑森林首批可以两列都待补。这里的三行只证明「缺一列仍保留两轴」，样例不入库。不按 1v1 胜率给封闭图编中路。</li>
+  </ul>
+</body>
+</html>
