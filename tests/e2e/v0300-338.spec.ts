@@ -352,6 +352,7 @@ const TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables.json';
 const PATCH_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-188329.json';
 const PLAYERS_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-players.json';
 const EVENTS_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-events.json';
+const LADDER_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-ladder.json';
 const TABLE_WIDTHS = [360, 1280] as const;
 const RECORD_TABLES = !!process.env.V0300_RECORD;
 const historicalTableGolden: Record<string, TableStyle[]> = existsSync(TABLES_FIXTURE)
@@ -386,11 +387,24 @@ for (const key of eventTableKeys) {
   assert.ok(!Object.hasOwn(patchTableGolden, key), `Events fixture cannot replace the patch companion expectation: ${key}`);
   assert.ok(!Object.hasOwn(playerTableGolden, key), `Events fixture cannot replace the players companion expectation: ${key}`);
 }
+// #33: #/ladder 从规划占位变成有表的页面。这两条宽度键从历史空基准挪到补充文件，历史文件里其它页面的表格样式不动。
+const ladderTableGolden = JSON.parse(readFileSync(LADDER_TABLES_FIXTURE, 'utf8')) as Record<string, TableStyle[]>;
+const ladderTableKeys = TABLE_WIDTHS.map((width) => `${width} /ladder`);
+assert.deepEqual(Object.keys(ladderTableGolden).sort(), [...ladderTableKeys].sort(), 'Ladder table fixture must contain exactly its two width keys');
+for (const key of ladderTableKeys) {
+  assert.ok(Array.isArray(ladderTableGolden[key]), `Missing explicit table expectation: ${key}`);
+  assert.ok(ladderTableGolden[key]?.length === 1, `Ladder table expectation must record the real table: ${key}`);
+  assert.ok(!Object.hasOwn(historicalTableGolden, key), `Ladder fixture cannot replace a historical table expectation: ${key}`);
+  assert.ok(!Object.hasOwn(patchTableGolden, key), `Ladder fixture cannot replace the patch companion expectation: ${key}`);
+  assert.ok(!Object.hasOwn(playerTableGolden, key), `Ladder fixture cannot replace the players companion expectation: ${key}`);
+  assert.ok(!Object.hasOwn(eventTableGolden, key), `Ladder fixture cannot replace the events companion expectation: ${key}`);
+}
 const tableFixtureGroups = [
   { file: TABLES_FIXTURE, keys: Object.keys(historicalTableGolden), golden: historicalTableGolden },
   { file: PATCH_TABLES_FIXTURE, keys: patchTableKeys, golden: patchTableGolden },
   { file: PLAYERS_TABLES_FIXTURE, keys: playerTableKeys, golden: playerTableGolden },
   { file: EVENTS_TABLES_FIXTURE, keys: eventTableKeys, golden: eventTableGolden },
+  { file: LADDER_TABLES_FIXTURE, keys: ladderTableKeys, golden: ladderTableGolden },
 ];
 function explicitTableKeyOwners(groups: typeof tableFixtureGroups) {
   const owners = new Map<string, string>();
@@ -410,7 +424,7 @@ assert.deepEqual(
   TABLE_WIDTHS.flatMap((width) => PAGES.map((route) => `${width} ${route}`)).sort(),
   'All four table fixture owners must partition exactly the static-page width keys; missing and extra keys are rejected',
 );
-const tableGolden = { ...historicalTableGolden, ...patchTableGolden, ...playerTableGolden, ...eventTableGolden };
+const tableGolden = { ...historicalTableGolden, ...patchTableGolden, ...playerTableGolden, ...eventTableGolden, ...ladderTableGolden };
 
 function recordTableFixtures(tables: Record<string, TableStyle[]>, write: (file: string, text: string) => void = writeFileSync) {
   assert.deepEqual(
@@ -448,11 +462,12 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
   test('守卫：记录时历史基准与全部补充基准保持分开，不覆盖彼此的键值', () => {
     const written = new Map<string, Record<string, TableStyle[]>>();
     recordTableFixtures(tableGolden, (file, text) => written.set(file, JSON.parse(text) as Record<string, TableStyle[]>));
-    expect([...written.keys()]).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE, PLAYERS_TABLES_FIXTURE, EVENTS_TABLES_FIXTURE]);
+    expect([...written.keys()]).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE, PLAYERS_TABLES_FIXTURE, EVENTS_TABLES_FIXTURE, LADDER_TABLES_FIXTURE]);
     expect(written.get(TABLES_FIXTURE)).toEqual(historicalTableGolden);
     expect(written.get(PATCH_TABLES_FIXTURE)).toEqual(patchTableGolden);
     expect(written.get(PLAYERS_TABLES_FIXTURE)).toEqual(playerTableGolden);
     expect(written.get(EVENTS_TABLES_FIXTURE)).toEqual(eventTableGolden);
+    expect(written.get(LADDER_TABLES_FIXTURE)).toEqual(ladderTableGolden);
     expect(Object.keys(written.get(EVENTS_TABLES_FIXTURE)!).sort()).toEqual([...eventTableKeys].sort());
     const eventsGroup = tableFixtureGroups.find((group) => group.file === EVENTS_TABLES_FIXTURE)!;
     const withoutEvents = tableFixtureGroups.filter((group) => group.file !== EVENTS_TABLES_FIXTURE);
@@ -501,6 +516,14 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
       await page.goto('./#/events', { waitUntil: 'networkidle' });
       await openDetailsWithPlayerReadiness(page, '/events');
       expect(await tableStyles(page)).toEqual(tableGolden[`${width} /events`]);
+    });
+  for (const width of TABLE_WIDTHS)
+    test(`新增 #/ladder @${width}：天梯表已加载，表格与显式补充基准一致`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('./#/ladder', { waitUntil: 'networkidle' });
+      await expect(page.getByRole('heading', { level: 1, name: '天梯数据' })).toBeVisible();
+      await expect(page.getByTestId('ladder-table')).toBeVisible();
+      expect(await tableStyles(page)).toEqual(tableGolden[`${width} /ladder`]);
     });
   for (const width of TABLE_WIDTHS)
     for (const route of playerPageRoutes)

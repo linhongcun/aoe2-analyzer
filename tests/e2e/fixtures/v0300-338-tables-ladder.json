@@ -1,0 +1,20 @@
+{
+ "360 /ladder": [
+  {
+   "cls": "ladder-table",
+   "display": "table",
+   "overflowX": "visible",
+   "tr": "table-row",
+   "td": "table-cell"
+  }
+ ],
+ "1280 /ladder": [
+  {
+   "cls": "ladder-table",
+   "display": "table",
+   "overflowX": "visible",
+   "tr": "table-row",
+   "td": "table-cell"
+  }
+ ]
+}

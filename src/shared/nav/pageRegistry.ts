@@ -54,7 +54,7 @@ export const LAZY_COMPONENTS = [
   'Players',
   'Events',
   'PlayerDetail',
-  'Planned',
+  'Ladder',
 ] as const;
 export type LazyComponentId = (typeof LAZY_COMPONENTS)[number];
 export type ComponentId = 'Home' | LazyComponentId;
@@ -682,17 +682,16 @@ export const PAGES: readonly PageDef[] = [
     key: 'ladder',
     path: '/ladder',
     kind: 'page',
-    lane: 'future',
+    lane: 'secondary',
     group: 'reference',
     label: '天梯数据',
     en: 'Ladder Stats',
     icon: 'trophy',
-    desc: '团战排位胜率、出场率',
+    desc: '阿拉伯 1v1 分段胜率、出场率与新手友好度',
     match: /^\/ladder$/,
-    status: 'planned',
-    component: 'Planned',
+    component: 'Ladder',
     metaTitle: '天梯数据',
-    metaDescription: '文明统计入口；可靠的新版本统计数据仍在准备中。',
+    metaDescription: '查看阿拉伯 1v1 随机地图各文明的分段胜率、出场率与样本局数。',
   },
   {
     key: 'home',

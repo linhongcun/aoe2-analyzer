@@ -42,6 +42,7 @@ export const SCHEMA_CATALOG = {
       ['search-py', 'search-py'],
       ['page-metadata', 'page-metadata'],
       ['team_bonuses', 'team-bonuses'],
+      ['ladder-beginner', 'ladder-beginner'],
     ].map(([file, schema]) => [`src/data/${file}.json`, `data-${schema}.json`]),
   ),
 };
