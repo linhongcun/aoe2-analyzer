@@ -70,6 +70,28 @@ export function encodeSiege(config: SiegeConfig): string {
   return params.toString();
 }
 
+export type SiegeCanonical = { kind: 'ignore' } | { kind: 'keep' } | { kind: 'replace' };
+
+/**
+ * 地址栏已经离开攻城页时，不要用这次渲染里的默认参数 replace 回去。
+ * 路径尾斜杠不单独触发 replace。
+ */
+export function decideSiegeCanonical(liveHash: string, canonicalSearch: string): SiegeCanonical {
+  const raw = liveHash.startsWith('#') ? liveHash.slice(1) : liveHash;
+  let decoded = raw;
+  try {
+    decoded = decodeURIComponent(raw);
+  } catch {
+    // 不完整的百分号编码保持原样，避免一次坏地址打断默认参数同步。
+  }
+  const q = decoded.indexOf('?');
+  const path = (q >= 0 ? decoded.slice(0, q) : decoded).replace(/\/+$/, '') || '/';
+  if (path !== '/siege') return { kind: 'ignore' };
+  const search = q >= 0 ? decoded.slice(q) : '';
+  if (search === canonicalSearch) return { kind: 'keep' };
+  return { kind: 'replace' };
+}
+
 /** 单位详情「算拆建筑」：对城堡、缺省数量、无文明、无护甲已核实才显示。 */
 export function siegeUnitEntryVerified(unit: Unit, castle: Building | undefined): boolean {
   return !!castle && castle.id === SIEGE_DEFAULT_BUILDING_ID && calculateSiege(unit, castle, SIEGE_DEFAULT_N, '', []).verified;

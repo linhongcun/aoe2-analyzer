@@ -4,6 +4,7 @@ import { civs, type Core } from '../../data';
 import { useCore } from '../../data/hooks';
 import {
   calculateSiege,
+  decideSiegeCanonical,
   decodeSiege,
   encodeSiege,
   siegeArmorTechs,
@@ -44,8 +45,9 @@ function SiegeTool({ core }: { core: Core }) {
   const config = useMemo(() => decodeSiege(location.search, core), [location.search, core]);
   const canonical = '?' + encodeSiege(config);
   // HashRouter 的 replace 导航调用 history.replaceState，保持分享状态且不堆积编辑历史。
+  // 读地址栏而不是这次渲染的 location：下一次导航可能已经写进 hash，旧的 replace 不能把它盖回去。
   useEffect(() => {
-    if (location.search !== canonical) navigate({ pathname: '/siege', search: canonical }, { replace: true });
+    if (decideSiegeCanonical(window.location.hash, canonical).kind === 'replace') navigate({ pathname: '/siege', search: canonical }, { replace: true });
   }, [canonical, location.search, navigate]);
   const [garrison, setGarrison] = useState(false);
   const [emptyCount, setEmptyCount] = useState<string | null>(null);
