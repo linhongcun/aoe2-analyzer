@@ -4,6 +4,7 @@ import { civByEn } from '../../data';
 import { buildOrders } from '../../data/buildOrders';
 import catalog from '../../data/mapCatalog.json';
 import { mapGuides } from './guides';
+import { MapPositions } from './MapPositions';
 import './maps.css';
 
 const GROUPS: Record<string, string> = {
@@ -218,6 +219,7 @@ export default function Maps() {
               </ul>
             </>
           )}
+          <MapPositions mapId={selected.id} />
           <details>
             <summary>来源与核对日期</summary>
             <ul>

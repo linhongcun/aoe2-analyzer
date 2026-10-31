@@ -7,7 +7,9 @@ import { RES_ZH } from '../../domain/ratings';
 
 export const img = (p: string) => `${import.meta.env.BASE_URL}img/${p}`;
 
-export const CivIcon = ({ c }: { c: Pick<Civ, 'en'> }) => <img className="ico" src={img(`civs/${c.en.toLowerCase()}.webp`)} alt={c.en} loading="lazy" />;
+export const CivIcon = ({ c, alt }: { c: Pick<Civ, 'en'>; alt?: string }) => (
+  <img className="ico" src={img(`civs/${c.en.toLowerCase()}.webp`)} alt={alt ?? c.en} loading="lazy" />
+);
 export const UnitIcon = ({ u, big }: { u: Unit; big?: boolean }) => (
   <img className={big ? 'uico big' : 'uico'} src={img(`units/${u.pic}.webp`)} alt="" loading="lazy" />
 );
