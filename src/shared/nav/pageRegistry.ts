@@ -688,11 +688,11 @@ export const PAGES: readonly PageDef[] = [
     label: '天梯数据',
     en: 'Ladder Stats',
     icon: 'trophy',
-    desc: '阿拉伯 1v1 分段胜率、出场率与新手友好度',
+    desc: '阿拉伯 1v1 胜率、出场率与新手友好度',
     match: /^\/ladder$/,
     component: 'Ladder',
     metaTitle: '天梯数据',
-    metaDescription: '查看阿拉伯 1v1 随机地图各文明的分段胜率、出场率与样本局数。',
+    metaDescription: '查看阿拉伯 1v1 随机地图各文明的胜率、出场率与样本局数。',
   },
   {
     key: 'home',

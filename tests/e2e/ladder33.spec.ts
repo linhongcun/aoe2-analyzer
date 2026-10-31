@@ -1,5 +1,6 @@
-// #33 `#/ladder` 失败验收。不实现页面，不改 pageRegistry / v0*-acceptance。当前 main 仍是规划中占位，用例应红。
-// 设计：docs/design/ladder-33/ladder-33.md（main @ 677d64e）。深链只认 elo，默认 all；其它 Elo 芯片在，内容是空态，不编数。
+// #33 `#/ladder` 阿拉伯 1v1 天梯。不改 pageRegistry / v0*-acceptance。
+// #545 锁定当前快照只露出有数据的分段：不再要求六枚芯片、可点空态，以及首页「分段胜率」。那些断言改到 tests/e2e/ladder545.spec.ts，在实现前应红。
+// 设计：docs/design/ladder-33/ladder-33.md；空芯片与入口文案：docs/design/ladder-545/ladder-545.md。
 // 锚点来自 #536 `src/data/ladder-arabia-p162286.json` @ 98bbf11。winRate/playRate 已是百分数，界面固定两位小数（51.4 → 51.40%），不得再乘 100。
 // testid：ladder-page/context/bracket(data-elo)/source/patch-note/table/row-{En}/sort-{win|play|games|name|tier}/tier/expand/reason-{En}/fallback-toast/share/footer/empty。data-games < 300 标「样本少」。
 import { existsSync, readFileSync } from 'node:fs';
@@ -15,11 +16,6 @@ const CIV_COUNT = 48;
 const FRANKS = { en: 'Franks', winRate: 51.4, playRate: 5.15, games: 51920 };
 const ROMANS = { en: 'Romans', winRate: 54.04, playRate: 1.67, games: 16815 };
 const ABSENT = ['Jurchens', 'Khitans'] as const;
-const OTHER_LABELS = ['<850', '850-1000', '1000-1200', '1200+', '1900+'] as const;
-
-function normLabel(label: string) {
-  return label.replace(/\s+/g, '').replace(/[–—−]/g, '-');
-}
 
 type SnapCiv = { en: string; winRate: number; playRate: number; games: number };
 if (existsSync(SNAPSHOT_PATH)) {
@@ -89,8 +85,7 @@ async function expectLadderPage(page: Page) {
   await expect(context.getByRole('button')).toHaveCount(0);
   await expect(context.getByRole('combobox')).toHaveCount(0);
   await expect(context.getByRole('radio')).toHaveCount(0);
-  const group = page.getByRole('radiogroup', { name: /天梯分段/ });
-  await expect(group).toBeVisible();
+  // 当前快照的 Elo 芯片 / 只读 pill 由 #545 验收。这里只要求主表还在。
   const table = page.getByTestId('ladder-table');
   await expect(table).toBeVisible();
   await expect(page.getByRole('table', { name: /阿拉伯 1v1/ })).toBeVisible();
@@ -120,29 +115,6 @@ async function cellPercent(row: Locator, index: number) {
   return value;
 }
 
-async function brackets(page: Page) {
-  const group = page.getByRole('radiogroup', { name: /天梯分段/ });
-  const chips = group.getByTestId('ladder-bracket');
-  const count = await chips.count();
-  const items: { elo: string; label: string; checked: boolean }[] = [];
-  for (let i = 0; i < count; i++) {
-    const chip = chips.nth(i);
-    items.push({
-      elo: (await chip.getAttribute('data-elo')) ?? '',
-      label: ((await chip.innerText()) ?? '').replace(/\s+/g, ' ').trim(),
-      checked: (await chip.getAttribute('aria-checked')) === 'true',
-    });
-  }
-  return { group, chips, items };
-}
-
-async function bracket(page: Page, elo: string): Promise<Locator> {
-  const { chips, items } = await brackets(page);
-  const index = items.findIndex((item) => item.elo === elo);
-  expect(index, `分段 ${elo}`).toBeGreaterThanOrEqual(0);
-  return chips.nth(index);
-}
-
 function sortButton(page: Page, key: string) {
   return page.getByTestId(`ladder-sort-${key}`);
 }
@@ -162,34 +134,6 @@ async function columnIndex(page: Page, pattern: RegExp) {
     if (pattern.test(((await headers.nth(i).innerText()) ?? '').replace(/\s+/g, ''))) return i;
   }
   return -1;
-}
-
-async function otherBrackets(page: Page) {
-  const { items } = await brackets(page);
-  return OTHER_LABELS.map((label) => {
-    const item = items.find((chip) => normLabel(chip.label) === label);
-    expect(item, `缺少分段「${label}」`).toBeTruthy();
-    return { elo: item?.elo ?? '', label: item?.label ?? label };
-  });
-}
-
-async function expectEmptyBracket(page: Page, elo: string, label: string) {
-  expect(await page.getByRole('heading', { name: '该模块规划中', exact: true }).count(), '#/ladder 仍是规划中占位').toBe(0);
-  await expect(page.getByTestId('ladder-page')).toBeVisible();
-  await expect(await bracket(page, elo)).toHaveAttribute('aria-checked', 'true');
-  const empty = page.getByTestId('ladder-empty');
-  await expect(empty).toBeVisible();
-  await expect(empty).toContainText('这个分段暂无数据');
-  await expect(empty).toContainText(label);
-  await expect(empty).toContainText(/不推算/);
-  await expect(empty).toContainText(/不补数/);
-  await expect(empty).not.toContainText(/%/);
-  await expect(page.getByTestId('ladder-table')).toHaveCount(0);
-  await expect(page.locator('[data-testid^="ladder-row-"]')).toHaveCount(0);
-  await expect(page.getByTestId('ladder-source')).toContainText(FETCHED_AT);
-  await expect(page.getByTestId('ladder-source')).not.toContainText(String(ALL_GAMES));
-  await expect(page.getByTestId('ladder-source')).not.toContainText('504,189');
-  expect(queryFlags(page.url())).toEqual({ elo, sort: null, dir: null, civ: null });
 }
 
 test('#33 #/ladder 不是规划中占位，资料分组的首页和工具菜单都有入口', async ({ page }) => {
@@ -213,7 +157,14 @@ test('#33 #/ladder 不是规划中占位，资料分组的首页和工具菜单�
     tools: await tools.count(),
   }).toEqual({ planned: 0, notFound: 0, feature: 1, home: 1, tools: 1 });
   await expect(home).toContainText('天梯数据');
-  await expect(home).toContainText('阿拉伯 1v1 分段胜率、出场率与新手友好度');
+  const homeText = ((await home.textContent()) ?? '').replace(/\s+/g, '');
+  // #545：首页卡片改掉「分段胜率」。工具菜单只显示名称，整份菜单也不得再出现这句。
+  const menuText = ((await menu.textContent()) ?? '').replace(/\s+/g, '');
+  expect({
+    homeHasOld: homeText.includes('分段胜率'),
+    menuHasOld: menuText.includes('分段胜率'),
+    homeDesc: homeText.includes('阿拉伯1v1胜率、出场率与新手友好度'),
+  }).toEqual({ homeHasOld: false, menuHasOld: false, homeDesc: true });
   await expect(home).not.toContainText('团战');
   await expect(home).not.toContainText('规划中');
   await expect(tools).toContainText('天梯数据');
@@ -222,51 +173,21 @@ test('#33 #/ladder 不是规划中占位，资料分组的首页和工具菜单�
   await expectLadderPage(page);
 });
 
-test('#33 无查询时默认分段是 all，深链 ?elo= 能还原且不写入 sort/dir/civ', async ({ page }) => {
+test('#33 无查询和 ?elo=all 停在全部，不写 sort/dir/civ；空芯片改由 #545 验收', async ({ page }) => {
   await page.goto('./#/ladder');
   await expectLadderPage(page);
-  const initial = await brackets(page);
-  const elos = initial.items.map((item) => item.elo);
-  expect(new Set(elos).size).toBe(elos.length);
-  expect(elos).toContain('all');
-  expect(elos).toHaveLength(1 + OTHER_LABELS.length);
-  expect(initial.items.find((item) => item.elo === 'all')?.label).toMatch(/全部/);
-  expect(initial.items.filter((item) => item.checked).map((item) => item.elo)).toEqual(['all']);
-  for (const item of initial.items) expect(item.label.length).toBeGreaterThan(0);
-  const flags = queryFlags(page.url());
-  expect(flags.elo === null || flags.elo === 'all').toBe(true);
-  expect(flags.sort).toBeNull();
-  expect(flags.dir).toBeNull();
-  expect(flags.civ).toBeNull();
+  expect(queryFlags(page.url())).toEqual({ elo: null, sort: null, dir: null, civ: null });
+  // #545：当前快照没有可切换的空分段，也不进入可点空态。
+  await expect(page.getByRole('radiogroup', { name: /天梯分段/ })).toHaveCount(0);
+  await expect(page.getByTestId('ladder-bracket')).toHaveCount(0);
+  await expect(page.getByTestId('ladder-elo-static')).toBeVisible();
+  await expect(page.getByTestId('ladder-empty')).toHaveCount(0);
 
   await page.goto('./#/ladder?elo=all');
   await expectLadderPage(page);
-  await expect(await bracket(page, 'all')).toHaveAttribute('aria-checked', 'true');
-  const others = await otherBrackets(page);
-  expect(new Set(others.map((item) => item.elo)).size).toBe(others.length);
-  for (const item of others) expect(item.elo).not.toBe('all');
-
-  const [first] = others;
-  expect(first).toBeTruthy();
-  const before = await page.evaluate(() => history.length);
-  await (await bracket(page, first?.elo ?? '')).click();
-  await expectEmptyBracket(page, first?.elo ?? '', first?.label ?? '');
-  expect(await page.evaluate(() => history.length)).toBe(before);
-  await page.reload();
-  await expectEmptyBracket(page, first?.elo ?? '', first?.label ?? '');
-  await page.getByTestId('ladder-empty').getByRole('button', { name: /全部/ }).click();
-  await expect
-    .poll(() => {
-      const elo = queryFlags(page.url()).elo;
-      return elo === null || elo === 'all';
-    })
-    .toBe(true);
-  await expectLadderPage(page);
-
-  for (const item of others) {
-    await page.goto(`./#/ladder?elo=${encodeURIComponent(item.elo)}`);
-    await expectEmptyBracket(page, item.elo, item.label);
-  }
+  expect(queryFlags(page.url())).toEqual({ elo: null, sort: null, dir: null, civ: null });
+  await expect(page.getByTestId('ladder-empty')).toHaveCount(0);
+  await expect(page.getByTestId('ladder-table')).toBeVisible();
 });
 
 test('#33 非法 elo 回落全部，sort/dir/civ 不保留', async ({ page }) => {
@@ -277,8 +198,11 @@ test('#33 非法 elo 回落全部，sort/dir/civ 不保留', async ({ page }) =>
   await expect(toast).toContainText(/未识别的分段/);
   await expect(toast).toContainText('not-a-bracket');
   await expect(toast).toContainText('全部');
-  await expect(await bracket(page, 'all')).toHaveAttribute('aria-checked', 'true');
   await expect.poll(() => queryFlags(page.url())).toEqual({ elo: null, sort: null, dir: null, civ: null });
+  // #545：回落后是只读「全部」，不是一枚选中的 Elo 芯片，也不是空态。
+  await expect(page.getByRole('radiogroup', { name: /天梯分段/ })).toHaveCount(0);
+  await expect(page.getByTestId('ladder-elo-static')).toBeVisible();
+  await expect(page.getByTestId('ladder-empty')).toHaveCount(0);
 });
 
 test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本不一致时出现，页面不请求 aoestats', async ({ page }) => {

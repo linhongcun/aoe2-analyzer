@@ -1,8 +1,8 @@
-/** #33 阿拉伯 1v1 天梯：排序、百分数展示、分段深链。数字只来自快照，这里不做换算。 */
+/** 阿拉伯 1v1 天梯：排序、百分数展示、分段深链。只露出有文明数据的分段。数字只来自快照，这里不做换算。 */
 
 export const LOW_SAMPLE = 300;
 
-/** 页面上固定出现的 Elo 芯片。快照里还没有的分段保持空态，不推算。 */
+/** 分段名单与顺序。没有文明数据的档不画芯片，深链回到「全部」。 */
 export const DISPLAY_BRACKETS = [
   { key: 'all', label: '全部' },
   { key: 'lt850', label: '<850' },
@@ -75,12 +75,13 @@ export interface SortableCiv extends LadderCivStat {
   tierRank: number;
 }
 
-const BRACKET_KEYS = new Set<string>(DISPLAY_BRACKETS.map((bracket) => bracket.key));
-
-export function resolveElo(raw: string | null): { elo: BracketKey; illegal: string | null } {
-  if (raw == null || raw === '' || raw === 'all') return { elo: 'all', illegal: null };
-  if (BRACKET_KEYS.has(raw)) return { elo: raw as BracketKey, illegal: null };
-  return { elo: 'all', illegal: raw };
+/** 深链分段。无参数、空串和 all 留在「全部」且不提示。未知 key、以及名单内但没有文明数据的档，都回到「全部」并复用同一条 toast。 */
+export function resolveElo(raw: string | null, snapshot: LadderSnapshot): { elo: BracketKey; toast: string | null } {
+  if (raw == null || raw === '' || raw === 'all') return { elo: 'all', toast: null };
+  const preset = DISPLAY_BRACKETS.find((bracket) => bracket.key === raw);
+  if (!preset) return { elo: 'all', toast: `未识别的分段「${raw}」，已显示「全部」。` };
+  if (viewBracket(snapshot, preset.key).empty) return { elo: 'all', toast: `「${preset.label}」暂无数据，已显示「全部」。` };
+  return { elo: preset.key, toast: null };
 }
 
 /** 默认分段不写入查询串。sort / dir / civ 一律不进地址。 */
@@ -103,6 +104,11 @@ export function viewBracket(snapshot: LadderSnapshot, key: string) {
     civs,
     empty,
   };
+}
+
+/** 有文明数据的分段，顺序与 DISPLAY_BRACKETS 相同。 */
+export function visibleBrackets(snapshot: LadderSnapshot) {
+  return DISPLAY_BRACKETS.filter((bracket) => !viewBracket(snapshot, bracket.key).empty);
 }
 
 export function friendliness(en: string, entries: readonly BeginnerEntry[]) {
