@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import arabiaJson from '../../data/ladder-arabia-p185872.json';
 import teamJson from '../../data/ladder-4v4-rm-e1200-1400-90d.json';
 import { isBalanceAligned, LOW_SAMPLE, resolveElo, type BracketKey, type LadderSnapshot } from '../../domain/ladder';
-import { canonicalLadderSearch, resolveLadderLocation, type LadderModeId } from '../../domain/ladderQuery';
+import { canonicalLadderSearch, resolveLadderLocation, sliceFacts, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
 import { LadderArabia } from './LadderArabia';
 import { HideLowSample, LadderFilters } from './LadderFilters';
 import { LadderTeam } from './LadderTeam';
@@ -50,14 +50,23 @@ export default function Ladder() {
     navigate({ pathname: '/ladder', search: canonicalLadderSearch({ mode: 'arabia1v1', elo: next, pendingView: resolved.pendingView }) }, { replace: true });
   };
 
+  const selectEloOption = (option: EloFilterOption) => {
+    if (!option.enabled) return;
+    navigate(
+      { pathname: '/ladder', search: canonicalLadderSearch({ mode: option.mode, elo: option.elo, pendingView: resolved.pendingView }) },
+      { replace: true },
+    );
+  };
+
   const selectView = (view: LadderViewId) => {
     navigate({ pathname: '/ladder', search: canonicalLadderSearch({ ...resolved, pendingView: view === 'table' ? null : view }) }, { replace: true });
   };
   const view = resolved.pendingView ?? 'table';
+  const facts = sliceFacts(resolved.mode, resolved.elo, arabiaSnapshot, teamSnapshot);
   const sampleFloor = (resolved.mode === '4v4' ? teamSnapshot.lowSampleGames : undefined) ?? LOW_SAMPLE;
   const controls = (
     <>
-      <LadderFilters mode={resolved.mode} arabia={arabiaSnapshot} onMode={selectMode} />
+      <LadderFilters mode={resolved.mode} elo={resolved.elo} arabia={arabiaSnapshot} team={teamSnapshot} onMode={selectMode} onElo={selectEloOption} />
       <HideLowSample checked={hideLow} threshold={sampleFloor} onChange={setHideLow} />
       {toast && (
         <p className="ladder-toast" role="status" data-testid="ladder-fallback-toast">
@@ -92,11 +101,11 @@ export default function Ladder() {
         <LadderViewSwitch view={view} onChange={selectView} />
       </div>
       {resolved.mode === '4v4' ? (
-        <LadderTeam view={view} hideLow={hideLow} onArabia={() => selectMode('arabia1v1')}>
+        <LadderTeam view={view} elo={resolved.elo} facts={facts} hideLow={hideLow} onArabia={() => selectMode('arabia1v1')}>
           {controls}
         </LadderTeam>
       ) : (
-        <LadderArabia view={view} elo={resolved.elo as BracketKey} onSelect={selectElo} hideLow={hideLow}>
+        <LadderArabia view={view} elo={resolved.elo as BracketKey} facts={facts} onSelect={selectElo} hideLow={hideLow}>
           {controls}
         </LadderArabia>
       )}

@@ -13,13 +13,16 @@ import {
   snapshotCutoff,
   sortLadder,
   toggleSort,
+  viewBracket,
   visibleSourceLabel,
   type LadderCivStat,
   type LadderSnapshot,
   type SortDir,
   type SortKey,
 } from '../../domain/ladder';
+import type { SliceFacts } from '../../domain/ladderQuery';
 import { LadderMeta, LadderTiers } from './LadderBands';
+import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderFreshness } from './LadderFreshness';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
@@ -61,10 +64,26 @@ function sparkline(values: number[]): { points: string; tone: 'good' | 'bad' | '
   return { points, tone };
 }
 
-export function LadderTeam({ view, hideLow, onArabia, children }: { view: LadderViewId; hideLow: boolean; onArabia: () => void; children?: ReactNode }) {
+export function LadderTeam({
+  view,
+  elo,
+  facts,
+  hideLow,
+  onArabia,
+  children,
+}: {
+  view: LadderViewId;
+  elo: string;
+  facts: SliceFacts;
+  hideLow: boolean;
+  onArabia: () => void;
+  children?: ReactNode;
+}) {
   const [sort, setSort] = useState<TeamSortState>({ key: 'win', dir: firstSortDir('win') });
   const share = useShareLink({ stateKey: '4v4' });
-  const bracket = snapshot.brackets[0];
+  const bracketKey = elo === 'all' || elo === '' ? '1200-1400' : elo;
+  const bracketView = viewBracket(snapshot, bracketKey);
+  const bracket = bracketView.empty ? undefined : snapshot.brackets.find((item) => item.key === bracketView.key);
   const threshold = snapshot.lowSampleGames ?? LOW_SAMPLE;
   const cutoff = snapshotCutoff(snapshot);
   const aligned = isBalanceAligned(snapshot.patchNote, SITE_BUILD);
@@ -99,9 +118,18 @@ export function LadderTeam({ view, hideLow, onArabia, children }: { view: Ladder
 
   return (
     <>
-      <div className="ladder-source" data-testid="ladder-source" data-cutoff={aligned ? 'aligned' : 'mismatch'} data-fetched-at={snapshot.fetchedAt}>
+      <div
+        className="ladder-source"
+        data-testid="ladder-source"
+        data-cutoff={aligned ? 'aligned' : 'mismatch'}
+        data-fetched-at={snapshot.fetchedAt}
+        data-slice-mode={facts.mode}
+        data-slice-elo={facts.eloKey}
+        data-slice-map={facts.mapKey}
+      >
         <Icon name="database" />
         <div className="ladder-copy">
+          <LadderSourceFacts facts={facts} />
           <p className="ladder-cutoff" data-testid="ladder-cutoff">
             {!aligned && <span className="ladder-cutoff-flag">非当前平衡</span>}
             {!aligned && ' · '}

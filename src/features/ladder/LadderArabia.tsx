@@ -25,7 +25,9 @@ import {
   type SortDir,
   type SortKey,
 } from '../../domain/ladder';
+import type { SliceFacts } from '../../domain/ladderQuery';
 import { LadderMeta, LadderTiers } from './LadderBands';
+import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderBracketGroup } from './LadderElo';
 import { LadderFreshness } from './LadderFreshness';
 import type { LadderViewId } from './LadderViewSwitch';
@@ -78,12 +80,14 @@ function SortMark({ active, dir }: { active: boolean; dir: SortDir }) {
 export function LadderArabia({
   view,
   elo,
+  facts,
   onSelect,
   hideLow,
   children,
 }: {
   view: LadderViewId;
   elo: BracketKey;
+  facts: SliceFacts;
   onSelect: (key: string) => void;
   hideLow: boolean;
   children?: ReactNode;
@@ -156,9 +160,18 @@ export function LadderArabia({
   return (
     <>
       {/* 玩家界面写来源名、统计截止、相对新鲜度和样本量。Wayback 路径不渲染。来源名若是 aoe2scout 则不印出。 */}
-      <div className="ladder-source" data-testid="ladder-source" data-cutoff={mismatch ? 'mismatch' : 'aligned'} data-fetched-at={snapshot.fetchedAt}>
+      <div
+        className="ladder-source"
+        data-testid="ladder-source"
+        data-cutoff={mismatch ? 'mismatch' : 'aligned'}
+        data-fetched-at={snapshot.fetchedAt}
+        data-slice-mode={facts.mode}
+        data-slice-elo={facts.eloKey}
+        data-slice-map={facts.mapKey}
+      >
         <Icon name="database" />
         <div className="ladder-copy">
+          <LadderSourceFacts facts={facts} />
           <p className="ladder-cutoff" data-testid="ladder-cutoff">
             {mismatch && patchBuild ? (
               <>

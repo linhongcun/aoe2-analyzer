@@ -590,6 +590,21 @@
   background: var(--color-accent-soft);
   font-weight: 600;
 }
+.ladder-elo-option {
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+.ladder-page .ladder-elo-option:disabled,
+.ladder-page .ladder-elo-option:disabled:hover {
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+.ladder-source-facts {
+  margin: 0 0 4px;
+  font-size: 13px;
+}
 .ladder-hide {
   display: inline-flex;
   align-items: center;
