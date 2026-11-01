@@ -88,4 +88,10 @@ describe('#282 compact calculation inputs', () => {
     expect(construction).toHaveProperty('unitSets');
     expect(construction).toHaveProperty('automaticSets');
   });
+  it('loads gather labels without the build-sim coverage graph', () => {
+    const src = readFileSync('src/domain/realCost.ts', 'utf8');
+    expect(src).toContain("from './unhandledRes'");
+    expect(src).not.toContain('buildSimCoverage');
+    expect(src).toMatch(/import type \{ EcoData \} from '\.\/buildSim'/);
+  });
 });
