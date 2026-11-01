@@ -18,11 +18,11 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/civ/Shu');
       // The unique-unit sidebar confirms the asynchronous core data has arrived.
       await expect(page.locator('aside a[href="#/unit/1959"]').first()).toBeVisible();
-      const opening = page.getByRole('region', { name: '推荐开局', exact: true });
+      const opening = page.getByRole('region', { name: '开局建议', exact: true });
       await expect(opening).toContainText(magazine.zh);
       await expect(opening).not.toContainText(magazine.en);
       await expect(opening.getByRole('link', { name: magazine.zh, exact: true })).toHaveAttribute('href', `#/tech/${magazine.id}`);
-      const unique = page.locator('p').filter({ has: page.getByText('特色兵种：', { exact: true }) });
+      const unique = page.getByTestId('civ-rating-footnote').locator('div').filter({ hasText: '特色兵种' });
       await expect(unique).toContainText(guard.zh);
       await expect(unique).not.toContainText('白毦卫');
       await expect(unique).toContainText(guard.en);

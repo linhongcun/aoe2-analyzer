@@ -74,6 +74,8 @@ export const PROFILES = {
       'civNav602',
       // #584：文明页「鲜为人知」失败验收。实现折入后应收绿，不要放宽断言。
       'insights584',
+      // #603：概览主栏编辑式分区。Kent 的失败验收折进来之后应收绿。
+      'civ603',
     ],
   ),
   units: profile(

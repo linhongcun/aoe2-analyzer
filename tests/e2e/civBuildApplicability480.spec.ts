@@ -7,7 +7,7 @@ const orders = readdirSync(new URL('../../src/data/build-orders/', import.meta.u
   .filter((file) => file.endsWith('.json'))
   .map((file) => JSON.parse(readFileSync(new URL(`../../src/data/build-orders/${file}`, import.meta.url), 'utf8')) as BuildOrder);
 const order = (id: string) => orders.find((entry) => entry.id === id)!;
-const opening = (page: Page) => page.getByRole('region', { name: '推荐开局', exact: true });
+const opening = (page: Page) => page.getByRole('region', { name: '开局建议', exact: true });
 const applicability = (page: Page) => page.getByRole('region', { name: '开局适用文明', exact: true });
 const genericNote = '资料未列出该文明，当前作为通用示意';
 const errors = new WeakMap<Page, string[]>();
@@ -31,7 +31,8 @@ test('#480 regression Tatars uses its listed archer opening instead of the route
   await expect(region).toBeVisible();
   await expect(region.getByRole('link', { name: order('archers-19').name.zh, exact: true })).toHaveAttribute('href', '#/builds?bo=archers-19&civ=Tatars');
   await expect(region.locator('a[href*="bo=scouts-18"]')).toHaveCount(0);
-  await expect(region).toContainText('资料标注适用的开局流程');
+  await expect(region.getByText('资料标注适用的开局流程', { exact: true })).toHaveCount(0);
+  await expect(region.getByText('通用示意', { exact: true })).toHaveCount(0);
 });
 
 test('#480 regression Mayans exposes the listed archer opening despite eagle route text', async ({ page }) => {
@@ -39,7 +40,7 @@ test('#480 regression Mayans exposes the listed archer opening despite eagle rou
   const region = opening(page);
   await expect(region).toBeVisible();
   await expect(region.getByRole('link', { name: order('archers-19').name.zh, exact: true })).toHaveAttribute('href', '#/builds?bo=archers-19&civ=Mayans');
-  await expect(region).toContainText('资料标注适用的开局流程');
+  await expect(region.getByText('资料标注适用的开局流程', { exact: true })).toHaveCount(0);
 });
 
 test('#480 regression Varangians fallback is explicitly generic and preserves the requested civilization', async ({ page }) => {
@@ -48,7 +49,7 @@ test('#480 regression Varangians fallback is explicitly generic and preserves th
   const link = region.getByRole('link', { name: order('scouts-18').name.zh, exact: true });
   await expect(link).toBeVisible();
   await expect.soft(link).toHaveAttribute('href', '#/builds?bo=scouts-18&civ=Varangians');
-  await expect.soft(region).toContainText('通用流程示意');
+  await expect.soft(region.getByText('通用流程示意', { exact: true })).toHaveCount(0);
   await expect.soft(link.locator('..')).toContainText('通用示意');
 });
 
@@ -134,8 +135,10 @@ for (const width of [360, 375, 390, 1280])
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/civ/Varangians');
       const region = opening(page);
-      await expect(region).toContainText('通用流程示意');
-      await expect(region.locator('ol > li')).toHaveCount(2);
+      await expect(region.getByText('通用示意', { exact: true })).toBeVisible();
+      await expect(region.getByText('通用流程示意', { exact: true })).toHaveCount(0);
+      await expect(region.locator('ol > li')).toHaveCount(0);
+      await expect(region.getByTestId('civ-opening-summary')).toContainText('黑暗至封建');
       const link = region.getByRole('link', { name: order('scouts-18').name.zh, exact: true });
       await touchTargets(region.locator('.civ-opening-links a'));
       await region.screenshot({ path: info.outputPath(`civ480-generic-${width}-${theme}.png`) });

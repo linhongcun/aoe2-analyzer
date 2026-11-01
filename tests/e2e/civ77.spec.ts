@@ -9,10 +9,11 @@ for (const width of [360, 375, 390, 1280]) {
       if (e.type() === 'error') errors.push(e.text());
     });
     await page.goto('./#/civ/Mongols');
-    const opening = page.getByRole('region', { name: '推荐开局' });
+    const opening = page.getByRole('region', { name: '开局建议' });
     await expect(opening).toContainText('蒙古突骑');
     await expect(opening).not.toContainText('芒古代');
-    await expect(opening.locator('li')).toHaveCount(2);
+    await expect(opening.getByTestId('civ-opening-summary')).toHaveCount(1);
+    await expect(opening.locator('ol, li')).toHaveCount(0);
     await expect(page.getByText('标签说明：', { exact: false })).toBeVisible();
     const bonusLink = page.getByRole('link', { name: '查看完整加成表', exact: true });
     await expect(bonusLink).toHaveAttribute('href', '#/bonuses');
@@ -26,7 +27,7 @@ for (const width of [360, 375, 390, 1280]) {
     await page.getByRole('link', { name: '查看完整加成表', exact: true }).click();
     await expect(page).toHaveURL(/#\/bonuses$/);
     await page.goto('./#/civ/Vietnamese');
-    await expect(page.getByRole('region', { name: '推荐开局' })).toContainText('藤弓兵');
+    await expect(page.getByRole('region', { name: '开局建议' })).toContainText('藤弓兵');
     expect(errors).toEqual([]);
   });
 }

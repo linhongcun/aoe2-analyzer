@@ -1,0 +1,223 @@
+/* issue 603 概览主栏。沿用 .detail-section，不另做卡片皮肤。 */
+
+.detail .civ-ov-hd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.detail .civ-ov-hd h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.detail .civ-ov-link {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--color-link);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.detail .civ-ratings .detail-ratings-heading {
+  margin: 0 0 12px;
+}
+
+.detail .civ-ratings .detail-ratings-heading h2 {
+  margin: 0;
+}
+
+.detail .civ-ratings .rl-btn {
+  width: 44px;
+  height: 44px;
+}
+
+.detail .civ-ratings .detail-stats {
+  margin-bottom: 0;
+}
+
+.civ-rating-footnote {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+.civ-rating-footnote > div {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.civ-rating-footnote > div:first-child {
+  margin-top: 0;
+}
+
+.civ-rating-footnote dt {
+  flex: none;
+  width: 72px;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+}
+
+.civ-rating-footnote dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--fs-body);
+  line-height: 1.45;
+}
+
+#detail .dmain > .insight-slot {
+  margin-bottom: 24px;
+}
+
+.civ-bonus-cap {
+  margin: 0 0 8px;
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+
+.civ-bonuses .blrows {
+  margin: 0;
+}
+
+.civ-bonuses .brow {
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.civ-bonuses .blrows .brow:last-child {
+  border-bottom: 0;
+}
+
+.civ-bonuses .brow-h {
+  box-sizing: border-box;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 0;
+}
+
+.civ-bonuses .brow-t {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.45;
+}
+
+.civ-bonuses .brow-t .num {
+  line-height: 1.45;
+}
+
+.civ-bonuses .brow-h .tag {
+  flex-shrink: 0;
+  margin: 0 0 0 auto;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+
+.civ-bonuses .tag.ok {
+  color: var(--color-good);
+  background: var(--color-good-soft);
+}
+
+.civ-bonuses .tag.txt {
+  color: var(--color-muted);
+  background: var(--color-surface-2);
+}
+
+.civ-bonus-team {
+  margin: 16px 0 0;
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.civ-stance-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+}
+
+.civ-stance-cols h3 {
+  margin: 0 0 8px;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.civ-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.civ-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+}
+
+.civ-chip.is-pro {
+  color: var(--color-good);
+  background: var(--color-good-soft);
+}
+
+.civ-chip.is-con {
+  color: var(--color-bad);
+  background: var(--color-bad-soft);
+}
+
+.civ-position {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: var(--fs-body);
+  line-height: 1.45;
+}
+
+.civ-position .k {
+  margin-right: 8px;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+}
+
+@media (min-width: 601px) {
+  .detail .civ-ratings .rl-pop {
+    right: 0;
+    left: auto;
+  }
+
+  .detail .civ-ratings .rl-pop::before {
+    right: 16px;
+    left: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .civ-stance-cols {
+    grid-template-columns: 1fr;
+  }
+}

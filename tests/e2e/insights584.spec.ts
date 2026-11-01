@@ -3,6 +3,7 @@
 // 当前 main 没有这块，用例应红。实现折入后应收绿。不要放宽断言去迁就现状。
 // 不关 #584。不改 tests/**/v0*-acceptance*。
 //
+// #603 起，文明概览没有条目时不挂这个槽。单位页空态仍是「暂无」。
 // 槽位：data-testid="insight-slot"（section，标题「鲜为人知」）
 // 条目：data-testid="insight-item"（ul > li）
 // 空态：data-testid="insight-empty"，正文「暂无」；有内容时不要留这个节点
@@ -138,35 +139,25 @@ test('#/unit/38 骑士：造价与生产正下方有空槽「暂无」', async (
   await expectEmpty(slot(page));
 });
 
-test('#/civ/Franks 法兰克：短摘要下、加成长列表上有空槽「暂无」', async ({ page }) => {
+test('#/civ/Franks 法兰克：没有洞察就不挂槽，概览不写「暂无」', async ({ page }) => {
   await openDetail(page, '/civ/Franks', /法兰克/);
-  const region = await expectFixedSlot(page);
-  await expectEmpty(region);
+  await expect(slot(page)).toHaveCount(0);
+  await expect(page.getByTestId('insight-empty')).toHaveCount(0);
   const placement = await page.evaluate(() => {
     const main = document.querySelector('.dmain');
-    const insight = document.querySelector('[data-testid="insight-slot"]');
-    const paragraph = (prefix: string) => [...(main?.querySelectorAll('p') ?? [])].find((node) => node.querySelector('b')?.textContent?.startsWith(prefix));
-    const follows = (earlier: Element | undefined, later: Element | null) =>
+    const ratings = main?.querySelector('[data-testid="civ-ratings"]') ?? null;
+    const bonuses = main?.querySelector('[data-testid="civ-bonuses"]') ?? null;
+    const follows = (earlier: Element | null, later: Element | null) =>
       !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
-    const bonuses = main?.querySelector('ul.blrows') ?? null;
-    return {
-      afterRole: follows(paragraph('官方定位'), insight),
-      afterUnique: follows(paragraph('特色兵种'), insight),
-      beforeBonusList: follows(insight ?? undefined, bonuses),
-      outsideBonusList: !insight?.closest('ul.blrows, li.brow'),
-      outsideOpening: !insight?.closest('section[aria-label="开局建议"]'),
-    };
+    return { bonusesAfterRatings: follows(ratings, bonuses), visibleEmpty: main instanceof HTMLElement && main.innerText.includes('暂无') };
   });
-  expect(placement).toEqual({
-    afterRole: true,
-    afterUnique: true,
-    beforeBonusList: true,
-    outsideBonusList: true,
-    outsideOpening: true,
-  });
+  expect(placement.bonusesAfterRatings).toBe(true);
+  expect(placement.visibleEmpty).toBe(false);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await leaveAndReturn(page, '数据');
-  await expectEmpty(slot(page));
+  await page.getByRole('tab', { name: '数据', exact: true }).click();
+  await expect(page.getByRole('tab', { name: '概览', exact: true })).toHaveAttribute('aria-selected', 'false');
+  await page.getByRole('tab', { name: '概览', exact: true }).click();
+  await expect(slot(page)).toHaveCount(0);
 });
 
 test('#/unit/2705 扈从部队：种子①标枪/驻扎分句 + 种子②无粮步兵', async ({ page }) => {
@@ -214,18 +205,19 @@ test('#/civ/Malians 马里：种子⑧空城 8 箭，禁旧 +5，不与山城堡
   await expectNowrap(region, /^18$/);
   const placement = await page.evaluate(() => {
     const main = document.querySelector('.dmain');
-    const insight = document.querySelector('[data-testid="insight-slot"]');
-    const paragraph = (prefix: string) => [...(main?.querySelectorAll('p') ?? [])].find((node) => node.querySelector('b')?.textContent?.startsWith(prefix));
-    const follows = (earlier: Element | undefined, later: Element | null) =>
+    const insight = main?.querySelector('[data-testid="insight-slot"]') ?? null;
+    const ratings = main?.querySelector('[data-testid="civ-ratings"]') ?? null;
+    const bonuses = main?.querySelector('[data-testid="civ-bonuses"]') ?? null;
+    const follows = (earlier: Element | null, later: Element | null) =>
       !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
     return {
-      afterRole: follows(paragraph('官方定位'), insight),
-      afterUnique: follows(paragraph('特色兵种'), insight),
-      beforeBonusList: follows(insight ?? undefined, main?.querySelector('ul.blrows') ?? null),
+      afterRatings: follows(ratings, insight),
+      beforeBonuses: follows(insight, bonuses),
       outsideBonusList: !insight?.closest('ul.blrows, li.brow'),
+      outsideOpening: !insight?.closest('[data-testid="civ-opening"]'),
     };
   });
-  expect(placement).toEqual({ afterRole: true, afterUnique: true, beforeBonusList: true, outsideBonusList: true });
+  expect(placement).toEqual({ afterRatings: true, beforeBonuses: true, outsideBonusList: true, outsideOpening: true });
   await leaveAndReturn(page, '数据');
   await expect(
     slot(page)
@@ -280,18 +272,19 @@ test('#/civ/Persians 波斯：种子⑪高血城镇中心，不写火力相等�
   await expectNowrap(region, new RegExp(`2400${RANGE}4800`));
   const placement = await page.evaluate(() => {
     const main = document.querySelector('.dmain');
-    const insight = document.querySelector('[data-testid="insight-slot"]');
-    const paragraph = (prefix: string) => [...(main?.querySelectorAll('p') ?? [])].find((node) => node.querySelector('b')?.textContent?.startsWith(prefix));
-    const follows = (earlier: Element | undefined, later: Element | null) =>
+    const insight = main?.querySelector('[data-testid="insight-slot"]') ?? null;
+    const ratings = main?.querySelector('[data-testid="civ-ratings"]') ?? null;
+    const bonuses = main?.querySelector('[data-testid="civ-bonuses"]') ?? null;
+    const follows = (earlier: Element | null, later: Element | null) =>
       !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
     return {
-      afterRole: follows(paragraph('官方定位'), insight),
-      afterUnique: follows(paragraph('特色兵种'), insight),
-      beforeBonusList: follows(insight ?? undefined, main?.querySelector('ul.blrows') ?? null),
+      afterRatings: follows(ratings, insight),
+      beforeBonuses: follows(insight, bonuses),
       outsideBonusList: !insight?.closest('ul.blrows, li.brow'),
+      outsideOpening: !insight?.closest('[data-testid="civ-opening"]'),
     };
   });
-  expect(placement).toEqual({ afterRole: true, afterUnique: true, beforeBonusList: true, outsideBonusList: true });
+  expect(placement).toEqual({ afterRatings: true, beforeBonuses: true, outsideBonusList: true, outsideOpening: true });
   await leaveAndReturn(page, '数据');
   await expect(
     slot(page)

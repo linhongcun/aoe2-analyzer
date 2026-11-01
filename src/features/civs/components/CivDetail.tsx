@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
@@ -12,7 +12,7 @@ import { collapse } from '../../../domain/family';
 import { Icon } from '../../../shared/ui/Icon';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
-import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
+import { DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
 import { RatingHeading, RatingLabel } from '../../../shared/ui/RatingHelp';
 import { Linked, PosBox, Radar } from '../../../shared/ui/widgets';
 import { session } from '../../../shared/utils/sticky';
@@ -25,7 +25,34 @@ import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
 import { civDisplayText } from '../displayNames';
 import CivProfessionalView from './CivProfessionalView';
+import './civOverview.css';
 import './civRelatedTools.css';
+
+function OverviewCard({
+  title,
+  testId,
+  extra,
+  className = '',
+  headingClassName = '',
+  children,
+}: {
+  title: string;
+  testId: string;
+  extra?: ReactNode;
+  className?: string;
+  headingClassName?: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className={`detail-section${className ? ` ${className}` : ''}`} aria-label={title} data-testid={testId}>
+      <div className={`civ-ov-hd${headingClassName ? ` ${headingClassName}` : ''}`}>
+        <h2>{title}</h2>
+        {extra}
+      </div>
+      {children}
+    </section>
+  );
+}
 
 function UTech({ s, civ }: { s: string; civ: string }) {
   const core = useCore();
@@ -74,6 +101,7 @@ export default function CivDetail() {
   }, [c]);
   if (!c) return <CivNotFound en={en} />;
   const [s, w] = strengths(c);
+  const insights = civInsights(c.en);
   const myU = core ? core.units.filter((u) => u.type === 'UniqueUnit' && u.civs.includes(c.en)) : [];
   const highlights = new Set(
     c.s
@@ -140,43 +168,74 @@ export default function CivDetail() {
           content: (
             <>
               {c.op.trim() && (
-                <DetailSection title="开局建议">
+                <OverviewCard title="开局建议" testId="civ-opening" className="civ-opening-card">
                   <CivOpening c={c} />
-                </DetailSection>
+                </OverviewCard>
               )}
-              <section className="detail-ratings-heading">
-                <h2>能力评分</h2>
-                <RatingLabel />
-              </section>
-              {ratingTiles}
-              <p>
-                <b>官方定位：</b>
-                {c.desc}
-              </p>
-              <p>
-                <b>特色兵种：</b>
-                <Linked text={civDisplayText(c.uu, c.en, core)} />
-              </p>
-              <InsightSlot items={civInsights(c.en)} />
-              <p>
-                <b>文明加成：</b>
-                <Link className="ulink" to="/bonuses">
-                  查看完整加成表
-                </Link>
-              </p>
-              <BonusRows c={c} />
-              <p className="g">
-                <b>优势：</b>
-                {s.join('、')}
-              </p>
-              <p className="r">
-                <b>劣势：</b>
-                {w.join('、')}
-              </p>
-              <p>
-                <b>推荐团战位置：</b>
-                {c.fl >= c.pk ? '边位 Flank' : '口袋 Pocket'}（边位 {c.fl}/10，口袋 {c.pk}/10）
-              </p>
+              <OverviewCard title="能力评分" testId="civ-ratings" className="civ-ratings" headingClassName="detail-ratings-heading" extra={<RatingLabel />}>
+                {ratingTiles}
+                <dl className="civ-rating-footnote" data-testid="civ-rating-footnote">
+                  <div>
+                    <dt>官方定位</dt>
+                    <dd>{c.desc}</dd>
+                  </div>
+                  <div>
+                    <dt>特色兵种</dt>
+                    <dd>
+                      <Linked text={civDisplayText(c.uu, c.en, core)} />
+                    </dd>
+                  </div>
+                </dl>
+              </OverviewCard>
+              {insights.length > 0 && <InsightSlot items={insights} />}
+              <OverviewCard
+                title="文明加成"
+                testId="civ-bonuses"
+                className="civ-bonuses"
+                extra={
+                  <Link className="civ-ov-link" to="/bonuses">
+                    查看完整加成表
+                  </Link>
+                }
+              >
+                <BonusRows c={c} />
+              </OverviewCard>
+              <OverviewCard title="优劣与位置" testId="civ-stance" className="civ-stance">
+                <div className="civ-stance-cols">
+                  <div data-testid="civ-stance-pros">
+                    <h3>优势</h3>
+                    <div className="civ-chips">
+                      {s.map((name) => (
+                        <span key={name} className="civ-chip is-pro">
+                          {name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div data-testid="civ-stance-cons">
+                    <h3>劣势</h3>
+                    <div className="civ-chips">
+                      {w.map((name) => (
+                        <span key={name} className="civ-chip is-con">
+                          {name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="civ-position" data-testid="civ-position">
+                  <span className="k">推荐团战位置</span>
+                  {c.fl >= c.pk ? '边位 Flank' : '口袋 Pocket'}（边位{' '}
+                  <span className="nw">
+                    <span className="num">{c.fl}</span>/10
+                  </span>
+                  ，口袋{' '}
+                  <span className="nw">
+                    <span className="num">{c.pk}</span>/10
+                  </span>
+                  ）
+                </p>
+              </OverviewCard>
               <DetailSource note="能力评分为主观近似评分；开局建议请结合文明加成调整" />
             </>
           ),
@@ -229,7 +288,12 @@ export default function CivDetail() {
           <CivUniqueBuildings civ={c.en} buildings={core?.buildings ?? null} />
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
           {sameDlc.length > 0 && <SameDlcCivs key={c.en} list={sameDlc} />}
-          <p className="note">共 {civs.length} 个文明</p>
+          <p className="note">
+            共{' '}
+            <span className="nw">
+              <span className="num">{civs.length}</span> 个文明
+            </span>
+          </p>
         </>
       }
     />
