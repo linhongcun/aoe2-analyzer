@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { formatPercent, type LadderSnapshot } from '../../src/domain/ladder';
 
-const snapshot = JSON.parse(readFileSync('src/data/ladder-arabia-p162286.json', 'utf8')) as LadderSnapshot;
+const snapshot = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
 const all = snapshot.brackets.find((bracket) => bracket.key === 'all');
 if (!all || all.civs.length < 16) throw new Error('全部段文明不足 16，无法验收首批 12–16 家');
 const winByEn = new Map(all.civs.map((civ) => [civ.en, civ.winRate]));

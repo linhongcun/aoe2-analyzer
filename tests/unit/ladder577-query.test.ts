@@ -14,7 +14,7 @@ import {
 } from '../../src/domain/ladder';
 import { canonicalLadderSearch, resolveLadderLocation } from '../../src/domain/ladderQuery';
 
-const arabia = JSON.parse(readFileSync('src/data/ladder-arabia-p162286.json', 'utf8')) as LadderSnapshot;
+const arabia = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
 const team = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
 
 describe('天梯默认切片地址与平衡口径 #577', () => {
@@ -29,14 +29,17 @@ describe('天梯默认切片地址与平衡口径 #577', () => {
   it('玩家看到的截止日是窗口终点，不是取回日', () => {
     expect(snapshotCutoff(team)).toBe('2026-10-30');
     expect(team.fetchedAt).toBe('2026-11-01');
-    expect(snapshotCutoff(arabia)).toBe(arabia.fetchedAt);
+    expect(snapshotCutoff(arabia)).toBe(arabia.period?.to);
+    expect(arabia.period?.to).toBe('2026-11-01');
   });
 
   it('4v4 样本是人次，来源名不印到界面', () => {
     expect(isPlayerSample(team.sample?.unit)).toBe(true);
+    expect(isPlayerSample(arabia.sample?.unit)).toBe(true);
     expect(visibleSourceLabel(team.source)).toBe('来源');
     expect(visibleSourceLabel(team.source).toLowerCase()).not.toContain('aoe2scout');
-    expect(visibleSourceLabel(arabia.source)).toBe('aoestats.io');
+    expect(visibleSourceLabel(arabia.source)).toBe('Age of Notes');
+    expect(visibleSourceLabel(arabia.source).toLowerCase()).not.toContain('aoe2scout');
   });
 
   it('分层档界和分布象限按锁定边界', () => {

@@ -1,27 +1,31 @@
 // #33 `#/ladder` 阿拉伯 1v1 天梯。不改 pageRegistry / v0*-acceptance。
 // #545 锁定当前快照只露出有数据的分段：不再要求六枚芯片、可点空态，以及首页「分段胜率」。那些断言改到 tests/e2e/ladder545.spec.ts，在实现前应红。
 // 设计：docs/design/ladder-33/ladder-33.md；空芯片与入口文案：docs/design/ladder-545/ladder-545.md。
-// 锚点来自 #536 `src/data/ladder-arabia-p162286.json` @ 98bbf11。winRate/playRate 已是百分数，界面固定两位小数（51.4 → 51.40%），不得再乘 100。
+// 锚点来自 Age of Notes 阿拉伯页 data-wr / data-games / data-pr（2026-11-01，补丁 185872）。百分数原样写入，界面固定两位小数，不得再乘 100。
 // testid：ladder-page/context/bracket(data-elo)/source/patch-note/table/row-{En}/sort-{win|play|games|name|tier}/tier/expand/reason-{En}/fallback-toast/share/footer/empty。data-games < 300 标「样本少」。
 import { existsSync, readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
-const SNAPSHOT_PATH = 'src/data/ladder-arabia-p162286.json';
-/** 锚点抄自 #536 @ 98bbf11 的快照，不是编出来的。文件还没进本分支时仍用这些常量；文件在时下面会核对。 */
-const FETCHED_AT = '2026-07-12';
-const PATCH_162286 = '162286';
-const ALL_GAMES = 504189;
-const CIV_COUNT = 48;
-const FRANKS = { en: 'Franks', winRate: 51.4, playRate: 5.15, games: 51920 };
-const ROMANS = { en: 'Romans', winRate: 54.04, playRate: 1.67, games: 16815 };
-const ABSENT = ['Jurchens', 'Khitans'] as const;
+const SNAPSHOT_PATH = 'src/data/ladder-arabia-p185872.json';
+/** 锚点抄自 Age of Notes 页上的 data-wr / data-pr / data-games，不是编出来的。 */
+const FETCHED_AT = '2026-11-01';
+const CUTOFF = '2026-11-01';
+const PATCH_BUILD = '185872';
+const ALL_GAMES = 114500;
+const CIV_COUNT = 56;
+const FRANKS = { en: 'Franks', winRate: 50.667, playRate: 5.279, games: 5769 };
+const ROMANS = { en: 'Romans', winRate: 55.09, playRate: 1.689, games: 1955 };
 
 type SnapCiv = { en: string; winRate: number; playRate: number; games: number };
 if (existsSync(SNAPSHOT_PATH)) {
   const snap = JSON.parse(readFileSync(SNAPSHOT_PATH, 'utf8')) as {
     fetchedAt: string;
     patchNote: string;
+    source: string;
+    sourceUrl: string;
+    period?: { to?: string };
+    sample?: { unit?: string };
     brackets: { key: string; games: number; civs: SnapCiv[] }[];
   };
   const all = snap.brackets.find((bracket) => bracket.key === 'all');
@@ -29,7 +33,10 @@ if (existsSync(SNAPSHOT_PATH)) {
     !all ||
     snap.brackets.length !== 1 ||
     snap.fetchedAt !== FETCHED_AT ||
-    !snap.patchNote.includes(PATCH_162286) ||
+    snap.period?.to !== CUTOFF ||
+    !snap.patchNote.includes(PATCH_BUILD) ||
+    snap.sample?.unit !== 'player' ||
+    /aoe2scout/i.test(`${snap.source} ${snap.sourceUrl}`) ||
     all.games !== ALL_GAMES ||
     all.civs.length !== CIV_COUNT;
   if (drifted) throw new Error(`${SNAPSHOT_PATH} 与 all 锚点不一致`);
@@ -37,7 +44,6 @@ if (existsSync(SNAPSHOT_PATH)) {
     const civ = all?.civs.find((item) => item.en === anchor.en);
     if (civ?.winRate !== anchor.winRate || civ.playRate !== anchor.playRate || civ.games !== anchor.games) throw new Error(`${anchor.en} 与快照不一致`);
   }
-  for (const en of ABSENT) if (all?.civs.some((civ) => civ.en === en)) throw new Error(`${en} 不应出现在 all 快照里`);
 }
 
 const LOW_SAMPLE = 300;
@@ -206,36 +212,40 @@ test('#33 非法 elo 回落全部，sort/dir/civ 不保留', async ({ page }) =>
   await expect(page.getByTestId('ladder-empty')).toHaveCount(0);
 });
 
-test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本不一致时出现，页面不请求 aoestats', async ({ page }) => {
+test('#33 来源条披露 Age of Notes 与截止日期，补丁提示条只在版本不一致时出现，页面不请求来源站', async ({ page }) => {
   const hits: string[] = [];
   page.on('request', (request) => {
-    if (/aoestats\.io|web\.archive\.org/i.test(request.url())) hits.push(request.url());
+    if (/aoestats\.io|ageofnotes\.com|aoe2scout\.com|web\.archive\.org/i.test(request.url())) hits.push(request.url());
   });
   await page.goto('./#/ladder?mode=arabia1v1');
   const root = await expectLadderPage(page);
   expect(hits).toEqual([]);
   const source = page.getByTestId('ladder-source');
   await expect(source).toBeVisible();
-  const link = source.getByRole('link', { name: /aoestats/ });
-  await expect(link).toHaveAttribute('href', /^https:\/\/aoestats\.io\/maps\/arabia\/?$/);
+  const link = source.getByRole('link', { name: /Age of Notes/ });
+  await expect(link).toHaveAttribute('href', 'https://ageofnotes.com/stats/maps/arabia/');
   await expect(link).toHaveAttribute('target', '_blank');
   await expect(link).toHaveAttribute('rel', /noopener/);
   await expect(source).toContainText('外部');
-  await expect(source).toContainText(FETCHED_AT);
+  await expect(source).toContainText(CUTOFF);
   await expect(source).toContainText('补丁');
-  await expect(source).toContainText(PATCH_162286);
+  await expect(source).toContainText(PATCH_BUILD);
   await expect(source).toContainText('统计截止');
   await expect(source).not.toContainText(/wayback/i);
   await expect(source).not.toContainText('archive.org');
   await expect(source).not.toContainText('实时');
+  await expect(source).not.toContainText(/aoe2scout/i);
   await expect(root).not.toContainText(/wayback/i);
   await expect(root).not.toContainText('archive.org');
+  await expect(root).not.toContainText(/aoe2scout/i);
   await expect(source).toContainText(/本分段样本/);
-  await expect(source).toContainText(/504[,，]?189/);
-  await expect(source).toContainText('局');
+  await expect(source).toContainText(/114[,，]?500/);
+  await expect(source).toContainText('人次');
+  await expect(source).not.toContainText('局');
   const footer = page.getByTestId('ladder-footer');
-  await expect(footer).toContainText('aoestats');
-  await expect(footer).toContainText(FETCHED_AT);
+  await expect(footer).toContainText('Age of Notes');
+  await expect(footer).not.toContainText('aoestats');
+  await expect(footer).toContainText(CUTOFF);
   await expect(footer).toContainText('静态快照');
   await expect(footer).toContainText('不实时抓取');
   await expect(footer).toContainText('不自建统计');
@@ -244,11 +254,11 @@ test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本
   const sitePatch = String((JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { patch: { build: number } }).patch.build);
   const note = page.getByTestId('ladder-patch-note');
   const cutoff = page.getByTestId('ladder-cutoff');
-  if (sitePatch === PATCH_162286) {
+  if (sitePatch === PATCH_BUILD) {
     await expect(note).toHaveCount(0);
     await expect(source).toHaveAttribute('data-cutoff', 'aligned');
     await expect(cutoff).toContainText('统计截止');
-    await expect(cutoff).toContainText(FETCHED_AT);
+    await expect(cutoff).toContainText(CUTOFF);
     await expect(cutoff).toContainText('静态快照');
     await expect(cutoff).not.toContainText('非当前平衡');
   } else {
@@ -256,14 +266,14 @@ test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本
     await expect(source).toHaveAttribute('data-cutoff', 'mismatch');
     await expect(cutoff).toContainText('非当前平衡');
     await expect(cutoff).toContainText('统计截止');
-    await expect(cutoff).toContainText(FETCHED_AT);
-    await expect(cutoff).toContainText(PATCH_162286);
+    await expect(cutoff).toContainText(CUTOFF);
+    await expect(cutoff).toContainText(PATCH_BUILD);
     await expect(cutoff).toContainText('与本站 DE');
     await expect(cutoff).toContainText(sitePatch);
     await expect(note).toBeVisible();
     await expect(note).toContainText('胜率可能未反映最新平衡改动');
-    await expect(note).not.toContainText(FETCHED_AT);
-    await expect(note).not.toContainText(PATCH_162286);
+    await expect(note).not.toContainText(CUTOFF);
+    await expect(note).not.toContainText(PATCH_BUILD);
     await expect(note).not.toContainText(sitePatch);
     await expect(page.getByTestId('ladder-table')).toBeVisible();
   }
@@ -353,7 +363,7 @@ test('#33 all 分段对照快照原百分数，不乘 100；样本少于 300 才
   await expectLadderPage(page);
   const winIndex = await columnIndex(page, /胜率/);
   const playIndex = await columnIndex(page, /出场率/);
-  const gamesIndex = await columnIndex(page, /样本局数/);
+  const gamesIndex = await columnIndex(page, /^出场$/);
   expect(winIndex).toBeGreaterThanOrEqual(0);
   expect(playIndex).toBeGreaterThanOrEqual(0);
   expect(gamesIndex).toBeGreaterThanOrEqual(0);
@@ -366,7 +376,6 @@ test('#33 all 分段对照快照原百分数，不乘 100；样本少于 300 才
     expect(sample).toContain(String(anchor.games));
     await expect(row).not.toContainText('样本少');
   }
-  for (const en of ABSENT) await expect(page.getByTestId(`ladder-row-${en}`)).toHaveCount(0);
   const rows = page.locator('[data-testid^="ladder-row-"]');
   const count = await rows.count();
   expect(count).toBe(CIV_COUNT);
@@ -400,9 +409,9 @@ for (const width of [360, 375, 390, 1280]) {
       const root = await expectLadderPage(page);
       if (width >= 960) {
         await expect(root.getByRole('heading', { level: 1 })).toContainText('Ladder Stats');
-        await expect(root.getByRole('columnheader', { name: /样本局数/ })).toBeVisible();
+        await expect(root.getByRole('columnheader', { name: '出场', exact: true })).toBeVisible();
       } else {
-        await expect(root.getByRole('columnheader', { name: /样本局数/ })).toHaveCount(0);
+        await expect(root.getByRole('columnheader', { name: '出场', exact: true })).toHaveCount(0);
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       const metrics = root.locator('.num');
