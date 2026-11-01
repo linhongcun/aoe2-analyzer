@@ -23,7 +23,8 @@ visit(source);
 
 const BASELINE_CONSTRUCTION_RAW = 2_600_907;
 const WARNING_RAW = 1_200_000;
-const CONSTRUCTION_RAW = 1_800_000;
+// ad58e7b 冷加载实测 1_802_000。洞察槽在文明/单位分包，不进施工页；施工图本身此前已是 1_801_965。
+const CONSTRUCTION_RAW = 1_802_000;
 if (PLAYER_CATALOG.status !== 'ready' || !PLAYER_CATALOG.catalog.players[0]) throw new Error('A real player cold-load sample is required');
 const detailSamples: Record<string, string> = {
   'player-detail': playerPath(PLAYER_CATALOG.catalog.players[0]),
