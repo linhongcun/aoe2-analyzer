@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import arabiaJson from '../../data/ladder-arabia-p162286.json';
+import arabiaJson from '../../data/ladder-arabia-p185872.json';
 import teamJson from '../../data/ladder-4v4-rm-e1200-1400-90d.json';
 import { isBalanceAligned, LOW_SAMPLE, resolveElo, type BracketKey, type LadderSnapshot } from '../../domain/ladder';
 import { canonicalLadderSearch, resolveLadderLocation, type LadderModeId } from '../../domain/ladderQuery';

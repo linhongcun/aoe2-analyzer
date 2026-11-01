@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo, useState, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
 import beginnerNotes from '../../data/ladder-beginner.json';
-import snapshotJson from '../../data/ladder-arabia-p162286.json';
+import snapshotJson from '../../data/ladder-arabia-p185872.json';
 import {
   firstSortDir,
   formatGames,
@@ -10,12 +10,15 @@ import {
   friendliness,
   isLowSample,
   isPatchMismatch,
+  isPlayerSample,
+  snapshotCutoff,
   snapshotPatchBuild,
   sortLadder,
   TIER_LABEL,
   TIER_RANK,
   toggleSort,
   viewBracket,
+  visibleSourceLabel,
   type BeginnerNotes,
   type BracketKey,
   type LadderSnapshot,
@@ -78,6 +81,10 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
   const wide = useWideTable();
   const mismatch = isPatchMismatch(snapshot.patchNote, SITE_BUILD);
   const patchBuild = snapshotPatchBuild(snapshot.patchNote);
+  const cutoff = snapshotCutoff(snapshot);
+  const playerSample = isPlayerSample(snapshot.sample?.unit);
+  const sampleUnit = playerSample ? '人次' : '局';
+  const gamesLabel = playerSample ? '出场' : '样本局数';
   const bracket = useMemo(() => viewBracket(snapshot, elo), [elo]);
   const rows = useMemo(() => {
     const visible = hideLow ? bracket.civs.filter((stat) => !isLowSample(stat.games)) : bracket.civs;
@@ -120,8 +127,8 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
           <Icon name="rotate-ccw" />
           重试
         </button>
-        <a href="https://aoestats.io/maps/arabia/" target="_blank" rel="noopener noreferrer">
-          aoestats.io
+        <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
+          {visibleSourceLabel(snapshot.source)}
           <Icon name="external-link" />
           （外部）
         </a>
@@ -143,7 +150,7 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
         </span>
       </div>
       <LadderBracketGroup snapshot={snapshot} elo={elo} onSelect={select} />
-      {/* 玩家界面只写 aoestats、统计日期和补丁号。Wayback 路径留在快照 JSON 与设计文档，不渲染到页面。 */}
+      {/* 玩家界面只写来源名、统计截止和补丁号。Wayback 路径不渲染。来源名若是 aoe2scout 则不印出。 */}
       <div className="ladder-source" data-testid="ladder-source" data-cutoff={mismatch ? 'mismatch' : 'aligned'} data-fetched-at={snapshot.fetchedAt}>
         <Icon name="database" />
         <div className="ladder-copy">
@@ -153,7 +160,7 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
                 <span className="ladder-cutoff-flag">非当前平衡</span>
                 {' · '}
                 <span className="nw">
-                  统计截止 <span className="num">{snapshot.fetchedAt}</span>
+                  统计截止 <span className="num">{cutoff}</span>
                 </span>
                 {' · '}
                 <span className="nw">
@@ -163,7 +170,7 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
             ) : (
               <>
                 <span className="nw">
-                  统计截止 <span className="num">{snapshot.fetchedAt}</span>
+                  统计截止 <span className="num">{cutoff}</span>
                 </span>
                 {patchBuild && (
                   <>
@@ -180,14 +187,14 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
           </p>
           <p className="ladder-source-meta">
             <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
-              {snapshot.source}
+              {visibleSourceLabel(snapshot.source)}
               <Icon name="external-link" />
               （外部）
             </a>
             。
             {!bracket.empty && (
               <span className="nw">
-                本分段样本 <span className="num">{formatGames(bracket.games)}</span> 局
+                本分段样本 <span className="num">{formatGames(bracket.games)}</span> {sampleUnit}
               </span>
             )}
           </p>
@@ -233,7 +240,7 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
                         <SortHead id="name" label="文明" sort={sort} onSort={setSort} />
                         <SortHead id="win" label="胜率" sort={sort} onSort={setSort} numeric />
                         <SortHead id="play" label="出场率" sort={sort} onSort={setSort} numeric />
-                        {wide && <SortHead id="games" label="样本局数" sort={sort} onSort={setSort} numeric className="ladder-games-col" />}
+                        {wide && <SortHead id="games" label={gamesLabel} sort={sort} onSort={setSort} numeric className="ladder-games-col" />}
                         <SortHead id="tier" label="新手友好度" sort={sort} onSort={setSort} />
                         <th>走势</th>
                         <th className="ladder-expand-col">
@@ -309,7 +316,7 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
                                 <td colSpan={wide ? 7 : 6}>
                                   <div id={`ladder-reason-${row.en}`} data-testid={`ladder-reason-${row.en}`} className="ladder-reason">
                                     <p className="ladder-reason-games">
-                                      样本局数 <span className="num">{formatGames(row.games)}</span>
+                                      {gamesLabel} <span className="num">{formatGames(row.games)}</span>
                                       {isLowSample(row.games) && <span className="ladder-few">样本少</span>}
                                     </p>
                                     <p>
@@ -348,7 +355,15 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
               <li>胜率：本分段里，该文明赢下的对局占比。</li>
               <li>出场率：本分段里，该文明被选中的对局占比。</li>
               <li>
-                样本局数：计入上面两项的对局数。少于 <span className="num">300</span> 局时标「样本少」，数字仍照实显示。
+                {playerSample ? (
+                  <>
+                    出场：本分段里该文明的出场人次。少于 <span className="num">300</span> 人次时标「样本少」，数字仍照实显示。
+                  </>
+                ) : (
+                  <>
+                    样本局数：计入上面两项的对局数。少于 <span className="num">300</span> 局时标「样本少」，数字仍照实显示。
+                  </>
+                )}
               </li>
             </ul>
           </section>
@@ -380,9 +395,9 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
       <p className="ladder-footer" data-testid="ladder-footer">
         <Icon name="info" />
         <span className="ladder-copy">
-          数据来源：aoestats.io（阿拉伯 · RM <span className="nw">1v1</span>）·{' '}
+          数据来源：{visibleSourceLabel(snapshot.source)}（阿拉伯 · RM <span className="nw">1v1</span>）·{' '}
           <span className="nw">
-            统计更新 <span className="num">{snapshot.fetchedAt}</span>
+            统计更新 <span className="num">{cutoff}</span>
           </span>
           。本站保存静态快照，不实时抓取、不自建统计；胜率不是平衡建议。新手友好度为本站编辑口径，不是官方推荐。
         </span>

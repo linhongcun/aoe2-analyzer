@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { DISPLAY_BRACKETS, formatPercent, viewBracket, type LadderSnapshot } from '../../src/domain/ladder';
 
-const snapshot = JSON.parse(readFileSync('src/data/ladder-arabia-p162286.json', 'utf8')) as LadderSnapshot;
+const snapshot = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
 const all = snapshot.brackets.find((bracket) => bracket.key === 'all');
 const romans = all?.civs.find((civ) => civ.en === 'Romans');
 const franks = all?.civs.find((civ) => civ.en === 'Franks');

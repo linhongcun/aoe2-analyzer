@@ -9,7 +9,10 @@ import {
   friendliness,
   isLowSample,
   isPatchMismatch,
+  isPlayerSample,
   resolveElo,
+  snapshotCutoff,
+  snapshotPatchBuild,
   sortLadder,
   TIER_LABEL,
   viewBracket,
@@ -19,7 +22,7 @@ import {
 } from '../../src/domain/ladder';
 import { PAGES } from '../../src/shared/nav/pageRegistry';
 
-const snapshot = JSON.parse(readFileSync('src/data/ladder-arabia-p162286.json', 'utf8')) as LadderSnapshot;
+const snapshot = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
 
 function row(stat: LadderSnapshot['brackets'][number]['civs'][number], nameKey = stat.en): SortableCiv {
   return { ...stat, nameKey, tierRank: 3 };
@@ -35,8 +38,9 @@ describe('天梯快照展示 #33', () => {
       const play = formatPercent(civ.playRate);
       expect(win).toMatch(/^\d+\.\d{2}%$/);
       expect(play).toMatch(/^\d+\.\d{2}%$/);
-      expect(Number(win.slice(0, -1))).toBeCloseTo(civ.winRate, 2);
-      expect(Number(play.slice(0, -1))).toBeCloseTo(civ.playRate, 2);
+      // 两位小数半入最多差 0.005。第三位恰好是 5 时，toBeCloseTo(2) 的开区间会把正确舍入判失败。
+      expect(Math.abs(Number(win.slice(0, -1)) - civ.winRate)).toBeLessThanOrEqual(0.005 + 1e-9);
+      expect(Math.abs(Number(play.slice(0, -1)) - civ.playRate)).toBeLessThanOrEqual(0.005 + 1e-9);
     }
     expect(formatPercent(51.4)).toBe('51.40%');
     expect(formatPercent(54.04)).toBe('54.04%');
@@ -81,8 +85,8 @@ describe('天梯快照展示 #33', () => {
     }
     expect(canonicalSearch('all')).toBe('');
     expect(canonicalSearch('lt850')).toBe('?elo=lt850');
-    expect(viewBracket(snapshot, 'all').games).toBe(504189);
-    expect(viewBracket(snapshot, 'all').civs).toHaveLength(48);
+    expect(viewBracket(snapshot, 'all').games).toBe(114500);
+    expect(viewBracket(snapshot, 'all').civs).toHaveLength(56);
     expect(visibleBrackets(snapshot).map((bracket) => bracket.key)).toEqual(['all']);
   });
 
@@ -122,6 +126,23 @@ describe('天梯快照展示 #33', () => {
     expect(page).toContain('静态快照');
     expect(page).toContain('胜率可能未反映最新平衡改动。');
     expect(page).not.toContain('分段胜率');
+  });
+
+  it('阿拉伯快照日期和补丁号都新于 p162286，截止用 period.to，样本按人次', () => {
+    expect(snapshot.fetchedAt > '2026-07-12').toBe(true);
+    expect(snapshot.fetchedAt).toBe('2026-11-01');
+    expect(snapshot.period?.from).toBe('2026-09-22');
+    expect(snapshot.period?.to).toBe('2026-11-01');
+    expect(snapshotCutoff(snapshot)).toBe(snapshot.period?.to);
+    expect(Number(snapshotPatchBuild(snapshot.patchNote))).toBe(185872);
+    expect(snapshot.sourceUrl).toBe('https://ageofnotes.com/stats/maps/arabia/');
+    expect(`${snapshot.source} ${snapshot.sourceUrl}`.toLowerCase()).not.toContain('aoe2scout');
+    expect(isPlayerSample(snapshot.sample?.unit)).toBe(true);
+    const all = snapshot.brackets.find((bracket) => bracket.key === 'all');
+    expect(all?.civs.reduce((sum, civ) => sum + civ.games, 0)).toBe(all?.games);
+    expect(all?.civs.find((civ) => civ.en === 'Romans')).toMatchObject({ winRate: 55.09, playRate: 1.689, games: 1955 });
+    expect(all?.civs.find((civ) => civ.en === 'Franks')).toMatchObject({ winRate: 50.667, playRate: 5.279, games: 5769 });
+    expect(all?.civs.find((civ) => civ.en === 'Muisca')).toMatchObject({ winRate: 44.792, playRate: 0.502, games: 576 });
   });
 
   it('没有编辑条目时友好度是待补，样本少只看 300 局以下', () => {
