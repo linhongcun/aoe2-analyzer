@@ -39,13 +39,6 @@ function FreshnessText({ value }: { value: RelativeFreshness }) {
       </span>
     );
   }
-  if (value.kind === 'under-hour') {
-    return (
-      <span className="nw" data-testid="ladder-relative">
-        更新于不到 <span className="num">1</span> 小时
-      </span>
-    );
-  }
   return (
     <span className="nw" data-testid="ladder-relative">
       {freshnessText(value)}

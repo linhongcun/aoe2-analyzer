@@ -174,8 +174,7 @@ export function sampleGames(games: number | null | undefined): number | null {
   return games;
 }
 
-export type RelativeFreshness =
-  { kind: 'missing' } | { kind: 'future' } | { kind: 'today' } | { kind: 'under-hour' } | { kind: 'hours'; count: number } | { kind: 'days'; count: number };
+export type RelativeFreshness = { kind: 'missing' } | { kind: 'future' } | { kind: 'hours'; count: number } | { kind: 'days'; count: number };
 
 const DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/;
 const DATE_TIME = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2}))$/;
@@ -188,7 +187,7 @@ function isValidYmd(year: number, month: number, day: number): boolean {
 
 /**
  * 相对快照 `fetchedAt` 的新鲜度。只有日期时按本机日历算天数；带时间才分小时。
- * 不满 1 小时不再往下拆，避免秒级「近实时」。不自动刷新。
+ * 当天是「更新于 0 天前」，不满 1 小时是「更新于 0 小时前」。不写分钟或秒，也不自动刷新。
  */
 export function relativeFreshness(fetchedAt: string, now: Date): RelativeFreshness {
   const raw = fetchedAt.trim();
@@ -202,7 +201,6 @@ export function relativeFreshness(fetchedAt: string, now: Date): RelativeFreshne
     const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
     const days = Math.round((today - fetched) / 86_400_000);
     if (days < 0) return { kind: 'future' };
-    if (days === 0) return { kind: 'today' };
     return { kind: 'days', count: days };
   }
   if (!DATE_TIME.test(raw)) return { kind: 'missing' };
@@ -211,7 +209,7 @@ export function relativeFreshness(fetchedAt: string, now: Date): RelativeFreshne
   const elapsed = now.getTime() - instant;
   if (elapsed < 0) return { kind: 'future' };
   const hour = 3_600_000;
-  if (elapsed < hour) return { kind: 'under-hour' };
+  if (elapsed < hour) return { kind: 'hours', count: 0 };
   if (elapsed < 24 * hour) return { kind: 'hours', count: Math.floor(elapsed / hour) };
   return { kind: 'days', count: Math.floor(elapsed / (24 * hour)) };
 }
@@ -220,8 +218,6 @@ export function relativeFreshness(fetchedAt: string, now: Date): RelativeFreshne
 export function freshnessText(value: RelativeFreshness): string {
   if (value.kind === 'missing') return '更新时间未收录';
   if (value.kind === 'future') return '更新日晚于本机';
-  if (value.kind === 'today') return '更新于今天';
-  if (value.kind === 'under-hour') return '更新于不到 1 小时';
   if (value.kind === 'hours') return `更新于 ${value.count} 小时前`;
   return `更新于 ${value.count} 天前`;
 }

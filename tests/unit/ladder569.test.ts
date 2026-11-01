@@ -22,15 +22,15 @@ describe('天梯相对新鲜度与样本量 #569', () => {
   it('只有日期时按本机日历算天，当天不写成小时', () => {
     const morning = new Date(2026, 10, 1, 9, 0, 0);
     const evening = new Date(2026, 10, 1, 23, 59, 0);
-    expect(freshnessText(relativeFreshness('2026-11-01', morning))).toBe('更新于今天');
-    expect(freshnessText(relativeFreshness('2026-11-01', evening))).toBe('更新于今天');
+    expect(freshnessText(relativeFreshness('2026-11-01', morning))).toBe('更新于 0 天前');
+    expect(freshnessText(relativeFreshness('2026-11-01', evening))).toBe('更新于 0 天前');
     expect(freshnessText(relativeFreshness('2026-10-31', morning))).toBe('更新于 1 天前');
     expect(freshnessText(relativeFreshness('2026-10-18', morning))).toBe('更新于 14 天前');
   });
 
   it('带时间才分小时，不满 1 小时不写分钟或秒', () => {
     const now = new Date('2026-11-15T12:00:00Z');
-    expect(freshnessText(relativeFreshness('2026-11-15T11:20:00Z', now))).toBe('更新于不到 1 小时');
+    expect(freshnessText(relativeFreshness('2026-11-15T11:20:00Z', now))).toBe('更新于 0 小时前');
     expect(freshnessText(relativeFreshness('2026-11-15T11:00:00Z', now))).toBe('更新于 1 小时前');
     expect(freshnessText(relativeFreshness('2026-11-15T09:00:00Z', now))).toBe('更新于 3 小时前');
     expect(freshnessText(relativeFreshness('2026-11-14T12:00:00Z', now))).toBe('更新于 1 天前');
@@ -43,7 +43,7 @@ describe('天梯相对新鲜度与样本量 #569', () => {
     expect(freshnessText(relativeFreshness('2026-02-31', now))).toBe('更新时间未收录');
     expect(freshnessText(relativeFreshness('', now))).toBe('更新时间未收录');
     expect(freshnessText(relativeFreshness('昨天', now))).toBe('更新时间未收录');
-    for (const text of ['更新于今天', '更新于 3 小时前', '更新于 14 天前', '更新于不到 1 小时', '更新日晚于本机', '更新时间未收录']) {
+    for (const text of ['更新于 0 天前', '更新于 3 小时前', '更新于 14 天前', '更新于 0 小时前', '更新日晚于本机', '更新时间未收录']) {
       expect(text).not.toMatch(FORBIDDEN);
     }
   });
