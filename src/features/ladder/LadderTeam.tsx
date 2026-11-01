@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
 import snapshotJson from '../../data/ladder-4v4-rm-e1200-1400-90d.json';
@@ -60,7 +60,7 @@ function sparkline(values: number[]): { points: string; tone: 'good' | 'bad' | '
   return { points, tone };
 }
 
-export function LadderTeam({ view, hideLow, onArabia }: { view: LadderViewId; hideLow: boolean; onArabia: () => void }) {
+export function LadderTeam({ view, hideLow, onArabia, children }: { view: LadderViewId; hideLow: boolean; onArabia: () => void; children?: ReactNode }) {
   const [sort, setSort] = useState<TeamSortState>({ key: 'win', dir: firstSortDir('win') });
   const share = useShareLink({ stateKey: '4v4' });
   const bracket = snapshot.brackets[0];
@@ -80,13 +80,16 @@ export function LadderTeam({ view, hideLow, onArabia }: { view: LadderViewId; hi
 
   if (!snapshot.fetchedAt || !bracket || bracket.civs.length === 0) {
     return (
-      <div className="ladder-empty" data-testid="ladder-empty">
-        <Icon name="inbox" />
-        <p className="ladder-empty-title">这个切片暂无快照。不推算，不补数。</p>
-        <button type="button" onClick={onArabia}>
-          看阿拉伯 1v1
-        </button>
-      </div>
+      <>
+        {children}
+        <div className="ladder-empty" data-testid="ladder-empty">
+          <Icon name="inbox" />
+          <p className="ladder-empty-title">这个切片暂无快照。不推算，不补数。</p>
+          <button type="button" onClick={onArabia}>
+            看阿拉伯 1v1
+          </button>
+        </div>
+      </>
     );
   }
 
@@ -95,9 +98,6 @@ export function LadderTeam({ view, hideLow, onArabia }: { view: LadderViewId; hi
 
   return (
     <>
-      <p className="ladder-slice" data-testid="ladder-context">
-        <span className="nw">4v4</span> 随机地图 · 全图
-      </p>
       <div className="ladder-source" data-testid="ladder-source" data-cutoff={aligned ? 'aligned' : 'mismatch'} data-fetched-at={snapshot.fetchedAt}>
         <Icon name="database" />
         <div className="ladder-copy">
@@ -135,6 +135,10 @@ export function LadderTeam({ view, hideLow, onArabia }: { view: LadderViewId; hi
           <span className="ladder-copy">胜率可能未反映最新平衡改动。</span>
         </p>
       )}
+      {children}
+      <p className="ladder-slice" data-testid="ladder-context">
+        <span className="nw">4v4</span> 随机地图 · 全图
+      </p>
       {view === 'tiers' && <LadderTiers civs={rows} />}
       {view === 'meta' && <LadderMeta civs={rows} />}
       {view === 'table' && (

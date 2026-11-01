@@ -55,6 +55,17 @@ export default function Ladder() {
   };
   const view = resolved.pendingView ?? 'table';
   const sampleFloor = (resolved.mode === '4v4' ? teamSnapshot.lowSampleGames : undefined) ?? LOW_SAMPLE;
+  const controls = (
+    <>
+      <LadderFilters mode={resolved.mode} arabia={arabiaSnapshot} onMode={selectMode} />
+      <HideLowSample checked={hideLow} threshold={sampleFloor} onChange={setHideLow} />
+      {toast && (
+        <p className="ladder-toast" role="status" data-testid="ladder-fallback-toast">
+          {toast}
+        </p>
+      )}
+    </>
+  );
 
   return (
     <section className="pane ladder-page" data-testid="ladder-page" data-patch-mismatch={aligned ? undefined : 'true'}>
@@ -80,17 +91,14 @@ export default function Ladder() {
         </div>
         <LadderViewSwitch view={view} onChange={selectView} />
       </div>
-      <LadderFilters mode={resolved.mode} arabia={arabiaSnapshot} onMode={selectMode} />
-      <HideLowSample checked={hideLow} threshold={sampleFloor} onChange={setHideLow} />
-      {toast && (
-        <p className="ladder-toast" role="status" data-testid="ladder-fallback-toast">
-          {toast}
-        </p>
-      )}
       {resolved.mode === '4v4' ? (
-        <LadderTeam view={view} hideLow={hideLow} onArabia={() => selectMode('arabia1v1')} />
+        <LadderTeam view={view} hideLow={hideLow} onArabia={() => selectMode('arabia1v1')}>
+          {controls}
+        </LadderTeam>
       ) : (
-        <LadderArabia view={view} elo={resolved.elo as BracketKey} onSelect={selectElo} hideLow={hideLow} />
+        <LadderArabia view={view} elo={resolved.elo as BracketKey} onSelect={selectElo} hideLow={hideLow}>
+          {controls}
+        </LadderArabia>
       )}
     </section>
   );
