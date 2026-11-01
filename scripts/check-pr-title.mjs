@@ -1,5 +1,5 @@
 // 校验 PR 标题符合 Conventional Commits：类型(范围)!: 描述
-const TYPES = ['feat', 'fix', 'docs', 'chore', 'test', 'ci', 'refactor', 'style', 'perf', 'build', 'revert', 'hotfix'];
+const TYPES = ['feat', 'fix', 'docs', 'chore', 'data', 'test', 'ci', 'refactor', 'style', 'perf', 'build', 'revert', 'hotfix'];
 export const PR_TITLE_RE = new RegExp(`^(${TYPES.join('|')})(\\([^()\\s][^()]*\\))?!?: \\S.*$`);
 export const isValidTitle = (t) => PR_TITLE_RE.test(String(t ?? '').trim());
 
