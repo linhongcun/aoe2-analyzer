@@ -65,6 +65,17 @@ describe('#431 affected feature plans', () => {
     expect(detail.e2e).not.toContain('tests/e2e/v0300-338.spec.ts');
   });
 
+  it('#584 unit and civ detail plans select the insights acceptance spec', () => {
+    const unit = planChanges([change('src/features/units/components/UnitDetail.tsx')]);
+    const civ = planChanges([change('src/features/civs/components/CivDetail.tsx')]);
+    expect(unit).toMatchObject({ scope: 'targeted', features: ['units'], full: false, data: false });
+    expect(civ).toMatchObject({ scope: 'civ-ui', features: ['civs'], full: false, data: false });
+    expect(unit.e2e).toContain('tests/e2e/insights584.spec.ts');
+    expect(civ.e2e).toContain('tests/e2e/insights584.spec.ts');
+    expect(PROFILES.units.e2e).toContain('tests/e2e/insights584.spec.ts');
+    expect(PROFILES.civs.e2e).toContain('tests/e2e/insights584.spec.ts');
+  });
+
   it('#554 search href rewrite stays on the full unit plan and still selects siege browser acceptance', () => {
     const searchHref = planChanges([change('src/domain/search.ts')]);
     expect(searchHref).toMatchObject({ scope: 'full', full: true, data: false });

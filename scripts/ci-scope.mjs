@@ -70,11 +70,25 @@ export const PROFILES = {
       'civRegionalBuildings456',
       'civUniqueBuildings463',
       'civEmptyModules465',
+      // #584：文明页「鲜为人知」失败验收。实现折入后应收绿，不要放宽断言。
+      'insights584',
     ],
   ),
   units: profile(
     ['unitFilters192', 'unitFilters196', 'unitCount14', 'unitNames271', 'unitAge11', 'upgradeLine10', 'relatedTechs193', 'family', 'simRoute424', 'simulator'],
-    ['unitCards6', 'unitFilters196', 'units192', 'unitCount14', 'dupNames44', 'upgradeLine10', 'relatedTechs193', 'sidebar44', 'catalogLayout187'],
+    [
+      'unitCards6',
+      'unitFilters196',
+      'units192',
+      'unitCount14',
+      'dupNames44',
+      'upgradeLine10',
+      'relatedTechs193',
+      'sidebar44',
+      'catalogLayout187',
+      // #584：单位页「鲜为人知」失败验收。与文明页同一份 spec。
+      'insights584',
+    ],
   ),
   simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
   techs: profile(
