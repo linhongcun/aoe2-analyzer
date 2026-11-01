@@ -28,7 +28,6 @@ import {
 import type { SliceFacts } from '../../domain/ladderQuery';
 import { LadderMeta, LadderTiers } from './LadderBands';
 import { LadderSourceFacts } from './LadderSourceFacts';
-import { LadderBracketGroup } from './LadderElo';
 import { LadderFreshness } from './LadderFreshness';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
@@ -231,7 +230,6 @@ export function LadderArabia({
           <span className="nw">1v1</span> 随机地图（RM）
         </span>
       </div>
-      <LadderBracketGroup snapshot={snapshot} elo={elo} onSelect={select} />
       <div className="ladder-layout">
         <div className="ladder-main">
           {bracket.empty ? (

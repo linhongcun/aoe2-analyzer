@@ -100,7 +100,16 @@ export default function Ladder() {
         </div>
         <LadderViewSwitch view={view} onChange={selectView} />
       </div>
-      {resolved.mode === '4v4' ? (
+      {resolved.missing ? (
+        <>
+          {controls}
+          <div className="ladder-empty" data-testid="ladder-empty">
+            <Icon name="inbox" />
+            <p className="ladder-empty-title">这个分段暂无数据</p>
+            <p>没有这一模式和 Elo 的快照。不推算，不补数。</p>
+          </div>
+        </>
+      ) : resolved.mode === '4v4' ? (
         <LadderTeam view={view} elo={resolved.elo} facts={facts} hideLow={hideLow} onArabia={() => selectMode('arabia1v1')}>
           {controls}
         </LadderTeam>

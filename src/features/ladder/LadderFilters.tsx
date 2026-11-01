@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { LadderStaticPill } from './LadderElo';
 import type { LadderSnapshot } from '../../domain/ladder';
 import { eloFilterOptions, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
 import { Icon } from '../../shared/ui/Icon';
@@ -30,13 +29,7 @@ export function LadderFilters({
 }) {
   const teamMode = mode === '4v4';
   const eloOptions = eloFilterOptions(mode, elo, arabia, team);
-  const inModeEnabled = eloOptions.filter((option) => option.enabled && option.mode === mode);
-  const showPill = inModeEnabled.length < 2;
-  const extras = eloOptions.filter((option) => {
-    if (option.current) return false;
-    if (option.enabled && option.mode === mode && inModeEnabled.length >= 2) return false;
-    return true;
-  });
+  const checked = eloOptions.some((option) => option.current);
   return (
     <div className="ladder-filters" data-testid="ladder-filters">
       <span className="ladder-filter-label">模式</span>
@@ -63,32 +56,30 @@ export function LadderFilters({
         </span>
       </div>
       <span className="ladder-filter-label">天梯分段</span>
-      <div className="ladder-filter-row" data-testid="ladder-elo-options">
-        {showPill && teamMode && (
-          <span className="ladder-pill" data-testid="ladder-elo-static">
-            <span className="nw">1200–1400</span>
-            <span className="ladder-fixed">当前快照</span>
-          </span>
-        )}
-        {mode === 'arabia1v1' && <LadderStaticPill snapshot={arabia} />}
-        {extras.map((option) => (
-          <button
-            key={`${option.mode}:${option.key}`}
-            type="button"
-            className="ladder-elo-option"
-            disabled={!option.enabled}
-            data-testid={option.enabled ? 'ladder-elo-option' : 'ladder-elo-disabled'}
-            data-band={option.key}
-            data-target-mode={option.enabled ? option.mode : undefined}
-            title={option.enabled ? undefined : '暂无数据'}
-            onClick={() => {
-              if (option.enabled) onElo(option);
-            }}
-          >
-            <span className="nw">{option.label}</span>
-            {!option.enabled && <span className="ladder-fixed">暂无数据</span>}
-          </button>
-        ))}
+      <div className="ladder-filter-row" role="radiogroup" aria-label="天梯分段" data-testid="ladder-elo">
+        {eloOptions.map((option, index) => {
+          const firstEnabled = eloOptions.findIndex((item) => item.enabled) === index;
+          return (
+            <button
+              key={`${option.mode}:${option.key}`}
+              type="button"
+              role="radio"
+              aria-checked={option.current}
+              disabled={!option.enabled}
+              tabIndex={option.current || (!checked && firstEnabled) ? 0 : -1}
+              className="ladder-elo-option"
+              data-testid={option.enabled ? 'ladder-elo-option' : 'ladder-elo-disabled'}
+              data-elo={option.key}
+              data-target-mode={option.enabled ? option.mode : undefined}
+              onClick={() => {
+                if (option.enabled) onElo(option);
+              }}
+            >
+              <span className="nw">{option.label}</span>
+              {!option.enabled && <span className="ladder-fixed">暂无数据</span>}
+            </button>
+          );
+        })}
       </div>
       <span className="ladder-filter-label">地图</span>
       <div className="ladder-filter-row">

@@ -8,25 +8,23 @@ export interface LadderLocation {
   elo: string;
   pendingView: LadderPendingView | null;
   toast: string | null;
+  /** 这个模式和 Elo 没有文明数据。地址留着，页面不改展示另一档的胜率。 */
+  missing: boolean;
 }
 
-/** 默认 4v4 切片不写 mode / elo / period / map。表视图不写 view。分层和分布先留在地址上。 */
-export function canonicalLadderSearch(state: Pick<LadderLocation, 'mode' | 'elo' | 'pendingView'>): string {
+/** 默认 4v4 切片不写 mode / elo / period / map。表视图不写 view。无数据组合保留 mode 和 elo。 */
+export function canonicalLadderSearch(state: Pick<LadderLocation, 'mode' | 'elo' | 'pendingView'> & { missing?: boolean }): string {
   const params = new URLSearchParams();
-  if (state.mode === 'arabia1v1') params.set('mode', 'arabia1v1');
-  if (state.mode === 'arabia1v1' && state.elo !== 'all') params.set('elo', state.elo);
+  if (state.missing) {
+    params.set('mode', state.mode);
+    if (state.elo) params.set('elo', state.elo);
+  } else {
+    if (state.mode === 'arabia1v1') params.set('mode', 'arabia1v1');
+    if (state.mode === 'arabia1v1' && state.elo !== 'all') params.set('elo', state.elo);
+  }
   if (state.pendingView) params.set('view', state.pendingView);
   const query = params.toString();
   return query ? `?${query}` : '';
-}
-
-function bracketLabel(raw: string): string {
-  if (raw === 'lt850') return '<850';
-  if (raw === '850-1000') return '850-1000';
-  if (raw === '1000-1200') return '1000-1200';
-  if (raw === '1200+') return '1200+';
-  if (raw === '1900+') return '1900+';
-  return raw;
 }
 
 export function resolveLadderLocation(search: string, arabia: LadderSnapshot): LadderLocation {
@@ -35,6 +33,7 @@ export function resolveLadderLocation(search: string, arabia: LadderSnapshot): L
   const rawView = params.get('view');
   const rawElo = params.get('elo');
   const toasts: string[] = [];
+  const askedElo = rawElo?.replaceAll('–', '-') ?? null;
 
   let mode: LadderModeId;
   if (rawMode == null || rawMode === '') mode = rawElo != null ? 'arabia1v1' : '4v4';
@@ -50,13 +49,19 @@ export function resolveLadderLocation(search: string, arabia: LadderSnapshot): L
   else toasts.push(`未识别的视图「${rawView}」，已显示「表」。`);
 
   let elo = 'all';
+  let missing = false;
   const unrecognizedMode = rawMode != null && rawMode !== '' && rawMode !== '4v4' && rawMode !== 'arabia1v1';
-  if (mode === 'arabia1v1') {
+  const teamOnlyElo = askedElo === '1200-1400';
+  if (mode === 'arabia1v1' && teamOnlyElo) {
+    elo = '1200-1400';
+    missing = true;
+  } else if (mode === 'arabia1v1') {
     const resolved = resolveElo(rawElo, arabia);
     elo = resolved.elo;
     if (resolved.toast) toasts.push(resolved.toast);
-  } else if (!unrecognizedMode && rawElo != null && rawElo !== '' && rawElo !== '1200-1400') {
-    toasts.push(`「${bracketLabel(rawElo)}」暂无数据，已显示「1200–1400」。`);
+  } else if (!unrecognizedMode && askedElo != null && askedElo !== '' && askedElo !== 'all' && askedElo !== '1200-1400') {
+    elo = askedElo;
+    missing = true;
   }
 
   if (mode === '4v4' && !unrecognizedMode) {
@@ -72,7 +77,7 @@ export function resolveLadderLocation(search: string, arabia: LadderSnapshot): L
     if (map != null && map !== '' && map !== 'arabia') toasts.push(`「${map}」暂无数据，已显示「阿拉伯」。`);
   }
 
-  return { mode, elo, pendingView, toast: toasts[0] ?? null };
+  return { mode, elo, pendingView, toast: toasts[0] ?? null, missing };
 }
 
 /** 4v4 自有快照只有这一档。其它 Elo 段没有对应文件，不能编胜率。 */

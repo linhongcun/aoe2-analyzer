@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { DISPLAY_BRACKETS, type LadderSnapshot } from '../../src/domain/ladder';
-import { canonicalLadderSearch, eloFilterOptions, sliceBracket, sliceFacts } from '../../src/domain/ladderQuery';
+import { canonicalLadderSearch, eloFilterOptions, resolveLadderLocation, sliceBracket, sliceFacts } from '../../src/domain/ladderQuery';
 
 const arabia = JSON.parse(readFileSync('src/data/ladder-arabia-p185872.json', 'utf8')) as LadderSnapshot;
 const team = JSON.parse(readFileSync('src/data/ladder-4v4-rm-e1200-1400-90d.json', 'utf8')) as LadderSnapshot;
@@ -85,5 +85,19 @@ describe('天梯模式与 Elo 只读已有快照 #571', () => {
       mapLabel: '全图',
       eloKey: '1200-1400',
     });
+  });
+
+  it('没有快照的模式和 Elo 留在地址上，不改去展示另一档', () => {
+    const teamMissing = resolveLadderLocation('?mode=4v4&elo=lt850', arabia);
+    expect(teamMissing).toMatchObject({ mode: '4v4', elo: 'lt850', missing: true, toast: null });
+    expect(canonicalLadderSearch(teamMissing)).toBe('?mode=4v4&elo=lt850');
+    const arabiaMissing = resolveLadderLocation('?mode=arabia1v1&elo=1200-1400', arabia);
+    expect(arabiaMissing).toMatchObject({ mode: 'arabia1v1', elo: '1200-1400', missing: true, toast: null });
+    expect(canonicalLadderSearch(arabiaMissing)).toBe('?mode=arabia1v1&elo=1200-1400');
+    const legacy = resolveLadderLocation('?elo=lt850', arabia);
+    expect(legacy.missing).toBe(false);
+    expect(legacy.mode).toBe('arabia1v1');
+    expect(legacy.elo).toBe('all');
+    expect(legacy.toast).toContain('暂无数据');
   });
 });

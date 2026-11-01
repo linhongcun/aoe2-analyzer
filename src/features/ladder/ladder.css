@@ -595,6 +595,11 @@
   background: var(--color-surface);
   color: var(--color-text);
 }
+.ladder-page .ladder-elo-option[aria-checked='true'] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  font-weight: 600;
+}
 .ladder-page .ladder-elo-option:disabled,
 .ladder-page .ladder-elo-option:disabled:hover {
   background: var(--color-surface-2);
