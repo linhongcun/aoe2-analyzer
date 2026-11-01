@@ -25,7 +25,8 @@ for (const width of [360, 375, 390, 1280])
       const region = regionalBlock(page);
       await expect(page.locator('.dside .sideblk > h4').first()).toHaveText('独特单位');
       await expect(page.locator('.dside .sideblk > h4').nth(1)).toHaveText('区域单位');
-      await expect(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('快速入口');
+      await expect(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('同资料片文明');
+      await expect(page.locator('.dside').getByRole('heading', { name: '快速入口', exact: true })).toHaveCount(0);
       await expect(page.locator('.dmain').getByRole('heading', { name: '区域单位', exact: true })).toHaveCount(0);
       const line = region.locator('details');
       const summary = line.locator('summary');

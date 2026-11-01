@@ -23,7 +23,7 @@ async function checkModules(page: Page, wanted: string[]) {
   for (const title of optional) await expect(block(page, title)).toHaveCount(wanted.includes(title) ? 1 : 0);
   await expect(page.locator('.dside')).not.toContainText(/本文明没有(?:区域单位|独特建筑|区域建筑)/);
   const titles = await page.locator('.dside .sideblk > h4').allTextContents();
-  expect(titles.filter((title) => title !== '同资料片文明')).toEqual(['独特单位', ...wanted, '快速入口']);
+  expect(titles.filter((title) => title !== '同资料片文明')).toEqual(['独特单位', ...wanted]);
   for (const card of await page.locator('.dside .sideblk').all()) expect(await card.getByRole('link').count()).toBeGreaterThan(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 }

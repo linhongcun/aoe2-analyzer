@@ -70,6 +70,8 @@ export const PROFILES = {
       'civRegionalBuildings456',
       'civUniqueBuildings463',
       'civEmptyModules465',
+      // #602：文明详情页内 Tab 与「相关工具」分层。
+      'civNav602',
       // #584：文明页「鲜为人知」失败验收。实现折入后应收绿，不要放宽断言。
       'insights584',
     ],
