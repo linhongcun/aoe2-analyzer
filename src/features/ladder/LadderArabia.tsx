@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState, type MouseEvent } from 'react';
+import { Fragment, useEffect, useMemo, useState, type MouseEvent, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
 import beginnerNotes from '../../data/ladder-beginner.json';
@@ -74,7 +74,19 @@ function SortMark({ active, dir }: { active: boolean; dir: SortDir }) {
   return <Icon name={name} className={active ? 'ic ladder-sort-on' : 'ic ladder-sort-idle'} />;
 }
 
-export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderViewId; elo: BracketKey; onSelect: (key: string) => void; hideLow: boolean }) {
+export function LadderArabia({
+  view,
+  elo,
+  onSelect,
+  hideLow,
+  children,
+}: {
+  view: LadderViewId;
+  elo: BracketKey;
+  onSelect: (key: string) => void;
+  hideLow: boolean;
+  children?: ReactNode;
+}) {
   const [sort, setSort] = useState<{ key: SortKey; dir: SortDir }>({ key: 'win', dir: firstSortDir('win') });
   const [open, setOpen] = useState<string | null>(null);
   const share = useShareLink({ stateKey: elo });
@@ -119,37 +131,28 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
 
   if (!snapshot.fetchedAt) {
     return (
-      <div className="ladder-empty" data-testid="ladder-error">
-        <Icon name="circle-alert" />
-        <p className="ladder-empty-title">天梯快照没有读到</p>
-        <p>页面不会显示任何胜率或出场率，以免给出不准确的数字。</p>
-        <button type="button" onClick={() => window.location.reload()}>
-          <Icon name="rotate-ccw" />
-          重试
-        </button>
-        <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
-          {visibleSourceLabel(snapshot.source)}
-          <Icon name="external-link" />
-          （外部）
-        </a>
-      </div>
+      <>
+        {children}
+        <div className="ladder-empty" data-testid="ladder-error">
+          <Icon name="circle-alert" />
+          <p className="ladder-empty-title">天梯快照没有读到</p>
+          <p>页面不会显示任何胜率或出场率，以免给出不准确的数字。</p>
+          <button type="button" onClick={() => window.location.reload()}>
+            <Icon name="rotate-ccw" />
+            重试
+          </button>
+          <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
+            {visibleSourceLabel(snapshot.source)}
+            <Icon name="external-link" />
+            （外部）
+          </a>
+        </div>
+      </>
     );
   }
 
   return (
     <>
-      <div className="ladder-context" data-testid="ladder-context">
-        <span className="ladder-pill">
-          <Icon name="map" />
-          阿拉伯 <span lang="en">{snapshot.map}</span>
-          <span className="ladder-fixed">固定</span>
-        </span>
-        <span className="ladder-pill">
-          <Icon name="swords" />
-          <span className="nw">1v1</span> 随机地图（RM）
-        </span>
-      </div>
-      <LadderBracketGroup snapshot={snapshot} elo={elo} onSelect={select} />
       {/* 玩家界面只写来源名、统计截止和补丁号。Wayback 路径不渲染。来源名若是 aoe2scout 则不印出。 */}
       <div className="ladder-source" data-testid="ladder-source" data-cutoff={mismatch ? 'mismatch' : 'aligned'} data-fetched-at={snapshot.fetchedAt}>
         <Icon name="database" />
@@ -206,6 +209,19 @@ export function LadderArabia({ view, elo, onSelect, hideLow }: { view: LadderVie
           <span className="ladder-copy">胜率可能未反映最新平衡改动。</span>
         </p>
       )}
+      {children}
+      <div className="ladder-context" data-testid="ladder-context">
+        <span className="ladder-pill">
+          <Icon name="map" />
+          阿拉伯 <span lang="en">{snapshot.map}</span>
+          <span className="ladder-fixed">固定</span>
+        </span>
+        <span className="ladder-pill">
+          <Icon name="swords" />
+          <span className="nw">1v1</span> 随机地图（RM）
+        </span>
+      </div>
+      <LadderBracketGroup snapshot={snapshot} elo={elo} onSelect={select} />
       <div className="ladder-layout">
         <div className="ladder-main">
           {bracket.empty ? (

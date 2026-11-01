@@ -1,6 +1,6 @@
 // #547 数据刀把「日期和补丁号都要新于 p162286」加回。不 skip，不放宽。
 // 首屏截止 / 「非当前平衡」和页脚「胜率不是平衡建议」仍在。不编胜率，不接 live API。
-// 首屏强调：1280×900 阿拉伯 1v1「全部」。黄条 ladder-patch-note，以及来源条里原有的「统计更新 {date}」，都不算醒目。
+// 首屏强调：1280×900 阿拉伯 1v1「全部」，以及无参数默认 4v4。黄条 ladder-patch-note，以及来源条里原有的「统计更新 {date}」，都不算醒目。
 import { readdirSync, readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { snapshotPatchBuild } from '../../src/domain/ladder';
@@ -131,6 +131,46 @@ test('#547 默认全部首屏要在黄条之外强调统计截止或非当前平
   expect(probe.scrollY, '截止信息应在打开页面时就可见，而不是滚下去才出现').toBe(0);
   expect(hit.top, `强调顶边应在首屏内：${hit.text}`).toBeGreaterThanOrEqual(0);
   expect(hit.bottom, `强调应完整落在 ${probe.viewHeight}px 首屏内：${hit.text}`).toBeLessThanOrEqual(probe.viewHeight);
+});
+
+test('#547 默认 #/ladder 首屏在筛选之前就能看到非当前平衡和统计截止', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('./#/ladder');
+  await expect(page.getByTestId('ladder-page')).toBeVisible();
+  await expect(page.getByTestId('ladder-mode-4v4')).toHaveAttribute('aria-checked', 'true');
+  const cutoff = page.getByTestId('ladder-cutoff');
+  await expect(cutoff).toBeVisible();
+  await expect(cutoff).toContainText('非当前平衡');
+  await expect(cutoff).toContainText('统计截止');
+  await expect(cutoff).not.toContainText('实时');
+  const box = await page.evaluate(() => {
+    const cutoffEl = document.querySelector('[data-testid="ladder-cutoff"]');
+    const filters = document.querySelector('[data-testid="ladder-filters"]');
+    const yellow = document.querySelector('[data-testid="ladder-patch-note"]');
+    const rect = (el: Element | null) => {
+      if (!(el instanceof HTMLElement)) return null;
+      const box = el.getBoundingClientRect();
+      return { top: box.top, bottom: box.bottom };
+    };
+    return {
+      scrollY: window.scrollY,
+      viewHeight: window.innerHeight,
+      cutoff: rect(cutoffEl),
+      filters: rect(filters),
+      yellow: rect(yellow),
+      insideYellow: Boolean(cutoffEl?.closest('[data-testid="ladder-patch-note"]')),
+    };
+  });
+  expect(box.scrollY, '打开页面时不要先滚到表').toBe(0);
+  expect(box.insideYellow, '截止句不能只写在可略过的黄条里').toBe(false);
+  expect(box.cutoff, '应有截止行').toBeTruthy();
+  expect(box.filters, '应有筛选').toBeTruthy();
+  if (!box.cutoff || !box.filters) return;
+  expect(box.cutoff.top, '截止行顶边应在首屏内').toBeGreaterThanOrEqual(0);
+  expect(box.cutoff.bottom, `截止行应完整落在 ${box.viewHeight}px 首屏内`).toBeLessThanOrEqual(box.viewHeight);
+  expect(box.cutoff.bottom, '截止行应在筛选区之上，不埋在筛选下面').toBeLessThanOrEqual(box.filters.top);
+  if (box.yellow) expect(box.yellow.top, '黄条仍在截止行下面').toBeGreaterThanOrEqual(box.cutoff.bottom - 1);
+  await expect(page.getByTestId('ladder-footer')).toContainText('胜率不是平衡建议');
 });
 
 test('#547 页脚仍保留「胜率不是平衡建议」', async ({ page }) => {

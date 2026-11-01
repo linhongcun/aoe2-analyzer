@@ -146,6 +146,8 @@
 }
 .ladder-cutoff {
   display: block;
+  color: var(--color-text);
+  font-size: var(--fs-body);
 }
 .ladder-cutoff-flag {
   color: var(--color-warn);
