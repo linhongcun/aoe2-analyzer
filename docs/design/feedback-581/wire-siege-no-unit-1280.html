@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#581 线框 · 1280 · 攻城页地址无单位</title>
+  <link rel="stylesheet" href="feedback.css" />
+</head>
+<body>
+  <main class="frame f1280" data-testid="siege-page">
+    <div class="fbbar">
+      <a class="fbbtn" href="#feedback" data-t="feedback">
+        <span class="ic mu" aria-hidden="true" title="message-square-warning">message-square-warning</span>
+        报错/反馈
+      </a>
+    </div>
+    <div class="top">
+      <a class="back" href="#/" aria-label="返回首页"><span class="ic" aria-hidden="true" title="arrow-left">arrow-left</span>首页</a>
+      <span class="crumb">工具 / 攻城拆建筑</span>
+    </div>
+    <h1><span class="ic lg" aria-hidden="true" title="hammer">hammer</span>攻城拆建筑</h1>
+    <p class="desc">几台攻城单位拆掉一座建筑要多久：击数、游戏秒、<span class="num">1.7</span> 倍速度下的现实秒。</p>
+    <div class="grid">
+      <div>
+        <section class="sec" aria-labelledby="h-in">
+          <h2 id="h-in">攻方</h2>
+          <div class="field">
+            <label for="u">攻城单位</label>
+            <div class="sel sel-empty" id="u"><span class="ic mu" aria-hidden="true" title="hammer">hammer</span><span class="grow"><span class="tag">示意</span></span><span class="ic mu" aria-hidden="true" title="chevron-down">chevron-down</span></div>
+          </div>
+          <div class="field">
+            <label for="n">数量</label>
+            <div class="step">
+              <div class="stepper">
+                <button type="button" aria-label="减少一台"><span class="ic" aria-hidden="true" title="minus">minus</span></button>
+                <input id="n" class="num" value="4" inputmode="numeric" aria-label="数量" readonly />
+                <button type="button" aria-label="增加一台"><span class="ic" aria-hidden="true" title="plus">plus</span></button>
+              </div>
+              <span role="group" aria-label="常用数量" style="display:inline-flex;gap:6px">
+                <button type="button" class="chip num" aria-pressed="false">1</button>
+                <button type="button" class="chip num" aria-pressed="true">4</button>
+                <button type="button" class="chip num" aria-pressed="false">6</button>
+              </span>
+            </div>
+          </div>
+        </section>
+        <section class="sec" aria-labelledby="h-tg">
+          <h2 id="h-tg">目标</h2>
+          <div class="field">
+            <label for="b">目标建筑</label>
+            <div class="sel" id="b"><span class="ic" aria-hidden="true" title="castle">castle</span><span class="grow">城堡</span><span class="ic mu" aria-hidden="true" title="chevron-down">chevron-down</span></div>
+          </div>
+        </section>
+      </div>
+      <section class="result" aria-label="计算结果保持现页">
+        <h2>结果区保持现页</h2>
+        <p class="ph">击数、游戏秒、现实秒不在这张线框里。反馈簇只有链接。</p>
+      </section>
+    </div>
+    <div class="foot">
+      <a class="fblink" href="#feedback" data-t="feedback">
+        <span class="ic mu" aria-hidden="true" title="message-square-warning">message-square-warning</span>
+        报错/反馈
+      </a>
+      <a class="fblink" href="#feedback" data-t="feature">
+        <span class="ic" aria-hidden="true" title="lightbulb">lightbulb</span>
+        功能建议
+      </a>
+      <p class="say">发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。</p>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>地址 <code>#/siege</code>，查询里没有 <code>unit</code>。<code>siegeFeedbackText</code> 为 null。页顶和页脚都没有旁注，也没有 <code>siege-feedback-context</code>。</li>
+    <li>不出现「未选单位」「将附带：—」或光秃的 ID。选择框里的「示意」只说明这是线框冻结的那一帧，实现不增加空选项，页面上不出现「示意」。</li>
+    <li>攻城页随后会把地址收成默认单位。那之后旁注写成 <code>将附带：攻城锤 / 1258</code>，不再用这张线框。</li>
+    <li>链接仍是占位。预填 URL 的生成不改；这一帧的标题保持路径 <code>/siege</code>，类型/ID 为「—」。</li>
+  </ul>
+</body>
+</html>
