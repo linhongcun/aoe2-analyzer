@@ -133,7 +133,7 @@ export const PROFILES = {
     ['garrison218', 'garrison224', 'sidebar44', 'catalogLayout187'],
   ),
   // #533：攻城页改动跑金标准与失败验收。不把 /siege 放进全站宽度/截图矩阵。
-  siege: profile(['siege308'], ['siege308', 'siege533']),
+  siege: profile(['siege308'], ['siege308', 'siege533', 'siege554-555']),
   maps: profile([], ['maps34', 'mapPreviews', 'mapCatalog422', 'maps559']),
   compare: profile(['compare403', 'teamBonuses228'], ['compare403', 'civText402', 'teamBonuses228']),
   // Display-only helpers. Combat, eco and cost math stay on the full plan.
@@ -463,6 +463,10 @@ export function planChanges(changes) {
       else full = true;
       // 单位详情的「算拆建筑」入口。其它单位列表改动不因此跑攻城验收，也不扩大全站矩阵。
       if (path === 'src/features/units/components/UnitDetail.tsx') extraE2e.add('tests/e2e/siege533.spec.ts');
+    } else if (path === 'src/domain/search.ts') {
+      // #554 only rewrites the siege page href for「冲车」. Keep the full unit plan; PR browser still runs siege acceptance.
+      features.add('siege');
+      full = true;
     } else if (/^tests\/unit\/[^/]+\.test\.ts$/.test(path) || /^tests\/e2e\/[^/]+\.spec\.ts$/.test(path)) {
       (path.startsWith('tests/unit/') ? extraUnit : extraE2e).add(path);
     } else {

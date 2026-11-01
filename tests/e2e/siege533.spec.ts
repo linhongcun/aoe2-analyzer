@@ -168,7 +168,8 @@ test('#533 搜索「冲车」见到攻城锤和攻城拆建筑，主名仍是攻
   await tool.click();
   // 点击后地址先变成 #/siege，默认参数的 replace 随后才写入。等这次 replace 结束再回首页，
   // 否则它和 page.goto('#/') 抢同一次同文档导航，首页会留在攻城页上。
-  await expect(page).toHaveURL(/#\/siege\?unit=1258(?:&|$)/);
+  // #554：这一下预填冲车系（中型冲车 422 或重型冲车 548），不再是默认攻城锤 1258。下面打开攻城锤单位页的断言不变。
+  await expect(page).toHaveURL(/#\/siege\?unit=(?:422|548)(?:&|$)/);
   const again = await openSearch(page, '冲车');
   await namedOption(again, '攻城锤').click();
   await expect(page).toHaveURL(/#\/unit\/1258(?:[/?#]|$)/);

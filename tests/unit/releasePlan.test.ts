@@ -55,7 +55,7 @@ describe('#431 affected feature plans', () => {
     const siege = planChanges([change('src/features/siege/Siege.tsx')]);
     expect(siege).toMatchObject({ scope: 'targeted', features: ['siege'], full: false, data: false });
     expect(siege.unit).toEqual(['tests/unit/siege308.test.ts']);
-    expect(siege.e2e).toEqual(['tests/e2e/siege308.spec.ts', 'tests/e2e/siege533.spec.ts']);
+    expect(siege.e2e).toEqual(['tests/e2e/siege308.spec.ts', 'tests/e2e/siege533.spec.ts', 'tests/e2e/siege554-555.spec.ts']);
     expect(siege.e2e).not.toContain('tests/e2e/v0300-338.spec.ts');
     const detail = planChanges([change('src/features/units/components/UnitDetail.tsx')]);
     expect(detail).toMatchObject({ scope: 'targeted', features: ['units'], full: false, data: false });
@@ -63,6 +63,12 @@ describe('#431 affected feature plans', () => {
     expect(detail.e2e).toContain('tests/e2e/unitCards6.spec.ts');
     expect(detail.e2e).not.toContain('tests/e2e/siege308.spec.ts');
     expect(detail.e2e).not.toContain('tests/e2e/v0300-338.spec.ts');
+  });
+
+  it('#554 search href rewrite stays on the full unit plan and still selects siege browser acceptance', () => {
+    const searchHref = planChanges([change('src/domain/search.ts')]);
+    expect(searchHref).toMatchObject({ scope: 'full', full: true, data: false });
+    expect(searchHref.features).toEqual(['all', 'siege']);
   });
 
   it('shared card styles cover both matchup and same-DLC civilization details, with union and deduplication', () => {
