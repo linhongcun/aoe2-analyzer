@@ -3,52 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>#584 线框 · 1280 · 文明页有内容 · 马里</title>
+  <title>#584 线框 · 1280 · 文明页有内容 · 孟加拉</title>
   <link rel="stylesheet" href="insights.css" />
 </head>
 <body>
-  <main class="frame f1280">
-    <p class="crumb">文明 / 马里</p>
+  <main class="frame f1280 civ">
+    <p class="crumb">文明 / 孟加拉</p>
     <div class="dhead">
       <div class="uico" aria-hidden="true">文明</div>
       <div>
-        <h1>马里 <small>Malians</small></h1>
+        <h1>孟加拉 <small>Bengalis</small></h1>
         <div class="tags">
-          <span class="tag">步兵</span>
-          <span class="tag">骑兵</span>
+          <span class="tag">印度王朝</span>
+          <span class="tag">骑兵</span><span class="tag">海军</span>
         </div>
       </div>
     </div>
-    <div class="tabs" role="tablist" aria-label="马里内容">
+    <div class="tabs" role="tablist" aria-label="孟加拉内容" data-testid="civ-tabs">
       <span class="on" role="tab" aria-selected="true">概览</span>
       <span role="tab">数据</span>
       <span role="tab">科技</span>
       <span role="tab">更新历史</span>
       <span role="tab">职业选手视角</span>
     </div>
-    <div class="layout">
-      <div>
-        <p class="sum"><b>官方定位：</b>步兵文明</p>
-        <p class="sum"><b>特色兵种：</b>飞刀女兵（步兵）</p>
-        <section class="insight-slot" data-testid="insight-slot" aria-labelledby="insight-h">
+    <nav class="tools" aria-label="相关工具" data-testid="civ-related-tools">
+      <span class="lbl">相关工具</span>
+      <a href="#/builds?civ=Bengalis"><span class="ic" aria-hidden="true">book-open</span>开局流程</a>
+      <a href="#/production?civ=Bengalis"><span class="ic" aria-hidden="true">factory</span>生产对照</a>
+      <a href="#/matchup?me=Bengalis"><span class="ic" aria-hidden="true">crosshair</span>对局助手</a>
+      <a href="#/compare?a=Bengalis"><span class="ic" aria-hidden="true">scale</span>文明对比</a>
+      <a href="#/tree/Bengalis"><span class="ic" aria-hidden="true">git-branch</span>科技树</a>
+    </nav>
+    <div class="civ-layout">
+      <div role="tabpanel">
+        <section class="block" aria-label="开局建议" data-testid="civ-opening">
+          <div class="hd"><h2>开局建议</h2></div>
+          <p class="route" data-testid="civ-opening-summary">
+            <span class="era">黑暗至封建</span> 斥候骑兵
+            <span class="arr" aria-hidden="true">→</span>
+            <span class="era">城堡及后续</span> 城堡战车 + 战象
+          </p>
+          <a class="flow" href="#/builds?bo=scouts-18&amp;civ=Bengalis">
+            <span class="ic" aria-hidden="true">chevron-right</span>
+            <span class="name"><span class="num nw">18 人口</span>侦察骑兵速攻（单马厩）</span>
+            <span class="pill">通用示意</span>
+          </a>
+          <div class="foot">
+            <details class="notes" data-testid="civ-opening-notes">
+              <summary><span class="ic" aria-hidden="true">chevron-right</span>路线说明</summary>
+            </details>
+            <a href="#/builds" data-testid="civ-opening-all">查看全部开局</a>
+          </div>
+        </section>
+        <section class="block" aria-label="能力评分" data-testid="civ-ratings">
+          <div class="hd">
+            <h2>能力评分</h2>
+            <span class="ratelabel">主观评分，仅供参考
+              <button type="button" class="help" aria-label="评分说明"><span class="ic" aria-hidden="true">circle-help</span></button>
+            </span>
+          </div>
+          <div class="scores" aria-label="文明能力评分">
+            <div class="score is-key"><b>骑兵</b><div class="v nw"><span class="num">7</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:70%"></i></span></div>
+            <div class="score"><b>弓手</b><div class="v nw"><span class="num">6</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:60%"></i></span></div>
+            <div class="score"><b>步兵</b><div class="v nw"><span class="num">3</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:30%"></i></span></div>
+            <div class="score"><b>经济</b><div class="v nw"><span class="num">6</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:60%"></i></span></div>
+            <div class="score"><b>防御</b><div class="v nw"><span class="num">5</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:50%"></i></span></div>
+            <div class="score"><b>攻城</b><div class="v nw"><span class="num">5</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:50%"></i></span></div>
+            <div class="score"><b>僧侣</b><div class="v nw"><span class="num">6</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:60%"></i></span></div>
+            <div class="score is-key"><b>海军</b><div class="v nw"><span class="num">8</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:80%"></i></span></div>
+          </div>
+          <dl class="meta" data-testid="civ-rating-footnote">
+            <div><dt>官方定位</dt><dd>象兵和海军文明</dd></div>
+            <div><dt>特色兵种</dt><dd>战车 (骑射手)（Ratha (Mounted Archer)）</dd></div>
+          </dl>
+        </section>
+        <section class="insight-slot" data-testid="insight-slot" data-state="filled" aria-labelledby="insight-h">
           <h2 id="insight-h">鲜为人知</h2>
           <ul class="insight-list">
-            <li class="insight-item" data-testid="insight-item">蛮王：空城镇中心也能射 <span class="nw"><span class="num">8</span> 箭</span>（满驻上限 <span class="nw"><span class="num">18</span></span>）。</li>
-            <li class="insight-item" data-testid="insight-item">驻扎仍可再加箭。利于前线推进 / TC 对射。</li>
+            <li class="insight-item" data-testid="insight-item">战车造价无粮（<span class="nw"><span class="num">60</span> 木 + <span class="num">60</span> 金</span>）。</li>
+            <li class="insight-item" data-testid="insight-item">无粮骑兵 UU（对照骑士线）。</li>
           </ul>
         </section>
-        <p class="ph">文明加成长列表在槽位下面。这两条都挂在马里，不写进加成正文。</p>
+        <section class="block" aria-label="文明加成" data-testid="civ-bonuses">
+          <div class="hd">
+            <h2>文明加成</h2>
+            <a class="sec-link" href="#/bonuses">查看完整加成表</a>
+          </div>
+          <p class="cap">标签说明：已计入表示有可计算的效果，展开可查看适用单位或科技；部分计入表示只有部分工具计入，展开可查看各工具的计入情况；仅文本表示只展示游戏说明。各工具实际支持范围以工具内的提示为准。计入色标沿用现有判定，本线框不另锁哪一条是已计入。</p>
+          <ul class="brows">
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">到达下一时代时，城镇中心产生 <span class="nw"><span class="num">2</span> 个</span>村民</span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">骑兵对掷矛手的攻击力 <span class="nw"><span class="num">+2</span></span></span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">象兵单位受到的额外伤害 <span class="nw"><span class="num">-25%</span></span> 并提升该单位抵抗招降的能力</span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">僧侣近战护甲 <span class="nw"><span class="num">+3</span></span>/远程护甲 <span class="nw"><span class="num">+3</span></span></span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">船舰每分钟恢复 <span class="nw"><span class="num">15</span> 生命值</span></span></li>
+          </ul>
+          <h3 class="sub">团队加成</h3>
+          <ul class="brows">
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">贸易单位不仅能产生黄金，还能额外产生 <span class="nw"><span class="num">10%</span></span> 的食物</span></li>
+          </ul>
+        </section>
+        <section class="block" aria-label="优劣与位置" data-testid="civ-stance">
+          <div class="hd"><h2>优劣与位置</h2></div>
+          <div class="cols">
+            <div data-testid="civ-stance-pros">
+              <h3>优势</h3>
+              <div class="chips"><span class="chip g">海军</span><span class="chip g">骑兵</span><span class="chip g">弓手</span></div>
+            </div>
+            <div data-testid="civ-stance-cons">
+              <h3>劣势</h3>
+              <div class="chips"><span class="chip r">防御</span><span class="chip r">攻城</span><span class="chip r">步兵</span></div>
+            </div>
+          </div>
+          <p class="pos" data-testid="civ-position"><span class="k">推荐团战位置</span>口袋 Pocket（边位 <span class="nw"><span class="num">5</span>/10</span>，口袋 <span class="nw"><span class="num">7</span>/10</span>）</p>
+        </section>
+        <p class="source">能力评分为主观近似评分；开局建议请结合文明加成调整</p>
       </div>
-      <aside class="side">
-        <strong>侧栏保持原样</strong>
-        洞察不放侧栏。
+      <aside class="sidecol">
+        <div class="sideblk"><h3>独特单位</h3><div class="ent"><span class="art" aria-hidden="true"></span>战车</div></div>
+        <div class="sideblk"><h3>同资料片文明</h3>
+          <div class="ent">瞿折罗</div>
+          <div class="ent">达罗毗荼</div>
+        </div>
+        <p class="source">共 <span class="nw"><span class="num">56</span> 个</span>文明。洞察不放侧栏。</p>
       </aside>
     </div>
   </main>
   <ul class="anno">
-    <li>有内容示例只标 <strong>马里</strong>（<code>#/civ/Malians</code>）。不把撒克逊送石和立陶宛山城堡写进这一页。</li>
-    <li>两条都来自种子⑧修订：空城镇中心也能射 8 箭（满驻上限 18）；用途是前线推进 / TC 对射。不写旧 +5，也不写「禁锁 +N」。不与山城堡（抬射程）混成一句。</li>
-    <li>科技名「蛮王」、英文 Tigui、id 576，与 <code>techs.json</code> 一致。站内 desc 仍是「无驻扎亦能自动射箭」，箭数以 #584 修订为准。再加一条只多一个 <code>insight-item</code>。</li>
+    <li>有内容示例：<code>#/civ/Bengalis</code> 孟加拉。槽在评分卡和文明加成之间，两条都是种子③已核实短句。</li>
+    <li>不写「第一个」序位，包括旧稿允许的「第一个无粮的城堡骑兵 UU」。不写驻扎射箭。同一句不复制到 <code>#/unit/1759</code>。</li>
+    <li>官方定位、特色兵种在评分卡脚注里。造价 <span class="nw">60 木 + 60 金</span>来自 <code>units.json</code> 战车 1759。琥珀色框只为审阅定位。</li>
   </ul>
 </body>
 </html>

@@ -3,48 +3,137 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>#584 线框 · 1280 · 文明页空槽 · 法兰克</title>
+  <title>#584 线框 · 1280 · 文明页无洞察 · 法兰克</title>
   <link rel="stylesheet" href="insights.css" />
 </head>
 <body>
-  <main class="frame f1280">
+  <main class="frame f1280 civ">
     <p class="crumb">文明 / 法兰克</p>
     <div class="dhead">
       <div class="uico" aria-hidden="true">文明</div>
       <div>
         <h1>法兰克 <small>Franks</small></h1>
         <div class="tags">
+          <span class="tag">国王时代</span>
           <span class="tag">骑兵</span>
         </div>
       </div>
     </div>
-    <div class="tabs" role="tablist" aria-label="法兰克内容">
+    <div class="tabs" role="tablist" aria-label="法兰克内容" data-testid="civ-tabs">
       <span class="on" role="tab" aria-selected="true">概览</span>
       <span role="tab">数据</span>
       <span role="tab">科技</span>
       <span role="tab">更新历史</span>
       <span role="tab">职业选手视角</span>
     </div>
-    <div class="layout">
-      <div>
-        <p class="sum"><b>官方定位：</b>骑兵文明</p>
-        <p class="sum"><b>特色兵种：</b>掷斧兵（步兵）</p>
-        <section class="insight-slot" data-testid="insight-slot" aria-labelledby="insight-h">
-          <h2 id="insight-h">鲜为人知</h2>
-          <p class="insight-empty" data-testid="insight-empty">暂无</p>
+    <nav class="tools" aria-label="相关工具" data-testid="civ-related-tools">
+      <span class="lbl">相关工具</span>
+      <a href="#/builds?civ=Franks"><span class="ic" aria-hidden="true">book-open</span>开局流程</a>
+      <a href="#/production?civ=Franks"><span class="ic" aria-hidden="true">factory</span>生产对照</a>
+      <a href="#/matchup?me=Franks"><span class="ic" aria-hidden="true">crosshair</span>对局助手</a>
+      <a href="#/compare?a=Franks"><span class="ic" aria-hidden="true">scale</span>文明对比</a>
+      <a href="#/tree/Franks"><span class="ic" aria-hidden="true">git-branch</span>科技树</a>
+    </nav>
+    <div class="civ-layout">
+      <div role="tabpanel">
+        <section class="block" aria-label="开局建议" data-testid="civ-opening">
+          <div class="hd"><h2>开局建议</h2></div>
+          <p class="route" data-testid="civ-opening-summary">
+            <span class="era">黑暗至封建</span> 斥候骑兵
+            <span class="arr" aria-hidden="true">→</span>
+            <span class="era">城堡及后续</span> 速城堡骑士
+            <span class="arr" aria-hidden="true">→</span>
+            <span class="era">城堡及后续</span> 掷斧兵/游侠
+          </p>
+          <a class="flow" href="#/builds?bo=scouts-18&amp;civ=Franks">
+            <span class="ic" aria-hidden="true">chevron-right</span>
+            <span class="name"><span class="num nw">18 人口</span>侦察骑兵速攻（单马厩）</span>
+          </a>
+          <a class="flow" href="#/builds?bo=fast-castle-knights&amp;civ=Franks">
+            <span class="ic" aria-hidden="true">chevron-right</span>
+            <span class="name">直城后转骑士（暴经济分支）</span>
+          </a>
+          <div class="foot">
+            <details class="notes" data-testid="civ-opening-notes">
+              <summary><span class="ic" aria-hidden="true">chevron-right</span>路线说明</summary>
+            </details>
+            <a href="#/builds" data-testid="civ-opening-all">查看全部开局</a>
+          </div>
         </section>
-        <p class="ph">文明加成长列表在槽位下面。洞察不写进加成正文，也不要展开才看见。</p>
+        <section class="block" aria-label="能力评分" data-testid="civ-ratings">
+          <div class="hd">
+            <h2>能力评分</h2>
+            <span class="ratelabel">主观评分，仅供参考
+              <button type="button" class="help" aria-label="评分说明"><span class="ic" aria-hidden="true">circle-help</span></button>
+            </span>
+          </div>
+          <div class="scores" aria-label="文明能力评分">
+            <div class="score is-key"><b>骑兵</b><div class="v nw"><span class="num">10</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:100%"></i></span></div>
+            <div class="score"><b>弓手</b><div class="v nw"><span class="num">4</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:40%"></i></span></div>
+            <div class="score"><b>步兵</b><div class="v nw"><span class="num">6</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:60%"></i></span></div>
+            <div class="score is-key"><b>经济</b><div class="v nw"><span class="num">8</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:80%"></i></span></div>
+            <div class="score"><b>防御</b><div class="v nw"><span class="num">6</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:60%"></i></span></div>
+            <div class="score"><b>攻城</b><div class="v nw"><span class="num">5</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:50%"></i></span></div>
+            <div class="score"><b>僧侣</b><div class="v nw"><span class="num">4</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:40%"></i></span></div>
+            <div class="score"><b>海军</b><div class="v nw"><span class="num">5</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:50%"></i></span></div>
+          </div>
+          <dl class="meta" data-testid="civ-rating-footnote">
+            <div><dt>官方定位</dt><dd>骑兵文明</dd></div>
+            <div><dt>特色兵种</dt><dd>掷斧兵 (步兵)（Throwing Axeman (Infantry)）</dd></div>
+          </dl>
+        </section>
+        
+        <section class="block" aria-label="文明加成" data-testid="civ-bonuses">
+          <div class="hd">
+            <h2>文明加成</h2>
+            <a class="sec-link" href="#/bonuses">查看完整加成表</a>
+          </div>
+          <p class="cap">标签说明：已计入表示有可计算的效果，展开可查看适用单位或科技；部分计入表示只有部分工具计入，展开可查看各工具的计入情况；仅文本表示只展示游戏说明。各工具实际支持范围以工具内的提示为准。计入色标沿用现有判定，本线框不另锁哪一条是已计入。</p>
+          <ul class="brows">
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">采果工的工作速度 <span class="nw"><span class="num">+15%</span></span></span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">磨坊科技免费</span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">骑兵单位从封建时代开始生命值 <span class="nw"><span class="num">+20%</span></span></span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">城堡在城堡/帝王时代的费用 <span class="nw"><span class="num">-15/25%</span></span></span></li>
+          </ul>
+          <h3 class="sub">团队加成</h3>
+          <ul class="brows">
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">骑士系视野 <span class="nw"><span class="num">+2</span></span></span></li>
+          </ul>
+        </section>
+        <section class="block" aria-label="优劣与位置" data-testid="civ-stance">
+          <div class="hd"><h2>优劣与位置</h2></div>
+          <div class="cols">
+            <div data-testid="civ-stance-pros">
+              <h3>优势</h3>
+              <div class="chips"><span class="chip g">骑兵</span><span class="chip g">经济</span><span class="chip g">步兵</span></div>
+            </div>
+            <div data-testid="civ-stance-cons">
+              <h3>劣势</h3>
+              <div class="chips"><span class="chip r">海军</span><span class="chip r">弓手</span><span class="chip r">僧侣</span></div>
+            </div>
+          </div>
+          <p class="pos" data-testid="civ-position"><span class="k">推荐团战位置</span>口袋 Pocket（边位 <span class="nw"><span class="num">5</span>/10</span>，口袋 <span class="nw"><span class="num">10</span>/10</span>）</p>
+        </section>
+        <p class="source">能力评分为主观近似评分；开局建议请结合文明加成调整</p>
       </div>
-      <aside class="side">
-        <strong>侧栏保持原样</strong>
-        洞察不放侧栏。
+      <aside class="sidecol">
+        <div class="sideblk"><h3>独特单位</h3><div class="ent"><span class="art" aria-hidden="true"></span>掷斧兵</div></div>
+        <div class="sideblk"><h3>同资料片文明</h3>
+          <div class="ent">中国</div>
+          <div class="ent">日本</div>
+          <div class="ent">蒙古</div>
+          <div class="ent">波斯</div>
+          <div class="ent">萨拉森</div>
+          <button type="button" class="more">查看全部（<span class="num">12</span>）</button>
+        </div>
+        <p class="source">共 <span class="nw"><span class="num">56</span> 个</span>文明。洞察不放侧栏。</p>
       </aside>
     </div>
   </main>
   <ul class="anno">
-    <li>空态示例：<code>#/civ/Franks</code> 法兰克。官方定位与特色兵种来自 <code>civs.json</code>。本页没有种子。</li>
-    <li>槽位固定在短摘要下面、文明加成上面。外框仍在；正文只有「暂无」。</li>
-    <li>与单位页同一组件：<code>insight-slot</code> / <code>insight-empty</code>。两条路由各有自己的列表，不共用一条数据。</li>
+    <li>空态示例：<code>#/civ/Franks</code> 法兰克。评分卡下面直接是文明加成，中间没有「鲜为人知」，没有「暂无」，也没有空档。</li>
+    <li>官方定位、特色兵种在评分卡脚注 <code>civ-rating-footnote</code> 里，不再是卡外两大段。</li>
+    <li>单位页空态仍挂槽并写「暂无」。文明页调用前看 <code>civInsights(en).length</code>，为 0 就不挂 <code>InsightSlot</code>。</li>
   </ul>
 </body>
 </html>
