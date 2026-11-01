@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#602 线框 · 1280 · 亚美尼亚职业选手视角</title>
+  <link rel="stylesheet" href="civ-nav.css" />
+</head>
+<body>
+  <main class="frame">
+    <p class="crumbs">首页 / 文明 / <span>亚美尼亚</span></p>
+    <div class="dhead">
+      <div class="mark" aria-hidden="true">文明</div>
+      <div>
+        <h1>亚美尼亚 <small>Armenians</small></h1>
+        <div class="tags">
+          <span class="tag">皇家山脉</span>
+          <span class="tag">步兵</span>
+          <span class="tag">海军</span>
+        </div>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="亚美尼亚内容" data-testid="civ-tabs">
+      <span role="tab">概览</span>
+      <span role="tab">数据</span>
+      <span role="tab">科技</span>
+      <span role="tab">更新历史</span>
+      <span class="on" role="tab" aria-selected="true">职业选手视角</span>
+    </div>
+    <nav class="tools" aria-label="相关工具" data-testid="civ-related-tools">
+      <span class="lbl">相关工具</span>
+      <a href="#/builds?civ=Armenians" data-testid="civ-tool-builds"><span class="ic" aria-hidden="true">book-open</span>开局流程</a>
+      <a href="#/production?civ=Armenians" data-testid="civ-tool-production"><span class="ic" aria-hidden="true">factory</span>生产对照</a>
+      <a href="#/matchup?me=Armenians" data-testid="civ-tool-matchup"><span class="ic" aria-hidden="true">crosshair</span>对局助手</a>
+      <a href="#/compare?a=Armenians" data-testid="civ-tool-compare"><span class="ic" aria-hidden="true">scale</span>文明对比</a>
+      <a href="#/tree/Armenians" data-testid="civ-tool-tree"><span class="ic" aria-hidden="true">git-branch</span>科技树</a>
+    </nav>
+    <div class="body">
+      <div role="tabpanel">
+        <h2>职业选手原始资料</h2>
+        <p class="note">概览与数据页的能力评分为本站综合参考。</p>
+        <p>未摘录本文明的名次、档位或分数，请查看原视频了解完整观点。</p>
+        <article class="card" aria-label="Hera 原视频">
+          <p><b>Hera</b> <span class="tag">仅参考</span></p>
+          <h3>I Ranked All 56 Civilizations in Age of Empires 2</h3>
+          <p class="note">核对日期 <span class="num nw">2026-10-29</span></p>
+          <p><a href="https://www.youtube.com/watch?v=AaxJADJGjvU">查看原视频</a></p>
+        </article>
+      </div>
+      <aside class="side">
+        <h3>独特单位</h3>
+        <div>
+          <span class="chip">复合弓箭手</span>
+          <span class="chip">牧师战士</span>
+        </div>
+        <h3>同资料片文明</h3>
+        <div><span class="chip">格鲁吉亚</span></div>
+        <p class="note nw">共 <span class="num">56</span> 个文明</p>
+      </aside>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>「职业选手视角」只在上面的 Tab，且为选中态。地址仍是 <code>#/civ/Armenians?tab=pro</code>。</li>
+    <li>情境条与概览那张相同：五个跨页工具，没有职业选手，没有第二排主导航。</li>
+    <li>原视频标题与核对日期来自现有 <code>proSources.ts</code>。不摘录名次或档位。</li>
+    <li>图标方块上的字是 Lucide 名。实现换成图标，不把名字留在界面上。</li>
+  </ul>
+</body>
+</html>
