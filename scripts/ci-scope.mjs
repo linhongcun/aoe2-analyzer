@@ -133,7 +133,8 @@ export const PROFILES = {
     ['garrison218', 'garrison224', 'sidebar44', 'catalogLayout187'],
   ),
   // #533：攻城页改动跑金标准与失败验收。不把 /siege 放进全站宽度/截图矩阵。
-  siege: profile(['siege308'], ['siege308', 'siege533', 'siege554-555']),
+  // #581：页内单位上下文跟攻城反馈走，后续攻城改动也要跑到 siege581。
+  siege: profile(['siege308'], ['siege308', 'siege533', 'siege554-555', 'siege581']),
   maps: profile([], ['maps34', 'mapPreviews', 'mapCatalog422', 'maps559']),
   compare: profile(['compare403', 'teamBonuses228'], ['compare403', 'civText402', 'teamBonuses228']),
   // Display-only helpers. Combat, eco and cost math stay on the full plan.

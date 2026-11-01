@@ -221,6 +221,23 @@ footer.editorial-footer .fbfoot {
   max-width: var(--content-max);
   margin: 0 auto 8px;
 }
+/* issue 581：攻城反馈旁注。名称与 ID 不折行，簇本身仍可换行。 */
+main .fbbar {
+  align-items: center;
+  gap: 8px;
+}
+.fbctx {
+  display: inline;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.fbctx .num {
+  font-variant-numeric: tabular-nums;
+}
 /* 元信息里的链接和文本共享同一行盒，触控高度不会改变基线。 */
 footer.editorial-footer .fmeta .fitem {
   display: inline-flex;

@@ -15,7 +15,7 @@ import {
   SIEGE_UNIT_IDS,
   type SiegeConfig,
 } from '../../domain/siege';
-import FeedbackLink from '../../shared/ui/FeedbackLink';
+import FeedbackLink, { SiegeFeedbackNote } from '../../shared/ui/FeedbackLink';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
@@ -257,7 +257,10 @@ function SiegeTool({ core }: { core: Core }) {
                   {[280, 550, 588].includes(u.id) ? '规则未核实' : '数据未核实'}，暂不计算
                 </h2>
                 <p data-testid="siege-unverified-reason">{unverifiedBody(result.reason)}</p>
-                <FeedbackLink kind="data" label="反馈数据缺口" />
+                <div className="siege-gap-feedback">
+                  <FeedbackLink kind="data" label="反馈数据缺口" />
+                  <SiegeFeedbackNote />
+                </div>
               </section>
             )}
           </div>

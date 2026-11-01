@@ -336,6 +336,13 @@
   margin: 6px 0;
   color: var(--color-muted);
 }
+.siege-gap-feedback {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 12px;
+}
 .siege-unverified .fblink {
   min-height: 44px;
   min-width: 44px;
@@ -347,6 +354,9 @@
   color: var(--color-link);
   font-size: 13px;
   box-sizing: border-box;
+}
+.siege-gap-feedback .fblink {
+  margin-top: 0;
 }
 .siege-unverified .fblink:focus-visible {
   outline: 2px solid var(--color-accent);
