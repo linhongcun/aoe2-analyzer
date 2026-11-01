@@ -3,6 +3,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import buildings from '../../src/data/buildings.json';
+import civs from '../../src/data/civs.json';
+import techs from '../../src/data/techs.json';
 import units from '../../src/data/units.json';
 import trees from '../../src/data/trees.json';
 import { civStatus } from '../../src/domain/civStatus';
@@ -11,8 +13,10 @@ import type { Trees } from '../../src/domain/types';
 import { InsightSlot } from '../../src/shared/ui/InsightSlot';
 
 const T = trees as unknown as Trees;
-const unitRows = units as unknown as { id: number; cost: Record<string, number>; rng: number }[];
-const buildingRows = buildings as unknown as { en: string; rng: number }[];
+const unitRows = units as unknown as { id: number; cost: Record<string, number>; rng: number; ma: number }[];
+const buildingRows = buildings as unknown as { en: string; rng: number; hp: number; atk: number }[];
+const civRows = civs as unknown as { en: string; bon: string[] }[];
+const techRows = techs as unknown as { id: number; zh: string; en: string; desc: string }[];
 const unitById = (id: number) => unitRows.find((unit) => unit.id === id)!;
 const building = (en: string) => buildingRows.find((row) => row.en === en)!;
 
@@ -103,6 +107,43 @@ describe('#584 鲜为人知槽位', () => {
     expect(incas).not.toContain('多送');
   });
 
+  it('诸葛弩 73/559 挂种子⑩锁句，不写攻城加成或绝对反制', () => {
+    expect(unitById(1258).ma).toBe(-3);
+    expect(unitById(422).ma).toBe(-2);
+    expect(unitById(548).ma).toBe(-1);
+    const lines = ['非精锐每轮 3 箭、精锐 5 箭；次级弹含 0 近战，对负甲冲车有额外咬伤。', '成群可远程磨掉冲车突袭。'];
+    expect(unitInsights(73).map(insightText)).toEqual(lines);
+    expect(unitInsights(559)).toBe(unitInsights(73));
+    const body = lines.join('\n');
+    expect(body).not.toMatch(/攻城加成|克制冲车|不怕冲车|绝对反制/);
+    expect(civRows.some((civ) => civ.en === 'Chinese')).toBe(true);
+    expect(civInsights('Chinese')).toEqual([]);
+  });
+
+  it('波斯挂种子⑪锁句：城镇中心血量对齐城堡基础，不写火力相等或免黄金', () => {
+    expect(building('Town Center').hp).toBe(2400);
+    expect(building('Castle').hp).toBe(4800);
+    expect(building('Town Center').atk).toBe(5);
+    expect(building('Castle').atk).toBe(11);
+    const persians = civRows.find((civ) => civ.en === 'Persians');
+    expect(persians?.bon.some((line) => line.includes('城镇中心和码头的生命值 +100%'))).toBe(true);
+    const kamandaran = techRows.find((tech) => tech.id === 488);
+    expect(kamandaran?.zh).toBe('波斯步弓手');
+    expect(kamandaran?.en).toBe('Kamandaran');
+    expect(kamandaran?.desc).toContain('木材');
+    expect(kamandaran?.desc).toContain('黄金');
+    expect(kamandaran?.desc).not.toContain('免费');
+    expect(techRows.find((tech) => tech.id === 50)?.desc).toContain('生命值 +10%');
+
+    const lines = civInsights('Persians').map(insightText);
+    expect(lines).toEqual([
+      `城镇中心生命值 +100%（2400${`\u2192`}4800，同砌体与城堡基础齐），可当前线伪城堡；须驻扎射箭单位才有输出。`,
+      '叠波斯步弓手（Kamandaran）后弓兵木代金（非免费）。',
+    ]);
+    expect(lines.join('\n')).not.toMatch(/火力等于城堡|绝对反制|免黄金|免费弓/);
+    expect(unitInsights(109)).toEqual([]);
+  });
+
   it('骑士和法兰克是空槽，单位页和文明页不共用同一句', () => {
     expect(unitInsights(38)).toEqual([]);
     expect(civInsights('Franks')).toEqual([]);
@@ -122,6 +163,14 @@ describe('#584 鲜为人知槽位', () => {
     expect(malians).toContain('<span class="nw"><span class="num">8</span><span> 箭</span></span>');
     expect(malians).toContain('<span class="nw"><span class="num">18</span></span>');
     expect(malians).not.toContain('insight-empty');
+    const chuKoNu = renderToStaticMarkup(createElement(InsightSlot, { items: unitInsights(73) }));
+    expect(chuKoNu.match(/data-testid="insight-item"/g)).toHaveLength(2);
+    expect(chuKoNu).toContain('<span class="nw"><span class="num">3</span><span> 箭</span></span>');
+    expect(chuKoNu).toContain('<span class="nw"><span class="num">5</span><span> 箭</span></span>');
+    expect(chuKoNu).toContain('<span class="nw"><span class="num">0</span><span> 近战</span></span>');
+    const persians = renderToStaticMarkup(createElement(InsightSlot, { items: civInsights('Persians') }));
+    expect(persians).toContain('<span class="nw"><span class="num">+100</span><span>%</span></span>');
+    expect(persians).toContain(`<span class="nw"><span class="num">2400</span><span>${`\u2192`}</span><span class="num">4800</span></span>`);
     const empty = renderToStaticMarkup(createElement(InsightSlot, { items: [] }));
     expect(empty).toContain('data-state="empty"');
     expect(empty).toContain('data-testid="insight-empty">暂无</p>');

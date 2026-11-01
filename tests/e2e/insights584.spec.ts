@@ -9,6 +9,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 const AMBER = 'rgb(166, 90, 20)';
+const RANGE = `\u2192`;
 
 async function openDetail(page: Page, hash: string, title: RegExp) {
   await page.setViewportSize({ width: 1280, height: 900 });
@@ -230,5 +231,71 @@ test('#/civ/Malians 马里：种子⑧空城 8 箭，禁旧 +5，不与山城堡
     slot(page)
       .getByTestId('insight-item')
       .filter({ hasText: /空城镇中心也能射\s*8\s*箭/ }),
+  ).toBeVisible();
+});
+
+test('#/unit/73 诸葛弩：种子⑩多箭与 0 近战，不成攻城克制', async ({ page }) => {
+  await openDetail(page, '/unit/73', /^诸葛弩/);
+  const region = await expectFixedSlot(page);
+  const texts = await expectList(region);
+  expect(texts).toEqual(['非精锐每轮 3 箭、精锐 5 箭；次级弹含 0 近战，对负甲冲车有额外咬伤。', '成群可远程磨掉冲车突袭。']);
+  const body = texts.join('\n');
+  expect(body).not.toMatch(/攻城加成|克制冲车|不怕冲车|绝对反制/);
+  await expect(region.locator('.num').filter({ hasText: /^3$/ })).toHaveCount(1);
+  await expect(region.locator('.num').filter({ hasText: /^5$/ })).toHaveCount(1);
+  await expect(region.locator('.num').filter({ hasText: /^0$/ })).toHaveCount(1);
+  await expectNowrap(region, /3\s*箭/);
+  await expectNowrap(region, /5\s*箭/);
+  await expectNowrap(region, /0\s*近战/);
+  const placement = await page.evaluate(() => {
+    const cost = document.querySelector('section[aria-label="造价与生产"]');
+    const insight = document.querySelector('[data-testid="insight-slot"]');
+    const stats = document.querySelector('section[aria-label="基础属性"]');
+    return { underCost: !!cost && cost.nextElementSibling === insight, aboveStats: !!insight && insight.nextElementSibling === stats };
+  });
+  expect(placement).toEqual({ underCost: true, aboveStats: true });
+  await leaveAndReturn(page, '相关');
+  await expect(slot(page).getByTestId('insight-item').filter({ hasText: '成群可远程磨掉冲车突袭。' })).toBeVisible();
+});
+
+test('#/unit/559 精锐诸葛弩：与普通诸葛弩同一组种子⑩', async ({ page }) => {
+  await openDetail(page, '/unit/559', /精锐诸葛弩/);
+  const texts = await expectList(await expectFixedSlot(page));
+  expect(texts).toEqual(['非精锐每轮 3 箭、精锐 5 箭；次级弹含 0 近战，对负甲冲车有额外咬伤。', '成群可远程磨掉冲车突袭。']);
+  expect(texts.join('\n')).not.toMatch(/攻城加成|克制冲车|不怕冲车|绝对反制/);
+});
+
+test('#/civ/Persians 波斯：种子⑪高血城镇中心，不写火力相等或免黄金', async ({ page }) => {
+  await openDetail(page, '/civ/Persians', /波斯/);
+  const region = await expectFixedSlot(page);
+  const texts = await expectList(region);
+  expect(texts[0]).toBe(`城镇中心生命值 +100%（2400${RANGE}4800，同砌体与城堡基础齐），可当前线伪城堡；须驻扎射箭单位才有输出。`);
+  expect(texts[1]).toBe('叠波斯步弓手（Kamandaran）后弓兵木代金（非免费）。');
+  const body = texts.join('\n');
+  expect(body).not.toMatch(/火力等于城堡|绝对反制|免黄金|免费弓/);
+  await expect(region.locator('.num').filter({ hasText: /^\+100$/ })).toHaveCount(1);
+  await expect(region.locator('.num').filter({ hasText: /^2400$/ })).toHaveCount(1);
+  await expect(region.locator('.num').filter({ hasText: /^4800$/ })).toHaveCount(1);
+  await expectNowrap(region, /\+100%/);
+  await expectNowrap(region, new RegExp(`2400${RANGE}4800`));
+  const placement = await page.evaluate(() => {
+    const main = document.querySelector('.dmain');
+    const insight = document.querySelector('[data-testid="insight-slot"]');
+    const paragraph = (prefix: string) => [...(main?.querySelectorAll('p') ?? [])].find((node) => node.querySelector('b')?.textContent?.startsWith(prefix));
+    const follows = (earlier: Element | undefined, later: Element | null) =>
+      !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+    return {
+      afterRole: follows(paragraph('官方定位'), insight),
+      afterUnique: follows(paragraph('特色兵种'), insight),
+      beforeBonusList: follows(insight ?? undefined, main?.querySelector('ul.blrows') ?? null),
+      outsideBonusList: !insight?.closest('ul.blrows, li.brow'),
+    };
+  });
+  expect(placement).toEqual({ afterRole: true, afterUnique: true, beforeBonusList: true, outsideBonusList: true });
+  await leaveAndReturn(page, '数据');
+  await expect(
+    slot(page)
+      .getByTestId('insight-item')
+      .filter({ hasText: `2400${RANGE}4800` }),
   ).toBeVisible();
 });
