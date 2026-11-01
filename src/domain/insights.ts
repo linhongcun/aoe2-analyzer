@@ -47,7 +47,7 @@ const hearth: readonly InsightItem[] = [
 
 const ratha: readonly InsightItem[] = [{ id: 'ratha-foodless', parts: ['无粮骑兵 UU（对照骑士线）。'] }];
 
-/** 种子⑩。73 / 559 同一条；箭数与次级弹按 #584 锁句，不写成攻城加成。 */
+/** 种子⑩。73 / 559 同一条；箭数与次级弹按 issue 584 锁句，不写成攻城加成。 */
 const chuKoNu: readonly InsightItem[] = [
   {
     id: 'chu-ko-nu-volley',
