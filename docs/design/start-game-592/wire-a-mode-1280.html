@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#592 线框 · 1280 · 路径 A · 选模式</title>
+  <link rel="stylesheet" href="start-game.css" />
+</head>
+<body>
+  <main class="frame f1280">
+    <header class="topbar">
+      <a class="brand" href="#/"><span class="ic" aria-hidden="true">swords</span>帝国时代 II 分析器</a>
+      <nav class="nav" aria-label="主导航">
+        <a class="on" href="#/" aria-current="page">首页</a>
+        <a href="#/civs">文明</a>
+        <a href="#/units">单位</a>
+        <a href="#/techs">科技</a>
+        <span>工具</span>
+      </nav>
+      <span class="ver nw">数据版本：DE Update <span class="num">188329</span></span>
+      <button class="search" type="button"><span class="ic mu" aria-hidden="true">search</span>搜索</button>
+    </header>
+    <div class="page">
+      <section data-testid="start-game" aria-labelledby="start-title">
+        <p class="kicker">首页</p>
+        <h1 id="start-title">开一局</h1>
+        <p class="lede">先定这局怎么打。可以跳过，也可以回头改。</p>
+        <ol class="steps" data-testid="start-steps" aria-label="本局步骤">
+          <li class="on" aria-current="step">模式</li>
+          <li>地图</li>
+          <li>文明</li>
+          <li>对手</li>
+        </ol>
+        <p class="stepnote">路位只在组队出现，现在不占一格。步数不固定。</p>
+        <section class="ask" data-testid="start-step" data-step="mode" aria-labelledby="mode-h">
+          <h2 id="mode-h">选模式</h2>
+          <p class="why">先定这局是单挑还是组队。模式定了，后面才看地图；组队才问路位。</p>
+          <div class="choices">
+            <button class="choice" type="button">
+              <span class="ic" aria-hidden="true">swords</span>
+              <span>
+                <strong class="nw">1v1 随机地图</strong>
+                <small>选这条不会出现路位。</small>
+              </span>
+            </button>
+            <div>
+              <button class="choice" type="button">
+                <span class="ic" aria-hidden="true">users</span>
+                <span>
+                  <strong>组队随机地图</strong>
+                  <small>点这张卡之后再选人数。人数没选，模式不算完成。</small>
+                </span>
+              </button>
+              <div class="sizes" role="group" aria-label="组队人数">
+                <button type="button" disabled><span class="nw">2v2</span></button>
+                <button type="button" disabled><span class="nw">3v3</span></button>
+                <button type="button" disabled><span class="nw">4v4</span></button>
+              </div>
+            </div>
+          </div>
+          <p class="hint">人数三枚还不能点。1v1 没有这一排。</p>
+          <div class="actions">
+            <button class="btn" type="button" data-testid="start-back" disabled>上一步</button>
+            <button class="btn" type="button" data-testid="start-skip">跳过此步</button>
+          </div>
+        </section>
+        <div class="alts">
+          <button class="lobby" type="button" data-testid="start-lobby">已在大厅</button>
+          <p class="practice" data-testid="start-practice">先练某个文明 · 首刀不做</p>
+        </div>
+      </section>
+      <section class="more" data-testid="start-more-tools" aria-labelledby="more-h">
+        <h2 id="more-h">更多工具</h2>
+        <p class="why">查资料和计算器还在这里，不再是首页第一件事。</p>
+        <div class="tools">
+          <a class="tool" href="#/builds"><span class="ic mu" aria-hidden="true">list-ordered</span><span><b>开局流程</b><small>分步时间线</small></span></a>
+          <a class="tool" href="#/compare"><span class="ic mu" aria-hidden="true">scale</span><span><b>文明对比</b><small>两个文明的差异</small></span></a>
+          <a class="tool" href="#/matchup"><span class="ic mu" aria-hidden="true">crosshair</span><span><b>对局助手</b><small>自己查双方文明</small></span></a>
+          <a class="tool" href="#/duel"><span class="ic mu" aria-hidden="true">sword</span><span><b>单位 PK</b><small>两个单位对战</small></span></a>
+          <a class="tool" href="#/siege"><span class="ic mu" aria-hidden="true">hammer</span><span><b>攻城拆建筑</b><small>拆一座要多久</small></span></a>
+          <a class="tool" href="#/maps"><span class="ic mu" aria-hidden="true">map</span><span><b>地图</b><small>特点和开局</small></span></a>
+          <a class="tool" href="#/civs"><span class="ic mu" aria-hidden="true">shield</span><span><b>文明</b><small>加成与定位</small></span></a>
+          <a class="tool" href="#/ladder"><span class="ic mu" aria-hidden="true">trophy</span><span><b>天梯数据</b><small>现有静态快照</small></span></a>
+        </div>
+      </section>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>路径 A 第 1 步。步骤条没有路位。模式在地图前。</li>
+    <li>「已在大厅」是次按钮。先练文明不可点，文案带「首刀不做」。</li>
+    <li>更多工具在流程下面。八个名字都是现有页面。</li>
+  </ul>
+</body>
+</html>

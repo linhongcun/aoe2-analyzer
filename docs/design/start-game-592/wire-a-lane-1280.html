@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#592 线框 · 1280 · 路径 A · 路位</title>
+  <link rel="stylesheet" href="start-game.css" />
+</head>
+<body>
+  <main class="frame f1280">
+    <header class="topbar">
+      <a class="brand" href="#/"><span class="ic" aria-hidden="true">swords</span>帝国时代 II 分析器</a>
+      <nav class="nav" aria-label="主导航">
+        <a class="on" href="#/" aria-current="page">首页</a>
+        <a href="#/civs">文明</a>
+        <a href="#/units">单位</a>
+        <a href="#/techs">科技</a>
+        <span>工具</span>
+      </nav>
+      <span class="ver nw">数据版本：DE Update <span class="num">188329</span></span>
+      <button class="search" type="button"><span class="ic mu" aria-hidden="true">search</span>搜索</button>
+    </header>
+    <div class="page">
+      <section data-testid="start-game" aria-labelledby="start-title">
+        <p class="kicker">首页 / 开一局</p>
+        <h1 id="start-title">开一局</h1>
+        <p class="lede">组队已经选完模式和地图。这一步才出现。</p>
+        <ol class="steps" data-testid="start-steps" aria-label="本局步骤">
+          <li class="done">模式</li>
+          <li class="done">地图</li>
+          <li class="on" aria-current="step">路位</li>
+          <li>文明</li>
+          <li>对手</li>
+        </ol>
+        <p class="stepnote">因为选了组队，路位插在地图和文明之间。1v1 不会插入。这不是固定的第 3 步。</p>
+        <section class="ask" data-testid="start-step" data-step="lane" aria-labelledby="lane-h">
+          <h2 id="lane-h">选路位</h2>
+          <p class="why">只有组队才问这一步。中路 / 边路沿用开图 <span class="nw">4v4</span> 的编辑叫法，不是天梯排名。这里不列文明。</p>
+          <ul class="picked">
+            <li><span class="k">模式</span><span class="nw">组队 · 4v4 随机地图</span></li>
+            <li><span class="k">地图</span>阿拉伯半岛 <span class="en">Arabia</span></li>
+          </ul>
+          <div class="choices">
+            <button class="choice" type="button">
+              <span class="ic" aria-hidden="true">git-branch</span>
+              <span>
+                <strong>中路</strong>
+                <small>Pocket。先记这一侧，下一步再看这一侧的文明。</small>
+              </span>
+            </button>
+            <button class="choice" type="button">
+              <span class="ic" aria-hidden="true">git-branch</span>
+              <span>
+                <strong>边路</strong>
+                <small>Flank。和中路同一级，不按胜率分先后。</small>
+              </span>
+            </button>
+          </div>
+          <div class="actions">
+            <button class="btn" type="button" data-testid="start-back">上一步</button>
+            <button class="btn" type="button" data-testid="start-skip">跳过此步</button>
+          </div>
+        </section>
+        <p class="practice">先练某个文明 · 首刀不做</p>
+        <p class="folded">更多工具收在下面，这一步不展开。</p>
+      </section>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>路径 A 中途。模式是组队 <span class="nw">4v4</span> 随机地图，地图是玩家点选的阿拉伯半岛，不是热度排序。</li>
+    <li>路位两张卡都还没选。跳过此步会在摘要里写成「暂无建议」，不替玩家选中路或边路。</li>
+    <li>上一步回到地图。改掉组队之后，这一格会消失。</li>
+  </ul>
+</body>
+</html>
