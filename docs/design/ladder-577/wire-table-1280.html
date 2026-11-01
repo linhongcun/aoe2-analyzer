@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#577 线框 · 1280 · 默认切片 · 表</title>
+  <link rel="stylesheet" href="ladder.css" />
+</head>
+<body>
+  <main class="frame f1280" data-testid="ladder-page" data-patch-mismatch="true">
+    <div class="top">
+      <div>
+        <p class="crumb">
+          <span class="ic mu" aria-hidden="true" title="home">home</span>
+          首页
+          <span class="ic mu" aria-hidden="true" title="chevron-right">chevron-right</span>
+          资料
+          <span class="ic mu" aria-hidden="true" title="chevron-right">chevron-right</span>
+          天梯数据
+        </p>
+        <h1>
+          <span class="ic lg" aria-hidden="true" title="trophy">trophy</span>
+          天梯数据 <small>Ladder Stats</small>
+        </h1>
+        <p class="desc">默认 <span class="nw">4v4</span> 随机地图、Elo <span class="nw">1200–1400</span>、近 <span class="nw">90 天</span>、全图。可切回阿拉伯 <span class="nw">1v1</span>。</p>
+      </div>
+      <div class="views" role="radiogroup" aria-label="视图" data-testid="ladder-view">
+        <button type="button" role="radio" class="on" aria-checked="true" data-testid="ladder-view-table">
+          <span class="ic" aria-hidden="true" title="table">table</span>
+          表
+        </button>
+        <button type="button" role="radio" aria-checked="false" disabled title="随下一刀" data-testid="ladder-view-tiers">
+          <span class="ic mu" aria-hidden="true" title="rows-3">rows-3</span>
+          分层
+        </button>
+        <button type="button" role="radio" aria-checked="false" disabled title="随下一刀" data-testid="ladder-view-meta">
+          <span class="ic mu" aria-hidden="true" title="chart-scatter">chart-scatter</span>
+          分布
+        </button>
+      </div>
+    </div>
+
+    <div class="filters" data-testid="ladder-filters">
+      <span class="flabel">模式</span>
+      <div class="frow" role="radiogroup" aria-label="模式" data-testid="ladder-mode">
+        <button type="button" class="chip on" role="radio" aria-checked="true" data-testid="ladder-mode-4v4">
+          <span class="ic" aria-hidden="true" title="users">users</span>
+          <span class="nw">4v4</span> 随机地图
+        </button>
+        <button type="button" class="chip" role="radio" aria-checked="false" data-testid="ladder-mode-arabia1v1">
+          <span class="ic mu" aria-hidden="true" title="swords">swords</span>
+          阿拉伯 <span class="nw">1v1</span>
+        </button>
+      </div>
+      <span class="flabel">时段</span>
+      <div class="frow">
+        <span class="pill" data-testid="ladder-period-static">
+          <span class="ic mu" aria-hidden="true" title="calendar">calendar</span>
+          近 <span class="nw">90 天</span>
+          <span class="fix">当前快照</span>
+        </span>
+      </div>
+      <span class="flabel">天梯分段</span>
+      <div class="frow">
+        <span class="pill" data-testid="ladder-elo-static">
+          <span class="nw">1200–1400</span>
+          <span class="fix">当前快照</span>
+        </span>
+      </div>
+      <span class="flabel">地图</span>
+      <div class="frow">
+        <span class="pill" data-testid="ladder-map-static">
+          <span class="ic mu" aria-hidden="true" title="map">map</span>
+          全图
+          <span class="fix">当前快照</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="source" data-testid="ladder-source" data-cutoff="mismatch">
+      <span class="ic" aria-hidden="true" title="database">database</span>
+      <div class="copy">
+        <p class="cutoff" data-testid="ladder-cutoff">
+          <span class="flag">非当前平衡</span>
+          · <span class="nw">统计截止 <span class="num">2026-04-01</span><span class="tag">示意</span></span>
+          · <span class="nw">补丁 <span class="num">100000</span><span class="tag">示意</span> 与本站 DE <span class="num">188329</span> 不同</span>
+        </p>
+        <p class="meta">
+          <span class="ext">来源见快照 <span class="ic mu" aria-hidden="true" title="external-link">external-link</span>（外部）<span class="tag">示意</span></span>。
+          <span class="nw">本切片样本 <span class="num">10,000</span> 局<span class="tag">示意</span></span>
+        </p>
+      </div>
+    </div>
+    <p class="patch" data-testid="ladder-patch-note">
+      <span class="ic" aria-hidden="true" title="triangle-alert">triangle-alert</span>
+      <span>胜率可能未反映最新平衡改动。</span>
+    </p>
+
+    <div class="card">
+      <div class="toolbar">
+        <p class="wiretag">版式示意，不是统计。五行只为看列宽。</p>
+        <label class="hide">
+          <input type="checkbox" checked data-testid="ladder-hide-low" />
+          隐藏低样本
+        </label>
+      </div>
+      <table data-testid="ladder-table">
+        <caption class="sr">4v4 随机地图 1200–1400 近 90 天 全图 各文明胜率（版式示意）</caption>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>文明</th>
+            <th class="numcol"><button type="button" class="sort">胜率 <span class="ic" aria-hidden="true" title="arrow-down">arrow-down</span></button></th>
+            <th>95% 区间</th>
+            <th class="numcol"><button type="button" class="sort">出场率 <span class="ic mu" aria-hidden="true" title="arrow-up-down">arrow-up-down</span></button></th>
+            <th class="numcol"><button type="button" class="sort">样本局数 <span class="ic mu" aria-hidden="true" title="arrow-up-down">arrow-up-down</span></button></th>
+            <th class="numcol">相对 50%</th>
+            <th class="numcol">走势</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="num">1</td>
+            <td>
+              <a class="zh" href="#/civ/Chinese"><span class="ic mu" aria-hidden="true" title="shield">shield</span> 中国</a>
+              <span class="en" lang="en">Chinese</span>
+            </td>
+            <td class="numcol"><span class="win"><span class="bar" aria-hidden="true"><i style="left:50%;width:5%"></i></span><span class="num">51.00%</span></span></td>
+            <td><span class="band" aria-hidden="true"><i style="left:28%;width:44%"></i><b></b></span></td>
+            <td class="numcol"><span class="num">1.20%</span></td>
+            <td class="numcol"><span class="num">1,200</span></td>
+            <td class="numcol"><span class="num up nw">+1.00</span></td>
+            <td class="numcol"><svg class="spark" width="72" height="24" viewBox="0 0 72 24" aria-hidden="true" data-testid="ladder-trend"><polyline points="2,18 20,14 38,11 54,7 70,4" fill="none" stroke="#1f7a35" stroke-width="1.5" /></svg></td>
+          </tr>
+          <tr>
+            <td class="num">2</td>
+            <td>
+              <a class="zh" href="#/civ/Franks"><span class="ic mu" aria-hidden="true" title="shield">shield</span> 法兰克</a>
+              <span class="en" lang="en">Franks</span>
+            </td>
+            <td class="numcol"><span class="win"><span class="bar" aria-hidden="true"><i style="left:50%;width:2.5%"></i></span><span class="num">50.50%</span></span></td>
+            <td><span class="band" aria-hidden="true"><i style="left:32%;width:36%"></i><b></b></span></td>
+            <td class="numcol"><span class="num">6.00%</span></td>
+            <td class="numcol"><span class="num">8,000</span></td>
+            <td class="numcol"><span class="num up nw">+0.50</span></td>
+            <td class="numcol"><svg class="spark" width="72" height="24" viewBox="0 0 72 24" aria-hidden="true" data-testid="ladder-trend"><polyline points="2,14 20,16 38,12 54,10 70,8" fill="none" stroke="#1f7a35" stroke-width="1.5" /></svg></td>
+          </tr>
+          <tr>
+            <td class="num">3</td>
+            <td>
+              <a class="zh" href="#/civ/Britons"><span class="ic mu" aria-hidden="true" title="shield">shield</span> 不列颠</a>
+              <span class="en" lang="en">Britons</span>
+            </td>
+            <td class="numcol"><span class="win"><span class="bar" aria-hidden="true"><i style="left:50%;width:0%"></i></span><span class="num">50.00%</span></span></td>
+            <td><span class="band" aria-hidden="true"><i style="left:36%;width:28%"></i><b></b></span></td>
+            <td class="numcol"><span class="num">2.00%</span></td>
+            <td class="numcol"><span class="num">3,400</span></td>
+            <td class="numcol"><span class="num flat nw">0.00</span></td>
+            <td class="numcol"><svg class="spark" width="72" height="24" viewBox="0 0 72 24" aria-hidden="true" data-testid="ladder-trend"><polyline points="2,12 20,11 38,13 54,12 70,12" fill="none" stroke="#636366" stroke-width="1.5" /></svg></td>
+          </tr>
+          <tr>
+            <td class="num">4</td>
+            <td>
+              <a class="zh" href="#/civ/Huns"><span class="ic mu" aria-hidden="true" title="shield">shield</span> 匈奴</a>
+              <span class="en" lang="en">Huns</span>
+            </td>
+            <td class="numcol"><span class="win"><span class="bar" aria-hidden="true"><i style="left:47.5%;width:2.5%"></i></span><span class="num">49.50%</span></span></td>
+            <td><span class="band" aria-hidden="true"><i style="left:30%;width:40%"></i><b></b></span></td>
+            <td class="numcol"><span class="num">1.00%</span></td>
+            <td class="numcol"><span class="num">900</span></td>
+            <td class="numcol"><span class="num down nw">−0.50</span></td>
+            <td class="numcol"><svg class="spark" width="72" height="24" viewBox="0 0 72 24" aria-hidden="true" data-testid="ladder-trend"><polyline points="2,6 20,8 38,12 54,15 70,18" fill="none" stroke="#c4281c" stroke-width="1.5" /></svg></td>
+          </tr>
+          <tr>
+            <td class="num">5</td>
+            <td>
+              <a class="zh" href="#/civ/Byzantines"><span class="ic mu" aria-hidden="true" title="shield">shield</span> 拜占庭</a>
+              <span class="en" lang="en">Byzantines</span>
+            </td>
+            <td class="numcol"><span class="win"><span class="bar" aria-hidden="true"><i style="left:45%;width:5%"></i></span><span class="num">49.00%</span></span></td>
+            <td><span class="band" aria-hidden="true"><i style="left:24%;width:48%"></i><b></b></span></td>
+            <td class="numcol"><span class="num">4.00%</span></td>
+            <td class="numcol"><span class="num">5,600</span></td>
+            <td class="numcol"><span class="num down nw">−1.00</span></td>
+            <td class="numcol"><svg class="spark" width="72" height="24" viewBox="0 0 72 24" aria-hidden="true" data-testid="ladder-trend"><polyline points="2,8 20,9 38,14 54,16 70,20" fill="none" stroke="#c4281c" stroke-width="1.5" /></svg></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="shareline">
+        <ul class="read">
+          <li>胜率：这一切片里，该文明赢下的对局占比。</li>
+          <li>走势：这份静态快照里的胜率序列，不是实时。</li>
+          <li>相对 <span class="nw">50%</span>：胜率减去 <span class="nw">50</span> 个百分点。</li>
+        </ul>
+        <button type="button" class="share">
+          <span class="ic mu" aria-hidden="true" title="link">link</span>
+          复制当前链接
+        </button>
+      </div>
+    </div>
+
+    <p class="foot" data-testid="ladder-footer">
+      <span class="ic" aria-hidden="true" title="info">info</span>
+      <span>数据来源：静态快照（<span class="nw">4v4</span> 随机地图 · 全图 · <span class="nw">1200–1400</span> · 近 <span class="nw">90 天</span>）· <span class="nw">统计更新 <span class="num">2026-04-01</span><span class="tag">示意</span></span>。本站保存静态快照，不实时抓取、不自建统计；胜率不是平衡建议。</span>
+    </p>
+  </main>
+  <ul class="anno">
+    <li>这张是 A。默认切片：<span class="nw">4v4</span> 随机地图 · <span class="nw">1200–1400</span> · 近 <span class="nw">90 天</span> · 全图。视图是表。分层、分布两枚不可点，文案仍在。</li>
+    <li>时段、分段、地图只有一档，所以是只读 pill，不画 <span class="nw">7</span> 天或空 Elo 芯片，也没有滑杆。模式两枚才能切换，另一枚回到阿拉伯 <span class="nw">1v1</span>。</li>
+    <li>来源条是 #547 的不一致态。日期 <span class="nw">2026-04-01</span>、补丁 <span class="nw">100000</span>、样本 <span class="nw">10,000</span> 和「示意」只属于线框。实现读该切片 JSON。页面上不出现「示意」，也不要第二张新鲜度横幅。</li>
+    <li>表内胜率、区间、出场、局数、相对 <span class="nw">50%</span> 和折线都是版式示意，不是 aoestats，也不是 aoe2scout。不要抄进快照。五行不是完整文明表。</li>
+    <li>「版式示意」那一行只在线框里，实现不要渲染。隐藏低样本是产品控件，默认勾选，文案不写 <span class="nw">50</span>。</li>
+  </ul>
+</body>
+</html>
