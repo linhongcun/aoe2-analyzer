@@ -296,16 +296,17 @@ for (const width of [360, 375, 390, 1280])
       await expect.poll(() => scroller.evaluate((element) => element.scrollLeft)).toBe(0);
       await page.locator('#detail .dhead').getByRole('button', { name: '复制链接', exact: true }).focus();
       const beforeFocusY = await page.evaluate(() => scrollY);
-      // S2 inserts five genuine keyboard stops between the copy button and the selected tab.
-      const context = page.locator('#detail').getByRole('navigation', { name: '本页相关工具', exact: true });
-      for (const label of ['开局流程', '生产对照', '对局助手', '文明对比', LABEL]) {
-        await page.keyboard.press('Tab');
-        await expect(context.getByRole('link', { name: label, exact: true })).toBeFocused();
-      }
+      // #602：页内 Tab 在相关工具上面。复制链接之后先落到当前页签，再落到离开本页的五个链接。
       await page.keyboard.press('Tab');
       await expect(tab(page, LABEL)).toBeFocused();
       await fullyInsideTabScroller(page, tab(page, LABEL));
       expect(await page.evaluate(() => scrollY)).toBe(beforeFocusY);
+      const context = page.locator('#detail').getByRole('navigation', { name: '相关工具', exact: true });
+      await expect(context.getByRole('link', { name: LABEL, exact: true })).toHaveCount(0);
+      for (const label of ['开局流程', '生产对照', '对局助手', '文明对比', '科技树']) {
+        await page.keyboard.press('Tab');
+        await expect(context.getByRole('link', { name: label, exact: true })).toBeFocused();
+      }
       await tab(page, LABEL).press('Home');
       await selected(page, '概览');
       await expect(tab(page, '概览')).toBeFocused();

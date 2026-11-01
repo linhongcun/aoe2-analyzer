@@ -868,10 +868,11 @@ export async function checkSite({ site, version, commit, features = [] }) {
             await check(buildings).toHaveCount(0);
             const unique = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '独特建筑', exact: true }) });
             await check(unique).toHaveCount(0);
-            await check(page.locator('.dside .sideblk > h4').nth(1)).toHaveText('快速入口');
+            await check(page.locator('.dside .sideblk > h4').nth(1)).toHaveText('同资料片文明');
+            await check(page.locator('.dside').getByRole('heading', { name: '快速入口', exact: true })).toHaveCount(0);
             await goto('/civ/Armenians');
             await check(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('区域建筑');
-            await check(page.locator('.dside .sideblk > h4').nth(3)).toHaveText('快速入口');
+            await check(page.locator('.dside .sideblk > h4').nth(3)).toHaveText('同资料片文明');
             await check(buildings.getByRole('link')).toHaveText(['骡车', '强化教堂']);
             await check(buildings.getByRole('link', { name: '强化教堂', exact: true })).toHaveAttribute('href', '#/building/1806?civ=Armenians&age=3');
             await check(page.locator('.dmain').getByRole('heading', { name: '区域建筑', exact: true })).toHaveCount(0);
@@ -881,7 +882,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
             await check(unique.getByRole('link', { name: '营垒', exact: true })).toHaveAttribute('href', '#/building/1251?civ=Bulgarians&age=3');
             await check(regional).toHaveCount(0);
             await check(buildings).toHaveCount(0);
-            await check(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('快速入口');
+            await check(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('同资料片文明');
             await check(page.locator('.dmain').getByRole('heading', { name: '独特建筑', exact: true })).toHaveCount(0);
           }
         }

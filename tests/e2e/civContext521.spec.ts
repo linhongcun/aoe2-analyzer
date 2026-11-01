@@ -22,13 +22,13 @@ async function capture(page: Page, info: TestInfo, name: string) {
 
 test('#521 文明情境入口预填当前文明，单边对比和生产可刷新', async ({ page }) => {
   await page.goto('./#/civ/Jurchens');
-  const nav = page.locator('#detail').getByRole('navigation', { name: '本页相关工具', exact: true });
+  const nav = page.locator('#detail').getByRole('navigation', { name: '相关工具', exact: true });
   for (const [name, href] of [
     ['开局流程', '#/builds?civ=Jurchens'],
     ['生产对照', '#/production?civ=Jurchens'],
     ['对局助手', '#/matchup?me=Jurchens'],
     ['文明对比', '#/compare?a=Jurchens'],
-    ['职业选手视角', '#/civ/Jurchens?tab=pro'],
+    ['科技树', '#/tree/Jurchens'],
   ])
     await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute('href', href!);
   await nav.getByRole('link', { name: '生产对照', exact: true }).click();
@@ -134,15 +134,16 @@ for (const width of [360, 375, 390, 1280])
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/civ/Jurchens');
-      const nav = page.locator('#detail').getByRole('navigation', { name: '本页相关工具', exact: true });
+      const nav = page.locator('#detail').getByRole('navigation', { name: '相关工具', exact: true });
       await expect(nav.getByRole('link')).toHaveCount(5);
+      await expect(nav.getByRole('link', { name: '职业选手视角', exact: true })).toHaveCount(0);
       for (const link of await nav.getByRole('link').all()) {
         const box = await link.boundingBox();
         expect(box!.width).toBeGreaterThanOrEqual(44);
         expect(box!.height).toBeGreaterThanOrEqual(44);
       }
       await capture(page, info, `civ-${width}-${theme}`);
-      await nav.getByRole('link', { name: '职业选手视角', exact: true }).click();
+      await page.getByRole('tab', { name: '职业选手视角', exact: true }).click();
       await expect(page.getByRole('heading', { name: '职业选手原始资料', exact: true })).toBeVisible();
       await healthy(page);
       await page.goto('./#/civs');

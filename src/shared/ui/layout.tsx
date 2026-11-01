@@ -47,6 +47,8 @@ export function DetailPage({
   tabs,
   initialTab,
   tabsTop,
+  afterTabs,
+  tablistTestId,
   sidebar,
 }: {
   id: string;
@@ -62,6 +64,9 @@ export function DetailPage({
   initialTab?: string;
   /** 标签栏上方的额外控件（如 普通/精锐 切换） */
   tabsTop?: ReactNode;
+  /** 标签栏下方、两栏正文上方。文明详情把离开本页的工具放在这里，不与页内 Tab 同级。 */
+  afterTabs?: ReactNode;
+  tablistTestId?: string;
   sidebar?: ReactNode;
 }) {
   const [params, setParams] = useSearchParams();
@@ -101,7 +106,7 @@ export function DetailPage({
         <CopyPageLink />
       </div>
       {tabsTop}
-      <div role="tablist" className="dtabs" aria-label={`${title}内容`}>
+      <div role="tablist" className="dtabs" aria-label={`${title}内容`} data-testid={tablistTestId}>
         {tabs.map((t, index) => (
           <button
             key={t.key}
@@ -118,6 +123,7 @@ export function DetailPage({
           </button>
         ))}
       </div>
+      {afterTabs}
       <div className={sidebar ? 'dbody has-side' : 'dbody'}>
         <div className="dmain" role="tabpanel" id={`${tabId}-panel`} aria-labelledby={`${tabId}-${cur.key}`} tabIndex={0}>
           {cur.content}
