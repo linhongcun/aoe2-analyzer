@@ -27,6 +27,7 @@ import {
 } from '../../domain/ladder';
 import { LadderMeta, LadderTiers } from './LadderBands';
 import { LadderBracketGroup } from './LadderElo';
+import { LadderFreshness } from './LadderFreshness';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
 import { Icon, type IconName } from '../../shared/ui/Icon';
@@ -98,6 +99,7 @@ export function LadderArabia({
   const sampleUnit = playerSample ? '人次' : '局';
   const gamesLabel = playerSample ? '出场' : '样本局数';
   const bracket = useMemo(() => viewBracket(snapshot, elo), [elo]);
+  const rawBracket = snapshot.brackets.find((item) => item.key === elo);
   const rows = useMemo(() => {
     const visible = hideLow ? bracket.civs.filter((stat) => !isLowSample(stat.games)) : bracket.civs;
     const enriched = visible.map((stat) => {
@@ -153,7 +155,7 @@ export function LadderArabia({
 
   return (
     <>
-      {/* 玩家界面只写来源名、统计截止和补丁号。Wayback 路径不渲染。来源名若是 aoe2scout 则不印出。 */}
+      {/* 玩家界面写来源名、统计截止、相对新鲜度和样本量。Wayback 路径不渲染。来源名若是 aoe2scout 则不印出。 */}
       <div className="ladder-source" data-testid="ladder-source" data-cutoff={mismatch ? 'mismatch' : 'aligned'} data-fetched-at={snapshot.fetchedAt}>
         <Icon name="database" />
         <div className="ladder-copy">
@@ -188,18 +190,13 @@ export function LadderArabia({
               </>
             )}
           </p>
+          <LadderFreshness fetchedAt={snapshot.fetchedAt} games={bracket.empty ? undefined : rawBracket?.games} scope="本分段样本" unit={sampleUnit} />
           <p className="ladder-source-meta">
             <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
               {visibleSourceLabel(snapshot.source)}
               <Icon name="external-link" />
               （外部）
             </a>
-            。
-            {!bracket.empty && (
-              <span className="nw">
-                本分段样本 <span className="num">{formatGames(bracket.games)}</span> {sampleUnit}
-              </span>
-            )}
           </p>
         </div>
       </div>

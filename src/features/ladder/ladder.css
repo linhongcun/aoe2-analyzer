@@ -141,10 +141,12 @@
   border-left: 3px solid var(--color-warn);
 }
 .ladder-cutoff,
+.ladder-freshness,
 .ladder-source-meta {
   margin: 0;
 }
-.ladder-cutoff {
+.ladder-cutoff,
+.ladder-freshness {
   display: block;
   color: var(--color-text);
   font-size: var(--fs-body);
