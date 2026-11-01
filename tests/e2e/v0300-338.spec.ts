@@ -388,6 +388,7 @@ for (const key of eventTableKeys) {
   assert.ok(!Object.hasOwn(playerTableGolden, key), `Events fixture cannot replace the players companion expectation: ${key}`);
 }
 // #33: #/ladder 从规划占位变成有表的页面。这两条宽度键从历史空基准挪到补充文件，历史文件里其它页面的表格样式不动。
+// #577: 无参数默认 4v4，表 class 为 ladder-table ladder-table-team。display / overflow 仍与旧基准相同。
 const ladderTableGolden = JSON.parse(readFileSync(LADDER_TABLES_FIXTURE, 'utf8')) as Record<string, TableStyle[]>;
 const ladderTableKeys = TABLE_WIDTHS.map((width) => `${width} /ladder`);
 assert.deepEqual(Object.keys(ladderTableGolden).sort(), [...ladderTableKeys].sort(), 'Ladder table fixture must contain exactly its two width keys');
