@@ -17,6 +17,18 @@ export interface FeedbackCtx {
   search: string;
   href: string;
   ua: string;
+  /** #555：攻城页当前单位的中文名。只在 `/siege` 且地址带 `unit` 时写入预填。 */
+  unitName?: string;
+}
+
+/** 攻城页带 unit 时写成「手推炮 / 36」。没有单位名时不编造。 */
+export function siegeFeedbackText(c: FeedbackCtx): string | null {
+  const path = c.pathname.replace(/\/+$/, '') || '/';
+  if (path !== '/siege') return null;
+  const id = new URLSearchParams(c.search).get('unit');
+  const name = c.unitName?.trim();
+  if (!id || !name) return null;
+  return `${name} / ${id}`;
 }
 
 /** 站点版本：package.json version（构建时注入），页脚显示在数据版本前 */
@@ -35,9 +47,10 @@ export function entityOf(pathname: string): { type: string; id: string } | null 
 
 export function feedbackUrl(c: FeedbackCtx, kind: 'bug' | 'data' | 'feature' = 'data'): string {
   const e = entityOf(c.pathname);
+  const siege = siegeFeedbackText(c);
   const q = new URLSearchParams(c.search);
   const civ = q.get('civ') ?? q.get('c') ?? (/^\/(civ|tree)\//.test(c.pathname) ? e?.id.split('/')[0] : null);
-  const title = e ? `${e.type} ${e.id}` : c.pathname || '/';
+  const title = siege ?? (e ? `${e.type} ${e.id}` : c.pathname || '/');
   const body = [
     kind === 'data'
       ? '## 哪个数值/内容有误？\n\n\n## 正确值与来源（游戏内截图 / Wiki / 补丁说明）\n\n'
@@ -46,7 +59,7 @@ export function feedbackUrl(c: FeedbackCtx, kind: 'bug' | 'data' | 'feature' = '
         : '## 问题描述\n\n\n## 复现步骤\n\n',
     '## 环境（自动填写）',
     `- 页面：${c.href}`,
-    `- 类型/ID：${e ? `${e.type} / ${e.id}` : '—'}`,
+    `- 类型/ID：${siege ?? (e ? `${e.type} / ${e.id}` : '—')}`,
     `- 文明：${civ ?? '—'}`,
     `- 数据版本：${dataVersion()}；构建 ${__BUILD__}`,
     `- 浏览器：${c.ua}`,

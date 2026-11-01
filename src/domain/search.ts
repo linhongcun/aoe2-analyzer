@@ -77,6 +77,16 @@ function score1(zh: string, en: string, q: string): number {
 const KIND_ORDER = { page: 0, civ: 1, unit: 2, building: 3, tech: 4, bonus: 5, term: 6 } as const;
 /** issue 145 E：给只靠拼音命中的结果最多预留这么多位，并提前展示 */
 export const PY_RESERVE = 5;
+/**
+ * #554：搜索词就是「冲车」时，攻城拆建筑页预填中型冲车。
+ * 单位 id 与 `units.json` 里 Capped Ram 对齐，由单测锁住；不是默认攻城锤 1258。
+ */
+export const SIEGE_SEARCH_RAM_UNIT_ID = 422;
+
+function withSiegeRamHref(it: SearchItem, q: string): SearchItem {
+  if (it.kind === 'page' && it.id === 'siege' && q === '冲车') return { ...it, href: `/siege?unit=${SIEGE_SEARCH_RAM_UNIT_ID}` };
+  return it;
+}
 export function search(items: SearchItem[], raw: string, limit = 30): SearchItem[] {
   const q = norm(raw);
   if (!q || limit <= 0) return [];
@@ -98,5 +108,7 @@ export function search(items: SearchItem[], raw: string, limit = 30): SearchItem
   const selectedPy = py.filter((x) => selected.has(x));
   // 中英文精确/名称前缀命中（至少首条）优先，随后展示最多 5 条拼音，其余保持各自原顺序。
   const firstCount = Math.max(1, head.filter((x) => x.s >= TIER.prefix).length);
-  return [...head.slice(0, firstCount), ...selectedPy.slice(0, PY_RESERVE), ...head.slice(firstCount), ...selectedPy.slice(PY_RESERVE)].map((x) => x.it);
+  return [...head.slice(0, firstCount), ...selectedPy.slice(0, PY_RESERVE), ...head.slice(firstCount), ...selectedPy.slice(PY_RESERVE)].map((x) =>
+    withSiegeRamHref(x.it, q),
+  );
 }
