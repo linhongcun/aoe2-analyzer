@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#577 线框 · 1280 · 默认切片 · 分布</title>
+  <link rel="stylesheet" href="ladder.css" />
+</head>
+<body>
+  <main class="frame f1280" data-testid="ladder-page" data-patch-mismatch="true">
+    <div class="top">
+      <div>
+        <p class="crumb">
+          <span class="ic mu" aria-hidden="true" title="home">home</span>
+          首页
+          <span class="ic mu" aria-hidden="true" title="chevron-right">chevron-right</span>
+          资料
+          <span class="ic mu" aria-hidden="true" title="chevron-right">chevron-right</span>
+          天梯数据
+        </p>
+        <h1>
+          <span class="ic lg" aria-hidden="true" title="trophy">trophy</span>
+          天梯数据 <small>Ladder Stats</small>
+        </h1>
+        <p class="desc">默认 <span class="nw">4v4</span> 随机地图、Elo <span class="nw">1200–1400</span>、近 <span class="nw">90 天</span>、全图。可切回阿拉伯 <span class="nw">1v1</span>。</p>
+      </div>
+      <div class="views" role="radiogroup" aria-label="视图" data-testid="ladder-view">
+        <button type="button" role="radio" aria-checked="false" data-testid="ladder-view-table">
+          <span class="ic mu" aria-hidden="true" title="table">table</span>
+          表
+        </button>
+        <button type="button" role="radio" aria-checked="false" data-testid="ladder-view-tiers">
+          <span class="ic mu" aria-hidden="true" title="rows-3">rows-3</span>
+          分层
+        </button>
+        <button type="button" role="radio" class="on" aria-checked="true" data-testid="ladder-view-meta">
+          <span class="ic" aria-hidden="true" title="chart-scatter">chart-scatter</span>
+          分布
+        </button>
+      </div>
+    </div>
+
+    <div class="filters" data-testid="ladder-filters">
+      <span class="flabel">模式</span>
+      <div class="frow" role="radiogroup" aria-label="模式" data-testid="ladder-mode">
+        <button type="button" class="chip on" role="radio" aria-checked="true" data-testid="ladder-mode-4v4">
+          <span class="ic" aria-hidden="true" title="users">users</span>
+          <span class="nw">4v4</span> 随机地图
+        </button>
+        <button type="button" class="chip" role="radio" aria-checked="false" data-testid="ladder-mode-arabia1v1">
+          <span class="ic mu" aria-hidden="true" title="swords">swords</span>
+          阿拉伯 <span class="nw">1v1</span>
+        </button>
+      </div>
+      <span class="flabel">时段</span>
+      <div class="frow">
+        <span class="pill" data-testid="ladder-period-static">
+          <span class="ic mu" aria-hidden="true" title="calendar">calendar</span>
+          近 <span class="nw">90 天</span>
+          <span class="fix">当前快照</span>
+        </span>
+      </div>
+      <span class="flabel">天梯分段</span>
+      <div class="frow">
+        <span class="pill" data-testid="ladder-elo-static">
+          <span class="nw">1200–1400</span>
+          <span class="fix">当前快照</span>
+        </span>
+      </div>
+      <span class="flabel">地图</span>
+      <div class="frow">
+        <span class="pill" data-testid="ladder-map-static">
+          <span class="ic mu" aria-hidden="true" title="map">map</span>
+          全图
+          <span class="fix">当前快照</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="source" data-testid="ladder-source" data-cutoff="mismatch">
+      <span class="ic" aria-hidden="true" title="database">database</span>
+      <div class="copy">
+        <p class="cutoff" data-testid="ladder-cutoff">
+          <span class="flag">非当前平衡</span>
+          · <span class="nw">统计截止 <span class="num">2026-04-01</span><span class="tag">示意</span></span>
+          · <span class="nw">补丁 <span class="num">100000</span><span class="tag">示意</span> 与本站 DE <span class="num">188329</span> 不同</span>
+        </p>
+        <p class="meta">
+          <span class="ext">来源见快照 <span class="ic mu" aria-hidden="true" title="external-link">external-link</span>（外部）<span class="tag">示意</span></span>。
+          <span class="nw">本切片样本 <span class="num">10,000</span> 局<span class="tag">示意</span></span>
+        </p>
+      </div>
+    </div>
+    <p class="patch" data-testid="ladder-patch-note">
+      <span class="ic" aria-hidden="true" title="triangle-alert">triangle-alert</span>
+      <span>胜率可能未反映最新平衡改动。</span>
+    </p>
+
+    <div class="card">
+      <div class="toolbar">
+        <p class="wiretag">版式示意，不是统计。五点只为看象限。</p>
+        <label class="hide">
+          <input type="checkbox" checked data-testid="ladder-hide-low" />
+          隐藏低样本
+        </label>
+      </div>
+      <div data-testid="ladder-meta-map">
+        <div class="quads">
+          <div class="quad"><b>强且常见</b><span class="nw">胜率不低于 50%</span><span class="nw">出场率不低于中位</span></div>
+          <div class="quad"><b>强且少见</b><span class="nw">胜率不低于 50%</span><span class="nw">出场率低于中位</span></div>
+          <div class="quad"><b>弱且常见</b><span class="nw">胜率低于 50%</span><span class="nw">出场率不低于中位</span></div>
+          <div class="quad"><b>弱且少见</b><span class="nw">胜率低于 50%</span><span class="nw">出场率低于中位</span></div>
+        </div>
+        <div class="plotbox">
+          <div class="ylabels" aria-hidden="true">
+            <span class="nw">54%</span>
+            <span class="nw">50%</span>
+            <span class="nw">46%</span>
+          </div>
+          <div class="plot">
+            <div class="h50"></div>
+            <div class="vmed"></div>
+            <span class="ql tl">强且少见</span>
+            <span class="ql tr">强且常见</span>
+            <span class="ql bl">弱且少见</span>
+            <span class="ql br">弱且常见</span>
+            <button type="button" class="bub" style="left:15%;top:37.5%;width:16px;height:16px" title="中国，胜率 51.00%，出场率 1.20%，样本 1,200 局"><span class="sr">中国</span></button>
+            <button type="button" class="bub" style="left:75%;top:43.75%;width:36px;height:36px" title="法兰克，胜率 50.50%，出场率 6.00%，样本 8,000 局"><span class="sr">法兰克</span></button>
+            <button type="button" class="bub" style="left:25%;top:50%;width:24px;height:24px" title="不列颠，胜率 50.00%，出场率 2.00%，样本 3,400 局"><span class="sr">不列颠</span></button>
+            <button type="button" class="bub lo" style="left:12.5%;top:56.25%;width:14px;height:14px" title="匈奴，胜率 49.50%，出场率 1.00%，样本 900 局"><span class="sr">匈奴</span></button>
+            <button type="button" class="bub lo" style="left:50%;top:62.5%;width:30px;height:30px" title="拜占庭，胜率 49.00%，出场率 4.00%，样本 5,600 局"><span class="sr">拜占庭</span></button>
+          </div>
+          <div class="xlabels" aria-hidden="true">
+            <span class="z nw">0%</span>
+            <span class="nw" style="left:25%">2%</span>
+            <span class="end nw">8%</span>
+          </div>
+        </div>
+        <p class="note">气泡大小是样本局数。虚线是 <span class="nw">50%</span> 胜率，和当前出场率中位数（线框放在 <span class="nw">2.00%</span><span class="tag">示意</span>）。纵轴胜率，横轴出场率。</p>
+      </div>
+      <div class="shareline">
+        <ul class="read">
+          <li>落在线上算强、算常见。不列颠卡在两条线上，归强且常见。</li>
+          <li>颜色只分不低于 <span class="nw">50%</span> 和低于 <span class="nw">50%</span>，不用绿橙暗底。</li>
+        </ul>
+        <button type="button" class="share">
+          <span class="ic mu" aria-hidden="true" title="link">link</span>
+          复制当前链接
+        </button>
+      </div>
+    </div>
+
+    <p class="foot" data-testid="ladder-footer">
+      <span class="ic" aria-hidden="true" title="info">info</span>
+      <span>数据来源：静态快照（<span class="nw">4v4</span> 随机地图 · 全图 · <span class="nw">1200–1400</span> · 近 <span class="nw">90 天</span>）· <span class="nw">统计更新 <span class="num">2026-04-01</span><span class="tag">示意</span></span>。本站保存静态快照，不实时抓取、不自建统计；胜率不是平衡建议。</span>
+    </p>
+  </main>
+  <ul class="anno">
+    <li>这张是 B。筛选和来源条与表、分层两张相同。五点就是那五行示意文明，不是另一份统计。</li>
+    <li>横轴出场率，纵轴胜率。纵虚线是示意中位数 <span class="nw">2.00%</span>。实现用当前可见文明重算，不写死 <span class="nw">2%</span>。</li>
+    <li>象限用中文。不写 Pillars / Sleepers 一类英文绰号，不搬暗色底。气泡上的数在 <code>title</code> 里，线框不弹出浮层。</li>
+    <li>「版式示意」和「示意」只属于线框。实现不渲染这两个字。</li>
+  </ul>
+</body>
+</html>
