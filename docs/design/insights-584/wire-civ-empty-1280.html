@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#584 线框 · 1280 · 文明页空槽 · 法兰克</title>
+  <link rel="stylesheet" href="insights.css" />
+</head>
+<body>
+  <main class="frame f1280">
+    <p class="crumb">文明 / 法兰克</p>
+    <div class="dhead">
+      <div class="uico" aria-hidden="true">文明</div>
+      <div>
+        <h1>法兰克 <small>Franks</small></h1>
+        <div class="tags">
+          <span class="tag">骑兵</span>
+        </div>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="法兰克内容">
+      <span class="on" role="tab" aria-selected="true">概览</span>
+      <span role="tab">数据</span>
+      <span role="tab">科技</span>
+      <span role="tab">更新历史</span>
+      <span role="tab">职业选手视角</span>
+    </div>
+    <div class="layout">
+      <div>
+        <p class="sum"><b>官方定位：</b>骑兵文明</p>
+        <p class="sum"><b>特色兵种：</b>掷斧兵（步兵）</p>
+        <section class="insight-slot" data-testid="insight-slot" aria-labelledby="insight-h">
+          <h2 id="insight-h">鲜为人知</h2>
+          <p class="insight-empty" data-testid="insight-empty">暂无</p>
+        </section>
+        <p class="ph">文明加成长列表在槽位下面。洞察不写进加成正文，也不要展开才看见。</p>
+      </div>
+      <aside class="side">
+        <strong>侧栏保持原样</strong>
+        洞察不放侧栏。
+      </aside>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>空态示例：<code>#/civ/Franks</code> 法兰克。官方定位与特色兵种来自 <code>civs.json</code>。本页没有种子。</li>
+    <li>槽位固定在短摘要下面、文明加成上面。外框仍在；正文只有「暂无」。</li>
+    <li>与单位页同一组件：<code>insight-slot</code> / <code>insight-empty</code>。两条路由各有自己的列表，不共用一条数据。</li>
+  </ul>
+</body>
+</html>
