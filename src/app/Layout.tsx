@@ -5,7 +5,7 @@ import { Loading } from '../shared/ui/widgets';
 import { WIKI } from '../shared/nav/sections';
 import { NavItem } from './nav/NavItem';
 import { ToolsMenu } from './nav/ToolsMenu';
-import FeedbackLink from '../shared/ui/FeedbackLink';
+import FeedbackLink, { SiegeFeedbackNote } from '../shared/ui/FeedbackLink';
 import { appVersion } from '../shared/utils/feedback';
 import { DATA_SOURCES, REPO, versionLabel } from '../shared/utils/dataInfo';
 import { useTheme } from './theme/useTheme';
@@ -219,6 +219,7 @@ function MobileTheme({ preference, onSelect }: { preference: ThemePreference; on
 
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname, search, hash } = useLocation();
+  const siegePage = pathname === '/siege' || pathname === '/siege/';
   const { preference, select } = useTheme();
   const nav = useRef<HTMLElement>(null);
   const burger = useRef<HTMLButtonElement>(null);
@@ -418,6 +419,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <main ref={main} id="main-content">
         {pathname !== '/' && (
           <div className="fbbar">
+            {siegePage && <SiegeFeedbackNote />}
             <FeedbackLink compact />
           </div>
         )}
@@ -430,7 +432,14 @@ export function Layout({ children }: { children: ReactNode }) {
       )}
       <footer className="editorial-footer">
         <p className="fbfoot">
-          <FeedbackLink /> <FeedbackLink kind="feature" /> 发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。{' '}
+          <FeedbackLink /> <FeedbackLink kind="feature" />
+          {siegePage && (
+            <>
+              {' '}
+              <SiegeFeedbackNote />
+            </>
+          )}{' '}
+          发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。{' '}
           <span className="fmeta" data-t="footer-meta">
             <span className="build-id fitem" data-t="footer-app-version">
               {appVersion()}
