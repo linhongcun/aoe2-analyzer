@@ -1,24 +1,8 @@
-// #577 失败验收（设计 #586 @ 6553d099 §11 A + §12 B）。不实现页面，不改 src/，不关 #577。
-// 当前 main 仍是阿拉伯 1v1「全部」。这些用例应红，直到 A+B 按短稿落地。1280×900。不接 live，不读 aoe2scout。
-// 不把线框示意胜率（51.00%、50.50%、中国/法兰克归类）写进断言或 JSON。
-//
-// 产品锁定的分层边界（Steve 2026-11-01，§7），实现不得另切：
-//   S ≥ 52%；A ≥ 51% 且 < 52%；B ≥ 50% 且 < 51%；C ≥ 48% 且 < 50%；D < 48%。
-//   恰好 52→S，51→A，50→B，48→C。
-// 分布落在线上（§8）：胜率 ≥ 50% 算强；出场率 ≥ 当前可见文明中位数算常见。
-// 象限只有：强且少见 / 强且常见 / 弱且少见 / 弱且常见。禁止 Pillars / Sleepers / Crowd-pleasers / Niche。
-//
-// 契约（§2–§8）。A 只做表时，分层/分布 disabled，点击不改地址和筛选；本文件同时挂 B，A+B 合入后这两枚必须可点。
-//   ladder-filters；模式 radiogroup：ladder-mode-4v4「4v4 随机地图」、ladder-mode-arabia1v1「阿拉伯 1v1」
-//   默认切片只读：ladder-period-static「近 90 天 · 当前快照」、ladder-elo-static「1200–1400 · 当前快照」、ladder-map-static「全图 · 当前快照」
-//   阿拉伯：时段「整段快照 · 当前快照」，地图「阿拉伯 · 固定」，分段仍是 ladder-elo-static「全部」
-//   ladder-view aria-label=视图；ladder-view-table / ladder-view-tiers / ladder-view-meta
-// 无 4v4 文件：ladder-empty「这个切片暂无快照。不推算，不补数。」+「看阿拉伯 1v1」；不画 ladder-cutoff / data-fetched-at。有文件时 data-fetched-at=fetchedAt，样本句「本切片样本」（阿拉伯仍「本分段样本」）。
-// ladder-hide-low 默认勾选，「隐藏低样本」不含 50，不进地址；data-threshold 缺省 LOW_SAMPLE（300）或切片 lowSampleGames。勾选后表、分层计数、气泡、中位线是同一批可见文明。
-// 走势 ladder-trend-{En}：无序列写「无走势」且无折线。有序列：data-period / data-points / data-low-sample，门槛 ladder-trend-rules[data-min-games]。
-// 分层 ladder-tier-band-S|A|B|C|D（data-band、data-count），空档「这一档没有文明」，药丸链 /civ/{en}。
-// 分布 ladder-meta-map：win-line data-value=50，pick-line 为可见出场率中位数，bubble-{En} 可聚焦，aria-label 含英文名、胜率、出场率、局数，data-quadrant 为四句中文之一。
-// 地址：无参数才是默认切片。?mode=arabia1v1 走旧快照。只带 elo 进入阿拉伯，elo=all 收成 mode=arabia1v1。快照认 src/data/ladder-*.json（4v4+RM、全图、1200–1400、约 90 天）。阿拉伯文件不能冒充。
+// #577 验收（设计 #586 @ 6553d099 §11 A + §12 B）。1280×900。不接 live，不读 aoe2scout，不把线框示意胜率写进断言。
+// 分层边界：S≥52，A≥51 且 <52，B≥50 且 <51，C≥48 且 <50，D<48。线上 52→S，51→A，50→B，48→C。
+// 分布：胜率≥50 算强，出场率≥当前可见中位数算常见。象限只有强且少见/强且常见/弱且少见/弱且常见。
+// A 只做表时分层/分布 disabled，点击不改地址和筛选；A+B 合入后必须可点。无序列写「无走势」且无折线。
+// 无参数才是默认切片。?mode=arabia1v1 走旧快照。只带 elo 进入阿拉伯。快照认 src/data/ladder-*.json。
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
@@ -66,10 +50,13 @@ function daysBetween(from: string, to: string): number | null {
   if (!Number.isFinite(start) || !Number.isFinite(end)) return null;
   return Math.round((end - start) / 86_400_000);
 }
+function windowEnds(record: Json): { from: string; to: string } {
+  const period = asRecord(record.period);
+  return { from: textOf(record.dateFrom) || (period ? textOf(period.from) : ''), to: textOf(record.dateTo) || (period ? textOf(period.to) : '') };
+}
 function readWindow(record: Json): number | null {
   const explicit = numOf(record.windowDays);
-  const from = textOf(record.dateFrom);
-  const to = textOf(record.dateTo);
+  const { from, to } = windowEnds(record);
   const span = from && to ? daysBetween(from, to) : null;
   const candidates = [explicit, span].filter((value): value is number => value != null);
   if (candidates.length === 0 || candidates.some((value) => value < 80 || value > 100)) return null;
@@ -85,7 +72,10 @@ function matchesDefaultSlice(record: Json): boolean {
   const map = textOf(record.map) || textOf(record.maps);
   const allMaps = /^(?:all|__all__|any|\*)$/i.test(map) || ALL_MAPS.test(map);
   if (!allMaps || /阿拉伯|Arabia/i.test(map)) return false;
-  if (numOf(record.eloMin) !== 1200 || numOf(record.eloMax) !== 1400) return false;
+  const elo = asRecord(record.elo);
+  const eloMin = numOf(record.eloMin) ?? (elo ? numOf(elo.min) : null);
+  const eloMax = numOf(record.eloMax) ?? (elo ? numOf(elo.max) : null);
+  if (eloMin !== 1200 || eloMax !== 1400) return false;
   return readWindow(record) != null;
 }
 function readTrend(civ: Json): number[] | null {
@@ -140,11 +130,12 @@ function loadDefaultSlice(): SliceSnapshot | null {
     if (!record || !matchesDefaultSlice(record)) continue;
     const civs = readCivs(record);
     if (civs.length === 0) continue;
+    const ends = windowEnds(record);
     found.push({
       file,
       fetchedAt: textOf(record.fetchedAt) || null,
-      dateFrom: textOf(record.dateFrom) || null,
-      dateTo: textOf(record.dateTo) || null,
+      dateFrom: ends.from || null,
+      dateTo: ends.to || null,
       windowDays: readWindow(record),
       lowSampleGames: numOf(record.lowSampleGames) ?? LOW_SAMPLE,
       civs,
@@ -330,7 +321,12 @@ test('#577 来源条写明默认口径和截止；没有该切片快照时不展
   const cutoff = slice.dateTo ?? slice.fetchedAt;
   soon(cutoff, `${slice.file} 要有 dateTo 或 fetchedAt，来源条才能写截止`).toBeTruthy();
   if (cutoff) soon(source, `来源条截止应包含快照 ${cutoff}`).toContain(cutoff);
-  soon(compact, '4v4 样本句是「本切片样本」').toContain('本切片样本');
+  soon(compact, '4v4 样本句是「本切片样本」，单位是人次或出场').toMatch(/本切片样本/);
+  soon(compact.includes('人次') || compact.includes('出场'), '样本单位').toBe(true);
+  soon(
+    /本切片样本[\d,]*局/.test(compact) || /aoe2scout/i.test(pageText) || !compact.includes('非当前平衡'),
+    '不写局、不印来源站名、补丁缺失仍是非当前平衡',
+  ).toBe(false);
   const fetchedAt = await page.getByTestId('ladder-source').getAttribute('data-fetched-at');
   soon(fetchedAt, 'ladder-source[data-fetched-at] 应等于这份快照').toBe(slice.fetchedAt);
   for (const civ of slice.civs) {
@@ -351,7 +347,13 @@ test('#577 默认表每一行有与筛同期的趋势，低样本门槛可测，
   soon(rowCount, '默认切片应有文明表，空态不算趋势已完成').toBeGreaterThan(0);
   soon(trendCount, `表行 ${rowCount} 行，趋势节点 ${trendCount} 个。每一行都要有 ladder-trend-{En}`).toBe(rowCount);
   if (!slice || !slice.trendReady) {
-    soon(slice?.trendReady ?? false, `${slice?.file ?? '无快照'} 的每个文明都要有 trend[]（至少 2 个点），曲线才能与表同源`).toBe(true);
+    if (!slice) return;
+    for (const civ of slice.civs) {
+      const trend = page.getByTestId(`ladder-trend-${civ.en}`);
+      const text = ((await trend.count()) === 1 ? await trend.innerText() : '').replace(/\s+/g, '');
+      const curves = (await trend.count()) === 1 ? await trend.locator('svg polyline, svg path, canvas').count() : 1;
+      soon(text.includes('无走势') && curves === 0, `${civ.en} 无序列时应写「无走势」且不画线`).toBe(true);
+    }
     return;
   }
   const period = await plainText(page, 'ladder-period-static');

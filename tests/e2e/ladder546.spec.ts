@@ -43,7 +43,7 @@ async function openLadder(page: Page) {
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => void (message.type() === 'error' && errors.push(message.text())));
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('./#/ladder');
+  await page.goto('./#/ladder?mode=arabia1v1');
   await expect(page.getByTestId('ladder-page')).toBeVisible();
   await expect(page.getByTestId('ladder-table')).toBeVisible();
   await expect(page.getByTestId('ladder-elo-static')).toContainText('全部');

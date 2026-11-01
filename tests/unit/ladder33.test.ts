@@ -106,16 +106,16 @@ describe('天梯快照展示 #33', () => {
 
   it('入口文案不再暗示已有多段胜率，空态文案仍留在页面里', () => {
     const ladder = PAGES.find((page) => page.key === 'ladder');
-    expect(ladder?.desc).toBe('阿拉伯 1v1 胜率、出场率与新手友好度');
-    expect(ladder?.metaDescription).toBe('查看阿拉伯 1v1 随机地图各文明的胜率、出场率与样本局数。');
+    expect(ladder?.desc).toBe('默认 4v4 随机地图胜率、出场率与走势');
+    expect(ladder?.metaDescription).toBe('查看默认切片（4v4 随机地图、Elo 1200–1400、近 90 天、全图）的文明胜率与走势，并可切回阿拉伯 1v1。');
     expect(ladder?.label).toBe('天梯数据');
     expect(ladder?.metaTitle).toBe('天梯数据');
     expect(`${ladder?.desc} ${ladder?.metaDescription}`).not.toContain('分段胜率');
-    const page = readFileSync('src/features/ladder/Ladder.tsx', 'utf8');
+    const page = ['Ladder.tsx', 'LadderArabia.tsx', 'LadderTeam.tsx'].map((name) => readFileSync(`src/features/ladder/${name}`, 'utf8')).join('\n');
     expect(page).toContain('这个分段暂无数据');
     expect(page).toContain('不推算，不补数');
     expect(page).toContain('data-testid="ladder-empty"');
-    expect(page).toContain('阿拉伯 1v1 胜率、出场率与新手友好度。');
+    expect(page).toContain('可切回阿拉伯');
     expect(page).toContain('data-testid="ladder-cutoff"');
     expect(page).toContain('非当前平衡');
     expect(page).toContain('统计截止');

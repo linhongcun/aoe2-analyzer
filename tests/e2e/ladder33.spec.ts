@@ -163,19 +163,20 @@ test('#33 #/ladder 不是规划中占位，资料分组的首页和工具菜单�
   expect({
     homeHasOld: homeText.includes('分段胜率'),
     menuHasOld: menuText.includes('分段胜率'),
-    homeDesc: homeText.includes('阿拉伯1v1胜率、出场率与新手友好度'),
+    homeDesc: homeText.includes('默认4v4随机地图胜率、出场率与走势'),
   }).toEqual({ homeHasOld: false, menuHasOld: false, homeDesc: true });
   await expect(home).not.toContainText('团战');
   await expect(home).not.toContainText('规划中');
   await expect(tools).toContainText('天梯数据');
   await tools.click();
   await expect(page).toHaveURL(/#\/ladder\/?(?:\?|$)/);
-  await expectLadderPage(page);
+  await expect(page.getByTestId('ladder-mode-4v4')).toHaveAttribute('aria-checked', 'true');
 });
 
-test('#33 无查询和 ?elo=all 停在全部，不写 sort/dir/civ；空芯片改由 #545 验收', async ({ page }) => {
+test('#33 无查询是 4v4 默认切片；?elo=all 仍停在阿拉伯全部', async ({ page }) => {
   await page.goto('./#/ladder');
-  await expectLadderPage(page);
+  await expect(page.getByTestId('ladder-page')).toBeVisible();
+  await expect(page.getByTestId('ladder-mode-4v4')).toHaveAttribute('aria-checked', 'true');
   expect(queryFlags(page.url())).toEqual({ elo: null, sort: null, dir: null, civ: null });
   // #545：当前快照没有可切换的空分段，也不进入可点空态。
   await expect(page.getByRole('radiogroup', { name: /天梯分段/ })).toHaveCount(0);
@@ -210,7 +211,7 @@ test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本
   page.on('request', (request) => {
     if (/aoestats\.io|web\.archive\.org/i.test(request.url())) hits.push(request.url());
   });
-  await page.goto('./#/ladder');
+  await page.goto('./#/ladder?mode=arabia1v1');
   const root = await expectLadderPage(page);
   expect(hits).toEqual([]);
   const source = page.getByTestId('ladder-source');
@@ -270,7 +271,7 @@ test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本
 });
 
 test('#33 主表默认按胜率降序，点击表头只改排序指示，不把 sort/dir/civ 写进地址', async ({ page }) => {
-  await page.goto('./#/ladder');
+  await page.goto('./#/ladder?mode=arabia1v1');
   await expectLadderPage(page);
   await expect(sortHeader(page, 'win')).toHaveAttribute('aria-sort', 'descending');
   await expect(sortHeader(page, 'play')).toHaveAttribute('aria-sort', 'none');
@@ -301,7 +302,7 @@ test('#33 主表默认按胜率降序，点击表头只改排序指示，不把 
 });
 
 test('#33 行展开显示四档新手友好度，并链到加成与文明详情', async ({ page }) => {
-  await page.goto('./#/ladder');
+  await page.goto('./#/ladder?mode=arabia1v1');
   const root = await expectLadderPage(page);
   await expect(page.getByTestId('ladder-share')).toBeVisible();
   const aside = root.locator('aside');
@@ -394,7 +395,7 @@ for (const width of [360, 375, 390, 1280]) {
       page.on('console', (message) => void (message.type() === 'error' && errors.push(message.text())));
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
-      await page.goto('./#/ladder');
+      await page.goto('./#/ladder?mode=arabia1v1');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       const root = await expectLadderPage(page);
       if (width >= 960) {

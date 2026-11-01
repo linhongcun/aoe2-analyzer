@@ -20,6 +20,10 @@ export interface LadderCivStat {
   winRate: number;
   playRate: number;
   games: number;
+  wins?: number;
+  ci95Low?: number;
+  ci95High?: number;
+  trend?: LadderTrendPoint[];
 }
 
 export interface LadderBracket {
@@ -29,6 +33,12 @@ export interface LadderBracket {
   civs: LadderCivStat[];
 }
 
+export interface LadderTrendPoint {
+  period: string;
+  winRate: number;
+  games?: number;
+}
+
 export interface LadderSnapshot {
   source: string;
   sourceUrl: string;
@@ -36,6 +46,10 @@ export interface LadderSnapshot {
   mode: string;
   fetchedAt: string;
   patchNote?: string;
+  period?: { key: string; from: string; to: string };
+  elo?: { min: number; max: number };
+  sample?: { unit: string; note?: string };
+  lowSampleGames?: number;
   brackets: LadderBracket[];
 }
 
@@ -138,6 +152,69 @@ export function snapshotPatchBuild(patchNote: string | undefined): string | null
 export function isPatchMismatch(patchNote: string | undefined, siteBuild: number): boolean {
   const patch = snapshotPatchBuild(patchNote);
   return patch != null && patch !== String(siteBuild);
+}
+
+/** 解析不出补丁号时 `isPatchMismatch` 为 false，但仍不是本站当前平衡。 */
+export function isBalanceAligned(patchNote: string | undefined, siteBuild: number): boolean {
+  const patch = snapshotPatchBuild(patchNote);
+  return patch != null && patch === String(siteBuild);
+}
+
+/** 玩家看到的统计截止。有窗口时用窗口最后一天，不用取回日。 */
+export function snapshotCutoff(snapshot: { fetchedAt: string; period?: { to?: string } }): string {
+  return snapshot.period?.to || snapshot.fetchedAt;
+}
+
+export function isPlayerSample(unit: string | undefined): boolean {
+  return unit === 'player';
+}
+
+/** 来源字段若是站点名，不印到界面上。 */
+export function visibleSourceLabel(source: string): string {
+  return /aoe2scout/i.test(source) ? '来源' : source;
+}
+
+export type WinBand = 'S' | 'A' | 'B' | 'C' | 'D';
+
+/** 产品锁定：S≥52，A≥51，B≥50，C≥48，其余 D。线上归上一档。 */
+export function winBand(winRate: number): WinBand {
+  if (winRate >= 52) return 'S';
+  if (winRate >= 51) return 'A';
+  if (winRate >= 50) return 'B';
+  if (winRate >= 48) return 'C';
+  return 'D';
+}
+
+export function medianOf(values: readonly number[]): number | null {
+  if (values.length === 0) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  if (sorted.length % 2 === 1) return sorted[mid] ?? null;
+  const left = sorted[mid - 1];
+  const right = sorted[mid];
+  if (left == null || right == null) return null;
+  return (left + right) / 2;
+}
+
+export type MetaQuadrant = '强且少见' | '强且常见' | '弱且少见' | '弱且常见';
+
+/** 胜率 ≥50 算强，出场率 ≥中位数算常见。线上不掉进弱或少见。 */
+export function metaQuadrant(winRate: number, playRate: number, pickMedian: number): MetaQuadrant {
+  const strong = winRate >= 50;
+  const common = playRate >= pickMedian;
+  if (strong && common) return '强且常见';
+  if (strong) return '强且少见';
+  if (common) return '弱且常见';
+  return '弱且少见';
+}
+
+/** 胜率减去 50 个百分点。正负用色，零保持 muted。 */
+export function formatWinDelta(winRate: number): { text: string; tone: 'good' | 'bad' | 'muted' } {
+  const delta = Math.round((winRate - 50) * 100) / 100;
+  const abs = Math.abs(delta).toFixed(2);
+  if (delta > 0) return { text: `+${abs}`, tone: 'good' };
+  if (delta < 0) return { text: `−${abs}`, tone: 'bad' };
+  return { text: abs, tone: 'muted' };
 }
 
 export function firstSortDir(key: SortKey): SortDir {
