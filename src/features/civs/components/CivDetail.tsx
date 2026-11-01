@@ -25,7 +25,7 @@ import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
 import { civDisplayText } from '../displayNames';
 import CivProfessionalView from './CivProfessionalView';
-import '../../../shared/ui/contextLinks.css';
+import './civRelatedTools.css';
 
 function UTech({ s, civ }: { s: string; civ: string }) {
   const core = useCore();
@@ -100,6 +100,13 @@ export default function CivDetail() {
     />
   );
   const sameDlc = c.dlc != null ? DLCS[c.dlc]!.civs.filter((n) => n !== c.en).map((n) => civByEn(n)!) : [];
+  const relatedTools = [
+    ['civ-tool-builds', `/builds?civ=${c.en}`, 'book-open', '开局流程'],
+    ['civ-tool-production', `/production?civ=${c.en}`, 'factory', '生产对照'],
+    ['civ-tool-matchup', `/matchup?me=${c.en}`, 'crosshair', '对局助手'],
+    ['civ-tool-compare', `/compare?a=${c.en}`, 'scale', '文明对比'],
+    ['civ-tool-tree', `/tree/${c.en}`, 'git-branch', '科技树'],
+  ] as const;
   return (
     <DetailPage
       key={c.en}
@@ -114,23 +121,16 @@ export default function CivDetail() {
           {TYPE_ZH[t]}
         </span>
       ))}
-      tabsTop={
-        <nav className="ctx-bar" aria-label="本页相关工具">
-          <Link className="community-tool-entry" to={`/builds?civ=${c.en}`}>
-            <Icon name="book-open" /> 开局流程
-          </Link>
-          <Link className="community-tool-entry" to={`/production?civ=${c.en}`}>
-            <Icon name="factory" /> 生产对照
-          </Link>
-          <Link className="community-tool-entry" to={`/matchup?me=${c.en}`}>
-            <Icon name="crosshair" /> 对局助手
-          </Link>
-          <Link className="community-tool-entry" to={`/compare?a=${c.en}`}>
-            <Icon name="scale" /> 文明对比
-          </Link>
-          <Link className="community-tool-entry" to={`/civ/${c.en}?tab=pro`}>
-            <Icon name="users" /> 职业选手视角
-          </Link>
+      tablistTestId="civ-tabs"
+      afterTabs={
+        <nav className="civ-related-tools" aria-label="相关工具" data-testid="civ-related-tools">
+          <span className="lbl">相关工具</span>
+          {relatedTools.map(([id, to, icon, label]) => (
+            <Link key={id} data-testid={id} to={to}>
+              <Icon name={icon} className="ic civ-tool-ic" />
+              {label}
+            </Link>
+          ))}
         </nav>
       }
       tabs={[
@@ -212,11 +212,6 @@ export default function CivDetail() {
                 <b>帝王时代独特科技：</b>
                 <UTech s={c.it} civ={c.en} />
               </p>
-              <p>
-                <Link className="ulink tlink" to={`/tree/${c.en}`}>
-                  <Icon name="tree-deciduous" /> 查看完整科技树 <Icon name="arrow-right" />
-                </Link>
-              </p>
             </>
           ),
         },
@@ -233,17 +228,6 @@ export default function CivDetail() {
           <CivRegionalUnits civ={c.en} units={core?.units ?? null} />
           <CivUniqueBuildings civ={c.en} buildings={core?.buildings ?? null} />
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
-          <SideBlock title="快速入口">
-            <Link className="ulink tlink" to={`/tree/${c.en}`}>
-              <Icon name="git-branch" /> 科技树
-            </Link>
-            <Link className="ulink" to={`/compare?a=${c.en}`}>
-              <Icon name="scale" /> 文明对比
-            </Link>
-            <Link className="ulink" to={`/matchup?me=${c.en}`}>
-              <Icon name="crosshair" /> 对局助手
-            </Link>
-          </SideBlock>
           {sameDlc.length > 0 && <SameDlcCivs key={c.en} list={sameDlc} />}
           <p className="note">共 {civs.length} 个文明</p>
         </>

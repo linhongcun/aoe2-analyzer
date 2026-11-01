@@ -26,7 +26,7 @@ for (const width of [360, 375, 390, 1280])
       const link = unique.getByRole('link', { name: '营垒', exact: true });
       await expect(link).toHaveAttribute('href', '#/building/1251?civ=Bulgarians&age=3');
       await expect(unique.getByRole('link')).toHaveCount(1);
-      for (const [index, name] of ['独特单位', '独特建筑', '快速入口'].entries())
+      for (const [index, name] of ['独特单位', '独特建筑', '同资料片文明'].entries())
         await expect(page.locator('.dside .sideblk > h4').nth(index)).toHaveText(name);
       await expect(page.locator('.dmain').getByRole('heading', { name: '独特建筑', exact: true })).toHaveCount(0);
       await expect(unique).not.toContainText(/训练建筑|城堡时代|点击建筑/);
