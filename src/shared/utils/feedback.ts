@@ -17,7 +17,7 @@ export interface FeedbackCtx {
   search: string;
   href: string;
   ua: string;
-  /** #555：攻城页当前单位的中文名。只在 `/siege` 且地址带 `unit` 时写入预填。 */
+  /** issue 555：攻城页当前单位的中文名。只在 `/siege` 且地址带 `unit` 时写入预填。 */}
   unitName?: string;
 }
 

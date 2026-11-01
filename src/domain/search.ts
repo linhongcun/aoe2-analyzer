@@ -78,7 +78,7 @@ const KIND_ORDER = { page: 0, civ: 1, unit: 2, building: 3, tech: 4, bonus: 5, t
 /** issue 145 E：给只靠拼音命中的结果最多预留这么多位，并提前展示 */
 export const PY_RESERVE = 5;
 /**
- * #554：搜索词就是「冲车」时，攻城拆建筑页预填中型冲车。
+ * issue 554：搜索词就是「冲车」时，攻城拆建筑页预填中型冲车。
  * 单位 id 与 `units.json` 里 Capped Ram 对齐，由单测锁住；不是默认攻城锤 1258。
  */
 export const SIEGE_SEARCH_RAM_UNIT_ID = 422;
