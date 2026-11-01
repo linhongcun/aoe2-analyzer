@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#592 线框 · 1280 · 路径 B · 已在大厅</title>
+  <link rel="stylesheet" href="start-game.css" />
+</head>
+<body>
+  <main class="frame f1280">
+    <header class="topbar">
+      <a class="brand" href="#/"><span class="ic" aria-hidden="true">swords</span>帝国时代 II 分析器</a>
+      <nav class="nav" aria-label="主导航">
+        <a class="on" href="#/" aria-current="page">首页</a>
+        <a href="#/civs">文明</a>
+        <a href="#/units">单位</a>
+        <a href="#/techs">科技</a>
+        <span>工具</span>
+      </nav>
+      <span class="ver nw">数据版本：DE Update <span class="num">188329</span></span>
+      <button class="search" type="button"><span class="ic mu" aria-hidden="true">search</span>搜索</button>
+    </header>
+    <div class="page">
+      <section data-testid="start-game" aria-labelledby="start-title">
+        <p class="kicker">首页 / 已在大厅</p>
+        <h1 id="start-title">开一局</h1>
+        <p class="lede">模式和地图已经在入口里填好。从文明接着选。没有连上游戏大厅。</p>
+        <ol class="steps" data-testid="start-steps" aria-label="本局步骤">
+          <li class="done">模式</li>
+          <li class="done">地图</li>
+          <li class="on" aria-current="step">文明</li>
+          <li>对手</li>
+        </ol>
+        <p class="stepnote">路位还没占一格。从某一侧点文明时再记上那一侧。</p>
+        <section class="ask" data-testid="start-step" data-step="civ" aria-labelledby="civ-h">
+          <h2 id="civ-h">选我方文明</h2>
+          <p class="why">还没选路位，所以按侧分开。不是一张胜率榜。下面每侧两条，用来看密度；阿拉伯半岛的编辑稿两侧都还有更多。</p>
+          <ul class="picked">
+            <li><span class="k">模式 · 已预填</span><span class="nw">组队 · 4v4 随机地图</span></li>
+            <li><span class="k">地图 · 已预填</span>阿拉伯半岛 <span class="en">Arabia</span></li>
+          </ul>
+          <div class="actions">
+            <button class="btn" type="button">补路位</button>
+            <button class="btn" type="button">修改模式和地图</button>
+          </div>
+          <div class="rows">
+            <div class="col">
+              <h3>中路 <span class="en">Pocket</span></h3>
+              <button class="row" type="button">
+                <span class="art" aria-hidden="true">文明</span>
+                <span>
+                  <b>法兰克</b> <span class="en">Franks</span>
+                  <small>骑兵从封建时代起生命更高，磨坊科技免费，中路适合发育后出骑士。</small>
+                  <span class="tag">编辑口径，不是胜率</span>
+                </span>
+              </button>
+              <button class="row" type="button">
+                <span class="art" aria-hidden="true">文明</span>
+                <span>
+                  <b>匈奴</b> <span class="en">Huns</span>
+                  <small>不用盖房屋，马厩工作更快，中路可以更顺地转骑士。</small>
+                  <span class="tag">编辑口径，不是胜率</span>
+                </span>
+              </button>
+            </div>
+            <div class="col">
+              <h3>边路 <span class="en">Flank</span></h3>
+              <button class="row" type="button">
+                <span class="art" aria-hidden="true">文明</span>
+                <span>
+                  <b>不列颠</b> <span class="en">Britons</span>
+                  <small>城堡时代起步弓手射程更远，边路适合用弓线牵制侧翼。</small>
+                  <span class="tag">编辑口径，不是胜率</span>
+                </span>
+              </button>
+              <button class="row" type="button">
+                <span class="art" aria-hidden="true">文明</span>
+                <span>
+                  <b>埃塞俄比亚</b> <span class="en">Ethiopians</span>
+                  <small>步弓手攻击更快，长枪兵升级免费，边路射骑都能接。</small>
+                  <span class="tag">编辑口径，不是胜率</span>
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn" type="button" data-testid="start-back">上一步</button>
+            <button class="btn" type="button" data-testid="start-skip">跳过此步</button>
+          </div>
+        </section>
+        <p class="practice">先练某个文明 · 首刀不做</p>
+        <p class="folded">更多工具收在下面，这一步不展开。</p>
+      </section>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>路径 B 起点。从首页「已在大厅」来。步骤条没有路位。</li>
+    <li>预填值是线框示例：组队 <span class="nw">4v4</span>、阿拉伯半岛。不是大厅同步。</li>
+    <li>点法兰克会同时记下中路。点不列颠会同时记下边路。稿的其余条目实现时按原顺序补全。</li>
+  </ul>
+</body>
+</html>

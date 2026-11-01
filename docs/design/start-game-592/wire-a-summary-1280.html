@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#592 线框 · 1280 · 路径 A · 本局摘要</title>
+  <link rel="stylesheet" href="start-game.css" />
+</head>
+<body>
+  <main class="frame f1280">
+    <header class="topbar">
+      <a class="brand" href="#/"><span class="ic" aria-hidden="true">swords</span>帝国时代 II 分析器</a>
+      <nav class="nav" aria-label="主导航">
+        <a class="on" href="#/" aria-current="page">首页</a>
+        <a href="#/civs">文明</a>
+        <a href="#/units">单位</a>
+        <a href="#/techs">科技</a>
+        <span>工具</span>
+      </nav>
+      <span class="ver nw">数据版本：DE Update <span class="num">188329</span></span>
+      <button class="search" type="button"><span class="ic mu" aria-hidden="true">search</span>搜索</button>
+    </header>
+    <div class="page">
+      <section data-testid="start-game" aria-labelledby="start-title">
+        <p class="kicker">首页 / 开一局</p>
+        <h1 id="start-title">本局摘要</h1>
+        <p class="lede">只汇总点过的选择。没有数据的格子写「暂无建议」，不补胜率。</p>
+        <ol class="steps" data-testid="start-steps" aria-label="已走过的步骤">
+          <li class="done">模式</li>
+          <li class="done">地图</li>
+          <li class="done">路位</li>
+          <li class="done">文明</li>
+          <li class="done">对手</li>
+        </ol>
+        <p class="stepnote">摘要不占一格。这局是组队，所以看得到路位。1v1 的摘要没有这一格。</p>
+        <article class="summary" data-testid="start-summary" aria-labelledby="sum-h">
+          <h2 id="sum-h">这一局</h2>
+          <dl class="sumrows">
+            <div>
+              <dt>模式</dt>
+              <dd class="nw">组队 · 4v4 随机地图</dd>
+              <button class="btn" type="button">修改</button>
+            </div>
+            <div>
+              <dt>地图</dt>
+              <dd>阿拉伯半岛 <span class="en">Arabia</span></dd>
+              <button class="btn" type="button">修改</button>
+            </div>
+            <div>
+              <dt>路位</dt>
+              <dd>中路 <span class="en">Pocket</span></dd>
+              <button class="btn" type="button">修改</button>
+            </div>
+            <div>
+              <dt>文明</dt>
+              <dd>
+                <a class="textlink" href="#/civ/Franks">法兰克</a>
+                <span class="en">Franks</span>
+                <small class="hint">骑兵从封建时代起生命更高，磨坊科技免费，中路适合发育后出骑士。编辑口径，不是胜率。</small>
+              </dd>
+              <button class="btn" type="button">修改</button>
+            </div>
+            <div>
+              <dt>对手</dt>
+              <dd><p class="empty" data-testid="start-empty">暂无建议</p></dd>
+              <button class="btn" type="button">修改</button>
+            </div>
+          </dl>
+          <div class="links">
+            <a class="textlink" href="#/maps">地图页</a>
+            <a class="textlink" href="#/civ/Franks">法兰克</a>
+            <a class="textlink" href="#/ladder">天梯数据</a>
+            <a class="textlink" href="#/matchup">对局助手</a>
+            <a class="textlink" href="#/builds">开局流程</a>
+          </div>
+          <p class="src">天梯打开的是现有静态快照，不是这一局的胜率。对局助手和开局流程不会自动带上法兰克。地图页不保证已经选中阿拉伯半岛。</p>
+          <div class="actions">
+            <button class="btn" type="button">再开一局</button>
+          </div>
+        </article>
+        <p class="practice">先练某个文明 · 首刀不做</p>
+        <p class="folded">更多工具收在下面，摘要不展开。</p>
+      </section>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>路径 A 走完。对手没有克制数据，空态节点文字是「暂无建议」。</li>
+    <li>法兰克那句来自地图页开图 <span class="nw">4v4</span> 中路编辑稿，不是天梯排序。</li>
+    <li>五个「修改」回到对应的决策步。再开一局回到选模式。</li>
+  </ul>
+</body>
+</html>
