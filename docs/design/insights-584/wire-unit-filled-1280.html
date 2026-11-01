@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#584 线框 · 1280 · 单位页有内容 · 扈从部队</title>
+  <link rel="stylesheet" href="insights.css" />
+</head>
+<body>
+  <main class="frame f1280">
+    <p class="crumb">单位 / 扈从部队</p>
+    <div class="dhead">
+      <div class="uico" aria-hidden="true">单位</div>
+      <div>
+        <h1>扈从部队 <small>Hearth Troop</small></h1>
+        <div class="tags">
+          <span class="tag">独特单位</span>
+          <span class="tag">城堡</span>
+          <span class="tag">城堡时代</span>
+        </div>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="扈从部队内容">
+      <span class="on" role="tab" aria-selected="true">概览</span>
+      <span role="tab">科技模拟器</span>
+      <span role="tab">相关</span>
+      <span role="tab">更新历史</span>
+    </div>
+    <div class="layout">
+      <div>
+        <section class="sec" aria-labelledby="cost-h">
+          <h2 id="cost-h">造价与生产</h2>
+          <dl class="cost">
+            <div>
+              <dt>造价</dt>
+              <dd>
+                <span class="nw"><span class="num">80</span> 木材</span>
+                <span class="nw"><span class="num">35</span> 黄金</span>
+              </dd>
+            </div>
+            <div>
+              <dt>生产时间</dt>
+              <dd><span class="nw"><span class="num">16</span>s</span></dd>
+            </div>
+            <div>
+              <dt>生产建筑</dt>
+              <dd>城堡</dd>
+            </div>
+          </dl>
+        </section>
+        <section class="insight-slot" data-testid="insight-slot" aria-labelledby="insight-h">
+          <h2 id="insight-h">鲜为人知</h2>
+          <ul class="insight-list">
+            <li class="insight-item" data-testid="insight-item">近战前自带投掷标枪；造价无粮（<span class="nw"><span class="num">80</span> 木 + <span class="num">35</span> 金</span>）。</li>
+            <li class="insight-item" data-testid="insight-item">驻扎防御建筑可因自带远程/穿刺标枪增加射箭。这不是文明「塔/城堡基础箭 +100%」。</li>
+            <li class="insight-item" data-testid="insight-item">无粮步兵（对照火矛兵）。</li>
+          </ul>
+        </section>
+        <p class="ph">基础属性在槽位下面。三条都是短列表项；再加一条只多一行，不改外框。</p>
+      </div>
+      <aside class="side">
+        <strong>侧栏保持原样</strong>
+        洞察不放侧栏。
+      </aside>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>有内容示例：撒克逊人独特单位 <code>#/unit/2705</code> 扈从部队。造价 <span class="nw">80 木材 + 35 黄金</span>、生产 <span class="nw">16s</span>、城堡，来自 <code>units.json</code>。</li>
+    <li>前两条是种子①，驻扎加箭与文明塔/城堡基础箭分句。第三条是种子②。不写「等同步弓单兵必加」，也不写未枚举全库的序位。</li>
+    <li>与空态同一槽位：标题「鲜为人知」+ 列表。没有「暂无」。建议每条 <code>data-testid="insight-item"</code>。</li>
+  </ul>
+</body>
+</html>

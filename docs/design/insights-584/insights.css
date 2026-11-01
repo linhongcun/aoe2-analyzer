@@ -1,0 +1,186 @@
+/* #584 线框。方向 C 令牌，本文件自包含。琥珀色细框只标新槽位置。 */
+:root {
+  --accent: #a65a14;
+  --muted: #636366;
+  --border: #e5e5ea;
+  --bg: #fbfbfd;
+  --card: #fff;
+  --text: #1d1d1f;
+  --soft: #f5f5f7;
+  --link: #0066cc;
+  --line: #f0f0f2;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, "WenQuanYi Micro Hei", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.num { font-variant-numeric: tabular-nums; }
+.nw, .num { white-space: nowrap; }
+.ic {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: #f0e6da;
+  color: var(--accent);
+  font: 600 6px/1 ui-monospace, monospace;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-align: center;
+  letter-spacing: -0.2px;
+}
+.frame {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin: 16px auto;
+}
+.f1280 { width: 1280px; padding: 24px 32px 20px; }
+.crumb { color: var(--muted); font-size: 12px; margin: 0 0 10px; }
+.dhead { display: flex; gap: 14px; align-items: center; }
+.uico {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: var(--soft);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+h1 { font-size: 22px; margin: 0; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+h1 small { color: var(--muted); font-size: 13px; font-weight: 400; margin-left: 6px; }
+.tags { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.tag {
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--soft);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: #ececf0;
+  border-radius: 10px;
+  padding: 4px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 16px 0;
+}
+.tabs span {
+  min-height: 36px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.tabs .on { background: #fff; color: var(--text); font-weight: 600; }
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 24px;
+  align-items: start;
+}
+.sec {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px 18px;
+  margin: 0 0 16px;
+  background: #fff;
+  box-shadow: 0 1px 2px #0000000a, 0 4px 16px #0000000a;
+}
+.sec h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+}
+.cost {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+}
+.cost div { display: grid; gap: 6px; }
+.cost dt { color: var(--muted); font-size: 12px; }
+.cost dd {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.sum { margin: 0 0 8px; font-size: 15px; line-height: 1.65; }
+.sum b { font-weight: 600; }
+.insight-slot {
+  margin: 0 0 16px;
+  padding: 16px 18px 14px;
+  background: #fff;
+  border: 1px solid var(--accent);
+  border-radius: 18px;
+  box-shadow: 0 1px 2px #0000000a, 0 4px 16px #0000000a;
+}
+.insight-slot h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+}
+.insight-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.insight-item {
+  margin: 0;
+  padding: 0 0 0 12px;
+  border-left: 2px solid var(--border);
+  font-size: 15px;
+  line-height: 1.65;
+}
+.insight-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+.ph {
+  margin: 0;
+  min-height: 44px;
+  border-radius: 12px;
+  background: var(--soft);
+  color: var(--muted);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+}
+.side {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--soft);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  padding: 12px;
+}
+.side strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 4px; }
+.anno { max-width: 1280px; margin: 8px auto 24px; font-size: 12px; color: var(--muted); padding: 0 16px; }
+.anno li { margin: 2px 0; }
+.anno code { font-size: 12px; }
