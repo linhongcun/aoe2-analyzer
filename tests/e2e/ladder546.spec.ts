@@ -1,8 +1,9 @@
-// #546 失败验收。不填 src/data/ladder-beginner.json，不改天梯 UI 骨架。
-// 当前 main 的 entries 为空，「全部」48 家都是「待补」，「已写 12–16 家」应红，直到数据 PR 落地。
-// 不点名文明，也不把胜率写成档位来源。设计：docs/design/ladder-33/ladder-33.md（友好度 pill / 待补展开）。
+// #546 首批友好度：档名、一两句理由、加成链接，胜率列仍是快照。
+// #580 把阿拉伯 1v1「全部」补齐后，原「12–16 家 / 至少一家待补」与产品冲突。
+// 本文件按这次授权改成：已写档等于全部段行数，待补为 0。不改天梯 UI 骨架。
+// 不点名文明，也不把胜率写成档位来源。
+// 设计：docs/design/ladder-33/ladder-33.md（友好度 pill / 待补展开）。
 // 页上现成免责是「编辑口径，不是官方推荐」（页脚 / 图例），不是另一句新文案。本文件不要求改字。
-// 不改 tests/**/v0*-acceptance*。合入本 PR 也不关闭 #546。
 import { readFileSync } from 'node:fs';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { formatPercent, type LadderSnapshot } from '../../src/domain/ladder';
@@ -93,7 +94,7 @@ async function reasonBody(reason: Locator) {
   });
 }
 
-test('#546 全部表已写新手友好度为 12–16 家，展开含档名、一两句理由与加成链接', async ({ page }) => {
+test('#546 全部表已写新手友好度覆盖每一行，展开含档名、一两句理由与加成链接', async ({ page }) => {
   const errors = await openLadder(page);
   const cells = await tierCells(page);
   expect(cells, '友好度格应覆盖全部段每一行').toHaveLength(all.civs.length);
@@ -106,9 +107,8 @@ test('#546 全部表已写新手友好度为 12–16 家，展开含档名、一
   const filled = cells.filter((cell) => filledTier.has(cell.tier));
   const pending = cells.filter((cell) => cell.tier === '待补');
   const written = writtenEntries();
-  expect.soft(filled.length, `已写新手友好度应为 12–16 家，当前 ${filled.length} 家（待补 ${pending.length}）`).toBeGreaterThanOrEqual(12);
-  expect.soft(filled.length, `首批不超过 16 家，当前 ${filled.length}`).toBeLessThanOrEqual(16);
-  expect.soft(pending.length, '未写入的文明应仍有待补').toBeGreaterThan(0);
+  expect(filled.length, `已写新手友好度应等于全部段 ${all.civs.length} 家，当前 ${filled.length}`).toBe(all.civs.length);
+  expect(pending, '待补应为 0').toEqual([]);
   expect
     .soft(sortedEns(filled.map((cell) => cell.en)), '页面已写档应等于 ladder-beginner.json 里非待补条目，不另点名文明')
     .toEqual(sortedEns(written.map((entry) => entry.en ?? '')));
@@ -137,18 +137,11 @@ test('#546 全部表已写新手友好度为 12–16 家，展开含档名、一
   expect(errors, '展开已写档后不应有页面错误').toEqual([]);
 });
 
-test('#546 仍有待补行且展开说明理由还没写，胜率列仍是快照百分数', async ({ page }) => {
+test('#546 胜率列仍是快照百分数，全部段不再有待补', async ({ page }) => {
   const errors = await openLadder(page);
   const cells = await tierCells(page);
   expect(cells.length).toBe(all.civs.length);
-  const pending = cells.find((cell) => cell.tier === '待补');
-  expect(pending, '至少一家保持待补').toBeTruthy();
-  if (!pending) return;
-
-  const reason = await openReason(page, pending.en);
-  await expect(reason.locator('strong')).toHaveText('待补');
-  await expect(reason).toContainText(/新手友好度理由还没写/);
-  await expect(reason).toContainText(/不影响上面的胜率/);
+  expect(cells.filter((cell) => cell.tier === '待补')).toEqual([]);
   await expect(page.getByTestId('ladder-footer')).toContainText(/编辑口径，(?:不是|非)官方推荐/);
 
   // 胜率列只跟快照走。不根据胜率高低断言档位。
