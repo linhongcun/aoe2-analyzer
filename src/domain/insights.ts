@@ -47,12 +47,23 @@ const hearth: readonly InsightItem[] = [
 
 const ratha: readonly InsightItem[] = [{ id: 'ratha-foodless', parts: ['无粮骑兵 UU（对照骑士线）。'] }];
 
+/** 种子⑩。73 / 559 同一条；箭数与次级弹按 #584 锁句，不写成攻城加成。 */
+const chuKoNu: readonly InsightItem[] = [
+  {
+    id: 'chu-ko-nu-volley',
+    parts: ['非精锐每轮 ', nw([num('3'), ' 箭']), '、精锐 ', nw([num('5'), ' 箭']), '；次级弹含 ', nw([num('0'), ' 近战']), '，对负甲冲车有额外咬伤。'],
+  },
+  { id: 'chu-ko-nu-rams', parts: ['成群可远程磨掉冲车突袭。'] },
+];
+
 /** 单位页。2706 / 1761 与普通版同一条事实，造价相同。 */
 export const UNIT_INSIGHTS: Readonly<Record<number, readonly InsightItem[]>> = {
   2705: hearth,
   2706: hearth,
   1759: ratha,
   1761: ratha,
+  73: chuKoNu,
+  559: chuKoNu,
 };
 
 export const CIV_INSIGHTS: Readonly<Record<string, readonly InsightItem[]>> = {
@@ -82,6 +93,19 @@ export const CIV_INSIGHTS: Readonly<Record<string, readonly InsightItem[]>> = {
       id: 'teutons-crenellations',
       parts: ['开垛口：叠箭羽+锥子后城堡约 ', nw([num('13')]), '，可压过手推炮 ', nw([num('12')]), '。'],
     },
+  ],
+  Persians: [
+    {
+      id: 'persians-tc-hp',
+      parts: [
+        '城镇中心生命值 ',
+        nw([num('+100'), '%']),
+        '（',
+        nw([num('2400'), RANGE, num('4800')]),
+        '，同砌体与城堡基础齐），可当前线伪城堡；须驻扎射箭单位才有输出。',
+      ],
+    },
+    { id: 'persians-kamandaran', parts: ['叠波斯步弓手（Kamandaran）后弓兵木代金（非免费）。'] },
   ],
 };
 
