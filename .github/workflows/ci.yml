@@ -62,10 +62,12 @@ jobs:
       - name: Catalog introduction audit
         if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.full == 'true' && github.event_name != 'pull_request'
         run: npm run introductions:check
-      # Chromium builds OG images and runs browser checks. pull_request with browser=false skips the install;
-      # that event also skips OG screenshots and the short smoke. main still installs so a docs push can deploy OG.
+      # Two install paths share this browser download. e2e/OG: any non-PR, or a pull_request with browser=true.
+      # Affected unit: browser=false still runs release108/releaseSmoke, which call chromium.launch() and need
+      # chromium_headless_shell. Install only when those unit checks actually run. browser=false still skips
+      # OG screenshots, Playwright e2e, and the short deploy smoke. main still installs so a docs push can deploy OG.
       - name: Use Ubuntu public package mirror
-        if: github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true'
+        if: github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true' || (steps.reuse.outputs.reused != 'true' && steps.scope.outputs.unit_chromium == 'true')
         run: |
           for source_file in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources /etc/apt/apt-mirrors.txt; do
             if [ -f "$source_file" ]; then
@@ -73,13 +75,13 @@ jobs:
             fi
           done
       - name: Cache Playwright browsers
-        if: github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true'
+        if: github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true' || (steps.reuse.outputs.reused != 'true' && steps.scope.outputs.unit_chromium == 'true')
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
       - name: Install Playwright chromium
-        if: github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true'
+        if: github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true' || (steps.reuse.outputs.reused != 'true' && steps.scope.outputs.unit_chromium == 'true')
         run: npx playwright install --with-deps chromium
       - name: Affected unit checks
         if: steps.reuse.outputs.reused != 'true'
