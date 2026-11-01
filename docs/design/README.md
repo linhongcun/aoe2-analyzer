@@ -48,6 +48,7 @@ SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分
 - [#533 攻城情境入口](siege-533/)（[#533](https://github.com/linhongcun/aoe2-analyzer/issues/533)）：单位页「算拆建筑」、冲车检索、未核实反馈。短稿，供 Steve 设计通过后由 Linus 实现。
 - [#33 天梯数据](ladder-33/)（[#33](https://github.com/linhongcun/aoe2-analyzer/issues/33)）：`#/ladder` 阿拉伯 1v1 分段胜率与新手友好度视觉交互稿，供 Steve 设计审阅后交 Codex。
 - [#545 天梯空分段](ladder-545/)（[#545](https://github.com/linhongcun/aoe2-analyzer/issues/545)）：顶栏只露有数据的 Elo 分段；当前快照改为只读「全部」。短稿，供 Steve 设计通过后由 Linus 实现。
+- [#547 天梯快照与首屏截止](ladder-547/)（[#547](https://github.com/linhongcun/aoe2-analyzer/issues/547)）：换一份新于 p162286 的阿拉伯 1v1 静态快照，并把统计截止或「非当前平衡」升到来源条第一行。短稿，供产品设计通过后由 Linus 实现。与 #566 并行。
 - [#559 地图边路 / 中路](maps-559/)（[#559](https://github.com/linhongcun/aoe2-analyzer/issues/559)）：地图详情在现有推荐文明下增加开图 4v4 的边路 / 中路编辑推荐；无稿显式待补。短稿，供 Steve 设计通过后实现。
 
 | Issue     | 内容                                                                                                                                                                                                        | 路径                                                                                                   | 状态 / 签字                                                   |

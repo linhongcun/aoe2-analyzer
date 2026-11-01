@@ -223,8 +223,10 @@ test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本
   await expect(source).toContainText(FETCHED_AT);
   await expect(source).toContainText('补丁');
   await expect(source).toContainText(PATCH_162286);
+  await expect(source).toContainText('统计截止');
   await expect(source).not.toContainText(/wayback/i);
   await expect(source).not.toContainText('archive.org');
+  await expect(source).not.toContainText('实时');
   await expect(root).not.toContainText(/wayback/i);
   await expect(root).not.toContainText('archive.org');
   await expect(source).toContainText(/本分段样本/);
@@ -240,15 +242,28 @@ test('#33 来源条披露 aoestats 与更新日期，补丁提示条只在版本
   await expect(footer).toContainText('不是官方推荐');
   const sitePatch = String((JSON.parse(readFileSync('scripts/data_sources.json', 'utf8')) as { patch: { build: number } }).patch.build);
   const note = page.getByTestId('ladder-patch-note');
+  const cutoff = page.getByTestId('ladder-cutoff');
   if (sitePatch === PATCH_162286) {
     await expect(note).toHaveCount(0);
+    await expect(source).toHaveAttribute('data-cutoff', 'aligned');
+    await expect(cutoff).toContainText('统计截止');
+    await expect(cutoff).toContainText(FETCHED_AT);
+    await expect(cutoff).toContainText('静态快照');
+    await expect(cutoff).not.toContainText('非当前平衡');
   } else {
     expect(await root.getAttribute('data-patch-mismatch')).toBe('true');
+    await expect(source).toHaveAttribute('data-cutoff', 'mismatch');
+    await expect(cutoff).toContainText('非当前平衡');
+    await expect(cutoff).toContainText('统计截止');
+    await expect(cutoff).toContainText(FETCHED_AT);
+    await expect(cutoff).toContainText(PATCH_162286);
+    await expect(cutoff).toContainText('与本站 DE');
+    await expect(cutoff).toContainText(sitePatch);
     await expect(note).toBeVisible();
-    await expect(note).toContainText('统计补丁');
-    await expect(note).toContainText(PATCH_162286);
-    await expect(note).toContainText(sitePatch);
     await expect(note).toContainText('胜率可能未反映最新平衡改动');
+    await expect(note).not.toContainText(FETCHED_AT);
+    await expect(note).not.toContainText(PATCH_162286);
+    await expect(note).not.toContainText(sitePatch);
     await expect(page.getByTestId('ladder-table')).toBeVisible();
   }
   expect(hits).toEqual([]);

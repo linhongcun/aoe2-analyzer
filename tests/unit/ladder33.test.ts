@@ -116,6 +116,11 @@ describe('天梯快照展示 #33', () => {
     expect(page).toContain('不推算，不补数');
     expect(page).toContain('data-testid="ladder-empty"');
     expect(page).toContain('阿拉伯 1v1 胜率、出场率与新手友好度。');
+    expect(page).toContain('data-testid="ladder-cutoff"');
+    expect(page).toContain('非当前平衡');
+    expect(page).toContain('统计截止');
+    expect(page).toContain('静态快照');
+    expect(page).toContain('胜率可能未反映最新平衡改动。');
     expect(page).not.toContain('分段胜率');
   });
 

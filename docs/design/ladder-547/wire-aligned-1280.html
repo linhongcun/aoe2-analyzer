@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#547 线框 · 1280 · 快照补丁与本站对齐</title>
+  <link rel="stylesheet" href="ladder.css" />
+</head>
+<body>
+  <main class="frame f1280" data-testid="ladder-page">
+    <p class="crumb">
+      <span class="ic mu" aria-hidden="true" title="home">home</span>
+      首页
+      <span class="ic mu" aria-hidden="true" title="chevron-right">chevron-right</span>
+      资料
+      <span class="ic mu" aria-hidden="true" title="chevron-right">chevron-right</span>
+      天梯数据
+    </p>
+    <h1>
+      <span class="ic lg" aria-hidden="true" title="trophy">trophy</span>
+      天梯数据 <small>Ladder Stats</small>
+    </h1>
+    <p class="desc">阿拉伯 1v1 胜率、出场率与新手友好度。</p>
+    <div class="ctx" data-testid="ladder-context">
+      <span class="pill">
+        <span class="ic" aria-hidden="true" title="map">map</span>
+        阿拉伯 <span lang="en">Arabia</span>
+        <span class="fix">固定</span>
+      </span>
+      <span class="pill">
+        <span class="ic" aria-hidden="true" title="swords">swords</span>
+        <span class="nw">1v1</span> 随机地图（RM）
+      </span>
+      <span class="pill" data-testid="ladder-elo-static">
+        天梯分段
+        <span class="nw">全部</span>
+        <span class="fix">当前快照</span>
+      </span>
+    </div>
+    <div class="source" data-testid="ladder-source" data-cutoff="aligned">
+      <span class="ic" aria-hidden="true" title="database">database</span>
+      <div class="copy">
+        <p class="cutoff" data-testid="ladder-cutoff">
+          <span class="nw">统计截止 <span class="num">2026-10-01</span><span class="tag">示意</span></span>
+          · <span class="nw">补丁 <span class="num">188329</span><span class="tag">示意</span></span>
+          · <span class="fix">静态快照</span>
+        </p>
+        <p class="meta">
+          <a href="https://aoestats.io/maps/arabia/">aoestats.io <span class="ic mu" aria-hidden="true" title="external-link">external-link</span>（外部）</a>。
+          <span class="nw">本分段样本 <span class="num">504,189</span> 局</span>
+        </p>
+      </div>
+    </div>
+    <div class="layout">
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>文明</th>
+              <th class="numcol">胜率</th>
+              <th class="numcol">出场率</th>
+              <th class="numcol">样本局数</th>
+              <th>新手友好度</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="zh">罗马</span><span class="en" lang="en">Romans</span></td>
+              <td class="numcol"><span class="win"><span class="bar" aria-hidden="true"><i style="left:50%;width:20%"></i></span><span class="num">54.04%</span></span></td>
+              <td class="numcol"><span class="num">1.67%</span></td>
+              <td class="numcol"><span class="num">16,815</span></td>
+              <td><span class="tier">待补</span></td>
+            </tr>
+            <tr>
+              <td><span class="zh">维京</span><span class="en" lang="en">Vikings</span></td>
+              <td class="numcol"><span class="win"><span class="bar" aria-hidden="true"><i style="left:50%;width:16%"></i></span><span class="num">53.18%</span></span></td>
+              <td class="numcol"><span class="num">1.71%</span></td>
+              <td class="numcol"><span class="num">17,286</span></td>
+              <td><span class="tier">待补</span></td>
+            </tr>
+            <tr>
+              <td><span class="zh">保加利亚</span><span class="en" lang="en">Bulgarians</span></td>
+              <td class="numcol"><span class="win"><span class="bar" aria-hidden="true"><i style="left:50%;width:16%"></i></span><span class="num">53.13%</span></span></td>
+              <td class="numcol"><span class="num">2.15%</span></td>
+              <td class="numcol"><span class="num">21,678</span></td>
+              <td><span class="tier">待补</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="card side">
+        <h2>怎么读这张表</h2>
+        <ul>
+          <li>胜率：本分段里，该文明赢下的对局占比。</li>
+          <li>出场率：本分段里，该文明被选中的对局占比。</li>
+          <li>样本局数：少于 <span class="num">300</span> 局时标「样本少」，数字仍照实显示。</li>
+        </ul>
+      </aside>
+    </div>
+    <p class="foot" data-testid="ladder-footer">
+      <span class="ic" aria-hidden="true" title="info">info</span>
+      <span>数据来源：aoestats.io（阿拉伯 · RM <span class="nw">1v1</span>）· <span class="nw">统计更新 <span class="num">2026-10-01</span></span>。本站保存静态快照，不实时抓取、不自建统计；胜率不是平衡建议。新手友好度为本站编辑口径，不是官方推荐。</span>
+    </p>
+  </main>
+  <ul class="anno">
+    <li>补丁号等于站内 DE 时走这一态。<code>data-cutoff="aligned"</code>。无黄条，无左边线，无「非当前平衡」。</li>
+    <li>截止日仍在来源条第一行，旁边是 muted「静态快照」。不写「实时」。</li>
+    <li>「示意」和日期 2026-10-01、补丁 188329 只属于这张线框，用来看对齐后的语气。实现读新快照的 <code>fetchedAt</code> 和补丁号，页面上不出现「示意」。</li>
+    <li>表内三行和样本局数仍是现快照 p162286 的版式，不代表对齐后的统计，不另编胜率。页脚日期与来源条同一字段，原句不改。</li>
+  </ul>
+</body>
+</html>
