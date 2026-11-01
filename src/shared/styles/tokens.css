@@ -32,11 +32,11 @@
   --color-link-soft: #e5f0fb; /* 链接类标签底 */
   --color-shadow: #0000001f; /* 图标、文字投影（原始透明黑） */
   --color-scrim: #00000066; /* 弹窗与菜单遮罩 */
-  /* 中性控件与路线当前项使用独立前景，避免深色时反转成白底。 */
+  /* 中性选中项使用独立前景，避免深色时反转成白底。路线当前项浅色用浅琥珀洗底（#601）。 */
   --color-selected: #1d1d1f;
   --color-on-selected: #ffffff;
-  --color-route-current: #1d1d1f;
-  --color-on-route-current: #ffffff;
+  --color-route-current: #f4ebe3; /* 与 --color-timeline-band 同色 */
+  --color-on-route-current: #1d1d1f; /* 对 #f4ebe3 约 14.3:1 */
   --color-rating: #aeaeb2;
   --color-decorative: #909096; /* 大号辅助数字在白色卡片上满足 3:1 */
   --color-route-selected: var(--color-route-current);
