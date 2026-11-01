@@ -1,0 +1,139 @@
+/* #547 线框。令牌与类名沿用 docs/design/ladder-545/ladder.css，本文件自包含。 */
+:root {
+  --accent: #a65a14;
+  --muted: #636366;
+  --border: #e5e5ea;
+  --bg: #fbfbfd;
+  --card: #fff;
+  --text: #1d1d1f;
+  --soft: #f5f5f7;
+  --link: #0066cc;
+  --warn: #a15c00;
+  --warn-soft: #fbf1e3;
+  --line: #f0f0f2;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.num { font-variant-numeric: tabular-nums; }
+.nw, .num { white-space: nowrap; }
+.ic {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: #f0e6da;
+  color: var(--accent);
+  font: 600 6px/1 ui-monospace, monospace;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-align: center;
+  letter-spacing: -0.2px;
+}
+.ic.lg { width: 22px; height: 22px; font-size: 7px; }
+.ic.mu { background: #ececf0; color: var(--muted); }
+.frame {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin: 16px auto;
+}
+.f1280 { width: 1280px; padding: 24px 32px; }
+.crumb { color: var(--muted); font-size: 12px; margin: 0 0 10px; display: flex; align-items: center; gap: 6px; }
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+h1 small { color: var(--muted); font-size: 14px; font-weight: 400; }
+.desc { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
+.ctx { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--text);
+  font-size: 12px;
+}
+.pill .fix { color: var(--muted); }
+.source, .patch, .foot {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.source { background: var(--soft); }
+.source[data-cutoff="mismatch"] { border-left: 3px solid var(--warn); }
+.source a { color: var(--link); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; min-height: 44px; }
+.copy { margin: 0; min-width: 0; }
+.cutoff { display: block; margin: 0; }
+.cutoff .flag { color: var(--warn); font-weight: 600; }
+.meta { margin: 0; }
+.patch { background: var(--warn-soft); }
+.patch .ic { background: #f6e6cf; color: var(--warn); }
+.foot { background: #fff; color: var(--muted); font-size: 12px; }
+.foot .ic { background: #ececf0; color: var(--muted); }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start; }
+.card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  padding: 8px 12px 12px;
+}
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font-size: 12px; font-weight: 500; color: var(--muted); padding: 8px; }
+td { padding: 8px; border-top: 1px solid var(--line); vertical-align: middle; }
+.numcol { text-align: right; }
+.zh { font-weight: 600; }
+.en { display: block; color: var(--muted); font-size: 12px; font-weight: 400; }
+.win { display: inline-flex; align-items: center; gap: 8px; }
+.bar { position: relative; width: 60px; height: 6px; border-radius: 999px; background: var(--soft); }
+.bar i {
+  position: absolute;
+  top: 0;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+.tier {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 8px;
+  border: 1px dashed #c7c7cc;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.side h2 { font-size: 14px; margin: 8px 0; }
+.side li { margin: 4px 0; font-size: 13px; }
+.tag {
+  margin-left: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+.anno { max-width: 1280px; margin: 8px auto 24px; font-size: 12px; color: var(--muted); padding: 0 16px; }
+.anno li { margin: 2px 0; }
+.anno code { font-size: 12px; }

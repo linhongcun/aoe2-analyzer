@@ -175,50 +175,60 @@ export default function Ladder() {
           {toast}
         </p>
       )}
-      {/* TODO: 玩家界面只写 aoestats、统计日期和补丁号。Wayback 路径留在快照 JSON 与设计/数据文档，不渲染到页面。 */}
-      <div className="ladder-source" data-testid="ladder-source">
+      {/* 玩家界面只写 aoestats、统计日期和补丁号。Wayback 路径留在快照 JSON 与设计文档，不渲染到页面。 */}
+      <div className="ladder-source" data-testid="ladder-source" data-cutoff={mismatch ? 'mismatch' : 'aligned'}>
         <Icon name="database" />
-        <p className="ladder-copy">
-          <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
-            {snapshot.source}
-            <Icon name="external-link" />
-            （外部）
-          </a>
-          。
-          <span className="nw">
-            统计更新 <span className="num">{snapshot.fetchedAt}</span>
-          </span>
-          {patchBuild && (
-            <>
-              。
-              <span className="nw">
-                补丁 <span className="num">{patchBuild}</span>
-              </span>
-            </>
-          )}
-          {!bracket.empty && (
-            <>
-              。
+        <div className="ladder-copy">
+          <p className="ladder-cutoff" data-testid="ladder-cutoff">
+            {mismatch && patchBuild ? (
+              <>
+                <span className="ladder-cutoff-flag">非当前平衡</span>
+                {' · '}
+                <span className="nw">
+                  统计截止 <span className="num">{snapshot.fetchedAt}</span>
+                </span>
+                {' · '}
+                <span className="nw">
+                  补丁 <span className="num">{patchBuild}</span> 与本站 DE <span className="num">{SITE_BUILD}</span> 不同
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="nw">
+                  统计截止 <span className="num">{snapshot.fetchedAt}</span>
+                </span>
+                {patchBuild && (
+                  <>
+                    {' · '}
+                    <span className="nw">
+                      补丁 <span className="num">{patchBuild}</span>
+                    </span>
+                  </>
+                )}
+                {' · '}
+                <span className="ladder-fixed">静态快照</span>
+              </>
+            )}
+          </p>
+          <p className="ladder-source-meta">
+            <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
+              {snapshot.source}
+              <Icon name="external-link" />
+              （外部）
+            </a>
+            。
+            {!bracket.empty && (
               <span className="nw">
                 本分段样本 <span className="num">{formatGames(bracket.games)}</span> 局
               </span>
-            </>
-          )}
-        </p>
+            )}
+          </p>
+        </div>
       </div>
       {mismatch && patchBuild && (
         <p className="ladder-patch" data-testid="ladder-patch-note">
           <Icon name="triangle-alert" />
-          <span className="ladder-copy">
-            <span className="nw">
-              统计补丁 <span className="num">{patchBuild}</span>
-            </span>{' '}
-            与本站数据版本{' '}
-            <span className="nw">
-              DE <span className="num">{SITE_BUILD}</span>
-            </span>{' '}
-            不同，胜率可能未反映最新平衡改动。
-          </span>
+          <span className="ladder-copy">胜率可能未反映最新平衡改动。</span>
         </p>
       )}
       <div className="ladder-layout">

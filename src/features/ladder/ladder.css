@@ -137,6 +137,20 @@
 .ladder-source {
   background: var(--color-surface-2);
 }
+.ladder-source[data-cutoff='mismatch'] {
+  border-left: 3px solid var(--color-warn);
+}
+.ladder-cutoff,
+.ladder-source-meta {
+  margin: 0;
+}
+.ladder-cutoff {
+  display: block;
+}
+.ladder-cutoff-flag {
+  color: var(--color-warn);
+  font-weight: 600;
+}
 .ladder-copy {
   margin: 0;
   min-width: 0;
