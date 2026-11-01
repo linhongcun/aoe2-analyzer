@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#602 线框 · 1280 · 亚美尼亚概览</title>
+  <link rel="stylesheet" href="civ-nav.css" />
+</head>
+<body>
+  <main class="frame">
+    <p class="crumbs">首页 / 文明 / <span>亚美尼亚</span></p>
+    <div class="dhead">
+      <div class="mark" aria-hidden="true">文明</div>
+      <div>
+        <h1>亚美尼亚 <small>Armenians</small></h1>
+        <div class="tags">
+          <span class="tag">皇家山脉</span>
+          <span class="tag">步兵</span>
+          <span class="tag">海军</span>
+        </div>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="亚美尼亚内容" data-testid="civ-tabs">
+      <span class="on" role="tab" aria-selected="true">概览</span>
+      <span role="tab">数据</span>
+      <span role="tab">科技</span>
+      <span role="tab">更新历史</span>
+      <span role="tab">职业选手视角</span>
+    </div>
+    <nav class="tools" aria-label="相关工具" data-testid="civ-related-tools">
+      <span class="lbl">相关工具</span>
+      <a href="#/builds?civ=Armenians" data-testid="civ-tool-builds"><span class="ic" aria-hidden="true">book-open</span>开局流程</a>
+      <a href="#/production?civ=Armenians" data-testid="civ-tool-production"><span class="ic" aria-hidden="true">factory</span>生产对照</a>
+      <a href="#/matchup?me=Armenians" data-testid="civ-tool-matchup"><span class="ic" aria-hidden="true">crosshair</span>对局助手</a>
+      <a href="#/compare?a=Armenians" data-testid="civ-tool-compare"><span class="ic" aria-hidden="true">scale</span>文明对比</a>
+      <a href="#/tree/Armenians" data-testid="civ-tool-tree"><span class="ic" aria-hidden="true">git-branch</span>科技树</a>
+    </nav>
+    <div class="body">
+      <div role="tabpanel">
+        <h2>开局建议</h2>
+        <p>民兵/长矛压制 -&gt; 城堡复合弓 + 冠军步兵</p>
+        <h2>能力评分</h2>
+        <div class="scores" aria-label="文明能力评分">
+          <div class="score"><b>骑兵</b><div class="v nw"><span class="num">3</span><small>/10</small></div></div>
+          <div class="score"><b>弓手</b><div class="v nw"><span class="num">6</span><small>/10</small></div></div>
+          <div class="score"><b>步兵</b><div class="v nw"><span class="num">9</span><small>/10</small></div></div>
+          <div class="score"><b>经济</b><div class="v nw"><span class="num">7</span><small>/10</small></div></div>
+          <div class="score"><b>防御</b><div class="v nw"><span class="num">6</span><small>/10</small></div></div>
+          <div class="score"><b>攻城</b><div class="v nw"><span class="num">5</span><small>/10</small></div></div>
+          <div class="score"><b>僧侣</b><div class="v nw"><span class="num">7</span><small>/10</small></div></div>
+          <div class="score"><b>海军</b><div class="v nw"><span class="num">8</span><small>/10</small></div></div>
+        </div>
+        <p><b>官方定位：</b>步兵和海军文明</p>
+        <p><b>特色兵种：</b>复合弓箭手，牧师战士</p>
+      </div>
+      <aside class="side">
+        <h3>独特单位</h3>
+        <div>
+          <span class="chip">复合弓箭手</span>
+          <span class="chip">牧师战士</span>
+        </div>
+        <h3>同资料片文明</h3>
+        <div><span class="chip">格鲁吉亚</span></div>
+        <p class="note nw">共 <span class="num">56</span> 个文明</p>
+      </aside>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>Tab 在页头下，灰轨白底，是本页内容。情境条在 Tab 下，只有「相关工具」和五个离开本页的链接。</li>
+    <li>「职业选手视角」只在 Tab 上。情境条没有该项，也没有 <code>users</code>。</li>
+    <li>侧栏无「快速入口」、无文明对比、无对局助手、无科技树。科技树只在情境条，Lucide <code>git-branch</code>。</li>
+    <li>评分来自 <code>civs.json</code> 的 <code>s</code>，分母 /10。不改口径。概览怎么分区不在本刀（#603）。区域单位、独特建筑、区域建筑若有，仍排在这些侧栏块之间。</li>
+  </ul>
+</body>
+</html>
