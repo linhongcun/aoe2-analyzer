@@ -688,11 +688,11 @@ export const PAGES: readonly PageDef[] = [
     label: '天梯数据',
     en: 'Ladder Stats',
     icon: 'trophy',
-    desc: '阿拉伯 1v1 胜率、出场率与新手友好度',
+    desc: '默认 4v4 随机地图胜率、出场率与走势',
     match: /^\/ladder$/,
     component: 'Ladder',
     metaTitle: '天梯数据',
-    metaDescription: '查看阿拉伯 1v1 随机地图各文明的胜率、出场率与样本局数。',
+    metaDescription: '查看默认切片（4v4 随机地图、Elo 1200–1400、近 90 天、全图）的文明胜率与走势，并可切回阿拉伯 1v1。',
   },
   {
     key: 'home',

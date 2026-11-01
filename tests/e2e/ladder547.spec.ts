@@ -16,7 +16,7 @@ function eloOf(url: string): string | null {
 
 async function openDefaultAll(page: Page) {
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('./#/ladder');
+  await page.goto('./#/ladder?mode=arabia1v1');
   await expect(page.getByTestId('ladder-page')).toBeVisible();
   await expect(page.getByRole('heading', { level: 1, name: /天梯数据/ })).toBeVisible();
   await expect(page.getByTestId('ladder-table')).toBeVisible();

@@ -15,9 +15,9 @@ if (!all || !romans || !franks || visible.length !== 1 || visible[0]?.key !== 'a
   throw new Error('本文件只锁定「当前快照仅 all 有数据」的只读 pill。其它分段有文明后，应改测 radiogroup 回归（设计 §6），不要假装仍为空。');
 }
 
-const ENTRY_DESC = '阿拉伯 1v1 胜率、出场率与新手友好度';
-const PAGE_DESC = `${ENTRY_DESC}。`;
-const META_DESC = '查看阿拉伯 1v1 随机地图各文明的胜率、出场率与样本局数。';
+const ENTRY_DESC = '默认 4v4 随机地图胜率、出场率与走势';
+const PAGE_DESC = '默认 4v4 随机地图、Elo 1200–1400、近 90 天、全图。可切回阿拉伯 1v1。';
+const META_DESC = '查看默认切片（4v4 随机地图、Elo 1200–1400、近 90 天、全图）的文明胜率与走势，并可切回阿拉伯 1v1。';
 const EMOJI = /\p{Extended_Pictographic}/u;
 const soon = expect.configure({ timeout: 2_000, soft: true });
 
@@ -43,13 +43,13 @@ async function expectNoEloChrome(page: Page) {
   const leaked = hidden.map((item) => item.key).filter((key) => keys.includes(key));
   soon(leaked, 'lt850 / 850-1000 / 1000-1200 / 1200+ / 1900+ 不应再有芯片').toEqual([]);
   soon(await page.getByTestId('ladder-bracket').count(), '不应再渲染 ladder-bracket').toBe(0);
-  soon(await page.getByTestId('ladder-page').getByRole('radiogroup').count(), '可见分段少于 2 时不要 radiogroup').toBe(0);
-  soon(await page.getByTestId('ladder-page').getByRole('radio').count()).toBe(0);
+  soon(await page.getByRole('radiogroup', { name: /天梯分段/ }).count(), '可见分段少于 2 时不要 Elo radiogroup').toBe(0);
+  soon(await page.locator('[data-testid="ladder-elo-static"] [role="radio"]').count()).toBe(0);
   soon(await page.getByTestId('ladder-page').innerText()).not.toContain('天梯分段（Elo）');
 }
 
 async function expectStaticAllPill(page: Page) {
-  const pill = page.getByTestId('ladder-context').getByTestId('ladder-elo-static');
+  const pill = page.getByTestId('ladder-elo-static');
   const count = await pill.count();
   soon(count, '上下文行应有只读 pill ladder-elo-static').toBe(1);
   if (count !== 1) return;
@@ -117,7 +117,7 @@ test('#545 当前快照打开 #/ladder：没有空分段芯片，只读 pill，�
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => void (message.type() === 'error' && errors.push(message.text())));
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('./#/ladder');
+  await page.goto('./#/ladder?mode=arabia1v1');
   await expectSettled(page);
   await expectNoEloChrome(page);
   await expectStaticAllPill(page);
@@ -170,7 +170,7 @@ test('#545 未识别分段仍提示未识别，地址去掉 elo，页面是只�
 
 test('#545 无参数、空 elo、elo=all 不提示，地址没有 elo', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
-  for (const url of ['./#/ladder', './#/ladder?elo=', './#/ladder?elo=all']) {
+  for (const url of ['./#/ladder?mode=arabia1v1', './#/ladder?elo=', './#/ladder?elo=all']) {
     await page.goto(url);
     await expectSettled(page);
     soon(await page.getByTestId('ladder-fallback-toast').count(), url).toBe(0);
@@ -206,14 +206,14 @@ test('#545 页内说明和分享描述去掉分段胜率，标题仍是天梯数
   await page.goto('./#/ladder');
   await expect(page.getByRole('heading', { level: 1, name: /天梯数据/ })).toBeVisible();
   await expect(page.locator('.ladder-desc')).toBeVisible();
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /阿拉伯 1v1/);
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /4v4 随机地图/);
   soon((await page.locator('.ladder-desc').innerText()).trim()).toBe(PAGE_DESC);
   soon(await page.locator('meta[name="description"]').getAttribute('content')).toBe(META_DESC);
   soon(await page.locator('meta[property="og:description"]').getAttribute('content')).toBe(META_DESC);
 });
 
 test('#545 空态组件仍在，默认页和空分段深链都到不了', async ({ page }) => {
-  const source = readFileSync('src/features/ladder/Ladder.tsx', 'utf8');
+  const source = ['Ladder.tsx', 'LadderArabia.tsx', 'LadderTeam.tsx'].map((name) => readFileSync(`src/features/ladder/${name}`, 'utf8')).join('\n');
   expect(source).toContain('data-testid="ladder-empty"');
   expect(source).toContain('这个分段暂无数据');
   expect(source).toContain('不推算');
