@@ -1,18 +1,117 @@
-.civ-opening .civ-opening-choice {
+.civ-opening-route {
+  margin: 0 0 12px;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.civ-opening-era {
+  margin-right: 4px;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+
+.civ-opening-arrow {
+  margin: 0 6px;
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.civ-opening-flows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.civ-opening-flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.civ-opening-flow .name {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-link);
+  font-size: var(--fs-body);
+  line-height: 1.45;
+}
+
+.civ-opening-generic {
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.civ-opening-empty {
+  margin: 0;
+}
+
+.civ-opening-foot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: var(--space-2);
-  max-width: 100%;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
 }
-.civ-opening .civ-opening-links .ulink {
+
+.civ-opening-notes {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+
+.civ-opening-notes summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  list-style: none;
+  cursor: pointer;
+}
+
+.civ-opening-notes summary::-webkit-details-marker {
+  display: none;
+}
+
+.civ-opening-notes summary::marker {
+  content: '';
+}
+
+.civ-opening-notes[open] summary .chev {
+  transform: rotate(90deg);
+}
+
+.civ-opening-notes p {
+  margin: 0 0 8px;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.civ-opening-all {
   display: inline-flex;
   align-items: center;
   min-width: 44px;
-  padding-block: var(--space-2);
-  max-width: 100%;
-}
-.civ-opening .civ-opening-generic {
+  min-height: 44px;
+  margin-left: auto;
+  color: var(--color-link);
   font-size: var(--fs-sm);
+  line-height: 1.4;
+  text-decoration: none;
   white-space: nowrap;
 }
