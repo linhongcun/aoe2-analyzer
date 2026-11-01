@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#581 线框 · 1280 · 攻城页已选中型冲车</title>
+  <link rel="stylesheet" href="feedback.css" />
+</head>
+<body>
+  <main class="frame f1280" data-testid="siege-page">
+    <div class="fbbar">
+      <p class="fbctx">将附带：<span class="nw" data-testid="siege-feedback-context">中型冲车 / <span class="num">422</span></span></p>
+      <a class="fbbtn" href="#feedback" data-t="feedback">
+        <span class="ic mu" aria-hidden="true" title="message-square-warning">message-square-warning</span>
+        报错/反馈
+      </a>
+    </div>
+    <div class="top">
+      <a class="back" href="#/" aria-label="返回首页"><span class="ic" aria-hidden="true" title="arrow-left">arrow-left</span>首页</a>
+      <span class="crumb">工具 / 攻城拆建筑</span>
+    </div>
+    <h1><span class="ic lg" aria-hidden="true" title="hammer">hammer</span>攻城拆建筑</h1>
+    <p class="desc">几台攻城单位拆掉一座建筑要多久：击数、游戏秒、<span class="num">1.7</span> 倍速度下的现实秒。</p>
+    <div class="grid">
+      <div>
+        <section class="sec" aria-labelledby="h-in">
+          <h2 id="h-in">攻方</h2>
+          <div class="field">
+            <label for="u">攻城单位</label>
+            <div class="sel" id="u"><span class="ic" aria-hidden="true" title="hammer">hammer</span><span class="grow">中型冲车</span><span class="ic mu" aria-hidden="true" title="chevron-down">chevron-down</span></div>
+          </div>
+          <div class="field">
+            <label for="n">数量</label>
+            <div class="step">
+              <div class="stepper">
+                <button type="button" aria-label="减少一台"><span class="ic" aria-hidden="true" title="minus">minus</span></button>
+                <input id="n" class="num" value="4" inputmode="numeric" aria-label="数量" readonly />
+                <button type="button" aria-label="增加一台"><span class="ic" aria-hidden="true" title="plus">plus</span></button>
+              </div>
+              <span role="group" aria-label="常用数量" style="display:inline-flex;gap:6px">
+                <button type="button" class="chip num" aria-pressed="false">1</button>
+                <button type="button" class="chip num" aria-pressed="true">4</button>
+                <button type="button" class="chip num" aria-pressed="false">6</button>
+              </span>
+            </div>
+          </div>
+        </section>
+        <section class="sec" aria-labelledby="h-tg">
+          <h2 id="h-tg">目标</h2>
+          <div class="field">
+            <label for="b">目标建筑</label>
+            <div class="sel" id="b"><span class="ic" aria-hidden="true" title="castle">castle</span><span class="grow">城堡</span><span class="ic mu" aria-hidden="true" title="chevron-down">chevron-down</span></div>
+          </div>
+        </section>
+      </div>
+      <section class="result" aria-label="计算结果保持现页">
+        <h2><span class="nw"><span class="num">4</span> 台</span>中型冲车拆城堡</h2>
+        <p class="ph">击数、游戏秒、现实秒保持现页。本切片不画这些数字。</p>
+      </section>
+    </div>
+    <div class="foot">
+      <a class="fblink" href="#feedback" data-t="feedback">
+        <span class="ic mu" aria-hidden="true" title="message-square-warning">message-square-warning</span>
+        报错/反馈
+      </a>
+      <a class="fblink" href="#feedback" data-t="feature">
+        <span class="ic" aria-hidden="true" title="lightbulb">lightbulb</span>
+        功能建议
+      </a>
+      <p class="fbctx">将附带：<span class="nw" data-testid="siege-feedback-context">中型冲车 / <span class="num">422</span></span></p>
+      <p class="say">发现错误或有功能建议？欢迎在 GitHub 提交（自动附带页面地址与数据版本）。</p>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>地址 <code>#/siege?unit=422</code>（缺省数量 4、目标城堡 82）。中文名来自 <code>units.json</code>：422 中型冲车。</li>
+    <li>旁注与链接同一簇：页顶在「报错/反馈」左侧；页脚两个链接共用一条，紧挨在说明句之前。静止可见，不是 tooltip。</li>
+    <li>句子与 #555 预填标题相同。<code>data-testid="siege-feedback-context"</code> 只包住 <code>中型冲车 / 422</code>，「将附带：」在节点外。线框链接是占位。实现仍打开原来的 GitHub 新 issue URL。</li>
+    <li>中型冲车对城堡已核实，不画「反馈数据缺口」。击数不在这张线框里编。</li>
+  </ul>
+</body>
+</html>
