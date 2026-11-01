@@ -229,19 +229,19 @@ test('#6 开局页固定分享条不会遮挡手机导航的外观按钮', async
 });
 
 for (const width of WIDTHS)
-  test(`#6 @${width}：首页首屏可搜索并看到至少四个资料入口`, async ({ page }, info) => {
+  test(`#6 @${width}：首页仍可搜索，开一局在工具宫格上面`, async ({ page }, info) => {
+    // #592 把首页第一屏改成「开一局」。搜索和资料入口还在，但不再占住第一屏。
     await page.setViewportSize({ width, height: 900 });
     await ready(page, '', '#home .hcard');
+    const title = page.getByRole('heading', { level: 1, name: '开一局', exact: true });
+    await expect(title).toBeInViewport({ ratio: 1 });
+    const titleBox = await title.boundingBox();
+    const cardBox = await page.locator('#home .hcard').first().boundingBox();
+    expect(titleBox && cardBox && titleBox.y < cardBox.y).toBe(true);
+    expect(await page.locator('#home .hcard').count()).toBeGreaterThanOrEqual(4);
     const search = page.locator('#home .herosearch');
+    await search.scrollIntoViewIfNeeded();
     await expect(search).toBeInViewport({ ratio: 1 });
-    const visibleCards = await page.locator('#home .hcard').evaluateAll(
-      (cards) =>
-        cards.filter((card) => {
-          const rect = card.getBoundingClientRect();
-          return rect.top >= 0 && rect.bottom <= innerHeight && rect.left >= 0 && rect.right <= innerWidth;
-        }).length,
-    );
-    expect(visibleCards).toBeGreaterThanOrEqual(4);
     await search.click();
     await expect(page.getByPlaceholder(/搜索文明、单位、科技/)).toBeFocused();
     await page.keyboard.press('Escape');
