@@ -52,5 +52,6 @@ export function schemaFileFor(file) {
   if (/^src\/data\/build-orders\/[a-z0-9-]+\.json$/u.test(file)) return 'data-build-order.json';
   if (/^src\/data\/patches\/[0-9]+\.json$/u.test(file)) return 'data-patch.json';
   if (/^src\/data\/ladder-arabia-[a-z0-9.-]+\.json$/u.test(file)) return 'data-ladder-arabia.json';
+  if (/^src\/data\/ladder-4v4-[a-z0-9.-]+\.json$/u.test(file)) return 'data-ladder-4v4.json';
   return null;
 }

@@ -92,14 +92,15 @@ hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归
 
 遵循 [Conventional Commits](https://www.conventionalcommits.org/zh-hans/v1.0.0/)：`类型(范围): 描述`，范围写对应 issue 号。PR 标题会被 CI 检查（`scripts/check-pr-title.mjs`），squash 合并时 PR 标题即提交信息。
 
-| 类型    | 用途               | 示例                               |
-| ------- | ------------------ | ---------------------------------- |
-| `feat`  | 新功能             | `feat(#19): 开局分享卡`            |
-| `fix`   | 修复 bug、数据错误 | `fix(#13): 科技涉及单位只显示一处` |
-| `docs`  | 文档               | `docs(#44): 别名表说明`            |
-| `chore` | 杂项、仓库维护     | `chore: 添加 CONTRIBUTING`         |
-| `test`  | 只改测试           | `test(#57): 主要卡点 e2e 用例`     |
-| `ci`    | CI 配置            | `ci: release/** 分支也跑测试`      |
+| 类型    | 用途                   | 示例                               |
+| ------- | ---------------------- | ---------------------------------- |
+| `feat`  | 新功能                 | `feat(#19): 开局分享卡`            |
+| `fix`   | 修复 bug、数据错误     | `fix(#13): 科技涉及单位只显示一处` |
+| `docs`  | 文档                   | `docs(#44): 别名表说明`            |
+| `chore` | 杂项、仓库维护         | `chore: 添加 CONTRIBUTING`         |
+| `data`  | 静态数据快照，不改界面 | `data(#577): 4v4 天梯快照`         |
+| `test`  | 只改测试               | `test(#57): 主要卡点 e2e 用例`     |
+| `ci`    | CI 配置                | `ci: release/** 分支也跑测试`      |
 
 另外允许 `refactor`、`style`、`perf`、`build`、`revert`、`hotfix`。不兼容变化在类型后加 `!`，例如 `feat(#70)!: 分享链接改用新格式`。
 
