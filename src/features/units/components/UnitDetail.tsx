@@ -19,10 +19,12 @@ import { CivChip, CivIcon, CostView, DlcBadgeL, StatIcon, TechLink, UnitIcon, Un
 import { BLink } from '../../../shared/ui/BLink';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles, type DetailStat } from '../../../shared/ui/DetailBlocks';
+import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Join, Linked, Loading, Sep } from '../../../shared/ui/widgets';
 import Simulator from '../../../shared/ui/sim/Simulator';
 import UnitList from './UnitList';
 import { discountedCost, priceAge } from '../../../domain/costDiscount';
+import { unitInsights } from '../../../domain/insights';
 import { siegeUnitEntryVerified } from '../../../domain/siege';
 import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/realCost';
 import { Basis } from '../../../shared/ui/RealCost';
@@ -273,6 +275,7 @@ export default function UnitDetail() {
                 </dl>
                 <GatherLine u={u} civ={rt.civ} age={rt.age} />
               </DetailSection>
+              <InsightSlot items={unitInsights(u.id)} />
               <StatTiles stats={stats} label="基础属性" />
               <div className="two">
                 <div>

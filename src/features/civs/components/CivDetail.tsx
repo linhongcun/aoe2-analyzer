@@ -3,12 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
+import { civInsights } from '../../../domain/insights';
 import { findUniqueTech } from '../../../domain/linker';
 import { AXES, strengths, TYPE_ZH } from '../../../domain/ratings';
 import type { Civ } from '../../../domain/types';
 import { CivChip, CivIcon, DlcBadgeL, TechIcon, UnitLinks } from '../../../shared/ui/art';
 import { collapse } from '../../../domain/family';
 import { Icon } from '../../../shared/ui/Icon';
+import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
 import { RatingHeading, RatingLabel } from '../../../shared/ui/RatingHelp';
@@ -155,6 +157,7 @@ export default function CivDetail() {
                 <b>特色兵种：</b>
                 <Linked text={civDisplayText(c.uu, c.en, core)} />
               </p>
+              <InsightSlot items={civInsights(c.en)} />
               <p>
                 <b>文明加成：</b>
                 <Link className="ulink" to="/bonuses">
