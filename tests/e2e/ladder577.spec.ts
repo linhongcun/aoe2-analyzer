@@ -1,79 +1,71 @@
-// #577 切片 A 失败验收。不实现页面，不改产品代码，不改 src/data 快照，不关 #577。
-// 当前 main 首次进入仍是阿拉伯 1v1「全部」（ladder-arabia-p162286.json），表行没有趋势。这些用例应红，直到实现 PR。
-// 只覆盖 AC-A：默认筛 + 来源条口径/截止 + 无快照不展示假胜率 + 表行趋势（时段、样本量门槛、与表同源）+ 可切回阿拉伯 1v1。
-// AC-B（Tiers / Meta Map）只记在文件末尾，不写会失败的用例。1280×900，不做窄屏。不接 live，不读 aoe2scout。
+// #577 失败验收（设计 #586 @ 6553d099 §11 A + §12 B）。不实现页面，不改 src/，不关 #577。
+// 当前 main 仍是阿拉伯 1v1「全部」。这些用例应红，直到 A+B 按短稿落地。1280×900。不接 live，不读 aoe2scout。
+// 不把线框示意胜率（51.00%、50.50%、中国/法兰克归类）写进断言或 JSON。
 //
-// 实现契约（没有短稿时按可测行为锁定，不要为了变绿放宽）：
-// 筛选当前值用这些 testid，节点本身可见。组内用 aria-pressed / aria-checked / aria-selected 标出当前项；没有时整段文字当作当前值（不要把未选项混进来）。
-//   ladder-filter-format  4v4（可写 4对4），不能是 1v1
-//   ladder-filter-mode    随机地图或 RM
-//   ladder-filter-elo     1200–1400，不是「全部」
-//   ladder-filter-period  「近 90 天 / 最近 90 天 / 90 天」，或起止日期跨 80–100 天（含约 89 天）
-//   ladder-filter-map     全图 / 全部地图 / 所有地图 / 不限地图，当前值不要带阿拉伯
-// 来源条 ladder-source 写明上述口径，并有「截止」或「截至」。无默认切片快照时写明没有这份快照，且页面不出现阿拉伯 1v1 的胜率百分数。
-// 默认切片快照认 src/data/ladder-*.json 的根对象（不要改阿拉伯文件来冒充）：
-//   format/mode/teamSize 含 4v4，mode 含 RM 或「随机地图」，map 为 all / __all__ / 全图 / 全部地图 / 所有地图 / 不限地图，
-//   eloMin=1200 且 eloMax=1400，windowDays 或 dateFrom–dateTo 在 80–100 天。
-//   civs[].{en,winRate,games,trend}；trend 为至少两个百分数，或 {winRate} 点。civs 也可放在 brackets[].civs。
-// 趋势：行内 [data-testid="ladder-trend-{En}"]，且落在 ladder-row-{En} 里。
-//   data-period  与时段筛一致：90d，或 YYYY-MM-DD/YYYY-MM-DD（跨度 80–100 天），或快照 windowDays/dateFrom/dateTo 的同一写法
-//   data-games   与该行 data-games、快照 games 相同
-//   data-points  逗号或空白分隔的百分数，与该文明 trend 相同；低样本为空
-//   data-low-sample  "true" / "false"，等于 data-games < 门槛
-//   门槛在 [data-testid="ladder-trend-rules"][data-min-games]（正整数）。文案含该数字、「趋势」和「样本」。
-//   达到门槛：可见 svg polyline/path 或 canvas。低于门槛：不画曲线，文案或 aria-label 含「样本不足」或「样本少」。
-// 切回：data-testid="ladder-open-arabia"，或可见 button/radio/link/tab/select，名称同时有「阿拉伯」（或 Arabia）和「1v1」。
-// 切回后表内胜率等于阿拉伯快照。该文件没有 trend[] 时，不要把默认切片的曲线留在这张表上。
+// 产品锁定的分层边界（Steve 2026-11-01，§7），实现不得另切：
+//   S ≥ 52%；A ≥ 51% 且 < 52%；B ≥ 50% 且 < 51%；C ≥ 48% 且 < 50%；D < 48%。
+//   恰好 52→S，51→A，50→B，48→C。
+// 分布落在线上（§8）：胜率 ≥ 50% 算强；出场率 ≥ 当前可见文明中位数算常见。
+// 象限只有：强且少见 / 强且常见 / 弱且少见 / 弱且常见。禁止 Pillars / Sleepers / Crowd-pleasers / Niche。
+//
+// 契约（§2–§8）。A 只做表时，分层/分布 disabled，点击不改地址和筛选；本文件同时挂 B，A+B 合入后这两枚必须可点。
+//   ladder-filters；模式 radiogroup：ladder-mode-4v4「4v4 随机地图」、ladder-mode-arabia1v1「阿拉伯 1v1」
+//   默认切片只读：ladder-period-static「近 90 天 · 当前快照」、ladder-elo-static「1200–1400 · 当前快照」、ladder-map-static「全图 · 当前快照」
+//   阿拉伯：时段「整段快照 · 当前快照」，地图「阿拉伯 · 固定」，分段仍是 ladder-elo-static「全部」
+//   ladder-view aria-label=视图；ladder-view-table / ladder-view-tiers / ladder-view-meta
+// 无 4v4 文件：ladder-empty「这个切片暂无快照。不推算，不补数。」+「看阿拉伯 1v1」；不画 ladder-cutoff / data-fetched-at。有文件时 data-fetched-at=fetchedAt，样本句「本切片样本」（阿拉伯仍「本分段样本」）。
+// ladder-hide-low 默认勾选，「隐藏低样本」不含 50，不进地址；data-threshold 缺省 LOW_SAMPLE（300）或切片 lowSampleGames。勾选后表、分层计数、气泡、中位线是同一批可见文明。
+// 走势 ladder-trend-{En}：无序列写「无走势」且无折线。有序列：data-period / data-points / data-low-sample，门槛 ladder-trend-rules[data-min-games]。
+// 分层 ladder-tier-band-S|A|B|C|D（data-band、data-count），空档「这一档没有文明」，药丸链 /civ/{en}。
+// 分布 ladder-meta-map：win-line data-value=50，pick-line 为可见出场率中位数，bubble-{En} 可聚焦，aria-label 含英文名、胜率、出场率、局数，data-quadrant 为四句中文之一。
+// 地址：无参数才是默认切片。?mode=arabia1v1 走旧快照。只带 elo 进入阿拉伯，elo=all 收成 mode=arabia1v1。快照认 src/data/ladder-*.json（4v4+RM、全图、1200–1400、约 90 天）。阿拉伯文件不能冒充。
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { expect, test, type Locator, type Page } from '@playwright/test';
-import { formatPercent } from '../../src/domain/ladder';
-
+import { expect, test, type Page } from '@playwright/test';
+import { formatPercent, LOW_SAMPLE } from '../../src/domain/ladder';
 const FORMAT_4V4 = /4\s*v\s*4|4v4|4\s*对\s*4/i;
 const FORMAT_1V1 = /1\s*v\s*1|1v1|1\s*对\s*1/i;
 const PERIOD_TEXT = /近\s*90\s*天|最近\s*90\s*天|过去\s*90\s*天|(?:^|[^\d])90\s*天/;
 const ALL_MAPS = /全图|全部地图|所有地图|不限地图/;
-const MISSING_SNAPSHOT = /没有这份快照|无此切片快照|暂无该切片|暂无此切片|没有该切片|不展示胜率|暂无快照/;
+const MISSING_SNAPSHOT = /没有这份快照|无此切片快照|暂无该切片|暂无此切片|没有该切片|不展示胜率|暂无快照|这个切片暂无快照/;
+const BANDS = ['S', 'A', 'B', 'C', 'D'] as const;
+const QUADS = ['强且少见', '强且常见', '弱且少见', '弱且常见'] as const;
+const ENGLISH_QUAD = /Pillars|Sleepers|Crowd-pleasers|Niche/i;
+type Band = (typeof BANDS)[number];
 const soon = expect.configure({ timeout: 2_000, soft: true });
-
 type Json = Record<string, unknown>;
-
 interface CivStat {
   en: string;
   winRate: number;
   games: number;
+  playRate: number | null;
   trend: number[] | null;
 }
-
 interface SliceSnapshot {
   file: string;
   fetchedAt: string | null;
   dateFrom: string | null;
   dateTo: string | null;
   windowDays: number | null;
+  lowSampleGames: number;
   civs: CivStat[];
   trendReady: boolean;
 }
-
 function asRecord(value: unknown): Json | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value) ? (value as Json) : null;
 }
-
 function textOf(value: unknown): string {
   return typeof value === 'string' ? value.trim() : '';
 }
-
 function numOf(value: unknown): number | null {
   return typeof value === 'number' && Number.isFinite(value) ? value : null;
 }
-
 function daysBetween(from: string, to: string): number | null {
   const start = Date.parse(from);
   const end = Date.parse(to);
   if (!Number.isFinite(start) || !Number.isFinite(end)) return null;
   return Math.round((end - start) / 86_400_000);
 }
-
 function readWindow(record: Json): number | null {
   const explicit = numOf(record.windowDays);
   const from = textOf(record.dateFrom);
@@ -83,11 +75,9 @@ function readWindow(record: Json): number | null {
   if (candidates.length === 0 || candidates.some((value) => value < 80 || value > 100)) return null;
   return candidates[0] ?? null;
 }
-
 function sliceBlob(record: Json): string {
   return [record.format, record.mode, record.teamSize, record.size, record.ladder, record.mapPool].map((item) => String(item ?? '')).join(' ');
 }
-
 function matchesDefaultSlice(record: Json): boolean {
   const blob = sliceBlob(record);
   if (!FORMAT_4V4.test(blob) || FORMAT_1V1.test(blob)) return false;
@@ -98,7 +88,6 @@ function matchesDefaultSlice(record: Json): boolean {
   if (numOf(record.eloMin) !== 1200 || numOf(record.eloMax) !== 1400) return false;
   return readWindow(record) != null;
 }
-
 function readTrend(civ: Json): number[] | null {
   const raw = civ.trend ?? civ.series ?? civ.points;
   if (!Array.isArray(raw) || raw.length < 2) return null;
@@ -110,7 +99,6 @@ function readTrend(civ: Json): number[] | null {
   if (points.some((point) => point == null)) return null;
   return points as number[];
 }
-
 function readCivs(record: Json): CivStat[] {
   const lists: unknown[] = [];
   if (Array.isArray(record.civs)) lists.push(...record.civs);
@@ -127,17 +115,15 @@ function readCivs(record: Json): CivStat[] {
     const winRate = civ ? numOf(civ.winRate) : null;
     const games = civ ? numOf(civ.games) : null;
     if (!civ || !en || winRate == null || games == null) continue;
-    civs.set(en, { en, winRate, games, trend: readTrend(civ) });
+    civs.set(en, { en, winRate, games, playRate: numOf(civ.playRate), trend: readTrend(civ) });
   }
   return [...civs.values()];
 }
-
 function ladderFiles(): string[] {
   return readdirSync('src/data')
     .filter((name) => /^ladder-.*\.json$/.test(name) && name !== 'ladder-beginner.json')
     .sort();
 }
-
 function loadArabia(): { file: string; fetchedAt: string; civs: Map<string, CivStat> } {
   const name = ladderFiles().find((file) => file.includes('arabia'));
   if (!name) throw new Error('找不到 src/data/ladder-arabia-*.json，无法验收切回路径');
@@ -147,7 +133,6 @@ function loadArabia(): { file: string; fetchedAt: string; civs: Map<string, CivS
   if (!civs.has('Franks') || !civs.has('Romans')) throw new Error(`${name} 缺少 Franks 或 Romans`);
   return { file: name, fetchedAt: textOf(record.fetchedAt), civs };
 }
-
 function loadDefaultSlice(): SliceSnapshot | null {
   const found: SliceSnapshot[] = [];
   for (const file of ladderFiles()) {
@@ -161,6 +146,7 @@ function loadDefaultSlice(): SliceSnapshot | null {
       dateFrom: textOf(record.dateFrom) || null,
       dateTo: textOf(record.dateTo) || null,
       windowDays: readWindow(record),
+      lowSampleGames: numOf(record.lowSampleGames) ?? LOW_SAMPLE,
       civs,
       trendReady: civs.every((civ) => civ.trend != null && civ.trend.length >= 2),
     });
@@ -168,26 +154,15 @@ function loadDefaultSlice(): SliceSnapshot | null {
   if (found.length > 1) throw new Error(`默认切片快照多于一份：${found.map((item) => item.file).join(', ')}`);
   return found[0] ?? null;
 }
-
 const arabia = loadArabia();
 const slice = loadDefaultSlice();
 const franks = arabia.civs.get('Franks');
 const romans = arabia.civs.get('Romans');
 if (!franks || !romans) throw new Error('阿拉伯快照缺少 Franks 或 Romans');
-
-function periodOk(text: string): boolean {
-  if (PERIOD_TEXT.test(text)) return true;
-  const dates = text.match(/\d{4}-\d{2}-\d{2}/g) ?? [];
-  if (dates.length < 2) return false;
-  const span = daysBetween(dates[0] ?? '', dates[1] ?? '');
-  return span != null && span >= 80 && span <= 100;
-}
-
 function eloOk(text: string): boolean {
   const compact = text.replace(/\s+/g, '');
   return /1200\D{0,8}1400|1400\D{0,8}1200/.test(compact);
 }
-
 function acceptedPeriods(filterText: string): string[] {
   const accepted = new Set<string>();
   if (PERIOD_TEXT.test(filterText) || slice?.windowDays === 90) accepted.add('90d');
@@ -197,8 +172,7 @@ function acceptedPeriods(filterText: string): string[] {
   if (slice?.dateFrom && slice.dateTo) accepted.add(`${slice.dateFrom}/${slice.dateTo}`);
   return [...accepted];
 }
-
-async function openFresh(page: Page) {
+async function openFresh(page: Page, hash = '/ladder') {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.addInitScript(() => {
@@ -206,99 +180,159 @@ async function openFresh(page: Page) {
     sessionStorage.clear();
   });
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('./#/ladder');
+  await page.goto(`./#${hash}`);
   await expect(page.getByTestId('ladder-page')).toBeVisible();
   return errors;
 }
-
-async function selectedText(page: Page, testId: string): Promise<string> {
+function hashQuery(url: string): URLSearchParams {
+  const hash = new URL(url).hash;
+  const queryAt = hash.indexOf('?');
+  return new URLSearchParams(queryAt === -1 ? '' : hash.slice(queryAt + 1));
+}
+/** 产品锁定边界。52→S，51→A，50→B，48→C，低于 48→D。 */
+function tierOf(winRate: number): Band {
+  if (winRate >= 52) return 'S';
+  if (winRate >= 51) return 'A';
+  if (winRate >= 50) return 'B';
+  if (winRate >= 48) return 'C';
+  return 'D';
+}
+function medianOf(values: number[]): number | null {
+  if (values.length === 0) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  if (sorted.length % 2 === 1) return sorted[mid] ?? null;
+  const left = sorted[mid - 1];
+  const right = sorted[mid];
+  if (left == null || right == null) return null;
+  return (left + right) / 2;
+}
+/** ≥50% 为强，≥中位数为常见。线上的点不掉进弱或少见。 */
+function quadrantOf(winRate: number, playRate: number, pickMedian: number): (typeof QUADS)[number] {
+  const strong = winRate >= 50;
+  const common = playRate >= pickMedian;
+  if (strong && common) return '强且常见';
+  if (strong) return '强且少见';
+  if (common) return '弱且常见';
+  return '弱且少见';
+}
+async function plainText(page: Page, testId: string): Promise<string> {
   const root = page.getByTestId(testId);
   if ((await root.count()) !== 1 || !(await root.isVisible())) return '';
-  const selected = root.locator('[aria-pressed="true"], [aria-checked="true"], [aria-selected="true"]');
-  const count = await selected.count();
-  const text = count >= 1 ? (await selected.allInnerTexts()).join(' ') : await root.innerText();
-  return text.replace(/\s+/g, ' ').trim();
+  return ((await root.innerText()) ?? '').replace(/\s+/g, '');
 }
-
+async function sliceSignature(page: Page) {
+  const mode = page.locator('[data-testid^="ladder-mode-"][aria-checked="true"]');
+  const hide = page.getByTestId('ladder-hide-low');
+  const source = page.getByTestId('ladder-source');
+  return {
+    mode: (await mode.count()) === 1 ? await mode.getAttribute('data-testid') : '',
+    period: await plainText(page, 'ladder-period-static'),
+    elo: await plainText(page, 'ladder-elo-static'),
+    map: await plainText(page, 'ladder-map-static'),
+    hide: (await hide.count()) === 1 ? await hide.isChecked() : null,
+    fetchedAt: (await source.count()) === 1 ? await source.getAttribute('data-fetched-at') : null,
+  };
+}
 async function openArabia(page: Page): Promise<boolean> {
-  const byId = page.getByTestId('ladder-open-arabia');
-  if ((await byId.count()) >= 1 && (await byId.first().isVisible())) {
-    await byId.first().click();
-    return true;
-  }
+  const mode = page.getByTestId('ladder-mode-arabia1v1');
   const named = page
-    .locator('button, a, [role="radio"], [role="tab"]')
+    .locator('button, a, [role="radio"], [role="tab"], select')
     .filter({ hasText: /阿拉伯|Arabia/ })
     .filter({ hasText: /1v1/ });
-  if ((await named.count()) >= 1 && (await named.first().isVisible())) {
-    await named.first().click();
-    return true;
-  }
-  const selects = page.locator('select');
-  const count = await selects.count();
-  for (let i = 0; i < count; i++) {
-    const labels = await selects.nth(i).locator('option').allInnerTexts();
+  const target = (await mode.count()) >= 1 ? mode.first() : (await named.count()) >= 1 ? named.first() : null;
+  if (!target || !(await target.isVisible())) return false;
+  if ((await target.evaluate((el) => el.tagName)) === 'SELECT') {
+    const labels = await target.locator('option').allInnerTexts();
     const hit = labels.find((label) => /阿拉伯|Arabia/.test(label) && /1v1/.test(label));
-    if (!hit) continue;
-    await selects.nth(i).selectOption({ label: hit });
+    if (!hit) return false;
+    await target.selectOption({ label: hit });
     return true;
   }
-  return false;
+  await target.click();
+  return true;
 }
-
 test('#577 打开 #/ladder 仍是天梯数据页，页脚保留「胜率不是平衡建议」', async ({ page }) => {
   const errors = await openFresh(page);
   await expect(page.getByRole('heading', { level: 1, name: /天梯数据/ })).toBeVisible();
   await expect(page.getByTestId('ladder-footer')).toContainText('胜率不是平衡建议');
   expect(errors, '打开天梯页不应有页面错误').toEqual([]);
 });
-
 test('#577 首次进入默认筛为 4v4 RM · Elo 1200–1400 · 近 90 天 · 全图', async ({ page }) => {
   await openFresh(page);
-  const format = await selectedText(page, 'ladder-filter-format');
-  const mode = await selectedText(page, 'ladder-filter-mode');
-  const elo = await selectedText(page, 'ladder-filter-elo');
-  const period = await selectedText(page, 'ladder-filter-period');
-  const map = await selectedText(page, 'ladder-filter-map');
   const context = ((await page.getByTestId('ladder-context').innerText()) ?? '').replace(/\s+/g, ' ').trim();
-  soon(format, `ladder-filter-format 当前值应为 4v4。现在上下文是「${context}」`).toMatch(FORMAT_4V4);
-  if (format) soon(format, '默认格式不能是 1v1').not.toMatch(FORMAT_1V1);
-  soon(mode, 'ladder-filter-mode 当前值应为随机地图 / RM').toMatch(/随机地图|\bRM\b/i);
-  soon(eloOk(elo), `ladder-filter-elo 当前值应为 1200–1400，实际「${elo}」`).toBe(true);
-  soon(periodOk(period), `ladder-filter-period 当前值应为近 90 天或 80–100 天的起止日期，实际「${period}」`).toBe(true);
-  soon(ALL_MAPS.test(map) && !/阿拉伯|Arabia/i.test(map), `ladder-filter-map 当前值应为全图，实际「${map}」`).toBe(true);
-  soon(
-    FORMAT_4V4.test(format) && /随机地图|\bRM\b/i.test(mode) && eloOk(elo) && periodOk(period) && ALL_MAPS.test(map),
-    `首次进入仍不是 4v4 RM · Elo 1200–1400 · 近 90 天 · 全图。上下文：「${context}」`,
-  ).toBe(true);
+  const filters = page.getByTestId('ladder-filters');
+  const mode4 = await plainText(page, 'ladder-mode-4v4');
+  const period = await plainText(page, 'ladder-period-static');
+  const elo = await plainText(page, 'ladder-elo-static');
+  const map = await plainText(page, 'ladder-map-static');
+  const hide = page.getByTestId('ladder-hide-low');
+  soon(await filters.count(), `应有 ladder-filters。现在上下文是「${context}」`).toBe(1);
+  soon(hashQuery(page.url()).get('mode'), '无参数默认切片不写 mode=arabia1v1').not.toBe('arabia1v1');
+  soon(mode4, 'ladder-mode-4v4 应为「4v4 随机地图」').toMatch(/4v4/);
+  soon(mode4).toMatch(/随机地图/);
+  const checked = page.getByTestId('ladder-mode-4v4');
+  soon((await checked.count()) === 1 ? await checked.getAttribute('aria-checked') : null, '4v4 应选中').toBe('true');
+  soon(period, `时段 pill 应为近 90 天 · 当前快照，实际「${period}」`).toContain('近90天');
+  soon(period).toContain('当前快照');
+  soon(eloOk(elo) && elo.includes('当前快照'), `分段 pill 应为 1200–1400 · 当前快照，实际「${elo}」`).toBe(true);
+  soon(map.includes('全图') && map.includes('当前快照') && !/阿拉伯|Arabia/i.test(map), `地图 pill 应为全图，实际「${map}」`).toBe(true);
+  if ((await filters.count()) === 1) {
+    soon(await filters.getByRole('radiogroup').count(), '只有模式两档是 radiogroup，单档不要包一层').toBe(1);
+    soon(await filters.getByRole('slider').count(), '不要 Elo 滑杆').toBe(0);
+    const blob = (await filters.innerText()) ?? '';
+    soon(blob, '不要 2v2 / 3v3 / 帝国战争').not.toMatch(/2v2|3v3|帝国战争/);
+    soon(blob, '不要空的 7 天时段').not.toMatch(/7\s*天/);
+  }
+  soon(await hide.count(), '应有「隐藏低样本」，默认勾选，文案不含 50').toBe(1);
+  if ((await hide.count()) === 1) {
+    soon(await hide.isChecked()).toBe(true);
+    soon(await hide.getAttribute('data-threshold'), `阈值缺省 ${LOW_SAMPLE}，或切片 lowSampleGames`).toBe(String(slice?.lowSampleGames ?? LOW_SAMPLE));
+    const label = await hide.evaluate((el) => {
+      const id = el.getAttribute('id');
+      const explicit = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`) : null;
+      return ((el.closest('label') ?? explicit)?.textContent ?? el.getAttribute('aria-label') ?? '').replace(/\s+/g, '');
+    });
+    soon(label).toContain('隐藏低样本');
+    soon(label, '不要写成 aoe2scout 的 50').not.toMatch(/50/);
+    soon(hashQuery(page.url()).has('hide') || hashQuery(page.url()).has('low'), '勾选不进地址').toBe(false);
+  }
 });
-
 test('#577 来源条写明默认口径和截止；没有该切片快照时不展示胜率', async ({ page }) => {
   await openFresh(page);
   const source = ((await page.getByTestId('ladder-source').innerText()) ?? '').replace(/\s+/g, ' ').trim();
   const compact = source.replace(/\s+/g, '');
-  soon(compact, `来源条要写明 4v4。实际：「${source}」`).toMatch(FORMAT_4V4);
-  soon(/随机地图|\bRM\b/i.test(source), '来源条要写明随机地图 / RM').toBe(true);
-  soon(eloOk(source), '来源条要写明 Elo 1200–1400').toBe(true);
-  soon(periodOk(source), '来源条要写明近 90 天，或 80–100 天的起止日期').toBe(true);
-  soon(ALL_MAPS.test(source), '来源条要写明全图 / 全部地图 / 所有地图 / 不限地图').toBe(true);
-  soon(source, '来源条要有截止或截至').toMatch(/截止|截至/);
+  // 口径在筛选条。来源条沿 #547：有文件才写截止；没有 4v4 文件就不编日期（§5 / §11）。
   const pageText = (await page.getByTestId('ladder-page').innerText()) ?? '';
   if (!slice) {
     soon(compact, '无默认切片快照时，来源条要写明没有这份快照 / 不展示胜率，不能只用阿拉伯 1v1 的统计截止充数').toMatch(MISSING_SNAPSHOT);
-    if (arabia.fetchedAt && source.includes(arabia.fetchedAt)) {
-      soon(source, `来源条写了阿拉伯快照日期 ${arabia.fetchedAt}，但没有标明它不是默认切片`).toMatch(/阿拉伯|1v1|不是默认/);
-    }
+    if (arabia.fetchedAt) soon(source, `空态不要写阿拉伯快照日期 ${arabia.fetchedAt}`).not.toContain(arabia.fetchedAt);
     const leaked = [...arabia.civs.keys()].filter((en) => {
       const civ = arabia.civs.get(en);
       return civ != null && pageText.includes(formatPercent(civ.winRate));
     });
     soon(leaked.slice(0, 8), `无默认切片快照时不得展示阿拉伯 1v1 胜率（${arabia.file}），已看到 ${leaked.slice(0, 8).join(', ')}`).toEqual([]);
+    const empty = page.getByTestId('ladder-empty');
+    soon(await empty.count(), '4v4 文件缺失时应是空态，而不是阿拉伯表').toBe(1);
+    if ((await empty.count()) === 1) {
+      const emptyText = ((await empty.innerText()) ?? '').replace(/\s+/g, '');
+      soon(emptyText).toContain('这个切片暂无快照');
+      soon(emptyText).toContain('不推算，不补数');
+    }
+    soon(await page.getByRole('button', { name: '看阿拉伯 1v1' }).count(), '空态按钮应能进入阿拉伯 1v1').toBeGreaterThan(0);
+    soon(await page.getByTestId('ladder-cutoff').count(), '没有 4v4 文件时不编截止日').toBe(0);
+    const fetched =
+      (await page.getByTestId('ladder-source').count()) === 1 ? await page.getByTestId('ladder-source').getAttribute('data-fetched-at') : 'missing';
+    soon(fetched, '空态不要写 data-fetched-at').toBeNull();
+    soon(compact, '空态不要用阿拉伯的「本分段样本」充数').not.toContain('本分段样本');
     return;
   }
   const cutoff = slice.dateTo ?? slice.fetchedAt;
   soon(cutoff, `${slice.file} 要有 dateTo 或 fetchedAt，来源条才能写截止`).toBeTruthy();
   if (cutoff) soon(source, `来源条截止应包含快照 ${cutoff}`).toContain(cutoff);
+  soon(compact, '4v4 样本句是「本切片样本」').toContain('本切片样本');
+  const fetchedAt = await page.getByTestId('ladder-source').getAttribute('data-fetched-at');
+  soon(fetchedAt, 'ladder-source[data-fetched-at] 应等于这份快照').toBe(slice.fetchedAt);
   for (const civ of slice.civs) {
     const row = page.getByTestId(`ladder-row-${civ.en}`);
     soon(await row.count(), `${civ.en} 应在默认表中`).toBe(1);
@@ -307,7 +341,6 @@ test('#577 来源条写明默认口径和截止；没有该切片快照时不展
     soon(shown, `${civ.en} 胜率应来自 ${slice.file}`).toContain(formatPercent(civ.winRate));
   }
 });
-
 test('#577 默认表每一行有与筛同期的趋势，低样本门槛可测，且与表同源', async ({ page }) => {
   await openFresh(page);
   const rows = page.locator('[data-testid^="ladder-row-"]');
@@ -321,7 +354,7 @@ test('#577 默认表每一行有与筛同期的趋势，低样本门槛可测，
     soon(slice?.trendReady ?? false, `${slice?.file ?? '无快照'} 的每个文明都要有 trend[]（至少 2 个点），曲线才能与表同源`).toBe(true);
     return;
   }
-  const period = await selectedText(page, 'ladder-filter-period');
+  const period = await plainText(page, 'ladder-period-static');
   const accepted = acceptedPeriods(period);
   const rules = page.getByTestId('ladder-trend-rules');
   soon(await rules.count(), '应有 ladder-trend-rules 写明样本量门槛').toBe(1);
@@ -336,35 +369,35 @@ test('#577 默认表每一行有与筛同期的趋势，低样本门槛可测，
   }
   for (const civ of slice.civs) {
     const trend = page.getByTestId(`ladder-trend-${civ.en}`);
+    const row = page.getByTestId(`ladder-row-${civ.en}`);
     soon(await trend.count(), civ.en).toBe(1);
     if ((await trend.count()) !== 1 || !Number.isInteger(minGames)) continue;
-    const row = page.getByTestId(`ladder-row-${civ.en}`);
-    const host = await trend.evaluate((el) => el.closest('[data-testid^="ladder-row-"]')?.getAttribute('data-testid') ?? '');
-    soon(host, `${civ.en} 的趋势应在该行内`).toBe(`ladder-row-${civ.en}`);
-    const dataPeriod = await trend.getAttribute('data-period');
-    soon(accepted, `${civ.en} data-period「${dataPeriod}」应与时段筛一致，接受 ${accepted.join(' 或 ')}`).toContain(dataPeriod);
-    const games = Number(await trend.getAttribute('data-games'));
-    const rowGames = Number(await row.getAttribute('data-games'));
-    soon(games, `${civ.en} 趋势样本应等于快照 ${civ.games}`).toBe(civ.games);
-    soon(rowGames, `${civ.en} 行样本应与趋势相同`).toBe(games);
-    const low = games < minGames;
-    soon(await trend.getAttribute('data-low-sample'), `${civ.en} data-low-sample 应反映门槛 ${minGames}`).toBe(low ? 'true' : 'false');
-    const points = await readPoints(trend);
-    const curves = await trend.locator('svg polyline, svg path, canvas').count();
-    if (low) {
-      soon(points, `${civ.en} 低于 ${minGames} 局不应画出趋势点`).toEqual([]);
-      soon(curves, `${civ.en} 低于门槛不应有曲线`).toBe(0);
-      const label = `${(await trend.innerText()) ?? ''} ${await trend.getAttribute('aria-label')}`;
-      soon(label, `${civ.en} 低样本应写明样本不足或样本少`).toMatch(/样本不足|样本少/);
-    } else {
-      soon(curves, `${civ.en} 达到门槛应有 svg 曲线或 canvas`).toBeGreaterThan(0);
-      soon(sameSeries(points, civ.trend ?? []), `${civ.en} data-points 应等于快照 trend`).toBe(true);
-    }
-    const shown = ((await row.innerText()) ?? '').replace(/\s+/g, '');
-    soon(shown, `${civ.en} 表内胜率应与趋势同源（${slice.file}）`).toContain(formatPercent(civ.winRate));
+    const info = await trend.evaluate((el) => ({
+      host: el.closest('tr')?.getAttribute('data-testid') ?? '',
+      period: el.getAttribute('data-period'),
+      games: Number(el.getAttribute('data-games')),
+      low: el.getAttribute('data-low-sample'),
+      points: (el.getAttribute('data-points') ?? '').trim(),
+      curves: el.querySelectorAll('svg polyline, svg path, canvas').length,
+      text: `${el.textContent ?? ''} ${el.getAttribute('aria-label') ?? ''}`,
+    }));
+    const low = civ.games < minGames;
+    const points = info.points
+      ? info.points
+          .split(/[,\s]+/)
+          .filter(Boolean)
+          .map(Number)
+      : [];
+    const shapeOk = info.host === `ladder-row-${civ.en}` && accepted.includes(info.period) && info.games === civ.games && info.low === (low ? 'true' : 'false');
+    const curveOk = low
+      ? points.length === 0 && info.curves === 0 && /样本不足|样本少/.test(info.text)
+      : info.curves > 0 && sameSeries(points, civ.trend ?? []);
+    soon(shapeOk, `${civ.en} 趋势应在行内，时段 ${accepted.join('/')}，样本 ${civ.games}，低样本=${low}。实际 ${JSON.stringify(info)}`).toBe(true);
+    soon(curveOk, `${civ.en} ${low ? '低样本不画线' : '曲线应等于快照 trend'}`).toBe(true);
+    soon(Number(await row.getAttribute('data-games')), `${civ.en} 行样本`).toBe(civ.games);
+    soon(((await row.innerText()) ?? '').replace(/\s+/g, ''), `${civ.en} 胜率同源`).toContain(formatPercent(civ.winRate));
   }
 });
-
 test('#577 可以切回现有阿拉伯 1v1 快照，且不借用默认切片的曲线', async ({ page }) => {
   await openFresh(page);
   const before = (await page.getByTestId('ladder-page').innerText()) ?? '';
@@ -379,23 +412,23 @@ test('#577 可以切回现有阿拉伯 1v1 快照，且不借用默认切片的�
   const source = ((await page.getByTestId('ladder-source').innerText()) ?? '').replace(/\s+/g, '');
   soon(`${caption}${source}`, '切回后来源或表题应标明阿拉伯与 1v1').toMatch(/阿拉伯|Arabia/);
   soon(`${caption}${source}`).toMatch(FORMAT_1V1);
+  soon((await plainText(page, 'ladder-period-static')).includes('近90天'), '切到阿拉伯后不要留下 4v4 的近 90 天').toBe(false);
+  soon(eloOk(await plainText(page, 'ladder-elo-static')), '切到阿拉伯后不要留下 1200–1400').toBe(false);
+  const arabiaMap = await plainText(page, 'ladder-map-static');
+  soon(arabiaMap, '阿拉伯地图应为「阿拉伯 · 固定」').toMatch(/阿拉伯/);
+  soon(arabiaMap).toContain('固定');
+  soon(await plainText(page, 'ladder-period-static'), '时段应为整段快照').toContain('整段快照');
   const legacyTrend = [...arabia.civs.values()].some((civ) => civ.trend != null && civ.trend.length >= 2);
+  const trends = page.locator('[data-testid^="ladder-trend-"]');
   if (!legacyTrend) {
-    soon(await page.locator('[data-testid^="ladder-trend-"]').count(), '阿拉伯 1v1 快照没有 trend[]，切回后不要留下默认切片的曲线').toBe(0);
+    soon(await trends.count(), '走势列仍在；无序列时写「无走势」，不留默认切片的折线').toBeGreaterThan(0);
+    if ((await trends.count()) > 0) {
+      soon((await trends.first().innerText()) ?? '').toContain('无走势');
+      soon(await trends.first().locator('svg polyline, svg path, canvas').count()).toBe(0);
+    }
   }
+  soon(await page.getByTestId('ladder-source').getAttribute('data-fetched-at'), '切回后来源截止等于阿拉伯快照').toBe(arabia.fetchedAt);
 });
-
-async function readPoints(trend: Locator): Promise<number[] | null> {
-  const attr = await trend.getAttribute('data-points');
-  if (attr == null || !attr.trim()) return [];
-  const parts = attr
-    .split(/[,\s]+/)
-    .filter(Boolean)
-    .map((item) => Number(item));
-  if (parts.some((part) => !Number.isFinite(part))) return null;
-  return parts;
-}
-
 function sameSeries(actual: number[] | null, expected: number[]): boolean {
   if (!actual || actual.length !== expected.length) return false;
   return actual.every((point, index) => {
@@ -403,9 +436,162 @@ function sameSeries(actual: number[] | null, expected: number[]): boolean {
     return want != null && Math.abs(point - want) < 0.001;
   });
 }
-
-// TODO(#577 AC-B)：本文件不测，避免 Tiers / Meta Map 未做时挡住切片 A。
-// 同一切片下 Table / Tiers / Meta Map 数据同源，切视图不丢筛选。
-// Tiers：每个文明只进一档，档界可测。
-// Meta Map：胜率 × 出场可测，象限规则与图例可测。
-// 仍不接 live，不扒 aoe2scout，不抄对方图或数字。
+test('#577 §11 视图三枚都在；B 未启用时点分层/分布不改地址和筛选', async ({ page }) => {
+  await openFresh(page);
+  const view = page.getByTestId('ladder-view');
+  const tiers = page.getByTestId('ladder-view-tiers');
+  const meta = page.getByTestId('ladder-view-meta');
+  for (const id of ['ladder-view', 'ladder-view-table', 'ladder-view-tiers', 'ladder-view-meta']) soon(await page.getByTestId(id).count(), id).toBe(1);
+  if ((await view.count()) === 1) soon(await view.getAttribute('aria-label')).toBe('视图');
+  if ((await tiers.count()) !== 1 || (await meta.count()) !== 1) return;
+  const tiersOff = await tiers.isDisabled();
+  const metaOff = await meta.isDisabled();
+  soon(tiersOff === metaOff, '分层和分布应同时 disabled（只做了 A）或同时可点（B 已合）').toBe(true);
+  if (!(tiersOff && metaOff)) return;
+  const url = page.url();
+  const before = await sliceSignature(page);
+  await tiers.click({ force: true });
+  await meta.click({ force: true });
+  soon(page.url(), 'disabled 时不改地址').toBe(url);
+  soon(await sliceSignature(page), 'disabled 时不改筛选').toEqual(before);
+});
+test('#577 §11 无参数不是阿拉伯；只带 elo 进入阿拉伯；mode=arabia1v1 读旧快照', async ({ page }) => {
+  await openFresh(page);
+  soon(hashQuery(page.url()).get('mode'), '无参数不是 mode=arabia1v1').not.toBe('arabia1v1');
+  soon((await page.getByTestId('ladder-mode-4v4').count()) === 1 ? await page.getByTestId('ladder-mode-4v4').getAttribute('aria-checked') : null).toBe('true');
+  await openFresh(page, '/ladder?elo=all');
+  await soon.poll(() => hashQuery(page.url()).get('mode') ?? '', { timeout: 2_000 }).toBe('arabia1v1');
+  soon(hashQuery(page.url()).has('elo'), 'elo=all 应收成 mode=arabia1v1，不再留 elo').toBe(false);
+  await openFresh(page, '/ladder?elo=lt850');
+  soon(hashQuery(page.url()).get('mode'), '只带 elo、没有 mode 时进入阿拉伯，不进 4v4').toBe('arabia1v1');
+  const toast = page.getByTestId('ladder-fallback-toast');
+  if (await toast.isVisible()) soon((await toast.innerText()) ?? '').toMatch(/暂无数据|未识别/);
+  await openFresh(page, '/ladder?mode=arabia1v1');
+  soon(hashQuery(page.url()).get('mode')).toBe('arabia1v1');
+  soon(await plainText(page, 'ladder-map-static')).toMatch(/阿拉伯/);
+  soon(await plainText(page, 'ladder-map-static')).toContain('固定');
+  soon(await plainText(page, 'ladder-period-static')).toContain('整段快照');
+  soon(await plainText(page, 'ladder-period-static'), '阿拉伯路径不保留近 90 天').not.toContain('近90天');
+  soon(eloOk(await plainText(page, 'ladder-elo-static')), '阿拉伯分段今天仍是「全部」，不是 1200–1400').toBe(false);
+  await expect(page.getByTestId('ladder-row-Franks')).toContainText(formatPercent(franks.winRate));
+  soon(await page.getByTestId('ladder-source').getAttribute('data-fetched-at')).toBe(arabia.fetchedAt);
+});
+test('#577 §12 深链分层：五档都在，边界锁定，空档与文明药丸', async ({ page }) => {
+  for (const [rate, band] of [
+    [52, 'S'],
+    [51.999, 'A'],
+    [51, 'A'],
+    [50.999, 'B'],
+    [50, 'B'],
+    [48, 'C'],
+    [47.999, 'D'],
+  ] as const)
+    expect(tierOf(rate)).toBe(band);
+  await openFresh(page, '/ladder?view=tiers');
+  soon(hashQuery(page.url()).get('view'), 'view=tiers 应留在地址上并打开分层').toBe('tiers');
+  soon(hashQuery(page.url()).get('mode'), '深链分层仍是默认切片，不是阿拉伯').not.toBe('arabia1v1');
+  const root = page.getByTestId('ladder-tiers');
+  soon(await root.count(), '应有 ladder-tiers').toBe(1);
+  if ((await root.count()) !== 1) return;
+  const hide = page.getByTestId('ladder-hide-low');
+  const hidden = (await hide.count()) === 1 ? await hide.isChecked() : true;
+  const threshold = Number((await hide.count()) === 1 ? await hide.getAttribute('data-threshold') : (slice?.lowSampleGames ?? LOW_SAMPLE));
+  const visible = (slice?.civs ?? []).filter((civ) => !hidden || civ.games >= (Number.isInteger(threshold) ? threshold : LOW_SAMPLE));
+  for (const band of BANDS) {
+    const row = page.getByTestId(`ladder-tier-band-${band}`);
+    soon(await row.count(), `应有 ${band} 行`).toBe(1);
+    if ((await row.count()) !== 1) continue;
+    soon(await row.getAttribute('data-band')).toBe(band);
+    const mine = visible.filter((civ) => tierOf(civ.winRate) === band);
+    soon(Number(await row.getAttribute('data-count')), `${band} 的 data-count 应等于这一档药丸数`).toBe(mine.length);
+    const text = ((await row.innerText()) ?? '').replace(/\s+/g, '');
+    if (mine.length === 0) soon(text, `${band} 空档应写「这一档没有文明」`).toContain('这一档没有文明');
+    for (const civ of mine) soon(await row.locator(`a[href*="/civ/${civ.en}"]`).count(), `${civ.en} 应链到 /civ/${civ.en}`).toBeGreaterThan(0);
+  }
+  soon((await root.innerText()) ?? '', '分层说明不要和友好度混用，且不要英文象限名').not.toMatch(ENGLISH_QUAD);
+});
+test('#577 §12 分布象限、边界归强/常见，隐藏低样本与三视图同一批文明', async ({ page }) => {
+  expect([quadrantOf(50, 2, 2), quadrantOf(50, 1.99, 2), quadrantOf(49.99, 2, 2), quadrantOf(49.99, 1.99, 2)]).toEqual([
+    '强且常见',
+    '强且少见',
+    '弱且常见',
+    '弱且少见',
+  ]);
+  await openFresh(page, '/ladder?view=meta');
+  soon(hashQuery(page.url()).get('view')).toBe('meta');
+  const root = page.getByTestId('ladder-meta-map');
+  soon(await root.count(), '应有 ladder-meta-map').toBe(1);
+  if ((await root.count()) !== 1) return;
+  const text = (await root.innerText()) ?? '';
+  soon(text).toMatch(/出场/);
+  soon(text).toMatch(/胜率/);
+  for (const label of QUADS) soon(text, `应有中文象限「${label}」`).toContain(label);
+  soon(text, '不要 Pillars / Sleepers / Crowd-pleasers / Niche').not.toMatch(ENGLISH_QUAD);
+  const winLine = root.getByTestId('ladder-meta-win-line');
+  soon(await winLine.count(), '胜率虚线固定在 50%').toBe(1);
+  if ((await winLine.count()) === 1) soon(await winLine.getAttribute('data-value')).toBe('50');
+  const hide = page.getByTestId('ladder-hide-low');
+  const threshold = Number((await hide.count()) === 1 ? await hide.getAttribute('data-threshold') : LOW_SAMPLE);
+  const useThreshold = Number.isInteger(threshold) ? threshold : LOW_SAMPLE;
+  const shown = (checked: boolean) => (slice?.civs ?? []).filter((civ) => civ.playRate != null && (!checked || civ.games >= useThreshold));
+  const checked = (await hide.count()) === 1 ? await hide.isChecked() : true;
+  const visible = shown(checked);
+  soon(slice, '分布要和默认切片快照同源，不能用线框五点').not.toBeNull();
+  if (!slice || visible.some((civ) => civ.playRate == null)) {
+    soon(
+      visible.every((civ) => civ.playRate != null),
+      '每个可见文明都要有出场率，中位数才算得出来',
+    ).toBe(true);
+    return;
+  }
+  const median = medianOf(visible.map((civ) => civ.playRate ?? 0));
+  const pickLine = root.getByTestId('ladder-meta-pick-line');
+  soon(await pickLine.count(), '纵虚线是当前可见文明的出场率中位数').toBe(1);
+  if (median != null && (await pickLine.count()) === 1) {
+    soon(Math.abs(Number(await pickLine.getAttribute('data-value')) - median) < 0.001, `中位数应为 ${median}`).toBe(true);
+  }
+  for (const civ of visible) {
+    const bubble = root.getByTestId(`ladder-meta-bubble-${civ.en}`);
+    soon(await bubble.count(), civ.en).toBe(1);
+    if ((await bubble.count()) !== 1 || civ.playRate == null || median == null) continue;
+    const focusable = await bubble.evaluate((el) => el.matches('button, a, [tabindex="0"]'));
+    soon(focusable, `${civ.en} 气泡应可聚焦`).toBe(true);
+    const label = (await bubble.getAttribute('aria-label')) ?? '';
+    soon(label, `${civ.en} 名称应含文明`).toContain(civ.en);
+    soon(label).toContain(formatPercent(civ.winRate));
+    soon(label).toContain(formatPercent(civ.playRate));
+    soon(label.includes(String(civ.games)) || label.includes(civ.games.toLocaleString('en-US')), `${civ.en} 名称应含样本局数`).toBe(true);
+    soon(await bubble.getAttribute('data-quadrant')).toBe(quadrantOf(civ.winRate, civ.playRate, median));
+  }
+  const bubbleCount = await root.locator('[data-testid^="ladder-meta-bubble-"]').count();
+  soon(bubbleCount, '气泡数等于当前可见文明').toBe(visible.length);
+});
+test('#577 §12 表、分层、分布保持模式、时段、分段、地图、隐藏低样本和 fetchedAt', async ({ page }) => {
+  await openFresh(page);
+  const table = page.getByTestId('ladder-view-table');
+  const tiers = page.getByTestId('ladder-view-tiers');
+  const meta = page.getByTestId('ladder-view-meta');
+  soon(await tiers.count(), '分层应可点').toBe(1);
+  soon(await meta.count(), '分布应可点').toBe(1);
+  if ((await tiers.count()) !== 1 || (await meta.count()) !== 1) return;
+  soon(await tiers.isDisabled(), 'B 合入后分层不是 disabled').toBe(false);
+  soon(await meta.isDisabled(), 'B 合入后分布不是 disabled').toBe(false);
+  if ((await tiers.isDisabled()) || (await meta.isDisabled())) return;
+  const before = await sliceSignature(page);
+  soon(before.mode, '切换前应已选中 4v4，空签名不算「保持不变」').toBe('ladder-mode-4v4');
+  await tiers.click();
+  soon(hashQuery(page.url()).get('view')).toBe('tiers');
+  soon(await sliceSignature(page), '点分层后筛选、勾选、fetchedAt 不变').toEqual(before);
+  await meta.click();
+  soon(hashQuery(page.url()).get('view')).toBe('meta');
+  soon(await sliceSignature(page), '点分布后筛选、勾选、fetchedAt 不变').toEqual(before);
+  if ((await table.count()) === 1) await table.click();
+  soon(hashQuery(page.url()).get('view'), '回到表时 view 省略').toBeNull();
+  soon(await sliceSignature(page)).toEqual(before);
+  const hide = page.getByTestId('ladder-hide-low');
+  if ((await hide.count()) !== 1) return;
+  const checked = await hide.isChecked();
+  await hide.click();
+  soon(`${hashQuery(page.url())}`, '勾选不进地址').not.toMatch(/hide|low/);
+  soon(await sliceSignature(page), '改隐藏低样本不改模式、时段、分段、地图、fetchedAt').toEqual({ ...before, hide: !checked });
+});
