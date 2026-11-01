@@ -543,6 +543,34 @@ export function eventBase(eventName, event, ref, initialReleaseBase = null) {
   return null;
 }
 
+/** Unit files whose Affected unit run calls chromium.launch() (Playwright 1.64 headless shell). */
+const CHROMIUM_UNIT_BASENAMES = ['release108.test.ts', 'releaseSmoke.test.ts'];
+
+function unitPatternMatches(pattern, basename) {
+  if (typeof pattern !== 'string') return false;
+  const prefix = 'tests/unit/';
+  if (!pattern.startsWith(prefix) || pattern.slice(prefix.length).includes('/')) return false;
+  const name = pattern.slice(prefix.length);
+  const regex = new RegExp(
+    `^${name
+      .split('*')
+      .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+      .join('.*')}$`,
+  );
+  return regex.test(basename);
+}
+
+/**
+ * True when `ci-run --unit` will execute a test that launches Playwright chromium.
+ * A full unit run includes release108 and releaseSmoke even though `unit` is empty.
+ */
+export function unitLaunchesChromium(plan) {
+  if (!plan || typeof plan !== 'object') return false;
+  if (plan.full) return true;
+  if (!Array.isArray(plan.unit)) return false;
+  return CHROMIUM_UNIT_BASENAMES.some((basename) => plan.unit.some((pattern) => unitPatternMatches(pattern, basename)));
+}
+
 /** Complete Playwright is allowed off pull_request. CI_E2E_FULL=false also refuses it. Unset env keeps local/full plans intact. */
 export function allowFullBrowser(env = process.env) {
   if (env.GITHUB_EVENT_NAME === 'pull_request') return false;
@@ -620,7 +648,11 @@ function main() {
   if (process.env.GITHUB_OUTPUT) {
     const runBrowser = plan.browser === 'full' || plan.browser === 'capped' || (plan.browser == null && (plan.full || !!plan.e2e.length));
     const e2eFull = plan.browser === 'full' || (plan.browser == null && !!plan.full);
-    appendFileSync(process.env.GITHUB_OUTPUT, `scope=${plan.scope}\ndata=${plan.data}\nfull=${plan.full}\nbrowser=${runBrowser}\ne2e_full=${e2eFull}\n`);
+    const unitChromium = unitLaunchesChromium(plan);
+    appendFileSync(
+      process.env.GITHUB_OUTPUT,
+      `scope=${plan.scope}\ndata=${plan.data}\nfull=${plan.full}\nbrowser=${runBrowser}\ne2e_full=${e2eFull}\nunit_chromium=${unitChromium}\n`,
+    );
   }
   console.log(`Validation plan: ${JSON.stringify(plan)}`);
 }
