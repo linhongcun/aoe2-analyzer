@@ -1,9 +1,10 @@
 // #584 鲜为人知洞察槽位 · 失败验收。
-// 对照设计短稿 docs/design/insights-584/（PR #593 @ e9893e8）。只编码产品行为，不实现槽位。
-// 当前 main 没有这块，用例应红。实现折入后应收绿。不要放宽断言去迁就现状。
-// 不关 #584。不改 tests/**/v0*-acceptance*。
+// 对照设计短稿 docs/design/insights-584/。#603 起，没有条目的文明概览不挂空槽；单位页空态仍是「暂无」。
+// #619 折进布局后，空槽与已挂上的种子可以是绿的。后面补上的种子③（孟加拉页）按产品 AC 仍应红，不要放宽。
+// 不断言驻扎射箭，也不断言「第一个」序位（未核实 / 产品确认前不写进验收文案）。
+// 本文件随 #584 实现折入，不要单独把仍红的用例合进 main。Relates #584，不关 issue。
+// 不改 tests/**/v0*-acceptance*。
 //
-// #603 起，文明概览没有条目时不挂这个槽。单位页空态仍是「暂无」。
 // 槽位：data-testid="insight-slot"（section，标题「鲜为人知」）
 // 条目：data-testid="insight-item"（ul > li）
 // 空态：data-testid="insight-empty"，正文「暂无」；有内容时不要留这个节点
@@ -107,6 +108,60 @@ async function expectList(region: Locator) {
   }
   await expect(region.locator('ul')).toHaveCount(1);
   return texts;
+}
+
+const RATHA_FOODLESS = '无粮骑兵 UU（对照骑士线）。';
+
+async function expectNoHScroll(page: Page) {
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+}
+
+async function slotShell(page: Page) {
+  return slot(page).evaluate((el) => {
+    const style = getComputedStyle(el);
+    const heading = el.querySelector('h2');
+    const list = el.querySelector(':scope > ul');
+    const listStyle = list ? getComputedStyle(list) : null;
+    return {
+      className: el.className,
+      pad: style.padding,
+      radius: style.borderRadius,
+      borderWidth: style.borderTopWidth,
+      marginBottom: style.marginBottom,
+      heading: heading?.textContent?.trim() ?? '',
+      headingPx: heading ? Number.parseFloat(getComputedStyle(heading).fontSize) : 0,
+      childTags: [...el.children].map((child) => child.tagName).join(','),
+      listDisplay: listStyle?.display ?? '',
+      listGap: listStyle?.gap ?? '',
+    };
+  });
+}
+
+async function unitNeighbors(page: Page) {
+  return page.evaluate(() => {
+    const cost = document.querySelector('section[aria-label="造价与生产"]');
+    const insight = document.querySelector('[data-testid="insight-slot"]');
+    const stats = document.querySelector('section[aria-label="基础属性"]');
+    return { underCost: !!cost && cost.nextElementSibling === insight, aboveStats: !!insight && insight.nextElementSibling === stats };
+  });
+}
+
+async function civNeighbors(page: Page) {
+  return page.evaluate(() => {
+    const main = document.querySelector('.dmain');
+    const insight = main?.querySelector('[data-testid="insight-slot"]') ?? null;
+    const ratings = main?.querySelector('[data-testid="civ-ratings"]') ?? null;
+    const bonuses = main?.querySelector('[data-testid="civ-bonuses"]') ?? null;
+    const follows = (earlier: Element | null, later: Element | null) =>
+      !!earlier && !!later && (earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+    return {
+      afterRatings: follows(ratings, insight),
+      beforeBonuses: follows(insight, bonuses),
+      outsideBonusList: !insight?.closest('ul.blrows, li.brow'),
+      outsideOpening: !insight?.closest('[data-testid="civ-opening"]'),
+      outsideFootnote: !insight?.closest('[data-testid="civ-rating-footnote"]'),
+    };
+  });
 }
 
 async function expectNowrap(region: Locator, pattern: RegExp) {
@@ -291,4 +346,124 @@ test('#/civ/Persians 波斯：种子⑪高血城镇中心，不写火力相等�
       .getByTestId('insight-item')
       .filter({ hasText: `2400${RANGE}4800` }),
   ).toBeVisible();
+});
+
+test('#/unit/2706 精锐扈从部队：种子①自带标枪 + 种子②无粮步兵，仍是同一槽', async ({ page }) => {
+  await openDetail(page, '/unit/2706', /精锐扈从部队/);
+  const region = await expectFixedSlot(page);
+  const texts = await expectList(region);
+  expect(texts.filter((text) => text.includes('近战前自带投掷标枪'))).toHaveLength(1);
+  expect(texts.filter((text) => text.includes('无粮步兵（对照火矛兵）'))).toHaveLength(1);
+  expect(texts.join('\n')).not.toMatch(/第一个|第二个|全游戏第一个|等同步弓单兵必加/);
+  await expect(region.locator('.num').filter({ hasText: /^80$/ })).toHaveCount(1);
+  await expect(region.locator('.num').filter({ hasText: /^35$/ })).toHaveCount(1);
+  await expectNowrap(region, /80\s*木/);
+  await expectNowrap(region, /35\s*金/);
+  expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
+  await expectNoHScroll(page);
+  await leaveAndReturn(page, '相关');
+  await expect(slot(page).getByTestId('insight-item').filter({ hasText: '无粮步兵（对照火矛兵）' })).toBeVisible();
+});
+
+test('#/unit/1759 战车：种子③无粮骑兵 UU，不写「第一个」', async ({ page }) => {
+  await openDetail(page, '/unit/1759', /^战车/);
+  const region = await expectFixedSlot(page);
+  await expect(region.getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toHaveCount(1);
+  await expect(region).not.toContainText('第一个');
+  await expect(region).not.toContainText('全游戏第一个');
+  expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
+  const buried = await page.evaluate(() => {
+    const item = document.querySelector('[data-testid="insight-item"]');
+    return { inDesc: !!item?.closest('p.desc'), inDetails: !!item?.closest('details') };
+  });
+  expect(buried).toEqual({ inDesc: false, inDetails: false });
+  await expectNoHScroll(page);
+  await leaveAndReturn(page, '相关');
+  await expect(slot(page).getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
+});
+
+test('#/unit/1761 精锐战车：与普通战车同一条种子③', async ({ page }) => {
+  await openDetail(page, '/unit/1761', /精锐战车/);
+  const region = await expectFixedSlot(page);
+  await expect(region.getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toHaveCount(1);
+  await expect(region).not.toContainText('第一个');
+  expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
+  await expectNoHScroll(page);
+});
+
+test('#/civ/Bengalis 孟加拉：种子③在洞察槽，不埋进特色兵种，不写「第一个」', async ({ page }) => {
+  // 战车页已经有这句。文明页仍是 #584 点名的另一处，tip 上还没有槽。
+  await openDetail(page, '/civ/Bengalis', /孟加拉/);
+  await expect(page.locator('.dmain')).not.toContainText('第一个');
+  await expect(page.locator('.dmain')).not.toContainText('全游戏第一个');
+  await expect(page.getByTestId('civ-rating-footnote')).not.toContainText(RATHA_FOODLESS);
+  await expect(page.getByTestId('insight-empty')).toHaveCount(0);
+  await expect(slot(page), '孟加拉页要有固定洞察槽，种子③不能只留在单位页').toHaveCount(1);
+  const region = await expectFixedSlot(page);
+  await expect(region.getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
+  await expect(region.getByTestId('insight-empty')).toHaveCount(0);
+  expect(await civNeighbors(page)).toEqual({
+    afterRatings: true,
+    beforeBonuses: true,
+    outsideBonusList: true,
+    outsideOpening: true,
+    outsideFootnote: true,
+  });
+  await expectNoHScroll(page);
+  await leaveAndReturn(page, '数据');
+  await expect(slot(page).getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
+});
+
+test('单位页 1 条和多条洞察共用同一槽位外壳，多一条只增加 li', async ({ page }) => {
+  await openDetail(page, '/unit/1759', /^战车/);
+  const one = await slotShell(page);
+  const oneCount = await slot(page).getByTestId('insight-item').count();
+  await openDetail(page, '/unit/73', /^诸葛弩/);
+  const two = await slotShell(page);
+  const twoCount = await slot(page).getByTestId('insight-item').count();
+  await openDetail(page, '/unit/2705', /扈从部队/);
+  const three = await slotShell(page);
+  const threeCount = await slot(page).getByTestId('insight-item').count();
+  expect(one.childTags).toBe('H2,UL');
+  expect(one.listDisplay).toBe('flex');
+  expect(two).toEqual(one);
+  expect(three).toEqual(one);
+  expect(oneCount).toBeGreaterThanOrEqual(1);
+  expect(twoCount).toBeGreaterThanOrEqual(2);
+  expect(threeCount).toBeGreaterThanOrEqual(2);
+  expect(threeCount).toBeGreaterThan(oneCount);
+  expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
+  await openDetail(page, '/unit/38', /骑士/);
+  const empty = await slotShell(page);
+  expect(empty.childTags).toBe('H2,P');
+  expect({ ...empty, childTags: one.childTags, listDisplay: one.listDisplay, listGap: one.listGap }).toEqual(one);
+  await expectNoHScroll(page);
+});
+
+test('文明页 1 条和 2 条洞察共用同一槽位外壳，位置不随条数变', async ({ page }) => {
+  await openDetail(page, '/civ/Saxons', /撒克逊/);
+  const single = await slotShell(page);
+  const singleCount = await slot(page).getByTestId('insight-item').count();
+  expect(await civNeighbors(page)).toEqual({
+    afterRatings: true,
+    beforeBonuses: true,
+    outsideBonusList: true,
+    outsideOpening: true,
+    outsideFootnote: true,
+  });
+  await openDetail(page, '/civ/Malians', /马里/);
+  const pair = await slotShell(page);
+  const pairCount = await slot(page).getByTestId('insight-item').count();
+  expect(pair).toEqual(single);
+  expect(single.childTags).toBe('H2,UL');
+  expect(singleCount).toBeGreaterThanOrEqual(1);
+  expect(pairCount).toBeGreaterThan(singleCount);
+  expect(await civNeighbors(page)).toEqual({
+    afterRatings: true,
+    beforeBonuses: true,
+    outsideBonusList: true,
+    outsideOpening: true,
+    outsideFootnote: true,
+  });
+  await expectNoHScroll(page);
 });
