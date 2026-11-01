@@ -165,6 +165,63 @@ export function snapshotCutoff(snapshot: { fetchedAt: string; period?: { to?: st
   return snapshot.period?.to || snapshot.fetchedAt;
 }
 
+/** 快照没有样本量时的占位。不留空白。 */
+export const SAMPLE_UNLISTED = '样本未收录';
+
+/** 0 是收录了的零。缺字段、空值和非数字才算未收录。 */
+export function sampleGames(games: number | null | undefined): number | null {
+  if (typeof games !== 'number' || !Number.isFinite(games)) return null;
+  return games;
+}
+
+export type RelativeFreshness = { kind: 'missing' } | { kind: 'future' } | { kind: 'hours'; count: number } | { kind: 'days'; count: number };
+
+const DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/;
+const DATE_TIME = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2}))$/;
+
+function isValidYmd(year: number, month: number, day: number): boolean {
+  if (month < 1 || month > 12 || day < 1) return false;
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+  return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day;
+}
+
+/**
+ * 相对快照 `fetchedAt` 的新鲜度。只有日期时按本机日历算天数；带时间才分小时。
+ * 当天是「更新于 0 天前」，不满 1 小时是「更新于 0 小时前」。不写分钟或秒，也不自动刷新。
+ */
+export function relativeFreshness(fetchedAt: string, now: Date): RelativeFreshness {
+  const raw = fetchedAt.trim();
+  const dateOnly = DATE_ONLY.exec(raw);
+  if (dateOnly) {
+    const year = Number(dateOnly[1]);
+    const month = Number(dateOnly[2]);
+    const day = Number(dateOnly[3]);
+    if (!isValidYmd(year, month, day)) return { kind: 'missing' };
+    const fetched = Date.UTC(year, month - 1, day);
+    const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    const days = Math.round((today - fetched) / 86_400_000);
+    if (days < 0) return { kind: 'future' };
+    return { kind: 'days', count: days };
+  }
+  if (!DATE_TIME.test(raw)) return { kind: 'missing' };
+  const instant = Date.parse(raw);
+  if (!Number.isFinite(instant)) return { kind: 'missing' };
+  const elapsed = now.getTime() - instant;
+  if (elapsed < 0) return { kind: 'future' };
+  const hour = 3_600_000;
+  if (elapsed < hour) return { kind: 'hours', count: 0 };
+  if (elapsed < 24 * hour) return { kind: 'hours', count: Math.floor(elapsed / hour) };
+  return { kind: 'days', count: Math.floor(elapsed / (24 * hour)) };
+}
+
+/** 给测试和纯文本断言用。界面上的数字另包 `.num`。 */
+export function freshnessText(value: RelativeFreshness): string {
+  if (value.kind === 'missing') return '更新时间未收录';
+  if (value.kind === 'future') return '更新日晚于本机';
+  if (value.kind === 'hours') return `更新于 ${value.count} 小时前`;
+  return `更新于 ${value.count} 天前`;
+}
+
 export function isPlayerSample(unit: string | undefined): boolean {
   return unit === 'player';
 }

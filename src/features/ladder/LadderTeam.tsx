@@ -20,6 +20,7 @@ import {
   type SortKey,
 } from '../../domain/ladder';
 import { LadderMeta, LadderTiers } from './LadderBands';
+import { LadderFreshness } from './LadderFreshness';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
 import { Icon, type IconName } from '../../shared/ui/Icon';
@@ -116,16 +117,13 @@ export function LadderTeam({ view, hideLow, onArabia, children }: { view: Ladder
               </>
             )}
           </p>
+          <LadderFreshness fetchedAt={snapshot.fetchedAt} games={bracket.games} scope={sampleScope} unit={sampleUnit} />
           <p className="ladder-source-meta">
             <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
               {visibleSourceLabel(snapshot.source)}
               <Icon name="external-link" />
               （外部）
             </a>
-            。
-            <span className="nw">
-              {sampleScope} <span className="num">{formatGames(bracket.games)}</span> {sampleUnit}
-            </span>
           </p>
         </div>
       </div>
