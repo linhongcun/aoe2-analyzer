@@ -50,6 +50,7 @@ const inputsHash = () =>
       'buildSim.ts',
       'buildSimCivRules.ts',
       'buildSimCoverage.ts',
+      'unhandledRes.ts',
       'buildSimEffects.ts',
       'buildSimMechanisms.ts',
       'buildSimNotes.ts',

@@ -48,6 +48,8 @@ import { slavicContext, slavicRowClass, SLAVIC_SOURCE_REASON, type SlavicRawTree
 import { khmerContext, khmerRowClass, khmerHasMarker, KHMER_SOURCE_REASON, type KhmerRawTech, type KhmerRawTree, type KhmerRawTeam } from './khmerEconomy';
 
 import { jurchenContext, jurchenRowClass, hasJurchenMarker, JURCHEN_SOURCE_REASON, type JurchenRawTech } from './jurchenEconomy';
+import { UNHANDLED_RES } from './unhandledRes';
+export { UNHANDLED_RES };
 
 // ───────── 文明加成覆盖（#42）：每条效果必须是 已处理 / 不影响开局（带原因）/ 影响开局但未实现 之一 ─────────
 
@@ -84,32 +86,6 @@ export const IRRELEVANT_RES: Record<number, string> = {
   295: '图皮非经济属性',
   297: '瓦兰吉非经济属性',
   504: '团队加成（西班牙）',
-};
-/** res 属性：影响开局但本批未实现（对应文明标为不支持） */
-export const UNHANDLED_RES: Record<number, string> = {
-  69: '农田食物储量（西西里）：#43 不加新机制，有不确定就先置灰',
-  292: '动物尸体不腐烂（女真）：#43 不加新机制，有不确定就先置灰',
-  // 下列条目和同一文明的采集 workRate 成对出现：玛雅 ×0.87 配资源 ×1.15，鞑靼羊 ×0.637 配 ×1.57，哥特狩猎 ×0.813 配 ×1.23，乘起来约等于 1。
-  // 模型已经算了 workRate 的减速，却没算这一半，到封建的时间会偏慢，所以属于影响开局但未实现
-  47: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  79: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  189: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  190: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  216: '家畜食物倍率，和牧羊 workRate 成对出现（鞑靼 ×0.637/×1.57），未建模',
-  219: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  296: '资源储量倍率，和采集 workRate 成对出现（玛雅），未建模',
-  215: '采果工存放的食物 +25%（马普切 1381），未建模',
-  85: '科技费用折扣是否作用于升级时代待 .dat 核实（汉）',
-  234: '开局/升级时代/经济科技送村民（孟加拉、魏等）未建模',
-  237: '波兰庄园农田加成未建模',
-  238: '波兰庄园农田加成未建模',
-  239: '波兰庄园农田加成未建模',
-  241: '波兰采石换金未建模',
-  254: '古尔贾拉家畜机制未建模',
-  267: '采浆果同时产木头（葡萄牙）未建模',
-  276: '采金加成（马里）未建模',
-  298: '羊/猎物/渔船额外产金（瓦兰吉）未建模',
-  502: '伐木同时产食物（蜀）未建模',
 };
 /**
  * 匈奴 tech 238「C-Bonus, Start w/ Horse」/ 241「C-Bonus, Disable Horse」（res 234 set 1）：
