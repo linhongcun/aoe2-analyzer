@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>#603 线框 · 1280 · 亚美尼亚概览</title>
+  <link rel="stylesheet" href="civ-overview.css" />
+</head>
+<body>
+  <main class="frame">
+    <p class="crumbs">首页 / 文明 / <span>亚美尼亚</span></p>
+    <div class="dhead">
+      <div class="mark" aria-hidden="true">文明</div>
+      <div>
+        <h1>亚美尼亚 <small>Armenians</small></h1>
+        <div class="tags">
+          <span class="tag">皇家山脉</span>
+          <span class="tag">步兵</span>
+          <span class="tag">海军</span>
+        </div>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="亚美尼亚内容" data-testid="civ-tabs">
+      <span class="on" role="tab" aria-selected="true">概览</span>
+      <span role="tab">数据</span>
+      <span role="tab">科技</span>
+      <span role="tab">更新历史</span>
+      <span role="tab">职业选手视角</span>
+    </div>
+    <nav class="tools" aria-label="相关工具" data-testid="civ-related-tools">
+      <span class="lbl">相关工具</span>
+      <a href="#/builds?civ=Armenians"><span class="ic" aria-hidden="true">book-open</span>开局流程</a>
+      <a href="#/production?civ=Armenians"><span class="ic" aria-hidden="true">factory</span>生产对照</a>
+      <a href="#/matchup?me=Armenians"><span class="ic" aria-hidden="true">crosshair</span>对局助手</a>
+      <a href="#/compare?a=Armenians"><span class="ic" aria-hidden="true">scale</span>文明对比</a>
+      <a href="#/tree/Armenians"><span class="ic" aria-hidden="true">git-branch</span>科技树</a>
+    </nav>
+    <div class="body">
+      <div role="tabpanel">
+        <section class="block" aria-label="开局建议" data-testid="civ-opening">
+          <div class="hd"><h2>开局建议</h2></div>
+          <p class="route" data-testid="civ-opening-summary">
+            <span class="era">黑暗至封建</span> 民兵/长矛兵压制
+            <span class="arr" aria-hidden="true">→</span>
+            <span class="era">城堡及后续</span> 城堡复合弓箭手 + 冠军步兵
+          </p>
+          <a class="flow" href="#/builds?bo=maa-archers-18&amp;civ=Armenians">
+            <span class="ic" aria-hidden="true">chevron-right</span>
+            <span class="name"><span class="num nw">18 人口</span>民兵升级武士（Man-at-Arms）速攻转弓手</span>
+            <span class="pill">通用示意</span>
+          </a>
+          <div class="foot">
+            <details class="notes" data-testid="civ-opening-notes">
+              <summary><span class="ic" aria-hidden="true">chevron-right</span>路线说明</summary>
+              <p>黑暗时代准备经济，封建时代选择开局兵种，再按路线转型。具体分配请查看开局流程。</p>
+              <p>兵种转型是路线参考；下面按资料适用名单列出流程，无明确匹配时标注通用示意。</p>
+              <p>暂无资料标注适用的流程，请结合文明加成调整。</p>
+            </details>
+            <a href="#/builds" data-testid="civ-opening-all">查看全部开局</a>
+          </div>
+        </section>
+
+        <section class="block" aria-label="能力评分" data-testid="civ-ratings">
+          <div class="hd">
+            <h2>能力评分</h2>
+            <span class="ratelabel">主观评分，仅供参考
+              <button type="button" class="help" aria-label="评分说明"><span class="ic" aria-hidden="true">circle-help</span></button>
+            </span>
+          </div>
+          <div class="scores" aria-label="文明能力评分">
+            <div class="score"><b>骑兵</b><div class="v nw"><span class="num">3</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:30%"></i></span></div>
+            <div class="score"><b>弓手</b><div class="v nw"><span class="num">6</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:60%"></i></span></div>
+            <div class="score is-key"><b>步兵</b><div class="v nw"><span class="num">9</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:90%"></i></span></div>
+            <div class="score"><b>经济</b><div class="v nw"><span class="num">7</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:70%"></i></span></div>
+            <div class="score"><b>防御</b><div class="v nw"><span class="num">6</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:60%"></i></span></div>
+            <div class="score"><b>攻城</b><div class="v nw"><span class="num">5</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:50%"></i></span></div>
+            <div class="score"><b>僧侣</b><div class="v nw"><span class="num">7</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:70%"></i></span></div>
+            <div class="score is-key"><b>海军</b><div class="v nw"><span class="num">8</span><small>/10</small></div><span class="track" aria-hidden="true"><i style="width:80%"></i></span></div>
+          </div>
+          <dl class="meta" data-testid="civ-rating-footnote">
+            <div><dt>官方定位</dt><dd>步兵和海军文明</dd></div>
+            <div><dt>特色兵种</dt><dd>复合弓箭手 (步弓手)，牧师战士 (步兵)（Composite Bowman (Foot Archer), Warrior Priest (Infantry)）</dd></div>
+          </dl>
+        </section>
+
+        <section class="block" aria-label="文明加成" data-testid="civ-bonuses">
+          <div class="hd">
+            <h2>文明加成</h2>
+            <a class="sec-link" href="#/bonuses">查看完整加成表</a>
+          </div>
+          <p class="cap">标签说明：已计入表示有可计算的效果，展开可查看适用单位或科技；部分计入表示只有部分工具计入，展开可查看各工具的计入情况；仅文本表示只展示游戏说明。各工具实际支持范围以工具内的提示为准。</p>
+          <ul class="brows">
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">骡车费用 <span class="num nw">-25%</span></span><span class="tag ok">已计入</span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">骡车科技效率 <span class="num nw">+40%</span></span><span class="tag ok">已计入</span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">可提前一个时代获得长矛兵系和民兵系升级 (武士除外)</span><span class="tag txt">仅文本</span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">建造首座强化教堂可免费获得一件圣物</span><span class="tag txt">仅文本</span></li>
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">箭船系和德罗蒙战舰可额外发射一颗炮弹</span><span class="tag txt">仅文本</span></li>
+          </ul>
+          <h3 class="sub">团队加成</h3>
+          <ul class="brows">
+            <li><span class="ic" aria-hidden="true">chevron-right</span><span class="bt">步兵视野 <span class="num nw">+2</span></span><span class="tag ok">已计入</span></li>
+          </ul>
+        </section>
+
+        <section class="block" aria-label="优劣与位置" data-testid="civ-stance">
+          <div class="hd"><h2>优劣与位置</h2></div>
+          <div class="cols">
+            <div data-testid="civ-stance-pros">
+              <h3>优势</h3>
+              <div class="chips">
+                <span class="chip g">步兵</span>
+                <span class="chip g">海军</span>
+                <span class="chip g">经济</span>
+              </div>
+            </div>
+            <div data-testid="civ-stance-cons">
+              <h3>劣势</h3>
+              <div class="chips">
+                <span class="chip r">防御</span>
+                <span class="chip r">攻城</span>
+                <span class="chip r">骑兵</span>
+              </div>
+            </div>
+          </div>
+          <p class="pos" data-testid="civ-position"><span class="k">推荐团战位置</span>边位 Flank（边位 <span class="nw"><span class="num">8</span>/10</span>，口袋 <span class="nw"><span class="num">5</span>/10</span>）</p>
+        </section>
+        <p class="source">来源：aoe2techtree · DE <span class="num">188329</span> · 能力评分为主观近似评分；开局建议请结合文明加成调整 · <a href="#/about-data">数据说明</a></p>
+      </div>
+      <aside class="side">
+        <section class="sideblk">
+          <h3>独特单位</h3>
+          <a class="ent" href="#/unit/1800"><span class="art" aria-hidden="true"></span>复合弓箭手</a>
+          <a class="ent" href="#/unit/1811"><span class="art" aria-hidden="true"></span>牧师战士</a>
+        </section>
+        <section class="sideblk">
+          <h3>区域单位</h3>
+          <a class="ent" href="#/unit/1795"><span class="art" aria-hidden="true"></span>德罗蒙战舰</a>
+        </section>
+        <section class="sideblk">
+          <h3>区域建筑</h3>
+          <a class="ent" href="#/building/1808"><span class="art" aria-hidden="true"></span>骡车</a>
+          <a class="ent" href="#/building/1806"><span class="art" aria-hidden="true"></span>强化教堂</a>
+        </section>
+        <section class="sideblk">
+          <h3>同资料片文明</h3>
+          <a class="ent" href="#/civ/Georgians"><span class="art" aria-hidden="true"></span>格鲁吉亚</a>
+        </section>
+        <p class="note nw">共 <span class="num">56</span> 个文明</p>
+      </aside>
+    </div>
+  </main>
+  <ul class="anno">
+    <li>主栏四块：开局卡、评分卡、加成清单、优劣芯片。亚美尼亚没有洞察，评分和加成之间不留「暂无」。</li>
+    <li>开局默认只有一行路线、一条流程、次要「查看全部开局」。「路线说明」收着。</li>
+    <li>官方定位和特色兵种在评分卡脚注。优势 / 劣势是芯片，位置单独一行。</li>
+    <li>Tab 和「相关工具」是已上线的 #602，本刀不改。侧栏无「快速入口」。灰块是原版图标的位置。</li>
+    <li>评分来自 <code>civs.json</code> 的 <code>s</code>。标签按走查当时的 <code>RowTag</code> 结果，实现不要写死。</li>
+  </ul>
+</body>
+</html>
