@@ -137,7 +137,7 @@ describe('#584 鲜为人知槽位', () => {
 
     const lines = civInsights('Persians').map(insightText);
     expect(lines).toEqual([
-      `城镇中心生命值 +100%（2400${`\u2192`}4800，同砌体与城堡基础齐），可当前线伪城堡；须驻扎射箭单位才有输出。`,
+      `城镇中心生命值 +100%（2400${`\u2192`}4800，同砌体与城堡基础齐），可当前线伪城堡。`,
       '叠波斯步弓手（Kamandaran）后弓兵木代金（非免费）。',
     ]);
     expect(lines.join('\n')).not.toMatch(/火力等于城堡|绝对反制|免黄金|免费弓/);

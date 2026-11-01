@@ -97,13 +97,7 @@ export const CIV_INSIGHTS: Readonly<Record<string, readonly InsightItem[]>> = {
   Persians: [
     {
       id: 'persians-tc-hp',
-      parts: [
-        '城镇中心生命值 ',
-        nw([num('+100'), '%']),
-        '（',
-        nw([num('2400'), RANGE, num('4800')]),
-        '，同砌体与城堡基础齐），可当前线伪城堡；须驻扎射箭单位才有输出。',
-      ],
+      parts: ['城镇中心生命值 ', nw([num('+100'), '%']), '（', nw([num('2400'), RANGE, num('4800')]), '，同砌体与城堡基础齐），可当前线伪城堡。'],
     },
     { id: 'persians-kamandaran', parts: ['叠波斯步弓手（Kamandaran）后弓兵木代金（非免费）。'] },
   ],

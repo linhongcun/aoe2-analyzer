@@ -269,7 +269,7 @@ test('#/civ/Persians 波斯：种子⑪高血城镇中心，不写火力相等�
   await openDetail(page, '/civ/Persians', /波斯/);
   const region = await expectFixedSlot(page);
   const texts = await expectList(region);
-  expect(texts[0]).toBe(`城镇中心生命值 +100%（2400${RANGE}4800，同砌体与城堡基础齐），可当前线伪城堡；须驻扎射箭单位才有输出。`);
+  expect(texts[0]).toBe(`城镇中心生命值 +100%（2400${RANGE}4800，同砌体与城堡基础齐），可当前线伪城堡。`);
   expect(texts[1]).toBe('叠波斯步弓手（Kamandaran）后弓兵木代金（非免费）。');
   const body = texts.join('\n');
   expect(body).not.toMatch(/火力等于城堡|绝对反制|免黄金|免费弓/);
