@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { StaticRouter } from 'react-router-dom/server';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { loadCore, type Core } from '../../src/data';
 import buildings from '../../src/data/buildings.json';
 import civs from '../../src/data/civs.json';
 import techs from '../../src/data/techs.json';
@@ -9,8 +11,13 @@ import units from '../../src/data/units.json';
 import trees from '../../src/data/trees.json';
 import { civStatus } from '../../src/domain/civStatus';
 import { CIV_INSIGHTS, civInsights, insightText, UNIT_INSIGHTS, unitInsights } from '../../src/domain/insights';
-import type { Trees } from '../../src/domain/types';
+import { buildFamilies } from '../../src/domain/family';
+import type { Trees, Unit } from '../../src/domain/types';
+import UnitDetail from '../../src/features/units/components/UnitDetail';
 import { InsightSlot } from '../../src/shared/ui/InsightSlot';
+
+const detailState = vi.hoisted(() => ({ core: null as Core | null }));
+vi.mock('../../src/data/hooks', () => ({ useCore: () => detailState.core, useTrees: () => T }));
 
 const T = trees as unknown as Trees;
 const unitRows = units as unknown as { id: number; cost: Record<string, number>; rng: number; ma: number }[];
@@ -19,6 +26,65 @@ const civRows = civs as unknown as { en: string; bon: string[] }[];
 const techRows = techs as unknown as { id: number; zh: string; en: string; desc: string }[];
 const unitById = (id: number) => unitRows.find((unit) => unit.id === id)!;
 const building = (en: string) => buildingRows.find((row) => row.en === en)!;
+
+describe('#585 战车真实单位页训练造价', () => {
+  const trainingNote = '训练不消耗食物。';
+  let fixedCore: Core;
+  beforeAll(async () => {
+    fixedCore = await loadCore();
+  });
+
+  function renderDetail(id: number, replacement?: Unit) {
+    const displayUnits = replacement ? fixedCore.units.map((unit) => (unit.id === id ? replacement : unit)) : fixedCore.units;
+    const unitIndex = replacement ? { ...fixedCore.unitById, [id]: replacement } : fixedCore.unitById;
+    detailState.core = replacement ? { ...fixedCore, units: displayUnits, unitById: unitIndex, fam: buildFamilies(displayUnits, unitIndex) } : fixedCore;
+    return renderToStaticMarkup(createElement(StaticRouter, { location: `/unit/${id}` }, createElement(UnitDetail)));
+  }
+
+  function section(html: string, label: string) {
+    const content = html.match(new RegExp(`<section\\b[^>]*aria-label="${label}"[^>]*>([\\s\\S]*?)<\\/section>`))?.[1];
+    expect(content, `真实页面应有${label}分区`).toBeDefined();
+    return content!;
+  }
+
+  it.each([1759, 1761])('单位 %i 在真实造价分区明确训练不消耗食物', (id) => {
+    const html = renderDetail(id);
+    const cost = section(html, '造价与生产');
+    expect(cost).toMatch(/alt="木材"[^>]*>60</);
+    expect(cost).toMatch(/alt="黄金"[^>]*>60</);
+    expect(cost).not.toContain('alt="食物"');
+    expect(html).toContain('data-testid="insight-empty">暂无</p>');
+    expect(cost).toContain(trainingNote);
+    expect(cost.indexOf(trainingNote)).toBeGreaterThan(cost.indexOf('</dl>'));
+    expect(cost.indexOf(trainingNote)).toBeLessThan(cost.indexOf('class="rc-uline"'));
+  });
+
+  it.each([38, 1962, 39])('真实单位 %i 不按名字或全部无粮成本误显示提示', (id) => {
+    const cost = section(renderDetail(id), '造价与生产');
+    expect(cost).not.toContain(trainingNote);
+  });
+
+  it.each([1759, 1761])('单位 %i 若来源成本增加食物，真实页面显示成本并撤下无粮提示', (id) => {
+    const original = fixedCore.unitById[id]!;
+    const originalCost = JSON.stringify(original.cost);
+    const replacement: Unit = { ...original, cost: { ...original.cost, Food: 1 } };
+    const cost = section(renderDetail(id, replacement), '造价与生产');
+    expect(cost).toMatch(/alt="食物"[^>]*>1</);
+    expect(cost).toMatch(/alt="木材"[^>]*>60</);
+    expect(cost).toMatch(/alt="黄金"[^>]*>60</);
+    expect(cost).not.toContain(trainingNote);
+    expect(JSON.stringify(original.cost)).toBe(originalCost);
+    expect(fixedCore.unitById[id]).toBe(original);
+  });
+
+  it('训练无粮不抹去真实精锐升级的800食物、800木材和45秒', () => {
+    const upgrade = section(renderDetail(1761), '精锐升级');
+    expect(upgrade).toMatch(/alt="食物"[^>]*>800</);
+    expect(upgrade).toMatch(/alt="木材"[^>]*>800</);
+    expect(upgrade).toContain('45s');
+    expect(upgrade).not.toContain(trainingNote);
+  });
+});
 
 describe('#584 鲜为人知槽位', () => {
   it('扈从部队只挂已批准的两条，不含驻扎因果句', () => {
