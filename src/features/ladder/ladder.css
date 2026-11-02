@@ -641,6 +641,17 @@
 .ladder-notes li {
   margin: 0 0 4px;
 }
+.ladder-share {
+  flex: 0 1 360px;
+  min-width: 0;
+  max-width: 100%;
+}
+.ladder-manual-link {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
 .ladder-slice {
   margin: 0 0 12px;
   color: var(--color-muted);

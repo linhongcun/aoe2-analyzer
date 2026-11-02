@@ -20,7 +20,8 @@ import {
   type SortDir,
   type SortKey,
 } from '../../domain/ladder';
-import type { SliceFacts } from '../../domain/ladderQuery';
+import { canonicalLadderSearch, type SliceFacts } from '../../domain/ladderQuery';
+import { ladderShareUrl } from './shareLink';
 import { LadderMeta, LadderTiers } from './LadderBands';
 import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderFreshness } from './LadderFreshness';
@@ -80,7 +81,8 @@ export function LadderTeam({
   children?: ReactNode;
 }) {
   const [sort, setSort] = useState<TeamSortState>({ key: 'win', dir: firstSortDir('win') });
-  const share = useShareLink({ stateKey: '4v4' });
+  const shareState = { mode: '4v4' as const, elo, pendingView: view === 'table' ? null : view };
+  const share = useShareLink({ stateKey: JSON.stringify([canonicalLadderSearch(shareState), hideLow, sort.key, sort.dir]) });
   const bracketKey = elo === 'all' || elo === '' ? '1200-1400' : elo;
   const bracketView = viewBracket(snapshot, bracketKey);
   const bracket = bracketView.empty ? undefined : snapshot.brackets.find((item) => item.key === bracketView.key);
@@ -251,12 +253,21 @@ export function LadderTeam({
                 相对 <span className="nw">50%</span>：胜率减去 <span className="nw">50</span> 个百分点。
               </li>
             </ul>
-            <div data-testid="ladder-share">
-              <button type="button" onClick={() => void share.copy(window.location.href)}>
+            <div className="ladder-share" data-testid="ladder-share">
+              <button type="button" onClick={() => void share.copy(() => ladderShareUrl(window.location.href, shareState))}>
                 <Icon name={share.copied ? 'check' : 'link'} />
                 复制当前链接
               </button>
               <p {...share.statusProps}>{share.status}</p>
+              {share.manualLink && (
+                <input
+                  className="ladder-manual-link"
+                  readOnly
+                  value={share.manualLink}
+                  aria-label="分享链接"
+                  onFocus={(event) => event.currentTarget.select()}
+                />
+              )}
             </div>
           </div>
         </div>
