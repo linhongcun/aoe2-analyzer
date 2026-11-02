@@ -31,6 +31,8 @@ for (const width of [360, 375, 390, 1280])
       await page.getByLabel('后撤空间', { exact: true }).selectOption('4');
       await page.getByLabel('军事投入', { exact: true }).selectOption('0');
       await expect(section).toContainText('当前预算或期限没有可优先建议的部队');
+      await section.getByText('范围、科技包与来源', { exact: true }).click();
+      await section.getByText('查看计算输入', { exact: true }).first().click();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(errors).toEqual([]);
       await page.getByLabel('军事投入', { exact: true }).selectOption('12000');
@@ -108,14 +110,18 @@ test('数据加载失败时保留选择并可继续，不刷新整页', async ({
   await expect(page.getByTestId('start-summary')).toContainText('匈奴');
 });
 
-test('已选玛雅中路明确路线不可用，仍可保留继续', async ({ page }) => {
-  await select(page, '中路');
-  await page.getByRole('searchbox', { name: '搜索文明', exact: true }).fill('玛雅');
-  await page.getByRole('button', { name: /玛雅/ }).click();
-  await page.getByTestId('start-skip').click();
-  await page.getByRole('button', { name: '修改文明', exact: true }).click();
-  await expect(page.getByTestId('scenario-suggestions')).toContainText('此路线不可用');
-  await page.getByRole('button', { name: '保留此文明继续', exact: true }).click();
-  await page.getByTestId('start-skip').click();
-  await expect(page.getByTestId('start-summary')).toContainText('玛雅');
-});
+for (const [civ, lane, reason] of [
+  ['玛雅', '中路', '此路线不可用'],
+  ['匈奴', '边路', '不在此路位首批比较范围'],
+])
+  test(`已选${civ}${lane}解释资格，仍可保留继续`, async ({ page }) => {
+    await select(page, lane);
+    await page.getByRole('searchbox', { name: '搜索文明', exact: true }).fill(civ!);
+    await page.getByRole('button', { name: new RegExp(civ!) }).click();
+    await page.getByTestId('start-skip').click();
+    await page.getByRole('button', { name: '修改文明', exact: true }).click();
+    await expect(page.getByTestId('scenario-suggestions')).toContainText(reason!);
+    await page.getByRole('button', { name: '保留此文明继续', exact: true }).click();
+    await page.getByTestId('start-skip').click();
+    await expect(page.getByTestId('start-summary')).toContainText(civ!);
+  });

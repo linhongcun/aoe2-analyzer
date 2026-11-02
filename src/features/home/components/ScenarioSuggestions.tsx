@@ -46,7 +46,7 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
   const update = <K extends keyof SceneConfig>(key: K, value: SceneConfig[K]) => setCfg((c) => ({ ...c, [key]: value }));
   const version = scenarioVersion();
   const selectedOutside = state.choice.civ && !SCENARIO_CIVS[lane].includes(state.choice.civ);
-  const selectionReason = selectedOutside && context ? scenarioProfile(context, state.choice.civ!, lane, cfg).reason : '机制待核验';
+  const selectionReason = selectedOutside && context ? scenarioProfile(context, state.choice.civ!, lane, cfg).reason || '不在此路位首批比较范围' : '机制待核验';
   return (
     <section className="start-scenes" data-testid="scenario-suggestions" aria-labelledby="scene-heading">
       <h2 id="scene-heading">城堡时代场景建议</h2>
