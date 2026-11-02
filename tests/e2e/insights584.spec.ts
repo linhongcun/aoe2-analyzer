@@ -1,20 +1,21 @@
-// #584 鲜为人知洞察槽位 · 失败验收。
+// #584 鲜为人知洞察槽位 · 按已批准 #621 路由合同迁移 PR #623。
 // 对照设计短稿 docs/design/insights-584/。#603 起，没有条目的文明概览不挂空槽；单位页空态仍是「暂无」。
 // #619 折进布局后，空槽与已挂上的种子可以是绿的。后面补上的种子③（孟加拉页）按产品 AC 仍应红，不要放宽。
-// 不断言驻扎射箭，也不断言「第一个」序位（未核实 / 产品确认前不写进验收文案）。
+// 扈从只留两条、战车种子③仅挂孟加拉；明确禁止驻扎句和「第一个」序位。
 // 本文件随 #584 实现折入，不要单独把仍红的用例合进 main。Relates #584，不关 issue。
 // 不改 tests/**/v0*-acceptance*。
 //
 // 槽位：data-testid="insight-slot"（section，标题「鲜为人知」）
 // 条目：data-testid="insight-item"（ul > li）
 // 空态：data-testid="insight-empty"，正文「暂无」；有内容时不要留这个节点
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 const AMBER = 'rgb(166, 90, 20)';
 const RANGE = `\u2192`;
 
-async function openDetail(page: Page, hash: string, title: RegExp) {
-  await page.setViewportSize({ width: 1280, height: 900 });
+async function openDetail(page: Page, hash: string, title: RegExp, width = 1280) {
+  await page.setViewportSize({ width, height: 900 });
   await page.goto(`./#${hash}`);
   await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
 }
@@ -77,13 +78,6 @@ async function leaveAndReturn(page: Page, otherTab: string) {
   await expect(page.getByRole('tab', { name: '概览', exact: true })).toHaveAttribute('aria-selected', 'true');
   await expect(slot(page)).toBeVisible();
   await expect(slot(page).locator('details')).toHaveCount(0);
-}
-
-function sentencesOf(text: string) {
-  return text
-    .split(/[。！？]/)
-    .map((part) => part.trim())
-    .filter(Boolean);
 }
 
 async function expectList(region: Locator) {
@@ -215,16 +209,14 @@ test('#/civ/Franks 法兰克：没有洞察就不挂槽，概览不写「暂无�
   await expect(slot(page)).toHaveCount(0);
 });
 
-test('#/unit/2705 扈从部队：种子①标枪/驻扎分句 + 种子②无粮步兵', async ({ page }) => {
+test('#/unit/2705 扈从部队：种子①标枪 + 种子②无粮步兵，不留驻扎句', async ({ page }) => {
   await openDetail(page, '/unit/2705', /扈从部队/);
   const region = await expectFixedSlot(page);
   const texts = await expectList(region);
   const body = texts.join('\n');
   expect(texts.some((text) => text.includes('近战前自带投掷标枪') && text.includes('无粮') && /80\s*木/.test(text) && /35\s*金/.test(text))).toBe(true);
-  const sentences = sentencesOf(body);
-  expect(sentences.some((text) => text.includes('驻扎') && /自带远程|穿刺标枪/.test(text))).toBe(true);
-  expect(sentences.some((text) => text.includes('塔') && text.includes('城堡') && text.includes('+100%'))).toBe(true);
-  expect(sentences.some((text) => text.includes('驻扎') && text.includes('+100%'))).toBe(false);
+  expect(texts).toHaveLength(2);
+  expect(body).not.toMatch(/驻扎|基础箭|\+100%/);
   expect(texts.some((text) => text.includes('无粮步兵（对照火矛兵）'))).toBe(true);
   expect(body).not.toContain('等同步弓单兵必加');
   expect(body).not.toMatch(/第一个|第二个|全游戏第一个/);
@@ -352,6 +344,8 @@ test('#/unit/2706 精锐扈从部队：种子①自带标枪 + 种子②无粮�
   await openDetail(page, '/unit/2706', /精锐扈从部队/);
   const region = await expectFixedSlot(page);
   const texts = await expectList(region);
+  expect(texts).toHaveLength(2);
+  expect(texts.join('\n')).not.toMatch(/驻扎|基础箭|\+100%/);
   expect(texts.filter((text) => text.includes('近战前自带投掷标枪'))).toHaveLength(1);
   expect(texts.filter((text) => text.includes('无粮步兵（对照火矛兵）'))).toHaveLength(1);
   expect(texts.join('\n')).not.toMatch(/第一个|第二个|全游戏第一个|等同步弓单兵必加/);
@@ -365,34 +359,24 @@ test('#/unit/2706 精锐扈从部队：种子①自带标枪 + 种子②无粮�
   await expect(slot(page).getByTestId('insight-item').filter({ hasText: '无粮步兵（对照火矛兵）' })).toBeVisible();
 });
 
-test('#/unit/1759 战车：种子③无粮骑兵 UU，不写「第一个」', async ({ page }) => {
-  await openDetail(page, '/unit/1759', /^战车/);
-  const region = await expectFixedSlot(page);
-  await expect(region.getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toHaveCount(1);
-  await expect(region).not.toContainText('第一个');
-  await expect(region).not.toContainText('全游戏第一个');
-  expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
-  const buried = await page.evaluate(() => {
-    const item = document.querySelector('[data-testid="insight-item"]');
-    return { inDesc: !!item?.closest('p.desc'), inDetails: !!item?.closest('details') };
+for (const [id, name] of [
+  [1759, /^战车/],
+  [1761, /精锐战车/],
+] as const) {
+  test(`#/unit/${id} 战车：种子③仅挂文明，单位固定槽为空`, async ({ page }) => {
+    await openDetail(page, `/unit/${id}`, name);
+    const region = await expectFixedSlot(page);
+    await expectEmpty(region);
+    await expect(region).not.toContainText(RATHA_FOODLESS);
+    expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
+    await expectNoHScroll(page);
+    await leaveAndReturn(page, '相关');
+    await expectEmpty(slot(page));
   });
-  expect(buried).toEqual({ inDesc: false, inDetails: false });
-  await expectNoHScroll(page);
-  await leaveAndReturn(page, '相关');
-  await expect(slot(page).getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
-});
-
-test('#/unit/1761 精锐战车：与普通战车同一条种子③', async ({ page }) => {
-  await openDetail(page, '/unit/1761', /精锐战车/);
-  const region = await expectFixedSlot(page);
-  await expect(region.getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toHaveCount(1);
-  await expect(region).not.toContainText('第一个');
-  expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
-  await expectNoHScroll(page);
-});
+}
 
 test('#/civ/Bengalis 孟加拉：种子③在洞察槽，不埋进特色兵种，不写「第一个」', async ({ page }) => {
-  // 战车页已经有这句。文明页仍是 #584 点名的另一处，tip 上还没有槽。
+  // #621 指定孟加拉承载两条，两个单位不复制同一洞察。
   await openDetail(page, '/civ/Bengalis', /孟加拉/);
   await expect(page.locator('.dmain')).not.toContainText('第一个');
   await expect(page.locator('.dmain')).not.toContainText('全游戏第一个');
@@ -400,6 +384,10 @@ test('#/civ/Bengalis 孟加拉：种子③在洞察槽，不埋进特色兵种�
   await expect(page.getByTestId('insight-empty')).toHaveCount(0);
   await expect(slot(page), '孟加拉页要有固定洞察槽，种子③不能只留在单位页').toHaveCount(1);
   const region = await expectFixedSlot(page);
+  const texts = await expectList(region);
+  expect(texts).toEqual(['战车造价无粮（60 木 + 60 金）。', RATHA_FOODLESS]);
+  await expectNowrap(region, /60\s*木/);
+  await expectNowrap(region, /60\s*金/);
   await expect(region.getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
   await expect(region.getByTestId('insight-empty')).toHaveCount(0);
   expect(await civNeighbors(page)).toEqual({
@@ -414,29 +402,22 @@ test('#/civ/Bengalis 孟加拉：种子③在洞察槽，不埋进特色兵种�
   await expect(slot(page).getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
 });
 
-test('单位页 1 条和多条洞察共用同一槽位外壳，多一条只增加 li', async ({ page }) => {
-  await openDetail(page, '/unit/1759', /^战车/);
-  const one = await slotShell(page);
-  const oneCount = await slot(page).getByTestId('insight-item').count();
+test('单位页两条洞察共用外壳，空槽外框保持一致', async ({ page }) => {
   await openDetail(page, '/unit/73', /^诸葛弩/);
-  const two = await slotShell(page);
-  const twoCount = await slot(page).getByTestId('insight-item').count();
+  const chuKoNu = await slotShell(page);
+  await expect(slot(page).getByTestId('insight-item')).toHaveCount(2);
   await openDetail(page, '/unit/2705', /扈从部队/);
-  const three = await slotShell(page);
-  const threeCount = await slot(page).getByTestId('insight-item').count();
-  expect(one.childTags).toBe('H2,UL');
-  expect(one.listDisplay).toBe('flex');
-  expect(two).toEqual(one);
-  expect(three).toEqual(one);
-  expect(oneCount).toBeGreaterThanOrEqual(1);
-  expect(twoCount).toBeGreaterThanOrEqual(2);
-  expect(threeCount).toBeGreaterThanOrEqual(2);
-  expect(threeCount).toBeGreaterThan(oneCount);
+  const hearth = await slotShell(page);
+  await expect(slot(page).getByTestId('insight-item')).toHaveCount(2);
+  expect(hearth.childTags).toBe('H2,UL');
+  expect(hearth.listDisplay).toBe('flex');
+  expect(hearth).toEqual(chuKoNu);
   expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
-  await openDetail(page, '/unit/38', /骑士/);
+  await openDetail(page, '/unit/1759', /^战车/);
   const empty = await slotShell(page);
+  await expectEmpty(slot(page));
   expect(empty.childTags).toBe('H2,P');
-  expect({ ...empty, childTags: one.childTags, listDisplay: one.listDisplay, listGap: one.listGap }).toEqual(one);
+  expect({ ...empty, childTags: hearth.childTags, listDisplay: hearth.listDisplay, listGap: hearth.listGap }).toEqual(hearth);
   await expectNoHScroll(page);
 });
 
@@ -467,3 +448,47 @@ test('文明页 1 条和 2 条洞察共用同一槽位外壳，位置不随条�
   });
   await expectNoHScroll(page);
 });
+
+for (const theme of ['light', 'dark']) {
+  for (const width of [360, 375, 390, 1280]) {
+    test(`#584 ${theme} @${width} 已批准路由内容、空态和数字可读`, async ({ page }, testInfo) => {
+      const errors: string[] = [];
+      page.on('pageerror', (error) => errors.push(error.message));
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
+      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
+      await openDetail(page, '/unit/2705', /扈从部队/, width);
+      await expect(slot(page).getByTestId('insight-item')).toHaveCount(2);
+      await expect(slot(page)).not.toContainText('驻扎');
+      await expectNowrap(slot(page), /80\s*木/);
+      await expectNowrap(slot(page), /35\s*金/);
+      await expectNoHScroll(page);
+      if (width === 1280) await page.screenshot({ path: testInfo.outputPath(`hearth-${theme}.png`), fullPage: true });
+      await openDetail(page, '/unit/1759', /^战车/, width);
+      await expectEmpty(slot(page));
+      await expectNoHScroll(page);
+      if (width === 1280) await page.screenshot({ path: testInfo.outputPath(`ratha-empty-${theme}.png`), fullPage: true });
+      await openDetail(page, '/civ/Bengalis', /孟加拉/, width);
+      const region = await expectFixedSlot(page);
+      await expect(region.getByTestId('insight-item')).toHaveCount(2);
+      await expect(region).toContainText('战车造价无粮');
+      await expect(region).not.toContainText('第一个');
+      await expectNowrap(region, /60\s*木/);
+      await expectNowrap(region, /60\s*金/);
+      expect(await civNeighbors(page)).toEqual({
+        afterRatings: true,
+        beforeBonuses: true,
+        outsideBonusList: true,
+        outsideOpening: true,
+        outsideFootnote: true,
+      });
+      await expectNoHScroll(page);
+      if (width === 1280) {
+        expect((await new AxeBuilder({ page }).include('[data-testid="insight-slot"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+      }
+      expect(errors).toEqual([]);
+      await page.screenshot({ path: testInfo.outputPath(`bengalis-${theme}-${width}.png`), fullPage: true });
+    });
+  }
+}

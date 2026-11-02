@@ -21,36 +21,24 @@ const unitById = (id: number) => unitRows.find((unit) => unit.id === id)!;
 const building = (en: string) => buildingRows.find((row) => row.en === en)!;
 
 describe('#584 鲜为人知槽位', () => {
-  it('扈从部队挂种子①②，造价跟 units.json，驻扎加箭与塔楼加成分句', () => {
+  it('扈从部队只挂已批准的两条，不含驻扎因果句', () => {
     const troop = unitById(2705);
     expect(troop.cost).toEqual({ Wood: 80, Gold: 35 });
     expect(unitById(2706).cost).toEqual(troop.cost);
     const lines = unitInsights(2705).map(insightText);
-    expect(lines).toEqual([
-      '近战前自带投掷标枪；造价无粮（80 木 + 35 金）。',
-      '驻扎防御建筑可因自带远程/穿刺标枪增加射箭。这不是文明「塔/城堡基础箭 +100%」。',
-      '无粮步兵（对照火矛兵）。',
-    ]);
+    expect(lines).toEqual(['近战前自带投掷标枪；造价无粮（80 木 + 35 金）。', '无粮步兵（对照火矛兵）。']);
     expect(unitInsights(2706).map(insightText)).toEqual(lines);
-    const sentences = lines
-      .join('\n')
-      .split(/[。！？]/)
-      .map((part) => part.trim())
-      .filter(Boolean);
-    expect(sentences.some((text) => text.includes('驻扎') && /自带远程|穿刺标枪/.test(text))).toBe(true);
-    expect(sentences.some((text) => text.includes('塔') && text.includes('城堡') && text.includes('+100%'))).toBe(true);
-    expect(sentences.some((text) => text.includes('驻扎') && text.includes('+100%'))).toBe(false);
+    expect(lines.join('\n')).not.toMatch(/驻扎|基础箭|\+100%/);
     expect(lines.join('\n')).not.toMatch(/第一个|第二个|全游戏第一个|等同步弓单兵必加/);
   });
 
-  it('战车只挂在单位页，不写全游戏第一个，也不抄到孟加拉文明页', () => {
+  it('战车种子③只挂孟加拉，普通和精锐单位保留空槽', () => {
     expect(unitById(1759).cost).toEqual({ Wood: 60, Gold: 60 });
     expect(unitById(1761).cost).toEqual({ Wood: 60, Gold: 60 });
-    const line = insightText(unitInsights(1759)[0]!);
-    expect(line).toBe('无粮骑兵 UU（对照骑士线）。');
-    expect(line).not.toContain('全游戏第一个');
-    expect(unitInsights(1761).map(insightText)).toEqual([line]);
-    expect(civInsights('Bengalis')).toEqual([]);
+    expect(unitInsights(1759)).toEqual([]);
+    expect(unitInsights(1761)).toEqual([]);
+    expect(civInsights('Bengalis').map(insightText)).toEqual(['战车造价无粮（60 木 + 60 金）。', '无粮骑兵 UU（对照骑士线）。']);
+    expect(civInsights('Bengalis').map(insightText).join('\n')).not.toContain('第一个');
   });
 
   it('马里只写蛮王 8 箭 / 满驻 18，不写旧 +5，不和山城堡混在一条', () => {
@@ -157,7 +145,7 @@ describe('#584 鲜为人知槽位', () => {
     expect(filled).toContain('data-testid="insight-slot"');
     expect(filled).toContain('data-state="filled"');
     expect(filled).not.toContain('insight-empty');
-    expect(filled.match(/data-testid="insight-item"/g)).toHaveLength(3);
+    expect(filled.match(/data-testid="insight-item"/g)).toHaveLength(2);
     expect(filled).toContain('<span class="nw"><span class="num">80</span><span> 木 + </span><span class="num">35</span><span> 金</span></span>');
     const malians = renderToStaticMarkup(createElement(InsightSlot, { items: civInsights('Malians') }));
     expect(malians).toContain('<span class="nw"><span class="num">8</span><span> 箭</span></span>');
@@ -175,6 +163,22 @@ describe('#584 鲜为人知槽位', () => {
     expect(empty).toContain('data-state="empty"');
     expect(empty).toContain('data-testid="insight-empty">暂无</p>');
     expect(empty).not.toContain('insight-item');
+  });
+
+  it('同一组件可承载1/2/3条已核实内容，条数变化不改槽位外壳', () => {
+    // 只组合现有事实验证展示容量，不向生产配置添加测试用内容。
+    const fixture = [unitInsights(2705)[0]!, unitInsights(73)[0]!, civInsights('Malians')[0]!];
+    const shells = [1, 2, 3].map((count) => {
+      const items = fixture.slice(0, count);
+      const html = renderToStaticMarkup(createElement(InsightSlot, { items }));
+      expect(html.match(/data-testid="insight-item"/g)).toHaveLength(count);
+      expect(html.match(/<section/g)).toHaveLength(1);
+      expect(html.match(/<h2/g)).toHaveLength(1);
+      expect(html.match(/<ul/g)).toHaveLength(1);
+      return html.replace(/<ul\b[^>]*>.*?<\/ul>/s, '<ul></ul>');
+    });
+    expect(shells[1]).toBe(shells[0]);
+    expect(shells[2]).toBe(shells[0]);
   });
 
   it('实现描边用边框令牌，不用线框琥珀色', () => {
