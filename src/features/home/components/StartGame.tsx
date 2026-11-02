@@ -6,7 +6,7 @@ import { CivStep, OpponentStep, Summary } from './startGameLater';
 
 function lede(state: StartState): string {
   if (state.current == null) return '只汇总点过的选择。没有数据的格子写「暂无建议」，不补胜率。';
-  if (state.lobby && state.current === 'civ') return '模式和地图已经在入口里填好。从文明接着选。没有连上游戏大厅。';
+  if (state.lobby && state.current === 'civ') return '从文明接着选。未填写的模式和地图按已跳过处理，可以回头补选。没有连上游戏大厅。';
   if (state.current === 'mode') return '先定这局怎么打。可以跳过，也可以回头改。';
   return '可以跳过，也可以回头改。';
 }
@@ -17,7 +17,8 @@ function note(state: StartState): string {
   }
   if (state.current === 'mode') return '路位只在组队出现，现在不占一格。步数不固定。';
   if (state.current === 'lane') return '因为选了组队，路位插在地图和文明之间。1v1 不会插入。这不是固定的第 3 步。';
-  if (state.current === 'civ' && state.lobby && !decisionSteps(state).includes('lane')) return '路位还没占一格。从某一侧点文明时再记上那一侧。';
+  if (state.current === 'civ' && state.lobby && state.choice.mode === 'team' && state.choice.mapId && !decisionSteps(state).includes('lane'))
+    return '路位还没占一格。从某一侧点文明时再记上那一侧。';
   return '步数不固定。还没到的格子不能点。';
 }
 
