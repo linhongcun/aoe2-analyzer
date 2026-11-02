@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>#558 文明搭配布局示意</title>
+    <link rel="stylesheet" href="../../src/shared/styles/tokens.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--color-bg);
+        color: var(--color-text);
+        font: 15px/1.65 var(--font-sans);
+      }
+      main {
+        max-width: 1160px;
+        margin: auto;
+        padding: 32px 24px;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0 0 12px;
+      }
+      h1 {
+        font-size: 32px;
+      }
+      h2 {
+        font-size: 22px;
+      }
+      h3 {
+        font-size: 18px;
+      }
+      .muted {
+        color: var(--color-muted);
+        font-size: 13px;
+      }
+      .frame {
+        margin-block: 24px 40px;
+        border: 1px solid var(--color-border);
+        border-radius: 18px;
+        background: var(--color-surface);
+        padding: 24px;
+      }
+      .columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+      .panel {
+        padding: 20px;
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        margin-block: 16px;
+      }
+      .quiet {
+        background: var(--color-surface-2);
+      }
+      .picker {
+        min-height: 56px;
+        border: 1px dashed var(--color-border);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 12px;
+        color: var(--color-on-route-current);
+        background: var(--color-route-current);
+        border-radius: 16px;
+        padding: 2px 8px;
+      }
+      .links {
+        color: var(--color-link);
+      }
+      .num {
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      .empty {
+        padding: 36px 16px;
+        text-align: center;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      .action {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 8px 16px;
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+      }
+      .primary {
+        color: var(--color-on-selected);
+        background: var(--color-selected);
+      }
+      @media (max-width: 700px) {
+        main {
+          padding: 20px 16px;
+        }
+        .frame {
+          padding: 16px;
+        }
+        .columns {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        .actions {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="muted">#558 静态布局示意。两种配置分开展示，不是产品的场景切换功能；无业务逻辑或新增游戏数据。</p>
+      <h1>文明搭配</h1>
+      <p>先选候选，看它和队友有哪些关联。</p>
+      <p class="muted">完整科技树潜力 · DE <span class="num">188329</span> · 编辑口径，非官方推荐</p>
+      <section class="frame" aria-label="空配置示意">
+        <h2>空配置</h2>
+        <div class="columns">
+          <div>
+            <p>你的候选</p>
+            <div class="picker">选择你的候选文明</div>
+          </div>
+          <div>
+            <p>已选队友 · 可留空，最多3名</p>
+            <div class="picker">加入队友</div>
+          </div>
+        </div>
+        <div class="empty">
+          <h3>先选一个你想玩的文明</h3>
+          <p class="muted">加入队友后，再看已有来源和具体兵种有什么补充。</p>
+        </div>
+        <p class="muted">候选待选时，结果、分享与既有工具跳转禁用；先选队友是合法可编辑中间态。</p>
+      </section>
+      <section class="frame" aria-label="波斯玛雅与法兰克示意">
+        <h2>候选法兰克，队友波斯＋玛雅</h2>
+        <div class="columns">
+          <div>
+            <p>你的候选</p>
+            <div class="picker">法兰克 · Franks</div>
+          </div>
+          <div>
+            <p>已选队友</p>
+            <div class="picker">波斯 · 玛雅 · 加入队友</div>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="panel">
+            <h3>法兰克带来的团队来源</h3>
+            <p><span class="tag">新增常驻来源</span></p>
+            <p>骑士系视野 <span class="num">+2</span></p>
+            <p class="muted">波斯可关联</p>
+            <p class="links">骑士 · 重装骑士 · 萨瓦尔</p>
+            <p class="muted">法兰克可关联</p>
+            <p class="links">骑士 · 重装骑士 · 游侠</p>
+          </div>
+          <div class="panel quiet">
+            <h3>队友也能关联到候选</h3>
+            <p>波斯：骑士系对远程士兵攻击 <span class="num">+2</span></p>
+            <p class="links">法兰克的骑士线</p>
+            <p>玛雅：城墙费用 <span class="num">−50%</span></p>
+            <p class="links">墙与门的已核对对象</p>
+          </div>
+        </div>
+        <h3>兵种选择多了什么</h3>
+        <p class="muted">新增优先，已有用明确的代表形态；完整清单可展开，跨方向归类不相加。</p>
+        <div class="panel">
+          <p>骑兵：波斯已有萨瓦尔；候选新增游侠。</p>
+          <p>弓兵：波斯已有骑射手；候选新增骑马弩兵具体路线。</p>
+          <p>步兵：候选新增掷斧兵线、冠军剑士。</p>
+          <p class="muted">具体新增是科技树形态，不表示原阵容缺兵或本局已分工。</p>
+        </div>
+        <div class="panel quiet">
+          <h3>条件来源的样式</h3>
+          <p><span class="tag">需研究 · 部分已核对</span></p>
+          <p>土堡：城堡时代、城堡研究。开放标枪骑兵与精锐升级另列，库曼限量形态也不归入常规训练线。</p>
+        </div>
+        <div class="actions">
+          <span class="action primary">复制搭配链接</span><span class="action">查看完整队伍加成</span><span class="action">带入团战分工</span>
+        </div>
+        <p class="muted">仅保留真实文明；研究、兵种、建筑与任务完成状态均由玩家继续填写。</p>
+      </section>
+    </main>
+  </body>
+</html>
