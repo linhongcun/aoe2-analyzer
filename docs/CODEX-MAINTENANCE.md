@@ -89,7 +89,7 @@
 
 ## 6. 设计硬规则（摘要）
 
-完整规范见 [docs/design/DESIGN-SYSTEM.md](design/DESIGN-SYSTEM.md) 与 [docs/design/README.md](design/README.md)（`ERRATA.md` 优先于 SPEC）。
+完整规范见 [docs/design/DESIGN-SYSTEM.md](design/DESIGN-SYSTEM.md) 与 [docs/design/README.md](design/README.md)「[给 Codex 的设计交接](design/README.md#给-codex-的设计交接)」（`ERRATA.md` 优先于 SPEC）。
 
 - **图标**：只用 Lucide，经 `src/shared/ui/Icon.tsx` 的 `ICONS` 登记后 `<Icon name="..." />`；禁止 emoji / Unicode 符号当图标（ESLint 会拦）；游戏美术图标除外。
 - **颜色**：只用 `src/shared/styles/tokens.css` 设计令牌；`npm run lint:colors`。
@@ -97,6 +97,12 @@
 - **数字不换行**：数值与「数字+单位」用 **`.num`**（等宽数字）与/或 **`.nw`**（`white-space: nowrap`）包住，360 宽也不能折行。
 - **四宽截图**：界面 PR 附 **360 / 375 / 390 / 1280**，无横向滚动、无 console error / pageerror。
 - **中文 UI**：文案与相邻页面一致；新增页面先改 `pageRegistry`，分组见 [ARCHITECTURE](ARCHITECTURE.md)「页面登记表」。
+
+带界面的 issue 先读 [设计索引「给 Codex 的设计交接」](design/README.md#给-codex-的设计交接)。
+
+UI 须挂 `docs/design/<topic>/` 规格，或 issue 内可测规格。没有对应短稿或规格则跳过，或先补规格，勿空做界面。
+
+方向 C、Lucide、原版游戏图标、tokens、PC-first，以及 Steve / Jony / Codex 的分工，以该节为准。
 
 ## 7. 测试规则
 
@@ -206,6 +212,7 @@ NODE
 - [ ] 从**当前已授权范围**挑选尚未实现的事项，核对实际代码及已合并 PR；不要继续使用已完成 issue 的旧示例选单，也不要把“超出上一轮小修”解释成“项目无法推进”
 - [ ] 大功能 / 新页面（如 #308、#33）先有明确规格、设计材料与失败用例，由执行者准备并交实现者之外的独立代理复核后再实现；不要自行扩范围
 - [ ] 分支名与 PR 标题符合 Conventional Commits：`类型(#issue): 描述`
+- [ ] 测试交接（先失败再折入、`Relates` / `Fixes`、含糊验收则跳过）按 [TESTING](TESTING.md#codex-交接) 与 [AGENTS.md](../AGENTS.md)「工作流」；此处不另写门禁
 
 ## 9. 发版
 
