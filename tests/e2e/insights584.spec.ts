@@ -540,10 +540,22 @@ for (const theme of ['light', 'dark']) {
       await expectNowrap(slot(page), /35\s*金/);
       await expectNoHScroll(page);
       if (width === 1280) await page.screenshot({ path: testInfo.outputPath(`hearth-${theme}.png`), fullPage: true });
-      await openDetail(page, '/unit/1759', /^战车/, width);
-      await expectEmpty(slot(page));
-      await expectNoHScroll(page);
-      if (width === 1280) await page.screenshot({ path: testInfo.outputPath(`ratha-empty-${theme}.png`), fullPage: true });
+      for (const [id, name] of [
+        [1759, /^战车/],
+        [1761, /精锐战车/],
+      ] as const) {
+        await openDetail(page, `/unit/${id}`, name, width);
+        const cost = await expectRathaTrainingCost(page);
+        const note = cost.getByText(RATHA_TRAINING_NOTE, { exact: true });
+        await expect(note).toBeVisible();
+        expect(await note.evaluate((el) => Number.parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(15);
+        await expectNoHScroll(page);
+        if (width === 1280) {
+          if (id === 1759) await page.screenshot({ path: testInfo.outputPath(`ratha-empty-${theme}.png`), fullPage: true });
+          expect((await new AxeBuilder({ page }).include('section[aria-label="造价与生产"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+        }
+        await page.screenshot({ path: testInfo.outputPath(`ratha-training-${id}-${theme}-${width}.png`), fullPage: true });
+      }
       await openDetail(page, '/civ/Bengalis', /孟加拉/, width);
       const region = await expectFixedSlot(page);
       await expect(region.getByTestId('insight-item')).toHaveCount(2);
