@@ -1,0 +1,87 @@
+{
+  "version": "feudal-castle-review-1",
+  "effects": {
+    "Britons": "4442422f",
+    "Ethiopians": "8d73b44e",
+    "Franks": "2af1c289",
+    "Mayans": "01a4124b",
+    "Vietnamese": "89e437f9",
+    "Berbers": "a7933d6e",
+    "Huns": "cca684fa"
+  },
+  "units": {
+    "4": {
+      "age": 2,
+      "building": 87,
+      "class": 0,
+      "from": null,
+      "costKeys": ["Gold", "Wood"]
+    },
+    "24": {
+      "age": 3,
+      "building": 87,
+      "class": 0,
+      "from": 4,
+      "costKeys": ["Gold", "Wood"]
+    },
+    "448": {
+      "age": 2,
+      "building": 101,
+      "class": 47,
+      "from": null,
+      "costKeys": ["Food"]
+    },
+    "38": {
+      "age": 3,
+      "building": 101,
+      "class": 12,
+      "from": null,
+      "costKeys": ["Food", "Gold"]
+    }
+  },
+  "techs": {
+    "Fletching": {
+      "id": 199,
+      "age": 2,
+      "building": 103,
+      "pre": null,
+      "costKeys": ["Food", "Gold"]
+    },
+    "Padded Archer Armor": {
+      "id": 211,
+      "age": 2,
+      "building": 103,
+      "pre": null,
+      "costKeys": ["Food"]
+    },
+    "Bodkin Arrow": {
+      "id": 200,
+      "age": 3,
+      "building": 103,
+      "pre": 199,
+      "costKeys": ["Food", "Gold"]
+    },
+    "Forging": {
+      "id": 67,
+      "age": 2,
+      "building": 103,
+      "pre": null,
+      "costKeys": ["Food"]
+    },
+    "Scale Barding Armor": {
+      "id": 81,
+      "age": 2,
+      "building": 103,
+      "pre": null,
+      "costKeys": ["Food"]
+    },
+    "Husbandry": {
+      "id": 39,
+      "age": 3,
+      "building": 101,
+      "pre": null,
+      "costKeys": ["Food"]
+    }
+  },
+  "upgradeCostKeys": ["Food", "Gold"]
+}
