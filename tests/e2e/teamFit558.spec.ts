@@ -24,7 +24,7 @@ const ready = async (page: Page) => {
   await expect(page.locator('[data-t="footer-build"]').first()).toBeVisible();
 };
 
-async function recordSubject(page: Page, testInfo: TestInfo, name: string) {
+async function recordSubject(page: Page, testInfo: TestInfo, name: string, fullPage = false) {
   const observed = {
     url: page.url(),
     headings: await page.locator('main h1,main h2').allTextContents(),
@@ -35,7 +35,12 @@ async function recordSubject(page: Page, testInfo: TestInfo, name: string) {
   const observedPath = testInfo.outputPath(`${name}.json`);
   const screenshotPath = testInfo.outputPath(`${name}.png`);
   writeFileSync(observedPath, JSON.stringify(observed, null, 2));
-  await page.screenshot({ path: screenshotPath, fullPage: false });
+  await page.screenshot({ path: screenshotPath, fullPage });
+  if (fullPage) {
+    const viewportPath = testInfo.outputPath(`${name}-viewport.png`);
+    await page.screenshot({ path: viewportPath, fullPage: false });
+    await testInfo.attach(`${name}-viewport.png`, { path: viewportPath, contentType: 'image/png' });
+  }
   await testInfo.attach(`${name}.json`, { path: observedPath, contentType: 'application/json' });
   await testInfo.attach(`${name}.png`, { path: screenshotPath, contentType: 'image/png' });
 }
@@ -311,7 +316,7 @@ for (const width of [360, 375, 390, 1280])
       expect(focused).toBe(true);
       await source.click();
       await page.evaluate(() => scrollTo(0, 0));
-      await recordSubject(page, testInfo, `team-fit-${width}-${theme}`);
+      await recordSubject(page, testInfo, `team-fit-${width}-${theme}`, true);
       expect(errors).toEqual([]);
     });
   }
@@ -366,4 +371,29 @@ test('#558 首页、工具、搜索派生同一真实入口', async ({ page }) =
   await dialog.getByRole('combobox', { name: '全局搜索', exact: true }).fill('wmdp');
   await dialog.getByRole('option').filter({ hasText: '文明搭配' }).click();
   await expect(page).toHaveURL(/#\/team-fit$/);
+});
+
+test('#558 键盘提交第三队友、清空、移除与损坏链接重置后保留有意义焦点', async ({ page }) => {
+  await page.goto(fitUrl('Franks', 'Persians,Mayans'));
+  await fitReady(page);
+  await page.getByRole('button', { name: '加入队友：加入队友', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await page.getByPlaceholder('搜索文明（中/英）').fill('Huns');
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('button', { name: '队友3：匈奴', exact: true })).toBeFocused();
+  await page.getByRole('button', { name: '清空候选', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('button', { name: '你的候选：选择候选文明', exact: true })).toBeFocused();
+  await page.getByRole('button', { name: '移除队友3', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('button', { name: '队友2：玛雅', exact: true })).toBeFocused();
+  await page.getByRole('button', { name: '移除队友2', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: '移除队友1', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('button', { name: '加入队友：加入队友', exact: true })).toBeFocused();
+  await page.goto('./#/team-fit?v=bad');
+  await page.getByRole('button', { name: '重置搭配', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('button', { name: '你的候选：选择候选文明', exact: true })).toBeFocused();
 });

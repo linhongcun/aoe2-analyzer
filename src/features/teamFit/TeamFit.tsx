@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ComponentType } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { loadCore, loadTrees } from '../../data';
 import { DATA_PATCH_BUILD } from '../../data/meta';
@@ -30,8 +30,15 @@ export default function TeamFit() {
       active = false;
     };
   }, []);
+  const pendingFocus = useRef<string | null>(null);
+  useLayoutEffect(() => {
+    const target = pendingFocus.current;
+    pendingFocus.current = null;
+    if (target) document.getElementById(target)?.focus();
+  }, [location.key]);
   const config = decoded.config;
-  const update = (next: TeamFitConfig, replace = false) => {
+  const update = (next: TeamFitConfig, replace = false, focusTarget = 'tf-candidate') => {
+    pendingFocus.current = focusTarget;
     navigate({ pathname: '/team-fit', search: '?' + encodeTeamFit(next) }, { replace });
     share.reset();
   };
@@ -93,13 +100,19 @@ export default function TeamFit() {
                       id={'tf-mate-' + i}
                       label={'队友' + (i + 1)}
                       value={civ}
-                      onChange={(next) => update({ ...config, mates: config.mates.map((value, index) => (index === i ? next : value)) })}
+                      onChange={(next) => update({ ...config, mates: config.mates.map((value, index) => (index === i ? next : value)) }, false, 'tf-mate-' + i)}
                     />
                     <button
                       type="button"
                       className="tf-remove"
                       aria-label={'移除队友' + (i + 1)}
-                      onClick={() => update({ ...config, mates: config.mates.filter((_, index) => index !== i) })}
+                      onClick={() =>
+                        update(
+                          { ...config, mates: config.mates.filter((_, index) => index !== i) },
+                          false,
+                          config.mates.length > 1 ? 'tf-mate-' + Math.min(i, config.mates.length - 2) : 'tf-add',
+                        )
+                      }
                     >
                       <Icon name="x" />
                     </button>
@@ -113,7 +126,7 @@ export default function TeamFit() {
                   none="加入队友"
                   value=""
                   onChange={(civ) => {
-                    if (civ) update({ ...config, mates: [...config.mates, civ] });
+                    if (civ) update({ ...config, mates: [...config.mates, civ] }, false, 'tf-mate-' + config.mates.length);
                   }}
                 />
               )}
