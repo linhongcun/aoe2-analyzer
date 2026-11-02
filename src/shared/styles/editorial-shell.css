@@ -486,6 +486,19 @@ footer.editorial-footer .footer-sources a {
     display: none;
   }
 }
+@media (min-width: 380px) and (max-width: 600px) {
+  footer.editorial-footer .fmeta {
+    /* 为版本号和不同字宽的构建 SHA 留出空间，三项仍保持 12px 同排。 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 1px;
+    margin-inline: calc(-1 * var(--space-3));
+  }
+  footer.editorial-footer .fmeta .fitem {
+    flex-shrink: 0;
+  }
+}
 /* 跳到主内容：平时移出视口，键盘聚焦时出现在左上角，高对比、点击区 ≥44px */
 .skip-link {
   position: fixed;
