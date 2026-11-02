@@ -1,6 +1,6 @@
 # #584 已批准路由合同与验收迁移
 
-本轮维护者已明确授权逐项实施剩余 issue，并定向要求接续现有 PR #623。该授权取代旧交接中 #584 未排期的状态。本补充只落实已批准的 #621 设计，不扩大其产品范围。
+维护者授权逐项处理剩余 issue，执行者据此接续已有 PR #623。该授权取代旧交接中 #584 未排期的状态。本补充只落实已批准的 #621 设计，不扩大其产品范围。
 
 基线为 `f30cd3ab964fc85e63d4908590c96f169879e06b`。PR #623 原头为 `851c048bddbb207e236674007dedfb69d73f28fb`；保留其历史，在独立工作树合入最新 main，不单独合并仍红的测试，不强推。
 
@@ -25,3 +25,9 @@ PR #623 新测要求战车单位和孟加拉文明同时出现同一句，与 #6
 ## 后续内容专项
 
 #582 的「无需先研远程科技」与 #585 两个战车单位造价区的明确「不消耗食物」提示分别逐条复核；本轮不因种子进槽自动宣称这两个 issue 全部完成，不顺带添加别名或修改游戏数据。
+
+## 精确 CI 消费者审计
+
+`src/domain/insights.ts` 只提供短句配置、纯文本拼接和按单位/文明查找。运行时消费者只有 `src/features/units/components/UnitDetail.tsx` 的 `unitInsights` 和 `src/features/civs/components/CivDetail.tsx` 的 `civInsights`；`src/shared/ui/InsightSlot.tsx` 仅导入类型，没有战斗、经济或统计计算消费者。
+
+只把这一精确路径映射到现有 `units`、`civs` 两个 profile，两边登记 `insights584` 单测；既有浏览器 `insights584`、`civ603` 和现有单位/文明部署烟测继续使用。未知或相近命名 domain、共享组件仍保守 full，生成 JSON 仍 full+data。范围正反例放 `releaseInsightsScope584.test.ts`，使维护模式长期覆盖规则本身；不增加虚拟功能名或目录级豁免。

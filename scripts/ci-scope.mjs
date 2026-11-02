@@ -12,6 +12,8 @@ const cssFiles = new Set(['src/shared/styles/base.css', 'src/shared/styles/edito
 const shellFiles = new Set(['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src/shared/styles/editorial-shell.css']);
 // Audited display files only. Calculation, tokens, routing and unaudited shared UI stay full.
 const displayFiles = new Map([
+  // Short insight content is read only by the unit/civilization detail pages; no simulation consumers.
+  ['src/domain/insights.ts', ['units', 'civs']],
   // Homepage choice flow only; no combat, economic simulation or generated data.
   ['src/domain/startGame.ts', ['home']],
   // Ladder-only URL/selection/source labels; snapshot values and statistical calculations are unchanged.
@@ -84,7 +86,17 @@ export const PROFILES = {
   patches: profile(['patches16', 'patchTree417', 'patchSearch16'], ['patches16', 'patchTree417']),
   matchup: profile(['matchup194', 'p0Batch', 'simRoute424', 'simulator'], ['matchup194', 'matchupSim424', 'rush35']),
   civs: profile(
-    ['civRequirements206', 'civText402', 'civOpening77', 'civBonus', 'dlc-linker', 'civRegionalUnits450', 'civRegionalBuildings456', 'civUniqueBuildings463'],
+    [
+      'civRequirements206',
+      'civText402',
+      'civOpening77',
+      'civBonus',
+      'dlc-linker',
+      'civRegionalUnits450',
+      'civRegionalBuildings456',
+      'civUniqueBuildings463',
+      'insights584',
+    ],
     [
       'civDlcFilters',
       'civRequirements206',
@@ -106,7 +118,19 @@ export const PROFILES = {
     ],
   ),
   units: profile(
-    ['unitFilters192', 'unitFilters196', 'unitCount14', 'unitNames271', 'unitAge11', 'upgradeLine10', 'relatedTechs193', 'family', 'simRoute424', 'simulator'],
+    [
+      'unitFilters192',
+      'unitFilters196',
+      'unitCount14',
+      'unitNames271',
+      'unitAge11',
+      'upgradeLine10',
+      'relatedTechs193',
+      'family',
+      'simRoute424',
+      'simulator',
+      'insights584',
+    ],
     [
       'unitCards6',
       'unitFilters196',
