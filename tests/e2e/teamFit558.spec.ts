@@ -8,8 +8,11 @@ test.beforeEach(({ page }, testInfo) => {
   normalErrors.set(page, errors);
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => {
-    if (message.type() === 'error' && !(testInfo.title.includes('[expected chunk failure]') && /net::ERR_FAILED|Failed to load resource/.test(message.text())))
-      errors.push(message.text());
+    const expectedChunkFailure =
+      testInfo.title.includes('[expected chunk failure]') &&
+      /\/assets\/TeamFitResults-[^/]+\.js$/.test(message.location().url) &&
+      /net::ERR_FAILED|Failed to load resource/.test(message.text());
+    if (message.type() === 'error' && !expectedChunkFailure) errors.push(message.text());
   });
 });
 test.afterEach(({ page }) => {
@@ -249,6 +252,7 @@ test('#558 首次直达拒绝新模型chunk后仍可编辑、可见重载恢复 
   await expect(page.getByRole('button', { name: '复制搭配链接', exact: true })).toBeDisabled();
   await pickFit(page, '你的候选', 'Berbers');
   expect(requests.some((url) => /\/TeamFitResults-/.test(url))).toBe(true);
+  expect(requests).toHaveLength(1);
   expect(errors).toEqual([]);
   await testInfo.attach('expected-network-failures.json', { body: JSON.stringify(requests), contentType: 'application/json' });
   await page.unroute(/\/assets\/TeamFitResults-[^/]+\.js$/);
@@ -359,7 +363,7 @@ test('#558 首页、工具、搜索派生同一真实入口', async ({ page }) =
   await page.keyboard.press('Escape');
   await page.keyboard.press('Control+k');
   const dialog = page.getByRole('dialog', { name: '全局搜索', exact: true });
-  await dialog.getByRole('textbox', { name: '全局搜索', exact: true }).fill('wmdp');
+  await dialog.getByRole('combobox', { name: '全局搜索', exact: true }).fill('wmdp');
   await dialog.getByRole('option').filter({ hasText: '文明搭配' }).click();
   await expect(page).toHaveURL(/#\/team-fit$/);
 });
