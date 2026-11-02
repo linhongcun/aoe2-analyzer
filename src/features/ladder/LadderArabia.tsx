@@ -25,9 +25,11 @@ import {
   type SortDir,
   type SortKey,
 } from '../../domain/ladder';
+import type { SliceFacts } from '../../domain/ladderQuery';
 import { LadderMeta, LadderTiers } from './LadderBands';
-import { LadderBracketGroup } from './LadderElo';
+import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderFreshness } from './LadderFreshness';
+import { LadderStatMethods } from './LadderStatMethods';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
 import { Icon, type IconName } from '../../shared/ui/Icon';
@@ -78,12 +80,14 @@ function SortMark({ active, dir }: { active: boolean; dir: SortDir }) {
 export function LadderArabia({
   view,
   elo,
+  facts,
   onSelect,
   hideLow,
   children,
 }: {
   view: LadderViewId;
   elo: BracketKey;
+  facts: SliceFacts;
   onSelect: (key: string) => void;
   hideLow: boolean;
   children?: ReactNode;
@@ -156,9 +160,18 @@ export function LadderArabia({
   return (
     <>
       {/* 玩家界面写来源名、统计截止、相对新鲜度和样本量。Wayback 路径不渲染。来源名若是 aoe2scout 则不印出。 */}
-      <div className="ladder-source" data-testid="ladder-source" data-cutoff={mismatch ? 'mismatch' : 'aligned'} data-fetched-at={snapshot.fetchedAt}>
+      <div
+        className="ladder-source"
+        data-testid="ladder-source"
+        data-cutoff={mismatch ? 'mismatch' : 'aligned'}
+        data-fetched-at={snapshot.fetchedAt}
+        data-slice-mode={facts.mode}
+        data-slice-elo={facts.eloKey}
+        data-slice-map={facts.mapKey}
+      >
         <Icon name="database" />
         <div className="ladder-copy">
+          <LadderSourceFacts facts={facts} />
           <p className="ladder-cutoff" data-testid="ladder-cutoff">
             {mismatch && patchBuild ? (
               <>
@@ -218,7 +231,6 @@ export function LadderArabia({
           <span className="nw">1v1</span> 随机地图（RM）
         </span>
       </div>
-      <LadderBracketGroup snapshot={snapshot} elo={elo} onSelect={select} />
       <div className="ladder-layout">
         <div className="ladder-main">
           {bracket.empty ? (
@@ -234,9 +246,10 @@ export function LadderArabia({
           ) : (
             <>
               {view === 'tiers' && <LadderTiers civs={rows} />}
-              {view === 'meta' && <LadderMeta civs={rows} />}
+              {view === 'meta' && <LadderMeta civs={rows} sampleUnit={sampleUnit} />}
               {view === 'table' && (
                 <div className="ladder-table-card">
+                  <LadderStatMethods playerSample={playerSample} interval={false} />
                   <table className="ladder-table" data-testid="ladder-table">
                     <caption className="ladder-sr">阿拉伯 1v1 {bracket.label} 各文明胜率</caption>
                     <colgroup>
@@ -365,8 +378,8 @@ export function LadderArabia({
           <section className="ladder-card ladder-wide-only">
             <h2>怎么读这张表</h2>
             <ul>
-              <li>胜率：本分段里，该文明赢下的对局占比。</li>
-              <li>出场率：本分段里，该文明被选中的对局占比。</li>
+              <li>胜率：按来源公布的该文明胜率展示。</li>
+              <li>出场率：按来源公布的文明选择比例展示，不由出场人次换算。</li>
               <li>
                 {playerSample ? (
                   <>

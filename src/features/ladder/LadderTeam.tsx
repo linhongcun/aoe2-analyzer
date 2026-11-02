@@ -13,14 +13,19 @@ import {
   snapshotCutoff,
   sortLadder,
   toggleSort,
+  viewBracket,
   visibleSourceLabel,
   type LadderCivStat,
   type LadderSnapshot,
   type SortDir,
   type SortKey,
 } from '../../domain/ladder';
+import { canonicalLadderSearch, type SliceFacts } from '../../domain/ladderQuery';
+import { ladderShareUrl } from './shareLink';
 import { LadderMeta, LadderTiers } from './LadderBands';
+import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderFreshness } from './LadderFreshness';
+import { LadderStatMethods } from './LadderStatMethods';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
 import { Icon, type IconName } from '../../shared/ui/Icon';
@@ -61,10 +66,27 @@ function sparkline(values: number[]): { points: string; tone: 'good' | 'bad' | '
   return { points, tone };
 }
 
-export function LadderTeam({ view, hideLow, onArabia, children }: { view: LadderViewId; hideLow: boolean; onArabia: () => void; children?: ReactNode }) {
+export function LadderTeam({
+  view,
+  elo,
+  facts,
+  hideLow,
+  onArabia,
+  children,
+}: {
+  view: LadderViewId;
+  elo: string;
+  facts: SliceFacts;
+  hideLow: boolean;
+  onArabia: () => void;
+  children?: ReactNode;
+}) {
   const [sort, setSort] = useState<TeamSortState>({ key: 'win', dir: firstSortDir('win') });
-  const share = useShareLink({ stateKey: '4v4' });
-  const bracket = snapshot.brackets[0];
+  const shareState = { mode: '4v4' as const, elo, pendingView: view === 'table' ? null : view };
+  const share = useShareLink({ stateKey: JSON.stringify([canonicalLadderSearch(shareState), hideLow, sort.key, sort.dir]) });
+  const bracketKey = elo === 'all' || elo === '' ? '1200-1400' : elo;
+  const bracketView = viewBracket(snapshot, bracketKey);
+  const bracket = bracketView.empty ? undefined : snapshot.brackets.find((item) => item.key === bracketView.key);
   const threshold = snapshot.lowSampleGames ?? LOW_SAMPLE;
   const cutoff = snapshotCutoff(snapshot);
   const aligned = isBalanceAligned(snapshot.patchNote, SITE_BUILD);
@@ -99,9 +121,18 @@ export function LadderTeam({ view, hideLow, onArabia, children }: { view: Ladder
 
   return (
     <>
-      <div className="ladder-source" data-testid="ladder-source" data-cutoff={aligned ? 'aligned' : 'mismatch'} data-fetched-at={snapshot.fetchedAt}>
+      <div
+        className="ladder-source"
+        data-testid="ladder-source"
+        data-cutoff={aligned ? 'aligned' : 'mismatch'}
+        data-fetched-at={snapshot.fetchedAt}
+        data-slice-mode={facts.mode}
+        data-slice-elo={facts.eloKey}
+        data-slice-map={facts.mapKey}
+      >
         <Icon name="database" />
         <div className="ladder-copy">
+          <LadderSourceFacts facts={facts} />
           <p className="ladder-cutoff" data-testid="ladder-cutoff">
             {!aligned && <span className="ladder-cutoff-flag">非当前平衡</span>}
             {!aligned && ' · '}
@@ -138,9 +169,10 @@ export function LadderTeam({ view, hideLow, onArabia, children }: { view: Ladder
         <span className="nw">4v4</span> 随机地图 · 全图
       </p>
       {view === 'tiers' && <LadderTiers civs={rows} />}
-      {view === 'meta' && <LadderMeta civs={rows} />}
+      {view === 'meta' && <LadderMeta civs={rows} sampleUnit={sampleUnit} />}
       {view === 'table' && (
         <div className="ladder-table-card">
+          <LadderStatMethods playerSample={player} interval={showInterval} />
           <table className="ladder-table ladder-table-team" data-testid="ladder-table">
             <caption className="ladder-sr">4v4 随机地图 1200–1400 近 90 天 全图 各文明胜率</caption>
             <thead>
@@ -217,18 +249,27 @@ export function LadderTeam({ view, hideLow, onArabia, children }: { view: Ladder
           </table>
           <div className="ladder-notes">
             <ul>
-              <li>胜率：这一切片里，该文明赢下的对局占比。</li>
+              <li>胜率：按来源公布的该文明胜率展示。</li>
               <li>走势：这份静态快照里的胜率序列，不是实时。</li>
               <li>
                 相对 <span className="nw">50%</span>：胜率减去 <span className="nw">50</span> 个百分点。
               </li>
             </ul>
-            <div data-testid="ladder-share">
-              <button type="button" onClick={() => void share.copy(window.location.href)}>
+            <div className="ladder-share" data-testid="ladder-share">
+              <button type="button" onClick={() => void share.copy(() => ladderShareUrl(window.location.href, shareState))}>
                 <Icon name={share.copied ? 'check' : 'link'} />
                 复制当前链接
               </button>
               <p {...share.statusProps}>{share.status}</p>
+              {share.manualLink && (
+                <input
+                  className="ladder-manual-link"
+                  readOnly
+                  value={share.manualLink}
+                  aria-label="分享链接"
+                  onFocus={(event) => event.currentTarget.select()}
+                />
+              )}
             </div>
           </div>
         </div>

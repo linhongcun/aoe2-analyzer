@@ -23,12 +23,19 @@
   white-space: nowrap;
 }
 .hk-controls,
-.hk-audit {
+.hk-audit,
+.hk-follow-tip {
   margin-top: var(--space-6);
   padding: var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface-2);
+}
+.hk-follow-tip p {
+  margin-block: 0 var(--space-2);
+}
+.hk-follow-tip a {
+  font-size: var(--fs-sm);
 }
 .hk-profile,
 .hk-buttons,

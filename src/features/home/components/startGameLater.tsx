@@ -67,11 +67,13 @@ export function CivStep({ state, onChange }: { state: StartState; onChange: Upda
         <p className="start-why">没有可以沿用的编辑稿。可以自己选一个文明，也可以跳过。</p>
       )}
       <Picked state={state} />
-      {state.lobby && state.choice.mode === 'team' && !decisionSteps(state).includes('lane') ? (
+      {state.lobby ? (
         <div className="start-actions">
-          <button type="button" className="start-btn" onClick={() => onChange((current) => openLane(current))}>
-            补路位
-          </button>
+          {state.choice.mode === 'team' && !decisionSteps(state).includes('lane') ? (
+            <button type="button" className="start-btn" onClick={() => onChange((current) => openLane(current))}>
+              补路位
+            </button>
+          ) : null}
           <button type="button" className="start-btn" onClick={() => onChange((current) => jumpTo(current, 'mode'))}>
             修改模式和地图
           </button>

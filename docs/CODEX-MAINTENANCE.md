@@ -2,9 +2,28 @@
 
 给 Codex（及同类无人值守编码代理）用的维护纪律。人类与角色代理仍以 [CONTRIBUTING.md](../CONTRIBUTING.md) 为准；本文件与 CONTRIBUTING / [AGENTS.md](../AGENTS.md) 冲突时，以 CONTRIBUTING 为准，并在 issue 里指出。
 
-入口：先读 AGENTS.md → 本文件 → 要做的那条 issue。
+入口：先读 AGENTS.md → 本文件（先看下方当前状态）→ 要做的那条 issue。
 
 已记录的维护者授权优先于本文件的默认限制。当前项目的[持续发布授权](../CONTRIBUTING.md#维护者的持续发布授权2026-10-24)要求：已授权更新完成适用审查和测试后直接完成上线，不再逐次询问发布。现行审阅流程按 [持续审阅授权](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) 执行；#431 已授权一次适用验证、可信证据复用和后台全量，现行验证规则见 [验证投入](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。范围、Hold 和测试保护继续有效。
+
+<a id="status-2026-11-02"></a>
+
+## 当前状态 / 2026-11-02
+
+无人值守 Codex 用这一节决定**现在领什么、跳过什么**。功能实现默认由 Codex 认领；产品范围与是否恢复由维护者决定。设计硬规则仍是第 6 节与 `docs/design/`；验收与失败用例仍见 [TESTING](TESTING.md)。不另建一套流程，也不把角色代理自循环当作实现通道。
+
+门禁不变：一次只认领 1 个 issue；同时在审 PR ≤ 2；实现者之外的**独立代理复核**加上按风险选择的 CI；持续发布授权以 CONTRIBUTING 为准。`Fixes #N` 合入默认分支会关 issue。交接、跟进或走查未完成时写 `Relates #N`，issue **保持 OPEN**，直到 Reid 的 PC 走查通过，或 Steve 关闭。不要把 Relates 改成 Fixes 来清队列。Reid / Steve 只决定这类 issue 何时关，**不代替**独立代理复核，也不新增签字角色。
+
+- **最近已发布：v0.74.0。** 抬版本号的提交是 `2998ded7`（#624）。其后的 tip 含 #622，合并提交 `4b6d35a6`（天梯模式和 Elo 切换已有快照）。
+- **#571 已关闭，不要重开。** Reid 在 tip `4b6d35a6` 上 PC 走查 PASS，#622 已合并。
+- **#584 仍 OPEN。** 设计短稿已合并（#621）。**实现未排期。** 维护者明确授权前不要开工实现。已有 open PR（含测试草稿 #623）时按第 5 节跳过，测试草稿不是实现授权。
+- **#625**（P1，候选）：产品方向已锁定为**解耦**。天梯的模式和 Elo 分段按钮分开；点 Elo 不跳到另一种模式；没有快照的档保持禁用（「暂无数据」）。不要做成「点了就换模式，再加一句说明」。
+- **#626**（P2，候选）：快捷键 / 开局的短提示。工作恢复后排在 #625 之后。
+- **双路功能实现暂停**，直到维护者 / Steve 明确说恢复。暂停期间可以做文档和 chore 类 Codex 交接，不要做 #584 的实现、#625、#626，以及其它未获恢复授权的双路功能。
+
+**现在可以领：** 已授权的文档 / chore 交接。不要领 #584 的实现、#625、#626。
+
+**恢复之后：** 先做 #625（解耦）。#625 完成后再做 #626。#584 的实现仍要单独授权，短稿合并不算开工许可。
 
 ## 1. 产品主题（是什么 / 不是什么）
 
@@ -33,11 +52,12 @@
 - CI 按功能影响生成 maintenance/civ-ui/targeted/full 计划，每份代码做一次必要验证。小 UI 不运行未变计算、数据再生成或无关整站回归；release/main 仅在同仓库真实成功来源、代码树、策略和覆盖范围匹配时复用证据。缺证据执行当前必要计划，不为阶段名称额外重跑全量，详见 [TESTING](TESTING.md)。
 - 只改文档或只改样式（不动逻辑和测试）的 PR：CI 绿即可采用轻量审阅规则。轻量审阅仍须通过对应范围的 CI，不要求额外整站全量。
 - **不得伪造他人结论、删除分支、修改仓库权限或放宽测试。** 没有合并/发布授权时不执行相应动作；本项目已记录的授权范围内，完成适用门禁后按顺序集成并发布。
+- **Relates 与 Fixes：** `Fixes #N` 合入默认分支会关 issue。`Relates #N` 不关 issue，保持 OPEN，直到 Reid 的 PC 走查通过或 Steve 关闭（#571 即按此在 tip `4b6d35a6` 关闭）。这不新增审阅角色；代码门禁仍是实现者之外的独立代理复核。
 - rebase 后若 `git range-diff` 证明自身改动不变，可沿用相应独立复核并记录新旧 SHA。当前 CI 仍核实实际代码树、策略与范围；不足时补当前必要验证，不无条件冒用旧 run，也不机械重复相同验收。
 
 ## 4. Hold 表（勿开）
 
-当前没有暂停条目。#372 仅按本轮明确的两条预置授权解除，不代表自动认领其它候选。
+单条 Hold 表当前没有新的暂停编号。#372 仅按本轮明确的两条预置授权解除，不代表自动认领其它候选。**双路功能实现**自 2026-11-02 起暂停，见 [当前状态](#status-2026-11-02)；不要把「表里没有新编号」读成可以开工 #584 的实现、#625 或 #626。恢复双路须维护者明确授权，审阅流程变更不恢复。
 
 更新 hold 列表或解 hold **必须** 获得维护者明确授权，代理不得自行开 hold 上的 issue。审阅流程变更本身不解除 Hold。
 
@@ -49,13 +69,27 @@
 
 - 标签 **`待确认`** 或 **`阻塞`**
 - 该 issue **已有 open PR**
-- 在上方 **Hold 表** 中
-- 正文缺少可测的 **「验收标准」**，或缺少 **「不要做」/「不在范围」**，且无法在已授权范围内补齐；执行者可先补齐规格并交独立代理复核，不得自行发明产品范围
+- 在上方 **Hold 表** 中，或属于 [当前状态](#status-2026-11-02) 里暂停的双路功能实现（#584 的实现、#625、#626）
+- **#571 已关闭**，不要重开
+- 正文缺少可测的 **「验收标准」**，或缺少 **「不要做」/「不在范围」**。只有空的「-」、没有具体数值 / 宽度 / 状态 / 可复现链接，都算没写完。执行者可在已授权范围内先补齐规格并交独立代理复核，不得自行发明产品范围
 - 标题形如「待村长确认」的版本范围
+
+### 作者写到 Codex 能领
+
+开写前正文应能逐项勾上。缺任一项，Codex 跳过，或只在已授权范围内补规格，不直接实现：
+
+- [ ] **玩家场景**：谁在什么情况下要用
+- [ ] **验收标准**：每条可测（具体数值、宽度、状态或可复现链接），不是空的「-」
+- [ ] **不在范围 / 不要做**：写明这次明确不做的事，不是空的「-」
+- [ ] **涉及页面 / 路由**（如 `#/ladder`）和数据来源；没核对的写「未核实」
+- [ ] 验收默认写清 **PC 1280** 可测；不为窄屏单独加产品范围，除非本 issue 写明。改了界面的 PR 仍按第 6 节附四宽截图
+- [ ] 改界面：设计稿或可测规格已挂上（`docs/design/`）。大功能或新页面先有失败用例，再实现
+
+写 issue 和实现时都守这些产品口径：不编造游戏数值；不接 live 天梯；天梯等静态快照标明非当前平衡和统计截止。缺来源就标「未核实」。
 
 ## 6. 设计硬规则（摘要）
 
-完整规范见 [docs/design/DESIGN-SYSTEM.md](design/DESIGN-SYSTEM.md) 与 [docs/design/README.md](design/README.md)（`ERRATA.md` 优先于 SPEC）。
+完整规范见 [docs/design/DESIGN-SYSTEM.md](design/DESIGN-SYSTEM.md) 与 [docs/design/README.md](design/README.md)「[给 Codex 的设计交接](design/README.md#给-codex-的设计交接)」（`ERRATA.md` 优先于 SPEC）。
 
 - **图标**：只用 Lucide，经 `src/shared/ui/Icon.tsx` 的 `ICONS` 登记后 `<Icon name="..." />`；禁止 emoji / Unicode 符号当图标（ESLint 会拦）；游戏美术图标除外。
 - **颜色**：只用 `src/shared/styles/tokens.css` 设计令牌；`npm run lint:colors`。
@@ -63,6 +97,12 @@
 - **数字不换行**：数值与「数字+单位」用 **`.num`**（等宽数字）与/或 **`.nw`**（`white-space: nowrap`）包住，360 宽也不能折行。
 - **四宽截图**：界面 PR 附 **360 / 375 / 390 / 1280**，无横向滚动、无 console error / pageerror。
 - **中文 UI**：文案与相邻页面一致；新增页面先改 `pageRegistry`，分组见 [ARCHITECTURE](ARCHITECTURE.md)「页面登记表」。
+
+带界面的 issue 先读 [设计索引「给 Codex 的设计交接」](design/README.md#给-codex-的设计交接)。
+
+UI 须挂 `docs/design/<topic>/` 规格，或 issue 内可测规格。没有对应短稿或规格则跳过，或先补规格，勿空做界面。
+
+方向 C、Lucide、原版游戏图标、tokens、PC-first，以及 Steve / Jony / Codex 的分工，以该节为准。
 
 ## 7. 测试规则
 
@@ -90,30 +130,32 @@
 
 - 部署烟测（`scripts/deployment-smoke.mjs`；该事件去掉 feature `all` 的长巡游，只留首页/页脚和已识别功能）
 - 核心包 `tests/e2e/smoke.spec.ts`
-- diff 里已经映射到 `PROFILES` 的功能 e2e
+- diff 里已经映射到 `PROFILES` 的功能 e2e，以及本次明确新增/修改或由入口指定的专项 e2e（已删除文件不执行）。`full` 单测计划不会丢弃这些专项浏览器验收（#636）
 
-识别不到功能时，浏览器只有部署烟测和 `smoke.spec.ts`。`CI_E2E_FULL` 由 `.github/workflows/ci.yml` 设置，`pull_request` 恒为 `false`；`scripts/ci-scope.mjs` 的 `applyBrowserPolicy` 与 `scripts/ci-run.mjs` 都认这个事件，不能靠把 `CI_E2E_FULL=true` 写进 PR 环境把整套 e2e 加回来。
+既无功能映射、也无明确专项用例时，浏览器只有部署烟测和 `smoke.spec.ts`。`CI_E2E_FULL` 由 `.github/workflows/ci.yml` 设置，`pull_request` 恒为 `false`；`scripts/ci-scope.mjs` 的 `applyBrowserPolicy` 与 `scripts/ci-run.mjs` 都认这个事件，不能靠把 `CI_E2E_FULL=true` 写进 PR 环境把整套 e2e 加回来。
+
+#636 为首页、天梯加入有界 profile。首页覆盖 `startGame592` 与首页壳层，天梯覆盖现有 `ladder*` 的明确文件列表；新增回归时同步维护列表。`src/domain/startGame.ts` 已审计为首页选择流程与展示投影，只有这一精确路径归入 home；其它计算或未知 domain 文件继续 full。专项清单和 profile 合并、去重后，仍最后应用下方 capped 黑名单。
 
 ### PR capped 黑名单（Kent §C，#538 / #514）
 
 下面这些 spec **不删除**，main / nightly / `CI_E2E_FULL` 仍会跑到。它们只是不能进入 pull_request 的 `capped` 列表，哪怕 `ci-scope` 给出 `full`，或某个宽 profile 本来选中了它们：
 
-| 模式 | PR capped |
-| --- | --- |
-| `v0300-338` | 始终排除 |
-| `screenshots`、`stepContrast`、`overflow64`、`cardWrap*`、`mobile361-359-366`、`touchTargets481` | 始终排除（四宽×双主题 / 截图 / 触控守卫；壳层那 6 个 spec 仍跑） |
-| `*197`、`finalCivs197`、`civDlcFilters` | 不跑整张文明矩阵。只改一个文明时，可以留下该文明自己的 `*197` spec |
-| `build41`、`rush35`、`rushGeneric507`、`timeline*` | 本 PR 不是该功能时排除 |
+| 模式                                                                                             | PR capped                                                          |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| `v0300-338`                                                                                      | 始终排除                                                           |
+| `screenshots`、`stepContrast`、`overflow64`、`cardWrap*`、`mobile361-359-366`、`touchTargets481` | 始终排除（四宽×双主题 / 截图 / 触控守卫；壳层那 6 个 spec 仍跑）   |
+| `*197`、`finalCivs197`、`civDlcFilters`                                                          | 不跑整张文明矩阵。只改一个文明时，可以留下该文明自己的 `*197` spec |
+| `build41`、`rush35`、`rushGeneric507`、`timeline*`                                               | 本 PR 不是该功能时排除                                             |
 
 `src/shared/nav/pageRegistry.ts`、`src/app/pageRegistry.tsx` 和 `src/shared/styles/` 下的共享 CSS 仍可让单测保持 `full`。PR 浏览器最多是 `smoke.spec.ts` 加上 diff 里真正改到的功能，不会把上表守卫带进来。
 
 `pull_request` 且 `browser=false` 时不跑 Playwright e2e，构建跳过 OG 截图，短部署烟测也不跑。若 Affected unit 会启动 Chromium（`release108`、`releaseSmoke`，含 maintenance 的 `tests/unit/release*.test.ts`），仍用与 e2e 相同的 `npx playwright install --with-deps chromium` 装上 `chromium_headless_shell`；没有这类单测则不安装。证据复用跳过 unit 时也不为这条路径安装。main 推送仍安装 chromium，以便生成 OG 并部署。`unused:check`、`introductions:check` 和 `docs/design/contrast.py` 只在 main / 夜间 / 手动运行，不挡 PR。
 
-| 事件                                                                 | 浏览器                                                 |
-| -------------------------------------------------------------------- | ------------------------------------------------------ |
-| `pull_request`                                                       | smoke + 已识别功能；无功能则 smoke。不跑约 189 个 spec |
-| `push` 到 `main` / `release/**`，且计划为 `full`（含壳层 push 提升） | 完整 Playwright                                        |
-| `schedule` 夜间、`workflow_dispatch` 且 `inputs.full` / `CI_FULL`    | 完整 Playwright，并做数据检查、禁用证据复用            |
+| 事件                                                                 | 浏览器                                                                                                                 |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `pull_request`                                                       | smoke + 已识别功能；无功能则 smoke。不跑约 189 个 spec                                                                 |
+| `push` 到 `main` / `release/**`，且计划为 `full`（含壳层 push 提升） | 完整 Playwright                                                                                                        |
+| `schedule` 夜间、`workflow_dispatch` 且 `inputs.full` / `CI_FULL`    | 完整 Playwright，并做数据检查、禁用证据复用                                                                            |
 | 已映射的 targeted / civ-ui / maintenance                             | 原文件列表。main 的 maintenance 仍短烟测；PR 且 browser=false 不跑 e2e/OG/短烟测。会启动 Chromium 的 unit 仍安装浏览器 |
 
 手动 `workflow_dispatch` 即使关掉 `inputs.full`，事件也没有 PR/push 基线，路径计划仍是 full，且 `CI_E2E_FULL` 为 true，浏览器同样是完整套件。浏览器限流只发生在 `pull_request`。
@@ -165,13 +207,14 @@ NODE
 
 开工前逐项勾选：
 
-- [ ] 已读 AGENTS.md + 本文件 + CONTRIBUTING 门禁段
-- [ ] issue **不在** Hold / 待确认 / 阻塞；无 open PR
-- [ ] 正文有 **验收标准** 与 **不要做**，或已在授权范围内补齐并独立复核；主题仍是「中文资料站 + 计算工具」
+- [ ] 已读 AGENTS.md + 本文件（含 [当前状态](#status-2026-11-02)）+ CONTRIBUTING 门禁段
+- [ ] issue **不在** Hold / 待确认 / 阻塞 / 双路暂停；无 open PR；不重开 #571
+- [ ] 正文有可测 **验收标准**（不是空的「-」）与写明事项的 **不要做 / 不在范围**，或已在授权范围内补齐并独立复核；主题仍是「中文资料站 + 计算工具」
 - [ ] 当前在审 PR 数 **&lt; 2**
 - [ ] 从**当前已授权范围**挑选尚未实现的事项，核对实际代码及已合并 PR；不要继续使用已完成 issue 的旧示例选单，也不要把“超出上一轮小修”解释成“项目无法推进”
 - [ ] 大功能 / 新页面（如 #308、#33）先有明确规格、设计材料与失败用例，由执行者准备并交实现者之外的独立代理复核后再实现；不要自行扩范围
 - [ ] 分支名与 PR 标题符合 Conventional Commits：`类型(#issue): 描述`
+- [ ] 测试交接（先失败再折入、`Relates` / `Fixes`、含糊验收则跳过）按 [TESTING](TESTING.md#codex-交接) 与 [AGENTS.md](../AGENTS.md)「工作流」；此处不另写门禁
 
 ## 9. 发版
 

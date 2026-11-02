@@ -2,7 +2,7 @@
 
 ## Codex / 无人值守维护（必读）
 
-批量或无人值守改代码前，先读 **[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（独立代理复核＋按风险选择的 CI）、当前 Hold 表、跳过条件与选 issue checklist。
+批量或无人值守改代码前，先读 **[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（独立代理复核＋按风险选择的 CI）、当前 Hold 表、跳过条件与选 issue checklist。先看该文 [「当前状态 / 2026-11-02」](docs/CODEX-MAINTENANCE.md#status-2026-11-02) 再选 issue。
 
 与 CONTRIBUTING 冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
 
@@ -16,9 +16,9 @@
 
 ### Hold（勿开）
 
-当前没有暂停条目。仅本轮已明确解除的 #372 按下方记录更新，其它issue仍需各自范围授权。
+单条 Hold 表当前没有新的暂停编号。仅本轮已明确解除的 #372 按下方记录更新，其它 issue 仍需各自范围授权。双路功能实现暂停见 [CODEX-MAINTENANCE「当前状态 / 2026-11-02」](docs/CODEX-MAINTENANCE.md#status-2026-11-02)，不要据此开工 #584 的实现、#625 或 #626。
 
-解 hold 必须获得维护者明确授权后才可开工；审阅流程变更不解除 Hold。
+解 hold 或恢复双路必须获得维护者明确授权后才可开工；审阅流程变更不解除 Hold，也不恢复双路。
 
 2026-10-26 维护者定向要求修复当时仅有的两条 bug（#442、#364），#364 已按[本轮具体授权](CONTRIBUTING.md#364-标题层级定向修复授权2026-10-26)纳入实施。此项授权不涉及 #372。
 
@@ -114,8 +114,9 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 ## 测试规则
 
 - **未经维护者明确授权，不要改 `tests/**/v0*-acceptance*` 及其他受保护验收用例的期望值。** 验收用例和产品决定冲突时，在 issue 里写清楚冲突，交维护者决定；获授权的修改须独立复核，不能通过放宽期望凑绿，也不要求指定历史作者重录。
-- 改了领域逻辑就补 `tests/unit/` 单测；修 bug 先写能复现的失败用例。
+- 改了领域逻辑就补 `tests/unit/` 单测；修 bug 先写能复现的失败用例。失败用例须在当前 `main` 上失败，再折进对应的 feat/fix PR 一起变绿；仍红的测试 PR 只软通过（承认红是预期，CI 仍失败），不单独合并。
 - 界面改动在 **360 / 375 / 390 / 1280** 四个宽度检查：没有横向滚动、没有页面报错（console error / pageerror）。
+- 四宽、axe、PR 浏览器上限、`Relates` / `Fixes` 与可测验收见 [TESTING](docs/TESTING.md#codex-交接)。
 
 ## 界面约定
 
@@ -134,14 +135,14 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
   - 优先级：`P0`（尽快）、`P1`（下一两个版本内）、`P2`（排期时再定）
   - 状态：`候选`（版本候选，未进入范围）、`待确认`（等维护者明确决定）、`阻塞`（被其他 issue 或决定卡住）
 - **带 `待确认` 或 `阻塞` 的 issue 不要动手。**
-- issue 类型看标签，不看标题前缀。验收标准写在 issue 里，按它做。
+- issue 类型看标签，不看标题前缀。验收标准写在 issue 里，按它做。写不成测试的不要开工：须点名路由（`#/...`）、具体界面状态、数据文件里的数字，以及不在范围。条目见 `.github/ISSUE_TEMPLATE/` 的「验收标准」和「Codex 就绪」。
 - 动手前先查这个 issue 有没有已打开的 PR，有就跳过。
 
 ## 工作流
 
 1. 一个 issue 一个 PR，一个执行者。普通已授权更新默认直接对最新 `main` 提 PR；仅需要多项冻结集成时以 `release/vX.Y.Z` 为目标。使用版本分支时先更新到其最新提交，不为简单更新额外建立发布分支。
 2. PR 标题必须是 Conventional Commits，CI 会检查：`类型(#issue): 描述`，类型为 `feat fix docs chore data test ci refactor style perf build revert hotfix`。例：`fix(#13): 科技涉及单位只显示一处`。静态数据快照用 `data`。
-3. PR 描述写 `Fixes #N`（合到非默认分支不会自动关 issue，发版时人工核对），附本地测试结果；界面 PR 附 360/375/390/1280 四张截图。按需在 CHANGELOG 当前版本小节写一句玩家能看懂的话。
+3. PR 描述按是否关 issue 选关键词，并附本地测试结果；界面 PR 附 360/375/390/1280 四张截图。产品功能要等 tip 变绿后走查 Pages 时写 `Relates #N`，issue 保持打开，直到 Pages 通过且产品侧关闭。只有合入默认分支就应自动关掉、且不需要这次走查的 issue 才写 `Fixes #N`。合到非默认分支不会自动关 issue，发版时仍人工核对。细则见 [TESTING](docs/TESTING.md#codex-交接)。按需在 CHANGELOG 当前版本小节写一句玩家能看懂的话。
 4. 默认审阅门禁：实现者之外的独立代理复核＋按风险选择的一次验证；PR 留下实际验证的提交 SHA、复核范围、结果和未解决问题，界面改动同时核对规格与四宽。执行者可在已授权范围补齐规格和失败用例并交独立复核；大功能或新页面须先具备这些材料再实现。只改文档或纯样式且不动逻辑和测试的 PR 可走 CI 绿的轻量规则。release/main 可以按代码树、策略、范围和真实来源复用成功证据，不机械重跑相同验证。不得伪造他人结论、删除分支、修改仓库权限或放宽测试；已获授权时按顺序集成并发布。
 5. 版本号一律三段 `vX.Y.Z`。完成独立复核和适用验证后合入 main；main 的真实 `test` 检查可记录可信复用结果，仍须完成真实 SHA 构建、短烟测和 Pages 部署。Release 核对线上版本/构建、本次功能及 tag，直接打包同一已部署产物和校验文件后正式发布，不再二次构建或默认跑大范围线上回归。按持续发布授权自动继续，无需再问是否上线；不要在 main 的检查和部署尚未结束时让脚本等待部署。
 

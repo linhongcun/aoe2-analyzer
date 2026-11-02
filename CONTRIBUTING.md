@@ -1,6 +1,6 @@
 # 贡献约定 / Contributing
 
-AI 编码代理先读 [AGENTS.md](AGENTS.md)（目录、命令、数据规则、测试规则的速查）。
+AI 编码代理先读 [AGENTS.md](AGENTS.md)（目录、命令、数据规则、测试规则的速查）。无人值守 Codex 的队列、跳过条件和 issue 质量条见 [docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)；与本文冲突时以本文为准。
 
 ## 角色
 

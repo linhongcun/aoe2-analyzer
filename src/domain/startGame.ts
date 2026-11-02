@@ -31,9 +31,6 @@ export interface StartState {
   current: StepId | null;
 }
 
-/** 线框里的路径 B 示例：组队 4v4、阿拉伯半岛。入口填好的，不是大厅同步。 */
-export const LOBBY_EXAMPLE = { mode: 'team' as const, teamSize: '4v4' as const, mapId: 'arabia' };
-
 const LATER: Record<StepId, readonly StepId[]> = {
   mode: ['map', 'lane', 'civ', 'opponent'],
   map: ['lane', 'civ', 'opponent'],
@@ -84,7 +81,7 @@ export type CivPanel = { kind: 'empty' } | { kind: 'side'; side: Lane; tips: Map
 
 /** 1v1 和跳过模式都不借用路位稿。未选路位的组队（路径 B）按侧分开，不合成一张榜。 */
 export function civPanels(state: StartState): CivPanel {
-  if (state.choice.mode !== 'team') return { kind: 'empty' };
+  if (state.choice.mode !== 'team' || !state.choice.teamSize || !state.choice.mapId) return { kind: 'empty' };
   if (state.choice.lane) {
     const tips = state.choice.mapId ? mapPosTips(state.choice.mapId, state.choice.lane) : [];
     return tips.length ? { kind: 'side', side: state.choice.lane, tips } : { kind: 'empty' };
@@ -103,7 +100,7 @@ export function civPanels(state: StartState): CivPanel {
 
 export function editorialReason(state: StartState): string | null {
   const { mapId, civ, lane } = state.choice;
-  if (!mapId || !civ) return null;
+  if (state.choice.mode !== 'team' || !state.choice.teamSize || !mapId || !civ) return null;
   const sides: Lane[] = lane ? [lane] : ['pocket', 'flank'];
   for (const side of sides) {
     const tip = mapPosTips(mapId, side).find((item) => item.civ === civ);
@@ -269,9 +266,7 @@ export function openLane(state: StartState): StartState {
 export function enterLobby(): StartState {
   return {
     ...resetStart(),
-    choice: { mode: LOBBY_EXAMPLE.mode, teamSize: LOBBY_EXAMPLE.teamSize, mapId: LOBBY_EXAMPLE.mapId, lane: null, civ: null },
-    prefilled: { mode: true, map: true },
-    teamArmed: true,
+    skipped: { mode: true, map: true },
     lobby: true,
     laneOpen: false,
     current: 'civ',

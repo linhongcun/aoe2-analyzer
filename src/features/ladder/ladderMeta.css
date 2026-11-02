@@ -1,0 +1,128 @@
+.ladder-plot {
+  position: relative;
+  height: 360px;
+  margin: 8px 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.ladder-plot-inner {
+  position: absolute;
+  inset: 32px 26px 40px 66px;
+}
+.ladder-meta-axis-title,
+.ladder-meta-x-tick,
+.ladder-meta-y-tick {
+  position: absolute;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+.ladder-meta-axis-y {
+  left: 12px;
+  top: 8px;
+}
+.ladder-meta-axis-x {
+  right: 12px;
+  bottom: 2px;
+}
+.ladder-meta-y-tick {
+  right: calc(100% + 10px);
+  transform: translateY(50%);
+}
+.ladder-meta-x-tick {
+  left: 0;
+  top: calc(100% + 6px);
+}
+.ladder-meta-x-end {
+  left: 100%;
+  transform: translateX(-100%);
+}
+.ladder-meta-line {
+  position: absolute;
+  border: 0;
+}
+.ladder-meta-win {
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed var(--color-muted);
+}
+.ladder-meta-pick {
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed var(--color-muted);
+}
+.ladder-page .ladder-meta-bubble {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  transform: translate(-50%, 50%);
+}
+.ladder-meta-mark {
+  display: block;
+  border: 1px solid var(--color-accent);
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+}
+.ladder-meta-bubble[aria-pressed='true'],
+.ladder-meta-bubble:focus-visible {
+  z-index: 2;
+}
+.ladder-meta-bubble[aria-pressed='true'] .ladder-meta-mark {
+  border-width: 2px;
+}
+.ladder-meta-select {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+.ladder-meta-select select {
+  flex: 0 1 240px;
+  min-width: 0;
+  max-width: 100%;
+}
+.ladder-meta-detail {
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.ladder-meta-detail > p {
+  margin: 0;
+  font-size: 14px;
+}
+.ladder-meta-detail > strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+.ladder-meta-detail dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin: 0;
+}
+.ladder-meta-detail dl > div {
+  flex: 0 1 130px;
+}
+.ladder-meta-detail dt {
+  color: var(--color-muted);
+  font-size: 12px;
+}
+.ladder-meta-detail dd {
+  margin: 4px 0 0;
+  font-size: 16px;
+}

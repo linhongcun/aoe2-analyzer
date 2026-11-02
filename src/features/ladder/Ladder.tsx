@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import arabiaJson from '../../data/ladder-arabia-p185872.json';
 import teamJson from '../../data/ladder-4v4-rm-e1200-1400-90d.json';
 import { isBalanceAligned, LOW_SAMPLE, resolveElo, type BracketKey, type LadderSnapshot } from '../../domain/ladder';
-import { canonicalLadderSearch, resolveLadderLocation, type LadderModeId } from '../../domain/ladderQuery';
+import { canonicalLadderSearch, resolveLadderLocation, sliceFacts, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
 import { LadderArabia } from './LadderArabia';
 import { HideLowSample, LadderFilters } from './LadderFilters';
 import { LadderTeam } from './LadderTeam';
@@ -27,6 +27,8 @@ export default function Ladder() {
     if (resolved.toast) setToast(resolved.toast);
   }
   const [hideLow, setHideLow] = useState(true);
+  // Elo 切换可能替换整棵 Team/Arabia/空态子树，焦点请求留在稳定根组件。
+  const pendingEloFocus = useRef<string | null>(null);
   const active = resolved.mode === '4v4' ? teamSnapshot : arabiaSnapshot;
   const aligned = isBalanceAligned(active.patchNote, SITE_BUILD);
 
@@ -50,14 +52,41 @@ export default function Ladder() {
     navigate({ pathname: '/ladder', search: canonicalLadderSearch({ mode: 'arabia1v1', elo: next, pendingView: resolved.pendingView }) }, { replace: true });
   };
 
+  const selectEloOption = (option: EloFilterOption) => {
+    if (!option.enabled || option.mode !== resolved.mode) return;
+    if (option.current) {
+      pendingEloFocus.current = null;
+      return;
+    }
+    pendingEloFocus.current = `${option.mode}:${option.key}`;
+    navigate(
+      { pathname: '/ladder', search: canonicalLadderSearch({ mode: resolved.mode, elo: option.elo, pendingView: resolved.pendingView }) },
+      { replace: true },
+    );
+  };
+
   const selectView = (view: LadderViewId) => {
     navigate({ pathname: '/ladder', search: canonicalLadderSearch({ ...resolved, pendingView: view === 'table' ? null : view }) }, { replace: true });
   };
   const view = resolved.pendingView ?? 'table';
+  const facts = sliceFacts(resolved.mode, resolved.elo, arabiaSnapshot, teamSnapshot);
   const sampleFloor = (resolved.mode === '4v4' ? teamSnapshot.lowSampleGames : undefined) ?? LOW_SAMPLE;
   const controls = (
     <>
-      <LadderFilters mode={resolved.mode} arabia={arabiaSnapshot} onMode={selectMode} />
+      <LadderFilters
+        mode={resolved.mode}
+        elo={resolved.elo}
+        arabia={arabiaSnapshot}
+        team={teamSnapshot}
+        onMode={selectMode}
+        onElo={selectEloOption}
+        onEloRef={(id, node) => {
+          if (node && pendingEloFocus.current === id && node.getAttribute('aria-checked') === 'true') {
+            pendingEloFocus.current = null;
+            node.focus();
+          }
+        }}
+      />
       <HideLowSample checked={hideLow} threshold={sampleFloor} onChange={setHideLow} />
       {toast && (
         <p className="ladder-toast" role="status" data-testid="ladder-fallback-toast">
@@ -91,12 +120,21 @@ export default function Ladder() {
         </div>
         <LadderViewSwitch view={view} onChange={selectView} />
       </div>
-      {resolved.mode === '4v4' ? (
-        <LadderTeam view={view} hideLow={hideLow} onArabia={() => selectMode('arabia1v1')}>
+      {resolved.missing ? (
+        <>
+          {controls}
+          <div className="ladder-empty" data-testid="ladder-empty">
+            <Icon name="inbox" />
+            <p className="ladder-empty-title">这个分段暂无数据</p>
+            <p>没有这一模式和 Elo 的快照。不推算，不补数。</p>
+          </div>
+        </>
+      ) : resolved.mode === '4v4' ? (
+        <LadderTeam view={view} elo={resolved.elo} facts={facts} hideLow={hideLow} onArabia={() => selectMode('arabia1v1')}>
           {controls}
         </LadderTeam>
       ) : (
-        <LadderArabia view={view} elo={resolved.elo as BracketKey} onSelect={selectElo} hideLow={hideLow}>
+        <LadderArabia view={view} elo={resolved.elo as BracketKey} facts={facts} onSelect={selectElo} hideLow={hideLow}>
           {controls}
         </LadderArabia>
       )}

@@ -91,9 +91,13 @@ test.describe('首页开一局 #592', () => {
     await page.getByTestId('start-lobby').click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
     await expect(page.getByTestId('start-steps')).toHaveText(/模式\s*地图\s*文明\s*对手/);
-    await expect(flowText(page)).toContainText('已预填');
-    await expect(flowText(page)).toContainText('阿拉伯半岛');
+    await expect(flowText(page)).not.toContainText('已预填');
+    await expect(flowText(page)).not.toContainText('阿拉伯半岛');
     await expect(flowText(page)).toContainText('没有连上游戏大厅');
+    await page.getByRole('button', { name: '修改模式和地图', exact: true }).click();
+    await page.getByRole('button', { name: '组队随机地图', exact: false }).click();
+    await page.getByRole('button', { name: '4v4', exact: true }).click();
+    await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
     await expect(page.getByRole('button', { name: /法兰克/ })).toContainText(FRANK);
     await expect(page.getByRole('button', { name: /不列颠/ })).toBeVisible();
     await page.getByRole('button', { name: '补路位', exact: true }).click();

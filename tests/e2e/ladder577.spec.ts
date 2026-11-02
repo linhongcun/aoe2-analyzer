@@ -207,6 +207,7 @@ function quadrantOf(winRate: number, playRate: number, pickMedian: number): (typ
   if (common) return '弱且常见';
   return '弱且少见';
 }
+async function checkedElo(page: Page): Promise<string> { const radio = page.getByRole('radiogroup', { name: /天梯分段/ }).locator('[aria-checked="true"]'); return (await radio.count()) === 1 ? ((await radio.innerText()) ?? '').replace(/\s+/g, '') : ''; }
 async function plainText(page: Page, testId: string): Promise<string> {
   const root = page.getByTestId(testId);
   if ((await root.count()) !== 1 || !(await root.isVisible())) return '';
@@ -219,7 +220,7 @@ async function sliceSignature(page: Page) {
   return {
     mode: (await mode.count()) === 1 ? await mode.getAttribute('data-testid') : '',
     period: await plainText(page, 'ladder-period-static'),
-    elo: await plainText(page, 'ladder-elo-static'),
+    elo: await checkedElo(page),
     map: await plainText(page, 'ladder-map-static'),
     hide: (await hide.count()) === 1 ? await hide.isChecked() : null,
     fetchedAt: (await source.count()) === 1 ? await source.getAttribute('data-fetched-at') : null,
@@ -255,7 +256,7 @@ test('#577 首次进入默认筛为 4v4 RM · Elo 1200–1400 · 近 90 天 · �
   const filters = page.getByTestId('ladder-filters');
   const mode4 = await plainText(page, 'ladder-mode-4v4');
   const period = await plainText(page, 'ladder-period-static');
-  const elo = await plainText(page, 'ladder-elo-static');
+  const elo = await checkedElo(page);
   const map = await plainText(page, 'ladder-map-static');
   const hide = page.getByTestId('ladder-hide-low');
   soon(await filters.count(), `应有 ladder-filters。现在上下文是「${context}」`).toBe(1);
@@ -266,10 +267,10 @@ test('#577 首次进入默认筛为 4v4 RM · Elo 1200–1400 · 近 90 天 · �
   soon((await checked.count()) === 1 ? await checked.getAttribute('aria-checked') : null, '4v4 应选中').toBe('true');
   soon(period, `时段 pill 应为近 90 天 · 当前快照，实际「${period}」`).toContain('近90天');
   soon(period).toContain('当前快照');
-  soon(eloOk(elo) && elo.includes('当前快照'), `分段 pill 应为 1200–1400 · 当前快照，实际「${elo}」`).toBe(true);
+  soon(eloOk(elo), `选中的 Elo 应为 1200–1400，实际「${elo}」`).toBe(true);
   soon(map.includes('全图') && map.includes('当前快照') && !/阿拉伯|Arabia/i.test(map), `地图 pill 应为全图，实际「${map}」`).toBe(true);
   if ((await filters.count()) === 1) {
-    soon(await filters.getByRole('radiogroup').count(), '只有模式两档是 radiogroup，单档不要包一层').toBe(1);
+    soon([await filters.getByRole('radiogroup', { name: '模式' }).count(), await filters.getByRole('radiogroup', { name: /天梯分段/ }).count()]).toEqual([1, 1]);
     soon(await filters.getByRole('slider').count(), '不要 Elo 滑杆').toBe(0);
     const blob = (await filters.innerText()) ?? '';
     soon(blob, '不要 2v2 / 3v3 / 帝国战争').not.toMatch(/2v2|3v3|帝国战争/);
@@ -415,7 +416,7 @@ test('#577 可以切回现有阿拉伯 1v1 快照，且不借用默认切片的�
   soon(`${caption}${source}`, '切回后来源或表题应标明阿拉伯与 1v1').toMatch(/阿拉伯|Arabia/);
   soon(`${caption}${source}`).toMatch(FORMAT_1V1);
   soon((await plainText(page, 'ladder-period-static')).includes('近90天'), '切到阿拉伯后不要留下 4v4 的近 90 天').toBe(false);
-  soon(eloOk(await plainText(page, 'ladder-elo-static')), '切到阿拉伯后不要留下 1200–1400').toBe(false);
+  soon(eloOk(await checkedElo(page)), '切到阿拉伯后选中的 Elo 不是 1200–1400').toBe(false);
   const arabiaMap = await plainText(page, 'ladder-map-static');
   soon(arabiaMap, '阿拉伯地图应为「阿拉伯 · 固定」').toMatch(/阿拉伯/);
   soon(arabiaMap).toContain('固定');
@@ -474,7 +475,7 @@ test('#577 §11 无参数不是阿拉伯；只带 elo 进入阿拉伯；mode=ara
   soon(await plainText(page, 'ladder-map-static')).toContain('固定');
   soon(await plainText(page, 'ladder-period-static')).toContain('整段快照');
   soon(await plainText(page, 'ladder-period-static'), '阿拉伯路径不保留近 90 天').not.toContain('近90天');
-  soon(eloOk(await plainText(page, 'ladder-elo-static')), '阿拉伯分段今天仍是「全部」，不是 1200–1400').toBe(false);
+  soon(/全部/.test(await checkedElo(page)) && !eloOk(await checkedElo(page)), '阿拉伯选中分段是「全部」，不是 1200–1400').toBe(true);
   await expect(page.getByTestId('ladder-row-Franks')).toContainText(formatPercent(franks.winRate));
   soon(await page.getByTestId('ladder-source').getAttribute('data-fetched-at')).toBe(arabia.fetchedAt);
 });

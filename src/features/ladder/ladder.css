@@ -590,6 +590,26 @@
   background: var(--color-accent-soft);
   font-weight: 600;
 }
+.ladder-elo-option {
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+.ladder-page .ladder-elo-option[aria-checked='true'] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  font-weight: 600;
+}
+.ladder-page .ladder-elo-option:disabled,
+.ladder-page .ladder-elo-option:disabled:hover {
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+.ladder-source-facts {
+  margin: 0 0 4px;
+  font-size: 13px;
+}
 .ladder-hide {
   display: inline-flex;
   align-items: center;
@@ -620,6 +640,17 @@
 }
 .ladder-notes li {
   margin: 0 0 4px;
+}
+.ladder-share {
+  flex: 0 1 360px;
+  min-width: 0;
+  max-width: 100%;
+}
+.ladder-manual-link {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 .ladder-slice {
   margin: 0 0 12px;
@@ -706,53 +737,6 @@
 .ladder-quads strong {
   color: var(--color-text);
   font-size: 14px;
-}
-.ladder-plot {
-  position: relative;
-  height: 360px;
-  margin: 8px 0;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-}
-.ladder-plot-axis {
-  position: absolute;
-  color: var(--color-muted);
-  font-size: 12px;
-}
-.ladder-plot-axis:first-child {
-  left: 8px;
-  bottom: 4px;
-}
-.ladder-plot-axis:nth-child(2) {
-  left: 8px;
-  top: 4px;
-}
-.ladder-meta-line {
-  position: absolute;
-  border: 0;
-}
-.ladder-meta-win {
-  left: 0;
-  right: 0;
-  height: 0;
-  border-top: 1px dashed var(--color-muted);
-}
-.ladder-meta-pick {
-  top: 0;
-  bottom: 0;
-  width: 0;
-  border-left: 1px dashed var(--color-muted);
-}
-.ladder-page .ladder-meta-bubble {
-  position: absolute;
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
-  border: 1px solid var(--color-accent);
-  border-radius: 50%;
-  background: var(--color-accent-soft);
-  transform: translate(-50%, 50%);
 }
 @media (max-width: 959px) {
   .ladder-table-team th:first-child,

@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react';
-import { LadderStaticPill } from './LadderElo';
+import type { KeyboardEvent, ReactNode } from 'react';
 import type { LadderSnapshot } from '../../domain/ladder';
-import type { LadderModeId } from '../../domain/ladderQuery';
+import { eloFilterOptions, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
 import { Icon } from '../../shared/ui/Icon';
 
 export function HideLowSample({ checked, threshold, onChange }: { checked: boolean; threshold: number; onChange: (checked: boolean) => void }) {
@@ -13,8 +12,40 @@ export function HideLowSample({ checked, threshold, onChange }: { checked: boole
   );
 }
 
-export function LadderFilters({ mode, arabia, onMode }: { mode: LadderModeId; arabia: LadderSnapshot; onMode: (mode: LadderModeId) => void }) {
-  const team = mode === '4v4';
+export function LadderFilters({
+  mode,
+  elo,
+  arabia,
+  team,
+  onMode,
+  onElo,
+  onEloRef,
+}: {
+  mode: LadderModeId;
+  elo: string;
+  arabia: LadderSnapshot;
+  team: LadderSnapshot;
+  onMode: (mode: LadderModeId) => void;
+  onElo: (option: EloFilterOption) => void;
+  onEloRef?: (id: string, node: HTMLButtonElement | null) => void;
+}) {
+  const teamMode = mode === '4v4';
+  const eloOptions = eloFilterOptions(mode, elo, arabia, team);
+  const checked = eloOptions.some((option) => option.current);
+  const onEloKey = (event: KeyboardEvent<HTMLButtonElement>, option: EloFilterOption) => {
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    const enabled = eloOptions.filter((item) => item.enabled);
+    const from = enabled.findIndex((item) => item.mode === option.mode && item.key === option.key);
+    if (from < 0) return;
+    let target: number;
+    if (event.key === 'Home') target = 0;
+    else if (event.key === 'End') target = enabled.length - 1;
+    else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') target = (from + 1) % enabled.length;
+    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') target = (from - 1 + enabled.length) % enabled.length;
+    else return;
+    event.preventDefault();
+    onElo(enabled[target]!);
+  };
   return (
     <div className="ladder-filters" data-testid="ladder-filters">
       <span className="ladder-filter-label">模式</span>
@@ -30,7 +61,7 @@ export function LadderFilters({ mode, arabia, onMode }: { mode: LadderModeId; ar
       <div className="ladder-filter-row">
         <span className="ladder-pill" data-testid="ladder-period-static">
           <Icon name="calendar" />
-          {team ? (
+          {teamMode ? (
             <>
               近 <span className="nw">90 天</span>
             </>
@@ -41,21 +72,39 @@ export function LadderFilters({ mode, arabia, onMode }: { mode: LadderModeId; ar
         </span>
       </div>
       <span className="ladder-filter-label">天梯分段</span>
-      <div className="ladder-filter-row">
-        {team ? (
-          <span className="ladder-pill" data-testid="ladder-elo-static">
-            <span className="nw">1200–1400</span>
-            <span className="ladder-fixed">当前快照</span>
-          </span>
-        ) : (
-          <LadderStaticPill snapshot={arabia} />
-        )}
+      <div className="ladder-filter-row" role="radiogroup" aria-label="天梯分段" data-testid="ladder-elo">
+        {eloOptions.map((option, index) => {
+          const firstEnabled = eloOptions.findIndex((item) => item.enabled) === index;
+          return (
+            <button
+              key={`${option.mode}:${option.key}`}
+              // 保留内联 ref：选中属性更新或子树替换后，都交由根组件恢复焦点。
+              ref={(node) => onEloRef?.(`${option.mode}:${option.key}`, node)}
+              type="button"
+              role="radio"
+              aria-checked={option.current}
+              disabled={!option.enabled}
+              tabIndex={option.current || (!checked && firstEnabled) ? 0 : -1}
+              className="ladder-elo-option"
+              data-testid={option.enabled ? 'ladder-elo-option' : 'ladder-elo-disabled'}
+              data-elo={option.key}
+              data-target-mode={option.enabled ? option.mode : undefined}
+              onClick={() => {
+                if (option.enabled) onElo(option);
+              }}
+              onKeyDown={(event) => onEloKey(event, option)}
+            >
+              <span className="nw">{option.label}</span>
+              {!option.enabled && <span className="ladder-fixed">暂无数据</span>}
+            </button>
+          );
+        })}
       </div>
       <span className="ladder-filter-label">地图</span>
       <div className="ladder-filter-row">
         <span className="ladder-pill" data-testid="ladder-map-static">
           <Icon name="map" />
-          {team ? '全图' : '阿拉伯 · 固定'}
+          {teamMode ? '全图' : '阿拉伯 · 固定'}
           <span className="ladder-fixed">当前快照</span>
         </span>
       </div>

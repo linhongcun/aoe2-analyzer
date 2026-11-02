@@ -32,7 +32,7 @@ it('#514 display files stay targeted, while calculation and unaudited UI stay fu
   expect(feedback).toMatchObject({ scope: 'targeted', features: ['shell'], full: false });
   expect(feedback.unit).toContain('tests/unit/feedback.test.ts');
   expect(feedback.e2e).toContain('tests/e2e/feedbackTap295.spec.ts');
-  for (const path of ['src/domain/realCost.ts', 'src/domain/gameClock.ts', 'src/shared/ui/widgets.tsx', 'src/features/home/components/Home.tsx'])
+  for (const path of ['src/domain/realCost.ts', 'src/domain/gameClock.ts', 'src/shared/ui/widgets.tsx'])
     expect(planChanges([change(path)])).toMatchObject({ scope: 'full', full: true, data: false });
 });
 

@@ -1,5 +1,16 @@
 # 设计稿索引（v0.4.0 已签字 / 定稿）
 
+## 给 Codex 的设计交接
+
+改界面前先读本索引、[DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)、该 issue 的短稿目录。`ERRATA.md` 优先于 SPEC。
+
+- **挂靠**：UI 改动须挂 `docs/design/<topic>/` 规格，或 issue 内可测规格。没有则跳过，或先补规格。只实现已挂到 issue、且产品已定稿或 Steve 已写「设计通过」的短稿。不自创版式，不扩范围。
+- **硬规则**：方向 C（浅色编辑风）。界面图标只用 Lucide，经 `src/shared/ui/Icon.tsx` 登记，不用 emoji。游戏素材用 `public/img/` 原版图标。颜色只用 `src/shared/styles/tokens.css`。数字和「数字+单位」用 `.num` / `.nw`。中文 UI。PC-first（以 1280 为准），不为窄屏过度打磨；仍核对 360 / 375 / 390 / 1280：无横向滚动、无页面报错。
+- **角色**：Steve 定范围和「设计通过」。Jony 出短稿并做视觉审。Codex 实现。视觉 PR 须在 15 分钟内回复「我在看」「视觉 N/A」「ETA」或「通过」。
+- **短稿**：目录通常有 `*.md`（验收、不要做）和 1280 线框或截图。实现 PR 对照 §AC，附四宽截图。
+- **当前**：`insights-584/` 短稿已合 main（[#621](https://github.com/linhongcun/aoe2-analyzer/pull/621)）。[#584](https://github.com/linhongcun/aoe2-analyzer/issues/584) 仍 OPEN，实现未做；认领前确认产品是否排到实现。`ladder-571/` 已上线。后续解耦见 [#625](https://github.com/linhongcun/aoe2-analyzer/issues/625)（尚未出新稿，勿按旧「Elo 绑模式」行为扩写）。
+- **交叉**：[CODEX-MAINTENANCE §6 设计硬规则](../CODEX-MAINTENANCE.md#6-设计硬规则摘要)、[CONTRIBUTING「设计与代码规范」](../../CONTRIBUTING.md#设计与代码规范)。交接与 issue 质量条见 [#627](https://github.com/linhongcun/aoe2-analyzer/issues/627)（产品侧主文档 PR 收口，本文不关该 issue）。
+
 v0.62.0 女真开局支持见 [第十四批规格](jurchens197.md)及[有界固定来源摘要](jurchens197-source-summary.json)：明确尸体腐烂与耗尽未模拟，不把不腐烂变成收入；骑士方案仅供通用经济模板。当前8套未研究攻城/防御加成目标；受控石工术验证收费与真实研究完成窗口。必要[教学来源审计](jurchens197-teaching-metadata.json)仅补两条来源字段的投影SHA，保留原事实、旧hash与精确逆恢复证明。实际验证、独立图审、CI和发布以本批PR交付记录为准。
 
 新增开局文明的来源证据按 [#478 有界摘要与固定来源重建流程](build-sim-source-478.md)执行；现有历史原件及对应验收保持。
@@ -44,18 +55,19 @@ v0.41.0 两条单位 PK 入口见 [波希米亚预置对战](bohemian-duel-prese
 SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分支上。样稿里的数字都以数据为准，和数据不一致时以数据为准。
 
 - [#517 站点串联](site-linking-517/)（[#517](https://github.com/linhongcun/aoe2-analyzer/issues/517)）：对阵优先的信息架构稿，供 Steve 拆切片与 Codex S1 前对齐。
+- [#626 跟随推鹿短提示](hotkeys-follow-626.md)：快捷键页首的 188329 社区实测用法、来源、四宽与既有个人表边界。
 - [#308 攻城拆建筑](siege-308/)（[#308](https://github.com/linhongcun/aoe2-analyzer/issues/308)）：`#/siege` 视觉交互稿，供 Codex 与 Steve 设计审阅。
-- [#533 攻城情境入口](siege-533/)（[#533](https://github.com/linhongcun/aoe2-analyzer/issues/533)）：单位页「算拆建筑」、冲车检索、未核实反馈。短稿，供 Steve 设计通过后由 Linus 实现。
+- [#533 攻城情境入口](siege-533/)（[#533](https://github.com/linhongcun/aoe2-analyzer/issues/533)）：单位页「算拆建筑」、冲车检索、未核实反馈。短稿，供实现者（Codex）实现（Steve 设计通过后）。
 - [#33 天梯数据](ladder-33/)（[#33](https://github.com/linhongcun/aoe2-analyzer/issues/33)）：`#/ladder` 阿拉伯 1v1 分段胜率与新手友好度视觉交互稿，供 Steve 设计审阅后交 Codex。
 - [#545 天梯空分段](ladder-545/)（[#545](https://github.com/linhongcun/aoe2-analyzer/issues/545)）：顶栏只露有数据的 Elo 分段；当前快照改为只读「全部」。短稿，供 Steve 设计通过后由 Linus 实现。
 - [#547 天梯快照与首屏截止](ladder-547/)（[#547](https://github.com/linhongcun/aoe2-analyzer/issues/547)）：换一份新于 p162286 的阿拉伯 1v1 静态快照，并把统计截止或「非当前平衡」升到来源条第一行。短稿，供产品设计通过后由 Linus 实现。与 #566 并行。
 - [#577 天梯默认切片与三视图](ladder-577/)（[#577](https://github.com/linhongcun/aoe2-analyzer/issues/577)）：Steve P1。`#/ladder` 默认 4v4 随机地图 · Elo 1200–1400 · 近 90 天 · 全图；表和走势先做，分层与分布随后。短稿，供产品设计通过后由 Linus 实现。
+- [#571 天梯模式与 Elo](ladder-571/)（[#571](https://github.com/linhongcun/aoe2-analyzer/issues/571)）：沿用现有两份快照。模式和 Elo 切到有数据的切片；没有快照的分段停用。来源条同时保留模式、Elo、地图和截止。
 - [#581 报错反馈页内单位上下文](feedback-581/)（[#581](https://github.com/linhongcun/aoe2-analyzer/issues/581)）：Steve 双路 P2，排在 #577 A 之后。`#/siege?unit=422` 的反馈簇旁写「将附带：中型冲车 / 422」；没有可附带的名与 ID 时不显示。短稿，供产品设计通过后由 Kent 轻失败用例、Linus 实现。
-- [#584 鲜为人知洞察槽位](insights-584/)（[#584](https://github.com/linhongcun/aoe2-analyzer/issues/584)）：`#/unit/:id` 与 `#/civ/:name` 各一块固定「鲜为人知」列表槽，紧挨造价或短摘要，不埋进长说明。空态「暂无」；同页可有多条。短稿，供 Steve 设计通过后由 Linus 实现。
+- [#584 鲜为人知洞察槽位](insights-584/)（[#584](https://github.com/linhongcun/aoe2-analyzer/issues/584)）：2026-11-01 修订，对齐 #603 四卡。单位页固定槽，空态「暂无」；文明页只在有条目时插在评分卡与文明加成之间，无条目不挂、不写「暂无」。短稿，供实现者（Codex）实现；Steve 设计通过前不实现。不关 #584。
 - [#559 地图边路 / 中路](maps-559/)（[#559](https://github.com/linhongcun/aoe2-analyzer/issues/559)）：地图详情在现有推荐文明下增加开图 4v4 的边路 / 中路编辑推荐；无稿显式待补。短稿，供 Steve 设计通过后实现。
 - [#592 开一局引导](start-game-592/)（[#592](https://github.com/linhongcun/aoe2-analyzer/issues/592)）：Steve 软锁。首页主路径 A 是模式 → 地图 →（仅组队才有路位）→ 文明 → 对手，可跳过、可回退，结束于「本局摘要」。B「已在大厅」从文明起。C 首刀不做。工具宫格降为「更多工具」。短稿，供产品设计通过后实现。
 - [#602 文明详情菜单分层](civ-nav-602/)（[#602](https://github.com/linhongcun/aoe2-analyzer/issues/602)）：页内 Tab 是本页内容；情境条降为「相关工具」，只放离开本页的五件。职业选手视角只留 Tab。侧栏去掉「快速入口」。短稿即布局依据。
-- [#603 文明概览主栏分区](civ-overview-603/)（[#603](https://github.com/linhongcun/aoe2-analyzer/issues/603)）：概览主栏分成开局、评分、加成、优劣。开局是一行路线加次要「查看全部开局」；定位和特色兵种收进评分卡；没有洞察就不占位；优劣用芯片。短稿，供 Steve 设计通过后另刀实现。不改 #602 的菜单。
 - [#603 文明概览主栏分区](civ-overview-603/)（[#603](https://github.com/linhongcun/aoe2-analyzer/issues/603)）：概览主栏分成开局、评分、加成、优劣。开局是一行路线加次要「查看全部开局」；定位和特色兵种收进评分卡；没有洞察就不占位；优劣用芯片。短稿，供 Steve 设计通过后另刀实现。不改 #602 的菜单。
 
 | Issue     | 内容                                                                                                                                                                                                        | 路径                                                                                                   | 状态 / 签字                                                   |
