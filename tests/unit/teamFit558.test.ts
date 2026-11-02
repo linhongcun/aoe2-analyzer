@@ -81,6 +81,21 @@ describe('#558 full-tree shape identity and sources', () => {
     expect(fitShapes(changed, trees, ['Franks']).some((s) => s.rawIds.includes(569))).toBe(false);
     expect(fitShapes(core, { ...trees, t: { ...trees.t, Franks: [] } }, ['Franks'])).toEqual([]);
   });
+  it('does not let roster numbering or caller edits contaminate cached immutable snapshots', () => {
+    const first = fitShapes(core, trees, ['Huns']);
+    const tarkan = first.find((s) => s.key === 'Tarkan')!;
+    tarkan.rawIds.length = 0;
+    tarkan.providers[0]!.player = 99;
+    tarkan.locations.find((l) => l.rawId === 886)!.techs.length = 0;
+    const next = fitShapes(core, trees, ['Franks', 'Huns', 'Huns']).find((s) => s.key === 'Tarkan')!;
+    expect(next.rawIds.sort()).toEqual([755, 886]);
+    expect(next.providers.map((p) => p.player)).toEqual([2, 3]);
+    expect(next.locations.filter((l) => l.rawId === 886).map((l) => l.player)).toEqual([2, 3]);
+    expect(next.locations.filter((l) => l.rawId === 886).every((l) => l.techs.includes(483))).toBe(true);
+    const replacement = { ...core, units: core.units.filter((u) => u.id !== 886) };
+    expect(fitShapes(replacement, trees, ['Huns']).find((s) => s.key === 'Tarkan')!.rawIds).toEqual([755]);
+    expect(fitShapes(core, { ...trees, t: { ...trees.t, Huns: [] } }, ['Huns'])).toEqual([]);
+  });
   it('distinguishes armor directory membership from actual combat and marks siege transport', () => {
     expect(fitUnitRoles(core.unitById[775]!)).toEqual([]);
     expect(fitUnitRoles(core.unitById[1811]!)).toContain('infantry');

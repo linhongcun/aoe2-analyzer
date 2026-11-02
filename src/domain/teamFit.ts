@@ -84,7 +84,7 @@ export function fitUnitRoles(unit: Unit): FitRole[] {
 }
 const specialUnits = new Set(TEAM_BONUS_DATA.technologies.filter((s) => s.kinds.includes('unlock')).flatMap((s) => s.targetUnits));
 
-export function fitShapes(core: Core, trees: Trees, players: string[]): FitShape[] {
+function buildFitShapes(core: Core, trees: Trees, players: string[]): FitShape[] {
   const shapes = new Map<string, FitShape>();
   players.forEach((civ, index) => {
     const player = index + 1;
@@ -123,6 +123,38 @@ export function fitShapes(core: Core, trees: Trees, players: string[]): FitShape
     });
   });
   return [...shapes.values()];
+}
+// Loader contexts are immutable snapshots. Cache only the costly per-civilization
+// potential, keyed by both context identities; every roster receives fresh derived
+// arrays and player numbers. Replacing either snapshot never reuses old potential.
+const potentialCache = new WeakMap<Core, WeakMap<Trees, Map<string, FitShape[]>>>();
+export function fitShapes(core: Core, trees: Trees, players: string[]): FitShape[] {
+  let treeCache = potentialCache.get(core);
+  if (!treeCache) {
+    treeCache = new WeakMap();
+    potentialCache.set(core, treeCache);
+  }
+  let civCache = treeCache.get(trees);
+  if (!civCache) {
+    civCache = new Map();
+    treeCache.set(trees, civCache);
+  }
+  const merged = new Map<string, FitShape>();
+  players.forEach((civ, index) => {
+    let potential = civCache.get(civ);
+    if (!potential) {
+      potential = buildFitShapes(core, trees, [civ]);
+      civCache.set(civ, potential);
+    }
+    potential.forEach((shape) => {
+      const row = merged.get(shape.key) ?? { ...shape, rawIds: [], providers: [], locations: [], roles: [...shape.roles] };
+      row.rawIds.push(...shape.rawIds.filter((id) => !row.rawIds.includes(id)));
+      row.providers.push({ player: index + 1, civ });
+      row.locations.push(...shape.locations.map((location) => ({ ...location, player: index + 1, techs: [...location.techs] })));
+      merged.set(row.key, row);
+    });
+  });
+  return [...merged.values()];
 }
 function relation(core: Core, trees: Trees, source: TeamTargetSource, civ: string, player: number): FitRelation {
   const status = civStatus(trees, civ);
