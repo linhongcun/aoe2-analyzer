@@ -1,27 +1,15 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
-import {
-  civPanels,
-  decisionSteps,
-  editStep,
-  editorialReason,
-  jumpTo,
-  laneRowVisible,
-  openLane,
-  pickCiv,
-  resetStart,
-  type StartState,
-  type StepId,
-} from '../../../domain/startGame';
-import { Actions, CivRow, EDITORIAL, EmptySlot, LANE_EN, LANE_LABEL, ModeText, Picked, findMap, normalize, useMaps, type Update } from './startGameEarly';
+import { decisionSteps, editStep, jumpTo, laneRowVisible, openLane, pickCiv, resetStart, type StartState, type StepId } from '../../../domain/startGame';
+import { Actions, CivRow, EmptySlot, LANE_EN, LANE_LABEL, ModeText, Picked, findMap, normalize, useMaps, type Update } from './startGameEarly';
 
-export function CivSearch({ shown, onChange }: { shown: ReadonlySet<string>; onChange: Update }) {
+export function CivSearch({ shown, onChange, searchOnly = false }: { shown: ReadonlySet<string>; onChange: Update; searchOnly?: boolean }) {
   const [query, setQuery] = useState('');
   const term = normalize(query);
   const visible = civs.filter((civ) => {
     if (shown.has(civ.en)) return false;
-    if (!term) return shown.size === 0;
+    if (!term) return shown.size === 0 && !searchOnly;
     return [civ.zh, civ.en, civ.py ?? '', civ.pyi ?? ''].some((part) => normalize(part).includes(term));
   });
   return (
@@ -33,7 +21,7 @@ export function CivSearch({ shown, onChange }: { shown: ReadonlySet<string>; onC
       <p className="start-hint">
         共 <span className="num nw">{civs.length} 个文明</span>
       </p>
-      {term || shown.size === 0 ? (
+      {term || (shown.size === 0 && !searchOnly) ? (
         visible.length ? (
           <div className="start-catalog">
             {visible.map((civ) => (
@@ -48,93 +36,85 @@ export function CivSearch({ shown, onChange }: { shown: ReadonlySet<string>; onC
   );
 }
 
+type SceneProps = { state: StartState; onChange: Update };
+function ScenarioLoader(props: SceneProps) {
+  const [attempt, retry] = useState(0);
+  const [loaded, setLoaded] = useState<{ Component: ComponentType<SceneProps> } | null>(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let live = true;
+    void import('./ScenarioSuggestions')
+      .then((module) => {
+        if (live) setLoaded({ Component: module.default });
+      })
+      .catch(() => {
+        if (live) setFailed(true);
+      });
+    return () => {
+      live = false;
+    };
+  }, [attempt]);
+  if (loaded) {
+    const Component = loaded.Component;
+    return <Component {...props} />;
+  }
+  if (failed)
+    return (
+      <p role="alert">
+        场景模块加载失败，已选文明保留。仍可搜索文明。
+        <button
+          className="start-btn"
+          type="button"
+          onClick={() => {
+            setFailed(false);
+            retry((n) => n + 1);
+          }}
+        >
+          重试场景
+        </button>
+      </p>
+    );
+  return <p role="status">正在计算场景建议…</p>;
+}
 export function CivStep({ state, onChange }: { state: StartState; onChange: Update }) {
-  const panel = civPanels(state);
-  const shown = new Set<string>();
-  if (panel.kind === 'side') for (const tip of panel.tips) shown.add(tip.civ);
-  if (panel.kind === 'split') for (const group of panel.groups) for (const tip of group.tips) shown.add(tip.civ);
-  const split = panel.kind === 'split';
+  const supported = state.choice.mode === 'team' && state.choice.teamSize === '4v4' && state.choice.mapId === 'arabia' && state.choice.lane != null;
   return (
     <section className="start-ask" data-testid="start-step" data-step="civ" aria-labelledby="start-civ-h">
       <p id="start-civ-h" className="start-ask-title">
         选我方文明
       </p>
-      {split ? (
-        <p className="start-why">还没选路位，所以按侧分开。不是一张胜率榜。</p>
-      ) : panel.kind === 'side' ? (
-        <p className="start-why">按这一侧编辑稿的原顺序全列。不按天梯重排，理由用稿里的原句。</p>
-      ) : (
-        <p className="start-why">没有可以沿用的编辑稿。可以自己选一个文明，也可以跳过。</p>
-      )}
       <Picked state={state} />
+      {state.choice.civ ? <p className="start-hint">已选文明保留；建议按新条件更新。只有重新选择或跳过文明才会替换。</p> : null}
+      {state.choice.civ ? (
+        <button type="button" className="start-btn" onClick={() => onChange((c) => pickCiv(c, c.choice.civ!))}>
+          保留此文明继续
+        </button>
+      ) : null}
       {state.lobby ? (
         <div className="start-actions">
           {state.choice.mode === 'team' && !decisionSteps(state).includes('lane') ? (
-            <button type="button" className="start-btn" onClick={() => onChange((current) => openLane(current))}>
+            <button type="button" className="start-btn" onClick={() => onChange(openLane)}>
               补路位
             </button>
           ) : null}
-          <button type="button" className="start-btn" onClick={() => onChange((current) => jumpTo(current, 'mode'))}>
+          <button type="button" className="start-btn" onClick={() => onChange((c) => jumpTo(c, 'mode'))}>
             修改模式和地图
           </button>
         </div>
       ) : null}
-      {panel.kind === 'empty' ? (
+      {supported ? (
+        <ScenarioLoader key={state.choice.lane} state={state} onChange={onChange} />
+      ) : (
         <>
-          <p className="start-k">建议</p>
-          <EmptySlot />
-          <Link className="start-link" to="/civs">
-            文明页
-          </Link>
-        </>
-      ) : null}
-      {panel.kind === 'side' ? (
-        <div className="start-stack">
-          <p className="start-col-title">
-            {LANE_LABEL[panel.side]}{' '}
-            <span className="start-en" lang="en">
-              {LANE_EN[panel.side]}
-            </span>
+          <p className="start-why">
+            {state.choice.mode == null || state.choice.mapId == null
+              ? '模式或地图尚未选择，当前条件暂无机制建议。可以补选条件，或自主选择文明。'
+              : '场景建议仅支持明确选择阿拉伯 4v4 和路位；当前条件暂无机制建议。可以自主选择文明。'}
           </p>
-          {panel.tips.map((tip) => (
-            <CivRow
-              key={tip.civ}
-              en={tip.civ}
-              reason={tip.reason}
-              pressed={state.choice.civ === tip.civ}
-              onPick={() => onChange((current) => pickCiv(current, tip.civ, panel.side))}
-            />
-          ))}
-        </div>
-      ) : null}
-      {panel.kind === 'split' ? (
-        <div className="start-cols">
-          {panel.groups.map((group) => (
-            <div key={group.side}>
-              <p className="start-col-title">
-                {LANE_LABEL[group.side]}{' '}
-                <span className="start-en" lang="en">
-                  {LANE_EN[group.side]}
-                </span>
-              </p>
-              {group.tips.length ? (
-                group.tips.map((tip) => (
-                  <CivRow
-                    key={tip.civ}
-                    en={tip.civ}
-                    reason={tip.reason}
-                    pressed={state.choice.civ === tip.civ && state.choice.lane === group.side}
-                    onPick={() => onChange((current) => pickCiv(current, tip.civ, group.side))}
-                  />
-                ))
-              ) : (
-                <EmptySlot />
-              )}
-            </div>
-          ))}
-        </div>
-      ) : null}
-      <CivSearch shown={shown} onChange={onChange} />
+          <EmptySlot />
+        </>
+      )}
+      <CivSearch shown={new Set()} onChange={onChange} searchOnly={supported} />
       <Actions state={state} onChange={onChange} />
     </section>
   );
@@ -161,7 +141,7 @@ export function OpponentStep({ state, onChange }: { state: StartState; onChange:
 export function Summary({ state, onChange }: { state: StartState; onChange: Update }) {
   const map = findMap(state.choice.mapId, useMaps());
   const civ = state.choice.civ ? civByEn(state.choice.civ) : undefined;
-  const reason = editorialReason(state);
+
   const modeValue = <ModeText state={state} />;
   return (
     <article className="start-summary" data-testid="start-summary" aria-labelledby="start-sum-h">
@@ -203,12 +183,7 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
               <span className="start-en" lang="en">
                 {civ.en}
               </span>
-              {reason ? (
-                <small>
-                  {reason}
-                  {EDITORIAL}。
-                </small>
-              ) : null}
+              <small>所选文明已保留。场景建议只比较声明条件下的城堡时代路线，不代表整局表现。</small>
             </>
           ) : null}
         </SummaryRow>

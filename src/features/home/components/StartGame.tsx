@@ -18,7 +18,7 @@ function note(state: StartState): string {
   if (state.current === 'mode') return '路位只在组队出现，现在不占一格。步数不固定。';
   if (state.current === 'lane') return '因为选了组队，路位插在地图和文明之间。1v1 不会插入。这不是固定的第 3 步。';
   if (state.current === 'civ' && state.lobby && state.choice.mode === 'team' && state.choice.mapId && !decisionSteps(state).includes('lane'))
-    return '路位还没占一格。从某一侧点文明时再记上那一侧。';
+    return '路位尚未选择。可点「补路位」查看该侧场景建议，也可以自主选择文明。';
   return '步数不固定。还没到的格子不能点。';
 }
 
