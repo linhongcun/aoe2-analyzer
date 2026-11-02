@@ -22,6 +22,8 @@ for (const width of [360, 375, 390, 1280]) {
     expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('unit')).toBe('1258');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(errors).toEqual([]);
-    await testInfo.attach(`siege631-${width}`, { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
+    const screenshot = testInfo.outputPath(`siege631-${width}.png`);
+    await page.screenshot({ path: screenshot, fullPage: true });
+    await testInfo.attach(`siege631-${width}`, { path: screenshot, contentType: 'image/png' });
   });
 }
