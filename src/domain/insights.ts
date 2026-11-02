@@ -36,7 +36,7 @@ function num(value: string): InsightNum {
 const hearth: readonly InsightItem[] = [
   {
     id: 'hearth-javelin',
-    parts: ['近战前自带投掷标枪；造价无粮（', nw([num('80'), ' 木 + ', num('35'), ' 金']), '）。'],
+    parts: ['近战前自带投掷标枪，无需先研远程科技；造价无粮（', nw([num('80'), ' 木 + ', num('35'), ' 金']), '）。'],
   },
   { id: 'hearth-foodless', parts: ['无粮步兵（对照火矛兵）。'] },
 ];

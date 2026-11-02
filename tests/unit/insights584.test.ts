@@ -26,7 +26,7 @@ describe('#584 鲜为人知槽位', () => {
     expect(troop.cost).toEqual({ Wood: 80, Gold: 35 });
     expect(unitById(2706).cost).toEqual(troop.cost);
     const lines = unitInsights(2705).map(insightText);
-    expect(lines).toEqual(['近战前自带投掷标枪；造价无粮（80 木 + 35 金）。', '无粮步兵（对照火矛兵）。']);
+    expect(lines).toEqual(['近战前自带投掷标枪，无需先研远程科技；造价无粮（80 木 + 35 金）。', '无粮步兵（对照火矛兵）。']);
     expect(unitInsights(2706).map(insightText)).toEqual(lines);
     expect(lines.join('\n')).not.toMatch(/驻扎|基础箭|\+100%/);
     expect(lines.join('\n')).not.toMatch(/第一个|第二个|全游戏第一个|等同步弓单兵必加/);
