@@ -12,6 +12,8 @@ const cssFiles = new Set(['src/shared/styles/base.css', 'src/shared/styles/edito
 const shellFiles = new Set(['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src/shared/styles/editorial-shell.css']);
 // Audited display files only. Calculation, tokens, routing and unaudited shared UI stay full.
 const displayFiles = new Map([
+  // Homepage choice flow only; no combat, economic simulation or generated data.
+  ['src/domain/startGame.ts', ['home']],
   ['src/domain/formatTime.ts', ['clock']],
   ['src/domain/dupNames.ts', ['names']],
   ['src/domain/linker.ts', ['links']],
@@ -48,6 +50,11 @@ const sourceChecks = [
 
 /** Page-local changes use the page's real existing regression coverage, including its helpers. */
 export const PROFILES = {
+  home: profile(['startGame592'], ['smoke', 'editorial6', 'startGame592']),
+  ladder: profile(
+    ['ladder33', 'ladder569', 'ladder571', 'ladder577-query', 'ladder577-snapshot', 'ladder580'],
+    ['smoke', 'ladder33', 'ladder545', 'ladder546', 'ladder547', 'ladder569', 'ladder571', 'ladder577', 'ladder580'],
+  ),
   shell: profile(['nav', 'theme6', 'pageRegistry283'], ['smoke', 'navigation272', 'editorial6', 'skipLink294', 'searchLoading395', 'feedbackTap295']),
   builds: profile(
     [...sourceChecks, 'sources', 'boSources', 'buildOrders', 'buildOrders.content', 'buildPractice216', 'buildSim', 'build41', 'v0300-335'],
@@ -308,8 +315,8 @@ export function prCappedExcludes(specPath, paths = []) {
   return false;
 }
 
-function fullPlan(data = true, features = []) {
-  return { scope: 'full', features: sorted(['all', ...features]), unit: [], e2e: [], data, full: true };
+function fullPlan(data = true, features = [], extraE2e = []) {
+  return { scope: 'full', features: sorted(['all', ...features]), unit: [], e2e: sorted(extraE2e), data, full: true };
 }
 
 function maintenancePlan() {
@@ -487,14 +494,14 @@ export function planChanges(changes) {
       features.add('siege');
       full = true;
     } else if (/^tests\/unit\/[^/]+\.test\.ts$/.test(path) || /^tests\/e2e\/[^/]+\.spec\.ts$/.test(path)) {
-      (path.startsWith('tests/unit/') ? extraUnit : extraE2e).add(path);
+      if (after !== null) (path.startsWith('tests/unit/') ? extraUnit : extraE2e).add(path);
     } else {
       full = true;
       // Generation inputs/scripts and dependencies may change the exported game data.
       if (/^scripts\/(?:.*\.py|.*\.json|pinyin_build\.mjs|catalog_introductions\.mjs|effects_audit\.ts)$/.test(path)) data = true;
     }
   }
-  if (full) return rememberPaths(fullPlan(data, features), changes);
+  if (full) return rememberPaths(fullPlan(data, features, extraE2e), changes);
   const selected = sorted(features);
   for (const feature of selected) {
     for (const path of PROFILES[feature].unit) extraUnit.add(path);
@@ -592,7 +599,7 @@ export function applyBrowserPolicy(plan, env = process.env) {
     return { ...plan, browser };
   }
   const paths = Array.isArray(plan.paths) ? plan.paths : [];
-  const candidates = new Set(plan.full ? PR_CORE_SMOKE_E2E : (plan.e2e ?? []));
+  const candidates = new Set([...(plan.full ? PR_CORE_SMOKE_E2E : []), ...(plan.e2e ?? [])]);
   if (plan.full) {
     for (const feature of plan.features ?? []) {
       if (feature === 'all' || !Object.hasOwn(PROFILES, feature)) continue;
