@@ -106,7 +106,11 @@ export function CivStep({ state, onChange }: { state: StartState; onChange: Upda
         <ScenarioLoader key={state.choice.lane} state={state} onChange={onChange} />
       ) : (
         <>
-          <p className="start-why">场景建议仅支持明确选择阿拉伯 4v4 和路位；当前条件暂无机制建议。可以自主选择文明。</p>
+          <p className="start-why">
+            {state.choice.mode == null || state.choice.mapId == null
+              ? '模式或地图尚未选择，当前条件暂无机制建议。可以补选条件，或自主选择文明。'
+              : '场景建议仅支持明确选择阿拉伯 4v4 和路位；当前条件暂无机制建议。可以自主选择文明。'}
+          </p>
           <EmptySlot />
         </>
       )}
@@ -179,7 +183,7 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
               <span className="start-en" lang="en">
                 {civ.en}
               </span>
-              <small>所选文明已保留。场景建议仅用于阿拉伯 4v4 的城堡时代路线，不代表整局表现。</small>
+              <small>所选文明已保留。场景建议只比较声明条件下的城堡时代路线，不代表整局表现。</small>
             </>
           ) : null}
         </SummaryRow>

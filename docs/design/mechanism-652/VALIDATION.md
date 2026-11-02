@@ -44,3 +44,9 @@ PLAYWRIGHT_BROWSERS_PATH=/workspace/.cache/ms-playwright npx playwright test tes
 ## 发布前产物路径修正
 
 截图保存改用Playwright testInfo.outputPath，匹配CI的test-results/**/*.png归档；不改产品或断言。独立review652复核两行diff通过。原配置复跑mechanism652.spec.ts：13/13通过（29.5秒），实际产物位于test-results。用户后续授权推送、合并及部署；上文“未发布”是本地验收时点状态，正式发布状态以PR和准确main CI记录为准。
+
+## 发布续检（2026-11-02）
+
+新实例已确认日志与正式站域名策略生效。原 CI 41436136899 的失败为图标脚本 GitHub API 403 rate limit exceeded；读取远端日志后重跑，随后由修正 CHANGELOG 的 8354156 取代。CI 41439613031 的完整单测 288 文件、5804 用例通过（2 skipped、1 todo），全部数据再生成与构建通过；浏览器 127 通过、4 失败，均为 startGame632 空大厅四宽禁止出现未选示例的原断言。
+
+修正未选模式/地图时的场景提示及摘要文字，不改变计算或状态，不改测试断言。发布补查本地构建、单文件 ESLint、diff check 通过；mechanism652 + startGame632 + startGame592 原测试共24项通过（29.5秒），日志 /tmp/652-empty-lobby-e2e.log。独立 release_review 复核两处文案及回归范围无代码阻断。最终提交仍需新的 CI 终态与真实 main 部署，不把上一轮完整成功项冒称当前提交重新跑过。
