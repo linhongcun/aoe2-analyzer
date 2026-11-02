@@ -8,6 +8,10 @@ import { chromium, type Browser } from '@playwright/test';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 // @ts-expect-error Release scripts are plain Node modules.
 import { checkSite } from '../../scripts/deployment-smoke.mjs';
+// @ts-expect-error CI scripts are plain Node modules.
+import { applyBrowserPolicy, planChanges, unitLaunchesChromium } from '../../scripts/ci-scope.mjs';
+// @ts-expect-error Diagnostic helpers are plain Node modules.
+import { diagnosticText, diagnosticUrl } from '../../scripts/smoke-diagnostics.mjs';
 
 const version = 'v0.74.9';
 const commit = 'a'.repeat(40);
@@ -40,6 +44,29 @@ function readReport(directory: string) {
 }
 
 describe('Release 提前失败证据 #641', () => {
+  it('只登记本项维护脚本与浏览器单测，未知同名前缀仍完整验证', () => {
+    const plan = planChanges([{ path: 'scripts/smoke-diagnostics.mjs' }]);
+    expect(plan).toMatchObject({ scope: 'maintenance', full: false, data: false });
+    expect(plan.unit).toContain('tests/unit/release*.test.ts');
+    expect(applyBrowserPolicy(plan, { GITHUB_EVENT_NAME: 'pull_request' }).browser).toBe('none');
+    expect(unitLaunchesChromium({ full: false, unit: ['tests/unit/releaseDiagnostics641.test.ts'] })).toBe(true);
+    expect(unitLaunchesChromium({ full: false, unit: ['tests/unit/releaseDiagnostics641Extra.test.ts'] })).toBe(false);
+    for (const path of ['scripts/smoke-diagnostics-extra.mjs', 'scripts/smoke-diagnostics/helper.mjs', 'src/domain/smoke-diagnostics.ts'])
+      expect(planChanges([{ path }]).full).toBe(true);
+  });
+
+  it('异常和事件中的URL统一去掉凭据、敏感查询与hash参数，保留定位用路由', () => {
+    const url = 'https://fixture-user:fixture-password@example.invalid/path?token=fixture-secret&mode=4v4#/ladder?api_key=fixture-key&view=meta';
+    const clean = diagnosticUrl(url);
+    expect(clean).toContain('mode=4v4');
+    expect(clean).toContain('#/ladder?');
+    expect(clean).toContain('view=meta');
+    for (const secret of ['fixture-user', 'fixture-password', 'fixture-secret', 'fixture-key']) expect(clean).not.toContain(secret);
+    expect(diagnosticText(`navigation failed ${url}\nAuthorization: Bearer fake-credential`)).not.toContain('fake-credential');
+    expect(diagnosticText(`navigation failed ${url}`)).toContain(clean);
+    expect(diagnosticText('x'.repeat(5000))).toHaveLength(1000);
+  });
+
   it('真实页脚先绘出、再报错卸载：原检查仍失败，并保留浏览器、资源、DOM和截图证据', async () => {
     let gate: ServerResponse | undefined;
     let painted = false;

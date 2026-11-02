@@ -2,10 +2,11 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { createSmokeDiagnostics, diagnosticText } from './smoke-diagnostics.mjs';
 
 const check = expect.configure({ timeout: 10_000 });
 export function assertFooter(actual, expected) {
@@ -28,16 +29,23 @@ export function deploymentSmokeFeatures(features, env = process.env) {
   const expandAll = env.GITHUB_EVENT_NAME !== 'pull_request' && env.CI_E2E_FULL !== 'false';
   return expandAll ? features : features.filter((feature) => feature !== 'all');
 }
-export async function checkSite({ site, version, commit, features = [] }) {
-  const root = new URL(site);
-  assert.ok(['http:', 'https:'].includes(root.protocol), 'Smoke checks need an HTTP site');
-  const browser = await chromium.launch();
+export async function checkSite({ site, version, commit, features = [], diagnosticsDir = join('test-results', 'deployment-smoke') }) {
+  const diagnostics = createSmokeDiagnostics({ site, version, commit, diagnosticsDir });
+  let browser, page;
+  let failed = false;
   const errors = [];
   const visited = [];
   try {
+    const root = new URL(site);
+    assert.ok(['http:', 'https:'].includes(root.protocol), 'Smoke checks need an HTTP site');
+    diagnostics.phase('browser-launch');
+    browser = await chromium.launch();
+    diagnostics.phase('browser-context');
     const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-    const page = await context.newPage();
+    diagnostics.phase('browser-page');
+    page = await context.newPage();
     const observe = (opened) => {
+      diagnostics.observe(opened);
       opened.on('pageerror', (error) => errors.push(error.message));
       opened.on('console', (message) => {
         if (message.type() === 'error') errors.push(message.text());
@@ -49,17 +57,20 @@ export async function checkSite({ site, version, commit, features = [] }) {
       const url = new URL(root);
       url.searchParams.set('_deployment_check', String(Date.now()));
       url.hash = route;
+      diagnostics.phase('navigate', { route });
       await page.goto(url.href);
+      diagnostics.phase('footer-visible');
       await check(page.locator('[data-t="footer-app-version"]').first()).toBeVisible();
-      assertFooter(
-        {
-          version: await page.locator('[data-t="footer-app-version"]').first().textContent(),
-          build: await page.locator('[data-t="footer-build"]').first().textContent(),
-        },
-        { version, commit },
-      );
+      diagnostics.phase('footer-version');
+      const actualVersion = await page.locator('[data-t="footer-app-version"]').first().textContent();
+      diagnostics.phase('footer-build');
+      const actualBuild = await page.locator('[data-t="footer-build"]').first().textContent();
+      diagnostics.phase('footer-assert');
+      assertFooter({ version: actualVersion, build: actualBuild }, { version, commit });
+      diagnostics.phase('page-heading');
       await check(page.locator('main h1, main h2').first()).toBeVisible();
       visited.push(route);
+      diagnostics.phase('feature-assertions');
     };
     await goto('/');
     if (features.includes('all')) {
@@ -73,6 +84,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
     const internalSourceText =
       /\b(?:sha(?:-?[0-9]+)?|csv|commit)\b|提交(?:号|哈希)?\s*[0-9a-f]{7,40}|\b(?:main|master)\s+[0-9a-f]{7,40}\b|src\/(?:content|data)\/|themkdemiiir\/aoe2-guide@/iu;
     if (needsBuildsSmoke(features)) {
+      diagnostics.phase('feature-assertions', { feature: 'builds-core' });
       // Compare real rendered inventory at the same early step, before later build-resource waits diverge.
       const inventory = async () => {
         const detail = page.getByRole('region', { name: '步骤详情', exact: true });
@@ -577,6 +589,7 @@ export async function checkSite({ site, version, commit, features = [] }) {
       );
     }
     for (const feature of smokeFeatures(features)) {
+      diagnostics.phase('feature-assertions', { feature });
       if (feature === 'builds') {
         const order = JSON.parse(readFileSync(new URL('../src/data/build-orders/scouts-18.json', import.meta.url), 'utf8'));
         for (const view of ['practice', 'print']) {
@@ -887,13 +900,38 @@ export async function checkSite({ site, version, commit, features = [] }) {
           }
         }
       }
+      diagnostics.phase('browser-errors');
       assert.deepEqual(errors, [], 'Deployment smoke found browser errors');
     }
+    diagnostics.phase('browser-errors');
     assert.deepEqual(errors, [], 'Deployment smoke found browser errors');
     console.log(`Verified ${version} / ${commit.slice(0, 7)}: ${visited.join(', ')}`);
     return visited;
+  } catch (error) {
+    failed = true;
+    try {
+      await diagnostics.capture(error, page);
+    } catch (problem) {
+      diagnostics.secondary('capture', problem);
+    }
+    throw error;
   } finally {
-    await browser.close();
+    if (browser) {
+      try {
+        await browser.close();
+      } catch (error) {
+        if (failed) diagnostics.secondary('browser-close', error);
+        else {
+          diagnostics.phase('browser-close');
+          try {
+            await diagnostics.capture(error, page);
+          } catch (problem) {
+            diagnostics.secondary('capture', problem);
+          }
+          throw error;
+        }
+      }
+    }
   }
 }
 async function main() {
@@ -915,7 +953,7 @@ async function main() {
 }
 if (import.meta.url === pathToFileURL(resolve(process.argv[1] || '')).href) {
   main().catch((error) => {
-    console.error(error);
+    console.error(diagnosticText(error?.stack ?? error, 4000));
     process.exitCode = 1;
   });
 }
