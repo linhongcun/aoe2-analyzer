@@ -25,6 +25,7 @@ import { ladderShareUrl } from './shareLink';
 import { LadderMeta, LadderTiers } from './LadderBands';
 import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderFreshness } from './LadderFreshness';
+import { LadderStatMethods } from './LadderStatMethods';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
 import { Icon, type IconName } from '../../shared/ui/Icon';
@@ -171,6 +172,7 @@ export function LadderTeam({
       {view === 'meta' && <LadderMeta civs={rows} sampleUnit={sampleUnit} />}
       {view === 'table' && (
         <div className="ladder-table-card">
+          <LadderStatMethods playerSample={player} interval={showInterval} />
           <table className="ladder-table ladder-table-team" data-testid="ladder-table">
             <caption className="ladder-sr">4v4 随机地图 1200–1400 近 90 天 全图 各文明胜率</caption>
             <thead>
@@ -247,7 +249,7 @@ export function LadderTeam({
           </table>
           <div className="ladder-notes">
             <ul>
-              <li>胜率：这一切片里，该文明赢下的对局占比。</li>
+              <li>胜率：按来源公布的该文明胜率展示。</li>
               <li>走势：这份静态快照里的胜率序列，不是实时。</li>
               <li>
                 相对 <span className="nw">50%</span>：胜率减去 <span className="nw">50</span> 个百分点。

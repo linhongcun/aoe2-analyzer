@@ -29,6 +29,7 @@ import type { SliceFacts } from '../../domain/ladderQuery';
 import { LadderMeta, LadderTiers } from './LadderBands';
 import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderFreshness } from './LadderFreshness';
+import { LadderStatMethods } from './LadderStatMethods';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
 import { Icon, type IconName } from '../../shared/ui/Icon';
@@ -248,6 +249,7 @@ export function LadderArabia({
               {view === 'meta' && <LadderMeta civs={rows} sampleUnit={sampleUnit} />}
               {view === 'table' && (
                 <div className="ladder-table-card">
+                  <LadderStatMethods playerSample={playerSample} interval={false} />
                   <table className="ladder-table" data-testid="ladder-table">
                     <caption className="ladder-sr">阿拉伯 1v1 {bracket.label} 各文明胜率</caption>
                     <colgroup>
@@ -376,8 +378,8 @@ export function LadderArabia({
           <section className="ladder-card ladder-wide-only">
             <h2>怎么读这张表</h2>
             <ul>
-              <li>胜率：本分段里，该文明赢下的对局占比。</li>
-              <li>出场率：本分段里，该文明被选中的对局占比。</li>
+              <li>胜率：按来源公布的该文明胜率展示。</li>
+              <li>出场率：按来源公布的文明选择比例展示，不由出场人次换算。</li>
               <li>
                 {playerSample ? (
                   <>
