@@ -32,6 +32,12 @@ describe('#584 鲜为人知槽位', () => {
     expect(lines.join('\n')).not.toMatch(/第一个|第二个|全游戏第一个|等同步弓单兵必加/);
   });
 
+  it.each([2705, 2706])('#582 单位 %i 的基础标枪明确无需先研远程科技', (id) => {
+    const javelin = unitInsights(id).find((item) => item.id === 'hearth-javelin');
+    expect(javelin).toBeDefined();
+    expect(insightText(javelin!)).toContain('无需先研远程科技');
+  });
+
   it('战车种子③只挂孟加拉，普通和精锐单位保留空槽', () => {
     expect(unitById(1759).cost).toEqual({ Wood: 60, Gold: 60 });
     expect(unitById(1761).cost).toEqual({ Wood: 60, Gold: 60 });
