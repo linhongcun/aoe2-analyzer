@@ -45,7 +45,9 @@ for (const width of [360, 375, 390, 1280])
       await row.getByText('查看两阶段账本', { exact: true }).click();
       await expect(section).toContainText('封建余额不结转');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      await section.locator('.start-scene-controls').screenshot({ path: info.outputPath(`controls-${width}-${theme}.png`) });
+      await section
+        .locator('.start-scene-controls')
+        .screenshot({ path: info.outputPath(`controls-${width}-${theme}.png`), style: 'header.topbar { visibility: hidden !important; }' });
       await row.screenshot({ path: info.outputPath(`route-${width}-${theme}.png`), style: 'header.topbar { visibility: hidden !important; }' });
       if (width === 360)
         expect((await new AxeBuilder({ page }).include('[data-testid="route-continuity"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
