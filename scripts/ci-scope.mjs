@@ -52,8 +52,8 @@ const sourceChecks = [
 export const PROFILES = {
   home: profile(['startGame592', 'startGame632'], ['smoke', 'editorial6', 'startGame592', 'startGame632']),
   ladder: profile(
-    ['ladder33', 'ladder569', 'ladder571', 'ladder577-query', 'ladder577-snapshot', 'ladder580', 'ladder633'],
-    ['smoke', 'ladder33', 'ladder545', 'ladder546', 'ladder547', 'ladder569', 'ladder571', 'ladder577', 'ladder580', 'ladder633', 'ladder634'],
+    ['ladder33', 'ladder569', 'ladder571', 'ladder577-query', 'ladder577-snapshot', 'ladder580', 'ladder633', 'ladder635'],
+    ['smoke', 'ladder33', 'ladder545', 'ladder546', 'ladder547', 'ladder569', 'ladder571', 'ladder577', 'ladder580', 'ladder633', 'ladder634', 'ladder635'],
   ),
   shell: profile(['nav', 'theme6', 'pageRegistry283'], ['smoke', 'navigation272', 'editorial6', 'skipLink294', 'searchLoading395', 'feedbackTap295']),
   builds: profile(
