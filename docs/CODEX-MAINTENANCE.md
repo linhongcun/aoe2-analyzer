@@ -132,7 +132,7 @@ UI 须挂 `docs/design/<topic>/` 规格，或 issue 内可测规格。没有对�
 - 核心包 `tests/e2e/smoke.spec.ts`
 - diff 里已经映射到 `PROFILES` 的功能 e2e，以及本次明确新增/修改或由入口指定的专项 e2e（已删除文件不执行）。`full` 单测计划不会丢弃这些专项浏览器验收（#636）
 
-识别不到功能时，浏览器只有部署烟测和 `smoke.spec.ts`。`CI_E2E_FULL` 由 `.github/workflows/ci.yml` 设置，`pull_request` 恒为 `false`；`scripts/ci-scope.mjs` 的 `applyBrowserPolicy` 与 `scripts/ci-run.mjs` 都认这个事件，不能靠把 `CI_E2E_FULL=true` 写进 PR 环境把整套 e2e 加回来。
+既无功能映射、也无明确专项用例时，浏览器只有部署烟测和 `smoke.spec.ts`。`CI_E2E_FULL` 由 `.github/workflows/ci.yml` 设置，`pull_request` 恒为 `false`；`scripts/ci-scope.mjs` 的 `applyBrowserPolicy` 与 `scripts/ci-run.mjs` 都认这个事件，不能靠把 `CI_E2E_FULL=true` 写进 PR 环境把整套 e2e 加回来。
 
 #636 为首页、天梯加入有界 profile。首页覆盖 `startGame592` 与首页壳层，天梯覆盖现有 `ladder*` 的明确文件列表；新增回归时同步维护列表。`src/domain/startGame.ts` 已审计为首页选择流程与展示投影，只有这一精确路径归入 home；其它计算或未知 domain 文件继续 full。专项清单和 profile 合并、去重后，仍最后应用下方 capped 黑名单。
 
