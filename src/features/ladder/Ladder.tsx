@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import arabiaJson from '../../data/ladder-arabia-p185872.json';
 import teamJson from '../../data/ladder-4v4-rm-e1200-1400-90d.json';
@@ -27,6 +27,8 @@ export default function Ladder() {
     if (resolved.toast) setToast(resolved.toast);
   }
   const [hideLow, setHideLow] = useState(true);
+  // Elo 切换可能替换整棵 Team/Arabia/空态子树，焦点请求留在稳定根组件。
+  const pendingEloFocus = useRef<string | null>(null);
   const active = resolved.mode === '4v4' ? teamSnapshot : arabiaSnapshot;
   const aligned = isBalanceAligned(active.patchNote, SITE_BUILD);
 
@@ -52,6 +54,11 @@ export default function Ladder() {
 
   const selectEloOption = (option: EloFilterOption) => {
     if (!option.enabled) return;
+    if (option.current) {
+      pendingEloFocus.current = null;
+      return;
+    }
+    pendingEloFocus.current = `${option.mode}:${option.key}`;
     navigate(
       { pathname: '/ladder', search: canonicalLadderSearch({ mode: option.mode, elo: option.elo, pendingView: resolved.pendingView }) },
       { replace: true },
@@ -66,7 +73,20 @@ export default function Ladder() {
   const sampleFloor = (resolved.mode === '4v4' ? teamSnapshot.lowSampleGames : undefined) ?? LOW_SAMPLE;
   const controls = (
     <>
-      <LadderFilters mode={resolved.mode} elo={resolved.elo} arabia={arabiaSnapshot} team={teamSnapshot} onMode={selectMode} onElo={selectEloOption} />
+      <LadderFilters
+        mode={resolved.mode}
+        elo={resolved.elo}
+        arabia={arabiaSnapshot}
+        team={teamSnapshot}
+        onMode={selectMode}
+        onElo={selectEloOption}
+        onEloRef={(id, node) => {
+          if (node && pendingEloFocus.current === id && node.getAttribute('aria-checked') === 'true') {
+            pendingEloFocus.current = null;
+            node.focus();
+          }
+        }}
+      />
       <HideLowSample checked={hideLow} threshold={sampleFloor} onChange={setHideLow} />
       {toast && (
         <p className="ladder-toast" role="status" data-testid="ladder-fallback-toast">
