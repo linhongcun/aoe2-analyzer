@@ -44,7 +44,7 @@ describe('PR 专项浏览器覆盖 #636', () => {
         .filter((name) => name.startsWith(family) && name.endsWith('.spec.ts'))
         .map((name) => `tests/e2e/${name}`),
     ];
-    if (family === 'startGame') expected.push('tests/e2e/editorial6.spec.ts');
+    if (family === 'startGame') expected.push('tests/e2e/editorial6.spec.ts', 'tests/e2e/mechanism652.spec.ts');
     expect(selected).toEqual(expected.sort());
   });
 
