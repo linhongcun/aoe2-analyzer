@@ -130,30 +130,32 @@ UI 须挂 `docs/design/<topic>/` 规格，或 issue 内可测规格。没有对�
 
 - 部署烟测（`scripts/deployment-smoke.mjs`；该事件去掉 feature `all` 的长巡游，只留首页/页脚和已识别功能）
 - 核心包 `tests/e2e/smoke.spec.ts`
-- diff 里已经映射到 `PROFILES` 的功能 e2e
+- diff 里已经映射到 `PROFILES` 的功能 e2e，以及本次明确新增/修改或由入口指定的专项 e2e（已删除文件不执行）。`full` 单测计划不会丢弃这些专项浏览器验收（#636）
 
-识别不到功能时，浏览器只有部署烟测和 `smoke.spec.ts`。`CI_E2E_FULL` 由 `.github/workflows/ci.yml` 设置，`pull_request` 恒为 `false`；`scripts/ci-scope.mjs` 的 `applyBrowserPolicy` 与 `scripts/ci-run.mjs` 都认这个事件，不能靠把 `CI_E2E_FULL=true` 写进 PR 环境把整套 e2e 加回来。
+既无功能映射、也无明确专项用例时，浏览器只有部署烟测和 `smoke.spec.ts`。`CI_E2E_FULL` 由 `.github/workflows/ci.yml` 设置，`pull_request` 恒为 `false`；`scripts/ci-scope.mjs` 的 `applyBrowserPolicy` 与 `scripts/ci-run.mjs` 都认这个事件，不能靠把 `CI_E2E_FULL=true` 写进 PR 环境把整套 e2e 加回来。
+
+#636 为首页、天梯加入有界 profile。首页覆盖 `startGame592` 与首页壳层，天梯覆盖现有 `ladder*` 的明确文件列表；新增回归时同步维护列表。`src/domain/startGame.ts` 已审计为首页选择流程与展示投影，只有这一精确路径归入 home；其它计算或未知 domain 文件继续 full。专项清单和 profile 合并、去重后，仍最后应用下方 capped 黑名单。
 
 ### PR capped 黑名单（Kent §C，#538 / #514）
 
 下面这些 spec **不删除**，main / nightly / `CI_E2E_FULL` 仍会跑到。它们只是不能进入 pull_request 的 `capped` 列表，哪怕 `ci-scope` 给出 `full`，或某个宽 profile 本来选中了它们：
 
-| 模式 | PR capped |
-| --- | --- |
-| `v0300-338` | 始终排除 |
-| `screenshots`、`stepContrast`、`overflow64`、`cardWrap*`、`mobile361-359-366`、`touchTargets481` | 始终排除（四宽×双主题 / 截图 / 触控守卫；壳层那 6 个 spec 仍跑） |
-| `*197`、`finalCivs197`、`civDlcFilters` | 不跑整张文明矩阵。只改一个文明时，可以留下该文明自己的 `*197` spec |
-| `build41`、`rush35`、`rushGeneric507`、`timeline*` | 本 PR 不是该功能时排除 |
+| 模式                                                                                             | PR capped                                                          |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| `v0300-338`                                                                                      | 始终排除                                                           |
+| `screenshots`、`stepContrast`、`overflow64`、`cardWrap*`、`mobile361-359-366`、`touchTargets481` | 始终排除（四宽×双主题 / 截图 / 触控守卫；壳层那 6 个 spec 仍跑）   |
+| `*197`、`finalCivs197`、`civDlcFilters`                                                          | 不跑整张文明矩阵。只改一个文明时，可以留下该文明自己的 `*197` spec |
+| `build41`、`rush35`、`rushGeneric507`、`timeline*`                                               | 本 PR 不是该功能时排除                                             |
 
 `src/shared/nav/pageRegistry.ts`、`src/app/pageRegistry.tsx` 和 `src/shared/styles/` 下的共享 CSS 仍可让单测保持 `full`。PR 浏览器最多是 `smoke.spec.ts` 加上 diff 里真正改到的功能，不会把上表守卫带进来。
 
 `pull_request` 且 `browser=false` 时不跑 Playwright e2e，构建跳过 OG 截图，短部署烟测也不跑。若 Affected unit 会启动 Chromium（`release108`、`releaseSmoke`，含 maintenance 的 `tests/unit/release*.test.ts`），仍用与 e2e 相同的 `npx playwright install --with-deps chromium` 装上 `chromium_headless_shell`；没有这类单测则不安装。证据复用跳过 unit 时也不为这条路径安装。main 推送仍安装 chromium，以便生成 OG 并部署。`unused:check`、`introductions:check` 和 `docs/design/contrast.py` 只在 main / 夜间 / 手动运行，不挡 PR。
 
-| 事件                                                                 | 浏览器                                                 |
-| -------------------------------------------------------------------- | ------------------------------------------------------ |
-| `pull_request`                                                       | smoke + 已识别功能；无功能则 smoke。不跑约 189 个 spec |
-| `push` 到 `main` / `release/**`，且计划为 `full`（含壳层 push 提升） | 完整 Playwright                                        |
-| `schedule` 夜间、`workflow_dispatch` 且 `inputs.full` / `CI_FULL`    | 完整 Playwright，并做数据检查、禁用证据复用            |
+| 事件                                                                 | 浏览器                                                                                                                 |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `pull_request`                                                       | smoke + 已识别功能；无功能则 smoke。不跑约 189 个 spec                                                                 |
+| `push` 到 `main` / `release/**`，且计划为 `full`（含壳层 push 提升） | 完整 Playwright                                                                                                        |
+| `schedule` 夜间、`workflow_dispatch` 且 `inputs.full` / `CI_FULL`    | 完整 Playwright，并做数据检查、禁用证据复用                                                                            |
 | 已映射的 targeted / civ-ui / maintenance                             | 原文件列表。main 的 maintenance 仍短烟测；PR 且 browser=false 不跑 e2e/OG/短烟测。会启动 Chromium 的 unit 仍安装浏览器 |
 
 手动 `workflow_dispatch` 即使关掉 `inputs.full`，事件也没有 PR/push 基线，路径计划仍是 full，且 `CI_E2E_FULL` 为 true，浏览器同样是完整套件。浏览器限流只发生在 `pull_request`。
