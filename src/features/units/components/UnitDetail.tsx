@@ -273,6 +273,7 @@ export default function UnitDetail() {
                     </dd>
                   </div>
                 </dl>
+                {(u.id === 1759 || u.id === 1761) && (u.cost.Food ?? 0) === 0 && <p>训练不消耗食物。</p>}
                 <GatherLine u={u} civ={rt.civ} age={rt.age} />
               </DetailSection>
               <InsightSlot items={unitInsights(u.id)} />
