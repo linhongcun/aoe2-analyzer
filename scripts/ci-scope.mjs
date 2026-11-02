@@ -204,6 +204,7 @@ export const PROFILES = {
   // #533：攻城页改动跑金标准与失败验收。不把 /siege 放进全站宽度/截图矩阵。
   // #581：页内单位上下文跟攻城反馈走，后续攻城改动也要跑到 siege581。
   siege: profile(['siege308'], ['siege308', 'siege533', 'siege554-555', 'siege581']),
+  teamFit: profile(['teamFit558', 'teamBonuses228', 'teamChainNote273'], ['teamFit558', 'teamBonuses228', 'v0300-273']),
   maps: profile([], ['maps34', 'mapPreviews', 'mapCatalog422', 'maps559']),
   compare: profile(['compare403', 'teamBonuses228'], ['compare403', 'civText402', 'teamBonuses228']),
   // Display-only helpers. Combat, eco and cost math stay on the full plan.
@@ -476,6 +477,9 @@ export function planChanges(changes) {
     const { path, before, after } = change;
     if (path === 'package.json' || path === 'package-lock.json') {
       if (!versionOnly(path, before, after)) full = data = true;
+    } else if (path === 'src/data/page-metadata.json') {
+      // Exact generated route/share metadata only; game data paths and mixed changes remain full + data.
+      full = true;
     } else if (path === '.npmrc' || path.startsWith('src/data/') || path.startsWith('public/img/') || path.startsWith('docs/PATCH-NOTES/')) {
       full = data = true;
     } else if (path.startsWith('.github/') || maintenanceFiles.has(path) || /^tests\/unit\/release[^/]*\.test\.ts$/.test(path)) {

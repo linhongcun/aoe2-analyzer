@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loadCore, loadTrees } from '../../data';
 import type { ProductionContext } from '../../domain/production';
 import { decodeTeamPlan, defaultTeamPlan, encodeTeamPlan, teamPlanShareUrl, type TeamPlan } from '../../domain/teamPlan';
@@ -86,6 +86,9 @@ export default function TeamPlanPage() {
         </div>
       </header>
       <div className="tp-screen">
+        <Link className="community-tool-entry" to="/team-fit">
+          选文明前看搭配
+        </Link>
         <CalcDock
           note={notice}
           resultId={plan && ctx ? 'tp-phase-heading' : undefined}
