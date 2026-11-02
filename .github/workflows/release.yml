@@ -114,6 +114,11 @@ jobs:
         env:
           SOURCE_CI_RUN_ID: ${{ steps.verify.outputs.ci_run_id }}
         run: node scripts/site-artifact.mjs --verify
+      - name: Plan feature smoke from the previous formal release
+        if: steps.verify.outputs.should_release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/prepare-release.mjs --smoke-plan
       - name: Use Ubuntu public package mirror
         if: steps.verify.outputs.should_release == 'true'
         run: |
@@ -135,7 +140,7 @@ jobs:
           npm run release -- "$RELEASE_VERSION"
       - name: Verify changed features on the actual site
         if: steps.verify.outputs.should_release == 'true'
-        run: node scripts/deployment-smoke.mjs --plan dist/build-evidence.json
+        run: node scripts/deployment-smoke.mjs --plan "$RUNNER_TEMP/release-smoke-plan.json"
       - name: Package the already deployed site
         if: steps.verify.outputs.should_release == 'true'
         env:

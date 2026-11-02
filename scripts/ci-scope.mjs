@@ -206,7 +206,7 @@ export const PROFILES = {
   siege: profile(['siege308'], ['siege308', 'siege533', 'siege554-555', 'siege581']),
   teamFit: profile(['teamFit558', 'teamBonuses228', 'teamChainNote273'], ['teamFit558', 'teamBonuses228', 'v0300-273']),
   maps: profile([], ['maps34', 'mapPreviews', 'mapCatalog422', 'maps559']),
-  compare: profile(['compare403', 'teamBonuses228'], ['compare403', 'civText402', 'teamBonuses228']),
+  compare: profile(['compare403', 'compareLocation558', 'teamBonuses228'], ['compare403', 'compareNavigation558', 'civText402', 'teamBonuses228']),
   // Display-only helpers. Combat, eco and cost math stay on the full plan.
   clock: profile(
     ['formatTime', 'formatTime.consistency-1', 'formatTime.consistency-2', 'formatTime.consistency-3', 'formatTime.consistency-4'],
