@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { formatGames, formatPercent, medianOf, type LadderCivStat, type LadderSnapshot } from '../../src/domain/ladder';
 
@@ -52,6 +53,9 @@ for (const width of [360, 375, 390, 1280]) {
     expect(marks.every((size) => size >= 10 && size <= 36)).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(errors).toEqual([]);
+    if (width === 1280) {
+      expect((await new AxeBuilder({ page }).include('[data-testid="ladder-meta-map"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+    }
     await page.screenshot({ path: testInfo.outputPath(`ladder635-${width}.png`), fullPage: true });
   });
 }
