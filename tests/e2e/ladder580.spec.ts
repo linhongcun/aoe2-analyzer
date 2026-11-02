@@ -103,7 +103,7 @@ async function openLadder(page: Page) {
   await expect(page.getByTestId('ladder-page')).toBeVisible();
   await expect(page.getByTestId('ladder-mode-arabia1v1')).toHaveAttribute('aria-checked', 'true');
   await expect(page.getByTestId('ladder-table')).toBeVisible();
-  await expect(page.getByTestId('ladder-elo-static')).toContainText('全部');
+  await expect(page.getByRole('radiogroup', { name: /天梯分段/ }).getByRole('radio', { name: '全部' })).toHaveAttribute('aria-checked', 'true');
   await expect(page.getByTestId('ladder-empty')).toHaveCount(0);
   return errors;
 }

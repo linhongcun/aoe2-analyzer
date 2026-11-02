@@ -50,6 +50,7 @@ SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分
 - [#545 天梯空分段](ladder-545/)（[#545](https://github.com/linhongcun/aoe2-analyzer/issues/545)）：顶栏只露有数据的 Elo 分段；当前快照改为只读「全部」。短稿，供 Steve 设计通过后由 Linus 实现。
 - [#547 天梯快照与首屏截止](ladder-547/)（[#547](https://github.com/linhongcun/aoe2-analyzer/issues/547)）：换一份新于 p162286 的阿拉伯 1v1 静态快照，并把统计截止或「非当前平衡」升到来源条第一行。短稿，供产品设计通过后由 Linus 实现。与 #566 并行。
 - [#577 天梯默认切片与三视图](ladder-577/)（[#577](https://github.com/linhongcun/aoe2-analyzer/issues/577)）：Steve P1。`#/ladder` 默认 4v4 随机地图 · Elo 1200–1400 · 近 90 天 · 全图；表和走势先做，分层与分布随后。短稿，供产品设计通过后由 Linus 实现。
+- [#571 天梯模式与 Elo](ladder-571/)（[#571](https://github.com/linhongcun/aoe2-analyzer/issues/571)）：沿用现有两份快照。模式和 Elo 切到有数据的切片；没有快照的分段停用。来源条同时保留模式、Elo、地图和截止。
 - [#581 报错反馈页内单位上下文](feedback-581/)（[#581](https://github.com/linhongcun/aoe2-analyzer/issues/581)）：Steve 双路 P2，排在 #577 A 之后。`#/siege?unit=422` 的反馈簇旁写「将附带：中型冲车 / 422」；没有可附带的名与 ID 时不显示。短稿，供产品设计通过后由 Kent 轻失败用例、Linus 实现。
 - [#584 鲜为人知洞察槽位](insights-584/)（[#584](https://github.com/linhongcun/aoe2-analyzer/issues/584)）：2026-11-01 修订，对齐 #603 四卡。单位页固定槽，空态「暂无」；文明页只在有条目时插在评分卡与文明加成之间，无条目不挂、不写「暂无」。短稿，Steve 设计通过前 Linus 不实现。不关 #584。
 - [#559 地图边路 / 中路](maps-559/)（[#559](https://github.com/linhongcun/aoe2-analyzer/issues/559)）：地图详情在现有推荐文明下增加开图 4v4 的边路 / 中路编辑推荐；无稿显式待补。短稿，供 Steve 设计通过后实现。

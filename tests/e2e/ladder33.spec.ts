@@ -184,10 +184,11 @@ test('#33 无查询是 4v4 默认切片；?elo=all 仍停在阿拉伯全部', as
   await expect(page.getByTestId('ladder-page')).toBeVisible();
   await expect(page.getByTestId('ladder-mode-4v4')).toHaveAttribute('aria-checked', 'true');
   expect(queryFlags(page.url())).toEqual({ elo: null, sort: null, dir: null, civ: null });
-  // #545：当前快照没有可切换的空分段，也不进入可点空态。
-  await expect(page.getByRole('radiogroup', { name: /天梯分段/ })).toHaveCount(0);
+  await expect(page.getByRole('radiogroup', { name: /天梯分段/ }).getByRole('radio', { name: /1200\s*(?:–|-)\s*1400/ })).toHaveAttribute(
+    'aria-checked',
+    'true',
+  );
   await expect(page.getByTestId('ladder-bracket')).toHaveCount(0);
-  await expect(page.getByTestId('ladder-elo-static')).toBeVisible();
   await expect(page.getByTestId('ladder-empty')).toHaveCount(0);
 
   await page.goto('./#/ladder?elo=all');
@@ -206,9 +207,7 @@ test('#33 非法 elo 回落全部，sort/dir/civ 不保留', async ({ page }) =>
   await expect(toast).toContainText('not-a-bracket');
   await expect(toast).toContainText('全部');
   await expect.poll(() => queryFlags(page.url())).toEqual({ elo: null, sort: null, dir: null, civ: null });
-  // #545：回落后是只读「全部」，不是一枚选中的 Elo 芯片，也不是空态。
-  await expect(page.getByRole('radiogroup', { name: /天梯分段/ })).toHaveCount(0);
-  await expect(page.getByTestId('ladder-elo-static')).toBeVisible();
+  await expect(page.getByRole('radiogroup', { name: /天梯分段/ }).getByRole('radio', { name: '全部' })).toHaveAttribute('aria-checked', 'true');
   await expect(page.getByTestId('ladder-empty')).toHaveCount(0);
 });
 

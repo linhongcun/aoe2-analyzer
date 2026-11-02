@@ -39,62 +39,31 @@ async function expectCanonicalAll(page: Page) {
 }
 
 async function expectNoEloChrome(page: Page) {
-  const keys = await page.locator('[data-elo]').evaluateAll((els) => els.map((el) => el.getAttribute('data-elo')));
-  const leaked = hidden.map((item) => item.key).filter((key) => keys.includes(key));
-  soon(leaked, 'lt850 / 850-1000 / 1000-1200 / 1200+ / 1900+ 不应再有芯片').toEqual([]);
-  soon(await page.getByTestId('ladder-bracket').count(), '不应再渲染 ladder-bracket').toBe(0);
-  soon(await page.getByRole('radiogroup', { name: /天梯分段/ }).count(), '可见分段少于 2 时不要 Elo radiogroup').toBe(0);
-  soon(await page.locator('[data-testid="ladder-elo-static"] [role="radio"]').count()).toBe(0);
+  const group = page.getByRole('radiogroup', { name: /天梯分段/ });
+  soon(await group.count(), '#571 把已有 Elo 收成可切换分段').toBe(1);
+  soon(await page.getByTestId('ladder-bracket').count(), '旧的分段芯片不再另画一套').toBe(0);
   soon(await page.getByTestId('ladder-page').innerText()).not.toContain('天梯分段（Elo）');
+  const current = group.getByRole('radio', { name: '全部' });
+  soon(await current.count()).toBe(1);
+  if ((await current.count()) === 1) soon(await current.getAttribute('aria-checked')).toBe('true');
+  for (const item of hidden) {
+    const node = page.locator(`[data-elo="${item.key}"]`);
+    soon(await node.count(), `${item.key} 停用，不拿别的胜率充数`).toBe(1);
+    if ((await node.count()) !== 1) continue;
+    soon(await node.isDisabled()).toBe(true);
+    soon(await node.getAttribute('aria-checked')).not.toBe('true');
+    soon(((await node.innerText()) ?? '').replace(/\s+/g, '')).not.toMatch(/\d+\.\d{2}%/);
+  }
 }
 
 async function expectStaticAllPill(page: Page) {
-  const pill = page.getByTestId('ladder-elo-static');
-  const count = await pill.count();
-  soon(count, '上下文行应有只读 pill ladder-elo-static').toBe(1);
-  if (count !== 1) return;
-  const text = ((await pill.textContent()) ?? '').replace(/\s+/g, '');
-  soon(text).toContain('天梯分段');
-  soon(text).toContain('全部');
-  soon(text).toContain('当前快照');
-  const nw = pill.locator('.nw');
-  const fixed = pill.locator('.ladder-fixed');
-  soon(await nw.count(), '「全部」放在 .nw 里，避免数字折行').toBe(1);
-  soon(await fixed.count(), '「当前快照」与地图「固定」同一 muted 写法').toBe(1);
-  if ((await nw.count()) === 1) soon(((await nw.textContent()) ?? '').trim()).toBe('全部');
-  if ((await fixed.count()) === 1) soon(((await fixed.textContent()) ?? '').trim()).toBe('当前快照');
-  const tag = await pill.evaluate((el) => el.tagName);
-  soon(tag).toBe('SPAN');
-  soon(await pill.locator('button').count()).toBe(0);
-  const insideButton = await pill.evaluate((el) => Boolean(el.closest('button')));
-  soon(insideButton).toBe(false);
-  const role = await pill.getAttribute('role');
-  soon(role === 'radio' || role === 'button').toBe(false);
-  soon(await pill.getAttribute('aria-checked')).toBeNull();
-  soon((await pill.getAttribute('class')) ?? '').toMatch(/ladder-pill/);
-  soon((await pill.getAttribute('class')) ?? '').not.toMatch(/ladder-bracket/);
-  const paint = await pill.evaluate((el) => {
-    const read = (name: string) => {
-      const probe = document.createElement('span');
-      probe.style.backgroundColor = `var(${name})`;
-      el.append(probe);
-      const value = getComputedStyle(probe).backgroundColor;
-      probe.remove();
-      return value;
-    };
-    const style = getComputedStyle(el);
-    return {
-      background: style.backgroundColor,
-      surface2: read('--color-surface-2'),
-      accentSoft: read('--color-accent-soft'),
-      borderWidth: Number.parseFloat(style.borderTopWidth),
-      border: style.borderTopColor,
-      accent: read('--color-accent'),
-    };
-  });
-  soon(paint.background, '只读 pill 用 surface-2，不要选中芯片的 accent 底').toBe(paint.surface2);
-  soon(paint.background).not.toBe(paint.accentSoft);
-  if (paint.borderWidth > 0) soon(paint.border, '只读 pill 不要 accent 描边').not.toBe(paint.accent);
+  const current = page.getByRole('radiogroup', { name: /天梯分段/ }).getByRole('radio', { name: '全部' });
+  soon(await current.count(), '阿拉伯这一档仍是「全部」').toBe(1);
+  if ((await current.count()) !== 1) return;
+  soon(await current.getAttribute('aria-checked')).toBe('true');
+  const label = current.locator('.nw');
+  soon(await label.count()).toBe(1);
+  if ((await label.count()) === 1) soon(((await label.textContent()) ?? '').trim()).toBe('全部');
 }
 
 async function expectAllTable(page: Page) {
