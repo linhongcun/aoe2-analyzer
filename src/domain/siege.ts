@@ -92,9 +92,11 @@ export function decideSiegeCanonical(liveHash: string, canonicalSearch: string):
   return { kind: 'replace' };
 }
 
-/** 单位详情「算拆建筑」：对城堡、缺省数量、无文明、无护甲已核实才显示。 */
+/** 单位详情「算拆建筑」：工具已收录，且对城堡、缺省数量、无文明、无护甲已核实才显示。 */
 export function siegeUnitEntryVerified(unit: Unit, castle: Building | undefined): boolean {
-  return !!castle && castle.id === SIEGE_DEFAULT_BUILDING_ID && calculateSiege(unit, castle, SIEGE_DEFAULT_N, '', []).verified;
+  return (
+    SIEGE_UNIT_IDS.includes(unit.id) && !!castle && castle.id === SIEGE_DEFAULT_BUILDING_ID && calculateSiege(unit, castle, SIEGE_DEFAULT_N, '', []).verified
+  );
 }
 
 /** 建筑详情「算攻城拆这座」：对照表内、默认攻城锤已核实，且不是石墙或城门。 */
