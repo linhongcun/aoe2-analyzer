@@ -25,7 +25,7 @@ import Simulator from '../../../shared/ui/sim/Simulator';
 import UnitList from './UnitList';
 import { discountedCost, priceAge } from '../../../domain/costDiscount';
 import { unitInsights } from '../../../domain/insights';
-import { siegeUnitEntryVerified } from '../../../domain/siege';
+import { unitSiegeHref } from '../siegeEntry';
 import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/realCost';
 import { Basis } from '../../../shared/ui/RealCost';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
@@ -191,7 +191,7 @@ export default function UnitDetail() {
   const simulatorRoute = routeWithQueryCiv(rt, queryCiv?.en, u.civs);
   const allCivsParams = new URLSearchParams(params);
   allCivsParams.set('tab', 'rel');
-  const showSiegeEntry = siegeUnitEntryVerified(u, core.buildingById[82]);
+  const siegeHref = unitSiegeHref(u, core.buildingById[82]);
   const showContext = !!(contextCiv || (me && opp));
   return (
     <DetailPage
@@ -212,7 +212,7 @@ export default function UnitDetail() {
       }
       tabsTop={
         <>
-          {(showContext || showSiegeEntry) && (
+          {(showContext || siegeHref) && (
             <nav className="ctx-bar" aria-label={showContext ? '文明相关入口' : '本页相关工具'}>
               {contextCiv && (
                 <Link className="ctx-civ-link ulink" to={`/civ/${contextCiv.en}`}>
@@ -224,8 +224,8 @@ export default function UnitDetail() {
                   <Icon name="arrow-left" /> 回对局助手
                 </Link>
               )}
-              {showSiegeEntry && (
-                <Link className="community-tool-entry" to={`/siege?unit=${u.id}`} data-testid="unit-siege-entry">
+              {siegeHref && (
+                <Link className="community-tool-entry" to={siegeHref} data-testid="unit-siege-entry">
                   <Icon name="hammer" /> 算拆建筑
                 </Link>
               )}
