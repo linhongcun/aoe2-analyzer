@@ -4,7 +4,7 @@
 
 在该实际main构建上先运行受保护 `v0300-338.spec.ts --list`，真实退出1，未收集到测试。新普通专项在360/1280实际等待网络空闲、加载/错误消失、空候选可编辑、0队友且没有结果后采集 `main table`；两宽均实际得到空数组，页脚为v0.74.14 / 构建108f760。专项在companion缺失处真实失败两次，采样JSON保留。
 
-此次仅按现有patch/players/events/ladder模式登记独立 `v0300-338-tables-team-fit.json` 的两键；原历史及四个companion逐文件字节/哈希保持。维护者本轮已明确批准必要的新路由所有权登记：新增严格两键、与全部旧组不重叠、owner组、合并及录制输出追加，补新组missing/extra/overlap和缺失录制项拒绝用例。现有每页样式期望、全量精确partition、缺键/多键/重叠拒绝及旧记录分组断言不放宽。
+此次仅按现有patch/players/events/ladder模式登记独立 `v0300-338-tables-team-fit.json` 的两键；原历史及四个companion逐文件字节/哈希保持。本轮已授权新页面的必要验证登记（范围见[#625授权记录](https://github.com/linhongcun/aoe2-analyzer/issues/625#issuecomment-6568916109)）；协调者审核为只新增新路由基准、保留既有产品期望，按既有companion模式补齐。具体登记包括：新增严格两键、与全部旧组不重叠、owner组、合并及录制输出追加，补新组missing/extra/overlap和缺失录制项拒绝用例。现有每页样式期望、全量精确partition、缺键/多键/重叠拒绝及旧记录分组断言不放宽。
 
 原受保护测试仍在PR capped黑名单内。新增普通 `teamFitFixture558.spec.ts` 让PR实际验证三项：显式六组的完整元信息×两宽exact keyset、每值为array且全局无重复；再分别采样360/1280的真实就绪空态。仅沿原规则排除`/about-data`，没有glob、为新路由自动填空或新增跳过。
 
