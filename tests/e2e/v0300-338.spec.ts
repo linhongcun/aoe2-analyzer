@@ -284,6 +284,13 @@ const playerPageRoutes = ['/players', ...playerRoutes(playerCatalog)];
 
 /** A heading shell is insufficient: capture real player cards/facts and expanded citations. */
 async function openDetailsWithPlayerReadiness(page: Page, route: string) {
+  if (route === '/team-fit') {
+    await expect(page.getByRole('heading', { name: '文明搭配', exact: true, level: 1 })).toBeVisible();
+    await expect(page.locator('main .tf-loading,main .tf-error')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: '你的候选：选择候选文明', exact: true })).toBeEnabled();
+    await expect(page.getByTestId('team-fit-mates')).toContainText('0 / 3');
+    await expect(page.getByTestId('team-fit-results')).toHaveCount(0);
+  }
   if (route === '/events') {
     await expect(page.getByRole('heading', { name: '赛事公告', exact: true, level: 1 })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'The Garrison 2026', exact: true, level: 2 })).toBeVisible();
@@ -353,6 +360,7 @@ const PATCH_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-188329.json';
 const PLAYERS_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-players.json';
 const EVENTS_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-events.json';
 const LADDER_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-ladder.json';
+const TEAM_FIT_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-team-fit.json';
 const TABLE_WIDTHS = [360, 1280] as const;
 const RECORD_TABLES = !!process.env.V0300_RECORD;
 const historicalTableGolden: Record<string, TableStyle[]> = existsSync(TABLES_FIXTURE)
@@ -400,12 +408,22 @@ for (const key of ladderTableKeys) {
   assert.ok(!Object.hasOwn(playerTableGolden, key), `Ladder fixture cannot replace the players companion expectation: ${key}`);
   assert.ok(!Object.hasOwn(eventTableGolden, key), `Ladder fixture cannot replace the events companion expectation: ${key}`);
 }
+// #558: only the newly registered page. Never replace an existing page's baseline.
+const teamFitTableGolden = JSON.parse(readFileSync(TEAM_FIT_TABLES_FIXTURE, 'utf8')) as Record<string, TableStyle[]>;
+const teamFitTableKeys = TABLE_WIDTHS.map((width) => `${width} /team-fit`);
+assert.deepEqual(Object.keys(teamFitTableGolden).sort(), [...teamFitTableKeys].sort(), 'Team Fit table fixture must contain exactly its two loaded width keys');
+for (const key of teamFitTableKeys) {
+  assert.ok(Array.isArray(teamFitTableGolden[key]), `Missing explicit table expectation: ${key}`);
+  for (const prior of [historicalTableGolden, patchTableGolden, playerTableGolden, eventTableGolden, ladderTableGolden])
+    assert.ok(!Object.hasOwn(prior, key), `Team Fit fixture cannot replace a previous table expectation: ${key}`);
+}
 const tableFixtureGroups = [
   { file: TABLES_FIXTURE, keys: Object.keys(historicalTableGolden), golden: historicalTableGolden },
   { file: PATCH_TABLES_FIXTURE, keys: patchTableKeys, golden: patchTableGolden },
   { file: PLAYERS_TABLES_FIXTURE, keys: playerTableKeys, golden: playerTableGolden },
   { file: EVENTS_TABLES_FIXTURE, keys: eventTableKeys, golden: eventTableGolden },
   { file: LADDER_TABLES_FIXTURE, keys: ladderTableKeys, golden: ladderTableGolden },
+  { file: TEAM_FIT_TABLES_FIXTURE, keys: teamFitTableKeys, golden: teamFitTableGolden },
 ];
 function explicitTableKeyOwners(groups: typeof tableFixtureGroups) {
   const owners = new Map<string, string>();
@@ -425,7 +443,7 @@ assert.deepEqual(
   TABLE_WIDTHS.flatMap((width) => PAGES.map((route) => `${width} ${route}`)).sort(),
   'All four table fixture owners must partition exactly the static-page width keys; missing and extra keys are rejected',
 );
-const tableGolden = { ...historicalTableGolden, ...patchTableGolden, ...playerTableGolden, ...eventTableGolden, ...ladderTableGolden };
+const tableGolden = { ...historicalTableGolden, ...patchTableGolden, ...playerTableGolden, ...eventTableGolden, ...ladderTableGolden, ...teamFitTableGolden };
 
 function recordTableFixtures(tables: Record<string, TableStyle[]>, write: (file: string, text: string) => void = writeFileSync) {
   assert.deepEqual(
@@ -463,12 +481,28 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
   test('守卫：记录时历史基准与全部补充基准保持分开，不覆盖彼此的键值', () => {
     const written = new Map<string, Record<string, TableStyle[]>>();
     recordTableFixtures(tableGolden, (file, text) => written.set(file, JSON.parse(text) as Record<string, TableStyle[]>));
-    expect([...written.keys()]).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE, PLAYERS_TABLES_FIXTURE, EVENTS_TABLES_FIXTURE, LADDER_TABLES_FIXTURE]);
+    const out = [...written.keys()];
+    expect(out).toEqual([TABLES_FIXTURE, PATCH_TABLES_FIXTURE, PLAYERS_TABLES_FIXTURE, EVENTS_TABLES_FIXTURE, LADDER_TABLES_FIXTURE, TEAM_FIT_TABLES_FIXTURE]);
     expect(written.get(TABLES_FIXTURE)).toEqual(historicalTableGolden);
     expect(written.get(PATCH_TABLES_FIXTURE)).toEqual(patchTableGolden);
     expect(written.get(PLAYERS_TABLES_FIXTURE)).toEqual(playerTableGolden);
     expect(written.get(EVENTS_TABLES_FIXTURE)).toEqual(eventTableGolden);
     expect(written.get(LADDER_TABLES_FIXTURE)).toEqual(ladderTableGolden);
+    expect(written.get(TEAM_FIT_TABLES_FIXTURE)).toEqual(teamFitTableGolden);
+    expect(Object.keys(written.get(TEAM_FIT_TABLES_FIXTURE)!).sort()).toEqual([...teamFitTableKeys].sort());
+    const teamFitGroup = tableFixtureGroups.find((group) => group.file === TEAM_FIT_TABLES_FIXTURE)!;
+    const withoutTeamFit = tableFixtureGroups.filter((group) => group.file !== TEAM_FIT_TABLES_FIXTURE);
+    expect(() =>
+      explicitTableKeyOwners([...withoutTeamFit, { ...teamFitGroup, golden: { ...teamFitTableGolden, '360 /unassigned-team-fit-page': [] } }]),
+    ).toThrow(/explicit owners/);
+    const missingTeamFit = { ...teamFitTableGolden };
+    delete missingTeamFit[teamFitTableKeys[0]!];
+    expect(() => explicitTableKeyOwners([...withoutTeamFit, { ...teamFitGroup, golden: missingTeamFit }])).toThrow(/explicit owners/);
+    expect(() => explicitTableKeyOwners([...tableFixtureGroups, teamFitGroup])).toThrow(/ownership overlaps/);
+    const missingTeamFitRecord = { ...tableGolden };
+    delete missingTeamFitRecord[teamFitTableKeys[0]!];
+    expect(() => recordTableFixtures(missingTeamFitRecord, () => assert.fail('Missing record must fail before writing'))).toThrow(/explicit owners/);
+
     expect(Object.keys(written.get(EVENTS_TABLES_FIXTURE)!).sort()).toEqual([...eventTableKeys].sort());
     const eventsGroup = tableFixtureGroups.find((group) => group.file === EVENTS_TABLES_FIXTURE)!;
     const withoutEvents = tableFixtureGroups.filter((group) => group.file !== EVENTS_TABLES_FIXTURE);
@@ -517,6 +551,13 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
       await page.goto('./#/events', { waitUntil: 'networkidle' });
       await openDetailsWithPlayerReadiness(page, '/events');
       expect(await tableStyles(page)).toEqual(tableGolden[`${width} /events`]);
+    });
+  for (const width of TABLE_WIDTHS)
+    test(`新增 #/team-fit @${width}：真实空配置已加载，表格与显式补充基准一致`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('./#/team-fit', { waitUntil: 'networkidle' });
+      await openDetailsWithPlayerReadiness(page, '/team-fit');
+      expect(await tableStyles(page)).toEqual(tableGolden[`${width} /team-fit`]);
     });
   for (const width of TABLE_WIDTHS)
     test(`新增 #/ladder @${width}：天梯表已加载，表格与显式补充基准一致`, async ({ page }) => {
