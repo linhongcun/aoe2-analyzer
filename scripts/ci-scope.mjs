@@ -14,6 +14,8 @@ const shellFiles = new Set(['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src
 const displayFiles = new Map([
   // Homepage choice flow only; no combat, economic simulation or generated data.
   ['src/domain/startGame.ts', ['home']],
+  // Ladder-only URL/selection/source labels; snapshot values and statistical calculations are unchanged.
+  ['src/domain/ladderQuery.ts', ['ladder']],
   ['src/domain/formatTime.ts', ['clock']],
   ['src/domain/dupNames.ts', ['names']],
   ['src/domain/linker.ts', ['links']],

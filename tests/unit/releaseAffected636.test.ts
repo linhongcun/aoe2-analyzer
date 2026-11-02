@@ -29,6 +29,7 @@ describe('PR 专项浏览器覆盖 #636', () => {
     ['src/features/home/components/Home.tsx', 'startGame592'],
     ['src/domain/startGame.ts', 'startGame592'],
     ['src/features/ladder/LadderFilters.tsx', 'ladder571'],
+    ['src/domain/ladderQuery.ts', 'ladder571'],
   ])('%s 有明确有界的功能验收', (path, spec) => {
     const plan = capped([path]);
     expect(plan).toMatchObject({ full: false, data: false, scope: 'targeted' });
@@ -57,6 +58,12 @@ describe('PR 专项浏览器覆盖 #636', () => {
   it('full 下也不把已删除的专项文件加入执行列表', () => {
     const plan = applyBrowserPolicy(planChanges([change('src/domain/realCost.ts'), { path: 'tests/e2e/removed636.spec.ts', before: 'old', after: null }]), pr);
     expect(plan.e2e).toEqual(['tests/e2e/smoke.spec.ts']);
+  });
+
+  it('只映射已审计的天梯选择辅助文件，统计计算及未知 domain 仍完整验证', () => {
+    for (const path of ['src/domain/ladder.ts', 'src/domain/ladderStats.ts', 'src/domain/ladderQueryExtra.ts']) {
+      expect(capped([path])).toMatchObject({ full: true, scope: 'full' });
+    }
   });
 
   it('黑名单最后过滤；未知模块独自仍保守 full + smoke', () => {
