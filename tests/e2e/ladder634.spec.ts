@@ -50,8 +50,8 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(page.getByTestId('ladder-elo').locator('[aria-checked="true"]')).toBeFocused();
     await page.keyboard.press('Shift+Tab');
     expect(await page.evaluate(() => !!document.activeElement?.closest('[data-testid="ladder-elo"]'))).toBe(false);
-    const target = page.getByTestId('ladder-elo').locator('[data-testid="ladder-elo-option"][aria-checked="false"]').first();
-    await target.click();
+    // #625 解耦后每模式目前只有一个真实档；仍验证鼠标点选和焦点，不借用其它模式的档。
+    await page.getByTestId('ladder-elo-option').click();
     await expect(page.getByTestId('ladder-elo').locator('[aria-checked="true"]')).toBeFocused();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(errors).toEqual([]);

@@ -53,14 +53,14 @@ export default function Ladder() {
   };
 
   const selectEloOption = (option: EloFilterOption) => {
-    if (!option.enabled) return;
+    if (!option.enabled || option.mode !== resolved.mode) return;
     if (option.current) {
       pendingEloFocus.current = null;
       return;
     }
     pendingEloFocus.current = `${option.mode}:${option.key}`;
     navigate(
-      { pathname: '/ladder', search: canonicalLadderSearch({ mode: option.mode, elo: option.elo, pendingView: resolved.pendingView }) },
+      { pathname: '/ladder', search: canonicalLadderSearch({ mode: resolved.mode, elo: option.elo, pendingView: resolved.pendingView }) },
       { replace: true },
     );
   };

@@ -10,8 +10,9 @@ for (const width of [360, 375, 390, 1280]) {
         if (message.type() === 'error') errors.push(message.text());
       });
       await page.setViewportSize({ width, height: 900 });
-      await page.addInitScript((value) => localStorage.setItem('theme', value), theme);
+      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/ladder?view=meta');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       const group = page.getByTestId('ladder-elo');
       const keys = await group.locator('[data-elo]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-elo')));
       const all = group.locator('[data-elo="all"]');
@@ -20,6 +21,7 @@ for (const width of [360, 375, 390, 1280]) {
       await expect(group.locator('[data-elo="1200-1400"]')).toHaveAttribute('aria-checked', 'true');
       await expect(page.getByTestId('ladder-source')).toHaveAttribute('data-slice-mode', '4v4');
       await expect(page).toHaveURL(/#\/ladder\?view=meta$/);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: testInfo.outputPath(`ladder625-${width}-${theme}-team.png`), fullPage: true });
 
       await page.getByTestId('ladder-mode-arabia1v1').click();
