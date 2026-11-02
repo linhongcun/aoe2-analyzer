@@ -29,6 +29,6 @@
 
 新建 `tests/e2e/hotkeys626.spec.ts`，在未实现的基线先验证缺失提示的真实失败。覆盖首屏与位置、限定文案/来源、搜索与个人表保存、打印仍为 20 项、四宽双主题无溢出/无页面错误、截图及 1280 axe。
 
-新增 `tests/unit/hotkeysCiScope626.test.ts`：页面/局部 CSS 进入 `hotkeys` 精确 profile，包含原 `hotkeys236` 与新 `hotkeys626` 浏览器验证及既有 `hotkeys236` 单测；未审计的 `domain/hotkeys.ts`、其他 domain、数据与依赖仍按原规则 full/data。profile 不增加 domain 豁免。
+新增 `tests/unit/releaseHotkeys626.test.ts`：页面/局部 CSS 进入 `hotkeys` 精确 profile，包含原 `hotkeys236` 与新 `hotkeys626` 浏览器验证及既有 `hotkeys236` 单测；未审计的 `domain/hotkeys.ts`、其他 domain、数据与依赖仍按原规则 full/data。profile 不增加 domain 豁免。
 
 实现后执行相关 Vitest、原与新快捷键浏览器用例、ESLint/颜色/CSS、类型、分层、构建。CI 策略变化保留原 release 策略单测；不伪称执行全站或游戏客户端验证。

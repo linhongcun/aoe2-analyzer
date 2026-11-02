@@ -52,6 +52,8 @@ const sourceChecks = [
 
 /** Page-local changes use the page's real existing regression coverage, including its helpers. */
 export const PROFILES = {
+  // Page-local hotkeys presentation only. The action catalog, storage logic and other domain files stay full.
+  hotkeys: profile(['hotkeys236'], ['smoke', 'hotkeys236', 'hotkeys626']),
   home: profile(['startGame592', 'startGame632'], ['smoke', 'editorial6', 'startGame592', 'startGame632']),
   ladder: profile(
     ['ladder33', 'ladder569', 'ladder571', 'ladder577-query', 'ladder577-snapshot', 'ladder580', 'ladder633', 'ladder635', 'ladder625'],
