@@ -34,6 +34,7 @@ const maintenanceFiles = new Set([
   'scripts/ci-run.mjs',
   'scripts/ci-evidence.mjs',
   'scripts/deployment-smoke.mjs',
+  'scripts/smoke-diagnostics.mjs',
   'scripts/site-artifact.mjs',
   'scripts/release-online-smoke.mjs',
 ]);
@@ -571,7 +572,7 @@ export function eventBase(eventName, event, ref, initialReleaseBase = null) {
 }
 
 /** Unit files whose Affected unit run calls chromium.launch() (Playwright 1.64 headless shell). */
-const CHROMIUM_UNIT_BASENAMES = ['release108.test.ts', 'releaseSmoke.test.ts'];
+const CHROMIUM_UNIT_BASENAMES = ['release108.test.ts', 'releaseSmoke.test.ts', 'releaseDiagnostics641.test.ts'];
 
 function unitPatternMatches(pattern, basename) {
   if (typeof pattern !== 'string') return false;
