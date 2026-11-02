@@ -41,16 +41,16 @@ describe('天梯模式与 Elo 只读已有快照 #571', () => {
   it('有数据的档可选，空档停用；当前档跟着模式走', () => {
     const onTeam = eloFilterOptions('4v4', 'all', arabia, team);
     expect(onTeam.find((option) => option.current)).toMatchObject({ key: '1200-1400', mode: '4v4', enabled: true, elo: 'all' });
-    expect(onTeam.find((option) => option.key === 'all')).toMatchObject({ mode: 'arabia1v1', enabled: true, current: false, elo: 'all' });
-    expect(onTeam.filter((option) => !option.enabled).map((option) => option.key)).toEqual(['lt850', '850-1000', '1000-1200', '1200+', '1900+']);
+    expect(onTeam.find((option) => option.key === 'all')).toMatchObject({ mode: '4v4', enabled: false, current: false, elo: 'all' });
+    expect(onTeam.filter((option) => !option.enabled).map((option) => option.key)).toEqual(['all', 'lt850', '850-1000', '1000-1200', '1200+', '1900+']);
     const onArabia = eloFilterOptions('arabia1v1', 'all', arabia, team);
     expect(onArabia.find((option) => option.current)?.key).toBe('all');
-    expect(onArabia.find((option) => option.key === '1200-1400')).toMatchObject({ mode: '4v4', enabled: true, current: false });
+    expect(onArabia.find((option) => option.key === '1200-1400')).toMatchObject({ mode: 'arabia1v1', enabled: false, current: false });
   });
 
-  it('选中有数据的档会切到那份快照，空档不能当成当前表', () => {
-    const toArabia = eloFilterOptions('4v4', 'all', arabia, team).find((option) => option.key === 'all');
-    const toTeam = eloFilterOptions('arabia1v1', 'all', arabia, team).find((option) => option.key === '1200-1400');
+  it('选中当前模式有数据的档保留模式，空档不能当成当前表', () => {
+    const toArabia = eloFilterOptions('arabia1v1', 'all', arabia, team).find((option) => option.key === 'all');
+    const toTeam = eloFilterOptions('4v4', 'all', arabia, team).find((option) => option.key === '1200-1400');
     expect(toArabia && canonicalLadderSearch({ mode: toArabia.mode, elo: toArabia.elo, pendingView: null })).toBe('?mode=arabia1v1');
     expect(toTeam && canonicalLadderSearch({ mode: toTeam.mode, elo: toTeam.elo, pendingView: 'tiers' })).toBe('?view=tiers');
     const blocked = eloFilterOptions('4v4', 'all', arabia, team).find((option) => option.key === 'lt850');

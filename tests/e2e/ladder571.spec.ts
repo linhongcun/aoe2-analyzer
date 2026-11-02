@@ -125,18 +125,19 @@ test('#571 模式筛选覆盖已承诺的 4v4 与阿拉伯 1v1，切换后表和
   await expectOwnedSlice(page, teamSlice);
 });
 
-test('#571 Elo 分段可切换，胜率与样本量改为另一份自有快照', async ({ page }) => {
+test('#571/#625 Elo 留在当前模式，显式模式切换更新真实胜率与样本量', async ({ page }) => {
   await openLadder(page);
   const group = eloGroup(page);
   await expect(group, 'Elo 应是可切换的天梯分段，而不是只读「当前快照」').toBeVisible();
   const current = group.getByRole('radio', { name: ELO_1200_1400 });
   const other = group.getByRole('radio', { name: /全部/ });
   await expect(current).toHaveAttribute('aria-checked', 'true');
-  await expect(other, '「全部」在阿拉伯快照里有数，不能禁用').toBeEnabled();
+  await expect(other, '4v4 没有全部档，不能借用阿拉伯快照').toBeDisabled();
+  await expect(other).toContainText('暂无数据');
   const before = await page.getByTestId('ladder-row-Franks').getAttribute('data-games');
-  await other.click();
+  await page.getByTestId('ladder-mode-arabia1v1').click();
   await expect(other).toHaveAttribute('aria-checked', 'true');
-  await expect(page.getByTestId('ladder-mode-arabia1v1'), 'Elo 落到哪份快照，模式芯片就跟哪份，不能 4v4 配阿拉伯胜率').toHaveAttribute('aria-checked', 'true');
+  await expect(page.getByTestId('ladder-mode-arabia1v1'), '只有显式模式切换才进入阿拉伯，不能 4v4 配阿拉伯胜率').toHaveAttribute('aria-checked', 'true');
   await expect(page.getByTestId('ladder-row-Franks')).toHaveAttribute('data-games', String(arabiaFranks.games));
   await expect(page.getByTestId('ladder-row-Franks')).toContainText(formatPercent(arabiaFranks.winRate));
   expect(before).not.toBe(String(arabiaFranks.games));

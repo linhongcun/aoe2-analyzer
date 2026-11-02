@@ -155,45 +155,19 @@ export function sliceFacts(mode: LadderModeId, elo: string, arabia: LadderSnapsh
   };
 }
 
-/**
- * 有文明数据的档可以选，并切到持有该档的快照。
- * 站内已定义、但两份快照都没有的档保持停用。
- * 缺的文件：阿拉伯 `lt850` / `850-1000` / `1000-1200` / `1200+` / `1900+`，以及 4v4 除 `1200-1400` 以外的 Elo。
- */
+/** Elo 只筛当前模式；另一模式持有的数据不代表此组合可用。两模式保持同一分段顺序。 */
 export function eloFilterOptions(mode: LadderModeId, elo: string, arabia: LadderSnapshot, team: LadderSnapshot): EloFilterOption[] {
-  const owned: EloFilterOption[] = [];
-  const taken = new Set<string>();
-  const addSnapshot = (snapshot: LadderSnapshot, owner: LadderModeId) => {
-    for (const bracket of snapshot.brackets) {
-      const view = viewBracket(snapshot, bracket.key);
-      const id = `${owner}:${bracket.key}`;
-      if (view.empty || taken.has(id)) continue;
-      taken.add(id);
-      taken.add(bracket.key);
-      owned.push({
-        key: bracket.key,
-        label: displayEloLabel(owner, bracket.key, view.label),
-        mode: owner,
-        elo: queryElo(owner, bracket.key),
-        enabled: true,
-        current: isCurrentBand(mode, elo, owner, bracket.key),
-      });
-    }
-  };
-  if (mode === '4v4') {
-    addSnapshot(team, '4v4');
-    addSnapshot(arabia, 'arabia1v1');
-  } else {
-    addSnapshot(arabia, 'arabia1v1');
-    addSnapshot(team, '4v4');
-  }
-  const missing = DISPLAY_BRACKETS.filter((band) => !taken.has(band.key)).map((band) => ({
-    key: band.key,
-    label: band.label,
-    mode,
-    elo: band.key,
-    enabled: false,
-    current: false,
-  }));
-  return [...owned, ...missing];
+  const bands = [...DISPLAY_BRACKETS.slice(0, 4), { key: TEAM_ELO_KEY, label: TEAM_ELO_LABEL }, ...DISPLAY_BRACKETS.slice(4)];
+  const snapshot = mode === '4v4' ? team : arabia;
+  return bands.map((band) => {
+    const view = viewBracket(snapshot, band.key);
+    return {
+      key: band.key,
+      label: displayEloLabel(mode, band.key, band.label),
+      mode,
+      elo: queryElo(mode, band.key),
+      enabled: !view.empty,
+      current: !view.empty && isCurrentBand(mode, elo, mode, band.key),
+    };
+  });
 }

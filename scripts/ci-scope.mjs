@@ -14,6 +14,8 @@ const shellFiles = new Set(['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src
 const displayFiles = new Map([
   // Homepage choice flow only; no combat, economic simulation or generated data.
   ['src/domain/startGame.ts', ['home']],
+  // Ladder-only URL/selection/source labels; snapshot values and statistical calculations are unchanged.
+  ['src/domain/ladderQuery.ts', ['ladder']],
   ['src/domain/formatTime.ts', ['clock']],
   ['src/domain/dupNames.ts', ['names']],
   ['src/domain/linker.ts', ['links']],
@@ -52,8 +54,22 @@ const sourceChecks = [
 export const PROFILES = {
   home: profile(['startGame592', 'startGame632'], ['smoke', 'editorial6', 'startGame592', 'startGame632']),
   ladder: profile(
-    ['ladder33', 'ladder569', 'ladder571', 'ladder577-query', 'ladder577-snapshot', 'ladder580', 'ladder633', 'ladder635'],
-    ['smoke', 'ladder33', 'ladder545', 'ladder546', 'ladder547', 'ladder569', 'ladder571', 'ladder577', 'ladder580', 'ladder633', 'ladder634', 'ladder635'],
+    ['ladder33', 'ladder569', 'ladder571', 'ladder577-query', 'ladder577-snapshot', 'ladder580', 'ladder633', 'ladder635', 'ladder625'],
+    [
+      'smoke',
+      'ladder33',
+      'ladder545',
+      'ladder546',
+      'ladder547',
+      'ladder569',
+      'ladder571',
+      'ladder577',
+      'ladder580',
+      'ladder633',
+      'ladder634',
+      'ladder635',
+      'ladder625',
+    ],
   ),
   shell: profile(['nav', 'theme6', 'pageRegistry283'], ['smoke', 'navigation272', 'editorial6', 'skipLink294', 'searchLoading395', 'feedbackTap295']),
   builds: profile(
