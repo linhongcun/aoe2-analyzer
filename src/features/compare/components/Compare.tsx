@@ -11,6 +11,7 @@ import { CivIcon } from '../../../shared/ui/art';
 import { RatingHeading } from '../../../shared/ui/RatingHelp';
 import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
 import { defaultTeamBonusConfig, encodeTeamBonuses, updateTeamRoster } from '../../../domain/teamBonuses';
+import { compareLocationIsCurrent } from '../compareLocation';
 import './compare.css';
 import '../../../shared/ui/contextLinks.css';
 
@@ -24,14 +25,16 @@ const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
 const cell = (c: Civ, k: (typeof ROWS)[number][1]) => (k === 'op' ? <Steps s={c.op} /> : c[k]);
 
 export default function Compare() {
-  const { pathname, search: query } = useLocation();
+  const location = useLocation();
+  const { pathname, search: query } = location;
   const navigate = useNavigate();
   const { a: aName, b: bName, search, needsReplace } = resolveCompareQuery(query);
   const a = civByEn(aName)!,
     b = civByEn(bName)!;
   useEffect(() => {
+    if (!compareLocationIsCurrent(location, window.location.hash)) return;
     if (needsReplace || pathname !== '/compare') navigate({ pathname: '/compare', search }, { replace: true });
-  }, [pathname, search, needsReplace, navigate]);
+  }, [location, pathname, search, needsReplace, navigate]);
   const selectCivilization = (side: 'a' | 'b', civ: string) => {
     const next = selectCompareCivilization(query, side, civ);
     if (next !== null) navigate({ pathname: '/compare', search: next });

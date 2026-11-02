@@ -1,7 +1,7 @@
 import { spawnSync, execFileSync } from 'node:child_process';
 import { appendFileSync, chmodSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { isAbsolute, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const shaPattern = /^[0-9a-f]{40}$/;
@@ -127,7 +127,88 @@ function installGitGuard(version) {
   appendFileSync(process.env.GITHUB_PATH, directory + '\n');
 }
 
-function main() {
+function compareVersions(a, b) {
+  const left = a.slice(1).split('.').map(BigInt),
+    right = b.slice(1).split('.').map(BigInt);
+  for (let i = 0; i < 3; i++) if (left[i] !== right[i]) return left[i] > right[i] ? 1 : -1;
+  return 0;
+}
+
+/** A release object is a baseline only when it is a formal release of this repository. */
+export function validateSmokeBaselineRelease(release, repository) {
+  if (
+    !release ||
+    release.draft !== false ||
+    release.prerelease !== false ||
+    !validVersion(release.tag_name) ||
+    !Number.isSafeInteger(release.id) ||
+    release.id <= 0 ||
+    typeof release.published_at !== 'string' ||
+    !Number.isFinite(Date.parse(release.published_at)) ||
+    release.url !== `https://api.github.com/repos/${repository}/releases/${release.id}` ||
+    release.html_url !== `https://github.com/${repository}/releases/tag/${release.tag_name}`
+  )
+    throw new Error('Smoke baseline must be a published non-prerelease of this repository');
+  return release;
+}
+
+async function writeReleaseSmokePlan({ source, repository, version, release, runId }) {
+  if (!process.env.RUNNER_TEMP || !isAbsolute(process.env.RUNNER_TEMP)) throw new Error('Smoke plan requires an absolute RUNNER_TEMP');
+  if (git('rev-parse', 'HEAD') !== source.deployedSha) throw new Error('Smoke plan checkout must be the actual deployed main');
+  const latest = validateSmokeBaselineRelease(api(`repos/${repository}/releases/latest`), repository);
+  let baseline = latest;
+  if (compareVersions(latest.tag_name, version) >= 0) {
+    if (source.automatic || release?.tag_name !== version) throw new Error('Smoke baseline must be strictly older than this release');
+    validateSmokeBaselineRelease(release, repository);
+    const pages = api(`repos/${repository}/releases?per_page=100`, { paginate: true });
+    if (!Array.isArray(pages) || pages.some((page) => !Array.isArray(page))) throw new Error('Invalid formal release list');
+    const older = pages
+      .flat()
+      .filter((item) => item?.draft === false && item.prerelease === false && validVersion(item.tag_name) && compareVersions(item.tag_name, version) < 0);
+    for (const item of older) validateSmokeBaselineRelease(item, repository);
+    older.sort((a, b) => Date.parse(b.published_at) - Date.parse(a.published_at) || b.id - a.id);
+    baseline = older[0];
+    if (!baseline) throw new Error('No strictly older formal release is available for smoke');
+  }
+  const ref = `refs/tags/${baseline.tag_name}`;
+  const remote = api(`repos/${repository}/git/ref/tags/${baseline.tag_name}`);
+  if (remote?.ref !== ref || !['tag', 'commit'].includes(remote.object?.type)) throw new Error('Invalid remote baseline tag ref');
+  requireSha(remote.object.sha, 'Remote baseline tag object');
+  const tagObject = git('rev-parse', ref);
+  if (tagObject !== remote.object.sha || git('cat-file', '-t', ref) !== remote.object.type)
+    throw new Error('Remote baseline tag differs from the local tag object');
+  const base = git('rev-parse', `${ref}^{commit}`);
+  requireSha(base, 'Formal release baseline');
+  if (base === source.deployedSha || spawnSync('git', ['merge-base', '--is-ancestor', base, source.deployedSha]).status !== 0)
+    throw new Error('Formal release baseline must be an earlier ancestor of deployed main');
+  if (releaseVersionForSource(JSON.parse(git('show', `${base}:package.json`)).version) !== baseline.tag_name)
+    throw new Error('Formal release tag and baseline package version differ');
+  // This dependency is unavailable during the initial prepare job, before npm ci.
+  const { planRange } = await import('./ci-scope.mjs');
+  const plan = planRange(base, source.deployedSha);
+  if (!Array.isArray(plan.paths) || !Array.isArray(plan.features)) throw new Error('Unable to calculate the cumulative smoke range');
+  const path = join(process.env.RUNNER_TEMP, 'release-smoke-plan.json');
+  writeFileSync(
+    path,
+    JSON.stringify(
+      {
+        purpose: 'cumulative-release-feature-smoke-only',
+        repository,
+        version,
+        base,
+        head: source.deployedSha,
+        base_release: { id: baseline.id, tag: baseline.tag_name, published_at: baseline.published_at, tag_object: tagObject },
+        source_ci_run_id: runId,
+        plan,
+      },
+      null,
+      2,
+    ) + '\n',
+  );
+  console.log(`Feature smoke only: ${baseline.tag_name} ${base}..${source.deployedSha}; incremental deployment CI evidence is unchanged`);
+}
+
+async function main() {
   const source = releaseSource({
     eventName: process.env.GITHUB_EVENT_NAME,
     event: JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8')),
@@ -144,6 +225,7 @@ function main() {
   if (process.env.EXPECTED_DEPLOYED_SHA && mainSha !== process.env.EXPECTED_DEPLOYED_SHA) throw new Error('Main moved after release preparation');
   if (process.env.EXPECTED_RELEASE_SHA && releaseSha !== process.env.EXPECTED_RELEASE_SHA) throw new Error('Release branch moved after preparation');
   if (mainSha !== source.deployedSha) {
+    if (process.argv.includes('--smoke-plan')) throw new Error('Main changed before cumulative smoke preparation');
     const stale = decideRelease({ ...source, version, mainSha, releaseSha });
     console.log(`${version}: ${stale.reason}`);
     output({ version, should_release: false, deployed_sha: source.deployedSha, release_sha: releaseSha ?? '' });
@@ -155,6 +237,7 @@ function main() {
   const decision = decideRelease({ ...source, version, mainSha, releaseSha, releaseIsAncestor: ancestry?.status === 0, release });
   console.log(`${version}: ${decision.reason}`);
   if (!decision.shouldRelease) {
+    if (process.argv.includes('--smoke-plan')) throw new Error('This automatic release no longer needs preparation');
     output({ version, should_release: false, deployed_sha: source.deployedSha, release_sha: releaseSha ?? '' });
     return;
   }
@@ -176,15 +259,14 @@ function main() {
     pages.flatMap((page) => page.jobs),
     { repository, sha: source.deployedSha },
   );
+  if (process.argv.includes('--smoke-plan')) await writeReleaseSmokePlan({ source, repository, version, release, runId: run.id });
   if (process.argv.includes('--guard-git')) installGitGuard(version);
   output({ version, should_release: true, deployed_sha: source.deployedSha, release_sha: releaseSha, ci_run_id: run.id });
 }
 
 if (import.meta.url === pathToFileURL(resolve(process.argv[1] ?? '')).href) {
-  try {
-    main();
-  } catch (error) {
+  main().catch((error) => {
     console.error(error.message);
     process.exitCode = 1;
-  }
+  });
 }
