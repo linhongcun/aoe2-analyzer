@@ -40,3 +40,7 @@ PLAYWRIGHT_BROWSERS_PATH=/workspace/.cache/ms-playwright npx playwright test tes
 ```
 
 结构审核脚本只输出待审指纹，不自动批准。默认参数是透明场景偏好；非支配分组仅解释两个限定指标。#652的全文明、跨时代整局推荐未完成，不能由这次测试推导其有效性。
+
+## 发布前产物路径修正
+
+截图保存改用Playwright testInfo.outputPath，匹配CI的test-results/**/*.png归档；不改产品或断言。独立review652复核两行diff通过。原配置复跑mechanism652.spec.ts：13/13通过（29.5秒），实际产物位于test-results。用户后续授权推送、合并及部署；上文“未发布”是本地验收时点状态，正式发布状态以PR和准确main CI记录为准。

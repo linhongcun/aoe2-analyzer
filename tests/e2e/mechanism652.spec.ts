@@ -10,7 +10,7 @@ async function select(page: Page, lane = '边路') {
 }
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['dark', 'light']) {
-    test(`${width} ${theme} 场景指标与布局`, async ({ page }) => {
+    test(`${width} ${theme} 场景指标与布局`, async ({ page }, testInfo) => {
       const errors: string[] = [];
       page.on('pageerror', (e) => errors.push(e.message));
       page.on('console', (e) => {
@@ -38,7 +38,7 @@ for (const width of [360, 375, 390, 1280])
       await page.getByLabel('军事投入', { exact: true }).selectOption('12000');
       await page.getByLabel('场景距离', { exact: true }).selectOption('12');
       await page.getByLabel('反应延迟', { exact: true }).selectOption('0.5');
-      await page.screenshot({ path: `/workspace/652-evidence/scenes-${width}-${theme}.png`, fullPage: true });
+      await page.screenshot({ path: testInfo.outputPath(`scenes-${width}-${theme}.png`), fullPage: true });
       if (width === 360) {
         expect((await new AxeBuilder({ page }).include('[data-testid="scenario-suggestions"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual(
           [],

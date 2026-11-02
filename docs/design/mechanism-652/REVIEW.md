@@ -57,3 +57,7 @@
 已独立读取 /workspace/652-final-browser.log：最终浏览器89 passed（1.4m）。已独立读取 /workspace/652-sicilians-rerun.log：原设置单独复跑sicilians197.test.ts共96 passed（7.00s）；原超时用例实际1779ms通过。执行者明确未改timeout、源码或断言。保留上节首次完整单测287文件通过/1文件超时的真实记录，不改写为首次全量全绿，也不将重跑96用例重复计入全量通过数。
 
 最终结论：01a7e0b实现的代码与已检查界面通过本次独立复核；原单测失败在单独复跑时未复现，最终浏览器全部通过，当前无剩余独立审查阻断。证据支持交付本地审阅，不代表已经发布、已覆盖全文明或验证整局胜负推荐。之后若仅归档此审查记录为文档提交，以上运行与截图证据仍对应实际代码提交01a7e0b。
+
+## 发布前截图产物路径修正复核
+
+独立读取tests/e2e/mechanism652.spec.ts两行diff：只给测试回调增加testInfo，将固定/workspace/652-evidence截图路径换成testInfo.outputPath；未修改产品、模型或验收断言。核对ci.yml上传test-results/**/*.png、release.yml上传test-results，且已看到本次复跑实际生成test-results/mechanism652-.../scenes-...png，符合已有CI产物收集方式。此次修改审查通过。读取652-portable-screenshots.log时13项专项仍运行，完整结果待执行者确认；此记录不预先宣称复跑通过。未执行GitHub approval或发布操作。
