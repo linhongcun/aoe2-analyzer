@@ -245,7 +245,7 @@ export function LadderArabia({
           ) : (
             <>
               {view === 'tiers' && <LadderTiers civs={rows} />}
-              {view === 'meta' && <LadderMeta civs={rows} />}
+              {view === 'meta' && <LadderMeta civs={rows} sampleUnit={sampleUnit} />}
               {view === 'table' && (
                 <div className="ladder-table-card">
                   <table className="ladder-table" data-testid="ladder-table">

@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error CI scripts are plain Node modules
 import { applyBrowserPolicy, planChanges, planRange } from '../../scripts/ci-scope.mjs';
@@ -35,7 +36,15 @@ describe('PR 专项浏览器覆盖 #636', () => {
     expect(selected).toContain(`tests/e2e/${spec}.spec.ts`);
     expect(selected).toContain('tests/e2e/smoke.spec.ts');
     expect(selected).not.toContain('tests/e2e/v0300-338.spec.ts');
-    expect(selected.length).toBeLessThan(12);
+    const family = path.includes('ladder') ? 'ladder' : 'startGame';
+    const expected = [
+      'tests/e2e/smoke.spec.ts',
+      ...readdirSync('tests/e2e')
+        .filter((name) => name.startsWith(family) && name.endsWith('.spec.ts'))
+        .map((name) => `tests/e2e/${name}`),
+    ];
+    if (family === 'startGame') expected.push('tests/e2e/editorial6.spec.ts');
+    expect(selected).toEqual(expected.sort());
   });
 
   it.each(['0a47a49', '4b6d35a'])('真实提交 %s 的新增专项验收被选择', (short) => {

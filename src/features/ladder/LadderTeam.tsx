@@ -168,7 +168,7 @@ export function LadderTeam({
         <span className="nw">4v4</span> 随机地图 · 全图
       </p>
       {view === 'tiers' && <LadderTiers civs={rows} />}
-      {view === 'meta' && <LadderMeta civs={rows} />}
+      {view === 'meta' && <LadderMeta civs={rows} sampleUnit={sampleUnit} />}
       {view === 'table' && (
         <div className="ladder-table-card">
           <table className="ladder-table ladder-table-team" data-testid="ladder-table">
