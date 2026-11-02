@@ -5,6 +5,7 @@ import {
   DEFAULT_SCENE,
   SCENARIO_CIVS,
   scenarioRows,
+  scenarioProfile,
   scenarioVersion,
   type SceneConfig,
   type SceneContext,
@@ -45,6 +46,7 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
   const update = <K extends keyof SceneConfig>(key: K, value: SceneConfig[K]) => setCfg((c) => ({ ...c, [key]: value }));
   const version = scenarioVersion();
   const selectedOutside = state.choice.civ && !SCENARIO_CIVS[lane].includes(state.choice.civ);
+  const selectionReason = selectedOutside && context ? scenarioProfile(context, state.choice.civ!, lane, cfg).reason : '机制待核验';
   return (
     <section className="start-scenes" data-testid="scenario-suggestions" aria-labelledby="scene-heading">
       <h2 id="scene-heading">城堡时代场景建议</h2>
@@ -52,7 +54,11 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
         阿拉伯 <span className="num nw">4v4</span> · {lane === 'flank' ? '边路弩手' : '中路骑士'}。仅比较本场景指标，不是整局强度榜，也不覆盖全部文明。
       </p>
       <p className="start-hint">已升城堡，建筑和人口就绪，资源预付、科技已完成。军事投入预算不等于同一游戏分钟。</p>
-      {selectedOutside ? <p role="status">已选{civByEn(state.choice.civ!)?.zh}保留；该文明的此路线机制待核验，不能据此判为弱。</p> : null}
+      {selectedOutside ? (
+        <p role="status">
+          已选{civByEn(state.choice.civ!)?.zh}保留；{selectionReason}，不能据此判为弱；可以保留文明并考虑其它路线。
+        </p>
+      ) : null}
       <details className="start-scene-details">
         <summary>调整场景与投入</summary>
         <p className="start-hint">以下是可调整假设，不是阿拉伯地图距离统计。返回此步后恢复默认场景。</p>

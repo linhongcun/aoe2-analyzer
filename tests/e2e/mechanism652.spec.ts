@@ -107,3 +107,15 @@ test('数据加载失败时保留选择并可继续，不刷新整页', async ({
   await page.getByTestId('start-skip').click();
   await expect(page.getByTestId('start-summary')).toContainText('匈奴');
 });
+
+test('已选玛雅中路明确路线不可用，仍可保留继续', async ({ page }) => {
+  await select(page, '中路');
+  await page.getByRole('searchbox', { name: '搜索文明', exact: true }).fill('玛雅');
+  await page.getByRole('button', { name: /玛雅/ }).click();
+  await page.getByTestId('start-skip').click();
+  await page.getByRole('button', { name: '修改文明', exact: true }).click();
+  await expect(page.getByTestId('scenario-suggestions')).toContainText('此路线不可用');
+  await page.getByRole('button', { name: '保留此文明继续', exact: true }).click();
+  await page.getByTestId('start-skip').click();
+  await expect(page.getByTestId('start-summary')).toContainText('玛雅');
+});

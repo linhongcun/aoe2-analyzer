@@ -21,6 +21,7 @@ import {
   SCENE_ECO,
   coverageReason,
   scenarioRows,
+  scenarioProfile,
   scenarioScope,
   type SceneContext,
 } from '../../src/domain/positionScenarios';
@@ -191,4 +192,9 @@ it('#652 已支持文明射程效果重载后传播到解释与建议', async ()
     vi.doUnmock('../../src/data/effects.json');
     vi.resetModules();
   }
+});
+
+it('issue 652 已选未覆盖文明区分路线不存在与机制未审', () => {
+  expect(scenarioProfile(base, 'Mayans', 'pocket', DEFAULT_SCENE).status).toBe('unavailable');
+  expect(scenarioProfile(base, 'Lithuanians', 'pocket', DEFAULT_SCENE).status).toBe('blocked');
 });

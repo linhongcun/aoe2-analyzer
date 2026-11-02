@@ -106,7 +106,7 @@ const validCost = (cost: Cost | null | undefined): cost is Cost =>
   !!cost &&
   Object.keys(cost).length > 0 &&
   Object.entries(cost).every(([k, v]) => ['Food', 'Wood', 'Gold', 'Stone'].includes(k) && Number.isFinite(v) && v >= 0);
-function profile(ctx: SceneContext, civ: string, lane: Lane, cfg: SceneConfig): SceneRow {
+export function scenarioProfile(ctx: SceneContext, civ: string, lane: Lane, cfg: SceneConfig): SceneRow {
   const fail = (status: SceneRow['status'], reason: string): SceneRow => ({ civ, status, reason, preferred: false });
   const { core, trees } = ctx,
     eco = ctx.eco ?? SCENE_ECO;
@@ -207,9 +207,9 @@ function profile(ctx: SceneContext, civ: string, lane: Lane, cfg: SceneConfig): 
   };
 }
 export function scenarioRows(ctx: SceneContext, lane: Lane, cfg: SceneConfig): SceneRow[] {
-  const target = lane === 'flank' ? profile(ctx, 'Franks', 'flank', cfg) : null;
+  const target = lane === 'flank' ? scenarioProfile(ctx, 'Franks', 'flank', cfg) : null;
   const rows = SCENARIO_CIVS[lane].map((civ) => {
-    const row = profile(ctx, civ, lane, cfg);
+    const row = scenarioProfile(ctx, civ, lane, cfg);
     if (row.status !== 'ok' && row.status !== 'budget') return row;
     if (lane === 'flank') {
       if (!target?.stats || target.status === 'blocked' || target.status === 'unavailable')
