@@ -425,6 +425,58 @@ test('#/civ/Bengalis 孟加拉：种子③在洞察槽，不埋进特色兵种�
   await expect(slot(page).getByTestId('insight-item').filter({ hasText: RATHA_FOODLESS })).toBeVisible();
 });
 
+// #585 训练提示位于造价分区，单位洞察仍空；不复制文明洞察或泛化其它无粮单位。
+const RATHA_TRAINING_NOTE = '训练不消耗食物。';
+
+async function expectRathaTrainingCost(page: Page) {
+  const cost = page.locator('section[aria-label="造价与生产"]');
+  for (const resource of ['木材', '黄金']) {
+    await expect(cost.locator('.res').filter({ has: page.getByRole('img', { name: resource, exact: true }) })).toHaveText('60');
+  }
+  await expect(cost.getByRole('img', { name: '食物', exact: true })).toHaveCount(0);
+  await expectEmpty(slot(page));
+  expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
+  return cost;
+}
+
+for (const [id, name] of [
+  [1759, /^战车/],
+  [1761, /精锐战车/],
+] as const) {
+  test(`#585 /unit/${id} 造价区明确训练不消耗食物，切换后仍正确`, async ({ page }) => {
+    await openDetail(page, `/unit/${id}`, name);
+    const cost = await expectRathaTrainingCost(page);
+    await expect(cost.getByText(RATHA_TRAINING_NOTE, { exact: true })).toBeVisible();
+    await page.getByRole('radio', { name: id === 1759 ? '精锐' : '普通', exact: true }).click();
+    const swapped = await expectRathaTrainingCost(page);
+    await expect(swapped.getByText(RATHA_TRAINING_NOTE, { exact: true })).toBeVisible();
+    await leaveAndReturn(page, '相关');
+    await expect(page.locator('section[aria-label="造价与生产"]').getByText(RATHA_TRAINING_NOTE, { exact: true })).toBeVisible();
+  });
+}
+
+for (const [id, name] of [
+  [38, /^骑士/],
+  [1962, /^战车/],
+  [39, /^骑射手/],
+] as const) {
+  test(`#585 /unit/${id} 不因名字或无粮成本显示Ratha训练提示`, async ({ page }) => {
+    await openDetail(page, `/unit/${id}`, name);
+    await expect(page.locator('section[aria-label="造价与生产"]')).toBeVisible();
+    await expect(page.getByText(RATHA_TRAINING_NOTE, { exact: true })).toHaveCount(0);
+  });
+}
+
+test('#585 精锐战车升级研究仍显示800食物、800木材与45秒', async ({ page }) => {
+  await openDetail(page, '/unit/1761', /精锐战车/);
+  await expectRathaTrainingCost(page);
+  const upgrade = page.locator('section#ediff[aria-label="精锐升级"]');
+  for (const resource of ['食物', '木材']) {
+    await expect(upgrade.locator('.res').filter({ has: page.getByRole('img', { name: resource, exact: true }) })).toHaveText('800');
+  }
+  await expect(upgrade).toContainText('45s');
+});
+
 test('单位页两条洞察共用外壳，空槽外框保持一致', async ({ page }) => {
   await openDetail(page, '/unit/73', /^诸葛弩/);
   const chuKoNu = await slotShell(page);
@@ -488,10 +540,22 @@ for (const theme of ['light', 'dark']) {
       await expectNowrap(slot(page), /35\s*金/);
       await expectNoHScroll(page);
       if (width === 1280) await page.screenshot({ path: testInfo.outputPath(`hearth-${theme}.png`), fullPage: true });
-      await openDetail(page, '/unit/1759', /^战车/, width);
-      await expectEmpty(slot(page));
-      await expectNoHScroll(page);
-      if (width === 1280) await page.screenshot({ path: testInfo.outputPath(`ratha-empty-${theme}.png`), fullPage: true });
+      for (const [id, name] of [
+        [1759, /^战车/],
+        [1761, /精锐战车/],
+      ] as const) {
+        await openDetail(page, `/unit/${id}`, name, width);
+        const cost = await expectRathaTrainingCost(page);
+        const note = cost.getByText(RATHA_TRAINING_NOTE, { exact: true });
+        await expect(note).toBeVisible();
+        expect(await note.evaluate((el) => Number.parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(15);
+        await expectNoHScroll(page);
+        if (width === 1280) {
+          if (id === 1759) await page.screenshot({ path: testInfo.outputPath(`ratha-empty-${theme}.png`), fullPage: true });
+          expect((await new AxeBuilder({ page }).include('section[aria-label="造价与生产"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+        }
+        await page.screenshot({ path: testInfo.outputPath(`ratha-training-${id}-${theme}-${width}.png`), fullPage: true });
+      }
       await openDetail(page, '/civ/Bengalis', /孟加拉/, width);
       const region = await expectFixedSlot(page);
       await expect(region.getByTestId('insight-item')).toHaveCount(2);
