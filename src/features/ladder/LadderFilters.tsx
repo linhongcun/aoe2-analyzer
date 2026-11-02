@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { KeyboardEvent, ReactNode } from 'react';
 import type { LadderSnapshot } from '../../domain/ladder';
 import { eloFilterOptions, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
 import { Icon } from '../../shared/ui/Icon';
@@ -19,6 +19,7 @@ export function LadderFilters({
   team,
   onMode,
   onElo,
+  onEloRef,
 }: {
   mode: LadderModeId;
   elo: string;
@@ -26,10 +27,25 @@ export function LadderFilters({
   team: LadderSnapshot;
   onMode: (mode: LadderModeId) => void;
   onElo: (option: EloFilterOption) => void;
+  onEloRef?: (id: string, node: HTMLButtonElement | null) => void;
 }) {
   const teamMode = mode === '4v4';
   const eloOptions = eloFilterOptions(mode, elo, arabia, team);
   const checked = eloOptions.some((option) => option.current);
+  const onEloKey = (event: KeyboardEvent<HTMLButtonElement>, option: EloFilterOption) => {
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    const enabled = eloOptions.filter((item) => item.enabled);
+    const from = enabled.findIndex((item) => item.mode === option.mode && item.key === option.key);
+    if (from < 0) return;
+    let target: number;
+    if (event.key === 'Home') target = 0;
+    else if (event.key === 'End') target = enabled.length - 1;
+    else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') target = (from + 1) % enabled.length;
+    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') target = (from - 1 + enabled.length) % enabled.length;
+    else return;
+    event.preventDefault();
+    onElo(enabled[target]!);
+  };
   return (
     <div className="ladder-filters" data-testid="ladder-filters">
       <span className="ladder-filter-label">模式</span>
@@ -62,6 +78,8 @@ export function LadderFilters({
           return (
             <button
               key={`${option.mode}:${option.key}`}
+              // 保留内联 ref：选中属性更新或子树替换后，都交由根组件恢复焦点。
+              ref={(node) => onEloRef?.(`${option.mode}:${option.key}`, node)}
               type="button"
               role="radio"
               aria-checked={option.current}
@@ -74,6 +92,7 @@ export function LadderFilters({
               onClick={() => {
                 if (option.enabled) onElo(option);
               }}
+              onKeyDown={(event) => onEloKey(event, option)}
             >
               <span className="nw">{option.label}</span>
               {!option.enabled && <span className="ladder-fixed">暂无数据</span>}
