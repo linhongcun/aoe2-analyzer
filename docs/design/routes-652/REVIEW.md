@@ -94,3 +94,13 @@ generic中本路线相关的是tech20：age2对448攻击+2、视野+2、速度+0
 已独立读取 `/tmp/652-routes-unit-recheck.log` 终态：8文件中3失败、5通过；355项中4失败、351通过，269.24秒，该轮未记录RPC错误。正确浏览器路径下 release108、releaseDiagnostics641、releaseSmoke 均通过，poles197 与 garrisonTechBudget282 也通过。剩余4项全部是原5000ms超时：formatTime.consistency-1 的 hybrid-fish-18 × Wei（6717ms）；consistency-3 的同开局 × Cumans（5660ms）及 × Franks（5645ms）；malians197「当前八开局不建大学，原团队研究加成不改变结果或额外计入采金」（5487ms）。未改这些断言或超时阈值。
 
 已再核对相对基线的 buildSim 系列、builds、formatTimeConsistency、malians197及package依赖文件差异为空。尚未发现本阶段新改动导致上述超时的直接证据，但不能证明问题仅由环境导致。最终独立结论：本阶段代码、专项及视觉复核通过；全量验收未通过，剩余稳定性问题属于待发布阻断。停止无新证据的反复重跑；本轮保持本地交付，不发布、不扩大修改旧模拟器。首轮全量失败与RPC记录继续保留，失败文件复核不能替代一次完整全绿。
+
+## 受控基线诊断的独立复核
+
+已独立审阅 `DIAGNOSIS.md`、19次运行的Vitest JSON与metrics终态，以及Node20版本记录。报告的通过/失败计数、失败用例和耗时与原始证据一致。另已独立用TypeScript AST追踪旧失败用例传递导入（保守包含type import/re-export/dynamic import）、setup、Vite配置、eager glob与显式文件读取：共76文件与main逐文件内容/SHA256一致，无未解析相对导入，未引入新路线或ScenarioSuggestions模块。相关数据目录清单相同；两个工作树共享依赖实体。该证据排除了所审导入链中新模块直接参与的路径，不等同证明所有潜在性能差异已被排除。
+
+Node24精确单例四对中7通过1超时；整文件对照main的matrix1出现3个旧用例超时，当前matrix1与matrix3各1个超时，Malians两边48项通过。原四个剩余失败用例在整文件对照均通过，超时迁移到其他旧用例。故不能单凭Franks单对当前失败/main通过判定本轮代码回归，也不能把现象归于唯一已证实的环境原因。
+
+CI主版本Node20.20.2限定验证：当前matrix1 114通过、matrix3 113通过1超时（maa-archers-18 × Generic，8101.8ms）、Malians48通过、新路线23通过，合计298通过1超时；Node20 main的matrix3 114通过。main该文件墙钟79.174秒，当前67.638秒，整文件总时间不能替代单用例5000ms门禁。切换Node主版本没有消除全部超时，Node24并非已证实唯一根因。CPU节流记录亦不足以解释全部差异，不作未经验证的JIT/GC或宿主争用归因。
+
+最终审查结论仍是：新路线代码、专项和视觉复核通过；旧矩阵在本云环境的时间稳定性未满足全量发布门禁，没有全量全绿。诊断新增了干净main同类失败与完整导入审计证据，未通过放宽阈值或改断言消除失败。本轮不再无依据重跑、不修改旧模拟器、不发布。现有workflow_dispatch注明完整后台回归不部署；若后续获明确授权，可推送本分支并触发已有Node20完整CI以取得独立执行器证据，不能在当前仅本地范围内自行执行。该待办源于授权范围，不是工具拒绝，也不包含PR、合并或部署。
