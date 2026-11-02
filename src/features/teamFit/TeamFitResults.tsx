@@ -264,22 +264,44 @@ export default function TeamFitResults({ config, core, trees }: TeamFitResultsPr
         {projection.directions.map((direction) => (
           <section className="tf-direction" key={direction.role} data-testid={'fit-role-' + direction.role}>
             <h3>{FIT_ROLES[direction.role]}</h3>
-            <div className="tf-comparison">
-              <div>
-                <h4>队友已可提供</h4>
-                {config.mates.length === 0 ? (
-                  <p className="note">尚未加入队友</p>
-                ) : direction.existing.length ? (
-                  <Routes routes={direction.existing} core={core} added={false} />
+            {direction.added.length === 0 ? (
+              <div className="tf-unchanged">
+                <p className="note">
+                  暂无新增形态{projection.candidate.some((shape) => shape.roles.includes(direction.role)) ? '；同形态仍可由候选提供。' : '。'}
+                </p>
+                {direction.existing.length > 0 ? (
+                  <details className="tf-existing-list">
+                    <summary>查看已有完整清单（{direction.existing.length}条路线）</summary>
+                    {direction.existing.map((route) => (
+                      <Route key={route.key} route={route} core={core} added={false} />
+                    ))}
+                  </details>
                 ) : (
-                  <p className="note">暂无本方向已核对形态</p>
+                  <p className="note">{config.mates.length ? '暂无本方向已核对形态' : '尚未加入队友'}</p>
                 )}
               </div>
-              <div>
-                <h4>{config.mates.length ? '候选可补充' : '候选可选'}</h4>
-                {direction.added.length ? <Routes routes={direction.added} core={core} added /> : <p className="note">暂无新增形态；同形态仍可由候选提供。</p>}
+            ) : (
+              <div className="tf-comparison">
+                <div>
+                  <h4>队友已可提供</h4>
+                  {config.mates.length === 0 ? (
+                    <p className="note">尚未加入队友</p>
+                  ) : direction.existing.length ? (
+                    <Routes routes={direction.existing} core={core} added={false} />
+                  ) : (
+                    <p className="note">暂无本方向已核对形态</p>
+                  )}
+                </div>
+                <div>
+                  <h4>{config.mates.length ? '候选可补充' : '候选可选'}</h4>
+                  {direction.added.length ? (
+                    <Routes routes={direction.added} core={core} added />
+                  ) : (
+                    <p className="note">暂无新增形态；同形态仍可由候选提供。</p>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </section>
         ))}
       </section>

@@ -397,3 +397,23 @@ test('#558 键盘提交第三队友、清空、移除与损坏链接重置后保
   await page.keyboard.press('Enter');
   await expect(page.getByRole('button', { name: '你的候选：选择候选文明', exact: true })).toBeFocused();
 });
+
+test('#558 无新增方向保持紧凑，展开仍保留真实已有形态与地点条件', async ({ page }) => {
+  await page.goto(fitUrl());
+  await fitReady(page);
+  const siege = page.getByTestId('fit-role-siege');
+  await expect(siege).toContainText('暂无新增形态；同形态仍可由候选提供。');
+  await expect(siege.locator('.tf-comparison')).toHaveCount(0);
+  const existing = siege.locator('.tf-existing-list');
+  await expect(existing).not.toHaveAttribute('open', '');
+  const ram = existing.locator('[data-shape="Siege Ram"]').first();
+  await expect(ram).toBeHidden();
+  await existing.getByText(/查看已有完整清单/, { exact: false }).click();
+  await expect(ram).toBeVisible();
+  await ram.getByText('地点与研究条件', { exact: true }).click();
+  await expect(ram.getByRole('link', { name: '单位详情', exact: true }).first()).toBeVisible();
+  await expect(ram).toContainText('攻城武器厂');
+  await page.goto(fitUrl('Mayans', 'Franks'));
+  await fitReady(page);
+  await expect(page.getByTestId('fit-role-cavalry')).not.toContainText('同形态仍可由候选提供');
+});
