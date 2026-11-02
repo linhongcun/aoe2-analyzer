@@ -24,6 +24,7 @@ const LOADERS: Record<LazyComponentId, LazyExoticComponent<ComponentType>> = {
   Market: lazy(() => import('../features/market/Market')),
   TradeIncome: lazy(() => import('../features/tradeIncome/TradeIncome')),
   Construction: lazy(() => import('../features/construction/Construction')),
+  TeamFit: lazy(() => import('../features/teamFit/TeamFit')),
   TeamBonuses: lazy(() => import('../features/teamBonuses/TeamBonuses')),
   GarrisonHealing: lazy(() => import('../features/garrisonHealing/GarrisonHealing')),
   GameClock: lazy(() => import('../features/gameClock/GameClock')),

@@ -1,0 +1,97 @@
+{
+  "sourceCommit": "457f638f6af120b90ab7340c3c29798ea5ee5354",
+  "sourceFileSha256": {
+    "src/data/units.json": "f580e0e0e67c6728e3d44cf3dd68b79a330c5444f15351fde62ae31d122c896d",
+    "src/data/trees.json": "9359bcfadbb5edb5792b3ffbe03a9f0b2fcb3a8a2a05f9b93611bf5d5c62150a"
+  },
+  "eligibility": "unit.civs includes civilization AND civStatus(uID) equals1;1260 excluded from ordinary channel",
+  "counterexample": {
+    "before": ["Franks"],
+    "candidate": "Sicilians",
+    "falseNewProductionAliases": [
+      {
+        "candidateId": 1786,
+        "englishForm": "Spearman",
+        "zh": "长矛兵",
+        "productionBuilding": 1665,
+        "unitCivs": ["Sicilians"],
+        "candidateTreeStatus": 1,
+        "alreadyOwnedBefore": [
+          {
+            "id": 93,
+            "building": 12,
+            "treeStatus": 1
+          }
+        ]
+      },
+      {
+        "candidateId": 1787,
+        "englishForm": "Pikeman",
+        "zh": "长枪兵",
+        "productionBuilding": 1665,
+        "unitCivs": ["Sicilians"],
+        "candidateTreeStatus": 1,
+        "alreadyOwnedBefore": [
+          {
+            "id": 358,
+            "building": 12,
+            "treeStatus": 1
+          }
+        ]
+      },
+      {
+        "candidateId": 1788,
+        "englishForm": "Halberdier",
+        "zh": "长戟兵",
+        "productionBuilding": 1665,
+        "unitCivs": ["Sicilians"],
+        "candidateTreeStatus": 1,
+        "alreadyOwnedBefore": [
+          {
+            "id": 359,
+            "building": 12,
+            "treeStatus": 1
+          }
+        ]
+      }
+    ],
+    "allRawAddedIds": [492, 548, 588, 1658, 1659, 1660, 1661, 1786, 1787, 1788],
+    "actualNewFullEnglishForms": ["Arbalester", "Elite Serjeant", "Serjeant", "Siege Onager", "Siege Ram"]
+  },
+  "franksFixedScenario": {
+    "before": ["Persians", "Mayans"],
+    "candidate": "Franks",
+    "rawAddedIds": [281, 531, 567, 569, 2700, 2701],
+    "newFullEnglishForms": ["Champion", "Elite Throwing Axeman", "Heavy Mounted Crossbowman", "Mounted Crossbowman", "Paladin", "Throwing Axeman"]
+  },
+  "identityRule": "Use complete English form names under the existing collapse same-en production-alias equivalence, after explicit special-channel classification. Retain raw IDs, providers and production locations. Do not strip Elite or reduce to base family before differences.",
+  "branchExamplesRemainDistinct": [
+    ["Paladin", "Savar"],
+    ["Cavalry Archer", "Mounted Crossbowman"],
+    ["Kipchak", "Elite Kipchak"]
+  ],
+  "reviewScope": "Read-only data/spec review; no production changes or implementation test suite executed.",
+  "hunsProductionAliasCheck": {
+    "ordinaryForm": {
+      "castle": 755,
+      "stable": 886,
+      "en": "Tarkan"
+    },
+    "eliteForm": {
+      "castle": 757,
+      "stable": 887,
+      "en": "Elite Tarkan"
+    },
+    "allFourEligible": "All4 belong only toHuns and all4 Huns tree cells equal1 under complete potential",
+    "crossBeforeCounterexample": false,
+    "reason": "If before hasHuns all4IDs already exist; otherwise there are2new forms represented by4raw IDs",
+    "stableCondition": {
+      "technology": 483,
+      "zh": "掠夺者",
+      "age": 3,
+      "researchBuilding": 82,
+      "source": "src/domain/production.ts:160 and src/data/techs.json"
+    },
+    "normalizationRequirement": "Retain per-location unlock conditions; merging production aliases must not imply Marauders already researched."
+  }
+}

@@ -1,0 +1,311 @@
+.team-fit-page {
+  max-width: 1100px;
+  margin: auto;
+}
+.team-fit-page .tf-heading {
+  padding: 0;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  margin-bottom: var(--space-8);
+}
+.team-fit-page .tf-eyebrow {
+  color: var(--color-accent);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+.team-fit-page h1 {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--space-3);
+}
+.team-fit-page h2 {
+  font-size: var(--fs-h3);
+  margin: 0 0 var(--space-3);
+}
+.team-fit-page h3 {
+  font-size: var(--fs-body);
+  margin: 0;
+}
+.team-fit-page h4 {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  margin: 0 0 var(--space-3);
+}
+.team-fit-page p {
+  margin: var(--space-2) 0;
+}
+.team-fit-page a {
+  color: var(--color-link);
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.team-fit-page .btn {
+  min-height: 44px;
+}
+.team-fit-page .tf-selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  margin-bottom: var(--space-8);
+}
+.team-fit-page .tf-selectors > section {
+  padding: var(--space-5);
+  min-width: 0;
+}
+.team-fit-page .tf-candidate {
+  background: var(--color-surface-2);
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+.team-fit-page .tf-count {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  white-space: nowrap;
+  font-weight: 400;
+  margin-left: var(--space-2);
+}
+.team-fit-page .tf-mates {
+  display: grid;
+  gap: var(--space-2);
+}
+.team-fit-page .tf-mate {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-2);
+  min-width: 0;
+}
+.team-fit-page .tf-mate .civpick {
+  flex: 1;
+  min-width: 0;
+}
+.team-fit-page .civpick {
+  max-width: 100%;
+}
+.team-fit-page .cp-trigger {
+  width: 100%;
+  min-height: 48px;
+}
+.team-fit-page .tf-remove {
+  min-width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  display: grid;
+  place-items: center;
+}
+.team-fit-page .tf-empty {
+  text-align: center;
+  padding: var(--space-10) var(--space-4);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-6);
+}
+.team-fit-page .tf-empty h2 {
+  font-size: 22px;
+}
+.team-fit-page .tf-source-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  margin-bottom: var(--space-10);
+}
+.team-fit-page .tf-source-grid > section {
+  min-width: 0;
+}
+.team-fit-page .tf-source {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin: var(--space-4) 0;
+  background: var(--color-surface);
+}
+.team-fit-page .tf-source header {
+  padding: 0;
+  text-align: left;
+  background: transparent;
+  border: 0;
+}
+.team-fit-page .tf-source header h3 {
+  margin-bottom: var(--space-2);
+}
+.team-fit-page .tf-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+.team-fit-page .tf-tag {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  padding: 2px 7px;
+  background: var(--color-tag);
+  color: var(--color-text-2);
+  border-radius: var(--radius-pill);
+  line-height: 1.7;
+}
+.team-fit-page .tf-new {
+  background: var(--color-route-current);
+  color: var(--color-on-route-current);
+}
+.team-fit-page .tf-providers {
+  font-size: var(--fs-sm);
+}
+.team-fit-page .tf-condition {
+  background: var(--color-surface-2);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-size: var(--fs-sm);
+  color: var(--color-text-2);
+}
+.team-fit-page .tf-condition p {
+  margin-bottom: 0;
+}
+.team-fit-page .tf-number {
+  white-space: nowrap;
+}
+.team-fit-page .tf-detail {
+  border-top: 1px solid var(--color-line);
+  margin-top: var(--space-2);
+}
+.team-fit-page summary {
+  min-height: 44px;
+  padding: var(--space-3) 0;
+  cursor: pointer;
+  font-size: var(--fs-sm);
+  color: var(--color-link);
+}
+.team-fit-page details ul {
+  padding-left: var(--space-5);
+  font-size: var(--fs-sm);
+}
+.team-fit-page .tf-relation {
+  margin-bottom: var(--space-4);
+  font-size: var(--fs-sm);
+}
+.team-fit-page .tf-relation strong {
+  color: var(--color-text-2);
+}
+.team-fit-page .tf-neutral,
+.team-fit-page .tf-solo {
+  background: var(--color-surface-2);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  color: var(--color-muted);
+}
+.team-fit-page .tf-direction {
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+}
+.team-fit-page .tf-direction > h3 {
+  font-size: var(--fs-h3);
+  margin-bottom: var(--space-4);
+}
+.team-fit-page .tf-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+.team-fit-page .tf-comparison > div {
+  min-width: 0;
+}
+.team-fit-page .tf-route {
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+}
+.team-fit-page .tf-route > .tf-tag {
+  margin-bottom: var(--space-2);
+}
+.team-fit-page .tf-shape {
+  padding-top: var(--space-1);
+}
+.team-fit-page .tf-shape .tf-tag {
+  margin-left: var(--space-2);
+}
+.team-fit-page .tf-shape p {
+  margin: var(--space-1) 0;
+}
+.team-fit-page .tf-more {
+  padding: 0 var(--space-3);
+}
+.team-fit-page .tf-bottom {
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+}
+.team-fit-page .tf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  margin: var(--space-5) 0 var(--space-3);
+}
+.team-fit-page .tf-error {
+  border: 1px solid var(--color-bad);
+  background: var(--color-bad-soft);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+}
+.team-fit-page .tf-loading {
+  padding: var(--space-5);
+  color: var(--color-muted);
+}
+.team-fit-page .tf-manual {
+  display: grid;
+  gap: var(--space-2);
+}
+.team-fit-page .tf-manual input {
+  width: 100%;
+  min-height: 44px;
+}
+@media (max-width: 700px) {
+  .team-fit-page .tf-selectors,
+  .team-fit-page .tf-source-grid,
+  .team-fit-page .tf-comparison {
+    grid-template-columns: 1fr;
+  }
+  .team-fit-page .tf-candidate {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .team-fit-page .tf-source-grid {
+    gap: var(--space-4);
+  }
+  .team-fit-page .tf-comparison {
+    gap: var(--space-4);
+  }
+  .team-fit-page .tf-heading {
+    margin-bottom: var(--space-6);
+  }
+  .team-fit-page .tf-selectors > section {
+    padding: var(--space-4);
+  }
+}
+/* Trigger accessible names follow the Chinese label, as in the existing team viewer. */
+.team-fit-page .tf-selectors .cp-trigger .cp-name small {
+  display: none;
+}
+.team-fit-page .tf-related-preview {
+  font-size: var(--fs-sm);
+}
+
+.team-fit-page .tf-candidate > .civpick {
+  display: block;
+  width: 100%;
+}
+@media (max-width: 700px) {
+  .team-fit-page h1 {
+    font-size: var(--fs-h2);
+  }
+}
