@@ -235,6 +235,29 @@ test('#/unit/2705 扈从部队：种子①标枪 + 种子②无粮步兵，不�
   await expect(slot(page).getByTestId('insight-item').filter({ hasText: '无粮步兵（对照火矛兵）' })).toBeVisible();
 });
 
+for (const [id, title] of [
+  [2705, /扈从部队/],
+  [2706, /精锐扈从部队/],
+] as const) {
+  test(`#582 /unit/${id} 概览明确基础标枪无需先研远程科技`, async ({ page }) => {
+    await openDetail(page, `/unit/${id}`, title);
+    const region = await expectFixedSlot(page);
+    const texts = await expectList(region);
+    expect(texts).toHaveLength(2);
+    expect(texts[0]).toContain('近战前自带投掷标枪');
+    expect(texts[1]).toBe('无粮步兵（对照火矛兵）。');
+    expect(texts.join('\n')).not.toMatch(/驻扎|基础箭|第一个|第二个/);
+    expect(await unitNeighbors(page)).toEqual({ underCost: true, aboveStats: true });
+    await expectNowrap(region, /80\s*木/);
+    await expectNowrap(region, /35\s*金/);
+    await expect(region.getByTestId('insight-item').first()).toContainText('无需先研远程科技');
+    await leaveAndReturn(page, '相关');
+    await expect(slot(page)).toContainText('无需先研远程科技');
+    expect((await new AxeBuilder({ page }).include('[data-testid="insight-slot"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+    await expectNoHScroll(page);
+  });
+}
+
 test('#/civ/Malians 马里：种子⑧空城 8 箭，禁旧 +5，不与山城堡混写', async ({ page }) => {
   await openDetail(page, '/civ/Malians', /马里/);
   const region = await expectFixedSlot(page);
