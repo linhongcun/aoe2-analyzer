@@ -368,3 +368,41 @@ button.start-chip.is-done {
     padding: var(--space-4);
   }
 }
+
+/* issue 652 限定场景，在现有文明步骤内逐层展开。 */
+.start-scenes {
+  margin-top: var(--space-4);
+  min-width: 0;
+}
+.start-scenes h2 {
+  font-size: var(--fs-h3);
+}
+.start-scene-card {
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.start-scene-details summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--color-accent);
+}
+.start-scene-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: var(--space-3);
+}
+.start-scene-controls label {
+  display: grid;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  min-width: 0;
+}
+.start-scene-controls select {
+  min-height: 44px;
+  width: 100%;
+  max-width: 100%;
+}

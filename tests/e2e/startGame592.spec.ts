@@ -1,7 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const WIDTHS = [360, 375, 390, 1280] as const;
-const FRANK = '骑兵从封建时代起生命更高，磨坊科技免费，中路适合发育后出骑士。';
 
 async function noOverflow(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -59,8 +58,9 @@ test.describe('首页开一局 #592', () => {
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');
     await page.getByRole('button', { name: /^中路/ }).click();
     const franks = page.getByRole('button', { name: /法兰克/ });
-    await expect(franks).toContainText(FRANK);
-    await expect(franks).toContainText('编辑口径，不是胜率');
+    await expect(page.getByTestId('scene-Franks')).toContainText('期限前');
+    await expect(franks).toBeVisible();
+    await expect(page.getByTestId('scenario-suggestions')).toContainText('城堡时代场景建议');
     await expect(page.getByRole('link', { name: '查看法兰克', exact: true })).toHaveAttribute('href', /#\/civ\/Franks$/);
     await page.getByTestId('start-back').click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');
@@ -98,7 +98,8 @@ test.describe('首页开一局 #592', () => {
     await page.getByRole('button', { name: '组队随机地图', exact: false }).click();
     await page.getByRole('button', { name: '4v4', exact: true }).click();
     await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
-    await expect(page.getByRole('button', { name: /法兰克/ })).toContainText(FRANK);
+    await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
+    await expect(flowText(page)).toContainText('当前条件暂无机制建议');
     await expect(page.getByRole('button', { name: /不列颠/ })).toBeVisible();
     await page.getByRole('button', { name: '补路位', exact: true }).click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');

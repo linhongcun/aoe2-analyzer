@@ -1,7 +1,7 @@
 /**
  * 首页「开一局」的步骤状态（issue 592）。
  * 模式始终在地图前。路位只在组队、并且这一格还在流程里时出现，步数不固定。
- * 跳过不写入默认选择。改更早的答案会清掉它后面的选择。
+ * 跳过不写入默认选择。修改条件保留玩家已选文明；明确跳过文明或再开一局才清除。
  */
 import { mapPosTips, type MapPosTip } from './mapPositions';
 
@@ -119,7 +119,6 @@ function clearDownstream(state: StartState, step: StepId): StartState {
       choice.mapId = null;
       prefilled.map = false;
     } else if (id === 'lane') choice.lane = null;
-    else if (id === 'civ') choice.civ = null;
   }
   return { ...state, choice, skipped, prefilled };
 }

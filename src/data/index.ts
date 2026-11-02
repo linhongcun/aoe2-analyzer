@@ -26,8 +26,8 @@ export interface Core {
 let corePromise: Promise<Core> | null = null;
 export let coreCache: Core | null = null;
 export function loadCore(): Promise<Core> {
-  corePromise ??= Promise.all([import('./units.json'), import('./techs.json'), import('./buildings.json'), import('../domain/introductions')]).then(
-    ([u, t, b, { unitDlc, buildingDlc, techDlc, techUpdate }]) => {
+  corePromise ??= Promise.all([import('./units.json'), import('./techs.json'), import('./buildings.json'), import('../domain/introductions')])
+    .then(([u, t, b, { unitDlc, buildingDlc, techDlc, techUpdate }]) => {
       const units = (u.default as unknown as Unit[]).map((x) => ({ ...x, dlc: unitDlc(x) }));
       const techs = (t.default as unknown as Tech[]).map((x) => ({ ...x, dlc: techDlc(x), introducedUpdate: techUpdate(x) }));
       const unitById: Record<number, Unit> = {};
@@ -52,14 +52,23 @@ export function loadCore(): Promise<Core> {
         fam: buildFamilies(units, unitById),
       };
       return coreCache;
-    },
-  );
+    })
+    .catch((error: unknown) => {
+      // 网络失败不永久缓存拒绝结果；局部重试保留调用方的玩家选择。
+      corePromise = null;
+      throw error;
+    });
   return corePromise;
 }
 
 let treesPromise: Promise<Trees> | null = null;
 export let treesCache: Trees | null = null;
 export function loadTrees(): Promise<Trees> {
-  treesPromise ??= import('./trees.json').then((m) => (treesCache = m.default as unknown as Trees));
+  treesPromise ??= import('./trees.json')
+    .then((m) => (treesCache = m.default as unknown as Trees))
+    .catch((error: unknown) => {
+      treesPromise = null;
+      throw error;
+    });
   return treesPromise;
 }

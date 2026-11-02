@@ -2,6 +2,10 @@
 
 本文件记录 aoe2-analyzer 每个版本的变化，格式参照 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## v0.74.15
+
+- 开一局新增阿拉伯 4v4 城堡时代场景建议，解释边路先手机会与中路支援；修改条件保留已选文明（#652）。
+
 ## 版本号规则
 
 采用[语义化版本](https://semver.org/lang/zh-CN/)「主版本.次版本.修订号」：
