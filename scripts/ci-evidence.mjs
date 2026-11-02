@@ -86,11 +86,11 @@ export function planCovers(available, required) {
   // A pull_request full plan records browser:"capped" and must not skip a later full browser run.
   if (bBrowser === 'full' && aBrowser !== 'full') return false;
   if (a.full && aBrowser === 'full') return true;
-  if (b.full) return false;
+  if (b.full && !a.full) return false;
   if (bBrowser !== 'none' && aBrowser === 'none') return false;
   return (
     b.features.every((feature) => a.features.includes(feature)) &&
-    b.unit.every((path) => containsPattern(a.unit, path)) &&
+    (a.full || b.unit.every((path) => containsPattern(a.unit, path))) &&
     b.e2e.every((path) => containsPattern(a.e2e, path))
   );
 }
@@ -175,20 +175,44 @@ export function validateEvidence({ manifest, run, jobs, artifact, commit, curren
 }
 
 /** At most two records: a reused build points directly at the original execution, never at an arbitrary chain. */
-export async function findReusableEvidence({ runs, current, api, download }) {
+export async function findReusableEvidence({ runs, current, api, download, now = Date.now, budgetMs = 10_000 }) {
+  const deadline = now() + budgetMs;
+  const remaining = () => {
+    const ms = Math.floor(deadline - now());
+    if (!(ms > 0)) throw new Error('Evidence lookup budget exhausted');
+    return ms;
+  };
+  const cache = new Map();
+  const query = async (endpoint) => {
+    remaining();
+    if (!cache.has(endpoint)) {
+      const result = await api(endpoint, { timeout: remaining() });
+      remaining();
+      cache.set(endpoint, result);
+    }
+    return cache.get(endpoint);
+  };
   const load = async (run) => {
     if (!trustedRun(run, current.repository) || run.id === current.run_id) return null;
     const prefix = `repos/${current.repository}/actions/runs/${run.id}`;
-    const artifacts = (await api(`${prefix}/artifacts?per_page=100`)).artifacts ?? [];
+    const artifacts = (await query(`${prefix}/artifacts?per_page=100`)).artifacts ?? [];
     const matching = artifacts.filter((item) => item.name === EVIDENCE_ARTIFACT && !item.expired);
     if (!matching.length) return null;
-    const jobs = (await api(`${prefix}/attempts/${run.run_attempt}/jobs?per_page=100`)).jobs;
-    if (!jobs?.some((job) => job.name === 'test' && job.status === 'completed' && job.conclusion === 'success')) return null;
     for (const artifact of matching.sort((a, b) => b.id - a.id)) {
       try {
-        const manifest = await download(artifact);
-        if (!SHA.test(manifest?.tested_commit ?? '')) continue;
-        const commit = await api(`repos/${current.repository}/git/commits/${manifest.tested_commit}`);
+        const manifest = await download(artifact, { timeout: remaining() });
+        remaining();
+        // Rejection only: a match still needs all GitHub-owned provenance below.
+        if (
+          !SHA.test(manifest?.tested_commit ?? '') ||
+          manifest.version !== 1 ||
+          manifest.tested_tree !== current.tree ||
+          manifest.policy_digest !== current.policy ||
+          !planCovers(manifest.plan, current.plan)
+        )
+          continue;
+        const jobs = (await query(`${prefix}/attempts/${run.run_attempt}/jobs?per_page=100`)).jobs;
+        const commit = await query(`repos/${current.repository}/git/commits/${manifest.tested_commit}`);
         if (validateEvidence({ manifest, run, jobs, artifact, commit, current }).ok) return manifest;
       } catch {
         // Missing or malformed evidence means current relevant validation, not a fabricated green result.
@@ -198,12 +222,15 @@ export async function findReusableEvidence({ runs, current, api, download }) {
   };
   for (const run of runs) {
     try {
+      remaining();
       const manifest = await load(run);
+      remaining();
       if (!manifest) continue;
       if (manifest.executed) return { run_id: run.id, source_run_id: run.id, source_run_attempt: run.run_attempt, plan: normalizePlan(manifest.plan) };
       if (manifest.source_run_id === current.run_id) continue;
-      const sourceRun = await api(`repos/${current.repository}/actions/runs/${manifest.source_run_id}`);
+      const sourceRun = await query(`repos/${current.repository}/actions/runs/${manifest.source_run_id}`);
       const source = await load(sourceRun);
+      remaining();
       if (
         !source?.executed ||
         source.source_run_id !== source.run_id ||
@@ -258,15 +285,16 @@ export function createEvidence(current, event, reuse = null) {
   };
 }
 
-function ghApi(endpoint) {
+function ghApi(endpoint, { timeout = 10_000 } = {}) {
   try {
-    return JSON.parse(execFileSync('gh', ['api', endpoint], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 4_194_304 }));
+    return JSON.parse(execFileSync('gh', ['api', endpoint], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 4_194_304, timeout }));
   } catch {
     throw new Error('GitHub evidence API unavailable');
   }
 }
 
-function downloadEvidence(repository, artifact) {
+function downloadEvidence(repository, artifact, { timeout = 10_000 } = {}) {
+  const deadline = Date.now() + timeout;
   if (!positive(artifact.id) || !(artifact.size_in_bytes > 0 && artifact.size_in_bytes <= 1_048_576)) throw new Error('Invalid evidence artifact');
   const directory = mkdtempSync(join(process.env.RUNNER_TEMP || tmpdir(), 'ci-evidence-'));
   try {
@@ -276,13 +304,17 @@ function downloadEvidence(repository, artifact) {
       execFileSync('gh', ['api', `repos/${repository}/actions/artifacts/${artifact.id}/zip`], {
         stdio: ['ignore', 'pipe', 'pipe'],
         maxBuffer: 2_097_152,
+        timeout,
       }),
     );
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) throw new Error('Evidence lookup budget exhausted');
     return JSON.parse(
       execFileSync('unzip', ['-p', archive, 'ci-evidence.json'], {
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],
         maxBuffer: 1_048_576,
+        timeout: remaining,
       }),
     );
   } finally {
@@ -354,12 +386,20 @@ async function main() {
       return;
     }
     let reuse = null;
+    const started = Date.now();
     try {
       const runs = ghApi(`repos/${current.repository}/actions/workflows/ci.yml/runs?status=success&per_page=30`).workflow_runs;
-      reuse = await findReusableEvidence({ runs, current, api: ghApi, download: (artifact) => downloadEvidence(current.repository, artifact) });
+      reuse = await findReusableEvidence({
+        runs,
+        current,
+        api: ghApi,
+        budgetMs: 10_000 - (Date.now() - started),
+        download: (artifact, options) => downloadEvidence(current.repository, artifact, options),
+      });
     } catch {
       // API/retention failures affect only reuse; they never bypass current checks.
     }
+    console.log(`Evidence lookup: ${Date.now() - started}ms elapsed; 10000ms budget; ${reuse ? 'hit' : 'miss, execute current plan'}`);
     if (reuse) writeFileSync(reusePath, JSON.stringify({ ...reuse, current_run_id: current.run_id, tree: current.tree, policy: current.policy }) + '\n');
     output({ reused: !!reuse, reuse_run_id: reuse?.run_id ?? '' });
     console.log(

@@ -57,7 +57,7 @@ const sourceChecks = [
 export const PROFILES = {
   // Page-local hotkeys presentation only. The action catalog, storage logic and other domain files stay full.
   hotkeys: profile(['hotkeys236'], ['smoke', 'hotkeys236', 'hotkeys626']),
-  home: profile(['startGame592', 'startGame632'], ['smoke', 'editorial6', 'startGame592', 'startGame632']),
+  home: profile(['startGame592', 'startGame632', 'mechanism652'], ['smoke', 'editorial6', 'startGame592', 'startGame632', 'mechanism652']),
   ladder: profile(
     ['ladder33', 'ladder569', 'ladder571', 'ladder577-query', 'ladder577-snapshot', 'ladder580', 'ladder633', 'ladder635', 'ladder625'],
     [
@@ -477,6 +477,10 @@ export function planChanges(changes) {
     const { path, before, after } = change;
     if (path === 'package.json' || path === 'package-lock.json') {
       if (!versionOnly(path, before, after)) full = data = true;
+    } else if (path === 'src/data/index.ts') {
+      // Audited runtime loader, not a generation input. Keep full consumer validation.
+      // Never clear data=true from another changed input. Unknown data files stay conservative.
+      full = true;
     } else if (path === 'src/data/page-metadata.json') {
       // Exact generated route/share metadata only; game data paths and mixed changes remain full + data.
       full = true;

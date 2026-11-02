@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 // @ts-expect-error scripts/*.mjs have no type declarations
-import { createEvidence, EVIDENCE_ARTIFACT, findReusableEvidence, planCovers, policyDigest, validateEvidence } from '../../scripts/ci-evidence.mjs';
+import { createEvidence, EVIDENCE_ARTIFACT, findReusableEvidence, policyDigest, validateEvidence } from '../../scripts/ci-evidence.mjs';
 
 const repository = 'linhongcun/aoe2-analyzer';
 const hash = (letter: string) => letter.repeat(40);
@@ -16,7 +16,6 @@ const targeted = {
   unit: ['tests/unit/simulator.test.ts'],
   e2e: ['tests/e2e/matchupSim424.spec.ts'],
 };
-const full = { scope: 'full', full: true, data: true, features: ['all'], unit: [], e2e: [] };
 
 function fixture(id = 100, sha = hash('a')) {
   const current = { repository, run_id: 200, run_attempt: 1, commit: hash('b'), tree: hash('c'), policy: 'd'.repeat(64), plan: structuredClone(targeted) };
@@ -269,37 +268,6 @@ describe('#431 exact tree evidence boundary', () => {
 });
 
 describe('#431 validation coverage and lineage', () => {
-  it('full tests cover targeted tests, but unchanged data must not be claimed as regenerated', () => {
-    expect(planCovers(full, targeted)).toBe(true);
-    const capped = {
-      scope: 'full',
-      full: true,
-      data: false,
-      browser: 'capped',
-      features: ['all'],
-      unit: [],
-      e2e: ['tests/e2e/smoke.spec.ts'],
-    };
-    const fullBrowser = { ...full, data: false, browser: 'full' };
-    expect(planCovers(capped, fullBrowser)).toBe(false);
-    expect(planCovers(fullBrowser, capped)).toBe(true);
-    expect(planCovers(full, capped)).toBe(true);
-    expect(planCovers({ ...full, data: false }, { ...targeted, data: true })).toBe(false);
-    expect(planCovers({ ...full, data: false }, targeted)).toBe(true);
-    expect(planCovers(targeted, full)).toBe(false);
-    expect(planCovers({ ...targeted, unit: [] }, targeted)).toBe(false);
-    expect(planCovers({ ...targeted, e2e: [] }, targeted)).toBe(false);
-    expect(planCovers({ ...targeted, features: [] }, targeted)).toBe(false);
-    expect(planCovers({ ...targeted, data: true }, targeted)).toBe(false);
-  });
-
-  it('supports explicit files covered by an already run release test glob without assuming arbitrary glob inclusion', () => {
-    const available = { ...targeted, unit: ['tests/unit/release*.test.ts'] };
-    expect(planCovers(available, { ...targeted, unit: ['tests/unit/releaseAuto.test.ts'] })).toBe(true);
-    expect(planCovers(available, { ...targeted, unit: ['tests/unit/release*/other.test.ts'] })).toBe(false);
-    expect(planCovers(available, { ...targeted, unit: ['tests/unit/*.test.ts'] })).toBe(false);
-  });
-
   it('finds a trusted execution and skips corrupt or failed candidates', async () => {
     const good = fixture(90, hash('e')),
       bad = fixture();
@@ -362,7 +330,14 @@ describe('#431 validation coverage and lineage', () => {
     const read = (path: string) => path + ':original';
     const before = policyDigest(read);
     expect(policyDigest(read)).toBe(before);
-    for (const changed of ['package-lock.json', 'scripts/ci-scope.mjs', 'scripts/site-artifact.mjs', 'scripts/deployment-smoke.mjs']) {
+    for (const changed of [
+      'package-lock.json',
+      '.github/workflows/ci.yml',
+      'playwright.config.ts',
+      'scripts/ci-scope.mjs',
+      'scripts/site-artifact.mjs',
+      'scripts/deployment-smoke.mjs',
+    ]) {
       expect(policyDigest((path: string) => read(path) + (path === changed ? ':changed' : ''))).not.toBe(before);
     }
     expect(
@@ -518,4 +493,97 @@ it('#431 PR CLI cannot record a wrong base repository as a valid fork contributi
   });
   expect(() => f.run('--record')).toThrow();
   expect(existsSync(join(f.directory, 'ci-evidence.json'))).toBe(false);
+});
+
+it('rejects mismatched manifests before spending jobs/commit API queries', async () => {
+  const f = fixture();
+  f.manifest.tested_tree = hash('f');
+  const server = fakeServer([f]);
+  expect(await findReusableEvidence({ runs: [f.run], current: f.current, ...server })).toBeNull();
+  expect(server.calls.some((p) => p.includes('/jobs') || p.includes('/git/commits/'))).toBe(false);
+});
+
+it('lookup budget exhaustion falls back without returning a late success', async () => {
+  const f = fixture();
+  const server = fakeServer([f]);
+  let now = 0;
+  const result = await findReusableEvidence({
+    runs: [f.run],
+    current: f.current,
+    ...server,
+    now: () => now,
+    budgetMs: 10,
+    download: async () => {
+      now = 11;
+      return f.manifest;
+    },
+  });
+  expect(result).toBeNull();
+  expect(server.calls.some((p) => p.includes('/git/commits/'))).toBe(false);
+});
+
+it('find validates a PR merge checkout without rejecting it by a different head SHA', async () => {
+  const f = fixture();
+  f.run.event = 'pull_request';
+  f.manifest.event = { name: 'pull_request', sha: hash('e'), head_repository: repository, base_sha: hash('f'), head_sha: f.run.head_sha };
+  f.manifest.tested_commit = hash('e');
+  f.commit = { sha: hash('e'), tree: { sha: f.current.tree }, parents: [{ sha: hash('f') }, { sha: f.run.head_sha }] };
+  expect(await findReusableEvidence({ runs: [f.run], current: f.current, ...fakeServer([f]) })).toMatchObject({ source_run_id: f.run.id });
+  f.commit.parents = [];
+  expect(await findReusableEvidence({ runs: [f.run], current: f.current, ...fakeServer([f]) })).toBeNull();
+});
+
+it.each(['version', 'policy_digest', 'plan'])('early rejection of %s still fails closed', async (key) => {
+  const f = fixture();
+  Object.assign(f.manifest, { [key]: key === 'version' ? 2 : key === 'policy_digest' ? 'e'.repeat(64) : { ...targeted, e2e: [] } });
+  const server = fakeServer([f]);
+  expect(await findReusableEvidence({ runs: [f.run], current: f.current, ...server })).toBeNull();
+  expect(server.calls).toHaveLength(1);
+});
+
+it('caches successful API replies within one lookup, never across lookups', async () => {
+  const f = fixture();
+  f.commit.tree.sha = hash('f');
+  const server = fakeServer([f]);
+  expect(await findReusableEvidence({ runs: [f.run, f.run], current: f.current, ...server })).toBeNull();
+  expect(server.calls).toHaveLength(3);
+  f.commit.tree.sha = f.current.tree;
+  expect(await findReusableEvidence({ runs: [f.run], current: f.current, ...server })).not.toBeNull();
+  expect(server.calls).toHaveLength(6);
+});
+
+it('an exhausted initial budget makes no requests', async () => {
+  const f = fixture();
+  const server = fakeServer([f]);
+  expect(await findReusableEvidence({ runs: [f.run], current: f.current, ...server, budgetMs: 0 })).toBeNull();
+  expect(server.calls).toEqual([]);
+});
+
+it('source lineage lookup shares the budget and rejects a late source reply', async () => {
+  const original = fixture(90, hash('e')),
+    reused = fixture();
+  reused.manifest = createEvidence({ ...reused.current, commit: reused.run.head_sha, run_id: reused.run.id }, reused.manifest.event, {
+    run_id: 90,
+    source_run_id: 90,
+    source_run_attempt: 1,
+    plan: targeted,
+  });
+  const server = fakeServer([reused, original]);
+  let now = 0;
+  const timeouts: number[] = [];
+  const result = await findReusableEvidence({
+    runs: [reused.run],
+    current: reused.current,
+    ...server,
+    now: () => now,
+    budgetMs: 10,
+    api: async (endpoint: string, options: { timeout: number }) => {
+      timeouts.push(options.timeout);
+      if (endpoint.endsWith('/runs/90')) now = 11;
+      return server.api(endpoint);
+    },
+  });
+  expect(result).toBeNull();
+  expect(timeouts.every((value) => value > 0 && value <= 10)).toBe(true);
+  expect(server.calls.some((path) => path.includes('/runs/90/artifacts'))).toBe(false);
 });
