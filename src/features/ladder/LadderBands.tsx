@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { formatGames, formatPercent, medianOf, metaQuadrant, winBand, type WinBand } from '../../domain/ladder';
 import { CivIcon } from '../../shared/ui/art';
@@ -55,9 +55,8 @@ export function LadderMeta({ civs, sampleUnit }: { civs: readonly BandCiv[]; sam
   const [selectedEn, setSelectedEn] = useState<string | null>(null);
   const detailId = useId();
   const selected = civs.find((civ) => civ.en === selectedEn);
-  useEffect(() => {
-    if (selectedEn && !civs.some((civ) => civ.en === selectedEn)) setSelectedEn(null);
-  }, [civs, selectedEn]);
+  // 随当前可见集合调整选择，避免 effect 再触发一轮级联渲染。
+  if (selectedEn && !selected) setSelectedEn(null);
   if (!civs.length) {
     return (
       <div data-testid="ladder-meta-map">

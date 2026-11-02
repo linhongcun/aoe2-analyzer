@@ -81,3 +81,25 @@ test('#635 真实Tab聚焦和Enter/Space都可读取气泡，筛选往返不保�
   await page.getByTestId('ladder-mode-arabia1v1').click();
   await expect(page.getByTestId('ladder-meta-detail')).not.toContainText(zh(row.en));
 });
+
+for (const width of [360, 375, 390, 1280]) {
+  test(`#635 深色 @${width} 详情刻度可读且无溢出`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+    await page.goto('./#/ladder?view=meta');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await page.getByRole('combobox', { name: '查看文明数据', exact: true }).selectOption(other.en);
+    await detailMatches(page, other);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    if (width === 1280) {
+      expect((await new AxeBuilder({ page }).include('[data-testid="ladder-meta-map"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+    }
+    expect(errors).toEqual([]);
+    await page.screenshot({ path: testInfo.outputPath(`ladder635-dark-${width}.png`), fullPage: true });
+  });
+}
