@@ -98,25 +98,27 @@ describe('开一局步骤 #592', () => {
     expect(resized.choice).toMatchObject({ teamSize: '2v2', mapId: null, lane: null });
   });
 
-  it('已在大厅从文明起，预填组队 4v4 和阿拉伯半岛，路位先不占格', () => {
+  it('已在大厅先跳过模式和地图，自己补选组队与地图后按侧推荐', () => {
     const lobby = enterLobby();
     expect(lobby.current).toBe('civ');
-    expect(lobby.prefilled).toEqual({ mode: true, map: true });
-    expect(lobby.choice).toMatchObject({ mode: 'team', teamSize: '4v4', mapId: 'arabia', lane: null });
+    expect(lobby.prefilled).toEqual({});
+    expect(lobby.skipped).toEqual({ mode: true, map: true });
+    expect(lobby.choice).toMatchObject({ mode: null, teamSize: null, mapId: null, lane: null });
     expect(decisionSteps(lobby)).toEqual(['mode', 'map', 'civ', 'opponent']);
     expect(laneRowVisible(lobby)).toBe(false);
-    const panel = civPanels(lobby);
+    const configured = chooseMap(chooseTeamSize(jumpTo(lobby, 'mode'), '4v4'), 'arabia');
+    const panel = civPanels(configured);
     expect(panel.kind).toBe('split');
     if (panel.kind !== 'split') return;
     expect(panel.groups.map((group) => group.side)).toEqual(['pocket', 'flank']);
     expect(panel.groups[0]?.tips[0]).toEqual({ civ: 'Franks', reason: frank });
     expect(panel.groups[1]?.tips[0]?.civ).toBe('Britons');
-    const picked = pickCiv(lobby, 'Franks', 'pocket');
+    const picked = pickCiv(configured, 'Franks', 'pocket');
     expect(picked.choice).toMatchObject({ lane: 'pocket', civ: 'Franks' });
     expect(picked.current).toBe('opponent');
     expect(laneRowVisible(picked)).toBe(true);
     expect(editorialReason(picked)).toBe(frank);
-    const opened = openLane(lobby);
+    const opened = openLane(configured);
     expect(opened.current).toBe('lane');
     expect(decisionSteps(opened)).toContain('lane');
   });

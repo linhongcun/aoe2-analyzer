@@ -50,7 +50,7 @@ const sourceChecks = [
 
 /** Page-local changes use the page's real existing regression coverage, including its helpers. */
 export const PROFILES = {
-  home: profile(['startGame592'], ['smoke', 'editorial6', 'startGame592']),
+  home: profile(['startGame592', 'startGame632'], ['smoke', 'editorial6', 'startGame592', 'startGame632']),
   ladder: profile(
     ['ladder33', 'ladder569', 'ladder571', 'ladder577-query', 'ladder577-snapshot', 'ladder580'],
     ['smoke', 'ladder33', 'ladder545', 'ladder546', 'ladder547', 'ladder569', 'ladder571', 'ladder577', 'ladder580'],
