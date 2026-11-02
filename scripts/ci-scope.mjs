@@ -66,6 +66,7 @@ export const PROFILES = {
       'ladder547',
       'ladder569',
       'ladder571',
+      'ladder572',
       'ladder577',
       'ladder580',
       'ladder633',
