@@ -8,6 +8,88 @@ import { summarizeRunTiming, summarizeChainTiming, formatTimingMarkdown } from '
 import assert from 'node:assert/strict';
 import { writeFileSync } from 'node:fs';
 
+/** Remove only observed no-op edges whose completion cannot change the ready-time maximum. */
+export function resolveObservedDependencies(jobs, declared) {
+  const graph = Object.fromEntries(Object.entries(declared).map(([name, parents]) => [name, Array.isArray(parents) ? [...parents] : parents]));
+  const visiting = new Set(),
+    visited = new Set();
+  const validGraph = (name) => {
+    if (visiting.has(name)) return false;
+    if (visited.has(name)) return true;
+    const parents = graph[name] ?? [];
+    if (!Array.isArray(parents) || parents.some((parent) => typeof parent !== 'string' || !parent) || new Set(parents).size !== parents.length) return false;
+    visiting.add(name);
+    if (!parents.every(validGraph)) return false;
+    visiting.delete(name);
+    visited.add(name);
+    return true;
+  };
+  // Preserve malformed declarations so generic timing still rejects them.
+  if (!Object.keys(graph).every(validGraph)) return graph;
+  const allocated = (job) => job.runner_id > 0 || (Array.isArray(job.steps) && job.steps.length > 0);
+  const noOp = (job) =>
+    job.status === 'completed' &&
+    job.conclusion === 'skipped' &&
+    (job.runner_id === null || job.runner_id === 0) &&
+    Array.isArray(job.steps) &&
+    job.steps.length === 0;
+  const time = (value) => {
+    if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/.test(value)) return null;
+    const ms = Date.parse(value);
+    return Number.isSafeInteger(ms) && ms > 0 && new Date(ms).toISOString().slice(0, 19) === value.slice(0, 19) ? ms : null;
+  };
+  const relevant = (name, child) => {
+    const rows = jobs.filter((job) => job.name === name);
+    if (
+      !Number.isSafeInteger(child.run_attempt) ||
+      child.run_attempt <= 0 ||
+      rows.some((job) => !Number.isSafeInteger(job.run_attempt) || job.run_attempt <= 0)
+    )
+      return null;
+    const preceding = rows.filter((job) => job.run_attempt <= child.run_attempt);
+    if (
+      !preceding.length ||
+      new Set(preceding.map((job) => job.run_attempt)).size !== preceding.length ||
+      preceding.some((job) => job.run_id !== undefined && child.run_id !== undefined && job.run_id !== child.run_id)
+    )
+      return null;
+    const latestAttempt = Math.max(...preceding.map((job) => job.run_attempt));
+    const latest = preceding.filter((job) => job.run_attempt === latestAttempt);
+    return latest.length === 1 ? { rows: preceding, latest: latest[0] } : null;
+  };
+  return Object.fromEntries(
+    Object.entries(graph).map(([name, parents]) => {
+      const children = jobs.filter((job) => job.name === name && allocated(job));
+      if (!children.length) return [name, [...parents]];
+      const removable = new Set(
+        parents.filter((parentName) =>
+          children.every((child) => {
+            const startedAt = time(child.started_at);
+            const parent = relevant(parentName, child);
+            if (startedAt === null || !parent || !noOp(parent.latest)) return false;
+            // Older executions must not be hidden by a newer skipped attempt.
+            if (parent.rows.some((row) => !noOp(row) || time(row.completed_at) === null || time(row.completed_at) > startedAt)) return false;
+            const latestNoOpCompletion = Math.max(...parent.rows.map((row) => time(row.completed_at)));
+            return parents.some((witnessName) => {
+              if (witnessName === parentName) return false;
+              const witness = relevant(witnessName, child)?.latest;
+              if (!witness || !allocated(witness) || witness.status !== 'completed') return false;
+              const witnessStart = time(witness.started_at),
+                witnessEnd = time(witness.completed_at);
+              // A name with an allocated row for this child cannot satisfy the
+              // universal no-op predicate, so this witness edge is retained.
+              return (
+                witnessStart !== null && witnessEnd !== null && witnessStart <= witnessEnd && latestNoOpCompletion <= witnessEnd && witnessEnd <= startedAt
+              );
+            });
+          }),
+        ),
+      );
+      return [name, parents.filter((parent) => !removable.has(parent))];
+    }),
+  );
+}
+
 export async function collectRun({ budget, api, repository, runId }) {
   assert.match(String(runId), /^[1-9]\d*$/, 'Expected an exact timing run ID');
   const run = await api(`repos/${repository}/actions/runs/${runId}`);
@@ -31,7 +113,11 @@ export async function collectRun({ budget, api, repository, runId }) {
           deploy: ['test'],
         }
       : { prepare: [], release: ['prepare'] };
-  const report = summarizeRunTiming({ run, jobs, dependencies });
+  const observedDependencies = resolveObservedDependencies(jobs, dependencies);
+  const report = {
+    ...summarizeRunTiming({ run, jobs, dependencies: observedDependencies }),
+    dependencyResolution: { declared: dependencies, observed: observedDependencies },
+  };
   budget.assertRemaining('collected timing');
   return { run, jobs, report };
 }
