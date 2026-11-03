@@ -33,7 +33,7 @@ describe('#660 官方来源文明历史', () => {
 
   it('只有官方短介绍时保留摘要与来源，没有空展开控件；年份不换行', () => {
     const entry: CivHistoryEntry = {
-      summary: '这是一段仅用于验证展示状态的测试摘要，581年与907—1125年保持完整。',
+      summary: '这是一段仅用于验证展示状态的测试摘要，581年、907—1125年、十一世纪与十五至十六世纪保持完整。',
       paragraphs: [],
       source: { label: '测试来源', url: 'https://www.ageofempires.com/' },
       checkedOn: '2026-11-03',
@@ -43,6 +43,8 @@ describe('#660 官方来源文明历史', () => {
     expect(html).toContain('官方原文');
     expect(html).toContain('<span class="num nw">581年</span>');
     expect(html).toContain('<span class="num nw">907—1125年</span>');
+    expect(html).toContain('<span class="num nw">十一世纪</span>');
+    expect(html).toContain('<span class="num nw">十五至十六世纪</span>');
     expect(html).not.toContain('<details');
   });
 });

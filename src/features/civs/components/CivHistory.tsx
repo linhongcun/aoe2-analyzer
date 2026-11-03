@@ -2,15 +2,17 @@ import { CIV_HISTORY, type CivHistoryEntry } from '../history';
 import './civ-history.css';
 
 function HistoryText({ text }: { text: string }) {
-  return text.split(/(\d+(?:[–—-]\d+)?(?:年|世纪)?)/u).map((part, index) =>
-    /^\d/u.test(part) ? (
-      <span key={index} className="num nw">
-        {part}
-      </span>
-    ) : (
-      part
-    ),
-  );
+  return text
+    .split(/(\d+(?:[–—-至]\d+)?(?:年|世纪)?|[零〇一二三四五六七八九十百千万两]+(?:至[零〇一二三四五六七八九十百千万两]+)?(?:年|世纪))/u)
+    .map((part, index) =>
+      index % 2 === 1 ? (
+        <span key={index} className="num nw">
+          {part}
+        </span>
+      ) : (
+        part
+      ),
+    );
 }
 
 export function CivHistory({ civ, entry = CIV_HISTORY[civ] }: { civ: string; entry?: CivHistoryEntry }) {
