@@ -319,4 +319,4 @@ export default function Hotkeys() {
   );
 }
 
-/* #659 controlled source diff for affected-CI timing. */
+/* Controlled source diff for affected CI timing. */
