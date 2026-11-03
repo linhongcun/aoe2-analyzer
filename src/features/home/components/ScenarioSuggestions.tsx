@@ -13,6 +13,7 @@ import {
 } from '../../../domain/positionScenarios';
 import { pickCiv, type StartState } from '../../../domain/startGame';
 import { CivRow, type Update } from './startGameEarly';
+import RouteContinuity from './RouteContinuity';
 
 const number = (n: number) => Number(n.toFixed(3)).toString();
 function Value({ n, unit = '' }: { n: number; unit?: string }) {
@@ -183,6 +184,7 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
           ))}
         </>
       )}
+      {context ? <RouteContinuity context={context} lane={lane} /> : null}
       <details className="start-scene-details">
         <summary>范围、科技包与来源</summary>
         <p className="start-hint">首批核验：{SCENARIO_CIVS[lane].map((c) => civByEn(c)?.zh ?? c).join('、')}。名单是机制覆盖范围，不是强势文明白名单。</p>
@@ -190,7 +192,9 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
           {lane === 'flank' ? '共同包：弩手升级、箭羽、锥子箭、弓兵鳞甲；不自动购买指环。' : '共同包：锻造、骑兵鳞甲；畜牧按所选状态。'}{' '}
           科技费用先扣；研究时间未放入真实对局时间线。合法包缺项则不比较，未搜索最优科技投资。
         </p>
-        <p className="start-hint">经济、队友、敌军伤亡、寻路、碰撞、弹道和操作收益未计入。只适用于城堡时代这条路线，封建衔接、帝王上限与特殊路线待验证。</p>
+        <p className="start-hint">
+          经济、队友、敌军伤亡、寻路、碰撞、弹道和操作收益未计入。此快照只用于城堡时代路线；封建衔接可展开独立账本，帝王上限与特殊路线待验证。
+        </p>
         <p className="start-hint">
           模型 {version.model} · 配置 {version.config}。输入摘要随各候选显示；新效果结构需重新核验。
         </p>
