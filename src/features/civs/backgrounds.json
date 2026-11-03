@@ -1,0 +1,342 @@
+{
+  "repo": "denniske/aoe2companion",
+  "commit": "d9e9ef68c761b3bd5304f704629662d41bee2d96",
+  "assets": {
+    "Armenians": {
+      "file": "armenians.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_armenians.png"
+    },
+    "Aztecs": {
+      "file": "aztecs.webp",
+      "width": 369,
+      "height": 368,
+      "sourcePath": "assets/history/civs/history_aztecs.png"
+    },
+    "Bengalis": {
+      "file": "bengalis.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_bengalis.png"
+    },
+    "Berbers": {
+      "file": "berbers.webp",
+      "width": 384,
+      "height": 377,
+      "sourcePath": "assets/history/civs/history_berbers.png"
+    },
+    "Bohemians": {
+      "file": "bohemians.webp",
+      "width": 370,
+      "height": 370,
+      "sourcePath": "assets/history/civs/history_bohemians.png"
+    },
+    "Britons": {
+      "file": "britons.webp",
+      "width": 324,
+      "height": 363,
+      "sourcePath": "assets/history/civs/history_britons.png"
+    },
+    "Bulgarians": {
+      "file": "bulgarians.webp",
+      "width": 375,
+      "height": 375,
+      "sourcePath": "assets/history/civs/history_bulgarians.png"
+    },
+    "Burgundians": {
+      "file": "burgundians.webp",
+      "width": 1000,
+      "height": 524,
+      "sourcePath": "assets/history/civs2/history_burgundians.png"
+    },
+    "Burmese": {
+      "file": "burmese.webp",
+      "width": 334,
+      "height": 334,
+      "sourcePath": "assets/history/civs/history_burmese.png"
+    },
+    "Byzantines": {
+      "file": "byzantines.webp",
+      "width": 380,
+      "height": 381,
+      "sourcePath": "assets/history/civs/history_byzantines.png"
+    },
+    "Celts": {
+      "file": "celts.webp",
+      "width": 414,
+      "height": 413,
+      "sourcePath": "assets/history/civs/history_celts.png"
+    },
+    "Chinese": {
+      "file": "chinese.webp",
+      "width": 366,
+      "height": 366,
+      "sourcePath": "assets/history/civs/history_chinese.png"
+    },
+    "Cumans": {
+      "file": "cumans.webp",
+      "width": 394,
+      "height": 394,
+      "sourcePath": "assets/history/civs/history_cumans.png"
+    },
+    "Danes": {
+      "file": "danes.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_danes.png"
+    },
+    "Dravidians": {
+      "file": "dravidians.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_dravidians.png"
+    },
+    "Ethiopians": {
+      "file": "ethiopians.webp",
+      "width": 326,
+      "height": 326,
+      "sourcePath": "assets/history/civs/history_ethiopians.png"
+    },
+    "Franks": {
+      "file": "franks.webp",
+      "width": 390,
+      "height": 390,
+      "sourcePath": "assets/history/civs/history_franks.png"
+    },
+    "Georgians": {
+      "file": "georgians.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_georgians.png"
+    },
+    "Goths": {
+      "file": "goths.webp",
+      "width": 388,
+      "height": 388,
+      "sourcePath": "assets/history/civs/history_goths.png"
+    },
+    "Gurjaras": {
+      "file": "gurjaras.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_gurjaras.png"
+    },
+    "Hindustanis": {
+      "file": "hindustanis.webp",
+      "width": 363,
+      "height": 363,
+      "sourcePath": "assets/history/civs/history_hindustani.png"
+    },
+    "Huns": {
+      "file": "huns.webp",
+      "width": 360,
+      "height": 360,
+      "sourcePath": "assets/history/civs/history_huns.png"
+    },
+    "Incas": {
+      "file": "incas.webp",
+      "width": 374,
+      "height": 374,
+      "sourcePath": "assets/history/civs/history_incas.png"
+    },
+    "Italians": {
+      "file": "italians.webp",
+      "width": 460,
+      "height": 417,
+      "sourcePath": "assets/history/civs/history_italians.png"
+    },
+    "Japanese": {
+      "file": "japanese.webp",
+      "width": 428,
+      "height": 360,
+      "sourcePath": "assets/history/civs/history_japanese.png"
+    },
+    "Jurchens": {
+      "file": "jurchens.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_jurchens.png"
+    },
+    "Khitans": {
+      "file": "khitans.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_khitans.png"
+    },
+    "Khmer": {
+      "file": "khmer.webp",
+      "width": 318,
+      "height": 318,
+      "sourcePath": "assets/history/civs/history_khmer.png"
+    },
+    "Koreans": {
+      "file": "koreans.webp",
+      "width": 450,
+      "height": 450,
+      "sourcePath": "assets/history/civs/history_koreans.png"
+    },
+    "Lithuanians": {
+      "file": "lithuanians.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_lithuanians.png"
+    },
+    "Magyars": {
+      "file": "magyars.webp",
+      "width": 233,
+      "height": 233,
+      "sourcePath": "assets/history/civs/history_magyars.png"
+    },
+    "Malay": {
+      "file": "malay.webp",
+      "width": 363,
+      "height": 363,
+      "sourcePath": "assets/history/civs/history_malay.png"
+    },
+    "Malians": {
+      "file": "malians.webp",
+      "width": 345,
+      "height": 345,
+      "sourcePath": "assets/history/civs/history_malians.png"
+    },
+    "Mapuche": {
+      "file": "mapuche.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_mapuche.png"
+    },
+    "Mayans": {
+      "file": "mayans.webp",
+      "width": 339,
+      "height": 339,
+      "sourcePath": "assets/history/civs/history_mayans.png"
+    },
+    "Mongols": {
+      "file": "mongols.webp",
+      "width": 403,
+      "height": 403,
+      "sourcePath": "assets/history/civs/history_mongols.png"
+    },
+    "Muisca": {
+      "file": "muisca.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_muisca.png"
+    },
+    "Persians": {
+      "file": "persians.webp",
+      "width": 354,
+      "height": 354,
+      "sourcePath": "assets/history/civs/history_persians.png"
+    },
+    "Poles": {
+      "file": "poles.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_poles.png"
+    },
+    "Portuguese": {
+      "file": "portuguese.webp",
+      "width": 350,
+      "height": 350,
+      "sourcePath": "assets/history/civs/history_portuguese.png"
+    },
+    "Romans": {
+      "file": "romans.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_romans.png"
+    },
+    "Saracens": {
+      "file": "saracens.webp",
+      "width": 336,
+      "height": 336,
+      "sourcePath": "assets/history/civs/history_saracens.png"
+    },
+    "Saxons": {
+      "file": "saxons.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_saxons.png"
+    },
+    "Shu": {
+      "file": "shu.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_shu.png"
+    },
+    "Sicilians": {
+      "file": "sicilians.webp",
+      "width": 460,
+      "height": 417,
+      "sourcePath": "assets/history/civs/history_sicilians.png"
+    },
+    "Slavs": {
+      "file": "slavs.webp",
+      "width": 432,
+      "height": 432,
+      "sourcePath": "assets/history/civs/history_slavs.png"
+    },
+    "Spanish": {
+      "file": "spanish.webp",
+      "width": 375,
+      "height": 375,
+      "sourcePath": "assets/history/civs/history_spanish.png"
+    },
+    "Tatars": {
+      "file": "tatars.webp",
+      "width": 400,
+      "height": 400,
+      "sourcePath": "assets/history/civs/history_tatars.png"
+    },
+    "Teutons": {
+      "file": "teutons.webp",
+      "width": 370,
+      "height": 370,
+      "sourcePath": "assets/history/civs/history_teutons.png"
+    },
+    "Tupi": {
+      "file": "tupi.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_tupi.png"
+    },
+    "Turks": {
+      "file": "turks.webp",
+      "width": 356,
+      "height": 356,
+      "sourcePath": "assets/history/civs/history_turks.png"
+    },
+    "Varangians": {
+      "file": "varangians.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_varangians.png"
+    },
+    "Vietnamese": {
+      "file": "vietnamese.webp",
+      "width": 400,
+      "height": 400,
+      "sourcePath": "assets/history/civs/history_vietnamese.png"
+    },
+    "Vikings": {
+      "file": "vikings.webp",
+      "width": 320,
+      "height": 320,
+      "sourcePath": "assets/history/civs/history_vikings.png"
+    },
+    "Wei": {
+      "file": "wei.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_wei.png"
+    },
+    "Wu": {
+      "file": "wu.webp",
+      "width": 1000,
+      "height": 530,
+      "sourcePath": "assets/history/civs2/history_wu.png"
+    }
+  }
+}
