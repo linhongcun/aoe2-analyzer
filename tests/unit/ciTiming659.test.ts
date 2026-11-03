@@ -144,6 +144,74 @@ describe('#659 actual workflow timing', () => {
     expect(unknown.knownRunnerMs).toBe(0);
   });
 
+  it('preserves real GitHub skipped-job timestamps without inventing execution or readiness', () => {
+    const skipped = {
+      id: 125662802853,
+      run_id: 41551266996,
+      run_attempt: 1,
+      name: 'deploy',
+      started_at: '2026-11-03T01:14:20Z',
+      completed_at: '2026-11-03T01:14:19Z',
+      status: 'completed',
+      conclusion: 'skipped',
+      runner_id: null,
+      steps: [],
+    };
+    const report = summarizeRunTiming({
+      run: run(41551266996, 0, 900),
+      jobs: [job(1, 'test', 20, 30), skipped],
+      dependencies: { test: [], deploy: ['test'] },
+    });
+    expect(report.jobs[1]).toMatchObject({
+      runnerAllocated: false,
+      runnerMs: 0,
+      reportedStartedAtMs: Date.parse(skipped.started_at),
+      reportedFinishedAtMs: Date.parse(skipped.completed_at),
+      startedAtMs: null,
+      finishedAtMs: null,
+      durationMs: null,
+      dependencyReadyAtMs: null,
+      dependencyQueueMs: null,
+      dependencyJobIds: [],
+      queueReason: 'Job had no allocated runner; execution and dependency queue were not observed',
+    });
+    expect(report.runnerMs).toBe(10000);
+    expect(report.jobsSpanMs).toBe(30000);
+    expect(report.criticalPathJobIds).toEqual([1]);
+    expect(report.complete).toBe(true);
+    const allSkipped = summarizeRunTiming({
+      run: run(41551266996, 0, 900, 2),
+      jobs: [skipped, { ...skipped, id: skipped.id + 1, name: 'browser (1)', run_attempt: 2 }],
+      dependencies: { deploy: [], 'browser (1)': [] },
+    });
+    expect(allSkipped).toMatchObject({
+      runnerMs: 0,
+      runnerMinutes: 0,
+      knownRunnerMs: 0,
+      attemptsObserved: [1, 2],
+      initialQueueMs: null,
+      jobsSpanMs: null,
+      criticalPathJobIds: [],
+      slowestShard: null,
+    });
+  });
+
+  it('keeps allocated chronology strict and unallocated queued jobs outside execution metrics', () => {
+    const reversed = { ...job(1, 'browser (1)', 30, 20), steps: [] };
+    expect(() => summarizeRunTiming({ run: run(), jobs: [reversed], dependencies: { 'browser (1)': [] } })).toThrow(/chronology/);
+    expect(() =>
+      summarizeRunTiming({ run: run(), jobs: [{ ...reversed, runner_id: null, steps: [{ name: 'executed' }] }], dependencies: { 'browser (1)': [] } }),
+    ).toThrow(/chronology/);
+    const report = summarizeRunTiming({
+      run: { ...run(), status: 'in_progress' },
+      jobs: [{ ...reversed, runner_id: null, started_at: null, completed_at: null, status: 'queued', conclusion: null }],
+      dependencies: { 'browser (1)': [] },
+    });
+    expect(report).toMatchObject({ runnerMs: 0, initialQueueMs: null, criticalPathJobIds: [], slowestShard: null, complete: false });
+    expect(report.jobs[0].dependencyQueueMs).toBeNull();
+    expect(report.jobs[0].durationMs).toBeNull();
+  });
+
   it('flags over-30-minute elapsed runs without changing the deadline to run_started_at', () => {
     const report = summarizeRunTiming({
       run: { ...run(100, 0, 1801, 2), run_started_at: iso(1790) },

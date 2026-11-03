@@ -53,14 +53,18 @@ export function summarizeRunTiming({ run, jobs, dependencies = {} }) {
     ids.add(id);
     if (attempt > runAttempt || (job.run_id !== undefined && job.run_id !== runId)) throw new Error('Job belongs to a different run or attempt');
     if (typeof job.name !== 'string' || !job.name) throw new Error('Invalid job name');
-    const startedAtMs = timestamp(job.started_at, 'job.started_at', true);
-    const finishedAtMs = timestamp(job.completed_at, 'job.completed_at', true);
+    const allocated = job.runner_id > 0 || (Array.isArray(job.steps) && job.steps.length > 0);
+    const unallocated = !allocated && (job.conclusion === 'skipped' || job.runner_id === 0 || job.runner_id === null);
+    const reportedStartedAtMs = timestamp(job.started_at, 'job.started_at', true);
+    const reportedFinishedAtMs = timestamp(job.completed_at, 'job.completed_at', true);
+    // GitHub can report reversed synthetic timestamps for jobs that never ran.
+    // Preserve those observations without treating them as execution or readiness.
+    const startedAtMs = unallocated ? null : reportedStartedAtMs;
+    const finishedAtMs = unallocated ? null : reportedFinishedAtMs;
     if ((startedAtMs !== null && startedAtMs < originMs) || (finishedAtMs !== null && (startedAtMs === null || finishedAtMs < startedAtMs)))
       throw new Error('Invalid job chronology: ' + id);
     if (completedAtMs !== null && finishedAtMs !== null && finishedAtMs > completedAtMs) throw new Error('Job finishes after run completion: ' + id);
     const durationMs = startedAtMs !== null && finishedAtMs !== null ? finishedAtMs - startedAtMs : null;
-    const allocated = job.runner_id > 0 || (Array.isArray(job.steps) && job.steps.length > 0);
-    const unallocated = job.conclusion === 'skipped' || job.runner_id === 0 || job.runner_id === null;
     const runnerMs = allocated ? durationMs : unallocated ? 0 : null;
     if (runnerMs === null) issues.push('Missing runner allocation or completed duration for job ' + id);
     if (job.status !== 'completed') issues.push('Job ' + id + ' is ' + (job.status ?? 'unknown'));
@@ -72,6 +76,8 @@ export function summarizeRunTiming({ run, jobs, dependencies = {} }) {
       conclusion: job.conclusion ?? null,
       runnerId: job.runner_id ?? null,
       runnerAllocated: allocated ? true : unallocated ? false : null,
+      reportedStartedAtMs,
+      reportedFinishedAtMs,
       startedAtMs,
       finishedAtMs,
       durationMs,
@@ -87,6 +93,10 @@ export function summarizeRunTiming({ run, jobs, dependencies = {} }) {
       .filter((parent) => parent.name === name && parent.attempt <= job.attempt && parent.finishedAtMs !== null && parent.finishedAtMs <= job.startedAtMs)
       .sort((a, b) => b.finishedAtMs - a.finishedAtMs || b.attempt - a.attempt)[0];
   for (const job of observed) {
+    if (job.runnerAllocated === false) {
+      job.queueReason = 'Job had no allocated runner; execution and dependency queue were not observed';
+      continue;
+    }
     if (job.startedAtMs === null) {
       job.queueReason = 'Job has no observed start';
       continue;
