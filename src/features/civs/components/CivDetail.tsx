@@ -19,6 +19,7 @@ import { session } from '../../../shared/utils/sticky';
 import CivNotFound from './CivNotFound';
 import { BonusRows } from './BonusRows';
 import { CivOpening } from './CivOpening';
+import { CivHistory } from './CivHistory';
 import { CivRegionalUnits } from './CivRegionalUnits';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
 import { CivUniqueBuildings } from './CivUniqueBuildings';
@@ -236,6 +237,7 @@ export default function CivDetail() {
                   ）
                 </p>
               </OverviewCard>
+              <CivHistory civ={c.en} />
               <DetailSource note="能力评分为主观近似评分；开局建议请结合文明加成调整" />
             </>
           ),
