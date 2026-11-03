@@ -7,7 +7,8 @@ describe('minimal CI optimization coverage', () => {
   it('home-only changes retain existing entry checks and mechanism acceptance', () => {
     const p = plan('src/features/home/components/ScenarioSuggestions.tsx');
     expect(p.unit).toContain('tests/unit/mechanism652.test.ts');
-    for (const name of ['smoke', 'editorial6', 'startGame592', 'startGame632', 'mechanism652'])
+    expect(p.unit).toContain('tests/unit/ageRoutes652.test.ts');
+    for (const name of ['smoke', 'editorial6', 'startGame592', 'startGame632', 'mechanism652', 'routes652'])
       expect(applyBrowserPolicy(p, { GITHUB_EVENT_NAME: 'pull_request' }).e2e).toContain(`tests/e2e/${name}.spec.ts`);
   });
   it('only the audited runtime loader avoids regeneration, retaining full computation and main browser', () => {

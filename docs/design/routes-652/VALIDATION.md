@@ -1,5 +1,11 @@
 # #652 第二阶段验证记录
 
+## 后续发布验证（2026-11-03）
+
+用户已明确授权继续检查、合并部署和仓库正式Release流程。分支已合并 main `7dbf3587e0e4e9a4cfd8bf87af49585dc38a571f`，保留CI优化，准备v0.75.0。home profile新增ageRoutes652/routes652，纯首页修改也会选择路线验收；原固定列表断言只扩展、不放宽。Node20专项67项通过。最终PR计划为full unit、data=false、6份capped浏览器（含routes652）；main仍full浏览器。
+
+以下失败与仅本地授权属于此前历史记录，不抹除；本轮正式CI、线上和Release结果以实际终态及PR/issue交付记录补充，运行中不视为通过。
+
 后续已完成干净main对照、资源采样和CI主版本Node20限定验证，见 [DIAGNOSIS.md](./DIAGNOSIS.md)。原四例在Node20下均通过；基线复现同类超时，未发现新路线直接参与，但旧矩阵稳定性仍未达到全量发布门禁。以下保留首轮真实记录。
 
 本轮基于 main e2637089ecbaafc30d08327a080df923064bb8f4（v0.74.15），独立分支 feat/652-feudal-castle-routes。只做本地提交，不推送、开 PR、合并、部署或关闭父 issue。下列为新功能实际执行记录，不复用上一阶段发布测试。
