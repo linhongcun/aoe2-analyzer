@@ -77,16 +77,36 @@ test('#422 中文重名地图以英文和ID区分', async ({ page }) => {
   const search = page.getByRole('searchbox', { name: '搜索地图', exact: true });
   await search.fill('浅滩');
   await expect(choices(page)).toHaveCount(2);
-  await nav.getByRole('button', { name: '浅滩 Wade', exact: true }).click();
-  await expect(page.getByRole('article', { name: '浅滩 Wade', exact: true })).toContainText('船只无法航行');
-  await nav.getByRole('button', { name: '浅滩 Shoals', exact: true }).click();
-  await expect(page.getByRole('article', { name: '浅滩 Shoals', exact: true })).toContainText('征服大海');
+  await nav.getByRole('button', { name: '浅滩（Wade） Wade', exact: true }).click();
+  await expect(page.getByRole('article', { name: '浅滩（Wade） Wade', exact: true })).toContainText('船只无法航行');
+  await nav.getByRole('button', { name: '浅滩（Shoals） Shoals', exact: true }).click();
+  await expect(page.getByRole('article', { name: '浅滩（Shoals） Shoals', exact: true })).toContainText('征服大海');
   await search.fill('沼泽');
   for (const en of ['Bogland', 'Morass']) {
     await nav.getByRole('button', { name: `沼泽 ${en}`, exact: true }).click();
     await expect(page.getByRole('article', { name: `沼泽 ${en}`, exact: true })).toBeVisible();
   }
 });
+
+for (const width of [360, 375, 390, 1280]) {
+  test(`#668 @${width} 两张浅滩在向导与目录主名可区分`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./#/');
+    await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+    await page.getByRole('searchbox', { name: '搜索地图', exact: true }).fill('浅滩');
+    const maps = page.getByTestId('start-step').locator('.start-map');
+    await expect(maps).toHaveCount(2);
+    await expect(maps.locator('b')).toHaveText(['浅滩（Shoals）', '浅滩（Wade）']);
+    for (const id of ['shoals', 'wade']) await expect(maps.locator(`img[src$="/${id}.webp"]`)).toHaveCount(1);
+    await page.screenshot({ path: testInfo.outputPath('home-maps.png'), fullPage: true });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.goto('./#/maps');
+    await page.getByRole('searchbox', { name: '搜索地图', exact: true }).fill('浅滩');
+    await expect(choices(page)).toHaveCount(2);
+    await expect(choices(page).locator('span')).toHaveText(['浅滩（Shoals）', '浅滩（Wade）']);
+    await page.screenshot({ path: testInfo.outputPath('catalog-maps.png'), fullPage: true });
+  });
+}
 
 test('#422 全部83张本地预览可解码，非方图不裁切，收起保留当前项', async ({ page }) => {
   await page.goto('./#/maps');
