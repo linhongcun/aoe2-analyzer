@@ -24,6 +24,10 @@
 
 #625 按已锁定的“模式与 Elo 解耦”交付；#626 沿该项之后的顺序交付。#584 本轮已获范围授权，并沿实际 PR 的规格及复核记录执行；设计短稿、测试草稿本身仍不等于实现授权。已有交付或在审 PR 先核对记录，避免重复认领。#571 已关闭，不要重开；其它未获本轮授权的事项继续按既有 Hold／范围／待确认规则处理。
 
+### #659 定向授权（2026-11-03）
+
+维护者在本轮明确回复“ok，可以处理那个 ci 的 issue 了”，授权实施 #659 的 CI 执行、覆盖、阶段证明、预算和等价巡检范围，见 [冻结规格](design/ci-659.md)。它是上述11项之后的单项授权，不扩大产品范围或解除其它数据阻塞；本文件旧的 PR 完整浏览器上限及壳层例外按下方新规则替代。
+
 ### 当前交付与依赖
 
 本PR准备时已核验前序 **v0.74.13 / main ef3d0e6f988eaa73a5e111a0eed29013336cc907** 的正式发布。本轮可实施事项为 #625、#626、#641、#572、#584、#582、#585、#558，共8项；前序交付的具体 PR、版本与证据见各 issue 的真实交付评论。#558 目标版本为0.74.14，本项目标版本及最终交付状态以该 issue 最终评论和 Release 为准；实现/验证通过不能提前写成已部署或已正式发布。
@@ -123,73 +127,32 @@ UI 须挂 `docs/design/<topic>/` 规格，或 issue 内可测规格。没有对�
 
 - **未经维护者明确授权，禁止修改** `tests/**/v0*-acceptance*` 及其他受保护验收用例的期望值。与产品决定冲突时在 issue 写清冲突，交维护者决定；获授权的修改须独立复核，不得通过放宽期望凑绿，也不要求指定历史作者重录。
 - 改领域逻辑补 `tests/unit/`；修 bug 先写能复现的失败用例。
-- e2e 命令、端口、并行 worktree、BASE_URL、四宽、axe 与 CI 跳过条件，见 [docs/TESTING.md](TESTING.md)。
+- e2e 命令、端口、并行 worktree、BASE_URL、四宽、axe 与 CI 范围/复用条件，见 [docs/TESTING.md](TESTING.md)。
 
-### 壳层 PR 的有界验证（#513）
+### CI 分阶段门禁（#659，2026-11-03）
 
-`scripts/ci-scope.mjs` 的壳层白名单是这三个精确路径：`src/app/Layout.tsx`、`src/shared/ui/Icon.tsx`、`src/shared/styles/editorial-shell.css`。仅改这些文件，可附普通文档、CHANGELOG 和仅版本号变更，PR 使用 `targeted`：单测 `nav`、`theme6`、`pageRegistry283`；浏览器固定 6 个 spec：`smoke`、`navigation272`、`editorial6`、`skipLink294`、`searchLoading395`、`feedbackTap295`。覆盖基础页面、首页入口、导航/主题/搜索焦点、跳过导航和页脚，并保留这些用例原有的四宽及明暗主题断言。`FeedbackLink.tsx` 与 `src/shared/utils/feedback.ts` 使用同一套 shell 浏览器检查，并额外跑 `feedback` 单测（#514）。
+维护者已明确授权处理 #659。历史 #513 曾将全局壳层列为 targeted，#514/#538 曾绝对限制 PR 完整浏览器；这些旧选择现由 #659 取代，历史授权仍可追溯，不再作为当前执行规则。冻结范围、集合对照、故障注入和实跑实验见 [ci-659.md](design/ci-659.md)，操作细则见 [TESTING 第6节](TESTING.md#ci-659-validation)。
 
-| 事件 / 混合改动                       | 验证计划                                                     |
-| ------------------------------------- | ------------------------------------------------------------ |
-| 仅壳层白名单的 PR                     | `targeted`，6 个浏览器 spec，不生成数据                      |
-| 壳层 + 已映射功能                     | 两者测试取并集、去重；6 个 spec 上限只针对纯壳层             |
-| 包含壳层的 `main` / `release/**` push | 保留此前的 `full` 单测和浏览器回归；不因壳层改动生成未变数据 |
-| nightly / `CI_FULL=true`              | `full` + 数据检查，禁用证据复用                              |
-| 仅普通文档 / CI 维护                  | 保持既有短路径；其他功能的 #431 计划与复用规则不变           |
+| 改动                                                                         | 当前计划                                                      |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| 普通文档、仅项目版本号                                                       | maintenance：核心静态、相关单测、真实 SHA 构建与冷启动 smoke  |
+| 已审计功能页面及精确辅助路径                                                 | 核心 smoke 加受影响闭包的正负路径、四宽和明暗主题；组合取并集 |
+| 经过前后选择器审计的限定 CSS                                                 | 所有实际消费者的相关回归；未知 CSS、全局规则和 `@import` full |
+| 公共计算、全局 CSS/tokens、路由、Layout/Icon/PageMeta、未知路径、CI 策略自身 | full 单测与浏览器，PR 同样执行                                |
+| 真实数据、生成输入、来源 pins 或依赖                                         | full，并运行实际数据再生成；不让 UI 顺带重生未变数据          |
+| 夜间 / 强制 full                                                             | 全部单测、数据、浏览器，禁用阶段复用                          |
 
-未审计的 `src/app/**`、`src/shared/**`、路由登记、设计令牌和计算逻辑仍可触发 `full`，不能将整个 shared 目录视为壳层。例如 `src/domain/realCost.ts` 仍是 `full`（完整单测；main/nightly 仍跑完整浏览器）。#512 的原始完整 diff 含此文件，不能宣称其全部改动会因壳层白名单转为 targeted。`pull_request` 上这类 full 计划不再跑约 189 个浏览器 spec，见下一节。`src/data/**`、数据生成脚本/来源、非仅版本号的依赖或锁文件变更仍保留 `full + data`。显式完整验证和未知提交范围也不降级。PR 的壳层 targeted 证据，以及只跑了 smoke 的 full 计划，都不能冒充 main/release 的完整浏览器成功。
+`startGame` 仅首页、`ladderQuery` 仅天梯等精确闭包以 `ci-scope` 和范围单测为准；首页/天梯受影响时保留空状态、未知输入、缺快照和失败恢复验收。文明 profile 包含 `civHistory` / `civBackgrounds` 及自己的四宽/主题。`formatTime`、`dupNames`、`glossary`、`linker`、`sharePage`、`simRoute` 尚未证明完整闭包，先 full。`FeedbackLink` 等现有精确展示例外保留，不把整个 shared 或 feature 目录视为安全白名单。
 
-### PR 浏览器上限（#514）
+窄计划可以排除无关的全站 hash/截图/触控守卫、其它文明矩阵和开局长巡游，断言和文件仍保留在夜间/高风险完整计划；所属功能自己的四宽/主题（包括 `civDlcFilters`）必须保留。全站守卫本身改动 full。`CI_E2E_FULL=false` 不再允许降级高风险 PR。没有文档 PR 跳过全部 e2e/构建烟测的例外。
 
-`pull_request` 永远不跑完整 Playwright。`scope=full` 时单测、内容、分层和 `data` 仍按原计划；浏览器改为：
+static、unit、必要 data 与 build 并行，非 PR 的 static-main 独立补跑。完整浏览器按历史时长加权 LPT 分配四个 runner，窄计划最多四片；保留 default/serial 原子组，不全局 `fullyParallel`。实际分片只消费同一不可变 build。最终 `test` 严格聚合必要阶段和精确 case 集合；失败、取消、超时、缺片、错构建均阻断 deploy。#338 合并同次1280访问的 hash/表格检查，保留原断言、冷启动语义和六份 golden。
 
-- 部署烟测（`scripts/deployment-smoke.mjs`；该事件去掉 feature `all` 的长巡游，只留首页/页脚和已识别功能）
-- 核心包 `tests/e2e/smoke.spec.ts`
-- diff 里已经映射到 `PROFILES` 的功能 e2e，以及本次明确新增/修改或由入口指定的专项 e2e（已删除文件不执行）。`full` 单测计划不会丢弃这些专项浏览器验收（#636）
+仅 v2 原始阶段执行证明可复用，v1 无效。GitHub 核实同仓库成功来源 run/attempt/数字 job/artifact，并匹配实际 tree、策略、工具链和精确检查/文件/case 集合；不沿用任意继承链。缺失或坏证明补跑所缺必要阶段。build 与 static-main 不复用；每次包括文档维护都重新构建真实 SHA 并执行24路由冷启动 smoke。PR 到同树 main 的源码覆盖可复用，main 新页脚仍实际核验；不能把复用写成本次重新执行。
 
-既无功能映射、也无明确专项用例时，浏览器只有部署烟测和 `smoke.spec.ts`。`CI_E2E_FULL` 由 `.github/workflows/ci.yml` 设置，`pull_request` 恒为 `false`；`scripts/ci-scope.mjs` 的 `applyBrowserPolicy` 与 `scripts/ci-run.mjs` 都认这个事件，不能靠把 `CI_E2E_FULL=true` 写进 PR 环境把整套 e2e 加回来。
+CI/Deploy 与 Release 各自从 GitHub `run.created_at` 起共享30分钟预算，包含初始/阶段/部署排队、同 run 重跑、命令和网络等待。不能按阶段重置预算；诊断最多另用90秒且不能变绿。平台进程清理存在延迟，不承诺物理30:00瞬间停止。Release 校验准确 main 外部 v2 gate 和已部署产物字节，不重建。独立完成事件时序报告记录 wall、排队、全部 runner 分钟和最慢片，PR→main→deploy→Release 整链另列；10分钟只是实测目标。
 
-#636 为首页、天梯加入有界 profile。首页覆盖 `startGame592` 与首页壳层，天梯覆盖现有 `ladder*` 的明确文件列表；新增回归时同步维护列表。`src/domain/startGame.ts` 已审计为首页选择流程与展示投影，只有这一精确路径归入 home；其它计算或未知 domain 文件继续 full。专项清单和 profile 合并、去重后，仍最后应用下方 capped 黑名单。
-
-### PR capped 黑名单（Kent §C，#538 / #514）
-
-下面这些 spec **不删除**，main / nightly / `CI_E2E_FULL` 仍会跑到。它们只是不能进入 pull_request 的 `capped` 列表，哪怕 `ci-scope` 给出 `full`，或某个宽 profile 本来选中了它们：
-
-| 模式                                                                                             | PR capped                                                          |
-| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| `v0300-338`                                                                                      | 始终排除                                                           |
-| `screenshots`、`stepContrast`、`overflow64`、`cardWrap*`、`mobile361-359-366`、`touchTargets481` | 始终排除（四宽×双主题 / 截图 / 触控守卫；壳层那 6 个 spec 仍跑）   |
-| `*197`、`finalCivs197`、`civDlcFilters`                                                          | 不跑整张文明矩阵。只改一个文明时，可以留下该文明自己的 `*197` spec |
-| `build41`、`rush35`、`rushGeneric507`、`timeline*`                                               | 本 PR 不是该功能时排除                                             |
-
-`src/shared/nav/pageRegistry.ts`、`src/app/pageRegistry.tsx` 和 `src/shared/styles/` 下的共享 CSS 仍可让单测保持 `full`。PR 浏览器最多是 `smoke.spec.ts` 加上 diff 里真正改到的功能，不会把上表守卫带进来。
-
-`pull_request` 且 `browser=false` 时不跑 Playwright e2e，构建跳过 OG 截图，短部署烟测也不跑。若 Affected unit 会启动 Chromium（`release108`、`releaseSmoke`，含 maintenance 的 `tests/unit/release*.test.ts`），仍用与 e2e 相同的 `npx playwright install --with-deps chromium` 装上 `chromium_headless_shell`；没有这类单测则不安装。证据复用跳过 unit 时也不为这条路径安装。main 推送仍安装 chromium，以便生成 OG 并部署。`unused:check`、`introductions:check` 和 `docs/design/contrast.py` 只在 main / 夜间 / 手动运行，不挡 PR。
-
-| 事件                                                                 | 浏览器                                                                                                                 |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `pull_request`                                                       | smoke + 已识别功能；无功能则 smoke。不跑约 189 个 spec                                                                 |
-| `push` 到 `main` / `release/**`，且计划为 `full`（含壳层 push 提升） | 完整 Playwright                                                                                                        |
-| `schedule` 夜间、`workflow_dispatch` 且 `inputs.full` / `CI_FULL`    | 完整 Playwright，并做数据检查、禁用证据复用                                                                            |
-| 已映射的 targeted / civ-ui / maintenance                             | 原文件列表。main 的 maintenance 仍短烟测；PR 且 browser=false 不跑 e2e/OG/短烟测。会启动 Chromium 的 unit 仍安装浏览器 |
-
-手动 `workflow_dispatch` 即使关掉 `inputs.full`，事件也没有 PR/push 基线，路径计划仍是 full，且 `CI_E2E_FULL` 为 true，浏览器同样是完整套件。浏览器限流只发生在 `pull_request`。
-
-已审计、只影响展示的路径不再标成 `full`（计算、令牌、路由、`realCost.ts`、`widgets.tsx`、`layout.tsx` 等仍会）：
-
-| 路径                                                             | 计划                          |
-| ---------------------------------------------------------------- | ----------------------------- |
-| `Layout.tsx`、`Icon.tsx`、`editorial-shell.css`                  | `shell`（#513，6 个 spec）    |
-| `FeedbackLink.tsx`、`src/shared/utils/feedback.ts`               | `shell`，并加 `feedback` 单测 |
-| `formatTime.ts`                                                  | `clock`                       |
-| `dupNames.ts`                                                    | `names`                       |
-| `linker.ts`                                                      | `links`                       |
-| `sharePage.ts`、`ShareImage.tsx`                                 | `share`                       |
-| `glossary.ts` 与 `src/features/glossary/`、`src/features/share/` | `glossary` / `share`          |
-
-证据里的 `browser:"capped"` 不能覆盖以后的 `browser:"full"`。main 不会把一次只跑了 smoke 的 PR 当成完整浏览器已通过。
-
-本地看 PR 会真正执行的浏览器列表（`planRange` 本身不含事件上限）：
+提交前可预估已提交 Git 范围（先 `git fetch origin main`；不含工作区修改）：
 
 ```bash
 node --input-type=module <<'NODE'
@@ -198,25 +161,12 @@ import { applyBrowserPolicy, planRange } from './scripts/ci-scope.mjs';
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
 const head = git('rev-parse', 'HEAD');
 const base = git('merge-base', 'origin/main', head);
-const plan = applyBrowserPolicy(planRange(base, head), { GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'false' });
-console.log(JSON.stringify({ scope: plan.scope, full: plan.full, browser: plan.browser, e2e: plan.e2e }, null, 2));
+const plan = applyBrowserPolicy(planRange(base, head), { GITHUB_EVENT_NAME: 'pull_request' });
+console.log(JSON.stringify(plan, null, 2));
 NODE
 ```
 
-提交前可预估实际 Git 范围（先 `git fetch origin main`；下例为当前分支与 main 的公共祖先到 HEAD）：
-
-```bash
-node --input-type=module <<'NODE'
-import { execFileSync } from 'node:child_process';
-import { planRange } from './scripts/ci-scope.mjs';
-const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
-const head = git('rev-parse', 'HEAD');
-const base = git('merge-base', 'origin/main', head);
-console.log(JSON.stringify(planRange(base, head), null, 2));
-NODE
-```
-
-该命令预估路径计划，不包含上表的事件提升；只读取已提交文件，不包含工作区修改。实际 Actions 计划见 `Select affected validation plan` 日志及 `ci-validation-evidence`。6 个 spec 是有界选择，不是固定耗时保证，交付时记录实际执行时间。
+实际 Actions 的精确检查与 case 集合见 plan artifact 和 `Freeze exact selections and verified phase reuse` 日志。单测 `unit_chromium` 只决定 unit 阶段是否需要安装浏览器；build 冷烟测及浏览器 worker 独立安装，统一通过剩余预算执行镜像修复和 `npx playwright install --with-deps chromium`。
 
 ## 8. 选 issue 流程（checklist）
 

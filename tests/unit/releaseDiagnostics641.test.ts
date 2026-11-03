@@ -44,11 +44,10 @@ function readReport(directory: string) {
 }
 
 describe('Release 提前失败证据 #641', () => {
-  it('只登记本项维护脚本与浏览器单测，未知同名前缀仍完整验证', () => {
+  it('#659 诊断策略自身和未知同名前缀均完整验证，浏览器单测识别仍精确', () => {
     const plan = planChanges([{ path: 'scripts/smoke-diagnostics.mjs' }]);
-    expect(plan).toMatchObject({ scope: 'maintenance', full: false, data: false });
-    expect(plan.unit).toContain('tests/unit/release*.test.ts');
-    expect(applyBrowserPolicy(plan, { GITHUB_EVENT_NAME: 'pull_request' }).browser).toBe('none');
+    expect(plan).toMatchObject({ scope: 'full', full: true, data: false });
+    expect(applyBrowserPolicy(plan, { GITHUB_EVENT_NAME: 'pull_request' }).browser).toBe('full');
     expect(unitLaunchesChromium({ full: false, unit: ['tests/unit/releaseDiagnostics641.test.ts'] })).toBe(true);
     expect(unitLaunchesChromium({ full: false, unit: ['tests/unit/releaseDiagnostics641Extra.test.ts'] })).toBe(false);
     for (const path of ['scripts/smoke-diagnostics-extra.mjs', 'scripts/smoke-diagnostics/helper.mjs', 'src/domain/smoke-diagnostics.ts'])

@@ -8,8 +8,8 @@ import postcss from 'postcss';
 const sha = /^[0-9a-f]{40}$/;
 const version = /^\d+\.\d+\.\d+$/;
 const cssFiles = new Set(['src/shared/styles/base.css', 'src/shared/styles/editorial.css']);
-// Audited shell presentation only; routing, tokens, state and other shared files stay conservative.
-const shellFiles = new Set(['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src/shared/styles/editorial-shell.css']);
+// Shell files have consumers throughout the application; a partial profile is not a proven closure.
+const shellFiles = new Set(['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src/shared/styles/editorial-shell.css', 'src/features/share/PageMeta.tsx']);
 // Audited display files only. Calculation, tokens, routing and unaudited shared UI stay full.
 const displayFiles = new Map([
   // Short insight content is read only by the unit/civilization detail pages; no simulation consumers.
@@ -18,11 +18,6 @@ const displayFiles = new Map([
   ['src/domain/startGame.ts', ['home']],
   // Ladder-only URL/selection/source labels; snapshot values and statistical calculations are unchanged.
   ['src/domain/ladderQuery.ts', ['ladder']],
-  ['src/domain/formatTime.ts', ['clock']],
-  ['src/domain/dupNames.ts', ['names']],
-  ['src/domain/linker.ts', ['links']],
-  ['src/domain/sharePage.ts', ['share']],
-  ['src/domain/glossary.ts', ['glossary']],
   ['src/shared/ui/ShareImage.tsx', ['share']],
   ['src/shared/ui/FeedbackLink.tsx', ['shell']],
   ['src/shared/utils/feedback.ts', ['shell']],
@@ -35,6 +30,20 @@ const maintenanceFiles = new Set([
   'scripts/ci-scope.mjs',
   'scripts/ci-run.mjs',
   'scripts/ci-evidence.mjs',
+  'scripts/ci-api.mjs',
+  'scripts/ci-browser-reporter.mjs',
+  'scripts/ci-browser-weights.json',
+  'scripts/ci-budget.mjs',
+  'scripts/ci-commands.mjs',
+  'scripts/ci-deploy.mjs',
+  'scripts/ci-plan.mjs',
+  'scripts/ci-release.mjs',
+  'scripts/ci-report.mjs',
+  'scripts/ci-shards.mjs',
+  'scripts/ci-stage-evidence.mjs',
+  'scripts/ci-stage.mjs',
+  'scripts/ci-timing.mjs',
+  'scripts/ci-worker.mjs',
   'scripts/deployment-smoke.mjs',
   'scripts/smoke-diagnostics.mjs',
   'scripts/site-artifact.mjs',
@@ -99,6 +108,8 @@ export const PROFILES = {
       'civRegionalBuildings456',
       'civUniqueBuildings463',
       'insights584',
+      'civHistory',
+      'civBackgrounds',
     ],
     [
       'civDlcFilters',
@@ -118,6 +129,8 @@ export const PROFILES = {
       'insights584',
       // #603：概览主栏编辑式分区。Kent 的失败验收折进来之后应收绿。
       'civ603',
+      'civHistory',
+      'civBackgrounds',
     ],
   ),
   units: profile(
@@ -220,24 +233,16 @@ export const PROFILES = {
   share: profile(['share78', 'shareCard'], ['share78', 'shareCard', 'shareLink286']),
   glossary: profile(['glossary217', 'glossary276'], ['glossary217', 'glossary276']),
 };
-/** Playwright files kept when a pull_request would otherwise run the whole suite (#514). */
-export const PR_CORE_SMOKE_E2E = ['tests/e2e/smoke.spec.ts'];
+/** Every ordinary gate includes the cold-built site smoke, including documentation/version-only changes. */
+export const GATE_CORE_SMOKE_E2E = ['tests/e2e/smoke.spec.ts'];
+// Legacy public name retained for release tooling importing the old scope module.
+export const PR_CORE_SMOKE_E2E = GATE_CORE_SMOKE_E2E;
 /**
- * Kent §C (#538, under #514). These never join a pull_request `capped` browser list,
- * including when scope is full or a broad profile is selected. Spec files stay in the tree.
- * main / nightly / CI_E2E_FULL still run them (full suite, or the unchanged profile list).
- * Four-width × dual-theme guards are the named files below, not the shell suite's own width checks.
+ * Global tours reserved for the nightly/high-risk full plan (#659 supersedes #514's PR cap).
+ * A narrow feature keeps its own width/theme/negative paths, including civDlcFilters.
+ * Editing one of these guard files itself is high risk and therefore selects the full plan.
  */
-export const PR_CAPPED_BLACKLIST_EXACT = [
-  'v0300-338',
-  'screenshots',
-  'stepContrast',
-  'overflow64',
-  'mobile361-359-366',
-  'touchTargets481',
-  'finalCivs197',
-  'civDlcFilters',
-];
+export const PR_CAPPED_BLACKLIST_EXACT = ['v0300-338', 'screenshots', 'stepContrast', 'overflow64', 'mobile361-359-366', 'touchTargets481', 'finalCivs197'];
 const BUILD41_OWNERS = [
   /(?:^|\/)build41\./,
   /^src\/features\/builds\//,
@@ -349,7 +354,7 @@ function pathsMentionCiv(paths, civ) {
   return paths.some((path) => exact.test(String(path).toLowerCase()) || prefix.test(String(path)));
 }
 
-/** True when a spec must stay out of the pull_request capped list (#514 §C). */
+/** Legacy name: omit unrelated global tours from a proven narrow gate on either PR or main. */
 export function prCappedExcludes(specPath, paths = []) {
   const base = specBasename(specPath);
   const changed = Array.isArray(paths) ? paths.filter((path) => typeof path === 'string') : [];
@@ -363,7 +368,7 @@ export function prCappedExcludes(specPath, paths = []) {
   return false;
 }
 
-function fullPlan(data = true, features = [], extraE2e = []) {
+export function fullPlan(data = true, features = [], extraE2e = []) {
   return { scope: 'full', features: sorted(['all', ...features]), unit: [], e2e: sorted(extraE2e), data, full: true };
 }
 
@@ -466,6 +471,64 @@ export function duelCssOnly(before, after) {
   }
 }
 
+// Each filename and selector root was checked against its actual TSX importer and other consumers.
+// New files, namespaces and global selectors do not inherit ownership from a feature directory.
+const ownedFeatureCss = new Map([
+  ['src/features/home/home.css', /^(?:#home|\.home-group(?:-desc)?)(?=$|\s|[.:#>\[])/],
+  ['src/features/home/start-game.css', /^(?:\.|button\.)start-[a-z-]+(?=$|\s|[.:#>\[])/],
+  ['src/features/ladder/ladder.css', /^\.ladder-[a-z-]+(?=$|\s|[.:#>\[])/],
+  ['src/features/ladder/ladderMeta.css', /^\.ladder-[a-z-]+(?=$|\s|[.:#>\[])/],
+  ['src/features/ladder/stat-methods.css', /^\.ladder-stat-methods(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civ-list-links.css', /^#list #grid > a\.card(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civ-background.css', /^\.civ-(?:detail-background|background-credit)(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civ-professional-view.css', /^\.civ-pro(?:-author)?(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civ-requirements.css', /^\.(?:civ-requirements|requirements-[a-z-]+|requirement-[a-z-]+)(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civRelatedTools.css', /^\.civ-related-tools(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civ-not-found.css', /^\.civ-not-found[a-z-]*(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civ-regional-units.css', /^\.civ-regional-[a-z-]+(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civ-regional-buildings.css', /^\.civ-regional-buildings(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civOverview.css', /^(?:\.detail\s+)?\.civ-[a-z-]+(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civ-unique-buildings.css', /^\.civ-unique-buildings(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/components/civ-history.css', /^\.civ-history[a-z-]*(?=$|\s|[.:#>\[])/],
+  ['src/features/civs/openingBuildChoices.css', /^\.civ-opening-[a-z-]+(?=$|\s|[.:#>\[])/],
+]);
+const ownedCssExactSelectors = new Map([
+  ['src/features/civs/components/civRelatedTools.css', ['#detail .dtabs:has(+ .civ-related-tools)']],
+  ['src/features/civs/components/civOverview.css', ['#detail .dmain > .insight-slot']],
+  ['src/features/ladder/stat-methods.css', ['.ladder-stat-methods p + p']],
+]);
+
+export function featureCssOnly(path, before, after) {
+  const rootSelector = ownedFeatureCss.get(path);
+  const sources = [before, after].filter((source) => source !== null);
+  if (!rootSelector || !sources.length) return false;
+  try {
+    return sources.every((source) => {
+      if (typeof source !== 'string') return false;
+      const root = postcss.parse(source);
+      let scoped = true,
+        rules = 0;
+      root.walkAtRules((rule) => {
+        if (!['media', 'supports'].includes(rule.name)) scoped = false;
+      });
+      root.walkRules((rule) => {
+        rules++;
+        for (const raw of rule.selectors) {
+          const selector = raw.trim();
+          if (ownedCssExactSelectors.get(path)?.includes(selector)) continue;
+          if (!rootSelector.test(selector) || /[+~\\]/.test(selector)) scoped = false;
+        }
+      });
+      root.walkDecls((declaration) => {
+        if (declaration.parent.type !== 'rule') scoped = false;
+      });
+      return scoped && rules > 0;
+    });
+  } catch {
+    return false;
+  }
+}
+
 /** A missing range remains conservative; unchanged pipelines are not regenerated for core/UI code. */
 export function planChanges(changes) {
   if (!Array.isArray(changes) || !changes.length) return fullPlan();
@@ -473,8 +536,7 @@ export function planChanges(changes) {
     extraUnit = new Set(),
     extraE2e = new Set();
   let full = false,
-    data = false,
-    policy = false;
+    data = false;
   for (const change of changes) {
     if (!change || !validPath(change.path)) return fullPlan();
     const { path, before, after } = change;
@@ -489,12 +551,13 @@ export function planChanges(changes) {
       full = true;
     } else if (path === '.npmrc' || path.startsWith('src/data/') || path.startsWith('public/img/') || path.startsWith('docs/PATCH-NOTES/')) {
       full = data = true;
-    } else if (path.startsWith('.github/') || maintenanceFiles.has(path) || /^tests\/unit\/release[^/]*\.test\.ts$/.test(path)) {
-      policy = true;
+    } else if (path.startsWith('.github/') || maintenanceFiles.has(path) || /^tests\/unit\/(?:release[^/]*|ci[A-Z0-9][^/]*)\.test\.ts$/.test(path)) {
+      // The policy deciding validation cannot certify itself with its former reduced profile.
+      full = true;
     } else if ((path.startsWith('docs/') && !path.startsWith('docs/PATCH-NOTES/')) || /^[^/]+\.md$/.test(path) || path === 'LICENSE') {
       // Ordinary documentation does not change product logic or generated data.
     } else if (shellFiles.has(path)) {
-      features.add('shell');
+      full = true;
     } else if (displayFiles.has(path)) {
       for (const feature of displayFiles.get(path)) features.add(feature);
       if (feedbackPaths.has(path)) extraUnit.add('tests/unit/feedback.test.ts');
@@ -521,8 +584,13 @@ export function planChanges(changes) {
       features.add('civs');
     } else if (path === 'src/domain/patches.ts') {
       features.add('patches');
-    } else if (path === 'src/domain/simRoute.ts') {
-      for (const feature of ['matchup', 'units', 'simulator']) features.add(feature);
+    } else if (
+      path === 'src/features/civs/backgrounds.source.json' ||
+      path === 'src/features/civs/backgrounds.json' ||
+      path === 'src/features/civs/import_backgrounds.py' ||
+      path.startsWith('src/features/civs/assets/backgrounds/')
+    ) {
+      full = data = true;
     } else if (path === 'src/shared/ui/PatchHistory.tsx') {
       // This history display is consumed by four entity details and patch pages.
       // Its loader, domain logic, styles and all other shared files remain conservative.
@@ -534,9 +602,10 @@ export function planChanges(changes) {
       // Audited presentation consumers only; state, calculations and other shared files stay full.
       for (const feature of ['duel', 'units', 'buildings']) features.add(feature);
       for (const name of ['matchupSim424', 'v070-88', 'garrison218', 'garrison224']) extraE2e.add(`tests/e2e/${name}.spec.ts`);
-    } else if (path.startsWith('src/features/duel/') && /\.(?:css|pcss|postcss|less|sass|scss|styl|stylus|sss)$/i.test(path)) {
+    } else if (/^src\/features\/.*\.(?:css|pcss|postcss|less|sass|scss|styl|stylus|sss)$/i.test(path)) {
       // Vite also accepts pcss/postcss and preprocessor suffixes; unknown syntax stays full.
-      if (path.endsWith('.css') && duelCssOnly(before, after)) features.add('duel');
+      if (path.startsWith('src/features/duel/') && path.endsWith('.css') && duelCssOnly(before, after)) features.add('duel');
+      else if (featureCssOnly(path, before, after)) features.add(path.split('/')[2]);
       else full = true;
     } else if (path.startsWith('src/features/')) {
       const feature = path.split('/')[2];
@@ -547,6 +616,9 @@ export function planChanges(changes) {
     } else if (path === 'src/domain/search.ts') {
       // #554 only rewrites the siege page href for「冲车」. Keep the full unit plan; PR browser still runs siege acceptance.
       features.add('siege');
+      full = true;
+    } else if (path.startsWith('tests/e2e/') && (PR_CAPPED_BLACKLIST_EXACT.includes(specBasename(path)) || specBasename(path).startsWith('cardWrap'))) {
+      // Nightly-only means an unrelated global tour is omitted from narrow work, never its own edit.
       full = true;
     } else if (/^tests\/unit\/[^/]+\.test\.ts$/.test(path) || /^tests\/e2e\/[^/]+\.spec\.ts$/.test(path)) {
       if (after !== null) (path.startsWith('tests/unit/') ? extraUnit : extraE2e).add(path);
@@ -563,7 +635,7 @@ export function planChanges(changes) {
     for (const path of PROFILES[feature].e2e) extraE2e.add(path);
   }
   const scope = selected.length === 1 && selected[0] === 'civs' ? 'civ-ui' : selected.length || extraUnit.size || extraE2e.size ? 'targeted' : 'maintenance';
-  if (policy || scope === 'maintenance') extraUnit.add('tests/unit/release*.test.ts');
+  if (scope === 'maintenance') extraUnit.add('tests/unit/release*.test.ts');
   return rememberPaths({ scope, features: selected, unit: sorted(extraUnit), e2e: sorted(extraE2e), data: false, full: false }, changes);
 }
 
@@ -635,34 +707,22 @@ export function unitLaunchesChromium(plan) {
   return CHROMIUM_UNIT_BASENAMES.some((basename) => plan.unit.some((pattern) => unitPatternMatches(pattern, basename)));
 }
 
-/** Complete Playwright is allowed off pull_request. CI_E2E_FULL=false also refuses it. Unset env keeps local/full plans intact. */
-export function allowFullBrowser(env = process.env) {
-  if (env.GITHUB_EVENT_NAME === 'pull_request') return false;
-  if (env.CI_E2E_FULL === 'false') return false;
+/** Legacy API retained: environment variables cannot downgrade a required high-risk browser plan. */
+export function allowFullBrowser(_env = process.env) {
   return true;
 }
 
 /**
- * pull_request keeps full unit/data scope but never the ~189-spec browser suite (#514).
- * §C blacklist is removed from that capped list even when scope is full or a profile would have included it.
- * pageRegistry / shared CSS therefore contribute smoke plus the feature files actually in the diff, not full-site guards.
+ * High-risk changes retain full browser coverage on every event. Proven narrow plans include
+ * the cold smoke and affected regressions; unrelated global tours remain in nightly/full runs.
  */
 export function applyBrowserPolicy(plan, env = process.env) {
   if (!plan || typeof plan !== 'object') return plan;
-  if (allowFullBrowser(env)) {
-    const browser = plan.full ? 'full' : plan.e2e?.length ? 'capped' : 'none';
-    return { ...plan, browser };
-  }
+  if (env.CI_FULL === 'true' || env.GITHUB_EVENT_NAME === 'schedule') return { ...fullPlan(true, plan.features, plan.e2e), paths: plan.paths, browser: 'full' };
+  if (plan.full) return { ...plan, browser: 'full' };
   const paths = Array.isArray(plan.paths) ? plan.paths : [];
-  const candidates = new Set([...(plan.full ? PR_CORE_SMOKE_E2E : []), ...(plan.e2e ?? [])]);
-  if (plan.full) {
-    for (const feature of plan.features ?? []) {
-      if (feature === 'all' || !Object.hasOwn(PROFILES, feature)) continue;
-      for (const path of PROFILES[feature].e2e) candidates.add(path);
-    }
-  }
+  const candidates = new Set([...GATE_CORE_SMOKE_E2E, ...(plan.e2e ?? [])]);
   const e2e = sorted([...candidates].filter((path) => !prCappedExcludes(path, paths)));
-  if (!e2e.length) return { ...plan, browser: 'none', e2e };
   return { ...plan, browser: 'capped', e2e };
 }
 
@@ -695,16 +755,8 @@ function main() {
     } catch {
       // Missing history or an unsupported event cannot select a reduced test profile.
     }
-    // #513 only narrows shell PR checks. Protected shell pushes retain their prior full suite,
-    // without changing #431's existing plans or regenerating unchanged game data.
-    if (
-      process.env.GITHUB_EVENT_NAME === 'push' &&
-      (process.env.GITHUB_REF === 'refs/heads/main' || process.env.GITHUB_REF?.startsWith('refs/heads/release/')) &&
-      plan.features.includes('shell')
-    )
-      plan = fullPlan(plan.data, plan.features);
     if (process.env.CI_FULL === 'true' || process.env.GITHUB_EVENT_NAME === 'schedule') plan = fullPlan();
-    // #514: pull_request never expands Playwright to the whole suite, even when scope stays full.
+    // #659: classify risk first; the event cannot weaken the required browser coverage.
     plan = applyBrowserPolicy(plan);
     writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-scope.json'), JSON.stringify({ base, head, scope: plan.scope }) + '\n');
     writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-plan.json'), JSON.stringify(plan) + '\n');

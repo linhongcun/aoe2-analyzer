@@ -1,0 +1,38 @@
+name: CI timing
+on:
+  workflow_run:
+    workflows: [Release]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: '单独读取某个 PR / nightly run 的计时；请从辅助分支调度'
+        required: true
+        type: string
+permissions: { contents: read, actions: read }
+jobs:
+  timing:
+    if: (github.event_name == 'workflow_run' && github.event.workflow_run.repository.full_name == github.repository) || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Read trusted main tooling; never execute the PR source that is being measured.
+      - uses: actions/checkout@v4
+        timeout-minutes: 2
+        with: { ref: main, persist-credentials: false }
+      - name: Establish this reporting run budget
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: node scripts/ci-budget.mjs --init
+      - name: Collect completed source run and every attempt
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_TIMING_RUN_ID: ${{ github.event.workflow_run.id || inputs.source_run_id }}
+          CI_TIMING_OUTPUT: ${{ runner.temp }}/ci-timing.json
+        run: node scripts/ci-report.mjs
+      - uses: actions/upload-artifact@v4
+        timeout-minutes: 1
+        with:
+          name: completed-run-timing
+          path: ${{ runner.temp }}/ci-timing.json
+          if-no-files-found: error
+      - run: node scripts/ci-budget.mjs --assert

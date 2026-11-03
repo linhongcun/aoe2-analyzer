@@ -2,6 +2,8 @@ import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error scripts/*.mjs has no declaration
 import { PROFILES, planChanges } from '../../scripts/ci-scope.mjs';
+// @ts-expect-error CI scripts are plain Node modules.
+import { resolveTestFiles } from '../../scripts/ci-run.mjs';
 
 const change = (path: string) => ({ path, before: '', after: '' });
 const history = 'src/shared/ui/PatchHistory.tsx';
@@ -32,12 +34,14 @@ describe('#437 建筑历史展示的 CI 影响范围', () => {
       change('tests/unit/buildingHistoryCiScope.test.ts'),
       change('scripts/ci-scope.mjs'),
     ]);
-    expect(plan).toMatchObject({ scope: 'targeted', features, full: false, data: false });
-    expect(plan.e2e).toContain('tests/e2e/buildingHistory.spec.ts');
-    expect(plan.e2e).toContain('tests/e2e/entityHistory435.spec.ts');
-    expect(plan.unit).toContain('tests/unit/buildingHistoryCiScope.test.ts');
-    expect(plan.unit).toContain('tests/unit/entityHistory435.test.ts');
-    expect(plan.unit).toContain('tests/unit/release*.test.ts');
+    expect(plan).toMatchObject({ scope: 'full', features: ['all', ...features], full: true, data: false });
+    const browser = resolveTestFiles(['tests/e2e/*.spec.ts'], 'e2e');
+    const unit = resolveTestFiles(['tests/unit/*.test.ts'], 'unit');
+    expect(browser).toContain('tests/e2e/buildingHistory.spec.ts');
+    expect(browser).toContain('tests/e2e/entityHistory435.spec.ts');
+    expect(unit).toContain('tests/unit/buildingHistoryCiScope.test.ts');
+    expect(unit).toContain('tests/unit/entityHistory435.test.ts');
+    expect(unit).toContain('tests/unit/releasePlan.test.ts');
   });
 
   it.each(['src/shared/ui/PatchHistoryOther.tsx', 'src/shared/ui/patchHistory.css', 'src/shared/ui/layout.tsx', 'src/domain/patchHistory.ts'])(

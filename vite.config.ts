@@ -8,7 +8,8 @@ import type { Unit } from './src/domain/types';
 
 const sha = (() => {
   try {
-    return execSync('git rev-parse --short HEAD').toString().trim();
+    // Git's automatic abbreviation grows with repository object count; the footer contract is seven digits.
+    return execSync('git rev-parse HEAD').toString().trim().slice(0, 7);
   } catch {
     return 'dev';
   }

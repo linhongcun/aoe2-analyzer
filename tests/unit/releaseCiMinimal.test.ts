@@ -15,7 +15,7 @@ describe('minimal CI optimization coverage', () => {
     const p = plan('src/data/index.ts');
     expect(p).toMatchObject({ full: true, data: false });
     expect(applyBrowserPolicy(p, { GITHUB_EVENT_NAME: 'push' }).browser).toBe('full');
-    expect(applyBrowserPolicy(p, { GITHUB_EVENT_NAME: 'pull_request' })).toMatchObject({ full: true, browser: 'capped' });
+    expect(applyBrowserPolicy(p, { GITHUB_EVENT_NAME: 'pull_request' })).toMatchObject({ full: true, browser: 'full' });
   });
   it.each([
     'src/data/civs.json',
@@ -34,7 +34,7 @@ describe('minimal CI optimization coverage', () => {
   it('new specs are selected and workflow changes retain release-policy gates', () => {
     expect(plan('tests/e2e/newFeature.spec.ts').e2e).toContain('tests/e2e/newFeature.spec.ts');
     expect(plan('tests/unit/newFeature.test.ts').unit).toContain('tests/unit/newFeature.test.ts');
-    expect(plan('.github/workflows/ci.yml').unit).toContain('tests/unit/release*.test.ts');
+    expect(plan('.github/workflows/ci.yml')).toMatchObject({ full: true, data: false });
     expect(plan('.github/workflows/ci.yml', 'src/domain/unknown.ts').full).toBe(true);
   });
 });

@@ -6,14 +6,14 @@ import { expect, it } from 'vitest';
 // @ts-expect-error CI scripts are plain Node modules
 import { planChanges } from '../../scripts/ci-scope.mjs';
 // @ts-expect-error CI scripts are plain Node modules
-import { resolveTestFiles, testCommand } from '../../scripts/ci-run.mjs';
+import { testCommand } from '../../scripts/ci-run.mjs';
 // @ts-expect-error CI scripts are plain Node modules
 import { planCovers } from '../../scripts/ci-evidence.mjs';
 
 const shellPaths = ['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src/shared/styles/editorial-shell.css'];
 const change = (path: string) => ({ path });
 
-it.each(shellPaths)('#513 %s selects a bounded, real shell suite with docs and version-only updates', (path) => {
+it.each(shellPaths)('#659 %s retains full consumer coverage with docs and version-only updates', (path) => {
   const plan = planChanges([
     change(path),
     change('docs/TESTING.md'),
@@ -25,22 +25,15 @@ it.each(shellPaths)('#513 %s selects a bounded, real shell suite with docs and v
       after: '{"version":"0.71.1","packages":{"":{"version":"0.71.1"}}}',
     },
   ]);
-  expect(plan).toMatchObject({ scope: 'targeted', features: ['shell'], full: false, data: false });
-  expect(plan.e2e.length).toBeLessThanOrEqual(15);
-  expect(plan.e2e).toEqual(
-    ['editorial6', 'feedbackTap295', 'navigation272', 'searchLoading395', 'skipLink294', 'smoke'].map((name) => `tests/e2e/${name}.spec.ts`),
-  );
-  expect(resolveTestFiles(plan.e2e, 'e2e')).toEqual(plan.e2e);
-  expect(resolveTestFiles(plan.unit, 'unit')).toEqual(plan.unit);
-  expect(testCommand(plan, 'e2e').args).toEqual(['playwright', 'test', ...plan.e2e, '--reporter=line']);
+  expect(plan).toMatchObject({ scope: 'full', features: ['all'], full: true, data: false });
+  expect(testCommand(plan, 'unit').args).toEqual(['vitest', 'run']);
+  expect(testCommand(plan, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
 });
 
-it('#513 shell, affected features and policy checks are combined and deduplicated', () => {
+it('#659 shell or policy edits retain full coverage when mixed with a known feature', () => {
   const plan = planChanges([...shellPaths, 'src/features/civs/CivDetail.tsx', 'scripts/ci-scope.mjs'].map(change));
-  expect(plan).toMatchObject({ scope: 'targeted', features: ['civs', 'shell'], full: false, data: false });
-  expect(plan.unit).toContain('tests/unit/release*.test.ts');
-  expect(plan.e2e).toContain('tests/e2e/civDlcFilters.spec.ts');
-  expect(plan.e2e).toContain('tests/e2e/navigation272.spec.ts');
+  expect(plan).toMatchObject({ scope: 'full', features: ['all', 'civs'], full: true, data: false });
+  expect(testCommand(plan, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
   expect(plan.e2e).toEqual([...new Set(plan.e2e)].sort());
 });
 
@@ -62,7 +55,7 @@ it.each(['src/data/civs.json', 'scripts/build_data.py', 'scripts/data_sources.js
   (path) => expect(planChanges([...shellPaths, path].map(change))).toMatchObject({ scope: 'full', full: true, data: true }),
 );
 
-it('#513 real CLI keeps shell PRs targeted, protected pushes full, and forced/background runs full+data', () => {
+it('#659 real CLI keeps shell PRs and protected pushes full, and forced/background runs full+data', () => {
   const directory = mkdtempSync(join(tmpdir(), 'shell-plan-'));
   const git = (...args: string[]) => execFileSync('git', args, { cwd: directory, encoding: 'utf8' }).trim();
   const commit = (path: string, content: string) => {
@@ -90,7 +83,7 @@ it('#513 real CLI keeps shell PRs targeted, protected pushes full, and forced/ba
           GITHUB_REF: ref,
           GITHUB_OUTPUT: join(directory, 'outputs'),
           CI_FULL: force,
-          // The parent PR workflow sets CI_E2E_FULL=false. A simulated push must not inherit that cap.
+          // Legacy CI_E2E_FULL=false must not weaken a high-risk PR's required coverage.
           CI_E2E_FULL: eventName === 'pull_request' ? 'false' : 'true',
         },
       });
@@ -104,12 +97,12 @@ it('#513 real CLI keeps shell PRs targeted, protected pushes full, and forced/ba
       return plan;
     };
     const pr = inspect('pull_request', 'refs/pull/513/merge');
-    expect(pr).toMatchObject({ scope: 'targeted', full: false, data: false, features: ['shell'] });
+    expect(pr).toMatchObject({ scope: 'full', full: true, data: false, features: ['all'], browser: 'full' });
     for (const ref of ['refs/heads/main', 'refs/heads/release/v0.71.1']) {
       const push = inspect('push', ref);
       expect(push).toMatchObject({ scope: 'full', full: true, data: false, browser: 'full' });
       expect(testCommand(push, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
-      expect(planCovers(pr, push)).toBe(false);
+      expect(planCovers(pr, push)).toBe(true);
     }
     expect(inspect('schedule', 'refs/heads/main')).toMatchObject({ scope: 'full', full: true, data: true });
     expect(inspect('pull_request', 'refs/pull/513/merge', 'true')).toMatchObject({ scope: 'full', full: true, data: true });

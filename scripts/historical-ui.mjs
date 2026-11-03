@@ -48,9 +48,41 @@ export function splitBrowserSubjects(files) {
   return { current: files.filter((file) => !historical.includes(file)), historical };
 }
 
+function exactSuite(file, root) {
+  return file.endsWith('.spec.ts') && existsSync(file) && statSync(file).isFile() && realpathSync(file) === file &&
+    file.startsWith(root + sep) && !file.slice(root.length + 1).includes(sep);
+}
+
+/** Mirror Playwright's public test-list file/project/title format; unknown input stays conservative. */
+function testListSuites(path, root) {
+  try {
+    const lines = readFileSync(path, 'utf8').split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('#'));
+    if (!lines.length) return null;
+    const files = [];
+    for (const line of lines) {
+      const tokens = line.split(line.includes('›') ? '›' : '>').map(token => token.trim());
+      if (tokens[0].startsWith('[')) {
+        if (!tokens[0].endsWith(']')) return null;
+        tokens.shift();
+      }
+      if (!tokens.length || tokens.some(token => !token)) return null;
+      // Playwright accepts optional :line[:column] after the rootDir-relative file.
+      const fileName = tokens[0].replace(/:(\d+):?(\d+)?$/, '');
+      if (!/^[A-Za-z0-9_.-]+\.spec\.ts$/.test(fileName)) return null;
+      const file = resolve(root, fileName);
+      if (!exactSuite(file, root)) return null;
+      files.push(file);
+    }
+    return [...new Set(files)];
+  } catch {
+    return null;
+  }
+}
+
 /** Omit the server only for unambiguous, existing exact current-suite selectors. */
 export function needsHistoricalServer(args = process.argv.slice(2), directory = process.cwd()) {
   const selectors = [];
+  const listed = [];
   const valueOptions = new Set([
     '--reporter',
     '--workers',
@@ -63,6 +95,8 @@ export function needsHistoricalServer(args = process.argv.slice(2), directory = 
     '--shard',
     '--output',
     '--project',
+    '--test-list',
+    '--test-list-invert',
   ]);
   const switches = new Set(['--headed', '--debug', '--list', '--forbid-only', '--quiet', '--pass-with-no-tests', '--fail-on-flaky-tests']);
   const values = args[0] === 'test' ? args.slice(1) : args;
@@ -73,23 +107,22 @@ export function needsHistoricalServer(args = process.argv.slice(2), directory = 
       const [option, inline] = value.split('=', 2);
       if (switches.has(option) && inline === undefined) continue;
       if (!valueOptions.has(option)) return true;
-      if (inline === undefined && (!values[++index] || values[index].startsWith('-'))) return true;
+      const argument = inline ?? values[++index];
+      if (!argument || argument.startsWith('-')) return true;
+      if (option === '--test-list' || option === '--test-list-invert') {
+        const files = testListSuites(resolve(directory, argument), root);
+        if (!files) return true;
+        // Inversion alone cannot prove that no historical test remains selected.
+        if (option === '--test-list') listed.push(...files);
+      }
       continue;
     }
     const file = resolve(directory, value);
-    if (
-      !file.endsWith('.spec.ts') ||
-      !existsSync(file) ||
-      !statSync(file).isFile() ||
-      realpathSync(file) !== file ||
-      !file.startsWith(root + sep) ||
-      file.slice(root.length + 1).includes(sep)
-    )
-      return true;
+    if (!exactSuite(file, root)) return true;
     selectors.push(file);
   }
-  if (!selectors.length || new Set(selectors).size !== selectors.length) return true;
-  return splitBrowserSubjects(selectors).historical.length > 0;
+  if ((!selectors.length && !listed.length) || new Set(selectors).size !== selectors.length) return true;
+  return splitBrowserSubjects([...new Set([...selectors, ...listed])]).historical.length > 0;
 }
 
 export function verifyHistoricalZip(archive) {

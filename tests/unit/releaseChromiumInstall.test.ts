@@ -11,18 +11,23 @@ import { testCommand } from '../../scripts/ci-run.mjs';
 const pr = { GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'false' };
 const change = (path: string) => ({ path });
 const workflow = readFileSync('.github/workflows/ci.yml', 'utf8');
-const installIf =
-  "github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true' || (steps.reuse.outputs.reused != 'true' && steps.scope.outputs.unit_chromium == 'true')";
+const installIf = "needs.plan.outputs.unit_chromium == 'true'";
 
-function stepBody(name: string) {
-  const body = workflow.match(new RegExp(`- name: ${name}\\n([\\s\\S]*?)(?=\\n {6}- )`))?.[1];
-  if (!body) throw new Error(`Missing workflow step: ${name}`);
+function jobBody(name: string) {
+  const body = workflow.match(new RegExp(`^ {2}${name}:\\n([\\s\\S]*?)(?=^ {2}[a-z-]+:|$(?![\\s\\S]))`, 'm'))?.[1];
+  if (!body) throw new Error(`Missing workflow job: ${name}`);
   return body;
 }
 
-it('a docs pull request keeps browser none but still launches chromium from release unit tests', () => {
+function stepBody(job: string, name: string) {
+  const body = jobBody(job).match(new RegExp(`- name: ${name}\\n([\\s\\S]*?)(?=\\n {6}- |$(?![\\s\\S]))`))?.[1];
+  if (!body) throw new Error(`Missing workflow step: ${job}/${name}`);
+  return body;
+}
+
+it('#659 a docs pull request requires site smoke and Chromium from its actual release unit tests', () => {
   const plan = applyBrowserPolicy(planChanges([change('docs/design/README.md')]), pr);
-  expect(plan).toMatchObject({ scope: 'maintenance', full: false, browser: 'none', e2e: [], data: false });
+  expect(plan).toMatchObject({ scope: 'maintenance', full: false, browser: 'capped', e2e: ['tests/e2e/smoke.spec.ts'], data: false });
   expect(plan.unit).toEqual(['tests/unit/release*.test.ts']);
   expect(unitLaunchesChromium(plan)).toBe(true);
   expect(unitLaunchesChromium({ full: false, unit: ['tests/unit/release108.test.ts'] })).toBe(true);
@@ -32,47 +37,49 @@ it('a docs pull request keeps browser none but still launches chromium from rele
   expect(unit?.args.slice(0, 2)).toEqual(['vitest', 'run']);
   expect(unit?.args).toContain('tests/unit/release108.test.ts');
   expect(unit?.args).toContain('tests/unit/releaseSmoke.test.ts');
-  expect(testCommand(plan, 'e2e')).toBeNull();
+  expect(testCommand(plan, 'e2e').args).toEqual(['playwright', 'test', 'tests/e2e/smoke.spec.ts', '--reporter=line']);
 });
 
-it('a unit-only targeted plan that never launches chromium stays unmarked', () => {
+it('#659 a unit-only targeted plan keeps site smoke while its unit suite stays unmarked', () => {
   const plan = applyBrowserPolicy(planChanges([change('tests/unit/buildSim.test.ts')]), pr);
-  expect(plan).toMatchObject({ scope: 'targeted', browser: 'none', e2e: [] });
+  expect(plan).toMatchObject({ scope: 'targeted', browser: 'capped', e2e: ['tests/e2e/smoke.spec.ts'] });
   expect(plan.unit).toEqual(['tests/unit/buildSim.test.ts']);
   expect(unitLaunchesChromium(plan)).toBe(false);
   expect(testCommand(plan, 'unit').args).not.toContain('tests/unit/release108.test.ts');
 });
 
-it('policy plus a non-release unit test still needs chromium and does not open e2e', () => {
+it('#659 CI policy itself needs full unit and browser validation on a PR', () => {
   const plan = applyBrowserPolicy(planChanges([change('scripts/ci-scope.mjs'), change('tests/unit/buildSim.test.ts')]), pr);
-  expect(plan.scope).toBe('targeted');
-  expect(plan.browser).toBe('none');
-  expect(plan.e2e).toEqual([]);
-  expect(plan.unit).toContain('tests/unit/release*.test.ts');
-  expect(plan.unit).toContain('tests/unit/buildSim.test.ts');
+  expect(plan).toMatchObject({ scope: 'full', full: true, browser: 'full', data: false });
+  expect(testCommand(plan, 'unit').args).toEqual(['vitest', 'run']);
+  expect(testCommand(plan, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
   expect(unitLaunchesChromium(plan)).toBe(true);
 });
 
 it('full and feature plans launch chromium through the unit suite without using this flag as the e2e switch', () => {
   const full = applyBrowserPolicy(planChanges([change('src/domain/realCost.ts')]), pr);
-  expect(full).toMatchObject({ scope: 'full', full: true, browser: 'capped' });
+  expect(full).toMatchObject({ scope: 'full', full: true, browser: 'full' });
   expect(full.unit).toEqual([]);
   expect(unitLaunchesChromium(full)).toBe(true);
   expect(testCommand(full, 'unit').args).toEqual(['vitest', 'run']);
-  const clock = applyBrowserPolicy(planChanges([change('src/domain/formatTime.ts')]), pr);
-  expect(clock.browser).toBe('capped');
-  expect(unitLaunchesChromium(clock)).toBe(false);
+  const home = applyBrowserPolicy(planChanges([change('src/domain/startGame.ts')]), pr);
+  expect(home.browser).toBe('capped');
+  expect(unitLaunchesChromium(home)).toBe(false);
 });
 
-it('the unit install reuses the e2e chromium command and does not turn OG, e2e, or short smoke back on', () => {
-  for (const name of ['Use Ubuntu public package mirror', 'Cache Playwright browsers', 'Install Playwright chromium'])
-    expect(stepBody(name)).toContain(`if: ${installIf}`);
-  expect(stepBody('Install Playwright chromium')).toContain('run: npx playwright install --with-deps chromium');
-  expect(stepBody('Affected browser checks')).toContain("if: steps.reuse.outputs.reused != 'true' && steps.scope.outputs.browser == 'true'");
-  expect(stepBody('Affected browser checks')).not.toContain('unit_chromium');
-  expect(workflow).toContain("CI_SKIP_PLAYWRIGHT: ${{ github.event_name == 'pull_request' && steps.scope.outputs.browser != 'true' && '1' || '0' }}");
-  expect(stepBody('Short check of the actual build')).toContain("(github.event_name != 'pull_request' || steps.scope.outputs.browser == 'true')");
-  expect(stepBody('Short check of the actual build')).not.toContain('unit_chromium');
+it('#659 only the unit install uses unit_chromium; build smoke and browser workers install independently', () => {
+  for (const name of ['Cache Playwright browsers', 'Install Playwright chromium under shared deadline'])
+    expect(stepBody('unit', name)).toContain(`if: ${installIf}`);
+  expect(stepBody('unit', 'Install Playwright chromium under shared deadline')).toContain('run: node scripts/ci-stage.mjs install-browser');
+  for (const job of ['build', 'browser']) {
+    expect(jobBody(job)).not.toContain('unit_chromium');
+    expect(stepBody(job, 'Cache Playwright browsers')).not.toContain('if:');
+    expect(stepBody(job, 'Install Playwright chromium under shared deadline')).toContain('run: node scripts/ci-stage.mjs install-browser');
+    expect(stepBody(job, 'Install Playwright chromium under shared deadline')).not.toContain('if:');
+  }
+  expect(jobBody('build')).not.toContain('if: needs.plan.outputs');
+  expect(jobBody('browser')).toContain("if: needs.plan.outputs.browser != '[]'");
+  expect(workflow).not.toContain('CI_SKIP_PLAYWRIGHT');
 });
 
 it('the scope CLI reports unit_chromium for a docs pull request and not for a unit-only plan', () => {
@@ -112,19 +119,19 @@ it('the scope CLI reports unit_chromium for a docs pull request and not for a un
       return { plan: JSON.parse(readFileSync(join(directory, 'ci-plan.json'), 'utf8')), output: readFileSync(join(directory, 'outputs'), 'utf8') };
     };
     const docs = inspect(docsHead, 'pull_request');
-    expect(docs.plan).toMatchObject({ scope: 'maintenance', browser: 'none', full: false });
-    expect(docs.output).toContain('browser=false');
+    expect(docs.plan).toMatchObject({ scope: 'maintenance', browser: 'capped', full: false });
+    expect(docs.output).toContain('browser=true');
     expect(docs.output).toContain('unit_chromium=true');
     expect(docs.output).toContain('e2e_full=false');
     const unitHead = commit('tests/unit/buildSim.test.ts', 'unit only');
     const unitOnly = inspect(unitHead, 'pull_request', docsHead);
-    expect(unitOnly.plan).toMatchObject({ scope: 'targeted', browser: 'none' });
+    expect(unitOnly.plan).toMatchObject({ scope: 'targeted', browser: 'capped' });
     expect(unitOnly.plan.unit).toEqual(['tests/unit/buildSim.test.ts']);
-    expect(unitOnly.output).toContain('browser=false');
+    expect(unitOnly.output).toContain('browser=true');
     expect(unitOnly.output).toContain('unit_chromium=false');
     const pushed = inspect(docsHead, 'push');
-    expect(pushed.plan).toMatchObject({ scope: 'maintenance', browser: 'none' });
-    expect(pushed.output).toContain('browser=false');
+    expect(pushed.plan).toMatchObject({ scope: 'maintenance', browser: 'capped' });
+    expect(pushed.output).toContain('browser=true');
     expect(pushed.output).toContain('unit_chromium=true');
   } finally {
     rmSync(directory, { recursive: true, force: true });

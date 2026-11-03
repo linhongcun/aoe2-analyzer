@@ -1,31 +1,29 @@
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { expect, it } from 'vitest';
 // @ts-expect-error CI scripts are plain Node modules
-import { PR_CORE_SMOKE_E2E, allowFullBrowser, applyBrowserPolicy, planChanges } from '../../scripts/ci-scope.mjs';
+import { GATE_CORE_SMOKE_E2E, PR_CORE_SMOKE_E2E, allowFullBrowser, applyBrowserPolicy, planChanges } from '../../scripts/ci-scope.mjs';
 // @ts-expect-error CI scripts are plain Node modules
 import { testCommand, validatePlan } from '../../scripts/ci-run.mjs';
 
 const change = (path: string) => ({ path });
 const pr = { GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'false' };
 const mainPush = { GITHUB_EVENT_NAME: 'push', CI_E2E_FULL: 'true', GITHUB_REF: 'refs/heads/main' };
-const suite = readdirSync('tests/e2e').filter((name) => name.endsWith('.spec.ts')).length;
 
-it('#514 display files stay targeted, while calculation and unaudited UI stay full', () => {
+it('#659 replaces incomplete display profiles with full validation while retaining audited local consumers', () => {
   const clock = planChanges([change('src/domain/formatTime.ts')]);
-  expect(clock).toMatchObject({ scope: 'targeted', features: ['clock'], full: false, data: false });
-  expect(clock.e2e).toEqual(['tests/e2e/timeFormat.spec.ts']);
-  expect(planChanges([change('src/domain/dupNames.ts')])).toMatchObject({ features: ['names'], full: false });
-  expect(planChanges([change('src/domain/linker.ts')])).toMatchObject({ features: ['links'], full: false });
+  expect(clock).toMatchObject({ scope: 'full', features: ['all'], full: true, data: false });
+  expect(planChanges([change('src/domain/dupNames.ts')])).toMatchObject({ full: true, data: false });
+  expect(planChanges([change('src/domain/linker.ts')])).toMatchObject({ full: true, data: false });
   expect(planChanges([change('src/domain/sharePage.ts'), change('src/shared/ui/ShareImage.tsx')])).toMatchObject({
-    features: ['share'],
-    full: false,
+    features: ['all', 'share'],
+    full: true,
   });
   expect(planChanges([change('src/features/share/PageMeta.tsx'), change('src/features/glossary/Glossary.tsx')])).toMatchObject({
-    features: ['glossary', 'share'],
-    full: false,
+    features: ['all', 'glossary'],
+    full: true,
   });
   expect(planChanges([change('src/shared/ui/layout.tsx')])).toMatchObject({ scope: 'full', full: true, data: false });
   const feedback = planChanges([change('src/shared/ui/FeedbackLink.tsx'), change('src/shared/utils/feedback.ts')]);
@@ -36,34 +34,31 @@ it('#514 display files stay targeted, while calculation and unaudited UI stay fu
     expect(planChanges([change(path)])).toMatchObject({ scope: 'full', full: true, data: false });
 });
 
-it('#514 a pull request never launches the full Playwright suite, including when scope stays full', () => {
-  expect(allowFullBrowser(pr)).toBe(false);
-  expect(allowFullBrowser({ GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'true' })).toBe(false);
+it('#659 a high-risk pull request launches full Playwright even when the legacy cap is false', () => {
+  expect(allowFullBrowser(pr)).toBe(true);
+  expect(allowFullBrowser({ GITHUB_EVENT_NAME: 'pull_request', CI_E2E_FULL: 'true' })).toBe(true);
   expect(allowFullBrowser(mainPush)).toBe(true);
   expect(allowFullBrowser({ GITHUB_EVENT_NAME: 'schedule', CI_E2E_FULL: 'true' })).toBe(true);
   expect(allowFullBrowser({ GITHUB_EVENT_NAME: 'workflow_dispatch', CI_E2E_FULL: 'true' })).toBe(true);
-  expect(allowFullBrowser({ GITHUB_EVENT_NAME: 'push', CI_E2E_FULL: 'false' })).toBe(false);
+  expect(allowFullBrowser({ GITHUB_EVENT_NAME: 'push', CI_E2E_FULL: 'false' })).toBe(true);
   const full = planChanges([change('src/domain/realCost.ts')]);
-  const capped = applyBrowserPolicy(full, pr);
-  expect(capped).toMatchObject({ scope: 'full', full: true, data: false, browser: 'capped' });
-  expect(capped.e2e).toEqual(PR_CORE_SMOKE_E2E);
-  expect(capped.e2e.length).toBeLessThan(10);
-  expect(testCommand(capped, 'unit').args).toEqual(['vitest', 'run']);
-  expect(testCommand(capped, 'e2e').args).toEqual(['playwright', 'test', ...capped.e2e, '--reporter=line']);
-  expect(testCommand(capped, 'e2e').args).not.toEqual(['playwright', 'test', '--reporter=line']);
+  const selected = applyBrowserPolicy(full, pr);
+  expect(selected).toMatchObject({ scope: 'full', full: true, data: false, browser: 'full' });
+  expect(testCommand(selected, 'unit').args).toEqual(['vitest', 'run']);
+  expect(testCommand(selected, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
   const mixed = applyBrowserPolicy(planChanges([change('src/domain/realCost.ts'), change('src/domain/formatTime.ts'), change('src/app/Layout.tsx')]), pr);
   expect(mixed.full).toBe(true);
-  expect(mixed.browser).toBe('capped');
-  expect(mixed.e2e).toContain('tests/e2e/smoke.spec.ts');
-  expect(mixed.e2e).toContain('tests/e2e/timeFormat.spec.ts');
-  expect(mixed.e2e).toContain('tests/e2e/navigation272.spec.ts');
-  expect(mixed.e2e.length).toBeLessThan(suite / 2);
+  expect(mixed.browser).toBe('full');
+  expect(testCommand(mixed, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
   expect(testCommand(applyBrowserPolicy(full, mainPush), 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
-  expect(applyBrowserPolicy(capped, pr)).toEqual(capped);
-  expect(() => validatePlan({ ...capped, e2e: [] })).toThrow(/Invalid CI validation plan/);
+  expect(applyBrowserPolicy(selected, pr)).toEqual(selected);
+  const maintenance = applyBrowserPolicy(planChanges([change('docs/design/small.md')]), pr);
+  expect(PR_CORE_SMOKE_E2E).toEqual(GATE_CORE_SMOKE_E2E);
+  expect(maintenance.e2e).toEqual(GATE_CORE_SMOKE_E2E);
+  expect(() => validatePlan({ ...maintenance, e2e: [] })).toThrow(/Invalid CI validation plan/);
 });
 
-it('#514 real CLI caps pull_request browser and leaves main, nightly, and manual full on the complete suite', () => {
+it('#659 real CLI retains the full high-risk suite on PR, main, nightly, and manual events', () => {
   const directory = mkdtempSync(join(tmpdir(), 'pr-browser-'));
   const git = (...args: string[]) => execFileSync('git', args, { cwd: directory, encoding: 'utf8' }).trim();
   const commit = (path: string) => {
@@ -99,14 +94,12 @@ it('#514 real CLI caps pull_request browser and leaves main, nightly, and manual
       return { plan, output: readFileSync(join(directory, 'outputs'), 'utf8') };
     };
     const pull = inspect('pull_request', 'refs/pull/514/merge');
-    expect(pull.plan).toMatchObject({ scope: 'full', full: true, data: false, browser: 'capped', features: ['all'] });
-    expect(pull.plan.e2e).toEqual(['tests/e2e/smoke.spec.ts']);
+    expect(pull.plan).toMatchObject({ scope: 'full', full: true, data: false, browser: 'full', features: ['all'] });
     expect(pull.output).toContain('browser=true');
-    expect(pull.output).toContain('e2e_full=false');
-    expect(testCommand(pull.plan, 'e2e').args).toEqual(['playwright', 'test', 'tests/e2e/smoke.spec.ts', '--reporter=line']);
+    expect(pull.output).toContain('e2e_full=true');
+    expect(testCommand(pull.plan, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
     const forced = inspect('pull_request', 'refs/pull/514/merge', 'true');
-    expect(forced.plan).toMatchObject({ scope: 'full', full: true, data: true, browser: 'capped' });
-    expect(forced.plan.e2e).toEqual(['tests/e2e/smoke.spec.ts']);
+    expect(forced.plan).toMatchObject({ scope: 'full', full: true, data: true, browser: 'full' });
     for (const [eventName, ref] of [
       ['push', 'refs/heads/main'],
       ['push', 'refs/heads/release/v0.74.0'],

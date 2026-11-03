@@ -34,8 +34,8 @@ describe('#427 按实际变更选择验证范围', () => {
     ).toBe('civ-ui');
   });
 
-  it('工作流和发布策略维护只跑相关发布检查，混入文明页面则补视觉检查', () => {
-    const maintenance = [
+  it('#659 工作流和发布策略变化始终使用完整验证，混入文明页面也不缩小范围', () => {
+    const policy = [
       change('.github/workflows/ci.yml'),
       change('.github/workflows/release.yml'),
       change('scripts/ci-scope.mjs'),
@@ -43,12 +43,14 @@ describe('#427 按实际变更选择验证范围', () => {
       change('tests/unit/releaseCiScope.test.ts'),
       change('docs/TESTING.md'),
     ];
-    expect(classifyChanges(maintenance)).toBe('maintenance');
-    expect(classifyChanges([...maintenance, change('src/features/civs/components/CivList.tsx')])).toBe('civ-ui');
+    expect(classifyChanges(policy)).toBe('full');
+    expect(classifyChanges([...policy, change('src/features/civs/components/CivList.tsx')])).toBe('full');
   });
 
   it('仓库根目录的代理和贡献政策文档属于维护范围', () => {
-    expect(classifyChanges([change('AGENTS.md'), change('CONTRIBUTING.md'), change('scripts/ci-scope.mjs')])).toBe('maintenance');
+    const documents = [change('AGENTS.md'), change('CONTRIBUTING.md')];
+    expect(classifyChanges(documents)).toBe('maintenance');
+    expect(classifyChanges([...documents, change('scripts/ci-scope.mjs')])).toBe('full');
   });
 
   it.each([

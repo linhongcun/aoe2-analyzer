@@ -13,8 +13,9 @@ const capped = (paths: string[]) => applyBrowserPolicy(planChanges(paths.map(cha
 describe('PR 专项浏览器覆盖 #636', () => {
   it('full 保留明确变更的专项用例，重复套策略结果不变', () => {
     const plan = capped(['src/domain/realCost.ts', 'tests/e2e/startGame592.spec.ts']);
-    expect(plan).toMatchObject({ full: true, data: false, browser: 'capped' });
-    expect(plan.e2e).toEqual(['tests/e2e/smoke.spec.ts', 'tests/e2e/startGame592.spec.ts']);
+    expect(plan).toMatchObject({ full: true, data: false, browser: 'full' });
+    expect(plan.e2e).toEqual(['tests/e2e/startGame592.spec.ts']);
+    expect(testCommand(plan, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
     expect(applyBrowserPolicy(plan, pr)).toEqual(plan);
   });
 
@@ -57,7 +58,8 @@ describe('PR 专项浏览器覆盖 #636', () => {
 
   it('full 下也不把已删除的专项文件加入执行列表', () => {
     const plan = applyBrowserPolicy(planChanges([change('src/domain/realCost.ts'), { path: 'tests/e2e/removed636.spec.ts', before: 'old', after: null }]), pr);
-    expect(plan.e2e).toEqual(['tests/e2e/smoke.spec.ts']);
+    expect(plan.e2e).not.toContain('tests/e2e/removed636.spec.ts');
+    expect(testCommand(plan, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
   });
 
   it('只映射已审计的天梯选择辅助文件，统计计算及未知 domain 仍完整验证', () => {
@@ -66,10 +68,11 @@ describe('PR 专项浏览器覆盖 #636', () => {
     }
   });
 
-  it('黑名单最后过滤；未知模块独自仍保守 full + smoke', () => {
+  it('#659 全局守卫自身与未知模块在 PR 保留完整浏览器验证', () => {
     const plan = capped(['src/domain/realCost.ts', 'tests/e2e/screenshots.spec.ts', 'tests/e2e/v0300-338.spec.ts']);
-    expect(plan.e2e).toEqual(['tests/e2e/smoke.spec.ts']);
-    expect(capped(['src/features/unknown636/View.tsx'])).toMatchObject({ full: true, browser: 'capped', e2e: ['tests/e2e/smoke.spec.ts'] });
+    expect(plan).toMatchObject({ full: true, browser: 'full' });
+    expect(testCommand(plan, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
+    expect(capped(['src/features/unknown636/View.tsx'])).toMatchObject({ full: true, browser: 'full' });
     for (const event of ['push', 'schedule', 'workflow_dispatch']) {
       const full = applyBrowserPolicy(planChanges([change('src/domain/realCost.ts'), change('tests/e2e/startGame592.spec.ts')]), {
         GITHUB_EVENT_NAME: event,

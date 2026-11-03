@@ -8,6 +8,8 @@
 
 **一次验证与快速发布（#431）**：普通已授权更新默认一个 issue、一个 PR 直接合入 `main`；只有需要多项冻结集成时才建 `release/vX.Y.Z`。同一代码树的真实成功验证可由 release/main 复用，main 仍构建真实 SHA 并做短烟测，发布 ZIP 使用已部署产物。全量回归在夜间后台或重大变更时执行一次，不作为普通 UI 更新逐阶段重复等待的门槛。现行规则见 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
 
+**CI 分阶段门禁（#659，2026-11-03）**：维护者已明确授权处理 #659，取代 #514 的 PR 完整浏览器禁令与 #513 的全局壳层 targeted 例外。按实际消费者闭包选择范围，共享计算、全局 CSS、路由、未知范围与 CI 策略自身在 PR 也完整验证；冻结规格见 [ci-659.md](docs/design/ci-659.md)。
+
 **持续发布授权**：hongcun 已要求已授权更新完成适用审查和测试后直接部署，不再逐次询问发布；不能停在 release 分支便称完成上线。发布授权及边界以 [CONTRIBUTING「维护者的持续发布授权」](CONTRIBUTING.md#维护者的持续发布授权2026-10-24) 为准；现行审阅流程以 [「维护者的持续审阅授权」](CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) 为准，由实现者之外的独立代理复核，记录实际提交 SHA、复核范围、结果和未解决问题，不再依赖指定人员签字。
 
 ### 数字不换行（`.num` / `.nw`）
@@ -101,22 +103,22 @@ npm run build
 BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 ```
 
-多个代理并行时每个用自己的 `git worktree` 和端口，不在共享目录切分支，不用 `git stash`。写法、四宽、axe、验收用例命名，以及 CI 何时跳过 Playwright，见 [docs/TESTING.md](docs/TESTING.md)。
+多个代理并行时每个用自己的 `git worktree` 和端口，不在共享目录切分支，不用 `git stash`。写法、四宽、axe、验收用例命名，以及 CI 范围和阶段复用，见 [docs/TESTING.md](docs/TESTING.md)。
 
 ## 合并前必须通过
 
-按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。`ci-scope` 选择 `maintenance`、`civ-ui`、`targeted` 或 `full`，功能页面及纯展示/路由辅助改动使用相关单测、交互和布局检查；UI 改动不重生成未变数据。核心计算、依赖、共享基础设施、未知或不可靠范围仍做一次完整验证；只有确需再生成时才执行数据管线。
+按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。`ci-scope` 选择 `maintenance`、`civ-ui`、`targeted` 或 `full`；窄范围必须有已审计的完整消费者闭包，保留受影响功能的正负路径、四宽和明暗主题。只有实际数据、生成输入、来源 pins 或依赖变化需要时执行数据管线，`full` 不自动等于 `data`。
 
-**PR 不跑完整浏览器（#514）**：`pull_request` 即使 `full=true`，也不跑约 189 个 Playwright spec。PR 浏览器是部署烟测 + `tests/e2e/smoke.spec.ts` + 已识别功能的 e2e；没有可识别功能时只跑 smoke。Kent §C 黑名单（`v0300-338`、四宽主题截图守卫、多文明 `*197` 矩阵、非本 PR 的开局长巡游）不进入这份 capped 列表。只改 `pageRegistry` 或共享 CSS 时，浏览器最多是 smoke 加上本次改到的功能。完整浏览器只在 main/release 的 full 计划、夜间 schedule、以及 `workflow_dispatch` 且 `CI_FULL`（环境变量 `CI_E2E_FULL`，pull_request 恒为 false）。Layout / Icon / `editorial-shell.css` 以及已审计的展示文件走 targeted，不会先被标成 full。详见 [CODEX-MAINTENANCE](docs/CODEX-MAINTENANCE.md)「PR 浏览器上限」。
+**风险决定浏览器范围（#659）**：共享计算、全局 CSS/tokens、路由、Layout/Icon/PageMeta、未知范围和策略自身选择完整单测与浏览器，PR 同样执行。完整浏览器按历史时长加权分配到四个 runner，不启用全局 `fullyParallel`；静态、单测、必要数据和构建并行，所有实际浏览器分片消费同一不可变构建。每次事件包括文档/版本维护均保留核心 smoke，并在真实 SHA 新构建上执行24路由冷启动烟测。`test` 严格聚合所有必要阶段；失败、超时、缺片或错构建均不得部署。
 
-`ci-validation-evidence` 记录实际测试提交、Git tree、策略指纹、范围和来源 run。release/main 仅在同仓库真实成功的 CI、代码树、策略和必要范围均匹配时复用；缺少有效证据就执行当前必要范围，不因发布阶段变化重复全量。main 仍重建真实 SHA，执行短烟测并部署。PR 描述记录实际执行、复用、跳过或中止的范围及结果，不把复用结果写成当前提交重新跑过全套。详见 [TESTING](docs/TESTING.md)。
+只接受经 GitHub 核实的 v2 原始阶段证明；v1 无效。复用必须匹配仓库、Git tree、策略、工具链、精确检查/文件/case 集合和来源 run/attempt/数字 job/artifact，不能继承任意复用链。build 与 static-main 不复用，main 始终重建真实 SHA。单次 run 从 `run.created_at` 起共享30分钟预算，包含排队、重跑、聚合和部署；诊断最多额外90秒且不能变绿。10分钟为实测目标，平台进程回收不承诺物理30:00停止；完成后报告 wall、排队、全部 runner 分钟和最慢片，整条发布链单列。细则见 [TESTING](docs/TESTING.md) 和 [冻结规格](docs/design/ci-659.md)。
 
 ## 测试规则
 
 - **未经维护者明确授权，不要改 `tests/**/v0*-acceptance*` 及其他受保护验收用例的期望值。** 验收用例和产品决定冲突时，在 issue 里写清楚冲突，交维护者决定；获授权的修改须独立复核，不能通过放宽期望凑绿，也不要求指定历史作者重录。
 - 改了领域逻辑就补 `tests/unit/` 单测；修 bug 先写能复现的失败用例。失败用例须在当前 `main` 上失败，再折进对应的 feat/fix PR 一起变绿；仍红的测试 PR 只软通过（承认红是预期，CI 仍失败），不单独合并。
 - 界面改动在 **360 / 375 / 390 / 1280** 四个宽度检查：没有横向滚动、没有页面报错（console error / pageerror）。
-- 四宽、axe、PR 浏览器上限、`Relates` / `Fixes` 与可测验收见 [TESTING](docs/TESTING.md#codex-交接)。
+- 四宽、axe、风险范围门禁、`Relates` / `Fixes` 与可测验收见 [TESTING](docs/TESTING.md#codex-交接)。
 
 ## 界面约定
 

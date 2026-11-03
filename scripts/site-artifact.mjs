@@ -38,14 +38,44 @@ function validateIdentity({ commit, tree, version, repository, runId }) {
   assert.match(repository, /^[\w.-]+\/[\w.-]+$/, 'Expected a repository');
   assert.ok(Number.isSafeInteger(runId) && runId > 0, 'Expected a real source CI run ID');
 }
-export function createArtifactManifest({ directory, commit, tree, version, repository, runId, plan }) {
+export function createArtifactManifest({ directory, commit, tree, version, repository, runId, plan, gate_ref, runAttempt, buildJobId, toolchainDigest }) {
   validateIdentity({ commit, tree, version, repository, runId });
   assert.ok(plan && Array.isArray(plan.features), 'Missing validation plan');
   const files = filesIn(directory);
   assert.ok(files['index.html'], 'Missing built site index');
   const manifest = { schema: 1, commit, tree, version, repository, runId, plan, files };
+  if (gate_ref !== undefined) {
+    assert.ok(typeof gate_ref === 'string' && gate_ref.length > 0 && gate_ref.length <= 500, 'Invalid immutable gate reference');
+    assert.ok(Number.isSafeInteger(runAttempt) && runAttempt > 0, 'Invalid build attempt');
+    assert.ok(Number.isSafeInteger(buildJobId) && buildJobId > 0, 'Invalid build job ID');
+    assert.match(toolchainDigest, /^[0-9a-f]{64}$/, 'Invalid build toolchain digest');
+    Object.assign(manifest, { gate_ref, runAttempt, buildJobId, toolchainDigest });
+  }
   writeFileSync(join(directory, manifestName), JSON.stringify(manifest, null, 2) + '\n');
   return manifest;
+}
+export function artifactManifestDigest(directory) {
+  return createHash('sha256')
+    .update(readFileSync(join(directory, manifestName)))
+    .digest('hex');
+}
+/** This pure link check accepts a gate only AFTER its independent GitHub provenance verification. */
+export function artifactSnapshot(directory, manifest = JSON.parse(readFileSync(join(directory, manifestName), 'utf8'))) {
+  assert.ok(manifest.gate_ref, 'Missing v2 aggregate gate link');
+  return {
+    commit: manifest.commit,
+    tree: manifest.tree,
+    run_id: manifest.runId,
+    run_attempt: manifest.runAttempt,
+    build_job_id: manifest.buildJobId,
+    manifest_digest: artifactManifestDigest(directory),
+    gate_ref: manifest.gate_ref,
+  };
+}
+export function verifyGateLink(directory, validatedGate) {
+  assert.equal(validatedGate?.version, 2, 'A verified v2 aggregate is mandatory');
+  assert.deepEqual(validatedGate.snapshot, artifactSnapshot(directory), 'Aggregate gate does not identify these immutable bytes');
+  return true;
 }
 export function verifyArtifactManifest({ directory, commit, tree, version, repository, runId }) {
   validateIdentity({ commit, tree, version, repository, runId });
