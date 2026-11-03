@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, expect, it } from 'vitest';
 // @ts-expect-error CI infrastructure uses plain Node modules.
-import { collectedUnitCases, actualUnitExecution, frozenRequirements } from '../../scripts/ci-plan.mjs';
+import { collectedUnitCases, actualUnitExecution, frozenRequirements, unitCaseId } from '../../scripts/ci-plan.mjs';
 // @ts-expect-error CI infrastructure uses plain Node modules.
 import { planChanges } from '../../scripts/ci-scope.mjs';
 // @ts-expect-error CI infrastructure uses plain Node modules.
@@ -41,9 +41,33 @@ it('unit public collection and actual report agree on stable names without treat
   expect(() => actualUnitExecution({ ...result(), success: false }, root)).toThrow(/succeed/);
 });
 
-it('freezing rejects empty, duplicate and escaped unit collections', () => {
+it('freezing preserves every same-name parameterized occurrence and the actual report proves their multiplicity', () => {
+  const frozen = collectedUnitCases([a, b, a], root);
+  expect(frozen).toHaveLength(3);
+  const repeated = frozen
+    .filter((c: { name: string }) => c.name === a.name)
+    .sort((x: { occurrence: number }, y: { occurrence: number }) => x.occurrence - y.occurrence);
+  expect(repeated.map((c: { occurrence: number }) => c.occurrence)).toEqual([0, 1]);
+  expect(repeated.map((c: { id: string }) => c.id)).toEqual([
+    unitCaseId('tests/unit/example.test.ts', a.name),
+    unitCaseId('tests/unit/example.test.ts', a.name, 1),
+  ]);
+  expect(new Set(frozen.map((c: { id: string }) => c.id)).size).toBe(3);
+  const report = result();
+  report.testResults[0]!.assertionResults.push({ ancestorTitles: ['suite'], title: 'first', status: 'passed' });
+  const byId = (x: { id: string }, y: { id: string }) => x.id.localeCompare(y.id);
+  const expected = frozen.map((c: { id: string }) => ({ id: c.id, status: 'passed' }));
+  expect(actualUnitExecution(report, root).cases.sort(byId)).toEqual(expected);
+  report.testResults[0]!.assertionResults.pop();
+  const omitted = actualUnitExecution(report, root).cases.sort(byId);
+  expect(omitted).toHaveLength(2);
+  expect(omitted).not.toEqual(expected);
+  expect(omitted.map((c: { id: string }) => c.id)).not.toContain(repeated[1].id);
+});
+
+it('freezing still rejects empty, invalid-name and escaped unit collections', () => {
   expect(() => collectedUnitCases([], root)).toThrow(/Empty/);
-  expect(() => collectedUnitCases([a, a], root)).toThrow(/Duplicate/);
+  expect(() => collectedUnitCases([{ ...a, name: '' }], root)).toThrow();
   expect(() => collectedUnitCases([{ ...a, file: '/outside/evil.test.ts' }], root)).toThrow();
 });
 it('CI duration weights change broad validation without regenerating unchanged game data', () => {
@@ -64,6 +88,13 @@ it('freezes only the three existing disabled unit identities that public Vitest 
     root,
   );
   expect(nested.find((c: { name: string }) => c.name.startsWith('nested'))?.expectedStatus).toBe('passed');
+});
+
+it('duplicate allowlisted disabled names cannot acquire additional skip exemptions', () => {
+  const source = { file: `${root}/tests/unit/buildSim.test.ts`, name: 'ordinary case' };
+  const skipped = collectedUnitCases([source], root).find((c: { expectedStatus: string }) => c.expectedStatus === 'skipped');
+  const duplicate = { file: source.file, name: skipped.name };
+  expect(() => collectedUnitCases([duplicate, duplicate], root)).toThrow(/Duplicate allowlisted skipped/);
 });
 
 it('a non-PR plan always requires fresh build and separate current main checks', () => {

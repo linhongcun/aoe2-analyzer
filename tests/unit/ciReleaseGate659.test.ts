@@ -120,6 +120,7 @@ function fixture() {
     head_repository: { id: 5, full_name: repository },
   };
   const jobs = [
+    ['static-main', 659_402, 20_000, 28_000],
     ['build', buildJobId, 30_000, 40_000],
     ['test', aggregateJobId, 50_000, 55_000],
     ['deploy', 659_411, 56_000, 60_000],
@@ -224,6 +225,25 @@ describe('#659 Release bridge authenticates actual source artifacts', () => {
     ['gate artifact updated after aggregate job', (f) => (f.artifact.updated_at = second(f.origin + 56_000))],
     ['missing fresh build', (f) => (f.gate.stages.find((stage) => stage.stage_id === 'build')!.executed = false)],
     ['authoritative build failed', (f) => (f.jobs.find((job) => job.name === 'build')!.conclusion = 'failure')],
+    ['authoritative static-main failed', (f) => (f.jobs.find((job) => job.name === 'static-main')!.conclusion = 'failure')],
+    ['static-main claims reused execution', (f) => (f.gate.stages.find((stage) => stage.stage_id === 'static-main')!.executed = false)],
+    ['static-main source job differs', (f) => f.gate.stages.find((stage) => stage.stage_id === 'static-main')!.source.job_id++],
+    ['static-main source attempt differs', (f) => f.gate.stages.find((stage) => stage.stage_id === 'static-main')!.source.run_attempt++],
+    ['static-main source tree differs', (f) => (f.gate.stages.find((stage) => stage.stage_id === 'static-main')!.source.tested_tree = 'f'.repeat(40))],
+    [
+      'static-main reuses a historical PR result',
+      (f) => {
+        const source = f.gate.stages.find((stage) => stage.stage_id === 'static-main')!.source;
+        Object.assign(source, { run_id: f.run.id - 1, run_attempt: 1, job_id: 659_001, tested_commit: 'f'.repeat(40) });
+      },
+    ],
+    [
+      'self-consistent requirement marks static-main reusable',
+      (f) => {
+        f.gate.requirements.find((required) => required.stage_id === 'static-main')!.reusable = true;
+        f.gate.requirements_digest = hash(Buffer.from(JSON.stringify(f.gate.requirements)));
+      },
+    ],
     ['build source run differs', (f) => f.gate.stages.find((stage) => stage.stage_id === 'build')!.source.run_id++],
     ['build source attempt differs', (f) => f.gate.stages.find((stage) => stage.stage_id === 'build')!.source.run_attempt++],
     ['build source commit differs', (f) => (f.gate.stages.find((stage) => stage.stage_id === 'build')!.source.tested_commit = 'f'.repeat(40))],

@@ -111,11 +111,14 @@ export async function reportDelivery({ budget, api, repository, runId, output, d
     bundle.sourceReason = error.message;
   }
   if (output) writeFileSync(output, JSON.stringify(bundle, null, 2) + '\n');
-  if (process.env.GITHUB_STEP_SUMMARY)
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    const reports = [...bundle.pr, ...(bundle.main ? [bundle.main] : []), bundle.release];
     appendFileSync(
       process.env.GITHUB_STEP_SUMMARY,
-      bundle.chain ? formatTimingMarkdown(bundle.chain) : `\nExact delivery chain unavailable: ${bundle.sourceReason}\n`,
+      reports.map(formatTimingMarkdown).join('\n') +
+        (bundle.chain ? formatTimingMarkdown(bundle.chain) : `\nExact delivery chain unavailable: ${bundle.sourceReason}\n`),
     );
+  }
   console.log(JSON.stringify(bundle));
   budget.assertRemaining('delivery timing report');
   return bundle;

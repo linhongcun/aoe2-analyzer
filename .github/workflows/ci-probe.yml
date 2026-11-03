@@ -1,5 +1,7 @@
 name: CI validation probe
 on:
+  push:
+    branches: [ci/659-validation-probe]
   workflow_dispatch:
     inputs:
       source_run_id:
@@ -9,6 +11,7 @@ on:
 permissions: { contents: read, actions: read }
 jobs:
   probe:
+    if: (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main') || (github.event_name == 'push' && github.ref == 'refs/heads/ci/659-validation-probe')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -20,8 +23,15 @@ jobs:
         timeout-minutes: 1
         run: |
           node --input-type=module <<'NODE'
-          import {appendFileSync} from 'node:fs';
-          const repo=process.env.GITHUB_REPOSITORY,id=process.env.SOURCE_CI_RUN_ID;
+          import {appendFileSync,readFileSync} from 'node:fs';
+          if(process.env.GITHUB_REF==='refs/heads/main')throw Error('Probes require an isolated helper branch');
+          const event=JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH,'utf8'));
+          const repo=process.env.GITHUB_REPOSITORY;
+          let id=process.env.SOURCE_CI_RUN_ID;
+          if(process.env.GITHUB_EVENT_NAME==='push') {
+            if(process.env.GITHUB_REF!=='refs/heads/ci/659-validation-probe')throw Error('Wrong probe helper branch');
+            id=event.head_commit?.message?.trim().match(/^ci\(#659\): isolated validation source-run:([1-9]\d*)$/)?.[1];
+          }
           if(!/^[1-9]\d*$/.test(id||''))throw Error('Invalid source run ID');
           const get=async(path)=>{
             const r=await fetch(`https://api.github.com/repos/${repo}/${path}`,{headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`},signal:AbortSignal.timeout(10000)});
@@ -32,8 +42,8 @@ jobs:
           if(own.id!==Number(process.env.GITHUB_RUN_ID)||own.run_attempt!==Number(process.env.GITHUB_RUN_ATTEMPT)||own.repository?.full_name!==repo)throw Error('Wrong probe clock');
           const origin=Date.parse(own.created_at),deadline=origin+1800000;
           if(!Number.isSafeInteger(origin)||Date.now()>=deadline)throw Error('Probe expired in queue');
-          appendFileSync(process.env.GITHUB_OUTPUT,`sha=${source.head_sha}\n`);
-          appendFileSync(process.env.GITHUB_ENV,`CI_RUN_EPOCH_MS=${origin}\nCI_DEADLINE_MS=${deadline}\n`);
+          appendFileSync(process.env.GITHUB_OUTPUT,`sha=${source.head_sha}\nrun_id=${id}\n`);
+          appendFileSync(process.env.GITHUB_ENV,`CI_RUN_EPOCH_MS=${origin}\nCI_DEADLINE_MS=${deadline}\nSOURCE_CI_RUN_ID=${id}\n`);
           NODE
       - uses: actions/checkout@v4
         timeout-minutes: 2
@@ -52,14 +62,14 @@ jobs:
           name: ci-plan-v2
           path: ${{ runner.temp }}/probe-source
           github-token: ${{ github.token }}
-          run-id: ${{ inputs.source_run_id }}
+          run-id: ${{ steps.source.outputs.run_id }}
       - uses: actions/download-artifact@v4
         timeout-minutes: 2
         with:
           name: ci-build-v2
           path: ${{ runner.temp }}/ci-build
           github-token: ${{ github.token }}
-          run-id: ${{ inputs.source_run_id }}
+          run-id: ${{ steps.source.outputs.run_id }}
       - run: node scripts/ci-budget.mjs --assert
       - run: node scripts/ci-stage.mjs install-browser
       - name: Positive control, malformed evidence and real narrow fallback

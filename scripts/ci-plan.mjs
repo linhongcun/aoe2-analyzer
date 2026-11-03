@@ -11,7 +11,13 @@ export const hash = (value) =>
   createHash('sha256')
     .update(typeof value === 'string' || Buffer.isBuffer(value) ? value : JSON.stringify(value))
     .digest('hex');
-export const unitCaseId = (file, name) => hash([file, name]);
+export const unitCaseId = (file, name, occurrence = 0) => hash([file, name, occurrence]);
+function nextUnitOccurrence(occurrences, file, name) {
+  const key = JSON.stringify([file, name]);
+  const occurrence = occurrences.get(key) ?? 0;
+  occurrences.set(key, occurrence + 1);
+  return occurrence;
+}
 const unitTodo = '#42 P0 buildSim 文明加成不得静默忽略 > 高棉：农田为瓶颈的开局里，去掉 654 必须让结果变慢（证明后再把高棉放出来）';
 const unitSkipped = [
   ['tests/unit/buildSim.test.ts', unitTodo],
@@ -30,12 +36,17 @@ export function collectedUnitCases(list, directory = process.cwd()) {
     const absolute = resolve(directory, file);
     if (list.some((c) => c.file === absolute) && !list.some((c) => c.file === absolute && c.name === name)) list.push({ file: absolute, name });
   }
+  // Parameterized tests may legitimately share their public name. Preserve every occurrence in
+  // declaration order, matching Vitest's JSON assertionResults rather than collapsing same titles.
+  const occurrences = new Map();
   const cases = list.map((entry) => {
     const file = relative(directory, entry.file).replaceAll('\\', '/');
     assert.match(file, /^tests\/unit\/[\w.-]+\.test\.ts$/);
     assert.ok(typeof entry.name === 'string' && entry.name);
+    const occurrence = nextUnitOccurrence(occurrences, file, entry.name);
     const expectedStatus = unitSkipped.some(([path, name]) => path === file && name === entry.name) ? 'skipped' : 'passed';
-    return { id: unitCaseId(file, entry.name), file, name: entry.name, expectedStatus };
+    assert.ok(expectedStatus !== 'skipped' || occurrence === 0, 'Duplicate allowlisted skipped unit case');
+    return { id: unitCaseId(file, entry.name, occurrence), file, name: entry.name, occurrence, expectedStatus };
   });
   assert.equal(new Set(cases.map((c) => c.id)).size, cases.length, 'Duplicate unit case identities');
   return cases.sort((a, b) => a.id.localeCompare(b.id));
@@ -45,12 +56,15 @@ export function actualUnitExecution(report, directory = process.cwd()) {
   assert.ok(Array.isArray(report.testResults) && report.testResults.length, 'Missing actual unit results');
   const files = [],
     cases = [];
+  const occurrences = new Map();
   for (const result of report.testResults) {
     const file = relative(directory, result.name).replaceAll('\\', '/');
     files.push(file);
     for (const test of result.assertionResults) {
+      const name = [...test.ancestorTitles, test.title].join(' > ');
+      const occurrence = nextUnitOccurrence(occurrences, file, name);
       cases.push({
-        id: unitCaseId(file, [...test.ancestorTitles, test.title].join(' > ')),
+        id: unitCaseId(file, name, occurrence),
         status: ['pending', 'todo', 'skipped'].includes(test.status) ? 'skipped' : test.status,
       });
     }

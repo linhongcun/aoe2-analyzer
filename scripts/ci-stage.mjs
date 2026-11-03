@@ -248,7 +248,7 @@ export async function verifyReleaseGate({ budget, api }) {
   assert.equal(run.conclusion, 'success');
   assert.equal(run.head_sha, process.env.EXPECTED_DEPLOYED_SHA);
   const jobs = await runJobs(api, repository, id, run.run_attempt);
-  for (const name of ['test', 'deploy', 'build']) {
+  for (const name of ['test', 'deploy', 'build', 'static-main']) {
     const matches = jobs.filter((j) => j.name === name);
     assert.equal(matches.length, 1);
     assert.equal(matches[0].status, 'completed');
@@ -322,6 +322,18 @@ export async function verifyReleaseGate({ budget, api }) {
   const buildRequired = requirements.find((r) => r.stage_id === 'build');
   assert.equal(buildRequired.reusable, false);
   for (const check of ['build', 'snapshot', 'fresh-build-smoke']) assert.ok(buildRequired.selection.checks.includes(check), 'Missing fresh build requirement');
+  const mainRequired = requirements.find((r) => r.stage_id === 'static-main');
+  assert.equal(mainRequired.reusable, false, 'Main-specific checks cannot be reused');
+  const mainStage = gate.stages.find((s) => s.stage_id === 'static-main');
+  assert.equal(mainStage.executed, true, 'Main-specific checks must execute in main');
+  for (const [key, value] of Object.entries({
+    run_id: id,
+    run_attempt: run.run_attempt,
+    tested_commit: run.head_sha,
+    tested_tree: gate.tested_tree,
+    job_id: jobs.find((j) => j.name === 'static-main').id,
+  }))
+    assert.equal(mainStage.source[key], value, 'Main-specific source mismatch');
   const build = gate.stages.find((s) => s.stage_id === 'build');
   assert.ok(build?.executed, 'Release requires a fresh main build');
   assert.equal(build.source.run_id, id);
@@ -356,7 +368,12 @@ export async function timingStage({ budget, api }) {
  * It never creates a phase receipt or a reusable aggregate. The source checkout and dist stay unchanged.
  */
 export async function probeStage({ budget, api }) {
-  assert.equal(process.env.GITHUB_EVENT_NAME, 'workflow_dispatch', 'Validation probes are manual read-only experiments');
+  assert.notEqual(process.env.GITHUB_REF, 'refs/heads/main', 'Validation probes require an isolated helper branch');
+  assert.ok(
+    process.env.GITHUB_EVENT_NAME === 'workflow_dispatch' ||
+      (process.env.GITHUB_EVENT_NAME === 'push' && process.env.GITHUB_REF === 'refs/heads/ci/659-validation-probe'),
+    'Unsupported validation probe event',
+  );
   const source = json(join(process.env.RUNNER_TEMP, 'probe-source', 'frozen.json'));
   const current = await makeCurrent(api, budget);
   assert.equal(current.tree, source.current.tree);
@@ -366,7 +383,7 @@ export async function probeStage({ budget, api }) {
     dist = join(buildFolder, 'dist');
   verifyArtifactManifest(manifestOptions(source.current, dist, source.plan));
   const snapshot = artifactSnapshot(dist);
-  const path = 'src/features/gameClock/GameClock.tsx',
+  const path = 'src/features/hotkeys/Hotkeys.tsx',
     before = readFileSync(path, 'utf8'),
     after = before + '\n/* #659 scope-only validation probe */\n';
   const narrow = applyBrowserPolicy(planChanges([{ path, before, after }]));
