@@ -51,6 +51,8 @@ test('@390：跳到主内容的地址是当前页（含查询），中键和 Ctr
     const opened = page.context().waitForEvent('page');
     await openModified();
     const popup = await opened;
+    // A newly created page can still expose its initial document before navigation.
+    await expect(popup).toHaveURL(here.href);
     await popup.waitForLoadState('domcontentloaded');
     expect(new URL(popup.url()).hash).toBe(here.hash);
     expect(new URL(page.url()).hash).toBe(here.hash);
