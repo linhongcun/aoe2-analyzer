@@ -58,6 +58,10 @@ def build_maps(source, previews, chinese, english, metadata):
         details = metadata.get(identity, {})
         if not isinstance(details, dict):
             raise ValueError(f'{identity}: 人工分类必须是对象')
+        display_name = details.get('displayName', zh['mapName'])
+        if 'displayName' in details and (not isinstance(display_name, str)
+                                         or display_name != f'{zh["mapName"]}（{en["mapName"]}）'):
+            raise ValueError(f'{identity}: 显示名只能使用固定中英来源名称的消歧括注')
         group = details.get('group', 'other')
         featured = details.get('featured', False)
         priority = details.get('priority', 1000)
@@ -77,7 +81,7 @@ def build_maps(source, previews, chinese, english, metadata):
             raise ValueError(f'{identity}: 预览清单不是固定来源的生成结果')
         item = {
             'id': identity,
-            'name': zh['mapName'],
+            'name': display_name,
             'en': en['mapName'],
             'description': zh['description'],
             'group': group,

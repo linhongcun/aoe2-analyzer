@@ -62,6 +62,27 @@ class SnapshotIntegrity(unittest.TestCase):
 
 
 class CatalogJoin(unittest.TestCase):
+    def test_display_name_disambiguates_only_the_requested_map_identity(self):
+        source, previews, zh, en = fixture(('shoals', 'wade', 'marsh'))
+        metadata = {
+            'shoals': {'displayName': '浅滩（Shoals）'},
+            'wade': {'displayName': '浅滩（Wade）'},
+        }
+        before = build_maps(source, previews, zh, en, {})
+        after = build_maps(source, previews, zh, en, metadata)
+        self.assertEqual([row['id'] for row in after], [row['id'] for row in before])
+        for original, updated in zip(before, after):
+            expected = metadata.get(original['id'], {}).get('displayName', original['name'])
+            self.assertEqual(updated, {**original, 'name': expected})
+        self.assertEqual(zh['rm_shoals']['mapName'], '浅滩')
+        self.assertEqual(zh['rm_wade']['mapName'], '浅滩')
+
+    def test_display_name_must_be_the_bilingual_source_name(self):
+        source, previews, zh, en = fixture(('shoals',))
+        for value in [None, False, 7, '', '  ', ' 浅滩（Shoals）', '浅滩（Wade）', '自造译名']:
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, '显示名'):
+                build_maps(source, previews, zh, en, {'shoals': {'displayName': value}})
+
     def test_same_chinese_name_does_not_merge_distinct_maps(self):
         source, previews, zh, en = fixture()
         rows = build_maps(source, previews, zh, en, {})
@@ -104,6 +125,17 @@ class CatalogJoin(unittest.TestCase):
 
 
 class PinnedCorpus(unittest.TestCase):
+    def test_only_shoals_and_wade_have_source_qualified_display_names(self):
+        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text())['assetSources']
+        chinese = read_snapshot(pins['mapCatalog']['snapshots']['zh-hans'])
+        catalog = json.loads((ROOT / 'src/data/mapCatalog.json').read_text())['maps']
+        changed = {row['id'] for row in catalog if row['name'] != chinese[f'rm_{row["id"]}']['mapName']}
+        self.assertEqual(changed, {'shoals', 'wade'})
+        by_id = {row['id']: row for row in catalog}
+        self.assertEqual(by_id['shoals']['name'], '浅滩（Shoals）')
+        self.assertEqual(by_id['wade']['name'], '浅滩（Wade）')
+        self.assertEqual((by_id['shoals']['en'], by_id['wade']['en']), ('Shoals', 'Wade'))
+
     def test_corpus_has_unique_map_ids_and_required_common_maps(self):
         pins = json.loads((ROOT / 'scripts/data_sources.json').read_text())['assetSources']
         zh = read_snapshot(pins['mapCatalog']['snapshots']['zh-hans'])
