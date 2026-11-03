@@ -1,0 +1,522 @@
+{
+  "repo": "denniske/aoe2companion",
+  "commit": "d9e9ef68c761b3bd5304f704629662d41bee2d96",
+  "committedAt": "2026-11-01T17:53:41Z",
+  "checkedOn": "2026-11-03",
+  "mappingURL": "https://github.com/denniske/aoe2companion/blob/d9e9ef68c761b3bd5304f704629662d41bee2d96/src/helper/civs.ts",
+  "mappingSha256": "91521880776295c0d7872d48972799f74d49e4ec1ad19e973871cf1feb189113",
+  "encoding": {
+    "format": "WebP",
+    "lossless": true,
+    "method": 6,
+    "resize": false,
+    "pillowVersion": "12.3.0",
+    "libwebpVersion": "1.6.0"
+  },
+  "assets": {
+    "Armenians": {
+      "file": "armenians.webp",
+      "sourcePath": "assets/history/civs2/history_armenians.png",
+      "sourceSha256": "018663c2b850fcb31485e06ada7594072d4d58262f18b8d7f65e62e7ae916594",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "b95539f1dd4578115db841a515f9b7cfa30eaa5b65a5a250b8d6b81d39a85a6c",
+      "outputBytes": 91674
+    },
+    "Aztecs": {
+      "file": "aztecs.webp",
+      "sourcePath": "assets/history/civs/history_aztecs.png",
+      "sourceSha256": "586d5591446f8a66b6023b4b80625678a295da13d1c0dbbf2d83b466bf5cf156",
+      "width": 369,
+      "height": 368,
+      "outputSha256": "aeb5f0644a44b440b535dcb6f15200f6b2a9990aeae61af7fbad40440ffaaf81",
+      "outputBytes": 36204
+    },
+    "Bengalis": {
+      "file": "bengalis.webp",
+      "sourcePath": "assets/history/civs2/history_bengalis.png",
+      "sourceSha256": "d2231dd507e014023a88ccae7bc533f0bfc46fa040beb5de640ef9416e5a2ae7",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "6957c972cf781efb29a7b96c7e4eaac6689ce171b877bbb329599950a834677b",
+      "outputBytes": 160926
+    },
+    "Berbers": {
+      "file": "berbers.webp",
+      "sourcePath": "assets/history/civs/history_berbers.png",
+      "sourceSha256": "f8cd4bbfe4d02e1bddbcf26f6eef0e6ca0ed4ebee72b430f83d59e1663626683",
+      "width": 384,
+      "height": 377,
+      "outputSha256": "505df7c8e9922b440f9593693d59908ed6ae6572b8eafc6b6064e0115c98e162",
+      "outputBytes": 36832
+    },
+    "Bohemians": {
+      "file": "bohemians.webp",
+      "sourcePath": "assets/history/civs/history_bohemians.png",
+      "sourceSha256": "208ad8337a0fe9a0040af5fbfb9a51109c34956c68f2e400c66b897d1759df05",
+      "width": 370,
+      "height": 370,
+      "outputSha256": "9bdfe3ed400075fa907219bfd5fdbc714617cd2604b25f22ec249bb7ad080ec5",
+      "outputBytes": 44674
+    },
+    "Britons": {
+      "file": "britons.webp",
+      "sourcePath": "assets/history/civs/history_britons.png",
+      "sourceSha256": "22d539173487d7890071839286350146ae657676323d628d9c7500f6e4aadedf",
+      "width": 324,
+      "height": 363,
+      "outputSha256": "319b9f286fb9bc3e254d16889e8ccf4e34b7cd63c395e6df79e8fe57a3b2327b",
+      "outputBytes": 56460
+    },
+    "Bulgarians": {
+      "file": "bulgarians.webp",
+      "sourcePath": "assets/history/civs/history_bulgarians.png",
+      "sourceSha256": "0d51f2835a2b9c96d31ff6284ab4ccbc07fea13b4dafeb6f2c36d0da9002c83a",
+      "width": 375,
+      "height": 375,
+      "outputSha256": "75b4c61b526403ffa5bd378500e47ddd0cb0bd01ec30aafa32e7913c6bdf1a90",
+      "outputBytes": 36636
+    },
+    "Burgundians": {
+      "file": "burgundians.webp",
+      "sourcePath": "assets/history/civs2/history_burgundians.png",
+      "sourceSha256": "acc97e51006edeffd30596287c613ab384c7fa06f79dd405f10af9da4648396d",
+      "width": 1000,
+      "height": 524,
+      "outputSha256": "13503d985b8c624d072270ee81f523b18f77f2934bd734e2c11aea40c988028e",
+      "outputBytes": 110178
+    },
+    "Burmese": {
+      "file": "burmese.webp",
+      "sourcePath": "assets/history/civs/history_burmese.png",
+      "sourceSha256": "cfea30fc58d7b80fc7e4ed8f1a996fc5788a83f3b7e8f7783d71b606743b3011",
+      "width": 334,
+      "height": 334,
+      "outputSha256": "a620f40b072e27091f629ff985436bc61a13396e080eccae53e316f930fa1dfd",
+      "outputBytes": 29572
+    },
+    "Byzantines": {
+      "file": "byzantines.webp",
+      "sourcePath": "assets/history/civs/history_byzantines.png",
+      "sourceSha256": "fd95701c784c4b16d16bf7ba7df73b2ca31daeb1b31130e460fe45c23a40f799",
+      "width": 380,
+      "height": 381,
+      "outputSha256": "48d64c609a4568551a0ac9ac49ce5a8171c5060ca0ee76c9c4eb52547be5ca5e",
+      "outputBytes": 35598
+    },
+    "Celts": {
+      "file": "celts.webp",
+      "sourcePath": "assets/history/civs/history_celts.png",
+      "sourceSha256": "19e4a61db5cc149ddf22eddf34ad1b1f3372f3a71335556d942e48b905dcc8b0",
+      "width": 414,
+      "height": 413,
+      "outputSha256": "b63e31c85634ce7aa1aea036a6826760c2874fe08504480e5ce0d5827e9c63e1",
+      "outputBytes": 56102
+    },
+    "Chinese": {
+      "file": "chinese.webp",
+      "sourcePath": "assets/history/civs/history_chinese.png",
+      "sourceSha256": "740ec7f668ab405f0ed7451b687e8270a771180b961681ac72d0cd3c9722845d",
+      "width": 366,
+      "height": 366,
+      "outputSha256": "6d53b138d19cbfe97ade2a7f653fdd1fd630b25c1672c416beaa35a4f5d84abf",
+      "outputBytes": 36720
+    },
+    "Cumans": {
+      "file": "cumans.webp",
+      "sourcePath": "assets/history/civs/history_cumans.png",
+      "sourceSha256": "89c345ed1ff36103b85d5314737c7d064628edbbaeb1b462729d689fa516c1d6",
+      "width": 394,
+      "height": 394,
+      "outputSha256": "60f54dd699897a53c357aaa77f2efa97e981112678767b65d0f962d597d1ba73",
+      "outputBytes": 56168
+    },
+    "Danes": {
+      "file": "danes.webp",
+      "sourcePath": "assets/history/civs2/history_danes.png",
+      "sourceSha256": "b4ea921ff9c2e643f53e4e12b07671cea60d64d03f7ab073e8984321c716a01c",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "9b2d4c036eda90e7ddaf001ae7bda411992c36d755c48edabfa21c61446d80b7",
+      "outputBytes": 301184
+    },
+    "Dravidians": {
+      "file": "dravidians.webp",
+      "sourcePath": "assets/history/civs2/history_dravidians.png",
+      "sourceSha256": "4efe15999c1f50e0ba7ef22f4f5d0866604e6931fa83636302c8f24a187c9f42",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "fef093ef73fd6f149f2faa3fd0484dae3ba591b479be07edb9c03c021734b0ef",
+      "outputBytes": 195320
+    },
+    "Ethiopians": {
+      "file": "ethiopians.webp",
+      "sourcePath": "assets/history/civs/history_ethiopians.png",
+      "sourceSha256": "716ea63c4a743115be961a581efb01847f1a3c3bb00d45c26dfdb9c87e75c7c8",
+      "width": 326,
+      "height": 326,
+      "outputSha256": "7d97b307b1f7b6e73de509583bc7345e86040304c82ae627acc7d77d1015ff99",
+      "outputBytes": 20202
+    },
+    "Franks": {
+      "file": "franks.webp",
+      "sourcePath": "assets/history/civs/history_franks.png",
+      "sourceSha256": "8a3bfc650c541cc746112b1d52ceaa6c41246193e44ceca286bc3ac841cb58fc",
+      "width": 390,
+      "height": 390,
+      "outputSha256": "d21b0955f1ec0c03e6d39e4ac41d13813dd3bd9052ba87d82fb91759ce31cdc5",
+      "outputBytes": 47870
+    },
+    "Georgians": {
+      "file": "georgians.webp",
+      "sourcePath": "assets/history/civs2/history_georgians.png",
+      "sourceSha256": "db787d65a192041eff311dd837e8c66a96dc7419c06c110bb3668163ff62f15c",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "dad8832199ba12deb2699fd055b9bfc8420240a1c1437b92c4986f14a867fc8d",
+      "outputBytes": 90548
+    },
+    "Goths": {
+      "file": "goths.webp",
+      "sourcePath": "assets/history/civs/history_goths.png",
+      "sourceSha256": "6abca63d11c9790fd4d1666456022155323034e74787df5a11e1b7e4b0412cc8",
+      "width": 388,
+      "height": 388,
+      "outputSha256": "8f09c8bf683b076a50e8f807ec5ed3f13b067d66d1d4fac37598063df82944dc",
+      "outputBytes": 47010
+    },
+    "Gurjaras": {
+      "file": "gurjaras.webp",
+      "sourcePath": "assets/history/civs2/history_gurjaras.png",
+      "sourceSha256": "434c3a1a0c78721893feb76079bd6cba5f44e2f188bcfc05645932958e22d4e3",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "7e944b2c8dc7e2778f8c625b9ab692f8389aa902ff577d1b7663c1212ca20110",
+      "outputBytes": 143332
+    },
+    "Hindustanis": {
+      "file": "hindustanis.webp",
+      "sourcePath": "assets/history/civs/history_hindustani.png",
+      "sourceSha256": "bca6a4973ce2490dee59572a2a07bc916755fe6016bd2d3f9ab0582e73fcc12b",
+      "width": 363,
+      "height": 363,
+      "outputSha256": "a5ab24aa0f3daa277cb18bb4ed90749f1e71d4340558e87864c14966a7a97dda",
+      "outputBytes": 34534
+    },
+    "Huns": {
+      "file": "huns.webp",
+      "sourcePath": "assets/history/civs/history_huns.png",
+      "sourceSha256": "a39dd0dd280217ec9c96bc3178051ef135d06007deeaca607034179cd12d6404",
+      "width": 360,
+      "height": 360,
+      "outputSha256": "79da5a05e00d4053116cb8ba771b765ad112fcb3a758359f56b7d50bc71c6888",
+      "outputBytes": 31152
+    },
+    "Incas": {
+      "file": "incas.webp",
+      "sourcePath": "assets/history/civs/history_incas.png",
+      "sourceSha256": "5db1eade3f35802ff13d64544950e9a8a34a53e20a533dc4e46fb33e8e3f2db6",
+      "width": 374,
+      "height": 374,
+      "outputSha256": "5ab2772795a87d2e66056f6409093f945b7d3e38ff3a9f57ba35c4bbddfb1aee",
+      "outputBytes": 40286
+    },
+    "Italians": {
+      "file": "italians.webp",
+      "sourcePath": "assets/history/civs/history_italians.png",
+      "sourceSha256": "c06ea031ac48cb383351ef6e1c6437bec335808620bbbe9549b9041fe5e22c76",
+      "width": 460,
+      "height": 417,
+      "outputSha256": "7e5c1e59aa3c5b8b863096bd5edd241d1493ad4b921e75788a544cd62adfacb0",
+      "outputBytes": 50044
+    },
+    "Japanese": {
+      "file": "japanese.webp",
+      "sourcePath": "assets/history/civs/history_japanese.png",
+      "sourceSha256": "bc5b68bbf5c0c5357c8ca1ff3ca64deae6d4aa5dc8fc1fe89d9b81767e9b9edf",
+      "width": 428,
+      "height": 360,
+      "outputSha256": "510bf33705a4f1e40b573a3306606fff7b157583d25c5ccd364d23f4ad6fa4ba",
+      "outputBytes": 45090
+    },
+    "Jurchens": {
+      "file": "jurchens.webp",
+      "sourcePath": "assets/history/civs2/history_jurchens.png",
+      "sourceSha256": "98479d58bdeae6aff088d89a3679647332a37f3959a1dc0d4d1aca44d168f7db",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "88aad42f567c5974fc7f8c3a6662a5c31ed8bcf8d6a13a125f401a9a71fc4267",
+      "outputBytes": 74620
+    },
+    "Khitans": {
+      "file": "khitans.webp",
+      "sourcePath": "assets/history/civs2/history_khitans.png",
+      "sourceSha256": "b13778177cd56e3b4463260cfbd328f5684229cb9bd46123bef74ce6a0aaa685",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "18c43045ae9f9f389f3b571f5a7308bea5b1bf8921edcca5850940156f8648b6",
+      "outputBytes": 133080
+    },
+    "Khmer": {
+      "file": "khmer.webp",
+      "sourcePath": "assets/history/civs/history_khmer.png",
+      "sourceSha256": "667d5a123f52ece78f95c00b7dee8a0608e8e1087144b6abc0277445629a7344",
+      "width": 318,
+      "height": 318,
+      "outputSha256": "b6c6ea383f3b376a8292cc17cfe4fa62301e9f52252e22059cab585c7f905600",
+      "outputBytes": 33664
+    },
+    "Koreans": {
+      "file": "koreans.webp",
+      "sourcePath": "assets/history/civs/history_koreans.png",
+      "sourceSha256": "a603a66d3746215b2a8d9081f65641a1fba939f6104ddaac94f9d701255a92d7",
+      "width": 450,
+      "height": 450,
+      "outputSha256": "05f16c626e366badf12d2e920e020c05131f6aa4969d87b1c5cb77af81f94676",
+      "outputBytes": 63498
+    },
+    "Lithuanians": {
+      "file": "lithuanians.webp",
+      "sourcePath": "assets/history/civs2/history_lithuanians.png",
+      "sourceSha256": "bc92d98a10a7da7da1808a6a1a3016d4612e2e7c792b79dbc61981dac7f28bc6",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "89c3c34d1cd0ac45a44568bbe3267e187f6e0d726c52582881d7241d1fc9bbfb",
+      "outputBytes": 67188
+    },
+    "Magyars": {
+      "file": "magyars.webp",
+      "sourcePath": "assets/history/civs/history_magyars.png",
+      "sourceSha256": "4ddea67b0549012e1f24bae9eac77f5eca844455e701d4c400a0f9c595ea7ce2",
+      "width": 233,
+      "height": 233,
+      "outputSha256": "4f01e6f0b7af260c960e836a78d39a3b520719499180e24e0696be5cf427158a",
+      "outputBytes": 20604
+    },
+    "Malay": {
+      "file": "malay.webp",
+      "sourcePath": "assets/history/civs/history_malay.png",
+      "sourceSha256": "fdef0ac0fea48ee877753e40eb9f8a9ca261f724bd94454fd57919972e54a613",
+      "width": 363,
+      "height": 363,
+      "outputSha256": "713dcdd899b0330971c4299f71a4b1368fa0a8ac205f50ef2b7fc1812e77b9a4",
+      "outputBytes": 36418
+    },
+    "Malians": {
+      "file": "malians.webp",
+      "sourcePath": "assets/history/civs/history_malians.png",
+      "sourceSha256": "9819c817c07b969cadd7493569dd127f33992a102d6f54ebed9e9fd8d2b248c2",
+      "width": 345,
+      "height": 345,
+      "outputSha256": "c34bb054d4f293f4335e4bee0f03e8d7d409f768bb5e3ab092b08126fe597055",
+      "outputBytes": 42628
+    },
+    "Mapuche": {
+      "file": "mapuche.webp",
+      "sourcePath": "assets/history/civs2/history_mapuche.png",
+      "sourceSha256": "653fb58d3845cdfd0c50e6b62de82534a479df25026a8c7dbc62c2008a001bb2",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "8885a2b0d61d35d4ffca6e6af578cedfe9291f7a763573fb79a2ce13e28cc0d8",
+      "outputBytes": 157652
+    },
+    "Mayans": {
+      "file": "mayans.webp",
+      "sourcePath": "assets/history/civs/history_mayans.png",
+      "sourceSha256": "efd6bb14ac0e97f7d917fdec5c00a184d282e335c101d7b7a8135ed671bd6a85",
+      "width": 339,
+      "height": 339,
+      "outputSha256": "c8cc7076d148c5a7b07775a8f03b8856e66b58d23d89dbf85756242ccf0fd9a2",
+      "outputBytes": 46396
+    },
+    "Mongols": {
+      "file": "mongols.webp",
+      "sourcePath": "assets/history/civs/history_mongols.png",
+      "sourceSha256": "bc5017272a483a7be991a77b73eca321108017a7b7fe37c89d8f1c79c58bd4a5",
+      "width": 403,
+      "height": 403,
+      "outputSha256": "913b926800308410684db2f57bb1cb6d8adc042240cfd00c8d684c203f35b593",
+      "outputBytes": 46628
+    },
+    "Muisca": {
+      "file": "muisca.webp",
+      "sourcePath": "assets/history/civs2/history_muisca.png",
+      "sourceSha256": "99a213db804baef8b01965b00de6db5e2cb05955c7b2cc3a5ab3408cfecefb1d",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "96068f01a28b6efcc08024ce746a555a74a532634c7c6b3516755febf0a885ff",
+      "outputBytes": 131850
+    },
+    "Persians": {
+      "file": "persians.webp",
+      "sourcePath": "assets/history/civs/history_persians.png",
+      "sourceSha256": "f34ffd6f923c97bb4234816c1c0cc194f5aab74a3b8ccc4b5ff8a98fbd9700e7",
+      "width": 354,
+      "height": 354,
+      "outputSha256": "1f203d1d4fcf65e2d713a796da20f7c607c6bab33e1acdc7254815e0f4833338",
+      "outputBytes": 33392
+    },
+    "Poles": {
+      "file": "poles.webp",
+      "sourcePath": "assets/history/civs2/history_poles.png",
+      "sourceSha256": "69ea14b7f796a2a459dbbb6656cde2d04218922476abcae526b60c5d749cc3bf",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "d26e32982e051fccd634330f5007f545f7b76e8e98ebf546a9c9845879c80c53",
+      "outputBytes": 131498
+    },
+    "Portuguese": {
+      "file": "portuguese.webp",
+      "sourcePath": "assets/history/civs/history_portuguese.png",
+      "sourceSha256": "74711afde55727cea4543e3bd7bced9e791c55046f004a4642dc143a8b751c41",
+      "width": 350,
+      "height": 350,
+      "outputSha256": "d7ae7498877cef1473511cc8699557c20a13552c2afb94d23f4dd4aa59582163",
+      "outputBytes": 34216
+    },
+    "Romans": {
+      "file": "romans.webp",
+      "sourcePath": "assets/history/civs2/history_romans.png",
+      "sourceSha256": "8e065d670b1e9065dcd4ab225090e1ad90ce6e55522de28f67ef8e2ee322758c",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "ab70ecde9f96d7894436ea5c4c5cbda87d6b8831d5abf624baf27d64d4ec055a",
+      "outputBytes": 81360
+    },
+    "Saracens": {
+      "file": "saracens.webp",
+      "sourcePath": "assets/history/civs/history_saracens.png",
+      "sourceSha256": "3f58a26e309f607775a2d8456d03e671a913474e93cac34c027a8d7361778470",
+      "width": 336,
+      "height": 336,
+      "outputSha256": "b9749fc10a1142782695180336113f14ec711fed2a75b4c2e2474b74df7e5abc",
+      "outputBytes": 42072
+    },
+    "Saxons": {
+      "file": "saxons.webp",
+      "sourcePath": "assets/history/civs2/history_saxons.png",
+      "sourceSha256": "9c1f7b7fa68634ccc1d8b3e584a124a2edc2613ed2711cbe3d34193a2afa3ee3",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "f5145f05ee671e951b119843686586d6e160c99495f0b093cc53553ea87cf624",
+      "outputBytes": 300104
+    },
+    "Shu": {
+      "file": "shu.webp",
+      "sourcePath": "assets/history/civs2/history_shu.png",
+      "sourceSha256": "335d89b8f506308d9feb556113ad4d7969ca3a3315ed1af3f84014dc5f2c84df",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "ec0d3cfb59d2e98a49e779d9bf575f41388562425bd67616626d1cc632d79c0b",
+      "outputBytes": 130998
+    },
+    "Sicilians": {
+      "file": "sicilians.webp",
+      "sourcePath": "assets/history/civs/history_sicilians.png",
+      "sourceSha256": "c06ea031ac48cb383351ef6e1c6437bec335808620bbbe9549b9041fe5e22c76",
+      "width": 460,
+      "height": 417,
+      "outputSha256": "7e5c1e59aa3c5b8b863096bd5edd241d1493ad4b921e75788a544cd62adfacb0",
+      "outputBytes": 50044
+    },
+    "Slavs": {
+      "file": "slavs.webp",
+      "sourcePath": "assets/history/civs/history_slavs.png",
+      "sourceSha256": "89d9a254342ec8447dcae770d6ca9f6982a8750fb01592235ec5d7599f518931",
+      "width": 432,
+      "height": 432,
+      "outputSha256": "8022c759fb792ddb4036d849823a725e82a4d0ead4e247a7eb1f55959a444758",
+      "outputBytes": 48574
+    },
+    "Spanish": {
+      "file": "spanish.webp",
+      "sourcePath": "assets/history/civs/history_spanish.png",
+      "sourceSha256": "eeb9beb2aba75ed38e9d5a35da6e320b2491933a3090d8344fbd613855a588b2",
+      "width": 375,
+      "height": 375,
+      "outputSha256": "48ef668e945e21c4cb03c4f78dbcfe00ce122f557811452630add78010547c4a",
+      "outputBytes": 50512
+    },
+    "Tatars": {
+      "file": "tatars.webp",
+      "sourcePath": "assets/history/civs/history_tatars.png",
+      "sourceSha256": "f591b3ba9e215e18edf329ec410120a01f16e0c1ec5dcf837bbe98ad4f39cda1",
+      "width": 400,
+      "height": 400,
+      "outputSha256": "24e9c3a4196d75c106e87c82ec215054b33c06380533be6e4ab4bc216eacc75c",
+      "outputBytes": 81956
+    },
+    "Teutons": {
+      "file": "teutons.webp",
+      "sourcePath": "assets/history/civs/history_teutons.png",
+      "sourceSha256": "208ad8337a0fe9a0040af5fbfb9a51109c34956c68f2e400c66b897d1759df05",
+      "width": 370,
+      "height": 370,
+      "outputSha256": "9bdfe3ed400075fa907219bfd5fdbc714617cd2604b25f22ec249bb7ad080ec5",
+      "outputBytes": 44674
+    },
+    "Tupi": {
+      "file": "tupi.webp",
+      "sourcePath": "assets/history/civs2/history_tupi.png",
+      "sourceSha256": "358a147786debac3f00330b5e87ef4519f8a7c8836cc9db80cfa1ad8a6fe5362",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "c605cd4a5a73893f891c6f2f6e1f4079ebfd4e6b4f4175f3a611f89ec4c433e3",
+      "outputBytes": 78326
+    },
+    "Turks": {
+      "file": "turks.webp",
+      "sourcePath": "assets/history/civs/history_turks.png",
+      "sourceSha256": "5bf079d249bb933f8d297771dd54697918a13f466ea79eca73a77ccc3b95359f",
+      "width": 356,
+      "height": 356,
+      "outputSha256": "e5ff558a1173caa831b46e23e73c9c2d4361d3e6121d94826f32daf83c272f2c",
+      "outputBytes": 29060
+    },
+    "Varangians": {
+      "file": "varangians.webp",
+      "sourcePath": "assets/history/civs2/history_varangians.png",
+      "sourceSha256": "b8eb50694ea196ac05aecb5611fdff633479d3aa368905f3f64190ea80c058b0",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "15d7e030552088110dc39b4eda0c73c78c2bf5493d71db916e49d77afa5c8773",
+      "outputBytes": 273602
+    },
+    "Vietnamese": {
+      "file": "vietnamese.webp",
+      "sourcePath": "assets/history/civs/history_vietnamese.png",
+      "sourceSha256": "b999375351c1185a008bf883731c0f99419cb1f65aaec0658d374a21b89e0a6a",
+      "width": 400,
+      "height": 400,
+      "outputSha256": "9dc9c9be1a0c58a4095ed28d4c02a2613cda65aa4dee2f8cfdcb2dcc3a00e309",
+      "outputBytes": 45208
+    },
+    "Vikings": {
+      "file": "vikings.webp",
+      "sourcePath": "assets/history/civs/history_vikings.png",
+      "sourceSha256": "46c7d20db2dce0057e1dc507ab3211b84ca1a815118561cad15ca72d35bcaa4e",
+      "width": 320,
+      "height": 320,
+      "outputSha256": "9f4803991393bcbf2349c7d567fa5563f891a0f1340aef72441e15c266f05997",
+      "outputBytes": 31010
+    },
+    "Wei": {
+      "file": "wei.webp",
+      "sourcePath": "assets/history/civs2/history_wei.png",
+      "sourceSha256": "f9edf88651050b85df85b6de30931a33230a5fb3640b79ae67652ffc89f3d142",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "4bdae34207dd66ed2f515bad890be3e1fa3b9d476023f5ab91c8b462785dd0bf",
+      "outputBytes": 99392
+    },
+    "Wu": {
+      "file": "wu.webp",
+      "sourcePath": "assets/history/civs2/history_wu.png",
+      "sourceSha256": "cf62d932b6e990e2a8015d23654a5b2d0f27a711e4ba09988c84552929739e08",
+      "width": 1000,
+      "height": 530,
+      "outputSha256": "59a57cdc94fd2aab1bca95e611f2908c537400df90dbca20369ab8ce4285bf03",
+      "outputBytes": 126830
+    }
+  }
+}

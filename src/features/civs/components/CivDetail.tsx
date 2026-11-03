@@ -20,6 +20,7 @@ import CivNotFound from './CivNotFound';
 import { BonusRows } from './BonusRows';
 import { CivOpening } from './CivOpening';
 import { CivHistory } from './CivHistory';
+import { CivBackground } from './CivBackground';
 import { CivRegionalUnits } from './CivRegionalUnits';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
 import { CivUniqueBuildings } from './CivUniqueBuildings';
@@ -136,7 +137,7 @@ export default function CivDetail() {
     ['civ-tool-compare', `/compare?a=${c.en}`, 'scale', '文明对比'],
     ['civ-tool-tree', `/tree/${c.en}`, 'git-branch', '科技树'],
   ] as const;
-  return (
+  const detail = (
     <DetailPage
       key={c.en}
       id="detail"
@@ -300,4 +301,5 @@ export default function CivDetail() {
       }
     />
   );
+  return <CivBackground civ={c.en}>{detail}</CivBackground>;
 }
