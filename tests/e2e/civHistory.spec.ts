@@ -73,8 +73,8 @@ test('切换文明与页签：背景不串页，更新历史保留补丁语义',
   await expect(history).toHaveCount(0);
 });
 
-test('格鲁吉亚窄屏的中文世纪与单位不拆行', async ({ page }) => {
-  for (const width of [360, 375]) {
+for (const width of [360, 375]) {
+  test(`格鲁吉亚 ${width} 的中文世纪与单位不拆行`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('./#/civ/Georgians');
     const history = page.getByTestId('civ-history');
@@ -91,5 +91,5 @@ test('格鲁吉亚窄屏的中文世纪与单位不拆行', async ({ page }) => 
       ).toBe(1);
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  }
-});
+  });
+}
