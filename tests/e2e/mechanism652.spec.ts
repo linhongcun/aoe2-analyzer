@@ -1,5 +1,10 @@
+import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+const techNames = JSON.parse(readFileSync('src/data/techs.json', 'utf8')) as { id: number; zh: string }[];
+const archerArmor = techNames.find((tech) => tech.id === 211),
+  thumbRing = techNames.find((tech) => tech.id === 437);
+if (!archerArmor || !thumbRing) throw new Error('Missing pinned archer technology names');
 async function select(page: Page, lane = '边路') {
   await page.goto('./#/');
   await page.getByRole('button', { name: /组队随机地图/ }).click();
@@ -7,6 +12,33 @@ async function select(page: Page, lane = '边路') {
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
   await page.getByRole('button', { name: new RegExp('^' + lane) }).click();
   await expect(page.getByTestId('scene-Britons')).toContainText('预算可负担');
+}
+for (const width of [360, 375, 390, 1280]) {
+  test(`#679 @${width} 边路说明与科技表中文名一致`, async ({ page }, testInfo) => {
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+    await page.setViewportSize({ width, height: 900 });
+    await select(page);
+    const source = page.getByText('范围、科技包与来源', { exact: true });
+    await source.click();
+    const packageNote = source.locator('..').locator('p').filter({ hasText: '共同包：' });
+    await expect(packageNote).toContainText(archerArmor.zh);
+    await expect(packageNote).toContainText(thumbRing.zh);
+    await expect(packageNote).not.toContainText(/弓兵鳞甲|指环/);
+    await source.locator('..').screenshot({ path: testInfo.outputPath('scenario-tech-names.png') });
+    await page.getByText('封建到城堡：路线衔接', { exact: true }).click();
+    const routeSource = page.getByText('两阶段规则与数据来源', { exact: true });
+    await routeSource.click();
+    const routePackage = routeSource.locator('..').locator('p').filter({ hasText: '共同包：' });
+    await expect(routePackage).toContainText(archerArmor.zh);
+    await expect(routePackage).not.toContainText(/弓兵鳞甲|指环/);
+    await routeSource.locator('..').screenshot({ path: testInfo.outputPath('route-tech-names.png') });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(errors).toEqual([]);
+  });
 }
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['dark', 'light']) {

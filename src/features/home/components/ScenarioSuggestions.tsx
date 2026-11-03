@@ -189,7 +189,7 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
         <summary>范围、科技包与来源</summary>
         <p className="start-hint">首批核验：{SCENARIO_CIVS[lane].map((c) => civByEn(c)?.zh ?? c).join('、')}。名单是机制覆盖范围，不是强势文明白名单。</p>
         <p className="start-hint">
-          {lane === 'flank' ? '共同包：弩手升级、箭羽、锥子箭、弓兵鳞甲；不自动购买指环。' : '共同包：锻造、骑兵鳞甲；畜牧按所选状态。'}{' '}
+          {lane === 'flank' ? '共同包：弩手升级、箭羽、锥子箭、射手软甲；不自动购买扳指。' : '共同包：锻造、骑兵鳞甲；畜牧按所选状态。'}{' '}
           科技费用先扣；研究时间未放入真实对局时间线。合法包缺项则不比较，未搜索最优科技投资。
         </p>
         <p className="start-hint">

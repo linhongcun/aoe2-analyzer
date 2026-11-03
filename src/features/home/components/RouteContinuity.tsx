@@ -85,7 +85,7 @@ export default function RouteContinuity({ context, lane }: { context: SceneConte
           <details className="start-scene-details">
             <summary>两阶段规则与数据来源</summary>
             <p className="start-hint">
-              共同包：{lane === 'flank' ? '封建箭羽、弓兵鳞甲；城堡锥子箭及弩手升级。' : '封建锻造、骑兵鳞甲；城堡按开关补畜牧。'}
+              共同包：{lane === 'flank' ? '封建箭羽、射手软甲；城堡锥子箭及弩手升级。' : '封建锻造、骑兵鳞甲；城堡按开关补畜牧。'}
               已付款的科技继承，不重复收费；未付款前置需在城堡补齐。只有整包付得起才执行转型，不买最优科技包。
             </p>
             <p className="start-hint">
