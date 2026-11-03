@@ -1,10 +1,21 @@
-import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { expect, test, type Page } from '@playwright/test';
 import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 import { openAllDetails } from './relicDetails412';
 import { playerById, playerPath, playerRoutes } from '../../src/domain/playerCatalog.mjs';
 import { PLAYER_CATALOG } from './players488Catalog';
+import {
+  assertCompleteRecord,
+  coldStaticPage,
+  createTableFixtureWriter,
+  explicitTableKeyOwners,
+  staticPageFailures,
+  staticSweepMode,
+  staticSweepPlan,
+  tableStyles,
+  type TableStyle,
+} from './staticSweep338';
 
 /**
  * v0.30.0 验收：#338（含 2026-10-21 23:55 北京时间的范围补充，issue comment 6320295954）。Kent 写，先失败。
@@ -272,11 +283,12 @@ test.describe('#338 文物收入页不再显示 .dat SHA256', () => {
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
     });
 });
-
 // 全站页面：取 src/data/page-metadata.json 的全部静态页（与 scripts/static_pages.mjs、sitemap 同一份清单），去掉「关于数据」
 const PAGES = Object.entries(JSON.parse(readFileSync('src/data/page-metadata.json', 'utf8')) as Record<string, { route?: string }>)
   .map(([key, meta]) => meta.route ?? key)
   .filter((r) => r !== '/about-data');
+const RECORD_TABLES = !!process.env.V0300_RECORD;
+if (RECORD_TABLES) assert.ok(!process.env.CI && !process.env.CI_BROWSER_MODE, 'Golden recording is forbidden in CI');
 const playerState = PLAYER_CATALOG;
 assert.ok(playerState.status === 'ready', 'The approved player catalog must be valid and loaded');
 const playerCatalog = playerState.catalog;
@@ -284,6 +296,8 @@ const playerPageRoutes = ['/players', ...playerRoutes(playerCatalog)];
 
 /** A heading shell is insufficient: capture real player cards/facts and expanded citations. */
 async function openDetailsWithPlayerReadiness(page: Page, route: string) {
+  if (route === '/patches/188329') await expect(page.getByRole('heading', { name: 'DE Update 188329', exact: true })).toBeVisible();
+  if (route === '/ladder') await expect(page.getByTestId('ladder-table')).toBeVisible();
   if (route === '/team-fit') {
     await expect(page.getByRole('heading', { name: '文明搭配', exact: true, level: 1 })).toBeVisible();
     await expect(page.locator('main .tf-loading,main .tf-error')).toHaveCount(0);
@@ -329,32 +343,28 @@ test.describe('#338 除「关于数据」外全站不显示 sha256', () => {
     expect(PAGES).toEqual(expect.arrayContaining(['/market', '/relic-income']));
     expect(PAGES.length).toBeGreaterThan(900);
   });
-  for (let shard = 0; shard < SHARDS; shard++)
-    test(`全部静态页（第 ${shard + 1}/${SHARDS} 组）：正文（含折叠内容）没有 64 位十六进制或已知 sha256 片段`, async ({ page }) => {
-      test.setTimeout(600_000);
-      const mine = PAGES.filter((_, i) => i % SHARDS === shard);
-      const bad: string[] = [];
-      const seen: string[] = [];
-      for (const route of mine) {
-        // 每页都整页加载（先到 about:blank），等懒加载的页面代码和数据请求都结束再读，避免读到上一页或加载中的内容
-        await page.goto('about:blank');
-        await page.goto(`./#${route}`, { waitUntil: 'networkidle' });
-        await expect(page.locator('main')).not.toBeEmpty();
-        await page.waitForLoadState('networkidle');
-        await openDetailsWithPlayerReadiness(page, route);
-        const found = hashesIn((await page.locator('main').textContent()) ?? '');
-        if (route === '/relic-income' || route === '/market') seen.push(route);
-        if (found.length) bad.push(`#${route}：${found.map((h) => h.slice(0, 16) + '…').join('、')}`);
-      }
-      expect(seen.sort(), '防空转：本组应读到的市场 / 文物收入页都读到了').toEqual(mine.filter((r) => r === '/relic-income' || r === '/market').sort());
-      expect(bad).toEqual([]);
-    });
+  // Manual recording keeps the original standalone hash selection; normal runs share the 1280 table visit.
+  if (RECORD_TABLES)
+    for (let shard = 0; shard < SHARDS; shard++)
+      test(`全部静态页（第 ${shard + 1}/${SHARDS} 组）：正文（含折叠内容）没有 64 位十六进制或已知 sha256 片段`, async ({ page }) => {
+        test.setTimeout(600_000);
+        const mine = PAGES.filter((_, i) => i % SHARDS === shard);
+        const bad: string[] = [];
+        const seen: string[] = [];
+        for (const route of mine) {
+          // 每页都整页加载（先到 about:blank），等懒加载的页面代码和数据请求都结束再读，避免读到上一页或加载中的内容
+          await coldStaticPage(page, route, openDetailsWithPlayerReadiness);
+          const found = hashesIn((await page.locator('main').textContent()) ?? '');
+          if (route === '/relic-income' || route === '/market') seen.push(route);
+          if (found.length) bad.push(`#${route}：${found.map((h) => h.slice(0, 16) + '…').join('、')}`);
+        }
+        expect(seen.sort(), '防空转：本组应读到的市场 / 文物收入页都读到了').toEqual(mine.filter((r) => r === '/relic-income' || r === '/market').sort());
+        expect(bad).toEqual([]);
+      });
 });
-
 // ---------- 守卫：#338 只改「关于数据」来源表，其他页面的表格计算样式与 main ead4c34 相同（Steve 2026-10-22 00:38） ----------
 // 录制（在 main ead4c34 或同等表格样式的构建上，单 worker；fixture 于 5c9326f 录制，#339→ead4c34 未改表格 CSS）：
 //   V0300_RECORD=1 BASE_URL=… npx playwright test tests/e2e/v0300-338.spec.ts -g '其他页面表格' --workers=1
-type TableStyle = { cls: string; display: string; overflowX: string; tr: string | null; td: string | null };
 const TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables.json';
 const PATCH_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-188329.json';
 const PLAYERS_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-players.json';
@@ -362,7 +372,8 @@ const EVENTS_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-events.json';
 const LADDER_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-ladder.json';
 const TEAM_FIT_TABLES_FIXTURE = 'tests/e2e/fixtures/v0300-338-tables-team-fit.json';
 const TABLE_WIDTHS = [360, 1280] as const;
-const RECORD_TABLES = !!process.env.V0300_RECORD;
+const recordedTables: Record<string, TableStyle[]> = {};
+const recordedVisits = new Set<string>();
 const historicalTableGolden: Record<string, TableStyle[]> = existsSync(TABLES_FIXTURE)
   ? (JSON.parse(readFileSync(TABLES_FIXTURE, 'utf8')) as Record<string, TableStyle[]>)
   : {};
@@ -425,18 +436,6 @@ const tableFixtureGroups = [
   { file: LADDER_TABLES_FIXTURE, keys: ladderTableKeys, golden: ladderTableGolden },
   { file: TEAM_FIT_TABLES_FIXTURE, keys: teamFitTableKeys, golden: teamFitTableGolden },
 ];
-function explicitTableKeyOwners(groups: typeof tableFixtureGroups) {
-  const owners = new Map<string, string>();
-  for (const group of groups) {
-    assert.deepEqual(Object.keys(group.golden).sort(), [...group.keys].sort(), `Table fixture keys must match explicit owners: ${group.file}`);
-    for (const key of group.keys) {
-      assert.ok(!owners.has(key), `Table fixture ownership overlaps: ${key}`);
-      assert.ok(Array.isArray(group.golden[key]), `Missing explicit table expectation: ${key}`);
-      owners.set(key, group.file);
-    }
-  }
-  return owners;
-}
 const tableKeyOwners = explicitTableKeyOwners(tableFixtureGroups);
 assert.deepEqual(
   [...tableKeyOwners.keys()].sort(),
@@ -444,40 +443,23 @@ assert.deepEqual(
   'All four table fixture owners must partition exactly the static-page width keys; missing and extra keys are rejected',
 );
 const tableGolden = { ...historicalTableGolden, ...patchTableGolden, ...playerTableGolden, ...eventTableGolden, ...ladderTableGolden, ...teamFitTableGolden };
-
-function recordTableFixtures(tables: Record<string, TableStyle[]>, write: (file: string, text: string) => void = writeFileSync) {
-  assert.deepEqual(
-    Object.keys(tables).sort(),
-    [...tableKeyOwners.keys()].sort(),
-    'Recorded table keys must match explicit owners; missing or unassigned records are rejected',
-  );
-  for (const key of tableKeyOwners.keys()) assert.ok(Array.isArray(tables[key]), `Missing explicit recorded table value: ${key}`);
-  for (const group of tableFixtureGroups) {
-    const owned = Object.fromEntries(group.keys.map((key) => [key, tables[key]]));
-    write(group.file, JSON.stringify(owned, null, 1) + '\n');
-  }
-}
-
-async function tableStyles(page: Page): Promise<TableStyle[]> {
-  return page.locator('main table').evaluateAll((tables) =>
-    tables.map((t) => {
-      const tr = t.querySelector('tbody tr') ?? t.querySelector('tr');
-      const td = tr?.querySelector('td, th') ?? null;
-      const cs = getComputedStyle(t);
-      return {
-        cls: t.className,
-        display: cs.display,
-        overflowX: cs.overflowX,
-        tr: tr ? getComputedStyle(tr).display : null,
-        td: td ? getComputedStyle(td).display : null,
-      };
-    }),
-  );
-}
+const recordTableFixtures = createTableFixtureWriter(tableFixtureGroups);
 
 test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main ead4c34 相同', () => {
-  test.describe.configure({ mode: 'parallel' });
-  if (RECORD_TABLES) test.afterAll(() => recordTableFixtures(tableGolden));
+  test.describe.configure({ mode: staticSweepMode(RECORD_TABLES) });
+  if (RECORD_TABLES) {
+    // eslint-disable-next-line no-empty-pattern -- Playwright requires destructured fixtures.
+    test.beforeAll(({}, info) => {
+      assert.equal(info.config.workers, 1, 'Golden recording requires one worker');
+      assert.equal(info.config.shard, null, 'Golden recording cannot use Playwright shards');
+      assert.ok(!process.env.CI_BROWSER_SHARD && !process.argv.some((arg) => /^--test-list(?:=|$)/.test(arg)), 'Golden recording cannot use case partitions');
+      assert.equal(info.config.repeatEach, 1, 'Golden recording cannot repeat cases');
+    });
+    test.afterAll(() => {
+      assertCompleteRecord(recordedTables, recordedVisits, [...tableKeyOwners.keys()]);
+      recordTableFixtures(recordedTables);
+    });
+  }
   test('守卫：记录时历史基准与全部补充基准保持分开，不覆盖彼此的键值', () => {
     const written = new Map<string, Record<string, TableStyle[]>>();
     recordTableFixtures(tableGolden, (file, text) => written.set(file, JSON.parse(text) as Record<string, TableStyle[]>));
@@ -575,25 +557,44 @@ test.describe('#338 守卫：其他页面表格的 display / overflow-x 与 main
         await openDetailsWithPlayerReadiness(page, route);
         expect(await tableStyles(page)).toEqual(tableGolden[`${width} ${route}`]);
       });
-  for (const width of TABLE_WIDTHS)
-    for (let shard = 0; shard < SHARDS; shard++)
-      test(`@${width} 全部静态页（第 ${shard + 1}/${SHARDS} 组）：main 里每张表格的 display、overflow-x 及首行 tr / td 的 display 不变`, async ({ page }) => {
-        test.setTimeout(600_000);
-        await page.setViewportSize({ width, height: 900 });
-        const diffs: string[] = [];
-        for (const route of PAGES.filter((_, i) => i % SHARDS === shard)) {
-          await page.goto('about:blank');
-          await page.goto(`./#${route}`, { waitUntil: 'networkidle' });
-          await expect(page.locator('main')).not.toBeEmpty();
-          if (route === '/patches/188329') await expect(page.getByRole('heading', { name: 'DE Update 188329', exact: true })).toBeVisible();
-          await page.waitForLoadState('networkidle');
-          await openDetailsWithPlayerReadiness(page, route);
-          const got = await tableStyles(page);
-          const key = `${width} ${route}`;
-          if (RECORD_TABLES) tableGolden[key] = got;
-          else if (JSON.stringify(got) !== JSON.stringify(tableGolden[key]))
-            diffs.push(`#${route}：main ${JSON.stringify(tableGolden[key])} → 现在 ${JSON.stringify(got)}`);
+  for (const { width, group: shard, routes: mine, families } of staticSweepPlan(PAGES, SHARDS, RECORD_TABLES))
+    test(`@${width} 全部静态页（第 ${shard + 1}/${SHARDS} 组）：main 里每张表格的 display、overflow-x 及首行 tr / td 的 display 不变`, async ({ page }) => {
+      test.setTimeout(600_000);
+      await page.setViewportSize({ width, height: 900 });
+      const diffs: string[] = [],
+        badHashes: string[] = [],
+        visited: string[] = [],
+        seen: string[] = [];
+      for (const route of mine) {
+        await coldStaticPage(page, route, openDetailsWithPlayerReadiness);
+        const got = await tableStyles(page),
+          key = `${width} ${route}`;
+        visited.push(route);
+        if (RECORD_TABLES) {
+          assert.ok(!recordedVisits.has(key), `Repeated recorded visit: ${key}`);
+          recordedTables[key] = got;
+          recordedVisits.add(key);
+        } else {
+          const failures = staticPageFailures(
+            {
+              route,
+              width,
+              tables: got,
+              expected: tableGolden[key]!,
+              text: families.includes('hash') ? ((await page.locator('main').textContent()) ?? '') : '',
+            },
+            hashesIn,
+          );
+          diffs.push(...failures.tableDiffs);
+          badHashes.push(...failures.badHashes);
+          if (families.includes('hash') && (route === '/relic-income' || route === '/market')) seen.push(route);
         }
-        expect(diffs, '其他页面表格的计算样式与 main 相同').toEqual([]);
-      });
+      }
+      expect.soft(visited, '防空转：本组每条静态路由都实际冷启动读取').toEqual(mine);
+      if (families.includes('hash')) {
+        expect.soft(seen.sort(), '防空转：本组应读到的市场 / 文物收入页都读到了').toEqual(mine.filter((r) => r === '/relic-income' || r === '/market').sort());
+        expect.soft(badHashes, '正文（含折叠内容）没有 64 位十六进制或已知 sha256 片段').toEqual([]);
+      }
+      expect.soft(diffs, '其他页面表格的计算样式与 main 相同').toEqual([]);
+    });
 });

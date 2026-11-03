@@ -3,6 +3,8 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+// @ts-expect-error CI commands are plain Node modules.
+import { installBrowser } from '../../scripts/ci-commands.mjs';
 
 const directories: string[] = [];
 afterEach(() => directories.splice(0).forEach((directory) => rmSync(directory, { recursive: true, force: true })));
@@ -57,12 +59,42 @@ function fixture(files: Record<string, string>) {
   return { directory, path };
 }
 
-function runMirrorStep(workflow: string, directory: string) {
-  // Execute the workflow's shell itself; only redirect its filesystem and remove privilege escalation.
-  const run = mirrorStep(workflow)
-    .run.replaceAll('/etc/apt/', `${directory}/etc/apt/`)
-    .replace(/\bsudo\s+/g, '');
-  execFileSync('bash', ['-e', '-o', 'pipefail', '-c', run], { encoding: 'utf8' });
+async function runMirrorStep(workflow: string, directory: string) {
+  // Execute production shell, redirecting its filesystem and removing privilege escalation only.
+  const executeShell = (command: string, args: string[]) => {
+    const origin = Date.now();
+    execFileSync(
+      command,
+      args.map((arg) => arg.replaceAll('/etc/apt/', `${directory}/etc/apt/`).replace(/\bsudo\s+/g, '')),
+      {
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          CI_RUN_EPOCH_MS: String(origin),
+          CI_DEADLINE_MS: String(origin + 30 * 60 * 1000),
+          GITHUB_RUN_ID: '659',
+          GITHUB_RUN_ATTEMPT: '1',
+          CI_BUDGET_KIND: 'validation',
+        },
+      },
+    );
+  };
+  if (workflow === 'release') executeShell('bash', ['-e', '-o', 'pipefail', '-c', mirrorStep(workflow).run]);
+  else {
+    // CI moved the same repair behind the shared-deadline installer. Keep exercising its actual shell.
+    const commands: string[] = [];
+    await installBrowser({
+      run: async (command: string, args: string[]) => {
+        commands.push(command);
+        if (command === 'bash') executeShell(command, args);
+        else {
+          expect(command).toBe('npx');
+          expect(args).toEqual(['playwright', 'install', '--with-deps', 'chromium']);
+        }
+      },
+    });
+    expect(commands).toEqual(['bash', 'npx']);
+  }
 }
 
 function referencedMirrors(directory: string, source: string) {
@@ -82,7 +114,7 @@ describe.each(['ci', 'release'])('%s workflow Ubuntu mirror repair #454', (workf
   it.each([
     ['deb822', 'sources.list.d/ubuntu.sources', deb822Mirror, 'sources.list', directLegacy],
     ['legacy', 'sources.list', legacyMirror, 'sources.list.d/ubuntu.sources', directDeb822],
-  ])('changes the selected %s mirror through the real mirror+file source', (_format, mirrorSourcePath, mirrorSource, directPath, directSource) => {
+  ])('changes the selected %s mirror through the real mirror+file source', async (_format, mirrorSourcePath, mirrorSource, directPath, directSource) => {
     const files = {
       'apt-mirrors.txt': mirrorList,
       [mirrorSourcePath]: mirrorSource,
@@ -90,7 +122,7 @@ describe.each(['ci', 'release'])('%s workflow Ubuntu mirror repair #454', (workf
       'sources.list.d/vendor.sources': vendorSource,
     };
     const { directory, path } = fixture(files);
-    runMirrorStep(workflow, directory);
+    await runMirrorStep(workflow, directory);
 
     const entries = referencedMirrors(directory, readFileSync(path(mirrorSourcePath), 'utf8'));
     const selected = [...entries].sort((a, b) => a.priority - b.priority)[0];
@@ -109,17 +141,17 @@ describe.each(['ci', 'release'])('%s workflow Ubuntu mirror repair #454', (workf
     ['sources.list', directLegacy],
     ['sources.list.d/ubuntu.sources', directDeb822],
     ['apt-mirrors.txt', mirrorList],
-  ])('also repairs %s when the other optional source files are absent', (name, content) => {
+  ])('also repairs %s when the other optional source files are absent', async (name, content) => {
     const { directory, path } = fixture({ [name]: content });
-    runMirrorStep(workflow, directory);
+    await runMirrorStep(workflow, directory);
     expect(readFileSync(path(name), 'utf8')).toBe(content.replaceAll('azure.archive.ubuntu.com', 'archive.ubuntu.com'));
     for (const missing of ['sources.list', 'sources.list.d/ubuntu.sources', 'apt-mirrors.txt'].filter((file) => file !== name))
       expect(existsSync(path(missing))).toBe(false);
   });
 
-  it('tolerates every optional source file being absent', () => {
+  it('tolerates every optional source file being absent', async () => {
     const { directory, path } = fixture({});
-    expect(() => runMirrorStep(workflow, directory)).not.toThrow();
+    await expect(runMirrorStep(workflow, directory)).resolves.toBeUndefined();
     expect(existsSync(path('apt-mirrors.txt'))).toBe(false);
   });
 

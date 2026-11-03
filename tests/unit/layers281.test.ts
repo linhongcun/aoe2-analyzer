@@ -3,6 +3,8 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error 纯 JS 脚本，没有类型声明
 import { classify, LOADERS, parseImports, ROOT, RULES } from '../../scripts/check-layers.mjs';
+// @ts-expect-error CI scripts are plain Node modules.
+import { STATIC_CHECKS } from '../../scripts/ci-commands.mjs';
 
 interface Edge {
   from: string;
@@ -138,7 +140,8 @@ describe('#281 分层边界检查脚本', () => {
 
   it('CI 以 --strict 运行分层检查（#281 ⑤）', () => {
     const ci = readFileSync(`${ROOT}/.github/workflows/ci.yml`, 'utf8');
-    expect(ci).toMatch(/- name: Layer boundaries \(strict, #281\)\n\s+run: npm run lint:layers -- --strict\n/);
+    expect(ci).toContain('run: node scripts/ci-stage.mjs run static');
+    expect(STATIC_CHECKS).toContainEqual(['layers', 'npm', ['run', 'lint:layers', '--', '--strict']]);
     expect(ci).not.toMatch(/warn only/i);
   });
 

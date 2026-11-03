@@ -26,17 +26,15 @@ function fixture() {
 const minimal = (overrides = {}) => ({ scope: 'targeted', features: [], unit: [], e2e: [], data: false, full: false, ...overrides });
 
 describe('#431 affected feature plans', () => {
-  it('patch summary and route helpers select their actual regressions without data generation', () => {
+  it('patch summaries stay targeted while shared route helpers require full tests without data generation', () => {
     const patch = planChanges([change('src/features/patches/Patches.tsx'), change('src/domain/patches.ts')]);
     expect(patch).toMatchObject({ scope: 'targeted', features: ['patches'], full: false, data: false });
     expect(patch.unit).toContain('tests/unit/patchTree417.test.ts');
     expect(patch.e2e).toEqual(['tests/e2e/patchTree417.spec.ts', 'tests/e2e/patches16.spec.ts']);
     const route = planChanges([change('src/domain/simRoute.ts')]);
-    expect(route).toMatchObject({ scope: 'targeted', features: ['matchup', 'simulator', 'units'], full: false, data: false });
-    expect(route.unit).toContain('tests/unit/simulator.test.ts');
-    expect(route.unit).toContain('tests/unit/simRoute424.test.ts');
-    expect(route.e2e).toContain('tests/e2e/matchupSim424.spec.ts');
-    expect(route.e2e).toContain('tests/e2e/upgradeLine10.spec.ts');
+    expect(route).toMatchObject({ scope: 'full', full: true, data: false });
+    expect(testCommand(route, 'unit')).toEqual({ command: 'npx', args: ['vitest', 'run'] });
+    expect(testCommand(route, 'e2e')).toEqual({ command: 'npx', args: ['playwright', 'test', '--reporter=line'] });
     expect(patch.unit).not.toContain('tests/unit/release*.test.ts');
   });
 
@@ -130,7 +128,7 @@ describe('#431 affected feature plans', () => {
     expect(planChanges([change('package.json', before, dependencies)])).toMatchObject({ scope: 'full', data: true });
   });
 
-  it('policy changes add policy unit tests to the affected UI rather than running the site', () => {
+  it('#659 policy changes require complete suites even when mixed with bounded UI changes', () => {
     const plan = planChanges([
       change('scripts/ci-evidence.mjs'),
       change('scripts/ci-run.mjs'),
@@ -138,10 +136,10 @@ describe('#431 affected feature plans', () => {
       change('scripts/deployment-smoke.mjs'),
       change('src/features/patches/Patches.tsx'),
     ]);
-    expect(plan).toMatchObject({ scope: 'targeted', data: false, full: false });
-    expect(plan.unit).toContain('tests/unit/release*.test.ts');
-    expect(plan.unit).toContain('tests/unit/patchTree417.test.ts');
-    expect(plan.e2e).toEqual(['tests/e2e/patchTree417.spec.ts', 'tests/e2e/patches16.spec.ts']);
+    expect(plan).toMatchObject({ scope: 'full', data: false, full: true });
+    expect(plan.features).toContain('patches');
+    expect(testCommand(plan, 'unit')).toEqual({ command: 'npx', args: ['vitest', 'run'] });
+    expect(testCommand(plan, 'e2e')).toEqual({ command: 'npx', args: ['playwright', 'test', '--reporter=line'] });
   });
 
   it('an added test runs explicitly; an unmapped test name is not an excuse to run the whole product', () => {

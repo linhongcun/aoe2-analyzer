@@ -28,16 +28,14 @@ describe('#584 insight presentation CI scope', () => {
   it('a mixed calculation or generated-data change retains the conservative plan', () => {
     const mixed = plan('src/domain/insights.ts', 'src/domain/realCost.ts');
     expect(mixed).toMatchObject({ scope: 'full', full: true, data: false });
-    expect(mixed.e2e).toContain('tests/e2e/insights584.spec.ts');
+    expect(mixed.browser).toBe('full');
     expect(plan('src/domain/insights.ts', 'src/data/units.json')).toMatchObject({ scope: 'full', full: true, data: true });
   });
 
-  it('policy maintenance continues selecting the scope regression and capped blacklist', () => {
+  it('#659 CI policy or a global guard edit cannot reduce its own verification', () => {
     const maintenance = plan('scripts/ci-scope.mjs');
-    expect(maintenance.unit).toContain('tests/unit/release*.test.ts');
+    expect(maintenance).toMatchObject({ full: true, browser: 'full', data: false });
     const selected = plan('src/domain/insights.ts', 'tests/e2e/v0300-338.spec.ts', 'tests/e2e/screenshots.spec.ts');
-    expect(selected.e2e).not.toContain('tests/e2e/v0300-338.spec.ts');
-    expect(selected.e2e).not.toContain('tests/e2e/screenshots.spec.ts');
-    expect(selected.e2e).toContain('tests/e2e/insights584.spec.ts');
+    expect(selected).toMatchObject({ full: true, browser: 'full', data: false });
   });
 });

@@ -261,7 +261,7 @@ describe('#558 release smoke baseline trust and workflow contract', () => {
   });
   it('plans only after npm ci and artifact verification and before tag/draft; original artifact packaging still verifies the same bytes', () => {
     const workflow = readFileSync('.github/workflows/release.yml', 'utf8');
-    const install = workflow.indexOf('run: npm ci --legacy-peer-deps'),
+    const install = workflow.indexOf('run: node scripts/ci-budget.mjs --run -- npm ci --legacy-peer-deps'),
       verify = workflow.indexOf('name: Verify deployed artifact identity and bytes'),
       plan = workflow.indexOf('name: Plan feature smoke from the previous formal release'),
       tag = workflow.indexOf('name: Verify deployment, tag and draft Release');

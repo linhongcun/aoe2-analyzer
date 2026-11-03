@@ -1,0 +1,76 @@
+name: CI validation probe
+on:
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: '已成功部署的 CI / Deploy run ID；仅做隔离验收实验，不发布'
+        required: true
+        type: string
+permissions: { contents: read, actions: read }
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_CI_RUN_ID: ${{ inputs.source_run_id }}
+    steps:
+      - name: Validate immutable source and establish this probe clock
+        id: source
+        timeout-minutes: 1
+        run: |
+          node --input-type=module <<'NODE'
+          import {appendFileSync} from 'node:fs';
+          const repo=process.env.GITHUB_REPOSITORY,id=process.env.SOURCE_CI_RUN_ID;
+          if(!/^[1-9]\d*$/.test(id||''))throw Error('Invalid source run ID');
+          const get=async(path)=>{
+            const r=await fetch(`https://api.github.com/repos/${repo}/${path}`,{headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`},signal:AbortSignal.timeout(10000)});
+            if(!r.ok)throw Error('Cannot verify probe source/clock');return r.json();
+          };
+          const [source,own]=await Promise.all([get(`actions/runs/${id}`),get(`actions/runs/${process.env.GITHUB_RUN_ID}`)]);
+          if(source.id!==Number(id)||source.name!=='CI / Deploy'||source.path!=='.github/workflows/ci.yml'||source.event!=='push'||source.head_branch!=='main'||source.repository?.full_name!==repo||source.head_repository?.full_name!==repo||source.status!=='completed'||source.conclusion!=='success'||!/^[a-f0-9]{40}$/.test(source.head_sha))throw Error('Untrusted probe source');
+          if(own.id!==Number(process.env.GITHUB_RUN_ID)||own.run_attempt!==Number(process.env.GITHUB_RUN_ATTEMPT)||own.repository?.full_name!==repo)throw Error('Wrong probe clock');
+          const origin=Date.parse(own.created_at),deadline=origin+1800000;
+          if(!Number.isSafeInteger(origin)||Date.now()>=deadline)throw Error('Probe expired in queue');
+          appendFileSync(process.env.GITHUB_OUTPUT,`sha=${source.head_sha}\n`);
+          appendFileSync(process.env.GITHUB_ENV,`CI_RUN_EPOCH_MS=${origin}\nCI_DEADLINE_MS=${deadline}\n`);
+          NODE
+      - uses: actions/checkout@v4
+        timeout-minutes: 2
+        with: { ref: '${{ steps.source.outputs.sha }}', fetch-depth: 0, persist-credentials: false }
+      - run: node scripts/ci-budget.mjs --init
+      - uses: actions/setup-node@v4
+        timeout-minutes: 2
+        with: { node-version: '20.19.5', cache: npm }
+      - uses: actions/setup-python@v5
+        timeout-minutes: 2
+        with: { python-version: '3.12.12' }
+      - run: node scripts/ci-budget.mjs --run -- npm ci --legacy-peer-deps
+      - uses: actions/download-artifact@v4
+        timeout-minutes: 2
+        with:
+          name: ci-plan-v2
+          path: ${{ runner.temp }}/probe-source
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.source_run_id }}
+      - uses: actions/download-artifact@v4
+        timeout-minutes: 2
+        with:
+          name: ci-build-v2
+          path: ${{ runner.temp }}/ci-build
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.source_run_id }}
+      - run: node scripts/ci-budget.mjs --assert
+      - run: node scripts/ci-stage.mjs install-browser
+      - name: Positive control, malformed evidence and real narrow fallback
+        run: node scripts/ci-stage.mjs probe
+      - uses: actions/upload-artifact@v4
+        timeout-minutes: 1
+        with:
+          name: isolated-validation-probe
+          path: |
+            ${{ runner.temp }}/validation-probe.json
+            ${{ runner.temp }}/probe-unit.json
+            ${{ runner.temp }}/probe-browser-report.json
+          if-no-files-found: error
+      - run: node scripts/ci-budget.mjs --assert
