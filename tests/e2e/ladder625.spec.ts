@@ -14,12 +14,13 @@ for (const width of [360, 375, 390, 1280]) {
       await page.goto('./#/ladder?view=meta');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       const group = page.getByTestId('ladder-elo');
-      const keys = await group.locator('[data-elo]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-elo')));
       const all = group.locator('[data-elo="all"]');
       await expect(all).toBeDisabled();
       await expect(all).toContainText('暂无数据');
       await expect(group.locator('[data-elo="1200-1400"]')).toHaveAttribute('aria-checked', 'true');
       await expect(page.getByTestId('ladder-source')).toHaveAttribute('data-slice-mode', '4v4');
+      // Snapshot only after the lazy page and its initial selection are ready.
+      const keys = await group.locator('[data-elo]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-elo')));
       await expect(page).toHaveURL(/#\/ladder\?view=meta$/);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: testInfo.outputPath(`ladder625-${width}-${theme}-team.png`), fullPage: true });
