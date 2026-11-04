@@ -192,7 +192,7 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
           {rows.map((row) => (
             <article className="start-scene-card" key={row.civ} data-testid={`scene-${row.civ}`}>
               <p className="start-k">{sceneLabel(row, lane)}</p>
-              <CivRow en={row.civ} pressed={state.choice.civ === row.civ} onPick={() => onChange((c) => pickCiv(c, row.civ))} />
+              <CivRow en={row.civ} state={state} pressed={state.choice.civ === row.civ} onPick={() => onChange((c) => pickCiv(c, row.civ))} />
               <p className="start-hint">城堡时代 · {context.core.unitById[lane === 'flank' ? 24 : 38]?.zh ?? '路线兵种未核实'}</p>
               <p className="start-why">{sceneReason(row, lane)}</p>
               <details className="start-scene-details">

@@ -1,6 +1,102 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+for (const kind of ['map', 'civ', 'editorial'])
+  test(`#676 @1280 ${kind}目录可视区完整容纳12项`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('./#/');
+    if (kind === 'map') await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+    else if (kind === 'civ') await page.getByTestId('start-lobby').click();
+    else {
+      await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+      await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+      await page.getByRole('button', { name: '浏览其余文明', exact: true }).click();
+    }
+    await page.evaluate(() => document.fonts.ready);
+    const catalog = page.getByTestId('start-step').locator('.start-catalog');
+    await expect(catalog).toBeVisible();
+    const metrics = await catalog.evaluate(
+      (element, selector) => {
+        element.scrollTop = 0;
+        const rect = element.getBoundingClientRect(),
+          top = rect.top + element.clientTop,
+          bottom = top + element.clientHeight;
+        const boxes = [...element.querySelectorAll(selector)].map((card) => {
+          const r = card.getBoundingClientRect();
+          const controls = [...card.querySelectorAll('button,a')].map((control) => {
+            const b = control.getBoundingClientRect();
+            return { top: b.top, bottom: b.bottom, height: b.height, complete: b.top >= top - 1 && b.bottom <= bottom + 1 };
+          });
+          return {
+            top: r.top,
+            bottom: r.bottom,
+            left: r.left,
+            width: r.width,
+            height: r.height,
+            complete: r.top >= top - 1 && r.bottom <= bottom + 1,
+            controls,
+          };
+        });
+        const style = getComputedStyle(element);
+        return {
+          top,
+          bottom,
+          clientHeight: element.clientHeight,
+          scrollHeight: element.scrollHeight,
+          scrollTop: element.scrollTop,
+          columns: style.gridTemplateColumns,
+          gap: style.gap,
+          complete: boxes.filter((b) => b.complete).length,
+          first12: boxes.slice(0, 12),
+        };
+      },
+      kind === 'map' ? '.start-map' : '.start-civrow',
+    );
+    console.log(
+      JSON.stringify({
+        kind,
+        version: await page.locator('[data-t="footer-app-version"]').innerText(),
+        build: await page.locator('[data-t="footer-build"]').innerText(),
+        metrics,
+      }),
+    );
+    expect(metrics.complete).toBeGreaterThanOrEqual(12);
+    expect(metrics.first12.every((box) => box.complete)).toBe(true);
+    expect(metrics.columns.split(' ')).toHaveLength(2);
+    expect(new Set(metrics.first12.map((box) => box.top)).size).toBe(6);
+    if (kind !== 'map')
+      for (const box of metrics.first12) {
+        expect(box.controls).toHaveLength(2);
+        expect(box.controls.every((c) => c.complete)).toBe(true);
+      }
+    expect(metrics.scrollHeight).toBeGreaterThan(metrics.clientHeight);
+    const last = catalog.locator(kind === 'map' ? '.start-map' : '.start-civrow').last();
+    await last.scrollIntoViewIfNeeded();
+    if (kind === 'map') {
+      const name = await last.locator('b').innerText();
+      await last.focus();
+      await expect(last).toBeFocused();
+      await last.click();
+      await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+      await expect(page.getByTestId('start-step')).toContainText(name);
+    } else {
+      const en = await last.locator('.start-en').innerText();
+      await last.getByRole('link').click();
+      await expect(page.getByRole('heading', { level: 1 })).toContainText(en);
+      await page.getByRole('link', { name: '回开一局', exact: true }).click();
+      await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+      expect(JSON.parse(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('sg')!).choice.civ).toBeNull();
+      if (kind === 'editorial') await page.getByRole('button', { name: '浏览其余文明', exact: true }).click();
+      const pick = last.locator('button');
+      await pick.scrollIntoViewIfNeeded();
+      await pick.focus();
+      await expect(pick).toBeFocused();
+      await pick.click();
+      await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
+      expect(JSON.parse(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('sg')!).choice.civ).toBe(en);
+    }
+  });
+
 test('路线衔接公开存量与追加预算，不替代城堡快照', async ({ page }) => {
   await page.goto('./#/');
   await page.getByRole('button', { name: /组队随机地图/ }).click();

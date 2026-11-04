@@ -8,12 +8,24 @@ import MapEditorial from './MapEditorial';
 import { editStep, jumpTo, laneRowVisible, openLane, pickCiv, resetStart, type StartState, type StepId } from '../../../domain/startGame';
 import { Actions, CivRow, EmptySlot, LANE_EN, LANE_LABEL, ModeText, Picked, findMap, normalize, useMaps, type Update } from './startGameEarly';
 
-export function CivSearch({ shown, onChange, searchOnly = false }: { shown: ReadonlySet<string>; onChange: Update; searchOnly?: boolean }) {
+export function CivSearch({
+  shown,
+  onChange,
+  state,
+  searchOnly = false,
+}: {
+  shown: ReadonlySet<string>;
+  onChange: Update;
+  state: StartState;
+  searchOnly?: boolean;
+}) {
   const [query, setQuery] = useState('');
+  const [browsing, setBrowsing] = useState(false);
   const term = normalize(query);
+  const all = !searchOnly && (shown.size === 0 || browsing);
   const visible = civs.filter((civ) => {
     if (shown.has(civ.en)) return false;
-    if (!term) return shown.size === 0 && !searchOnly;
+    if (!term) return all;
     return [civ.zh, civ.en, civ.py ?? '', civ.pyi ?? ''].some((part) => normalize(part).includes(term));
   });
   return (
@@ -25,11 +37,21 @@ export function CivSearch({ shown, onChange, searchOnly = false }: { shown: Read
       <p className="start-hint">
         共 <span className="num nw">{civs.length} 个文明</span>
       </p>
-      {term || (shown.size === 0 && !searchOnly) ? (
+      {shown.size > 0 && !searchOnly && !term ? (
+        <button className="start-btn" type="button" aria-expanded={browsing} onClick={() => setBrowsing((value) => !value)}>
+          {browsing ? '收起其余文明' : '浏览其余文明'}
+        </button>
+      ) : null}
+      {browsing && shown.size > 0 && !term && !searchOnly ? (
+        <p className="start-hint">
+          其余 <span className="num nw">{visible.length} 个文明</span>
+        </p>
+      ) : null}
+      {term || all ? (
         visible.length ? (
           <div className="start-catalog">
             {visible.map((civ) => (
-              <CivRow key={civ.en} en={civ.en} pressed={false} onPick={() => onChange((current) => pickCiv(current, civ.en))} />
+              <CivRow key={civ.en} en={civ.en} state={state} pressed={false} onPick={() => onChange((current) => pickCiv(current, civ.en))} />
             ))}
           </div>
         ) : (
@@ -122,7 +144,7 @@ export function CivStep({ state, onChange }: { state: StartState; onChange: Upda
           <EmptySlot />
         </>
       )}
-      <CivSearch shown={new Set(guide?.civs.map(([en]) => en))} onChange={onChange} searchOnly={supported} />
+      <CivSearch shown={new Set(guide?.civs.map(([en]) => en))} state={state} onChange={onChange} searchOnly={supported} />
       <Actions state={state} onChange={onChange} />
     </section>
   );

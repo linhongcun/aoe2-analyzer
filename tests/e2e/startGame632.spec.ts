@@ -2,6 +2,73 @@ import { expect, test, type Browser, type Page } from '@playwright/test';
 import type { StartState } from '../../src/domain/startGame';
 import AxeBuilder from '@axe-core/playwright';
 
+test('#676 @1280 编辑卡路径可以浏览其余文明', async ({ page }) => {
+  await editorialPath(page);
+  await expect(page.getByTestId('start-editorial').locator('.start-civrow')).toHaveCount(2);
+  console.log(
+    JSON.stringify({
+      version: await page.locator('[data-t="footer-app-version"]').innerText(),
+      build: await page.locator('[data-t="footer-build"]').innerText(),
+    }),
+  );
+  const search = page.getByRole('searchbox'),
+    catalog = page.locator('.start-civsearch .start-catalog');
+  await expect.poll(() => stateFromUrl(page.url())?.current).toBe('civ');
+  const before = stateFromUrl(page.url());
+  const browse = page.getByRole('button', { name: '浏览其余文明', exact: true });
+  await expect(browse).toHaveAttribute('aria-expanded', 'false');
+  await expect(catalog).toHaveCount(0);
+  await search.fill('Mongols');
+  await expect(catalog.locator('.start-civrow')).toHaveCount(1);
+  await expect(browse).toHaveCount(0);
+  await search.clear();
+  await expect(catalog).toHaveCount(0);
+  await browse.click();
+  await expect(page.getByRole('button', { name: '收起其余文明', exact: true })).toHaveAttribute('aria-expanded', 'true');
+  const names = await catalog.locator('.start-en').allTextContents();
+  expect(names.length).toBeGreaterThanOrEqual(12);
+  expect(names).not.toContain('Franks');
+  expect(names).not.toContain('Britons');
+  await search.fill('Huns');
+  await expect(catalog.locator('.start-civrow')).toHaveCount(1);
+  await search.clear();
+  await expect(catalog.locator('.start-civrow')).toHaveCount(names.length);
+  await page.getByRole('button', { name: '收起其余文明', exact: true }).click();
+  await expect(catalog).toHaveCount(0);
+  expect(stateFromUrl(page.url())).toEqual(before);
+  await search.fill('Mongols');
+  await page.getByRole('link', { name: '查看蒙古', exact: true }).click();
+  await page.reload();
+  await page.getByRole('link', { name: '回开一局', exact: true }).click();
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+  expect(stateFromUrl(page.url())).toEqual(before);
+  expect(stateFromUrl(page.url())?.choice.civ).toBeNull();
+});
+
+test('#676 @1280 坏来源无可执行返回；未知地图候选交Home验证零写', async ({ page }) => {
+  await editorialPath(page);
+  await expect.poll(() => stateFromUrl(page.url())?.current).toBe('civ');
+  const before = stateFromUrl(page.url())!;
+  const local = await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'));
+  for (const search of ['', '?returnTo=https%3A%2F%2Fexample.com', '?returnTo=%2F%3Fsgv%3D1%26sg%3D%7B%7D&returnTo=x', '?returnTo=%GG']) {
+    await page.goto('./#/civ/Britons' + search);
+    await expect(page.getByRole('heading', { level: 1, name: /不列颠/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: '回开一局', exact: true })).toHaveCount(0);
+    await page.getByRole('tab', { name: '数据', exact: true }).click();
+    await expect(page.getByRole('link', { name: '回开一局', exact: true })).toHaveCount(0);
+  }
+  const state = { ...before, choice: { ...before.choice, mapId: 'not-a-real-map' } },
+    target = '/?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(state) });
+  await page.goto('./#/civ/Britons?' + new URLSearchParams({ returnTo: target }));
+  const back = page.getByRole('link', { name: '回开一局', exact: true }),
+    href = await back.getAttribute('href');
+  await back.click();
+  await expect(page.getByRole('alert')).toContainText('链接中的本局进度无法恢复');
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
+  expect(new URL(page.url()).hash).toBe(href);
+  expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe(local);
+});
+
 async function editorialPath(page: Page, arena = false) {
   await page.goto('./#/');
   if (arena) {
