@@ -90,7 +90,7 @@ async function noHorizontalScroll(page: Page) {
 
 async function pickCiv(page: Page, id: string, civ: string) {
   await page.locator(`#${id}`).click();
-  await page.locator(`.cp-panel [data-civ="${civ}"]`).click();
+  await page.locator(`.cp-panel [data-civ="${civ || '__none'}"]`).click();
   await expect(page.locator(`#${id}`)).toHaveAttribute('data-value', civ);
 }
 
@@ -422,4 +422,91 @@ test('#520 往返保持 me/opp，开局页保持 civ', async ({ page }) => {
   expect(duel.get('b')?.split('.')[1]).toBe('Chinese');
   await clickLink(page.getByRole('link', { name: '回对局助手', exact: true }));
   await expectMatchupPair(page, 'Mongols', 'Chinese');
+});
+
+for (const width of [360, 375, 390, 1280])
+  for (const side of ['me', 'opp'])
+    test(`#672 @${width} explicit ${side} 单方不借默认另一方`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript((theme) => localStorage.setItem('aoe2-theme', theme), width === 390 ? 'dark' : 'light');
+      const errors: string[] = [];
+      page.on('pageerror', (e) => errors.push(e.message));
+      page.on('console', (m) => {
+        if (m.type() === 'error') errors.push(m.text());
+      });
+      await page.goto('./#/matchup?pair=explicit&' + new URLSearchParams({ [side]: side === 'me' ? 'Mongols' : 'Japanese', rush: 'scouts' }));
+      await expect(page.locator(side === 'me' ? '#ma' : '#me')).toHaveAttribute('data-value', side === 'me' ? 'Mongols' : 'Japanese');
+      await expect(page.locator(side === 'me' ? '#me' : '#ma')).toHaveAttribute('data-value', '');
+      await expect(page.getByRole('status')).toContainText(side === 'me' ? '请补选对手文明' : '请补选我方文明');
+      await expect(page.locator('#mres,.rush-defense,.matchup-title,nav[aria-label="对阵相关入口"]')).toHaveCount(0);
+      await expect(page.getByRole('link', { name: side === 'me' ? '我方文明：蒙古' : '对手文明：日本', exact: true })).toHaveAttribute(
+        'href',
+        side === 'me' ? /#\/civ\/Mongols$/ : /#\/civ\/Japanese$/,
+      );
+      await noHorizontalScroll(page);
+      expect(errors).toEqual([]);
+    });
+
+test('#672 @1280 partial历史、冲突sticky、复制与补齐清空恢复分析', async ({ page, browser }) => {
+  await page.goto('./#/matchup?me=Franks&opp=Japanese');
+  await expect(page.locator('#mres')).toBeVisible();
+  await page.evaluate(() => {
+    location.hash = '/matchup?pair=explicit&me=Mongols&rush=scouts';
+  });
+  await expect(page.locator('#me')).toHaveAttribute('data-value', '');
+  await page.evaluate(() => {
+    location.hash = '/matchup';
+  });
+  await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Franks');
+  await expect(page.locator('#me')).toHaveAttribute('data-value', 'Japanese');
+  await page.goBack();
+  await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Mongols');
+  await expect(page.locator('#me')).toHaveAttribute('data-value', '');
+  const url = page.url();
+  await page.reload();
+  await expect(page.locator('#me')).toHaveAttribute('data-value', '');
+  const context = await browser.newContext();
+  try {
+    const fresh = await context.newPage();
+    await fresh.goto(url);
+    await expect(fresh.locator('#ma')).toHaveAttribute('data-value', 'Mongols');
+    await expect(fresh.locator('#me')).toHaveAttribute('data-value', '');
+    await expect(fresh.locator('#mres,.rush-defense')).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+  await pickCiv(page, 'me', 'Chinese');
+  await expect(page.locator('#mres')).toBeVisible();
+  await expect(page.locator('.rush-defense')).toBeVisible();
+  await pickCiv(page, 'ma', '');
+  await expect(page.locator('#mres,.rush-defense')).toHaveCount(0);
+  expect(hashParams(page.url()).get('rush')).toBe('scouts');
+  expect(hashParams(page.url()).get('pair')).toBe('explicit');
+  expect(hashParams(page.url()).has('me')).toBe(false);
+  await page.goBack();
+  await expect(page.locator('#mres')).toBeVisible();
+  await page.goForward();
+  await expect(page.locator('#ma')).toHaveAttribute('data-value', '');
+  await expect(page.locator('#mres')).toHaveCount(0);
+  await pickCiv(page, 'ma', 'Franks');
+  await expect(page.locator('#mres')).toBeVisible();
+  expect(hashParams(page.url()).get('rush')).toBe('scouts');
+});
+
+test('#672 @1280 invalid显式链接整体空白且可重新选择恢复', async ({ page }) => {
+  await page.goto('./#/matchup?me=Mongols&opp=Chinese');
+  await expect(page.locator('#mres')).toBeVisible();
+  await page.evaluate(() => {
+    location.hash = '/matchup?pair=bad&pair=explicit&me=Unknown&opp=Japanese&rush=scouts';
+  });
+  await expect(page.getByRole('alert')).toContainText('对阵信息无效');
+  for (const id of ['ma', 'me']) await expect(page.locator('#' + id)).toHaveAttribute('data-value', '');
+  await expect(page.locator('#mres,.rush-defense')).toHaveCount(0);
+  await pickCiv(page, 'ma', 'Franks');
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.locator('#me')).toHaveAttribute('data-value', '');
+  await pickCiv(page, 'me', 'Japanese');
+  await expect(page.locator('#mres')).toBeVisible();
+  expect(hashParams(page.url()).getAll('pair')).toEqual(['explicit']);
+  expect(hashParams(page.url()).get('rush')).toBe('scouts');
 });

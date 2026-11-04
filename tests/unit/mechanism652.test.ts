@@ -164,7 +164,7 @@ describe('#652 真实数据、门禁与建议传播', () => {
   });
   it('未知地图模式路位不套用结果', () => {
     expect(scenarioScope(resetStart().choice)).not.toBeNull();
-    const choice = { mode: 'team' as const, teamSize: '4v4' as const, mapId: 'arabia', lane: 'flank' as const, civ: null };
+    const choice = { mode: 'team' as const, teamSize: '4v4' as const, mapId: 'arabia', lane: 'flank' as const, civ: null, opponent: null, mates: [] };
     expect(scenarioScope(choice)).toBeNull();
     expect(scenarioScope({ ...choice, teamSize: '2v2' })).not.toBeNull();
     expect(scenarioScope({ ...choice, mapId: 'arena' })).not.toBeNull();
@@ -223,5 +223,110 @@ describe('真实本局开局选择 #667', () => {
           selected.order.target.vils,
         );
     }
+  });
+});
+
+import { DEFAULT_ROUTE } from '../../src/domain/startGameInputs';
+import { decodeStartGame, encodeStartGame } from '../../src/domain/startGameCodec';
+it('#672 已确认参与者能使用唯一严格本局协议恢复', () => {
+  const state = chooseLane(chooseMap(chooseTeamSize(resetStart(), '4v4'), 'arabia'), 'pocket');
+  const input = { ...state, choice: { ...state.choice, opponent: 'Japanese', mates: ['Persians', 'Mayans', 'Persians'] } };
+  expect(decodeStartGame(encodeStartGame(input), new Set(['arabia']))).toEqual({ kind: 'valid', state: input });
+});
+
+import { choose1v1, enterLobby, finishFlow, backStep, editStep, pickOpponent, setMate } from '../../src/domain/startGame';
+import { decodeStartSearch, encodeStartSearch } from '../../src/domain/startGameCodec';
+describe('#672 参与者的状态、清理与唯一v1迁移', () => {
+  const team = () => chooseLane(chooseMap(chooseTeamSize(resetStart(), '4v4'), 'arabia'), 'pocket');
+  const chosen = () => pickOpponent(setMate(setMate(setMate(pickCiv(team(), 'Mongols'), 0, 'Persians'), 1, 'Mayans'), 2, 'Persians'), 'Japanese');
+  it('默认、普通完成、清空与主动跳过分别有准确语义', () => {
+    for (const state of [resetStart(), enterLobby()]) expect(state.choice).toMatchObject({ opponent: null, mates: [] });
+    const state = chosen();
+    expect(state.current).toBe('opponent');
+    expect(state.skipped.opponent).toBe(false);
+    const cleared = pickOpponent(state, null);
+    expect(cleared.current).toBe('opponent');
+    expect(cleared.skipped.opponent).toBe(false);
+    expect(finishFlow(cleared).skipped.opponent).toBe(false);
+    const skipped = skipStep(state);
+    expect(skipped.choice.opponent).toBeNull();
+    expect(skipped.skipped.opponent).toBe(true);
+    expect(skipped.current).toBeNull();
+    expect(skipped.choice.mates).toEqual(state.choice.mates);
+    expect(skipped.choice.civ).toBe('Mongols');
+  });
+  it('更改已知条件保留真实的人；1v1、跳过模式和新局清队友', () => {
+    const state = chosen(),
+      people = { opponent: 'Japanese', mates: ['Persians', 'Mayans', 'Persians'] };
+    for (const next of [
+      chooseMap(state, 'arena'),
+      chooseLane(state, 'flank'),
+      pickCiv(state, 'Huns'),
+      chooseTeamSize(state, '2v2'),
+      backStep(state),
+      editStep(finishFlow(state), 'civ'),
+    ])
+      expect(next.choice).toMatchObject(people);
+    const solo = choose1v1(state);
+    expect(solo.choice).toMatchObject({ opponent: 'Japanese', mates: [], lane: null });
+    expect(chooseTeamSize(solo, '4v4').choice.mates).toEqual([]);
+    expect(skipStep({ ...state, current: 'mode' }).choice).toMatchObject({ mates: [], opponent: 'Japanese', lane: null });
+  });
+  it('0到3、重复、改选和移除保留顺序；非法索引/非组队不追加', () => {
+    const state = chosen();
+    expect(setMate(state, 3, 'Huns')).toBe(state);
+    expect(setMate(state, -1, 'Huns')).toBe(state);
+    expect(setMate(state, 1.5, 'Huns')).toBe(state);
+    expect(setMate(resetStart(), 0, 'Huns').choice.mates).toEqual([]);
+    const changed = setMate(state, 1, 'Japanese');
+    expect(changed.choice.mates).toEqual(['Persians', 'Japanese', 'Persians']);
+    expect(setMate(changed, 0, null).choice.mates).toEqual(['Japanese', 'Persians']);
+    expect(state.choice.mates).toEqual(['Persians', 'Mayans', 'Persians']);
+  });
+  it('旧v1各字段独立缺省；两配置/flags与可选空对手摘要仍有效', () => {
+    const source = { ...chosen(), sceneConfig: { ...DEFAULT_SCENE, budget: 2000 }, routeConfig: { ...DEFAULT_ROUTE, feudalBudget: 6000 } };
+    for (const missing of [['opponent'], ['mates'], ['opponent', 'mates']]) {
+      const raw = JSON.parse(encodeStartGame(source));
+      for (const key of missing) delete raw.state.choice[key];
+      const expected = {
+        ...source,
+        choice: { ...source.choice, opponent: missing.includes('opponent') ? null : 'Japanese', mates: missing.includes('mates') ? [] : source.choice.mates },
+      };
+      expect(decodeStartGame(JSON.stringify(raw), new Set(['arabia']))).toEqual({ kind: 'valid', state: expected });
+    }
+    const empty = finishFlow(pickOpponent(source, null));
+    expect(decodeStartSearch(encodeStartSearch(empty), new Set(['arabia']))).toEqual({ kind: 'valid', state: empty });
+    const skipped = skipStep(source);
+    expect(decodeStartSearch(encodeStartSearch(skipped), new Set(['arabia']))).toEqual({ kind: 'valid', state: skipped });
+  });
+  it.each([0, 1, 2, 3])('严格接受%d名含重复的队友、保留独立对手', (count) => {
+    const state = chosen();
+    state.choice.mates = ['Mongols', 'Japanese', 'Mongols'].slice(0, count);
+    expect(decodeStartSearch(encodeStartSearch(state), new Set(['arabia']))).toEqual({ kind: 'valid', state });
+  });
+  it('出现的坏字段拒绝，非组队隐藏队友与skip矛盾不被修复', () => {
+    for (const patch of [
+      { opponent: '' },
+      { opponent: 'Unknown' },
+      { opponent: 1 },
+      { mates: null },
+      { mates: 'Persians' },
+      { mates: {} },
+      { mates: [''] },
+      { mates: ['Unknown'] },
+      { mates: ['Persians', 'Mayans', 'Huns', 'Franks'] },
+      { extra: true },
+    ]) {
+      const state = chosen(),
+        raw = { ...state, choice: { ...state.choice, ...patch } };
+      expect(decodeStartGame(JSON.stringify({ version: 1, state: raw }), new Set(['arabia']))).toEqual({ kind: 'invalid' });
+    }
+    const state = chosen();
+    for (const bad of [
+      { ...state, skipped: { ...state.skipped, opponent: true } },
+      { ...choose1v1(state), choice: { ...choose1v1(state).choice, mates: ['Persians'] } },
+      { ...resetStart(), choice: { ...resetStart().choice, mates: ['Persians'] } },
+    ])
+      expect(decodeStartGame(encodeStartGame(bad), new Set(['arabia']))).toEqual({ kind: 'invalid' });
   });
 });

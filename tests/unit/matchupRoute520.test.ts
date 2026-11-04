@@ -8,6 +8,8 @@ import {
   matchupUnitPath,
   readMatchupPair,
   writeMatchupPair,
+  writeExplicitMatchupPair,
+  explicitMatchupPath,
 } from '../../src/domain/matchupRoute';
 
 const query = (url: string) => new URLSearchParams(url.split('?')[1]);
@@ -57,5 +59,39 @@ describe('#520 matchup URL context', () => {
       expect(duelCivs(new URLSearchParams({ a: raw, b: '74.Chinese.2..' }))).toEqual({ me: undefined, opp: 'Chinese' });
     }
     expect(duelCivs(new URLSearchParams())).toEqual({ me: undefined, opp: undefined });
+  });
+});
+
+describe('#672 显式部分对阵独立于legacy默认', () => {
+  it.each([
+    ['', '', null, null],
+    ['Mongols', '', 'Mongols', null],
+    ['', 'Japanese', null, 'Japanese'],
+    ['Mongols', 'Japanese', 'Mongols', 'Japanese'],
+    ['Mongols', 'Mongols', 'Mongols', 'Mongols'],
+  ])('真实双方 %s/%s', (me, opp, a, b) => {
+    const params = new URLSearchParams(explicitMatchupPath(me || null, opp || null).split('?')[1]);
+    expect(readMatchupPair(params, sticky)).toEqual({ me: a, opp: b, invalid: false });
+  });
+  it.each([
+    'pair=',
+    'pair=other',
+    'pair=explicit&pair=explicit',
+    'pair=explicit&me=',
+    'pair=explicit&opp=',
+    'pair=explicit&me=Unknown',
+    'pair=explicit&opp=Unknown',
+    'pair=explicit&me=Mongols&me=Mongols',
+    'pair=explicit&opp=Japanese&opp=Japanese',
+  ])('拒绝整体坏对阵 %s', (raw) => expect(readMatchupPair(new URLSearchParams(raw), sticky)).toEqual({ me: null, opp: null, invalid: true }));
+  it('清空删除键、恢复规范marker、保留rush及独立参数且不修改输入', () => {
+    const source = new URLSearchParams('pair=bad&pair=explicit&me=Unknown&me=Franks&opp=Chinese&rush=scouts&x=1');
+    const next = writeExplicitMatchupPair(source, null, 'Japanese');
+    expect([...next.getAll('pair')]).toEqual(['explicit']);
+    expect(next.has('me')).toBe(false);
+    expect(next.get('opp')).toBe('Japanese');
+    expect(next.get('rush')).toBe('scouts');
+    expect(next.get('x')).toBe('1');
+    expect(source.getAll('pair')).toHaveLength(2);
   });
 });

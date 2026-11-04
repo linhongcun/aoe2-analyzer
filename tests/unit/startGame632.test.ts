@@ -43,6 +43,8 @@ describe('#676 完整文明来源与安全返回', () => {
       routeConfig: { ...DEFAULT_ROUTE, feudalBudget: 6000 },
       prefilled: { mode: false, map: false },
     };
+    state.choice.opponent = 'Japanese';
+    state.choice.mates = ['Persians', 'Mayans', 'Persians'];
     const before = encodeStartGame(state);
     const path = startCivPath('Britons', state),
       search = path.slice(path.indexOf('?'));
@@ -112,7 +114,7 @@ it('#666 只复用有真实文明与可查来源的四图编辑稿', () => {
 describe('大厅入口只记录实际输入 #632', () => {
   it('未填写的模式和地图是已跳过，不把示例当作已预填', () => {
     const state = enterLobby();
-    expect(state.choice).toEqual({ mode: null, teamSize: null, mapId: null, lane: null, civ: null });
+    expect(state.choice).toEqual({ mode: null, teamSize: null, mapId: null, lane: null, civ: null, opponent: null, mates: [] });
     expect(state.skipped).toEqual({ mode: true, map: true });
     expect(state.prefilled).toEqual({});
     expect(state.teamArmed).toBe(false);
@@ -310,6 +312,8 @@ describe('实际地址与存储协调hook #669', () => {
   it('合法URL胜冲突local，pending零写；canonical确认不重新加载地图或重复写', async () => {
     const wait = deferred();
     const state = team();
+    state.choice.opponent = 'Japanese';
+    state.choice.mates = ['Persians', 'Mayans'];
     const url = encodeStartSearch(state);
     const view = await mount({ search: url, stored: encodeStartGame(choose1v1(resetStart())), maps: () => wait.promise });
     expect(view.reads).toBe(0);

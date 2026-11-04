@@ -41,7 +41,13 @@ test('#676 @1280 机制查看返回保留原文明与两套独立配置', async 
     ['路线观察窗口（秒）', '60'],
   ])
     await page.getByLabel(label!, { exact: true }).selectOption(value!);
+  for (const en of ['Persians', 'Mayans']) {
+    await page.locator('#start-add-mate').click();
+    await page.locator('.cp-panel [data-civ="' + en + '"]').click();
+  }
   await page.getByTestId('scene-Huns').getByRole('button', { name: /匈奴/ }).click();
+  await page.locator('#start-opponent').click();
+  await page.locator('.cp-panel [data-civ="Japanese"]').click();
   await page.getByRole('button', { name: '完成本局', exact: true }).click();
   await page.getByRole('button', { name: '修改文明', exact: true }).click();
   const snap = () => JSON.parse(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('sg') ?? '{}');

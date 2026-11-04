@@ -22,10 +22,13 @@ for (const width of [360, 375, 390, 1280])
     await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
     await page.getByRole('searchbox').fill('Mongols');
     await page.getByRole('button', { name: /^蒙古/ }).click();
+    await page.locator('#start-opponent').click();
+    await page.locator('.cp-panel [data-civ="Japanese"]').click();
     await page.getByRole('button', { name: '完成本局', exact: true }).click();
     await expect(page.getByTestId('start-summary')).toContainText('蒙古');
     await page.getByRole('button', { name: '修改文明', exact: true }).click();
     await expect.poll(() => homeState676(page.url()).choice?.civ).toBe('Mongols');
+    await expect.poll(() => homeState676(page.url()).current).toBe('civ');
     const before = homeState676(page.url());
     await page.getByRole('link', { name: '查看不列颠', exact: true }).click();
     await expect(page.getByRole('heading', { level: 1, name: /不列颠/ })).toBeVisible();
@@ -111,14 +114,17 @@ test.describe('首页开一局 #592', () => {
     await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
     await page.getByRole('button', { name: /法兰克/ }).click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
-    await expect(page.getByTestId('start-step')).toContainText('本步暂无已核对对手数据');
-    await expect(page.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup\?me=Franks$/);
+    await expect(page.getByTestId('start-step')).toContainText('对手文明可选');
+    await expect(page.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup\?pair=explicit&me=Franks$/);
     await page.getByRole('button', { name: '完成本局', exact: true }).click();
     await expect(page.getByRole('heading', { level: 1, name: '本局摘要', exact: true })).toBeVisible();
     await expect(page.getByTestId('start-summary').locator('.start-sumkey')).toHaveText(['模式', '地图', '文明', '对手']);
-    await expect(page.getByTestId('start-summary').locator('.start-sumrow', { hasText: '对手' })).toContainText('暂无数据');
+    await expect(page.getByTestId('start-summary').locator('.start-sumrow', { hasText: '对手' })).toContainText('未选择');
     await expect(page.getByTestId('start-summary')).toContainText('不是这一局的胜率');
-    await expect(page.getByTestId('start-summary').getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup\?me=Franks$/);
+    await expect(page.getByTestId('start-summary').getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute(
+      'href',
+      /#\/matchup\?pair=explicit&me=Franks$/,
+    );
     await expect(page.getByTestId('start-summary').getByRole('link', { name: '天梯数据', exact: true })).toHaveAttribute('href', /#\/ladder$/);
     await expect(flowText(page)).not.toContainText('热门');
     await expect(flowText(page)).not.toContainText('常打');
@@ -472,7 +478,7 @@ test('#674 @1280 非法存档安全空局且玩家操作前不覆盖', async ({ 
   expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe('{invalid');
   await page.getByRole('button', { name: /1v1 随机地图/ }).click();
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('aoe2-start-game-v1')!));
-  expect(saved.state.choice).toEqual({ mode: '1v1', teamSize: null, mapId: null, lane: null, civ: null });
+  expect(saved.state.choice).toEqual({ mode: '1v1', teamSize: null, mapId: null, lane: null, civ: null, opponent: null, mates: [] });
 });
 
 test('#674 @1280 恢复地图加载失败保留原档且可重试', async ({ page }) => {

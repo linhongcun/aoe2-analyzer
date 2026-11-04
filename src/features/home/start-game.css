@@ -412,3 +412,7 @@ button.start-chip.is-done {
   width: 100%;
   max-width: 100%;
 }
+
+.start-ask .cp-trigger {
+  min-height: 44px;
+}

@@ -2,7 +2,9 @@ import { createElement, StrictMode, useState } from 'react';
 import { act, create, type ReactTestRenderer } from 'react-test-renderer';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import StartCivPicker from '../../src/features/home/components/StartCivPicker';
+import type { CivPickerProps } from '../../src/shared/ui/CivPicker';
 import { mapPosTips } from '../../src/domain/mapPositions';
 import {
   armTeam,
@@ -32,6 +34,73 @@ import { useStartGamePersistence } from '../../src/features/home/useStartGamePer
 
 const home = () => renderToStaticMarkup(createElement(StaticRouter, { location: '/' }, createElement(Home)));
 const frank = '骑兵从封建时代起生命更高，磨坊科技免费，中路适合发育后出骑士。';
+
+describe('#672 首页文明选项异步边界', () => {
+  it('真实入口图另有断言；延迟加载接收最新值，失败重试不修改本局', async () => {
+    const onChange = vi.fn();
+    let resolve!: (module: { CivPicker: typeof Picker }) => void;
+    let reject!: (error: Error) => void;
+    const Picker = (props: CivPickerProps) => createElement('button', { id: props.id, onClick: () => props.onChange('Japanese') }, props.value);
+    const load = vi.fn(
+      () =>
+        new Promise<{ CivPicker: typeof Picker }>((yes, no) => {
+          resolve = yes;
+          reject = no;
+        }),
+    );
+    let view!: ReactTestRenderer;
+    const props = { id: 'start-opponent', label: '对手', value: 'Franks', onChange, load };
+    await act(async () => {
+      view = create(createElement(StartCivPicker, props));
+    });
+    expect(view.root.findByProps({ role: 'status' }).children.join('')).toContain('加载');
+    await act(async () => {
+      reject(new Error('network'));
+    });
+    expect(view.root.findByProps({ role: 'alert' }).children.join('')).toContain('已填信息保留');
+    expect(onChange).not.toHaveBeenCalled();
+    await act(async () => {
+      view.root.findByType('button').props.onClick();
+    });
+    expect(load).toHaveBeenCalledTimes(2);
+    await act(async () => {
+      view.update(createElement(StartCivPicker, { ...props, value: 'Mongols' }));
+      resolve({ CivPicker: Picker });
+    });
+    expect(view.root.findByType('button').props.id).toBe(props.id);
+    expect(view.root.findByType('button').children).toEqual(['Mongols']);
+    expect(onChange).not.toHaveBeenCalled();
+    await act(async () => {
+      view.root.findByType('button').props.onClick();
+    });
+    expect(onChange).toHaveBeenCalledWith('Japanese');
+    await act(async () => {
+      view.unmount();
+    });
+  });
+  it.each(['resolve', 'reject'])('离开后忽略旧模块%s', async (outcome) => {
+    let resolve!: (module: { CivPicker: typeof Picker }) => void;
+    let reject!: (error: Error) => void;
+    const Picker = () => createElement('button');
+    const onChange = vi.fn();
+    const load = () =>
+      new Promise<{ CivPicker: typeof Picker }>((yes, no) => {
+        resolve = yes;
+        reject = no;
+      });
+    let view!: ReactTestRenderer;
+    await act(async () => {
+      view = create(createElement(StartCivPicker, { id: 'late', value: '', label: '对手', onChange, load }));
+    });
+    await act(async () => {
+      view.unmount();
+      if (outcome === 'resolve') resolve({ CivPicker: Picker });
+      else reject(new Error('late'));
+    });
+    expect(view.toJSON()).toBeNull();
+    expect(onChange).not.toHaveBeenCalled();
+  });
+});
 
 describe('开一局步骤 #592', () => {
   it('还没选模式时没有路位，1v1 走完也不插入', () => {
@@ -341,6 +410,8 @@ describe('本局实际恢复hook #674', () => {
   it('等待地图时无写入，验证成功恢复完整状态；正常操作后才保存', async () => {
     const wait = deferred674();
     const state = configured674();
+    state.choice.opponent = 'Japanese';
+    state.choice.mates = ['Persians', 'Persians'];
     const view = await mount674(encodeStartGame(state), () => wait.promise);
     expect(view.result.status).toBe('pending');
     expect(view.writes).toEqual([]);
@@ -435,24 +506,24 @@ describe('本局实际恢复hook #674', () => {
 describe('首页工具上下文与对手状态 #671', () => {
   const render = (state: ReturnType<typeof resetStart>, summary = false) =>
     renderToStaticMarkup(createElement(StaticRouter, { location: '/' }, createElement(summary ? Summary : OpponentStep, { state, onChange: () => {} })));
-  it('带真实己方且直接披露原有对手，开局仅带文明上下文', () => {
+  it('带真实己方且缺方保持空白，开局仅带文明上下文', () => {
     const state = pickCiv(chooseMap(choose1v1(resetStart()), 'arabia'), 'Mongols');
     for (const summary of [false, true]) {
       const html = render(state, summary);
-      expect(html).toContain('href="/matchup?me=Mongols"');
-      expect(html).toContain('非本局当前对手');
+      expect(html).toContain('href="/matchup?pair=explicit&amp;me=Mongols"');
+      expect(html).toContain('未选一方保持空白');
       expect(html).not.toContain('opp=');
     }
     const html = render(finishFlow(state), true);
     expect(html).toContain('href="/builds?civ=Mongols"');
     expect(html).toContain('列表仍为全部开局');
-    expect(html).toContain('暂无数据');
+    expect(html).toContain('未选择');
     expect(html).not.toContain('已跳过');
   });
   it('空局不伪造文明；只有真实跳过显示已跳过且历史标记保留', () => {
     const state = skipStep(skipStep(chooseMap(choose1v1(resetStart()), 'arena')));
     const html = render(state, true);
-    expect(html).toContain('href="/matchup"');
+    expect(html).toContain('href="/matchup?pair=explicit"');
     expect(html).toContain('href="/builds"');
     expect(html).toContain('未带入本局文明');
     expect(html).toContain('已跳过');

@@ -42,7 +42,7 @@ export function decodeStartGame(raw: string, mapIds?: ReadonlySet<string>): Star
     return { kind: 'invalid' };
   const c = s.choice;
   if (
-    !keys(c, ['mode', 'teamSize', 'mapId', 'lane', 'civ']) ||
+    !keys(c, ['mode', 'teamSize', 'mapId', 'lane', 'civ', 'opponent', 'mates'], ['mode', 'teamSize', 'mapId', 'lane', 'civ']) ||
     !nullable(c.mode, ['1v1', 'team']) ||
     !nullable(c.teamSize, ['2v2', '3v3', '4v4']) ||
     !nullable(c.lane, ['pocket', 'flank']) ||
@@ -54,6 +54,16 @@ export function decodeStartGame(raw: string, mapIds?: ReadonlySet<string>): Star
     !nullable(s.current, STEPS)
   )
     return { kind: 'invalid' };
+  const opponent = own(c, 'opponent') ? c.opponent : null;
+  const mates = own(c, 'mates') ? c.mates : [];
+  if (
+    !(opponent === null || (typeof opponent === 'string' && civByEn(opponent) != null)) ||
+    !Array.isArray(mates) ||
+    mates.length > 3 ||
+    mates.some((en) => typeof en !== 'string' || civByEn(en) == null) ||
+    (c.mode !== 'team' && mates.length > 0)
+  )
+    return { kind: 'invalid' };
   if (
     (c.mode === 'team' && (c.teamSize === null || s.teamArmed !== true)) ||
     (c.teamSize !== null && c.mode !== 'team') ||
@@ -62,7 +72,7 @@ export function decodeStartGame(raw: string, mapIds?: ReadonlySet<string>): Star
     (c.mode === '1v1' && s.teamArmed !== false)
   )
     return { kind: 'invalid' };
-  const choices = { mode: c.mode, map: c.mapId, lane: c.lane, civ: c.civ };
+  const choices = { mode: c.mode, map: c.mapId, lane: c.lane, civ: c.civ, opponent };
   for (const [step, choice] of Object.entries(choices)) {
     if (choice !== null && s.skipped[step] === true) return { kind: 'invalid' };
   }
@@ -78,7 +88,7 @@ export function decodeStartGame(raw: string, mapIds?: ReadonlySet<string>): Star
   )
     return { kind: 'invalid' };
   const state: StartState = {
-    choice: { mode: c.mode, teamSize: c.teamSize, mapId: c.mapId, lane: c.lane, civ: c.civ } as StartState['choice'],
+    choice: { mode: c.mode, teamSize: c.teamSize, mapId: c.mapId, lane: c.lane, civ: c.civ, opponent, mates: [...mates] } as StartState['choice'],
     sceneConfig: sceneConfig as StartState['sceneConfig'],
     routeConfig: routeConfig as StartState['routeConfig'],
     skipped: { ...s.skipped },

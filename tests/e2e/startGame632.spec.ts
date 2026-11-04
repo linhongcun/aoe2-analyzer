@@ -308,9 +308,9 @@ for (const width of [360, 375, 390, 1280]) {
       collectErrors(fresh, errors);
       await fresh.goto(url);
       await expect(fresh.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
-      await expect(fresh.locator('.start-picked')).toContainText('4v4');
-      await expect(fresh.locator('.start-picked')).toContainText('阿拉伯半岛');
-      await expect(fresh.locator('.start-picked')).toContainText('中路');
+      await expect(fresh.locator('.start-picked:not([data-testid="start-own-civ"])')).toContainText('4v4');
+      await expect(fresh.locator('.start-picked:not([data-testid="start-own-civ"])')).toContainText('阿拉伯半岛');
+      await expect(fresh.locator('.start-picked:not([data-testid="start-own-civ"])')).toContainText('中路');
       expect(stateFromUrl(fresh.url())).toEqual(stateFromUrl(url));
       await noOverflow(fresh);
       await fresh
@@ -412,7 +412,7 @@ for (const width of [360, 375, 390, 1280]) {
     await page.getByRole('button', { name: '再开一局', exact: true }).click();
     await expect.poll(() => stateFromUrl(page.url())?.current).toBe('mode');
     const resetUrl = page.url();
-    expect(stateFromUrl(resetUrl)?.choice).toEqual({ mode: null, teamSize: null, mapId: null, lane: null, civ: null });
+    expect(stateFromUrl(resetUrl)?.choice).toEqual({ mode: null, teamSize: null, mapId: null, lane: null, civ: null, opponent: null, mates: [] });
     await page.reload();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
     const resetContext = await receiver(browser, width, CONFLICT);
@@ -458,10 +458,12 @@ for (const width of [360, 375, 390, 1280]) {
     );
     await opponent.locator('a', { hasText: /^对局助手$/ }).click();
     await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Mongols');
-    await expect(page.locator('#me')).toHaveAttribute('data-value', 'Japanese');
+    await expect(page.locator('#me')).toHaveAttribute('data-value', '');
+    await expect(page.locator('#mres')).toHaveCount(0);
+    expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('pair')).toBe('explicit');
     await page.goBack();
-    await expect(opponent).toContainText('本步暂无已核对对手数据，未列出对手文明');
-    await expect(opponent).toContainText('仅带入我方文明；对手沿用助手原有选择，非本局当前对手');
+    await expect(opponent).toContainText('对手文明可选');
+    await expect(opponent).toContainText('未选一方保持空白');
     await expect(opponent.getByTestId('start-empty')).toHaveCount(0);
     await noOverflow(page);
     await page
@@ -470,7 +472,7 @@ for (const width of [360, 375, 390, 1280]) {
     await page.getByRole('button', { name: '完成本局', exact: true }).click();
     const summary = page.getByTestId('start-summary');
     const opponentRow = summary.locator('.start-sumrow').filter({ has: page.locator('.start-sumkey', { hasText: /^对手$/ }) });
-    await expect(opponentRow).toContainText('暂无数据');
+    await expect(opponentRow).toContainText('未选择');
     await expect(opponentRow).not.toContainText('已跳过');
     await expect(opponentRow).not.toContainText('暂无建议');
     await expect(summary).toContainText('列表仍为全部开局');
@@ -480,10 +482,12 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(summary.getByRole('link', { name: '天梯数据', exact: true })).toHaveAttribute('href', /#\/ladder$/);
     await summary.getByRole('link', { name: '对局助手', exact: true }).click();
     await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Mongols');
-    await expect(page.locator('#me')).toHaveAttribute('data-value', 'Japanese');
+    await expect(page.locator('#me')).toHaveAttribute('data-value', '');
+    await expect(page.locator('#mres')).toHaveCount(0);
+    expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('pair')).toBe('explicit');
     await page.goBack();
     await page.reload();
-    await expect(opponentRow).toContainText('暂无数据');
+    await expect(opponentRow).toContainText('未选择');
     await noOverflow(page);
     await page
       .locator('#home')
@@ -504,15 +508,15 @@ test('#671 @1280 未选文明与竞技场警告、跳过可刷新分享', async 
   await page.getByRole('button', { name: /竞技场/ }).click();
   await page.getByTestId('start-skip').click();
   const opponent = page.getByTestId('start-step');
-  await expect(opponent).toContainText('未带入本局文明；助手沿用原有双方选择，不代表本局对阵');
-  await expect(opponent.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup$/);
+  await expect(opponent).toContainText('未选一方保持空白');
+  await expect(opponent.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup\?pair=explicit$/);
   await page.getByTestId('start-skip').click();
   const summary = page.getByTestId('start-summary');
   const row = summary.locator('.start-sumrow').filter({ has: page.locator('.start-sumkey', { hasText: /^对手$/ }) });
   await expect(row).toHaveText(/对手已跳过修改/);
   await expect(summary).toContainText('地图页不保证已选中竞技场');
   await expect(summary).toContainText('未带入本局文明，列表仍为全部开局');
-  await expect(summary.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup$/);
+  await expect(summary.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup\?pair=explicit$/);
   await expect(summary.getByRole('link', { name: '开局流程', exact: true })).toHaveAttribute('href', /#\/builds$/);
   await expect(summary.getByRole('link', { name: '地图页', exact: true })).toHaveAttribute('href', /#\/maps$/);
   await expect(summary.getByRole('link', { name: '天梯数据', exact: true })).toHaveAttribute('href', /#\/ladder$/);

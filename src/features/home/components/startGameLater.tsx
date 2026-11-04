@@ -1,11 +1,13 @@
 import { useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
-import { buildsPath, matchupPath } from '../../../domain/matchupRoute';
+import { buildsPath, explicitMatchupPath } from '../../../domain/matchupRoute';
 import { sceneSupported } from '../../../domain/startGameInputs';
 import { mapGuides } from '../../../domain/mapGuides';
 import MapEditorial from './MapEditorial';
-import { editStep, jumpTo, laneRowVisible, openLane, pickCiv, resetStart, type StartState, type StepId } from '../../../domain/startGame';
+import CivPicker from './StartCivPicker';
+import { OwnCivChip, TeamMates, TeamMatesSummary, TeamFitLink } from './StartPlayers';
+import { editStep, jumpTo, laneRowVisible, openLane, pickCiv, pickOpponent, resetStart, type StartState, type StepId } from '../../../domain/startGame';
 import { Actions, CivRow, EmptySlot, LANE_EN, LANE_LABEL, ModeText, Picked, findMap, normalize, useMaps, type Update } from './startGameEarly';
 
 export function CivSearch({
@@ -144,6 +146,7 @@ export function CivStep({ state, onChange }: { state: StartState; onChange: Upda
           <EmptySlot />
         </>
       )}
+      <TeamMates state={state} onChange={onChange} />
       <CivSearch shown={new Set(guide?.civs.map(([en]) => en))} state={state} onChange={onChange} searchOnly={supported} />
       <Actions state={state} onChange={onChange} />
     </section>
@@ -156,12 +159,20 @@ export function OpponentStep({ state, onChange }: { state: StartState; onChange:
       <p id="start-opponent-h" className="start-ask-title">
         选对手
       </p>
-      <p className="start-why">本步暂无已核对对手数据，未列出对手文明。</p>
+      <p className="start-why">对手文明可选，也可以清空或跳过。手工选择不代表已连接游戏大厅。</p>
+      <OwnCivChip state={state} />
+      <CivPicker
+        id="start-opponent"
+        label="对手文明（可选）"
+        value={state.choice.opponent ?? ''}
+        none="未选择"
+        onChange={(en) => onChange((current) => pickOpponent(current, en || null))}
+      />
       <Picked state={state} />
-      <Link className="start-link" to={matchupPath(state.choice.civ)}>
+      <Link className="start-link" to={explicitMatchupPath(state.choice.civ, state.choice.opponent)}>
         对局助手
       </Link>
-      <MatchupNotice selected={state.choice.civ != null} />
+      <MatchupNotice />
       <Actions state={state} onChange={onChange} finish />
     </section>
   );
@@ -177,6 +188,7 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
       <p id="start-sum-h" className="start-ask-title">
         这一局
       </p>
+      <OwnCivChip state={state} />
       <div className="start-sumrows">
         <SummaryRow label="模式" step="mode" state={state} onChange={onChange} filled={state.choice.mode != null}>
           {modeValue}
@@ -221,13 +233,15 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
           step="opponent"
           state={state}
           onChange={onChange}
-          filled={false}
-          empty={state.skipped.opponent === true ? '已跳过' : '暂无数据'}
+          filled={state.choice.opponent != null}
+          empty={state.skipped.opponent === true ? '已跳过' : '未选择'}
         >
-          {null}
+          {state.choice.opponent ? civByEn(state.choice.opponent)?.zh : null}
         </SummaryRow>
+        <TeamMatesSummary state={state} onChange={onChange} />
       </div>
       <div className="start-links">
+        {state.choice.mode === 'team' && state.choice.teamSize != null ? <TeamFitLink state={state} /> : null}
         <Link className="start-link" to="/maps">
           地图页
         </Link>
@@ -239,7 +253,7 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
         <Link className="start-link" to="/ladder">
           天梯数据
         </Link>
-        <Link className="start-link" to={matchupPath(civ?.en)}>
+        <Link className="start-link" to={explicitMatchupPath(state.choice.civ, state.choice.opponent)}>
           对局助手
         </Link>
         {!sceneSupported(state.choice) ? (
@@ -248,7 +262,7 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
           </Link>
         ) : null}
       </div>
-      <MatchupNotice selected={civ != null} />
+      <MatchupNotice />
       <p className="start-hint">
         开局流程：
         {sceneSupported(state.choice)
@@ -297,12 +311,8 @@ export function SummaryRow({
   );
 }
 
-function MatchupNotice({ selected }: { selected: boolean }) {
-  return (
-    <p className="start-hint">
-      {selected ? '仅带入我方文明；对手沿用助手原有选择，非本局当前对手。' : '未带入本局文明；助手沿用原有双方选择，不代表本局对阵。'}
-    </p>
-  );
+function MatchupNotice() {
+  return <p className="start-hint">仅带入本局手动选择的文明；未选一方保持空白，补齐双方后查看分析。</p>;
 }
 
 function PlanLoader({ state }: { state: StartState }) {
