@@ -1,5 +1,130 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 import type { StartState } from '../../src/domain/startGame';
+import AxeBuilder from '@axe-core/playwright';
+
+async function editorialPath(page: Page, arena = false) {
+  await page.goto('./#/');
+  if (arena) {
+    await page.getByRole('button', { name: /组队随机地图/ }).click();
+    await page.getByRole('button', { name: '4v4', exact: true }).click();
+  } else await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+  await page.getByRole('button', { name: arena ? /竞技场/ : /阿拉伯半岛/ }).click();
+  if (arena) await page.getByRole('button', { name: /^中路/ }).click();
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+}
+
+for (const width of [360, 375, 390, 1280])
+  for (const arena of [false, true]) {
+    test(`#666 @${width} ${arena ? 'Arena4v4' : 'Arabia1v1'}真实地图编辑参考`, async ({ page }, info) => {
+      await page.setViewportSize({ width, height: 900 });
+      const theme = width === 390 ? 'dark' : 'light';
+      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
+      const errors: string[] = [];
+      collectErrors(page, errors);
+      await editorialPath(page, arena);
+      console.log(
+        JSON.stringify({
+          version: await page.locator('[data-t="footer-app-version"]').innerText(),
+          build: await page.locator('[data-t="footer-build"]').innerText(),
+          width,
+          theme,
+        }),
+      );
+      const guide = page.getByTestId('start-editorial');
+      await expect(guide).toBeVisible();
+      await expect(guide.locator('.start-civrow')).toHaveCount(2);
+      await expect(guide).toContainText('地图编辑参考');
+      await expect(guide).toContainText('不是胜率');
+      await expect(guide).toContainText('不按本局模式或路位计算');
+      await expect(guide).toContainText(arena ? '僧侣争圣物' : '侦察骑兵或步弓');
+      await expect(guide.locator(`a[href="https://aoe2.guide/${arena ? 'arena' : 'arabia'}/"]`)).toBeVisible();
+      await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
+      expect(await guide.innerText()).not.toMatch(/\d+(?:\.\d+)?\s*%|工秒|先手窗口|本场景指标优先/);
+      for (const en of arena ? ['Teutons', 'Bohemians'] : ['Franks', 'Britons'])
+        await expect(guide.locator('.start-civrow').filter({ hasText: en }).locator('small')).not.toHaveText('');
+      for (const control of await guide.locator('button,a').all()) {
+        const box = await control.boundingBox();
+        expect(box && box.width >= 44 && box.height >= 44).toBe(true);
+      }
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await noOverflow(page);
+      if (width === 1280) expect((await new AxeBuilder({ page }).include('[data-testid="start-game"]').analyze()).violations).toEqual([]);
+      await page.locator('#home').screenshot({
+        path: info.outputPath(`editorial666-${arena ? 'arena' : 'arabia'}-${width}.png`),
+        style: 'header.topbar, .skip-link { visibility: hidden !important; }',
+      });
+      await guide.locator('.start-civrow button').first().click();
+      await page.getByRole('button', { name: '完成本局', exact: true }).click();
+      await expect(page.getByTestId('start-summary')).toContainText(arena ? '条顿' : '法兰克');
+      await expect.poll(() => stateFromUrl(page.url())?.choice.mapId).toBe(arena ? 'arena' : 'arabia');
+      expect(stateFromUrl(page.url())?.choice.lane).toBe(arena ? 'pocket' : null);
+      expect(errors).toEqual([]);
+    });
+  }
+
+test('#666 @1280 2v2编辑稿保留路位且不声称机制', async ({ page }) => {
+  await page.goto('./#/');
+  await page.getByRole('button', { name: /组队随机地图/ }).click();
+  await page.getByRole('button', { name: '2v2', exact: true }).click();
+  await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+  await page.getByRole('button', { name: /^边路/ }).click();
+  await expect(page.getByTestId('start-editorial')).toContainText('不按本局模式或路位计算');
+  await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
+  await page.getByRole('button', { name: /法兰克/ }).click();
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await expect.poll(() => stateFromUrl(page.url())?.choice.teamSize).toBe('2v2');
+  expect(stateFromUrl(page.url())?.choice.lane).toBe('flank');
+});
+
+for (const [name, en, limitation] of [
+  ['游牧', 'Nomad', /先落城镇中心.*码头.*不能照搬.*出生配置和时间/],
+  ['岛屿', 'Islands', /安全近岸渔场.*水陆混合图.*纯岛图.*敌方距离调整造船/],
+] as const)
+  test(`#666 @1280 ${en}保留编辑来源的开局限制`, async ({ page }) => {
+    await page.goto('./#/');
+    await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+    await page.getByRole('button', { name: `${name} ${en}`, exact: true }).click();
+    const guide = page.getByTestId('start-editorial');
+    await expect(guide.locator('.start-civrow')).toHaveCount(2);
+    await expect(guide).toContainText(limitation);
+    await expect(guide.locator('a[href^="https://sitaux.com/"]').first()).toBeVisible();
+    await expect(guide.getByRole('link', { name: '查看地图攻略（需在页内选图）' })).toHaveAttribute('href', /#\/maps$/);
+  });
+
+test('#666 @1280 未核对地图与空大厅不借用参考或默认', async ({ page }) => {
+  await page.goto('./#/');
+  await page.getByTestId('start-lobby').click();
+  await expect(page.getByTestId('start-editorial')).toHaveCount(0);
+  await expect(page.getByTestId('start-step')).not.toContainText('阿拉伯半岛');
+  await expect(page.getByTestId('start-step')).not.toContainText('4v4');
+  await page.getByRole('button', { name: '修改模式和地图', exact: true }).click();
+  await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+  await page.getByRole('button', { name: /黑森林/ }).click();
+  await expect(page.getByTestId('start-step')).toContainText('暂无这张地图的文明编辑参考');
+  await expect(page.getByTestId('start-editorial')).toHaveCount(0);
+  await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
+  await page.getByRole('button', { name: /法兰克/ }).click();
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
+});
+
+test('#666 @1280 参考外已选文明保留且仍可搜索其它文明', async ({ page }) => {
+  await editorialPath(page);
+  await page.getByRole('searchbox').fill('Mongols');
+  await page.getByRole('button', { name: /^蒙古/ }).click();
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await page.getByRole('button', { name: '修改地图', exact: true }).click();
+  await page.getByRole('button', { name: /竞技场/ }).click();
+  await expect(page.getByTestId('start-editorial')).toContainText('Teutons');
+  await expect.poll(() => stateFromUrl(page.url())?.choice.civ).toBe('Mongols');
+  await page.getByRole('button', { name: '保留此文明继续', exact: true }).click();
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await expect(page.getByTestId('start-summary')).toContainText('蒙古');
+  await page.getByRole('button', { name: '修改文明', exact: true }).click();
+  await page.getByRole('searchbox').fill('Huns');
+  await page.getByRole('button', { name: /^匈奴/ }).click();
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await expect(page.getByTestId('start-summary')).toContainText('匈奴');
+});
 
 for (const width of [360, 375, 390, 1280]) {
   test(`#632 @${width} 空大厅不填示例，摘要保留跳过，可补选单挑`, async ({ page }, testInfo) => {
@@ -254,6 +379,7 @@ for (const width of [360, 375, 390, 1280]) {
     });
     await page.getByRole('button', { name: /1v1 随机地图/ }).click();
     await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+    await page.getByRole('searchbox').fill('Mongols');
     await page.getByRole('button', { name: /^蒙古/ }).click();
     const opponent = page.getByTestId('start-step');
     await expect(opponent).toHaveAttribute('data-step', 'opponent');

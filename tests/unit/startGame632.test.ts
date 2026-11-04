@@ -1,4 +1,6 @@
 import { DEFAULT_SCENE, DEFAULT_FLANK_SCENE, DEFAULT_ROUTE } from '../../src/domain/startGameInputs';
+import { mapGuides } from '../../src/domain/mapGuides';
+import { civByEn } from '../../src/data';
 import { createElement, StrictMode, useState } from 'react';
 import { act, create, type ReactTestRenderer } from 'react-test-renderer';
 import { describe, expect, it } from 'vitest';
@@ -29,6 +31,19 @@ import {
   type StartStorage,
 } from '../../src/features/home/startGamePersistence';
 import { useStartGamePersistence } from '../../src/features/home/useStartGamePersistence';
+
+it('#666 只复用有真实文明与可查来源的四图编辑稿', () => {
+  expect(Object.keys(mapGuides)).toEqual(['arabia', 'arena', 'nomad', 'islands']);
+  for (const guide of Object.values(mapGuides)) {
+    expect(guide.civs).toHaveLength(2);
+    for (const [en, why] of guide.civs) {
+      expect(civByEn(en)).toBeDefined();
+      expect(why.trim()).not.toBe('');
+    }
+    for (const [, url] of guide.sources) expect(new URL(url).protocol).toBe('https:');
+  }
+  expect(mapGuides['black-forest']).toBeUndefined();
+});
 
 describe('大厅入口只记录实际输入 #632', () => {
   it('未填写的模式和地图是已跳过，不把示例当作已预填', () => {
