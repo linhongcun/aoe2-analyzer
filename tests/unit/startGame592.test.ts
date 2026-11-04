@@ -25,6 +25,7 @@ import {
   skipStep,
 } from '../../src/domain/startGame';
 import Home from '../../src/features/home/components/Home';
+import { OpponentStep, Summary } from '../../src/features/home/components/startGameLater';
 import { decodeStartGame, encodeStartGame, START_GAME_KEY, type StartStorage } from '../../src/features/home/startGamePersistence';
 import { useStartGamePersistence } from '../../src/features/home/useStartGamePersistence';
 
@@ -427,5 +428,34 @@ describe('本局实际恢复hook #674', () => {
       expect(view.result.state.choice.mode).toBe('1v1');
       view.unmount();
     }
+  });
+});
+
+describe('首页工具上下文与对手状态 #671', () => {
+  const render = (state: ReturnType<typeof resetStart>, summary = false) =>
+    renderToStaticMarkup(createElement(StaticRouter, { location: '/' }, createElement(summary ? Summary : OpponentStep, { state, onChange: () => {} })));
+  it('带真实己方且直接披露原有对手，开局仅带文明上下文', () => {
+    const state = pickCiv(chooseMap(choose1v1(resetStart()), 'arabia'), 'Mongols');
+    for (const summary of [false, true]) {
+      const html = render(state, summary);
+      expect(html).toContain('href="/matchup?me=Mongols"');
+      expect(html).toContain('非本局当前对手');
+      expect(html).not.toContain('opp=');
+    }
+    const html = render(finishFlow(state), true);
+    expect(html).toContain('href="/builds?civ=Mongols"');
+    expect(html).toContain('列表仍为全部开局');
+    expect(html).toContain('暂无数据');
+    expect(html).not.toContain('已跳过');
+  });
+  it('空局不伪造文明；只有真实跳过显示已跳过且历史标记保留', () => {
+    const state = skipStep(skipStep(chooseMap(choose1v1(resetStart()), 'arena')));
+    const html = render(state, true);
+    expect(html).toContain('href="/matchup"');
+    expect(html).toContain('href="/builds"');
+    expect(html).toContain('未带入本局文明');
+    expect(html).toContain('已跳过');
+    expect(html).not.toContain('暂无数据');
+    expect(render(finishFlow(editStep(state, 'opponent')), true)).toContain('已跳过');
   });
 });
