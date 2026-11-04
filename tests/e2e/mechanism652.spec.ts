@@ -5,13 +5,14 @@ const techNames = JSON.parse(readFileSync('src/data/techs.json', 'utf8')) as { i
 const archerArmor = techNames.find((tech) => tech.id === 211),
   thumbRing = techNames.find((tech) => tech.id === 437);
 if (!archerArmor || !thumbRing) throw new Error('Missing pinned archer technology names');
-async function select(page: Page, lane = '边路') {
+async function select(page: Page, lane = '边路', expand = true) {
   await page.goto('./#/');
   await page.getByRole('button', { name: /组队随机地图/ }).click();
   await page.getByRole('button', { name: '4v4', exact: true }).click();
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
   await page.getByRole('button', { name: new RegExp('^' + lane) }).click();
-  await expect(page.getByTestId('scene-Britons')).toContainText('预算可负担');
+  await expect(page.getByTestId('scene-Britons').getByText(/^城堡时代 ·/)).toBeVisible();
+  if (expand) for (const why of await page.getByTestId('scenario-suggestions').getByText('为什么', { exact: true }).all()) await why.click();
 }
 for (const width of [360, 375, 390, 1280]) {
   test(`#679 @${width} 边路说明与科技表中文名一致`, async ({ page }, testInfo) => {
@@ -207,7 +208,9 @@ test('数据加载失败时保留选择并可继续，不刷新整页', async ({
   await expect(page.getByTestId('start-step')).toContainText('已选文明保留');
   await page.unroute(/\/assets\/trees-[^/]+\.js$/);
   await page.getByRole('button', { name: '重试场景', exact: true }).click();
-  await expect(page.getByTestId('scene-Huns')).toContainText('预算可负担');
+  await expect(page.getByTestId('scene-Huns').getByText('城堡时代 · 骑士', { exact: true })).toBeVisible();
+  await page.getByTestId('scene-Huns').getByText('为什么', { exact: true }).click();
+  await expect(page.getByTestId('scene-Huns').locator('p').filter({ hasText: '预算可负担' })).toBeVisible();
   await expect(page.getByTestId('start-step')).toContainText('已选文明保留');
   await page.getByRole('button', { name: '保留此文明继续', exact: true }).click();
   await page.getByTestId('start-skip').click();
@@ -228,4 +231,252 @@ for (const [civ, lane, reason] of [
     await page.getByRole('button', { name: '保留此文明继续', exact: true }).click();
     await page.getByTestId('start-skip').click();
     await expect(page.getByTestId('start-summary')).toContainText(civ!);
+    const summary = page.getByTestId('start-scene-summary');
+    await expect(summary).toContainText(reason!);
+    await summary.getByText('查看本局场景结果', { exact: true }).click();
+    await expect(summary.locator('p').filter({ hasText: '预算可负担' })).toHaveCount(0);
+    await expect(summary.locator('p').filter({ hasText: /先手窗口|期限前/ })).toHaveCount(0);
   });
+
+test('#667 @1280 主卡默认折叠计算证据', async ({ page }) => {
+  await select(page, '边路', false);
+  console.log(
+    JSON.stringify({
+      version: await page.locator('[data-t="footer-app-version"]').innerText(),
+      build: await page.locator('[data-t="footer-build"]').innerText(),
+    }),
+  );
+  await expect(page.getByTestId('scene-Britons').locator('p').filter({ hasText: '科技及升级' })).not.toBeVisible();
+});
+test('#667 @1280 本局摘要保留调过的场景', async ({ page }) => {
+  await select(page, '中路');
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  await page.getByLabel('军事投入', { exact: true }).selectOption('2000');
+  await page.getByLabel('场景距离', { exact: true }).selectOption('10');
+  await page.getByLabel('支援期限', { exact: true }).selectOption('1200');
+  await page.getByLabel('部队状态', { exact: true }).selectOption('ready');
+  await page.getByLabel('畜牧状态', { exact: true }).selectOption('false');
+  await page.getByTestId('scene-Huns').getByRole('button', { name: /匈奴/ }).click();
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await expect(page.getByTestId('start-scene-summary')).toContainText('1200');
+});
+test('#667 @1280 开局打开真实文明时间线', async ({ page }) => {
+  await select(page);
+  await page
+    .getByTestId('scene-Britons')
+    .getByRole('button', { name: /不列颠/ })
+    .click();
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await page.getByTestId('start-summary').getByRole('link', { name: '开局流程', exact: true }).click();
+  await expect(page.locator('[data-t="timeline"]')).toBeVisible();
+  await expect(page).toHaveURL(/bo=archers-19/);
+  await expect(page.locator('[data-t="sum-civ"]')).toContainText('按不列颠计');
+});
+
+function planUrl(url: string) {
+  const hash = new URL(url).hash;
+  return JSON.parse(new URLSearchParams(hash.slice(hash.indexOf('?'))).get('sg')!) as import('../../src/domain/startGame').StartState;
+}
+for (const width of [360, 375, 390, 1280]) {
+  test(`#667 @${width} 两账独立保存到摘要并跨context恢复`, async ({ page, browser }, info) => {
+    const errors: string[] = [];
+    const listen = (p: Page) => {
+      p.on('pageerror', (e) => errors.push(e.message));
+      p.on('console', (m) => {
+        if (m.type() === 'error') errors.push(m.text());
+      });
+    };
+    listen(page);
+    await page.setViewportSize({ width, height: 900 });
+    await page.addInitScript((theme) => localStorage.setItem('aoe2-theme', theme), width === 390 ? 'dark' : 'light');
+    await select(page, '边路', false);
+    for (const card of await page.getByTestId('scenario-suggestions').locator('> article').all()) {
+      await expect(card).toContainText('城堡时代 · 弩手');
+      await expect(card.locator('.start-why')).toBeVisible();
+      await expect(card.locator('p').filter({ hasText: '科技及升级' })).not.toBeVisible();
+    }
+    await page
+      .locator('#home')
+      .screenshot({ path: info.outputPath(`plan667-cards-${width}.png`), style: 'header.topbar, .skip-link { visibility:hidden!important; }' });
+    const britons = page.getByTestId('scene-Britons');
+    await britons.getByText('为什么', { exact: true }).click();
+    await expect(britons.locator('p').filter({ hasText: '科技及升级' })).toBeVisible();
+    await expect(britons).toContainText('1 次');
+    await page.getByTestId('start-back').click();
+    await page.getByRole('button', { name: /^中路/ }).click();
+    await page.getByText('调整场景与投入', { exact: true }).click();
+    await page.getByLabel('军事投入', { exact: true }).selectOption('2000');
+    await page.getByLabel('场景距离', { exact: true }).selectOption('10');
+    await page.getByLabel('支援期限', { exact: true }).selectOption('1200');
+    await page.getByLabel('部队状态', { exact: true }).selectOption('ready');
+    await page.getByLabel('畜牧状态', { exact: true }).selectOption('false');
+    await page.getByText('封建到城堡：路线衔接', { exact: true }).click();
+    await expect.poll(() => planUrl(page.url()).routeConfig).toBeNull();
+    await page.getByLabel('封建军事额度（工秒）', { exact: true }).selectOption('6000');
+    await page.getByLabel('城堡追加额度（工秒）', { exact: true }).selectOption('600');
+    await page.getByLabel('计划保留封建兵数', { exact: true }).selectOption('12');
+    await page.getByLabel('城堡新增上限', { exact: true }).selectOption('0');
+    await page.getByLabel('路线支援距离（格）', { exact: true }).selectOption('60');
+    await page.getByLabel('路线观察窗口（秒）', { exact: true }).selectOption('60');
+    await page.getByLabel('路线畜牧', { exact: true }).selectOption('true');
+    await expect(page.getByLabel('场景距离', { exact: true })).toHaveValue('10');
+    await expect(page.getByLabel('支援期限', { exact: true })).toHaveValue('1200');
+    await page.getByTestId('scene-Huns').getByText('为什么', { exact: true }).click();
+    const support = page
+      .getByTestId('scene-Huns')
+      .locator('p')
+      .filter({ hasText: /期限前/ });
+    await expect(support).toBeVisible();
+    const currentSupport = await support.innerText();
+    await page.getByTestId('scene-Huns').getByRole('button', { name: /匈奴/ }).click();
+    await page.getByRole('button', { name: '完成本局', exact: true }).click();
+    await expect(page.getByTestId('start-scene-summary')).toContainText('军事投入 2000 工秒 · 距离 10 格 · 现成部队 · 期限 1200 秒 · 未研究畜牧');
+    await expect(page.getByTestId('start-route-summary')).toContainText('独立封建额度 6000 工秒 · 城堡追加 600 工秒');
+    await expect(page.getByTestId('start-route-summary')).toContainText('距离 60 格 · 窗口 60 秒');
+    await expect.poll(() => planUrl(page.url()).current).toBeNull();
+    const saved = planUrl(page.url());
+    expect(saved.sceneConfig).toMatchObject({ budget: 2000, distance: 10, deadline: 1200, mode: 'ready', husbandry: false });
+    expect(saved.routeConfig).toMatchObject({ feudalBudget: 6000, castleBudget: 600, survivors: 12, newLimit: 0, distance: 60, deadline: 60, husbandry: true });
+    const url = page.url();
+    await page.getByText('查看本局场景结果', { exact: true }).click();
+    await expect(page.getByTestId('start-scene-summary')).toContainText(currentSupport);
+    await page.getByText('查看本局场景结果', { exact: true }).click();
+    await page
+      .locator('#home')
+      .screenshot({ path: info.outputPath(`plan667-summary-${width}.png`), style: 'header.topbar, .skip-link { visibility:hidden!important; }' });
+    await page.getByRole('button', { name: '修改文明', exact: true }).click();
+    await page.getByText('调整场景与投入', { exact: true }).click();
+    await expect(page.getByLabel('场景距离', { exact: true })).toHaveValue('10');
+    await expect(page.getByLabel('支援期限', { exact: true })).toHaveValue('1200');
+    await page.getByText('封建到城堡：路线衔接', { exact: true }).click();
+    await expect(page.getByLabel('路线支援距离（格）', { exact: true })).toHaveValue('60');
+    await expect(page.getByLabel('城堡追加额度（工秒）', { exact: true })).toHaveValue('600');
+    await page.getByLabel('军事投入', { exact: true }).selectOption('12000');
+    await expect(page.getByLabel('城堡追加额度（工秒）', { exact: true })).toHaveValue('600');
+    await page.evaluate((value) => {
+      location.hash = new URL(value).hash;
+    }, url);
+    await expect(page.getByTestId('start-scene-summary')).toContainText('2000 工秒');
+    await page.reload();
+    await expect(page.getByTestId('start-route-summary')).toContainText('6000 工秒');
+    const freshContext = await browser.newContext({ viewport: { width, height: 900 } });
+    try {
+      await freshContext.addInitScript(() =>
+        localStorage.setItem(
+          'aoe2-start-game-v1',
+          JSON.stringify({
+            version: 1,
+            state: {
+              choice: { mode: '1v1', teamSize: null, mapId: null, lane: null, civ: null },
+              skipped: {},
+              prefilled: {},
+              teamArmed: false,
+              lobby: false,
+              laneOpen: false,
+              current: 'map',
+            },
+          }),
+        ),
+      );
+      const fresh = await freshContext.newPage();
+      listen(fresh);
+      await fresh.goto(url);
+      await expect(fresh.getByTestId('start-scene-summary')).toContainText('匈奴');
+      await expect(fresh.getByTestId('start-route-summary')).toContainText('距离 60 格 · 窗口 60 秒');
+      expect(planUrl(fresh.url())).toEqual(saved);
+      expect(await fresh.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    } finally {
+      await freshContext.close();
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(errors).toEqual([]);
+  });
+}
+
+for (const [civ, zh, lane, bo] of [
+  ['Huns', '匈奴', '中路', 'scouts-18'],
+  ['Franks', '法兰克', '中路', 'scouts-18'],
+  ['Berbers', '柏柏尔', '中路', 'fast-castle-knights'],
+  ['Vietnamese', '越南', '边路', 'archers-19'],
+  ['Incas', '印加', '边路', null],
+  ['Mayans', '玛雅', '中路', null],
+] as const) {
+  test(`#667 @1280 ${civ}真实流程或诚实空态`, async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => {
+      if (m.type() === 'error') errors.push(m.text());
+    });
+    await select(page, lane, false);
+    await page.getByRole('searchbox', { name: '搜索文明', exact: true }).fill(zh);
+    await page
+      .locator('.start-catalog')
+      .getByRole('button', { name: new RegExp(zh) })
+      .click();
+    await page.getByRole('button', { name: '完成本局', exact: true }).click();
+    const summary = page.getByTestId('start-summary');
+    await expect(summary).toContainText(zh);
+    if (bo) {
+      if (civ === 'Vietnamese') await expect(summary).toContainText('通用示意，资料未列出该文明');
+      if (civ === 'Berbers') await expect(summary).toContainText('安全直城后转型，不适合盲目裸奔');
+      await summary.getByRole('link', { name: '开局流程', exact: true }).click();
+      await expect(page.locator('[data-t="timeline"]')).toBeVisible();
+      const query = new URLSearchParams(page.url().split('?')[1]);
+      expect(query.get('bo')).toBe(bo);
+      expect(query.get('civ')).toBe(civ);
+      await expect(page.getByLabel('开局', { exact: true })).toHaveValue(bo);
+      await expect(page.locator('#tlciv')).toHaveAttribute('data-value', civ);
+      await expect(page.locator('[data-t="sum-civ"]')).toContainText(`按${zh}计`);
+      if (civ === 'Vietnamese') await expect(page.getByRole('region', { name: '开局适用文明', exact: true })).toContainText('通用示意');
+      await page.reload();
+      await expect(page.locator('#tlciv')).toHaveAttribute('data-value', civ);
+      await expect(page.getByLabel('开局', { exact: true })).toHaveValue(bo);
+    } else {
+      await expect(summary).toContainText('暂无与当前路线匹配的开局');
+      await expect(summary.getByRole('link', { name: '开局流程', exact: true })).toHaveCount(0);
+      await expect(summary.getByRole('link', { name: '查看全部开局', exact: true })).toHaveAttribute('href', new RegExp('#/builds\\?civ=' + civ + '$'));
+    }
+    expect(errors).toEqual([]);
+  });
+}
+
+test('#667 @1280 摘要真实数据失败重试、非法配置保留地址和存档', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  const state = {
+    choice: { mode: 'team', teamSize: '4v4', mapId: 'arabia', lane: 'pocket', civ: 'Huns' },
+    sceneConfig: { age: 3, budget: 2000, distance: 10, deadline: 1200, reaction: 0.5, room: 0, mode: 'ready', husbandry: false },
+    routeConfig: { feudalBudget: 6000, castleBudget: 600, survivors: 12, newLimit: 0, husbandry: true, distance: 60, deadline: 60 },
+    skipped: {},
+    prefilled: {},
+    teamArmed: true,
+    lobby: false,
+    laneOpen: false,
+    current: 'opponent',
+  };
+  await page.route(/\/assets\/trees-[^/]+\.js$/, (r) => r.abort());
+  await page.goto('./#/?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(state) }));
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('本局打法数据加载失败，已选文明和输入保留');
+  await expect(page.getByTestId('start-summary')).toContainText('匈奴');
+  expect(planUrl(page.url()).sceneConfig).toEqual(state.sceneConfig);
+  await page.unroute(/\/assets\/trees-[^/]+\.js$/);
+  await page.getByRole('button', { name: '重试本局打法', exact: true }).click();
+  await expect(page.getByTestId('start-scene-summary')).toContainText('2000 工秒');
+  const original = await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'));
+  const invalid = planUrl(page.url());
+  invalid.sceneConfig!.distance = 11;
+  const hash = '/?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(invalid) });
+  await page.evaluate((value) => {
+    location.hash = value;
+  }, hash);
+  await expect(page.getByRole('alert')).toContainText('链接中的本局进度无法恢复');
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
+  expect(new URL(page.url()).hash).toBe('#' + hash);
+  expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe(original);
+  await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+  await expect.poll(() => planUrl(page.url()).choice.mode).toBe('1v1');
+  expect(planUrl(page.url()).sceneConfig).toBeNull();
+  expect(planUrl(page.url()).routeConfig).toBeNull();
+  expect(errors).toEqual([]);
+});

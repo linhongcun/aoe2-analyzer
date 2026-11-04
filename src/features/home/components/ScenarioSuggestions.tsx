@@ -12,6 +12,7 @@ import {
   type SceneRow,
 } from '../../../domain/positionScenarios';
 import { pickCiv, type StartState } from '../../../domain/startGame';
+import { sceneSupported } from '../../../domain/startGameInputs';
 import { CivRow, type Update } from './startGameEarly';
 import RouteContinuity from './RouteContinuity';
 
@@ -34,7 +35,7 @@ function Value({ n, unit = '' }: { n: number; unit?: string }) {
 }
 export default function ScenarioSuggestions({ state, onChange }: { state: StartState; onChange: Update }) {
   const lane = state.choice.lane!;
-  const [cfg, setCfg] = useState<SceneConfig>(() => ({ ...(lane === 'flank' ? DEFAULT_FLANK_SCENE : DEFAULT_SCENE) }));
+  const cfg = state.sceneConfig ?? (lane === 'flank' ? DEFAULT_FLANK_SCENE : DEFAULT_SCENE);
   const [context, setContext] = useState<SceneContext | null>(null);
   const [failed, setFailed] = useState(false);
   const [attempt, retry] = useState(0);
@@ -52,7 +53,12 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
     };
   }, [attempt]);
   const rows = useMemo(() => (context ? scenarioRows(context, lane, cfg) : []), [context, lane, cfg]);
-  const update = <K extends keyof SceneConfig>(key: K, value: SceneConfig[K]) => setCfg((c) => ({ ...c, [key]: value }));
+  const update = <K extends keyof SceneConfig>(key: K, value: SceneConfig[K]) =>
+    onChange((current) =>
+      sceneSupported(current.choice) && current.choice.lane === lane
+        ? { ...current, sceneConfig: { ...(current.sceneConfig ?? (lane === 'flank' ? DEFAULT_FLANK_SCENE : DEFAULT_SCENE)), [key]: value } }
+        : current,
+    );
   const version = scenarioVersion();
   const selectedOutside = state.choice.civ && !SCENARIO_CIVS[lane].includes(state.choice.civ);
   const selectionReason = selectedOutside && context ? scenarioProfile(context, state.choice.civ!, lane, cfg).reason || '不在此路位首批比较范围' : '机制待核验';
@@ -70,7 +76,7 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
       ) : null}
       <details className="start-scene-details">
         <summary>调整场景与投入</summary>
-        <p className="start-hint">以下是可调整假设，不是阿拉伯地图距离统计。返回此步后恢复默认场景。</p>
+        <p className="start-hint">以下是可调整假设，不是阿拉伯地图距离统计。本局会保留输入；改变模式、地图或路位后重置。</p>
         <div className="start-scene-controls">
           <label>
             军事投入（标准采集工秒）
@@ -187,12 +193,17 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
             <article className="start-scene-card" key={row.civ} data-testid={`scene-${row.civ}`}>
               <p className="start-k">{sceneLabel(row, lane)}</p>
               <CivRow en={row.civ} pressed={state.choice.civ === row.civ} onPick={() => onChange((c) => pickCiv(c, row.civ))} />
-              <SceneEvidence row={row} lane={lane} />
+              <p className="start-hint">城堡时代 · {context.core.unitById[lane === 'flank' ? 24 : 38]?.zh ?? '路线兵种未核实'}</p>
+              <p className="start-why">{sceneReason(row, lane)}</p>
+              <details className="start-scene-details">
+                <summary>为什么</summary>
+                <SceneEvidence row={row} lane={lane} />
+              </details>
             </article>
           ))}
         </>
       )}
-      {context ? <RouteContinuity context={context} lane={lane} /> : null}
+      {context ? <RouteContinuity context={context} state={state} onChange={onChange} /> : null}
       <details className="start-scene-details">
         <summary>范围、科技包与来源</summary>
         <p className="start-hint">首批核验：{SCENARIO_CIVS[lane].map((c) => civByEn(c)?.zh ?? c).join('、')}。名单是机制覆盖范围，不是强势文明白名单。</p>
@@ -215,7 +226,7 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
     </section>
   );
 }
-function SceneEvidence({ row, lane }: { row: SceneRow; lane: 'flank' | 'pocket' }) {
+export function SceneEvidence({ row, lane }: { row: SceneRow; lane: 'flank' | 'pocket' }) {
   if (!row.stats) return <p className="start-hint">{row.reason}；仍可自主选择，不参与当前比较。</p>;
   return (
     <>
@@ -263,5 +274,31 @@ function SceneEvidence({ row, lane }: { row: SceneRow; lane: 'flank' | 'pocket' 
         <p className="start-hint">输入摘要 {row.signature}</p>
       </details>
     </>
+  );
+}
+
+function sceneReason(row: SceneRow, lane: 'flank' | 'pocket') {
+  if (row.status !== 'ok') return row.reason;
+  if (!row.count) return '当前条件没有可用部队，不作优先建议。';
+  if (lane === 'flank') {
+    const facts: Record<string, string> = {
+      Britons: '城堡时代步弓射程更远，可围绕弩手距离展开。',
+      Mayans: '城堡时代步弓费用更低，同一投入能维持弓线。',
+      Ethiopians: '步弓攻击更快，适合继续弓线；射速不等于实际伤害。',
+      Vietnamese: '步弓生命更高，可以继续弓线；生命未参与人数和机会分组。',
+    };
+    const chances = row.opening?.opportunities;
+    const chanceNote =
+      chances == null || !Number.isFinite(chances) || chances < 0 ? '本条件先手机会未核实。' : chances > 0 ? '本条件有理论先手机会。' : '本条件无先手机会。';
+    return (facts[row.civ] ?? '对照样本，用来观察当前弩手路线结果。') + chanceNote;
+  }
+  return (
+    (
+      {
+        Berbers: '城堡时代马厩单位费用更低，可用于骑士接力。',
+        Huns: '马厩工作更快，可更快接续生产；不保证每个期限必多一兵。',
+        Franks: '骑兵生命更高，骑士更耐打；到场分组未计耐久。',
+      } as Record<string, string>
+    )[row.civ] ?? '对照样本，用来观察当前骑士路线的到场结果。'
   );
 }

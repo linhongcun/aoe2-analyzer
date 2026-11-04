@@ -5,16 +5,8 @@ import { SCENARIO_CIVS, type SceneContext } from './positionScenarios';
 import { SCENE_EPS, sceneSignature, supportArrival } from './positionScenarioMath';
 import { addCosts, scaleCost, routeWork, routeProfile, FEUDAL_TECHS, ROUTE_VERSION, type RouteProfile } from './routeProfiles';
 
-export interface RouteConfig {
-  feudalBudget: number;
-  castleBudget: number;
-  survivors: number;
-  newLimit: number;
-  husbandry: boolean;
-  distance: number;
-  deadline: number;
-}
-export const DEFAULT_ROUTE: RouteConfig = { feudalBudget: 2000, castleBudget: 3000, survivors: 6, newLimit: 6, husbandry: true, distance: 30, deadline: 120 };
+import type { RouteConfig } from './startGameInputs';
+export { DEFAULT_ROUTE, type RouteConfig } from './startGameInputs';
 export interface RouteLedger {
   budget: number;
   required: Cost;

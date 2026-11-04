@@ -25,6 +25,7 @@ import {
   skipStep,
 } from '../../src/domain/startGame';
 import Home from '../../src/features/home/components/Home';
+import { DEFAULT_SCENE, DEFAULT_ROUTE } from '../../src/domain/startGameInputs';
 import { OpponentStep, Summary } from '../../src/features/home/components/startGameLater';
 import { decodeStartGame, encodeStartGame, START_GAME_KEY, type StartStorage } from '../../src/features/home/startGamePersistence';
 import { useStartGamePersistence } from '../../src/features/home/useStartGamePersistence';
@@ -457,5 +458,61 @@ describe('首页工具上下文与对手状态 #671', () => {
     expect(html).toContain('已跳过');
     expect(html).not.toContain('暂无数据');
     expect(render(finishFlow(editStep(state, 'opponent')), true)).toContain('已跳过');
+  });
+});
+
+describe('本局两份输入归属 #667', () => {
+  const chosen = () => ({
+    ...pickCiv(chooseLane(chooseMap(chooseTeamSize(resetStart(), '4v4'), 'arabia'), 'pocket'), 'Huns'),
+    sceneConfig: { ...DEFAULT_SCENE, distance: 10, deadline: 1200 },
+    routeConfig: { ...DEFAULT_ROUTE, distance: 60, deadline: 60 },
+  });
+  it('同值/返回/文明/完成/打开路位保留独立输入', () => {
+    const state = chosen();
+    for (const next of [
+      chooseTeamSize(state, '4v4'),
+      chooseMap(state, 'arabia'),
+      chooseLane(state, 'pocket'),
+      pickCiv(state, 'Franks'),
+      pickCiv(state, 'Huns', 'pocket'),
+      backStep(state),
+      jumpTo(state, 'map'),
+      editStep(state, 'lane'),
+      openLane(state),
+      armTeam(state),
+      finishFlow(state),
+      skipStep(state),
+      skipStep({ ...state, current: 'civ' }),
+    ]) {
+      expect(next.sceneConfig).toEqual(state.sceneConfig);
+      expect(next.routeConfig).toEqual(state.routeConfig);
+    }
+    expect(skipStep({ ...state, current: 'civ' }).choice.civ).toBeNull();
+  });
+  it('每个真实条件变化/条件skip都清两份，保留文明；reset/lobby清空', () => {
+    const state = chosen();
+    for (const next of [
+      choose1v1(state),
+      chooseTeamSize(state, '3v3'),
+      chooseMap(state, 'arena'),
+      chooseLane(state, 'flank'),
+      pickCiv(state, 'Huns', 'flank'),
+      ...(['mode', 'map', 'lane'] as const).map((current) => skipStep({ ...state, current })),
+    ]) {
+      expect(next.sceneConfig).toBeNull();
+      expect(next.routeConfig).toBeNull();
+      expect(next.choice.civ).toBe('Huns');
+    }
+    for (const next of [resetStart(), enterLobby(), armTeam({ ...state, choice: { ...state.choice, mode: '1v1', teamSize: null, lane: null } })]) {
+      expect(next.sceneConfig).toBeNull();
+      expect(next.routeConfig).toBeNull();
+    }
+  });
+  it('同值solo与大厅同地图开放路位不会额外清输入', () => {
+    const state = chosen();
+    const solo = { ...state, choice: { ...state.choice, mode: '1v1' as const, teamSize: null, lane: null } };
+    expect(choose1v1(solo).sceneConfig).toEqual(state.sceneConfig);
+    const lobby = { ...state, lobby: true, laneOpen: false };
+    expect(chooseMap(lobby, 'arabia')).toMatchObject({ sceneConfig: state.sceneConfig, routeConfig: state.routeConfig, laneOpen: true });
   });
 });

@@ -3,7 +3,9 @@ import { civByEn } from '../../../data';
 import { ageRoutes, DEFAULT_ROUTE, type AgeRoute, type RouteConfig } from '../../../domain/ageRoutes';
 import { routeSources, routeWork } from '../../../domain/routeProfiles';
 import type { SceneContext } from '../../../domain/positionScenarios';
-import type { Lane } from '../../../domain/startGame';
+import type { Lane, StartState } from '../../../domain/startGame';
+import { sceneSupported } from '../../../domain/startGameInputs';
+import type { Update } from './startGameEarly';
 import type { Cost } from '../../../domain/types';
 
 function N({ n, unit = '' }: { n: number; unit?: string }) {
@@ -26,9 +28,14 @@ function Resources({ cost }: { cost: Cost }) {
     <>无支出</>
   );
 }
-export default function RouteContinuity({ context, lane }: { context: SceneContext; lane: Lane }) {
+export default function RouteContinuity({ context, state, onChange }: { context: SceneContext; state: StartState; onChange: Update }) {
+  const lane = state.choice.lane!;
   const [open, setOpen] = useState(false);
-  const [cfg, setCfg] = useState<RouteConfig>({ ...DEFAULT_ROUTE });
+  const cfg = state.routeConfig ?? DEFAULT_ROUTE;
+  const setCfg = (change: (cfg: RouteConfig) => RouteConfig) =>
+    onChange((current) =>
+      sceneSupported(current.choice) && current.choice.lane === lane ? { ...current, routeConfig: change(current.routeConfig ?? DEFAULT_ROUTE) } : current,
+    );
   const rows = useMemo(() => (open ? ageRoutes(context, lane, cfg) : []), [context, lane, cfg, open]);
   const numberControl = (key: Exclude<keyof RouteConfig, 'husbandry'>, label: string, options: number[]) => (
     <label key={key}>
@@ -108,7 +115,7 @@ export default function RouteContinuity({ context, lane }: { context: SceneConte
     </details>
   );
 }
-function RouteEvidence({ row, lane, cfg }: { row: AgeRoute; lane: Lane; cfg: RouteConfig }) {
+export function RouteEvidence({ row, lane, cfg }: { row: AgeRoute; lane: Lane; cfg: RouteConfig }) {
   const { feudal, castle, retained, feudalLedger: f, castleLedger: c } = row;
   return (
     <>

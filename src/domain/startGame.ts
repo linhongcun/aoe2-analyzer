@@ -4,6 +4,7 @@
  * 跳过不写入默认选择。修改条件保留玩家已选文明；明确跳过文明或再开一局才清除。
  */
 import { mapPosTips, type MapPosTip } from './mapPositions';
+import type { SceneConfig, RouteConfig } from './startGameInputs';
 
 export type StepId = 'mode' | 'map' | 'lane' | 'civ' | 'opponent';
 export type GameMode = '1v1' | 'team';
@@ -20,6 +21,8 @@ export interface StartChoice {
 
 export interface StartState {
   choice: StartChoice;
+  sceneConfig: SceneConfig | null;
+  routeConfig: RouteConfig | null;
   skipped: Partial<Record<StepId, boolean>>;
   /** 路径 B 在入口里填上的模式 / 地图，不是从游戏大厅读的。 */
   prefilled: Partial<Record<'mode' | 'map', boolean>>;
@@ -42,6 +45,8 @@ const LATER: Record<StepId, readonly StepId[]> = {
 export function resetStart(): StartState {
   return {
     choice: { mode: null, teamSize: null, mapId: null, lane: null, civ: null },
+    sceneConfig: null,
+    routeConfig: null,
     skipped: {},
     prefilled: {},
     teamArmed: false,
@@ -109,6 +114,8 @@ export function editorialReason(state: StartState): string | null {
   return null;
 }
 
+const clearInputs = (state: StartState): StartState => ({ ...state, sceneConfig: null, routeConfig: null });
+
 function clearDownstream(state: StartState, step: StepId): StartState {
   const choice = { ...state.choice };
   const skipped = { ...state.skipped };
@@ -142,7 +149,7 @@ export function armTeam(state: StartState): StartState {
     },
     'mode',
   );
-  return { ...cleared, current: 'mode' };
+  return { ...clearInputs(cleared), current: 'mode' };
 }
 
 export function choose1v1(state: StartState): StartState {
@@ -154,7 +161,7 @@ export function choose1v1(state: StartState): StartState {
     skipped: { ...state.skipped, mode: false },
     prefilled: { ...state.prefilled, mode: false },
   };
-  if (changed) next = clearDownstream(next, 'mode');
+  if (changed) next = clearInputs(clearDownstream(next, 'mode'));
   next = { ...next, choice: { ...next.choice, lane: null } };
   return advanceFrom(next, 'mode');
 }
@@ -168,7 +175,7 @@ export function chooseTeamSize(state: StartState, teamSize: TeamSize): StartStat
     skipped: { ...state.skipped, mode: false },
     prefilled: { ...state.prefilled, mode: false },
   };
-  if (changed) next = clearDownstream(next, 'mode');
+  if (changed) next = clearInputs(clearDownstream(next, 'mode'));
   return advanceFrom(next, 'mode');
 }
 
@@ -180,7 +187,7 @@ export function chooseMap(state: StartState, mapId: string): StartState {
     skipped: { ...state.skipped, map: false },
     prefilled: { ...state.prefilled, map: false },
   };
-  if (changed) next = clearDownstream(next, 'map');
+  if (changed) next = clearInputs(clearDownstream(next, 'map'));
   if (next.lobby && next.choice.mode === 'team' && next.choice.teamSize != null) next = { ...next, laneOpen: true };
   return advanceFrom(next, 'map');
 }
@@ -192,7 +199,7 @@ export function chooseLane(state: StartState, lane: Lane): StartState {
     choice: { ...state.choice, lane },
     skipped: { ...state.skipped, lane: false },
   };
-  if (changed) next = clearDownstream(next, 'lane');
+  if (changed) next = clearInputs(clearDownstream(next, 'lane'));
   return advanceFrom(next, 'lane');
 }
 
@@ -205,6 +212,7 @@ export function pickCiv(state: StartState, civ: string, lane?: Lane): StartState
     skipped: { ...state.skipped, civ: false, ...(lane != null ? { lane: false } : {}) },
   };
   if (laneChanged || civChanged) next = clearDownstream(next, 'civ');
+  if (laneChanged) next = clearInputs(next);
   return advanceFrom(next, 'civ');
 }
 
@@ -212,6 +220,7 @@ export function skipStep(state: StartState): StartState {
   const step = state.current;
   if (step == null) return state;
   let next = clearDownstream(state, step);
+  if (step === 'mode' || step === 'map' || step === 'lane') next = clearInputs(next);
   const choice = { ...next.choice };
   const prefilled = { ...next.prefilled };
   if (step === 'mode') {

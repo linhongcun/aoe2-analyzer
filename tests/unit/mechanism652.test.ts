@@ -198,3 +198,30 @@ it('issue 652 已选未覆盖文明区分路线不存在与机制未审', () => 
   expect(scenarioProfile(base, 'Mayans', 'pocket', DEFAULT_SCENE).status).toBe('unavailable');
   expect(scenarioProfile(base, 'Lithuanians', 'pocket', DEFAULT_SCENE).status).toBe('blocked');
 });
+
+import { selectStartOpening } from '../../src/domain/openingBuildChoices';
+import { buildOrders } from '../../src/data/buildOrders';
+import { civByEn } from '../../src/data';
+describe('真实本局开局选择 #667', () => {
+  it('按路位从同文明候选选择，保留成员优先和通用标记', () => {
+    for (const [civ, lane, bo, kind] of [
+      ['Britons', 'flank', 'archers-19', 'listed'],
+      ['Mayans', 'flank', 'archers-19', 'listed'],
+      ['Ethiopians', 'flank', 'archers-19', 'listed'],
+      ['Huns', 'pocket', 'scouts-18', 'listed'],
+      ['Franks', 'pocket', 'scouts-18', 'listed'],
+      ['Berbers', 'pocket', 'fast-castle-knights', 'listed'],
+      ['Vietnamese', 'flank', 'archers-19', 'generic'],
+      ['Incas', 'flank', undefined, 'generic'],
+      ['Mayans', 'pocket', undefined, 'listed'],
+    ] as const) {
+      const selected = selectStartOpening(civByEn(civ)!, buildOrders, lane);
+      expect(selected.order?.id, civ + lane).toBe(bo);
+      expect(selected.kind).toBe(kind);
+      if (selected.order)
+        expect(selected.order.steps.find((s) => s.phase === (selected.order!.target.age === 2 ? 'feudal-click' : 'castle-click'))?.vils).toBe(
+          selected.order.target.vils,
+        );
+    }
+  });
+});
