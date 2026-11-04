@@ -18,8 +18,8 @@ import RouteContinuity from './RouteContinuity';
 const number = (n: number) => Number(n.toFixed(3)).toString();
 function sceneLabel(row: SceneRow, lane: 'flank' | 'pocket') {
   if (row.status !== 'ok') return row.reason;
+  if (lane === 'pocket') return row.preferred ? '到场数量 / 时间侧重' : '到场对照候选';
   if (!row.preferred) return '其它候选 · 可比较侧重';
-  if (lane === 'pocket') return '本场景指标优先';
   const chances = row.opening?.opportunities;
   if (chances == null || !Number.isFinite(chances) || chances < 0) return '人数侧重 · 先手机会未核实';
   return chances > 0 ? '理论先手机会侧重' : '人数侧重 · 无先手机会';
@@ -162,7 +162,7 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
       <p className="start-hint">
         {lane === 'flank'
           ? '按可负担人数与每兵理论先手机会分别比较；人数侧重不代表有先手。未比较生命、伤害和完整战力。零前摇机会不是实际发射，命中与伤害未知。纯后撤不射击，不计入分组。'
-          : '优先组比较期限前人数与首兵到达；未比较生命和作战强度。两种部队状态分别使用预算，不重复花费；新兵必须完成首个训练周期。'}
+          : '到场分组仅比较期限前人数与首兵到达，未比较生命、攻击和完整战力；相同到达结果不代表相同耐久。两种部队状态分别使用预算，不重复花费；新兵必须完成首个训练周期。'}
       </p>
       {failed ? (
         <p role="alert">
@@ -242,8 +242,8 @@ function SceneEvidence({ row, lane }: { row: SceneRow; lane: 'flank' | 'pocket' 
         <summary>查看计算输入</summary>
         <p className="start-hint">
           生命 <Value n={row.stats.hp} /> · 攻击 <Value n={row.stats.atk} /> · 射程 <Value n={row.stats.rng} /> · 速度 <Value n={row.stats.spd} /> · 攻击周期{' '}
-          <Value n={row.stats.rof} unit=" 秒" /> · 训练周期 <Value n={row.cycle!} unit=" 秒" />
-          。这些属性不额外加分。
+          <Value n={row.stats.rof} unit=" 秒" /> · 训练周期 <Value n={row.cycle!} unit=" 秒" />。
+          {lane === 'pocket' ? '速度用于到达计算；新训练部队还须完成首个训练周期，现成部队不等待训练。生命、攻击等未参与到场分组。' : '这些属性不额外加分。'}
         </p>
         <p className="start-hint">
           单位费用：

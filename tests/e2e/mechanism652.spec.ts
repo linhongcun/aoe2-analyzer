@@ -72,6 +72,47 @@ for (const width of [360, 375, 390, 1280]) {
     expect(errors).toEqual([]);
   });
 }
+for (const width of [360, 375, 390, 1280]) {
+  test(`#677 @${width} 中路仅比较到场，展开保留耐久差异`, async ({ page }, testInfo) => {
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+    await page.setViewportSize({ width, height: 900 });
+    await select(page, '中路');
+    const section = page.getByTestId('scenario-suggestions'),
+      huns = page.getByTestId('scene-Huns');
+    await expect(huns.locator(':scope > .start-k')).toHaveText('到场数量 / 时间侧重');
+    await expect(section.getByText(/到场分组仅比较期限前人数与首兵到达，未比较生命、攻击和完整战力；相同到达结果不代表相同耐久。/)).toBeVisible();
+    await expect(section.getByText('本场景指标优先', { exact: true })).toHaveCount(0);
+    for (const [civ, hp] of [
+      ['Franks', 120],
+      ['Britons', 100],
+    ] as const) {
+      const card = page.getByTestId(`scene-${civ}`),
+        inputs = card.getByText('查看计算输入', { exact: true }).locator('..').locator('p').first();
+      await expect(card.locator(':scope > .start-k')).toHaveText('到场对照候选');
+      await expect(card).toContainText('首兵 50.202 秒 · 期限前 3 兵');
+      await expect(inputs).not.toBeVisible();
+      await card.getByText('查看计算输入', { exact: true }).click();
+      await expect(inputs).toBeVisible();
+      await expect(inputs).toContainText(`生命 ${hp} · 攻击`);
+      await expect(inputs).toContainText('速度用于到达计算；新训练部队还须完成首个训练周期，现成部队不等待训练。生命、攻击等未参与到场分组。');
+      await card.screenshot({ path: testInfo.outputPath(`pocket-${civ.toLowerCase()}.png`), style: 'header.topbar { visibility: hidden !important; }' });
+    }
+    await section.getByText('调整场景与投入', { exact: true }).click();
+    await page.getByLabel('部队状态', { exact: true }).selectOption('ready');
+    await expect(page.getByTestId('scene-Franks')).toContainText('首兵 20.202 秒 · 期限前 6 兵');
+    await expect(page.getByTestId('scene-Franks').getByText(/速度用于到达计算；新训练部队还须完成首个训练周期，现成部队不等待训练。/)).toBeVisible();
+    await page.getByLabel('军事投入', { exact: true }).selectOption('0');
+    await expect(huns.locator(':scope > .start-k')).toHaveText('预算不足以完成科技包并购买一兵');
+    await expect(section.getByText('到场数量 / 时间侧重', { exact: true })).toHaveCount(0);
+    await expect(section.getByText('到场对照候选', { exact: true })).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(errors).toEqual([]);
+  });
+}
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['dark', 'light']) {
     test(`${width} ${theme} 场景指标与布局`, async ({ page }, testInfo) => {
