@@ -1,4 +1,81 @@
 import { expect, test, type Page } from '@playwright/test';
+import type { StartState } from '../../src/domain/startGame';
+
+function homeState676(url: string): StartState {
+  return JSON.parse(new URLSearchParams(new URL(url).hash.split('?')[1]).get('sg') ?? '{}') as StartState;
+}
+
+for (const width of [360, 375, 390, 1280])
+  test(`#676 @${width} 查看另一文明可明确回原选择`, async ({ page, browser }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.addInitScript((theme) => localStorage.setItem('aoe2-theme', theme), width === 390 ? 'dark' : 'light');
+    const errors: string[] = [];
+    const collect = (p: Page) => {
+      p.on('pageerror', (e) => errors.push(e.message));
+      p.on('console', (m) => {
+        if (m.type() === 'error') errors.push(m.text());
+      });
+    };
+    collect(page);
+    await page.goto('./#/');
+    await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+    await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+    await page.getByRole('searchbox').fill('Mongols');
+    await page.getByRole('button', { name: /^蒙古/ }).click();
+    await page.getByRole('button', { name: '完成本局', exact: true }).click();
+    await expect(page.getByTestId('start-summary')).toContainText('蒙古');
+    await page.getByRole('button', { name: '修改文明', exact: true }).click();
+    await expect.poll(() => homeState676(page.url()).choice?.civ).toBe('Mongols');
+    const before = homeState676(page.url());
+    await page.getByRole('link', { name: '查看不列颠', exact: true }).click();
+    await expect(page.getByRole('heading', { level: 1, name: /不列颠/ })).toBeVisible();
+    console.log(
+      JSON.stringify({
+        version: await page.locator('[data-t="footer-app-version"]').innerText(),
+        build: await page.locator('[data-t="footer-build"]').innerText(),
+      }),
+    );
+    await expect(page.getByRole('link', { name: '回开一局', exact: true })).toBeVisible();
+    const returned = () => new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('returnTo');
+    const target = returned();
+    await page.getByRole('tab', { name: '数据', exact: true }).click();
+    expect(returned()).toBe(target);
+    await page.getByRole('tab', { name: '更新历史', exact: true }).click();
+    await page.getByPlaceholder('名称、改动或版本号').fill('射程');
+    expect(returned()).toBe(target);
+    await page.getByRole('button', { name: '清除历史筛选', exact: true }).click();
+    expect(returned()).toBe(target);
+    await page.getByPlaceholder('名称、改动或版本号').fill('射程');
+    await page.reload();
+    await expect(page.getByPlaceholder('名称、改动或版本号')).toHaveValue('射程');
+    await page.goBack();
+    await expect(page.getByRole('link', { name: '回开一局', exact: true })).toBeVisible();
+    await page.goForward();
+    expect(returned()).toBe(target);
+    const detailURL = page.url(),
+      context = await browser.newContext({ viewport: { width, height: 900 } });
+    try {
+      await context.addInitScript(
+        (state) => localStorage.setItem('aoe2-start-game-v1', JSON.stringify({ version: 1, state: { ...state, choice: { ...state.choice, civ: 'Franks' } } })),
+        before,
+      );
+      const fresh = await context.newPage();
+      collect(fresh);
+      await fresh.goto(detailURL);
+      await expect(fresh.getByRole('heading', { level: 1, name: /不列颠/ })).toBeVisible();
+      await fresh.getByRole('link', { name: '回开一局', exact: true }).click();
+      await expect(fresh.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+      await expect.poll(() => homeState676(fresh.url()).choice?.civ).toBe('Mongols');
+      expect(homeState676(fresh.url())).toEqual(before);
+    } finally {
+      await context.close();
+    }
+    await page.getByRole('link', { name: '回开一局', exact: true }).click();
+    await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+    expect(homeState676(page.url())).toEqual(before);
+    await noOverflow(page);
+    expect(errors).toEqual([]);
+  });
 
 const WIDTHS = [360, 375, 390, 1280] as const;
 
@@ -64,7 +141,11 @@ test.describe('首页开一局 #592', () => {
     await expect(page.getByTestId('scene-Franks').getByText(/期限前/)).toBeVisible();
     await expect(franks).toBeVisible();
     await expect(page.getByTestId('scenario-suggestions')).toContainText('城堡时代场景建议');
-    await expect(page.getByRole('link', { name: '查看法兰克', exact: true })).toHaveAttribute('href', /#\/civ\/Franks$/);
+    const view = page.getByRole('link', { name: '查看法兰克', exact: true });
+    await expect(view).toHaveAttribute('href', /#\/civ\/Franks\?returnTo=/);
+    const source = new URLSearchParams((await view.getAttribute('href'))!.split('?')[1]).get('returnTo');
+    expect(source).toMatch(/^\/\?sgv=1&sg=/);
+    expect(JSON.parse(new URLSearchParams(source!.slice(2)).get('sg')!).choice.lane).toBe('pocket');
     await page.getByTestId('start-back').click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');
     await expect(page.getByRole('button', { name: /^中路/ })).toHaveAttribute('aria-pressed', 'true');

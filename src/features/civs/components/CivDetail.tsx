@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { startReturnPath } from '../../../domain/startGameReturn';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
@@ -29,6 +30,7 @@ import { civDisplayText } from '../displayNames';
 import CivProfessionalView from './CivProfessionalView';
 import './civOverview.css';
 import './civRelatedTools.css';
+import './civ-start-return.css';
 
 function OverviewCard({
   title,
@@ -93,6 +95,7 @@ function SameDlcCivs({ list }: { list: Civ[] }) {
 
 export default function CivDetail() {
   const { en = '' } = useParams();
+  const homeReturn = startReturnPath(useLocation().search);
   const c = civByEn(en);
   const core = useCore();
   useEffect(() => {
@@ -152,6 +155,14 @@ export default function CivDetail() {
         </span>
       ))}
       tablistTestId="civ-tabs"
+      tabsTop={
+        homeReturn ? (
+          <div className="civ-start-return">
+            <Link to={homeReturn}>回开一局</Link>
+            <small>返回文明步，保留原选择</small>
+          </div>
+        ) : null
+      }
       afterTabs={
         <nav className="civ-related-tools" aria-label="相关工具" data-testid="civ-related-tools">
           <span className="lbl">相关工具</span>

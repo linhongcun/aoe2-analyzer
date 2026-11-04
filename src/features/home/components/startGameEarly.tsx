@@ -1,5 +1,6 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 import { Link } from 'react-router-dom';
+import { startCivPath } from '../../../domain/startGameReturn';
 import { civByEn } from '../../../data';
 import {
   armTeam,
@@ -224,7 +225,7 @@ export function Actions({ state, onChange, finish = false }: { state: StartState
   );
 }
 
-export function CivRow({ en, reason, pressed, onPick }: { en: string; reason?: string; pressed: boolean; onPick: () => void }) {
+export function CivRow({ en, reason, pressed, onPick, state }: { en: string; reason?: string; pressed: boolean; onPick: () => void; state: StartState }) {
   const civ = civByEn(en);
   if (!civ) return null;
   return (
@@ -240,7 +241,7 @@ export function CivRow({ en, reason, pressed, onPick }: { en: string; reason?: s
           {reason ? <span className="start-tag">{EDITORIAL}</span> : null}
         </span>
       </button>
-      <Link className="start-link" to={`/civ/${civ.en}`} aria-label={`查看${civ.zh}`}>
+      <Link className="start-link" to={startCivPath(civ.en, state)} aria-label={`查看${civ.zh}`}>
         查看
       </Link>
     </div>

@@ -14,6 +14,55 @@ async function select(page: Page, lane = '边路', expand = true) {
   await expect(page.getByTestId('scene-Britons').getByText(/^城堡时代 ·/)).toBeVisible();
   if (expand) for (const why of await page.getByTestId('scenario-suggestions').getByText('为什么', { exact: true }).all()) await why.click();
 }
+
+test('#676 @1280 机制查看返回保留原文明与两套独立配置', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+  await select(page, '中路', false);
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  for (const [label, value] of [
+    ['军事投入', '2000'],
+    ['场景距离', '10'],
+    ['支援期限', '1200'],
+    ['部队状态', 'ready'],
+    ['畜牧状态', 'false'],
+  ])
+    await page.getByLabel(label!, { exact: true }).selectOption(value!);
+  await page.getByText('封建到城堡：路线衔接', { exact: true }).click();
+  for (const [label, value] of [
+    ['封建军事额度（工秒）', '6000'],
+    ['城堡追加额度（工秒）', '600'],
+    ['计划保留封建兵数', '12'],
+    ['城堡新增上限', '0'],
+    ['路线支援距离（格）', '60'],
+    ['路线观察窗口（秒）', '60'],
+  ])
+    await page.getByLabel(label!, { exact: true }).selectOption(value!);
+  await page.getByTestId('scene-Huns').getByRole('button', { name: /匈奴/ }).click();
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await page.getByRole('button', { name: '修改文明', exact: true }).click();
+  const snap = () => JSON.parse(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('sg') ?? '{}');
+  await expect.poll(() => snap().current).toBe('civ');
+  const before = snap();
+  expect(before.sceneConfig.budget).toBe(2000);
+  expect(before.routeConfig.feudalBudget).toBe(6000);
+  await page.getByRole('link', { name: '查看法兰克', exact: true }).click();
+  await page.reload();
+  await page.getByRole('link', { name: '回开一局', exact: true }).click();
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+  expect(snap()).toEqual(before);
+  expect(snap().choice.civ).toBe('Huns');
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  await expect(page.getByLabel('军事投入', { exact: true })).toHaveValue('2000');
+  await page.getByText('封建到城堡：路线衔接', { exact: true }).click();
+  await expect(page.getByLabel('封建军事额度（工秒）', { exact: true })).toHaveValue('6000');
+  await expect(page.getByLabel('城堡追加额度（工秒）', { exact: true })).toHaveValue('600');
+  await expect(page.getByLabel('畜牧状态', { exact: true })).toHaveValue('false');
+  expect(errors).toEqual([]);
+});
 for (const width of [360, 375, 390, 1280]) {
   test(`#679 @${width} 边路说明与科技表中文名一致`, async ({ page }, testInfo) => {
     const errors: string[] = [];

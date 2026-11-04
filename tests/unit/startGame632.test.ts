@@ -1,5 +1,6 @@
 import { DEFAULT_SCENE, DEFAULT_FLANK_SCENE, DEFAULT_ROUTE } from '../../src/domain/startGameInputs';
 import { mapGuides } from '../../src/domain/mapGuides';
+import { startCivPath, startReturnPath } from '../../src/domain/startGameReturn';
 import { civByEn } from '../../src/data';
 import { createElement, StrictMode, useState } from 'react';
 import { act, create, type ReactTestRenderer } from 'react-test-renderer';
@@ -31,6 +32,69 @@ import {
   type StartStorage,
 } from '../../src/features/home/startGamePersistence';
 import { useStartGamePersistence } from '../../src/features/home/useStartGamePersistence';
+
+describe('#676 完整文明来源与安全返回', () => {
+  const outer = (target: string) => '?' + new URLSearchParams({ returnTo: target });
+  const maps = new Set(['arabia']);
+  it('查看不改原文明，唯一codec完整保存两配置及flags', () => {
+    const state = {
+      ...pickCiv(chooseLane(chooseMap(chooseTeamSize(armTeam(resetStart()), '4v4'), 'arabia'), 'pocket'), 'Mongols'),
+      sceneConfig: { ...DEFAULT_SCENE, budget: 2000 },
+      routeConfig: { ...DEFAULT_ROUTE, feudalBudget: 6000 },
+      prefilled: { mode: false, map: false },
+    };
+    const before = encodeStartGame(state);
+    const path = startCivPath('Britons', state),
+      search = path.slice(path.indexOf('?'));
+    expect(path).toMatch(/^\/civ\/Britons\?returnTo=/);
+    const target = startReturnPath(search);
+    expect(target).toBe('/' + encodeStartSearch({ ...state, current: 'civ' }));
+    expect(decodeStartSearch(target!.slice(1), maps)).toEqual({ kind: 'valid', state: { ...state, current: 'civ' } });
+    expect(encodeStartGame(state)).toBe(before);
+    expect(startReturnPath(search + '&tab=history&histQuery=test')).toBe(target);
+  });
+  it('不接受外站、路径变体、重复、坏编码、其它步骤或非法本局', () => {
+    const state = chooseMap(choose1v1(resetStart()), 'arabia');
+    const valid = '/' + encodeStartSearch(state);
+    for (const target of [
+      'https://example.com/',
+      'https://linhongcun.github.io/aoe2-analyzer/',
+      '//example.com/',
+      '/civ/Britons',
+      'relative',
+      '/./' + valid,
+      '/%2e/' + valid,
+      '%2F' + valid.slice(1),
+      '/\\' + valid,
+      ' ' + valid,
+      valid + ' ',
+      valid + '#x',
+      valid + '\n',
+      '/?sgv=2&sg={}',
+      '/?sgv=1&sg=%GG',
+      '/?sgv=1&sg=%C3%28',
+    ])
+      expect(startReturnPath(outer(target))).toBeNull();
+    for (const search of ['', '?returnTo=', '?returnTo=%GG', '?returnTo=%C3%28', outer(valid) + '&returnTo=' + encodeURIComponent(valid)])
+      expect(startReturnPath(search)).toBeNull();
+    for (const bad of [
+      resetStart(),
+      { ...state, extra: true },
+      { ...state, sceneConfig: { ...DEFAULT_SCENE } },
+      { ...state, choice: { ...state.choice, civ: 'Unknown' } },
+    ])
+      expect(startReturnPath(outer('/' + encodeStartSearch(bad)))).toBeNull();
+  });
+  it('needs-maps只保留安全候选，实际未知地图仍由Home拒绝且不截外层编码', () => {
+    const state = chooseMap(choose1v1(resetStart()), '中'.repeat(900));
+    const search = outer('/' + encodeStartSearch(state));
+    expect(search.length).toBeGreaterThan(START_GAME_LIMIT);
+    const target = startReturnPath(search);
+    expect(target).not.toBeNull();
+    expect(decodeStartSearch(target!.slice(1)).kind).toBe('needs-maps');
+    expect(decodeStartSearch(target!.slice(1), maps).kind).toBe('invalid');
+  });
+});
 
 it('#666 只复用有真实文明与可查来源的四图编辑稿', () => {
   expect(Object.keys(mapGuides)).toEqual(['arabia', 'arena', 'nomad', 'islands']);
