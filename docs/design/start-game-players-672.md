@@ -64,3 +64,5 @@ Home新测试声明持续放已登记routes652/mechanism652，近600行的592/63
 360/375/390/1280取实际状态图：组队三队友、已选对手摘要、1v1空/跳过摘要、Matchup两个相反单方空态；至少20张，390深色其余浅色。真实UI覆盖0/1/2/3、重复/改选/移除/上限、空己方TeamFit、双方完整/全空/双向单方/invalid、刷新/分享冲突local/历史与676返回。PC主验收，窄屏自然换行/抽屉；无横溢/consoleerror/pageerror、触点≥44×44、字≥12px、WCAG AA，沿现有语义tokens与Lucide。
 
 最终精确SHA/tree、实际build/test/20图由实现者之外代理独立终审；full适用CI、main/nativePages、公开专项/身份/manifest、正式tag/source/两次bytes/全部文件hash/completedobserver全部实际PASS后标已部署关闭。
+
+新增 Home 对手/队友 picker 与显式 Matchup picker 在桌面也使用局部最小44px高度；不修改共享 picker。按实际1280几何核对，不借窄屏默认尺寸冒充桌面通过。

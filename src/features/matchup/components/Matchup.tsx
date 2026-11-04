@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import RushDefense from './RushDefense';
+import './matchup-pair.css';
 import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
@@ -43,7 +44,7 @@ export default function Matchup() {
   const drill = data && a && e ? rushDrill(data, a.en, e.en, rushGuide(params.get('rush'))) : null;
   const counters = core && a && e ? filterCounterUnits(a.en, e.ty, core.units) : [];
   return (
-    <section id="matchup" className="pane">
+    <section id="matchup" className={params.has('pair') ? 'pane matchup-explicit' : 'pane'}>
       <ListHead title="对局助手" desc="根据双方文明给出反制建议" />
       <div className="bar fbar">
         我的文明 <CivPicker id="ma" label="我的文明" value={a?.en ?? ''} none="未选择" onChange={(en) => pick('me', en)} /> 对手文明{' '}
