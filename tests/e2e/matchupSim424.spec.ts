@@ -405,7 +405,10 @@ for (const width of [360, 375, 390, 1280])
           await route.abort('failed');
         });
         await page.goto('./#/matchup?me=Franks&opp=Muisca&pair=explicit&rush=archers');
-        await expect(page.getByRole('alert')).toContainText('对局资料加载失败，已选文明保留。');
+        const errorRegion = page.getByTestId('matchup-data-error');
+        await expect(errorRegion.getByRole('alert')).toHaveText('对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。');
+        await expect(errorRegion).toContainText('已选文明保留。');
+        await expect(errorRegion.getByRole('button', { name: '重试资料', exact: true })).toBeVisible();
         await expect(page.locator('#mres, .champi-age-card')).toHaveCount(0);
         await expect.poll(() => log.failed.length).toBe(1);
         expect(log.aborted.size).toBe(1);
@@ -414,7 +417,7 @@ for (const width of [360, 375, 390, 1280])
         expect(retryBox.width).toBeGreaterThanOrEqual(44);
         expect(retryBox.height).toBeGreaterThanOrEqual(44);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-        expect((await new AxeBuilder({ page }).include('[role="alert"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+        expect((await new AxeBuilder({ page }).include('[data-testid="matchup-data-error"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
         await pick(page, 'ma', 'Muisca');
         await pick(page, 'me', 'Franks');
         await page.getByRole('combobox', { name: '对手打法' }).selectOption('towers');
@@ -492,7 +495,10 @@ for (const reject of [false, true])
           await expect(page.locator('#mres')).toBeVisible();
           await expect(page.locator('.champi-ages')).toHaveCount(0);
         } else if (reject) {
-          await expect(page.getByRole('alert')).toContainText('对局资料加载失败，已选文明保留。');
+          const errorRegion = page.getByTestId('matchup-data-error');
+          await expect(errorRegion.getByRole('alert')).toHaveText('对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。');
+          await expect(errorRegion).toContainText('已选文明保留。');
+          await expect(errorRegion.getByRole('button', { name: '重试资料', exact: true })).toBeVisible();
           await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Muisca');
           await expect(page.locator('#me')).toHaveAttribute('data-value', 'Franks');
           await expect(page.locator('#mres, .champi-ages')).toHaveCount(0);

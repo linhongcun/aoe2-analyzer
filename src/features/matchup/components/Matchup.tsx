@@ -142,12 +142,15 @@ export default function Matchup() {
         e &&
         m &&
         (error ? (
-          <p role="alert">
-            对局资料加载失败，已选文明保留。
-            <button type="button" style={{ minHeight: 44, minWidth: 44 }} onClick={retry}>
-              重试资料
-            </button>
-          </p>
+          <div data-testid="matchup-data-error">
+            <p role="alert">对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。</p>
+            <p>
+              已选文明保留。
+              <button type="button" style={{ minHeight: 44, minWidth: 44 }} onClick={retry}>
+                重试资料
+              </button>
+            </p>
+          </div>
         ) : !core || !data ? (
           <Loading />
         ) : (
