@@ -289,6 +289,9 @@ export function MapStep({ state, onChange }: { state: StartState; onChange: Upda
       <p className="start-why">输入中文或英文名搜索，或从目录中选择这局的地图。</p>
       <p className="start-k">建议</p>
       <EmptySlot />
+      <p className="start-hint" data-testid="start-scenario-scope">
+        机制场景建议目前仅支持阿拉伯半岛的组队 <span className="num nw">4v4</span>，且需选择路位（中路或边路）；其它条件暂无机制建议，仍可自主选择文明。
+      </p>
       <div className="start-rowhead">
         <p className="start-col-title">地图目录</p>
         <Link className="start-link" to="/maps">

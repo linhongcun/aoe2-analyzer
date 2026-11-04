@@ -18,7 +18,7 @@ function note(state: StartState): string {
   if (state.current === 'mode') return '先选单挑或组队，也可以跳过。';
   if (state.current === 'lane') return '按队伍安排选择路位，也可以跳过。';
   if (state.current === 'civ' && state.lobby && state.choice.mode === 'team' && state.choice.mapId && !decisionSteps(state).includes('lane'))
-    return '路位尚未选择。可点「补路位」查看该侧场景建议，也可以自主选择文明。';
+    return '路位尚未选择。可点「补路位」补选，也可以自主选择文明。';
   return '点已完成的步骤可返回修改。';
 }
 

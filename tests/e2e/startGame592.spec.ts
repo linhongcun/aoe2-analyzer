@@ -106,7 +106,127 @@ test.describe('首页开一局 #592', () => {
     await expect(page.getByTestId('start-steps')).toContainText('路位');
   });
 
+  test('#670 大厅补路位不承诺未覆盖条件有机制建议', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+    await page.goto('./#/');
+    for (const [size, map] of [
+      ['2v2', /阿拉伯半岛/],
+      ['4v4', /竞技场/],
+    ] as const) {
+      await page.getByTestId('start-lobby').click();
+      await page.getByRole('button', { name: '修改模式和地图', exact: true }).click();
+      await page.getByRole('button', { name: /组队随机地图/ }).click();
+      await page.getByRole('button', { name: size, exact: true }).click();
+      await page.getByRole('button', { name: map }).click();
+      await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+      expect(await page.locator('.start-note').innerText()).not.toMatch(/补路位.*查看.*建议/);
+      await page.getByRole('button', { name: '补路位', exact: true }).click();
+      await page.getByRole('button', { name: /^中路/ }).click();
+      await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
+      await expect(page.getByTestId('start-step')).toContainText('当前条件暂无机制建议');
+      await page.getByRole('button', { name: /法兰克/ }).click();
+      await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
+      await noOverflow(page);
+      await page.getByRole('button', { name: '完成本局', exact: true }).click();
+      await page.getByRole('button', { name: '再开一局', exact: true }).click();
+    }
+    expect(errors).toEqual([]);
+  });
+
   for (const width of WIDTHS) {
+    test(`#670 @${width} 选地图前说明机制范围，缺条件仍可选文明`, async ({ page }, testInfo) => {
+      await page.setViewportSize({ width, height: 900 });
+      const errors: string[] = [];
+      page.on('pageerror', (error) => errors.push(error.message));
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
+      const step = page.getByTestId('start-step');
+      const scope = page.getByTestId('start-scenario-scope');
+      const mapScope = async () => {
+        await expect(step).toHaveAttribute('data-step', 'map');
+        await expect(scope).toBeVisible();
+        const copy = await scope.innerText();
+        expect(copy).toMatch(/机制.*仅/);
+        expect(copy).toContain('阿拉伯半岛');
+        expect(copy).toMatch(/组队\s*4v4/);
+        expect(copy).toMatch(/需.*路位/);
+        expect(copy).toContain('暂无机制建议');
+        expect(copy).toContain('自主选择文明');
+        await noOverflow(page);
+      };
+      const unsupported = async () => {
+        await expect(step).toHaveAttribute('data-step', 'civ');
+        await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
+        await expect(step).toContainText('当前条件暂无机制建议');
+        await expect(page.getByRole('searchbox', { name: '搜索文明', exact: true })).toBeVisible();
+        await noOverflow(page);
+      };
+      const chooseFranks = async () => {
+        await page.getByRole('button', { name: /法兰克/ }).click();
+        await page.getByRole('button', { name: '完成本局', exact: true }).click();
+        await expect(page.getByTestId('start-summary')).toContainText('法兰克');
+      };
+      const teamMap = async () => {
+        await page.getByRole('button', { name: /组队随机地图/ }).click();
+        await page.getByRole('button', { name: '4v4', exact: true }).click();
+        await mapScope();
+      };
+      const capture = async (state: string) => {
+        await page.locator('#home').screenshot({
+          path: testInfo.outputPath(`scope670-${state}-${width}.png`),
+          style: 'header.topbar, .skip-link { visibility: hidden !important; }',
+        });
+      };
+
+      await page.goto('./#/');
+      await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+      await mapScope();
+      await capture('map');
+      await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+      await unsupported();
+      await chooseFranks();
+
+      await page.getByRole('button', { name: '再开一局', exact: true }).click();
+      await teamMap();
+      await page.getByRole('button', { name: /竞技场/ }).click();
+      await page.getByRole('button', { name: /^中路/ }).click();
+      await unsupported();
+      await chooseFranks();
+
+      await page.getByRole('button', { name: '再开一局', exact: true }).click();
+      await teamMap();
+      await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+      await page.getByTestId('start-skip').click();
+      await unsupported();
+      await expect(page.getByRole('button', { name: '补路位', exact: true })).toHaveCount(0);
+      await page.getByTestId('start-back').click();
+      await page.getByRole('button', { name: /^中路/ }).click();
+      await expect(page.getByTestId('scene-Franks')).toContainText('预算可负担');
+      await noOverflow(page);
+      await chooseFranks();
+
+      await page.getByRole('button', { name: '再开一局', exact: true }).click();
+      await page.getByTestId('start-lobby').click();
+      await page.getByRole('button', { name: '修改模式和地图', exact: true }).click();
+      await teamMap();
+      await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+      await unsupported();
+      await expect(page.getByRole('button', { name: '补路位', exact: true })).toBeVisible();
+      await capture('missing-lane');
+      await page.getByRole('button', { name: '补路位', exact: true }).click();
+      await page.getByRole('button', { name: /^边路/ }).click();
+      await expect(page.getByTestId('scene-Britons')).toContainText('预算可负担');
+      await expect(page.getByTestId('scenario-suggestions')).toContainText('不是整局强度榜，也不覆盖全部文明');
+      await noOverflow(page);
+      expect(errors).toEqual([]);
+    });
+
     test(`#673 @${width} 三条开局路径只显示玩家能用的说明`, async ({ page }, testInfo) => {
       await page.setViewportSize({ width, height: 900 });
       const errors: string[] = [];
