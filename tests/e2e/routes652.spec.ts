@@ -152,6 +152,194 @@ test('#672 @1280 冷文明模块失败重试保留参与者和两套配置', asy
   }
 });
 
+async function flank652(page: Page) {
+  await page.goto('./#/');
+  await page.getByRole('button', { name: /组队随机地图/ }).click();
+  await page.getByRole('button', { name: '4v4', exact: true }).click();
+  await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+  await page.getByRole('button', { name: /^边路/ }).click();
+  await expect(page.getByTestId('scene-Britons')).toBeVisible();
+}
+
+test('#652方案 @1280 中路四方案真实计费且畜牧独立，零固定费仍按预算买兵', async ({ page }) => {
+  await team672(page);
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  await page.getByLabel('军事投入', { exact: true }).selectOption('2000');
+  const plan = page.getByLabel('本局统一科技方案', { exact: true }),
+    card = page.getByTestId('scene-Huns');
+  await expect(plan.locator('option')).toHaveCount(4);
+  expect(await plan.locator('option').evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual([
+    'none',
+    'attack-1',
+    'armor',
+    'common',
+  ]);
+  await card.getByText('比较科技方案', { exact: true }).click();
+  await expect(card.locator('[data-tech-plan]')).toHaveCount(4);
+  for (const [id, count, fixed] of [
+    ['none', 4, '283.019'],
+    ['attack-1', 3, '566.038'],
+    ['armor', 3, '566.038'],
+    ['common', 3, '849.057'],
+  ] as const) {
+    const row = card.locator(`[data-tech-plan="${id}"]`);
+    await expect(row.locator('.start-plan-result')).toContainText(`可负担 ${count} 兵`);
+    await expect(row.locator('.start-plan-quote')).toContainText(`合计 ${fixed} 工秒`);
+    await expect(row.locator('.start-plan-quote > div').first()).toContainText('畜牧');
+    await expect(row).toContainText('没有侦骑升级骑士费用');
+    await expect(row).not.toContainText('弩手升级报价');
+  }
+  await page.getByLabel('畜牧状态', { exact: true }).selectOption('false');
+  const none = card.locator('[data-tech-plan="none"]');
+  await expect(none).toContainText('无资源支出合计 0 工秒');
+  await expect(none.locator('.start-plan-result')).toContainText('可负担 5 兵');
+  await none.getByRole('button', { name: /用于本局比较$/ }).click();
+  await expect(plan).toHaveValue('none');
+  await expect(page.getByLabel('畜牧状态', { exact: true })).toHaveValue('false');
+  await page.getByLabel('军事投入', { exact: true }).selectOption('0');
+  await expect(card.locator(':scope > .start-why')).toContainText('剩余不足一兵');
+  await expect(none.locator('.start-plan-result')).toContainText('可负担 0 兵');
+  await expect(none).not.toContainText('固定投入不足');
+  await expect(page.getByTestId('scenario-suggestions').getByText('到场数量 / 时间侧重', { exact: true })).toHaveCount(0);
+});
+
+test('#652方案 @1280 采用只改方案并重算主比较，固定参考对手不随己方方案或预算变化', async ({ page }) => {
+  await flank652(page);
+  for (const en of ['Persians', 'Mayans']) await player672(page, 'start-add-mate', en);
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  await page.getByLabel('军事投入', { exact: true }).selectOption('12000');
+  await page.getByText('封建到城堡：路线衔接', { exact: true }).click();
+  await page.getByLabel('封建军事额度（工秒）', { exact: true }).selectOption('6000');
+  await page.getByLabel('城堡追加额度（工秒）', { exact: true }).selectOption('600');
+  await page
+    .getByTestId('scene-Franks')
+    .getByRole('button', { name: /法兰克/ })
+    .click();
+  await player672(page, 'start-opponent', 'Japanese');
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await page.getByRole('button', { name: '修改文明', exact: true }).click();
+  await expect.poll(() => state672(page).current).toBe('civ');
+  const before = state672(page),
+    card = page.getByTestId('scene-Britons');
+  expect(before.choice).toMatchObject({ civ: 'Franks', opponent: 'Japanese', mates: ['Persians', 'Mayans'] });
+  await expect(card.locator(':scope > .start-k')).toHaveText('理论先手机会侧重');
+  await card.getByText('为什么', { exact: true }).click();
+  await card.getByText('查看计算输入', { exact: true }).click();
+  const target = card.locator('p').filter({ hasText: '场景参考对手，非本局已选对手：' });
+  await expect(target).toBeVisible();
+  await expect(target).toContainText('固定共同包');
+  await expect(target).toContainText('射程 7 · 速度 0.96 · 攻击周期 2 秒');
+  const fixedTarget = await target.innerText();
+  await card.getByText('比较科技方案', { exact: true }).click();
+  const adopt = card.locator('[data-tech-plan="none"]').getByRole('button', { name: /用于本局比较$/ });
+  await adopt.click();
+  const chosen = { ...before, sceneConfig: { ...before.sceneConfig, techPlan: 'none' } };
+  await expect.poll(() => state672(page)).toEqual(chosen);
+  await expect(adopt).toHaveAttribute('aria-pressed', 'true');
+  await expect(card.locator(':scope > .start-k')).toHaveText('其它候选 · 可比较侧重');
+  await expect(card.locator(':scope > .start-why')).toContainText('无先手机会');
+  await expect(card.locator('p').filter({ hasText: '预算可负担' })).toContainText('预算可负担 48 兵');
+  for (const civ of ['Britons', 'Ethiopians', 'Franks', 'Mayans', 'Vietnamese'])
+    await expect(page.getByTestId(`scene-${civ}`).locator(':scope > p').filter({ hasText: '当前方案：' })).toContainText('无可选弓线科技');
+  await expect(target).toHaveText(fixedTarget);
+  await expect(card.locator('p').filter({ hasText: '同方案解释对照：' })).toContainText('射程 5');
+  await adopt.click();
+  expect(state672(page)).toEqual(chosen);
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  await expect(page.getByLabel('本局统一科技方案', { exact: true })).toHaveValue('none');
+  await page.getByLabel('军事投入', { exact: true }).selectOption('0');
+  await expect(target).toHaveText(fixedTarget);
+  await expect(card.locator('p').filter({ hasText: '预算可负担' })).toContainText('预算可负担 0 兵');
+  expect(state672(page).choice).toEqual(before.choice);
+  expect(state672(page).routeConfig).toEqual(before.routeConfig);
+});
+
+test('#652方案 @1280 非默认方案与两账参与者经摘要、分享刷新、纯local及查看返回保持一致', async ({ page, browser }) => {
+  await flank652(page);
+  for (const en of ['Persians', 'Mayans']) await player672(page, 'start-add-mate', en);
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  for (const [label, value] of [
+    ['军事投入', '2000'],
+    ['本局统一科技方案', 'attack-1-armor'],
+    ['场景距离', '2'],
+    ['反应延迟', '1.25'],
+    ['后撤空间', '4'],
+  ])
+    await page.getByLabel(label!, { exact: true }).selectOption(value!);
+  const label = await page.getByLabel('本局统一科技方案', { exact: true }).locator('option:checked').innerText();
+  await page.getByText('封建到城堡：路线衔接', { exact: true }).click();
+  for (const [name, value] of [
+    ['封建军事额度（工秒）', '6000'],
+    ['城堡追加额度（工秒）', '600'],
+    ['计划保留封建兵数', '12'],
+    ['城堡新增上限', '0'],
+    ['路线支援距离（格）', '60'],
+    ['路线观察窗口（秒）', '60'],
+  ])
+    await page.getByLabel(name!, { exact: true }).selectOption(value!);
+  await page
+    .getByTestId('scene-Britons')
+    .getByRole('button', { name: /不列颠/ })
+    .click();
+  await player672(page, 'start-opponent', 'Japanese');
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await expect.poll(() => state672(page).current).toBeNull();
+  const expected = state672(page),
+    url = page.url(),
+    summary = page.getByTestId('start-scene-summary');
+  expect(expected.choice).toMatchObject({ civ: 'Britons', opponent: 'Japanese', mates: ['Persians', 'Mayans'] });
+  expect(expected.sceneConfig).toMatchObject({ techPlan: 'attack-1-armor', budget: 2000, distance: 2, reaction: 1.25, room: 4 });
+  expect(expected.routeConfig).toEqual({ feudalBudget: 6000, castleBudget: 600, survivors: 12, newLimit: 0, husbandry: true, distance: 60, deadline: 60 });
+  await expect(summary).toContainText(label);
+  await summary.getByText('查看本局场景结果', { exact: true }).click();
+  const result = summary.locator('p').filter({ hasText: '预算可负担' });
+  await expect(result).toContainText('预算可负担 3 兵 · 科技及升级 1214.784 工秒 · 每兵 235.024 工秒');
+  const evidence = await result.innerText();
+  for (const kind of ['url', 'local']) {
+    const context = await browser.newContext();
+    try {
+      const seed =
+        kind === 'url'
+          ? {
+              ...expected,
+              sceneConfig: { ...expected.sceneConfig, techPlan: 'common' },
+              choice: { ...expected.choice, civ: 'Franks', opponent: 'Britons', mates: ['Huns'] },
+            }
+          : expected;
+      await context.addInitScript((state) => localStorage.setItem('aoe2-start-game-v1', JSON.stringify({ version: 1, state })), seed);
+      const fresh = await context.newPage(),
+        base = new URL(url);
+      base.hash = '/';
+      await fresh.goto(kind === 'url' ? url : base.href);
+      await expect(fresh.getByTestId('start-scene-summary')).toContainText(label);
+      expect(state672(fresh)).toEqual(expected);
+      await fresh.reload();
+      await expect(fresh.getByTestId('start-scene-summary')).toContainText(label);
+      expect(state672(fresh)).toEqual(expected);
+      await fresh.getByText('查看本局场景结果', { exact: true }).click();
+      await expect(fresh.getByTestId('start-scene-summary').locator('p').filter({ hasText: '预算可负担' })).toHaveText(evidence);
+      await expect(fresh.getByTestId('start-route-summary')).toContainText('独立封建额度 6000 工秒 · 城堡追加 600 工秒');
+      await fresh.getByRole('button', { name: '修改文明', exact: true }).click();
+      await expect(fresh.getByTestId('scene-Britons')).toBeVisible();
+      await expect.poll(() => state672(fresh).current).toBe('civ');
+      const atCivil = state672(fresh);
+      expect(atCivil.sceneConfig).toEqual(expected.sceneConfig);
+      expect(atCivil.routeConfig).toEqual(expected.routeConfig);
+      expect(atCivil.choice).toEqual(expected.choice);
+      await fresh.getByRole('link', { name: '查看法兰克', exact: true }).click();
+      await fresh.reload();
+      await fresh.getByRole('link', { name: '回开一局', exact: true }).click();
+      await expect(fresh.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+      await expect.poll(() => state672(fresh)).toEqual(atCivil);
+      await fresh.getByText('调整场景与投入', { exact: true }).click();
+      await expect(fresh.getByLabel('本局统一科技方案', { exact: true })).toHaveValue('attack-1-armor');
+      for (const [i, en] of expected.choice.mates.entries()) await expect(fresh.locator('#start-mate-' + i)).toHaveAttribute('data-value', en);
+    } finally {
+      await context.close();
+    }
+  }
+});
+
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['dark', 'light']) {
     test(`路线 ${width} ${theme} 两阶段账本与布局`, async ({ page }, info) => {

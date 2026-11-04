@@ -5,6 +5,8 @@ import {
   DEFAULT_SCENE,
   SCENARIO_CIVS,
   scenarioRows,
+  scenarioComparisons,
+  scenePlanOptions,
   scenarioProfile,
   scenarioVersion,
   type SceneConfig,
@@ -12,11 +14,11 @@ import {
   type SceneRow,
 } from '../../../domain/positionScenarios';
 import { pickCiv, type StartState } from '../../../domain/startGame';
-import { sceneSupported } from '../../../domain/startGameInputs';
+import { isSceneTechPlan, sceneSupported, type SceneTechPlan } from '../../../domain/startGameInputs';
 import { CivRow, type Update } from './startGameEarly';
 import RouteContinuity from './RouteContinuity';
+import TechnologyPlans, { SceneComparisonFacts, SceneCostQuote, SceneTechnologies, SceneValue as Value, technologyPlanLabel } from './TechnologyPlans';
 
-const number = (n: number) => Number(n.toFixed(3)).toString();
 function sceneLabel(row: SceneRow, lane: 'flank' | 'pocket') {
   if (row.status !== 'ok') return row.reason;
   if (lane === 'pocket') return row.preferred ? '到场数量 / 时间侧重' : '到场对照候选';
@@ -24,14 +26,6 @@ function sceneLabel(row: SceneRow, lane: 'flank' | 'pocket') {
   const chances = row.opening?.opportunities;
   if (chances == null || !Number.isFinite(chances) || chances < 0) return '人数侧重 · 先手机会未核实';
   return chances > 0 ? '理论先手机会侧重' : '人数侧重 · 无先手机会';
-}
-function Value({ n, unit = '' }: { n: number; unit?: string }) {
-  return (
-    <span className="num nw">
-      {number(n)}
-      {unit}
-    </span>
-  );
 }
 export default function ScenarioSuggestions({ state, onChange }: { state: StartState; onChange: Update }) {
   const lane = state.choice.lane!;
@@ -53,12 +47,21 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
     };
   }, [attempt]);
   const rows = useMemo(() => (context ? scenarioRows(context, lane, cfg) : []), [context, lane, cfg]);
+  const comparisons = useMemo(() => (context ? scenarioComparisons(context, lane, cfg) : {}), [context, lane, cfg]);
+  const options = useMemo(() => (context ? scenePlanOptions(context, lane) : []), [context, lane]);
+  const planLabel = technologyPlanLabel(options, cfg.techPlan);
   const update = <K extends keyof SceneConfig>(key: K, value: SceneConfig[K]) =>
     onChange((current) =>
       sceneSupported(current.choice) && current.choice.lane === lane
         ? { ...current, sceneConfig: { ...(current.sceneConfig ?? (lane === 'flank' ? DEFAULT_FLANK_SCENE : DEFAULT_SCENE)), [key]: value } }
         : current,
     );
+  const adoptPlan = (plan: SceneTechPlan) =>
+    onChange((current) => {
+      if (!sceneSupported(current.choice) || current.choice.lane !== lane || !isSceneTechPlan(plan, lane)) return current;
+      const currentConfig = current.sceneConfig ?? (lane === 'flank' ? DEFAULT_FLANK_SCENE : DEFAULT_SCENE);
+      return currentConfig.techPlan === plan ? current : { ...current, sceneConfig: { ...currentConfig, techPlan: plan } };
+    });
   const version = scenarioVersion();
   const selectedOutside = state.choice.civ && !SCENARIO_CIVS[lane].includes(state.choice.civ);
   const selectionReason = selectedOutside && context ? scenarioProfile(context, state.choice.civ!, lane, cfg).reason || '不在此路位首批比较范围' : '机制待核验';
@@ -68,7 +71,9 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
       <p className="start-hint">
         阿拉伯 <span className="num nw">4v4</span> · {lane === 'flank' ? '边路弩手' : '中路骑士'}。仅比较本场景指标，不是整局强度榜，也不覆盖全部文明。
       </p>
-      <p className="start-hint">已升城堡，建筑和人口就绪，资源预付、科技已完成。军事投入预算不等于同一游戏分钟。</p>
+      <p className="start-hint">
+        已升城堡，建筑和人口就绪，资源预先到位。只有付足固定投入且至少可买一兵的方案，才按科技和升级已完成计算；未付方案仅报费用。军事投入预算不等于同一游戏分钟。
+      </p>
       {selectedOutside ? (
         <p role="status">
           已选{civByEn(state.choice.civ!)?.zh}保留；{selectionReason}，不能据此判为弱；可以保留文明并考虑其它路线。
@@ -78,6 +83,27 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
         <summary>调整场景与投入</summary>
         <p className="start-hint">以下是可调整假设，不是阿拉伯地图距离统计。本局会保留输入；改变模式、地图或路位后重置。</p>
         <div className="start-scene-controls">
+          <label>
+            本局统一科技方案
+            <select
+              aria-label="本局统一科技方案"
+              value={cfg.techPlan}
+              disabled={!context || failed || !options.length}
+              onChange={(event) => {
+                if (isSceneTechPlan(event.target.value, lane)) adoptPlan(event.target.value);
+              }}
+            >
+              {options.length ? (
+                options.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))
+              ) : (
+                <option value={cfg.techPlan}>{failed ? '已选方案保留（资料加载失败）' : '已选方案保留（名称加载中）'}</option>
+              )}
+            </select>
+          </label>
           <label>
             军事投入（标准采集工秒）
             <select aria-label="军事投入" value={cfg.budget} onChange={(e) => update('budget', +e.target.value)}>
@@ -150,13 +176,17 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
             </>
           )}
         </div>
+        <p className="start-hint">
+          所有文明按同一方案比较，卡内可对照其它方案；改方案不会选择文明。
+          {!context ? (failed ? '科技资料加载失败，已选值保留；可在下方重试。' : '科技名称加载中，所选值保留。') : null}
+        </p>
       </details>
       <p className="start-hint">
-        投入 <span className="num nw">{cfg.budget} 工秒</span> · 距离 <Value n={cfg.distance} unit=" 格" /> ·{' '}
+        本局统一方案：{planLabel}。 投入 <span className="num nw">{cfg.budget} 工秒</span> · 距离 <Value n={cfg.distance} unit=" 格" /> ·{' '}
         {lane === 'flank' ? (
           <>
             反应 <Value n={cfg.reaction} unit=" 秒" />
-            ；目标为同科技包的参考弩手。
+            ；战术目标固定为法兰克城堡弩手，完成共同包三科技和弩手升级，目标费用独立，不随己方方案或预算改变。
           </>
         ) : (
           <>
@@ -194,11 +224,19 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
               <p className="start-k">{sceneLabel(row, lane)}</p>
               <CivRow en={row.civ} state={state} pressed={state.choice.civ === row.civ} onPick={() => onChange((c) => pickCiv(c, row.civ))} />
               <p className="start-hint">城堡时代 · {context.core.unitById[lane === 'flank' ? 24 : 38]?.zh ?? '路线兵种未核实'}</p>
+              <p className="start-hint">
+                当前方案：{planLabel}。方案科技：
+                <SceneTechnologies row={row} lane={lane} />。
+              </p>
               <p className="start-why">{sceneReason(row, lane)}</p>
+              {!row.count && (comparisons[row.civ] ?? []).some((other) => other.status === 'ok' && (other.count ?? 0) > 0) ? (
+                <p className="start-hint">当前方案无可用兵，另有其它方案可负担部队；展开下方对照后可采用，当前方案不会自动更换。</p>
+              ) : null}
               <details className="start-scene-details">
                 <summary>为什么</summary>
                 <SceneEvidence row={row} lane={lane} />
               </details>
+              <TechnologyPlans rows={comparisons[row.civ] ?? []} options={options} current={cfg.techPlan} lane={lane} onAdopt={adoptPlan} />
             </article>
           ))}
         </>
@@ -208,8 +246,17 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
         <summary>范围、科技包与来源</summary>
         <p className="start-hint">首批核验：{SCENARIO_CIVS[lane].map((c) => civByEn(c)?.zh ?? c).join('、')}。名单是机制覆盖范围，不是强势文明白名单。</p>
         <p className="start-hint">
-          {lane === 'flank' ? '共同包：弩手升级、箭羽、锥子箭、射手软甲；不自动购买扳指。' : '共同包：锻造、骑兵鳞甲；畜牧按所选状态。'}{' '}
-          科技费用先扣；研究时间未放入真实对局时间线。合法包缺项则不比较，未搜索最优科技投资。
+          共同包：
+          {context ? (
+            <>
+              {lane === 'flank'
+                ? `${context.core.unitById[24]?.zh ?? '弩手'}升级、${technologyPlanLabel(options, 'common')}；不自动购买${context.core.techById[437]?.zh ?? '额外射手科技'}。`
+                : `${technologyPlanLabel(options, 'common')}；畜牧按所选状态。`}
+            </>
+          ) : (
+            '科技名称待资料加载后核实。'
+          )}{' '}
+          科技费用先扣；研究时间未放入真实对局时间线。每文明可对照{lane === 'flank' ? '六' : '四'}种合法方案，缺项仅阻止相应方案；不提供最优科技包总分。
         </p>
         <p className="start-hint">
           经济、队友、敌军伤亡、寻路、碰撞、弹道和操作收益未计入。此快照只用于城堡时代路线；封建衔接可展开独立账本，帝王上限与特殊路线待验证。
@@ -227,14 +274,20 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
   );
 }
 export function SceneEvidence({ row, lane }: { row: SceneRow; lane: 'flank' | 'pocket' }) {
-  if (!row.stats) return <p className="start-hint">{row.reason}；仍可自主选择，不参与当前比较。</p>;
+  const hasArmy = !!row.stats && (row.count ?? 0) > 0;
+  const hasQuote = row.fixed != null && row.fixedSeconds != null && row.unitSeconds != null;
   return (
     <>
-      <p className="start-hint">
-        预算可负担 <span className="num nw">{row.count} 兵</span> · 科技及升级 <Value n={row.fixedSeconds!} unit=" 工秒" /> · 每兵{' '}
-        <Value n={row.unitSeconds!} unit=" 工秒" />
-      </p>
-      {lane === 'flank' && row.opening ? (
+      {row.status !== 'ok' ? <p className="start-hint">{row.explanation || row.reason}；仍可自主选择，不参与当前优先建议。</p> : null}
+      {hasQuote ? (
+        <p className="start-hint">
+          预算可负担 {row.count == null ? '人数未核实' : <span className="num nw">{row.count} 兵</span>} · 科技及升级{' '}
+          <Value n={row.fixedSeconds!} unit=" 工秒" /> · 每兵 <Value n={row.unitSeconds!} unit=" 工秒" />
+          {!hasArmy ? '。当前没有可用兵，固定投入仅为待完成报价。' : null}
+        </p>
+      ) : null}
+      <SceneCostQuote row={row} lane={lane} />
+      {hasArmy && lane === 'flank' && row.opening ? (
         <p className="start-hint">
           先手窗口 <Value n={row.opening.window} unit=" 秒" />
           ；每兵 <span className="num nw">{row.opening.opportunities} 次</span>条件机会。
@@ -243,62 +296,59 @@ export function SceneEvidence({ row, lane }: { row: SceneRow; lane: 'flank' | 'p
           ，不代表无伤输出。
         </p>
       ) : null}
-      {lane === 'pocket' && row.support ? (
+      {hasArmy && lane === 'pocket' && row.support ? (
         <p className="start-hint">
           行军 <Value n={row.support.travel} unit=" 秒" /> · 首兵 {row.support.first == null ? '无可负担部队' : <Value n={row.support.first} unit=" 秒" />} ·
           期限前 <span className="num nw">{row.support.count} 兵</span>。更快训练未必在每个期限多一兵，长期受预算限制。
+          {row.support.count === 0 ? '当前有可负担部队，但本期限内到场为零，不是预算不足。' : null}
         </p>
       ) : null}
-      <details className="start-scene-details">
-        <summary>查看计算输入</summary>
-        <p className="start-hint">
-          生命 <Value n={row.stats.hp} /> · 攻击 <Value n={row.stats.atk} /> · 射程 <Value n={row.stats.rng} /> · 速度 <Value n={row.stats.spd} /> · 攻击周期{' '}
-          <Value n={row.stats.rof} unit=" 秒" /> · 训练周期 <Value n={row.cycle!} unit=" 秒" />。
-          {lane === 'pocket' ? '速度用于到达计算；新训练部队还须完成首个训练周期，现成部队不等待训练。生命、攻击等未参与到场分组。' : '这些属性不额外加分。'}
-        </p>
-        <p className="start-hint">
-          单位费用：
-          {Object.entries(row.cost!).map(([k, v]) => (
-            <span className="num nw" key={k}>
-              {({ Food: '食', Wood: '木', Gold: '金', Stone: '石' } as Record<string, string>)[k]} {v}{' '}
-            </span>
-          ))}
-          。科技耗时（均假定已完成）：
-          {row.technologies?.map((t) => (
-            <span className="nw" key={t.id}>
-              {t.name} <span className="num">{t.seconds} 秒</span>；
-            </span>
-          ))}
-          。
-        </p>
-        <p className="start-hint">输入摘要 {row.signature}</p>
-      </details>
+      {hasQuote || hasArmy || row.target || row.baseline ? (
+        <details className="start-scene-details">
+          <summary>查看计算输入</summary>
+          {hasArmy && row.stats ? (
+            <p className="start-hint">
+              生命 <Value n={row.stats.hp} /> · 攻击 <Value n={row.stats.atk} /> · 射程 <Value n={row.stats.rng} /> · 速度 <Value n={row.stats.spd} /> ·
+              攻击周期 <Value n={row.stats.rof} unit=" 秒" /> · 训练周期 {row.cycle == null ? '未核实' : <Value n={row.cycle} unit=" 秒" />}。
+              {lane === 'pocket'
+                ? '速度用于到达计算；新训练部队还须完成首个训练周期，现成部队不等待训练。生命、攻击等未参与到场分组。'
+                : '这些属性不额外加分。'}
+            </p>
+          ) : null}
+          {row.technologies ? (
+            <p className="start-hint">
+              科技研究耗时（{hasArmy ? '当前部队按已完成计算' : '待完成报价，不授予属性'}；未加入对局时间线）：
+              {row.technologies?.map((t) => (
+                <span className="nw" key={t.id}>
+                  {t.name} <Value n={t.seconds} unit=" 秒" />；
+                </span>
+              ))}
+              {row.technologies.length ? null : '没有所选可选科技。'}
+            </p>
+          ) : null}
+          {row.target ? (
+            <p className="start-hint">
+              场景参考对手，非本局已选对手：{civByEn(row.target.civ)?.zh ?? '参考文明'}城堡弩手，固定共同包及弩手升级完成；射程{' '}
+              <Value n={row.target.stats.rng} /> · 速度 <Value n={row.target.stats.spd} /> · 攻击周期 <Value n={row.target.stats.rof} unit=" 秒" />
+              。独立目标费用不从己方扣除。目标输入摘要 {row.target.signature}
+            </p>
+          ) : null}
+          {row.baseline ? (
+            <p className="start-hint">
+              同方案解释对照：{civByEn(row.baseline.civ)?.zh ?? '参考文明'}；与己方使用同一所选方案。生命 <Value n={row.baseline.stats.hp} /> · 射程{' '}
+              <Value n={row.baseline.stats.rng} /> · 速度 <Value n={row.baseline.stats.spd} /> · 攻击周期 <Value n={row.baseline.stats.rof} unit=" 秒" /> · 单兵{' '}
+              <Value n={row.baseline.unitSeconds} unit=" 工秒" /> · 训练周期 <Value n={row.baseline.cycle} unit=" 秒" />
+              。解释对照输入摘要 {row.baseline.signature}
+            </p>
+          ) : null}
+          <SceneComparisonFacts row={row} />
+          {row.signature ? <p className="start-hint">输入摘要 {row.signature}</p> : null}
+        </details>
+      ) : null}
     </>
   );
 }
 
 function sceneReason(row: SceneRow, lane: 'flank' | 'pocket') {
-  if (row.status !== 'ok') return row.reason;
-  if (!row.count) return '当前条件没有可用部队，不作优先建议。';
-  if (lane === 'flank') {
-    const facts: Record<string, string> = {
-      Britons: '城堡时代步弓射程更远，可围绕弩手距离展开。',
-      Mayans: '城堡时代步弓费用更低，同一投入能维持弓线。',
-      Ethiopians: '步弓攻击更快，适合继续弓线；射速不等于实际伤害。',
-      Vietnamese: '步弓生命更高，可以继续弓线；生命未参与人数和机会分组。',
-    };
-    const chances = row.opening?.opportunities;
-    const chanceNote =
-      chances == null || !Number.isFinite(chances) || chances < 0 ? '本条件先手机会未核实。' : chances > 0 ? '本条件有理论先手机会。' : '本条件无先手机会。';
-    return (facts[row.civ] ?? '对照样本，用来观察当前弩手路线结果。') + chanceNote;
-  }
-  return (
-    (
-      {
-        Berbers: '城堡时代马厩单位费用更低，可用于骑士接力。',
-        Huns: '马厩工作更快，可更快接续生产；不保证每个期限必多一兵。',
-        Franks: '骑兵生命更高，骑士更耐打；到场分组未计耐久。',
-      } as Record<string, string>
-    )[row.civ] ?? '对照样本，用来观察当前骑士路线的到场结果。'
-  );
+  return row.explanation || row.reason || (lane === 'flank' ? '当前弩手路线结果；先手机会尚未核实。' : '当前骑士路线结果；到场结果尚未核实。');
 }

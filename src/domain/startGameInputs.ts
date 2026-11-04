@@ -1,4 +1,11 @@
 /** 本局可操作输入；轻量协议，不加载机制模型或数据。 */
+export const FLANK_TECH_PLANS = ['none', 'attack-1', 'attack-2', 'armor', 'attack-1-armor', 'common'] as const;
+export const POCKET_TECH_PLANS = ['none', 'attack-1', 'armor', 'common'] as const;
+export type SceneTechPlan = (typeof FLANK_TECH_PLANS)[number];
+export const sceneTechPlans = (lane: 'flank' | 'pocket') => (lane === 'flank' ? FLANK_TECH_PLANS : POCKET_TECH_PLANS);
+export const isSceneTechPlan = (value: unknown, lane: 'flank' | 'pocket'): value is SceneTechPlan =>
+  typeof value === 'string' && (sceneTechPlans(lane) as readonly string[]).includes(value);
+
 export interface SceneConfig {
   age: number;
   budget: number;
@@ -8,6 +15,7 @@ export interface SceneConfig {
   room: number;
   mode: 'ready' | 'new';
   husbandry: boolean;
+  techPlan: SceneTechPlan;
 }
 export interface RouteConfig {
   feudalBudget: number;
@@ -18,7 +26,17 @@ export interface RouteConfig {
   distance: number;
   deadline: number;
 }
-export const DEFAULT_SCENE: SceneConfig = { age: 3, budget: 12000, distance: 30, deadline: 120, reaction: 0.5, room: 0, mode: 'new', husbandry: true };
+export const DEFAULT_SCENE: SceneConfig = {
+  age: 3,
+  budget: 12000,
+  distance: 30,
+  deadline: 120,
+  reaction: 0.5,
+  room: 0,
+  mode: 'new',
+  husbandry: true,
+  techPlan: 'common',
+};
 export const DEFAULT_FLANK_SCENE: SceneConfig = { ...DEFAULT_SCENE, distance: 12 };
 export const DEFAULT_ROUTE: RouteConfig = { feudalBudget: 2000, castleBudget: 3000, survivors: 6, newLimit: 6, husbandry: true, distance: 30, deadline: 120 };
 export const sceneDefaults = (lane: 'flank' | 'pocket') => (lane === 'flank' ? DEFAULT_FLANK_SCENE : DEFAULT_SCENE);
@@ -32,10 +50,11 @@ const member = (v: unknown, values: readonly number[]) => typeof v === 'number' 
 export function validSceneInput(v: unknown, lane: 'flank' | 'pocket'): v is SceneConfig {
   if (
     !record(v) ||
-    !exact(v, ['age', 'budget', 'distance', 'deadline', 'reaction', 'room', 'mode', 'husbandry']) ||
+    !exact(v, ['age', 'budget', 'distance', 'deadline', 'reaction', 'room', 'mode', 'husbandry', 'techPlan']) ||
     v.age !== 3 ||
     !member(v.budget, [0, 2000, 12000]) ||
-    typeof v.husbandry !== 'boolean'
+    typeof v.husbandry !== 'boolean' ||
+    !isSceneTechPlan(v.techPlan, lane)
   )
     return false;
   return lane === 'flank'
@@ -50,6 +69,23 @@ export function validSceneInput(v: unknown, lane: 'flank' | 'pocket'): v is Scen
         ['new', 'ready'].includes(v.mode as string) &&
         v.reaction === 0.5 &&
         v.room === 0;
+}
+/** The only additive v1 migration: an otherwise exact old eight-key scene. */
+export function normalizeSceneInput(value: unknown, lane: 'flank' | 'pocket'): SceneConfig | null {
+  if (!record(value)) return null;
+  const next = Object.prototype.hasOwnProperty.call(value, 'techPlan') ? value : { ...value, techPlan: 'common' };
+  if (!validSceneInput(next, lane)) return null;
+  return {
+    age: next.age,
+    budget: next.budget,
+    distance: next.distance,
+    deadline: next.deadline,
+    reaction: next.reaction,
+    room: next.room,
+    mode: next.mode,
+    husbandry: next.husbandry,
+    techPlan: next.techPlan,
+  };
 }
 export function validRouteInput(v: unknown, lane: 'flank' | 'pocket'): v is RouteConfig {
   return (

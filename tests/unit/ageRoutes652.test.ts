@@ -243,3 +243,221 @@ it('#652 重新加载受支持的generic数值能改变封建侦骑属性', asyn
     vi.resetModules();
   }
 });
+
+describe('#652 城堡快照严格字段来源门禁', () => {
+  type Config = import('../../src/domain/startGameInputs').SceneConfig;
+  let sceneModule: typeof import('../../src/domain/positionScenarios');
+  let profileModule: typeof import('../../src/domain/castleScenarioProfile');
+  beforeAll(async () => {
+    sceneModule = await import('../../src/domain/positionScenarios');
+    profileModule = await import('../../src/domain/castleScenarioProfile');
+  });
+  const config = (overrides: Partial<Config> = {}): Config => ({ ...sceneModule.DEFAULT_SCENE, techPlan: 'none', husbandry: false, ...overrides });
+  const scene = (source = ctx, lane: 'flank' | 'pocket' = 'flank', overrides: Partial<Config> = {}) =>
+    sceneModule.scenarioProfile(source, 'Franks', lane, config(overrides));
+  const profile = (source = ctx, lane: 'flank' | 'pocket' = 'flank', overrides: Partial<Config> = {}) =>
+    profileModule.castleScenarioProfile(source, source.eco!, 'Franks', lane, config(overrides));
+
+  it.each([
+    [87, 'flank', 'none'],
+    [101, 'pocket', 'none'],
+    [103, 'flank', 'attack-1'],
+  ] as const)('普通建筑%s只凭block[0]确认，移除后即使保留u/t格仍不可用', (id, lane, techPlan) => {
+    const c = copy();
+    const blocks = c.trees.t.Franks!;
+    const block = blocks.find((entry) => entry[0] === id)!;
+    expect(block).toBeDefined();
+    expect(blocks.flatMap((entry) => entry[3]).some((cell) => cell[2] === 'b' && cell[3] === id)).toBe(false);
+    expect(scene(c, lane, { techPlan }).status).toBe('ok');
+    c.trees.t.Franks = blocks.filter((entry) => entry[0] !== id);
+    c.trees.t.Franks[0]![3].push(...block[3]);
+    expect(scene(c, lane, { techPlan }).status).toBe('unavailable');
+  });
+  it.each([
+    [87, 'flank', 'none'],
+    [101, 'pocket', 'none'],
+    [103, 'flank', 'attack-1'],
+  ] as const)('建筑%s目录与文明树时代都须已到，坏时代资料须blocked', (id, lane, techPlan) => {
+    const future = copy();
+    future.core.buildingById[id]!.age = 4;
+    expect(scene(future, lane, { techPlan }).status).toBe('unavailable');
+    const treeFuture = copy();
+    treeFuture.trees.t.Franks!.find((entry) => entry[0] === id)![1] = 6;
+    expect(scene(treeFuture, lane, { techPlan }).status).toBe('unavailable');
+    const broken = copy();
+    broken.core.buildingById[id]!.age = NaN;
+    expect(scene(broken, lane, { techPlan }).status).toBe('blocked');
+  });
+  it('未选铁匠科技和建筑不能误禁none，选中缺Gold科技则blocked', () => {
+    const c = copy();
+    const baseline = scene(c);
+    delete c.core.techById[199]!.cost.Gold;
+    expect(scene(c)).toEqual(baseline);
+    expect(scene(c, 'flank', { techPlan: 'attack-1' }).status).toBe('blocked');
+    c.core.buildingById[103]!.age = 4;
+    c.trees.t.Franks = c.trees.t.Franks!.filter((entry) => entry[0] !== 103);
+    expect(scene(c)).toEqual(baseline);
+  });
+  it.each([
+    ['id', (c: SceneContext): unknown => (c.core.techById[199]!.id = 99999)],
+    ['age', (c: SceneContext): unknown => (c.core.techById[199]!.age = 3)],
+    ['building', (c: SceneContext): unknown => (c.core.techById[199]!.b = 101)],
+    ['pre', (c: SceneContext): unknown => (c.core.techById[199]!.pre = 200)],
+    ['rt负值', (c: SceneContext): unknown => (c.core.techById[199]!.rt = -1)],
+    ['rt非有限', (c: SceneContext): unknown => (c.core.techById[199]!.rt = Infinity)],
+    ['rt缺失', (c: SceneContext): unknown => delete (c.core.techById[199] as unknown as Record<string, unknown>).rt],
+  ] as const)('选中科技%s变形是blocked，不降级为廉价包', (_field, change) => {
+    const c = copy();
+    change(c);
+    expect(scene(c, 'flank', { techPlan: 'attack-1' }).status).toBe('blocked');
+    expect(scene(c).status).toBe('ok');
+  });
+  it('完整科技来源允许原键内零费用和零研究时间，前置仍须真实匹配', () => {
+    const c = copy();
+    c.core.techById[199]!.cost = { Food: 0, Gold: 0 };
+    c.core.techById[199]!.rt = 0;
+    const result = scene(c, 'flank', { techPlan: 'attack-2' });
+    expect(result.status).toBe('ok');
+    expect(result.technologies?.map((tech) => tech.id)).toEqual([199, 200]);
+    expect(result.technologies?.find((tech) => tech.id === 199)?.seconds).toBe(0);
+    c.core.techById[200]!.pre = null;
+    expect(scene(c, 'flank', { techPlan: 'attack-2' }).status).toBe('blocked');
+  });
+  it('树中单项科技不可用只影响包含它的方案，绝不自动漏买', () => {
+    const c = copy();
+    c.trees.t.Franks!.flatMap((block) => block[3]).find((cell) => cell[2] === 't' && cell[3] === 200)![4] = 0;
+    expect(scene(c, 'flank', { techPlan: 'attack-1' }).status).toBe('ok');
+    expect(scene(c, 'flank', { techPlan: 'attack-2' }).status).toBe('unavailable');
+    expect(scene(c, 'flank', { techPlan: 'common' }).status).toBe('unavailable');
+  });
+
+  it.each([
+    ['null', null],
+    ['数组', [27]],
+    ['缺建筑键', {}],
+    ['错建筑键', { 101: 27 }],
+    ['额外建筑键', { 87: 27, 101: 27 }],
+    ['零周期', { 87: 0 }],
+    ['负周期', { 87: -1 }],
+    ['NaN', { 87: NaN }],
+    ['Infinity', { 87: Infinity }],
+    ['字符串周期', { 87: '27' }],
+  ] as const)('timeAt显式%s不能回退到有效trainTime', (_kind, timeAt) => {
+    const c = copy();
+    expect(c.eco!.units[24]!.trainTime).toBeGreaterThan(0);
+    (c.eco!.units[24] as unknown as Record<string, unknown>).timeAt = timeAt;
+    expect(scene(c).status).toBe('blocked');
+  });
+  it('真正缺省timeAt使用更新后的trainTime，合法精确键独立生效', () => {
+    const c = copy();
+    c.eco!.units[24]!.timeAt = undefined;
+    c.eco!.units[24]!.trainTime *= 2;
+    expect(scene(c).cycle).toBe(c.eco!.units[24]!.trainTime);
+    expect(scene(c).status).toBe('ok');
+    c.eco!.units[24]!.timeAt = { 87: ctx.eco!.units[24]!.trainTime / 2 };
+    c.eco!.units[24]!.trainTime = NaN;
+    const exact = scene(c);
+    expect(exact.status).toBe('ok');
+    expect(exact.cycle).toBe(ctx.eco!.units[24]!.trainTime / 2);
+  });
+  it.each([0, -1, NaN, Infinity])('缺省timeAt时trainTime=%s仍须blocked', (trainTime) => {
+    const c = copy();
+    delete c.eco!.units[24]!.timeAt;
+    c.eco!.units[24]!.trainTime = trainTime;
+    expect(scene(c).status).toBe('blocked');
+  });
+  it.each([
+    [24, 'flank', [87, 101], 0],
+    [24, 'flank', [101], 0],
+    [24, 'flank', [87], 12],
+    [38, 'pocket', [], 12],
+    [38, 'pocket', [87], 12],
+    [38, 'pocket', [101], 0],
+  ] as const)('单位%s的唯一生产地点和eco类别不能变形', (id, lane, at, unitClass) => {
+    const c = copy();
+    c.eco!.units[id]!.at = [...at];
+    c.eco!.units[id]!.class = unitClass;
+    expect(scene(c, lane).status).toBe('blocked');
+  });
+
+  it('骑士真实负附加伤害合法，数值更新仍传播到受审profile', () => {
+    expect(ctx.core.unitById[38]!.atks).toContainEqual(['村民', -3]);
+    expect(scene(ctx, 'pocket').status).toBe('ok');
+    const c = copy();
+    c.core.unitById[38]!.atks.find(([name]) => name === '村民')![1] = -7;
+    const result = profile(c, 'pocket');
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.value.stats.bonus['村民']).toBe(-7);
+  });
+  it.each([
+    ['缺主攻击', [['长矛兵', 3]]],
+    ['null元组', [null]],
+    ['元组少项', [['穿刺']]],
+    ['元组多项', [['穿刺', 5, 1]]],
+    ['非字符串类别', [[1, 5]]],
+    ['非有限伤害', [['穿刺', NaN]]],
+  ] as const)('弩手攻击表%s不抛错且blocked', (_kind, attacks) => {
+    const c = copy();
+    c.core.unitById[24]!.atks = attacks as unknown as [string, number][];
+    expect(scene(c).status).toBe('blocked');
+  });
+  it.each([
+    ['id', (c: SceneContext): unknown => (c.core.unitById[4]!.id = 448)],
+    ['age', (c: SceneContext): unknown => (c.core.unitById[4]!.age = 3)],
+    ['building', (c: SceneContext): unknown => (c.core.unitById[4]!.b = 101)],
+    ['from', (c: SceneContext): unknown => (c.core.unitById[4]!.from_ = 448)],
+    ['up', (c: SceneContext): unknown => (c.core.unitById[4]!.up = [{ Food: 1 }, 1])],
+  ] as const)('弩手祖先%s身份变形blocked，不能沿未知链累加', (_field, change) => {
+    const c = copy();
+    change(c);
+    expect(scene(c).status).toBe('blocked');
+  });
+  it('祖先文明与树中真实可用性须成立，未消费属性不扩gate', () => {
+    const civ = copy();
+    civ.core.unitById[4]!.civs = [];
+    expect(scene(civ).status).toBe('unavailable');
+    const tree = copy();
+    tree.trees.t.Franks!.flatMap((block) => block[3]).find((cell) => cell[2] === 'u' && cell[3] === 4)![4] = 0;
+    expect(scene(tree).status).toBe('unavailable');
+    const unused = copy();
+    unused.core.unitById[4]!.hp = NaN;
+    delete unused.core.unitById[4]!.cost.Gold;
+    expect(scene(unused).status).toBe('ok');
+  });
+  it.each([
+    ['升级缺Gold', (c: SceneContext): unknown => delete c.core.unitById[24]!.up![0].Gold],
+    ['升级新增Wood', (c: SceneContext): unknown => (c.core.unitById[24]!.up![0].Wood = 1)],
+    ['升级周期坏值', (c: SceneContext): unknown => (c.core.unitById[24]!.up![1] = NaN)],
+    ['弩手错id', (c: SceneContext): unknown => (c.core.unitById[24]!.id = 4)],
+    ['骑士伪祖先', (c: SceneContext): unknown => (c.core.unitById[38]!.from_ = 448)],
+    ['骑士伪升级', (c: SceneContext): unknown => (c.core.unitById[38]!.up = [{ Food: 1 }, 1])],
+  ] as const)('%s不能变成免费解锁或另一条路线', (_field, change) => {
+    const c = copy();
+    change(c);
+    expect(scene(c, _field.startsWith('骑士') ? 'pocket' : 'flank').status).toBe('blocked');
+  });
+  it('骑士none无祖先升级收费，零固定{}合法且仅付得一兵才给属性', () => {
+    const c = copy();
+    c.core.unitById[448]!.up = [{ Food: 999, Gold: 999 }, 999];
+    const zero = scene(c, 'pocket', { budget: 0 });
+    expect(zero).toMatchObject({ status: 'budget', funding: 'no-unit', fixed: {}, fixedSeconds: 0, upgrade: {}, upgradeSeconds: 0, count: 0 });
+    expect(zero.stats).toBeUndefined();
+    const one = scene(c, 'pocket', { budget: zero.unitSeconds! });
+    expect(one).toMatchObject({ status: 'ok', funding: 'funded', fixed: {}, count: 1 });
+    expect(one.stats?.hp).toBeGreaterThan(0);
+    expect(one.technologies).toEqual([]);
+  });
+  it('弩手必付升级只计一次，未付或只付固定费都不授予部队属性', () => {
+    const quote = scene();
+    expect(quote.fixed).toEqual(ctx.core.unitById[24]!.up![0]);
+    const short = scene(ctx, 'flank', { budget: quote.fixedSeconds! - 1 });
+    const fixedOnly = scene(ctx, 'flank', { budget: quote.fixedSeconds! });
+    expect(short).toMatchObject({ status: 'budget', funding: 'fixed-shortfall', count: 0 });
+    expect(fixedOnly).toMatchObject({ status: 'budget', funding: 'no-unit', count: 0 });
+    expect(short.stats).toBeUndefined();
+    expect(fixedOnly.stats).toBeUndefined();
+    const one = scene(ctx, 'flank', { budget: quote.fixedSeconds! + quote.unitSeconds! });
+    expect(one).toMatchObject({ status: 'ok', count: 1, fixed: quote.fixed });
+    expect(one.stats?.rng).toBeGreaterThan(0);
+  });
+});

@@ -39,7 +39,7 @@ describe('#676 完整文明来源与安全返回', () => {
   it('查看不改原文明，唯一codec完整保存两配置及flags', () => {
     const state = {
       ...pickCiv(chooseLane(chooseMap(chooseTeamSize(armTeam(resetStart()), '4v4'), 'arabia'), 'pocket'), 'Mongols'),
-      sceneConfig: { ...DEFAULT_SCENE, budget: 2000 },
+      sceneConfig: { ...DEFAULT_SCENE, budget: 2000, techPlan: 'armor' as const },
       routeConfig: { ...DEFAULT_ROUTE, feudalBudget: 6000 },
       prefilled: { mode: false, map: false },
     };
@@ -311,7 +311,7 @@ async function mount(options: Setup) {
 describe('实际地址与存储协调hook #669', () => {
   it('合法URL胜冲突local，pending零写；canonical确认不重新加载地图或重复写', async () => {
     const wait = deferred();
-    const state = team();
+    const state = { ...team(), sceneConfig: { ...DEFAULT_SCENE, techPlan: 'armor' as const }, routeConfig: { ...DEFAULT_ROUTE, feudalBudget: 6000 } };
     state.choice.opponent = 'Japanese';
     state.choice.mates = ['Persians', 'Mayans'];
     const url = encodeStartSearch(state);
@@ -517,6 +517,7 @@ describe('本局输入严格v1兼容 #667', () => {
       { ...state, sceneConfig: { ...state.sceneConfig, room: 4 } },
       { ...state, sceneConfig: { ...state.sceneConfig, reaction: 0 } },
       { ...state, sceneConfig: { ...state.sceneConfig, husbandry: 'false' } },
+      ...[null, '', 'attack-2', 'attack-1-armor', 'unknown', 0].map((techPlan) => ({ ...state, sceneConfig: { ...state.sceneConfig, techPlan } })),
       { ...state, sceneConfig: { ...state.sceneConfig, extra: 1 } },
       { ...state, sceneConfig: [] },
       { ...state, routeConfig: [] },
@@ -530,7 +531,7 @@ describe('本局输入严格v1兼容 #667', () => {
         choice: { ...state.choice, ...choice },
       })),
     ];
-    for (const key of Object.keys(state.sceneConfig)) {
+    for (const key of ['budget', 'age', 'mode', 'husbandry', 'distance', 'deadline', 'room', 'reaction']) {
       const cfg = { ...state.sceneConfig } as Record<string, unknown>;
       delete cfg[key];
       invalid.push({ ...state, sceneConfig: cfg } as never);
@@ -557,5 +558,18 @@ describe('本局输入严格v1兼容 #667', () => {
     expect(decodeStartGame(JSON.stringify({ version: 1, state: { ...flank, routeConfig: { ...flank.routeConfig, husbandry: false } } }), MAPS).kind).toBe(
       'invalid',
     );
+  });
+  it('#652 只有精确旧八键能迁移common，显式新键不被默认覆盖', () => {
+    const state = configured(),
+      legacy = JSON.parse(encodeStartGame(state));
+    delete legacy.state.sceneConfig.techPlan;
+    expect(decodeStartGame(JSON.stringify(legacy), MAPS)).toEqual({ kind: 'valid', state });
+    expect(decodeStartSearch('?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(legacy.state) }), MAPS)).toEqual({ kind: 'valid', state });
+    const chosen = { ...state, sceneConfig: { ...state.sceneConfig, techPlan: 'armor' as const } };
+    expect(decodeStartGame(encodeStartGame(chosen), MAPS)).toEqual({ kind: 'valid', state: chosen });
+    for (const patch of [{ techPlan: null }, { techPlan: 'none', extra: 1 }])
+      expect(decodeStartGame(JSON.stringify({ ...legacy, state: { ...state, sceneConfig: { ...legacy.state.sceneConfig, ...patch } } }), MAPS).kind).toBe(
+        'invalid',
+      );
   });
 });

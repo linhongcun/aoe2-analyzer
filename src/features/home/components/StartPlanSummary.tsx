@@ -4,12 +4,13 @@ import { civByEn, loadCore, loadTrees } from '../../../data';
 import type { BuildOrder } from '../../../domain/buildOrder';
 import { selectStartOpening } from '../../../domain/openingBuildChoices';
 import { buildsPath } from '../../../domain/matchupRoute';
-import { scenarioProfile, scenarioRows, type SceneContext } from '../../../domain/positionScenarios';
+import { scenePlanOptions, scenarioProfile, scenarioRows, scenarioVersion, type SceneContext, type SceneRow } from '../../../domain/positionScenarios';
 import { ageRoutes } from '../../../domain/ageRoutes';
 import { sceneDefaults } from '../../../domain/startGameInputs';
 import type { StartState } from '../../../domain/startGame';
 import { SceneEvidence } from './ScenarioSuggestions';
 import { RouteEvidence } from './RouteContinuity';
+import { SceneTechnologies, technologyPlanLabel } from './TechnologyPlans';
 
 export default function StartPlanSummary({ state }: { state: StartState }) {
   const lane = state.choice.lane!;
@@ -31,12 +32,18 @@ export default function StartPlanSummary({ state }: { state: StartState }) {
       live = false;
     };
   }, [attempt]);
-  const row = useMemo(() => {
+  const row = useMemo<SceneRow | null>(() => {
     if (!data || !civ) return null;
     const listed = scenarioRows(data.context, lane, cfg).find((r) => r.civ === civ.en);
     if (listed) return listed;
     const profile = scenarioProfile(data.context, civ.en, lane, cfg);
-    return { civ: civ.en, status: 'blocked' as const, preferred: false, reason: '不在此路位首批比较范围' + (profile.reason ? `；${profile.reason}` : '') };
+    return {
+      civ: civ.en,
+      plan: cfg.techPlan,
+      status: 'blocked',
+      preferred: false,
+      reason: '不在此路位首批比较范围' + (profile.reason ? `；${profile.reason}` : ''),
+    };
   }, [data, civ, lane, cfg]);
   const route = useMemo(
     () => (data && civ && state.routeConfig ? ageRoutes(data.context, lane, state.routeConfig).find((r) => r.civ === civ.en) : null),
@@ -66,6 +73,8 @@ export default function StartPlanSummary({ state }: { state: StartState }) {
   if (!data) return <p role="status">正在整理本局打法…</p>;
   const choices = civ ? selectStartOpening(civ, data.orders, lane) : null;
   const order = choices?.order;
+  const options = scenePlanOptions(data.context, lane);
+  const version = scenarioVersion();
   return (
     <section className="start-scenes" aria-label="本局打法">
       <section data-testid="start-scene-summary">
@@ -73,6 +82,15 @@ export default function StartPlanSummary({ state }: { state: StartState }) {
         <p>
           城堡时代 · {data.context.core.unitById[lane === 'flank' ? 24 : 38]?.zh ?? '路线兵种未核实'}；
           {state.sceneConfig ? '已保存调整输入' : '当前路位默认输入'}。
+        </p>
+        <p className="start-hint">
+          本局统一科技方案：{technologyPlanLabel(options, cfg.techPlan)}。
+          {row ? (
+            <>
+              方案科技：
+              <SceneTechnologies row={row} lane={lane} />。
+            </>
+          ) : null}
         </p>
         <p className="start-hint">
           军事投入 <span className="num nw">{cfg.budget} 工秒</span> · 距离 <span className="num nw">{cfg.distance} 格</span> ·{' '}
@@ -92,6 +110,7 @@ export default function StartPlanSummary({ state }: { state: StartState }) {
             <p>
               {civ?.zh}：{row.status === 'ok' ? '使用本局当前输入计算；不是整局胜率。' : row.reason}
             </p>
+            {row.explanation ? <p className="start-why">{row.explanation}</p> : null}
             <details className="start-scene-details">
               <summary>查看本局场景结果</summary>
               <SceneEvidence row={row} lane={lane} />
@@ -101,6 +120,18 @@ export default function StartPlanSummary({ state }: { state: StartState }) {
           <p>尚未选择文明，不生成默认文明结果。</p>
         )}
       </section>
+      <details className="start-scene-details start-plan-summary">
+        <summary>本局场景版本与来源</summary>
+        <p className="start-hint">
+          模型 {version.model} · 配置 {version.config}
+          。当前方案的费用、部队与独立战术目标及解释对照输入摘要，可在上方场景结果中复核。摘要用于追溯本模型输入，不宣称密码学完整性。
+        </p>
+        {version.sources.map((source) => (
+          <p className="start-hint" key={source.id}>
+            {source.patch} · {source.repo} · {source.commit.slice(0, 8)}
+          </p>
+        ))}
+      </details>
       {state.routeConfig ? (
         <section data-testid="start-route-summary">
           <h2>两阶段参考</h2>

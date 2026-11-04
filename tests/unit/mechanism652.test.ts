@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { decodeStartGame as decodeSceneState } from '../../src/domain/startGameCodec';
 import { chooseLane, chooseMap, chooseTeamSize, pickCiv, resetStart, skipStep } from '../../src/domain/startGame';
 
 describe('#652 保留玩家文明', () => {
@@ -23,6 +24,7 @@ import {
   scenarioRows,
   scenarioProfile,
   scenarioScope,
+  scenarioComparisons,
   type SceneContext,
 } from '../../src/domain/positionScenarios';
 import { firstStrike, retreatContact, supportArrival } from '../../src/domain/positionScenarioMath';
@@ -30,6 +32,85 @@ import { DAT } from '../../src/domain/datEffects';
 let base: SceneContext;
 beforeAll(async () => {
   base = { core: await loadCore(), trees: await loadTrees() };
+});
+
+describe('#652 合法方案、付款边界与固定参考目标', () => {
+  it('六个弓线包真实付前置与一次升级，人数依据各自剩余预算', () => {
+    const expected = [[], [199], [199, 200], [211], [199, 211], [199, 200, 211]];
+    const rows = scenarioComparisons(base, 'flank', DEFAULT_FLANK_SCENE).Britons!;
+    expect(rows).toHaveLength(6);
+    rows.forEach((r, i) => {
+      expect(r.status).toBe('ok');
+      expect(r.technologies!.map((t) => t.id)).toEqual(expected[i]);
+      const paid = { ...base.core.unitById[24]!.up![0] };
+      for (const id of expected[i]!) for (const [key, value] of Object.entries(base.core.techById[id]!.cost)) paid[key] = (paid[key] ?? 0) + value;
+      expect(r.fixed).toEqual(paid);
+      expect(r.count).toBe(Math.floor((DEFAULT_FLANK_SCENE.budget - r.fixedSeconds!) / r.unitSeconds!));
+      expect(r.upgrade).toEqual({ Food: 175, Gold: 100 });
+    });
+    expect(rows[0]!.count).toBeGreaterThan(rows[5]!.count!);
+    expect(rows[0]!.stats!.rng).toBe(rows[5]!.stats!.rng - 2);
+  });
+  it('中路四包保留独立畜牧选择，骑士无侦骑升级收费', () => {
+    for (const husbandry of [false, true]) {
+      const rows = scenarioComparisons(base, 'pocket', { ...DEFAULT_SCENE, husbandry }).Britons!;
+      expect(rows).toHaveLength(4);
+      const expected = [[], [67], [81], [67, 81]].map((ids) => (husbandry ? [...ids, 39] : ids));
+      rows.forEach((r, i) => {
+        expect(r.technologies!.map((t) => t.id)).toEqual(expected[i]);
+        expect(r.upgrade).toEqual({});
+        expect(r.upgradeSeconds).toBe(0);
+      });
+      expect(rows[0]!.fixed).toEqual(husbandry ? base.core.techById[39]!.cost : {});
+      expect(rows[0]!.stats!.spd).toBeCloseTo(base.core.unitById[38]!.spd * (husbandry ? 1.1 : 1));
+    }
+  });
+  it('自己换包或减少预算不改变明确敌方共同包，属性源变化仍传播到目标', () => {
+    const common = row(base),
+      none = row(base, 'Britons', { ...DEFAULT_FLANK_SCENE, techPlan: 'none', budget: 2000 });
+    expect(none.target).toEqual(common.target);
+    expect(none.target).toMatchObject({ civ: 'Franks', plan: 'common' });
+    expect(none.baseline!.plan).toBe('none');
+    expect(none.stats!.rng).toBe(common.stats!.rng - 2);
+    const changed = copy();
+    changed.core.unitById[24]!.rng += 1;
+    expect(row(changed).target!.stats.rng).toBe(common.target!.stats.rng + 1);
+    expect(row(changed).target!.signature).not.toBe(common.target!.signature);
+  });
+  it('不足固定费、恰付固定费、恰好一兵区分报价与已拥有属性', () => {
+    const quote = scenarioProfile(base, 'Britons', 'flank', DEFAULT_FLANK_SCENE);
+    for (const [budget, funding, count] of [
+      [quote.fixedSeconds! - 0.0001, 'fixed-shortfall', 0],
+      [quote.fixedSeconds!, 'no-unit', 0],
+      [quote.fixedSeconds! + quote.unitSeconds!, 'funded', 1],
+    ] as const) {
+      const result = scenarioProfile(base, 'Britons', 'flank', { ...DEFAULT_FLANK_SCENE, budget });
+      expect(result).toMatchObject({ funding, count, fixed: quote.fixed });
+      expect(Boolean(result.stats)).toBe(count > 0);
+    }
+    const empty = scenarioProfile(base, 'Britons', 'pocket', { ...DEFAULT_SCENE, budget: 0, techPlan: 'none', husbandry: false });
+    expect(empty).toMatchObject({ funding: 'no-unit', fixed: {}, fixedSeconds: 0, count: 0 });
+    expect(empty.stats).toBeUndefined();
+  });
+  it('none仍保留已核实文明固有加成，不假授予共同科技', () => {
+    const cfg = { ...DEFAULT_SCENE, techPlan: 'none' as const, husbandry: false };
+    expect(row(base, 'Franks', cfg, 'pocket').stats!.hp).toBeGreaterThan(row(base, 'Britons', cfg, 'pocket').stats!.hp);
+    expect(row(base, 'Huns', cfg, 'pocket').cycle).toBe(25);
+    const bow = { ...DEFAULT_FLANK_SCENE, techPlan: 'none' as const };
+    expect(row(base, 'Britons', bow).stats!.rng).toBe(row(base, 'Franks', bow).stats!.rng + 1);
+    expect(row(base, 'Mayans', bow).cost!.Gold).toBeLessThan(row(base, 'Franks', bow).cost!.Gold!);
+  });
+  it('解释基线不可用仍保留自身到场，但明确对照未完成', () => {
+    const changed = copy();
+    changed.trees = structuredClone(base.trees);
+    const forging = changed.trees.t.Britons!.flatMap((b) => b[3]).find((c) => c[2] === 't' && c[3] === 67)!;
+    forging[4] = 0;
+    const result = row(changed, 'Franks', DEFAULT_SCENE, 'pocket');
+    expect(result.status).toBe('ok');
+    expect(result.support!.count).toBeGreaterThan(0);
+    expect(result.baseline).toBeUndefined();
+    expect(result.explanation).toContain('同方案解释对照不可核验');
+  });
 });
 function copy(): SceneContext {
   const units = structuredClone(base.core.units),
@@ -42,6 +123,68 @@ function copy(): SceneContext {
 }
 const row = (ctx: SceneContext, civ = 'Britons', config = DEFAULT_FLANK_SCENE, lane: 'flank' | 'pocket' = 'flank') =>
   scenarioRows(ctx, lane, config).find((r) => r.civ === civ)!;
+
+describe('#652 完备场景真实缺口', () => {
+  it('none在低预算形成部队，不强制共同包且弩手解锁仍收费', () => {
+    const cfg = { ...DEFAULT_FLANK_SCENE, budget: 2000, techPlan: 'none' as const };
+    const chosen = scenarioProfile(base, 'Britons', 'flank', cfg);
+    const common = scenarioProfile(base, 'Britons', 'flank', { ...cfg, techPlan: 'common' });
+    console.log(
+      JSON.stringify({
+        gap: 'techPlan',
+        none: { status: chosen.status, count: chosen.count, fixed: chosen.fixed },
+        common: { status: common.status, count: common.count },
+      }),
+    );
+    expect(chosen.status).toBe('ok');
+    expect(chosen.count).toBeGreaterThan(0);
+    expect(chosen.fixed).toEqual(base.core.unitById[24]!.up![0]);
+    expect(common.count).toBe(0);
+  });
+  it.each(['unit', 'tech', 'upgrade'])('缺一个%s费用资源键显式blocked', (kind) => {
+    const c = copy();
+    if (kind === 'unit') delete c.core.unitById[24]!.cost.Gold;
+    else if (kind === 'tech') delete c.core.techById[199]!.cost.Gold;
+    else delete c.core.unitById[24]!.up![0].Gold;
+    const result = scenarioProfile(c, 'Britons', 'flank', DEFAULT_FLANK_SCENE);
+    console.log(JSON.stringify({ gap: 'partial-cost', kind, status: result.status, count: result.count, fixed: result.fixed }));
+    expect(result.status).toBe('blocked');
+  });
+  it('坏攻击tuple不抛异常而显式blocked', () => {
+    const c = copy();
+    c.core.unitById[24]!.atks = [null] as unknown as (typeof c.core.unitById)[24]['atks'];
+    let result: ReturnType<typeof scenarioProfile> | undefined;
+    expect(() => {
+      result = scenarioProfile(c, 'Britons', 'flank', DEFAULT_FLANK_SCENE);
+    }).not.toThrow();
+    expect(result?.status).toBe('blocked');
+  });
+  it('显式timeAt空对象不能静默回退trainTime', () => {
+    const c = copy();
+    c.eco!.units[38]!.timeAt = {};
+    expect(scenarioProfile(c, 'Britons', 'pocket', DEFAULT_SCENE).status).toBe('blocked');
+  });
+  it('尚未到生产建筑时代不能产生合法部队', () => {
+    const c = copy();
+    c.core = { ...c.core, buildingById: { ...c.core.buildingById, 87: { ...c.core.buildingById[87]!, age: 4 } } };
+    expect(scenarioProfile(c, 'Britons', 'flank', DEFAULT_FLANK_SCENE).status).toBe('unavailable');
+  });
+  const state = () => ({ ...chooseLane(chooseMap(chooseTeamSize(resetStart(), '4v4'), 'arabia'), 'flank'), sceneConfig: { ...DEFAULT_FLANK_SCENE } });
+  it('旧八字段v1恢复正规化为common对象', () => {
+    const legacy = state();
+    delete (legacy.sceneConfig as Record<string, unknown>).techPlan;
+    const result = decodeSceneState(JSON.stringify({ version: 1, state: legacy }), new Set(['arabia']));
+    expect(result.kind).toBe('valid');
+    if (result.kind === 'valid') expect((result.state.sceneConfig as unknown as Record<string, unknown>).techPlan).toBe('common');
+  });
+  it('新合法none字段恢复而非被当多余键拒绝', () => {
+    const next = state();
+    const scene = { ...next.sceneConfig, techPlan: 'none' };
+    const result = decodeSceneState(JSON.stringify({ version: 1, state: { ...next, sceneConfig: scene } }), new Set(['arabia']));
+    expect(result.kind).toBe('valid');
+    if (result.kind === 'valid') expect((result.state.sceneConfig as unknown as Record<string, unknown>).techPlan).toBe('none');
+  });
+});
 describe('#652 几何与整数边界', () => {
   it('普通到场包含期限，首兵不在t0', () => {
     expect(supportArrival(1, 30, 5, 0, 0, 'ready')?.count).toBe(5);
@@ -173,6 +316,70 @@ describe('#652 真实数据、门禁与建议传播', () => {
 
 // 模拟重新构建的数据模块：效果引擎在模块加载时编译规则，不能原地改闭包冒充重算。
 import { vi } from 'vitest';
+
+it.each([0, -1])('#652 完备解释：真实射程优势变为%s后不再按文明名写更远', async (value) => {
+  const changed = structuredClone(DAT);
+  const entry = changed.civs.Britons!.bonus.find(
+    (b) => b.age === 3 && b.req.length === 0 && b.rules.some((r) => r.t.includes(24) && r.fx.some((f) => f.s === 'rng')),
+  )!;
+  const effect = entry.rules.find((r) => r.t.includes(24))!.fx.find((f) => f.s === 'rng')!;
+  expect(effect.v).toBe(1);
+  effect.v = value;
+  vi.resetModules();
+  vi.doMock('../../src/data/effects.json', () => ({ default: changed }));
+  let view: import('react-test-renderer').ReactTestRenderer | undefined;
+  let unmount: (() => Promise<void>) | undefined;
+  try {
+    const [{ createElement: h }, { create, act }, { MemoryRouter }, data, model, game, { default: Scenes }] = await Promise.all([
+      import('react'),
+      import('react-test-renderer'),
+      import('react-router-dom'),
+      import('../../src/data'),
+      import('../../src/domain/positionScenarios'),
+      import('../../src/domain/startGame'),
+      import('../../src/features/home/components/ScenarioSuggestions'),
+    ]);
+    const [core, trees] = await Promise.all([data.loadCore(), data.loadTrees()]);
+    const rows = model.scenarioRows({ core, trees }, 'flank', model.DEFAULT_FLANK_SCENE);
+    const own = rows.find((r) => r.civ === 'Britons')!,
+      reference = rows.find((r) => r.civ === 'Franks')!;
+    expect(model.coverageReason('Britons')).toBeNull();
+    expect(own.status).toBe('ok');
+    expect(reference.status).toBe('ok');
+    expect(own.stats!.rng).toBe(reference.stats!.rng + value);
+    expect(own.opening!.opportunities).toBe(0);
+    const state = game.chooseLane(game.chooseMap(game.chooseTeamSize(game.resetStart(), '4v4'), 'arabia'), 'flank');
+    await act(async () => {
+      view = create(h(MemoryRouter, { future: { v7_startTransition: true, v7_relativeSplatPath: true } }, h(Scenes, { state, onChange: () => {} })));
+      await Promise.all([data.loadCore(), data.loadTrees()]);
+    });
+    unmount = async () => {
+      await act(async () => {
+        view?.unmount();
+      });
+    };
+    const why = view!.root.findByProps({ 'data-testid': 'scene-Britons' }).findByProps({ className: 'start-why' });
+    const text = (node: import('react-test-renderer').ReactTestInstance | string): string =>
+      typeof node === 'string' ? node : node.children.map(text).join('');
+    const rendered = text(why);
+    console.log(
+      JSON.stringify({
+        gap: 'derived-reason',
+        ownRange: own.stats!.rng,
+        referenceRange: reference.stats!.rng,
+        opportunities: own.opening!.opportunities,
+        rendered,
+      }),
+    );
+    expect(rendered.length).toBeGreaterThan(10);
+    expect(rendered).toContain('无先手机会');
+    expect(rendered).not.toContain('射程更远');
+  } finally {
+    await unmount?.();
+    vi.doUnmock('../../src/data/effects.json');
+    vi.resetModules();
+  }
+});
 it('#652 已支持文明射程效果重载后传播到解释与建议', async () => {
   const changed = structuredClone(DAT);
   const fx = changed.civs

@@ -1,0 +1,63 @@
+/* Issue 652: vertical comparisons remain readable at narrow Home widths. */
+.start-plan-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-3) 0;
+  padding: 0;
+  list-style: none;
+}
+.start-plan-list > li {
+  min-width: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+}
+.start-plan-list > .is-current {
+  border-color: var(--color-accent);
+}
+.start-plan-list h4 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+}
+.start-plan-current {
+  color: var(--color-accent);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+.start-plan-quote,
+.start-plan-facts,
+.start-plan-result {
+  min-width: 0;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+}
+.start-plan-quote,
+.start-plan-facts,
+.start-plan-result,
+.start-plan-adopt {
+  margin-top: var(--space-2);
+}
+.start-plan-adopt {
+  max-width: 100%;
+  min-height: 44px;
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.start-scene-card,
+.start-scene-details,
+.start-plan-summary {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
