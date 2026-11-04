@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
-import { CivPicker } from '../../../shared/ui/CivPicker';
+import CivPicker from './StartCivPicker';
 import { encodeTeamFit } from '../../../domain/teamFitQuery';
 import { editStep, setMate, type StartState } from '../../../domain/startGame';
 import type { Update } from './startGameEarly';

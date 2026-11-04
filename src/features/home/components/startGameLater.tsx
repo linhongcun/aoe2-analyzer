@@ -5,7 +5,7 @@ import { buildsPath, explicitMatchupPath } from '../../../domain/matchupRoute';
 import { sceneSupported } from '../../../domain/startGameInputs';
 import { mapGuides } from '../../../domain/mapGuides';
 import MapEditorial from './MapEditorial';
-import { CivPicker } from '../../../shared/ui/CivPicker';
+import CivPicker from './StartCivPicker';
 import { OwnCivChip, TeamMates, TeamMatesSummary, TeamFitLink } from './StartPlayers';
 import { editStep, jumpTo, laneRowVisible, openLane, pickCiv, pickOpponent, resetStart, type StartState, type StepId } from '../../../domain/startGame';
 import { Actions, CivRow, EmptySlot, LANE_EN, LANE_LABEL, ModeText, Picked, findMap, normalize, useMaps, type Update } from './startGameEarly';

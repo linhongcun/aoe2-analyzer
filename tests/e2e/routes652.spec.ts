@@ -111,6 +111,47 @@ test('路线衔接公开存量与追加预算，不替代城堡快照', async ({
   await expect(page.getByTestId('route-ledger-Britons')).toContainText('存量升级');
 });
 
+test('#672 @1280 冷文明模块失败重试保留参与者和两套配置', async ({ page, browser }) => {
+  await team672(page);
+  await player672(page, 'start-add-mate', 'Persians');
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  await page.getByLabel('军事投入', { exact: true }).selectOption('2000');
+  await page.getByText('封建到城堡：路线衔接', { exact: true }).click();
+  await page.getByLabel('封建军事额度（工秒）', { exact: true }).selectOption('6000');
+  await page.getByRole('searchbox').fill('Mongols');
+  await page.getByRole('button', { name: /^蒙古/ }).click();
+  await player672(page, 'start-opponent', 'Japanese');
+  await expect.poll(() => state672(page).choice.opponent).toBe('Japanese');
+  const expected = state672(page),
+    url = page.url();
+  const context = await browser.newContext();
+  try {
+    const chunk = /\/CivPicker-[^/]+\.js(?:\?|$)/;
+    let aborted = 0;
+    await context.route(chunk, async (route) => {
+      aborted++;
+      await route.abort();
+    });
+    const fresh = await context.newPage();
+    const pageErrors: string[] = [];
+    fresh.on('pageerror', (error) => pageErrors.push(error.message));
+    await fresh.goto(url);
+    await expect(fresh.getByRole('alert')).toContainText('文明选项加载失败');
+    expect(aborted).toBeGreaterThan(0);
+    expect(state672(fresh)).toEqual(expected);
+    await context.unroute(chunk);
+    await fresh.getByRole('button', { name: '重试文明选项', exact: true }).click();
+    await expect(fresh.locator('#start-opponent')).toHaveAttribute('data-value', 'Japanese');
+    expect(state672(fresh)).toEqual(expected);
+    await player672(fresh, 'start-opponent', 'Chinese');
+    await expect.poll(() => state672(fresh).choice.opponent).toBe('Chinese');
+    expect(state672(fresh)).toEqual({ ...expected, choice: { ...expected.choice, opponent: 'Chinese' } });
+    expect(pageErrors).toEqual([]);
+  } finally {
+    await context.close();
+  }
+});
+
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['dark', 'light']) {
     test(`路线 ${width} ${theme} 两阶段账本与布局`, async ({ page }, info) => {

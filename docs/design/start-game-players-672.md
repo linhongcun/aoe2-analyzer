@@ -66,3 +66,4 @@ Home新测试声明持续放已登记routes652/mechanism652，近600行的592/63
 最终精确SHA/tree、实际build/test/20图由实现者之外代理独立终审；full适用CI、main/nativePages、公开专项/身份/manifest、正式tag/source/两次bytes/全部文件hash/completedobserver全部实际PASS后标已部署关闭。
 
 新增 Home 对手/队友 picker 与显式 Matchup picker 在桌面也使用局部最小44px高度；不修改共享 picker。按实际1280几何核对，不借窄屏默认尺寸冒充桌面通过。
+首页新增文明选择器按需加载共享模块，避免把搜索索引同步带入首页入口包。加载中不改已填信息；失败显示可重试提示，重试成功接收最新选择；离开步骤后忽略旧加载回调。保留既有入口静态依赖断言。
