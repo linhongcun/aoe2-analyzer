@@ -17,6 +17,8 @@ export interface StartChoice {
   mapId: string | null;
   lane: Lane | null;
   civ: string | null;
+  opponent: string | null;
+  mates: string[];
 }
 
 export interface StartState {
@@ -44,7 +46,7 @@ const LATER: Record<StepId, readonly StepId[]> = {
 
 export function resetStart(): StartState {
   return {
-    choice: { mode: null, teamSize: null, mapId: null, lane: null, civ: null },
+    choice: { mode: null, teamSize: null, mapId: null, lane: null, civ: null, opponent: null, mates: [] },
     sceneConfig: null,
     routeConfig: null,
     skipped: {},
@@ -157,7 +159,7 @@ export function choose1v1(state: StartState): StartState {
   let next: StartState = {
     ...state,
     teamArmed: false,
-    choice: { ...state.choice, mode: '1v1', teamSize: null },
+    choice: { ...state.choice, mode: '1v1', teamSize: null, mates: [] },
     skipped: { ...state.skipped, mode: false },
     prefilled: { ...state.prefilled, mode: false },
   };
@@ -227,6 +229,7 @@ export function skipStep(state: StartState): StartState {
     choice.mode = null;
     choice.teamSize = null;
     choice.lane = null;
+    choice.mates = [];
     prefilled.mode = false;
     next = { ...next, teamArmed: false };
   } else if (step === 'map') {
@@ -234,6 +237,7 @@ export function skipStep(state: StartState): StartState {
     prefilled.map = false;
   } else if (step === 'lane') choice.lane = null;
   else if (step === 'civ') choice.civ = null;
+  else if (step === 'opponent') choice.opponent = null;
   next = { ...next, choice, prefilled, skipped: { ...next.skipped, [step]: true } };
   return advanceFrom(next, step);
 }
@@ -280,4 +284,21 @@ export function enterLobby(): StartState {
     laneOpen: false,
     current: 'civ',
   };
+}
+
+/** 可选对手：更新值不推进；清空与跳过分开。 */
+export function pickOpponent(state: StartState, opponent: string | null): StartState {
+  return { ...state, choice: { ...state.choice, opponent }, skipped: { ...state.skipped, opponent: false } };
+}
+/** 只保存已选队友；末尾可追加，null删除，至多三名。 */
+export function setMate(state: StartState, index: number, civ: string | null): StartState {
+  if (state.choice.mode !== 'team' || state.choice.teamSize == null || !Number.isInteger(index) || index < 0 || index > state.choice.mates.length || index > 2)
+    return state;
+  const mates = [...state.choice.mates];
+  if (civ === null) {
+    if (index >= mates.length) return state;
+    mates.splice(index, 1);
+  } else if (index === mates.length) mates.push(civ);
+  else mates[index] = civ;
+  return { ...state, choice: { ...state.choice, mates } };
 }

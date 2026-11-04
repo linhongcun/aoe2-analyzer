@@ -341,6 +341,8 @@ describe('本局实际恢复hook #674', () => {
   it('等待地图时无写入，验证成功恢复完整状态；正常操作后才保存', async () => {
     const wait = deferred674();
     const state = configured674();
+    state.choice.opponent = 'Japanese';
+    state.choice.mates = ['Persians', 'Persians'];
     const view = await mount674(encodeStartGame(state), () => wait.promise);
     expect(view.result.status).toBe('pending');
     expect(view.writes).toEqual([]);
@@ -435,24 +437,24 @@ describe('本局实际恢复hook #674', () => {
 describe('首页工具上下文与对手状态 #671', () => {
   const render = (state: ReturnType<typeof resetStart>, summary = false) =>
     renderToStaticMarkup(createElement(StaticRouter, { location: '/' }, createElement(summary ? Summary : OpponentStep, { state, onChange: () => {} })));
-  it('带真实己方且直接披露原有对手，开局仅带文明上下文', () => {
+  it('带真实己方且缺方保持空白，开局仅带文明上下文', () => {
     const state = pickCiv(chooseMap(choose1v1(resetStart()), 'arabia'), 'Mongols');
     for (const summary of [false, true]) {
       const html = render(state, summary);
-      expect(html).toContain('href="/matchup?me=Mongols"');
-      expect(html).toContain('非本局当前对手');
+      expect(html).toContain('href="/matchup?pair=explicit&amp;me=Mongols"');
+      expect(html).toContain('未选一方保持空白');
       expect(html).not.toContain('opp=');
     }
     const html = render(finishFlow(state), true);
     expect(html).toContain('href="/builds?civ=Mongols"');
     expect(html).toContain('列表仍为全部开局');
-    expect(html).toContain('暂无数据');
+    expect(html).toContain('未选择');
     expect(html).not.toContain('已跳过');
   });
   it('空局不伪造文明；只有真实跳过显示已跳过且历史标记保留', () => {
     const state = skipStep(skipStep(chooseMap(choose1v1(resetStart()), 'arena')));
     const html = render(state, true);
-    expect(html).toContain('href="/matchup"');
+    expect(html).toContain('href="/matchup?pair=explicit"');
     expect(html).toContain('href="/builds"');
     expect(html).toContain('未带入本局文明');
     expect(html).toContain('已跳过');

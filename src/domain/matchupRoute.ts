@@ -5,6 +5,15 @@ import { parseSide, type SideSpec } from './duelState';
 const knownCiv = (en: string | null | undefined) => (civs.some((c) => c.en === en) ? en! : undefined);
 
 export function readMatchupPair(params: URLSearchParams, sticky: { me: string; opp: string }) {
+  if (params.has('pair')) {
+    const valid =
+      params.getAll('pair').length === 1 &&
+      params.get('pair') === 'explicit' &&
+      ['me', 'opp'].every((key) => params.getAll(key).length <= 1 && (!params.has(key) || knownCiv(params.get(key)) != null));
+    return valid
+      ? { me: knownCiv(params.get('me')) ?? null, opp: knownCiv(params.get('opp')) ?? null, invalid: false }
+      : { me: null, opp: null, invalid: true };
+  }
   const me = knownCiv(params.get('me'));
   const opp = knownCiv(params.get('opp'));
   return {
@@ -53,3 +62,18 @@ const EMPTY_SIDE: SideSpec = { uid: 0, civ: '', age: 4, techs: [], team: [] };
 export function duelCivs(params: URLSearchParams) {
   return { me: knownCiv(parseSide(params.get('a'), EMPTY_SIDE).civ), opp: knownCiv(parseSide(params.get('b'), EMPTY_SIDE).civ) };
 }
+
+/** 显式部分对阵；不改变旧无marker调用者。 */
+export function writeExplicitMatchupPair(params: URLSearchParams, me: string | null, opp: string | null) {
+  const next = new URLSearchParams(params);
+  next.set('pair', 'explicit');
+  for (const [key, value] of [
+    ['me', me],
+    ['opp', opp],
+  ] as const) {
+    if (value) next.set(key, value);
+    else next.delete(key);
+  }
+  return next;
+}
+export const explicitMatchupPath = (me: string | null, opp: string | null) => '/matchup?' + writeExplicitMatchupPair(new URLSearchParams(), me, opp);

@@ -10,7 +10,7 @@ import { RatingLabel } from '../../../shared/ui/RatingHelp';
 import { useSticky } from '../../../shared/utils/sticky';
 import { Loading } from '../../../shared/ui/widgets';
 import { Link, useSearchParams } from 'react-router-dom';
-import { matchupBuildPath, matchupUnitPath, readMatchupPair, writeMatchupPair } from '../../../domain/matchupRoute';
+import { matchupBuildPath, matchupUnitPath, readMatchupPair, writeMatchupPair, writeExplicitMatchupPair } from '../../../domain/matchupRoute';
 import { Icon } from '../../../shared/ui/Icon';
 import '../../../shared/ui/contextLinks.css';
 import { rushGuide } from '../rushGuides';
@@ -24,67 +24,97 @@ export default function Matchup() {
     [ie, setE] = useSticky('mu.e', 5);
   const [params, setParams] = useSearchParams();
   const pair = readMatchupPair(params, { me: (civs[ia] ?? civs[16]!).en, opp: (civs[ie] ?? civs[5]!).en });
-  const a = civs.find((c) => c.en === pair.me)!,
-    e = civs.find((c) => c.en === pair.opp)!;
-  const m = matchup(a, e);
+  const a = civs.find((c) => c.en === pair.me),
+    e = civs.find((c) => c.en === pair.opp);
+  const m = a && e ? matchup(a, e) : null;
   // Query 先于 sticky；同步后，从其它页面回到无 query 的助手仍保留这对阵。
   useEffect(() => {
+    if (!a || !e) return;
     const nextA = civs.indexOf(a),
       nextE = civs.indexOf(e);
     if (ia !== nextA) setA(nextA);
     if (ie !== nextE) setE(nextE);
   }, [a, e, ia, ie, setA, setE]);
-  const pick = (side: 'me' | 'opp', en: string) => setParams(writeMatchupPair(params, side === 'me' ? en : a.en, side === 'opp' ? en : e.en));
-  const drill = data ? rushDrill(data, a.en, e.en, rushGuide(params.get('rush'))) : null;
-  const counters = core ? filterCounterUnits(a.en, e.ty, core.units) : [];
+  const pick = (side: 'me' | 'opp', en: string) => {
+    const me = side === 'me' ? en || null : (a?.en ?? null),
+      opp = side === 'opp' ? en || null : (e?.en ?? null);
+    setParams(params.has('pair') || !me || !opp ? writeExplicitMatchupPair(params, me, opp) : writeMatchupPair(params, me, opp));
+  };
+  const drill = data && a && e ? rushDrill(data, a.en, e.en, rushGuide(params.get('rush'))) : null;
+  const counters = core && a && e ? filterCounterUnits(a.en, e.ty, core.units) : [];
   return (
     <section id="matchup" className="pane">
       <ListHead title="对局助手" desc="根据双方文明给出反制建议" />
       <div className="bar fbar">
-        我的文明 <CivPicker id="ma" label="我的文明" value={a.en} onChange={(en) => pick('me', en)} /> 对手文明{' '}
-        <CivPicker id="me" label="对手文明" value={e.en} onChange={(en) => pick('opp', en)} />
+        我的文明 <CivPicker id="ma" label="我的文明" value={a?.en ?? ''} none="未选择" onChange={(en) => pick('me', en)} /> 对手文明{' '}
+        <CivPicker id="me" label="对手文明" value={e?.en ?? ''} none="未选择" onChange={(en) => pick('opp', en)} />
       </div>
-      {pair.invalid && <p className="note">链接中的文明无效，已用上次选择</p>}
-      <h3 className="matchup-title">
-        <Link className="ulink ctx-civ-link" to={`/civ/${a.en}`}>
-          <CivIcon c={a} />
-          {a.zh}
-        </Link>
-        <span className="note">vs</span>
-        <Link className="ulink ctx-civ-link" to={`/civ/${e.en}`}>
-          <CivIcon c={e} />
-          {e.zh}
-        </Link>
-      </h3>
-      <nav className="ctx-chips" aria-label="对阵相关入口">
-        {drill?.url ? (
-          <Link className="community-tool-entry" to={drill.url}>
-            <Icon name="swords" />
-            单位 PK
-          </Link>
-        ) : (
-          <span className="community-tool-entry" aria-disabled="true">
-            <Icon name="swords" />
-            单位 PK
-          </span>
-        )}
-        <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'me')}>
-          <Icon name="list-ordered" />
-          我方开局
-        </Link>
-        <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'opp')}>
-          <Icon name="list-ordered" />
-          对手开局
-        </Link>
-        <Link className="community-tool-entry" to={`/civ/${a.en}`}>
-          我方文明
-        </Link>
-        <Link className="community-tool-entry" to={`/civ/${e.en}`}>
-          对手文明
-        </Link>
-      </nav>
-      <p className="note">可复制地址栏链接分享这对阵</p>
-      <RushDefense own={a} enemy={e} data={data} loadError={error} />
+      {pair.invalid && (
+        <p className="note" role={params.has('pair') ? 'alert' : undefined}>
+          {params.has('pair') ? '链接中的对阵信息无效，请重新选择文明' : '链接中的文明无效，已用上次选择'}
+        </p>
+      )}
+      {(!a || !e) && (
+        <>
+          <p role="status">{!a && !e ? '请补选双方文明后查看对阵分析。' : !a ? '请补选我方文明后查看对阵分析。' : '请补选对手文明后查看对阵分析。'}</p>
+          <p>
+            {a ? (
+              <Link className="community-tool-entry" to={'/civ/' + a.en}>
+                我方文明：{a.zh}
+              </Link>
+            ) : null}{' '}
+            {e ? (
+              <Link className="community-tool-entry" to={'/civ/' + e.en}>
+                对手文明：{e.zh}
+              </Link>
+            ) : null}
+          </p>
+        </>
+      )}
+      {a && e && (
+        <>
+          <h3 className="matchup-title">
+            <Link className="ulink ctx-civ-link" to={`/civ/${a.en}`}>
+              <CivIcon c={a} />
+              {a.zh}
+            </Link>
+            <span className="note">vs</span>
+            <Link className="ulink ctx-civ-link" to={`/civ/${e.en}`}>
+              <CivIcon c={e} />
+              {e.zh}
+            </Link>
+          </h3>
+          <nav className="ctx-chips" aria-label="对阵相关入口">
+            {drill?.url ? (
+              <Link className="community-tool-entry" to={drill.url}>
+                <Icon name="swords" />
+                单位 PK
+              </Link>
+            ) : (
+              <span className="community-tool-entry" aria-disabled="true">
+                <Icon name="swords" />
+                单位 PK
+              </span>
+            )}
+            <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'me')}>
+              <Icon name="list-ordered" />
+              我方开局
+            </Link>
+            <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'opp')}>
+              <Icon name="list-ordered" />
+              对手开局
+            </Link>
+            <Link className="community-tool-entry" to={`/civ/${a.en}`}>
+              我方文明
+            </Link>
+            <Link className="community-tool-entry" to={`/civ/${e.en}`}>
+              对手文明
+            </Link>
+          </nav>
+          <p className="note">可复制地址栏链接分享这对阵</p>
+          <RushDefense own={a} enemy={e} data={data} loadError={error} />
+        </>
+      )}
       <p>
         <Link className="community-tool-entry" to="/castle-defense">
           城堡前置：按当前局面查看应对
@@ -104,76 +134,79 @@ export default function Matchup() {
           记录队友分工与支援约定
         </Link>
       </nav>
-      {error ? (
-        <p role="alert">对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。</p>
-      ) : !core || !data ? (
-        <Loading />
-      ) : (
-        <div id="mres">
-          <p>
-            <b>对手强项：</b>
-            {m.oppStrong.length ? (
-              m.oppStrong.join('、')
-            ) : (
-              <span className="note" data-t="empty-strengths">
-                {EMPTY_STRENGTHS_COPY}
+      {a &&
+        e &&
+        m &&
+        (error ? (
+          <p role="alert">对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。</p>
+        ) : !core || !data ? (
+          <Loading />
+        ) : (
+          <div id="mres">
+            <p>
+              <b>对手强项：</b>
+              {m.oppStrong.length ? (
+                m.oppStrong.join('、')
+              ) : (
+                <span className="note" data-t="empty-strengths">
+                  {EMPTY_STRENGTHS_COPY}
+                </span>
+              )}
+              <span className="tag note" style={{ marginLeft: 8 }} title="评分达到该值才列入强项">
+                评分 ≥ {STRONG_THRESHOLD}
               </span>
-            )}
-            <span className="tag note" style={{ marginLeft: 8 }} title="评分达到该值才列入强项">
-              评分 ≥ {STRONG_THRESHOLD}
-            </span>
-            ；<b>相对弱项：</b>
-            {m.oppWeak.join('、')}
-          </p>
-          <p>
-            <b>你的相对优势：</b>
-            {m.myEdge}
-          </p>
-          <p>
-            <b>推荐反制</b>
-          </p>
-          {e.ty.map((t) => (
-            <p key={t} className="note">
-              <b>{TYPE_ZH[t]}：</b>
-              {counterExtra(data, a.en, t)}
+              ；<b>相对弱项：</b>
+              {m.oppWeak.join('、')}
             </p>
-          ))}
-          {counters.length === 0 ? (
-            <p className="note">{EMPTY_COUNTERS_COPY}</p>
-          ) : (
-            <ul className="matchup-counter-list">
-              {counters.map((u) => {
-                const unit = core.units.find((x) => x.id === u.id);
-                return (
-                  <li key={u.id}>
-                    <Link className="ulink matchup-counter-link" to={matchupUnitPath(u.id, a.en, e.en)}>
-                      {unit && <UnitIcon u={unit} />}
-                      <span>{u.nameZh}</span>
-                    </Link>
-                    {unit?.civs.includes(a.en) && (
-                      <Link
-                        className="community-tool-entry matchup-sim-link"
-                        to={unitPath(u.id, a.en, 4, [], []) + '?tab=sim'}
-                        aria-label={`${u.nameZh}：用${a.zh}模拟`}
-                      >
-                        用{a.zh}模拟
+            <p>
+              <b>你的相对优势：</b>
+              {m.myEdge}
+            </p>
+            <p>
+              <b>推荐反制</b>
+            </p>
+            {e.ty.map((t) => (
+              <p key={t} className="note">
+                <b>{TYPE_ZH[t]}：</b>
+                {counterExtra(data, a.en, t)}
+              </p>
+            ))}
+            {counters.length === 0 ? (
+              <p className="note">{EMPTY_COUNTERS_COPY}</p>
+            ) : (
+              <ul className="matchup-counter-list">
+                {counters.map((u) => {
+                  const unit = core.units.find((x) => x.id === u.id);
+                  return (
+                    <li key={u.id}>
+                      <Link className="ulink matchup-counter-link" to={matchupUnitPath(u.id, a.en, e.en)}>
+                        {unit && <UnitIcon u={unit} />}
+                        <span>{u.nameZh}</span>
                       </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-          {counters.length > 0 && <p className="note">默认帝王时代，未勾选科技与团队加成；仍计入已建模文明加成，可在模拟器调整，不代表本局进度。</p>}
-          <p>
-            <b>建议：</b>
-            {m.tips}
-          </p>
-          <p className="note rating-foot">
-            评分仅描述相对强弱，不代表兵种是否可用。自动生成的建议 · <RatingLabel />
-          </p>
-        </div>
-      )}
+                      {unit?.civs.includes(a.en) && (
+                        <Link
+                          className="community-tool-entry matchup-sim-link"
+                          to={unitPath(u.id, a.en, 4, [], []) + '?tab=sim'}
+                          aria-label={`${u.nameZh}：用${a.zh}模拟`}
+                        >
+                          用{a.zh}模拟
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            {counters.length > 0 && <p className="note">默认帝王时代，未勾选科技与团队加成；仍计入已建模文明加成，可在模拟器调整，不代表本局进度。</p>}
+            <p>
+              <b>建议：</b>
+              {m.tips}
+            </p>
+            <p className="note rating-foot">
+              评分仅描述相对强弱，不代表兵种是否可用。自动生成的建议 · <RatingLabel />
+            </p>
+          </div>
+        ))}
     </section>
   );
 }
