@@ -32,14 +32,14 @@ test.describe('首页开一局 #592', () => {
     await expect(page.getByTestId('start-empty')).toHaveText('暂无建议');
     await page.getByRole('button', { name: /法兰克/ }).click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
-    await expect(page.getByTestId('start-empty')).toHaveText('暂无建议');
-    await expect(page.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup$/);
+    await expect(page.getByTestId('start-step')).toContainText('本步暂无已核对对手数据');
+    await expect(page.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup\?me=Franks$/);
     await page.getByRole('button', { name: '完成本局', exact: true }).click();
     await expect(page.getByRole('heading', { level: 1, name: '本局摘要', exact: true })).toBeVisible();
     await expect(page.getByTestId('start-summary').locator('.start-sumkey')).toHaveText(['模式', '地图', '文明', '对手']);
-    await expect(page.getByTestId('start-summary').getByTestId('start-empty')).toHaveText('暂无建议');
+    await expect(page.getByTestId('start-summary').locator('.start-sumrow', { hasText: '对手' })).toContainText('暂无数据');
     await expect(page.getByTestId('start-summary')).toContainText('不是这一局的胜率');
-    await expect(page.getByTestId('start-summary').getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup$/);
+    await expect(page.getByTestId('start-summary').getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup\?me=Franks$/);
     await expect(page.getByTestId('start-summary').getByRole('link', { name: '天梯数据', exact: true })).toHaveAttribute('href', /#\/ladder$/);
     await expect(flowText(page)).not.toContainText('热门');
     await expect(flowText(page)).not.toContainText('常打');
@@ -309,7 +309,7 @@ test.describe('首页开一局 #592', () => {
       await page.getByRole('button', { name: /法兰克/ }).click();
       await page.getByRole('button', { name: '跳过此步', exact: true }).click();
       await expect(page.getByRole('heading', { level: 1, name: '本局摘要', exact: true })).toBeVisible();
-      await expect(page.getByTestId('start-summary')).toContainText('暂无建议');
+      await expect(page.getByTestId('start-summary').locator('.start-sumrow', { hasText: '对手' })).toContainText('已跳过');
       await expect(page.locator('.start-sumkey', { hasText: '路位' })).toBeVisible();
       await noOverflow(page);
       expect(errors).toEqual([]);

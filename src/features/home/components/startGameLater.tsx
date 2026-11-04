@@ -1,6 +1,7 @@
 import { useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
+import { buildsPath, matchupPath } from '../../../domain/matchupRoute';
 import { editStep, jumpTo, laneRowVisible, openLane, pickCiv, resetStart, type StartState, type StepId } from '../../../domain/startGame';
 import { Actions, CivRow, EmptySlot, LANE_EN, LANE_LABEL, ModeText, Picked, findMap, normalize, useMaps, type Update } from './startGameEarly';
 
@@ -126,13 +127,12 @@ export function OpponentStep({ state, onChange }: { state: StartState; onChange:
       <p id="start-opponent-h" className="start-ask-title">
         选对手
       </p>
-      <p className="start-why">这一步没有已核对的对手数据。不列出对手文明。</p>
+      <p className="start-why">本步暂无已核对对手数据，未列出对手文明。</p>
       <Picked state={state} />
-      <p className="start-k">建议</p>
-      <EmptySlot />
-      <Link className="start-link" to="/matchup">
+      <Link className="start-link" to={matchupPath(state.choice.civ)}>
         对局助手
       </Link>
+      <MatchupNotice selected={state.choice.civ != null} />
       <Actions state={state} onChange={onChange} finish />
     </section>
   );
@@ -187,7 +187,14 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
             </>
           ) : null}
         </SummaryRow>
-        <SummaryRow label="对手" step="opponent" state={state} onChange={onChange} filled={false}>
+        <SummaryRow
+          label="对手"
+          step="opponent"
+          state={state}
+          onChange={onChange}
+          filled={false}
+          empty={state.skipped.opponent === true ? '已跳过' : '暂无数据'}
+        >
           {null}
         </SummaryRow>
       </div>
@@ -203,17 +210,20 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
         <Link className="start-link" to="/ladder">
           天梯数据
         </Link>
-        <Link className="start-link" to="/matchup">
+        <Link className="start-link" to={matchupPath(civ?.en)}>
           对局助手
         </Link>
-        <Link className="start-link" to="/builds">
+        <Link className="start-link" to={buildsPath(civ?.en)}>
           开局流程
         </Link>
       </div>
+      <MatchupNotice selected={civ != null} />
       <p className="start-hint">
-        天梯打开的是现有静态快照，不是这一局的胜率。对局助手和开局流程不会自动带上{civ ? civ.zh : '所选文明'}。地图页不保证已经选中
-        {map ? map.name : '刚才的地图'}。
+        开局流程：
+        {civ ? '仅带入文明上下文，列表仍为全部开局；地图、路位未带入，具体流程需自行选择。' : '未带入本局文明，列表仍为全部开局，具体流程需自行选择。'}
       </p>
+      <p className="start-hint">{map ? `地图页不保证已选中${map.name}，请在页内选择。` : '地图页未带入本局地图，请在页内选择。'}</p>
+      <p className="start-hint">天梯打开的是现有静态快照，未按本局筛选，不是这一局的胜率。</p>
       <div className="start-actions">
         <button type="button" className="start-btn" onClick={() => onChange(() => resetStart())}>
           再开一局
@@ -230,6 +240,7 @@ export function SummaryRow({
   onChange,
   filled,
   children,
+  empty,
 }: {
   label: string;
   step: StepId;
@@ -237,14 +248,23 @@ export function SummaryRow({
   onChange: Update;
   filled: boolean;
   children: ReactNode;
+  empty?: string;
 }) {
   return (
     <div className="start-sumrow">
       <p className="start-sumkey">{label}</p>
-      <div className="start-sumval">{filled ? children : <EmptySlot skipped={state.skipped[step] === true} />}</div>
+      <div className="start-sumval">{filled ? children : empty != null ? empty : <EmptySlot skipped={state.skipped[step] === true} />}</div>
       <button type="button" className="start-btn" aria-label={`修改${label}`} onClick={() => onChange((current) => editStep(current, step))}>
         修改
       </button>
     </div>
+  );
+}
+
+function MatchupNotice({ selected }: { selected: boolean }) {
+  return (
+    <p className="start-hint">
+      {selected ? '仅带入我方文明；对手沿用助手原有选择，非本局当前对手。' : '未带入本局文明；助手沿用原有双方选择，不代表本局对阵。'}
+    </p>
   );
 }

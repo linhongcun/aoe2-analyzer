@@ -239,3 +239,108 @@ for (const width of [360, 375, 390, 1280]) {
     expect(errors).toEqual([]);
   });
 }
+
+for (const width of [360, 375, 390, 1280]) {
+  test(`#671 @${width} 真实助手与开局上下文、对手语义明确`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    if (width === 375) await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'light'));
+    const errors: string[] = [];
+    collectErrors(page, errors);
+    await page.goto('./#/matchup?me=Franks&opp=Japanese');
+    await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Franks');
+    await expect(page.locator('#me')).toHaveAttribute('data-value', 'Japanese');
+    await page.evaluate(() => {
+      location.hash = '/';
+    });
+    await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+    await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+    await page.getByRole('button', { name: /^蒙古/ }).click();
+    const opponent = page.getByTestId('start-step');
+    await expect(opponent).toHaveAttribute('data-step', 'opponent');
+    console.log(
+      JSON.stringify({
+        version: await page.locator('[data-t="footer-app-version"]').innerText(),
+        build: await page.locator('[data-t="footer-build"]').innerText(),
+      }),
+    );
+    await opponent.locator('a', { hasText: /^对局助手$/ }).click();
+    await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Mongols');
+    await expect(page.locator('#me')).toHaveAttribute('data-value', 'Japanese');
+    await page.goBack();
+    await expect(opponent).toContainText('本步暂无已核对对手数据，未列出对手文明');
+    await expect(opponent).toContainText('仅带入我方文明；对手沿用助手原有选择，非本局当前对手');
+    await expect(opponent.getByTestId('start-empty')).toHaveCount(0);
+    await noOverflow(page);
+    await page
+      .locator('#home')
+      .screenshot({ path: testInfo.outputPath(`context671-opponent-${width}.png`), style: 'header.topbar, .skip-link { visibility: hidden !important; }' });
+    await page.getByRole('button', { name: '完成本局', exact: true }).click();
+    const summary = page.getByTestId('start-summary');
+    const opponentRow = summary.locator('.start-sumrow').filter({ has: page.locator('.start-sumkey', { hasText: /^对手$/ }) });
+    await expect(opponentRow).toContainText('暂无数据');
+    await expect(opponentRow).not.toContainText('已跳过');
+    await expect(opponentRow).not.toContainText('暂无建议');
+    await expect(summary).toContainText('列表仍为全部开局');
+    await expect(summary).toContainText('地图页不保证已选中阿拉伯半岛');
+    await expect(summary).toContainText('未按本局筛选');
+    await expect(summary.getByRole('link', { name: '地图页', exact: true })).toHaveAttribute('href', /#\/maps$/);
+    await expect(summary.getByRole('link', { name: '天梯数据', exact: true })).toHaveAttribute('href', /#\/ladder$/);
+    await summary.getByRole('link', { name: '对局助手', exact: true }).click();
+    await expect(page.locator('#ma')).toHaveAttribute('data-value', 'Mongols');
+    await expect(page.locator('#me')).toHaveAttribute('data-value', 'Japanese');
+    await page.goBack();
+    await page.reload();
+    await expect(opponentRow).toContainText('暂无数据');
+    await noOverflow(page);
+    await page
+      .locator('#home')
+      .screenshot({ path: testInfo.outputPath(`context671-summary-${width}.png`), style: 'header.topbar, .skip-link { visibility: hidden !important; }' });
+    await summary.getByRole('link', { name: '开局流程', exact: true }).click();
+    await expect(page.locator('#builds nav[aria-label="对阵相关入口"]').getByRole('link', { name: /蒙古/ })).toHaveAttribute('href', /#\/civ\/Mongols$/);
+    await expect(page).toHaveURL(/#\/builds\?civ=Mongols$/);
+    await noOverflow(page);
+    expect(errors).toEqual([]);
+  });
+}
+
+test('#671 @1280 未选文明与竞技场警告、跳过可刷新分享', async ({ page, browser }) => {
+  const errors: string[] = [];
+  collectErrors(page, errors);
+  await page.goto('./#/');
+  await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+  await page.getByRole('button', { name: /竞技场/ }).click();
+  await page.getByTestId('start-skip').click();
+  const opponent = page.getByTestId('start-step');
+  await expect(opponent).toContainText('未带入本局文明；助手沿用原有双方选择，不代表本局对阵');
+  await expect(opponent.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup$/);
+  await page.getByTestId('start-skip').click();
+  const summary = page.getByTestId('start-summary');
+  const row = summary.locator('.start-sumrow').filter({ has: page.locator('.start-sumkey', { hasText: /^对手$/ }) });
+  await expect(row).toHaveText(/对手已跳过修改/);
+  await expect(summary).toContainText('地图页不保证已选中竞技场');
+  await expect(summary).toContainText('未带入本局文明，列表仍为全部开局');
+  await expect(summary.getByRole('link', { name: '对局助手', exact: true })).toHaveAttribute('href', /#\/matchup$/);
+  await expect(summary.getByRole('link', { name: '开局流程', exact: true })).toHaveAttribute('href', /#\/builds$/);
+  await expect(summary.getByRole('link', { name: '地图页', exact: true })).toHaveAttribute('href', /#\/maps$/);
+  await expect(summary.getByRole('link', { name: '天梯数据', exact: true })).toHaveAttribute('href', /#\/ladder$/);
+  await expect(summary).toContainText('未按本局筛选，不是这一局的胜率');
+  await expect.poll(() => stateFromUrl(page.url())?.skipped.opponent).toBe(true);
+  const url = page.url();
+  await page.reload();
+  await expect(row).toContainText('已跳过');
+  await page.getByRole('button', { name: '修改对手', exact: true }).click();
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await expect(row).toContainText('已跳过');
+  const freshContext = await browser.newContext();
+  try {
+    const fresh = await freshContext.newPage();
+    collectErrors(fresh, errors);
+    await fresh.goto(url);
+    await expect(fresh.getByTestId('start-summary').locator('.start-sumrow', { hasText: '对手' })).toContainText('已跳过');
+    await noOverflow(fresh);
+  } finally {
+    await freshContext.close();
+  }
+  await noOverflow(page);
+  expect(errors).toEqual([]);
+});
