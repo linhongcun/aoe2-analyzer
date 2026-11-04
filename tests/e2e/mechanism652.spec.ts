@@ -40,6 +40,38 @@ for (const width of [360, 375, 390, 1280]) {
     expect(errors).toEqual([]);
   });
 }
+for (const width of [360, 375, 390, 1280]) {
+  test(`#678 @${width} 人数侧重与理论先手机会分开`, async ({ page }, testInfo) => {
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+    await page.setViewportSize({ width, height: 900 });
+    await select(page);
+    const mayans = page.getByTestId('scene-Mayans'),
+      britons = page.getByTestId('scene-Britons');
+    await expect(mayans).toContainText('0 次');
+    await expect(mayans.locator(':scope > .start-k')).toHaveText('人数侧重 · 无先手机会');
+    await expect(britons).toContainText('1 次');
+    await expect(britons.locator(':scope > .start-k')).toHaveText('理论先手机会侧重');
+    await mayans.screenshot({ path: testInfo.outputPath('mayans-zero.png') });
+    await britons.screenshot({ path: testInfo.outputPath('britons-opening.png') });
+    const section = page.getByTestId('scenario-suggestions');
+    await section.getByText('调整场景与投入', { exact: true }).click();
+    await page.getByLabel('反应延迟', { exact: true }).selectOption('1.25');
+    await expect(britons).toContainText('0 次');
+    await expect(britons.locator(':scope > .start-k')).not.toContainText('先手机会侧重');
+    await expect(section.getByText('理论先手机会侧重', { exact: true })).toHaveCount(0);
+    await page.getByLabel('场景距离', { exact: true }).selectOption('2');
+    await expect(section.getByText('理论先手机会侧重', { exact: true })).toHaveCount(0);
+    await page.getByLabel('军事投入', { exact: true }).selectOption('0');
+    await expect(section).toContainText('当前预算或期限没有可优先建议的部队');
+    await expect(section.getByText('人数侧重 · 无先手机会', { exact: true })).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(errors).toEqual([]);
+  });
+}
 for (const width of [360, 375, 390, 1280])
   for (const theme of ['dark', 'light']) {
     test(`${width} ${theme} 场景指标与布局`, async ({ page }, testInfo) => {
