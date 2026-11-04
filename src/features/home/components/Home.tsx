@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Link, parsePath, useLocation, useNavigate } from 'react-router-dom';
 import { civs } from '../../../data';
 import { DLCS } from '../../../domain/dlc';
 import { HOME_GROUPS, type Section } from '../../../shared/nav/sections';
@@ -45,8 +46,27 @@ const Card = ({ s }: { s: Section }) => (
 );
 const POPULAR = ['Franks', 'Britons', 'Mongols', 'Persians', 'Hindustanis', 'Armenians', 'Romans', 'Shu'];
 
+function currentHomeSearch(): string | null {
+  if (typeof window === 'undefined') return null;
+  const path = parsePath(window.location.hash.slice(1) || '/');
+  return (path.pathname ?? '/') === '/' ? (path.search ?? '') : null;
+}
+
 export default function Home() {
-  const { state: flow, onChange, status, notice, retry, abandon } = useStartGamePersistence();
+  const { search } = useLocation();
+  const navigate = useNavigate();
+  const bridge = useMemo(
+    () => ({
+      isCurrent: (expected: string) => currentHomeSearch() === expected,
+      replace: (next: string, expected: string) => {
+        if (currentHomeSearch() !== expected) return false;
+        navigate({ pathname: '/', search: next }, { replace: true });
+        return true;
+      },
+    }),
+    [navigate],
+  );
+  const { state: flow, onChange, status, notice, retry, abandon } = useStartGamePersistence({ search, bridge });
   const foldTools = flow.current !== 'mode';
   return (
     <section id="home" className="pane">

@@ -102,3 +102,25 @@ export function writeStartGame(storage: () => StartStorage | undefined, state: S
     /* 被拒绝时仍可继续当前流程。 */
   }
 }
+
+export const START_SEARCH_LIMIT = START_GAME_LIMIT * 3 + 64;
+export function encodeStartSearch(state: StartState): string {
+  return `?${new URLSearchParams({ sgv: '1', sg: JSON.stringify(state) })}`;
+}
+export function decodeStartSearch(search: string, mapIds?: ReadonlySet<string>): StartRestore | { kind: 'absent' } {
+  if (search === '') return { kind: 'absent' };
+  if (!search.startsWith('?') || new TextEncoder().encode(search).length > START_SEARCH_LIMIT) return { kind: 'invalid' };
+  try {
+    // URLSearchParams本身容忍坏percent/UTF-8；这里只验证，不把解码结果再次解析。
+    decodeURIComponent(search.slice(1).replace(/\+/g, ' '));
+    const params = new URLSearchParams(search);
+    if ([...params].length !== 2 || params.getAll('sgv').length !== 1 || params.getAll('sg').length !== 1 || params.get('sgv') !== '1')
+      return { kind: 'invalid' };
+    const raw = params.get('sg');
+    if (!raw || new TextEncoder().encode(`{"version":1,"state":${raw}}`).length > START_GAME_LIMIT) return { kind: 'invalid' };
+    const state: unknown = JSON.parse(raw);
+    return decodeStartGame(JSON.stringify({ version: 1, state }), mapIds);
+  } catch {
+    return { kind: 'invalid' };
+  }
+}
