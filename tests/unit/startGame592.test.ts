@@ -1,4 +1,4 @@
-import { createElement, StrictMode } from 'react';
+import { createElement, StrictMode, useState } from 'react';
 import { act, create, type ReactTestRenderer } from 'react-test-renderer';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
@@ -301,10 +301,22 @@ async function mount674(raw: string | null, maps: () => Promise<readonly { id: s
         writes.push(value);
       },
     }));
-  const options = { storage, maps };
+  let live = '';
+  let updateSearch: (search: string) => void;
+  const bridge = {
+    isCurrent: (expected: string) => live === expected,
+    replace: (next: string, expected: string) => {
+      if (live !== expected) return false;
+      live = next;
+      updateSearch(next);
+      return true;
+    },
+  };
   let result!: ReturnType<typeof useStartGamePersistence>;
   function Probe() {
-    result = useStartGamePersistence(options);
+    const [search, setSearch] = useState('');
+    updateSearch = setSearch;
+    result = useStartGamePersistence({ storage, maps, search, bridge });
     return null;
   }
   let renderer!: ReactTestRenderer;
