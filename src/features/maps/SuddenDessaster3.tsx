@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SD3_CHECKED_AT, SD3_MAPS, SD3_SOURCE } from './suddenDessaster3';
+import { SD3_CHECKED_AT, SD3_MAPS, SD3_SOURCE } from './suddenDessaster3Data';
 import './sudden-dessaster.css';
 
 const normalize = (text: string) =>
