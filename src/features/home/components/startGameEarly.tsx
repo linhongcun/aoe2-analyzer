@@ -52,19 +52,35 @@ export function loadMaps(): Promise<MapEntry[]> {
   });
 }
 
-export function useMaps(): MapEntry[] | null {
+function useMapCatalog() {
   const [maps, setMaps] = useState(mapCache);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    if (mapCache) return;
     let live = true;
-    void loadMaps().then((list) => {
-      if (live) setMaps(list);
-    });
+    void loadMaps()
+      .then((list) => {
+        if (live) setMaps(list);
+      })
+      .catch(() => {
+        if (live) setFailed(true);
+      });
     return () => {
       live = false;
     };
-  }, []);
-  return maps;
+  }, [attempt]);
+  return {
+    maps,
+    failed,
+    retry: () => {
+      setFailed(false);
+      setAttempt((n) => n + 1);
+    },
+  };
+}
+
+export function useMaps(): MapEntry[] | null {
+  return useMapCatalog().maps;
 }
 
 export const normalize = (text: string) =>
@@ -278,7 +294,7 @@ export function ModeStep({ state, onChange }: { state: StartState; onChange: Upd
 
 export function MapStep({ state, onChange }: { state: StartState; onChange: Update }) {
   const [query, setQuery] = useState('');
-  const maps = useMaps();
+  const { maps, failed, retry } = useMapCatalog();
   const term = normalize(query);
   const visible = (maps ?? []).filter((map) => !term || [map.name, map.en, map.id].some((part) => normalize(part).includes(term)));
   return (
@@ -302,7 +318,18 @@ export function MapStep({ state, onChange }: { state: StartState; onChange: Upda
         <span>搜索地图</span>
         <input type="search" value={query} placeholder="中文或英文名" onChange={(event) => setQuery(event.target.value)} />
       </label>
-      {!maps ? <p className="start-hint">正在读取地图目录</p> : null}
+      {!maps ? (
+        failed ? (
+          <p role="alert">
+            地图目录加载失败。
+            <button type="button" className="start-btn" onClick={retry}>
+              重试地图目录
+            </button>
+          </p>
+        ) : (
+          <p className="start-hint">正在读取地图目录</p>
+        )
+      ) : null}
       {maps && visible.length ? (
         <div className="start-catalog">
           {visible.map((map) => (

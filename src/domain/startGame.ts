@@ -24,7 +24,7 @@ export interface StartState {
   /** 路径 B 在入口里填上的模式 / 地图，不是从游戏大厅读的。 */
   prefilled: Partial<Record<'mode' | 'map', boolean>>;
   teamArmed: boolean;
-  /** 从「已在大厅」进来。路位先不占格，直到玩家按「补路位」。 */
+  /** 从「已在大厅」进来。补齐组队人数和地图后开放路位。 */
   lobby: boolean;
   laneOpen: boolean;
   /** null 表示本局摘要，摘要本身不占一格。 */
@@ -181,6 +181,7 @@ export function chooseMap(state: StartState, mapId: string): StartState {
     prefilled: { ...state.prefilled, map: false },
   };
   if (changed) next = clearDownstream(next, 'map');
+  if (next.lobby && next.choice.mode === 'team' && next.choice.teamSize != null) next = { ...next, laneOpen: true };
   return advanceFrom(next, 'map');
 }
 

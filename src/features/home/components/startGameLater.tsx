@@ -1,7 +1,7 @@
 import { useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
-import { decisionSteps, editStep, jumpTo, laneRowVisible, openLane, pickCiv, resetStart, type StartState, type StepId } from '../../../domain/startGame';
+import { editStep, jumpTo, laneRowVisible, openLane, pickCiv, resetStart, type StartState, type StepId } from '../../../domain/startGame';
 import { Actions, CivRow, EmptySlot, LANE_EN, LANE_LABEL, ModeText, Picked, findMap, normalize, useMaps, type Update } from './startGameEarly';
 
 export function CivSearch({ shown, onChange, searchOnly = false }: { shown: ReadonlySet<string>; onChange: Update; searchOnly?: boolean }) {
@@ -92,7 +92,7 @@ export function CivStep({ state, onChange }: { state: StartState; onChange: Upda
       ) : null}
       {state.lobby ? (
         <div className="start-actions">
-          {state.choice.mode === 'team' && !decisionSteps(state).includes('lane') ? (
+          {state.choice.mode === 'team' && state.choice.teamSize != null && state.choice.lane == null ? (
             <button type="button" className="start-btn" onClick={() => onChange(openLane)}>
               补路位
             </button>

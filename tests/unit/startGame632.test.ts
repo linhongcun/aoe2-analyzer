@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   choose1v1,
+  chooseLane,
   chooseMap,
   chooseTeamSize,
   civPanels,
@@ -44,8 +45,9 @@ describe('大厅入口只记录实际输入 #632', () => {
     expect(civPanels(noMap)).toEqual({ kind: 'empty' });
     expect(editorialReason(pickCiv(noMap, 'Franks'))).toBeNull();
     const mapped = chooseMap(team, 'arabia');
-    expect(civPanels(mapped).kind).toBe('split');
-    const picked = pickCiv(mapped, 'Franks', 'pocket');
+    expect(mapped.current).toBe('lane');
+    expect(civPanels(mapped).kind).toBe('empty');
+    const picked = pickCiv(chooseLane(mapped, 'pocket'), 'Franks');
     expect(editorialReason(picked)).toContain('中路适合');
     expect(picked.choice).toMatchObject({ mode: 'team', teamSize: '4v4', mapId: 'arabia', lane: 'pocket', civ: 'Franks' });
   });
