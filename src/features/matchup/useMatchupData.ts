@@ -1,24 +1,15 @@
-import { useEffect, useState } from 'react';
-import { coreCache, loadCore, loadTrees, treesCache, type Core } from '../../data';
-import type { Trees } from '../../domain/types';
+import { useCoreTrees } from '../../shared/utils/useCoreTrees';
+import { useMemo } from 'react';
 
 export function useMatchupData() {
-  const [data, setData] = useState<{ core: Core; trees: Trees } | null>(() => (coreCache && treesCache ? { core: coreCache, trees: treesCache } : null));
-  const [error, setError] = useState(false);
-  useEffect(() => {
-    if (data) return;
-    let active = true;
-    void Promise.all([loadCore(), loadTrees()]).then(
-      ([core, trees]) => {
-        if (active) setData({ core, trees });
-      },
-      () => {
-        if (active) setError(true);
-      },
-    );
-    return () => {
-      active = false;
-    };
-  }, [data]);
-  return { data, error };
+  const resources = useCoreTrees();
+  const data = useMemo(
+    () => (resources.core.data && resources.trees.data ? { core: resources.core.data, trees: resources.trees.data } : null),
+    [resources.core.data, resources.trees.data],
+  );
+  return {
+    data,
+    error: resources.core.error || resources.trees.error,
+    retry: resources.retry,
+  };
 }

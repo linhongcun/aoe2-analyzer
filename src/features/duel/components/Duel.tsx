@@ -2,7 +2,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
-import { useCore, useTrees } from '../../../data/hooks';
+import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/useCoreTrees';
+import ChampiReferences from '../../../shared/ui/ChampiReferences';
+import { isChampiUnit } from '../../../domain/champiCounters';
 import { countForBudget } from '../../../domain/duel';
 import '../duel-headings.css';
 import { collapse } from '../../../domain/family';
@@ -29,18 +31,20 @@ const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] 
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
 
 export default function Duel() {
+  const resources = useCoreTrees();
   return (
     <>
       <BohemianPresetJump />
-      <DuelCalculator />
+      <DuelCalculator resources={resources} />
+      {resources.core.data && resources.trees.data ? <ChampiReferences core={resources.core.data} trees={resources.trees.data} /> : null}
       <BohemianPresetCards />
     </>
   );
 }
 
-function DuelCalculator() {
-  const core = useCore(),
-    trees = useTrees();
+function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
+  const core = resources.core.data,
+    trees = resources.trees.data;
   const [sp, setSp] = useSearchParams();
   const [context, setContext] = useState(() => duelCivs(sp));
   const contextSearch = useRef(sp.toString());
@@ -116,7 +120,16 @@ function DuelCalculator() {
       <section id="duel" className="pane">
         <ListHead level={1} title="单位 PK" desc="两个单位对战模拟" />
         {contextBar}
-        <Loading />
+        {resources.core.error || resources.trees.error ? (
+          <p role="alert">
+            对局资料加载失败，已选文明保留。
+            <button type="button" style={{ minHeight: 44, minWidth: 44 }} onClick={resources.retry}>
+              重试资料
+            </button>
+          </p>
+        ) : (
+          <Loading />
+        )}
       </section>
     );
   const A = resolve(ctx, core.unitById, parseSide(sp.get('a'), DEF_A), DEF_A.uid);
@@ -226,7 +239,7 @@ function DuelCalculator() {
         byId={core.unitById}
         params={sp}
         available={!isUnavail(A) && !isUnavail(B)}
-        onSave={(a, b) => set({ a: fmtSide(a), b: fmtSide(b), m: '1', base: fmtSide(a), fixed: fmtSide(b), basev: String(DATA_SOURCES.patch.build) })}
+        onSave={(a, b) => set({ a: fmtSide(a), b: fmtSide(b), m: '1', base: fmtSide(a), fixed: fmtSide(b), basev: String(DATA_SOURCES?.patch?.build ?? '') })}
         onClear={() => set({}, ['base', 'fixed', 'basev'])}
         onNormalize={(values) => set(values)}
       />
@@ -249,7 +262,9 @@ function DuelCalculator() {
       <p className="note duel-note">
         <Icon name="triangle-alert" className="ic warn" />
         近似模型：伤害 = max(1, Σ max(0, 攻击类别 − 对应护甲类别))（来源：Fandom「Armor class」、aoe2.rocks 伤害计算）；双方 t=0
-        同时出手（缺少出手前摇数据）；远程按命中率取期望伤害；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、特殊能力与独特科技（仅文本）。群战为集火模型，不考虑近战包围空间；等资源已计入已核实的常驻文明训练费用加成；未核实的加成、团队加成与需研究的科技折扣不计入。结果用于比较强弱趋势，不等同于实战。
+        同时出手（缺少出手前摇数据）；远程按命中率取期望伤害；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、
+        {isChampiUnit(A.u.id) || isChampiUnit(B.u.id) ? '未建模的独特/特殊效果未计入；已建模数值科技按实际选择计算。' : '特殊能力与独特科技（仅文本）。'}
+        群战为集火模型，不考虑近战包围空间；等资源已计入已核实的常驻文明训练费用加成；未核实的加成、团队加成与需研究的科技折扣不计入。结果用于比较强弱趋势，不等同于实战。
       </p>
     </section>
   );

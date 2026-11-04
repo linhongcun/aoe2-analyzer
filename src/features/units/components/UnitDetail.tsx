@@ -4,9 +4,11 @@ import { RangeB } from '../../../shared/ui/RangeB';
 import { RangeHelp } from '../../../shared/ui/RangeHelp';
 import { Link, useLocation } from 'react-router-dom';
 import { baseUnit } from '../../../domain/family';
-import type { Unit } from '../../../domain/types';
+import type { Trees, Unit } from '../../../domain/types';
 import { civByEn, civs } from '../../../data';
-import { useCore, useTrees } from '../../../data/hooks';
+import { useCoreTrees } from '../../../shared/utils/useCoreTrees';
+import ChampiReferences from '../../../shared/ui/ChampiReferences';
+import { isChampiUnit } from '../../../domain/champiCounters';
 import { civStatus, makeSimContext, parseUnitPath, routeWithQueryCiv } from '../../../domain/simulator';
 import { unitRelatedTechs, type UnitRelatedTech } from '../../../domain/relatedTechs';
 import { AGE_ZH } from '../../../domain/ratings';
@@ -63,9 +65,8 @@ function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {
 const UT: Record<string, string> = { UniqueUnit: '独特单位', Unit: '通用单位', UnitUpgrade: '升级单位', RegionalUnit: '区域单位' };
 
 /** 升级路线中的一项；独特单位带灰色小标签「{单位} · {文明}」+ 文明图标（#10） */
-function UnitLineItem({ x }: { x: Unit }) {
-  const trees = useTrees();
-  const c = trees ? civByEn(uniqueCivs(x, trees)[0] ?? '') : undefined;
+function UnitLineItem({ x, trees }: { x: Unit; trees: Trees }) {
+  const c = civByEn(uniqueCivs(x, trees)[0] ?? '');
   if (!c) return <UnitLink u={x} />;
   return (
     <span className="uline-uu">
@@ -111,8 +112,9 @@ function RelatedTechs({ items, compact = false, civ }: { items: UnitRelatedTech[
 
 export default function UnitDetail() {
   const loc = useLocation();
-  const core = useCore();
-  const trees = useTrees();
+  const resources = useCoreTrees();
+  const core = resources.core.data;
+  const trees = resources.trees.data;
   const rt = parseUnitPath(loc.pathname);
   const params = new URLSearchParams(loc.search);
   const queryCiv = civByEn(params.get('civ') ?? '');
@@ -127,7 +129,16 @@ export default function UnitDetail() {
   if (!core)
     return (
       <section className="pane">
-        <Loading />
+        {resources.core.error ? (
+          <p role="alert">
+            单位资料加载失败，当前地址保留。
+            <button type="button" style={{ minHeight: 44, minWidth: 44 }} onClick={resources.core.retry}>
+              重试资料
+            </button>
+          </p>
+        ) : (
+          <Loading />
+        )}
       </section>
     );
   if (!rt) return <UnitList />;
@@ -140,7 +151,9 @@ export default function UnitDetail() {
   const swap = (id: number) => loc.pathname.replace(/^\/unit\/\d+/, '/unit/' + id) + loc.search;
   // 有文明上下文时按该文明科技树选分叉（#10）
   const st = rt.civ && trees ? civStatus(trees, rt.civ) : null;
-  const ln = upgradeLine(u, core.units, core.unitById, st ? (id) => st['u' + id] === 1 : undefined).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id);
+  const ln = trees
+    ? upgradeLine(u, core.units, core.unitById, st ? (id) => st['u' + id] === 1 : undefined).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id)
+    : [];
   const stats: DetailStat[] = [
     { key: 'hp', icon: 'hp', label: '生命值 HP', value: u.hp, accent: true, change: isE ? u.hp - base.hp : undefined },
     { key: 'atk', icon: u.rng > 1 ? 'patk' : 'atk', label: '攻击力', value: u.atk, accent: true, change: isE ? u.atk - base.atk : undefined },
@@ -178,6 +191,7 @@ export default function UnitDetail() {
     },
   ];
   const rel = trees ? unitRelatedTechs(makeSimContext(core.techs, trees), u, rt.civ) : null;
+  const treeWaiting = resources.trees.error ? <p role="status">科技树资料暂不可用，请使用上方“重试科技树”。</p> : <Loading />;
   const cz = (en: string) => civByEn(en)?.zh;
   // #44「相关」第一项：完全重名（自动识别）与易混淆（对照表）互斥，一个单位只出现其中一种
   const peers = dupPeers(base, core.units);
@@ -212,6 +226,18 @@ export default function UnitDetail() {
       }
       tabsTop={
         <>
+          {!trees ? (
+            resources.trees.error ? (
+              <p role="alert">
+                科技树资料加载失败，基础资料仍可查看。
+                <button type="button" style={{ minHeight: 44, minWidth: 44 }} onClick={resources.trees.retry}>
+                  重试科技树
+                </button>
+              </p>
+            ) : (
+              <p role="status">科技树资料加载中，基础资料仍可查看。</p>
+            )
+          ) : null}
           {(showContext || siegeHref) && (
             <nav className="ctx-bar" aria-label={showContext ? '文明相关入口' : '本页相关工具'}>
               {contextCiv && (
@@ -232,6 +258,7 @@ export default function UnitDetail() {
             </nav>
           )}
           {u.id === 93 && <p className="note">通常在封建时代可用；亚美尼亚可在黑暗时代训练长矛兵。</p>}
+          {trees && isChampiUnit(u.id) ? <ChampiReferences core={core} trees={trees} variant="unit" /> : null}
           {elite && (
             <div className="eseg" role="radiogroup" aria-label="普通/精锐">
               <Link role="radio" aria-checked={!isE} className={isE ? undefined : 'on'} to={swap(base.id)} replace>
@@ -327,14 +354,14 @@ export default function UnitDetail() {
             </>
           ),
         },
-        ...(u.civs.length ? [{ key: 'sim', label: '科技模拟器', content: <Simulator key={u.id} u={u} route={simulatorRoute} /> }] : []),
+        ...(u.civs.length ? [{ key: 'sim', label: '科技模拟器', content: trees ? <Simulator key={u.id} u={u} route={simulatorRoute} /> : treeWaiting }] : []),
         {
           key: 'rel',
           label: '相关',
           content: (
             <>
               <h4>相关科技</h4>
-              {rel ? <RelatedTechs items={rel} civ={rt.civ} /> : <Loading />}
+              {rel ? <RelatedTechs items={rel} civ={rt.civ} /> : treeWaiting}
               <h4>
                 拥有该单位的文明（{u.civs.length}/{civs.length}）
               </h4>
@@ -381,23 +408,27 @@ export default function UnitDetail() {
             </SideBlock>
           )}
           <SideBlock title="升级路线">
-            <div className="uline vline">
-              <Join
-                sep={<Sep />}
-                items={ln.map((x) =>
-                  x.id === u.id ? (
-                    <b className="cur">
-                      <UnitIcon u={x} />
-                      {x.zh}
-                    </b>
-                  ) : (
-                    <UnitLineItem x={x} />
-                  ),
-                )}
-              />
-            </div>
+            {trees ? (
+              <div className="uline vline">
+                <Join
+                  sep={<Sep />}
+                  items={ln.map((x) =>
+                    x.id === u.id ? (
+                      <b className="cur">
+                        <UnitIcon u={x} />
+                        {x.zh}
+                      </b>
+                    ) : (
+                      <UnitLineItem x={x} trees={trees} />
+                    ),
+                  )}
+                />
+              </div>
+            ) : (
+              treeWaiting
+            )}
           </SideBlock>
-          <SideBlock title="相关科技">{rel ? <RelatedTechs items={rel} compact civ={rt.civ} /> : <Loading />}</SideBlock>
+          <SideBlock title="相关科技">{rel ? <RelatedTechs items={rel} compact civ={rt.civ} /> : treeWaiting}</SideBlock>
           <SideBlock title={`可用文明 ${u.civs.length}/${civs.length}`}>
             <div className="unit-civ-links">
               <Join

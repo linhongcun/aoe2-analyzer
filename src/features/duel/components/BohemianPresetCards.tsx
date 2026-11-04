@@ -19,7 +19,8 @@ function focusPresetTarget(id: 'duel' | 'duel-presets') {
 }
 
 export function BohemianPresetJump() {
-  if (!bohemianPresetsFor(DATA_SOURCES.patch.build).length) return null;
+  const build = DATA_SOURCES?.patch?.build;
+  if (typeof build !== 'number' || !bohemianPresetsFor(build).length) return null;
   return (
     <div className="bar">
       <button type="button" onClick={() => focusPresetTarget('duel-presets')}>
@@ -73,14 +74,14 @@ function PresetCard({ preset, stateKey }: { preset: BohemianPreset; stateKey: st
 
 export function BohemianPresetCards() {
   const location = useLocation();
-  const presets = bohemianPresetsFor(DATA_SOURCES.patch.build);
+  const build = DATA_SOURCES?.patch?.build;
+  const presets = typeof build === 'number' ? bohemianPresetsFor(build) : [];
   if (!presets.length) return null;
   return (
     <section id="duel-presets" tabIndex={-1} className="pane" aria-label="波希米亚预置对战">
       <h2>波希米亚预置对战</h2>
       <p className="note">
-        波希米亚对法兰克，双方当前时代满科技、无团队加成，<span className="num nw">1v1</span>。数据{' '}
-        <span className="num nw">DE {DATA_SOURCES.patch.build}</span>。
+        波希米亚对法兰克，双方当前时代满科技、无团队加成，<span className="num nw">1v1</span>。数据 <span className="num nw">DE {build}</span>。
       </p>
       <p className="note">沿用上方 PK 近似模型及其限制，结果不等同实战。</p>
       <div className="two">
