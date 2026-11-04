@@ -231,6 +231,11 @@ for (const [civ, lane, reason] of [
     await page.getByRole('button', { name: '保留此文明继续', exact: true }).click();
     await page.getByTestId('start-skip').click();
     await expect(page.getByTestId('start-summary')).toContainText(civ!);
+    const summary = page.getByTestId('start-scene-summary');
+    await expect(summary).toContainText(reason!);
+    await summary.getByText('查看本局场景结果', { exact: true }).click();
+    await expect(summary.locator('p').filter({ hasText: '预算可负担' })).toHaveCount(0);
+    await expect(summary.locator('p').filter({ hasText: /先手窗口|期限前/ })).toHaveCount(0);
   });
 
 test('#667 @1280 主卡默认折叠计算证据', async ({ page }) => {

@@ -31,10 +31,13 @@ export default function StartPlanSummary({ state }: { state: StartState }) {
       live = false;
     };
   }, [attempt]);
-  const row = useMemo(
-    () => (data && civ ? (scenarioRows(data.context, lane, cfg).find((r) => r.civ === civ.en) ?? scenarioProfile(data.context, civ.en, lane, cfg)) : null),
-    [data, civ, lane, cfg],
-  );
+  const row = useMemo(() => {
+    if (!data || !civ) return null;
+    const listed = scenarioRows(data.context, lane, cfg).find((r) => r.civ === civ.en);
+    if (listed) return listed;
+    const profile = scenarioProfile(data.context, civ.en, lane, cfg);
+    return { civ: civ.en, status: 'blocked' as const, preferred: false, reason: '不在此路位首批比较范围' + (profile.reason ? `；${profile.reason}` : '') };
+  }, [data, civ, lane, cfg]);
   const route = useMemo(
     () => (data && civ && state.routeConfig ? ageRoutes(data.context, lane, state.routeConfig).find((r) => r.civ === civ.en) : null),
     [data, civ, lane, state.routeConfig],
