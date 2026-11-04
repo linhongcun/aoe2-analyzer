@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { decisionSteps, enterLobby, laneRowVisible, type StartState } from '../../../domain/startGame';
+import { enterLobby, laneRowVisible, type StartState } from '../../../domain/startGame';
 import '../start-game.css';
 import { LaneStep, MapStep, ModeStep, Practice, StepBar, loadMaps, type Update } from './startGameEarly';
 import { CivStep, OpponentStep, Summary } from './startGameLater';
 
 function lede(state: StartState): string {
+  if (state.lobby) return '可按当前选择继续，也可以回头改条件。没有连上游戏大厅。';
   if (state.current == null) return '查看并修改本局选择。这里不估算本局胜率。';
-  if (state.lobby && state.current === 'civ') return '从文明接着选。未填写的模式和地图按已跳过处理，可以回头补选。没有连上游戏大厅。';
   if (state.current === 'mode') return '先定这局怎么打。可以跳过，也可以回头改。';
   return '可以跳过，也可以回头改。';
 }
@@ -17,14 +17,16 @@ function note(state: StartState): string {
   }
   if (state.current === 'mode') return '先选单挑或组队，也可以跳过。';
   if (state.current === 'lane') return '按队伍安排选择路位，也可以跳过。';
-  if (state.current === 'civ' && state.lobby && state.choice.mode === 'team' && state.choice.mapId && !decisionSteps(state).includes('lane'))
+  if (state.current === 'civ' && state.lobby && state.choice.mode === 'team' && state.choice.mapId && state.choice.lane == null)
     return '路位尚未选择。可点「补路位」补选，也可以自主选择文明。';
   return '点已完成的步骤可返回修改。';
 }
 
 export default function StartGame({ state, onChange }: { state: StartState; onChange: Update }) {
   useEffect(() => {
-    void loadMaps();
+    void loadMaps().catch(() => {
+      /* 地图步或恢复区显示失败与重试。 */
+    });
   }, []);
   const lobbyStart = state.lobby && state.current === 'civ';
   return (

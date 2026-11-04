@@ -1,11 +1,10 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { civs } from '../../../data';
 import { DLCS } from '../../../domain/dlc';
-import { resetStart } from '../../../domain/startGame';
 import { HOME_GROUPS, type Section } from '../../../shared/nav/sections';
 import { CivIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
+import { useStartGamePersistence } from '../useStartGamePersistence';
 import StartGame from './StartGame';
 import '../home.css';
 
@@ -47,11 +46,31 @@ const Card = ({ s }: { s: Section }) => (
 const POPULAR = ['Franks', 'Britons', 'Mongols', 'Persians', 'Hindustanis', 'Armenians', 'Romans', 'Shu'];
 
 export default function Home() {
-  const [flow, setFlow] = useState(resetStart);
+  const { state: flow, onChange, status, notice, retry, abandon } = useStartGamePersistence();
   const foldTools = flow.current !== 'mode';
   return (
     <section id="home" className="pane">
-      <StartGame state={flow} onChange={setFlow} />
+      {status !== 'ready' ? (
+        <section className="start-game" aria-labelledby="start-restore-h">
+          <h1 id="start-restore-h">恢复本局进度</h1>
+          <p role={status === 'failed' ? 'alert' : 'status'}>
+            {status === 'failed' ? '地图目录加载失败，原进度已保留。可以重试或放弃恢复。' : '正在核对本局地图，原进度已保留。'}
+          </p>
+          {status === 'failed' ? (
+            <button className="start-btn" onClick={retry}>
+              重试恢复
+            </button>
+          ) : null}
+          <button className="start-btn" onClick={abandon}>
+            放弃恢复，重新开始
+          </button>
+        </section>
+      ) : (
+        <>
+          {notice ? <p role="alert">{notice}</p> : null}
+          <StartGame state={flow} onChange={onChange} />
+        </>
+      )}
       <section
         className={foldTools ? 'start-more is-folded' : 'start-more'}
         data-testid="start-more-tools"

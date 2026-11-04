@@ -1,4 +1,5 @@
-import { createElement } from 'react';
+import { createElement, StrictMode } from 'react';
+import { act, create, type ReactTestRenderer } from 'react-test-renderer';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -24,6 +25,8 @@ import {
   skipStep,
 } from '../../src/domain/startGame';
 import Home from '../../src/features/home/components/Home';
+import { decodeStartGame, encodeStartGame, START_GAME_KEY, type StartStorage } from '../../src/features/home/startGamePersistence';
+import { useStartGamePersistence } from '../../src/features/home/useStartGamePersistence';
 
 const home = () => renderToStaticMarkup(createElement(StaticRouter, { location: '/' }, createElement(Home)));
 const frank = '骑兵从封建时代起生命更高，磨坊科技免费，中路适合发育后出骑士。';
@@ -107,13 +110,15 @@ describe('开一局步骤 #592', () => {
     expect(decisionSteps(lobby)).toEqual(['mode', 'map', 'civ', 'opponent']);
     expect(laneRowVisible(lobby)).toBe(false);
     const configured = chooseMap(chooseTeamSize(jumpTo(lobby, 'mode'), '4v4'), 'arabia');
-    const panel = civPanels(configured);
-    expect(panel.kind).toBe('split');
-    if (panel.kind !== 'split') return;
-    expect(panel.groups.map((group) => group.side)).toEqual(['pocket', 'flank']);
-    expect(panel.groups[0]?.tips[0]).toEqual({ civ: 'Franks', reason: frank });
-    expect(panel.groups[1]?.tips[0]?.civ).toBe('Britons');
-    const picked = pickCiv(configured, 'Franks', 'pocket');
+    expect(configured.current).toBe('lane');
+    const panel = civPanels(chooseLane(configured, 'pocket'));
+    expect(panel.kind).toBe('side');
+    if (panel.kind !== 'side') return;
+    expect(panel.side).toBe('pocket');
+    expect(panel.tips[0]).toEqual({ civ: 'Franks', reason: frank });
+    const flank = civPanels(chooseLane(configured, 'flank'));
+    expect(flank.kind === 'side' && flank.tips[0]?.civ).toBe('Britons');
+    const picked = pickCiv(chooseLane(configured, 'pocket'), 'Franks');
     expect(picked.choice).toMatchObject({ lane: 'pocket', civ: 'Franks' });
     expect(picked.current).toBe('opponent');
     expect(laneRowVisible(picked)).toBe(true);
@@ -165,5 +170,250 @@ describe('开一局步骤 #592', () => {
     expect(html.indexOf('data-testid="start-game"')).toBeLessThan(html.indexOf('class="hgrid"'));
     const flowHtml = html.slice(html.indexOf('data-testid="start-game"'), html.indexOf('data-testid="start-more-tools"'));
     expect(flowHtml).not.toMatch(/胜率\s*\d|\d+(?:\.\d+)?\s*%|热门|常打|出场率/);
+  });
+});
+
+const MAP_IDS = new Set(['arabia', 'arena', 'black-forest']);
+const configured674 = () => chooseLane(chooseMap(chooseTeamSize(jumpTo(enterLobby(), 'mode'), '4v4'), 'arabia'), 'pocket');
+
+describe('本局严格存档 #674', () => {
+  it('合法UI事件序列保留全部选择、false标记、current与大厅语义', () => {
+    const configured = configured674();
+    const summary = finishFlow(pickCiv(configured, 'Franks'));
+    const skipped = skipStep(chooseMap(chooseTeamSize(resetStart(), '4v4'), 'arabia'));
+    const states = [
+      resetStart(),
+      armTeam(resetStart()),
+      enterLobby(),
+      pickCiv(enterLobby(), 'Franks'),
+      choose1v1(resetStart()),
+      chooseMap(choose1v1(resetStart()), 'black-forest'),
+      configured,
+      summary,
+      { ...summary, skipped: { ...summary.skipped, opponent: false } },
+      { ...summary, skipped: { ...summary.skipped, opponent: undefined } },
+      skipStep(pickCiv(configured, 'Franks')),
+      skipStep(skipStep(skipStep(skipStep(resetStart())))),
+      backStep(skipped),
+      jumpTo(summary, 'map'),
+      editStep(skipStep(pickCiv(configured, 'Franks')), 'opponent'),
+      chooseTeamSize(jumpTo(configured, 'mode'), '4v4'),
+      choose1v1(jumpTo(openLane(configured), 'mode')),
+      armTeam(jumpTo(chooseMap(choose1v1(jumpTo(configured, 'mode')), 'arabia'), 'mode')),
+    ];
+    for (const state of states) {
+      const normalized = JSON.parse(JSON.stringify(state));
+      expect(decodeStartGame(encodeStartGame(state), MAP_IDS), JSON.stringify(state)).toEqual({ kind: 'valid', state: normalized });
+    }
+  });
+
+  it('有地图时仅待完整目录，未知ID拒绝；无地图不必等待', () => {
+    const state = configured674();
+    expect(decodeStartGame(encodeStartGame(state)).kind).toBe('needs-maps');
+    expect(decodeStartGame(encodeStartGame(state), new Set(['arena'])).kind).toBe('invalid');
+    expect(decodeStartGame(encodeStartGame(resetStart())).kind).toBe('valid');
+  });
+
+  it('拒绝字段、版本、类型、组合、前置步骤、未知ID和超长输入，不发明默认值', () => {
+    const base = () => JSON.parse(encodeStartGame(resetStart()));
+    const invalidFields: [string[], unknown][] = [
+      [['version'], '1'],
+      [['version'], 2],
+      [['extra'], true],
+      [['state', 'extra'], true],
+      [['state', 'choice', 'extra'], true],
+      [['state', 'skipped'], []],
+      [['state', 'prefilled'], null],
+      [['state', 'skipped', 'mode'], 'false'],
+      [['state', 'skipped', 'extra'], false],
+      [['state', 'prefilled', 'civ'], false],
+      [['state', 'teamArmed'], 1],
+      [['state', 'lobby'], 'true'],
+      [['state', 'laneOpen'], null],
+      [['state', 'choice', 'mode'], '4v4'],
+      [['state', 'choice', 'teamSize'], '5v5'],
+      [['state', 'choice', 'lane'], 'left'],
+      [['state', 'current'], 'lane'],
+      [['state', 'choice', 'civ'], 'unknown'],
+      [['state', 'choice', 'mapId'], 'unknown'],
+      [['state', 'choice', 'mode'], 'team'],
+      [['state', 'choice', 'teamSize'], '4v4'],
+      [['state', 'choice', 'lane'], 'pocket'],
+      [['state', 'prefilled', 'mode'], true],
+      [['state', 'current'], 'map'],
+      [['state', 'current'], null],
+    ];
+    const patch = (path: string[], value: unknown, remove = false) => {
+      const input = base();
+      let target = input as Record<string, unknown>;
+      for (const key of path.slice(0, -1)) target = target[key] as Record<string, unknown>;
+      if (remove) delete target[path.at(-1)!];
+      else target[path.at(-1)!] = value;
+      return input;
+    };
+    const invalid = invalidFields.map(([path, value]) => patch(path, value));
+    for (const key of ['choice', 'skipped', 'prefilled', 'teamArmed', 'lobby', 'laneOpen', 'current']) invalid.push(patch(['state', key], null, true));
+    for (const key of ['mode', 'teamSize', 'mapId', 'lane', 'civ']) invalid.push(patch(['state', 'choice', key], null, true));
+    invalid.push(patch(['state'], null, true));
+    const armedSolo = base();
+    armedSolo.state.choice.mode = '1v1';
+    armedSolo.state.teamArmed = true;
+    invalid.push(armedSolo);
+    const skippedSolo = base();
+    skippedSolo.state.choice.mode = '1v1';
+    skippedSolo.state.skipped.mode = true;
+    invalid.push(skippedSolo);
+    for (const value of invalid) {
+      expect(decodeStartGame(JSON.stringify(value), MAP_IDS), JSON.stringify(value)).toEqual({ kind: 'invalid' });
+    }
+    for (const raw of ['null', '[]', '{', '{}', ' '.repeat(4097), JSON.stringify({ text: '中'.repeat(1500) })]) {
+      expect(decodeStartGame(raw, MAP_IDS)).toEqual({ kind: 'invalid' });
+    }
+    const skippedCurrent = jumpTo(enterLobby(), 'map');
+    expect(skippedCurrent.skipped.map).toBe(true);
+    expect(decodeStartGame(encodeStartGame(skippedCurrent), MAP_IDS).kind).toBe('valid');
+    expect(decodeStartGame(encodeStartGame(chooseMap(resetStart(), 'arabia')), MAP_IDS).kind).toBe('invalid');
+  });
+});
+
+function deferred674() {
+  let resolve!: (maps: { id: string }[]) => void;
+  let reject!: (error: Error) => void;
+  const promise = new Promise<{ id: string }[]>((yes, no) => {
+    resolve = yes;
+    reject = no;
+  });
+  return { promise, resolve, reject };
+}
+async function mount674(raw: string | null, maps: () => Promise<readonly { id: string }[]>, storageOverride?: () => StartStorage | undefined) {
+  const writes: string[] = [];
+  let stored = raw;
+  const storage =
+    storageOverride ??
+    (() => ({
+      getItem: (key: string) => {
+        expect(key).toBe(START_GAME_KEY);
+        return stored;
+      },
+      setItem: (key: string, value: string) => {
+        expect(key).toBe(START_GAME_KEY);
+        stored = value;
+        writes.push(value);
+      },
+    }));
+  const options = { storage, maps };
+  let result!: ReturnType<typeof useStartGamePersistence>;
+  function Probe() {
+    result = useStartGamePersistence(options);
+    return null;
+  }
+  let renderer!: ReactTestRenderer;
+  await act(async () => {
+    renderer = create(createElement(StrictMode, null, createElement(Probe)));
+  });
+  return {
+    get result() {
+      return result;
+    },
+    writes,
+    get stored() {
+      return stored;
+    },
+    unmount: () => act(() => renderer.unmount()),
+  };
+}
+
+describe('本局实际恢复hook #674', () => {
+  it('等待地图时无写入，验证成功恢复完整状态；正常操作后才保存', async () => {
+    const wait = deferred674();
+    const state = configured674();
+    const view = await mount674(encodeStartGame(state), () => wait.promise);
+    expect(view.result.status).toBe('pending');
+    expect(view.writes).toEqual([]);
+    await act(async () => view.result.onChange(() => resetStart()));
+    expect(view.result.status).toBe('pending');
+    await act(async () => wait.resolve([{ id: 'arabia' }]));
+    expect(view.result.state).toEqual(state);
+    expect(view.writes).toEqual([]);
+    await act(async () => view.result.onChange((current) => pickCiv(current, 'Franks')));
+    expect(JSON.parse(view.stored!).state.choice.civ).toBe('Franks');
+    view.unmount();
+  });
+
+  it('失败保留原存档、可重试；未知ID安全空态且不写回，玩家操作后才替换', async () => {
+    const first = deferred674();
+    const second = deferred674();
+    let calls = 0;
+    const raw = encodeStartGame(configured674());
+    const view = await mount674(raw, () => (++calls === 1 ? first.promise : second.promise));
+    await act(async () => first.reject(new Error('offline')));
+    expect(view.result.status).toBe('failed');
+    expect(view.stored).toBe(raw);
+    expect(view.writes).toEqual([]);
+    await act(async () => view.result.retry());
+    await act(async () => second.resolve([{ id: 'arena' }]));
+    expect(view.result.status).toBe('ready');
+    expect(view.result.state).toEqual(resetStart());
+    expect(view.result.notice).toContain('无法恢复');
+    expect(view.stored).toBe(raw);
+    expect(view.writes).toEqual([]);
+    await act(async () => view.result.onChange(choose1v1));
+    expect(JSON.parse(view.stored!).state.choice.mode).toBe('1v1');
+    view.unmount();
+  });
+
+  it('同批次放弃与成功/失败迟到均不能复活旧局；卸载不写入', async () => {
+    for (const fail of [false, true]) {
+      const wait = deferred674();
+      const view = await mount674(encodeStartGame(configured674()), () => wait.promise);
+      await act(async () => {
+        view.result.abandon();
+        if (fail) wait.reject(new Error('late'));
+        else wait.resolve([{ id: 'arabia' }]);
+        await Promise.resolve();
+      });
+      expect(view.result.status).toBe('ready');
+      expect(view.result.state).toEqual(resetStart());
+      expect(JSON.parse(view.stored!).state).toEqual(resetStart());
+      view.unmount();
+    }
+    const wait = deferred674();
+    const view = await mount674(encodeStartGame(configured674()), () => wait.promise);
+    view.unmount();
+    await act(async () => wait.resolve([{ id: 'arabia' }]));
+    expect(view.writes).toEqual([]);
+  });
+
+  it('无效原记录不自动覆盖；storage getter/get/set失败与无storage仍可操作', async () => {
+    const invalid = await mount674('{bad', async () => []);
+    expect(invalid.result.state).toEqual(resetStart());
+    expect(invalid.result.notice).toContain('无法恢复');
+    expect(invalid.writes).toEqual([]);
+    invalid.unmount();
+    for (const storage of [
+      () => {
+        throw new Error('getter');
+      },
+      () => ({
+        getItem: () => {
+          throw new Error('read');
+        },
+        setItem: () => {
+          throw new Error('write');
+        },
+      }),
+      () => ({
+        getItem: () => null,
+        setItem: () => {
+          throw new Error('write');
+        },
+      }),
+      () => undefined,
+    ]) {
+      const view = await mount674(null, async () => [], storage);
+      await act(async () => view.result.onChange(choose1v1));
+      expect(view.result.state.choice.mode).toBe('1v1');
+      view.unmount();
+    }
   });
 });

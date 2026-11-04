@@ -98,6 +98,8 @@ test.describe('首页开一局 #592', () => {
     await page.getByRole('button', { name: '组队随机地图', exact: false }).click();
     await page.getByRole('button', { name: '4v4', exact: true }).click();
     await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+    await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');
+    await page.getByTestId('start-skip').click();
     await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
     await expect(flowText(page)).toContainText('当前条件暂无机制建议');
     await expect(page.getByRole('button', { name: /不列颠/ })).toBeVisible();
@@ -123,6 +125,8 @@ test.describe('首页开一局 #592', () => {
       await page.getByRole('button', { name: /组队随机地图/ }).click();
       await page.getByRole('button', { name: size, exact: true }).click();
       await page.getByRole('button', { name: map }).click();
+      await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');
+      await page.getByTestId('start-skip').click();
       await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
       expect(await page.locator('.start-note').innerText()).not.toMatch(/补路位.*查看.*建议/);
       await page.getByRole('button', { name: '补路位', exact: true }).click();
@@ -216,6 +220,8 @@ test.describe('首页开一局 #592', () => {
       await page.getByRole('button', { name: '修改模式和地图', exact: true }).click();
       await teamMap();
       await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+      await expect(step).toHaveAttribute('data-step', 'lane');
+      await page.getByTestId('start-skip').click();
       await unsupported();
       await expect(page.getByRole('button', { name: '补路位', exact: true })).toBeVisible();
       await capture('missing-lane');
@@ -309,4 +315,101 @@ test.describe('首页开一局 #592', () => {
       expect(errors).toEqual([]);
     });
   }
+});
+
+for (const width of WIDTHS) {
+  test(`#674 @${width} 大厅补图自动进入路位并在各步刷新保留本局`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+    await page.goto('./#/');
+    await page.getByTestId('start-lobby').click();
+    await page.getByRole('button', { name: /法兰克/ }).click();
+    await page.getByTestId('start-steps').getByRole('button', { name: '模式', exact: true }).click();
+    await page.getByRole('button', { name: /组队随机地图/ }).click();
+    await page.getByRole('button', { name: '4v4', exact: true }).click();
+    await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+    await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');
+    await expect(page.locator('.start-lede')).not.toContainText('按已跳过');
+    await page.reload();
+    await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');
+    await expect(page.getByTestId('start-game')).toContainText('没有连上游戏大厅');
+    await page.locator('#home').screenshot({ path: testInfo.outputPath(`lobby674-lane-${width}.png`) });
+    await page.getByRole('button', { name: /^中路/ }).click();
+    await page.reload();
+    await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+    await expect(page.getByTestId('start-game')).toContainText('已选文明保留');
+    await expect(page.locator('.start-picked')).toContainText('4v4');
+    await expect(page.locator('.start-picked')).toContainText('阿拉伯半岛');
+    await expect(page.locator('.start-picked')).toContainText('中路');
+    await expect(page.locator('.start-lede')).not.toContainText('按已跳过');
+    await page.locator('#home').screenshot({ path: testInfo.outputPath(`lobby674-civ-${width}.png`) });
+    await page.getByRole('button', { name: '保留此文明继续', exact: true }).click();
+    await page.getByRole('button', { name: '完成本局', exact: true }).click();
+    await page.reload();
+    await expect(page.getByTestId('start-summary')).toContainText('法兰克');
+    await expect(page.getByTestId('start-game')).toContainText('没有连上游戏大厅');
+    await page.getByRole('button', { name: '再开一局', exact: true }).click();
+    await page.reload();
+    await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
+    await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+    await page.reload();
+    await expect(page.getByTestId('start-steps')).not.toContainText('路位');
+    await noOverflow(page);
+    expect(errors).toEqual([]);
+  });
+}
+
+test('#674 @1280 大厅已选文明刷新保留进度', async ({ page }) => {
+  await page.goto('./#/');
+  await page.getByTestId('start-lobby').click();
+  await page.getByRole('button', { name: /法兰克/ }).click();
+  await page.reload();
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await expect(page.getByTestId('start-summary')).toContainText('法兰克');
+});
+
+test('#674 @1280 非法存档安全空局且玩家操作前不覆盖', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('aoe2-start-game-v1', '{invalid'));
+  await page.goto('./#/');
+  await expect(page.getByRole('alert')).toContainText('保存的本局进度无法恢复');
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
+  await expect(page.getByRole('button', { name: '4v4', exact: true })).toBeDisabled();
+  expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe('{invalid');
+  await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('aoe2-start-game-v1')!));
+  expect(saved.state.choice).toEqual({ mode: '1v1', teamSize: null, mapId: null, lane: null, civ: null });
+});
+
+test('#674 @1280 恢复地图加载失败保留原档且可重试', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  const raw = JSON.stringify({
+    version: 1,
+    state: {
+      choice: { mode: 'team', teamSize: '4v4', mapId: 'arabia', lane: 'pocket', civ: 'Franks' },
+      skipped: {},
+      prefilled: {},
+      teamArmed: true,
+      lobby: true,
+      laneOpen: true,
+      current: 'civ',
+    },
+  });
+  await page.addInitScript((value) => localStorage.setItem('aoe2-start-game-v1', value), raw);
+  await page.route(/\/assets\/mapCatalog-[^/]+\.js$/, (route) => route.abort());
+  await page.goto('./#/');
+  await expect(page.getByRole('alert')).toContainText('地图目录加载失败，原进度已保留');
+  expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe(raw);
+  await expect(page.getByTestId('start-step')).toHaveCount(0);
+  await page.unroute(/\/assets\/mapCatalog-[^/]+\.js$/);
+  await page.getByRole('button', { name: '重试恢复', exact: true }).click();
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+  await expect(page.getByTestId('start-game')).toContainText('已选文明保留');
+  expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe(raw);
+  expect(errors).toEqual([]);
 });

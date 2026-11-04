@@ -202,7 +202,6 @@ test('数据加载失败时保留选择并可继续，不刷新整页', async ({
   await page.getByRole('button', { name: /组队随机地图/ }).click();
   await page.getByRole('button', { name: '4v4', exact: true }).click();
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
-  await page.getByRole('button', { name: '补路位', exact: true }).click();
   await page.getByRole('button', { name: /^中路/ }).click();
   await expect(page.getByRole('alert')).toContainText('加载失败');
   await expect(page.getByTestId('start-step')).toContainText('已选文明保留');
