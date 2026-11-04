@@ -157,7 +157,7 @@ describe('开一局步骤 #592', () => {
     expect(html).toContain('data-testid="start-lobby"');
     expect(html).toContain('data-testid="start-practice"');
     expect(html).toContain('data-testid="start-more-tools"');
-    expect(html).toContain('先练某个文明 · 首刀不做');
+    expect(html).toContain('按文明练习 · 即将提供');
     expect(html).toContain('搜索文明、单位、科技、开局…');
     expect(html).toContain('更多工具');
     expect(html).not.toMatch(/<a[^>]*data-testid="start-practice"/);

@@ -61,7 +61,7 @@ export default function Home() {
           更多工具
         </p>
         <div className="start-more-body">
-          <p className="start-why">查资料和计算器还在这里，不再是首页第一件事。</p>
+          <p className="start-why">查看文明资料、对局分析与开局计算。</p>
           <button className="herosearch" onClick={() => dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}>
             <Icon name="search" />
             <span>搜索文明、单位、科技、开局…</span>
@@ -95,7 +95,7 @@ export default function Home() {
           ))}
         </div>
         <p className="start-folded" id="more-folded">
-          更多工具收在下面，这一步不展开。
+          查资料和计算工具可从导航打开。
         </p>
       </section>
     </section>

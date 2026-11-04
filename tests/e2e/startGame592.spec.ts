@@ -86,7 +86,7 @@ test.describe('首页开一局 #592', () => {
   test('已在大厅从文明起；先练文明不能点', async ({ page }) => {
     await page.goto('./#/');
     const practice = page.getByTestId('start-practice');
-    await expect(practice).toHaveText('先练某个文明 · 首刀不做');
+    await expect(practice).toHaveText('按文明练习 · 即将提供');
     expect(await practice.evaluate((el) => el.matches('a, button, [href], [tabindex]'))).toBe(false);
     await page.getByTestId('start-lobby').click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
@@ -107,6 +107,68 @@ test.describe('首页开一局 #592', () => {
   });
 
   for (const width of WIDTHS) {
+    test(`#673 @${width} 三条开局路径只显示玩家能用的说明`, async ({ page }, testInfo) => {
+      await page.setViewportSize({ width, height: 900 });
+      const errors: string[] = [];
+      page.on('pageerror', (error) => errors.push(error.message));
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
+      const developerCopy =
+        /首刀不做|不占一格|步数不固定|不是固定的第\s*3\s*步|路位插在地图和文明之间|还没到的格子不能点|模式不算完成|模式才算完成|人数三枚|顺序跟名单一致|编辑叫法|先记这一侧|和中路同一级|不再是首页第一件事|这一步不展开|没有数据的格子写/;
+      const check = async (step: string | null) => {
+        if (step) await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', step);
+        else await expect(page.getByTestId('start-summary')).toBeVisible();
+        expect(await flowText(page).innerText()).not.toMatch(developerCopy);
+        expect(await page.locator('#home').innerText()).not.toMatch(developerCopy);
+        await noOverflow(page);
+      };
+      const capture = async (state: string) => {
+        await page.locator('#home').screenshot({
+          path: testInfo.outputPath(`copy673-${state}-${width}.png`),
+          style: 'header.topbar { visibility: hidden !important; }',
+        });
+      };
+
+      await page.goto('./#/');
+      await check('mode');
+      await capture('mode');
+      await page.getByRole('button', { name: /1v1 随机地图/ }).click();
+      await check('map');
+      await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+      await check('civ');
+      await page.getByRole('button', { name: /法兰克/ }).click();
+      await check('opponent');
+      await page.getByRole('button', { name: '完成本局', exact: true }).click();
+      await check(null);
+
+      await page.getByRole('button', { name: '再开一局', exact: true }).click();
+      await page.getByRole('button', { name: /组队随机地图/ }).click();
+      await check('mode');
+      await page.getByRole('button', { name: '4v4', exact: true }).click();
+      await check('map');
+      await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
+      await check('lane');
+      await capture('team-lane');
+      await page.getByRole('button', { name: /^中路/ }).click();
+      await expect(page.getByTestId('scenario-suggestions')).toBeVisible();
+      await check('civ');
+      await page.getByRole('button', { name: /法兰克/ }).click();
+      await check('opponent');
+      await page.getByRole('button', { name: '完成本局', exact: true }).click();
+      await check(null);
+
+      await page.getByRole('button', { name: '再开一局', exact: true }).click();
+      await page.getByTestId('start-lobby').click();
+      await check('civ');
+      await capture('lobby-civ');
+      await page.getByRole('button', { name: /法兰克/ }).click();
+      await check('opponent');
+      await page.getByRole('button', { name: '完成本局', exact: true }).click();
+      await check(null);
+      expect(errors).toEqual([]);
+    });
+
     test(`@${width} 模式步和摘要没有横向滚动`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       const errors: string[] = [];

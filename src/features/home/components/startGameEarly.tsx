@@ -83,7 +83,7 @@ export function findMap(id: string | null, maps: MapEntry[] | null) {
 export function Practice() {
   return (
     <p className="start-practice" data-testid="start-practice">
-      先练某个文明 · 首刀不做
+      按文明练习 · 即将提供
     </p>
   );
 }
@@ -244,7 +244,7 @@ export function ModeStep({ state, onChange }: { state: StartState; onChange: Upd
           <Icon name="swords" />
           <span>
             <strong className="num nw">1v1 随机地图</strong>
-            <small>选这条不会出现路位。</small>
+            <small>单挑无需选择路位。</small>
           </span>
         </button>
         <div>
@@ -252,7 +252,7 @@ export function ModeStep({ state, onChange }: { state: StartState; onChange: Upd
             <Icon name="users" />
             <span>
               <strong>组队随机地图</strong>
-              <small>点这张卡之后再选人数。人数没选，模式不算完成。</small>
+              <small>选择组队后，再选对战人数。</small>
             </span>
           </button>
           <div className="start-sizes" role="group" aria-label="组队人数">
@@ -270,7 +270,7 @@ export function ModeStep({ state, onChange }: { state: StartState; onChange: Upd
           </div>
         </div>
       </div>
-      {sizesOn ? <p className="start-hint">选好人数，模式才算完成。</p> : <p className="start-hint">人数三枚还不能点。1v1 没有这一排。</p>}
+      {sizesOn ? <p className="start-hint">请选择对战人数，继续选地图。</p> : <p className="start-hint">先点组队，再选对战人数。</p>}
       <Actions state={state} onChange={onChange} />
     </section>
   );
@@ -286,7 +286,7 @@ export function MapStep({ state, onChange }: { state: StartState; onChange: Upda
       <p id="start-map-h" className="start-ask-title">
         选地图
       </p>
-      <p className="start-why">先选定这张图。名字用目录里的中文和英文，顺序跟名单一致。</p>
+      <p className="start-why">输入中文或英文名搜索，或从目录中选择这局的地图。</p>
       <p className="start-k">建议</p>
       <EmptySlot />
       <div className="start-rowhead">
@@ -334,9 +334,7 @@ export function LaneStep({ state, onChange }: { state: StartState; onChange: Upd
       <p id="start-lane-h" className="start-ask-title">
         选路位
       </p>
-      <p className="start-why">
-        只有组队才问这一步。中路 / 边路沿用开图 <span className="num nw">4v4</span> 的编辑叫法，不是天梯排名。这里不列文明。
-      </p>
+      <p className="start-why">按队伍安排选择中路或边路。路位不表示文明强弱。</p>
       <Picked state={state} />
       <div className="start-choices">
         {(['pocket', 'flank'] as const).map((side) => (
@@ -350,9 +348,7 @@ export function LaneStep({ state, onChange }: { state: StartState; onChange: Upd
             <Icon name="git-branch" />
             <span>
               <strong>{LANE_LABEL[side]}</strong>
-              <small>
-                {LANE_EN[side]}。{side === 'pocket' ? '先记这一侧，下一步再看这一侧的文明。' : '和中路同一级，不按先后。'}
-              </small>
+              <small>{LANE_EN[side]}</small>
             </span>
           </button>
         ))}
