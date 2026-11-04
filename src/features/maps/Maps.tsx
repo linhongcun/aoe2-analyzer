@@ -5,6 +5,7 @@ import { buildOrders } from '../../data/buildOrders';
 import catalog from '../../data/mapCatalog.json';
 import { mapGuides } from './guides';
 import { MapPositions } from './MapPositions';
+import SuddenDessaster3 from './SuddenDessaster3';
 import './maps.css';
 
 const GROUPS: Record<string, string> = {
@@ -77,6 +78,7 @@ export default function Maps() {
         </a>
         。预览用于辨认地形，实际布局随版本和随机种子变化；这里不表示当前天梯地图池。
       </p>
+      <SuddenDessaster3 />
       <div className="map-filters">
         <label className="map-search">
           <span>搜索地图</span>
