@@ -18,6 +18,14 @@ import { InsightSlot } from '../../src/shared/ui/InsightSlot';
 
 const detailState = vi.hoisted(() => ({ core: null as Core | null }));
 vi.mock('../../src/data/hooks', () => ({ useCore: () => detailState.core, useTrees: () => T }));
+// UnitDetail opts into independent resources; keep the same injected source fixture.
+vi.mock('../../src/shared/utils/useCoreTrees', () => ({
+  useCoreTrees: () => ({
+    core: { data: detailState.core, pending: !detailState.core, error: false, retry: () => {} },
+    trees: { data: T, pending: false, error: false, retry: () => {} },
+    retry: () => {},
+  }),
+}));
 
 const T = trees as unknown as Trees;
 const unitRows = units as unknown as { id: number; cost: Record<string, number>; rng: number; ma: number }[];

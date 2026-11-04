@@ -37,6 +37,14 @@ vi.mock('../../src/features/matchup/availability', async (original) => {
   return { ...actual, rushDrill: vi.fn(actual.rushDrill), counterExtra: vi.fn(actual.counterExtra) };
 });
 vi.mock('../../src/data/hooks', () => ({ useCore: () => null, useTrees: () => null }));
+// This context-only Duel fixture intentionally keeps both numerical resources pending.
+vi.mock('../../src/shared/utils/useCoreTrees', () => ({
+  useCoreTrees: () => ({
+    core: { data: null, pending: true, error: false, retry: () => {} },
+    trees: { data: null, pending: true, error: false, retry: () => {} },
+    retry: () => {},
+  }),
+}));
 
 let view: ReactTestRenderer;
 let navigate: NavigateFunction;
