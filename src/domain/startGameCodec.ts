@@ -1,5 +1,5 @@
 import { civByEn } from '../data';
-import { sceneSupported, validSceneInput, validRouteInput } from './startGameInputs';
+import { sceneSupported, normalizeSceneInput, validRouteInput } from './startGameInputs';
 import { decisionSteps, type StartState, type StepId } from './startGame';
 
 export const START_GAME_LIMIT = 4096;
@@ -79,17 +79,18 @@ export function decodeStartGame(raw: string, mapIds?: ReadonlySet<string>): Star
   for (const step of ['mode', 'map'] as const) {
     if (s.prefilled[step] === true && (choices[step] === null || s.skipped[step] === true)) return { kind: 'invalid' };
   }
-  const sceneConfig = own(s, 'sceneConfig') ? s.sceneConfig : null;
+  const rawScene = own(s, 'sceneConfig') ? s.sceneConfig : null;
+  const sceneConfig = rawScene === null ? null : normalizeSceneInput(rawScene, c.lane as 'flank' | 'pocket');
   const routeConfig = own(s, 'routeConfig') ? s.routeConfig : null;
   const supported = sceneSupported(c as unknown as StartState['choice']);
   if (
-    (sceneConfig !== null && (!supported || !validSceneInput(sceneConfig, c.lane as 'flank' | 'pocket'))) ||
+    (rawScene !== null && (!supported || sceneConfig === null)) ||
     (routeConfig !== null && (!supported || !validRouteInput(routeConfig, c.lane as 'flank' | 'pocket')))
   )
     return { kind: 'invalid' };
   const state: StartState = {
     choice: { mode: c.mode, teamSize: c.teamSize, mapId: c.mapId, lane: c.lane, civ: c.civ, opponent, mates: [...mates] } as StartState['choice'],
-    sceneConfig: sceneConfig as StartState['sceneConfig'],
+    sceneConfig,
     routeConfig: routeConfig as StartState['routeConfig'],
     skipped: { ...s.skipped },
     prefilled: { ...s.prefilled },

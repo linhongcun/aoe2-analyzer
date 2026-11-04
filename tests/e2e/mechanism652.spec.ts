@@ -1,7 +1,59 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { DEFAULT_SCENE } from '../../src/domain/startGameInputs';
 const techNames = JSON.parse(readFileSync('src/data/techs.json', 'utf8')) as { id: number; zh: string }[];
+
+test('#652方案 @1280 同预算可选择合法低固定费方案', async ({ page }, info) => {
+  await select(page, '边路', false);
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  await page.getByLabel('军事投入', { exact: true }).selectOption('2000');
+  const card = page.getByTestId('scene-Britons');
+  console.log(
+    JSON.stringify({
+      version: await page.locator('[data-t="footer-app-version"]').innerText(),
+      build: await page.locator('[data-t="footer-build"]').innerText(),
+      commonAt2000: await card.innerText(),
+    }),
+  );
+  await page.screenshot({ path: info.outputPath('technology-before.png'), fullPage: true });
+  const plan = page.getByRole('combobox', { name: '本局统一科技方案', exact: true });
+  await expect(plan).toBeVisible();
+  await expect(plan.locator('option')).toHaveCount(6);
+  await expect(plan).toHaveValue('common');
+  await expect(card).toContainText('剩余不足一兵');
+  await plan.selectOption('none');
+  await expect(plan).toHaveValue('none');
+  await expect(card).not.toContainText('固定投入不足');
+  await card.getByText('为什么', { exact: true }).click();
+  await expect(card.locator('p').filter({ hasText: '预算可负担' })).toContainText('预算可负担 5 兵 · 科技及升级 668.347 工秒 · 每兵 235.024 工秒');
+  const upgrade = card.locator('.start-plan-quote > div').filter({ hasText: '必付弩手升级报价' });
+  await expect(upgrade).toContainText('食 175');
+  await expect(upgrade).toContainText('金 100');
+  await expect(upgrade).toContainText('研究 35 秒');
+  await expect(card.locator(':scope > p').filter({ hasText: '当前方案：' })).toContainText('无可选弓线科技');
+  await card.getByText('比较科技方案', { exact: true }).click();
+  await expect(card.locator('[data-tech-plan]')).toHaveCount(6);
+  for (const [id, count, fixed, food, gold, techIds] of [
+    ['none', 5, '668.347', 175, 100, []],
+    ['attack-1', 4, '1026.105', 275, 150, [199]],
+    ['attack-2', 1, '1741.621', 475, 250, [199, 200]],
+    ['armor', 4, '857.026', 275, 100, [211]],
+    ['attack-1-armor', 3, '1214.784', 375, 150, [199, 211]],
+    ['common', 0, '1930.3', 575, 250, [199, 200, 211]],
+  ] as const) {
+    const comparison = card.locator(`[data-tech-plan="${id}"]`);
+    await expect(comparison.locator('.start-plan-result')).toContainText(`可负担 ${count} 兵`);
+    const fixedQuote = comparison.locator('.start-plan-quote > div').filter({ hasText: '固定投入：' });
+    await expect(fixedQuote).toContainText(`合计 ${fixed} 工秒`);
+    await expect(fixedQuote).toContainText(`食 ${food}`);
+    await expect(fixedQuote).toContainText(`金 ${gold}`);
+    await expect(comparison.locator('.start-plan-quote > div').filter({ hasText: '必付弩手升级报价' })).toContainText('食 175；金 100；研究 35 秒');
+    const names = techIds.map((techId) => techNames.find((tech) => tech.id === techId)!.zh).join('、') || '无可选弓线科技';
+    await expect(comparison.locator('.start-plan-quote > div').first()).toHaveText(`方案科技：${names}。`);
+  }
+  await expect(card.locator('[data-tech-plan="none"] .start-plan-current')).toHaveText('当前方案');
+});
 const archerArmor = techNames.find((tech) => tech.id === 211),
   thumbRing = techNames.find((tech) => tech.id === 437);
 if (!archerArmor || !thumbRing) throw new Error('Missing pinned archer technology names');
@@ -163,7 +215,7 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(page.getByTestId('scene-Franks')).toContainText('首兵 20.202 秒 · 期限前 6 兵');
     await expect(page.getByTestId('scene-Franks').getByText(/速度用于到达计算；新训练部队还须完成首个训练周期，现成部队不等待训练。/)).toBeVisible();
     await page.getByLabel('军事投入', { exact: true }).selectOption('0');
-    await expect(huns.locator(':scope > .start-k')).toHaveText('预算不足以完成科技包并购买一兵');
+    await expect(huns.locator(':scope > .start-k')).toHaveText('当前方案固定投入不足，预算不足以完成所选科技及单位升级。');
     await expect(section.getByText('到场数量 / 时间侧重', { exact: true })).toHaveCount(0);
     await expect(section.getByText('到场对照候选', { exact: true })).toHaveCount(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -260,12 +312,20 @@ test('数据加载失败时保留选择并可继续，不刷新整页', async ({
   await page.getByRole('button', { name: '4v4', exact: true }).click();
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
   await page.getByRole('button', { name: /^中路/ }).click();
+  const pending = { ...planUrl(page.url()), sceneConfig: { ...DEFAULT_SCENE, techPlan: 'armor' } };
+  await page.evaluate((state) => (location.hash = '/?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(state) })), pending);
   await expect(page.getByRole('alert')).toContainText('加载失败');
   await expect(page.getByTestId('start-editorial')).toHaveCount(0);
   await expect(page.getByTestId('start-step')).toContainText('已选文明保留');
+  await page.getByText('调整场景与投入', { exact: true }).click();
+  await expect(page.getByLabel('本局统一科技方案', { exact: true })).toBeDisabled();
+  await expect(page.getByLabel('本局统一科技方案', { exact: true })).toHaveValue('armor');
+  await expect(page.getByLabel('本局统一科技方案', { exact: true }).locator('option')).toHaveText('已选方案保留（资料加载失败）');
   await page.unroute(/\/assets\/trees-[^/]+\.js$/);
   await page.getByRole('button', { name: '重试场景', exact: true }).click();
   await expect(page.getByTestId('scene-Huns').getByText('城堡时代 · 骑士', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('本局统一科技方案', { exact: true })).toHaveValue('armor');
+  await expect(page.getByTestId('scene-Huns').locator(':scope > p').filter({ hasText: '当前方案：' })).toContainText('骑兵鳞甲');
   await page.getByTestId('scene-Huns').getByText('为什么', { exact: true }).click();
   await expect(page.getByTestId('scene-Huns').locator('p').filter({ hasText: '预算可负担' })).toBeVisible();
   await expect(page.getByTestId('start-step')).toContainText('已选文明保留');
@@ -516,7 +576,8 @@ test('#667 @1280 摘要真实数据失败重试、非法配置保留地址和存
   await page.getByRole('button', { name: '完成本局', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('本局打法数据加载失败，已选文明和输入保留');
   await expect(page.getByTestId('start-summary')).toContainText('匈奴');
-  expect(planUrl(page.url()).sceneConfig).toEqual(state.sceneConfig);
+  expect(state.sceneConfig).not.toHaveProperty('techPlan');
+  expect(planUrl(page.url()).sceneConfig).toEqual({ ...state.sceneConfig, techPlan: 'common' });
   await page.unroute(/\/assets\/trees-[^/]+\.js$/);
   await page.getByRole('button', { name: '重试本局打法', exact: true }).click();
   await expect(page.getByTestId('start-scene-summary')).toContainText('2000 工秒');

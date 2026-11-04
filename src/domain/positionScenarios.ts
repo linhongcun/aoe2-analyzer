@@ -2,16 +2,15 @@
 import type { Core } from '../data';
 import ecoRaw from '../data/raw/eco';
 import { DAT } from './datEffects';
-import { TEAM_BONUSES, TECH_SRC, BONUS_SRC } from './effects';
-import { civStatus, makeSimContext, simulate, simTechs } from './simulator';
-import { discountedCost } from './costDiscount';
-import { gatherModel, realCost } from './realCost';
+import { TECH_SRC, BONUS_SRC } from './effects';
 import type { Cost, SimStats, Trees } from './types';
 import type { Lane, StartChoice } from './startGame';
 import { firstStrike, retreatContact, sceneSignature, supportArrival, SCENE_EPS } from './positionScenarioMath';
 import reviewed from './positionScenarioReview.json';
+import { castleScenarioProfile, type CastleProfile, type CastleResult } from './castleScenarioProfile';
+import { isSceneTechPlan, sceneTechPlans, type SceneTechPlan } from './startGameInputs';
 
-export const SCENARIO_VERSION = 'castle-scenes-1';
+export const SCENARIO_VERSION = 'castle-scenes-2';
 export const SCENARIO_CIVS: Record<Lane, readonly string[]> = {
   flank: ['Britons', 'Ethiopians', 'Franks', 'Mayans', 'Vietnamese'],
   pocket: ['Berbers', 'Britons', 'Franks', 'Huns'],
@@ -43,6 +42,7 @@ export interface SceneContext {
 }
 export interface SceneRow {
   civ: string;
+  plan: SceneTechPlan;
   status: 'ok' | 'unavailable' | 'blocked' | 'budget';
   reason: string;
   preferred: boolean;
@@ -58,6 +58,28 @@ export interface SceneRow {
   retreat?: number | null;
   support?: NonNullable<ReturnType<typeof supportArrival>>;
   signature?: string;
+  funding?: 'fixed-shortfall' | 'no-unit' | 'funded';
+  fixedShortfall?: number;
+  upgrade?: Cost;
+  upgradeSeconds?: number;
+  facts?: SceneFact[];
+  explanation?: string;
+  target?: SceneReference;
+  baseline?: SceneReference & { unitSeconds: number; cycle: number };
+}
+export interface SceneFact {
+  kind: string;
+  label: string;
+  unit: string;
+  own: number;
+  baseline: number;
+  baselineCiv: string;
+}
+export interface SceneReference {
+  civ: string;
+  plan: SceneTechPlan;
+  stats: Pick<SimStats, 'hp' | 'rng' | 'spd' | 'rof'>;
+  signature: string;
 }
 export function scenarioScope(choice: StartChoice): string | null {
   if (!choice.mode || !choice.mapId || !choice.teamSize || !choice.lane) return '请明确选择组队人数、地图和路位后查看场景建议。';
@@ -92,136 +114,171 @@ export function coverageReason(civ: string, eco = SCENE_ECO): string | null {
   }
   return null;
 }
-const validCost = (cost: Cost | null | undefined): cost is Cost =>
-  !!cost &&
-  Object.keys(cost).length > 0 &&
-  Object.entries(cost).every(([k, v]) => ['Food', 'Wood', 'Gold', 'Stone'].includes(k) && Number.isFinite(v) && v >= 0);
-export function scenarioProfile(ctx: SceneContext, civ: string, lane: Lane, cfg: SceneConfig): SceneRow {
-  const fail = (status: SceneRow['status'], reason: string): SceneRow => ({ civ, status, reason, preferred: false });
-  const { core, trees } = ctx,
-    eco = ctx.eco ?? SCENE_ECO;
-  if (cfg.age !== 3) return fail('blocked', '仅验证城堡时代');
-  if (![cfg.budget, cfg.distance, cfg.deadline, cfg.reaction, cfg.room].every((x) => Number.isFinite(x) && x >= 0)) return fail('blocked', '场景参数无效');
-  const unit = core.unitById[lane === 'flank' ? 24 : 38];
-  const available = civStatus(trees, civ);
-  if (!unit || !unit.civs.includes(civ) || available['u' + unit.id] !== 1) return fail('unavailable', '此路线不可用');
+
+function profileFor(ctx: SceneContext, civ: string, lane: Lane, cfg: SceneConfig): CastleResult {
+  const invalid = (reason: string): CastleResult => ({ ok: false, status: 'blocked', reason });
+  if (lane !== 'flank' && lane !== 'pocket') return invalid('路位未知');
+  if (cfg.age !== 3) return invalid('仅验证城堡时代');
+  if (
+    ![cfg.budget, cfg.distance, cfg.deadline, cfg.reaction, cfg.room].every((n) => Number.isFinite(n) && n >= 0) ||
+    !['new', 'ready'].includes(cfg.mode) ||
+    typeof cfg.husbandry !== 'boolean' ||
+    !isSceneTechPlan(cfg.techPlan, lane)
+  )
+    return invalid('场景参数或科技方案无效');
+  const eco = ctx.eco ?? SCENE_ECO;
   const gate = coverageReason(civ, eco);
-  if (gate) return fail('blocked', gate);
-  if (!Number.isInteger(unit.age) || unit.age < 1 || unit.age > cfg.age || !core.buildingById[unit.b]?.civs.includes(civ))
-    return fail('unavailable', '单位或建筑尚不可用');
-  if (
-    !['hp', 'atk', 'ma', 'pa', 'rng', 'spd', 'rof', 'acc'].every((k) => Number.isFinite(unit[k as keyof typeof unit])) ||
-    unit.spd <= 0 ||
-    unit.rof <= 0 ||
-    !validCost(unit.cost)
-  )
-    return fail('blocked', '单位关键属性或费用缺失');
-  if (!Array.isArray(unit.atks) || !(unit.from_ === null || Number.isInteger(unit.from_))) return fail('blocked', '单位结构或升级来源缺失');
-  const sim = makeSimContext(core.techs, trees),
-    offered = simTechs(sim, unit, civ);
-  const names = lane === 'flank' ? BOW_TECHS : [...CAV_TECHS, ...(cfg.husbandry ? ['Husbandry'] : [])];
-  const selected = offered.filter((x) => names.includes(x.t.en));
-  if (
-    selected.length !== names.length ||
-    selected.some(
-      (x) => !x.ef || !Number.isInteger(x.t.age) || x.t.age < 1 || x.t.age > cfg.age || !validCost(x.t.cost) || !Number.isFinite(x.t.rt) || x.t.rt < 0,
-    )
-  )
-    return fail('unavailable', '共同科技包不可用或费用缺失');
-  const ids = new Set(selected.map((x) => x.t.id));
-  if (selected.some((x) => x.t.pre != null && !ids.has(x.t.pre))) return fail('unavailable', '科技前置不完整');
-  const fixed: Cost = {};
-  const add = (c: Cost) => {
-    for (const [k, v] of Object.entries(c)) fixed[k] = (fixed[k] ?? 0) + v;
-  };
-  selected.forEach((x) => add(x.t.cost));
-  let ancestor = unit;
-  const visited = new Set<number>();
-  while (ancestor.from_ != null) {
-    if (visited.has(ancestor.id) || !ancestor.up || !validCost(ancestor.up[0]) || !Number.isFinite(ancestor.up[1]) || ancestor.up[1] < 0)
-      return fail('blocked', '升级链费用缺失或循环');
-    visited.add(ancestor.id);
-    add(ancestor.up[0]);
-    const previous = core.unitById[ancestor.from_];
-    if (
-      !previous ||
-      available['u' + previous.id] !== 1 ||
-      !Number.isInteger(previous.age) ||
-      previous.age < 1 ||
-      previous.age > cfg.age ||
-      !(previous.from_ === null || Number.isInteger(previous.from_))
-    )
-      return fail('unavailable', '升级路线不可用');
-    ancestor = previous;
-  }
-  const ownTeam = new Set(TEAM_BONUSES.flatMap((x, i) => (x[0] === civ ? [i] : [])));
-  const stats = simulate(sim, unit, civ, 3, ids, ownTeam);
-  if (![stats.spd, stats.rof, stats.rng].every(Number.isFinite) || stats.spd <= 0 || stats.rof <= 0 || stats.rng < 0)
-    return fail('blocked', '有效属性不可核验');
-  const discount = discountedCost(unit, civ, 3, { techIds: ids });
-  if (discount.unsupported.length || !validCost(discount.cost)) return fail('blocked', '折扣机制不可核验');
-  const source = eco.units[unit.id];
-  if (!source || !Array.isArray(source.at) || !source.at.includes(unit.b)) return fail('blocked', '训练来源缺失');
-  let cycle = source.timeAt?.[unit.b] ?? source.trainTime;
-  // 已核验的样本只需这两类生产乘法；与production一致，自身团队仅一次。
-  for (const row of eco.civEco[civ] ?? []) {
-    if (row.age > 3 || (row.requires ?? []).some((id) => ![101, 102, 103].includes(id) && !ids.has(id))) continue;
-    for (const e of row.effects) {
-      const train = e.attr === 'trainTime' && (e.target === `unit:${unit.id}` || e.target === `class:${source.class}`);
-      const work = e.attr === 'workRate' && e.target === `unit:${unit.b}`;
-      if (!train && !work) continue;
-      if (e.kind !== 'attr' || e.op !== 'mul' || !Number.isFinite(e.v) || e.v! <= 0) return fail('blocked', '训练效果数值不可核验');
-      cycle = train ? cycle * e.v! : cycle / e.v!;
-    }
-  }
-  if (!Number.isFinite(cycle) || cycle <= 0) return fail('blocked', '训练周期缺失');
-  const rates = gatherModel(3, '', { techIds: new Set(), walkTiles: 3, farmTiles: 0 });
-  const fixedSeconds = realCost(fixed, rates).total,
-    unitSeconds = realCost(discount.cost, rates).total;
-  if (!Number.isFinite(fixedSeconds) || !Number.isFinite(unitSeconds) || unitSeconds <= 0) return fail('blocked', '成本换算缺失');
-  const count = Math.max(0, Math.floor((cfg.budget - fixedSeconds) / unitSeconds));
+  return gate ? invalid(gate) : castleScenarioProfile(ctx, eco, civ, lane, cfg);
+}
+function profileSignature(ctx: SceneContext, civ: string, profile: CastleProfile) {
+  return sceneSignature({ profile, source: reviewPayload(civ, ctx.eco ?? SCENE_ECO) });
+}
+function reference(ctx: SceneContext, civ: string, plan: SceneTechPlan, profile: CastleProfile): SceneReference {
+  const { hp, rng, spd, rof } = profile.stats;
+  return { civ, plan, stats: { hp, rng, spd, rof }, signature: profileSignature(ctx, civ, profile) };
+}
+export function scenarioProfile(ctx: SceneContext, civ: string, lane: Lane, cfg: SceneConfig): SceneRow {
+  const result = profileFor(ctx, civ, lane, cfg);
+  if (!result.ok) return { civ, plan: cfg.techPlan, status: result.status, reason: result.reason, preferred: false };
+  const p = result.value;
+  const paid = cfg.budget + SCENE_EPS >= p.fixedSeconds;
+  const count = paid ? Math.max(0, Math.floor((cfg.budget - p.fixedSeconds) / p.unitSeconds + SCENE_EPS)) : 0;
+  const funding = !paid ? 'fixed-shortfall' : count ? 'funded' : 'no-unit';
+  const reason = count ? '' : !paid ? '当前方案固定投入不足，预算不足以完成所选科技及单位升级。' : '当前方案可付固定投入，剩余不足一兵。';
   return {
     civ,
+    plan: cfg.techPlan,
     status: count ? 'ok' : 'budget',
-    reason: count ? '' : '预算不足以完成科技包并购买一兵',
+    reason,
     preferred: false,
-    stats,
+    funding,
+    fixedShortfall: Math.max(0, p.fixedSeconds - cfg.budget),
     count,
-    fixed,
-    cost: discount.cost,
-    fixedSeconds,
-    unitSeconds,
-    cycle,
-    technologies: selected.map((x) => ({ id: x.t.id, name: x.t.zh, seconds: x.t.rt })),
-    signature: sceneSignature({ unit, fixed, stats, cycle, cost: discount.cost, rates: rates.rate, cfg, source: reviewPayload(civ, eco) }),
+    ...(count ? { stats: p.stats } : {}),
+    cost: p.cost,
+    fixed: p.fixed,
+    fixedSeconds: p.fixedSeconds,
+    unitSeconds: p.unitSeconds,
+    cycle: p.cycle,
+    technologies: p.techs.map((t) => ({ id: t.id, name: t.zh, seconds: t.rt })),
+    upgrade: p.upgrade,
+    upgradeSeconds: p.upgradeSeconds,
+    signature: sceneSignature({ model: SCENARIO_VERSION, cfg, profile: profileSignature(ctx, civ, p), count, funding }),
   };
 }
+function deriveFacts(own: SceneRow, baselineCiv: string, p: CastleProfile): SceneFact[] {
+  if (!own.stats || own.status !== 'ok') return [];
+  const facts: SceneFact[] = [];
+  const add = (kind: string, label: string, unit: string, a: number, b: number, lower = false) => {
+    if (Number.isFinite(a) && Number.isFinite(b) && (lower ? a < b - SCENE_EPS : a > b + SCENE_EPS))
+      facts.push({ kind, label, unit, own: a, baseline: b, baselineCiv });
+  };
+  add('range', '射程', '格', own.stats.rng, p.stats.rng);
+  add('unit-cost', '单兵标准费用', '工秒', own.unitSeconds!, p.unitSeconds, true);
+  add('attack-period', '攻击周期', '秒', own.stats.rof, p.stats.rof, true);
+  add('health', '生命', '', own.stats.hp, p.stats.hp);
+  add('production', '训练周期', '秒', own.cycle!, p.cycle, true);
+  add('speed', '行军速度', '格/秒', own.stats.spd, p.stats.spd);
+  return facts;
+}
+function explain(row: SceneRow, lane: Lane) {
+  if (row.status !== 'ok' || !row.count) return row.reason;
+  const kinds = new Set(row.facts?.map((f) => f.kind));
+  const parts: string[] = [];
+  if (lane === 'flank') {
+    if (kinds.has('range')) parts.push('同方案下步弓射程更远，可围绕当前距离展开。');
+    if (kinds.has('unit-cost')) parts.push('按标准工秒折算，当前步弓费用更低。');
+    if (kinds.has('attack-period')) parts.push('步弓攻击周期更短、射速更快；不等于实际命中伤害。');
+    if (kinds.has('health')) parts.push('步弓生命更高，生命未参与人数和机会分组。');
+    if (!parts.length) parts.push('当前条件按人数与理论机会比较，不判断整局强度。');
+    const chances = row.opening?.opportunities;
+    parts.push(chances == null ? '本条件先手机会未核实。' : chances > 0 ? '本条件有理论先手机会。' : '本条件无先手机会。');
+  } else {
+    if ((row.support?.count ?? 0) === 0) return '当前方案有可负担部队，但本期限到场为零；可调整距离或观察期限。';
+    if (kinds.has('unit-cost')) parts.push('按标准工秒折算，当前马厩单位费用更低。');
+    if (kinds.has('production')) parts.push('马厩工作更快，当前训练周期更短；不保证每个期限必多一兵。');
+    if (kinds.has('speed')) parts.push('当前行军速度更快，收益仍取决于距离和期限。');
+    if (kinds.has('health')) parts.push('骑兵生命更高，但到场分组未计耐久。');
+    if (!parts.length) parts.push('按当前方案比较可负担部队的到场数量与首兵时间。');
+  }
+  return parts.join('');
+}
 export function scenarioRows(ctx: SceneContext, lane: Lane, cfg: SceneConfig): SceneRow[] {
-  const target = lane === 'flank' ? scenarioProfile(ctx, 'Franks', 'flank', cfg) : null;
+  const target = lane === 'flank' ? profileFor(ctx, 'Franks', lane, { ...cfg, techPlan: 'common' }) : null;
+  const baselineCiv = lane === 'flank' ? 'Franks' : 'Britons';
+  const neutral = profileFor(ctx, baselineCiv, lane, cfg);
   const rows = SCENARIO_CIVS[lane].map((civ) => {
-    const row = scenarioProfile(ctx, civ, lane, cfg);
-    if (row.status !== 'ok' && row.status !== 'budget') return row;
-    if (lane === 'flank') {
-      if (!target?.stats || target.status === 'blocked' || target.status === 'unavailable')
-        return { ...row, status: 'blocked' as const, reason: '参考目标机制不可核验' };
-      const opening = firstStrike(row.stats!.rng, row.stats!.rof, target.stats.rng, target.stats.spd, cfg.distance, cfg.reaction);
-      if (!opening) return { ...row, status: 'blocked' as const, reason: '先手参数不可核验' };
-      return { ...row, opening, retreat: retreatContact(row.stats!.rng, target.stats.rng, target.stats.spd, row.stats!.spd, cfg.reaction, cfg.room) };
+    let row = scenarioProfile(ctx, civ, lane, cfg);
+    if (target?.ok) row.target = reference(ctx, 'Franks', 'common', target.value);
+    if (neutral.ok) {
+      row.baseline = { ...reference(ctx, baselineCiv, cfg.techPlan, neutral.value), unitSeconds: neutral.value.unitSeconds, cycle: neutral.value.cycle };
+      row.facts = deriveFacts(row, baselineCiv, neutral.value);
     }
-    const support = supportArrival(row.stats!.spd, row.cycle!, row.count!, cfg.distance, cfg.deadline, cfg.mode);
-    return support ? { ...row, support } : { ...row, status: 'blocked' as const, reason: '支援参数不可核验' };
+    if (row.status === 'ok') {
+      if (lane === 'flank') {
+        if (!target?.ok) row = { ...row, status: 'blocked', reason: '场景参考目标机制不可核验' };
+        else {
+          const p = target.value.stats;
+          const opening = firstStrike(row.stats!.rng, row.stats!.rof, p.rng, p.spd, cfg.distance, cfg.reaction);
+          row = opening
+            ? { ...row, opening, retreat: retreatContact(row.stats!.rng, p.rng, p.spd, row.stats!.spd, cfg.reaction, cfg.room) }
+            : { ...row, status: 'blocked', reason: '先手参数不可核验' };
+        }
+      } else {
+        const support = supportArrival(row.stats!.spd, row.cycle!, row.count!, cfg.distance, cfg.deadline, cfg.mode);
+        row = support ? { ...row, support } : { ...row, status: 'blocked', reason: '支援参数不可核验' };
+      }
+    }
+    row.explanation = explain(row, lane);
+    if (!neutral.ok) row.explanation += `同方案解释对照不可核验：${neutral.reason}。`;
+    row.signature = sceneSignature({
+      model: SCENARIO_VERSION,
+      config: 'arabia-castle-2',
+      cfg,
+      own: row.signature,
+      target: row.target ?? null,
+      baseline: row.baseline ?? null,
+      facts: row.facts ?? [],
+      baselineStatus: neutral.ok ? 'ok' : neutral.reason,
+      status: row.status,
+      count: row.count,
+      funding: row.funding,
+      opening: row.opening ?? null,
+      support: row.support ?? null,
+    });
+    return row;
   });
   const usable = rows.filter((r) => r.status === 'ok' && (lane === 'flank' ? r.count! > 0 : (r.support?.count ?? 0) > 0));
   const metrics = (r: SceneRow) => (lane === 'flank' ? [r.count!, r.opening!.opportunities] : [r.support!.count, -r.support!.first!]);
   for (const row of usable) {
     const mine = metrics(row);
     row.preferred = !usable.some((other) => {
-      const them = metrics(other);
-      return them.every((v, i) => v >= mine[i]! - SCENE_EPS) && them.some((v, i) => v > mine[i]! + SCENE_EPS);
+      const theirs = metrics(other);
+      return theirs.every((v, i) => v >= mine[i]! - SCENE_EPS) && theirs.some((v, i) => v > mine[i]! + SCENE_EPS);
     });
   }
   return rows.sort((a, b) => Number(b.preferred) - Number(a.preferred) || a.civ.localeCompare(b.civ));
 }
+export function scenarioComparisons(ctx: SceneContext, lane: Lane, cfg: SceneConfig): Record<string, SceneRow[]> {
+  const result = Object.fromEntries(SCENARIO_CIVS[lane].map((civ) => [civ, [] as SceneRow[]]));
+  for (const techPlan of sceneTechPlans(lane)) for (const row of scenarioRows(ctx, lane, { ...cfg, techPlan })) result[row.civ]!.push(row);
+  return result;
+}
+export function scenePlanOptions(ctx: SceneContext, lane: Lane): { id: SceneTechPlan; label: string }[] {
+  const names: Record<string, readonly number[]> =
+    lane === 'flank'
+      ? { none: [], 'attack-1': [199], 'attack-2': [199, 200], armor: [211], 'attack-1-armor': [199, 211], common: [199, 200, 211] }
+      : { none: [], 'attack-1': [67], armor: [81], common: [67, 81] };
+  return sceneTechPlans(lane).map((id) => ({
+    id,
+    label:
+      id === 'none'
+        ? lane === 'flank'
+          ? '无可选弓线科技'
+          : '无锻造/鳞甲，畜牧按所选状态'
+        : names[id]!.map((n) => ctx.core.techById[n]?.zh ?? '科技资料待核验').join(' + '),
+  }));
+}
 export function scenarioVersion() {
-  return { model: SCENARIO_VERSION, config: 'arabia-castle-1', sources: DAT.meta.sources };
+  return { model: SCENARIO_VERSION, config: 'arabia-castle-2', sources: DAT.meta.sources };
 }
