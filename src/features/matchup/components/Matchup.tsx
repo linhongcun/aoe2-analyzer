@@ -17,9 +17,10 @@ import '../../../shared/ui/contextLinks.css';
 import { rushGuide } from '../rushGuides';
 import { counterExtra, rushDrill } from '../availability';
 import { useMatchupData } from '../useMatchupData';
+import ChampiAges from './ChampiAges';
 
 export default function Matchup() {
-  const { data, error } = useMatchupData();
+  const { data, error, retry } = useMatchupData();
   const core = data?.core;
   const [ia, setA] = useSticky('mu.a', 16),
     [ie, setE] = useSticky('mu.e', 5);
@@ -43,8 +44,10 @@ export default function Matchup() {
   };
   const drill = data && a && e ? rushDrill(data, a.en, e.en, rushGuide(params.get('rush'))) : null;
   const counters = core && a && e ? filterCounterUnits(a.en, e.ty, core.units) : [];
+  const lineCivs = core?.unitById[2550]?.civs;
+  const champiPair = Array.isArray(lineCivs) && [a?.en, e?.en].some((civ) => civ && lineCivs.includes(civ));
   return (
-    <section id="matchup" className={params.has('pair') ? 'pane matchup-explicit' : 'pane'}>
+    <section id="matchup" className={params.has('pair') || champiPair ? 'pane matchup-explicit' : 'pane'}>
       <ListHead title="对局助手" desc="根据双方文明给出反制建议" />
       <div className="bar fbar">
         我的文明 <CivPicker id="ma" label="我的文明" value={a?.en ?? ''} none="未选择" onChange={(en) => pick('me', en)} /> 对手文明{' '}
@@ -139,11 +142,17 @@ export default function Matchup() {
         e &&
         m &&
         (error ? (
-          <p role="alert">对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。</p>
+          <p role="alert">
+            对局资料加载失败，已选文明保留。
+            <button type="button" style={{ minHeight: 44, minWidth: 44 }} onClick={retry}>
+              重试资料
+            </button>
+          </p>
         ) : !core || !data ? (
           <Loading />
         ) : (
           <div id="mres">
+            <ChampiAges core={core} trees={data.trees} me={a.en} opp={e.en} />
             <p>
               <b>对手强项：</b>
               {m.oppStrong.length ? (

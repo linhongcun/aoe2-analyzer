@@ -47,3 +47,7 @@ describe('simulator', () => {
     expect(parseUnitPath('unit/569')).toEqual({ id: 569, civ: undefined, age: undefined, ids: [], team: [] });
   });
 });
+
+// Current-build #657 cases stay in every existing simulator consumer profile.
+import './champi657Cases';
+import './coreTrees657Cases';

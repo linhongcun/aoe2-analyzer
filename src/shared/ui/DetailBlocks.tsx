@@ -44,11 +44,15 @@ export function StatTiles({ stats, label = '关键属性' }: { stats: DetailStat
               )}
             </dd>
             {s.score != null && (
-              <span className="detail-score-track" aria-hidden="true">
+              <dd className="detail-score-track" aria-hidden="true" style={{ display: 'block', marginTop: 12 }}>
                 <span style={{ width: `${Math.max(0, Math.min(10, s.score)) * 10}%` }} />
-              </span>
+              </dd>
             )}
-            {s.note && <div className="detail-stat-note">{s.note}</div>}
+            {s.note && (
+              <dd className="detail-stat-note" style={{ display: 'block' }}>
+                {s.note}
+              </dd>
+            )}
           </div>
         ))}
       </dl>

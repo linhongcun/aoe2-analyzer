@@ -1,5 +1,5 @@
 import type { Core } from '../../data';
-import { EARLY_UNIT_AGES } from '../../domain/availabilityAge';
+import { unitAvailable, techAvailable } from '../../domain/unitAvailability';
 import type { BuildOrder } from '../../domain/buildOrder';
 import { fmtSide } from '../../domain/duelState';
 import { COUNTER_EXTRA } from '../../domain/ratings';
@@ -9,25 +9,7 @@ export interface MatchupData {
   core: Pick<Core, 'unitById' | 'techById'>;
   trees: Trees;
 }
-
-function treeAge(data: MatchupData, civ: string, kind: 'u' | 't', id: number): number {
-  const cells = (data.trees.t[civ] ?? []).flatMap((block) => block[3]).filter((cell) => cell[2] === kind && cell[3] === id && cell[4] === 1);
-  return cells.length ? Math.min(...cells.map((cell) => Math.floor(cell[0] / 2) + 1)) : Infinity;
-}
-
-export function unitAvailable(data: MatchupData, civ: string, id: number, age: number): boolean {
-  const unit = data.core.unitById[id];
-  const rowAge = treeAge(data, civ, 'u', id);
-  if (!unit?.civs.includes(civ) || !Number.isFinite(rowAge) || ![1, 2, 3, 4].includes(age)) return false;
-  // Existing early-unit exceptions override a stale catalogue/tree row. Otherwise use
-  // both sources: ordinary spearmen are Feudal; Armenians' actual row is Dark Age.
-  return (EARLY_UNIT_AGES[civ]?.[id] ?? Math.max(unit.age, rowAge)) <= age;
-}
-
-export function techAvailable(data: MatchupData, civ: string, id: number, age: number): boolean {
-  const tech = data.core.techById[id];
-  return !!tech?.civs.includes(civ) && [1, 2, 3, 4].includes(age) && Math.max(tech.age, treeAge(data, civ, 't', id)) <= age;
-}
+export { unitAvailable, techAvailable };
 
 export function unavailableBuildUnits(data: MatchupData, civ: string, order: BuildOrder): number[] {
   const targets = order.steps.flatMap((step) => step.actions.flatMap((action) => (action.type === 'train' || action.type === 'upgrade' ? [action.unit] : [])));
