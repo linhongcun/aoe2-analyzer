@@ -6,6 +6,8 @@
 
 与 CONTRIBUTING 冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
 
+**当前非阻塞 backlog 批授权（2026-11-04）**：维护者已明确要求处理所有非阻塞 issue。本批按 **#688 → #652 → #657** 串行交付；#570/#573/#574仍因可核验原始数据缺失保持阻塞。此次授权取代下文历史11项/13项白名单及上一批对#652/#657的排除，不重开已交付项；规格、来源、单写者、独立复核、适用CI和真实上线/正式Release/关闭门禁不变。详见[当前批次记录](docs/CODEX-MAINTENANCE.md#nonblocking-2026-11-04)与[#688认领记录](https://github.com/linhongcun/aoe2-analyzer/issues/688)。
+
 **一次验证与快速发布（#431）**：普通已授权更新默认一个 issue、一个 PR 直接合入 `main`；只有需要多项冻结集成时才建 `release/vX.Y.Z`。同一代码树的真实成功验证可由 release/main 复用，main 仍构建真实 SHA 并做短烟测，发布 ZIP 使用已部署产物。全量回归在夜间后台或重大变更时执行一次，不作为普通 UI 更新逐阶段重复等待的门槛。现行规则见 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
 
 **CI 分阶段门禁（#659，2026-11-03）**：维护者已明确授权处理 #659，取代 #514 的 PR 完整浏览器禁令与 #513 的全局壳层 targeted 例外。按实际消费者闭包选择范围，共享计算、全局 CSS、路由、未知范围与 CI 策略自身在 PR 也完整验证；冻结规格见 [ci-659.md](docs/design/ci-659.md)。
