@@ -97,14 +97,6 @@ export function findMap(id: string | null, maps: MapEntry[] | null) {
   return maps.find((map) => map.id === id);
 }
 
-export function Practice() {
-  return (
-    <p className="start-practice" data-testid="start-practice">
-      按文明练习 · 即将提供
-    </p>
-  );
-}
-
 export function EmptySlot({ skipped = false }: { skipped?: boolean }) {
   return (
     <p className="start-emptyline">

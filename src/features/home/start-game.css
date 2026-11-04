@@ -202,20 +202,45 @@ button.start-chip.is-done {
 .start-lobby {
   border-radius: var(--radius-pill);
 }
-.start-practice {
-  margin: var(--space-4) 0 0;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 var(--space-4);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-pill);
-  background: var(--color-surface-2);
-  color: var(--color-muted);
-  font-size: var(--fs-sm);
+.start-feature-menu {
+  margin-top: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
 }
-.start-alts .start-practice {
-  margin-top: 0;
+.start-feature-menu > summary {
+  min-height: 44px;
+  padding: var(--space-3);
+  cursor: pointer;
+  font-size: var(--fs-body);
+}
+.start-menu-grid {
+  display: grid;
+  gap: var(--space-5);
+  padding: 0 var(--space-4) var(--space-4);
+}
+.start-menu-tools {
+  margin-top: var(--space-5);
+}
+.start-menu-list {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.start-feature-menu .start-btn,
+.start-feature-menu .start-link {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+.start-feature-menu .start-btn:disabled {
+  border-style: dashed;
+}
+@media (min-width: 900px) {
+  .start-menu-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
 }
 .start-search {
   display: flex;

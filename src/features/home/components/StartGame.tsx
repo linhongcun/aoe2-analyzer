@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { enterLobby, laneRowVisible, type StartState } from '../../../domain/startGame';
 import '../start-game.css';
-import { LaneStep, MapStep, ModeStep, Practice, StepBar, loadMaps, type Update } from './startGameEarly';
+import { LaneStep, MapStep, ModeStep, StepBar, loadMaps, type Update } from './startGameEarly';
 import { CivStep, OpponentStep, Summary } from './startGameLater';
+import StartFeatureMenu from './StartFeatureMenu';
 
 function lede(state: StartState): string {
   if (state.lobby) return '可按当前选择继续，也可以回头改条件。没有连上游戏大厅。';
@@ -34,6 +35,7 @@ export default function StartGame({ state, onChange }: { state: StartState; onCh
       <p className="start-kicker">{lobbyStart ? '首页 / 已在大厅' : state.current === 'mode' ? '首页' : '首页 / 开一局'}</p>
       <h1 id="start-title">{state.current == null ? '本局摘要' : '开一局'}</h1>
       <p className="start-lede">{lede(state)}</p>
+      <StartFeatureMenu state={state} />
       <StepBar state={state} onChange={onChange} />
       <p className="start-note">{note(state)}</p>
       {state.current === 'mode' ? <ModeStep state={state} onChange={onChange} /> : null}
@@ -47,11 +49,8 @@ export default function StartGame({ state, onChange }: { state: StartState; onCh
           <button type="button" className="start-lobby" data-testid="start-lobby" onClick={() => onChange(() => enterLobby())}>
             已在大厅
           </button>
-          <Practice />
         </div>
-      ) : (
-        <Practice />
-      )}
+      ) : null}
     </section>
   );
 }

@@ -541,3 +541,59 @@ test('#671 @1280 未选文明与竞技场警告、跳过可刷新分享', async 
   await noOverflow(page);
   expect(errors).toEqual([]);
 });
+
+for (const width of [360, 375, 390, 1280])
+  for (const theme of ['light', 'dark'])
+    test(`#700 @${width} ${theme} 菜单保持原生语义、触点与可读性`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript((t) => localStorage.setItem('aoe2-theme', t), theme);
+      const errors: string[] = [];
+      collectErrors(page, errors);
+      await page.goto('./#/');
+      await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
+      const menu = page.getByTestId('start-feature-menu'),
+        summary = menu.locator('summary');
+      await expect(summary).toHaveText('开一局功能菜单');
+      await expect(menu).not.toHaveAttribute('open');
+      await summary.focus();
+      await page.keyboard.press('Enter');
+      await expect(menu).toHaveAttribute('open', '');
+      await expect(menu.getByRole('link')).toHaveCount(3);
+      const disabled = menu.locator('button:disabled');
+      await expect(disabled).toHaveCount(4);
+      for (const button of await disabled.all()) {
+        await expect(button).toContainText('规划中');
+        await expect(button).not.toHaveAttribute('href');
+        const reason = await button.getAttribute('aria-describedby');
+        await expect(page.locator('#' + reason)).toBeVisible();
+      }
+      const controls = await menu
+        .locator('button,a,summary')
+        .evaluateAll((es) => es.map((e) => ({ w: e.getBoundingClientRect().width, h: e.getBoundingClientRect().height })));
+      expect(controls.every((e) => e.w >= 44 && e.h >= 44)).toBe(true);
+      expect(
+        await menu
+          .locator('*')
+          .evaluateAll((es) => es.filter((e) => e.getClientRects().length && parseFloat(getComputedStyle(e).fontSize) < 12).map((e) => e.tagName)),
+      ).toEqual([]);
+      expect((await new AxeBuilder({ page }).include('[data-testid="start-feature-menu"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+      for (let i = 0; i < 5; i++) {
+        await page.keyboard.press('Tab');
+        expect(await page.evaluate(() => document.activeElement?.matches('button:disabled'))).toBe(false);
+      }
+      await summary.focus();
+      await page.keyboard.press('Space');
+      await expect(menu).not.toHaveAttribute('open');
+      await noOverflow(page);
+      expect(errors).toEqual([]);
+    });
+
+test('#674 @1280 大厅已选文明刷新保留进度', async ({ page }) => {
+  await page.goto('./#/');
+  await page.getByTestId('start-lobby').click();
+  await page.getByRole('button', { name: /法兰克/ }).click();
+  await page.reload();
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
+  await page.getByRole('button', { name: '完成本局', exact: true }).click();
+  await expect(page.getByTestId('start-summary')).toContainText('法兰克');
+});

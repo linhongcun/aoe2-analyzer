@@ -176,9 +176,20 @@ test.describe('首页开一局 #592', () => {
 
   test('已在大厅从文明起；先练文明不能点', async ({ page }) => {
     await page.goto('./#/');
+    const menu = page.getByTestId('start-feature-menu');
+    await menu.locator('summary').click();
     const practice = page.getByTestId('start-practice');
-    await expect(practice).toHaveText('按文明练习 · 即将提供');
-    expect(await practice.evaluate((el) => el.matches('a, button, [href], [tabindex]'))).toBe(false);
+    await expect(practice).toHaveText('按文明练习 · 规划中');
+    await expect(practice).toBeDisabled();
+    await expect(practice).not.toHaveAttribute('href');
+    const before = { url: page.url(), local: await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1')) };
+    await practice.scrollIntoViewIfNeeded();
+    const box = (await practice.boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await practice.evaluate((el) => (el as HTMLButtonElement).click());
+    expect({ url: page.url(), local: await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1')) }).toEqual(before);
+    await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
+    await menu.locator('summary').click();
     await page.getByTestId('start-lobby').click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
     await expect(page.getByTestId('start-steps')).toHaveText(/模式\s*地图\s*文明\s*对手/);
@@ -459,16 +470,6 @@ for (const width of WIDTHS) {
   });
 }
 
-test('#674 @1280 大厅已选文明刷新保留进度', async ({ page }) => {
-  await page.goto('./#/');
-  await page.getByTestId('start-lobby').click();
-  await page.getByRole('button', { name: /法兰克/ }).click();
-  await page.reload();
-  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
-  await page.getByRole('button', { name: '完成本局', exact: true }).click();
-  await expect(page.getByTestId('start-summary')).toContainText('法兰克');
-});
-
 test('#674 @1280 非法存档安全空局且玩家操作前不覆盖', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('aoe2-start-game-v1', '{invalid'));
   await page.goto('./#/');
@@ -509,3 +510,86 @@ test('#674 @1280 恢复地图加载失败保留原档且可重试', async ({ pag
   expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe(raw);
   expect(errors).toEqual([]);
 });
+
+for (const stage of ['empty', 'opponent', 'summary'] as const)
+  test(`#700 @1280 ${stage} 菜单零写零预加载且真实工具保留上下文返回`, async ({ page }) => {
+    const errors: string[] = [],
+      chunks: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => {
+      if (m.type() === 'error') errors.push(m.text());
+    });
+    page.on('request', (r) => {
+      if (/\/assets\/.*\.js(?:\?.*)?$/.test(r.url())) chunks.push(r.url());
+    });
+    await page.goto('./#/');
+    await expect(page).toHaveURL(/sgv=1/);
+    if (stage !== 'empty') {
+      const next: StartState = {
+        ...homeState676(page.url()),
+        choice: { mode: 'team', teamSize: '4v4', mapId: 'arena', lane: 'pocket', civ: 'Franks', opponent: 'Japanese', mates: ['Britons'] },
+        teamArmed: true,
+        current: stage === 'summary' ? null : 'opponent',
+      };
+      await page.goto('./#/?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(next) }));
+    }
+    if (stage === 'summary') await expect(page.getByTestId('start-summary')).toBeVisible();
+    else await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', stage === 'empty' ? 'mode' : 'opponent');
+    const expected = homeState676(page.url());
+    await expect
+      .poll(async () => JSON.parse((await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))) ?? 'null')?.state)
+      .toEqual(stage === 'empty' ? undefined : expected);
+    const raw = await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'));
+    await page.evaluate(() => {
+      const original = Storage.prototype.setItem,
+        w = window as unknown as { menuWrites: number };
+      w.menuWrites = 0;
+      Storage.prototype.setItem = function (k, v) {
+        if (k === 'aoe2-start-game-v1') w.menuWrites++;
+        original.call(this, k, v);
+      };
+    });
+    const url = page.url(),
+      count = chunks.length,
+      menu = page.getByTestId('start-feature-menu');
+    await menu.locator('summary').click();
+    for (const button of await menu.locator('button:disabled').all()) {
+      await button.scrollIntoViewIfNeeded();
+      const box = (await button.boundingBox())!;
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      await button.evaluate((el) => (el as HTMLButtonElement).click());
+    }
+    await menu.getByRole('button', { name: '回到本局步骤', exact: true }).click();
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe(
+      stage === 'summary' ? 'start-sum-h' : stage === 'empty' ? 'start-mode-h' : 'start-opponent-h',
+    );
+    await expect(menu).not.toHaveAttribute('open');
+    expect(page.url()).toBe(url);
+    expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe(raw);
+    expect(await page.evaluate(() => (window as unknown as { menuWrites: number }).menuWrites)).toBe(0);
+    expect(chunks.length).toBe(count);
+    for (const label of ['对局助手', '文明搭配', '开局流程']) {
+      await menu.locator('summary').click();
+      await menu.getByRole('link', { name: '打开' + label, exact: true }).click();
+      const q = new URLSearchParams(new URL(page.url()).hash.split('?')[1]),
+        filled = stage !== 'empty';
+      if (label === '对局助手') {
+        await expect(page.locator('#ma')).toHaveAttribute('data-value', filled ? 'Franks' : '');
+        await expect(page.locator('#me')).toHaveAttribute('data-value', filled ? 'Japanese' : '');
+        expect(q.get('pair')).toBe('explicit');
+      } else if (label === '文明搭配') {
+        await expect(page.getByTestId('team-fit-page')).toBeVisible();
+        await expect(page.locator('#tf-candidate')).toHaveAttribute('data-value', filled ? 'Franks' : '');
+        expect(q.get('mates')).toBe(filled ? 'Britons' : '');
+        await expect(page.getByTestId('team-fit-mates').locator('.tf-mate')).toHaveCount(filled ? 1 : 0);
+      } else {
+        await expect(page.locator('#builds')).toBeVisible();
+        expect(q.get('civ')).toBe(filled ? 'Franks' : null);
+      }
+      await noOverflow(page);
+      await page.goBack();
+      await expect(menu.locator('summary')).toBeVisible();
+      await expect.poll(() => homeState676(page.url())).toEqual(expected);
+    }
+    expect(errors).toEqual([]);
+  });
