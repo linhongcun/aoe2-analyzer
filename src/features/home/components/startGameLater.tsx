@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { buildsPath, matchupPath } from '../../../domain/matchupRoute';
 import { sceneSupported } from '../../../domain/startGameInputs';
+import { mapGuides } from '../../../domain/mapGuides';
+import MapEditorial from './MapEditorial';
 import { editStep, jumpTo, laneRowVisible, openLane, pickCiv, resetStart, type StartState, type StepId } from '../../../domain/startGame';
 import { Actions, CivRow, EmptySlot, LANE_EN, LANE_LABEL, ModeText, Picked, findMap, normalize, useMaps, type Update } from './startGameEarly';
 
@@ -79,7 +81,9 @@ function ScenarioLoader(props: SceneProps) {
   return <p role="status">正在计算场景建议…</p>;
 }
 export function CivStep({ state, onChange }: { state: StartState; onChange: Update }) {
-  const supported = state.choice.mode === 'team' && state.choice.teamSize === '4v4' && state.choice.mapId === 'arabia' && state.choice.lane != null;
+  const supported = sceneSupported(state.choice);
+  const ready = state.choice.mode != null && (state.choice.mode !== 'team' || state.choice.teamSize != null) && state.choice.mapId != null;
+  const guide = !supported && ready ? mapGuides[state.choice.mapId!] : undefined;
   return (
     <section className="start-ask" data-testid="start-step" data-step="civ" aria-labelledby="start-civ-h">
       <p id="start-civ-h" className="start-ask-title">
@@ -106,17 +110,19 @@ export function CivStep({ state, onChange }: { state: StartState; onChange: Upda
       ) : null}
       {supported ? (
         <ScenarioLoader key={state.choice.lane} state={state} onChange={onChange} />
+      ) : guide ? (
+        <MapEditorial guide={guide} state={state} onChange={onChange} />
       ) : (
         <>
           <p className="start-why">
-            {state.choice.mode == null || state.choice.mapId == null
-              ? '模式或地图尚未选择，当前条件暂无机制建议。可以补选条件，或自主选择文明。'
-              : '场景建议仅支持明确选择阿拉伯 4v4 和路位；当前条件暂无机制建议。可以自主选择文明。'}
+            {!ready
+              ? '模式、组队人数或地图尚未选择，当前条件暂无机制建议。可以补选条件，或自主选择文明。'
+              : '当前条件暂无机制建议；暂无这张地图的文明编辑参考。可以自主选择文明。'}
           </p>
           <EmptySlot />
         </>
       )}
-      <CivSearch shown={new Set()} onChange={onChange} searchOnly={supported} />
+      <CivSearch shown={new Set(guide?.civs.map(([en]) => en))} onChange={onChange} searchOnly={supported} />
       <Actions state={state} onChange={onChange} />
     </section>
   );

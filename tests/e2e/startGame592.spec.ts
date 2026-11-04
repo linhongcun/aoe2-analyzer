@@ -29,7 +29,9 @@ test.describe('首页开一局 #592', () => {
     await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
     await expect(page.getByTestId('start-steps')).not.toContainText('路位');
-    await expect(page.getByTestId('start-empty')).toHaveText('暂无建议');
+    await expect(page.getByTestId('start-editorial')).toContainText('地图编辑参考');
+    await expect(page.getByTestId('start-editorial').locator('a[href="https://aoe2.guide/arabia/"]')).toBeVisible();
+    await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
     await page.getByRole('button', { name: /法兰克/ }).click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
     await expect(page.getByTestId('start-step')).toContainText('本步暂无已核对对手数据');
@@ -68,7 +70,8 @@ test.describe('首页开一局 #592', () => {
     await expect(page.getByRole('button', { name: /^中路/ })).toHaveAttribute('aria-pressed', 'true');
     await page.getByTestId('start-skip').click();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
-    await expect(page.getByTestId('start-empty')).toHaveText('暂无建议');
+    await expect(page.getByTestId('start-editorial')).toContainText('地图通用编辑参考');
+    await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
     await page.getByTestId('start-skip').click();
     await page.getByTestId('start-skip').click();
     await expect(page.getByRole('heading', { level: 1, name: '本局摘要', exact: true })).toBeVisible();
@@ -134,6 +137,8 @@ test.describe('首页开一局 #592', () => {
       await page.getByRole('button', { name: /^中路/ }).click();
       await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
       await expect(page.getByTestId('start-step')).toContainText('当前条件暂无机制建议');
+      await expect(page.getByTestId('start-editorial')).toBeVisible();
+      if (size === '4v4') await page.getByRole('searchbox').fill('Franks');
       await page.getByRole('button', { name: /法兰克/ }).click();
       await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'opponent');
       await noOverflow(page);
@@ -169,10 +174,11 @@ test.describe('首页开一局 #592', () => {
         await expect(step).toHaveAttribute('data-step', 'civ');
         await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
         await expect(step).toContainText('当前条件暂无机制建议');
-        await expect(page.getByRole('searchbox', { name: '搜索文明', exact: true })).toBeVisible();
+        await expect(page.getByRole('searchbox', { name: /搜索文明|也可以搜全部文明/ })).toBeVisible();
         await noOverflow(page);
       };
       const chooseFranks = async () => {
+        if (await page.getByTestId('start-editorial').count()) await page.getByRole('searchbox').fill('Franks');
         await page.getByRole('button', { name: /法兰克/ }).click();
         await page.getByRole('button', { name: '完成本局', exact: true }).click();
         await expect(page.getByTestId('start-summary')).toContainText('法兰克');

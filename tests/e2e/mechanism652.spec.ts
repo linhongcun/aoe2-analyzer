@@ -67,6 +67,7 @@ for (const width of [360, 375, 390, 1280]) {
     await page.getByLabel('场景距离', { exact: true }).selectOption('2');
     await expect(section.getByText('理论先手机会侧重', { exact: true })).toHaveCount(0);
     await page.getByLabel('军事投入', { exact: true }).selectOption('0');
+    await expect(page.getByTestId('start-editorial')).toHaveCount(0);
     await expect(section).toContainText('当前预算或期限没有可优先建议的部队');
     await expect(section.getByText('人数侧重 · 无先手机会', { exact: true })).toHaveCount(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -205,6 +206,7 @@ test('数据加载失败时保留选择并可继续，不刷新整页', async ({
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
   await page.getByRole('button', { name: /^中路/ }).click();
   await expect(page.getByRole('alert')).toContainText('加载失败');
+  await expect(page.getByTestId('start-editorial')).toHaveCount(0);
   await expect(page.getByTestId('start-step')).toContainText('已选文明保留');
   await page.unroute(/\/assets\/trees-[^/]+\.js$/);
   await page.getByRole('button', { name: '重试场景', exact: true }).click();
