@@ -58,7 +58,8 @@ test.describe('首页开一局 #592', () => {
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');
     await page.getByRole('button', { name: /^中路/ }).click();
     const franks = page.getByRole('button', { name: /法兰克/ });
-    await expect(page.getByTestId('scene-Franks')).toContainText('期限前');
+    await page.getByTestId('scene-Franks').getByText('为什么', { exact: true }).click();
+    await expect(page.getByTestId('scene-Franks').getByText(/期限前/)).toBeVisible();
     await expect(franks).toBeVisible();
     await expect(page.getByTestId('scenario-suggestions')).toContainText('城堡时代场景建议');
     await expect(page.getByRole('link', { name: '查看法兰克', exact: true })).toHaveAttribute('href', /#\/civ\/Franks$/);
@@ -211,7 +212,8 @@ test.describe('首页开一局 #592', () => {
       await expect(page.getByRole('button', { name: '补路位', exact: true })).toHaveCount(0);
       await page.getByTestId('start-back').click();
       await page.getByRole('button', { name: /^中路/ }).click();
-      await expect(page.getByTestId('scene-Franks')).toContainText('预算可负担');
+      await page.getByTestId('scene-Franks').getByText('为什么', { exact: true }).click();
+      await expect(page.getByTestId('scene-Franks').locator('p').filter({ hasText: '预算可负担' })).toBeVisible();
       await noOverflow(page);
       await chooseFranks();
 
@@ -227,7 +229,8 @@ test.describe('首页开一局 #592', () => {
       await capture('missing-lane');
       await page.getByRole('button', { name: '补路位', exact: true }).click();
       await page.getByRole('button', { name: /^边路/ }).click();
-      await expect(page.getByTestId('scene-Britons')).toContainText('预算可负担');
+      await page.getByTestId('scene-Britons').getByText('为什么', { exact: true }).click();
+      await expect(page.getByTestId('scene-Britons').locator('p').filter({ hasText: '预算可负担' })).toBeVisible();
       await expect(page.getByTestId('scenario-suggestions')).toContainText('不是整局强度榜，也不覆盖全部文明');
       await noOverflow(page);
       expect(errors).toEqual([]);

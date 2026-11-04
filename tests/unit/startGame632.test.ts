@@ -1,3 +1,4 @@
+import { DEFAULT_SCENE, DEFAULT_FLANK_SCENE, DEFAULT_ROUTE } from '../../src/domain/startGameInputs';
 import { createElement, StrictMode, useState } from 'react';
 import { act, create, type ReactTestRenderer } from 'react-test-renderer';
 import { describe, expect, it } from 'vitest';
@@ -20,6 +21,7 @@ import {
 
 import {
   decodeStartSearch,
+  decodeStartGame,
   encodeStartGame,
   encodeStartSearch,
   START_GAME_LIMIT,
@@ -402,5 +404,75 @@ describe('实际地址与存储协调hook #669', () => {
     gone.unmount();
     await act(async () => wait.resolve([{ id: 'arabia' }]));
     expect(gone.writes).toEqual([]);
+  });
+});
+
+describe('本局输入严格v1兼容 #667', () => {
+  const configured = () => ({
+    ...pickCiv(chooseLane(chooseMap(chooseTeamSize(resetStart(), '4v4'), 'arabia'), 'pocket'), 'Huns'),
+    sceneConfig: { ...DEFAULT_SCENE, budget: 2000, distance: 10, deadline: 1200, mode: 'ready' as const, husbandry: false },
+    routeConfig: { ...DEFAULT_ROUTE, feudalBudget: 6000, castleBudget: 600, survivors: 12, newLimit: 0, distance: 60, deadline: 60 },
+  });
+  it('新两账完整roundtrip独立；旧v1逐字段缺省null且保留选择和当前步', () => {
+    const state = configured();
+    expect(decodeStartSearch(encodeStartSearch(state), MAPS)).toEqual({ kind: 'valid', state });
+    expect(decodeStartGame(encodeStartGame(state), MAPS)).toEqual({ kind: 'valid', state });
+    for (const fields of [['sceneConfig'], ['routeConfig'], ['sceneConfig', 'routeConfig']]) {
+      const legacy = JSON.parse(encodeStartGame(state));
+      for (const field of fields) delete legacy.state[field];
+      const expected = { ...state, ...Object.fromEntries(fields.map((field) => [field, null])) };
+      expect(decodeStartGame(JSON.stringify(legacy), MAPS)).toEqual({ kind: 'valid', state: expected });
+      expect(decodeStartSearch('?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(legacy.state) }), MAPS)).toEqual({ kind: 'valid', state: expected });
+    }
+  });
+  it('精确离散值与隐藏字段；缺键/额外键/类型/非有限/任意连续值/范围外拒绝', () => {
+    const state = configured();
+    const invalid = [
+      { ...state, sceneConfig: { ...state.sceneConfig, budget: '2000' } },
+      { ...state, sceneConfig: { ...state.sceneConfig, distance: 11 } },
+      { ...state, sceneConfig: { ...state.sceneConfig, age: 4 } },
+      { ...state, sceneConfig: { ...state.sceneConfig, room: 4 } },
+      { ...state, sceneConfig: { ...state.sceneConfig, reaction: 0 } },
+      { ...state, sceneConfig: { ...state.sceneConfig, husbandry: 'false' } },
+      { ...state, sceneConfig: { ...state.sceneConfig, extra: 1 } },
+      { ...state, sceneConfig: [] },
+      { ...state, routeConfig: [] },
+      ...[NaN, Infinity, -1, 0.5, 13].map((survivors) => ({ ...state, routeConfig: { ...state.routeConfig, survivors } })),
+      { ...state, routeConfig: { ...state.routeConfig, feudalBudget: 601 } },
+      { ...state, routeConfig: { ...state.routeConfig, deadline: 61 } },
+      { ...state, routeConfig: { ...state.routeConfig, husbandry: 0 } },
+      { ...state, routeConfig: { ...state.routeConfig, extra: 1 } },
+      ...[{ mode: '1v1', teamSize: null, lane: null }, { teamSize: '3v3' }, { mapId: 'arena' }, { lane: null }].map((choice) => ({
+        ...state,
+        choice: { ...state.choice, ...choice },
+      })),
+    ];
+    for (const key of Object.keys(state.sceneConfig)) {
+      const cfg = { ...state.sceneConfig } as Record<string, unknown>;
+      delete cfg[key];
+      invalid.push({ ...state, sceneConfig: cfg } as never);
+    }
+    for (const key of Object.keys(state.routeConfig)) {
+      const cfg = { ...state.routeConfig } as Record<string, unknown>;
+      delete cfg[key];
+      invalid.push({ ...state, routeConfig: cfg } as never);
+    }
+    for (const value of invalid) {
+      expect(decodeStartGame(JSON.stringify({ version: 1, state: value }), MAPS), JSON.stringify(value)).toEqual({ kind: 'invalid' });
+      expect(decodeStartGame(JSON.stringify({ version: 1, state: value })).kind).toBe('invalid');
+      expect(decodeStartSearch('?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(value) }), MAPS).kind).toBe('invalid');
+    }
+    const flank = {
+      ...state,
+      choice: { ...state.choice, lane: 'flank' },
+      sceneConfig: { ...DEFAULT_FLANK_SCENE, reaction: 1.25, room: 12, distance: 2 },
+      routeConfig: { ...DEFAULT_ROUTE, distance: 0, deadline: 0, survivors: 0, newLimit: 12 },
+    };
+    expect(decodeStartGame(JSON.stringify({ version: 1, state: flank }), MAPS).kind).toBe('valid');
+    for (const patch of [{ deadline: 60 }, { mode: 'ready' }, { husbandry: false }])
+      expect(decodeStartGame(JSON.stringify({ version: 1, state: { ...flank, sceneConfig: { ...flank.sceneConfig, ...patch } } }), MAPS).kind).toBe('invalid');
+    expect(decodeStartGame(JSON.stringify({ version: 1, state: { ...flank, routeConfig: { ...flank.routeConfig, husbandry: false } } }), MAPS).kind).toBe(
+      'invalid',
+    );
   });
 });

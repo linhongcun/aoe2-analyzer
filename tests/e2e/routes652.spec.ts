@@ -7,7 +7,9 @@ test('路线衔接公开存量与追加预算，不替代城堡快照', async ({
   await page.getByRole('button', { name: '4v4', exact: true }).click();
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
   await page.getByRole('button', { name: /^边路/ }).click();
-  await expect(page.getByTestId('scene-Britons')).toContainText('预算可负担');
+  await expect(page.getByTestId('scene-Britons').getByText('城堡时代 · 弩手', { exact: true })).toBeVisible();
+  await page.getByTestId('scene-Britons').getByText('为什么', { exact: true }).click();
+  await expect(page.getByTestId('scene-Britons').locator('p').filter({ hasText: '预算可负担' })).toBeVisible();
   await expect(page.getByText('封建到城堡：路线衔接', { exact: true })).toBeVisible();
   await page.getByText('封建到城堡：路线衔接', { exact: true }).click();
   await expect(page.getByTestId('route-ledger-Britons')).toContainText('存量升级');

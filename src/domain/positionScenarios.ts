@@ -16,18 +16,8 @@ export const SCENARIO_CIVS: Record<Lane, readonly string[]> = {
   flank: ['Britons', 'Ethiopians', 'Franks', 'Mayans', 'Vietnamese'],
   pocket: ['Berbers', 'Britons', 'Franks', 'Huns'],
 };
-export interface SceneConfig {
-  age: number;
-  budget: number;
-  distance: number;
-  deadline: number;
-  reaction: number;
-  room: number;
-  mode: 'ready' | 'new';
-  husbandry: boolean;
-}
-export const DEFAULT_SCENE: SceneConfig = { age: 3, budget: 12000, distance: 30, deadline: 120, reaction: 0.5, room: 0, mode: 'new', husbandry: true };
-export const DEFAULT_FLANK_SCENE: SceneConfig = { ...DEFAULT_SCENE, distance: 12 };
+import type { SceneConfig } from './startGameInputs';
+export { DEFAULT_SCENE, DEFAULT_FLANK_SCENE, type SceneConfig } from './startGameInputs';
 interface EcoEffect {
   kind: string;
   attr?: string;

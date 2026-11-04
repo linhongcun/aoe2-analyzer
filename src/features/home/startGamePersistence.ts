@@ -1,4 +1,5 @@
 import { civByEn } from '../../data';
+import { sceneSupported, validSceneInput, validRouteInput } from '../../domain/startGameInputs';
 import { decisionSteps, type StartState, type StepId } from '../../domain/startGame';
 
 export const START_GAME_KEY = 'aoe2-start-game-v1';
@@ -31,7 +32,15 @@ export function decodeStartGame(raw: string, mapIds?: ReadonlySet<string>): Star
   }
   if (!object(input) || !keys(input, ['version', 'state']) || input.version !== 1 || !object(input.state)) return { kind: 'invalid' };
   const s = input.state;
-  if (!keys(s, ['choice', 'skipped', 'prefilled', 'teamArmed', 'lobby', 'laneOpen', 'current']) || !object(s.choice)) return { kind: 'invalid' };
+  if (
+    !keys(
+      s,
+      ['choice', 'skipped', 'prefilled', 'teamArmed', 'lobby', 'laneOpen', 'current', 'sceneConfig', 'routeConfig'],
+      ['choice', 'skipped', 'prefilled', 'teamArmed', 'lobby', 'laneOpen', 'current'],
+    ) ||
+    !object(s.choice)
+  )
+    return { kind: 'invalid' };
   const c = s.choice;
   if (
     !keys(c, ['mode', 'teamSize', 'mapId', 'lane', 'civ']) ||
@@ -61,8 +70,18 @@ export function decodeStartGame(raw: string, mapIds?: ReadonlySet<string>): Star
   for (const step of ['mode', 'map'] as const) {
     if (s.prefilled[step] === true && (choices[step] === null || s.skipped[step] === true)) return { kind: 'invalid' };
   }
+  const sceneConfig = own(s, 'sceneConfig') ? s.sceneConfig : null;
+  const routeConfig = own(s, 'routeConfig') ? s.routeConfig : null;
+  const supported = sceneSupported(c as unknown as StartState['choice']);
+  if (
+    (sceneConfig !== null && (!supported || !validSceneInput(sceneConfig, c.lane as 'flank' | 'pocket'))) ||
+    (routeConfig !== null && (!supported || !validRouteInput(routeConfig, c.lane as 'flank' | 'pocket')))
+  )
+    return { kind: 'invalid' };
   const state: StartState = {
     choice: { mode: c.mode, teamSize: c.teamSize, mapId: c.mapId, lane: c.lane, civ: c.civ } as StartState['choice'],
+    sceneConfig: sceneConfig as StartState['sceneConfig'],
+    routeConfig: routeConfig as StartState['routeConfig'],
     skipped: { ...s.skipped },
     prefilled: { ...s.prefilled },
     teamArmed: s.teamArmed as boolean,

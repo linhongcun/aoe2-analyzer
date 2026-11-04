@@ -2,6 +2,7 @@ import { useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { buildsPath, matchupPath } from '../../../domain/matchupRoute';
+import { sceneSupported } from '../../../domain/startGameInputs';
 import { editStep, jumpTo, laneRowVisible, openLane, pickCiv, resetStart, type StartState, type StepId } from '../../../domain/startGame';
 import { Actions, CivRow, EmptySlot, LANE_EN, LANE_LABEL, ModeText, Picked, findMap, normalize, useMaps, type Update } from './startGameEarly';
 
@@ -213,17 +214,24 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
         <Link className="start-link" to={matchupPath(civ?.en)}>
           对局助手
         </Link>
-        <Link className="start-link" to={buildsPath(civ?.en)}>
-          开局流程
-        </Link>
+        {!sceneSupported(state.choice) ? (
+          <Link className="start-link" to={buildsPath(civ?.en)}>
+            开局流程
+          </Link>
+        ) : null}
       </div>
       <MatchupNotice selected={civ != null} />
       <p className="start-hint">
         开局流程：
-        {civ ? '仅带入文明上下文，列表仍为全部开局；地图、路位未带入，具体流程需自行选择。' : '未带入本局文明，列表仍为全部开局，具体流程需自行选择。'}
+        {sceneSupported(state.choice)
+          ? '具体流程见本局开局；地图、路位未带入目标页。'
+          : civ
+            ? '当前条件未指定已核验打法；仅带入文明上下文，列表仍为全部开局；地图、路位未带入，具体流程需自行选择。'
+            : '未带入本局文明，列表仍为全部开局，具体流程需自行选择。'}
       </p>
       <p className="start-hint">{map ? `地图页不保证已选中${map.name}，请在页内选择。` : '地图页未带入本局地图，请在页内选择。'}</p>
       <p className="start-hint">天梯打开的是现有静态快照，未按本局筛选，不是这一局的胜率。</p>
+      {sceneSupported(state.choice) ? <PlanLoader state={state} /> : null}
       <div className="start-actions">
         <button type="button" className="start-btn" onClick={() => onChange(() => resetStart())}>
           再开一局
@@ -267,4 +275,41 @@ function MatchupNotice({ selected }: { selected: boolean }) {
       {selected ? '仅带入我方文明；对手沿用助手原有选择，非本局当前对手。' : '未带入本局文明；助手沿用原有双方选择，不代表本局对阵。'}
     </p>
   );
+}
+
+function PlanLoader({ state }: { state: StartState }) {
+  const [Component, setComponent] = useState<ComponentType<{ state: StartState }> | null>(null);
+  const [attempt, retry] = useState(0);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let live = true;
+    void import('./StartPlanSummary')
+      .then((m) => {
+        if (live) setComponent(() => m.default);
+      })
+      .catch(() => {
+        if (live) setFailed(true);
+      });
+    return () => {
+      live = false;
+    };
+  }, [attempt]);
+  if (Component) return <Component state={state} />;
+  if (failed)
+    return (
+      <p role="alert">
+        本局打法模块加载失败，选择和输入保留。
+        <button
+          type="button"
+          className="start-btn"
+          onClick={() => {
+            setFailed(false);
+            retry((n) => n + 1);
+          }}
+        >
+          重试本局打法
+        </button>
+      </p>
+    );
+  return <p role="status">正在整理本局打法…</p>;
 }
