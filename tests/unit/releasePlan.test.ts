@@ -52,8 +52,14 @@ describe('#431 affected feature plans', () => {
   it('#533 siege UI and the unit detail entry own siege533 without the site-wide matrix', () => {
     const siege = planChanges([change('src/features/siege/Siege.tsx')]);
     expect(siege).toMatchObject({ scope: 'targeted', features: ['siege'], full: false, data: false });
-    expect(siege.unit).toEqual(['tests/unit/siege308.test.ts']);
-    expect(siege.e2e).toEqual(['tests/e2e/siege308.spec.ts', 'tests/e2e/siege533.spec.ts', 'tests/e2e/siege554-555.spec.ts', 'tests/e2e/siege581.spec.ts']);
+    expect(siege.unit).toEqual(['tests/unit/siege308.test.ts', 'tests/unit/trebuchet711.test.ts']);
+    expect(siege.e2e).toEqual([
+      'tests/e2e/siege308.spec.ts',
+      'tests/e2e/siege533.spec.ts',
+      'tests/e2e/siege554-555.spec.ts',
+      'tests/e2e/siege581.spec.ts',
+      'tests/e2e/trebuchet711.spec.ts',
+    ]);
     expect(siege.e2e).not.toContain('tests/e2e/v0300-338.spec.ts');
     const detail = planChanges([change('src/features/units/components/UnitDetail.tsx')]);
     expect(detail).toMatchObject({ scope: 'targeted', features: ['units'], full: false, data: false });
