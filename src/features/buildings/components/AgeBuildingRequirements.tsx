@@ -15,7 +15,7 @@ export function AgeBuildingRequirements({ buildings }: { buildings: Building[] }
       {ids.map((id) => {
         const building = buildings.find((item) => item.id === id);
         return building ? (
-          <Link className="ulink community-tool-entry" data-counts={counts} key={id} to={`/building/${id}`}>
+          <Link className="community-tool-entry" data-counts={counts} key={id} to={`/building/${id}`}>
             {building.zh}
           </Link>
         ) : (
@@ -58,7 +58,7 @@ export function AgeBuildingRequirements({ buildings }: { buildings: Building[] }
       </p>
       <div className="uchips" aria-label="升级时代说明来源">
         {rows.map((row) => (
-          <Link className="ulink community-tool-entry" key={row.tech} to={`/tech/${row.tech}`}>
+          <Link className="community-tool-entry" key={row.tech} to={`/tech/${row.tech}`}>
             {row.age}说明
           </Link>
         ))}

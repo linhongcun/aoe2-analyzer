@@ -37,6 +37,11 @@ for (const width of [360, 375, 390, 1280]) {
       await expect(imperial.getByRole('link', { name: '营垒', exact: true })).toHaveAttribute('href', '#/building/1251');
       await expect(panel).toContainText('DE Update 188329');
       await expect(panel).toContainText('高棉');
+      for (const link of await panel.getByRole('link').all()) {
+        const bounds = await link.boundingBox();
+        expect(bounds!.width).toBeGreaterThanOrEqual(44);
+        expect(bounds!.height).toBeGreaterThanOrEqual(44);
+      }
       await page.locator('#bq').fill('磨坊');
       await expect(page.locator('#bgrid > a')).toHaveCount(1);
       await expect(panel).toBeVisible();
@@ -45,6 +50,10 @@ for (const width of [360, 375, 390, 1280]) {
       expect((await new AxeBuilder({ page }).include('[aria-labelledby="age-buildings-title"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual(
         [],
       );
+      await page.evaluate(() => {
+        (document.activeElement as HTMLElement | null)?.blur();
+        scrollTo(0, 0);
+      });
       await page.screenshot({ path: info.outputPath(`age-buildings-${width}-${theme}.png`), fullPage: true });
     });
   }
