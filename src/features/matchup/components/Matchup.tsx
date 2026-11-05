@@ -178,6 +178,12 @@ export default function Matchup() {
             <p>
               <b>推荐反制</b>
             </p>
+            <p className="note matchup-counter-note">
+              以下反制建议为通用示意，非模型结论。当前 PK 采用近似计算，忽略射程、走位/风筝、地形高低差、冲锋攻击和溅射；击杀时间不能证明能否贴脸或绕后。
+              <Link className="community-tool-entry" to="/duel">
+                查看 PK 模型能力与限制
+              </Link>
+            </p>
             {e.ty.map((t) => (
               <p key={t} className="note">
                 <b>{TYPE_ZH[t]}：</b>
