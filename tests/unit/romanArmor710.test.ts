@@ -89,3 +89,101 @@ describe('#710 护甲投影来源与闭包', () => {
     expect(TECH_EFFECTS[core.techById[74]!.en]).toBeDefined();
   });
 });
+
+describe('#710 审阅发现的未知资格与顺序操作边界', () => {
+  it('缺科技树键是待确认，不可声称无法研究', async () => {
+    const core = await loadCore(),
+      trees = await loadTrees(),
+      b = civBonuses(civByEn('Romans')!)[1]!;
+    const missing = structuredClone(trees);
+    for (const block of missing.t.Romans!) block[3] = block[3].filter((c) => !(c[2] === 't' && c[3] === 74));
+    const r = romanArmor(b, core.units, core.techs, missing)!;
+    expect(r.unavailable.map((t) => t.id)).not.toContain(74);
+    expect(r.rows.some((row) => row.t.id === 74)).toBe(false);
+    const noTree = structuredClone(trees);
+    delete noTree.t.Romans;
+    expect(romanArmor(b, core.units, core.techs, noTree)?.unavailable).toEqual([]);
+  });
+  it('真实普通效果变异跟随；累计按add/mul/set逐项应用', async () => {
+    const core = await loadCore(),
+      trees = await loadTrees(),
+      b = civBonuses(civByEn('Romans')!)[1]!;
+    const scale = core.techById[74]!.en,
+      chain = core.techById[76]!.en;
+    const savedScale = TECH_EFFECTS[scale]!,
+      savedChain = TECH_EFFECTS[chain]!;
+    try {
+      TECH_EFFECTS[scale] = [
+        [
+          () => true,
+          [
+            { s: 'ma', op: 'add', v: 3 },
+            { s: 'pa', op: 'add', v: 4 },
+          ],
+        ],
+      ];
+      TECH_EFFECTS[chain] = [
+        [
+          () => true,
+          [
+            { s: 'ma', op: 'mul', v: 2 },
+            { s: 'pa', op: 'set', v: 10 },
+          ],
+        ],
+      ];
+      const r = romanArmor(b, core.units, core.techs, trees)!;
+      const row = r.rows.find((r) => r.t.id === 74 && r.units.some((u) => u.id === 1793))!;
+      expect(row.normal).toEqual({ ma: 3, pa: 4 });
+      expect(row.roman).toEqual({ ma: 4, pa: 5 });
+      expect(r.example?.stages.map((s) => [s.ma, s.pa])).toEqual([
+        [2, 2],
+        [6, 7],
+        [13, 11],
+      ]);
+    } finally {
+      TECH_EFFECTS[scale] = savedScale;
+      TECH_EFFECTS[chain] = savedChain;
+    }
+  });
+});
+
+it('#710 来源/归属或普通规则缺失不给可信数字；累计不退成缺锁甲的两阶段', async () => {
+  const core = await loadCore(),
+    trees = await loadTrees(),
+    b = civBonuses(civByEn('Romans')!)[1]!;
+  for (const bad of [
+    { ...b, src: 'text' as const },
+    { ...b, idx: 0 },
+  ]) {
+    const r = romanArmor(bad, core.units, core.techs, trees)!;
+    expect(r.rows).toEqual([]);
+    expect(r.unavailable).toEqual([]);
+    expect(r.example).toBeNull();
+  }
+  const missing = romanArmor(
+    b,
+    core.units,
+    core.techs.filter((t) => t.id !== 76),
+    trees,
+  )!;
+  expect(missing.rows.some((r) => r.t.id === 74)).toBe(true);
+  expect(missing.example).toBeNull();
+  const name = core.techById[74]!.en,
+    saved = TECH_EFFECTS[name]!;
+  try {
+    delete TECH_EFFECTS[name];
+    const r = romanArmor(b, core.units, core.techs, trees)!;
+    expect(r.rows.some((r) => r.t.id === 74)).toBe(false);
+    expect(r.unavailable.some((t) => t.id === 74)).toBe(false);
+    expect(r.example).toBeNull();
+  } finally {
+    TECH_EFFECTS[name] = saved;
+  }
+});
+
+it('#710 fresh仅为文本一致性审计，false仍保留有效DAT贡献', async () => {
+  const core = await loadCore(),
+    trees = await loadTrees(),
+    b = civBonuses(civByEn('Romans')!)[1]!;
+  expect(romanArmor({ ...b, fresh: false }, core.units, core.techs, trees)).toEqual(romanArmor(b, core.units, core.techs, trees));
+});

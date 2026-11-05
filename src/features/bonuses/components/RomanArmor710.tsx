@@ -51,6 +51,10 @@ export default function RomanArmor710({ b }: { b: CivBonusEnt }) {
       ) : (
         <p>科技或作用对象待确认。</p>
       )}
+      {result.pendingSource && <p>部分科技来源或对象资格待确认，不计入累计示例。</p>}
+      {result.pendingTechs.map((t) => (
+        <p key={t.id}>{t.zh}研究资格待确认，本例不计入</p>
+      ))}
       {result.unavailable.map((t) => (
         <p key={t.id}>罗马无法研究{t.zh}，本例不计入</p>
       ))}

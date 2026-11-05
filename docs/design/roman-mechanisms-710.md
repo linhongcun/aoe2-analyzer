@@ -33,3 +33,7 @@ tech884概览新增“攻击类蓄力参数”，3例各h3和DL读当前名称�
 新romanCharge710 unit/e2e常驻techs，分别source-only TechDetail/TechAffects/local charge及adapter证明；RomanArmor的BonusDetail/bonuses-local既有full长期覆盖，不新bonuses窄profile，不挂civs/units/duel。新JSON/Python producer为full+data；data_update/现有DATA_CHECKS独立--check登记，compile/catalog完整。本项实际full/data=true。本地相关CI必须整份releasePlan，并含既有schema边界；精确集合合法迁移只加成员保旧equal/排除。先实际commitSHA build/快新browser+首图自检，再push/full，独立实际SHA终审后由集成代理完整交付。
 
 实际DAT另保留tech.repeatable原始标志1，仅记录字段，不解释成可重复研究；上方效果投影只按命令序列应用一次。容量/率均为有限数仍须防除法溢出，溢出给待确认，不显示Infinity。
+
+## 独立源码审阅补强
+
+7a4ce30生产新18/24图虽通过，源码审发现缺树键误称不可研究、通用mul/set累计用单项delta会算错及普通规则变异覆盖不足，故未push。真实新红记录710-review-first-red.log及710-review-source-first-red.log；不把该head称交付完成。目标身份但src非dat/idx非1只给待确认（fresh仅为文本一致性审计，不作为有效DAT的门禁）；引用科技缺目录、普通规则或相关树键缺失也待确认，只有明确不可用才写无法研究。现有合法单项可保留；冻结累计必须同一u1793的74及76齐全、真实pre闭包成立，再从新base按普通效果和本条extra顺序各应用一次，支持现有add/mul/set，不以相对最初基础的delta反复相加。任何累计非finite转待确认。普通规则真实变异以finally还原，原三阶段现值与7对象/禁77断言保持。
