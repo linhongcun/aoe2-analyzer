@@ -115,6 +115,18 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     },
   );
 
+  it.each(['src/features/units/components/UnitDetail.tsx', 'src/features/units/components/SplashMechanics.tsx'])(
+    '%s alone retains the splash explanation regression',
+    (path) => {
+      for (const env of [pr, main]) {
+        const selected = browser([change(path)], env);
+        expect(selected).toMatchObject({ full: false, data: false });
+        expect(selected.unit).toContain('tests/unit/splash712.test.ts');
+        expect(selected.e2e).toContain('tests/e2e/splash712.spec.ts');
+      }
+    },
+  );
+
   it('the affected home and ladder keep their exact important negative paths', () => {
     const home = browser([change('src/domain/startGame.ts')]);
     for (const name of ['startGame592', 'startGame632', 'mechanism652', 'routes652']) expect(home.e2e).toContain('tests/e2e/' + name + '.spec.ts');

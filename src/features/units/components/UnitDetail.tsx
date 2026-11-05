@@ -35,6 +35,7 @@ import { unitDisplayAge } from '../displayAge';
 import { ScoutAgeChanges } from './ScoutAgeChanges';
 import { TrebuchetStates } from './TrebuchetStates';
 import { AgeCounterBonuses } from './AgeCounterBonuses';
+import { SplashMechanics, splashDescription } from './SplashMechanics';
 import '../../../shared/ui/contextLinks.css';
 import './unit-civ-links.css';
 
@@ -345,6 +346,7 @@ export default function UnitDetail() {
                     </table>
                     {u.id === 331 && <p className="note">目录打包记录的准确度，不代表展开命中率。</p>}
                   </DetailSection>
+                  <SplashMechanics unit={u} />
                   {u.up && (!elite || u.id !== elite.id) && (
                     <DetailSection title="升级研究">
                       <p>
@@ -377,7 +379,7 @@ export default function UnitDetail() {
               {elite && <EliteDiff base={base} elite={elite} />}
               <h4>说明</h4>
               <p className="desc">
-                <Linked text={u.id === 331 ? u.desc.replace('组装后才能移动，拆装后即可攻击', '打包后可移动，展开后可攻击') : u.desc} nl />
+                <Linked text={u.id === 331 ? u.desc.replace('组装后才能移动，拆装后即可攻击', '打包后可移动，展开后可攻击') : splashDescription(u)} nl />
               </p>
               <DetailSource />
             </>

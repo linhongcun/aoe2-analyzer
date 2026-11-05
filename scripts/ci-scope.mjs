@@ -152,6 +152,7 @@ export const PROFILES = {
       'thumbRing709',
       'trebuchet711',
       'ageCounter708',
+      'splash712',
     ],
     [
       'unitCards6',
@@ -171,6 +172,7 @@ export const PROFILES = {
       'thumbRing709',
       'trebuchet711',
       'ageCounter708',
+      'splash712',
     ],
   ),
   simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
