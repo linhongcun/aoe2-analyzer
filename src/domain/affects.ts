@@ -70,10 +70,14 @@ export interface AffectGroup {
 export function techAffects(t: Tech, units: readonly Unit[], buildings: readonly Building[]): AffectGroup[] {
   const G = new Map<string, Map<string, AffectRow>>();
   const add = (g: string, ef: Effect[], u?: Unit, b?: Building) => {
-    const k = effectKey(ef);
+    const parts =
+      t.id === 437
+        ? ef.map((e) => (e.s === 'rof' ? { icon: 'rof', text: `攻击间隔约 ×${Number((1 / (1 + e.v)).toFixed(5))}（v:${e.v}）` } : effectParts([e])[0]!))
+        : effectParts(ef);
+    const k = t.id === 437 ? JSON.stringify(ef) : effectKey(ef);
     const m = G.get(g) ?? new Map<string, AffectRow>();
     G.set(g, m);
-    const r = m.get(k) ?? { effect: k, parts: effectParts(ef), units: [], buildings: [] };
+    const r = m.get(k) ?? { effect: parts.map((p) => p.text).join('，'), parts, units: [], buildings: [] };
     m.set(k, r);
     if (u) r.units.push(u);
     if (b) r.buildings.push(b);

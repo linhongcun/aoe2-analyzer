@@ -28,6 +28,8 @@ export default function TechDetail() {
     opp = civByEn(params.get('opp') ?? '');
   const allCivsParams = new URLSearchParams(params);
   allCivsParams.set('tab', 'civs');
+  const affectsParams = new URLSearchParams(params);
+  affectsParams.set('tab', 'affects');
   const core = useCore();
   useEffect(() => {
     scrollTo(0, 0);
@@ -161,12 +163,20 @@ export default function TechDetail() {
                 </div>
               )}
               {t.desc.trim() && (
-                <DetailSection title="效果说明">
+                <DetailSection title={t.id === 437 ? '游戏内说明（近似）' : '效果说明'}>
                   <p className="desc">
                     <Linked text={t.desc} nl />
                     <br />
                     <small className="note">{t.descEn.replace(/\n/g, ' ')}</small>
                   </p>
+                  {t.id === 437 && (
+                    <p className="note">
+                      上方百分比为游戏内近似说明；请按具体单位的精确间隔系数阅读。
+                      <Link className="community-tool-entry" to={`/tech/${t.id}?${affectsParams.toString()}`}>
+                        查看精确间隔与DE来源
+                      </Link>
+                    </p>
+                  )}
                 </DetailSection>
               )}
               {rel.length > 0 && (
@@ -179,7 +189,13 @@ export default function TechDetail() {
                   </div>
                 </>
               )}
-              <DetailSource note="结构化效果与科技模拟器同源；未编码效果以游戏说明为准" />
+              <DetailSource
+                note={
+                  t.id === 437
+                    ? '攻击间隔与科技模拟器同源：effects.json / Thumb Ring / s:rof；游戏说明为近似文案'
+                    : '结构化效果与科技模拟器同源；未编码效果以游戏说明为准'
+                }
+              />
             </>
           ),
         },

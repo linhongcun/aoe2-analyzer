@@ -149,6 +149,7 @@ export const PROFILES = {
       'automaticAge705',
       'armorValues706',
       'negativeBonus707',
+      'thumbRing709',
     ],
     [
       'unitCards6',
@@ -165,12 +166,13 @@ export const PROFILES = {
       'automaticAge705',
       'armorValues706',
       'negativeBonus707',
+      'thumbRing709',
     ],
   ),
   simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
   techs: profile(
-    ['affects', 'techUnits13', 'techBuilding12', 'techCost355', 'relatedTechs193'],
-    ['techCards6', 'techUnits13', 'relatedTechs193', 'catalogLayout187'],
+    ['affects', 'techUnits13', 'techBuilding12', 'techCost355', 'relatedTechs193', 'thumbRing709'],
+    ['techCards6', 'techUnits13', 'relatedTechs193', 'catalogLayout187', 'thumbRing709'],
   ),
   duel: profile(
     [
@@ -196,6 +198,7 @@ export const PROFILES = {
       'duelPreset372',
       'armorValues706',
       'negativeBonus707',
+      'thumbRing709',
     ],
     [
       'duelHeading364',
@@ -221,6 +224,7 @@ export const PROFILES = {
       'refactor288',
       'armorValues706',
       'negativeBonus707',
+      'thumbRing709',
     ],
   ),
   buildings: profile(

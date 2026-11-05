@@ -9,6 +9,7 @@ import { Icon } from '../../../shared/ui/Icon';
 import { LineChip } from '../../../shared/ui/LineChip';
 import { Loading } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
+import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 
 /** 作用对象：与科技模拟器使用同一效果表与判定 */
 export default function TechAffects({ t }: { t: Tech }) {
@@ -39,6 +40,12 @@ export default function TechAffects({ t }: { t: Tech }) {
       {numeric ? (
         <>
           <p className="note">与科技模拟器使用同一份结构化效果表（单一数据源）；列出该科技数值上作用的全部单位/建筑。</p>
+          {t.id === 437 && (
+            <p className="note">
+              扳指的攻击间隔 = 原间隔 / (1+v)，不同作用对象的系数分别列出。来源：effects.json / Thumb Ring / s:rof；v保留原始值，倍率为近似展示；DE{' '}
+              {DATA_SOURCES.patch?.build ?? '待确认'}。
+            </p>
+          )}
           {groups.length ? (
             groups.map((g) => (
               <div className="affg" key={g.group}>
