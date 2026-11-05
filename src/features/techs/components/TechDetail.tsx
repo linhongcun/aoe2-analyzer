@@ -9,6 +9,7 @@ import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import TechAffects from './TechAffects';
+import { AgeBuildingRequirements } from './AgeBuildingRequirements';
 import ChargeAttack710 from './ChargeAttack710';
 import { techEffectText } from '../techEffectText';
 import { ThumbRingEffectText } from './ThumbRingEffectText';
@@ -51,6 +52,7 @@ export default function TechDetail() {
   // 涉及单位用结构化效果（与「作用对象」同源），不再按说明文字匹配单位名（#13）
   const affected = techAffects(t, core.units, core.buildings);
   const rel = affectedUnits(affected, core.fam);
+  const ageTech = t.id === 101 || t.id === 102 || t.id === 103 ? t.id : null;
   // 条件与对象是效果的一部分；相同的“攻击 +1”不能跨建筑或组合科技去重。
   const effectCards = affected.flatMap((group, groupIndex) => {
     const conditional = group.group.startsWith('组合触发');
@@ -182,6 +184,7 @@ export default function TechDetail() {
                   )}
                 </DetailSection>
               )}
+              {ageTech !== null && <AgeBuildingRequirements techId={ageTech} buildings={core.buildings} />}
               {t.id === 884 && <ChargeAttack710 />}
               {rel.length > 0 && (
                 <>

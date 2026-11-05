@@ -8,7 +8,12 @@ import { ListHead } from '../../../shared/ui/layout';
 import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 import { filterBuildings } from '../logic/filter';
-import { AgeBuildingRequirements } from './AgeBuildingRequirements';
+
+const ageGuides = [
+  [101, '封建时代说明'],
+  [102, '城堡时代说明'],
+  [103, '帝王时代说明'],
+] as const;
 
 export default function BuildingList() {
   const core = useCore();
@@ -21,7 +26,14 @@ export default function BuildingList() {
   return (
     <section id="buildings" className="pane">
       <ListHead title="建筑" desc="全部建筑 · 按时代、类型、DLC 筛选" />
-      {core && <AgeBuildingRequirements buildings={core.buildings} />}
+      <p className="note">各档建筑门槛写在对应的时代升级说明里。</p>
+      <div className="uchips" role="navigation" aria-label="时代升级说明">
+        {ageGuides.map(([id, label]) => (
+          <Link className="community-tool-entry" key={id} to={`/tech/${id}`}>
+            {label}
+          </Link>
+        ))}
+      </div>
       <div className="bar fbar">
         <SearchInput id="bq" value={q} onChange={setQ} placeholder="搜索建筑（中/英）" />
         <select id="bt" value={type} onChange={(e) => setType(e.target.value)}>
