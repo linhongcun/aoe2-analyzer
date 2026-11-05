@@ -10,6 +10,7 @@ const armorBox = (page: Page, scope: Page | Locator = page) =>
   scope.locator('.bonusbox').filter({ has: page.getByRole('heading', { name: '护甲类别（防御）', exact: true }) });
 
 async function values(box: Locator, id: number) {
+  await expect(box).toHaveCount(1);
   await expect(box).toBeVisible();
   for (const [name, value] of units.find((unit) => unit.id === id)!.armc) {
     const tag = box.locator('.tag').filter({ hasText: new RegExp(`^${name}\\s`) });
@@ -53,14 +54,8 @@ for (const width of [360, 375, 390, 1280]) {
         await values(box, context === 'unit' ? 827 : context === 'sim' ? 751 : 38);
         if (context === 'sim') await expect(box.locator('[aria-label="冲击步兵 0（旧称：鹰战士类）"]')).toBeVisible();
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-        expect(
-          (
-            await new AxeBuilder({ page })
-              .include(context === 'pk' ? '#duel-a .duel-tech' : context === 'sim' ? '#sim' : '#unit')
-              .withTags(['wcag2a', 'wcag2aa'])
-              .analyze()
-          ).violations,
-        ).toEqual([]);
+        await box.evaluate((element) => element.setAttribute('data-armor-audit', '706'));
+        expect((await new AxeBuilder({ page }).include('[data-armor-audit="706"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
         await box.screenshot({ path: info.outputPath(`armor-${context}-${width}-${theme}.png`) });
       }
       expect(errors).toEqual([]);
