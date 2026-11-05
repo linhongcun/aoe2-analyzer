@@ -221,7 +221,7 @@ describe('开一局步骤 #592', () => {
     expect(edited.choice.civ).toBe('Franks');
   });
 
-  it('首页第一屏是开一局，工具入口还在，先练文明不是链接', () => {
+  it('首页第一屏是开一局，工具入口还在，规划练习不可触发', () => {
     const html = home();
     expect(html).toContain('>开一局<');
     expect(html).toContain('data-testid="start-game"');
@@ -233,11 +233,11 @@ describe('开一局步骤 #592', () => {
     expect(html).toContain('data-testid="start-lobby"');
     expect(html).toContain('data-testid="start-practice"');
     expect(html).toContain('data-testid="start-more-tools"');
-    expect(html).toContain('按文明练习 · 即将提供');
+    expect(html).toContain('按文明练习 · 规划中');
     expect(html).toContain('搜索文明、单位、科技、开局…');
     expect(html).toContain('更多工具');
     expect(html).not.toMatch(/<a[^>]*data-testid="start-practice"/);
-    expect(html).not.toMatch(/<button[^>]*data-testid="start-practice"/);
+    expect(html).toMatch(/<button(?=[^>]*data-testid="start-practice")(?=[^>]*disabled="")[^>]*>/);
     expect(html.indexOf('data-testid="start-game"')).toBeLessThan(html.indexOf('class="hgrid"'));
     const flowHtml = html.slice(html.indexOf('data-testid="start-game"'), html.indexOf('data-testid="start-more-tools"'));
     expect(flowHtml).not.toMatch(/胜率\s*\d|\d+(?:\.\d+)?\s*%|热门|常打|出场率/);
