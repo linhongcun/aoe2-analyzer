@@ -116,7 +116,11 @@ for (const width of [360, 375, 390, 1280])
         await target.evaluate((el) => el.setAttribute('data-counter-audit', '708'));
         expect((await new AxeBuilder({ page }).include('[data-counter-audit="708"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-        await target.screenshot({ path: info.outputPath(`age-counter-${id}-${width}-${theme}.png`) });
+        await page.evaluate(() => {
+          (document.activeElement as HTMLElement | null)?.blur();
+          window.scrollTo(0, 0);
+        });
+        await page.screenshot({ path: info.outputPath(`age-counter-${id}-${width}-${theme}.png`), fullPage: true });
       }
       expect(errors).toEqual([]);
     });
