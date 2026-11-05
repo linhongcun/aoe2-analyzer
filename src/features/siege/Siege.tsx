@@ -216,6 +216,11 @@ function SiegeTool({ core }: { core: Core }) {
           </section>
         </div>
         <div className="siege-output">
+          {u.id === 331 && (
+            <p className="siege-note" data-t="trebuchet-siege">
+              按展开态持续攻击；不含打包／展开切换，耗时待确认。
+            </p>
+          )}
           <div aria-live="polite" aria-atomic="true">
             {result.verified ? (
               <section className="siege-result" data-testid="siege-result" aria-labelledby="siege-result-title">
