@@ -1,0 +1,316 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-charge-attack.json",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generatedBy": {
+          "const": "scripts/charge_attack_build.py"
+        },
+        "patch": {
+          "$ref": "common.defs.json#/$defs/sourceText"
+        },
+        "datSource": {
+          "type": "object",
+          "properties": {
+            "repo": {
+              "type": "string"
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "repo",
+            "commit",
+            "path"
+          ],
+          "additionalProperties": false
+        },
+        "datSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "engineVerifiedInPinnedBuild": {
+          "const": false
+        },
+        "fieldSemantics": {
+          "type": "object",
+          "properties": {
+            "attributes": {
+              "$ref": "common.defs.json#/$defs/publicUrl"
+            },
+            "mode": {
+              "$ref": "common.defs.json#/$defs/publicUrl"
+            },
+            "duration": {
+              "$ref": "common.defs.json#/$defs/publicUrl"
+            },
+            "seconds": {
+              "$ref": "common.defs.json#/$defs/publicUrl"
+            }
+          },
+          "required": [
+            "attributes",
+            "mode",
+            "duration",
+            "seconds"
+          ],
+          "additionalProperties": false
+        },
+        "durationFormula": {
+          "const": "max_charge/recharge_rate"
+        },
+        "durationUnit": {
+          "const": "seconds"
+        }
+      },
+      "required": [
+        "generatedBy",
+        "patch",
+        "datSource",
+        "datSha256",
+        "engineVerifiedInPinnedBuild",
+        "fieldSemantics",
+        "durationFormula",
+        "durationUnit"
+      ],
+      "additionalProperties": false
+    },
+    "tech": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string"
+        },
+        "civId": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "civName": {
+          "type": "string"
+        },
+        "effectId": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "age": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "repeatable": {
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "requiredCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "researchLocations": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "civId",
+        "civName",
+        "effectId",
+        "age",
+        "repeatable",
+        "requires",
+        "requiredCount",
+        "researchLocations"
+      ],
+      "additionalProperties": false
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "Type": {
+            "enum": [
+              0,
+              4,
+              5
+            ]
+          },
+          "A": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "B": {
+            "const": -1
+          },
+          "C": {
+            "enum": [
+              59,
+              60,
+              61,
+              62,
+              101
+            ]
+          },
+          "D": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "index",
+          "Type",
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "rawTargets": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "uniqueItems": true
+    },
+    "legalTargets": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "uniqueItems": true
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "before": {
+            "type": "object",
+            "properties": {
+              "max_charge": {
+                "type": "number",
+                "minimum": 0
+              },
+              "recharge_rate": {
+                "type": "number",
+                "minimum": 0
+              },
+              "charge_event": {
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              "charge_type": {
+                "enum": [
+                  0,
+                  1
+                ]
+              }
+            },
+            "required": [
+              "max_charge",
+              "recharge_rate",
+              "charge_event",
+              "charge_type"
+            ],
+            "additionalProperties": false
+          },
+          "after": {
+            "type": "object",
+            "properties": {
+              "max_charge": {
+                "type": "number",
+                "minimum": 0
+              },
+              "recharge_rate": {
+                "type": "number",
+                "minimum": 0
+              },
+              "charge_event": {
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              "charge_type": {
+                "enum": [
+                  0,
+                  1
+                ]
+              }
+            },
+            "required": [
+              "max_charge",
+              "recharge_rate",
+              "charge_event",
+              "charge_type"
+            ],
+            "additionalProperties": false
+          },
+          "commandIndices": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "unitId",
+          "before",
+          "after",
+          "commandIndices"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "tech",
+    "commands",
+    "rawTargets",
+    "legalTargets",
+    "examples"
+  ],
+  "additionalProperties": false
+}

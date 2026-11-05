@@ -1,0 +1,608 @@
+{
+  "commands": [
+    {
+      "A": 38,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 0
+    },
+    {
+      "A": 283,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 1
+    },
+    {
+      "A": 569,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 2
+    },
+    {
+      "A": 1813,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 3
+    },
+    {
+      "A": 74,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 4
+    },
+    {
+      "A": 75,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 5
+    },
+    {
+      "A": 77,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 6
+    },
+    {
+      "A": 473,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 7
+    },
+    {
+      "A": 567,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 8
+    },
+    {
+      "A": 1793,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 9
+    },
+    {
+      "A": 1790,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 10
+    },
+    {
+      "A": 1792,
+      "B": -1,
+      "C": 101,
+      "D": 0.6666666269302368,
+      "Type": 5,
+      "index": 11
+    },
+    {
+      "A": 38,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 12
+    },
+    {
+      "A": 283,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 13
+    },
+    {
+      "A": 569,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 14
+    },
+    {
+      "A": 1813,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 15
+    },
+    {
+      "A": 74,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 16
+    },
+    {
+      "A": 75,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 17
+    },
+    {
+      "A": 77,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 18
+    },
+    {
+      "A": 473,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 19
+    },
+    {
+      "A": 567,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 20
+    },
+    {
+      "A": 1793,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 21
+    },
+    {
+      "A": 1790,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 22
+    },
+    {
+      "A": 1792,
+      "B": -1,
+      "C": 59,
+      "D": 5.0,
+      "Type": 4,
+      "index": 23
+    },
+    {
+      "A": 38,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 24
+    },
+    {
+      "A": 283,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 25
+    },
+    {
+      "A": 569,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 26
+    },
+    {
+      "A": 1813,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 27
+    },
+    {
+      "A": 74,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 28
+    },
+    {
+      "A": 75,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 29
+    },
+    {
+      "A": 77,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 30
+    },
+    {
+      "A": 473,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 31
+    },
+    {
+      "A": 567,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 32
+    },
+    {
+      "A": 1793,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 33
+    },
+    {
+      "A": 1790,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 34
+    },
+    {
+      "A": 1792,
+      "B": -1,
+      "C": 60,
+      "D": 0.25,
+      "Type": 4,
+      "index": 35
+    },
+    {
+      "A": 38,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 36
+    },
+    {
+      "A": 283,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 37
+    },
+    {
+      "A": 569,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 38
+    },
+    {
+      "A": 1813,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 39
+    },
+    {
+      "A": 74,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 40
+    },
+    {
+      "A": 75,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 41
+    },
+    {
+      "A": 77,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 42
+    },
+    {
+      "A": 473,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 43
+    },
+    {
+      "A": 567,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 44
+    },
+    {
+      "A": 1793,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 45
+    },
+    {
+      "A": 1790,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 46
+    },
+    {
+      "A": 1792,
+      "B": -1,
+      "C": 61,
+      "D": 1.0,
+      "Type": 0,
+      "index": 47
+    },
+    {
+      "A": 38,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 48
+    },
+    {
+      "A": 283,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 49
+    },
+    {
+      "A": 569,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 50
+    },
+    {
+      "A": 1813,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 51
+    },
+    {
+      "A": 74,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 52
+    },
+    {
+      "A": 75,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 53
+    },
+    {
+      "A": 77,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 54
+    },
+    {
+      "A": 473,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 55
+    },
+    {
+      "A": 567,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 56
+    },
+    {
+      "A": 1793,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 57
+    },
+    {
+      "A": 1790,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 58
+    },
+    {
+      "A": 1792,
+      "B": -1,
+      "C": 62,
+      "D": 1.0,
+      "Type": 0,
+      "index": 59
+    }
+  ],
+  "examples": [
+    {
+      "after": {
+        "charge_event": 1,
+        "charge_type": 1,
+        "max_charge": 5.0,
+        "recharge_rate": 0.25
+      },
+      "before": {
+        "charge_event": 0,
+        "charge_type": 0,
+        "max_charge": 0.0,
+        "recharge_rate": 0.0
+      },
+      "commandIndices": [
+        13,
+        25,
+        37,
+        49
+      ],
+      "unitId": 283
+    },
+    {
+      "after": {
+        "charge_event": 1,
+        "charge_type": 1,
+        "max_charge": 5.0,
+        "recharge_rate": 0.25
+      },
+      "before": {
+        "charge_event": 0,
+        "charge_type": 0,
+        "max_charge": 0.0,
+        "recharge_rate": 0.0
+      },
+      "commandIndices": [
+        23,
+        35,
+        47,
+        59
+      ],
+      "unitId": 1792
+    },
+    {
+      "after": {
+        "charge_event": 1,
+        "charge_type": 1,
+        "max_charge": 5.0,
+        "recharge_rate": 0.25
+      },
+      "before": {
+        "charge_event": 0,
+        "charge_type": 0,
+        "max_charge": 0.0,
+        "recharge_rate": 0.0
+      },
+      "commandIndices": [
+        21,
+        33,
+        45,
+        57
+      ],
+      "unitId": 1793
+    }
+  ],
+  "legalTargets": [
+    38,
+    74,
+    75,
+    77,
+    283,
+    1790,
+    1792,
+    1793
+  ],
+  "meta": {
+    "datSha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f",
+    "datSource": {
+      "commit": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+      "path": "dat/empires2_x2_p1.dat",
+      "repo": "SiegeEngineers/auto-mods"
+    },
+    "durationFormula": "max_charge/recharge_rate",
+    "durationUnit": "seconds",
+    "engineVerifiedInPinnedBuild": false,
+    "fieldSemantics": {
+      "attributes": "https://github.com/Tapsa/AGE/blob/eb1202b70bf3a45d4264212b53b70bbad4369e98/AGE_Frame/Lists.cpp#L325",
+      "duration": "https://github.com/SiegeEngineers/aoe2techtree/blob/e56728e76b7d08301fba7b18d5f16bc8554c109a/scripts/generateDataFiles.py#L416",
+      "mode": "https://github.com/Tapsa/AGE/blob/eb1202b70bf3a45d4264212b53b70bbad4369e98/AGE_Frame/Units.cpp#L1404",
+      "seconds": "https://github.com/SiegeEngineers/aoe2techtree/blob/e56728e76b7d08301fba7b18d5f16bc8554c109a/js/main.js#L389"
+    },
+    "generatedBy": "scripts/charge_attack_build.py",
+    "patch": "DE Update 188329 (2026-10-28)"
+  },
+  "rawTargets": [
+    38,
+    74,
+    75,
+    77,
+    283,
+    473,
+    567,
+    569,
+    1790,
+    1792,
+    1793,
+    1813
+  ],
+  "tech": {
+    "age": 4,
+    "civId": 43,
+    "civName": "Romans",
+    "effectId": 895,
+    "id": 884,
+    "name": "Comitatenses",
+    "repeatable": 1,
+    "requiredCount": 1,
+    "requires": [
+      103
+    ],
+    "researchLocations": [
+      82
+    ]
+  }
+}

@@ -125,7 +125,7 @@ def main():
     run(sys.executable, 'scripts/dat_source.py', '--check')
     # 顺序保留依赖：garrison_healing 读取 general/hosts；各导出器保留自身来源门禁。
     for name in ('effects', 'eco', 'market', 'garrison', 'garrison_general', 'trade_income',
-                 'construction', 'team_bonuses', 'garrison_healing', 'relic_income', 'generate_resource'):
+                 'construction', 'team_bonuses', 'garrison_healing', 'relic_income', 'generate_resource', 'charge_attack'):
         run(sys.executable, 'scripts/%s_build.py' % name)
     run('npx', 'vite-node', 'scripts/build_orders_check.ts')
     run('npx', 'vite-node', 'scripts/effects_audit.ts')

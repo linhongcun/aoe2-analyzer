@@ -5,6 +5,7 @@ import { CivIcon } from '../../../shared/ui/art';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import BonusBody, { BonusTags, BonusText } from '../../../shared/ui/BonusBody';
 import BonusList from './BonusList';
+import RomanArmor710 from './RomanArmor710';
 
 /** #/civ/:en/bonus/:idx（idx 为序号或 team） */
 export default function BonusDetail() {
@@ -25,15 +26,24 @@ export default function BonusDetail() {
       title={heading}
       en={b.team ? `${c.en} team bonus` : `${c.en} bonus ${+b.idx + 1}`}
       tags={<BonusTags b={b} />}
-      tabs={[{ key: 'ov', label: '效果', content: <BonusBody b={b} /> }]}
+      tabs={[
+        {
+          key: 'ov',
+          label: '效果',
+          content: (
+            <>
+              <BonusBody b={b} />
+              {b.id === 'Romans-1' && <RomanArmor710 b={b} />}
+            </>
+          ),
+        },
+      ]}
       sidebar={
         <SideBlock title={`${c.zh} 的全部加成`}>
           <ul className="bside">
             {list.map((x) => (
               <li key={x.id} className={x.id === b.id ? 'cur' : undefined}>
-                <Link to={`/civ/${c.en}/bonus/${x.idx}`}>
-                  {x.team ? '团队：' + x.zh : <BonusText b={x} linked={false} />}
-                </Link>
+                <Link to={`/civ/${c.en}/bonus/${x.idx}`}>{x.team ? '团队：' + x.zh : <BonusText b={x} linked={false} />}</Link>
               </li>
             ))}
           </ul>

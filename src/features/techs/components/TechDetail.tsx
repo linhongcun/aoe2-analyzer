@@ -9,6 +9,8 @@ import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
 import TechAffects from './TechAffects';
+import ChargeAttack710 from './ChargeAttack710';
+import { techEffectText } from '../techEffectText';
 import { ThumbRingEffectText } from './ThumbRingEffectText';
 import { techAffects } from '../../../domain/affects';
 import { affectedUnits } from '../../../domain/family';
@@ -58,7 +60,7 @@ export default function TechDetail() {
       return {
         key: `effect-${groupIndex}-${rowIndex}`,
         label,
-        value: t.id === 437 ? <ThumbRingEffectText text={row.effect} /> : row.effect,
+        value: t.id === 437 ? <ThumbRingEffectText text={row.effect} /> : techEffectText(t.id, row.effect),
         note: `作用对象：${targets.slice(0, 4).join('、')}${targets.length > 4 ? ` 等 ${targets.length} 类单位或建筑` : ''}`,
       };
     });
@@ -180,6 +182,7 @@ export default function TechDetail() {
                   )}
                 </DetailSection>
               )}
+              {t.id === 884 && <ChargeAttack710 />}
               {rel.length > 0 && (
                 <>
                   <h4>涉及单位</h4>
