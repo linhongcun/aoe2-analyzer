@@ -33,6 +33,7 @@ import { Basis } from '../../../shared/ui/RealCost';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { unitDisplayAge } from '../displayAge';
 import { ScoutAgeChanges } from './ScoutAgeChanges';
+import { TrebuchetStates } from './TrebuchetStates';
 import '../../../shared/ui/contextLinks.css';
 import './unit-civ-links.css';
 
@@ -157,13 +158,20 @@ export default function UnitDetail() {
     : [];
   const stats: DetailStat[] = [
     { key: 'hp', icon: 'hp', label: '生命值 HP', value: u.hp, accent: true, change: isE ? u.hp - base.hp : undefined },
-    { key: 'atk', icon: u.rng > 1 ? 'patk' : 'atk', label: '攻击力', value: u.atk, accent: true, change: isE ? u.atk - base.atk : undefined },
-    { key: 'ma', icon: 'marm', label: '近战护甲', value: u.ma, change: isE ? u.ma - base.ma : undefined },
-    { key: 'pa', icon: 'parm', label: '穿刺护甲', value: u.pa, change: isE ? u.pa - base.pa : undefined },
+    {
+      key: 'atk',
+      icon: u.rng > 1 ? 'patk' : 'atk',
+      label: u.id === 331 ? '攻击力（展开态）' : '攻击力',
+      value: u.atk,
+      accent: true,
+      change: isE ? u.atk - base.atk : undefined,
+    },
+    { key: 'ma', icon: 'marm', label: u.id === 331 ? '近战护甲（打包态）' : '近战护甲', value: u.ma, change: isE ? u.ma - base.ma : undefined },
+    { key: 'pa', icon: 'parm', label: u.id === 331 ? '穿刺护甲（打包态）' : '穿刺护甲', value: u.pa, change: isE ? u.pa - base.pa : undefined },
     {
       key: 'rng',
       icon: 'range',
-      label: '射程',
+      label: u.id === 331 ? '射程（展开态）' : '射程',
       value: u.rng,
       change: isE ? u.rng - base.rng : undefined,
       note: (
@@ -174,12 +182,12 @@ export default function UnitDetail() {
         </>
       ),
     },
-    { key: 'spd', icon: 'speed', label: '移动速度', value: u.spd, change: isE ? u.spd - base.spd : undefined },
+    { key: 'spd', icon: 'speed', label: u.id === 331 ? '移动速度（打包态）' : '移动速度', value: u.spd, change: isE ? u.spd - base.spd : undefined },
     { key: 'los', label: '视野', value: u.los, change: isE ? u.los - base.los : undefined },
     {
       key: 'rof',
       icon: 'rof',
-      label: '攻击间隔',
+      label: u.id === 331 ? '攻击间隔（展开态）' : '攻击间隔',
       value: u.rof > 0 ? `${u.rof}s` : '—',
       change: isE && u.rof > 0 && base.rof > 0 ? u.rof - base.rof : undefined,
       lowerIsBetter: true,
@@ -259,6 +267,11 @@ export default function UnitDetail() {
             </nav>
           )}
           {u.id === 93 && <p className="note">通常在封建时代可用；亚美尼亚可在黑暗时代训练长矛兵。</p>}
+          {u.id === 331 && (
+            <p className="note" data-t="trebuchet-model">
+              科技模拟器与单位 PK 沿用目录数值，不模拟两态切换；目录护甲和准确度不代表展开态。
+            </p>
+          )}
           {trees && isChampiUnit(u.id) ? <ChampiReferences core={core} trees={trees} variant="unit" /> : null}
           {elite && (
             <div className="eseg" role="radiogroup" aria-label="普通/精锐">
@@ -306,6 +319,7 @@ export default function UnitDetail() {
               </DetailSection>
               <InsightSlot items={unitInsights(u.id)} />
               <StatTiles stats={stats} label="基础属性" />
+              <TrebuchetStates unit={u} />
               <ScoutAgeChanges unit={u} />
               <div className="two">
                 <div>
@@ -327,6 +341,7 @@ export default function UnitDetail() {
                         )}
                       </tbody>
                     </table>
+                    {u.id === 331 && <p className="note">目录打包记录的准确度，不代表展开命中率。</p>}
                   </DetailSection>
                   {u.up && (!elite || u.id !== elite.id) && (
                     <DetailSection title="升级研究">
@@ -341,16 +356,26 @@ export default function UnitDetail() {
                   )}
                 </div>
                 <div>
+                  {u.id === 331 && <p className="note">下列攻击加成按已核同的展开攻击字段列出。</p>}
                   {u.atks.some(([n]) => n !== '近战' && n !== '穿刺') && (
                     <BonusTable B={Object.fromEntries(u.atks.filter(([n]) => n !== '近战' && n !== '穿刺'))} />
                   )}
-                  {u.armc.length > 0 && <ArmorClasses list={u.armc} />}
+                  {u.armc.length > 0 && (
+                    <>
+                      {u.id === 331 && (
+                        <p className="note" data-t="trebuchet-armor">
+                          下列为目录打包记录的护甲类别，不代表展开态。
+                        </p>
+                      )}
+                      <ArmorClasses list={u.armc} />
+                    </>
+                  )}
                 </div>
               </div>
               {elite && <EliteDiff base={base} elite={elite} />}
               <h4>说明</h4>
               <p className="desc">
-                <Linked text={u.desc} nl />
+                <Linked text={u.id === 331 ? u.desc.replace('组装后才能移动，拆装后即可攻击', '打包后可移动，展开后可攻击') : u.desc} nl />
               </p>
               <DetailSource />
             </>

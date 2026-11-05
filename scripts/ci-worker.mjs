@@ -27,7 +27,7 @@ export async function executeWorker({ stage, frozen, job, budget, folder, env = 
   if (stage === 'data') return { execution: { checks: await executeChecks(DATA_CHECKS, budget), files: [], cases: [] } };
   if (stage === 'unit') {
     const output = join(folder, 'unit-results.json');
-    await budget.run('npx', ['vitest', 'run', ...required.selection.files, '--maxWorkers=2', '--minWorkers=1', '--reporter=json', `--outputFile=${output}`]);
+    await budget.run('npx', ['vitest', 'run', ...required.selection.files, '--maxWorkers=2', '--minWorkers=1', '--reporter=json', '--reporter=default', `--outputFile=${output}`]);
     return { execution: actualUnitExecution(JSON.parse(readFileSync(output, 'utf8'))) };
   }
   const buildFolder = join(env.RUNNER_TEMP || 'work', 'ci-build');
