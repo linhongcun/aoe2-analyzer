@@ -87,12 +87,19 @@ export function BonusTable({
   const Heading = headingLevel === 3 ? 'h3' : 'h4';
   const cur = S ?? B;
   const ks = [...new Set([...Object.keys(B), ...Object.keys(cur), ...Object.keys(C ?? {})])].filter((k) => B[k] || cur[k] || C?.[k]);
+  const hasNegative = [B, S, C].some((column) => column && Object.values(column).some((value) => value < 0));
   return (
     <div className="bonusbox">
       <Heading className={headingLevel === undefined ? undefined : 'sim-bonus-title'}>
         <Icon name="crosshair" /> 克制加成 / Bonus damage
       </Heading>
       <p className="note">{BONUS_NOTE}</p>
+      {hasNegative && (
+        <p className="note" data-t="negative-bonus-note">
+          负攻击加成可能扣减伤害，不能直接忽略。每类贡献 = max(min(0, 攻击), 攻击 − 护甲)，与基础攻击的对应类别贡献合计后，伤害最低为 1。本站 PK
+          只计算目标已入库且具有的护甲类别；缺失或无匹配类别的这一项不计入，不能据此判断实战伤害。
+        </p>
+      )}
       {ks.length ? (
         <table className="stat bonustab">
           <tbody>

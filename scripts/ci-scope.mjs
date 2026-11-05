@@ -146,6 +146,9 @@ export const PROFILES = {
       'simRoute424',
       'simulator',
       'insights584',
+      'automaticAge705',
+      'armorValues706',
+      'negativeBonus707',
     ],
     [
       'unitCards6',
@@ -159,6 +162,9 @@ export const PROFILES = {
       'catalogLayout187',
       // #584：单位页「鲜为人知」失败验收。与文明页同一份 spec。
       'insights584',
+      'automaticAge705',
+      'armorValues706',
+      'negativeBonus707',
     ],
   ),
   simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
@@ -188,6 +194,8 @@ export const PROFILES = {
       'v0290-322',
       'headingScope364',
       'duelPreset372',
+      'armorValues706',
+      'negativeBonus707',
     ],
     [
       'duelHeading364',
@@ -211,11 +219,13 @@ export const PROFILES = {
       'smoke',
       'overflow64',
       'refactor288',
+      'armorValues706',
+      'negativeBonus707',
     ],
   ),
   buildings: profile(
-    ['buildings', 'buildingSim', 'buildingAge357', 'garrison218', 'garrisonGeneral224'],
-    ['garrison218', 'garrison224', 'sidebar44', 'catalogLayout187'],
+    ['buildings', 'buildingSim', 'buildingAge357', 'garrison218', 'garrisonGeneral224', 'ageBuildings704', 'automaticAge705'],
+    ['garrison218', 'garrison224', 'sidebar44', 'catalogLayout187', 'ageBuildings704', 'automaticAge705'],
   ),
   // #533：攻城页改动跑金标准与失败验收。不把 /siege 放进全站宽度/截图矩阵。
   // #581：页内单位上下文跟攻城反馈走，后续攻城改动也要跑到 siege581。

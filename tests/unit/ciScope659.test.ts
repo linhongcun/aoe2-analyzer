@@ -54,6 +54,29 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     expect(selected.e2e).toContain('tests/e2e/civDlcFilters.spec.ts');
   });
 
+  it.each([
+    ['src/features/buildings/components/BuildingList.tsx', ['ageBuildings704', 'automaticAge705']],
+    ['src/features/buildings/components/BuildingDetail.tsx', ['ageBuildings704', 'automaticAge705']],
+    ['src/features/units/components/UnitDetail.tsx', ['automaticAge705', 'armorValues706', 'negativeBonus707']],
+    ['src/features/duel/components/DuelSelection.tsx', ['armorValues706', 'negativeBonus707']],
+    ['src/shared/ui/sim/SimPanel.tsx', ['ageBuildings704', 'automaticAge705', 'armorValues706', 'negativeBonus707']],
+  ] as const)('%s alone retains the mechanics regressions without test-file changes', (path, names) => {
+    for (const env of [pr, main]) {
+      const selected = browser([change(path)], env);
+      expect(selected).toMatchObject({ full: false, data: false });
+      for (const name of names) {
+        expect(selected.unit).toContain(`tests/unit/${name}.test.ts`);
+        expect(selected.e2e).toContain(`tests/e2e/${name}.spec.ts`);
+      }
+    }
+  });
+
+  it('building simulation alone does not select an armor display it never passes', () => {
+    const selected = browser([change('src/features/buildings/components/BuildingSimulator.tsx')]);
+    expect(selected.unit).not.toContain('tests/unit/armorValues706.test.ts');
+    expect(selected.e2e).not.toContain('tests/e2e/armorValues706.spec.ts');
+  });
+
   it('the affected home and ladder keep their exact important negative paths', () => {
     const home = browser([change('src/domain/startGame.ts')]);
     for (const name of ['startGame592', 'startGame632', 'mechanism652', 'routes652']) expect(home.e2e).toContain('tests/e2e/' + name + '.spec.ts');
