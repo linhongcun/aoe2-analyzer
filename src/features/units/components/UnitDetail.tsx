@@ -34,6 +34,7 @@ import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHi
 import { unitDisplayAge } from '../displayAge';
 import { ScoutAgeChanges } from './ScoutAgeChanges';
 import { TrebuchetStates } from './TrebuchetStates';
+import { AgeCounterBonuses } from './AgeCounterBonuses';
 import '../../../shared/ui/contextLinks.css';
 import './unit-civ-links.css';
 
@@ -321,6 +322,7 @@ export default function UnitDetail() {
               <StatTiles stats={stats} label="基础属性" />
               <TrebuchetStates unit={u} />
               <ScoutAgeChanges unit={u} />
+              <AgeCounterBonuses unitId={u.id} unitById={core.unitById} />
               <div className="two">
                 <div>
                   <DetailSection title="其他属性">
