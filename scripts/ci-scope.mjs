@@ -151,6 +151,7 @@ export const PROFILES = {
       'negativeBonus707',
       'thumbRing709',
       'trebuchet711',
+      'ageCounter708',
     ],
     [
       'unitCards6',
@@ -169,6 +170,7 @@ export const PROFILES = {
       'negativeBonus707',
       'thumbRing709',
       'trebuchet711',
+      'ageCounter708',
     ],
   ),
   simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
