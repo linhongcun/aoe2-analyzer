@@ -34,6 +34,7 @@ export const SCHEMA_CATALOG = {
       ['garrison_hosts', 'garrison-hosts'],
       ['market', 'market'],
       ['relic_income', 'relic-income'],
+      ['charge_attack', 'charge-attack'],
       ['trade_income', 'trade-income'],
       ['generate_resource', 'generate-resource'],
       ['catalog-introductions', 'catalog-introductions'],

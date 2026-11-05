@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { spawnSync } from 'node:child_process';
+import charge from '../../src/data/charge_attack.json';
 import construction from '../../src/data/construction.json';
 import healing from '../../src/data/garrison_healing.json';
 import scouting from '../../src/content/scouting.json';
@@ -7,6 +8,7 @@ import pageMetadata from '../../src/data/page-metadata.json';
 import teamBonuses from '../../src/data/team_bonuses.json';
 
 const modules = [
+  '../../src/data/charge_attack.json',
   '../../src/data/construction.json',
   '../../src/data/garrison_healing.json',
   '../../src/content/scouting.json',
@@ -19,10 +21,16 @@ afterEach(() => {
 });
 
 describe('#285 JSON 必须先校验再成为可信数据', () => {
+  it('攻击类蓄力坏结构必须抛错，不能伪成零或待确认', async () => {
+    const bad = structuredClone(charge);
+    (bad.examples[0]!.after as unknown as Record<string, unknown>).max_charge = '5';
+    vi.doMock('../../src/data/charge_attack.json', () => ({ default: bad }));
+    await expect(import('../../src/features/techs/chargeAttack710')).rejects.toThrow(/数据.*校验/);
+  });
   it('独立 Node ESM 与浏览器转换均可加载同一份 standalone 代码', () => {
     const source = `
       import { readFileSync } from 'node:fs';
-      const inputs = [['construction','src/data/construction.json'],['garrison-healing','src/data/garrison_healing.json'],['scouting','src/content/scouting.json'],['page-metadata','src/data/page-metadata.json'],['team-bonuses','src/data/team_bonuses.json']];
+      const inputs = [['charge-attack','src/data/charge_attack.json'],['construction','src/data/construction.json'],['garrison-healing','src/data/garrison_healing.json'],['scouting','src/content/scouting.json'],['page-metadata','src/data/page-metadata.json'],['team-bonuses','src/data/team_bonuses.json']];
       for (const [name, path] of inputs) {
         const { default: validate } = await import('./src/content/schema/compiled/' + name + '.mjs');
         if (!validate(JSON.parse(readFileSync(path, 'utf8')))) throw new Error(name + ' standalone failed');

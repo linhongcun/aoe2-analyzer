@@ -21,6 +21,12 @@ const validate = (file: string, data: unknown) => validateDocument(`src/data/${f
 // Changes exercise the producer's closed unions, compact tuples, raw dataclasses,
 // and dictionary values. Every fixture passes before its one-field mutation.
 const structureMutations: Mutation[] = [
+  { file: 'charge_attack', path: ['examples', 0, 'after', 'max_charge'], value: '5' },
+  { file: 'charge_attack', path: ['examples', 0, 'after', 'charge_event'], value: 2 },
+  { file: 'charge_attack', path: ['examples', 0, 'after', 'charge_type'], value: false },
+  { file: 'charge_attack', path: ['commands', 12, 'D'], value: true },
+  { file: 'charge_attack', path: ['meta', 'fieldSemantics', 'seconds'], value: 'file:///private' },
+  { file: 'charge_attack', path: ['meta', 'unexpected'], value: 1 },
   { file: 'civs', path: [0, 's'], value: [5] },
   { file: 'units', path: [0, 'arms'], value: [['Cavalry', 1, 'extra']] },
   { file: 'techs', path: [0, 'pre'], value: '22' },

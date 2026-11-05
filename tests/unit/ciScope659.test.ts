@@ -127,6 +127,45 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     },
   );
 
+  it.each([
+    'src/features/techs/components/TechDetail.tsx',
+    'src/features/techs/components/TechAffects.tsx',
+    'src/features/techs/components/ChargeAttack710.tsx',
+    'src/features/techs/chargeAttack710.ts',
+    'src/features/techs/techEffectText.ts',
+  ])('%s alone retains the Roman charge display regression', (path) => {
+    for (const env of [pr, main]) {
+      const selected = browser([change(path)], env);
+      expect(selected).toMatchObject({ full: false, data: false });
+      expect(selected.unit).toContain('tests/unit/romanCharge710.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/romanCharge710.spec.ts');
+    }
+  });
+  it.each(['src/features/bonuses/components/BonusDetail.tsx', 'src/features/bonuses/components/RomanArmor710.tsx', 'src/features/bonuses/romanArmor710.ts'])(
+    '%s keeps the full Roman armor coverage',
+    (path) => {
+      for (const env of [pr, main]) expect(browser([change(path)], env)).toMatchObject({ full: true, data: false, browser: 'full' });
+    },
+  );
+  it.each([
+    'src/features/units/components/UnitDetail.tsx',
+    'src/features/duel/components/DuelSelection.tsx',
+    'src/features/civs/components/CivDetail.tsx',
+    'src/features/civs/components/BonusRows.tsx',
+  ])('%s is not a new Roman mechanism consumer', (path) => {
+    for (const env of [pr, main]) {
+      const selected = browser([change(path)], env);
+      expect(selected.full).toBe(false);
+      for (const name of ['romanCharge710', 'romanArmor710']) {
+        expect(selected.unit).not.toContain(`tests/unit/${name}.test.ts`);
+        expect(selected.e2e).not.toContain(`tests/e2e/${name}.spec.ts`);
+      }
+    }
+  });
+  it.each(['src/data/charge_attack.json', 'scripts/charge_attack_build.py'])('%s keeps real data reproduction', (path) => {
+    for (const env of [pr, main]) expect(browser([change(path)], env)).toMatchObject({ full: true, data: true, browser: 'full' });
+  });
+
   it('the affected home and ladder keep their exact important negative paths', () => {
     const home = browser([change('src/domain/startGame.ts')]);
     for (const name of ['startGame592', 'startGame632', 'mechanism652', 'routes652']) expect(home.e2e).toContain('tests/e2e/' + name + '.spec.ts');
