@@ -151,9 +151,8 @@ export function ArmorClasses({ list, headingLevel }: { list: [string, number][];
       <div>
         {l.length
           ? l.map(([n, v]) => (
-              <span key={n} className="tag" title={CLASS_AKA[n]} aria-label={CLASS_AKA[n] ? `${n}（${CLASS_AKA[n]}）` : undefined}>
-                {n}
-                {v ? ' ' + v : ''}
+              <span key={n} className="tag" title={CLASS_AKA[n]} aria-label={CLASS_AKA[n] ? `${n} ${v}（${CLASS_AKA[n]}）` : undefined}>
+                {n} <span className="num nw">{v}</span>
               </span>
             ))
           : '—'}
