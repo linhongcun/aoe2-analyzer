@@ -18,6 +18,7 @@ import { useLocation } from 'react-router-dom';
 import garrisonHosts from '../../../data/garrison_hosts.json';
 import { DEFAULT_CONSTRUCTION, encodeConstruction } from '../../../domain/construction';
 import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
+import { WallAgeChanges } from './WallAgeChanges';
 
 const isUq = (x: Unit | Tech) => x.type === 'UniqueUnit' || x.type === 'UniqueTech';
 const GarrisonPreview = lazy(() => import('./GeneralGarrisonPreview'));
@@ -144,6 +145,7 @@ export default function BuildingDetail() {
                 <p className="note">多人施工使用实际施工形态与工作速率，可能与已建建筑的面板工期不同。</p>
               </DetailSection>
               <StatTiles stats={stats} label="建筑属性" />
+              <WallAgeChanges building={b} />
               {b.desc.trim() && (
                 <DetailSection title="说明">
                   <p className="desc">

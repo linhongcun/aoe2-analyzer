@@ -32,6 +32,7 @@ import { DEFAULT_AGE, fmtClock, gatherModel, realCost } from '../../../domain/re
 import { Basis } from '../../../shared/ui/RealCost';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
 import { unitDisplayAge } from '../displayAge';
+import { ScoutAgeChanges } from './ScoutAgeChanges';
 import '../../../shared/ui/contextLinks.css';
 import './unit-civ-links.css';
 
@@ -305,6 +306,7 @@ export default function UnitDetail() {
               </DetailSection>
               <InsightSlot items={unitInsights(u.id)} />
               <StatTiles stats={stats} label="基础属性" />
+              <ScoutAgeChanges unit={u} />
               <div className="two">
                 <div>
                   <DetailSection title="其他属性">
