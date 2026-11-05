@@ -8,6 +8,7 @@ import { ListHead } from '../../../shared/ui/layout';
 import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 import { filterBuildings } from '../logic/filter';
+import { AgeBuildingRequirements } from './AgeBuildingRequirements';
 
 export default function BuildingList() {
   const core = useCore();
@@ -20,6 +21,7 @@ export default function BuildingList() {
   return (
     <section id="buildings" className="pane">
       <ListHead title="建筑" desc="全部建筑 · 按时代、类型、DLC 筛选" />
+      {core && <AgeBuildingRequirements buildings={core.buildings} />}
       <div className="bar fbar">
         <SearchInput id="bq" value={q} onChange={setQ} placeholder="搜索建筑（中/英）" />
         <select id="bt" value={type} onChange={(e) => setType(e.target.value)}>
