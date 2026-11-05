@@ -3,7 +3,7 @@
  * 来源：https://ageofempires.fandom.com/wiki/Armor_class_(Age_of_Empires_II) ，https://ugc.aoe2.rocks/general/damage_calculation/
  * 伤害公式（AoE2）：每次命中伤害 = max(1, Σ_c max(min(0, 攻击_c), 攻击_c − 护甲_c))，
  *   c 遍历攻击方的全部攻击类别（近战/穿刺主攻击 + 各类克制加成），且仅当防守方拥有该护甲类别时计入。
- *   所有匹配类别贡献非负时，才可等价简化为 Σ_c max(0, 攻击_c − 护甲_c)。
+ *   所有匹配类别贡献非负时，本场可等价简化为 max(1, Σ_c max(0, 攻击_c − 护甲_c))。
  * 近似：首次攻击在 t=0 发生（无出手前摇数据）；远程按命中率取期望；忽略射程、走位、地形、冲锋攻击与特殊能力。
  */
 import type { Cost, StatSet, Unit } from './types';
