@@ -116,6 +116,7 @@ function fixture(options: Record<string, unknown> = {}) {
   if (options.oldGateAttempt) job.run_attempt = 1;
   if (options.wrongOIDC) claims.run_attempt = '1';
   if (options.resetEpoch) run.created_at = iso(1000);
+  if (options.rerunTiming) job.started_at = iso(180_000);
   const token = `header.${Buffer.from(JSON.stringify(claims)).toString('base64url')}.signature`;
   let polls = 0;
   let publicChecks = 0;
@@ -152,7 +153,8 @@ function fixture(options: Record<string, unknown> = {}) {
     }
     if (url === env.ACTIONS_ID_TOKEN_REQUEST_URL) return respond({ value: token });
     if (parsed.pathname === '/repos/owner/site/actions/runs/51') return respond(run);
-    if (parsed.pathname === '/repos/owner/site/actions/runs/51/attempts/2') return respond(run);
+    if (parsed.pathname === '/repos/owner/site/actions/runs/51/attempts/2')
+      return respond({ ...run, ...((options.attemptMetadata as Record<string, unknown>) ?? {}) });
     if (parsed.pathname.endsWith('/jobs')) return respond({ total_count: 1, jobs: [job] });
     if (parsed.pathname.endsWith('/artifacts'))
       return respond({
@@ -196,6 +198,33 @@ function fixture(options: Record<string, unknown> = {}) {
 }
 
 describe('#659 budgeted native Pages publication', () => {
+  it.each([
+    { created_at: iso(1000), run_started_at: iso(0) },
+    { created_at: iso(121_000), run_started_at: iso(120_000) },
+  ])('#715 accepts independently timestamped attempts without resetting the run deadline', async (attemptMetadata) => {
+    const test = fixture({ attemptMetadata, rerunTiming: true });
+    const original = test.args.budget.toJSON();
+    await expect(deployPages(test.args)).resolves.toMatchObject({ status: 'succeed' });
+    expect(test.args.budget.toJSON()).toEqual(original);
+    expect(original.origin_ms).toBe(ORIGIN);
+    expect(original.deadline_ms).toBe(DEADLINE);
+  });
+
+  it.each([
+    { created_at: iso(-1000) },
+    { created_at: iso(300_001) },
+    { created_at: 'invalid' },
+    { id: 52 },
+    { run_attempt: 1 },
+    { head_sha: 'b'.repeat(40) },
+    { run_started_at: iso(-1000) },
+    { run_started_at: iso(300_001) },
+  ])('#715 rejects invalid attempt metadata before publication: %j', async (attemptMetadata) => {
+    const test = fixture({ attemptMetadata });
+    await expect(deployPages(test.args)).rejects.toThrow();
+    expect(test.publishCalls()).toHaveLength(0);
+  });
+
   it('uses exact current artifact, actual Pages REST payload and runtime OIDC, then reports only succeed', async () => {
     const test = fixture();
     await expect(deployPages(test.args)).resolves.toEqual({ id: '91', page_url: 'https://owner.github.io/site/', status: 'succeed', artifact_id: 81 });

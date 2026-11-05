@@ -124,11 +124,14 @@ function validateRun(run, attempt, current, budget, now) {
   )
     throw fail('Pages run metadata does not identify the current main workflow');
   if (timestamp(run.created_at, 'run epoch') !== budget.originMs) throw fail('Pages deadline was reset from the GitHub run epoch');
+  // GitHub timestamps each attempt independently; the run epoch remains the budget anchor.
+  const attemptCreated = timestamp(attempt?.created_at, 'attempt epoch');
   if (
     attempt?.id !== run.id ||
     attempt.run_attempt !== current.attempt ||
     attempt.head_sha !== current.sha ||
-    timestamp(attempt.created_at, 'attempt epoch') !== budget.originMs
+    attemptCreated < budget.originMs ||
+    attemptCreated > now()
   )
     throw fail('Pages attempt metadata is stale');
   const started = timestamp(attempt.run_started_at, 'attempt start');
