@@ -10,6 +10,7 @@ import { LineChip } from '../../../shared/ui/LineChip';
 import { Loading } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
+import { ThumbRingEffectText } from './ThumbRingEffectText';
 
 /** 作用对象：与科技模拟器使用同一效果表与判定 */
 export default function TechAffects({ t }: { t: Tech }) {
@@ -56,7 +57,7 @@ export default function TechAffects({ t }: { t: Tech }) {
                       {r.parts.map((p, i) => (
                         <span key={i} className="tag">
                           {p.icon && <StatIcon k={p.icon} t={p.text} />}
-                          {p.text}
+                          {t.id === 437 ? <ThumbRingEffectText text={p.text} /> : p.text}
                         </span>
                       ))}
                     </div>

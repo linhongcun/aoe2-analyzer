@@ -80,6 +80,7 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
   it.each([
     'src/features/techs/components/TechDetail.tsx',
     'src/features/techs/components/TechAffects.tsx',
+    'src/features/techs/components/ThumbRingEffectText.tsx',
     'src/features/units/components/UnitDetail.tsx',
     'src/features/duel/components/DuelSelection.tsx',
     'src/shared/ui/sim/SimPanel.tsx',
