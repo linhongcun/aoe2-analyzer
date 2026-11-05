@@ -5,7 +5,7 @@ import { civByEn } from '../../../data';
 import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
 import { isChampiUnit } from '../../../domain/champiCounters';
-import { countForBudget } from '../../../domain/duel';
+import { countForBudget, damageByClass } from '../../../domain/duel';
 import '../duel-headings.css';
 import { collapse } from '../../../domain/family';
 import { makeSimContext } from '../../../domain/simulator';
@@ -29,6 +29,8 @@ import { resolve, isUnavail, type SideState, type Resolved } from '../logic/duel
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
+const SIMPLE_DAMAGE = '伤害 = max(1, Σ max(0, 攻击类别 − 对应护甲类别))';
+const FULL_DAMAGE = '伤害 = max(1, Σ max(min(0, 攻击类别), 攻击类别 − 对应护甲类别))';
 
 export default function Duel() {
   const resources = useCoreTrees();
@@ -134,6 +136,14 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
     );
   const A = resolve(ctx, core.unitById, parseSide(sp.get('a'), DEF_A), DEF_A.uid);
   const B = resolve(ctx, core.unitById, parseSide(sp.get('b'), DEF_B), DEF_B.uid);
+  const hasNegative = !isUnavail(A) && !isUnavail(B) && [...damageByClass(A.F, B.F), ...damageByClass(B.F, A.F)].some((row) => row.damage < 0);
+  const formulaTitle =
+    isUnavail(A) || isUnavail(B)
+      ? '存在不可用单位，本场伤害未计算；简式仅适用于匹配类别没有负伤害贡献的情形。'
+      : hasNegative
+        ? '本场存在负伤害贡献；只对目标已入库且具有的护甲类别求和。'
+        : '本场双方已匹配类别均无负伤害贡献，使用等价简式；一般规则保留负攻击扣减。';
+  const damageFormula = hasNegative ? FULL_DAMAGE : SIMPLE_DAMAGE;
   const upd = (k: 'a' | 'b', s: SideSpec) => set({ [k]: fmtSide(s) });
   const cnt = (s: SideState, n: number) =>
     isUnavail(s)
@@ -261,7 +271,11 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
       )}
       <p className="note duel-note">
         <Icon name="triangle-alert" className="ic warn" />
-        近似模型：伤害 = max(1, Σ max(0, 攻击类别 − 对应护甲类别))（来源：Fandom「Armor class」、aoe2.rocks 伤害计算）；双方 t=0
+        近似模型：
+        <span role="math" title={formulaTitle} aria-label={`${formulaTitle} ${damageFormula}`}>
+          {damageFormula}
+        </span>
+        （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）；双方 t=0
         同时出手（缺少出手前摇数据）；远程按命中率取期望伤害；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、
         {isChampiUnit(A.u.id) || isChampiUnit(B.u.id) ? '未建模的独特/特殊效果未计入；已建模数值科技按实际选择计算。' : '特殊能力与独特科技（仅文本）。'}
         群战为集火模型，不考虑近战包围空间；等资源已计入已核实的常驻文明训练费用加成；未核实的加成、团队加成与需研究的科技折扣不计入。结果用于比较强弱趋势，不等同于实战。
