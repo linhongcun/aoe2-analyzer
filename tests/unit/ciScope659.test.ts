@@ -77,6 +77,20 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     expect(selected.e2e).not.toContain('tests/e2e/armorValues706.spec.ts');
   });
 
+  it.each([
+    'src/features/techs/components/TechDetail.tsx',
+    'src/features/techs/components/TechAffects.tsx',
+    'src/features/techs/components/ThumbRingEffectText.tsx',
+    'src/features/units/components/UnitDetail.tsx',
+    'src/features/duel/components/DuelSelection.tsx',
+    'src/shared/ui/sim/SimPanel.tsx',
+  ])('%s alone retains the Thumb Ring display regression', (path) => {
+    const selected = browser([change(path)]);
+    expect(selected).toMatchObject({ full: false, data: false });
+    expect(selected.unit).toContain('tests/unit/thumbRing709.test.ts');
+    expect(selected.e2e).toContain('tests/e2e/thumbRing709.spec.ts');
+  });
+
   it('the affected home and ladder keep their exact important negative paths', () => {
     const home = browser([change('src/domain/startGame.ts')]);
     for (const name of ['startGame592', 'startGame632', 'mechanism652', 'routes652']) expect(home.e2e).toContain('tests/e2e/' + name + '.spec.ts');

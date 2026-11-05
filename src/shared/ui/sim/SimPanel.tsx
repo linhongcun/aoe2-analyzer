@@ -9,6 +9,7 @@ import type { NumStat, StatSet, Tech } from '../../../domain/types';
 import { CostView, StatIcon, TechIcon } from '../art';
 import { Icon } from '../Icon';
 import { fmtStat } from '../../utils/simFormat';
+import { DATA_SOURCES } from '../../utils/dataInfo';
 
 export type StatRow = [NumStat, string, string];
 export interface SimPanelProps {
@@ -173,6 +174,7 @@ export default function SimPanel(p: SimPanelProps) {
   const Subheading = p.headingLevel === 2 ? 'h3' : 'h4';
   const childLevel = p.headingLevel === undefined ? undefined : p.headingLevel === 2 ? 3 : 4;
   const tot = totalCost(p.avail, p.sel);
+  const thumbRof = (p.sel.has(437) ? p.avail.find((x) => x.t.id === 437)?.ef : null)?.filter((e) => e.s === 'rof') ?? [];
   const groups: Record<string, SimTech[]> = {};
   p.avail.forEach((x) => (groups[simGroup(x.t)] ??= []).push(x));
   const toggle = (id: number) => {
@@ -331,6 +333,19 @@ export default function SimPanel(p: SimPanelProps) {
               <StatRows rows={p.rows} B={p.base} S={p.cur} C={p.cmpStats} />
             </tbody>
           </table>
+          {thumbRof.length > 0 && p.base.rof > 0 && (
+            <p className="note" data-t="thumb-ring-interval">
+              扳指单项换算：Δ = 基间隔 × (1/(1+v) − 1)。
+              {thumbRof.map((e, i) => (
+                <span key={i}>
+                  基间隔 <span className="num nw">{fmtStat('rof', p.base.rof)}</span>，仅扳指{' '}
+                  <span className="num nw">{fmtStat('rof', p.base.rof / (1 + e.v))}</span>，单项Δ{' '}
+                  <span className="num nw">{fmtStat('rof', p.base.rof / (1 + e.v) - p.base.rof)}</span>（<span className="num nw">v:{e.v}</span>）。
+                </span>
+              ))}
+              面板总差值还叠加文明与其他效果，不能全部归因于扳指。来源：effects.json / Thumb Ring / s:rof；DE {DATA_SOURCES.patch?.build ?? '待确认'}。
+            </p>
+          )}
           <BonusTable B={p.base.bonus} S={p.cur.bonus} C={p.cmpStats?.bonus ?? null} cmpLabel={`${civByEn(p.cmp)?.zh ?? ''} 满`} headingLevel={childLevel} />
           {p.armorClasses && <ArmorClasses list={p.armorClasses} headingLevel={childLevel} />}
           <p className="note">
