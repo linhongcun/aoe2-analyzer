@@ -17,3 +17,5 @@
 验证：先在真实基线渲染UnitDetail与浏览器路由形成缺状态区/口径的first-red；SSR改变传入目录字段验证数据绑定与输入不变，非331无特例。浏览器核真实单位字段归属、50s生产与待确认分离、sim tab可见模型边界、siege结果与单位选择负路径；四宽明暗保存最终SHA生产截图。保护v0290-322中的331.Dravidians及其它61场期望/捕获不变；338冻结的是现有table结构/display/overflow签名与正文哈希边界，原table保留，不重录或放宽。
 
 新trebuchet711回归常驻units与siege profiles；ciScope659用仅UnitDetail/本地组件/Siege源码diff证明选择，不把测试路径混入模拟diff。不更改选择策略，CI策略文件自身变更使实际门禁full、data=false；本地只做必要相关验证，最终远端full必须真实通过。
+
+必要诊断依赖：PR721提交263742da的远端full unit真实退出1，但原JSON-only reporter只记录输出文件路径，失败时没有可读取的具体case，不能猜测根因或把负向子进程trace当成失败。经本轮明确授权，unit命令仅追加Vitest内置default人读reporter；原JSON reporter/outputFile、精确选择、maxWorkers2/minWorkers1、预算、退出码和证据门禁保持。Vitest3.2.7真实临时失败fixture验证同时写JSON失败结果、stdout包含具体失败case，退出仍1；fixture已清理且不提交。新head须执行实际完整CI取得诊断，不能盲重跑原红head或放宽timeout/保护期望。
