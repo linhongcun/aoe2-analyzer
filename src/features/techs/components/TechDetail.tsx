@@ -13,6 +13,7 @@ import { AgeBuildingRequirements } from './AgeBuildingRequirements';
 import ChargeAttack710 from './ChargeAttack710';
 import { techEffectText } from '../techEffectText';
 import { ThumbRingEffectText } from './ThumbRingEffectText';
+import { ConversionTechLink } from './ConversionTechLink';
 import { techAffects } from '../../../domain/affects';
 import { affectedUnits } from '../../../domain/family';
 import { TECH_AKA } from '../../../data/aliases';
@@ -182,6 +183,7 @@ export default function TechDetail() {
                       </Link>
                     </p>
                   )}
+                  {(t.id === 45 || t.id === 46) && <ConversionTechLink />}
                 </DetailSection>
               )}
               {ageTech !== null && <AgeBuildingRequirements techId={ageTech} buildings={core.buildings} />}
