@@ -5155,6 +5155,13 @@
    "td": "table-cell"
   },
   {
+   "cls": "stat",
+   "display": "table",
+   "overflowX": "visible",
+   "tr": "table-row",
+   "td": "table-cell"
+  },
+  {
    "cls": "stat bonustab",
    "display": "table",
    "overflowX": "visible",
@@ -10486,6 +10493,13 @@
   }
  ],
  "1280 /unit/83": [
+  {
+   "cls": "stat",
+   "display": "table",
+   "overflowX": "visible",
+   "tr": "table-row",
+   "td": "table-cell"
+  },
   {
    "cls": "stat",
    "display": "table",
