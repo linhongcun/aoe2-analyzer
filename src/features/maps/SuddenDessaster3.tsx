@@ -21,6 +21,11 @@ export default function SuddenDessaster3() {
       <div className="sd3-body">
         <h3>SD3 猝死赛事图</h3>
         <p>以下是 Sudden Dessaster 3 赛事版本，不表示当前天梯图池或平衡结论。不能另建城镇中心，最后一座城镇中心被毁即败。</p>
+        <p>
+          <Link to="/game-guide" data-testid="sd3-victory-link">
+            查看胜利条件说明
+          </Link>
+        </p>
         <p className="note">
           描述据{' '}
           <a href={SD3_SOURCE} target="_blank" rel="noopener noreferrer">
