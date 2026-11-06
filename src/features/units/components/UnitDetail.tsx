@@ -37,6 +37,7 @@ import { TrebuchetStates } from './TrebuchetStates';
 import { AgeCounterBonuses } from './AgeCounterBonuses';
 import { SplashMechanics, splashDescription } from './SplashMechanics';
 import { ConversionMechanics } from './ConversionMechanics';
+import { FishingGather } from './FishingGather';
 import { VillagerGather } from './VillagerGather';
 import '../../../shared/ui/contextLinks.css';
 import './unit-civ-links.css';
@@ -322,6 +323,7 @@ export default function UnitDetail() {
                 <GatherLine u={u} civ={rt.civ} age={rt.age} />
               </DetailSection>
               <VillagerGather unitId={u.id} />
+              <FishingGather unitId={u.id} />
               <InsightSlot items={unitInsights(u.id)} />
               <StatTiles stats={stats} label="基础属性" />
               <TrebuchetStates unit={u} />

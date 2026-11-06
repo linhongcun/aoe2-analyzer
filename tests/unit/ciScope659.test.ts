@@ -115,6 +115,18 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     },
   );
 
+  it.each(['src/features/units/components/UnitDetail.tsx', 'src/features/units/components/FishingGather.tsx', 'src/features/units/fishingGather.ts'])(
+    '%s alone retains the fishing ship gather display regression',
+    (path) => {
+      for (const env of [pr, main]) {
+        const selected = browser([change(path)], env);
+        expect(selected).toMatchObject({ full: false, data: false });
+        expect(selected.unit).toContain('tests/unit/fishingGather735.test.ts');
+        expect(selected.e2e).toContain('tests/e2e/fishingGather735.spec.ts');
+      }
+    },
+  );
+
   it.each(['src/features/units/components/UnitDetail.tsx', 'src/features/units/components/VillagerGather.tsx', 'src/features/units/villagerGather.ts'])(
     '%s alone retains the villager gather display regression',
     (path) => {
