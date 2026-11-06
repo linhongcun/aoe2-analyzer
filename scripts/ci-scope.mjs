@@ -155,6 +155,7 @@ export const PROFILES = {
       'splash712',
       'villagerGather730',
       'fishingGather735',
+      'accuracy746',
     ],
     [
       'unitCards6',
@@ -177,12 +178,13 @@ export const PROFILES = {
       'splash712',
       'villagerGather730',
       'fishingGather735',
+      'accuracy746',
     ],
   ),
   simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
   techs: profile(
-    ['affects', 'techUnits13', 'techBuilding12', 'techCost355', 'relatedTechs193', 'thumbRing709', 'romanCharge710', 'ageBuildings704'],
-    ['techCards6', 'techUnits13', 'relatedTechs193', 'catalogLayout187', 'thumbRing709', 'romanCharge710', 'ageBuildings704'],
+    ['affects', 'techUnits13', 'techBuilding12', 'techCost355', 'relatedTechs193', 'thumbRing709', 'romanCharge710', 'ageBuildings704', 'accuracy746'],
+    ['techCards6', 'techUnits13', 'relatedTechs193', 'catalogLayout187', 'thumbRing709', 'romanCharge710', 'ageBuildings704', 'accuracy746'],
   ),
   duel: profile(
     [
@@ -209,6 +211,7 @@ export const PROFILES = {
       'armorValues706',
       'negativeBonus707',
       'thumbRing709',
+      'accuracy746',
     ],
     [
       'duelHeading364',
@@ -235,6 +238,7 @@ export const PROFILES = {
       'armorValues706',
       'negativeBonus707',
       'thumbRing709',
+      'accuracy746',
     ],
   ),
   buildings: profile(
