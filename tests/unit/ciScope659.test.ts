@@ -214,6 +214,19 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     for (const env of [pr, main]) expect(browser([change(path)], env)).toMatchObject({ full: true, data: true, browser: 'full' });
   });
 
+  it.each(['src/features/gameGuide/GameGuide.tsx', 'src/features/gameGuide/elevationCard.tsx', 'src/features/gameGuide/elevation.ts'])(
+    '%s alone retains the elevation bonus regression',
+    (path) => {
+      for (const env of [pr, main]) {
+        const selected = browser([change(path)], env);
+        expect(selected).toMatchObject({ full: false, data: false });
+        expect(selected.unit).toContain('tests/unit/elevation734.test.ts');
+        expect(selected.e2e).toContain('tests/e2e/elevation734.spec.ts');
+        expect(selected.e2e).toContain('tests/e2e/gameGuide256.spec.ts');
+      }
+    },
+  );
+
   it('the affected home and ladder keep their exact important negative paths', () => {
     const home = browser([change('src/domain/startGame.ts')]);
     for (const name of ['startGame592', 'startGame632', 'mechanism652', 'routes652']) expect(home.e2e).toContain('tests/e2e/' + name + '.spec.ts');

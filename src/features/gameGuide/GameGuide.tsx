@@ -19,6 +19,7 @@ import {
 } from '../../domain/gameGuide';
 import { Icon } from '../../shared/ui/Icon';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import ElevationCard from './elevationCard';
 import VictoryModesCard from './victoryModes';
 import './gameGuide.css';
 
@@ -135,6 +136,7 @@ export default function GameGuide() {
       )}
 
       <VictoryModesCard />
+      <ElevationCard />
 
       <div className="gg-layout">
         <nav className="gg-nav" aria-label="六张入门卡">
