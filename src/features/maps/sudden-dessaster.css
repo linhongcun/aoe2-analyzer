@@ -1,3 +1,58 @@
+.sd3-watch {
+  margin-block: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.sd3-watch[data-state='open'] {
+  padding: var(--space-3) var(--space-4);
+}
+.map-guide .sd3-watch h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+.map-guide .sd3-watch-ended > summary {
+  display: list-item;
+  list-style-position: inside;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+}
+.sd3-watch-body {
+  padding: 0 var(--space-4) var(--space-4);
+}
+.sd3-watch-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+.map-guide .sd3-watch-rows li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  min-width: 0;
+  overflow-wrap: normal;
+}
+.sd3-watch-round {
+  font-weight: 700;
+}
+.sd3-watch-time {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+}
+.sd3-watch .num {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
 .sd3-collection {
   margin-block: var(--space-4);
   border: 1px solid var(--color-border);
