@@ -39,9 +39,9 @@ const renderBuilding = (id: number) =>
     ),
   );
 const cell = (html: string, marker: string, step: string, field: string) => {
-  const table = html.match(new RegExp(`<table[^>]*data-t="${marker}"[^>]*>([\\s\\S]*?)<\\/table>`))?.[1] ?? '';
-  const row = table.match(new RegExp(`<tr[^>]*data-step="${step}"[^>]*>([\\s\\S]*?)<\\/tr>`))?.[1] ?? '';
-  const value = row.match(new RegExp(`<td[^>]*data-field="${field}"[^>]*>([\\s\\S]*?)<\\/td>`))?.[1] ?? '';
+  const root = html.match(new RegExp(`<dl[^>]*data-t="${marker}"[^>]*>([\\s\\S]*?)<\\/dl>`))?.[1] ?? '';
+  const row = root.match(new RegExp(`<div[^>]*data-step="${step}"[^>]*>([\\s\\S]*?)<\\/div>`))?.[1] ?? '';
+  const value = row.match(new RegExp(`data-field="${field}"[^>]*>([\\s\\S]*?)<\\/(?:dd|span)>`))?.[1] ?? '';
   return visible(value);
 };
 
@@ -146,6 +146,7 @@ describe('issue 736 农田与养鱼场食物总量', () => {
     expect(farm).toContain('https://ugc.aoe2.rocks/general/resources/resources/');
     expect(farm).toContain('188329');
     expect(farm).not.toContain('715');
+    expect(farm).not.toMatch(/<table\b/);
     expect(visible(renderFood(50, { ecoTechs: {}, civEco: { Chinese: [{ effects: [{ res: 36 }] }] } }))).toContain('中国队起始量待确认');
 
     const trap = renderFood(199);
@@ -155,6 +156,7 @@ describe('issue 736 农田与养鱼场食物总量', () => {
     expect(visible(trap)).toContain('civEco.Malay');
     expect(trap).toContain('href="/civ/Malay"');
     expect(trap).not.toContain('715');
+    expect(trap).not.toMatch(/<table\b/);
     expect(visible(renderFood(199, { civEco: { Malay: [] } }))).toContain('马来食物总量待确认');
     expect(renderFood(68)).toBe('');
     expect(renderFood(12)).toBe('');

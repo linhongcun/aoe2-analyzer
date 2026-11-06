@@ -37,34 +37,28 @@ function SourcePatch({ patch }: { patch: string | null }) {
   );
 }
 
-function FarmRow({ step }: { step: FoodAmountStep }) {
+function FarmSteps({ steps, marker }: { steps: FoodAmountStep[]; marker: string }) {
   return (
-    <tr data-step={step.key}>
-      <th scope="row">{step.techId ? <TechName id={step.techId} /> : '基准'}</th>
-      <td data-field="total">
-        <Amount value={step.total} />
-      </td>
-      <td data-field="add">{step.techId ? <Amount value={step.add} prefix="+" /> : '无'}</td>
-    </tr>
-  );
-}
-
-function FarmTable({ steps, marker }: { steps: FoodAmountStep[]; marker: string }) {
-  return (
-    <table className="stat" data-t={marker}>
-      <thead>
-        <tr>
-          <th scope="col">阶段</th>
-          <th scope="col">满额食物</th>
-          <th scope="col">本级增加</th>
-        </tr>
-      </thead>
-      <tbody>
-        {steps.map((step) => (
-          <FarmRow key={step.key} step={step} />
-        ))}
-      </tbody>
-    </table>
+    <dl className="detail-cost-grid" data-t={marker}>
+      {steps.map((step) => (
+        <div key={step.key} data-step={step.key}>
+          <dt>{step.techId ? <TechName id={step.techId} /> : '基准'}</dt>
+          <dd>
+            <span data-field="total">
+              <Amount value={step.total} />
+            </span>
+            {step.techId ? (
+              <>
+                {' '}
+                <span className="note" data-field="add">
+                  <Amount value={step.add} prefix="+" />
+                </span>
+              </>
+            ) : null}
+          </dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
@@ -76,14 +70,14 @@ function FarmFood({ data }: { data: FarmFoodAmount }) {
         <p>一块新农田在磨坊科技之后的满额食物。表内只累加资源 36。已有农田提供的食物数量较少。</p>
         <p className="note">不含采集速率，也不含其它文明或团队加成。这里不做补种或配田。</p>
         <h3>通用新田</h3>
-        <FarmTable steps={data.steps} marker="farm-food-generic" />
+        <FarmSteps steps={data.steps} marker="farm-food-generic" />
         <h3>{chinese}</h3>
         {data.chineseFromUgc ? (
           <>
             <p className="note" data-t="farm-food-chinese-note">
               {chinese}新田使用另一条起始量，再累加同一组磨坊科技。起始量来自 UGC 资源 36；eco.json 的 civEco.Chinese 没有导出这条起始行。
             </p>
-            <FarmTable steps={data.chineseSteps} marker="farm-food-chinese" />
+            <FarmSteps steps={data.chineseSteps} marker="farm-food-chinese" />
           </>
         ) : (
           <p data-t="farm-food-chinese-note">中国队起始量待确认。</p>
@@ -120,28 +114,20 @@ function FishTrapFood({ data }: { data: FishTrapFoodAmount }) {
     <DetailSection title="食物总量">
       <div data-t="fish-trap-food">
         <p>养鱼场提供的食物总量。这里不算采集速率，也不含其它文明加成。</p>
-        <table className="stat" data-t="fish-trap-food-table">
-          <thead>
-            <tr>
-              <th scope="col">范围</th>
-              <th scope="col">食物总量</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-step="base">
-              <th scope="row">通用</th>
-              <td data-field="total">
-                <Amount value={data.base} />
-              </td>
-            </tr>
-            <tr data-step="malay">
-              <th scope="row">{malay}</th>
-              <td data-field="total">
-                <Amount value={data.malay?.value ?? null} />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <dl className="detail-cost-grid" data-t="fish-trap-food-table">
+          <div data-step="base">
+            <dt>通用</dt>
+            <dd data-field="total">
+              <Amount value={data.base} />
+            </dd>
+          </div>
+          <div data-step="malay">
+            <dt>{malay}</dt>
+            <dd data-field="total">
+              <Amount value={data.malay?.value ?? null} />
+            </dd>
+          </div>
+        </dl>
         {data.malay?.triple ? (
           <p className="note" data-t="fish-trap-triple">
             {malay}把资源 <span className="detail-number nw">88</span> 直接设为上表数值（civEco tech <span className="detail-number nw">{data.malay.tech}</span>
@@ -175,7 +161,10 @@ function FishTrapFood({ data }: { data: FishTrapFoodAmount }) {
   );
 }
 
-/** 只在农田和养鱼场详情挂出。其它建筑不显示。 */
+/**
+ * 只在农田和养鱼场详情挂出。其它建筑不显示。
+ * 用既有 detail-cost-grid，不新增 table。issue 338 里这两页的表格基准是空列表。
+ */
 export function FoodAmount({ buildingId, source }: { buildingId: number; source?: FoodEcoSlice }) {
   if (buildingId === FARM_BUILDING_ID) return <FarmFood data={farmFoodAmount(source)} />;
   if (buildingId === FISH_TRAP_BUILDING_ID) return <FishTrapFood data={fishTrapFoodAmount(source)} />;

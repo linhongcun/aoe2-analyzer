@@ -1,6 +1,10 @@
+import { readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import eco from '../../src/data/eco.json' with { type: 'json' };
+import { tableStyles } from './staticSweep338';
+
+const tableGolden = JSON.parse(readFileSync('tests/e2e/fixtures/v0300-338-tables.json', 'utf8')) as Record<string, unknown[]>;
 
 const farmRegion = (page: Page) => page.getByRole('region', { name: '食物总量', exact: true });
 
@@ -59,6 +63,8 @@ test('issue 736 PC1280 农田与养鱼场展示可核验食物总量', async ({ 
   await expect(farm.locator('[data-t="farm-food-chinese"] [data-step="13"] [data-field="total"]')).toHaveText('420');
   await expect(farm.locator('[data-t="farm-food-chinese"] [data-step="12"] [data-field="total"]')).toHaveText('595');
   await expect(farm).not.toContainText('715');
+  expect(tableGolden['1280 /building/50']).toEqual([]);
+  expect(await tableStyles(page)).toEqual([]);
   const horse = farm.getByRole('link', { name: '马轭', exact: true });
   await expect(horse).toHaveAttribute('href', /#\/tech\/14$/);
   await expect(farm.getByRole('link', { name: '重犁', exact: true })).toHaveAttribute('href', /#\/tech\/13$/);
@@ -79,6 +85,8 @@ test('issue 736 PC1280 农田与养鱼场展示可核验食物总量', async ({ 
   await expect(trap).toContainText('3 倍');
   await expect(trap).toContainText('civEco.Malay');
   await expect(trap).not.toContainText('715');
+  expect(tableGolden['1280 /building/199']).toEqual([]);
+  expect(await tableStyles(page)).toEqual([]);
   await expect(trap.getByRole('link', { name: '马来', exact: true })).toHaveAttribute('href', /#\/civ\/Malay$/);
 
   await page.goto('./#/building/68');
@@ -112,6 +120,8 @@ for (const id of [50, 199])
           await expect(target.locator('[data-step="base"] [data-field="total"]')).toHaveText('710');
           await expect(target).not.toContainText('715');
         }
+        expect(await tableStyles(page)).toEqual([]);
+        if (width === 360 || width === 1280) expect(tableGolden[`${width} /building/${id}`]).toEqual([]);
         await numbersStay(target);
         for (const link of await target.getByRole('link').all()) {
           const box = await link.boundingBox();
