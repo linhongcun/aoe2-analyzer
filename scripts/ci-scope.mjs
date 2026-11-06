@@ -153,6 +153,7 @@ export const PROFILES = {
       'trebuchet711',
       'ageCounter708',
       'splash712',
+      'villagerGather730',
     ],
     [
       'unitCards6',
@@ -173,6 +174,7 @@ export const PROFILES = {
       'trebuchet711',
       'ageCounter708',
       'splash712',
+      'villagerGather730',
     ],
   ),
   simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
