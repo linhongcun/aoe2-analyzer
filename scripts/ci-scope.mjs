@@ -154,6 +154,7 @@ export const PROFILES = {
       'ageCounter708',
       'splash712',
       'villagerGather730',
+      'fishingShipGather735',
     ],
     [
       'unitCards6',
@@ -175,6 +176,7 @@ export const PROFILES = {
       'ageCounter708',
       'splash712',
       'villagerGather730',
+      'fishingShipGather735',
     ],
   ),
   simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),

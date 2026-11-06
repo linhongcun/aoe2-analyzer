@@ -127,6 +127,18 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     },
   );
 
+  it.each(['src/features/units/components/UnitDetail.tsx', 'src/features/units/components/FishingShipGather.tsx', 'src/features/units/fishingShipGather.ts'])(
+    '%s alone retains the fishing ship gather display regression',
+    (path) => {
+      for (const env of [pr, main]) {
+        const selected = browser([change(path)], env);
+        expect(selected).toMatchObject({ full: false, data: false });
+        expect(selected.unit).toContain('tests/unit/fishingShipGather735.test.ts');
+        expect(selected.e2e).toContain('tests/e2e/fishingShipGather735.spec.ts');
+      }
+    },
+  );
+
   it.each(['src/features/units/components/UnitDetail.tsx', 'src/features/units/components/SplashMechanics.tsx'])(
     '%s alone retains the splash explanation regression',
     (path) => {
