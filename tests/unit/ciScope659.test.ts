@@ -127,6 +127,18 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     },
   );
 
+  it.each(['src/features/techs/components/TechDetail.tsx', 'src/features/techs/components/AgeBuildingRequirements.tsx'])(
+    '%s alone retains the relocated age-building checklist',
+    (path) => {
+      for (const env of [pr, main]) {
+        const selected = browser([change(path)], env);
+        expect(selected).toMatchObject({ full: false, data: false });
+        expect(selected.unit).toContain('tests/unit/ageBuildings704.test.ts');
+        expect(selected.e2e).toContain('tests/e2e/ageBuildings704.spec.ts');
+      }
+    },
+  );
+
   it.each([
     'src/features/techs/components/TechDetail.tsx',
     'src/features/techs/components/TechAffects.tsx',
