@@ -36,6 +36,7 @@ import { ScoutAgeChanges } from './ScoutAgeChanges';
 import { TrebuchetStates } from './TrebuchetStates';
 import { AgeCounterBonuses } from './AgeCounterBonuses';
 import { SplashMechanics, splashDescription } from './SplashMechanics';
+import { ConversionMechanics } from './ConversionMechanics';
 import { VillagerGather } from './VillagerGather';
 import '../../../shared/ui/contextLinks.css';
 import './unit-civ-links.css';
@@ -326,6 +327,7 @@ export default function UnitDetail() {
               <TrebuchetStates unit={u} />
               <ScoutAgeChanges unit={u} />
               <AgeCounterBonuses unitId={u.id} unitById={core.unitById} />
+              <ConversionMechanics unitId={u.id} techs={core.techs} />
               <div className="two">
                 <div>
                   <DetailSection title="其他属性">
