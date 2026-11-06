@@ -115,6 +115,18 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     },
   );
 
+  it.each(['src/features/buildings/components/BuildingDetail.tsx', 'src/features/buildings/components/FoodAmount.tsx', 'src/features/buildings/foodAmount.ts'])(
+    '%s alone retains the farm and fish trap food amount regression',
+    (path) => {
+      for (const env of [pr, main]) {
+        const selected = browser([change(path)], env);
+        expect(selected).toMatchObject({ full: false, data: false });
+        expect(selected.unit).toContain('tests/unit/foodAmount736.test.ts');
+        expect(selected.e2e).toContain('tests/e2e/foodAmount736.spec.ts');
+      }
+    },
+  );
+
   it.each(['src/features/units/components/UnitDetail.tsx', 'src/features/units/components/FishingGather.tsx', 'src/features/units/fishingGather.ts'])(
     '%s alone retains the fishing ship gather display regression',
     (path) => {

@@ -18,6 +18,7 @@ import { useLocation } from 'react-router-dom';
 import garrisonHosts from '../../../data/garrison_hosts.json';
 import { DEFAULT_CONSTRUCTION, encodeConstruction } from '../../../domain/construction';
 import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
+import { FoodAmount } from './FoodAmount';
 import { WallAgeChanges } from './WallAgeChanges';
 
 const isUq = (x: Unit | Tech) => x.type === 'UniqueUnit' || x.type === 'UniqueTech';
@@ -146,6 +147,7 @@ export default function BuildingDetail() {
               </DetailSection>
               <StatTiles stats={stats} label="建筑属性" />
               <WallAgeChanges building={b} />
+              <FoodAmount buildingId={b.id} />
               {b.desc.trim() && (
                 <DetailSection title="说明">
                   <p className="desc">
