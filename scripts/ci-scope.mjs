@@ -94,7 +94,7 @@ export const PROFILES = {
     [...sourceChecks, 'sources', 'boSources', 'buildOrders', 'buildOrders.content', 'buildPractice216', 'buildSim', 'build41', 'v0300-335'],
     ['sourcePresentation442', 'practice216', 'build41', 'v0290-322-golden'],
   ),
-  gameGuide: profile([...sourceChecks, 'gameGuide256', 'v0300-335'], ['sourcePresentation442', 'gameGuide256']),
+  gameGuide: profile([...sourceChecks, 'gameGuide256', 'v0300-335', 'elevation734'], ['sourcePresentation442', 'gameGuide256', 'elevation734']),
   patches: profile(['patches16', 'patchTree417', 'patchSearch16'], ['patches16', 'patchTree417']),
   matchup: profile(['matchup194', 'p0Batch', 'simRoute424', 'simulator'], ['matchup194', 'matchupSim424', 'rush35']),
   civs: profile(
