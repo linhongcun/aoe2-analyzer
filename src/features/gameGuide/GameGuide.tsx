@@ -22,6 +22,7 @@ import { useShareLink } from '../../shared/ui/useShareLink';
 import ElevationCard from './elevationCard';
 import HousingCard from './housingCard';
 import { HOUSING_ANCHOR } from './housing';
+import StandardVictoryCard from './standardVictoryCard';
 import VictoryModesCard from './victoryModes';
 import './gameGuide.css';
 
@@ -142,6 +143,7 @@ export default function GameGuide() {
       )}
 
       <VictoryModesCard />
+      <StandardVictoryCard />
       <ElevationCard />
       <HousingCard />
 

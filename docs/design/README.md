@@ -68,6 +68,7 @@ SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分
 - [#559 地图边路 / 中路](maps-559/)（[#559](https://github.com/linhongcun/aoe2-analyzer/issues/559)）：地图详情在现有推荐文明下增加开图 4v4 的边路 / 中路编辑推荐；无稿显式待补。短稿，供 Steve 设计通过后实现。
 - [#702 SD3 观赛窗口](maps-sd3-watch-702.md)（[#702](https://github.com/linhongcun/aoe2-analyzer/issues/702)）：`#/maps` 合集旁列出半决赛与决赛的上海时间和 UTC。开放时展开；2026-11-09 00:00 UTC 起收起为「本届已结束」。不接直播、不爬比分。
 - [#752 SD3 赛图机制短卡](maps-sd3-mechanics-752.md)（[#752](https://github.com/linhongcun/aoe2-analyzer/issues/752)）：`#/maps` 合集旁列出薄冰、猴岛、圣谷的手册机制，并链到手册。查不到的细节标待确认。不改观赛窗和胜利条件。
+- [#747 Standard 奇观与圣物倒计时](standard-victory-747.md)（[#747](https://github.com/linhongcun/aoe2-analyzer/issues/747)）：`#/game-guide` 胜利条件区补 Standard 入口。年数只读科技说明；地图基础秒数和 UGC 附加时间不写死。
 - [#592 开一局引导](start-game-592/)（[#592](https://github.com/linhongcun/aoe2-analyzer/issues/592)）：Steve 软锁。首页主路径 A 是模式 → 地图 →（仅组队才有路位）→ 文明 → 对手，可跳过、可回退，结束于「本局摘要」。B「已在大厅」从文明起。C 首刀不做。工具宫格降为「更多工具」。短稿，供产品设计通过后实现。
 - [#602 文明详情菜单分层](civ-nav-602/)（[#602](https://github.com/linhongcun/aoe2-analyzer/issues/602)）：页内 Tab 是本页内容；情境条降为「相关工具」，只放离开本页的五件。职业选手视角只留 Tab。侧栏去掉「快速入口」。短稿即布局依据。
 - [#603 文明概览主栏分区](civ-overview-603/)（[#603](https://github.com/linhongcun/aoe2-analyzer/issues/603)）：概览主栏分成开局、评分、加成、优劣。开局是一行路线加次要「查看全部开局」；定位和特色兵种收进评分卡；没有洞察就不占位；优劣用芯片。短稿，供 Steve 设计通过后另刀实现。不改 #602 的菜单。

@@ -281,18 +281,23 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     for (const env of [pr, main]) expect(browser([change(path)], env)).toMatchObject({ full: true, data: true, browser: 'full' });
   });
 
-  it.each(['src/features/gameGuide/GameGuide.tsx', 'src/features/gameGuide/elevationCard.tsx', 'src/features/gameGuide/elevation.ts'])(
-    '%s alone retains the elevation bonus regression',
-    (path) => {
-      for (const env of [pr, main]) {
-        const selected = browser([change(path)], env);
-        expect(selected).toMatchObject({ full: false, data: false });
-        expect(selected.unit).toContain('tests/unit/elevation734.test.ts');
-        expect(selected.e2e).toContain('tests/e2e/elevation734.spec.ts');
-        expect(selected.e2e).toContain('tests/e2e/gameGuide256.spec.ts');
-      }
-    },
-  );
+  it.each([
+    'src/features/gameGuide/GameGuide.tsx',
+    'src/features/gameGuide/elevationCard.tsx',
+    'src/features/gameGuide/elevation.ts',
+    'src/features/gameGuide/standardVictoryCard.tsx',
+    'src/features/gameGuide/standardVictory.ts',
+  ])('%s alone retains the game-guide mechanism regressions', (path) => {
+    for (const env of [pr, main]) {
+      const selected = browser([change(path)], env);
+      expect(selected).toMatchObject({ full: false, data: false });
+      expect(selected.unit).toContain('tests/unit/elevation734.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/elevation734.spec.ts');
+      expect(selected.unit).toContain('tests/unit/standardVictory747.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/standardVictory747.spec.ts');
+      expect(selected.e2e).toContain('tests/e2e/gameGuide256.spec.ts');
+    }
+  });
 
   it.each([
     'src/features/gameGuide/GameGuide.tsx',
