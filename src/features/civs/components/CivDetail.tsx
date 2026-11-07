@@ -19,6 +19,7 @@ import { Linked, PosBox, Radar } from '../../../shared/ui/widgets';
 import { session } from '../../../shared/utils/sticky';
 import CivNotFound from './CivNotFound';
 import { ArenaCastleGold } from './ArenaCastleGold';
+import { NomadReveal } from './NomadReveal';
 import { BonusRows } from './BonusRows';
 import { CivOpening } from './CivOpening';
 import { CivHistory } from './CivHistory';
@@ -215,6 +216,7 @@ export default function CivDetail() {
                 <BonusRows c={c} />
               </OverviewCard>
               <ArenaCastleGold en={c.en} />
+              <NomadReveal en={c.en} />
               <OverviewCard title="优劣与位置" testId="civ-stance" className="civ-stance">
                 <div className="civ-stance-cols">
                   <div data-testid="civ-stance-pros">
