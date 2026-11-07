@@ -5,7 +5,6 @@
  */
 import buildingsRaw from '../../data/raw/buildings';
 import ecoRaw from '../../data/raw/eco';
-import { DATA_SOURCES } from '../../shared/utils/dataInfo';
 
 export const HOUSING_ANCHOR = 'housing';
 export const POP_ANCHOR = 'pop';
@@ -50,10 +49,6 @@ export interface CatalogGap {
   zh: string;
 }
 
-export interface PatchSource {
-  patch?: { build?: unknown; date?: unknown };
-}
-
 export interface HousingFacts {
   rows: HousingRow[];
   gaps: CatalogGap[];
@@ -63,6 +58,7 @@ export interface HousingFacts {
 
 interface EcoAge {
   ageReq?: unknown;
+  meta?: { patch?: unknown };
 }
 
 export function housingRows(buildings: readonly HousingSource[]): HousingRow[] {
@@ -112,21 +108,17 @@ export function gapText(zh: string, ids: readonly number[]): string {
   return `经济数据把编号 ${ids.join('、')} 标成${zh}，建筑资料没有${noun}条目。是否提供人口：待确认。`;
 }
 
-export function housingPatch(sources: PatchSource): { patchBuild: string | null; patchDate: string | null } {
-  const build = sources.patch?.build;
-  const date = sources.patch?.date;
+/** 补丁行来自 eco.meta.patch，与页脚 DE Update 同一条。不引用 dataInfo，避免整份来源清单进主包。 */
+export function housingPatch(patch: unknown): { patchBuild: string | null; patchDate: string | null } {
+  if (typeof patch !== 'string') return { patchBuild: null, patchDate: null };
   return {
-    patchBuild: typeof build === 'number' && Number.isInteger(build) && build > 0 ? String(build) : null,
-    patchDate: typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null,
+    patchBuild: /DE Update (\d+)/.exec(patch)?.[1] ?? null,
+    patchDate: /\((\d{4}-\d{2}-\d{2})\)/.exec(patch)?.[1] ?? null,
   };
 }
 
-export function housingFacts(
-  buildings: readonly HousingSource[] = buildingsRaw as HousingSource[],
-  eco: EcoAge = ecoRaw as EcoAge,
-  sources: PatchSource = DATA_SOURCES,
-): HousingFacts {
+export function housingFacts(buildings: readonly HousingSource[] = buildingsRaw as HousingSource[], eco: EcoAge = ecoRaw as EcoAge): HousingFacts {
   const rows = housingRows(buildings);
-  const patch = housingPatch(sources);
+  const patch = housingPatch(eco.meta?.patch);
   return { rows, gaps: catalogGaps(eco.ageReq, rows), patchBuild: patch.patchBuild, patchDate: patch.patchDate };
 }

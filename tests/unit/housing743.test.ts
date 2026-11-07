@@ -65,8 +65,9 @@ describe('#743 提供人口只读建筑资料的 pop', () => {
         { id: 8, zh: '先', en: 'Soon', pop: 4, age: 1 },
       ]).map((row) => row.id),
     ).toEqual([8, 9]);
-    expect(housingPatch({})).toEqual({ patchBuild: null, patchDate: null });
-    expect(housingPatch({ patch: { build: 0, date: '昨天' } })).toEqual({ patchBuild: null, patchDate: null });
+    expect(housingPatch(undefined)).toEqual({ patchBuild: null, patchDate: null });
+    expect(housingPatch('昨天')).toEqual({ patchBuild: null, patchDate: null });
+    expect(housingPatch('DE Update 188329 (2026-10-28)')).toEqual({ patchBuild: '188329', patchDate: '2026-10-28' });
   });
 
   it('经济数据点了名、建筑资料没有的编号标待确认', () => {
@@ -96,6 +97,7 @@ describe('#743 短卡写明上限来自开房设置，并链到提供人口', ()
     expect(visible).toContain(HOUSING_LEAD);
     expect(visible).toContain('5');
     expect(visible).toContain('20');
+    expect(html).not.toContain('<table');
     expect(html).not.toContain('世界奇观');
     expect(html).not.toContain('大商站');
   });

@@ -48,28 +48,22 @@ export default function HousingCard({ facts = housingFacts() }: { facts?: Housin
       <p data-housing="cap">{HOUSING_CAP_NOTE}</p>
       <p className="note">{HOUSING_BONUS_NOTE}</p>
       {facts.rows.length > 0 ? (
-        <table aria-label="各建筑提供人口">
-          <thead>
-            <tr>
-              <th scope="col">建筑</th>
-              <th scope="col">提供人口</th>
-            </tr>
-          </thead>
-          <tbody>
-            {facts.rows.map((row) => (
-              <tr key={row.id} data-housing-id={row.id}>
-                <th scope="row">
-                  <Link className="community-tool-entry" to={buildingPopHref(row.id)}>
-                    {row.zh ?? '待确认'}
-                  </Link>
-                </th>
-                <td>
-                  <span className="num nw gg-number">{row.pop}</span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <dl className="detail-cost-grid" aria-label="各建筑提供人口">
+          {facts.rows.map((row) => (
+            <div key={row.id} data-housing-id={row.id}>
+              <dt>
+                <Link className="community-tool-entry" to={buildingPopHref(row.id)}>
+                  {row.zh ?? '待确认'}
+                </Link>
+              </dt>
+              <dd>
+                <span className="nw">
+                  提供人口 <span className="num gg-number">{row.pop}</span>
+                </span>
+              </dd>
+            </div>
+          ))}
+        </dl>
       ) : (
         <p data-housing="empty">建筑资料里没有写明提供人口的建筑：待确认。</p>
       )}
