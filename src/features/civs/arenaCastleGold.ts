@@ -8,9 +8,14 @@ import ecoRaw from '../../data/raw/eco';
 export const ARENA_CASTLE_CIVS = ['Muisca', 'Ethiopians', 'Varangians'] as const;
 export type ArenaCastleCiv = (typeof ARENA_CASTLE_CIVS)[number];
 
-/** 本站开局模型的标准资源黄金。188329 文明资源向量该项为 0，数据包没有另写这笔库存。 */
+/**
+ * 本站开局模型里的标准资源黄金。不是当前 DE 标准随机地图的已核验库存。
+ * 文明资源向量对应项为 0，只表示这份向量没有另加一笔，不能读成玩家库存是 0。
+ */
 export const STANDARD_START_GOLD = 100;
 export const ARENA_CASTLE_GOLD_CHECKED = '2026-11-07';
+/** 官方 188329 新闻页署期。2026-11-07 打开页面，署名 Age DE Team October 27, 2026。 */
+export const OFFICIAL_188329_PAGE_DATE = '2026-10-27';
 
 const LOOM = '22';
 const FEUDAL = '101';
@@ -188,12 +193,16 @@ const gap = (have: number, need: number) => Math.max(0, need - have);
 function shared(castle: { food: number; gold: number }, loomGold: number): { lines: ArenaGoldLine[]; notes: ArenaGoldNote[]; links: ArenaGoldLink[] } {
   return {
     lines: [
-      { id: 'start', label: '开局黄金', parts: [num(STANDARD_START_GOLD, '黄金')] },
-      { id: 'castle', label: '城堡费用', parts: foodGold(castle.food, castle.gold) },
+      { id: 'start', label: '开局黄金', parts: [num(STANDARD_START_GOLD, '黄金'), words('，待核验')], pending: true },
+      { id: 'castle', label: '通用城堡费用', parts: foodGold(castle.food, castle.gold) },
       { id: 'loom', label: '织布', parts: [num(loomGold, '黄金')] },
     ],
     notes: [
-      { id: 'premise', text: '前提是标准资源，没有市场买卖、队友进贡，也没有织布以外的黄金支出。先织布或其他花金，上面的差额会变。' },
+      {
+        id: 'start-assumption',
+        text: '开局黄金是本站模型假设，当前 DE 标准随机地图、标准资源、黑暗开局仍待核验。文明资源向量里的 0 不是库存 0。下面依赖这笔黄金的差额都写了「若按模型」。',
+      },
+      { id: 'premise', text: '模型前提还有：没有市场买卖、队友进贡，也没有织布以外的黄金支出。先织布或其他花金，条件差额会变。' },
       {
         id: 'boundary',
         text: '不安排村民挖金，不等于没有黄金收入。食物和升城堡的建筑条件仍要另满足。这里不写固定人数和时间，不是已实测的完整直城流程，也不表示一定成功。',
@@ -210,6 +219,7 @@ function shared(castle: { food: number; gold: number }, loomGold: number): { lin
 function stamp(patch: string): ArenaGoldLine[] {
   return [
     { id: 'checked', label: '核对日', parts: [nw({ kind: 'text', text: ARENA_CASTLE_GOLD_CHECKED })] },
+    { id: 'official-date', label: '官方公告', parts: [nw({ kind: 'text', text: OFFICIAL_188329_PAGE_DATE })] },
     { id: 'patch', label: '数据版本', parts: [nw({ kind: 'text', text: patch })] },
   ];
 }
@@ -217,20 +227,25 @@ function stamp(patch: string): ArenaGoldLine[] {
 function sourceNote(extra: string): ArenaGoldNote {
   return {
     id: 'source',
-    text: `城堡费用、织布、折扣和到账数量读自这份固定数据包。上表开局黄金沿用本站标准资源模型；文明资源向量没有另记这笔起始黄金。${extra}`,
+    text: `通用城堡费用、织布、折扣和到账数量读自固定数据包。官方公告署期是 ${OFFICIAL_188329_PAGE_DATE}。数据版本括号里的日期是本站数据包记录，不是官方发布日期。${extra}`,
   };
 }
 
-function balance(id: string, label: string, have: number, need: number): ArenaGoldLine {
-  const short = gap(have, need);
-  return {
-    id,
-    label,
-    parts:
-      short === 0
-        ? [words('手头 '), num(have, '黄金'), words('，差额 '), num(0, '黄金')]
-        : [words('手头 '), num(have, '黄金'), words('，还差 '), num(short, '黄金')],
-  };
+function modelGap(id: string, label: string, need: number, grant = 0, loomPaid = 0): ArenaGoldLine {
+  const short = gap(STANDARD_START_GOLD + grant - loomPaid, need);
+  const parts: Chunk[] = [words('若开局黄金按模型为 '), num(STANDARD_START_GOLD, '黄金')];
+  if (grant > 0) parts.push(words('，加上封建入账 '), num(grant, '黄金'));
+  if (loomPaid > 0) parts.push(words('，先付织布 '), num(loomPaid, '黄金'));
+  parts.push(words(short === 0 ? '，差额 ' : '，还差 '), num(short, '黄金'));
+  return { id, label, pending: true, parts };
+}
+
+function modelExtra(id: string, label: string, need: number, loomPaid = 0): ArenaGoldLine {
+  const short = gap(STANDARD_START_GOLD - loomPaid, need);
+  const parts: Chunk[] = [words('若开局黄金按模型为 '), num(STANDARD_START_GOLD, '黄金')];
+  if (loomPaid > 0) parts.push(words('，先付织布 '), num(loomPaid, '黄金'));
+  parts.push(words('，至少还要产生 '), num(short, '黄金'));
+  return { id, label, pending: true, parts };
 }
 
 export function arenaCastleGold(civ: string, eco: ArenaEco = ecoRaw as ArenaEco): ArenaCastleGold | null {
@@ -257,14 +272,14 @@ export function arenaCastleGold(civ: string, eco: ArenaEco = ecoRaw as ArenaEco)
       lines: [
         ...base.lines,
         { id: 'click', label: '点城堡黄金', parts: [num(click, '黄金')] },
-        balance('plain', '不织布', STANDARD_START_GOLD, click),
-        balance('loom-first', '先织布', STANDARD_START_GOLD - loom.gold, click),
+        modelGap('plain', '不织布', click),
+        modelGap('loom-first', '先织布', click, 0, loom.gold),
         ...stamp(patch),
       ],
       notes: [
         ...base.notes,
-        { id: 'discount', text: '折扣只减少升级时代的黄金，食物不减。升封建不花黄金，所以不改变点封建要付的黄金。' },
-        sourceNote('官方升时代说明列出城堡的食物和黄金，没有印出开局库存。'),
+        { id: 'discount', text: '折扣只减少升级时代的黄金，食物不减。上面的通用城堡费用是基准；点城堡黄金才是折扣后的点击费用。升封建不花黄金。' },
+        sourceNote('官方升时代说明列出通用城堡费用，没有印出开局库存。'),
       ],
       links: base.links,
     };
@@ -286,8 +301,8 @@ export function arenaCastleGold(civ: string, eco: ArenaEco = ecoRaw as ArenaEco)
       lines: [
         ...base.lines,
         { id: 'feudal-grant', label: '到达封建入账', parts: foodGold(feudalGrant.food, feudalGrant.gold) },
-        balance('plain', '不织布', onHand, castle.gold),
-        balance('loom-first', '先织布', onHand - loom.gold, castle.gold),
+        modelGap('plain', '不织布', castle.gold, feudalGrant.gold),
+        modelGap('loom-first', '先织布', castle.gold, feudalGrant.gold, loom.gold),
         { id: 'castle-grant', label: '到达城堡再入账', parts: foodGold(castleGrant.food, castleGrant.gold) },
         ...stamp(patch),
       ],
@@ -312,8 +327,8 @@ export function arenaCastleGold(civ: string, eco: ArenaEco = ecoRaw as ArenaEco)
     lines: [
       ...base.lines,
       { id: 'sources', label: '适用来源', parts: [words('牧羊、狩猎')] },
-      { id: 'plain', label: '不织布还需产生', parts: [words('至少 '), num(gap(STANDARD_START_GOLD, castle.gold), '黄金')] },
-      { id: 'loom-first', label: '先织布还需产生', parts: [words('至少 '), num(gap(STANDARD_START_GOLD - loom.gold, castle.gold), '黄金')] },
+      modelExtra('plain', '不织布还需产生', castle.gold),
+      modelExtra('loom-first', '先织布还需产生', castle.gold, loom.gold),
       { id: 'ratio', label: '精确比例', parts: [words('待确认')], pending: true },
       { id: 'gather', label: '食物采集量', parts: [words('待确认')], pending: true },
       ...stamp(patch),

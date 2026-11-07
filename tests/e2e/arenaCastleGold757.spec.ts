@@ -4,9 +4,9 @@ import { noOverflow, setTheme, wrappedNums } from './v0290-helpers';
 
 const widths = [360, 375, 390, 1280] as const;
 const civs = [
-  ['Muisca', '穆伊斯卡', '点城堡黄金', '手头 100 黄金，差额 0 黄金', '手头 50 黄金，还差 50 黄金'],
-  ['Ethiopians', '埃塞俄比亚', '到达封建入账', '手头 200 黄金，差额 0 黄金', '不能支付点击城堡的费用'],
-  ['Varangians', '瓦兰吉人', '牧羊、狩猎', '至少 100 黄金', '至少 150 黄金'],
+  ['Muisca', '穆伊斯卡', '点城堡黄金', '若开局黄金按模型为 100 黄金，差额 0 黄金', '先付织布 50 黄金，还差 50 黄金'],
+  ['Ethiopians', '埃塞俄比亚', '到达封建入账', '加上封建入账 100 黄金，差额 0 黄金', '不能支付点击城堡的费用'],
+  ['Varangians', '瓦兰吉人', '牧羊、狩猎', '至少还要产生 100 黄金', '至少还要产生 150 黄金'],
 ] as const;
 
 async function openCiv(page: Page, en: string, width: number, theme: 'dark' | 'light') {
@@ -57,10 +57,17 @@ for (const width of widths) {
       await expect(card).toContainText(marker);
       await expect(card).toContainText(plain);
       await expect(card).toContainText(loom);
+      await expect(card).toContainText('通用城堡费用');
+      await expect(card).toContainText('本站模型假设');
+      await expect(card).toContainText('仍待核验');
+      await expect(card).toContainText('不是库存 0');
+      await expect(card.locator('[data-field="start"]')).toHaveAttribute('data-pending', 'true');
       await expect(card).toContainText('800 食物');
       await expect(card).toContainText('200 黄金');
       await expect(card).toContainText('50 黄金');
       await expect(card).toContainText('DE Update 188329 (2026-10-28)');
+      await expect(card).toContainText('2026-10-27');
+      await expect(card).toContainText('不是官方发布日期');
       await expect(card).toContainText('2026-11-07');
       await expect(card).not.toContainText('10%');
       await expect(card).not.toContainText('10.01');
@@ -97,7 +104,7 @@ test('#757 穆伊斯卡浅色 1280 仍可读', async ({ page }) => {
   const errors = await openCiv(page, 'Muisca', 1280, 'light');
   const card = page.getByTestId('arena-castle-gold');
   await expect(card).toBeVisible();
-  await expect(card).toContainText('手头 50 黄金，还差 50 黄金');
+  await expect(card).toContainText('若开局黄金按模型为 100 黄金，先付织布 50 黄金，还差 50 黄金');
   expect(await wrappedNums(page, '[data-testid="arena-castle-gold"]')).toEqual([]);
   expect(errors).toEqual([]);
   await noOverflow(page);

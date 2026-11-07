@@ -43,8 +43,11 @@ describe('#757 竞技场不挖金的黄金收支', () => {
     expect(STANDARD_START_GOLD).toBe(100);
     for (const civ of ['Muisca', 'Ethiopians', 'Varangians'] as const) {
       const card = arenaCastleGold(civ, live)!;
-      expect(line(card, 'start')).toBe('100 黄金');
+      expect(line(card, 'start')).toBe('100 黄金，待核验');
+      expect(card.lines.find((item) => item.id === 'start')?.pending).toBe(true);
       expect(line(card, 'castle')).toBe('800 食物 + 200 黄金');
+      expect(card.lines.find((item) => item.id === 'castle')?.label).toBe('通用城堡费用');
+      expect(line(card, 'official-date')).toBe('2026-10-27');
       expect(line(card, 'loom')).toBe('50 黄金');
       expect(line(card, 'patch')).toBe('DE Update 188329 (2026-10-28)');
       expect(line(card, 'checked')).toBe(ARENA_CASTLE_GOLD_CHECKED);
@@ -53,7 +56,13 @@ describe('#757 竞技场不挖金的黄金收支', () => {
       expect(arenaCastleGoldText(card)).toContain('不等于没有黄金收入');
       expect(arenaCastleGoldText(card)).not.toContain('实测通过');
       expect(arenaCastleGoldText(card)).not.toContain('必定成功');
+      expect(arenaCastleGoldText(card)).toContain('本站模型假设');
+      expect(arenaCastleGoldText(card)).toContain('仍待核验');
+      expect(arenaCastleGoldText(card)).toContain('不是库存 0');
+      expect(arenaCastleGoldText(card)).toContain('官方公告署期是 2026-10-27');
+      expect(arenaCastleGoldText(card)).toContain('不是官方发布日期');
       expect(arenaCastleGoldText(card)).toContain('不写固定人数和时间');
+      expect(arenaCastleGoldText(card)).not.toContain('手头 100 黄金，差额 0 黄金');
       expect(arenaCastleGoldText(card)).not.toMatch(/\d+\s*人/);
       expect(arenaCastleGoldText(card)).not.toContain('10%');
       expect(arenaCastleGoldText(card)).not.toContain('10.01');
@@ -66,8 +75,9 @@ describe('#757 竞技场不挖金的黄金收支', () => {
     const card = arenaCastleGold('Muisca', live)!;
     expect(civByEn('Muisca')?.bon).toContain('进入下一个时代所需黄金成本 -50%');
     expect(line(card, 'click')).toBe('100 黄金');
-    expect(line(card, 'plain')).toBe('手头 100 黄金，差额 0 黄金');
-    expect(line(card, 'loom-first')).toBe('手头 50 黄金，还差 50 黄金');
+    expect(line(card, 'plain')).toBe('若开局黄金按模型为 100 黄金，差额 0 黄金');
+    expect(line(card, 'loom-first')).toBe('若开局黄金按模型为 100 黄金，先付织布 50 黄金，还差 50 黄金');
+    expect(card.lines.find((item) => item.id === 'plain')?.pending).toBe(true);
     expect(line(card, 'castle')).toContain('800 食物');
     expect(arenaCastleGoldText(card)).toContain('食物不减');
     expect(arenaCastleGoldText(card)).toContain('升封建不花黄金');
@@ -75,7 +85,7 @@ describe('#757 竞技场不挖金的黄金收支', () => {
     changed.techs!['102']!.cost = { Food: 800, Gold: 300 };
     const next = arenaCastleGold('Muisca', changed)!;
     expect(line(next, 'click')).toBe('150 黄金');
-    expect(line(next, 'plain')).toBe('手头 100 黄金，还差 50 黄金');
+    expect(line(next, 'plain')).toBe('若开局黄金按模型为 100 黄金，还差 50 黄金');
     const halvedFood = structuredClone(live);
     halvedFood.civEco!.Muisca = (halvedFood.civEco!.Muisca as object[]).map((row) => {
       const item = row as { tech?: number; effects?: { kind?: string; res?: string; v?: number }[] };
@@ -89,8 +99,8 @@ describe('#757 竞技场不挖金的黄金收支', () => {
     const card = arenaCastleGold('Ethiopians', live)!;
     expect(civByEn('Ethiopians')?.bon[0]).toBe('升级到下一时代时获得的黄金 +100、食物 +100');
     expect(line(card, 'feudal-grant')).toBe('100 食物 + 100 黄金');
-    expect(line(card, 'plain')).toBe('手头 200 黄金，差额 0 黄金');
-    expect(line(card, 'loom-first')).toBe('手头 150 黄金，还差 50 黄金');
+    expect(line(card, 'plain')).toBe('若开局黄金按模型为 100 黄金，加上封建入账 100 黄金，差额 0 黄金');
+    expect(line(card, 'loom-first')).toBe('若开局黄金按模型为 100 黄金，加上封建入账 100 黄金，先付织布 50 黄金，还差 50 黄金');
     expect(line(card, 'castle-grant')).toBe('100 食物 + 100 黄金');
     const text = arenaCastleGoldText(card);
     expect(text).toContain('封建研究完成之后、点城堡之前');
@@ -100,7 +110,7 @@ describe('#757 竞技场不挖金的黄金收支', () => {
     const changed = structuredClone(live);
     const rows = changed.civEco!.Ethiopians as { tech?: number; requires?: number[]; effects?: { res?: number; v?: number }[] }[];
     rows.find((row) => row.tech === 587)!.effects!.find((effect) => effect.res === 3)!.v = 80;
-    expect(line(arenaCastleGold('Ethiopians', changed)!, 'plain')).toBe('手头 180 黄金，还差 20 黄金');
+    expect(line(arenaCastleGold('Ethiopians', changed)!, 'plain')).toBe('若开局黄金按模型为 100 黄金，加上封建入账 80 黄金，还差 20 黄金');
     rows.find((row) => row.tech === 588)!.requires = [];
     expect(arenaCastleGold('Ethiopians', changed)).toBeNull();
   });
@@ -109,8 +119,9 @@ describe('#757 竞技场不挖金的黄金收支', () => {
     const card = arenaCastleGold('Varangians', live)!;
     expect(civByEn('Varangians')?.bon[0]).toBe('牧羊、捕鱼和狩猎也能产生黄金');
     expect(line(card, 'sources')).toBe('牧羊、狩猎');
-    expect(line(card, 'plain')).toBe('至少 100 黄金');
-    expect(line(card, 'loom-first')).toBe('至少 150 黄金');
+    expect(line(card, 'plain')).toBe('若开局黄金按模型为 100 黄金，至少还要产生 100 黄金');
+    expect(line(card, 'loom-first')).toBe('若开局黄金按模型为 100 黄金，先付织布 50 黄金，至少还要产生 150 黄金');
+    expect(card.lines.find((item) => item.id === 'plain')?.pending).toBe(true);
     expect(line(card, 'ratio')).toBe('待确认');
     expect(line(card, 'gather')).toBe('待确认');
     expect(card.lines.find((item) => item.id === 'ratio')?.pending).toBe(true);
