@@ -20,6 +20,7 @@ import { DEFAULT_CONSTRUCTION, encodeConstruction } from '../../../domain/constr
 import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
 import { FoodAmount } from './FoodAmount';
 import { HousingGuideLink, POP_ANCHOR } from './HousingGuideLink';
+import { MarketFees } from './MarketFees';
 import { WallAgeChanges } from './WallAgeChanges';
 
 const isUq = (x: Unit | Tech) => x.type === 'UniqueUnit' || x.type === 'UniqueTech';
@@ -158,6 +159,7 @@ export default function BuildingDetail() {
               {b.pop ? <HousingGuideLink /> : null}
               <WallAgeChanges building={b} />
               <FoodAmount buildingId={b.id} />
+              <MarketFees buildingId={b.id} />
               {b.desc.trim() && (
                 <DetailSection title="说明">
                   <p className="desc">

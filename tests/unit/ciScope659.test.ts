@@ -115,6 +115,21 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     },
   );
 
+  it.each([
+    'src/features/buildings/components/BuildingDetail.tsx',
+    'src/features/buildings/components/MarketFees.tsx',
+    'src/features/buildings/marketFees.ts',
+    'src/features/techs/components/TechDetail.tsx',
+    'src/features/techs/components/MarketFeeTechLinks.tsx',
+  ])('%s alone retains the market fee regression', (path) => {
+    for (const env of [pr, main]) {
+      const selected = browser([change(path)], env);
+      expect(selected).toMatchObject({ full: false, data: false });
+      expect(selected.unit).toContain('tests/unit/marketFees745.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/marketFees745.spec.ts');
+    }
+  });
+
   it.each(['src/features/buildings/components/BuildingDetail.tsx', 'src/features/buildings/components/FoodAmount.tsx', 'src/features/buildings/foodAmount.ts'])(
     '%s alone retains the farm and fish trap food amount regression',
     (path) => {
@@ -150,6 +165,43 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
       }
     },
   );
+
+  it.each(['src/features/units/components/UnitDetail.tsx', 'src/features/units/components/AccuracyBoundaryNote.tsx'])(
+    '%s alone retains the accuracy and ballistics boundary',
+    (path) => {
+      for (const env of [pr, main]) {
+        const selected = browser([change(path)], env);
+        expect(selected).toMatchObject({ full: false, data: false });
+        expect(selected.unit).toContain('tests/unit/accuracy746.test.ts');
+        expect(selected.e2e).toContain('tests/e2e/accuracy746.spec.ts');
+      }
+    },
+  );
+
+  it.each(['src/features/techs/components/TechDetail.tsx', 'src/features/techs/components/BallisticsBoundaryNote.tsx'])(
+    '%s alone retains the ballistics boundary on the tech page',
+    (path) => {
+      for (const env of [pr, main]) {
+        const selected = browser([change(path)], env);
+        expect(selected).toMatchObject({ full: false, data: false });
+        expect(selected.unit).toContain('tests/unit/accuracy746.test.ts');
+        expect(selected.e2e).toContain('tests/e2e/accuracy746.spec.ts');
+      }
+    },
+  );
+
+  it('the duel page keeps the model-note anchor used by the accuracy boundary', () => {
+    for (const env of [pr, main]) {
+      const selected = browser([change('src/features/duel/components/Duel.tsx')], env);
+      expect(selected).toMatchObject({ full: false, data: false });
+      expect(selected.unit).toContain('tests/unit/accuracy746.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/accuracy746.spec.ts');
+    }
+  });
+
+  it('accuracy boundary facts stay on the broad plan until separately audited', () => {
+    expect(browser([change('src/domain/accuracyBoundary.ts')])).toMatchObject({ full: true, data: false, browser: 'full' });
+  });
 
   it.each(['src/features/units/components/UnitDetail.tsx', 'src/features/units/components/SplashMechanics.tsx'])(
     '%s alone retains the splash explanation regression',
