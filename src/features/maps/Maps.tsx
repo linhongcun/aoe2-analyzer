@@ -6,6 +6,7 @@ import catalog from '../../data/mapCatalog.json';
 import { mapGuides } from './guides';
 import { MapPositions } from './MapPositions';
 import SuddenDessaster3 from './SuddenDessaster3';
+import SuddenDessasterMechanics from './SuddenDessasterMechanics';
 import SuddenDessasterWatch from './SuddenDessasterWatch';
 import './maps.css';
 
@@ -81,6 +82,7 @@ export default function Maps() {
       </p>
       <SuddenDessasterWatch />
       <SuddenDessaster3 />
+      <SuddenDessasterMechanics />
       <div className="map-filters">
         <label className="map-search">
           <span>搜索地图</span>
