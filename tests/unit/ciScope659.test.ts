@@ -116,6 +116,21 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
   );
 
   it.each([
+    'src/features/buildings/repairCost.ts',
+    'src/features/buildings/components/BuildingDetail.tsx',
+    'src/features/buildings/components/RepairCosts.tsx',
+    'src/features/units/components/VillagerGather.tsx',
+    'src/features/civs/components/BonusRows.tsx',
+  ])('%s alone retains the repair cost regression', (path) => {
+    for (const env of [pr, main]) {
+      const selected = browser([change(path)], env);
+      expect(selected).toMatchObject({ full: false, data: false });
+      expect(selected.unit).toContain('tests/unit/repairCost744.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/repairCost744.spec.ts');
+    }
+  });
+
+  it.each([
     'src/features/buildings/components/BuildingDetail.tsx',
     'src/features/buildings/components/MarketFees.tsx',
     'src/features/buildings/marketFees.ts',

@@ -113,6 +113,7 @@ export const PROFILES = {
       'insights584',
       'civHistory',
       'civBackgrounds',
+      'repairCost744',
     ],
     [
       'civDlcFilters',
@@ -134,6 +135,7 @@ export const PROFILES = {
       'civ603',
       'civHistory',
       'civBackgrounds',
+      'repairCost744',
     ],
   ),
   units: profile(
@@ -159,6 +161,7 @@ export const PROFILES = {
       'villagerGather730',
       'fishingGather735',
       'accuracy746',
+      'repairCost744',
     ],
     [
       'unitCards6',
@@ -182,6 +185,7 @@ export const PROFILES = {
       'villagerGather730',
       'fishingGather735',
       'accuracy746',
+      'repairCost744',
     ],
   ),
   simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
@@ -267,6 +271,7 @@ export const PROFILES = {
       'foodAmount736',
       'marketFees745',
       'housing743',
+      'repairCost744',
     ],
     [
       'garrison218',
@@ -278,6 +283,7 @@ export const PROFILES = {
       'foodAmount736',
       'marketFees745',
       'housing743',
+      'repairCost744',
     ],
   ),
   // #533：攻城页改动跑金标准与失败验收。不把 /siege 放进全站宽度/截图矩阵。

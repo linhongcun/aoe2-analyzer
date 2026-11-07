@@ -76,6 +76,9 @@ export function VillagerGather({ unitId, source }: { unitId: number; source?: Vi
         <Link className="community-tool-entry" to="/eco-payoff">
           经济科技收益
         </Link>
+        <Link className="community-tool-entry" to="/building/109#repair-cost">
+          查看修复费用
+        </Link>
       </div>
     </DetailSection>
   );
