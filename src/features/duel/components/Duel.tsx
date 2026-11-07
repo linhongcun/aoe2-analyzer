@@ -1,6 +1,6 @@
 /** 工具：单位 PK（1v1 / N vs M / 等资源），URL 与结果协调。 */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCoreTrees, type CoreTreesResources } from '../../../shared/utils/useCoreTrees';
 import ChampiReferences from '../../../shared/ui/ChampiReferences';
@@ -48,6 +48,8 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
   const core = resources.core.data,
     trees = resources.trees.data;
   const [sp, setSp] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [context, setContext] = useState(() => duelCivs(sp));
   const contextSearch = useRef(sp.toString());
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
@@ -80,8 +82,15 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
     // 旧 PK 会容错补齐 pack；回链不能把这次自动修复误当作原链接的文明。
     if (contextSearch.current !== sp.toString()) setContext(duelCivs(sp));
     contextSearch.current = canonStr;
-    if (canonStr !== sp.toString()) setSp(new URLSearchParams(canonStr), { replace: true });
-  }, [canonStr, sp, setSp]);
+    if (canonStr === sp.toString()) return;
+    // setSearchParams 会丢掉 #duel-model。只在这个锚点上改用带 hash 的跳转，其它地址仍走原来的补齐。
+    if (location.hash === '#duel-model') navigate({ pathname: location.pathname, search: `?${canonStr}`, hash: location.hash }, { replace: true });
+    else setSp(new URLSearchParams(canonStr), { replace: true });
+  }, [canonStr, sp, setSp, navigate, location.pathname, location.hash]);
+  useEffect(() => {
+    if (location.hash !== '#duel-model') return;
+    document.getElementById('duel-model')?.scrollIntoView({ block: 'start' });
+  }, [location.hash, core]);
   const contextBar = (
     <nav className="ctx-bar" aria-label="对阵相关入口">
       <Link className="community-tool-entry" to={context.me && context.opp ? matchupPath(context.me, context.opp) : matchupPath()}>
@@ -269,7 +278,7 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
           onOpen={(n, m) => set({ m: 'n', na: String(n), nb: String(m) }, mode === 'n' ? [] : ['be'])}
         />
       )}
-      <p className="note duel-note">
+      <p className="note duel-note" id="duel-model">
         <Icon name="triangle-alert" className="ic warn" />
         近似模型：
         <span role="math" title={formulaTitle} aria-label={`${formulaTitle} ${damageFormula}`}>

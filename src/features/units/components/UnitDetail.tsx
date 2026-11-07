@@ -37,6 +37,7 @@ import { TrebuchetStates } from './TrebuchetStates';
 import { AgeCounterBonuses } from './AgeCounterBonuses';
 import { SplashMechanics, splashDescription } from './SplashMechanics';
 import { ConversionMechanics } from './ConversionMechanics';
+import { AccuracyBoundaryNote } from './AccuracyBoundaryNote';
 import { FishingGather } from './FishingGather';
 import { VillagerGather } from './VillagerGather';
 import '../../../shared/ui/contextLinks.css';
@@ -351,6 +352,7 @@ export default function UnitDetail() {
                       </tbody>
                     </table>
                     {u.id === 331 && <p className="note">目录打包记录的准确度，不代表展开命中率。</p>}
+                    <AccuracyBoundaryNote unit={u} techs={core.techs} />
                   </DetailSection>
                   <SplashMechanics unit={u} />
                   {u.up && (!elite || u.id !== elite.id) && (
