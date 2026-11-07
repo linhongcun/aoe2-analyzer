@@ -115,6 +115,21 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     },
   );
 
+  it.each([
+    'src/features/buildings/components/BuildingDetail.tsx',
+    'src/features/buildings/components/MarketFees.tsx',
+    'src/features/buildings/marketFees.ts',
+    'src/features/techs/components/TechDetail.tsx',
+    'src/features/techs/components/MarketFeeTechLinks.tsx',
+  ])('%s alone retains the market fee regression', (path) => {
+    for (const env of [pr, main]) {
+      const selected = browser([change(path)], env);
+      expect(selected).toMatchObject({ full: false, data: false });
+      expect(selected.unit).toContain('tests/unit/marketFees745.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/marketFees745.spec.ts');
+    }
+  });
+
   it.each(['src/features/buildings/components/BuildingDetail.tsx', 'src/features/buildings/components/FoodAmount.tsx', 'src/features/buildings/foodAmount.ts'])(
     '%s alone retains the farm and fish trap food amount regression',
     (path) => {
