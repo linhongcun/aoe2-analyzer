@@ -19,6 +19,7 @@ import garrisonHosts from '../../../data/garrison_hosts.json';
 import { DEFAULT_CONSTRUCTION, encodeConstruction } from '../../../domain/construction';
 import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
 import { FoodAmount } from './FoodAmount';
+import { RepairCosts } from './RepairCosts';
 import { HousingGuideLink, POP_ANCHOR } from './HousingGuideLink';
 import { MarketFees } from './MarketFees';
 import { WallAgeChanges } from './WallAgeChanges';
@@ -155,6 +156,7 @@ export default function BuildingDetail() {
                 </p>
                 <p className="note">多人施工使用实际施工形态与工作速率，可能与已建建筑的面板工期不同。</p>
               </DetailSection>
+              <RepairCosts />
               <StatTiles stats={stats} label="建筑属性" />
               {b.pop ? <HousingGuideLink /> : null}
               <WallAgeChanges building={b} />

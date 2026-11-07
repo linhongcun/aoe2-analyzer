@@ -61,6 +61,13 @@ export function BonusRows({ c }: { c: Civ }) {
         <>
           <h3 className="civ-bonus-team">团队加成</h3>
           <ul className="blrows">{team.map(row)}</ul>
+          {c.en === 'Georgians' && (
+            <p className="community-tool-row">
+              <Link className="community-tool-entry" to="/building/109#repair-cost">
+                查看建筑修复费用
+              </Link>
+            </p>
+          )}
         </>
       )}
     </>
