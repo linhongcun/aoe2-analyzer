@@ -14,6 +14,7 @@ import ChargeAttack710 from './ChargeAttack710';
 import { techEffectText } from '../techEffectText';
 import { ThumbRingEffectText } from './ThumbRingEffectText';
 import { ConversionTechLink } from './ConversionTechLink';
+import { MarketFeeTechLinks } from './MarketFeeTechLinks';
 import { BallisticsBoundaryNote } from './BallisticsBoundaryNote';
 import { techAffects } from '../../../domain/affects';
 import { affectedUnits } from '../../../domain/family';
@@ -185,6 +186,7 @@ export default function TechDetail() {
                     </p>
                   )}
                   {(t.id === 45 || t.id === 46) && <ConversionTechLink />}
+                  <MarketFeeTechLinks techId={t.id} />
                 </DetailSection>
               )}
               {t.id === 93 && <BallisticsBoundaryNote techs={core.techs} />}
