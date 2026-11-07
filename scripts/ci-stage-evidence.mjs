@@ -420,8 +420,13 @@ function validateProof(input, allowHistoricalBuild = false) {
     return reject('checkout-not-proven');
   if (run.event === 'pull_request') {
     const parents = Array.isArray(commit.parents) ? commit.parents.map((parent) => parent.sha) : [];
-    if (receipt.event.head_sha !== run.head_sha || !(parents.length === 2 && parents[0] === receipt.event.base_sha && parents[1] === run.head_sha))
-      return reject('pr-merge-not-proven');
+    const headMerged = parents.length === 2 && parents[1] === run.head_sha;
+    const recordedBase = headMerged && parents[0] === receipt.event.base_sha;
+    // pull_request.base.sha stays at the SHA recorded on the PR. refs/pull/N/merge is built
+    // from the base tip at workflow time. base_advanced is set only after compare proves that
+    // recorded base fast-forwards to that tip (ahead, behind_by 0).
+    const advancedBase = headMerged && commit.base_advanced === true;
+    if (receipt.event.head_sha !== run.head_sha || !(recordedBase || advancedBase)) return reject('pr-merge-not-proven');
   } else if (receipt.tested_commit !== run.head_sha) return reject('checkout-does-not-match-run');
   if (
     mode === 'current' &&
@@ -476,6 +481,17 @@ function validateProof(input, allowHistoricalBuild = false) {
 /** A proof contains receipt + GitHub run/attempt jobs/artifact/commit + independently computed ZIP archive_sha256. */
 export function validateStageEvidence(input) {
   return validateProof(input);
+}
+
+/** Record that the PR base moved forward under the merge commit GitHub actually checked out. */
+export async function noteAdvancedBase(commit, event, repository, query) {
+  if (!commit || event?.name !== 'pull_request') return commit;
+  const parents = Array.isArray(commit.parents) ? commit.parents.map((parent) => parent.sha) : [];
+  if (!(parents.length === 2 && parents[1] === event.head_sha && SHA.test(parents[0] ?? '') && SHA.test(event.base_sha ?? '') && parents[0] !== event.base_sha))
+    return commit;
+  const compared = await query('repos/' + repository + '/compare/' + event.base_sha + '...' + parents[0]);
+  if (compared?.status === 'ahead' && compared.behind_by === 0) commit.base_advanced = true;
+  return commit;
 }
 
 /** All network adapters receive the SAME budget and a bounded lookup signal/timeout. No successful result after expiry. */
@@ -542,6 +558,7 @@ export async function findReusableStages({ current, requirements, api, download,
       query('repos/' + current.repository + '/git/commits/' + downloaded.receipt.tested_commit),
     ]);
     if (jobData?.total_count > 100) return reject('source-jobs-truncated');
+    await noteAdvancedBase(commit, downloaded.receipt?.event, current.repository, query);
     const proof = { receipt: downloaded.receipt, archive_sha256: downloaded.archive_sha256, run, jobs: jobData?.jobs, artifact, commit };
     if (needed.stage_id.startsWith('browser-')) {
       const list = await query(prefix + '/artifacts?per_page=100');

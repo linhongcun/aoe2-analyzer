@@ -279,6 +279,21 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     },
   );
 
+  it.each([
+    'src/features/gameGuide/GameGuide.tsx',
+    'src/features/gameGuide/housingCard.tsx',
+    'src/features/gameGuide/housing.ts',
+    'src/features/buildings/components/BuildingDetail.tsx',
+    'src/features/buildings/components/HousingGuideLink.tsx',
+  ])('%s alone retains the housing population regression', (path) => {
+    for (const env of [pr, main]) {
+      const selected = browser([change(path)], env);
+      expect(selected).toMatchObject({ full: false, data: false });
+      expect(selected.unit).toContain('tests/unit/housing743.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/housing743.spec.ts');
+    }
+  });
+
   it('the affected home and ladder keep their exact important negative paths', () => {
     const home = browser([change('src/domain/startGame.ts')]);
     for (const name of ['startGame592', 'startGame632', 'mechanism652', 'routes652']) expect(home.e2e).toContain('tests/e2e/' + name + '.spec.ts');

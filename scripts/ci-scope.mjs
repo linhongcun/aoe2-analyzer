@@ -94,7 +94,10 @@ export const PROFILES = {
     [...sourceChecks, 'sources', 'boSources', 'buildOrders', 'buildOrders.content', 'buildPractice216', 'buildSim', 'build41', 'v0300-335'],
     ['sourcePresentation442', 'practice216', 'build41', 'v0290-322-golden'],
   ),
-  gameGuide: profile([...sourceChecks, 'gameGuide256', 'v0300-335', 'elevation734'], ['sourcePresentation442', 'gameGuide256', 'elevation734']),
+  gameGuide: profile(
+    [...sourceChecks, 'gameGuide256', 'v0300-335', 'elevation734', 'housing743'],
+    ['sourcePresentation442', 'gameGuide256', 'elevation734', 'housing743'],
+  ),
   patches: profile(['patches16', 'patchTree417', 'patchSearch16'], ['patches16', 'patchTree417']),
   matchup: profile(['matchup194', 'p0Batch', 'simRoute424', 'simulator'], ['matchup194', 'matchupSim424', 'rush35']),
   civs: profile(
@@ -253,8 +256,29 @@ export const PROFILES = {
     ],
   ),
   buildings: profile(
-    ['buildings', 'buildingSim', 'buildingAge357', 'garrison218', 'garrisonGeneral224', 'ageBuildings704', 'automaticAge705', 'foodAmount736', 'marketFees745'],
-    ['garrison218', 'garrison224', 'sidebar44', 'catalogLayout187', 'ageBuildings704', 'automaticAge705', 'foodAmount736', 'marketFees745'],
+    [
+      'buildings',
+      'buildingSim',
+      'buildingAge357',
+      'garrison218',
+      'garrisonGeneral224',
+      'ageBuildings704',
+      'automaticAge705',
+      'foodAmount736',
+      'marketFees745',
+      'housing743',
+    ],
+    [
+      'garrison218',
+      'garrison224',
+      'sidebar44',
+      'catalogLayout187',
+      'ageBuildings704',
+      'automaticAge705',
+      'foodAmount736',
+      'marketFees745',
+      'housing743',
+    ],
   ),
   // #533：攻城页改动跑金标准与失败验收。不把 /siege 放进全站宽度/截图矩阵。
   // #581：页内单位上下文跟攻城反馈走，后续攻城改动也要跑到 siege581。
