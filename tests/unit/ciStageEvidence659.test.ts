@@ -12,6 +12,7 @@ const {
   snapshotIdentity,
   stageArtifactName,
   toolchainDigest,
+  noteAdvancedBase,
   validateStageEvidence,
 } = evidence;
 
@@ -364,6 +365,35 @@ describe('#659 GitHub-owned stage provenance', () => {
     expect(validateStageEvidence(proof).ok).toBe(true);
     proof.commit.parents.reverse();
     expect(validateStageEvidence(proof).ok).toBe(false);
+  });
+
+  it('accepts a PR merge whose base fast-forwarded after the recorded base SHA', async () => {
+    const proof = fixture();
+    const recorded = sha('e');
+    const tip = sha('d');
+    proof.run.event = 'pull_request';
+    proof.run.head_sha = sha('f');
+    proof.jobs[0]!.head_sha = sha('f');
+    proof.artifact.workflow_run.head_sha = sha('f');
+    proof.receipt.event = { name: 'pull_request', sha: proof.receipt.tested_commit, head_repository: repository, base_sha: recorded, head_sha: sha('f') };
+    proof.commit.parents = [{ sha: tip }, { sha: sha('f') }];
+    expect(validateStageEvidence(proof).reason).toBe('pr-merge-not-proven');
+    const calls = [];
+    await noteAdvancedBase(proof.commit, proof.receipt.event, repository, async (endpoint) => {
+      calls.push(endpoint);
+      return { status: 'ahead', behind_by: 0 };
+    });
+    expect(calls).toEqual(['repos/' + repository + '/compare/' + recorded + '...' + tip]);
+    expect(validateStageEvidence(proof).ok).toBe(true);
+    proof.commit.base_advanced = false;
+    expect(validateStageEvidence(proof).reason).toBe('pr-merge-not-proven');
+    proof.commit.base_advanced = true;
+    proof.commit.parents = [{ sha: tip }, { sha: sha('b') }];
+    expect(validateStageEvidence(proof).reason).toBe('pr-merge-not-proven');
+    proof.commit.parents = [{ sha: tip }, { sha: sha('f') }];
+    delete proof.commit.base_advanced;
+    await noteAdvancedBase(proof.commit, proof.receipt.event, repository, async () => ({ status: 'diverged', behind_by: 1 }));
+    expect(proof.commit.base_advanced).toBeUndefined();
   });
 
   it('prevents own-run and old-attempt receipts impersonating current execution', () => {
