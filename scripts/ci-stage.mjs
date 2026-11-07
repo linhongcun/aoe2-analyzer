@@ -14,6 +14,7 @@ import {
   validateStageEvidence,
   toolchainDigest,
   selectionDigest,
+  noteAdvancedBase,
 } from './ci-stage-evidence.mjs';
 import { hash, readToolchain, collectUnits, frozenRequirements, writeJson, policyDigest, makeRequirement, actualUnitExecution } from './ci-plan.mjs';
 import { resolveTestFiles } from './ci-run.mjs';
@@ -164,7 +165,12 @@ async function currentProofs(frozen, api, budget) {
   const run = await currentRun(api);
   const jobs = await runJobs(api, frozen.current.repository, run.id, run.run_attempt);
   const artifacts = await pages(api, `repos/${frozen.current.repository}/actions/runs/${run.id}/artifacts`, 'artifacts');
-  const commit = await api(`repos/${frozen.current.repository}/git/commits/${frozen.current.commit}`);
+  const commit = await noteAdvancedBase(
+    await api(`repos/${frozen.current.repository}/git/commits/${frozen.current.commit}`),
+    frozen.current.event,
+    frozen.current.repository,
+    api,
+  );
   const proofs = {};
   // A source may have been rerun, expired or cancelled since planning. Refresh independent API facts.
   const queries = new Map(),
@@ -178,7 +184,12 @@ async function currentProofs(frozen, api, budget) {
     const [sourceJobs, artifact, sourceCommit] = await Promise.all([
       runJobs(query, frozen.current.repository, sourceRun.id, sourceRun.run_attempt),
       query(`repos/${frozen.current.repository}/actions/artifacts/${proof.artifact.id}`),
-      query(`repos/${frozen.current.repository}/git/commits/${proof.receipt.tested_commit}`),
+      noteAdvancedBase(
+        await query(`repos/${frozen.current.repository}/git/commits/${proof.receipt.tested_commit}`),
+        proof.receipt.event,
+        frozen.current.repository,
+        query,
+      ),
     ]);
     if (!downloads.has(artifact.id)) downloads.set(artifact.id, artifactDownloader(budget)(artifact));
     const downloaded = await downloads.get(artifact.id);

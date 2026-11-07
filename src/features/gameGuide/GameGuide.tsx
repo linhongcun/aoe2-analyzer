@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   GAME_GUIDE_CARDS,
@@ -20,6 +20,8 @@ import {
 import { Icon } from '../../shared/ui/Icon';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import ElevationCard from './elevationCard';
+import HousingCard from './housingCard';
+import { HOUSING_ANCHOR } from './housing';
 import StandardVictoryCard from './standardVictoryCard';
 import VictoryModesCard from './victoryModes';
 import './gameGuide.css';
@@ -58,6 +60,10 @@ export default function GameGuide() {
     if (invalid) return;
     await copy(() => gameGuideShareUrl(state, document.baseURI));
   };
+  useEffect(() => {
+    if (location.hash !== `#${HOUSING_ANCHOR}`) return;
+    document.getElementById(HOUSING_ANCHOR)?.scrollIntoView({ block: 'start' });
+  }, [location.hash]);
   if (DATA_ERRORS.length)
     return (
       <section className="pane game-guide-page" data-testid="game-guide-page">
@@ -139,6 +145,7 @@ export default function GameGuide() {
       <VictoryModesCard />
       <StandardVictoryCard />
       <ElevationCard />
+      <HousingCard />
 
       <div className="gg-layout">
         <nav className="gg-nav" aria-label="六张入门卡">

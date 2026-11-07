@@ -19,6 +19,7 @@ import garrisonHosts from '../../../data/garrison_hosts.json';
 import { DEFAULT_CONSTRUCTION, encodeConstruction } from '../../../domain/construction';
 import { SIEGE_DEFAULT_UNIT_ID, siegeBuildingEntryVerified } from '../../../domain/siege';
 import { FoodAmount } from './FoodAmount';
+import { HousingGuideLink, POP_ANCHOR } from './HousingGuideLink';
 import { MarketFees } from './MarketFees';
 import { WallAgeChanges } from './WallAgeChanges';
 
@@ -30,8 +31,16 @@ export default function BuildingDetail() {
   const core = useCore();
   const loc = useLocation();
   useEffect(() => {
+    if (!core) return;
+    const building = core.buildingById[+id];
+    const pop = document.querySelector('#building [data-stat="pop"]');
+    if (pop instanceof HTMLElement && building?.pop) pop.id = POP_ANCHOR;
+    if (loc.hash === `#${POP_ANCHOR}` && pop instanceof HTMLElement && building?.pop) {
+      pop.scrollIntoView({ block: 'start' });
+      return;
+    }
     scrollTo(0, 0);
-  }, [id]);
+  }, [core, id, loc.hash]);
   if (!core)
     return (
       <section className="pane">
@@ -147,6 +156,7 @@ export default function BuildingDetail() {
                 <p className="note">多人施工使用实际施工形态与工作速率，可能与已建建筑的面板工期不同。</p>
               </DetailSection>
               <StatTiles stats={stats} label="建筑属性" />
+              {b.pop ? <HousingGuideLink /> : null}
               <WallAgeChanges building={b} />
               <FoodAmount buildingId={b.id} />
               <MarketFees buildingId={b.id} />

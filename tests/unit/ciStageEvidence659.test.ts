@@ -12,6 +12,7 @@ const {
   snapshotIdentity,
   stageArtifactName,
   toolchainDigest,
+  noteAdvancedBase,
   validateStageEvidence,
 } = evidence;
 
@@ -364,6 +365,24 @@ describe('#659 GitHub-owned stage provenance', () => {
     expect(validateStageEvidence(proof).ok).toBe(true);
     proof.commit.parents.reverse();
     expect(validateStageEvidence(proof).ok).toBe(false);
+  });
+
+  it('accepts a fast-forward of the recorded PR base', async () => {
+    const proof = fixture();
+    const [recorded, tip, head] = [sha('e'), sha('d'), sha('f')];
+    proof.run.event = 'pull_request';
+    proof.run.head_sha = head;
+    proof.jobs[0]!.head_sha = head;
+    proof.artifact.workflow_run.head_sha = head;
+    proof.receipt.event = { name: 'pull_request', sha: proof.receipt.tested_commit, head_repository: repository, base_sha: recorded, head_sha: head };
+    const commit = proof.commit as typeof proof.commit & { base_advanced?: boolean };
+    commit.parents = [{ sha: tip }, { sha: head }];
+    expect(validateStageEvidence(proof).reason).toBe('pr-merge-not-proven');
+    await noteAdvancedBase(commit, proof.receipt.event, repository, async () => ({ status: 'ahead', behind_by: 0 }));
+    expect(commit.base_advanced).toBe(true);
+    expect(validateStageEvidence(proof).ok).toBe(true);
+    commit.parents = [{ sha: tip }, { sha: sha('b') }];
+    expect(validateStageEvidence(proof).reason).toBe('pr-merge-not-proven');
   });
 
   it('prevents own-run and old-attempt receipts impersonating current execution', () => {
