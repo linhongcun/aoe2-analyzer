@@ -606,6 +606,29 @@
   color: var(--color-muted);
   cursor: not-allowed;
 }
+.ladder-map-option {
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+.ladder-page .ladder-map-option[aria-checked='true'] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  font-weight: 600;
+}
+.ladder-page .ladder-map-option:disabled,
+.ladder-page .ladder-map-option:disabled:hover {
+  background: var(--color-surface-2);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+.ladder-query-url,
+.ladder-insights-note {
+  margin: 4px 0 0;
+  color: var(--color-muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
 .ladder-source-facts {
   margin: 0 0 4px;
   font-size: 13px;

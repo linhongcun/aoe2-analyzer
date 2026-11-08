@@ -3,3 +3,5 @@ node_modules
 src/data/*.json
 public
 scripts/.cache
+# Exact AoE2 Insights response bodies. Formatting would change the sha256.
+docs/data/insights-match-ups/*.json

@@ -1,0 +1,512 @@
+{
+  "elo": {
+    "filtered": false,
+    "note": "查询没有 elo_group 条件。接口有 Elo 分组枚举，但本快照未筛选，不是某一分段。"
+  },
+  "fetchedAt": "2026-11-08T02:27:25Z",
+  "fetchedAtOrigin": "local-receipt",
+  "kind": "aoe2insights-match-ups",
+  "ladder": {
+    "id": 3,
+    "label": "RM 1v1"
+  },
+  "lowSample": {
+    "field": "agg_n_matches",
+    "note": "来源没有规定低样本线。本站暂定：原始 agg_n_matches < 100 时标「低样本」。比较的是原始行数，不换算、不除以 2。阈值待确认，不是平衡建议。",
+    "status": "pending",
+    "threshold": 100
+  },
+  "map": {
+    "en": "Arabia",
+    "id": 9,
+    "key": "rm-arabia",
+    "zh": "阿拉伯"
+  },
+  "patch": {
+    "dateStatus": "absent",
+    "filtered": false,
+    "id": null,
+    "note": "查询 filter 只有 ladder 与 map。响应没有 patch 列，不能标成单一补丁、补丁日期或版本名。"
+  },
+  "period": {
+    "filtered": false,
+    "note": "查询没有 started_time 或 month 条件。这是全时段汇总。采集时间不是统计覆盖截止。"
+  },
+  "queryUrl": "https://www.aoe2insights.com/stats/api/match-ups/?by=civilization&aggregation=agg_win_rate&aggregation=agg_n_matches&aggregation=agg_n_won&aggregation=agg_play_rate&aggregation=n_rows&filter=%7B%22field%22%3A%22ladder%22%2C%22operator%22%3A%22equals%22%2C%22value%22%3A3%7D&filter=%7B%22field%22%3A%22map%22%2C%22operator%22%3A%22equals%22%2C%22value%22%3A9%7D",
+  "rawFile": "docs/data/insights-match-ups/rm1v1-map-9.json",
+  "rawSha256": "2ce77f2ed5a6db5c90c46905501688d8e8e3b631f6ee520dd4930780300e4b7c",
+  "rows": [
+    {
+      "aggNMatches": 15874,
+      "aggNWon": 8471,
+      "aggPlayRate": 0.006269456286399695,
+      "aggWinRate": 0.5336,
+      "civilization": "Unknown",
+      "nRows": 15874
+    },
+    {
+      "aggNMatches": 38518,
+      "aggNWon": 18697,
+      "aggPlayRate": 0.015212732596670244,
+      "aggWinRate": 0.4854,
+      "civilization": "Aztecs",
+      "nRows": 38518
+    },
+    {
+      "aggNMatches": 46442,
+      "aggNWon": 23281,
+      "aggPlayRate": 0.018342326373502246,
+      "aggWinRate": 0.5013,
+      "civilization": "Berbers",
+      "nRows": 46442
+    },
+    {
+      "aggNMatches": 54610,
+      "aggNWon": 26428,
+      "aggPlayRate": 0.021568288257546135,
+      "aggWinRate": 0.4839,
+      "civilization": "Britons",
+      "nRows": 54610
+    },
+    {
+      "aggNMatches": 47228,
+      "aggNWon": 24087,
+      "aggPlayRate": 0.01865275806312743,
+      "aggWinRate": 0.51,
+      "civilization": "Bulgarians",
+      "nRows": 47228
+    },
+    {
+      "aggNMatches": 29473,
+      "aggNWon": 13922,
+      "aggPlayRate": 0.011640398458426246,
+      "aggWinRate": 0.4724,
+      "civilization": "Burmese",
+      "nRows": 29473
+    },
+    {
+      "aggNMatches": 56792,
+      "aggNWon": 27491,
+      "aggPlayRate": 0.022430071904826224,
+      "aggWinRate": 0.4841,
+      "civilization": "Byzantines",
+      "nRows": 56792
+    },
+    {
+      "aggNMatches": 39980,
+      "aggNWon": 20134,
+      "aggPlayRate": 0.01579015133742345,
+      "aggWinRate": 0.5036,
+      "civilization": "Celts",
+      "nRows": 39980
+    },
+    {
+      "aggNMatches": 60070,
+      "aggNWon": 30523,
+      "aggPlayRate": 0.023724722132041683,
+      "aggWinRate": 0.5081,
+      "civilization": "Chinese",
+      "nRows": 60070
+    },
+    {
+      "aggNMatches": 38320,
+      "aggNWon": 18353,
+      "aggPlayRate": 0.015134532247375352,
+      "aggWinRate": 0.4789,
+      "civilization": "Cumans",
+      "nRows": 38320
+    },
+    {
+      "aggNMatches": 74544,
+      "aggNWon": 37595,
+      "aggPlayRate": 0.029441246655750215,
+      "aggWinRate": 0.5043,
+      "civilization": "Ethiopians",
+      "nRows": 74544
+    },
+    {
+      "aggNMatches": 93427,
+      "aggNWon": 47942,
+      "aggPlayRate": 0.036899111280676855,
+      "aggWinRate": 0.5131,
+      "civilization": "Franks",
+      "nRows": 93427
+    },
+    {
+      "aggNMatches": 40404,
+      "aggNWon": 20066,
+      "aggPlayRate": 0.01595761067126706,
+      "aggWinRate": 0.4966,
+      "civilization": "Goths",
+      "nRows": 40404
+    },
+    {
+      "aggNMatches": 53957,
+      "aggNWon": 28104,
+      "aggPlayRate": 0.021310385085376613,
+      "aggWinRate": 0.5209,
+      "civilization": "Huns",
+      "nRows": 53957
+    },
+    {
+      "aggNMatches": 40312,
+      "aggNWon": 19553,
+      "aggPlayRate": 0.015921275155433068,
+      "aggWinRate": 0.485,
+      "civilization": "Incas",
+      "nRows": 40312
+    },
+    {
+      "aggNMatches": 4,
+      "aggNWon": 4,
+      "aggPlayRate": 1.579805036260475e-06,
+      "aggWinRate": 1.0,
+      "civilization": "Indians",
+      "nRows": 4
+    },
+    {
+      "aggNMatches": 40660,
+      "aggNWon": 20160,
+      "aggPlayRate": 0.01605871819358773,
+      "aggWinRate": 0.4958,
+      "civilization": "Italians",
+      "nRows": 40660
+    },
+    {
+      "aggNMatches": 64727,
+      "aggNWon": 32614,
+      "aggPlayRate": 0.025564010145507944,
+      "aggWinRate": 0.5039,
+      "civilization": "Japanese",
+      "nRows": 64727
+    },
+    {
+      "aggNMatches": 67838,
+      "aggNWon": 33618,
+      "aggPlayRate": 0.026792703512459527,
+      "aggWinRate": 0.4956,
+      "civilization": "Khmer",
+      "nRows": 67838
+    },
+    {
+      "aggNMatches": 37365,
+      "aggNWon": 18566,
+      "aggPlayRate": 0.014757353794968163,
+      "aggWinRate": 0.4969,
+      "civilization": "Koreans",
+      "nRows": 37365
+    },
+    {
+      "aggNMatches": 61862,
+      "aggNWon": 30490,
+      "aggPlayRate": 0.024432474788286376,
+      "aggWinRate": 0.4929,
+      "civilization": "Lithuanians",
+      "nRows": 61862
+    },
+    {
+      "aggNMatches": 112460,
+      "aggNWon": 56031,
+      "aggPlayRate": 0.04441621859446326,
+      "aggWinRate": 0.4982,
+      "civilization": "Magyars",
+      "nRows": 112460
+    },
+    {
+      "aggNMatches": 34000,
+      "aggNWon": 17506,
+      "aggPlayRate": 0.013428342808214038,
+      "aggWinRate": 0.5149,
+      "civilization": "Malay",
+      "nRows": 34000
+    },
+    {
+      "aggNMatches": 47856,
+      "aggNWon": 24774,
+      "aggPlayRate": 0.018900787453820324,
+      "aggWinRate": 0.5177,
+      "civilization": "Malians",
+      "nRows": 47856
+    },
+    {
+      "aggNMatches": 56101,
+      "aggNWon": 28785,
+      "aggPlayRate": 0.02215716058481223,
+      "aggWinRate": 0.5131,
+      "civilization": "Mayans",
+      "nRows": 56101
+    },
+    {
+      "aggNMatches": 151823,
+      "aggNWon": 77357,
+      "aggPlayRate": 0.05996268500504353,
+      "aggWinRate": 0.5095,
+      "civilization": "Mongols",
+      "nRows": 151823
+    },
+    {
+      "aggNMatches": 90781,
+      "aggNWon": 46696,
+      "aggPlayRate": 0.035854070249190545,
+      "aggWinRate": 0.5144,
+      "civilization": "Persians",
+      "nRows": 90781
+    },
+    {
+      "aggNMatches": 47594,
+      "aggNWon": 23608,
+      "aggPlayRate": 0.018797310223945263,
+      "aggWinRate": 0.496,
+      "civilization": "Portuguese",
+      "nRows": 47594
+    },
+    {
+      "aggNMatches": 44791,
+      "aggNWon": 21233,
+      "aggPlayRate": 0.017690261844785737,
+      "aggWinRate": 0.474,
+      "civilization": "Saracens",
+      "nRows": 44791
+    },
+    {
+      "aggNMatches": 35460,
+      "aggNWon": 17556,
+      "aggPlayRate": 0.014004971646449111,
+      "aggWinRate": 0.4951,
+      "civilization": "Slavs",
+      "nRows": 35460
+    },
+    {
+      "aggNMatches": 50029,
+      "aggNWon": 23957,
+      "aggPlayRate": 0.019759016539768828,
+      "aggWinRate": 0.4789,
+      "civilization": "Spanish",
+      "nRows": 50029
+    },
+    {
+      "aggNMatches": 43697,
+      "aggNWon": 21603,
+      "aggPlayRate": 0.017258185167368496,
+      "aggWinRate": 0.4944,
+      "civilization": "Tatars",
+      "nRows": 43697
+    },
+    {
+      "aggNMatches": 44205,
+      "aggNWon": 21675,
+      "aggPlayRate": 0.017458820406973576,
+      "aggWinRate": 0.4903,
+      "civilization": "Teutons",
+      "nRows": 44205
+    },
+    {
+      "aggNMatches": 33273,
+      "aggNWon": 15275,
+      "aggPlayRate": 0.013141213242873697,
+      "aggWinRate": 0.4591,
+      "civilization": "Turks",
+      "nRows": 33273
+    },
+    {
+      "aggNMatches": 84972,
+      "aggNWon": 42557,
+      "aggPlayRate": 0.033559798385281274,
+      "aggWinRate": 0.5008,
+      "civilization": "Vietnamese",
+      "nRows": 84972
+    },
+    {
+      "aggNMatches": 42823,
+      "aggNWon": 22968,
+      "aggPlayRate": 0.016912997766945582,
+      "aggWinRate": 0.5363,
+      "civilization": "Vikings",
+      "nRows": 42823
+    },
+    {
+      "aggNMatches": 40199,
+      "aggNWon": 18841,
+      "aggPlayRate": 0.01587664566315871,
+      "aggWinRate": 0.4687,
+      "civilization": "Burgundians",
+      "nRows": 40199
+    },
+    {
+      "aggNMatches": 38267,
+      "aggNWon": 18777,
+      "aggPlayRate": 0.0151135998306449,
+      "aggWinRate": 0.4907,
+      "civilization": "Sicilians",
+      "nRows": 38267
+    },
+    {
+      "aggNMatches": 38995,
+      "aggNWon": 18466,
+      "aggPlayRate": 0.015401124347244307,
+      "aggWinRate": 0.4735,
+      "civilization": "Poles",
+      "nRows": 38995
+    },
+    {
+      "aggNMatches": 31528,
+      "aggNWon": 14624,
+      "aggPlayRate": 0.012452023295805064,
+      "aggWinRate": 0.4638,
+      "civilization": "Bohemians",
+      "nRows": 31528
+    },
+    {
+      "aggNMatches": 61425,
+      "aggNWon": 32154,
+      "aggPlayRate": 0.02425988108807492,
+      "aggWinRate": 0.5235,
+      "civilization": "Hindustanis",
+      "nRows": 61425
+    },
+    {
+      "aggNMatches": 27649,
+      "aggNWon": 13441,
+      "aggPlayRate": 0.010920007361891469,
+      "aggWinRate": 0.4861,
+      "civilization": "Dravidians",
+      "nRows": 27649
+    },
+    {
+      "aggNMatches": 29339,
+      "aggNWon": 14071,
+      "aggPlayRate": 0.01158747498971152,
+      "aggWinRate": 0.4796,
+      "civilization": "Bengalis",
+      "nRows": 29339
+    },
+    {
+      "aggNMatches": 29666,
+      "aggNWon": 14251,
+      "aggPlayRate": 0.011716624051425813,
+      "aggWinRate": 0.4804,
+      "civilization": "Gurjaras",
+      "nRows": 29666
+    },
+    {
+      "aggNMatches": 43345,
+      "aggNWon": 23520,
+      "aggPlayRate": 0.017119162324177574,
+      "aggWinRate": 0.5426,
+      "civilization": "Romans",
+      "nRows": 43345
+    },
+    {
+      "aggNMatches": 29516,
+      "aggNWon": 14004,
+      "aggPlayRate": 0.011657381362566046,
+      "aggWinRate": 0.4745,
+      "civilization": "Armenians",
+      "nRows": 29516
+    },
+    {
+      "aggNMatches": 34794,
+      "aggNWon": 16713,
+      "aggPlayRate": 0.013741934107911743,
+      "aggWinRate": 0.4803,
+      "civilization": "Georgians",
+      "nRows": 34794
+    },
+    {
+      "aggNMatches": 25762,
+      "aggNWon": 13824,
+      "aggPlayRate": 0.01017473433603559,
+      "aggWinRate": 0.5366,
+      "civilization": "Shu",
+      "nRows": 25762
+    },
+    {
+      "aggNMatches": 21996,
+      "aggNWon": 11449,
+      "aggPlayRate": 0.008687347894396352,
+      "aggWinRate": 0.5205,
+      "civilization": "Wu",
+      "nRows": 21996
+    },
+    {
+      "aggNMatches": 42372,
+      "aggNWon": 21140,
+      "aggPlayRate": 0.016734874749107214,
+      "aggWinRate": 0.4989,
+      "civilization": "Wei",
+      "nRows": 42372
+    },
+    {
+      "aggNMatches": 28160,
+      "aggNWon": 13590,
+      "aggPlayRate": 0.011121827455273745,
+      "aggWinRate": 0.4826,
+      "civilization": "Jurchens",
+      "nRows": 28160
+    },
+    {
+      "aggNMatches": 53646,
+      "aggNWon": 29265,
+      "aggPlayRate": 0.021187555243807363,
+      "aggWinRate": 0.5455,
+      "civilization": "Khitans",
+      "nRows": 53646
+    },
+    {
+      "aggNMatches": 9445,
+      "aggNWon": 4569,
+      "aggPlayRate": 0.003730314641870047,
+      "aggWinRate": 0.4837,
+      "civilization": "Mapuche",
+      "nRows": 9445
+    },
+    {
+      "aggNMatches": 8434,
+      "aggNWon": 3865,
+      "aggPlayRate": 0.0033310189189552117,
+      "aggWinRate": 0.4583,
+      "civilization": "Muisca",
+      "nRows": 8434
+    },
+    {
+      "aggNMatches": 12858,
+      "aggNWon": 6572,
+      "aggPlayRate": 0.005078283289059298,
+      "aggWinRate": 0.5111,
+      "civilization": "Tupi",
+      "nRows": 12858
+    },
+    {
+      "aggNMatches": 693,
+      "aggNWon": 374,
+      "aggPlayRate": 0.00027370122253212733,
+      "aggWinRate": 0.5397,
+      "civilization": "Saxons",
+      "nRows": 693
+    },
+    {
+      "aggNMatches": 1058,
+      "aggNWon": 486,
+      "aggPlayRate": 0.0004178584320908957,
+      "aggWinRate": 0.4594,
+      "civilization": "Varangians",
+      "nRows": 1058
+    },
+    {
+      "aggNMatches": 539,
+      "aggNWon": 284,
+      "aggPlayRate": 0.00021287872863609902,
+      "aggWinRate": 0.5269,
+      "civilization": "Danes",
+      "nRows": 539
+    }
+  ],
+  "sample": {
+    "field": "agg_n_matches",
+    "note": "本次聚合里每个文明的 agg_n_matches 都等于 n_rows（Number of rows）。接口说明 1v1 每次对阵存两行，双方各一行。因此这个数是该文明的玩家行数，不是独立对局数，也不能把单个文明的数除以 2。各文明之和等于行数合计，同样不是独立对局数。字段英文标签仍是 Match (Count)。",
+    "unit": "row",
+    "unitStatus": "verified-equal-n_rows"
+  },
+  "source": "AoE2 Insights",
+  "sourceUrl": "https://www.aoe2insights.com/stats/"
+}

@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/data-ladder-insights.json",
+  "title": "AoE2 Insights RM 1v1 civilization snapshot",
+  "type": "object",
+  "required": [
+    "kind",
+    "source",
+    "sourceUrl",
+    "queryUrl",
+    "fetchedAt",
+    "fetchedAtOrigin",
+    "rawSha256",
+    "rawFile",
+    "ladder",
+    "map",
+    "elo",
+    "patch",
+    "period",
+    "sample",
+    "lowSample",
+    "rows"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kind": { "const": "aoe2insights-match-ups" },
+    "source": { "type": "string", "minLength": 1 },
+    "sourceUrl": { "type": "string", "pattern": "^https://www\\.aoe2insights\\.com/" },
+    "queryUrl": { "type": "string", "pattern": "^https://www\\.aoe2insights\\.com/stats/api/match-ups/\\?" },
+    "fetchedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "fetchedAtOrigin": { "enum": ["http-date", "local-receipt"] },
+    "rawSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "rawFile": { "type": "string", "pattern": "^docs/data/insights-match-ups/rm1v1-map-(9|29)\\.json$" },
+    "ladder": {
+      "type": "object",
+      "required": ["id", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "const": 3 },
+        "label": { "const": "RM 1v1" }
+      }
+    },
+    "map": {
+      "type": "object",
+      "required": ["id", "key", "en", "zh"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "enum": [9, 29] },
+        "key": { "enum": ["rm-arabia", "arena"] },
+        "en": { "enum": ["Arabia", "Arena"] },
+        "zh": { "enum": ["阿拉伯", "竞技场"] }
+      }
+    },
+    "elo": {
+      "type": "object",
+      "required": ["filtered", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "filtered": { "const": false },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "patch": {
+      "type": "object",
+      "required": ["filtered", "id", "dateStatus", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "filtered": { "const": false },
+        "id": { "type": "null" },
+        "dateStatus": { "const": "absent" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "period": {
+      "type": "object",
+      "required": ["filtered", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "filtered": { "const": false },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "required": ["field", "unit", "unitStatus", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "field": { "const": "agg_n_matches" },
+        "unit": { "const": "row" },
+        "unitStatus": { "const": "verified-equal-n_rows" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "lowSample": {
+      "type": "object",
+      "required": ["threshold", "field", "status", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "threshold": { "const": 100 },
+        "field": { "const": "agg_n_matches" },
+        "status": { "const": "pending" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["civilization", "aggWinRate", "aggPlayRate", "aggNMatches", "nRows", "aggNWon"],
+        "additionalProperties": false,
+        "properties": {
+          "civilization": { "type": "string", "minLength": 1 },
+          "aggWinRate": { "type": "number", "minimum": 0, "maximum": 1 },
+          "aggPlayRate": { "type": "number", "minimum": 0, "maximum": 1 },
+          "aggNMatches": { "type": "integer", "minimum": 1 },
+          "nRows": { "type": "integer", "minimum": 1 },
+          "aggNWon": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  }
+}

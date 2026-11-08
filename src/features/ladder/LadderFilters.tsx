@@ -1,6 +1,7 @@
 import type { KeyboardEvent, ReactNode } from 'react';
 import type { LadderSnapshot } from '../../domain/ladder';
-import { eloFilterOptions, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
+import type { InsightsMapKey } from '../../domain/ladderInsights';
+import { eloFilterOptions, insightsMapOptions, type EloFilterOption, type LadderModeId, type MapFilterOption } from '../../domain/ladderQuery';
 import { Icon } from '../../shared/ui/Icon';
 
 export function HideLowSample({ checked, threshold, onChange }: { checked: boolean; threshold: number; onChange: (checked: boolean) => void }) {
@@ -17,20 +18,28 @@ export function LadderFilters({
   elo,
   arabia,
   team,
+  insightsMap,
+  insightsAvailable,
   onMode,
   onElo,
+  onMap,
   onEloRef,
 }: {
   mode: LadderModeId;
   elo: string;
   arabia: LadderSnapshot;
   team: LadderSnapshot;
+  insightsMap: InsightsMapKey | null;
+  insightsAvailable: readonly InsightsMapKey[];
   onMode: (mode: LadderModeId) => void;
   onElo: (option: EloFilterOption) => void;
+  onMap: (option: MapFilterOption) => void;
   onEloRef?: (id: string, node: HTMLButtonElement | null) => void;
 }) {
   const teamMode = mode === '4v4';
-  const eloOptions = eloFilterOptions(mode, elo, arabia, team);
+  const insights = insightsMap != null && mode === 'arabia1v1';
+  const eloOptions = eloFilterOptions(mode, elo, arabia, team).map((option) => (insights ? { ...option, enabled: false, current: false } : option));
+  const mapOptions = insightsMapOptions(mode, insightsMap, insightsAvailable);
   const checked = eloOptions.some((option) => option.current);
   const onEloKey = (event: KeyboardEvent<HTMLButtonElement>, option: EloFilterOption) => {
     if (event.altKey || event.ctrlKey || event.metaKey) return;
@@ -61,14 +70,16 @@ export function LadderFilters({
       <div className="ladder-filter-row">
         <span className="ladder-pill" data-testid="ladder-period-static">
           <Icon name="calendar" />
-          {teamMode ? (
+          {insights ? (
+            '全时段'
+          ) : teamMode ? (
             <>
               近 <span className="nw">90 天</span>
             </>
           ) : (
             '整段快照'
           )}
-          <span className="ladder-fixed">当前快照</span>
+          <span className="ladder-fixed">{insights ? '未按补丁筛选' : '当前快照'}</span>
         </span>
       </div>
       <span className="ladder-filter-label">天梯分段</span>
@@ -102,11 +113,34 @@ export function LadderFilters({
       </div>
       <span className="ladder-filter-label">地图</span>
       <div className="ladder-filter-row">
-        <span className="ladder-pill" data-testid="ladder-map-static">
-          <Icon name="map" />
-          {teamMode ? '全图' : '阿拉伯 · 固定'}
-          <span className="ladder-fixed">当前快照</span>
-        </span>
+        {insightsMap == null && (
+          <span className="ladder-pill" data-testid="ladder-map-static">
+            <Icon name="map" />
+            {teamMode ? '全图' : '阿拉伯 · 固定'}
+            <span className="ladder-fixed">当前快照</span>
+          </span>
+        )}
+        <div className="ladder-filter-row" role="radiogroup" aria-label="地图" data-testid="ladder-map">
+          {mapOptions.map((option) => (
+            <button
+              key={option.key}
+              type="button"
+              role="radio"
+              aria-checked={option.current}
+              disabled={!option.enabled}
+              className="ladder-map-option"
+              data-testid={`ladder-map-${option.key}`}
+              data-map={option.key}
+              onClick={() => {
+                if (option.enabled) onMap(option);
+              }}
+            >
+              <Icon name="map" />
+              <span>{option.label}</span>
+              <span className="ladder-fixed">{option.enabled ? option.note : '暂无数据'}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
