@@ -78,6 +78,13 @@ export interface ScoutingContent {
   scenarios: ScoutingScenario[];
 }
 export const SCOUTING_CONTENT = readValidatedJson(rawContent, validateScouting, '侦察内容');
+
+/** 内容基期与当前数值口径分开显示；内容未按新补丁重录时不冒充当前版本（issue 793）。 */
+export const scoutingVersionParts = (contentVersion: string, currentVersionLabel: string, currentBuild?: number) => ({
+  content: `内容基期 ${contentVersion}`,
+  current: `数值口径 ${currentVersionLabel}`,
+  note: currentBuild ? `内容未按 ${currentBuild} 重录` : null,
+});
 export const SCOUTING_STATE_ZH: Record<ScoutingObservationState, string> = {
   unknown: '未知',
   unseen: '没看到',

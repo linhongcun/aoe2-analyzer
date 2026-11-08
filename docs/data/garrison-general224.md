@@ -2,7 +2,7 @@
 
 `python3 scripts/garrison_general_build.py` 生成 `src/data/garrison_general.json` 与轻量入口清单 `garrison_hosts.json`；`--check` 比较完整再生成结果。旧 #218 的导出脚本和 JSON 保持独立。
 
-所有游戏数字来自 `scripts/data_sources.json` 固定的 DE Update 185872 `.dat`：`SiegeEngineers/auto-mods@0c38027504532826c9922e4db77e2c1d33554291`，SHA256 `4aa2f0a719e88e5f1502517eddb27c669aeb40c2fe9d8c4f3eec7751c01e7baa`。解析器沿用固定的 `genieutils-py==0.1.2`。缓存和游戏数据文件不提交。
+所有游戏数字来自 `scripts/data_sources.json` 固定的 DE Update 188329 `.dat`：`SiegeEngineers/auto-mods@e293dc106b0f3b0ceac2db98409fbcc5c921190b`，SHA256 `d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f`。解析器沿用固定的 `genieutils-py==0.1.2`。缓存和游戏数据文件不提交。
 
 站内单位、建筑中英文和可用性沿用站内生成目录；新增对象先查询同一固定版本的科技树语言表。该语言表是精选子集，缺少牧畜、国王、圣物等名称时，脚本按 `.dat` 内部名称直接翻译为中文，并在 `extra_label` 中保存这些文字映射。文字映射不提供游戏数值。
 

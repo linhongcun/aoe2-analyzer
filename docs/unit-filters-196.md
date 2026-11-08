@@ -1,6 +1,6 @@
 # 单位目录文明与兵种筛选（#196）
 
-文明按当前固定游戏版本 DE Update 185872 的 `Unit.civs` 判断，表示该文明科技树中可用的实际记录，不计盟友解锁、招降或战役赠予。来源为 `src/data/units.json`，上游版本见 `scripts/data_sources.json`。不从生产建筑或文明描述推断可用性。
+文明按当前固定游戏版本 DE Update 188329 的 `Unit.civs` 判断，表示该文明科技树中可用的实际记录，不计盟友解锁、招降或战役赠予。来源为 `src/data/units.json`，上游版本见 `scripts/data_sources.json`。不从生产建筑或文明描述推断可用性。
 
 兵种读取同一记录的原始护甲类别 `Unit.cls`，复用 `unitClass.ts` 中已有判定，不改变战斗、科技效果计算。分类允许交叉：
 

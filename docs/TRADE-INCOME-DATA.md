@@ -4,7 +4,7 @@
 
 可训练性使用 `productionBuildings` 的固定单位、建筑、文明与时代树；造价使用 `discountedCost` 的基础价格及已核常驻折扣，不自动研究降价科技，不引入盟友折扣。手填价格必须注明来源并逐资源填写，确认免费可填零，未知值不回退为零。各资源投资独立列出，不相加成黄金回本。
 
-`scripts/trade_income_build.py` 从 `scripts/data_sources.json` 固定的 DE185872 `.dat` 导出车 #128、船 #17 的人口：`-sum(unit.resource_storages[type=4].amount)`，并验证全部文明原始模板一致。运行 `python3 scripts/trade_income_build.py --check` 可复现。它不运行游戏客户端；`engineVerifiedInPinnedBuild=false`。
+`scripts/trade_income_build.py` 从 `scripts/data_sources.json` 固定的 DE 188329 `.dat` 导出车 #128、船 #17 的人口：`-sum(unit.resource_storages[type=4].amount)`，并验证全部文明原始模板一致。运行 `python3 scripts/trade_income_build.py --check` 可复现。它不运行游戏客户端；`engineVerifiedInPinnedBuild=false`。
 
 生产目标嵌入完整 `encodeProduction` 结果，通过额外严格结构校验后由 `calculateProduction` 计算未舍入的每分钟黄金消耗，不保存易失真的显示值。来源损坏时停止结果，允许显式切手动；外层链接损坏独立锁定，只可重置。分享格式 `v=1`，完整编码每个参数；拒绝重复、未知、缺失参数与不合法数字。编辑中的空值或负数只存在本地草稿，保持可修改，停止计算和复制，不覆盖有效链接。
 
