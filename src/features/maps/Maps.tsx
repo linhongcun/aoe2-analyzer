@@ -69,7 +69,7 @@ export default function Maps() {
 
   return (
     <section className="pane map-guide">
-      <h2>地图与开局</h2>
+      <h1 className="page-heading">地图与开局</h1>
       <p>
         收录 <span className="num nw">{catalog.maps.length} 张</span>标准地图，常见地图优先排列。选择地图，查看预览、地形与开局提示。
       </p>

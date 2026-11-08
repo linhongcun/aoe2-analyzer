@@ -7,7 +7,7 @@ import { CivChip, DlcImg } from '../../../shared/ui/art';
 export default function DlcView() {
   return (
     <section id="dlcs" className="pane">
-      <ListHead title="DLC / 资料片" desc="文明历史首发列表；版本标签不等于当前购买要求" />
+      <ListHead level={1} title="DLC / 资料片" desc="文明历史首发列表；版本标签不等于当前购买要求" />
       <p>
         想看当前本体包含哪些内容、哪些需要另购，请去
         <Link className="community-tool-entry" to="/content-guide">

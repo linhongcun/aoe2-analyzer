@@ -108,7 +108,7 @@ export default function Patches() {
   if (!id)
     return (
       <section className="pane patches">
-        <h2>版本补丁</h2>
+        <h1 className="page-heading">版本补丁</h1>
         <p>按版本列出加强、削弱和新内容；历史改动来自当时官方记录。</p>
         <p className="note">
           正在分批收录 DE

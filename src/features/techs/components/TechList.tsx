@@ -29,7 +29,7 @@ export default function TechList() {
   );
   return (
     <section id="techs" className="pane">
-      <ListHead title="科技" desc="全部科技 · 按类别、时代、首发版本、建筑筛选" />
+      <ListHead level={1} title="科技" desc="全部科技 · 按类别、时代、首发版本、建筑筛选" />
       <CatalogFilters
         search={<SearchInput id="tq" value={q} onChange={setQ} placeholder="搜索科技（名称/效果）" />}
         count={

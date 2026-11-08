@@ -52,7 +52,7 @@ export async function coldStaticPage(page: Page, route: string, ready: (page: Pa
   await page.goto(`./#${route}`, { waitUntil: 'networkidle' });
   await expect(page.locator('main')).not.toBeEmpty();
   await expect(page.locator('main h1,main h2').first()).toBeVisible();
-  if (route.startsWith('/builds?bo=') && !new URLSearchParams(route.split('?')[1]).has('view')) await expect(page.locator('main h2.tl-title')).toHaveText(/\S/);
+  if (route.startsWith('/builds?bo=') && !new URLSearchParams(route.split('?')[1]).has('view')) await expect(page.locator('main h1.tl-title')).toHaveText(/\S/);
   await page.waitForLoadState('networkidle');
   await page.evaluate(() => document.fonts.ready.then(() => undefined));
   await ready(page, route);

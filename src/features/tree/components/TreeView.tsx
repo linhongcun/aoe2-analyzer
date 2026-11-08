@@ -82,7 +82,7 @@ export default function TreeView() {
     eb = m === '2' ? extras(b.en, a.en) : [];
   return (
     <section id="tree" className="pane">
-      <ListHead title="科技树" desc="按建筑分列、按时代分行；可对比两个文明" />
+      <ListHead level={1} title="科技树" desc="按建筑分列、按时代分行；可对比两个文明" />
       <div className="bar fbar">
         <CivPicker id="tra" label="文明" value={a.en} onChange={(en) => nav('/tree/' + en, { replace: true })} />
         <select id="trm" value={m} onChange={(e) => setM(e.target.value)}>
