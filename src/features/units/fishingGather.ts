@@ -25,6 +25,7 @@ export interface EcoEffectStat {
   v?: unknown;
 }
 
+/** UI 视图切片：防御式解析 eco.json，只声明本页读取的字段；不是 EcoData 的整表副本。 */
 export interface FishingEcoSlice {
   meta?: { patch?: unknown; tasks?: unknown };
   fishingShip?: FishingShipStat | null;
