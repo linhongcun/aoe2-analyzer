@@ -166,7 +166,8 @@ describe('#243 agreements, identities and full URL restoration', () => {
   it('supports 2–4 stable identities and duplicate civs without assigning positions or tasks', () => {
     let plan = defaultTeamPlan();
     expect(plan.players.every((p) => p.position === 'unspecified')).toBe(true);
-    expect(plan.players.map((p) => p.civ)).toEqual(['Franks', 'Franks']);
+    // #769：默认文明是显式「未选择」，不替玩家确认阵容。
+    expect(plan.players.map((p) => p.civ)).toEqual(['', '']);
     plan = addPlanPlayer(addPlanPlayer(plan));
     expect(addPlanPlayer(plan)).toBe(plan);
     plan.phases[0]!.tasks = [{ kind: 'support', owners: ['p2', 'p3'], intentionalGap: false, gapReason: '', note: '' }];

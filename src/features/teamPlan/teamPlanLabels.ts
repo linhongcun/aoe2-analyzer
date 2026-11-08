@@ -1,3 +1,4 @@
+import { civs } from '../../data';
 import type { ProductionContext } from '../../domain/production';
 import type { PlanAge, PlanPlayer } from '../../domain/teamPlan';
 
@@ -5,6 +6,9 @@ export const AGE_NAMES: Record<PlanAge, string> = { 2: '封建', 3: '城堡', 4:
 export const OPEN_NAMES = { unspecified: '未指定', open: '开放陆地', closed: '封闭陆地', 'mixed-land': '混合陆地条件' } as const;
 export const unique = (values: number[]) => [...new Set(values)];
 export const playerLabel = (player: PlanPlayer) => player.name || player.id.toUpperCase();
+export const knownCiv = (civ: string) => civs.some((c) => c.en === civ);
+/** 空文明代表玩家还没选；界面与打印稿都显示「未选择」，不能回落到某个默认文明（issue 769）。 */
+export const civLabel = (civ: string) => (civ ? (civs.find((c) => c.en === civ)?.zh ?? civ) : '未选择');
 export const labelFor = (ctx: ProductionContext, kind: 'unit' | 'tech' | 'building', id: number) =>
   (kind === 'unit' ? ctx.core.unitById[id] : kind === 'tech' ? ctx.core.techById[id] : ctx.core.buildingById[id])?.zh ?? `未知 ID ${id}`;
 /** issue 271：同名但生产建筑和英文名都相同、规则区分不了的单位，在这里写玩家能看懂的专门标签（Steve 2026-10-22：不显示编号） */

@@ -84,11 +84,12 @@ export const emptyPlayerPhase = (playerId: PlayerId): PlayerPhase => ({
   supply: 'unchecked',
   supplyNote: '',
 });
+/** Empty civ means the player has not chosen a civ; it must never print as a default civ (issue 769). */
 export function defaultTeamPlan(): TeamPlan {
   const players: PlanPlayer[] = ['p1', 'p2'].map((id) => ({
     id: id as PlayerId,
     name: id.toUpperCase(),
-    civ: 'Franks',
+    civ: '',
     position: 'unspecified',
     positionNote: '',
   }));
@@ -123,7 +124,7 @@ export function addPlanPlayer(plan: TeamPlan): TeamPlan {
   if (!id) return plan;
   return {
     ...plan,
-    players: [...plan.players, { id, name: id.toUpperCase(), civ: 'Franks', position: 'unspecified', positionNote: '' }],
+    players: [...plan.players, { id, name: id.toUpperCase(), civ: '', position: 'unspecified', positionNote: '' }],
     phases: plan.phases.map((phase) => ({ ...phase, players: [...phase.players, emptyPlayerPhase(id)] })),
   };
 }
@@ -378,7 +379,9 @@ export function checkPlanForce(ctx: ProductionContext, player: PlanPlayer, phase
 /** Semantic problems preserve the complete object; the editor never silently drops references. */
 export function teamPlanErrors(plan: TeamPlan, ctx: ProductionContext): string[] {
   const errors: string[] = [];
-  for (const player of plan.players) if (!civs.some((c) => c.en === player.civ)) errors.push(`${player.id}：未知文明 ${player.civ}，请重新选择。`);
+  // 空文明是「未选择」的初始状态，不是损坏引用；只有非空却查不到的文明才提示重选。
+  for (const player of plan.players)
+    if (player.civ && !civs.some((c) => c.en === player.civ)) errors.push(`${player.id}：未知文明 ${player.civ}，请重新选择。`);
   for (const phase of plan.phases) {
     for (const row of phase.players) {
       const player = plan.players.find((p) => p.id === row.playerId)!;

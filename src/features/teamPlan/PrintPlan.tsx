@@ -1,4 +1,3 @@
-import { civs } from '../../data';
 import type { ProductionContext } from '../../domain/production';
 import {
   FORCE_STATUS_NAMES,
@@ -12,7 +11,7 @@ import {
   type TeamPlan,
 } from '../../domain/teamPlan';
 import { Sources } from './PlanSources';
-import { AGE_NAMES, OPEN_NAMES, labelFor, playerLabel } from './teamPlanLabels';
+import { AGE_NAMES, OPEN_NAMES, civLabel, labelFor, playerLabel } from './teamPlanLabels';
 
 export function PrintPlan({ ctx, plan }: { ctx: ProductionContext; plan: TeamPlan }) {
   const names = (ids: number[], kind: 'unit' | 'tech' | 'building') => (ids.length ? ids.map((id) => labelFor(ctx, kind, id)).join('、') : '未确认');
@@ -36,8 +35,7 @@ export function PrintPlan({ ctx, plan }: { ctx: ProductionContext; plan: TeamPla
       )}
       {plan.players.map((p) => (
         <p key={p.id}>
-          {p.id.toUpperCase()} {playerLabel(p)} · {civs.find((c) => c.en === p.civ)?.zh ?? p.civ} · {POSITION_NAMES[p.position]} ·{' '}
-          {p.positionNote || '位置补充未填写'}
+          {p.id.toUpperCase()} {playerLabel(p)} · {civLabel(p.civ)} · {POSITION_NAMES[p.position]} · {p.positionNote || '位置补充未填写'}
         </p>
       ))}
       {plan.phases.map((phase) => (
