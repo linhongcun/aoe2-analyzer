@@ -4,6 +4,7 @@ import { civs } from '../../data';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { CostView } from '../../shared/ui/art';
+import { Breadcrumbs } from '../../shared/ui/layout';
 import { tradeIncomeProductionHref } from '../../domain/tradeIncome';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import {
@@ -146,6 +147,7 @@ function ProductionBody({
     update({ ...config, rows: config.rows.map((r, i) => (i === index ? { ...r, ...fields } : r)) });
   return (
     <section className="pane production-page" data-testid="production-page">
+      <Breadcrumbs />
       <header className="production-heading">
         <div>
           <h1>持续生产</h1>

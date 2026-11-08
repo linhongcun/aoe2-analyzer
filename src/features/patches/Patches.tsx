@@ -5,6 +5,7 @@ import { usePatchArchives } from '../../data/patchHistory';
 import { filterPatch, groupTreeChanges, patchTarget, PATCH_KINDS, PATCH_TYPES, type PatchKind } from '../../domain/patches';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { NumericText } from '../../shared/ui/PatchHistory';
+import { Breadcrumbs } from '../../shared/ui/layout';
 import { MountedCrossbowPresets } from './MountedCrossbowPresetCards';
 import './patches.css';
 
@@ -108,6 +109,7 @@ export default function Patches() {
   if (!id)
     return (
       <section className="pane patches">
+        <Breadcrumbs />
         <h1 className="page-heading">版本补丁</h1>
         <p>按版本列出加强、削弱和新内容；历史改动来自当时官方记录。</p>
         <p className="note">

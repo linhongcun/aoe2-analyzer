@@ -20,6 +20,7 @@ import { AGE_ZH } from '../../domain/ratings';
 import { Icon } from '../../shared/ui/Icon';
 import { Loading } from '../../shared/ui/widgets';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
+import { Breadcrumbs } from '../../shared/ui/layout';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './garrisonHealing.css';
 
@@ -129,6 +130,7 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
 
   return (
     <section className="pane healing-page" data-testid="garrison-healing-page">
+      <Breadcrumbs />
       <header className="healing-heading">
         <div>
           <h1>驻军回血</h1>
