@@ -1,4 +1,4 @@
-/** 数据版本信息（scripts/data_sources.json 在构建时注入） */
+/** 数据版本信息（构建时注入；当前固定来源见 src/data/sources.ts） */
 export interface SourcePin {
   repo: string;
   commit: string;

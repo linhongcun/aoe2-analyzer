@@ -1,6 +1,6 @@
 /** Issue 243: explicit shared agreements, never a team score or automatic readiness claim. */
 import content from '../content/team-plan.json';
-import teachingSources from '../../scripts/data_sources.json';
+import { DATA_SOURCES } from '../data/sources';
 import shapes from '../data/garrison_general.json';
 import { civs } from '../data';
 import { DATA_PATCH_BUILD } from '../data/meta';
@@ -26,7 +26,7 @@ export const PLAN_SEARCH_LIMIT = PLAN_TOKEN_LIMIT + 32;
 export const TEAM_PLAN_UNIT_IDS: readonly number[] = content.unitIds;
 export const TEAM_PLAN_SOURCES = content.sources;
 export const TEAM_PLAN_CHECKED = content.checked;
-export const TEAM_PLAN_COMPATIBILITY = reviewedTeachingContent188329('team-plan', content, teachingSources) ? TEACHING_COMPATIBILITY_188329 : null;
+export const TEAM_PLAN_COMPATIBILITY = reviewedTeachingContent188329('team-plan', content, DATA_SOURCES) ? TEACHING_COMPATIBILITY_188329 : null;
 export interface PlanPlayer {
   id: PlayerId;
   name: string;

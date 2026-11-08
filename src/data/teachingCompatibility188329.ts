@@ -1,4 +1,4 @@
-import type sources from '../../scripts/data_sources.json';
+import type { DataSources } from './sources';
 
 /** A one-patch review of two unchanged catalogues, never a migration of saved plans.
  * Exact original bytes are SHA-256 checked in teachingCompatibility486.test.ts.
@@ -91,7 +91,7 @@ export const TEACHING_COMPATIBILITY_188329 = {
 } as const;
 
 type TeachingCatalog = keyof typeof TEACHING_COMPATIBILITY_188329.content;
-export function reviewedTeachingContent188329(catalog: TeachingCatalog, content: unknown, pins: typeof sources): boolean {
+export function reviewedTeachingContent188329(catalog: TeachingCatalog, content: unknown, pins: DataSources): boolean {
   const review = TEACHING_COMPATIBILITY_188329;
   if (pins.patch.build !== review.approvedPatch) return false;
   for (const name of ['dat', 'aoe2techtree', 'halfon'] as const) {

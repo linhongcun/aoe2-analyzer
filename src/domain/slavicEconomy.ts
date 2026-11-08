@@ -1,4 +1,4 @@
-/** Fixed DE185872 Slavic farm supply and independently removable tree bonus. */
+/** Evidence pinned DE185872; runtime DE188329 Slavic farm supply and independently removable tree bonus. */
 import type { BuildOrder } from './buildOrder';
 import type { EcoData } from './buildSim';
 

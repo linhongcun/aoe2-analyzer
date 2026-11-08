@@ -1,4 +1,4 @@
-/** Fixed DE185872 Georgian infrastructure and independently removable source groups. */
+/** Evidence pinned DE185872; runtime DE188329 Georgian infrastructure and independently removable source groups. */
 import type { BuildOrder } from './buildOrder';
 import type { EcoData } from './buildSim';
 import { roundHalfPrice } from './roundHalfPrice';
