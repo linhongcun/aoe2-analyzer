@@ -28,6 +28,7 @@ export const DATA_CHECKS = [
   ['pinyin-check', 'npm', ['run', 'pinyin:check']],
   python('effects', 'scripts/effects_build.py'),
   diff('effects-diff', 'src/data/effects.json'),
+  ['effects-audit', 'npx', ['vite-node', 'scripts/effects_audit.ts', '--check']],
   python('eco', 'scripts/eco_build.py'),
   diff('eco-diff', 'src/data/eco.json', 'docs/ECO-DATA.md'),
   ...[
