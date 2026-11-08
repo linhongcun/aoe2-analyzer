@@ -6,7 +6,7 @@
  * 意大利丝绸之路（资源 78 设为 0.1）不在本条范围，读取时不扫其它科技。
  */
 import { DAT, type DatFile } from '../../domain/datEffects';
-import ecoRaw from '../../data/raw/eco';
+import { ECO } from '../../data/eco';
 
 export const MARKET_BUILDING_ID = 84;
 export const MARKET_FEE_ANCHOR = 'market-fees';
@@ -168,7 +168,7 @@ function ugcDefault(res: number, baselineExported: boolean): MarketDefault | nul
   return { ...rate(res, UGC_DEFAULT_RATE), source: 'ugc' };
 }
 
-export function marketFeeFacts(file: DatFile = DAT, eco: MarketEco = ecoRaw as unknown as MarketEco): MarketFeeFacts {
+export function marketFeeFacts(file: DatFile = DAT, eco: MarketEco = ECO): MarketFeeFacts {
   const baselineExported = exportHasMarketBaseline(file, eco);
   return {
     patch: patchOf(file, eco),

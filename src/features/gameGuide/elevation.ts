@@ -3,7 +3,7 @@
  * 悬崖没有专用字段，文案保持待确认，不补写乘子。
  */
 import civsRaw from '../../data/raw/civs';
-import ecoRaw from '../../data/raw/eco';
+import { ECO } from '../../data/eco';
 
 export const ELEVATION_HIGHER_RES = 211;
 export const ELEVATION_LOWER_RES = 212;
@@ -161,7 +161,7 @@ function notable(civ: ElevationCiv): boolean {
   return odd(civ.higherAdd) || odd(civ.lowerAdd);
 }
 
-export function elevationFacts(eco: ElevationEco = ecoRaw as ElevationEco, civs: readonly ElevationCivRow[] = civsRaw as ElevationCivRow[]): ElevationFacts {
+export function elevationFacts(eco: ElevationEco = ECO, civs: readonly ElevationCivRow[] = civsRaw as ElevationCivRow[]): ElevationFacts {
   const patch = eco.meta?.patch ?? '';
   const civEco = eco.civEco ?? {};
   const zero: ResourceAdd = { state: 'value', value: 0 };

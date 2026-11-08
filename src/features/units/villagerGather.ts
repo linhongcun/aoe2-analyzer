@@ -2,7 +2,7 @@
  * issue 730：只读展示 eco.json villager.tasks / villager.female 的基准 workRate 与携带量。
  * 不计算往返，不改持续生产的收入口径，缺数字标待确认。
  */
-import ecoRaw from '../../data/raw/eco';
+import { ECO } from '../../data/eco';
 
 export { VILLAGER_UNIT_ID } from '../../domain/gameIds';
 
@@ -62,7 +62,7 @@ export function formatGatherNumber(value: number): string {
   return Object.is(value, -0) ? '0' : String(value);
 }
 
-export function villagerGatherBaseline(source: VillagerEcoSlice = ecoRaw as unknown as VillagerEcoSlice): VillagerGatherBaseline {
+export function villagerGatherBaseline(source: VillagerEcoSlice = ECO): VillagerGatherBaseline {
   const tasks = source.villager?.tasks ?? {};
   const female = source.villager?.female ?? {};
   const seen = new Set<string>();

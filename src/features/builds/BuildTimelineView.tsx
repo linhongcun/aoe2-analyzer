@@ -3,7 +3,7 @@ import { sharePageUrl } from '../../domain/sharePage';
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Download, TriangleAlert as Warn, Link2, Settings2, Share2, X } from 'lucide-react';
-import eco from '../../data/raw/eco';
+import { ECO as eco } from '../../data/eco';
 import units from '../../data/raw/units';
 import { buildOrders } from '../../data/buildOrders';
 import { civByEn } from '../../data';
@@ -20,7 +20,7 @@ import { TimelineSettings } from './TimelineSettings';
 import { TimelineChart } from './TimelineChart';
 import { TimelineSteps } from './TimelineSteps';
 import { TimelineSummary } from './TimelineSummary';
-import { civSimNotes, noHouseCompare, simulateBuild, WALK, type EcoData, type UpgradeData } from '../../domain/buildSim';
+import { civSimNotes, noHouseCompare, simulateBuild, WALK, type UpgradeData } from '../../domain/buildSim';
 import { Breadcrumbs } from '../../shared/ui/layout';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { SHARE_DISABLED_NOTE, buildShareCard } from './shareCard';
@@ -42,29 +42,17 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   const unsupported = !!q.civ && !simSupport(q.civ);
   const simCiv = q.civ && !unsupported ? q.civ : 'Generic';
   const displayOrder = useMemo(
-    () =>
-      polishBuildOrder(
-        mapucheBuildOrder(
-          georgianBuildOrder(armenianBuildOrder(bo, simCiv, eco as unknown as EcoData), simCiv, eco as unknown as EcoData),
-          simCiv,
-          eco as unknown as EcoData,
-        ),
-        simCiv,
-        eco as unknown as EcoData,
-      ),
+    () => polishBuildOrder(mapucheBuildOrder(georgianBuildOrder(armenianBuildOrder(bo, simCiv, eco), simCiv, eco), simCiv, eco), simCiv, eco),
     [bo, simCiv],
   );
-  const tl = useMemo(
-    () => simulateBuild(bo, simCiv, eco as unknown as EcoData, UPS, { walkTiles: q.dist, autoHouses: q.house }),
-    [bo, simCiv, q.dist, q.house],
-  );
+  const tl = useMemo(() => simulateBuild(bo, simCiv, eco, UPS, { walkTiles: q.dist, autoHouses: q.house }), [bo, simCiv, q.dist, q.house]);
   const v = useMemo(() => buildView(tl, (id) => UNIT_ZH[id] ?? id), [tl]);
   // #42 匈奴（huns-flag-* 稿）：只有文明被支持、按它计算且它不需要房子时才出现；置灰时 simCiv 是 Generic，这里恒为 false
   const noHouses = tl.noHouses;
   const cartUnits = tl.civ === 'Armenians' || tl.civ === 'Georgians';
   const noNeedZh = `${civByEn(simCiv)?.zh ?? simCiv}不需要`;
   const genericTl = useMemo(
-    () => (noHouses ? simulateBuild(bo, 'Generic', eco as unknown as EcoData, UPS, { walkTiles: q.dist, autoHouses: q.house }) : null),
+    () => (noHouses ? simulateBuild(bo, 'Generic', eco, UPS, { walkTiles: q.dist, autoHouses: q.house }) : null),
     [noHouses, bo, q.dist, q.house],
   );
   const {
@@ -87,12 +75,10 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
   const target = v.ages.find((a) => a.age === (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]) ?? v.ages[v.ages.length - 1];
   const targetZh = AGE_ZH[bo.target.age]!;
   const civLabel = simCiv !== 'Generic' ? `按${civByEn(simCiv)?.zh ?? simCiv}计` : '按通用计';
-  const civNotes = useMemo(() => (simCiv !== 'Generic' ? civSimNotes(eco as unknown as EcoData, simCiv, bo.id) : []), [simCiv, bo.id]);
+  const civNotes = useMemo(() => (simCiv !== 'Generic' ? civSimNotes(eco, simCiv, bo.id) : []), [simCiv, bo.id]);
   const sel = q.step !== null ? tl.steps[q.step] : undefined;
   const sumT = summaryText(v.top, targetZh);
-  const cmp = genericTl
-    ? noHouseCompare(tl, genericTl, eco as unknown as EcoData, simCiv, (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]!)
-    : null;
+  const cmp = genericTl ? noHouseCompare(tl, genericTl, eco, simCiv, (['', '', 'feudal', 'castle', 'imperial'] as const)[bo.target.age]!) : null;
   const cmpText = cmp ? noHouseCompareText(cmp, targetZh) : null;
   const changed = (q.civ ? 1 : 0) + (q.dist !== WALK.default ? 1 : 0) + (q.house ? 0 : 1);
   const source = visibleSources(bo.sources)[0]?.title;

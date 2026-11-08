@@ -5,7 +5,7 @@
  * 马来养鱼场读取 civEco.Malay 对资源 88 的 set。
  * 不改 eco.json，不算采集速率，不做配田或补种。
  */
-import ecoRaw from '../../data/raw/eco';
+import { ECO } from '../../data/eco';
 
 export const FARM_BUILDING_ID = 50;
 export { FISH_TRAP_BUILDING_ID } from '../../domain/gameIds';
@@ -142,7 +142,7 @@ function malayFishTrap(source: FoodEcoSlice): MalayFishTrapFood | null {
   return { tech: MALAY_FISH_TRAP_TECH, value, name: text(hit.name), triple: value === UGC_FISH_TRAP_FOOD_DEFAULT * 3 };
 }
 
-export function farmFoodAmount(source: FoodEcoSlice = ecoRaw as unknown as FoodEcoSlice): FarmFoodAmount {
+export function farmFoodAmount(source: FoodEcoSlice = ECO): FarmFoodAmount {
   const fromUgc = chineseFromUgc(source);
   return {
     steps: chain(UGC_FARM_FOOD_DEFAULT, source),
@@ -152,7 +152,7 @@ export function farmFoodAmount(source: FoodEcoSlice = ecoRaw as unknown as FoodE
   };
 }
 
-export function fishTrapFoodAmount(source: FoodEcoSlice = ecoRaw as unknown as FoodEcoSlice): FishTrapFoodAmount {
+export function fishTrapFoodAmount(source: FoodEcoSlice = ECO): FishTrapFoodAmount {
   return {
     base: UGC_FISH_TRAP_FOOD_DEFAULT,
     malay: malayFishTrap(source),

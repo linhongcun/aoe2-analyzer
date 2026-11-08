@@ -4,7 +4,7 @@
  * 格鲁吉亚团队加成只读 eco.json civEco.Georgians 的 team 行，并与 effects.json 同一条 res 271 mul 对上。
  * 城镇中心、城门复合体倍率和固定每分钟修复量没有单独导出；对不上的 270/271 效果也不解释成这些数字。
  */
-import ecoRaw from '../../data/raw/eco';
+import { ECO } from '../../data/eco';
 import { DAT, type DatFile } from '../../domain/datEffects';
 
 export const UNIT_REPAIR_RES = 270;
@@ -118,7 +118,7 @@ function georgianMul(file: DatFile, eco: RepairEco): RepairMul | null {
   return { res: BUILDING_REPAIR_RES, op: 'mul', v: value, text: `×${formatRepairFactor(value)}` };
 }
 
-export function repairCostFacts(file: DatFile = DAT, eco: RepairEco = ecoRaw as unknown as RepairEco): RepairCostFacts {
+export function repairCostFacts(file: DatFile = DAT, eco: RepairEco = ECO): RepairCostFacts {
   const ecoHits: RepairEffect[] = [];
   const effectHits: RepairEffect[] = [];
   walk(eco, ecoHits);

@@ -3,7 +3,7 @@
  * 数字从固定数据包 eco.json 读出。标准开局黄金不在文明资源向量里，见设计说明。
  * 瓦兰吉资源 298 的原始字段不在这里公布：玩法比例缺少可核的函数体。
  */
-import ecoRaw from '../../data/raw/eco';
+import { ECO } from '../../data/eco';
 import { AGE_TECH_IDS } from '../../domain/gameIds';
 
 export const ARENA_CASTLE_CIVS = ['Muisca', 'Ethiopians', 'Varangians'] as const;
@@ -249,7 +249,7 @@ function modelExtra(id: string, label: string, need: number, loomPaid = 0): Aren
   return { id, label, pending: true, parts };
 }
 
-export function arenaCastleGold(civ: string, eco: ArenaEco = ecoRaw as ArenaEco): ArenaCastleGold | null {
+export function arenaCastleGold(civ: string, eco: ArenaEco = ECO): ArenaCastleGold | null {
   if (!ARENA_CASTLE_CIVS.includes(civ as ArenaCastleCiv)) return null;
   const patch = patchOf(eco);
   const rows = rowsOf(eco, civ);
