@@ -5,7 +5,7 @@ import { img } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { useSearchIndex } from '../hooks';
 
-const KIND = { page: '页面', civ: '文明', unit: '单位', tech: '科技', building: '建筑', bonus: '加成', term: '术语' } as const;
+const KIND = { page: '页面', build: '开局', civ: '文明', unit: '单位', tech: '科技', building: '建筑', bonus: '加成', term: '术语' } as const;
 
 /** Ctrl/Cmd+K 全局命令面板 */
 export default function CommandPalette({
@@ -64,7 +64,7 @@ export default function CommandPalette({
             aria-expanded={open}
             aria-activedescendant={res[sel] ? `${listId}-option-${sel}` : undefined}
             value={q}
-            placeholder="搜索文明、单位、科技、开局"
+            placeholder="搜索文明、单位、科技、术语、页面、开局"
             onChange={(e) => {
               setQ(e.target.value);
               setSel(0);

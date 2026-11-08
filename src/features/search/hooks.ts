@@ -102,7 +102,7 @@ export function useSearchIndex(): SearchItem[] {
     );
     buildOrders.forEach((b) =>
       items.push({
-        kind: 'page',
+        kind: 'build',
         id: 'bo-' + b.id,
         zh: b.name.zh,
         en: b.name.en,
