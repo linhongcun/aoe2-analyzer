@@ -9,6 +9,7 @@ import { gatherModel, type GatherModel } from './realCost';
 import { productionTechAge, productionTechs } from './production';
 import { GARRISON_TECH_DATA, freeGarrisonTechs } from './garrisonTechs';
 import { buildingAge as constructionBuildingAge } from './availabilityAge';
+import { AGE_TECH_IDS } from './gameIds';
 
 export { CONSTRUCTION_DATA } from '../data/construction';
 export const CONSTRUCTION_LIMIT = 200;
@@ -220,7 +221,7 @@ export function calculateConstruction(ctx: ConstructionContext, config: Construc
     known.add(307);
     known.add(722);
   }
-  [101, 102, 103].forEach((id, i) => {
+  AGE_TECH_IDS.forEach((id, i) => {
     if (config.age >= i + 2) known.add(id);
   });
   const done = new Set<number>();

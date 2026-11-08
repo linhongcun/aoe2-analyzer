@@ -8,6 +8,7 @@ import { discountedCost } from './costDiscount';
 import { gatherModel, realCost } from './realCost';
 import { buildingAge } from './availabilityAge';
 import review from './routeReview.json';
+import { AGE_BY_TECH } from './gameIds';
 
 const BOW: Record<string, readonly string[]> = {
   none: [],
@@ -166,7 +167,7 @@ export function castleScenarioProfile(ctx: SceneContext, eco: SceneEco, civ: str
       return fail('按建筑训练周期缺失或结构变化');
     cycle = source.timeAt[unit.b]!;
   } else cycle = source.trainTime;
-  const ages: Record<number, number> = { 104: 1, 101: 2, 102: 3, 103: 4 };
+  const ages = AGE_BY_TECH;
   for (const entry of eco.civEco[civ] ?? []) {
     if (entry.age > cfg.age || (entry.requires ?? []).some((n) => (ages[n] ? ages[n]! > cfg.age : !ids.has(n)))) continue;
     for (const effect of entry.effects) {

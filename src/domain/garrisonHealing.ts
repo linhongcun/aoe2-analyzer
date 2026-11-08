@@ -17,6 +17,7 @@ import {
 import { civStatus, makeSimContext, simTechs, simulate } from './simulator';
 import { TEAM_BONUSES } from './effects';
 import { productionTechAge } from './production';
+import { FEMALE_VILLAGER_ID, VILLAGER_UNIT_ID } from './gameIds';
 
 export type HealingContext = GeneralGarrisonContext;
 export interface HealingConfig {
@@ -65,7 +66,7 @@ export const DEFAULT_HEALING_CONFIG: HealingConfig = {
   buildingId: 109,
   civ: 'Britons',
   age: 3,
-  unitId: 83,
+  unitId: VILLAGER_UNIT_ID,
   entry: 'enter',
   techs: [],
   currentHp: '10',
@@ -78,7 +79,7 @@ const generalConfig = (c: HealingConfig): GeneralGarrisonConfig => ({
   techs: c.techs,
   rows: [{ unitId: c.unitId, count: '1', entry: c.entry }],
 });
-const simUnit = (ctx: HealingContext, c: HealingConfig) => ctx.core.unitById[c.unitId === 293 ? 83 : c.unitId];
+const simUnit = (ctx: HealingContext, c: HealingConfig) => ctx.core.unitById[c.unitId === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : c.unitId];
 const emptyComparison = (status: HealingStatus, reason: string, maxHp: number | null = null): HealingComparison => ({
   status,
   reason,
@@ -339,7 +340,7 @@ export function healingLink(
     buildingId: input.buildingId,
     civ: input.civ,
     age: input.age,
-    unitId: input.unitId ?? 83,
+    unitId: input.unitId ?? VILLAGER_UNIT_ID,
     entry: input.entry ?? 'enter',
     techs: unique([...(input.techs ?? [])]),
     currentHp: '1',
@@ -353,7 +354,8 @@ export function healingLink(
     if (!candidate) return null;
     if (input.entry === undefined) c.entry = candidate.canEnter ? 'enter' : candidate.canCreate ? 'created' : 'deposit';
   } else {
-    const candidate = candidates.find((u) => u.id === 83 && u.canEnter) ?? candidates.find((u) => u.canEnter) ?? candidates.find((u) => u.canCreate);
+    const candidate =
+      candidates.find((u) => u.id === VILLAGER_UNIT_ID && u.canEnter) ?? candidates.find((u) => u.canEnter) ?? candidates.find((u) => u.canCreate);
     if (!candidate) return null;
     c = { ...c, unitId: candidate.id, entry: candidate.canEnter ? 'enter' : 'created' };
     const applicable = new Set(availableHealingTechs(ctx, c).map((t) => t.id));

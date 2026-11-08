@@ -1,13 +1,13 @@
 /** Chinese opening admission against the complete fixed DE188329 bonus records. */
 import type { EcoData, EffectRow } from './buildSim';
 import type { JurchenRawTech } from './jurchenEconomy';
+import { TC_BY_AGE } from './gameIds';
 
 export type ChineseRawTech = JurchenRawTech;
 export const CHINESE_SOURCE_REASON = '中国起始、科技折扣或城镇中心缺少完整已核来源，未计入';
 export const CHINESE_OPENING_NOTE = '普通开局6村民；城镇中心提供15人口；科技折扣不含升级时代';
 export const CHINESE_MODEL_NOTE = '普通起始按固定数据计入；科技折扣在到达相应时代后生效，沿用本站整数费用取整。农田额外储量、视野与客户端逐帧行为未模拟。';
 const IDS = [226, 302, 304, 350, 351, 352, 425];
-const TCS = [109, 71, 141, 142];
 const command = (Type: number, A: number, B: number, C: number, D: number) => ({ Type, A, B, C, D });
 const canonical = (value: unknown): unknown =>
   Array.isArray(value)
@@ -49,9 +49,9 @@ function expected(id: number): { age: number; raw: ChineseRawTech; effects: Effe
   } else if (id === 425) {
     effectId = 437;
     commands = [
-      ...TCS.map((tc) => command(0, tc, -1, 21, 15)),
-      ...TCS.map((tc) => command(4, tc, -1, 1, 7)),
-      ...TCS.map((tc) => command(4, tc, -1, 23, 7)),
+      ...TC_BY_AGE.map((tc) => command(0, tc, -1, 21, 15)),
+      ...TC_BY_AGE.map((tc) => command(4, tc, -1, 1, 7)),
+      ...TC_BY_AGE.map((tc) => command(4, tc, -1, 23, 7)),
       command(0, 444, -1, 21, 15),
     ];
     effects = [];

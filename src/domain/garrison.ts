@@ -4,6 +4,7 @@ import type { Core } from '../data';
 import type { Building, Tech, Trees } from './types';
 import { civStatus } from './simulator';
 import { productionTechAge } from './production';
+import { AGE_TECH_IDS, VILLAGER_UNIT_ID } from './gameIds';
 
 interface GarrisonUnit {
   attack: number;
@@ -67,7 +68,7 @@ export function garrisonTechs(ctx: GarrisonContext, b: Building, civ: string, ag
       t.civs.includes(civ) &&
       status['t' + t.id] === 1 &&
       productionTechAge(t, civ) <= age &&
-      GARRISON_DATA.techs[t.id]?.effects.some((e) => e.unit === b.id || e.unit === 83),
+      GARRISON_DATA.techs[t.id]?.effects.some((e) => e.unit === b.id || e.unit === VILLAGER_UNIT_ID),
   );
 }
 
@@ -137,7 +138,7 @@ export function calculateGarrison(ctx: GarrisonContext, b: Building, config: Gar
   }
   if (result.errors.length) return result;
   const building = data.units[b.id],
-    villager = data.units[83];
+    villager = data.units[VILLAGER_UNIT_ID];
   if (!building || !villager) {
     fail('固定版本驻军数据缺失，停止计算。');
     return result;
@@ -146,11 +147,11 @@ export function calculateGarrison(ctx: GarrisonContext, b: Building, config: Gar
     V = { ...villager };
   const apply = (r: GarrisonRule) => {
     for (const e of r.effects) {
-      const target = e.unit === b.id ? B : e.unit === 83 ? V : null;
+      const target = e.unit === b.id ? B : e.unit === VILLAGER_UNIT_ID ? V : null;
       if (target) target[e.stat] = e.op === 'set' ? e.value : e.op === 'mul' ? target[e.stat] * e.value : target[e.stat] + e.value;
     }
   };
-  const known = new Set([...selected, 104, ...[101, 102, 103].filter((_, i) => config.age >= i + 2)]);
+  const known = new Set([...selected, 104, ...AGE_TECH_IDS.filter((_, i) => config.age >= i + 2)]);
   // Selecting the exact Guard Tower / Keep shape means its line upgrade has
   // already completed. Shadow Arrowslits technologies retain their n-of rules.
   if (b.id === 234 || b.id === 235) known.add(140);
