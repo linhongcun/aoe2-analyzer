@@ -6,7 +6,8 @@ import { join, resolve } from 'node:path';
 import { buildOrders } from '../../src/data/buildOrders';
 import { visibleSources } from '../../src/features/builds/sources';
 import guide from '../../src/content/game-guide.json';
-import { publicBuildLicense, publicBuildPresentation, publicGameGuideSources } from '../../src/domain/sourcePresentation.mjs';
+import type { Source } from '../../src/domain/buildOrder';
+import { publicBuildLicense, publicBuildPresentation, publicBuildSources, publicGameGuideSources } from '../../src/domain/sourcePresentation.mjs';
 import { checkSourcePresentation, validateSourcePresentation } from '../../scripts/check-source-presentation.mjs';
 
 const rawGuide = () => structuredClone(guide);
@@ -24,9 +25,42 @@ describe('#442 公开开局来源与原始证据分离', () => {
     );
     for (const source of sources) {
       expect(Object.hasOwn(source, 'ref')).toBe(false);
-      expect(source.section ?? '').not.toMatch(/src\/content\/build-orders\//);
+      expect(Object.hasOwn(source, 'section')).toBe(false);
     }
     expect(JSON.stringify(order)).toBe(before);
+  });
+
+  it('非 Guide 来源的 section/ref 不进入公开投影', () => {
+    const build = rawBuild('hybrid-fish-18');
+    const raw = {
+      ...build.sources[0]!,
+      section: 'src/content/build-orders/18pop-scouts.yaml',
+      ref: 'themkdemiiir/aoe2-guide@f09ed56',
+    };
+    const [source] = publicBuildSources([raw as Source]);
+    expect(source).toEqual({
+      title: raw.title,
+      url: raw.url,
+      author: raw.author,
+      accessed: raw.accessed,
+    });
+    expect(Object.hasOwn(source!, 'section')).toBe(false);
+    expect(Object.hasOwn(source!, 'ref')).toBe(false);
+  });
+
+  it('公开投影不传播未知内部字段', () => {
+    const raw = {
+      title: 'Fixture',
+      url: 'https://example.com/build',
+      author: 'Fixture author',
+      accessed: '2026-11-09',
+      section: 'src/content/build-orders/private.yaml',
+      ref: 'private/repo@abcdef1',
+      privateCsv: 'hidden.csv',
+    };
+    const [source] = publicBuildSources([raw as Source]);
+    expect(source).toEqual({ title: raw.title, url: raw.url, author: raw.author, accessed: raw.accessed });
+    expect(Object.hasOwn(source!, 'privateCsv')).toBe(false);
   });
 
   it('清理后严格命令通过，不再依赖22条来源迁移告警', () => {
@@ -63,10 +97,16 @@ describe('#442 公开开局来源与原始证据分离', () => {
   it.each(['main 1234567 / DE185872', 'main abcdefa / DE185872', 'MAIN 1234567 / DE185872', 'main ABCDEFA / DE185872'])(
     '未知或错配的技术版本 %s 不能绕过公开格式',
     (value) => {
-      for (const field of ['title', 'author', 'section', 'ref'] as const) {
+      for (const field of ['title', 'author'] as const) {
         const build = rawBuild('hybrid-fish-18');
         build.sources[0]![field] = value;
         expect(validateSourcePresentation(buildFile(build.id), build).valid, field).toBe(false);
+      }
+      for (const field of ['section', 'ref'] as const) {
+        const build = rawBuild('hybrid-fish-18');
+        build.sources[0]![field] = value;
+        expect(validateSourcePresentation(buildFile(build.id), build).valid, field).toBe(true);
+        expect(Object.hasOwn(publicBuildPresentation(build).sources[0]!, field), field).toBe(false);
       }
       const build = rawBuild('hybrid-fish-18');
       build.license = value;

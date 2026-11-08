@@ -16,13 +16,12 @@ function guidePin(source) {
 export function publicBuildSources(sources) {
   return (sources ?? [])
     .filter((source) => typeof source?.title === 'string' && source.title.trim() !== '')
-    .map((source) => {
-      if (!guidePin(source)) return { ...source };
-      const citation = { ...source };
-      delete citation.section;
-      delete citation.ref;
-      return citation;
-    });
+    .map((source) => ({
+      title: source.title,
+      url: source.url,
+      author: source.author,
+      accessed: source.accessed,
+    }));
 }
 
 export function publicBuildLicense(license, sources) {

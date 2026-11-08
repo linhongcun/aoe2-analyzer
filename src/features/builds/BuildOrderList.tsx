@@ -191,7 +191,6 @@ export default function BuildOrderList() {
                   <a href={s.url} target="_blank" rel="noopener noreferrer">
                     {s.title}
                   </a>
-                  {s.section ? `（${s.section}）` : ''}
                 </span>
               ))}
               。{publicBuildLicense(b.license, b.sources)}
