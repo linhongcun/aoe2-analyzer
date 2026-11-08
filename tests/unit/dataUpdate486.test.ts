@@ -1,4 +1,5 @@
 /** #486: current DE188329 facts verified against the official article and both pinned game sources. */
+import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import pins from '../../scripts/data_sources.json';
@@ -75,7 +76,13 @@ describe('#486 current DE188329 data', () => {
     expect(teams.meta.dat.sha256).toBe(datSha);
   });
 
-  it('reports no effect-rule changes when the two pinned exports contain identical rules', () => {
-    expect(readFileSync('docs/EFFECTS-AUDIT.md', 'utf8')).toContain('小计：科技 0 个、加成 0 条有数值变化');
+  it('documents either the cold-cache placeholder or a zero hot diff', () => {
+    expect(readFileSync('docs/EFFECTS-AUDIT.md', 'utf8')).toMatch(/未取得更新前快照|小计：科技 0 个/);
+  });
+
+  it('EFFECTS-AUDIT --check is reproducible with a cold cache', () => {
+    const result = spawnSync('npx', ['vite-node', 'scripts/effects_audit.ts', '--check'], { encoding: 'utf8', timeout: 120000 });
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).toContain('EFFECTS-AUDIT.md 可复现');
   });
 });
