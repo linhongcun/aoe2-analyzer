@@ -37,7 +37,10 @@ export default function DlcView() {
                   return <CivChip key={n} c={c} title={c.en} />;
                 })}
               </td>
-              <td className="dc">{d.civs.length}</td>
+              <td className="dc">
+                <span className="dc-num">{d.civs.length}</span>
+                <span className="dc-label"> 个文明</span>
+              </td>
             </tr>
           ))}
         </tbody>
