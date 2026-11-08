@@ -1,4 +1,4 @@
-/** Fixed DE185872 Khmer source gates and bounded continuous no-return farm estimate. */
+/** Evidence pinned DE185872; runtime DE188329 Khmer source gates and bounded continuous no-return farm estimate. */
 import type { BuildOrder } from './buildOrder';
 import type { EcoData } from './buildSim';
 import { KHMER_FIXED_SOURCE } from './khmerSource';

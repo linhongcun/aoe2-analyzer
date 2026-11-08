@@ -1,4 +1,4 @@
-/** Fixed DE185872 Armenian infrastructure and three independently removable bonus groups. */
+/** Evidence pinned DE185872; runtime DE188329 Armenian infrastructure and three independently removable bonus groups. */
 import type { BuildOrder } from './buildOrder';
 import type { EcoData } from './buildSim';
 import { roundHalfPrice } from './roundHalfPrice';
