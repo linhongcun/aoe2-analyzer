@@ -421,11 +421,38 @@ footer.editorial-footer .footer-sources a {
     box-shadow: none;
     border: 0;
   }
+  /* issue 774：抽屉内工具组只默认展开当前组；其余组是可折叠标题（details/summary，键盘可操作）。 */
+  header.topbar.editorial-topbar .tools-group > summary.tools-group-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  header.topbar.editorial-topbar .tools-group > summary.tools-group-title:hover {
+    background: var(--color-surface-2);
+  }
+  header.topbar.editorial-topbar .tools-group > summary.tools-group-title:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 3px;
+  }
+  header.topbar.editorial-topbar .tools-group > summary.tools-group-title .ic {
+    width: 16px;
+    height: 16px;
+  }
+  header.topbar.editorial-topbar .tools-group[open] > summary.tools-group-title .ic {
+    transform: rotate(180deg);
+  }
+  /* issue 774：外观段移到抽屉首屏（导航上方），≤900 隐藏页头主题按钮时不用滚到底部。 */
   header.topbar.editorial-topbar .drawer-appearance {
     display: block;
-    margin-top: auto;
-    padding-top: 16px;
-    border-top: 1px solid var(--color-border);
+    margin-top: 0;
+    padding: 0 0 12px;
+    border-top: 0;
+    border-bottom: 1px solid var(--color-border);
   }
   header.topbar.editorial-topbar .drawer-appearance h2 {
     margin: 0 0 8px;

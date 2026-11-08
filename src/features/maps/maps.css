@@ -264,3 +264,12 @@
     flex: 1 0 100%;
   }
 }
+
+/* issue 774（修 issue 771 回归）：地图页「所有链接 ≥44px 热区」规则不应撑高共享面包屑；
+   ≤600px 的 44×44 触控热区仍由 editorial.css 的 nav.crumbs a 规则恢复。 */
+@media (min-width: 601px) {
+  .map-guide nav.crumbs a {
+    min-height: 0;
+    padding-inline: 0;
+  }
+}
