@@ -197,8 +197,9 @@ for (const search of ['', '?a=Unknown&b=Muisca', '?a=Mapuche&a=Franks&b=Muisca',
   });
 
 for (const [search, a, b] of [
-  ['?a=Mapuche', 'Mapuche', 'Britons'],
-  ['?b=Muisca', 'Franks', 'Muisca'],
+  // #772：单边入口的另一侧补目录里第一个不同的文明。
+  ['?a=Mapuche', 'Mapuche', 'Armenians'],
+  ['?b=Muisca', 'Armenians', 'Muisca'],
 ])
   test(`#521 单边入口保留${search}，复制静态链接、刷新及后退恢复`, async ({ page, browser }) => {
     await page.goto(prefixedBase + '#/civs');

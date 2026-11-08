@@ -45,8 +45,9 @@ describe('#403 complete civilization pairs', () => {
   });
 
   it.each([
-    ['?a=Mapuche', 'Mapuche', 'Britons'],
-    ['?b=Muisca', 'Franks', 'Muisca'],
+    // #772：缺一侧时补目录里第一个不同的文明，不再固定回落到默认侧。
+    ['?a=Mapuche', 'Mapuche', 'Armenians'],
+    ['?b=Muisca', 'Armenians', 'Muisca'],
     ['?a=Mapuche&b=Muisca', 'Mapuche', 'Muisca'],
     ['a=Mapuche&b=Muisca', 'Mapuche', 'Muisca'],
     ['?b=Mapuche&a=Muisca', 'Muisca', 'Mapuche'],
@@ -78,6 +79,26 @@ describe('#403 complete civilization pairs', () => {
     vi.doMock('../../src/data/raw/civs', () => ({ default: civs.filter((civilization) => civilization.en !== missing) }));
     vi.resetModules();
     await expect(import('../../src/domain/compare')).rejects.toThrow('默认文明不在固定资料中');
+  });
+});
+
+describe('#772 单边/非法参数的默认对与提示来源', () => {
+  it('缺一侧时选第一个不同的文明，不再固定默认侧或变成自比', () => {
+    expect(pair('?a=Britons')).toEqual({ a: 'Britons', b: 'Armenians' });
+    expect(pair('?b=Mapuche')).toEqual({ a: 'Armenians', b: 'Mapuche' });
+    expect(resolveCompareQuery('?a=Britons')).toMatchObject({
+      missingA: false,
+      missingB: true,
+      invalid: false,
+      autoPicked: true,
+      needsReplace: true,
+    });
+    expect(pair('')).toEqual({ a: 'Franks', b: 'Britons' });
+  });
+
+  it('非法参数整组回退并标记 invalid，显式同文明不算非法', () => {
+    expect(resolveCompareQuery('?a=Unknown&b=Mapuche')).toMatchObject({ a: 'Franks', b: 'Britons', invalid: true, autoPicked: false });
+    expect(resolveCompareQuery('?a=Britons&b=Britons')).toMatchObject({ a: 'Britons', b: 'Britons', invalid: false, autoPicked: false });
   });
 });
 
@@ -115,8 +136,26 @@ describe('#403 query preservation and idempotence', () => {
 
   it('does not reorder a valid query and only adds a missing query prefix once', () => {
     const search = '?b=Muisca&x=1&a=Mapuche&x=2';
-    expect(resolveCompareQuery(search)).toEqual({ a: 'Mapuche', b: 'Muisca', search, needsReplace: false });
-    expect(resolveCompareQuery(search.slice(1))).toEqual({ a: 'Mapuche', b: 'Muisca', search, needsReplace: true });
+    expect(resolveCompareQuery(search)).toEqual({
+      a: 'Mapuche',
+      b: 'Muisca',
+      search,
+      needsReplace: false,
+      missingA: false,
+      missingB: false,
+      invalid: false,
+      autoPicked: false,
+    });
+    expect(resolveCompareQuery(search.slice(1))).toEqual({
+      a: 'Mapuche',
+      b: 'Muisca',
+      search,
+      needsReplace: true,
+      missingA: false,
+      missingB: false,
+      invalid: false,
+      autoPicked: false,
+    });
   });
 
   it('makes invalid-query normalization idempotent without mutating the input object', () => {
@@ -125,7 +164,8 @@ describe('#403 query preservation and idempotence', () => {
     const normalized = resolveCompareQuery(input);
     expect(normalized.needsReplace).toBe(true);
     expect([...input]).toEqual(before);
-    expect(resolveCompareQuery(normalized.search)).toEqual({ ...normalized, needsReplace: false });
+    const reread = resolveCompareQuery(normalized.search);
+    expect(reread).toMatchObject({ a: 'Franks', b: 'Britons', search: normalized.search, needsReplace: false, invalid: false, autoPicked: false });
     expect(unknownEntries(normalized.search)).toEqual([
       ['x', '1'],
       ['y', '2'],

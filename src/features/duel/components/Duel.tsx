@@ -29,6 +29,18 @@ import { resolve, isUnavail, type SideState, type Resolved } from '../logic/duel
 
 const DEF_A: SideSpec = { uid: 569, civ: 'Franks', age: 4, techs: 'f', team: [] };
 const DEF_B: SideSpec = { uid: 359, civ: 'Japanese', age: 4, techs: 'f', team: [] };
+/** issue 772：坏深链里的科技字段不是 f/c/数字列表时视为无效，需要提示并写回规范化后的地址。 */
+const techFieldInvalid = (raw: string | null) => {
+  if (raw === null) return false;
+  const field = raw.split('.')[3] ?? '';
+  if (field === '' || field === 'f' || field === 'c') return false;
+  return !/^[1-9]\d*(?:-[1-9]\d*)*$/.test(field);
+};
+const rawUid = (raw: string | null) => {
+  if (raw === null) return null;
+  const uid = Number(raw.split('.')[0]);
+  return Number.isSafeInteger(uid) && uid > 0 ? uid : null;
+};
 const SIMPLE_DAMAGE = '伤害 = max(1, Σ max(0, 攻击类别 − 对应护甲类别))';
 const FULL_DAMAGE = '伤害 = max(1, Σ max(min(0, 攻击类别), 攻击类别 − 对应护甲类别))';
 
@@ -52,6 +64,18 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
   const navigate = useNavigate();
   const [context, setContext] = useState(() => duelCivs(sp));
   const contextSearch = useRef(sp.toString());
+  // issue 772：坏单位 id / 乱码科技被宽松回退时给出明确提示，并把 evidence 放进 history state，
+  // 让地址栏被 replace 成实际参数后提示仍保留一次；之后用户改选/前往新链接自然清除。
+  const linkStateInvalid = (location.state as { duelLinkInvalid?: boolean } | null)?.duelLinkInvalid ?? false;
+  const uidInvalid =
+    !!core &&
+    (['a', 'b'] as const).some((key) => {
+      const raw = sp.get(key);
+      if (!raw) return false;
+      const uid = rawUid(raw);
+      return uid === null || !core.unitById[uid];
+    });
+  const invalidLink = linkStateInvalid || techFieldInvalid(sp.get('a')) || techFieldInvalid(sp.get('b')) || uidInvalid;
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
   const params = decodeDuelParams(sp);
   const { mode, na, nb, bud, vils, mins } = params;
@@ -71,10 +95,12 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
     const u = core.unitById[s.uid]?.civs.length ? core.unitById[s.uid]! : core.unitById[fallback];
     return u?.civs.length ? { ...s, civ: u.civs[0]! } : s;
   };
+  // issue 772：未知单位 id 回退到默认一侧，避免坏链接永远留在地址栏。
+  const fixSide = (spec: SideSpec, fallback: SideSpec) => (core && !core.unitById[spec.uid] ? fallback : civFix(spec, fallback.uid));
   // 比较链接的错误参数须保留并明确失效，不能经旧 PK 容错回退后变成有效比较。
   if (!hasUpgrade) {
-    canon.set('a', fmtSide(civFix(parseSide(sp.get('a'), DEF_A), DEF_A.uid)));
-    canon.set('b', fmtSide(civFix(parseSide(sp.get('b'), DEF_B), DEF_B.uid)));
+    canon.set('a', fmtSide(fixSide(parseSide(sp.get('a'), DEF_A), DEF_A)));
+    canon.set('b', fmtSide(fixSide(parseSide(sp.get('b'), DEF_B), DEF_B)));
     canon.set('m', mode);
   }
   const canonStr = canonDuelParams(canon, params).toString();
@@ -83,10 +109,12 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
     if (contextSearch.current !== sp.toString()) setContext(duelCivs(sp));
     contextSearch.current = canonStr;
     if (canonStr === sp.toString()) return;
+    const nextState = invalidLink ? { duelLinkInvalid: true } : undefined;
     // setSearchParams 会丢掉 #duel-model。只在这个锚点上改用带 hash 的跳转，其它地址仍走原来的补齐。
-    if (location.hash === '#duel-model') navigate({ pathname: location.pathname, search: `?${canonStr}`, hash: location.hash }, { replace: true });
-    else setSp(new URLSearchParams(canonStr), { replace: true });
-  }, [canonStr, sp, setSp, navigate, location.pathname, location.hash]);
+    if (location.hash === '#duel-model')
+      navigate({ pathname: location.pathname, search: `?${canonStr}`, hash: location.hash }, { replace: true, state: nextState });
+    else setSp(new URLSearchParams(canonStr), { replace: true, state: nextState });
+  }, [canonStr, sp, setSp, navigate, location.pathname, location.hash, invalidLink]);
   useEffect(() => {
     if (location.hash !== '#duel-model') return;
     document.getElementById('duel-model')?.scrollIntoView({ block: 'start' });
@@ -169,6 +197,11 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
   return (
     <section id="duel" className="pane">
       <ListHead level={1} title="单位 PK" desc="选择双方单位、文明与科技，计算每击伤害、击杀次数与用时；支持群战与等资源对比" />
+      {invalidLink && (
+        <p className="note" role="status">
+          链接中的单位或科技无效，已回退为默认对决；地址栏已写成实际使用的参数。
+        </p>
+      )}
       {contextBar}
       <div className="bar fbar" role="radiogroup" aria-label="模式">
         {(
