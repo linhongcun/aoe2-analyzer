@@ -8,7 +8,7 @@ import { UNIT_ROLE_ZH, type UnitRole } from '../../../domain/unitRoles';
 import { civNote, dupIdsIn } from '../../../domain/dupNames';
 import { civByEn } from '../../../data';
 import { CostView, DlcBadge, EliteBadge, UnitIcon } from '../../../shared/ui/art';
-import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
+import { DlcBar, Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
@@ -58,7 +58,6 @@ export default function UnitList() {
           <option value="UnitUpgrade">升级单位</option>
           <option value="RegionalUnit">区域单位</option>
         </select>
-        <DlcSelect id="udlc" value={dlc} onChange={setDlc} />
         <select id="ua" aria-label="时代" value={a} onChange={(e) => setA(e.target.value)}>
           <option value="">全部时代</option>
           <option value="1">黑暗</option>
