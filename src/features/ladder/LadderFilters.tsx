@@ -1,6 +1,7 @@
 import type { KeyboardEvent, ReactNode } from 'react';
 import type { LadderSnapshot } from '../../domain/ladder';
 import type { InsightsMapKey } from '../../domain/ladderInsights';
+import { REQUIRED_WINDOW } from '../../domain/ladderInsights';
 import { eloFilterOptions, insightsMapOptions, type EloFilterOption, type LadderModeId, type MapFilterOption } from '../../domain/ladderQuery';
 import { Icon } from '../../shared/ui/Icon';
 
@@ -20,10 +21,13 @@ export function LadderFilters({
   team,
   insightsMap,
   insightsAvailable,
+  unfilteredElo,
   onMode,
   onElo,
   onMap,
+  onLegacyMap,
   onEloRef,
+  onMapRef,
 }: {
   mode: LadderModeId;
   elo: string;
@@ -31,14 +35,21 @@ export function LadderFilters({
   team: LadderSnapshot;
   insightsMap: InsightsMapKey | null;
   insightsAvailable: readonly InsightsMapKey[];
+  /** 未分 Elo 的「全部」写「未筛选」，并保持可用。 */
+  unfilteredElo: boolean;
   onMode: (mode: LadderModeId) => void;
   onElo: (option: EloFilterOption) => void;
   onMap: (option: MapFilterOption) => void;
+  onLegacyMap: () => void;
   onEloRef?: (id: string, node: HTMLButtonElement | null) => void;
+  onMapRef?: (key: string, node: HTMLButtonElement | null) => void;
 }) {
   const teamMode = mode === '4v4';
-  const insights = insightsMap != null && mode === 'arabia1v1';
-  const eloOptions = eloFilterOptions(mode, elo, arabia, team).map((option) => (insights ? { ...option, enabled: false, current: false } : option));
+  const windowMissing = insightsMap != null && !insightsAvailable.includes(insightsMap);
+  const eloOptions = eloFilterOptions(mode, elo, arabia, team).map((option) => {
+    if (unfilteredElo && option.key === 'all') return { ...option, label: '未筛选', enabled: true, current: elo === 'all' };
+    return option;
+  });
   const mapOptions = insightsMapOptions(mode, insightsMap, insightsAvailable);
   const checked = eloOptions.some((option) => option.current);
   const onEloKey = (event: KeyboardEvent<HTMLButtonElement>, option: EloFilterOption) => {
@@ -63,15 +74,19 @@ export function LadderFilters({
           <span className="nw">4v4</span> 随机地图
         </ModeChip>
         <ModeChip id="arabia1v1" mode={mode} icon="swords" testId="ladder-mode-arabia1v1" onMode={onMode}>
-          阿拉伯 <span className="nw">1v1</span>
+          <span className="nw">RM 1v1</span>
         </ModeChip>
       </div>
       <span className="ladder-filter-label">时段</span>
       <div className="ladder-filter-row">
         <span className="ladder-pill" data-testid="ladder-period-static">
           <Icon name="calendar" />
-          {insights ? (
-            '全时段'
+          {windowMissing ? (
+            <>
+              <span className="nw">
+                {REQUIRED_WINDOW.from} 至 {REQUIRED_WINDOW.to}
+              </span>
+            </>
           ) : teamMode ? (
             <>
               近 <span className="nw">90 天</span>
@@ -79,7 +94,7 @@ export function LadderFilters({
           ) : (
             '整段快照'
           )}
-          <span className="ladder-fixed">{insights ? '未按补丁筛选' : '当前快照'}</span>
+          <span className="ladder-fixed">{windowMissing ? '暂无快照' : '当前快照'}</span>
         </span>
       </div>
       <span className="ladder-filter-label">天梯分段</span>
@@ -112,36 +127,58 @@ export function LadderFilters({
         })}
       </div>
       <span className="ladder-filter-label">地图</span>
-      <div className="ladder-filter-row">
-        {insightsMap == null && (
+      {teamMode ? (
+        <div className="ladder-filter-row">
           <span className="ladder-pill" data-testid="ladder-map-static">
             <Icon name="map" />
-            {teamMode ? '全图' : '阿拉伯 · 固定'}
+            全图
             <span className="ladder-fixed">当前快照</span>
           </span>
-        )}
-        <div className="ladder-filter-row" role="radiogroup" aria-label="地图" data-testid="ladder-map">
-          {mapOptions.map((option) => (
-            <button
-              key={option.key}
-              type="button"
-              role="radio"
-              aria-checked={option.current}
-              disabled={!option.enabled}
-              className="ladder-map-option"
-              data-testid={`ladder-map-${option.key}`}
-              data-map={option.key}
-              onClick={() => {
-                if (option.enabled) onMap(option);
-              }}
-            >
-              <Icon name="map" />
-              <span>{option.label}</span>
-              <span className="ladder-fixed">{option.enabled ? option.note : '暂无数据'}</span>
-            </button>
-          ))}
         </div>
-      </div>
+      ) : (
+        <div className="ladder-filter-row" role="radiogroup" aria-label="地图" data-testid="ladder-map">
+          <button
+            type="button"
+            role="radio"
+            ref={(node) => onMapRef?.('arabia', node)}
+            className="ladder-map-option"
+            data-testid="ladder-map-static"
+            data-map="arabia"
+            aria-checked={insightsMap !== 'arena'}
+            disabled={insightsMap === 'rm-arabia' && !insightsAvailable.includes('rm-arabia')}
+            onClick={() => {
+              if (insightsMap === 'rm-arabia' && !insightsAvailable.includes('rm-arabia')) return;
+              onLegacyMap();
+            }}
+          >
+            <Icon name="map" />
+            <span>阿拉伯</span>
+            {insightsMap === 'rm-arabia' && !insightsAvailable.includes('rm-arabia') && <span className="ladder-fixed">暂无数据</span>}
+          </button>
+          {mapOptions
+            .filter((option) => option.key === 'arena')
+            .map((option) => (
+              <button
+                key={option.key}
+                type="button"
+                role="radio"
+                ref={(node) => onMapRef?.(option.key, node)}
+                className="ladder-map-option"
+                data-testid={`ladder-map-${option.key}`}
+                data-map={option.key}
+                aria-checked={option.current}
+                disabled={!option.enabled}
+                onClick={() => {
+                  if (option.enabled) onMap(option);
+                }}
+              >
+                <Icon name="map" />
+                <span>{option.label}</span>
+                {!option.enabled && <span className="ladder-fixed">暂无数据</span>}
+              </button>
+            ))}
+        </div>
+      )}
     </div>
   );
 }

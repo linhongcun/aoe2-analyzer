@@ -1,5 +1,7 @@
 /** AoE2 Insights 地图快照。页面只读静态文件；这里不做网络请求，也不把缺失值补成 0。 */
 
+export const LOW_SAMPLE_THRESHOLD = 300;
+export const REQUIRED_WINDOW = { from: '2026-05', to: '2026-10' } as const;
 export const INSIGHTS_MAP_KEYS = ['rm-arabia', 'arena'] as const;
 export type InsightsMapKey = (typeof INSIGHTS_MAP_KEYS)[number];
 
@@ -25,9 +27,9 @@ export interface InsightsSnapshot {
   map: { id: number; key: InsightsMapKey; en: string; zh: string };
   elo: { filtered: boolean; note: string };
   patch: { filtered: boolean; id: number | null; dateStatus: 'absent' | 'unconfirmed' | 'official'; note: string; date?: string };
-  period: { filtered: boolean; note: string };
+  period: { filtered: boolean; note: string; from?: string; to?: string };
   sample: { field: string; unit: 'row' | 'unconfirmed'; unitStatus: 'verified-equal-n_rows' | 'unconfirmed'; note: string };
-  lowSample: { threshold: number; field: string; status: 'pending'; note: string };
+  lowSample: { threshold: number; field: string; status: 'pending' | 'product'; note: string };
   rows: InsightsRow[];
 }
 
@@ -146,24 +148,30 @@ export function formatRatioPercent(ratio: number): string {
   return `${rounded2.toFixed(2)}%`;
 }
 
-/** 样本缺失或为 0 时不把胜率显示成可靠数字。真实 0 胜率在样本大于 0 时保留。 */
-export function presentWin(rate: number | null | undefined, sample: number | null | undefined): { text: string; reliable: boolean } {
-  if (typeof sample !== 'number' || !Number.isFinite(sample) || sample === 0) return { text: '未收录', reliable: false };
-  if (typeof rate !== 'number' || !Number.isFinite(rate)) return { text: '未收录', reliable: false };
-  return { text: formatRatioPercent(rate), reliable: true };
+export function sampleHeading(): string {
+  return '样本单位待确认';
 }
 
-/** 阈值 T 本身不标低样本。比较的是调用方声明的字段，这里不换算。 */
-export function isLowSampleCount(sample: number | null | undefined, threshold: number): boolean {
-  return typeof sample === 'number' && Number.isFinite(sample) && sample > 0 && sample < threshold;
+export function isRequiredWindow(snapshot: { period: { filtered: boolean; from?: string; to?: string } }): boolean {
+  return snapshot.period.filtered && snapshot.period.from === REQUIRED_WINDOW.from && snapshot.period.to === REQUIRED_WINDOW.to;
 }
 
-export function sampleHeading(sample: InsightsSnapshot['sample']): string {
-  if (sample.unitStatus === 'verified-equal-n_rows' && sample.unit === 'row') return '玩家行';
-  return `${sample.field} · 单位待确认`;
+/** 0 与缺失都不是可靠胜率。低于阈值不返回百分数。阈值本身可以显示，包括真实的 0%。 */
+export function visibleWin(
+  rate: number | null | undefined,
+  sample: number | null | undefined,
+  threshold = LOW_SAMPLE_THRESHOLD,
+): { text: string; showRate: boolean; low: boolean } {
+  if (typeof sample !== 'number' || !Number.isFinite(sample)) return { text: '未收录', showRate: false, low: false };
+  if (sample < threshold) return { text: '', showRate: false, low: true };
+  if (typeof rate !== 'number' || !Number.isFinite(rate)) return { text: '未收录', showRate: false, low: false };
+  return { text: formatRatioPercent(rate), showRate: true, low: false };
 }
 
-/** 没有官方对应时只留补丁号。全时段不写日期，也不借用别的补丁。 */
+/** 低于阈值才算样本不足。缺失不是 0，0 也低于阈值，但不会被写成胜率。 */
+export function isLowSampleCount(sample: number | null | undefined, threshold = LOW_SAMPLE_THRESHOLD): boolean {
+  return typeof sample === 'number' && Number.isFinite(sample) && sample < threshold;
+}
 export function patchLabel(patch: { filtered: boolean; id: number | null; dateStatus: string; date?: string }): string {
   if (!patch.filtered || patch.id == null || patch.dateStatus === 'absent') return '未按补丁筛选';
   if (patch.dateStatus !== 'official' || !patch.date) return String(patch.id);

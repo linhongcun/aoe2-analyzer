@@ -1,7 +1,7 @@
 {
   "elo": {
     "filtered": false,
-    "note": "查询没有 elo_group 条件。接口有 Elo 分组枚举，但本快照未筛选，不是某一分段。"
+    "note": "查询没有 elo_group 条件。未分 Elo 的全部在界面写「未筛选」，不是某一分段，也不标成暂无数据。"
   },
   "fetchedAt": "2026-11-08T02:27:25Z",
   "fetchedAtOrigin": "local-receipt",
@@ -12,9 +12,9 @@
   },
   "lowSample": {
     "field": "agg_n_matches",
-    "note": "来源没有规定低样本线。本站暂定：原始 agg_n_matches < 100 时标「低样本」。比较的是原始行数，不换算、不除以 2。阈值待确认，不是平衡建议。",
-    "status": "pending",
-    "threshold": 100
+    "note": "产品规则：原始 agg_n_matches < 300 时灰显「样本不足」，且不显示胜率。300 本身仍显示胜率。这不是来源定义的局数线。",
+    "status": "product",
+    "threshold": 300
   },
   "map": {
     "en": "Arabia",
@@ -30,7 +30,7 @@
   },
   "period": {
     "filtered": false,
-    "note": "查询没有 started_time 或 month 条件。这是全时段汇总。采集时间不是统计覆盖截止。"
+    "note": "查询没有 month 或 started_time 条件。这是全时段，不是 2026-05 至 2026-10。采集时间不是统计覆盖截止。"
   },
   "queryUrl": "https://www.aoe2insights.com/stats/api/match-ups/?by=civilization&aggregation=agg_win_rate&aggregation=agg_n_matches&aggregation=agg_n_won&aggregation=agg_play_rate&aggregation=n_rows&filter=%7B%22field%22%3A%22ladder%22%2C%22operator%22%3A%22equals%22%2C%22value%22%3A3%7D&filter=%7B%22field%22%3A%22map%22%2C%22operator%22%3A%22equals%22%2C%22value%22%3A9%7D",
   "rawFile": "docs/data/insights-match-ups/rm1v1-map-9.json",
@@ -503,9 +503,9 @@
   ],
   "sample": {
     "field": "agg_n_matches",
-    "note": "本次聚合里每个文明的 agg_n_matches 都等于 n_rows（Number of rows）。接口说明 1v1 每次对阵存两行，双方各一行。因此这个数是该文明的玩家行数，不是独立对局数，也不能把单个文明的数除以 2。各文明之和等于行数合计，同样不是独立对局数。字段英文标签仍是 Match (Count)。",
-    "unit": "row",
-    "unitStatus": "verified-equal-n_rows"
+    "note": "保存的响应里每个文明的 agg_n_matches 与 n_rows 数值相等。这不能单独证实中文单位。页面写「样本单位待确认」，不称局数，不除以 2。各文明之和是这些原始计数的合计，不是独立对局数。",
+    "unit": "unconfirmed",
+    "unitStatus": "unconfirmed"
   },
   "source": "AoE2 Insights",
   "sourceUrl": "https://www.aoe2insights.com/stats/"

@@ -5,11 +5,12 @@ import {
   collectedLabel,
   formatRatioPercent,
   isLowSampleCount,
+  isRequiredWindow,
   patchLabel,
-  presentWin,
   queryAgrees,
   readInsightsSnapshot,
   sampleHeading,
+  visibleWin,
   type InsightsSnapshot,
 } from '../../src/domain/ladderInsights';
 import { canonicalLadderSearch, insightsMapOptions, resolveLadderLocation } from '../../src/domain/ladderQuery';
@@ -70,25 +71,27 @@ describe('Insights 地图快照 #570', () => {
     const broken = structuredClone(rmArabia);
     delete (broken.rows[0] as { aggWinRate?: number }).aggWinRate;
     expect(readInsightsSnapshot(broken).ok).toBe(false);
-    expect(presentWin(0, 12)).toEqual({ text: '0.00%', reliable: true });
-    expect(presentWin(0, 0).reliable).toBe(false);
-    expect(presentWin(null, 12)).toEqual({ text: '未收录', reliable: false });
-    expect(presentWin(0.5, null).text).toBe('未收录');
+    expect(visibleWin(0, 300)).toMatchObject({ text: '0.00%', showRate: true, low: false });
+    expect(visibleWin(0.5, null)).toMatchObject({ text: '未收录', showRate: false });
+    expect(visibleWin(0.5, 0)).toMatchObject({ showRate: false, low: true, text: '' });
   });
 
-  it('低样本按暂定阈值的原始计数，T 本身不标', () => {
-    expect(isLowSampleCount(99, 100)).toBe(true);
-    expect(isLowSampleCount(100, 100)).toBe(false);
-    expect(isLowSampleCount(101, 100)).toBe(false);
-    expect(isLowSampleCount(0, 100)).toBe(false);
-    expect(isLowSampleCount(null, 100)).toBe(false);
-    expect(rmArabia.lowSample).toMatchObject({ threshold: 100, field: 'agg_n_matches', status: 'pending' });
+  it('低样本按原始 agg_n_matches 的 299/300 边界，不足则不给胜率', () => {
+    expect(isLowSampleCount(299, 300)).toBe(true);
+    expect(isLowSampleCount(300, 300)).toBe(false);
+    expect(isLowSampleCount(301, 300)).toBe(false);
+    expect(visibleWin(0.8, 299).showRate).toBe(false);
+    expect(visibleWin(0.8, 300).showRate).toBe(true);
+    expect(visibleWin(0.8, 300).text).toBe('80.00%');
+    expect(rmArabia.lowSample).toMatchObject({ threshold: 300, field: 'agg_n_matches', status: 'product' });
+    expect(isRequiredWindow(rmArabia)).toBe(false);
+    expect(isRequiredWindow(arena)).toBe(false);
   });
 
-  it('单位未核实时不叫局；补丁没有官方对应时只留号；全时段不写日期', () => {
-    expect(sampleHeading({ field: 'agg_n_matches', unit: 'unconfirmed', unitStatus: 'unconfirmed', note: '' })).toBe('agg_n_matches · 单位待确认');
-    expect(sampleHeading(rmArabia.sample)).toBe('玩家行');
-    expect(sampleHeading(rmArabia.sample)).not.toContain('局');
+  it('单位一律待确认；补丁没有官方对应时只留号；全时段不写日期', () => {
+    expect(sampleHeading()).toBe('样本单位待确认');
+    expect(sampleHeading()).not.toContain('局');
+    expect(sampleHeading()).not.toContain('玩家行');
     const numbered = patchLabel({ filtered: true, id: 185872, dateStatus: 'unconfirmed', date: '2026-09-22' });
     expect(numbered).toBe('185872');
     expect(numbered).not.toContain('2026');

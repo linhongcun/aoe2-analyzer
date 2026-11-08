@@ -207,7 +207,10 @@ function quadrantOf(winRate: number, playRate: number, pickMedian: number): (typ
   if (common) return '弱且常见';
   return '弱且少见';
 }
-async function checkedElo(page: Page): Promise<string> { const radio = page.getByRole('radiogroup', { name: /天梯分段/ }).locator('[aria-checked="true"]'); return (await radio.count()) === 1 ? ((await radio.innerText()) ?? '').replace(/\s+/g, '') : ''; }
+async function checkedElo(page: Page): Promise<string> {
+  const radio = page.getByRole('radiogroup', { name: /天梯分段/ }).locator('[aria-checked="true"]');
+  return (await radio.count()) === 1 ? ((await radio.innerText()) ?? '').replace(/\s+/g, '') : '';
+}
 async function plainText(page: Page, testId: string): Promise<string> {
   const root = page.getByTestId(testId);
   if ((await root.count()) !== 1 || !(await root.isVisible())) return '';
@@ -270,7 +273,9 @@ test('#577 首次进入默认筛为 4v4 RM · Elo 1200–1400 · 近 90 天 · �
   soon(eloOk(elo), `选中的 Elo 应为 1200–1400，实际「${elo}」`).toBe(true);
   soon(map.includes('全图') && map.includes('当前快照') && !/阿拉伯|Arabia/i.test(map), `地图 pill 应为全图，实际「${map}」`).toBe(true);
   if ((await filters.count()) === 1) {
-    soon([await filters.getByRole('radiogroup', { name: '模式' }).count(), await filters.getByRole('radiogroup', { name: /天梯分段/ }).count()]).toEqual([1, 1]);
+    soon([await filters.getByRole('radiogroup', { name: '模式' }).count(), await filters.getByRole('radiogroup', { name: /天梯分段/ }).count()]).toEqual([
+      1, 1,
+    ]);
     soon(await filters.getByRole('slider').count(), '不要 Elo 滑杆').toBe(0);
     const blob = (await filters.innerText()) ?? '';
     soon(blob, '不要 2v2 / 3v3 / 帝国战争').not.toMatch(/2v2|3v3|帝国战争/);
@@ -418,8 +423,8 @@ test('#577 可以切回现有阿拉伯 1v1 快照，且不借用默认切片的�
   soon((await plainText(page, 'ladder-period-static')).includes('近90天'), '切到阿拉伯后不要留下 4v4 的近 90 天').toBe(false);
   soon(eloOk(await checkedElo(page)), '切到阿拉伯后选中的 Elo 不是 1200–1400').toBe(false);
   const arabiaMap = await plainText(page, 'ladder-map-static');
-  soon(arabiaMap, '阿拉伯地图应为「阿拉伯 · 固定」').toMatch(/阿拉伯/);
-  soon(arabiaMap).toContain('固定');
+  soon(arabiaMap, '阿拉伯地图应为地图单选里的「阿拉伯」').toMatch(/阿拉伯/);
+  soon(arabiaMap).not.toContain('固定');
   soon(await plainText(page, 'ladder-period-static'), '时段应为整段快照').toContain('整段快照');
   const legacyTrend = [...arabia.civs.values()].some((civ) => civ.trend != null && civ.trend.length >= 2);
   const trends = page.locator('[data-testid^="ladder-trend-"]');
@@ -472,7 +477,7 @@ test('#577 §11 无参数不是阿拉伯；只带 elo 进入阿拉伯；mode=ara
   await openFresh(page, '/ladder?mode=arabia1v1');
   soon(hashQuery(page.url()).get('mode')).toBe('arabia1v1');
   soon(await plainText(page, 'ladder-map-static')).toMatch(/阿拉伯/);
-  soon(await plainText(page, 'ladder-map-static')).toContain('固定');
+  soon(await plainText(page, 'ladder-map-static')).not.toContain('固定');
   soon(await plainText(page, 'ladder-period-static')).toContain('整段快照');
   soon(await plainText(page, 'ladder-period-static'), '阿拉伯路径不保留近 90 天').not.toContain('近90天');
   soon(/全部/.test(await checkedElo(page)) && !eloOk(await checkedElo(page)), '阿拉伯选中分段是「全部」，不是 1200–1400').toBe(true);

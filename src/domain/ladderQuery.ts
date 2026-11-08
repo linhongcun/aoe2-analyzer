@@ -81,7 +81,6 @@ export function resolveLadderLocation(search: string, arabia: LadderSnapshot, op
     }
     if (mode !== 'arabia1v1' || !present) {
       missing = true;
-      toasts.unshift('这张地图在当前模式下暂无快照。');
     } else {
       missing = false;
       elo = 'all';

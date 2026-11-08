@@ -23,8 +23,8 @@ BASE = 'https://www.aoe2insights.com/stats/api/match-ups/'
 SOURCE = 'AoE2 Insights'
 SOURCE_URL = 'https://www.aoe2insights.com/stats/'
 USER_AGENT = 'aoe2-analyzer-snapshot/570 (static; one-shot; github.com/linhongcun/aoe2-analyzer)'
-# Provisional display threshold. The source does not define one. See the data note.
-LOW_SAMPLE_THRESHOLD = 100
+# Product rule for #570/#574. Not a source-defined match threshold.
+LOW_SAMPLE_THRESHOLD = 300
 MAPS = {
     9: {'key': 'rm-arabia', 'en': 'Arabia', 'zh': '阿拉伯', 'file': 'rm1v1-map-9.json', 'snapshot': 'ladder-insights-rm1v1-arabia.json'},
     29: {'key': 'arena', 'en': 'Arena', 'zh': '竞技场', 'file': 'rm1v1-map-29.json', 'snapshot': 'ladder-insights-rm1v1-arena.json'},
@@ -33,17 +33,20 @@ AGGREGATIONS = ('agg_win_rate', 'agg_n_matches', 'agg_n_won', 'agg_play_rate', '
 COLUMNS = AGGREGATIONS + ('civilization',)
 
 SAMPLE_NOTE = (
-    '本次聚合里每个文明的 agg_n_matches 都等于 n_rows（Number of rows）。'
-    '接口说明 1v1 每次对阵存两行，双方各一行。因此这个数是该文明的玩家行数，不是独立对局数，也不能把单个文明的数除以 2。'
-    '各文明之和等于行数合计，同样不是独立对局数。字段英文标签仍是 Match (Count)。'
+    '保存的响应里每个文明的 agg_n_matches 与 n_rows 数值相等。'
+    '这不能单独证实中文单位。页面写「样本单位待确认」，不称局数，不除以 2。'
+    '各文明之和是这些原始计数的合计，不是独立对局数。'
 )
 LOW_SAMPLE_NOTE = (
-    '来源没有规定低样本线。本站暂定：原始 agg_n_matches < 100 时标「低样本」。'
-    '比较的是原始行数，不换算、不除以 2。阈值待确认，不是平衡建议。'
+    '产品规则：原始 agg_n_matches < 300 时灰显「样本不足」，且不显示胜率。'
+    '300 本身仍显示胜率。这不是来源定义的局数线。'
 )
-ELO_NOTE = '查询没有 elo_group 条件。接口有 Elo 分组枚举，但本快照未筛选，不是某一分段。'
+ELO_NOTE = '查询没有 elo_group 条件。未分 Elo 的全部在界面写「未筛选」，不是某一分段，也不标成暂无数据。'
 PATCH_NOTE = '查询 filter 只有 ladder 与 map。响应没有 patch 列，不能标成单一补丁、补丁日期或版本名。'
-PERIOD_NOTE = '查询没有 started_time 或 month 条件。这是全时段汇总。采集时间不是统计覆盖截止。'
+PERIOD_NOTE = (
+    '查询没有 month 或 started_time 条件。这是全时段，不是 2026-05 至 2026-10。'
+    '采集时间不是统计覆盖截止。'
+)
 
 
 def repo_root() -> Path:
@@ -206,14 +209,14 @@ def build_snapshot(body: bytes, map_id: int, fetched_at: str, fetched_at_origin:
         'period': {'filtered': False, 'note': PERIOD_NOTE},
         'sample': {
             'field': 'agg_n_matches',
-            'unit': 'row',
-            'unitStatus': 'verified-equal-n_rows',
+            'unit': 'unconfirmed',
+            'unitStatus': 'unconfirmed',
             'note': SAMPLE_NOTE,
         },
         'lowSample': {
             'threshold': LOW_SAMPLE_THRESHOLD,
             'field': 'agg_n_matches',
-            'status': 'pending',
+            'status': 'product',
             'note': LOW_SAMPLE_NOTE,
         },
         'rows': parsed['rows'],
@@ -351,7 +354,7 @@ def fetch_body(map_id: int, attempts: int = 4, pause: float = 20.0) -> bytes:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description='Check or refresh AoE2 Insights RM 1v1 map snapshots')
     parser.add_argument('--check', action='store_true', help='verify committed snapshots (default)')
-    parser.add_argument('--fetch', action='store_true', help='request both maps once; does not run in CI')
+    parser.add_argument('--fetch', action='store_true', help='blocked until robots.txt /stats/api/ is decided')
     parser.add_argument('--install-json', help='publish already saved response bodies; no network')
     parser.add_argument('--root', default=str(repo_root()))
     args = parser.parse_args(argv)
@@ -363,30 +366,8 @@ def main(argv: list[str] | None = None) -> int:
         captures = json.loads(Path(args.install_json).read_text('utf-8'))
         publish(root, captures)
     if args.fetch:
-        captures = []
-        for index, map_id in enumerate(MAPS):
-            if index:
-                time.sleep(20)
-            body = fetch_body(map_id)
-            fd, name = tempfile.mkstemp(prefix='insights-', suffix='.json')
-            os.close(fd)
-            Path(name).write_bytes(body)
-            captures.append(
-                {
-                    'path': name,
-                    'map_id': map_id,
-                    'fetched_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-                    'fetched_at_origin': 'local-receipt',
-                }
-            )
-        try:
-            publish(root, captures)
-        finally:
-            for capture in captures:
-                try:
-                    os.unlink(capture['path'])
-                except OSError:
-                    pass
+        print('BLOCKED: robots.txt Disallow /stats/api/ 已上报 hongcun，拍板前不请求、不探测、不重试。', file=sys.stderr)
+        return 2
     problems = check(root)
     if problems:
         for item in problems:

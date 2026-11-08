@@ -51,7 +51,7 @@ export function LadderTiers({ civs }: { civs: readonly BandCiv[] }) {
   );
 }
 
-export function LadderMeta({ civs, sampleUnit }: { civs: readonly BandCiv[]; sampleUnit: '人次' | '局' }) {
+export function LadderMeta({ civs, sampleUnit }: { civs: readonly BandCiv[]; sampleUnit: '人次' | '局' | '待确认' }) {
   const [selectedEn, setSelectedEn] = useState<string | null>(null);
   const detailId = useId();
   const selected = civs.find((civ) => civ.en === selectedEn);
@@ -76,7 +76,7 @@ export function LadderMeta({ civs, sampleUnit }: { civs: readonly BandCiv[]; sam
   const games = civs.map((civ) => civ.games);
   const gMin = Math.min(...games);
   const gMax = Math.max(...games);
-  const sampleLabel = sampleUnit === '人次' ? '出场人次' : '样本局数';
+  const sampleLabel = sampleUnit === '人次' ? '出场人次' : sampleUnit === '局' ? '样本局数' : '样本';
   return (
     <div data-testid="ladder-meta-map">
       <div className="ladder-quads">

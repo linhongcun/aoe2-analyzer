@@ -622,12 +622,36 @@
   color: var(--color-muted);
   cursor: not-allowed;
 }
-.ladder-query-url,
-.ladder-insights-note {
-  margin: 4px 0 0;
+.ladder-source-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0;
+}
+.ladder-source-line a {
+  overflow-wrap: anywhere;
+}
+.ladder-source-details {
+  margin-top: 4px;
   color: var(--color-muted);
   font-size: 12px;
+}
+.ladder-source-details summary {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.ladder-source-details p {
+  margin: 4px 0 0;
   overflow-wrap: anywhere;
+}
+.ladder-row-low {
+  color: var(--color-muted);
+}
+.ladder-fixture-banner {
+  margin: 0 0 8px;
+  color: var(--color-warn);
+  font-size: 12px;
 }
 .ladder-source-facts {
   margin: 0 0 4px;
