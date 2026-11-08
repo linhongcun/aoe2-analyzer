@@ -11,13 +11,27 @@
         "type": "object",
         "properties": {
           "title": {
-            "$ref": "#/$defs/publicText"
+            "allOf": [
+              {
+                "$ref": "#/$defs/publicText"
+              },
+              {
+                "$ref": "common.defs.json#/$defs/nonEmptyString"
+              }
+            ]
           },
           "url": {
             "$ref": "common.defs.json#/$defs/publicUrl"
           },
           "author": {
-            "$ref": "#/$defs/publicText"
+            "allOf": [
+              {
+                "$ref": "#/$defs/publicText"
+              },
+              {
+                "$ref": "common.defs.json#/$defs/nonEmptyString"
+              }
+            ]
           },
           "accessed": {
             "type": "string",

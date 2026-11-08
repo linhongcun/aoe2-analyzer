@@ -9,6 +9,7 @@ import guide from '../../src/content/game-guide.json';
 import type { Source } from '../../src/domain/buildOrder';
 import { publicBuildLicense, publicBuildPresentation, publicBuildSources, publicGameGuideSources } from '../../src/domain/sourcePresentation.mjs';
 import { checkSourcePresentation, validateSourcePresentation } from '../../scripts/check-source-presentation.mjs';
+import { createSchemaCompiler, SCHEMA_ID_BASE } from '../../scripts/content-schema.mjs';
 
 const rawGuide = () => structuredClone(guide);
 const rawBuild = (id = 'scouts-18') => structuredClone(buildOrders.find((build) => build.id === id)!);
@@ -32,20 +33,27 @@ describe('#442 公开开局来源与原始证据分离', () => {
 
   it('非 Guide 来源的 section/ref 不进入公开投影', () => {
     const build = rawBuild('hybrid-fish-18');
-    const raw = {
-      ...build.sources[0]!,
-      section: 'src/content/build-orders/18pop-scouts.yaml',
-      ref: 'themkdemiiir/aoe2-guide@f09ed56',
-    };
-    const [source] = publicBuildSources([raw as Source]);
+    build.sources[0]!.section = '步骤 3';
+    build.sources[0]!.ref = 'v1.2.3';
+    expect(validateSourcePresentation(buildFile(build.id), build).valid).toBe(true);
+    const [source] = publicBuildPresentation(build).sources;
     expect(source).toEqual({
-      title: raw.title,
-      url: raw.url,
-      author: raw.author,
-      accessed: raw.accessed,
+      title: build.sources[0]!.title,
+      url: build.sources[0]!.url,
+      author: build.sources[0]!.author,
+      accessed: build.sources[0]!.accessed,
     });
     expect(Object.hasOwn(source!, 'section')).toBe(false);
     expect(Object.hasOwn(source!, 'ref')).toBe(false);
+  });
+
+  it('公开来源 schema 直接拒绝 section/ref/未知字段', () => {
+    const compiler = createSchemaCompiler();
+    const validate = compiler.getSchema(`${SCHEMA_ID_BASE}public-build-sources.json`)!;
+    const base = { title: 'Fixture', url: 'https://example.com/build', author: 'Fixture author', accessed: '2026-11-09' };
+    expect(validate({ sources: [base], license: 'MIT' })).toBe(true);
+    for (const extra of [{ section: '步骤 3' }, { ref: 'v1.2.3' }, { privateCsv: 'hidden.csv' }])
+      expect(validate({ sources: [{ ...base, ...extra }], license: 'MIT' }), JSON.stringify(extra)).toBe(false);
   });
 
   it('公开投影不传播未知内部字段', () => {

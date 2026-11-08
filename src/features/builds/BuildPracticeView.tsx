@@ -324,6 +324,7 @@ export default function BuildPracticeView({
                 <a href={source.url} target="_blank" rel="noopener noreferrer">
                   {source.title}
                 </a>
+                {' · '}
                 {source.author} · 核对 <span className="num nw">{source.accessed}</span>
                 <span className="bp-source-url">{source.url}</span>
               </li>
