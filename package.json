@@ -2,7 +2,7 @@
   "name": "aoe2-analyzer",
   "private": true,
   "license": "MIT",
-  "version": "0.77.47",
+  "version": "0.77.48",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "e2e": "playwright test",
-    "lint": "eslint . && npm run lint:colors && npm run lint:css",
+    "lint": "eslint . && npm run lint:registries && npm run lint:colors && npm run lint:css",
+    "lint:registries": "node scripts/check-registries.mjs",
     "lint:css": "node scripts/check-css.mjs",
     "lint:colors": "node scripts/check-colors.mjs",
     "lint:layers": "node scripts/check-layers.mjs",

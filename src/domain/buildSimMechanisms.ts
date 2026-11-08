@@ -207,6 +207,7 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
     },
   },
 };
+export const CIV_MECHANISM_KEYS = Object.freeze(Object.keys(CIV_MECHANISMS));
 const DEFAULT_MECHANISM: CivMechanism = {};
 export const civMechanism = (civ?: string): CivMechanism => CIV_MECHANISMS[civ ?? ''] ?? DEFAULT_MECHANISM;
 export const mechanismContext = (eco: EcoData, civ?: string): MechanismContext => ({ weiRewards: null, ...civMechanism(civ).context?.(eco) });
