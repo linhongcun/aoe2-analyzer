@@ -1,6 +1,6 @@
 import type { GurjaraRawTech } from './gurjaraEconomy';
 import type { RomanFarm, RomanRawTech, RomanRawTree, RomanRawTeam } from './romanEconomy';
-import { polishStoneGold, type PolishInfrastructure, type PolishRawTech } from './polishEconomy';
+import { type PolishInfrastructure, type PolishRawTech } from './polishEconomy';
 export { civSimNotes } from './buildSimNotes';
 import {
   civMechanism,
@@ -39,7 +39,7 @@ import { roundHalfPrice } from './roundHalfPrice';
 
 import { weiRewardsForCompletedResearch, type WeiSpawnContext } from './weiEconomy';
 import { bengaliRewardsForReachedAge, type BengaliSpawnContext } from './bengaliEconomy';
-import { armenianResearchBonus, armenianResearchSites, armenianSiteName, type ArmenianInfrastructure, type ArmenianRawTech } from './armenianEconomy';
+import { armenianResearchSites, armenianSiteName, type ArmenianInfrastructure, type ArmenianRawTech } from './armenianEconomy';
 import { georgianResearchSites, type GeorgianInfrastructure, type GeorgianRawTech } from './georgianEconomy';
 
 import { type SlavicFarm, type SlavicRawTree, type SlavicRawTech } from './slavicEconomy';
@@ -48,8 +48,8 @@ import { type KhmerFarm, type KhmerPrerequisites, type KhmerRawTech, type KhmerR
 
 import type { JurchenRawTech } from './jurchenEconomy';
 import type { ChineseRawTech } from './chineseEconomy';
-import { mapucheForagerFood, type MapucheInfrastructure, type MapucheRawTech } from './mapucheEconomy';
-import { HOUSE_ID, TC_BY_AGE, VILLAGER_UNIT_ID, isAgeTech } from './gameIds';
+import { type MapucheInfrastructure, type MapucheRawTech } from './mapucheEconomy';
+import { HOUSE_ID, TC_BY_AGE, VILLAGER_UNIT_ID } from './gameIds';
 import { effectiveGatherRate } from './gatherRate';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
@@ -273,8 +273,6 @@ const ECO_TASK: Record<Task, string> = {
   build: 'build',
 };
 const NEAR: Task[] = ['sheep', 'boar', 'deer', 'hunt', 'berries', 'farm', 'fish'];
-/** 起始村民数：.dat 中由引擎资源（编号 234 等）控制、含义未完全解码，按文明加成文字手工给出 */
-export const START_VILS: Record<string, number> = { Chinese: 6, Mayans: 4 };
 const TC = TC_BY_AGE[0]!;
 const r1 = (x: number) => Math.round(x * 10) / 10;
 
@@ -414,7 +412,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     born++;
     return t ?? null;
   };
-  const startVils = mechanism.startingVillagers?.(scope) ?? START_VILS[civ] ?? 3;
+  const startVils = mechanism.startingVillagers?.(scope) ?? 3;
   for (let i = 0; i < startVils; i++) assign();
   const tcPopulation = mechanism.townCenterPopulation?.(scope) ?? 5;
   let popCap = Math.min(200, tcPopulation + m.popBonus);
@@ -423,10 +421,10 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const built = new Map<number, number>([[TC, 1]]); // building id → 数量
   const constructions: Construction[] = [];
   const buildingsDone: { building: number; at: number }[] = [];
-  // The reviewed starting cart is already complete; it consumes no stock, worker, TC time or population.
-  if (georgians?.start) {
-    built.set(1808, 1);
-    buildingsDone.push({ building: 1808, at: 0 });
+  // Reviewed starting buildings are already complete; they consume no stock, worker, TC time or population.
+  for (const building of mechanism.startingBuildings?.(scope) ?? []) {
+    built.set(building, (built.get(building) ?? 0) + 1);
+    buildingsDone.push({ building, at: 0 });
   }
   /** 每座房子（含自动补房）付木开工的时刻，#42 匈奴对比「省下的木头」用 */
   const housePaidAt: number[] = [];
@@ -479,12 +477,12 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     if (kind === 'tech') {
       if (frankMillFree && freeIds.has(id)) return { food: 0, wood: 0, gold: 0, stone: 0 };
       const tm = m.techCost[id] ?? {};
-      for (const r of Object.keys(out) as Res[])
-        out[r] = Math.max(0, Math.round(applyMod(applyMod(out[r] * (civ === 'Chinese' && isAgeTech(id) ? 1 : m.techCostAll), tm.all), tm[r])));
+      const applyAll = mechanism.techCostRule?.('tech', id, scope)?.applyTechCostAll ?? true;
+      for (const r of Object.keys(out) as Res[]) out[r] = Math.max(0, Math.round(applyMod(applyMod(out[r] * (applyAll ? m.techCostAll : 1), tm.all), tm[r])));
       return out;
     }
     // Chinese ordinary technologies include unit upgrades; advancing Age is excluded above.
-    if (civ === 'Chinese' && kind === 'up') {
+    if (kind === 'up' && mechanism.techCostRule?.('up', id, scope)?.applyTechCostAll) {
       for (const r of Object.keys(out) as Res[]) out[r] = Math.max(0, Math.round(out[r] * m.techCostAll));
       return out;
     }
@@ -520,7 +518,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
     if (georgians) completedResearch.add(p.a.tech);
     if (armenians) {
       completedResearch.add(p.a.tech);
-      for (const bonus of armenianResearchBonus(armenians, p.a.tech, age, appliedArmenianResearch)) {
+      for (const bonus of mechanism.researchRewards?.({ scope, tech: p.a.tech, age, applied: appliedArmenianResearch }) ?? []) {
         applyEffects(m, bonus.effects);
         appliedArmenianResearch.add(bonus.tech!);
       }
@@ -968,10 +966,11 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         const q = rate(k);
         stock[r] += alloc[k] * q * TICK * (1 + (m.depositBonus[r] ?? 0));
         if (m.foragerWood) stock.wood += alloc[k] * foragerWoodIncome(m, ECO_TASK[k], q) * TICK;
-        if (m.foragerFood) stock.food += alloc[k] * mapucheForagerFood(m, ECO_TASK[k], q) * TICK;
+        if (m.foragerFood) stock.food += alloc[k] * (mechanism.foragerFoodIncome?.(m, ECO_TASK[k], q) ?? 0) * TICK;
         if (m.lumberFood) stock.food += alloc[k] * lumberFoodIncome(m, ECO_TASK[k], q) * TICK;
         if (m.varangianGold) stock.gold += alloc[k] * varangianGoldIncome(m, ECO_TASK[k], q) * TICK;
-        if (scope.poles) stock.gold += alloc[k] * polishStoneGold(scope.poles, ECO_TASK[k], q) * TICK;
+        const stoneGold = mechanism.stoneGoldIncome?.(scope, ECO_TASK[k], q) ?? 0;
+        if (stoneGold) stock.gold += alloc[k] * stoneGold * TICK;
       }
     }
     if (fishingShips && eco.fishingShip) {
@@ -1237,8 +1236,10 @@ export function gatherRate(
   });
   const rate = mechanismFarmRate(scope, ecoTask, average);
   const wood = foragerWoodIncome(m, ecoTask, rate);
-  const food = lumberFoodIncome(m, ecoTask, rate) + mapucheForagerFood(m, ecoTask, rate);
+  const food = lumberFoodIncome(m, ecoTask, rate) + (civMechanism(civ).foragerFoodIncome?.(m, ecoTask, rate) ?? 0);
   const gold =
-    (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) + varangianGoldIncome(m, ecoTask, rate) + polishStoneGold(scope.poles, ecoTask, rate);
+    (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) +
+    varangianGoldIncome(m, ecoTask, rate) +
+    (civMechanism(civ).stoneGoldIncome?.(scope, ecoTask, rate) ?? 0);
   return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}), ...(gold ? { gold } : {}) } };
 }

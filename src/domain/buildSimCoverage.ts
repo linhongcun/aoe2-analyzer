@@ -107,7 +107,7 @@ const FORCED_CIVS = new Set(
     .split(',')
     .filter(Boolean),
 );
-/** 已在 START_VILS 建模送村民的文明 tech（汉 302、玛雅 554） */
+/** 已在起始村民 hook 建模送村民的文明 tech（汉 302、玛雅 554） */
 const RES234_HANDLED = new Set([302, 554]);
 /** 整条待核实的文明 tech → 原因 */
 const PENDING_TECH: Record<number, string> = {};
@@ -125,7 +125,7 @@ export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
     bos = bos.map((order) => civMechanism(civ).prepare!(order, civ!, eco));
   const units = new Set<number>([VILLAGER_UNIT_ID]);
   const buildings = new Set<number>([...TC_UNITS, HOUSE_ID, ...FARM_UNITS]);
-  if (georgians?.start) buildings.add(1808);
+  for (const id of civMechanism(civ).startingBuildings?.(context) ?? []) buildings.add(id);
   const techs = new Set<number>([...AGE_TECH_IDS, ...Object.keys(eco.ecoTechs).map(Number)]);
   for (const b of bos)
     for (const st of b.steps)
