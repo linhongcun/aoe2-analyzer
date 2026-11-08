@@ -18,7 +18,16 @@ import {
 } from './ci-stage-evidence.mjs';
 import { hash, readToolchain, collectUnits, frozenRequirements, writeJson, policyDigest, makeRequirement, actualUnitExecution } from './ci-plan.mjs';
 import { resolveTestFiles } from './ci-run.mjs';
-import { planChanges, applyBrowserPolicy } from './ci-scope.mjs';
+import {
+  planChanges,
+  applyBrowserPolicy,
+  selectNarrowSmokeCases,
+  selectBuildSmokeCases,
+  narrowSmokeGate,
+  browserShardCount,
+  GATE_NARROW_SMOKE,
+  narrowSmokeTitles,
+} from './ci-scope.mjs';
 import { buildShardManifest, validateShardReport, atomicUnits } from './ci-shards.mjs';
 import { executeWorker, manifestOptions } from './ci-worker.mjs';
 import { verifyArtifactManifest, artifactSnapshot, verifyGateLink } from './site-artifact.mjs';
@@ -67,7 +76,8 @@ export async function planStage({ budget, api }) {
   await budget.run('npx', ['playwright', 'test', ...files, '--list', '--reporter=./scripts/ci-browser-reporter.mjs'], {
     env: { ...process.env, CI_BROWSER_MODE: 'list', CI_BROWSER_REPORT: listPath, CI_BROWSER_MANIFEST: '', CI_BROWSER_SHARD: '' },
   });
-  const browserCases = json(listPath).cases;
+  let browserCases = json(listPath).cases;
+  if (plan.browser === 'gate') browserCases = selectNarrowSmokeCases(browserCases);
   assert.deepEqual([...new Set(browserCases.map((c) => c.file))].sort(), files, 'Browser collection changed selected files');
   const weights = json('scripts/ci-browser-weights.json');
   const buildList = join(folder(), 'build-smoke-collection.json');
@@ -78,12 +88,13 @@ export async function planStage({ budget, api }) {
       env: { ...process.env, CI_BROWSER_MODE: 'list', CI_BROWSER_REPORT: buildList, CI_BROWSER_MANIFEST: '', CI_BROWSER_SHARD: '' },
     },
   );
-  const buildSmokeCases = json(buildList).cases.filter(
-    (c) => (c.file === 'tests/e2e/smoke.spec.ts' && c.titlePath.at(-1).startsWith('route ')) || c.file === 'tests/e2e/ciBuild659.spec.ts',
-  );
-  assert.equal(buildSmokeCases.length, 25, 'Mandatory build smoke must retain 24 cold routes and exact build identity');
-  const count = plan.browser === 'full' ? 4 : Math.min(4, atomicUnits(browserCases, weights).length);
+  const buildSmokeCases = selectBuildSmokeCases(json(buildList).cases, plan.browser === 'gate' ? 'gate' : 'matrix');
+  const count = browserShardCount(plan, plan.browser === 'full' ? 4 : atomicUnits(browserCases, weights).length);
   const browserManifest = buildShardManifest({ cases: browserCases, sourceBuild: null, shardCount: count, weights });
+  if (plan.browser === 'gate') {
+    assert.equal(browserManifest.shards.length, 1, 'Default smoke must stay on one shard');
+    assert.equal(browserManifest.shards[0].cases.length, GATE_NARROW_SMOKE.length, 'Default shard dropped a narrow smoke case');
+  }
   const requirements = frozenRequirements(plan, toolchain, unitCases, browserManifest.shards, current.event.name);
   const plan_digest = hash({ plan, requirements, toolchain, browserCases, buildSmokeCases, weights });
   const gate_ref = `ci-v2:${current.repository}:${current.run_id}:${current.run_attempt}:${plan_digest}:test`;
@@ -235,7 +246,9 @@ export async function aggregateStage({ budget, api }) {
   }
   const gate = aggregateStageEvidence({ current: frozen.current, requirements: frozen.requirements, proofs, snapshot, browserManifest: manifest });
   const job = await actualJob(api, 'test');
-  Object.assign(gate, { aggregate_job_id: job.id, plan_digest: frozen.plan_digest, requirements: frozen.requirements });
+  // Smoke reports were already rejected above. This record is what Release checks before packing deployed-site.
+  const smoke = narrowSmokeGate(frozen.plan, frozen.browserCases, frozen.requirements);
+  Object.assign(gate, { aggregate_job_id: job.id, plan_digest: frozen.plan_digest, requirements: frozen.requirements, smoke });
   verifyArtifactManifest(manifestOptions(frozen.current, dist, frozen.plan));
   verifyGateLink(dist, gate);
   const destination = join(process.env.RUNNER_TEMP || 'work', 'ci-gate');
@@ -259,9 +272,9 @@ export async function verifyReleaseGate({ budget, api }) {
   assert.equal(run.conclusion, 'success');
   assert.equal(run.head_sha, process.env.EXPECTED_DEPLOYED_SHA);
   const jobs = await runJobs(api, repository, id, run.run_attempt);
-  for (const name of ['test', 'deploy', 'build', 'static-main']) {
+  for (const name of ['test', 'deploy', 'build', 'browser-1']) {
     const matches = jobs.filter((j) => j.name === name);
-    assert.equal(matches.length, 1);
+    assert.equal(matches.length, 1, name);
     assert.equal(matches[0].status, 'completed');
     assert.equal(matches[0].conclusion, 'success');
     assert.equal(matches[0].run_id, id);
@@ -309,7 +322,7 @@ export async function verifyReleaseGate({ budget, api }) {
     jobs.filter((j) => j.name === 'deploy').every((j) => timestampUpper(j.completed_at) < deadline),
     'Source deployment exceeded deadline',
   );
-  assert.ok(gate.required_stage_ids.includes('build') && gate.required_stage_ids.includes('static') && gate.required_stage_ids.includes('static-main'));
+  assert.ok(gate.required_stage_ids.includes('build') && gate.required_stage_ids.includes('static') && gate.required_stage_ids.includes('browser-1'));
   assert.deepEqual(
     gate.stages.map((s) => s.stage_id),
     gate.required_stage_ids,
@@ -333,18 +346,42 @@ export async function verifyReleaseGate({ budget, api }) {
   const buildRequired = requirements.find((r) => r.stage_id === 'build');
   assert.equal(buildRequired.reusable, false);
   for (const check of ['build', 'snapshot', 'fresh-build-smoke']) assert.ok(buildRequired.selection.checks.includes(check), 'Missing fresh build requirement');
-  const mainRequired = requirements.find((r) => r.stage_id === 'static-main');
-  assert.equal(mainRequired.reusable, false, 'Main-specific checks cannot be reused');
-  const mainStage = gate.stages.find((s) => s.stage_id === 'static-main');
-  assert.equal(mainStage.executed, true, 'Main-specific checks must execute in main');
-  for (const [key, value] of Object.entries({
-    run_id: id,
-    run_attempt: run.run_attempt,
-    tested_commit: run.head_sha,
-    tested_tree: gate.tested_tree,
-    job_id: jobs.find((j) => j.name === 'static-main').id,
-  }))
-    assert.equal(mainStage.source[key], value, 'Main-specific source mismatch');
+  const browserRequired = requirements.find((r) => r.stage_id === 'browser-1');
+  assert.equal(browserRequired.reusable, false, 'Narrow smoke must run against the current build');
+  assert.deepEqual(
+    requirements.filter((r) => r.stage_id.startsWith('browser-')).map((r) => r.stage_id),
+    ['browser-1'],
+    'Release source cannot include the multi-shard browser matrix',
+  );
+  assert.deepEqual(
+    gate.smoke,
+    { titles: narrowSmokeTitles(), case_ids: browserRequired.selection.cases.map((entry) => entry.id).sort() },
+    'Release source is missing the narrow smoke',
+  );
+  const browserStage = gate.stages.find((s) => s.stage_id === 'browser-1');
+  assert.equal(browserStage?.executed, true, 'Narrow smoke must execute on the deploying run');
+  assert.equal(browserStage.source.job_id, jobs.find((j) => j.name === 'browser-1').id, 'Narrow smoke job mismatch');
+  if (gate.required_stage_ids.includes('static-main')) {
+    const matches = jobs.filter((j) => j.name === 'static-main');
+    assert.equal(matches.length, 1);
+    assert.equal(matches[0].status, 'completed');
+    assert.equal(matches[0].conclusion, 'success');
+    assert.equal(matches[0].run_id, id);
+    assert.equal(matches[0].run_attempt, run.run_attempt);
+    assert.equal(matches[0].head_sha, run.head_sha);
+    const mainRequired = requirements.find((r) => r.stage_id === 'static-main');
+    assert.equal(mainRequired.reusable, false, 'Main-specific checks cannot be reused');
+    const mainStage = gate.stages.find((s) => s.stage_id === 'static-main');
+    assert.equal(mainStage.executed, true, 'Main-specific checks must execute in main');
+    for (const [key, value] of Object.entries({
+      run_id: id,
+      run_attempt: run.run_attempt,
+      tested_commit: run.head_sha,
+      tested_tree: gate.tested_tree,
+      job_id: matches[0].id,
+    }))
+      assert.equal(mainStage.source[key], value, 'Main-specific source mismatch');
+  }
   const build = gate.stages.find((s) => s.stage_id === 'build');
   assert.ok(build?.executed, 'Release requires a fresh main build');
   assert.equal(build.source.run_id, id);

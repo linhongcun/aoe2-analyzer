@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
@@ -304,6 +305,77 @@ export const PROFILES = {
 };
 /** Every ordinary gate includes the cold-built site smoke, including documentation/version-only changes. */
 export const GATE_CORE_SMOKE_E2E = ['tests/e2e/smoke.spec.ts'];
+/**
+ * Default CI smoke (#749). One Chromium shard, not the 24-route / four-width / axe matrix.
+ * Route cases must stay loadable with an empty console; query and calculation are existing
+ * assertions in the same file so a broken search or the Franks Paladin total fails the shard.
+ */
+export const GATE_NARROW_SMOKE = [
+  { file: 'tests/e2e/smoke.spec.ts', title: 'route (home) renders without console errors', kind: 'route' },
+  { file: 'tests/e2e/smoke.spec.ts', title: 'route #civs renders without console errors', kind: 'route' },
+  { file: 'tests/e2e/smoke.spec.ts', title: 'route #/civ/Franks renders without console errors', kind: 'route' },
+  { file: 'tests/e2e/smoke.spec.ts', title: 'route #unit/569 renders without console errors', kind: 'route' },
+  { file: 'tests/e2e/smoke.spec.ts', title: 'Ctrl+K command palette searches across civs/units/techs', kind: 'query' },
+  { file: 'tests/e2e/smoke.spec.ts', title: 'Franks Paladin full tech = 192 HP', kind: 'calculation' },
+];
+export const BUILD_IDENTITY_TITLE = 'fresh build identity matches the actual checked-out commit and package version';
+export function narrowSmokeTitles() {
+  return GATE_NARROW_SMOKE.map((entry) => entry.title);
+}
+/** Keep exactly the default smoke. A missing title fails planning; extra matrix cases are dropped. */
+export function selectNarrowSmokeCases(cases) {
+  assert.ok(Array.isArray(cases), 'Missing browser collection');
+  const selected = [];
+  for (const spec of GATE_NARROW_SMOKE) {
+    const matches = cases.filter((entry) => entry?.file === spec.file && entry.titlePath?.at(-1) === spec.title);
+    assert.equal(matches.length, 1, `Narrow smoke missing or duplicated: ${spec.title}`);
+    selected.push(matches[0]);
+  }
+  return selected;
+}
+/** Gate builds prove footer identity only. The 24-route matrix stays on the manual full plan. */
+export function selectBuildSmokeCases(cases, mode) {
+  assert.ok(Array.isArray(cases), 'Missing build smoke collection');
+  const identity = cases.filter((entry) => entry?.file === 'tests/e2e/ciBuild659.spec.ts' && entry.titlePath?.at(-1) === BUILD_IDENTITY_TITLE);
+  assert.equal(identity.length, 1, 'Mandatory build identity smoke missing');
+  if (mode === 'gate') return identity;
+  const routes = cases.filter((entry) => entry?.file === 'tests/e2e/smoke.spec.ts' && String(entry.titlePath?.at(-1) ?? '').startsWith('route '));
+  assert.equal(routes.length, 24, 'Mandatory build smoke must retain 24 cold routes and exact build identity');
+  return [...routes, ...identity];
+}
+/** Full keeps four runners. The default gate never grows a matrix, even when many atomic units exist. */
+export function browserShardCount(plan, atomicCount) {
+  assert.ok(Number.isSafeInteger(atomicCount) && atomicCount > 0, 'Invalid browser atomic count');
+  if (plan?.browser === 'full') return 4;
+  if (plan?.browser === 'gate') return 1;
+  const count = Math.min(4, atomicCount);
+  assert.ok(count >= 1 && count <= 4, 'Invalid browser shard count');
+  return count;
+}
+export function minimalGatePlan() {
+  return { scope: 'gate', features: [], unit: [], e2e: [...GATE_CORE_SMOKE_E2E], data: false, full: false, browser: 'gate' };
+}
+/**
+ * Bind the issued gate to the one shard that actually ran the narrow smoke.
+ * Returns null for a full plan, which is not a deployment source.
+ */
+export function narrowSmokeGate(plan, browserCases, requirements) {
+  if (!plan || plan.browser !== 'gate') return null;
+  const selected = selectNarrowSmokeCases(browserCases);
+  assert.equal(selected.length, browserCases.length, 'Default browser shard contains cases outside the narrow smoke');
+  const browsers = requirements.filter((entry) => entry.stage_id.startsWith('browser-'));
+  assert.deepEqual(
+    browsers.map((entry) => entry.stage_id),
+    ['browser-1'],
+    'Default gate must be exactly one browser shard',
+  );
+  assert.equal(browsers[0].reusable, false, 'Narrow smoke must execute against the current build');
+  const ids = selected.map((entry) => entry.id).sort();
+  assert.deepEqual(browsers[0].selection.cases.map((entry) => entry.id).sort(), ids, 'Browser requirement does not match the narrow smoke');
+  for (const stage of ['unit', 'data', 'static-main'])
+    assert.ok(!requirements.some((entry) => entry.stage_id === stage), 'Default gate must not require ' + stage);
+  return { titles: narrowSmokeTitles(), case_ids: ids };
+}
 // Legacy public name retained for release tooling importing the old scope module.
 export const PR_CORE_SMOKE_E2E = GATE_CORE_SMOKE_E2E;
 /**
@@ -782,17 +854,37 @@ export function allowFullBrowser(_env = process.env) {
 }
 
 /**
- * High-risk changes retain full browser coverage on every event. Proven narrow plans include
- * the cold smoke and affected regressions; unrelated global tours remain in nightly/full runs.
+ * Direct callers still see the #659 risk browser plan. CI itself uses selectCiPlan, which
+ * does not let a risky diff expand the default PR/main gate (#749).
  */
 export function applyBrowserPolicy(plan, env = process.env) {
   if (!plan || typeof plan !== 'object') return plan;
-  if (env.CI_FULL === 'true' || env.GITHUB_EVENT_NAME === 'schedule') return { ...fullPlan(true, plan.features, plan.e2e), paths: plan.paths, browser: 'full' };
+  if (env.CI_FULL === 'true' || env.GITHUB_EVENT_NAME === 'schedule')
+    return {
+      ...fullPlan(true, Array.isArray(plan.features) ? plan.features : [], Array.isArray(plan.e2e) ? plan.e2e : []),
+      paths: plan.paths,
+      browser: 'full',
+    };
+  if (plan.browser === 'gate' || plan.scope === 'gate') return { ...minimalGatePlan(), paths: plan.paths };
   if (plan.full) return { ...plan, browser: 'full' };
   const paths = Array.isArray(plan.paths) ? plan.paths : [];
   const candidates = new Set([...GATE_CORE_SMOKE_E2E, ...(plan.e2e ?? [])]);
   const e2e = sorted([...candidates].filter((path) => !prCappedExcludes(path, paths)));
   return { ...plan, browser: 'capped', e2e };
+}
+
+/**
+ * CI entry (#749). Ordinary PR and main push stay on the narrow gate even when planChanges
+ * would have chosen full. workflow_dispatch with CI_FULL, or a schedule event, keeps the
+ * complete plan. The workflow no longer has a schedule trigger.
+ */
+export function selectCiPlan(classified, env = process.env) {
+  if (env.CI_FULL === 'true' || env.GITHUB_EVENT_NAME === 'schedule') {
+    const features = Array.isArray(classified?.features) ? classified.features : [];
+    const extra = Array.isArray(classified?.e2e) ? classified.e2e : [];
+    return applyBrowserPolicy(fullPlan(true, features, extra), env);
+  }
+  return applyBrowserPolicy(minimalGatePlan(), env);
 }
 
 /** Called only after prepare-release validates the successful main run that owns this artifact. */
@@ -824,14 +916,14 @@ function main() {
     } catch {
       // Missing history or an unsupported event cannot select a reduced test profile.
     }
-    if (process.env.CI_FULL === 'true' || process.env.GITHUB_EVENT_NAME === 'schedule') plan = fullPlan();
-    // #659: classify risk first; the event cannot weaken the required browser coverage.
-    plan = applyBrowserPolicy(plan);
+    // #749: classification is recorded only as input. The default event cannot expand it.
+    plan = selectCiPlan(plan);
     writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-scope.json'), JSON.stringify({ base, head, scope: plan.scope }) + '\n');
     writeFileSync(join(process.env.RUNNER_TEMP || '.', 'ci-plan.json'), JSON.stringify(plan) + '\n');
   }
   if (process.env.GITHUB_OUTPUT) {
-    const runBrowser = plan.browser === 'full' || plan.browser === 'capped' || (plan.browser == null && (plan.full || !!plan.e2e.length));
+    const runBrowser =
+      plan.browser === 'full' || plan.browser === 'capped' || plan.browser === 'gate' || (plan.browser == null && (plan.full || !!plan.e2e.length));
     const e2eFull = plan.browser === 'full' || (plan.browser == null && !!plan.full);
     const unitChromium = unitLaunchesChromium(plan);
     appendFileSync(

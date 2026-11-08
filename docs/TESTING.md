@@ -113,6 +113,8 @@ expect(violations).toEqual([]);
 
 #431 的一次适用验证原则继续有效。维护者于2026-11-03明确授权 #659，取代 #514 的 PR 绝不完整浏览器限制、#513 的全局壳层 targeted 例外和旧 `browser=none` 维护豁免。完整冻结范围、故障注入、覆盖对照和实验要求见 [ci-659.md](design/ci-659.md)。
 
+**现行默认门禁是 [#749](design/ci-749.md)（2026-11-08）。** 普通 PR 与 main push 只跑 `static`、`build`（构建身份）和 Chromium 单分片窄冒烟，main 在聚合成功后才上传 `deployed-site` 并部署。多分片、24 路由、axe/四宽、单测和 data 只在手动 `workflow_dispatch` 且 `full=true` 时跑，不部署。日更 schedule 已关。下文风险表仍描述 `planChanges` 的分类，供 full 和本地检查；CI 入口 `selectCiPlan` 不会据此扩大默认门禁。
+
 `scripts/ci-scope.mjs` 生成 `scope`、`features`、`unit`、`e2e`、`data`、`full` 与浏览器计划；`ci-stage.mjs` 冻结精确检查 ID、文件和 case 集合，再执行各阶段。`full` 明确表示完整范围，不用空列表、零测试或文件请求列表代替实际执行证明。
 
 | 范围          | 适用变化                                                            | 必要覆盖                                                                       |
@@ -132,11 +134,11 @@ feature 目录名称不构成 CSS 作用范围证明。只有登记的局部样�
 
 ### 并行阶段、同一构建与严格聚合
 
-核心 static 包含 lint、类型、严格内容/公开来源/预编译校验器和严格分层；非 PR 的 unused、contrast 与必要 introductions 检查单列 static-main。static、static-main、unit、必要 data 与 build 并行。build 每次实际构建当前 SHA，并在新构建上执行24路由冷启动 smoke，包括文档维护事件；build 与 static-main 均不可复用。
+核心 static 包含 lint、类型、严格内容/公开来源/预编译校验器和严格分层。默认不跑 static-main、unit 或 data。手动 full 才把 unused、contrast 与必要 introductions 放进 static-main，并跑全部单测和 data。build 每次实际构建当前 SHA。默认构建烟测只核对页脚版本和 HEAD；24 路由冷启动只在 full。build 与 static-main 均不可复用。默认 `browser-1` 也不可复用，必须对着本次构建执行。
 
-完整浏览器固定四个 runner，窄计划按原子执行单元使用最多四片。按历史实测时长加权 LPT 分配；缺少历史时明确使用保守权重，不能将文件数平均或原生 shard 当作性能保证。保留 default/serial 组原子性，不全局启用 `fullyParallel`。每片先核对精确 case 选择，所有本次实际分片只消费同一不可变 build snapshot，不能各自构建或在浏览器后向 dist 写收据。
+手动 full 的浏览器固定四个 runner。默认门禁固定 1 片，不把窄冒烟拆成矩阵，也不把 24 路由加回默认。按历史实测时长加权 LPT 分配仍只用于 full；缺少历史时明确使用保守权重，不能将文件数平均或原生 shard 当作性能保证。保留 default/serial 组原子性，不全局启用 `fullyParallel`。每片先核对精确 case 选择，所有本次实际分片只消费同一不可变 build snapshot，不能各自构建或在浏览器后向 dist 写收据。
 
-最终 `test` 核对所有必要阶段的真实成功结果、精确 case 并集和交集、允许的既有 skip、数据结果与构建身份。失败、取消、超时、缺片、重复/漏 case、非预期跳过和错构建均阻断证明与 deploy。文件检查、软链接拒绝和无匹配失败继续有效。24路由新构建 smoke 不因源码测试复用而省略。
+最终 `test` 核对本次计划内各阶段的真实成功结果、精确 case 并集和交集、允许的既有 skip、数据结果与构建身份。失败、取消、超时、缺片、重复/漏 case、非预期跳过和错构建均阻断证明与 deploy。文件检查、软链接拒绝和无匹配失败继续有效。full 的 24 路由新构建 smoke 不因源码测试复用而省略；默认窄冒烟本身不可复用。
 
 #338 将1280 hash 与表格断言合并到同次路由访问；保留两类独立失败收集、每路由冷启动/数据就绪、visited/seen 防空转、360表格和六份 golden 原字节。手工 record 仍须完整单 worker，CI/分片/多 worker 禁止 record。不得通过减少断言或更新 golden 换取速度。
 
@@ -156,7 +158,7 @@ Release 自己的 run 也从其 `run.created_at` 计30分钟，下载并核对�
 
 ### 后台完整检查
 
-CI/Deploy 每日北京时间04:17（cron `17 20 * * *`，UTC）及手动 full 运行保留完整套件；手动 full 默认开启。nightly 和强制 full 禁用复用并强制 full/data，仍共享同一30分钟预算，真实失败需定位。这些事件不部署、不触发 Release。
+CI/Deploy 不再有日更 schedule。手动 full（`workflow_dispatch`，`full` 默认 true）保留完整套件，禁用复用并强制 full/data，仍共享同一30分钟预算，真实失败需定位。该次运行不部署、不触发 Release。
 
 ## 7. 合并前要绿什么（摘要）
 

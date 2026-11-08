@@ -7,15 +7,17 @@ import { applyBrowserPolicy } from './ci-scope.mjs';
 export function validatePlan(plan) {
   if (
     !plan ||
-    !['maintenance', 'civ-ui', 'targeted', 'full'].includes(plan.scope) ||
+    !['maintenance', 'civ-ui', 'targeted', 'full', 'gate'].includes(plan.scope) ||
     typeof plan.full !== 'boolean' ||
     typeof plan.data !== 'boolean' ||
     plan.full !== (plan.scope === 'full') ||
     (plan.data && !plan.full) ||
-    (plan.browser !== undefined && !['full', 'capped', 'none'].includes(plan.browser)) ||
+    (plan.browser !== undefined && !['full', 'capped', 'none', 'gate'].includes(plan.browser)) ||
     (plan.browser === 'full' && !plan.full) ||
     (plan.browser === 'none' && (plan.full || plan.e2e?.length)) ||
     (plan.browser === 'capped' && !plan.e2e?.length) ||
+    (plan.browser === 'gate' &&
+      (plan.scope !== 'gate' || plan.full || plan.data || plan.unit.length !== 0 || plan.e2e.length !== 1 || plan.e2e[0] !== 'tests/e2e/smoke.spec.ts')) ||
     !Array.isArray(plan.features) ||
     plan.features.some((feature) => typeof feature !== 'string' || !/^[A-Za-z][A-Za-z0-9-]*$/.test(feature)) ||
     !Array.isArray(plan.unit) ||

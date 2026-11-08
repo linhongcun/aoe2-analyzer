@@ -464,8 +464,11 @@ describe('#659 browser source build and immutable aggregate', () => {
       delete input.proofs.static;
     }
     if (kind === 'missing static-main') {
-      input.requirements = input.requirements.filter((entry) => entry.stage_id !== 'static-main');
-      delete input.proofs['static-main'];
+      const full = aggregateFixture(4);
+      Object.assign(full.current, { force_full: true });
+      full.requirements = full.requirements.filter((entry) => entry.stage_id !== 'static-main');
+      delete full.proofs['static-main'];
+      Object.assign(input, full);
     }
     if (kind === 'failed data') {
       input.requirements.push(required('data'));

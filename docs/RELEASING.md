@@ -9,7 +9,7 @@
 1. 普通更新从最新 main 建实现分支，一个 issue、一个 PR 直接对 main；只有确需多项冻结集成时才建立 `release/vX.Y.Z`。版本号为三段，`package.json` 与锁文件一并更新。CHANGELOG 用 `scripts/changelog.mjs` 的 `insertVersionSection` 插在 Unreleased 正文之后、已有版本之前。
 2. 完成实现者之外的独立复核，以及按变更计划选择的一次验证。高风险 PR 与 main 一样执行完整单测和四 runner 浏览器；窄范围保留受影响功能正负路径、四宽与主题。阶段 v2 证明记录实际被测提交/tree、策略/工具链、精确检查/文件/case 集合和原始 run/attempt/数字 job/artifact；PR 通常测试 merge ref，不能仅用 PR head SHA。
 3. 合入 main。仅复用 GitHub 核实的同仓库成功原始执行证明，并匹配 tree、策略、工具链、精确集合与 artifact 归属/摘要；v1、坏证明或任意复用链无效，执行所缺必要阶段。build 与 static-main 不可复用。release 分支经过同样判断。
-4. main 重新构建其真实 `__BUILD__`，执行新构建24路由冷启动 smoke。static、unit、必要 data 与 build 并行；实际浏览器分片消费同一不可变 build，最终 `test` 严格核对全部必要阶段及构建身份后上传 `deployed-site` 并部署完全相同的 dist。每次事件包括普通文档维护都保留新构建冷烟测；等待该 main run 的实际 `test` 与 `deploy` 都成功。
+4. main 重新构建其真实 `__BUILD__`。默认只跑 static、构建身份烟测和 Chromium 单分片窄冒烟（首页、`#civs`、`#/civ/Franks`、`#unit/569`、Ctrl+K 搜索、法兰克圣骑士满科技 192 HP）。`test` 成功后才把同一 dist 上传为 `deployed-site` 并部署。冒烟或聚合失败则不部署。24 路由、多分片、单测和 data 只在手动 full，不作为这次部署的门禁。等待该 main run 的实际 `test` 与 `deploy` 都成功。
 
 普通 UI 更新不重生成未变数据，不默认执行无关计算与整站扫描。核心计算、依赖、共享基础设施和未知范围仍完整验证一次；涉及数据、生成脚本、来源等变化时才做相应数据管线。不要为凑项数或固定周期推迟已就绪的授权更新。
 
@@ -39,6 +39,6 @@ CI/Deploy 与 Release 各自从 GitHub `run.created_at` 起共享30分钟验证�
 
 ## 后台完整回归
 
-CI/Deploy 每日北京时间 04:17（cron `17 20 * * *`，UTC）运行完整单测、数据检查和整站浏览器；手动调度的 full 默认开启。该运行强制 full/data，禁用验证证据复用，不部署、不触发 Release。失败保留在真实 Actions 记录中并按故障定位；普通更新不等待无关后台回归重新执行。
+CI/Deploy 已关闭每日 schedule。手动调度的 full 默认开启，强制 full/data，禁用验证证据复用，不部署、不触发 Release。失败保留在真实 Actions 记录中并按故障定位；普通更新不等待这次手动回归。默认门禁见 [ci-749](design/ci-749.md)。
 
 日常单次运行以10分钟为实测目标。独立完成事件时序报告使用 GitHub workflow-completed 数据统计 wall、排队、全部 runner 分钟与最慢浏览器片；交付时另列 PR→main→deploy→Release 整链，不能用局部 job 时间或目标代替实际耗时。

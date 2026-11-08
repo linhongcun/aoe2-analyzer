@@ -46,13 +46,13 @@ hongcun 针对“胡斯派战车对轻型投石车、精锐胡斯派战车对中
 
 hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归，并在 #431 授权实施「每份代码只做一次相关验证、release/main 复用结果、部署后短核验、全量转后台」。2026-11-03 又明确授权处理 #659；以下分阶段门禁取代 #514 的 PR 绝不完整浏览器限制及 #513 的全局壳层 targeted 例外。历史授权记录保留，独立复核、数据来源和受保护产品验收规则继续有效。冻结范围、故障注入和等价巡检要求见 [#659 规格](docs/design/ci-659.md)。
 
-- 每次保留核心静态/类型/严格内容、来源、校验器与分层检查、真实 SHA 构建和跨路由冷启动 smoke。`maintenance` 文档/版本维护也执行核心烟测。`civ-ui` / `targeted` 仅用于已审计的完整消费者闭包，保留受影响功能的正负路径、四宽及明暗主题；无关全站巡检留在夜间或高风险计划，功能自己的断言不删减。
-- 共享计算、全局 CSS/tokens、路由、Layout/Icon/PageMeta、未知范围和 CI 策略自身使用 `full` 单测与浏览器，PR 同样执行。`formatTime`、`dupNames`、`glossary`、`linker`、`sharePage`、`simRoute` 在完整闭包另经审计前均保守 full。只有实际数据、生成输入、来源 pins 与依赖变化需要时执行数据管线；`full` 和 `data` 独立记录。
-- static、unit、必要 data 与 build 并行，main 专属 static-main 独立补跑。完整浏览器按历史时长加权 LPT 分配给四个 runner；窄计划最多四片，保留 default/serial 原子组，不全局 `fullyParallel`。实际分片只消费同一不可变构建，最终 `test` 严格核对所有必要阶段、精确 case 并集与构建身份，失败、取消、超时、缺片或错误证明均阻断部署。#338 合并同次1280访问中的 hash/表格检查，保留原有断言、失败收集、冷启动语义与六份 golden。
+- **默认 CI（#749，2026-11-08）**只跑 static、真实 SHA 构建（页脚身份）和 Chromium 单分片窄冒烟。普通 PR 不再按风险自动扩成四片、24 路由、单测或 data。手动 `workflow_dispatch` 且 `full=true` 才跑这些；该次不部署。细则见 [ci-749](docs/design/ci-749.md)。
+- `planChanges` 仍记录 `civ-ui` / `targeted` / `full` 分类，供手动 full 和本地检查。`formatTime`、`dupNames`、`glossary`、`linker`、`sharePage`、`simRoute` 在完整闭包另经审计前，手动 full 仍按广覆盖跑。只有手动 full，或本地需要时，才执行数据管线。
+- 默认 `browser-1` 只有一片，不可复用，消费同一次不可变构建。手动 full 才按历史时长加权 LPT 分到四个 runner。最终 `test` 核对本次计划内的阶段、精确 case 与构建身份；失败、取消、超时、缺片或错误证明均阻断部署。#338 的 hash/表格检查留在 full，不回默认门禁。
 - 只接受经 GitHub 核实的 v2 原始阶段证明；v1 全部无效。PR merge ref 到 main 的复用要求同仓库、相同 tree/策略/工具链、精确检查/文件/case 集合，以及真实成功来源 run/attempt/数字 job/artifact 匹配，不能只凭 PR head SHA、祖先关系或任意复用链。缺少有效证明时执行所缺必要阶段，并如实区分本次执行与原始执行来源。
-- build 与 static-main 不复用。main 仍重建实际提交的 `__BUILD__`；每次事件包括 maintenance 均对新构建执行24路由冷启动 smoke，再将同一快照用于 Pages 和 `deployed-site`。Release 下载准确成功 main run 的产物，核对外部 v2 gate、manifest、版本/SHA/tree/tag 和本次功能，直接打包相同字节与 SHA256，不二次构建。
+- build 不复用。main 仍重建实际提交的 `__BUILD__`，默认对新构建执行窄冒烟和页脚身份检查，再将同一快照用于 Pages 和 `deployed-site`。static-main 只在手动 full，且该次不部署。Release 下载准确成功 main run 的产物，核对外部 v2 gate、窄冒烟记录、manifest、版本/SHA/tree/tag 和本次功能，直接打包相同字节与 SHA256，不二次构建。
 - 每次 CI/Deploy 或 Release run 从 GitHub `run.created_at` 起共享30分钟预算，包含初始/阶段/部署排队、重跑、命令、网络等待和聚合；不能逐阶段重置。Release 有自己的 run 起点。诊断最多另用90秒，不能继续验证或签发成功证明；平台清理延迟不构成物理30:00停止承诺。完成后的独立时序报告使用 GitHub workflow-completed 数据，列出 wall、排队、全部 runner 分钟与最慢片；PR→main→deploy→Release 整链另外汇总。
-- 每日北京时间 04:17（GitHub Actions cron `17 20 * * *`，按 UTC 解释）及手动完整运行保留全量单测、数据检查和整站浏览器回归。该后台运行禁用证据复用，强制 `full` 和 `data`，不部署、不触发 Release。真实失败仍须定位，不提高超时、增加重试或放宽断言掩盖问题。
+- 日更 schedule 已关闭。手动完整运行保留全量单测、数据检查和整站浏览器回归，禁用证据复用，强制 `full` 和 `data`，不部署、不触发 Release。真实失败仍须定位，不提高超时、增加重试或放宽断言掩盖问题。
 - 本地先做一次必要验证。没有新修改、真实失败或未解决问题时不扩大或重复测试；需要定位失败时收窄到具体问题。报告实际执行、复用、跳过或中止范围。日常单次运行以10分钟为实测目标；不能将目标、局部计时或超预算的结果写成完成承诺。
 
 ## 版本工作流

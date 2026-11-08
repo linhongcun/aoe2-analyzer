@@ -58,7 +58,7 @@ it('#659 a high-risk pull request launches full Playwright even when the legacy 
   expect(() => validatePlan({ ...maintenance, e2e: [] })).toThrow(/Invalid CI validation plan/);
 });
 
-it('#659 real CLI retains the full high-risk suite on PR, main, nightly, and manual events', () => {
+it('#749 real CLI keeps ordinary PR and main on the narrow gate; full stays manual or schedule', () => {
   const directory = mkdtempSync(join(tmpdir(), 'pr-browser-'));
   const git = (...args: string[]) => execFileSync('git', args, { cwd: directory, encoding: 'utf8' }).trim();
   const commit = (path: string) => {
@@ -94,24 +94,30 @@ it('#659 real CLI retains the full high-risk suite on PR, main, nightly, and man
       return { plan, output: readFileSync(join(directory, 'outputs'), 'utf8') };
     };
     const pull = inspect('pull_request', 'refs/pull/514/merge');
-    expect(pull.plan).toMatchObject({ scope: 'full', full: true, data: false, browser: 'full', features: ['all'] });
+    expect(pull.plan).toMatchObject({ scope: 'gate', full: false, data: false, browser: 'gate', e2e: ['tests/e2e/smoke.spec.ts'], unit: [] });
     expect(pull.output).toContain('browser=true');
-    expect(pull.output).toContain('e2e_full=true');
-    expect(testCommand(pull.plan, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
+    expect(pull.output).toContain('e2e_full=false');
+    expect(pull.output).toContain('unit_chromium=false');
+    expect(testCommand(pull.plan, 'e2e').args).toEqual(['playwright', 'test', 'tests/e2e/smoke.spec.ts', '--reporter=line']);
+    expect(testCommand(pull.plan, 'unit')).toBeNull();
     const forced = inspect('pull_request', 'refs/pull/514/merge', 'true');
     expect(forced.plan).toMatchObject({ scope: 'full', full: true, data: true, browser: 'full' });
+    expect(forced.output).toContain('e2e_full=true');
+    for (const ref of ['refs/heads/main', 'refs/heads/release/v0.74.0']) {
+      const run = inspect('push', ref, 'false');
+      expect(run.plan).toMatchObject({ scope: 'gate', browser: 'gate', full: false, data: false });
+      expect(run.output).toContain('e2e_full=false');
+    }
     for (const [eventName, ref] of [
-      ['push', 'refs/heads/main'],
-      ['push', 'refs/heads/release/v0.74.0'],
       ['schedule', 'refs/heads/main'],
       ['workflow_dispatch', 'refs/heads/main'],
     ] as const) {
-      const run = inspect(eventName, ref, eventName === 'push' ? 'false' : 'true');
-      expect(run.plan).toMatchObject({ scope: 'full', full: true, browser: 'full' });
+      const run = inspect(eventName, ref, 'true');
+      expect(run.plan).toMatchObject({ scope: 'full', full: true, data: true, browser: 'full' });
       expect(run.output).toContain('e2e_full=true');
       expect(testCommand(run.plan, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
     }
-    expect(inspect('schedule', 'refs/heads/main', 'true').plan.data).toBe(true);
+    expect(inspect('schedule', 'refs/heads/main', 'false').plan).toMatchObject({ scope: 'full', data: true, browser: 'full' });
     expect(inspect('workflow_dispatch', 'refs/heads/main', 'true').plan.data).toBe(true);
     expect(inspect('push', 'refs/heads/main', 'false').plan.data).toBe(false);
   } finally {
