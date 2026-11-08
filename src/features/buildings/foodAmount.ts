@@ -8,7 +8,7 @@
 import ecoRaw from '../../data/raw/eco';
 
 export const FARM_BUILDING_ID = 50;
-export const FISH_TRAP_BUILDING_ID = 199;
+export { FISH_TRAP_BUILDING_ID } from '../../domain/gameIds';
 export const FARM_FOOD_RES = 36;
 export const FISH_TRAP_FOOD_RES = 88;
 /** 研究顺序：马轭、重犁、轮作。不是科技编号顺序。 */

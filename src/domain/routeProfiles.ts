@@ -8,6 +8,7 @@ import { gatherModel, realCost } from './realCost';
 import { reviewPayload, SCENE_ECO, type SceneContext } from './positionScenarios';
 import { sceneSignature } from './positionScenarioMath';
 import review from './routeReview.json';
+import { AGE_BY_TECH } from './gameIds';
 
 export const ROUTE_VERSION = 'feudal-castle-ledger-1';
 export const FEUDAL_TECHS = { flank: ['Fletching', 'Padded Archer Armor'], pocket: ['Forging', 'Scale Barding Armor'] };
@@ -114,7 +115,7 @@ export function routeProfile(ctx: SceneContext, civ: string, unitId: number, age
   )
     return fail('按建筑训练周期缺失或结构变化');
   let cycle = source.timeAt?.[unit.b] ?? source.trainTime;
-  const ageTechs: Record<number, number> = { 104: 1, 101: 2, 102: 3, 103: 4 };
+  const ageTechs = AGE_BY_TECH;
   for (const row of eco.civEco[civ] ?? []) {
     if (row.age > age || (row.requires ?? []).some((id) => (ageTechs[id] ? ageTechs[id]! > age : !ids.has(id)))) continue;
     for (const e of row.effects) {

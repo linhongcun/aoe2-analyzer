@@ -1,6 +1,7 @@
 /** Fixed DE188329 Roman worker bonus and independently sourced farm supply. */
 import type { BuildOrder } from './buildOrder';
 import type { EcoData, EffectRow } from './buildSim';
+import { VILLAGER_CLASS } from './gameIds';
 
 export interface RomanCommand {
   Type: number;
@@ -104,7 +105,7 @@ const TECHS: Record<number, RomanRawTech> = {
 };
 const DECODED: Record<number, Row['effects']> = {
   887: [
-    { kind: 'attr', target: 'class:4', attr: 'workRate', op: 'mul', v: 1.05 },
+    { kind: 'attr', target: `class:${VILLAGER_CLASS}`, attr: 'workRate', op: 'mul', v: 1.05 },
     { kind: 'attr', target: 'task:farm', attr: 'workRate', op: 'mul', v: 1.038095 },
     { kind: 'attr', target: 'unit:50', attr: 'workRate', op: 'mul', v: 1.05 },
     { kind: 'attr', target: 'unit:1187', attr: 'workRate', op: 'mul', v: 1.05 },
@@ -158,7 +159,7 @@ export function romanContext(eco: EcoData): RomanContext {
     complete,
     bonus,
     supplyMultiplier: bonusRow?.effects.find((effect) => effect.target === 'unit:50')?.v ?? 1,
-    buildMultiplier: bonusRow?.effects.find((effect) => effect.target === 'class:4')?.v ?? 1,
+    buildMultiplier: bonusRow?.effects.find((effect) => effect.target === `class:${VILLAGER_CLASS}`)?.v ?? 1,
     reasons: complete ? [] : [ROMAN_SOURCE_REASON],
   };
 }

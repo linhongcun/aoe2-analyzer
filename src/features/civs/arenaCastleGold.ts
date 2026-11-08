@@ -4,6 +4,7 @@
  * 瓦兰吉资源 298 的原始字段不在这里公布：玩法比例缺少可核的函数体。
  */
 import ecoRaw from '../../data/raw/eco';
+import { AGE_TECH_IDS } from '../../domain/gameIds';
 
 export const ARENA_CASTLE_CIVS = ['Muisca', 'Ethiopians', 'Varangians'] as const;
 export type ArenaCastleCiv = (typeof ARENA_CASTLE_CIVS)[number];
@@ -27,7 +28,7 @@ const ETHIOPIAN_IMPERIAL = 589;
 const ETHIOPIAN_SPECIAL_START = 871;
 const FEUDAL_AGE_START = 298;
 const VARANGIAN_GOLD = 1475;
-const AGE_UP = [101, 102, 103];
+const AGE_UP = AGE_TECH_IDS;
 
 export const OFFICIAL_AGE_HREF = 'https://www.ageofempires.com/learn-to-play/advancing-aoe2/';
 export const OFFICIAL_VARANGIAN_HREF = 'https://www.ageofempires.com/news/varangians-civilization-deep-dive/';

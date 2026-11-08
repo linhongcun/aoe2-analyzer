@@ -1,6 +1,7 @@
 /** Issue197: only the reviewed Bengali age family, never a general Type7 interpreter. */
 import validateSpawn from '../content/schema/compiled/wei-spawn.mjs';
 import type { WeiSpawnContext } from './weiEconomy';
+import { AGE_TECH_IDS } from './gameIds';
 
 /** The existing structural schema is shared; Bengali and Wei semantics stay separate. */
 export type BengaliSpawnContext = WeiSpawnContext;
@@ -20,7 +21,7 @@ export interface BengaliReward {
   count: number;
 }
 const IDS = [847, 848, 849, 873];
-const TRIGGERS = [101, 102, 103, 298];
+const TRIGGERS = [...AGE_TECH_IDS, 298];
 const AGES = [2, 3, 4, 1];
 export const BENGALI_CONTEXT_REASON = '孟加拉时代赠村民缺少完整已核前置和生成命令，未计入';
 export const BENGALI_SPAWN_NOTE =

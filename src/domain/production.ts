@@ -6,6 +6,7 @@ import { discountedCost, roundHalfPrice } from './costDiscount';
 import { gatherModel, type GatherRes } from './realCost';
 import type { Cost, Tech, Trees, Unit } from './types';
 import { buildingAge, EARLY_UNIT_AGES } from './availabilityAge';
+import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
 
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
@@ -27,7 +28,14 @@ export interface ProductionContext {
   core: Core;
   trees: Trees;
 }
-export const DEFAULT_PRODUCTION: ProductionConfig = { civ: 'Franks', age: 3, techs: [], walk: 3, farm: 1, rows: [{ unit: 83, building: 109, count: '1' }] };
+export const DEFAULT_PRODUCTION: ProductionConfig = {
+  civ: 'Franks',
+  age: 3,
+  techs: [],
+  walk: 3,
+  farm: 1,
+  rows: [{ unit: VILLAGER_UNIT_ID, building: TC_BY_AGE[0]!, count: '1' }],
+};
 const task = { Food: 'farm', Wood: 'wood', Gold: 'gold', Stone: 'stone' } as const;
 const costAttrs: Record<number, GatherRes | 'all'> = { 100: 'all', 103: 'Food', 104: 'Wood', 105: 'Gold', 106: 'Stone' };
 const change = (base: number, op: string | undefined, v: number) => (op === 'set' ? v : op === 'mul' ? base * v : base + v);
@@ -42,7 +50,7 @@ function isGatherTech(t: Tech) {
   return (eco.ecoTechs[t.id]?.effects ?? []).some(
     (e) =>
       e.kind === 'attr' &&
-      ['task:farm', 'task:wood', 'task:gold', 'task:stone', 'class:4'].includes(e.target ?? '') &&
+      ['task:farm', 'task:wood', 'task:gold', 'task:stone', `class:${VILLAGER_CLASS}`].includes(e.target ?? '') &&
       ['workRate', 'carry', 'speed'].includes(e.attr ?? ''),
   );
 }
@@ -149,10 +157,14 @@ interface EcoEffect {
   res?: number;
 }
 function matches(e: EcoEffect, u: Unit) {
-  return e.target === `unit:${u.id}` || e.target === `class:${eco.units[u.id]?.class}` || (u.id === 83 && ['villager', 'class:4'].includes(e.target ?? ''));
+  return (
+    e.target === `unit:${u.id}` ||
+    e.target === `class:${eco.units[u.id]?.class}` ||
+    (u.id === VILLAGER_UNIT_ID && ['villager', `class:${VILLAGER_CLASS}`].includes(e.target ?? ''))
+  );
 }
 function buildingTarget(building: number, age: number) {
-  if (building === 109) return [109, 71, 141, 142][age - 1] ?? building;
+  if (building === TC_BY_AGE[0]!) return TC_BY_AGE[age - 1] ?? building;
   if (building === 45) return [45, 133, 47, 51][age - 1] ?? building;
   return building;
 }
@@ -233,7 +245,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
         warnings.push('马普切聚落专用训练倍率未计入；兵营和靶场使用普通训练时间，聚落生产暂不可选。');
         continue;
       }
-      const needed = (r.requires ?? []).filter((id) => !!ctx.core.techById[id] && ![101, 102, 103].includes(id));
+      const needed = (r.requires ?? []).filter((id) => !!ctx.core.techById[id] && !isAgeTech(id));
       if (needed.some((id) => !sel.has(id))) continue;
       if (relevant.some((e) => e.op !== 'mul' || !Number.isFinite(e.v) || (e.v ?? 0) <= 0)) {
         warnings.push(`${r.name}：训练效果未核实，未计入。`);

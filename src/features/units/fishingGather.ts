@@ -3,11 +3,12 @@
  * 养鱼场没有单独 workRate 时标待确认，不推算。不计算往返，不改 eco.json。
  */
 import ecoRaw from '../../data/raw/eco';
+import { FISH_TRAP_BUILDING_ID as FISH_TRAP_BUILDING_ID_NUM } from '../../domain/gameIds';
 import { formatGatherNumber } from './villagerGather';
 
 export const FISHING_SHIP_UNIT_ID = 13;
 export const GILLNETS_TECH_ID = '65';
-export const FISH_TRAP_BUILDING_ID = '199';
+export const FISH_TRAP_BUILDING_ID = String(FISH_TRAP_BUILDING_ID_NUM);
 
 export interface FishingShipStat {
   unit?: unknown;

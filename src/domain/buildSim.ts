@@ -11,7 +11,7 @@ import {
   mechanismTeamRowAllowed,
   mechanismGatherMarkerAllowed,
 } from './buildSimMechanisms';
-import { TC_BY_AGE, applyMod, baseMods, RES_START, RES_HUNT_FOOD, applyEffects } from './buildSimEffects';
+import { applyMod, baseMods, RES_START, RES_HUNT_FOOD, applyEffects } from './buildSimEffects';
 import { foragerWoodIncome, lumberFoodIncome, varangianGoldIncome, hasUniqueMayanTree } from './buildSimCivRules';
 import { simScope, techAtomicOk, simSupport } from './buildSimCoverage';
 export { pushMod, applyMod, type NumMod } from './buildSimEffects';
@@ -49,6 +49,7 @@ import { type KhmerFarm, type KhmerPrerequisites, type KhmerRawTech, type KhmerR
 import type { JurchenRawTech } from './jurchenEconomy';
 import type { ChineseRawTech } from './chineseEconomy';
 import { mapucheForagerFood, type MapucheInfrastructure, type MapucheRawTech } from './mapucheEconomy';
+import { HOUSE_ID, TC_BY_AGE, VILLAGER_UNIT_ID, isAgeTech } from './gameIds';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -273,8 +274,7 @@ const ECO_TASK: Record<Task, string> = {
 const NEAR: Task[] = ['sheep', 'boar', 'deer', 'hunt', 'berries', 'farm', 'fish'];
 /** 起始村民数：.dat 中由引擎资源（编号 234 等）控制、含义未完全解码，按文明加成文字手工给出 */
 export const START_VILS: Record<string, number> = { Chinese: 6, Mayans: 4 };
-const HOUSE = 70;
-const TC = 109;
+const TC = TC_BY_AGE[0]!;
 const r1 = (x: number) => Math.round(x * 10) / 10;
 
 /** TC 闲置区间 → 卡点（严格大于阈值；纯函数，便于边界测试） */
@@ -465,7 +465,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
   const costOf = (kind: 'unit' | 'building' | 'tech' | 'up', id: number): Stock => {
     const c: Cost =
       kind === 'unit'
-        ? id === 83
+        ? id === VILLAGER_UNIT_ID
           ? eco.villager.cost
           : (eco.units[id]?.cost ?? {})
         : kind === 'building'
@@ -479,7 +479,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       if (frankMillFree && freeIds.has(id)) return { food: 0, wood: 0, gold: 0, stone: 0 };
       const tm = m.techCost[id] ?? {};
       for (const r of Object.keys(out) as Res[])
-        out[r] = Math.max(0, Math.round(applyMod(applyMod(out[r] * (civ === 'Chinese' && [101, 102, 103].includes(id) ? 1 : m.techCostAll), tm.all), tm[r])));
+        out[r] = Math.max(0, Math.round(applyMod(applyMod(out[r] * (civ === 'Chinese' && isAgeTech(id) ? 1 : m.techCostAll), tm.all), tm[r])));
       return out;
     }
     // Chinese ordinary technologies include unit upgrades; advancing Age is excluded above.
@@ -774,7 +774,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         const n = a.count ?? 1;
         const bt = buildingTime(a.building);
         for (let k = 0; k < n; k++) constructions.push({ building: a.building, progress: 0, bt, step: p.step, p });
-        if (a.building === HOUSE) for (let k = 0; k < n; k++) housePaidAt.push(r1(t));
+        if (a.building === HOUSE_ID) for (let k = 0; k < n; k++) housePaidAt.push(r1(t));
       } else if (a.type === 'train') {
         military++;
         const at = (eco.units[a.unit]?.at ?? []).find((b) => (built.get(b) ?? 0) > 0)!;
@@ -798,15 +798,15 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       }
     }
     // 2b) 自动补房
-    if (P.autoHouses && popCap < 200 && popCap - popUsed() <= 2 && !constructions.some((c) => c.building === HOUSE)) {
-      const c = costOf('building', HOUSE);
+    if (P.autoHouses && popCap < 200 && popCap - popUsed() <= 2 && !constructions.some((c) => c.building === HOUSE_ID)) {
+      const c = costOf('building', HOUSE_ID);
       if (afford(c)) {
         pay(c);
         housePaidAt.push(r1(t));
         constructions.push({
-          building: HOUSE,
+          building: HOUSE_ID,
           progress: 0,
-          bt: buildingTime(HOUSE, 25),
+          bt: buildingTime(HOUSE_ID, 25),
           step: -1,
           auto: true,
         });
@@ -845,7 +845,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       if (c.building > 0) {
         built.set(c.building, (built.get(c.building) ?? 0) + 1);
         if (!c.auto) buildingsDone.push({ building: c.building, at: r1(t) });
-        if (c.building === HOUSE) popCap = Math.min(200, popCap + 5);
+        if (c.building === HOUSE_ID) popCap = Math.min(200, popCap + 5);
         if (c.building === TC) popCap = Math.min(200, popCap + tcPopulation);
         const extraPopulation = mechanism.buildingPopulation?.(scope, c.building) ?? 0;
         if (extraPopulation) popCap = Math.min(200, popCap + extraPopulation);
@@ -939,12 +939,12 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
         const nextClick = [2, 3, 4].map((a) => (a > age && !ageUps.some((x) => x.age === a) ? clickVils(a) : undefined)).find((x) => x !== undefined);
         const limit = Math.min(finalVils, nextClick ?? finalVils);
         if (born < limit) {
-          const c = costOf('unit', 83);
+          const c = costOf('unit', VILLAGER_UNIT_ID);
           if (popUsed() + 1 > popCap) cause = 'pop';
           else if (!afford(c)) cause = 'food';
           else {
             pay(c);
-            tcState = { kind: 'vil', left: eco.villager.trainTime * (m.timeMul['unit:83'] ?? 1) };
+            tcState = { kind: 'vil', left: eco.villager.trainTime * (m.timeMul[`unit:${VILLAGER_UNIT_ID}`] ?? 1) };
             villagerStartedAt = r1(t);
           }
         } else if (nextStep < nSteps && born < finalVils) cause = 'other';
@@ -1116,7 +1116,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
   };
 }
 
-const isHouse = (a: Action) => a.type === 'build' && a.building === HOUSE;
+const isHouse = (a: Action) => a.type === 'build' && a.building === HOUSE_ID;
 /**
  * #42：文明是否不需要房子——黑暗时代即生效的 res 4（人口余量）加法让 5 + 加成 ≥ 200（人口上限），
  * 数值从 eco.json（.dat 导出）读，匈奴 Tech tree 为 +2000。只看 handled 的条目。
@@ -1172,7 +1172,7 @@ export function noHouseCompare(
   let startWoodDelta = 0;
   for (const r of eco.civEco[civ] ?? [])
     if (r.age === 1 && r.source !== 'team') for (const e of r.effects) if (e.kind === 'res' && e.res === 92 && e.op === 'add') startWoodDelta += e.v ?? 0;
-  const houseWood = eco.buildings[HOUSE]?.cost.Wood ?? 25;
+  const houseWood = eco.buildings[HOUSE_ID]?.cost.Wood ?? 25;
   const housesSaved = genericTl.housePaidAt.filter((t) => t <= g.reachAt).length;
   return { earlierSec: r1(g.reachAt - c.reachAt), startWoodDelta, housesSaved, woodNet: housesSaved * houseWood + startWoodDelta };
 }

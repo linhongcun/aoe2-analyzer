@@ -4,7 +4,7 @@
  */
 import ecoRaw from '../../data/raw/eco';
 
-export const VILLAGER_UNIT_ID = 83;
+export { VILLAGER_UNIT_ID } from '../../domain/gameIds';
 
 /** 已有任务键的玩家称呼。未知键不自拟名称。 */
 const TASK_LABEL: Record<string, string> = {

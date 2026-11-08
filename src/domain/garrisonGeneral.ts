@@ -8,6 +8,7 @@ import type { Building, Tech, Trees } from './types';
 import { civStatus } from './simulator';
 import { productionTechAge } from './production';
 import { buildingAge as getGarrisonBuildingAge, EARLY_UNIT_AGES } from './availabilityAge';
+import { AGE_TECH_IDS, FEMALE_VILLAGER_ID, TC_BY_AGE, VILLAGER_UNIT_ID } from './gameIds';
 
 export type GarrisonEntry = 'enter' | 'created' | 'deposit';
 export interface GeneralGarrisonRow {
@@ -176,7 +177,7 @@ export function garrisonUnitMask(unit: Pick<GeneralGarrisonUnit, 'sizeClass' | '
 export { getGarrisonBuildingAge };
 function unitAge(ctx: GeneralGarrisonContext, id: number, civ: string, data: GeneralGarrisonData) {
   const u = ctx.core.unitById[id];
-  if (id === 293) return 1;
+  if (id === FEMALE_VILLAGER_ID) return 1;
   return (
     EARLY_UNIT_AGES[civ]?.[id] ??
     Math.max(u?.age ?? ctx.core.buildingById[id]?.age ?? data.units[id]?.catalog?.age ?? 1, id === 93 ? 2 : 1, data.herdableIds.includes(id) ? 1 : 0)
@@ -188,12 +189,12 @@ function existingUnitAge(ctx: GeneralGarrisonContext, id: number, civ: string, d
   return data.civs[civ]?.startingScoutId === id ? 1 : unitAge(ctx, id, civ, data);
 }
 function unitAvailable(ctx: GeneralGarrisonContext, id: number, config: GeneralGarrisonConfig, data: GeneralGarrisonData): boolean {
-  const u = ctx.core.unitById[id] ?? (id === 293 ? ctx.core.unitById[83] : undefined) ?? ctx.core.buildingById[id];
+  const u = ctx.core.unitById[id] ?? (id === FEMALE_VILLAGER_ID ? ctx.core.unitById[VILLAGER_UNIT_ID] : undefined) ?? ctx.core.buildingById[id];
   if (u && !u.civs.includes(config.civ)) return false;
   if (!u && !data.herdableIds.includes(id) && !(data.specialOccupantIds ?? []).includes(id) && !(data.relicIds ?? []).includes(id)) return false;
   if (!u && data.units[id]?.catalog?.civs.length && !data.units[id]!.catalog!.civs.includes(config.civ)) return false;
   if (existingUnitAge(ctx, id, config.civ, data) > config.age) return false;
-  return civStatus(ctx.trees, config.civ)['u' + (id === 293 ? 83 : id)] !== 0;
+  return civStatus(ctx.trees, config.civ)['u' + (id === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : id)] !== 0;
 }
 
 function availableTechs(ctx: GeneralGarrisonContext, config: GeneralGarrisonConfig, data: GeneralGarrisonData): Tech[] {
@@ -246,7 +247,7 @@ function snapshot(ctx: GeneralGarrisonContext, b: Building, config: GeneralGarri
       productionLocations[e.unit] = [...(productionLocations[e.unit] ?? []), e.location];
     }
   };
-  for (const [index, id] of [101, 102, 103].entries())
+  for (const [index, id] of AGE_TECH_IDS.entries())
     if (config.age >= index + 2) {
       if (data.ageRules[id]) apply(data.ageRules[id]!);
       known.add(id);
@@ -311,7 +312,7 @@ function candidate(
   const predecessors = data.buildings[b.id]?.predecessors ?? aliases;
   // Scenario/editor defaults can have a train location without being part of the normal production roster (e.g. sheep at TC).
   // Female villagers share the normal villager production slot rather than a separate raw train-location record.
-  const productionId = id === 293 ? 83 : id;
+  const productionId = id === FEMALE_VILLAGER_ID ? VILLAGER_UNIT_ID : id;
   const producer = state.units[productionId];
   const catalogProduction = predecessors.some((sourceId) => data.buildings[sourceId]?.produces.includes(productionId));
   const relocatedProduction = state.productionLocations[productionId]?.some((location) => predecessors.includes(location)) ?? false;
@@ -332,10 +333,10 @@ function candidate(
   if ([759, 761].includes(id) && b.id === 12 && !state.known.has(16)) canCreate = false;
   if ([886, 887].includes(id) && b.id === 101 && !state.known.has(483)) canCreate = false;
   if (id === 1699 && !state.known.has(755)) canCreate = false;
-  const core = ctx.core.unitById[id] ?? (id === 293 ? ctx.core.unitById[83] : undefined) ?? ctx.core.buildingById[id];
+  const core = ctx.core.unitById[id] ?? (id === FEMALE_VILLAGER_ID ? ctx.core.unitById[VILLAGER_UNIT_ID] : undefined) ?? ctx.core.buildingById[id];
   return {
     id,
-    zh: id === 293 ? '女村民' : u.zh,
+    zh: id === FEMALE_VILLAGER_ID ? '女村民' : u.zh,
     en: u.en,
     age: existingUnitAge(ctx, id, config.civ, data),
     pic: core?.pic ?? u.catalog?.pic ?? 0,
@@ -447,7 +448,7 @@ export function unitGarrisonPower(unit: GeneralGarrisonUnit, units: Record<strin
 
 function relicGarrisonPower(buildingId: number, building: GeneralGarrisonUnit, units: Record<string, GeneralGarrisonUnit>) {
   if (!FORTIFIED_CHURCH_IDS.has(buildingId)) return { power: 0, reason: '圣物存放只计容量，不增加弹丸。' };
-  const villager = units[83];
+  const villager = units[VILLAGER_UNIT_ID];
   const power = villager ? unitGarrisonPower(villager, units).power : null;
   const maxProjectiles = building.projectile >= 0 ? Math.max(1, building.max) : Math.max(0, building.max - 1);
   return {
@@ -646,8 +647,8 @@ export function readGeneralGarrison(params: URLSearchParams, b: Building): { con
   } else if (params.has('garrison')) {
     const count = params.get('garrison')!;
     if (!/^\d+$/.test(count) || !Number.isSafeInteger(Number(count))) errors.push('旧版驻军数量参数无效。');
-    rows.push({ unitId: 83, count, entry: 'enter' });
-  } else if ([109, 79, 234, 235].includes(b.id)) rows.push({ unitId: 83, count: '0', entry: 'enter' });
+    rows.push({ unitId: VILLAGER_UNIT_ID, count, entry: 'enter' });
+  } else if ([TC_BY_AGE[0]!, 79, 234, 235].includes(b.id)) rows.push({ unitId: VILLAGER_UNIT_ID, count: '0', entry: 'enter' });
   if (rows.length > GENERAL_GARRISON_LIMIT) errors.push(`驻军列表最多 ${GENERAL_GARRISON_LIMIT} 项。`);
   return { config: { civ: params.get('civ') ?? b.civs[0]!, age: age === null ? Math.max(3, b.age) : Number(age), techs: unique(techs), rows }, errors };
 }

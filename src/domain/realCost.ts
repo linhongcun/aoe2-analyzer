@@ -14,6 +14,7 @@ import civs from '../data/raw/civs';
 import type { Cost } from './types';
 import type { CostDiscount } from './costDiscount';
 import { UNHANDLED_RES } from './unhandledRes';
+import { VILLAGER_CLASS } from './gameIds';
 
 export type GatherRes = 'Food' | 'Wood' | 'Gold' | 'Stone';
 type Task = 'farm' | 'wood' | 'gold' | 'stone';
@@ -21,7 +22,7 @@ export const RES_TASK: Record<GatherRes, Task> = { Food: 'farm', Wood: 'wood', G
 /** 往返格数（口径假设，不是游戏数据） */
 export const ROUND_TRIP: Record<Task, number> = { farm: 0, wood: 6, gold: 6, stone: 6 };
 /** 村民 class（.dat class 4） */
-const VIL = 'class:4';
+const VIL = `class:${VILLAGER_CLASS}`;
 export const DEFAULT_VILS = 10;
 export const DEFAULT_MIN = 10;
 export const DEFAULT_AGE = 3;
@@ -85,12 +86,12 @@ export interface GatherModel {
  * bonus：civs.json 的 bon 序号，取 aoe2techtree 中文文明描述中的对应要点作为展示来源。
  */
 const SOURCED: Record<string, Record<string, { value: number | 'eco'; bonus: number } | 'drop'>> = {
-  Romans: { 'class:4:workRate': { value: 1.05, bonus: 0 }, 'task:farm:workRate': 'drop' },
+  Romans: { [`${VIL}:workRate`]: { value: 1.05, bonus: 0 }, 'task:farm:workRate': 'drop' },
   Slavs: { 'task:farm:workRate': { value: 1.15, bonus: 0 } },
   Celts: { 'task:wood:workRate': { value: 'eco', bonus: 0 } },
   Koreans: { 'task:stone:workRate': { value: 'eco', bonus: 0 } },
   Turks: { 'task:gold:workRate': { value: 'eco', bonus: 0 } },
-  Berbers: { 'class:4:speed': { value: 'eco', bonus: 0 } },
+  Berbers: { [`${VIL}:speed`]: { value: 'eco', bonus: 0 } },
 };
 
 /** issue 331：一组效果里有没有采集模型会读的项（村民采集/搬运/移动、资源产量）；团队行本身在 gatherModel 里一律跳过 */

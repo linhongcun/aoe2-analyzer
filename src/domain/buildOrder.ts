@@ -3,6 +3,7 @@
  * 数据文件：src/data/build-orders/*.json（每个文件一个 BuildOrder）。
  * 步骤以「当前村民数」为主键（与社区写法一致：6 → 羊、+3 → 木……），可选时代事件标记。
  */
+import { AGE_BY_TECH, HOUSE_ID } from './gameIds';
 
 /** 村民任务。hunt = 城镇中心下的肉类（羊/野猪/鹿），sheep/boar/deer 为更细的写法，统计时都计入食物 */
 export type Task = 'sheep' | 'boar' | 'deer' | 'hunt' | 'berries' | 'farm' | 'fish' | 'wood' | 'gold' | 'stone' | 'build';
@@ -88,8 +89,7 @@ export interface RefData {
 }
 
 /** 房子 */
-export const HOUSE = 70;
-const AGE_TECH: Record<number, number> = { 101: 2, 102: 3, 103: 4 };
+export { HOUSE_ID as HOUSE };
 const isObj = (x: unknown): x is Record<string, unknown> => typeof x === 'object' && x !== null && !Array.isArray(x);
 const isInt = (x: unknown, min = 0): x is number => typeof x === 'number' && Number.isInteger(x) && x >= min;
 
@@ -127,7 +127,7 @@ export function checkShape(bo: unknown): string[] {
       if (st.houseText !== undefined) {
         if (!Array.isArray(st.houseText) || st.houseText.some((x) => typeof x !== 'string' || !x || !String(st.note ?? '').includes(x)))
           e.push(`${p}.houseText 必须是 note 中的非空片段`);
-      } else if (Array.isArray(st.actions) && st.actions.some((a) => isObj(a) && a.type === 'build' && a.building === 70))
+      } else if (Array.isArray(st.actions) && st.actions.some((a) => isObj(a) && a.type === 'build' && a.building === HOUSE_ID))
         e.push(`${p} 含造房动作，需要 houseText（#42）`);
       if (!Array.isArray(st.actions)) return e.push(`${p}.actions 必须为数组`);
       if (st.actions.length === 0 && !st.note) e.push(`${p} 既无动作也无说明`);
@@ -231,7 +231,7 @@ export function checkSemantics(bo: BuildOrder, ref: RefData): { errors: string[]
           else need(`单位 ${a.unit}`, ref.units[a.unit]!.age);
           break;
         case 'research':
-          if (AGE_TECH[a.tech]) e.push(`${p}：升级时代请用 ageUp 动作`);
+          if (a.tech !== 104 && AGE_BY_TECH[a.tech]) e.push(`${p}：升级时代请用 ageUp 动作`);
           else if (!ref.techs[a.tech]) e.push(`${p}：未知科技 ${a.tech}`);
           else need(`科技 ${a.tech}`, ref.techs[a.tech]!.age);
           break;
@@ -260,7 +260,7 @@ export function checkSemantics(bo: BuildOrder, ref: RefData): { errors: string[]
   });
   // 开局规则：前 3 个村民（vils = 3 的步骤）必须包含盖房子
   const opening = bo.steps.filter((s) => s.vils === 3);
-  if (!opening.some((s) => s.actions.some((a) => a.type === 'build' && a.building === HOUSE))) e.push('开局（前 3 个村民）缺少盖房子步骤');
+  if (!opening.some((s) => s.actions.some((a) => a.type === 'build' && a.building === HOUSE_ID))) e.push('开局（前 3 个村民）缺少盖房子步骤');
   if (age < bo.target.age) e.push(`未到达目标时代 ${bo.target.age}`);
   const reach = bo.steps.find((s) => s.phase === (['', '', 'feudal-click', 'castle-click', 'imperial-click'] as const)[bo.target.age]);
   if (!reach) e.push('缺少目标时代的点击步骤');

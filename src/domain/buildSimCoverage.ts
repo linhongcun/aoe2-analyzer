@@ -36,8 +36,7 @@ import {
   MALIAN_BUILDING_CLASSES,
   hasMalianBuildingContext,
 } from './buildSimCivRules';
-const TC = 109;
-const HOUSE = 70;
+const TC = TC_BY_AGE[0]!;
 import { isWeiRewardRow, weiRewardFamily, WEI_CONTEXT_REASON } from './weiEconomy';
 import { isBengaliRewardRow, bengaliRewardFamily, BENGALI_CONTEXT_REASON } from './bengaliEconomy';
 import { armenianContext, armenianResearchSites, armenianRowClass, type ArmenianRawTech } from './armenianEconomy';
@@ -49,6 +48,7 @@ import { khmerContext, khmerRowClass, khmerHasMarker, KHMER_SOURCE_REASON, type 
 
 import { jurchenContext, jurchenRowClass, hasJurchenMarker, JURCHEN_SOURCE_REASON, type JurchenRawTech } from './jurchenEconomy';
 import { UNHANDLED_RES } from './unhandledRes';
+import { AGE_TECH_IDS, HOUSE_ID, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
 export { UNHANDLED_RES };
 
 // ───────── 文明加成覆盖（#42）：每条效果必须是 已处理 / 不影响开局（带原因）/ 影响开局但未实现 之一 ─────────
@@ -123,10 +123,10 @@ export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
   const { armenians, georgians } = context;
   if (armenians?.infrastructure || georgians?.infrastructure || context.mapuche?.infrastructure || context.poles?.infrastructure)
     bos = bos.map((order) => civMechanism(civ).prepare!(order, civ!, eco));
-  const units = new Set<number>([83]);
-  const buildings = new Set<number>([...TC_UNITS, HOUSE, ...FARM_UNITS]);
+  const units = new Set<number>([VILLAGER_UNIT_ID]);
+  const buildings = new Set<number>([...TC_UNITS, HOUSE_ID, ...FARM_UNITS]);
   if (georgians?.start) buildings.add(1808);
-  const techs = new Set<number>([101, 102, 103, ...Object.keys(eco.ecoTechs).map(Number)]);
+  const techs = new Set<number>([...AGE_TECH_IDS, ...Object.keys(eco.ecoTechs).map(Number)]);
   for (const b of bos)
     for (const st of b.steps)
       for (const a of st.actions) {
@@ -138,7 +138,7 @@ export function simScope(eco: EcoData, bos: BuildOrder[], civ?: string) {
   const unitClass = new Map([...units].map((u) => [u, eco.units[u]?.class ?? -1] as const));
   // TC时代形态和替代农田不一定有单独计价记录；实际build入口及已有记录必须有class，缺失时不能少算马里折扣。
   const pricedBuildings = new Set([...buildings].filter((id) => eco.buildings[id]));
-  pricedBuildings.add(HOUSE);
+  pricedBuildings.add(HOUSE_ID);
   for (const bo of bos) for (const step of bo.steps) for (const action of step.actions) if (action.type === 'build') pricedBuildings.add(action.building);
   const buildingClass = new Map([...pricedBuildings].map((id) => [id, eco.buildings[id]?.class ?? -1] as const));
   return {
@@ -254,7 +254,7 @@ export function classifyCivEffect(
   if (e.kind === 'attr' && e.target) {
     const t = e.target;
     const id = t.startsWith('unit:') ? Number(t.slice(5)) : NaN;
-    const vil = t.startsWith('task:') || t === 'villager' || t === 'class:4' || id === 83;
+    const vil = t.startsWith('task:') || t === 'villager' || t === `class:${VILLAGER_CLASS}` || id === VILLAGER_UNIT_ID;
     // 类别目标（#42 哥特步兵 class:6）：开局里有该类别的单位时，费用倍率已按类别实现；其余属性不影响开局时间
     if (t.startsWith('class:') && !vil) {
       const cls = Number(t.slice(6));

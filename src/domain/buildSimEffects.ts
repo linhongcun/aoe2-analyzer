@@ -7,8 +7,9 @@ import {
   RES_WILD_FOOD_GOLD,
   RES_SHEPHERD_PRODUCTIVITY,
 } from './buildSimCivRules';
+import { TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
+export { TC_BY_AGE };
 const START: Stock = { food: 200, wood: 200, gold: 100, stone: 200 };
-export const TC_BY_AGE = [109, 71, 141, 142];
 export const TC_UNITS = new Set(TC_BY_AGE);
 /** 文明修正 */
 export interface Mods {
@@ -197,7 +198,7 @@ export function applyEffects(m: Mods, effects: EffectRow['effects'], application
     const v = x.v ?? 0;
     if (x.kind === 'attr' && x.target && x.attr && (x.op === 'mul' || x.op === 'add')) {
       const t = x.target;
-      const key = t.startsWith('task:') ? t.slice(5) : t === 'villager' || t === 'class:4' || t === 'unit:83' ? 'villager' : t;
+      const key = t.startsWith('task:') ? t.slice(5) : t === 'villager' || t === `class:${VILLAGER_CLASS}` || t === `unit:${VILLAGER_UNIT_ID}` ? 'villager' : t;
       const mul = (o: Record<string, number>, k: string) => {
         if (x.op === 'mul') o[k] = (o[k] ?? 1) * v;
       };
@@ -212,7 +213,7 @@ export function applyEffects(m: Mods, effects: EffectRow['effects'], application
       } else if (x.attr === 'speed' && key === 'villager' && x.op === 'mul') m.speed *= v;
       else if (x.attr === 'speed' && x.op === 'mul') mul(m.unitSpeed, key);
       else if (x.attr in COST_ATTR && x.op === 'mul') {
-        const id = key === 'villager' ? 'unit:83' : key;
+        const id = key === 'villager' ? `unit:${VILLAGER_UNIT_ID}` : key;
         const r = COST_ATTR[x.attr]!;
         const o = (m.costMul[id] ??= {});
         o[r] = (o[r] ?? 1) * v;
@@ -228,7 +229,7 @@ export function applyEffects(m: Mods, effects: EffectRow['effects'], application
         const o = (m.costAdd[key] ??= {});
         const r = COST_ATTR[x.attr] as Res;
         o[r] = (o[r] ?? 0) + v;
-      } else if (x.attr === 'trainTime' && x.op === 'mul') mul(m.timeMul, key === 'villager' ? 'unit:83' : key);
+      } else if (x.attr === 'trainTime' && x.op === 'mul') mul(m.timeMul, key === 'villager' ? `unit:${VILLAGER_UNIT_ID}` : key);
     } else if (x.kind === 'res' && x.res !== undefined) {
       if (application.mayanResource && MAYAN_RESOURCE_TASKS[x.res]) {
         const task = MAYAN_RESOURCE_TASKS[x.res]!;
