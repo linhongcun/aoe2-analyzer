@@ -4,7 +4,7 @@
  * 但那是文明加成，不是建筑住房，本页不写。经济数据里标了名称、建筑资料却没有条目的编号保持待确认。
  */
 import buildingsRaw from '../../data/raw/buildings';
-import ecoRaw from '../../data/raw/eco';
+import { ECO } from '../../data/eco';
 
 export const HOUSING_ANCHOR = 'housing';
 export const POP_ANCHOR = 'pop';
@@ -56,6 +56,7 @@ export interface HousingFacts {
   patchDate: string | null;
 }
 
+/** UI 视图切片：防御式解析 eco.json，只声明本页读取的字段；不是 EcoData 的整表副本。 */
 interface EcoAge {
   ageReq?: unknown;
   meta?: { patch?: unknown };
@@ -117,7 +118,7 @@ export function housingPatch(patch: unknown): { patchBuild: string | null; patch
   };
 }
 
-export function housingFacts(buildings: readonly HousingSource[] = buildingsRaw as HousingSource[], eco: EcoAge = ecoRaw as EcoAge): HousingFacts {
+export function housingFacts(buildings: readonly HousingSource[] = buildingsRaw as HousingSource[], eco: EcoAge = ECO): HousingFacts {
   const rows = housingRows(buildings);
   const patch = housingPatch(eco.meta?.patch);
   return { rows, gaps: catalogGaps(eco.ageReq, rows), patchBuild: patch.patchBuild, patchDate: patch.patchDate };

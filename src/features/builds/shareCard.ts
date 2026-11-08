@@ -3,9 +3,9 @@
  * 原则：卡片不自己算，和页面用同一套函数——rangeLabel（#56）、pickSummaryBottleneck + summaryText（#57）、formatClock。
  * 纯函数，不碰 DOM；数字全部来自 simulateBuild → buildView。
  */
-import ecoRaw from '../../data/raw/eco';
+import { ECO as ecoRaw } from '../../data/eco';
 import { formatClock } from '../../domain/formatTime';
-import { civSimNotes, MAYAN_CAVALRY_TEMPLATE_NOTE, SHU_KNIGHT_TEMPLATE_NOTE, type EcoData } from '../../domain/buildSim';
+import { civSimNotes, MAYAN_CAVALRY_TEMPLATE_NOTE, SHU_KNIGHT_TEMPLATE_NOTE } from '../../domain/buildSim';
 import { WEI_KNIGHT_TEMPLATE_NOTE } from '../../domain/weiEconomy';
 import { BENGALI_KNIGHT_TEMPLATE_NOTE } from '../../domain/bengaliEconomy';
 import { ARMENIAN_CART_NOTE, ARMENIAN_RESEARCH_NOTE } from '../../domain/armenianEconomy';
@@ -82,7 +82,7 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
   const head = `${i.civZh}·${shortBoName(i.boNameZh)}`;
   const title = reached ? `${head}，约 ${formatClock(target!.reachAt)} 到${i.targetZh}，${phrase}` : `${head}，60 分钟内到不了${i.targetZh}`;
   const slavicNotes = ['Poles', 'Romans', 'Gurjaras', 'Mapuche', 'Chinese', 'Slavs', 'Khmer', 'Jurchens'].includes(i.civEn)
-    ? civSimNotes(ecoRaw as unknown as EcoData, i.civEn, i.boId)
+    ? civSimNotes(ecoRaw, i.civEn, i.boId)
     : [];
   return {
     title,

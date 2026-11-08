@@ -2,7 +2,7 @@
  * issue 735：只读展示 eco.json fishingShip 的岸鱼 / 深海基准 workRate 与携带量，并对照刺网。
  * 养鱼场没有单独 workRate 时标待确认，不推算。不计算往返，不改 eco.json。
  */
-import ecoRaw from '../../data/raw/eco';
+import { ECO } from '../../data/eco';
 import { FISH_TRAP_BUILDING_ID as FISH_TRAP_BUILDING_ID_NUM } from '../../domain/gameIds';
 import { formatGatherNumber } from './villagerGather';
 
@@ -25,12 +25,14 @@ export interface EcoEffectStat {
   v?: unknown;
 }
 
+/** UI 视图切片：防御式解析 eco.json，只声明本页读取的字段；不是 EcoData 的整表副本。 */
 export interface FishingEcoSlice {
   meta?: { patch?: unknown; tasks?: unknown };
   fishingShip?: FishingShipStat | null;
   units?: Record<string, { class?: unknown } | null | undefined>;
   ecoTechs?: Record<string, { effects?: unknown } | null | undefined>;
-  buildings?: Record<string, { workRate?: unknown } | null | undefined>;
+  /** buildTime 只用于让 EcoDataView 的结构可赋给这个防御式切片，本文件不读取。 */
+  buildings?: Record<string, { workRate?: unknown; buildTime?: unknown } | null | undefined>;
 }
 
 export interface FishingGillnets {
@@ -90,7 +92,7 @@ function fishTrapWorkRate(source: FishingEcoSlice): number | null {
   return finite(row.workRate);
 }
 
-export function fishingShipGatherBaseline(source: FishingEcoSlice = ecoRaw as unknown as FishingEcoSlice): FishingGatherBaseline {
+export function fishingShipGatherBaseline(source: FishingEcoSlice = ECO): FishingGatherBaseline {
   const ship = shipStats(source.fishingShip);
   const gillnets = gillnetsOf(source);
   const shoreAfter = gillnets && ship.workRate != null ? scaleGather(ship.workRate, gillnets.workMul) : null;
