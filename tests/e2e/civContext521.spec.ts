@@ -39,10 +39,11 @@ test('#521 文明情境入口预填当前文明，单边对比和生产可刷新
   await page.goBack();
   await nav.getByRole('link', { name: '文明对比', exact: true }).click();
   await expect(page.locator('#ca')).toHaveAttribute('data-value', 'Jurchens');
-  await expect(page.locator('#cb')).toHaveAttribute('data-value', 'Britons');
+  // issue 772：缺 b 时补目录里第一个不同文明（Armenians），不再固定回落默认侧。
+  await expect(page.locator('#cb')).toHaveAttribute('data-value', 'Armenians');
   await expect(page.locator('#ctab th').nth(1).getByRole('link')).toHaveAttribute('href', '#/civ/Jurchens');
   await expect.poll(() => params(page).get('a')).toBe('Jurchens');
-  await expect.poll(() => params(page).get('b')).toBe('Britons');
+  await expect.poll(() => params(page).get('b')).toBe('Armenians');
   await page.reload();
   await expect(page.locator('#ca')).toHaveAttribute('data-value', 'Jurchens');
   await page.goBack();
