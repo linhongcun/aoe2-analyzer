@@ -23,7 +23,7 @@ import {
 import { PlayerEditor } from './PlayerEditor';
 import { Sources } from './PlanSources';
 import { TextField } from './PlanTextField';
-import { AGE_NAMES, OPEN_NAMES, playerLabel } from './teamPlanLabels';
+import { AGE_NAMES, OPEN_NAMES, knownCiv, playerLabel } from './teamPlanLabels';
 
 export function PlanEditor({
   ctx,
@@ -41,6 +41,8 @@ export function PlanEditor({
   const changePhase = (next: PlanPhase) => update({ ...plan, phases: plan.phases.map((p) => (p.age === next.age ? next : p)) });
   const changePlayer = (next: PlanPlayer) => update({ ...plan, players: plan.players.map((p) => (p.id === next.id ? next : p)) });
   const teamHref = '/team-bonuses?' + encodeTeamBonuses({ players: plan.players.map((p) => p.civ), age: phase.age, target: 'all', unit: null, researched: [] });
+  // 未选择文明时不生成会锁死的队伍加成链接；选齐后再启用（issue 769）。
+  const civsReady = plan.players.every((p) => knownCiv(p.civ));
   return (
     <>
       <section className="tp-panel tp-lead" aria-labelledby="tp-lead-heading">
@@ -56,9 +58,15 @@ export function PlanEditor({
         <button className="btn" onClick={() => update(exampleTeamPlan(), true)}>
           载入开放陆地4v4范例
         </button>
-        <Link className="btn" to={teamHref}>
-          查看队伍加成来源
-        </Link>
+        {civsReady ? (
+          <Link className="btn" to={teamHref}>
+            查看队伍加成来源
+          </Link>
+        ) : (
+          <button type="button" className="btn" disabled title="先为每名玩家选择文明">
+            查看队伍加成来源
+          </button>
+        )}
       </div>
       <p className="tp-boundary">只核对固定数据与玩家明确确认的形态升级、解锁和生产建筑。未核对资源、人口、兵力或队友实际支援；任务认领仅表示约定。</p>
       {plan.example && (
@@ -123,7 +131,8 @@ export function PlanEditor({
               <label className="tp-field">
                 {player.id.toUpperCase()} 文明
                 <select value={player.civ} onChange={(e) => changePlayer({ ...player, civ: e.target.value })}>
-                  {!civs.some((c) => c.en === player.civ) && <option value={player.civ}>未知文明：{player.civ}</option>}
+                  <option value="">未选择</option>
+                  {!!player.civ && !civs.some((c) => c.en === player.civ) && <option value={player.civ}>未知文明：{player.civ}</option>}
                   {civs.map((c) => (
                     <option key={c.en} value={c.en}>
                       {c.zh}

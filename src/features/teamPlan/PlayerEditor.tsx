@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { civs } from '../../data';
 import { encodeProduction, type ProductionContext } from '../../domain/production';
 import {
   PLAN_LIMITS,
@@ -14,7 +13,7 @@ import {
 } from '../../domain/teamPlan';
 import { ForceEditor } from './ForceEditor';
 import { TextField } from './PlanTextField';
-import { labelFor, playerLabel, unique } from './teamPlanLabels';
+import { civLabel, knownCiv, labelFor, playerLabel, unique } from './teamPlanLabels';
 
 const toggle = (values: number[], id: number) => (values.includes(id) ? values.filter((value) => value !== id) : [...values, id]);
 
@@ -41,21 +40,22 @@ export function PlayerEditor({
     ...selected.flatMap((f) => [...planPotentialBuildings(ctx, player.civ, phase.age, f.unitId), f.buildingId]),
     ...row.completedBuildings,
   ]);
-  const production = selected.length
-    ? '/production?' +
-      encodeProduction({
-        civ: player.civ,
-        age: phase.age,
-        rows: selected.map((f) => ({ unit: f.unitId, building: f.buildingId, count: '1' })),
-        techs: row.completedUnlockTechIds,
-        walk: 3,
-        farm: 1,
-      })
-    : null;
+  const production =
+    selected.length && knownCiv(player.civ)
+      ? '/production?' +
+        encodeProduction({
+          civ: player.civ,
+          age: phase.age,
+          rows: selected.map((f) => ({ unit: f.unitId, building: f.buildingId, count: '1' })),
+          techs: row.completedUnlockTechIds,
+          walk: 3,
+          farm: 1,
+        })
+      : null;
   return (
     <article className="tp-panel tp-player-phase" data-testid={`team-plan-player-${row.playerId}`}>
       <h3>
-        {playerLabel(player)} · {civs.find((c) => c.en === player.civ)?.zh ?? player.civ}
+        {playerLabel(player)} · {civLabel(player.civ)}
       </h3>
       <p className="note">
         {POSITION_NAMES[player.position]} {player.positionNote}
@@ -127,7 +127,7 @@ export function PlayerEditor({
       />
       <p className="note">自报不会改变资格核对或证明支援足够。</p>
       <div className="tp-actions">
-        <Link to={`/tree/${player.civ}`}>文明科技树</Link>
+        {knownCiv(player.civ) && <Link to={`/tree/${player.civ}`}>文明科技树</Link>}
         {production && <Link to={production}>持续生产资料（每行按1座）</Link>}
       </div>
     </article>
