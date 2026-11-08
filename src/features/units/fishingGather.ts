@@ -30,6 +30,7 @@ export interface FishingEcoSlice {
   fishingShip?: FishingShipStat | null;
   units?: Record<string, { class?: unknown } | null | undefined>;
   ecoTechs?: Record<string, { effects?: unknown } | null | undefined>;
+  /** buildTime 只用于让 EcoDataView 的结构可赋给这个防御式切片，本文件不读取。 */
   buildings?: Record<string, { workRate?: unknown; buildTime?: unknown } | null | undefined>;
 }
 

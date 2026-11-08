@@ -4,6 +4,7 @@
  */
 import civsRaw from '../../data/raw/civs';
 import { ECO } from '../../data/eco';
+import type { EcoRow } from '../../domain/ecoTypes';
 
 export const ELEVATION_HIGHER_RES = 211;
 export const ELEVATION_LOWER_RES = 212;
@@ -30,21 +31,12 @@ export const HOTFIX_82587 = {
 export const CLIFF_PENDING = '悬崖是否与山体同一套乘子：待确认。站内经济数据没有悬崖专用字段，本页不补写。';
 export const TERRAIN_OMISSION = '单位 PK 和对局助手的伤害计算未计入地形高低差。';
 
-interface ResEffect {
-  kind?: string;
-  op?: string;
-  res?: number;
-  v?: number;
-}
-
-interface EcoRow {
-  tech?: number;
-  effects?: ResEffect[];
-}
+/** 防御式 UI 切片：只要求 tech/effects，允许测试 fixture 省略 .dat 行的其它字段。 */
+export type ElevationEcoRow = Pick<EcoRow, 'tech'> & { effects?: EcoRow['effects'] };
 
 export interface ElevationEco {
   meta?: { patch?: string };
-  civEco?: Record<string, EcoRow[] | undefined>;
+  civEco?: Record<string, ElevationEcoRow[] | undefined>;
 }
 
 interface ElevationCivRow {
@@ -94,7 +86,7 @@ export function formatElevationNumber(value: number): string | null {
   return sign + (frac === 0 ? String(whole) : `${whole}.${String(frac).padStart(2, '0')}`);
 }
 
-export function resourceAdd(rows: readonly EcoRow[] | undefined, res: number): ResourceAdd {
+export function resourceAdd(rows: readonly ElevationEcoRow[] | undefined, res: number): ResourceAdd {
   let sum = 0;
   let seen = false;
   for (const row of rows ?? []) {
@@ -116,7 +108,7 @@ function multiplied(base: number, add: ResourceAdd): string | null {
   return add.state === 'value' ? formatElevationNumber(base + add.value) : null;
 }
 
-function techsFor(rows: readonly EcoRow[] | undefined): number[] {
+function techsFor(rows: readonly ElevationEcoRow[] | undefined): number[] {
   const ids: number[] = [];
   for (const row of rows ?? []) {
     const hit = (row.effects ?? []).some((effect) => effect.kind === 'res' && (effect.res === ELEVATION_HIGHER_RES || effect.res === ELEVATION_LOWER_RES));
@@ -132,7 +124,7 @@ function catalogMatches(bonus: string | null, add: ResourceAdd): boolean {
   return percent !== null && bonus.includes(`${percent}%`);
 }
 
-function describeCiv(en: string, rows: readonly EcoRow[] | undefined, civs: readonly ElevationCivRow[]): ElevationCiv {
+function describeCiv(en: string, rows: readonly ElevationEcoRow[] | undefined, civs: readonly ElevationCivRow[]): ElevationCiv {
   const civ = civs.find((item) => item.en === en);
   const bonusIndex = (civ?.bonEn ?? []).findIndex((line) => /higher elevation/i.test(line));
   const higherAdd = resourceAdd(rows, ELEVATION_HIGHER_RES);

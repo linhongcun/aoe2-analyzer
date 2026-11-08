@@ -1,6 +1,7 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { ECO, ECO_PATCH_BUILD } from '../../src/data/eco';
+import { ECO } from '../../src/data/eco';
 import pins from '../../scripts/data_sources.json';
 
 const FEATURE_FILES = [
@@ -17,18 +18,27 @@ const FEATURE_FILES = [
   'src/features/units/villagerGather.ts',
 ] as const;
 
+const walk = (directory: string): string[] =>
+  readdirSync(directory, { withFileTypes: true }).flatMap((entry) => (entry.isDirectory() ? walk(join(directory, entry.name)) : [join(directory, entry.name)]));
+const FEATURE_SOURCES = walk('src/features').filter((file) => file.endsWith('.ts') || file.endsWith('.tsx'));
+
 describe('#814 features 走 eco 类型化入口', () => {
-  it('feature 不直读 raw/eco，也不再把整表强转成 EcoData', () => {
-    for (const file of FEATURE_FILES) {
+  it('整个 features 目录不直读 raw/eco，也不再把整表强转成 EcoData', () => {
+    for (const file of FEATURE_SOURCES) {
       const source = readFileSync(file, 'utf8');
       expect(source, file).not.toContain('data/raw/eco');
       expect(source, file).not.toContain('as unknown as EcoData');
+    }
+  });
+
+  it('11 个已知页面都从 data/eco 读取类型化 ECO', () => {
+    for (const file of FEATURE_FILES) {
+      const source = readFileSync(file, 'utf8');
       expect(source, file).toContain("from '../../data/eco'");
     }
   });
 
   it('ECO 是带 meta 的类型化视图，版本与 pin 一致', () => {
-    expect(ECO_PATCH_BUILD).toBe(pins.patch.build);
     expect(ECO.meta?.patch).toContain(`DE Update ${pins.patch.build}`);
     expect(Object.keys(ECO.civEco)).toHaveLength(56);
     expect(Object.keys(ECO.villager.tasks).length).toBeGreaterThan(0);

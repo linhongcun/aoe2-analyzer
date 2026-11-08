@@ -85,14 +85,15 @@ interface TechCost {
   Gold?: unknown;
 }
 
-interface EcoTech {
+/** UI 切片视图：防御式解析 eco.json，字段比 ecoTypes 的 EcoTech 更宽；避免与导出类型同名。 */
+interface ArenaTech {
   en?: unknown;
   cost?: TechCost;
 }
 
 export interface ArenaEco {
   meta?: { patch?: unknown };
-  techs?: Record<string, EcoTech | undefined>;
+  techs?: Record<string, ArenaTech | undefined>;
   civEco?: Record<string, unknown>;
 }
 
