@@ -25,7 +25,8 @@ import { ECO as eco } from '../data/eco';
 import { CONSTRUCTION_DATA as construction } from '../data/construction';
 import unitsRaw from '../data/raw/units';
 import { buildOrders } from '../data/buildOrders';
-import { classifyCivEffect, simScope, simSupport as currentSimSupport, techAtomicOk } from './buildSim';
+import { CIV_MECHANISM_KEYS, classifyCivEffect, simScope, simSupport as currentSimSupport, techAtomicOk } from './buildSim';
+import { BONUS_USAGE_EXCLUDED } from './mechanismExclusions';
 import type { CivBonusEnt } from './civBonus';
 import { DAT } from './datEffects';
 import { gatherBonusIdx, gatherModel, touchesGather } from './realCost';
@@ -41,6 +42,8 @@ import { khmerContext, KHMER_FARM_NOTE, KHMER_PREREQUISITE_NOTE } from './khmerE
 
 /** PK 与真实成本只给单位算折后价（建筑费用折扣不在这两个工具里） */
 const UNIT_IDS = new Set((unitsRaw as unknown as { id: number }[]).map((u) => u.id));
+/** 从机制注册表派生；排除项集中在 mechanismExclusions.ts。 */
+export const BONUS_USAGE_CIVS = Object.freeze(CIV_MECHANISM_KEYS.filter((civ) => !Object.hasOwn(BONUS_USAGE_EXCLUDED, civ)));
 type Cmd = { C: number; A: number; B: number };
 const relicMods = Object.values((relicRaw as unknown as { modifiers: Record<string, { civ: string; scope: string }> }).modifiers);
 
@@ -204,9 +207,7 @@ function simLine(b: CivBonusEnt): BonusUsageLine | null {
     };
   }
   const { techs, treeOnly } = bonusTechs(b);
-  const currentScope = ['Poles', 'Romans', 'Mapuche', 'Chinese', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer'].includes(b.civ)
-    ? simScope(eco, buildOrders, b.civ)
-    : scope();
+  const currentScope = BONUS_USAGE_CIVS.includes(b.civ) ? simScope(eco, buildOrders, b.civ) : scope();
   const rows = (eco.civEco[b.civ] ?? []).filter((r) => {
     const t = (r as { tech?: number }).tech;
     return r.source !== 'team' && t !== undefined && techs.includes(t);
