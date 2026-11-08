@@ -160,4 +160,7 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 ## 提交身份
 
 - 不要用 `@users.noreply.github.com` 邮箱提交（会把提交归到别的 GitHub 用户）。用仓库现有的身份或维护者指定的身份，提交前 `git config user.email` 确认。
+- AI 代理参与的实现，在本地 commit message 与 PR 正文末尾保留署名 trailer：`Co-authored-by: DeepSeek Harness <noreply@deepseek.com>`。author/committer 仍用仓库身份；squash 合并后 GitHub 的 author 是合并者，按 Cursor 等既有做法通过 co-author 记录代理参与。
+- `noreply@deepseek.com` 目前没有绑定 GitHub 账号（DeepSeek 在 GitHub 只有组织 `deepseek-ai`，组织不能归属提交），所以该 trailer 只显示文字署名、不产生头像/链接徽章；若维护者后续建立 GitHub App 或专用账号，再把邮箱换成可归属的形态并同步更新本文件与 `CONTRIBUTING.md`。
+- 不得用他人或其他账号的 noreply 邮箱冒充归属；代理署名只用于诚实记录参与方。
 - 不要提交 `.dat`、`scripts/.cache/`、`dist/`、截图 png、`node_modules`。
