@@ -1,6 +1,6 @@
 # 多人施工模型（#227）
 
-固定版本为 DE Update 185872。`scripts/construction_build.py` 从 `scripts/data_sources.json` 固定的原版 DAT 导出 `src/data/construction.json`；`--check` 校验逐字复现。原始 DAT 与缓存不提交。元数据保留来源提交、SHA256、补丁、生成脚本，以及 `engineVerifiedInPinnedBuild=false`。以下为原字段及公开规则推算，未运行固定版本游戏客户端。
+固定版本为 DE Update 188329。`scripts/construction_build.py` 从 `scripts/data_sources.json` 固定的原版 DAT 导出 `src/data/construction.json`；`--check` 校验逐字复现。原始 DAT 与缓存不提交。元数据保留来源提交、SHA256、补丁、生成脚本，以及 `engineVerifiedInPinnedBuild=false`。以下为原字段及公开规则推算，未运行固定版本游戏客户端。
 
 #282 将各文明重复的对象与自动规则保存为 `unitSets` / `automaticSets` 共享字典，`civs[name].units` / `automatic` 为字典索引。前端统一通过 `src/data/construction.ts` 读取展开后的 `CONSTRUCTION_DATA`；计算结构、命令顺序、原始索引、前置闭包和来源字段保持不变。Python 源回归通过生成脚本的 `expand` 读取同一逻辑结构。
 
@@ -35,7 +35,7 @@
 | 建筑形态            | 固定升级映射及科技目录                                                                               | 警戒箭塔、大型箭塔、垛墙、港口及炮塔须相应升级；免费/自动与前置联动      |
 | Vedic Teachings条件 | generic1311–1322需1309，1309属于目录外Puru                                                           | 无该研究状态，不会误应用到正常文明                                       |
 
-起始TC门控同时参考已实际打开核对的官方 [Update81058](https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/)（西班牙起始TC不享建造加速）和 [Hotfix45185](https://www.ageofempires.com/news/aoe2de-hotfix-45185/)（西西里游牧首TC不享建造加速）。它们解释仍保留在固定DAT里的条件，不用旧补丁数字覆盖185872字段。[官方论坛讨论](https://forums.ageofempires.com/t/sicilians-are-f-tier-they-even-build-castles-and-tcs-slower-than-spanish/247622)中测试者确认遗漏首TC导致西西里加成不生效，仅作为条件风险示例。
+起始TC门控同时参考已实际打开核对的官方 [Update81058](https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/)（西班牙起始TC不享建造加速）和 [Hotfix45185](https://www.ageofempires.com/news/aoe2de-hotfix-45185/)（西西里游牧首TC不享建造加速）。它们解释仍保留在固定DAT里的条件，不用旧补丁数字覆盖当前固定 DAT 字段。[官方论坛讨论](https://forums.ageofempires.com/t/sicilians-are-f-tier-they-even-build-castles-and-tcs-slower-than-spanish/247622)中测试者确认遗漏首TC导致西西里加成不生效，仅作为条件风险示例。
 
 ## 与旧工具的差异
 

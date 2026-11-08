@@ -1,6 +1,6 @@
 # #228 队伍加成来源与目标关联审计
 
-`python3 scripts/team_bonuses_build.py` 从 `dat_source.load()` 固定的 DE Update 185872 原始 `.dat` 生成 `src/data/team_bonuses.json`；`--check` 要求逐字复现。`.dat`、解析缓存、Python 环境不提交。数据来源仓库、完整提交、路径、SHA256 均在生成元数据中，不以当前网页数值覆盖固定版本。
+`python3 scripts/team_bonuses_build.py` 从 `dat_source.load()` 固定的 DE Update 188329 原始 `.dat` 生成 `src/data/team_bonuses.json`；`--check` 要求逐字复现。`.dat`、解析缓存、Python 环境不提交。数据来源仓库、完整提交、路径、SHA256 均在生成元数据中，不以当前网页数值覆盖固定版本。
 
 导出覆盖站内 56 文明、248 个站内单位、38 建筑和 3 项可研究团队科技。它是来源与静态目标目录，不是队伍效果模拟器，`engineVerifiedInPinnedBuild=false`。同一文明来源只合并展示提供者；不据此推断多个玩家研究同一科技时的叠加次数或合并倍率。
 

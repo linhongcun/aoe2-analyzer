@@ -12,6 +12,7 @@ import {
   encodeScouting,
   exampleScoutingConfig,
   isScoutingTimeText,
+  scoutingVersionParts,
   withScenario,
   type ScoutingConfig,
   type ScoutingHypothesisResult,
@@ -21,6 +22,7 @@ import {
 import { sharePageUrl } from '../../domain/sharePage';
 import { Icon } from '../../shared/ui/Icon';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { DATA_SOURCES, versionLabel } from '../../shared/utils/dataInfo';
 import './scouting.css';
 
 const maps: Record<ScoutingConfig['map'], string> = {
@@ -92,6 +94,8 @@ export default function Scouting() {
     navigate = useNavigate();
   const decoded = useMemo(() => decodeScouting(location.search), [location.search]);
   const [timeDrafts, setTimeDrafts] = useState<Partial<Record<ScoutingObservationId, string>>>({});
+  const currentDataLabel = DATA_SOURCES.patch ? versionLabel(DATA_SOURCES) : '当前数据版本';
+  const versionParts = scoutingVersionParts(SCOUTING_CONTENT.dataVersion, currentDataLabel, DATA_SOURCES.patch?.build);
   const {
     copy,
     status: notice,
@@ -417,7 +421,13 @@ export default function Scouting() {
         <summary>适用范围</summary>
         <p>{SCOUTING_CONTENT.editorialNotice}</p>
         <p className="scouting-note">
-          游戏资料口径 <span className="num">{SCOUTING_CONTENT.dataVersion}</span>，核对 <span className="num">{SCOUTING_CONTENT.checkedAt}</span>
+          <span className="nw">{versionParts.content}</span> / <span className="nw">{versionParts.current}</span>
+          {versionParts.note ? (
+            <>
+              ，<span className="nw">{versionParts.note}</span>
+            </>
+          ) : null}
+          ，核对 <span className="num">{SCOUTING_CONTENT.checkedAt}</span>
           。信号的判断来自所列教学或本站整理，行动建议按这些观察原则组织。
         </p>
         <ul className="scouting-sources">

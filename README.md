@@ -2,7 +2,7 @@
 
 在线访问：https://linhongcun.github.io/aoe2-analyzer/
 
-帝国时代 II 决定版（DE）的中文百科与分析工具。数值对应 **DE Update 185872**（2026-09-22），效果数据直接派生自游戏原版 `.dat`。所有评分（1-10）为主观近似值，仅供参考。
+帝国时代 II 决定版（DE）的中文百科与分析工具。数值对应 **DE Update 188329**（2026-10-28），效果数据直接派生自游戏原版 `.dat`。所有评分（1-10）为主观近似值，仅供参考。
 
 ## 模块 / Modules
 
@@ -44,14 +44,14 @@
 
 | 数据                                                                                       | 来源                                                                                                                                                   | 脚本                                                                              |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| 文明、单位、科技、建筑、科技树、中英文本、图标                                             | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `scripts/data_sources.json`，185872）                        | `npm run data`（`scripts/build_data.py`）                                         |
+| 文明、单位、科技、建筑、科技树、中英文本、图标                                             | [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)（固定提交见 `scripts/data_sources.json`，188329）                        | `npm run data`（`scripts/build_data.py`）                                         |
 | 科技/文明加成/团队加成的结构化效果（`src/data/effects.json`）                              | DE 原版 `empires2_x2_p1.dat`，来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，sha256 `4aa2f0a7…7baa` 固定 | `npm run effects`（`scripts/effects_build.py` + 审计 `scripts/effects_audit.ts`） |
 | 经济/开局数据（训练/建造/研究时间与费用、村民采集速率、文明经济效果，`src/data/eco.json`） | 同上                                                                                                                                                   | `npm run eco`（`scripts/eco_build.py`，对账见 `docs/ECO-DATA.md`）                |
 | 村民驻军数据（弹丸基数/上限、驻军贡献与相关科技，`src/data/garrison.json`）                | 同一固定 `.dat`；算法与范围见 [issue218 规格](docs/design/issue218-spec.md)                                                                            | `python3 scripts/garrison_build.py`（CI 使用 `--check` 校验可复现）               |
 | 开局库（`src/data/build-orders/*.json`）                                                   | 社区开局转写，逐个注明出处（见 [docs/BUILD-ORDERS.md](docs/BUILD-ORDERS.md)）                                                                          | `npm run bo:check`                                                                |
 | 基础数值对账（aoe2techtree vs .dat）                                                       | 同上                                                                                                                                                   | `npm run stats:check`                                                             |
 
-- 全部上游固定版本（仓库、提交、sha256、补丁号、日期）集中在 **`scripts/data_sources.json`**；站点页头徽章「数据版本：DE 185872（2026-09-22）」链接到 [关于数据](https://linhongcun.github.io/aoe2-analyzer/#/about-data) 页。
+- 全部上游固定版本（仓库、提交、sha256、补丁号、日期）集中在 **`scripts/data_sources.json`**；站点页头徽章「数据版本：DE 188329（2026-10-28）」链接到 [关于数据](https://linhongcun.github.io/aoe2-analyzer/#/about-data) 页。
 - `.dat` 仅在构建时下载到 `scripts/.cache/`（已 gitignore），校验 **sha256 + 补丁标记**（标记由 `data:update` 从新文件计算并记录：文明/科技/效果数量、最新文明；另有最小常识检查）：`npm run dat:check`。用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py) 解析（首次运行自动建立 `scripts/.cache/venv`）。
 - **.dat © Microsoft Corporation：本仓库与站点均不包含、不分发该文件**，只发布由它派生的数值。
 - 效果差异与覆盖率见 [docs/EFFECTS-AUDIT.md](docs/EFFECTS-AUDIT.md)；新补丁：`npm run data:update`（检查上游 → 更新固定版本 → 重新生成全部数据、审计、对账 → 写 `docs/PATCH-NOTES/<补丁号>.md`，**不自动提交**），详见 [docs/DATA-UPDATE.md](docs/DATA-UPDATE.md)。
@@ -97,7 +97,7 @@ npm run test:py      # Python 测试：补丁号识别、差异摘要、标记�
 - 界面图标：[Lucide](https://lucide.dev)（ISC License），经 lucide-react 本地打包（不使用 CDN）
 - DLC/资料片列表与图标（`public/img/dlc/`，缩放为 64px WebP）：来自 [seicing.com 文明发售列表](https://seicing.com/html/aoe2/index-aoe2.html)，并与 ageofempires.com 官方公告核对
 - 时代图标（`public/img/ages/`，64px WebP）：来自 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) `img/Ages/base_{dark,feudal,castle,imperial}_age.png`，固定提交见 `scripts/data_sources.json`（游戏图像 © Microsoft）
-- 科技/文明加成/团队加成数值效果（`src/data/effects.json`，`scripts/effects_build.py`）：全部取自 DE 原版游戏数据文件 `empires2_x2_p1.dat`（DE Update 185872），文件来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，构建时下载并校验 sha256 与补丁标记（`npm run dat:check`），用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py)（LGPL-3.0）解析。**.dat © Microsoft Corporation，本仓库与站点均不包含、不再分发该文件**，只发布由它派生的数值。基础数值仍取自 aoe2techtree，并与 .dat 对账（`npm run stats:check`）。参考对账：[linhongcun/lhc-aoe2](https://github.com/linhongcun/lhc-aoe2)。差异见 `docs/EFFECTS-AUDIT.md`
+- 科技/文明加成/团队加成数值效果（`src/data/effects.json`，`scripts/effects_build.py`）：全部取自 DE 原版游戏数据文件 `empires2_x2_p1.dat`（DE Update 188329），文件来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `e293dc1`，构建时下载并校验 sha256 与补丁标记（`npm run dat:check`），用 [genieutils-py](https://github.com/SiegeEngineers/genieutils-py)（LGPL-3.0）解析。**.dat © Microsoft Corporation，本仓库与站点均不包含、不再分发该文件**，只发布由它派生的数值。基础数值仍取自 aoe2techtree，并与 .dat 对账（`npm run stats:check`）。参考对账：[linhongcun/lhc-aoe2](https://github.com/linhongcun/lhc-aoe2)。差异见 `docs/EFFECTS-AUDIT.md`
 - 文明数据：[SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree)
 - 单位/科技数据与图标（`public/img/units/`、`img/techs/`）：高清版取自 [denniske/aoe2companion](https://github.com/denniske/aoe2companion) 的 256px DE 图标（缩放为 128px WebP，`scripts/icons_hires.py`），未覆盖的少数图标回退到 aoe2techtree 48px 原图（游戏图像 © Microsoft）
 - 属性/资源图标（`public/img/stats/`，40px WebP）：来自 [Age of Empires Fandom Wiki](https://ageofempires.fandom.com/)（如 Hpicon_aoe2de.png、Attack_cur.png、Armoricon_aoe2de.png、AoE2DE_icon_*.png、Aoe2de_food.png 等；Wiki 内容 CC BY-SA，游戏图像 © Microsoft）
