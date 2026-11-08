@@ -24,7 +24,7 @@ export const AOE_BUDDY_SD3_SOURCE = {
 export const VICTORY_MODE_COPY = {
   kicker: '胜利条件 / 游戏模式',
   title: '房间设置和赛事口径分开看',
-  lead: '下面六张入门卡只覆盖征服示例。猝死、弑君和其他设置不能用征服示例代替。',
+  lead: '猝死、弑君和其他设置不能用征服示例代替。',
   conquestHeading: '征服',
   /** 与本局目标卡第一段保持同一句。 */
   conquest: '本页示例采用征服设置：通过军事与战略击败所有敌方，或让对方投降结束比赛。分数领先只是当前局势的一个提示，不是已经获胜。',
