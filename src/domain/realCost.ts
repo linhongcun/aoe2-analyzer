@@ -15,6 +15,7 @@ import type { Cost } from './types';
 import type { CostDiscount } from './costDiscount';
 import { UNHANDLED_RES } from './unhandledRes';
 import { VILLAGER_CLASS } from './gameIds';
+import { effectiveGatherRate } from './gatherRate';
 
 export type GatherRes = 'Food' | 'Wood' | 'Gold' | 'Stone';
 type Task = 'farm' | 'wood' | 'gold' | 'stone';
@@ -152,9 +153,8 @@ export function gatherModel(age: number, civ = '', options: { techIds?: Readonly
     const b = eco.villager.tasks[t]!;
     const wr = get(`task:${t}:workRate`, get(`${VIL}:workRate`, b.workRate));
     const carry = get(`task:${t}:carry`, get(`${VIL}:carry`, b.carry));
-    const distance = t === 'farm' ? (options.farmTiles ?? 0) * 2 : options.walkTiles === undefined ? ROUND_TRIP[t] : options.walkTiles * 2;
-    const trip = carry / wr + distance / speed;
-    rate[t] = distance === 0 ? wr : carry / trip;
+    const oneWay = t === 'farm' ? (options.farmTiles ?? 0) : options.walkTiles === undefined ? ROUND_TRIP[t] / 2 : options.walkTiles;
+    rate[t] = oneWay === 0 ? wr : effectiveGatherRate({ workRate: wr, carry, speed, walkTiles: oneWay });
   }
   return { age, civ, rate, applied, unsupported };
 }

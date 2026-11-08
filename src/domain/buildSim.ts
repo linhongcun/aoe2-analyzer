@@ -50,6 +50,7 @@ import type { JurchenRawTech } from './jurchenEconomy';
 import type { ChineseRawTech } from './chineseEconomy';
 import { mapucheForagerFood, type MapucheInfrastructure, type MapucheRawTech } from './mapucheEconomy';
 import { HOUSE_ID, TC_BY_AGE, VILLAGER_UNIT_ID, isAgeTech } from './gameIds';
+import { effectiveGatherRate } from './gatherRate';
 
 export type Res = 'food' | 'wood' | 'gold' | 'stone';
 export type Stock = Record<Res, number>;
@@ -573,8 +574,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       (m.mayanProductivity[et] ?? 1);
     const carry = base.carry * (m.carry[et] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + et] ?? 0) + (m.carry['add:villager'] ?? 0);
     const d = t === 'farm' && m.farmNoWalk ? 0 : NEAR.includes(t) ? P.nearTiles : P.walkTiles;
-    const walk = (2 * d) / (eco.villager.speed * m.speed);
-    const average = carry / (carry / wr + walk);
+    const average = effectiveGatherRate({ workRate: wr, carry, speed: eco.villager.speed * m.speed, walkTiles: d });
     return mechanismFarmRate(scope, et, average);
   };
   const actionCost = (a: Action): Stock => {
@@ -982,7 +982,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       const carry = fish.carry * (m.carry[key] ?? 1) * (m.carry[cls] ?? 1) + (m.carry['add:' + key] ?? 0) + (m.carry['add:' + cls] ?? 0);
       const speed = fish.speed * (m.unitSpeed[key] ?? 1) * (m.unitSpeed[cls] ?? 1);
       if (wr > 0 && carry > 0 && speed > 0) {
-        const q = (fishingShips * carry) / (carry / wr + (2 * P.walkTiles) / speed);
+        const q = effectiveGatherRate({ workRate: wr, carry, speed, walkTiles: P.walkTiles, units: fishingShips });
         stock.food += q * TICK;
         if (m.varangianGold) stock.gold += q * m.varangianGold * TICK;
       }
@@ -1228,8 +1228,13 @@ export function gatherRate(
     (ecoTask === 'sheep' ? m.sheepFoodMul : 1) *
     (m.mayanProductivity[ecoTask] ?? 1);
   const carry = base.carry * (m.carry[ecoTask] ?? 1) * (m.carry.villager ?? 1) + (m.carry['add:' + ecoTask] ?? 0) + (m.carry['add:villager'] ?? 0);
-  const walk = (2 * (ecoTask === 'farm' && m.farmNoWalk ? 0 : tiles)) / (eco.villager.speed * m.speed);
-  const average = carry / (carry / workRate + walk);
+  const average = effectiveGatherRate({
+    workRate,
+    carry,
+    speed: eco.villager.speed * m.speed,
+    walkTiles: tiles,
+    noReturnWalk: ecoTask === 'farm' && m.farmNoWalk,
+  });
   const rate = mechanismFarmRate(scope, ecoTask, average);
   const wood = foragerWoodIncome(m, ecoTask, rate);
   const food = lumberFoodIncome(m, ecoTask, rate) + mapucheForagerFood(m, ecoTask, rate);
