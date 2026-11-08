@@ -142,10 +142,7 @@ export default function GameGuide() {
         </div>
       )}
 
-      <VictoryModesCard />
-      <StandardVictoryCard />
-      <ElevationCard />
-      <HousingCard />
+      {!invalid && <p className="note gg-six-scope">下面六张入门卡只覆盖征服示例。</p>}
 
       <div className="gg-layout">
         <nav className="gg-nav" aria-label="六张入门卡">
@@ -244,6 +241,12 @@ export default function GameGuide() {
             )
           ))}
       </div>
+
+      <VictoryModesCard />
+      <StandardVictoryCard />
+      <ElevationCard />
+      <HousingCard />
+
       <footer className="gg-footer">
         <p>六卡是入门阅读路线，不是完整教程、胜率工具或实时比赛分析。</p>
         <div className="gg-links">
