@@ -404,6 +404,12 @@ a.hcard:hover {
   outline: none;
   padding: 6px;
 }
+/* issue 773：占位要列全可搜索范围，窄屏用 12px 保证仍能整句显示（issue 482 可读性）。 */
+@media (max-width: 420px) {
+  .cmdk-in input {
+    font-size: var(--fs-xs);
+  }
+}
 .cmdk-list {
   list-style: none;
   margin: 0;
@@ -2222,13 +2228,57 @@ a.tbld:hover span {
 }
 
 /* issue 45 时间线键盘节点、连续村民和跟进说明 */
-.tl-node-list { display: flex; flex-wrap: wrap; gap: 4px; margin-block: 12px; }
-.tl-node-list button { min-width: 44px; min-height: 44px; }
-.tl-villagers summary { background: var(--color-text-2); color: var(--color-surface); min-height: 44px; padding: 12px; box-sizing: border-box; cursor: pointer; }
-.tl-villagers details { margin-block: 8px; }
-.tl-villagers button { min-height: 44px; text-align: left; }
-.tl-followup { flex-basis: 100%; display: flex; align-items: center; gap: 8px; background: var(--color-surface-2); border-left: 3px solid var(--color-accent); padding: 8px; font-size: 13px; }
-.tl-followup button { min-height: 44px; flex: none; }
-.tl-entities { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 8px; }
-.tl-entities a { min-height: 44px; }
-.tl-extra-controls > summary { min-height: 44px; padding: 12px; box-sizing: border-box; cursor: pointer; }
+.tl-node-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-block: 12px;
+}
+.tl-node-list button {
+  min-width: 44px;
+  min-height: 44px;
+}
+.tl-villagers summary {
+  background: var(--color-text-2);
+  color: var(--color-surface);
+  min-height: 44px;
+  padding: 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.tl-villagers details {
+  margin-block: 8px;
+}
+.tl-villagers button {
+  min-height: 44px;
+  text-align: left;
+}
+.tl-followup {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-surface-2);
+  border-left: 3px solid var(--color-accent);
+  padding: 8px;
+  font-size: 13px;
+}
+.tl-followup button {
+  min-height: 44px;
+  flex: none;
+}
+.tl-entities {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tl-entities a {
+  min-height: 44px;
+}
+.tl-extra-controls > summary {
+  min-height: 44px;
+  padding: 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+}

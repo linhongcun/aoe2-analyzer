@@ -3,7 +3,7 @@ import extraPy from '../data/search-py.json';
 import { PAGES } from '../shared/nav/pageRegistry';
 
 export interface SearchItem {
-  kind: 'civ' | 'unit' | 'tech' | 'building' | 'bonus' | 'page' | 'term';
+  kind: 'civ' | 'unit' | 'tech' | 'building' | 'bonus' | 'page' | 'term' | 'build';
   id: string;
   zh: string;
   en: string;
@@ -74,7 +74,8 @@ function score1(zh: string, en: string, q: string): number {
   if (z.includes(q) || e.includes(q)) return TIER.sub;
   return 0;
 }
-const KIND_ORDER = { page: 0, civ: 1, unit: 2, building: 3, tech: 4, bonus: 5, term: 6 } as const;
+// 开局（build）沿用原 page 的 KIND_ORDER 位次；具体开局同分时靠 late 排在实体结果之后。
+const KIND_ORDER = { page: 0, build: 0, civ: 1, unit: 2, building: 3, tech: 4, bonus: 5, term: 6 } as const;
 /** issue 145 E：给只靠拼音命中的结果最多预留这么多位，并提前展示 */
 export const PY_RESERVE = 5;
 /**

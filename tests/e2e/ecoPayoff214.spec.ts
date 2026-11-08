@@ -102,7 +102,7 @@ test('#214 生产页与科技详情入口，前后导航保持URL', async ({ pag
   await expect(page.getByRole('checkbox', { name: '已有双刃斧', exact: true })).toBeChecked();
   await expect(page.locator('nav.crumbs')).toContainText('经济科技收益');
   await page.keyboard.press('Control+k');
-  await page.getByPlaceholder(/搜索文明、单位、科技/).fill('jingjikejishouyi');
+  await page.getByRole('combobox', { name: '全局搜索', exact: true }).fill('jingjikejishouyi');
   await expect(page.locator('.cmdk-list li').first()).toContainText('经济科技收益');
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('eco-payoff-page')).toBeVisible();

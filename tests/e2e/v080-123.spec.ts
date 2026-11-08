@@ -5,7 +5,7 @@ async function palette(page: Page, q: string) {
   await page.goto('./');
   await page.locator('#home').waitFor();
   await page.keyboard.press('Control+k');
-  await page.getByPlaceholder(/搜索文明、单位、科技/).fill(q);
+  await page.getByRole('combobox', { name: '全局搜索', exact: true }).fill(q);
   await expect(page.locator('.cmdk-list li').first()).toBeVisible();
   return page.locator('.cmdk-list li');
 }
@@ -56,13 +56,13 @@ for (const w of [360, 1280]) {
 
     test('全局搜索中文「匈奴」和英文「Huns」照旧', async ({ page }) => {
       await expect((await palette(page, '匈奴')).first()).toContainText('匈奴');
-      await page.getByPlaceholder(/搜索文明、单位、科技/).fill('Huns');
+      await page.getByRole('combobox', { name: '全局搜索', exact: true }).fill('Huns');
       await expect(page.locator('.cmdk-list li').first()).toContainText('匈奴');
     });
 
     test('全局搜索「nuzhen」（ü 输入 u）出现「女真」，「yinjiaqiangbingzhang」出现「印加枪兵长」', async ({ page }) => {
       await expect((await palette(page, 'nuzhen')).filter({ hasText: '女真' }).first()).toBeVisible();
-      await page.getByPlaceholder(/搜索文明、单位、科技/).fill('yinjiaqiangbingzhang');
+      await page.getByRole('combobox', { name: '全局搜索', exact: true }).fill('yinjiaqiangbingzhang');
       await expect(page.locator('.cmdk-list li').filter({ hasText: '印加枪兵长' }).first()).toBeVisible();
     });
 

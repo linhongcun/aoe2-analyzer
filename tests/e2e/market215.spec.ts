@@ -131,7 +131,7 @@ test('#215 全局搜索可用市场页面拼音进入子工具', async ({ page }
   await page.goto('./#/production');
   await page.getByRole('button', { name: '全局搜索', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: '全局搜索', exact: true });
-  await dialog.getByPlaceholder(/搜索文明、单位、科技/).fill('shichangmaimai');
+  await page.getByRole('combobox', { name: '全局搜索', exact: true }).fill('shichangmaimai');
   await dialog.locator('.cmdk-list li').filter({ hasText: '市场买卖' }).click();
   await expect(page.getByRole('heading', { name: '市场买卖预算', exact: true })).toBeVisible();
 });

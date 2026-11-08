@@ -84,7 +84,7 @@ test('Ctrl+K command palette searches across civs/units/techs', async ({ page })
   await page.goto('./');
   await page.locator('#home').waitFor();
   await page.keyboard.press('Control+k');
-  await page.getByPlaceholder(/搜索文明、单位、科技/).fill('paladin');
+  await page.getByRole('combobox', { name: '全局搜索', exact: true }).fill('paladin');
   await expect(page.locator('.cmdk-list li').first()).toContainText('Paladin');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#\/unit\/569/);
@@ -414,7 +414,7 @@ test('team bonus detail notes allies; bonus list filters; Ctrl+K finds bonuses',
   await page.locator('#benc').check();
   await expect(page.locator('#blist li').first()).toContainText('已计入数值');
   await page.keyboard.press('Control+k');
-  await page.getByPlaceholder(/搜索文明、单位、科技/).fill('磨坊科技免费');
+  await page.getByRole('combobox', { name: '全局搜索', exact: true }).fill('磨坊科技免费');
   await expect(page.locator('.cmdk-list li').first()).toContainText('加成');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#\/civ\/Franks\/bonus\/1$/);
