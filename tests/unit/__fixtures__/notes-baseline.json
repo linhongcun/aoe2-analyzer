@@ -1,0 +1,513 @@
+[
+  {
+    "id": "armenian-cart-note",
+    "civ": "Armenians",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "伐木场、采矿场逐次改为付费骡车；行走距离固定，移动和自动复用未模拟"
+  },
+  {
+    "id": "armenian-research-note",
+    "civ": "Armenians",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "伐木、采矿科技增强仅在对应研究完成后计入"
+  },
+  {
+    "id": "armenian-assumption",
+    "civ": "Armenians",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "每个原营地建造动作均新增一辆付费骡车，不假定移动或复用。浆果与农田科技仍用磨坊；骡车只算一种时代前置建筑。施工沿用本站模型，未经当前客户端实测。"
+  },
+  {
+    "id": "armenian-context-reason",
+    "civ": "Armenians",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "亚美尼亚骡车或经济科技缺少完整已核来源，未计入"
+  },
+  {
+    "id": "bengali-context-reason",
+    "civ": "Bengalis",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "孟加拉时代赠村民缺少完整已核前置和生成命令，未计入"
+  },
+  {
+    "id": "bengali-spawn-note",
+    "civ": "Bengalis",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "到达新时代时，每座已完成城镇中心赠送2个村民，直接加入开局任务分配；满住房仍计入赠送，普通训练继续受住房限制。住房政策未经当前版本客户端实测；具体出生位置、集结与驻扎未模拟。"
+  },
+  {
+    "id": "bengali-spawn-assumption",
+    "civ": "Bengalis",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "到达新时代时，每座已完成城镇中心赠送2个村民，直接加入开局任务分配；满住房仍计入赠送，普通训练继续受住房限制。住房政策未经当前版本客户端实测；具体出生位置、集结与驻扎未模拟。奖励按本站0.1秒步长计入；当前方案不包含特殊起始时代。"
+  },
+  {
+    "id": "bengali-knight-template-note",
+    "civ": "Bengalis",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "孟加拉没有骑士；骑士方案仅供通用模板经济估算"
+  },
+  {
+    "id": "chinese-source-reason",
+    "civ": "Chinese",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "中国起始、科技折扣或城镇中心缺少完整已核来源，未计入"
+  },
+  {
+    "id": "chinese-opening-note",
+    "civ": "Chinese",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "普通开局6村民；城镇中心提供15人口；科技折扣不含升级时代"
+  },
+  {
+    "id": "chinese-model-note",
+    "civ": "Chinese",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "普通起始按固定数据计入；科技折扣在到达相应时代后生效，沿用本站整数费用取整。农田额外储量、视野与客户端逐帧行为未模拟。"
+  },
+  {
+    "id": "georgian-start-note",
+    "civ": "Georgians",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "开局已有1辆免费骡车，不占人口；原营地动作仍逐次新增付费骡车"
+  },
+  {
+    "id": "georgian-cart-note",
+    "civ": "Georgians",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "伐木场、采矿场逐次改为付费骡车，每辆80木、20食物；行走距离固定，移动和自动复用未模拟"
+  },
+  {
+    "id": "georgian-assumption",
+    "civ": "Georgians",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "起始免费骡车已作为完成实体和一种时代前置；每个原营地建造动作仍新增一辆付费骡车。浆果与农田科技仍用磨坊。施工沿用本站模型，未经当前客户端实测；教堂范围经济未纳入当前模板。"
+  },
+  {
+    "id": "georgian-context-reason",
+    "civ": "Georgians",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "格鲁吉亚骡车或加成缺少完整已核来源，未计入"
+  },
+  {
+    "id": "georgian-church-reason",
+    "civ": "Georgians",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "强化教堂范围经济不在当前开局模型内，未计入"
+  },
+  {
+    "id": "gurjara-source-reason",
+    "civ": "Gurjaras",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "瞿折罗起始果丛或磨坊驻畜缺少完整已核来源，未计入"
+  },
+  {
+    "id": "gurjara-action-reason",
+    "civ": "Gurjaras",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "瞿折罗驻畜或新增动作尚未模拟，未支持此方案"
+  },
+  {
+    "id": "gurjara-opening-note",
+    "civ": "Gurjaras",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "当前模板未驻畜；驻畜收益、额外果丛及耗尽未模拟"
+  },
+  {
+    "id": "gurjara-knight-note",
+    "civ": "Gurjaras",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "瞿折罗没有骑士；骑士方案仅供通用模板经济估算"
+  },
+  {
+    "id": "gurjara-bush-note",
+    "civ": "Gurjaras",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "资源不耗尽模型未计额外果丛收益，也未将果丛折算为起始库存"
+  },
+  {
+    "id": "gurjara-garrison-note",
+    "civ": "Gurjaras",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "当前8套模板未驻畜，未计算驻畜收益"
+  },
+  {
+    "id": "gurjara-model-note",
+    "civ": "Gurjaras",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "普通起始为3名村民和1名骆驼斥候，人口4/5，库存不变。沿用本站资源不耗尽与固定距离模型；没有自动驻畜、被动食物或额外果丛库存收益，未模拟家畜实体、逐笔收入或客户端逐帧行为。"
+  },
+  {
+    "id": "jurchen-source-reason",
+    "civ": "Jurchens",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "女真加成缺少完整已核来源，未计入"
+  },
+  {
+    "id": "jurchen-decay-note",
+    "civ": "Jurchens",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "按资源不耗尽估算，尸体腐烂与耗尽未模拟，不腐烂收益未计入"
+  },
+  {
+    "id": "jurchen-knight-note",
+    "civ": "Jurchens",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "女真没有骑士；骑士方案仅供通用模板经济估算。"
+  },
+  {
+    "id": "jurchen-research-note",
+    "civ": "Jurchens",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "当前8套开局不研究该加成涉及的攻城和防御科技，未产生费用或研究时间收益。"
+  },
+  {
+    "id": "khmer-prerequisite-note",
+    "civ": "Khmer",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "当前开局免建筑前置已计入，显式建筑照常付费建造"
+  },
+  {
+    "id": "khmer-farm-note",
+    "civ": "Khmer",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "农田按免回仓与供给上限连续估算，结果可能低于原通用估算，不代表游戏内加成减益"
+  },
+  {
+    "id": "khmer-farm-detail",
+    "civ": "Khmer",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "取消的是回仓往返，田内走点、食物池启动和瞬态、耗尽与续种未模拟；不绑定完成田块与农民人数。"
+  },
+  {
+    "id": "khmer-source-reason",
+    "civ": "Khmer",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "高棉农田或免前置缺少完整已核来源，未计入"
+  },
+  {
+    "id": "mapuche-source-reason",
+    "civ": "Mapuche",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "马普切聚落、采果或训练地点缺少完整已核来源，未计入"
+  },
+  {
+    "id": "mapuche-opening-note",
+    "civ": "Mapuche",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "营地逐次改为付费聚落；采果交仓额外食物按连续收入估算"
+  },
+  {
+    "id": "mapuche-train-note",
+    "civ": "Mapuche",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "当前方案沿原兵营训练长矛兵；聚落军事生产未使用"
+  },
+  {
+    "id": "mapuche-cavalry-note",
+    "civ": "Mapuche",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "马普切无马厩；侦察骑兵、骑士方案仅供通用模板经济估算"
+  },
+  {
+    "id": "mapuche-militia-note",
+    "civ": "Mapuche",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "马普切无民兵系；民兵、武士方案仅供通用模板经济估算"
+  },
+  {
+    "id": "mapuche-model-note",
+    "civ": "Mapuche",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "原磨坊、伐木场和采矿场动作逐次新建聚落，每座125木、40秒基础工期，完成后提供5人口及研究地点；不合并或自动复用。采果额外食物共用原携带量和往返时间，不改变工作速率；有限浆果、逐笔交仓取整、移动与战斗未模拟，未经当前客户端逐帧实测。"
+  },
+  {
+    "id": "polish-source-reason",
+    "civ": "Poles",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "波兰大庄园或采石产金缺少完整已核来源，未计入"
+  },
+  {
+    "id": "polish-opening-note",
+    "civ": "Poles",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "磨坊逐次改为大庄园，建成提供5人口；农田即时收获未计入"
+  },
+  {
+    "id": "polish-stone-note",
+    "civ": "Poles",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "采石兼产黄金按连续收入估算；当前8个模板均无采石分工"
+  },
+  {
+    "id": "polish-farm-note",
+    "civ": "Poles",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "当前模板未指定农田与大庄园的邻接，不计农田即时收获"
+  },
+  {
+    "id": "polish-model-note",
+    "civ": "Poles",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "原磨坊动作逐次新建大庄园，每座100木、40秒基础工期，建成后提供5人口及磨坊前置、研究地点；不合并或自动复用。当前模板未指定农田邻接，不计农田即时收获，普通农田采集不变；有限粮、耗尽、续种和预取时序未模拟。采石额外黄金按有效石料收入比例连续计入，共用携带量和往返时间；不模拟逐笔交仓取整，未经当前客户端逐帧实测。"
+  },
+  {
+    "id": "roman-source-reason",
+    "civ": "Romans",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "罗马农田或村民加成缺少完整已核来源，未计入"
+  },
+  {
+    "id": "roman-work-note",
+    "civ": "Romans",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "村民采集与建造加成已计入；修理未模拟"
+  },
+  {
+    "id": "roman-farm-note",
+    "civ": "Romans",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "农田按供给上限连续估算，近距离可能低于原通用估算，不代表游戏内加成减益"
+  },
+  {
+    "id": "roman-farm-detail",
+    "civ": "Romans",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "罗马农田先按携带与往返计算采集均速，再与独立供给上限取较小值；食物池启动、田块完成与人数绑定、耗尽和续种未模拟。"
+  },
+  {
+    "id": "roman-team-note",
+    "civ": "Romans",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "蝎式弩最小射程团队加成不影响当前开局经济"
+  },
+  {
+    "id": "slavic-farm-note",
+    "civ": "Slavs",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "农田按供给上限连续估算，近距离可能低于原通用估算，不代表游戏内加成减益"
+  },
+  {
+    "id": "slavic-farm-detail",
+    "civ": "Slavs",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "斯拉夫农田先按携带与往返计算采集均速，再与独立供给上限取较小值；食物池启动、田块完成与人数绑定、耗尽和续种未模拟。"
+  },
+  {
+    "id": "slavic-team-note",
+    "civ": "Slavs",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "团队军事建筑提供人口未模拟"
+  },
+  {
+    "id": "slavic-source-reason",
+    "civ": "Slavs",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "斯拉夫农田或加成缺少完整已核来源，未计入"
+  },
+  {
+    "id": "wei-context-reason",
+    "civ": "Wei",
+    "scope": "build-sim",
+    "status": "unverified",
+    "text": "魏研究赠村民缺少完整已核前置和生成命令，未计入"
+  },
+  {
+    "id": "wei-spawn-note",
+    "civ": "Wei",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "经济研究完成时赠送村民，直接加入开局任务分配；满住房仍计入赠送，普通训练继续受住房限制。住房政策未经当前版本客户端实测；具体出生位置、集结与驻扎未模拟。"
+  },
+  {
+    "id": "wei-spawn-assumption",
+    "civ": "Wei",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "经济研究完成时赠送村民，直接加入开局任务分配；满住房仍计入赠送，普通训练继续受住房限制。住房政策未经当前版本客户端实测；具体出生位置、集结与驻扎未模拟。奖励按本站0.1秒步长计入。"
+  },
+  {
+    "id": "wei-knight-template-note",
+    "civ": "Wei",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "魏没有骑士；骑士方案仅供通用模板经济估算"
+  },
+  {
+    "id": "forager-wood-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "采果兼产木材按连续收入估算"
+  },
+  {
+    "id": "forager-wood-assumption",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "采果兼产木材按采果有效食物收入的比例连续流入；共用采果的携带量和往返时间，不增加伐木走路。不模拟客户端逐笔到账、取整和走路期间的触发时序。"
+  },
+  {
+    "id": "lumber-food-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "伐木兼产食物按连续收入估算"
+  },
+  {
+    "id": "lumber-food-assumption",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "伐木兼产食物按伐木有效收入的比例连续流入；共用伐木的携带量和往返时间，不额外增加食物走路。不模拟客户端逐笔到账、取整、砍倒树阶段或走路期间的触发时序。"
+  },
+  {
+    "id": "shu-knight-template-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "蜀不能训练骑士；骑士方案仅供通用模板经济估算。"
+  },
+  {
+    "id": "malian-gold-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "采金交仓额外黄金按连续收入估算"
+  },
+  {
+    "id": "malian-gold-assumption",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "采金交仓额外黄金按有效采金收入的百分比连续计入，共用采金携带量和往返时间；不增加基础工作速率或矿物储量。不模拟客户端逐次交仓、取整或行走期间的触发时序。"
+  },
+  {
+    "id": "varangian-gold-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "牧羊、狩猎和捕鱼兼产黄金按连续收入估算"
+  },
+  {
+    "id": "varangian-gold-assumption",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "牧羊、狩猎和捕鱼兼产黄金按有效食物收入的比例连续计入；村民和渔船共用各自主资源的携带量与往返参数，不占用食物携带空间。不模拟客户端逐笔到账、取整或行走期间的触发时序。"
+  },
+  {
+    "id": "tatar-shepherd-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "牧羊按产量与工作率配对估算；新增羊和资源耗尽未模拟"
+  },
+  {
+    "id": "tatar-shepherd-assumption",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "鞑靼牧羊先按固定数据的产量与工作率配对，再计算携带和往返；近城镇中心肉类沿用牧羊速率代理，不表示真正狩猎也有羊加成。不模拟新增羊实体、羊总食物可采量、资源耗尽或客户端逐帧行为。"
+  },
+  {
+    "id": "mayan-resource-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "资源产量与工作率配对估算；储量和耗尽未模拟"
+  },
+  {
+    "id": "mayan-cavalry-template-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "玛雅无马厩；侦察骑兵、骑士方案仅供通用模板经济估算"
+  },
+  {
+    "id": "mayan-resource-assumption",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "玛雅各资源产量与专职工作率配对后再计算携带和往返，一般净系数1.0005、农田0.9315；近城镇中心肉类仍用牧羊代理。资源储量、耗尽、农田续种和客户端逐帧行为未模拟。沿用玛雅的起始人数，织布按原开局实际研发；墙费只在显式计入团队时折半。"
+  },
+  {
+    "id": "sicilian-construction-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "按实际施工形态计入城镇中心、城堡和防御工事加成"
+  },
+  {
+    "id": "sicilian-farm-note",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "农田升级额外储量、耗尽和续种未模拟"
+  },
+  {
+    "id": "sicilian-construction-assumption",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "西西里施工从开局已有的城镇中心完成状态计入一次加成；新城镇中心按实际施工形态的工期计算，城堡和防御工事按各自工期计算。建造者完工后返回原任务，建造费用与停采时间沿用同一模型；增建城镇中心不会再赠石料，额外城镇中心的产村民队列未模拟。"
+  },
+  {
+    "id": "sicilian-farm-assumption",
+    "scope": "build-sim",
+    "status": "assumption",
+    "text": "西西里农田升级额外储量不改变采集速度；资源点不会耗尽，农田升级额外储量、失效和续种未模拟，也不估算由此节省的木材。"
+  },
+  {
+    "id": "dps-unavailable-reason",
+    "scope": "ui",
+    "status": "unverified",
+    "text": "爆炸单位，无攻击间隔"
+  },
+  {
+    "id": "siege-mangonel-reason",
+    "scope": "ui",
+    "status": "unverified",
+    "text": "主弹与副弹的伤害结算尚未对齐，不推算击数与用时。"
+  },
+  {
+    "id": "siege-stone-defense-reason",
+    "scope": "ui",
+    "status": "unverified",
+    "text": "建筑的「石质防御」护甲数据尚未对齐，不推算击数与用时。"
+  }
+]
