@@ -35,25 +35,28 @@ for (const width of [360, 375, 390, 1280])
 
       await page.goto('./#/units');
       await expect(page.locator('#ugrid .card').first()).toBeVisible();
+      await expect(page.locator('#udlc')).toHaveCount(0);
+      const bar = page.locator('#units').getByRole('group', { name: 'DLC 快捷筛选', exact: true });
       await page.locator('#uq').fill('Eagle');
-      await page.locator('#udlc').selectOption('2');
+      await bar.locator('button[data-v="2"]').click();
+      await expect(bar.locator('button[data-v="2"]')).toHaveAttribute('aria-pressed', 'true');
       await expect(page.locator('#ugrid .card')).toHaveCount(1);
       await expect(page.locator('#ugrid .card')).toHaveAttribute('data-unit-id', '751');
       await expect(page.locator('#ugrid .card .dlcb img')).toHaveAttribute('src', /\/img\/dlc\/2\.webp$/);
-      await page.locator('#udlc').selectOption('1');
+      await bar.locator('button[data-v="1"]').click();
       await expect(page.locator('#ugrid .card')).toHaveCount(1);
       await expect(page.locator('#ugrid .card')).toHaveAttribute('data-unit-id', '753');
       await page.locator('#uq').fill('战车');
-      await page.locator('#udlc').selectOption('8');
+      await bar.locator('button[data-v="8"]').click();
       await expect(page.locator('#ugrid .card[data-unit-id="1759"]')).toBeVisible();
       await expect(page.locator('#ugrid .card[data-unit-id="1962"]')).toHaveCount(0);
-      await page.locator('#udlc').selectOption('11');
+      await bar.locator('button[data-v="11"]').click();
       await expect(page.locator('#ugrid .card[data-unit-id="1962"]')).toBeVisible();
       await expect(page.locator('#ugrid .card[data-unit-id="1759"]')).toHaveCount(0);
       await page.locator('#uq').fill('');
-      await page.locator('#udlc').selectOption('0');
+      await bar.locator('button[data-v="0"]').click();
       await expect(page.locator('#ugrid .card[data-unit-id="74"]')).toBeVisible();
-      await page.locator('#udlc').selectOption('none');
+      await bar.locator('button[data-v="none"]').click();
       await expect(page.locator('#ugrid .card')).toHaveCount(0);
       await expect(page.locator('#ucnt')).toHaveText(/^0 \/ /);
 

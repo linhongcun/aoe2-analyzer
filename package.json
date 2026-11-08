@@ -2,7 +2,7 @@
   "name": "aoe2-analyzer",
   "private": true,
   "license": "MIT",
-  "version": "0.77.30",
+  "version": "0.77.31",
   "type": "module",
   "scripts": {
     "dev": "vite",
