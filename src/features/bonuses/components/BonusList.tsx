@@ -27,7 +27,7 @@ export default function BonusList() {
       <ListHead level={1} title="文明加成" desc={`全部 ${ALL.length} 条文明/团队加成，其中 ${nEnc} 条已计入模拟器数值`} />
       <p>
         <Link className="btn community-tool-entry" to="/team-bonuses">
-          按玩家阵容汇总队伍加成
+          按玩家阵容汇总团队加成
         </Link>
       </p>
       <div className="bar fbar">

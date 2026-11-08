@@ -57,7 +57,8 @@ export default function PageMeta({
         : (PAGE_META[key] ?? PAGE_META['/']!);
   const shareSearch = omitShareSearch ? '' : search;
   useEffect(() => {
-    document.title = `${meta.title} | ${SITE_NAME}`;
+    // issue 775：首页 metaTitle 就是站点名，不能拼成「帝国时代 II 分析器 | 帝国时代 II 分析器」。
+    document.title = meta.title === SITE_NAME ? SITE_NAME : `${meta.title} | ${SITE_NAME}`;
     const set = (name: string, content: string, property = false) => {
       const attr = property ? 'property' : 'name';
       let tag = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);

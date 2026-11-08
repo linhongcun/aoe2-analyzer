@@ -45,7 +45,7 @@ test('#230 窄屏首页四个规划入口可键盘访问并进入真实页面', 
   for (const [, path, pageId] of [
     ['商路供给', '/trade-income', 'trade-income-page'],
     ['多人施工', '/construction', 'construction-page'],
-    ['队伍加成', '/team-bonuses', 'team-bonuses-page'],
+    ['团队加成', '/team-bonuses', 'team-bonuses-page'],
     ['驻军回血', '/garrison-healing', 'garrison-healing-page'],
   ]) {
     await page.goto('./#/');
@@ -202,7 +202,7 @@ test('#230 文明对比携带两名玩家及重复文明顺序，队伍页来源
   await page.goto('./#/compare');
   await compareCiv(page, 'A', 'Berbers');
   await compareCiv(page, 'B', 'Berbers');
-  await page.getByRole('link', { name: '查看这两个文明的队伍加成来源', exact: true }).click();
+  await page.getByRole('link', { name: '查看这两个文明的团队加成来源', exact: true }).click();
   await expect(page.getByTestId('team-bonuses-page')).toBeVisible();
   expect(Object.fromEntries(hashQuery(page))).toEqual({ tv: '1', players: 'Berbers,Berbers', age: '4', target: 'all', unit: '', researched: '' });
   await expect(page.getByRole('button', { name: '玩家 1 文明：柏柏尔', exact: true })).toBeVisible();

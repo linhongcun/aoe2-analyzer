@@ -220,6 +220,8 @@ function MobileTheme({ preference, onSelect }: { preference: ThemePreference; on
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname, search, hash } = useLocation();
   const siegePage = pathname === '/siege' || pathname === '/siege/';
+  // issue 775：评分免责只出现在真正展示 1–10 评分的页面（文明详情、文明对比），其余工具页不再无条件带出。
+  const showsRatings = pathname === '/compare' || /^\/civ(?:\/|$)/.test(pathname);
   const { preference, select } = useTheme();
   const nav = useRef<HTMLElement>(null);
   const burger = useRef<HTMLButtonElement>(null);
@@ -454,7 +456,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </span>
           </span>
         </p>
-        <p className="note">面向团战排位 · 所有评分（1-10）均为主观近似评分，仅供参考；数据可能随版本补丁变化。</p>
+        {showsRatings && <p className="note">面向团战排位 · 所有评分（1-10）均为主观近似评分，仅供参考；数据可能随版本补丁变化。</p>}
         <details className="footer-sources">
           <summary>资料来源与使用声明</summary>
           <div>

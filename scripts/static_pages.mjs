@@ -40,7 +40,9 @@ for (const [key, meta] of Object.entries(pages)) {
   urls.push(url);
   const depth = rel.split('/').filter(Boolean).length;
   const base = depth ? '../'.repeat(depth) : './';
-  const title = `${meta.title} | 帝国时代 II 分析器`;
+  // #775：首页静态页标题就是站点名，不再重复拼接品牌。
+  const siteName = '帝国时代 II 分析器';
+  const title = meta.title === siteName ? siteName : `${meta.title} | ${siteName}`;
   const image = new URL(`og/${imageKey(key, meta)}.png`, site).href;
   const route = meta.route ?? key;
   // 无默认参数的页面保留原始查询，重复参数和损坏编码交由各页严格校验，不能在进入路由前洗成正常链接。

@@ -60,11 +60,11 @@ export function PlanEditor({
         </button>
         {civsReady ? (
           <Link className="btn" to={teamHref}>
-            查看队伍加成来源
+            查看团队加成来源
           </Link>
         ) : (
           <button type="button" className="btn" disabled title="先为每名玩家选择文明">
-            查看队伍加成来源
+            查看团队加成来源
           </button>
         )}
       </div>

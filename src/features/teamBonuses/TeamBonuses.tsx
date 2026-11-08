@@ -79,7 +79,7 @@ export default function TeamBonuses() {
     <section className="pane team-bonuses-page" data-testid="team-bonuses-page">
       <header className="team-heading">
         <div>
-          <h1>队伍加成一屏汇总</h1>
+          <h1>团队加成一屏汇总</h1>
           <p className="note">选择队友文明，检查常驻效果与需要研究的团队科技。</p>
         </div>
         <button className="btn" type="button" disabled={!valid} onClick={() => void share()}>

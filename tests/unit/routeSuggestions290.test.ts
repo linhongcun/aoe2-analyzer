@@ -4,7 +4,7 @@ import { suggestRoutes } from '../../src/domain/routeSuggestions';
 const routes = [
   { path: '/trade-income', label: '商路供给' },
   { path: '/garrison-healing', label: '驻军回血' },
-  { path: '/team-bonuses', label: '队伍加成' },
+  { path: '/team-bonuses', label: '团队加成' },
   { path: '/team-plan', label: '团战分工' },
   { path: '/game-guide', label: '一局与观赛' },
   { path: '/game-clock', label: '时间换算' },

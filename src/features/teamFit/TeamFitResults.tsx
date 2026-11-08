@@ -309,7 +309,7 @@ export default function TeamFitResults({ config, core, trees }: TeamFitResultsPr
         <p className="note">同一来源只汇总一次，不计算重复倍率；关联来自固定数据，未作客户端实测声明。</p>
         <div className="tf-actions">
           <Link className="btn" to={links.bonuses}>
-            查看完整队伍加成
+            查看完整团队加成
           </Link>
           {links.plan ? (
             <Link className="btn" to={links.plan}>
