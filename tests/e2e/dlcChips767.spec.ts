@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 /**
- * #767：DLC 页在 360/375/390 宽把文明芯片挤成逐字竖排（芯片 35px 宽、国王时代行高 1017px）。
- * 修复口径：≤600px 改为卡片布局，芯片保持单行；1280 桌面表格与 210px 名称列不变。
+ * #767：DLC 页在 360/375/390 宽把文明列压到约 91px，芯片里的文明名被折成两行（单字文明芯片 69px），
+ * 国王时代行高 1017px、整页 5732px。修复口径：≤600px 改为卡片布局，芯片保持单行且 ≥72px；1280 桌面表格不变。
  */
 const MOBILE_WIDTHS = [360, 375, 390] as const;
 
@@ -10,7 +10,7 @@ for (const width of MOBILE_WIDTHS) {
   test.describe(`#767 DLC 文明芯片卡片布局 ${width}`, () => {
     test.use({ viewport: { width, height: 900 } });
 
-    test('芯片单行、分组行高回落、整页不被逐字竖排拉长', async ({ page }) => {
+    test('全部芯片单行且 ≥72px、分组行高回落、整页不被折行拉长', async ({ page }) => {
       const errors: string[] = [];
       page.on('console', (m) => {
         if (m.type() === 'error') errors.push(m.text());
@@ -22,30 +22,33 @@ for (const width of MOBILE_WIDTHS) {
       expect(errors).toEqual([]);
 
       const m = await page.evaluate(() => {
-        const chip = document.querySelector('.dlct .civchip') as HTMLElement;
-        // 只取芯片里的文明名文本节点，逐字竖排时每个字会有一个不同的 top。
-        const textNode = [...chip.childNodes].find((n) => n.nodeType === 3 && (n.textContent ?? '').trim());
-        const range = document.createRange();
-        range.selectNodeContents(textNode!);
-        const lines = new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size;
+        const chips = [...document.querySelectorAll('.dlct .civchip')] as HTMLElement[];
+        // 只取每个芯片里的文明名文本节点；被折行时同一文本会占多个不同的 top。
+        const lines = (chip: HTMLElement) => {
+          const textNode = [...chip.childNodes].find((n) => n.nodeType === 3 && (n.textContent ?? '').trim());
+          const range = document.createRange();
+          range.selectNodeContents(textNode!);
+          return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size;
+        };
         const rows = [...document.querySelectorAll('.dlct tr')] as HTMLElement[];
         const table = document.querySelector('.dlct') as HTMLElement;
         return {
-          chipWidth: Math.round(chip.getBoundingClientRect().width),
-          chipHeight: Math.round(chip.getBoundingClientRect().height),
-          textLines: lines,
-          pageHeight: document.documentElement.scrollHeight,
+          chipCount: chips.length,
+          minChipWidth: Math.min(...chips.map((c) => Math.round(c.getBoundingClientRect().width))),
+          maxChipLines: Math.max(...chips.map(lines)),
           rowHeights: rows.map((r) => Math.round(r.getBoundingClientRect().height)),
+          pageHeight: document.documentElement.scrollHeight,
           tableDisplay: getComputedStyle(table).display,
           horizontalOverflow: document.documentElement.scrollWidth > innerWidth + 1,
         };
       });
 
-      expect(m.chipWidth, '芯片宽度应容纳图标 + 文明名').toBeGreaterThanOrEqual(72);
-      expect(m.textLines, '芯片里的文明名应单行，不逐字竖排').toBe(1);
+      expect(m.chipCount, '56 个文明全部渲染为芯片').toBe(56);
+      expect(m.minChipWidth, '每个芯片宽度应容纳图标 + 文明名').toBeGreaterThanOrEqual(72);
+      expect(m.maxChipLines, '芯片里的文明名应单行，不折行/不逐字竖排').toBe(1);
       expect(Math.max(...m.rowHeights), '每个资料片分组行应回到卡片量级').toBeLessThan(600);
-      // 修复前 5732（逐字竖排）；卡片布局下 14 个资料片的固有高度约 3700，这里留 500 余量。
-      expect(m.pageHeight, '整页不应被逐字竖排拉长').toBeLessThan(4200);
+      // 修复前 5732（真实 SHA 构建）；卡片布局下 14 个资料片 + 56 个 ≥44px 芯片的固有高度约 3800。
+      expect(m.pageHeight, '整页不应被折行拉长').toBeLessThan(4200);
       expect(m.tableDisplay, '窄屏改为块级卡片布局').toBe('block');
       expect(m.horizontalOverflow, '无横向滚动').toBe(false);
     });
@@ -55,26 +58,66 @@ for (const width of MOBILE_WIDTHS) {
 test.describe('#767 DLC 桌面布局', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
-  test('1280 保持表格布局与固定名称列', async ({ page }) => {
+  test('1280 保持表格布局、名称列 210px、芯片单行', async ({ page }) => {
     await page.goto('#/dlc');
     await expect(page.locator('.dlct tr').first()).toBeVisible();
     await page.waitForLoadState('networkidle');
 
     const m = await page.evaluate(() => {
-      const table = document.querySelector('.dlct') as HTMLElement;
-      const dn = document.querySelector('.dlct .dn') as HTMLElement;
-      const chip = document.querySelector('.dlct .civchip') as HTMLElement;
+      const chips = [...document.querySelectorAll('.dlct .civchip')] as HTMLElement[];
+      const lines = (chip: HTMLElement) => {
+        const textNode = [...chip.childNodes].find((n) => n.nodeType === 3 && (n.textContent ?? '').trim());
+        const range = document.createRange();
+        range.selectNodeContents(textNode!);
+        return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size;
+      };
+      const rows = [...document.querySelectorAll('.dlct tr')] as HTMLElement[];
       return {
-        tableDisplay: getComputedStyle(table).display,
-        dnWidth: Math.round(dn.getBoundingClientRect().width),
-        chipHeight: Math.round(chip.getBoundingClientRect().height),
+        tableDisplay: getComputedStyle(document.querySelector('.dlct') as HTMLElement).display,
+        dnWidth: Math.round((document.querySelector('.dlct .dn') as HTMLElement).getBoundingClientRect().width),
+        maxChipLines: Math.max(...chips.map(lines)),
+        maxRowHeight: Math.max(...rows.map((r) => Math.round(r.getBoundingClientRect().height))),
+        pageHeight: document.documentElement.scrollHeight,
         horizontalOverflow: document.documentElement.scrollWidth > innerWidth + 1,
       };
     });
 
     expect(m.tableDisplay, '桌面仍是表格').toBe('table');
-    expect(m.dnWidth, '桌面名称列保持 210px').toBeGreaterThanOrEqual(210);
-    expect(m.chipHeight, '桌面芯片保持单行').toBeLessThan(60);
+    expect(m.dnWidth, '桌面名称列保持 210px').toBe(210);
+    expect(m.maxChipLines, '桌面芯片保持单行').toBe(1);
+    expect(m.maxRowHeight, '桌面行高与修复前一致（约 91–101）').toBeLessThan(130);
+    expect(m.pageHeight, '桌面整页高度与修复前一致（约 1903）').toBeLessThan(2000);
     expect(m.horizontalOverflow, '无横向滚动').toBe(false);
+  });
+});
+
+test.describe('#767 DLC 断点级联', () => {
+  test.use({ viewport: { width: 600, height: 900 } });
+
+  test('600px 用卡片、601px 回到表格，两者都无横向滚动', async ({ page }) => {
+    await page.goto('#/dlc');
+    await expect(page.locator('.dlct tr').first()).toBeVisible();
+    await page.waitForLoadState('networkidle');
+
+    const read = () =>
+      page.evaluate(() => ({
+        display: getComputedStyle(document.querySelector('.dlct') as HTMLElement).display,
+        labelShown: getComputedStyle(document.querySelector('.dlct .dc-label') as HTMLElement).display !== 'none',
+        horizontalOverflow: document.documentElement.scrollWidth > innerWidth + 1,
+      }));
+
+    await page.setViewportSize({ width: 600, height: 900 });
+    await page.waitForTimeout(100);
+    const at600 = await read();
+    expect(at600.display, '600px 属于卡片布局').toBe('block');
+    expect(at600.labelShown, '600px 显示「个文明」').toBe(true);
+    expect(at600.horizontalOverflow, '600px 无横向滚动').toBe(false);
+
+    await page.setViewportSize({ width: 601, height: 900 });
+    await page.waitForTimeout(100);
+    const at601 = await read();
+    expect(at601.display, '601px 回到表格布局').toBe('table');
+    expect(at601.labelShown, '601px 隐藏「个文明」').toBe(false);
+    expect(at601.horizontalOverflow, '601px 无横向滚动').toBe(false);
   });
 });

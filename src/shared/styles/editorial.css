@@ -116,7 +116,7 @@ kbd {
 .dlct .dc-label {
   display: none;
 }
-/* issue 767：固定 210px 名称列在窄屏把文明芯片挤到 35px、逐字竖排；≤600px 改为卡片布局。 */
+/* issue 767：固定 210px 名称列在窄屏把文明列压到约 91px，芯片里的文明名被折成两行；≤600px 改为卡片布局。 */
 @media (max-width: 600px) {
   .dlct,
   .dlct tbody,
@@ -145,10 +145,13 @@ kbd {
     width: auto;
     margin-top: var(--space-2);
     text-align: left;
-    white-space: nowrap;
   }
   .dlct .dc-label {
     display: inline;
+  }
+  /* 单字文明芯片（蜀/魏/吴）自然宽度只有 69px，补到 72px 以满足验收口径并让卡片内芯片更齐。 */
+  .dlct .civchip {
+    min-width: 72px;
   }
 }
 .stat td:first-child,

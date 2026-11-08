@@ -38,8 +38,10 @@ export default function DlcView() {
                 })}
               </td>
               <td className="dc">
-                <span className="dc-num">{d.civs.length}</span>
-                <span className="dc-label"> 个文明</span>
+                <span className="nw">
+                  <span className="num">{d.civs.length}</span>
+                  <span className="dc-label"> 个文明</span>
+                </span>
               </td>
             </tr>
           ))}
