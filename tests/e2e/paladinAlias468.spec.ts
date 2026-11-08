@@ -41,6 +41,8 @@ for (const width of [360, 375, 390, 1280]) {
       await page.goto('./#/civs?req=');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       const panel = page.getByTestId('civ-requirements');
+      // #776 起 ≤600 的「必备单位与科技」默认收进 details，先展开再搜索/添加。
+      if (width <= 600) await panel.locator('summary').click();
       const query = panel.getByRole('textbox', { name: '搜索必备单位或科技', exact: true });
       await expect(query).toBeEnabled();
       await query.fill('圣骑士');

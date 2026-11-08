@@ -286,6 +286,12 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/civs?req=u:569,t:435');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await expect(page.getByTestId('requirement-chip')).toHaveCount(2);
+      // #776 起 ≤600 的「必备单位与科技」默认收进 details；展开后再核对控件触区（条件 chip 始终在 DOM 中计数）。
+      if (width <= 600) {
+        const requirements = page.getByTestId('civ-requirements');
+        await requirements.locator('summary').click();
+        await expect(requirements).toHaveJSProperty('open', true);
+      }
       await expectCivs(page, paladinBloodlines);
       for (const control of await page.getByTestId('civ-requirements').locator('input, select, button, a').all()) {
         const box = await control.boundingBox();

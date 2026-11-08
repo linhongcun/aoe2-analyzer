@@ -159,3 +159,39 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* issue 776：窄屏折叠头。summary 保留「必备单位与科技」标题与已选条件数。 */
+.requirements-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  list-style: none;
+  cursor: pointer;
+}
+.requirements-summary::marker,
+.requirements-summary::-webkit-details-marker {
+  content: '';
+  display: none;
+}
+.requirements-summary h2 {
+  margin: 0;
+  font-size: var(--fs-h3);
+}
+.requirements-summary-count {
+  margin-left: auto;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+.requirements-summary .ic {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+details.civ-requirements[open] > .requirements-summary .ic {
+  transform: rotate(180deg);
+}
+.requirements-summary:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+}
