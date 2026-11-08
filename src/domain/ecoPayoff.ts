@@ -1,5 +1,5 @@
 /** issue 214：固定人口的单项经济科技收益；游戏数值只从固定导出读取。 */
-import ecoRaw from '../data/raw/eco';
+import { ECO as eco } from '../data/eco';
 import { civs } from '../data';
 import { DAT } from './datEffects';
 import { freeProductionTechs, productionTechAge, type ProductionContext } from './production';
@@ -11,12 +11,6 @@ export const PAYOFF_TARGETS = [202, 203, 221, 55, 182, 278, 279] as const;
 export const PAYOFF_BASELINE = [...PAYOFF_TARGETS, 213, 249];
 export const PAYOFF_RESOURCES: GatherRes[] = ['Food', 'Wood', 'Gold', 'Stone'];
 const TASK = { Food: 'farm', Wood: 'wood', Gold: 'gold', Stone: 'stone' } as const;
-type Fx = { kind: string; attr?: string; op?: string; res?: number | string; v?: number; tech?: number };
-type Row = { age: number; source: string; name: string; tech?: number; requires?: number[]; effects: Fx[] };
-const eco = ecoRaw as unknown as {
-  techs: Record<string, { cost: Cost; researchTime: number }>;
-  civEco: Record<string, Row[]>;
-};
 export interface EcoPayoffConfig {
   civ: string;
   age: number;
@@ -82,7 +76,7 @@ export function payoffResearch(config: Pick<EcoPayoffConfig, 'civ' | 'age'>, t: 
       }
       if (e.kind === 'techTime') time = op(time, e.op, e.v!);
       else {
-        const affected = String(e.res) === '-1' ? PAYOFF_RESOURCES : PAYOFF_RESOURCES.filter((r) => r === e.res);
+        const affected = String(e.res) === '-1' ? PAYOFF_RESOURCES : PAYOFF_RESOURCES.filter((r) => String(r) === String(e.res));
         if (!affected.length) {
           warnings.push(`${row.name}：费用资源类型未核实。`);
           continue;
