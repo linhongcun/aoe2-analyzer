@@ -172,6 +172,8 @@ const CIV_NOTES: ReadonlyMap<string, CivNotes> = new Map([
   ],
 ]);
 
+export const CIV_NOTES_KEYS = Object.freeze([...CIV_NOTES.keys()]);
+
 /** 页面「按某文明计」下方的附注：已计入但有未核实部分、或明确不计入的加成。 */
 export function civSimNotes(eco: EcoData, civ: string, boId?: string): string[] {
   const rows = (eco.civEco[civ] ?? []).filter((row) => row.source !== 'team');
