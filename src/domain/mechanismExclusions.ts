@@ -1,16 +1,16 @@
 /**
- * #821 机制文明清单的显式排除项。
+ * issue 821 机制文明清单的显式排除项。
  *
  * 两份清单都从 `CIV_MECHANISM_KEYS` 派生；这里只保留确实不覆盖的文明和原因。
  * 新增机制文明会默认进入 parity / bonusUsage；若要排除，必须在这里补一条原因。
  */
 export const PARITY_EXCLUDED: Readonly<Record<string, string>> = {
-  Romans: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-  Poles: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-  Gurjaras: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-  Mapuche: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-  Chinese: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-  Jurchens: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
+  Romans: 'parity special 列表只覆盖 issue 197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
+  Poles: 'parity special 列表只覆盖 issue 197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
+  Gurjaras: 'parity special 列表只覆盖 issue 197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
+  Mapuche: 'parity special 列表只覆盖 issue 197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
+  Chinese: 'parity special 列表只覆盖 issue 197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
+  Jurchens: 'parity special 列表只覆盖 issue 197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
   Franks: 'parity special 列表不单列；freeResearchOnce 由通用快照覆盖',
 };
 
