@@ -18,8 +18,9 @@ for (const width of [360, 375, 390, 1280])
       });
       await page.goto('./#/units');
       await expect(page.locator('#ucnt')).toHaveText('163 / 163');
+      const ages = page.locator('#units').getByRole('group', { name: '时代快捷筛选', exact: true });
       await page.locator('#uq').fill('近卫军');
-      await page.locator('#ua').selectOption('4');
+      await ages.locator('button[data-v="4"]').click();
       const card = page.locator('#ugrid .card');
       await expect(card).toHaveCount(1);
       await expect(card).toHaveAttribute('data-unit-id', String(elite.id));
@@ -42,16 +43,16 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('#unit .dhead h1')).toContainText(elite.zh);
 
       await page.goto('./#/units');
-      await page.locator('#ua').selectOption('');
+      await ages.locator('button[data-v=""]').click();
       await page.locator('#uq').fill('精锐近卫军');
       await expect(card).toHaveAttribute('data-unit-id', String(elite.id));
-      await page.locator('#ua').selectOption('3');
+      await ages.locator('button[data-v="3"]').click();
       await expect(card).toHaveCount(0);
       await expect(page.locator('#ucnt')).toHaveText('0 / 163');
       await page.locator('#uq').fill('近卫军');
       await expect(card).toHaveAttribute('data-unit-id', String(base.id));
       await expect(card.locator('[data-stat="hp"] dd')).toHaveText(String(base.hp));
-      await page.locator('#ua').selectOption('');
+      await ages.locator('button[data-v=""]').click();
       await expect(card).toHaveAttribute('data-unit-id', String(base.id));
       await expect(card.locator('.ebadge')).toHaveCount(1);
       await expect(page.locator('#ucnt')).toHaveText('1 / 163');

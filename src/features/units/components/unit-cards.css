@@ -8,7 +8,7 @@
   min-width: 0;
 }
 .unit-list-filters > select {
-  grid-column: span 2;
+  grid-column: span 3;
 }
 .unit-list-filters .sw input,
 .unit-list-filters select,
@@ -42,6 +42,9 @@
 }
 .unit-filter-note {
   margin: var(--space-2) 0 var(--space-3);
+}
+#units .dbar + .dbar {
+  margin-top: 0;
 }
 .unit-filter-empty {
   padding: var(--space-8) var(--space-4);

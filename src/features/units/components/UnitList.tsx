@@ -8,7 +8,7 @@ import { UNIT_ROLE_ZH, type UnitRole } from '../../../domain/unitRoles';
 import { civNote, dupIdsIn } from '../../../domain/dupNames';
 import { civByEn } from '../../../data';
 import { CostView, DlcBadge, EliteBadge, UnitIcon } from '../../../shared/ui/art';
-import { DlcBar, Loading, SearchInput } from '../../../shared/ui/widgets';
+import { AgeBar, DlcBar, Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
@@ -58,13 +58,6 @@ export default function UnitList() {
           <option value="UnitUpgrade">升级单位</option>
           <option value="RegionalUnit">区域单位</option>
         </select>
-        <select id="ua" aria-label="时代" value={a} onChange={(e) => setA(e.target.value)}>
-          <option value="">全部时代</option>
-          <option value="1">黑暗</option>
-          <option value="2">封建</option>
-          <option value="3">城堡</option>
-          <option value="4">帝王</option>
-        </select>
         <div className="unit-filter-summary">
           <span id="ucnt" className="note" role="status" aria-live="polite">
             {r.length} / {fams.length}
@@ -78,6 +71,7 @@ export default function UnitList() {
       </div>
       <p className="note unit-filter-note">按当前版本科技树中的可用单位筛选，不计队友解锁。兵种可交叉归类，骑射也属于骑兵和弓兵；其他单位含村民、贸易车等。</p>
       <DlcBar value={dlc} onChange={setDlc} />
+      <AgeBar value={a} onChange={setA} />
       {!core ? (
         <Loading />
       ) : !r.length ? (
