@@ -10,6 +10,7 @@ import {
   polishNotes,
   polishBuildingTime,
   polishBuildingCost,
+  polishStoneGold,
   POLISH_MODEL_NOTE,
 } from './polishEconomy';
 import {
@@ -18,6 +19,7 @@ import {
   mapucheResearchSites,
   mapucheNotes,
   mapucheRowAllowed,
+  mapucheForagerFood,
   MAPUCHE_MODEL_NOTE,
   type MapucheContext,
 } from './mapucheEconomy';
@@ -31,13 +33,21 @@ import { CONSTRUCTION_DATA } from '../data/construction';
 import * as rules from './buildSimCivRules';
 import { weiRewardFamily, WEI_SPAWN_ASSUMPTION, WEI_KNIGHT_TEMPLATE_NOTE } from './weiEconomy';
 import { bengaliRewardFamily, BENGALI_SPAWN_ASSUMPTION, BENGALI_KNIGHT_TEMPLATE_NOTE } from './bengaliEconomy';
-import { armenianContext, armenianBuildOrder, ARMENIAN_RESEARCH_IDS, ARMENIAN_ASSUMPTION, ARMENIAN_RESEARCH_NOTE } from './armenianEconomy';
+import {
+  armenianContext,
+  armenianBuildOrder,
+  armenianResearchBonus,
+  ARMENIAN_RESEARCH_IDS,
+  ARMENIAN_ASSUMPTION,
+  ARMENIAN_RESEARCH_NOTE,
+} from './armenianEconomy';
 import { georgianContext, georgianBuildOrder, GEORGIAN_ASSUMPTION } from './georgianEconomy';
 import { slavicContext, slavicFarmRate, slavicHasFarmAssignment, SLAVIC_FARM_NOTE, SLAVIC_FARM_DETAIL, SLAVIC_TEAM_NOTE } from './slavicEconomy';
 import { khmerContext, khmerRowClass, khmerFarmRate, khmerBuildingReady, khmerModel } from './khmerEconomy';
 import { chineseContext, chinesePopulation, chineseStartingVillagers, chineseRowAllowed, chineseModel } from './chineseEconomy';
 import { jurchenContext, jurchenNotes, jurchenRowClass, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 import { DATA_PATCH, SOURCE_PINS } from '../data/sources';
+import { isAgeTech } from './gameIds';
 import type { CivContext } from './civModel';
 export interface MechanismContext {
   romans?: ReturnType<typeof romanContext>;
@@ -86,6 +96,12 @@ interface CivMechanism {
   buildingCost?: (scope: Scope, id: number) => EcoData['buildings'][string]['cost'] | undefined;
   buildingPopulation?: (scope: Scope, id: number) => number;
   startingVillagers?: (scope: Scope) => number;
+  /** simScope 在完整 Scope 构造前就要知道起始建筑，所以接收 context。 */
+  startingBuildings?: (context: MechanismContext) => readonly number[];
+  techCostRule?: (kind: 'tech' | 'up', id: number, scope: Scope) => { applyTechCostAll: boolean } | undefined;
+  researchRewards?: (input: { scope: Scope; tech: number; age: number; applied: ReadonlySet<number> }) => readonly EffectRow[];
+  foragerFoodIncome?: (mods: Mods, task: string, rate: number) => number;
+  stoneGoldIncome?: (scope: Scope, task: string, rate: number) => number;
   townCenterPopulation?: (scope: Scope) => number;
   context?: (eco: EcoData) => Partial<MechanismContext>;
   atomicGather?: boolean;
@@ -122,6 +138,7 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
     buildingTime: (scope, _eco, _mods, id) => polishBuildingTime(scope.poles, id),
     buildingCost: (scope, id) => polishBuildingCost(scope.poles, id),
     buildingPopulation: (scope, id) => polishBuildingPopulation(scope.poles, id),
+    stoneGoldIncome: (scope, task, rate) => polishStoneGold(scope.poles, task, rate),
     researchSites: (eco, tech, scope) => polishResearchSites(eco, tech, scope),
     assumptions: ({ eco, bo }) => (polishContext(eco).complete ? [...polishNotes(eco, bo.id), POLISH_MODEL_NOTE] : []),
   },
@@ -136,6 +153,7 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
     prepare: mapucheBuildOrder,
     buildingReady: (scope, id, _age, built) => !scope.mapuche?.infrastructure || ![50, 1187, 84].includes(id) || (built.get(2556) ?? 0) > 0,
     buildingPopulation: (scope, id) => (id === 2556 ? (scope.mapuche?.infrastructure?.settlements[0]?.populationSource.amount ?? 0) : 0),
+    foragerFoodIncome: (mods, task, rate) => mapucheForagerFood(mods, task, rate),
     researchSites: mapucheResearchSites,
     deferAgeTechs: [1405, 1406, 1407],
     atomicGather: true,
@@ -147,6 +165,7 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
     assumptionScope: 'bo',
     context: (eco) => ({ chinese: chineseContext(eco) }),
     startingVillagers: (scope) => chineseStartingVillagers(scope.chinese),
+    techCostRule: (kind, id) => (kind === 'up' ? { applyTechCostAll: true } : { applyTechCostAll: !isAgeTech(id) }),
     townCenterPopulation: (scope) => chinesePopulation(scope.chinese),
     assumptions: (input) => chineseModel.assumptions?.({ eco: input.eco, bo: input.bo, ctx: input.ctx ?? chineseModel.context(input.eco) }) ?? [],
   },
@@ -163,6 +182,7 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
   Mayans: {
     source: CURRENT_MODEL_SOURCE,
     atomicGather: true,
+    startingVillagers: () => 4,
     teamRowAllowed: (row, scope, unique) => row.source !== 'team' || (unique && rules.hasMayanWallContext(row, scope)),
     assumptions: () => [rules.MAYAN_RESOURCE_ASSUMPTION, rules.MAYAN_CAVALRY_TEMPLATE_NOTE],
   },
@@ -201,12 +221,14 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
     context: (eco) => ({ armenians: armenianContext(eco) }),
     prepare: armenianBuildOrder,
     deferAgeTechs: ARMENIAN_RESEARCH_IDS,
+    researchRewards: ({ scope, tech, age, applied }) => armenianResearchBonus(scope.armenians, tech, age, applied),
     assumptions: ({ eco }) => (armenianContext(eco).infrastructure ? [ARMENIAN_ASSUMPTION, ARMENIAN_RESEARCH_NOTE] : []),
   },
   Georgians: {
     source: MODEL_SOURCE_BY_CIV.Georgians!,
     context: (eco) => ({ georgians: georgianContext(eco) }),
     prepare: georgianBuildOrder,
+    startingBuildings: ({ georgians }) => (georgians?.start ? [1808] : []),
     assumptions: ({ eco }) => {
       const context = georgianContext(eco);
       return context.infrastructure
