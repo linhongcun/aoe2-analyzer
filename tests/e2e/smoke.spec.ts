@@ -103,6 +103,8 @@ test('mobile nav opens and navigates', async ({ page }) => {
   await expect(page.locator('nav.mainnav')).toBeHidden();
   await page.getByRole('button', { name: '菜单' }).click();
   await page.getByRole('button', { name: '工具' }).click();
+  // #774 起手机抽屉的工具组默认折叠：先展开「对局计划」组再点页面入口。
+  await page.getByRole('dialog', { name: '主导航' }).locator('#tools-menu details', { hasText: '对局计划' }).locator('summary').click();
   await page.locator('nav.mainnav a', { hasText: '对局助手' }).click();
   await expect(page.locator('#matchup:has(#mres) .matchup-title')).toBeVisible();
   await expect(page.locator('nav.mainnav')).toBeHidden();

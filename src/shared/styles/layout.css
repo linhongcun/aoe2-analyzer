@@ -123,10 +123,6 @@ nav.crumbs a {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  /* issue 771：页面级「所有链接 44px 热区」规则（如 .map-guide a/.patches a）不应撑高共享面包屑；
-     ≤600px 的 44×44 触控热区由 editorial.css 里后续的 nav.crumbs a 规则恢复。 */
-  min-height: 0;
-  padding-inline: 0;
 }
 nav.crumbs .ic {
   width: 13px;

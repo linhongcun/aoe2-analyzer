@@ -372,6 +372,8 @@ export function Layout({ children }: { children: ReactNode }) {
               <Icon name="x" />
             </button>
           </div>
+          {/* issue 774：外观段放到抽屉首屏（导航上方），≤900 页头主题按钮隐藏时不必滚到抽屉底部才能切主题。 */}
+          {menu && <MobileTheme preference={preference} onSelect={select} />}
           <div className="ngroup">
             <NavLink to="/" end className={() => `nitem${pathname === '/' ? ' on' : ''}`} data-t="home">
               <Icon name="home" />
@@ -383,7 +385,6 @@ export function Layout({ children }: { children: ReactNode }) {
             ))}
             <ToolsMenu key={menu ? `drawer:${pathname}` : `bar:${pathname}`} path={pathname} drawerOpen={menu} />
           </div>
-          {menu && <MobileTheme preference={preference} onSelect={select} />}
         </nav>
         <Link
           to="/about-data"

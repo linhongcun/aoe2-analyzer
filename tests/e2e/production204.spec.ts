@@ -82,8 +82,12 @@ for (const width of [390, 1280])
     if (width < 600) await page.getByRole('button', { name: '菜单', exact: true }).click();
     await page.getByRole('button', { name: '工具', exact: true }).click();
     const menu = page.locator('#tools-menu');
-    await expect(menu.getByRole('region', { name: '对局计划', exact: true }).getByRole('link').first()).toContainText('开局流程');
+    // #774 起手机抽屉的工具组是可折叠 summary（默认只展开当前组），桌面仍是平铺 region。
+    const planning = width < 600 ? menu.locator('details').nth(1) : menu.locator('section[aria-labelledby="tools-planning"]');
+    if (width < 600) await planning.locator('summary').click();
+    await expect(planning.getByRole('link').first()).toContainText('开局流程');
     await expect(menu.locator('.tools-group-title')).toHaveText(['新手入门', '对局计划', '经济计算', '资料']);
+    if (width < 600) await menu.locator('details').nth(2).locator('summary').click();
     await menu.getByRole('link', { name: /持续生产/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: '持续生产' })).toBeVisible();
     await expect(menu).toBeHidden();
