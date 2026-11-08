@@ -7,8 +7,6 @@ import { expect, it } from 'vitest';
 import { planChanges } from '../../scripts/ci-scope.mjs';
 // @ts-expect-error CI scripts are plain Node modules
 import { testCommand } from '../../scripts/ci-run.mjs';
-// @ts-expect-error CI scripts are plain Node modules
-import { planCovers } from '../../scripts/ci-evidence.mjs';
 
 const shellPaths = ['src/app/Layout.tsx', 'src/shared/ui/Icon.tsx', 'src/shared/styles/editorial-shell.css'];
 const change = (path: string) => ({ path });
@@ -96,13 +94,14 @@ it('#659 real CLI keeps shell PRs and protected pushes full, and forced/backgrou
       });
       return plan;
     };
+    const gate = { scope: 'gate', full: false, data: false, browser: 'gate', features: [], unit: [], e2e: ['tests/e2e/smoke.spec.ts'] };
     const pr = inspect('pull_request', 'refs/pull/513/merge');
-    expect(pr).toMatchObject({ scope: 'full', full: true, data: false, features: ['all'], browser: 'full' });
+    expect(pr).toMatchObject(gate);
     for (const ref of ['refs/heads/main', 'refs/heads/release/v0.71.1']) {
       const push = inspect('push', ref);
-      expect(push).toMatchObject({ scope: 'full', full: true, data: false, browser: 'full' });
-      expect(testCommand(push, 'e2e').args).toEqual(['playwright', 'test', '--reporter=line']);
-      expect(planCovers(pr, push)).toBe(true);
+      expect(push).toMatchObject(gate);
+      expect(testCommand(push, 'e2e').args).toEqual(['playwright', 'test', 'tests/e2e/smoke.spec.ts', '--reporter=line']);
+      expect(testCommand(push, 'unit')).toBeNull();
     }
     expect(inspect('schedule', 'refs/heads/main')).toMatchObject({ scope: 'full', full: true, data: true });
     expect(inspect('pull_request', 'refs/pull/513/merge', 'true')).toMatchObject({ scope: 'full', full: true, data: true });

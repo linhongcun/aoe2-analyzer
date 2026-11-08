@@ -93,8 +93,11 @@ export function makeRequirement(stage_id, selection, fingerprint, reusable = tru
 export function frozenRequirements(plan, toolchain, unitCases, shards, eventName) {
   validatePlan(plan);
   const fingerprint = toolchainDigest(toolchain);
+  const gate = plan.browser === 'gate';
   const requirements = [makeRequirement('static', { checks: STATIC_CHECKS.map((c) => c[0]) }, fingerprint)];
-  if (eventName !== 'pull_request') requirements.push(makeRequirement('static-main', { checks: mainChecks(plan).map((c) => c[0]) }, fingerprint, false));
+  // static-main (unused, contrast, introductions) is full-only. The default gate must not require it on main.
+  if (!gate && eventName !== 'pull_request')
+    requirements.push(makeRequirement('static-main', { checks: mainChecks(plan).map((c) => c[0]) }, fingerprint, false));
   if (unitCases.length)
     requirements.push(makeRequirement('unit', { checks: ['vitest'], files: [...new Set(unitCases.map((c) => c.file))].sort(), cases: unitCases }, fingerprint));
   if (plan.data) requirements.push(makeRequirement('data', { checks: DATA_CHECKS.map((c) => c[0]) }, fingerprint));
@@ -109,6 +112,7 @@ export function frozenRequirements(plan, toolchain, unitCases, shards, eventName
           cases: shard.cases,
         },
         fingerprint,
+        !gate,
       ),
     );
   return requirements;

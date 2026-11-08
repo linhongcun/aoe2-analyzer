@@ -168,15 +168,15 @@ UI 须挂 `docs/design/<topic>/` 规格，或 issue 内可测规格。没有对�
 | 经过前后选择器审计的限定 CSS                                                 | 所有实际消费者的相关回归；未知 CSS、全局规则和 `@import` full |
 | 公共计算、全局 CSS/tokens、路由、Layout/Icon/PageMeta、未知路径、CI 策略自身 | full 单测与浏览器，PR 同样执行                                |
 | 真实数据、生成输入、来源 pins 或依赖                                         | full，并运行实际数据再生成；不让 UI 顺带重生未变数据          |
-| 夜间 / 强制 full                                                             | 全部单测、数据、浏览器，禁用阶段复用                          |
+| 夜间 / 强制 full                                                             | 日更已关。手动 full：全部单测、数据、四片浏览器，禁用阶段复用 |
 
 `startGame` 仅首页、`ladderQuery` 仅天梯等精确闭包以 `ci-scope` 和范围单测为准；首页/天梯受影响时保留空状态、未知输入、缺快照和失败恢复验收。文明 profile 包含 `civHistory` / `civBackgrounds` 及自己的四宽/主题。`formatTime`、`dupNames`、`glossary`、`linker`、`sharePage`、`simRoute` 尚未证明完整闭包，先 full。`FeedbackLink` 等现有精确展示例外保留，不把整个 shared 或 feature 目录视为安全白名单。
 
 窄计划可以排除无关的全站 hash/截图/触控守卫、其它文明矩阵和开局长巡游，断言和文件仍保留在夜间/高风险完整计划；所属功能自己的四宽/主题（包括 `civDlcFilters`）必须保留。全站守卫本身改动 full。`CI_E2E_FULL=false` 不再允许降级高风险 PR。没有文档 PR 跳过全部 e2e/构建烟测的例外。
 
-static、unit、必要 data 与 build 并行，非 PR 的 static-main 独立补跑。完整浏览器按历史时长加权 LPT 分配四个 runner，窄计划最多四片；保留 default/serial 原子组，不全局 `fullyParallel`。实际分片只消费同一不可变 build。最终 `test` 严格聚合必要阶段和精确 case 集合；失败、取消、超时、缺片、错构建均阻断 deploy。#338 合并同次1280访问的 hash/表格检查，保留原断言、冷启动语义和六份 golden。
+**默认 CI（#749）**只跑 static、build 和一条不可复用的 Chromium 窄冒烟；main 聚合成功后才上传 `deployed-site` 并部署。不要把四片、24 路由、axe、单测或 data 加回默认。手动 full 才并行 static-main、unit、data 与四片浏览器。最终 `test` 核对本次计划内的阶段和精确 case；失败、取消、超时、缺片、错构建均阻断 deploy。#338 留在 full。见 [ci-749](design/ci-749.md)。
 
-仅 v2 原始阶段执行证明可复用，v1 无效。GitHub 核实同仓库成功来源 run/attempt/数字 job/artifact，并匹配实际 tree、策略、工具链和精确检查/文件/case 集合；不沿用任意继承链。缺失或坏证明补跑所缺必要阶段。build 与 static-main 不复用；每次包括文档维护都重新构建真实 SHA 并执行24路由冷启动 smoke。PR 到同树 main 的源码覆盖可复用，main 新页脚仍实际核验；不能把复用写成本次重新执行。
+仅 v2 原始阶段执行证明可复用，v1 无效。GitHub 核实同仓库成功来源 run/attempt/数字 job/artifact，并匹配实际 tree、策略、工具链和精确检查/文件/case 集合；不沿用任意继承链。缺失或坏证明补跑所缺必要阶段。build 与默认 browser-1 不复用；main 重新构建真实 SHA 并执行窄冒烟，而不是每次 24 路由。static-main 只在手动 full。不能把复用写成本次重新执行。
 
 CI/Deploy 与 Release 各自从 GitHub `run.created_at` 起共享30分钟预算，包含初始/阶段/部署排队、同 run 重跑、命令和网络等待。不能按阶段重置预算；诊断最多另用90秒且不能变绿。平台进程清理存在延迟，不承诺物理30:00瞬间停止。Release 校验准确 main 外部 v2 gate 和已部署产物字节，不重建。独立完成事件时序报告记录 wall、排队、全部 runner 分钟和最慢片，PR→main→deploy→Release 整链另列；10分钟只是实测目标。
 
@@ -185,11 +185,11 @@ CI/Deploy 与 Release 各自从 GitHub `run.created_at` 起共享30分钟预算�
 ```bash
 node --input-type=module <<'NODE'
 import { execFileSync } from 'node:child_process';
-import { applyBrowserPolicy, planRange } from './scripts/ci-scope.mjs';
+import { planRange, selectCiPlan } from './scripts/ci-scope.mjs';
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
 const head = git('rev-parse', 'HEAD');
 const base = git('merge-base', 'origin/main', head);
-const plan = applyBrowserPolicy(planRange(base, head), { GITHUB_EVENT_NAME: 'pull_request' });
+const plan = selectCiPlan(planRange(base, head), { GITHUB_EVENT_NAME: 'pull_request' });
 console.log(JSON.stringify(plan, null, 2));
 NODE
 ```
@@ -214,7 +214,7 @@ NODE
 - 开发发版：`npm run release -- vX.Y.Z`（详见 [docs/RELEASING.md](RELEASING.md) 与 CONTRIBUTING「发版」）。
 - 本项目已有 hongcun 的持续发布授权；已授权更新完成独立复核和一次适用验证后继续上线，不再单独请求发布许可。main 的 test 可以记录经核实的证据复用，仍须构建真实 SHA、短烟测并完成真实 test/deploy。只有 PR 绿灯不等于已上线；正式 Release、tag 和附件也须确认。
 - Release 在 main CI/Deploy 成功后自动接续，下载准确 run 的 deployed-site，核对 manifest/版本/SHA/tree/tag 与本次功能，直接打包同一 dist，不再默认 594 项线上回归或二次构建。手动调度用于恢复，不在部署未就绪时提前等待。详细步骤见 RELEASING。
-- 全量回归仍每日北京时间 04:17 和手动保留，禁用证据复用并强制 full/data；该后台事件不部署、不发 Release。核心/数据/依赖等重大变化仍需一次适用完整验证，真实失败必须定位。
+- 日更全量已关闭。手动 full 仍禁用证据复用并强制 full/data；该次不部署、不发 Release。核心/数据/依赖等重大变化需要时手动跑完整验证，真实失败必须定位。
 - CHANGELOG 写**玩家可见**的一句中文说明，不写内部实现黑话。
 
 ## 10. pageRegistry（#388 已合入）

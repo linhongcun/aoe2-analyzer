@@ -82,7 +82,7 @@ it('#659 only the unit install uses unit_chromium; build smoke and browser worke
   expect(workflow).not.toContain('CI_SKIP_PLAYWRIGHT');
 });
 
-it('the scope CLI reports unit_chromium for a docs pull request and not for a unit-only plan', () => {
+it('#749 the scope CLI does not schedule unit chromium for an ordinary docs or unit-only change', () => {
   const directory = mkdtempSync(join(tmpdir(), 'unit-chromium-'));
   const repo = join(directory, 'repo');
   mkdirSync(repo);
@@ -119,20 +119,19 @@ it('the scope CLI reports unit_chromium for a docs pull request and not for a un
       return { plan: JSON.parse(readFileSync(join(directory, 'ci-plan.json'), 'utf8')), output: readFileSync(join(directory, 'outputs'), 'utf8') };
     };
     const docs = inspect(docsHead, 'pull_request');
-    expect(docs.plan).toMatchObject({ scope: 'maintenance', browser: 'capped', full: false });
+    expect(docs.plan).toMatchObject({ scope: 'gate', browser: 'gate', full: false, data: false, unit: [] });
     expect(docs.output).toContain('browser=true');
-    expect(docs.output).toContain('unit_chromium=true');
+    expect(docs.output).toContain('unit_chromium=false');
     expect(docs.output).toContain('e2e_full=false');
     const unitHead = commit('tests/unit/buildSim.test.ts', 'unit only');
     const unitOnly = inspect(unitHead, 'pull_request', docsHead);
-    expect(unitOnly.plan).toMatchObject({ scope: 'targeted', browser: 'capped' });
-    expect(unitOnly.plan.unit).toEqual(['tests/unit/buildSim.test.ts']);
+    expect(unitOnly.plan).toMatchObject({ scope: 'gate', browser: 'gate', unit: [] });
     expect(unitOnly.output).toContain('browser=true');
     expect(unitOnly.output).toContain('unit_chromium=false');
     const pushed = inspect(docsHead, 'push');
-    expect(pushed.plan).toMatchObject({ scope: 'maintenance', browser: 'capped' });
+    expect(pushed.plan).toMatchObject({ scope: 'gate', browser: 'gate' });
     expect(pushed.output).toContain('browser=true');
-    expect(pushed.output).toContain('unit_chromium=true');
+    expect(pushed.output).toContain('unit_chromium=false');
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }

@@ -626,11 +626,12 @@ export function aggregateStageEvidence({ current, requirements, proofs, snapshot
   validateCurrent(current, time);
   const wanted = requirements.map(requirement),
     ids = wanted.map((entry) => entry.stage_id);
+  const fullValidation = current.force_full === true || current.event.name === 'schedule';
   if (
     new Set(ids).size !== ids.length ||
     !ids.includes('static') ||
     !ids.includes('build') ||
-    (current.event.name !== 'pull_request' && !ids.includes('static-main'))
+    (fullValidation && current.event.name !== 'pull_request' && !ids.includes('static-main'))
   )
     throw new Error('Missing or duplicate mandatory phases');
   if (!object(proofs) || Object.keys(proofs).length !== ids.length || Object.keys(proofs).some((id) => !ids.includes(id)))

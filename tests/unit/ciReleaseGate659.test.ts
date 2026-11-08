@@ -12,6 +12,8 @@ import { createBudget } from '../../scripts/ci-budget.mjs';
 import { policyDigest, selectionDigest } from '../../scripts/ci-stage-evidence.mjs';
 // @ts-expect-error CI infrastructure uses plain Node modules.
 import { artifactSnapshot, createArtifactManifest } from '../../scripts/site-artifact.mjs';
+// @ts-expect-error CI infrastructure uses plain Node modules.
+import { narrowSmokeTitles } from '../../scripts/ci-scope.mjs';
 
 const repository = 'linhongcun/aoe2-analyzer';
 const folders: string[] = [];
@@ -23,7 +25,7 @@ afterEach(() => {
   folders.splice(0).forEach((path) => rmSync(path, { recursive: true, force: true }));
 });
 
-function fixture() {
+function fixture(options: { omitStaticMain?: boolean } = {}) {
   const directory = mkdtempSync(join(tmpdir(), 'ci659-release-gate-'));
   folders.push(directory);
   const dist = join(directory, 'dist');
@@ -52,14 +54,18 @@ function fixture() {
     toolchainDigest: toolchain_digest,
   });
   const snapshot = artifactSnapshot(dist);
+  const smokeCases = ['smoke-calc', 'smoke-civs', 'smoke-franks', 'smoke-home', 'smoke-query', 'smoke-unit'].map((id) => ({
+    id,
+    expectedStatus: 'passed',
+  }));
   const requirements = ['static', 'static-main', 'build', 'browser-1'].map((stage_id) => ({
     stage_id,
     job_name: stage_id,
-    reusable: !['static-main', 'build'].includes(stage_id),
+    reusable: !['static-main', 'build', 'browser-1'].includes(stage_id),
     selection: {
       checks: stage_id === 'build' ? ['build', 'fresh-build-smoke', 'snapshot'] : stage_id.startsWith('browser-') ? ['playwright'] : [stage_id],
       files: stage_id.startsWith('browser-') ? ['tests/e2e/smoke.spec.ts'] : [],
-      cases: stage_id.startsWith('browser-') ? [{ id: 'immutable-route', expectedStatus: 'passed' }] : [],
+      cases: stage_id.startsWith('browser-') ? smokeCases : [],
     },
     toolchain_digest,
   }));
@@ -89,6 +95,7 @@ function fixture() {
       run_attempt: attempt,
     },
     required_stage_ids: requirements.map((entry) => entry.stage_id),
+    smoke: { titles: narrowSmokeTitles(), case_ids: smokeCases.map((entry) => entry.id) },
     stages: requirements.map((entry, index) => ({
       stage_id: entry.stage_id,
       executed: true,
@@ -122,6 +129,7 @@ function fixture() {
   const jobs = [
     ['static-main', 659_402, 20_000, 28_000],
     ['build', buildJobId, 30_000, 40_000],
+    ['browser-1', 659_404, 41_000, 48_000],
     ['test', aggregateJobId, 50_000, 55_000],
     ['deploy', 659_411, 56_000, 60_000],
   ].map(([name, jobId, start, end]) => ({
@@ -190,6 +198,16 @@ function fixture() {
     throw new Error('Unexpected authoritative API endpoint: ' + endpoint);
   };
   const verify = () => verifyReleaseGate({ budget, api });
+  if (options.omitStaticMain) {
+    gate.requirements = gate.requirements.filter((entry) => entry.stage_id !== 'static-main');
+    gate.required_stage_ids = gate.requirements.map((entry) => entry.stage_id);
+    gate.stages = gate.stages.filter((stage) => stage.stage_id !== 'static-main');
+    gate.requirements_digest = hash(Buffer.from(JSON.stringify(gate.requirements)));
+    jobs.splice(
+      jobs.findIndex((job) => job.name === 'static-main'),
+      1,
+    );
+  }
   pack();
   return { directory, dist, origin, run, gate, jobs, artifact, budget, pack, verify, fetched, called };
 }
@@ -200,6 +218,12 @@ describe('#659 Release bridge authenticates actual source artifacts', () => {
     expect(await f.verify()).toEqual(f.gate);
     expect(f.fetched).toHaveLength(1);
     expect(f.called).toContain(`repos/${repository}/actions/runs/${f.run.id}/attempts/2/jobs?per_page=100&page=1`);
+  });
+
+  it('accepts a default main gate that executed the narrow smoke and did not run static-main', async () => {
+    const f = fixture({ omitStaticMain: true });
+    expect(f.gate.required_stage_ids).toEqual(['static', 'build', 'browser-1']);
+    expect(await f.verify()).toEqual(f.gate);
   });
 
   const mutations: [string, (f: ReturnType<typeof fixture>) => void][] = [
@@ -225,6 +249,11 @@ describe('#659 Release bridge authenticates actual source artifacts', () => {
     ['gate artifact updated after aggregate job', (f) => (f.artifact.updated_at = second(f.origin + 56_000))],
     ['missing fresh build', (f) => (f.gate.stages.find((stage) => stage.stage_id === 'build')!.executed = false)],
     ['authoritative build failed', (f) => (f.jobs.find((job) => job.name === 'build')!.conclusion = 'failure')],
+    ['authoritative narrow smoke failed', (f) => (f.jobs.find((job) => job.name === 'browser-1')!.conclusion = 'failure')],
+    ['narrow smoke was not executed on this run', (f) => (f.gate.stages.find((stage) => stage.stage_id === 'browser-1')!.executed = false)],
+    ['narrow smoke drops the home route', (f) => (f.gate.smoke.titles = f.gate.smoke.titles.filter((title: string) => !title.startsWith('route (home)')))],
+    ['narrow smoke case ids do not match the shard', (f) => (f.gate.smoke.case_ids = ['other-case'])],
+    ['release source adds a second browser shard', (f) => f.gate.required_stage_ids.push('browser-2')],
     ['authoritative static-main failed', (f) => (f.jobs.find((job) => job.name === 'static-main')!.conclusion = 'failure')],
     ['static-main claims reused execution', (f) => (f.gate.stages.find((stage) => stage.stage_id === 'static-main')!.executed = false)],
     ['static-main source job differs', (f) => f.gate.stages.find((stage) => stage.stage_id === 'static-main')!.source.job_id++],

@@ -113,11 +113,11 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 ## 合并前必须通过
 
-按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。`ci-scope` 选择 `maintenance`、`civ-ui`、`targeted` 或 `full`；窄范围必须有已审计的完整消费者闭包，保留受影响功能的正负路径、四宽和明暗主题。只有实际数据、生成输入、来源 pins 或依赖变化需要时执行数据管线，`full` 不自动等于 `data`。
+按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。**默认 CI（#749）**是 static、真实 SHA 构建和 Chromium 单分片窄冒烟；main 在聚合成功后才部署。不要把四片浏览器、24 路由、axe、单测或 data 加回普通 PR。这些只在手动 `workflow_dispatch` 且 `full=true` 时跑，且该次不部署。`planChanges` 的 `maintenance` / `civ-ui` / `targeted` / `full` 分类不再驱动默认门禁。细则见 [ci-749](docs/design/ci-749.md)。
 
-**风险决定浏览器范围（#659）**：共享计算、全局 CSS/tokens、路由、Layout/Icon/PageMeta、未知范围和策略自身选择完整单测与浏览器，PR 同样执行。完整浏览器按历史时长加权分配到四个 runner，不启用全局 `fullyParallel`；静态、单测、必要数据和构建并行，所有实际浏览器分片消费同一不可变构建。每次事件包括文档/版本维护均保留核心 smoke，并在真实 SHA 新构建上执行24路由冷启动烟测。`test` 严格聚合所有必要阶段；失败、超时、缺片或错构建均不得部署。
+**手动 full 仍按 #659**：共享计算、全局 CSS/tokens、路由、Layout/Icon/PageMeta、未知范围和策略自身在 full 里跑完整单测与四片浏览器。失败、超时、缺片或错构建均不得部署。默认窄冒烟失败同样不得部署。
 
-只接受经 GitHub 核实的 v2 原始阶段证明；v1 无效。复用必须匹配仓库、Git tree、策略、工具链、精确检查/文件/case 集合和来源 run/attempt/数字 job/artifact，不能继承任意复用链。build 与 static-main 不复用，main 始终重建真实 SHA。单次 run 从 `run.created_at` 起共享30分钟预算，包含排队、重跑、聚合和部署；诊断最多额外90秒且不能变绿。10分钟为实测目标，平台进程回收不承诺物理30:00停止；完成后报告 wall、排队、全部 runner 分钟和最慢片，整条发布链单列。细则见 [TESTING](docs/TESTING.md) 和 [冻结规格](docs/design/ci-659.md)。
+只接受经 GitHub 核实的 v2 原始阶段证明；v1 无效。复用必须匹配仓库、Git tree、策略、工具链、精确检查/文件/case 集合和来源 run/attempt/数字 job/artifact，不能继承任意复用链。build 与默认 `browser-1` 不复用，main 始终重建真实 SHA。static-main 只属于手动 full。单次 run 从 `run.created_at` 起共享30分钟预算，包含排队、重跑、聚合和部署；诊断最多额外90秒且不能变绿。细则见 [TESTING](docs/TESTING.md)、[ci-749](docs/design/ci-749.md) 和 [ci-659](docs/design/ci-659.md)。
 
 ## 测试规则
 
