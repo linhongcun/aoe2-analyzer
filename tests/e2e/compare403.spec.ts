@@ -89,7 +89,7 @@ async function pair(page: Page, a: string, b: string) {
     await expect(page.locator('#cpos')).toContainText(`${civ.zh} ${civ.fl}/10`);
     await expect(page.locator('#cpos')).toContainText(`${civ.zh} ${civ.pk}/10`);
   }
-  const team = page.getByRole('link', { name: '查看这两个文明的队伍加成来源', exact: true });
+  const team = page.getByRole('link', { name: '查看这两个文明的团队加成来源', exact: true });
   const teamUrl = new URL((await team.getAttribute('href'))!, page.url());
   const teamQuery = new URLSearchParams(teamUrl.hash.split('?')[1]);
   expect(teamQuery.get('players')).toBe(`${a},${b}`);
@@ -270,7 +270,7 @@ test('#403 URL覆盖既有会话选择，裸入口恢复默认而历史恢复指
     location.hash = '/compare?a=Berbers&b=Berbers';
   });
   await pair(page, 'Berbers', 'Berbers');
-  await page.getByRole('link', { name: '查看这两个文明的队伍加成来源', exact: true }).click();
+  await page.getByRole('link', { name: '查看这两个文明的团队加成来源', exact: true }).click();
   await expect(page.getByTestId('team-bonus-Berbers-team').getByRole('link', { name: '玩家 1 · 柏柏尔', exact: true })).toBeVisible();
   await expect(page.getByTestId('team-bonus-Berbers-team').getByRole('link', { name: '玩家 2 · 柏柏尔', exact: true })).toBeVisible();
   await page.goBack();

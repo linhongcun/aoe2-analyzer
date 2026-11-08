@@ -362,7 +362,7 @@ export default function RelicIncome() {
               </p>
               <p>时间单位与效果含义参考下列资料，资料里的历史示例数字没有用于本模型。结果按游戏数据推算，没有在游戏里逐帧实测。</p>
               <p>
-                亚美尼亚免费圣物如已存放，计入输入数量，不再自动加一件。修道院与强化教堂采用相同收入参数；立陶宛团队修道院工作速度不额外放大收入。其他普通队伍加成不会凭文案套用成圣物收益。
+                亚美尼亚免费圣物如已存放，计入输入数量，不再自动加一件。修道院与强化教堂采用相同收入参数；立陶宛团队修道院工作速度不额外放大收入。其他普通团队加成不会凭文案套用成圣物收益。
               </p>
               <p>
                 仅算固定数量、固定生效状态和固定期间；不模拟抢夺、携带路程、途中增减、研究完成时刻、外交改变、战役触发或自制场景奖励。多个无神论来源尚未核实其执行叠加，暂停黄金、食物及金耗覆盖。
@@ -397,7 +397,7 @@ export default function RelicIncome() {
             </details>
             <nav className="relic-links" aria-label="相关工具">
               <Link className="relic-link" to="/team-bonuses">
-                队伍加成来源
+                团队加成来源
               </Link>
               <Link className="relic-link" to="/building/104?tab=garrison">
                 修道院驻军容量

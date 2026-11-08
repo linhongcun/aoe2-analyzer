@@ -33,7 +33,7 @@ for (const width of [360, 375, 390, 1280])
       await page.keyboard.press('Escape');
       await content.getByRole('link', { name: '回首页', exact: true }).click();
       await expect(page.locator('#home')).toBeVisible();
-      await expect(page).toHaveTitle('帝国时代 II 分析器 | 帝国时代 II 分析器');
+      await expect(page).toHaveTitle('帝国时代 II 分析器');
 
       // 很长的未知路径也应换行；建议必须能导航到实际页面。
       await page.goto('./#/team-' + 'x'.repeat(200));
@@ -42,7 +42,7 @@ for (const width of [360, 375, 390, 1280])
       const expected = [
         { label: '团战分工', path: '/team-plan', heading: '团战分工计划' },
         { label: '文明搭配', path: '/team-fit', heading: '文明搭配' },
-        { label: '队伍加成', path: '/team-bonuses', heading: '队伍加成一屏汇总' },
+        { label: '团队加成', path: '/team-bonuses', heading: '团队加成一屏汇总' },
       ];
       await expect(suggestions).toHaveText(expected.map(({ label }) => label));
       expect(await suggestions.evaluateAll((links) => links.map((link) => link.getAttribute('href')))).toEqual(expected.map(({ path }) => '#' + path));

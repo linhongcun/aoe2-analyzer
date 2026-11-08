@@ -25,7 +25,7 @@ async function pick(page: Page, player: number, civ: string) {
 
 test('#228 本人默认来源、1–4人上下限和重复来源保留全部提供者', async ({ page }) => {
   await page.goto('./#/team-bonuses');
-  await expect(page.getByRole('heading', { name: '队伍加成一屏汇总', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '团队加成一屏汇总', exact: true })).toBeVisible();
   await expect(page.getByTestId('team-bonus-Franks-team')).toHaveCount(1);
   await expect(page.getByRole('button', { name: '移除玩家 1', exact: true })).toBeDisabled();
   for (let count = 0; count < 3; count++) await page.getByRole('button', { name: '添加玩家', exact: true }).click();

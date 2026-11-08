@@ -45,11 +45,11 @@ async function recordSubject(page: Page, testInfo: TestInfo, name: string, fullP
   await testInfo.attach(`${name}.png`, { path: screenshotPath, contentType: 'image/png' });
 }
 
-test('#558 正控制：既有队伍加成与团战分工保持可用', async ({ page }, testInfo) => {
+test('#558 正控制：既有团队加成与团战分工保持可用', async ({ page }, testInfo) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('./#/team-bonuses?tv=1&players=Franks%2CPersians%2CMayans&age=4&target=all&unit=&researched=');
-  await expect(page.getByRole('heading', { level: 1, name: '队伍加成一屏汇总', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: '团队加成一屏汇总', exact: true })).toBeVisible();
   await expect(page.getByTestId('team-bonus-Franks-team')).toBeVisible();
   await expect(page.getByTestId('team-bonus-Persians-team')).toBeVisible();
   await expect(page.getByTestId('team-bonus-Mayans-team')).toBeVisible();
@@ -226,7 +226,7 @@ test('#558 分享失败保留完整链接、复制成功有反馈且旧异步反
 test('#558 两既有工具实际接收文明、研究与所有阶段约定为空', async ({ page }) => {
   await page.goto(fitUrl());
   await fitReady(page);
-  await page.getByRole('link', { name: '查看完整队伍加成', exact: true }).click();
+  await page.getByRole('link', { name: '查看完整团队加成', exact: true }).click();
   await expect(page.getByTestId('team-bonus-Franks-team')).toBeVisible();
   for (const [index, civ] of [
     [1, '法兰克'],

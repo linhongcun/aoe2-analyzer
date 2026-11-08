@@ -44,7 +44,7 @@ export default function Compare() {
       <ListHead title="文明对比" desc="两个文明的能力雷达与关键差异" />
       <p>
         <Link className="btn community-tool-entry" to={'/team-bonuses?' + encodeTeamBonuses(updateTeamRoster(defaultTeamBonusConfig(), [a.en, b.en]))}>
-          查看这两个文明的队伍加成来源
+          查看这两个文明的团队加成来源
         </Link>
       </p>
       <div className="bar fbar">

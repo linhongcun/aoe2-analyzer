@@ -343,6 +343,10 @@
     "py": "tuanzhanfengong",
     "pyi": "tzfg"
   },
+  "团队加成": {
+    "py": "tuanduijiacheng",
+    "pyi": "tdjc"
+  },
   "圣物不仅能产生黄金，还能产生食物": {
     "py": "shengwubujinnengchanshenghuangjinhainengchanshengshiwu",
     "pyi": "swbjncshjhncssw"
@@ -1234,10 +1238,6 @@
   "长矛兵系造成的额外伤害 +25%": {
     "py": "changmaobingxizaochengdeewaishanghai",
     "pyi": "cmbxzcdewsh"
-  },
-  "队伍加成": {
-    "py": "duiwujiacheng",
-    "pyi": "dwjc"
   },
   "防御工事建造速度 +50%，城镇中心建造速度 +100%": {
     "py": "fangyugongshijianzaosuduchengzhenzhongxinjianzaosudu",
