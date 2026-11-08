@@ -112,6 +112,18 @@ hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归
 
 另外允许 `refactor`、`style`、`perf`、`build`、`revert`、`hotfix`。不兼容变化在类型后加 `!`，例如 `feat(#70)!: 分享链接改用新格式`。
 
+### AI 代理署名
+
+AI 代理参与的实现，在本地 commit message 和 PR 正文末尾保留署名 trailer：
+
+```
+Co-authored-by: DeepSeek Harness <noreply@deepseek.com>
+```
+
+- author/committer 仍是仓库身份（squash 合并后 GitHub 的 author 是合并者）；co-author 只记录代理参与，与 Cursor 等既有做法一致。
+- `noreply@deepseek.com` 目前未绑定 GitHub 账号（DeepSeek 在 GitHub 只有组织 `deepseek-ai`，组织不能归属提交），因此 GitHub 只显示文字 co-author、没有头像/链接徽章。换成可归属的 GitHub App bot 或官方账号后，同步更新本节与 `AGENTS.md`。
+- 不得用他人或其他账号的 noreply 邮箱冒充归属；署名仅用于诚实记录参与方。
+
 ## 数据来源
 
 - 只引用自己实际打开核对过的来源，写明链接或文件版本。
