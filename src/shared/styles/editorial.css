@@ -116,7 +116,7 @@ kbd {
 .dlct .dc-label {
   display: none;
 }
-/* issue 767：固定 210px 名称列在窄屏把文明列压到约 91px，芯片里的文明名被折成两行；≤600px 改为卡片布局。 */
+/* issue 767：固定 210px 名称列在窄屏把文明列压到约 91px，芯片里的文明名最多被折成 5 行；≤600px 改为卡片布局。 */
 @media (max-width: 600px) {
   .dlct,
   .dlct tbody,
