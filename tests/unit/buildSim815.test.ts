@@ -7,6 +7,9 @@ describe('#815 buildSim 文明特化迁入注册表', () => {
     const source = readFileSync('src/domain/buildSim.ts', 'utf8');
     for (const token of ['START_VILS', 'mapucheForagerFood', 'polishStoneGold', 'armenianResearchBonus', "civ === 'Chinese'", 'georgians?.start'])
       expect(source, token).not.toContain(token);
+    const coverage = readFileSync('src/domain/buildSimCoverage.ts', 'utf8');
+    expect(coverage).not.toContain('georgians?.start');
+    expect(coverage).not.toContain('START_VILS');
   });
 
   it('六类扩展点都登记在 CIV_MECHANISMS', () => {

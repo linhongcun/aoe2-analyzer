@@ -1203,7 +1203,8 @@ export function gatherRate(
 ): { carry: number; workRate: number; rate: number; extraIncome: Partial<Stock> } {
   const m = baseMods();
   const scope = simScope(eco, ALL_BOS, civ);
-  m.farmNoWalk = !!civMechanism(civ).farmNoWalk?.(scope);
+  const mechanism = civMechanism(civ);
+  m.farmNoWalk = !!mechanism.farmNoWalk?.(scope);
   const uniqueMayanTree = hasUniqueMayanTree(eco);
   for (const r of eco.civEco[civ] ?? [])
     if (
@@ -1211,7 +1212,7 @@ export function gatherRate(
       r.source !== 'team' &&
       mechanismRowAllowed(r, scope, uniqueMayanTree) &&
       mechanismGatherMarkerAllowed(r, scope) &&
-      (!civMechanism(civ).atomicGather || techAtomicOk(r, scope))
+      (!mechanism.atomicGather || techAtomicOk(r, scope))
     )
       applyEffects(
         m,
@@ -1236,10 +1237,10 @@ export function gatherRate(
   });
   const rate = mechanismFarmRate(scope, ecoTask, average);
   const wood = foragerWoodIncome(m, ecoTask, rate);
-  const food = lumberFoodIncome(m, ecoTask, rate) + (civMechanism(civ).foragerFoodIncome?.(m, ecoTask, rate) ?? 0);
+  const food = lumberFoodIncome(m, ecoTask, rate) + (mechanism.foragerFoodIncome?.(m, ecoTask, rate) ?? 0);
   const gold =
     (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) +
     varangianGoldIncome(m, ecoTask, rate) +
-    (civMechanism(civ).stoneGoldIncome?.(scope, ecoTask, rate) ?? 0);
+    (mechanism.stoneGoldIncome?.(scope, ecoTask, rate) ?? 0);
   return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}), ...(gold ? { gold } : {}) } };
 }

@@ -96,6 +96,7 @@ interface CivMechanism {
   buildingCost?: (scope: Scope, id: number) => EcoData['buildings'][string]['cost'] | undefined;
   buildingPopulation?: (scope: Scope, id: number) => number;
   startingVillagers?: (scope: Scope) => number;
+  /** simScope 在完整 Scope 构造前就要知道起始建筑，所以接收 context。 */
   startingBuildings?: (context: MechanismContext) => readonly number[];
   techCostRule?: (kind: 'tech' | 'up', id: number, scope: Scope) => { applyTechCostAll: boolean } | undefined;
   researchRewards?: (input: { scope: Scope; tech: number; age: number; applied: ReadonlySet<number> }) => readonly EffectRow[];
