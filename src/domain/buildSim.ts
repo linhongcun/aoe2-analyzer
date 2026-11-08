@@ -1107,7 +1107,7 @@ export function simulateBuild(bo: BuildOrder, civ: string, eco: EcoData, ups: Up
       version: MODEL_VERSION,
       assumptions: [
         ...ASSUMPTIONS,
-        ...mechanismAssumptions(civ, { eco, bo, params: P, scope: () => simScope(eco, ALL_BOS, civ) }),
+        ...mechanismAssumptions(civ, { eco, bo, params: P, scope: () => simScope(eco, civMechanism(civ).assumptionScope === 'bo' ? [bo] : ALL_BOS, civ) }),
         ...(bo.steps.some((st) => st.actions.some((a) => a.type === 'train' && a.unit === 13))
           ? ['渔船训练完成后按深海鱼任务倍率采集；往返距离使用走路距离参数、速度使用渔船自身速度。不模拟鱼耗尽、转渔网或受袭损失。']
           : []),

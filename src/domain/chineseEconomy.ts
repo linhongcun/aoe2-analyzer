@@ -2,6 +2,7 @@
 import type { EcoData, EffectRow } from './buildSim';
 import type { JurchenRawTech } from './jurchenEconomy';
 import { TC_BY_AGE } from './gameIds';
+import type { CivModel } from './civModel';
 
 export type ChineseRawTech = JurchenRawTech;
 export const CHINESE_SOURCE_REASON = '中国起始、科技折扣或城镇中心缺少完整已核来源，未计入';
@@ -102,3 +103,9 @@ export function chineseRowClass(
 export const chinesePopulation = (context?: ReturnType<typeof chineseContext>) => context?.admitted.get(425)?.chineseTech?.commands[0]?.D ?? 5;
 export const chineseStartingVillagers = (context?: ReturnType<typeof chineseContext>) => 3 + (context?.admitted.get(302)?.chineseTech?.commands[1]?.C ?? 0);
 export const chineseNotes = (eco: EcoData) => (chineseContext(eco).complete ? [CHINESE_OPENING_NOTE] : []);
+
+export const chineseModel: CivModel = {
+  civ: 'Chinese',
+  context: chineseContext,
+  assumptions: ({ ctx }) => ((ctx as ReturnType<typeof chineseContext>).complete ? [CHINESE_OPENING_NOTE, CHINESE_MODEL_NOTE] : []),
+};
