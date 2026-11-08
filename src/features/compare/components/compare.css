@@ -34,3 +34,27 @@
     width: 100%;
   }
 }
+
+/* issue 776：≤760（`.two` 单列断点）下首列中文标签原本被压到 35px 逐字竖排，整页被拉到 2700+。
+   首列 nowrap + min-width、表格两端收紧；1280 桌面版式不变（issue 776 验收要求对照截图一致）。 */
+@media (max-width: 760px) {
+  #compare #ctab :is(td, th):first-child {
+    white-space: nowrap;
+    min-width: 64px;
+  }
+  #compare #ctab td,
+  #compare #ctab th {
+    padding: 5px 3px;
+    line-height: 1.5;
+  }
+  #compare #ctab {
+    font-size: 13px;
+  }
+  #compare #ctab th .ico {
+    max-width: 36px;
+    max-height: 36px;
+  }
+  #compare .two {
+    gap: 12px;
+  }
+}

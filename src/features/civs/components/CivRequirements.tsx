@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../../../shared/ui/Icon';
 import { useShareLink } from '../../../shared/ui/useShareLink';
@@ -7,6 +7,19 @@ import { DATA_SOURCES, versionLabel } from '../../../shared/utils/dataInfo';
 import { requirementToken, resolveRequirements, searchRequirements, type RequirementCondition, type RequirementContext } from '../../../domain/civRequirements';
 import type { Tech, Unit } from '../../../domain/types';
 import './civ-requirements.css';
+
+/** issue 776：≤600 把「必备单位与科技」收进可折叠 details，让文明卡回到窄屏首屏；summary 保留标题与条件数。 */
+const NARROW_REQUIREMENTS_QUERY = '(max-width: 600px)';
+function useNarrowRequirements() {
+  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && window.matchMedia(NARROW_REQUIREMENTS_QUERY).matches);
+  useEffect(() => {
+    const media = window.matchMedia(NARROW_REQUIREMENTS_QUERY);
+    const onChange = () => setNarrow(media.matches);
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, []);
+  return narrow;
+}
 
 export default function CivRequirements({
   context,
@@ -44,17 +57,16 @@ export default function CivRequirements({
     onChange(next);
     reset();
   };
-  return (
-    <section className="civ-requirements" data-testid="civ-requirements" aria-labelledby="requirements-title">
-      <div className="requirements-heading">
-        <div>
-          <h2 id="requirements-title">必备单位与科技</h2>
-          <p className="note">查找同时拥有全部项目的文明。单位按具体形态筛选，普通、精锐及替代单位分别选择。</p>
-        </div>
-        <button type="button" onClick={() => void copy()} disabled={!context}>
-          <Icon name="copy" /> 复制筛选链接
-        </button>
-      </div>
+  const narrow = useNarrowRequirements();
+  const requirementsTitle = <h2 id="requirements-title">必备单位与科技</h2>;
+  const requirementsNote = <p className="note">查找同时拥有全部项目的文明。单位按具体形态筛选，普通、精锐及替代单位分别选择。</p>;
+  const copyButton = (
+    <button type="button" onClick={() => void copy()} disabled={!context}>
+      <Icon name="copy" /> 复制筛选链接
+    </button>
+  );
+  const body = (
+    <>
       <div className="requirements-search">
         <label>
           搜索必备单位或科技
@@ -161,6 +173,35 @@ export default function CivRequirements({
         </label>
       )}
       <p className="note requirements-version">可用性依据 {versionLabel(DATA_SOURCES)} 科技树；包含免费科技，不计队友解锁，不代表该兵种满科技。</p>
+    </>
+  );
+  if (narrow)
+    return (
+      <details className="civ-requirements" data-testid="civ-requirements">
+        <summary className="requirements-summary">
+          {requirementsTitle}
+          <span className="note requirements-summary-count">
+            已选 <span className="num">{conditions.length}</span> 项
+          </span>
+          <Icon name="chevron-down" />
+        </summary>
+        <div className="requirements-heading">
+          <div>{requirementsNote}</div>
+          {copyButton}
+        </div>
+        {body}
+      </details>
+    );
+  return (
+    <section className="civ-requirements" data-testid="civ-requirements" aria-labelledby="requirements-title">
+      <div className="requirements-heading">
+        <div>
+          {requirementsTitle}
+          {requirementsNote}
+        </div>
+        {copyButton}
+      </div>
+      {body}
     </section>
   );
 }
