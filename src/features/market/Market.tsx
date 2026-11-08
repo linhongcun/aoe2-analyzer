@@ -22,6 +22,7 @@ import {
 } from '../../domain/market';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { Icon } from '../../shared/ui/Icon';
+import { Breadcrumbs } from '../../shared/ui/layout';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './market.css';
 
@@ -75,12 +76,23 @@ export default function Market() {
   };
   return (
     <section className="pane market-page" data-testid="market-page">
+      <Breadcrumbs />
       <header className="market-heading">
         <div>
           <h1>市场买卖预算</h1>
           <p className="note">按你的交易顺序，估算资源收支与下一笔报价。</p>
         </div>
       </header>
+      <p className="market-econ-links">
+        相关经济工具：
+        <Link className="ulink" to="/production">
+          持续生产
+        </Link>
+        {' · '}
+        <Link className="ulink" to="/eco-payoff">
+          经济科技收益
+        </Link>
+      </p>
       <CalcDock
         note={status}
         resultId={decoded.errors.length ? undefined : 'market-compare-title'}

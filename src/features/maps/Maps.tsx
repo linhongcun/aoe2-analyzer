@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { buildOrders } from '../../data/buildOrders';
 import catalog from '../../data/mapCatalog.json';
+import { Breadcrumbs } from '../../shared/ui/layout';
 import { mapGuides } from './guides';
 import { MapPositions } from './MapPositions';
 import SuddenDessaster3 from './SuddenDessaster3';
@@ -69,6 +70,7 @@ export default function Maps() {
 
   return (
     <section className="pane map-guide">
+      <Breadcrumbs />
       <h1 className="page-heading">地图与开局</h1>
       <p>
         收录 <span className="num nw">{catalog.maps.length} 张</span>标准地图，常见地图优先排列。选择地图，查看预览、地形与开局提示。

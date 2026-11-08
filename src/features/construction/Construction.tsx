@@ -6,6 +6,7 @@ import { AGE_ZH } from '../../domain/ratings';
 import { Loading } from '../../shared/ui/widgets';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
+import { Breadcrumbs } from '../../shared/ui/layout';
 import {
   calculateConstruction,
   constructionBuildings,
@@ -82,6 +83,7 @@ export default function Construction() {
   };
   return (
     <section className="pane construction-page" data-testid="construction-page">
+      <Breadcrumbs />
       <header className="construction-heading">
         <div>
           <h1>多人施工</h1>

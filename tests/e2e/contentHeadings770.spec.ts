@@ -3,7 +3,8 @@ import { expect, test, type Page } from '@playwright/test';
 // #770：11 个内容页补 h1；标签由 h2 升级为 h1，但视觉保持原样（字体大小/位置不变）。
 // 基线度量（修复前 h2，1280×900 / 360×900，pageTop = top + scrollY）：
 // 列表页 .lhead 标题 28px/37.8px、margin-top 0、top=151；
-// 直排标题页（地图/版本补丁/关于数据）22.5px/30.375px、margin-top 18.675px、top=138（1280）/136（360）；
+// 直排标题页 22.5px/30.375px、margin-top 18.675px；关于数据 top=138（1280）/136（360）；
+// #771 在地图/版本补丁标题上方加了面包屑（标题下移一行），两页 top 变为 170（1280）/170（360），字号/行高/边距不变。
 // 开局时间线 .tl-title 40px/46px、margin-top 8px（360 由既有移动端设计隐藏）。
 const LIST_HEADINGS = [
   ['/civs', '文明'],
@@ -15,15 +16,15 @@ const LIST_HEADINGS = [
   ['/dlc', 'DLC / 资料片'],
 ] as const;
 const PLAIN_HEADINGS = [
-  ['/maps', '地图与开局'],
-  ['/patches', '版本补丁'],
-  ['/about-data', '关于数据'],
+  ['/maps', '地图与开局', { 1280: 170, 360: 170 }],
+  ['/patches', '版本补丁', { 1280: 170, 360: 170 }],
+  ['/about-data', '关于数据', { 1280: 138, 360: 136 }],
 ] as const;
 
 const LIST_STYLE = { fontSize: '28px', lineHeight: '37.8px', marginTop: '0px', marginBottom: '0px' };
 const PLAIN_STYLE = { fontSize: '22.5px', lineHeight: '30.375px', marginTop: '18.675px', marginBottom: '18.675px' };
-const TOP_1280 = { list: 151, plain: 138 } as const;
-const TOP_360 = { list: 151, plain: 136 } as const;
+const TOP_1280 = { list: 151 } as const;
+const TOP_360 = { list: 151 } as const;
 
 const failures = new WeakMap<Page, string[]>();
 test.beforeEach(async ({ page }) => {
@@ -65,10 +66,10 @@ for (const [route, expected] of LIST_HEADINGS)
     await singleTitle(page, route, expected, LIST_STYLE, TOP_1280.list);
   });
 
-for (const [route, expected] of PLAIN_HEADINGS)
+for (const [route, expected, tops] of PLAIN_HEADINGS)
   test(`#770 @1280 ${route} 有唯一 h1 且视觉不变`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
-    await singleTitle(page, route, expected, PLAIN_STYLE, TOP_1280.plain);
+    await singleTitle(page, route, expected, PLAIN_STYLE, tops[1280]);
   });
 
 for (const [route, expected] of LIST_HEADINGS)
@@ -77,10 +78,10 @@ for (const [route, expected] of LIST_HEADINGS)
     await singleTitle(page, route, expected, LIST_STYLE, TOP_360.list);
   });
 
-for (const [route, expected] of PLAIN_HEADINGS)
+for (const [route, expected, tops] of PLAIN_HEADINGS)
   test(`#770 @360 ${route} 有唯一 h1`, async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 900 });
-    await singleTitle(page, route, expected, PLAIN_STYLE, TOP_360.plain);
+    await singleTitle(page, route, expected, PLAIN_STYLE, tops[360]);
   });
 
 test('#770 @1280 开局时间线与跟练两个视图各有且仅有一个 h1', async ({ page }) => {
