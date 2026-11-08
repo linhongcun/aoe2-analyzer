@@ -1723,6 +1723,8 @@
   "hash": "#/construction?cv=1&building=70&civ=Romans&age=3&techs=&builders=4&baseline=1&tc=1&task=wood&walk=3&farm=0",
   "lines": [
    "报错/反馈",
+   "首页",
+   "多人施工",
    "多人施工",
    "比较提前完工的时间与村民工时。时间均为游戏时间。",
    "跳到结果",
@@ -1957,6 +1959,8 @@
   "hash": "#/construction?cv=1&building=70&civ=Romans&age=3&techs=&builders=4&baseline=1&tc=1&task=farm&walk=3&farm=0",
   "lines": [
    "报错/反馈",
+   "首页",
+   "多人施工",
    "多人施工",
    "比较提前完工的时间与村民工时。时间均为游戏时间。",
    "跳到结果",
@@ -2191,6 +2195,8 @@
   "hash": "#/construction?cv=1&building=70&civ=Franks&age=3&techs=&builders=4&baseline=1&tc=1&task=wood&walk=3&farm=0",
   "lines": [
    "报错/反馈",
+   "首页",
+   "多人施工",
    "多人施工",
    "比较提前完工的时间与村民工时。时间均为游戏时间。",
    "跳到结果",
