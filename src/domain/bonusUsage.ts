@@ -21,11 +21,11 @@ import { chineseContext, CHINESE_OPENING_NOTE } from './chineseEconomy';
  * 科技树汇总效果（.dat tech 号 < 0，issue 332）：按 aoe2techtree@3bb43b1 文明加成英文原文把每条对应到 eco.json 的 tree 行效果，
  * 结论 = 去掉这些效果后全部开局方案重跑是否变化（见 TREE_SIM / tests/unit/v0300-332.test.ts）；核对不了的写「无法核实」再写具体原因。
  */
-import ecoRaw from '../data/raw/eco';
+import { ECO as eco } from '../data/eco';
 import { CONSTRUCTION_DATA as construction } from '../data/construction';
 import unitsRaw from '../data/raw/units';
 import { buildOrders } from '../data/buildOrders';
-import { classifyCivEffect, simScope, simSupport as currentSimSupport, techAtomicOk, type EcoData } from './buildSim';
+import { classifyCivEffect, simScope, simSupport as currentSimSupport, techAtomicOk } from './buildSim';
 import type { CivBonusEnt } from './civBonus';
 import { DAT } from './datEffects';
 import { gatherBonusIdx, gatherModel, touchesGather } from './realCost';
@@ -39,7 +39,6 @@ import { georgianContext } from './georgianEconomy';
 import { slavicContext, SLAVIC_FARM_NOTE } from './slavicEconomy';
 import { khmerContext, KHMER_FARM_NOTE, KHMER_PREREQUISITE_NOTE } from './khmerEconomy';
 
-const eco = ecoRaw as unknown as EcoData;
 /** PK 与真实成本只给单位算折后价（建筑费用折扣不在这两个工具里） */
 const UNIT_IDS = new Set((unitsRaw as unknown as { id: number }[]).map((u) => u.id));
 type Cmd = { C: number; A: number; B: number };

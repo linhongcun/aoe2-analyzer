@@ -1,5 +1,5 @@
 /** issue 204 稳态连续训练。游戏数值只读固定 eco / effects；不修改旧真实费用默认口径。 */
-import ecoRaw from '../data/raw/eco';
+import { ECO as eco } from '../data/eco';
 import { civs, type Core } from '../data';
 import { DAT, type DatEco } from './datEffects';
 import { discountedCost, roundHalfPrice } from './costDiscount';
@@ -7,36 +7,6 @@ import { gatherModel, type GatherRes } from './realCost';
 import type { Cost, Tech, Trees, Unit } from './types';
 import { buildingAge, EARLY_UNIT_AGES } from './availabilityAge';
 
-interface EcoEffect {
-  kind: string;
-  target?: string;
-  attr?: string;
-  op?: string;
-  v?: number;
-  tech?: number;
-  res?: number;
-}
-interface EcoRow {
-  age: number;
-  name: string;
-  source: string;
-  tech?: number;
-  requires?: number[];
-  effects: EcoEffect[];
-}
-interface EcoUnit {
-  at: number[];
-  class?: number;
-  cost: Cost;
-  trainTime: number;
-  timeAt?: Record<string, number>;
-}
-const eco = ecoRaw as unknown as {
-  units: Record<string, EcoUnit>;
-  villager: { cost: Cost; trainTime: number };
-  ecoTechs: Record<string, { effects: EcoEffect[] }>;
-  civEco: Record<string, EcoRow[]>;
-};
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
 export const BUILDING_LIMIT = 100;
@@ -169,6 +139,15 @@ export function productionUnits(ctx: ProductionContext, config: ProductionConfig
   return ctx.core.units.filter((u) => productionBuildings(ctx, config, u).length > 0);
 }
 
+interface EcoEffect {
+  kind: string;
+  target?: string;
+  attr?: string;
+  op?: string;
+  v?: number;
+  tech?: number;
+  res?: number;
+}
 function matches(e: EcoEffect, u: Unit) {
   return e.target === `unit:${u.id}` || e.target === `class:${eco.units[u.id]?.class}` || (u.id === 83 && ['villager', 'class:4'].includes(e.target ?? ''));
 }

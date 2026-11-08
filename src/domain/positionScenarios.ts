@@ -1,6 +1,6 @@
 /** issue 652 城堡时代限定情景。无胜率、无文明评分、无跨时代总分。 */
 import type { Core } from '../data';
-import ecoRaw from '../data/raw/eco';
+import { ECO } from '../data/eco';
 import { DAT } from './datEffects';
 import { TECH_SRC, BONUS_SRC } from './effects';
 import type { Cost, SimStats, Trees } from './types';
@@ -34,7 +34,7 @@ export interface SceneEco {
   units: Record<string, { trainTime: number; at: number[]; class?: number; timeAt?: Record<string, number> }>;
   civEco: Record<string, EcoRow[]>;
 }
-export const SCENE_ECO = ecoRaw as unknown as SceneEco;
+export const SCENE_ECO: SceneEco = ECO;
 export interface SceneContext {
   core: Core;
   trees: Trees;
