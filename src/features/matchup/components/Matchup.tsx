@@ -115,7 +115,7 @@ export default function Matchup() {
               对手文明
             </Link>
           </nav>
-          <p className="note">可复制地址栏链接分享这对阵</p>
+          {!pair.invalid && params.has('me') && params.has('opp') && <p className="note">可复制地址栏链接分享这对阵</p>}
           <RushDefense own={a} enemy={e} data={data} loadError={error} />
         </>
       )}

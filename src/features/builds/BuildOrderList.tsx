@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { civByEn } from '../../data';
 import type { ListMeta } from './listMeta';
 import { visibleSources } from './sources';
@@ -41,9 +41,21 @@ function useListMeta(): Record<string, ListMeta> | null {
 }
 
 export default function BuildOrderList() {
-  const [sp] = useSearchParams();
+  const [sp, setSp] = useSearchParams();
+  const location = useLocation();
   const meta = useListMeta();
   const bo = sp.get('bo');
+  // issue 772：非法 bo 静默退回列表时给出提示并清掉坏参数，避免再次分享还是坏链接。
+  // 地址栏被 replace 成干净地址后，提示靠 history state 保留一次；换到别的链接即清除。
+  const currentInvalid = !!bo && !buildOrders.some((b) => b.id === bo);
+  const stateInvalidBo = (location.state as { buildsInvalidBo?: boolean } | null)?.buildsInvalidBo ?? false;
+  const invalidBo = currentInvalid || stateInvalidBo;
+  useEffect(() => {
+    if (!currentInvalid) return;
+    const next = new URLSearchParams(sp);
+    next.delete('bo');
+    setSp(next, { replace: true, state: { buildsInvalidBo: true } });
+  }, [currentInvalid, sp, setSp]);
   if (bo && buildOrders.some((b) => b.id === bo))
     return (
       <>
@@ -70,6 +82,11 @@ export default function BuildOrderList() {
   return (
     <section className="pane" id="builds">
       <ListHead level={1} title="开局流程" desc={`${buildOrders.length} 个主流开局，点开看每一步卡在哪`} />
+      {invalidBo && (
+        <p className="note" role="status">
+          链接中的开局无效，已显示全部开局。
+        </p>
+      )}
       <BuildContext params={sp} />
       <nav className="bar" aria-label="单人与内容入门">
         <Link className="community-tool-entry" to="/game-guide">

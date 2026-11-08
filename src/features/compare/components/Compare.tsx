@@ -24,17 +24,30 @@ const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
 ];
 const cell = (c: Civ, k: (typeof ROWS)[number][1]) => (k === 'op' ? <Steps s={c.op} /> : c[k]);
 
+/** issue 772：坏参数/缺参的说明；地址栏被 replace 成完整参数后靠 location.state 保留一次。 */
+type CompareLinkNote = { kind: 'invalid' } | { kind: 'picked'; side: 'a' | 'b'; civ: string };
+function resolveLinkNote(input: string): CompareLinkNote | null {
+  const resolved = resolveCompareQuery(input);
+  if (resolved.invalid) return { kind: 'invalid' };
+  if (!resolved.autoPicked) return null;
+  const side = resolved.missingB ? 'b' : 'a';
+  return { kind: 'picked', side, civ: side === 'b' ? resolved.b : resolved.a };
+}
+
 export default function Compare() {
   const location = useLocation();
   const { pathname, search: query } = location;
   const navigate = useNavigate();
   const { a: aName, b: bName, search, needsReplace } = resolveCompareQuery(query);
+  const linkNote = resolveLinkNote(query) ?? (location.state as { compareLinkNote?: CompareLinkNote } | null)?.compareLinkNote ?? null;
   const a = civByEn(aName)!,
     b = civByEn(bName)!;
   useEffect(() => {
     if (!compareLocationIsCurrent(location, window.location.hash)) return;
-    if (needsReplace || pathname !== '/compare') navigate({ pathname: '/compare', search }, { replace: true });
-  }, [location, pathname, search, needsReplace, navigate]);
+    const note = resolveLinkNote(query);
+    if (!needsReplace && !note && pathname === '/compare') return;
+    navigate({ pathname: '/compare', search }, { replace: true, state: note ? { compareLinkNote: note } : undefined });
+  }, [location, pathname, query, search, needsReplace, navigate]);
   const selectCivilization = (side: 'a' | 'b', civ: string) => {
     const next = selectCompareCivilization(query, side, civ);
     if (next !== null) navigate({ pathname: '/compare', search: next });
@@ -51,6 +64,16 @@ export default function Compare() {
         <CivPicker id="ca" label="文明 A" value={a.en} onChange={(en) => selectCivilization('a', en)} /> VS{' '}
         <CivPicker id="cb" label="文明 B" value={b.en} onChange={(en) => selectCivilization('b', en)} />
       </div>
+      {linkNote?.kind === 'invalid' && (
+        <p className="note" role="status">
+          链接中的文明无效，已整组回退为默认对比。
+        </p>
+      )}
+      {linkNote?.kind === 'picked' && (
+        <p className="note" role="status">
+          链接缺少{linkNote.side === 'b' ? '对手' : '我方'}文明，已自动选择「{civByEn(linkNote.civ)?.zh ?? linkNote.civ}」，请按实际补选。
+        </p>
+      )}
       <div className="compare-share">
         <CopyPageLink key={search} />
       </div>
