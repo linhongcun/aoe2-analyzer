@@ -10,6 +10,7 @@ scripts/            数据管线（Python）：npm run data
   civs_build.py       文明（游戏文本解析 + scripts/civ_ratings.json 主观评分/开局）
   units_build.py      单位（属性、护甲类别 cls、升级路线、图标 → public/img/units）
   techs_build.py      科技（费用、前置、图标 → public/img/techs）
+  ages_build.py       时代图标（aoe2techtree img/Ages → public/img/ages）
   trees_build.py      每文明科技树布局（建筑分列/时代分行/连线、建筑图标）
   catalog_introductions.json / .mjs  单位、建筑首发版本的逐ID来源清单与编译校验
 src/
@@ -34,14 +35,14 @@ src/
     hooks/            特性内状态
     logic/            特性内纯逻辑（如 tree/layout.ts 布局计算、civs/filter.ts）
   shared/
-    ui/               Icon（Lucide）、art（CivIcon/UnitLink/CostView/StatIcon/DlcBadge…）、widgets（Radar/PosBox/Linked/DlcBar…）
+    ui/               Icon（Lucide）、art（CivIcon/UnitLink/CostView/StatIcon/DlcBadge/AgeImg…）、widgets（Radar/PosBox/Linked/DlcBar/AgeBar…）
     styles/           tokens.css（设计令牌）+ base.css（全局主题样式）
     ui/sim/           跨页面复用的单位模拟器（SimPanel / Simulator，单位详情、PK、建筑模拟共用）
     hooks/            跨页面状态（如 useSimState：状态以 URL 为唯一来源）
     nav/pageRegistry.ts  页面登记表（路径、分组、文案、元数据、搜索别名；唯一来源）
     nav/sections.ts      从登记表派生导航、首页卡片、面包屑与搜索
     utils/sticky.ts   跨路由保留的筛选状态（等价于旧版隐藏面板保留输入）
-public/img/         游戏美术（civs/units/techs/buildings/dlc/stats，WebP）
+public/img/         游戏美术（civs/units/techs/buildings/dlc/ages/stats，WebP）
 tests/unit/         Vitest：模拟器数值、前置链、DLC 映射、自动链接器
 tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 ```

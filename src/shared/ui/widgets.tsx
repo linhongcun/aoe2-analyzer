@@ -6,7 +6,7 @@ import { DLCS } from '../../domain/dlc';
 import { linkify } from '../../domain/linker';
 import { useCore } from '../../data/hooks';
 import { civs } from '../../data';
-import { DlcImg } from './art';
+import { AgeImg, DlcImg } from './art';
 import { Icon } from './Icon';
 
 /** 自动链接单位/科技名称；nl=true 时把换行渲染为 <br> */
@@ -214,6 +214,19 @@ export function DlcBar({ value, onChange }: { value: string; onChange: (v: strin
       {b('', '全部')}
       {DLCS.map((_, i) => b(String(i), <DlcImg i={i} />))}
       {b('none', '未标注')}
+    </div>
+  );
+}
+export function AgeBar({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const b = (v: string, c: ReactNode) => (
+    <button type="button" key={v} data-v={v} className={value === v ? 'on' : undefined} aria-pressed={value === v} onClick={() => onChange(v)}>
+      {c}
+    </button>
+  );
+  return (
+    <div className="dbar" role="group" aria-label="时代快捷筛选">
+      {b('', '全部')}
+      {([1, 2, 3, 4] as const).map((age) => b(String(age), <AgeImg age={age} />))}
     </div>
   );
 }

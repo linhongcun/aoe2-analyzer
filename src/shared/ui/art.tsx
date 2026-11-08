@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import type { Building, Civ, Cost, Tech, Unit } from '../../domain/types';
 import type { FamilyEntry } from '../../domain/family';
 import { DLCS } from '../../domain/dlc';
-import { RES_ZH } from '../../domain/ratings';
+import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 
 export const img = (p: string) => `${import.meta.env.BASE_URL}img/${p}`;
 
@@ -81,6 +81,10 @@ export const costText = (c: Cost) =>
     .map(([k, v]) => `${v} ${RES_ZH[k] ?? k}`)
     .join(' + ') || '—';
 
+export const AgeImg = ({ age, className = 'dlci' }: { age: number; className?: string }) => {
+  const zh = AGE_ZH[age] ?? '';
+  return <img className={className} src={img(`ages/${age}.webp`)} alt={zh} title={zh} />;
+};
 export const DlcImg = ({ i, className = 'dlci' }: { i: number; className?: string }) => {
   const d = DLCS[i]!;
   return <img className={className} src={img(`dlc/${i}.webp`)} alt={`${d.zh} ${d.en}`} title={`${d.zh} · ${d.en} (${d.year})`} />;
