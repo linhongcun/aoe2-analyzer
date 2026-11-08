@@ -207,10 +207,7 @@ function quadrantOf(winRate: number, playRate: number, pickMedian: number): (typ
   if (common) return '弱且常见';
   return '弱且少见';
 }
-async function checkedElo(page: Page): Promise<string> {
-  const radio = page.getByRole('radiogroup', { name: /天梯分段/ }).locator('[aria-checked="true"]');
-  return (await radio.count()) === 1 ? ((await radio.innerText()) ?? '').replace(/\s+/g, '') : '';
-}
+async function checkedElo(page: Page): Promise<string> { const radio = page.getByRole('radiogroup', { name: /天梯分段/ }).locator('[aria-checked="true"]'); return (await radio.count()) === 1 ? ((await radio.innerText()) ?? '').replace(/\s+/g, '') : ''; }
 async function plainText(page: Page, testId: string): Promise<string> {
   const root = page.getByTestId(testId);
   if ((await root.count()) !== 1 || !(await root.isVisible())) return '';
@@ -273,9 +270,7 @@ test('#577 首次进入默认筛为 4v4 RM · Elo 1200–1400 · 近 90 天 · �
   soon(eloOk(elo), `选中的 Elo 应为 1200–1400，实际「${elo}」`).toBe(true);
   soon(map.includes('全图') && map.includes('当前快照') && !/阿拉伯|Arabia/i.test(map), `地图 pill 应为全图，实际「${map}」`).toBe(true);
   if ((await filters.count()) === 1) {
-    soon([await filters.getByRole('radiogroup', { name: '模式' }).count(), await filters.getByRole('radiogroup', { name: /天梯分段/ }).count()]).toEqual([
-      1, 1,
-    ]);
+    soon([await filters.getByRole('radiogroup', { name: '模式' }).count(), await filters.getByRole('radiogroup', { name: /天梯分段/ }).count()]).toEqual([1, 1]);
     soon(await filters.getByRole('slider').count(), '不要 Elo 滑杆').toBe(0);
     const blob = (await filters.innerText()) ?? '';
     soon(blob, '不要 2v2 / 3v3 / 帝国战争').not.toMatch(/2v2|3v3|帝国战争/);
