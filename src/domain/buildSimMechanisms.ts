@@ -34,10 +34,11 @@ import { bengaliRewardFamily, BENGALI_SPAWN_ASSUMPTION, BENGALI_KNIGHT_TEMPLATE_
 import { armenianContext, armenianBuildOrder, ARMENIAN_RESEARCH_IDS, ARMENIAN_ASSUMPTION, ARMENIAN_RESEARCH_NOTE } from './armenianEconomy';
 import { georgianContext, georgianBuildOrder, GEORGIAN_ASSUMPTION } from './georgianEconomy';
 import { slavicContext, slavicFarmRate, slavicHasFarmAssignment, SLAVIC_FARM_NOTE, SLAVIC_FARM_DETAIL, SLAVIC_TEAM_NOTE } from './slavicEconomy';
-import { khmerContext, khmerRowClass, khmerFarmRate, khmerBuildingReady, khmerNotes, khmerHasFarmAssignment, KHMER_FARM_DETAIL } from './khmerEconomy';
-import { chineseContext, chinesePopulation, chineseStartingVillagers, chineseRowAllowed, chineseNotes, CHINESE_MODEL_NOTE } from './chineseEconomy';
+import { khmerContext, khmerRowClass, khmerFarmRate, khmerBuildingReady, khmerModel } from './khmerEconomy';
+import { chineseContext, chinesePopulation, chineseStartingVillagers, chineseRowAllowed, chineseModel } from './chineseEconomy';
 import { jurchenContext, jurchenNotes, jurchenRowClass, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 import { DATA_PATCH, SOURCE_PINS } from '../data/sources';
+import type { CivContext } from './civModel';
 export interface MechanismContext {
   romans?: ReturnType<typeof romanContext>;
   poles?: ReturnType<typeof polishContext>;
@@ -55,7 +56,7 @@ export interface MechanismContext {
   georgians?: ReturnType<typeof georgianContext>;
 }
 type Scope = ReturnType<typeof simScope>;
-type Assumptions = { eco: EcoData; bo: BuildOrder; params: SimParams; scope: () => Scope };
+type Assumptions = { eco: EcoData; bo: BuildOrder; params: SimParams; scope: () => Scope; ctx?: CivContext };
 export type ModelSource = {
   status: 'current' | 'evidence-pinned' | 'legacy';
   patch: number;
@@ -78,6 +79,9 @@ const MODEL_SOURCE_BY_CIV: Readonly<Record<string, ModelSource>> = {
 };
 interface CivMechanism {
   source: ModelSource;
+  /** assumptions 的 scope 使用当前 bo（而不是 ALL_BOS）；目前仅两个 CivModel 样板。 */
+  assumptionScope?: 'bo';
+  civContext?: (eco: EcoData) => CivContext;
   builderMultiplier?: (scope: Scope) => number;
   buildingCost?: (scope: Scope, id: number) => EcoData['buildings'][string]['cost'] | undefined;
   buildingPopulation?: (scope: Scope, id: number) => number;
@@ -139,10 +143,12 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
   },
   Chinese: {
     source: CURRENT_MODEL_SOURCE,
+    civContext: chineseModel.context,
+    assumptionScope: 'bo',
     context: (eco) => ({ chinese: chineseContext(eco) }),
     startingVillagers: (scope) => chineseStartingVillagers(scope.chinese),
     townCenterPopulation: (scope) => chinesePopulation(scope.chinese),
-    assumptions: ({ eco }) => (chineseContext(eco).complete ? [...chineseNotes(eco), CHINESE_MODEL_NOTE] : []),
+    assumptions: (input) => chineseModel.assumptions?.({ eco: input.eco, bo: input.bo, ctx: input.ctx ?? chineseModel.context(input.eco) }) ?? [],
   },
   Jurchens: {
     source: CURRENT_MODEL_SOURCE,
@@ -220,6 +226,8 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
   },
   Khmer: {
     source: MODEL_SOURCE_BY_CIV.Khmer!,
+    civContext: khmerModel.context,
+    assumptionScope: 'bo',
     context: (eco) => ({ khmer: khmerContext(eco) }),
     atomicGather: true,
     farmNoWalk: (scope) => !!scope.khmer?.bonus,
@@ -237,17 +245,18 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
       return sites[eco.ecoTechs[tech]?.at ?? ''] ?? [eco.techs[tech]?.at ?? -1];
     },
     prerequisiteCiv: (scope, civ) => (scope.khmer?.noPrerequisites ? civ : ''),
-    assumptions: ({ eco, bo }) => {
-      const context = khmerContext(eco);
-      return [...khmerNotes(context, bo), ...(context.physical && context.bonus && khmerHasFarmAssignment(bo) ? [KHMER_FARM_DETAIL] : [])];
-    },
+    assumptions: (input) => khmerModel.assumptions?.({ eco: input.eco, bo: input.bo, ctx: input.ctx ?? khmerModel.context(input.eco) }) ?? [],
   },
 };
 export const CIV_MECHANISM_KEYS = Object.freeze(Object.keys(CIV_MECHANISMS));
 const DEFAULT_MECHANISM: CivMechanism = { source: { status: 'legacy', patch: DATA_PATCH.build } };
 export const civMechanism = (civ?: string): CivMechanism => CIV_MECHANISMS[civ ?? ''] ?? DEFAULT_MECHANISM;
 export const mechanismContext = (eco: EcoData, civ?: string): MechanismContext => ({ weiRewards: null, ...civMechanism(civ).context?.(eco) });
-export const mechanismAssumptions = (civ: string, input: Assumptions): string[] => civMechanism(civ).assumptions?.(input) ?? [];
+export const mechanismAssumptions = (civ: string, input: Assumptions): string[] => {
+  const model = civMechanism(civ);
+  const ctx = input.ctx ?? model.civContext?.(input.eco) ?? { reasons: [] };
+  return model.assumptions?.({ ...input, ctx }) ?? [];
+};
 export const mechanismFarmRate = (scope: Scope, task: string, average: number): number =>
   task === 'farm' ? (civMechanism(scope.civ).farmRate?.(scope, average) ?? average) : average;
 

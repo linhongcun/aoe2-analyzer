@@ -3,6 +3,7 @@ import type { BuildOrder } from './buildOrder';
 import type { EcoData } from './buildSim';
 import { KHMER_FIXED_SOURCE } from './khmerSource';
 import { KHMER_FIXED_PREREQUISITES } from './khmerPrerequisiteSource';
+import type { CivModel } from './civModel';
 export interface KhmerCommand {
   Type: number;
   A: number;
@@ -170,3 +171,12 @@ export function khmerNotes(context: KhmerContext, bo?: BuildOrder): string[] {
     ...(context.physical && context.bonus && bo && khmerHasFarmAssignment(bo) ? [KHMER_FARM_NOTE] : []),
   ];
 }
+
+export const khmerModel: CivModel = {
+  civ: 'Khmer',
+  context: khmerContext,
+  assumptions: ({ bo, ctx }) => {
+    const c = ctx as KhmerContext;
+    return [...khmerNotes(c, bo), ...(c.physical && c.bonus && khmerHasFarmAssignment(bo) ? [KHMER_FARM_DETAIL] : [])];
+  },
+};
