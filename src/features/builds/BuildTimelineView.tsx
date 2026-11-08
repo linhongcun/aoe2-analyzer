@@ -238,7 +238,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
     <section className="pane tl" id="builds" data-t="timeline">
       <div className="tl-desk-only">
         <Breadcrumbs current={bo.name.zh} />
-        <h2 className="tl-title">{bo.name.zh}</h2>
+        <h1 className="tl-title">{bo.name.zh}</h1>
         <p className="note">
           {bo.summary}
           {source && ` · 来源 ${source}`}

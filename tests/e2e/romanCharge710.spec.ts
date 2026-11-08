@@ -93,7 +93,7 @@ for (const width of [360, 375, 390, 1280])
         if (tab === 'ov') {
           await target.getByRole('link', { name: '数据说明', exact: true }).click();
           await expect(page).toHaveURL(/#\/about-data$/);
-          await expect(page.getByRole('heading', { level: 2, name: '关于数据', exact: true })).toBeVisible();
+          await expect(page.getByRole('heading', { level: 1, name: '关于数据', exact: true })).toBeVisible();
           await page.goto('./#/tech/884?tab=ov');
           await expect(target).toBeVisible();
         }

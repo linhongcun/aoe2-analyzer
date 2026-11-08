@@ -8,7 +8,7 @@ const NAMES: Record<string, string> = { dat: '游戏原版 .dat', aoe2techtree: 
 export default function AboutData() {
   return (
     <section id="about-data" className="pane">
-      <h2>关于数据</h2>
+      <h1 className="page-heading">关于数据</h1>
       <p>
         当前数据版本：<b data-t="data-version">{versionLabel(D)}</b>（{D.patch.name}；识别自 {D.patch.detectedFrom}）。最后更新：
         <span className="src-date">{D.updated}</span>。

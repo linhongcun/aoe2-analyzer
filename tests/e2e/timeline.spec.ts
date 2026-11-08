@@ -196,7 +196,7 @@ test.describe('#3 开局时间线', () => {
     await expect(page.locator('[data-t="sum-arrive"] b')).toBeInViewport();
     await expect(page.locator('[data-t="sum-bottleneck"]')).toBeInViewport();
     await expect(page.locator('[data-step="0"]')).toBeInViewport();
-    await expect(page.locator('h2.tl-title')).toBeHidden();
+    await expect(page.locator('h1.tl-title')).toBeHidden();
     const share = page.getByRole('button', { name: '复制链接' }).filter({ visible: true });
     await expect(share).toHaveCount(1);
     await expect(share).toBeInViewport();

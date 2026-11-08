@@ -46,7 +46,7 @@ export default function CivList() {
   const changeFilter = (values: Partial<CivRequirementFilters>) => update({ ...filters, ...values }, conditions);
   return (
     <section id="list" className="pane">
-      <ListHead title="文明" desc="56 个文明 · 按类型、DLC、团战位置与必备单位、科技组合筛选" />
+      <ListHead level={1} title="文明" desc="56 个文明 · 按类型、DLC、团战位置与必备单位、科技组合筛选" />
       <CatalogFilters
         search={<SearchInput id="q" value={q} onChange={(q) => changeFilter({ q })} placeholder="搜索文明（中/英）" />}
         count={

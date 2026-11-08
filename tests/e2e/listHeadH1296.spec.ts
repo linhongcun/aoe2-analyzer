@@ -1,4 +1,5 @@
-// #296 自测（Linus）：#/builds、#/duel 的主标题改为 h1 后，外观与其它列表页的 h2 标题一致；其它列表页不受影响。
+// #296 自测（Linus）：#/builds、#/duel 的主标题改为 h1 后，外观与其它列表页的 h2 标题一致。
+// #770 把 #/civs、#/units、#/techs 等列表页也升级为 h1，参照页改用仍用 h2 的 #/compare。
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
@@ -19,9 +20,9 @@ async function go(page: Page, route: string, theme: (typeof THEMES)[number]) {
 
 for (const theme of THEMES)
   for (const w of [360, 1280])
-    test(`${theme} @${w}：#/builds、#/duel 的 h1 与 #/civs 列表标题 h2 外观相同`, async ({ page }) => {
+    test(`${theme} @${w}：#/builds、#/duel 的 h1 与 #/compare 列表标题 h2 外观相同`, async ({ page }) => {
       await page.setViewportSize({ width: w, height: 800 });
-      await go(page, '/civs', theme);
+      await go(page, '/compare', theme);
       const ref = await look(page, '.lhead h2');
       for (const route of ['/builds', '/duel']) {
         await go(page, route, theme);
@@ -68,10 +69,10 @@ test('#/builds、#/duel 通过 axe page-has-heading-one；两页标题层级无�
   }
 });
 
-test('不在范围的列表页仍用 h2 标题（#/civs、#/units、#/techs）', async ({ page }) => {
-  for (const route of ['/civs', '/units', '/techs']) {
+test('#770 把原 #296 例外清单里的列表页升级为 h1 主标题', async ({ page }) => {
+  for (const route of ['/civs', '/units', '/techs', '/buildings', '/tree/Armenians', '/bonuses', '/dlc']) {
     await go(page, route, 'light');
-    await expect(page.locator('.lhead h2'), route).toHaveCount(1);
-    await expect(page.locator('.lhead h1'), route).toHaveCount(0);
+    await expect(page.locator('.lhead h1'), route).toHaveCount(1);
+    await expect(page.locator('.lhead h2'), route).toHaveCount(0);
   }
 });

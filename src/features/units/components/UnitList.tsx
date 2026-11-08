@@ -39,7 +39,7 @@ export default function UnitList() {
   const dup = dupIdsIn(r.map((x) => x.u));
   return (
     <section id="units" className="pane">
-      <ListHead title="单位" desc="全部单位 · 按文明、兵种、类别、DLC、时代筛选" />
+      <ListHead level={1} title="单位" desc="全部单位 · 按文明、兵种、类别、DLC、时代筛选" />
       <div className="bar fbar unit-list-filters">
         <SearchInput id="uq" value={q} onChange={setQ} placeholder="搜索单位（中/英）" />
         <CivPicker id="uciv" value={civ} onChange={setCiv} none="全部文明" label="可用文明" />

@@ -25,7 +25,7 @@ export default function BuildingList() {
   const r = filterBuildings(all, { q, age, type, dlc });
   return (
     <section id="buildings" className="pane">
-      <ListHead title="建筑" desc="全部建筑 · 按时代、类型、DLC 筛选" />
+      <ListHead level={1} title="建筑" desc="全部建筑 · 按时代、类型、DLC 筛选" />
       <p className="note">各档建筑门槛写在对应的时代升级说明里。</p>
       <div className="uchips" role="navigation" aria-label="时代升级说明">
         {ageGuides.map(([id, label]) => (
