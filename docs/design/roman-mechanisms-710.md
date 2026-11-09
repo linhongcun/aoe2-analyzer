@@ -8,7 +8,7 @@
 
 新增scripts/charge_attack_build.py沿relic_income已有有界DUMP/cache/--check：只读tech884及实际effect、实际Romans文明四字段；不用British缓存，不另下数据或扩dat_source缓存。Type0/4/5按原始顺序set/add/mul，保index/Type/A/B/C/D与原float。属性59/60/61/62分别max_charge/recharge_rate/charge_event/charge_type；101训练时间是明确伴随分支，未知/重复/缺字段/非finite/bool伪数值或错身份/资格失败，不补0或静默丢命令。
 
-输出charge_attack.json封闭结构：meta含generatedBy/patch/datSource/datSha256/engineVerifiedInPinnedBuild:false/固定语义URL与公式；tech身份、有限原始commands、rawTargets、legalTargets、examples[{unitId,before,after,commandIndices}]。每个state恰为四字段，容量/速率非负finite，模式只接收基底0/已核1；其它模式schema拒绝，合法0不默认解释为Attack，helper待确认。不存需同步维护的20。sort_keys/allow_nan=False/稳定换行，无动态时间戳；--check不覆写。新data-charge-attack schema、catalog映射、独立compiled validator/.d.mts与唯一features/techs/chargeAttack710 typed reader，沿readValidatedJson坏结构直接throw，不吞错伪0。有效但资格不成立/未支持模式给明确待确认；rate0不换算、不Infinity。
+输出charge_attack.json封闭结构：meta含generatedBy/patch/datSource/datSha256/engineVerifiedInPinnedBuild:false/固定语义URL与公式；tech身份、有限原始commands、rawTargets、legalTargets、examples[{unitId,before,after,commandIndices}]。每个state恰为四字段，容量/速率非负finite，模式只接收基底0/已核1；其它模式schema拒绝，合法0不默认解释为Attack，helper待确认。不存需同步维护的20。sort_keys/allow_nan=False/稳定换行，无动态时间戳；--check不覆写。新data-charge-attack schema、catalog映射、独立compiled validator/.d.mts与唯一domain/chargeAttack typed reader，沿readValidatedJson坏结构直接throw，不吞错伪0。有效但资格不成立/未支持模式给明确待确认；rate0不换算、不Infinity。
 
 当前raw12=[38,74,75,77,283,473,567,569,1790,1792,1793,1813]；目录Romans AND树status1合法8=[38,74,75,77,283,1790,1792,1793]；展示3例=[283,1792,1793]。示例需科技884可用、时代与形态已升级假设，不能将12称可训或8称同局同时可生产。生产数值全部derive：当前四基底0，after容量5/恢复率0.25/event1/type1；静态容量/恢复率自然20秒，不能硬填。
 

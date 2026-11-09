@@ -247,6 +247,7 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     'src/features/techs/components/TechAffects.tsx',
     'src/features/techs/components/ChargeAttack710.tsx',
     'src/features/techs/chargeAttack710.ts',
+    'src/domain/chargeAttack.ts',
     'src/features/techs/techEffectText.ts',
   ])('%s alone retains the Roman charge display regression', (path) => {
     for (const env of [pr, main]) {
@@ -254,6 +255,14 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
       expect(selected).toMatchObject({ full: false, data: false });
       expect(selected.unit).toContain('tests/unit/romanCharge710.test.ts');
       expect(selected.e2e).toContain('tests/e2e/romanCharge710.spec.ts');
+    }
+  });
+  it.each(['src/domain/conversion.ts'])('%s alone retains the conversion display regression', (path) => {
+    for (const env of [pr, main]) {
+      const selected = browser([change(path)], env);
+      expect(selected).toMatchObject({ full: false, data: false });
+      expect(selected.unit).toContain('tests/unit/conversion731.test.ts');
+      expect(selected.e2e).toContain('tests/e2e/conversion731.spec.ts');
     }
   });
   it.each(['src/features/bonuses/components/BonusDetail.tsx', 'src/features/bonuses/components/RomanArmor710.tsx', 'src/features/bonuses/romanArmor710.ts'])(
@@ -285,8 +294,10 @@ describe('#659 frozen coverage and actual v1 to v2 shadow comparison', () => {
     'src/features/gameGuide/GameGuide.tsx',
     'src/features/gameGuide/elevationCard.tsx',
     'src/features/gameGuide/elevation.ts',
+    'src/domain/elevation.ts',
     'src/features/gameGuide/standardVictoryCard.tsx',
     'src/features/gameGuide/standardVictory.ts',
+    'src/domain/standardVictory.ts',
   ])('%s alone retains the game-guide mechanism regressions', (path) => {
     for (const env of [pr, main]) {
       const selected = browser([change(path)], env);

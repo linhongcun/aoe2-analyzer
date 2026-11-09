@@ -128,6 +128,7 @@ describe('#747 Standard 倒计时只写有出处的句子', () => {
   it('源码不写死年数、秒数或 UGC 附加时间', () => {
     const source = [
       readFileSync('src/features/gameGuide/standardVictory.ts', 'utf8'),
+      readFileSync('src/domain/standardVictory.ts', 'utf8'),
       readFileSync('src/features/gameGuide/standardVictoryCard.tsx', 'utf8'),
     ].join('\n');
     expect(source).not.toMatch(/\+100|100 年|1000|16:40|2000 年|\d+\s*秒/);
