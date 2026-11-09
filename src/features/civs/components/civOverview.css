@@ -251,3 +251,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* 页面任务优先：四个概览语义区保持顺序，去掉套在指标外的卡片壳。 */
+#detail .dmain > .detail-section {
+  margin-bottom: var(--space-6);
+  padding: var(--space-5) 0 0;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+#detail .dmain > .detail-section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+#detail .civ-ratings .detail-stat {
+  padding: var(--space-3);
+  border-radius: 0;
+  border-bottom: 1px solid var(--color-line);
+  background: transparent;
+}

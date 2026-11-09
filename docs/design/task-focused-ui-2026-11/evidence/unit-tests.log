@@ -1,0 +1,16 @@
+
+ RUN  v3.2.7 /workspace/aoe2-analyzer
+
+ ✓ tests/unit/startGame632.test.ts (21 tests) 126ms
+ ✓ tests/unit/startGame592.test.ts (26 tests) 165ms
+ ✓ tests/unit/unitFilters196.test.ts (29 tests) 51ms
+ ✓ tests/unit/unitFilters192.test.ts (17 tests) 60ms
+ ✓ tests/unit/civRequirements206.test.ts (53 tests) 2372ms
+   ✓ #206 固定数据与精确形态 > 全部 199 项科技的 civs、科技树与单条件查询一致  1212ms
+   ✓ #206 固定数据与精确形态 > 全部 248 条单位记录的 civs、科技树与单条件查询一致  1091ms
+
+ Test Files  5 passed (5)
+      Tests  146 passed (146)
+   Start at  10:23:46
+   Duration  4.23s (transform 1.70s, setup 123ms, collect 4.30s, tests 2.77s, environment 1ms, prepare 981ms)
+

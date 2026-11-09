@@ -1,0 +1,100 @@
+
+Running 3 tests using 2 workers
+
+(node:20338) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+(node:20339) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/3] tests/e2e/mechanism652.spec.ts:304:1 › 数据加载失败时保留选择并可继续，不刷新整页
+[2/3] tests/e2e/startGame592.spec.ts:485:1 › #674 @1280 恢复地图加载失败保留原档且可重试
+  1) tests/e2e/startGame592.spec.ts:485:1 › #674 @1280 恢复地图加载失败保留原档且可重试 ────────────────────────────
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByTestId('start-step')
+    Expected: "civ"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" getByTestId('start-step') with timeout 5000ms
+      - waiting for getByTestId('start-step')
+
+
+      506 |   await page.unroute(/\/assets\/mapCatalog-[^/]+\.js$/);
+      507 |   await page.getByRole('button', { name: '重试恢复', exact: true }).click();
+    > 508 |   await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
+          |                                                ^
+      509 |   await expect(page.getByTestId('start-game')).toContainText('已选文明保留');
+      510 |   expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe(raw);
+      511 |   expect(errors).toEqual([]);
+        at /workspace/aoe2-analyzer/tests/e2e/startGame592.spec.ts:508:48
+
+    Error Context: work/test-output/startGame592--674-1280-恢复地图加载失败保留原档且可重试/error-context.md
+
+
+  2) tests/e2e/mechanism652.spec.ts:304:1 › 数据加载失败时保留选择并可继续，不刷新整页 ──────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('scene-Huns').getByText('城堡时代 · 骑士', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('scene-Huns').getByText('城堡时代 · 骑士', { exact: true }) with timeout 5000ms
+      - waiting for getByTestId('scene-Huns').getByText('城堡时代 · 骑士', { exact: true })
+
+
+      324 |   await page.unroute(/\/assets\/trees-[^/]+\.js$/);
+      325 |   await page.getByRole('button', { name: '重试场景', exact: true }).click();
+    > 326 |   await expect(page.getByTestId('scene-Huns').getByText('城堡时代 · 骑士', { exact: true })).toBeVisible();
+          |                                                                                        ^
+      327 |   await expect(page.getByLabel('本局统一科技方案', { exact: true })).toHaveValue('armor');
+      328 |   await expect(page.getByTestId('scene-Huns').locator(':scope > p').filter({ hasText: '当前方案：' })).toContainText('骑兵鳞甲');
+      329 |   await page.getByTestId('scene-Huns').getByText('为什么', { exact: true }).click();
+        at /workspace/aoe2-analyzer/tests/e2e/mechanism652.spec.ts:326:88
+
+    Error Context: work/test-output/mechanism652-数据加载失败时保留选择并可继续，不刷新整页/error-context.md
+
+
+(node:21601) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[3/3] tests/e2e/mechanism652.spec.ts:560:1 › #667 @1280 摘要真实数据失败重试、非法配置保留地址和存档
+  3) tests/e2e/mechanism652.spec.ts:560:1 › #667 @1280 摘要真实数据失败重试、非法配置保留地址和存档 ──────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('start-scene-summary')
+    Expected substring: "2000 工秒"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByTestId('start-scene-summary') with timeout 5000ms
+      - waiting for getByTestId('start-scene-summary')
+
+
+      581 |   await page.unroute(/\/assets\/trees-[^/]+\.js$/);
+      582 |   await page.getByRole('button', { name: '重试本局打法', exact: true }).click();
+    > 583 |   await expect(page.getByTestId('start-scene-summary')).toContainText('2000 工秒');
+          |                                                         ^
+      584 |   const original = await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'));
+      585 |   const invalid = planUrl(page.url());
+      586 |   invalid.sceneConfig!.distance = 11;
+        at /workspace/aoe2-analyzer/tests/e2e/mechanism652.spec.ts:583:57
+
+    Error Context: work/test-output/mechanism652--667-1280-摘要真实数据失败重试、非法配置保留地址和存档/error-context.md
+
+
+  3 failed
+    tests/e2e/mechanism652.spec.ts:304:1 › 数据加载失败时保留选择并可继续，不刷新整页 ───────────────────────────────────
+    tests/e2e/mechanism652.spec.ts:560:1 › #667 @1280 摘要真实数据失败重试、非法配置保留地址和存档 ───────────────────────
+    tests/e2e/startGame592.spec.ts:485:1 › #674 @1280 恢复地图加载失败保留原档且可重试 ─────────────────────────────

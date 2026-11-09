@@ -4,6 +4,7 @@ import { civs } from '../../../data';
 import { useCore, useTrees } from '../../../data/hooks';
 import { TYPE_ZH } from '../../../domain/ratings';
 import type { CivType } from '../../../domain/types';
+import { DLCS } from '../../../domain/dlc';
 import { CivIcon } from '../../../shared/ui/art';
 import { DlcBar, SearchInput } from '../../../shared/ui/widgets';
 import CatalogFilters from '../../../shared/ui/CatalogFilters';
@@ -57,6 +58,15 @@ export default function CivList() {
         active={[ty, pos, dlc].filter(Boolean).length + conditions.length}
         dirty={Boolean(q || ty || pos || dlc || conditions.length)}
         onReset={() => update(EMPTY_CIV_FILTERS, [])}
+        activeSummary={[
+          q && `搜索“${q}”`,
+          ty && TYPE_ZH[ty as CivType],
+          pos && (pos === 'fl' ? '边位' : '口袋'),
+          dlc && (dlc === 'none' ? 'DLC未标注' : DLCS[+dlc]?.zh),
+        ]
+          .filter(Boolean)
+          .join(' · ')}
+        secondary={<DlcBar value={dlc} onChange={(dlc) => changeFilter({ dlc })} />}
       >
         <select id="ty" aria-label="文明类型" value={ty} onChange={(e) => changeFilter({ ty: e.target.value })}>
           <option value="">全部类型</option>
@@ -72,7 +82,6 @@ export default function CivList() {
           <option value="pk">适合口袋 Pocket (7分及以上)</option>
         </select>
       </CatalogFilters>
-      <DlcBar value={dlc} onChange={(dlc) => changeFilter({ dlc })} />
       <CivRequirements
         context={context}
         conditions={conditions}

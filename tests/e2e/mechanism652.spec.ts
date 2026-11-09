@@ -3,7 +3,6 @@ import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { DEFAULT_SCENE } from '../../src/domain/startGameInputs';
 const techNames = JSON.parse(readFileSync('src/data/techs.json', 'utf8')) as { id: number; zh: string }[];
-
 test('#652方案 @1280 同预算可选择合法低固定费方案', async ({ page }, info) => {
   await select(page, '边路', false);
   await page.getByText('调整场景与投入', { exact: true }).click();
@@ -193,6 +192,7 @@ for (const width of [360, 375, 390, 1280]) {
     const section = page.getByTestId('scenario-suggestions'),
       huns = page.getByTestId('scene-Huns');
     await expect(huns.locator(':scope > .start-k')).toHaveText('到场数量 / 时间侧重');
+    await section.getByText('范围、科技包与来源', { exact: true }).click();
     await expect(section.getByText(/到场分组仅比较期限前人数与首兵到达，未比较生命、攻击和完整战力；相同到达结果不代表相同耐久。/)).toBeVisible();
     await expect(section.getByText('本场景指标优先', { exact: true })).toHaveCount(0);
     for (const [civ, hp] of [

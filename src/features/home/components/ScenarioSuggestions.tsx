@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { civByEn, loadCore, loadTrees } from '../../../data';
+import { Icon } from '../../../shared/ui/Icon';
 import {
   DEFAULT_FLANK_SCENE,
   DEFAULT_SCENE,
@@ -71,122 +72,16 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
       <p className="start-hint">
         阿拉伯 <span className="num nw">4v4</span> · {lane === 'flank' ? '边路弩手' : '中路骑士'}。仅比较本场景指标，不是整局强度榜，也不覆盖全部文明。
       </p>
-      <p className="start-hint">
-        已升城堡，建筑和人口就绪，资源预先到位。只有付足固定投入且至少可买一兵的方案，才按科技和升级已完成计算；未付方案仅报费用。军事投入预算不等于同一游戏分钟。
-      </p>
       {selectedOutside ? (
         <p role="status">
           已选{civByEn(state.choice.civ!)?.zh}保留；{selectionReason}，不能据此判为弱；可以保留文明并考虑其它路线。
         </p>
       ) : null}
-      <details className="start-scene-details">
-        <summary>调整场景与投入</summary>
-        <p className="start-hint">以下是可调整假设，不是阿拉伯地图距离统计。本局会保留输入；改变模式、地图或路位后重置。</p>
-        <div className="start-scene-controls">
-          <label>
-            本局统一科技方案
-            <select
-              aria-label="本局统一科技方案"
-              value={cfg.techPlan}
-              disabled={!context || failed || !options.length}
-              onChange={(event) => {
-                if (isSceneTechPlan(event.target.value, lane)) adoptPlan(event.target.value);
-              }}
-            >
-              {options.length ? (
-                options.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))
-              ) : (
-                <option value={cfg.techPlan}>{failed ? '已选方案保留（资料加载失败）' : '已选方案保留（名称加载中）'}</option>
-              )}
-            </select>
-          </label>
-          <label>
-            军事投入（标准采集工秒）
-            <select aria-label="军事投入" value={cfg.budget} onChange={(e) => update('budget', +e.target.value)}>
-              {[0, 2000, 12000].map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            {lane === 'flank' ? '接战初距（格）' : '支援距离（格）'}
-            <select aria-label="场景距离" value={cfg.distance} onChange={(e) => update('distance', +e.target.value)}>
-              {(lane === 'flank' ? [2, 12] : [10, 30, 60]).map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-          </label>
-          {lane === 'flank' ? (
-            <>
-              <label>
-                反应延迟（秒）
-                <select aria-label="反应延迟" value={cfg.reaction} onChange={(e) => update('reaction', +e.target.value)}>
-                  {[0, 0.5, 1.25].map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                纯后撤空间（格）
-                <select aria-label="后撤空间" value={cfg.room} onChange={(e) => update('room', +e.target.value)}>
-                  {[0, 4, 12].map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </>
-          ) : (
-            <>
-              <label>
-                部队状态
-                <select aria-label="部队状态" value={cfg.mode} onChange={(e) => update('mode', e.target.value as SceneConfig['mode'])}>
-                  <option value="new">新训练 · 一座空闲马厩</option>
-                  <option value="ready">已准备好 · 最多6兵</option>
-                </select>
-              </label>
-              <label>
-                支援期限（秒）
-                <select aria-label="支援期限" value={cfg.deadline} onChange={(e) => update('deadline', +e.target.value)}>
-                  {[60, 120, 1200].map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                畜牧状态
-                <select aria-label="畜牧状态" value={String(cfg.husbandry)} onChange={(e) => update('husbandry', e.target.value === 'true')}>
-                  <option value="true">已研究 · 计入费用</option>
-                  <option value="false">未研究</option>
-                </select>
-              </label>
-            </>
-          )}
-        </div>
-        <p className="start-hint">
-          所有文明按同一方案比较，卡内可对照其它方案；改方案不会选择文明。
-          {!context ? (failed ? '科技资料加载失败，已选值保留；可在下方重试。' : '科技名称加载中，所选值保留。') : null}
-        </p>
-      </details>
-      <p className="start-hint">
+      <p className="start-hint start-scene-config">
         本局统一方案：{planLabel}。 投入 <span className="num nw">{cfg.budget} 工秒</span> · 距离 <Value n={cfg.distance} unit=" 格" /> ·{' '}
         {lane === 'flank' ? (
           <>
             反应 <Value n={cfg.reaction} unit=" 秒" />
-            ；战术目标固定为法兰克城堡弩手，完成共同包三科技和弩手升级，目标费用独立，不随己方方案或预算改变。
           </>
         ) : (
           <>
@@ -195,11 +90,153 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
           </>
         )}
       </p>
-      <p className="start-hint">
-        {lane === 'flank'
-          ? '按可负担人数与每兵理论先手机会分别比较；人数侧重不代表有先手。未比较生命、伤害和完整战力。零前摇机会不是实际发射，命中与伤害未知。纯后撤不射击，不计入分组。'
-          : '到场分组仅比较期限前人数与首兵到达，未比较生命、攻击和完整战力；相同到达结果不代表相同耐久。两种部队状态分别使用预算，不重复花费；新兵必须完成首个训练周期。'}
-      </p>
+      <div className="start-scene-tools">
+        <details className="start-scene-details">
+          <summary>
+            调整场景与投入 <Icon name="chevron-down" />
+          </summary>
+          <p className="start-hint">以下是可调整假设，不是阿拉伯地图距离统计。本局会保留输入；改变模式、地图或路位后重置。</p>
+          <div className="start-scene-controls">
+            <label>
+              本局统一科技方案
+              <select
+                aria-label="本局统一科技方案"
+                value={cfg.techPlan}
+                disabled={!context || failed || !options.length}
+                onChange={(event) => {
+                  if (isSceneTechPlan(event.target.value, lane)) adoptPlan(event.target.value);
+                }}
+              >
+                {options.length ? (
+                  options.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))
+                ) : (
+                  <option value={cfg.techPlan}>{failed ? '已选方案保留（资料加载失败）' : '已选方案保留（名称加载中）'}</option>
+                )}
+              </select>
+            </label>
+            <label>
+              军事投入（标准采集工秒）
+              <select aria-label="军事投入" value={cfg.budget} onChange={(e) => update('budget', +e.target.value)}>
+                {[0, 2000, 12000].map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              {lane === 'flank' ? '接战初距（格）' : '支援距离（格）'}
+              <select aria-label="场景距离" value={cfg.distance} onChange={(e) => update('distance', +e.target.value)}>
+                {(lane === 'flank' ? [2, 12] : [10, 30, 60]).map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {lane === 'flank' ? (
+              <>
+                <label>
+                  反应延迟（秒）
+                  <select aria-label="反应延迟" value={cfg.reaction} onChange={(e) => update('reaction', +e.target.value)}>
+                    {[0, 0.5, 1.25].map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  纯后撤空间（格）
+                  <select aria-label="后撤空间" value={cfg.room} onChange={(e) => update('room', +e.target.value)}>
+                    {[0, 4, 12].map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </>
+            ) : (
+              <>
+                <label>
+                  部队状态
+                  <select aria-label="部队状态" value={cfg.mode} onChange={(e) => update('mode', e.target.value as SceneConfig['mode'])}>
+                    <option value="new">新训练 · 一座空闲马厩</option>
+                    <option value="ready">已准备好 · 最多6兵</option>
+                  </select>
+                </label>
+                <label>
+                  支援期限（秒）
+                  <select aria-label="支援期限" value={cfg.deadline} onChange={(e) => update('deadline', +e.target.value)}>
+                    {[60, 120, 1200].map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  畜牧状态
+                  <select aria-label="畜牧状态" value={String(cfg.husbandry)} onChange={(e) => update('husbandry', e.target.value === 'true')}>
+                    <option value="true">已研究 · 计入费用</option>
+                    <option value="false">未研究</option>
+                  </select>
+                </label>
+              </>
+            )}
+          </div>
+          <p className="start-hint">
+            所有文明按同一方案比较，卡内可对照其它方案；改方案不会选择文明。
+            {!context ? (failed ? '科技资料加载失败，已选值保留；可在下方重试。' : '科技名称加载中，所选值保留。') : null}
+          </p>
+        </details>
+        <details className="start-scene-details">
+          <summary>
+            范围、科技包与来源 <Icon name="chevron-down" />
+          </summary>
+          <p className="start-hint">
+            已升城堡，建筑和人口就绪，资源预先到位。只有付足固定投入且至少可买一兵的方案，才按科技和升级已完成计算；未付方案仅报费用。军事投入预算不等于同一游戏分钟。
+          </p>
+          {lane === 'flank' ? (
+            <p className="start-hint">战术目标固定为法兰克城堡弩手，完成共同包三科技和弩手升级，目标费用独立，不随己方方案或预算改变。</p>
+          ) : null}
+          <p className="start-hint">
+            {lane === 'flank'
+              ? '按可负担人数与每兵理论先手机会分别比较；人数侧重不代表有先手。未比较生命、伤害和完整战力。零前摇机会不是实际发射，命中与伤害未知。纯后撤不射击，不计入分组。'
+              : '到场分组仅比较期限前人数与首兵到达，未比较生命、攻击和完整战力；相同到达结果不代表相同耐久。两种部队状态分别使用预算，不重复花费；新兵必须完成首个训练周期。'}
+          </p>
+          <p className="start-hint">首批核验：{SCENARIO_CIVS[lane].map((c) => civByEn(c)?.zh ?? c).join('、')}。名单是机制覆盖范围，不是强势文明白名单。</p>
+          <p className="start-hint">
+            共同包：
+            {context ? (
+              <>
+                {lane === 'flank'
+                  ? `${context.core.unitById[24]?.zh ?? '弩手'}升级、${technologyPlanLabel(options, 'common')}；不自动购买${context.core.techById[437]?.zh ?? '额外射手科技'}。`
+                  : `${technologyPlanLabel(options, 'common')}；畜牧按所选状态。`}
+              </>
+            ) : (
+              '科技名称待资料加载后核实。'
+            )}{' '}
+            科技费用先扣；研究时间未放入真实对局时间线。每文明可对照{lane === 'flank' ? '六' : '四'}种合法方案，缺项仅阻止相应方案；不提供最优科技包总分。
+          </p>
+          <p className="start-hint">
+            经济、队友、敌军伤亡、寻路、碰撞、弹道和操作收益未计入。此快照只用于城堡时代路线；封建衔接可展开独立账本，帝王上限与特殊路线待验证。
+          </p>
+          <p className="start-hint">
+            模型 {version.model} · 配置 {version.config}。输入摘要随各候选显示；新效果结构需重新核验。
+          </p>
+          {version.sources.map((source) => (
+            <p className="start-hint" key={source.id}>
+              {source.patch} · {source.repo} · {source.commit.slice(0, 8)}
+            </p>
+          ))}
+        </details>
+      </div>
       {failed ? (
         <p role="alert">
           场景数据加载失败。仍可搜索文明。
@@ -220,15 +257,15 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
         <>
           {!rows.some((r) => r.preferred) ? <p role="status">当前预算或期限没有可优先建议的部队。</p> : null}
           {rows.map((row) => (
-            <article className="start-scene-card" key={row.civ} data-testid={`scene-${row.civ}`}>
+            <article className="start-scene-card" key={row.civ} data-testid={`scene-${row.civ}`} data-preferred={row.preferred ? 'true' : 'false'}>
               <p className="start-k">{sceneLabel(row, lane)}</p>
               <CivRow en={row.civ} state={state} pressed={state.choice.civ === row.civ} onPick={() => onChange((c) => pickCiv(c, row.civ))} />
+              <p className="start-why">{sceneReason(row, lane)}</p>
               <p className="start-hint">城堡时代 · {context.core.unitById[lane === 'flank' ? 24 : 38]?.zh ?? '路线兵种未核实'}</p>
               <p className="start-hint">
                 当前方案：{planLabel}。方案科技：
                 <SceneTechnologies row={row} lane={lane} />。
               </p>
-              <p className="start-why">{sceneReason(row, lane)}</p>
               {!row.count && (comparisons[row.civ] ?? []).some((other) => other.status === 'ok' && (other.count ?? 0) > 0) ? (
                 <p className="start-hint">当前方案无可用兵，另有其它方案可负担部队；展开下方对照后可采用，当前方案不会自动更换。</p>
               ) : null}
@@ -242,34 +279,6 @@ export default function ScenarioSuggestions({ state, onChange }: { state: StartS
         </>
       )}
       {context ? <RouteContinuity context={context} state={state} onChange={onChange} /> : null}
-      <details className="start-scene-details">
-        <summary>范围、科技包与来源</summary>
-        <p className="start-hint">首批核验：{SCENARIO_CIVS[lane].map((c) => civByEn(c)?.zh ?? c).join('、')}。名单是机制覆盖范围，不是强势文明白名单。</p>
-        <p className="start-hint">
-          共同包：
-          {context ? (
-            <>
-              {lane === 'flank'
-                ? `${context.core.unitById[24]?.zh ?? '弩手'}升级、${technologyPlanLabel(options, 'common')}；不自动购买${context.core.techById[437]?.zh ?? '额外射手科技'}。`
-                : `${technologyPlanLabel(options, 'common')}；畜牧按所选状态。`}
-            </>
-          ) : (
-            '科技名称待资料加载后核实。'
-          )}{' '}
-          科技费用先扣；研究时间未放入真实对局时间线。每文明可对照{lane === 'flank' ? '六' : '四'}种合法方案，缺项仅阻止相应方案；不提供最优科技包总分。
-        </p>
-        <p className="start-hint">
-          经济、队友、敌军伤亡、寻路、碰撞、弹道和操作收益未计入。此快照只用于城堡时代路线；封建衔接可展开独立账本，帝王上限与特殊路线待验证。
-        </p>
-        <p className="start-hint">
-          模型 {version.model} · 配置 {version.config}。输入摘要随各候选显示；新效果结构需重新核验。
-        </p>
-        {version.sources.map((source) => (
-          <p className="start-hint" key={source.id}>
-            {source.patch} · {source.repo} · {source.commit.slice(0, 8)}
-          </p>
-        ))}
-      </details>
     </section>
   );
 }

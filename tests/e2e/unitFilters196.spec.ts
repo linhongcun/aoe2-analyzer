@@ -27,6 +27,10 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('#ua')).toHaveCount(0);
       const bar = page.locator('#units').getByRole('group', { name: 'DLC 快捷筛选', exact: true });
       const ages = page.locator('#units').getByRole('group', { name: '时代快捷筛选', exact: true });
+      if (width <= 600) {
+        await expect(bar).toBeHidden();
+        await page.locator('.catalog-filter-toggle').click();
+      }
       await expect(bar).toBeVisible();
       await expect(ages).toBeVisible();
       await expect(bar.locator('button[aria-pressed="true"]')).toHaveCount(1);
@@ -69,6 +73,7 @@ for (const width of [360, 375, 390, 1280])
       await card.click();
       await expect(page).toHaveURL(/#\/unit\/38$/);
       await page.getByRole('link', { name: '单位', exact: true }).first().click();
+      if (width <= 600) await page.locator('.catalog-filter-toggle').click();
       await expect(page.locator('#uciv')).toHaveAttribute('data-value', 'Franks');
       await expect(page.locator('#urole')).toHaveValue('cavalry');
       await expect(bar.locator('button[data-v="0"]')).toHaveAttribute('aria-pressed', 'true');

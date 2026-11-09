@@ -48,12 +48,16 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/civs');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       const bar = dlcBar(page);
+      if (width <= 600) {
+        await expect(bar).toBeHidden();
+        await page.locator('.catalog-filter-toggle').click();
+      }
       await expect(bar).toBeVisible();
       await expect(page.locator('#cdlc')).toHaveCount(0);
       await expect(bar.getByRole('button')).toHaveCount(DLCS.length + 2);
       await expect(bar.getByRole('img')).toHaveCount(DLCS.length);
       await expectSelected(page, '');
-      if (width <= 600) await expect(page.locator('.catalog-filter-panel')).toBeHidden();
+      if (width <= 600) await expect(page.locator('.catalog-filter-panel')).toBeVisible();
       await expectCivs(
         page,
         civs.map((civ) => civ.en),
@@ -70,11 +74,10 @@ for (const width of [360, 375, 390, 1280])
         .toBe(true);
       await page.screenshot({ path: info.outputPath(`civ-cards-${theme}-${width}.png`) });
 
-      // 快捷按钮在手机筛选面板收起时也可操作。
+      // 展开后全部DLC快捷按钮保持原有实时筛选行为。
       await bar.locator(`button[data-v="${latestDlc}"]`).click();
       await expectSelected(page, String(latestDlc));
       await expectCivs(page, releaseCivs(latestDlc));
-      if (width <= 600) await page.locator('.catalog-filter-toggle').click();
       await bar.locator('button[data-v="0"]').click();
       await expectSelected(page, '0');
       await expectCivs(page, releaseCivs(0));

@@ -477,7 +477,7 @@ test('#585 精锐战车升级研究仍显示800食物、800木材与45秒', asyn
   await expect(upgrade).toContainText('45s');
 });
 
-test('单位页两条洞察共用外壳，空槽外框保持一致', async ({ page }) => {
+test('单位页有内容洞察共用外壳，空槽收敛为紧凑状态行', async ({ page }) => {
   await openDetail(page, '/unit/73', /^诸葛弩/);
   const chuKoNu = await slotShell(page);
   await expect(slot(page).getByTestId('insight-item')).toHaveCount(2);
@@ -492,7 +492,12 @@ test('单位页两条洞察共用外壳，空槽外框保持一致', async ({ pa
   const empty = await slotShell(page);
   await expectEmpty(slot(page));
   expect(empty.childTags).toBe('H2,P');
-  expect({ ...empty, childTags: hearth.childTags, listDisplay: hearth.listDisplay, listGap: hearth.listGap }).toEqual(hearth);
+  expect(empty.heading).toBe(hearth.heading);
+  expect(empty.headingPx).toBe(hearth.headingPx);
+  const compact = await slot(page).evaluate((el) => ({ height: el.getBoundingClientRect().height, shadow: getComputedStyle(el).boxShadow }));
+  expect(compact.height).toBeLessThanOrEqual(56);
+  expect(compact.shadow).toBe('none');
+  expect(empty.borderWidth).toBe('0px');
   await expectNoHScroll(page);
 });
 

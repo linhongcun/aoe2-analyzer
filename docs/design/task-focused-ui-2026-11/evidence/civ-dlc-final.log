@@ -1,0 +1,18 @@
+
+Running 10 tests using 1 worker
+
+(node:31256) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/10] tests/e2e/civDlcFilters.spec.ts:45:5 › 文明 DLC 快捷筛选 light @360：仅保留图标入口与清空筛选
+[2/10] tests/e2e/civDlcFilters.spec.ts:45:5 › 文明 DLC 快捷筛选 dark @360：仅保留图标入口与清空筛选
+[3/10] tests/e2e/civDlcFilters.spec.ts:45:5 › 文明 DLC 快捷筛选 light @375：仅保留图标入口与清空筛选
+[4/10] tests/e2e/civDlcFilters.spec.ts:45:5 › 文明 DLC 快捷筛选 dark @375：仅保留图标入口与清空筛选
+[5/10] tests/e2e/civDlcFilters.spec.ts:45:5 › 文明 DLC 快捷筛选 light @390：仅保留图标入口与清空筛选
+[6/10] tests/e2e/civDlcFilters.spec.ts:45:5 › 文明 DLC 快捷筛选 dark @390：仅保留图标入口与清空筛选
+[7/10] tests/e2e/civDlcFilters.spec.ts:45:5 › 文明 DLC 快捷筛选 light @1280：仅保留图标入口与清空筛选
+[8/10] tests/e2e/civDlcFilters.spec.ts:45:5 › 文明 DLC 快捷筛选 dark @1280：仅保留图标入口与清空筛选
+[9/10] tests/e2e/civDlcFilters.spec.ts:111:1 › 文明 DLC 快捷筛选：每个资料片图标命中对应文明并保留路由间记忆
+[10/10] tests/e2e/civDlcFilters.spec.ts:142:1 › 文明 DLC 快捷筛选：保留分享链接的搜索、类型、位置与必备单位科技条件
+  10 passed (12.5s)

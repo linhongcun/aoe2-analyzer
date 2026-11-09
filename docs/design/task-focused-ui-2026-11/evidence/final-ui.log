@@ -1,0 +1,48 @@
+
+Running 36 tests using 2 workers
+
+(node:27621) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+(node:27620) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/36] tests/e2e/civRequirements206.spec.ts:46:1 › #206 搜索、类型、键盘添加、详情链接和单项移除
+[2/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 light @360：资料卡版本图标对齐且不遮挡文字
+[3/36] tests/e2e/civRequirements206.spec.ts:85:1 › #206 旧筛选组合、清空条件和复制链接刷新还原
+[4/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 dark @360：资料卡版本图标对齐且不遮挡文字
+[5/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 light @375：资料卡版本图标对齐且不遮挡文字
+[6/36] tests/e2e/civRequirements206.spec.ts:114:1 › #206 裸入口旧筛选保持临时记忆，复制和新增条件才生成完整快照
+[7/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 dark @375：资料卡版本图标对齐且不遮挡文字
+[8/36] tests/e2e/civRequirements206.spec.ts:148:1 › #206 复制被拒绝时提供手动链接，筛选变化后清除旧反馈
+[9/36] tests/e2e/civRequirements206.spec.ts:175:1 › #206 分享参数覆盖收件人的 sticky，裸路由沿用原筛选
+[10/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 light @390：资料卡版本图标对齐且不遮挡文字
+[11/36] tests/e2e/civRequirements206.spec.ts:198:1 › #206 URL 编码、刷新、前后导航和详情返回保留条件
+[12/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 dark @390：资料卡版本图标对齐且不遮挡文字
+[13/36] tests/e2e/civRequirements206.spec.ts:218:1 › #206 精确升级形态、互斥单位、缺科技和免费科技
+[14/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 light @1280：资料卡版本图标对齐且不遮挡文字
+[15/36] tests/e2e/civRequirements206.spec.ts:237:1 › #206 未知 ID、错误格式和不安全整数保留并阻止查询
+[16/36] tests/e2e/civRequirements206.spec.ts:260:1 › #206 数据加载期间不展示放宽后的文明结果
+[17/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 dark @1280：资料卡版本图标对齐且不遮挡文字
+[18/36] tests/e2e/civRequirements206.spec.ts:283:5 › #206 light @360：组合条件和文明交集布局
+[19/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 light @1920：资料卡版本图标对齐且不遮挡文字
+[20/36] tests/e2e/civRequirements206.spec.ts:283:5 › #206 dark @360：组合条件和文明交集布局
+[21/36] tests/e2e/civRequirements206.spec.ts:283:5 › #206 light @375：组合条件和文明交集布局
+[22/36] tests/e2e/catalogLayout187.spec.ts:11:5 › #187 dark @1920：资料卡版本图标对齐且不遮挡文字
+[23/36] tests/e2e/civRequirements206.spec.ts:283:5 › #206 dark @375：组合条件和文明交集布局
+[24/36] tests/e2e/civRequirements206.spec.ts:283:5 › #206 light @390：组合条件和文明交集布局
+[25/36] tests/e2e/taskFocusedUi.spec.ts:19:5 › 任务优先 UI light @360：六页、首屏、键盘与可访问性
+[26/36] tests/e2e/civRequirements206.spec.ts:283:5 › #206 dark @390：组合条件和文明交集布局
+[27/36] tests/e2e/civRequirements206.spec.ts:283:5 › #206 light @1280：组合条件和文明交集布局
+[28/36] tests/e2e/civRequirements206.spec.ts:283:5 › #206 dark @1280：组合条件和文明交集布局
+[29/36] tests/e2e/taskFocusedUi.spec.ts:19:5 › 任务优先 UI dark @360：六页、首屏、键盘与可访问性
+[30/36] tests/e2e/taskFocusedUi.spec.ts:19:5 › 任务优先 UI light @375：六页、首屏、键盘与可访问性
+[31/36] tests/e2e/taskFocusedUi.spec.ts:19:5 › 任务优先 UI dark @375：六页、首屏、键盘与可访问性
+[32/36] tests/e2e/taskFocusedUi.spec.ts:19:5 › 任务优先 UI light @390：六页、首屏、键盘与可访问性
+[33/36] tests/e2e/taskFocusedUi.spec.ts:19:5 › 任务优先 UI dark @390：六页、首屏、键盘与可访问性
+[34/36] tests/e2e/taskFocusedUi.spec.ts:19:5 › 任务优先 UI light @1280：六页、首屏、键盘与可访问性
+[35/36] tests/e2e/taskFocusedUi.spec.ts:19:5 › 任务优先 UI dark @1280：六页、首屏、键盘与可访问性
+[36/36] tests/e2e/taskFocusedUi.spec.ts:88:1 › 收起筛选保留实际条件、跨页返回与断点焦点
+  36 passed (2.2m)

@@ -1,0 +1,18 @@
+
+Running 10 tests using 1 worker
+
+(node:23346) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/10] tests/e2e/unitFilters196.spec.ts:16:5 › #196 light @360：文明与兵种可组合筛选、清空与键盘操作
+[2/10] tests/e2e/unitFilters196.spec.ts:16:5 › #196 dark @360：文明与兵种可组合筛选、清空与键盘操作
+[3/10] tests/e2e/unitFilters196.spec.ts:16:5 › #196 light @375：文明与兵种可组合筛选、清空与键盘操作
+[4/10] tests/e2e/unitFilters196.spec.ts:16:5 › #196 dark @375：文明与兵种可组合筛选、清空与键盘操作
+[5/10] tests/e2e/unitFilters196.spec.ts:16:5 › #196 light @390：文明与兵种可组合筛选、清空与键盘操作
+[6/10] tests/e2e/unitFilters196.spec.ts:16:5 › #196 dark @390：文明与兵种可组合筛选、清空与键盘操作
+[7/10] tests/e2e/unitFilters196.spec.ts:16:5 › #196 light @1280：文明与兵种可组合筛选、清空与键盘操作
+[8/10] tests/e2e/unitFilters196.spec.ts:16:5 › #196 dark @1280：文明与兵种可组合筛选、清空与键盘操作
+[9/10] tests/e2e/unitFilters196.spec.ts:105:1 › #196 不可用精锐不出现在文明结果或含精锐标记中
+[10/10] tests/e2e/unitFilters196.spec.ts:122:1 › #196 骑射交叉分类及同名战车按文明隔离
+  10 passed (38.0s)

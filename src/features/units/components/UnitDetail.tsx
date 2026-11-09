@@ -42,6 +42,7 @@ import { FishingGather } from './FishingGather';
 import { VillagerGather } from './VillagerGather';
 import '../../../shared/ui/contextLinks.css';
 import './unit-civ-links.css';
+import './unit-detail.css';
 
 /** #88 S8：费用下面一行「采集时间 ≈ 1 个村民 m:ss」；时代跟页面所选，未选默认城堡；未选文明按通用速度 */
 function GatherLine({ u, civ, age }: { u: Unit; civ?: string; age?: number }) {

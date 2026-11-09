@@ -1,0 +1,90 @@
+# 本轮定向设计调研笔记
+
+调研日期：2026-11-09（Asia/Shanghai）。范围：只为本轮移动列表、开一局层级、详情可扫描性提供证据；不提出全站换肤、科技树重写或业务重构。
+
+## 方法与证据边界
+
+使用仓库安装的 Playwright 与系统 Chromium 实际访问各页面，截图尺寸为 1280×900 / 390×900，deviceScaleFactor=1；尝试可用控件，核对文字和状态变化。浏览器启动：`chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--no-sandbox']})`，未额外覆盖代理；网络沿用环境配置。截图都在 `work/deliverables/references/`，本笔记为中间记录，交付由主代理整合。
+
+GitHub Issues 主文档 200，但其 githubassets 样式/图像资源受网络策略限制，实际截图无样式，因此**不把它作为视觉质量证据**。Linear `https://linear.app/features` 与 Stripe `https://docs.stripe.com/payments/accept-a-payment` 访问为 ERR_TUNNEL_CONNECTION_FAILED，因此**不评价未看到的页面**。知名度不计入设计质量判断。
+
+## 三个主要参考
+
+### 1. 复杂列表与移动筛选：pub.dev 搜索
+
+URL：<https://pub.dev/packages?q=http>。
+
+真实观察：桌面搜索结果与筛选并列；390px 上先是一行查询输入与筛选入口，然后结果数/排序和第一条结果（标题约在 y227px）。点筛选图标会在搜索与结果之间展开 Platforms、SDKs、License、Advanced，其中组内选项继续分层。收起状态能够直接比较前两项结果的名称、说明、版本和指标；展开状态首项结果降至约 y645px。筛选能力被保留，而阅读结果的默认状态更紧凑。
+
+截图：
+- `pub-list-1280.png`：桌面结果与筛选关系。
+- `pub-list-390.png`：手机默认收起状态。
+- `pub-list-filter-390.png`：实际点击筛选后的展开状态。
+
+可迁移：搜索常驻；把低频、多组选项收进清楚标示的筛选入口；结果计数靠近结果；桌面仍可展开。将项目 DLC、时代筛选、长操作说明放进移动端折叠区域，保持已选状态可见并可清除。筛选收起与否只是呈现状态，不能改变已有筛选值或 URL 协议。
+
+不借用：pub.dev 的筛选只有图标，发现成本较高；DOM 上入口还是 img 元素而非语义 button，不能复制其键盘/可访问性实现。该站长平台标签挤占单条结果空间，也不应照搬。项目应使用“筛选 + 已选数”文字、原生按钮或 details/summary、可见焦点。
+
+质量结论：在本轮“默认让结果先出现”目标上是直接有效样本；展开后的筛选本身仍然很高，说明折叠不是压缩所有控件的替代品。
+
+### 2. 参数决策与推荐操作：Node.js 下载页
+
+URL：<https://nodejs.org/en/download>。
+
+真实观察：页面以一句连贯的选择句排列 Version/LTS、Operating System、Platform、Package Manager，选择之后紧接可复制的安装命令。验证版本的步骤包含在命令中；预编译包、发行说明、发行周期、签名校验、源码与旧版本入口随后出现。默认 Linux/nvm/npm；实际把第一个 Operating System 从 Linux 改为 Windows 后，Platform 自动变成 fnm，命令转为 PowerShell/winget，并保留可复制操作。
+
+截图：
+- `node-download-1280.png`：桌面参数与主要操作相邻。
+- `node-download-390.png`：手机默认 Linux 状态。
+- `node-download-windows-390.png`：实际修改平台后的推荐命令状态。
+
+可迁移：把当前参数/步骤紧邻它产生的推荐结论；参数改变后直接更新结论，不先铺长篇背景说明。开一局应先呈现“正在选什么/当前已选”和推荐结果，推荐理由就近保留，计算模型/适用范围/完整依据通过明确标题展开。重要限制仍需短句在结论旁提示，完整限制不得删除。
+
+不借用：它不是严格编号向导，也没有复杂评分理由；它只能支持“参数—可执行结果—进一步信息”的顺序，不足以证明某个复杂评分模型。该站顶部临时安全公告和推荐新版本的信息条占高较多，不照搬；底部预编译下载还有第二组独立操作系统选择，改第一组并不会同步，易混淆，也不照搬。命令区仍可占手机大量高度，项目不应机械复制大代码卡片。
+
+质量结论：主操作与当前参数因果关系清楚，次级探索在后；适合本轮调整信息顺序，不作为游戏推荐计算依据。
+
+### 3. 数据密集详情：pub.dev 包详情与 Metadata
+
+URL：<https://pub.dev/packages/http>。
+
+真实观察：桌面名称/版本/发布者/平台在页头，正文用标签页分区；右栏直接平铺 likes/points/downloads、Documentation、Publisher、Weekly Downloads、Metadata、Repository、License、Dependencies，靠字号、间距和细分隔线分组，没有给每个字段套独立卡片。390px 下先保留名称、版本、身份和一段 Metadata 摘要，点击实测的 More... 后进入 Metadata 视图，顶部集中三个数值，来源/关联入口分组平铺，有返回入口。
+
+截图：
+- `pub-detail-1280.png`：桌面正文/次要元信息的主次关系。
+- `pub-detail-390.png`：手机摘要与进入更多元信息的入口。
+- `pub-detail-metadata-390.png`：实测 More... 后的元信息视图。
+
+可迁移：单位核心指标用紧凑、对齐的统计组；次要属性以字段列表/小标题平铺；来源和关联资料保持清楚入口。文明加成、团队加成、独特内容可以共用一个内容段落层级，避免同级小卡套大卡。无实际内容的类别保留小型“暂无…”状态即可，不能让单个空值产生大面积卡片。**空状态处理是结合本项目的数据语义作出的决策，不冒称样本已经验证了游戏数据的空值含义。**
+
+不借用：该站手机 tabs 换成两排且部分远端 README 徽章因本环境网络限制破图；本轮不引入它的多排导航、不复制品牌蓝色或整个详情布局，也不新增元信息独立路由。项目现有核心数据、来源和链接全部保留。
+
+质量结论：区分核心事实、正文、次级元信息做得清楚；特别适合减少本项目中“每项一张卡”的视觉分隔。手机版不是完美样本，选择性借用其渐进披露与信息分组。
+
+## 候选比较与未采用部分
+
+| 候选（真实 URL） | 已看页面/截图 | 质量判断与本轮取舍 |
+| --- | --- | --- |
+| pub.dev 搜索 <https://pub.dev/packages?q=http> | 桌面/手机/手机展开筛选 | 主要列表参考；默认结果优先。图标入口语义不借用。 |
+| Node.js 下载 <https://nodejs.org/en/download> | 桌面/手机/切 Windows | 主要决策参考；参数与结果相邻，后置高级信息。不是完整向导，不借用独立重复平台选择。 |
+| pub.dev http 详情 <https://pub.dev/packages/http> | 桌面/手机/More... | 主要详情参考；元信息平铺、核心指标集中。手机多排 tabs 不借用。 |
+| crates.io 搜索 <https://crates.io/search?q=http> | `crates-list-1280.png`、`crates-list-390.png` | 搜索/结果数/排序很紧凑，但手机每项右侧多组下载数拉长卡片、压缩描述。不选作主要布局。 |
+| crates.io serde 详情 <https://crates.io/crates/serde> | `crates-detail-1280.png`、`crates-detail-390.png` | 桌面右栏小标题与字段列支持“少容器”方向；手机6项纵向 tabs 占到近一屏，不借用该响应式导航。 |
+| PyPI requests <https://pypi.org/project/requests/> | `pypi-detail-1280.png`、`pypi-detail-390.png` | 名称/版本/一句描述/可复制安装指令聚合得清楚；手机5项纵向导航占高太多，且正文徽章部分资源受限。不选作主要手机参考。 |
+| RubyGems 搜索 <https://rubygems.org/search?query=http> | `rubygems-list-1280.png`、`rubygems-list-390.png` | 结果行较紧凑，但手机大标题、空白、排序和筛选都展开，首结果约 y640px，与本轮要解决的问题类似；作为反例。 |
+| NuGet Newtonsoft.Json <https://www.nuget.org/packages/Newtonsoft.Json> | `nuget-detail-1280.png`、`nuget-detail-390.png` | 安装命令旁有复制操作，元信息较完整；手机页头空白、提醒和多排 tabs 将正文压到 y850px 附近。不选作主要手机参考。 |
+| GitHub Issues <https://github.com/microsoft/vscode/issues> | 主文档200，但资源受限；未归档为交付参考 | 无样式，不能判断实际视觉质量。 |
+| Linear <https://linear.app/features>、Stripe <https://docs.stripe.com/payments/accept-a-payment> | 隧道连接失败 | 未看到，不用于结论。 |
+
+## 可复用设计原则（用于现有设计文档沉淀）
+
+1. 手机默认态的上半屏先给任务与结果；低频、多组选项可披露，但搜索、结果数和已选状态不能消失。
+2. 折叠入口必须说明里面有什么，最好显示已选数；不能借折叠重置条件、改变 URL 或丢失焦点。
+3. 决策工具按“当前操作—结论—关键理由—完整依据/限制/来源”组织；保留适用范围的一句摘要，完整免责声明和来源可展开查看。
+4. 用字号、对齐、间距、细分隔线表达层级；卡片用于有独立任务边界的内容，不让每个字段和空值都变成卡片。
+5. 空值、零值、不适用与未知必须按数据语义区别处理；减少面积不能改成误导性数字，也不能删来源。
+6. 借用信息架构与交互原则，保留本站令牌、图标、组件和业务流程；不借用样本品牌风格。此轮科技树只检查，不重写。
+
+## 截图质量复核
+
+已逐一查看主要参考截图：pub.dev 搜索收起/展开，Node.js 手机，pub.dev 详情桌面/手机/Metadata，crates.io 详情桌面/手机，PyPI 手机，以及 RubyGems/NuGet 手机。Node.js 和 pub.dev 搜索基础界面资源完整；pub.dev 详情正文的第三方状态徽章存在破图，报告应标明为网络资源限制，不能将其视为产品真实故障。GitHub 无样式截图没有移入交付参考目录。所有截图由真实浏览器产生，无合成/补绘。
