@@ -65,6 +65,19 @@ describe('#285 每份内容和生成 JSON 都有可诊断的 schema', () => {
         mutate((entry) => (entry.summary = '')),
       ).valid,
     ).toBe(false);
+    expect(
+      validateDocument(
+        file,
+        mutate((entry) => (entry.checkedOn = '2026-99-99')),
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateDocument(
+        file,
+        mutate((entry) => (entry.checkedOn = '2026-13-40')),
+      ).valid,
+    ).toBe(false);
+    expect(validateDocument(file, {}).valid).toBe(false);
   });
 
   it('新增未登记 JSON 不能被通用 object schema 放过', () => {

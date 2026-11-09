@@ -31,7 +31,9 @@ describe('content schema 与 domain 允许值一致（issue 838）', () => {
   it('mixedArmy：敌人枚举相等，卡片场景都存在于场景表', () => {
     const s = schema('content-mixed-army');
     expect(sorted(values(s, '$defs.scenario.properties.enemyCompositions.items.enum'))).toEqual(sorted(MIXED_ARMY_ENEMIES));
-    for (const card of (mixedContent as { cards: { scenario: string }[] }).cards) {
+    const cards = (mixedContent as { cards: { scenario: string }[] }).cards;
+    expect(cards.length).toBeGreaterThan(0);
+    for (const card of cards) {
       expect(MIXED_ARMY_SCENARIOS, card.scenario).toContain(card.scenario);
     }
   });
