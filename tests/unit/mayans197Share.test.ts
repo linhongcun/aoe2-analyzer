@@ -5,6 +5,7 @@ import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
 import { buildView } from '../../src/features/builds/timelineModel';
 import { buildShareCard } from '../../src/features/builds/shareCard';
+import { MAYAN_RESOURCE_NOTE } from '../../src/domain/buildSimCivRules';
 
 const ups = Object.fromEntries(units.filter((unit) => unit.up).map((unit) => [unit.id, unit.up])) as UpgradeData;
 const knightNote = '玛雅无马厩；侦察骑兵、骑士方案仅供通用模板经济估算';
@@ -30,13 +31,17 @@ const card = (boId: string, civEn: string, civZh: string) => {
 describe('#197 玛雅分享保留模板边界', () => {
   it.each(['scouts-18', 'fast-castle-knights'])('%s卡片basis保留不可用军事模板说明，同一model供PNG绘制', (boId) => {
     const result = card(boId, 'Mayans', '玛雅');
-    expect(result.basis).toBe(`按玛雅计 · 走路 4 格 · 游戏版本 ${__DATA_SOURCES__.patch.build}\n${knightNote}`);
+    expect(result.basis).toBe(`按玛雅计 · 走路 4 格 · 游戏版本 ${__DATA_SOURCES__.patch.build}\n${MAYAN_RESOURCE_NOTE}\n${knightNote}`);
     expect(result.url).toContain('civ=Mayans');
   });
   it.each([
     ['archers-19', 'Mayans', '玛雅'],
     ['fast-castle-knights', 'Franks', '法兰克'],
-  ])('%s/%s原basis不增加玛雅骑兵模板说明', (boId, civ, zh) => {
-    expect(card(boId!, civ!, zh!).basis).toBe(`按${zh}计 · 走路 4 格 · 游戏版本 ${__DATA_SOURCES__.patch.build}`);
+  ])('%s/%s只新增玛雅资源备注，不增加骑兵模板说明', (boId, civ, zh) => {
+    const expected =
+      boId === 'archers-19' && civ === 'Mayans'
+        ? `按${zh}计 · 走路 4 格 · 游戏版本 ${__DATA_SOURCES__.patch.build}\n${MAYAN_RESOURCE_NOTE}`
+        : `按${zh}计 · 走路 4 格 · 游戏版本 ${__DATA_SOURCES__.patch.build}`;
+    expect(card(boId!, civ!, zh!).basis).toBe(expected);
   });
 });

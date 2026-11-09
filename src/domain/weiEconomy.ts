@@ -31,6 +31,7 @@ export const WEI_CONTEXT_REASON = '魏研究赠村民缺少完整已核前置和
 export const WEI_SPAWN_NOTE =
   '经济研究完成时赠送村民，直接加入开局任务分配；满住房仍计入赠送，普通训练继续受住房限制。住房政策未经当前版本客户端实测；具体出生位置、集结与驻扎未模拟。';
 export const WEI_SPAWN_ASSUMPTION = `${WEI_SPAWN_NOTE}奖励按本站0.1秒步长计入。`;
+export const WEI_SHARE_TEXT = '经济研究完成赠村民，按开局任务分配\n满住房仍计入赠送；该住房政策未经当前版本客户端实测\n出生位置、集结与驻扎未模拟';
 export const WEI_KNIGHT_TEMPLATE_NOTE = '魏没有骑士；骑士方案仅供通用模板经济估算';
 /** Also catches displaced source/ID rows; resource234 remains closed outside this family. */
 export const isWeiRewardRow = (row: Row) => row.spawn !== undefined || (row.tech !== undefined && row.tech >= 1039 && row.tech <= 1054);
