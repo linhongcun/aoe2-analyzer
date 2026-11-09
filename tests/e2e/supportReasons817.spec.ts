@@ -1,5 +1,5 @@
 import { execSync, spawn, type ChildProcess } from 'node:child_process';
-import { mkdtempSync } from 'node:fs';
+import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
@@ -8,8 +8,9 @@ import { expect, test, type Page } from '@playwright/test';
  * #817 未支持文明的具体原因：单独构建 VITE_FORCE_UNSUPPORTED_CIVS=Khmer 的测试包并在独立端口预览。
  * 正式构建不设这个变量；当前 56 个文明仍全部 supported。
  */
-let BASE = 'http://localhost:4175/';
+let BASE = 'http://localhost:4200/';
 let srv: ChildProcess | undefined;
+let outDir: string | undefined;
 const openCivPicker = async (page: Page) => {
   if (await page.locator('button.tl-setbtn').isVisible()) await page.locator('button.tl-setbtn').click();
   const trigger = page.locator('#tlciv');
@@ -18,9 +19,10 @@ const openCivPicker = async (page: Page) => {
 
 test.describe.configure({ mode: 'serial', timeout: 180_000 });
 test.beforeAll(async () => {
-  const PORT = 4175 + test.info().parallelIndex;
+  const PORT = 4200 + test.info().parallelIndex;
   BASE = `http://localhost:${PORT}/`;
   const out = mkdtempSync(join(tmpdir(), 'support-reasons-'));
+  outDir = out;
   execSync(`npx vite build --outDir ${out} --emptyOutDir`, {
     env: { ...process.env, VITE_FORCE_UNSUPPORTED_CIVS: 'Khmer' },
     stdio: 'ignore',
@@ -38,6 +40,7 @@ test.beforeAll(async () => {
 });
 test.afterAll(() => {
   if (srv?.pid) process.kill(-srv.pid);
+  if (outDir) rmSync(outDir, { recursive: true, force: true });
 });
 
 test('#817 强制不支持的文明显示具体原因', async ({ page }) => {
