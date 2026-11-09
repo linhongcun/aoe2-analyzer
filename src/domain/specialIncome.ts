@@ -53,8 +53,8 @@ export const SPECIAL_INCOME_EXCEPTIONS = {
     { res: 268, op: 'mul', reason: '猎物食物倍率：只分类，不入账' },
   ],
   applicationOnly: [
-    { flag: 'buildingWood', reason: '马里建筑木费折扣在 attr cost 分支处理，不是资源渠道' },
-    { flag: 'mayanWall', reason: '玛雅墙费折扣在 attr cost 分支处理，不是资源渠道' },
+    { flag: 'buildingWood', civ: 'Malians', reason: '马里建筑木费折扣在 attr cost 分支处理，不是资源渠道' },
+    { flag: 'mayanWall', civ: 'Mayans', reason: '玛雅墙费折扣在 attr cost 分支处理，不是资源渠道' },
   ],
 } as const;
 
@@ -155,6 +155,7 @@ export function specialIncomeErrors(rules: readonly SpecialIncomeRule[] = SPECIA
     if ((rule.res === undefined) !== (rule.op === undefined)) errors.push(`${label}: res/op 必须成对`);
     if (rule.flag && !rule.allows) errors.push(`${label}: flag 条目缺少 allows`);
     if (rule.apply && (rule.res === undefined || rule.op === undefined)) errors.push(`${label}: apply 条目缺少 res/op`);
+    if (rule.flag && rule.res !== undefined && rule.op && !rule.apply) errors.push(`${label}: flag+res+op 条目缺少 apply`);
     if (!rule.apply && !rule.accepts && !rule.allows && !rule.income) errors.push(`${label}: 没有任何 apply/accepts/allows/income`);
   }
   return errors;

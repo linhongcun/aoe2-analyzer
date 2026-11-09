@@ -287,8 +287,16 @@ export const APPLICATION_RULES: readonly ApplicationRule[] = [
   ...SPECIAL_INCOME.flatMap((rule) =>
     rule.flag && rule.allows ? [{ flag: rule.flag, civ: rule.civ, gather: rule.gather, allows: rule.allows as ApplicationRule['allows'] }] : [],
   ),
-  { flag: SPECIAL_INCOME_EXCEPTIONS.applicationOnly[0].flag, civ: 'Malians', allows: rules.hasMalianBuildingContext },
-  { flag: SPECIAL_INCOME_EXCEPTIONS.applicationOnly[1].flag, civ: 'Mayans', allows: rules.hasMayanWallContext },
+  {
+    flag: SPECIAL_INCOME_EXCEPTIONS.applicationOnly.find((entry) => entry.flag === 'buildingWood')!.flag,
+    civ: SPECIAL_INCOME_EXCEPTIONS.applicationOnly.find((entry) => entry.flag === 'buildingWood')!.civ,
+    allows: rules.hasMalianBuildingContext,
+  },
+  {
+    flag: SPECIAL_INCOME_EXCEPTIONS.applicationOnly.find((entry) => entry.flag === 'mayanWall')!.flag,
+    civ: SPECIAL_INCOME_EXCEPTIONS.applicationOnly.find((entry) => entry.flag === 'mayanWall')!.civ,
+    allows: rules.hasMayanWallContext,
+  },
 ];
 export function rowApplication(civ: string, row: EffectRow, scope: Scope, mode: 'timeline' | 'gather', atomic: () => boolean): RowApplication {
   const application: RowApplication = {};

@@ -50,10 +50,18 @@ describe('#816 特殊收入主表', () => {
     expect(RESOURCE_HANDLERS.some((row) => row.res === 268 && row.op === 'mul')).toBe(true);
     expect(APPLICATION_RULES.some((row) => row.flag === 'buildingWood')).toBe(true);
     expect(APPLICATION_RULES.some((row) => row.flag === 'mayanWall')).toBe(true);
+    expect(RESOURCE_APPLICATIONS).toHaveLength(SPECIAL_INCOME.filter((rule) => rule.flag && rule.res !== undefined && rule.op && rule.apply).length);
+    expect(RESOURCE_HANDLERS).toHaveLength(
+      SPECIAL_INCOME.filter((rule) => rule.res !== undefined && rule.op).length + SPECIAL_INCOME_EXCEPTIONS.classificationOnly.length,
+    );
+    expect(APPLICATION_RULES).toHaveLength(SPECIAL_INCOME.filter((rule) => rule.flag && rule.allows).length + SPECIAL_INCOME_EXCEPTIONS.applicationOnly.length);
+    expect(APPLICATION_RULES.find((row) => row.flag === 'buildingWood')).toMatchObject({ civ: 'Malians' });
+    expect(APPLICATION_RULES.find((row) => row.flag === 'mayanWall')).toMatchObject({ civ: 'Mayans' });
   });
 
   it('主表不变量能拒绝缺字段的假条目', () => {
     expect(specialIncomeErrors()).toEqual([]);
     expect(specialIncomeErrors([...SPECIAL_INCOME, { flag: 'foragerFood', res: 999, op: 'add' }])).not.toEqual([]);
+    expect(specialIncomeErrors([...SPECIAL_INCOME, { flag: 'foragerFood', res: 999, op: 'add', allows: () => true }])).not.toEqual([]);
   });
 });

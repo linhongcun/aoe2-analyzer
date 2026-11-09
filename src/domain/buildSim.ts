@@ -15,7 +15,7 @@ import { applyMod, baseMods, RES_START, RES_HUNT_FOOD, applyEffects } from './bu
 import { hasUniqueMayanTree } from './buildSimCivRules';
 import { SPECIAL_INCOME, type SpecialRes } from './specialIncome';
 
-const VARANGIAN_INCOME = SPECIAL_INCOME.find((rule) => rule.flag === 'varangianGold')!;
+const VARANGIAN_INCOME = SPECIAL_INCOME.find((rule) => rule.flag === 'varangianGold');
 import { simScope, techAtomicOk, simSupport } from './buildSimCoverage';
 export { pushMod, applyMod, type NumMod } from './buildSimEffects';
 export { SHU_KNIGHT_TEMPLATE_NOTE, MAYAN_CAVALRY_TEMPLATE_NOTE } from './buildSimCivRules';
@@ -986,7 +986,7 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       if (wr > 0 && carry > 0 && speed > 0) {
         const q = effectiveGatherRate({ workRate: wr, carry, speed, walkTiles: P.walkTiles, units: fishingShips });
         stock.food += q * TICK;
-        const shipGold = VARANGIAN_INCOME.income?.(m, 'fish', q, scope)?.gold ?? 0;
+        const shipGold = VARANGIAN_INCOME?.income?.(m, 'fish', q, scope)?.gold ?? 0;
         if (shipGold) stock.gold += shipGold * TICK;
       }
     }
