@@ -45,6 +45,8 @@ export interface LadderSnapshot {
   map: string;
   mode: string;
   fetchedAt: string;
+  sourceSha256?: string;
+  sourceBytes?: number;
   patchNote?: string;
   period?: { key: string; from: string; to: string };
   elo?: { min: number; max: number };

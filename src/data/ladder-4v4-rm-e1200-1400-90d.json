@@ -4,6 +4,8 @@
   "map": "all",
   "mode": "4v4 RM",
   "fetchedAt": "2026-11-01",
+  "sourceSha256": "ff357ef3551f3c513c7aaccfe5c661e2ffb727ff32a0136f683481ea341e615a",
+  "sourceBytes": 126163,
   "patchNote": "One-time copy of aoe2scout static aggregate rm_4v4, Elo band 1200-1400, window 90d (2026-08-02 through 2026-10-30). Grid version 2026-10-30. Retrieved 2026-11-01. The file has no DE patch id. civ games are player appearances in that band, not matches. The source monthly trend runs outside this window and is omitted. aoestats.io returned HTTP 522 on retrieval.",
   "period": {
     "key": "90d",

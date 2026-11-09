@@ -16,6 +16,8 @@ interface Civ {
 interface Snapshot {
   sourceUrl: string;
   fetchedAt: string;
+  sourceSha256: string;
+  sourceBytes: number;
   patchNote: string;
   map: string;
   mode: string;
@@ -37,6 +39,8 @@ describe('4v4 静态快照 #577', () => {
     expect(snapshot.period).toEqual({ key: '90d', from: '2026-08-02', to: '2026-10-30' });
     expect(snapshot.elo).toEqual({ min: 1200, max: 1400 });
     expect(snapshot.fetchedAt).toBe('2026-11-01');
+    expect(snapshot.sourceSha256).toBe('ff357ef3551f3c513c7aaccfe5c661e2ffb727ff32a0136f683481ea341e615a');
+    expect(snapshot.sourceBytes).toBe(126163);
     expect(snapshot.sourceUrl).toBe('https://www.aoe2scout.com/d/current/civs/rm_4v4__e1200_1400__d90d.json');
     expect(snapshot.sample.unit).toBe('player');
     expect(snapshot.brackets).toHaveLength(1);
