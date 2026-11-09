@@ -14,7 +14,7 @@ import { polishBuildOrder } from '../../domain/polishEconomy';
 import { mapucheBuildOrder } from '../../domain/mapucheEconomy';
 import { visibleSources } from './sources';
 import { followupHint } from './timelineFollowups';
-import { simSupport } from '../../domain/simSupport';
+import { simSupport, simSupportWarning } from '../../domain/simSupport';
 import { useTimelineSettings } from './useTimelineSettings';
 import { TimelineSettings } from './TimelineSettings';
 import { TimelineChart } from './TimelineChart';
@@ -308,7 +308,7 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
       {unsupported && !warnOff && (
         <div className="tl-civwarn" role="status" data-t="civ-warn">
           <Warn size={16} aria-hidden />
-          <span>链接里的{civByEn(q.civ)?.zh ?? q.civ}加成尚未计入，已按通用计算。</span>
+          <span>{simSupportWarning(q.civ, civByEn(q.civ)?.zh ?? q.civ)}</span>
           <button type="button" aria-label="关闭提示" onClick={hideWarning}>
             <X size={16} aria-hidden />
           </button>
