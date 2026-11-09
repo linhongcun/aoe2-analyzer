@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import eco from '../../src/data/eco.json';
 import units from '../../src/data/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
@@ -95,5 +96,41 @@ describe('#19 分享卡 buildShareCard', () => {
 
   it('置灰说明逐字', () => {
     expect(SHARE_DISABLED_NOTE).toBe('加成未计入，暂不能生成分享卡');
+  });
+
+  it('已有附注的文明（含此前漏掉的）都随分享卡传播', () => {
+    for (const [civ, zh, note] of [
+      ['Malians', '马里', '采金交仓额外黄金按连续收入估算'],
+      ['Varangians', '瓦兰吉人', '牧羊、狩猎和捕鱼兼产黄金按连续收入估算'],
+      ['Tatars', '鞑靼', '牧羊按产量与工作率配对估算'],
+      ['Sicilians', '西西里', '农田升级额外储量、耗尽和续种未模拟'],
+      ['Portuguese', '葡萄牙', '采果兼产木材按连续收入估算'],
+      ['Huns', '匈奴', '马的食物未计入'],
+    ] as const)
+      expect(card('scouts-18', civ, zh).c.basis, civ).toContain(note);
+    expect(card('fast-castle-knights', 'Shu', '蜀').c.basis).toContain('蜀不能训练骑士');
+    expect(card('fast-castle-knights', 'Shu', '蜀').c.basis).toContain('伐木兼产食物按连续收入估算');
+    expect(card('scouts-18', 'Mayans', '玛雅').c.basis).toContain('资源产量与工作率配对估算');
+  });
+
+  it('分享卡不再维护文明名字面量白名单', () => {
+    const source = readFileSync('src/features/builds/shareCard.ts', 'utf8');
+    for (const civ of [
+      'Poles',
+      'Romans',
+      'Malians',
+      'Varangians',
+      'Tatars',
+      'Sicilians',
+      'Portuguese',
+      'Wei',
+      'Bengalis',
+      'Armenians',
+      'Georgians',
+      'Mayans',
+      'Shu',
+    ])
+      expect(source, civ).not.toContain(`'${civ}'`);
+    expect(source).toContain('shareCardNotes');
   });
 });

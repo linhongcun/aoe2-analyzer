@@ -5,11 +5,7 @@
  */
 import { ECO as ecoRaw } from '../../data/eco';
 import { formatClock } from '../../domain/formatTime';
-import { civSimNotes, MAYAN_CAVALRY_TEMPLATE_NOTE, SHU_KNIGHT_TEMPLATE_NOTE } from '../../domain/buildSim';
-import { WEI_KNIGHT_TEMPLATE_NOTE } from '../../domain/weiEconomy';
-import { BENGALI_KNIGHT_TEMPLATE_NOTE } from '../../domain/bengaliEconomy';
-import { ARMENIAN_CART_NOTE, ARMENIAN_RESEARCH_NOTE } from '../../domain/armenianEconomy';
-import { GEORGIAN_CART_NOTE, GEORGIAN_START_NOTE } from '../../domain/georgianEconomy';
+import { shareCardNotes } from '../../domain/buildSimNotes';
 import { RES_ZH, rangeLabel, summaryParts, summaryText, type AgeMark, type TimelineView } from './timelineModel';
 
 export interface ShareCell {
@@ -81,9 +77,7 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
           : sum.main.replace(/ 约 .*$/, '');
   const head = `${i.civZh}·${shortBoName(i.boNameZh)}`;
   const title = reached ? `${head}，约 ${formatClock(target!.reachAt)} 到${i.targetZh}，${phrase}` : `${head}，60 分钟内到不了${i.targetZh}`;
-  const slavicNotes = ['Poles', 'Romans', 'Gurjaras', 'Mapuche', 'Chinese', 'Slavs', 'Khmer', 'Jurchens'].includes(i.civEn)
-    ? civSimNotes(ecoRaw, i.civEn, i.boId)
-    : [];
+  const notes = shareCardNotes(ecoRaw, i.civEn, i.boId);
   return {
     title,
     cells: [
@@ -104,17 +98,7 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
     ],
     basis:
       [`按${i.civZh}计`, `走路 ${i.dist} 格`, ...(i.house ? [] : ['关自动建房']), `游戏版本 ${i.patchBuild}`].join(' · ') +
-      (i.civEn === 'Shu' && i.boId === 'fast-castle-knights' ? `\n${SHU_KNIGHT_TEMPLATE_NOTE}` : '') +
-      (i.civEn === 'Mayans' && ['scouts-18', 'fast-castle-knights'].includes(i.boId) ? `\n${MAYAN_CAVALRY_TEMPLATE_NOTE}` : '') +
-      (i.civEn === 'Wei' ? '\n经济研究完成赠村民，按开局任务分配\n满住房仍计入赠送；该住房政策未经当前版本客户端实测\n出生位置、集结与驻扎未模拟' : '') +
-      (i.civEn === 'Wei' && i.boId === 'fast-castle-knights' ? `\n${WEI_KNIGHT_TEMPLATE_NOTE}` : '') +
-      (i.civEn === 'Bengalis'
-        ? '\n到达新时代时，每座完成城镇中心赠送2个村民\n满住房仍计入赠送；该住房政策未经当前版本客户端实测\n出生位置、集结与驻扎未模拟'
-        : '') +
-      (i.civEn === 'Bengalis' && i.boId === 'fast-castle-knights' ? `\n${BENGALI_KNIGHT_TEMPLATE_NOTE}` : '') +
-      (i.civEn === 'Armenians' ? `\n${ARMENIAN_CART_NOTE}\n${ARMENIAN_RESEARCH_NOTE}` : '') +
-      (i.civEn === 'Georgians' ? `\n${GEORGIAN_START_NOTE}\n${GEORGIAN_CART_NOTE}` : '') +
-      slavicNotes.map((note) => `\n${note}`).join(''),
+      notes.map((note) => `\n${note}`).join(''),
     site: SHARE_SITE,
     kind: '开局时间线',
     url: shareUrl(i),

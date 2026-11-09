@@ -13,8 +13,8 @@ import { armenianContext, ARMENIAN_CART_NOTE, ARMENIAN_RESEARCH_NOTE } from './a
 import { georgianContext, GEORGIAN_START_NOTE, GEORGIAN_CART_NOTE } from './georgianEconomy';
 import { slavicContext, slavicHasFarmAssignment, SLAVIC_FARM_NOTE } from './slavicEconomy';
 import { khmerContext, khmerNotes } from './khmerEconomy';
-import { weiRewardFamily, WEI_SPAWN_NOTE, WEI_KNIGHT_TEMPLATE_NOTE } from './weiEconomy';
-import { bengaliRewardFamily, BENGALI_SPAWN_NOTE, BENGALI_KNIGHT_TEMPLATE_NOTE } from './bengaliEconomy';
+import { weiRewardFamily, WEI_SPAWN_NOTE, WEI_KNIGHT_TEMPLATE_NOTE, WEI_SHARE_TEXT } from './weiEconomy';
+import { bengaliRewardFamily, BENGALI_SPAWN_NOTE, BENGALI_KNIGHT_TEMPLATE_NOTE, BENGALI_SHARE_TEXT } from './bengaliEconomy';
 
 import { jurchenNotes } from './jurchenEconomy';
 
@@ -195,4 +195,15 @@ export function civSimNotes(eco: EcoData, civ: string, boId?: string): string[] 
     out.push(`猎物食物 ×${Math.round(mods.huntFoodMul * 100) / 100}；对其他采集的作用未核实`);
   }
   return out;
+}
+
+/** 分享卡投影：复用 civSimNotes，但保留现有 BO 条件（Shu/Mayan 模板只在其原 BO 出现）。 */
+export function shareCardNotes(eco: EcoData, civ: string, boId?: string): string[] {
+  return civSimNotes(eco, civ, boId)
+    .map((note) => (note === WEI_SPAWN_NOTE ? WEI_SHARE_TEXT : note === BENGALI_SPAWN_NOTE ? BENGALI_SHARE_TEXT : note))
+    .filter((note) => {
+      if (note === rules.SHU_KNIGHT_TEMPLATE_NOTE) return boId === 'fast-castle-knights';
+      if (note === rules.MAYAN_CAVALRY_TEMPLATE_NOTE) return boId === 'scouts-18' || boId === 'fast-castle-knights';
+      return true;
+    });
 }

@@ -27,6 +27,7 @@ export const BENGALI_CONTEXT_REASON = '孟加拉时代赠村民缺少完整已�
 export const BENGALI_SPAWN_NOTE =
   '到达新时代时，每座已完成城镇中心赠送2个村民，直接加入开局任务分配；满住房仍计入赠送，普通训练继续受住房限制。住房政策未经当前版本客户端实测；具体出生位置、集结与驻扎未模拟。';
 export const BENGALI_SPAWN_ASSUMPTION = `${BENGALI_SPAWN_NOTE}奖励按本站0.1秒步长计入；当前方案不包含特殊起始时代。`;
+export const BENGALI_SHARE_TEXT = '到达新时代时，每座完成城镇中心赠送2个村民\n满住房仍计入赠送；该住房政策未经当前版本客户端实测\n出生位置、集结与驻扎未模拟';
 export const BENGALI_KNIGHT_TEMPLATE_NOTE = '孟加拉没有骑士；骑士方案仅供通用模板经济估算';
 export const isBengaliRewardRow = (row: Row) => row.ageSpawn !== undefined || (row.tech !== undefined && IDS.includes(row.tech));
 
