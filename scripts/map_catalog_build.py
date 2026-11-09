@@ -77,11 +77,17 @@ def build_maps(source, previews, chinese, english, metadata, require_provenance=
             editorial_source, checked_at = details.get('source', 'editorial'), details.get('checkedAt', '2026-11-09')
         if not isinstance(editorial_source, str) or not (
             editorial_source in ('editorial', 'civs.json')
-            or (re.fullmatch(r'https://[^\s]+', editorial_source) and urlparse(editorial_source).netloc)
+            or (
+                re.fullmatch(r'https://[^\s]+', editorial_source)
+                and not any(ord(char) < 0x20 for char in editorial_source)
+                and urlparse(editorial_source).netloc
+            )
         ):
             raise ValueError(f'{identity}: 编辑文案来源必须是 editorial、civs.json 或有效 https URL')
         try:
-            parsed_date = date.fromisoformat(checked_at) if isinstance(checked_at, str) else None
+            parsed_date = (
+                date.fromisoformat(checked_at) if isinstance(checked_at, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', checked_at) else None
+            )
         except ValueError:
             parsed_date = None
         if parsed_date is None or parsed_date > date.today():
