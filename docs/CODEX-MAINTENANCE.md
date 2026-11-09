@@ -136,7 +136,7 @@
 
 ## 6. 设计硬规则（摘要）
 
-完整规范见 [docs/design/DESIGN-SYSTEM.md](design/DESIGN-SYSTEM.md) 与 [docs/design/README.md](design/README.md)「[给 Codex 的设计交接](design/README.md#给-codex-的设计交接)」（`ERRATA.md` 优先于 SPEC）。
+完整规范见 [docs/design/DESIGN-SYSTEM.md](design/DESIGN-SYSTEM.md) 与 [docs/design/README.md](design/README.md)「[给 Codex 的设计交接](design/README.md#给-codex-的设计交接)」（各短稿目录内如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 `docs/design/mockups/issue24-v3/ERRATA.md`）。
 
 - **图标**：只用 Lucide，经 `src/shared/ui/Icon.tsx` 的 `ICONS` 登记后 `<Icon name="..." />`；禁止 emoji / Unicode 符号当图标（ESLint 会拦）；游戏美术图标除外。
 - **颜色**：只用 `src/shared/styles/tokens.css` 设计令牌；`npm run lint:colors`。

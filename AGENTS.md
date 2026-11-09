@@ -132,7 +132,7 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 - **数字不换行**：数值、「数字+单位」不能被折到两行（例如「1个村民」在 360 宽折行就是 bug）。
 - 图标只用 Lucide（在 `src/shared/ui/Icon.tsx` 登记后 `<Icon name="..." />`），禁止 emoji 和 Unicode 符号当图标（ESLint 会拦）；游戏美术图标除外。
 - 文字不小于 12px；可点区域不小于 44×44；颜色只用设计令牌，对比度满足 WCAG AA。
-- 完整设计规范：[docs/design/DESIGN-SYSTEM.md](docs/design/DESIGN-SYSTEM.md)，既有设计稿和规格索引：[docs/design/README.md](docs/design/README.md)（`ERRATA.md` 优先于 SPEC）。
+- 完整设计规范：[docs/design/DESIGN-SYSTEM.md](docs/design/DESIGN-SYSTEM.md)，既有设计稿和规格索引：[docs/design/README.md](docs/design/README.md)（各短稿目录内如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 `docs/design/mockups/issue24-v3/ERRATA.md`）。
 
 ## 怎么读 issue
 
