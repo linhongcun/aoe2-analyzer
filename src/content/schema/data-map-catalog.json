@@ -21,10 +21,7 @@
               "$ref": "common.defs.json#/$defs/publicUrl"
             }
           },
-          "required": [
-            "zh",
-            "en"
-          ],
+          "required": ["zh", "en"],
           "additionalProperties": false
         },
         "previewCommit": {
@@ -35,12 +32,7 @@
           "$ref": "common.defs.json#/$defs/sourceText"
         }
       },
-      "required": [
-        "checkedAt",
-        "sourceUrls",
-        "previewCommit",
-        "copyright"
-      ],
+      "required": ["checkedAt", "sourceUrls", "previewCommit", "copyright"],
       "additionalProperties": false
     },
     "maps": {
@@ -63,14 +55,7 @@
           },
           "group": {
             "type": "string",
-            "enum": [
-              "open",
-              "closed",
-              "hybrid",
-              "water",
-              "nomad",
-              "other"
-            ]
+            "enum": ["open", "closed", "hybrid", "water", "nomad", "other"]
           },
           "featured": {
             "type": "boolean"
@@ -100,44 +85,35 @@
                 "minimum": 1
               }
             },
-            "required": [
-              "image",
-              "sourceUrl",
-              "width",
-              "height"
-            ],
+            "required": ["image", "sourceUrl", "width", "height"],
             "additionalProperties": false
           },
           "source": {
-            "type": "string",
-            "pattern": "^(editorial|civs\\.json|https://.+)$"
+            "anyOf": [
+              {
+                "const": "editorial"
+              },
+              {
+                "const": "civs.json"
+              },
+              {
+                "type": "string",
+                "format": "public-url",
+                "pattern": "^https://"
+              }
+            ]
           },
           "checkedAt": {
             "type": "string",
-            "format": "iso-date"
+            "format": "iso-date-past"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "en",
-          "description",
-          "group",
-          "featured",
-          "scouting",
-          "opening",
-          "source",
-          "checkedAt",
-          "preview"
-        ],
+        "required": ["id", "name", "en", "description", "group", "featured", "scouting", "opening", "source", "checkedAt", "preview"],
         "additionalProperties": false
       },
       "minItems": 1
     }
   },
-  "required": [
-    "meta",
-    "maps"
-  ],
+  "required": ["meta", "maps"],
   "additionalProperties": false
 }

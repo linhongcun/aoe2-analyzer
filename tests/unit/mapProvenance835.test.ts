@@ -34,6 +34,17 @@ describe('地图编辑内容 provenance（issue 835）', () => {
     const badDate = copy();
     badDate.maps[0]!.checkedAt = '2026-13-40';
     expect(validateDocument(file, badDate).valid).toBe(false);
+    const future = copy();
+    future.maps[0]!.checkedAt = '2099-01-01';
+    expect(validateDocument(file, future).valid).toBe(false);
+    for (const source of ['', 'https://not a url', 'https:///', 'http://example.com']) {
+      const badSource = copy();
+      badSource.maps[0]!.source = source;
+      expect(validateDocument(file, badSource).valid, source).toBe(false);
+    }
+    const noDate = copy();
+    delete noDate.maps[0]!.checkedAt;
+    expect(validateDocument(file, noDate).valid).toBe(false);
   });
 
   it('4 篇地图攻略都有核对状态，未知日期不伪装成已核对', () => {

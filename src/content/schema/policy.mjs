@@ -64,9 +64,14 @@ function isIsoDate(value) {
   return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
 }
 
+function isNotFutureIsoDate(value) {
+  return isIsoDate(value) && value <= new Date().toISOString().slice(0, 10);
+}
+
 export const publicFormats = {
   'public-url': { type: 'string', validate: isPublicSourceUrl },
   'iso-date': { type: 'string', validate: isIsoDate },
+  'iso-date-past': { type: 'string', validate: isNotFutureIsoDate },
   'source-text': { type: 'string', validate: isPublicSourceText },
 };
 
