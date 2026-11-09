@@ -47,8 +47,8 @@ export const EXPLICIT_OTHER_BUILDINGS: Readonly<Record<string, string>> = {
 };
 
 export const buildingType = (en: string): BuildingType => {
-  if (TYPE_BY_EN[en]) return TYPE_BY_EN[en];
-  if (EXPLICIT_OTHER_BUILDINGS[en]) return 'other';
+  if (Object.hasOwn(TYPE_BY_EN, en)) return TYPE_BY_EN[en]!;
+  if (Object.hasOwn(EXPLICIT_OTHER_BUILDINGS, en)) return 'other';
   throw new Error(`未登记建筑类型：${en}`);
 };
 export const BUILDING_TYPE_ZH: Record<BuildingType, string> = { military: '军事', economy: '经济', defense: '防御', other: '其他' };

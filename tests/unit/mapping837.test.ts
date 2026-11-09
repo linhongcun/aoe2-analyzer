@@ -35,6 +35,11 @@ describe('反制、提前解锁与建筑类型映射（issue 837）', () => {
     expect(units.some((unit) => unit.zh === '侦察骑兵')).toBe(false);
     expect(filterCounterUnits('Britons', ['arch'], units).map((unit) => unit.nameZh)).toContain('斥候骑兵');
     expect(filterCounterUnits('Britons', ['arch'], units).map((unit) => unit.id)).not.toContain(1786);
+    for (const list of Object.values(COUNTER_UNITS)) {
+      for (const variant of [1786, 1787, 1788]) expect(list).not.toContain(variant);
+    }
+    expect(COUNTER_EXTRA_GROUPS.cavalry).toContain(448);
+    expect(COUNTER_EXTRA_GROUPS.lightCavalry).toContain(1707);
   });
 
   it('提前解锁表覆盖全部条目，且四种口径不改变行为', () => {
@@ -61,6 +66,7 @@ describe('反制、提前解锁与建筑类型映射（issue 837）', () => {
     expect(Object.keys(EXPLICIT_OTHER_BUILDINGS)).toHaveLength(5);
     expect(buildingType('University')).toBe('other');
     expect(() => buildingType('Not a real building')).toThrow(/未登记建筑类型/);
+    expect(() => buildingType('constructor')).toThrow(/未登记建筑类型/);
   });
 
   it('行到时代公式与 93 例外只在 availabilityAge 中维护', () => {
