@@ -70,6 +70,13 @@ def build_maps(source, previews, chinese, english, metadata):
         scouting, opening = details.get('scouting', ''), details.get('opening', '')
         if not isinstance(scouting, str) or not isinstance(opening, str):
             raise ValueError(f'{identity}: 侦察和开局提示必须为文本')
+        editorial_source, checked_at = details.get('source', 'editorial'), details.get('checkedAt', '2026-11-09')
+        if not isinstance(editorial_source, str) or not (
+            editorial_source in ('editorial', 'civs.json') or editorial_source.startswith('https://')
+        ):
+            raise ValueError(f'{identity}: 编辑文案来源必须是 editorial、civs.json 或 https URL')
+        if not isinstance(checked_at, str) or not re.fullmatch(r'\d{4}-\d{2}-\d{2}', checked_at):
+            raise ValueError(f'{identity}: 核对日期必须是 YYYY-MM-DD')
         preview = previews[identity]
         expected = {
             'image': f'img/maps/{identity}.webp',
@@ -88,6 +95,8 @@ def build_maps(source, previews, chinese, english, metadata):
             'featured': featured,
             'scouting': scouting,
             'opening': opening,
+            'source': editorial_source,
+            'checkedAt': checked_at,
             'preview': expected,
         }
         ordered.append(((not featured, priority, en['mapName'].casefold(), identity), item))
@@ -107,6 +116,9 @@ def main():
         previews = json.loads((ROOT / 'src/data/mapPreviews.json').read_text(encoding='utf-8'))
         metadata_file = ROOT / 'scripts/map_catalog_meta.json'
         metadata = json.loads(metadata_file.read_text(encoding='utf-8')) if metadata_file.exists() else {}
+        for identity, details in metadata.items():
+            if not isinstance(details, dict) or 'source' not in details or 'checkedAt' not in details:
+                raise ValueError(f'{identity}: 分类元数据必须显式提供 source/checkedAt')
         catalog = {
             'meta': {
                 'checkedAt': pin['date'],
