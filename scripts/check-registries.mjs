@@ -8,8 +8,9 @@
  *   simSupport 显式分支      src/domain/buildSimCoverage.ts
  *   parity special 列表      scripts/build_mechanisms_parity.ts
  *   bonusUsage currentScope  src/domain/bonusUsage.ts
+ *   parity/bonusUsage 排除项 src/domain/mechanismExclusions.ts
  *
- * 允许的缺口必须逐条出现在 ALLOW 中并写明原因；新增/删除登记或缺口变化都会失败。
+ * 允许的缺口必须逐条出现在排除项/ALLOW 中并写明原因；新增/删除登记或缺口变化都会失败。
  * 用法：node scripts/check-registries.mjs [--root <dir>]
  */
 import { readFileSync } from 'node:fs';
@@ -23,6 +24,7 @@ const FILES = {
   coverage: 'src/domain/buildSimCoverage.ts',
   parity: 'scripts/build_mechanisms_parity.ts',
   bonusUsage: 'src/domain/bonusUsage.ts',
+  exclusions: 'src/domain/mechanismExclusions.ts',
 };
 
 const EXPECTED = { mechanisms: 20, notes: 18, simSupport: 14, parity: 13, bonusUsage: 11 };
@@ -40,26 +42,6 @@ const ALLOW = {
     Varangians: '没有逐文明分支；只有 assumptions，由通用分类处理',
     Tatars: '没有逐文明分支；atomicGather/assumptions 由通用分类处理',
     Franks: '没有逐文明分支；只有 freeResearchOnce，由通用分类处理',
-  },
-  parity: {
-    Romans: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-    Poles: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-    Gurjaras: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-    Mapuche: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-    Chinese: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-    Jurchens: 'parity special 列表只覆盖 #197 后续批次；该文明由通用 metadata/timeline 快照覆盖',
-    Franks: 'parity special 列表不单列；freeResearchOnce 由通用快照覆盖',
-  },
-  bonusUsage: {
-    Gurjaras: '当前模板未驻畜，eco/text 行由通用 scope 分类，未进逐条科技清单',
-    Jurchens: '尸体腐烂/攻城折扣不在当前模板，eco/text 行由通用 scope 分类',
-    Portuguese: '采果兼产木材走 assumptions，未进逐条科技清单',
-    Shu: '伐木兼产食物走 assumptions，未进逐条科技清单',
-    Malians: '采金交仓/建筑木费走 assumptions，未进逐条科技清单',
-    Varangians: '牧羊/狩猎/捕鱼兼产黄金走 assumptions，未进逐条科技清单',
-    Tatars: '牧羊配对走 assumptions，未进逐条科技清单',
-    Mayans: '资源配对/骑兵模板走 assumptions，未进逐条科技清单',
-    Franks: 'freeResearchOnce 没有逐条科技解释，未进清单',
   },
 };
 
@@ -115,6 +97,20 @@ function objectKeys(sf, name) {
   return [...new Set(out)];
 }
 
+function objectEntries(sf, name) {
+  const init = findVariable(sf, name).initializer;
+  if (!init || !ts.isObjectLiteralExpression(init)) throw new Error(`${name} 不是对象字面量`);
+  const out = new Map();
+  for (const prop of init.properties) {
+    if (!ts.isPropertyAssignment(prop)) continue;
+    const key = propertyName(prop.name);
+    if (key === null) continue;
+    if (!ts.isStringLiteral(prop.initializer)) throw new Error(`${name}.${key} 的原因必须是字符串字面量`);
+    out.set(key, prop.initializer.text);
+  }
+  return out;
+}
+
 function mapKeys(sf, name) {
   const init = findVariable(sf, name).initializer;
   if (!init || !ts.isNewExpression(init) || init.expression.getText(sf) !== 'Map') throw new Error(`${name} 不是 new Map([...])`);
@@ -129,23 +125,6 @@ function mapKeys(sf, name) {
   return [...new Set(out)];
 }
 
-function arrayStrings(node) {
-  if (!node || !ts.isArrayLiteralExpression(node)) return null;
-  const out = [];
-  for (const element of node.elements) {
-    if (ts.isStringLiteral(element)) out.push(element.text);
-    else return null;
-  }
-  return out;
-}
-
-function variableArray(sf, name) {
-  const init = findVariable(sf, name).initializer;
-  const values = arrayStrings(init);
-  if (!values) throw new Error(`${name} 不是纯字符串数组`);
-  return [...new Set(values)];
-}
-
 function simSupportCivs(sf) {
   const fn = findFunction(sf, 'simSupport');
   const out = [];
@@ -156,18 +135,6 @@ function simSupportCivs(sf) {
     if (ts.isIdentifier(left) && left.text === 'civ' && ts.isStringLiteral(right)) out.push(right.text);
   });
   return [...new Set(out)];
-}
-
-function currentScopeCivs(sf) {
-  const init = findVariable(sf, 'currentScope').initializer;
-  let found = null;
-  visit(init, (node) => {
-    if (found || !ts.isArrayLiteralExpression(node)) return;
-    const values = arrayStrings(node);
-    if (values && values.length >= 5) found = values;
-  });
-  if (!found) throw new Error('bonusUsage 的 currentScope 里找不到文明数组');
-  return [...new Set(found)];
 }
 
 const setsOf = (values) => new Set(values);
@@ -191,19 +158,46 @@ export function checkRegistries(root = process.cwd()) {
   const mechanisms = objectKeys(parse(root, FILES.mechanisms), 'CIV_MECHANISMS');
   const notes = mapKeys(parse(root, FILES.notes), 'CIV_NOTES');
   const simSupport = simSupportCivs(parse(root, FILES.coverage));
-  const parity = variableArray(parse(root, FILES.parity), 'special');
-  const bonusUsage = currentScopeCivs(parse(root, FILES.bonusUsage));
+  const parityFile = parse(root, FILES.parity);
+  const bonusUsageFile = parse(root, FILES.bonusUsage);
+  const exclusions = parse(root, FILES.exclusions);
+  const parityExcluded = objectEntries(exclusions, 'PARITY_EXCLUDED');
+  const bonusUsageExcluded = objectEntries(exclusions, 'BONUS_USAGE_EXCLUDED');
+  const mechanismsSet = setsOf(mechanisms);
+  const parity = mechanisms.filter((civ) => !parityExcluded.has(civ));
+  const bonusUsage = mechanisms.filter((civ) => !bonusUsageExcluded.has(civ));
   const actual = { mechanisms, notes, simSupport, parity, bonusUsage };
   const errors = [];
+  const parityInit = findVariable(parityFile, 'special').initializer?.getText(parityFile) ?? '';
+  if (!parityInit.includes('CIV_MECHANISM_KEYS.filter') || !parityInit.includes('PARITY_EXCLUDED'))
+    errors.push('parity special 必须由 CIV_MECHANISM_KEYS.filter + PARITY_EXCLUDED 派生');
+  const bonusInit = findVariable(bonusUsageFile, 'BONUS_USAGE_CIVS').initializer?.getText(bonusUsageFile) ?? '';
+  if (!bonusInit.includes('CIV_MECHANISM_KEYS.filter') || !bonusInit.includes('BONUS_USAGE_EXCLUDED'))
+    errors.push('bonusUsage BONUS_USAGE_CIVS 必须由 CIV_MECHANISM_KEYS.filter + BONUS_USAGE_EXCLUDED 派生');
+  const scopeInit = findVariable(bonusUsageFile, 'currentScope').initializer?.getText(bonusUsageFile) ?? '';
+  if (!scopeInit.includes('BONUS_USAGE_CIVS.includes')) errors.push('bonusUsage currentScope 必须使用 BONUS_USAGE_CIVS');
   for (const [key, expected] of Object.entries(EXPECTED)) {
     if (actual[key].length !== expected) errors.push(`${key} 数量为 ${actual[key].length}，期望 ${expected}`);
   }
-  const mechanismsSet = setsOf(mechanisms);
+  for (const [label, excluded] of [
+    ['parity', parityExcluded],
+    ['bonusUsage', bonusUsageExcluded],
+  ]) {
+    for (const [civ, reason] of excluded) {
+      if (!mechanismsSet.has(civ)) errors.push(`${label} 排除项不在 CIV_MECHANISMS：${civ}`);
+      if (!reason.trim()) errors.push(`${label} 排除项缺少原因：${civ}`);
+    }
+  }
+  const allow = {
+    ...ALLOW,
+    parity: Object.fromEntries(parityExcluded),
+    bonusUsage: Object.fromEntries(bonusUsageExcluded),
+  };
   errors.push(...checkGap('CIV_NOTES', mechanismsSet, setsOf(notes), ALLOW.notes));
   errors.push(...checkGap('simSupport', mechanismsSet, setsOf(simSupport), ALLOW.simSupport));
-  errors.push(...checkGap('parity', mechanismsSet, setsOf(parity), ALLOW.parity));
-  errors.push(...checkGap('bonusUsage', mechanismsSet, setsOf(bonusUsage), ALLOW.bonusUsage));
-  return { actual, allow: ALLOW, errors };
+  errors.push(...checkGap('parity', mechanismsSet, setsOf(parity), allow.parity));
+  errors.push(...checkGap('bonusUsage', mechanismsSet, setsOf(bonusUsage), allow.bonusUsage));
+  return { actual, allow, errors };
 }
 
 function main() {

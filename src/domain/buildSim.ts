@@ -16,6 +16,7 @@ import { foragerWoodIncome, lumberFoodIncome, varangianGoldIncome, hasUniqueMaya
 import { simScope, techAtomicOk, simSupport } from './buildSimCoverage';
 export { pushMod, applyMod, type NumMod } from './buildSimEffects';
 export { SHU_KNIGHT_TEMPLATE_NOTE, MAYAN_CAVALRY_TEMPLATE_NOTE } from './buildSimCivRules';
+export { CIV_MECHANISM_KEYS } from './buildSimMechanisms';
 export {
   simScope,
   classifyCivEffect,

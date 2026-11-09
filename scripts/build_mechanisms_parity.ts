@@ -2,6 +2,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
+import { PARITY_EXCLUDED } from '../src/domain/mechanismExclusions';
 
 // Run against each worktree with its own Vite root so import.meta.glob loads that tree's BOs.
 const root = process.env.PARITY_ROOT ?? process.cwd();
@@ -13,7 +14,7 @@ const eco = JSON.parse(readFileSync(root + '/src/data/eco.json', 'utf8'));
 const units = JSON.parse(readFileSync(root + '/src/data/units.json', 'utf8'));
 const civs = JSON.parse(readFileSync(root + '/src/data/civs.json', 'utf8')).map((c: { en: string }) => c.en);
 const upgrades = Object.fromEntries(units.filter((u: { up?: unknown }) => u.up).map((u: { id: number; up: unknown }) => [u.id, u.up]));
-const special = ['Portuguese', 'Shu', 'Malians', 'Varangians', 'Tatars', 'Mayans', 'Sicilians', 'Wei', 'Bengalis', 'Armenians', 'Georgians', 'Slavs', 'Khmer'];
+const special = sim.CIV_MECHANISM_KEYS.filter((civ: string) => !Object.hasOwn(PARITY_EXCLUDED, civ));
 const serialize = (value: unknown) =>
   JSON.stringify(value, (_key, val) =>
     val === undefined ? { $undefined: true } : typeof val === 'number' && !Number.isFinite(val) ? { $number: String(val) } : val,
