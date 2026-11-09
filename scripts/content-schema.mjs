@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv2020 from 'ajv/dist/2020.js';
@@ -108,6 +108,21 @@ export function validateDocument(file, data) {
 export function checkDirectory(root = process.cwd()) {
   const files = [],
     problems = [];
+  const visit = (path, file, symbolicLink = false) => {
+    files.push(file);
+    if (symbolicLink) {
+      problems.push(problem(file, 'file', 'JSON 输入不能使用符号链接'));
+      return;
+    }
+    let data;
+    try {
+      data = JSON.parse(readFileSync(path, 'utf8'));
+    } catch (error) {
+      problems.push(problem(file, 'syntax', `JSON 语法无效：${error.message.slice(0, 160)}`));
+      return;
+    }
+    problems.push(...validateDocument(file, data).problems);
+  };
   const walk = (directory) => {
     if (!existsSync(directory)) return;
     for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -115,24 +130,15 @@ export function checkDirectory(root = process.cwd()) {
       const file = relative(root, path).split(sep).join('/');
       if (file === 'src/content/schema') continue;
       if (entry.isDirectory()) walk(path);
-      else if (file.endsWith('.json')) {
-        files.push(file);
-        if (entry.isSymbolicLink()) {
-          problems.push(problem(file, 'file', 'JSON 输入不能使用符号链接'));
-          continue;
-        }
-        let data;
-        try {
-          data = JSON.parse(readFileSync(path, 'utf8'));
-        } catch (error) {
-          problems.push(problem(file, 'syntax', `JSON 语法无效：${error.message.slice(0, 160)}`));
-          continue;
-        }
-        problems.push(...validateDocument(file, data).problems);
-      }
+      else if (file.endsWith('.json')) visit(path, file, entry.isSymbolicLink());
     }
   };
   for (const directory of ['src/content', 'src/data']) walk(join(root, directory));
+  // 少数手工内容仍留在 features；只登记精确文件，不能把整个 features 目录纳入扫描。
+  for (const file of ['src/features/civs/history.json']) {
+    const path = join(root, file);
+    if (existsSync(path)) visit(path, file, lstatSync(path).isSymbolicLink());
+  }
   if (!files.length) problems.push(problem('src/content + src/data', 'coverage', '未发现任何 JSON 输入'));
   return { files: files.sort(), problems };
 }

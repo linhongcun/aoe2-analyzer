@@ -17,6 +17,8 @@ export type TaskKind = (typeof TASK_KINDS)[number];
 export const TASK_NAMES: Record<TaskKind, string> = { scout: '侦察', breach: '破城', screen: '掩护', support: '支援' };
 export const POSITION_NAMES = { unspecified: '未指定', flank: '边位', pocket: '口袋', custom: '自记位置' } as const;
 export const SUPPLY_NAMES = { unchecked: '兵力与资源未核对', 'self-reported-ready': '玩家自报已核对', 'self-reported-short': '玩家自报仍需补充' } as const;
+export const PLAN_OPENNESSES = ['unspecified', 'open', 'closed', 'mixed-land'] as const;
+export const PLAN_EXAMPLES = [null, 'open-land-4v4-v1'] as const;
 export const PLAN_LIMITS = { name: 24, position: 48, title: 80, map: 80, note: 120, agreement: 160, buildings: 8, forms: 16, techs: 32 } as const;
 // Every structurally legal string uses UTF-16 length (the same limit as HTML maxLength).
 // At most three UTF-8 bytes per code unit; these bounds accommodate the full schema.
@@ -166,7 +168,7 @@ export function teamPlanShape(v: unknown): v is TeamPlan {
     v.patch !== DATA_PATCH_BUILD ||
     !str(v.title, PLAN_LIMITS.title) ||
     !member(v.activeAge, PLAN_AGES) ||
-    !member(v.example, [null, 'open-land-4v4-v1'])
+    !member(v.example, PLAN_EXAMPLES)
   )
     return false;
   const m = v.map;
@@ -175,7 +177,7 @@ export function teamPlanShape(v: unknown): v is TeamPlan {
     !keys(m, ['name', 'openness', 'conditions']) ||
     !str(m.name, PLAN_LIMITS.map) ||
     !str(m.conditions, PLAN_LIMITS.agreement) ||
-    !member(m.openness, ['unspecified', 'open', 'closed', 'mixed-land'])
+    !member(m.openness, PLAN_OPENNESSES)
   )
     return false;
   if (

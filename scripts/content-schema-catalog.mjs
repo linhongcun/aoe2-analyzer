@@ -1,5 +1,6 @@
 /** Every game/content JSON has one explicit format; only like-shaped families share. */
 export const SCHEMA_CATALOG = {
+  'src/features/civs/history.json': 'content-civ-history.json',
   ...Object.fromEntries(
     [
       'campaigns',
