@@ -1,3 +1,4 @@
+import { displayUnitAge as domainDisplayAge } from '../../domain/availabilityAge';
 import type { Unit } from '../../domain/types';
 
 /**
@@ -7,7 +8,7 @@ import type { Unit } from '../../domain/types';
  * projection for production, costs, combat or the build simulator.
  */
 export function unitDisplayAge(unit: Pick<Unit, 'id' | 'age'>, civ = ''): number {
-  return unit.id === 93 ? (civ === 'Armenians' ? 1 : 2) : unit.age;
+  return domainDisplayAge(unit.id, unit.age, civ);
 }
 
 /** Keep the original unit data and family indexes intact; copy only an exception. */

@@ -7,7 +7,7 @@ import type { Core } from '../data';
 import type { Building, Tech, Trees } from './types';
 import { civStatus } from './simulator';
 import { productionTechAge } from './production';
-import { buildingAge as getGarrisonBuildingAge, EARLY_UNIT_AGES } from './availabilityAge';
+import { buildingAge as getGarrisonBuildingAge, trainingUnitAge } from './availabilityAge';
 import { AGE_TECH_IDS, FEMALE_VILLAGER_ID, TC_BY_AGE, VILLAGER_UNIT_ID } from './gameIds';
 
 export type GarrisonEntry = 'enter' | 'created' | 'deposit';
@@ -178,10 +178,7 @@ export { getGarrisonBuildingAge };
 function unitAge(ctx: GeneralGarrisonContext, id: number, civ: string, data: GeneralGarrisonData) {
   const u = ctx.core.unitById[id];
   if (id === FEMALE_VILLAGER_ID) return 1;
-  return (
-    EARLY_UNIT_AGES[civ]?.[id] ??
-    Math.max(u?.age ?? ctx.core.buildingById[id]?.age ?? data.units[id]?.catalog?.age ?? 1, id === 93 ? 2 : 1, data.herdableIds.includes(id) ? 1 : 0)
-  );
+  return trainingUnitAge(civ, id, u?.age ?? ctx.core.buildingById[id]?.age ?? data.units[id]?.catalog?.age ?? 1, data.herdableIds.includes(id) ? 1 : 0);
 }
 function existingUnitAge(ctx: GeneralGarrisonContext, id: number, civ: string, data: GeneralGarrisonData) {
   // Civ.resources[263] names an existing starting unit, independently of its production unlock.

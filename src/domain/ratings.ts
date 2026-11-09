@@ -42,35 +42,32 @@ export function strengths(c: Civ): [string[], string[]] {
 }
 
 /**
- * 各兵种类型的反制单位（中文名，须与 units.json 的 zh 精确匹配或为其升级线常用名）。
- * 战术补充文案不含单位名，过滤后仍可展示。
+ * 各兵种类型的反制单位 id（units.json）。id 化后不再依赖中文显示名；
+ * 同名 Sicilians 变体（1786-1788）不列入，规范项为 93/358/359。
  */
-export const COUNTER_UNITS: Record<CivType, string[]> = {
-  cav: ['长矛兵', '长枪兵', '长戟兵', '骆驼兵', '重装骆驼兵', '帝王骆驼兵', '骆驼斥候', '僧侣'],
-  arch: [
-    '掷矛手',
-    '精锐掷矛手',
-    '帝王掷矛手',
-    '攻城锤',
-    '中型冲车',
-    '重型冲车',
-    '轻型投石车',
-    '中型投石车',
-    '重型投石车',
-    '侦察骑兵',
-    '轻型骑兵',
-    '翼骑兵',
-    '骑士',
-    '重装骑士',
-    '游侠',
-  ],
-  inf: ['步弓手', '弩手', '劲弩手', '火枪手', '骑士', '重装骑士', '游侠', '骑射手', '重装骑射手', '弩炮', '重型弩炮'],
-  naval: ['火艨艟', '喷火船', '快速喷火船', '箭船', '战船', '大型战舰'],
-  monk: ['轻型骑兵', '翼骑兵', '鹰斥候', '鹰勇士', '精锐鹰勇士'],
-  siege: ['侦察骑兵', '轻型骑兵', '翼骑兵', '骑士', '重装骑士', '游侠'],
+export const COUNTER_UNITS: Readonly<Record<CivType, readonly number[]>> = {
+  cav: [93, 358, 359, 329, 330, 207, 1755, 125],
+  arch: [7, 6, 1155, 1258, 422, 548, 280, 550, 588, 448, 546, 441, 38, 283, 569],
+  inf: [4, 24, 492, 5, 38, 283, 569, 39, 474, 279, 542],
+  naval: [1103, 529, 532, 539, 21, 442],
+  monk: [546, 441, 751, 753, 752],
+  siege: [448, 546, 441, 38, 283, 569],
   def: [],
-  eco: ['民兵', '侦察骑兵'],
+  eco: [74, 448],
 };
+
+/** 反制补充文案用到的单位组；与 COUNTER_UNITS 分离，避免把「文案补充」误当成完整反制表。 */
+export const COUNTER_EXTRA_GROUPS = {
+  cavalry: [448, 38],
+  lightCavalry: [546, 441, 1707],
+  horseArcher: [39, 474],
+  spearman: [93],
+  monk: [125],
+  ram: [1258, 422, 548],
+  onager: [280, 550, 588],
+  rangedInfantry: [4, 24, 492, 5],
+  scorpion: [279],
+} as const satisfies Record<string, readonly number[]>;
 
 export const COUNTER_EXTRA: Record<CivType, string> = {
   cav: '用城墙/长矛阵限制机动；僧侣转化也有效',
@@ -83,18 +80,6 @@ export const COUNTER_EXTRA: Record<CivType, string> = {
   eco: '早期骚扰打断其发育节奏，别让其速城堡',
 };
 
-/** @deprecated 保留给旧引用；新逻辑用 COUNTER_UNITS + filterCounterUnits */
-export const COUNTERS: Record<CivType, string> = {
-  cav: '长矛兵/戟兵 + 骆驼 + 僧侣转化；用城墙/长矛阵限制机动',
-  arch: '散兵/精英散兵 + 冲车/投石；侦察骑兵或骑士快速贴脸；轻骑兵绕后',
-  inf: '弓手/手炮远程放风筝；用骑兵或骑射拉扯；城堡期蝎子克制密集步兵',
-  naval: '在水图早出火船/战舰抢水；陆图则无需担心，压制其陆军',
-  monk: '轻骑兵/鹰战士猎杀僧侣；分散阵型；具有转化抗性的单位',
-  siege: '骑兵/轻骑兵直切攻城武器；保持冲车阵型分散',
-  def: '避免强攻城墙塔楼，转为经济压制与攻城武器推进；多点骚扰',
-  eco: '早期骚扰（侦察/民兵）打断其发育节奏，别让其速城堡',
-};
-
 export const EMPTY_COUNTERS_COPY = '当前文明暂无可用反制推荐';
 
 export interface CounterUnit {
@@ -103,18 +88,13 @@ export interface CounterUnit {
   nameEn: string;
 }
 
-/** 本方文明能否造出该中文名单位（精确匹配 zh） */
-export function civCanBuildZh(civEn: string, nameZh: string, units: { id: number; zh: string; en: string; civs: string[] }[]): boolean {
-  return units.some((u) => u.zh === nameZh && u.civs.includes(civEn));
-}
-
 /** 按本方科技树过滤反制单位；造不出的藏掉（v1，不灰显） */
 export function filterCounterUnits(meEn: string, oppTypes: CivType[], units: { id: number; zh: string; en: string; civs: string[] }[]): CounterUnit[] {
   const seen = new Set<number>();
   const out: CounterUnit[] = [];
   for (const t of oppTypes) {
-    for (const zh of COUNTER_UNITS[t] ?? []) {
-      const u = units.find((x) => x.zh === zh && x.civs.includes(meEn));
+    for (const id of COUNTER_UNITS[t] ?? []) {
+      const u = units.find((x) => x.id === id && x.civs.includes(meEn));
       if (u && !seen.has(u.id)) {
         seen.add(u.id);
         out.push({ id: u.id, nameZh: u.zh, nameEn: u.en });
