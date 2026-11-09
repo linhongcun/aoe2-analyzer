@@ -7,7 +7,7 @@ import { HOUSE, type BuildOrder } from '../../domain/buildOrder';
 import type { BuildTimeline } from '../../domain/buildSim';
 import { practiceAction, practiceProgress, practiceSteps, type PracticeNames, type PracticeStep } from '../../domain/buildPractice';
 import { publicBuildLicense } from '../../domain/sourcePresentation.mjs';
-import { simSupport } from '../../domain/simSupport';
+import { simSupport, simSupportNote, simSupportTitle, simSupportWarning } from '../../domain/simSupport';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { mmss, noteParts, rowTime, type TimelineQuery } from './timelineModel';
@@ -210,6 +210,8 @@ export default function BuildPracticeView({
             isEnabled={simSupport}
             disabledGroup="暂不支持 · 文明加成尚未计入"
             disabledNote="文明加成尚未计入"
+            disabledNoteFor={simSupportNote}
+            disabledTitleFor={simSupportTitle}
           />
         </div>
         <p className="note">
@@ -226,7 +228,7 @@ export default function BuildPracticeView({
         </p>
         {unsupported && (
           <p className="bp-warning" role="status" data-testid="practice-civ-warning">
-            链接里的{selectedCiv}加成尚未计入，已按通用计算。以下数字不是该文明的完整估算。
+            {simSupportWarning(query.civ, selectedCiv)}以下数字不是该文明的完整估算。
           </p>
         )}
         {query.variant && <p className="note">链接的{query.variant === 'aggr' ? '激进' : '保守'}变体尚无独立步骤数据，当前仍按本开局的相同步骤估算。</p>}

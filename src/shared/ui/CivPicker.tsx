@@ -31,6 +31,10 @@ export interface CivPickerProps {
   /** 底部组标题与禁用行小字（配合 isEnabled） */
   disabledGroup?: string;
   disabledNote?: string;
+  /** 可选：按文明返回禁用原因；优先于 disabledNote，返回空则回退。 */
+  disabledNoteFor?: (en: string) => string | undefined;
+  /** 可选：按文明返回 title/aria 的完整原因；缺省用 disabledNoteFor/disabledNote。 */
+  disabledTitleFor?: (en: string) => string | undefined;
 }
 
 /** 文明是否匹配搜索词（ql 已 trim + 小写）；列表过滤与 Enter 共用同一条规则 */
@@ -63,7 +67,20 @@ export function enterTarget(
 type Row =
   { kind: 'head'; key: string; dlc: number | null; title: string } | { kind: 'opt'; key: string; en: string; c?: Civ } | { kind: 'dis'; key: string; c: Civ };
 
-export function CivPicker({ id, value, onChange, allowed, none, label, suffix, isEnabled, disabledGroup, disabledNote }: CivPickerProps) {
+export function CivPicker({
+  id,
+  value,
+  onChange,
+  allowed,
+  none,
+  label,
+  suffix,
+  isEnabled,
+  disabledGroup,
+  disabledNote,
+  disabledNoteFor,
+  disabledTitleFor,
+}: CivPickerProps) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [act, setAct] = useState(0);
@@ -229,7 +246,9 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix, i
                     </div>
                   );
                 if (r.kind === 'dis') {
-                  const tip = `${r.c.zh}：${disabledNote ?? '暂不可选'}，暂不能选`;
+                  const note = disabledNoteFor?.(r.c.en) ?? disabledNote;
+                  const full = disabledTitleFor?.(r.c.en) ?? note;
+                  const tip = `${r.c.zh}：${full ?? '暂不可选'}，暂不能选`;
                   return (
                     <div
                       key={r.key}
@@ -245,7 +264,7 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix, i
                       <span className="cp-name">
                         {r.c.zh}
                         <small>{r.c.en}</small>
-                        {disabledNote && <small className="cp-dis-note">{disabledNote}</small>}
+                        {note && <small className="cp-dis-note">{note}</small>}
                       </span>
                       <Ban size={16} aria-hidden />
                     </div>
