@@ -1,4 +1,4 @@
-import { mkdtempSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -18,12 +18,53 @@ describe('#285 每份内容和生成 JSON 都有可诊断的 schema', () => {
         const path = join(directory, entry.name);
         return path.startsWith('src/content/schema') ? [] : entry.isDirectory() ? files(path) : path.endsWith('.json') ? [path] : [];
       });
-    expect(result.files.sort()).toEqual([...files('src/content'), ...files('src/data')].sort());
+    expect(result.files.sort()).toEqual([...files('src/content'), ...files('src/data'), 'src/features/civs/history.json'].sort());
     expect(result.files.length).toBeGreaterThan(0);
     const migration = ratchetProblems(result.problems);
     expect(migration.errors).toEqual([]);
     expect(migration.warnings).toHaveLength(LEGACY_SOURCE_BASELINE.length);
     expect(JSON.stringify(scouting)).toBe(before);
+  });
+
+  it('文明历史条目进入 schema，缺字段/坏 URL/多余字段会失败', () => {
+    const history = JSON.parse(readFileSync('src/features/civs/history.json', 'utf8')) as Record<string, Record<string, unknown>>;
+    const file = 'src/features/civs/history.json';
+    const mutate = (fn: (entry: Record<string, unknown>) => void) => {
+      const copy = JSON.parse(JSON.stringify(history)) as Record<string, Record<string, unknown>>;
+      fn(copy.Armenians!);
+      return copy;
+    };
+    expect(validateDocument(file, history).valid).toBe(true);
+    expect(
+      validateDocument(
+        file,
+        mutate((entry) => delete entry.checkedOn),
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateDocument(
+        file,
+        mutate((entry) => (entry.extra = 'x')),
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateDocument(
+        file,
+        mutate((entry) => ((entry.source as Record<string, unknown>).url = 'file:///x')),
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateDocument(
+        file,
+        mutate((entry) => (entry.paragraphs = ['a', 'b', 'c'])),
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateDocument(
+        file,
+        mutate((entry) => (entry.summary = '')),
+      ).valid,
+    ).toBe(false);
   });
 
   it('新增未登记 JSON 不能被通用 object schema 放过', () => {

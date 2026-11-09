@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhongcun.github.io/aoe2-analyzer/schema/content-civ-history.json",
+  "title": "AoE2 civilization history entries",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "required": [
+      "summary",
+      "paragraphs",
+      "source",
+      "checkedOn"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "summary": {
+        "type": "string",
+        "format": "source-text",
+        "pattern": "\\S"
+      },
+      "paragraphs": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 2,
+        "items": {
+          "type": "string",
+          "format": "source-text",
+          "pattern": "\\S"
+        }
+      },
+      "source": {
+        "type": "object",
+        "required": [
+          "label",
+          "url"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "format": "source-text",
+            "pattern": "\\S"
+          },
+          "url": {
+            "$ref": "common.defs.json#/$defs/publicUrl"
+          }
+        }
+      },
+      "checkedOn": {
+        "type": "string",
+        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+      }
+    }
+  }
+}

@@ -28,7 +28,8 @@ export const CONTENT_ACQUISITIONS = {
 export type ContentMode = Exclude<keyof typeof CONTENT_MODES, 'all'>;
 export type ContentKind = Exclude<keyof typeof CONTENT_KINDS, 'all'>;
 export type ContentAcquisition = keyof typeof CONTENT_ACQUISITIONS;
-export type ContentEvidenceStatus = 'verified' | 'unverified' | 'stale' | 'conflict';
+export const CONTENT_EVIDENCE_STATUSES = ['verified', 'unverified', 'stale', 'conflict'] as const;
+export type ContentEvidenceStatus = (typeof CONTENT_EVIDENCE_STATUSES)[number];
 export interface ContentEvidence {
   id: string;
   url: string;
