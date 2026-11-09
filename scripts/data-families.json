@@ -30,7 +30,7 @@
       "generator": "scripts/market_build.py",
       "pin": "dat",
       "check": ["python3 scripts/market_build.py --check"],
-      "tests": ["tests/py/test_market_data.py", "tests/unit/market215.test.ts", "tests/unit/marketFees745.test.ts"],
+      "tests": ["tests/py/test_market_data.py", "tests/unit/market215.test.ts", "tests/unit/marketFees745.test.ts", "tests/unit/marketFeeCross834.test.ts"],
       "auditStatus": "reproduced-by-check"
     },
     {
