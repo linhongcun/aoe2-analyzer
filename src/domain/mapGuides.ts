@@ -4,6 +4,9 @@ export interface MapGuide {
   builds: string[];
   civs: [string, string][];
   sources: [string, string][];
+  /** 已知核对日期；没有记录时为 null，status 标 unverified，不把来源发布日期伪装成核对日。 */
+  checkedAt: string | null;
+  status: 'verified' | 'unverified' | 'editorial';
 }
 
 /** 保留原有四类地图的已核对攻略和链接。 */
@@ -17,6 +20,8 @@ export const mapGuides: Record<string, MapGuide> = {
       ['Britons', '弓手路线清晰，城堡时代可利用射程优势。'],
     ],
     sources: [['AOE2 Guide · Arabia（2021-06-15）', 'https://aoe2.guide/arabia/']],
+    checkedAt: null,
+    status: 'unverified',
   },
   arena: {
     resources: '出生自带石墙，前期食物和部分矿点在墙内，侧后方通常有树林；墙外资源和圣物需要争夺。墙内空间有限，扩张前先侦察。',
@@ -27,6 +32,8 @@ export const mapGuides: Record<string, MapGuide> = {
       ['Bohemians', '僧侣和火药路线适合城堡之后的推进。'],
     ],
     sources: [['AOE2 Guide · Arena（2024-09-30）', 'https://aoe2.guide/arena/']],
+    checkedAt: null,
+    status: 'unverified',
   },
   nomad: {
     resources: '开局没有城镇中心，村民位置分散。优先选择靠树林、能取得食物的落脚点；海岸提供捕鱼机会，野猪等陆上食物要靠探索寻找。',
@@ -37,6 +44,8 @@ export const mapGuides: Record<string, MapGuide> = {
       ['Koreans', '船只和战车方向可结合邻近敌人的位置选择。'],
     ],
     sources: [['Sitaux · Nomad（2026 网站，2026-10-18 核对）', 'https://sitaux.com/nomad/']],
+    checkedAt: '2026-10-18',
+    status: 'verified',
   },
   islands: {
     resources: '岛屿之间缺少陆路，渔场成为重要食物来源。陆上树林同时负担码头、渔船、军舰和房屋，木材调配比纯陆图更紧；猪、岸鱼和树林位置以实图侦察为准。',
@@ -51,5 +60,7 @@ export const mapGuides: Record<string, MapGuide> = {
       ['Sitaux · Water Maps（2026 网站，2026-10-18 核对）', 'https://sitaux.com/water-maps/'],
       ['Survivalist 开局整理 · AoE Buddy（2026-10-18 核对）', 'https://aoebuddy.com/build-orders/18-fishing-ship-build'],
     ],
+    checkedAt: '2026-10-18',
+    status: 'verified',
   },
 };

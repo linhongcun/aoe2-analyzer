@@ -6,6 +6,7 @@
 API 快照是经 JSON 解析后以 UTF-8 / 两空格缩进归档的数据，不声称保存原 HTTP 字节。
 """
 import argparse
+from datetime import date
 import json
 from pathlib import Path
 import re
@@ -37,7 +38,7 @@ def read_snapshot(pin, root=ROOT):
     return indexed
 
 
-def build_maps(source, previews, chinese, english, metadata):
+def build_maps(source, previews, chinese, english, metadata, require_provenance=False):
     assets = source['assets']
     if set(previews) != set(assets):
         raise ValueError('预览清单与固定图标来源不一致，请先生成 map_previews.py')
@@ -70,6 +71,27 @@ def build_maps(source, previews, chinese, english, metadata):
         scouting, opening = details.get('scouting', ''), details.get('opening', '')
         if not isinstance(scouting, str) or not isinstance(opening, str):
             raise ValueError(f'{identity}: 侦察和开局提示必须为文本')
+        if require_provenance:
+            editorial_source, checked_at = details.get('source'), details.get('checkedAt')
+        else:
+            editorial_source, checked_at = details.get('source', 'editorial'), details.get('checkedAt', '2026-11-09')
+        if not isinstance(editorial_source, str) or not (
+            editorial_source in ('editorial', 'civs.json')
+            or (
+                re.fullmatch(r'https://[^\s]+', editorial_source)
+                and not any(ord(char) < 0x20 for char in editorial_source)
+                and urlparse(editorial_source).netloc
+            )
+        ):
+            raise ValueError(f'{identity}: 编辑文案来源必须是 editorial、civs.json 或有效 https URL')
+        try:
+            parsed_date = (
+                date.fromisoformat(checked_at) if isinstance(checked_at, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', checked_at) else None
+            )
+        except ValueError:
+            parsed_date = None
+        if parsed_date is None or parsed_date > date.today():
+            raise ValueError(f'{identity}: 核对日期必须是 YYYY-MM-DD 且不晚于今天')
         preview = previews[identity]
         expected = {
             'image': f'img/maps/{identity}.webp',
@@ -88,6 +110,8 @@ def build_maps(source, previews, chinese, english, metadata):
             'featured': featured,
             'scouting': scouting,
             'opening': opening,
+            'source': editorial_source,
+            'checkedAt': checked_at,
             'preview': expected,
         }
         ordered.append(((not featured, priority, en['mapName'].casefold(), identity), item))
@@ -107,6 +131,9 @@ def main():
         previews = json.loads((ROOT / 'src/data/mapPreviews.json').read_text(encoding='utf-8'))
         metadata_file = ROOT / 'scripts/map_catalog_meta.json'
         metadata = json.loads(metadata_file.read_text(encoding='utf-8')) if metadata_file.exists() else {}
+        for identity, details in metadata.items():
+            if not isinstance(details, dict) or 'source' not in details or 'checkedAt' not in details:
+                raise ValueError(f'{identity}: 分类元数据必须显式提供 source/checkedAt')
         catalog = {
             'meta': {
                 'checkedAt': pin['date'],
@@ -114,7 +141,7 @@ def main():
                 'previewCommit': source['commit'],
                 'copyright': '游戏图像及游戏内地图说明 © Microsoft；AoE2 Companion 整理。',
             },
-            'maps': build_maps(source, previews, chinese, english, metadata),
+            'maps': build_maps(source, previews, chinese, english, metadata, require_provenance=True),
         }
         target = ROOT / 'src/data/mapCatalog.json'
         generated = (json.dumps(catalog, ensure_ascii=False, indent=2) + '\n').encode()

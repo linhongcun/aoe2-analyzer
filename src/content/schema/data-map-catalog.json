@@ -87,9 +87,28 @@
             },
             "required": ["image", "sourceUrl", "width", "height"],
             "additionalProperties": false
+          },
+          "source": {
+            "anyOf": [
+              {
+                "const": "editorial"
+              },
+              {
+                "const": "civs.json"
+              },
+              {
+                "type": "string",
+                "format": "public-url",
+                "pattern": "^https://"
+              }
+            ]
+          },
+          "checkedAt": {
+            "type": "string",
+            "format": "iso-date-past"
           }
         },
-        "required": ["id", "name", "en", "description", "group", "featured", "scouting", "opening", "preview"],
+        "required": ["id", "name", "en", "description", "group", "featured", "scouting", "opening", "source", "checkedAt", "preview"],
         "additionalProperties": false
       },
       "minItems": 1
