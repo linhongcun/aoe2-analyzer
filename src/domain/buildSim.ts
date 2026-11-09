@@ -869,15 +869,15 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           if (!job) continue;
           const u = eco.units[job.unit]!;
           const clsT = !legacy && u.class !== undefined ? (m.timeMul['class:' + u.class] ?? 1) : 1;
-          const base = u.timeAt?.[String(b)] ?? u.trainTime;
+          const trainBase = u.timeAt?.[String(b)] ?? u.trainTime;
           const unitT = m.timeMul['unit:' + job.unit] ?? 1;
-          const rate = m.rate['unit:' + b] ?? 1;
+          const workRate = m.rate['unit:' + b] ?? 1;
           active = {
             job,
-            left: trainingCycle(base, [
+            left: trainingCycle(trainBase, [
               { kind: 'train', op: 'mul', v: unitT },
               { kind: 'train', op: 'mul', v: clsT },
-              { kind: 'work', op: 'mul', v: rate },
+              { kind: 'work', op: 'mul', v: workRate },
             ]).cycle,
           };
           unitBusy.set(key, active);

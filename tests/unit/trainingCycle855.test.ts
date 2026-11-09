@@ -31,10 +31,14 @@ describe('共享训练周期求值（issue 855）', () => {
     expect(trainingCycle(100, ops).seconds).toBe(150);
   });
 
-  it('只有乘法时 cycle 与逐步参照完全一致', () => {
+  it('只有乘法时 cycle 与逐步参照完全一致，seconds 保留分离累计顺序', () => {
     const ops = [train('mul', 1.1), work('mul', 1.0909), train('mul', 1.0833), work('mul', 0.9)];
     let expected = 100;
     for (const op of ops) expected = op.kind === 'train' ? expected * op.v : expected / op.v;
-    expect(trainingCycle(100, ops).cycle).toBe(expected);
+    const result = trainingCycle(100, ops);
+    expect(result.cycle).toBe(expected);
+    // production 的独立累计：train 依次相乘，work 依次相乘，最后才相除。
+    expect(result.seconds).toBe((100 * 1.1 * 1.0833) / (1.0909 * 0.9));
+    expect(result.seconds).not.toBe(result.cycle);
   });
 });

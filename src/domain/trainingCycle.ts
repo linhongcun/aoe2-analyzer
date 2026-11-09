@@ -8,7 +8,11 @@ export interface TrainingCycleOp {
 }
 
 export interface TrainingCycle {
-  /** 按操作顺序直接作用在一个周期上的结果；route/castle/buildSim 使用。 */
+  /**
+   * 按操作顺序直接作用在一个周期上的结果；route/castle/buildSim 使用。
+   * 前置条件：work 操作只有 `mul`（这些调用点也只产生 mul）。含 work set/add 或
+   * train set 时，`cycle` 不保证等于 `seconds`，请使用 `seconds`。
+   */
   cycle: number;
   /** train 与 work 分开累计后一次相除的结果；production 使用，保持原算术顺序。 */
   seconds: number;
