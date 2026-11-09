@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import eco from '../../src/data/eco.json';
+import civs from '../../src/data/civs.json';
 import units from '../../src/data/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, WALK, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
@@ -115,22 +116,7 @@ describe('#19 分享卡 buildShareCard', () => {
 
   it('分享卡不再维护文明名字面量白名单', () => {
     const source = readFileSync('src/features/builds/shareCard.ts', 'utf8');
-    for (const civ of [
-      'Poles',
-      'Romans',
-      'Malians',
-      'Varangians',
-      'Tatars',
-      'Sicilians',
-      'Portuguese',
-      'Wei',
-      'Bengalis',
-      'Armenians',
-      'Georgians',
-      'Mayans',
-      'Shu',
-    ])
-      expect(source, civ).not.toContain(`'${civ}'`);
+    for (const civ of civs as { en: string }[]) expect(source, civ.en).not.toContain(`'${civ.en}'`);
     expect(source).toContain('shareCardNotes');
   });
 });

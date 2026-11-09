@@ -3,7 +3,7 @@
  * 原则：卡片不自己算，和页面用同一套函数——rangeLabel（#56）、pickSummaryBottleneck + summaryText（#57）、formatClock。
  * 纯函数，不碰 DOM；数字全部来自 simulateBuild → buildView。
  */
-import { ECO as ecoRaw } from '../../data/eco';
+import { ECO } from '../../data/eco';
 import { formatClock } from '../../domain/formatTime';
 import { shareCardNotes } from '../../domain/buildSimNotes';
 import { RES_ZH, rangeLabel, summaryParts, summaryText, type AgeMark, type TimelineView } from './timelineModel';
@@ -77,7 +77,7 @@ export function buildShareCard(i: ShareInput): ShareCardModel {
           : sum.main.replace(/ 约 .*$/, '');
   const head = `${i.civZh}·${shortBoName(i.boNameZh)}`;
   const title = reached ? `${head}，约 ${formatClock(target!.reachAt)} 到${i.targetZh}，${phrase}` : `${head}，60 分钟内到不了${i.targetZh}`;
-  const notes = shareCardNotes(ecoRaw, i.civEn, i.boId);
+  const notes = shareCardNotes(ECO, i.civEn, i.boId);
   return {
     title,
     cells: [
