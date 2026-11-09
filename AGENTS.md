@@ -159,8 +159,12 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 ## 提交身份
 
-- 不要用 `@users.noreply.github.com` 邮箱提交（会把提交归到别的 GitHub 用户）。用仓库现有的身份或维护者指定的身份，提交前 `git config user.email` 确认。
-- AI 代理参与的实现，在本地 commit message 与 PR 正文末尾保留署名 trailer：`Co-authored-by: DeepSeek Harness <noreply@deepseek.com>`。author/committer 仍用仓库身份；squash 合并后 GitHub 的 author 是合并者，按 Cursor 等既有做法通过 co-author 记录代理参与。
-- `noreply@deepseek.com` 目前没有绑定 GitHub 账号（DeepSeek 在 GitHub 只有组织 `deepseek-ai`，组织不能归属提交），所以该 trailer 只显示文字署名、不产生头像/链接徽章；若维护者后续建立 GitHub App 或专用账号，再把邮箱换成可归属的形态并同步更新本文件与 `CONTRIBUTING.md`。
-- 不得用他人或其他账号的 noreply 邮箱冒充归属；代理署名只用于诚实记录参与方。
+- 不要用 `@users.noreply.github.com` 邮箱做 git author（会把提交归到别的 GitHub 用户）。用仓库现有的身份或维护者指定的身份，提交前 `git config user.email` 确认。不修改用户的 git author 配置。
+- `Co-authored-by` 只记录这次实际参与代码、提交说明或 PR 正文的 coding agent。coding agent 指产品或执行工具。底层模型名不是参与者。只写实际参与者；多方都实际参与时，每个参与者各写一行。认不出执行工具时不写代理 trailer，空缺不得填成 DeepSeek Harness，也不得填成任何其他已知身份。
+- 下面每行只在对应产品实际参与时使用，整段不是提交模板：
+  - Claude Code：`Co-Authored-By: Claude Code <noreply@anthropic.com>`
+  - Codex：`Co-authored-by: Codex <noreply@openai.com>`
+  - DeepSeek Harness：`Co-authored-by: DeepSeek Harness <noreply@deepseek.com>`。这是本仓库 [#778](https://github.com/linhongcun/aoe2-analyzer/issues/778) 的项目约定。已查阅的 DeepSeek 官方文档没有给出这一固定身份。该邮箱未绑定 GitHub 账号，只有文字署名。
+  - Cursor：git author 已是 `Cursor Agent <cursoragent@cursor.com>` 时不必再写同一身份。否则仅在 Cursor 实际参与时写 `Co-authored-by: Cursor Agent <cursoragent@cursor.com>`。Cursor 帮助页中的 Made with Cursor 是 Cursor 自己的 trailer，不表示 Claude Code、Codex 或 DeepSeek Harness 参与过。
+- 邮箱、名称和历史别名的核实记录以 [CONTRIBUTING「AI 代理署名」](CONTRIBUTING.md#ai-代理署名) 为准；两处冲突时以 CONTRIBUTING 为准。author/committer 仍用仓库身份；squash 合并后 GitHub 的 author 是合并者。不得用他人或其他账号的 noreply 邮箱冒充归属。
 - 不要提交 `.dat`、`scripts/.cache/`、`dist/`、截图 png、`node_modules`。

@@ -114,15 +114,37 @@ hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归
 
 ### AI 代理署名
 
-AI 代理参与的实现，在本地 commit message 和 PR 正文末尾保留署名 trailer：
+本地 commit 与 PR 正文末尾的 `Co-authored-by` 记录这次实际写下代码、提交说明或 PR 正文的 coding agent。coding agent 是产品或执行工具。Claude Code、Codex、DeepSeek Harness 各用各的一行。只写实际参与的产品；多方都实际参与时每个产品各写一行。底层模型名不是参与者。
 
-```
-Co-authored-by: DeepSeek Harness <noreply@deepseek.com>
-```
+- 没有参与的 agent 不写。
+- 认不出执行工具时不添加代理 trailer。空缺不得填成 DeepSeek Harness，也不得填成任何其他已知身份。
+- 下面每一条单独使用。整段不是提交模板。
+- author/committer 仍用仓库身份。squash 合并后 GitHub 的 author 是合并者。不修改用户的 git author 配置。不用他人或其他账号的 noreply 邮箱冒充归属。
+- Git 对 trailer 键名大小写不敏感。各行保持来源中的大小写。
 
-- author/committer 仍是仓库身份（squash 合并后 GitHub 的 author 是合并者）；co-author 只记录代理参与，与 Cursor 等既有做法一致。
-- `noreply@deepseek.com` 目前未绑定 GitHub 账号（DeepSeek 在 GitHub 只有组织 `deepseek-ai`，组织不能归属提交），因此 GitHub 只显示文字 co-author、没有头像/链接徽章。换成可归属的 GitHub App bot 或官方账号后，同步更新本节与 `AGENTS.md`。
-- 不得用他人或其他账号的 noreply 邮箱冒充归属；署名仅用于诚实记录参与方。
+**Claude Code**（这次的执行工具是 Claude Code）
+
+`Co-Authored-By: Claude Code <noreply@anthropic.com>`
+
+邮箱来自 Claude Code 官方 [attribution.commit](https://code.claude.com/docs/en/settings-reference)。官方默认 trailer 使用 `noreply@anthropic.com`，名称默认写成当时的模型；模型不能识别为 Claude 模型时，官方名称写 `Claude Code`。本仓库按产品归属，名称使用 Claude Code。本仓库提交 `799aff8330cd4be08b65c92affe373f7575fafa3` 的 GitHub `Commit.authors` 把这一姓名和邮箱解析为用户 `claude`。
+
+**Codex**（这次的执行工具是 Codex）
+
+`Co-authored-by: Codex <noreply@openai.com>`
+
+OpenAI Codex 在启用 git attribution 时使用这一行，见源码 [`codex-rs/ext/git-attribution/src/world_state.rs`](https://github.com/openai/codex/blob/main/codex-rs/ext/git-attribution/src/world_state.rs) 的 `ENABLED_INSTRUCTIONS`。公开提交 [`95e92df15ff27d4651afd1c9497d8f2c673651be`](https://github.com/Migz93/pacearr/commit/95e92df15ff27d4651afd1c9497d8f2c673651be) 将该邮箱解析为 GitHub 用户 `codex`。本仓库 `7844d93fe646b91b0eeec9c6ff867e6c25929c62` 写过 `Codex <codex@openai.com>`，同样解析为用户 `codex`。那是同一产品已经出现过的邮箱。新提交写上面的官方行；两行不要同时出现。
+
+**DeepSeek Harness**（这次的执行工具是 DeepSeek Harness）
+
+`Co-authored-by: DeepSeek Harness <noreply@deepseek.com>`
+
+这是本仓库 [#778](https://github.com/linhongcun/aoe2-analyzer/issues/778) 定下的项目约定，用来表示执行工具 DeepSeek Harness。已查阅的 DeepSeek Harness 官方文档，以及 `deepseek-ai/deepseek-harness` 里搜到的提交样本，都没有给出这个固定姓名和邮箱。提交 `e6c5d04af629a082540d1187da80117f71019ee6` 与 `799aff8330cd4be08b65c92affe373f7575fafa3` 上，该邮箱的 GitHub 用户仍为空，页面只显示文字署名。以后若有可归属的官方账号或 GitHub App，再同时改本节与 `AGENTS.md`。
+
+**Cursor**（这次的执行工具是 Cursor）
+
+`Co-authored-by: Cursor Agent <cursoragent@cursor.com>`
+
+本仓库提交 `7b0d0e1e14f6e6b5a76749d2e29dcef4235736b8` 将该邮箱解析为 GitHub 用户 `cursoragent`。git author 已经是这个身份时，不必再写同一行。Cursor 帮助页说明产品会另加 Made with Cursor trailer（<https://cursor.com/help/integrations/git>）。那是 Cursor 自己的标记，不代替上面三行，也不表示那三个产品参与过。
 
 ## 数据来源
 
