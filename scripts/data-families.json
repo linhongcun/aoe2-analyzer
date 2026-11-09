@@ -1,0 +1,117 @@
+{
+  "_doc": "issue 820 数据族索引：每个 .dat 派生文件的生成器、pin、复现命令、测试与审计状态。pin=\"dat\" 指向 scripts/data_sources.json 的 sources.dat；pin=\"manual\" 表示手工输入。只读元数据，不做运行时加载。",
+  "families": [
+    {
+      "file": "src/data/effects.json",
+      "generator": "scripts/effects_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/effects_build.py", "git diff --exit-code -- src/data/effects.json", "npx vite-node scripts/effects_audit.ts --check"],
+      "tests": ["tests/py/test_data_update486.py", "tests/unit/datEffects.test.ts", "tests/unit/effectsManual.test.ts"],
+      "auditStatus": "audit-doc-check"
+    },
+    {
+      "file": "src/data/eco.json",
+      "generator": "scripts/eco_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/eco_build.py", "git diff --exit-code -- src/data/eco.json docs/ECO-DATA.md"],
+      "tests": ["tests/py/test_data_update486.py", "tests/unit/dataUpdate486.test.ts", "tests/unit/ecoView796.test.ts", "tests/unit/ecoPayoff214.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/construction.json",
+      "generator": "scripts/construction_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/construction_build.py --check"],
+      "tests": ["tests/py/test_construction227.py", "tests/unit/construction227.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/market.json",
+      "generator": "scripts/market_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/market_build.py --check"],
+      "tests": ["tests/py/test_market_data.py", "tests/unit/market215.test.ts", "tests/unit/marketFees745.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/garrison.json",
+      "generator": "scripts/garrison_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/garrison_build.py --check"],
+      "tests": ["tests/py/test_garrison218.py", "tests/unit/garrison218.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/garrison_general.json",
+      "generator": "scripts/garrison_general_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/garrison_general_build.py --check"],
+      "tests": ["tests/py/test_garrison_general224.py", "tests/unit/garrisonGeneral224.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/garrison_techs.json",
+      "generator": "scripts/garrison_general_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/garrison_general_build.py --check"],
+      "tests": ["tests/py/test_garrison_general224.py", "tests/unit/garrisonTechBudget282.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/garrison_healing.json",
+      "generator": "scripts/garrison_healing_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/garrison_healing_build.py --check"],
+      "tests": ["tests/py/test_garrison_healing229.py", "tests/unit/garrisonHealing229.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/trade_income.json",
+      "generator": "scripts/trade_income_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/trade_income_build.py --check"],
+      "tests": ["tests/py/test_trade_income226.py", "tests/unit/tradeIncome226.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/relic_income.json",
+      "generator": "scripts/relic_income_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/relic_income_build.py --check"],
+      "tests": ["tests/py/test_relic_income238.py", "tests/unit/relicIncome238.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/generate_resource.json",
+      "generator": "scripts/generate_resource_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/generate_resource_build.py --check"],
+      "tests": ["tests/py/test_generate_resource383.py"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/charge_attack.json",
+      "generator": "scripts/charge_attack_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/charge_attack_build.py --check"],
+      "tests": ["tests/py/test_charge_attack710.py", "tests/unit/romanCharge710.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/team_bonuses.json",
+      "generator": "scripts/team_bonuses_build.py",
+      "pin": "dat",
+      "check": ["python3 scripts/team_bonuses_build.py --check"],
+      "tests": ["tests/py/test_team_bonuses228.py", "tests/unit/teamBonuses228.test.ts"],
+      "auditStatus": "reproduced-by-check"
+    },
+    {
+      "file": "src/data/garrison_hosts.json",
+      "generator": null,
+      "pin": "manual",
+      "check": [],
+      "tests": ["tests/py/test_garrison_general224.py", "tests/py/test_garrison_healing229.py"],
+      "auditStatus": "manual-input"
+    }
+  ]
+}
