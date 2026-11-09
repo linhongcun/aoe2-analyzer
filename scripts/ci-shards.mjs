@@ -158,11 +158,20 @@ function validateSnapshot(snapshot) {
   return snapshot;
 }
 
+export function missingWeightFiles(cases, weights = {}) {
+  const files = new Set(canonicalCases(cases).map((value) => value.file));
+  return [...files].filter((file) => !(Number.isFinite(weights.files?.[file]) && weights.files[file] > 0)).sort((a, b) => a.localeCompare(b));
+}
+
 export function buildShardManifest({ cases, sourceBuild = null, shardCount = 4, weights = {} }) {
   const allCases = canonicalCases(cases);
   assert.ok(allCases.length > 0, 'Empty global browser collection');
   assert.ok(Number.isSafeInteger(shardCount) && shardCount >= 1 && shardCount <= 4, 'Invalid browser shard count');
   if (sourceBuild !== null) validateSnapshot(sourceBuild);
+  const missing = missingWeightFiles(allCases, weights);
+  if (missing.length && weights.files && Object.keys(weights.files).length) {
+    console.error(`Browser weights missing for ${missing.length} file(s): ${missing.join(', ')}`);
+  }
   const shards = Array.from({ length: shardCount }, (_, index) => ({ index: index + 1, cases: [], units: [], estimatedMs: 0 }));
   for (const unit of atomicUnits(allCases, weights)) {
     const target = [...shards].sort((a, b) => a.estimatedMs - b.estimatedMs || a.index - b.index)[0];
@@ -181,6 +190,7 @@ export function buildShardManifest({ cases, sourceBuild = null, shardCount = 4, 
       allCases,
       caseDigest: casesDigest(allCases),
       shards,
+      missingWeightFiles: missing,
       weightSource: weights.source ?? 'explicit conservative seeds; no measured speedup claimed',
     },
     { allowPlanning: true },
