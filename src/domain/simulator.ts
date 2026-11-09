@@ -1,6 +1,7 @@
 /** 科技模拟器效果引擎（纯函数，无 UI 依赖） */
 import type { Cost, Effect, SimStats, StatSet, Tech, Trees, Unit } from './types';
 import { CIV_BONUSES, CIV_TECH_EXTRAS, TEAM_BONUSES, TECH_EFFECTS, TEXT_ONLY_TECHS, genericFx } from './effects';
+import { applyEffectValue } from './numericEffects';
 
 export interface SimContext {
   techs: Tech[];
@@ -55,9 +56,7 @@ export function applyEffects(S: StatSet, list: readonly Effect[]): void {
         if (S.bonus[e.vs] !== undefined) S.bonus[e.vs] = S.bonus[e.vs]! * e.v;
       } else S.bonus[e.vs] = (S.bonus[e.vs] ?? 0) + e.v;
     } else if (e.s === 'rof') S.rofx *= 1 + e.v;
-    else if (e.op === 'mul') S[e.s] *= e.v;
-    else if (e.op === 'set') S[e.s] = e.v;
-    else S[e.s] += e.v;
+    else S[e.s] = applyEffectValue(S[e.s], e.op, e.v);
   }
 }
 
