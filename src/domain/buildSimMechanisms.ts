@@ -10,7 +10,6 @@ import {
   polishNotes,
   polishBuildingTime,
   polishBuildingCost,
-  polishStoneGold,
   POLISH_MODEL_NOTE,
 } from './polishEconomy';
 import {
@@ -19,7 +18,6 @@ import {
   mapucheResearchSites,
   mapucheNotes,
   mapucheRowAllowed,
-  mapucheForagerFood,
   MAPUCHE_MODEL_NOTE,
   type MapucheContext,
 } from './mapucheEconomy';
@@ -48,6 +46,7 @@ import { chineseContext, chinesePopulation, chineseStartingVillagers, chineseRow
 import { jurchenContext, jurchenNotes, jurchenRowClass, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 import { DATA_PATCH, SOURCE_PINS } from '../data/sources';
 import { isAgeTech } from './gameIds';
+import { SPECIAL_INCOME } from './specialIncome';
 import type { CivContext } from './civModel';
 export interface MechanismContext {
   romans?: ReturnType<typeof romanContext>;
@@ -100,8 +99,6 @@ interface CivMechanism {
   startingBuildings?: (context: MechanismContext) => readonly number[];
   techCostRule?: (kind: 'tech' | 'up', id: number, scope: Scope) => { applyTechCostAll: boolean } | undefined;
   researchRewards?: (input: { scope: Scope; tech: number; age: number; applied: ReadonlySet<number> }) => readonly EffectRow[];
-  foragerFoodIncome?: (mods: Mods, task: string, rate: number) => number;
-  stoneGoldIncome?: (scope: Scope, task: string, rate: number) => number;
   townCenterPopulation?: (scope: Scope) => number;
   context?: (eco: EcoData) => Partial<MechanismContext>;
   atomicGather?: boolean;
@@ -138,7 +135,6 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
     buildingTime: (scope, _eco, _mods, id) => polishBuildingTime(scope.poles, id),
     buildingCost: (scope, id) => polishBuildingCost(scope.poles, id),
     buildingPopulation: (scope, id) => polishBuildingPopulation(scope.poles, id),
-    stoneGoldIncome: (scope, task, rate) => polishStoneGold(scope.poles, task, rate),
     researchSites: (eco, tech, scope) => polishResearchSites(eco, tech, scope),
     assumptions: ({ eco, bo }) => (polishContext(eco).complete ? [...polishNotes(eco, bo.id), POLISH_MODEL_NOTE] : []),
   },
@@ -153,7 +149,6 @@ export const CIV_MECHANISMS: Readonly<Record<string, CivMechanism>> = {
     prepare: mapucheBuildOrder,
     buildingReady: (scope, id, _age, built) => !scope.mapuche?.infrastructure || ![50, 1187, 84].includes(id) || (built.get(2556) ?? 0) > 0,
     buildingPopulation: (scope, id) => (id === 2556 ? (scope.mapuche?.infrastructure?.settlements[0]?.populationSource.amount ?? 0) : 0),
-    foragerFoodIncome: (mods, task, rate) => mapucheForagerFood(mods, task, rate),
     researchSites: mapucheResearchSites,
     deferAgeTechs: [1405, 1406, 1407],
     atomicGather: true,
@@ -289,14 +284,10 @@ interface ApplicationRule {
   allows: (row: EffectRow, scope: Scope) => boolean;
 }
 const APPLICATION_RULES: readonly ApplicationRule[] = [
-  { flag: 'foragerFood', civ: 'Mapuche', gather: true, allows: (row, scope) => scope.mapuche?.admitted.get(1381) === row },
-  { flag: 'foragerWood', gather: true, allows: (row) => row.tech === 453 },
-  { flag: 'lumberFood', gather: true, allows: (row) => rules.hasLumberFoodContext(row) === true },
-  { flag: 'malianGold', civ: 'Malians', gather: true, allows: (row) => rules.hasMalianGoldContext(row) === true },
+  ...SPECIAL_INCOME.flatMap((rule) =>
+    rule.flag && rule.allows ? [{ flag: rule.flag, civ: rule.civ, gather: rule.gather, allows: rule.allows as ApplicationRule['allows'] }] : [],
+  ),
   { flag: 'buildingWood', civ: 'Malians', allows: rules.hasMalianBuildingContext },
-  { flag: 'varangianGold', civ: 'Varangians', gather: true, allows: (row) => rules.hasVarangianGoldContext(row) === true },
-  { flag: 'tatarShepherd', civ: 'Tatars', gather: true, allows: rules.hasTatarShepherdContext },
-  { flag: 'mayanResource', civ: 'Mayans', gather: true, allows: (row) => rules.hasMayanTreeContext(row) === true },
   { flag: 'mayanWall', civ: 'Mayans', allows: rules.hasMayanWallContext },
 ];
 export function rowApplication(civ: string, row: EffectRow, scope: Scope, mode: 'timeline' | 'gather', atomic: () => boolean): RowApplication {

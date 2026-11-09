@@ -1,12 +1,6 @@
 import type { Res, Stock, EffectRow } from './buildSim';
-import {
-  MAYAN_RESOURCE_TASKS,
-  RES_FORAGER_WOOD,
-  RES_LUMBER_FOOD,
-  RES_GOLD_PRODUCTIVITY,
-  RES_WILD_FOOD_GOLD,
-  RES_SHEPHERD_PRODUCTIVITY,
-} from './buildSimCivRules';
+import { MAYAN_RESOURCE_TASKS } from './buildSimCivRules';
+import { SPECIAL_INCOME } from './specialIncome';
 import { TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
 export { TC_BY_AGE };
 const START: Stock = { food: 200, wood: 200, gold: 100, stone: 200 };
@@ -138,61 +132,9 @@ export interface RowApplication {
   mayanWall?: boolean;
 }
 /** All special scalar resource channels share the same dispatch; context admission lives in the registry. */
-const RESOURCE_APPLICATIONS: readonly {
-  flag: keyof RowApplication;
-  res: number;
-  op: string;
-  apply: (mods: Mods, value: number) => void;
-}[] = [
-  {
-    flag: 'foragerFood',
-    res: 215,
-    op: 'add',
-    apply: (m, v) => {
-      m.foragerFood += v / 100;
-    },
-  },
-  {
-    flag: 'foragerWood',
-    res: RES_FORAGER_WOOD,
-    op: 'add',
-    apply: (m, v) => {
-      m.foragerWood += v / 100;
-    },
-  },
-  {
-    flag: 'lumberFood',
-    res: RES_LUMBER_FOOD,
-    op: 'set',
-    apply: (m, v) => {
-      m.lumberFood = v / 100;
-    },
-  },
-  {
-    flag: 'malianGold',
-    res: RES_GOLD_PRODUCTIVITY,
-    op: 'add',
-    apply: (m, v) => {
-      m.depositBonus.gold = (m.depositBonus.gold ?? 0) + v / 100;
-    },
-  },
-  {
-    flag: 'varangianGold',
-    res: RES_WILD_FOOD_GOLD,
-    op: 'set',
-    apply: (m, v) => {
-      m.varangianGold = v / 100;
-    },
-  },
-  {
-    flag: 'tatarShepherd',
-    res: RES_SHEPHERD_PRODUCTIVITY,
-    op: 'mul',
-    apply: (m, v) => {
-      m.sheepFoodMul *= v;
-    },
-  },
-];
+const RESOURCE_APPLICATIONS = SPECIAL_INCOME.flatMap((rule) =>
+  rule.flag && rule.res !== undefined && rule.op && rule.apply ? [{ flag: rule.flag, res: rule.res, op: rule.op, apply: rule.apply }] : [],
+);
 export function applyEffects(m: Mods, effects: EffectRow['effects'], application: RowApplication = {}) {
   for (const x of effects) {
     const v = x.v ?? 0;
