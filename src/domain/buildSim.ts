@@ -12,6 +12,7 @@ import {
   mechanismGatherMarkerAllowed,
 } from './buildSimMechanisms';
 import { applyMod, baseMods, RES_START, RES_HUNT_FOOD, applyEffects } from './buildSimEffects';
+import { trainingCycle } from './trainingCycle';
 import { hasUniqueMayanTree } from './buildSimCivRules';
 import { SPECIAL_INCOME, type SpecialRes } from './specialIncome';
 
@@ -868,7 +869,17 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           if (!job) continue;
           const u = eco.units[job.unit]!;
           const clsT = !legacy && u.class !== undefined ? (m.timeMul['class:' + u.class] ?? 1) : 1;
-          active = { job, left: ((u.timeAt?.[String(b)] ?? u.trainTime) * (m.timeMul['unit:' + job.unit] ?? 1) * clsT) / (m.rate['unit:' + b] ?? 1) };
+          const base = u.timeAt?.[String(b)] ?? u.trainTime;
+          const unitT = m.timeMul['unit:' + job.unit] ?? 1;
+          const rate = m.rate['unit:' + b] ?? 1;
+          active = {
+            job,
+            left: trainingCycle(base, [
+              { kind: 'train', op: 'mul', v: unitT },
+              { kind: 'train', op: 'mul', v: clsT },
+              { kind: 'work', op: 'mul', v: rate },
+            ]).cycle,
+          };
           unitBusy.set(key, active);
         }
         active.left -= TICK;
@@ -946,7 +957,11 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           else if (!afford(c)) cause = 'food';
           else {
             pay(c);
-            tcState = { kind: 'vil', left: eco.villager.trainTime * (m.timeMul[`unit:${VILLAGER_UNIT_ID}`] ?? 1) };
+            const villagerT = m.timeMul[`unit:${VILLAGER_UNIT_ID}`] ?? 1;
+            tcState = {
+              kind: 'vil',
+              left: trainingCycle(eco.villager.trainTime, [{ kind: 'train', op: 'mul', v: villagerT }]).cycle,
+            };
             villagerStartedAt = r1(t);
           }
         } else if (nextStep < nSteps && born < finalVils) cause = 'other';

@@ -7,6 +7,7 @@ import { gatherModel, type GatherRes } from './realCost';
 import type { Cost, Tech, Trees, Unit } from './types';
 import { buildingAge, trainingUnitAge } from './availabilityAge';
 import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
+import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
@@ -231,8 +232,8 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
     const cost: Cost = { ...discount.exact };
     const notes = discount.applied.map((x) => x.text);
     warnings.push(...discount.unsupported.map((x) => `${x.text || '文明训练费用折扣'}：折扣未计入。`));
-    let seconds = data.timeAt?.[row.building] ?? data.trainTime;
-    let speed = 1;
+    const base = data.timeAt?.[row.building] ?? data.trainTime;
+    const cycleOps: TrainingCycleOp[] = [];
     const targetBuilding = buildingTarget(row.building, config.age);
     for (const r of eco.civEco[config.civ] ?? []) {
       if (r.age > config.age) continue;
@@ -250,10 +251,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
         warnings.push(`${r.name}：训练效果未核实，未计入。`);
         continue;
       }
-      for (const e of relevant) {
-        if (e.attr === 'trainTime') seconds *= e.v!;
-        else speed *= e.v!;
-      }
+      for (const e of relevant) cycleOps.push({ kind: e.attr === 'trainTime' ? 'train' : 'work', op: 'mul', v: e.v! });
       notes.push(r.source === 'team' ? '本文明团队训练加成' : r.name);
     }
     for (const t of selectedTechs) {
@@ -271,17 +269,17 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
         continue;
       }
       for (const e of effects) {
-        if (e.a === 13 && e.t?.includes(row.building)) speed = change(speed, e.op, e.v);
-        else if (e.a === 101 && e.t?.includes(u.id)) seconds = change(seconds, e.op, e.v);
+        if (e.a === 13 && e.t?.includes(row.building)) cycleOps.push({ kind: 'work', op: e.op, v: e.v });
+        else if (e.a === 101 && e.t?.includes(u.id)) cycleOps.push({ kind: 'train', op: e.op, v: e.v });
         else if (e.a !== undefined && costAttrs[e.a] && e.t?.includes(u.id)) {
           const res = costAttrs[e.a]!;
           for (const k of res === 'all' ? PRODUCTION_RES : [res]) cost[k] = Math.max(0, change(cost[k] ?? 0, e.op, e.v));
         }
       }
-      for (const f of time) seconds = change(seconds, f.op, f.v);
+      for (const f of time) cycleOps.push({ kind: 'train', op: f.op, v: f.v });
       notes.push(t.zh);
     }
-    seconds /= speed;
+    const seconds = trainingCycle(base, cycleOps).seconds;
     if (!Number.isFinite(seconds) || seconds <= 0) {
       errors.push(`${label}：无法核实有效训练时间，未计算。`);
       return;

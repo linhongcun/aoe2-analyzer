@@ -9,6 +9,7 @@ import { gatherModel, realCost } from './realCost';
 import { buildingAge } from './availabilityAge';
 import review from './routeReview.json';
 import { AGE_BY_TECH } from './gameIds';
+import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 
 const BOW: Record<string, readonly string[]> = {
   none: [],
@@ -154,7 +155,7 @@ export function castleScenarioProfile(ctx: SceneContext, eco: SceneEco, civ: str
   const source = eco.units[id];
   if (!source || !Array.isArray(source.at) || source.at.length !== 1 || source.at[0] !== shape.building || source.class !== shape.class)
     return fail('生产建筑或单位类别来源变化，需核验');
-  let cycle: number;
+  let base: number;
   if (source.timeAt !== undefined) {
     if (
       source.timeAt === null ||
@@ -165,9 +166,10 @@ export function castleScenarioProfile(ctx: SceneContext, eco: SceneEco, civ: str
       source.timeAt[unit.b]! <= 0
     )
       return fail('按建筑训练周期缺失或结构变化');
-    cycle = source.timeAt[unit.b]!;
-  } else cycle = source.trainTime;
+    base = source.timeAt[unit.b]!;
+  } else base = source.trainTime;
   const ages = AGE_BY_TECH;
+  const cycleOps: TrainingCycleOp[] = [];
   for (const entry of eco.civEco[civ] ?? []) {
     if (entry.age > cfg.age || (entry.requires ?? []).some((n) => (ages[n] ? ages[n]! > cfg.age : !ids.has(n)))) continue;
     for (const effect of entry.effects) {
@@ -175,9 +177,10 @@ export function castleScenarioProfile(ctx: SceneContext, eco: SceneEco, civ: str
       const work = effect.attr === 'workRate' && effect.target === 'unit:' + unit.b;
       if (!train && !work) continue;
       if (effect.kind !== 'attr' || effect.op !== 'mul' || !Number.isFinite(effect.v) || effect.v! <= 0) return fail('训练效果数值不可核验');
-      cycle = train ? cycle * effect.v! : cycle / effect.v!;
+      cycleOps.push({ kind: train ? 'train' : 'work', op: 'mul', v: effect.v! });
     }
   }
+  const cycle = trainingCycle(base, cycleOps).cycle;
   if (!Number.isFinite(cycle) || cycle <= 0) return fail('训练周期缺失');
   const rates = gatherModel(3, '', { techIds: new Set(), walkTiles: 3, farmTiles: 0 });
   const fixedSeconds = realCost(fixed, rates).total,
