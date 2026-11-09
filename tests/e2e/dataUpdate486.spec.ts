@@ -58,7 +58,7 @@ test('#486 精锐与移速不变对照、PK 和当前版本来源', async ({ pag
   expect(await response.text()).toContain('数据版本 DE 188329');
 });
 
-test('#486 当前站点保留计算深链，185872 专用预置不跨版本开放', async ({ page }) => {
+test('#486 当前站点保留计算深链，已下线的 185872 专用预置不复活', async ({ page }) => {
   const query = 'a=1704.Bohemians.3.c.&b=280.Franks.3.c.&m=1';
   await page.goto('./#/duel?' + query);
   await expect(page.locator('#duel-res')).toBeVisible();

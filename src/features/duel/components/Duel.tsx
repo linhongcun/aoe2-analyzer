@@ -19,7 +19,6 @@ import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 import { BreakEven } from './BreakEven';
-import { BohemianPresetCards, BohemianPresetJump } from './BohemianPresetCards';
 import { DamageBreakdown } from './DamageBreakdown';
 import { AgeComparison } from './AgeComparison';
 import { UpgradeComparison } from './UpgradeComparison';
@@ -48,10 +47,8 @@ export default function Duel() {
   const resources = useCoreTrees();
   return (
     <>
-      <BohemianPresetJump />
       <DuelCalculator resources={resources} />
       {resources.core.data && resources.trees.data ? <ChampiReferences core={resources.core.data} trees={resources.trees.data} /> : null}
-      <BohemianPresetCards />
     </>
   );
 }

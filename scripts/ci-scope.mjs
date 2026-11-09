@@ -226,7 +226,6 @@ export const PROFILES = {
       'v0280-281',
       'v0290-322',
       'headingScope364',
-      'duelPreset372',
       'armorValues706',
       'negativeBonus707',
       'thumbRing709',
