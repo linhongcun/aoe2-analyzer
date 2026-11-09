@@ -53,6 +53,7 @@ const inputsHash = () =>
       'unhandledRes.ts',
       'buildSimEffects.ts',
       'buildSimMechanisms.ts',
+      'specialIncome.ts',
       'buildSimNotes.ts',
       'roundHalfPrice.ts',
       'buildOrder.ts',

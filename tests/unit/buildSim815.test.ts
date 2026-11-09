@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { CIV_MECHANISMS } from '../../src/domain/buildSimMechanisms';
+import { SPECIAL_INCOME } from '../../src/domain/specialIncome';
 
 describe('#815 buildSim 文明特化迁入注册表', () => {
   it('buildSim 主循环不再直接判断/调用六类文明特化', () => {
@@ -17,7 +18,7 @@ describe('#815 buildSim 文明特化迁入注册表', () => {
     expect(CIV_MECHANISMS.Chinese?.techCostRule).toBeTypeOf('function');
     expect(CIV_MECHANISMS.Georgians?.startingBuildings).toBeTypeOf('function');
     expect(CIV_MECHANISMS.Armenians?.researchRewards).toBeTypeOf('function');
-    expect(CIV_MECHANISMS.Mapuche?.foragerFoodIncome).toBeTypeOf('function');
-    expect(CIV_MECHANISMS.Poles?.stoneGoldIncome).toBeTypeOf('function');
+    expect(SPECIAL_INCOME.some((rule) => rule.flag === 'foragerFood' && rule.income)).toBe(true);
+    expect(SPECIAL_INCOME.some((rule) => !rule.flag && rule.income)).toBe(true);
   });
 });

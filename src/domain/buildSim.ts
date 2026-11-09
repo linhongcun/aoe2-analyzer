@@ -12,7 +12,10 @@ import {
   mechanismGatherMarkerAllowed,
 } from './buildSimMechanisms';
 import { applyMod, baseMods, RES_START, RES_HUNT_FOOD, applyEffects } from './buildSimEffects';
-import { foragerWoodIncome, lumberFoodIncome, varangianGoldIncome, hasUniqueMayanTree } from './buildSimCivRules';
+import { hasUniqueMayanTree } from './buildSimCivRules';
+import { SPECIAL_INCOME, type SpecialRes } from './specialIncome';
+
+const VARANGIAN_INCOME = SPECIAL_INCOME.find((rule) => rule.flag === 'varangianGold');
 import { simScope, techAtomicOk, simSupport } from './buildSimCoverage';
 export { pushMod, applyMod, type NumMod } from './buildSimEffects';
 export { SHU_KNIGHT_TEMPLATE_NOTE, MAYAN_CAVALRY_TEMPLATE_NOTE } from './buildSimCivRules';
@@ -966,12 +969,11 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       if (r && alloc[k] > 0) {
         const q = rate(k);
         stock[r] += alloc[k] * q * TICK * (1 + (m.depositBonus[r] ?? 0));
-        if (m.foragerWood) stock.wood += alloc[k] * foragerWoodIncome(m, ECO_TASK[k], q) * TICK;
-        if (m.foragerFood) stock.food += alloc[k] * (mechanism.foragerFoodIncome?.(m, ECO_TASK[k], q) ?? 0) * TICK;
-        if (m.lumberFood) stock.food += alloc[k] * lumberFoodIncome(m, ECO_TASK[k], q) * TICK;
-        if (m.varangianGold) stock.gold += alloc[k] * varangianGoldIncome(m, ECO_TASK[k], q) * TICK;
-        const stoneGold = mechanism.stoneGoldIncome?.(scope, ECO_TASK[k], q) ?? 0;
-        if (stoneGold) stock.gold += alloc[k] * stoneGold * TICK;
+        for (const rule of SPECIAL_INCOME) {
+          const extra = rule.income?.(m, ECO_TASK[k], q, scope);
+          if (!extra) continue;
+          for (const [res, value] of Object.entries(extra) as [SpecialRes, number][]) stock[res] += alloc[k] * value * TICK;
+        }
       }
     }
     if (fishingShips && eco.fishingShip) {
@@ -984,7 +986,8 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       if (wr > 0 && carry > 0 && speed > 0) {
         const q = effectiveGatherRate({ workRate: wr, carry, speed, walkTiles: P.walkTiles, units: fishingShips });
         stock.food += q * TICK;
-        if (m.varangianGold) stock.gold += q * m.varangianGold * TICK;
+        const shipGold = VARANGIAN_INCOME?.income?.(m, 'fish', q, scope)?.gold ?? 0;
+        if (shipGold) stock.gold += shipGold * TICK;
       }
     }
     if (nextStep >= nSteps && doneAt.every((x) => x !== null) && !(drainPaidBirth && tcState?.kind === 'vil')) break;
@@ -1237,11 +1240,15 @@ export function gatherRate(
     noReturnWalk: ecoTask === 'farm' && m.farmNoWalk,
   });
   const rate = mechanismFarmRate(scope, ecoTask, average);
-  const wood = foragerWoodIncome(m, ecoTask, rate);
-  const food = lumberFoodIncome(m, ecoTask, rate) + (mechanism.foragerFoodIncome?.(m, ecoTask, rate) ?? 0);
-  const gold =
-    (ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0) +
-    varangianGoldIncome(m, ecoTask, rate) +
-    (mechanism.stoneGoldIncome?.(scope, ecoTask, rate) ?? 0);
+  let wood = 0;
+  let food = 0;
+  let gold = ecoTask === 'gold' ? rate * (m.depositBonus.gold ?? 0) : 0;
+  for (const rule of SPECIAL_INCOME) {
+    const extra = rule.income?.(m, ecoTask, rate, scope);
+    if (!extra) continue;
+    wood += extra.wood ?? 0;
+    food += extra.food ?? 0;
+    gold += extra.gold ?? 0;
+  }
   return { carry, workRate, rate, extraIncome: { ...(wood ? { wood } : {}), ...(food ? { food } : {}), ...(gold ? { gold } : {}) } };
 }

@@ -14,16 +14,9 @@ import { chineseContext, chineseRowClass, hasChineseMarker, CHINESE_SOURCE_REASO
 import { civMechanism, mechanismContext } from './buildSimMechanisms';
 import type { BuildOrder } from './buildOrder';
 import type { EcoData, EffectRow } from './buildSim';
-import { TC_UNITS, TECH_OPS, RES_START, COST_ATTR, RES_STOCK, TECH_RES, RES_DEPOSIT, RES_HUNT_FOOD } from './buildSimEffects';
+import { TC_UNITS, TECH_OPS, RES_START, COST_ATTR, RES_STOCK, TECH_RES, RES_DEPOSIT } from './buildSimEffects';
+import { SPECIAL_INCOME, SPECIAL_INCOME_EXCEPTIONS } from './specialIncome';
 import {
-  RES_FORAGER_WOOD,
-  RES_LUMBER_FOOD,
-  hasLumberFoodContext,
-  RES_GOLD_PRODUCTIVITY,
-  hasMalianGoldContext,
-  RES_WILD_FOOD_GOLD,
-  hasVarangianGoldContext,
-  RES_SHEPHERD_PRODUCTIVITY,
   hasTatarShepherdContext,
   MAYAN_RESOURCE_TASKS,
   hasMayanTreeContext,
@@ -163,18 +156,13 @@ export function techAtomicOk(row: EffectRow, scope: ReturnType<typeof simScope>)
 }
 
 /** Resource semantics are registered independently of the generic effect classifier. */
-const RESOURCE_HANDLERS: readonly {
+export const RESOURCE_HANDLERS: readonly {
   res: number;
   op: string;
   accepts?: (row: EffectRow, effect: Effect) => boolean | undefined;
 }[] = [
-  { res: 269, op: 'set' },
-  { res: RES_HUNT_FOOD, op: 'mul' },
-  { res: RES_FORAGER_WOOD, op: 'add', accepts: (row) => row.tech === 453 },
-  { res: RES_LUMBER_FOOD, op: 'set', accepts: hasLumberFoodContext },
-  { res: RES_GOLD_PRODUCTIVITY, op: 'add', accepts: hasMalianGoldContext },
-  { res: RES_WILD_FOOD_GOLD, op: 'set', accepts: (row, e) => Number.isFinite(e.v) && e.v! >= 0 && hasVarangianGoldContext(row) },
-  { res: RES_SHEPHERD_PRODUCTIVITY, op: 'mul', accepts: hasTatarShepherdContext },
+  ...SPECIAL_INCOME.flatMap((rule) => (rule.res !== undefined && rule.op ? [{ res: rule.res, op: rule.op, accepts: rule.accepts }] : [])),
+  ...SPECIAL_INCOME_EXCEPTIONS.classificationOnly.map(({ res, op }) => ({ res, op })),
 ];
 /** 判定一条文明效果 */
 export function classifyCivEffect(
