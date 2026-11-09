@@ -630,53 +630,6 @@ export async function checkSite({ site, version, commit, features = [], diagnost
         await summary.locator('summary').click();
         await check(summary.getByRole('link', { name: '萨拉森', exact: true })).toHaveAttribute('href', '#/tree/Saracens');
         await check(summary.locator('a[href="#/tech/54"]').first()).toBeVisible();
-        const sources = JSON.parse(readFileSync(new URL('./data_sources.json', import.meta.url), 'utf8'));
-        if (sources.patch.build === 185872) {
-          const presets = page.getByRole('region', { name: '骑马弩兵与骑射手预置', exact: true });
-          const configurations = [
-            ['castle-britons-byzantines', 'a=2700.Britons.3..&b=39.Byzantines.3..&m=1'],
-            ['castle-franks-byzantines', 'a=2700.Franks.3..&b=39.Byzantines.3..&m=1'],
-            ['imperial-britons-byzantines', 'a=2701.Britons.4..&b=474.Byzantines.4..&m=1'],
-          ];
-          await check(presets).toBeVisible();
-          await check(presets.locator('[data-preset]')).toHaveCount(3);
-          await check(presets.getByRole('link', { name: '打开对照', exact: true })).toHaveCount(3);
-          for (const [key, query] of configurations)
-            await check(presets.locator(`[data-preset="${key}"]`).getByRole('link', { name: '打开对照', exact: true })).toHaveAttribute(
-              'href',
-              `#/duel?${query}`,
-            );
-          await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: root.origin });
-          const franks = presets.locator('[data-preset="castle-franks-byzantines"]');
-          await franks.getByRole('button', { name: /复制对照链接/ }).click();
-          await check(franks.getByRole('status')).toHaveText('对照链接已复制。');
-          const copied = new URL(await page.evaluate(() => navigator.clipboard.readText()));
-          assert.equal(copied.origin, root.origin);
-          assert.equal(copied.pathname, new URL('duel/', root).pathname);
-          assert.equal(copied.hash, '');
-          assert.equal(copied.searchParams.toString(), configurations[1][1]);
-          const fresh = await page.context().newPage();
-          try {
-            await fresh.goto(copied.href);
-            for (const reload of [false, true]) {
-              if (reload) await fresh.reload();
-              await check(fresh.locator('#duel-res')).toBeVisible();
-              assert.equal(new URL(fresh.url()).hash, `#/duel?${configurations[1][1]}`);
-              await check(fresh.locator('#duel-a .duel-head')).toContainText('骑马弩兵');
-              await check(fresh.locator('#duel-a .duel-head')).toContainText('法兰克');
-              await check(fresh.locator('#duel-b .duel-head')).toContainText('骑射手');
-              await check(fresh.locator('#duel-b .duel-head')).toContainText('拜占庭');
-              for (const side of ['a', 'b']) {
-                await check(fresh.locator(`#duel-${side} .duel-age`)).toHaveText('城堡时代');
-                await check(fresh.locator(`#duel-${side}`).getByRole('radio', { name: '无科技', exact: true })).toHaveAttribute('aria-checked', 'true');
-              }
-              await check(fresh.getByRole('radio', { name: '1v1', exact: true })).toHaveAttribute('aria-checked', 'true');
-            }
-          } finally {
-            await fresh.close();
-          }
-          console.log('Verified DE185872 presets: three exact links, real clipboard, stable Duel entry and refresh');
-        }
       } else if (feature === 'matchup') {
         await goto('/matchup');
         await check(page.locator('#mres')).toBeVisible();
@@ -755,65 +708,8 @@ export async function checkSite({ site, version, commit, features = [], diagnost
         console.log('Verified Duel heading-order: default, expanded, time popup, unavailable; Unit/Building default headings and Unit Basis retained');
         await goto('/duel?a=569.Franks.4.f.0-1&b=359.Japanese.4.f.2&m=t&vil=19&min=13&bud=8800&be=1');
         const presets = page.getByRole('region', { name: '波希米亚预置对战', exact: true });
-        const dataBuild = JSON.parse(readFileSync(new URL('./data_sources.json', import.meta.url), 'utf8')).patch.build;
-        if (dataBuild === 185872) {
-          const configurations = [
-            { key: 'castle-hussite-mangonel', query: 'a=1704.Bohemians.3.c.&b=280.Franks.3.c.&m=1', a: '胡斯派战车', b: '轻型投石车', age: '城堡时代' },
-            { key: 'imperial-hussite-onager', query: 'a=1706.Bohemians.4.c.&b=550.Franks.4.c.&m=1', a: '精锐胡斯派战车', b: '中型投石车', age: '帝王时代' },
-          ];
-          const selected = async (preset) => {
-            await check(page.locator('#duel-res')).toBeVisible();
-            assertFooter(
-              {
-                version: await page.locator('[data-t="footer-app-version"]').first().textContent(),
-                build: await page.locator('[data-t="footer-build"]').first().textContent(),
-              },
-              { version, commit },
-            );
-            assert.equal(new URL(page.url()).hash, '#/duel?' + preset.query);
-            for (const [side, unit, civ] of [
-              ['a', preset.a, '波希米亚'],
-              ['b', preset.b, '法兰克'],
-            ]) {
-              await check(page.locator('#duel-' + side + ' .duel-head')).toContainText(unit);
-              await check(page.locator('#duel-' + side + ' .duel-head')).toContainText(civ);
-              await check(page.locator('#duel-' + side + ' .duel-age')).toHaveText(preset.age);
-              await check(page.locator('#duel-' + side).getByRole('radio', { name: '当前时代满科技', exact: true })).toHaveAttribute('aria-checked', 'true');
-            }
-            await check(page.getByRole('radio', { name: '1v1', exact: true })).toHaveAttribute('aria-checked', 'true');
-          };
-          await check(presets.locator('article[data-preset]')).toHaveCount(2);
-          await check(presets).toContainText(/DE\s*185872/);
-          await page.getByRole('button', { name: '查看波希米亚预置', exact: true }).click();
-          await check(presets).toBeFocused();
-          for (const preset of configurations) {
-            const open = presets.locator('[data-preset="' + preset.key + '"]').getByRole('link', { name: '打开对照', exact: true });
-            await check(open).toHaveAttribute('href', '#/duel?' + preset.query);
-            await open.click();
-            await selected(preset);
-          }
-          await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: root.origin });
-          const before = page.url();
-          const first = presets.locator('[data-preset="castle-hussite-mangonel"]');
-          await first.getByRole('button', { name: /复制对照链接/ }).click();
-          await check(first.getByRole('status')).toHaveText('对照链接已复制。');
-          assert.equal(page.url(), before);
-          const copied = new URL(await page.evaluate(() => navigator.clipboard.readText()));
-          assert.equal(copied.origin, root.origin);
-          assert.equal(copied.pathname, new URL('duel/', root).pathname);
-          assert.equal(copied.hash, '');
-          assert.equal(copied.searchParams.toString(), configurations[0].query);
-          await page.goto(copied.href);
-          await selected(configurations[0]);
-          await page.reload();
-          await selected(configurations[0]);
-          console.log(
-            'Verified two DE185872 Bohemian presets: exact links, current-age settings, fresh query, discoverability, real clipboard, static entry and reload',
-          );
-        } else {
-          await check(presets).toHaveCount(0);
-          await check(page.getByRole('button', { name: '查看波希米亚预置', exact: true })).toHaveCount(0);
-        }
+        await check(presets).toHaveCount(0);
+        await check(page.getByRole('button', { name: '查看波希米亚预置', exact: true })).toHaveCount(0);
       } else if (feature === 'simulator' || feature === 'simRoute') {
         await goto('/unit/38/Franks/4/?tab=sim');
         await check(page.locator('#simciv')).toHaveAttribute('data-value', 'Franks');
