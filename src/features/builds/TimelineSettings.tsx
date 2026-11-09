@@ -1,5 +1,5 @@
 import { WALK } from '../../domain/buildSim';
-import { simSupport, simSupportNote } from '../../domain/simSupport';
+import { simSupport, simSupportNote, simSupportTitle } from '../../domain/simSupport';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import type { TimelineQuery } from './timelineModel';
 
@@ -35,6 +35,7 @@ export function TimelineSettings({
           disabledGroup="暂不支持 · 文明加成尚未计入"
           disabledNote="文明加成尚未计入"
           disabledNoteFor={simSupportNote}
+          disabledTitleFor={simSupportTitle}
           value={unsupported ? '' : q.civ}
           onChange={(en) => set('civ', en || null)}
         />

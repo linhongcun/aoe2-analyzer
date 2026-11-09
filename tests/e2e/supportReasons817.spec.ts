@@ -1,24 +1,58 @@
+import { execSync, spawn, type ChildProcess } from 'node:child_process';
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 
+/**
+ * #817 未支持文明的具体原因：单独构建 VITE_FORCE_UNSUPPORTED_CIVS=Khmer 的测试包并在独立端口预览。
+ * 正式构建不设这个变量；当前 56 个文明仍全部 supported。
+ */
+let BASE = 'http://localhost:4175/';
+let srv: ChildProcess | undefined;
 const openCivPicker = async (page: Page) => {
   if (await page.locator('button.tl-setbtn').isVisible()) await page.locator('button.tl-setbtn').click();
   const trigger = page.locator('#tlciv');
   await trigger.nth((await trigger.count()) - 1).click();
 };
 
-test.skip(!process.env.VITE_FORCE_UNSUPPORTED_CIVS, 'requires VITE_FORCE_UNSUPPORTED_CIVS test build');
+test.describe.configure({ mode: 'serial', timeout: 180_000 });
+test.beforeAll(async () => {
+  const PORT = 4175 + test.info().parallelIndex;
+  BASE = `http://localhost:${PORT}/`;
+  const out = mkdtempSync(join(tmpdir(), 'support-reasons-'));
+  execSync(`npx vite build --outDir ${out} --emptyOutDir`, {
+    env: { ...process.env, VITE_FORCE_UNSUPPORTED_CIVS: 'Khmer' },
+    stdio: 'ignore',
+  });
+  srv = spawn('npx', ['vite', 'preview', '--outDir', out, '--port', String(PORT), '--strictPort'], { stdio: 'ignore', detached: true });
+  for (let i = 0; i < 60; i++) {
+    try {
+      if ((await fetch(BASE)).ok) return;
+    } catch {
+      /* 还没起来 */
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+  throw new Error('support-reasons 预览没有起来');
+});
+test.afterAll(() => {
+  if (srv?.pid) process.kill(-srv.pid);
+});
 
 test('#817 强制不支持的文明显示具体原因', async ({ page }) => {
-  await page.goto('./#/builds?bo=scouts-18&civ=Khmer');
+  await page.goto(`${BASE}#/builds?bo=scouts-18&civ=Khmer`);
   const warn = page.locator('[data-t="civ-warn"]');
   await expect(warn).toBeVisible();
   await expect(warn).toContainText('测试构建：该文明被强制标记为不支持');
 
-  const trigger = page.locator('#tlciv');
-  await trigger.nth((await trigger.count()) - 1).click();
+  await openCivPicker(page);
   const disabled = page.locator('[data-civ="Khmer"]');
   await expect(disabled).toContainText('测试构建：该文明被强制标记为不支持');
   await expect(disabled).toHaveAttribute('title', /测试构建：该文明被强制标记为不支持/);
+
+  await page.goto(`${BASE}#/builds?bo=scouts-18&civ=Khmer&view=practice`);
+  await expect(page.locator('[data-testid="practice-civ-warning"]')).toContainText('测试构建：该文明被强制标记为不支持');
 });
 
 for (const width of [360, 375, 390, 1280]) {
@@ -29,7 +63,7 @@ for (const width of [360, 375, 390, 1280]) {
     page.on('console', (message) => {
       if (message.type() === 'error') errors.push(message.text());
     });
-    await page.goto('./#/builds?bo=scouts-18&civ=Khmer');
+    await page.goto(`${BASE}#/builds?bo=scouts-18&civ=Khmer`);
     await expect(page.locator('[data-t="civ-warn"]')).toBeVisible();
     await openCivPicker(page);
     await expect(page.locator('[data-civ="Khmer"]')).toBeVisible();

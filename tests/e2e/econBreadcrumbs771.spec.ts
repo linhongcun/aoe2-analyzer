@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-// #771：6 个经济/资料页补齐「首页 › 页名」面包屑（复用现有 Breadcrumbs），/market 补回经济工具互链。
+// #771：6 个经济/资料页补齐「首页 / 页名」面包屑（复用现有 Breadcrumbs），/market 补回经济工具互链。
 // 面包屑外观/高度以已在用的 /relic-income 为参照（同一组件、同一 CSS）。
 const PAGES = [
   ['/maps', '地图'],
@@ -51,7 +51,7 @@ async function expectBreadcrumb(page: Page, route: string, label: string) {
 }
 
 for (const width of [1280, 360])
-  test(`#771 @${width} 六个页面都有与既有页一致的「首页 › 页名」面包屑`, async ({ page }) => {
+  test(`#771 @${width} 六个页面都有与既有页一致的「首页 / 页名」面包屑`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('./#/relic-income');
     const reference = await measure(page);

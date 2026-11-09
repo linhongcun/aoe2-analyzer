@@ -33,6 +33,8 @@ export interface CivPickerProps {
   disabledNote?: string;
   /** 可选：按文明返回禁用原因；优先于 disabledNote，返回空则回退。 */
   disabledNoteFor?: (en: string) => string | undefined;
+  /** 可选：按文明返回 title/aria 的完整原因；缺省用 disabledNoteFor/disabledNote。 */
+  disabledTitleFor?: (en: string) => string | undefined;
 }
 
 /** 文明是否匹配搜索词（ql 已 trim + 小写）；列表过滤与 Enter 共用同一条规则 */
@@ -65,7 +67,20 @@ export function enterTarget(
 type Row =
   { kind: 'head'; key: string; dlc: number | null; title: string } | { kind: 'opt'; key: string; en: string; c?: Civ } | { kind: 'dis'; key: string; c: Civ };
 
-export function CivPicker({ id, value, onChange, allowed, none, label, suffix, isEnabled, disabledGroup, disabledNote, disabledNoteFor }: CivPickerProps) {
+export function CivPicker({
+  id,
+  value,
+  onChange,
+  allowed,
+  none,
+  label,
+  suffix,
+  isEnabled,
+  disabledGroup,
+  disabledNote,
+  disabledNoteFor,
+  disabledTitleFor,
+}: CivPickerProps) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [act, setAct] = useState(0);
@@ -232,7 +247,8 @@ export function CivPicker({ id, value, onChange, allowed, none, label, suffix, i
                   );
                 if (r.kind === 'dis') {
                   const note = disabledNoteFor?.(r.c.en) ?? disabledNote;
-                  const tip = `${r.c.zh}：${note ?? '暂不可选'}，暂不能选`;
+                  const full = disabledTitleFor?.(r.c.en) ?? note;
+                  const tip = `${r.c.zh}：${full ?? '暂不可选'}，暂不能选`;
                   return (
                     <div
                       key={r.key}

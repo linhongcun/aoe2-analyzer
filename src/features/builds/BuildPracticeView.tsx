@@ -7,7 +7,7 @@ import { HOUSE, type BuildOrder } from '../../domain/buildOrder';
 import type { BuildTimeline } from '../../domain/buildSim';
 import { practiceAction, practiceProgress, practiceSteps, type PracticeNames, type PracticeStep } from '../../domain/buildPractice';
 import { publicBuildLicense } from '../../domain/sourcePresentation.mjs';
-import { simSupport, simSupportNote, simSupportWarning } from '../../domain/simSupport';
+import { simSupport, simSupportNote, simSupportTitle, simSupportWarning } from '../../domain/simSupport';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { mmss, noteParts, rowTime, type TimelineQuery } from './timelineModel';
@@ -211,6 +211,7 @@ export default function BuildPracticeView({
             disabledGroup="暂不支持 · 文明加成尚未计入"
             disabledNote="文明加成尚未计入"
             disabledNoteFor={simSupportNote}
+            disabledTitleFor={simSupportTitle}
           />
         </div>
         <p className="note">

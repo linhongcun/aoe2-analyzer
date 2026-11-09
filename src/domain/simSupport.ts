@@ -24,16 +24,18 @@ export const simSupportReasons = (civId: string): string[] => {
   if (FORCED_UNSUPPORTED.has(civId)) return [FORCED_REASON];
   let v = reasonsCache.get(civId);
   if (!v) reasonsCache.set(civId, (v = [...detail(eco, civId, buildOrders).reasons]));
-  return v;
+  return [...v];
 };
 /** UI 摘要：最多 max 条具体原因；空数组时由调用方回退通用句。 */
 export const simSupportSummary = (civId: string, max = 2): string[] => simSupportReasons(civId).slice(0, max);
 /** 选择器禁用行的一句话原因；取不到时回退现有通用句。 */
 export const simSupportNote = (civId: string): string => simSupportSummary(civId, 1)[0] ?? '文明加成尚未计入';
+/** 选择器 title/aria 的完整原因；无原因时返回 undefined，由 CivPicker 回退。 */
+export const simSupportTitle = (civId: string): string | undefined => simSupportReasons(civId).join('；') || undefined;
 /** 链接警告文案：最多两条具体原因，更多时给出总数；无原因时保留逐字通用句。 */
-export const simSupportWarning = (civId: string, civZh: string): string => {
-  const all = simSupportReasons(civId);
-  if (!all.length) return `链接里的${civZh}加成尚未计入，已按通用计算。`;
-  const shown = all.slice(0, 2).join('；');
-  return `链接里的${civZh}：${shown}${all.length > 2 ? `；等 ${all.length} 条` : ''}，已按通用计算。`;
+export const supportWarningText = (reasons: readonly string[], civZh: string): string => {
+  if (!reasons.length) return `链接里的${civZh}加成尚未计入，已按通用计算。`;
+  const shown = reasons.slice(0, 2).join('；');
+  return `链接里的${civZh}：${shown}${reasons.length > 2 ? `；等 ${reasons.length} 条` : ''}，已按通用计算。`;
 };
+export const simSupportWarning = (civId: string, civZh: string): string => supportWarningText(simSupportReasons(civId), civZh);
