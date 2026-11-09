@@ -39,6 +39,11 @@ const structureMutations: Mutation[] = [
   { file: 'garrison_techs', path: ['techs', '10'], value: 1 },
   { file: 'garrison_hosts', path: [0], value: 109.5 },
   { file: 'market', path: ['engine', 'rounding'], value: 'ceil' },
+  { file: 'ladder-4v4-rm-e1200-1400-90d', path: ['sourceSha256'], value: 'FF357EF3551F3C513C7AACCFE5C661E2FFB727FF32A0136F683481EA341E615A' },
+  { file: 'ladder-4v4-rm-e1200-1400-90d', path: ['sourceSha256'], value: 'ff357ef3' },
+  { file: 'ladder-4v4-rm-e1200-1400-90d', path: ['sourceBytes'], value: 0 },
+  { file: 'ladder-4v4-rm-e1200-1400-90d', path: ['sourceBytes'], value: -1 },
+  { file: 'ladder-4v4-rm-e1200-1400-90d', path: ['sourceBytes'], value: 126163.5 },
   { file: 'relic_income', path: ['audit', 'monasteries', '1806', 'tasks', 0, 'work_value_1'], value: '1' },
   { file: 'trade_income', path: ['units', '128', 'population'], value: 0 },
   { file: 'generate_resource', path: ['modifiers', 0, 'op'], value: 'add' },
@@ -55,6 +60,17 @@ describe('#285 生成数据保留各领域的精确结构', () => {
     const original = load(file);
     expect(validate(file, original).valid).toBe(true);
     expect(validate(file, rewrite(original, path, value)).valid).toBe(false);
+  });
+
+  it('4v4 天梯快照缺少来源指纹字段时失败', () => {
+    const file = 'ladder-4v4-rm-e1200-1400-90d';
+    const original = load(file) as Record<string, unknown>;
+    const noSha = structuredClone(original);
+    delete noSha.sourceSha256;
+    const noBytes = structuredClone(original);
+    delete noBytes.sourceBytes;
+    expect(validate(file, noSha).valid).toBe(false);
+    expect(validate(file, noBytes).valid).toBe(false);
   });
 
   it('空的 relic 审计分支仍有结构定义，未知 task 字段不能溜过', () => {
