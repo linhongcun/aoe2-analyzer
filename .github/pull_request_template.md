@@ -36,6 +36,7 @@ Fixes #
 ## 检查清单
 
 - [ ] PR 标题符合 Conventional Commits（`类型(#issue): 描述`）
+- [ ] `Co-authored-by` 只列出实际参与的 coding agent；认不出执行工具时留空，未填成 DeepSeek Harness
 - [ ] 已 rebase 到目标分支最新提交，且在本版冻结范围内
 - [ ] 游戏数字来自数据文件，没有手改生成的 `src/data/*.json`
 - [ ] 未擅改 `tests/**/v0*-acceptance*` 及其他受保护验收期望；如有冲突，附维护者明确决定和独立复核证据
