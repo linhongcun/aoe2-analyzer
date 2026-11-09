@@ -719,6 +719,17 @@ export function planChanges(changes) {
         features.add('civs');
         features.add('matchup');
       } else full = true;
+    } else if (path === 'src/domain/chargeAttack.ts') {
+      // 蓄力攻击模型已下沉 domain；仍由 techs profile 的 romanCharge710 覆盖。
+      features.add('techs');
+    } else if (path === 'src/domain/elevation.ts' || path === 'src/domain/standardVictory.ts') {
+      // 高地/Standard 模型已下沉 domain；仍由 gameGuide profile 覆盖。
+      features.add('gameGuide');
+    } else if (path === 'src/domain/conversion.ts') {
+      // 招降模型已下沉 domain；units profile 不自动包含 conversion731，显式补定向用例。
+      features.add('units');
+      extraUnit.add('tests/unit/conversion731.test.ts');
+      extraE2e.add('tests/e2e/conversion731.spec.ts');
     } else if (path === 'src/domain/civUnits.ts' || path === 'src/domain/civBuildings.ts') {
       // Read-only civilization presentation; no simulation or generated data changes.
       features.add('civs');

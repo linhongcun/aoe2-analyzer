@@ -25,7 +25,7 @@ describe('#285 JSON 必须先校验再成为可信数据', () => {
     const bad = structuredClone(charge);
     (bad.examples[0]!.after as unknown as Record<string, unknown>).max_charge = '5';
     vi.doMock('../../src/data/charge_attack.json', () => ({ default: bad }));
-    await expect(import('../../src/features/techs/chargeAttack710')).rejects.toThrow(/数据.*校验/);
+    await expect(import('../../src/domain/chargeAttack')).rejects.toThrow(/数据.*校验/);
   });
   it('独立 Node ESM 与浏览器转换均可加载同一份 standalone 代码', () => {
     const source = `
