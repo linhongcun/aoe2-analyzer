@@ -33,10 +33,17 @@ describe('civ_ratings 结构校验', () => {
 
   it('缺文明、多文明或字段不齐会失败', () => {
     expect(problemsFor((data) => delete data.Armenians).join('\n')).toContain('Armenians: 评分文件缺少该文明');
-    expect(problemsFor((data) => (data.Fake = structuredClone(row(data, 'Armenians')))).join('\n')).toContain(
-      'Fake: 评分文件包含 civs.json 中不存在的文明',
-    );
-    expect(problemsFor((data) => { row(data, 'Armenians').extra = 1; }).join('\n')).toContain('字段必须恰好是');
+    expect(problemsFor((data) => (data.Fake = structuredClone(row(data, 'Armenians')))).join('\n')).toContain('Fake: 评分文件包含 civs.json 中不存在的文明');
+    expect(
+      problemsFor((data) => {
+        row(data, 'Armenians').extra = 1;
+      }).join('\n'),
+    ).toContain('字段必须恰好是');
+    expect(
+      problemsFor((data) => {
+        delete row(data, 'Armenians').op;
+      }).join('\n'),
+    ).toContain('字段必须恰好是');
   });
 
   it('ty 必须是非空、无重复且属于固定枚举', () => {
@@ -54,10 +61,22 @@ describe('civ_ratings 结构校验', () => {
 
   it('fl/pk 必须是 1–10 的整数，op 必须非空', () => {
     for (const field of ['fl', 'pk']) {
-      expect(problemsFor((data) => { row(data, 'Armenians')[field] = 0; }).join('\n')).toContain(`${field}: 必须是 1–10`);
-      expect(problemsFor((data) => { row(data, 'Armenians')[field] = 11; }).join('\n')).toContain(`${field}: 必须是 1–10`);
+      expect(
+        problemsFor((data) => {
+          row(data, 'Armenians')[field] = 0;
+        }).join('\n'),
+      ).toContain(`${field}: 必须是 1–10`);
+      expect(
+        problemsFor((data) => {
+          row(data, 'Armenians')[field] = 11;
+        }).join('\n'),
+      ).toContain(`${field}: 必须是 1–10`);
     }
-    expect(problemsFor((data) => { row(data, 'Armenians').op = ''; }).join('\n')).toContain('op: 必须是非空字符串');
+    expect(
+      problemsFor((data) => {
+        row(data, 'Armenians').op = '';
+      }).join('\n'),
+    ).toContain('op: 必须是非空字符串');
   });
 
   it('CLI 对缺文明的 fixture 非 0 退出', () => {

@@ -25,6 +25,7 @@ function isValidDate(value) {
   if (typeof value !== 'string' || !DATE.test(value)) return false;
   const [year, month, day] = value.split('-').map(Number);
   const date = new Date(Date.UTC(year, month - 1, day));
+  if (year < 100) date.setUTCFullYear(year);
   return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
 }
 
@@ -51,8 +52,8 @@ export function validateCivRatings(ratings, civNames) {
   if (!isValidDate(ratings.verifiedAt)) {
     problems.push('verifiedAt: 必须是 YYYY-MM-DD 的真实日期');
   }
-  if (!Number.isInteger(ratings.schemaVersion) || ratings.schemaVersion < 1) {
-    problems.push('schemaVersion: 必须是 >= 1 的整数');
+  if (Object.hasOwn(ratings, 'schemaVersion') && ratings.schemaVersion !== 1) {
+    problems.push('schemaVersion: 存在时必须是 1');
   }
 
   const keys = Object.keys(ratings).filter((key) => !META.has(key));
