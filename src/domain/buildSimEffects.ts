@@ -2,7 +2,9 @@ import type { Res, Stock, EffectRow } from './buildSim';
 import { MAYAN_RESOURCE_TASKS } from './buildSimCivRules';
 import { SPECIAL_INCOME } from './specialIncome';
 import { TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
+import { pushMod, TECH_OPS, type NumMod } from './numericEffects';
 export { TC_BY_AGE };
+export { applyMod, pushMod, TECH_OPS, type NumMod } from './numericEffects';
 const START: Stock = { food: 200, wood: 200, gold: 100, stone: 200 };
 export const TC_UNITS = new Set(TC_BY_AGE);
 /** 文明修正 */
@@ -53,21 +55,6 @@ export interface Mods {
   mayanWallCost: Record<number, number>;
   start: Stock;
 }
-/** 数值修正：按 .dat 效果顺序累积，set 覆盖之前的一切，mul/add 依次叠加。值 = (set ?? 原值) × mul + add */
-export interface NumMod {
-  set?: number;
-  mul: number;
-  add: number;
-}
-export function pushMod(cur: NumMod | undefined, op: string | undefined, v: number): NumMod {
-  const m = cur ?? { mul: 1, add: 0 };
-  if (op === 'set') return { set: v, mul: 1, add: 0 };
-  if (op === 'mul') return { set: m.set, mul: m.mul * v, add: m.add * v };
-  return { set: m.set, mul: m.mul, add: m.add + v };
-}
-export const applyMod = (base: number, m?: NumMod): number => (m ? (m.set ?? base) * m.mul + m.add : base);
-export const TECH_OPS = new Set(['set', 'mul', 'add']);
-
 export function baseMods(): Mods {
   return {
     rate: {},
