@@ -2,6 +2,7 @@ import { ListHead } from '../../../shared/ui/layout';
 import { Link } from 'react-router-dom';
 import { useCore } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
+import { DLCS } from '../../../domain/dlc';
 import { collapse } from '../../../domain/family';
 import { filterUnitFamilies } from '../../../domain/unitFilters';
 import { UNIT_ROLE_ZH, type UnitRole } from '../../../domain/unitRoles';
@@ -12,6 +13,7 @@ import { AgeBar, DlcBar, Loading, SearchInput } from '../../../shared/ui/widgets
 import { useSticky } from '../../../shared/utils/sticky';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { Icon } from '../../../shared/ui/Icon';
+import CatalogFilters from '../../../shared/ui/CatalogFilters';
 import { projectUnitDisplayAges } from '../displayAge';
 import './unit-cards.css';
 
@@ -40,8 +42,41 @@ export default function UnitList() {
   return (
     <section id="units" className="pane">
       <ListHead level={1} title="单位" desc="全部单位 · 按文明、兵种、类别、DLC、时代筛选" />
-      <div className="bar fbar unit-list-filters">
-        <SearchInput id="uq" value={q} onChange={setQ} placeholder="搜索单位（中/英）" />
+      <CatalogFilters
+        search={<SearchInput id="uq" value={q} onChange={setQ} placeholder="搜索单位（中/英）" />}
+        count={
+          <span id="ucnt">
+            {r.length} / {fams.length}
+          </span>
+        }
+        active={[t, a, dlc, civ, role].filter(Boolean).length}
+        dirty={dirty}
+        onReset={reset}
+        activeSummary={[
+          q && `搜索“${q}”`,
+          civ && civByEn(civ)?.zh,
+          role && UNIT_ROLE_ZH[role],
+          t && { UniqueUnit: '独特单位', Unit: '通用单位', UnitUpgrade: '升级单位', RegionalUnit: '区域单位' }[t],
+          dlc && (dlc === 'none' ? 'DLC未标注' : DLCS[+dlc]?.zh),
+          a && AGE_ZH[+a],
+        ]
+          .filter(Boolean)
+          .join(' · ')}
+        secondary={
+          <>
+            <DlcBar value={dlc} onChange={setDlc} />
+            <AgeBar value={a} onChange={setA} />
+            <details className="unit-filter-help">
+              <summary>
+                筛选口径与兵种说明 <Icon name="chevron-down" />
+              </summary>
+              <p className="note unit-filter-note">
+                按当前版本科技树中的可用单位筛选，不计队友解锁。兵种可交叉归类，骑射也属于骑兵和弓兵；其他单位含村民、贸易车等。
+              </p>
+            </details>
+          </>
+        }
+      >
         <CivPicker id="uciv" value={civ} onChange={setCiv} none="全部文明" label="可用文明" />
         <select id="urole" aria-label="兵种" value={role} onChange={(e) => setRole(e.target.value as UnitRole | '')}>
           <option value="">全部兵种</option>
@@ -58,20 +93,7 @@ export default function UnitList() {
           <option value="UnitUpgrade">升级单位</option>
           <option value="RegionalUnit">区域单位</option>
         </select>
-        <div className="unit-filter-summary">
-          <span id="ucnt" className="note" role="status" aria-live="polite">
-            {r.length} / {fams.length}
-          </span>
-          {dirty && (
-            <button type="button" onClick={reset}>
-              清空筛选
-            </button>
-          )}
-        </div>
-      </div>
-      <p className="note unit-filter-note">按当前版本科技树中的可用单位筛选，不计队友解锁。兵种可交叉归类，骑射也属于骑兵和弓兵；其他单位含村民、贸易车等。</p>
-      <DlcBar value={dlc} onChange={setDlc} />
-      <AgeBar value={a} onChange={setA} />
+      </CatalogFilters>
       {!core ? (
         <Loading />
       ) : !r.length ? (

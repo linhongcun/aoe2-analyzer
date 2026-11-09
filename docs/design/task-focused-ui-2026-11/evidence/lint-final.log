@@ -1,0 +1,118 @@
+
+/workspace/aoe2-analyzer/src/domain/buildSim.ts
+  501:1  warning  File has too many lines (1254). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/src/domain/garrisonGeneral.ts
+  501:1  warning  File has too many lines (665). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/src/features/builds/BuildTimelineView.tsx
+  501:1  warning  File has too many lines (517). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/src/features/market/Market.tsx
+  501:1  warning  File has too many lines (538). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/src/features/mixedArmy/MixedArmy.tsx
+  501:1  warning  File has too many lines (574). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/src/features/units/components/UnitDetail.tsx
+  501:1  warning  File has too many lines (542). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/src/shared/nav/pageRegistry.ts
+  501:1  warning  File has too many lines (835). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/src/shared/utils/useCoreTrees.ts
+  19:18  warning  The ref value 'generation.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'generation.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+  67:6   warning  React Hook useCallback has missing dependencies: 'core' and 'trees'. Either include them or remove the dependency array                                                                                                                                              react-hooks/exhaustive-deps
+
+/workspace/aoe2-analyzer/tests/e2e/insights584.spec.ts
+  501:1  warning  File has too many lines (586). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/e2e/ladder577.spec.ts
+  501:1  warning  File has too many lines (600). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/e2e/matchupSim424.spec.ts
+  501:1  warning  File has too many lines (514). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/e2e/mechanism652.spec.ts
+  501:1  warning  File has too many lines (600). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/e2e/routes652.spec.ts
+  501:1  warning  File has too many lines (577). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/e2e/siteLinking520.spec.ts
+  501:1  warning  File has too many lines (512). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/e2e/smoke.spec.ts
+  501:1  warning  File has too many lines (669). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/e2e/startGame592.spec.ts
+  501:1  warning  File has too many lines (595). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/e2e/startGame632.spec.ts
+  501:1  warning  File has too many lines (599). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/e2e/v0300-338.spec.ts
+  501:1  warning  File has too many lines (600). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/unit/ciStageEvidence659.test.ts
+  501:1  warning  File has too many lines (598). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/unit/mechanism652.test.ts
+  501:1  warning  File has too many lines (539). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/unit/releaseEvidence.test.ts
+  501:1  warning  File has too many lines (589). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/unit/startGame592.test.ts
+  501:1  warning  File has too many lines (589). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/unit/startGame632.test.ts
+  501:1  warning  File has too many lines (575). Maximum allowed is 500  max-lines
+
+/workspace/aoe2-analyzer/tests/unit/wei197.test.ts
+  501:1  warning  File has too many lines (539). Maximum allowed is 500  max-lines
+
+✖ 25 problems (0 errors, 25 warnings)
+
+
+> aoe2-analyzer@0.77.64 lint:registries
+> node scripts/check-registries.mjs
+
+机制注册表一致性检查（#794）
+  CIV_MECHANISMS: 20
+  CIV_NOTES: 18（允许缺口：Portuguese、Franks）
+  simSupport 显式分支: 14（允许缺口：Portuguese、Shu、Malians、Varangians、Tatars、Franks）
+  parity: 13（允许缺口：Romans、Poles、Gurjaras、Mapuche、Chinese、Jurchens、Franks）
+  bonusUsage: 11（允许缺口：Gurjaras、Jurchens、Portuguese、Shu、Malians、Varangians、Tatars、Mayans、Franks）
+
+✓ 五组登记一致；允许缺口均有原因。
+
+> aoe2-analyzer@0.77.64 lint:data-families
+> node scripts/check-data-families.mjs
+
+数据族索引：14 条，0 个错误
+
+> aoe2-analyzer@0.77.64 lint:colors
+> node scripts/check-colors.mjs
+
+颜色检查通过：src 中只有 tokens.css 含原始颜色值。
+
+> aoe2-analyzer@0.77.64 lint:css
+> node scripts/check-css.mjs
+
+src/shared/styles/base.css: 1814 行，超过 800 行，建议按职责拆分（只报告）。
+src/shared/styles/layout.css: 2284 行，超过 800 行，建议按职责拆分（只报告）。
+CSS 语法检查：79 个文件，0 个错误
+
+> aoe2-analyzer@0.77.64 lint:layers
+> node scripts/check-layers.mjs --strict
+
+分层边界检查（#281）：0 处越层引用（strict：有违规即失败）
+
+feature-to-feature（features/X 不能 import features/Y）：0 处
+
+shared-upward（shared/ 不能 import features/、app/）：0 处
+
+domain-upward（domain/ 不能 import react、features/、app/、shared/ui）：0 处
+
+core-json-direct（核心数据 JSON 只能经 LOADERS 登记的文件读取）：0 处

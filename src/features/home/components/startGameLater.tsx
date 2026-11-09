@@ -240,6 +240,7 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
         </SummaryRow>
         <TeamMatesSummary state={state} onChange={onChange} />
       </div>
+      {sceneSupported(state.choice) ? <PlanLoader state={state} /> : null}
       <div className="start-links">
         {state.choice.mode === 'team' && state.choice.teamSize != null ? <TeamFitLink state={state} /> : null}
         <Link className="start-link" to="/maps">
@@ -262,18 +263,20 @@ export function Summary({ state, onChange }: { state: StartState; onChange: Upda
           </Link>
         ) : null}
       </div>
-      <MatchupNotice />
-      <p className="start-hint">
-        开局流程：
-        {sceneSupported(state.choice)
-          ? '具体流程见本局开局；地图、路位未带入目标页。'
-          : civ
-            ? '当前条件未指定已核验打法；仅带入文明上下文，列表仍为全部开局；地图、路位未带入，具体流程需自行选择。'
-            : '未带入本局文明，列表仍为全部开局，具体流程需自行选择。'}
-      </p>
-      <p className="start-hint">{map ? `地图页不保证已选中${map.name}，请在页内选择。` : '地图页未带入本局地图，请在页内选择。'}</p>
-      <p className="start-hint">天梯打开的是现有静态快照，未按本局筛选，不是这一局的胜率。</p>
-      {sceneSupported(state.choice) ? <PlanLoader state={state} /> : null}
+      <details className="start-scene-details start-tool-notes">
+        <summary>工具跳转范围与限制</summary>
+        <MatchupNotice />
+        <p className="start-hint">
+          开局流程：
+          {sceneSupported(state.choice)
+            ? '具体流程见本局开局；地图、路位未带入目标页。'
+            : civ
+              ? '当前条件未指定已核验打法；仅带入文明上下文，列表仍为全部开局；地图、路位未带入，具体流程需自行选择。'
+              : '未带入本局文明，列表仍为全部开局，具体流程需自行选择。'}
+        </p>
+        <p className="start-hint">{map ? `地图页不保证已选中${map.name}，请在页内选择。` : '地图页未带入本局地图，请在页内选择。'}</p>
+        <p className="start-hint">天梯打开的是现有静态快照，未按本局筛选，不是这一局的胜率。</p>
+      </details>
       <div className="start-actions">
         <button type="button" className="start-btn" onClick={() => onChange(() => resetStart())}>
           再开一局

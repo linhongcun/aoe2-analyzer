@@ -124,7 +124,7 @@ export default function CivRequirements({
       ) : (
         <p className="note requirements-search-note">输入中文、英文或拼音名称后添加条件；不会自动补齐科技或替换兵种。</p>
       )}
-      <div className="requirements-selected" aria-label="已选组合条件">
+      <div className="requirements-selected" role="group" aria-label="已选组合条件">
         {context &&
           resolved.map((condition, index) => (
             <div className={`requirement-chip${condition.error ? ' invalid' : ''}`} key={`${condition.token}-${index}`} data-testid="requirement-chip">
