@@ -2,7 +2,7 @@ import type { Core } from '../../data';
 import { unitAvailable, techAvailable } from '../../domain/unitAvailability';
 import type { BuildOrder } from '../../domain/buildOrder';
 import { fmtSide } from '../../domain/duelState';
-import { COUNTER_EXTRA } from '../../domain/ratings';
+import { COUNTER_EXTRA, COUNTER_EXTRA_GROUPS } from '../../domain/ratings';
 import type { CivType, Trees } from '../../domain/types';
 
 export interface MatchupData {
@@ -45,24 +45,32 @@ export function rushDrill(data: MatchupData, own: string, enemy: string, guide: 
  * Keep neutral advice; only retain unit clauses supported by the selected civ's tree.
  */
 export function counterExtra(data: MatchupData, civ: string, type: CivType): string {
-  const any = (...ids: number[]) => ids.some((id) => unitAvailable(data, civ, id, 4));
-  const cavalry = any(448, 38),
-    light = any(546, 441, 1707),
-    horseArcher = any(39, 474);
-  if (type === 'cav') return [any(93) ? '用城墙/长矛阵限制机动' : '用城墙限制机动', any(125) && '僧侣转化也有效'].filter(Boolean).join('；');
+  const any = (...ids: readonly number[]) => ids.some((id) => unitAvailable(data, civ, id, 4));
+  const cavalry = any(...COUNTER_EXTRA_GROUPS.cavalry),
+    light = any(...COUNTER_EXTRA_GROUPS.lightCavalry),
+    horseArcher = any(...COUNTER_EXTRA_GROUPS.horseArcher);
+  if (type === 'cav')
+    return [any(...COUNTER_EXTRA_GROUPS.spearman) ? '用城墙/长矛阵限制机动' : '用城墙限制机动', any(...COUNTER_EXTRA_GROUPS.monk) && '僧侣转化也有效']
+      .filter(Boolean)
+      .join('；');
   if (type === 'arch') {
-    const siege = [any(1258, 422, 548) && '冲车', any(280, 550, 588) && '投石'].filter(Boolean).join('/');
+    const siege = [any(...COUNTER_EXTRA_GROUPS.ram) && '冲车', any(...COUNTER_EXTRA_GROUPS.onager) && '投石'].filter(Boolean).join('/');
     const mounted = [cavalry && '骑兵快速贴脸', light && '轻骑绕后'].filter(Boolean).join('或');
     return [siege && `${siege}压阵地`, mounted].filter(Boolean).join('；') || '当前文明暂无可核对的补充反制建议';
   }
   if (type === 'inf') {
     const mounted = [cavalry && '骑兵', horseArcher && '骑射'].filter(Boolean).join('或');
     return (
-      [any(4, 24, 492, 5) && '远程放风筝', mounted && `${mounted}拉扯`, unitAvailable(data, civ, 279, 3) && '城堡期蝎子克制密集步兵']
+      [
+        any(...COUNTER_EXTRA_GROUPS.rangedInfantry) && '远程放风筝',
+        mounted && `${mounted}拉扯`,
+        unitAvailable(data, civ, COUNTER_EXTRA_GROUPS.scorpion[0], 3) && '城堡期蝎子克制密集步兵',
+      ]
         .filter(Boolean)
         .join('；') || '当前文明暂无可核对的补充反制建议'
     );
   }
-  if (type === 'siege') return [cavalry && '骑兵直切攻城武器', any(1258, 422, 548) ? '保持冲车阵型分散' : '保持阵型分散'].filter(Boolean).join('；');
+  if (type === 'siege')
+    return [cavalry && '骑兵直切攻城武器', any(...COUNTER_EXTRA_GROUPS.ram) ? '保持冲车阵型分散' : '保持阵型分散'].filter(Boolean).join('；');
   return COUNTER_EXTRA[type];
 }
