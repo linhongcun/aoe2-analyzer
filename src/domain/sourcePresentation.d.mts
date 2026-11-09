@@ -1,13 +1,11 @@
 import type { BuildOrder, Source } from './buildOrder';
 import type { GameGuideSource } from './gameGuide';
 
-/** Strictly validated public fields; recognized technical locators are absent. */
+/** Strictly validated public fields; internal technical locators are never projected. */
 export interface PublicBuildSource {
   title: string;
   url: string;
   author: string;
-  section?: string;
-  ref?: string;
   accessed: string;
 }
 export interface PublicBuildPresentation {
