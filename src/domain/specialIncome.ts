@@ -28,9 +28,9 @@ export type SpecialIncome = Partial<Record<SpecialRes, number>>;
  *
  * - 收入：foragerWood / foragerFood / lumberFood / varangianGold / Polish stoneGold
  * - 只修饰：malianGold / tatarShepherd
- * - 行放行：mayanResource（成本类 buildingWood / mayanWall 仍在 APPLICATION_RULES 的显式例外里）
+ * - 行放行：mayanResource
  * 三张派生表（RESOURCE_APPLICATIONS / RESOURCE_HANDLERS / APPLICATION_RULES）只从这里取条目；
- * `classificationOnly` 的 res 269 / 268 也在派生表处显式列出。
+ * 非收入/非放行例外集中在 SPECIAL_INCOME_EXCEPTIONS（269/268、buildingWood/mayanWall）。
  */
 export interface SpecialIncomeRule {
   flag?: keyof RowApplication;
