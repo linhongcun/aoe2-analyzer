@@ -46,6 +46,18 @@ export interface SpecialIncomeRule {
 
 const extra = (res: SpecialRes, value: number): SpecialIncome | undefined => (value ? { [res]: value } : undefined);
 
+/** 不属于收入/行放行的显式例外；派生表从这里读取，避免静默分叉。 */
+export const SPECIAL_INCOME_EXCEPTIONS = {
+  classificationOnly: [
+    { res: 269, op: 'set', reason: '西班牙科技返金：只分类，不入账' },
+    { res: 268, op: 'mul', reason: '猎物食物倍率：只分类，不入账' },
+  ],
+  applicationOnly: [
+    { flag: 'buildingWood', reason: '马里建筑木费折扣在 attr cost 分支处理，不是资源渠道' },
+    { flag: 'mayanWall', reason: '玛雅墙费折扣在 attr cost 分支处理，不是资源渠道' },
+  ],
+} as const;
+
 export const SPECIAL_INCOME: readonly SpecialIncomeRule[] = [
   {
     flag: 'foragerWood',
@@ -130,3 +142,20 @@ export const SPECIAL_INCOME: readonly SpecialIncomeRule[] = [
     income: (_m, task, rate, scope) => extra('gold', polishStoneGold(scope.poles, task, rate)),
   },
 ];
+
+/** 机器可检查的主表不变量；测试用它证明派生表不会静默丢渠道。 */
+export function specialIncomeErrors(rules: readonly SpecialIncomeRule[] = SPECIAL_INCOME): string[] {
+  const errors: string[] = [];
+  const keys = new Set<string>();
+  for (const [index, rule] of rules.entries()) {
+    const label = rule.flag ?? `rule-${index}`;
+    const key = `${rule.flag ?? ''}:${rule.res ?? ''}:${rule.op ?? ''}`;
+    if (keys.has(key)) errors.push(`${label}: 重复渠道 ${key}`);
+    keys.add(key);
+    if ((rule.res === undefined) !== (rule.op === undefined)) errors.push(`${label}: res/op 必须成对`);
+    if (rule.flag && !rule.allows) errors.push(`${label}: flag 条目缺少 allows`);
+    if (rule.apply && (rule.res === undefined || rule.op === undefined)) errors.push(`${label}: apply 条目缺少 res/op`);
+    if (!rule.apply && !rule.accepts && !rule.allows && !rule.income) errors.push(`${label}: 没有任何 apply/accepts/allows/income`);
+  }
+  return errors;
+}

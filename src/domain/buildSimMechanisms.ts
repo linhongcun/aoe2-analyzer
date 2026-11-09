@@ -46,7 +46,7 @@ import { chineseContext, chinesePopulation, chineseStartingVillagers, chineseRow
 import { jurchenContext, jurchenNotes, jurchenRowClass, JURCHEN_RESEARCH_NOTE } from './jurchenEconomy';
 import { DATA_PATCH, SOURCE_PINS } from '../data/sources';
 import { isAgeTech } from './gameIds';
-import { SPECIAL_INCOME } from './specialIncome';
+import { SPECIAL_INCOME, SPECIAL_INCOME_EXCEPTIONS } from './specialIncome';
 import type { CivContext } from './civModel';
 export interface MechanismContext {
   romans?: ReturnType<typeof romanContext>;
@@ -283,12 +283,12 @@ interface ApplicationRule {
   gather?: boolean;
   allows: (row: EffectRow, scope: Scope) => boolean;
 }
-const APPLICATION_RULES: readonly ApplicationRule[] = [
+export const APPLICATION_RULES: readonly ApplicationRule[] = [
   ...SPECIAL_INCOME.flatMap((rule) =>
     rule.flag && rule.allows ? [{ flag: rule.flag, civ: rule.civ, gather: rule.gather, allows: rule.allows as ApplicationRule['allows'] }] : [],
   ),
-  { flag: 'buildingWood', civ: 'Malians', allows: rules.hasMalianBuildingContext },
-  { flag: 'mayanWall', civ: 'Mayans', allows: rules.hasMayanWallContext },
+  { flag: SPECIAL_INCOME_EXCEPTIONS.applicationOnly[0].flag, civ: 'Malians', allows: rules.hasMalianBuildingContext },
+  { flag: SPECIAL_INCOME_EXCEPTIONS.applicationOnly[1].flag, civ: 'Mayans', allows: rules.hasMayanWallContext },
 ];
 export function rowApplication(civ: string, row: EffectRow, scope: Scope, mode: 'timeline' | 'gather', atomic: () => boolean): RowApplication {
   const application: RowApplication = {};

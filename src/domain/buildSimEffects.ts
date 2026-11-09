@@ -132,7 +132,7 @@ export interface RowApplication {
   mayanWall?: boolean;
 }
 /** All special scalar resource channels share the same dispatch; context admission lives in the registry. */
-const RESOURCE_APPLICATIONS = SPECIAL_INCOME.flatMap((rule) =>
+export const RESOURCE_APPLICATIONS = SPECIAL_INCOME.flatMap((rule) =>
   rule.flag && rule.res !== undefined && rule.op && rule.apply ? [{ flag: rule.flag, res: rule.res, op: rule.op, apply: rule.apply }] : [],
 );
 export function applyEffects(m: Mods, effects: EffectRow['effects'], application: RowApplication = {}) {
