@@ -8,7 +8,6 @@ import {
   COINAGE_TECH_ID,
   GUILDS_TECH_ID,
   MARKET_BUILDING_ID,
-  MARKET_FEE_ANCHOR,
   SARACENS_EN,
   UGC_MARKET_CHECKED,
   UGC_MARKET_HREF,
@@ -16,7 +15,8 @@ import {
   marketFeeFacts,
   type MarketFeeFacts,
   type MarketRate,
-} from '../marketFees';
+} from '../../../domain/marketFeeFacts';
+import { MARKET_FEE_ANCHOR } from '../marketFees';
 
 function Rate({ rate }: { rate: MarketRate | null }) {
   return (

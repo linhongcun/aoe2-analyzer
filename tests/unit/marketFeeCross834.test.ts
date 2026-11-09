@@ -19,9 +19,7 @@ describe('市场费率交叉一致性（issue 834）', () => {
     const tech = Object.values(fakeDat.techs).find((candidate) => candidate.id === 15);
     const effect = tech?.eco?.find((candidate) => candidate.res === 78 && candidate.op === 'set');
     const ecoEffect = fakeEco.ecoTechs?.['15']?.effects;
-    const ecoRow = Array.isArray(ecoEffect)
-      ? ecoEffect.find((candidate) => candidate?.res === 78 && candidate?.op === 'set')
-      : undefined;
+    const ecoRow = Array.isArray(ecoEffect) ? ecoEffect.find((candidate) => candidate?.res === 78 && candidate?.op === 'set') : undefined;
     expect(effect).toBeDefined();
     expect(ecoRow).toBeDefined();
     if (!effect || !ecoRow) return;
