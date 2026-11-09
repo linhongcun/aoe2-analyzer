@@ -14,7 +14,6 @@ import {
   COINAGE_TECH_ID,
   GUILDS_TECH_ID,
   MARKET_BUILDING_ID,
-  MARKET_FEE_ANCHOR,
   SARACEN_MARKET_TECH,
   SARACENS_EN,
   UGC_DEFAULT_RATE,
@@ -23,7 +22,8 @@ import {
   formatMarketPercent,
   marketFeeFacts,
   type MarketEco,
-} from '../../src/features/buildings/marketFees';
+} from '../../src/domain/marketFeeFacts';
+import { MARKET_FEE_ANCHOR } from '../../src/features/buildings/marketFees';
 import { MarketFeeTechLinks } from '../../src/features/techs/components/MarketFeeTechLinks';
 import TechDetail from '../../src/features/techs/components/TechDetail';
 

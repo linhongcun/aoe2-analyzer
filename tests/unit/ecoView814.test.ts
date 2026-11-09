@@ -9,7 +9,6 @@ const FEATURE_FILES = [
   'src/features/builds/listMeta.ts',
   'src/features/builds/shareCard.ts',
   'src/features/buildings/foodAmount.ts',
-  'src/features/buildings/marketFees.ts',
   'src/features/buildings/repairCost.ts',
   'src/features/civs/arenaCastleGold.ts',
   'src/features/gameGuide/elevation.ts',
@@ -31,11 +30,17 @@ describe('#814 features 走 eco 类型化入口', () => {
     }
   });
 
-  it('11 个已知页面都从 data/eco 读取类型化 ECO', () => {
+  it('10 个已知页面都从 data/eco 读取类型化 ECO', () => {
     for (const file of FEATURE_FILES) {
       const source = readFileSync(file, 'utf8');
       expect(source, file).toContain("from '../../data/eco'");
     }
+  });
+
+  it('marketFeeFacts 在 domain 内使用类型化 data/eco', () => {
+    const source = readFileSync('src/domain/marketFeeFacts.ts', 'utf8');
+    expect(source).toContain("from '../data/eco'");
+    expect(source).not.toContain('data/raw/eco');
   });
 
   it('ECO 是带 meta 的类型化视图，版本与 pin 一致', () => {
