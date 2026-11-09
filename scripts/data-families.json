@@ -1,11 +1,5 @@
 {
-  "_doc": "issue 820 数据族索引：每个 .dat 派生文件的生成器、pin、复现命令、测试与审计状态。只读元数据，不做运行时加载。",
-  "pin": {
-    "dat": {
-      "source": "data_sources.json",
-      "path": "sources.dat"
-    }
-  },
+  "_doc": "issue 820 数据族索引：每个 .dat 派生文件的生成器、pin、复现命令、测试与审计状态。pin=\"dat\" 指向 scripts/data_sources.json 的 sources.dat；pin=\"manual\" 表示手工输入。只读元数据，不做运行时加载。",
   "families": [
     {
       "file": "src/data/effects.json",
