@@ -9,6 +9,7 @@ import { reviewPayload, SCENE_ECO, type SceneContext } from './positionScenarios
 import { sceneSignature } from './positionScenarioMath';
 import review from './routeReview.json';
 import { AGE_BY_TECH } from './gameIds';
+import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 
 export const ROUTE_VERSION = 'feudal-castle-ledger-1';
 export const FEUDAL_TECHS = { flank: ['Fletching', 'Padded Archer Armor'], pocket: ['Forging', 'Scale Barding Armor'] };
@@ -114,7 +115,8 @@ export function routeProfile(ctx: SceneContext, civ: string, unitId: number, age
     (Object.keys(source.timeAt).join(',') !== String(unit.b) || !Number.isFinite(source.timeAt[unit.b]) || source.timeAt[unit.b]! <= 0)
   )
     return fail('按建筑训练周期缺失或结构变化');
-  let cycle = source.timeAt?.[unit.b] ?? source.trainTime;
+  const base = source.timeAt?.[unit.b] ?? source.trainTime;
+  const cycleOps: TrainingCycleOp[] = [];
   const ageTechs = AGE_BY_TECH;
   for (const row of eco.civEco[civ] ?? []) {
     if (row.age > age || (row.requires ?? []).some((id) => (ageTechs[id] ? ageTechs[id]! > age : !ids.has(id)))) continue;
@@ -123,9 +125,10 @@ export function routeProfile(ctx: SceneContext, civ: string, unitId: number, age
       const work = e.attr === 'workRate' && e.target === `unit:${unit.b}`;
       if (!train && !work) continue;
       if (e.kind !== 'attr' || e.op !== 'mul' || !Number.isFinite(e.v) || e.v! <= 0) return fail('生产效果不可核验');
-      cycle = train ? cycle * e.v! : cycle / e.v!;
+      cycleOps.push({ kind: train ? 'train' : 'work', op: 'mul', v: e.v! });
     }
   }
+  const cycle = trainingCycle(base, cycleOps).cycle;
   if (!Number.isFinite(cycle) || cycle <= 0) return fail('训练周期缺失');
   const discount = discountedCost(unit, civ, age, { techIds: ids });
   if (discount.unsupported.length || !validCost(discount.cost, shape.costKeys) || routeWork(discount.cost) <= 0) return fail('单位折扣不可核验');
