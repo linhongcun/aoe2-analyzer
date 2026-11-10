@@ -6,6 +6,7 @@
    重新生成全部 JSON（npm run data 等价流程）、effects.json、docs/EFFECTS-AUDIT.md，运行基础数值对账；
    把差异摘要写入 docs/PATCH-NOTES/<patch>.md 并打印。
 3. 永不自动提交：请自行检查 git diff 后提交。
+开始前先跑覆盖清单（scripts/data_update_coverage.py）。清单失败则退出，不查询上游，不跑生成器，不改 pin。
 审阅后冻结来源：重复传入 --source-ref dat=<完整SHA>、aoe2techtree=<完整SHA>、halfon=<完整SHA>，三项必须齐全。
 --check：只报告是否有更新（有更新时退出码 10）。--force：即使无更新也重跑生成流程。
 环境变量 GITHUB_TOKEN（可选）：提高 GitHub API 速率限制。"""
@@ -75,11 +76,18 @@ def frozen(repo, ref):
 
 
 def run(*cmd):
+    """失败即停：任一生成器非零退出就中断后续步骤。"""
     print('$', ' '.join(cmd)); subprocess.run(cmd, cwd=ROOT, check=True)
 
 
 def main():
     args = parse_args(sys.argv[1:])
+    from data_update_coverage import check
+    errors = check()
+    if errors:
+        for error in errors:
+            print('✗ ' + error)
+        raise SystemExit('数据更新覆盖清单未通过，已停止，未运行生成器')
     pins = json.load(open(SRC)); S = pins['sources']
     up = {k: frozen(S[k]['repo'], args.source_refs[k]) if args.source_refs else latest(S[k]['repo'], PATHS[k]) for k in PATHS}
     builds = {detect_patch([row['message']]) for row in up.values()} - {None}
