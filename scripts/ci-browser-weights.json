@@ -24,6 +24,7 @@
     "tests/e2e/breakEven25.spec.ts": 19012,
     "tests/e2e/build41.spec.ts": 7979,
     "tests/e2e/buildingHistory.spec.ts": 27238,
+    "tests/e2e/buildings881.spec.ts": 6000,
     "tests/e2e/buildQuickLinks479.spec.ts": 12498,
     "tests/e2e/campaigns240.spec.ts": 22551,
     "tests/e2e/cardWrap78.spec.ts": 36180,

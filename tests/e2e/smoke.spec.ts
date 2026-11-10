@@ -218,7 +218,7 @@ test('building detail tabs + links from tree and unit page', async ({ page }) =>
 
 test('buildings list filters by type', async ({ page }) => {
   await page.goto('./#buildings');
-  await page.locator('#bt').selectOption('defense');
+  await page.getByRole('group', { name: '类型' }).getByRole('button', { name: '防御', exact: true }).click();
   await expect(page.locator('#bgrid .card', { hasText: 'Keep' })).toBeVisible();
   await expect(page.locator('#bgrid .card', { hasText: 'Barracks' })).toHaveCount(0);
 });

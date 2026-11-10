@@ -20,41 +20,56 @@ for (const width of [360, 375, 390, 1280, 1920])
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'units').toBe(true);
       for (const [route, grid] of CATALOGS) {
         await page.goto(`./#/${route}`);
-        await expect(page.locator(`${grid} .dlcb`).first()).toBeVisible();
+        await expect(page.locator(`${grid} > .card`).first()).toBeVisible();
         await page.evaluate(() => document.fonts.ready);
         const columns = await page.locator(`${grid} > .card`).evaluateAll((cards) => {
           const firstTop = cards[0]!.getBoundingClientRect().top;
           return cards.filter((card) => Math.abs(card.getBoundingClientRect().top - firstTop) < 1).length;
         });
         expect(columns, `${route} 同行资料卡`).toBeGreaterThanOrEqual(2);
-        const badges = await page.locator(`${grid} .ucard:has(.dlcb)`).evaluateAll((cards) =>
-          cards.map((card) => {
-            const bounds = card.getBoundingClientRect();
-            const badge = card.querySelector('.dlcb')!.getBoundingClientRect();
-            const content = card.querySelector('.mini')!.getBoundingClientRect();
-            return {
-              left: badge.left - bounds.left,
-              bottom: bounds.bottom - badge.bottom,
-              inside: badge.left >= bounds.left && badge.right <= bounds.right && badge.bottom <= bounds.bottom,
-              clear: badge.top >= content.bottom + 4,
-              contentFits: [...card.querySelectorAll('small, .res, .unit-card-stats')].every((element) =>
-                [...element.getClientRects()].every((rect) => rect.left >= bounds.left && rect.right <= bounds.right),
-              ),
-            };
-          }),
-        );
-        expect(badges.length).toBeGreaterThan(1);
-        expect(
-          badges.every((badge) => badge.inside && badge.clear),
-          route,
-        ).toBe(true);
-        expect(
-          badges.every((badge) => badge.contentFits),
-          `${route} 文字和费用不超出卡片`,
-        ).toBe(true);
-        for (const side of ['left', 'bottom'] as const) {
-          const offsets = badges.map((badge) => badge[side]);
-          expect(Math.max(...offsets) - Math.min(...offsets), `${route} ${side}`).toBeLessThanOrEqual(1);
+        if (route === 'buildings') {
+          // #881：建筑卡用文字标记，不再把资料片图标钉在左下角。
+          await expect(page.locator(`${grid} .b-card .b-cost`).first()).toBeVisible();
+          const fits = await page.locator(`${grid} .b-card`).evaluateAll((cards) =>
+            cards.every((card) => {
+              const bounds = card.getBoundingClientRect();
+              return [...card.querySelectorAll('.b-zh, .b-en, .b-meta, .b-cost, .b-flags')].every((element) =>
+                [...element.getClientRects()].every((rect) => rect.left >= bounds.left - 1 && rect.right <= bounds.right + 1),
+              );
+            }),
+          );
+          expect(fits, '建筑卡文字和造价不超出卡片').toBe(true);
+        } else {
+          await expect(page.locator(`${grid} .dlcb`).first()).toBeVisible();
+          const badges = await page.locator(`${grid} .ucard:has(.dlcb)`).evaluateAll((cards) =>
+            cards.map((card) => {
+              const bounds = card.getBoundingClientRect();
+              const badge = card.querySelector('.dlcb')!.getBoundingClientRect();
+              const content = card.querySelector('.mini')!.getBoundingClientRect();
+              return {
+                left: badge.left - bounds.left,
+                bottom: bounds.bottom - badge.bottom,
+                inside: badge.left >= bounds.left && badge.right <= bounds.right && badge.bottom <= bounds.bottom,
+                clear: badge.top >= content.bottom + 4,
+                contentFits: [...card.querySelectorAll('small, .res, .unit-card-stats')].every((element) =>
+                  [...element.getClientRects()].every((rect) => rect.left >= bounds.left && rect.right <= bounds.right),
+                ),
+              };
+            }),
+          );
+          expect(badges.length).toBeGreaterThan(1);
+          expect(
+            badges.every((badge) => badge.inside && badge.clear),
+            route,
+          ).toBe(true);
+          expect(
+            badges.every((badge) => badge.contentFits),
+            `${route} 文字和费用不超出卡片`,
+          ).toBe(true);
+          for (const side of ['left', 'bottom'] as const) {
+            const offsets = badges.map((badge) => badge[side]);
+            expect(Math.max(...offsets) - Math.min(...offsets), `${route} ${side}`).toBeLessThanOrEqual(1);
+          }
         }
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), route).toBe(true);
         if (theme === 'light') {

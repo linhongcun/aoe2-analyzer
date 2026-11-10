@@ -273,6 +273,7 @@ export const PROFILES = {
       'marketFees745',
       'housing743',
       'repairCost744',
+      'buildingQuery881',
     ],
     [
       'garrison218',
@@ -285,6 +286,7 @@ export const PROFILES = {
       'marketFees745',
       'housing743',
       'repairCost744',
+      'buildings881',
     ],
   ),
   // #533：攻城页改动跑金标准与失败验收。不把 /siege 放进全站宽度/截图矩阵。

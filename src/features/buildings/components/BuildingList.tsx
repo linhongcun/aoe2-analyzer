@@ -1,80 +1,214 @@
+import { Fragment, useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCore } from '../../../data/hooks';
-import { BUILDING_TYPE_ZH } from '../../../domain/buildings';
+import { BUILDING_TYPE_ZH, isUniqueBuilding } from '../../../domain/buildings';
+import { DLCS } from '../../../domain/dlc';
 import { AGE_ZH } from '../../../domain/ratings';
-import type { BuildingType } from '../../../domain/types';
-import { BuildingIcon, CostView, DlcBadge } from '../../../shared/ui/art';
+import type { Building, BuildingType } from '../../../domain/types';
+import { BuildingIcon, CostView } from '../../../shared/ui/art';
+import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
-import { DlcBar, DlcSelect, Loading, SearchInput } from '../../../shared/ui/widgets';
+import { Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 import { filterBuildings } from '../logic/filter';
+import './building-list.css';
 
+const DESKTOP_QUERY = '(min-width: 721px)';
 const ageGuides = [
   [101, '封建时代说明'],
   [102, '城堡时代说明'],
   [103, '帝王时代说明'],
 ] as const;
+const AGES = [
+  ['1', '黑暗'],
+  ['2', '封建'],
+  ['3', '城堡'],
+  ['4', '帝王'],
+] as const;
+
+function useDesktopList() {
+  const [desktop, setDesktop] = useState(() => window.matchMedia(DESKTOP_QUERY).matches);
+  useLayoutEffect(() => {
+    const media = window.matchMedia(DESKTOP_QUERY);
+    const apply = () => setDesktop(media.matches);
+    apply();
+    media.addEventListener('change', apply);
+    return () => media.removeEventListener('change', apply);
+  }, []);
+  return desktop;
+}
+
+function cardFlags(b: Pick<Building, 'civs' | 'dlc'>): string {
+  const bits: string[] = [];
+  if (isUniqueBuilding(b)) bits.push('独特');
+  if (b.dlc != null && b.dlc !== 0) {
+    const name = DLCS[b.dlc]?.zh;
+    if (name && name !== '国王时代') bits.push(name);
+  }
+  return bits.join(' · ');
+}
+
+function Chip({ pressed, onClick, children }: { pressed: boolean; onClick: () => void; children: string }) {
+  return (
+    <button type="button" className="b-chip" aria-pressed={pressed} onClick={onClick}>
+      {children}
+    </button>
+  );
+}
 
 export default function BuildingList() {
   const core = useCore();
+  const desktop = useDesktopList();
+  const [moreOpen, setMoreOpen] = useState(false);
   const [q, setQ] = useSticky('b.q', ''),
     [age, setAge] = useSticky('b.a', ''),
     [type, setType] = useSticky('b.t', ''),
     [dlc, setDlc] = useSticky('b.dlc', '');
   const all = core?.buildings ?? [];
   const r = filterBuildings(all, { q, age, type, dlc });
+  const unlabeled = all.filter((b) => b.dlc == null).length;
+  const dirty = Boolean(q || type || age || dlc);
+  const summary = [
+    q && `搜索「${q}」`,
+    type && type in BUILDING_TYPE_ZH ? BUILDING_TYPE_ZH[type as BuildingType] : '',
+    age && AGE_ZH[+age],
+    dlc === 'none' ? '未标注资料片' : dlc ? DLCS[+dlc]?.zh : '',
+  ]
+    .filter(Boolean)
+    .join(' · ');
+  const reset = () => {
+    setQ('');
+    setType('');
+    setAge('');
+    setDlc('');
+  };
   return (
     <section id="buildings" className="pane">
-      <ListHead level={1} title="建筑" desc="全部建筑 · 按时代、类型、DLC 筛选" />
-      <p className="note">各档建筑门槛写在对应的时代升级说明里。</p>
-      <div className="uchips" role="navigation" aria-label="时代升级说明">
-        {ageGuides.map(([id, label]) => (
-          <Link className="community-tool-entry" key={id} to={`/tech/${id}`}>
-            {label}
-          </Link>
+      <ListHead level={1} title="建筑" desc="查找建筑并打开详情。" />
+      <nav className="b-guides" aria-label="时代升级说明">
+        {ageGuides.map(([id, label], index) => (
+          <Fragment key={id}>
+            {index > 0 && (
+              <span className="b-guide-sep" aria-hidden="true">
+                ·
+              </span>
+            )}
+            <Link to={`/tech/${id}`}>{label}</Link>
+          </Fragment>
         ))}
-      </div>
-      <div className="bar fbar">
-        <SearchInput id="bq" value={q} onChange={setQ} placeholder="搜索建筑（中/英）" />
-        <select id="bt" value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="">全部类型</option>
-          {(Object.keys(BUILDING_TYPE_ZH) as BuildingType[]).map((t) => (
-            <option key={t} value={t}>
-              {BUILDING_TYPE_ZH[t]}
-            </option>
+      </nav>
+      <div className="b-filters">
+        <div className="b-search">
+          <SearchInput id="bq" value={q} onChange={setQ} placeholder="搜索中文、英文或拼音" label="搜索建筑，可搜中文、英文或拼音" />
+        </div>
+        <p className="b-label" id="b-type-label">
+          类型
+        </p>
+        <div className="b-chips" role="group" aria-labelledby="b-type-label">
+          <Chip pressed={type === ''} onClick={() => setType('')}>
+            全部
+          </Chip>
+          {(Object.keys(BUILDING_TYPE_ZH) as BuildingType[]).map((key) => (
+            <Chip key={key} pressed={type === key} onClick={() => setType(key)}>
+              {BUILDING_TYPE_ZH[key]}
+            </Chip>
           ))}
-        </select>
-        <select id="ba" value={age} onChange={(e) => setAge(e.target.value)}>
-          <option value="">全部时代</option>
-          <option value="1">黑暗</option>
-          <option value="2">封建</option>
-          <option value="3">城堡</option>
-          <option value="4">帝王</option>
-        </select>
-        <DlcSelect id="bdlc" value={dlc} onChange={setDlc} />
-        <span id="bcnt" className="note">
-          {r.length} / {all.length}
-        </span>
+        </div>
+        <div className="b-result">
+          <p className="b-count">
+            <span id="bcnt" className="num nw">
+              {r.length} / {all.length} 座建筑
+            </span>
+          </p>
+          {summary && <p className="b-summary">{summary}</p>}
+          {dirty && (
+            <button type="button" className="b-clear" onClick={reset}>
+              清空筛选
+            </button>
+          )}
+        </div>
+        <p className="b-note">造价为目录基础值。时代按目录时代精确匹配。</p>
+        <details
+          className="b-more"
+          open={desktop || moreOpen}
+          onToggle={(event) => {
+            if (window.matchMedia(DESKTOP_QUERY).matches) {
+              if (!event.currentTarget.open) event.currentTarget.open = true;
+              return;
+            }
+            setMoreOpen(event.currentTarget.open);
+          }}
+        >
+          <summary>
+            <span>筛选</span>
+            <Icon name="chevron-down" />
+          </summary>
+          <div className="b-secondary">
+            <div>
+              <p className="b-label" id="b-age-label">
+                时代
+              </p>
+              <div className="b-chips" role="group" aria-labelledby="b-age-label">
+                <Chip pressed={age === ''} onClick={() => setAge('')}>
+                  全部
+                </Chip>
+                {AGES.map(([value, label]) => (
+                  <Chip key={value} pressed={age === value} onClick={() => setAge(value)}>
+                    {label}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div className="b-dlc">
+              <label className="b-label" htmlFor="bdlc">
+                资料片
+              </label>
+              <select id="bdlc" value={dlc} onChange={(event) => setDlc(event.target.value)}>
+                <option value="">全部</option>
+                {DLCS.map((item, index) => (
+                  <option key={item.en} value={String(index)}>
+                    {item.zh}
+                  </option>
+                ))}
+                <option value="none">未标注（{unlabeled}）</option>
+              </select>
+            </div>
+          </div>
+        </details>
       </div>
-      <DlcBar value={dlc} onChange={setDlc} />
       {!core ? (
         <Loading />
+      ) : !r.length ? (
+        <div className="b-empty" role="status">
+          <p>没有符合条件的建筑。</p>
+          <button type="button" className="b-clear" onClick={reset}>
+            清空筛选
+          </button>
+        </div>
       ) : (
         <div id="bgrid">
-          {r.map((b) => (
-            <Link key={b.id} className="card ucard" to={`/building/${b.id}`}>
-              <BuildingIcon b={b} />
-              <div>
-                <h3>{b.zh}</h3>
-                <small>{b.en}</small>
-                <div className="mini">
-                  {BUILDING_TYPE_ZH[b.type]} · {AGE_ZH[b.age] ?? ''} · <CostView c={b.cost} />
-                  {b.civs.length < 10 ? ' · ' + b.civs.length + ' 个文明' : ''}
+          {r.map((b) => {
+            const flags = cardFlags(b);
+            return (
+              <Link key={b.id} className="card b-card" to={`/building/${b.id}`} data-building-id={b.id}>
+                <BuildingIcon b={b} />
+                <div className="b-id">
+                  <h2 className="b-zh">{b.zh}</h2>
+                  <p className="b-en">{b.en}</p>
                 </div>
-                <DlcBadge i={b.dlc} linked={false} />
-              </div>
-            </Link>
-          ))}
+                <p className="b-meta">
+                  {BUILDING_TYPE_ZH[b.type]} · {AGE_ZH[b.age] ?? ''}
+                </p>
+                <div className="b-foot">
+                  <p className="b-cost">
+                    <span className="b-cost-label">造价</span>
+                    <CostView c={b.cost} />
+                  </p>
+                  {flags && <p className="b-flags">{flags}</p>}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
     </section>
