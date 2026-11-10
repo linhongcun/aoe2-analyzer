@@ -93,8 +93,27 @@ class FailClosed(unittest.TestCase):
         self.assertTrue(any('补丁历史' in error and 'patches_build.py' in error for error in errors), errors)
 
 
+class CostPolicy(unittest.TestCase):
+    def test_old_dual_track_status_is_rejected(self):
+        manifest = load()
+        manifest['costBonuses']['status'] = 'current-dual-track'
+        manifest['costBonuses']['pendingIssue'] = 864
+        errors = coverage.check(ROOT, manifest=manifest)
+        self.assertTrue(any('unified-cost-policy' in error for error in errors), errors)
+
+    def test_opening_cost_losing_shared_policy_is_rejected(self):
+        source = (ROOT / 'src/domain/buildSim.ts').read_text(encoding='utf-8').replace('civDiscountFactors', 'removedCivDiscount')
+        errors = coverage.check(ROOT, sources={'src/domain/buildSim.ts': source})
+        self.assertTrue(any('buildSim.ts' in error and 'civDiscountFactors' in error for error in errors), errors)
+
+    def test_discount_losing_group_match_is_rejected(self):
+        source = (ROOT / 'src/domain/costDiscount.ts').read_text(encoding='utf-8').replace('matchCostGroup', 'removedMatch')
+        errors = coverage.check(ROOT, sources={'src/domain/costDiscount.ts': source})
+        self.assertTrue(any('costDiscount.ts' in error and 'matchCostGroup' in error for error in errors), errors)
+
+
 class PatchHistory(unittest.TestCase):
-    def test_moved_pin_must_not_rewrite_188329(self):
+    def test_moved_pin_reports_lock_without_claiming_a_new_archive(self):
         pins = json.loads((ROOT / 'scripts/data_sources.json').read_text(encoding='utf-8'))
         pins['patch']['build'] = 999999
         errors = coverage.check(ROOT, sources={'scripts/data_sources.json': json.dumps(pins)})
@@ -102,6 +121,16 @@ class PatchHistory(unittest.TestCase):
         self.assertIn('999999', joined)
         self.assertIn('不要改写', joined)
         self.assertIn('188329', joined)
+        self.assertIn('不检查新补丁档案是否已经建立', joined)
+        self.assertNotIn('请新增', joined)
+
+    def test_editing_pin_build_is_does_not_require_a_new_archive(self):
+        pins = json.loads((ROOT / 'scripts/data_sources.json').read_text(encoding='utf-8'))
+        pins['patch']['build'] = 999999
+        manifest = load()
+        manifest['patchHistory']['pinBuildIs'] = 999999
+        errors = coverage.check(ROOT, manifest=manifest, sources={'scripts/data_sources.json': json.dumps(pins)})
+        self.assertFalse(any('pinBuildIs' in error or '请新增' in error for error in errors), errors)
 
 
 if __name__ == '__main__':

@@ -477,22 +477,36 @@ def check(
             errors.append(f'漏登记：buildSimMechanisms.ts import 了不存在的 {stem}.ts')
 
     cost = data['costBonuses']
-    if cost.get('status') != 'current-dual-track' or cost.get('pendingIssue') != 864:
-        errors.append('编排漂移：费用加成仍须标成 current-dual-track，并把统一函数留给 #864')
+    if cost.get('status') != 'unified-cost-policy' or cost.get('issue') != 864:
+        errors.append('编排漂移：费用清单必须登记现行统一策略 unified-cost-policy（#864 已合入），不能再写成双轨或待落地')
+    policy = cost.get('policy') or {}
+    policy_text = text(policy.get('file', ''))
+    if policy.get('evidence') and policy['evidence'] not in policy_text:
+        errors.append(f'漏登记：{policy.get("file")} 不再声明现行费用计入策略')
+    for symbol in policy.get('symbols') or []:
+        if f'export function {symbol}' not in policy_text:
+            errors.append(f'编排漂移：costPolicy 缺少现行入口 {symbol}')
     for rel in cost['mustBeProducedBy']:
         if rel not in direct_scripts:
             errors.append(f'漏登记：费用类加成的生成器 {rel} 不在编排里')
-    if cost['effectsEvidence'] not in text('scripts/effects_build.py'):
+    effects_text = text('scripts/effects_build.py')
+    if cost['effectsEvidence'] not in effects_text:
         errors.append('编排漂移：effects_build.py 不再写 costDiscounts')
+    if cost.get('effectsPolicyEvidence') and cost['effectsPolicyEvidence'] not in effects_text:
+        errors.append('编排漂移：effects_build.py 不再把 costDiscounts 交给 costPolicy')
     if cost['ecoEvidence'] not in text('scripts/eco_build.py'):
         errors.append('编排漂移：eco_build.py 的费用说明变了')
-    for evaluator in cost['currentEvaluators']:
-        body = text(evaluator['file'])
-        if evaluator['evidence'] not in body:
-            errors.append(f'漏登记：{evaluator["file"]} 缺少当前求值入口 {evaluator["symbol"]}')
-        must_call = evaluator.get('mustCall')
-        if must_call and must_call not in body:
-            errors.append(f'编排漂移：{evaluator["symbol"]} 不再调用 {must_call}')
+    for site in cost.get('callSites') or []:
+        body = text(site['file'])
+        if site['evidence'] not in body:
+            errors.append(f'漏登记：{site["file"]} 缺少现行费用入口 {site["symbol"]}')
+        for name in site.get('mustCall') or []:
+            if name not in body:
+                errors.append(f'编排漂移：{site["file"]} 不再调用 {name}')
+        for key in ('groupSkip', 'sharedPolicy'):
+            phrase = site.get(key)
+            if phrase and phrase not in body:
+                errors.append(f'编排漂移：{site["file"]} 不再说明现行费用策略（{phrase}）')
 
     try:
         pins = json.loads(text('scripts/data_sources.json'))
@@ -503,8 +517,10 @@ def check(
     pin_build = (pins.get('patch') or {}).get('build')
     if pin_build != history['pinBuildIs']:
         errors.append(
-            f'补丁历史：当前 pin 已变为 {pin_build}。不要改写 src/data/patches/188329.json 或 patches_188329.py 的锁定身份。'
-            '请新增补丁档案文件，并分开更新覆盖清单；188329 的 identity 必须保持不变。'
+            f'补丁历史：当前 pin 是 {pin_build}，覆盖清单 pinBuildIs 仍是 {history["pinBuildIs"]}。'
+            '本检查只拒绝改写已锁定档案的身份常量，不检查新补丁档案是否已经建立。'
+            '不要改写 src/data/patches/188329.json 或 patches_188329.py 的 FIXED_COMMITS / DAT_SHA256。'
+            '只把清单里的 pinBuildIs 改成新号，并不能证明新档案存在。'
         )
     asset_sources = pins.get('assetSources') or {}
     if 'mapPreviews' not in asset_sources:
@@ -571,8 +587,10 @@ def check(
     for item in data['notThisIssue']:
         if f'#{item["issue"]}' not in doc:
             errors.append(f'漏登记：{DOC_PATH} 未写明边界 #{item["issue"]}')
-    if '当前事实' not in doc or '待落地' not in doc:
-        errors.append(f'漏登记：{DOC_PATH} 必须分开写当前事实和待落地项')
+    if '当前事实' not in doc:
+        errors.append(f'漏登记：{DOC_PATH} 必须写明当前事实')
+    if '双轨' in doc or '待落地项是 #864' in doc or '不读 `ok`' in doc or 'ok 为 false' in doc:
+        errors.append(f'编排漂移：{DOC_PATH} 仍把费用策略写成旧的双轨或待落地')
 
     try:
         package = json.loads(text('package.json'))

@@ -109,7 +109,7 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 - `src/data/patches/185872.json` 由 `scripts/patches_build.py` 的 `HISTORICAL_SHA256` 封存。
 - `src/data/patches/66692.json`、`src/data/patches/81058.json`、`src/data/patches/125283.json` 由 `scripts/history_build.py` 生成。它不收编 185872 或 188329。
 
-下一个补丁号应是新文件。不要改写 188329 或更早档案的锁定身份，也不要让 `scripts/data_update.py` 去调用上述生成器。
+不要改写 188329 或更早档案的锁定身份，也不要让 `scripts/data_update.py` 去调用上述生成器。pin 与清单里的 `pinBuildIs` 不一致时，检查只报告这份锁定，不检查新补丁档案是否已经建立。只把 `pinBuildIs` 改成新号，并不能证明新档案存在。新档案要另建，且不得改写 188329 的 `FIXED_COMMITS` / `DAT_SHA256`。
 
 ## 新增文明机制或费用加成
 
@@ -123,16 +123,18 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 
 已有检查仍在，本单不改它们：`scripts/check-registries.mjs`、`tests/unit/buildSim815.test.ts`、`tests/unit/sources801.test.ts`、`tests/unit/deriveLists821.test.ts`。
 
-费用类加成当前事实仍是双轨，待落地项是 #864，不是本单：
+费用计入的当前事实是统一策略，已经由 #864 合入 `src/domain/costPolicy.ts`。本清单只登记现行调用，不重写费用实现。
 
-- 生成侧必须同时经过 `scripts/effects_build.py`（`costDiscounts`）和 `scripts/eco_build.py`
-- PK / 单位页入口是 `src/domain/costDiscount.ts` 的 `discountedCost`。`src/domain/unitCost.ts` 的 `unitCost` 调用它，不是第三套公式
-- 开局入口是 `src/domain/buildSim.ts` 里的 `costOf`，按 eco 原始乘数，不读 `ok`
-- 待落地：#864 才负责把这两条求值收成同一策略。清单先点名上述位置，不复制未合入实现，也不宣称函数已经统一
+- 生成侧仍须同时经过 `scripts/effects_build.py`（`costDiscounts`，运行时交给 costPolicy）和 `scripts/eco_build.py`
+- `discountedCost`（`src/domain/costDiscount.ts`）用 `matchCostGroup` 与 `priceFromRawFactor`。对不上费用句的分组不乘，其它分组仍计入
+- `costOf`（`src/domain/buildSim.ts`）用 `civDiscountFactors` 与 `alignAggregatedFactor`，与 PK 共用 costPolicy
+- `unitCost`（`src/domain/unitCost.ts`）调用 `discountedCost` 和 `priceFromRawFactor`
+- `src/domain/bonusUsage.ts` 用 `bonusDiscountCounted`
+- `scripts/check-cost-drift.ts` 是 #865 已合入的只读检查，本单不改它
 
 ## 不在本单
 
-- #865：默认 CI 的轻量防漂移。这里不改 workflow。
+- #865：`cost:check` 已在 lint 里。这里不改 workflow，也不把本覆盖清单加进默认门禁。
 - #869：不把四套科技可用性收成一个布尔。
 - 不新建服务，不把主观评分、开局 JSON 或已放弃的天梯数据并进 `effects.json`。
 - full data 仍是手动的再生 diff，不是每个 PR 的门禁。

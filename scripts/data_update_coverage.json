@@ -311,31 +311,54 @@
     "economyNote": "已有的 *Economy.ts 必须被 buildSimMechanisms.ts import。本单不重写这些实现。只有新机制确实需要新模型时才新增文件，并同时 import、登记 CIV_MECHANISMS。"
   },
   "costBonuses": {
-    "status": "current-dual-track",
-    "pendingIssue": 864,
-    "pending": "统一求值策略仍是 #864 的待落地项。本清单不复制未合入实现，也不把两条求值路径写成已经合成一个函数。",
+    "status": "unified-cost-policy",
+    "issue": 864,
+    "policy": {
+      "file": "src/domain/costPolicy.ts",
+      "evidence": "单位训练费的唯一计入策略（issue 864）",
+      "symbols": ["matchCostGroup", "priceFromRawFactor", "civDiscountFactors", "alignAggregatedFactor"]
+    },
     "mustBeProducedBy": ["scripts/effects_build.py", "scripts/eco_build.py"],
     "effectsEvidence": "out['costDiscounts'] = cost_discounts(out, civs)",
+    "effectsPolicyEvidence": "运行时直接拿来乘（src/domain/costPolicy.ts）",
     "ecoEvidence": "费用、训练/研究时间、资源",
-    "currentEvaluators": [
+    "callSites": [
       {
         "symbol": "discountedCost",
         "file": "src/domain/costDiscount.ts",
         "evidence": "export function discountedCost(",
-        "role": "当前事实：PK 与单位页折后价。ok 为 false 时整条折扣不乘。"
+        "mustCall": ["matchCostGroup", "priceFromRawFactor"],
+        "groupSkip": "该组不乘",
+        "role": "PK 与单位页。对不上费用句的分组不乘，其它分组仍计入。"
       },
       {
         "symbol": "costOf",
         "file": "src/domain/buildSim.ts",
         "evidence": "const costOf = (kind: 'unit' | 'building' | 'tech' | 'up'",
-        "role": "当前事实：开局按 eco 原始乘数计价，不读 ok。"
+        "mustCall": ["civDiscountFactors", "alignAggregatedFactor"],
+        "sharedPolicy": "与 PK 共用 costPolicy",
+        "role": "开局单位费用通过 costPolicy 改写已从 eco 乘上的倍率。"
       },
       {
         "symbol": "unitCost",
         "file": "src/domain/unitCost.ts",
         "evidence": "export function unitCost(",
-        "mustCall": "discountedCost",
-        "role": "当前事实：单位折后费用叠加，调用 discountedCost，属于同一条 PK 路径，不是第三套公式。"
+        "mustCall": ["discountedCost", "priceFromRawFactor"],
+        "role": "单位折后叠加。基础价来自 discountedCost，取整来自 costPolicy。"
+      },
+      {
+        "symbol": "bonusDiscountCounted",
+        "file": "src/domain/bonusUsage.ts",
+        "evidence": "import { bonusDiscountCounted } from './costPolicy'",
+        "mustCall": ["bonusDiscountCounted"],
+        "role": "加成百科按 costPolicy 判断句子是否被实际计入。"
+      },
+      {
+        "symbol": "check-cost-drift",
+        "file": "scripts/check-cost-drift.ts",
+        "evidence": "import { civDiscountFactors, priceFromRawFactor } from '../src/domain/costPolicy'",
+        "mustCall": ["civDiscountFactors", "priceFromRawFactor"],
+        "role": "#865 已合入的只读防漂移。本清单不改它，也不改 lint。"
       }
     ]
   },
@@ -367,7 +390,7 @@
     "historyBuilds": ["66692", "81058", "125283"],
     "historyScript": "scripts/history_build.py",
     "historyOutputs": ["src/data/patches/66692.json", "src/data/patches/81058.json", "src/data/patches/125283.json"],
-    "rule": "下一个补丁号写新文件。不要改写 188329 或更早档案的锁定身份。data_update 只写 docs/PATCH-NOTES，不调用 patches_build 或 history_build。"
+    "rule": "不要改写 188329 或更早档案的锁定身份。data_update 只写 docs/PATCH-NOTES，不调用 patches_build 或 history_build。pin 与 pinBuildIs 不一致时，本检查只报告锁定身份，不验收新档案是否存在；只改清单里的 pinBuildIs 不能证明新档案已建立。"
   },
   "failFast": {
     "stopMessage": "数据更新覆盖清单未通过，已停止，未运行生成器",
@@ -385,18 +408,18 @@
       "data:update": "python3 scripts/data_update.py",
       "data:status": "python3 scripts/data_update.py --check"
     },
-    "reason": "默认 PR CI 不跑这份清单，也不恢复 full data。#865 才负责默认 CI 上的只读检查。本单不改 workflow 和 package.json。"
+    "reason": "默认 PR CI 不跑这份清单，也不恢复 full data。#865 已把 cost:check 放进 lint。本单不改 workflow 或 package.json。"
   },
   "notThisIssue": [
     {
       "issue": 864,
-      "status": "pending",
-      "note": "费用求值双轨仍由 #864 处理。这里只点名 discountedCost、costOf 和 unitCost。"
+      "status": "landed",
+      "note": "费用计入策略已由 #864 合入 costPolicy。清单只登记现行调用，不重写实现。"
     },
     {
       "issue": 865,
-      "status": "separate",
-      "note": "默认 CI 的轻量防漂移是 #865。本单不改 CI。"
+      "status": "landed",
+      "note": "cost:check 已由 #865 合入 lint。本单不改 CI，也不把 data_update_coverage 加进默认门禁。"
     },
     {
       "issue": 869,
