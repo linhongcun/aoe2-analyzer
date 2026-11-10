@@ -255,8 +255,10 @@ describe('#652 真实数据、门禁与建议传播', () => {
     const original = DAT.costDiscounts.Mayans;
     try {
       DAT.costDiscounts.Mayans = structuredClone(original!);
-      const group = DAT.costDiscounts.Mayans!.flatMap((d) => d.groups).find((g) => g.units.includes(24))!;
+      const entry = DAT.costDiscounts.Mayans!.find((d) => d.groups.some((g) => g.units.includes(24)))!;
+      const group = entry.groups.find((g) => g.units.includes(24))!;
       group.tiers['3'] = 0.5;
+      entry.text = { ...entry.text, '3': 50 };
       const b = row(base, 'Mayans');
       expect(b.status).toBe('ok');
       expect(b.count).toBeGreaterThan(53);
