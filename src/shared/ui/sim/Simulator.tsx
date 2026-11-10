@@ -40,6 +40,11 @@ export default function Simulator({ u, route }: { u: Unit; route: SimRoute }) {
       teamBonuses={TEAM_BONUSES.map(([, label, f]) => ({ label, ok: f(u) }))}
       go={go}
       setCmp={setCmp}
+      statHeadings={{
+        base: '目录基础',
+        current: '当前设置下的近似模拟值',
+        full: (name) => (name ? `${name}满科技` : '对照文明满科技'),
+      }}
     />
   );
 }

@@ -38,14 +38,20 @@ export function useSimState(u: Unit, rt: SimRoute) {
   }, [ctx, u, rt.civ, rt.age, idsKey, teamKey, cmp]); // eslint-disable-line react-hooks/exhaustive-deps
   const go = (civ: string, age: number, sel: Iterable<number>, team: Iterable<number>) =>
     nav(unitPath(u.id, civ, age, sel, team) + location.search, { replace: true });
+  const encodedSim = rt.age !== undefined || rt.ids.length > 0 || rt.team.length > 0;
   useEffect(() => {
     if (!state) return;
+    // 仅有文明或显式打开工作区时，不要为默认时代把地址写成 /4/。玩家改时代或科技仍由 go() 写入。
+    if (!encodedSim) {
+      session.lastSim = { uid: u.id, civ: state.civ, cmp };
+      return;
+    }
     // 读地址栏而不是这次渲染里的 location：下一次导航可能已经写进 hash，旧的 replace 不能把它盖回去。
     const live = unitHashLocation(window.location.hash);
     const decision = decideSimCanonical(live.pathname, rt, { civ: state.civ, age: state.age, ids: [...state.sel], team: [...state.team] });
     if (decision.kind === 'ignore') return;
     session.lastSim = { uid: u.id, civ: state.civ, cmp };
     if (decision.kind === 'replace') nav(decision.path + (live.search || location.search), { replace: true });
-  }, [state, location.pathname, location.search]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [state, location.pathname, location.search, encodedSim]); // eslint-disable-line react-hooks/exhaustive-deps
   return { state, go, setCmp: setCmpState };
 }

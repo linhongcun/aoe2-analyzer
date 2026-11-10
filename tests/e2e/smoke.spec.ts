@@ -27,7 +27,7 @@ const ROUTES: [string, string][] = [
   ['#civ/Armenians', '#detail h1'],
   ['#/civ/Franks', '#detail h1'],
   ['#units', '#ugrid .unit-row'],
-  ['#unit/569', '#unit .dtabs'],
+  ['#unit/569', '#unit h1'],
   ['#unit/569?tab=sim', '#sim .simt'],
   ['#unit/569/Franks/4', '#sim .simtab'],
   ['#techs', '#tgrid .tech-row'],
@@ -57,12 +57,12 @@ for (const [hash, sel] of ROUTES) {
 }
 
 test('Franks Paladin full tech = 192 HP', async ({ page }) => {
-  await page.goto('./#unit/569/Franks');
+  await page.goto('./#unit/569/Franks/4');
   await page.getByRole('button', { name: '满科技' }).click();
   const hp = page.locator('.simtab tr').nth(1).locator('td');
   await expect(hp.nth(1)).toHaveText(/^160\.00\s*\+32\.00$/); // 基础列：基础值 + 绿色增量
   await expect(hp.nth(1).locator('.up')).toHaveText('+32.00');
-  await expect(hp.nth(2)).toHaveText('192.00'); // 当前列：仅最终值
+  await expect(hp.nth(2)).toHaveText('192.00'); // 当前设置下的近似模拟值
   await expect(page).toHaveURL(/unit\/569\/Franks\/4\/[\d,]+/);
 });
 
@@ -76,10 +76,12 @@ test('civ card click opens detail, unique unit link opens unit page', async ({ p
   await expect(page.locator('#unit h1')).toBeVisible();
 });
 
-test('unit tabs: overview -> simulator tab', async ({ page }) => {
+test('unit overview opens the simulator without writing a default age', async ({ page }) => {
   await page.goto('./#unit/569');
-  await page.getByRole('tab', { name: '科技模拟器' }).click();
+  await page.getByRole('button', { name: '打开科技模拟器' }).click();
   await expect(page.locator('#sim .simt').first()).toBeVisible();
+  await expect(page).toHaveURL(/tab=sim/);
+  await expect(page).not.toHaveURL(/\/4\//);
 });
 
 test('Ctrl+K command palette searches across civs/units/techs', async ({ page }) => {
@@ -249,7 +251,7 @@ test('bonus damage is a separate section from self stats (unit + building sim)',
   const bt = page.locator('#sim .bonustab');
   await expect(bt.locator('tr', { hasText: '船只' }).locator('td').nth(1)).toHaveText(/^0\s*\+4$/);
   await expect(bt.locator('tr', { hasText: '船只' }).locator('td').nth(2)).toHaveText('4');
-  await page.goto('./#/unit/569/Franks');
+  await page.goto('./#/unit/569/Franks/4');
   await expect(page.locator('#sim')).toContainText('克制加成');
   await expect(page.locator('#sim')).toContainText('护甲类别（防御）');
   await expect(page.locator('.simtab')).not.toContainText('加成');
