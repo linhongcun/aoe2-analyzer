@@ -28,10 +28,17 @@ export interface EffectPart {
   text: string;
 }
 const pct = (x: number) => `${Math.round(x * 100)}%`;
+/**
+ * 生成表把护甲类别 39 写成「村民」。已提交单位里，村民没有这个类别；
+ * 弯刀勇士和骆驼目标的该护甲是 -3，龙脉把它 +3。这里只说明名称，不把类别改写成另一种游戏属性。
+ */
+export const ARMC_CLASS_NOTE =
+  '「村民」是生成数据里的护甲类别名，不是村民单位；村民没有这个类别。龙脉把弯刀勇士和骆驼目标的这项护甲加上效果里的数值。攻击方若带有同一类别的负攻击，按现有伤害公式计入，总伤害仍沿用现有下限。没有这条攻击的单位不受影响。本站未做游戏内对照。';
 export function effectParts(ef: readonly Effect[]): EffectPart[] {
   return ef.map((e) => {
     if (e.s === 'bonus')
       return { icon: '', text: e.op === 'mul' ? `对 ${e.vs} 加成伤害 ${e.v >= 1 ? '+' : ''}${pct(e.v - 1)}` : `对 ${e.vs} 加成 ${e.v > 0 ? '+' : ''}${e.v}` };
+    if (e.s === 'armc') return { icon: '', text: `护甲类别「${e.vs}」${e.v > 0 ? '+' : ''}${e.v}` };
     const [n, icon] = STAT_ZH[e.s] ?? [e.s, ''];
     if (e.s === 'rof') return { icon, text: `${n} +${pct(e.v)}` };
     if (e.s === 'bt' && 'op' in e && e.op === 'mul') return { icon, text: `建造速度 +${pct(1 / e.v - 1)}` };

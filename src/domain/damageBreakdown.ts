@@ -25,6 +25,11 @@ export function damageSources(ctx: SimContext, u: Unit, civ: string, age: number
         b = after.bonus[key] ?? 0;
       if (a !== b) changes.push({ stat: `对${key}加成`, before: a, after: b });
     }
+    for (const key of new Set([...Object.keys(before.armc), ...Object.keys(after.armc)])) {
+      const a = before.armc[key] ?? 0,
+        b = after.armc[key] ?? 0;
+      if (a !== b) changes.push({ stat: `护甲类别「${key}」`, before: a, after: b });
+    }
     if (changes.length) sources.push({ source, techId, changes });
   };
   const stats = simulate(ctx, u, civ, age, sel, team, record);

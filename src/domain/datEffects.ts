@@ -98,13 +98,14 @@ export interface DatFile {
 export const DAT = raw as unknown as DatFile;
 
 const NUM = new Set(['hp', 'atk', 'ma', 'pa', 'rng', 'spd', 'los', 'acc', 'minr', 'gar', 'bt', 'barm']);
-/** dat 效果 → 模拟器 Effect；护甲类别（armc）等面板无对应项的返回空（在审计与经济文本中保留） */
+/** dat 效果 → 模拟器 Effect。armc 按生成表里的类别名加减护甲，不把它解释成另一种属性。 */
 export function toEffects(fx: readonly DatFx[]): Effect[] {
   const out: Effect[] = [];
   fx.forEach((f) => {
     if (f.s === 'rof') out.push({ s: 'rof', v: f.v });
     else if (f.s === 'bonus' && f.vs) out.push(f.op === 'mul' ? { s: 'bonus', vs: f.vs, v: f.v, op: 'mul' } : { s: 'bonus', vs: f.vs, v: f.v });
-    else if (NUM.has(f.s)) out.push({ s: f.s as Exclude<Effect['s'], 'rof' | 'bonus'>, op: f.op ?? 'add', v: f.v } as Effect);
+    else if (f.s === 'armc' && f.vs) out.push(f.op === 'mul' ? { s: 'armc', vs: f.vs, v: f.v, op: 'mul' } : { s: 'armc', vs: f.vs, v: f.v });
+    else if (NUM.has(f.s)) out.push({ s: f.s as Exclude<Effect['s'], 'rof' | 'bonus' | 'armc'>, op: f.op ?? 'add', v: f.v } as Effect);
   });
   return out;
 }

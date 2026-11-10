@@ -4,7 +4,7 @@ import { applyEffects, baseStats } from '../../domain/simulator';
 import { civStatus } from '../../domain/civStatus';
 import type { Effect, StatSet, Tech, Trees, Unit } from '../../domain/types';
 const armor = (fx: Effect[]) => fx.length > 0 && fx.every((e) => e.s === 'ma' || e.s === 'pa');
-const copy = (s: StatSet): StatSet => ({ ...s, bonus: { ...s.bonus } });
+const copy = (s: StatSet): StatSet => ({ ...s, bonus: { ...s.bonus }, armc: { ...s.armc } });
 /** Separate normal effects and this bonus's extra once; never add extras to simTechs. */
 export function romanArmor(b: CivBonusEnt, units: readonly Unit[], techs: readonly Tech[], trees: Trees) {
   if (b.id !== 'Romans-1' || b.civ !== 'Romans') return null;

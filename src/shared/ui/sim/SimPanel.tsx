@@ -2,6 +2,7 @@
 import { CivPicker } from '../CivPicker';
 import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
+import { ARMC_CLASS_NOTE } from '../../../domain/affects';
 import { toggleTech } from '../../../domain/prereq';
 import { AGE_ZH } from '../../../domain/ratings';
 import { allNumeric, presetUpTo, simGroup, totalCost, type SimTech } from '../../../domain/simulator';
@@ -156,6 +157,11 @@ export function ArmorClasses({ list, headingLevel }: { list: [string, number][];
         <Icon name="shield" /> 护甲类别（防御）
       </Heading>
       <p className="note">敌方对这些类别有克制加成时会对其造成额外伤害；数值为该类别护甲</p>
+      {l.some(([n]) => n === '村民') && (
+        <p className="note" data-t="royal-heirs-armc">
+          {ARMC_CLASS_NOTE}
+        </p>
+      )}
       <div>
         {l.length
           ? l.map(([n, v]) => (

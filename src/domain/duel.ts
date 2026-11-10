@@ -29,7 +29,7 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
   const attack: Record<string, number> = { [pierce ? '穿刺' : '近战']: S.atk };
   Object.entries(S.bonus).forEach(([k, v]) => (attack[k] = v));
   const armor: Record<string, number> = { 近战: S.ma, 穿刺: S.pa };
-  u.armc.forEach(([k, v]) => (armor[k] = v));
+  Object.entries(S.armc).forEach(([k, v]) => (armor[k] = v));
   return { name: u.zh, hp: S.hp, attack, armor, rof: S.rof, acc: Math.min(100, Math.max(0, S.acc)) / 100, ranged: u.rng > 1, rng: S.rng, cost: u.cost };
 }
 

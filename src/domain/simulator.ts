@@ -30,6 +30,10 @@ export function baseStats(u: Unit): StatSet {
   u.atks.forEach(([n, v]) => {
     if (n !== '近战' && n !== '穿刺') bonus[n] = v;
   });
+  const armc: Record<string, number> = {};
+  u.armc.forEach(([n, v]) => {
+    armc[n] = v;
+  });
   return {
     hp: u.hp,
     atk: u.atk,
@@ -45,6 +49,7 @@ export function baseStats(u: Unit): StatSet {
     bt: u.tt,
     barm: 0,
     bonus,
+    armc,
     rofx: 1,
   };
 }
@@ -55,6 +60,9 @@ export function applyEffects(S: StatSet, list: readonly Effect[]): void {
       if (e.op === 'mul') {
         if (S.bonus[e.vs] !== undefined) S.bonus[e.vs] = S.bonus[e.vs]! * e.v;
       } else S.bonus[e.vs] = (S.bonus[e.vs] ?? 0) + e.v;
+    } else if (e.s === 'armc') {
+      const cur = S.armc[e.vs] ?? 0;
+      S.armc[e.vs] = e.op === 'mul' ? cur * e.v : cur + e.v;
     } else if (e.s === 'rof') S.rofx *= 1 + e.v;
     else S[e.s] = applyEffectValue(S[e.s], e.op, e.v);
   }
@@ -111,9 +119,9 @@ export function simulate(
 ): SimStats {
   const S: SimStats = baseStats(u);
   const apply = (list: readonly Effect[], source: string, techId?: number) => {
-    const before = trace ? { ...S, bonus: { ...S.bonus } } : null;
+    const before = trace ? { ...S, bonus: { ...S.bonus }, armc: { ...S.armc } } : null;
     applyEffects(S, list);
-    if (trace && before) trace({ source, techId, before, after: { ...S, bonus: { ...S.bonus } } });
+    if (trace && before) trace({ source, techId, before, after: { ...S, bonus: { ...S.bonus }, armc: { ...S.armc } } });
   };
   (CIV_BONUSES[civ] ?? []).forEach(([f, g, note]) => {
     if (f(u)) apply(g(age), `文明加成：${note}`);

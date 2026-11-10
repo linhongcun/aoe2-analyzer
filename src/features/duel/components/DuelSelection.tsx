@@ -174,7 +174,7 @@ export function Side({
           cur={side.S}
           cmpStats={null}
           civNotes={civBonusNotes(u, side.civ)}
-          armorClasses={u.armc}
+          armorClasses={Object.entries(side.S.armc)}
           teamBonuses={TEAM_BONUSES.map(([, label, f]) => ({ label, ok: f(u) }))}
           go={(civ, age, sel, team) => onChange({ uid: u.id, civ, age, techs: [...sel], team: [...team] })}
           setCmp={() => {}}
