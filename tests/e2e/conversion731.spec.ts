@@ -87,7 +87,7 @@ test('#731 僧侣与传教士页展示招降机制，科技页只放短链', asy
   ] as const) {
     await page.goto(`./#/tech/${id}`);
     await expect(page.locator('#tech h1')).toContainText(name);
-    const note = page.getByRole('region', { name: '效果说明', exact: true });
+    const note = page.getByRole('region', { name: '游戏说明', exact: true });
     await expect(note).toContainText('上方百分比是平均时间的近似说法，不是另一套数值。');
     await expect(note).not.toContainText('150');
     const link = note.getByRole('link', { name: '查看招降间隔与概率', exact: true });
@@ -129,11 +129,11 @@ for (const width of [360, 375, 390, 1280])
 
       await page.goto('./#/tech/46');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      const note = page.getByRole('region', { name: '效果说明', exact: true });
+      const note = page.getByRole('region', { name: '游戏说明', exact: true });
       await expect(note.getByRole('link', { name: '查看招降间隔与概率', exact: true })).toBeVisible();
       await numbersStay(note);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       if (width === 1280)
-        expect((await new AxeBuilder({ page }).include('[aria-label="效果说明"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
+        expect((await new AxeBuilder({ page }).include('[aria-label="游戏说明"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
       expect(errors, errors.join('\n')).toEqual([]);
     });

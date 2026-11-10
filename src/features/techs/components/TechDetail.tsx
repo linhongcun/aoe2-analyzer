@@ -3,282 +3,261 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
-import { CivChip, CivIcon, CostView, TechReleaseBadge, StatIcon, TechIcon, TechLink, UnitLink } from '../../../shared/ui/art';
-import { BLink } from '../../../shared/ui/BLink';
-import { DetailPage, SideBlock } from '../../../shared/ui/layout';
-import { DetailSection, DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
+import { techEffectEntries, techTypeMark } from '../../../domain/techDetailView';
+import { TECH_AKA } from '../../../data/aliases';
+import { AgeImg, BuildingIcon, CivChip, CivIcon, CostView, TechIcon, TechLink, TechReleaseBadge } from '../../../shared/ui/art';
+import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
+import { Icon } from '../../../shared/ui/Icon';
+import { Breadcrumbs } from '../../../shared/ui/layout';
+import { HistoricalEntityDetail, PatchHistory } from '../../../shared/ui/PatchHistory';
 import { Join, Linked, Loading } from '../../../shared/ui/widgets';
-import TechAffects from './TechAffects';
 import { AgeBuildingRequirements } from './AgeBuildingRequirements';
+import { BallisticsBoundaryNote } from './BallisticsBoundaryNote';
 import ChargeAttack710 from './ChargeAttack710';
-import { techEffectText } from '../techEffectText';
-import { ThumbRingEffectText } from './ThumbRingEffectText';
 import { ConversionTechLink } from './ConversionTechLink';
 import { MarketFeeTechLinks } from './MarketFeeTechLinks';
-import { BallisticsBoundaryNote } from './BallisticsBoundaryNote';
-import { ARMC_CLASS_NOTE, techAffects } from '../../../domain/affects';
-import { affectedUnits } from '../../../domain/family';
-import { TECH_AKA } from '../../../data/aliases';
-import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
-import { Icon } from '../../../shared/ui/Icon';
+import TechAffects from './TechAffects';
 import '../../../shared/ui/contextLinks.css';
-import './tech-civ-links.css';
+import './tech-detail.css';
 
-const TT: Record<string, string> = { UniqueTech: '独特科技', Research: '通用科技', RegionalTech: '区域科技' };
-
-/** 类别名和加值各自不拆开；窄卡片可以在两者之间换行。 */
-function ArmcEffectText({ text }: { text: string }) {
-  const matched = text.match(/^(护甲类别「.+?」)([+-]\d+)$/);
-  if (!matched) return text;
-  return (
-    <>
-      <span className="nw">{matched[1]}</span>
-      <span className="num nw">{matched[2]}</span>
-    </>
-  );
-}
+const ECO_PAYOFF = [202, 203, 221, 55, 182, 278, 279];
 
 export default function TechDetail() {
   const { id = '' } = useParams();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
+  const tab = params.get('tab');
   const contextCiv = civByEn(params.get('civ') ?? '');
-  const me = civByEn(params.get('me') ?? ''),
-    opp = civByEn(params.get('opp') ?? '');
-  const allCivsParams = new URLSearchParams(params);
-  allCivsParams.set('tab', 'civs');
-  const affectsParams = new URLSearchParams(params);
-  affectsParams.set('tab', 'affects');
+  const me = civByEn(params.get('me') ?? '');
+  const opp = civByEn(params.get('opp') ?? '');
   const core = useCore();
+  const tech = core?.techById[+id];
+
   useEffect(() => {
-    scrollTo(0, 0);
-  }, [id]);
+    if (!tech) return;
+    const target = tab === 'affects' ? 'affects' : tab === 'civs' ? 'tech-civs' : tab === 'history' ? 'tech-history' : null;
+    if (!target) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    document.getElementById(target)?.scrollIntoView({ block: 'start' });
+  }, [tech, tab]);
+
   if (!core)
     return (
       <section className="pane">
         <Loading />
       </section>
     );
-  const t = core.techById[+id];
-  if (!t) return <HistoricalEntityDetail target={{ targetType: 'tech', targetId: id }} />;
-  const pre = t.pre != null ? core.techById[t.pre] : undefined;
-  const aliases = TECH_AKA[t.id]?.filter((name) => name.toLowerCase() !== t.en.toLowerCase() && name !== t.zh);
-  const nxt = core.techs.filter((x) => x.pre === t.id);
-  // 涉及单位用结构化效果（与「作用对象」同源），不再按说明文字匹配单位名（#13）
-  const affected = techAffects(t, core.units, core.buildings);
-  const rel = affectedUnits(affected, core.fam);
-  const ageTech = t.id === 101 || t.id === 102 || t.id === 103 ? t.id : null;
-  // 条件与对象是效果的一部分；相同的“攻击 +1”不能跨建筑或组合科技去重。
-  const effectCards = affected.flatMap((group, groupIndex) => {
-    const conditional = group.group.startsWith('组合触发');
-    const label = conditional ? core.techs.reduce((text, tech) => text.replaceAll(tech.en, tech.zh), group.group) : `${group.group}（基础效果）`;
-    return group.rows.map((row, rowIndex) => {
-      const targets = [...new Set([...row.units.map((unit) => unit.zh), ...row.buildings.map((building) => building.zh)])];
-      return {
-        key: `effect-${groupIndex}-${rowIndex}`,
-        label,
-        value:
-          t.id === 437 ? <ThumbRingEffectText text={row.effect} /> : t.id === 574 ? <ArmcEffectText text={row.effect} /> : techEffectText(t.id, row.effect),
-        note: `作用对象：${targets.slice(0, 4).join('、')}${targets.length > 4 ? ` 等 ${targets.length} 类单位或建筑` : ''}`,
-      };
-    });
-  });
-  const civList = (
-    <>
-      <h4>
-        {t.type === 'UniqueTech' ? '所属文明' : '可研究的文明'}（{t.civs.length}/{civs.length}）
-      </h4>
-      <div>
-        <Join
-          sep=" "
-          items={t.civs.map((n) => {
-            const c = civByEn(n);
-            return c ? <CivChip c={c} /> : n;
-          })}
-        />
-      </div>
-      {t.type !== 'UniqueTech' && t.civs.length < civs.length && (
-        <p className="note">
-          无法研究：
-          {civs
-            .filter((c) => !t.civs.includes(c.en))
-            .map((c) => c.zh)
-            .join('、')}
-        </p>
-      )}
-    </>
-  );
+  if (!tech) return <HistoricalEntityDetail target={{ targetType: 'tech', targetId: id }} />;
+
+  const mark = techTypeMark(tech.type);
+  const building = core.buildingById[tech.b];
+  const ageName = AGE_ZH[tech.age] ?? String(tech.age);
+  const aliases = TECH_AKA[tech.id]?.filter((name) => name.toLowerCase() !== tech.en.toLowerCase() && name !== tech.zh);
+  const entries = techEffectEntries(tech, core.units, core.buildings);
+  const previous = tech.pre != null ? core.techById[tech.pre] : undefined;
+  const next = core.techs.filter((item) => item.pre === tech.id);
+  const unavailable = civs.filter((civ) => !tech.civs.includes(civ.en));
+  const affectsParams = new URLSearchParams(params);
+  affectsParams.set('tab', 'affects');
+  const ageTech = tech.id === 101 || tech.id === 102 || tech.id === 103 ? tech.id : null;
+  const jump = (target: string) => document.getElementById(target)?.scrollIntoView({ block: 'start' });
+
   return (
-    <DetailPage
-      key={t.id}
-      id="tech"
-      crumb={t.zh}
-      icon={<TechIcon t={t} big />}
-      title={t.zh}
-      en={t.en}
-      badges={<TechReleaseBadge t={t} large />}
-      tags={
-        <>
-          <span className="tag">{TT[t.type] ?? t.type}</span>
-          <BLink id={t.b} zh={t.bz} />
-          <span className="tag">{AGE_ZH[t.age] ?? t.age}</span>
-          {!!aliases?.length && <span className="note">又名：{aliases.join('、')}</span>}
-        </>
-      }
-      tabsTop={
-        (contextCiv || (me && opp)) && (
-          <nav className="ctx-bar" aria-label="文明相关入口">
-            {contextCiv && (
-              <Link className="ctx-civ-link ulink" to={`/civ/${contextCiv.en}`}>
-                <CivIcon c={contextCiv} /> {contextCiv.zh}
+    <section id="tech" className="pane td">
+      <Breadcrumbs current={tech.zh} />
+      {(contextCiv || (me && opp)) && (
+        <nav className="ctx-bar" aria-label="文明相关入口">
+          {contextCiv && (
+            <Link className="ctx-civ-link ulink" to={`/civ/${contextCiv.en}`}>
+              <CivIcon c={contextCiv} /> {contextCiv.zh}
+            </Link>
+          )}
+          {me && opp && (
+            <Link className="community-tool-entry" to={`/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}>
+              <Icon name="arrow-left" /> 回对局助手
+            </Link>
+          )}
+        </nav>
+      )}
+      <div className="td-id" data-t="tech-identity">
+        <div className="td-icon">
+          <TechIcon t={tech} big />
+        </div>
+        <div className="td-id-main">
+          <div className="td-id-top">
+            <h1>{tech.zh}</h1>
+            <CopyPageLink />
+          </div>
+          <p className="td-en">{tech.en}</p>
+          {!!aliases?.length && <p className="td-aka">又名：{aliases.join('、')}</p>}
+          <div className="td-tags">
+            <span className="td-tag" data-t="catalog-type" data-kind={mark.kind}>
+              {mark.label}
+            </span>
+            {building ? (
+              <Link className="td-tag" to={`/building/${building.id}`}>
+                <BuildingIcon b={building} />
+                {building.zh}
               </Link>
+            ) : (
+              <span className="td-tag">{tech.bz}</span>
             )}
-            {me && opp && (
-              <Link className="community-tool-entry" to={`/matchup?${new URLSearchParams({ me: me.en, opp: opp.en })}`}>
-                <Icon name="arrow-left" /> 回对局助手
+            <span className="td-tag" data-t="catalog-age">
+              <AgeImg age={tech.age} />
+              {ageName}
+            </span>
+            <span data-t="tech-release">
+              <TechReleaseBadge t={tech} large />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <nav className="td-jump" aria-label="本页章节">
+        <button type="button" onClick={() => jump('tech-research')}>
+          研究
+        </button>
+        {entries.length > 0 && (
+          <button type="button" onClick={() => jump('affects')}>
+            作用对象
+          </button>
+        )}
+        {tech.desc.trim() && (
+          <button type="button" onClick={() => jump('tech-notes')}>
+            说明
+          </button>
+        )}
+        <button type="button" onClick={() => jump('tech-civs')}>
+          文明
+        </button>
+        {(previous || next.length > 0) && (
+          <button type="button" onClick={() => jump('tech-links')}>
+            目录关联
+          </button>
+        )}
+        <button type="button" onClick={() => jump('tech-history')}>
+          更新历史
+        </button>
+      </nav>
+
+      <section className="td-research" id="tech-research" aria-label="研究">
+        <h2>研究</h2>
+        <div className="td-research-grid">
+          <div data-t="catalog-cost">
+            <p className="td-lab">费用</p>
+            <div className="td-cost">
+              <CostView c={tech.cost} />
+            </div>
+          </div>
+          <div data-t="catalog-time">
+            <p className="td-lab">研究时间</p>
+            <p className="td-time">
+              <Icon name="clock" />
+              <span className="num nw">{tech.rt}秒</span>
+            </p>
+          </div>
+          <div className="td-place" data-t="catalog-place">
+            <p className="td-lab">研究地点</p>
+            {building ? (
+              <Link className="td-place-link" to={`/building/${building.id}`}>
+                <BuildingIcon b={building} />
+                <span>{building.zh}</span>
               </Link>
+            ) : (
+              <span>{tech.bz}</span>
             )}
-          </nav>
-        )
-      }
-      tabs={[
-        {
-          key: 'ov',
-          label: '概览',
-          content: (
-            <>
-              <DetailSection title="研究">
-                <dl className="detail-cost-grid">
-                  <div>
-                    <dt>费用</dt>
-                    <dd>
-                      <CostView c={t.cost} />
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>研究时间</dt>
-                    <dd className="detail-number">
-                      <StatIcon k="time" t="研究时间" />
-                      {t.rt}s
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>研究建筑</dt>
-                    <dd>
-                      <BLink id={t.b} zh={t.bz} />
-                    </dd>
-                  </div>
-                </dl>
-              </DetailSection>
-              {[202, 203, 221, 55, 182, 278, 279].includes(t.id) && (
-                <p>
-                  <Link className="ulink tech-payoff-entry" to={`/eco-payoff?civ=Byzantines&target=${t.id}&age=${t.age}`}>
-                    查看经济科技收益与研究投入
-                  </Link>
-                </p>
-              )}
-              {effectCards.length > 0 && (
-                <div className="detail-effect-tiles">
-                  <p className="note">基础效果与需要额外科技的组合效果分别列出；请结合生效条件与作用对象阅读，完整说明见「作用对象」。</p>
-                  <StatTiles label="科技效果" stats={effectCards.map((card, index) => ({ ...card, accent: index < 2 }))} />
-                </div>
-              )}
-              {t.id === 574 && (
-                <p className="note" data-t="royal-heirs-armc">
-                  {ARMC_CLASS_NOTE}
-                </p>
-              )}
-              {t.desc.trim() && (
-                <DetailSection title={t.id === 437 ? '游戏内说明（近似）' : '效果说明'}>
-                  <p className="desc">
-                    <Linked text={t.desc} nl />
-                    <br />
-                    <small className="note">{t.descEn.replace(/\n/g, ' ')}</small>
-                  </p>
-                  {t.id === 437 && (
-                    <p className="note">
-                      上方百分比为游戏内近似说明；请按具体单位的精确间隔系数阅读。
-                      <Link className="community-tool-entry" to={`/tech/${t.id}?${affectsParams.toString()}`}>
-                        查看精确间隔与DE来源
-                      </Link>
-                    </p>
-                  )}
-                  {(t.id === 45 || t.id === 46) && <ConversionTechLink />}
-                  <MarketFeeTechLinks techId={t.id} />
-                </DetailSection>
-              )}
-              {t.id === 93 && <BallisticsBoundaryNote techs={core.techs} />}
-              {ageTech !== null && <AgeBuildingRequirements techId={ageTech} buildings={core.buildings} />}
-              {t.id === 884 && <ChargeAttack710 />}
-              {rel.length > 0 && (
-                <>
-                  <h4>涉及单位</h4>
-                  <div className="uchips">
-                    {rel.map((u) => (
-                      <UnitLink key={u.id} u={u} />
-                    ))}
-                  </div>
-                </>
-              )}
-              <DetailSource
-                note={
-                  t.id === 437
-                    ? '攻击间隔与科技模拟器同源：effects.json / Thumb Ring / s:rof；游戏说明为近似文案'
-                    : '结构化效果与科技模拟器同源；未编码效果以游戏说明为准'
-                }
-              />
-            </>
-          ),
-        },
-        { key: 'affects', label: '作用对象', content: <TechAffects t={t} /> },
-        { key: 'civs', label: '文明', content: civList },
-        { key: 'history', label: '更新历史', content: <PatchHistory target={{ targetType: 'tech', targetId: t.id, targetNameZh: t.zh }} /> },
-      ]}
-      sidebar={
-        <>
-          <SideBlock title={`可用文明 ${t.civs.length}/${civs.length}`}>
-            <div className="tech-civ-links">
+          </div>
+        </div>
+        <p className="td-kicker">目录费用和时间，不含文明折扣。</p>
+        {ECO_PAYOFF.includes(tech.id) && (
+          <p>
+            <Link className="ulink tech-payoff-entry" to={`/eco-payoff?civ=Byzantines&target=${tech.id}&age=${tech.age}`}>
+              查看经济科技收益与研究投入
+            </Link>
+          </p>
+        )}
+      </section>
+
+      {entries.length > 0 && <TechAffects tech={tech} entries={entries} units={core.units} unitById={core.unitById} fam={core.fam} techs={core.techs} />}
+
+      {tech.desc.trim() && (
+        <section className="td-section" id="tech-notes" aria-label={tech.id === 437 ? '游戏内说明（近似）' : '游戏说明'}>
+          <h2>{tech.id === 437 ? '游戏内说明（近似）' : '游戏说明'}</h2>
+          <p className="desc">
+            <Linked text={tech.desc} nl />
+          </p>
+          <p className="td-kicker">{tech.descEn.replace(/\n/g, ' ')}</p>
+          {tech.id === 437 && (
+            <p className="note">
+              上方百分比为游戏内近似说明；请按具体规则的精确间隔系数阅读。
+              <Link className="community-tool-entry" to={`/tech/${tech.id}?${affectsParams.toString()}`}>
+                查看精确间隔与DE来源
+              </Link>
+            </p>
+          )}
+          {(tech.id === 45 || tech.id === 46) && <ConversionTechLink />}
+          <MarketFeeTechLinks techId={tech.id} />
+        </section>
+      )}
+      {tech.id === 93 && <BallisticsBoundaryNote techs={core.techs} />}
+      {ageTech !== null && <AgeBuildingRequirements techId={ageTech} buildings={core.buildings} />}
+      {tech.id === 884 && <ChargeAttack710 />}
+
+      <section className="td-section" id="tech-civs" aria-label={mark.kind === 'unique' ? '所属文明' : '可研究文明'}>
+        <h2>{mark.kind === 'unique' ? '所属文明' : '可研究文明'}</h2>
+        <p className="td-kicker">
+          <span className="num nw">
+            {tech.civs.length}/{civs.length}
+          </span>
+        </p>
+        <div className="td-civs">
+          {tech.civs.map((en) => {
+            const civ = civByEn(en);
+            return civ ? <CivChip key={en} c={civ} /> : <span key={en}>{en}</span>;
+          })}
+        </div>
+        {mark.kind !== 'unique' && unavailable.length > 0 && (
+          <>
+            <h3>无法研究</h3>
+            <div className="td-civs">
+              {unavailable.map((civ) => (
+                <CivChip key={civ.en} c={civ} />
+              ))}
+            </div>
+          </>
+        )}
+      </section>
+
+      {(previous || next.length > 0) && (
+        <section className="td-section td-links" id="tech-links" aria-label="目录关联">
+          <h2>目录关联</h2>
+          <p className="td-kicker">目录里记下的前后项。</p>
+          {previous && (
+            <p>
+              前一项 <TechLink t={previous} />
+            </p>
+          )}
+          {next.length > 0 && (
+            <p>
+              后一项{' '}
               <Join
                 sep=" "
-                items={t.civs.slice(0, 8).map((n) => {
-                  const c = civByEn(n);
-                  return c ? <CivChip c={c} /> : n;
-                })}
+                items={next.map((item) => (
+                  <TechLink key={item.id} t={item} />
+                ))}
               />
-              {t.civs.length > 8 ? ' 等' : ''}
-            </div>
-            {t.civs.length > 8 && (
-              <Link className="ctx-civ-link ulink" to={location.pathname + '?' + allCivsParams}>
-                查看全部可用文明
-              </Link>
-            )}
-          </SideBlock>
-          {(pre || nxt.length > 0) && (
-            <SideBlock title="科技链">
-              <div className="uline">
-                {pre && (
-                  <>
-                    前置：
-                    <TechLink t={pre} />
-                    <br />
-                  </>
-                )}
-                {nxt.length > 0 && (
-                  <>
-                    后续：
-                    <Join
-                      sep=" "
-                      items={nxt.map((x) => (
-                        <TechLink t={x} />
-                      ))}
-                    />
-                  </>
-                )}
-              </div>
-            </SideBlock>
+            </p>
           )}
-        </>
-      }
-    />
+        </section>
+      )}
+
+      <DetailSource note={entries.length ? '结构化效果与科技模拟器同源；未编码效果以游戏说明为准' : '这条科技没有编码数值，以游戏说明为准'} />
+
+      <div className="td-history" id="tech-history">
+        <PatchHistory target={{ targetType: 'tech', targetId: tech.id, targetNameZh: tech.zh }} />
+      </div>
+    </section>
   );
 }

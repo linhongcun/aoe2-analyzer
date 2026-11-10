@@ -1,45 +1,42 @@
 import { expect, test } from '@playwright/test';
 import techs from '../../src/data/techs.json' with { type: 'json' };
-import buildings from '../../src/data/buildings.json' with { type: 'json' };
 
 const tech = (en: string) => techs.find((entry) => entry.en === en)!;
-const building = (en: string) => buildings.find((entry) => entry.en === en)!;
 
-test('海上霸主的数值卡保留箭术科技前提及船坞/巨港对象', async ({ page }) => {
+test('海上霸主按完整条件分开列出，不把相同数字并成一条', async ({ page }) => {
   await page.goto('./#/tech/624');
-  const effects = page.getByRole('region', { name: '科技效果', exact: true });
-  await expect(effects).toBeVisible();
-  for (const card of await effects.locator('.detail-stat').all()) {
-    await expect(card.locator('dt')).toContainText('组合触发');
-    await expect(card.locator('.detail-stat-note')).toContainText('作用对象：');
+  const summaries = page.locator('[data-t="effect-summary"]');
+  await expect(summaries).toHaveCount(4);
+  const fletching = summaries.filter({ hasText: '箭羽' });
+  await expect(fletching).toHaveCount(2);
+  await expect(fletching.filter({ hasText: '攻击' })).toHaveCount(1);
+  for (const prerequisite of ['箭羽', '锥子箭', '护腕']) {
+    const row = summaries.filter({ hasText: prerequisite }).first();
+    await expect(row).toContainText('需要');
+    await expect(row).toContainText('海上霸主');
   }
-  for (const prerequisite of ['Fletching', 'Bodkin Arrow', 'Bracer']) {
-    const cards = effects.locator('.detail-stat').filter({ has: page.locator('dt', { hasText: `需 ${tech(prerequisite).zh}` }) });
-    expect(await cards.count()).toBeGreaterThan(0);
-    await expect(cards.first().locator('.detail-stat-note')).toContainText(building('Dock').zh);
-  }
-  await expect(effects).toContainText(building('Harbor').zh);
-  await expect(page.getByRole('region', { name: '效果说明', exact: true })).toContainText(tech('Thalassocracy').desc);
-  await page.getByRole('tab', { name: '作用对象', exact: true }).click();
-  await expect(page.locator('#affects')).toContainText('组合触发');
+  const harborId = await fletching.filter({ hasText: '攻击' }).getAttribute('data-rule');
+  await expect(page.locator(`[data-t="affect-rule"][data-rule="${harborId}"]`)).toContainText('巨港');
+  await expect(page.locator(`[data-t="affect-rule"][data-rule="${harborId}"]`)).not.toContainText('船坞');
+  const dock = fletching.filter({ hasNotText: '攻击' });
+  const dockId = await dock.getAttribute('data-rule');
+  await expect(page.locator(`[data-t="affect-rule"][data-rule="${dockId}"]`)).toContainText('船坞');
+  await expect(page.getByRole('region', { name: '游戏说明', exact: true })).toContainText(tech('Thalassocracy').desc);
+  await expect(page.locator('#tech')).not.toContainText('必须');
 });
 
-test('射箭槽不把不同塔型与升级条件归并成一个无条件攻击加成', async ({ page }) => {
+test('射箭槽的基础攻击和箭塔条件各自保留', async ({ page }) => {
   await page.goto('./#/tech/608');
-  const effects = page.getByRole('region', { name: '科技效果', exact: true });
-  await expect(effects).toBeVisible();
-  for (const prerequisite of ['Guard Tower', 'Keep']) {
-    const card = effects.locator('.detail-stat').filter({ has: page.locator('dt', { hasText: `需 ${tech(prerequisite).zh}` }) });
-    await expect(card).toHaveCount(1);
-    await expect(card.locator('.detail-stat-note')).toContainText(building(prerequisite).zh);
-  }
-  const base = effects.locator('.detail-stat').filter({ has: page.locator('dt', { hasText: '防御建筑（基础效果）' }) });
-  await expect(base).toHaveCount(1);
-  await expect(base.locator('.detail-stat-note')).toContainText(building('Watch Tower').zh);
-  await expect(base.locator('.detail-stat-note')).toContainText(building('Guard Tower').zh);
-  await expect(base.locator('.detail-stat-note')).toContainText(building('Keep').zh);
-  // 固定补丁说明保留瞭望/警戒/大型箭塔的分对象总效果，不能由单张 +1 卡取代。
-  await expect(page.getByRole('region', { name: '效果说明', exact: true })).toContainText(tech('Arrowslits').desc);
-  await page.getByRole('tab', { name: '作用对象', exact: true }).click();
-  await expect(page.locator('#affects')).toContainText(building('Keep').zh);
+  const summaries = page.locator('[data-t="effect-summary"]');
+  await expect(summaries).toHaveCount(3);
+  await expect(page.locator('[data-t="effect-summary"][data-kind="base"]')).toHaveCount(1);
+  await expect(page.locator('[data-t="effect-summary"][data-req="Arrowslits|Guard Tower"]')).toContainText('警戒箭塔');
+  await expect(page.locator('[data-t="effect-summary"][data-req="Arrowslits|Keep"]')).toContainText('大型箭塔');
+  const baseId = await page.locator('[data-t="effect-summary"][data-kind="base"]').getAttribute('data-rule');
+  const base = page.locator(`[data-t="affect-rule"][data-rule="${baseId}"]`);
+  await expect(base).toContainText('瞭望箭塔');
+  await expect(base).toContainText('警戒箭塔');
+  await expect(base).toContainText('大型箭塔');
+  await expect(base).not.toContainText('+1 攻击');
+  await expect(page.getByRole('region', { name: '游戏说明', exact: true })).toContainText(tech('Arrowslits').desc);
 });

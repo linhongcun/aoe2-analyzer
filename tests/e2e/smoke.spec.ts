@@ -259,16 +259,17 @@ test('bonus damage is a separate section from self stats (unit + building sim)',
 
 test('tech affects tab: Bracer lists archers + Keep; civ filter narrows', async ({ page }) => {
   await page.goto('./#/tech/201');
-  await page.locator('.dtabs').getByText('作用对象').click();
   await expect(page.locator('#affects')).toContainText('弓兵');
   await expect(page.locator('#affects a[href*="building/"]').first()).toBeVisible();
-  const all = await page.locator('#affects .affrow a').count();
+  const all = await page.locator('#affects [data-t="affect-objects"] a').count();
   await pickCiv(page, 'affciv', 'Britons');
-  await expect.poll(() => page.locator('#affects .affrow a').count()).toBeLessThan(all);
+  await expect.poll(() => page.locator('#affects [data-t="affect-objects"] a').count()).toBeLessThan(all);
+  await expect(page).toHaveURL(/#\/tech\/201$/);
   await page.goto('./#/tech/435');
-  await page.locator('.dtabs').getByText('作用对象').click();
+  await page.locator('#affciv').click();
+  await page.locator('.cp-panel [data-civ="__none"]').click();
   await expect(page.locator('#affects')).toContainText('骑兵');
-  await expect(page.locator('#affects h4', { hasText: '步兵' })).toHaveCount(0);
+  await expect(page.locator('#affects h3', { hasText: '步兵' })).toHaveCount(0);
 });
 
 test('elite dedup: civ chips, unit list, toggle keeps URL working', async ({ page }) => {
@@ -301,7 +302,6 @@ test('elite toggle preserves simulator state', async ({ page }) => {
 
 test('tech affects groups upgrade lines into one chip', async ({ page }) => {
   await page.goto('./#/tech/435');
-  await page.getByRole('tab', { name: /作用对象/ }).click();
   await expect(page.locator('#affects .lchip', { hasText: '重装骑士' })).toHaveCount(1);
   await expect(page.locator('#affects a', { hasText: /^精锐/ })).toHaveCount(0);
 });

@@ -26,14 +26,12 @@ describe('#710 蓄力资料现有页面验收', () => {
     for (const phrase of ['容量不等于额外伤害', '静态换算不是运行时冷却', '冲锋额外伤害', '触发距离', '待确认']) expect(text(html)).toContain(phrase);
   });
   it('884两个资料视图用训练措辞，不改原数值', () => {
-    const overview = render();
-    const values = [...overview.matchAll(/<span class="detail-stat-value" data-t="stat-value">([\s\S]*?)<\/span>/g)].map((match) => text(match[1]!));
-    expect(values.length).toBeGreaterThan(0);
-    expect(values).toContain('训练速度 +50%');
-    expect(values).not.toContain('建造速度 +50%');
+    const overview = text(render());
+    expect(overview).toContain('+50% 训练速度');
+    expect(overview).not.toContain('建造速度');
     const affects = text(render('/tech/884?tab=affects'));
-    expect(affects).toContain('训练速度 +50%');
-    expect(affects).not.toContain('建造速度 +50%');
+    expect(affects).toContain('+50% 训练速度');
+    expect(affects).not.toContain('建造速度');
   });
   it('非884仍保留扳指已有间隔投影', () => {
     const html = render('/tech/437');

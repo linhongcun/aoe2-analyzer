@@ -1,107 +1,141 @@
+import { civs } from '../../../data';
+import { useTrees } from '../../../data/hooks';
+import { civStatus } from '../../../domain/civStatus';
+import { ARMC_CLASS_NOTE } from '../../../domain/affects';
+import { applyTechCivFilter, browseAffected, effectSummary, listedGroupCount, type TechEffectEntry } from '../../../domain/techDetailView';
+import type { Families } from '../../../domain/family';
+import type { Tech, Unit } from '../../../domain/types';
+import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
+import { useSticky } from '../../../shared/utils/sticky';
+import { BuildingLink } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
-import { useCore, useTrees } from '../../../data/hooks';
-import { techAffects, textMentions } from '../../../domain/affects';
-import { civStatus } from '../../../domain/simulator';
-import type { Tech } from '../../../domain/types';
-import { collapse, groupLines } from '../../../domain/family';
-import { BuildingLink, StatIcon, UnitLinks } from '../../../shared/ui/art';
-import { Icon } from '../../../shared/ui/Icon';
 import { LineChip } from '../../../shared/ui/LineChip';
 import { Loading } from '../../../shared/ui/widgets';
-import { useSticky } from '../../../shared/utils/sticky';
-import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
-import { ThumbRingEffectText } from './ThumbRingEffectText';
 import { techEffectText } from '../techEffectText';
+import { ThumbRingEffectText } from './ThumbRingEffectText';
 
-/** 作用对象：与科技模拟器使用同一效果表与判定 */
-export default function TechAffects({ t }: { t: Tech }) {
-  const core = useCore(),
-    trees = useTrees();
-  const [civ0, setCiv] = useSticky('affects.civ', '');
-  if (!core) return <Loading />;
-  const civ = t.civs.includes(civ0) ? civ0 : '';
-  const st = civ && trees ? civStatus(trees, civ) : null;
-  const uOk = (id: number, civs: string[]) => !st || st['u' + id] === 1 || civs.includes(civ);
-  const bOk = (civs: string[]) => !civ || civs.includes(civ);
-  const groups = techAffects(t, core.units, core.buildings)
-    .map((g) => ({
-      ...g,
-      rows: g.rows
-        .map((r) => ({ ...r, units: r.units.filter((u) => uOk(u.id, u.civs)), buildings: r.buildings.filter((b) => bOk(b.civs)) }))
-        .filter((r) => r.units.length + r.buildings.length),
-    }))
-    .filter((g) => g.rows.length);
-  const numeric = techAffects(t, core.units, core.buildings).length > 0;
-  const tm = numeric ? null : textMentions(t, core.linker, core.unitById, core.buildingById);
+function techZh(techs: readonly Tech[], en: string) {
+  return techs.find((item) => item.en === en)?.zh ?? en;
+}
+
+function SummaryText({ text, techId }: { text: string; techId: number }) {
+  if (techId === 437) return <ThumbRingEffectText text={text} />;
+  return text.split(/([+-]?\d+(?:\.\d+)?%?)/g).map((part, index) =>
+    /\d/.test(part) ? (
+      <span className="num nw" key={index}>
+        {part}
+      </span>
+    ) : (
+      <span key={index}>{part}</span>
+    ),
+  );
+}
+
+function RuleList({ entry, units, unitById, fam }: { entry: TechEffectEntry; units: Unit[]; unitById: Record<number, Unit>; fam: Families }) {
+  const view = browseAffected(entry.units, entry.buildings, units, unitById, fam);
+  if (!view.groups.length && !view.buildings.length) return null;
   return (
-    <div id="affects">
-      <div className="bar">
-        文明 <CivPicker id="affciv" label="按文明筛选" value={civ} onChange={setCiv} allowed={t.civs} none="全部单位/建筑" suffix="拥有的" />
-        {civ && !trees && <Loading />}
-      </div>
-      {numeric ? (
-        <>
-          <p className="note">与科技模拟器使用同一份结构化效果表（单一数据源）；列出该科技数值上作用的全部单位/建筑。</p>
-          {t.id === 437 && (
-            <p className="note">
-              扳指的攻击间隔 = 原间隔 / (1+v)，不同作用对象的系数分别列出。来源：effects.json / Thumb Ring / s:rof；v保留原始值，倍率为近似展示；DE{' '}
-              {DATA_SOURCES.patch?.build ?? '待确认'}。
-            </p>
-          )}
-          {groups.length ? (
-            groups.map((g) => (
-              <div className="affg" key={g.group}>
-                <h4>{g.group}</h4>
-                {g.rows.map((r) => (
-                  <div className="affrow" key={r.effect}>
-                    <div className="affef">
-                      {r.parts.map((p, i) => (
-                        <span key={i} className={p.text.startsWith('护甲类别') ? 'tag nw' : 'tag'}>
-                          {p.icon && <StatIcon k={p.icon} t={techEffectText(t.id, p.text)} />}
-                          {t.id === 437 ? <ThumbRingEffectText text={techEffectText(t.id, p.text)} /> : techEffectText(t.id, p.text)}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="uchips">
-                      {groupLines(r.units, core.units, core.unitById, core.fam).map((g) => (
-                        <LineChip key={'l' + g.members[0]!.u.id} g={g} />
-                      ))}
-                      {r.buildings.map((b) => (
-                        <BuildingLink key={'b' + b.id} b={b} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))
-          ) : (
-            <p className="note">该文明没有受此科技影响的单位/建筑</p>
-          )}
-        </>
-      ) : (
-        <>
-          <p className="note">
-            <Icon name="triangle-alert" className="ic warn" /> 根据说明文字推断，未计入数值
-          </p>
-          {tm && tm.units.length + tm.buildings.length ? (
-            <div className="uchips">
-              <UnitLinks
-                list={collapse(
-                  tm.units.filter((u) => uOk(u.id, u.civs)),
-                  core.fam,
-                )}
-              />
-              {tm.buildings
-                .filter((b) => bOk(b.civs))
-                .map((b) => (
-                  <BuildingLink key={'b' + b.id} b={b} />
-                ))}
-            </div>
-          ) : (
-            <p className="note">说明文字中未识别到具体单位或建筑</p>
-          )}
-        </>
+    <div data-t="affect-rule" data-kind={entry.kind} data-rule={entry.id}>
+      {view.groups.map((group) => (
+        <div className="td-browse" key={group.name}>
+          <h3 data-t="browse-group">{group.name}</h3>
+          <div className="td-objects" data-t="affect-objects">
+            {group.lines.map((line) => (
+              <LineChip key={line.members.map((member) => member.u.id).join('-')} g={line} />
+            ))}
+          </div>
+        </div>
+      ))}
+      {view.buildings.length > 0 && (
+        <div className="td-browse">
+          <h3 data-t="browse-group">建筑</h3>
+          <div className="td-objects" data-t="affect-objects">
+            {view.buildings.map((building) => (
+              <BuildingLink key={building.id} b={building} />
+            ))}
+          </div>
+        </div>
       )}
     </div>
+  );
+}
+
+/** 作用对象：摘要、独立筛选和完整名单在同一块。筛选不写进地址。 */
+export default function TechAffects({
+  tech,
+  entries,
+  units,
+  unitById,
+  fam,
+  techs,
+}: {
+  tech: Tech;
+  entries: TechEffectEntry[];
+  units: Unit[];
+  unitById: Record<number, Unit>;
+  fam: Families;
+  techs: Tech[];
+}) {
+  const trees = useTrees();
+  const [selected, setSelected] = useSticky('affects.civ', '');
+  const status = selected && trees ? civStatus(trees, selected) : null;
+  const filter = applyTechCivFilter(
+    selected,
+    tech.civs,
+    civs.map((civ) => civ.en),
+    entries,
+    selected ? status : null,
+  );
+  const shown = filter.kind === 'all' || filter.kind === 'narrowed' ? filter.entries : [];
+  const count = listedGroupCount(shown, units, unitById, fam);
+  const waiting = !!selected && !trees && civs.some((civ) => civ.en === selected) && tech.civs.includes(selected);
+  return (
+    <section id="affects" aria-label="作用对象">
+      <h2>作用对象</h2>
+      {entries.map((entry) => {
+        const body = effectSummary(entry.parts, (text) => techEffectText(tech.id, text));
+        const text = entry.kind === 'combo' ? `需要${entry.req.map((en) => techZh(techs, en)).join('、')}：${body}` : body;
+        return (
+          <p className="td-summary" data-t="effect-summary" data-kind={entry.kind} data-rule={entry.id} data-req={entry.req.join('|')} key={entry.id}>
+            <SummaryText text={text} techId={tech.id} />
+          </p>
+        );
+      })}
+      {tech.id === 437 && (
+        <p className="td-kicker">
+          不同作用范围的间隔系数分开列出。攻击间隔 = 原间隔 / (1+v)。来源：effects.json / Thumb Ring / s:rof；v保留原始值，倍率为近似展示；DE{' '}
+          {DATA_SOURCES.patch?.build ?? '待确认'}。
+        </p>
+      )}
+      {tech.id === 574 && (
+        <p className="note" data-t="royal-heirs-armc">
+          {ARMC_CLASS_NOTE}
+        </p>
+      )}
+      <div className="td-filter">
+        <CivPicker id="affciv" label="按文明筛选" value={selected} onChange={setSelected} none="全部名单" />
+        {waiting && <Loading />}
+        {filter.kind === 'all' ? (
+          <p className="td-kicker" data-t="filter-quiet">
+            未筛选文明。当前完整名单 <span className="num">{count}</span> 组。
+          </p>
+        ) : (
+          <p className="td-status" data-t="filter-status" data-state={filter.kind}>
+            {filter.kind === 'unknown' && '没有这份文明资料。名单保持为空，不会退回全部。'}
+            {filter.kind === 'unavailable' && '该文明无法研究这项科技。已保留选择，名单不退回全部。'}
+            {filter.kind === 'empty' && '该文明可以研究这项科技，但当前名单里没有其拥有的作用对象。'}
+            {filter.kind === 'pending' && '正在读取该文明的科技树。'}
+            {filter.kind === 'narrowed' && (
+              <>
+                只显示该文明拥有的对象。研究费用和时间不变。当前 <span className="num">{count}</span> 组。
+              </>
+            )}
+          </p>
+        )}
+      </div>
+      {shown.map((entry) => (
+        <RuleList key={entry.id} entry={entry} units={units} unitById={unitById} fam={fam} />
+      ))}
+    </section>
   );
 }

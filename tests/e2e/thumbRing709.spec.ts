@@ -70,7 +70,7 @@ for (const width of [360, 375, 390, 1280])
         await page.goto(context === 'sim' ? './#/unit/24/Chinese/4/437/?tab=sim' : context === 'affects' ? './#/tech/437?tab=affects' : './#/tech/437');
         await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
         const target =
-          context === 'sim' ? page.locator('[data-t="thumb-ring-interval"]') : context === 'affects' ? page.locator('#affects') : page.locator('#tech .dmain');
+          context === 'sim' ? page.locator('[data-t="thumb-ring-interval"]') : context === 'affects' ? page.locator('#affects') : page.locator('#tech');
         await expect(target).toBeVisible();
         if (context === 'sim') {
           await expect(target).toContainText('Δ = 基间隔 × (1/(1+v) − 1)');

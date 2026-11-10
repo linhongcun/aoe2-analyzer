@@ -252,7 +252,6 @@ for (const [route, root, tab, selected] of [
   ['unit/281', '#unit', /^科技模拟器$/, 'sim'],
   ['civ/Franks', '#detail', /^数据$/, 'data'],
   ['building/12', '#building', /^生产（\d+）$/, 'prod'],
-  ['tech/22', '#tech', /^作用对象$/, 'affects'],
 ] as const)
   test(`#6 ${route}：唯一 H1、页头复制链接与内容页签经刷新保留`, async ({ page }) => {
     await ready(page, route, `${root} h1`);
@@ -265,6 +264,19 @@ for (const [route, root, tab, selected] of [
     await page.reload();
     await expect(page.locator(root).getByRole('tab', { name: tab, exact: true })).toHaveAttribute('aria-selected', 'true');
   });
+
+test('#6 tech/22：唯一标题，复制当前地址，tab=affects 定位作用对象', async ({ page }) => {
+  await ready(page, 'tech/22', '#tech h1');
+  await expect(page.locator('main h1')).toHaveCount(1);
+  await expect(page.locator('#tech').getByRole('button', { name: '复制链接', exact: true })).toBeVisible();
+  await page.goto('./#/tech/22?tab=affects');
+  await expect(page).toHaveURL(/tab=affects/);
+  await page.reload();
+  await expect(page).toHaveURL(/tab=affects/);
+  const top = await page.locator('#affects').evaluate((el) => el.getBoundingClientRect().top);
+  const nav = await page.locator('header.topbar').evaluate((el) => el.getBoundingClientRect().bottom);
+  expect(top).toBeGreaterThanOrEqual(nav - 2);
+});
 
 for (const width of WIDTHS)
   test(`#6 @${width}：属性块呈现数据、精锐增量与升级费用，切回普通版同步还原`, async ({ page }) => {
