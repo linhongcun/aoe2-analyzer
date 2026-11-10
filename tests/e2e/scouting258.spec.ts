@@ -136,8 +136,8 @@ test('#258 walled economic and forward evidence coexist, with different checks a
   await expect(page.locator('[data-hypothesis="hidden-pressure"]')).toHaveAttribute('data-evidence-status', 'local-support');
   await expect(page.getByTestId('scouting-result')).toContainText('同时发展和施压');
   await expect(page.getByRole('link', { name: '已辨认快攻的应对' })).toHaveAttribute('href', /#\/matchup$/);
-  await expect(page.getByRole('link', { name: '已见城堡前置的阶段应对' })).toHaveAttribute('href', /#\/castle-defense$/);
-  await expect(page.getByRole('link', { name: '已见混兵组合的分工' })).toHaveAttribute('href', /#\/mixed-army$/);
+  await expect(page.getByRole('link', { name: '已见城堡前置的阶段应对' })).toHaveAttribute('href', /#\/matchup\/castle-defense$/);
+  await expect(page.getByRole('link', { name: '已见混兵组合的分工' })).toHaveAttribute('href', /#\/matchup\/mixed-army$/);
 });
 
 test('#258 legitimate unsupported context stays distinct from malformed parameters', async ({ page }) => {
@@ -178,7 +178,7 @@ test('#258 full state including hidden scenario observations survives reload and
   await page.getByRole('button', { name: '复制情报链接' }).click();
   await expect(page.getByRole('status')).toContainText('自动复制失败');
   const shared = await page.getByLabel('手动复制情报链接', { exact: true }).inputValue();
-  expect(new URL(shared).pathname).toMatch(/\/scouting\/$/);
+  expect(new URL(shared).pathname).toMatch(/\/matchup\/scouting\/$/);
   expect(new URL(shared).hash).toBe('');
   const payload = JSON.parse(new URL(shared).searchParams.get('data')!);
   expect(payload.observations['field-army']).toEqual({ state: 'seen', at: '15:16', area: 'enemy-edge', stale: false });
