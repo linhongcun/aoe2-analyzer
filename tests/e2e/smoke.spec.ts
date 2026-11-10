@@ -207,15 +207,15 @@ test('leaving a tech detail page does not crash (regression)', async ({ page }) 
 
 test('building detail tabs + links from tree and unit page', async ({ page }) => {
   await page.goto('./#/building/82');
-  await expect(page.locator('#building h1')).toContainText('Castle');
-  await page.getByRole('tab', { name: /生产/ }).click();
-  await expect(page.locator('#building .uqrow').first()).toBeVisible();
+  await expect(page.locator('#building h1')).toContainText('城堡');
+  await expect(page.locator('#building-prod')).toBeVisible();
+  await expect(page.locator('#building-prod [data-t="catalog-row"]').first()).toBeVisible();
   await page.goto('./#tree/Franks');
   await page.locator('a.tbld').first().click();
   await expect(page.locator('#building h1')).toBeVisible();
   await page.goto('./#unit/569');
-  await page.locator('#unit a.tagl').first().click();
-  await expect(page.locator('#building h1')).toContainText('Stable');
+  await page.locator('#unit a[href$="/building/101"]').first().click();
+  await expect(page.locator('#building h1')).toContainText('马厩');
 });
 
 test('buildings list filters by type', async ({ page }) => {
@@ -322,8 +322,10 @@ test('CivPicker: keyboard navigation, Esc, none option, allowed civs', async ({ 
   await expect(page.locator('.cp-panel .cp-q')).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(page.locator('.cp-panel')).toHaveCount(0);
-  // 农田：限定可建造农田的文明 + 不对比
+  // 农田：先选定文明，模拟器里的对比才出现
   await page.goto('./#/building/50?tab=sim');
+  await expect(page.locator('[data-t="sim-needs-civ"]')).toBeVisible();
+  await pickCiv(page, 'building-civ', 'Britons');
   await page.locator('#simcmp').click();
   await expect(page.locator('.cp-panel [data-civ="__none"]')).toContainText('不对比');
   await expect(page.locator('.cp-panel .cp-q')).toBeFocused();

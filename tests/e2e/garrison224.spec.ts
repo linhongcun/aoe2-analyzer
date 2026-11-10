@@ -37,10 +37,10 @@ async function capacity(page: Page, used: number, limit: number) {
 test('#224 城堡和生产建筑有驻军入口，农田没有虚假的入口', async ({ page }) => {
   for (const building of [82, 12, 45, 68, 70, 104, 236, 1189, 1251, 1665, 1806, 2556]) {
     await page.goto(`./#/building/${building}`);
-    await expect(page.getByRole('tab', { name: '驻军预览', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '配置驻军预览', exact: true })).toBeVisible();
   }
   await page.goto('./#/building/50');
-  await expect(page.getByRole('tab', { name: '驻军预览', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '配置驻军预览', exact: true })).toHaveCount(0);
 });
 
 test('#224 城堡可以增删村民、步弓和骑士，混合容量共用', async ({ page }) => {
