@@ -172,6 +172,8 @@ OpenAI Codex 在启用 git attribution 时使用这一行，见源码 [`codex-rs
 
 先运行一次必要的静态检查与构建，再按变更选择相关单测和页面回归，具体命令见 [TESTING.md](docs/TESTING.md)。完整单测、Python 与整站 Playwright 只在当前风险范围确实需要时执行，不把下面之外的全套命令作为每次更新的默认流程。
 
+2026-11-10 起，开发实现时的兼容取舍见 [AGENTS「开发执行」](AGENTS.md#dev-exec-2026-11-10)。测试门禁以 [TESTING](docs/TESTING.md) 文首为准。发布、审阅和关闭授权不变。
+
 ```bash
 npm ci
 npm run lint

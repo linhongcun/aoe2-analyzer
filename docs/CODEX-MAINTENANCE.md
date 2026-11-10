@@ -89,6 +89,7 @@
 3. 当前 PR **合完再拿下一个**；不要并行囤积分支等合。
 4. 开 PR 前先查该 issue 是否已有 open PR，有则跳过。
 5. 普通已授权更新默认一个 issue、一个 PR 直接对最新 main；仅需要多项冻结集成时使用 `release/vX.Y.Z` 并更新到其最新提交。
+6. 开发实现时的兼容取舍见 [AGENTS「开发执行」](../AGENTS.md#dev-exec-2026-11-10)。每 PR 测试门禁以 [TESTING](TESTING.md) 文首为准。
 
 ## 3. 门禁（对齐 CONTRIBUTING）
 
