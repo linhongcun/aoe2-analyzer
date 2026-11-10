@@ -8,7 +8,7 @@ const TOOLS = [
   ['文明对比', '#/compare?a=Armenians', 'civ-tool-compare'],
   ['科技树', '#/tree/Armenians', 'civ-tool-tree'],
 ] as const;
-const TABS = ['概览', '数据', '科技', '更新历史', '职业选手视角'];
+const TABS = ['概览', '数据', '科技', '更新历史'];
 const errors = new WeakMap<Page, string[]>();
 
 test.beforeEach(({ page }) => {
@@ -90,9 +90,7 @@ test('#602 页内 Tab 在上，相关工具在下，职业选手视角不进情�
   await expect(tech).toContainText('帝王时代独特科技');
   await expect(tech).not.toContainText('查看完整科技树');
   await expect(tech).not.toContainText('职业选手视角');
-  await page.getByRole('tab', { name: '职业选手视角', exact: true }).click();
-  await expect(page.getByRole('tab', { name: '职业选手视角', exact: true })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('heading', { name: '职业选手原始资料', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '职业选手原始资料', exact: true })).toHaveCount(0);
   await expect(tools.getByRole('link')).toHaveCount(5);
   await expect(tools).not.toContainText('职业选手视角');
   expect((await new AxeBuilder({ page }).include('#detail').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);

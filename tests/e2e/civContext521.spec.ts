@@ -138,14 +138,14 @@ for (const width of [360, 375, 390, 1280])
       const nav = page.locator('#detail').getByRole('navigation', { name: '相关工具', exact: true });
       await expect(nav.getByRole('link')).toHaveCount(5);
       await expect(nav.getByRole('link', { name: '职业选手视角', exact: true })).toHaveCount(0);
+      await expect(page.locator('#detail a[href*="/players"], #detail a[href*="/events"]')).toHaveCount(0);
       for (const link of await nav.getByRole('link').all()) {
         const box = await link.boundingBox();
         expect(box!.width).toBeGreaterThanOrEqual(44);
         expect(box!.height).toBeGreaterThanOrEqual(44);
       }
       await capture(page, info, `civ-${width}-${theme}`);
-      await page.getByRole('tab', { name: '职业选手视角', exact: true }).click();
-      await expect(page.getByRole('heading', { name: '职业选手原始资料', exact: true })).toBeVisible();
+      await expect(page.getByRole('heading', { name: '职业选手原始资料', exact: true })).toHaveCount(0);
       await healthy(page);
       await page.goto('./#/civs');
       await page.locator('#q').fill('Jurchens');
