@@ -16,6 +16,7 @@ import type { CostDiscount } from './costDiscount';
 import { UNHANDLED_RES } from './unhandledRes';
 import { VILLAGER_CLASS } from './gameIds';
 import { effectiveGatherRate } from './gatherRate';
+import { formatClock, ratePerMinute } from './formatTime';
 
 export type GatherRes = 'Food' | 'Wood' | 'Gold' | 'Stone';
 type Task = 'farm' | 'wood' | 'gold' | 'stone';
@@ -179,15 +180,11 @@ export function realCost(cost: Cost, g: GatherModel): RealCost {
 }
 
 /** 预算内能出几个（floor，与等资源一致；至少 0） */
-export const countForTime = (unitSec: number, vils: number, min: number) => (unitSec > 0 ? Math.floor((vils * min * 60) / unitSec + 1e-9) : 0);
+export const countForTime = (unitSec: number, vils: number, min: number) => (unitSec > 0 ? Math.floor(ratePerMinute(vils * min, unitSec) + 1e-9) : 0);
 
-/** m:ss；满 1 小时 h:mm:ss（四舍五入到秒） */
+/** m:ss；满 1 小时 h:mm:ss。与时间线共用向下取整；GameClock 的 nearest 是显式 converter 模式。 */
 export function fmtClock(sec: number): string {
-  const s = Math.round(sec);
-  const h = Math.floor(s / 3600),
-    m = Math.floor((s % 3600) / 60),
-    ss = String(s % 60).padStart(2, '0');
-  return h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`;
+  return formatClock(sec, { hours: true });
 }
 
 /** issue 322：折后价 → 采集模型 + 真实成本（原在 shared/ui/RealCost，纯计算迁入 domain） */
