@@ -41,6 +41,7 @@ const task = { Food: 'farm', Wood: 'wood', Gold: 'gold', Stone: 'stone' } as con
 const costAttrs: Record<number, GatherRes | 'all'> = { 100: 'all', 103: 'Food', 104: 'Wood', 105: 'Gold', 106: 'Stone' };
 const unique = (s: string[]) => [...new Set(s)];
 
+/** 勃艮第采集科技与波希米亚化学的时代只属于生产口径，须在 techAvailability.ts 点名。 */
 export function productionTechAge(t: Tech, civ: string) {
   if (civ === 'Burgundians' && eco.ecoTechs[t.id] && isGatherTech(t)) return Math.max(1, t.age - 1);
   if (civ === 'Bohemians' && t.id === 47) return 3;

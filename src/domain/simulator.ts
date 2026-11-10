@@ -68,7 +68,7 @@ export function applyEffects(S: StatSet, list: readonly Effect[]): void {
   }
 }
 
-/** 该文明下对该单位有意义的科技（编码了数值的 + 独特科技/文本项） */
+/** 该文明下对该单位有意义的科技（编码了数值的 + 独特科技/文本项）。树格点亮且有效果规则，不代替另外三套。例外见 techAvailability.ts。 */
 export function simTechs(ctx: SimContext, u: Unit, civ: string): SimTech[] {
   const st = civStatus(ctx.trees, civ);
   const r: SimTech[] = [];

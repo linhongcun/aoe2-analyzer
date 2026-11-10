@@ -135,7 +135,7 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 ## 不在本单
 
 - #865：`cost:check` 已在 lint 里。这里不改 workflow，也不把本覆盖清单加进默认门禁。
-- #869：不把四套科技可用性收成一个布尔。
+- #869：四套科技可用性仍各自独立，不收成一个布尔。问题、消费者和手写例外在 `src/domain/techAvailability.ts`，检查是 `npm run availability:check`（已接入 `npm run lint`）。数据更新编排不跑这份检查，也不做全科技×全文明矩阵。
 - 不新建服务，不把主观评分、开局 JSON 或已放弃的天梯数据并进 `effects.json`。
 - full data 仍是手动的再生 diff，不是每个 PR 的门禁。
 
