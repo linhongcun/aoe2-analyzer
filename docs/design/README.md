@@ -7,9 +7,9 @@
 改界面前先读本索引、[DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)、该 issue 的短稿目录。各短稿目录内如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 [mockups/issue24-v3/ERRATA.md](mockups/issue24-v3/ERRATA.md)。
 
 - **挂靠**：UI 改动须挂 `docs/design/<topic>/` 规格，或 issue 内可测规格。没有则跳过，或先补规格。只实现已挂到 issue、且产品已定稿或 Steve 已写「设计通过」的短稿。不自创版式，不扩范围。
-- **硬规则**：方向 C（浅色编辑风）。界面图标只用 Lucide，经 `src/shared/ui/Icon.tsx` 登记，不用 emoji。游戏素材用 `public/img/` 原版图标。颜色只用 `src/shared/styles/tokens.css`。数字和「数字+单位」用 `.num` / `.nw`。中文 UI。PC-first（以 1280 为准），不为窄屏过度打磨；仍核对 360 / 375 / 390 / 1280：无横向滚动、无页面报错。
-- **角色**：Steve 定范围和「设计通过」。Jony 出短稿并做视觉审。Codex 实现。视觉 PR 须在 15 分钟内回复「我在看」「视觉 N/A」「ETA」或「通过」。
-- **短稿**：目录通常有 `*.md`（验收、不要做）和 1280 线框或截图。实现 PR 对照 §AC，附四宽截图。
+- **硬规则**：方向 C（浅色编辑风）。界面图标只用 Lucide，经 `src/shared/ui/Icon.tsx` 登记，不用 emoji。游戏素材用 `public/img/` 原版图标。颜色只用 `src/shared/styles/tokens.css`。数字和「数字+单位」用 `.num` / `.nw`。中文 UI。PC-first（以 1280 为准），不为窄屏过度打磨。按本次改动影响选择必要视口和界面证据，如实标明覆盖，不固定四宽。
+- **角色**：Steve 定范围和「设计通过」。Jony 负责好用与美观；评审视觉方向时给界面图，不以文字或线框代替，只看本次相关显示。旧组件功能可以有理由取舍。Codex 实现。视觉 PR 须在 15 分钟内回复「我在看」「视觉 N/A」「ETA」或「通过」。产品、运营和视觉职责见 [CONTRIBUTING「角色」](../../CONTRIBUTING.md#角色)。
+- **短稿**：目录通常有 `*.md`（验收、不要做）和 1280 线框或截图。实现 PR 对照 §AC，按本次改动影响选择必要视口和界面证据，如实标明覆盖，不固定四宽。
 - **当前**：`insights-584/` 已合 main（[#621](https://github.com/linhongcun/aoe2-analyzer/pull/621)）。[#584](https://github.com/linhongcun/aoe2-analyzer/issues/584) 已实现并关闭（2026-11-02，PR #623，CHANGELOG 0.74.11）。`ladder-571/` 已上线。后续解耦见 [#625](https://github.com/linhongcun/aoe2-analyzer/issues/625)（已关闭，设计稿 [ladder-independent-625.md](ladder-independent-625.md)）。
 - **交叉**：[CODEX-MAINTENANCE §6 设计硬规则](../CODEX-MAINTENANCE.md#6-设计硬规则摘要)、[CONTRIBUTING「设计与代码规范」](../../CONTRIBUTING.md#设计与代码规范)。交接与 issue 质量条见 [#627](https://github.com/linhongcun/aoe2-analyzer/issues/627)（产品侧主文档 PR 收口，本文不关该 issue）。
 
