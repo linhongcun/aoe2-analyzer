@@ -17,7 +17,7 @@ test('#44 1280：「相关」侧栏宽 320px，原因行不溢出（320px 下折
 for (const [hash, sel] of [
   ['#unit/569', '#unit .dtabs'],
   ['#unit/1948', '#unit .dtabs'],
-  ['#tech/12', '.dtabs'],
+  ['#tech/12', '#tech h1'],
   ['#civ/Armenians', '#detail h1'],
   ['#/building/82', '#building h1'],
 ] as const)

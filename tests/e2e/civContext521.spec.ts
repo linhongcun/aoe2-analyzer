@@ -101,11 +101,8 @@ test('#521 科技文明上下文与概览文明列表可导航，非法文明不
   const nav = page.locator('#tech').getByRole('navigation', { name: '文明相关入口', exact: true });
   await expect(nav.locator('a[href="#/civ/Jurchens"]')).toContainText('女真');
   await expect(nav.getByRole('link', { name: '回对局助手', exact: true })).toHaveAttribute('href', '#/matchup?me=Mongols&opp=Chinese');
-  await page.getByRole('tab', { name: '文明', exact: true }).click();
   expect(params(page).get('civ')).toBe('Jurchens');
-  await expect(page.getByRole('tabpanel').locator('a[href="#/civ/Jurchens"]')).toBeVisible();
-  await page.getByRole('tab', { name: '概览', exact: true }).click();
-  await expect(page.locator('#tech .dside a[href="#/civ/Jurchens"]')).toBeVisible();
+  await expect(page.locator('#tech-civs a[href="#/civ/Jurchens"]')).toBeVisible();
   await nav.locator('a[href="#/civ/Jurchens"]').click();
   await expect(page.locator('#detail h1')).toContainText('女真');
   await page.goto('./#/tech/996?civ=Unknown&me=Mongols&opp=Unknown');
@@ -166,7 +163,7 @@ for (const width of [360, 375, 390, 1280])
       await capture(page, info, `unit-${width}-${theme}`);
       await page.goto('./#/tech/996?civ=Jurchens');
       await expect(page.locator('#tech nav[aria-label="文明相关入口"] a[href="#/civ/Jurchens"]')).toBeVisible();
-      const techBox = await page.locator('#tech .tech-civ-links .civchip').first().boundingBox();
+      const techBox = await page.locator('#tech-civs .civchip').first().boundingBox();
       expect(techBox!.width).toBeGreaterThanOrEqual(44);
       expect(techBox!.height).toBeGreaterThanOrEqual(44);
       await capture(page, info, `tech-${width}-${theme}`);

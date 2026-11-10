@@ -215,6 +215,7 @@
     "tests/e2e/teamPlan243.spec.ts": 21889,
     "tests/e2e/teamPlan769.spec.ts": 6000,
     "tests/e2e/techCards6.spec.ts": 1501,
+    "tests/e2e/techDetail902.spec.ts": 12000,
     "tests/e2e/techUnits13.spec.ts": 1000,
     "tests/e2e/techs883.spec.ts": 6000,
     "tests/e2e/thumbRing709.spec.ts": 15000,

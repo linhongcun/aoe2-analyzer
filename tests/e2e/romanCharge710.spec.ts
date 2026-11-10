@@ -39,11 +39,10 @@ test('#710 PC1280蓄力参数与两处训练措辞', async ({ page }) => {
   await page.goto('./#/tech/884');
   await expect(page.locator('#tech h1')).toContainText('野战军');
   await chargeRows(region(page));
-  await expect(page.locator('.detail-effect-tiles')).toContainText('训练速度 +50%');
-  await expect(page.locator('.detail-effect-tiles')).not.toContainText('建造速度');
-  await page.getByRole('tab', { name: '作用对象', exact: true }).click();
+  await expect(page.locator('[data-t="effect-summary"]')).toContainText('+50% 训练速度');
+  await expect(page.locator('[data-t="effect-summary"]')).not.toContainText('建造速度');
   const affects = page.locator('#affects');
-  await expect(affects).toContainText('训练速度 +50%');
+  await expect(affects).toContainText('+50% 训练速度');
   await expect(affects).not.toContainText('建造速度');
   await expect(affects.locator('[title*="建造"]')).toHaveCount(0);
   await expect(affects.locator('[alt*="建造"]')).toHaveCount(0);
@@ -69,7 +68,7 @@ for (const width of [360, 375, 390, 1280])
         await expect(target).toBeVisible();
         if (tab === 'ov') await chargeRows(target);
         else {
-          await expect(target).toContainText('训练速度 +50%');
+          await expect(target).toContainText('+50% 训练速度');
           await expect(target).not.toContainText('建造速度');
         }
         await expect(target).toHaveCount(1);
