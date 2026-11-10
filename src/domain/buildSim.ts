@@ -40,6 +40,7 @@ export {
  */
 import type { Action, BuildOrder, Task } from './buildOrder';
 import { buildOrders as ALL_BOS } from '../data/buildOrders';
+import { alignAggregatedFactor, civDiscountFactors } from './costPolicy';
 import { applyAggregatedResource } from './unitCost';
 
 import { weiRewardsForCompletedResearch, type WeiSpawnContext } from './weiEconomy';
@@ -492,9 +493,12 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       return out;
     }
     const add = kind !== 'up' ? m.costAdd['unit:' + id] : undefined;
-    // 单位折扣：按单位 id 与按类别（哥特步兵 class:6，#42）两种写法相乘。逐资源加减和取整走 unitCost。
+    // 单位折扣：按单位 id 与按类别（哥特步兵 class:6，#42）两种写法相乘。
+    // 计入哪些组、乘完怎么取整，与 PK 共用 costPolicy；这里只保留逐步累加的 adapter。
     const cls = !legacy && kind === 'unit' && eco.units[id]?.class !== undefined ? m.costMul['class:' + eco.units[id]!.class] : undefined;
     const mul = m.costMul['unit:' + id];
+    const civFactors = kind === 'unit' && !legacy ? civDiscountFactors(id, civ, age) : undefined;
+    const resName: Record<Res, string> = { food: 'Food', wood: 'Wood', gold: 'Gold', stone: 'Stone' };
     const buildingWood = kind === 'building' ? m.buildingWoodCost[eco.buildings[id]?.class ?? -1] : undefined;
     const mayanWall = kind === 'building' ? m.mayanWallCost[eco.buildings[id]?.class ?? -1] : undefined;
     const multiply = kind !== 'up' && Boolean(mul || cls || buildingWood !== undefined || mayanWall !== undefined);
@@ -507,6 +511,9 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
           factor = Math.round(raw * buildingWood * 1e6) / 1e6;
         } else factor = (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1) * (mayanWall ?? 1);
       }
+      const decision = civFactors?.[resName[r]!];
+      // 只改写已经从 eco 乘上的倍率。没有这条效果时不从折扣表补回去，否则「去掉该加成」的对照会失效。
+      if (decision && factor !== undefined && !(decision.factor === 1 && decision.accumulated === 1)) factor = alignAggregatedFactor(factor, decision);
       const extra = add?.[r];
       out[r] = applyAggregatedResource(out[r], { ...(extra !== undefined ? { add: extra } : {}), ...(factor !== undefined ? { factor } : {}) }, legacy);
     }

@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { roundHalfPrice } from '../../src/domain/roundHalfPrice';
 
 type U = { id: number; en: string; age: number; civs: string[]; cost: Record<string, number> };
 type G = { units: number[]; res: string[]; tiers: Record<string, number> };
@@ -8,24 +9,21 @@ const CD = (JSON.parse(readFileSync('src/data/effects.json', 'utf8')) as { costD
 /** 独立扫描折后价恰为 .5 的 单位 × 文明 × 时代（整数算术），用于逐个核对页面 */
 const HALVES: [U, string, number][] = [];
 Object.entries(CD).forEach(([civ, list]) =>
-  list.forEach(
-    (d) =>
-      d.ok &&
-      d.groups.forEach((g) =>
-        g.units.forEach((id) => {
-          const u = UNITS.find((x) => x.id === id);
-          if (!u || !u.civs.includes(civ)) return;
-          Object.entries(g.tiers).forEach(([a, m]) => {
-            const p = Math.round((1 - m) * 100);
-            if (
-              +a >= u.age &&
-              g.res.some((r) => u.cost[r] && (u.cost[r]! * (100 - p)) % 100 === 50) &&
-              !HALVES.some((h) => h[0].id === id && h[1] === civ && h[2] === +a)
-            )
-              HALVES.push([u, civ, +a]);
-          });
-        }),
-      ),
+  list.forEach((d) =>
+    d.groups.forEach((g) =>
+      g.units.forEach((id) => {
+        const u = UNITS.find((x) => x.id === id);
+        if (!u || !u.civs.includes(civ)) return;
+        Object.entries(g.tiers).forEach(([a, m]) => {
+          if (
+            +a >= u.age &&
+            g.res.some((r) => u.cost[r] && roundHalfPrice(u.cost[r]! * m) % 1 === 0.5) &&
+            !HALVES.some((h) => h[0].id === id && h[1] === civ && h[2] === +a)
+          )
+            HALVES.push([u, civ, +a]);
+        });
+      }),
+    ),
   ),
 );
 
@@ -112,11 +110,11 @@ test('每个 .5 情况（#129）：不再标「未计入」，直接显示 .5 �
 for (const w of [1280, 390]) {
   test.describe(`${w}px 复审`, () => {
     test.use({ viewport: { width: w, height: 900 } });
-    test('朝鲜：折扣未计入、按原价', async ({ page }) => {
+    test('高丽弩手：木材按五折计入', async ({ page }) => {
       await open(page, 'a=24.Koreans.3.c.&b=569.Franks.4.f.');
-      await expect(A(page).locator('[data-t="pk-unsupported"]')).toContainText('折扣未计入：高丽');
-      await expect(A(page).locator('.pk-now')).toHaveCount(0);
-      await expect(A(page).locator('[data-t="pk-res-Wood"] td').nth(1)).toHaveText('25');
+      await expect(A(page).locator('[data-t="pk-applied"]')).toContainText('远程士兵和步兵');
+      await expect(A(page).locator('[data-t="pk-unsupported"]')).toHaveCount(0);
+      await expect(A(page).locator('[data-t="pk-res-Wood"] td').nth(1)).toHaveText('12.5');
     });
     test('B 侧与 .3.c. 不显示「按X时代价格」（.3.f. 的口径见 v060-100）', async ({ page }) => {
       await open(page, 'a=329.Berbers.3.f.&b=569.Franks.4.f.');
@@ -169,7 +167,7 @@ for (const w of [360, 375, 390]) {
     test.use({ viewport: { width: w, height: 900 } });
     for (const [name, q, row] of [
       ['.5：哥特长戟兵帝王（#129 起已计入）', 'a=359.Goths.4.c.&b=569.Franks.4.f.', 'pk-applied'],
-      ['高丽弩手', 'a=24.Koreans.3.c.&b=569.Franks.4.f.', 'pk-unsupported'],
+      ['高丽弩手', 'a=24.Koreans.3.c.&b=569.Franks.4.f.', 'pk-applied'],
     ] as const) {
       test(`${name}：「来源」单行显示`, async ({ page }) => {
         await open(page, q);

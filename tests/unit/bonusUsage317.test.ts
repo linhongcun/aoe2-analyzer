@@ -1,7 +1,7 @@
 // issue 317：经济/费用类文明加成（src = 'eco'）的「是否计入」标签必须与各工具的实际计算一致。
 // 判定不靠标签自身：开局模拟用「去掉该加成的 civEco 行后重跑」看结果是否变化，真实成本 / 训练费用直接调用工具函数。
 // 开局模拟全量重跑约 60 次 × 8 个开局方案，太慢（CI 上 60 s 以上），结果存成快照 fixtures/bonusUsage317-sim.json：
-// 快照带输入指纹（整个 eco.json 数据对象、开局方案、升级数据、buildSim.ts 及拆分的文明规则/覆盖/效果/数值求值/训练周期/机制/附注模块、roundHalfPrice.ts / buildOrder.ts 源码），任一变化本测试即失败，提示重新生成：
+// 快照带输入指纹（整个 eco.json 数据对象、开局方案、升级数据、buildSim.ts 及拆分的文明规则/覆盖/效果/数值求值/训练周期/费用策略/机制/附注模块、roundHalfPrice.ts / buildOrder.ts 源码），任一变化本测试即失败，提示重新生成：
 //   UPDATE_BONUS317=1 npx vitest run tests/unit/bonusUsage317.test.ts
 // 平时只抽两条（条顿第 1 条、阿兹特克第 1 条）在记录的开局方案上现场重跑，确认快照与真实计算一致。
 import { createHash } from 'node:crypto';
@@ -18,7 +18,6 @@ import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/
 import { simSupport } from '../../src/domain/simSupport';
 import { gatherModel } from '../../src/domain/realCost';
 import { discountedCost } from '../../src/domain/costDiscount';
-import { DAT } from '../../src/domain/datEffects';
 import { calculateConstruction, DEFAULT_CONSTRUCTION } from '../../src/domain/construction';
 import { loadTrees } from '../../src/data';
 
@@ -58,6 +57,7 @@ const inputsHash = () =>
       'specialIncome.ts',
       'buildSimNotes.ts',
       'roundHalfPrice.ts',
+      'costPolicy.ts',
       'buildOrder.ts',
       'weiEconomy.ts',
       'bengaliEconomy.ts',
@@ -153,9 +153,10 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
     expect(ECO.filter((b) => b.src === 'eco')).toHaveLength(112);
     expect(ECO.filter((b) => b.src === 'text')).toHaveLength(37);
   });
-  it('src = text 中实际被工具计入的五条：亚美尼亚经济研究、凯尔特伐木、高棉免建筑前置、朝鲜采石、突厥采金', () => {
+  it('src = text 中实际被工具计入的六条：亚美尼亚经济研究、凯尔特伐木、高棉免建筑前置、朝鲜采石、高丽战船木材、突厥采金', () => {
     const counted = ECO.filter((b) => b.src === 'text' && bonusUsage(b).some((l) => l.on === true)).map((b) => b.id);
-    expect(counted).toEqual(['Armenians-1', 'Celts-0', 'Khmer-0', 'Koreans-0', 'Turks-0']);
+    expect(counted).toEqual(['Armenians-1', 'Celts-0', 'Khmer-0', 'Koreans-0', 'Koreans-3', 'Turks-0']);
+    expect(line(bon('Koreans-3'), 'cost').map((l) => l.on)).toEqual([true]);
     expect(line(bon('Armenians-1'), 'sim')[0]).toMatchObject({ on: true, note: '伐木、采矿科技增强仅在对应研究完成后计入' });
     for (const [id, label] of [
       ['Celts-0', '伐木 +15%'],
@@ -225,10 +226,11 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
   });
   it('训练费用：标「已计入」当且仅当 discountedCost 对相关单位实际打折（建筑折扣不在 PK / 真实成本里）', () => {
     for (const b of ECO) {
-      const entries = (DAT.costDiscounts[b.civ] ?? []).filter((d) => d.idx === b.idx);
-      const hit = entries.some((d) =>
-        d.groups.some((g) => g.units.some((id) => core.unitById[id] && discountedCost(core.unitById[id]!, b.civ, 4).applied.some((a) => a.idx === b.idx))),
-      );
+      const hit =
+        typeof b.idx === 'number' &&
+        Object.values(core.unitById).some(
+          (u) => u && u.civs.includes(b.civ) && discountedCost(u, b.civ, Math.max(4, u.age)).applied.some((a) => a.idx === b.idx),
+        );
       expect([b.id, line(b, 'cost').some((l) => l.on)]).toEqual([b.id, hit]);
     }
   });
@@ -244,10 +246,11 @@ describe('issue 317 全部 src = eco 的加成：标签与工具实际计算一�
     }
     expect(hidden).toBeGreaterThan(0);
     expect(hidden).toBeLessThan(112);
-    // src = text 同样规则：五条被工具计入，不显示；其余 32 条没有工具计入，仍显示
+    // src = text 同样规则：六条被工具计入，不显示；其余 31 条没有工具计入，仍显示
     const text = ECO.filter((x) => x.src === 'text');
-    for (const b of text) expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !['Armenians-1', 'Celts-0', 'Khmer-0', 'Koreans-0', 'Turks-0'].includes(b.id)]);
-    expect(text.filter((b) => showEcoSourceTag(b))).toHaveLength(32);
+    for (const b of text)
+      expect([b.id, showEcoSourceTag(b)]).toEqual([b.id, !['Armenians-1', 'Celts-0', 'Khmer-0', 'Koreans-0', 'Koreans-3', 'Turks-0'].includes(b.id)]);
+    expect(text.filter((b) => showEcoSourceTag(b))).toHaveLength(31);
   });
   it('没有任何工具计入的加成保持「仅文本」', () => {
     for (const b of ECO) if (!bonusUsage(b).some((l) => l.on)) expect([b.id, usageLevel(bonusUsage(b))]).toEqual([b.id, 'none']);

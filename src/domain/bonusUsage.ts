@@ -8,7 +8,7 @@ import { chineseContext, CHINESE_OPENING_NOTE } from './chineseEconomy';
  * 不另立规则，只读各工具自己的判定，保证标签与计算一致：
  * - 开局模拟：simSupport（不支持的文明整页按通用文明计算）+ buildSim 的 techAtomicOk / classifyCivEffect（按 .dat tech 号对应 civEco 行）；
  * - 真实成本 · 采集速度：realCost 的 SOURCED 表（gatherBonusIdx）；
- * - 训练费用（单位 PK「等资源」、单位详情的真实成本）：costDiscount 读的 DAT.costDiscounts（按加成序号，ok = false 时显示「折扣未计入」）；
+ * - 训练费用（单位 PK「等资源」、单位详情的真实成本）：costPolicy 按组对账后，discountedCost 实际计入的加成序号；
  *   只看作用于单位的条目，建筑费用折扣不在这两个工具里；
  * - 施工工具：construction.json 里该文明独有的自动规则（按 tech 号；只有改建造者工作速率 / 施工工期的命令才会被施工工具使用）；
  * - 修理：没有任何工具计算修理。
@@ -28,6 +28,7 @@ import { buildOrders } from '../data/buildOrders';
 import { CIV_MECHANISM_KEYS, classifyCivEffect, simScope, simSupport as currentSimSupport, techAtomicOk } from './buildSim';
 import { BONUS_USAGE_EXCLUDED } from './mechanismExclusions';
 import type { CivBonusEnt } from './civBonus';
+import { bonusDiscountCounted } from './costPolicy';
 import { DAT } from './datEffects';
 import { gatherBonusIdx, gatherModel, touchesGather } from './realCost';
 import relicRaw from '../data/relic_income.json';
@@ -316,11 +317,13 @@ function usageLines(b: CivBonusEnt & { idx: number }): BonusUsageLine[] {
   if (sim) out.push(sim);
   const g = gatherLines(b);
   if (g.length) out.push({ tool: 'gather', name: USAGE_TOOL_ZH.gather, on: true, note: `采集速度已计入（${g.map((l) => l.label).join('、')}）` });
-  for (const d of (DAT.costDiscounts?.[b.civ] ?? []).filter((x) => x.idx === idx && x.groups.some((g) => g.units.some((id) => UNIT_IDS.has(id)))))
+  const listed = (DAT.costDiscounts?.[b.civ] ?? []).some((x) => x.idx === idx && x.groups.some((g) => g.units.some((id) => UNIT_IDS.has(id))));
+  const counted = bonusDiscountCounted(b.civ, idx);
+  if (listed || counted)
     out.push(
-      d.ok
+      counted
         ? { tool: 'cost', name: USAGE_TOOL_ZH.cost, on: true, note: '单位 PK「等资源」与单位详情的真实成本按折后价计算' }
-        : { tool: 'cost', name: USAGE_TOOL_ZH.cost, on: false, note: '.dat 数值与说明对不上，显示「折扣未计入」，按原价' },
+        : { tool: 'cost', name: USAGE_TOOL_ZH.cost, on: false, note: '.dat 累计乘数与说明的整数百分比对不上，显示「折扣未计入」，按原价' },
     );
   const techs = new Set(bonusTechs(b).techs);
   const cc = construction.civs[b.civ];

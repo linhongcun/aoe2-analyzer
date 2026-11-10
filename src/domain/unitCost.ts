@@ -8,10 +8,10 @@
  * 开局模拟仍先把文明效果收成 costAdd / costMul，再调用 applyAggregatedResource。
  * 那条路径的取整也在这里：legacy 文明用 Math.round，其余用 roundHalfPrice。
  */
+import { priceFromRawFactor } from './costPolicy';
 import { DAT, type DatCostDiscount } from './datEffects';
 import { discountedCost, type CostDiscount } from './costDiscount';
 import { applyEffectValue } from './numericEffects';
-import { roundHalfPrice } from './roundHalfPrice';
 import type { Cost } from './types';
 
 export const UNIT_COST_RESOURCES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
@@ -72,7 +72,7 @@ export interface UnitCostOptions {
 
 /** legacy 开局沿用整数 Math.round；其余口径统一 roundHalfPrice。 */
 export function finalizeUnitPrice(exact: number, legacy = false): number {
-  return legacy ? Math.round(exact) : roundHalfPrice(exact);
+  return priceFromRawFactor(exact, 1, legacy);
 }
 
 export interface AggregatedResourceMod {
@@ -85,11 +85,11 @@ export interface AggregatedResourceMod {
   factor?: number;
 }
 
-/** 开局聚合：先加并归零，有倍率时再乘并取整。 */
+/** 开局聚合：先加并归零，有倍率时再乘并取整。乘和取整只走 priceFromRawFactor。 */
 export function applyAggregatedResource(base: number, mod: AggregatedResourceMod, legacy = false): number {
   const added = mod.add !== undefined ? Math.max(0, base + mod.add) : base;
   if (mod.factor === undefined) return added;
-  return finalizeUnitPrice(added * mod.factor, legacy);
+  return priceFromRawFactor(added, mod.factor, legacy);
 }
 
 function techEffects(tech: UnitCostTech): readonly UnitCostEffect[] {

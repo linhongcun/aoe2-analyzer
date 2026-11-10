@@ -83,9 +83,9 @@ export interface DatCostDiscount {
   idx: number | null;
   techs: number[];
   groups: DatCostGroup[];
-  /** 加成文本里的百分比（只用于对账） */
+  /** 加成文本里的百分比（只用于对账，不是乘数） */
   text: Record<string, number> | null;
-  /** .dat 与文本逐时代一致 */
+  /** 生成器的整条对账结果。运行时按 costPolicy 分组决定，不拿这个总开关一刀切。 */
   ok: boolean;
 }
 export interface DatFile {

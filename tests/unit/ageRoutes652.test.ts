@@ -211,7 +211,9 @@ describe('#652 真实文明数据及扰动', () => {
     const saved = DAT.costDiscounts.Mayans;
     try {
       DAT.costDiscounts.Mayans = structuredClone(saved!);
-      DAT.costDiscounts.Mayans!.flatMap((d) => d.groups).find((g) => g.units.includes(4))!.tiers['2'] = 0.5;
+      const entry = DAT.costDiscounts.Mayans!.find((d) => d.groups.some((g) => g.units.includes(4)))!;
+      entry.groups.find((g) => g.units.includes(4))!.tiers['2'] = 0.5;
+      entry.text = { ...entry.text, '2': 50 };
       const r = row('Mayans');
       expect(r.feudal.cost.Gold).toBe(22.5);
       expect(r.castle.cost.Gold).toBe(36);

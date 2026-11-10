@@ -1,16 +1,13 @@
 /**
  * #24 PK 等资源 · 文明训练费用加成（纯函数）。
- * 口径（Steve 终版，#24）：
+ * 口径：
  *  1. 折扣档位跟随 PK 所选时代；未选时代时按单位最早可用时代取档，界面注明「按X时代价格」。
- *  2. 数值只来自 .dat 导出（scripts/effects_build.py → effects.json 的 costDiscounts：属性 100/103–106 的乘法效果逐时代累计），
- *     不从 civs.json 文本抄数；文本只用于对账。
- *  3. 读不出或与文本对不上的加成（ok=false）显示「折扣未计入」，按原价，不出估算值。
- * 折后价取整（issue 129，Steve 在 issue 133 按游戏实测定）：就近取到 0.5，x.25 往小、x.75 往大（26.25 → 26，168.75 → 169），
- * 与开局页共用 roundHalfPrice；显示价与计算用价为同一个值。恰好落在 .5 的直接显示 .5，不再记「未计入」。
- * 精确算术：每档用 .dat 乘数换算的整数百分比 p（构建时已与加成文本逐时代对账一致），
- * 折后价 = 原价 × Π(100 − p) / 100^k，分子分母全程整数，最后一步才取整。
+ *  2. 乘数只用 .dat 累计原始值（costDiscounts.tiers）。文本整数百分比只决定这一组算不算（costPolicy）。
+ *  3. 对不上任何费用句子的组显示「折扣未计入」，该组不乘，不出估算值。
+ * 取整与开局相同：priceFromRawFactor，再走到 roundHalfPrice（issue 129）。恰好落在半数的直接显示半数。
  */
 import civsRaw from '../data/raw/civs';
+import { matchCostGroup, priceFromRawFactor } from './costPolicy';
 import { DAT, type DatCostDiscount } from './datEffects';
 import type { Cost } from './types';
 import { roundHalfPrice } from './roundHalfPrice';
@@ -67,45 +64,33 @@ export function discountedCost(
 ): CostDiscount {
   const table = opts.table ?? DAT.costDiscounts ?? {};
   const base = { ...u.cost };
-  /** 每种资源的精确有理数价 num / den（整数） */
-  const num: Record<string, number> = {},
-    den: Record<string, number> = {};
-  Object.entries(base).forEach(([r, v]) => ((num[r] = v), (den[r] = 1)));
+  const factor: Record<string, number> = {};
+  Object.keys(base).forEach((r) => (factor[r] = 1));
   const applied: AppliedLine[] = [],
     unsupported: CostBonusLine[] = [],
     half: (CostBonusLine & { res: string[] })[] = [];
   (table[civEn] ?? []).forEach((d) => {
-    const gs = d.groups.filter((g) => g.units.includes(u.id));
-    if (!gs.length) return;
-    const touched = gs.flatMap((g) => g.res).filter((r) => base[r]);
-    if (!touched.length) return;
-    if (!d.ok) return unsupported.push(lineOf(civEn, d));
-    const live = gs.filter((g) => g.tiers[String(age)] !== undefined);
-    if (!live.length) return; // 该时代尚未生效
-    const step: Record<string, number> = {},
-      cnt: Record<string, number> = {};
-    let pct = 0;
-    live.forEach((g) => {
-      pct = Math.round((1 - g.tiers[String(age)]!) * 100);
-      g.res.forEach((r) => {
-        if (!base[r]) return;
-        step[r] = (step[r] ?? 1) * (100 - pct);
-        cnt[r] = (cnt[r] ?? 0) + 1;
-      });
+    d.groups.forEach((g) => {
+      if (!g.units.includes(u.id)) return;
+      const tier = g.tiers[String(age)];
+      if (tier === undefined) return;
+      const touched = g.res.filter((r) => base[r]);
+      if (!touched.length) return;
+      const match = matchCostGroup(civEn, d, g, age, tier);
+      if (!match) {
+        unsupported.push(lineOf(civEn, d));
+        return;
+      }
+      touched.forEach((r) => (factor[r] = (factor[r] ?? 1) * tier));
+      const res = [...new Set(touched)];
+      applied.push({ ...lineOf(civEn, { idx: match.idx, techs: d.techs }), pct: match.pct, res: ALL.every((r) => res.includes(r)) ? null : res });
     });
-    const scale = (r: string) => 100 ** cnt[r]!;
-    Object.keys(step).forEach((r) => {
-      num[r] = num[r]! * step[r]!;
-      den[r] = den[r]! * scale(r);
-    });
-    const res = [...new Set(live.flatMap((g) => g.res))];
-    applied.push({ ...lineOf(civEn, d), pct, res: ALL.every((r) => res.includes(r)) ? null : res });
   });
   const exact: Cost = {},
     cost: Cost = {};
   Object.keys(base).forEach((r) => {
-    exact[r] = num[r]! / den[r]!;
-    cost[r] = roundHalfPrice(num[r]! / den[r]!);
+    exact[r] = base[r]! * (factor[r] ?? 1);
+    cost[r] = priceFromRawFactor(base[r]!, factor[r] ?? 1);
   });
   const noCost: CostBonusLine[] = [];
   if (opts.techIds) {
