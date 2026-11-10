@@ -132,5 +132,5 @@ export const AVAILABILITY_EXCEPTIONS: readonly AvailabilityException[] = [
 ];
 
 export const AVAILABILITY_CHECK_LIMITS =
-  '能发现的范围：civStatus、techAvailable、productionTechs、productionTechAge、simTechs、availabilityAge 所在五个文件里，函数声明和赋给 const 的函数中的手写文明时代分支（返回 1–4，或对 .age 做加减，或 Math.max/min 包住它们）、单位编号时代下限，以及 displayUnitAge 的展示分支。也包括这些文件直接 import 的 src/domain 绑定里，形状为「文明名、编号、时代字面量」三层的表。site、role、differs、because 都必须是源码里的字面量；指向另一张常量表不算登记。只重复文明名、声明对不上、多出来的声明、或出现名为 isAvailable 的函数，都会失败。上述函数若直接调用另一套，也会失败。displayUnitAge、unitDisplayAge、projectUnitDisplayAges 被点名过的生产、费用、战斗或开局模拟文件 import，会失败。' +
+  '能发现的范围：civStatus、techAvailable、productionTechs、productionTechAge、simTechs、availabilityAge 所在五个文件里，函数声明和赋给 const 的函数中的手写文明时代分支（返回 1–4，或对 .age 做加减，或 Math.max/min 包住它们）、单位编号时代下限，以及 displayUnitAge 的展示分支。也包括这些文件直接 import 的 src/domain 绑定里，形状为「文明名、编号、时代字面量」三层的表。site、role、differs、because 都必须是源码里的字面量；指向另一张常量表不算登记。只重复文明名、声明对不上、多出来的声明、或出现名为 isAvailable 的函数，都会失败。上述函数若直接调用另一套，也会失败。displayUnitAge、unitDisplayAge、projectUnitDisplayAges 被点名过的生产、费用、战斗或开局模拟文件 import，会失败。displayUnitAge 的嵌套三元与等价 if/return 都能登记，结构键可随改写调整；扫描对不上不是判定语义错误。四套可以登记同一个主要消费者文件，只要该文件值导入对应函数；共享文件不等于把四套混用。' +
   '不能发现的范围：不在上述文件、也没有被它们直接 import 的新建文件；对象方法或类方法；不返回时代字面量的文明分支；动态拼出的文明名；namespace 或动态 import；把判断藏进别的名字而不是 isAvailable。展示 import 只拦当前点名的路径。不比较四套的返回值，也不跑全科技×全文明。不能拦一切任意新代码。';

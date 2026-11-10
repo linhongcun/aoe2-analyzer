@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { auditSources, checkRepo, contractErrors, displayForbiddenArea } from '../../scripts/check-tech-availability.mjs';
+import { auditSources, checkRepo, contractErrors, displayForbiddenArea, questionFileErrors } from '../../scripts/check-tech-availability.mjs';
 import { AVAILABILITY_CHECK_LIMITS, AVAILABILITY_EXCEPTIONS, TECH_AVAILABILITY } from '../../src/domain/techAvailability';
 
 const ALL = ['civStatus', 'techAvailable', 'productionTechs', 'simTechs'] as const;
@@ -172,6 +172,71 @@ describe('#869 科技可用性例外必须点名', () => {
   it('displayUnitAge 丢掉文明展示分支会失败', () => {
     const stripped = readFileSync('src/domain/availabilityAge.ts', 'utf8').replace("civ === 'Armenians' ? 1 : 2", 'catalogAge');
     const result = auditSources([{ name: 'src/domain/availabilityAge.ts', text: stripped }], []);
-    expect(result.errors.some((error: string) => error.includes('displayUnitAge') && error.includes('恰好一处'))).toBe(true);
+    expect(result.errors.some((error: string) => error.includes('displayUnitAge') && error.includes('没有扫到嵌套三元或等价 if/return'))).toBe(true);
+    expect(result.errors.some((error: string) => error.includes('恰好一处'))).toBe(false);
+  });
+
+  it('等价 if/return 展示改写可以登记，改时代才要换结构键', () => {
+    const declaration = {
+      site: DISPLAY,
+      role: 'display-only',
+      differs: ALL,
+      because: '长矛兵展示时代仍是亚美尼亚 1、其他文明 2。这是等价改写，不是判定语义错误。',
+    };
+    const forms = [
+      `export function displayUnitAge(id: number, catalogAge: number, civ = ''): number {
+        if (id === SPEARMAN_UNIT_ID) {
+          if (civ === 'Armenians') return 1;
+          return 2;
+        }
+        return catalogAge;
+      }`,
+      `export function displayUnitAge(id: number, catalogAge: number, civ = ''): number {
+        if (id !== SPEARMAN_UNIT_ID) return catalogAge;
+        return civ === 'Armenians' ? 1 : 2;
+      }`,
+    ];
+    for (const body of forms) {
+      const result = auditSources([{ name: 'src/domain/availabilityAge.ts', text: body + '\n' }], [declaration]);
+      expect(result.errors).toEqual([]);
+      expect(result.sites.map((site) => site.key)).toEqual([DISPLAY]);
+    }
+    const changed = auditSources(
+      [
+        {
+          name: 'src/domain/availabilityAge.ts',
+          text: `export function displayUnitAge(id: number, catalogAge: number, civ = ''): number {
+            if (id === SPEARMAN_UNIT_ID) {
+              if (civ === 'Armenians') return 3;
+              return 2;
+            }
+            return catalogAge;
+          }\n`,
+        },
+      ],
+      [declaration],
+    );
+    const next = DISPLAY.replace('Armenians=1', 'Armenians=3');
+    expect(changed.errors.some((error: string) => error.includes(`缺声明：${next}`))).toBe(true);
+    expect(changed.errors.some((error: string) => error.includes(`声明没有对应的手写例外：${DISPLAY}`))).toBe(true);
+    expect(changed.errors.some((error: string) => error.includes('没有扫到嵌套三元或等价 if/return'))).toBe(false);
+  });
+
+  it('四套可以共享主要消费者文件，注释里重复名字仍然不算', () => {
+    const shared = 'src/features/sharedConsumer.ts';
+    const questions = [
+      { id: 'civStatus', asks: '格子是否点亮', definedIn: 'src/domain/civStatus.ts', exportName: 'civStatus', consumer: shared },
+      { id: 'simTechs', asks: '格子点亮且有效果规则', definedIn: 'src/domain/simulator.ts', exportName: 'simTechs', consumer: shared },
+    ];
+    const imported = questionFileErrors(questions, [
+      {
+        name: shared,
+        text: "import { civStatus } from '../domain/civStatus';\nimport { simTechs } from '../domain/simulator';\nvoid civStatus;\nvoid simTechs;\n",
+      },
+    ]);
+    expect(imported).toEqual([]);
+    const commentOnly = questionFileErrors(questions, [{ name: shared, text: '// civStatus\n// simTechs\nexport const note = 1;\n' }]);
+    expect(commentOnly.some((error: string) => error.includes('没有以值导入'))).toBe(true);
+    expect(commentOnly.some((error: string) => error.includes('不能是同一个文件'))).toBe(false);
   });
 });

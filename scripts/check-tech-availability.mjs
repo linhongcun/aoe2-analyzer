@@ -228,25 +228,106 @@ function ageReturns(node) {
   return out;
 }
 
+function unitIdCompare(node) {
+  if (!ts.isBinaryExpression(node)) return null;
+  const negated = node.operatorToken.kind === ts.SyntaxKind.ExclamationEqualsEqualsToken;
+  if (node.operatorToken.kind !== ts.SyntaxKind.EqualsEqualsEqualsToken && !negated) return null;
+  for (const side of [node.left, node.right]) {
+    const other = side === node.left ? node.right : node.left;
+    if (!isPlainId(other)) continue;
+    if (ts.isIdentifier(side) && side.text === 'SPEARMAN_UNIT_ID') return { token: 'SPEARMAN_UNIT_ID', negated };
+    if (ts.isNumericLiteral(side) && side.text === '93') return { token: '93', negated };
+  }
+  return null;
+}
+
+function ageLiteral(node) {
+  const fingerprint = ageFingerprint(node);
+  return fingerprint?.startsWith('literal:') ? literalNumber(fingerprint) : null;
+}
+
+function ageLiteralReturn(node) {
+  if (!node) return null;
+  if (ts.isBlock(node)) return node.statements.length === 1 ? ageLiteralReturn(node.statements[0]) : null;
+  if (ts.isReturnStatement(node)) return ageLiteral(node.expression);
+  return null;
+}
+
+function civAgePairFromStatements(statements) {
+  const first = statements[0];
+  if (!first) return null;
+  if (ts.isReturnStatement(first)) return civAgePair(first.expression);
+  if (!ts.isIfStatement(first)) return null;
+  const civ = civIn(first.expression);
+  const yes = ageLiteralReturn(first.thenStatement);
+  const no = ageLiteralReturn(first.elseStatement) || ageLiteralReturn(statements[1]);
+  if (civ && yes && no) return { civ, yes, no };
+  return null;
+}
+
+function civAgePair(node) {
+  if (!node) return null;
+  const value = unwrap(node);
+  if (!value) return null;
+  if (ts.isReturnStatement(value)) return civAgePair(value.expression);
+  if (ts.isBlock(value)) return civAgePairFromStatements(value.statements);
+  if (ts.isConditionalExpression(value)) {
+    const civ = civIn(value.condition);
+    const yes = ageLiteral(value.whenTrue);
+    const no = ageLiteral(value.whenFalse);
+    if (civ && yes && no) return { civ, yes, no };
+  }
+  if (ts.isIfStatement(value)) {
+    const civ = civIn(value.expression);
+    const yes = ageLiteralReturn(value.thenStatement);
+    const no = ageLiteralReturn(value.elseStatement);
+    if (civ && yes && no) return { civ, yes, no };
+  }
+  return null;
+}
+
+function displayFromExpression(expr) {
+  const value = unwrap(expr);
+  if (!value || !ts.isConditionalExpression(value)) return null;
+  const cmp = unitIdCompare(value.condition);
+  if (!cmp || cmp.negated) return null;
+  const pair = civAgePair(value.whenTrue);
+  return pair ? { token: cmp.token, pair } : null;
+}
+
+function displaySite(file, token, pair) {
+  return {
+    kind: 'display-age',
+    key: `display-age:${file}:displayUnitAge:${token}:${pair.civ}=${pair.yes}:other=${pair.no}`,
+    owner: 'displayUnitAge',
+    usedBy: [],
+  };
+}
+
 function collectDisplay(fn, file) {
   const sites = [];
-  visitBody(fn, (node) => {
-    if (!ts.isConditionalExpression(node)) return;
-    const token = unitIdToken(node.condition);
-    const inner = unwrap(node.whenTrue);
-    if (!token || !inner || !ts.isConditionalExpression(inner)) return;
-    const civ = civIn(inner.condition);
-    const yes = ageFingerprint(inner.whenTrue);
-    const no = ageFingerprint(inner.whenFalse);
-    if (!civ || !yes || !no) return;
-    sites.push({
-      kind: 'display-age',
-      key: `display-age:${file}:displayUnitAge:${token}:${civ}=${literalNumber(yes)}:other=${literalNumber(no)}`,
-      owner: 'displayUnitAge',
-      usedBy: [],
-    });
+  const add = (token, pair) => {
+    if (token && pair) sites.push(displaySite(file, token, pair));
+  };
+  const body = fn.body;
+  if (!body) return sites;
+  if (!ts.isBlock(body)) {
+    const found = displayFromExpression(body);
+    if (found) add(found.token, found.pair);
+    return sites;
+  }
+  body.statements.forEach((stmt, index) => {
+    if (ts.isReturnStatement(stmt)) {
+      const found = displayFromExpression(stmt.expression);
+      if (found) add(found.token, found.pair);
+    }
+    if (!ts.isIfStatement(stmt)) return;
+    const cmp = unitIdCompare(stmt.expression);
+    if (!cmp) return;
+    add(cmp.token, cmp.negated ? civAgePairFromStatements(body.statements.slice(index + 1)) : civAgePair(stmt.thenStatement));
   });
-  return sites;
+  const seen = new Set();
+  return sites.filter((site) => (seen.has(site.key) ? false : seen.add(site.key)));
 }
 
 function collectFunctionSites(fn, file, fnName) {
@@ -434,7 +515,8 @@ function collectFromFiles(fileMap, root) {
     errors.push(...nameErrors(sf, file));
     if (fns.has('displayUnitAge')) {
       const found = sites.filter((site) => site.kind === 'display-age' && site.owner === 'displayUnitAge' && site.key.includes(file));
-      if (found.length !== 1) errors.push(`${file} 的 displayUnitAge 必须保留恰好一处文明展示时代，当前扫到 ${found.length} 处。`);
+      if (found.length === 0)
+        errors.push(`${file} 的 displayUnitAge 没有扫到嵌套三元或等价 if/return 展示例外。结构没对上或文明展示分支已删除；这不是四套判定语义错误。`);
     }
   }
   for (const alias of aliases) {
@@ -704,10 +786,8 @@ function importsValue(sf, name) {
 
 function questionErrors(root, questions, files) {
   const errors = [];
-  const consumers = new Set();
   for (const question of questions) {
     if (!question.definedIn || !question.consumer || !question.exportName) continue;
-    consumers.add(question.consumer);
     let defined;
     try {
       defined = parseText(question.definedIn, loadText(question.definedIn, root, files));
@@ -735,8 +815,12 @@ function questionErrors(root, questions, files) {
         errors.push(`${resolved} 没有把 ${question.exportName} 导出给 ${question.consumer}。`);
     }
   }
-  if (consumers.size && consumers.size !== questions.length) errors.push('四套问题的主要消费者不能是同一个文件。');
   return errors;
+}
+
+export function questionFileErrors(questions, entries) {
+  const files = new Map(entries.map((entry) => [entry.name, entry.text]));
+  return questionErrors(ROOT, questions, files);
 }
 
 export function displayForbiddenArea(file) {

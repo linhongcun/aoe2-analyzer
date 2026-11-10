@@ -25,5 +25,9 @@ export function checkRepo(root?: string): {
 };
 
 export function contractErrors(text: string): string[];
+export function questionFileErrors(
+  questions: { id: string; asks?: string; definedIn?: string; exportName?: string; consumer?: string }[],
+  entries: { name: string; text: string }[],
+): string[];
 export function displayForbiddenArea(file: string): string | null;
 export function matchErrors(sites: AvailabilitySite[], declarations: AvailabilityDeclaration[]): string[];
