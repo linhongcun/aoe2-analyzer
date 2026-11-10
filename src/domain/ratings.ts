@@ -1,10 +1,6 @@
 import type { Civ, CivType } from './types';
 
 export const AXES = ['骑兵', '弓手', '步兵', '经济', '防御', '攻城', '僧侣', '海军'] as const;
-/** 强项门槛：评分 ≥ 8 才算「强」（与建议文案同源） */
-export const STRONG_THRESHOLD = 8;
-/** #15 对手无强项时的锁定文案（Jony） */
-export const EMPTY_STRENGTHS_COPY = `无突出强项（各项评分均低于 ${STRONG_THRESHOLD}）`;
 export const TYPE_ZH: Record<CivType, string> = {
   cav: '骑兵',
   arch: '弓手',
@@ -18,24 +14,7 @@ export const TYPE_ZH: Record<CivType, string> = {
 export const AGE_ZH: Record<number, string> = { 1: '黑暗时代', 2: '封建时代', 3: '城堡时代', 4: '帝王时代' };
 export const RES_ZH: Record<string, string> = { Food: '食物', Wood: '木材', Gold: '黄金', Stone: '石料' };
 
-export interface StrengthEntry {
-  /** 轴索引对应 AXES / Civ.s */
-  key: 'cav' | 'arch' | 'inf' | 'eco' | 'def' | 'siege' | 'monk' | 'naval';
-  axis: string;
-  score: number;
-}
-
-const AXIS_KEYS: StrengthEntry['key'][] = ['cav', 'arch', 'inf', 'eco', 'def', 'siege', 'monk', 'naval'];
-
-/** 评分 ≥ STRONG_THRESHOLD 的轴（由高到低）；不足 3 项则少列，不再用 <8 的充数 */
-export function strengthEntries(c: Civ): StrengthEntry[] {
-  return c.s
-    .map((score, i) => ({ key: AXIS_KEYS[i]!, axis: AXES[i]!, score }))
-    .filter((x) => x.score >= STRONG_THRESHOLD)
-    .sort((a, b) => b.score - a.score);
-}
-
-/** 前三项优势与后三项弱项，仅为评分的相对排序，不代表兵种可用性；对局助手强项另用 strengthEntries 门槛。 */
+/** 前三项优势与后三项弱项，仅为评分的相对排序，不代表兵种可用性。 */
 export function strengths(c: Civ): [string[], string[]] {
   const a = c.s.map((v, i) => [v, AXES[i]!] as const).sort((x, y) => y[0] - x[0]);
   return [a.slice(0, 3).map((x) => x[1]), a.slice(-3).map((x) => x[1])];
@@ -102,39 +81,4 @@ export function filterCounterUnits(meEn: string, oppTypes: CivType[], units: { i
     }
   }
   return out;
-}
-
-export interface MatchupAdvice {
-  oppStrong: string[];
-  /** 对手评分最低的三项，不推导缺兵种或配兵结论。 */
-  oppWeak: string[];
-  /** 带分数的强项（仅 ≥ 门槛） */
-  strengths: StrengthEntry[];
-  myEdge: string;
-  tips: string;
-  /** 建议文案数组（便于测试） */
-  advice: string[];
-}
-
-export function matchup(a: Civ, e: Civ): MatchupAdvice {
-  const entries = strengthEntries(e);
-  const [, ew] = strengths(e);
-  const best = AXES.map((k, i) => [a.s[i]! - e.s[i]!, k] as const).sort((x, y) => y[0] - x[0]);
-  const myEdge =
-    best
-      .slice(0, 3)
-      .filter((x) => x[0] > 0)
-      .map((x) => `${x[1]}(+${x[0]})`)
-      .join('、') || '无明显优势，建议稳健发育';
-  const advice: string[] = [];
-  advice.push(e.s[3]! >= STRONG_THRESHOLD ? '对手经济强，前期主动骚扰。' : '对手经济一般，可以稳健发育拖后期。');
-  if (a.s[0]! >= STRONG_THRESHOLD) advice.push('你骑兵强，可攻击对方后排弓手和攻城武器。');
-  return {
-    oppStrong: entries.map((x) => x.axis),
-    oppWeak: ew,
-    strengths: entries,
-    myEdge,
-    tips: advice.join(''),
-    advice,
-  };
 }

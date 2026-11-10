@@ -1,51 +1,62 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import civsRaw from '../../src/data/civs.json';
-import type { Civ } from '../../src/domain/types';
-import { AXES, STRONG_THRESHOLD, filterCounterUnits, matchup } from '../../src/domain/ratings';
+import { filterCounterUnits } from '../../src/domain/ratings';
+import { PAGES } from '../../src/shared/nav/pageRegistry';
 import { unit, units } from './helpers';
 
-const civs = civsRaw as unknown as Civ[];
-const civ = (en: string) => civs.find((entry) => entry.en === en)!;
+const MATCHUP_DESC = '快攻指南、类型反制示意和相关入口';
+const MATCHUP_META = '查看有限快攻指南、类型反制示意，以及开局、单位 PK 与文明入口。';
 const unsupportedAdvice = /缺骑兵|没有骑兵|不能造骑兵|你可以多用远程单位/;
+const page = readFileSync('src/features/matchup/components/Matchup.tsx', 'utf8');
+const ratings = readFileSync('src/domain/ratings.ts', 'utf8');
 
-describe('#194 评分不推导兵种缺失', () => {
-  it.each(['Chinese', 'Japanese'])('%s 实际可造骑士，即使骑兵评分靠后也不声称缺骑兵', (en) => {
-    const opponent = civ(en);
-    expect(unit('Knight').civs).toContain(en);
-    const result = matchup(civ('Franks'), opponent);
-    expect(result.oppWeak).toContain('骑兵');
-    expect(result.tips).not.toMatch(unsupportedAdvice);
-    expect(result.advice.join('')).not.toMatch(unsupportedAdvice);
+describe('#888 对局助手不再用评分推导强弱与打法', () => {
+  it('页头与登记描述一致，不再承诺自动打法建议', () => {
+    const entry = PAGES.find((item) => item.key === 'matchup');
+    expect(entry?.desc).toBe(MATCHUP_DESC);
+    expect(entry?.metaDescription).toBe(MATCHUP_META);
+    expect(page).toContain(`desc="${MATCHUP_DESC}"`);
+    expect(page).not.toContain('根据双方文明给出反制建议');
+    expect(`${entry?.desc} ${entry?.metaDescription}`).not.toMatch(/自动给出打法|你的相对优势/);
   });
 
-  it('56 个文明的所有对局均不凭评分声称缺兵种或指定远程配兵', () => {
-    expect(civs).toHaveLength(56);
-    for (const me of civs)
-      for (const opponent of civs) {
-        const result = matchup(me, opponent);
-        expect(result.tips, `${me.en} vs ${opponent.en}`).not.toMatch(unsupportedAdvice);
-        expect(result.advice.join(''), `${me.en} vs ${opponent.en}`).not.toMatch(unsupportedAdvice);
-      }
+  it('页面与评分模块不再生成相对优势或自动建议句', () => {
+    for (const src of [page, ratings]) {
+      expect(src).not.toContain('对手强项');
+      expect(src).not.toContain('相对弱项');
+      expect(src).not.toContain('你的相对优势');
+      expect(src).not.toContain('前期主动骚扰');
+      expect(src).not.toContain('你骑兵强');
+      expect(src).not.toContain('自动生成的建议');
+      expect(src).not.toContain('骑兵(+');
+      expect(src).not.toMatch(unsupportedAdvice);
+    }
+    expect(page).not.toMatch(/<b>建议：<\/b>/);
+    expect(page).not.toContain('rating-foot');
+    expect(page).not.toContain('matchup(');
+    expect(ratings).not.toContain('function matchup');
+    expect(ratings).not.toContain('function strengthEntries');
+    expect(ratings).not.toContain('STRONG_THRESHOLD');
+    expect(ratings).toContain('export function strengths');
+    expect(ratings).toContain('export function filterCounterUnits');
   });
 
-  it.each([
-    ['骑兵最低', [0, 10, 10, 10, 10, 10, 10, 10]],
-    ['各项最高且并列', [10, 10, 10, 10, 10, 10, 10, 10]],
-    ['各项最低且并列', [0, 0, 0, 0, 0, 0, 0, 0]],
-    ['各项恰好低于强项门槛', [7, 7, 7, 7, 7, 7, 7, 7]],
-    ['各项恰好达到强项门槛', [8, 8, 8, 8, 8, 8, 8, 8]],
-  ])('%s：相对排序只描述评分，强项门槛不变', (_, scores) => {
-    const opponent: Civ = { ...civ('Chinese'), s: scores };
-    const result = matchup(civ('Franks'), opponent);
-    expect(result.tips).not.toMatch(unsupportedAdvice);
-    expect(result.oppWeak).toHaveLength(3);
-    expect(new Set(result.oppWeak).size).toBe(3);
-    for (const axis of result.oppWeak) expect(AXES).toContain(axis);
-    expect(result.strengths).toHaveLength(scores.filter((score) => score >= STRONG_THRESHOLD).length);
-    for (const entry of result.strengths) expect(entry.score).toBeGreaterThanOrEqual(STRONG_THRESHOLD);
+  it('仍保留类型反制、限度说明、快攻指南、蔷琵和深链', () => {
+    expect(page).toContain('推荐反制');
+    expect(page).toContain('通用示意，非模型结论');
+    expect(page).toContain('EMPTY_COUNTERS_COPY');
+    expect(page).toContain('<ChampiAges');
+    expect(page).toContain('<RushDefense');
+    expect(page).toContain('matchupBuildPath');
+    expect(page).toContain('我方开局');
+    expect(page).toContain('对手开局');
+    expect(page).toContain('单位 PK');
+    expect(page).toContain('我方文明');
+    expect(page).toContain('对手文明');
   });
 
   it('继续按本方单位可用性过滤反制，玛雅不会收到骑士和骆驼', () => {
+    expect(unit('Knight').civs).not.toContain('Mayans');
     const counters = filterCounterUnits('Mayans', ['cav', 'arch', 'inf'], units);
     expect(counters.length).toBeGreaterThan(0);
     expect(counters.map((entry) => entry.nameZh).join('')).not.toMatch(/骑士|骆驼/);
