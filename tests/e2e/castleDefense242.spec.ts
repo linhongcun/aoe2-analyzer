@@ -87,7 +87,7 @@ test('#242 complete sharing survives reload and sources distinguish guidance fro
   await page.getByRole('button', { name: '复制观察链接' }).click();
   await expect(page.getByRole('status')).toContainText('自动复制失败');
   const shared = await page.getByLabel('观察链接', { exact: true }).inputValue();
-  expect(new URL(shared).pathname).toMatch(/\/castle-defense\/$/);
+  expect(new URL(shared).pathname).toMatch(/\/matchup\/castle-defense\/$/);
   expect(new URL(shared).hash).toBe('');
   expect(shared).toContain('escort=present');
   expect(shared).toContain('path=unsafe');

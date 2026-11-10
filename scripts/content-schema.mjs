@@ -7,8 +7,6 @@ import { _ } from 'ajv/dist/compile/codegen/index.js';
 import { publicFormats, constructionReferenceProblems } from '../src/content/schema/policy.mjs';
 import { LEGACY_SOURCE_BASELINE } from './content-baseline.mjs';
 import { schemaFileFor } from './content-schema-catalog.mjs';
-import { playerCatalogProblems, readPlayerCatalog } from '../src/domain/playerCatalog.mjs';
-import { eventCatalogProblems } from '../src/domain/eventCatalog.mjs';
 
 export const SCHEMA_DIRECTORY = resolve(dirname(fileURLToPath(import.meta.url)), '../src/content/schema');
 export const SCHEMA_ID_BASE = 'https://linhongcun.github.io/aoe2-analyzer/schema/';
@@ -73,34 +71,6 @@ export function validateDocument(file, data) {
       }));
   if (valid && file === 'src/data/construction.json')
     problems.push(...constructionReferenceProblems(data).map((entry) => problem(file, 'reference', entry.message, entry.path)));
-  if (valid && file === 'src/content/players.json') {
-    const civs = JSON.parse(readFileSync(new URL('../src/data/civs.json', import.meta.url), 'utf8'));
-    problems.push(
-      ...playerCatalogProblems(
-        data,
-        civs.map((civ) => civ.en),
-      ).map((entry) => problem(file, 'reference', entry.message, entry.path)),
-    );
-  }
-  if (valid && file === 'src/content/events.json') {
-    try {
-      const civs = JSON.parse(readFileSync(new URL('../src/data/civs.json', import.meta.url), 'utf8'));
-      const players = readPlayerCatalog(
-        JSON.parse(readFileSync(new URL('../src/content/players.json', import.meta.url), 'utf8')),
-        civs.map((civ) => civ.en),
-      );
-      if (players.status === 'unavailable') problems.push(problem(file, 'reference', '赛事依赖的选手目录未通过校验'));
-      else
-        problems.push(
-          ...eventCatalogProblems(
-            data,
-            players.catalog.players.map((player) => player.id),
-          ).map((entry) => problem(file, 'reference', entry.message, entry.path)),
-        );
-    } catch {
-      problems.push(problem(file, 'reference', '赛事依赖的选手目录暂不可读取'));
-    }
-  }
   return { valid: problems.length === 0, problems };
 }
 

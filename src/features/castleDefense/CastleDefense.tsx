@@ -83,19 +83,24 @@ export default function CastleDefense() {
   const plan = locked ? null : planCastleDefense(config);
   const change = (patch: Partial<CastleDefenseConfig>) => {
     if (locked) return;
-    navigate({ pathname: '/castle-defense', search: '?' + encodeCastleDefense({ ...config, ...patch }) }, { replace: true });
+    navigate({ pathname: '/matchup/castle-defense', search: '?' + encodeCastleDefense({ ...config, ...patch }) }, { replace: true });
     resetShare();
   };
   const reset = () => {
-    navigate({ pathname: '/castle-defense', search: '?' + encodeCastleDefense(defaultCastleDefense()) }, { replace: true });
+    navigate({ pathname: '/matchup/castle-defense', search: '?' + encodeCastleDefense(defaultCastleDefense()) }, { replace: true });
     resetShare();
   };
   const share = async () => {
     if (locked) return;
-    await copy(() => sharePageUrl('/castle-defense', '?' + encodeCastleDefense(config), document.baseURI));
+    await copy(() => sharePageUrl('/matchup/castle-defense', '?' + encodeCastleDefense(config), document.baseURI));
   };
   return (
     <section className="pane castle-defense-page" data-testid="castle-defense-page">
+      <p>
+        <Link className="community-tool-entry" to="/matchup">
+          返回对局助手
+        </Link>
+      </p>
       <header className="castle-defense-heading">
         <div>
           <h1>城堡前置应对</h1>

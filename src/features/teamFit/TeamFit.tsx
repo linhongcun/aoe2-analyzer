@@ -5,6 +5,7 @@ import { DATA_PATCH_BUILD } from '../../data/meta';
 import { decodeTeamFit, emptyTeamFit, encodeTeamFit, type TeamFitConfig } from '../../domain/teamFitQuery';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
+import { TeamSections } from '../../shared/ui/TeamSections';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import type { TeamFitResultsProps } from './TeamFitResults';
 import './teamFit.css';
@@ -53,6 +54,7 @@ export default function TeamFit() {
   const Results = loaded?.Results;
   return (
     <section className="pane team-fit-page" data-testid="team-fit-page">
+      <TeamSections />
       <header className="tf-heading">
         <p className="tf-eyebrow">选文明前</p>
         <h1>文明搭配</h1>

@@ -16,6 +16,10 @@
 .community-tool-entry:hover {
   background: var(--color-link-soft);
 }
+.team-sections a[aria-current='page'] {
+  font-weight: 700;
+  border-color: var(--color-link);
+}
 .community-tool-row {
   display: flex;
   flex-wrap: wrap;

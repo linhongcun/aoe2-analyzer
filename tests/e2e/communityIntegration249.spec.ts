@@ -2,8 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 const entries = [
   ['内容与购买', 'content-guide', 'content-guide-page'],
-  ['混兵情境', 'mixed-army', 'mixed-army-page'],
-  ['团战分工', 'team-plan', 'team-plan-page'],
+  ['团队', 'team-fit', 'team-fit-page'],
   ['战役入门', 'campaigns', 'campaigns-page'],
   ['圣物收益', 'relic-income', 'relic-income-page'],
 ] as const;
@@ -30,7 +29,7 @@ for (const width of [360, 375, 390, 1280])
       // #272 起首页按用途分组：五个社区新工具与旧规划入口都以分组卡片出现，每个只出现一次。
       const home = page.locator('#home');
       for (const [, route] of entries) await expect(home.locator(`a.hcard[href="#/${route}"]`)).toHaveCount(1);
-      for (const path of ['/game-clock', '/hotkeys', '/castle-defense', '/trade-income', '/construction', '/team-bonuses', '/garrison-healing'])
+      for (const path of ['/game-clock', '/hotkeys', '/trade-income', '/construction', '/garrison-healing'])
         await expect(home.locator(`a.hcard[href="#${path}"]`)).toHaveCount(1);
       await page.screenshot({ path: info.outputPath(`community249-${theme}-${width}.png`), fullPage: true });
       for (const [, route, id] of entries) {

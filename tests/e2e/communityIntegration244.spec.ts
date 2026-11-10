@@ -17,7 +17,6 @@ test.afterEach(async ({ page }) => {
 const entries = [
   ['时间换算', '/game-clock', 'game-clock-page'],
   ['快捷键速查', '/hotkeys', 'hotkeys-page'],
-  ['城堡前置应对', '/castle-defense', 'castle-defense-page'],
 ] as const;
 const query = (page: Page) => new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
 

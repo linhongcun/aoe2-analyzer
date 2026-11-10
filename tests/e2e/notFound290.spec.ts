@@ -39,11 +39,7 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/team-' + 'x'.repeat(200));
       await expect(page.getByRole('heading', { level: 1, name: '找不到该页' })).toBeVisible();
       const suggestions = page.locator('.not-found-suggestions a');
-      const expected = [
-        { label: '团战分工', path: '/team-plan', heading: '团战分工计划' },
-        { label: '文明搭配', path: '/team-fit', heading: '文明搭配' },
-        { label: '团队加成', path: '/team-bonuses', heading: '团队加成一屏汇总' },
-      ];
+      const expected = [{ label: '团队', path: '/team-fit', heading: '文明搭配' }];
       await expect(suggestions).toHaveText(expected.map(({ label }) => label));
       expect(await suggestions.evaluateAll((links) => links.map((link) => link.getAttribute('href')))).toEqual(expected.map(({ path }) => '#' + path));
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

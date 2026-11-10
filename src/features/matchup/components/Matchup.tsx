@@ -46,7 +46,7 @@ export default function Matchup() {
   const champiPair = Array.isArray(lineCivs) && [a?.en, e?.en].some((civ) => civ && lineCivs.includes(civ));
   return (
     <section id="matchup" className={params.has('pair') || champiPair ? 'pane matchup-explicit' : 'pane'}>
-      <ListHead title="对局助手" desc="快攻指南、类型反制示意和相关入口" />
+      <ListHead title="对局助手" desc="快攻指南、类型反制，以及侦察、混兵和城堡前置" />
       <div className="bar fbar">
         我的文明 <CivPicker id="ma" label="我的文明" value={a?.en ?? ''} none="未选择" onChange={(en) => pick('me', en)} /> 对手文明{' '}
         <CivPicker id="me" label="对手文明" value={e?.en ?? ''} none="未选择" onChange={(en) => pick('opp', en)} />
@@ -117,20 +117,20 @@ export default function Matchup() {
           <RushDefense own={a} enemy={e} data={data} loadError={error} />
         </>
       )}
-      <p>
-        <Link className="community-tool-entry" to="/castle-defense">
-          城堡前置：按当前局面查看应对
-        </Link>
-      </p>
-      <nav className="bar" aria-label="情境与队伍规划">
-        <Link className="community-tool-entry" to="/scouting">
+      <nav className="bar" aria-label="对局助手有限指南">
+        <Link className="community-tool-entry" to="/matchup/scouting">
           先辨析侦察线索与缺失信息
         </Link>
+        <Link className="community-tool-entry" to="/matchup/mixed-army">
+          按敌军组合查看混兵情境
+        </Link>
+        <Link className="community-tool-entry" to="/matchup/castle-defense">
+          城堡前置：按当前局面查看应对
+        </Link>
+      </nav>
+      <nav className="bar" aria-label="情境与队伍规划">
         <Link className="community-tool-entry" to="/match-review">
           记录本局疑问与下次练习重点
-        </Link>
-        <Link className="community-tool-entry" to="/mixed-army">
-          按敌军组合查看混兵情境
         </Link>
         <Link className="community-tool-entry" to="/team-plan">
           记录队友分工与支援约定
