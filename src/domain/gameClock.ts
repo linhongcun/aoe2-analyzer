@@ -1,4 +1,6 @@
 /** Issue 237: explicit clock arithmetic, independent of all game simulation models. */
+import { formatClock } from './formatTime';
+
 export type GameClockDirection = 'game-to-real' | 'real-to-game';
 export type GameClockUnit = 'seconds' | 'minutes';
 export interface GameClockConfig {
@@ -88,10 +90,9 @@ export function changeGameClockUnit(config: GameClockConfig, unit: GameClockUnit
   return { config: { ...config, unit, duration: value }, error: null };
 }
 
-/** Rounded display only; original inputs and arithmetic retain their precision. */
+/** Rounded converter display only; original inputs and arithmetic retain their precision. */
 export function gameClockMinutes(seconds: number): string {
-  const rounded = Math.round(seconds);
-  return Math.floor(rounded / 60).toLocaleString('zh-CN', { useGrouping: false }) + ':' + String(rounded % 60).padStart(2, '0');
+  return formatClock(seconds, { rounding: 'nearest' });
 }
 
 /** Keep very small positive durations visible rather than displaying a false zero. */

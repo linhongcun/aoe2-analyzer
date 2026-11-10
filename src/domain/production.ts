@@ -8,6 +8,7 @@ import type { Cost, Tech, Trees, Unit } from './types';
 import { buildingAge, trainingUnitAge } from './availabilityAge';
 import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
+import { ratePerMinute } from './formatTime';
 
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
@@ -284,13 +285,13 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
       return;
     }
     const count = +row.count,
-      perMinute = (count * 60) / seconds;
+      perMinute = ratePerMinute(count, seconds);
     const spend = Object.fromEntries(PRODUCTION_RES.map((r) => [r, (cost[r] ?? 0) * perMinute])) as Record<GatherRes, number>;
     lines.push({ unit: u, building: row.building, count, cost, seconds, perMinute, spend, applied: unique(notes) });
   });
   const resources = PRODUCTION_RES.map((key) => {
     const spend = errors.length ? 0 : lines.reduce((total, l) => total + l.spend[key], 0);
-    const income = gather.rate[task[key]] * 60;
+    const income = ratePerMinute(gather.rate[task[key]], 1);
     const villagers = income > 0 && Number.isFinite(income) ? spend / income : 0;
     return { key, spend, income, villagers, rounded: Math.ceil(villagers - 1e-9) };
   });

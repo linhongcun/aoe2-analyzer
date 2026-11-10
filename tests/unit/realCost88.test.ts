@@ -174,9 +174,10 @@ describe('#88 单价用时与数量', () => {
     expect(countForTime(rc.total, 5, 10)).toBe(Math.floor(3000 / rc.total));
     expect(countForTime(rc.total, 10, 5)).toBe(Math.floor(3000 / rc.total));
   });
-  it('fmtClock：m:ss、满 1 小时 h:mm:ss', () => {
+  it('fmtClock：m:ss、满 1 小时 h:mm:ss，与时间线共用向下取整', () => {
     expect(fmtClock(59.4)).toBe('0:59');
-    expect(fmtClock(173.65)).toBe('2:54');
+    expect(fmtClock(59.5)).toBe('0:59');
+    expect(fmtClock(173.65)).toBe('2:53');
     expect(fmtClock(3600)).toBe('1:00:00');
     expect(fmtClock(3725)).toBe('1:02:05');
   });

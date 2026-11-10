@@ -3,7 +3,7 @@ import eco from '../../src/data/eco.json';
 import units from '../../src/data/units.json';
 import { buildOrders } from '../../src/data/buildOrders';
 import { simulateBuild, type EcoData, type UpgradeData } from '../../src/domain/buildSim';
-import { floorSec, formatClock } from '../../src/domain/formatTime';
+import { floorSec, formatClock, ratePerMinute } from '../../src/domain/formatTime';
 import { bottleneckLabel, rowTime } from '../../src/features/builds/timelineModel';
 import { comboCount, SHARDS, shardCombos } from './formatTimeConsistency';
 
@@ -26,6 +26,16 @@ describe('formatClock：向下取整到秒', () => {
     [NaN, '0:00'],
   ])('%s -> %s', (s, out) => expect(formatClock(s)).toBe(out));
   it('floorSec 与 formatClock 同一口径', () => expect(floorSec(24.8)).toBe(24));
+  it('显式 nearest converter 模式只给 GameClock 使用', () => {
+    expect(formatClock(59.5)).toBe('0:59');
+    expect(formatClock(59.5, { rounding: 'nearest' })).toBe('1:00');
+    expect(formatClock(3600, { hours: true })).toBe('1:00:00');
+  });
+  it('ratePerMinute 统一每分钟换算', () => {
+    expect(ratePerMinute(2, 3)).toBe(40);
+    expect(ratePerMinute(0.5, 1)).toBe(30);
+    expect(ratePerMinute(2, 0)).toBe(0);
+  });
 });
 
 // #289：「开局 × 文明」逐条检查拆到 formatTime.consistency-1..4.test.ts 并行跑（共用代码在 formatTimeConsistency.ts）
