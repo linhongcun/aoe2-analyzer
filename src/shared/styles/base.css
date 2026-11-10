@@ -461,13 +461,25 @@ a {
   z-index: 3;
 }
 .tcell.na {
+  border-color: var(--color-border);
+  box-shadow: none;
+}
+.tcell.na img {
   filter: grayscale(1);
   opacity: 0.28;
-  border-color: var(--color-border);
 }
 .tcell.uq {
   border-color: var(--color-accent);
   box-shadow: 0 0 8px var(--color-accent);
+}
+.tcell.rg {
+  border-color: var(--color-text-2);
+  box-shadow: none;
+}
+.tcell.na.uq,
+.tcell.na.rg {
+  border-color: var(--color-border);
+  box-shadow: none;
 }
 .tcell.onlyA {
   outline: 3px solid var(--c-up);
@@ -488,6 +500,7 @@ a {
 }
 .tl1 {
   display: inline-block;
+  position: relative;
   width: 16px;
   height: 16px;
   border: 2px solid var(--c-border);
@@ -499,6 +512,10 @@ a {
 .tl1.uq {
   border-color: var(--color-accent);
   box-shadow: 0 0 6px var(--color-accent);
+}
+.tl1.rg {
+  border-color: var(--color-text-2);
+  box-shadow: none;
 }
 .tl1.na {
   opacity: 0.3;

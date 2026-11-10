@@ -16,3 +16,10 @@ export function regionalBuildings<T extends Pick<Building, 'id' | 'civs'>>(civ: 
 export function uniqueBuildings<T extends Pick<Building, 'id' | 'civs'>>(civ: string, buildings: readonly T[]): T[] {
   return buildings.filter((b) => UNIQUE_BUILDING_IDS.has(b.id) && b.civs.includes(civ));
 }
+
+/** 建筑身份只认官方名单，不按文明数量推断。 */
+export function buildingMark(id: number): 'unique' | 'regional' | null {
+  if (UNIQUE_BUILDING_IDS.has(id)) return 'unique';
+  if (REGIONAL_BUILDING_IDS.has(id)) return 'regional';
+  return null;
+}
