@@ -21,6 +21,7 @@ describe('formatClock：向下取整到秒', () => {
     [584.9, '9:44'],
     [585, '9:45'],
     [599.9999999, '10:00'], // 浮点累加误差视为整秒
+    [3599.5, '59:59'],
     [3600, '60:00'],
     [-3, '0:00'],
     [NaN, '0:00'],
@@ -29,6 +30,7 @@ describe('formatClock：向下取整到秒', () => {
   it('显式 nearest converter 模式只给 GameClock 使用', () => {
     expect(formatClock(59.5)).toBe('0:59');
     expect(formatClock(59.5, { rounding: 'nearest' })).toBe('1:00');
+    expect(formatClock(3599.5, { hours: true })).toBe('59:59');
     expect(formatClock(3600, { hours: true })).toBe('1:00:00');
   });
   it('ratePerMinute 统一每分钟换算', () => {

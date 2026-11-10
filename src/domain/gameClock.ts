@@ -1,5 +1,5 @@
 /** Issue 237: explicit clock arithmetic, independent of all game simulation models. */
-import { formatClock } from './formatTime';
+import { formatClock, SECONDS_PER_MINUTE } from './formatTime';
 
 export type GameClockDirection = 'game-to-real' | 'real-to-game';
 export type GameClockUnit = 'seconds' | 'minutes';
@@ -37,7 +37,7 @@ export function parseGameClockDuration(value: string, unit: GameClockUnit): Game
   } else {
     const match = clock.exec(value);
     if (!match) return { ok: false, error: '请按“分:秒”填写，例如 10:00 或 0:05.5；秒位为 00–59。' };
-    whole = Number(match[1]) * 60 + Number(match[2]);
+    whole = Number(match[1]) * SECONDS_PER_MINUTE + Number(match[2]);
     fraction = match[3] ?? '';
   }
   const seconds = Number(`${whole}${fraction ? '.' + fraction : ''}`);
@@ -85,7 +85,9 @@ export function changeGameClockUnit(config: GameClockConfig, unit: GameClockUnit
   if (!duration.ok) return { config, error: '先修正时长，再切换单位；原输入已保留。' };
   const fraction = duration.fraction ? '.' + duration.fraction : '';
   const value =
-    unit === 'seconds' ? String(duration.whole) + fraction : Math.floor(duration.whole / 60) + ':' + String(duration.whole % 60).padStart(2, '0') + fraction;
+    unit === 'seconds'
+      ? String(duration.whole) + fraction
+      : Math.floor(duration.whole / SECONDS_PER_MINUTE) + ':' + String(duration.whole % SECONDS_PER_MINUTE).padStart(2, '0') + fraction;
   if (value.length > TEXT_LIMIT) return { config, error: '换写后的时长超过 64 个字符，请缩短小数位；原输入已保留。' };
   return { config: { ...config, unit, duration: value }, error: null };
 }

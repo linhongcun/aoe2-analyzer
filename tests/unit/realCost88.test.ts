@@ -178,6 +178,7 @@ describe('#88 单价用时与数量', () => {
     expect(fmtClock(59.4)).toBe('0:59');
     expect(fmtClock(59.5)).toBe('0:59');
     expect(fmtClock(173.65)).toBe('2:53');
+    expect(fmtClock(3599.5)).toBe('59:59');
     expect(fmtClock(3600)).toBe('1:00:00');
     expect(fmtClock(3725)).toBe('1:02:05');
   });
