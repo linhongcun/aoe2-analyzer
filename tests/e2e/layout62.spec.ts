@@ -52,13 +52,6 @@ async function openFilters(root: Locator, mobile: boolean) {
   return { toggle, panel };
 }
 
-async function expectCivDlc(root: Locator, value: string) {
-  const bar = root.getByRole('group', { name: 'DLC 快捷筛选', exact: true });
-  await expect(root.locator('#cdlc')).toHaveCount(0);
-  await expect(bar.locator('button[aria-pressed="true"]')).toHaveCount(1);
-  await expect(bar.locator(`button[data-v="${value}"]`)).toHaveAttribute('aria-pressed', 'true');
-}
-
 async function expectTechRelease(root: Locator, value: string) {
   const bar = root.getByRole('group', { name: '科技首发版本快捷筛选', exact: true });
   await expect(root.locator('#tdlc')).toHaveCount(0);
@@ -114,56 +107,49 @@ for (const width of WIDTHS)
 
       await ready(page, 'civs', '#grid .card');
       const civRoot = page.locator('#list');
-      await expect(civRoot.getByRole('group', { name: 'DLC 快捷筛选' })).toBeVisible();
-      await expect(civRoot.locator('.dbar button')).toHaveCount(DLCS.length + 2);
-      await expectCivDlc(civRoot, '');
+      const civToggle = civRoot.getByRole('button', { name: '按条件筛选', exact: true });
+      const civPanel = civRoot.locator('#filter-panel');
       await expect(civRoot.locator('#q')).toBeVisible();
-      await expect(civRoot.locator('#cnt')).toBeVisible();
+      await expect(civRoot.locator('#cnt')).toHaveText(`${CIVS.length} / ${CIVS.length}`);
+      await expect(civPanel).toBeHidden();
       await screenshot(page, info, 'civs', width, theme);
-      const civFilters = await openFilters(civRoot, mobile);
-      await civRoot.locator(`.dbar button[data-v="${LARGE_DLC}"]`).click();
+      await civToggle.click();
+      await expect(civPanel).toBeVisible();
+      await civRoot.locator('#dlc').selectOption(String(LARGE_DLC));
       await expect(civRoot.locator('#cnt')).toHaveText(`${DLC_CIVS.length} / ${CIVS.length}`);
       await civRoot.locator('#ty').selectOption(FIRST_CIV.ty[0]!);
       const filteredCivs = DLC_CIVS.filter((civ) => civ.ty.includes(FIRST_CIV.ty[0]!));
       await expect(civRoot.locator('#cnt')).toHaveText(`${filteredCivs.length} / ${CIVS.length}`);
-      if (mobile) {
-        await expect(civFilters.toggle).toHaveText('筛选（2）');
-        await civRoot.locator('#ty').focus();
-        await page.keyboard.press('Escape');
-        await expect(civFilters.toggle).toBeFocused();
-        await expect(civFilters.panel).toBeHidden();
-        await civFilters.toggle.click();
-        await civFilters.toggle.click();
-        await expect(civFilters.panel).toBeHidden();
-        await expect(civRoot.locator('#grid .card')).toHaveCount(filteredCivs.length);
-      }
+      await page.keyboard.press('Escape');
+      await expect(civToggle).toBeFocused();
+      await expect(civPanel).toBeHidden();
+      await expect(civRoot.locator('#grid .card')).toHaveCount(filteredCivs.length);
       // 搜索、计数在筛选收起后仍可使用；筛选结果来自同一组真实资料。
       await civRoot.locator('#q').fill(FIRST_CIV.zh);
       await expect(civRoot.locator('#grid .card')).toHaveCount(1);
       await civRoot.locator('#q').fill('');
-      // 同页切换宽度时，保留筛选状态并只渲染一份控件。
-      await page.setViewportSize({ width: mobile ? 1280 : 390, height: 900 });
-      await expectCivDlc(civRoot, String(LARGE_DLC));
       await expect(civRoot.locator('#grid .card')).toHaveCount(filteredCivs.length);
-      if (mobile) await expect(civFilters.panel).toBeVisible();
+      await page.setViewportSize({ width: mobile ? 1280 : 390, height: 900 });
+      await expect(civRoot.locator('#dlc')).toHaveValue(String(LARGE_DLC));
+      await expect(civRoot.locator('#ty')).toHaveValue(FIRST_CIV.ty[0]!);
       await noOverflow(page);
       await page.setViewportSize({ width, height: 900 });
+      const kept = new URL(page.url()).hash;
       await page.evaluate(() => (location.hash = '#/'));
       await expect(page.locator('#home .hcard').first()).toBeVisible();
       await page.evaluate(() => (location.hash = '#/civs'));
-      await expectCivDlc(civRoot, String(LARGE_DLC));
-      await expect(civRoot.locator('#ty')).toHaveValue(FIRST_CIV.ty[0]!);
-      await expect(civRoot.locator('#grid .card')).toHaveCount(filteredCivs.length);
-      if (mobile) await civFilters.toggle.click();
-      await civRoot.getByRole('button', { name: '清空筛选', exact: true }).click();
-      for (const id of ['ty', 'pos']) await expect(civRoot.locator('#' + id)).toHaveValue('');
-      await expectCivDlc(civRoot, '');
       await expect(civRoot.locator('#cnt')).toHaveText(`${CIVS.length} / ${CIVS.length}`);
-      // 沿用 useSticky 原有语义：路由间保留，完整刷新恢复默认。
-      await civRoot.locator(`.dbar button[data-v="${LARGE_DLC}"]`).click();
+      await page.evaluate((hash) => (location.hash = hash), kept);
+      await expect(civRoot.locator('#cnt')).toHaveText(`${filteredCivs.length} / ${CIVS.length}`);
+      await civRoot.getByRole('button', { name: '重置全部', exact: true }).click();
+      await expect(civRoot.locator('#ty')).toHaveValue('');
+      await expect(civRoot.locator('#dlc')).toHaveValue('');
+      await expect(civRoot.locator('#cnt')).toHaveText(`${CIVS.length} / ${CIVS.length}`);
+      await civToggle.click();
+      await civRoot.locator('#dlc').selectOption(String(LARGE_DLC));
       await page.reload();
-      await expectCivDlc(civRoot, '');
-      await expect(civRoot.locator('#cnt')).toHaveText(`${CIVS.length} / ${CIVS.length}`);
+      await expect(civRoot.locator('#cnt')).toHaveText(`${DLC_CIVS.length} / ${CIVS.length}`);
+      await civRoot.getByRole('button', { name: '重置全部', exact: true }).click();
 
       await ready(page, 'techs', '#tgrid .card');
       const techRoot = page.locator('#techs');

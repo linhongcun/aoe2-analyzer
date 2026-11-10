@@ -26,172 +26,81 @@ async function expectCivs(page: Page, names: string[]) {
   await expect(page.locator('#cnt')).toHaveText(`${names.length} / 56`);
 }
 
-async function expectLegacyFilters(page: Page, values: { q: string; ty: string; pos: string; dlc: string }) {
-  for (const [id, value] of Object.entries({ q: values.q, ty: values.ty, pos: values.pos })) {
-    await expect(page.locator(`#${id}`)).toHaveValue(value);
-  }
-  const bar = page.getByRole('group', { name: 'DLC 快捷筛选', exact: true });
-  await expect(page.locator('#cdlc')).toHaveCount(0);
-  await expect(bar.locator('button[aria-pressed="true"]')).toHaveCount(1);
-  await expect(bar.locator(`button[data-v="${values.dlc}"]`)).toHaveAttribute('aria-pressed', 'true');
+async function openFilters(page: Page) {
+  const panel = page.locator('#filter-panel');
+  if (await panel.isHidden()) await page.getByRole('button', { name: '按条件筛选', exact: true }).click();
+  await expect(panel).toBeVisible();
 }
 
 async function addRequirement(page: Page, kind: '单位' | '科技', name: string) {
-  const panel = page.getByTestId('civ-requirements');
-  await panel.getByRole('textbox', { name: '搜索必备单位或科技', exact: true }).fill(name);
-  await panel.getByRole('button', { name: `添加${kind} ${name}`, exact: true }).click();
-  await expect(panel.getByRole('button', { name: `添加${kind} ${name}`, exact: true })).toHaveCount(0);
+  await openFilters(page);
+  await page.locator('#option-search').fill(name);
+  await page.getByRole('checkbox', { name: `添加${kind} ${name}`, exact: true }).check();
 }
 
-test('#206 搜索、类型、键盘添加、详情链接和单项移除', async ({ page }) => {
-  await page.goto('./#/civs?req=');
+test('#206 搜索单位科技、单项移除和重置', async ({ page }) => {
+  await page.goto('./#/civs');
   await expect(page.locator('#cnt')).toHaveText('56 / 56');
-  const panel = page.getByTestId('civ-requirements');
-  const search = panel.getByRole('textbox', { name: '搜索必备单位或科技', exact: true });
-  const kind = panel.getByRole('combobox', { name: '条件类型', exact: true });
-  await kind.selectOption('tech');
-  await search.fill('游侠');
-  await expect(panel.getByRole('button', { name: '添加单位 游侠', exact: true })).toHaveCount(0);
-  await kind.selectOption('unit');
-  const addPaladin = panel.getByRole('button', { name: '添加单位 游侠', exact: true });
-  await expect(addPaladin).toBeVisible();
-  await search.focus();
-  await page.keyboard.press('Tab');
-  await expect(search).not.toBeFocused();
-  await addPaladin.focus();
-  await page.keyboard.press('Enter');
-  await expect(addPaladin).toHaveCount(0);
+  await openFilters(page);
+  await page.locator('#option-search').fill('游侠');
+  await expect(page.getByRole('checkbox', { name: '添加科技 游侠', exact: true })).toHaveCount(0);
+  await addRequirement(page, '单位', '游侠');
   await expectCivs(page, paladins);
-  await expect(panel.getByTestId('requirement-chip')).toHaveCount(1);
-  await expect(panel.getByTestId('requirement-chip').getByRole('link')).toHaveAttribute('href', '#/unit/569');
-  await kind.selectOption('unit');
-  await search.fill('血统');
-  await expect(panel.getByRole('button', { name: '添加科技 血统', exact: true })).toHaveCount(0);
-  await kind.selectOption('all');
+  await expect(page.getByTestId('requirement-chip')).toHaveCount(1);
+  await expect(page.getByTestId('requirement-chip').getByRole('link')).toHaveAttribute('href', '#/unit/569');
   await addRequirement(page, '科技', '血统');
-  await expect(panel.getByTestId('requirement-chip')).toHaveCount(2);
-  await expect(panel.getByTestId('requirement-chip').filter({ hasText: '血统' }).getByRole('link')).toHaveAttribute('href', '#/tech/435');
+  await expect(page.getByTestId('requirement-chip')).toHaveCount(2);
+  await expect(page.getByTestId('requirement-chip').filter({ hasText: '血统' }).getByRole('link')).toHaveAttribute('href', '#/tech/435');
   await expectCivs(page, paladinBloodlines);
-  const removeBloodlines = panel.getByRole('button', { name: '移除科技 血统', exact: true });
-  await removeBloodlines.focus();
-  await page.keyboard.press('Space');
-  await expect(panel.getByTestId('requirement-chip')).toHaveCount(1);
+  await page.getByRole('button', { name: '移除科技 血统', exact: true }).click();
+  await expect(page.getByTestId('requirement-chip')).toHaveCount(1);
   await expectCivs(page, paladins);
-  await panel.getByRole('button', { name: '清空组合条件', exact: true }).click();
-  await expect(panel.getByTestId('requirement-chip')).toHaveCount(0);
+  await expect(page.locator('#option-search')).toHaveValue('血统');
+  await page.getByRole('button', { name: '重置全部', exact: true }).click();
+  await expect(page.getByTestId('requirement-chip')).toHaveCount(0);
+  await expect(page.locator('#option-search')).toHaveValue('');
   await expect(page.locator('#cnt')).toHaveText('56 / 56');
 });
 
-test('#206 旧筛选组合、清空条件和复制链接刷新还原', async ({ page, context }) => {
-  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-  await page.goto('./#/civs?req=');
+test('#206 名称类型版本和必备条件写入地址栏，刷新后仍在', async ({ page }) => {
+  await page.goto('./#/civs');
   await addRequirement(page, '单位', '游侠');
   await addRequirement(page, '科技', '血统');
   await page.locator('#q').fill('Huns');
   await page.locator('#ty').selectOption('cav');
-  await page.locator('#pos').selectOption('pk');
-  await page.getByRole('group', { name: 'DLC 快捷筛选', exact: true }).locator('button[data-v="1"]').click();
+  await page.locator('#dlc').selectOption('1');
   await expectCivs(page, ['Huns']);
-  await page.getByRole('button', { name: '复制筛选链接', exact: true }).click();
-  await expect(page.getByText('筛选链接已复制，包含全部条件。', { exact: true })).toBeVisible();
-  const link = await page.evaluate(() => navigator.clipboard.readText());
-  const params = new URLSearchParams(new URL(link).hash.split('?')[1]);
+  const params = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
   expect(params.get('req')?.split(',').sort()).toEqual(['t:435', 'u:569']);
-  for (const [key, value] of Object.entries({ q: 'Huns', ty: 'cav', pos: 'pk', dlc: '1' })) expect(params.get(key)).toBe(value);
-  await page.locator('#q').fill('Teutons');
-  await expect(page.getByText('筛选链接已复制，包含全部条件。', { exact: true })).toHaveCount(0);
-  await page.goto(link);
+  expect(params.get('q')).toBe('Huns');
+  expect(params.get('ty')).toBe('cav');
+  expect(params.get('dlc')).toBe('1');
+  expect(params.get('pos')).toBeNull();
   await page.reload();
-  await expectLegacyFilters(page, { q: 'Huns', ty: 'cav', pos: 'pk', dlc: '1' });
+  await expect(page.locator('#q')).toHaveValue('Huns');
+  await expect(page.locator('#ty')).toHaveValue('cav');
+  await expect(page.locator('#dlc')).toHaveValue('1');
   await expect(page.getByTestId('requirement-chip')).toHaveCount(2);
   await expectCivs(page, ['Huns']);
-  await page.getByRole('button', { name: '清空组合条件', exact: true }).click();
+  await page.getByRole('button', { name: '移除科技 血统', exact: true }).click();
+  await page.getByRole('button', { name: '移除单位 游侠', exact: true }).click();
   await expect(page.getByTestId('requirement-chip')).toHaveCount(0);
-  await expectLegacyFilters(page, { q: 'Huns', ty: 'cav', pos: 'pk', dlc: '1' });
+  await expect(page.locator('#q')).toHaveValue('Huns');
   await expectCivs(page, ['Huns']);
 });
 
-test('#206 裸入口旧筛选保持临时记忆，复制和新增条件才生成完整快照', async ({ page, context }) => {
-  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+test('#206 裸地址不恢复上一次筛选，地址栏参数会覆盖', async ({ page }) => {
   await page.goto('./#/civs');
   await page.locator('#q').fill('Huns');
-  await page.locator('#ty').selectOption('cav');
-  await page.locator('#pos').selectOption('pk');
-  await page.getByRole('group', { name: 'DLC 快捷筛选', exact: true }).locator('button[data-v="1"]').click();
-  await expectCivs(page, ['Huns']);
-  expect(new URL(page.url()).hash).toBe('#/civs');
-  await page.getByRole('button', { name: '复制筛选链接', exact: true }).click();
-  const link = await page.evaluate(() => navigator.clipboard.readText());
-  const copied = new URLSearchParams(new URL(link).hash.split('?')[1]);
-  for (const [key, value] of Object.entries({ q: 'Huns', ty: 'cav', pos: 'pk', dlc: '1' })) expect(copied.get(key)).toBe(value);
-  expect(new URL(page.url()).hash).toBe('#/civs');
-  await page.reload();
-  await expectLegacyFilters(page, { q: '', ty: '', pos: '', dlc: '' });
+  expect(new URL(page.url()).hash).toContain('q=Huns');
+  await page.goto('./#/civs');
+  await expect(page.locator('#q')).toHaveValue('');
   await expect(page.locator('#cnt')).toHaveText('56 / 56');
-  await page.goto(link);
-  await expectLegacyFilters(page, { q: 'Huns', ty: 'cav', pos: 'pk', dlc: '1' });
-  await expectCivs(page, ['Huns']);
-
-  await page.goto('./#/civs');
-  await page.locator('#q').fill('Huns');
-  await addRequirement(page, '单位', '游侠');
-  const added = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
-  expect(added.get('req')).toBe('u:569');
-  expect(added.get('q')).toBe('Huns');
-  await page.getByRole('button', { name: '清空组合条件', exact: true }).click();
-  expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).has('req')).toBe(false);
-  await page.reload();
-  await expectLegacyFilters(page, { q: 'Huns', ty: '', pos: '', dlc: '' });
-  await expectCivs(page, ['Huns']);
-});
-
-test('#206 复制被拒绝时提供手动链接，筛选变化后清除旧反馈', async ({ page }) => {
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, 'clipboard', {
-      configurable: true,
-      value: {
-        writeText: async () => {
-          throw new DOMException('Clipboard denied for regression', 'NotAllowedError');
-        },
-      },
-    });
-  });
-  await page.goto('./#/civs?req=u:569,t:435');
-  await expectCivs(page, paladinBloodlines);
-  await page.getByRole('button', { name: '复制筛选链接', exact: true }).click();
-  const manualLink = page.getByRole('textbox', { name: '筛选链接', exact: true });
-  await expect(manualLink).toBeVisible();
-  await expect(manualLink).toHaveAttribute('readonly', '');
-  await expect(page.getByText('自动复制失败，请复制下方链接。', { exact: true })).toBeVisible();
-  const link = await manualLink.inputValue();
-  const params = new URLSearchParams(new URL(link).hash.split('?')[1]);
-  expect(params.get('req')?.split(',').sort()).toEqual(['t:435', 'u:569']);
-  await page.locator('#q').fill('Huns');
-  await expectCivs(page, ['Huns']);
-  await expect(manualLink).toHaveCount(0);
-  await expect(page.getByText('自动复制失败，请复制下方链接。', { exact: true })).toHaveCount(0);
-});
-
-test('#206 分享参数覆盖收件人的 sticky，裸路由沿用原筛选', async ({ page }) => {
-  await page.goto('./#/civs');
-  await page.locator('#q').fill('Turks');
-  await page.locator('#ty').selectOption('cav');
-  await page.locator('#pos').selectOption('pk');
-  await page.getByRole('group', { name: 'DLC 快捷筛选', exact: true }).locator('button[data-v="0"]').click();
-  await expectCivs(page, ['Turks']);
-  await page.evaluate(() => (location.hash = '#/units'));
-  await expect(page.locator('#uq')).toBeVisible();
-  await page.evaluate(() => (location.hash = '#/civs?req=u:569,t:435'));
-  await expectLegacyFilters(page, { q: '', ty: '', pos: '', dlc: '' });
-  await expectCivs(page, paladinBloodlines);
-  await page.evaluate(() => (location.hash = '#/units'));
-  await expect(page.locator('#uq')).toBeVisible();
-  await page.evaluate(() => (location.hash = '#/civs'));
-  await expectLegacyFilters(page, { q: 'Turks', ty: 'cav', pos: 'pk', dlc: '0' });
-  await expectCivs(page, ['Turks']);
-  await page.evaluate(() => (location.hash = '#/civs?q=Huns'));
-  await expectLegacyFilters(page, { q: 'Huns', ty: '', pos: '', dlc: '' });
-  await expect(page.getByTestId('requirement-chip')).toHaveCount(0);
+  await page.goto('./#/civs?q=Huns&ty=cav&pos=pk&dlc=1');
+  await expect(page.locator('#q')).toHaveValue('Huns');
+  await expect(page.locator('#ty')).toHaveValue('cav');
+  await expect(page.locator('#dlc')).toHaveValue('1');
+  await expect(page.locator('#pos')).toHaveCount(0);
   await expectCivs(page, ['Huns']);
 });
 
@@ -277,35 +186,3 @@ test('#206 数据加载期间不展示放宽后的文明结果', async ({ page }
   await expect(page.getByTestId('requirements-loading')).toHaveCount(0);
   await expectCivs(page, paladinBloodlines);
 });
-
-for (const width of [360, 375, 390, 1280])
-  for (const theme of ['light', 'dark'])
-    test(`#206 ${theme} @${width}：组合条件和文明交集布局`, async ({ page }, info) => {
-      await page.setViewportSize({ width, height: 900 });
-      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
-      await page.goto('./#/civs?req=u:569,t:435');
-      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      await expect(page.getByTestId('requirement-chip')).toHaveCount(2);
-      // #776 起 ≤600 的「必备单位与科技」默认收进 details；展开后再核对控件触区（条件 chip 始终在 DOM 中计数）。
-      if (width <= 600) {
-        const requirements = page.getByTestId('civ-requirements');
-        await requirements.locator('summary').click();
-        await expect(requirements).toHaveJSProperty('open', true);
-      }
-      await expectCivs(page, paladinBloodlines);
-      for (const control of await page.getByTestId('civ-requirements').locator('input, select, button, a').all()) {
-        const box = await control.boundingBox();
-        expect(box!.width).toBeGreaterThanOrEqual(44);
-        expect(box!.height).toBeGreaterThanOrEqual(44);
-      }
-      await page.evaluate(() => document.fonts.ready);
-      await expect
-        .poll(() =>
-          page
-            .locator('#grid .card img')
-            .evaluateAll((images) => images.every((image) => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0)),
-        )
-        .toBe(true);
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      await page.screenshot({ path: info.outputPath(`civ-requirements206-${theme}-${width}.png`), fullPage: true });
-    });

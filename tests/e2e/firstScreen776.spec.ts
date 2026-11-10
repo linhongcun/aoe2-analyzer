@@ -75,47 +75,12 @@ test('#776 @1280 /compare 表格版式与修复前一致', async ({ page }) => {
 });
 
 for (const width of MOBILE)
-  test(`#776 @${width} /civs 首屏出现文明卡、必备单位与科技默认收起`, async ({ page }) => {
+  test(`#857 @${width} /civs 首屏直接看到文明卡，条件栏默认收起`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('./#/civs');
     await expect(page.locator('#grid .card').first()).toBeVisible();
     await fontsReady(page);
     expect(await firstCardTop(page), `${width} 首卡应在 900px 首屏内`).toBeLessThan(900);
-    const requirements = page.getByTestId('civ-requirements');
-    await expect(requirements).toHaveCount(1);
-    expect(await requirements.evaluate((element) => element.tagName)).toBe('DETAILS');
-    await expect(requirements).toHaveJSProperty('open', false);
-    const summary = requirements.locator('summary');
-    await expect(summary).toContainText('必备单位与科技');
-    await expect(summary).toContainText('已选 0 项');
-    expect((await summary.boundingBox())!.height, 'summary 高度应 ≤120').toBeLessThanOrEqual(120);
+    await expect(page.locator('#filter-panel')).toBeHidden();
+    await expect(page.locator('#grid .card .mini')).toHaveCount(0);
   });
-
-test('#776 @1280 /civs 首屏版式与修复前一致', async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('./#/civs');
-  await fontsReady(page);
-  const requirements = page.getByTestId('civ-requirements');
-  expect(await requirements.evaluate((element) => element.tagName)).toBe('SECTION');
-  expect(await requirements.evaluate((element) => Math.round(element.getBoundingClientRect().height))).toBe(300);
-  expect(await firstCardTop(page)).toBe(679.52);
-  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBe(2349);
-});
-
-test('#776 @360 展开后才能使用必备单位与科技，条件数显示在 summary', async ({ page }) => {
-  await page.setViewportSize({ width: 360, height: 900 });
-  await page.goto('./#/civs');
-  const requirements = page.getByTestId('civ-requirements');
-  await expect(requirements.locator('summary')).toContainText('已选 0 项');
-  await requirements.locator('summary').click();
-  await expect(requirements).toHaveJSProperty('open', true);
-  const query = requirements.getByRole('textbox', { name: '搜索必备单位或科技', exact: true });
-  await expect(query).toBeVisible();
-  await expect(query).toBeEnabled();
-  await query.fill('圣骑士');
-  const add = requirements.getByRole('button', { name: '添加单位 游侠', exact: true });
-  await expect(add).toBeVisible();
-  await add.click();
-  await expect(requirements.locator('summary')).toContainText('已选 1 项');
-  await expect(requirements.getByTestId('requirement-chip')).toHaveCount(1);
-});

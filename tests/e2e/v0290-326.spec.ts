@@ -1,6 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
 import civs from '../../src/data/civs.json' with { type: 'json' };
-import { DLCS } from '../../src/domain/dlc';
 import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 
 /**
@@ -11,7 +10,7 @@ import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 guardPage();
 
 // ---------- #326 ----------
-test.describe('#425 文明列表：卡片仅保留文明盾徽，DLC 图标保留在顶部筛选栏', () => {
+test.describe('#425 文明列表：卡片保留文明盾徽，不放资料片图标或位置评分', () => {
   for (const width of WIDTHS)
     test(`#/civs @${width}：卡片无 DLC 图标和旧缩进，文明盾徽及数字不折行保持可用`, async ({ page }, info) => {
       await page.setViewportSize({ width, height: 900 });
@@ -21,14 +20,8 @@ test.describe('#425 文明列表：卡片仅保留文明盾徽，DLC 图标保�
       await page.waitForLoadState('networkidle');
       await expect(cards.locator('img.ico[src*="/img/civs/"]')).toHaveCount(civs.length);
       await expect(cards.locator('.cdl, .dlcb, img[src*="/img/dlc/"]')).toHaveCount(0);
-      const positions = cards.locator('.mini');
-      await expect(positions).toHaveCount(civs.length);
-      const pads = await positions.evaluateAll((elements) => [...new Set(elements.map((element) => getComputedStyle(element).paddingLeft))]);
-      expect(pads, '文明卡位置文字不保留旧 DLC 图标的左缩进').toEqual(['0px']);
-      const bar = page.getByRole('group', { name: 'DLC 快捷筛选', exact: true });
-      await expect(bar).toBeVisible();
-      await expect(bar.getByRole('img')).toHaveCount(DLCS.length);
-      await expect(bar.getByRole('button', { name: '全部', exact: true })).toHaveAttribute('aria-pressed', 'true');
+      await expect(cards.locator('.mini')).toHaveCount(0);
+      await expect(page.getByRole('group', { name: 'DLC 快捷筛选', exact: true })).toHaveCount(0);
       expect(await wrappedNums(page, 'main')).toEqual([]);
       await page.screenshot({ path: info.outputPath(`civs-${width}.png`), fullPage: false });
     });

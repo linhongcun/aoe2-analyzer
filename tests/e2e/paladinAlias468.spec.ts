@@ -38,23 +38,22 @@ for (const width of [360, 375, 390, 1280]) {
       await expect(page.getByRole('heading', { level: 1, name: '游侠 Paladin', exact: true })).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
-      await page.goto('./#/civs?req=');
+      await page.goto('./#/civs');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      const panel = page.getByTestId('civ-requirements');
-      // #776 起 ≤600 的「必备单位与科技」默认收进 details，先展开再搜索/添加。
-      if (width <= 600) await panel.locator('summary').click();
-      const query = panel.getByRole('textbox', { name: '搜索必备单位或科技', exact: true });
+      await page.getByRole('button', { name: '按条件筛选', exact: true }).click();
+      const query = page.getByRole('searchbox', { name: '查找要添加的单位与科技', exact: true });
       await expect(query).toBeEnabled();
       await query.fill('圣骑士');
-      const add = panel.getByRole('button', { name: '添加单位 游侠', exact: true });
+      const add = page.getByRole('checkbox', { name: '添加单位 游侠', exact: true });
       await expect(add).toBeVisible();
-      await add.click();
-      const chip = panel.getByTestId('requirement-chip');
+      await add.check();
+      const chip = page.getByTestId('requirement-chip');
       await expect(chip).toHaveCount(1);
       await expect(chip.getByRole('link')).toHaveAttribute('href', '#/unit/569');
       expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).get('req')).toBe('u:569');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: info.outputPath(`paladin-requirement-${width}-${theme}.png`), fullPage: true });
+      await page.keyboard.press('Escape');
       await chip.getByRole('link', { name: '游侠', exact: true }).click();
       await expect(page).toHaveURL(/#\/unit\/569(?:[?&]|$)/);
       await expect(page.getByRole('heading', { level: 1, name: '游侠 Paladin', exact: true })).toBeVisible();

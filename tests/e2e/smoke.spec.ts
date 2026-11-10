@@ -69,6 +69,8 @@ test('Franks Paladin full tech = 192 HP', async ({ page }) => {
 test('civ card click opens detail, unique unit link opens unit page', async ({ page }) => {
   await page.goto('./#list');
   await page.locator('#grid .card', { hasText: 'Armenians' }).click();
+  await expect(page.getByRole('complementary', { name: '文明速览' })).toBeVisible();
+  await page.getByRole('link', { name: '打开完整文明资料' }).click();
   await expect(page.locator('#detail h1')).toContainText('Armenians');
   await page.locator('#detail .uchips a').first().click();
   await expect(page.locator('#unit h1')).toBeVisible();
