@@ -43,6 +43,7 @@ for (const width of [360, 375, 390, 1280])
       await page.locator('#uq').fill('Spearman');
       const spear = page.locator('#ugrid [data-unit-id="93"]');
       const ages = page.locator('#units').getByRole('group', { name: '时代快捷筛选', exact: true });
+      if (width <= 600) await page.locator('#units .catalog-filter-toggle').click();
       await ages.locator('button[data-v="2"]').click();
       await expect(spear).toBeVisible();
       await expect(spear.locator('.mini')).toContainText('封建时代');

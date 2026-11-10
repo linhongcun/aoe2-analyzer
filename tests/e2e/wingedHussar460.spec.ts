@@ -46,9 +46,9 @@ for (const width of [360, 375, 390, 1280])
 test('#460 单位筛选、详情与文明时代上下文', async ({ page }) => {
   await page.goto('./#/units');
   await page.locator('#uq').fill('波兰翼骑兵');
-  await page.locator('#ut').selectOption('RegionalUnit');
+  await page.locator('#units').getByRole('group', { name: '单位类别', exact: true }).locator('button[data-v="RegionalUnit"]').click();
   await expect(page.locator('#ugrid [data-unit-id="1707"]')).toBeVisible();
-  await page.locator('#ut').selectOption('UniqueUnit');
+  await page.locator('#units').getByRole('group', { name: '单位类别', exact: true }).locator('button[data-v="UniqueUnit"]').click();
   await expect(page.locator('#ugrid [data-unit-id="1707"]')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: '没有符合条件的单位' })).toBeVisible();
   for (const civ of ['Poles', 'Lithuanians']) {

@@ -168,6 +168,7 @@ export const PROFILES = {
       'unitCards6',
       'unitFilters196',
       'units192',
+      'units879',
       'unitCount14',
       'dupNames44',
       'upgradeLine10',

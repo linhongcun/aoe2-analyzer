@@ -26,7 +26,7 @@ const ROUTES: [string, string][] = [
   ['#list', '#grid .card'],
   ['#civ/Armenians', '#detail h1'],
   ['#/civ/Franks', '#detail h1'],
-  ['#units', '#ugrid .card'],
+  ['#units', '#ugrid .unit-row'],
   ['#unit/569', '#unit .dtabs'],
   ['#unit/569?tab=sim', '#sim .simt'],
   ['#unit/569/Franks/4', '#sim .simtab'],
@@ -116,7 +116,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
   const PAGES: [string, string][] = [
     ['#/', '#home [data-testid="home-start"]'],
     ['#/civs', '#grid .card'],
-    ['#/units', '#ugrid .card'],
+    ['#/units', '#ugrid .unit-row'],
     ['#/buildings', '#bgrid .card'],
     ['#/techs', '#tgrid .card'],
     ['#/tree', '.tree .tcell'],
@@ -199,7 +199,7 @@ test('leaving a tech detail page does not crash (regression)', async ({ page }) 
   await page.goto('./#tech/12');
   await expect(page.locator('#tech h1')).toBeVisible();
   await page.locator('nav.mainnav a[data-t="units"]').first().click();
-  await expect(page.locator('#ugrid .card').first()).toBeVisible();
+  await expect(page.locator('#ugrid .unit-row').first()).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -279,7 +279,7 @@ test('elite dedup: civ chips, unit list, toggle keeps URL working', async ({ pag
   await expect(chips.first()).toContainText('精锐');
   await page.goto('./#/units');
   await page.locator('#uq').fill('掷斧');
-  await expect(page.locator('#ugrid .card')).toHaveCount(1);
+  await expect(page.locator('#ugrid .unit-row')).toHaveCount(1);
   // 旧的精锐链接仍可打开，并选中“精锐”
   await page.goto('./#/unit/531');
   await expect(page.locator('#unit h1')).toContainText('精锐掷斧兵');

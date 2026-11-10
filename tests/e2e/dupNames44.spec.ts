@@ -62,10 +62,10 @@ test('#44 390 宽：原因行可折行，页面不横向滚动', async ({ page }
 test('#44 单位列表：两个楼船、两个战车都在，且带文明小字', async ({ page }) => {
   await page.goto('./#units');
   await page.locator('#uq').fill('楼船');
-  await expect(page.locator('#ugrid .card')).toHaveCount(2);
-  await expect(page.locator('#ugrid .card .civnote')).toHaveText(['达罗毗荼', '中国等 5 个文明']);
+  await expect(page.locator('#ugrid .unit-row')).toHaveCount(2);
+  await expect(page.locator('#ugrid .unit-row .civnote')).toHaveText(['达罗毗荼', '中国等 5 个文明']);
   await page.locator('#uq').fill('翼骑兵');
-  await expect(page.locator('#ugrid .card .civnote')).toHaveCount(0);
+  await expect(page.locator('#ugrid .unit-row .civnote')).toHaveCount(0);
 });
 
 async function palette(page: Page, q: string) {

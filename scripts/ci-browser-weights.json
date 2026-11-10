@@ -231,6 +231,7 @@
     "tests/e2e/unitCount14.spec.ts": 1000,
     "tests/e2e/unitFilters196.spec.ts": 15897,
     "tests/e2e/units192.spec.ts": 7871,
+    "tests/e2e/units879.spec.ts": 6000,
     "tests/e2e/upgradeLine10.spec.ts": 1567,
     "tests/e2e/upgrades205.spec.ts": 21955,
     "tests/e2e/v0100-acceptance.spec.ts": 10349,
