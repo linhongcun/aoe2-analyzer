@@ -13,13 +13,15 @@ describe('情景预算与中性采集上下文（issue 907）', () => {
     expect(affordableCount(39.999999, 40, 10)).toEqual({ paid: false, count: 0 });
   });
 
-  it('limit 只在 paid 后截断', () => {
+  it('limit 只在 paid 后截断，且 limit=0 不影响 paid', () => {
     expect(affordableCount(100, 40, 10, 3)).toEqual({ paid: true, count: 3 });
+    expect(affordableCount(100, 40, 10, 0)).toEqual({ paid: true, count: 0 });
     expect(affordableCount(30, 40, 10, 3)).toEqual({ paid: false, count: 0 });
   });
 
-  it('负剩余预算不产生负数数量', () => {
+  it('paid 后极小的负余量仍钳制为 0', () => {
     expect(affordableCount(39, 40, 10)).toEqual({ paid: false, count: 0 });
+    expect(affordableCount(39.9999999995, 40, 0.1)).toEqual({ paid: true, count: 0 });
   });
 
   it('中性采集上下文与旧调用完全一致', () => {
