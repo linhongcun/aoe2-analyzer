@@ -203,8 +203,20 @@ export const PROFILES = {
       'ageBuildings704',
       'accuracy746',
       'marketFees745',
+      'techCatalog883',
     ],
-    ['techCards6', 'techUnits13', 'relatedTechs193', 'catalogLayout187', 'thumbRing709', 'romanCharge710', 'ageBuildings704', 'accuracy746', 'marketFees745'],
+    [
+      'techCards6',
+      'techUnits13',
+      'relatedTechs193',
+      'catalogLayout187',
+      'thumbRing709',
+      'romanCharge710',
+      'ageBuildings704',
+      'accuracy746',
+      'marketFees745',
+      'techs883',
+    ],
   ),
   duel: profile(
     [

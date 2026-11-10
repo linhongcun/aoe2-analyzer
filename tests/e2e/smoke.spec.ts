@@ -30,7 +30,7 @@ const ROUTES: [string, string][] = [
   ['#unit/569', '#unit .dtabs'],
   ['#unit/569?tab=sim', '#sim .simt'],
   ['#unit/569/Franks/4', '#sim .simtab'],
-  ['#techs', '#tgrid .card'],
+  ['#techs', '#tgrid .tech-row'],
   ['#tech/12', '#tech h1'],
   ['#tree', '.tree .tcell'],
   ['#tree/Britons', '.tree .tcell'],
@@ -96,7 +96,7 @@ test('breadcrumbs on detail pages', async ({ page }) => {
   await page.goto('./#tech/12');
   await expect(page.locator('nav.crumbs')).toContainText('科技');
   await page.locator('nav.crumbs a', { hasText: '科技' }).click();
-  await expect(page.locator('#tgrid .card').first()).toBeVisible();
+  await expect(page.locator('#tgrid .tech-row').first()).toBeVisible();
 });
 
 test('mobile nav opens and navigates', async ({ page }) => {
@@ -118,7 +118,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/civs', '#grid .card'],
     ['#/units', '#ugrid .unit-row'],
     ['#/buildings', '#bgrid .card'],
-    ['#/techs', '#tgrid .card'],
+    ['#/techs', '#tgrid .tech-row'],
     ['#/tree', '.tree .tcell'],
     ['#/compare', '#ctab tr'],
     ['#/matchup', '#matchup:has(#mres) .matchup-title'],

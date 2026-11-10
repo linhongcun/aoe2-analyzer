@@ -1,9 +1,7 @@
 {
   "schema": 1,
   "source": "Historical file wall spans from timestamped Playwright line events (overlapping runner work, not per-case CPU duration). Seed only; exact new reporter durations supersede after first measured run. The 338 non-sweep allowance excludes the long sweeps; staticSweepMs uses the historical paired-worker table-sweep cadence rounded upward. Files without historical measurement use non-skipped case count × defaultCaseMs; staticSweep338.spec.ts uses staticSweepMs. Coverage checked 2026-11-09.",
-  "historicalRuns": [
-    41551266996
-  ],
+  "historicalRuns": [41551266996],
   "historicalJob": 125639155326,
   "defaultCaseMs": 1500,
   "staticSweepMs": 85000,
@@ -218,6 +216,7 @@
     "tests/e2e/teamPlan769.spec.ts": 6000,
     "tests/e2e/techCards6.spec.ts": 1501,
     "tests/e2e/techUnits13.spec.ts": 1000,
+    "tests/e2e/techs883.spec.ts": 6000,
     "tests/e2e/thumbRing709.spec.ts": 15000,
     "tests/e2e/timeFormat.spec.ts": 1000,
     "tests/e2e/timeline.spec.ts": 72561,
