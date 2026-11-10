@@ -7,9 +7,10 @@
  * 生成器自己的说明也是：text_pcts「只用于与 .dat 对账，不作为数值来源」。
  *
  * 一组在该时代计入，当且仅当 round((1 - 原始乘数) * 100) 等于
- * 本条加成文本的百分比，或同一文明另一条费用句子的百分比（资源对得上）。
- * 对不上的组两边都不乘，并记未计入。高丽 0.5 对上「-50% wood」，
- * 0.8 对上另一句「Warships cost -20% wood」，不再因整条 ok=false 一起丢掉。
+ * 效果所挂加成句子的百分比。另一句不能靠「百分比相同」放行。
+ * 跨句只允许 REVIEWED_SPLIT_COST_GROUPS 里逐项核对过的分组：
+ * 当前句子仍是费用句、点名的资源与分组一致、单位 id 与效果目标逐个相同。
+ * 任一条件失败就不计入。高丽战船是其中一条；伤害减免、缺资源、兵种不符都不能借用。
  *
  * 取整仍是 roundHalfPrice（issue 129 游戏内实测的是 0.75 这种原始乘数和整数百分比相同的价）。
  * 原始乘数与整数百分比取整后差 0.5 或 1 时，采用原始乘数。那一跳没有游戏内实测。
@@ -68,9 +69,69 @@ export function textPercents(text: string, start: number): Record<number, number
   return Object.fromEntries(ages.map((a, i) => [a, ps[i]!]));
 }
 
-function namedResources(text: string): Set<string> {
+function namedResources(text: string): string[] {
   const lower = text.toLowerCase();
-  return new Set(RES_WORDS.filter(([word]) => lower.includes(word)).map(([, res]) => res));
+  return RES_WORDS.filter(([word]) => lower.includes(word)).map(([, res]) => res);
+}
+
+function sameIds(a: readonly number[], b: readonly number[]): boolean {
+  if (a.length !== b.length) return false;
+  const left = [...a].sort((x, y) => x - y);
+  const right = [...b].sort((x, y) => x - y);
+  return left.every((id, i) => id === right[i]);
+}
+
+/**
+ * 费用句必须同时有 cost、对得上的百分比，以及明确资源。
+ * 没有资源词就不能用来证明分组；伤害、移速、生命等句子直接拒绝。
+ */
+export function unitCostSentence(text: string, age: number): { pct: number; res: string[] } | null {
+  if (!/\bcosts?\b/i.test(text)) return null;
+  const parsed = textPercents(text, 1);
+  const pct = parsed?.[age];
+  const res = namedResources(text);
+  if (pct === undefined || !res.length) return null;
+  return { pct, res };
+}
+
+/**
+ * 跨句白名单。效果挂在 filedAt，但玩家可见的费用句是 sentence。
+ * 不从兵种名词猜测。单位 id 必须与效果目标逐个相同；句子一旦不再是对应资源的费用句，本条自动失效。
+ * 新的拆句要先核对效果目标和当前原文，再加一行。没有登记的分组保持不计入。
+ */
+export const REVIEWED_SPLIT_COST_GROUPS: readonly {
+  civ: string;
+  filedAt: number;
+  sentence: number;
+  res: readonly string[];
+  raw: number;
+  units: readonly number[];
+}[] = [
+  {
+    civ: 'Koreans',
+    filedAt: 1,
+    sentence: 3,
+    res: ['Wood'],
+    raw: 0.8,
+    units: [21, 250, 420, 442, 527, 528, 529, 532, 533, 539, 691, 831, 832, 1004, 1006, 1103, 1104, 1302, 1750, 1795, 1948, 2626, 2627, 2628, 2633],
+  },
+];
+
+function reviewedSplit(civEn: string, entry: DatCostDiscount, group: DatCostGroup, age: number, tier: number, pct: number): DiscountMatch | null {
+  const row = REVIEWED_SPLIT_COST_GROUPS.find(
+    (item) =>
+      item.civ === civEn &&
+      item.filedAt === entry.idx &&
+      item.raw === tier &&
+      sameIds(item.units, group.units) &&
+      item.res.length === group.res.length &&
+      item.res.every((res) => group.res.includes(res)),
+  );
+  if (!row) return null;
+  const line = civs.find((c) => c.en === civEn)?.bonEn[row.sentence];
+  const sentence = line ? unitCostSentence(line, age) : null;
+  if (!sentence || sentence.pct !== pct || sentence.res.length !== row.res.length || !sentence.res.every((res) => row.res.includes(res))) return null;
+  return { idx: row.sentence, pct, raw: tier, via: 'other' };
 }
 
 /** 这一组在该时代是否计入，以及应对上哪一句加成。 */
@@ -78,16 +139,7 @@ export function matchCostGroup(civEn: string, entry: DatCostDiscount, group: Dat
   const pct = Math.round((1 - tier) * 100);
   const own = entry.text?.[String(age)];
   if (own === pct) return { idx: entry.idx, pct, raw: tier, via: 'own' };
-  const lines = civs.find((c) => c.en === civEn)?.bonEn ?? [];
-  for (let i = 0; i < lines.length; i++) {
-    if (i === entry.idx) continue;
-    const parsed = textPercents(lines[i] ?? '', 1);
-    if (!parsed || parsed[age] !== pct) continue;
-    const named = namedResources(lines[i] ?? '');
-    if (named.size && !group.res.some((r) => named.has(r))) continue;
-    return { idx: i, pct, raw: tier, via: 'other' };
-  }
-  return null;
+  return reviewedSplit(civEn, entry, group, age, tier, pct);
 }
 
 /** 原始乘数乘上去再取整。legacy 只保留开局未支持文明的 Math.round。 */
