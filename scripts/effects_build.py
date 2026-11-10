@@ -438,8 +438,10 @@ def text_pcts(text, start):
 
 def cost_discounts(out, civs):
     """civ → [{idx, techs, groups:[{units, res, tiers:{时代: 累计乘数}}], text:{时代: p}|None, ok}]。
-    ok=True 仅当每个分组在文本列出的每个时代，.dat 累计折扣四舍五入到整数百分比都与文本一致；
-    文本没列出的时代不给档（tiers 不含该时代）。ok=False 的加成前端显示「折扣未计入」、按原价。"""
+    tiers 是 .dat 原始乘数的累计，运行时直接拿来乘（src/domain/costPolicy.ts）。
+    text 只用于对账。ok=True 表示这一序号下每个分组的整数百分比都等于本句文本；
+    运行时不看这个总开关，而是按组对账，一组还能对上同一文明的另一句费用文本。
+    文本没列出的时代不给档（tiers 不含该时代）。对不上任何句子的组不计入。"""
     res = {}
     for c in civs:
         ent = out['civs'].get(c['en'])

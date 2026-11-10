@@ -6,6 +6,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { discountedCost, priceAge } from '../../src/domain/costDiscount';
+import { roundHalfPrice } from '../../src/domain/roundHalfPrice';
 import { DAT } from '../../src/domain/datEffects';
 import { countForBudget } from '../../src/domain/duel';
 import { unit, units } from './helpers';
@@ -76,17 +77,23 @@ describe('Reid 场景（3000 资源）', () => {
 });
 
 describe('数据读不出 / 对不上：折扣未计入，按原价，不出估算值', () => {
-  it('ok=false 的加成进 unsupported，价格为原价', () => {
-    const table = { Byzantines: DAT.costDiscounts.Byzantines!.map((x) => ({ ...x, ok: false })) };
+  it('分组百分比对不上任何费用句子时不乘，价格为原价', () => {
+    const table = {
+      Byzantines: DAT.costDiscounts.Byzantines!.map((x) => ({
+        ...x,
+        text: { '1': 10, '2': 10, '3': 10, '4': 10 },
+        groups: x.groups.map((g) => ({ ...g, tiers: Object.fromEntries(Object.keys(g.tiers).map((k) => [k, 0.5])) })),
+      })),
+    };
     const d = discountedCost(unit('Halberdier'), 'Byzantines', 4, { table });
     expect(d.cost).toEqual(unit('Halberdier').cost);
     expect(d.applied).toEqual([]);
-    expect(d.unsupported).toHaveLength(1);
+    expect(d.unsupported.length).toBeGreaterThan(0);
     expect(JSON.stringify(d.unsupported)).not.toMatch(/pct/);
   });
-  it('真实数据中与文本对不上的（如朝鲜）显示未计入', () => {
-    const bad = Object.entries(DAT.costDiscounts).filter(([, v]) => v.some((x) => !x.ok));
-    expect(bad.length).toBeGreaterThan(0);
+  it('生成器仍把高丽整条标成 ok=false；运行时按分组计入五折', () => {
+    expect(DAT.costDiscounts.Koreans!.some((x) => !x.ok)).toBe(true);
+    expect(discountedCost(unit('Crossbowman'), 'Koreans', 3).cost.Wood).toBe(12.5);
   });
   it('无该文明数据：按原价，无说明行', () => {
     const d = discountedCost(unit('Halberdier'), 'Byzantines', 4, { table: {} });
@@ -110,48 +117,48 @@ describe('.5 规则（#129）：折后价恰为 .5 的直接显示 .5，不再�
     expect(roundHalfPrice((35 * 75) / 100)).toBe(26); // 26.25
     expect(roundHalfPrice((25 * 75) / 100)).toBe(19); // 18.75
   });
-  // 独立扫描：所有 单位 × 文明 × 时代 × 资源，按 .dat 档位换算的整数百分比 p，原价 × (100 − p) 除以 100 余 50 即为 .5
   const cases: [string, string, number, string][] = [];
   Object.entries(DAT.costDiscounts).forEach(([civ, list]) =>
-    list.forEach((d) => {
-      if (!d.ok) return;
+    list.forEach((d) =>
       d.groups.forEach((g) =>
         g.units.forEach((id) => {
           const u = units.find((x) => x.id === id);
           if (!u || !u.civs.includes(civ)) return;
           Object.entries(g.tiers).forEach(([a, m]) => {
             if (+a < u.age) return;
-            const p = Math.round((1 - m) * 100);
             g.res.forEach((r) => {
               const b = u.cost[r];
               const c: [string, string, number, string] = [u.en, civ, +a, r];
-              if (b && (b * (100 - p)) % 100 === 50 && !cases.some((x) => x.join() === c.join())) cases.push(c);
+              if (b && roundHalfPrice(b * m) % 1 === 0.5 && !cases.some((x) => x.join() === c.join())) cases.push(c);
             });
           });
         }),
-      );
-    }),
+      ),
+    ),
   );
-  it('扫描结果非空，且清单固定（数据变更时需复核）', () => {
+  it('原始乘数取整后恰为 .5 的都直接显示 .5，不标未计入', () => {
     expect(cases.length).toBeGreaterThan(0);
-    expect(cases.map((c) => c.join('|')).sort()).toMatchSnapshot();
-  });
-  it('每个 .5 情况：不标「未计入」、该资源显示精确的 .5 价', () => {
     cases.forEach(([en, civ, age, r]) => {
       units
         .filter((x) => x.en === en && x.civs.includes(civ))
         .forEach((u) => {
           const d = discountedCost(u, civ, age);
           expect(d.half, `${en} ${civ} ${age} ${r}`).toEqual([]);
+          expect(d.unsupported, `${en} ${civ} ${age} ${r}`).toEqual([]);
           expect(d.cost[r]! % 1, `${en} ${civ} ${age} ${r}`).toBe(0.5);
         });
     });
   });
-  it('朝鲜（高丽，数据与文本对不上）仍是「折扣未计入」', () => {
+  it('高丽弩手木材按 .dat 的 0.5 计入，不再整条按原价', () => {
     const u = unit('Crossbowman');
     const d = discountedCost(u, 'Koreans', 3);
-    expect(d.unsupported.length).toBe(1);
-    expect(d.half).toEqual([]);
-    expect(d.cost).toEqual(u.cost);
+    expect(d.unsupported).toEqual([]);
+    expect(d.applied.map((a) => [a.idx, a.pct])).toEqual([[1, 50]]);
+    expect(d.cost.Wood).toBe(12.5);
+    expect(d.cost.Gold).toBe(u.cost.Gold);
+    const ship = units.find((x) => x.id === 21)!;
+    const naval = discountedCost(ship, 'Koreans', 3);
+    expect(naval.applied.map((a) => [a.idx, a.pct])).toEqual([[3, 20]]);
+    expect(naval.cost.Wood).toBe(roundHalfPrice(ship.cost.Wood! * 0.8));
   });
 });
