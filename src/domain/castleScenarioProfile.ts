@@ -4,7 +4,7 @@ import type { Lane } from './startGame';
 import { isSceneTechPlan, type SceneConfig } from './startGameInputs';
 import { TEAM_BONUSES } from './effects';
 import { civStatus, makeSimContext, simulate, simTechs } from './simulator';
-import { discountedCost } from './costDiscount';
+import { unitCost } from './unitCost';
 import { gatherModel, realCost } from './realCost';
 import { buildingAge } from './availabilityAge';
 import review from './routeReview.json';
@@ -147,8 +147,8 @@ export function castleScenarioProfile(ctx: SceneContext, eco: SceneEco, civ: str
   const ownTeam = new Set(TEAM_BONUSES.flatMap((x, index) => (x[0] === civ ? [index] : [])));
   const stats = simulate(sim, unit, civ, cfg.age, ids, ownTeam);
   if (!validStats(stats)) return fail('有效属性不可核验');
-  const discount = discountedCost(unit, civ, cfg.age, { techIds: ids });
-  if (discount.unsupported.length || !cost(discount.cost, shape.costKeys)) return fail('折扣费用或机制不可核验');
+  const priced = unitCost(unit, civ, cfg.age, techs, { techIds: ids });
+  if (priced.discount.unsupported.length || priced.undecoded.length || !cost(priced.cost, shape.costKeys)) return fail('折扣费用或机制不可核验');
   const fixed: Cost = { ...upgrade };
   for (const t of techs) for (const [key, value] of Object.entries(t.cost)) fixed[key] = (fixed[key] ?? 0) + value;
 
@@ -184,7 +184,7 @@ export function castleScenarioProfile(ctx: SceneContext, eco: SceneEco, civ: str
   if (!Number.isFinite(cycle) || cycle <= 0) return fail('训练周期缺失');
   const rates = gatherModel(3, '', { techIds: new Set(), walkTiles: 3, farmTiles: 0 });
   const fixedSeconds = realCost(fixed, rates).total,
-    unitSeconds = realCost(discount.cost, rates).total;
+    unitSeconds = realCost(priced.cost, rates).total;
   if (!Number.isFinite(fixedSeconds) || !Number.isFinite(unitSeconds) || unitSeconds <= 0) return fail('费用换算不可核验');
-  return { ok: true, value: { unit, stats, cost: discount.cost, fixed, fixedSeconds, unitSeconds, cycle, techs, upgrade, upgradeSeconds } };
+  return { ok: true, value: { unit, stats, cost: priced.cost, fixed, fixedSeconds, unitSeconds, cycle, techs, upgrade, upgradeSeconds } };
 }
