@@ -3,13 +3,6 @@ import { buildsPath, explicitMatchupPath } from '../../../domain/matchupRoute';
 import { encodeTeamFit } from '../../../domain/teamFitQuery';
 import type { StartState } from '../../../domain/startGame';
 
-const planned = [
-  ['maps', '更多地图与人数机制', '目前仅有部分场景的计算建议；更多地图与人数待完善，仍可自主选文明。'],
-  ['routes', '更多文明与时代路线', '当前比较只覆盖声明文明和城堡路线；更多兵种及帝王路线尚未核验。'],
-  ['practice', '按文明练习', '尚未提供按文明组织的练习流程；可先使用现有开局库。'],
-  ['team', '团队协同机制', '当前可手填队友并查看文明搭配；本局尚不计算联合兵种的协同行动。'],
-] as const;
-
 export default function StartFeatureMenu({ state }: { state: StartState }) {
   const { civ, opponent, mates } = state.choice;
   const tools = [
@@ -62,30 +55,6 @@ export default function StartFeatureMenu({ state }: { state: StartState }) {
             </ul>
           </section>
         </div>
-        <section aria-labelledby="start-menu-planned">
-          <h2 id="start-menu-planned" className="start-ask-title">
-            后续完善
-          </h2>
-          <ul className="start-menu-list">
-            {planned.map(([id, label, reason]) => (
-              <li key={id}>
-                <button
-                  type="button"
-                  className="start-btn"
-                  disabled
-                  data-testid={id === 'practice' ? 'start-practice' : undefined}
-                  aria-describedby={'start-menu-reason-' + id}
-                >
-                  {label} · 规划中
-                </button>
-                <p className="start-hint" id={'start-menu-reason-' + id}>
-                  {reason}
-                </p>
-              </li>
-            ))}
-          </ul>
-          <p className="start-hint">规划中表示尚未支持，不承诺上线时间。</p>
-        </section>
       </div>
     </details>
   );

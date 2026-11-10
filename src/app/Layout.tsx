@@ -8,6 +8,7 @@ import { ToolsMenu } from './nav/ToolsMenu';
 import FeedbackLink, { SiegeFeedbackNote } from '../shared/ui/FeedbackLink';
 import { appVersion } from '../shared/utils/feedback';
 import { DATA_SOURCES, REPO, versionLabel } from '../shared/utils/dataInfo';
+import { bindGlobalSearch } from '../shared/search/globalSearch';
 import { useTheme } from './theme/useTheme';
 import type { ThemePreference } from './theme/theme';
 import '../shared/styles/editorial-shell.css';
@@ -239,6 +240,7 @@ export function Layout({ children }: { children: ReactNode }) {
     setMenuAt(null);
     setCmdk(true);
   }, []);
+  useEffect(() => bindGlobalSearch({ open: openSearch, preload: () => void loadCommandPalette() }), [openSearch]);
   /** 让 main 临时可聚焦并移入焦点；离开后去掉 tabindex，平时点击正文不会把焦点吸到 main 上。 */
   const focusMain = useCallback((options?: FocusOptions) => {
     const target = main.current;
@@ -396,17 +398,19 @@ export function Layout({ children }: { children: ReactNode }) {
           <Icon name="database" />
           <span>数据版本：{versionLabel(DATA_SOURCES)}</span>
         </Link>
-        <button
-          className="searchbtn"
-          onClick={openSearch}
-          onPointerEnter={() => void loadCommandPalette()}
-          onFocus={() => void loadCommandPalette()}
-          aria-label="全局搜索"
-        >
-          <Icon name="search" />
-          <span>搜索</span>
-          <kbd>Ctrl K</kbd>
-        </button>
+        {pathname !== '/' && (
+          <button
+            className="searchbtn"
+            onClick={openSearch}
+            onPointerEnter={() => void loadCommandPalette()}
+            onFocus={() => void loadCommandPalette()}
+            aria-label="全局搜索"
+          >
+            <Icon name="search" />
+            <span>搜索</span>
+            <kbd>Ctrl K</kbd>
+          </button>
+        )}
         <a
           href={REPO}
           className="iconbtn"

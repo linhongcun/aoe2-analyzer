@@ -16,7 +16,7 @@ async function pickCiv(page: Page, id: string, en: string) {
 
 // 旧版 hash（无前导 /）与新版 hash 都必须可用
 const ROUTES: [string, string][] = [
-  ['', '#home .hcard'],
+  ['', '#home [data-testid="home-start"]'],
   ['#civs', '#grid .card'],
   ['#simulator', '#simhub .card'],
   ['#buildings', '#bgrid .card'],
@@ -114,7 +114,7 @@ test('mobile nav opens and navigates', async ({ page }) => {
 
 test('nav: every entry opens its real page, none opens a planned placeholder', async ({ page }) => {
   const PAGES: [string, string][] = [
-    ['#/', '#home .hcard'],
+    ['#/', '#home [data-testid="home-start"]'],
     ['#/civs', '#grid .card'],
     ['#/units', '#ugrid .card'],
     ['#/buildings', '#bgrid .card'],
@@ -182,7 +182,7 @@ test('nav: 工具 dropdown toggles on click, closes on outside click and Esc', a
 
 test('home: 无占位块，版本补丁已提供正式入口', async ({ page }) => {
   await page.goto('./');
-  await expect(page.locator('#home .hgrid').first()).toBeVisible();
+  await expect(page.locator('#home [data-testid="home-catalog"]')).toBeVisible();
   await expect(page.locator('#home .soon-card')).toHaveCount(0);
   await expect(page.locator('#home')).not.toContainText('即将推出');
   await expect(page.locator('#home')).not.toContainText('正在制作');
@@ -589,7 +589,7 @@ test('rating label also on compare and matchup; old yellow note removed', async 
 
 test('#31 Ctrl+K 搜到开局流程与开局名；工具菜单首项为开局流程', async ({ page }) => {
   await page.goto('./#/');
-  await expect(page.locator('#home .hcard[data-k="builds"]')).toBeVisible();
+  await expect(page.locator('#home a[href="#/builds"]')).toBeVisible();
   await page.keyboard.press('Control+k');
   await page.keyboard.type('开局流程');
   await expect(page.getByRole('dialog').getByText('开局流程').first()).toBeVisible();

@@ -17,7 +17,7 @@
   margin: 0 0 var(--space-2);
   font-size: var(--fs-xs);
 }
-.start-game h1 {
+#start-title {
   margin: 0;
   color: var(--color-text);
   font-size: var(--fs-h1);
@@ -385,12 +385,12 @@ button.start-chip.is-done {
   .start-catalog {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
-  .start-game h1 {
+  #start-title {
     font-size: var(--fs-h1);
   }
 }
 @media (max-width: 600px) {
-  .start-game h1 {
+  #start-title {
     font-size: 30px;
   }
   .start-ask,

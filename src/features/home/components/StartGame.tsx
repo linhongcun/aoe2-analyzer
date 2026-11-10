@@ -33,7 +33,7 @@ export default function StartGame({ state, onChange }: { state: StartState; onCh
   return (
     <section className="start-game" data-testid="start-game" aria-labelledby="start-title">
       <p className="start-kicker">{lobbyStart ? '首页 / 已在大厅' : state.current === 'mode' ? '首页' : '首页 / 开一局'}</p>
-      <h1 id="start-title">{state.current == null ? '本局摘要' : '开一局'}</h1>
+      <h2 id="start-title">{state.current == null ? '本局摘要' : '开一局'}</h2>
       <p className="start-lede">{lede(state)}</p>
       <StepBar state={state} onChange={onChange} />
       <p className="start-note">{note(state)}</p>
