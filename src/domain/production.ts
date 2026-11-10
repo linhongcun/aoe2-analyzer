@@ -2,7 +2,7 @@
 import { ECO as eco } from '../data/eco';
 import { civs, type Core } from '../data';
 import { DAT, type DatEco } from './datEffects';
-import { discountedCost, roundHalfPrice } from './costDiscount';
+import { unitCost } from './unitCost';
 import { gatherModel, type GatherRes } from './realCost';
 import type { Cost, Tech, Trees, Unit } from './types';
 import { buildingAge, trainingUnitAge } from './availabilityAge';
@@ -39,7 +39,6 @@ export const DEFAULT_PRODUCTION: ProductionConfig = {
 };
 const task = { Food: 'farm', Wood: 'wood', Gold: 'gold', Stone: 'stone' } as const;
 const costAttrs: Record<number, GatherRes | 'all'> = { 100: 'all', 103: 'Food', 104: 'Wood', 105: 'Gold', 106: 'Stone' };
-const change = (base: number, op: string | undefined, v: number) => (op === 'set' ? v : op === 'mul' ? base * v : base + v);
 const unique = (s: string[]) => [...new Set(s)];
 
 export function productionTechAge(t: Tech, civ: string) {
@@ -228,10 +227,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
       return;
     }
     const data = eco.units[u.id]!;
-    const discount = discountedCost({ id: u.id, cost: data.cost }, config.civ, config.age);
-    const cost: Cost = { ...discount.exact };
-    const notes = discount.applied.map((x) => x.text);
-    warnings.push(...discount.unsupported.map((x) => `${x.text || '文明训练费用折扣'}：折扣未计入。`));
+    const notes: string[] = [];
     const base = data.timeAt?.[row.building] ?? data.trainTime;
     const cycleOps: TrainingCycleOp[] = [];
     const targetBuilding = buildingTarget(row.building, config.age);
@@ -254,6 +250,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
       for (const e of relevant) cycleOps.push({ kind: e.attr === 'trainTime' ? 'train' : 'work', op: 'mul', v: e.v! });
       notes.push(r.source === 'team' ? '本文明团队训练加成' : r.name);
     }
+    const costTechs: { id: number; en: string; zh: string }[] = [];
     for (const t of selectedTechs) {
       const d = DAT.techs[t.en];
       const effects = relevantTechEffects(t).filter((e) => e.t?.includes(u.id) || (e.a === 13 && e.t?.includes(row.building)));
@@ -263,7 +260,7 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
           .flatMap((r) => r.fx)
           .filter((f) => f.s === 'bt') ?? [];
       if (!effects.length && !time.length) continue;
-      // 资源标记可能附带未编码条件；整项排除，避免只实现一半。
+      // 资源标记可能附带未编码条件；整项排除，避免只实现一半。费用本身由 unitCost 套用。
       if (d?.eco.some((e) => e.res !== undefined) || effects.some((e) => !['set', 'mul', 'add'].includes(e.op))) {
         warnings.push(`${t.zh}：含未解码的资源或条件效果，生产效果整项未计入。`);
         continue;
@@ -271,22 +268,20 @@ export function calculateProduction(ctx: ProductionContext, config: ProductionCo
       for (const e of effects) {
         if (e.a === 13 && e.t?.includes(row.building)) cycleOps.push({ kind: 'work', op: e.op, v: e.v });
         else if (e.a === 101 && e.t?.includes(u.id)) cycleOps.push({ kind: 'train', op: e.op, v: e.v });
-        else if (e.a !== undefined && costAttrs[e.a] && e.t?.includes(u.id)) {
-          const res = costAttrs[e.a]!;
-          for (const k of res === 'all' ? PRODUCTION_RES : [res]) cost[k] = Math.max(0, change(cost[k] ?? 0, e.op, e.v));
-        }
       }
       for (const f of time) cycleOps.push({ kind: 'train', op: f.op, v: f.v });
+      costTechs.push({ id: t.id, en: t.en, zh: t.zh });
       notes.push(t.zh);
     }
+    const priced = unitCost({ id: u.id, cost: data.cost }, config.civ, config.age, costTechs);
+    notes.unshift(...priced.discount.applied.map((x) => x.text));
+    warnings.push(...priced.discount.unsupported.map((x) => `${x.text || '文明训练费用折扣'}：折扣未计入。`));
+    const cost = priced.cost;
     const seconds = trainingCycle(base, cycleOps).seconds;
     if (!Number.isFinite(seconds) || seconds <= 0) {
       errors.push(`${label}：无法核实有效训练时间，未计算。`);
       return;
     }
-    PRODUCTION_RES.forEach((r) => {
-      if (cost[r] !== undefined) cost[r] = roundHalfPrice(cost[r]!);
-    });
     const count = +row.count,
       perMinute = (count * 60) / seconds;
     const spend = Object.fromEntries(PRODUCTION_RES.map((r) => [r, (cost[r] ?? 0) * perMinute])) as Record<GatherRes, number>;

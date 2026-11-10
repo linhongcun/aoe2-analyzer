@@ -3,7 +3,7 @@ import type { Cost, SimStats, Tech, Unit } from './types';
 import { DAT } from './datEffects';
 import { TEAM_BONUSES } from './effects';
 import { applyEffects, civStatus, makeSimContext, simTechs, simulate } from './simulator';
-import { discountedCost } from './costDiscount';
+import { unitCost } from './unitCost';
 import { gatherModel, realCost } from './realCost';
 import { reviewPayload, SCENE_ECO, type SceneContext } from './positionScenarios';
 import { sceneSignature } from './positionScenarioMath';
@@ -130,8 +130,9 @@ export function routeProfile(ctx: SceneContext, civ: string, unitId: number, age
   }
   const cycle = trainingCycle(base, cycleOps).cycle;
   if (!Number.isFinite(cycle) || cycle <= 0) return fail('训练周期缺失');
-  const discount = discountedCost(unit, civ, age, { techIds: ids });
-  if (discount.unsupported.length || !validCost(discount.cost, shape.costKeys) || routeWork(discount.cost) <= 0) return fail('单位折扣不可核验');
+  const priced = unitCost(unit, civ, age, techs, { techIds: ids });
+  if (priced.discount.unsupported.length || priced.undecoded.length || !validCost(priced.cost, shape.costKeys) || routeWork(priced.cost) <= 0)
+    return fail('单位折扣不可核验');
   const team = new Set(TEAM_BONUSES.flatMap((x, i) => (x[0] === civ ? [i] : [])));
   // 侦骑封建自动提速先于城堡畜牧。旧通用模拟器把generic放在科技后，
   // 此已核验路线延后应用畜牧，避免对基础速度乘完再加封建增量。
@@ -147,6 +148,6 @@ export function routeProfile(ctx: SceneContext, civ: string, unitId: number, age
     stats.rof <= 0
   )
     return fail('时代与文明属性不可核验');
-  return { ok: true, value: { unit, age, stats, cost: discount.cost, cycle, techs, upgrade, upgradeSeconds } };
+  return { ok: true, value: { unit, age, stats, cost: priced.cost, cycle, techs, upgrade, upgradeSeconds } };
 }
 export const routeSources = () => ({ model: ROUTE_VERSION, review: review.version, sources: DAT.meta.sources });

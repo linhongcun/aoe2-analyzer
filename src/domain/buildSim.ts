@@ -40,7 +40,7 @@ export {
  */
 import type { Action, BuildOrder, Task } from './buildOrder';
 import { buildOrders as ALL_BOS } from '../data/buildOrders';
-import { roundHalfPrice } from './roundHalfPrice';
+import { applyAggregatedResource } from './unitCost';
 
 import { weiRewardsForCompletedResearch, type WeiSpawnContext } from './weiEconomy';
 import { bengaliRewardsForReachedAge, type BengaliSpawnContext } from './bengaliEconomy';
@@ -492,22 +492,24 @@ function runOnce(bo: BuildOrder, civ: string, eco: EcoData, ups: UpgradeData, P:
       return out;
     }
     const add = kind !== 'up' ? m.costAdd['unit:' + id] : undefined;
-    if (add) for (const r of Object.keys(add) as Res[]) out[r] = Math.max(0, out[r] + add[r]!);
-    // 单位折扣：按单位 id 与按类别（哥特步兵 class:6，#42）两种写法相乘
+    // 单位折扣：按单位 id 与按类别（哥特步兵 class:6，#42）两种写法相乘。逐资源加减和取整走 unitCost。
     const cls = !legacy && kind === 'unit' && eco.units[id]?.class !== undefined ? m.costMul['class:' + eco.units[id]!.class] : undefined;
     const mul = m.costMul['unit:' + id];
     const buildingWood = kind === 'building' ? m.buildingWoodCost[eco.buildings[id]?.class ?? -1] : undefined;
     const mayanWall = kind === 'building' ? m.mayanWallCost[eco.buildings[id]?.class ?? -1] : undefined;
-    const rnd = legacy ? Math.round : roundHalfPrice;
-    if ((mul || cls || buildingWood !== undefined || mayanWall !== undefined) && kind !== 'up')
-      for (const r of Object.keys(out) as Res[]) {
+    const multiply = kind !== 'up' && Boolean(mul || cls || buildingWood !== undefined || mayanWall !== undefined);
+    for (const r of Object.keys(out) as Res[]) {
+      let factor: number | undefined;
+      if (multiply) {
         if (r === 'wood' && buildingWood !== undefined) {
-          const factor = (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1);
+          const raw = (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1);
           // 与effects_build.py累计tiers的6位规范一致；仅新马里建筑木费，保留原half-price及其它文明路径。
-          const combined = Math.round(factor * buildingWood * 1e6) / 1e6;
-          out[r] = rnd(out[r] * combined);
-        } else out[r] = rnd(out[r] * (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1) * (mayanWall ?? 1));
+          factor = Math.round(raw * buildingWood * 1e6) / 1e6;
+        } else factor = (mul?.all ?? 1) * (mul?.[r] ?? 1) * (cls?.all ?? 1) * (cls?.[r] ?? 1) * (mayanWall ?? 1);
       }
+      const extra = add?.[r];
+      out[r] = applyAggregatedResource(out[r], { ...(extra !== undefined ? { add: extra } : {}), ...(factor !== undefined ? { factor } : {}) }, legacy);
+    }
     return out;
   };
   /** 科技研究时间：.dat 原值经文明修正（set 为绝对秒数，如哥特织布机 1 s；mul 为倍率，如马来升时代 ×0.6） */
