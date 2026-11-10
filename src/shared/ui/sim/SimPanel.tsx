@@ -36,6 +36,8 @@ export interface SimPanelProps {
   embedded?: string;
   /** 默认保留 h3/h4；单位 PK 显式传 2，使其子标题使用 h3。 */
   headingLevel?: 2 | 3;
+  /** 单位详情工作区的列名。建筑模拟器和单位 PK 不传，仍用短列名。 */
+  statHeadings?: { base: string; current: string; full: (name: string) => string };
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
@@ -332,9 +334,9 @@ export default function SimPanel(p: SimPanelProps) {
             <tbody>
               <tr>
                 <th>属性</th>
-                <th>基础</th>
-                <th>当前</th>
-                {p.cmpStats && <th>{civByEn(p.cmp)?.zh} 满</th>}
+                <th>{p.statHeadings?.base ?? '基础'}</th>
+                <th>{p.statHeadings?.current ?? '当前'}</th>
+                {p.cmpStats && <th>{p.statHeadings ? p.statHeadings.full(civByEn(p.cmp)?.zh ?? '') : `${civByEn(p.cmp)?.zh ?? ''} 满`}</th>}
               </tr>
               <StatRows rows={p.rows} B={p.base} S={p.cur} C={p.cmpStats} />
             </tbody>

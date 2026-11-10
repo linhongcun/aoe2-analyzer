@@ -229,6 +229,7 @@
     "tests/e2e/trebuchet711.spec.ts": 15000,
     "tests/e2e/unitCards6.spec.ts": 2598,
     "tests/e2e/unitCount14.spec.ts": 1000,
+    "tests/e2e/unitDetail895.spec.ts": 18000,
     "tests/e2e/unitFilters196.spec.ts": 15897,
     "tests/e2e/units192.spec.ts": 7871,
     "tests/e2e/units879.spec.ts": 6000,

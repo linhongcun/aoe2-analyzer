@@ -151,7 +151,7 @@ describe('#749 default gate', () => {
     expect(smokeSource).toContain("['', '#home [data-testid=\"home-start\"]']");
     expect(smokeSource).toContain("['#civs', '#grid .card']");
     expect(smokeSource).toContain("['#/civ/Franks', '#detail h1']");
-    expect(smokeSource).toContain("['#unit/569', '#unit .dtabs']");
+    expect(smokeSource).toContain("['#unit/569', '#unit h1']");
     expect(smokeSource).toContain('expect(errors).toEqual([])');
     expect(smokeSource).toContain("test('Ctrl+K command palette searches across civs/units/techs'");
     expect(smokeSource).toContain("fill('paladin')");
