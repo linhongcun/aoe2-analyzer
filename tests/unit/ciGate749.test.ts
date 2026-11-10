@@ -148,7 +148,7 @@ describe('#749 default gate', () => {
 
   it('locks the smoke spec to the homepage, key routes, search and Paladin total', () => {
     expect(smokeSource).toContain("test(`route ${hash || '(home)'} renders without console errors`");
-    expect(smokeSource).toContain("['', '#home .hcard']");
+    expect(smokeSource).toContain("['', '#home [data-testid=\"home-start\"]']");
     expect(smokeSource).toContain("['#civs', '#grid .card']");
     expect(smokeSource).toContain("['#/civ/Franks', '#detail h1']");
     expect(smokeSource).toContain("['#unit/569', '#unit .dtabs']");

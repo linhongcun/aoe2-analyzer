@@ -12,7 +12,7 @@ const UNITS = JSON.parse(readFileSync('src/data/units.json', 'utf8')) as UnitSta
 const BASE = UNITS.find((unit) => unit.id === 281)!;
 const ELITE = UNITS.find((unit) => unit.id === 531)!;
 const PAGES = [
-  ['', '#home .hcard'],
+  ['', '#home [data-testid="home-start"]'],
   ['unit/531', '#unit h1'],
   ['civ/Franks', '#detail h1'],
   ['tech/22', '#tech h1'],
@@ -87,7 +87,7 @@ for (const width of [390, 1280])
       await page.setViewportSize({ width, height: 900 });
       await chooseInitialTheme(page, theme);
       for (const [route, selector] of [
-        ['', '#home .hcard'],
+        ['', '#home [data-testid="home-start"]'],
         ['unit/531', '#unit h1'],
         ['civ/Franks?tab=data', '.ratehead'],
         ['units', '#ugrid .card'],
@@ -107,7 +107,7 @@ for (const width of [390, 1280])
 
 test('#6 首次访问默认浅色，主题菜单可用键盘关闭并恢复焦点', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark' });
-  await ready(page, '', '#home .hcard');
+  await ready(page, '', '#home [data-testid="home-start"]');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   const trigger = page.getByRole('button', { name: '主题：浅色', exact: true });
   await trigger.click();
@@ -122,7 +122,7 @@ test('#6 首次访问默认浅色，主题菜单可用键盘关闭并恢复焦�
 });
 
 test('#6 外观菜单打开时进入全局搜索，焦点留在新搜索框并可直接输入', async ({ page }) => {
-  await ready(page, '', '#home .hcard');
+  await ready(page, '', '#home [data-testid="home-start"]');
   await page.getByRole('button', { name: '主题：浅色', exact: true }).click();
   await page.getByRole('button', { name: '全局搜索', exact: true }).click();
   // 外点关闭的延迟焦点恢复必须先完成，避免只验证到弹层刚打开的一瞬。
@@ -179,7 +179,7 @@ test('#6 主题选择经刷新保留，系统选项响应系统变化，分享 U
 for (const width of [360, 375, 390])
   test(`#6 @${width}：手机抽屉外观切换、导航和触控目标可用`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await ready(page, '', '#home .hcard');
+    await ready(page, '', '#home [data-testid="home-start"]');
     const menu = page.getByRole('button', { name: '菜单', exact: true });
     await menu.click();
     const nav = page.getByRole('dialog', { name: '主导航', exact: true });
@@ -206,7 +206,7 @@ for (const width of [360, 375, 390])
 
 test('#6 手机点击导航遮罩关闭抽屉并恢复菜单按钮焦点', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 900 });
-  await ready(page, '', '#home .hcard');
+  await ready(page, '', '#home [data-testid="home-start"]');
   const trigger = page.getByRole('button', { name: '菜单', exact: true });
   await trigger.click();
   const drawer = page.getByRole('dialog', { name: '主导航', exact: true });
@@ -229,19 +229,19 @@ test('#6 开局页固定分享条不会遮挡手机导航的外观按钮', async
 });
 
 for (const width of WIDTHS)
-  test(`#6 @${width}：首页仍可搜索，开一局在工具宫格上面`, async ({ page }, info) => {
-    // #592 把首页第一屏改成「开一局」。搜索和资料入口还在，但不再占住第一屏。
+  test(`#6 @${width}：首页仍可搜索，开一局在工具目录上面`, async ({ page }, info) => {
     await page.setViewportSize({ width, height: 900 });
-    await ready(page, '', '#home .hcard');
-    const title = page.getByRole('heading', { level: 1, name: '开一局', exact: true });
-    await expect(title).toBeInViewport({ ratio: 1 });
+    await ready(page, '', '#home [data-testid="home-start"]');
+    const title = page.getByRole('heading', { name: '开一局', exact: true });
+    const catalog = page.getByRole('heading', { name: '工具与资料', exact: true });
     const titleBox = await title.boundingBox();
-    const cardBox = await page.locator('#home .hcard').first().boundingBox();
-    expect(titleBox && cardBox && titleBox.y < cardBox.y).toBe(true);
-    expect(await page.locator('#home .hcard').count()).toBeGreaterThanOrEqual(4);
-    const search = page.locator('#home .herosearch');
-    await search.scrollIntoViewIfNeeded();
-    await expect(search).toBeInViewport({ ratio: 1 });
+    const catalogBox = await catalog.boundingBox();
+    expect(titleBox && catalogBox && titleBox.y < catalogBox.y).toBe(true);
+    if (width >= 1280) {
+      await expect(title).toBeInViewport({ ratio: 1 });
+      await expect(page.getByRole('button', { name: '配置本局', exact: true })).toBeInViewport({ ratio: 1 });
+    }
+    const search = page.getByTestId('home-search');
     await search.click();
     await expect(page.getByPlaceholder(/搜索文明、单位、科技/)).toBeFocused();
     await page.keyboard.press('Escape');

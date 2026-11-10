@@ -221,26 +221,19 @@ describe('开一局步骤 #592', () => {
     expect(edited.choice.civ).toBe('Franks');
   });
 
-  it('首页第一屏是开一局，工具入口还在，规划练习不可触发', () => {
+  it('首页默认收起开一局，不展示规划中按钮', () => {
     const html = home();
+    expect(html).toContain('查阅文明、单位与科技，并使用计算工具。');
     expect(html).toContain('>开一局<');
-    expect(html).toContain('data-testid="start-game"');
-    expect(html).toContain('data-testid="start-steps"');
-    expect(html).toContain('data-step="mode"');
-    expect(html).not.toContain('data-step="lane"');
-    expect(html).toContain('data-testid="start-back"');
-    expect(html).toContain('data-testid="start-skip"');
-    expect(html).toContain('data-testid="start-lobby"');
-    expect(html).toContain('data-testid="start-practice"');
-    expect(html).toContain('data-testid="start-more-tools"');
-    expect(html).toContain('按文明练习 · 规划中');
+    expect(html).toContain('data-testid="home-configure"');
+    expect(html).toContain('>已在大厅<');
     expect(html).toContain('搜索文明、单位、科技、开局…');
-    expect(html).toContain('更多工具');
-    expect(html).not.toMatch(/<a[^>]*data-testid="start-practice"/);
-    expect(html).toMatch(/<button(?=[^>]*data-testid="start-practice")(?=[^>]*disabled="")[^>]*>/);
-    expect(html.indexOf('data-testid="start-game"')).toBeLessThan(html.indexOf('class="hgrid"'));
-    const flowHtml = html.slice(html.indexOf('data-testid="start-game"'), html.indexOf('data-testid="start-more-tools"'));
-    expect(flowHtml).not.toMatch(/胜率\s*\d|\d+(?:\.\d+)?\s*%|热门|常打|出场率/);
+    expect(html).toContain('工具与资料');
+    expect(html).not.toContain('data-testid="start-steps"');
+    expect(html).not.toContain('规划中');
+    expect(html).not.toContain('设计选例');
+    expect(html.indexOf('id="site-title"')).toBeLessThan(html.indexOf('id="home-start-title"'));
+    expect(html.indexOf('id="home-start-title"')).toBeLessThan(html.indexOf('id="home-catalog-title"'));
   });
 });
 
