@@ -16,14 +16,14 @@ function recordErrors(page: Page) {
 async function openHistory(page: Page, id: number, query = '') {
   await page.goto(`./#/building/${id}?tab=history${query}`);
   await expect(records(page).first()).toBeVisible();
-  await expect(page.getByRole('tab', { name: '更新历史', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#building-history')).toHaveJSProperty('open', true);
 }
 
 test('#437 建筑历史：城楼从概览切换可查真实机制改动及当时文明范围', async ({ page }) => {
   const errors = recordErrors(page);
   await page.goto('./#/building/1665?tab=ov');
-  await expect(page.getByRole('tab', { name: '概览', exact: true })).toHaveAttribute('aria-selected', 'true');
-  await page.getByRole('tab', { name: '更新历史', exact: true }).click();
+  await expect(page.locator('#building')).toHaveAttribute('data-view', 'overview');
+  await page.locator('.bd-jump').getByRole('button', { name: '更新历史', exact: true }).click();
   await expect(page).toHaveURL(/tab=history/);
   await expect(records(page)).toHaveCount(3);
   for (const [id, text] of [
@@ -87,7 +87,7 @@ test('#437 建筑历史：复制真实静态链接后新上下文打开与刷新
       },
     });
   });
-  await page.locator('.dhead').getByRole('button', { name: '复制链接', exact: true }).click();
+  await page.locator('#building').getByRole('button', { name: '复制链接', exact: true }).click();
   await expect.poll(() => page.evaluate(() => (window as Window & { copiedBuildingHistory?: string }).copiedBuildingHistory)).toBeTruthy();
   const copied = await page.evaluate(() => (window as Window & { copiedBuildingHistory?: string }).copiedBuildingHistory);
   const url = new URL(copied!);
@@ -110,7 +110,7 @@ test('#437 建筑历史：复制真实静态链接后新上下文打开与刷新
     await expect(records(fresh)).toHaveCount(1);
     await expect(fresh.getByLabel('开始日期', { exact: true })).toHaveValue('2024-10-15');
     await expect(fresh.getByLabel('结束日期', { exact: true })).toHaveValue('2024-10-15');
-    await expect(fresh.getByRole('tab', { name: '更新历史', exact: true })).toHaveAttribute('aria-selected', 'true');
+    await expect(fresh.locator('#building-history')).toHaveJSProperty('open', true);
     expect(freshErrors).toEqual([]);
   } finally {
     await context.close();
@@ -137,7 +137,7 @@ test('#437 建筑历史：版本条目与关联档案都直接进入建筑历史
   await expect(archeryRange).toHaveAttribute('href', '#/building/87?tab=history');
   await archeryRange.click();
   await expect(page).toHaveURL(/building\/87\?tab=history/);
-  await expect(page.getByRole('tab', { name: '更新历史', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#building-history')).toHaveJSProperty('open', true);
   await expect(history(page).locator('[data-history-entry="81058-117"]')).toContainText('满足前置条件');
   await expect(history(page).locator('[data-history-entry="81058-117"]')).toContainText('关联影响');
   expect(errors).toEqual([]);

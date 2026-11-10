@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCore, useTrees } from '../../../data/hooks';
+import { buildingHasAttack } from '../../../domain/buildingDetailView';
 import { buildingBase, buildingCivNotes, buildingSimTechs, simulateBuilding } from '../../../domain/buildingSim';
 import { allNumeric, makeSimContext } from '../../../domain/simulator';
 import type { Building } from '../../../domain/types';
@@ -20,14 +21,16 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     loc = useLocation(),
     nav = useNavigate();
   const ctx = useMemo(() => (core && trees ? makeSimContext(core.techs, trees) : null), [core, trees]);
+  const q = new URLSearchParams(loc.search);
+  const requested = q.get('civ');
+  const civ = requested && b.civs.includes(requested) ? requested : null;
+  if (!civ) return <p data-t="sim-needs-civ">请先选择拥有这座建筑的文明，再查看当前设置下的近似模拟值。</p>;
   if (!ctx || !core)
     return (
       <div id="sim" className="posbox">
         <Loading />
       </div>
     );
-  const q = new URLSearchParams(loc.search);
-  const civ = b.civs.includes(q.get('civ') ?? '') ? q.get('civ')! : b.civs[0]!;
   const minAge = getGarrisonBuildingAge(b, civ, ctx.trees);
   const age = Math.max(minAge, Math.min(4, +(q.get('age') ?? 4) || 4));
   const avail = buildingSimTechs(ctx, b, civ);
@@ -35,8 +38,13 @@ export default function BuildingSimulator({ b }: { b: Building }) {
   const sel = new Set(nums(q.get('techs')).filter((i) => ok.has(i)));
   const cmp = b.civs.includes(q.get('cmp') ?? '') ? q.get('cmp')! : '';
   const write = (c: string, a: number, s: Iterable<number>, cm: string) => {
-    const p = new URLSearchParams({ tab: 'sim', civ: c, age: String(a), techs: [...s].join(',') });
+    const p = new URLSearchParams(loc.search);
+    p.set('tab', 'sim');
+    p.set('civ', c);
+    p.set('age', String(a));
+    p.set('techs', [...s].join(','));
     if (cm) p.set('cmp', cm);
+    else p.delete('cmp');
     nav(`/building/${b.id}?${p.toString()}`, { replace: true });
   };
   const rows: StatRow[] = [
@@ -44,7 +52,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     ['ma', '近战护甲', 'marm'],
     ['pa', '穿刺护甲', 'parm'],
     ['barm', '建筑护甲', ''],
-    ...((b.atk
+    ...((buildingHasAttack(b)
       ? [
           ['atk', '攻击力', 'patk'],
           ['rng', '射程', 'range'],
@@ -61,6 +69,18 @@ export default function BuildingSimulator({ b }: { b: Building }) {
     trees && garrisonHosts.includes(b.id)
       ? new Set(getGarrisonTechs({ core, trees }, b, { civ, age, techs: [], rows: [] }).map((t) => t.id))
       : new Set<number>();
+  const garrisonSearch = () => {
+    const next = writeGeneralGarrison({
+      civ,
+      age,
+      techs: [...sel].filter((techId) => garrisonTechIds.has(techId)),
+      rows: [109, 79, 234, 235].includes(b.id) ? [{ unitId: 83, count: '0', entry: 'enter' }] : [],
+    });
+    const selected = q.get('techs');
+    if (selected) next.set('techs', selected);
+    if (cmp) next.set('cmp', cmp);
+    return next.toString();
+  };
   const constructionHref = trees ? constructionLink({ core, trees }, { buildingId: b.id, civ, age, techs: sel }) : null;
   const healingHref = trees && garrisonHosts.includes(b.id) ? healingLink({ core, trees }, { buildingId: b.id, civ, age, techs: sel }) : null;
   return (
@@ -79,13 +99,12 @@ export default function BuildingSimulator({ b }: { b: Building }) {
       </div>
       {trees && garrisonHosts.includes(b.id) && (
         <p>
-          <Link
-            to={`/building/${b.id}?${writeGeneralGarrison({ civ, age, techs: [...sel].filter((id) => garrisonTechIds.has(id)), rows: [109, 79, 234, 235].includes(b.id) ? [{ unitId: 83, count: '0', entry: 'enter' }] : [] }).toString()}`}
-          >
-            查看驻军配置与弹丸预览
-          </Link>
+          <Link to={`/building/${b.id}?${garrisonSearch()}`}>查看驻军配置与弹丸预览</Link>
         </p>
       )}
+      <p className="note" data-t="sim-headings">
+        目录基础 / 当前设置下的近似模拟值 / 对照
+      </p>
       <SimPanel
         civs={b.civs}
         minAge={minAge}
@@ -97,6 +116,7 @@ export default function BuildingSimulator({ b }: { b: Building }) {
         avail={avail}
         techById={core.techById}
         rows={rows}
+        statHeadings={{ base: '目录基础', current: '当前设置下的近似模拟值', full: () => '对照' }}
         base={buildingBase(b)}
         cur={simulateBuilding(ctx, b, civ, age, sel)}
         cmpStats={C}

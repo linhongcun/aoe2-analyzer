@@ -150,13 +150,13 @@ for (const query of ['gtechs=999999', 'gtechs=199,,200', 'gtechs=' + '9'.repeat(
   });
 
 test('#218 建筑详情有独立入口，#224扩展城堡并排除无驻军建筑', async ({ page }) => {
-  await page.goto('./#/building/109');
-  await page.getByRole('tab', { name: '驻军预览', exact: true }).click();
+  await page.goto('./#/building/109?civ=Britons');
+  await page.getByRole('button', { name: '配置驻军预览', exact: true }).click();
   await expect(panel(page)).toBeVisible();
   await page.goto('./#/building/82');
-  await expect(page.getByRole('tab', { name: '驻军预览', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '配置驻军预览', exact: true })).toBeVisible();
   await page.goto('./#/building/103');
-  await expect(page.getByRole('tab', { name: '驻军预览', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '配置驻军预览', exact: true })).toHaveCount(0);
 });
 
 for (const width of [360, 375, 390, 1280])

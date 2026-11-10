@@ -19,7 +19,7 @@ for (const [hash, sel] of [
   ['#unit/1948', '#unit .dtabs'],
   ['#tech/12', '.dtabs'],
   ['#civ/Armenians', '#detail h1'],
-  ['#/building/82', '.dtabs'],
+  ['#/building/82', '#building h1'],
 ] as const)
   test(`#44 1280：${hash} 无横向溢出`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });

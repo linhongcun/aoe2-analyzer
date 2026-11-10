@@ -66,18 +66,27 @@ function ReadyGarrison({ b, ctx }: { b: Building; ctx: GeneralGarrisonContext })
     successMessage: '驻军方案链接已复制。',
     failureMessage: '无法自动复制，请手动复制链接',
   });
-  const shareUrl = sharePageUrl(`/building/${b.id}`, writeGeneralGarrison(config).toString(), document.baseURI);
+  const keepWorkspace = (next: URLSearchParams) => {
+    for (const key of ['techs', 'cmp']) {
+      const value = params.get(key);
+      if (value) next.set(key, value);
+    }
+    return next;
+  };
+  const shareUrl = sharePageUrl(`/building/${b.id}`, keepWorkspace(writeGeneralGarrison(config)).toString(), document.baseURI);
   const update = (next: GeneralGarrisonConfig) => {
-    if (!parseErrors.length) setParams(writeGeneralGarrison(next), { replace: true });
+    if (!parseErrors.length) setParams(keepWorkspace(writeGeneralGarrison(next)), { replace: true });
   };
   const reset = () =>
     setParams(
-      writeGeneralGarrison({
-        civ: b.civs[0]!,
-        age: Math.max(b.age, 3),
-        techs: [],
-        rows: [109, 79, 234, 235].includes(b.id) ? [{ unitId: 83, count: '0', entry: 'enter' }] : [],
-      }),
+      keepWorkspace(
+        writeGeneralGarrison({
+          civ: b.civs[0]!,
+          age: Math.max(b.age, 3),
+          techs: [],
+          rows: [109, 79, 234, 235].includes(b.id) ? [{ unitId: 83, count: '0', entry: 'enter' }] : [],
+        }),
+      ),
       { replace: true },
     );
   const copy = async () => {
