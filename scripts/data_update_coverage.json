@@ -1,0 +1,430 @@
+{
+  "schemaVersion": 1,
+  "issue": 868,
+  "entry": {
+    "command": "python3 scripts/data_update.py",
+    "npm": "npm run data:update",
+    "status": "npm run data:status",
+    "force": "npm run data:update -- --force",
+    "checklist": "scripts/data_update_coverage.json",
+    "checkCommand": "python3 scripts/data_update_coverage.py",
+    "pins": "scripts/data_sources.json",
+    "doNotHandEdit": [
+      "src/data/civs.json",
+      "src/data/units.json",
+      "src/data/techs.json",
+      "src/data/buildings.json",
+      "src/data/trees.json",
+      "src/data/effects.json",
+      "src/data/eco.json",
+      "src/data/search-py.json"
+    ]
+  },
+  "conditions": {
+    "dat-or-techtree-or-force": "set(changed) & {'dat', 'aoe2techtree'} or args.force"
+  },
+  "orchestrated": [
+    {
+      "script": "scripts/build_data.py",
+      "args": [],
+      "when": "dat-or-techtree-or-force",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/pinyin_build.mjs",
+      "args": [],
+      "when": "dat-or-techtree-or-force",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/dat_source.py",
+      "args": ["--check"],
+      "when": "always",
+      "kind": "check"
+    },
+    {
+      "script": "scripts/effects_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/eco_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/market_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/garrison_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/garrison_general_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/trade_income_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/construction_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/team_bonuses_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/garrison_healing_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/relic_income_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/generate_resource_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/charge_attack_build.py",
+      "args": [],
+      "when": "always",
+      "kind": "generator"
+    },
+    {
+      "script": "scripts/build_orders_check.ts",
+      "args": [],
+      "when": "always",
+      "kind": "check"
+    },
+    {
+      "script": "scripts/effects_audit.ts",
+      "args": [],
+      "when": "always",
+      "kind": "audit"
+    },
+    {
+      "script": "scripts/stats_crosscheck.py",
+      "args": [],
+      "when": "always",
+      "kind": "check"
+    }
+  ],
+  "nestedInBuildData": [
+    { "script": "scripts/civs_build.py" },
+    { "script": "scripts/units_build.py" },
+    { "script": "scripts/techs_build.py" },
+    { "script": "scripts/trees_build.py" },
+    { "script": "scripts/buildings_build.py" },
+    { "script": "scripts/ages_build.py" },
+    { "script": "scripts/icons_hires.py" },
+    { "script": "scripts/catalog_introductions.mjs" }
+  ],
+  "introductionsFact": "锁 SHA 的 issue 正文写 data_update 不跑 introductions。当前 build_data.py 会调用 catalog_introductions.mjs 编译查表，但 data_update.py 没有单独一步，也只有在 dat 或 aoe2techtree 变更或 --force 时才会跑到。人工源仍是 scripts/catalog_introductions.json。",
+  "intentionalSkips": [
+    {
+      "id": "patches",
+      "script": "scripts/patches_build.py",
+      "reason": "补丁档案按历史身份锁定。data_update 不重写 src/data/patches。",
+      "owner": "无单独具名负责人。185872 由 patches_build.py 的 HISTORICAL_SHA256 封存；188329 由 patches_188329.py 的 FIXED_COMMITS 与 DAT_SHA256 锁定。",
+      "evidenceFile": "scripts/patches_build.py",
+      "ownerEvidence": "185872 使用封存来源；188329 使用当前固定 DAT。",
+      "command": "python3 scripts/patches_build.py"
+    },
+    {
+      "id": "history",
+      "script": "scripts/history_build.py",
+      "reason": "66692、81058、125283 只用已核实官方项目清单校验身份，不用今天的数值覆盖历史。",
+      "owner": "无单独具名负责人。主人是 history_build.py 的 PATCHES 表。",
+      "evidenceFile": "scripts/history_build.py",
+      "ownerEvidence": "生成可追溯的历史补丁；仅校验实体身份，不用今天的数值覆盖历史。",
+      "command": "python3 scripts/history_build.py"
+    },
+    {
+      "id": "map-previews",
+      "script": "scripts/map_previews.py",
+      "reason": "地图预览是独立素材，不随 .dat 或 aoe2techtree 的 pin 编排更新。",
+      "owner": "无单独具名负责人。固定提交在 data_sources.json 的 assetSources.mapPreviews。",
+      "evidenceFile": "scripts/map_previews.py",
+      "ownerEvidence": "固定 AoE2 Companion 地图选择预览，生成随站点发布的 WebP。",
+      "command": "python3 scripts/map_previews.py"
+    },
+    {
+      "id": "map-catalog",
+      "script": "scripts/map_catalog_build.py",
+      "reason": "地图目录和编辑文案不在数据更新编排里。",
+      "owner": "无单独具名负责人。编辑文案在 scripts/map_catalog_meta.json。",
+      "evidenceFile": "scripts/map_catalog_build.py",
+      "ownerEvidence": "从固定双语 API 快照、图标清单及人工分类生成地图目录。",
+      "command": "python3 scripts/map_catalog_build.py"
+    }
+  ],
+  "humanItems": [
+    {
+      "id": "civ-ratings",
+      "path": "scripts/civ_ratings.json",
+      "owner": "维护者",
+      "ownerEvidence": "由维护者主观判断",
+      "touch": "主观评分 ty、s、fl、pk、op。不要把分数写进生成的 civs.json。"
+    },
+    {
+      "id": "aliases",
+      "path": "src/data/aliases.ts",
+      "owner": "Reid 整理、Steve 审",
+      "ownerEvidence": "Reid 整理、Steve 审",
+      "touch": "搜索别名。新增走 issue，不在别的模块另加别名表。"
+    },
+    {
+      "id": "confusables",
+      "path": "src/data/confusables.ts",
+      "owner": "Reid 维护、Steve 签字",
+      "ownerEvidence": "新增条目由 Reid 维护、Steve 签字后再加。",
+      "touch": "易混淆对照。和别名表分开。"
+    },
+    {
+      "id": "pinyin-fix",
+      "path": "scripts/pinyin_build.mjs",
+      "owner": "Steve",
+      "ownerEvidence": "Steve 定：枪兵长的「长」读 zhǎng",
+      "touch": "多音字 FIX 表。拼音生成器本身在编排里，人工只改 FIX。"
+    },
+    {
+      "id": "effects-links",
+      "path": "scripts/effects_links.json",
+      "owner": "无单独具名负责人",
+      "ownerEvidence": "仅校正自动关联的「归属」",
+      "touch": "只校正加成文本属于哪一条。数值仍来自 .dat。"
+    },
+    {
+      "id": "catalog-introductions",
+      "path": "scripts/catalog_introductions.json",
+      "evidenceFile": "scripts/catalog_introductions.mjs",
+      "owner": "无单独具名负责人",
+      "ownerEvidence": "将人工核对的首发版本清单编译为运行时查表",
+      "touch": "图鉴首发版本。新增资料先补这份清单，不能靠文明资料片或引擎 ID 自动补。"
+    },
+    {
+      "id": "build-orders",
+      "path": "src/data/build-orders",
+      "evidenceFile": "src/data/build-orders/scouts-18.json",
+      "owner": "各开局文件自己的 sources[].author 与 review.by。清单不另指定一个人。",
+      "ownerEvidence": "中文步骤说明为本项目原创表述",
+      "touch": "开局步骤。每个 JSON 必须有非空 sources[].author 和 review.by。"
+    },
+    {
+      "id": "map-editorial",
+      "path": "scripts/map_catalog_meta.json",
+      "evidenceFile": "scripts/map_catalog_build.py",
+      "owner": "无单独具名负责人",
+      "ownerEvidence": "编辑文案来源必须是 editorial、civs.json 或有效 https URL",
+      "touch": "地图侦察、开局提示和分类。source 为 editorial 的句子是人工文案。"
+    },
+    {
+      "id": "civ-text-corrections",
+      "path": "scripts/civ_text_corrections.json",
+      "evidenceFile": "scripts/civs_build.py",
+      "owner": "无单独具名负责人",
+      "ownerEvidence": "不能静默覆盖新文本",
+      "touch": "文明特色科技译名校正。原文对不上就改这张表或确认上游，不能改成跳过。"
+    },
+    {
+      "id": "stats-allowlist",
+      "path": "scripts/stats_allowlist.json",
+      "evidenceFile": "scripts/stats_crosscheck.py",
+      "owner": "无单独具名负责人",
+      "ownerEvidence": "允许差异清单：scripts/stats_allowlist.json（每条须写 reason）",
+      "touch": "数值对账的例外。每条必须有 reason。空数组是当前事实，不是省略检查。"
+    }
+  ],
+  "prohibitedManualOverrides": [
+    {
+      "path": "src/domain/effects.manual.ts",
+      "ownerEvidence": "现在只作为「回退」",
+      "rule": ".dat 已有战斗规则时不要改这份手工表。effects.ts 在 datCombat 为真时直接 return，手工战斗规则不会进运行时。"
+    },
+    {
+      "path": "src/domain/buildingEffects.manual.ts",
+      "ownerEvidence": "现在只作为回退",
+      "rule": "建筑手工效果同样只在 .dat 没有对应战斗规则时回退。"
+    }
+  ],
+  "runtimeGuard": {
+    "file": "src/domain/effects.ts",
+    "snippet": "if (datCombat(en)) return;",
+    "minimum": 2
+  },
+  "civMechanisms": {
+    "registries": [
+      {
+        "symbol": "CIV_MECHANISMS",
+        "file": "src/domain/buildSimMechanisms.ts",
+        "role": "开局机制注册表。新的特殊文明机制先加这里。"
+      },
+      {
+        "symbol": "classifyCivEffect",
+        "file": "src/domain/buildSimCoverage.ts",
+        "role": "把文明效果分成已处理、无关、待实现、未知。未知会使开局校验失败。"
+      },
+      {
+        "symbol": "SPECIAL_INCOME",
+        "file": "src/domain/specialIncome.ts",
+        "role": "特殊资源渠道主表。派生表从这里取条目。"
+      }
+    ],
+    "contextTechAliases": {
+      "ARMENIAN": "Armenians",
+      "GEORGIAN": "Georgians",
+      "SLAVIC": "Slavs",
+      "KHMER": "Khmer",
+      "JURCHEN": "Jurchens",
+      "CHINESE": "Chinese",
+      "MAPUCHE": "Mapuche",
+      "GURJARA": "Gurjaras",
+      "POLES": "Poles",
+      "ROMAN": "Romans"
+    },
+    "contextTechFile": "scripts/eco_build.py",
+    "existingChecks": ["scripts/check-registries.mjs", "tests/unit/buildSim815.test.ts", "tests/unit/sources801.test.ts", "tests/unit/deriveLists821.test.ts"],
+    "economyNote": "已有的 *Economy.ts 必须被 buildSimMechanisms.ts import。本单不重写这些实现。只有新机制确实需要新模型时才新增文件，并同时 import、登记 CIV_MECHANISMS。"
+  },
+  "costBonuses": {
+    "status": "unified-cost-policy",
+    "issue": 864,
+    "policy": {
+      "file": "src/domain/costPolicy.ts",
+      "evidence": "单位训练费的唯一计入策略（issue 864）",
+      "symbols": ["matchCostGroup", "priceFromRawFactor", "civDiscountFactors", "alignAggregatedFactor"]
+    },
+    "mustBeProducedBy": ["scripts/effects_build.py", "scripts/eco_build.py"],
+    "effectsEvidence": "out['costDiscounts'] = cost_discounts(out, civs)",
+    "effectsPolicyEvidence": "运行时直接拿来乘（src/domain/costPolicy.ts）",
+    "ecoEvidence": "费用、训练/研究时间、资源",
+    "callSites": [
+      {
+        "symbol": "discountedCost",
+        "file": "src/domain/costDiscount.ts",
+        "evidence": "export function discountedCost(",
+        "mustCall": ["matchCostGroup", "priceFromRawFactor"],
+        "groupSkip": "该组不乘",
+        "role": "PK 与单位页。对不上费用句的分组不乘，其它分组仍计入。"
+      },
+      {
+        "symbol": "costOf",
+        "file": "src/domain/buildSim.ts",
+        "evidence": "const costOf = (kind: 'unit' | 'building' | 'tech' | 'up'",
+        "mustCall": ["civDiscountFactors", "alignAggregatedFactor"],
+        "sharedPolicy": "与 PK 共用 costPolicy",
+        "role": "开局单位费用通过 costPolicy 改写已从 eco 乘上的倍率。"
+      },
+      {
+        "symbol": "unitCost",
+        "file": "src/domain/unitCost.ts",
+        "evidence": "export function unitCost(",
+        "mustCall": ["discountedCost", "priceFromRawFactor"],
+        "role": "单位折后叠加。基础价来自 discountedCost，取整来自 costPolicy。"
+      },
+      {
+        "symbol": "bonusDiscountCounted",
+        "file": "src/domain/bonusUsage.ts",
+        "evidence": "import { bonusDiscountCounted } from './costPolicy'",
+        "mustCall": ["bonusDiscountCounted"],
+        "role": "加成百科按 costPolicy 判断句子是否被实际计入。"
+      },
+      {
+        "symbol": "check-cost-drift",
+        "file": "scripts/check-cost-drift.ts",
+        "evidence": "import { civDiscountFactors, priceFromRawFactor } from '../src/domain/costPolicy'",
+        "mustCall": ["civDiscountFactors", "priceFromRawFactor"],
+        "role": "#865 已合入的只读防漂移。本清单不改它，也不改 lint。"
+      }
+    ]
+  },
+  "patchHistory": {
+    "pinBuildIs": 188329,
+    "notesDir": "docs/PATCH-NOTES",
+    "archiveDir": "src/data/patches",
+    "locked": [
+      {
+        "build": "188329",
+        "module": "scripts/patches_188329.py",
+        "output": "src/data/patches/188329.json",
+        "assertText": "pins['patch']['build'] == 188329",
+        "identity": {
+          "dat": "e293dc106b0f3b0ceac2db98409fbcc5c921190b",
+          "aoe2techtree": "e56728e76b7d08301fba7b18d5f16bc8554c109a",
+          "halfon": "7f96c37fc5f63c7141ec7d88e91c627beb375b28",
+          "datSha256": "d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f"
+        }
+      },
+      {
+        "build": "185872",
+        "module": "scripts/patches_build.py",
+        "constant": "HISTORICAL_SHA256",
+        "sha256": "94b5ae8e67dbb19382162a9a5d2f7d935ef82f7858b92af681d4397505cb2a42",
+        "output": "src/data/patches/185872.json"
+      }
+    ],
+    "historyBuilds": ["66692", "81058", "125283"],
+    "historyScript": "scripts/history_build.py",
+    "historyOutputs": ["src/data/patches/66692.json", "src/data/patches/81058.json", "src/data/patches/125283.json"],
+    "rule": "不要改写 188329 或更早档案的锁定身份。data_update 只写 docs/PATCH-NOTES，不调用 patches_build 或 history_build。pin 与 pinBuildIs 不一致时，本检查只报告锁定身份，不验收新档案是否存在；只改清单里的 pinBuildIs 不能证明新档案已建立。"
+  },
+  "failFast": {
+    "stopMessage": "数据更新覆盖清单未通过，已停止，未运行生成器",
+    "civTextMessages": [
+      "unique-tech source changed; review civ_text_corrections.json",
+      "unique-tech name is empty; review civ_text_corrections.json",
+      "unique-tech description separator changed; review civ_text_corrections.json",
+      "不能静默覆盖新文本"
+    ]
+  },
+  "ci": {
+    "workflowDir": ".github/workflows",
+    "mustNotReference": ["data_update_coverage.py"],
+    "packageScripts": {
+      "data:update": "python3 scripts/data_update.py",
+      "data:status": "python3 scripts/data_update.py --check"
+    },
+    "reason": "默认 PR CI 不跑这份清单，也不恢复 full data。#865 已把 cost:check 放进 lint。本单不改 workflow 或 package.json。"
+  },
+  "notThisIssue": [
+    {
+      "issue": 864,
+      "status": "landed",
+      "note": "费用计入策略已由 #864 合入 costPolicy。清单只登记现行调用，不重写实现。"
+    },
+    {
+      "issue": 865,
+      "status": "landed",
+      "note": "cost:check 已由 #865 合入 lint。本单不改 CI，也不把 data_update_coverage 加进默认门禁。"
+    },
+    {
+      "issue": 869,
+      "status": "out-of-scope",
+      "note": "不把四套科技可用性收成一个布尔。"
+    }
+  ]
+}
