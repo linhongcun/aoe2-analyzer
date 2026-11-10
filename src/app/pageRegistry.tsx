@@ -44,9 +44,6 @@ const LOADERS: Record<LazyComponentId, LazyExoticComponent<ComponentType>> = {
   SimulatorHub: lazy(() => import('../features/simulator/components/SimulatorHub')),
   BuildOrderList: lazy(() => import('../features/builds/BuildOrderList')),
   Maps: lazy(() => import('../features/maps/Maps')),
-  Players: lazy(() => import('../features/players/Players')),
-  Events: lazy(() => import('../features/events/Events')),
-  PlayerDetail: lazy(() => import('../features/players/PlayerDetail')),
   Ladder: lazy(() => import('../features/ladder/Ladder')),
 };
 

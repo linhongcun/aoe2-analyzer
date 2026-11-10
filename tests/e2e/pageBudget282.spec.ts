@@ -2,8 +2,6 @@ import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import ts from 'typescript';
-import { PLAYER_CATALOG } from './players488Catalog';
-import { playerPath } from '../../src/domain/playerCatalog.mjs';
 
 // Read literal route metadata with the same TypeScript AST approach as page_metadata.mjs.
 const source = ts.createSourceFile('pageRegistry.ts', readFileSync('src/shared/nav/pageRegistry.ts', 'utf8'), ts.ScriptTarget.Latest, true);
@@ -25,9 +23,7 @@ const BASELINE_CONSTRUCTION_RAW = 2_600_907;
 const WARNING_RAW = 1_200_000;
 // ad58e7b 冷加载实测 1_802_000。洞察槽在文明/单位分包，不进施工页；施工图本身此前已是 1_801_965。
 const CONSTRUCTION_RAW = 1_802_000;
-if (PLAYER_CATALOG.status !== 'ready' || !PLAYER_CATALOG.catalog.players[0]) throw new Error('A real player cold-load sample is required');
 const detailSamples: Record<string, string> = {
-  'player-detail': playerPath(PLAYER_CATALOG.catalog.players[0]),
   'civ-detail': '/civ/Franks',
   'civ-bonus': '/civ/Franks/bonus/0',
   'unit-detail': '/unit/4',

@@ -5,12 +5,10 @@ const fixture = 'tests/e2e/fixtures/v0300-338-tables-team-fit.json';
 const expectedKeys = ['1280 /team-fit', '360 /team-fit'];
 // The protected whole-site spec is intentionally outside PR capped. Keep its
 // complete ownership contract visible here, without widening browser scope.
-test('#558 静态页两宽必须由显式六组夹具完整且不重叠地拥有', () => {
+test('#558 静态页两宽必须由显式四组夹具完整且不重叠地拥有', () => {
   const files = [
     'tests/e2e/fixtures/v0300-338-tables.json',
     'tests/e2e/fixtures/v0300-338-tables-188329.json',
-    'tests/e2e/fixtures/v0300-338-tables-players.json',
-    'tests/e2e/fixtures/v0300-338-tables-events.json',
     'tests/e2e/fixtures/v0300-338-tables-ladder.json',
     fixture,
   ];
