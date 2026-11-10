@@ -53,10 +53,8 @@ async function openFilters(root: Locator, mobile: boolean) {
 }
 
 async function expectTechRelease(root: Locator, value: string) {
-  const bar = root.getByRole('group', { name: '科技首发版本快捷筛选', exact: true });
-  await expect(root.locator('#tdlc')).toHaveCount(0);
-  await expect(bar.locator('button[aria-pressed="true"]')).toHaveCount(1);
-  await expect(bar.locator(`button[data-v="${value}"]`)).toHaveAttribute('aria-pressed', 'true');
+  await expect(root.getByRole('group', { name: '科技首发版本快捷筛选', exact: true })).toHaveCount(0);
+  await expect(root.locator('#tdlc')).toHaveValue(value);
 }
 
 test('#62 首页入口按用途分组，桌面每行四张卡片', async ({ page }) => {
@@ -151,43 +149,41 @@ for (const width of WIDTHS)
       await expect(civRoot.locator('#cnt')).toHaveText(`${DLC_CIVS.length} / ${CIVS.length}`);
       await civRoot.getByRole('button', { name: '重置全部', exact: true }).click();
 
-      await ready(page, 'techs', '#tgrid .card');
+      await ready(page, 'techs', '#tgrid .tech-row');
       const techRoot = page.locator('#techs');
-      const techBar = techRoot.getByRole('group', { name: '科技首发版本快捷筛选', exact: true });
-      await expect(techBar).toBeVisible();
-      await expect(techBar.getByRole('button')).toHaveCount(DLCS.length + 3);
-      await expect(techBar.getByRole('img')).toHaveCount(DLCS.length);
+      await expect(techRoot.getByRole('group', { name: '科技首发版本快捷筛选', exact: true })).toHaveCount(0);
       await expectTechRelease(techRoot, '');
       await expect(techRoot.locator('#tq')).toBeVisible();
       await expect(techRoot.locator('#tcnt')).toBeVisible();
       await screenshot(page, info, 'techs', width, theme);
       const techFilters = await openFilters(techRoot, mobile);
-      await techRoot.locator('#tt').selectOption(FIRST_TECH.type);
+      await techRoot.locator(`#tt button[data-v="${FIRST_TECH.type}"]`).click();
       await techRoot.locator('#ta').selectOption(String(FIRST_TECH.age));
-      await techBar.locator(`button[data-v="${techDlc(FIRST_TECH)}"]`).click();
+      await techRoot.locator('#tdlc').selectOption(String(techDlc(FIRST_TECH)));
       await expectTechRelease(techRoot, String(techDlc(FIRST_TECH)));
       await techRoot.locator('#tb').selectOption(FIRST_TECH.bz);
       const filteredTechs = TECHS.filter(
         (tech) => tech.type === FIRST_TECH.type && tech.age === FIRST_TECH.age && techDlc(tech) === techDlc(FIRST_TECH) && tech.bz === FIRST_TECH.bz,
       );
-      await expect(techRoot.locator('#tcnt')).toHaveText(`${filteredTechs.length} / ${TECHS.length}`);
+      await expect(techRoot.locator('#tcnt')).toHaveText(`${filteredTechs.length} / ${TECHS.length} 项科技`);
       if (mobile) {
-        await expect(techFilters.toggle).toHaveText('筛选（4）');
+        await expect(techFilters.toggle).toHaveText(`筛选（3）`);
         await techFilters.toggle.click();
         await expect(techFilters.panel).toBeHidden();
-        await expect(techRoot.locator('#tgrid .card')).toHaveCount(filteredTechs.length);
+        await expect(techRoot.locator('#tgrid .tech-row')).toHaveCount(filteredTechs.length);
       }
       await page.evaluate(() => (location.hash = '#/'));
       await expect(page.locator('#home .hcard').first()).toBeVisible();
       await page.evaluate(() => (location.hash = '#/techs'));
-      await expect(techRoot.locator('#tt')).toHaveValue(FIRST_TECH.type);
+      await expect(techRoot.locator(`#tt button[data-v="${FIRST_TECH.type}"]`)).toHaveAttribute('aria-pressed', 'true');
       await expectTechRelease(techRoot, String(techDlc(FIRST_TECH)));
-      await expect(techRoot.locator('#tcnt')).toHaveText(`${filteredTechs.length} / ${TECHS.length}`);
+      await expect(techRoot.locator('#tcnt')).toHaveText(`${filteredTechs.length} / ${TECHS.length} 项科技`);
       if (mobile) await techFilters.toggle.click();
       await techRoot.getByRole('button', { name: '清空筛选', exact: true }).click();
-      for (const id of ['tt', 'ta', 'tb']) await expect(techRoot.locator('#' + id)).toHaveValue('');
+      for (const id of ['ta', 'tb', 'tdlc']) await expect(techRoot.locator('#' + id)).toHaveValue('');
+      await expect(techRoot.locator('#tt button[data-v=""]')).toHaveAttribute('aria-pressed', 'true');
       await expectTechRelease(techRoot, '');
-      await expect(techRoot.locator('#tcnt')).toHaveText(`${TECHS.length} / ${TECHS.length}`);
+      await expect(techRoot.locator('#tcnt')).toHaveText(`${TECHS.length} / ${TECHS.length} 项科技`);
 
       await ready(page, 'builds', '[data-t="build-order"] summary');
       await screenshot(page, info, 'builds', width, theme);

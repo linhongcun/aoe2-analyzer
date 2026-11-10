@@ -1,0 +1,306 @@
+/* 科技目录：列对齐结果行。颜色只用语义令牌。≤720px 改为单列，次筛选默认收起。 */
+#techs {
+  font-size: 16px;
+  min-width: 0;
+}
+#techs .tech-filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  margin-bottom: var(--space-4);
+}
+#techs .tech-filters .sw,
+#techs .tech-filters .sw input {
+  width: 100%;
+  max-width: none;
+}
+#techs .tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+#techs .tech-chips button {
+  border-radius: var(--radius-pill);
+  min-width: 44px;
+  min-height: 44px;
+}
+#techs .tech-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  min-width: 0;
+}
+#techs .tech-count {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+#techs .tech-count .num {
+  font-variant-numeric: tabular-nums;
+}
+#techs .tech-basis,
+#techs .catalog-filter-active {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+#techs .catalog-filter-active {
+  display: block;
+  overflow-wrap: anywhere;
+}
+#techs .catalog-filter-reset,
+#techs .tech-empty button {
+  min-height: 44px;
+  color: var(--color-link);
+  background: transparent;
+  border-color: transparent;
+}
+#techs .tech-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+#techs .tech-field > span {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-2);
+  line-height: 1.3;
+}
+#techs .tech-field select {
+  flex: none;
+  width: 100%;
+  height: 44px;
+  min-width: 0;
+  min-height: 44px;
+}
+#techs #tgrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  grid-template-columns: none;
+  min-width: 0;
+}
+#techs .tech-head,
+#techs .tech-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(72px, 0.75fr) minmax(96px, 0.8fr) minmax(72px, 0.85fr) minmax(108px, 0.9fr) minmax(88px, 0.8fr);
+  column-gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+#techs .tech-head {
+  padding: 0 12px 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+#techs .tech-row {
+  padding: 8px 12px;
+  min-height: 56px;
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-line);
+}
+#techs .tech-row:hover {
+  background: var(--color-surface-2);
+}
+#techs .tech-row:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+  position: relative;
+  z-index: 1;
+}
+#techs .tech-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+#techs .tech-names {
+  min-width: 0;
+}
+#techs .tech-zh {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+#techs .tech-en {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--color-muted);
+  overflow-wrap: anywhere;
+}
+#techs .tech-row .uico {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  flex-shrink: 0;
+  object-fit: contain;
+  background: var(--color-surface-2);
+}
+#techs .tech-bz,
+#techs .tech-age,
+#techs .tech-civ,
+#techs .tech-release {
+  min-width: 0;
+  font-size: 14px;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+#techs .tech-cost {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  min-width: 0;
+  font-size: 14px;
+}
+#techs .tech-k {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+#techs .tech-id {
+  grid-column: 1;
+}
+#techs .tech-pair,
+#techs .tech-tail {
+  display: contents;
+}
+#techs .tech-bz {
+  grid-column: 2;
+}
+#techs .tech-age {
+  grid-column: 3;
+}
+#techs .tech-civ {
+  grid-column: 4;
+}
+#techs .tech-cost {
+  grid-column: 5;
+}
+#techs .tech-release {
+  grid-column: 6;
+}
+#techs .tech-civ:empty,
+#techs .tech-release:empty {
+  display: none;
+}
+#techs .tech-empty {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+}
+#techs .tech-empty p {
+  margin: 0 0 var(--space-3);
+  font-size: 16px;
+}
+@media (min-width: 721px) {
+  #techs .tech-secondary {
+    display: grid;
+    flex: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 720px) {
+  #techs .catalog-filter-toggle {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 4px;
+    justify-self: start;
+  }
+  #techs .catalog-filter-toggle .tech-chevron {
+    width: 16px;
+    height: 16px;
+  }
+  #techs .catalog-filter-toggle[aria-expanded='true'] .tech-chevron {
+    transform: rotate(180deg);
+  }
+  #techs .tech-secondary {
+    display: none;
+    flex: none;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    width: 100%;
+    min-width: 0;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-line);
+  }
+  #techs .tech-secondary[data-open='true'] {
+    display: grid;
+  }
+  #techs .tech-head {
+    display: none;
+  }
+  #techs .tech-row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 4px;
+    padding: 10px 4px;
+  }
+  #techs .tech-id,
+  #techs .tech-pair,
+  #techs .tech-cost,
+  #techs .tech-tail,
+  #techs .tech-bz,
+  #techs .tech-age,
+  #techs .tech-civ,
+  #techs .tech-release {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  #techs .tech-id {
+    order: 1;
+  }
+  #techs .tech-pair {
+    order: 2;
+  }
+  #techs .tech-cost {
+    order: 3;
+  }
+  #techs .tech-tail {
+    order: 4;
+  }
+  #techs .tech-pair,
+  #techs .tech-tail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+    min-width: 0;
+    padding-left: 50px;
+  }
+  #techs .tech-cost {
+    padding-left: 50px;
+  }
+  #techs .tech-k {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0 4px 0 0;
+    overflow: visible;
+    clip: auto;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+}
