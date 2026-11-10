@@ -36,6 +36,7 @@
     "tests/e2e/civ603.spec.ts": 5185,
     "tests/e2e/civ77.spec.ts": 4151,
     "tests/e2e/civBackgrounds.spec.ts": 16500,
+    "tests/e2e/civBrowse857.spec.ts": 3000,
     "tests/e2e/civBuildApplicability480.spec.ts": 38858,
     "tests/e2e/civContext521.spec.ts": 19109,
     "tests/e2e/civDlcFilters.spec.ts": 13313,

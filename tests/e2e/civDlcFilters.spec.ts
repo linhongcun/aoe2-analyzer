@@ -3,7 +3,6 @@ import civs from '../../src/data/civs.json' with { type: 'json' };
 import { CIV_DLC, DLCS } from '../../src/domain/dlc';
 
 const errors = new WeakMap<Page, string[]>();
-const latestDlc = DLCS.length - 1;
 const releaseCivs = (index: number) => civs.filter((civ) => CIV_DLC[civ.en] === index).map((civ) => civ.en);
 
 test.beforeEach(async ({ page }) => {
@@ -29,149 +28,41 @@ async function expectCivs(page: Page, names: string[]) {
   await expect(page.locator('#cnt')).toHaveText(`${names.length} / ${civs.length}`);
 }
 
-function dlcBar(page: Page) {
-  return page.getByRole('group', { name: 'DLC 快捷筛选', exact: true });
-}
-
-async function expectSelected(page: Page, value: string) {
-  const bar = dlcBar(page);
-  await expect(bar.locator(`button[data-v="${value}"]`)).toHaveAttribute('aria-pressed', 'true');
-  await expect(bar.locator('button[aria-pressed="true"]')).toHaveCount(1);
-  await expect(bar.locator('button[aria-pressed="false"]')).toHaveCount(DLCS.length + 1);
-}
-
-for (const width of [360, 375, 390, 1280])
-  for (const theme of ['light', 'dark'])
-    test(`文明 DLC 快捷筛选 ${theme} @${width}：仅保留图标入口与清空筛选`, async ({ page }, info) => {
-      await page.setViewportSize({ width, height: 900 });
-      await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
-      await page.goto('./#/civs');
-      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      const bar = dlcBar(page);
-      if (width <= 600) {
-        await expect(bar).toBeHidden();
-        await page.locator('.catalog-filter-toggle').click();
-      }
-      await expect(bar).toBeVisible();
-      await expect(page.locator('#cdlc')).toHaveCount(0);
-      await expect(bar.getByRole('button')).toHaveCount(DLCS.length + 2);
-      await expect(bar.getByRole('img')).toHaveCount(DLCS.length);
-      await expectSelected(page, '');
-      if (width <= 600) await expect(page.locator('.catalog-filter-panel')).toBeVisible();
-      await expectCivs(
-        page,
-        civs.map((civ) => civ.en),
-      );
-      await page.evaluate(() => document.fonts.ready);
-      await page.locator('#grid .card').first().scrollIntoViewIfNeeded();
-      await expect
-        .poll(() =>
-          page
-            .locator('#grid .card img.ico')
-            .first()
-            .evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
-        )
-        .toBe(true);
-      await page.screenshot({ path: info.outputPath(`civ-cards-${theme}-${width}.png`) });
-
-      // 展开后全部DLC快捷按钮保持原有实时筛选行为。
-      await bar.locator(`button[data-v="${latestDlc}"]`).click();
-      await expectSelected(page, String(latestDlc));
-      await expectCivs(page, releaseCivs(latestDlc));
-      await bar.locator('button[data-v="0"]').click();
-      await expectSelected(page, '0');
-      await expectCivs(page, releaseCivs(0));
-      await bar.locator(`button[data-v="${latestDlc}"]`).click();
-      await expectSelected(page, String(latestDlc));
-      await expectCivs(page, releaseCivs(latestDlc));
-
-      for (const button of await bar.getByRole('button').all()) {
-        const box = await button.boundingBox();
-        expect(box!.width).toBeGreaterThanOrEqual(44);
-        expect(box!.height).toBeGreaterThanOrEqual(44);
-      }
-      await page.evaluate(() => document.fonts.ready);
-      await expect
-        .poll(() =>
-          bar
-            .getByRole('img')
-            .evaluateAll((images) => images.every((image) => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0)),
-        )
-        .toBe(true);
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      await page.screenshot({ path: info.outputPath(`civ-dlc-${theme}-${width}.png`), fullPage: true });
-      await page.getByRole('button', { name: '清空筛选', exact: true }).click();
-      await expectSelected(page, '');
-      await expectCivs(
-        page,
-        civs.map((civ) => civ.en),
-      );
-    });
-
-test('文明 DLC 快捷筛选：每个资料片图标命中对应文明并保留路由间记忆', async ({ page }) => {
+test('所属版本下拉按文明首发筛选，不表示账号拥有', async ({ page }) => {
   await page.goto('./#/civs');
-  const bar = dlcBar(page);
-  for (const [index, dlc] of DLCS.entries()) {
-    const button = bar.locator(`button[data-v="${index}"]`);
-    await expect(button.getByRole('img')).toHaveAttribute('alt', `${dlc.zh} ${dlc.en}`);
-    await expect(button.getByRole('img')).toHaveAttribute('title', `${dlc.zh} · ${dlc.en} (${dlc.year})`);
-    await button.click();
-    await expectSelected(page, String(index));
-    await expectCivs(page, releaseCivs(index));
-    expect(new URL(page.url()).hash).toBe('#/civs');
-  }
-  await page.evaluate(() => (location.hash = '#/units'));
-  await expect(page.locator('#uq')).toBeVisible();
-  await page.evaluate(() => (location.hash = '#/civs'));
-  await expectSelected(page, String(latestDlc));
-  await expectCivs(page, releaseCivs(latestDlc));
-  await bar.getByRole('button', { name: '未标注', exact: true }).click();
-  await expectSelected(page, 'none');
   await expectCivs(
     page,
-    civs.filter((civ) => CIV_DLC[civ.en] == null).map((civ) => civ.en),
+    civs.map((civ) => civ.en),
   );
-  await bar.getByRole('button', { name: '全部', exact: true }).click();
-  await expectSelected(page, '');
+  await page.getByRole('button', { name: '按条件筛选', exact: true }).click();
+  const dlc = page.locator('#dlc');
+  await expect(dlc.getByRole('option')).toHaveCount(DLCS.length + 1);
+  await expect(page.getByText('按文明首发版本分类，不代表账号已拥有的内容。')).toBeVisible();
+  for (const [index, item] of DLCS.entries()) {
+    await dlc.selectOption(String(index));
+    await expect(page.getByRole('button', { name: `移除 DLC ${item.zh}`, exact: true })).toBeVisible();
+    await expectCivs(page, releaseCivs(index));
+  }
+  await page.getByRole('button', { name: '重置全部', exact: true }).click();
+  await expect(dlc).toHaveValue('');
   await expectCivs(
     page,
     civs.map((civ) => civ.en),
   );
 });
 
-test('文明 DLC 快捷筛选：保留分享链接的搜索、类型、位置与必备单位科技条件', async ({ page }) => {
-  await page.goto('./#/civs?req=u:569,t:435&q=Huns&ty=cav&pos=pk&dlc=0&view=compact');
-  const chips = page.getByTestId('requirement-chip');
-  await expect(chips).toHaveCount(2);
-  await expectCivs(page, []);
-  await dlcBar(page).locator('button[data-v="1"]').click();
-  await expectSelected(page, '1');
-  await expectCivs(page, ['Huns']);
-  const expectSnapshot = async (dlc: string) => {
-    const params = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
-    for (const [key, value] of Object.entries({ q: 'Huns', ty: 'cav', pos: 'pk', dlc, view: 'compact' })) expect(params.get(key)).toBe(value);
-    expect(params.get('req')?.split(',').sort()).toEqual(['t:435', 'u:569']);
-    for (const [id, value] of Object.entries({ q: 'Huns', ty: 'cav', pos: 'pk' })) await expect(page.locator(`#${id}`)).toHaveValue(value);
-    await expect(chips).toHaveCount(2);
-    await expect(chips.filter({ hasText: '游侠' })).toHaveCount(1);
-    await expect(chips.filter({ hasText: '血统' })).toHaveCount(1);
-  };
-  await expectSnapshot('1');
-  await page.reload();
-  await expectSelected(page, '1');
-  await expectCivs(page, ['Huns']);
-  await expectSnapshot('1');
-  await dlcBar(page).getByRole('button', { name: '全部', exact: true }).click();
-  await expectSelected(page, '');
-  await expectSnapshot('');
-  await expectCivs(page, ['Huns']);
-  await page.getByRole('button', { name: '清空筛选', exact: true }).click();
-  await expectSelected(page, '');
-  for (const id of ['q', 'ty', 'pos']) await expect(page.locator(`#${id}`)).toHaveValue('');
-  await expect(chips).toHaveCount(0);
-  await expectCivs(
-    page,
-    civs.map((civ) => civ.en),
-  );
-  expect(new URLSearchParams(new URL(page.url()).hash.split('?')[1]).has('req')).toBe(false);
+test('分享链接里的位置参数不参与列表，名称类型版本和单位仍取交集', async ({ page }) => {
+  await page.goto('./#/civs?q=%E6%B3%95%E5%85%B0%E5%85%8B&ty=cav&pos=fl&dlc=0');
+  await expect(page.locator('#grid .card')).toHaveCount(1);
+  await expect(page.locator('#grid .card')).toHaveAttribute('data-civ', 'Franks');
+  await expect(page.getByText('边位')).toHaveCount(0);
+  await page.getByRole('button', { name: '按条件筛选', exact: true }).click();
+  await expect(page.locator('#pos')).toHaveCount(0);
+  await page.locator('#option-search').fill('骑士');
+  await page.getByRole('checkbox', { name: '添加单位 骑士', exact: true }).check();
+  await expect(page.locator('#grid .card')).toHaveAttribute('data-civ', 'Franks');
+  const params = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
+  expect(params.get('pos')).toBeNull();
+  expect(params.get('req')).toBe('u:38');
+  expect(params.get('dlc')).toBe('0');
 });
