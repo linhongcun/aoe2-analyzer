@@ -60,7 +60,7 @@ jobs:
         with: { node-version: '20.19.5', cache: npm }
       - uses: actions/setup-python@v5
         timeout-minutes: 2
-        with: { python-version: '3.12.12' }
+        with: { python-version: '3.12' }
       - name: PR title (Conventional Commits)
         if: github.event_name == 'pull_request'
         env: { PR_TITLE: '${{ github.event.pull_request.title }}' }

@@ -54,7 +54,7 @@ jobs:
         with: { node-version: '20.19.5', cache: npm }
       - uses: actions/setup-python@v5
         timeout-minutes: 2
-        with: { python-version: '3.12.12' }
+        with: { python-version: '3.12' }
       - run: node scripts/ci-budget.mjs --run -- npm ci --legacy-peer-deps
       - uses: actions/download-artifact@v4
         timeout-minutes: 2
