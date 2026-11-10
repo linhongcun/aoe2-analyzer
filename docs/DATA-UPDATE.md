@@ -82,7 +82,7 @@ dat 或 aoe2techtree 有变更，或者传入 `--force` 时，先跑：
 
 | 项           | 文件                                 | 主人                                                                                                                    |
 | ------------ | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| 主观评分     | `scripts/civ_ratings.json`           | 维护者。文件写明由维护者主观判断                                                                                        |
+| 主观评分     | `scripts/civ_ratings.json`           | 维护者。文件写明由维护者主观判断。`basis` 只记口径；`verifiedAt` 不是补丁对齐日，对齐补丁必须留空                       |
 | 搜索别名     | `src/data/aliases.ts`                | Reid 整理、Steve 审                                                                                                     |
 | 易混淆对照   | `src/data/confusables.ts`            | Reid 维护、Steve 签字                                                                                                   |
 | 拼音多音字   | `scripts/pinyin_build.mjs` 的 `FIX`  | Steve。生成器在编排里，人工只改这张表                                                                                   |

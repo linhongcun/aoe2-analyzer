@@ -57,6 +57,7 @@
     "tests/e2e/communityIntegration249.spec.ts": 25368,
     "tests/e2e/compare403.spec.ts": 35867,
     "tests/e2e/compareNavigation558.spec.ts": 4679,
+    "tests/e2e/compareRatings889.spec.ts": 3000,
     "tests/e2e/construction227.spec.ts": 17769,
     "tests/e2e/contentGuide239.spec.ts": 12572,
     "tests/e2e/contentHeadings770.spec.ts": 42000,

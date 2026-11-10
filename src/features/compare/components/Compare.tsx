@@ -4,9 +4,11 @@ import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CopyPageLink } from '../../../shared/ui/DetailBlocks';
 import { civByEn } from '../../../data';
+import { RATING_BASIS, RATING_FILE_VERIFIED_AT } from '../../../data/ratingBasis';
 import { resolveCompareQuery, selectCompareCivilization } from '../../../domain/compare';
 import { AXES } from '../../../domain/ratings';
 import type { Civ } from '../../../domain/types';
+import { PAGES } from '../../../shared/nav/pageRegistry';
 import { CivIcon } from '../../../shared/ui/art';
 import { RatingHeading } from '../../../shared/ui/RatingHelp';
 import { PosBox, Radar, Steps } from '../../../shared/ui/widgets';
@@ -23,6 +25,7 @@ const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
   ['开局', 'op'],
 ];
 const cell = (c: Civ, k: (typeof ROWS)[number][1]) => (k === 'op' ? <Steps s={c.op} /> : c[k]);
+const comparePage = PAGES.find((item) => item.key === 'compare');
 
 /** issue 772：坏参数/缺参的说明；地址栏被 replace 成完整参数后靠 location.state 保留一次。 */
 type CompareLinkNote = { kind: 'invalid' } | { kind: 'picked'; side: 'a' | 'b'; civ: string };
@@ -54,7 +57,7 @@ export default function Compare() {
   };
   return (
     <section id="compare" className="pane">
-      <ListHead title="文明对比" desc="两个文明的能力雷达与关键差异" />
+      <ListHead title={comparePage?.label ?? '文明对比'} desc={comparePage?.desc ?? ''} />
       <p>
         <Link className="btn community-tool-entry" to={'/team-bonuses?' + encodeTeamBonuses(updateTeamRoster(defaultTeamBonusConfig(), [a.en, b.en]))}>
           查看这两个文明的团队加成来源
@@ -77,8 +80,32 @@ export default function Compare() {
       <div className="compare-share">
         <CopyPageLink key={search} />
       </div>
+      <section className="compare-basis" aria-labelledby="compare-basis-title" data-testid="compare-rating-basis">
+        <h3 id="compare-basis-title">评分口径</h3>
+        <p>{RATING_BASIS.axisRule}</p>
+        <p>
+          刻度是 <span className="num nw">1–10</span> 的整数。文件复核日{' '}
+          <time dateTime={RATING_FILE_VERIFIED_AT} className="num nw">
+            {RATING_FILE_VERIFIED_AT}
+          </time>
+          。{RATING_BASIS.verifiedAtMeans}
+        </p>
+        <ul className="compare-axes">
+          {RATING_BASIS.axes.map((name) => (
+            <li key={name}>
+              <b>{name}</b>
+              <span>{RATING_BASIS.axisGap}</span>
+            </li>
+          ))}
+        </ul>
+        <p>{RATING_BASIS.reviewableEvidence}</p>
+        <p>{RATING_BASIS.communityClaimNote}</p>
+        <p>{RATING_BASIS.uncertainty}</p>
+        <p id="compare-score-note">{RATING_BASIS.highlight}</p>
+        <p className="note">下方特色兵种、城堡科技、帝王科技、团队加成和开局是资料对照，不由这些分数推导。</p>
+      </section>
       <div className="two">
-        <table id="ctab">
+        <table id="ctab" aria-describedby="compare-score-note">
           <tbody>
             <tr>
               <th />
@@ -100,8 +127,8 @@ export default function Compare() {
             {AXES.map((l, i) => (
               <tr key={l}>
                 <td>{l}</td>
-                <td className={`compare-score${a.s[i]! > b.s[i]! ? ' win' : ''}`}>{a.s[i]}</td>
-                <td className={`compare-score${b.s[i]! > a.s[i]! ? ' win' : ''}`}>{b.s[i]}</td>
+                <td className={`compare-score num nw${a.s[i]! > b.s[i]! ? ' compare-higher' : ''}`}>{a.s[i]}</td>
+                <td className={`compare-score num nw${b.s[i]! > a.s[i]! ? ' compare-higher' : ''}`}>{b.s[i]}</td>
               </tr>
             ))}
             {ROWS.map(([l, k]) => (
@@ -115,12 +142,15 @@ export default function Compare() {
         </table>
         <div>
           <RatingHeading />
-          <Radar id="crd" list={[a, b]} />
-          <p className="note">金色=左侧文明，蓝色=右侧文明</p>
+          <Radar id="crd" list={[a, b]} label="八维主观参考分雷达，不是胜率或精确战力" />
+          <p className="note">金色=左侧文明，蓝色=右侧文明。{RATING_BASIS.highlight}</p>
         </div>
       </div>
       <div id="cpos">
         <PosBox list={[a, b]} />
+        <p className="note" data-testid="compare-position-basis">
+          {RATING_BASIS.positions.source}
+        </p>
       </div>
     </section>
   );
