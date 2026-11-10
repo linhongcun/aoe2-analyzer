@@ -1,7 +1,6 @@
 import { expect, test } from '@playwright/test';
 
 const CATALOGS = [
-  ['units', '#ugrid'],
   ['techs', '#tgrid'],
   ['buildings', '#bgrid'],
 ] as const;
@@ -16,6 +15,9 @@ for (const width of [360, 375, 390, 1280, 1920])
       page.on('console', (message) => {
         if (message.type() === 'error') errors.push(message.text());
       });
+      await page.goto('./#/units');
+      await expect(page.locator('#ugrid .unit-row').first()).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'units').toBe(true);
       for (const [route, grid] of CATALOGS) {
         await page.goto(`./#/${route}`);
         await expect(page.locator(`${grid} .dlcb`).first()).toBeVisible();

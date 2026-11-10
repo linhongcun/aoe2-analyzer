@@ -23,40 +23,40 @@ for (const width of [360, 375, 390, 1280])
       });
       await page.goto('./#/units');
       await expect(page.locator('#ucnt')).toHaveText('163 / 163');
-      await expect(page.locator('#udlc')).toHaveCount(0);
-      await expect(page.locator('#ua')).toHaveCount(0);
-      const bar = page.locator('#units').getByRole('group', { name: 'DLC 快捷筛选', exact: true });
+      const dlc = page.locator('#udlc');
       const ages = page.locator('#units').getByRole('group', { name: '时代快捷筛选', exact: true });
+      const types = page.locator('#units').getByRole('group', { name: '单位类别', exact: true });
       if (width <= 600) {
-        await expect(bar).toBeHidden();
+        await expect(dlc).toBeHidden();
+        await expect(ages).toBeHidden();
         await page.locator('.catalog-filter-toggle').click();
       }
-      await expect(bar).toBeVisible();
+      await expect(dlc).toBeVisible();
       await expect(ages).toBeVisible();
-      await expect(bar.locator('button[aria-pressed="true"]')).toHaveCount(1);
+      await expect(dlc).toHaveValue('');
       await expect(ages.locator('button[aria-pressed="true"]')).toHaveCount(1);
       await chooseCiv(page, 'Franks');
       await page.getByRole('combobox', { name: '兵种', exact: true }).selectOption('cavalry');
       await page.locator('#uq').fill('Knight');
-      await page.locator('#ut').selectOption('Unit');
+      await types.locator('button[data-v="Unit"]').click();
       await ages.locator('button[data-v="3"]').click();
-      await bar.locator('button[data-v="0"]').click();
-      await expect(bar.locator('button[data-v="0"]')).toHaveAttribute('aria-pressed', 'true');
+      await dlc.selectOption('0');
+      await expect(dlc).toHaveValue('0');
       await expect(ages.locator('button[data-v="3"]')).toHaveAttribute('aria-pressed', 'true');
       const knight = units.find((u) => u.id === 38)!;
-      const card = page.locator('#ugrid .card');
+      const card = page.locator('#ugrid .unit-row');
       await expect(card).toHaveCount(1);
       await expect(card).toHaveAttribute('data-unit-id', String(knight.id));
-      await expect(card).toHaveAttribute('href', `#/unit/${knight.id}`);
-      await expect(card.locator('h3')).toHaveText(knight.zh);
+      await expect(card).toHaveAttribute('href', `#/unit/${knight.id}?civ=Franks`);
+      await expect(card.locator('.unit-zh')).toHaveText(knight.zh);
       await expect(card.locator('[data-stat="hp"] dd')).toHaveText(String(knight.hp));
       await expect(page.locator('#ucnt')).toHaveText('1 / 163');
-      for (const id of ['uciv', 'urole', 'ut']) {
+      for (const id of ['uciv', 'urole', 'udlc']) {
         const box = await page.locator(`#${id}`).boundingBox();
         expect(box!.width).toBeGreaterThanOrEqual(44);
         expect(box!.height).toBeGreaterThanOrEqual(44);
       }
-      for (const button of await bar.getByRole('button').all()) {
+      for (const button of await types.getByRole('button').all()) {
         const box = await button.boundingBox();
         expect(box!.width).toBeGreaterThanOrEqual(44);
         expect(box!.height).toBeGreaterThanOrEqual(44);
@@ -71,12 +71,12 @@ for (const width of [360, 375, 390, 1280])
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: info.outputPath(`filters-${theme}-${width}.png`), fullPage: true });
       await card.click();
-      await expect(page).toHaveURL(/#\/unit\/38$/);
+      await expect(page).toHaveURL(/#\/unit\/38\?civ=Franks$/);
       await page.getByRole('link', { name: '单位', exact: true }).first().click();
       if (width <= 600) await page.locator('.catalog-filter-toggle').click();
       await expect(page.locator('#uciv')).toHaveAttribute('data-value', 'Franks');
       await expect(page.locator('#urole')).toHaveValue('cavalry');
-      await expect(bar.locator('button[data-v="0"]')).toHaveAttribute('aria-pressed', 'true');
+      await expect(dlc).toHaveValue('0');
       await expect(ages.locator('button[data-v="3"]')).toHaveAttribute('aria-pressed', 'true');
       await expect(card).toHaveAttribute('data-unit-id', '38');
 
@@ -87,8 +87,8 @@ for (const width of [360, 375, 390, 1280])
       await page.locator('.unit-filter-empty button').click();
       await expect(page.locator('#ucnt')).toHaveText('163 / 163');
       await expect(page.locator('#uciv')).toHaveAttribute('data-value', '');
-      for (const id of ['urole', 'ut', 'uq']) await expect(page.locator(`#${id}`)).toHaveValue('');
-      await expect(bar.locator('button[data-v=""]')).toHaveAttribute('aria-pressed', 'true');
+      for (const id of ['urole', 'udlc', 'uq']) await expect(page.locator(`#${id}`)).toHaveValue('');
+      await expect(types.locator('button[data-v=""]')).toHaveAttribute('aria-pressed', 'true');
       await expect(ages.locator('button[data-v=""]')).toHaveAttribute('aria-pressed', 'true');
       await expect(page.locator('.unit-filter-empty')).toHaveCount(0);
 
@@ -107,15 +107,15 @@ test('#196 不可用精锐不出现在文明结果或含精锐标记中', async 
   await chooseCiv(page, 'Turks');
   await page.locator('#urole').selectOption('archer');
   await page.locator('#uq').fill('Skirmisher');
-  const card = page.locator('#ugrid .card');
+  const card = page.locator('#ugrid .unit-row');
   await expect(card).toHaveCount(1);
   await expect(card).toHaveAttribute('data-unit-id', '7');
-  await expect(card.locator('.ebadge')).toHaveCount(0);
+  await expect(card.locator('.elite-mark')).toHaveCount(0);
   await page.locator('#units').getByRole('group', { name: '时代快捷筛选', exact: true }).locator('button[data-v="3"]').click();
   await expect(page.locator('#ucnt')).toHaveText('0 / 163');
   await chooseCiv(page, 'Franks');
   await expect(card).toHaveAttribute('data-unit-id', '6');
-  await expect(card).toHaveAttribute('href', '#/unit/6');
+  await expect(card).toHaveAttribute('href', '#/unit/6?civ=Franks');
   await expect(page.locator('#ucnt')).toHaveText('1 / 163');
 });
 
@@ -123,7 +123,7 @@ test('#196 骑射交叉分类及同名战车按文明隔离', async ({ page }) =
   await page.goto('./#/units');
   await chooseCiv(page, 'Mongols');
   await page.locator('#uq').fill('Mangudai');
-  const card = page.locator('#ugrid .card');
+  const card = page.locator('#ugrid .unit-row');
   for (const role of ['cavalry', 'archer']) {
     await page.locator('#urole').selectOption(role);
     await expect(card).toHaveCount(1);

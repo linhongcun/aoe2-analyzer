@@ -18,7 +18,7 @@ for (const width of [360, 375, 390, 1280]) {
     expect(await card.locator('a').count()).toBe(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(
-      await card.locator('.unit-card-stats dd').evaluateAll((values) =>
+      await card.locator('.unit-stats dd').evaluateAll((values) =>
         values.every((value) => {
           const style = getComputedStyle(value);
           return style.whiteSpace === 'nowrap' && Number.parseFloat(style.fontSize) >= 12 && value.scrollWidth <= value.clientWidth;

@@ -27,7 +27,7 @@ for (const width of [360, 375, 390, 1280])
       for (const [name, route, ready] of [
         ['home', './#/', '[data-testid="start-step"]'],
         ['civs', './#/civs', '#grid .card'],
-        ['units', './#/units', '#ugrid .card'],
+        ['units', './#/units', '#ugrid .unit-row'],
         ['civ', './#/civ/Franks', '[data-testid="civ-ratings"]'],
         ['unit', './#/unit/38', '.detail-stats'],
         ['tree', './#/tree', '.tcell'],
@@ -96,12 +96,12 @@ test('收起筛选保留实际条件、跨页返回与断点焦点', async ({ pa
   await expect(page.locator('.catalog-filter-panel')).toBeHidden();
   await expect(page.locator('.catalog-filter-active')).toContainText('骑兵');
   await expect(page.locator('.catalog-filter-active')).toContainText('Knight');
-  await page.locator('#ugrid .card').first().click();
+  await page.locator('#ugrid .unit-row').first().click();
   await page.getByRole('link', { name: '单位', exact: true }).first().click();
   await expect(page.locator('.catalog-filter-active')).toContainText('骑兵');
   await expect(page.locator('.catalog-filter-panel')).toBeHidden();
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.locator('#urole').focus();
+  await page.locator('#udlc').focus();
   await page.setViewportSize({ width: 390, height: 900 });
   await expect(toggle).toBeFocused();
   await page.getByRole('button', { name: '清空筛选', exact: true }).click();

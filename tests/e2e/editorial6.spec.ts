@@ -17,7 +17,7 @@ const PAGES = [
   ['civ/Franks', '#detail h1'],
   ['tech/22', '#tech h1'],
   ['building/12', '#building h1'],
-  ['units', '#ugrid .card'],
+  ['units', '#ugrid .unit-row'],
   ['unit/569/Franks/4', '#sim .simtab'],
   ['duel', '#duel-res'],
   ['builds', '.tl-empty-btns .tl-chip'],
@@ -90,7 +90,7 @@ for (const width of [390, 1280])
         ['', '#home [data-testid="home-start"]'],
         ['unit/531', '#unit h1'],
         ['civ/Franks?tab=data', '.ratehead'],
-        ['units', '#ugrid .card'],
+        ['units', '#ugrid .unit-row'],
         ['unit/569/Franks/4', '#sim .simtab'],
       ]) {
         await ready(page, route!, selector!);
@@ -198,7 +198,7 @@ for (const width of [360, 375, 390])
     await expect(menu).toBeFocused();
     await menu.click();
     await nav.getByRole('link', { name: '单位', exact: true }).click();
-    await expect(page.locator('#ugrid .card').first()).toBeVisible();
+    await expect(page.locator('#ugrid .unit-row').first()).toBeVisible();
     await expect(nav).toBeHidden();
     await page.reload();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');

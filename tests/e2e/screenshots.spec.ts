@@ -8,7 +8,7 @@ const OUT = process.env.SHOT_DIR;
 
 const PAGES: [name: string, hash: string, ready: string][] = [
   ['home', '', '#home .hcard'],
-  ['units', '#units', '#ugrid .card'],
+  ['units', '#units', '#ugrid .unit-row'],
   ['unit-paladin', '#unit/569', '#unit .dtabs'],
   ['unit-paladin-sim', '#unit/569?tab=sim', '#sim .simt'],
   ['civ-franks', '#civ/Franks', '#detail h1'],

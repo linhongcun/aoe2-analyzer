@@ -230,11 +230,23 @@ export function AgeBar({ value, onChange }: { value: string; onChange: (v: strin
     </div>
   );
 }
-export function SearchInput({ id, value, onChange, placeholder }: { id: string; value: string; onChange: (v: string) => void; placeholder: string }) {
+export function SearchInput({
+  id,
+  value,
+  onChange,
+  placeholder,
+  describedBy,
+}: {
+  id: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+  describedBy?: string;
+}) {
   return (
     <span className="sw">
       <Icon name="search" className="ic sic" />
-      <input id={id} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+      <input id={id} value={value} placeholder={placeholder} aria-describedby={describedBy} onChange={(e) => onChange(e.target.value)} />
     </span>
   );
 }
