@@ -84,7 +84,7 @@ async function basicUnit657(page: Page, id: number) {
   const stats = page.getByRole('region', { name: '基础属性', exact: true });
   await expect(stats).toBeVisible();
   for (const key of ['hp', 'atk', 'ma', 'pa', 'rng', 'spd'] as const)
-    await expect(stats.locator(`[data-stat="${key}"] [data-t="stat-value"]`)).toHaveText(String(unit[key]));
+    await expect(stats.locator(`[data-stat="${key}"] [data-t="stat-value"]`)).toHaveText(key === 'hp' ? Number(unit[key]).toFixed(2) : String(unit[key]));
 }
 
 test.describe('#657 current 单位详情参考与局部资源', () => {

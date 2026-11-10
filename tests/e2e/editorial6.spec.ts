@@ -274,8 +274,8 @@ for (const width of WIDTHS)
     await expect(stats).toBeVisible();
     for (const key of ['hp', 'atk'] as const) {
       const item = stats.locator(`[data-stat="${key}"]`);
-      await expect(item.locator('[data-t="stat-value"]')).toHaveText(String(ELITE[key]));
-      await expect(item.locator('[data-t="stat-delta"]')).toHaveText('+' + (ELITE[key] - BASE[key]));
+      await expect(item.locator('[data-t="stat-value"]')).toHaveText(key === 'hp' ? Number(ELITE[key]).toFixed(2) : String(ELITE[key]));
+      await expect(item.locator('[data-t="stat-delta"]')).toHaveText('+' + (key === 'hp' ? Number(ELITE[key] - BASE[key]).toFixed(2) : ELITE[key] - BASE[key]));
     }
     await expect(stats.locator('.is-key')).toHaveCount(2);
     const columns = await stats.locator('[data-stat]').evaluateAll((items) => {
@@ -295,7 +295,7 @@ for (const width of WIDTHS)
     await eliteSwitch.getByRole('radio', { name: '普通', exact: true }).click();
     await expect(page).toHaveURL(/#\/unit\/281(?:\?|$)/);
     for (const key of ['hp', 'atk'] as const) {
-      await expect(stats.locator(`[data-stat="${key}"] [data-t="stat-value"]`)).toHaveText(String(BASE[key]));
+      await expect(stats.locator(`[data-stat="${key}"] [data-t="stat-value"]`)).toHaveText(key === 'hp' ? Number(BASE[key]).toFixed(2) : String(BASE[key]));
     }
     await expect(stats.locator('[data-t="stat-delta"]')).toHaveCount(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

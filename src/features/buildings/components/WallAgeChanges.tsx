@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { buildingBase } from '../../../domain/buildingSim';
 import { DAT, toEffects, type DatGeneric } from '../../../domain/datEffects';
 import { AGE_ZH } from '../../../domain/ratings';
+import { formatHp } from '../../../domain/hpFormat';
 import { applyEffects } from '../../../domain/simulator';
 import type { Building } from '../../../domain/types';
 import { DetailSection, StatTiles } from '../../../shared/ui/DetailBlocks';
@@ -26,7 +27,7 @@ export function wallAgeChange(
   if (raw.length !== 1 || !effect || effect.op !== 'mul' || !Number.isFinite(effect.v)) return { state: 'pending' };
   const current = buildingBase(building);
   applyEffects(current, toEffects(raw));
-  const after = Math.round(current.hp);
+  const after = current.hp;
   if (!Number.isFinite(after)) return { state: 'pending' };
   return { state: 'ready', age: entry.age, tech, before: building.hp, after, multiplier: effect.v };
 }
@@ -50,17 +51,17 @@ export function WallAgeChanges({ building }: { building: Building }) {
               {
                 key: 'hp',
                 label: '生命值',
-                value: <span className="num nw">{change.after}</span>,
+                value: <span className="num nw">{formatHp(change.after)}</span>,
                 note: (
                   <>
                     {AGE_ZH[change.age - 1]}{' '}
                     <span className="num nw" data-auto-before>
-                      {change.before}
+                      {formatHp(change.before)}
                     </span>
                     ；自动变化{' '}
                     <span className="num nw">
                       {change.after > change.before ? '+' : ''}
-                      {change.after - change.before}
+                      {formatHp(change.after - change.before)}
                     </span>
                   </>
                 ),

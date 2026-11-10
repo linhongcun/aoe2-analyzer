@@ -48,7 +48,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('#ucnt')).toHaveText('0 / 163');
       await page.locator('#uq').fill('近卫军');
       await expect(card).toHaveAttribute('data-unit-id', String(base.id));
-      await expect(card.locator('[data-stat="hp"] dd')).toHaveText(String(base.hp));
+      await expect(card.locator('[data-stat="hp"] dd')).toHaveText(Number(base.hp).toFixed(2));
       await ages.locator('button[data-v=""]').click();
       await expect(card).toHaveAttribute('data-unit-id', String(base.id));
       await expect(card.locator('.elite-mark')).toHaveText('含精锐');

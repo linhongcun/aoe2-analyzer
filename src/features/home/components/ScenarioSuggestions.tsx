@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { civByEn, loadCore, loadTrees } from '../../../data';
+import { formatHp } from '../../../domain/hpFormat';
 import { Icon } from '../../../shared/ui/Icon';
 import {
   DEFAULT_FLANK_SCENE,
@@ -317,8 +318,9 @@ export function SceneEvidence({ row, lane }: { row: SceneRow; lane: 'flank' | 'p
           <summary>查看计算输入</summary>
           {hasArmy && row.stats ? (
             <p className="start-hint">
-              生命 <Value n={row.stats.hp} /> · 攻击 <Value n={row.stats.atk} /> · 射程 <Value n={row.stats.rng} /> · 速度 <Value n={row.stats.spd} /> ·
-              攻击周期 <Value n={row.stats.rof} unit=" 秒" /> · 训练周期 {row.cycle == null ? '未核实' : <Value n={row.cycle} unit=" 秒" />}。
+              生命 <span className="num nw">{formatHp(row.stats.hp)}</span> · 攻击 <Value n={row.stats.atk} /> · 射程 <Value n={row.stats.rng} /> · 速度{' '}
+              <Value n={row.stats.spd} /> · 攻击周期 <Value n={row.stats.rof} unit=" 秒" /> · 训练周期{' '}
+              {row.cycle == null ? '未核实' : <Value n={row.cycle} unit=" 秒" />}。
               {lane === 'pocket'
                 ? '速度用于到达计算；新训练部队还须完成首个训练周期，现成部队不等待训练。生命、攻击等未参与到场分组。'
                 : '这些属性不额外加分。'}
@@ -344,8 +346,9 @@ export function SceneEvidence({ row, lane }: { row: SceneRow; lane: 'flank' | 'p
           ) : null}
           {row.baseline ? (
             <p className="start-hint">
-              同方案解释对照：{civByEn(row.baseline.civ)?.zh ?? '参考文明'}；与己方使用同一所选方案。生命 <Value n={row.baseline.stats.hp} /> · 射程{' '}
-              <Value n={row.baseline.stats.rng} /> · 速度 <Value n={row.baseline.stats.spd} /> · 攻击周期 <Value n={row.baseline.stats.rof} unit=" 秒" /> · 单兵{' '}
+              同方案解释对照：{civByEn(row.baseline.civ)?.zh ?? '参考文明'}；与己方使用同一所选方案。生命{' '}
+              <span className="num nw">{formatHp(row.baseline.stats.hp)}</span> · 射程 <Value n={row.baseline.stats.rng} /> · 速度{' '}
+              <Value n={row.baseline.stats.spd} /> · 攻击周期 <Value n={row.baseline.stats.rof} unit=" 秒" /> · 单兵{' '}
               <Value n={row.baseline.unitSeconds} unit=" 工秒" /> · 训练周期 <Value n={row.baseline.cycle} unit=" 秒" />
               。解释对照输入摘要 {row.baseline.signature}
             </p>

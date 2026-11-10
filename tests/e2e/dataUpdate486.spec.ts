@@ -12,7 +12,7 @@ for (const width of [360, 375, 390, 1280])
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/unit/873');
       await expect(page.locator('[data-t="footer-version"]')).toContainText('DE 188329');
-      await expect(page.locator('#unit [data-stat="hp"] [data-t="stat-value"]')).toHaveText('220');
+      await expect(page.locator('#unit [data-stat="hp"] [data-t="stat-value"]')).toHaveText('220.00');
       await expect(page.locator('#unit .detail-cost-grid .res:has(img[alt="食物"])')).toHaveText('70');
       await expect(page.locator('#unit .detail-cost-grid .res:has(img[alt="黄金"])')).toHaveText('80');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -37,7 +37,7 @@ for (const width of [360, 375, 390, 1280])
 
 test('#486 精锐与移速不变对照、PK 和当前版本来源', async ({ page }) => {
   await page.goto('./#/unit/875');
-  await expect(page.locator('#unit [data-stat="hp"] [data-t="stat-value"]')).toHaveText('270');
+  await expect(page.locator('#unit [data-stat="hp"] [data-t="stat-value"]')).toHaveText('270.00');
   await expect(page.locator('#unit .detail-cost-grid .res:has(img[alt="食物"])')).toHaveText('70');
   for (const [id, speed] of [
     [2569, '1.45'],
@@ -47,7 +47,7 @@ test('#486 精锐与移速不变对照、PK 和当前版本来源', async ({ pag
     await expect(page.locator('#unit [data-stat="spd"] [data-t="stat-value"]')).toHaveText(speed);
   }
   await page.goto('./#/duel?a=873.Dravidians.3..&b=4.Britons.3..&m=n');
-  await expect(page.locator('#duel-a .duel-stats tr').filter({ hasText: '生命值' }).locator('td').last()).toHaveText('220');
+  await expect(page.locator('#duel-a .duel-stats tr').filter({ hasText: '生命值' }).locator('td').last()).toHaveText('220.00');
   await expect(page.locator('#duel-a .duel-head .res:has(img[alt="食物"])')).toHaveText('70');
   await page.goto('./#/about-data');
   await expect(page.locator('[data-t="data-version"]')).toHaveText('DE 188329（2026-10-28）');

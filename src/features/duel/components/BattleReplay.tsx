@@ -1,5 +1,6 @@
 import { useEffect, useId, useState } from 'react';
 import { replayAt, type ReplayFrame } from '../../../domain/battleReplay';
+import { formatHp } from '../../../domain/hpFormat';
 import type { Unit } from '../../../domain/types';
 import { UnitIcon } from '../../../shared/ui/art';
 
@@ -55,7 +56,7 @@ export function BattleReplay({
             </p>
             <progress max={max} value={value} aria-label={`${side} 剩余${unit}`} />
             <p className="nw" data-t={`replay-${side}`}>
-              {Number(value.toFixed(1))} {unit}
+              {unit === '生命' ? formatHp(value) : Number(value.toFixed(1))} {unit}
             </p>
           </div>
         ))}

@@ -1,3 +1,4 @@
+import { formatHp } from '../../domain/hpFormat';
 import type { NumStat } from '../../domain/types';
 /** 单位模拟器属性行：[属性键, 中文名, 图标键（null=按射程选 atk/patk，''=无图标）] */
 export const SIM_ROWS: [NumStat, string, string | null][] = [
@@ -12,12 +13,14 @@ export const SIM_ROWS: [NumStat, string, string | null][] = [
   ['acc', '准确度', ''],
 ];
 export const fmtStat = (k: NumStat, v: number): string =>
-  k === 'spd'
-    ? v.toFixed(2)
-    : k === 'rof'
-      ? v.toFixed(2) + 's'
-      : k === 'bt'
-        ? (Math.round(v * 10) / 10).toString() + 's'
-        : k === 'acc'
-          ? Math.round(v) + '%'
-          : String(Math.round(v * 100) / 100);
+  k === 'hp'
+    ? formatHp(v)
+    : k === 'spd'
+      ? v.toFixed(2)
+      : k === 'rof'
+        ? v.toFixed(2) + 's'
+        : k === 'bt'
+          ? (Math.round(v * 10) / 10).toString() + 's'
+          : k === 'acc'
+            ? Math.round(v) + '%'
+            : String(Math.round(v * 100) / 100);

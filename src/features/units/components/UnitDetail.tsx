@@ -4,6 +4,7 @@ import { RangeB } from '../../../shared/ui/RangeB';
 import { RangeHelp } from '../../../shared/ui/RangeHelp';
 import { Link, useLocation } from 'react-router-dom';
 import { baseUnit } from '../../../domain/family';
+import { formatHp } from '../../../domain/hpFormat';
 import type { Trees, Unit } from '../../../domain/types';
 import { civByEn, civs } from '../../../data';
 import { useCoreTrees } from '../../../shared/utils/useCoreTrees';
@@ -164,7 +165,7 @@ export default function UnitDetail() {
     ? upgradeLine(u, core.units, core.unitById, st ? (id) => st['u' + id] === 1 : undefined).filter((x) => !core.fam.baseOf[x.id] || x.id === u.id)
     : [];
   const stats: DetailStat[] = [
-    { key: 'hp', icon: 'hp', label: '生命值 HP', value: u.hp, accent: true, change: isE ? u.hp - base.hp : undefined },
+    { key: 'hp', icon: 'hp', label: '生命值 HP', value: formatHp(u.hp), accent: true, change: isE ? u.hp - base.hp : undefined },
     {
       key: 'atk',
       icon: u.rng > 1 ? 'patk' : 'atk',

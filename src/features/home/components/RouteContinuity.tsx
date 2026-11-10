@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { civByEn } from '../../../data';
 import { ageRoutes, DEFAULT_ROUTE, type AgeRoute, type RouteConfig } from '../../../domain/ageRoutes';
+import { formatHp } from '../../../domain/hpFormat';
 import { routeSources, routeWork } from '../../../domain/routeProfiles';
 import type { SceneContext } from '../../../domain/positionScenarios';
 import type { Lane, StartState } from '../../../domain/startGame';
@@ -130,7 +131,7 @@ export function RouteEvidence({ row, lane, cfg }: { row: AgeRoute; lane: Lane; c
               </>
             ) : (
               <>
-                生命 <N n={feudal.stats.hp} />
+                生命 <span className="num nw">{formatHp(feudal.stats.hp)}</span>
                 ，速度 <N n={feudal.stats.spd} />。
               </>
             )}
@@ -185,7 +186,7 @@ export function RouteEvidence({ row, lane, cfg }: { row: AgeRoute; lane: Lane; c
             </>
           ) : (
             <>
-              生命 <N n={retained.stats.hp} />
+              生命 <span className="num nw">{formatHp(retained.stats.hp)}</span>
               ，速度 <N n={retained.stats.spd} />；{c.packagePaid && cfg.husbandry ? '已计入本次付费畜牧。' : '未额外计入畜牧。'}
             </>
           )}
@@ -193,7 +194,7 @@ export function RouteEvidence({ row, lane, cfg }: { row: AgeRoute; lane: Lane; c
       ) : null}
       {row.newCount > 0 ? (
         <p className="start-hint">
-          城堡新产{castle.unit.zh}：生命 <N n={castle.stats.hp} />
+          城堡新产{castle.unit.zh}：生命 <span className="num nw">{formatHp(castle.stats.hp)}</span>
           ，攻击 <N n={castle.stats.atk} />，
           {lane === 'flank' ? (
             <>

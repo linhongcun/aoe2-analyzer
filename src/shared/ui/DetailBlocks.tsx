@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { formatHp } from '../../domain/hpFormat';
 import { DATA_SOURCES } from '../utils/dataInfo';
 import { Icon } from './Icon';
 import { StatIcon } from './art';
@@ -36,10 +37,10 @@ export function StatTiles({ stats, label = '关键属性' }: { stats: DetailStat
                 <span
                   className={`detail-stat-change ${(s.lowerIsBetter ? s.change < 0 : s.change > 0) ? 'g' : 'r'}`}
                   data-t="stat-delta"
-                  aria-label={`相对普通版变化 ${s.change > 0 ? '+' : ''}${s.change}`}
+                  aria-label={`相对普通版变化 ${s.change > 0 ? '+' : ''}${s.key === 'hp' ? formatHp(s.change) : s.change}`}
                 >
                   {s.change > 0 ? '+' : ''}
-                  {Math.round(s.change * 100) / 100}
+                  {s.key === 'hp' ? formatHp(s.change) : Math.round(s.change * 100) / 100}
                 </span>
               )}
             </dd>

@@ -161,7 +161,7 @@ export function groupFight(a: Fighter, na: number, b: Fighter, nb: number, maxT 
     bAlive = alive(B);
   const winner = aAlive && !bAlive ? 'a' : bAlive && !aAlive ? 'b' : 'draw';
   const hpLeft = (winner === 'a' ? A : winner === 'b' ? B : []).filter((h) => h > 0).reduce((s, h) => s + h, 0);
-  return { winner, aAlive, bAlive, hpLeft: Math.round(hpLeft), duration: t, timeline };
+  return { winner, aAlive, bAlive, hpLeft, duration: t, timeline };
 }
 
 export const costSum = (c: Cost) => Object.values(c).reduce((s, v) => s + (v ?? 0), 0);

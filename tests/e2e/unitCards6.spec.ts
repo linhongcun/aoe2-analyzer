@@ -10,7 +10,7 @@ for (const width of [360, 375, 390, 1280]) {
     await page.locator('#uq').fill(unit.zh);
     const card = page.locator(`[data-unit-id="${unit.id}"]`);
     await expect(card).toBeVisible();
-    await expect(card.locator('[data-stat="hp"] dd')).toHaveText(String(unit.hp));
+    await expect(card.locator('[data-stat="hp"] dd')).toHaveText(Number(unit.hp).toFixed(2));
     await expect(card.locator('[data-stat="atk"] dd')).toHaveText(String(unit.atk));
     await expect(card.locator('[data-stat="rng"] dd')).toHaveText(String(unit.rng));
     await expect(card).toContainText(unit.bz);

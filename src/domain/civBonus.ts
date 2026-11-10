@@ -21,6 +21,7 @@ import {
   type TeamBonus,
   type TechExtra,
 } from './effects';
+import { formatHp } from './hpFormat';
 import { applyEffects, baseStats } from './simulator';
 import type { Building, Civ, Effect, NumStat, StatSet, Unit } from './types';
 
@@ -201,12 +202,12 @@ function diffRows(base: StatSet, f: (age: number) => Effect[], ages: number[]): 
     const S: StatSet = { ...base, bonus: { ...base.bonus }, armc: { ...base.armc } };
     applyEffects(S, f(a));
     S.rof = S.rof / S.rofx;
-    S.hp = Math.round(S.hp);
     STATS.forEach((k) => {
       if (Math.abs(S[k] - base[k]) < 1e-9) return;
-      const v = Math.round(S[k] * 100) / 100,
-        p = last.get(k);
-      if (p && p[3] === v && p[0].at(-1) === a - 1) p[0].push(a);
+      const v = k === 'hp' ? S.hp : Math.round(S[k] * 100) / 100;
+      const shown = k === 'hp' ? formatHp(v) : String(v);
+      const p = last.get(k);
+      if (p && (k === 'hp' ? formatHp(p[3]) === shown : p[3] === v) && p[0].at(-1) === a - 1) p[0].push(a);
       else {
         const r: Example['rows'][number] = [[a], k, base[k], v];
         out.push(r);
