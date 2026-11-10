@@ -8,7 +8,7 @@ import { BuildContext } from '../../src/features/builds/BuildContext';
 
 import { loadCore, loadTrees, type Core } from '../../src/data';
 import type { Trees } from '../../src/domain/types';
-import { matchup, filterCounterUnits } from '../../src/domain/ratings';
+import { filterCounterUnits } from '../../src/domain/ratings';
 import { rushDrill, counterExtra } from '../../src/features/matchup/availability';
 import RushDefense from '../../src/features/matchup/components/RushDefense';
 const liveData = vi.hoisted(() => ({
@@ -30,7 +30,7 @@ vi.mock('../../src/features/matchup/useMatchupData', async () => {
 });
 vi.mock('../../src/domain/ratings', async (original) => {
   const actual = await original<typeof import('../../src/domain/ratings')>();
-  return { ...actual, matchup: vi.fn(actual.matchup), filterCounterUnits: vi.fn(actual.filterCounterUnits) };
+  return { ...actual, filterCounterUnits: vi.fn(actual.filterCounterUnits) };
 });
 vi.mock('../../src/features/matchup/availability', async (original) => {
   const actual = await original<typeof import('../../src/features/matchup/availability')>();
@@ -117,7 +117,8 @@ let loaded: { core: Core; trees: Trees };
 beforeAll(async () => {
   loaded = { core: await loadCore(), trees: await loadTrees() };
 });
-const calculations = [matchup, filterCounterUnits, rushDrill, counterExtra];
+const calculations = [filterCounterUnits, rushDrill, counterExtra];
+const rendered = () => JSON.stringify(view.toJSON());
 const noAnalysis = () => {
   for (const fn of calculations) expect(fn).not.toHaveBeenCalled();
   expect(view.root.findAllByType(RushDefense)).toHaveLength(0);
@@ -166,6 +167,9 @@ it('#672 explicit complete, clear, refill keeps rush and restores actual analysi
   for (const fn of calculations) expect(fn).toHaveBeenCalled();
   expect(view.root.findAllByType(RushDefense)).toHaveLength(1);
   expect(view.root.findAllByProps({ id: 'mres' })).toHaveLength(1);
+  expect(rendered()).toContain('推荐反制');
+  expect(rendered()).toContain('通用示意，非模型结论');
+  for (const gone of ['对手强项', '相对弱项', '你的相对优势', '前期主动骚扰', '自动生成的建议', '骑兵(+']) expect(rendered()).not.toContain(gone);
   expect(links()).toContain('/builds?civ=Chinese&from=matchup&me=Mongols');
   vi.clearAllMocks();
   await change('ma', '');
