@@ -28,6 +28,7 @@ import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import type { Core } from '../../data';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
+import { TeamSections } from '../../shared/ui/TeamSections';
 import { Linked, Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './teamBonuses.css';
@@ -77,6 +78,7 @@ export default function TeamBonuses() {
   const unknownTechnologies = sources.technologies.filter((row) => teamTargetMatch(row.source, config) === 'unknown');
   return (
     <section className="pane team-bonuses-page" data-testid="team-bonuses-page">
+      <TeamSections />
       <header className="team-heading">
         <div>
           <h1>团队加成一屏汇总</h1>

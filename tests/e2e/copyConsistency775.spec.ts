@@ -21,7 +21,8 @@ test('#775 全站统一叫「团队加成」，旧叫法只保留为搜索别名
   await expect(page.locator('#home h1')).toBeVisible();
   await page.getByRole('button', { name: '工具', exact: true }).click();
   const tools = page.locator('#tools-menu');
-  await expect(tools.getByRole('link', { name: '团队加成', exact: true })).toBeVisible();
+  await expect(tools.getByRole('link', { name: '团队', exact: true })).toBeVisible();
+  await expect(tools.getByRole('link', { name: '团队加成', exact: true })).toHaveCount(0);
   expect(await tools.innerText()).not.toContain('队伍加成');
 
   // #/bonuses 的说明与按钮
@@ -48,10 +49,10 @@ test('#775 全站统一叫「团队加成」，旧叫法只保留为搜索别名
   const input = dialog.getByRole('combobox', { name: '全局搜索', exact: true });
   await input.fill('队伍加成');
   const options = dialog.getByRole('listbox', { name: '搜索结果', exact: true }).getByRole('option');
-  const hit = options.filter({ hasText: '团队加成' }).first();
+  const hit = options.filter({ hasText: '团队' }).first();
   await expect(hit).toBeVisible();
   await hit.click();
-  await expect(page).toHaveURL(/#\/team-bonuses/);
+  await expect(page).toHaveURL(/#\/team-fit$/);
 });
 
 test('#775 一局与观赛浏览器标题去掉「卡」，导航短名不变', async ({ page }) => {
