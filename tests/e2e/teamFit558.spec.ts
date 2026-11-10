@@ -358,18 +358,16 @@ test('#558 首次冷加载保留选择，不先画假零结论', async ({ page }
 
 test('#558 首页、工具、搜索派生同一真实入口', async ({ page }) => {
   await page.goto('./#/');
-  await page
-    .locator('#home')
-    .getByRole('link', { name: /文明搭配/ })
-    .click();
+  await page.locator('#home a[href="#/team-fit"]').click();
   await expect(page.getByRole('heading', { level: 1, name: '文明搭配', exact: true })).toBeVisible();
   await page.getByRole('button', { name: '工具', exact: true }).click();
-  await expect(page.locator('#tools-menu').getByRole('link', { name: '文明搭配', exact: true })).toHaveAttribute('href', '#/team-fit');
+  await expect(page.locator('#tools-menu').getByRole('link', { name: '团队', exact: true })).toHaveAttribute('href', '#/team-fit');
+  await expect(page.locator('#tools-menu').getByRole('link', { name: '文明搭配', exact: true })).toHaveCount(0);
   await page.keyboard.press('Escape');
   await page.keyboard.press('Control+k');
   const dialog = page.getByRole('dialog', { name: '全局搜索', exact: true });
-  await dialog.getByRole('combobox', { name: '全局搜索', exact: true }).fill('wmdp');
-  await dialog.getByRole('option').filter({ hasText: '文明搭配' }).click();
+  await dialog.getByRole('combobox', { name: '全局搜索', exact: true }).fill('td');
+  await dialog.getByRole('option').filter({ hasText: '团队' }).click();
   await expect(page).toHaveURL(/#\/team-fit$/);
 });
 
