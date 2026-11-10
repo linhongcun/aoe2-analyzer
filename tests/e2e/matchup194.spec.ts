@@ -27,7 +27,7 @@ for (const width of [360, 375, 390, 1280])
       ]) {
         await pickCiv(page, 'me', opponent!);
         await expect(page.locator('#matchup .matchup-title')).toContainText(name!);
-        await expect(page.locator('#matchup .lhead .note')).toContainText('快攻指南、类型反制示意和相关入口');
+        await expect(page.locator('#matchup .lhead .note')).toContainText('快攻指南、类型反制，以及侦察、混兵和城堡前置');
         await expect(result).toContainText('推荐反制');
         await expect(result).toContainText('通用示意，非模型结论');
         for (const gone of ['对手强项', '相对弱项', '你的相对优势', '前期主动骚扰', '自动生成的建议']) await expect(result).not.toContainText(gone);
@@ -48,3 +48,28 @@ for (const width of [360, 375, 390, 1280])
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(errors).toEqual([]);
     });
+
+test('#892 有限指南从对局助手进入，旧地址转到分区且不恢复评分建议', async ({ page }) => {
+  await page.goto('./#/');
+  const home = page.locator('#home');
+  await expect(home.locator('a.hcard[href="#/scouting"]')).toHaveCount(0);
+  await expect(home.locator('a.hcard[href="#/mixed-army"]')).toHaveCount(0);
+  await expect(home.locator('a.hcard[href="#/castle-defense"]')).toHaveCount(0);
+  await page.goto('./#/matchup');
+  const guides = page.locator('nav[aria-label="对局助手有限指南"]');
+  await expect(guides.getByRole('link', { name: '先辨析侦察线索与缺失信息' })).toHaveAttribute('href', '#/matchup/scouting');
+  await expect(guides.getByRole('link', { name: '按敌军组合查看混兵情境' })).toHaveAttribute('href', '#/matchup/mixed-army');
+  await expect(guides.getByRole('link', { name: '城堡前置：按当前局面查看应对' })).toHaveAttribute('href', '#/matchup/castle-defense');
+  await expect(page.locator('#matchup')).not.toContainText('你的相对优势');
+  await expect(page.locator('#matchup')).not.toContainText('前期主动骚扰');
+  await page.goto('./#/scouting?sv=1&data=%7B%7D');
+  await expect(page).toHaveURL(/#\/matchup\/scouting\?sv=1&data=/);
+  await expect(page.getByTestId('scouting-page')).toBeVisible();
+  await page.goto('./#/mixed-army');
+  await expect(page).toHaveURL(/#\/matchup\/mixed-army$/);
+  await expect(page.getByTestId('mixed-army-page')).toBeVisible();
+  await page.goto('./#/castle-defense');
+  await expect(page).toHaveURL(/#\/matchup\/castle-defense$/);
+  await expect(page.getByTestId('castle-defense-page')).toBeVisible();
+  await expect(page.getByTestId('castle-defense-page')).toContainText('不自动判断实际战局');
+});

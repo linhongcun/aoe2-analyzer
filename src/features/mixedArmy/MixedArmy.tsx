@@ -264,17 +264,17 @@ export default function MixedArmy() {
   const plan = ctx && !decoded.locked ? planMixedArmy(ctx, config) : null;
   const change = (patch: Partial<MixedArmyConfig>) => {
     if (decoded.locked) return;
-    navigate({ pathname: '/mixed-army', search: '?' + encodeMixedArmy({ ...config, ...patch }) }, { replace: true });
+    navigate({ pathname: '/matchup/mixed-army', search: '?' + encodeMixedArmy({ ...config, ...patch }) }, { replace: true });
     resetShare();
   };
   const reset = () => {
     const search = '?' + encodeMixedArmy(defaultMixedArmyConfig());
-    navigate({ pathname: '/mixed-army', search }, { replace: true });
+    navigate({ pathname: '/matchup/mixed-army', search }, { replace: true });
     announce('情境已重置，关键观察与完成确认均保留为未知或未确认。', search);
   };
   const share = async () => {
     if (decoded.locked || decoded.errors.length || plan?.status === 'invalid') return;
-    await copy(() => sharePageUrl('/mixed-army', '?' + encodeMixedArmy(config), document.baseURI));
+    await copy(() => sharePageUrl('/matchup/mixed-army', '?' + encodeMixedArmy(config), document.baseURI));
   };
   const toggle = (field: 'completedForms' | 'completedUnlockTechIds' | 'completedBuildings', id: number) =>
     change({ [field]: config[field].includes(id) ? config[field].filter((old) => old !== id) : [...config[field], id] });
@@ -292,6 +292,11 @@ export default function MixedArmy() {
   const showExample = !!plan && plan.status === 'needs-observation' && config.ownMain === 'unknown' && config.enemy === 'unknown';
   return (
     <section className="pane mixed-army-page" data-testid="mixed-army-page">
+      <p>
+        <Link className="community-tool-entry" to="/matchup">
+          返回对局助手
+        </Link>
+      </p>
       <header className="mixed-heading">
         <div>
           <h1>混兵情境卡</h1>

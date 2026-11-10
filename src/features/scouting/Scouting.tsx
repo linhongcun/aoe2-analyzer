@@ -116,7 +116,7 @@ export default function Scouting() {
   const canShare = !decoded.locked && !draftTimes.length && analysis?.status !== 'invalid';
   const change = (patch: Partial<ScoutingConfig>) => {
     if (decoded.locked) return;
-    navigate({ pathname: '/scouting', search: '?' + encodeScouting({ ...config, ...patch }) }, { replace: true });
+    navigate({ pathname: '/matchup/scouting', search: '?' + encodeScouting({ ...config, ...patch }) }, { replace: true });
     resetShare();
   };
   const changeObservation = (id: ScoutingObservationId, patch: Partial<ScoutingObservation>) =>
@@ -138,7 +138,7 @@ export default function Scouting() {
   const reset = () => {
     const empty = decoded.locked ? defaultScoutingConfig() : { ...config, observations: defaultScoutingConfig().observations };
     const search = '?' + encodeScouting(empty);
-    navigate({ pathname: '/scouting', search }, { replace: true });
+    navigate({ pathname: '/matchup/scouting', search }, { replace: true });
     setTimeDrafts({});
     announce('观察已清空，可以填写自己的观察。', JSON.stringify([search, {}]));
   };
@@ -159,10 +159,15 @@ export default function Scouting() {
   };
   const share = async () => {
     if (!canShare) return;
-    await copy(() => sharePageUrl('/scouting', '?' + encodeScouting(config), document.baseURI));
+    await copy(() => sharePageUrl('/matchup/scouting', '?' + encodeScouting(config), document.baseURI));
   };
   return (
     <section className="pane scouting-page" data-testid="scouting-page" aria-labelledby="scouting-title">
+      <p>
+        <Link className="community-tool-entry" to="/matchup">
+          返回对局助手
+        </Link>
+      </p>
       <header className="scouting-heading">
         <div>
           <p className="scouting-kicker">从信号找到下一步</p>
@@ -395,8 +400,8 @@ export default function Scouting() {
 
                   <div className="scouting-links">
                     <Link to="/matchup">已辨认快攻的应对</Link>
-                    <Link to="/castle-defense">已见城堡前置的阶段应对</Link>
-                    <Link to="/mixed-army">已见混兵组合的分工</Link>
+                    <Link to="/matchup/castle-defense">已见城堡前置的阶段应对</Link>
+                    <Link to="/matchup/mixed-army">已见混兵组合的分工</Link>
                   </div>
                 </section>
                 <details className="scouting-panel scouting-snapshot">

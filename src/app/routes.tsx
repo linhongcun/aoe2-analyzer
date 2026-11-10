@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { civs } from '../data';
 import { PAGE_REGISTRY, type RegisteredPage } from './pageRegistry';
 
@@ -8,8 +8,9 @@ const NotFound = lazy(() => import('../features/notFound/NotFound'));
 
 /** 元数据跟随登记表里的路由 pattern，不看地址栏里的大小写或编码。 */
 function RegisteredRoute({ page }: { page: RegisteredPage }) {
+  const location = useLocation();
   if (page.redirectDefaultTree) return <Navigate to={'/tree/' + civs[16]!.en} replace />;
-  if (page.redirectTo) return <Navigate to={page.redirectTo} replace />;
+  if (page.redirectTo) return <Navigate to={page.redirectKeepSearch ? { pathname: page.redirectTo, search: location.search } : page.redirectTo} replace />;
   const Page = page.Component;
   if (!Page) return null;
   return (

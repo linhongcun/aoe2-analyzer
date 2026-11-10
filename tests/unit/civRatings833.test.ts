@@ -1,9 +1,12 @@
-import { readFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
-import { validateCivRatings } from '../../scripts/check-civ-ratings.mjs';
+import { AXIS_NAMES, validateCivRatings } from '../../scripts/check-civ-ratings.mjs';
+import { RATING_BASIS, RATING_FILE_VERIFIED_AT } from '../../src/data/ratingBasis';
+import { AXES } from '../../src/domain/ratings';
 
 type Ratings = Record<string, unknown>;
 type Row = Record<string, unknown>;
@@ -19,10 +22,44 @@ function problemsFor(mutate: (data: Ratings) => void): string[] {
   return validateCivRatings(data, civNames);
 }
 
+const META = ['_doc', 'verifiedAt', 'schemaVersion', 'basis'];
+const scoreDigest = createHash('sha256')
+  .update(JSON.stringify(Object.fromEntries(Object.entries(ratings).filter(([key]) => !META.includes(key)))))
+  .digest('hex');
+
 describe('civ_ratings 结构校验', () => {
-  it('当前 56 个文明与元数据通过', () => {
+  it('当前 56 个文明与元数据通过，且分数没有被重写', () => {
     expect(validateCivRatings(ratings, civNames)).toEqual([]);
-    expect(Object.keys(ratings).filter((key) => !['_doc', 'verifiedAt', 'schemaVersion'].includes(key))).toHaveLength(56);
+    expect(Object.keys(ratings).filter((key) => !META.includes(key))).toHaveLength(56);
+    expect(scoreDigest).toBe('f38986a07b7eacb9d44faf7874ecc2088ab194c568d6a264898718d310acfd7a');
+    expect(AXES).toEqual([...AXIS_NAMES]);
+    expect(RATING_BASIS.axes).toEqual([...AXES]);
+    expect(RATING_BASIS.alignedPatch).toBeNull();
+    expect(RATING_BASIS.alignedPatchStatus).toBe('unknown');
+    expect(RATING_BASIS.positions.alignedPatch).toBeNull();
+    expect(RATING_BASIS.positions.independentOfAxes).toBe(true);
+    expect(RATING_FILE_VERIFIED_AT).toBe(ratings.verifiedAt);
+    expect(JSON.stringify(RATING_BASIS)).not.toContain('188329');
+    const civRows = JSON.parse(readFileSync('src/data/civs.json', 'utf8')) as { en: string; s: number[]; fl: number; pk: number }[];
+    for (const civ of civRows) {
+      const source = ratings[civ.en] as { s: number[]; fl: number; pk: number };
+      expect(civ.s, civ.en).toEqual(source.s);
+      expect(civ.fl, civ.en).toBe(source.fl);
+      expect(civ.pk, civ.en).toBe(source.pk);
+    }
+  });
+
+  it('口径不能冒充补丁对齐、社区实证或新模型', () => {
+    const basis = (data: Ratings) => data.basis as Record<string, unknown>;
+    const positions = (data: Ratings) => basis(data).positions as Record<string, unknown>;
+    expect(problemsFor((data) => delete data.basis).join('\n')).toContain('basis');
+    expect(problemsFor((data) => (basis(data).alignedPatch = 188329)).join('\n')).toContain('alignedPatch');
+    expect(problemsFor((data) => (basis(data).alignedPatchStatus = 'aligned')).join('\n')).toContain('unknown');
+    expect(problemsFor((data) => (basis(data).communityClaim = 'verified')).join('\n')).toContain('unverified');
+    expect(problemsFor((data) => (basis(data).axes = [...(basis(data).axes as string[])].reverse())).join('\n')).toContain('basis.axes');
+    expect(problemsFor((data) => (positions(data).independentOfAxes = false)).join('\n')).toContain('independentOfAxes');
+    expect(problemsFor((data) => (basis(data).highlight = '这是赢面')).join('\n')).toContain('赢面');
+    expect(problemsFor((data) => (data._doc = '只有主观')).join('\n')).toContain('待核');
   });
 
   it('缺少元数据、非法日期或版本号会失败', () => {

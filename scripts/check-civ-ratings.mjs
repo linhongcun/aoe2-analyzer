@@ -10,12 +10,31 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const CIV_TYPES = Object.freeze(['cav', 'arch', 'inf', 'naval', 'monk', 'siege', 'def', 'eco']);
-export const META_KEYS = Object.freeze(['_doc', 'verifiedAt', 'schemaVersion']);
+export const AXIS_NAMES = Object.freeze(['骑兵', '弓手', '步兵', '经济', '防御', '攻城', '僧侣', '海军']);
+export const META_KEYS = Object.freeze(['_doc', 'verifiedAt', 'schemaVersion', 'basis']);
 
 const META = new Set(META_KEYS);
 const TYPES = new Set(CIV_TYPES);
 const FIELDS = ['fl', 'op', 'pk', 's', 'ty'];
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
+const BASIS_KEYS = [
+  'axes',
+  'scale',
+  'nature',
+  'reviewableEvidence',
+  'axisRule',
+  'axisGap',
+  'alignedPatch',
+  'alignedPatchStatus',
+  'verifiedAtMeans',
+  'communityClaim',
+  'communityClaimNote',
+  'highlight',
+  'uncertainty',
+  'positions',
+];
+const POSITION_KEYS = ['fields', 'labels', 'independentOfAxes', 'nature', 'alignedPatch', 'alignedPatchStatus', 'source'];
+const BANNED_BASIS = ['188329', 'DE Update', '已对齐', '赢面'];
 
 function isPlainObject(value) {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -36,6 +55,77 @@ function sameKeys(actual, expected) {
   return left.every((key, index) => key === right[index]);
 }
 
+function requirePhrase(problems, where, value, phrases) {
+  if (typeof value !== 'string' || !value.trim()) {
+    problems.push(`${where}: 必须是非空字符串`);
+    return;
+  }
+  for (const phrase of phrases) {
+    if (!value.includes(phrase)) problems.push(`${where}: 必须写明「${phrase}」`);
+  }
+}
+
+function rejectStamp(problems, where, value) {
+  const text = typeof value === 'string' ? value : JSON.stringify(value);
+  for (const banned of BANNED_BASIS) {
+    if (text.includes(banned)) problems.push(`${where}: 不能写入 ${banned}`);
+  }
+}
+
+function requireUnknownPatch(problems, where, value) {
+  if (!isPlainObject(value)) return;
+  if (value.alignedPatch !== null) problems.push(`${where}.alignedPatch: 必须是 null，不能填写游戏补丁`);
+  if (value.alignedPatchStatus !== 'unknown') problems.push(`${where}.alignedPatchStatus: 必须是 unknown`);
+}
+
+/**
+ * @param {string[]} problems
+ * @param {unknown} basis
+ */
+function validateBasis(problems, basis) {
+  if (!isPlainObject(basis)) {
+    problems.push('basis: 必须是 object，写明轴、依据性质和未知项');
+    return;
+  }
+  if (!sameKeys(Object.keys(basis), BASIS_KEYS)) {
+    problems.push(`basis: 字段必须恰好是 ${BASIS_KEYS.join('/')}`);
+  }
+  rejectStamp(problems, 'basis', basis);
+  if (!Array.isArray(basis.axes) || basis.axes.length !== AXIS_NAMES.length || basis.axes.some((name, index) => name !== AXIS_NAMES[index])) {
+    problems.push(`basis.axes: 必须依次是 ${AXIS_NAMES.join('、')}`);
+  }
+  if (basis.scale !== '1-10-integer') problems.push('basis.scale: 必须是 1-10-integer');
+  if (basis.nature !== 'maintainer-subjective') problems.push('basis.nature: 必须是 maintainer-subjective');
+  requirePhrase(problems, 'basis.reviewableEvidence', basis.reviewableEvidence, ['维护者主观', '待核']);
+  requirePhrase(problems, 'basis.axisRule', basis.axisRule, ['主观', '待核']);
+  requirePhrase(problems, 'basis.axisGap', basis.axisGap, ['主观', '待核']);
+  requireUnknownPatch(problems, 'basis', basis);
+  requirePhrase(problems, 'basis.verifiedAtMeans', basis.verifiedAtMeans, ['复核', '未知']);
+  if (basis.communityClaim !== 'unverified') problems.push('basis.communityClaim: 必须是 unverified，不能把没有出处的社区看法写成已证实');
+  requirePhrase(problems, 'basis.communityClaimNote', basis.communityClaimNote, ['待核']);
+  requirePhrase(problems, 'basis.highlight', basis.highlight, ['不是胜率']);
+  requirePhrase(problems, 'basis.uncertainty', basis.uncertainty, ['未知']);
+
+  const positions = basis.positions;
+  if (!isPlainObject(positions)) {
+    problems.push('basis.positions: 必须是 object');
+  } else {
+    if (!sameKeys(Object.keys(positions), POSITION_KEYS)) {
+      problems.push(`basis.positions: 字段必须恰好是 ${POSITION_KEYS.join('/')}`);
+    }
+    if (!Array.isArray(positions.fields) || positions.fields.length !== 2 || positions.fields[0] !== 'fl' || positions.fields[1] !== 'pk') {
+      problems.push('basis.positions.fields: 必须依次是 fl、pk');
+    }
+    if (!Array.isArray(positions.labels) || positions.labels.length !== 2 || positions.labels[0] !== '边位' || positions.labels[1] !== '口袋') {
+      problems.push('basis.positions.labels: 必须依次是边位、口袋');
+    }
+    if (positions.independentOfAxes !== true) problems.push('basis.positions.independentOfAxes: 必须是 true');
+    if (positions.nature !== 'maintainer-subjective') problems.push('basis.positions.nature: 必须是 maintainer-subjective');
+    requireUnknownPatch(problems, 'basis.positions', positions);
+    requirePhrase(problems, 'basis.positions.source', positions.source, ['fl', 'pk', '未知', '待核']);
+  }
+}
+
 /**
  * @param {unknown} ratings
  * @param {readonly string[]} civNames
@@ -48,6 +138,8 @@ export function validateCivRatings(ratings, civNames) {
 
   if (typeof ratings._doc !== 'string' || !ratings._doc.trim()) {
     problems.push('_doc: 必须是非空字符串，写明 8 轴顺序、1–10 分与主观口径');
+  } else {
+    requirePhrase(problems, '_doc', ratings._doc, ['由维护者主观判断', '不是胜率', '待核', '未知']);
   }
   if (!isValidDate(ratings.verifiedAt)) {
     problems.push('verifiedAt: 必须是 YYYY-MM-DD 的真实日期');
@@ -55,6 +147,7 @@ export function validateCivRatings(ratings, civNames) {
   if (Object.hasOwn(ratings, 'schemaVersion') && ratings.schemaVersion !== 1) {
     problems.push('schemaVersion: 存在时必须是 1');
   }
+  validateBasis(problems, ratings.basis);
 
   const keys = Object.keys(ratings).filter((key) => !META.has(key));
   const expected = new Set(civNames);

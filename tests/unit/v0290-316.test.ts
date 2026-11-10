@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import scoutingContent from '../../src/content/scouting.json';
 import { analyseScouting, defaultScoutingConfig, SCOUTING_AREAS, withScenario, type ScoutingArea, type ScoutingConfig } from '../../src/domain/scouting';
+import { PAGES } from '../../src/shared/nav/pageRegistry';
 import { ALL } from '../../src/shared/nav/sections';
 
 // ---------- #316 ③ ----------
@@ -18,8 +19,9 @@ const files = (dir: string): string[] =>
   });
 
 describe('#316 「侦察辨析」入口说明', () => {
-  it('sections 里的说明换成新措辞', () => {
-    expect(ALL.find((s) => s.path === '/scouting')!.desc).toBe(NEW_DESC);
+  it('说明仍是新措辞，且不再作为首页或导航入口', () => {
+    expect(PAGES.find((page) => page.key === 'scouting')?.desc).toBe(NEW_DESC);
+    expect(ALL.some((section) => section.key === 'scouting' || section.path === '/scouting' || section.path === '/matchup/scouting')).toBe(false);
   });
   it('src 下任何文件（含搜索索引、别名）都不再出现旧措辞', () => {
     const hits = files('src').filter((f) => readFileSync(f, 'utf8').includes(OLD_DESC));

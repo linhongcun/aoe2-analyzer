@@ -36,7 +36,7 @@ describe('团队单一入口（#890）', () => {
     }
     expect(PAGES.find((page) => page.key === 'matchup')).toMatchObject({
       label: '对局助手',
-      desc: '快攻指南、类型反制示意和相关入口',
+      desc: '快攻指南、类型反制，以及侦察、混兵和城堡前置',
     });
     expect(PAGES.find((page) => page.key === 'events')).toMatchObject({ kind: 'redirect', redirectTo: '/' });
     const compare = readFileSync('src/features/compare/components/Compare.tsx', 'utf8');
