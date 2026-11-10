@@ -23,7 +23,6 @@ import { CivBackground } from './CivBackground';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
 import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
-import CivProfessionalView from './CivProfessionalView';
 import './civ-read.css';
 import './civ-start-return.css';
 
@@ -32,7 +31,6 @@ const TAB_ANCHOR: Record<string, string> = {
   data: 'identity',
   tech: 'kit',
   history: 'patches',
-  pro: 'pro',
 };
 
 const CHAPTERS = [
@@ -156,7 +154,6 @@ export default function CivDetail() {
     ['civ-tool-compare', `/compare?a=${c.en}`, '文明对比'],
   ] as const;
   const historyOpen = tab === 'history' || location.hash === '#patches';
-  const proOpen = tab === 'pro' || location.hash === '#pro';
   return (
     <CivBackground civ={c.en} className="civ-read">
       <Breadcrumbs current={c.zh} />
@@ -272,16 +269,13 @@ export default function CivDetail() {
       <NomadReveal en={c.en} />
       <section className="civ-more" id="more" data-testid="civ-more">
         <p className="civ-kicker">其他资料</p>
-        <h2>历史、更新与职业资料</h2>
+        <h2>历史与更新</h2>
         <p className="note">本页不展示能力评分、团战位置和开局短句。这些仍留在数据里，不作为打法或排名推荐。</p>
         <Fold key={`${c.en}-history`} title="文明历史摘要" wanted={false}>
           <CivHistory civ={c.en} />
         </Fold>
         <Fold key={`${c.en}-patches`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
           <PatchHistory target={{ targetType: 'civ', targetId: c.en, targetNameZh: c.zh }} />
-        </Fold>
-        <Fold key={`${c.en}-pro`} id="pro" title="职业资料" wanted={proOpen} testId="civ-pro">
-          <CivProfessionalView />
         </Fold>
         <DetailSource note="加成、单位与科技来自当前数据目录" />
       </section>

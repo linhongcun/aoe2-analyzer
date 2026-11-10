@@ -19,21 +19,9 @@
     "py": "dadehao",
     "pyi": "ddh"
   },
-  "Hera": {
-    "py": "",
-    "pyi": ""
-  },
-  "Liereyy": {
-    "py": "",
-    "pyi": ""
-  },
   "MAA：武士": {
     "py": "wushi",
     "pyi": "ws"
-  },
-  "TheViper": {
-    "py": "",
-    "pyi": ""
   },
   "UU：独特单位": {
     "py": "dutedanwei",
@@ -1075,10 +1063,6 @@
     "py": "yangguangongzuosudu",
     "pyi": "yggzsd"
   },
-  "职业选手资料": {
-    "py": "zhiyexuanshouziliao",
-    "pyi": "zyxszl"
-  },
   "聚落可以训练长矛兵系和掷矛手": {
     "py": "juluokeyixunlianchangmaobingxihezhimaoshou",
     "pyi": "jlkyxlcmbxhzms"
@@ -1146,10 +1130,6 @@
   "资源持续时间 +15%": {
     "py": "ziyuanchixushijian",
     "pyi": "zycxsj"
-  },
-  "赛事公告": {
-    "py": "saishigonggao",
-    "pyi": "ssgg"
   },
   "运输船生命值 +100%，运载量 +20": {
     "py": "yunshuchuanshengmingzhiyunzailiang",

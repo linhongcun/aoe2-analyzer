@@ -509,7 +509,6 @@
 .civ-read .insight-item,
 .civ-read .civ-arena-gold,
 .civ-read .civ-nomad-reveal,
-.civ-read .civ-pro-card h3,
 .civ-read .detail-cost-grid dd {
   color: var(--civ-ink);
 }
@@ -518,8 +517,7 @@
   font-size: 16px;
 }
 
-.civ-read .insight-slot,
-.civ-read .civ-pro-card {
+.civ-read .insight-slot {
   background: var(--civ-lift);
   border-color: var(--civ-line);
   box-shadow: none;
