@@ -29,15 +29,17 @@ test.describe('#316 首页与导航', () => {
     expect(names.filter((n) => (n.match(/打开/g) ?? []).length > 1)).toEqual([]);
   });
 
-  test('「侦察辨析」在首页卡片和工具菜单里是新措辞', async ({ page }) => {
+  test('「侦察辨析」不再列入首页和工具菜单，指南页仍用新措辞', async ({ page }) => {
     await page.goto('./#/');
     const NEW = '对照具体信号，判断对手在做什么，安排下一步';
-    await expect(page.locator('#home a.hcard[href$="/scouting"]')).toContainText(NEW);
+    await expect(page.locator('#home a.hcard[href$="/scouting"]')).toHaveCount(0);
     await toolsButton(page).click();
     const panel = page.locator('#tools-menu');
     await expect(panel).toBeVisible();
-    const text = await panel.innerText();
-    expect(text).not.toContain('对照相容解释');
+    await expect(panel).not.toContainText('侦察辨析');
+    await expect(panel).not.toContainText('对照相容解释');
+    await page.goto('./#/matchup/scouting');
+    await expect(page.getByTestId('scouting-page')).toContainText(NEW);
   });
 
   for (const width of [360, 375, 390])
@@ -46,7 +48,7 @@ test.describe('#316 首页与导航', () => {
       for (const [route, label] of [
         ['/builds', '开局流程'],
         ['/market', '市场买卖'],
-        ['/scouting', '侦察辨析'],
+        ['/matchup', '对局助手'],
       ] as const) {
         void label; // 按 href 定位，链接里加说明文字也不影响
         await page.goto('./#' + route);

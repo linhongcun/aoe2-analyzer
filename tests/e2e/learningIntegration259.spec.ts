@@ -5,7 +5,6 @@ import ts from 'typescript';
 const entries = [
   ['一局与观赛', 'game-guide', 'game-guide-page'],
   ['手填复盘', 'match-review', 'match-review-page'],
-  ['侦察辨析', 'scouting', 'scouting-page'],
 ] as const;
 // 对局计划组入口数从 pageRegistry 派生（与 pageBudget282 同样读 TS AST；口径同 sections.ts 的 HOME_GROUPS），新增工具不必改这里。
 const registry = ts.createSourceFile('pageRegistry.ts', readFileSync('src/shared/nav/pageRegistry.ts', 'utf8'), ts.ScriptTarget.Latest, true);

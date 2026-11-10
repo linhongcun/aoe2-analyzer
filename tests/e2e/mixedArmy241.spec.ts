@@ -185,7 +185,7 @@ test('#241 complete sharing, manual-copy fallback, fresh tab restore and browser
   await expect(page.getByRole('status')).toContainText('自动复制失败');
   const shared = await page.getByLabel('手动复制情境链接', { exact: true }).inputValue();
   const parsed = new URL(shared);
-  expect(parsed.pathname).toMatch(/\/mixed-army\/$/);
+  expect(parsed.pathname).toMatch(/\/matchup\/mixed-army\/$/);
   expect(parsed.searchParams.get('completedForms')).toBe('441');
   expect(parsed.searchParams.get('completedUnlockTechIds')).toBe('47,10');
   expect(parsed.searchParams.get('retreat')).toBe('unknown');

@@ -4,8 +4,8 @@ import { filterCounterUnits } from '../../src/domain/ratings';
 import { PAGES } from '../../src/shared/nav/pageRegistry';
 import { unit, units } from './helpers';
 
-const MATCHUP_DESC = '快攻指南、类型反制示意和相关入口';
-const MATCHUP_META = '查看有限快攻指南、类型反制示意，以及开局、单位 PK 与文明入口。';
+const MATCHUP_DESC = '快攻指南、类型反制，以及侦察、混兵和城堡前置';
+const MATCHUP_META = '查看有限快攻指南、类型反制示意，以及侦察辨析、混兵情境和城堡前置应对。';
 const unsupportedAdvice = /缺骑兵|没有骑兵|不能造骑兵|你可以多用远程单位/;
 const page = readFileSync('src/features/matchup/components/Matchup.tsx', 'utf8');
 const ratings = readFileSync('src/domain/ratings.ts', 'utf8');

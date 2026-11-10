@@ -176,7 +176,7 @@ function ProductionBody({
         )}
       </p>
       <nav className="bar" aria-label="生产与战术规划">
-        <Link className="community-tool-entry" to="/mixed-army">
+        <Link className="community-tool-entry" to="/matchup/mixed-army">
           结合当前局面查看混兵条件
         </Link>
         <Link className="community-tool-entry" to="/team-plan">
