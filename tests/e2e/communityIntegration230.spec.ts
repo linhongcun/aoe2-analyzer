@@ -45,7 +45,7 @@ test('#230 窄屏首页四个规划入口可键盘访问并进入真实页面', 
   for (const [, path, pageId] of [
     ['商路供给', '/trade-income', 'trade-income-page'],
     ['多人施工', '/construction', 'construction-page'],
-    ['团队加成', '/team-bonuses', 'team-bonuses-page'],
+    ['团队', '/team-fit', 'team-fit-page'],
     ['驻军回血', '/garrison-healing', 'garrison-healing-page'],
   ]) {
     await page.goto('./#/');

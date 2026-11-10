@@ -23,7 +23,9 @@ describe('#892 三份有限指南归入对局助手', () => {
       expect(redirect).toMatchObject({ kind: 'redirect', path: `/${key}`, redirectTo: `/matchup/${key}`, redirectKeepSearch: true, entry: 'none' });
     }
     expect(ALL.some((section) => section.key === 'matchup')).toBe(true);
-    expect(ALL.some((section) => section.key === 'team-plan')).toBe(true);
+    expect(ALL.some((section) => section.key === 'team-fit')).toBe(true);
+    expect(ALL.some((section) => section.key === 'team-plan')).toBe(false);
+    expect(guide('team-plan')).toMatchObject({ path: '/team-plan', entry: 'none', component: 'TeamPlan' });
     expect(ALL.some((section) => section.key === 'match-review')).toBe(true);
   });
 

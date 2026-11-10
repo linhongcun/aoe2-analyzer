@@ -4,6 +4,7 @@ import { loadCore, loadTrees } from '../../data';
 import type { ProductionContext } from '../../domain/production';
 import { decodeTeamPlan, defaultTeamPlan, encodeTeamPlan, teamPlanShareUrl, type TeamPlan } from '../../domain/teamPlan';
 import { CalcDock } from '../../shared/ui/CalcDock';
+import { TeamSections } from '../../shared/ui/TeamSections';
 import { PlanEditor } from './PlanEditor';
 import { PrintPlan } from './PrintPlan';
 import { useShareLink } from '../../shared/ui/useShareLink';
@@ -73,6 +74,9 @@ export default function TeamPlanPage() {
   const plan = decoded.plan;
   return (
     <section className="pane team-plan-page" data-testid="team-plan-page">
+      <div className="tp-screen">
+        <TeamSections />
+      </div>
       <header className="tp-heading tp-screen">
         <div>
           <p className="note">共同约定这局的分工</p>
