@@ -198,7 +198,7 @@ function diffRows(base: StatSet, f: (age: number) => Effect[], ages: number[]): 
   const out: Example['rows'] = [];
   const last = new Map<NumStat, Example['rows'][number]>();
   ages.forEach((a) => {
-    const S: StatSet = { ...base, bonus: { ...base.bonus } };
+    const S: StatSet = { ...base, bonus: { ...base.bonus }, armc: { ...base.armc } };
     applyEffects(S, f(a));
     S.rof = S.rof / S.rofx;
     S.hp = Math.round(S.hp);

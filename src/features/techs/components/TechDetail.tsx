@@ -16,7 +16,7 @@ import { ThumbRingEffectText } from './ThumbRingEffectText';
 import { ConversionTechLink } from './ConversionTechLink';
 import { MarketFeeTechLinks } from './MarketFeeTechLinks';
 import { BallisticsBoundaryNote } from './BallisticsBoundaryNote';
-import { techAffects } from '../../../domain/affects';
+import { ARMC_CLASS_NOTE, techAffects } from '../../../domain/affects';
 import { affectedUnits } from '../../../domain/family';
 import { TECH_AKA } from '../../../data/aliases';
 import { PatchHistory, HistoricalEntityDetail } from '../../../shared/ui/PatchHistory';
@@ -25,6 +25,18 @@ import '../../../shared/ui/contextLinks.css';
 import './tech-civ-links.css';
 
 const TT: Record<string, string> = { UniqueTech: '独特科技', Research: '通用科技', RegionalTech: '区域科技' };
+
+/** 类别名和加值各自不拆开；窄卡片可以在两者之间换行。 */
+function ArmcEffectText({ text }: { text: string }) {
+  const matched = text.match(/^(护甲类别「.+?」)([+-]\d+)$/);
+  if (!matched) return text;
+  return (
+    <>
+      <span className="nw">{matched[1]}</span>
+      <span className="num nw">{matched[2]}</span>
+    </>
+  );
+}
 
 export default function TechDetail() {
   const { id = '' } = useParams();
@@ -65,7 +77,8 @@ export default function TechDetail() {
       return {
         key: `effect-${groupIndex}-${rowIndex}`,
         label,
-        value: t.id === 437 ? <ThumbRingEffectText text={row.effect} /> : techEffectText(t.id, row.effect),
+        value:
+          t.id === 437 ? <ThumbRingEffectText text={row.effect} /> : t.id === 574 ? <ArmcEffectText text={row.effect} /> : techEffectText(t.id, row.effect),
         note: `作用对象：${targets.slice(0, 4).join('、')}${targets.length > 4 ? ` 等 ${targets.length} 类单位或建筑` : ''}`,
       };
     });
@@ -169,6 +182,11 @@ export default function TechDetail() {
                   <p className="note">基础效果与需要额外科技的组合效果分别列出；请结合生效条件与作用对象阅读，完整说明见「作用对象」。</p>
                   <StatTiles label="科技效果" stats={effectCards.map((card, index) => ({ ...card, accent: index < 2 }))} />
                 </div>
+              )}
+              {t.id === 574 && (
+                <p className="note" data-t="royal-heirs-armc">
+                  {ARMC_CLASS_NOTE}
+                </p>
               )}
               {t.desc.trim() && (
                 <DetailSection title={t.id === 437 ? '游戏内说明（近似）' : '效果说明'}>

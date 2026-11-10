@@ -56,7 +56,7 @@ export default function TechAffects({ t }: { t: Tech }) {
                   <div className="affrow" key={r.effect}>
                     <div className="affef">
                       {r.parts.map((p, i) => (
-                        <span key={i} className="tag">
+                        <span key={i} className={p.text.startsWith('护甲类别') ? 'tag nw' : 'tag'}>
                           {p.icon && <StatIcon k={p.icon} t={techEffectText(t.id, p.text)} />}
                           {t.id === 437 ? <ThumbRingEffectText text={techEffectText(t.id, p.text)} /> : techEffectText(t.id, p.text)}
                         </span>

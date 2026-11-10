@@ -18,6 +18,7 @@ export default function Simulator({ u, route }: { u: Unit; route: SimRoute }) {
       </div>
     );
   const rows: StatRow[] = SIM_ROWS.map(([k, n, ic]) => [k, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
+  const cur = simulate(S.ctx, u, S.civ, S.age, S.sel, S.team);
   const C = S.cmp ? simulate(S.ctx, u, S.cmp, 4, allNumeric(simTechs(S.ctx, u, S.cmp)), new Set()) : null;
   return (
     <SimPanel
@@ -32,10 +33,10 @@ export default function Simulator({ u, route }: { u: Unit; route: SimRoute }) {
       techById={core.techById}
       rows={rows}
       base={baseStats(u)}
-      cur={simulate(S.ctx, u, S.civ, S.age, S.sel, S.team)}
+      cur={cur}
       cmpStats={C}
       civNotes={civBonusNotes(u, S.civ)}
-      armorClasses={u.armc}
+      armorClasses={Object.entries(cur.armc)}
       teamBonuses={TEAM_BONUSES.map(([, label, f]) => ({ label, ok: f(u) }))}
       go={go}
       setCmp={setCmp}

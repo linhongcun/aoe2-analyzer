@@ -123,12 +123,17 @@ export interface StatSet {
   rof: number;
   acc: number;
   bonus: Record<string, number>;
+  /** 护甲类别当前值（不含近战/穿刺）。来自单位 armc，可被 armc 效果修改。 */
+  armc: Record<string, number>;
   rofx: number;
 }
-export type NumStat = Exclude<keyof StatSet, 'bonus' | 'rofx'>;
-/** 效果：add 加值、mul 乘、set 设定；rof 表示攻速 +x%（攻击间隔 /(1+x)）；bonus 为对某类别的加成伤害（op=mul 时按倍率放大已有加成） */
+export type NumStat = Exclude<keyof StatSet, 'bonus' | 'rofx' | 'armc'>;
+/** 效果：add 加值、mul 乘、set 设定；rof 表示攻速 +x%（攻击间隔 /(1+x)）；bonus 为对某类别的加成伤害（op=mul 时按倍率放大已有加成）；armc 为护甲类别加减 */
 export type Effect =
-  { s: Exclude<NumStat, 'rof'>; op?: 'add' | 'mul' | 'set'; v: number } | { s: 'rof'; v: number } | { s: 'bonus'; vs: string; v: number; op?: 'add' | 'mul' };
+  | { s: Exclude<NumStat, 'rof'>; op?: 'add' | 'mul' | 'set'; v: number }
+  | { s: 'rof'; v: number }
+  | { s: 'bonus'; vs: string; v: number; op?: 'add' | 'mul' }
+  | { s: 'armc'; vs: string; v: number; op?: 'add' | 'mul' };
 export type UnitPred = (u: Unit) => boolean;
 
 export type BuildingType = 'military' | 'economy' | 'defense' | 'other';

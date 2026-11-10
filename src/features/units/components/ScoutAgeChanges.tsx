@@ -26,7 +26,7 @@ export function scoutAgeChange(
   const effects = entry.rules.filter((rule) => !rule.b && rule.t.includes(unit.id)).flatMap((rule) => toEffects(rule.fx));
   if (!stats.every(([key]) => effects.some((effect) => effect.s === key))) return { state: 'pending' };
   const base = baseStats(unit);
-  const current = { ...base, bonus: { ...base.bonus } };
+  const current = { ...base, bonus: { ...base.bonus }, armc: { ...base.armc } };
   applyEffects(current, effects);
   if (!stats.every(([key]) => Number.isFinite(current[key]))) return { state: 'pending' };
   return { state: 'ready', age: entry.age, tech: entry.tech, before: base, after: current };

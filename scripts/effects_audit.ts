@@ -35,7 +35,7 @@ const nm = (o: Obj) => `${o.zh}(${o.en})`;
 const KEYS = ['hp', 'atk', 'ma', 'pa', 'rng', 'spd', 'los', 'rof', 'acc', 'minr', 'gar', 'bt', 'barm'] as const;
 function result(o: Obj, b: boolean, ef: Effect[]): Record<string, number> {
   const S: StatSet = b ? buildingBase(o as Building) : baseStats(o as Unit);
-  const base: StatSet = { ...S, bonus: { ...S.bonus } };
+  const base: StatSet = { ...S, bonus: { ...S.bonus }, armc: { ...S.armc } };
   applyEffects(S, ef);
   S.rof = S.rof / S.rofx;
   const r: Record<string, number> = {};
