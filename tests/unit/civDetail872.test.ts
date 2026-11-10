@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { civByEn, civs, loadCore, type Core } from '../../src/data';
 import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../src/domain/civKit';
@@ -57,6 +58,20 @@ describe('文明详情套件装配', () => {
         }
       }
     }
+  });
+
+  it('文明详情颜色引用现有主题令牌，不另写一套固定深色', () => {
+    const css = readFileSync('src/features/civs/components/civ-read.css', 'utf8');
+    const tokens = readFileSync('src/shared/styles/tokens.css', 'utf8');
+    expect(css).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
+    expect(css).toContain('var(--color-bg)');
+    expect(css).toContain('var(--color-text)');
+    expect(css).toContain('var(--color-accent)');
+    expect(css).toContain('var(--color-on-accent)');
+    expect(css).toContain('var(--color-link)');
+    expect(tokens).not.toMatch(/\.civ-read\s*\{/);
+    expect(css).toMatch(/\.civ-read \.civ-tree\s*\{[^}]*color:\s*var\(--civ-btn-ink\)/);
+    expect(css).not.toMatch(/(^|\n)\.civ-tree\s*\{[^}]*color:/);
   });
 
   it('评分、位置和开局字段还在，优劣计算没有删掉', () => {

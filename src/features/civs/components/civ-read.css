@@ -1,9 +1,24 @@
-/* 文明详情阅读页。颜色来自 .civ-read 上的令牌，不改全站变量。 */
+/* 文明详情阅读页。颜色只引用现有主题令牌，随 data-theme 的 light / dark 切换。 */
 
 .civ-read {
+  --civ-bg: var(--color-bg);
+  --civ-bg-deep: var(--color-surface-2);
+  --civ-lift: var(--color-surface-2);
+  --civ-ink: var(--color-text);
+  --civ-ink-2: var(--color-text-2);
+  --civ-ink-3: var(--color-muted);
+  --civ-gold: var(--color-accent);
+  --civ-gold-2: var(--color-accent);
+  --civ-copper: var(--color-warn);
+  --civ-line: var(--color-border);
+  --civ-line-2: var(--color-border);
+  --civ-btn: var(--color-accent);
+  --civ-btn-ink: var(--color-on-accent);
+  --civ-btn-edge: var(--color-accent);
+  --civ-focus: var(--color-link);
   margin: calc(var(--space-8) * -1) calc(var(--space-10) * -1);
   padding: 20px 28px 64px;
-  background: radial-gradient(900px 420px at 8% -10%, var(--civ-lift), transparent 60%), var(--civ-bg);
+  background: var(--civ-bg);
   color: var(--civ-ink);
   font-size: 16px;
   line-height: 1.65;
@@ -15,7 +30,7 @@
 }
 
 .civ-read a {
-  color: var(--civ-gold);
+  color: var(--color-link);
 }
 
 .civ-read .note,
@@ -177,7 +192,7 @@
 }
 
 .civ-read .detail-copy-button,
-.civ-list-link {
+.civ-read .civ-list-link {
   border: 1px solid var(--civ-line-2);
   border-radius: 2px;
   background: transparent;
@@ -326,14 +341,14 @@
   font-weight: 600;
 }
 
-.kit-row {
+.civ-read .kit-row {
   display: flex;
   gap: 10px;
   align-items: center;
   min-height: 44px;
   padding: 8px 0;
   border-top: 1px solid var(--civ-line);
-  color: inherit;
+  color: var(--civ-ink);
   text-decoration: none;
 }
 
@@ -388,7 +403,7 @@
   border-top: 1px solid var(--civ-line-2);
 }
 
-.civ-tree {
+.civ-read .civ-tree {
   display: flex;
   gap: 12px;
   align-items: center;
@@ -404,9 +419,9 @@
   text-decoration: none;
 }
 
-.civ-tree:hover {
+.civ-read .civ-tree:hover {
   color: var(--civ-btn-ink);
-  background: var(--civ-gold);
+  background: var(--civ-btn);
 }
 
 .civ-tree small {
