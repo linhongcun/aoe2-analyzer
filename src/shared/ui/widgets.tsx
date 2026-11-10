@@ -75,7 +75,7 @@ export function Join({ items, sep }: { items: ReactNode[]; sep: ReactNode }) {
 }
 
 /** 8 轴能力雷达图（canvas）；canvas 不认 var()，颜色从设计令牌读取 */
-export function Radar({ list, id }: { list: Civ[]; id?: string }) {
+export function Radar({ list, id, label }: { list: Civ[]; id?: string; label?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const cv = ref.current;
@@ -132,7 +132,7 @@ export function Radar({ list, id }: { list: Civ[]; id?: string }) {
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     return () => theme.disconnect();
   }, [list]);
-  return <canvas id={id} ref={ref} width={440} height={440} />;
+  return <canvas id={id} ref={ref} width={440} height={440} role={label ? 'img' : undefined} aria-label={label} />;
 }
 
 /** 团战位置适配（边位/口袋）横条 */
@@ -147,7 +147,7 @@ export function PosBox({ list }: { list: Civ[] }) {
             <div style={{ width: `${c[k] * 10}%`, background: cl[j] }} />
             <b>
               {list.length > 1 ? c.zh + ' ' : ''}
-              {c[k]}/10
+              <span className="num nw">{c[k]}/10</span>
             </b>
           </div>
         ))}

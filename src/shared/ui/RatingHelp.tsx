@@ -61,10 +61,11 @@ function RatingHelp() {
         <Icon name="circle-help" className="ic rl-ic" />
       </button>
       {open && (
-        <div id={id} ref={pop} className="rl-pop" role="dialog" aria-label="评分是怎么来的" tabIndex={-1}>
-          <strong className="rl-title">评分是怎么来的</strong>
-          <p>8 项能力按 1–10 打分，由我们参考以下几点人工整理：文明加成、独特单位和独特科技；科技树完整度（缺哪些关键升级）；团战排位社区的普遍看法。</p>
-          <p>不是胜率统计，会随版本补丁调整。数据在 scripts/civ_ratings.json。</p>
+        <div id={id} ref={pop} className="rl-pop" role="dialog" aria-label="评分口径在页面上" tabIndex={-1}>
+          <strong className="rl-title">评分口径在页面上</strong>
+          <p>八项分数是维护者主观整理的整数，用来画雷达。不是胜率，也不是精确战力。</p>
+          <p>各轴只有名称，没有单独的量化规则，规则待核。可复查的记录是维护者主观判断；社区出处没有写入文件，待核。</p>
+          <p>分数适用的游戏补丁未知。复核日只表示文件结构和口径查过，不是逐文明重打分，也不表示已经对齐当前资料版本。</p>
           <p>
             觉得不准？
             <FeedbackLink

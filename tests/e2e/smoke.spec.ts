@@ -484,28 +484,31 @@ test('build orders read-only list renders all entries with sources', async ({ pa
 });
 
 test('rating help: beside 能力评分, opens/closes by click, outside click and Esc, focus moves in and back', async ({ page }) => {
-  await page.goto('./#/civ/Franks');
-  await page.getByRole('tab', { name: '数据' }).click();
-  const head = page.locator('#detail .ratehead');
+  await page.goto('./#/compare');
+  const basis = page.getByTestId('compare-rating-basis');
+  await expect(basis).toContainText('规则待核');
+  await expect(basis).toContainText('游戏版本未知');
+  await expect(basis).not.toContainText('188329');
+  const head = page.locator('#compare .ratehead');
   await expect(head).toContainText('能力评分');
   await expect(head).toContainText('主观评分，仅供参考');
-  await expect(page.locator('#detail')).not.toContainText('评分为主观近似值');
   const btn = head.getByRole('button', { name: '评分说明' });
   const box = await btn.boundingBox();
   expect(box!.width).toBeGreaterThanOrEqual(32);
   expect(box!.height).toBeGreaterThanOrEqual(32);
-  const pop = page.getByRole('dialog', { name: '评分是怎么来的' });
+  const pop = page.getByRole('dialog', { name: '评分口径在页面上' });
   await expect(pop).toBeHidden();
   await btn.click();
   await expect(pop).toBeVisible();
   await expect(pop).toBeFocused();
-  await expect(pop).toContainText(
-    '8 项能力按 1–10 打分，由我们参考以下几点人工整理：文明加成、独特单位和独特科技；科技树完整度（缺哪些关键升级）；团战排位社区的普遍看法。',
-  );
-  await expect(pop).toContainText('不是胜率统计，会随版本补丁调整。数据在 scripts/civ_ratings.json。');
+  await expect(pop).toContainText('不是胜率，也不是精确战力。');
+  await expect(pop).toContainText('规则待核');
+  await expect(pop).toContainText('分数适用的游戏补丁未知');
+  await expect(pop).not.toContainText('团战排位社区的普遍看法');
+  await expect(pop).not.toContainText('会随版本补丁调整');
   await expect(pop.getByRole('link', { name: /反馈给我们/ })).toHaveAttribute('href', /issues\/new/);
   await expect(btn).toHaveAttribute('aria-expanded', 'true');
-  await page.locator('#detail .dhead h1').click();
+  await page.locator('#compare h2').click();
   await expect(pop).toBeHidden();
   await btn.click();
   await expect(pop).toBeVisible();
@@ -519,15 +522,14 @@ test('rating help: beside 能力评分, opens/closes by click, outside click and
 
 test('rating help on mobile: 44px target, popover spans the card width', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('./#/civ/Franks');
-  await page.getByRole('tab', { name: '数据' }).click();
-  const head = page.locator('#detail .ratehead');
+  await page.goto('./#/compare');
+  const head = page.locator('#compare .ratehead');
   const btn = head.getByRole('button', { name: '评分说明' });
   const b = await btn.boundingBox();
   expect(b!.width).toBeGreaterThanOrEqual(44);
   expect(b!.height).toBeGreaterThanOrEqual(44);
   await btn.click();
-  const pop = page.getByRole('dialog', { name: '评分是怎么来的' });
+  const pop = page.getByRole('dialog', { name: '评分口径在页面上' });
   const h = await head.boundingBox();
   const p = await pop.boundingBox();
   expect(Math.abs(p!.x - h!.x)).toBeLessThan(1);

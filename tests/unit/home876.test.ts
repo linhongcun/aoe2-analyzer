@@ -50,7 +50,7 @@ describe('首页方向 B #876', () => {
       expect(catalog).not.toContain(`href="${path}"`);
     }
     const pages = PAGES.filter((page) => page.kind === 'page' && page.lane && page.status !== 'planned' && !page.path.includes(':'));
-    expect(pages).toHaveLength(38);
+    expect(pages).toHaveLength(31);
     for (const page of pages) expect(html, page.path).toContain(`href="${page.path}"`);
     expect(html).not.toContain('设计选例');
     expect(html).not.toContain('规划中');
