@@ -38,6 +38,12 @@ export interface TreeLayout {
   lines: LLine[];
 }
 
+/** 跳到建筑：目标列靠近左侧，并为 sticky 时代标签留出约 56px。右侧滚不动时停在最大 scrollLeft。 */
+export function jumpScrollLeft(columnX: number, maxScroll: number): number {
+  const max = Math.max(0, maxScroll);
+  return Math.min(max, Math.max(0, columnX - 56));
+}
+
 export function layoutTree(trees: Trees, civ: string, cmpCiv: string | null, exists: (k: 'u' | 't' | 'b', id: number) => boolean): TreeLayout {
   const sb = cmpCiv ? civStatus(trees, cmpCiv) : null;
   let x = LW;
