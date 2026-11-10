@@ -17,7 +17,7 @@ export function buildingAge(building: Pick<Building, 'id' | 'age'>, civ: string,
 
 export const SPEARMAN_UNIT_ID = 93;
 
-/** 现有单位提前解锁口径，共用一份；不改变各工具的其他形态/前置检查。 */
+/** 现有单位提前解锁口径，共用一份；不改变各工具的其他形态/前置检查。新增文明或时代须在 techAvailability.ts 点名。 */
 export const EARLY_UNIT_AGES: Readonly<Record<string, Readonly<Record<number, number>>>> = {
   Armenians: { 75: 1, 77: 2, 473: 3, 358: 2, 359: 3 },
   Cumans: { 1258: 2, 422: 3 },
@@ -38,7 +38,7 @@ export function trainingUnitAge(civ: string, id: number, catalogAge: number, ext
   return Math.max(EARLY_UNIT_AGES[civ]?.[id] ?? catalogAge, id === SPEARMAN_UNIT_ID ? 2 : 1, extraFloor);
 }
 
-/** 展示口径：Armenians 长矛兵按黑暗，其他文明按封建；不得用于生产/费用/战斗。 */
+/** 展示口径：Armenians 长矛兵按黑暗，其他文明按封建；不得用于生产/费用/战斗。登记见 techAvailability.ts。 */
 export function displayUnitAge(id: number, catalogAge: number, civ = ''): number {
   return id === SPEARMAN_UNIT_ID ? (civ === 'Armenians' ? 1 : 2) : catalogAge;
 }

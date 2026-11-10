@@ -20,6 +20,7 @@ export function unitAvailable(data: AvailabilityData, civ: string, id: number, a
   return availableUnitAge(civ, id, unit.age, rowAge) <= age;
 }
 
+/** 问目录文明与目录/树行时代。不代替另外三套，也不读生产口径的手写提前。例外见 techAvailability.ts。 */
 export function techAvailable(data: AvailabilityData, civ: string, id: number, age: number): boolean {
   const tech = data.core.techById[id];
   return !!tech?.civs.includes(civ) && [1, 2, 3, 4].includes(age) && Math.max(tech.age, treeAge(data, civ, 't', id)) <= age;
