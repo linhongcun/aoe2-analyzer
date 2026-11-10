@@ -1,320 +1,290 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { startReturnPath } from '../../../domain/startGameReturn';
-import { civByEn, civs } from '../../../data';
+import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
 import { civInsights } from '../../../domain/insights';
-import { findUniqueTech } from '../../../domain/linker';
-import { AXES, strengths, TYPE_ZH } from '../../../domain/ratings';
-import type { Civ } from '../../../domain/types';
-import { CivChip, CivIcon, DlcBadgeL, TechIcon, UnitLinks } from '../../../shared/ui/art';
-import { collapse } from '../../../domain/family';
+import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../../domain/civKit';
+import { AGE_ZH, TYPE_ZH } from '../../../domain/ratings';
+import type { Building, Unit } from '../../../domain/types';
+import { DlcImg, img, TechIcon, UnitIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
-import { DetailPage, SideBlock } from '../../../shared/ui/layout';
-import { DetailSource, StatTiles } from '../../../shared/ui/DetailBlocks';
-import { RatingHeading, RatingLabel } from '../../../shared/ui/RatingHelp';
-import { Linked, PosBox, Radar } from '../../../shared/ui/widgets';
+import { Breadcrumbs } from '../../../shared/ui/layout';
+import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { session } from '../../../shared/utils/sticky';
 import CivNotFound from './CivNotFound';
 import { ArenaCastleGold } from './ArenaCastleGold';
 import { NomadReveal } from './NomadReveal';
 import { BonusRows } from './BonusRows';
-import { CivOpening } from './CivOpening';
 import { CivHistory } from './CivHistory';
 import { CivBackground } from './CivBackground';
-import { CivRegionalUnits } from './CivRegionalUnits';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
 import { CivUniqueBuildings } from './CivUniqueBuildings';
 import { PatchHistory } from '../../../shared/ui/PatchHistory';
-import { civDisplayText } from '../displayNames';
 import CivProfessionalView from './CivProfessionalView';
-import './civOverview.css';
-import './civRelatedTools.css';
+import './civ-read.css';
 import './civ-start-return.css';
 
-function OverviewCard({
-  title,
+const TAB_ANCHOR: Record<string, string> = {
+  ov: 'identity',
+  data: 'identity',
+  tech: 'kit',
+  history: 'patches',
+  pro: 'pro',
+};
+
+const CHAPTERS = [
+  ['identity', '身份'],
+  ['bonuses', '加成'],
+  ['kit', '兵种'],
+  ['next', '下一步'],
+  ['more', '其他'],
+] as const;
+
+function EmNum({ text }: { text: string }) {
+  return text.split(/((?:[+＋−-]\s*)?\d+(?:\.\d+)?\s*%?)/g).map((part, index) =>
+    index % 2 ? (
+      <span className="num nw" key={index}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
+
+function Fold({ id, title, wanted, testId, children }: { id?: string; title: string; wanted: boolean; testId?: string; children: ReactNode }) {
+  const [open, setOpen] = useState(wanted);
+  return (
+    <details id={id} className="civ-more-block" data-testid={testId} open={open} onToggle={(event) => setOpen(event.currentTarget.open)}>
+      <summary>{title}</summary>
+      {open ? children : null}
+    </details>
+  );
+}
+
+function buildingZh(id: number, buildings: readonly Building[] | null): string | undefined {
+  return buildings?.find((building) => building.id === id)?.zh;
+}
+
+function KitUnits({
+  label,
+  hint,
+  lines,
+  buildings,
   testId,
-  extra,
-  className = '',
-  headingClassName = '',
-  children,
 }: {
-  title: string;
+  label: string;
+  hint: string;
+  lines: { u: Unit; elite?: Unit }[];
+  buildings: readonly Building[] | null;
   testId: string;
-  extra?: ReactNode;
-  className?: string;
-  headingClassName?: string;
-  children: ReactNode;
 }) {
+  if (!lines.length) return null;
   return (
-    <section className={`detail-section${className ? ` ${className}` : ''}`} aria-label={title} data-testid={testId}>
-      <div className={`civ-ov-hd${headingClassName ? ` ${headingClassName}` : ''}`}>
-        <h2>{title}</h2>
-        {extra}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function UTech({ s, civ }: { s: string; civ: string }) {
-  const core = useCore();
-  const f = core && findUniqueTech(s, civ, core.techs);
-  if (!f) return <Linked text={civDisplayText(s, civ, core)} />;
-  return (
-    <>
-      <Link className="ulink tlink" to={`/tech/${f.tech.id}`}>
-        <TechIcon t={f.tech} />
-        {f.zh}
-      </Link>
-      <Linked text={civDisplayText(f.rest, civ, core)} />｜{f.en}
-    </>
-  );
-}
-
-function SameDlcCivs({ list }: { list: Civ[] }) {
-  const [expanded, setExpanded] = useState(false);
-  return (
-    <SideBlock title="同资料片文明">
-      <ul id="same-dlc-civs" className="same-dlc-civs">
-        {(expanded ? list : list.slice(0, 5)).map((c) => (
-          <li key={c.en}>
-            <CivChip c={c} />
-          </li>
-        ))}
-      </ul>
-      {list.length > 5 && (
-        <button type="button" className="same-dlc-toggle" aria-expanded={expanded} aria-controls="same-dlc-civs" onClick={() => setExpanded(!expanded)}>
-          {expanded ? '收起' : `查看全部（${list.length}）`}
-        </button>
-      )}
-    </SideBlock>
+    <div className="civ-kit-group" data-testid={testId}>
+      <p className="civ-group-title">
+        <b>{label}</b>
+        <span>{hint}</span>
+      </p>
+      {lines.map(({ u, elite }) => {
+        const made = buildingZh(u.b, buildings);
+        const sub = [u.en, elite ? '含精锐' : '', made ? `${made}生产` : ''].filter(Boolean).join(' · ');
+        return (
+          <Link className="kit-row uchips" key={u.id} to={`/unit/${u.id}`}>
+            <span className="kit-icons">
+              <UnitIcon u={u} />
+              {elite && <UnitIcon u={elite} />}
+            </span>
+            <span className="kit-meta">
+              <span className="kit-name">{u.zh}</span>
+              <span className="kit-sub">{sub}</span>
+            </span>
+            <span className="kit-age">{AGE_ZH[u.age] ?? ''}</span>
+          </Link>
+        );
+      })}
+    </div>
   );
 }
 
 export default function CivDetail() {
   const { en = '' } = useParams();
-  const homeReturn = startReturnPath(useLocation().search);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const homeReturn = startReturnPath(location.search);
   const c = civByEn(en);
   const core = useCore();
+  const params = new URLSearchParams(location.search);
+  const tab = params.get('tab');
   useEffect(() => {
-    if (c) {
-      session.lastCiv = c.en;
-      scrollTo(0, 0);
+    if (!c) return;
+    session.lastCiv = c.en;
+    if (tab != null) {
+      const next = new URLSearchParams(location.search);
+      next.delete('tab');
+      const anchor = TAB_ANCHOR[tab] ?? '';
+      navigate({ pathname: location.pathname, search: next.toString() ? `?${next}` : '', hash: anchor ? `#${anchor}` : '' }, { replace: true });
+      return;
     }
-  }, [c]);
+    const id = location.hash.replace(/^#/, '');
+    if (!id) {
+      scrollTo(0, 0);
+      return;
+    }
+    const frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
+    return () => cancelAnimationFrame(frame);
+  }, [c, location.hash, location.pathname, location.search, navigate, tab]);
   if (!c) return <CivNotFound en={en} />;
-  const [s, w] = strengths(c);
   const insights = civInsights(c.en);
-  const myU = core ? core.units.filter((u) => u.type === 'UniqueUnit' && u.civs.includes(c.en)) : [];
-  const highlights = new Set(
-    c.s
-      .map((score, index) => ({ score, index }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 2)
-      .map((x) => x.index),
-  );
-  const ratingTiles = (
-    <StatTiles
-      label="文明能力评分"
-      stats={AXES.map((label, index) => ({
-        key: `rating-${index}`,
-        label,
-        value: (
-          <>
-            {c.s[index]}
-            <small className="detail-score-max">/10</small>
-          </>
-        ),
-        score: c.s[index],
-        accent: highlights.has(index),
-      }))}
-    />
-  );
-  const sameDlc = c.dlc != null ? DLCS[c.dlc]!.civs.filter((n) => n !== c.en).map((n) => civByEn(n)!) : [];
-  const relatedTools = [
-    ['civ-tool-builds', `/builds?civ=${c.en}`, 'book-open', '开局流程'],
-    ['civ-tool-production', `/production?civ=${c.en}`, 'factory', '生产对照'],
-    ['civ-tool-matchup', `/matchup?me=${c.en}`, 'crosshair', '对局助手'],
-    ['civ-tool-compare', `/compare?a=${c.en}`, 'scale', '文明对比'],
-    ['civ-tool-tree', `/tree/${c.en}`, 'git-branch', '科技树'],
+  const uniqueUnits = core ? civUniqueUnits(c.en, core.units, core.fam) : [];
+  const uniqueTechs = core ? civUniqueTechs(c, core.techs) : [];
+  const regional = core
+    ? relatedRegionalLines(c, core.units, core.techs).flatMap((line) => {
+        const base = line[0];
+        if (!base) return [];
+        const tail = line.length > 1 ? line[line.length - 1] : undefined;
+        return [{ u: base, elite: tail && tail.id !== base.id ? tail : undefined }];
+      })
+    : [];
+  const tools = [
+    ['civ-tool-builds', `/builds?civ=${c.en}`, '开局流程'],
+    ['civ-tool-production', `/production?civ=${c.en}`, '生产对照'],
+    ['civ-tool-matchup', `/matchup?me=${c.en}`, '对局助手'],
+    ['civ-tool-compare', `/compare?a=${c.en}`, '文明对比'],
   ] as const;
-  const detail = (
-    <DetailPage
-      key={c.en}
-      id="detail"
-      crumb={c.zh}
-      icon={<CivIcon c={c} />}
-      title={c.zh}
-      en={c.en}
-      badges={<DlcBadgeL i={c.dlc} />}
-      tags={c.ty.map((t) => (
-        <span key={t} className="tag">
-          {TYPE_ZH[t]}
-        </span>
-      ))}
-      tablistTestId="civ-tabs"
-      tabsTop={
-        homeReturn ? (
-          <div className="civ-start-return">
-            <Link to={homeReturn}>回开一局</Link>
-            <small>返回文明步，保留原选择</small>
-          </div>
-        ) : null
-      }
-      afterTabs={
-        <nav className="civ-related-tools" aria-label="相关工具" data-testid="civ-related-tools">
-          <span className="lbl">相关工具</span>
-          {relatedTools.map(([id, to, icon, label]) => (
-            <Link key={id} data-testid={id} to={to}>
-              <Icon name={icon} className="ic civ-tool-ic" />
-              {label}
-            </Link>
-          ))}
-        </nav>
-      }
-      tabs={[
-        {
-          key: 'ov',
-          label: '概览',
-          content: (
-            <>
-              {c.op.trim() && (
-                <OverviewCard title="开局建议" testId="civ-opening" className="civ-opening-card">
-                  <CivOpening c={c} />
-                </OverviewCard>
-              )}
-              <OverviewCard title="能力评分" testId="civ-ratings" className="civ-ratings" headingClassName="detail-ratings-heading" extra={<RatingLabel />}>
-                {ratingTiles}
-                <dl className="civ-rating-footnote" data-testid="civ-rating-footnote">
-                  <div>
-                    <dt>官方定位</dt>
-                    <dd>{c.desc}</dd>
-                  </div>
-                  <div>
-                    <dt>特色兵种</dt>
-                    <dd>
-                      <Linked text={civDisplayText(c.uu, c.en, core)} />
-                    </dd>
-                  </div>
-                </dl>
-              </OverviewCard>
-              {insights.length > 0 && <InsightSlot items={insights} />}
-              <OverviewCard
-                title="文明加成"
-                testId="civ-bonuses"
-                className="civ-bonuses"
-                extra={
-                  <Link className="civ-ov-link" to="/bonuses">
-                    查看完整加成表
-                  </Link>
-                }
-              >
-                <BonusRows c={c} />
-              </OverviewCard>
-              <ArenaCastleGold en={c.en} />
-              <NomadReveal en={c.en} />
-              <OverviewCard title="优劣与位置" testId="civ-stance" className="civ-stance">
-                <div className="civ-stance-cols">
-                  <div data-testid="civ-stance-pros">
-                    <h3>优势</h3>
-                    <div className="civ-chips">
-                      {s.map((name) => (
-                        <span key={name} className="civ-chip is-pro">
-                          {name}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div data-testid="civ-stance-cons">
-                    <h3>劣势</h3>
-                    <div className="civ-chips">
-                      {w.map((name) => (
-                        <span key={name} className="civ-chip is-con">
-                          {name}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p className="civ-position" data-testid="civ-position">
-                  <span className="k">推荐团战位置</span>
-                  {c.fl >= c.pk ? '边位 Flank' : '口袋 Pocket'}（边位{' '}
-                  <span className="nw">
-                    <span className="num">{c.fl}</span>/10
-                  </span>
-                  ，口袋{' '}
-                  <span className="nw">
-                    <span className="num">{c.pk}</span>/10
-                  </span>
-                  ）
-                </p>
-              </OverviewCard>
-              <CivHistory civ={c.en} />
-              <DetailSource note="能力评分为主观近似评分；开局建议请结合文明加成调整" />
-            </>
-          ),
-        },
-        {
-          key: 'data',
-          label: '数据',
-          content: (
-            <>
-              {ratingTiles}
-              <div className="two">
-                <div>
-                  <RatingHeading />
-                  <Radar id="rd" list={[c]} />
-                </div>
-                <div>
-                  <PosBox list={[c]} />
-                </div>
-              </div>
-            </>
-          ),
-        },
-        {
-          key: 'tech',
-          label: '科技',
-          content: (
-            <>
-              <p>
-                <b>城堡时代独特科技：</b>
-                <UTech s={c.ct} civ={c.en} />
-              </p>
-              <p>
-                <b>帝王时代独特科技：</b>
-                <UTech s={c.it} civ={c.en} />
-              </p>
-            </>
-          ),
-        },
-        { key: 'history', label: '更新历史', content: <PatchHistory target={{ targetType: 'civ', targetId: c.en, targetNameZh: c.zh }} /> },
-        { key: 'pro', label: '职业选手视角', content: <CivProfessionalView /> },
-      ]}
-      sidebar={
-        <>
-          {myU.length > 0 && (
-            <SideBlock title="独特单位">
-              <div className="uchips">{core && <UnitLinks list={collapse(myU, core.fam)} />}</div>
-            </SideBlock>
+  const historyOpen = tab === 'history' || location.hash === '#patches';
+  const proOpen = tab === 'pro' || location.hash === '#pro';
+  return (
+    <CivBackground civ={c.en} className="civ-read">
+      <Breadcrumbs current={c.zh} />
+      <nav className="civ-chapters" aria-label="本页章节">
+        {CHAPTERS.map(([id, label]) => (
+          <Link key={id} to={{ pathname: location.pathname, search: location.search, hash: `#${id}` }}>
+            {label}
+          </Link>
+        ))}
+      </nav>
+      {homeReturn && (
+        <div className="civ-start-return">
+          <Link to={homeReturn}>回开一局</Link>
+          <small>返回文明步，保留原选择</small>
+        </div>
+      )}
+      <header className="civ-identity" id="identity" data-testid="civ-identity">
+        <div className="identity-art" aria-hidden="true" />
+        <img className="civ-crest" src={img(`civs/${c.en.toLowerCase()}.webp`)} alt="" />
+        <div className="civ-identity-main">
+          {c.dlc != null && (
+            <p className="civ-dlc">
+              <Link to="/dlc">
+                <DlcImg i={c.dlc} />
+                <span>{DLCS[c.dlc]!.zh}</span>
+              </Link>
+            </p>
           )}
-          <CivRegionalUnits civ={c.en} units={core?.units ?? null} />
+          <h1>
+            {c.zh}
+            <span>{c.en}</span>
+          </h1>
+          <p className="civ-official">
+            官方定位：<em>{c.desc}</em>
+          </p>
+          {c.ty.length > 0 && (
+            <div className="civ-tags">
+              {c.ty.map((type) => (
+                <span key={type} className="tag">
+                  {TYPE_ZH[type]}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="civ-identity-actions">
+          <CopyPageLink />
+          <Link className="civ-list-link" to="/civs">
+            文明列表
+          </Link>
+        </div>
+      </header>
+      <div className="civ-columns">
+        <section id="bonuses" aria-labelledby="civ-bonus-title" data-testid="civ-bonuses">
+          <p className="civ-kicker">机制事实</p>
+          <h2 id="civ-bonus-title">文明加成</h2>
+          <p className="note">事实在此完整列出一次。点开一行可进入加成详情。</p>
+          <BonusRows key={c.en} c={c} />
+        </section>
+        <section className="civ-kit" id="kit" aria-labelledby="civ-kit-title" data-testid="civ-kit">
+          <p className="civ-kicker">本文明套件</p>
+          <h2 id="civ-kit-title">关键兵种与科技</h2>
+          <p className="note">名称进入单位或科技页。能造什么、缺什么看完整科技树。</p>
+          {!core && <p role="status">正在加载兵种与科技…</p>}
+          <KitUnits label="独特单位" hint="本文明专属" lines={uniqueUnits} buildings={core?.buildings ?? null} testId="civ-unique-units" />
+          {uniqueTechs.length > 0 && (
+            <div className="civ-kit-group" data-testid="civ-unique-techs">
+              <p className="civ-group-title">
+                <b>独特科技</b>
+                <span>本文明专属</span>
+              </p>
+              {uniqueTechs.map((item) => (
+                <Link className="kit-row" key={item.tech.id} to={`/tech/${item.tech.id}`}>
+                  <span className="kit-icons">
+                    <TechIcon t={item.tech} />
+                  </span>
+                  <span className="kit-meta">
+                    <span className="kit-name">{item.zh}</span>
+                    <span className="kit-sub">
+                      <EmNum text={item.tech.desc || item.rest} />
+                    </span>
+                  </span>
+                  <span className="kit-age">{AGE_ZH[item.tech.age] ?? ''}</span>
+                </Link>
+              ))}
+            </div>
+          )}
+          <KitUnits label="区域单位" hint="与本文明加成或独特科技有关" lines={regional} buildings={core?.buildings ?? null} testId="civ-regional-units" />
           <CivUniqueBuildings civ={c.en} buildings={core?.buildings ?? null} />
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
-          {sameDlc.length > 0 && <SameDlcCivs key={c.en} list={sameDlc} />}
-          <p className="note">
-            共{' '}
-            <span className="nw">
-              <span className="num">{civs.length}</span> 个文明
-            </span>
-          </p>
-        </>
-      }
-    />
+          <div className="civ-next" id="next" data-testid="civ-next">
+            <Link className="civ-tree" data-testid="civ-tool-tree" to={`/tree/${c.en}`}>
+              <span>
+                查看完整科技树
+                <small>看清能造什么、缺什么</small>
+              </span>
+              <Icon name="git-branch" />
+            </Link>
+            <ul className="civ-tools" aria-label="相关工具" data-testid="civ-related-tools">
+              {tools.map(([id, to, label]) => (
+                <li key={id}>
+                  <Link data-testid={id} to={to}>
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      </div>
+      {insights.length > 0 && <InsightSlot items={insights} />}
+      <ArenaCastleGold en={c.en} />
+      <NomadReveal en={c.en} />
+      <section className="civ-more" id="more" data-testid="civ-more">
+        <p className="civ-kicker">其他资料</p>
+        <h2>历史、更新与职业资料</h2>
+        <p className="note">本页不展示能力评分、团战位置和开局短句。这些仍留在数据里，不作为打法或排名推荐。</p>
+        <Fold key={`${c.en}-history`} title="文明历史摘要" wanted={false}>
+          <CivHistory civ={c.en} />
+        </Fold>
+        <Fold key={`${c.en}-patches`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
+          <PatchHistory target={{ targetType: 'civ', targetId: c.en, targetNameZh: c.zh }} />
+        </Fold>
+        <Fold key={`${c.en}-pro`} id="pro" title="职业资料" wanted={proOpen} testId="civ-pro">
+          <CivProfessionalView />
+        </Fold>
+        <DetailSource note="加成、单位与科技来自当前数据目录" />
+      </section>
+    </CivBackground>
   );
-  return <CivBackground civ={c.en}>{detail}</CivBackground>;
 }

@@ -220,8 +220,8 @@ function MobileTheme({ preference, onSelect }: { preference: ThemePreference; on
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname, search, hash } = useLocation();
   const siegePage = pathname === '/siege' || pathname === '/siege/';
-  // issue 775：评分免责只出现在真正展示 1–10 评分的页面（文明详情、文明对比），其余工具页不再无条件带出。
-  const showsRatings = pathname === '/compare' || /^\/civ(?:\/|$)/.test(pathname);
+  // issue 775：评分免责只出现在真正展示 1–10 评分的页面。文明详情不再展示评分，只保留文明对比。
+  const showsRatings = pathname === '/compare';
   const { preference, select } = useTheme();
   const nav = useRef<HTMLElement>(null);
   const burger = useRef<HTMLButtonElement>(null);

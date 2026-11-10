@@ -1,0 +1,584 @@
+/* 文明详情阅读页。颜色来自 .civ-read 上的令牌，不改全站变量。 */
+
+.civ-read {
+  margin: calc(var(--space-8) * -1) calc(var(--space-10) * -1);
+  padding: 20px 28px 64px;
+  background: radial-gradient(900px 420px at 8% -10%, var(--civ-lift), transparent 60%), var(--civ-bg);
+  color: var(--civ-ink);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.civ-read :where(h1, h2, h3, h4) {
+  color: var(--civ-ink);
+  font-family: 'Songti SC', 'Noto Serif SC', 'Source Han Serif SC', serif;
+}
+
+.civ-read a {
+  color: var(--civ-gold);
+}
+
+.civ-read .note,
+.civ-read .civ-history .civ-history-note,
+.civ-read .detail-copy-fallback {
+  color: var(--civ-ink-3);
+  font-size: 13px;
+}
+
+.civ-read nav.crumbs,
+.civ-read nav.crumbs a {
+  color: var(--civ-ink-3);
+}
+
+.civ-read nav.civ-chapters {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 4;
+  display: flex;
+  justify-content: flex-start;
+  gap: 0 16px;
+  margin: 0 0 8px;
+  padding: 4px 0;
+  overflow-x: auto;
+  background: var(--civ-bg);
+}
+
+.civ-chapters a {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  min-height: 44px;
+  color: var(--civ-ink-2);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.civ-chapters a:hover {
+  color: var(--civ-gold);
+}
+
+.civ-identity,
+#bonuses,
+#kit,
+#next,
+#more,
+#patches,
+#pro {
+  scroll-margin-top: 120px;
+}
+
+.civ-read header.civ-identity {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px 18px;
+  align-items: center;
+  overflow: hidden;
+  padding: 8px 0 16px;
+  border: 0;
+  border-bottom: 1px solid var(--civ-line-2);
+  background: transparent;
+  text-align: left;
+}
+
+.identity-art {
+  position: absolute;
+  top: -20%;
+  right: -12px;
+  width: 220px;
+  height: 150%;
+  background-image: var(--civ-art);
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: contain;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.civ-crest {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.civ-dlc {
+  margin: 0 0 4px;
+  font-size: 13px;
+}
+
+.civ-dlc a {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 44px;
+  color: var(--civ-ink-3);
+  text-decoration: none;
+}
+
+.civ-dlc img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.civ-identity h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+}
+
+.civ-identity h1 span {
+  display: inline-block;
+  margin-left: 10px;
+  color: var(--civ-ink-3);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.civ-official {
+  margin: 6px 0 0;
+  color: var(--civ-ink-2);
+}
+
+.civ-official em {
+  color: var(--civ-gold);
+  font-family: 'Songti SC', 'Noto Serif SC', 'Source Han Serif SC', serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.civ-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.civ-read .tag {
+  padding: 2px 7px;
+  border: 1px solid var(--civ-line);
+  color: var(--civ-ink-3);
+  font-size: 13px;
+  background: transparent;
+}
+
+.civ-identity-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.civ-read .detail-copy-button,
+.civ-list-link {
+  border: 1px solid var(--civ-line-2);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--civ-ink-2);
+}
+
+.civ-read .detail-copy-button:hover,
+.civ-list-link:hover {
+  background: var(--civ-lift);
+  color: var(--civ-ink);
+}
+
+.civ-list-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.civ-read .detail-copy-fallback {
+  background: var(--civ-lift);
+  border-color: var(--civ-line-2);
+}
+
+.civ-read .detail-copy-fallback input {
+  color: var(--civ-ink);
+  background: var(--civ-bg);
+}
+
+.civ-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 28px 40px;
+  align-items: start;
+  padding-top: 20px;
+}
+
+.civ-kicker {
+  margin: 0 0 8px;
+  color: var(--civ-gold-2);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.civ-read h2 {
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background-image: linear-gradient(90deg, var(--civ-line-2), transparent 78%);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+}
+
+.civ-read .num {
+  color: var(--civ-gold);
+  font-weight: 600;
+}
+
+.civ-read .brow {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--civ-line);
+  border-left: 2px solid var(--civ-gold-2);
+  border-radius: 0;
+  background: transparent;
+}
+
+.civ-read .blrows {
+  margin: 0;
+  box-shadow: 0 1px 0 var(--civ-line);
+}
+
+.civ-read .brow-h {
+  min-height: 44px;
+  padding: 8px 0 8px 12px;
+  color: var(--civ-ink);
+}
+
+.civ-read .brow-h:hover {
+  background: var(--civ-lift);
+}
+
+.civ-read .brow.open .brow-h {
+  background: var(--civ-lift);
+}
+
+.civ-read .brow-b {
+  border-top: 0;
+  color: var(--civ-ink-3);
+  font-size: 13px;
+}
+
+.civ-read .brow-b a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.civ-team {
+  margin-top: 18px;
+}
+
+.civ-team .civ-bonus-team,
+.civ-team .kicker {
+  margin: 0 0 8px;
+  color: var(--civ-copper);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.civ-team .brow {
+  border-left-color: var(--civ-copper);
+  background: var(--civ-lift);
+}
+
+.civ-read .tag.ok,
+.civ-read .tag.txt {
+  color: var(--civ-ink-2);
+  background: transparent;
+  border: 1px solid var(--civ-line);
+}
+
+.civ-kit-group {
+  margin: 0 0 20px;
+}
+
+.civ-group-title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin: 0 0 8px;
+  color: var(--civ-ink-3);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.civ-group-title b {
+  color: var(--civ-ink-2);
+  font-weight: 600;
+}
+
+.kit-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 0;
+  border-top: 1px solid var(--civ-line);
+  color: inherit;
+  text-decoration: none;
+}
+
+.civ-kit-group .kit-row:last-child {
+  border-bottom: 1px solid var(--civ-line);
+}
+
+.kit-row:hover {
+  color: var(--civ-gold);
+}
+
+.kit-icons {
+  display: flex;
+  flex: none;
+  gap: 4px;
+}
+
+.civ-read .kit-row .uico {
+  width: 42px;
+  height: 42px;
+  margin: 0;
+  border-color: var(--civ-line);
+  background: var(--civ-bg-deep);
+}
+
+.kit-meta {
+  min-width: 0;
+}
+
+.kit-name {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.kit-sub,
+.kit-age {
+  color: var(--civ-ink-3);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.kit-age {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.civ-next {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--civ-line-2);
+}
+
+.civ-tree {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 13px 16px;
+  border: 1px solid var(--civ-btn-edge);
+  background: var(--civ-btn);
+  color: var(--civ-btn-ink);
+  font-family: 'Songti SC', 'Noto Serif SC', 'Source Han Serif SC', serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.civ-tree:hover {
+  color: var(--civ-btn-ink);
+  background: var(--civ-gold);
+}
+
+.civ-tree small {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.civ-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.civ-tools a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--civ-ink-3);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.civ-tools a:hover {
+  color: var(--civ-gold);
+}
+
+.civ-read .sideblk {
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.civ-read .sideblk h4 {
+  margin: 0 0 8px;
+  color: var(--civ-ink-2);
+  font-size: 13px;
+}
+
+.civ-read .sideblk .ulink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: 0 12px 8px 0;
+  color: var(--civ-ink);
+}
+
+.civ-more {
+  margin-top: 40px;
+  padding-top: 8px;
+}
+
+.civ-more-block {
+  border-top: 1px solid var(--civ-line);
+  padding: 4px 0;
+}
+
+.civ-more-block summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--civ-ink-2);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.civ-read .civ-history h2 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.civ-read .civ-history p,
+.civ-read .insight-item,
+.civ-read .civ-arena-gold,
+.civ-read .civ-nomad-reveal,
+.civ-read .civ-pro-card h3,
+.civ-read .detail-cost-grid dd {
+  color: var(--civ-ink);
+}
+
+.civ-read .civ-history p {
+  font-size: 16px;
+}
+
+.civ-read .insight-slot,
+.civ-read .civ-pro-card {
+  background: var(--civ-lift);
+  border-color: var(--civ-line);
+  box-shadow: none;
+}
+
+.civ-read .insight-slot > h2 {
+  color: var(--civ-ink);
+}
+
+.civ-read .detail-cost-grid dt {
+  color: var(--civ-ink-3);
+  font-size: 13px;
+}
+
+.civ-read .civ-arena-gold h2,
+.civ-read .civ-nomad-reveal h2 {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.civ-read .history-filters input,
+.civ-read .history-filters select {
+  color: var(--civ-ink);
+  background: var(--civ-lift);
+  border-color: var(--civ-line-2);
+}
+
+.civ-read :where(a, button, summary):focus-visible {
+  outline: 2px solid var(--civ-focus);
+  outline-offset: 3px;
+}
+
+.civ-start-return {
+  border-color: var(--civ-line);
+  background: var(--civ-lift);
+}
+
+.civ-start-return small {
+  color: var(--civ-ink-3);
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .civ-read header.civ-identity {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .civ-identity-actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .civ-columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .civ-identity h1 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .civ-read {
+    margin: calc(var(--space-4) * -1);
+    padding: 12px 16px 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .identity-art {
+    display: none;
+  }
+}

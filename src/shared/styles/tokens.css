@@ -166,3 +166,22 @@
   --shadow-3: 0 12px 40px #00000099;
   --focus-ring: 0 0 0 3px #4da3ff88;
 }
+
+/* 文明详情阅读页。只给 .civ-read 用，不改全站字号和主题色。对比已按正文 4.5:1 核对。 */
+.civ-read {
+  --civ-bg: #110f0c;
+  --civ-bg-deep: #0b0a08;
+  --civ-lift: #191612;
+  --civ-ink: #f3eadb;
+  --civ-ink-2: #e4d9c8;
+  --civ-ink-3: #cbbfae;
+  --civ-gold: #e4c48a;
+  --civ-gold-2: #d4b06a;
+  --civ-copper: #e09a7c;
+  --civ-line: #3a342c;
+  --civ-line-2: #5c5348;
+  --civ-btn: #c4a05c;
+  --civ-btn-ink: #140f0a;
+  --civ-btn-edge: #9a7840;
+  --civ-focus: #f6e2b0;
+}

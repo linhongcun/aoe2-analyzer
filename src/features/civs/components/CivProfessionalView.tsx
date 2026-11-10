@@ -41,8 +41,7 @@ export default function CivProfessionalView({ catalogue = PRO_SOURCES }: { catal
   }, []);
   return (
     <DetailSection title="职业选手原始资料" className="civ-pro">
-      <p className="note">概览与数据页的能力评分为本站综合参考。</p>
-      <p>未摘录本文明的名次、档位或分数，请查看原视频了解完整观点。</p>
+      <p>未摘录本文明的名次、档位或分数，请查看原视频了解完整观点。这里不是本文明的打法或排名结论。</p>
       {state.status === 'empty' && <p role="status">暂无已核对原链接</p>}
       {state.status === 'unavailable' && <p role="status">资料暂不可用</p>}
       {state.status === 'ready' &&

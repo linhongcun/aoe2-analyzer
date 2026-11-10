@@ -3,53 +3,14 @@
   isolation: isolate;
 }
 
-.civ-detail-background.has-civ-art .dhead {
-  position: relative;
-  box-sizing: border-box;
-  min-height: 264px;
-  padding-right: 50%;
-}
-
-.civ-detail-background.has-civ-art .dhead::after {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  top: 24px;
-  right: 24px;
-  bottom: 24px;
-  width: 46%;
-  background-color: var(--color-text);
-  mask-image: var(--civ-art);
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: right center;
-  opacity: 0.3;
-  pointer-events: none;
-}
-
-.civ-detail-background.has-civ-art .dhead > * {
-  position: relative;
-  z-index: 1;
-}
-
-.civ-detail-background.has-civ-art .dhead > :nth-child(2) {
-  background: var(--color-surface);
-}
-
-.civ-detail-background.has-civ-art .dhead .detail-copy {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-}
-
 .civ-background-credit {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0 12px;
-  margin: 16px 0;
-  color: var(--color-muted);
-  font-size: var(--fs-xs);
+  margin: 16px 0 0;
+  color: var(--civ-ink-3, var(--color-muted));
+  font-size: 13px;
 }
 
 .civ-background-credit a {
@@ -57,27 +18,5 @@
   align-items: center;
   min-width: 44px;
   min-height: 44px;
-  color: var(--color-link);
-}
-
-@media (max-width: 600px) {
-  .civ-detail-background.has-civ-art .dhead {
-    min-height: 0;
-    padding: 200px 16px 20px;
-  }
-
-  .civ-detail-background.has-civ-art .dhead::after {
-    top: 20px;
-    right: 16px;
-    bottom: auto;
-    width: calc(100% - 32px);
-    height: 160px;
-    mask-position: center;
-  }
-
-  .civ-detail-background.has-civ-art .dhead .detail-copy {
-    position: relative;
-    top: auto;
-    right: auto;
-  }
+  color: var(--civ-gold, var(--color-link));
 }

@@ -53,12 +53,9 @@ export function BonusRows({ c }: { c: Civ }) {
   const team = list.filter((b) => b.team);
   return (
     <>
-      <p className="note civ-bonus-cap">
-        标签说明：已计入表示有可计算的效果，展开可查看适用单位或科技；部分计入表示只有部分工具计入，展开可查看各工具的计入情况；仅文本表示只展示游戏说明。各工具实际支持范围以工具内的提示为准。
-      </p>
       <ul className="blrows">{list.filter((b) => !b.team).map(row)}</ul>
       {team.length > 0 && (
-        <>
+        <div className="civ-team" data-testid="civ-team">
           <h3 className="civ-bonus-team">团队加成</h3>
           <ul className="blrows">{team.map(row)}</ul>
           {c.en === 'Georgians' && (
@@ -68,8 +65,11 @@ export function BonusRows({ c }: { c: Civ }) {
               </Link>
             </p>
           )}
-        </>
+        </div>
       )}
+      <p className="note civ-bonus-cap">
+        标签说明：已计入表示有可计算的效果，展开可查看适用单位或科技；部分计入表示只有部分工具计入，展开可查看各工具的计入情况；仅文本表示只展示游戏说明。各工具实际支持范围以工具内的提示为准。
+      </p>
     </>
   );
 }
