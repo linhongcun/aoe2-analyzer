@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
+import { formatHp } from '../../../domain/hpFormat';
 import { collapse } from '../../../domain/family';
 import { civNote, dupIdsIn } from '../../../domain/dupNames';
 import { AGE_ZH } from '../../../domain/ratings';
@@ -257,7 +258,7 @@ export default function UnitList() {
               <dl className="unit-stats" aria-label="基础属性">
                 <div data-stat="hp">
                   <dt className="stat-label">生命</dt>
-                  <dd className="num nw">{u.hp}</dd>
+                  <dd className="num nw">{formatHp(u.hp)}</dd>
                 </div>
                 <div data-stat="atk">
                   <dt className="stat-label">攻击</dt>

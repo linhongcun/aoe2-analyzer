@@ -61,8 +61,8 @@ test('四墙门的时代生命对照与未扩展页面', async ({ page }) => {
   ]) {
     await page.goto(`./#/building/${id}`);
     const panel = page.getByRole('region', { name: '升时代自动变化', exact: true });
-    await expect(panel.locator('[data-auto-before]')).toHaveText(String(before));
-    await expect(panel.locator('[data-stat="hp"] [data-t="stat-value"]')).toHaveText(String(after));
+    await expect(panel.locator('[data-auto-before]')).toHaveText(Number(before).toFixed(2));
+    await expect(panel.locator('[data-stat="hp"] [data-t="stat-value"]')).toHaveText(Number(after).toFixed(2));
   }
   for (const route of ['unit/751', 'unit/38', 'building/70', 'building/87']) {
     await page.goto(`./#/${route}`);

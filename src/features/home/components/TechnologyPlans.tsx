@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { civByEn } from '../../../data';
+import { formatHp } from '../../../domain/hpFormat';
 import type { Lane } from '../../../domain/startGame';
 import type { SceneRow } from '../../../domain/positionScenarios';
 import type { SceneTechPlan } from '../../../domain/startGameInputs';
@@ -151,8 +152,9 @@ export function SceneComparisonFacts({ row }: { row: SceneRow }) {
       同方案解释对照（独立于战术目标）：
       {row.facts.map((fact, index) => (
         <div key={`${fact.kind}-${index}`}>
-          {fact.label}：己方 <SceneValue n={fact.own} unit={fact.unit} />，{civByEn(fact.baselineCiv)?.zh ?? '参考文明'}{' '}
-          <SceneValue n={fact.baseline} unit={fact.unit} />。
+          {fact.label}：己方 {fact.kind === 'health' ? <span className="num nw">{formatHp(fact.own)}</span> : <SceneValue n={fact.own} unit={fact.unit} />}，
+          {civByEn(fact.baselineCiv)?.zh ?? '参考文明'}{' '}
+          {fact.kind === 'health' ? <span className="num nw">{formatHp(fact.baseline)}</span> : <SceneValue n={fact.baseline} unit={fact.unit} />}。
         </div>
       ))}
       事实差异不代表战斗胜负，未额外计入原两维分组。

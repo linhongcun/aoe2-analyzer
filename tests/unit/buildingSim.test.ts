@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import raw from '../../src/data/buildings.json';
 import { buildingBase, buildingSimTechs, simulateBuilding } from '../../src/domain/buildingSim';
+import { formatHp } from '../../src/domain/hpFormat';
 import { buildingType } from '../../src/domain/buildings';
 import { allNumeric } from '../../src/domain/simulator';
 import type { Building } from '../../src/domain/types';
@@ -15,15 +16,20 @@ const full = (en: string, civ: string) => {
 const ids = (...n: string[]) => new Set(n.map((x) => tech(x).id));
 
 describe('building simulator (values vs AoE2 Fandom Wiki)', () => {
-  it('Castle + Masonry + Architecture + Hoardings = 7,028 HP (wiki: Hoardings page)', () => {
-    expect(simulateBuilding(ctx, B('Castle'), 'Franks', 4, ids('Masonry', 'Architecture', 'Hoardings')).hp).toBe(7028);
+  it('Castle + Masonry + Architecture + Hoardings 保留连乘小数，展示为 7027.68', () => {
+    const hp = simulateBuilding(ctx, B('Castle'), 'Franks', 4, ids('Masonry', 'Architecture', 'Hoardings')).hp;
+    expect(hp).toBeCloseTo(7027.68, 6);
+    expect(formatHp(hp)).toBe('7027.68');
   });
-  it('Byzantine Imperial Castle with Hoardings = 8,131 HP (wiki)', () => {
-    expect(simulateBuilding(ctx, B('Castle'), 'Byzantines', 4, ids('Hoardings')).hp).toBe(8131);
+  it('Byzantine Imperial Castle with Hoardings 保留连乘小数，展示为 8130.71', () => {
+    const hp = simulateBuilding(ctx, B('Castle'), 'Byzantines', 4, ids('Hoardings')).hp;
+    expect(hp).toBeCloseTo(8130.707818128878, 6);
+    expect(formatHp(hp)).toBe('8130.71');
   });
   it('Britons Castle full tech: armor 10/13, +6 building armor, attack 15, range 11, no min range', () => {
     const s = full('Castle', 'Britons');
-    expect([s.hp, s.ma, s.pa, s.barm]).toEqual([7028, 10, 13, 14]); // barm: 基础 8 + Masonry 3 + Architecture 3（.dat 类别 11）
+    expect(s.hp).toBeCloseTo(7027.68, 6);
+    expect([s.ma, s.pa, s.barm]).toEqual([10, 13, 14]); // barm: 基础 8 + Masonry 3 + Architecture 3（.dat 类别 11）
     expect([s.atk, s.rng, s.minr]).toEqual([15, 11, 0]);
     expect(s.bonus['船只']).toBe(4);
   });

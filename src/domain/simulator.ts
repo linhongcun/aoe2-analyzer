@@ -151,8 +151,7 @@ export function simulate(
     '时代与单位特殊规则',
   );
   S.rof = S.rof / S.rofx;
-  // .dat 逐时代乘子保留 4 位小数（如 1.0909），容差 0.2 后取整（1.1×1.0909×1.0833 = 1.29995）
-  S.hp = Math.floor(S.hp + 0.2);
+  // 生命保持效果叠加后的浮点，供后续战斗和治疗使用。两位小数只在展示时产生。
   // #38 .dat 射程科技改的是属性 12（Range = 对建筑射程），对单位射程同步变化，差值恒定
   if (u.rngBd) S.rngB = S.rng + u.rngBd;
   return S;

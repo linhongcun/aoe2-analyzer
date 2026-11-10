@@ -1,5 +1,6 @@
 import ShareImage from '../../../shared/ui/ShareImage';
 import { duel, groupFight, costSum } from '../../../domain/duel';
+import { formatHp } from '../../../domain/hpFormat';
 import { sideEngagementSeconds } from '../../../domain/generateResource';
 import { groupReplay, oneReplay } from '../../../domain/battleReplay';
 import { formatTrade, tradeLosses } from '../../../domain/trade';
@@ -31,7 +32,7 @@ export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
         {r.winner !== 'draw' && (
           <small className="note">
             {' '}
-            · 用时 {r1(r.duration)}s · 剩余生命 {r1(r.remaining)} / {r1((r.winner === 'a' ? A : B).F.hp)}
+            · 用时 {r1(r.duration)}s · 剩余生命 {formatHp(r.remaining)} / {formatHp((r.winner === 'a' ? A : B).F.hp)}
           </small>
         )}
       </h2>
@@ -39,7 +40,7 @@ export function OneVOne({ A, B }: { A: Resolved; B: Resolved }) {
         title={`${A.u.zh} 对 ${B.u.zh}：${wn}`}
         stats={[
           ['模拟用时', `${r1(r.duration)} 秒`],
-          ['剩余生命', r1(r.remaining)],
+          ['剩余生命', formatHp(r.remaining)],
           ['双方数量', '1 / 1'],
         ]}
         note="忽略射程拉扯与操作；完整文明和科技参数见链接。"
@@ -95,7 +96,7 @@ export function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: num
         <Icon name="trophy" /> {wn}
         <small className="note">
           {' '}
-          · 用时 {r1(g.duration)}s · 剩余 {g.winner === 'b' ? g.bAlive : g.aAlive} 个单位、总生命 {g.hpLeft}
+          · 用时 {r1(g.duration)}s · 剩余 {g.winner === 'b' ? g.bAlive : g.aAlive} 个单位、总生命 {formatHp(g.hpLeft)}
         </small>
       </h2>
       <ShareImage

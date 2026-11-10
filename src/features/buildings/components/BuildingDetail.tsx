@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { BUILDING_TYPE_ZH } from '../../../domain/buildings';
+import { formatHp } from '../../../domain/hpFormat';
 import { AGE_ZH } from '../../../domain/ratings';
 import type { Tech, Unit } from '../../../domain/types';
 import { collapse } from '../../../domain/family';
@@ -87,7 +88,7 @@ export default function BuildingDetail() {
     );
   };
   const stats: DetailStat[] = [
-    { key: 'hp', icon: 'hp', label: '生命值', value: b.hp, accent: true },
+    { key: 'hp', icon: 'hp', label: '生命值', value: formatHp(b.hp), accent: true },
     { key: 'armor', icon: 'marm', label: '护甲（近战 / 穿刺）', value: `${b.ma} / ${b.pa}`, accent: true },
     { key: 'los', label: '视野', value: b.los },
     ...(b.gar ? [{ key: 'gar', label: '驻扎容量', value: b.gar }] : []),
@@ -227,7 +228,7 @@ export default function BuildingDetail() {
         <>
           <SideBlock title="概要">
             <p className="note">
-              生命值 {b.hp} · 护甲 {b.ma}/{b.pa}
+              生命值 {formatHp(b.hp)} · 护甲 {b.ma}/{b.pa}
               {b.atk ? ` · 攻击 ${b.atk}` : ''}
               {b.pop ? ` · 人口 +${b.pop}` : ''}
             </p>

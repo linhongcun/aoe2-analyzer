@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import civsRaw from '../../src/data/civs.json';
 import raw from '../../src/data/buildings.json';
 import { allCivBonuses, bonusAffects, bonusExample, civBonuses, classify, parseAges } from '../../src/domain/civBonus';
+import { formatHp } from '../../src/domain/hpFormat';
 import { BUILDING_CIV_BONUSES } from '../../src/domain/buildingSim';
 import { buildingType } from '../../src/domain/buildings';
 import { CIV_BONUSES } from '../../src/domain/effects';
@@ -64,10 +65,15 @@ describe('数值示例与作用对象（与模拟器同一判定）', () => {
     expect(franks[1]!.encoded).toBe(false);
     expect(bonusAffects(franks[1]!, units, bs)).toEqual([]);
   });
-  it('建筑加成：拜占庭建筑生命值逐时代 +10/20/30/40%（城镇中心 2400 到 2640/2880/3120/3360）', () => {
+  it('建筑加成：拜占庭城镇中心生命保留连乘小数，展示为两位', () => {
     const ex = bonusExample(civBonuses(civ('Byzantines'))[0]!, units, bs, 'Town Center')!;
     expect(ex.kind).toBe('building');
-    expect(ex.rows.map((r) => r[3])).toEqual([2640, 2880, 3120, 3360]);
+    const hp = ex.rows.map((r) => r[3]);
+    expect(hp[0]).toBe(2640);
+    expect(hp[1]).toBeCloseTo(2879.976, 6);
+    expect(hp[2]).toBeCloseTo(3119.8780008, 6);
+    expect(hp[3]).toBeCloseTo(3359.79661906152, 8);
+    expect(hp.map((value) => formatHp(value))).toEqual(['2640.00', '2879.98', '3119.88', '3359.80']);
   });
   it('团队加成：法兰克骑士系视野 +2，作用于所有文明的骑士', () => {
     const t = civBonuses(civ('Franks')).at(-1)!;
@@ -86,10 +92,13 @@ describe('新增编码的文明加成（Fandom 各文明页）', () => {
   it('西班牙：火药单位攻速 +18%（手炮手攻击间隔 3.45 到 2.92）', () => {
     expect(simulate(ctx, unit('Hand Cannoneer'), 'Spanish', 4, none, none).rof).toBeCloseTo(3.45 * 0.85, 2); // .dat: 攻击间隔 ×0.85（文本「+18%」= 1/0.85 取整）;
   });
-  it('蒙古：轻骑兵帝王时代 +30% 生命值', () => {
+  it('蒙古：轻骑兵帝王时代 +30% 生命值保留连乘后的小数', () => {
     const u = unit('Hussar');
-    expect(simulate(ctx, u, 'Mongols', 4, none, none).hp).toBe(Math.floor(u.hp * 1.3));
-    expect(simulate(ctx, u, 'Mongols', 3, none, none).hp).toBe(Math.floor(u.hp * 1.2));
+    const imperial = simulate(ctx, u, 'Mongols', 4, none, none).hp;
+    const castle = simulate(ctx, u, 'Mongols', 3, none, none).hp;
+    expect(castle).toBeCloseTo(u.hp * 1.2, 8);
+    expect(imperial).toBeGreaterThan(castle);
+    expect(imperial).not.toBe(Math.floor(imperial));
   });
   it('土耳其：侦察骑兵系 +1 穿刺护甲', () => {
     const u = unit('Light Cavalry');
@@ -97,7 +106,7 @@ describe('新增编码的文明加成（Fandom 各文明页）', () => {
   });
   it('葡萄牙：船只封建/城堡/帝王 +10/15/20% 生命值', () => {
     const u = unit('Galleon');
-    expect(simulate(ctx, u, 'Portuguese', 4, none, none).hp).toBe(Math.floor(u.hp * 1.2));
+    expect(simulate(ctx, u, 'Portuguese', 4, none, none).hp).toBeCloseTo(186.7374530945, 8);
   });
   it('吴：帝王时代剑士攻击 +2，城堡时代不加', () => {
     const u = unit('Jian Swordsman');

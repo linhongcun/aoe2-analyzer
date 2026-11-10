@@ -49,7 +49,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(card).toHaveAttribute('data-unit-id', String(knight.id));
       await expect(card).toHaveAttribute('href', `#/unit/${knight.id}?civ=Franks`);
       await expect(card.locator('.unit-zh')).toHaveText(knight.zh);
-      await expect(card.locator('[data-stat="hp"] dd')).toHaveText(String(knight.hp));
+      await expect(card.locator('[data-stat="hp"] dd')).toHaveText(Number(knight.hp).toFixed(2));
       await expect(page.locator('#ucnt')).toHaveText('1 / 163');
       for (const id of ['uciv', 'urole', 'udlc']) {
         const box = await page.locator(`#${id}`).boundingBox();

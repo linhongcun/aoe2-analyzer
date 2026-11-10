@@ -4,6 +4,7 @@ import buildings from '../../src/data/raw/buildings';
 import { DAT } from '../../src/domain/datEffects';
 import type { Building, Unit } from '../../src/domain/types';
 import { scoutAgeChange } from '../../src/features/units/components/ScoutAgeChanges';
+import { formatHp } from '../../src/domain/hpFormat';
 import { wallAgeChange } from '../../src/features/buildings/components/WallAgeChanges';
 
 const scout = units.find((unit) => unit.id === 448)! as unknown as Unit;
@@ -28,8 +29,12 @@ describe('有来源的局部自动时代投影 #705', () => {
     [792, 240, 400, 2, 1.66667],
     [117, 1080, 1800, 3, 1.666667],
     [487, 1650, 2750, 3, 1.666667],
-  ])('墙门%i保留原始倍率并沿既有HP取整', (id, before, after, age, multiplier) => {
-    expect(wallAgeChange(wall(id))).toMatchObject({ state: 'ready', before, after, age, multiplier });
+  ])('墙门%i保留原始倍率，生命展示仍是两位', (id, before, after, age, multiplier) => {
+    const change = wallAgeChange(wall(id));
+    expect(change).toMatchObject({ state: 'ready', before, age, multiplier });
+    if (change?.state !== 'ready') throw new Error('missing wall rule');
+    expect(change.after).toBeCloseTo(before * multiplier, 6);
+    expect(formatHp(change.after)).toBe(formatHp(after));
   });
 
   it('来源和基底改变时结果随之变化，输入保持不变', () => {

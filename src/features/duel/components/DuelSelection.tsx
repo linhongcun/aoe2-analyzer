@@ -1,6 +1,7 @@
 import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
+import { formatHp } from '../../../domain/hpFormat';
 import { baseUnit } from '../../../domain/family';
 import type { collapse } from '../../../domain/family';
 import { AGE_ZH } from '../../../domain/ratings';
@@ -115,7 +116,7 @@ export function Side({
         <tbody>
           {(
             [
-              ['hp', '生命值', r1(side.F.hp)],
+              ['hp', '生命值', formatHp(side.F.hp)],
               [u.rng > 1 ? 'patk' : 'atk', '攻击', r1(side.S.atk) + (side.F.ranged ? '（穿刺）' : '（近战）')],
               ['marm', '护甲', `${r1(side.S.ma)} / ${r1(side.S.pa)}`],
               [

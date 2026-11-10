@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useShareLink } from '../../../shared/ui/useShareLink';
 import { civByEn } from '../../../data';
 import { DATA_SOURCES, versionLabel } from '../../../shared/utils/dataInfo';
+import { formatHp } from '../../../domain/hpFormat';
 import { upgradeComparison, upgradePlan, type UpgradeSide } from '../../../domain/upgradeComparison';
 import type { SimContext } from '../../../domain/simulator';
 import type { Tech, Unit } from '../../../domain/types';
@@ -11,6 +12,7 @@ import { fmtSide, parseUpgradeSide } from '../../../domain/duelState';
 import './upgrade-comparison.css';
 
 const fmt = (n: number | null) => (n === null || !Number.isFinite(n) ? '—' : String(Number(n.toFixed(3))));
+const showHp = (key: string, n: number | null) => ((key === 'a-hp' || key === 'remaining') && n !== null && Number.isFinite(n) ? formatHp(n) : fmt(n));
 const MODEL = '1v1 近似模型：首击同时发生，远程按命中率取期望；未模拟移速、射程、弹道、走位、地形和特殊能力的实战价值。结果不变不代表科技无用。';
 const COST_NOTE = '基础研究费用：文明科研折扣、免费科技、返金与研究速度加成未计入；研究时长为逐项合计，不模拟并行研究。';
 type Plan = Extract<ReturnType<typeof upgradePlan>, { ok: true }>;
@@ -236,13 +238,13 @@ export function UpgradeComparison({
                   <th scope="row">{row.label}</th>
                   <td>
                     <span className="upgrade-number" data-t="upgrade-value">
-                      {fmt(row.before)}
+                      {showHp(row.key, row.before)}
                       {row.before === null || !Number.isFinite(row.before) ? '' : row.unit}
                     </span>
                   </td>
                   <td>
                     <span className="upgrade-number" data-t="upgrade-value">
-                      {fmt(row.after)}
+                      {showHp(row.key, row.after)}
                       {row.after === null || !Number.isFinite(row.after) ? '' : row.unit}
                     </span>
                     <small className="upgrade-delta">
@@ -250,7 +252,7 @@ export function UpgradeComparison({
                         ? '未模拟'
                         : row.after === row.before
                           ? '不变'
-                          : `变化 ${row.after > row.before ? '+' : ''}${fmt(row.after - row.before)}${row.unit ?? ''}`}
+                          : `变化 ${row.after > row.before ? '+' : ''}${showHp(row.key, row.after - row.before)}${row.unit ?? ''}`}
                     </small>
                   </td>
                 </tr>
