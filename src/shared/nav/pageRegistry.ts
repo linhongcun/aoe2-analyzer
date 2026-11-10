@@ -343,11 +343,11 @@ export const PAGES: readonly PageDef[] = [
     label: '对局助手',
     en: 'Matchup',
     icon: 'crosshair',
-    desc: '根据双方文明给出反制建议',
+    desc: '快攻指南、类型反制示意和相关入口',
     match: /^\/matchup$/,
     component: 'Matchup',
     metaTitle: '对局助手',
-    metaDescription: '查看双方文明特点、反制建议和早期防守思路。',
+    metaDescription: '查看有限快攻指南、类型反制示意，以及开局、单位 PK 与文明入口。',
   },
   {
     key: 'simulator',

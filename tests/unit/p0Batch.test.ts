@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import civsRaw from '../../src/data/civs.json';
 import type { Civ } from '../../src/domain/types';
-import { EMPTY_COUNTERS_COPY, STRONG_THRESHOLD, filterCounterUnits, matchup, strengthEntries } from '../../src/domain/ratings';
+import { EMPTY_COUNTERS_COPY, filterCounterUnits } from '../../src/domain/ratings';
 import { DPS_UNAVAILABLE_REASON, duel, fighterFrom, oneWay } from '../../src/domain/duel';
 import { simulate } from '../../src/domain/simulator';
 import { ctx, units } from './helpers';
@@ -14,37 +14,19 @@ import { readFileSync } from 'node:fs';
 
 const civs = civsRaw as unknown as Civ[];
 const civ = (en: string) => civs.find((c) => c.en === en)!;
-const STRONG = '对手经济强，前期主动骚扰。';
-const WEAK = '对手经济一般，可以稳健发育拖后期。';
 
-describe('#15 强项与建议同门槛 8', () => {
-  it('门槛为 8', () => expect(STRONG_THRESHOLD).toBe(8));
-  it('不列颠经济=7：强项不含经济；建议用「一般」', () => {
-    const m = matchup(civ('Franks'), civ('Britons'));
-    expect(civ('Britons').s[3]).toBe(7);
-    expect(m.strengths.some((s) => s.key === 'eco')).toBe(false);
-    expect(m.advice).toContain(WEAK);
-    expect(m.advice).not.toContain(STRONG);
-  });
-  it('经济>=8：强项含经济；建议用「强」', () => {
-    const opp = civs.find((c) => c.s[3]! >= 8)!;
-    const m = matchup(civ('Franks'), opp);
-    expect(m.strengths.some((s) => s.key === 'eco')).toBe(true);
-    expect(m.advice).toContain(STRONG);
-  });
-  it('遍历 civ×civ：强项只含 >=8；含经济 <=> 建议为「强」', () => {
-    for (const a of civs)
-      for (const e of civs) {
-        const m = matchup(a, e);
-        for (const s of m.strengths) expect(s.score).toBeGreaterThanOrEqual(8);
-        const eco = m.strengths.some((s) => s.key === 'eco');
-        expect(m.tips.includes(WEAK)).toBe(!eco);
-        expect(m.tips.includes(STRONG)).toBe(eco);
-      }
-  });
-  it('strengthEntries 由高到低', () => {
-    const s = strengthEntries(civ('Chinese')).map((x) => x.score);
-    expect([...s].sort((a, b) => b - a)).toEqual(s);
+describe('#888 取代 #15：对局助手不再展示评分强项与自动建议', () => {
+  it('页面不再引用空强项文案、评分门槛或自动建议脚注', () => {
+    const src = readFileSync('src/features/matchup/components/Matchup.tsx', 'utf8');
+    expect(src).not.toContain('EMPTY_STRENGTHS_COPY');
+    expect(src).not.toContain('empty-strengths');
+    expect(src).not.toContain('STRONG_THRESHOLD');
+    expect(src).not.toContain('自动生成的建议');
+    expect(src).not.toContain('前期主动骚扰');
+    expect(src).toContain('推荐反制');
+    expect(src).toContain('EMPTY_COUNTERS_COPY');
+    const css = readFileSync('src/shared/styles/base.css', 'utf8');
+    expect(css).toMatch(/\.note \{\s*color: var\(--c-muted\)/);
   });
 });
 
@@ -140,17 +122,6 @@ describe('#22 对建筑小字格式', () => {
 });
 
 describe('Jony review 追加断言', () => {
-  it('#15 空强项文案锁定', async () => {
-    const { EMPTY_STRENGTHS_COPY } = await import('../../src/domain/ratings');
-    expect(EMPTY_STRENGTHS_COPY).toBe('无突出强项（各项评分均低于 8）');
-    const src = readFileSync('src/features/matchup/components/Matchup.tsx', 'utf8');
-    expect(src).toContain('EMPTY_STRENGTHS_COPY');
-    expect(src).not.toContain('均未达门槛');
-    // Jony：空强项文案使用 muted .note 样式（同位置，无图标）
-    expect(src).toMatch(/<span className="note" data-t="empty-strengths">\s*\{EMPTY_STRENGTHS_COPY\}\s*<\/span>/);
-    const css = readFileSync('src/shared/styles/base.css', 'utf8');
-    expect(css).toMatch(/\.note \{\s*color: var\(--c-muted\)/);
-  });
   it('#27 PK 攻击间隔用全角 em dash + 原因小字，不用半角 -', () => {
     // 单位页已改为共享统计卡，其破折号与说明小字在 smoke 的 #27 用例检查真实 DOM。
     const s = readFileSync('src/features/duel/components/DuelSelection.tsx', 'utf8');

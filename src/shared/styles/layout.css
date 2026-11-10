@@ -231,10 +231,6 @@ a.hcard:hover {
   gap: 8px;
   margin: 0 0 8px;
 }
-/* 对局助手脚注没有 .ratehead，窄屏浮层否则会相对视口定位并盖住按钮（issue 366） */
-.rating-foot {
-  position: relative;
-}
 .ratehead h4 {
   margin: 0;
 }

@@ -26,9 +26,9 @@ test('#558 Compare晚到规范化不能夺回已发起的Matchup导航', async (
     await expect(page.locator('#compare .ratehead')).toContainText('主观评分，仅供参考');
     await page.goto('./#/matchup');
     await expect(page).toHaveURL(/#\/matchup$/);
-    await expect(page.locator('#mres .rating-foot')).toContainText('主观评分，仅供参考');
-    await page.locator('#mres .rating-foot').getByRole('button', { name: '评分说明', exact: true }).click();
-    await expect(page.getByRole('dialog', { name: '评分是怎么来的', exact: true })).toBeVisible();
+    await expect(page.locator('#mres')).toContainText('推荐反制');
+    await expect(page.locator('#mres .rating-foot')).toHaveCount(0);
+    await expect(page.locator('#mres')).not.toContainText('自动生成的建议');
     await expect(page).toHaveURL(/#\/matchup$/);
     expect(delayed).toBe(1);
     expect(errors).toEqual([]);

@@ -4,10 +4,9 @@ import './matchup-pair.css';
 import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
-import { EMPTY_COUNTERS_COPY, EMPTY_STRENGTHS_COPY, STRONG_THRESHOLD, TYPE_ZH, filterCounterUnits, matchup } from '../../../domain/ratings';
+import { EMPTY_COUNTERS_COPY, TYPE_ZH, filterCounterUnits } from '../../../domain/ratings';
 import { unitPath } from '../../../domain/simRoute';
 import { CivIcon, UnitIcon } from '../../../shared/ui/art';
-import { RatingLabel } from '../../../shared/ui/RatingHelp';
 import { useSticky } from '../../../shared/utils/sticky';
 import { Loading } from '../../../shared/ui/widgets';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -28,7 +27,6 @@ export default function Matchup() {
   const pair = readMatchupPair(params, { me: (civs[ia] ?? civs[16]!).en, opp: (civs[ie] ?? civs[5]!).en });
   const a = civs.find((c) => c.en === pair.me),
     e = civs.find((c) => c.en === pair.opp);
-  const m = a && e ? matchup(a, e) : null;
   // Query 先于 sticky；同步后，从其它页面回到无 query 的助手仍保留这对阵。
   useEffect(() => {
     if (!a || !e) return;
@@ -48,7 +46,7 @@ export default function Matchup() {
   const champiPair = Array.isArray(lineCivs) && [a?.en, e?.en].some((civ) => civ && lineCivs.includes(civ));
   return (
     <section id="matchup" className={params.has('pair') || champiPair ? 'pane matchup-explicit' : 'pane'}>
-      <ListHead title="对局助手" desc="根据双方文明给出反制建议" />
+      <ListHead title="对局助手" desc="快攻指南、类型反制示意和相关入口" />
       <div className="bar fbar">
         我的文明 <CivPicker id="ma" label="我的文明" value={a?.en ?? ''} none="未选择" onChange={(en) => pick('me', en)} /> 对手文明{' '}
         <CivPicker id="me" label="对手文明" value={e?.en ?? ''} none="未选择" onChange={(en) => pick('opp', en)} />
@@ -140,7 +138,6 @@ export default function Matchup() {
       </nav>
       {a &&
         e &&
-        m &&
         (error ? (
           <div data-testid="matchup-data-error">
             <p role="alert">对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。</p>
@@ -156,25 +153,6 @@ export default function Matchup() {
         ) : (
           <div id="mres">
             <ChampiAges core={core} trees={data.trees} me={a.en} opp={e.en} />
-            <p>
-              <b>对手强项：</b>
-              {m.oppStrong.length ? (
-                m.oppStrong.join('、')
-              ) : (
-                <span className="note" data-t="empty-strengths">
-                  {EMPTY_STRENGTHS_COPY}
-                </span>
-              )}
-              <span className="tag note" style={{ marginLeft: 8 }} title="评分达到该值才列入强项">
-                评分 ≥ {STRONG_THRESHOLD}
-              </span>
-              ；<b>相对弱项：</b>
-              {m.oppWeak.join('、')}
-            </p>
-            <p>
-              <b>你的相对优势：</b>
-              {m.myEdge}
-            </p>
             <p>
               <b>推荐反制</b>
             </p>
@@ -217,13 +195,6 @@ export default function Matchup() {
               </ul>
             )}
             {counters.length > 0 && <p className="note">默认帝王时代，未勾选科技与团队加成；仍计入已建模文明加成，可在模拟器调整，不代表本局进度。</p>}
-            <p>
-              <b>建议：</b>
-              {m.tips}
-            </p>
-            <p className="note rating-foot">
-              评分仅描述相对强弱，不代表兵种是否可用。自动生成的建议 · <RatingLabel />
-            </p>
           </div>
         ))}
     </section>

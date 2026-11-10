@@ -27,10 +27,13 @@ for (const width of [360, 375, 390, 1280])
       ]) {
         await pickCiv(page, 'me', opponent!);
         await expect(page.locator('#matchup .matchup-title')).toContainText(name!);
-        await expect(result.locator('p').first()).toContainText('相对弱项：');
-        await expect(result.locator('p').first()).toContainText('骑兵');
+        await expect(page.locator('#matchup .lhead .note')).toContainText('快攻指南、类型反制示意和相关入口');
+        await expect(result).toContainText('推荐反制');
+        await expect(result).toContainText('通用示意，非模型结论');
+        for (const gone of ['对手强项', '相对弱项', '你的相对优势', '前期主动骚扰', '自动生成的建议']) await expect(result).not.toContainText(gone);
+        await expect(result).not.toContainText(/骑兵\(\+\d/);
         await expect(result).not.toContainText(/缺骑兵|没有骑兵|不能造骑兵|你可以多用远程单位/);
-        await expect(result.locator('.rating-foot')).toContainText('评分仅描述相对强弱，不代表兵种是否可用。');
+        await expect(result.locator('.rating-foot')).toHaveCount(0);
         await page.evaluate(() => document.fonts.ready);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
         if (opponent === 'Chinese') await page.screenshot({ path: info.outputPath(`matchup-${width}-${theme}.png`), fullPage: true });

@@ -534,7 +534,7 @@ test('rating help on mobile: 44px target, popover spans the card width', async (
   expect(Math.abs(p!.width - h!.width)).toBeLessThan(1);
 });
 
-test('rating label also on compare and matchup; old yellow note removed', async ({ page }) => {
+test('rating label stays on compare; matchup no longer shows score advice', async ({ page }) => {
   const pageErrors: string[] = [];
   const failedRequests: { url: string; error: string }[] = [];
   const recordError = (error: Error) => {
@@ -549,9 +549,10 @@ test('rating label also on compare and matchup; old yellow note removed', async 
     await page.goto('./#/compare');
     await expect(page.locator('#compare .ratehead')).toContainText('主观评分，仅供参考');
     await page.goto('./#/matchup');
-    await expect(page.locator('#mres .rating-foot')).toContainText('主观评分，仅供参考');
-    await page.locator('#mres .rating-foot').getByRole('button', { name: '评分说明' }).click();
-    await expect(page.getByRole('dialog', { name: '评分是怎么来的' })).toBeVisible();
+    await expect(page.locator('#mres')).toContainText('推荐反制');
+    await expect(page.locator('#mres .rating-foot')).toHaveCount(0);
+    await expect(page.locator('#mres')).not.toContainText('你的相对优势');
+    await expect(page.locator('#mres')).not.toContainText('自动生成的建议');
   } catch (error) {
     // Keep the original failure; a stalled renderer must not prevent a bounded log snapshot.
     try {
