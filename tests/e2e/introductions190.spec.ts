@@ -62,16 +62,19 @@ for (const width of [360, 375, 390, 1280])
 
       await page.goto('./#/buildings');
       await expect(page.locator('#bgrid .card').first()).toBeVisible();
-      await page.locator('#bdlc').selectOption('2');
+      const buildingDlc = page.locator('#bdlc');
+      if (!(await buildingDlc.isVisible())) await page.locator('#buildings .b-more > summary').click();
+      await expect(buildingDlc).toBeVisible();
+      await buildingDlc.selectOption('2');
       await expect(page.locator('#bgrid .card[href="#/building/792"]')).toBeVisible();
       await expect(page.locator('#bgrid .card[href="#/building/82"]')).toHaveCount(0);
-      await page.locator('#bdlc').selectOption('12');
+      await buildingDlc.selectOption('12');
       await expect(page.locator('#bgrid .card[href="#/building/2556"]')).toBeVisible();
-      await page.locator('#bdlc').selectOption('0');
+      await buildingDlc.selectOption('0');
       await expect(page.locator('#bgrid .card[href="#/building/82"]')).toBeVisible();
-      await page.locator('#bdlc').selectOption('none');
+      await buildingDlc.selectOption('none');
       await expect(page.locator('#bgrid .card')).toHaveCount(0);
-      await expect(page.locator('#bcnt')).toHaveText('0 / 38');
+      await expect(page.locator('#bcnt')).toHaveText('0 / 38 座建筑');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(errors).toEqual([]);
     });

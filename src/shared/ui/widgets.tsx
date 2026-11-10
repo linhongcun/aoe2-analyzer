@@ -236,17 +236,19 @@ export function SearchInput({
   onChange,
   placeholder,
   describedBy,
+  label,
 }: {
   id: string;
   value: string;
   onChange: (v: string) => void;
   placeholder: string;
   describedBy?: string;
+  label?: string;
 }) {
   return (
     <span className="sw">
       <Icon name="search" className="ic sic" />
-      <input id={id} value={value} placeholder={placeholder} aria-describedby={describedBy} onChange={(e) => onChange(e.target.value)} />
+      <input id={id} value={value} placeholder={placeholder} aria-label={label} aria-describedby={describedBy} onChange={(e) => onChange(e.target.value)} />
     </span>
   );
 }
