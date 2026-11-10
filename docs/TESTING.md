@@ -1,8 +1,10 @@
 # 测试指南 / TESTING
 
-给写测试、跑测试的人（含编码代理）看：目录、命令、四宽、axe、验收用例命名，以及 CI 范围、分片和阶段复用。
+给写测试、跑测试的人（含编码代理）看。目录和命令仍在下面。审阅、发布和产品范围不在本文改写，仍以 [CONTRIBUTING.md](../CONTRIBUTING.md) 为准。
 
-现行流程是执行者准备实现、规格、失败用例和证据，由实现者之外的独立代理复核，在 PR 记录实际提交 SHA、复核范围、结果和未解决问题；不再依赖指定人员签字。见 [CONTRIBUTING.md「持续审阅授权」](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) 与「开发和验收」。持续审阅和发布授权不降低测试要求；本文件与 CONTRIBUTING 冲突时以 CONTRIBUTING 为准。
+**2026-11-10（优先于下文，以及 AGENTS / CONTRIBUTING / CODEX-MAINTENANCE 里冲突的测试门禁）**：Kent 只确认这次改动的功能是否正常。本站仅自己使用，历史包袱小，允许重构并接受回归。旧布局、旧入口、旧链接协议、重复功能不必兼容；有意合并、替代或删除不算 bug。每份 PR 只做必要冒烟，加上与本次 diff 直接相关的测试。纯布局不重跑无关计算或数据测试。不把全站、全尺寸、全主题矩阵设为每 PR 门禁。改到计算或数据时，只核对该改动的正确性。报告分开写实际执行、CI 实际范围、未验证项；没跑的不要写成通过。
+
+默认 CI 配置不因本文改变，仍是 [#749](design/ci-749.md) 的 static、真实 SHA 构建和 Chromium 单分片窄冒烟。设计文档里的宽度或截图要求不自动变成测试门禁。
 
 ## 1. 测试放哪
 
@@ -47,7 +49,7 @@ README 里的 `BASE_URL=<线上地址>` 同样走这条：配置只认 `BASE_URL
 
 ## 3. 四宽
 
-界面改动查 **360 / 375 / 390 / 1280**：没有横向滚动，没有 `console` error / `pageerror`。设计硬规则的摘要在 [CODEX-MAINTENANCE.md](CODEX-MAINTENANCE.md) §6。
+2026-11-10：360 / 375 / 390 / 1280 和明暗主题不是每 PR 门禁，也不做全站矩阵。只有这次改动本身要核对某一宽度或主题上的功能时，才查受影响页面。下面是既有写法，按需使用，不是清单。
 
 `garrisonHealing229.spec.ts`、`castleDefense242.spec.ts` 的常见形状：`beforeEach` 收集 `pageerror`，以及 `console` 里 `type === 'error'` 的文本；`afterEach` 断言这份列表为 `[]`，并检查
 
@@ -61,7 +63,7 @@ expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWi
 
 ## 4. axe
 
-e2e 使用 `@axe-core/playwright` 的 `AxeBuilder`。仓库没有一份全站统一的 tag 清单，跟同页已有用例：
+2026-11-10：axe 不是每 PR 门禁。只有这次改动直接涉及对比度或可访问性时，才对受影响区域抽查，不扫全站。需要时跟同页已有用例：
 
 - 只查对比度：`.withRules(['color-contrast'])`。`editorial6.spec.ts` 扫整页；`garrisonHealing229.spec.ts` 先 `.include('[data-testid="garrison-healing-page"]')`。
 - 一组 WCAG tag：`.include(...).withTags(['wcag2a', 'wcag2aa'])`，见 `castleDefense242.spec.ts`。有的页再加 `wcag21aa`（如 `mixedArmy241.spec.ts`）；有的 `analyze()` 不加 tag、不加 rule（如 `teamPlan243.spec.ts`）。
@@ -73,15 +75,15 @@ const violations = (await new AxeBuilder({ page }).include('[data-testid="castle
 expect(violations).toEqual([]);
 ```
 
-设计令牌对比度另跑 `python3 docs/design/contrast.py`（WCAG AA，CI 会跑）。文字不小于 12px、可点区域不小于 44×44，仍以设计规范和四宽用例为准。
+设计令牌对比度脚本是 `python3 docs/design/contrast.py`。文字不小于 12px、可点区域不小于 44×44 属于设计规范，不因普通 PR 默认重跑，也不做成每 PR 的宽度矩阵。
 
-## 5. 验收用例
+## 5. 功能是否正常
 
-执行者将 issue 的验收标准落成先失败的 Vitest 和/或 Playwright，并交独立代理复核。大功能或新页面先备齐规格与失败用例，再实现；缺少材料时可在已授权范围内补齐。历史上 Kent 写的这批文件名匹配 `v0*-acceptance*`，放在 `tests/unit/` 和 `tests/e2e/`。
+Kent 只确认这次改动的功能是否正常，用与 diff 直接相关的 Vitest 或 Playwright 即可。不要求先开仍红的验收 PR，也不把验收矩阵或签字当作测试门禁。
 
-**未经维护者明确授权，禁止修改** `tests/**/v0*-acceptance*` 及其他受保护验收用例的期望值。和产品决定冲突时，在 issue 写清冲突并交维护者明确决定；获授权的修改由执行者完成并独立复核，不要求指定历史作者重录，不得以删断言、跳过用例或放宽期望凑绿。
+`tests/**/v0*-acceptance*` 以及后来文件名不含 `acceptance` 的 `v0290-*`、`v0300-*` 等，是历史快照，不是兼容合同。改动有意换掉旧布局、入口、链接或重复功能时，把对应用例改成新行为或删掉；这种失败不判 bug，也不为保住旧期望把旧界面加回来。计算或数据改动仍要核对该结果；不得用删断言、跳过或放宽期望掩盖算错或数据错误。
 
-当前 `main` 上对上这个名字的文件如下（只说明命名，不把其中任一版写成「现网版本」；版本号以 `package.json` 和页脚为准）：
+当前 `main` 上文件名匹配 `v0*-acceptance*` 的如下（只说明命名，不把其中任一版写成「现网版本」；版本号以 `package.json` 和页脚为准）：
 
 | 文件                                  | 文件头自述               |
 | ------------------------------------- | ------------------------ |
@@ -94,43 +96,39 @@ expect(violations).toEqual([]);
 | `tests/unit/v0270-acceptance.test.ts` | v0.27.0 验收（#299）     |
 | `tests/e2e/v0270-acceptance.spec.ts`  | v0.27.0 验收（#299）     |
 
-后来的历史验收用例还有 `tests/unit/v0290-*.test.ts`、`tests/e2e/v0300-*.spec.ts` 这类，文件名不含 `acceptance`，不在上面这条 glob 里。改之前读该文件头；历史作者或重录说明保留为背景，现行期望值变更统一遵守上述维护者明确授权＋独立复核规则。
+后来的历史用例还有 `tests/unit/v0290-*.test.ts`、`tests/e2e/v0300-*.spec.ts` 这类。改之前读该文件头。期望值按上一段处理。
 
 ### Codex 交接
 
-给 Codex 执行者的写法。这不是新的 CI 门禁，也不代替第 3、4、6 节的四宽、axe 和风险范围门禁。未经维护者明确授权，仍然不要改 `tests/**/v0*-acceptance*` 及其他受保护验收用例的期望值。
+给 Codex 执行者的写法。这不是新的 CI 门禁。测试范围以文首 2026-11-10 为准，不把第 3、4、6 节的旧四宽、axe 和风险表当作每 PR 义务。
 
-**先失败，再折入。** 把验收写成 Vitest 和/或 Playwright，并确认它在当前 `main` 上失败。可以先开一份仍红的测试 PR，也可以和修复写在同一个 PR 里。仍红的测试 PR 保持草稿，描述里写明红是预期：审阅可以软通过（确认断言就是验收，红不是要在这条 PR 里修掉的回归）。CI 仍会失败，不能据此合并。实现时把这些用例折进对应的 `feat` / `fix` PR，一起变绿再合。不要 squash-merge 一份单独仍红的测试 PR；折入之后关掉那条红 PR 即可。近例：#620 只交仍红的 `ladder571`，#622 折入后一起变绿。
+**先看功能是否正常。** 不要求先交一份仍红的测试 PR，再折进实现。#620 / #622 的先红流程只作历史，不再沿用。
 
 **Relates 与 Fixes。** 维护者已授权已部署 issue 可直接关闭，见 [2026-11-03持续关闭授权](../CONTRIBUTING.md#已部署-issue-的持续关闭授权2026-11-03)。网站实现 PR 正文使用 `Relates #N`，避免合入时提前关闭；完成实际 Pages 部署、线上核对和正式 Release 后，执行者主动关闭已完成范围的 issue，无需额外产品走查或具名人员决定。合入即完成、无需网站交付的工程或文档事项可使用 `Fixes #N`。合到非默认分支不会自动关 issue。这是选关键词的约定，不是 CI 检查项。#622 的旧 `Relates #571` 走查交接作为历史保留。
 
-**验收要可测。** 验收标准写不成测试就不要开工。每条须点名路由（`#/...`）、页面上的具体状态（例如空态文案「暂无数据」）、从数据文件读到的数字（不凭记忆），以及不在范围。功能建议、问题报告、数据错误的「验收标准」和「Codex 就绪」在 `.github/ISSUE_TEMPLATE/`。缺这些条时按 [CODEX-MAINTENANCE](CODEX-MAINTENANCE.md) §5 跳过，或只在已授权范围内补齐规格，不自行发明产品范围。
+**怎样算正常。** 能说明这次功能怎样算正常即可。不要求每条都写宽度、全状态和数据矩阵；写不出矩阵不构成不能开工。计算或数据改动仍核对这次结果，数字从数据文件读，不凭记忆。产品范围、待确认和阻塞仍按 [CODEX-MAINTENANCE](CODEX-MAINTENANCE.md) 的非测试条款处理。
 
 <a id="6-按影响验证一次并复用证据"></a>
 <a id="ci-659-validation"></a>
 
-## 6. 按影响验证一次并复用阶段证据（#659，2026-11-03）
+## 6. 每 PR 跑什么，以及 CI 实际覆盖
 
-#431 的一次适用验证原则继续有效。维护者于2026-11-03明确授权 #659，取代 #514 的 PR 绝不完整浏览器限制、#513 的全局壳层 targeted 例外和旧 `browser=none` 维护豁免。完整冻结范围、故障注入、覆盖对照和实验要求见 [ci-659.md](design/ci-659.md)。
+2026-11-10 的每 PR 义务只有：必要冒烟，加上与本次 diff 直接相关的测试。纯布局不跑无关单测、数据再生成或 Python 数据测试。计算或数据只跑能核对这次结果的测试。全站、四宽、明暗、axe、完整单测和 data 不是每 PR 门禁，也不是普通 PR 的合并条件。
 
-**现行默认门禁是 [#749](design/ci-749.md)（2026-11-08）。** 普通 PR 与 main push 只跑 `static`、`build`（构建身份）和 Chromium 单分片窄冒烟，main 在聚合成功后才上传 `deployed-site` 并部署。多分片、24 路由、axe/四宽、单测和 data 只在手动 `workflow_dispatch` 且 `full=true` 时跑，不部署。日更 schedule 已关。下文风险表仍描述 `planChanges` 的分类，供 full 和本地检查；CI 入口 `selectCiPlan` 不会据此扩大默认门禁。
+**默认 CI 仍是 [#749](design/ci-749.md)（2026-11-08），本文不改工作流。** 普通 PR 与 main push 只跑 `static`、`build`（构建身份）和 Chromium 单分片窄冒烟，main 在聚合成功后才上传 `deployed-site` 并部署。多分片、24 路由、axe、四宽、单测和 data 只在手动 `workflow_dispatch` 且 `full=true` 时跑，不部署。日更 schedule 已关。`planChanges` 的 `maintenance` / `civ-ui` / `targeted` / `full` 不再决定 PR 必须跑什么。下表只供手动 full 或本地排查对照。
 
-`scripts/ci-scope.mjs` 生成 `scope`、`features`、`unit`、`e2e`、`data`、`full` 与浏览器计划；`ci-stage.mjs` 冻结精确检查 ID、文件和 case 集合，再执行各阶段。`full` 明确表示完整范围，不用空列表、零测试或文件请求列表代替实际执行证明。
+#431 的「小改动不等长回归」仍然有效。#659 的闭包和实验记录见 [ci-659.md](design/ci-659.md)，不把其中的完整浏览器写成每 PR 门禁。
 
-| 范围          | 适用变化                                                            | 必要覆盖                                                                       |
-| ------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `maintenance` | 普通文档、仅项目版本号变化                                          | 核心静态检查、相关 release 单测、新构建与跨路由冷启动 smoke                    |
-| `civ-ui`      | 已审计的文明页面及限定 CSS                                          | 核心 smoke，加文明筛选/卡片/详情的正负路径、四宽和明暗主题；包括历史与背景专项 |
-| `targeted`    | 已证明完整消费者闭包的功能页面、辅助文件及相关测试                  | 核心 smoke，加受影响闭包的单测、交互、正负路径、四宽和明暗主题；混合改动取并集 |
-| `full`        | 公共计算、全局 CSS/tokens、路由、共享壳层、未知范围、依赖、策略自身 | 完整单测和完整浏览器，PR 同样执行；`data` 按实际输入另计                       |
+`scripts/ci-scope.mjs` 仍会生成 `scope`、`features`、`unit`、`e2e`、`data`、`full` 与浏览器计划；`ci-stage.mjs` 在手动 full 时冻结精确检查 ID、文件和 case 集合。手动 full 若声称跑了完整范围，须有真实执行证明，不能用空列表或文件请求列表代替。这不是每 PR 要跑 full。
 
-首页 `startGame` 和天梯 `ladderQuery` 只对精确审计路径使用有界 profile。受影响时保留首页空大厅、未知模式/地图、失败恢复和文明保留，以及天梯缺快照/恢复等负路径；文档维护不展开无关首页长测。`insights`、`sourcePresentation`、`civUnits` / `civBuildings` 等现有精确映射以 `ci-scope` 与范围单测为准，新增回归同步登记。`formatTime`、`dupNames`、`glossary`、`linker`、`sharePage`、`simRoute` 尚未证明完整闭包，保守 full；Layout/Icon/PageMeta 与共享 `editorial-shell.css` 同样 full。
+| 范围          | 适用变化                                                            | 只在手动 full 或本地排查时                                                       |
+| ------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `maintenance` | 普通文档、仅项目版本号变化                                          | 必要冒烟；不扩成计算或数据                                                       |
+| `civ-ui`      | 已审计的文明页面及限定 CSS                                          | 受影响页面的必要冒烟；四宽和主题仅在这次要核对它们时                             |
+| `targeted`    | 已证明完整消费者闭包的功能页面、辅助文件及相关测试                  | 与 diff 直接相关的测试；不取全站并集                                             |
+| `full`        | 公共计算、全局 CSS/tokens、路由、共享壳层、未知范围、依赖、策略自身 | 仅手动 full，不是每 PR 门禁。计算或数据只核对该次结果；纯布局不重生未变数据     |
 
-feature 目录名称不构成 CSS 作用范围证明。只有登记的局部样式、前后源码均通过选择器/at-rule 审计时才收窄；全局选择器、`@import`、未知样式、解析失败或选择器逃逸均 full。Hotkeys TSX 保留原 profile，其含全局打印规则的 CSS 走 full。既有文明徽标/间距和明确限定的共享卡片 CSS 例外继续接受原有源码审计。
-
-窄计划使用核心 `smoke.spec.ts` 与所属功能回归，保留该功能自己的四宽/主题（例如 `civDlcFilters`）。无关的全站 hash/截图/触控巡检、其它文明矩阵和开局长巡游留在夜间或高风险完整计划；直接修改全站守卫本身也 full。`CI_E2E_FULL=false` 不能降级必要范围。
-
-`package.json` 和锁文件只有结构化证明仅项目版本号变化时可按维护处理。实际数据、生成脚本/输入、来源 pins 和依赖变化才开启 `data`，包括文明背景来源、生成清单、导入器与生成图片。`src/data/index.ts` 运行时加载边界及准确的 `page-metadata.json` 路径保持 full、无需再生成未变游戏数据；混入真实数据输入仍 data。`docs/PATCH-NOTES/**` 是产品输入。
+上表和旧的消费者闭包（未证明闭包则 full、全局 CSS、Layout/Icon/PageMeta、功能自己的四宽主题必须保留）都不再扩大每 PR 的测试。默认 CI 不会因 diff 打开 data 或四片浏览器。`CI_E2E_FULL=false` 不能把默认 CI 实际会跑的窄冒烟说成没跑。
 
 ### 并行阶段、同一构建与严格聚合
 
@@ -140,7 +138,7 @@ feature 目录名称不构成 CSS 作用范围证明。只有登记的局部样�
 
 最终 `test` 核对本次计划内各阶段的真实成功结果、精确 case 并集和交集、允许的既有 skip、数据结果与构建身份。失败、取消、超时、缺片、重复/漏 case、非预期跳过和错构建均阻断证明与 deploy。文件检查、软链接拒绝和无匹配失败继续有效。full 的 24 路由新构建 smoke 不因源码测试复用而省略；默认窄冒烟本身不可复用。
 
-#338 将1280 hash 与表格断言合并到同次路由访问；保留两类独立失败收集、每路由冷启动/数据就绪、visited/seen 防空转、360表格和六份 golden 原字节。手工 record 仍须完整单 worker，CI/分片/多 worker 禁止 record。不得通过减少断言或更新 golden 换取速度。
+#338 的 hash 与表格检查留在手动 full，不回默认门禁。有意替换旧布局或旧表时，更新或去掉对应 golden 不算放水；不能用改 golden 掩盖计算或数据错误。
 
 ### PR 到 main 的 v2 阶段复用
 
@@ -162,9 +160,11 @@ CI/Deploy 不再有日更 schedule。手动 full（`workflow_dispatch`，`full` 
 
 ## 7. 合并前要绿什么（摘要）
 
-按变更范围做必要的本地检查和对应 CI。没有新修改、失败或未解决问题时不扩大测试范围，范围以已审计的消费者闭包为准；全局 Icon 改动按高风险 full 处理，不能按文案修改推定其影响。记录实际通过、跳过或中止的数量，不能将部分执行写成全量通过。
+本地按文首 2026-11-10：必要冒烟和与本次改动直接相关的测试。没有新修改时不扩大范围。全局 Icon、共享样式不因此要求每 PR 跑 full。
 
-独立代理复核实际提交，界面核对受影响状态和四宽。当前 CI 的真实 test 可以记录经核实的复用证据；main 的真实 test/deploy 和上线结果仍须确认。空 statuses、只有 PR 绿灯或仅提交祖先关系不代表已验证部署。使用 release 分支时按同一证据规则处理，不为阶段名称重复全量。不得伪造结论、提高超时、增加重试或放宽产品断言。
+报告写清三件事：本地实际命令和结果；这次 CI 的范围（默认 #749：static、构建身份、单分片窄冒烟；手动 full 另计）；没跑的宽度、主题、计算或数据。跳过、复用、中止不要写成通过。
+
+部署是否成功看 main 的真实 test、deploy 和线上结果。空 statuses、只有 PR 绿灯或仅提交祖先关系不算已部署。不得伪造结论、提高超时、增加重试，或放宽断言掩盖算错和数据错误。
 
 ### 异步数据就绪（#412）
 
@@ -173,6 +173,8 @@ CI/Deploy 不再有日更 schedule。手动 full（`workflow_dispatch`，`full` 
 加载回归用受控请求闸门覆盖这一顺序，先证明旧行为失败，再证明放行后真实内容可操作。不用固定 sleep、提高 timeout、自动 retry 或删除断言代替就绪条件。本地全量失败、单独复跑通过、受控延迟复现和远端整套结果须分别报告；既有竞态已成为 release CI 的真实失败时，应先修复再发布。
 
 ## 8. 局部跑和别的检查
+
+下列命令和历史专项按需使用。其中「走 full」或「必须保留四宽」不再作为每 PR 门禁。
 
 - 单个文件：`npx playwright test tests/e2e/castleDefense242.spec.ts --reporter=line`，或 `npx vitest run tests/unit/v0270-acceptance.test.ts`。
 - 本地 worker 参数按测试要求选择；受保护 golden 录制仍用 `--workers=1`。CI 的四 runner 与每片执行参数由冻结计划和 `ci-worker.mjs` 管理，不全局启用 `fullyParallel`。
@@ -204,12 +206,12 @@ npx playwright test tests/e2e/searchLoading371.spec.ts tests/e2e/aliases.spec.ts
 
 `scripts/content-baseline.mjs` 现在仅导出空冻结清单，不能再新增迁移豁免；兼容的 `--ratchet` 与严格模式具有相同阻断效果。开局与入门的原始来源证据保留，页面读取共享公开投影；独立 `node scripts/check-source-presentation.mjs` 再验证这 9 份输入对应的公开 DTO，拒绝内部定位、伪造或不一致的 pin、未知字段和坏链接。原编译器、登记表、公开格式 policy 与五个运行时边界保持不变。边界与归属规则见 [公开来源规格](design/source-presentation-442.md)，初始迁移过程见 [#285 规格](design/issue285-json-validation.md)。
 
-来源 UI 的 CI 范围明确限定在两类页面、纯公开投影、独立 checker 和四份来源 schema。两份 raw schema 仅来源子树变化可走相关检查；步骤、卡片、其它结构、通用引擎、共享 policy、预编译校验器或未知文件变化仍走 full，原始数据或依赖变化仍 full/data。清空基线的例外要求整个文件精确等于空冻结导出；任何新增条目或其它代码仍 full。规则及反例由 `sourcePresentationScope442` 验证。
+来源 UI 的检查笔记仍限定在两类页面、纯公开投影、独立 checker 和四份来源 schema。这些变化不自动变成每 PR 的 full 或 data。改到原始数据时只核对这次正确性。规则及反例由 `sourcePresentationScope442` 验证。
 
 五处前端读取边界使用独立的预编译校验器。修改对应 schema 或共享格式后运行 `npm run content:validators`；`npm run content:validators -- --check` 验证生成结果可复现。不要手改 `src/content/schema/compiled`。相关单测为 `contentSchema285`、`contentSources285`、`generatedSchemas285`、`jsonBoundary285`、`sourcePolicy285`；体积继续由 `v080-123` 入口 gzip 和 `pageBudget282` 的施工冷加载预算保护。
 
 ### #364 Duel标题与共享展示闭包
 
-`duel` profile覆盖标题语义、四宽明暗截图、URL/金标准、伤害/时代/回放/升级/费用/盈亏平衡的原有回归。仅 `src/shared/ui/sim/SimPanel.tsx` 和 `src/shared/ui/RealCost.tsx` 两个展示文件使用已核消费者的Duel、单位、建筑联合范围，并补共享默认标题合同检查；直接消费者新增时，`headingScope364` 的实际导入审计会失败，要求重新核对范围。其他shared文件、核心domain算式、全局CSS仍使用完整检查。
+`duel` 的旧笔记覆盖标题、URL、伤害、时代、回放、升级、费用和盈亏平衡。仅 `src/shared/ui/sim/SimPanel.tsx` 和 `src/shared/ui/RealCost.tsx` 两个展示文件使用已核消费者的 Duel、单位、建筑联合范围；直接消费者新增时，`headingScope364` 会要求重新核对范围。其他 shared 文件、核心 domain 算式、全局 CSS 不因此要求每 PR 跑完整检查。算式或数据有改动时只核对该结果。
 
-所有Duel局部CSS修改都要有前后源码证据：每个selector以 `#duel` 限定，不能有外部兄弟选择器、未限定的嵌套规则或全局at-rule；不满足则回退完整检查。#442既有source-only schema与内部字段检查保持。main/Release短烟测检查实际构建的Duel默认/展开/不可用/浮层和共享默认大纲；184对零容差视觉守恒的本地工具、固定两项页脚元数据归一化与真实基线复用说明见 [验证工具](design/duel-heading-364-visual/README.md)。
+Duel 局部 CSS 的选择器审计、#442 的 schema 检查，以及 184 对视觉守恒工具，都不是每 PR 门禁。说明见 [验证工具](design/duel-heading-364-visual/README.md)。
