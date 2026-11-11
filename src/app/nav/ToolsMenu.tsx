@@ -9,7 +9,7 @@ function isMobileDrawer() {
 function toolsPath(path: string) {
   return !WIKI.some((s) => !s.hideNav && s.match.test(path)) && TOOL_GROUPS.some((group) => group.sections.some((s) => s.match.test(path)));
 }
-/** 抽屉上方「百科」已经列出 5 个 wiki 一级入口；抽屉里的工具面板不再重复它们（issue 774）。 */
+/** 抽屉上方「百科」已经列出未隐藏的 wiki 一级入口；抽屉里的工具面板不再重复它们（issue 774）。 */
 const WIKI_NAV_KEYS = new Set(WIKI.filter((s) => !s.hideNav).map((s) => s.key));
 /** 当前页所在工具组：抽屉里默认只展开这一组。 */
 function currentGroupKey(path: string) {
@@ -99,7 +99,7 @@ export function ToolsMenu({ path, drawerOpen = false }: { path: string; drawerOp
           const sections = drawerOpen ? group.sections.filter((s) => !WIKI_NAV_KEYS.has(s.key)) : group.sections;
           if (drawerOpen)
             return (
-              // issue 774 抽屉：只默认展开当前页所在组，其余组作为可折叠标题（键盘可用），并跳过与上方「百科」重复的 5 项。
+              // issue 774 抽屉：只默认展开当前页所在组，其余组作为可折叠标题（键盘可用），并跳过与上方「百科」重复的项。
               <details key={group.key} className="tools-group" open={group.key === groupKey}>
                 <summary className="tools-group-title" id={`tools-${group.key}`}>
                   {group.title}

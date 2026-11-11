@@ -62,6 +62,6 @@ describe('页面登记表 #283', () => {
     expect(home).not.toMatch(/\[(?:\s*'[/a-z0-9-]+'\s*,){2,}\s*'[/a-z0-9-]+'\s*\]/);
     const economy = HOME_GROUPS.find((group) => group.key === 'economy')!;
     expect(economy.sections.map((section) => section.path)).toEqual(expect.arrayContaining(['/market', '/eco-payoff']));
-    expect(WIKI.filter((section) => !section.hideNav).map((section) => section.key)).toEqual(['civs', 'units', 'buildings', 'techs', 'tree']);
+    expect(WIKI.filter((section) => !section.hideNav).map((section) => section.key)).toEqual(['civs', 'units', 'buildings', 'techs', 'tree', 'maps']);
   });
 });

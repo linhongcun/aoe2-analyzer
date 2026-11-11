@@ -78,7 +78,7 @@ describe('#752 手册机制短卡', () => {
     expect(SD3_WATCH_ROWS.map((row) => row.label)).toEqual(['半决赛', '决赛']);
     expect(VICTORY_MODE_COPY.sd3).toBe('主办方公开手册写：不能再建城镇中心；最后一座城镇中心被毁就会立刻输掉。这只说明该赛事图包。');
     expect(SD3_HANDBOOK_SOURCE.checkedAt).toBe('2026-11-06');
-    expect(readFileSync('src/features/maps/Maps.tsx', 'utf8')).toContain('<SuddenDessaster3 />\n      <SuddenDessasterMechanics />');
+    expect(readFileSync('src/features/maps/Maps.tsx', 'utf8')).toContain('<SuddenDessaster3 />\n        <SuddenDessasterMechanics />');
     expect(readFileSync('src/features/gameGuide/GameGuide.tsx', 'utf8')).not.toContain('SuddenDessasterMechanics');
     expect(readFileSync('src/features/maps/SuddenDessasterWatch.tsx', 'utf8')).not.toContain('火药桶');
   });

@@ -30,6 +30,16 @@ function PosRows({ tips }: { tips: MapPosTip[] }) {
 }
 
 export function MapPositions({ mapId }: { mapId: string }) {
+  const flank = mapPosTips(mapId, 'flank');
+  const pocket = mapPosTips(mapId, 'pocket');
+  if (flank.length === 0 && pocket.length === 0) {
+    return (
+      <section className="map-positions map-pos-missing" data-testid="map-positions" aria-label="路位推荐">
+        <p>路位推荐暂缺</p>
+        <FeedbackLink kind="data" label="反馈数据缺口" />
+      </section>
+    );
+  }
   return (
     <section className="map-positions" data-testid="map-positions" aria-label="边路与中路推荐">
       <div className="map-pos-meta">
@@ -43,7 +53,7 @@ export function MapPositions({ mapId }: { mapId: string }) {
       </div>
       <div className="map-pos-cols">
         {SIDES.map((side) => {
-          const tips = mapPosTips(mapId, side.id);
+          const tips = side.id === 'flank' ? flank : pocket;
           return (
             <div className="map-pos-col" data-testid={`map-pos-${side.id}`} key={side.id}>
               <h3>

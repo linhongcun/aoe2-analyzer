@@ -23,7 +23,7 @@ const PAGES = [
   ['builds', '.tl-empty-btns .tl-chip'],
   ['builds?bo=scouts-18', '.tl-steps'],
   ['patches/185872', '.patch-entry'],
-  ['maps', '.map-guide article'],
+  ['maps', '.map-guide'],
 ] as const;
 
 async function chooseInitialTheme(page: Page, theme: Theme) {

@@ -9,8 +9,7 @@
 //
 // 延期、不在本文件里钉死的 §8：
 // - 同一文明两列都在：不指定哪一张图重叠，只禁止「两边都适合」角标。
-// - 只写了一列：没有指定地图。黑森林按「今天没有位置稿」验收为两列待补。
-//   线框 wire-partial 的黑森林边路三行写明不入库，不能拿来当数据。
+// - 没有位置稿：一行「路位推荐暂缺」和数据反馈，不显示两列口径。
 // - 稿件放在 positions.ts、不进 mapCatalog.json：不是页面上能看见的事。
 // - 不改文明页「边位 / 口袋」、不做模式切换、不接 #558。
 // - 不做 360 精修。窄屏只留一条 390 上下排。
@@ -19,9 +18,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 
 const MUTED = 'rgb(99, 99, 102)';
 const LINK = 'rgb(0, 102, 204)';
-const DASH = 'rgb(199, 199, 204)';
 const SOFT = 'rgb(245, 245, 247)';
-const BAD = 'rgb(196, 40, 28)';
 const EMOJI = /\p{Extended_Pictographic}/u;
 const STATS = /胜率|Elo|样本|分段|aoestats/i;
 
@@ -166,38 +163,6 @@ async function expectFilled(column: Locator) {
   }
 }
 
-async function expectEmpty(column: Locator, label: string) {
-  await expect(column.locator('a[href*="#/civ/"]')).toHaveCount(0);
-  await expect(column.locator('img[src*="civs/"]')).toHaveCount(0);
-  const empty = column.getByTestId('map-pos-empty');
-  await expect(empty).toHaveCount(1);
-  await expect(empty).toHaveAttribute('role', 'status');
-  await expect(empty).toContainText(label);
-  await expect(empty).not.toContainText('暂无推荐');
-  await expect(empty.locator('svg.lucide-inbox')).toHaveCount(1);
-  const paint = await empty.evaluate((el) => {
-    const style = getComputedStyle(el);
-    return { border: style.borderTopStyle, color: style.borderTopColor, bg: style.backgroundColor };
-  });
-  expect(paint.border).toBe('dashed');
-  expect(paint.color).toBe(DASH);
-  expect(paint.bg).toBe(SOFT);
-  expect(paint.color).not.toBe(BAD);
-
-  const feedback = empty.getByRole('link', { name: '反馈数据缺口', exact: true });
-  await expect(feedback).toHaveCount(1);
-  await expect(feedback).toHaveClass(/\bfblink\b/);
-  await expect(feedback).toHaveAttribute('data-t', 'feedback');
-  await expect(feedback).toHaveAttribute('target', '_blank');
-  await expect(feedback.locator('svg')).toHaveClass(/lucide-message-square-warning/);
-  const href = await feedback.getAttribute('href');
-  expect(href).toMatch(/^https:\/\/github\.com\/linhongcun\/aoe2-analyzer\/issues\/new\?/);
-  expect(new URL(href ?? '').searchParams.get('labels')).toBe('data');
-  const box = await feedback.boundingBox();
-  expect(box?.width ?? 0).toBeGreaterThanOrEqual(44);
-  expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
-}
-
 async function expectLayout(positions: Locator, layout: 'columns' | 'stack') {
   const box = await positions.evaluate((root) => {
     const rect = (id: string) => {
@@ -270,11 +235,11 @@ test('#559 阿拉伯半岛：推荐文明仍在，其下边路与中路各 3–8
   await expect(page).toHaveURL(new RegExp(`#/civ/${en}(?:[/?#]|$)`));
 });
 
-test('#559 黑森林：没有位置稿时两列都待补，不编文明', async ({ page }) => {
+test('#559 黑森林：没有位置稿时一行暂缺，不显示口径', async ({ page }) => {
   const errors = watch(page);
   const article = await openMap(page, 'black-forest', '黑森林', 'Black Forest');
   const positions = article.getByTestId('map-positions');
-  await expect(positions, '没有推荐文明列表时也不能藏起边路/中路').toBeVisible();
+  await expect(positions, '没有路位名单时仍保留一行提示').toBeVisible();
   expect(
     await article.evaluate((root) => {
       const block = root.querySelector('[data-testid="map-positions"]');
@@ -284,15 +249,18 @@ test('#559 黑森林：没有位置稿时两列都待补，不编文明', async 
     }),
   ).toBe(true);
 
-  await expectChrome(positions);
-  const flank = positions.getByTestId('map-pos-flank');
-  const pocket = positions.getByTestId('map-pos-pocket');
-  await expectHeading(flank, '边路推荐', 'Flank');
-  await expectHeading(pocket, '中路推荐', 'Pocket');
-  await expectEmpty(flank, '边路推荐待补');
-  await expectEmpty(pocket, '中路推荐待补');
-  await expect(positions.getByTestId('map-pos-empty')).toHaveCount(2);
-  await expectLayout(positions, 'columns');
+  await expect(positions).toContainText('路位推荐暂缺');
+  const feedback = positions.getByRole('link', { name: '反馈数据缺口', exact: true });
+  await expect(feedback).toHaveCount(1);
+  await expect(feedback).toHaveAttribute('data-t', 'feedback');
+  await expect(positions.getByTestId('map-pos-mode')).toHaveCount(0);
+  await expect(positions.getByTestId('map-pos-disclaimer')).toHaveCount(0);
+  await expect(positions.getByTestId('map-pos-flank')).toHaveCount(0);
+  await expect(positions.getByTestId('map-pos-pocket')).toHaveCount(0);
+  await expect(positions).not.toContainText('边路推荐待补');
+  await expect(positions).not.toContainText('中路推荐待补');
+  await expect(positions).not.toContainText('适用：');
+  await expect(positions).not.toContainText('编辑口径，非官方推荐');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
 });
