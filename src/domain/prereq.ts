@@ -24,6 +24,8 @@ export interface ToggleSelectedOptions {
   ignoreUnavailable?: boolean;
   /** 补前置时跨过不可用中间项继续找更早的可用祖先（模拟器行为）。 */
   crossUnavailable?: boolean;
+  /** 补链遇到已选中项时停止，不继续补更早祖先（驻军工具行为）。 */
+  stopAtSelected?: boolean;
   /** 返回按 id 升序的集合（驻军建筑页行为）。 */
   sort?: boolean;
 }
@@ -74,9 +76,10 @@ export function toggleSelected(id: number, selected: ReadonlySet<number>, byId: 
     const add = (xid: number, root: boolean, seen: Set<number>) => {
       if (seen.has(xid)) return;
       seen.add(xid);
-      if (root || options.available.has(xid)) {
-        if (!next.has(xid)) next.add(xid);
-      } else if (!options.crossUnavailable) return;
+      if (next.has(xid)) {
+        if (options.stopAtSelected) return;
+      } else if (root || options.available.has(xid)) next.add(xid);
+      else if (!options.crossUnavailable) return;
       const pre = byId[xid]?.pre;
       if (pre != null) add(pre, false, seen);
     };

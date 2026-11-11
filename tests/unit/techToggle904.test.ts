@@ -19,8 +19,9 @@ describe('科技选择共享切换（issue 904）', () => {
     expect([...toggleSelected(3, new Set(), byId, { available: new Set([3]) })].sort()).toEqual([3]);
   });
 
-  it('中间前置已选中时仍继续补更早的链', () => {
+  it('中间前置已选中时默认继续补更早的链，驻军工具可停止', () => {
     expect([...toggleSelected(3, new Set([2]), byId, { available })].sort()).toEqual([1, 2, 3]);
+    expect([...toggleSelected(3, new Set([2]), byId, { available, stopAtSelected: true })].sort()).toEqual([2, 3]);
   });
 
   it('取消时按前置缺失移除后继', () => {
