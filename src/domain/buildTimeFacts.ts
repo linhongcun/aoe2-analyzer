@@ -9,8 +9,8 @@
  */
 import { ECO, type EcoDataView } from '../data/eco';
 import { CONSTRUCTION_DATA, type ConstructionData } from '../data/construction';
-
-export const TOWN_CENTER_ID = 109;
+import { TOWN_CENTER_ID } from './gameIds';
+export { TOWN_CENTER_ID } from './gameIds';
 
 export function openingTownCenterBuildTime(eco: EcoDataView = ECO): number | null {
   const value = eco.buildings[TOWN_CENTER_ID]?.buildTime;
@@ -41,6 +41,6 @@ export function townCenterBuildTimes(eco: EcoDataView = ECO, data: ConstructionD
 /** 施工页 warning 文本；两个值都从数据读取。 */
 export function townCenterBuildTimeNote(eco: EcoDataView = ECO, data: ConstructionData = CONSTRUCTION_DATA): string | null {
   const { opening, construction } = townCenterBuildTimes(eco, data);
-  if (opening === null || construction === null) return null;
+  if (opening === null || construction === null || opening === construction) return null;
   return `按游戏里实际建造城镇中心的 ${construction} 秒计算，和其他页面里的 ${opening} 秒不是同一个口径。`;
 }

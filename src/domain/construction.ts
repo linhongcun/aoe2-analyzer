@@ -174,7 +174,7 @@ export function calculateConstruction(ctx: ConstructionContext, config: Construc
   result.selected = effectiveConstructionTechs(ctx, config);
   result.free = freeConstructionTechs(ctx, config);
   if (b) for (const id of shapeTechs(b.id)) if (!result.selected.has(id)) errors.push(`建造此形态须先研究${ctx.core.techById[id]?.zh ?? `科技 ${id}`}。`);
-  if (b?.id === 109) {
+  if (b?.id === TOWN_CENTER_ID) {
     if (!config.hasTownCenter && config.age !== 1) errors.push('首版仅支持黑暗时代的起始城镇中心；其他起始时代条件尚未核实。');
     if (config.hasTownCenter && config.age < 3 && !(config.civ === 'Cumans' && config.age === 2))
       errors.push('首版额外城镇中心支持城堡时代起，库曼另支持封建额外城镇中心；重建条件未核实。');
