@@ -35,16 +35,14 @@ for (const w of WIDTHS)
 for (const w of WIDTHS)
   test.describe(`#97+#103 定稿 S1 ${w}px`, () => {
     test.use({ viewport: { width: w, height: 900 } });
-    test('有折扣的格子显示「原价」「实际」标签；派出数量行用「按原价」「实际」', async ({ page }) => {
+    test('卡头显示折后训练价，不用「实际」标价；派出数量是单一数字', async ({ page }) => {
       await page.goto('#/duel?m=r&bud=3000&a=359.Byzantines.4.f.&b=569.Franks.4.f.');
-      for (const r of ['pk-res-Food', 'pk-res-Wood']) {
-        const t = (await A(page).locator(`[data-t="${r}"] td`).nth(1).textContent())!;
-        expect(t, r).toMatch(/原价\s*35|原价\s*25/);
-        expect(t, r).toContain('实际');
-      }
-      const c = (await A(page).locator('[data-t="pk-count"] td').nth(1).textContent())!;
-      expect(c).toMatch(/按原价/);
-      expect(c).toMatch(/实际/);
+      const price = page.locator('#duel-a [data-t="pk-price"]');
+      await expect(price).toContainText('26');
+      await expect(price).toContainText('19');
+      await expect(price).not.toContainText('实际');
+      await expect(A(page).locator('[data-t="pk-count"] b')).toHaveText('66');
+      await expect(A(page).locator('[data-t="pk-count"]')).not.toContainText('按原价');
     });
     test('负号统一 U+2212：已计入行和加成原文里不出现连字符「-数字」', async ({ page }) => {
       await page.goto('#/duel?m=r&bud=3000&a=359.Byzantines.4.f.&b=569.Franks.4.f.');

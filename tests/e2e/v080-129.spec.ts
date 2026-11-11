@@ -4,11 +4,12 @@ for (const w of [360, 375, 390, 1280])
   test(`#129 哥特民兵 PK 价统一取整，${w}px`, async ({ page }) => {
     await page.setViewportSize({ width: w, height: 900 });
     await page.goto('#/duel?a=74.Goths.1.f.&b=74.Franks.1.f.&m=r&bud=3000');
+    const price = page.locator('#duel-a [data-t="pk-price"]');
     const a = page.locator('[data-t="pk-cost-a"]');
     await expect(a).toBeVisible();
-    await expect(a).not.toContainText('未计入');
-    await expect(a).toContainText('42.5');
-    await expect(a).toContainText('17');
+    await expect(price).toContainText('42.5');
+    await expect(price).toContainText('17');
+    await expect(price).not.toContainText('未计入');
     const h = await a.evaluate((el) => el.scrollWidth <= el.clientWidth);
     expect(h).toBe(true);
   });

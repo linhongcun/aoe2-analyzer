@@ -9,13 +9,16 @@ import { TEAM_BONUSES } from '../../../domain/effects';
 import { baseStats, civBonusNotes } from '../../../domain/simulator';
 import type { SideSpec } from '../../../domain/duelState';
 import { CivPicker } from '../../../shared/ui/CivPicker';
-import { CostView, StatIcon, UnitIcon } from '../../../shared/ui/art';
+import { StatIcon, UnitIcon } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
 import { RangeB } from '../../../shared/ui/RangeB';
 import SimPanel, { type StatRow } from '../../../shared/ui/sim/SimPanel';
 import { SIM_ROWS } from '../../../shared/utils/simFormat';
 import { RealCostBlock } from '../../../shared/ui/RealCost';
+import { EMPTY_TRAINING_TECH } from '../logic/trainingCostView';
 import { CostDiscountBlock } from './CostDiscount';
+import { PkCost } from './PkCost';
+import { TrainingPrice } from './TrainingPrice';
 import { UnitPicker } from './UnitPicker';
 import { isUnavail, r1, type SideState, type Unavail } from '../logic/duelSide';
 
@@ -33,7 +36,7 @@ export function Side({
   fams: ReturnType<typeof collapse>;
   onChange: (s: SideSpec) => void;
   count: number;
-  /** 等资源预算；0 = 非等资源模式（不显示折后价） */
+  /** 等资源预算；0 = 不显示派出数量和训练投入 */
   bud: number;
   /** #88 等采集时间预算 [村民数, 分钟]；null = 非该模式 */
   time: [number, number] | null;
@@ -53,10 +56,15 @@ export function Side({
           <h2 className="duel-side-title">
             {k.toUpperCase()} · {u.zh} {count > 1 && <span className="tag">× {count}</span>}
           </h2>
-          <small className="note">
-            {civByEn(side.civ)?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span> · <CostView c={u.cost} />
+          <small className="note duel-meta">
+            {civByEn(side.civ)?.zh} · <span className="duel-age">{AGE_ZH[side.age]}</span>
+            <PkCost cost={side.training.price.cost} base={side.training.before} />
           </small>
         </div>
+      </div>
+      <div data-t={`pk-cost-${k}`}>
+        <TrainingPrice quote={side.training} sel={side.sel} bud={bud} count={count} />
+        <CostDiscountBlock unit={u.zh} civ={civByEn(side.civ)?.zh ?? side.civ} d={side.disc} />
       </div>
       {time && (
         <RealCostBlock
@@ -65,12 +73,11 @@ export function Side({
           civ={side.civ}
           civZh={civByEn(side.civ)?.zh ?? side.civ}
           age={side.age}
-          d={side.disc}
+          d={{ ...side.disc, cost: side.training.price.cost, exact: side.training.price.exact }}
           vils={time[0]}
           min={time[1]}
         />
       )}
-      {bud > 0 && <CostDiscountBlock k={k} unit={u.zh} civ={civByEn(side.civ)?.zh ?? side.civ} d={side.disc} bud={bud} count={count} />}
       <div className="bar">
         <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
         {elite && (
@@ -158,6 +165,7 @@ export function Side({
       </table>
       <details className="duel-tech">
         <summary>科技详情（已选 {side.sel.size} 项，可逐项勾选）</summary>
+        {!side.training.costs.length && <p className="note">{EMPTY_TRAINING_TECH}</p>}
         <SimPanel
           headingLevel={2}
           embedded={`duel-${k}`}
@@ -168,7 +176,15 @@ export function Side({
           sel={side.sel}
           team={new Set(spec.team)}
           cmp=""
-          avail={side.avail}
+          avail={[
+            ...side.avail,
+            ...side.training.costs.filter((item) => !side.avail.some((row) => row.t.id === item.tech.id)).map((item) => ({ t: item.tech, ef: null })),
+          ]}
+          selectableWithoutEffect={new Set(side.training.costs.map((item) => item.tech.id))}
+          presetExtra={(scope) => {
+            const limit = scope === 'all' ? 4 : scope;
+            return new Set(side.training.costs.filter((item) => item.supported && item.tech.age <= limit).map((item) => item.tech.id));
+          }}
           techById={core.techById}
           rows={rows}
           base={baseStats(u)}

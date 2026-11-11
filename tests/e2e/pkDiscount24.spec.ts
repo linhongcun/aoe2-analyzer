@@ -41,23 +41,26 @@ for (const w of [1280, 390]) {
 
     test('拜占庭长戟 vs 法兰克游侠：26/19 得 66 个，游侠 22 个；已计入点名加成', async ({ page }) => {
       await open(page, 'a=359.Byzantines.4.f.&b=569.Franks.4.f.');
-      await expect(A(page).locator('[data-t="pk-res-Food"] .pk-now')).toHaveText('26');
-      await expect(A(page).locator('[data-t="pk-res-Wood"] .pk-now')).toHaveText('19');
+      await expect(page.locator('#duel-a [data-t="pk-price"]')).toContainText('26');
+      await expect(page.locator('#duel-a [data-t="pk-price"]')).toContainText('19');
       await expect(A(page).locator('[data-t="pk-count"] b')).toHaveText('66');
       await expect(A(page).locator('[data-t="pk-applied"]')).toContainText('已计入：拜占庭');
       await expect(A(page).locator('[data-t="pk-applied"]')).toContainText('−25%');
       await expect(B(page).locator('[data-t="pk-count"] b')).toHaveText('22');
-      await expect(B(page).locator('[data-t="pk-none"]')).toBeVisible();
+      await expect(B(page).locator('[data-t="pk-none"]')).toHaveCount(0);
+      await expect(page.locator('#duel-b [data-t="pk-price"]')).toContainText('60');
+      await expect(page.locator('#duel-b [data-t="pk-price"]')).toContainText('75');
       await expect(B(page).locator('[data-t="pk-applied"]')).toHaveCount(0);
       // 已选时代：不显示「按X时代价格」
       await expect(page.locator('[data-t="pk-basis"]')).toHaveCount(0);
-      await expect(page.locator('.duel-note')).toContainText('等资源已计入已核实的常驻文明训练费用加成');
+      await expect(page.locator('.duel-note')).toContainText('已核实的常驻文明训练费用加成计入其中');
       // 页面级横向溢出是已知的 #64（另行修复）；这里只守本功能新增的块不越出视口、不互相遮挡
       for (const loc of [A(page), B(page)]) {
         const bb = (await loc.boundingBox())!;
         expect(bb.x + bb.width).toBeLessThanOrEqual(w);
-        const line = (await loc.locator('.pk-line, .pk-none').first().boundingBox())!;
-        expect(line.x + line.width).toBeLessThanOrEqual(bb.x + bb.width + 0.5);
+        const line = loc.locator('.pk-line, .pk-budget').first();
+        const lineBox = await line.boundingBox();
+        expect(lineBox!.x + lineBox!.width).toBeLessThanOrEqual(bb.x + bb.width + 0.5);
       }
     });
 
@@ -102,8 +105,8 @@ test('每个 .5 情况（#129）：不再标「未计入」，直接显示 .5 �
     const a = page.locator('[data-t="pk-cost-a"]');
     await expect(a.locator('[data-t="pk-applied"]').first(), `${u.en} ${civ} ${age}`).toBeVisible();
     await expect(a.locator('[data-t="pk-half"]')).toHaveCount(0);
-    await expect(a).not.toContainText('未计入');
-    await expect(a.locator('[data-t^="pk-res-"]').filter({ hasText: /\d\.5/ }).first(), `${u.en} ${civ} ${age}`).toBeVisible();
+    await expect(page.locator('#duel-a [data-t="pk-price"]'), `${u.en} ${civ} ${age}`).not.toContainText('未计入');
+    await expect(page.locator('#duel-a [data-t="pk-price"]').filter({ hasText: /\d\.5/ }).first(), `${u.en} ${civ} ${age}`).toBeVisible();
   }
 });
 
@@ -114,7 +117,7 @@ for (const w of [1280, 390]) {
       await open(page, 'a=24.Koreans.3.c.&b=569.Franks.4.f.');
       await expect(A(page).locator('[data-t="pk-applied"]')).toContainText('远程士兵和步兵');
       await expect(A(page).locator('[data-t="pk-unsupported"]')).toHaveCount(0);
-      await expect(A(page).locator('[data-t="pk-res-Wood"] td').nth(1)).toHaveText('12.5');
+      await expect(page.locator('#duel-a [data-t="pk-price"]')).toContainText('12.5');
     });
     test('B 侧与 .3.c. 不显示「按X时代价格」（.3.f. 的口径见 v060-100）', async ({ page }) => {
       await open(page, 'a=329.Berbers.3.f.&b=569.Franks.4.f.');
@@ -192,8 +195,10 @@ for (const w of [360, 375, 390]) {
   });
 }
 
-test('1v1 模式不显示折后价', async ({ page }) => {
+test('1v1 显示每名训练价，不显示预算和派出数量', async ({ page }) => {
   await page.goto('#/duel?m=1&a=359.Byzantines.4.f.&b=569.Franks.4.f.');
   await expect(page.locator('#duel-res')).toBeVisible();
-  await expect(page.locator('[data-t="pk-cost-a"]')).toHaveCount(0);
+  await expect(page.locator('#duel-a [data-t="pk-price"]')).toContainText('26');
+  await expect(page.locator('[data-t="pk-budget"]')).toHaveCount(0);
+  await expect(page.locator('#duel-bud')).toHaveCount(0);
 });

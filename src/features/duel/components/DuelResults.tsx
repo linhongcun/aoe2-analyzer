@@ -110,8 +110,8 @@ export function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: num
       />
       {bud > 0 && (
         <p className="note">
-          预算 {bud}：A {A.u.zh} × {na}（单价 {costSum(A.disc.cost)}，投入 {na * costSum(A.disc.cost)}），B {B.u.zh} × {nb}（单价 {costSum(B.disc.cost)}，投入{' '}
-          {nb * costSum(B.disc.cost)}）
+          预算 {bud}：A {A.u.zh} × {na}（单价 {costSum(A.training.price.cost)}，投入 {na * costSum(A.training.price.cost)}），B {B.u.zh} × {nb}（单价{' '}
+          {costSum(B.training.price.cost)}，投入 {nb * costSum(B.training.price.cost)}）
         </p>
       )}
       <CounterSummary a={A.F} b={B.F} />
@@ -144,7 +144,7 @@ export function Group({ A, B, na, nb, bud }: { A: Resolved; B: Resolved; na: num
 
 /** issue 107 交换比：只计阵亡单位，按折后取整单价；金按 1:1 计入 */
 function TradeRow({ A, B, na, nb, aAlive, bAlive }: { A: Resolved; B: Resolved; na: number; nb: number; aAlive: number; bAlive: number }) {
-  const t = tradeLosses({ na, nb, aAlive, bAlive, costA: A.disc.cost, costB: B.disc.cost });
+  const t = tradeLosses({ na, nb, aAlive, bAlive, costA: A.training.price.cost, costB: B.training.price.cost });
   const f = formatTrade(t);
   return (
     <div className="pk-trade" data-t="pk-trade">
