@@ -65,7 +65,7 @@ describe('数值示例与作用对象（与模拟器同一判定）', () => {
     expect(franks[1]!.encoded).toBe(false);
     expect(bonusAffects(franks[1]!, units, bs)).toEqual([]);
   });
-  it('建筑加成：拜占庭城镇中心生命保留连乘小数，展示为两位', () => {
+  it('建筑加成：拜占庭城镇中心生命保留连乘小数，非整数展示两位', () => {
     const ex = bonusExample(civBonuses(civ('Byzantines'))[0]!, units, bs, 'Town Center')!;
     expect(ex.kind).toBe('building');
     const hp = ex.rows.map((r) => r[3]);
@@ -73,7 +73,7 @@ describe('数值示例与作用对象（与模拟器同一判定）', () => {
     expect(hp[1]).toBeCloseTo(2879.976, 6);
     expect(hp[2]).toBeCloseTo(3119.8780008, 6);
     expect(hp[3]).toBeCloseTo(3359.79661906152, 8);
-    expect(hp.map((value) => formatHp(value))).toEqual(['2640.00', '2879.98', '3119.88', '3359.80']);
+    expect(hp.map((value) => formatHp(value))).toEqual(['2640', '2879.98', '3119.88', '3359.80']);
   });
   it('团队加成：法兰克骑士系视野 +2，作用于所有文明的骑士', () => {
     const t = civBonuses(civ('Franks')).at(-1)!;

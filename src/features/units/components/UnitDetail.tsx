@@ -223,7 +223,6 @@ export default function UnitDetail() {
       <section className="ud-core" id="unit-core" aria-label="目录基础属性与造价">
         <div className="ud-stats">
           <h2>目录基础属性</h2>
-          <p className="ud-kicker">目录基础值，未计文明加成与科技。</p>
           <CatalogStats u={u} base={base} elite={isE} />
         </div>
         <div className="ud-cost-col">
@@ -356,7 +355,7 @@ export default function UnitDetail() {
         <p className="ud-desc">
           <Linked text={u.id === 331 ? u.desc.replace('组装后才能移动，拆装后即可攻击', '打包后可移动，展开后可攻击') : splashDescription(u)} nl />
         </p>
-        <DetailSource note="目录基础值，未计文明加成与科技。" />
+        <DetailSource note={null} />
       </section>
 
       {trees && isChampiUnit(u.id) ? <ChampiReferences core={core} trees={trees} variant="unit" /> : null}
