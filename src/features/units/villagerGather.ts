@@ -1,10 +1,11 @@
 /**
  * issue 730：只读展示 eco.json villager.tasks / villager.female 的基准 workRate 与携带量。
- * 不计算往返，不改持续生产的收入口径，缺数字标待确认。
+ * 数值事实在 domain/villagerGatherFacts.ts；本文件只保留玩家称呼和视图映射。
  */
-import { ECO } from '../../data/eco';
+import { villagerGatherFacts, type VillagerEcoSlice } from '../../domain/villagerGatherFacts';
 
 export { VILLAGER_UNIT_ID } from '../../domain/gameIds';
+export type { VillagerEcoSlice, VillagerTaskStat } from '../../domain/villagerGatherFacts';
 
 /** 已有任务键的玩家称呼。未知键不自拟名称。 */
 const TASK_LABEL: Record<string, string> = {
@@ -18,23 +19,6 @@ const TASK_LABEL: Record<string, string> = {
   fish: '捕鱼',
   build: '建造',
 };
-
-/** 主要采集任务在前；其余仍按数据出现，不丢行。 */
-const TASK_ORDER = ['wood', 'farm', 'gold', 'stone', 'berries', 'hunt', 'sheep', 'fish', 'build'];
-
-export interface VillagerTaskStat {
-  workRate?: unknown;
-  carry?: unknown;
-}
-
-/** UI 视图切片：防御式解析 eco.json，只声明本页读取的字段；不是 EcoData 的整表副本。 */
-export interface VillagerEcoSlice {
-  meta?: { patch?: unknown; tasks?: unknown };
-  villager?: {
-    tasks?: Record<string, VillagerTaskStat | null | undefined>;
-    female?: Record<string, VillagerTaskStat | null | undefined>;
-  };
-}
 
 export interface VillagerGatherRow {
   key: string;
@@ -53,45 +37,14 @@ export interface VillagerGatherBaseline {
   tasksNote: string | null;
 }
 
-const finite = (value: unknown): number | null => (typeof value === 'number' && Number.isFinite(value) ? value : null);
-
-const text = (value: unknown): string | null => (typeof value === 'string' && value.trim() ? value : null);
-
-const asStat = (value: unknown): VillagerTaskStat | undefined => (value !== null && typeof value === 'object' ? (value as VillagerTaskStat) : undefined);
-
 export function formatGatherNumber(value: number): string {
   return Object.is(value, -0) ? '0' : String(value);
 }
 
-export function villagerGatherBaseline(source: VillagerEcoSlice = ECO): VillagerGatherBaseline {
-  const tasks = source.villager?.tasks ?? {};
-  const female = source.villager?.female ?? {};
-  const seen = new Set<string>();
-  const keys: string[] = [];
-  const push = (key: string) => {
-    if (seen.has(key) || (!(key in tasks) && !(key in female))) return;
-    seen.add(key);
-    keys.push(key);
-  };
-  for (const key of TASK_ORDER) push(key);
-  for (const key of Object.keys(tasks)) push(key);
-  for (const key of Object.keys(female)) push(key);
-  const rows = keys.map((key) => {
-    const male = asStat(tasks[key]);
-    const fem = asStat(female[key]);
-    return {
-      key,
-      label: TASK_LABEL[key] ?? '待确认',
-      workRate: male ? finite(male.workRate) : null,
-      carry: male ? finite(male.carry) : null,
-      femaleWorkRate: fem ? finite(fem.workRate) : null,
-      femaleCarry: fem ? finite(fem.carry) : null,
-    };
-  });
+export function villagerGatherBaseline(source?: VillagerEcoSlice): VillagerGatherBaseline {
+  const facts = villagerGatherFacts(source);
   return {
-    rows,
-    femaleSame: rows.every((row) => row.workRate === row.femaleWorkRate && row.carry === row.femaleCarry),
-    patch: text(source.meta?.patch),
-    tasksNote: text(source.meta?.tasks),
+    ...facts,
+    rows: facts.rows.map((row) => ({ ...row, label: TASK_LABEL[row.key] ?? '待确认' })),
   };
 }

@@ -8,12 +8,8 @@ const FEATURE_FILES = [
   'src/features/builds/BuildTimelineView.tsx',
   'src/features/builds/listMeta.ts',
   'src/features/builds/shareCard.ts',
-  'src/features/buildings/foodAmount.ts',
   'src/features/buildings/repairCost.ts',
   'src/features/civs/arenaCastleGold.ts',
-  'src/features/gameGuide/housing.ts',
-  'src/features/units/fishingGather.ts',
-  'src/features/units/villagerGather.ts',
 ] as const;
 
 const walk = (directory: string): string[] =>
@@ -29,10 +25,23 @@ describe('#814 features 走 eco 类型化入口', () => {
     }
   });
 
-  it('9 个已知页面都从 data/eco 读取类型化 ECO', () => {
+  it('仍直接读 eco 的已知页面从 data/eco 读取类型化 ECO', () => {
     for (const file of FEATURE_FILES) {
       const source = readFileSync(file, 'utf8');
       expect(source, file).toContain("from '../../data/eco'");
+    }
+  });
+
+  it('下沉的数值事实在 domain 内使用类型化 data/eco', () => {
+    for (const file of [
+      'src/domain/villagerGatherFacts.ts',
+      'src/domain/fishingGatherFacts.ts',
+      'src/domain/foodAmountFacts.ts',
+      'src/domain/housingFacts.ts',
+    ]) {
+      const source = readFileSync(file, 'utf8');
+      expect(source, file).toContain("from '../data/eco'");
+      expect(source, file).not.toContain('data/raw/eco');
     }
   });
 

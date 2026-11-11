@@ -740,6 +740,15 @@ export function planChanges(changes) {
     } else if (path === 'src/domain/elevation.ts' || path === 'src/domain/standardVictory.ts') {
       // 高地/Standard 模型已下沉 domain；仍由 gameGuide profile 覆盖。
       features.add('gameGuide');
+    } else if (path === 'src/domain/villagerGatherFacts.ts' || path === 'src/domain/fishingGatherFacts.ts') {
+      // 村民/渔船数值事实已下沉 domain；仍由 units profile 覆盖。
+      features.add('units');
+    } else if (path === 'src/domain/foodAmountFacts.ts') {
+      // 农田/养鱼场食物事实已下沉 domain；仍由 buildings profile 覆盖。
+      features.add('buildings');
+    } else if (path === 'src/domain/housingFacts.ts') {
+      // 住房事实已下沉 domain；仍由 gameGuide profile 覆盖。
+      features.add('gameGuide');
     } else if (path === 'src/domain/conversion.ts') {
       // 招降模型已下沉 domain；units profile 不自动包含 conversion731，显式补定向用例。
       features.add('units');
