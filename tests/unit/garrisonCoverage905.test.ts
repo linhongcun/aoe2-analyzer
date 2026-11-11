@@ -24,9 +24,10 @@ describe('驻军覆盖契约（issue 905）', () => {
     expect(Object.keys(GARRISON_DATA.units).sort()).toEqual(['109', '234', '235', '293', '79', '83']);
   });
 
-  it('重叠建筑同时存在于通用 host、通用建筑表和驻军 host 列表', () => {
+  it('全部 legacy 建筑都必须出现在通用 host 与通用建筑表', () => {
     const hosts = new Set(getGarrisonBuildings(ctx).map((b) => b.id));
-    for (const id of GARRISON_COVERAGE.overlapBuildings) {
+    expect(GARRISON_COVERAGE.overlapBuildings).toEqual([...GARRISON_COVERAGE.legacyArrowBuildings]);
+    for (const id of GARRISON_COVERAGE.legacyArrowBuildings) {
       expect(GENERAL_GARRISON_DATA.buildings[String(id)], `general building ${id}`).toBeDefined();
       expect(hosts.has(id), `garrison host ${id}`).toBe(true);
     }
@@ -34,20 +35,31 @@ describe('驻军覆盖契约（issue 905）', () => {
     expect(Object.keys(GARRISON_MODE_COVERAGE).sort()).toEqual(['arrows', 'cannon', 'economic', 'shelter']);
   });
 
-  it('tech 47 的 4 个 attack 与 2 个 firepower 目标被锁定', () => {
+  it('tech 47 的 attack/firepower 精确目标被锁定', () => {
     const tech = GARRISON_DATA.techs['47']!;
-    expect(tech.effects.filter((e) => e.stat === 'attack')).toHaveLength(4);
-    expect(tech.effects.filter((e) => e.stat === 'firepower')).toHaveLength(2);
+    expect(
+      tech.effects
+        .filter((e) => e.stat === 'attack')
+        .map((e) => e.unit)
+        .sort((a, z) => a - z),
+    ).toEqual([79, 109, 234, 235]);
+    expect(
+      tech.effects
+        .filter((e) => e.stat === 'firepower')
+        .map((e) => e.unit)
+        .sort((a, z) => a - z),
+    ).toEqual([83, 293]);
   });
 
-  it('Franks 免费科技来源差异被显式锁定', () => {
+  it('免费科技来源允许不同，且不是一个文明的孤例', () => {
     const b = ctx.core.buildingById[109]!;
-    const config = { civ: 'Franks', age: 4, techs: [], villagers: '0', rows: [] };
-    const legacy = garrisonFreeTechs(ctx, b, config);
-    const general = getFreeGarrisonTechs(ctx, b, config);
-    expect(legacy).toEqual([]);
-    expect([...general].sort((a, z) => a - z)).toEqual([12, 13, 14]);
-    expect(GARRISON_COVERAGE.knownFreeTechDivergence).toBe('Franks');
+    const differing = b.civs.filter((civ) => {
+      const legacy = garrisonFreeTechs(ctx, b, { civ, age: 4, techs: [], villagers: '0' });
+      const general = getFreeGarrisonTechs(ctx, b, { civ, age: 4, techs: [], rows: [] });
+      return JSON.stringify([...legacy].sort((a, z) => a - z)) !== JSON.stringify([...general].sort((a, z) => a - z));
+    });
+    expect(differing.length).toBeGreaterThan(0);
+    expect(GARRISON_COVERAGE.freeTechSources).toEqual({ legacy: 'garrison.json', general: 'garrison_techs.json' });
   });
 
   it('四座重叠建筑的村民容量与箭数仍与通用模型一致', () => {
