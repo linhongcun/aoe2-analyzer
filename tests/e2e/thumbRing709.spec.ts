@@ -1,5 +1,12 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Locator } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
+
+async function openEffectSource(page: Page) {
+  const source = page.locator('[data-t="effect-source"]');
+  await expect(source).toBeVisible();
+  if ((await source.getAttribute('open')) === null) await source.locator('summary').click();
+  await expect(source).toHaveAttribute('open', '');
+}
 
 async function unbrokenNumbers(target: Locator) {
   const tokens = await target.evaluate((root) => {
@@ -27,6 +34,9 @@ test('#709 PC1280 扳指近似游戏说明能打开精确作用对象', async ({
   await expect(game.getByRole('link', { name: '查看精确间隔与DE来源', exact: true })).toHaveAttribute('href', '#/tech/437?tab=affects');
   await game.getByRole('link', { name: '查看精确间隔与DE来源', exact: true }).click();
   await expect(page).toHaveURL(/tab=affects/);
+  await expect(page.locator('[data-t="effect-summary"]').first()).not.toContainText('v:');
+  await expect(page.locator('[data-t="effect-summary"]').first()).not.toContainText('effects.json');
+  await openEffectSource(page);
   for (const v of ['0.176471', '0.111111', '0.111116', '0.25', '0.250002']) await expect(page.locator('#affects')).toContainText(`v:${v}`);
   await expect(page.locator('#affects')).toContainText('s:rof');
   await expect(page.locator('#affects')).not.toContainText('攻击速度 +18%');
@@ -77,7 +87,10 @@ for (const width of [360, 375, 390, 1280])
           await expect(target).toContainText('DE 188329');
         } else {
           await expect(target).toContainText('攻击间隔约 ×0.85');
+          await expect(page.locator('[data-t="effect-summary"]').first()).not.toContainText('v:');
+          await openEffectSource(page);
           await expect(target).toContainText('v:0.176471');
+          await expect(page.locator('[data-t="effect-source"]')).toContainText('s:rof');
         }
         if (context === 'overview') {
           await expect(target).toContainText('游戏内说明（近似）');

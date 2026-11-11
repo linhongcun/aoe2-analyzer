@@ -220,6 +220,7 @@
     "tests/e2e/techUnits13.spec.ts": 1000,
     "tests/e2e/techs883.spec.ts": 6000,
     "tests/e2e/thumbRing709.spec.ts": 15000,
+    "tests/e2e/thumbRing922.spec.ts": 9000,
     "tests/e2e/timeFormat.spec.ts": 1000,
     "tests/e2e/timeline.spec.ts": 72561,
     "tests/e2e/timeline45.spec.ts": 14513,

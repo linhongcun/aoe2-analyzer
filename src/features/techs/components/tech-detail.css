@@ -207,6 +207,48 @@
   font-weight: 600;
   line-height: 1.45;
 }
+.td .td-source {
+  margin: 4px 0 8px;
+}
+.td .td-source > summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 8px 0;
+  cursor: pointer;
+  list-style: none;
+  color: var(--color-text);
+  font-size: 16px;
+}
+.td .td-source > summary::-webkit-details-marker {
+  display: none;
+}
+.td .td-source > summary::marker {
+  content: '';
+}
+.td .td-source[open] > summary .ic {
+  transform: rotate(90deg);
+}
+.td .td-source:not([open]) > :not(summary) {
+  display: none;
+}
+.td .td-source p,
+.td .td-source li {
+  overflow-wrap: anywhere;
+}
+.td .td-source ul {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.td .td-source li {
+  margin: 4px 0 0;
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 1.45;
+}
 .td-filter {
   position: sticky;
   top: var(--nav-h);
