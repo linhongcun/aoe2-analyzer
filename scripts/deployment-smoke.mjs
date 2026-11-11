@@ -700,7 +700,7 @@ export async function checkSite({ site, version, commit, features = [], diagnost
               ),
             })),
           );
-          assert.deepEqual(violations, [{ id: 'heading-order', targets: [{ tag: 'H3', text: panelTitle }] }], 'Published shared simulator baseline changed');
+          assert.deepEqual(violations, [], 'Published shared simulator heading-order baseline regressed');
         }
         await goto('/unit/38');
         await page.locator('[data-t="rc-basis-btn"]').first().click();
