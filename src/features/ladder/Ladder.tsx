@@ -4,6 +4,7 @@ import arabiaJson from '../../data/ladder-arabia-p185872.json';
 import teamJson from '../../data/ladder-4v4-rm-e1200-1400-90d.json';
 import { isBalanceAligned, LOW_SAMPLE, resolveElo, type BracketKey, type LadderSnapshot } from '../../domain/ladder';
 import { canonicalLadderSearch, resolveLadderLocation, sliceFacts, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
+import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderArabia } from './LadderArabia';
 import { HideLowSample, LadderFilters } from './LadderFilters';
 import { LadderTeam } from './LadderTeam';
@@ -19,7 +20,7 @@ const SITE_BUILD = DATA_SOURCES.patch?.build ?? 0;
 export default function Ladder() {
   const location = useLocation();
   const navigate = useNavigate();
-  const resolved = useMemo(() => resolveLadderLocation(location.search, arabiaSnapshot), [location.search]);
+  const resolved = useMemo(() => resolveLadderLocation(location.search, arabiaSnapshot, teamSnapshot), [location.search]);
   const [toast, setToast] = useState<string | null>(resolved.toast);
   const [trackedToast, setTrackedToast] = useState(resolved.toast);
   if (resolved.toast !== trackedToast) {
@@ -44,12 +45,12 @@ export default function Ladder() {
   }, [toast]);
 
   const selectMode = (mode: LadderModeId) => {
-    navigate({ pathname: '/ladder', search: canonicalLadderSearch({ mode, elo: 'all', pendingView: resolved.pendingView }) }, { replace: true });
+    navigate({ pathname: '/ladder', search: canonicalLadderSearch({ mode, elo: 'all', pendingView: resolved.pendingView }) });
   };
 
   const selectElo = (key: string) => {
     const next = resolveElo(key, arabiaSnapshot).elo;
-    navigate({ pathname: '/ladder', search: canonicalLadderSearch({ mode: 'arabia1v1', elo: next, pendingView: resolved.pendingView }) }, { replace: true });
+    navigate({ pathname: '/ladder', search: canonicalLadderSearch({ mode: 'arabia1v1', elo: next, pendingView: resolved.pendingView }) });
   };
 
   const selectEloOption = (option: EloFilterOption) => {
@@ -59,14 +60,11 @@ export default function Ladder() {
       return;
     }
     pendingEloFocus.current = `${option.mode}:${option.key}`;
-    navigate(
-      { pathname: '/ladder', search: canonicalLadderSearch({ mode: resolved.mode, elo: option.elo, pendingView: resolved.pendingView }) },
-      { replace: true },
-    );
+    navigate({ pathname: '/ladder', search: canonicalLadderSearch({ mode: resolved.mode, elo: option.elo, pendingView: resolved.pendingView }) });
   };
 
   const selectView = (view: LadderViewId) => {
-    navigate({ pathname: '/ladder', search: canonicalLadderSearch({ ...resolved, pendingView: view === 'table' ? null : view }) }, { replace: true });
+    navigate({ pathname: '/ladder', search: canonicalLadderSearch({ ...resolved, pendingView: view === 'table' ? null : view }) });
   };
   const view = resolved.pendingView ?? 'table';
   const facts = sliceFacts(resolved.mode, resolved.elo, arabiaSnapshot, teamSnapshot);
@@ -86,8 +84,9 @@ export default function Ladder() {
             node.focus();
           }
         }}
-      />
-      <HideLowSample checked={hideLow} threshold={sampleFloor} onChange={setHideLow} />
+      >
+        <HideLowSample checked={hideLow} threshold={sampleFloor} onChange={setHideLow} />
+      </LadderFilters>
       {toast && (
         <p className="ladder-toast" role="status" data-testid="ladder-fallback-toast">
           {toast}
@@ -114,7 +113,7 @@ export default function Ladder() {
             天梯数据 <small>Ladder Stats</small>
           </h1>
           <p className="ladder-desc">
-            默认 <span className="nw">4v4</span> 随机地图、Elo <span className="nw">1200–1400</span>、近 <span className="nw">90 天</span>、全图。可切回阿拉伯{' '}
+            默认 <span className="nw">4v4</span> 随机地图、Elo <span className="nw">1200–1400</span>、近 <span className="nw">90 天</span>、全图。可切到阿拉伯{' '}
             <span className="nw">1v1</span>。
           </p>
         </div>
@@ -122,6 +121,22 @@ export default function Ladder() {
       </div>
       {resolved.missing ? (
         <>
+          <div
+            className="ladder-source"
+            data-testid="ladder-source"
+            data-cutoff="missing"
+            data-slice-mode={facts.mode}
+            data-slice-elo={facts.eloKey}
+            data-slice-map={facts.mapKey}
+          >
+            <Icon name="database" />
+            <div className="ladder-copy">
+              <LadderSourceFacts facts={facts} />
+              <p className="ladder-missing-source" data-testid="ladder-missing-source">
+                本组合暂无快照，不显示其他分段的统计截止、样本或胜率。
+              </p>
+            </div>
+          </div>
           {controls}
           <div className="ladder-empty" data-testid="ladder-empty">
             <Icon name="inbox" />

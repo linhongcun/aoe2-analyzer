@@ -21,13 +21,17 @@ export function canonicalLadderSearch(state: Pick<LadderLocation, 'mode' | 'elo'
   } else {
     if (state.mode === 'arabia1v1') params.set('mode', 'arabia1v1');
     if (state.mode === 'arabia1v1' && state.elo !== 'all') params.set('elo', state.elo);
+    if (state.mode === '4v4' && state.elo !== 'all') {
+      params.set('mode', '4v4');
+      params.set('elo', state.elo);
+    }
   }
   if (state.pendingView) params.set('view', state.pendingView);
   const query = params.toString();
   return query ? `?${query}` : '';
 }
 
-export function resolveLadderLocation(search: string, arabia: LadderSnapshot): LadderLocation {
+export function resolveLadderLocation(search: string, arabia: LadderSnapshot, team?: LadderSnapshot): LadderLocation {
   const params = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
   const rawMode = params.get('mode');
   const rawView = params.get('view');
@@ -51,17 +55,21 @@ export function resolveLadderLocation(search: string, arabia: LadderSnapshot): L
   let elo = 'all';
   let missing = false;
   const unrecognizedMode = rawMode != null && rawMode !== '' && rawMode !== '4v4' && rawMode !== 'arabia1v1';
-  const teamOnlyElo = askedElo === '1200-1400';
-  if (mode === 'arabia1v1' && teamOnlyElo) {
-    elo = '1200-1400';
-    missing = true;
-  } else if (mode === 'arabia1v1') {
-    const resolved = resolveElo(rawElo, arabia);
-    elo = resolved.elo;
-    if (resolved.toast) toasts.push(resolved.toast);
-  } else if (!unrecognizedMode && askedElo != null && askedElo !== '' && askedElo !== 'all' && askedElo !== '1200-1400') {
+  if (mode === 'arabia1v1') {
+    if (askedElo == null || askedElo === '' || askedElo === 'all') {
+      elo = 'all';
+    } else if (isLegalEloKey(askedElo)) {
+      elo = askedElo;
+      missing = viewBracket(arabia, askedElo).empty;
+    } else {
+      const resolved = resolveElo(askedElo, arabia);
+      elo = resolved.elo;
+      if (resolved.toast) toasts.push(resolved.toast);
+    }
+  } else if (!unrecognizedMode && askedElo != null && askedElo !== '' && askedElo !== 'all' && askedElo !== TEAM_ELO_KEY) {
     elo = askedElo;
-    missing = true;
+    const filled = team != null && isLegalEloKey(askedElo) && !viewBracket(team, askedElo).empty;
+    missing = !filled;
   }
 
   if (mode === '4v4' && !unrecognizedMode) {
@@ -108,8 +116,14 @@ function teamEloKey(elo: string): string {
   return elo;
 }
 
-function displayEloLabel(mode: LadderModeId, key: string, fallback: string): string {
-  if (mode === '4v4' && key === TEAM_ELO_KEY) return TEAM_ELO_LABEL;
+const LEGAL_ELO_KEYS = new Set<string>([...DISPLAY_BRACKETS.map((band) => band.key), TEAM_ELO_KEY]);
+
+function isLegalEloKey(key: string): boolean {
+  return LEGAL_ELO_KEYS.has(key);
+}
+
+function displayEloLabel(key: string, fallback: string): string {
+  if (key === TEAM_ELO_KEY) return TEAM_ELO_LABEL;
   return fallback;
 }
 
@@ -139,7 +153,7 @@ export function sliceFacts(mode: LadderModeId, elo: string, arabia: LadderSnapsh
       mode,
       modeLabel: '4v4 随机地图',
       eloKey: view.key,
-      eloLabel: view.empty && view.key === TEAM_ELO_KEY ? TEAM_ELO_LABEL : displayEloLabel(mode, view.key, view.label),
+      eloLabel: displayEloLabel(view.key, view.label),
       mapKey: 'all',
       mapLabel: '全图',
     };
@@ -149,7 +163,7 @@ export function sliceFacts(mode: LadderModeId, elo: string, arabia: LadderSnapsh
     mode,
     modeLabel: '阿拉伯 1v1',
     eloKey: view.key,
-    eloLabel: view.label,
+    eloLabel: displayEloLabel(view.key, view.label),
     mapKey: 'arabia',
     mapLabel: '阿拉伯',
   };
@@ -163,11 +177,16 @@ export function eloFilterOptions(mode: LadderModeId, elo: string, arabia: Ladder
     const view = viewBracket(snapshot, band.key);
     return {
       key: band.key,
-      label: displayEloLabel(mode, band.key, band.label),
+      label: displayEloLabel(band.key, band.label),
       mode,
       elo: queryElo(mode, band.key),
       enabled: !view.empty,
-      current: !view.empty && isCurrentBand(mode, elo, mode, band.key),
+      current: isCurrentBand(mode, elo, mode, band.key),
     };
   });
+}
+
+/** 有快照的档，加上当前请求但本模式没有快照的那一档。其余空档不画芯片。 */
+export function renderedEloOptions(options: readonly EloFilterOption[]): EloFilterOption[] {
+  return options.filter((option) => option.enabled || option.current);
 }

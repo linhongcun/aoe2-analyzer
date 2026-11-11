@@ -7,12 +7,15 @@ import {
   firstSortDir,
   formatGames,
   formatPercent,
+  finiteTrendRates,
   formatWinDelta,
   isBalanceAligned,
+  isDrawableTrend,
   isPlayerSample,
   snapshotCutoff,
   sortLadder,
   toggleSort,
+  trendFootnote,
   viewBracket,
   visibleSourceLabel,
   type LadderCivStat,
@@ -23,8 +26,9 @@ import {
 import { canonicalLadderSearch, type SliceFacts } from '../../domain/ladderQuery';
 import { ladderShareUrl } from './shareLink';
 import { LadderMeta, LadderTiers } from './LadderBands';
-import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderFreshness } from './LadderFreshness';
+import { LadderSourceFacts } from './LadderSourceFacts';
+import { LadderSpark } from './LadderSpark';
 import { LadderStatMethods } from './LadderStatMethods';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
@@ -47,23 +51,6 @@ interface TeamRow extends LadderCivStat {
 
 function hasInterval(civs: readonly LadderCivStat[]): boolean {
   return civs.length > 0 && civs.every((civ) => typeof civ.ci95Low === 'number' && typeof civ.ci95High === 'number');
-}
-
-function sparkline(values: number[]): { points: string; tone: 'good' | 'bad' | 'muted' } {
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const span = max - min || 1;
-  const points = values
-    .map((value, index) => {
-      const x = values.length === 1 ? 36 : 2 + (index * 68) / (values.length - 1);
-      const y = 22 - ((value - min) / span) * 20;
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(' ');
-  const first = values[0] ?? 0;
-  const last = values[values.length - 1] ?? 0;
-  const tone = last > first ? 'good' : last < first ? 'bad' : 'muted';
-  return { points, tone };
 }
 
 export function LadderTeam({
@@ -100,6 +87,7 @@ export function LadderTeam({
     });
     return sortLadder(enriched, sort.key, sort.dir);
   }, [bracket?.civs, hideLow, sort, threshold]);
+  const showTrend = rows.some((row) => isDrawableTrend(row.games, row.trend, threshold));
 
   if (!snapshot.fetchedAt || !bracket || bracket.civs.length === 0) {
     return (
@@ -148,31 +136,29 @@ export function LadderTeam({
               </>
             )}
           </p>
-          <LadderFreshness fetchedAt={snapshot.fetchedAt} games={bracket.games} scope={sampleScope} unit={sampleUnit} />
-          <p className="ladder-source-meta">
-            <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
-              {visibleSourceLabel(snapshot.source)}
-              <Icon name="external-link" />
-              （外部）
-            </a>
-          </p>
+          <div className="ladder-source-meta-row">
+            <LadderFreshness fetchedAt={snapshot.fetchedAt} games={bracket.games} scope={sampleScope} unit={sampleUnit} />
+            <p className="ladder-source-meta">
+              <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
+                {visibleSourceLabel(snapshot.source)}
+                <Icon name="external-link" />
+                （外部）
+              </a>
+            </p>
+          </div>
+          {!aligned && (
+            <p className="ladder-balance" data-testid="ladder-patch-note">
+              胜率可能未反映最新平衡改动。
+            </p>
+          )}
         </div>
       </div>
-      {!aligned && (
-        <p className="ladder-patch" data-testid="ladder-patch-note">
-          <Icon name="triangle-alert" />
-          <span className="ladder-copy">胜率可能未反映最新平衡改动。</span>
-        </p>
-      )}
       {children}
-      <p className="ladder-slice" data-testid="ladder-context">
-        <span className="nw">4v4</span> 随机地图 · 全图
-      </p>
       {view === 'tiers' && <LadderTiers civs={rows} />}
       {view === 'meta' && <LadderMeta civs={rows} sampleUnit={sampleUnit} />}
       {view === 'table' && (
         <div className="ladder-table-card">
-          <LadderStatMethods playerSample={player} interval={showInterval} />
+          <LadderStatMethods playerSample={player} interval={showInterval} trend={showTrend} />
           <table className="ladder-table ladder-table-team" data-testid="ladder-table">
             <caption className="ladder-sr">4v4 随机地图 1200–1400 近 90 天 全图 各文明胜率</caption>
             <thead>
@@ -184,13 +170,13 @@ export function LadderTeam({
                 <TeamHead id="play" label="出场率" sort={sort} onSort={setSort} numeric />
                 <TeamHead id="games" label={player ? '出场' : '样本局数'} sort={sort} onSort={setSort} numeric />
                 <th className="ladder-num">相对 50%</th>
-                <th className="ladder-num">走势</th>
+                {showTrend && <th className="ladder-num">走势</th>}
               </tr>
             </thead>
             <tbody>
               {rows.map((row, index) => {
                 const delta = formatWinDelta(row.winRate);
-                const series = (row.trend ?? []).map((point) => point.winRate).filter((value) => Number.isFinite(value));
+                const series = finiteTrendRates(row.trend);
                 const low = row.games < threshold;
                 return (
                   <tr key={row.en} data-testid={`ladder-row-${row.en}`} data-games={row.games}>
@@ -204,13 +190,18 @@ export function LadderTeam({
                           {row.linked ? (
                             <Link to={`/civ/${row.en}`}>
                               <span className="ladder-zh">{row.zh}</span>
+                              <small className="ladder-en" lang="en">
+                                {row.en}
+                              </small>
                             </Link>
                           ) : (
-                            <span className="ladder-zh">{row.zh}</span>
+                            <span className="ladder-civ-link">
+                              <span className="ladder-zh">{row.zh}</span>
+                              <small className="ladder-en" lang="en">
+                                {row.en}
+                              </small>
+                            </span>
                           )}
-                          <small className="ladder-en" lang="en">
-                            {row.en}
-                          </small>
                         </span>
                       </span>
                     </td>
@@ -239,9 +230,11 @@ export function LadderTeam({
                         {delta.text}
                       </span>
                     </td>
-                    <td className="ladder-num" data-testid={`ladder-trend-${row.en}`}>
-                      {series.length >= 2 && !low ? <Spark values={series} /> : '无走势'}
-                    </td>
+                    {showTrend && (
+                      <td className="ladder-num" data-testid={`ladder-trend-${row.en}`}>
+                        {series.length >= 2 && !low ? <LadderSpark values={series} /> : '无走势'}
+                      </td>
+                    )}
                   </tr>
                 );
               })}
@@ -250,10 +243,10 @@ export function LadderTeam({
           <div className="ladder-notes">
             <ul>
               <li>胜率：按来源公布的该文明胜率展示。</li>
-              <li>走势：这份静态快照里的胜率序列，不是实时。</li>
               <li>
                 相对 <span className="nw">50%</span>：胜率减去 <span className="nw">50</span> 个百分点。
               </li>
+              <li>{trendFootnote(showTrend, snapshot.patchNote)}</li>
             </ul>
             <div className="ladder-share" data-testid="ladder-share">
               <button type="button" onClick={() => void share.copy(() => ladderShareUrl(window.location.href, shareState))}>
@@ -285,15 +278,6 @@ export function LadderTeam({
         </span>
       </p>
     </>
-  );
-}
-
-function Spark({ values }: { values: number[] }) {
-  const line = sparkline(values);
-  return (
-    <svg className={`ladder-spark ladder-spark-${line.tone}`} width="72" height="24" viewBox="0 0 72 24" aria-hidden="true">
-      <polyline points={line.points} fill="none" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
   );
 }
 

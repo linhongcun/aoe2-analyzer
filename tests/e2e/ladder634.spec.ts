@@ -61,8 +61,12 @@ for (const width of [360, 375, 390, 1280]) {
 test('#634 无快照空态也可用键盘选回真实切片', async ({ page }) => {
   await page.goto('./#/ladder?mode=4v4&elo=lt850');
   await expect(page.getByTestId('ladder-empty')).toBeVisible();
-  await expect(page.getByTestId('ladder-elo').locator('[aria-checked="true"]')).toHaveCount(0);
-  await tabToElo(page);
-  await pressElo(page, 'End');
+  const missing = page.getByTestId('ladder-elo').locator('[aria-checked="true"]');
+  await expect(missing).toHaveCount(1);
+  await expect(missing).toHaveAttribute('aria-disabled', 'true');
+  await missing.focus();
+  await page.keyboard.press('ArrowRight');
   await expect(page.getByTestId('ladder-empty')).toHaveCount(0);
+  await expect(page.getByTestId('ladder-elo').locator('[aria-checked="true"]')).toHaveAttribute('data-elo', '1200-1400');
+  await expect(page.getByTestId('ladder-source')).toHaveAttribute('data-slice-mode', '4v4');
 });

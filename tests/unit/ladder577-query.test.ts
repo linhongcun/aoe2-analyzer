@@ -69,8 +69,7 @@ describe('天梯默认切片地址与平衡口径 #577', () => {
     expect(canonicalLadderSearch(resolveLadderLocation('', arabia))).toBe('');
     expect(resolveLadderLocation('?elo=all', arabia)).toMatchObject({ mode: 'arabia1v1', elo: 'all', toast: null });
     expect(canonicalLadderSearch(resolveLadderLocation('?elo=all', arabia))).toBe('?mode=arabia1v1');
-    expect(resolveLadderLocation('?elo=lt850', arabia).mode).toBe('arabia1v1');
-    expect(resolveLadderLocation('?elo=lt850', arabia).toast).toContain('暂无数据');
+    expect(resolveLadderLocation('?elo=lt850', arabia)).toMatchObject({ mode: 'arabia1v1', elo: 'lt850', missing: true, toast: null });
     expect(resolveLadderLocation('?mode=arabia1v1', arabia).mode).toBe('arabia1v1');
     expect(resolveLadderLocation('?view=tiers', arabia)).toMatchObject({ mode: '4v4', pendingView: 'tiers', toast: null });
     expect(canonicalLadderSearch(resolveLadderLocation('?view=tiers', arabia))).toBe('?view=tiers');

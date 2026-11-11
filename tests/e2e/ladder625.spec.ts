@@ -14,23 +14,19 @@ for (const width of [360, 375, 390, 1280]) {
       await page.goto('./#/ladder?view=meta');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       const group = page.getByTestId('ladder-elo');
-      const all = group.locator('[data-elo="all"]');
-      await expect(all).toBeDisabled();
-      await expect(all).toContainText('暂无数据');
+      await expect(group.locator('[data-elo="all"]')).toHaveCount(0);
       await expect(group.locator('[data-elo="1200-1400"]')).toHaveAttribute('aria-checked', 'true');
+      await expect(group.locator('[data-elo="1200-1400"]')).toBeEnabled();
+      await expect(page.getByTestId('ladder-elo-gap')).toContainText('其他 Elo 分段暂无本模式快照，不估算。');
       await expect(page.getByTestId('ladder-source')).toHaveAttribute('data-slice-mode', '4v4');
-      // Snapshot only after the lazy page and its initial selection are ready.
-      const keys = await group.locator('[data-elo]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-elo')));
       await expect(page).toHaveURL(/#\/ladder\?view=meta$/);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: testInfo.outputPath(`ladder625-${width}-${theme}-team.png`), fullPage: true });
 
       await page.getByTestId('ladder-mode-arabia1v1').click();
-      await expect(all).toBeEnabled();
-      await expect(all).toHaveAttribute('aria-checked', 'true');
-      await expect(group.locator('[data-elo="1200-1400"]')).toBeDisabled();
-      await expect(group.locator('[data-elo="1200-1400"]')).toContainText('暂无数据');
-      expect(await group.locator('[data-elo]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-elo')))).toEqual(keys);
+      await expect(group.locator('[data-elo="all"]')).toBeEnabled();
+      await expect(group.locator('[data-elo="all"]')).toHaveAttribute('aria-checked', 'true');
+      await expect(group.locator('[data-elo="1200-1400"]')).toHaveCount(0);
       await expect(page.getByTestId('ladder-source')).toHaveAttribute('data-slice-mode', 'arabia1v1');
       await expect(page.getByTestId('ladder-source')).toHaveAttribute('data-slice-elo', 'all');
       await expect(page.getByTestId('ladder-source')).toContainText('阿拉伯');
@@ -48,17 +44,14 @@ test('#625 缺快照深链可用键盘恢复，Elo 不改变原模式', async ({
     await page.goto(`./#/ladder?mode=${mode}&elo=${mode === '4v4' ? 'lt850' : '1200-1400'}`);
     await expect(page.getByTestId('ladder-empty')).toBeVisible();
     await expect(page.getByTestId('ladder-table')).toHaveCount(0);
-    for (let i = 0; i < 60; i++) {
-      if (await page.evaluate(() => document.activeElement?.matches('[data-testid="ladder-elo-option"]'))) break;
-      await page.keyboard.press('Tab');
-    }
-    await expect(page.getByTestId('ladder-elo-option')).toBeFocused();
-    await page.keyboard.press('Enter');
+    const missing = page.getByTestId('ladder-elo-disabled');
+    await expect(missing).toHaveAttribute('aria-checked', 'true');
+    await missing.focus();
+    await page.keyboard.press('ArrowRight');
     await expect(page.getByTestId('ladder-empty')).toHaveCount(0);
     await expect(page.getByTestId('ladder-elo-option')).toBeFocused();
     await expect(page.getByTestId('ladder-source')).toHaveAttribute('data-slice-mode', mode);
     await page.keyboard.press('ArrowRight');
-    await expect(page.getByTestId('ladder-elo-option')).toBeFocused();
     await expect(page.getByTestId('ladder-source')).toHaveAttribute('data-slice-mode', mode);
   }
 });

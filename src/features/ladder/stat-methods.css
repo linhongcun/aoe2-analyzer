@@ -1,9 +1,9 @@
 .ladder-stat-methods {
-  padding: 12px 16px;
+  padding: 2px 4px 4px;
   border-bottom: 1px solid var(--color-line);
   color: var(--color-muted);
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .ladder-stat-methods p {

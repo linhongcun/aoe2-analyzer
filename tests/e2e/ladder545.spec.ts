@@ -16,7 +16,7 @@ if (!all || !romans || !franks || visible.length !== 1 || visible[0]?.key !== 'a
 }
 
 const ENTRY_DESC = '默认 4v4 随机地图胜率、出场率与走势';
-const PAGE_DESC = '默认 4v4 随机地图、Elo 1200–1400、近 90 天、全图。可切回阿拉伯 1v1。';
+const PAGE_DESC = '默认 4v4 随机地图、Elo 1200–1400、近 90 天、全图。可切到阿拉伯 1v1。';
 const META_DESC = '查看默认切片（4v4 随机地图、Elo 1200–1400、近 90 天、全图）的文明胜率与走势，并可切回阿拉伯 1v1。';
 const EMOJI = /\p{Extended_Pictographic}/u;
 const soon = expect.configure({ timeout: 2_000, soft: true });
@@ -47,13 +47,9 @@ async function expectNoEloChrome(page: Page) {
   soon(await current.count()).toBe(1);
   if ((await current.count()) === 1) soon(await current.getAttribute('aria-checked')).toBe('true');
   for (const item of hidden) {
-    const node = page.locator(`[data-elo="${item.key}"]`);
-    soon(await node.count(), `${item.key} 停用，不拿别的胜率充数`).toBe(1);
-    if ((await node.count()) !== 1) continue;
-    soon(await node.isDisabled()).toBe(true);
-    soon(await node.getAttribute('aria-checked')).not.toBe('true');
-    soon(((await node.innerText()) ?? '').replace(/\s+/g, '')).not.toMatch(/\d+\.\d{2}%/);
+    soon(await page.locator(`[data-elo="${item.key}"]`).count(), `${item.key} 未选中的空档不画芯片`).toBe(0);
   }
+  soon(await page.getByTestId('ladder-elo-gap').count(), '其余空档收成一句说明').toBe(1);
 }
 
 async function expectStaticAllPill(page: Page) {
@@ -103,23 +99,24 @@ test('#545 当前快照打开 #/ladder：没有空分段芯片，只读 pill，�
   soon(errors).toEqual([]);
 });
 
-test('#545 五个空分段深链回落全部，toast 写出显示名、暂无数据、全部', async ({ page }) => {
+test('#545 五个空分段深链留在原址，不回退全部，也不展示别档胜率', async ({ page }) => {
   test.setTimeout(60_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   for (const item of hidden) {
     await page.goto(`./#/ladder?elo=${encodeURIComponent(item.key)}`);
     await expectSettled(page);
-    await expectCanonicalAll(page);
-    const toast = page.getByTestId('ladder-fallback-toast');
-    const shown = await toast.isVisible();
-    soon(shown, `${item.key} 应出现 ladder-fallback-toast`).toBe(true);
-    if (shown) {
-      await soon(toast).toHaveAttribute('role', 'status');
-      await soon(toast).toHaveText(`「${item.label}」暂无数据，已显示「全部」。`);
-    }
-    await expectNoEloChrome(page);
-    await expectStaticAllPill(page);
-    await expectAllTable(page);
+    await soon.poll(() => hashLocation(page.url())).toEqual({ path: '/ladder', elo: item.key });
+    soon(await page.getByTestId('ladder-fallback-toast').count(), `${item.key} 不应改去展示全部`).toBe(0);
+    await expect(page.getByTestId('ladder-empty')).toContainText('没有这一模式和 Elo 的快照');
+    await expect(page.getByTestId('ladder-table')).toHaveCount(0);
+    const requested = page.locator(`[data-elo="${item.key}"]`);
+    await expect(requested).toHaveAttribute('aria-checked', 'true');
+    await expect(requested).toHaveAttribute('aria-disabled', 'true');
+    const source = ((await page.getByTestId('ladder-source').innerText()) ?? '').replace(/\s+/g, '');
+    expect(source).toContain('阿拉伯1v1');
+    expect(source).toContain(item.label.replace(/\s+/g, ''));
+    expect(source).toContain('本组合暂无快照');
+    expect(source).not.toMatch(/\d{4}-\d{2}-\d{2}/);
   }
 });
 
@@ -193,5 +190,6 @@ test('#545 空态组件仍在，默认页和空分段深链都到不了', async 
   soon(await page.getByTestId('ladder-empty').count(), '#/ladder').toBe(0);
   await page.goto('./#/ladder?elo=lt850');
   await expectSettled(page);
-  soon(await page.getByTestId('ladder-empty').count(), '#/ladder?elo=lt850').toBe(0);
+  soon(await page.getByTestId('ladder-empty').count(), '#/ladder?elo=lt850 合法缺档留在空态').toBe(1);
+  soon(hashLocation(page.url()), '合法缺档不改去全部').toEqual({ path: '/ladder', elo: 'lt850' });
 });
