@@ -10,6 +10,7 @@ import { productionTechAge, productionTechs } from './production';
 import { GARRISON_TECH_DATA, freeGarrisonTechs } from './garrisonTechs';
 import { buildingAge as constructionBuildingAge } from './availabilityAge';
 import { AGE_TECH_IDS } from './gameIds';
+import { TOWN_CENTER_ID, townCenterBuildTimeNote } from './buildTimeFacts';
 import { toggleSelected } from './prereq';
 
 export { CONSTRUCTION_DATA } from '../data/construction';
@@ -248,7 +249,10 @@ export function calculateConstruction(ctx: ConstructionContext, config: Construc
   result.form = form!;
   result.single = time / rate;
   warnings.push('理论同时施工：所有普通村民已到场，不计步行、阻挡、分批到达、战斗或维修。没有在游戏里实测。');
-  if (b.id === 109) warnings.push('按游戏里实际建造城镇中心的 150 秒计算，和其他页面里的 100 秒不是同一个口径。');
+  if (b.id === TOWN_CENTER_ID) {
+    const note = townCenterBuildTimeNote();
+    if (note) warnings.push(note);
+  }
   if (['Spanish', 'Romans'].includes(config.civ)) warnings.push('本工具计入了这个文明的建造速度加成，结果可能和开局模拟不同。');
   if (config.civ === 'Sicilians') warnings.push('西西里施工加成须已完成过首座城镇中心；本开关同时控制城堡与防御工事加成。');
   let gather: GatherModel | null = null;
