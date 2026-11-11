@@ -63,9 +63,9 @@ async function mount(component: ReturnType<typeof h>, entry: string) {
     view = create(h(MemoryRouter, { initialEntries: [entry], future: { v7_startTransition: true, v7_relativeSplatPath: true } }, h(Probe), component));
   });
 }
-const context = () => view.root.findByProps({ 'aria-label': '对阵相关入口' });
-const links = () =>
-  context()
+const links = (label = '对阵相关入口') =>
+  view.root
+    .findByProps({ 'aria-label': label })
     .findAllByType('a')
     .map((a) => a.props.href as string);
 afterEach(() => {
@@ -78,7 +78,7 @@ it('#520 query wins over sticky, picker writes both keys and a bare return remem
   await mount(h(Matchup), '/matchup?me=Mongols&opp=Chinese&rush=scouts');
   expect(view.root.findByProps({ id: 'ma', 'data-value': 'Mongols' }).type).toBe('button');
   expect(view.root.findByProps({ id: 'me', 'data-value': 'Chinese' }).type).toBe('button');
-  expect(links()).toContain('/builds?civ=Chinese&from=matchup&me=Mongols');
+  expect(links('跟这对文明走的开局与文明页')).toContain('/builds?civ=Chinese&from=matchup&me=Mongols');
   // CivPicker 的 onChange 是真实页面写 URL 的入口。
   const picker = view.root.findAll((node) => typeof node.type === 'function' && node.props.id === 'ma')[0]!;
   await act(async () => picker.props.onChange('Franks'));
@@ -167,10 +167,12 @@ it('#672 explicit complete, clear, refill keeps rush and restores actual analysi
   for (const fn of calculations) expect(fn).toHaveBeenCalled();
   expect(view.root.findAllByType(RushDefense)).toHaveLength(1);
   expect(view.root.findAllByProps({ id: 'mres' })).toHaveLength(1);
-  expect(rendered()).toContain('推荐反制');
-  expect(rendered()).toContain('通用示意，非模型结论');
+  expect(rendered()).toContain('通用类型反制');
+  expect(rendered()).toContain('也不是模型结论');
+  const pk = view.root.findByProps({ 'aria-label': '单位 PK，不自动带入当前双方' });
+  expect(pk.props.to ?? pk.props.href).toBe('/duel');
   for (const gone of ['对手强项', '相对弱项', '你的相对优势', '前期主动骚扰', '自动生成的建议', '骑兵(+']) expect(rendered()).not.toContain(gone);
-  expect(links()).toContain('/builds?civ=Chinese&from=matchup&me=Mongols');
+  expect(links('跟这对文明走的开局与文明页')).toContain('/builds?civ=Chinese&from=matchup&me=Mongols');
   vi.clearAllMocks();
   await change('ma', '');
   noAnalysis();

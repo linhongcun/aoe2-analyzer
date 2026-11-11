@@ -8,7 +8,8 @@ for (const width of [360, 375, 390, 1280]) {
       if (e.type() === 'error') errors.push(e.text());
     });
     await page.goto('./#/matchup?rush=scouts');
-    const section = page.getByRole('region', { name: '应对早期进攻' });
+    const section = page.getByRole('region', { name: '可按当前文明核对的练习' });
+    const guide = page.getByRole('region', { name: '通用早期应对' });
     for (const [id, a, b] of [
       ['militia', '2', '3'],
       ['scouts', '2', '3'],
@@ -17,7 +18,7 @@ for (const width of [360, 375, 390, 1280]) {
     ]) {
       await section.getByRole('combobox').selectOption(id!);
       await expect(page).toHaveURL(new RegExp(`rush=${id}`));
-      await expect(section).toContainText('城镇中心');
+      await expect(guide).toContainText('城镇中心');
       await section.getByRole('link', { name: /打开 PK 演练/ }).click();
       await expect(page.locator('#duel-res')).toBeVisible();
       await expect(page.locator('#duel-res .duel-tab')).toContainText(`A ${a}`);

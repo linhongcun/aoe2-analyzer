@@ -1,25 +1,57 @@
 .rush-defense {
-  margin-block: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  margin-top: 0;
+  padding: 8px 12px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  min-width: 0;
 }
+
 .rush-defense p {
-  line-height: 1.7;
+  line-height: 1.55;
 }
+
 .rush-count {
   white-space: nowrap;
 }
-.rush-defense a,
-.rush-defense summary {
-  min-height: 44px;
+
+.mu-rush {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-2);
+}
+
+.mu-rush label {
   display: inline-flex;
   align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
 }
+
 .rush-defense select {
   min-height: 44px;
+  min-width: 44px;
   max-width: 100%;
 }
+
+.mu-practice-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0 0 var(--space-1);
+}
+
+.mu-practice-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  font-weight: 550;
+}
+
 .rush-defense li {
   overflow-wrap: anywhere;
 }

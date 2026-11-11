@@ -11,11 +11,11 @@ const page = readFileSync('src/features/matchup/components/Matchup.tsx', 'utf8')
 const ratings = readFileSync('src/domain/ratings.ts', 'utf8');
 
 describe('#888 对局助手不再用评分推导强弱与打法', () => {
-  it('页头与登记描述一致，不再承诺自动打法建议', () => {
+  it('页头说明这对阵入口与通用参考的差别，登记描述仍不承诺自动打法', () => {
     const entry = PAGES.find((item) => item.key === 'matchup');
     expect(entry?.desc).toBe(MATCHUP_DESC);
     expect(entry?.metaDescription).toBe(MATCHUP_META);
-    expect(page).toContain(`desc="${MATCHUP_DESC}"`);
+    expect(page).toContain('选定双方文明，打开跟这对阵走的开局和练习。早期应对和类型反制是通用参考，不会改写成针对对手的专属打法。');
     expect(page).not.toContain('根据双方文明给出反制建议');
     expect(`${entry?.desc} ${entry?.metaDescription}`).not.toMatch(/自动给出打法|你的相对优势/);
   });
@@ -42,9 +42,11 @@ describe('#888 对局助手不再用评分推导强弱与打法', () => {
   });
 
   it('仍保留类型反制、限度说明、快攻指南、蔷琵和深链', () => {
-    expect(page).toContain('推荐反制');
-    expect(page).toContain('通用示意，非模型结论');
-    expect(page).toContain('EMPTY_COUNTERS_COPY');
+    expect(page).toContain('通用类型反制');
+    expect(page).toContain('也不是模型结论');
+    expect(page).toContain('当前我方暂无可用的类型对照单位');
+    expect(page).toContain('不自动带入当前双方');
+    expect(page).toContain('to="/duel"');
     expect(page).toContain('<ChampiAges');
     expect(page).toContain('<RushDefense');
     expect(page).toContain('matchupBuildPath');
@@ -53,6 +55,9 @@ describe('#888 对局助手不再用评分推导强弱与打法', () => {
     expect(page).toContain('单位 PK');
     expect(page).toContain('我方文明');
     expect(page).toContain('对手文明');
+    expect(page).not.toContain('推荐反制');
+    expect(page).not.toContain('to="/duel?');
+    expect(page).not.toContain("to={'/duel?");
   });
 
   it('继续按本方单位可用性过滤反制，玛雅不会收到骑士和骆驼', () => {

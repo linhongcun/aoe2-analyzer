@@ -1,22 +1,29 @@
 import { useEffect } from 'react';
-import RushDefense from './RushDefense';
+import RushDefense, { RushReference } from './RushDefense';
 import './matchup-pair.css';
 import { ListHead } from '../../../shared/ui/layout';
 import { CivPicker } from '../../../shared/ui/CivPicker';
 import { civs } from '../../../data';
-import { EMPTY_COUNTERS_COPY, TYPE_ZH, filterCounterUnits } from '../../../domain/ratings';
+import { TYPE_ZH, filterCounterUnits } from '../../../domain/ratings';
 import { unitPath } from '../../../domain/simRoute';
-import { CivIcon, UnitIcon } from '../../../shared/ui/art';
+import { UnitIcon } from '../../../shared/ui/art';
 import { useSticky } from '../../../shared/utils/sticky';
 import { Loading } from '../../../shared/ui/widgets';
 import { Link, useSearchParams } from 'react-router-dom';
 import { matchupBuildPath, matchupUnitPath, readMatchupPair, writeMatchupPair, writeExplicitMatchupPair } from '../../../domain/matchupRoute';
 import { Icon } from '../../../shared/ui/Icon';
-import '../../../shared/ui/contextLinks.css';
-import { rushGuide } from '../rushGuides';
-import { counterExtra, rushDrill } from '../availability';
+import { counterExtra } from '../availability';
 import { useMatchupData } from '../useMatchupData';
 import ChampiAges from './ChampiAges';
+
+const LEDE = '选定双方文明，打开跟这对阵走的开局和练习。早期应对和类型反制是通用参考，不会改写成针对对手的专属打法。';
+const PAIR_SCOPE = '下面的开局、文明页和练习入口会带上这对文明。';
+const SHARE_HINT = '可复制地址栏链接分享这对阵';
+const PK_NOTE = '不自动带入当前双方';
+const EMPTY_COUNTERS = '当前我方暂无可用的类型对照单位';
+const COUNTER_PENDING = '选定双方文明后，会按对手登记类型取出通用对照表，再只列出我方能造的单位。这里不生成针对某个对手的专属分析。';
+const SIM_LIMIT =
+  '以下单位链到模拟器时，默认帝王时代，未勾选科技与团队加成；仍计入已建模文明加成，可在模拟器调整，不代表本局进度。当前 PK 采用近似计算，忽略射程、走位/风筝、地形高低差、冲锋攻击和溅射；击杀时间不能证明能否贴脸或绕后。';
 
 export default function Matchup() {
   const { data, error, retry } = useMatchupData();
@@ -40,127 +47,97 @@ export default function Matchup() {
       opp = side === 'opp' ? en || null : (e?.en ?? null);
     setParams(params.has('pair') || !me || !opp ? writeExplicitMatchupPair(params, me, opp) : writeMatchupPair(params, me, opp));
   };
-  const drill = data && a && e ? rushDrill(data, a.en, e.en, rushGuide(params.get('rush'))) : null;
+  const both = Boolean(a && e);
   const counters = core && a && e ? filterCounterUnits(a.en, e.ty, core.units) : [];
   const lineCivs = core?.unitById[2550]?.civs;
   const champiPair = Array.isArray(lineCivs) && [a?.en, e?.en].some((civ) => civ && lineCivs.includes(civ));
+  const typeNames = e ? e.ty.map((t) => TYPE_ZH[t]).join('、') || '（无登记类型）' : '';
   return (
     <section id="matchup" className={params.has('pair') || champiPair ? 'pane matchup-explicit' : 'pane'}>
-      <ListHead title="对局助手" desc="快攻指南、类型反制，以及侦察、混兵和城堡前置" />
-      <div className="bar fbar">
-        我的文明 <CivPicker id="ma" label="我的文明" value={a?.en ?? ''} none="未选择" onChange={(en) => pick('me', en)} /> 对手文明{' '}
-        <CivPicker id="me" label="对手文明" value={e?.en ?? ''} none="未选择" onChange={(en) => pick('opp', en)} />
-      </div>
-      {pair.invalid && (
-        <p className="note" role={params.has('pair') ? 'alert' : undefined}>
-          {params.has('pair') ? '链接中的对阵信息无效，请重新选择文明' : '链接中的文明无效，已用上次选择'}
-        </p>
-      )}
-      {(!a || !e) && (
-        <>
-          <p role="status">{!a && !e ? '请补选双方文明后查看对阵分析。' : !a ? '请补选我方文明后查看对阵分析。' : '请补选对手文明后查看对阵分析。'}</p>
-          <p>
-            {a ? (
-              <Link className="community-tool-entry" to={'/civ/' + a.en}>
-                我方文明：{a.zh}
-              </Link>
-            ) : null}{' '}
-            {e ? (
-              <Link className="community-tool-entry" to={'/civ/' + e.en}>
-                对手文明：{e.zh}
-              </Link>
-            ) : null}
-          </p>
-        </>
-      )}
-      {a && e && (
-        <>
-          <h3 className="matchup-title">
-            <Link className="ulink ctx-civ-link" to={`/civ/${a.en}`}>
-              <CivIcon c={a} />
-              {a.zh}
-            </Link>
-            <span className="note">vs</span>
-            <Link className="ulink ctx-civ-link" to={`/civ/${e.en}`}>
-              <CivIcon c={e} />
-              {e.zh}
-            </Link>
-          </h3>
-          <nav className="ctx-chips" aria-label="对阵相关入口">
-            {drill?.url ? (
-              <Link className="community-tool-entry" to={drill.url}>
-                <Icon name="swords" />
-                单位 PK
-              </Link>
-            ) : (
-              <span className="community-tool-entry" aria-disabled="true">
-                <Icon name="swords" />
-                单位 PK
-              </span>
-            )}
-            <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'me')}>
-              <Icon name="list-ordered" />
-              我方开局
-            </Link>
-            <Link className="community-tool-entry" to={matchupBuildPath(a.en, e.en, 'opp')}>
-              <Icon name="list-ordered" />
-              对手开局
-            </Link>
-            <Link className="community-tool-entry" to={`/civ/${a.en}`}>
-              我方文明
-            </Link>
-            <Link className="community-tool-entry" to={`/civ/${e.en}`}>
-              对手文明
-            </Link>
-          </nav>
-          {!pair.invalid && params.has('me') && params.has('opp') && <p className="note">可复制地址栏链接分享这对阵</p>}
-          <RushDefense own={a} enemy={e} data={data} loadError={error} />
-        </>
-      )}
-      <nav className="bar" aria-label="对局助手有限指南">
-        <Link className="community-tool-entry" to="/matchup/scouting">
-          先辨析侦察线索与缺失信息
-        </Link>
-        <Link className="community-tool-entry" to="/matchup/mixed-army">
-          按敌军组合查看混兵情境
-        </Link>
-        <Link className="community-tool-entry" to="/matchup/castle-defense">
-          城堡前置：按当前局面查看应对
-        </Link>
-      </nav>
-      <nav className="bar" aria-label="情境与队伍规划">
-        <Link className="community-tool-entry" to="/match-review">
-          记录本局疑问与下次练习重点
-        </Link>
-        <Link className="community-tool-entry" to="/team-plan">
-          记录队友分工与支援约定
-        </Link>
-      </nav>
-      {a &&
-        e &&
-        (error ? (
-          <div data-testid="matchup-data-error">
-            <p role="alert">对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。</p>
-            <p>
-              已选文明保留。
-              <button type="button" style={{ minHeight: 44, minWidth: 44 }} onClick={retry}>
-                重试资料
-              </button>
-            </p>
+      <ListHead level={1} title="对局助手" desc={LEDE} />
+      <section className="mu-region mu-region-pair" aria-labelledby="mu-pair-title">
+        <p className="mu-kicker">跟选择走</p>
+        <h2 id="mu-pair-title">当前对局</h2>
+        <div className="mu-picks">
+          <div className="mu-pick">
+            <label htmlFor="ma">我的文明</label>
+            <CivPicker id="ma" label="我的文明" value={a?.en ?? ''} none="未选择" onChange={(en) => pick('me', en)} />
           </div>
-        ) : !core || !data ? (
-          <Loading />
-        ) : (
-          <div id="mres">
-            <ChampiAges core={core} trees={data.trees} me={a.en} opp={e.en} />
-            <p>
-              <b>推荐反制</b>
-            </p>
-            <p className="note matchup-counter-note">
-              以下反制建议为通用示意，非模型结论。当前 PK 采用近似计算，忽略射程、走位/风筝、地形高低差、冲锋攻击和溅射；击杀时间不能证明能否贴脸或绕后。
-              <Link className="community-tool-entry" to="/duel">
-                查看 PK 模型能力与限制
+          <div className="mu-pick">
+            <label htmlFor="me">对手文明</label>
+            <CivPicker id="me" label="对手文明" value={e?.en ?? ''} none="未选择" onChange={(en) => pick('opp', en)} />
+          </div>
+        </div>
+        {pair.invalid && (
+          <p className="note" role={params.has('pair') ? 'alert' : undefined}>
+            {params.has('pair') ? '链接中的对阵信息无效，请重新选择文明' : '链接中的文明无效，已用上次选择'}
+          </p>
+        )}
+        {!both && (
+          <p role="status">
+            {!a && !e ? '请补选双方文明后查看跟对阵走的入口。' : !a ? '请补选我方文明后查看跟对阵走的入口。' : '请补选对手文明后查看跟对阵走的入口。'}
+          </p>
+        )}
+        {both && a && e && (
+          <>
+            <p className="mu-scope">{PAIR_SCOPE}</p>
+            {!pair.invalid && params.has('me') && params.has('opp') && <p className="note">{SHARE_HINT}</p>}
+            <nav className="mu-tools" aria-label="跟这对文明走的开局与文明页">
+              <Link className="community-tool-entry mu-chip" to={matchupBuildPath(a.en, e.en, 'me')}>
+                <Icon name="list-ordered" />
+                我方开局
               </Link>
+              <Link className="community-tool-entry mu-chip" to={matchupBuildPath(a.en, e.en, 'opp')}>
+                <Icon name="list-ordered" />
+                对手开局
+              </Link>
+              <Link className="community-tool-entry mu-chip" to={`/civ/${a.en}`}>
+                <Icon name="shield" />
+                我方文明
+              </Link>
+              <Link className="community-tool-entry mu-chip" to={`/civ/${e.en}`}>
+                <Icon name="shield" />
+                对手文明
+              </Link>
+            </nav>
+          </>
+        )}
+        <p className="mu-pk">
+          <Link className="community-tool-entry mu-chip" to="/duel" aria-label="单位 PK，不自动带入当前双方">
+            <Icon name="swords" />
+            单位 PK
+          </Link>
+          <span className="mu-pk-note">{PK_NOTE}</span>
+        </p>
+        {both && a && e && (
+          <>
+            <RushDefense own={a} enemy={e} data={data} loadError={error}>
+              {champiPair && core && data ? <ChampiAges core={core} trees={data.trees} me={a.en} opp={e.en} /> : null}
+            </RushDefense>
+            {error && (
+              <div data-testid="matchup-data-error">
+                <p role="alert">对局资料加载失败，暂时无法核对演练和开局。请刷新页面重试。</p>
+                <p>
+                  已选文明保留。
+                  <button type="button" style={{ minHeight: 44, minWidth: 44 }} onClick={retry}>
+                    重试资料
+                  </button>
+                </p>
+              </div>
+            )}
+          </>
+        )}
+      </section>
+      <section className="mu-region mu-region-ref" aria-labelledby="mu-ref-title">
+        <p className="mu-kicker">通用参考</p>
+        <h2 id="mu-ref-title">通用参考</h2>
+        <RushReference own={a} data={data} />
+        {both && a && e && core && data ? (
+          <div id="mres" className="mu-ref-block">
+            <h3>通用类型反制</h3>
+            <p className="mu-scope">
+              <span className="mu-tag">通用示意</span>
+              按对手登记类型（当前：{typeNames}）取出通用对照表，再只列出我方能造的单位。不是对{e.zh}的专属分析，也不是模型结论。
             </p>
             {e.ty.map((t) => (
               <p key={t} className="note">
@@ -169,7 +146,7 @@ export default function Matchup() {
               </p>
             ))}
             {counters.length === 0 ? (
-              <p className="note">{EMPTY_COUNTERS_COPY}</p>
+              <p className="note">{EMPTY_COUNTERS}</p>
             ) : (
               <ul className="matchup-counter-list">
                 {counters.map((u) => {
@@ -194,9 +171,58 @@ export default function Matchup() {
                 })}
               </ul>
             )}
-            {counters.length > 0 && <p className="note">默认帝王时代，未勾选科技与团队加成；仍计入已建模文明加成，可在模拟器调整，不代表本局进度。</p>}
+            <details className="mu-fold">
+              <summary>模拟默认与 PK 限制</summary>
+              <p>{SIM_LIMIT}</p>
+              <p>
+                <Link to="/duel">查看 PK 模型能力与限制</Link>
+              </p>
+            </details>
           </div>
-        ))}
+        ) : (
+          <div className="mu-ref-block">
+            <h3>通用类型反制</h3>
+            {both ? (
+              error ? null : (
+                <Loading />
+              )
+            ) : (
+              <p className="mu-scope">
+                <span className="mu-tag">通用示意</span>
+                {COUNTER_PENDING}
+              </p>
+            )}
+          </div>
+        )}
+        <div className="mu-ref-block">
+          <h3>有限指南与记录</h3>
+          <p className="mu-scope">三份指南仍在原路由，内容不并进本页，也不新增情境。</p>
+          <nav className="mu-tools" aria-label="对局助手有限指南">
+            <Link className="community-tool-entry mu-chip" to="/matchup/scouting">
+              <Icon name="book-open" />
+              先辨析侦察线索与缺失信息
+            </Link>
+            <Link className="community-tool-entry mu-chip" to="/matchup/mixed-army">
+              <Icon name="book-open" />
+              按敌军组合查看混兵情境
+            </Link>
+            <Link className="community-tool-entry mu-chip" to="/matchup/castle-defense">
+              <Icon name="book-open" />
+              城堡前置：按当前局面查看应对
+            </Link>
+          </nav>
+          <nav className="mu-tools" aria-label="情境与队伍规划">
+            <Link className="community-tool-entry mu-chip" to="/match-review">
+              <Icon name="scroll" />
+              记录本局疑问与下次练习重点
+            </Link>
+            <Link className="community-tool-entry mu-chip" to="/team-plan">
+              <Icon name="users" />
+              记录队友分工与支援约定
+            </Link>
+          </nav>
+        </div>
+      </section>
     </section>
   );
 }

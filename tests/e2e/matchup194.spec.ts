@@ -17,7 +17,8 @@ for (const width of [360, 375, 390, 1280])
       await page.setViewportSize({ width, height: 900 });
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/matchup');
-      await expect(page.locator('#matchup .matchup-title')).toBeVisible();
+      await expect(page.getByRole('heading', { name: '当前对局', exact: true })).toBeVisible();
+      await expect(page.locator('.matchup-title')).toHaveCount(0);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await pickCiv(page, 'ma', 'Franks');
       const result = page.locator('#mres');
@@ -26,10 +27,10 @@ for (const width of [360, 375, 390, 1280])
         ['Japanese', '日本'],
       ]) {
         await pickCiv(page, 'me', opponent!);
-        await expect(page.locator('#matchup .matchup-title')).toContainText(name!);
-        await expect(page.locator('#matchup .lhead .note')).toContainText('快攻指南、类型反制，以及侦察、混兵和城堡前置');
-        await expect(result).toContainText('推荐反制');
-        await expect(result).toContainText('通用示意，非模型结论');
+        await expect(page.locator('#me')).toContainText(name!);
+        await expect(page.locator('#matchup .lhead .note')).toContainText('不会改写成针对对手的专属打法');
+        await expect(result).toContainText('通用类型反制');
+        await expect(result).toContainText('也不是模型结论');
         for (const gone of ['对手强项', '相对弱项', '你的相对优势', '前期主动骚扰', '自动生成的建议']) await expect(result).not.toContainText(gone);
         await expect(result).not.toContainText(/骑兵\(\+\d/);
         await expect(result).not.toContainText(/缺骑兵|没有骑兵|不能造骑兵|你可以多用远程单位/);

@@ -23,8 +23,8 @@ describe('#888 取代 #15：对局助手不再展示评分强项与自动建议'
     expect(src).not.toContain('STRONG_THRESHOLD');
     expect(src).not.toContain('自动生成的建议');
     expect(src).not.toContain('前期主动骚扰');
-    expect(src).toContain('推荐反制');
-    expect(src).toContain('EMPTY_COUNTERS_COPY');
+    expect(src).toContain('通用类型反制');
+    expect(src).toContain('当前我方暂无可用的类型对照单位');
     const css = readFileSync('src/shared/styles/base.css', 'utf8');
     expect(css).toMatch(/\.note \{\s*color: var\(--c-muted\)/);
   });
@@ -47,10 +47,11 @@ describe('#26 反制按本方科技树过滤', () => {
   });
   it('空态文案锁定', () => expect(EMPTY_COUNTERS_COPY).toBe('当前文明暂无可用反制推荐'));
   it('无可造反制时返回空（不回退）', () => expect(filterCounterUnits('Nobody', ['cav'], units)).toEqual([]));
-  it('页面使用「推荐反制」标题与空态常量，不出现「需…」灰显', () => {
+  it('页面使用「通用类型反制」标题与空列表文案，不出现「需…」灰显', () => {
     const src = readFileSync('src/features/matchup/components/Matchup.tsx', 'utf8');
-    expect(src).toContain('推荐反制');
-    expect(src).toContain('EMPTY_COUNTERS_COPY');
+    expect(src).toContain('通用类型反制');
+    expect(src).toContain('当前我方暂无可用的类型对照单位');
+    expect(src).not.toContain('EMPTY_COUNTERS_COPY');
     expect(src).not.toMatch(/需\{|「需/);
   });
 });

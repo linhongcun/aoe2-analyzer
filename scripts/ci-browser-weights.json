@@ -133,6 +133,7 @@
     "tests/e2e/marketFees745.spec.ts": 13500,
     "tests/e2e/matchReview257.spec.ts": 28517,
     "tests/e2e/matchup194.spec.ts": 9989,
+    "tests/e2e/matchup939.spec.ts": 12000,
     "tests/e2e/matchupAvailability469.spec.ts": 27212,
     "tests/e2e/matchupSim424.spec.ts": 19666,
     "tests/e2e/mayans197.spec.ts": 47402,

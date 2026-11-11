@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
-const rush = (page: Page) => page.getByRole('region', { name: '应对早期进攻', exact: true });
+const rush = (page: Page) => page.getByRole('region', { name: '可按当前文明核对的练习', exact: true });
 const duel = (page: Page) => rush(page).getByRole('link', { name: /打开 PK 演练/ });
 const build = (page: Page) => rush(page).getByRole('link', { name: /参考开局/ });
 const query = (href: string) => new URLSearchParams(href.split('?')[1]);
