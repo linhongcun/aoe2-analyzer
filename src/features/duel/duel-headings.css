@@ -7,7 +7,7 @@
   color: var(--color-muted);
 }
 #duel .duel-win {
-  margin-block: 1em;
+  margin: 0 0 var(--space-2);
 }
 #duel .upgrade-title {
   margin: 1em 0;
@@ -62,4 +62,130 @@
   font-weight: 600;
   line-height: 1.65;
   letter-spacing: normal;
+}
+
+/* issue 943 紧凑壳：压选择卡留白，控件保持 44px，属性行不是按钮所以更密。 */
+#duel .lhead {
+  margin-bottom: var(--space-2);
+}
+#duel .duel-sides {
+  margin: var(--space-2) 0;
+  gap: var(--space-3);
+}
+#duel .duel-side {
+  padding: var(--space-2) var(--space-3);
+}
+#duel .duel-side .bar {
+  margin-bottom: var(--space-2);
+}
+#duel .duel-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+}
+#duel .pk-price {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  color: var(--color-text-2);
+}
+#duel .pk-base {
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+}
+#duel .pk-base s {
+  text-decoration: line-through;
+}
+#duel .pk-bound,
+#duel .pk-open {
+  margin: var(--space-1) 0 0;
+  font-size: var(--fs-sm);
+}
+#duel .pk-bound {
+  color: var(--color-good);
+}
+#duel .pk-open {
+  color: var(--color-text-2);
+}
+#duel .pk-miss {
+  margin: var(--space-1) 0 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-warn-soft);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+}
+#duel .pk-miss p {
+  margin: 0;
+}
+#duel .pk-miss-state {
+  color: var(--color-text-2);
+}
+#duel .pk-cost-more > summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--color-accent);
+  font-size: var(--fs-sm);
+}
+#duel .pk-budget {
+  margin-top: var(--space-2);
+}
+#duel .pk-brow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+}
+#duel .pk-brow b {
+  font-size: var(--fs-h3);
+  font-variant-numeric: tabular-nums;
+}
+#duel .ctx-bar {
+  margin: var(--space-1) 0;
+}
+#duel .fbar {
+  padding: var(--space-2);
+}
+#duel .duel-stats .si {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: -3px;
+}
+#duel .duel-stats td {
+  padding: 2px var(--space-2);
+  line-height: 1.2;
+  vertical-align: middle;
+}
+#duel #duel-res {
+  margin-top: var(--space-1);
+}
+#duel .fbar button,
+#duel .duel-presets button,
+#duel .eseg button,
+#duel .rc-seg .seg button {
+  min-height: 44px;
+}
+#duel .duel-side .civpick {
+  display: flex;
+  width: 100%;
+}
+#duel .duel-side .cp-trigger {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+}
+#duel .upgrade-summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+}
+#duel .upgrade-summary .upgrade-title {
+  margin: 0;
 }

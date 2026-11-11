@@ -77,18 +77,18 @@ test.describe('#100 补充口径（Steve）+ 定稿 T1–T7', () => {
     await expect(A(page)).toBeVisible();
     expect(await stats(page, 'a')).toEqual({ hp: '120', atk: '12', armor: '4 / 4' });
     expect(await stats(page, 'b')).toEqual({ hp: '120', atk: '8', armor: '2 / 2' });
-    await expect(page.locator('[data-t="pk-cost-b"] [data-t="pk-res-Food"] .pk-now')).toHaveText('47');
-    await expect(page.locator('[data-t="pk-cost-b"] [data-t="pk-res-Gold"] .pk-now')).toHaveText('51');
-    await expect(page.locator('[data-t="pk-cost-a"] [data-t="pk-res-Food"]')).toContainText('60');
-    await expect(page.locator('[data-t="pk-cost-a"] [data-t="pk-res-Gold"]')).toContainText('75');
+    await expect(page.locator('#duel-b [data-t="pk-price"]')).toContainText('47');
+    await expect(page.locator('#duel-b [data-t="pk-price"]')).toContainText('51');
+    await expect(page.locator('#duel-a [data-t="pk-price"]')).toContainText('60');
+    await expect(page.locator('#duel-a [data-t="pk-price"]')).toContainText('75');
   });
   test('.3.f.：标题显示城堡时代，价格按城堡价（柏柏尔骆驼 47 食 / 51 金）', async ({ page }) => {
     await page.goto('#/duel?a=38.Franks.3.f.&b=329.Berbers.3.f.&m=r&bud=3000');
     await expect(A(page)).toBeVisible();
     await expect(notes(page).nth(0)).toContainText('城堡时代');
     await expect(notes(page).nth(1)).toContainText('城堡时代');
-    await expect(page.locator('[data-t="pk-cost-b"] [data-t="pk-res-Food"] .pk-now')).toHaveText('47');
-    await expect(page.locator('[data-t="pk-cost-b"] [data-t="pk-res-Gold"] .pk-now')).toHaveText('51');
+    await expect(page.locator('#duel-b [data-t="pk-price"]')).toContainText('47');
+    await expect(page.locator('#duel-b [data-t="pk-price"]')).toContainText('51');
   });
   test('T6 无时代参数：标题帝王时代，价格按帝王时代（柏柏尔骆驼 32 个，v0.5.0 线上帝王锚点）', async ({ page }) => {
     await page.goto('#/duel?m=r&bud=3000&a=329.Berbers..f.&b=38.Franks..f.');

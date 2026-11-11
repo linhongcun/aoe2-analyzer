@@ -1,7 +1,6 @@
-/** #24 等资源：每侧的原价 → 折后价、派出数量与「已计入 / 未计入」说明（v3 SPEC）。只展示，数值来自 domain/costDiscount */
+/** #24 常驻文明训练折扣的已计入 / 未计入句式。单价在卡头，派出数量在预算区。 */
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { costSum } from '../../../domain/duel';
 import type { CostDiscount } from '../../../domain/costDiscount';
 import { RES_ZH } from '../../../domain/ratings';
 import { Icon } from '../../../shared/ui/Icon';
@@ -10,51 +9,10 @@ import { minus } from '../../../shared/utils/minus';
 import { AGE_ZH as AGE } from '../../../domain/ratings';
 const ORDER = ['Food', 'Wood', 'Gold', 'Stone'];
 
-/** issue 103：有变化的格子：「原价 ~~55~~ 实际 **47**」；无变化只显示单个数字 */
-function WasNow({ was, now, wasLabel = '原价' }: { was: number; now: number; wasLabel?: string }) {
+export function CostDiscountBlock({ unit, civ, d }: { unit: string; civ: string; d: CostDiscount }) {
+  if (!d.applied.length && !d.unsupported.length && !d.half.length) return null;
   return (
-    <span className="pk-wn">
-      <span className="pk-lbl">{wasLabel}</span>
-      <s className="pk-was">{was}</s>
-      <span className="pk-lbl">实际</span>
-      <b className="pk-now">{now}</b>
-    </span>
-  );
-}
-
-export function CostDiscountBlock({ k, unit, civ, d, bud, count }: { k: 'a' | 'b'; unit: string; civ: string; d: CostDiscount; bud: number; count: number }) {
-  const res = ORDER.filter((r) => d.base[r]);
-  const baseSum = costSum(d.base),
-    sum = costSum(d.cost);
-  const baseCount = Math.max(1, Math.floor(bud / Math.max(1, baseSum)));
-  const changed = sum !== baseSum;
-  return (
-    <div className="pk-cost" data-t={`pk-cost-${k}`}>
-      <table className="stat pk-cost-tab">
-        <tbody>
-          {res.map((r) => (
-            <tr key={r} data-t={`pk-res-${r}`}>
-              <td>{RES_ZH[r] ?? r}</td>
-              <td>{d.cost[r] !== d.base[r] ? <WasNow was={d.base[r]!} now={d.cost[r]!} /> : d.base[r]}</td>
-            </tr>
-          ))}
-          <tr data-t="pk-sum">
-            <td>单价合计</td>
-            <td>{changed ? <WasNow was={baseSum} now={sum} /> : sum}</td>
-          </tr>
-          <tr className="pk-count" data-t="pk-count">
-            <td>派出数量</td>
-            <td>{changed && baseCount !== count ? <WasNow was={baseCount} now={count} wasLabel="按原价" /> : <b>{count}</b>}</td>
-          </tr>
-          <tr data-t="pk-spent">
-            <td>实际投入</td>
-            <td>
-              {count * sum}
-              <small className="note"> / {bud}</small>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div className="pk-civ">
       {d.applied.map((a) => (
         <div key={a.techs.join()} className="pk-line pk-applied" data-t="pk-applied">
           <Icon name="check" className="ic" />
@@ -91,11 +49,6 @@ export function CostDiscountBlock({ k, unit, civ, d, bud, count }: { k: 'a' | 'b
           {!d.applied.length && !d.unsupported.length && i === 0 && <SourcePop civ={civ} unit={unit} d={d} />}
         </div>
       ))}
-      {!d.applied.length && !d.unsupported.length && !d.half.length && (
-        <p className="note pk-none" data-t="pk-none">
-          该文明没有可计入的训练费用加成，按原价计算。
-        </p>
-      )}
     </div>
   );
 }

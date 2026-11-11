@@ -72,6 +72,7 @@
     "tests/e2e/dlcChips767.spec.ts": 7500,
     "tests/e2e/duelHeading364.spec.ts": 36132,
     "tests/e2e/duelPreset372.spec.ts": 26649,
+    "tests/e2e/duelTrainingCost943.spec.ts": 15000,
     "tests/e2e/dupNames44.spec.ts": 11394,
     "tests/e2e/econBreadcrumbs771.spec.ts": 12000,
     "tests/e2e/ecoPayoff214.spec.ts": 13959,

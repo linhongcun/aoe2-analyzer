@@ -187,8 +187,10 @@ export function UpgradeComparison({
     : [];
   const winner = (w: 'a' | 'b' | 'draw') => (w === 'draw' ? '平局' : `${w.toUpperCase()} 获胜`);
   return (
-    <section className="upgrade-comparison posbox" data-t="upgrade-comparison" aria-label="升级前后对比">
-      <h2 className="upgrade-title">升级前后对比</h2>
+    <details className="upgrade-comparison posbox" data-t="upgrade-comparison" aria-label="升级前后对比" open={hasBase ? true : undefined}>
+      <summary className="upgrade-summary">
+        <h2 className="upgrade-title">升级前后对比</h2>
+      </summary>
       <p className="note">保存当前 A 为升级前，固定 B；在上方 A 的科技详情选择方案。同一单位形态、文明、时代和团队加成，仅比较 1v1。</p>
       <div className="upgrade-actions">
         <button type="button" disabled={!canSave} onClick={save}>
@@ -296,6 +298,6 @@ export function UpgradeComparison({
           <p className="note">{MODEL}</p>
         </>
       )}
-    </section>
+    </details>
   );
 }

@@ -38,6 +38,10 @@ export interface SimPanelProps {
   headingLevel?: 2 | 3;
   /** 单位详情工作区的列名。建筑模拟器和单位 PK 不传，仍用短列名。 */
   statHeadings?: { base: string; current: string; full: (name: string) => string };
+  /** 没有战斗数值、但单位 PK 仍要勾选的费用科技。缺省时 ef 为空仍是「仅文本」。 */
+  selectableWithoutEffect?: ReadonlySet<number>;
+  /** 满科技 / 时代预设在战斗科技之外再纳入的 id。缺省不改变预设。 */
+  presetExtra?: (scope: 'all' | number) => ReadonlySet<number>;
 }
 
 function StatRows({ rows, B, S, C }: { rows: StatRow[]; B: StatSet; S: StatSet; C: StatSet | null }) {
@@ -185,6 +189,10 @@ export default function SimPanel(p: SimPanelProps) {
   const thumbRof = (p.sel.has(437) ? p.avail.find((x) => x.t.id === 437)?.ef : null)?.filter((e) => e.s === 'rof') ?? [];
   const groups: Record<string, SimTech[]> = {};
   p.avail.forEach((x) => (groups[simGroup(x.t)] ??= []).push(x));
+  const withExtra = (ids: Set<number>, scope: 'all' | number) => {
+    p.presetExtra?.(scope).forEach((id) => ids.add(id));
+    return ids;
+  };
   const toggle = (id: number) => {
     const t = p.techById[id]!;
     p.go(
@@ -239,7 +247,7 @@ export default function SimPanel(p: SimPanelProps) {
               </option>
             ))}
         </select>
-        <button onClick={() => p.go(p.civ, 4, allNumeric(p.avail), p.team)}>满科技</button>
+        <button onClick={() => p.go(p.civ, 4, withExtra(allNumeric(p.avail), 'all'), p.team)}>满科技</button>
         <button onClick={() => p.go(p.civ, p.age, [], p.team)}>清空</button>
         {[2, 3, 4]
           .filter((a) => a >= p.minAge)
@@ -248,7 +256,7 @@ export default function SimPanel(p: SimPanelProps) {
               key={a}
               onClick={() => {
                 const ag = Math.max(p.minAge, a);
-                p.go(p.civ, ag, presetUpTo(p.avail, ag), p.team);
+                p.go(p.civ, ag, withExtra(presetUpTo(p.avail, ag), ag), p.team);
               }}
             >
               {AGE_ZH[a]!.slice(0, 2)}预设
@@ -277,9 +285,10 @@ export default function SimPanel(p: SimPanelProps) {
               <Subheading className={p.headingLevel === undefined ? undefined : 'sim-group-title'}>{g}</Subheading>
               {l.map(({ t, ef }) => {
                 const on = p.sel.has(t.id);
+                const checkable = !!ef || !!p.selectableWithoutEffect?.has(t.id);
                 return (
-                  <label key={t.id} className={`simt${on ? ' on' : ''}${ef ? '' : ' txt'}${t.age > p.age && !on ? ' late' : ''}`}>
-                    {ef ? <input type="checkbox" checked={on} onChange={() => toggle(t.id)} /> : <span className="tag">仅文本</span>}
+                  <label key={t.id} className={`simt${on ? ' on' : ''}${checkable ? '' : ' txt'}${t.age > p.age && !on ? ' late' : ''}`}>
+                    {checkable ? <input type="checkbox" checked={on} onChange={() => toggle(t.id)} /> : <span className="tag">仅文本</span>}
                     <TechIcon t={t} />
                     <Link className="ulink tlink" to={`/tech/${t.id}`}>
                       {t.zh}
@@ -289,7 +298,7 @@ export default function SimPanel(p: SimPanelProps) {
                       <CostView c={t.cost} /> <StatIcon k="time" t="研究时间" />
                       {t.rt}s
                     </span>
-                    {!ef && <div className="note">{t.desc}</div>}
+                    {!checkable && <div className="note">{t.desc}</div>}
                   </label>
                 );
               })}

@@ -14,6 +14,8 @@ import { canonDuelParams, decodeDuelParams } from '../../../domain/duelParams';
 import { buildsPath, duelCivs, matchupPath } from '../../../domain/matchupRoute';
 import '../../../shared/ui/contextLinks.css';
 import { countForTime, fmtClock, realCostOf } from '../../../domain/realCost';
+import { contextSearchAfterCanon } from '../logic/duelContext';
+import { DUEL_COST_MODEL } from '../logic/trainingCostView';
 import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
@@ -102,10 +104,11 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
   }
   const canonStr = canonDuelParams(canon, params).toString();
   useEffect(() => {
-    // 旧 PK 会容错补齐 pack；回链不能把这次自动修复误当作原链接的文明。
-    if (contextSearch.current !== sp.toString()) setContext(duelCivs(sp));
+    const incoming = sp.toString();
+    const nextSearch = contextSearchAfterCanon(contextSearch.current, incoming, canonStr);
+    if (nextSearch !== null) setContext(duelCivs(new URLSearchParams(nextSearch)));
     contextSearch.current = canonStr;
-    if (canonStr === sp.toString()) return;
+    if (canonStr === incoming) return;
     const nextState = invalidLink ? { duelLinkInvalid: true } : undefined;
     // setSearchParams 会丢掉 #duel-model。只在这个锚点上改用带 hash 的跳转，其它地址仍走原来的补齐。
     if (location.hash === '#duel-model')
@@ -183,9 +186,9 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
     isUnavail(s)
       ? 1
       : mode === 'r'
-        ? countForBudget(s.disc.cost, bud)
+        ? countForBudget(s.training.price.cost, bud)
         : mode === 't'
-          ? Math.max(1, countForTime(realCostOf(s.disc, s.age, s.civ).rc.total, vils, mins))
+          ? Math.max(1, countForTime(realCostOf({ ...s.disc, cost: s.training.price.cost, exact: s.training.price.exact }, s.age, s.civ).rc.total, vils, mins))
           : mode === 'n'
             ? n
             : 1;
@@ -317,7 +320,7 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
         （来源：Fandom「Armor class」、aoe2.rocks 伤害计算）；双方 t=0
         同时出手（缺少出手前摇数据）；远程按命中率取期望伤害；忽略射程、走位/风筝、地形高低差、冲锋攻击、溅射、
         {isChampiUnit(A.u.id) || isChampiUnit(B.u.id) ? '未建模的独特/特殊效果未计入；已建模数值科技按实际选择计算。' : '特殊能力与独特科技（仅文本）。'}
-        群战为集火模型，不考虑近战包围空间；等资源已计入已核实的常驻文明训练费用加成；未核实的加成、团队加成与需研究的科技折扣不计入。结果用于比较强弱趋势，不等同于实战。
+        群战为集火模型，不考虑近战包围空间；{DUEL_COST_MODEL}结果用于比较强弱趋势，不等同于实战。
       </p>
     </section>
   );

@@ -6,6 +6,7 @@ import type { Fighter } from '../../../domain/duel';
 import type { SimContext } from '../../../domain/simulator';
 import type { Unit } from '../../../domain/types';
 import { CostView } from '../../../shared/ui/art';
+import { PkCost } from './PkCost';
 
 interface Side {
   u: Unit;
@@ -15,6 +16,7 @@ interface Side {
   spec: { team: number[] };
   F: Fighter;
   disc: CostDiscount;
+  training: { price: { cost: CostDiscount['cost'] } };
 }
 const n = (v: number) => Number(v.toFixed(3));
 
@@ -99,7 +101,7 @@ export function DamageBreakdown({ ctx, a, b }: { ctx: SimContext; a: Side; b: Si
               训练费用：
               <CostView c={attacker.disc.base} />
               ；折后：
-              <CostView c={attacker.disc.cost} />
+              <PkCost cost={attacker.training.price.cost} />
             </p>
             {attacker.disc.applied.map((line, i) => (
               <p className="note" key={i}>

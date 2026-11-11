@@ -1,7 +1,8 @@
 import { civByEn } from '../../../data';
-import { discountedCost, priceAge, type CostDiscount } from '../../../domain/costDiscount';
+import type { CostDiscount } from '../../../domain/costDiscount';
 import { fighterFrom, type Fighter } from '../../../domain/duel';
-import { presetUpTo, simTechs, simulate, type SimContext } from '../../../domain/simulator';
+import { applicableTrainingTechs, quoteTraining, selectTrainingIds, type TrainingQuote } from '../../../domain/duelTrainingCost';
+import { simTechs, simulate, type SimContext } from '../../../domain/simulator';
 import type { StatSet, Unit } from '../../../domain/types';
 import type { SideSpec } from '../../../domain/duelState';
 import { substituteIn } from './substitute';
@@ -15,8 +16,10 @@ export interface Resolved {
   S: StatSet;
   F: Fighter;
   avail: ReturnType<typeof simTechs>;
-  /** 训练费用（已按已核实的常驻文明加成折算，#24） */
+  /** 常驻文明训练折扣（不含需研究的费用科技），供「已计入 / 未计入」句式 */
   disc: CostDiscount;
+  /** 已选且本站已支持的费用科技之后的训练价，与 Fighter.cost 同一笔 unitCost */
+  training: TrainingQuote;
 }
 /** issue 124 选的文明造不了这个单位：保留玩家选的文明，不出属性与战斗结果，等玩家点按钮 */
 export interface Unavail {
@@ -43,11 +46,13 @@ export function resolve(ctx: SimContext, byId: Record<number, Unit>, spec: SideS
   const age = Math.max(u.age, spec.age);
   const avail = simTechs(ctx, u, civ);
   const ok = new Set(avail.map((x) => x.t.id));
-  // issue 100：模拟、标题、取价统一用 URL 时代（未写时代按帝王）；「满科技」= 该时代及以前可研究的科技全算
-  const sel = spec.techs === 'f' || spec.techs === 'c' ? presetUpTo(avail, age) : new Set(spec.techs.filter((i) => ok.has(i)));
+  // issue 100：模拟、标题、取价统一用 URL 时代（未写时代按帝王）。
+  // issue 943：f / c 再纳入本站已支持的适用费用科技；战斗仍只吃 simulate 能用的效果。
+  const costs = applicableTrainingTechs(ctx, u, civ, age);
+  const sel = selectTrainingIds(spec.techs, avail, age, costs);
   const S = simulate(ctx, u, civ, age, sel, new Set(spec.team));
-  const disc = discountedCost(u, civ, priceAge(u.age, age), { techIds: ok });
-  return { spec, u, civ, age, sel, S, F: { ...fighterFrom(u, S), cost: disc.cost }, avail, disc };
+  const training = quoteTraining(u, civ, age, sel, costs, ok);
+  return { spec, u, civ, age, sel, S, F: { ...fighterFrom(u, S), cost: training.price.cost }, avail, disc: training.price.discount, training };
 }
 
 export const r1 = (x: number) => String(Math.round(x * 10) / 10);

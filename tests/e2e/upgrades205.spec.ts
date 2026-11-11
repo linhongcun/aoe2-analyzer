@@ -31,6 +31,12 @@ function comparison(page: Page) {
   return page.locator('[data-t="upgrade-comparison"]');
 }
 
+async function expandComparison(page: Page) {
+  const panel = comparison(page);
+  if (!(await panel.evaluate((el) => (el as HTMLDetailsElement).open))) await panel.locator('summary').click();
+  return panel;
+}
+
 function metric(page: Page, name: string, column: 0 | 1) {
   return comparison(page).locator(`[data-metric="${name}"] td`).nth(column).locator('[data-t="upgrade-value"]');
 }
@@ -83,7 +89,7 @@ test.afterEach(({ page }) => {
 test('#205 保存、勾选科技、复制分享、刷新与清除比较', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto(`./#/duel?a=${KNIGHT}&b=${KNIGHT}&m=1`);
-  const panel = comparison(page);
+  const panel = await expandComparison(page);
   await expect(panel.locator('[data-t="upgrade-status"]')).toBeVisible();
   await panel.getByRole('button', { name: '保存为升级前', exact: true }).click();
   await expectMetric(page, 'ab-hits', 13, 13);
@@ -114,6 +120,7 @@ test('#205 保存、勾选科技、复制分享、刷新与清除比较', async 
   await expectMetric(page, 'ab-hits', 12, 12);
   await panel.getByRole('button', { name: '清除比较', exact: true }).click();
   await expect(panel.locator('[data-metric]')).toHaveCount(0);
+  await expandComparison(page);
   await expect(panel.getByRole('button', { name: '保存为升级前', exact: true })).toBeVisible();
   const cleared = new URLSearchParams(new URL(page.url()).hash.split('?')[1]);
   for (const key of ['base', 'fixed', 'basev']) expect(cleared.has(key)).toBe(false);
@@ -290,6 +297,7 @@ test('#205 直接加载上下文发生变化的分享链接也拒绝比较', asy
 test('#205 无法训练或非 1v1 时禁止保存基准', async ({ page }) => {
   for (const url of [`./#/duel?a=${KNIGHT}&b=${KNIGHT}&m=n`, './#/duel?a=38.Aztecs.3..&b=38.Byzantines.3..&m=1']) {
     await page.goto(url);
+    await expandComparison(page);
     await expect(comparison(page).locator('[data-t="upgrade-status"]')).toBeVisible();
     await expect(comparison(page).getByRole('button', { name: '保存为升级前', exact: true })).toBeDisabled();
     await expect(comparison(page).locator('[data-metric]')).toHaveCount(0);
