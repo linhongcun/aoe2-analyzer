@@ -17,7 +17,7 @@ for (const width of [360, 375, 390, 1280])
       });
     };
     collect(page);
-    await page.goto('./#/');
+    await page.goto('./#/start');
     await page.getByRole('button', { name: /1v1 随机地图/ }).click();
     await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
     await page.getByRole('searchbox').fill('Mongols');
@@ -93,11 +93,8 @@ function flowText(page: Page) {
 test.describe('首页开一局 #592', () => {
   test('路径 A 先选模式再选地图，1v1 没有路位，能走到本局摘要', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
-    await page.goto('./#/');
+    await page.goto('./#/start');
     await expect(page.getByRole('heading', { level: 1, name: '开一局', exact: true })).toBeVisible();
-    const title = await page.getByRole('heading', { level: 1 }).boundingBox();
-    const card = await page.locator('#home .hcard').first().boundingBox();
-    expect(title && card && title.y < card.y).toBe(true);
     await expect(page.getByTestId('start-more-tools')).toBeVisible();
     await expect(page.getByTestId('start-steps')).toHaveText(/模式\s*地图\s*文明\s*对手/);
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
@@ -134,7 +131,7 @@ test.describe('首页开一局 #592', () => {
   });
 
   test('组队才出现路位；跳过不替玩家选择；上一步留着已经点过的图', async ({ page }) => {
-    await page.goto('./#/');
+    await page.goto('./#/start');
     await page.getByRole('button', { name: /组队随机地图/ }).click();
     await page.getByRole('button', { name: '4v4', exact: true }).click();
     await expect(page.getByTestId('start-steps')).toHaveText(/模式\s*地图\s*路位\s*文明\s*对手/);
@@ -175,7 +172,7 @@ test.describe('首页开一局 #592', () => {
   });
 
   test('已在大厅从文明起；先练文明不能点', async ({ page }) => {
-    await page.goto('./#/');
+    await page.goto('./#/start');
     const menu = page.getByTestId('start-feature-menu');
     await menu.locator('summary').click();
     const practice = page.getByTestId('start-practice');
@@ -217,7 +214,7 @@ test.describe('首页开一局 #592', () => {
     page.on('console', (message) => {
       if (message.type() === 'error') errors.push(message.text());
     });
-    await page.goto('./#/');
+    await page.goto('./#/start');
     for (const [size, map] of [
       ['2v2', /阿拉伯半岛/],
       ['4v4', /竞技场/],
@@ -287,13 +284,13 @@ test.describe('首页开一局 #592', () => {
         await mapScope();
       };
       const capture = async (state: string) => {
-        await page.locator('#home').screenshot({
+        await page.locator('[data-testid="start-game"]').screenshot({
           path: testInfo.outputPath(`scope670-${state}-${width}.png`),
           style: 'header.topbar, .skip-link { visibility: hidden !important; }',
         });
       };
 
-      await page.goto('./#/');
+      await page.goto('./#/start');
       await page.getByRole('button', { name: /1v1 随机地图/ }).click();
       await mapScope();
       await capture('map');
@@ -353,17 +350,17 @@ test.describe('首页开一局 #592', () => {
         if (step) await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', step);
         else await expect(page.getByTestId('start-summary')).toBeVisible();
         expect(await flowText(page).innerText()).not.toMatch(developerCopy);
-        expect(await page.locator('#home').innerText()).not.toMatch(developerCopy);
+        expect(await page.locator('[data-testid="start-game"]').innerText()).not.toMatch(developerCopy);
         await noOverflow(page);
       };
       const capture = async (state: string) => {
-        await page.locator('#home').screenshot({
+        await page.locator('[data-testid="start-game"]').screenshot({
           path: testInfo.outputPath(`copy673-${state}-${width}.png`),
           style: 'header.topbar { visibility: hidden !important; }',
         });
       };
 
-      await page.goto('./#/');
+      await page.goto('./#/start');
       await check('mode');
       await capture('mode');
       await page.getByRole('button', { name: /1v1 随机地图/ }).click();
@@ -406,7 +403,7 @@ test.describe('首页开一局 #592', () => {
       await page.setViewportSize({ width, height: 900 });
       const errors: string[] = [];
       page.on('pageerror', (error) => errors.push(error.message));
-      await page.goto('./#/');
+      await page.goto('./#/start');
       await expect(page.getByTestId('start-game')).toBeVisible();
       await noOverflow(page);
       await page.getByRole('button', { name: /组队随机地图/ }).click();
@@ -432,7 +429,7 @@ for (const width of WIDTHS) {
     page.on('console', (message) => {
       if (message.type() === 'error') errors.push(message.text());
     });
-    await page.goto('./#/');
+    await page.goto('./#/start');
     await page.getByTestId('start-lobby').click();
     await page.getByRole('button', { name: /法兰克/ }).click();
     await page.getByTestId('start-steps').getByRole('button', { name: '模式', exact: true }).click();
@@ -444,7 +441,7 @@ for (const width of WIDTHS) {
     await page.reload();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'lane');
     await expect(page.getByTestId('start-game')).toContainText('没有连上游戏大厅');
-    await page.locator('#home').screenshot({ path: testInfo.outputPath(`lobby674-lane-${width}.png`) });
+    await page.locator('[data-testid="start-game"]').screenshot({ path: testInfo.outputPath(`lobby674-lane-${width}.png`) });
     await page.getByRole('button', { name: /^中路/ }).click();
     await page.reload();
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
@@ -453,7 +450,7 @@ for (const width of WIDTHS) {
     await expect(page.locator('.start-picked')).toContainText('阿拉伯半岛');
     await expect(page.locator('.start-picked')).toContainText('中路');
     await expect(page.locator('.start-lede')).not.toContainText('按已跳过');
-    await page.locator('#home').screenshot({ path: testInfo.outputPath(`lobby674-civ-${width}.png`) });
+    await page.locator('[data-testid="start-game"]').screenshot({ path: testInfo.outputPath(`lobby674-civ-${width}.png`) });
     await page.getByRole('button', { name: '保留此文明继续', exact: true }).click();
     await page.getByRole('button', { name: '完成本局', exact: true }).click();
     await page.reload();
@@ -472,7 +469,7 @@ for (const width of WIDTHS) {
 
 test('#674 @1280 非法存档安全空局且玩家操作前不覆盖', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('aoe2-start-game-v1', '{invalid'));
-  await page.goto('./#/');
+  await page.goto('./#/start');
   await expect(page.getByRole('alert')).toContainText('保存的本局进度无法恢复');
   await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
   await expect(page.getByRole('button', { name: '4v4', exact: true })).toBeDisabled();
@@ -499,7 +496,7 @@ test('#674 @1280 恢复地图加载失败保留原档且可重试', async ({ pag
   });
   await page.addInitScript((value) => localStorage.setItem('aoe2-start-game-v1', value), raw);
   await page.route(/\/assets\/mapCatalog-[^/]+\.js$/, (route) => route.abort());
-  await page.goto('./#/');
+  await page.goto('./#/start');
   await expect(page.getByRole('alert')).toContainText('地图目录加载失败，原进度已保留');
   expect(await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'))).toBe(raw);
   await expect(page.getByTestId('start-step')).toHaveCount(0);
@@ -522,7 +519,7 @@ for (const stage of ['empty', 'opponent', 'summary'] as const)
     page.on('request', (r) => {
       if (/\/assets\/.*\.js(?:\?.*)?$/.test(r.url())) chunks.push(r.url());
     });
-    await page.goto('./#/');
+    await page.goto('./#/start');
     await expect(page).toHaveURL(/sgv=1/);
     if (stage !== 'empty') {
       const next: StartState = {

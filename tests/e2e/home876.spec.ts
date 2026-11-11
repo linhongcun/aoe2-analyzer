@@ -9,10 +9,8 @@ async function openHome(page: Page, search = '') {
 test('#876 1280 首屏能看到开一局标题和配置按钮', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await openHome(page);
-  const title = page.getByRole('heading', { name: '开一局', exact: true });
-  const configure = page.getByRole('button', { name: '配置本局', exact: true });
-  await expect(title).toBeInViewport({ ratio: 1 });
-  await expect(configure).toBeInViewport({ ratio: 1 });
+  await expect(page.locator('#home a[href="#/start"]')).toHaveCount(1);
+  await expect(page.locator('#home [data-testid="start-game"]')).toHaveCount(0);
   const unitIconsAligned = await page
     .locator('.home-ref-row')
     .first()
@@ -30,7 +28,7 @@ test('#876 390 顺读且目录标题不挤成多列', async ({ page }) => {
   await openHome(page);
   const home = page.locator('#home');
   const order = await home.evaluate((root) => {
-    const ids = ['site-title', 'home-ref-title', 'home-start-title', 'home-catalog-title'];
+    const ids = ['site-title', 'home-ref-title', 'home-catalog-title'];
     return ids.map((id) => root.querySelector('#' + id)?.getBoundingClientRect().top ?? -1);
   });
   expect(order.every((top, index) => index === 0 || top > order[index - 1]!)).toBe(true);
@@ -66,9 +64,10 @@ test('#876 唯一搜索打开现有全局搜索', async ({ page }) => {
 });
 
 test('#876 已在大厅进入文明步，原链接可恢复', async ({ page }) => {
-  await openHome(page);
-  await expect(page.getByTestId('start-step')).toHaveCount(0);
-  await page.getByTestId('home-lobby').click();
+  await page.addInitScript(() => localStorage.removeItem('aoe2-start-game-v1'));
+  await page.goto('./#/start');
+  await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
+  await page.getByTestId('start-lobby').click();
   await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
   await expect(page.getByTestId('start-game')).toContainText('没有连上游戏大厅');
   const saved = page.url();
@@ -81,8 +80,8 @@ test('#876 已在大厅进入文明步，原链接可恢复', async ({ page }) =
 });
 
 test('#876 配置本局后仍可跳过并返回', async ({ page }) => {
-  await openHome(page);
-  await page.getByTestId('home-configure').click();
+  await page.addInitScript(() => localStorage.removeItem('aoe2-start-game-v1'));
+  await page.goto('./#/start');
   await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
   await page.getByTestId('start-skip').click();
   await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'map');
@@ -112,9 +111,10 @@ test('#876 记录浅色与深色的 1280 和 390 首屏', async ({ page }) => {
   await expect(page.getByRole('dialog', { name: '全局搜索' })).toBeVisible();
   await page.screenshot({ path: '/opt/cursor/artifacts/home-1280-light-search.png' });
   await page.keyboard.press('Escape');
-  await page.getByTestId('home-configure').click();
+  await page.goto('./#/start');
   await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
   await page.screenshot({ path: '/opt/cursor/artifacts/home-1280-light-flow.png' });
+  await page.goto('./#/');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.evaluate(() => localStorage.setItem('aoe2-theme', 'dark'));
   await page.reload();

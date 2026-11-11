@@ -1,45 +1,28 @@
 import { createElement } from 'react';
-import { act, create, type ReactTestRenderer } from 'react-test-renderer';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { MemoryRouter } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 import { describe, expect, it } from 'vitest';
 import buildings from '../../src/data/buildings.json';
 import civs from '../../src/data/civs.json';
 import techs from '../../src/data/techs.json';
 import units from '../../src/data/units.json';
-import { enterLobby, resetStart } from '../../src/domain/startGame';
-import { encodeStartSearch } from '../../src/domain/startGameCodec';
 import Home from '../../src/features/home/components/Home';
-import { isIdleStart } from '../../src/features/home/homeEntry';
 import { HOME_AGE_PICS, HOME_BUILDING_PIC, HOME_EMBLEM_CIVS, HOME_TECH_PIC, HOME_UNIT_PICS } from '../../src/features/home/homeReference';
 import { PAGES } from '../../src/shared/nav/pageRegistry';
 
 const home = (search = '') => renderToStaticMarkup(createElement(StaticRouter, { location: { pathname: '/', search } }, createElement(Home)));
 
 describe('首页方向 B #876', () => {
-  it('空白局收起，已有大厅进度直接进入文明步', () => {
-    expect(isIdleStart(resetStart())).toBe(true);
-    expect(isIdleStart(enterLobby())).toBe(false);
+  it('首页不再嵌开一局，目录里只有一条普通入口', () => {
     const idle = home();
-    expect(idle).toContain('data-testid="home-configure"');
-    expect(idle).not.toContain('data-step="mode"');
-    const lobby = home(encodeStartSearch(enterLobby()));
-    expect(lobby).toContain('data-step="civ"');
-    expect(lobby).toContain('没有连上游戏大厅');
-    expect(lobby).not.toContain('data-testid="home-configure"');
-  });
-
-  it('配置本局展开原来的模式步', async () => {
-    let configured!: ReactTestRenderer;
-    await act(async () => {
-      configured = create(createElement(MemoryRouter, { initialEntries: ['/'] }, createElement(Home)));
-    });
-    await act(async () => {
-      configured.root.findByProps({ 'data-testid': 'home-configure' }).props.onClick();
-    });
-    expect(configured.root.findByProps({ 'data-testid': 'start-step' }).props['data-step']).toBe('mode');
-    expect(configured.root.findAllByProps({ 'data-testid': 'home-configure' })).toHaveLength(0);
+    expect(idle).not.toContain('data-testid="start-game"');
+    expect(idle).not.toContain('data-testid="home-configure"');
+    expect(idle).not.toContain('>已在大厅<');
+    expect(idle).not.toContain('>配置本局<');
+    const catalog = idle.slice(idle.indexOf('data-testid="home-catalog"'));
+    expect(catalog.match(/href="\/start"/g)).toEqual(['href="/start"']);
+    expect(catalog).toContain('>开一局<');
+    expect(catalog).toContain('>开局流程<');
   });
 
   it('五项资料在目录之外，其余已上线页面都能从首页找到', () => {
@@ -50,7 +33,7 @@ describe('首页方向 B #876', () => {
       expect(catalog).not.toContain(`href="${path}"`);
     }
     const pages = PAGES.filter((page) => page.kind === 'page' && page.lane && page.status !== 'planned' && !page.path.includes(':'));
-    expect(pages).toHaveLength(31);
+    expect(pages).toHaveLength(32);
     for (const page of pages) expect(html, page.path).toContain(`href="${page.path}"`);
     expect(html).not.toContain('设计选例');
     expect(html).not.toContain('规划中');

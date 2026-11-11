@@ -70,7 +70,7 @@ test('#676 @1280 坏来源无可执行返回；未知地图候选交Home验证�
 });
 
 async function editorialPath(page: Page, arena = false) {
-  await page.goto('./#/');
+  await page.goto('./#/start');
   if (arena) {
     await page.getByRole('button', { name: /组队随机地图/ }).click();
     await page.getByRole('button', { name: '4v4', exact: true }).click();
@@ -116,7 +116,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await noOverflow(page);
       if (width === 1280) expect((await new AxeBuilder({ page }).include('[data-testid="start-game"]').analyze()).violations).toEqual([]);
-      await page.locator('#home').screenshot({
+      await page.locator('[data-testid="start-game"]').screenshot({
         path: info.outputPath(`editorial666-${arena ? 'arena' : 'arabia'}-${width}.png`),
         style: 'header.topbar, .skip-link { visibility: hidden !important; }',
       });
@@ -130,7 +130,7 @@ for (const width of [360, 375, 390, 1280])
   }
 
 test('#666 @1280 2v2编辑稿保留路位且不声称机制', async ({ page }) => {
-  await page.goto('./#/');
+  await page.goto('./#/start');
   await page.getByRole('button', { name: /组队随机地图/ }).click();
   await page.getByRole('button', { name: '2v2', exact: true }).click();
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
@@ -148,7 +148,7 @@ for (const [name, en, limitation] of [
   ['岛屿', 'Islands', /安全近岸渔场.*水陆混合图.*纯岛图.*敌方距离调整造船/],
 ] as const)
   test(`#666 @1280 ${en}保留编辑来源的开局限制`, async ({ page }) => {
-    await page.goto('./#/');
+    await page.goto('./#/start');
     await page.getByRole('button', { name: /1v1 随机地图/ }).click();
     await page.getByRole('button', { name: `${name} ${en}`, exact: true }).click();
     const guide = page.getByTestId('start-editorial');
@@ -159,7 +159,7 @@ for (const [name, en, limitation] of [
   });
 
 test('#666 @1280 未核对地图与空大厅不借用参考或默认', async ({ page }) => {
-  await page.goto('./#/');
+  await page.goto('./#/start');
   await page.getByTestId('start-lobby').click();
   await expect(page.getByTestId('start-editorial')).toHaveCount(0);
   await expect(page.getByTestId('start-step')).not.toContainText('阿拉伯半岛');
@@ -201,7 +201,7 @@ for (const width of [360, 375, 390, 1280]) {
     page.on('console', (message) => {
       if (message.type() === 'error') errors.push(message.text());
     });
-    await page.goto('./#/');
+    await page.goto('./#/start');
     await page.getByTestId('start-lobby').click();
     const flow = page.getByTestId('start-game');
     await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'civ');
@@ -281,7 +281,7 @@ for (const width of [360, 375, 390, 1280]) {
     if (width === 375) await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'light'));
     const errors: string[] = [];
     collectErrors(page, errors);
-    await page.goto('./#/');
+    await page.goto('./#/start');
     const historyBefore = await page.evaluate(() => history.length);
     await page.getByRole('button', { name: /组队随机地图/ }).click();
     await page.getByRole('button', { name: '4v4', exact: true }).click();
@@ -314,7 +314,7 @@ for (const width of [360, 375, 390, 1280]) {
       expect(stateFromUrl(fresh.url())).toEqual(stateFromUrl(url));
       await noOverflow(fresh);
       await fresh
-        .locator('#home')
+        .locator('[data-testid="start-game"]')
         .screenshot({ path: testInfo.outputPath(`url669-opponent-${width}.png`), style: 'header.topbar, .skip-link { visibility: hidden !important; }' });
       await fresh.getByRole('button', { name: '完成本局', exact: true }).click();
       await expect(fresh.getByTestId('start-summary')).toContainText('法兰克');
@@ -322,7 +322,7 @@ for (const width of [360, 375, 390, 1280]) {
       await expect(fresh.getByTestId('start-summary')).toContainText('法兰克');
       await noOverflow(fresh);
       await fresh
-        .locator('#home')
+        .locator('[data-testid="start-game"]')
         .screenshot({ path: testInfo.outputPath(`url669-summary-${width}.png`), style: 'header.topbar, .skip-link { visibility: hidden !important; }' });
     } finally {
       await freshContext.close();
@@ -467,7 +467,7 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(opponent.getByTestId('start-empty')).toHaveCount(0);
     await noOverflow(page);
     await page
-      .locator('#home')
+      .locator('[data-testid="start-game"]')
       .screenshot({ path: testInfo.outputPath(`context671-opponent-${width}.png`), style: 'header.topbar, .skip-link { visibility: hidden !important; }' });
     await page.getByRole('button', { name: '完成本局', exact: true }).click();
     const summary = page.getByTestId('start-summary');
@@ -490,7 +490,7 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(opponentRow).toContainText('未选择');
     await noOverflow(page);
     await page
-      .locator('#home')
+      .locator('[data-testid="start-game"]')
       .screenshot({ path: testInfo.outputPath(`context671-summary-${width}.png`), style: 'header.topbar, .skip-link { visibility: hidden !important; }' });
     await summary.getByRole('link', { name: '开局流程', exact: true }).click();
     await expect(page.locator('#builds nav[aria-label="对阵相关入口"]').getByRole('link', { name: /蒙古/ })).toHaveAttribute('href', /#\/civ\/Mongols$/);
@@ -503,7 +503,7 @@ for (const width of [360, 375, 390, 1280]) {
 test('#671 @1280 未选文明与竞技场警告、跳过可刷新分享', async ({ page, browser }) => {
   const errors: string[] = [];
   collectErrors(page, errors);
-  await page.goto('./#/');
+  await page.goto('./#/start');
   await page.getByRole('button', { name: /1v1 随机地图/ }).click();
   await page.getByRole('button', { name: /竞技场/ }).click();
   await page.getByTestId('start-skip').click();
@@ -549,7 +549,7 @@ for (const width of [360, 375, 390, 1280])
       await page.addInitScript((t) => localStorage.setItem('aoe2-theme', t), theme);
       const errors: string[] = [];
       collectErrors(page, errors);
-      await page.goto('./#/');
+      await page.goto('./#/start');
       await expect(page.getByTestId('start-step')).toHaveAttribute('data-step', 'mode');
       const menu = page.getByTestId('start-feature-menu'),
         summary = menu.locator('summary');
@@ -589,7 +589,7 @@ for (const width of [360, 375, 390, 1280])
     });
 
 test('#674 @1280 大厅已选文明刷新保留进度', async ({ page }) => {
-  await page.goto('./#/');
+  await page.goto('./#/start');
   await page.getByTestId('start-lobby').click();
   await page.getByRole('button', { name: /法兰克/ }).click();
   await page.reload();

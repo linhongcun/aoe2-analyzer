@@ -50,8 +50,9 @@ describe('#676 完整文明来源与安全返回', () => {
       search = path.slice(path.indexOf('?'));
     expect(path).toMatch(/^\/civ\/Britons\?returnTo=/);
     const target = startReturnPath(search);
-    expect(target).toBe('/' + encodeStartSearch({ ...state, current: 'civ' }));
-    expect(decodeStartSearch(target!.slice(1), maps)).toEqual({ kind: 'valid', state: { ...state, current: 'civ' } });
+    expect(target).toBe('/start' + encodeStartSearch({ ...state, current: 'civ' }));
+    expect(decodeStartSearch(target!.slice('/start'.length), maps)).toEqual({ kind: 'valid', state: { ...state, current: 'civ' } });
+    expect(startReturnPath(outer('/' + encodeStartSearch({ ...state, current: 'civ' })))).toBe(target);
     expect(encodeStartGame(state)).toBe(before);
     expect(startReturnPath(search + '&tab=history&histQuery=test')).toBe(target);
   });
@@ -93,8 +94,9 @@ describe('#676 完整文明来源与安全返回', () => {
     expect(search.length).toBeGreaterThan(START_GAME_LIMIT);
     const target = startReturnPath(search);
     expect(target).not.toBeNull();
-    expect(decodeStartSearch(target!.slice(1)).kind).toBe('needs-maps');
-    expect(decodeStartSearch(target!.slice(1), maps).kind).toBe('invalid');
+    expect(target!.startsWith('/start?')).toBe(true);
+    expect(decodeStartSearch(target!.slice('/start'.length)).kind).toBe('needs-maps');
+    expect(decodeStartSearch(target!.slice('/start'.length), maps).kind).toBe('invalid');
   });
 });
 
