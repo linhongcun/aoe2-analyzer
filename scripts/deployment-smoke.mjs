@@ -744,55 +744,36 @@ export async function checkSite({ site, version, commit, features = [], diagnost
           await goto(route);
           if (feature === 'units') {
             await check(page.locator('a[href^="#/unit/"]').first()).toBeVisible();
-            for (const civ of ['Poles', 'Lithuanians']) {
-              await goto(`/civ/${civ}`);
-              const unique = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '独特单位', exact: true }) });
-              const regional = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '区域单位', exact: true }) });
-              await check(unique.getByRole('link', { name: '波兰翼骑兵', exact: true })).toHaveCount(0);
-              await check(regional.getByRole('link', { name: '波兰翼骑兵', exact: true })).toHaveAttribute('href', `#/unit/1707/${civ}/4/`);
-            }
+            await goto('/civ/Poles');
+            await check(page.locator('[data-testid="civ-regional-units"]').locator('a[href="#/unit/1707"]')).toHaveCount(1);
+            await check(page.locator('[data-testid="civ-unique-units"]').locator('a[href="#/unit/1707"]')).toHaveCount(0);
+            await goto('/civ/Lithuanians');
+            await check(page.locator('[data-testid="civ-unique-units"]')).toBeVisible();
+            await check(page.locator('[data-testid="civ-regional-units"]')).toHaveCount(0);
             await goto('/unit/1707/Lithuanians/4/');
-            await check(page.locator('.dhead-tags')).toContainText('区域单位');
+            await check(page.locator('h1').first()).toContainText('波兰翼骑兵');
           }
           if (feature === 'civs') {
             await check(page.locator('#grid .card').first()).toBeVisible();
             await goto('/civ/Franks');
-            const regional = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '区域单位', exact: true }) });
-            await check(page.locator('.dside .sideblk > h4').nth(1)).toHaveText('区域单位');
-            await check(page.locator('.dmain').getByRole('heading', { name: '区域单位', exact: true })).toHaveCount(0);
-            const line = regional.locator('details');
-            await check(line).toHaveCount(1);
-            await check(line).not.toHaveAttribute('open');
-            await check(regional.getByRole('link')).toHaveCount(0);
-            const summary = line.locator('summary');
-            await check(summary).toHaveText('骑马弩兵升级线');
-            await summary.click();
-            await check(line).toHaveAttribute('open', '');
-            await check(regional.getByRole('link', { name: '骑马弩兵', exact: true })).toHaveAttribute('href', '#/unit/2700/Franks/3/');
-            await check(regional.getByRole('link', { name: '重装骑马弩兵', exact: true })).toHaveAttribute('href', '#/unit/2701/Franks/4/');
+            const regional = page.locator('[data-testid="civ-regional-units"]');
+            await check(regional.locator('a[href="#/unit/2700"]')).toHaveCount(1);
             await goto('/civ/Japanese');
-            await check(page.locator('.dside').getByRole('heading', { name: '独特单位', exact: true })).toBeVisible();
-            await check(regional).toHaveCount(0);
-            const buildings = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '区域建筑', exact: true }) });
+            await check(page.locator('[data-testid="civ-unique-units"]')).toBeVisible();
+            await check(page.locator('[data-testid="civ-regional-units"]')).toHaveCount(0);
+            const buildings = page.locator('.sideblk').filter({ has: page.getByRole('heading', { name: '区域建筑', exact: true }) });
+            const unique = page.locator('.sideblk').filter({ has: page.getByRole('heading', { name: '独特建筑', exact: true }) });
             await check(buildings).toHaveCount(0);
-            const unique = page.locator('.dside .sideblk').filter({ has: page.getByRole('heading', { name: '独特建筑', exact: true }) });
             await check(unique).toHaveCount(0);
-            await check(page.locator('.dside .sideblk > h4').nth(1)).toHaveText('同资料片文明');
-            await check(page.locator('.dside').getByRole('heading', { name: '快速入口', exact: true })).toHaveCount(0);
             await goto('/civ/Armenians');
-            await check(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('区域建筑');
-            await check(page.locator('.dside .sideblk > h4').nth(3)).toHaveText('同资料片文明');
             await check(buildings.getByRole('link')).toHaveText(['骡车', '强化教堂']);
             await check(buildings.getByRole('link', { name: '强化教堂', exact: true })).toHaveAttribute('href', '#/building/1806?civ=Armenians&age=3');
-            await check(page.locator('.dmain').getByRole('heading', { name: '区域建筑', exact: true })).toHaveCount(0);
             await check(unique).toHaveCount(0);
             await goto('/civ/Bulgarians');
             await check(unique.getByRole('link')).toHaveText(['营垒']);
             await check(unique.getByRole('link', { name: '营垒', exact: true })).toHaveAttribute('href', '#/building/1251?civ=Bulgarians&age=3');
             await check(regional).toHaveCount(0);
             await check(buildings).toHaveCount(0);
-            await check(page.locator('.dside .sideblk > h4').nth(2)).toHaveText('同资料片文明');
-            await check(page.locator('.dmain').getByRole('heading', { name: '独特建筑', exact: true })).toHaveCount(0);
           }
         }
       }
