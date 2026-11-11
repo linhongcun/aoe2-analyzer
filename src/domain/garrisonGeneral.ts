@@ -9,6 +9,7 @@ import { civStatus } from './simulator';
 import { productionTechAge } from './production';
 import { buildingAge as getGarrisonBuildingAge, trainingUnitAge } from './availabilityAge';
 import { AGE_TECH_IDS, FEMALE_VILLAGER_ID, TC_BY_AGE, VILLAGER_UNIT_ID } from './gameIds';
+import { toggleSelected } from './prereq';
 
 export type GarrisonEntry = 'enter' | 'created' | 'deposit';
 export interface GeneralGarrisonRow {
@@ -394,30 +395,7 @@ export function toggleGeneralGarrisonTech(
   const available = new Set(getGarrisonTechs(ctx, b, config, data).map((t) => t.id));
   const free = new Set(getFreeGarrisonTechs(ctx, b, config, data));
   const selected = new Set([...config.techs, ...free]);
-  if (!available.has(id) || free.has(id)) return unique([...selected]);
-  if (selected.has(id)) {
-    selected.delete(id);
-    let changed = true;
-    while (changed) {
-      changed = false;
-      for (const tid of selected) {
-        const pre = ctx.core.techById[tid]?.pre;
-        if (pre && available.has(pre) && !selected.has(pre)) {
-          selected.delete(tid);
-          changed = true;
-        }
-      }
-    }
-  } else {
-    const add = (tid: number) => {
-      if (selected.has(tid)) return;
-      selected.add(tid);
-      const pre = ctx.core.techById[tid]?.pre;
-      if (pre && available.has(pre)) add(pre);
-    };
-    add(id);
-  }
-  return unique([...selected]);
+  return unique([...toggleSelected(id, selected, ctx.core.techById, { available, free })]);
 }
 
 /** Unit contribution is not target damage. It uses the current pinned pierce/reload/firepower fields. */

@@ -10,6 +10,7 @@ import { productionTechAge, productionTechs } from './production';
 import { GARRISON_TECH_DATA, freeGarrisonTechs } from './garrisonTechs';
 import { buildingAge as constructionBuildingAge } from './availabilityAge';
 import { AGE_TECH_IDS } from './gameIds';
+import { toggleSelected } from './prereq';
 
 export { CONSTRUCTION_DATA } from '../data/construction';
 export const CONSTRUCTION_LIMIT = 200;
@@ -106,22 +107,13 @@ export function effectiveConstructionTechs(ctx: ConstructionContext, config: Con
 }
 export function toggleConstructionTech(ctx: ConstructionContext, config: ConstructionConfig, id: number) {
   const selected = effectiveConstructionTechs(ctx, config);
-  if (freeConstructionTechs(ctx, config).has(id)) return [...selected];
-  if (selected.has(id)) {
-    selected.delete(id);
-    let changed = true;
-    while (changed) {
-      changed = false;
-      for (const tid of selected) {
-        const pre = ctx.core.techById[tid]?.pre;
-        if (pre && !selected.has(pre)) {
-          selected.delete(tid);
-          changed = true;
-        }
-      }
-    }
-  } else selected.add(id);
-  return [...effectiveConstructionTechs(ctx, { ...config, techs: [...selected] })];
+  const next = toggleSelected(id, selected, ctx.core.techById, {
+    available: new Set(legalTechs(ctx, config).map((t) => t.id)),
+    free: freeConstructionTechs(ctx, config),
+    allowUnavailable: true,
+    removeMissing: 'any',
+  });
+  return [...effectiveConstructionTechs(ctx, { ...config, techs: [...next] })];
 }
 /** Published ideal simultaneous-arrival rule; not an engine or pathfinding simulation. */
 export function idealConstructionSeconds(single: number, builders: number) {
