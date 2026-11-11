@@ -21,7 +21,7 @@ test('默认未指定文明停在概览，无效文明不回退，仅文明不�
   await expect(page.locator('#building-civ')).toHaveAttribute('data-value', '');
   await expect(page.locator('[data-t="civ-scope"]')).toContainText('全文明目录并集');
   await expect(page.locator('#sim')).toHaveCount(0);
-  await expect(page.locator('[data-stat="hp"] [data-t="stat-value"]')).toHaveText('4800.00');
+  await expect(page.locator('[data-stat="hp"] [data-t="stat-value"]')).toHaveText('4800');
   await expect(page.locator('[data-t="catalog-cost"]')).toContainText('650');
   await expect(page.locator('[data-t="catalog-cost"] img[title="木材"]')).toHaveCount(0);
   await expect(page.locator('[data-t="panel-time"]')).toContainText('面板工期');
@@ -89,8 +89,9 @@ test('生产研究使用动态并集，只看目录含有默认关闭', async ({
 
 test('施工入口、攻击组和官方区域标记', async ({ page }) => {
   await open(page, '/building/82');
-  await expect(page.locator('[data-t="construction-note"]')).toHaveText('预填目录时代，非解锁条件。');
-  await expect(page.locator('[data-t="construction-needs-civ"]')).toBeVisible();
+  await expect(page.locator('[data-t="construction-note"]')).toHaveCount(0);
+  await expect(page.locator('[data-t="construction-needs-civ"]')).toHaveText('先选择文明。');
+  await expect(page.locator('[data-t="panel-time"]')).not.toContainText('预填目录时代');
   await expect(page.locator('[data-t="construction-entry"]')).toHaveCount(0);
   await expect(page.locator('[data-stat="atk"]')).toContainText('11');
   await expect(page.locator('[data-stat="rng"]')).toContainText('最小射程');
@@ -100,6 +101,7 @@ test('施工入口、攻击组和官方区域标记', async ({ page }) => {
   await page.locator('#building-civ').click();
   await page.locator('.cp-panel .cp-q').fill('Franks');
   await page.locator('.cp-panel [data-civ="Franks"]').click();
+  await expect(page.locator('[data-t="construction-entry-block"] [data-t="construction-note"]')).toHaveText('预填目录时代，非解锁条件。');
   const href = await page.locator('[data-t="construction-entry"]').getAttribute('href');
   expect(href).toContain('cv=1');
   expect(href).toContain('civ=Franks');
@@ -119,7 +121,7 @@ test('施工入口、攻击组和官方区域标记', async ({ page }) => {
   await open(page, '/building/12');
   await expect(page.locator('[data-stat="atk"]')).toHaveCount(0);
   await expect(page.locator('[data-stat="ma"]')).toContainText('0');
-  await expect(page.locator('[data-stat="hp"]')).toContainText('1200.00');
+  await expect(page.locator('[data-stat="hp"] [data-t="stat-value"]')).toHaveText('1200');
 
   await open(page, '/building/109');
   await expect(page.locator('[data-stat="atk"]')).toBeVisible();

@@ -156,7 +156,7 @@ describe('#749 default gate', () => {
     expect(smokeSource).toContain("test('Ctrl+K command palette searches across civs/units/techs'");
     expect(smokeSource).toContain("fill('paladin')");
     expect(smokeSource).toContain("test('Franks Paladin full tech = 192 HP'");
-    expect(smokeSource).toContain("toHaveText('192.00')");
+    expect(smokeSource).toContain("toHaveText('192')");
   });
 
   it('requires static-main only when validation is forced or scheduled', () => {

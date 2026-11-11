@@ -103,6 +103,13 @@ export default function BuildingDetail() {
   const construction = buildingConstructionEntry(b.id, b.age, civ);
   const showSiege = siegeBuildingEntryVerified(b, core.unitById[SIEGE_DEFAULT_UNIT_ID]);
   const attack = buildingHasAttack(b);
+  const workspaceStatus = host
+    ? civ
+      ? '查看科技效果，或配置驻军预览。'
+      : '查看科技效果，或配置驻军预览。未指定文明时需先选择文明。'
+    : civ
+      ? '查看科技效果。'
+      : '查看科技效果。未指定文明时需先选择文明。';
   const go = (patch: Record<string, string | null>) => nav({ pathname: loc.pathname, search: patchBuildingSearch(loc.search, patch) });
   const setCiv = (en: string) => go({ civ: en || null });
   const scrollTo = (target: string) => {
@@ -217,7 +224,6 @@ export default function BuildingDetail() {
         </div>
         <div className="bd-cost-col">
           <h2>目录造价</h2>
-          <p className="bd-kicker">目录造价。</p>
           <div className="bd-cost" data-t="catalog-cost">
             <CostView c={b.cost} />
           </div>
@@ -231,17 +237,19 @@ export default function BuildingDetail() {
             </div>
             <p className="bd-kicker">目录记录的面板工期，不是多人施工里的村民工时。</p>
           </div>
-          <p className="bd-kicker" data-t="construction-note">
-            预填目录时代，非解锁条件。
-          </p>
           <div className="bd-tools">
             {construction ? (
-              <Link className="bd-btn" to={construction} data-t="construction-entry">
-                比较多人施工
-              </Link>
+              <div data-t="construction-entry-block">
+                <Link className="bd-btn" to={construction} data-t="construction-entry">
+                  比较多人施工
+                </Link>
+                <p className="bd-kicker" data-t="construction-note">
+                  预填目录时代，非解锁条件。
+                </p>
+              </div>
             ) : (
               <p className="bd-kicker" data-t="construction-needs-civ">
-                先选择文明。入口会预填这座建筑和{ageName}，不会补上默认文明。
+                先选择文明。
               </p>
             )}
             {showSiege && (
@@ -255,7 +263,7 @@ export default function BuildingDetail() {
 
       <section className="bd-entry" id="building-workspace" aria-label="工作区">
         <h2>工作区</h2>
-        <p>{host ? '查看科技效果，或配置驻军预览。未指定文明时需先选择文明。' : '查看科技效果。未指定文明时需先选择文明。'}</p>
+        <p data-t="workspace-status">{workspaceStatus}</p>
         <div className="bd-tools">
           {view.surface === 'overview' ? (
             <button type="button" className="bd-btn" onClick={() => go({ tab: 'sim' })}>
@@ -312,7 +320,7 @@ export default function BuildingDetail() {
             {b.pop ? <HousingGuideLink /> : null}
             <FoodAmount buildingId={b.id} />
             <MarketFees buildingId={b.id} />
-            <DetailSource note="目录基础值，未计文明加成与科技" />
+            <DetailSource note={null} />
           </section>
           <section className="bd-section" id="building-civs" aria-label="相关">
             <h2>相关</h2>
