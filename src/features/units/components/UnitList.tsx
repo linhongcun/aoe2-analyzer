@@ -15,6 +15,7 @@ import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
 import { Loading, SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
+import { formatCatalogStat } from '../catalogStat';
 import { projectUnitDisplayAges } from '../displayAge';
 import './unit-list.css';
 
@@ -144,7 +145,7 @@ export default function UnitList() {
             )}
           </div>
         </div>
-        <p className="unit-basis">生命、攻击、射程和造价是目录基础值，不是满科技或折后结果。</p>
+        <p className="unit-basis">生命、攻击、近战护甲、远程护甲、射程和造价是目录基础值，不是满科技或折后结果。</p>
         <div ref={panel} id={panelId} className="catalog-filter-panel unit-filters-secondary" data-open={filtersOpen ? 'true' : 'false'}>
           <div className="unit-filter-row">
             <div className="unit-filter-label">时代</div>
@@ -228,6 +229,8 @@ export default function UnitList() {
             <span>造价</span>
             <span className="unit-head-stat">生命</span>
             <span className="unit-head-stat">攻击</span>
+            <span className="unit-head-stat">近战护甲</span>
+            <span className="unit-head-stat">远程护甲</span>
             <span className="unit-head-stat">射程</span>
             <span />
           </div>
@@ -263,6 +266,14 @@ export default function UnitList() {
                 <div data-stat="atk">
                   <dt className="stat-label">攻击</dt>
                   <dd className="num nw">{u.atk}</dd>
+                </div>
+                <div data-stat="ma">
+                  <dt className="stat-label">近战护甲</dt>
+                  <dd className="num nw">{formatCatalogStat(u.ma)}</dd>
+                </div>
+                <div data-stat="pa">
+                  <dt className="stat-label">远程护甲</dt>
+                  <dd className="num nw">{formatCatalogStat(u.pa)}</dd>
                 </div>
                 <div data-stat="rng">
                   <dt className="stat-label">射程</dt>

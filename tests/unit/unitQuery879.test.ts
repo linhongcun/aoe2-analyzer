@@ -49,6 +49,8 @@ describe('#879 单位目录搜索与系列口径', () => {
     const shown = projectUnitDisplayAges(units, 'Mongols').find((unit) => unit.id === 11)!;
     expect(shown.hp).toBe(byId[11]!.hp);
     expect(shown.atk).toBe(byId[11]!.atk);
+    expect(shown.ma).toBe(byId[11]!.ma);
+    expect(shown.pa).toBe(byId[11]!.pa);
     expect(shown.rng).toBe(byId[11]!.rng);
     expect(shown.cost).toEqual(byId[11]!.cost);
   });
