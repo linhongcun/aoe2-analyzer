@@ -22,7 +22,7 @@ test('#879 1280：搜索、系列、文明上下文与目录基础值', async ({
   });
   await page.goto('./#/units');
   await expect(page.locator('#ucnt')).toHaveText('163 / 163');
-  await expect(page.getByText('生命、攻击、射程和造价是目录基础值，不是满科技或折后结果。')).toBeVisible();
+  await expect(page.getByText('生命、攻击、近战护甲、远程护甲、射程和造价是目录基础值，不是满科技或折后结果。')).toBeVisible();
   await expect(page.locator('#units .unit-help')).not.toHaveAttribute('open');
   await expect(page.locator('.unit-head')).toBeVisible();
   await expect(page.locator('#udlc')).toBeVisible();
