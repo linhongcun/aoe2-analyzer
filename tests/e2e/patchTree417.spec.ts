@@ -29,8 +29,7 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/patches/185872?civ=Saracens');
       if (!(await summary.evaluate((el) => (el as HTMLDetailsElement).open))) await summary.locator('summary').click();
       await expect(summary.locator('h4')).toHaveCount(1);
-      await expect(summary).toContainText('改动前 已开放');
-      await expect(summary).toContainText('改动后 未开放');
+      await expect(summary).toContainText(`已开放 ${String.fromCodePoint(0x2192)} 未开放（移除）`);
       const tech = summary.getByRole('link', { name: '脚踏起重机', exact: true });
       await tech.focus();
       await expect(tech).toBeFocused();

@@ -17,7 +17,7 @@ const LIST_HEADINGS = [
 ] as const;
 const PLAIN_HEADINGS = [
   ['/maps', '地图与开局', { 1280: 170, 360: 170 }],
-  ['/patches', '版本补丁', { 1280: 170, 360: 170 }],
+  ['/patches', '更新历史', { 1280: 170, 360: 170 }],
   ['/about-data', '关于数据', { 1280: 138, 360: 136 }],
 ] as const;
 

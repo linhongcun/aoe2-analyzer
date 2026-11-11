@@ -99,3 +99,11 @@ export function archivedTarget(archives: readonly PatchArchive[], target: Histor
 export function historyCoverage(archive: PatchArchive) {
   return archive.coverage === 'balance-section' ? '文明平衡栏目' : archive.coverage;
 }
+
+/** Catalog name wins. Otherwise only an explicit archivedTargets row is an identity. */
+export function resolveHistoryIdentity(archives: readonly PatchArchive[], target: HistoryTarget, catalogName?: string) {
+  if (catalogName) return { name: catalogName, en: undefined as string | undefined, archived: false };
+  const archived = archivedTarget(archives, target);
+  if (!archived) return null;
+  return { name: archived.targetNameZh, en: archived.nameEn, archived: true };
+}

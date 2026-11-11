@@ -10,29 +10,59 @@
 .patches a {
   display: inline-flex;
   align-items: center;
+  gap: 0.35rem;
   min-width: 44px;
   max-width: 100%;
 }
+.patches h1,
+.patches h2,
+.patches h3,
+.patches p {
+  overflow-wrap: anywhere;
+}
+.patch-eyebrow {
+  margin: 0;
+}
+.patches-read > h1,
+.patches-read > p,
+.patch-eyebrow {
+  margin-block: 0.15rem;
+}
+.patches-read > h1 {
+  font-size: 1.5em;
+  line-height: 1.25;
+}
 .patch-version,
-.patch-civs,
-.patch-entry {
+.patch-entry,
+.patch-search,
+.patch-filters,
+.patch-tree-summary {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: 1rem;
-  margin-block: 1rem;
+  padding: 0.75rem 1rem;
+  margin-block: 0.75rem;
 }
 .patch-version > a {
   display: block;
 }
-.patch-count {
-  display: inline-block;
-  margin-right: 1rem;
-  white-space: nowrap;
+.patches-read .patch-entry {
+  margin-block: 0.5rem;
+  padding: 0.65rem 0.85rem;
 }
-.patch-layout {
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  gap: 1.5rem;
+.patches-read .patch-entry h3,
+.patches-read .patch-entry p {
+  margin-block: 0.25rem;
+}
+.patch-pin {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  margin-right: 0.4rem;
+  padding: 0 0.45rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  background: var(--color-bg);
 }
 .patches input:not([type='checkbox']) {
   width: 100%;
@@ -40,47 +70,92 @@
   min-height: 44px;
 }
 .patches fieldset {
-  margin-block: 1rem;
+  margin-block: 0.75rem;
   border: 1px solid var(--color-border);
 }
-.patches fieldset label {
+.patches summary {
   display: flex;
   align-items: center;
-  min-height: 44px;
-  gap: 0.5rem;
+  cursor: pointer;
 }
 .patch-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
 }
+.patch-chips button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.patch-chips button[aria-pressed='true'] {
+  outline: 2px solid var(--color-text);
+  outline-offset: 1px;
+}
+.patch-search,
 .patch-combo {
   position: relative;
 }
+.patch-search [role='listbox'],
 .patch-combo [role='listbox'] {
-  max-height: 240px;
-  overflow-y: auto;
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  max-height: 280px;
+  overflow: auto;
   border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
 }
+.patch-search [role='option'],
 .patch-combo [role='option'] {
-  display: block;
+  display: flex;
   width: 100%;
   text-align: left;
+  gap: 0.4rem;
+  align-items: center;
 }
+.patch-search .active,
 .patch-combo .active {
   outline: 2px solid var(--color-text);
   outline-offset: -2px;
 }
 .patch-kind {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.4rem;
   color: var(--color-muted);
   font-size: 12px;
 }
-.patch-entry h4 {
-  margin-block: 0.5rem;
+.patch-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 1.5rem;
+}
+.patch-mark-buff {
+  color: var(--color-good);
+}
+.patch-mark-nerf {
+  color: var(--color-bad);
+}
+.patch-mark-fix,
+.patch-mark-adjust,
+.patch-mark-new {
+  color: var(--color-text);
+}
+.patch-entry h3 {
+  margin-block: 0.35rem;
 }
 .patch-values {
   display: flex;
@@ -89,72 +164,36 @@
   gap: 0.75rem;
   font-variant-numeric: tabular-nums;
 }
-.patch-values b {
+.patch-values > span {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
   min-width: 0;
 }
 .patch-values .num,
-.patch-values .nw {
+.patch-values .nw,
+.patch-version .num,
+.patches .nw {
   white-space: nowrap;
 }
-.patch-layout > div,
 .patch-entry,
 .patch-version,
-.patch-values > span {
+.patch-values,
+.patch-tree-summary {
   min-width: 0;
 }
 .patch-original p {
   overflow-wrap: anywhere;
 }
-.patch-tree-summary a {
+.patch-tree-summary a,
+.patch-tree-summary summary {
   min-width: 44px;
 }
-.patch-values > span {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-.patch-mobile-filter {
-  display: none;
-}
-.patch-filter-sheet {
-  color: var(--color-text);
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  max-height: 85vh;
-  overflow-y: auto;
-  box-sizing: border-box;
-}
 @media (max-width: 699px) {
-  .patch-layout {
-    display: block;
-  }
-  .patch-desktop-filter {
-    display: none;
-  }
-  .patch-mobile-filter {
-    display: block;
-    width: 100%;
-  }
-  .patch-filter-sheet {
-    margin: auto 0 0;
-    width: 100%;
-    max-width: 100%;
-  }
-}
-.patch-buff .patch-kind {
-  color: var(--color-good);
-}
-.patch-nerf .patch-kind {
-  color: var(--color-bad);
-}
-.patch-new .patch-kind {
-  color: var(--color-link);
-}
-/* issue 774（修 issue 771 回归）：版本补丁页「所有链接 ≥44px 热区」规则不应撑高共享面包屑；
-   ≤600px 的 44×44 触控热区仍由 editorial.css 的 nav.crumbs a 规则恢复。 */
-@media (min-width: 601px) {
-  .patches nav.crumbs a {
-    min-height: 0;
-    padding-inline: 0;
+  .patch-version,
+  .patch-entry,
+  .patch-filters,
+  .patch-tree-summary {
+    padding: 0.65rem;
   }
 }

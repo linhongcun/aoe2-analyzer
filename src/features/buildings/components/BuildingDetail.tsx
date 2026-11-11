@@ -23,9 +23,8 @@ import { CivPicker } from '../../../shared/ui/CivPicker';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { Icon, type IconName } from '../../../shared/ui/Icon';
 import { Breadcrumbs } from '../../../shared/ui/layout';
-import { PatchHistory } from '../../../shared/ui/PatchHistory';
+import { HistoricalEntityDetail, PatchHistory } from '../../../shared/ui/PatchHistory';
 import { Linked, Loading } from '../../../shared/ui/widgets';
-import BuildingList from './BuildingList';
 import { BuildingCatalog } from './BuildingCatalog';
 import BuildingSimulator from './BuildingSimulator';
 import { FoodAmount } from './FoodAmount';
@@ -93,7 +92,7 @@ export default function BuildingDetail() {
         <Loading />
       </section>
     );
-  if (!b) return <BuildingList />;
+  if (!b) return <HistoricalEntityDetail target={{ targetType: 'building', targetId: id }} />;
 
   const units = b.units.map((unitId) => core.unitById[unitId]).filter((unit): unit is Unit => !!unit);
   const produced = productionEntries(units, core.fam);

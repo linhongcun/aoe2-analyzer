@@ -40,8 +40,8 @@ function ExampleIcons({ paths, size }: { paths: readonly string[]; size: number 
 export default function Home() {
   const { search } = useLocation();
   if (hasLegacyStartQuery(search)) return <Navigate to={{ pathname: '/start', search }} replace />;
-  // 顶栏百科里已有首页专用卡的五项不再进下方目录。地图回到顶栏后仍留在目录，首页没有地图专用卡。
-  const featured = new Set(WIKI.filter((section) => !section.hideNav && section.key !== 'maps').map((section) => section.key));
+  // 顶栏百科里已有首页专用卡的五项不再进下方目录。地图和更新历史没有首页专用卡，仍留在资料目录。
+  const featured = new Set(WIKI.filter((section) => !section.hideNav && section.key !== 'maps' && section.key !== 'patches').map((section) => section.key));
   const catalog = HOME_GROUPS.map((group) => ({
     ...group,
     sections: group.sections.filter((section) => !featured.has(section.key)),

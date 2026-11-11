@@ -9,21 +9,20 @@ for (const width of [360, 375, 390, 1280]) {
     });
     await page.goto('./#/patches');
     await page.getByRole('link', { name: /DE Update 185872/ }).click();
+    const filters = page.locator('.patch-filters');
+    if (!(await filters.evaluate((el) => (el as HTMLDetailsElement).open))) await filters.locator('summary').click();
     const combo = page.getByRole('combobox', { name: '搜索文明' });
     await combo.fill('Franks');
     await combo.press('Enter');
     await combo.press('Escape');
     await expect(page).toHaveURL(/civ=Franks/);
     const civs = await page.locator('.patch-entry').evaluateAll((els) => els.map((e) => e.getAttribute('data-civs')));
-    expect(civs.every((c) => !c || c === 'Franks')).toBe(true);
+    expect(civs.every((c) => !c || c.split(',').includes('Franks'))).toBe(true);
     await page.getByRole('link', { name: '掷斧兵', exact: true }).click();
     await expect(page).toHaveURL(/unit\/281/);
     await page.goBack();
     await expect(page.getByRole('button', { name: '移除法兰克' })).toBeVisible();
-    if (width < 700) await page.getByRole('button', { name: /筛选 ·/ }).click();
-    const filters = width < 700 ? page.getByRole('dialog') : page.getByRole('complementary', { name: '筛选改动' });
-    await filters.getByRole('checkbox', { name: '削弱', exact: true }).check();
-    if (width < 700) await filters.getByRole('button', { name: /显示 .* 条/ }).click();
+    await filters.getByRole('button', { name: '削弱', exact: true }).click();
     await expect(page.locator('.patch-buff')).toHaveCount(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath(`patches-${width}.png`), fullPage: true });
@@ -35,8 +34,8 @@ for (const width of [360, 375, 390, 1280]) {
     await page.goto('./#/patches/unknown');
     await expect(page.getByRole('heading', { name: '找不到版本 unknown' })).toBeVisible();
     await page.goto('./#/about-data');
-    await page.getByRole('link', { name: '查看版本补丁' }).click();
-    await expect(page.getByRole('heading', { name: '版本补丁', exact: true })).toBeVisible();
+    await page.getByRole('link', { name: '查看更新历史' }).click();
+    await expect(page.getByRole('heading', { name: '更新历史', exact: true })).toBeVisible();
     expect(errors).toEqual([]);
   });
 }
