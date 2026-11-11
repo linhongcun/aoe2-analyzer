@@ -79,6 +79,7 @@
     "tests/e2e/editorial6.spec.ts": 73897,
     "tests/e2e/elevation734.spec.ts": 16500,
     "tests/e2e/entityHistory435.spec.ts": 31634,
+    "tests/e2e/entityHistory950.spec.ts": 6000,
     "tests/e2e/entry280.spec.ts": 6721,
     "tests/e2e/favicon30.spec.ts": 1012,
     "tests/e2e/feedbackTap295.spec.ts": 14785,

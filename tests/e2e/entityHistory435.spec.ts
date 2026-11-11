@@ -4,6 +4,11 @@ import AxeBuilder from '@axe-core/playwright';
 const history = (page: Page) => page.getByTestId('entity-history');
 const version = (page: Page, id: string) => history(page).locator(`[data-history-version="${id}"]`);
 
+async function openFilters(page: Page) {
+  const details = history(page).locator('details').filter({ hasText: '筛选本页记录' });
+  if ((await details.getAttribute('open')) === null) await details.locator('summary').click();
+}
+
 async function openHistory(page: Page, route: string) {
   await page.goto(`./#${route}`);
   await expect(history(page).locator('[data-history-entry]').first()).toBeVisible();
@@ -30,9 +35,10 @@ test('#435 弩手跨版本升级费用可追溯，历史筛选可分享并恢复
   expect(sourceArchive).not.toHaveProperty('date');
   expect(sourceArchive.releaseDate).toBe('2022-08-29');
   expect(sourceArchive.publishedAt).toBe('2022-08-30');
-  await expect(page.getByRole('tab', { name: '更新历史', exact: true })).toHaveAttribute('aria-selected', 'true');
-  await expect(version(page, '66692')).toContainText(/官方发行日（公告当地日期）：\s*2022-08-29/);
-  await expect(version(page, '66692')).toContainText(/公告公开（北京时间）：\s*2022-08-30/);
+  await expect(page.locator('#unit-history')).toHaveAttribute('open', '');
+  await expect(history(page).getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(version(page, '66692')).toContainText(/官方发行日（公告当地日期）\s*2022-08-29/);
+  await expect(version(page, '66692')).toContainText(/公告公开（北京时间）\s*2022-08-30/);
   await expect(version(page, '66692')).toContainText(/125\s*食物/);
   await expect(version(page, '66692')).toContainText(/175\s*食物/);
   await expect(version(page, '66692')).toContainText('升级');
@@ -43,6 +49,7 @@ test('#435 弩手跨版本升级费用可追溯，历史筛选可分享并恢复
   const english = version(page, '66692').locator('details').first();
   await english.locator('summary').click();
   await expect(english).toContainText('Crossbowman');
+  await openFilters(page);
   await page.getByLabel('开始日期', { exact: true }).fill('2022-08-29');
   await page.getByLabel('结束日期', { exact: true }).fill('2022-08-29');
   await expect(version(page, '66692')).toBeVisible();
@@ -84,6 +91,7 @@ test('#435 古拉姆普通和精锐历史分开，文明与科技都有来源记
   await expect(version(page, '81058')).toContainText('新增');
   await expect(version(page, '81058')).toContainText(/护甲/);
   await openHistory(page, '/unit/74?tab=history');
+  await openFilters(page);
   await page.getByRole('combobox', { name: '影响关系', exact: true }).selectOption('related');
   await expect(history(page)).toContainText('软甲');
   await expect(history(page)).toContainText('关联影响');
@@ -255,6 +263,7 @@ for (const width of [360, 375, 390, 1280])
       }
       const violations = (await new AxeBuilder({ page }).include('[data-testid="entity-history"]').withTags(['wcag2a', 'wcag2aa']).analyze()).violations;
       expect(violations).toEqual([]);
+      await openFilters(page);
       await page.getByLabel('搜索历史', { exact: true }).focus();
       await expect(page.getByLabel('搜索历史', { exact: true })).toBeFocused();
       expect(errors).toEqual([]);

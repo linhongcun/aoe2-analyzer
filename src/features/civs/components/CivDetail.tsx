@@ -274,7 +274,7 @@ export default function CivDetail() {
           <CivHistory civ={c.en} />
         </Fold>
         <Fold key={`${c.en}-patches-${historyOpen ? 'open' : 'shut'}`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
-          <PatchHistory target={{ targetType: 'civ', targetId: c.en, targetNameZh: c.zh }} />
+          <PatchHistory hostedHeading target={{ targetType: 'civ', targetId: c.en, targetNameZh: c.zh }} />
         </Fold>
         <DetailSource note="加成、单位与科技来自当前数据目录" />
       </section>

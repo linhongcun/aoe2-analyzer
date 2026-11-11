@@ -4,6 +4,11 @@ import AxeBuilder from '@axe-core/playwright';
 const history = (page: Page) => page.getByTestId('entity-history');
 const records = (page: Page) => history(page).locator('[data-history-entry]');
 
+async function openFilters(page: Page) {
+  const details = history(page).locator('details').filter({ hasText: '筛选本页记录' });
+  if ((await details.getAttribute('open')) === null) await details.locator('summary').click();
+}
+
 function recordErrors(page: Page) {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
@@ -33,8 +38,9 @@ test('#437 建筑历史：城楼从概览切换可查真实机制改动及当时
   ]) {
     const record = history(page).locator(`[data-history-entry="${id}"]`);
     await expect(record).toContainText(text!);
-    await expect(record).toContainText('直接改动');
-    await expect(record).toContainText('适用文明：西西里');
+    await expect(record).toContainText('档案标记 加强');
+    await expect(record).not.toContainText('关联影响');
+    await expect(record).toContainText('适用：西西里');
     await expect(record.getByRole('link', { name: '查看官方来源', exact: true })).toHaveAttribute(
       'href',
       'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-81058/',
@@ -53,10 +59,11 @@ test('#437 建筑历史：市场直接与关联筛选取交集，筛选无结果
   await openHistory(page, 84);
   await expect(history(page)).toContainText('125283');
   await expect(history(page)).toContainText('66692');
+  await openFilters(page);
   await page.getByRole('combobox', { name: '影响关系', exact: true }).selectOption('related');
   await expect(history(page).locator('[data-history-entry="125283-010-013"]')).toHaveCount(0);
   await expect(history(page).locator('[data-history-entry="66692-009-021"]')).toContainText('研究行会后；萨拉森不适用');
-  await expect(history(page).locator('[data-history-entry="66692-029-045"]')).toContainText('适用文明：萨拉森');
+  await expect(history(page).locator('[data-history-entry="66692-029-045"]')).toContainText('适用：萨拉森');
   await page.getByLabel('搜索历史', { exact: true }).fill('行会');
   await expect(records(page)).toHaveCount(1);
   await expect(records(page).first()).toContainText('关联影响');
@@ -121,14 +128,12 @@ test('#437 建筑历史：复制真实静态链接后新上下文打开与刷新
 test('#437 建筑历史：版本条目与关联档案都直接进入建筑历史页签', async ({ page }) => {
   const errors = recordErrors(page);
   await page.goto('./#/patches/81058');
-  const link = page.getByRole('link', { name: '查看城楼更新历史', exact: true }).first();
-  await expect(link).toHaveAttribute('href', '#/building/1665?tab=history');
+  const link = page.locator('a[href="#/building/1665?tab=history"]').first();
+  await expect(link).toBeVisible();
   await link.click();
   await expect(records(page)).toHaveCount(3);
   await page.goto('./#/tech/379?tab=history');
-  const related = history(page).locator('[data-history-entry="81058-115"] .history-related').getByRole('link', { name: '围墙', exact: true });
-  await expect(related).toHaveAttribute('href', '#/tech/379?tab=history');
-  const building = history(page).locator('[data-history-entry="81058-115"] h4').getByRole('link', { name: '城楼', exact: true });
+  const building = history(page).locator('[data-history-entry="81058-115"] .history-related-name').getByRole('link', { name: '城楼', exact: true });
   await expect(building).toHaveAttribute('href', '#/building/1665?tab=history');
   await building.click();
   await expect(page).toHaveURL(/building\/1665\?tab=history/);
@@ -152,9 +157,11 @@ for (const width of [360, 375, 390, 1280])
       for (const id of [1665, 84]) {
         await openHistory(page, id);
         await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-        await history(page).locator('details').filter({ hasText: '查看官方原文摘录' }).first().locator('summary').click();
+        await history(page).locator('details').filter({ hasText: '官方原文' }).first().locator('summary').click();
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        await openFilters(page);
         for (const control of await history(page).locator('input, select, button').all()) {
+          if (!(await control.isVisible())) continue;
           const box = await control.boundingBox();
           expect(box!.height).toBeGreaterThanOrEqual(44);
         }
