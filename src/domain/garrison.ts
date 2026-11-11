@@ -82,7 +82,7 @@ export function toggleGarrisonTech(ctx: GarrisonContext, b: Building, config: Ga
   const available = new Set(garrisonTechs(ctx, b, config.civ, config.age).map((t) => t.id));
   const free = new Set(garrisonFreeTechs(ctx, b, config));
   const selected = new Set([...config.techs, ...free]);
-  return [...toggleSelected(id, selected, ctx.core.techById, { available, free, sort: true })];
+  return [...toggleSelected(id, selected, ctx.core.techById, { available, free, ignoreUnavailable: true, sort: true })];
 }
 
 export function calculateGarrison(ctx: GarrisonContext, b: Building, config: GarrisonConfig, data = GARRISON_DATA): GarrisonResult {

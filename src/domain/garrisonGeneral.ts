@@ -395,7 +395,7 @@ export function toggleGeneralGarrisonTech(
   const available = new Set(getGarrisonTechs(ctx, b, config, data).map((t) => t.id));
   const free = new Set(getFreeGarrisonTechs(ctx, b, config, data));
   const selected = new Set([...config.techs, ...free]);
-  return unique([...toggleSelected(id, selected, ctx.core.techById, { available, free })]);
+  return unique([...toggleSelected(id, selected, ctx.core.techById, { available, free, ignoreUnavailable: true })]);
 }
 
 /** Unit contribution is not target damage. It uses the current pinned pierce/reload/firepower fields. */

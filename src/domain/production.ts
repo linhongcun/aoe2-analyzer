@@ -109,7 +109,6 @@ export function toggleProductionTech(ctx: ProductionContext, config: ProductionC
   const next = toggleSelected(id, sel, ctx.core.techById, {
     available: new Set(productionTechs(ctx, config).map((t) => t.id)),
     free: freeProductionTechs(ctx, config),
-    allowUnavailable: true,
     removeMissing: 'any',
   });
   return [...effectiveProductionTechs(ctx, { ...config, techs: [...next] })];

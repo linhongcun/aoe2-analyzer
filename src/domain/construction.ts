@@ -110,7 +110,6 @@ export function toggleConstructionTech(ctx: ConstructionContext, config: Constru
   const next = toggleSelected(id, selected, ctx.core.techById, {
     available: new Set(legalTechs(ctx, config).map((t) => t.id)),
     free: freeConstructionTechs(ctx, config),
-    allowUnavailable: true,
     removeMissing: 'any',
   });
   return [...effectiveConstructionTechs(ctx, { ...config, techs: [...next] })];

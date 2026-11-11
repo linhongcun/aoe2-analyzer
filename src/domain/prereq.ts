@@ -16,12 +16,14 @@ export interface ToggleSelectedOptions {
   available: ReadonlySet<number>;
   /** 免费科技：不可取消，也不参与切换。 */
   free?: ReadonlySet<number>;
-  /** 不在 available 的 id 是否仍允许进入选择（production/construction 由 effective* 再过滤）。 */
-  allowUnavailable?: boolean;
   /** 取消时把「前置不在选择中」的后继全部移除；默认只处理 available 中的前置。 */
   removeMissing?: 'any' | 'available';
   /** 取消时按完整前置链级联（模拟器行为）。 */
   cascadeChain?: boolean;
+  /** 不可用 id 已选中时也保持原样（驻军工具行为）；默认允许移除。 */
+  ignoreUnavailable?: boolean;
+  /** 补前置时跨过不可用中间项继续找更早的可用祖先（模拟器行为）。 */
+  crossUnavailable?: boolean;
   /** 返回按 id 升序的集合（驻军建筑页行为）。 */
   sort?: boolean;
 }
@@ -33,7 +35,9 @@ export interface ToggleSelectedOptions {
 export function toggleSelected(id: number, selected: ReadonlySet<number>, byId: Record<number, Tech>, options: ToggleSelectedOptions): Set<number> {
   const next = new Set(selected);
   if (!byId[id] || options.free?.has(id)) return next;
-  if (!options.allowUnavailable && !options.available.has(id)) return next;
+  if (!options.available.has(id)) {
+    if (options.ignoreUnavailable || !next.has(id)) return next;
+  }
   if (next.has(id)) {
     if (options.cascadeChain) {
       const rm = new Set([id]);
@@ -41,7 +45,9 @@ export function toggleSelected(id: number, selected: ReadonlySet<number>, byId: 
       while (changed) {
         changed = false;
         for (const xid of options.available) {
-          if (next.has(xid) && !rm.has(xid) && prereqChain(byId[xid]!, byId).some((p) => rm.has(p.id))) {
+          const tech = byId[xid];
+          if (!tech || !next.has(xid) || rm.has(xid)) continue;
+          if (prereqChain(tech, byId).some((p) => rm.has(p.id))) {
             rm.add(xid);
             changed = true;
           }
@@ -65,17 +71,20 @@ export function toggleSelected(id: number, selected: ReadonlySet<number>, byId: 
       }
     }
   } else {
-    const add = (xid: number, root: boolean) => {
-      if ((!root && !options.available.has(xid)) || next.has(xid)) return;
-      next.add(xid);
+    const add = (xid: number, root: boolean, seen: Set<number>) => {
+      if (seen.has(xid)) return;
+      seen.add(xid);
+      if (root || options.available.has(xid)) {
+        if (!next.has(xid)) next.add(xid);
+      } else if (!options.crossUnavailable) return;
       const pre = byId[xid]?.pre;
-      if (pre != null) add(pre, false);
+      if (pre != null) add(pre, false, seen);
     };
-    add(id, true);
+    add(id, true, new Set());
   }
   return options.sort ? new Set([...next].sort((a, b) => a - b)) : next;
 }
 
 export function toggleTech(id: number, sel: ReadonlySet<number>, avail: readonly Tech[], byId: Record<number, Tech>): Set<number> {
-  return toggleSelected(id, sel, byId, { available: new Set(avail.map((t) => t.id)), allowUnavailable: true, cascadeChain: true });
+  return toggleSelected(id, sel, byId, { available: new Set(avail.map((t) => t.id)), cascadeChain: true, crossUnavailable: true });
 }
