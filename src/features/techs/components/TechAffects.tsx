@@ -2,13 +2,22 @@ import { civs } from '../../../data';
 import { useTrees } from '../../../data/hooks';
 import { civStatus } from '../../../domain/civStatus';
 import { ARMC_CLASS_NOTE } from '../../../domain/affects';
-import { applyTechCivFilter, browseAffected, effectSummary, listedGroupCount, type TechEffectEntry } from '../../../domain/techDetailView';
+import {
+  applyTechCivFilter,
+  browseAffected,
+  effectClause,
+  effectSummary,
+  listedGroupCount,
+  thumbRingSourceSentence,
+  type TechEffectEntry,
+} from '../../../domain/techDetailView';
 import type { Families } from '../../../domain/family';
 import type { Tech, Unit } from '../../../domain/types';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
 import { useSticky } from '../../../shared/utils/sticky';
 import { BuildingLink } from '../../../shared/ui/art';
 import { CivPicker } from '../../../shared/ui/CivPicker';
+import { Icon } from '../../../shared/ui/Icon';
 import { LineChip } from '../../../shared/ui/LineChip';
 import { Loading } from '../../../shared/ui/widgets';
 import { techEffectText } from '../techEffectText';
@@ -16,6 +25,11 @@ import { ThumbRingEffectText } from './ThumbRingEffectText';
 
 function techZh(techs: readonly Tech[], en: string) {
   return techs.find((item) => item.en === en)?.zh ?? en;
+}
+
+function sourceRuleText(clause: string, rofVs: readonly number[] | undefined): string {
+  if (!rofVs?.length) return `${clause}。这一范围没有攻击间隔系数。来源字段 s:acc。`;
+  return `${clause}。原始系数 ${rofVs.map((value) => `v:${value}`).join('，')}。`;
 }
 
 function SummaryText({ text, techId }: { text: string; techId: number }) {
@@ -93,8 +107,9 @@ export default function TechAffects({
     <section id="affects" aria-label="作用对象">
       <h2>作用对象</h2>
       {entries.map((entry) => {
-        const body = effectSummary(entry.parts, (text) => techEffectText(tech.id, text));
-        const text = entry.kind === 'combo' ? `需要${entry.req.map((en) => techZh(techs, en)).join('、')}：${body}` : body;
+        const body = effectClause(entry.parts, (text) => techEffectText(tech.id, text));
+        const summary = tech.id === 437 ? body : effectSummary(entry.parts, (text) => techEffectText(tech.id, text));
+        const text = entry.kind === 'combo' ? `需要${entry.req.map((en) => techZh(techs, en)).join('、')}：${summary}` : summary;
         return (
           <p className="td-summary" data-t="effect-summary" data-kind={entry.kind} data-rule={entry.id} data-req={entry.req.join('|')} key={entry.id}>
             <SummaryText text={text} techId={tech.id} />
@@ -102,10 +117,29 @@ export default function TechAffects({
         );
       })}
       {tech.id === 437 && (
-        <p className="td-kicker">
-          不同作用范围的间隔系数分开列出。攻击间隔 = 原间隔 / (1+v)。来源：effects.json / Thumb Ring / s:rof；v保留原始值，倍率为近似展示；DE{' '}
-          {DATA_SOURCES.patch?.build ?? '待确认'}。
-        </p>
+        <>
+          <p className="td-kicker">每条对应下面各自的名单。</p>
+          <details className="td-source" data-t="effect-source">
+            <summary>
+              <Icon name="chevron-right" />
+              原始系数与来源
+            </summary>
+            <p className="td-kicker">上面每条各有自己的作用范围。倍率只是近似，原始系数不同就不合并。</p>
+            <ul>
+              {entries.map((entry) => {
+                const clause = effectClause(entry.parts, (text) => techEffectText(tech.id, text));
+                return (
+                  <li data-t="effect-source-rule" data-rule={entry.id} key={entry.id}>
+                    <ThumbRingEffectText text={sourceRuleText(clause, entry.rofVs)} />
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="td-kicker">
+              <ThumbRingEffectText text={thumbRingSourceSentence(DATA_SOURCES.patch?.build ?? '待确认')} />
+            </p>
+          </details>
+        </>
       )}
       {tech.id === 574 && (
         <p className="note" data-t="royal-heirs-armc">

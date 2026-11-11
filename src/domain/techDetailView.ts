@@ -24,17 +24,31 @@ export function leadEffectText(text: string): string {
   return `${matched[2]} ${matched[1]}`;
 }
 
-export function effectSummary(parts: readonly EffectPart[], mapText: (text: string) => string = (text) => text): string {
-  const body = parts.map((part) => leadEffectText(mapText(part.text))).join('，');
-  return `${body}（作用于下方完整名单）`;
+export function effectClause(parts: readonly EffectPart[], mapText: (text: string) => string = (text) => text): string {
+  return parts.map((part) => leadEffectText(mapText(part.text))).join('，');
 }
 
+export function effectSummary(parts: readonly EffectPart[], mapText: (text: string) => string = (text) => text): string {
+  return `${effectClause(parts, mapText)}（作用于下方完整名单）`;
+}
+
+/** 扳指主摘要只保留间隔倍率。原始 v 记在条目上，近似倍率相同也不并成一条。 */
 function partsFor(techId: number, fx: readonly Effect[]): EffectPart[] {
   if (techId === 437)
     return fx.map((effect) =>
-      effect.s === 'rof' ? { icon: 'rof', text: `攻击间隔约 ×${Number((1 / (1 + effect.v)).toFixed(5))}（v:${effect.v}）` } : effectParts([effect])[0]!,
+      effect.s === 'rof' ? { icon: 'rof', text: `攻击间隔约 ×${Number((1 / (1 + effect.v)).toFixed(5))}` } : effectParts([effect])[0]!,
     );
   return effectParts(fx);
+}
+
+function rofValues(techId: number, fx: readonly Effect[]): number[] | undefined {
+  if (techId !== 437) return undefined;
+  return fx.flatMap((effect) => (effect.s === 'rof' ? [effect.v] : []));
+}
+
+/** 与原先作用对象来源句一致，供展开后核对，不写进主摘要。 */
+export function thumbRingSourceSentence(patch: string | number): string {
+  return `不同作用范围的间隔系数分开列出。攻击间隔 = 原间隔 / (1+v)。来源：effects.json / Thumb Ring / s:rof；v保留原始值，倍率为近似展示；DE ${patch}。`;
 }
 
 export interface TechEffectEntry {
@@ -45,6 +59,8 @@ export interface TechEffectEntry {
   parts: EffectPart[];
   units: Unit[];
   buildings: Building[];
+  /** 仅扳指：本条规则的原始 s:rof，按数据顺序保留，不因倍率近似而合并。没有间隔效果时为空数组。 */
+  rofVs?: readonly number[];
 }
 
 /** 按源码规则逐条收集。相同数值的另一条规则或另一组 req 不并入。 */
@@ -55,14 +71,14 @@ export function techEffectEntries(tech: Tech, units: readonly Unit[], buildings:
     const parts = partsFor(tech.id, fx);
     const matched = units.filter((unit) => pred(unit));
     if (!parts.length || !matched.length) return;
-    out.push({ id: `unit-${index}`, kind: 'base', req: [], parts, units: matched, buildings: [] });
+    out.push({ id: `unit-${index}`, kind: 'base', req: [], parts, units: matched, buildings: [], rofVs: rofValues(tech.id, fx) });
   });
   (BUILDING_EFFECTS[tech.en] ?? []).forEach((rule, index) => {
     const [pred, fx] = rule;
     const parts = partsFor(tech.id, fx);
     const matched = buildings.filter((building) => pred(building));
     if (!parts.length || !matched.length) return;
-    out.push({ id: `building-${index}`, kind: 'base', req: [], parts, units: [], buildings: matched });
+    out.push({ id: `building-${index}`, kind: 'base', req: [], parts, units: [], buildings: matched, rofVs: rofValues(tech.id, fx) });
   });
   GENERIC_FX.forEach((item, index) => {
     if (!item.req.length || !item.req.includes(tech.en)) return;
@@ -77,6 +93,7 @@ export function techEffectEntries(tech: Tech, units: readonly Unit[], buildings:
       parts,
       units: matchedUnits,
       buildings: matchedBuildings,
+      rofVs: rofValues(tech.id, item.fx),
     });
   });
   return out;
