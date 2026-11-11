@@ -1,8 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const message = '以下应对为通用示意，非针对当前对手文明；请按侦察结果调整。';
-const rush = (page: Page) => page.getByRole('region', { name: '应对早期进攻', exact: true });
-const note = (page: Page) => rush(page).getByText(message, { exact: true });
+const message = '下列四段是固定的通用稿，只随「对手打法」切换';
+const practice = (page: Page) => page.getByRole('region', { name: '可按当前文明核对的练习', exact: true });
+const guide = (page: Page) => page.getByRole('region', { name: '通用早期应对', exact: true });
+const note = (page: Page) => guide(page).locator('p.mu-scope');
 
 async function pick(page: Page, id: 'ma' | 'me', civ: string) {
   await page.locator(`#${id}`).click();
@@ -23,15 +24,16 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/matchup');
       await expect(page.locator('#mres')).toBeVisible();
       await pick(page, 'ma', 'Franks');
-      await expect(rush(page).getByRole('combobox')).toHaveValue('militia');
+      await expect(practice(page).getByRole('combobox')).toHaveValue('militia');
       for (const [enemy, name] of [
         ['Mongols', '蒙古'],
         ['Britons', '不列颠'],
       ] as const) {
         await pick(page, 'me', enemy);
-        await expect(rush(page)).toContainText(`当前对局：法兰克 对 ${name}`);
-        await expect(note(page)).toBeVisible();
-        await expect(rush(page).getByRole('link', { name: /打开 PK 演练/ })).toHaveAttribute('href', new RegExp(`b=74\\.${enemy}\\.2\\.\\.`));
+        await expect(page.locator('#me')).toContainText(name);
+        await expect(guide(page)).not.toContainText(`当前对局：法兰克 对 ${name}`);
+        await expect(note(page)).toContainText(message);
+        await expect(practice(page).getByRole('link', { name: /打开 PK 演练/ })).toHaveAttribute('href', new RegExp(`b=74\\.${enemy}\\.2\\.\\.`));
       }
       const geometry = await note(page).evaluate((element) => {
         const rect = element.getBoundingClientRect();
@@ -51,22 +53,22 @@ for (const width of [360, 375, 390, 1280])
       expect(geometry.bottom).toBeLessThanOrEqual(geometry.heading);
       expect(geometry.fits).toBe(true);
       expect(geometry.clippedText).toBe(false);
-      await rush(page).screenshot({ path: info.outputPath(`rush507-${width}-${theme}.png`) });
+      await guide(page).screenshot({ path: info.outputPath(`rush507-${width}-${theme}.png`) });
       for (const pressure of ['scouts', 'archers', 'towers']) {
-        await rush(page).getByRole('combobox').selectOption(pressure);
-        await expect(note(page)).toBeVisible();
+        await practice(page).getByRole('combobox').selectOption(pressure);
+        await expect(note(page)).toContainText(message);
       }
-      await rush(page).getByRole('combobox').selectOption('militia');
+      await practice(page).getByRole('combobox').selectOption('militia');
       await pick(page, 'me', 'Incas');
-      await expect(rush(page)).toContainText('对手印加在封建时代不可用民兵');
-      await expect(rush(page).getByRole('link', { name: /打开 PK 演练/ })).toHaveCount(0);
-      await expect(note(page)).toBeVisible();
+      await expect(practice(page)).toContainText('对手印加在封建时代不可用民兵');
+      await expect(practice(page).getByRole('link', { name: /打开 PK 演练/ })).toHaveCount(0);
+      await expect(note(page)).toContainText(message);
       await pick(page, 'ma', 'Mayans');
       await pick(page, 'me', 'Britons');
-      await rush(page).getByRole('combobox').selectOption('scouts');
-      await expect(rush(page).getByRole('link', { name: /参考开局/ })).toHaveCount(0);
-      await expect(rush(page)).toContainText('玛雅在该流程目标时代不可用');
-      await expect(note(page)).toBeVisible();
+      await practice(page).getByRole('combobox').selectOption('scouts');
+      await expect(practice(page).getByRole('link', { name: /参考开局/ })).toHaveCount(0);
+      await expect(practice(page)).toContainText('玛雅在该流程目标时代不可用');
+      await expect(note(page)).toContainText(message);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(errors).toEqual([]);
     });
@@ -82,12 +84,12 @@ test('#507 general scope remains visible while data loads and after a real data 
   });
   try {
     await page.goto('./#/matchup');
-    await expect(rush(page).getByRole('status')).toContainText('正在核对双方文明');
-    await expect(note(page)).toBeVisible();
+    await expect(practice(page).getByRole('status')).toContainText('正在核对双方文明');
+    await expect(note(page)).toContainText(message);
   } finally {
     release();
   }
   await expect(page.getByRole('alert')).toContainText('对局资料加载失败');
-  await expect(note(page)).toBeVisible();
-  await expect(rush(page).getByRole('link', { name: /打开 PK 演练|参考开局/ })).toHaveCount(0);
+  await expect(note(page)).toContainText(message);
+  await expect(practice(page).getByRole('link', { name: /打开 PK 演练|参考开局/ })).toHaveCount(0);
 });

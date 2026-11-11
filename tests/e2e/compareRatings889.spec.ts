@@ -61,7 +61,7 @@ test('#889 对比页可见雷达、原分数、资料对照和评分口径', asy
   await expect(page.getByTestId('compare-position-basis')).toContainText('未知');
   await expect(page.getByTestId('compare-position-basis')).toContainText('待核');
   await page.goto('./#/matchup');
-  await expect(page.locator('#mres')).toContainText('推荐反制');
+  await expect(page.locator('#mres')).toContainText('通用类型反制');
   await expect(page.locator('#mres')).not.toContainText('你的相对优势');
   await expect(page.locator('#mres')).not.toContainText('自动生成的建议');
 });

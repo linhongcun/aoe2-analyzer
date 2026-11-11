@@ -1,3 +1,249 @@
 .matchup-explicit .cp-trigger {
   min-height: 44px;
 }
+
+#matchup .lhead {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-1);
+  margin-bottom: var(--space-2);
+}
+
+#matchup .lhead .note {
+  max-width: 42em;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.mu-region {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+  padding: 12px 16px 8px;
+  margin: 0 0 var(--space-3);
+  min-width: 0;
+}
+
+.mu-region-pair {
+  border-color: color-mix(in srgb, var(--color-accent) 28%, var(--color-border));
+}
+
+.mu-region-ref {
+  background: var(--color-surface-2);
+  box-shadow: none;
+}
+
+.mu-kicker {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-xs);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+}
+
+.mu-region h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.mu-region h3,
+.rush-defense h3 {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-body);
+  font-weight: 650;
+}
+
+.mu-scope {
+  margin: 0 0 var(--space-2);
+  max-width: 46em;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.mu-tag {
+  display: inline-block;
+  margin: 0 6px 0 0;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: var(--fs-xs);
+  font-weight: 650;
+  line-height: 1.6;
+  vertical-align: 1px;
+}
+
+.mu-picks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-2) var(--space-5);
+  margin: 0 0 var(--space-2);
+}
+
+.mu-pick {
+  flex: 1 1 220px;
+  max-width: 320px;
+  min-width: 0;
+}
+
+.mu-pick label {
+  display: block;
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+}
+
+#matchup .mu-pick .civpick,
+#matchup .mu-pick .cp-trigger {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.mu-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  padding: 0;
+}
+
+#matchup .mu-chip {
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 44px;
+  min-width: 44px;
+}
+
+#matchup .mu-chip:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.mu-pk {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-2);
+}
+
+.mu-pk-note {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+
+.mu-ref-block {
+  margin: 0 0 22px;
+  min-width: 0;
+}
+
+.mu-ref-block:last-child {
+  margin-bottom: 0;
+}
+
+.mu-guide h4 {
+  margin: var(--space-3) 0 var(--space-1);
+  font-size: var(--fs-sm);
+  font-weight: 650;
+}
+
+.mu-guide p,
+.mu-fold p,
+.mu-region .note {
+  margin: 0 0 var(--space-1);
+  max-width: 52em;
+  line-height: 1.55;
+}
+
+.mu-warn {
+  color: var(--color-bad);
+}
+
+.mu-fold {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+
+.mu-fold summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+  color: var(--color-text);
+  font-weight: 550;
+}
+
+.mu-fold ul {
+  margin: var(--space-2) 0;
+  padding-left: 1.2em;
+}
+
+.mu-fold a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  overflow-wrap: anywhere;
+}
+
+#matchup .matchup-counter-list li {
+  flex-wrap: nowrap;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  padding: 0 var(--space-2) 0 0;
+}
+
+#matchup .matchup-counter-list .matchup-counter-link {
+  border: 0;
+  background: transparent;
+}
+
+#matchup .matchup-counter-list .matchup-counter-link:hover {
+  background: transparent;
+  color: var(--color-link);
+}
+
+#matchup .matchup-sim-link.community-tool-entry {
+  min-height: 44px;
+  min-width: 44px;
+  border: 0;
+  background: transparent;
+  padding: 0 var(--space-2);
+  color: var(--color-link);
+  font-size: var(--fs-xs);
+}
+
+@media (max-width: 720px) {
+  #matchup .lhead .note,
+  #matchup .mu-scope {
+    line-height: 1.4;
+  }
+
+  .mu-region {
+    padding: 6px 8px;
+  }
+
+  .mu-pick label {
+    margin-bottom: 2px;
+  }
+
+  #matchup .rush-defense {
+    padding: 4px 8px;
+  }
+
+  .mu-pick {
+    flex-basis: 100%;
+    max-width: none;
+  }
+}

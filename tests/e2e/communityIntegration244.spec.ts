@@ -117,7 +117,7 @@ test('#244 当前跟练时点带入游戏时间，并可查个人按键表', asy
 
 test('#244 对局助手的城堡入口与原四类防守分区独立', async ({ page }) => {
   await page.goto('./#/matchup?rush=towers');
-  const early = page.getByRole('region', { name: '应对早期进攻', exact: true });
+  const early = page.getByRole('region', { name: '可按当前文明核对的练习', exact: true });
   await expect(early.getByRole('combobox')).toHaveCount(1);
   await expect(early.getByRole('combobox')).toHaveValue('towers');
   await expect(early).toContainText('不模拟打塔');

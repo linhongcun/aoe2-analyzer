@@ -36,7 +36,7 @@ const ROUTES: [string, string][] = [
   ['#tree/Britons', '.tree .tcell'],
   ['#dlc', '.dlct tr'],
   ['#compare', '#ctab tr'],
-  ['#matchup', '#matchup:has(#mres) .matchup-title'],
+  ['#matchup', '#matchup:has(#mres) h1'],
   ['#/duel', '#duel-res .duel-win'],
   ['#/bonuses', '#blist li'],
   ['#/civ/Franks/bonus/2', '#bonus h1'],
@@ -110,7 +110,7 @@ test('mobile nav opens and navigates', async ({ page }) => {
   // #774 起手机抽屉的工具组默认折叠：先展开「对局计划」组再点页面入口。
   await page.getByRole('dialog', { name: '主导航' }).locator('#tools-menu details', { hasText: '对局计划' }).locator('summary').click();
   await page.locator('nav.mainnav a', { hasText: '对局助手' }).click();
-  await expect(page.locator('#matchup:has(#mres) .matchup-title')).toBeVisible();
+  await expect(page.locator('#matchup:has(#mres) h1')).toBeVisible();
   await expect(page.locator('nav.mainnav')).toBeHidden();
 });
 
@@ -123,7 +123,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/techs', '#tgrid .tech-row'],
     ['#/tree', '.tree .tcell'],
     ['#/compare', '#ctab tr'],
-    ['#/matchup', '#matchup:has(#mres) .matchup-title'],
+    ['#/matchup', '#matchup:has(#mres) h1'],
     ['#/simulator', '#simhub .card'],
     ['#/duel', '#duel-res .duel-win'],
     ['#/builds', '#builds [data-t="build-order"]'],
@@ -556,7 +556,7 @@ test('rating label stays on compare; matchup no longer shows score advice', asyn
     await page.goto('./#/compare');
     await expect(page.locator('#compare .ratehead')).toContainText('主观评分，仅供参考');
     await page.goto('./#/matchup');
-    await expect(page.locator('#mres')).toContainText('推荐反制');
+    await expect(page.locator('#mres')).toContainText('通用类型反制');
     await expect(page.locator('#mres .rating-foot')).toHaveCount(0);
     await expect(page.locator('#mres')).not.toContainText('你的相对优势');
     await expect(page.locator('#mres')).not.toContainText('自动生成的建议');
