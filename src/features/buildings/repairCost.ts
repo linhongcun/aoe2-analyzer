@@ -6,12 +6,13 @@
  */
 import { ECO } from '../../data/eco';
 import { DAT, type DatFile } from '../../domain/datEffects';
+import { TOWN_CENTER_ID } from '../../domain/gameIds';
+export { TOWN_CENTER_ID };
 
 export const UNIT_REPAIR_RES = 270;
 export const BUILDING_REPAIR_RES = 271;
 export const GEORGIANS_EN = 'Georgians';
 export const REPAIR_ANCHOR = 'repair-cost';
-export const TOWN_CENTER_ID = 109;
 export const REPAIR_COST_HREF = `/building/${TOWN_CENTER_ID}#${REPAIR_ANCHOR}`;
 
 /** UGC Resources。只引用资源名称，不引用未列出的默认比例。 */
