@@ -114,7 +114,7 @@ describe.each(['ci', 'release'])('%s workflow Ubuntu mirror repair #454', (workf
   it.each([
     ['deb822', 'sources.list.d/ubuntu.sources', deb822Mirror, 'sources.list', directLegacy],
     ['legacy', 'sources.list', legacyMirror, 'sources.list.d/ubuntu.sources', directDeb822],
-  ])('changes the selected %s mirror through the real mirror+file source', async (_format, mirrorSourcePath, mirrorSource, directPath, directSource) => {
+  ])('keeps distinct %s mirror candidates through the real mirror+file source', async (_format, mirrorSourcePath, mirrorSource, directPath, directSource) => {
     const files = {
       'apt-mirrors.txt': mirrorList,
       [mirrorSourcePath]: mirrorSource,
@@ -126,25 +126,30 @@ describe.each(['ci', 'release'])('%s workflow Ubuntu mirror repair #454', (workf
 
     const entries = referencedMirrors(directory, readFileSync(path(mirrorSourcePath), 'utf8'));
     const selected = [...entries].sort((a, b) => a.priority - b.priority)[0];
-    expect(new URL(selected?.uri ?? '').hostname).toBe('archive.ubuntu.com');
-    expect(selected).toEqual({ uri: 'http://archive.ubuntu.com/ubuntu/', priority: 1 });
-    expect(entries.slice(1)).toEqual([
-      { uri: 'https://archive.ubuntu.com/ubuntu/', priority: 2 },
-      { uri: 'https://security.ubuntu.com/ubuntu/', priority: 3 },
+    // Configured candidate order only. This does not show that any host answered.
+    expect(entries.map((entry) => new URL(entry.uri).hostname)).toEqual([
+      'azure.archive.ubuntu.com',
+      'archive.ubuntu.com',
+      'security.ubuntu.com',
     ]);
-    // Exact file checks preserve protocols, priorities, suites, components, signatures and other sources.
-    for (const [name, before] of Object.entries(files))
-      expect(readFileSync(path(name), 'utf8')).toBe(before.replaceAll('azure.archive.ubuntu.com', 'archive.ubuntu.com'));
+    expect(new Set(entries.map((entry) => new URL(entry.uri).hostname)).size).toBe(entries.length);
+    expect(selected).toEqual({ uri: 'http://azure.archive.ubuntu.com/ubuntu/', priority: 1 });
+    // Direct URIs still leave the Azure host. The mirror list stays three distinct candidates.
+    for (const [name, before] of Object.entries(files)) {
+      const expected = name === 'apt-mirrors.txt' ? before : before.replaceAll('azure.archive.ubuntu.com', 'archive.ubuntu.com');
+      expect(readFileSync(path(name), 'utf8')).toBe(expected);
+    }
   });
 
   it.each([
-    ['sources.list', directLegacy],
-    ['sources.list.d/ubuntu.sources', directDeb822],
-    ['apt-mirrors.txt', mirrorList],
-  ])('also repairs %s when the other optional source files are absent', async (name, content) => {
+    ['sources.list', directLegacy, true],
+    ['sources.list.d/ubuntu.sources', directDeb822, true],
+    ['apt-mirrors.txt', mirrorList, false],
+  ])('keeps %s usable when the other optional source files are absent', async (name, content, rewriteDirect) => {
     const { directory, path } = fixture({ [name]: content });
     await runMirrorStep(workflow, directory);
-    expect(readFileSync(path(name), 'utf8')).toBe(content.replaceAll('azure.archive.ubuntu.com', 'archive.ubuntu.com'));
+    const expected = rewriteDirect ? content.replaceAll('azure.archive.ubuntu.com', 'archive.ubuntu.com') : content;
+    expect(readFileSync(path(name), 'utf8')).toBe(expected);
     for (const missing of ['sources.list', 'sources.list.d/ubuntu.sources', 'apt-mirrors.txt'].filter((file) => file !== name))
       expect(existsSync(path(missing))).toBe(false);
   });
