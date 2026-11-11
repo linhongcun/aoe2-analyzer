@@ -7,6 +7,7 @@
  * 近似：首次攻击在 t=0 发生（无出手前摇数据）；远程按命中率取期望；忽略射程、走位、地形、冲锋攻击与特殊能力。
  */
 import type { Cost, StatSet, Unit } from './types';
+import { damageRows, hitCount, totalDamage } from './damageCore';
 
 export interface Fighter {
   name: string;
@@ -36,16 +37,11 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
 /** 本场匹配的攻击类别；计算和展示共用，保留零伤害及负攻击的扣减。 */
 export function damageByClass(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>) {
   // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对村民 −3 会扣减）
-  return Object.entries(a.attack).flatMap(([category, attack]) =>
-    category in d.armor ? [{ category, attack, armor: d.armor[category]!, damage: Math.max(Math.min(0, attack), attack - d.armor[category]!) }] : [],
-  );
+  return damageRows(a.attack, d.armor).rows;
 }
 /** 单次命中伤害（不含命中率） */
 export function damagePerHit(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>): number {
-  return Math.max(
-    1,
-    damageByClass(a, d).reduce((sum, row) => sum + row.damage, 0),
-  );
+  return totalDamage(damageByClass(a, d));
 }
 /** 期望每次攻击伤害（远程乘命中率；近战命中率视为 100%） */
 export const expectedHit = (a: Fighter, d: Fighter) => damagePerHit(a, d) * (a.ranged ? a.acc : 1);
@@ -65,7 +61,7 @@ export const DPS_UNAVAILABLE_REASON = '爆炸单位，无攻击间隔';
 export function oneWay(a: Fighter, d: Fighter): OneWay {
   const dmg = damagePerHit(a, d),
     expDmg = expectedHit(a, d);
-  const hits = expDmg > 0 ? Math.ceil(d.hp / expDmg - 1e-9) : Infinity;
+  const hits = hitCount(d.hp, expDmg);
   if (!(a.rof > 0)) {
     // 自爆等无攻击间隔：可算单次伤害，但 DPS/持续击杀时间无意义
     return {

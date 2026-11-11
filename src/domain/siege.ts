@@ -1,6 +1,7 @@
 /** issue 308：固定生成数据驱动的理想齐射模型，不估计未收录的护甲类别。 */
 import { DAT, toEffects } from './datEffects';
 import { applyEffects, baseStats } from './simulator';
+import { damageRows, hitCount, totalDamage } from './damageCore';
 import { buildingBase } from './buildingSim';
 import type { Building, Unit } from './types';
 
@@ -132,18 +133,15 @@ export function calculateSiege(u: Unit, b: Building, n: number, civ = '', armor:
   // buildings_build.py 从 .dat 类别 11 生成 barm。建筑不属于攻城武器/船只/僧侣，不能加上对应伤害。
   const irrelevant = new Set(['攻城武器', '重型攻城武器', '船只', '僧侣']);
   const armors: Record<string, number> = { 近战: defender.ma, 穿刺: defender.pa, 所有建筑: defender.barm };
-  let sum = 0;
-  for (const [category, attack] of Object.entries(attacks)) {
-    if (irrelevant.has(category)) continue;
-    if (!(category in armors) || !Number.isFinite(armors[category]) || !Number.isFinite(attack))
-      return unknown(category === '石质防御' ? SIEGE_STONE_DEFENSE_REASON : `建筑缺少「${category}」护甲的可核实数据。`);
-    sum += Math.max(0, attack - armors[category]!);
-  }
-  const damage = Math.max(1, sum);
+  const filtered = Object.fromEntries(Object.entries(attacks).filter(([category]) => !irrelevant.has(category)));
+  const applied = damageRows(filtered, armors, { negativeAttack: false, missingArmor: 'error' });
+  const bad = applied.problems[0];
+  if (bad !== undefined) return unknown(bad === '石质防御' ? SIEGE_STONE_DEFENSE_REASON : `建筑缺少「${bad}」护甲的可核实数据。`);
+  const damage = totalDamage(applied.rows);
   const interval = attacker.rof / attacker.rofx;
   if (!u.atks.length || !Number.isFinite(defender.hp) || defender.hp <= 0 || !Number.isFinite(interval) || interval <= 0)
     return unknown('生命值或攻击间隔数据待补。');
-  const hits = Math.ceil(Math.round(defender.hp) / (n * damage));
+  const hits = hitCount(defender.hp, n * damage, { roundHp: true, epsilon: 0 });
   const gameSeconds = (hits - 1) * interval;
   return { verified: true, damage, hits, gameSeconds, realSeconds: gameSeconds / SIEGE_SPEED };
 }
