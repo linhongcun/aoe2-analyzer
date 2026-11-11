@@ -20,7 +20,7 @@ const PAGES = [
   ['units', '#ugrid .unit-row'],
   ['unit/569/Franks/4', '#sim .simtab'],
   ['duel', '#duel-res'],
-  ['builds', '.tl-empty-btns .tl-chip'],
+  ['builds', '[data-t="build-order"]'],
   ['builds?bo=scouts-18', '.tl-steps'],
   ['patches/185872', '.patch-entry'],
   ['maps', '.map-guide'],

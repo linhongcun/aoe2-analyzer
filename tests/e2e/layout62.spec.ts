@@ -185,23 +185,12 @@ for (const width of WIDTHS)
       await expectTechRelease(techRoot, '');
       await expect(techRoot.locator('#tcnt')).toHaveText(`${TECHS.length} / ${TECHS.length} 项科技`);
 
-      await ready(page, 'builds', '[data-t="build-order"] summary');
+      await ready(page, 'builds', '[data-t="build-order"]');
       await screenshot(page, info, 'builds', width, theme);
-      const shortcuts = page.locator('.tl-empty-btns .tl-chip');
-      await expect(shortcuts).toHaveCount(8);
-      const shortcut = shortcuts.first();
-      await expect(shortcut).toHaveJSProperty('tagName', 'BUTTON');
-      await shortcut.focus();
+      const open = page.locator('[data-t="build-order"]').first().getByRole('link', { name: '查看时间线', exact: true });
+      await expect(open).toHaveJSProperty('tagName', 'A');
+      await open.focus();
       await page.keyboard.press('Enter');
-      await expect(page).toHaveURL(/#\/builds$/);
-      const firstGroup = page.locator('[data-t="build-order"]').first();
-      await expect(firstGroup).toHaveAttribute('open');
-      await expect(firstGroup.locator('summary')).toBeFocused();
-      await expect(firstGroup.locator('summary')).toBeInViewport();
-      const target = await firstGroup.locator('summary').boundingBox();
-      const header = await page.locator('header').boundingBox();
-      expect(target!.y).toBeGreaterThanOrEqual(header!.y + header!.height);
-      await firstGroup.locator('a.tl-open').click();
       await expect(page).toHaveURL(/#\/builds\?bo=/);
       await expect(page.locator('.tl-steps')).toBeVisible();
       if (mobile) {

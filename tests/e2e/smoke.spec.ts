@@ -482,9 +482,10 @@ test('build orders read-only list renders all entries with sources', async ({ pa
   await page.goto('./#/builds');
   const items = page.locator('[data-t="build-order"]');
   await expect(items).toHaveCount(8);
-  await items.first().locator('summary').click();
-  await expect(items.first()).toContainText('来源');
-  await expect(items.first().locator('a[href*="aoe2guide.com"]')).toHaveCount(1);
+  await expect(page.locator('.bo-steps, .tl-empty')).toHaveCount(0);
+  await expect(items.first()).not.toContainText('来源');
+  await page.goto('./#/builds?bo=scouts-18&view=print');
+  await expect(page.getByRole('region', { name: '开局来源与估算限制' }).locator('a[href*="aoe2guide.com"]')).toHaveCount(1);
 });
 
 test('rating help: beside 能力评分, opens/closes by click, outside click and Esc, focus moves in and back', async ({ page }) => {

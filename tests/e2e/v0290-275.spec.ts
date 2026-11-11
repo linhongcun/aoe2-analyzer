@@ -15,16 +15,14 @@ const NUM_UNIT = /\d+(?:\.\d+)?\s*(?:名村民|个村民|人口|村民|分钟|�
 test.describe('#275 开局步骤：数字与单位不断行', () => {
   for (const theme of THEMES)
     for (const width of WIDTHS)
-      test(`#/builds 列表全部步骤 ${theme} @${width}`, async ({ page }) => {
+      test(`#/builds 目录数字不断行 ${theme} @${width}`, async ({ page }) => {
         await setTheme(page, theme);
         await page.setViewportSize({ width, height: 900 });
         await page.goto('./#/builds');
         await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-        await expect(page.locator('.bo-steps li').first()).toBeAttached();
-        await page.locator('main details').evaluateAll((els) => els.forEach((e) => ((e as HTMLDetailsElement).open = true)));
-        await expect(page.locator('.bo-steps li').first()).toBeVisible();
-        expect(await wrappedFragments(page, '.bo-steps li', NUM_UNIT)).toEqual([]);
-        expect(await wrappedNums(page, 'main')).toEqual([]);
+        await expect(page.locator('[data-t="build-order"]').first()).toBeVisible();
+        await expect(page.locator('.bo-steps')).toHaveCount(0);
+        expect(await wrappedNums(page, '.bo-catalog-list')).toEqual([]);
       });
 
   for (const theme of THEMES)
