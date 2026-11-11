@@ -37,7 +37,7 @@ export function fighterFrom(u: Unit, S: StatSet): Fighter {
 /** 本场匹配的攻击类别；计算和展示共用，保留零伤害及负攻击的扣减。 */
 export function damageByClass(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>) {
   // Fandom「Armor class」第 2 步：Damage1_i = max(min(0, Atk_i), Atk_i − Arm_i)（负攻击如对村民 −3 会扣减）
-  return damageRows(a.attack, d.armor).rows;
+  return damageRows(a.attack, d.armor, { allowInvalid: true }).rows;
 }
 /** 单次命中伤害（不含命中率） */
 export function damagePerHit(a: Pick<Fighter, 'attack'>, d: Pick<Fighter, 'armor'>): number {

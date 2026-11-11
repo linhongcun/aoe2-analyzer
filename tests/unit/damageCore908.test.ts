@@ -24,6 +24,15 @@ describe('共享伤害核（issue 908）', () => {
     expect(skip.problems).toEqual(['石质防御']);
     const error = damageRows({ 近战: 5, 船只: 4 }, { 近战: 1 }, { negativeAttack: false, missingArmor: 'error' });
     expect(error.problems).toEqual(['船只']);
+    const ordered = damageRows({ 船只: 4, 近战: 5, 石质防御: NaN }, { 近战: 1 }, { negativeAttack: false, missingArmor: 'error' });
+    expect(ordered.problems).toEqual(['船只', '石质防御']);
+  });
+
+  it('PK 允许非有限值参与，保持旧行为', () => {
+    const rows = damageRows({ 近战: NaN }, { 近战: 1 }, { allowInvalid: true }).rows;
+    expect(rows).toHaveLength(1);
+    expect(Number.isNaN(rows[0]!.damage)).toBe(true);
+    expect(totalDamage(rows)).toBeNaN();
   });
 
   it('单次伤害至少 1，负总和也钳制', () => {

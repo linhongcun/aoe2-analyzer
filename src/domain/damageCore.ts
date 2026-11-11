@@ -16,8 +16,10 @@ export interface DamageRow {
 export interface DamageRowsOptions {
   /** true：max(min(0, attack), attack - armor)；false：max(0, attack - armor)。 */
   negativeAttack?: boolean;
-  /** 缺少护甲类别时跳过（PK）还是列入 missing（攻城）。 */
+  /** 缺少护甲类别时跳过（PK）还是列入 problems（攻城）。 */
   missingArmor?: 'skip' | 'error';
+  /** PK 保留非有限值参与计算；默认把非有限值列入 problems。 */
+  allowInvalid?: boolean;
 }
 
 export interface DamageRowsResult {
@@ -29,17 +31,21 @@ export interface DamageRowsResult {
 export function damageRows(
   attacks: Readonly<Record<string, number>>,
   armors: Readonly<Record<string, number>>,
-  { negativeAttack = true, missingArmor = 'skip' }: DamageRowsOptions = {},
+  { negativeAttack = true, missingArmor = 'skip', allowInvalid = false }: DamageRowsOptions = {},
 ): DamageRowsResult {
   const rows: DamageRow[] = [];
   const problems: string[] = [];
   for (const [category, attack] of Object.entries(attacks)) {
-    if (!Number.isFinite(attack)) {
+    if (!Number.isFinite(attack) && !allowInvalid) {
       problems.push(category);
       continue;
     }
     const armor = armors[category];
-    if (armor === undefined || !Number.isFinite(armor)) {
+    if (armor === undefined) {
+      if (missingArmor === 'error') problems.push(category);
+      continue;
+    }
+    if (!Number.isFinite(armor) && !allowInvalid) {
       if (missingArmor === 'error') problems.push(category);
       continue;
     }
