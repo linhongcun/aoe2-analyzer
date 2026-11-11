@@ -109,7 +109,7 @@ describe('issue 736 农田与养鱼场食物总量', () => {
     expect(malay?.effects).toEqual([expect.objectContaining({ op: 'set', res: 88, v: 2130 })]);
     expect(data.malay).toMatchObject({ tech: 637, value: 2130, triple: true });
     expect(data.malay?.value).toBe(710 * 3);
-    expect(readFileSync('src/features/buildings/foodAmount.ts', 'utf8')).not.toMatch(/715/);
+    expect(readFileSync('src/domain/foodAmountFacts.ts', 'utf8')).not.toMatch(/715/);
     expect(readFileSync('src/features/buildings/components/FoodAmount.tsx', 'utf8')).not.toMatch(/715/);
 
     const other = structuredClone(live);
