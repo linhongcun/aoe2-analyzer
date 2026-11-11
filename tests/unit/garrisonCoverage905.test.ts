@@ -58,7 +58,9 @@ describe('驻军覆盖契约（issue 905）', () => {
       const general = getFreeGarrisonTechs(ctx, b, { civ, age: 4, techs: [], rows: [] });
       return JSON.stringify([...legacy].sort((a, z) => a - z)) !== JSON.stringify([...general].sort((a, z) => a - z));
     });
-    expect(differing.length).toBeGreaterThan(0);
+    expect(garrisonFreeTechs(ctx, b, { civ: 'Franks', age: 4, techs: [], villagers: '0' })).toEqual([]);
+    expect([...getFreeGarrisonTechs(ctx, b, { civ: 'Franks', age: 4, techs: [], rows: [] })].sort((a, z) => a - z)).toEqual([12, 13, 14]);
+    expect(differing.length).toBeGreaterThan(1);
     expect(GARRISON_COVERAGE.freeTechSources).toEqual({ legacy: 'garrison.json', general: 'garrison_techs.json' });
   });
 
