@@ -63,11 +63,21 @@ export async function installBrowser(budget) {
     '-e',
     '-c',
     `
-for source_file in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources /etc/apt/apt-mirrors.txt; do
+for source_file in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources; do
   if [ -f "$source_file" ]; then
     sudo sed -i 's|azure\\.archive\\.ubuntu\\.com|archive.ubuntu.com|g' "$source_file"
   fi
 done
+# Keep apt-mirrors.txt unchanged. Rewriting azure.archive.ubuntu.com there makes
+# priority 1 and 2 the same host, so a DNS failure has no distinct fallback.
+if [ -f /etc/apt/apt-mirrors.txt ]; then
+  echo 'Ubuntu apt mirror candidates:'
+  grep -E '^[^#[:space:]]' /etc/apt/apt-mirrors.txt || true
+fi
+if command -v apt-config >/dev/null 2>&1; then
+  echo 'apt acquire timeout settings:'
+  apt-config dump Acquire::Retries Acquire::http::Timeout Acquire::https::Timeout || true
+fi
 `,
   ]);
   await budget.run('npx', ['playwright', 'install', '--with-deps', 'chromium']);

@@ -223,11 +223,21 @@ jobs:
         if: steps.verify.outputs.should_release == 'true'
         run: |
           node scripts/ci-budget.mjs --assert
-          for source_file in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources /etc/apt/apt-mirrors.txt; do
+          for source_file in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources; do
             if [ -f "$source_file" ]; then
               node scripts/ci-budget.mjs --run -- sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|g' "$source_file"
             fi
           done
+          node scripts/ci-budget.mjs --run -- bash -c '
+            if [ -f /etc/apt/apt-mirrors.txt ]; then
+              echo "Ubuntu apt mirror candidates:"
+              grep -E "^[^#[:space:]]" /etc/apt/apt-mirrors.txt || true
+            fi
+            if command -v apt-config >/dev/null 2>&1; then
+              echo "apt acquire timeout settings:"
+              apt-config dump Acquire::Retries Acquire::http::Timeout Acquire::https::Timeout || true
+            fi
+          '
           node scripts/ci-budget.mjs --assert
       - name: Install Playwright chromium
         if: steps.verify.outputs.should_release == 'true'
