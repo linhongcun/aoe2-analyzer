@@ -6,7 +6,7 @@ test('#688 @1280 SD3合集全图中英检索且保留标准目录', async ({ pag
   await page.goto('./#/maps');
   await expect(page.getByRole('heading', { name: '地图与开局', exact: true })).toBeVisible();
   const standard = page.getByRole('searchbox', { name: '搜索地图', exact: true });
-  await expect(page.getByRole('navigation', { name: '选择地图' }).locator('button')).toHaveCount(8);
+  await expect(page.getByRole('navigation', { name: '选择地图' }).locator('button')).toHaveCount(83);
   await standard.fill('Holy Hollow');
   await expect(page.locator('.map-result-count')).toContainText('没有匹配的地图');
   console.log(
@@ -19,6 +19,8 @@ test('#688 @1280 SD3合集全图中英检索且保留标准目录', async ({ pag
   );
   await page.screenshot({ path: test.info().outputPath('sd3-before.png'), fullPage: true });
   await page.getByRole('button', { name: '清除筛选', exact: true }).click();
+  const topic = page.getByTestId('map-sd3');
+  await topic.locator('summary').first().click();
   const collection = page.getByTestId('sd3-collection');
   await expect(collection.locator('summary')).toBeVisible();
   await collection.locator('summary').click();
@@ -92,7 +94,7 @@ test.afterEach(async ({ page }) => {
 
 test('#422 黑森林作为常见入口可直接选择', async ({ page }) => {
   await page.goto('./#/maps');
-  await expect(choices(page)).toHaveCount(8);
+  await expect(choices(page)).toHaveCount(catalog.maps.length);
   await expect(page.getByRole('article', { name: '阿拉伯半岛 Arabia', exact: true })).toBeVisible();
   const choice = page.getByRole('navigation', { name: '选择地图' }).getByRole('button', { name: '黑森林 Black Forest', exact: true });
   await expect(choice).toBeVisible();
@@ -117,7 +119,7 @@ test('#422 搜索归一化、地形筛选与无结果恢复不抢焦点', async 
     await expect(page.getByRole('article', { name: '黑森林 Black Forest', exact: true })).toBeVisible();
   }
   await clear.click();
-  await expect(page.getByRole('article', { name: '开道 Michi', exact: true })).toBeVisible();
+  await expect(page.getByRole('article', { name: '黑森林 Black Forest', exact: true })).toBeVisible();
   await expect(page.locator('#map-details')).not.toBeFocused();
   await group.focus();
   await group.selectOption('closed');
@@ -132,7 +134,7 @@ test('#422 搜索归一化、地形筛选与无结果恢复不抢焦点', async 
   await clear.click();
   await expect(search).toHaveValue('');
   await expect(group).toHaveValue('all');
-  await expect(page.getByRole('article', { name: '开道 Michi', exact: true })).toBeVisible();
+  await expect(page.getByRole('article', { name: '黑森林 Black Forest', exact: true })).toBeVisible();
 });
 
 test('#422 中文重名地图以英文和ID区分', async ({ page }) => {
@@ -167,17 +169,16 @@ for (const width of [360, 375, 390, 1280]) {
     await page.goto('./#/maps');
     await page.getByRole('searchbox', { name: '搜索地图', exact: true }).fill('浅滩');
     await expect(choices(page)).toHaveCount(2);
-    await expect(choices(page).locator('span')).toHaveText(['浅滩（Shoals）', '浅滩（Wade）']);
+    await expect(choices(page).locator('.map-row-zh')).toHaveText(['浅滩（Shoals）', '浅滩（Wade）']);
     await page.screenshot({ path: testInfo.outputPath('catalog-maps.png'), fullPage: true });
   });
 }
 
-test('#422 全部83张本地预览可解码，非方图不裁切，收起保留当前项', async ({ page }) => {
+test('#422 全部目录预览可解码，非方图不裁切', async ({ page }) => {
   await page.goto('./#/maps');
-  await expect(choices(page)).toHaveCount(8);
-  await page.getByRole('button', { name: /展开/ }).click();
   expect(catalog.maps).toHaveLength(83);
   await expect(choices(page)).toHaveCount(catalog.maps.length);
+  await expect(page.getByRole('button', { name: /展开其余/ })).toHaveCount(0);
   const nav = page.getByRole('navigation', { name: '选择地图' });
   for (const map of catalog.maps) {
     const thumbnail = nav.getByRole('button', { name: `${map.name} ${map.en}`, exact: true }).locator('img');
@@ -196,14 +197,14 @@ test('#422 全部83张本地预览可解码，非方图不裁切，收起保留�
   const box = await preview.boundingBox();
   expect(box!.width).toBeCloseTo(224, 0);
   expect(box!.width / box!.height).toBeCloseTo(423 / 420, 2);
-  await page.getByRole('button', { name: /收起/ }).click();
-  await expect(choices(page)).toHaveCount(9);
+  await expect(choices(page)).toHaveCount(catalog.maps.length);
   await expect(nav.getByRole('button', { name: '阿塔卡马 Atacama', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(detail).toBeVisible();
 });
 
 test('#688 @1280 赛事搜索恢复与标准筛选独立，真实预填拆主城', async ({ page }) => {
   await page.goto('./#/maps');
+  await page.getByTestId('map-sd3').locator('summary').first().click();
   const collection = page.getByTestId('sd3-collection'),
     summary = collection.locator('summary');
   await summary.focus();
@@ -236,7 +237,7 @@ test('#688 @1280 赛事搜索恢复与标准筛选独立，真实预填拆主城
   await expect(search).toHaveValue('no-such-sd3-map');
   await collection.getByRole('button', { name: '清除赛事搜索', exact: true }).click();
   await expect(collection.locator('.sd3-card')).toHaveCount(11);
-  await expect(page.getByText('83 张', { exact: true })).toBeVisible();
+  await expect(page.locator('.map-result-count')).toContainText(`${catalog.maps.length} / ${catalog.maps.length}`);
   await expect(page.locator('#map-details')).toHaveAttribute('data-map-id', 'arena');
   await expect(collection).toContainText('不模拟赛事特殊机关或多主城失败条件');
   await collection.getByRole('link', { name: '用攻城拆建筑估算拆主城', exact: true }).click();
@@ -260,6 +261,7 @@ for (const width of [360, 375, 390, 1280]) {
       return route.continue();
     });
     await page.goto('./#/maps');
+    await page.getByTestId('map-sd3').locator('summary').first().click();
     const collection = page.getByTestId('sd3-collection'),
       summary = collection.locator('summary');
     const capture = async (state: string) => {

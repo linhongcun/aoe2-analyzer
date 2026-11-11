@@ -305,7 +305,7 @@ export const PROFILES = {
   // #581：页内单位上下文跟攻城反馈走，后续攻城改动也要跑到 siege581。
   siege: profile(['siege308', 'trebuchet711'], ['siege308', 'siege533', 'siege554-555', 'siege581', 'trebuchet711']),
   teamFit: profile(['teamFit558', 'teamBonuses228', 'teamChainNote273'], ['teamFit558', 'teamBonuses228', 'v0300-273']),
-  maps: profile(['sd3Watch702', 'sd3Mechanics752'], ['maps34', 'mapPreviews', 'mapCatalog422', 'maps559', 'sd3Watch702', 'sd3Mechanics752']),
+  maps: profile(['sd3Watch702', 'sd3Mechanics752'], ['maps34', 'mapPreviews', 'mapCatalog422', 'maps559', 'maps935', 'sd3Watch702', 'sd3Mechanics752']),
   compare: profile(['compare403', 'compareLocation558', 'teamBonuses228'], ['compare403', 'compareNavigation558', 'civText402', 'teamBonuses228']),
   // Display-only helpers. Combat, eco and cost math stay on the full plan.
   clock: profile(

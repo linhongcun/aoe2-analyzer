@@ -40,10 +40,11 @@ function ExampleIcons({ paths, size }: { paths: readonly string[]; size: number 
 export default function Home() {
   const { search } = useLocation();
   if (hasLegacyStartQuery(search)) return <Navigate to={{ pathname: '/start', search }} replace />;
-  const primaryKeys = new Set(WIKI.filter((section) => !section.hideNav).map((section) => section.key));
+  // 顶栏百科里已有首页专用卡的五项不再进下方目录。地图回到顶栏后仍留在目录，首页没有地图专用卡。
+  const featured = new Set(WIKI.filter((section) => !section.hideNav && section.key !== 'maps').map((section) => section.key));
   const catalog = HOME_GROUPS.map((group) => ({
     ...group,
-    sections: group.sections.filter((section) => !primaryKeys.has(section.key)),
+    sections: group.sections.filter((section) => !featured.has(section.key)),
   })).filter((group) => group.sections.length > 0);
   const civ = wikiEntry('civs');
   const units = wikiEntry('units');

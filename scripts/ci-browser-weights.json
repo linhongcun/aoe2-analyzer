@@ -127,6 +127,7 @@
     "tests/e2e/mapPreviews.spec.ts": 19280,
     "tests/e2e/maps34.spec.ts": 8339,
     "tests/e2e/maps559.spec.ts": 3777,
+    "tests/e2e/maps935.spec.ts": 4500,
     "tests/e2e/mapuche197.spec.ts": 18522,
     "tests/e2e/market215.spec.ts": 20948,
     "tests/e2e/marketFees745.spec.ts": 13500,

@@ -34,6 +34,7 @@ test('#702 @1280 开放窗口列出半决赛和决赛的上海时间与 UTC', as
     return route.continue();
   });
   await page.goto('./#/maps');
+  await page.getByTestId('map-sd3').locator('summary').first().click();
   const watch = page.getByTestId('sd3-watch');
   await expect(watch).toHaveAttribute('data-state', 'open');
   await expect(watch.getByRole('heading', { name: 'SD3 观赛窗口', exact: true })).toBeVisible();
@@ -68,6 +69,7 @@ test('#702 @1280 开放窗口列出半决赛和决赛的上海时间与 UTC', as
 test('#702 决赛开打时刻仍显示时间，不写成已结束', async ({ page }) => {
   await freeze(page, '2026-11-08T17:00:00.000Z');
   await page.goto('./#/maps');
+  await page.getByTestId('map-sd3').locator('summary').first().click();
   const watch = page.getByTestId('sd3-watch');
   await expect(watch).toHaveAttribute('data-state', 'open');
   await expect(watch.locator('[data-round="final"]')).toBeVisible();
@@ -79,6 +81,7 @@ test('#702 窗口到期后收起并标明本届已结束', async ({ page }) => {
   await freeze(page, '2026-11-09T00:00:00.000Z');
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/maps');
+  await page.getByTestId('map-sd3').locator('summary').first().click();
   const watch = page.getByTestId('sd3-watch');
   await expect(watch).toHaveAttribute('data-state', 'ended');
   const summary = watch.locator('summary');
@@ -104,6 +107,7 @@ for (const width of [360, 375, 390, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     if (width === 390) await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
     await page.goto('./#/maps');
+    await page.getByTestId('map-sd3').locator('summary').first().click();
     const watch = page.getByTestId('sd3-watch');
     await expect(watch).toHaveAttribute('data-state', 'open');
     await expect(watch.locator('[data-round="semifinal"]')).toBeVisible();

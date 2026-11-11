@@ -54,6 +54,7 @@ test('#729 非征服时六张卡仍暂停，短卡继续说明不能拿征服示
 test('#729 SD3 合集短链打开胜利条件卡，不出现赛程', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/maps');
+  await page.getByTestId('map-sd3').locator('summary').first().click();
   const collection = page.getByTestId('sd3-collection');
   await collection.locator('summary').click();
   await expect(collection).not.toContainText('$20,000');

@@ -34,6 +34,7 @@ async function numbersStayOneLine(scope: ReturnType<Page['locator']>) {
 test('#752 @1280 合集旁能看到三张机制短卡并链到手册', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/maps');
+  await page.getByTestId('map-sd3').locator('summary').first().click();
   const watch = page.getByTestId('sd3-watch');
   const collection = page.getByTestId('sd3-collection');
   const mechanics = mechanicsOf(page);
@@ -94,6 +95,7 @@ test('#752 @1280 合集旁能看到三张机制短卡并链到手册', async ({ 
   await noOverflow(page);
 
   await page.goto('./#/maps');
+  await page.getByTestId('map-sd3').locator('summary').first().click();
   await page.addStyleTag({ content: 'header.topbar, .skip-link, a[href*="issues/new"] { visibility: hidden !important; }' });
   await mechanicsOf(page).scrollIntoViewIfNeeded();
   await noOverflow(page);
@@ -107,6 +109,7 @@ for (const width of [360, 375, 390, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     if (width === 390) await page.addInitScript(() => localStorage.setItem('aoe2-theme', 'dark'));
     await page.goto('./#/maps');
+    await page.getByTestId('map-sd3').locator('summary').first().click();
     await page.addStyleTag({ content: 'header.topbar, .skip-link, a[href*="issues/new"] { visibility: hidden !important; }' });
     const mechanics = mechanicsOf(page);
     await expect(mechanics).toHaveAttribute('open', '');
