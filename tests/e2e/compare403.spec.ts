@@ -139,7 +139,7 @@ function sharedUrl(value: string, a: string, b: string) {
 test('#403 直达参数、刷新和文明特有内容一致', async ({ page }) => {
   await page.goto('./#/compare?a=Mapuche&b=Muisca');
   await pair(page, 'Mapuche', 'Muisca');
-  await expect(page.locator('#ctab')).toContainText('Malon');
+  await expect(page.locator('#compare-facts')).toContainText('Malon');
   await page.reload();
   await pair(page, 'Mapuche', 'Muisca');
 });
