@@ -699,6 +699,10 @@
     "py": "shijianhuansuan",
     "pyi": "sjhs"
   },
+  "更新历史": {
+    "py": "gengxinlishi",
+    "pyi": "gxls"
+  },
   "木栅栏生命值 +33%": {
     "py": "muzhalanshengmingzhi",
     "pyi": "mzlsmz"
@@ -894,10 +898,6 @@
   "炮舰攻击移动目标的准确度提高": {
     "py": "paojiangongjiyidongmubiaodizhunquedutigao",
     "pyi": "pjgjydmbdzqdtg"
-  },
-  "版本补丁": {
-    "py": "banbenbuding",
-    "pyi": "bbbd"
   },
   "牧场取代农田": {
     "py": "muchangqudainongtian",

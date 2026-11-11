@@ -66,10 +66,18 @@ export default function UnitDetail() {
   const opp = civByEn(params.get('opp') ?? '');
   const u = core && rt ? core.unitById[rt.id] : undefined;
   const workspace = rt ? unitWorkspaceOpen(rt, loc.search) : false;
+  const setHistory = (open: boolean) => {
+    const next = new URLSearchParams(loc.search);
+    if (open) next.set('tab', 'history');
+    else if (next.get('tab') === 'history') next.delete('tab');
+    const query = next.toString();
+    nav({ pathname: loc.pathname, search: query ? `?${query}` : '' });
+  };
 
   useEffect(() => {
     if (workspace) document.getElementById('unit-sim')?.scrollIntoView({ block: 'start' });
     else if (tab === 'rel') document.getElementById('unit-related')?.scrollIntoView({ block: 'start' });
+    else if (tab === 'history') document.getElementById('unit-history')?.scrollIntoView({ block: 'start' });
     else scrollTo(0, 0);
   }, [u?.id, workspace, tab]);
 
@@ -204,7 +212,14 @@ export default function UnitDetail() {
 
       <nav className="ud-jump" aria-label="本页章节">
         {JUMPS.map(([id, label]) => (
-          <button key={id} type="button" onClick={() => document.getElementById(id)?.scrollIntoView({ block: 'start' })}>
+          <button
+            key={id}
+            type="button"
+            onClick={() => {
+              if (id === 'unit-history') setHistory(true);
+              document.getElementById(id)?.scrollIntoView({ block: 'start' });
+            }}
+          >
             {label}
           </button>
         ))}
@@ -446,7 +461,15 @@ export default function UnitDetail() {
         </nav>
       )}
 
-      <details className="ud-history" id="unit-history">
+      <details
+        className="ud-history"
+        id="unit-history"
+        open={tab === 'history'}
+        onToggle={(event) => {
+          if (event.currentTarget.open === (tab === 'history')) return;
+          setHistory(event.currentTarget.open);
+        }}
+      >
         <summary>更新历史</summary>
         <PatchHistory target={{ targetType: 'unit', targetId: u.id, targetNameZh: u.zh }} />
       </details>

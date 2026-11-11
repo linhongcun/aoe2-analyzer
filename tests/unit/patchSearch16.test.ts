@@ -18,13 +18,13 @@ it('新增页面不能挤掉短拼音保留的文明/单位；精确搜页面仍
     href: '/unit/' + i,
     sub: '',
   }));
-  const page = withSearchPy({ kind: 'page', id: 'patches', zh: '版本补丁', en: 'Patch Notes', href: '/patches', sub: '' });
+  const page = withSearchPy({ kind: 'page', id: 'patches', zh: '更新历史', en: 'Update History', href: '/patches', sub: '' });
   const ids = (items: SearchItem[]) =>
     search(items, 'ba')
       .filter((x) => x.id.startsWith('entity'))
       .map((x) => x.id);
   expect(ids([...text, ...entities, page])).toEqual(ids([...text, ...entities]));
   expect(ids([...text, ...entities, page])).toHaveLength(5);
-  expect(search([...text, ...entities, page], '版本补丁')[0]?.id).toBe('patches');
-  expect(search([...text, ...entities, page], 'banben')[0]?.id).toBe('patches');
+  expect(search([...text, ...entities, page], '更新历史')[0]?.id).toBe('patches');
+  expect(search([...text, ...entities, page], 'gengxin')[0]?.id).toBe('patches');
 });

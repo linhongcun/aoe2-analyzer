@@ -11,7 +11,7 @@ const home = () => renderToStaticMarkup(createElement(StaticRouter, { location: 
 
 describe('导航与首页入口 #272', () => {
   it('顶部保留紧凑的百科快捷入口', () => {
-    expect(visibleWiki.map((s) => s.key)).toEqual(['civs', 'units', 'buildings', 'techs', 'tree', 'maps']);
+    expect(visibleWiki.map((s) => s.key)).toEqual(['civs', 'units', 'buildings', 'techs', 'tree', 'maps', 'patches']);
   });
 
   it('每个已上线页面在首页渲染至少一个入口，且工具菜单数据包含入口', () => {

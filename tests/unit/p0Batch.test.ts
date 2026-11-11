@@ -151,7 +151,7 @@ describe('#31 开局流程入口', () => {
     expect(TOOLS[0]!.status).toBeUndefined();
     expect(FUTURE.map((s) => s.key)).not.toContain('builds');
     // 顶部导航：首页·文明·单位·建筑·科技·科技树·地图·工具
-    expect(['首页', ...WIKI.filter((s) => !s.hideNav).map((s) => s.label), '工具']).toEqual(['首页', '文明', '单位', '建筑', '科技', '科技树', '地图', '工具']);
+    expect(['首页', ...WIKI.filter((s) => !s.hideNav).map((s) => s.label), '工具']).toEqual(['首页', '文明', '单位', '建筑', '科技', '科技树', '地图', '更新历史', '工具']);
   });
   it('首页不再有「即将推出 · 正在制作」块', () => {
     const src = readFileSync('src/features/home/components/Home.tsx', 'utf8');

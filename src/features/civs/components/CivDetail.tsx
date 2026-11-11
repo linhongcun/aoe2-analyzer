@@ -14,7 +14,7 @@ import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
 import { session } from '../../../shared/utils/sticky';
-import CivNotFound from './CivNotFound';
+import { HistoricalEntityDetail, PatchHistory } from '../../../shared/ui/PatchHistory';
 import { ArenaCastleGold } from './ArenaCastleGold';
 import { NomadReveal } from './NomadReveal';
 import { BonusRows } from './BonusRows';
@@ -22,7 +22,6 @@ import { CivHistory } from './CivHistory';
 import { CivBackground } from './CivBackground';
 import { CivRegionalBuildings } from './CivRegionalBuildings';
 import { CivUniqueBuildings } from './CivUniqueBuildings';
-import { PatchHistory } from '../../../shared/ui/PatchHistory';
 import './civ-read.css';
 import './civ-start-return.css';
 
@@ -135,7 +134,7 @@ export default function CivDetail() {
     const frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
     return () => cancelAnimationFrame(frame);
   }, [c, location.hash, location.pathname, location.search, navigate, tab]);
-  if (!c) return <CivNotFound en={en} />;
+  if (!c) return <HistoricalEntityDetail target={{ targetType: 'civ', targetId: en }} />;
   const insights = civInsights(c.en);
   const uniqueUnits = core ? civUniqueUnits(c.en, core.units, core.fam) : [];
   const uniqueTechs = core ? civUniqueTechs(c, core.techs) : [];
@@ -274,7 +273,7 @@ export default function CivDetail() {
         <Fold key={`${c.en}-history`} title="文明历史摘要" wanted={false}>
           <CivHistory civ={c.en} />
         </Fold>
-        <Fold key={`${c.en}-patches`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
+        <Fold key={`${c.en}-patches-${historyOpen ? 'open' : 'shut'}`} id="patches" title="更新历史" wanted={historyOpen} testId="civ-patches">
           <PatchHistory target={{ targetType: 'civ', targetId: c.en, targetNameZh: c.zh }} />
         </Fold>
         <DetailSource note="加成、单位与科技来自当前数据目录" />

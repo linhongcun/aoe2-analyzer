@@ -94,7 +94,7 @@ function HistoryTimeline({ archives, target }: { archives: PatchArchive[]; targe
     <section className="entity-history" data-testid="entity-history" aria-label="更新历史">
       <h2>更新历史</h2>
       <p className="note">首批收录 DE 正式版 {archives.map((patch) => patch.id).join('、')}，属于分批收录，版本之间仍有空缺。历史数值不代表当前数值。</p>
-      <p className="note">直接改动与有明确依据的关联影响分别显示；数值加强或削弱不能直接证明整体对局强弱。文明关联未核实的全局改动，请在版本补丁中查看。</p>
+      <p className="note">直接改动与有明确依据的关联影响分别显示；数值加强或削弱不能直接证明整体对局强弱。没有写明适用文明的改动，请在更新历史中查看。</p>
       <details className="history-coverage">
         <summary>查看收录范围</summary>
         <ul>
@@ -176,6 +176,11 @@ function HistoryTimeline({ archives, target }: { archives: PatchArchive[]; targe
             </time>{' '}
             · DE 正式版
           </p>
+          {target.targetType === 'civ' && (
+            <p>
+              <Link to={`/patches/${patch.id}?civ=${encodeURIComponent(String(target.targetId))}`}>查看本版本的文明分组改动（含未写明适用文明的记录）</Link>
+            </p>
+          )}
           {patch.publishedAt && (
             <p className="note">
               公告公开（北京时间）：<time className="num nw">{patch.publishedAt}</time>
@@ -259,7 +264,7 @@ export function HistoricalEntityDetail({ target }: { target: HistoryTarget }) {
       <section className="pane">
         <h1>尚未收录该对象的更新历史</h1>
         <p>当前目录和历史档案均未找到此项。</p>
-        <Link to="/patches">查看版本补丁</Link>
+        <Link to="/patches">查看更新历史</Link>
       </section>
     );
   return (

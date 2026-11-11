@@ -4,7 +4,7 @@ import { expect, test, type Page } from '@playwright/test';
 // 面包屑外观/高度以已在用的 /relic-income 为参照（同一组件、同一 CSS）。
 const PAGES = [
   ['/maps', '地图'],
-  ['/patches', '版本补丁'],
+  ['/patches', '更新历史'],
   ['/production', '持续生产'],
   ['/market', '市场买卖'],
   ['/construction', '多人施工'],

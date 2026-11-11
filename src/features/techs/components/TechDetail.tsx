@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { AGE_ZH } from '../../../domain/ratings';
@@ -25,6 +25,7 @@ const ECO_PAYOFF = [202, 203, 221, 55, 182, 278, 279];
 export default function TechDetail() {
   const { id = '' } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
   const tab = params.get('tab');
   const contextCiv = civByEn(params.get('civ') ?? '');
@@ -32,6 +33,13 @@ export default function TechDetail() {
   const opp = civByEn(params.get('opp') ?? '');
   const core = useCore();
   const tech = core?.techById[+id];
+  const setHistory = (open: boolean) => {
+    const next = new URLSearchParams(location.search);
+    if (open) next.set('tab', 'history');
+    else if (next.get('tab') === 'history') next.delete('tab');
+    const query = next.toString();
+    navigate({ pathname: location.pathname, search: query ? `?${query}` : '' });
+  };
 
   useEffect(() => {
     if (!tech) return;
@@ -137,7 +145,13 @@ export default function TechDetail() {
             目录关联
           </button>
         )}
-        <button type="button" onClick={() => jump('tech-history')}>
+        <button
+          type="button"
+          onClick={() => {
+            setHistory(true);
+            jump('tech-history');
+          }}
+        >
           更新历史
         </button>
       </nav>
@@ -255,9 +269,18 @@ export default function TechDetail() {
 
       <DetailSource note={entries.length ? '结构化效果与科技模拟器同源；未编码效果以游戏说明为准' : '这条科技没有编码数值，以游戏说明为准'} />
 
-      <div className="td-history" id="tech-history">
+      <details
+        className="td-history"
+        id="tech-history"
+        open={tab === 'history'}
+        onToggle={(event) => {
+          if (event.currentTarget.open === (tab === 'history')) return;
+          setHistory(event.currentTarget.open);
+        }}
+      >
+        <summary>更新历史</summary>
         <PatchHistory target={{ targetType: 'tech', targetId: tech.id, targetNameZh: tech.zh }} />
-      </div>
+      </details>
     </section>
   );
 }

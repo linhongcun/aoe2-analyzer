@@ -75,7 +75,7 @@ describe('地图页标记 #935', () => {
     expect(maps).toMatchObject({ path: '/maps', lane: 'wiki', group: 'reference', label: '地图' });
     expect(maps?.hideNav).toBeUndefined();
     const visible = PAGES.filter((item) => item.lane === 'wiki' && !item.hideNav).map((item) => item.key);
-    expect(visible).toEqual(['civs', 'units', 'buildings', 'techs', 'tree', 'maps']);
+    expect(visible).toEqual(['civs', 'units', 'buildings', 'techs', 'tree', 'maps', 'patches']);
   });
 
   it('路由表没有单图路径，计数不写死目录长度', () => {
