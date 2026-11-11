@@ -1,4 +1,4 @@
-/** Issue 224: building capacity, entry compatibility and a documented projectile model. */
+/** Issue 224: building capacity, entry compatibility and a documented projectile model. Coverage: ./garrisonCoverage.ts. */
 import raw from '../data/garrison_general.json';
 import { freeGarrisonTechs, implicitShapeTechs } from './garrisonTechs';
 import { DATA_PATCH_BUILD } from '../data/meta';
