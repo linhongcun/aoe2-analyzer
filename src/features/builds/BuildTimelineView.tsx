@@ -29,6 +29,7 @@ import { NumUnitText } from './NumUnitText';
 import BuildPracticeView, { buildPracticeUrl } from './BuildPracticeView';
 import { buildView, rowTime, mmss, rangeLabel, summaryText, isLongBottleneck, noHouseCompareText } from './timelineModel';
 import { BuildApplicability } from './BuildApplicability';
+import { buildsFocusState } from './buildsFocus';
 
 const UPS = Object.fromEntries((units as { id: number; up?: unknown }[]).filter((u) => u.up).map((u) => [u.id, u.up])) as UpgradeData;
 const UNIT_ZH = Object.fromEntries((units as { id: number; zh: string }[]).map((u) => [String(u.id), u.zh]));
@@ -222,8 +223,8 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
 
   const timeline = (
     <section className="pane tl" id="builds" data-t="timeline">
+      <Breadcrumbs current={bo.name.zh} />
       <div className="tl-desk-only">
-        <Breadcrumbs current={bo.name.zh} />
         <h1 className="tl-title">{bo.name.zh}</h1>
         <p className="note">
           {bo.summary}
@@ -232,6 +233,9 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
       </div>
 
       <nav className="bp-entry" aria-label="开局跟练与打印">
+        <Link className="bp-button" to={buildsPath(q.civ || undefined)} state={buildsFocusState(bo.id)}>
+          返回开局列表
+        </Link>
         <Link className="bp-button" to={buildPracticeUrl(sp, 'practice')}>
           专注跟练
         </Link>
@@ -393,7 +397,10 @@ export default function BuildTimelineView({ orders = buildOrders }: { orders?: B
       />
       <p className="note">
         {source && <span className="tl-mob-only">来源 {source} · </span>}
-        时间为模拟估算（{tl.model.version}）。<Link to={buildsPath(q.civ)}>返回开局列表</Link>
+        时间为模拟估算（{tl.model.version}）。
+        <Link to={buildsPath(q.civ || undefined)} state={buildsFocusState(bo.id)}>
+          返回开局列表
+        </Link>
       </p>
       <div className="tl-share-sticky">
         <div className="tl-share-row">

@@ -29,21 +29,19 @@ const summary = (page: Page) => page.getByRole('region', { name: /摘要/ });
 const steps = (page: Page) => page.getByRole('list', { name: '步骤' }).getByRole('listitem');
 
 test.describe('#3 开局时间线', () => {
-  test('1. 无参数打开：空状态提示 + 8 个开局入口，无时间线无摘要', async ({ page }) => {
+  test('1. 无参数打开：比较目录，无时间线无摘要', async ({ page }) => {
     await page.goto(BUILDS);
-    await expect(page.getByText('选一个开局，看看你会卡在哪')).toBeVisible();
-    await expect(page.locator('[data-t="timeline-empty"]').getByRole('button', { name: /开局/ })).toHaveCount(8);
+    await expect(page.getByRole('heading', { name: '开局流程', exact: true })).toBeVisible();
+    await expect(page.getByText('选一个开局，看看你会卡在哪')).toHaveCount(0);
+    await expect(page.locator('[data-t="build-order"]')).toHaveCount(8);
+    await expect(page.locator('.bo-steps')).toHaveCount(0);
     await expect(nodes(page)).toHaveCount(0);
     await expect(summary(page)).toHaveCount(0);
   });
 
-  test('2. 开局快捷定位到分组，再打开时间线：URL 含 bo，摘要「到达封建 约 m:ss」', async ({ page }) => {
+  test('2. 查看时间线：URL 含 bo，摘要「到达封建 约 m:ss」', async ({ page }) => {
     await page.goto(BUILDS);
-    await page.locator('[data-t="timeline-empty"]').getByRole('button', { name: /开局/ }).first().click();
-    const group = page.locator('[data-t="build-order"]').first();
-    await expect(group).toHaveAttribute('open');
-    await expect(group.locator('summary')).toBeFocused();
-    await group.locator('a.tl-open').click();
+    await page.locator('[data-t="build-order"]').first().getByRole('link', { name: '查看时间线', exact: true }).click();
     await expect(page).toHaveURL(/[?&]bo=/);
     await expect(nodes(page).first()).toBeVisible();
     await expect(
@@ -57,7 +55,7 @@ test.describe('#3 开局时间线', () => {
   test('2b. 开局库每个开局都能打开自己的时间线', async ({ page }) => {
     await page.goto(BUILDS);
     await expect(page.locator('[data-t="build-order"]').first()).toBeVisible();
-    const links = page.locator('a.tl-open');
+    const links = page.getByRole('link', { name: '查看时间线', exact: true });
     const n = await links.count();
     expect(n).toBeGreaterThanOrEqual(6);
     const hrefs = await links.evaluateAll((as) => as.map((a) => a.getAttribute('href')));

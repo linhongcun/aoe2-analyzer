@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { buildOrders } from '../../data/buildOrders';
+import { buildsPath } from '../../domain/matchupRoute';
+import { buildsFocusState } from './buildsFocus';
 import { civByEn } from '../../data';
 import { useCore } from '../../data/hooks';
 import { HOUSE, type BuildOrder } from '../../domain/buildOrder';
@@ -175,6 +177,10 @@ export default function BuildPracticeView({
           <p className="note">{mode === 'practice' ? '按自己的节奏，手动跟完每一步。' : '核对全部步骤后，可用浏览器打印或保存为 PDF。'}</p>
         </div>
         <nav className="bp-toolbar" aria-label="跟练视图">
+          <Link className="bp-button" to={buildsPath(query.civ || undefined)} state={buildsFocusState(order.id)}>
+            <Icon name="arrow-left" />
+            返回开局列表
+          </Link>
           <Link className="bp-button" to={buildPracticeUrl(params, null)}>
             <Icon name="arrow-left" />
             返回时间线

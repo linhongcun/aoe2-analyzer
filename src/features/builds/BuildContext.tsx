@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { civByEn } from '../../data';
 import { buildsMatchupReturn, buildsPath } from '../../domain/matchupRoute';
 import { Icon } from '../../shared/ui/Icon';
+import { buildsFocusState } from './buildsFocus';
 import '../../shared/ui/contextLinks.css';
 
 export function BuildContext({ params }: { params: URLSearchParams }) {
@@ -22,7 +23,7 @@ export function BuildContext({ params }: { params: URLSearchParams }) {
         </Link>
       )}
       {params.has('bo') && (
-        <Link className="community-tool-entry" to={buildsPath(civ?.en)}>
+        <Link className="community-tool-entry" to={buildsPath(civ?.en)} state={buildsFocusState(params.get('bo') ?? '')}>
           查看全部开局
         </Link>
       )}

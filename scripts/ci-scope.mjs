@@ -93,7 +93,7 @@ export const PROFILES = {
   shell: profile(['nav', 'theme6', 'pageRegistry283'], ['smoke', 'navigation272', 'editorial6', 'skipLink294', 'searchLoading395', 'feedbackTap295']),
   builds: profile(
     [...sourceChecks, 'sources', 'boSources', 'buildOrders', 'buildOrders.content', 'buildPractice216', 'buildSim', 'build41', 'v0300-335'],
-    ['sourcePresentation442', 'practice216', 'build41', 'v0290-322-golden'],
+    ['sourcePresentation442', 'practice216', 'build41', 'v0290-322-golden', 'buildsCatalog937'],
   ),
   gameGuide: profile(
     [...sourceChecks, 'gameGuide256', 'v0300-335', 'elevation734', 'housing743', 'standardVictory747'],
