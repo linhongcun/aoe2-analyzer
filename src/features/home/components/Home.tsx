@@ -1,22 +1,13 @@
-import { useMemo, useState, type ReactNode } from 'react';
-import { Link, parsePath, useLocation, useNavigate } from 'react-router-dom';
+import { type ReactNode } from 'react';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { civs } from '../../../data';
-import { enterLobby } from '../../../domain/startGame';
 import { preloadGlobalSearch, requestGlobalSearch } from '../../../shared/search/globalSearch';
 import { HOME_GROUPS, WIKI, type Section } from '../../../shared/nav/sections';
 import { img } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
-import { isIdleStart } from '../homeEntry';
 import { HOME_AGE_PICS, HOME_BUILDING_PIC, HOME_EMBLEM_CIVS, HOME_REFERENCE_COPY, HOME_TECH_PIC, HOME_UNIT_PICS } from '../homeReference';
-import { useStartGamePersistence } from '../useStartGamePersistence';
-import StartGame from './StartGame';
+import { hasLegacyStartQuery } from '../legacyStartQuery';
 import '../home.css';
-
-function currentHomeSearch(): string | null {
-  if (typeof window === 'undefined') return null;
-  const path = parsePath(window.location.hash.slice(1) || '/');
-  return (path.pathname ?? '/') === '/' ? (path.search ?? '') : null;
-}
 
 function wikiEntry(key: keyof typeof HOME_REFERENCE_COPY): Section {
   const section = WIKI.find((item) => item.key === key);
@@ -48,26 +39,12 @@ function ExampleIcons({ paths, size }: { paths: readonly string[]; size: number 
 
 export default function Home() {
   const { search } = useLocation();
-  const navigate = useNavigate();
-  const [flowOpen, setFlowOpen] = useState(false);
-  const bridge = useMemo(
-    () => ({
-      isCurrent: (expected: string) => currentHomeSearch() === expected,
-      replace: (next: string, expected: string) => {
-        if (currentHomeSearch() !== expected) return false;
-        navigate({ pathname: '/', search: next }, { replace: true });
-        return true;
-      },
-    }),
-    [navigate],
-  );
-  const { state: flow, onChange, status, notice, retry, abandon } = useStartGamePersistence({ search, bridge });
+  if (hasLegacyStartQuery(search)) return <Navigate to={{ pathname: '/start', search }} replace />;
   const primaryKeys = new Set(WIKI.filter((section) => !section.hideNav).map((section) => section.key));
   const catalog = HOME_GROUPS.map((group) => ({
     ...group,
     sections: group.sections.filter((section) => !primaryKeys.has(section.key)),
   })).filter((group) => group.sections.length > 0);
-  const showFlow = status === 'ready' && (flowOpen || notice != null || !isIdleStart(flow));
   const civ = wikiEntry('civs');
   const units = wikiEntry('units');
   const tree = wikiEntry('tree');
@@ -147,48 +124,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {notice ? <p role="alert">{notice}</p> : null}
-      {status !== 'ready' ? (
-        <section className="start-game home-restore" aria-labelledby="start-restore-h" data-testid="home-start">
-          <h2 id="start-restore-h">恢复本局进度</h2>
-          <p role={status === 'failed' ? 'alert' : 'status'}>
-            {status === 'failed' ? '地图目录加载失败，原进度已保留。可以重试或放弃恢复。' : '正在核对本局地图，原进度已保留。'}
-          </p>
-          {status === 'failed' ? (
-            <button className="start-btn" type="button" onClick={retry}>
-              重试恢复
-            </button>
-          ) : null}
-          <button className="start-btn" type="button" onClick={abandon}>
-            放弃恢复，重新开始
-          </button>
-        </section>
-      ) : showFlow ? (
-        <StartGame state={flow} onChange={onChange} />
-      ) : (
-        <section className="home-start" data-testid="home-start" aria-labelledby="home-start-title">
-          <p className="home-kicker">本局配置</p>
-          <h2 id="home-start-title">开一局</h2>
-          <p className="home-start-lede">记下这局的模式、地图和文明，再转到相关工具。</p>
-          <div className="home-start-actions">
-            <button type="button" className="home-start-primary" data-testid="home-configure" onClick={() => setFlowOpen(true)}>
-              配置本局
-            </button>
-            <button
-              type="button"
-              className="home-start-secondary"
-              data-testid="home-lobby"
-              onClick={() => {
-                setFlowOpen(true);
-                onChange(() => enterLobby());
-              }}
-            >
-              已在大厅
-            </button>
-          </div>
-        </section>
-      )}
 
       <section className="home-catalog" data-testid="home-catalog" aria-labelledby="home-catalog-title">
         <h2 id="home-catalog-title">工具与资料</h2>

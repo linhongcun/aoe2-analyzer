@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('首页、工具菜单和搜索只有一个团队入口', async ({ page }) => {
   await page.goto('./');
-  await expect(page.locator('#home [data-testid="home-start"]')).toBeVisible();
+  await expect(page.locator('#home [data-testid="home-catalog"]')).toBeVisible();
   await expect(page.locator('#home a[href="#/team-fit"]')).toHaveCount(1);
   await expect(page.locator('#home a[href="#/team-bonuses"], #home a[href="#/team-plan"]')).toHaveCount(0);
   await page.getByRole('button', { name: '工具', exact: true }).click();

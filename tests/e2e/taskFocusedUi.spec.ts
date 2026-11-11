@@ -25,7 +25,7 @@ for (const width of [360, 375, 390, 1280])
         if (m.type() === 'error') errors.push(m.text());
       });
       for (const [name, route, ready] of [
-        ['home', './#/', '[data-testid="start-step"]'],
+        ['home', './#/', '#home h1'],
         ['civs', './#/civs', '#grid .card'],
         ['units', './#/units', '#ugrid .unit-row'],
         ['civ', './#/civ/Franks', '[data-testid="civ-ratings"]'],

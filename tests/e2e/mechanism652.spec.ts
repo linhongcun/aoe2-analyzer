@@ -57,7 +57,7 @@ const archerArmor = techNames.find((tech) => tech.id === 211),
   thumbRing = techNames.find((tech) => tech.id === 437);
 if (!archerArmor || !thumbRing) throw new Error('Missing pinned archer technology names');
 async function select(page: Page, lane = '边路', expand = true) {
-  await page.goto('./#/');
+  await page.goto('./#/start');
   await page.getByRole('button', { name: /组队随机地图/ }).click();
   await page.getByRole('button', { name: '4v4', exact: true }).click();
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
@@ -292,7 +292,7 @@ test('中路更换场景、保留文明、修改地图、跳过和再开一局',
   await expect(page.getByTestId('scenario-suggestions')).toHaveCount(0);
 });
 test('2v2和未选路位不套用计算建议', async ({ page }) => {
-  await page.goto('./#/');
+  await page.goto('./#/start');
   await page.getByRole('button', { name: /组队随机地图/ }).click();
   await page.getByRole('button', { name: '2v2', exact: true }).click();
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
@@ -303,7 +303,7 @@ test('2v2和未选路位不套用计算建议', async ({ page }) => {
 
 test('数据加载失败时保留选择并可继续，不刷新整页', async ({ page }) => {
   await page.route(/\/assets\/trees-[^/]+\.js$/, (route) => route.abort());
-  await page.goto('./#/');
+  await page.goto('./#/start');
   await page.getByTestId('start-lobby').click();
   await page.getByRole('button', { name: /匈奴/ }).click();
   await page.getByTestId('start-skip').click();
@@ -313,7 +313,7 @@ test('数据加载失败时保留选择并可继续，不刷新整页', async ({
   await page.getByRole('button', { name: /阿拉伯半岛/ }).click();
   await page.getByRole('button', { name: /^中路/ }).click();
   const pending = { ...planUrl(page.url()), sceneConfig: { ...DEFAULT_SCENE, techPlan: 'armor' } };
-  await page.evaluate((state) => (location.hash = '/?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(state) })), pending);
+  await page.evaluate((state) => (location.hash = '/start?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(state) })), pending);
   await expect(page.getByRole('alert')).toContainText('加载失败');
   await expect(page.getByTestId('start-editorial')).toHaveCount(0);
   await expect(page.getByTestId('start-step')).toContainText('已选文明保留');
@@ -413,7 +413,7 @@ for (const width of [360, 375, 390, 1280]) {
       await expect(card.locator('p').filter({ hasText: '科技及升级' })).not.toBeVisible();
     }
     await page
-      .locator('#home')
+      .locator('[data-testid="start-game"]')
       .screenshot({ path: info.outputPath(`plan667-cards-${width}.png`), style: 'header.topbar, .skip-link { visibility:hidden!important; }' });
     const britons = page.getByTestId('scene-Britons');
     await britons.getByText('为什么', { exact: true }).click();
@@ -459,7 +459,7 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(page.getByTestId('start-scene-summary')).toContainText(currentSupport);
     await page.getByText('查看本局场景结果', { exact: true }).click();
     await page
-      .locator('#home')
+      .locator('[data-testid="start-game"]')
       .screenshot({ path: info.outputPath(`plan667-summary-${width}.png`), style: 'header.topbar, .skip-link { visibility:hidden!important; }' });
     await page.getByRole('button', { name: '修改文明', exact: true }).click();
     await page.getByText('调整场景与投入', { exact: true }).click();
@@ -584,7 +584,7 @@ test('#667 @1280 摘要真实数据失败重试、非法配置保留地址和存
   const original = await page.evaluate(() => localStorage.getItem('aoe2-start-game-v1'));
   const invalid = planUrl(page.url());
   invalid.sceneConfig!.distance = 11;
-  const hash = '/?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(invalid) });
+  const hash = '/start?' + new URLSearchParams({ sgv: '1', sg: JSON.stringify(invalid) });
   await page.evaluate((value) => {
     location.hash = value;
   }, hash);

@@ -16,7 +16,7 @@ async function pickCiv(page: Page, id: string, en: string) {
 
 // 旧版 hash（无前导 /）与新版 hash 都必须可用
 const ROUTES: [string, string][] = [
-  ['', '#home [data-testid="home-start"]'],
+  ['', '#home [data-testid="home-catalog"]'],
   ['#civs', '#grid .card'],
   ['#simulator', '#simhub .card'],
   ['#buildings', '#bgrid .card'],
@@ -116,7 +116,7 @@ test('mobile nav opens and navigates', async ({ page }) => {
 
 test('nav: every entry opens its real page, none opens a planned placeholder', async ({ page }) => {
   const PAGES: [string, string][] = [
-    ['#/', '#home [data-testid="home-start"]'],
+    ['#/', '#home [data-testid="home-catalog"]'],
     ['#/civs', '#grid .card'],
     ['#/units', '#ugrid .unit-row'],
     ['#/buildings', '#bgrid .card'],

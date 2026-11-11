@@ -38,6 +38,7 @@ const LOADERS: Record<LazyComponentId, LazyExoticComponent<ComponentType>> = {
   GameGuide: lazy(() => import('../features/gameGuide/GameGuide')),
   MatchReview: lazy(() => import('../features/matchReview/MatchReview')),
   Scouting: lazy(() => import('../features/scouting/Scouting')),
+  StartPage: lazy(() => import('../features/home/components/StartPage')),
   Glossary: lazy(() => import('../features/glossary/Glossary')),
   Patches: lazy(() => import('../features/patches/Patches')),
   AboutData: lazy(() => import('../features/about/AboutData')),

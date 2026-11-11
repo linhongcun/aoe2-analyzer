@@ -221,19 +221,19 @@ describe('开一局步骤 #592', () => {
     expect(edited.choice.civ).toBe('Franks');
   });
 
-  it('首页默认收起开一局，不展示规划中按钮', () => {
+  it('首页只在目录放一条开一局，不嵌向导', () => {
     const html = home();
     expect(html).toContain('查阅文明、单位与科技，并使用计算工具。');
     expect(html).toContain('>开一局<');
-    expect(html).toContain('data-testid="home-configure"');
-    expect(html).toContain('>已在大厅<');
+    expect(html).not.toContain('data-testid="home-configure"');
+    expect(html).not.toContain('>已在大厅<');
     expect(html).toContain('搜索文明、单位、科技、开局…');
     expect(html).toContain('工具与资料');
     expect(html).not.toContain('data-testid="start-steps"');
     expect(html).not.toContain('规划中');
     expect(html).not.toContain('设计选例');
-    expect(html.indexOf('id="site-title"')).toBeLessThan(html.indexOf('id="home-start-title"'));
-    expect(html.indexOf('id="home-start-title"')).toBeLessThan(html.indexOf('id="home-catalog-title"'));
+    expect(html.match(/href="\/start"/g)).toEqual(['href="/start"']);
+    expect(html.indexOf('id="site-title"')).toBeLessThan(html.indexOf('id="home-catalog-title"'));
   });
 });
 

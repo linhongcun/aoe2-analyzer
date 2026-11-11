@@ -202,6 +202,7 @@
     "tests/e2e/standardVictory747.spec.ts": 15000,
     "tests/e2e/startGame592.spec.ts": 7267,
     "tests/e2e/startGame632.spec.ts": 5432,
+    "tests/e2e/startGame929.spec.ts": 15000,
     "tests/e2e/staticSweep338.spec.ts": 85000,
     "tests/e2e/stepContrast.spec.ts": 2720,
     "tests/e2e/sumRange.spec.ts": 4472,
