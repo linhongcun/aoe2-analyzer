@@ -24,9 +24,9 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/compare');
       await page.getByRole('button', { name: /^文明 A：/ }).click();
       await page.locator('[role="option"][data-civ="Jurchens"]').click();
-      const castle = page.locator('#ctab tr').filter({ has: page.getByRole('cell', { name: '城堡科技', exact: true }) });
+      const castle = page.locator('#compare-facts tr').filter({ has: page.getByRole('cell', { name: '城堡科技', exact: true }) });
       await expect(castle.locator('td').nth(1)).toHaveText('强化堡垒 (防御工事每分钟恢复 500 生命值)｜Fortified Bastions');
-      await expect(page.locator('#ctab')).not.toContainText('加固堡垒');
+      await expect(page.locator('#compare')).not.toContainText('加固堡垒');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(errors).toEqual([]);
     });

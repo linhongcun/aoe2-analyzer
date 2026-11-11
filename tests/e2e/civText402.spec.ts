@@ -27,10 +27,10 @@ for (const width of [360, 375, 390, 1280])
       await page.goto('./#/compare');
       await choose(page, 'A', 'Mapuche');
       await choose(page, 'B', 'Muisca');
-      const castle = page.locator('#ctab tr').filter({ has: page.getByRole('cell', { name: '城堡科技', exact: true }) });
+      const castle = page.locator('#compare-facts tr').filter({ has: page.getByRole('cell', { name: '城堡科技', exact: true }) });
       await expect(castle.locator('td').nth(1)).toHaveText('突袭 (掷石绳骑兵、投石手和掷矛手可造成穿透伤害)｜Malon');
       await expect(castle.locator('td').nth(2)).toContainText('蔷琵战士');
-      await expect(page.locator('#ctab')).not.toContainText(/可可|•/);
+      await expect(page.locator('#compare')).not.toContainText(/可可|•/);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: info.outputPath(`compare-${width}-${theme}.png`), fullPage: true });
       await choose(page, 'A', 'Franks');

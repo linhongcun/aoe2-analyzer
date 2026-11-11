@@ -1,40 +1,85 @@
 .compare-basis {
-  margin: 0 0 var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  background: var(--c-panel);
-  border: 1px solid var(--c-border);
+  position: static;
+  margin: 0 0 8px;
+  padding: 6px 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 10px;
 }
 
-.compare-basis h3 {
-  margin: 0 0 8px;
+.compare-basis h3,
+.compare-scores h3,
+.compare-facts h3,
+.compare-basis h4 {
+  margin: 0 0 4px;
   font-size: 16px;
 }
 
+.compare-summary {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--color-text-2);
+}
+
 .compare-basis p,
-.compare-axes span {
+.compare-scores .note,
+.compare-facts .note {
+  margin: 0 0 8px;
+}
+
+.compare-basis .num,
+.compare-score.num,
+#cpos .num {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.compare-basis-toggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--color-link);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.compare-basis-toggle:hover {
+  text-decoration: underline;
+}
+
+#compare-basis-full {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-line);
+}
+
+#compare-basis-full p {
   margin: 0 0 8px;
   font-size: 14px;
   line-height: 1.6;
 }
 
-.compare-basis .num {
-  font-family: var(--font-num);
-  font-variant-numeric: tabular-nums;
-}
-
-.compare-axes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 16px;
-  margin: 0 0 12px;
+.compare-axis-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
   padding: 0;
   list-style: none;
 }
 
-.compare-axes b {
-  display: block;
-  font-size: 14px;
+.compare-axis-names li {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-2);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .compare-score.compare-higher {
@@ -42,17 +87,68 @@
   font-weight: 700;
 }
 
-#cpos .num {
-  font-family: var(--font-num);
-  font-variant-numeric: tabular-nums;
+#compare .lhead {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+#compare .lhead .note {
+  max-width: 46rem;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-text-2);
+}
+
+.compare-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.compare-pickers {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.compare-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.compare-field-label {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--color-muted);
+}
+
+.compare-vs {
+  flex: none;
+  padding-bottom: 12px;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+#compare .cp-trigger {
+  min-height: 44px;
+  box-sizing: border-box;
 }
 
 .compare-share {
-  margin-bottom: var(--space-4);
-}
-
-#compare #ctab th .ctx-civ-link {
-  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  margin-bottom: 0;
 }
 
 .compare-share .detail-copy {
@@ -78,35 +174,181 @@
   min-height: 44px;
 }
 
-@media (max-width: 600px) {
-  .compare-share .detail-copy-button {
-    width: 100%;
-  }
+.compare-team-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 13px;
 }
 
-/* issue 776：≤760（`.two` 单列断点）下首列中文标签原本被压到 35px 逐字竖排，整页被拉到 2700+。
-   首列 nowrap + min-width、表格两端收紧；1280 桌面版式不变（issue 776 验收要求对照截图一致）。 */
+.compare-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.compare-scores,
+.compare-radar,
+.compare-facts {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.compare-facts {
+  margin-bottom: 16px;
+}
+
+#compare #ctab th,
+#compare #ctab td {
+  padding: 2px 8px;
+  vertical-align: middle;
+}
+
+#compare .compare-facts th,
+#compare .compare-facts td {
+  padding: 4px 8px;
+  vertical-align: middle;
+}
+
+#compare #ctab .compare-score {
+  font-size: 18px;
+  text-align: right;
+}
+
+#compare th.compare-side-a,
+#compare th.compare-side-a a {
+  color: var(--color-accent);
+}
+
+#compare th.compare-side-b,
+#compare th.compare-side-b a {
+  color: var(--color-link);
+}
+
+#compare .compare-civ-link {
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  color: inherit;
+}
+
+#compare .compare-civ-link .ico {
+  width: 28px;
+  height: 28px;
+}
+
+#compare #crd {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.compare-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.compare-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+
+.compare-swatch-a {
+  background: var(--color-accent);
+}
+
+.compare-swatch-b {
+  background: var(--color-link);
+}
+
+#compare .compare-facts td.compare-side-a {
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+
+#compare .compare-facts td.compare-side-b {
+  box-shadow: inset 3px 0 0 var(--color-link);
+}
+
 @media (max-width: 760px) {
-  #compare #ctab :is(td, th):first-child {
+  .compare-board {
+    grid-template-columns: 1fr;
+  }
+
+  /* issue 776：窄屏首列保持单行，避免中文标签被压成逐字竖排。 */
+  #compare #ctab :is(td, th):first-child,
+  #compare .compare-facts :is(td, th):first-child {
     white-space: nowrap;
     min-width: 64px;
   }
+
   #compare #ctab td,
-  #compare #ctab th {
+  #compare #ctab th,
+  #compare .compare-facts td,
+  #compare .compare-facts th {
     padding: 5px 3px;
     line-height: 1.5;
   }
-  #compare #ctab {
+
+  #compare #ctab,
+  #compare .compare-facts table {
     font-size: 13px;
   }
-  #compare #ctab th .ico {
-    max-width: 36px;
-    max-height: 36px;
+}
+
+@media (max-width: 600px) {
+  .compare-toolbar {
+    flex-direction: column;
+    align-items: stretch;
   }
-  #compare .two {
-    gap: 12px;
+
+  .compare-pickers {
+    flex-wrap: nowrap;
   }
-  .compare-axes {
-    grid-template-columns: 1fr;
+
+  .compare-field {
+    flex: 1 1 0;
+  }
+
+  #compare .civpick,
+  #compare .cp-trigger {
+    max-width: 100%;
+  }
+
+  #compare .cp-trigger {
+    width: 100%;
+  }
+
+  #compare .cp-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #compare .cp-trigger small {
+    display: none;
+  }
+
+  .compare-share,
+  .compare-share .detail-copy {
+    width: 100%;
+  }
+
+  .compare-share .detail-copy-button {
+    width: 100%;
   }
 }

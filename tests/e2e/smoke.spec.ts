@@ -492,7 +492,7 @@ test('rating help: beside 能力评分, opens/closes by click, outside click and
   await page.goto('./#/compare');
   const basis = page.getByTestId('compare-rating-basis');
   await expect(basis).toContainText('规则待核');
-  await expect(basis).toContainText('游戏版本未知');
+  await expect(basis).toContainText('游戏补丁未知');
   await expect(basis).not.toContainText('188329');
   const head = page.locator('#compare .ratehead');
   await expect(head).toContainText('能力评分');
