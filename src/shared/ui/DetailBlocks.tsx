@@ -70,10 +70,11 @@ export function DetailSection({ title, children, className = '' }: { title: stri
   );
 }
 
-export function DetailSource({ note = '基础数值，未含文明加成与科技' }: { note?: string }) {
+export function DetailSource({ note = '基础数值，未含文明加成与科技' }: { note?: string | null }) {
   return (
     <p className="detail-source note">
-      来源：aoe2techtree{DATA_SOURCES.patch ? ` · DE ${DATA_SOURCES.patch.build}` : ''} · {note} · <Link to="/about-data">数据说明</Link>
+      来源：aoe2techtree{DATA_SOURCES.patch ? ` · DE ${DATA_SOURCES.patch.build}` : ''}
+      {note ? ` · ${note}` : ''} · <Link to="/about-data">数据说明</Link>
     </p>
   );
 }

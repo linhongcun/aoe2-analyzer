@@ -10,7 +10,7 @@ test('无文明、查询文明和路径文明都停在概览，不写成 /4/', a
   await open(page, '/unit/38');
   await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
   await expect(page.locator('#sim')).toHaveCount(0);
-  await expect(page.locator('[data-stat="hp"]')).toContainText('100.00');
+  await expect(page.locator('[data-stat="hp"] .num')).toHaveText('100');
   await expect(page.locator('[data-t="catalog-cost"]')).toContainText('60');
   await expect(page.locator('[data-t="discount-price"], [data-t="discount-unapplied"]')).toHaveCount(0);
   await expect(page).toHaveURL(/#\/unit\/38$/);
@@ -18,7 +18,7 @@ test('无文明、查询文明和路径文明都停在概览，不写成 /4/', a
   await open(page, '/unit/38?civ=Franks');
   await expect(page.locator('#unit')).toHaveAttribute('data-view', 'overview');
   await expect(page.locator('#sim')).toHaveCount(0);
-  await expect(page.locator('[data-stat="hp"]')).toContainText('100.00');
+  await expect(page.locator('[data-stat="hp"] .num')).toHaveText('100');
   await expect(page).toHaveURL(/civ=Franks/);
   await expect(page).not.toHaveURL(/\/Franks\/4/);
 
@@ -89,7 +89,7 @@ test('拜占庭长戟兵给出真实折后价，未选文明没有折后价卡',
 test('代表单位与特殊边界只按已核口径出现', async ({ page }) => {
   await open(page, '/unit/11');
   await expect(page.locator('#unit h1')).toContainText('蒙古突骑');
-  await expect(page.locator('[data-stat="hp"]')).toContainText('60.00');
+  await expect(page.locator('[data-stat="hp"] .num')).toHaveText('60');
   await expect(page.locator('[data-stat="atk"]')).toContainText('6');
   await expect(page.locator('[data-t="unit-type"]')).toHaveText('独特单位');
 
@@ -123,7 +123,7 @@ test('代表单位与特殊边界只按已核口径出现', async ({ page }) => 
 
   await open(page, '/unit/38?civ=Aztecs');
   await expect(page.locator('[data-t="cannot-train"]')).toHaveText('该文明无法训练本单位');
-  await expect(page.locator('[data-stat="hp"]')).toContainText('100.00');
+  await expect(page.locator('[data-stat="hp"] .num')).toHaveText('100');
   await expect(page.locator('[data-t="discount-price"]')).toHaveCount(0);
 
   await page.locator('#unitciv').click();
@@ -152,7 +152,7 @@ test('1280 第一屏能看到身份、生命和目录造价，390 能看到生�
 test('工作区给出引擎算出的近似模拟值', async ({ page }) => {
   await open(page, '/unit/569/Franks/4/');
   await page.getByRole('button', { name: '满科技' }).click();
-  await expect(page.locator('.simtab tr').nth(1).locator('td').nth(2)).toHaveText('192.00');
+  await expect(page.locator('.simtab tr').nth(1).locator('td').nth(2)).toHaveText('192');
   await expect(page.locator('#sim')).toContainText('当前设置下的近似模拟值');
   await expect(page.locator('#sim')).toContainText('不计入');
   await expect(page.locator('#unit')).not.toContainText('暂未计算');

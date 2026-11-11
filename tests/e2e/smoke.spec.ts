@@ -60,9 +60,9 @@ test('Franks Paladin full tech = 192 HP', async ({ page }) => {
   await page.goto('./#unit/569/Franks/4');
   await page.getByRole('button', { name: '满科技' }).click();
   const hp = page.locator('.simtab tr').nth(1).locator('td');
-  await expect(hp.nth(1)).toHaveText(/^160\.00\s*\+32\.00$/); // 基础列：基础值 + 绿色增量
-  await expect(hp.nth(1).locator('.up')).toHaveText('+32.00');
-  await expect(hp.nth(2)).toHaveText('192.00'); // 当前设置下的近似模拟值
+  await expect(hp.nth(1)).toHaveText(/^160\s*\+32$/); // 基础列：基础值 + 绿色增量
+  await expect(hp.nth(1).locator('.up')).toHaveText('+32');
+  await expect(hp.nth(2)).toHaveText('192'); // 当前设置下的近似模拟值
   await expect(page).toHaveURL(/unit\/569\/Franks\/4\/[\d,]+/);
 });
 
@@ -229,7 +229,7 @@ test('building simulator: Britons Castle full tech, URL state', async ({ page })
   await page.goto('./#/building/82?tab=sim&civ=Britons');
   await page.getByRole('button', { name: '满科技' }).click();
   const hp = page.locator('.simtab tr').nth(1).locator('td');
-  await expect(hp.nth(1)).toHaveText(/^4800\.00\s*\+2227\.68$/);
+  await expect(hp.nth(1)).toHaveText(/^4800\s*\+2227\.68$/);
   await expect(hp.nth(2)).toHaveText('7027.68');
   await expect(page).toHaveURL(/civ=Britons.*techs=\d/);
   await page.reload();
