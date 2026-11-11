@@ -9,6 +9,7 @@ import { buildingAge, trainingUnitAge } from './availabilityAge';
 import { isAgeTech, TC_BY_AGE, VILLAGER_CLASS, VILLAGER_UNIT_ID } from './gameIds';
 import { trainingCycle, type TrainingCycleOp } from './trainingCycle';
 import { ratePerMinute } from './formatTime';
+import { toggleSelected } from './prereq';
 
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
@@ -105,20 +106,12 @@ export function effectiveProductionTechs(ctx: ProductionContext, config: Product
 }
 export function toggleProductionTech(ctx: ProductionContext, config: ProductionConfig, id: number): number[] {
   const sel = effectiveProductionTechs(ctx, config);
-  if (freeProductionTechs(ctx, config).has(id)) return [...sel];
-  if (sel.has(id)) {
-    sel.delete(id);
-    let changed = true;
-    while (changed) {
-      changed = false;
-      for (const tid of sel)
-        if (ctx.core.techById[tid]?.pre === id || (ctx.core.techById[tid]?.pre && !sel.has(ctx.core.techById[tid]!.pre!))) {
-          sel.delete(tid);
-          changed = true;
-        }
-    }
-  } else sel.add(id);
-  return [...effectiveProductionTechs(ctx, { ...config, techs: [...sel] })];
+  const next = toggleSelected(id, sel, ctx.core.techById, {
+    available: new Set(productionTechs(ctx, config).map((t) => t.id)),
+    free: freeProductionTechs(ctx, config),
+    removeMissing: 'any',
+  });
+  return [...effectiveProductionTechs(ctx, { ...config, techs: [...next] })];
 }
 
 /** 独立生产地点由该文明树格确认，附加地点还须具有 .dat 的训练记录。 */

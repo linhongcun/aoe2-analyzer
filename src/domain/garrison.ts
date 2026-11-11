@@ -5,6 +5,7 @@ import type { Building, Tech, Trees } from './types';
 import { civStatus } from './simulator';
 import { productionTechAge } from './production';
 import { AGE_TECH_IDS, VILLAGER_UNIT_ID } from './gameIds';
+import { toggleSelected } from './prereq';
 
 interface GarrisonUnit {
   attack: number;
@@ -81,30 +82,7 @@ export function toggleGarrisonTech(ctx: GarrisonContext, b: Building, config: Ga
   const available = new Set(garrisonTechs(ctx, b, config.civ, config.age).map((t) => t.id));
   const free = new Set(garrisonFreeTechs(ctx, b, config));
   const selected = new Set([...config.techs, ...free]);
-  if (free.has(id) || !available.has(id)) return [...selected];
-  if (selected.has(id)) {
-    selected.delete(id);
-    let changed = true;
-    while (changed) {
-      changed = false;
-      for (const t of selected) {
-        const pre = ctx.core.techById[t]?.pre;
-        if (pre && available.has(pre) && !selected.has(pre)) {
-          selected.delete(t);
-          changed = true;
-        }
-      }
-    }
-  } else {
-    const add = (tid: number) => {
-      if (selected.has(tid)) return;
-      selected.add(tid);
-      const pre = ctx.core.techById[tid]?.pre;
-      if (pre && available.has(pre)) add(pre);
-    };
-    add(id);
-  }
-  return [...selected].sort((a, z) => a - z);
+  return [...toggleSelected(id, selected, ctx.core.techById, { available, free, ignoreUnavailable: true, stopAtSelected: true, sort: true })];
 }
 
 export function calculateGarrison(ctx: GarrisonContext, b: Building, config: GarrisonConfig, data = GARRISON_DATA): GarrisonResult {
