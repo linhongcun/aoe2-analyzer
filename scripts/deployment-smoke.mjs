@@ -746,7 +746,7 @@ export async function checkSite({ site, version, commit, features = [], diagnost
             await check(page.locator('a[href^="#/unit/"]').first()).toBeVisible();
             await goto('/civ/Poles');
             await check(page.locator('[data-testid="civ-regional-units"]').locator('a[href="#/unit/1707"]')).toHaveCount(1);
-            await check(page.locator('[data-testid="civ-unique-units"]').getByRole('link', { name: '波兰翼骑兵', exact: true })).toHaveCount(0);
+            await check(page.locator('[data-testid="civ-unique-units"]').locator('a[href="#/unit/1707"]')).toHaveCount(0);
             await goto('/civ/Lithuanians');
             await check(page.locator('[data-testid="civ-unique-units"]')).toBeVisible();
             await check(page.locator('[data-testid="civ-regional-units"]')).toHaveCount(0);
