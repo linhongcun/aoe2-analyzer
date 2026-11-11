@@ -119,7 +119,7 @@ describe('天梯快照展示 #33', () => {
     expect(page).toContain('这个分段暂无数据');
     expect(page).toContain('不推算，不补数');
     expect(page).toContain('data-testid="ladder-empty"');
-    expect(page).toContain('可切回阿拉伯');
+    expect(page).toContain('可切到阿拉伯');
     expect(page).toContain('data-testid="ladder-cutoff"');
     expect(page).toContain('非当前平衡');
     expect(page).toContain('统计截止');

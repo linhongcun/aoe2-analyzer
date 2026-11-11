@@ -4,19 +4,23 @@ import { civByEn } from '../../data';
 import beginnerNotes from '../../data/ladder-beginner.json';
 import snapshotJson from '../../data/ladder-arabia-p185872.json';
 import {
+  finiteTrendRates,
   firstSortDir,
   formatGames,
   formatPercent,
   friendliness,
+  isDrawableTrend,
   isLowSample,
   isPatchMismatch,
   isPlayerSample,
+  LOW_SAMPLE,
   snapshotCutoff,
   snapshotPatchBuild,
   sortLadder,
   TIER_LABEL,
   TIER_RANK,
   toggleSort,
+  trendFootnote,
   viewBracket,
   visibleSourceLabel,
   type BeginnerNotes,
@@ -27,8 +31,9 @@ import {
 } from '../../domain/ladder';
 import type { SliceFacts } from '../../domain/ladderQuery';
 import { LadderMeta, LadderTiers } from './LadderBands';
-import { LadderSourceFacts } from './LadderSourceFacts';
 import { LadderFreshness } from './LadderFreshness';
+import { LadderSourceFacts } from './LadderSourceFacts';
+import { LadderSpark } from './LadderSpark';
 import { LadderStatMethods } from './LadderStatMethods';
 import type { LadderViewId } from './LadderViewSwitch';
 import { CivIcon } from '../../shared/ui/art';
@@ -123,6 +128,8 @@ export function LadderArabia({
     });
     return sortLadder(enriched, sort.key, sort.dir);
   }, [bracket.civs, hideLow, sort]);
+  const showTrend = rows.some((row) => isDrawableTrend(row.games, row.trend, LOW_SAMPLE));
+  const trendColumns = showTrend ? 1 : 0;
 
   const expandedEn = open && bracket.civs.some((civ) => civ.en === open) ? open : null;
 
@@ -203,34 +210,24 @@ export function LadderArabia({
               </>
             )}
           </p>
-          <LadderFreshness fetchedAt={snapshot.fetchedAt} games={bracket.empty ? undefined : rawBracket?.games} scope="本分段样本" unit={sampleUnit} />
-          <p className="ladder-source-meta">
-            <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
-              {visibleSourceLabel(snapshot.source)}
-              <Icon name="external-link" />
-              （外部）
-            </a>
-          </p>
+          <div className="ladder-source-meta-row">
+            <LadderFreshness fetchedAt={snapshot.fetchedAt} games={bracket.empty ? undefined : rawBracket?.games} scope="本分段样本" unit={sampleUnit} />
+            <p className="ladder-source-meta">
+              <a href={snapshot.sourceUrl} target="_blank" rel="noopener noreferrer">
+                {visibleSourceLabel(snapshot.source)}
+                <Icon name="external-link" />
+                （外部）
+              </a>
+            </p>
+          </div>
+          {mismatch && patchBuild && (
+            <p className="ladder-balance" data-testid="ladder-patch-note">
+              胜率可能未反映最新平衡改动。
+            </p>
+          )}
         </div>
       </div>
-      {mismatch && patchBuild && (
-        <p className="ladder-patch" data-testid="ladder-patch-note">
-          <Icon name="triangle-alert" />
-          <span className="ladder-copy">胜率可能未反映最新平衡改动。</span>
-        </p>
-      )}
       {children}
-      <div className="ladder-context" data-testid="ladder-context">
-        <span className="ladder-pill">
-          <Icon name="map" />
-          阿拉伯 <span lang="en">{snapshot.map}</span>
-          <span className="ladder-fixed">固定</span>
-        </span>
-        <span className="ladder-pill">
-          <Icon name="swords" />
-          <span className="nw">1v1</span> 随机地图（RM）
-        </span>
-      </div>
       <div className="ladder-layout">
         <div className="ladder-main">
           {bracket.empty ? (
@@ -249,7 +246,7 @@ export function LadderArabia({
               {view === 'meta' && <LadderMeta civs={rows} sampleUnit={sampleUnit} />}
               {view === 'table' && (
                 <div className="ladder-table-card">
-                  <LadderStatMethods playerSample={playerSample} interval={false} />
+                  <LadderStatMethods playerSample={playerSample} interval={false} trend={showTrend} />
                   <table className="ladder-table" data-testid="ladder-table">
                     <caption className="ladder-sr">阿拉伯 1v1 {bracket.label} 各文明胜率</caption>
                     <colgroup>
@@ -258,7 +255,7 @@ export function LadderArabia({
                       <col className="ladder-col-play" />
                       {wide && <col className="ladder-col-games" />}
                       <col className="ladder-col-tier" />
-                      <col className="ladder-col-trend" />
+                      {showTrend && <col className="ladder-col-trend" />}
                       <col className="ladder-col-expand" />
                     </colgroup>
                     <thead>
@@ -268,7 +265,7 @@ export function LadderArabia({
                         <SortHead id="play" label="出场率" sort={sort} onSort={setSort} numeric />
                         {wide && <SortHead id="games" label={gamesLabel} sort={sort} onSort={setSort} numeric className="ladder-games-col" />}
                         <SortHead id="tier" label="新手友好度" sort={sort} onSort={setSort} />
-                        <th>走势</th>
+                        {showTrend && <th>走势</th>}
                         <th className="ladder-expand-col">
                           <span className="ladder-sr">展开</span>
                         </th>
@@ -292,13 +289,18 @@ export function LadderArabia({
                                     {row.linked ? (
                                       <Link to={`/civ/${row.en}`}>
                                         <span className="ladder-zh">{row.zh}</span>
+                                        <small className="ladder-en" lang="en">
+                                          {row.en}
+                                        </small>
                                       </Link>
                                     ) : (
-                                      <span className="ladder-zh">{row.zh}</span>
+                                      <span className="ladder-civ-link">
+                                        <span className="ladder-zh">{row.zh}</span>
+                                        <small className="ladder-en" lang="en">
+                                          {row.en}
+                                        </small>
+                                      </span>
                                     )}
-                                    <small className="ladder-en" lang="en">
-                                      {row.en}
-                                    </small>
                                   </span>
                                 </span>
                               </td>
@@ -322,7 +324,11 @@ export function LadderArabia({
                                   {TIER_LABEL[row.tier]}
                                 </span>
                               </td>
-                              <td data-testid={`ladder-trend-${row.en}`}>无走势</td>
+                              {showTrend && (
+                                <td data-testid={`ladder-trend-${row.en}`}>
+                                  {isDrawableTrend(row.games, row.trend, LOW_SAMPLE) ? <LadderSpark values={finiteTrendRates(row.trend)} /> : '无走势'}
+                                </td>
+                              )}
                               <td className="ladder-expand-col">
                                 <button
                                   type="button"
@@ -339,7 +345,7 @@ export function LadderArabia({
                             </tr>
                             {expanded && (
                               <tr className="ladder-reason-row">
-                                <td colSpan={wide ? 7 : 6}>
+                                <td colSpan={5 + (wide ? 1 : 0) + trendColumns}>
                                   <div id={`ladder-reason-${row.en}`} data-testid={`ladder-reason-${row.en}`} className="ladder-reason">
                                     <p className="ladder-reason-games">
                                       {gamesLabel} <span className="num">{formatGames(row.games)}</span>
@@ -369,6 +375,9 @@ export function LadderArabia({
                       })}
                     </tbody>
                   </table>
+                  <p className="ladder-trend-note" data-testid="ladder-series-note">
+                    {trendFootnote(showTrend, snapshot.patchNote)}
+                  </p>
                 </div>
               )}
             </>

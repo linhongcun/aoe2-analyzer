@@ -219,9 +219,9 @@ async function sliceSignature(page: Page) {
   const source = page.getByTestId('ladder-source');
   return {
     mode: (await mode.count()) === 1 ? await mode.getAttribute('data-testid') : '',
-    period: await plainText(page, 'ladder-period-static'),
+    period: await plainText(page, 'ladder-fixed-range'),
     elo: await checkedElo(page),
-    map: await plainText(page, 'ladder-map-static'),
+    map: await plainText(page, 'ladder-fixed-range'),
     hide: (await hide.count()) === 1 ? await hide.isChecked() : null,
     fetchedAt: (await source.count()) === 1 ? await source.getAttribute('data-fetched-at') : null,
   };
@@ -252,12 +252,12 @@ test('#577 打开 #/ladder 仍是天梯数据页，页脚保留「胜率不是�
 });
 test('#577 首次进入默认筛为 4v4 RM · Elo 1200–1400 · 近 90 天 · 全图', async ({ page }) => {
   await openFresh(page);
-  const context = ((await page.getByTestId('ladder-context').innerText()) ?? '').replace(/\s+/g, ' ').trim();
+  const context = await plainText(page, 'ladder-fixed-range');
   const filters = page.getByTestId('ladder-filters');
   const mode4 = await plainText(page, 'ladder-mode-4v4');
-  const period = await plainText(page, 'ladder-period-static');
+  const period = await plainText(page, 'ladder-fixed-range');
   const elo = await checkedElo(page);
-  const map = await plainText(page, 'ladder-map-static');
+  const map = period;
   const hide = page.getByTestId('ladder-hide-low');
   soon(await filters.count(), `应有 ladder-filters。现在上下文是「${context}」`).toBe(1);
   soon(hashQuery(page.url()).get('mode'), '无参数默认切片不写 mode=arabia1v1').not.toBe('arabia1v1');
@@ -265,10 +265,10 @@ test('#577 首次进入默认筛为 4v4 RM · Elo 1200–1400 · 近 90 天 · �
   soon(mode4).toMatch(/随机地图/);
   const checked = page.getByTestId('ladder-mode-4v4');
   soon((await checked.count()) === 1 ? await checked.getAttribute('aria-checked') : null, '4v4 应选中').toBe('true');
-  soon(period, `时段 pill 应为近 90 天 · 当前快照，实际「${period}」`).toContain('近90天');
-  soon(period).toContain('当前快照');
+  soon(period, `固定范围应写近 90 天且不是可改筛选，实际「${period}」`).toContain('近90天');
+  soon(period).toContain('不是可改筛选');
   soon(eloOk(elo), `选中的 Elo 应为 1200–1400，实际「${elo}」`).toBe(true);
-  soon(map.includes('全图') && map.includes('当前快照') && !/阿拉伯|Arabia/i.test(map), `地图 pill 应为全图，实际「${map}」`).toBe(true);
+  soon(map.includes('全图') && !/阿拉伯|Arabia/i.test(map), `固定范围应含全图，实际「${map}」`).toBe(true);
   if ((await filters.count()) === 1) {
     soon([await filters.getByRole('radiogroup', { name: '模式' }).count(), await filters.getByRole('radiogroup', { name: /天梯分段/ }).count()]).toEqual([1, 1]);
     soon(await filters.getByRole('slider').count(), '不要 Elo 滑杆').toBe(0);
@@ -346,17 +346,16 @@ test('#577 默认表每一行有与筛同期的趋势，低样本门槛可测，
   const trendCount = await trends.count();
   soon(slice, 'src/data/ladder-*.json 没有 4v4 RM · Elo 1200–1400 · 约 90 天 · 全图的快照。阿拉伯 1v1 文件不能充当趋势来源。').not.toBeNull();
   soon(rowCount, '默认切片应有文明表，空态不算趋势已完成').toBeGreaterThan(0);
-  soon(trendCount, `表行 ${rowCount} 行，趋势节点 ${trendCount} 个。每一行都要有 ladder-trend-{En}`).toBe(rowCount);
   if (!slice || !slice.trendReady) {
+    soon(trendCount, '没有可画序列时不输出走势列，也不写整列「无走势」').toBe(0);
     if (!slice) return;
-    for (const civ of slice.civs) {
-      const trend = page.getByTestId(`ladder-trend-${civ.en}`);
-      const text = ((await trend.count()) === 1 ? await trend.innerText() : '').replace(/\s+/g, '');
-      const curves = (await trend.count()) === 1 ? await trend.locator('svg polyline, svg path, canvas').count() : 1;
-      soon(text.includes('无走势') && curves === 0, `${civ.en} 无序列时应写「无走势」且不画线`).toBe(true);
-    }
+    const note = ((await page.locator('.ladder-notes').innerText()) ?? '').replace(/\s+/g, '');
+    soon(note, '表下说明未收录走势，并写明窗外月度走势已省略').toContain('走势：本快照未收录');
+    soon(note).toContain('来源的月度走势不在近90天窗口内，已省略，不估算');
+    soon(((await page.getByTestId('ladder-stat-methods').innerText()) ?? '').replace(/\s+/g, '')).toContain('本快照未收录走势，不估算');
     return;
   }
+  soon(trendCount, `表行 ${rowCount} 行，趋势节点 ${trendCount} 个。有可画序列时每一行都要有 ladder-trend-{En}`).toBe(rowCount);
   const period = await plainText(page, 'ladder-period-static');
   const accepted = acceptedPeriods(period);
   const rules = page.getByTestId('ladder-trend-rules');
@@ -415,20 +414,16 @@ test('#577 可以切回现有阿拉伯 1v1 快照，且不借用默认切片的�
   const source = ((await page.getByTestId('ladder-source').innerText()) ?? '').replace(/\s+/g, '');
   soon(`${caption}${source}`, '切回后来源或表题应标明阿拉伯与 1v1').toMatch(/阿拉伯|Arabia/);
   soon(`${caption}${source}`).toMatch(FORMAT_1V1);
-  soon((await plainText(page, 'ladder-period-static')).includes('近90天'), '切到阿拉伯后不要留下 4v4 的近 90 天').toBe(false);
+  const arabiaRange = await plainText(page, 'ladder-fixed-range');
+  soon(arabiaRange.includes('近90天'), '切到阿拉伯后不要留下 4v4 的近 90 天').toBe(false);
   soon(eloOk(await checkedElo(page)), '切到阿拉伯后选中的 Elo 不是 1200–1400').toBe(false);
-  const arabiaMap = await plainText(page, 'ladder-map-static');
-  soon(arabiaMap, '阿拉伯地图应为「阿拉伯 · 固定」').toMatch(/阿拉伯/);
-  soon(arabiaMap).toContain('固定');
-  soon(await plainText(page, 'ladder-period-static'), '时段应为整段快照').toContain('整段快照');
+  soon(arabiaRange, '阿拉伯固定范围应写整段快照和阿拉伯').toMatch(/阿拉伯/);
+  soon(arabiaRange).toContain('整段快照');
   const legacyTrend = [...arabia.civs.values()].some((civ) => civ.trend != null && civ.trend.length >= 2);
   const trends = page.locator('[data-testid^="ladder-trend-"]');
   if (!legacyTrend) {
-    soon(await trends.count(), '走势列仍在；无序列时写「无走势」，不留默认切片的折线').toBeGreaterThan(0);
-    if ((await trends.count()) > 0) {
-      soon((await trends.first().innerText()) ?? '').toContain('无走势');
-      soon(await trends.first().locator('svg polyline, svg path, canvas').count()).toBe(0);
-    }
+    soon(await trends.count(), '无序列时不画走势列').toBe(0);
+    soon(((await page.getByTestId('ladder-series-note').innerText()) ?? '').replace(/\s+/g, '')).toContain('走势：本快照未收录');
   }
   soon(await page.getByTestId('ladder-source').getAttribute('data-fetched-at'), '切回后来源截止等于阿拉伯快照').toBe(arabia.fetchedAt);
 });
@@ -471,10 +466,10 @@ test('#577 §11 无参数不是阿拉伯；只带 elo 进入阿拉伯；mode=ara
   if (await toast.isVisible()) soon((await toast.innerText()) ?? '').toMatch(/暂无数据|未识别/);
   await openFresh(page, '/ladder?mode=arabia1v1');
   soon(hashQuery(page.url()).get('mode')).toBe('arabia1v1');
-  soon(await plainText(page, 'ladder-map-static')).toMatch(/阿拉伯/);
-  soon(await plainText(page, 'ladder-map-static')).toContain('固定');
-  soon(await plainText(page, 'ladder-period-static')).toContain('整段快照');
-  soon(await plainText(page, 'ladder-period-static'), '阿拉伯路径不保留近 90 天').not.toContain('近90天');
+  const arabiaRange = await plainText(page, 'ladder-fixed-range');
+  soon(arabiaRange).toMatch(/阿拉伯/);
+  soon(arabiaRange).toContain('整段快照');
+  soon(arabiaRange, '阿拉伯路径不保留近 90 天').not.toContain('近90天');
   soon(/全部/.test(await checkedElo(page)) && !eloOk(await checkedElo(page)), '阿拉伯选中分段是「全部」，不是 1200–1400').toBe(true);
   await expect(page.getByTestId('ladder-row-Franks')).toContainText(formatPercent(franks.winRate));
   soon(await page.getByTestId('ladder-source').getAttribute('data-fetched-at')).toBe(arabia.fetchedAt);

@@ -1,6 +1,6 @@
 import type { KeyboardEvent, ReactNode } from 'react';
 import type { LadderSnapshot } from '../../domain/ladder';
-import { eloFilterOptions, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
+import { eloFilterOptions, renderedEloOptions, type EloFilterOption, type LadderModeId } from '../../domain/ladderQuery';
 import { Icon } from '../../shared/ui/Icon';
 
 export function HideLowSample({ checked, threshold, onChange }: { checked: boolean; threshold: number; onChange: (checked: boolean) => void }) {
@@ -20,6 +20,7 @@ export function LadderFilters({
   onMode,
   onElo,
   onEloRef,
+  children,
 }: {
   mode: LadderModeId;
   elo: string;
@@ -28,86 +29,88 @@ export function LadderFilters({
   onMode: (mode: LadderModeId) => void;
   onElo: (option: EloFilterOption) => void;
   onEloRef?: (id: string, node: HTMLButtonElement | null) => void;
+  children?: ReactNode;
 }) {
-  const teamMode = mode === '4v4';
-  const eloOptions = eloFilterOptions(mode, elo, arabia, team);
-  const checked = eloOptions.some((option) => option.current);
+  const options = eloFilterOptions(mode, elo, arabia, team);
+  const visible = renderedEloOptions(options);
+  const hasOtherGap = options.some((option) => !option.enabled && !option.current);
+  const checked = visible.some((option) => option.current);
   const onEloKey = (event: KeyboardEvent<HTMLButtonElement>, option: EloFilterOption) => {
     if (event.altKey || event.ctrlKey || event.metaKey) return;
-    const enabled = eloOptions.filter((item) => item.enabled);
-    const from = enabled.findIndex((item) => item.mode === option.mode && item.key === option.key);
+    const from = visible.findIndex((item) => item.key === option.key);
     if (from < 0) return;
     let target: number;
     if (event.key === 'Home') target = 0;
-    else if (event.key === 'End') target = enabled.length - 1;
-    else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') target = (from + 1) % enabled.length;
-    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') target = (from - 1 + enabled.length) % enabled.length;
+    else if (event.key === 'End') target = visible.length - 1;
+    else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') target = (from + 1) % visible.length;
+    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') target = (from - 1 + visible.length) % visible.length;
     else return;
     event.preventDefault();
-    onElo(enabled[target]!);
+    const next = visible[target];
+    if (!next) return;
+    if (!next.enabled) {
+      event.currentTarget.parentElement?.querySelector<HTMLButtonElement>(`[data-elo="${CSS.escape(next.key)}"]`)?.focus();
+      return;
+    }
+    onElo(next);
   };
   return (
     <div className="ladder-filters" data-testid="ladder-filters">
-      <span className="ladder-filter-label">模式</span>
-      <div className="ladder-filter-row" role="radiogroup" aria-label="模式" data-testid="ladder-mode">
-        <ModeChip id="4v4" mode={mode} icon="users" testId="ladder-mode-4v4" onMode={onMode}>
-          <span className="nw">4v4</span> 随机地图
-        </ModeChip>
-        <ModeChip id="arabia1v1" mode={mode} icon="swords" testId="ladder-mode-arabia1v1" onMode={onMode}>
-          阿拉伯 <span className="nw">1v1</span>
-        </ModeChip>
+      <div className="ladder-filter-line">
+        <span className="ladder-filter-label">模式</span>
+        <div className="ladder-filter-row" role="radiogroup" aria-label="模式" data-testid="ladder-mode">
+          <ModeChip id="4v4" mode={mode} icon="users" testId="ladder-mode-4v4" onMode={onMode}>
+            <span className="nw">4v4</span> 随机地图
+          </ModeChip>
+          <ModeChip id="arabia1v1" mode={mode} icon="swords" testId="ladder-mode-arabia1v1" onMode={onMode}>
+            阿拉伯 <span className="nw">1v1</span>
+          </ModeChip>
+        </div>
+        <span className="ladder-filter-label">天梯分段</span>
+        <div className="ladder-filter-row" role="radiogroup" aria-label="天梯分段" data-testid="ladder-elo">
+          {visible.map((option, index) => {
+            const firstEnabled = visible.findIndex((item) => item.enabled) === index;
+            return (
+              <button
+                key={`${option.mode}:${option.key}`}
+                // 保留内联 ref：选中属性更新或子树替换后，都交由根组件恢复焦点。
+                ref={(node) => onEloRef?.(`${option.mode}:${option.key}`, node)}
+                type="button"
+                role="radio"
+                aria-checked={option.current}
+                aria-disabled={!option.enabled}
+                tabIndex={option.current || (!checked && firstEnabled) ? 0 : -1}
+                className="ladder-elo-option"
+                data-testid={option.enabled ? 'ladder-elo-option' : 'ladder-elo-disabled'}
+                data-elo={option.key}
+                data-target-mode={option.enabled ? option.mode : undefined}
+                onClick={() => {
+                  if (option.enabled) onElo(option);
+                }}
+                onKeyDown={(event) => onEloKey(event, option)}
+              >
+                <span className="nw">{option.label}</span>
+                {!option.enabled && <span className="ladder-fixed">暂无数据</span>}
+              </button>
+            );
+          })}
+        </div>
+        {children}
       </div>
-      <span className="ladder-filter-label">时段</span>
-      <div className="ladder-filter-row">
-        <span className="ladder-pill" data-testid="ladder-period-static">
-          <Icon name="calendar" />
-          {teamMode ? (
-            <>
-              近 <span className="nw">90 天</span>
-            </>
-          ) : (
-            '整段快照'
-          )}
-          <span className="ladder-fixed">当前快照</span>
-        </span>
-      </div>
-      <span className="ladder-filter-label">天梯分段</span>
-      <div className="ladder-filter-row" role="radiogroup" aria-label="天梯分段" data-testid="ladder-elo">
-        {eloOptions.map((option, index) => {
-          const firstEnabled = eloOptions.findIndex((item) => item.enabled) === index;
-          return (
-            <button
-              key={`${option.mode}:${option.key}`}
-              // 保留内联 ref：选中属性更新或子树替换后，都交由根组件恢复焦点。
-              ref={(node) => onEloRef?.(`${option.mode}:${option.key}`, node)}
-              type="button"
-              role="radio"
-              aria-checked={option.current}
-              disabled={!option.enabled}
-              tabIndex={option.current || (!checked && firstEnabled) ? 0 : -1}
-              className="ladder-elo-option"
-              data-testid={option.enabled ? 'ladder-elo-option' : 'ladder-elo-disabled'}
-              data-elo={option.key}
-              data-target-mode={option.enabled ? option.mode : undefined}
-              onClick={() => {
-                if (option.enabled) onElo(option);
-              }}
-              onKeyDown={(event) => onEloKey(event, option)}
-            >
-              <span className="nw">{option.label}</span>
-              {!option.enabled && <span className="ladder-fixed">暂无数据</span>}
-            </button>
-          );
-        })}
-      </div>
-      <span className="ladder-filter-label">地图</span>
-      <div className="ladder-filter-row">
-        <span className="ladder-pill" data-testid="ladder-map-static">
-          <Icon name="map" />
-          {teamMode ? '全图' : '阿拉伯 · 固定'}
-          <span className="ladder-fixed">当前快照</span>
-        </span>
-      </div>
+      {hasOtherGap && (
+        <p className="ladder-elo-gap" data-testid="ladder-elo-gap">
+          其他 Elo 分段暂无本模式快照，不估算。
+        </p>
+      )}
+      <p className="ladder-fixed-note" data-testid="ladder-fixed-range">
+        {mode === '4v4' ? (
+          <>
+            近 <span className="nw">90 天</span>、全图是当前快照的固定范围，不是可改筛选。
+          </>
+        ) : (
+          '整段快照、阿拉伯是当前快照的固定范围，不是可改筛选。'
+        )}
+      </p>
     </div>
   );
 }

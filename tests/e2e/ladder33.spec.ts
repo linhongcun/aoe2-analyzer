@@ -82,15 +82,17 @@ async function expectLadderPage(page: Page) {
   const icons = root.locator('svg');
   const iconCount = await icons.count();
   for (let i = 0; i < iconCount; i++) await expect(icons.nth(i)).toHaveClass(/lucide/);
-  const context = page.getByTestId('ladder-context');
-  await expect(context).toContainText('阿拉伯');
-  await expect(context).toContainText('Arabia');
-  await expect(context).toContainText(/1v1/);
-  await expect(context).toContainText(/随机地图|RM/);
-  await expect(context.getByRole('link')).toHaveCount(0);
-  await expect(context.getByRole('button')).toHaveCount(0);
-  await expect(context.getByRole('combobox')).toHaveCount(0);
-  await expect(context.getByRole('radio')).toHaveCount(0);
+  const source = page.getByTestId('ladder-source');
+  await expect(source).toContainText('阿拉伯');
+  await expect(source).toContainText(/1v1/);
+  await expect(source).toContainText(/Elo/);
+  const fixed = page.getByTestId('ladder-fixed-range');
+  await expect(fixed).toContainText('整段快照');
+  await expect(fixed).toContainText('不是可改筛选');
+  await expect(fixed.getByRole('link')).toHaveCount(0);
+  await expect(fixed.getByRole('button')).toHaveCount(0);
+  await expect(fixed.getByRole('combobox')).toHaveCount(0);
+  await expect(fixed.getByRole('radio')).toHaveCount(0);
   // 当前快照的 Elo 芯片 / 只读 pill 由 #545 验收。这里只要求主表还在。
   const table = page.getByTestId('ladder-table');
   await expect(table).toBeVisible();
@@ -432,7 +434,8 @@ for (const width of [360, 375, 390, 1280]) {
             return style.visibility !== 'hidden' && style.display !== 'none' && rect.width > 0 && rect.height > 0;
           })
           .map((el) => {
-            const rect = el.getBoundingClientRect();
+            const hit = el instanceof HTMLInputElement && el.type === 'checkbox' ? (el.closest('label') ?? el) : el;
+            const rect = hit.getBoundingClientRect();
             const labelled = el instanceof HTMLInputElement || el instanceof HTMLSelectElement ? el.labels?.[0]?.textContent : '';
             const name = (el.getAttribute('aria-label') || labelled || el.textContent || el.tagName).replace(/\s+/g, ' ').trim();
             return { name, width: rect.width, height: rect.height };

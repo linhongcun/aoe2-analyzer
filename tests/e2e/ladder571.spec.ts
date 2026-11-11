@@ -130,13 +130,12 @@ test('#571/#625 Elo 留在当前模式，显式模式切换更新真实胜率与
   const group = eloGroup(page);
   await expect(group, 'Elo 应是可切换的天梯分段，而不是只读「当前快照」').toBeVisible();
   const current = group.getByRole('radio', { name: ELO_1200_1400 });
-  const other = group.getByRole('radio', { name: /全部/ });
   await expect(current).toHaveAttribute('aria-checked', 'true');
-  await expect(other, '4v4 没有全部档，不能借用阿拉伯快照').toBeDisabled();
-  await expect(other).toContainText('暂无数据');
+  await expect(group.locator('[data-elo="all"]'), '4v4 未选中的空档不画芯片，也不能借用阿拉伯快照').toHaveCount(0);
+  await expect(page.getByTestId('ladder-elo-gap')).toContainText('其他 Elo 分段暂无本模式快照，不估算。');
   const before = await page.getByTestId('ladder-row-Franks').getAttribute('data-games');
   await page.getByTestId('ladder-mode-arabia1v1').click();
-  await expect(other).toHaveAttribute('aria-checked', 'true');
+  await expect(group.getByRole('radio', { name: '全部' })).toHaveAttribute('aria-checked', 'true');
   await expect(page.getByTestId('ladder-mode-arabia1v1'), '只有显式模式切换才进入阿拉伯，不能 4v4 配阿拉伯胜率').toHaveAttribute('aria-checked', 'true');
   await expect(page.getByTestId('ladder-row-Franks')).toHaveAttribute('data-games', String(arabiaFranks.games));
   await expect(page.getByTestId('ladder-row-Franks')).toContainText(formatPercent(arabiaFranks.winRate));
@@ -171,7 +170,7 @@ async function expectMissingCombo(page: Page, hash: string, key: string, label: 
     expect(text, '空态不能留下两位小数胜率').not.toMatch(WIN_RATE);
   }
   if (disabled) {
-    await expect(option.first()).not.toHaveAttribute('aria-checked', 'true');
+    await expect(option.first()).toHaveAttribute('aria-checked', 'true');
   }
 }
 
@@ -189,14 +188,16 @@ test('#571 不实时抓取；地图行在时来源条仍保留模式、Elo 与�
     if (LIVE_HOST.test(request.url())) hits.push(request.url());
   });
   await openLadder(page);
-  const map = page.getByTestId('ladder-map-static');
-  await expect(map).toBeVisible();
-  await expect(map).toContainText('全图');
+  const range = page.getByTestId('ladder-fixed-range');
+  await expect(range).toBeVisible();
+  await expect(range).toContainText('全图');
+  await expect(range).toContainText('不是可改筛选');
   await expectOwnedSlice(page, teamSlice);
   expect(hits, '筛选不得请求统计站').toEqual([]);
 
   await page.getByTestId('ladder-mode-arabia1v1').click();
-  await expect(page.getByTestId('ladder-map-static')).toContainText('阿拉伯');
+  await expect(page.getByTestId('ladder-fixed-range')).toContainText('阿拉伯');
+  await expect(page.getByTestId('ladder-fixed-range')).toContainText('整段快照');
   await expectOwnedSlice(page, arabiaSlice);
   await expect(page.getByTestId('ladder-source')).not.toContainText(ELO_1200_1400);
   await expect(page.getByTestId('ladder-cutoff')).toContainText(snapshotCutoff(arabia));

@@ -95,9 +95,7 @@ describe('天梯模式与 Elo 只读已有快照 #571', () => {
     expect(arabiaMissing).toMatchObject({ mode: 'arabia1v1', elo: '1200-1400', missing: true, toast: null });
     expect(canonicalLadderSearch(arabiaMissing)).toBe('?mode=arabia1v1&elo=1200-1400');
     const legacy = resolveLadderLocation('?elo=lt850', arabia);
-    expect(legacy.missing).toBe(false);
-    expect(legacy.mode).toBe('arabia1v1');
-    expect(legacy.elo).toBe('all');
-    expect(legacy.toast).toContain('暂无数据');
+    expect(legacy).toMatchObject({ mode: 'arabia1v1', elo: 'lt850', missing: true, toast: null });
+    expect(canonicalLadderSearch(legacy)).toBe('?mode=arabia1v1&elo=lt850');
   });
 });

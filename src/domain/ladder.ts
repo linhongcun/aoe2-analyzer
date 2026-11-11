@@ -2,7 +2,7 @@
 
 export const LOW_SAMPLE = 300;
 
-/** 分段名单与顺序。没有文明数据的档不画芯片，深链回到「全部」。 */
+/** 分段名单与顺序。未选中且没有文明数据的档不画芯片；合法缺档深链留在原地址。 */
 export const DISPLAY_BRACKETS = [
   { key: 'all', label: '全部' },
   { key: 'lt850', label: '<850' },
@@ -231,6 +231,32 @@ export function isPlayerSample(unit: string | undefined): boolean {
 /** 来源字段若是站点名，不印到界面上。 */
 export function visibleSourceLabel(source: string): string {
   return /aoe2scout/i.test(source) ? '来源' : source;
+}
+
+/** 有限胜率点。非数字不算进可画序列。 */
+export function finiteTrendRates(trend: readonly { winRate: number }[] | undefined): number[] {
+  return (trend ?? []).map((point) => point.winRate).filter((value) => Number.isFinite(value));
+}
+
+/**
+ * 可画曲线：有限数字至少两个，且这一行没有被低样本规则排除。
+ * 门槛与各表隐藏低样本、不画 sparkline 的规则相同。
+ */
+export function isDrawableTrend(games: number, trend: readonly { winRate: number }[] | undefined, threshold: number): boolean {
+  return games >= threshold && finiteTrendRates(trend).length >= 2;
+}
+
+/** 来源说明写明月度走势落在当前窗口之外并已省略。英文原文不进玩家界面。 */
+export function omittedMonthlyTrend(patchNote: string | undefined): boolean {
+  if (!patchNote) return false;
+  return /monthly trend/i.test(patchNote) && /omitted/i.test(patchNote);
+}
+
+/** 表下走势句。有可画序列时用原来的静态快照说明；否则不估算，也不回填窗外月度走势。 */
+export function trendFootnote(hasDrawableTrend: boolean, patchNote: string | undefined): string {
+  if (hasDrawableTrend) return '走势：这份静态快照里的胜率序列，不是实时。';
+  if (omittedMonthlyTrend(patchNote)) return '走势：本快照未收录。来源的月度走势不在近 90 天窗口内，已省略，不估算。';
+  return '走势：本快照未收录。';
 }
 
 export type WinBand = 'S' | 'A' | 'B' | 'C' | 'D';
