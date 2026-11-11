@@ -3,6 +3,7 @@ import type { Cost } from './types';
 import type { Lane } from './startGame';
 import { SCENARIO_CIVS, type SceneContext } from './positionScenarios';
 import { SCENE_EPS, sceneSignature, supportArrival } from './positionScenarioMath';
+import { affordableCount } from './scenarioBudget';
 import { addCosts, scaleCost, routeWork, routeProfile, FEUDAL_TECHS, ROUTE_VERSION, type RouteProfile } from './routeProfiles';
 
 import type { RouteConfig } from './startGameInputs';
@@ -21,8 +22,9 @@ export interface RouteLedger {
 export function militaryLedger(budget: number, required: Cost, cost: Cost, limit: number, wanted: boolean): RouteLedger {
   const fixedWork = routeWork(required),
     unitWork = routeWork(cost);
-  const packagePaid = wanted && budget + SCENE_EPS >= fixedWork;
-  const count = packagePaid ? Math.min(limit, Math.max(0, Math.floor((budget - fixedWork) / unitWork + SCENE_EPS))) : 0;
+  const affordable = affordableCount(budget, fixedWork, unitWork, limit);
+  const packagePaid = wanted && affordable.paid;
+  const count = wanted ? affordable.count : 0;
   const spent = packagePaid ? addCosts(required, scaleCost(cost, count)) : {};
   const spentWork = routeWork(spent);
   return {

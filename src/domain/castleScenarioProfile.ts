@@ -5,7 +5,8 @@ import { isSceneTechPlan, type SceneConfig } from './startGameInputs';
 import { TEAM_BONUSES } from './effects';
 import { civStatus, makeSimContext, simulate, simTechs } from './simulator';
 import { unitCost } from './unitCost';
-import { gatherModel, realCost } from './realCost';
+import { realCost } from './realCost';
+import { neutralGatherModel } from './scenarioBudget';
 import { buildingAge } from './availabilityAge';
 import review from './routeReview.json';
 import { AGE_BY_TECH } from './gameIds';
@@ -182,7 +183,7 @@ export function castleScenarioProfile(ctx: SceneContext, eco: SceneEco, civ: str
   }
   const cycle = trainingCycle(base, cycleOps).cycle;
   if (!Number.isFinite(cycle) || cycle <= 0) return fail('训练周期缺失');
-  const rates = gatherModel(3, '', { techIds: new Set(), walkTiles: 3, farmTiles: 0 });
+  const rates = neutralGatherModel();
   const fixedSeconds = realCost(fixed, rates).total,
     unitSeconds = realCost(priced.cost, rates).total;
   if (!Number.isFinite(fixedSeconds) || !Number.isFinite(unitSeconds) || unitSeconds <= 0) return fail('费用换算不可核验');

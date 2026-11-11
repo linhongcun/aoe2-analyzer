@@ -4,7 +4,8 @@ import { DAT } from './datEffects';
 import { TEAM_BONUSES } from './effects';
 import { applyEffects, civStatus, makeSimContext, simTechs, simulate } from './simulator';
 import { unitCost } from './unitCost';
-import { gatherModel, realCost } from './realCost';
+import { realCost } from './realCost';
+import { neutralGatherModel } from './scenarioBudget';
 import { reviewPayload, SCENE_ECO, type SceneContext } from './positionScenarios';
 import { sceneSignature } from './positionScenarioMath';
 import review from './routeReview.json';
@@ -20,7 +21,7 @@ export const addCosts = (...costs: Cost[]): Cost => {
 };
 export const scaleCost = (cost: Cost, n: number): Cost => Object.fromEntries(Object.entries(cost).map(([k, v]) => [k, v * n]));
 /** 同一中性标准工秒计价，不是文明经济模拟，也不是跨时代经过时间。 */
-export const routeWork = (cost: Cost) => realCost(cost, gatherModel(3, '', { techIds: new Set(), walkTiles: 3, farmTiles: 0 })).total;
+export const routeWork = (cost: Cost) => realCost(cost, neutralGatherModel()).total;
 const validCost = (cost: Cost | undefined | null, keys: readonly string[]): cost is Cost =>
   !!cost &&
   Object.keys(cost).sort().join(',') === [...keys].sort().join(',') &&

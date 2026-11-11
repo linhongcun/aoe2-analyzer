@@ -6,6 +6,7 @@ import { TECH_SRC, BONUS_SRC } from './effects';
 import type { Cost, SimStats, Trees } from './types';
 import type { Lane, StartChoice } from './startGame';
 import { firstStrike, retreatContact, sceneSignature, supportArrival, SCENE_EPS } from './positionScenarioMath';
+import { affordableCount } from './scenarioBudget';
 import reviewed from './positionScenarioReview.json';
 import { castleScenarioProfile, type CastleProfile, type CastleResult } from './castleScenarioProfile';
 import { isSceneTechPlan, sceneTechPlans, type SceneTechPlan } from './startGameInputs';
@@ -141,8 +142,7 @@ export function scenarioProfile(ctx: SceneContext, civ: string, lane: Lane, cfg:
   const result = profileFor(ctx, civ, lane, cfg);
   if (!result.ok) return { civ, plan: cfg.techPlan, status: result.status, reason: result.reason, preferred: false };
   const p = result.value;
-  const paid = cfg.budget + SCENE_EPS >= p.fixedSeconds;
-  const count = paid ? Math.max(0, Math.floor((cfg.budget - p.fixedSeconds) / p.unitSeconds + SCENE_EPS)) : 0;
+  const { paid, count } = affordableCount(cfg.budget, p.fixedSeconds, p.unitSeconds);
   const funding = !paid ? 'fixed-shortfall' : count ? 'funded' : 'no-unit';
   const reason = count ? '' : !paid ? '当前方案固定投入不足，预算不足以完成所选科技及单位升级。' : '当前方案可付固定投入，剩余不足一兵。';
   return {
