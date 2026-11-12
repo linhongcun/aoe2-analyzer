@@ -15,9 +15,10 @@ import patches_build as patches  # noqa: E402
 
 class PatchArchives(unittest.TestCase):
     def test_185872_archive_bytes_remain_frozen(self):
+        # #955 给 14 条已核对费用补了资源名。历史输入指纹仍由另一条测试锁定。
         original = (ROOT / 'src/data/patches/185872.json').read_bytes()
         self.assertEqual(hashlib.sha256(original).hexdigest(),
-                         '13aac16199d5ff637b88758520390e707d7c338ddbd595eeea29ac0d5c6e7b2b')
+                         '87b8c73086e832faeefba8c15654d2568eb5f8e3fd5efb3d366cb4f62cdb895d')
 
     def test_185872_reproduces_without_current_data_or_dat(self):
         with tempfile.TemporaryDirectory() as directory:
