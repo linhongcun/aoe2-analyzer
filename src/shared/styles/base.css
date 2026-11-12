@@ -1724,9 +1724,10 @@ table.ediff td.dn {
   white-space: nowrap;
 }
 
-/* issue 275：加成详情页标题不在中文字之间断开，只在「文明名 ·」与「文明加成 N」之间的空格处换行（见 BonusDetail） */
+/* 加成详情标题是原文，按正常中文断行。泛称「文明名 · 文明加成 N」在 .bon-kind，不再靠 keep-all 把整句粘成一行。 */
 #bonus h1 {
-  word-break: keep-all;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 /* issue 275：数字 + 单位、日期等不可断开的片段（开局步骤、跟练卡、内容指南日期） */

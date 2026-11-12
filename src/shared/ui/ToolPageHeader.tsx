@@ -131,6 +131,22 @@ function ToolMoreMenu({ items, triggerRef }: { items: ToolHeadAction[]; triggerR
   );
 }
 
+/** 一行相关工具。链接热区由 tool-related 样式保证至少 44px。 */
+export function RelatedTools({ links, label = '相关工具', flush = false }: { links: ToolRelatedLink[]; label?: string; flush?: boolean }) {
+  if (!links.length) return null;
+  return (
+    <nav className={flush ? 'tool-related tool-related-flush' : 'tool-related'} aria-label={label}>
+      <span className="tool-related-label">{label}</span>
+      {links.map((link) => (
+        <Link key={link.to + link.label} className="tool-related-link" to={link.to}>
+          {link.label}
+          <Icon name="chevron-right" />
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
 /** 工具页页头：面包屑或顶栏、左对齐标题、最多两个可见操作，其余收进「更多」。 */
 export function ToolPageHeader({
   title,
@@ -189,17 +205,7 @@ export function ToolPageHeader({
           )}
         </div>
       </header>
-      {related && related.links.length > 0 && (
-        <nav className={flush ? 'tool-related tool-related-flush' : 'tool-related'} aria-label={related.label ?? '相关工具'}>
-          <span className="tool-related-label">{related.label ?? '相关工具'}</span>
-          {related.links.map((link) => (
-            <Link key={link.to + link.label} className="tool-related-link" to={link.to}>
-              {link.label}
-              <Icon name="chevron-right" />
-            </Link>
-          ))}
-        </nav>
-      )}
+      {related && related.links.length > 0 && <RelatedTools label={related.label} links={related.links} flush={flush} />}
     </>
   );
 }

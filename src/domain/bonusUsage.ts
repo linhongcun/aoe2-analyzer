@@ -385,5 +385,18 @@ export function usageLevel(lines: BonusUsageLine[]): 'all' | 'part' | 'none' {
   return lines.every((l) => l.on === true) ? 'all' : 'part';
 }
 
+export type BonusLevel = 'all' | 'part' | 'none';
+
+/** 列表与文明详情行共用的三档：已编码，或列出的工具全部计入，为已计入；有计入也有未计入为部分计入；都没有计入为仅文本。 */
+export function bonusLevel(b: CivBonusEnt): BonusLevel {
+  return b.encoded ? 'all' : usageLevel(bonusUsage(b));
+}
+
+export const LEVEL_ZH: Record<BonusLevel, string> = {
+  all: '已计入',
+  part: '部分计入',
+  none: '仅文本',
+};
+
 /** Steve 设计审查（PR 330）：有工具计入的加成不再显示来源标签（src = 'eco' 的绿色「.dat 经济/费用效果（文本展示）」、src = 'text' 的橙色「无 .dat 数据」）；没有工具计入的保持原样 */
 export const showEcoSourceTag = (b: CivBonusEnt) => !((b.src === 'eco' || b.src === 'text') && !b.encoded && usageLevel(bonusUsage(b)) !== 'none');

@@ -2,16 +2,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { civBonuses } from '../../../domain/civBonus';
-import { bonusUsage, usageLevel } from '../../../domain/bonusUsage';
+import { bonusLevel, LEVEL_ZH } from '../../../domain/bonusUsage';
 import type { Civ } from '../../../domain/types';
 import { Icon } from '../../../shared/ui/Icon';
 import BonusBody, { BonusText } from '../../../shared/ui/BonusBody';
 
-/** issue 317：经济/费用类加成看各工具是否真的计入（bonusUsage），不再一律标「仅文本」 */
+/** 与加成列表同一判定（bonusLevel）：已计入 / 部分计入 / 仅文本。 */
 function RowTag({ b }: { b: ReturnType<typeof civBonuses>[number] }) {
-  const lv = b.encoded ? 'all' : usageLevel(bonusUsage(b));
-  if (lv === 'none') return <span className="tag txt">仅文本</span>;
-  return <span className="tag ok">{lv === 'all' ? '已计入' : '部分计入'}</span>;
+  const lv = bonusLevel(b);
+  return <span className={lv === 'none' ? 'tag txt' : 'tag ok'}>{LEVEL_ZH[lv]}</span>;
 }
 
 /** 行内数字和百分号不从中间拆开。原文不变。 */

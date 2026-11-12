@@ -65,79 +65,25 @@ test.describe('#275 开局步骤：数字与单位不断行', () => {
 });
 
 /**
- * 加成详情页标题「文明名 · 文明加成 N」的断行（逐字取 Range 的 clientRects，同 wrappedNums 的量法）：
- * Steve 2026-10-21 20:31：「文明加成 N」整体不断行，文明名本身也不断；放不下时只在文明名与「文明加成」之间换行。
- * 返回各段占了几行；null 表示标题不含该格式。只看 h1 自身的文字，不含 <small> 里的英文副标题。
+ * #965：详情页 h1 改为加成原文。泛称「文明名 · 文明加成 N」留在页头标签里，并且不把序号拆到下一行。
  */
-async function bonusTitleLines(page: Page): Promise<{ civ: number; tail: number; num: boolean } | null> {
-  return page
-    .locator('main h1')
-    .first()
-    .evaluate((h1) => {
-      const nodes: { n: Text; start: number }[] = [];
-      let text = '';
-      const tw = document.createTreeWalker(h1, NodeFilter.SHOW_TEXT);
-      for (let n = tw.nextNode() as Text | null; n; n = tw.nextNode() as Text | null) {
-        if (n.parentElement !== h1) continue;
-        nodes.push({ n, start: text.length });
-        text += n.data;
-      }
-      const m = /^(\s*)(\S.*?)\s*·\s*(文明加成\s*\d+)\s*$/.exec(text);
-      if (!m) return null;
-      const at = (i: number) => {
-        const k = nodes.findLast((x) => x.start <= i && i < x.start + x.n.data.length)!;
-        return [k.n, i - k.start] as const;
-      };
-      /** 区间 [from, to) 内每个非空白字符的行矩形，按垂直区间归并成行 */
-      const lines = (from: number, to: number) => {
-        const out: { top: number; bottom: number }[] = [];
-        for (let i = from; i < to; i++) {
-          if (/\s/.test(text[i]!)) continue;
-          const r = document.createRange();
-          const [n, o] = at(i);
-          r.setStart(n, o);
-          r.setEnd(n, o + 1);
-          for (const x of r.getClientRects())
-            if (x.width > 0 && x.height > 0 && !out.some((l) => x.top < l.bottom - 2 && x.bottom > l.top + 2)) out.push({ top: x.top, bottom: x.bottom });
-        }
-        return out;
-      };
-      const civFrom = m[1]!.length,
-        civTo = civFrom + m[2]!.length;
-      const tailFrom = text.indexOf(m[3]!, civTo),
-        tailTo = tailFrom + m[3]!.length;
-      const numFrom = tailFrom + m[3]!.search(/\d/);
-      const chengAt = tailFrom + m[3]!.indexOf('成');
-      const cheng = lines(chengAt, chengAt + 1);
-      const num = lines(numFrom, tailTo);
-      return {
-        civ: lines(civFrom, civTo).length,
-        tail: lines(tailFrom, tailTo).length,
-        // 序号单独成行：「成」与 N 不在同一行
-        num: !(num[0]!.top < cheng[0]!.bottom - 2 && num[0]!.bottom > cheng[0]!.top + 2),
-      };
-    });
-}
-test.describe('#275 文明加成详情页标题：只在文明名与「文明加成」之间换行（Steve 2026-10-21 并入，起因土耳其 @360）', () => {
+test.describe('#275 文明加成详情页标题（#965 起 h1 为加成原文，泛称在标签）', () => {
   for (const width of WIDTHS)
-    test(`全部加成详情页标题 @${width}：文明名不断行，「文明加成 N」不断行，序号不单独成行`, async ({ page }) => {
+    test(`全部加成详情页 @${width}：h1 是加成原文，泛称标签不把序号拆行`, async ({ page }) => {
       test.setTimeout(180_000);
       await page.setViewportSize({ width, height: 900 });
       const bad: string[] = [];
       let checked = 0;
-      for (const c of civsRaw as { en: string; bon: string[] }[])
+      for (const c of civsRaw as { en: string; zh: string; bon: string[] }[])
         for (let i = 0; i < c.bon.length; i++) {
           await page.goto(`./#/civ/${c.en}/bonus/${i}`);
-          await expect(page.locator('main h1').first()).toContainText(`文明加成 ${i + 1}`);
-          const r = await bonusTitleLines(page);
-          if (r === null) {
-            bad.push(`${c.en}/bonus/${i} 标题不是「文明名 · 文明加成 N」`);
-            continue;
-          }
+          const heading = page.locator('#bonus h1');
+          const kind = page.locator('#bonus .bon-kind');
+          await expect(heading).toContainText(c.bon[i]!);
+          await expect(kind).toHaveText(`${c.zh} · 文明加成 ${i + 1}`);
+          const lines = await kind.evaluate((el) => el.getClientRects().length);
           checked++;
-          const why = [r.civ > 1 && `文明名断成 ${r.civ} 行`, r.tail > 1 && `「文明加成 N」断成 ${r.tail} 行`, r.num && '序号单独成行'].filter(Boolean);
-          if (why.length)
-            bad.push(`#/civ/${c.en}/bonus/${i}「${(await page.locator('main h1').first().innerText()).replace(/\s+/g, ' ')}」：${why.join('、')}`);
+          if (lines !== 1) bad.push(`#/civ/${c.en}/bonus/${i} 泛称标签占了 ${lines} 行`);
         }
       expect(checked, '防空转：225 个标题都量到').toBe(225);
       expect(bad).toEqual([]);

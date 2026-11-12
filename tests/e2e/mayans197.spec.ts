@@ -57,7 +57,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.locator('#bonus .bonusbody')).toContainText('资源持续时间 +15%');
       await expect(page.locator('#bonus .bonusbody [data-usage="sim"]')).toHaveAttribute('data-on', 'true');
       await expect(page.locator('#bonus .bonusbody [data-usage="sim"]')).toContainText(usageNote);
-      await expect(page.locator('#bonus .bonusbody')).toContainText('已计入数值');
+      await expect(page.locator('#bonus .dhead .tag.ok').filter({ hasText: /^已计入$/ })).toBeVisible();
       await expect(page.locator('#bonus .bside')).toContainText('资源持续时间 +15%');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: info.outputPath(`mayans-bonus1-${width}-${theme}.png`), fullPage: true });
