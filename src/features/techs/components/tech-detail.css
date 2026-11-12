@@ -116,6 +116,7 @@
 }
 .td-jump {
   display: flex;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 4px;
   margin: 0 0 12px;
