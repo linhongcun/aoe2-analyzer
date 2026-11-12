@@ -167,8 +167,13 @@
 .patch-values > span {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.35rem;
   min-width: 0;
+}
+.patch-values > span > b {
+  min-width: 0;
+  max-width: 100%;
 }
 .patch-values .num,
 .patch-values .nw,

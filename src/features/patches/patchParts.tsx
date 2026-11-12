@@ -13,9 +13,11 @@ import {
   type ObjectCandidate,
   type PatchEntry,
 } from '../../domain/patches';
+import { parseResourceChange } from '../../domain/resourceValue';
 import { BuildingIcon, CivIcon, TechIcon, UnitIcon } from '../../shared/ui/art';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { NumericText } from '../../shared/ui/PatchHistory';
+import { ResourceValue } from '../../shared/ui/ResourceValue';
 
 export const OBJECT_LABEL = { unit: '单位', building: '建筑', tech: '科技', civ: '文明' } as const;
 const KIND_ICON: Record<ArchiveKind, IconName> = { new: 'plus', buff: 'arrow-up', nerf: 'arrow-down', adjust: 'info' };
@@ -159,6 +161,7 @@ export function ObjectSearch({ archives, core }: { archives: readonly PatchArchi
 
 export function EntryBody({ entry, core }: { entry: PatchEntry; core: Core | null }) {
   const kind = ARCHIVE_KINDS.find((item) => item === entry.kind);
+  const parsed = parseResourceChange(entry);
   return (
     <>
       <p className="patch-kind">
@@ -185,18 +188,14 @@ export function EntryBody({ entry, core }: { entry: PatchEntry; core: Core | nul
           {entry.before !== undefined && (
             <span>
               改动前{' '}
-              <b>
-                <NumericText text={entry.before} />
-              </b>
+              <b>{parsed?.before ? <ResourceValue segments={parsed.before} other={parsed.after} variant="patch" /> : <NumericText text={entry.before} />}</b>
             </span>
           )}
           {entry.before !== undefined && entry.after !== undefined && <Icon name="arrow-right" />}
           {entry.after !== undefined && (
             <span>
               改动后{' '}
-              <b>
-                <NumericText text={entry.after} />
-              </b>
+              <b>{parsed?.after ? <ResourceValue segments={parsed.after} other={parsed.before} variant="patch" /> : <NumericText text={entry.after} />}</b>
             </span>
           )}
         </div>

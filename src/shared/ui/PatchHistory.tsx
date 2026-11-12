@@ -4,7 +4,9 @@ import { civByEn } from '../../data';
 import { usePatchArchives } from '../../data/patchHistory';
 import { archivedTarget, filterHistory, historyCoverage, historyFor, historyRangeError, type PatchArchive } from '../../domain/patchHistory';
 import { PATCH_KINDS, patchTarget, statedCivIds, type HistoryTarget, type PatchEntry } from '../../domain/patches';
+import { parseResourceChange } from '../../domain/resourceValue';
 import { Icon } from './Icon';
+import { ResourceValue } from './ResourceValue';
 import { DetailPage } from './layout';
 import './patchHistory.css';
 
@@ -85,14 +87,13 @@ function HistoryDate({ patch }: { patch: PatchArchive }) {
 
 function HistoryValues({ entry }: { entry: PatchEntry }) {
   if (entry.before === undefined && entry.after === undefined) return null;
+  const parsed = parseResourceChange(entry);
   return (
     <p className="history-values">
       {entry.before !== undefined && (
         <span>
           <span className="history-value-label">前</span>{' '}
-          <b>
-            <NumericText text={entry.before} />
-          </b>
+          <b>{parsed?.before ? <ResourceValue segments={parsed.before} other={parsed.after} variant="history" /> : <NumericText text={entry.before} />}</b>
         </span>
       )}
       {entry.before !== undefined && entry.after !== undefined && (
@@ -103,9 +104,7 @@ function HistoryValues({ entry }: { entry: PatchEntry }) {
       {entry.after !== undefined && (
         <span>
           <span className="history-value-label">后</span>{' '}
-          <b>
-            <NumericText text={entry.after} />
-          </b>
+          <b>{parsed?.after ? <ResourceValue segments={parsed.after} other={parsed.before} variant="history" /> : <NumericText text={entry.after} />}</b>
         </span>
       )}
     </p>

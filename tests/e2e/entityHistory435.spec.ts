@@ -40,10 +40,15 @@ test('#435 弩手跨版本升级费用可追溯，历史筛选可分享并恢复
   await expect(history(page).getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(0);
   await expect(version(page, '66692')).toContainText(/官方发行日（公告当地日期）\s*2022-08-29/);
   await expect(version(page, '66692')).toContainText(/公告公开（北京时间）\s*2022-08-30/);
-  await expect(version(page, '66692')).toContainText(/125\s*食物/);
-  await expect(version(page, '66692')).toContainText(/175\s*食物/);
+  const crossbow66692 = version(page, '66692').locator('[data-history-entry="66692-001-001"]');
+  await expect(crossbow66692.getByRole('img', { name: '食物' })).toHaveCount(2);
+  await expect(crossbow66692.getByRole('img', { name: '黄金' })).toHaveCount(2);
+  await expect(crossbow66692).toContainText('125');
+  await expect(crossbow66692).toContainText('175');
   await expect(version(page, '66692')).toContainText('升级');
-  await expect(version(page, '125283')).toContainText(/100\s*(?:黄金|金)/);
+  const crossbow125283 = version(page, '125283').locator('[data-history-entry="125283-002-003"]');
+  await expect(crossbow125283.getByRole('img', { name: '黄金' })).toHaveCount(2);
+  await expect(crossbow125283).toContainText('100');
   await expect(version(page, '125283')).toContainText('升级');
   const source = version(page, '66692').getByRole('link', { name: /官方/ }).first();
   await expect(source).toHaveAttribute('href', 'https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-66692/');

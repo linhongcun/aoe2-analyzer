@@ -170,7 +170,7 @@
 .history-values {
   display: inline-flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-1) var(--space-2);
   max-width: 100%;
   padding: var(--space-1) var(--space-2);
@@ -178,6 +178,10 @@
   background: var(--color-surface-2);
   font-size: 14px;
   font-variant-numeric: tabular-nums;
+}
+.history-values > span {
+  min-width: 0;
+  max-width: 100%;
 }
 .history-value-label,
 .history-arrow {

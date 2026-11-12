@@ -54,7 +54,7 @@ export const CivChip = ({ c, title }: { c: Civ; title?: string }) => (
 export const StatIcon = ({ k, t }: { k: string; t?: string }) =>
   k ? <img className="si" src={img(`stats/${k}.webp`)} alt={t ?? k} title={t ?? k} /> : <span className="si" />;
 
-const RK: Record<string, string> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone' };
+export const RK: Record<string, string> = { Food: 'food', Wood: 'wood', Gold: 'gold', Stone: 'stone' };
 export function CostView({ c }: { c: Cost }) {
   const e = Object.entries(c).filter(([, v]) => v);
   if (!e.length) return <>—</>;
