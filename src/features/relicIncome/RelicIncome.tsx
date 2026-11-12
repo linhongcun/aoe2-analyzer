@@ -16,8 +16,8 @@ import {
   type RelicIncomeConfig,
   type RelicIncomeData,
 } from '../../domain/relicIncome';
-import { Breadcrumbs } from '../../shared/ui/layout';
 import { CalcDock } from '../../shared/ui/CalcDock';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './relicIncome.css';
@@ -105,11 +105,23 @@ export default function RelicIncome() {
   );
   return (
     <section className="pane relic-income" data-testid="relic-income-page">
-      <Breadcrumbs />
-      <header className="relic-heading">
-        <h1>圣物收益</h1>
-        <p>估算已存放且生效的固定圣物，在一段游戏时间内提供的分资源收入。</p>
-      </header>
+      <ToolPageHeader
+        flush
+        title="圣物收益"
+        description="估算已存放且生效的固定圣物，在一段游戏时间内提供的分资源收入。"
+        dock={
+          data && r ? (
+            <CalcDock
+              note={status}
+              resultId="relic-result-title"
+              actions={[
+                { label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void copy() },
+                { label: '重置', icon: 'rotate-ccw', onClick: () => write(newRelicIncomeConfig()) },
+              ]}
+            />
+          ) : undefined
+        }
+      />
       {!data ? (
         <div className="relic-card">
           {loaded.error ? (
@@ -133,14 +145,6 @@ export default function RelicIncome() {
       ) : (
         r && (
           <>
-            <CalcDock
-              note={status}
-              resultId="relic-result-title"
-              actions={[
-                { label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void copy() },
-                { label: '重置圣物方案', onClick: () => write(newRelicIncomeConfig()) },
-              ]}
-            />
             {manualLink && (
               <label className="relic-manual">
                 完整方案链接

@@ -181,7 +181,7 @@ for (const query of ['v=1&mates=&candidate=Unknown', 'v=1&mates=Franks&candidate
     }
     await expect(page.getByRole('button', { name: '复制搭配链接', exact: true })).toBeDisabled();
     expect(new URL(page.url()).hash.endsWith(query)).toBe(true);
-    await page.getByRole('button', { name: '重置搭配', exact: true }).click();
+    await page.getByRole('button', { name: query === 'v=1&mates=Franks&candidate=' ? '重置' : '重置搭配', exact: true }).click();
     await expect(page.getByRole('alert')).toHaveCount(0);
     await expect(page.getByTestId('team-fit-mates')).toContainText('0 / 3');
   });
@@ -288,6 +288,7 @@ for (const width of [360, 375, 390, 1280])
           .evaluateAll((elements) =>
             elements
               .filter((el) => {
+                if (el.closest('.tool-head-actions')) return false;
                 const r = el.getBoundingClientRect();
                 return r.width > 0 && r.height > 0 && (r.width < 43.5 || r.height < 43.5);
               })

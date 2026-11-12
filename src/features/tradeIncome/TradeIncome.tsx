@@ -14,9 +14,8 @@ import {
   TRADE_INCOME_UNITS,
   type TradeIncomeConfig,
 } from '../../domain/tradeIncome';
-import { Breadcrumbs } from '../../shared/ui/layout';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { Loading } from '../../shared/ui/widgets';
-import { Icon } from '../../shared/ui/Icon';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './trade-income.css';
@@ -122,25 +121,15 @@ function TradeIncomeBody({
   };
   return (
     <section className="pane trade-income" data-testid="trade-income-page">
-      <Breadcrumbs />
-      <header className="trade-income-heading">
-        <div>
-          <h1>商路供给规划</h1>
-          <p className="note">用本局实测交金与完整周期，规划持续补兵所需的贸易车船。</p>
-        </div>
-        <Link className="ulink" to="/production">
-          持续生产工具
-        </Link>
-      </header>
-      <div className="trade-income-actions">
-        <button className="btn" type="button" disabled={errors.length > 0} onClick={() => void copy()}>
-          <Icon name="copy" />
-          复制方案链接
-        </button>
-        <button className="btn" type="button" onClick={reset}>
-          重置方案
-        </button>
-      </div>
+      <ToolPageHeader
+        title="商路供给规划"
+        description="用本局实测交金与完整周期，规划持续补兵所需的贸易车船。"
+        related={{ links: [{ to: '/production', label: '持续生产工具' }] }}
+        actions={[
+          { label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void copy() },
+          { label: '重置', icon: 'rotate-ccw', onClick: reset },
+        ]}
+      />
       {shared && (
         <p {...statusProps} className="note">
           {shared.text}

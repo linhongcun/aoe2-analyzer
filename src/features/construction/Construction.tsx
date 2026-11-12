@@ -6,7 +6,7 @@ import { AGE_ZH } from '../../domain/ratings';
 import { Loading } from '../../shared/ui/widgets';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
-import { Breadcrumbs } from '../../shared/ui/layout';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import {
   calculateConstruction,
   constructionBuildings,
@@ -83,20 +83,20 @@ export default function Construction() {
   };
   return (
     <section className="pane construction-page" data-testid="construction-page">
-      <Breadcrumbs />
-      <header className="construction-heading">
-        <div>
-          <h1>多人施工</h1>
-          <p className="note">比较提前完工的时间与村民工时。时间均为游戏时间。</p>
-        </div>
-      </header>
-      <CalcDock
-        note={status}
-        resultId="construction-result-title"
-        actions={[
-          { label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void share() },
-          { label: '重置为默认方案', onClick: reset },
-        ]}
+      <ToolPageHeader
+        flush
+        title="多人施工"
+        description="比较提前完工的时间与村民工时。时间均为游戏时间。"
+        dock={
+          <CalcDock
+            note={status}
+            resultId="construction-result-title"
+            actions={[
+              { label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void share() },
+              { label: '重置', icon: 'rotate-ccw', onClick: reset },
+            ]}
+          />
+        }
       />
       {manual && (
         <label className="construction-manual">

@@ -65,7 +65,7 @@ test('#286 未完成的旧复制不会覆盖编辑、重置或新复制', async 
   await expect(feedback).toContainText('换算链接已复制');
   await expect(manual).toHaveCount(0);
   await copy.click();
-  await page.getByRole('button', { name: '重置换算', exact: true }).click();
+  await page.getByRole('button', { name: '重置', exact: true }).click();
   await settle(3, 'resolve');
   await expect(feedback).toHaveCount(0);
   await expect(ratio).toHaveValue('1.7');

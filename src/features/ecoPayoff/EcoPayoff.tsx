@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { civs } from '../../data';
 import { useCore, useTrees } from '../../data/hooks';
 import { Loading } from '../../shared/ui/widgets';
-import { Breadcrumbs } from '../../shared/ui/layout';
 import { CalcDock } from '../../shared/ui/CalcDock';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import { fmtClock } from '../../domain/realCost';
 import {
@@ -105,23 +105,20 @@ function EcoPayoffBody({
   const groups = [...new Set(available.map((t) => t.bz.replace(/\n/g, '')))];
   return (
     <section className="pane eco-payoff" data-testid="eco-payoff-page">
-      <Breadcrumbs />
-      <header className="eco-heading">
-        <div>
-          <h1>经济科技收益</h1>
-          <p className="note">固定人数与采集条件，对比现在研究一项科技带来的投入和增量。</p>
-        </div>
-        <Link className="ulink" to="/production">
-          持续生产工具
-        </Link>
-      </header>
-      <CalcDock
-        note={shared?.text}
-        resultId="eco-result"
-        actions={[
-          { label: '复制方案链接', icon: 'copy', disabled: parseErrors.length > 0, onClick: () => void copy() },
-          { label: '重置方案', onClick: reset },
-        ]}
+      <ToolPageHeader
+        title="经济科技收益"
+        description="固定人数与采集条件，对比现在研究一项科技带来的投入和增量。"
+        related={{ links: [{ to: '/production', label: '持续生产工具' }] }}
+        dock={
+          <CalcDock
+            note={shared?.text}
+            resultId="eco-result"
+            actions={[
+              { label: '复制方案链接', icon: 'copy', disabled: parseErrors.length > 0, onClick: () => void copy() },
+              { label: '重置', icon: 'rotate-ccw', onClick: reset },
+            ]}
+          />
+        }
       />
       <p className="eco-lead" data-testid="eco-lead">
         {errors.length ? (

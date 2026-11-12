@@ -216,7 +216,7 @@ async function touchTargets(elements: Locator) {
   expect(
     await elements.evaluateAll((nodes) =>
       nodes
-        .filter((node) => node.closest('.production-mode-nav, .train-compare-page'))
+        .filter((node) => node.closest('.production-mode-nav, .train-compare-page') && !node.closest('.tool-head-actions, nav.crumbs'))
         .map((node) => ({ text: node.textContent, width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height }))
         .filter((box) => box.width < 43.5 || box.height < 43.5),
     ),

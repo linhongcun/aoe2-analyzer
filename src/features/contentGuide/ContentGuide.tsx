@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import {
   CONTENT_KINDS,
   CONTENT_MODES,
@@ -222,21 +223,16 @@ export default function ContentGuide() {
   };
   return (
     <section className="pane content-guide-page" data-testid="content-guide-page">
-      <header className="cg-heading">
-        <p className="cg-note">先看想玩的内容</p>
-        <h1>内容与购买导航</h1>
-        <p>查资料片提供的文明、战役和其他内容，分清当前本体已包含与另购项目。</p>
-        <p>
-          想看文明最早在哪个版本登场，请去
-          <Link className="community-tool-entry" to="/dlc">
-            查看文明历史首发列表
-          </Link>
-          。
-        </p>
-        <p className="cg-note">
-          Steam 公开商店快照 · 核对 {contentCatalog.verifiedAt} · <span className="cg-number">17 项</span>内容
-        </p>
-      </header>
+      <ToolPageHeader
+        title="内容与购买导航"
+        description={
+          <>
+            查资料片提供的文明、战役和其他内容，分清当前本体已包含与另购项目。Steam 公开商店快照 · 核对{' '}
+            <span className="nw">{contentCatalog.verifiedAt}</span> · <span className="cg-number">17 项</span>内容
+          </>
+        }
+        related={{ links: [{ to: '/dlc', label: '查看文明历史首发列表' }] }}
+      />
       {!!dataErrors.length && (
         <div className="cg-error" role="alert">
           <h2>内容目录暂不可用</h2>

@@ -9,6 +9,7 @@ import {
   serializeMatchReview,
   type MatchReviewDraft,
 } from '../../domain/matchReview';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { matchReviewDraftReducer } from './matchReviewDraftState';
 import { ReviewEditor } from './ReviewEditor';
@@ -38,7 +39,7 @@ export default function MatchReview() {
   const [draftState, dispatchDraft] = useReducer(matchReviewDraftReducer, { draft: initial.draft, beforeClear: null });
   const { draft, beforeClear } = draftState;
   const draftRef = useRef(draft);
-  const clearButtonRef = useRef<HTMLButtonElement>(null);
+  const moreRef = useRef<HTMLButtonElement>(null);
   const clearDialogRef = useRef<HTMLDialogElement>(null);
   const cancelClearRef = useRef<HTMLButtonElement>(null);
   const snapshot = useRef(initial.raw);
@@ -145,7 +146,7 @@ export default function MatchReview() {
     dispatchDraft({ type: 'undo' });
     const saved = persist(beforeClear);
     setNotice(saved ? '已撤销清空，复盘草稿已恢复并保存到本机。' : '已撤销清空，本页内容已恢复；本机草稿未更新，请查看保存提示。');
-    clearButtonRef.current?.focus();
+    moreRef.current?.focus();
   };
   const overwriteLocal = () => {
     const serialized = serializeMatchReview(draftRef.current);
@@ -250,40 +251,34 @@ export default function MatchReview() {
   return (
     <section className="pane match-review-page" aria-labelledby="mr-title" data-testid="match-review-page">
       <div className="mr-screen">
-        <header>
-          <p className="note">把观察变成一个可验证的练习重点</p>
-          <h1 id="mr-title">手填复盘与下局目标</h1>
-        </header>
-        <div className="mr-panel mr-storage" aria-label="草稿保存状态">
-          <p>草稿只保存在此浏览器的本机存储，不会上传。清除网站数据、换设备或存储被拒绝时，请使用 JSON 备份。</p>
-          <div className="mr-actions">
-            <button type="button" onClick={() => persist(draftRef.current)}>
-              重试保存本页
-            </button>
-            <button
-              type="button"
-              ref={clearButtonRef}
-              aria-haspopup="dialog"
-              onClick={() => {
+        <ToolPageHeader
+          title="手填复盘与下局目标"
+          titleId="mr-title"
+          description="草稿只保存在此浏览器的本机存储，不会上传。清除网站数据、换设备或存储被拒绝时，请使用 JSON 备份。"
+          actions={[
+            { label: '求助摘要与打印', onClick: () => jumpTo('mr-output') },
+            { label: '备份与恢复', onClick: () => jumpTo('mr-backup') },
+          ]}
+          more={[
+            { label: '重试保存本页', onClick: () => persist(draftRef.current) },
+            {
+              label: '清空本页内容',
+              popup: 'dialog',
+              onClick: () => {
                 clearDialogRef.current?.showModal();
                 cancelClearRef.current?.focus();
-              }}
-            >
-              清空本页内容
-            </button>
-            <button type="button" onClick={() => jumpTo('mr-backup')}>
-              备份与恢复
-            </button>
-            <button type="button" onClick={() => jumpTo('mr-output')}>
-              求助摘要与打印
-            </button>
-          </div>
+              },
+            },
+          ]}
+          moreTriggerRef={moreRef}
+        />
+        <div className="mr-panel mr-storage" aria-label="草稿保存状态">
           <dialog
             ref={clearDialogRef}
             className="mr-clear-dialog"
             aria-labelledby="mr-clear-title"
             aria-describedby="mr-clear-description"
-            onClose={() => clearButtonRef.current?.focus()}
+            onClose={() => moreRef.current?.focus()}
           >
             <h2 id="mr-clear-title">确认清空本页内容？</h2>
             <p id="mr-clear-description">将清除本页内容及本机保存的复盘草稿。本次页面会话内可撤销刚才的清空，刷新或离开后无法恢复；需要长期保留请先备份。</p>

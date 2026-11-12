@@ -22,28 +22,13 @@ import {
 } from '../../domain/market';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { Icon } from '../../shared/ui/Icon';
-import { Breadcrumbs } from '../../shared/ui/layout';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './market.css';
 
 const number = (value: number) => value.toLocaleString('zh-CN');
 const signed = (value: number) => (value > 0 ? '+' : '') + number(value);
 const PAGE_SIZE = 25;
-function marketLead(result: MarketResult, name: string) {
-  if (result.errors.length) return <>方案 {name}：输入无效</>;
-  if (result.failure)
-    return (
-      <>
-        方案 {name}：只覆盖部分交易，已执行 <span className="market-number">{result.trades.length} 笔</span>
-      </>
-    );
-  if (!result.trades.length) return <>方案 {name}：没有交易</>;
-  return (
-    <>
-      方案 {name}：预计可执行 <span className="market-number">{result.trades.length} 笔</span>
-    </>
-  );
-}
 
 export default function Market() {
   const location = useLocation(),
@@ -76,41 +61,32 @@ export default function Market() {
   };
   return (
     <section className="pane market-page" data-testid="market-page">
-      <Breadcrumbs />
-      <header className="market-heading">
-        <div>
-          <h1>市场买卖预算</h1>
-          <p className="note">按你的交易顺序，估算资源收支与下一笔报价。</p>
-        </div>
-      </header>
-      <p className="market-econ-links">
-        相关经济工具：
-        <Link className="ulink" to="/production">
-          持续生产
-        </Link>
-        {' · '}
-        <Link className="ulink" to="/eco-payoff">
-          经济科技收益
-        </Link>
-      </p>
-      <CalcDock
-        note={status}
-        resultId={decoded.errors.length ? undefined : 'market-compare-title'}
-        actions={[
-          {
-            label: '复制两份方案链接',
-            icon: 'copy',
-            disabled: decoded.errors.length > 0 || config.plans.some((plan) => marketErrors(plan).length > 0),
-            onClick: () => void share(),
-          },
-          { label: '重置方案', onClick: () => update(defaultMarketConfig()) },
-        ]}
+      <ToolPageHeader
+        title="市场买卖预算"
+        description="按你的交易顺序，估算资源收支与下一笔报价。"
+        related={{
+          label: '相关经济工具',
+          links: [
+            { to: '/production', label: '持续生产' },
+            { to: '/eco-payoff', label: '经济科技收益' },
+          ],
+        }}
+        dock={
+          <CalcDock
+            note={status}
+            resultId={decoded.errors.length ? undefined : 'market-compare-title'}
+            actions={[
+              {
+                label: '复制两份方案链接',
+                icon: 'copy',
+                disabled: decoded.errors.length > 0 || config.plans.some((plan) => marketErrors(plan).length > 0),
+                onClick: () => void share(),
+              },
+              { label: '重置', icon: 'rotate-ccw', onClick: () => update(defaultMarketConfig()) },
+            ]}
+          />
+        }
       />
-      {!decoded.errors.length && (
-        <p className="market-lead" data-testid="market-lead">
-          {marketLead(results[0]!, 'A')}；{marketLead(results[1]!, 'B')}。
-        </p>
-      )}
       <aside className="market-caution" aria-label="预算口径">
         <strong>预算估算，游戏实际报价优先</strong>
         <p>

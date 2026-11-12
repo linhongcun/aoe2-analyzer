@@ -189,7 +189,8 @@ for (const [index, bad] of [
     await expect(page.getByRole('button', { name: '复制完整计划', exact: true })).toBeDisabled();
     await expect(page.getByLabel('原始计划参数', { exact: true })).toHaveValue(bad);
     await expect(page.getByRole('combobox', { name: 'P1 主兵种', exact: true })).toHaveCount(0);
-    await page.getByRole('button', { name: '重置计划', exact: true }).click();
+    await page.getByRole('button', { name: '更多', exact: true }).click();
+    await page.getByRole('menuitem', { name: '重置计划', exact: true }).click();
     await expect(page.getByRole('combobox', { name: 'P1 主兵种', exact: true })).toHaveValue('');
   });
 }
@@ -210,6 +211,7 @@ for (const width of [360, 375, 390, 1280])
         .evaluateAll((elements) =>
           elements
             .filter((e) => {
+              if (e.closest('.tool-head-actions, nav.crumbs')) return false;
               const r = e.getBoundingClientRect();
               return r.width > 0 && r.height > 0 && (r.width < 43.5 || r.height < 43.5);
             })

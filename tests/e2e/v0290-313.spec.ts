@@ -14,22 +14,28 @@ test.describe('#313 手填复盘：连续清空两次后撤销', () => {
       await page.setViewportSize({ width, height: 900 });
       await page.goto('./#/match-review');
       await field(page, '复盘标题').fill('旧草稿');
-      const clear = page.getByRole('button', { name: '清空本页内容', exact: true });
+      const more = page.getByRole('button', { name: '更多', exact: true });
       const dialog = page.getByRole('dialog', { name: '确认清空本页内容？', exact: true });
       const confirm = dialog.getByRole('button', { name: '确认清空', exact: true });
       const undo = page.getByRole('button', { name: '撤销', exact: true });
-      await clear.click();
-      await confirm.click();
-      await expect(field(page, '复盘标题')).toHaveValue('');
-      await expect(undo).toBeVisible();
-      if (await clear.isEnabled()) {
-        await clear.click();
-        if (await dialog.isVisible()) await confirm.click();
-      } else {
-        // 禁用方案：要有可见说明，读屏能听到原因；按钮仍不小于 44px
+      const openClear = async () => {
+        await more.click();
+        const clear = page.getByRole('menuitem', { name: '清空本页内容', exact: true });
+        if (await clear.isEnabled()) {
+          await clear.click();
+          return true;
+        }
         await expect(clear).toHaveAccessibleDescription(/.+/);
         const box = await clear.boundingBox();
         expect(box!.height).toBeGreaterThanOrEqual(44);
+        return false;
+      };
+      expect(await openClear()).toBe(true);
+      await confirm.click();
+      await expect(field(page, '复盘标题')).toHaveValue('');
+      await expect(undo).toBeVisible();
+      if (await openClear()) {
+        if (await dialog.isVisible()) await confirm.click();
       }
       await undo.click();
       await expect(field(page, '复盘标题')).toHaveValue('旧草稿');

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { civs, civByEn } from '../../data';
 import type { ProductionContext } from '../../domain/production';
 import { CostView } from '../../shared/ui/art';
-import { Icon } from '../../shared/ui/Icon';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { commitUrl } from '../../shared/utils/dataInfo';
 import { encodeTrainCompare, TRAIN_COMPARE_ENTRY, TRAIN_COMPARE_UNITS, type TrainCompareConfig } from './trainCompareCodec';
@@ -42,28 +42,24 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
     });
   return (
     <section className="pane train-compare-page" data-testid="train-compare-page">
-      <header className="train-compare-heading">
-        <div>
-          <h1>跨文明训练对照</h1>
-          <p className="note">同一单位形态、同一座马厩，比较已选文明的训练间隔与费用。</p>
-        </div>
-        <div className="train-compare-actions">
-          <button className="btn" type="button" disabled={changed || !!result.errors.length} onClick={() => void share()}>
-            <Icon name="copy" />
-            复制对照链接
-          </button>
-          <button
-            className="btn"
-            type="button"
-            onClick={() => {
-              reset();
-              navigate(TRAIN_COMPARE_ENTRY);
-            }}
-          >
-            重置对照
-          </button>
-        </div>
-      </header>
+      <ToolPageHeader
+        crumb="跨文明训练对照"
+        title="跨文明训练对照"
+        description="同一单位形态、同一座马厩，比较已选文明的训练间隔与费用。"
+        actions={[{ label: '复制对照链接', icon: 'copy', disabled: changed || !!result.errors.length, onClick: () => void share() }]}
+      />
+      <div className="train-compare-actions">
+        <button
+          className="btn"
+          type="button"
+          onClick={() => {
+            reset();
+            navigate(TRAIN_COMPARE_ENTRY);
+          }}
+        >
+          重置对照
+        </button>
+      </div>
       {!changed && status && (
         <p className="note" {...statusProps}>
           {status}

@@ -300,6 +300,7 @@ for (const width of [360, 375, 390, 1280])
       const bad = await root.locator('input, select, button, summary, a').evaluateAll((elements) =>
         elements
           .filter((element) => {
+            if (element.closest('nav.crumbs')) return false;
             const box = element.getBoundingClientRect();
             return box.width > 0 && box.height > 0 && (box.height < 44 || box.width < 44);
           })

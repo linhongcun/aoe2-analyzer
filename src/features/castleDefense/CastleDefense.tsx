@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Icon } from '../../shared/ui/Icon';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { sharePageUrl } from '../../domain/sharePage';
 import {
   CASTLE_AGE_ZH,
@@ -96,29 +96,21 @@ export default function CastleDefense() {
   };
   return (
     <section className="pane castle-defense-page" data-testid="castle-defense-page">
-      <p>
-        <Link className="community-tool-entry" to="/matchup">
-          返回对局助手
-        </Link>
-      </p>
-      <header className="castle-defense-heading">
-        <div>
-          <h1>城堡前置应对</h1>
-          <p>城堡落在门口以后，先看还能保住什么，再选下一步。</p>
-          <p className="castle-defense-note">
+      <ToolPageHeader
+        flush
+        crumb="城堡前置应对"
+        title="城堡前置应对"
+        description={
+          <>
             限 <span className="castle-defense-nowrap">1v1 Arena</span>。按你已经看见的信息整理选择，不自动判断实际战局。
-          </p>
-        </div>
-        <div className="castle-defense-buttons">
-          <button type="button" className="btn" disabled={locked} onClick={() => void share()}>
-            <Icon name="copy" />
-            复制观察链接
-          </button>
-          <button type="button" className="btn" disabled={locked} onClick={() => window.print()}>
-            打印当前清单
-          </button>
-        </div>
-      </header>
+          </>
+        }
+        actions={[
+          { label: '复制观察链接', icon: 'copy', disabled: locked, onClick: () => void share() },
+          { label: '打印当前清单', icon: 'printer', disabled: locked, onClick: () => window.print() },
+        ]}
+      />
+      <p>城堡落在门口以后，先看还能保住什么，再选下一步。</p>
       <p className="castle-defense-example">例如：堡已经造好，但还没查过后方金矿？先把资源保留为“未知”，查清退路后再决定迁移或解围。</p>
       {status && <p {...statusProps}>{status}</p>}
       {manualLink && (

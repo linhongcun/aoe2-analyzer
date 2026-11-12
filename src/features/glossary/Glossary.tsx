@@ -2,6 +2,8 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { findTerms, glossary, groupTerms, termById, type GlossaryTerm } from '../../domain/glossary';
 import { sharePageUrl } from '../../domain/sharePage';
 import { Icon } from '../../shared/ui/Icon';
+import { Breadcrumbs } from '../../shared/ui/layout';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './glossary.css';
 
@@ -96,10 +98,7 @@ export default function Glossary() {
     const term = termById(id);
     return (
       <section className="pane glossary">
-        <Link className="gl-back" to="/glossary">
-          <Icon name="arrow-left" />
-          术语与缩写
-        </Link>
+        <Breadcrumbs current={term ? term.zh : '没有这个术语'} />
         {term ? (
           <Term key={term.id} term={term} />
         ) : (
@@ -116,19 +115,16 @@ export default function Glossary() {
   }
   return (
     <section className="pane glossary">
-      <header>
-        <p className="note gl-eyebrow">读懂社区建议</p>
-        <h1>术语与缩写</h1>
-        <p>从一个缩写开始，了解含义、使用语境和相关工具。</p>
-        <nav className="bar" aria-label="入门与操作资料">
-          <Link className="community-tool-entry" to="/game-guide">
-            用六张卡看懂一局与观赛
-          </Link>
-          <Link className="community-tool-entry" to="/hotkeys">
-            查游戏操作与个人按键表
-          </Link>
-        </nav>
-      </header>
+      <ToolPageHeader
+        title="术语与缩写"
+        description="从一个缩写开始，了解含义、使用语境和相关工具。"
+        related={{
+          links: [
+            { to: '/game-guide', label: '用六张卡看懂一局与观赛' },
+            { to: '/hotkeys', label: '查游戏操作与个人按键表' },
+          ],
+        }}
+      />
       <label className="gl-search">
         搜索术语
         <span>

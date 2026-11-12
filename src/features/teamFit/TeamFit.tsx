@@ -6,6 +6,7 @@ import { decodeTeamFit, emptyTeamFit, encodeTeamFit, type TeamFitConfig } from '
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { TeamSections } from '../../shared/ui/TeamSections';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import type { TeamFitResultsProps } from './TeamFitResults';
 import './teamFit.css';
@@ -54,13 +55,21 @@ export default function TeamFit() {
   const Results = loaded?.Results;
   return (
     <section className="pane team-fit-page" data-testid="team-fit-page">
-      <TeamSections />
-      <header className="tf-heading">
-        <p className="tf-eyebrow">选文明前</p>
-        <h1>文明搭配</h1>
-        <p>先选候选，看它和队友有哪些关联。</p>
-        <p className="note">完整科技树潜力 · DE {DATA_PATCH_BUILD} · 编辑口径，非官方推荐</p>
-      </header>
+      <ToolPageHeader
+        top={<TeamSections />}
+        title="文明搭配"
+        description="先选候选，看它和队友有哪些关联。"
+        actions={[
+          {
+            label: '复制搭配链接',
+            icon: 'copy',
+            disabled: decoded.locked || !config.candidate || !loaded || failed,
+            onClick: copy,
+          },
+          { label: '重置', icon: 'rotate-ccw', onClick: () => update(emptyTeamFit(), true) },
+        ]}
+      />
+      <p className="note">完整科技树潜力 · DE {DATA_PATCH_BUILD} · 编辑口径，非官方推荐</p>
       {decoded.locked ? (
         <div className="tf-error" role="alert">
           <h2>无法恢复这份搭配</h2>
@@ -158,17 +167,6 @@ export default function TeamFit() {
           ) : null}
         </>
       )}
-      <div className="tf-actions">
-        <button type="button" className="btn" disabled={decoded.locked || !config.candidate || !loaded || failed} onClick={copy}>
-          <Icon name="copy" />
-          复制搭配链接
-        </button>
-        {!decoded.locked && (
-          <button type="button" className="btn" onClick={() => update(emptyTeamFit(), true)}>
-            重置搭配
-          </button>
-        )}
-      </div>
       {!decoded.locked && !config.candidate && <p className="note">选好候选后可分享，或带入队伍工具。</p>}
       {share.status && <p {...share.statusProps}>{share.status}</p>}
       {share.manualLink && (

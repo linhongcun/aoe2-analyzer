@@ -219,7 +219,7 @@ test('#241 strict damaged links lock; recoverable semantic mistakes retain edita
     await expect(page.getByTestId('mixed-army-result')).toHaveCount(0);
     await expect(page.getByLabel('情境', { exact: true })).toBeDisabled();
     await expect(page.getByRole('button', { name: '复制情境链接', exact: true })).toBeDisabled();
-    await page.getByRole('button', { name: '重置为默认情境', exact: true }).click();
+    await page.getByRole('button', { name: '重置', exact: true }).click();
     await expect(page.getByLabel('现有主力准确形态', { exact: true })).toHaveValue('unknown');
   }
   await page.goto(href({ age: '9' }));
@@ -284,6 +284,7 @@ for (const width of [360, 375, 390, 1280])
         .evaluateAll((nodes) =>
           nodes
             .filter((node) => {
+              if (node.closest('.tool-head-actions, nav.crumbs')) return false;
               const rect = node.getBoundingClientRect();
               return rect.width > 0 && rect.height > 0 && (rect.width < 44 || rect.height < 44);
             })

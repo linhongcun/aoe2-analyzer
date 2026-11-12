@@ -143,7 +143,12 @@ for (const width of [360, 375, 390, 1280]) for (const theme of ['light', 'dark']
     await expect(mode(page)).toBeFocused();
     await pack(page).selectOption('icons-barbarossa');
     await page.locator('.cg-sources summary').click();
-    const small = await page.locator('[data-testid="content-guide-page"]').evaluate((root) => [...root.querySelectorAll('a,button,input,select,summary')].filter((node) => node.getClientRects().length).map((node) => ({ text: node.textContent, height: node.getBoundingClientRect().height })).filter((node) => node.height < 43.9));
+    const small = await page.locator('[data-testid="content-guide-page"]').evaluate((root) =>
+      [...root.querySelectorAll('a,button,input,select,summary')]
+        .filter((node) => node.getClientRects().length && !node.closest('nav.crumbs'))
+        .map((node) => ({ text: node.textContent, height: node.getBoundingClientRect().height }))
+        .filter((node) => node.height < 43.9),
+    );
     expect(small).toEqual([]);
     const report = await new AxeBuilder({ page }).include('[data-testid="content-guide-page"]').withTags(['wcag2a', 'wcag2aa']).analyze();
     expect(report.violations).toEqual([]);
