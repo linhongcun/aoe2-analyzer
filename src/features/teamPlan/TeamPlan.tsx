@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { loadCore, loadTrees } from '../../data';
 import type { ProductionContext } from '../../domain/production';
 import { decodeTeamPlan, defaultTeamPlan, encodeTeamPlan, teamPlanShareUrl, type TeamPlan } from '../../domain/teamPlan';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { TeamSections } from '../../shared/ui/TeamSections';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { PlanEditor } from './PlanEditor';
 import { PrintPlan } from './PrintPlan';
 import { useShareLink } from '../../shared/ui/useShareLink';
@@ -74,33 +75,25 @@ export default function TeamPlanPage() {
   const plan = decoded.plan;
   return (
     <section className="pane team-plan-page" data-testid="team-plan-page">
+      <ToolPageHeader
+        className="tp-screen"
+        top={<TeamSections />}
+        title="团战分工计划"
+        description="记录谁出兵、谁承担任务、何时会合；各阶段按玩家各自到达的时代约定。"
+        related={{ links: [{ to: '/team-fit', label: '选文明前看搭配' }] }}
+        dock={
+          <CalcDock
+            note={notice}
+            resultId={plan && ctx ? 'tp-phase-heading' : undefined}
+            actions={[
+              { label: '复制完整计划', icon: 'copy', disabled: !plan, onClick: () => void share() },
+              { label: '打印全部阶段', icon: 'printer', disabled: !plan || !ctx, onClick: () => window.print() },
+            ]}
+          />
+        }
+        more={[{ label: '重置计划', icon: 'rotate-ccw', onClick: () => update(defaultTeamPlan(), Boolean(plan)) }]}
+      />
       <div className="tp-screen">
-        <TeamSections />
-      </div>
-      <header className="tp-heading tp-screen">
-        <div>
-          <p className="note">共同约定这局的分工</p>
-          <h1>团战分工计划</h1>
-          <p>记录谁出兵、谁承担任务、何时会合；各阶段按玩家各自到达的时代约定。</p>
-        </div>
-        <div className="tp-actions">
-          <button type="button" className="btn" disabled={!plan || !ctx} onClick={() => window.print()}>
-            打印全部阶段
-          </button>
-        </div>
-      </header>
-      <div className="tp-screen">
-        <Link className="community-tool-entry" to="/team-fit">
-          选文明前看搭配
-        </Link>
-        <CalcDock
-          note={notice}
-          resultId={plan && ctx ? 'tp-phase-heading' : undefined}
-          actions={[
-            { label: '复制完整计划', icon: 'copy', disabled: !plan, onClick: () => void share() },
-            { label: '重置计划', onClick: () => update(defaultTeamPlan(), Boolean(plan)) },
-          ]}
-        />
         {!!editError && (
           <p role="alert" className="tp-error">
             {editError}未截断或替换原计划。

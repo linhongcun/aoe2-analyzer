@@ -29,6 +29,7 @@ import type { Core } from '../../data';
 import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { TeamSections } from '../../shared/ui/TeamSections';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { Linked, Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './teamBonuses.css';
@@ -78,28 +79,19 @@ export default function TeamBonuses() {
   const unknownTechnologies = sources.technologies.filter((row) => teamTargetMatch(row.source, config) === 'unknown');
   return (
     <section className="pane team-bonuses-page" data-testid="team-bonuses-page">
-      <TeamSections />
-      <header className="team-heading">
-        <div>
-          <h1>团队加成一屏汇总</h1>
-          <p className="note">选择队友文明，检查常驻效果与需要研究的团队科技。</p>
-        </div>
-        <button className="btn" type="button" disabled={!valid} onClick={() => void share()}>
-          <Icon name="copy" />
-          复制队伍方案
-        </button>
-      </header>
-      <nav className="bar" aria-label="队伍相关工具">
-        <Link className="community-tool-entry" to="/team-fit">
-          选文明前看搭配
-        </Link>
-        <Link className="community-tool-entry" to="/team-plan">
-          约定团战分工与支援
-        </Link>
-        <Link className="community-tool-entry" to="/relic-income">
-          按明确来源预览圣物收益
-        </Link>
-      </nav>
+      <ToolPageHeader
+        top={<TeamSections />}
+        title="团队加成一屏汇总"
+        description="选择队友文明，检查常驻效果与需要研究的团队科技。"
+        actions={[{ label: '复制队伍方案', icon: 'copy', disabled: !valid, onClick: () => void share() }]}
+        related={{
+          links: [
+            { to: '/team-fit', label: '选文明前看搭配' },
+            { to: '/team-plan', label: '约定团战分工与支援' },
+            { to: '/relic-income', label: '按明确来源预览圣物收益' },
+          ],
+        }}
+      />
       <aside className="team-notice" aria-label="汇总口径">
         <strong>包含本人，按效果来源汇总</strong>
         <p>重复文明的同一来源只列一条，保留全部提供者；来源合并用于查阅，不表示叠加倍率。不同来源分别列出，不计算总倍率。</p>

@@ -18,6 +18,7 @@ import {
   type HotkeyProfile,
 } from '../../domain/hotkeys';
 import { Icon } from '../../shared/ui/Icon';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import './hotkeys.css';
 
 function loadPersonalTable() {
@@ -89,10 +90,7 @@ export default function Hotkeys() {
 
   return (
     <section className="pane hotkeys-page" aria-labelledby="hk-title" data-testid="hotkeys-page">
-      <header className="hk-screen">
-        <h1 id="hk-title">游戏快捷键速查</h1>
-        <p className="note hk-scope">{hotkeyMenuNote}</p>
-      </header>
+      <ToolPageHeader className="hk-screen" title="游戏快捷键速查" titleId="hk-title" description={hotkeyMenuNote} />
 
       <aside className="hk-screen hk-follow-tip" aria-label="推鹿与跟随提示">
         <h2>推鹿时试试跟随</h2>

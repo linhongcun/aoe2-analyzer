@@ -21,6 +21,7 @@ import {
   type CampaignSource,
 } from '../../domain/campaigns';
 import { Icon } from '../../shared/ui/Icon';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './campaigns.css';
 
@@ -160,7 +161,7 @@ export default function Campaigns() {
   if (DATA_ERRORS.length)
     return (
       <section className="pane campaigns-page" data-testid="campaigns-page">
-        <h1>战役入门目录</h1>
+        <ToolPageHeader title="战役入门目录" />
         <div role="alert">
           <h2>目录资料暂不可用</h2>
           <p>字段核对未通过，请稍后刷新重试。当前不展示未经核对的条目。</p>
@@ -169,10 +170,7 @@ export default function Campaigns() {
     );
   return (
     <section className="pane campaigns-page" data-testid="campaigns-page">
-      <header className="campaign-heading">
-        <h1>战役入门目录</h1>
-        <p>从名称、地区或首发内容包查找，按发售或游戏覆盖年代安排自己的顺序。</p>
-      </header>
+      <ToolPageHeader title="战役入门目录" description="从名称、地区或首发内容包查找，按发售或游戏覆盖年代安排自己的顺序。" />
       {errors.length > 0 && (
         <div className="campaign-error" role="alert">
           <h2>{locked ? '目录链接未能恢复' : '请修正筛选条件'}</h2>

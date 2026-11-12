@@ -55,7 +55,7 @@ for (const width of [360, 375, 390, 1280]) {
     await expect(page.getByRole('alert')).toContainText('方案链接无效');
     await expect(page.getByTestId('market-editor-A')).toHaveCount(0);
     await expect(page.getByRole('button', { name: '复制两份方案链接' })).toBeDisabled();
-    await page.getByRole('button', { name: '重置方案' }).click();
+    await page.getByRole('button', { name: '重置', exact: true }).click();
     await page.evaluate(() => localStorage.setItem('aoe2-theme', 'dark'));
     await page.reload();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');

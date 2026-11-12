@@ -4,7 +4,7 @@ import { civs } from '../../data';
 import { Loading } from '../../shared/ui/widgets';
 import { Icon } from '../../shared/ui/Icon';
 import { CostView } from '../../shared/ui/art';
-import { Breadcrumbs } from '../../shared/ui/layout';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { tradeIncomeProductionHref } from '../../domain/tradeIncome';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import {
@@ -54,7 +54,7 @@ export default function Production() {
         <ProductionCompareError key={location.search} errors={errors} />
       ) : error ? (
         <section className="pane train-compare-page">
-          <h1>{mode.kind === 'legacy' ? '持续生产' : '跨文明训练对照'}</h1>
+          <ToolPageHeader title={mode.kind === 'legacy' ? '持续生产' : '跨文明训练对照'} />
           <p role="alert">生产资料加载失败，请刷新页面重试。</p>
           <button className="btn" type="button" onClick={() => window.location.reload()}>
             刷新重试
@@ -62,7 +62,7 @@ export default function Production() {
         </section>
       ) : !context ? (
         <section className="pane train-compare-page">
-          <h1>{mode.kind === 'legacy' ? '持续生产' : '跨文明训练对照'}</h1>
+          <ToolPageHeader title={mode.kind === 'legacy' ? '持续生产' : '跨文明训练对照'} />
           <Loading />
           <p className="note" role="status">
             正在加载文明、单位与生产资料。
@@ -147,20 +147,16 @@ function ProductionBody({
     update({ ...config, rows: config.rows.map((r, i) => (i === index ? { ...r, ...fields } : r)) });
   return (
     <section className="pane production-page" data-testid="production-page">
-      <Breadcrumbs />
-      <header className="production-heading">
-        <div>
-          <h1>持续生产</h1>
-          <p className="note">从专用生产建筑反推每分钟开销与村民分配。时间均为游戏时间。</p>
-        </div>
+      <ToolPageHeader
+        title="持续生产"
+        description="从专用生产建筑反推每分钟开销与村民分配。时间均为游戏时间。"
+        actions={[{ label: '复制方案链接', icon: 'copy', disabled: linkErrors.length > 0, onClick: () => void share() }]}
+      />
+      <p>
         <Link className="btn" to="/market">
           市场买卖预算
         </Link>
-        <button type="button" className="btn" disabled={linkErrors.length > 0} onClick={() => void share()}>
-          <Icon name="copy" />
-          复制方案链接
-        </button>
-      </header>
+      </p>
       <p>
         <Link className="ulink production-payoff-entry" to="/eco-payoff">
           经济科技收益：固定村民对比研究投入与增量

@@ -43,14 +43,24 @@ for (const width of [360, 375, 390, 1280]) {
     await page.getByRole('checkbox', { name: '包含对局上下文', exact: true }).uncheck();
     const original = await getBackup(page);
     const stored = await page.evaluate((name) => localStorage.getItem(name), key);
-    const clear = page.getByRole('button', { name: '清空本页内容', exact: true });
+    const more = page.getByRole('button', { name: '更多', exact: true });
+    const openClear = async () => {
+      await more.click();
+      await page.getByRole('menuitem', { name: '清空本页内容', exact: true }).click();
+    };
+    const openClearByKeyboard = async () => {
+      await more.press('Enter');
+      await expect(page.getByRole('menuitem', { name: '重试保存本页', exact: true })).toBeFocused();
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Enter');
+    };
     const dialog = page.getByRole('dialog', { name: '确认清空本页内容？', exact: true });
     const cancel = dialog.getByRole('button', { name: '取消', exact: true });
     const confirm = dialog.getByRole('button', { name: '确认清空', exact: true });
     const undo = page.getByRole('button', { name: '撤销', exact: true });
     const noOverflow = async () => expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
-    await clear.click();
+    await openClear();
     await expect(dialog).toBeVisible();
     await expect(dialog).toHaveAccessibleDescription(/将清除本页内容及本机保存的复盘草稿/);
     await expect(cancel).toBeFocused();
@@ -62,24 +72,24 @@ for (const width of [360, 375, 390, 1280]) {
     await noOverflow();
     await cancel.click();
     await expect(dialog).not.toBeVisible();
-    await expect(clear).toBeFocused();
+    await expect(more).toBeFocused();
     expect(await getBackup(page)).toEqual(original);
     expect(await page.evaluate((name) => localStorage.getItem(name), key)).toBe(stored);
 
-    await clear.press('Enter');
+    await openClearByKeyboard();
     await expect(cancel).toBeFocused();
     await page.keyboard.press('Escape');
     await expect(dialog).not.toBeVisible();
-    await expect(clear).toBeFocused();
+    await expect(more).toBeFocused();
     expect(await getBackup(page)).toEqual(original);
     expect(await page.evaluate((name) => localStorage.getItem(name), key)).toBe(stored);
 
-    await clear.press('Enter');
+    await openClearByKeyboard();
     await page.keyboard.press('Tab');
     await expect(confirm).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(dialog).not.toBeVisible();
-    await expect(clear).toBeFocused();
+    await expect(more).toBeFocused();
     await expect(field(page, '复盘标题')).toHaveValue('');
     await expect(field(page, '地图')).toHaveValue('');
     await expect(field(page, '目标：想做的动作')).toHaveValue('');
@@ -108,14 +118,14 @@ for (const width of [360, 375, 390, 1280]) {
     ).toBe(true);
     await noOverflow();
 
-    await clear.click();
+    await openClear();
     await confirm.click();
     await expect(undo).toBeVisible();
     // 清空后开始输入新内容：撤销收起，新内容不会被旧草稿覆盖。
     await field(page, '复盘标题').fill('清空后的新内容');
     await expect(undo).toHaveCount(0);
     await expect(field(page, '复盘标题')).toHaveValue('清空后的新内容');
-    await clear.click();
+    await openClear();
     await confirm.click();
     await expect(undo).toBeVisible();
     await page.reload();

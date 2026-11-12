@@ -208,7 +208,7 @@ test('#238 原始无效字段保持可编辑，非适用研究不会被悄悄清
   await expect(page.getByRole('alert')).toHaveCount(0);
   await count.fill('1000001');
   await expect(page.getByRole('alert')).toContainText('1000000');
-  await page.getByRole('button', { name: '重置圣物方案', exact: true }).click();
+  await page.getByRole('button', { name: '重置', exact: true }).click();
   await expect(count).toHaveValue('1');
 });
 
@@ -219,7 +219,7 @@ test('#238 重复/未知/坏编码/超长链接锁定，保留原文且显式重
     await expect(page.getByRole('textbox', { name: '原方案链接', exact: true })).toHaveValue(/#\/relic-income\?/);
     await expect(page.getByRole('textbox', { name: '已生效圣物数量', exact: true })).toBeDisabled();
     await expect(page.getByTestId('relic-rate-Gold')).toHaveCount(0);
-    await page.getByRole('button', { name: '重置圣物方案', exact: true }).click();
+    await page.getByRole('button', { name: '重置', exact: true }).click();
     await expect(page.getByTestId('relic-rate-Gold')).toHaveText('30 金／游戏分钟');
   }
 });

@@ -128,7 +128,7 @@ for (const mutation of ['duplicate', 'unknown', 'missing', 'numeric'])
     await expect(page.getByRole('textbox', { name: '当前车船数量', exact: true })).toBeDisabled();
     await expect(page.getByRole('button', { name: '显式切换手动目标', exact: true })).toBeDisabled();
     await expect(page.getByRole('button', { name: '复制方案链接', exact: true })).toBeDisabled();
-    await page.getByRole('button', { name: '重置方案', exact: true }).click();
+    await page.getByRole('button', { name: '重置', exact: true }).click();
     await expect(page.getByRole('alert')).toHaveCount(0);
     await expect(page.getByTestId('trade-total')).toHaveText('500 金／分钟');
   });

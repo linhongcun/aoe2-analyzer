@@ -16,6 +16,7 @@ import {
 } from '../../domain/gameClock';
 import { sharePageUrl } from '../../domain/sharePage';
 import { CalcDock } from '../../shared/ui/CalcDock';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './gameClock.css';
 
@@ -76,20 +77,19 @@ export default function GameClock() {
   };
   return (
     <section className="pane game-clock-page" data-testid="game-clock-page">
-      <header className="gc-heading">
-        <div>
-          <p className="note">读懂攻略里的时间</p>
-          <h1>游戏与现实时间换算</h1>
-          <p>填入你使用的速度倍率，把游戏时长和理论现实时长相互换算。</p>
-        </div>
-      </header>
-      <CalcDock
-        note={notice}
-        resultId={locked ? undefined : 'gc-result-title'}
-        actions={[
-          { label: '复制换算链接', icon: 'copy', disabled: locked || !result.ok, onClick: () => void share() },
-          { label: '重置换算', onClick: () => update(defaultGameClockConfig()) },
-        ]}
+      <ToolPageHeader
+        title="游戏与现实时间换算"
+        description="填入你使用的速度倍率，把游戏时长和理论现实时长相互换算。"
+        dock={
+          <CalcDock
+            note={notice}
+            resultId={locked ? undefined : 'gc-result-title'}
+            actions={[
+              { label: '复制换算链接', icon: 'copy', disabled: locked || !result.ok, onClick: () => void share() },
+              { label: '重置', icon: 'rotate-ccw', onClick: () => update(defaultGameClockConfig()) },
+            ]}
+          />
+        }
       />
       <aside className="gc-intro" aria-label="时钟口径">
         <strong>攻略时点通常使用游戏时钟</strong>

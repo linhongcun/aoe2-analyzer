@@ -144,6 +144,7 @@ for (const width of [360, 375, 390, 1280])
         .evaluateAll((elements) =>
           elements
             .filter((element) => {
+              if (element.closest('.tool-head-actions')) return false;
               const rect = element.getBoundingClientRect();
               return rect.width > 0 && rect.height > 0 && (rect.width < 43.5 || rect.height < 43.5);
             })

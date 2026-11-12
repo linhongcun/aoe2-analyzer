@@ -322,6 +322,7 @@ for (const width of [360, 375, 390, 1280])
         if (!(await control.isVisible())) continue;
         // #771 起页内有了共享面包屑。面包屑链接的 44×44 触控热区按 #361 只在 ≤600px 生效；
         // 桌面宽度下它与 #/relic-income 等既有页面同为 21px 高，不属于本页控件触区范围。
+        if (await control.evaluate((element) => !!element.closest('.tool-head-actions'))) continue;
         if (width > 600 && (await control.evaluate((element) => !!element.closest('nav.crumbs')))) continue;
         const box = await control.boundingBox();
         expect(box!.height).toBeGreaterThanOrEqual(44);

@@ -17,10 +17,9 @@ import {
 } from '../../domain/garrisonHealing';
 import { getGarrisonBuildingAge, type GarrisonCandidate, type GarrisonEntry } from '../../domain/garrisonGeneral';
 import { AGE_ZH } from '../../domain/ratings';
-import { Icon } from '../../shared/ui/Icon';
 import { Loading } from '../../shared/ui/widgets';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
-import { Breadcrumbs } from '../../shared/ui/layout';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './garrisonHealing.css';
 
@@ -130,17 +129,11 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
 
   return (
     <section className="pane healing-page" data-testid="garrison-healing-page">
-      <Breadcrumbs />
-      <header className="healing-heading">
-        <div>
-          <h1>驻军回血</h1>
-          <p className="note">查看一个单位在建筑内的静态治疗速率，以及草药前后的理论恢复时间。时间均为游戏时间。</p>
-        </div>
-        <button type="button" className="btn" disabled={unshareable} onClick={() => void copy()}>
-          <Icon name="copy" />
-          复制回血方案
-        </button>
-      </header>
+      <ToolPageHeader
+        title="驻军回血"
+        description="查看一个单位在建筑内的静态治疗速率，以及草药前后的理论恢复时间。时间均为游戏时间。"
+        actions={[{ label: '复制回血方案', icon: 'copy', disabled: unshareable, onClick: () => void copy() }]}
+      />
       {shareStatus && <p {...statusProps}>{shareStatus}</p>}
       {manualLink && (
         <label className="healing-manual">

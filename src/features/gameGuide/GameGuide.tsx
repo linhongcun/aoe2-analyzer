@@ -17,7 +17,7 @@ import {
   type GameGuideState,
   type GameGuideVictory,
 } from '../../domain/gameGuide';
-import { Icon } from '../../shared/ui/Icon';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import ElevationCard from './elevationCard';
 import HousingCard from './housingCard';
@@ -67,7 +67,7 @@ export default function GameGuide() {
   if (DATA_ERRORS.length)
     return (
       <section className="pane game-guide-page" data-testid="game-guide-page">
-        <h1>一局与观赛入门</h1>
+        <ToolPageHeader title="一局与观赛入门" />
         <div role="alert">
           <h2>入门资料暂不可用</h2>
           <p>资料核对未通过，当前不展示未经核对的卡片。</p>
@@ -76,17 +76,12 @@ export default function GameGuide() {
     );
   return (
     <section className="pane game-guide-page" data-testid="game-guide-page" aria-labelledby="gg-title">
-      <header className="gg-heading">
-        <div>
-          <p className="note">从看懂一局开始</p>
-          <h1 id="gg-title">一局与观赛入门</h1>
-          <p>用六张短卡，了解目标、开局角色，以及经济、军队和信息怎样联系。</p>
-        </div>
-        <button type="button" disabled={invalid} onClick={() => void share()}>
-          <Icon name="copy" />
-          复制当前卡片链接
-        </button>
-      </header>
+      <ToolPageHeader
+        title="一局与观赛入门"
+        titleId="gg-title"
+        description="用六张短卡，了解目标、开局角色，以及经济、军队和信息怎样联系。"
+        actions={[{ label: '复制当前卡片链接', icon: 'copy', disabled: invalid, onClick: () => void share() }]}
+      />
 
       <section className="gg-scope" aria-label="教学适用范围">
         <div className="gg-setting">

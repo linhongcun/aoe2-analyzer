@@ -41,7 +41,7 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.getByRole('alert')).toContainText('链接参数');
       await expect(page.getByRole('button', { name: '复制方案链接', exact: true })).toBeDisabled();
       await expect(page.getByRole('textbox', { name: '木材村民数', exact: true })).toBeDisabled();
-      await page.getByRole('button', { name: '重置方案', exact: true }).click();
+      await page.getByRole('button', { name: '重置', exact: true }).click();
       await expect(page.getByRole('alert')).toHaveCount(0);
       await expect(page.locator('body')).not.toContainText('Infinity');
       expect(errors).toEqual([]);
@@ -56,7 +56,7 @@ for (const query of ['target=no', 'age=no', 'known=bad', 'age=2&age=3'])
     await expect(page.getByRole('button', { name: '复制方案链接', exact: true })).toBeDisabled();
     await expect(page.getByTestId('eco-balance')).toHaveCount(0);
     await expect(page).toHaveURL(new RegExp(query.replace(/[?&]/g, '\\$&') + '$'));
-    await page.getByRole('button', { name: '重置方案', exact: true }).click();
+    await page.getByRole('button', { name: '重置', exact: true }).click();
     await expect(page.getByRole('alert')).toHaveCount(0);
     await expect(page.getByTestId('eco-balance')).toContainText('从现在起约');
     await expect(page.getByRole('textbox', { name: '木材村民数', exact: true })).toBeEnabled();

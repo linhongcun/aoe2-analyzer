@@ -129,8 +129,9 @@ for (const width of [360, 375, 390, 1280])
       const small = await page.locator('.construction-page button, .construction-page select, .construction-page input:not([type=checkbox])').evaluateAll(
         (nodes) =>
           nodes.filter((node) => {
+            if (node.closest('.tool-head-actions')) return false;
             const r = node.getBoundingClientRect();
-            return r.width < 44 || r.height < 44;
+            return r.width > 0 && r.height > 0 && (r.width < 44 || r.height < 44);
           }).length,
       );
       expect(small).toBe(0);

@@ -115,7 +115,7 @@ test('#237 空值、非法分秒和零倍率暂停；无效时切换单位保留
   await expect(page.getByTestId('game-clock-result')).toHaveCount(0);
   await page.getByRole('textbox', { name: '速度倍率', exact: true }).fill('1e3');
   await expect(pageRoot(page).getByRole('alert')).toContainText('不使用指数写法');
-  await page.getByRole('button', { name: '重置换算', exact: true }).click();
+  await page.getByRole('button', { name: '重置', exact: true }).click();
   await expect(page.getByTestId('game-clock-result')).toHaveText('5:53');
 });
 
@@ -125,7 +125,7 @@ test('#237 损坏和重复参数显示明确重置，不回落成看似有效的
     await expect(pageRoot(page).getByRole('alert')).toContainText('未知或重复参数');
     await expect(input(page)).toHaveCount(0);
     await expect(page.getByRole('button', { name: '复制换算链接' })).toBeDisabled();
-    await page.getByRole('button', { name: '重置换算', exact: true }).click();
+    await page.getByRole('button', { name: '重置', exact: true }).click();
     await expect(page.getByTestId('game-clock-result')).toHaveText('5:53');
   }
   await page.goto('./#/game-clock?' + query({ duration: '%GG' }));
@@ -188,8 +188,19 @@ for (const width of [360, 375, 390, 1280])
       ).toBe(true);
       const share = page.getByRole('button', { name: '复制换算链接', exact: true });
       const box = await share.boundingBox();
-      expect(box!.height).toBeGreaterThanOrEqual(44);
       expect(box!.width).toBeGreaterThanOrEqual(44);
+      if (width <= 700) expect(box!.height).toBeGreaterThanOrEqual(44);
+      else {
+        expect(box!.height).toBeGreaterThanOrEqual(36);
+        expect(box!.height).toBeLessThan(40);
+        expect(
+          await share.evaluate((element) => {
+            const rect = element.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            return document.elementFromPoint(x, rect.top - 3) === element && document.elementFromPoint(x, rect.bottom + 3) === element;
+          }),
+        ).toBe(true);
+      }
       await share.focus();
       await expect(share).toBeFocused();
       await page.getByText('换算规则与适用范围', { exact: true }).click();

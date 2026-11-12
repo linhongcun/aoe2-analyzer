@@ -19,6 +19,7 @@ import {
 import { AGE_ZH } from '../../domain/ratings';
 import { sharePageUrl } from '../../domain/sharePage';
 import { CalcDock } from '../../shared/ui/CalcDock';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './mixedArmy.css';
@@ -292,29 +293,25 @@ export default function MixedArmy() {
   const showExample = !!plan && plan.status === 'needs-observation' && config.ownMain === 'unknown' && config.enemy === 'unknown';
   return (
     <section className="pane mixed-army-page" data-testid="mixed-army-page">
-      <p>
-        <Link className="community-tool-entry" to="/matchup">
-          返回对局助手
-        </Link>
-      </p>
-      <header className="mixed-heading">
-        <div>
-          <h1>混兵情境卡</h1>
-          <p>看到掩护后，先分清谁防骑、谁清掷矛手、谁处理后排攻城。</p>
-        </div>
-      </header>
-      <CalcDock
-        note={shareStatus}
-        resultId={showExample ? 'mixed-example-title' : plan ? 'mixed-result-heading' : undefined}
-        actions={[
-          {
-            label: '复制情境链接',
-            icon: 'copy',
-            disabled: !ctx || decoded.locked || decoded.errors.length > 0 || plan?.status === 'invalid',
-            onClick: () => void share(),
-          },
-          { label: '重置为默认情境', onClick: reset },
-        ]}
+      <ToolPageHeader
+        crumb="混兵情境卡"
+        title="混兵情境卡"
+        description="看到掩护后，先分清谁防骑、谁清掷矛手、谁处理后排攻城。"
+        dock={
+          <CalcDock
+            note={shareStatus}
+            resultId={showExample ? 'mixed-example-title' : plan ? 'mixed-result-heading' : undefined}
+            actions={[
+              {
+                label: '复制情境链接',
+                icon: 'copy',
+                disabled: !ctx || decoded.locked || decoded.errors.length > 0 || plan?.status === 'invalid',
+                onClick: () => void share(),
+              },
+              { label: '重置', icon: 'rotate-ccw', onClick: reset },
+            ]}
+          />
+        }
       />
       {manualLink && (
         <label className="mixed-field mixed-manual">

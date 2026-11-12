@@ -20,7 +20,7 @@ import {
   type ScoutingObservationId,
 } from '../../domain/scouting';
 import { sharePageUrl } from '../../domain/sharePage';
-import { Icon } from '../../shared/ui/Icon';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { DATA_SOURCES, versionLabel } from '../../shared/utils/dataInfo';
 import './scouting.css';
@@ -163,28 +163,17 @@ export default function Scouting() {
   };
   return (
     <section className="pane scouting-page" data-testid="scouting-page" aria-labelledby="scouting-title">
-      <p>
-        <Link className="community-tool-entry" to="/matchup">
-          返回对局助手
-        </Link>
-      </p>
-      <header className="scouting-heading">
-        <div>
-          <p className="scouting-kicker">从信号找到下一步</p>
-          <h1 id="scouting-title">侦察情报辨析卡</h1>
-          <p>对照具体信号，记录观察，安排下一步行动。</p>
-        </div>
-        <div className="scouting-buttons">
-          <button type="button" className="btn" disabled={!canShare} onClick={() => void share()}>
-            <Icon name="copy" />
-            复制情报链接
-          </button>
-          <button type="button" className="btn" disabled={analysis?.status !== 'covered'} onClick={print}>
-            <Icon name="printer" />
-            打印当前辨析
-          </button>
-        </div>
-      </header>
+      <ToolPageHeader
+        flush
+        crumb="侦察情报辨析卡"
+        title="侦察情报辨析卡"
+        titleId="scouting-title"
+        description="对照具体信号，记录观察，安排下一步行动。"
+        actions={[
+          { label: '复制情报链接', icon: 'copy', disabled: !canShare, onClick: () => void share() },
+          { label: '打印当前辨析', icon: 'printer', disabled: analysis?.status !== 'covered', onClick: print },
+        ]}
+      />
       {notice && (
         <p {...statusProps} className="scouting-feedback">
           {notice}

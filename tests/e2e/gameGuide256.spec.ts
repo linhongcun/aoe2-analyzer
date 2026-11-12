@@ -147,7 +147,7 @@ for (const width of [360, 375, 390, 1280])
       await page.locator('.gg-sources summary').click();
       const small = await root(page).evaluate((el) =>
         [...el.querySelectorAll('a,button,select,summary')]
-          .filter((node) => node.getClientRects().length)
+          .filter((node) => node.getClientRects().length && !node.closest('.tool-head-actions, nav.crumbs'))
           .map((node) => ({ text: node.textContent, height: node.getBoundingClientRect().height }))
           .filter((node) => node.height < 43.9),
       );

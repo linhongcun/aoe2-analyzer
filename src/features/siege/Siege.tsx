@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { civs, type Core } from '../../data';
 import { useCore } from '../../data/hooks';
 import {
@@ -17,6 +17,7 @@ import {
 } from '../../domain/siege';
 import FeedbackLink, { SiegeFeedbackNote } from '../../shared/ui/FeedbackLink';
 import { Icon, type IconName } from '../../shared/ui/Icon';
+import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './siege.css';
@@ -71,10 +72,6 @@ function SiegeTool({ core }: { core: Core }) {
   const changeCount = (value: number) => update({ n: Math.max(1, Math.min(SIEGE_MAX_COUNT, value)) });
   const shareControls = (
     <div className="siege-share">
-      <button type="button" onClick={() => void share.copy(window.location.href)}>
-        <Icon name="link" />
-        {share.copied ? '已复制' : '复制分享链接'}
-      </button>
       {/* 常驻 live region：只播报「已复制」等状态，改输入不重读结果卡。 */}
       <p className="siege-note siege-share-status" {...share.statusProps}>
         {share.status}
@@ -90,20 +87,21 @@ function SiegeTool({ core }: { core: Core }) {
 
   return (
     <section className="pane siege-page" data-testid="siege-page">
-      <div className="siege-top">
-        <Link to="/" aria-label="返回首页">
-          <Icon name="arrow-left" />
-          首页
-        </Link>
-        <span className="siege-note">工具 / 攻城拆建筑</span>
-      </div>
-      <h1>
-        <Icon name="hammer" />
-        攻城拆建筑
-      </h1>
-      <p className="siege-desc">
-        几台攻城单位拆掉一座建筑要多久：击数、游戏秒、<span className="num">1.7</span> 倍速度下的现实秒。
-      </p>
+      <ToolPageHeader
+        title="攻城拆建筑"
+        description={
+          <>
+            几台攻城单位拆掉一座建筑要多久：击数、游戏秒、<span className="num">1.7</span> 倍速度下的现实秒。
+          </>
+        }
+        actions={[
+          {
+            label: share.copied ? '已复制' : '复制分享链接',
+            icon: 'copy',
+            onClick: () => void share.copy(window.location.href),
+          },
+        ]}
+      />
       <div className="siege-grid">
         <div className="siege-inputs">
           <section className="siege-panel" aria-labelledby="siege-attacker-title">

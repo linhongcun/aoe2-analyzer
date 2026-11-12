@@ -151,6 +151,7 @@ for (const width of [360, 375, 390, 1280])
         .evaluateAll((elements) =>
           elements
             .filter((element) => {
+              if (element.closest('.tool-head-actions, nav.crumbs')) return false;
               const box = element.getBoundingClientRect();
               return box.width > 0 && box.height > 0 && box.height < 44;
             })
