@@ -27,10 +27,7 @@
   min-height: 44px;
 }
 .castle-defense-grid {
-  display: grid;
-  grid-template-columns: minmax(230px, 0.8fr) minmax(0, 2fr);
-  gap: var(--space-6);
-  align-items: start;
+  min-width: 0;
 }
 .castle-defense-panel,
 .castle-defense-action {
@@ -96,11 +93,8 @@
 .castle-defense-nowrap {
   white-space: nowrap;
 }
-.castle-defense-example {
-  padding: var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-2);
-  color: var(--color-text-2);
+.castle-defense-result > .tool-example {
+  margin-bottom: 0;
 }
 .castle-defense-result,
 .castle-defense-actions {
@@ -195,9 +189,6 @@
   color: var(--color-text);
 }
 @media (max-width: 700px) {
-  .castle-defense-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .castle-defense-panel,
   .castle-defense-action {
     padding: var(--space-4);
@@ -212,7 +203,8 @@
   .castle-defense-manual {
     display: none;
   }
-  .castle-defense-grid {
+  .castle-defense-grid,
+  .castle-defense-result {
     display: block;
   }
   .castle-defense-settings {

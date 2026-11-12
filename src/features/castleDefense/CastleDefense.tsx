@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolExample, ToolGrid } from '../../shared/ui/ToolShell';
 import { sharePageUrl } from '../../domain/sharePage';
 import {
   CASTLE_AGE_ZH,
@@ -25,6 +26,13 @@ import {
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './castleDefense.css';
 
+function CastleExample() {
+  return (
+    <ToolExample>
+      <p>例如：堡已经造好，但还没查过后方金矿？先把资源保留为“未知”，查清退路后再决定迁移或解围。</p>
+    </ToolExample>
+  );
+}
 const stages: { id: CastleStage; label: string }[] = [
   { id: 'stone', label: '疑似准备' },
   { id: 'construction', label: '前压或施工' },
@@ -111,7 +119,6 @@ export default function CastleDefense() {
         ]}
       />
       <p>城堡落在门口以后，先看还能保住什么，再选下一步。</p>
-      <p className="castle-defense-example">例如：堡已经造好，但还没查过后方金矿？先把资源保留为“未知”，查清退路后再决定迁移或解围。</p>
       {status && <p {...statusProps}>{status}</p>}
       {manualLink && (
         <label className="castle-defense-manual">
@@ -128,7 +135,8 @@ export default function CastleDefense() {
           </button>
         </div>
       )}
-      <div className="castle-defense-grid">
+      {!plan && <CastleExample />}
+      <ToolGrid className="castle-defense-grid">
         <aside className="castle-defense-panel castle-defense-settings">
           <h2>我观察到什么</h2>
           <fieldset disabled={locked}>
@@ -207,6 +215,7 @@ export default function CastleDefense() {
         </aside>
         {plan && (
           <div className="castle-defense-result" data-testid="castle-defense-result">
+            <CastleExample />
             <ol className="castle-defense-stages" aria-label="四个观察阶段">
               {stages.map((stage) => (
                 <li key={stage.id} aria-current={plan.stage === stage.id ? 'step' : undefined}>
@@ -255,7 +264,7 @@ export default function CastleDefense() {
             )}
           </div>
         )}
-      </div>
+      </ToolGrid>
       <section className="castle-defense-panel castle-defense-scope" aria-labelledby="castle-defense-scope-title">
         <h2 id="castle-defense-scope-title">先核对本方的实际条件</h2>
         <p>本页只给通用检查清单。僧侣、攻城器和防守建筑都不能跨文明、跨时代直接套用；先核对科技树、生产前置、资源、保护和位置。</p>

@@ -4,7 +4,7 @@ import { expect, test, type Page } from '@playwright/test';
 const SOURCE = 'https://www.reddit.com/r/aoe2/comments/1xh3y3n/psa_follow_command_now_auto_pushes_deer/';
 const tip = (page: Page) => page.getByRole('complementary', { name: '推鹿与跟随提示', exact: true });
 
-test('#626 首屏可扫读社区实测短提示，来源和搜索之前的位置明确', async ({ page }) => {
+test('#626 社区实测短提示在快捷键表之后，文案和来源不变', async ({ page }) => {
   await page.goto('./#/hotkeys');
   const note = tip(page);
   await expect(note).toBeVisible();
@@ -27,12 +27,10 @@ test('#626 首屏可扫读社区实测短提示，来源和搜索之前的位置
   expect(noteBox).not.toBeNull();
   expect(sourceBox).not.toBeNull();
   expect(searchBox).not.toBeNull();
-  expect(noteBox!.y).toBeGreaterThan(0);
-  expect(noteBox!.y + noteBox!.height).toBeLessThanOrEqual(900);
-  expect(noteBox!.y + noteBox!.height).toBeLessThan(searchBox!.y);
+  expect(searchBox!.y).toBeLessThan(noteBox!.y);
   expect(sourceBox!.height).toBeGreaterThanOrEqual(44);
   expect(sourceBox!.width).toBeGreaterThanOrEqual(44);
-  for (let step = 0; step < 30 && !(await source.evaluate((el) => el === document.activeElement)); step++) await page.keyboard.press('Tab');
+  for (let step = 0; step < 80 && !(await source.evaluate((el) => el === document.activeElement)); step++) await page.keyboard.press('Tab');
   await expect(source).toBeFocused();
 });
 

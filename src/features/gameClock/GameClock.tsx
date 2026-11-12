@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   calculateGameClock,
   changeGameClockUnit,
@@ -17,6 +17,7 @@ import {
 import { sharePageUrl } from '../../domain/sharePage';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './gameClock.css';
 
@@ -91,21 +92,19 @@ export default function GameClock() {
           />
         }
       />
-      <aside className="gc-intro" aria-label="时钟口径">
-        <strong>攻略时点通常使用游戏时钟</strong>
-        <p>
-          倍率表示每经过 <span className="gc-number">1 现实秒</span>，游戏经过多少秒。默认使用标准速度（天梯默认），倍率为{' '}
-          <span className="gc-number">1.7</span>；可选预设或手动填写。
-        </p>
-        <p className="note">换算只适用于倍率恒定、连续运行的情况，不能还原暂停、变速或卡顿后的实际对局耗时。</p>
-      </aside>
+      {manualLink && (
+        <label className="gc-manual-link">
+          手动复制换算链接
+          <input readOnly value={manualLink} onFocus={(event) => event.target.select()} />
+        </label>
+      )}
       {locked ? (
         <div className="gc-error" role="alert">
           <h2>换算链接无法读取</h2>
           <p>{decoded.errors.join(' ')}</p>
         </div>
       ) : (
-        <div className="gc-layout">
+        <ToolGrid className="gc-layout">
           <section className="gc-panel" aria-labelledby="gc-input-title">
             <h2 id="gc-input-title">填写时长与倍率</h2>
             <label>
@@ -230,40 +229,47 @@ export default function GameClock() {
               </>
             )}
           </section>
-        </div>
+        </ToolGrid>
       )}
-      {manualLink && (
-        <label className="gc-manual-link">
-          手动复制换算链接
-          <input readOnly value={manualLink} onFocus={(event) => event.target.select()} />
-        </label>
-      )}
-      <details className="gc-panel gc-method">
-        <summary>换算规则与适用范围</summary>
+      <ToolFooter
+        related={{
+          links: [
+            { to: '/builds', label: '开局流程' },
+            { to: '/construction', label: '多人施工' },
+            { to: '/trade-income', label: '商路供给' },
+            { to: '/garrison-healing', label: '驻军回血' },
+          ],
+        }}
+      >
         <p>
-          游戏时间除以速度倍率得到理论现实时间，现实时间乘以速度倍率得到游戏时间。这里只做时钟算术，不读取游戏，也不改变本站开局、施工、生产、商路或治疗模型的游戏时间。
+          <strong>攻略时点通常使用游戏时钟</strong>
         </p>
         <p>
-          输入时长最多 <span className="gc-number">{`${GAME_CLOCK_DURATION_LIMIT} 秒`}</span>，倍率大于 <span className="gc-number">0</span> 且不超过{' '}
-          <span className="gc-number">1000</span>；换算结果超过安全整数秒范围时暂停显示。空值、负数、指数写法与非法分秒需要先修正。
+          倍率表示每经过 <span className="gc-number">1 现实秒</span>，游戏经过多少秒。默认使用标准速度（天梯默认），倍率为{' '}
+          <span className="gc-number">1.7</span>；可选预设或手动填写。
         </p>
-        <p>
-          决定版速度预设：慢速（Slow）<span className="gc-number">1.0</span>、休闲（Casual）<span className="gc-number">1.5</span>、 标准（Normal）
-          <span className="gc-number">1.7</span>、快速（Fast）<span className="gc-number">2.0</span>。天梯与比赛使用标准速度， 本页默认倍率为{' '}
-          <span className="gc-number">1.7</span>。
-        </p>
-        <p>
-          来源：<a href="https://forums.ageofempires.com/t/whats-the-equivalent-to-1-5-game-speed-in-aoe2-de/84298">帝国时代官方论坛：DE 游戏速度讨论</a>（
-          <span className="gc-number">2020 年</span>），帖中说明 Normal 为 <span className="gc-number">1.7</span>、Casual 为{' '}
-          <span className="gc-number">1.5</span>，Normal 是多人游戏的标准速度。
-        </p>
-        <nav className="gc-links" aria-label="相关工具">
-          <Link to="/builds">开局流程</Link>
-          <Link to="/construction">多人施工</Link>
-          <Link to="/trade-income">商路供给</Link>
-          <Link to="/garrison-healing">驻军回血</Link>
-        </nav>
-      </details>
+        <p>换算只适用于倍率恒定、连续运行的情况，不能还原暂停、变速或卡顿后的实际对局耗时。</p>
+        <details className="gc-method">
+          <summary>换算规则与适用范围</summary>
+          <p>
+            游戏时间除以速度倍率得到理论现实时间，现实时间乘以速度倍率得到游戏时间。这里只做时钟算术，不读取游戏，也不改变本站开局、施工、生产、商路或治疗模型的游戏时间。
+          </p>
+          <p>
+            输入时长最多 <span className="gc-number">{`${GAME_CLOCK_DURATION_LIMIT} 秒`}</span>，倍率大于 <span className="gc-number">0</span> 且不超过{' '}
+            <span className="gc-number">1000</span>；换算结果超过安全整数秒范围时暂停显示。空值、负数、指数写法与非法分秒需要先修正。
+          </p>
+          <p>
+            决定版速度预设：慢速（Slow）<span className="gc-number">1.0</span>、休闲（Casual）<span className="gc-number">1.5</span>、 标准（Normal）
+            <span className="gc-number">1.7</span>、快速（Fast）<span className="gc-number">2.0</span>。天梯与比赛使用标准速度， 本页默认倍率为{' '}
+            <span className="gc-number">1.7</span>。
+          </p>
+          <p>
+            来源：<a href="https://forums.ageofempires.com/t/whats-the-equivalent-to-1-5-game-speed-in-aoe2-de/84298">帝国时代官方论坛：DE 游戏速度讨论</a>（
+            <span className="gc-number">2020 年</span>），帖中说明 Normal 为 <span className="gc-number">1.7</span>、Casual 为{' '}
+            <span className="gc-number">1.5</span>，Normal 是多人游戏的标准速度。
+          </p>
+        </details>
+      </ToolFooter>
     </section>
   );
 }

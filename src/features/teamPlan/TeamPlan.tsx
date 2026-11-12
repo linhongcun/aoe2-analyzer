@@ -6,6 +6,7 @@ import { decodeTeamPlan, defaultTeamPlan, encodeTeamPlan, teamPlanShareUrl, type
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { TeamSections } from '../../shared/ui/TeamSections';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolFooter } from '../../shared/ui/ToolShell';
 import { PlanEditor } from './PlanEditor';
 import { PrintPlan } from './PrintPlan';
 import { useShareLink } from '../../shared/ui/useShareLink';
@@ -80,7 +81,6 @@ export default function TeamPlanPage() {
         top={<TeamSections />}
         title="团战分工计划"
         description="记录谁出兵、谁承担任务、何时会合；各阶段按玩家各自到达的时代约定。"
-        related={{ links: [{ to: '/team-fit', label: '选文明前看搭配' }] }}
         dock={
           <CalcDock
             note={notice}
@@ -128,6 +128,9 @@ export default function TeamPlanPage() {
         )}
       </div>
       {plan && ctx && <PrintPlan ctx={ctx} plan={plan} />}
+      <ToolFooter related={{ links: [{ to: '/team-fit', label: '选文明前看搭配' }] }}>
+        {plan && ctx && <p>只核对固定数据与玩家明确确认的形态升级、解锁和生产建筑。未核对资源、人口、兵力或队友实际支援；任务认领仅表示约定。</p>}
+      </ToolFooter>
     </section>
   );
 }

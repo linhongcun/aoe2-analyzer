@@ -15,6 +15,22 @@ export type ToolHeadAction = {
 
 export type ToolRelatedLink = { to: string; label: string };
 
+/** 相关工具一行。页头或页脚都可以放，热区沿用 44px。 */
+export function ToolRelated({ label, links, flush = false }: { label?: string; links: ToolRelatedLink[]; flush?: boolean }) {
+  if (!links.length) return null;
+  return (
+    <nav className={flush ? 'tool-related tool-related-flush' : 'tool-related'} aria-label={label ?? '相关工具'}>
+      <span className="tool-related-label">{label ?? '相关工具'}</span>
+      {links.map((link) => (
+        <Link key={link.to + link.label} className="tool-related-link" to={link.to}>
+          {link.label}
+          <Icon name="chevron-right" />
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
 function setRef<T>(ref: Ref<T> | undefined, value: T | null) {
   if (!ref) return;
   if (typeof ref === 'function') ref(value);
@@ -189,17 +205,7 @@ export function ToolPageHeader({
           )}
         </div>
       </header>
-      {related && related.links.length > 0 && (
-        <nav className={flush ? 'tool-related tool-related-flush' : 'tool-related'} aria-label={related.label ?? '相关工具'}>
-          <span className="tool-related-label">{related.label ?? '相关工具'}</span>
-          {related.links.map((link) => (
-            <Link key={link.to + link.label} className="tool-related-link" to={link.to}>
-              {link.label}
-              <Icon name="chevron-right" />
-            </Link>
-          ))}
-        </nav>
-      )}
+      {related && <ToolRelated label={related.label} links={related.links} flush={flush} />}
     </>
   );
 }

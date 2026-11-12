@@ -20,6 +20,7 @@ import { AGE_ZH } from '../../domain/ratings';
 import { Loading } from '../../shared/ui/widgets';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolGrid } from '../../shared/ui/ToolShell';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './garrisonHealing.css';
 
@@ -156,7 +157,7 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
         </div>
       )}
 
-      <div className="healing-columns">
+      <ToolGrid className="healing-columns">
         <section className="healing-card" aria-labelledby="healing-config-title">
           <h2 id="healing-config-title">恢复配置</h2>
           <fieldset disabled={locked} className="healing-fields" aria-label="回血配置">
@@ -373,7 +374,7 @@ function HealingBody({ ctx }: { ctx: HealingContext }) {
             </button>
           )}
         </section>
-      </div>
+      </ToolGrid>
 
       <section className="healing-card healing-boundary" aria-labelledby="healing-boundary-title">
         <h2 id="healing-boundary-title">来源与计算范围</h2>
