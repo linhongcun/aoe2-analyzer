@@ -3,6 +3,7 @@ import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TRAIN_COMPARE_ENTRY } from './trainCompareCodec';
 import { CompareNumberText } from './CompareNumberText';
+import { ProductionPageTop } from './ProductionModeNav';
 
 export function ProductionCompareError({ errors }: { errors: string[] }) {
   const location = useLocation(),
@@ -10,7 +11,7 @@ export function ProductionCompareError({ errors }: { errors: string[] }) {
   const [raw, setRaw] = useState(location.search);
   return (
     <section className="pane train-compare-page">
-      <ToolPageHeader crumb="跨文明训练对照" title="跨文明训练对照" />
+      <ToolPageHeader title="跨文明训练对照" top={<ProductionPageTop crumb="跨文明训练对照" />} />
       <div role="alert">
         <p>对照链接无法完整恢复，未生成结果。</p>
         <ul>

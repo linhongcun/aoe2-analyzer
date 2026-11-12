@@ -13,20 +13,26 @@ export type ToolHeadAction = {
   popup?: 'dialog';
 };
 
-export type ToolRelatedLink = { to: string; label: string };
+export type ToolRelatedLink = { to: string; label: string } | { label: string };
 
-/** 相关工具一行。页头或页脚都可以放，热区沿用 44px。 */
+/** 相关工具一行。页头或页脚都可以放，热区沿用 44px。没有地址的项只显示为说明文字。 */
 export function ToolRelated({ label, links, flush = false }: { label?: string; links: ToolRelatedLink[]; flush?: boolean }) {
   if (!links.length) return null;
   return (
     <nav className={flush ? 'tool-related tool-related-flush' : 'tool-related'} aria-label={label ?? '相关工具'}>
       <span className="tool-related-label">{label ?? '相关工具'}</span>
-      {links.map((link) => (
-        <Link key={link.to + link.label} className="tool-related-link" to={link.to}>
-          {link.label}
-          <Icon name="chevron-right" />
-        </Link>
-      ))}
+      {links.map((link) =>
+        'to' in link ? (
+          <Link key={link.to + link.label} className="tool-related-link" to={link.to}>
+            {link.label}
+            <Icon name="chevron-right" />
+          </Link>
+        ) : (
+          <span key={link.label} className="tool-related-text">
+            {link.label}
+          </span>
+        ),
+      )}
     </nav>
   );
 }

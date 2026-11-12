@@ -196,6 +196,14 @@ nav.tool-related.tool-related-flush {
   width: 1em;
   height: 1em;
 }
+.tool-related-text {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+}
 
 @media (max-width: 700px) {
   header.tool-head .tool-head-actions {

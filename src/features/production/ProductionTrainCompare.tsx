@@ -5,6 +5,7 @@ import type { ProductionContext } from '../../domain/production';
 import { CostView } from '../../shared/ui/art';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
 import { useShareLink } from '../../shared/ui/useShareLink';
+import { ProductionPageTop } from './ProductionModeNav';
 import { commitUrl } from '../../shared/utils/dataInfo';
 import { encodeTrainCompare, TRAIN_COMPARE_ENTRY, TRAIN_COMPARE_UNITS, type TrainCompareConfig } from './trainCompareCodec';
 import { availableTrainingCivs, compareTraining } from './trainCompareModel';
@@ -43,23 +44,20 @@ export function ProductionTrainCompare({ context, config }: { context: Productio
   return (
     <section className="pane train-compare-page" data-testid="train-compare-page">
       <ToolPageHeader
-        crumb="跨文明训练对照"
         title="跨文明训练对照"
         description="同一单位形态、同一座马厩，比较已选文明的训练间隔与费用。"
-        actions={[{ label: '复制对照链接', icon: 'copy', disabled: changed || !!result.errors.length, onClick: () => void share() }]}
+        top={<ProductionPageTop crumb="跨文明训练对照" />}
+        actions={[
+          { label: '复制对照链接', icon: 'copy', disabled: changed || !!result.errors.length, onClick: () => void share() },
+          {
+            label: '重置对照',
+            onClick: () => {
+              reset();
+              navigate(TRAIN_COMPARE_ENTRY);
+            },
+          },
+        ]}
       />
-      <div className="train-compare-actions">
-        <button
-          className="btn"
-          type="button"
-          onClick={() => {
-            reset();
-            navigate(TRAIN_COMPARE_ENTRY);
-          }}
-        >
-          重置对照
-        </button>
-      </div>
       {!changed && status && (
         <p className="note" {...statusProps}>
           {status}
