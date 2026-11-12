@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { startReturnPath } from '../../../domain/startGameReturn';
 import { civByEn } from '../../../data';
@@ -9,7 +9,6 @@ import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../../d
 import { AGE_ZH, TYPE_ZH } from '../../../domain/ratings';
 import type { Building, Unit } from '../../../domain/types';
 import { DlcImg, img, TechIcon, UnitIcon } from '../../../shared/ui/art';
-import { Icon } from '../../../shared/ui/Icon';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
@@ -29,6 +28,7 @@ const TAB_ANCHOR: Record<string, string> = {
   ov: 'identity',
   data: 'identity',
   tech: 'kit',
+  techtree: 'techtree',
   history: 'patches',
 };
 
@@ -36,9 +36,27 @@ const CHAPTERS = [
   ['identity', '身份'],
   ['bonuses', '加成'],
   ['kit', '兵种'],
-  ['next', '下一步'],
+  ['techtree', '科技树'],
   ['more', '其他'],
 ] as const;
+
+function TechTreePending() {
+  return (
+    <section id="techtree" className="civ-techtree" data-testid="civ-techtree" aria-labelledby="civ-tt-title">
+      <div className="civ-tt-head">
+        <div className="civ-tt-title">
+          <p className="civ-kicker">能造什么、缺什么</p>
+          <h2 id="civ-tt-title">科技树</h2>
+        </div>
+      </div>
+      <div className="civ-tt-frame is-end">
+        <p className="civ-tt-skel" role="status">
+          正在加载科技树…
+        </p>
+      </div>
+    </section>
+  );
+}
 
 function EmNum({ text }: { text: string }) {
   return text.split(/((?:[+＋−-]\s*)?\d+(?:\.\d+)?\s*%?)/g).map((part, index) =>
@@ -107,7 +125,7 @@ function KitUnits({
   );
 }
 
-export default function CivDetail() {
+export default function CivDetail({ techTree: TechTree }: { techTree: ComponentType<{ civEn: string }> }) {
   const { en = '' } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -215,7 +233,10 @@ export default function CivDetail() {
         <section className="civ-kit" id="kit" aria-labelledby="civ-kit-title" data-testid="civ-kit">
           <p className="civ-kicker">本文明套件</p>
           <h2 id="civ-kit-title">关键兵种与科技</h2>
-          <p className="note">名称进入单位或科技页。能造什么、缺什么看完整科技树。</p>
+          <p className="note">
+            名称进入单位或科技页。能造什么、缺什么见下方
+            <Link to={{ pathname: location.pathname, search: location.search, hash: '#techtree' }}>科技树</Link>。
+          </p>
           {!core && <p role="status">正在加载兵种与科技…</p>}
           <KitUnits label="独特单位" hint="本文明专属" lines={uniqueUnits} buildings={core?.buildings ?? null} testId="civ-unique-units" />
           {uniqueTechs.length > 0 && (
@@ -243,30 +264,30 @@ export default function CivDetail() {
           <KitUnits label="区域单位" hint="与本文明加成或独特科技有关" lines={regional} buildings={core?.buildings ?? null} testId="civ-regional-units" />
           <CivUniqueBuildings civ={c.en} buildings={core?.buildings ?? null} />
           <CivRegionalBuildings civ={c.en} buildings={core?.buildings ?? null} />
-          <div className="civ-next" id="next" data-testid="civ-next">
-            <Link className="civ-tree" data-testid="civ-tool-tree" to={`/tree/${c.en}`}>
-              <span>
-                查看完整科技树
-                <small>看清能造什么、缺什么</small>
-              </span>
-              <Icon name="git-branch" />
-            </Link>
-            <ul className="civ-tools" aria-label="相关工具" data-testid="civ-related-tools">
-              {tools.map(([id, to, label]) => (
-                <li key={id}>
-                  <Link data-testid={id} to={to}>
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
         </section>
       </div>
+      <Suspense fallback={<TechTreePending />}>
+        <TechTree civEn={c.en} />
+      </Suspense>
       {insights.length > 0 && <InsightSlot items={insights} />}
       <ArenaCastleGold en={c.en} />
       <NomadReveal en={c.en} />
       <section className="civ-more" id="more" data-testid="civ-more">
+        <p className="civ-continue" data-testid="civ-related-tools">
+          <span className="civ-continue-lab">用这个文明继续：</span>
+          {tools.map(([id, to, label], index) => (
+            <span key={id}>
+              {index > 0 && (
+                <span className="civ-continue-sep" aria-hidden="true">
+                  ·
+                </span>
+              )}
+              <Link data-testid={id} to={to}>
+                {label}
+              </Link>
+            </span>
+          ))}
+        </p>
         <p className="civ-kicker">其他资料</p>
         <h2>历史与更新</h2>
         <p className="note">本页不展示能力评分、团战位置和开局短句。这些仍留在数据里，不作为打法或排名推荐。</p>

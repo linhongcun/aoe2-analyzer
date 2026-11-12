@@ -30,7 +30,7 @@ for (const width of [360, 375, 390, 1280])
         ['units', './#/units', '#ugrid .unit-row'],
         ['civ', './#/civ/Franks', '[data-testid="civ-ratings"]'],
         ['unit', './#/unit/38', '.detail-stats'],
-        ['tree', './#/tree', '.tcell'],
+        ['tree', './#/civ/Franks#techtree', '.tcell'],
         ['scene', sceneRoute, '.start-scene-card'],
       ]) {
         await page.goto(route!);

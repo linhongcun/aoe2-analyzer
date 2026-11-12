@@ -28,12 +28,12 @@ describe('首页方向 B #876', () => {
   it('五项资料在目录之外，其余已上线页面都能从首页找到', () => {
     const html = home();
     const catalog = html.slice(html.indexOf('data-testid="home-catalog"'));
-    for (const path of ['/civs', '/units', '/tree', '/buildings', '/techs']) {
+    for (const path of ['/civs', '/units', '/buildings', '/techs']) {
       expect(html).toContain(`href="${path}"`);
       expect(catalog).not.toContain(`href="${path}"`);
     }
     const pages = PAGES.filter((page) => page.kind === 'page' && page.lane && page.status !== 'planned' && !page.path.includes(':'));
-    expect(pages).toHaveLength(32);
+    expect(pages).toHaveLength(31);
     for (const page of pages) expect(html, page.path).toContain(`href="${page.path}"`);
     expect(html).not.toContain('设计选例');
     expect(html).not.toContain('规划中');

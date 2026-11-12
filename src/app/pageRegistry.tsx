@@ -4,14 +4,13 @@ import { PAGES, type LazyComponentId, type PageDef } from '../shared/nav/pageReg
 
 const LOADERS: Record<LazyComponentId, LazyExoticComponent<ComponentType>> = {
   CivList: lazy(() => import('../features/civs/components/CivList')),
-  CivDetail: lazy(() => import('../features/civs/components/CivDetail')),
+  CivDetail: lazy(() => import('./CivDetailPage')),
   BonusDetail: lazy(() => import('../features/bonuses/components/BonusDetail')),
   BonusList: lazy(() => import('../features/bonuses/components/BonusList')),
   UnitList: lazy(() => import('../features/units/components/UnitList')),
   UnitDetail: lazy(() => import('../features/units/components/UnitDetail')),
   TechList: lazy(() => import('../features/techs/components/TechList')),
   TechDetail: lazy(() => import('../features/techs/components/TechDetail')),
-  TreeView: lazy(() => import('../features/tree/components/TreeView')),
   DlcView: lazy(() => import('../features/dlc/components/DlcView')),
   Compare: lazy(() => import('../features/compare/components/Compare')),
   Matchup: lazy(() => import('../features/matchup/components/Matchup')),

@@ -22,7 +22,7 @@ for (const width of [360, 375, 390, 1280])
       expect(shortestCiv!.height).toBeGreaterThanOrEqual(44);
       await expect(summary.getByRole('listitem')).toHaveCount(57);
       await expect(page.locator('.patch-entry')).not.toHaveCount(0);
-      await expect(summary.getByRole('link', { name: '萨拉森', exact: true })).toHaveAttribute('href', '#/tree/Saracens');
+      await expect(summary.getByRole('link', { name: '萨拉森', exact: true })).toHaveAttribute('href', '#/civ/Saracens?tab=techtree');
       await expect(summary.getByRole('link', { name: '脚踏起重机', exact: true })).toHaveCount(8);
       await expect(summary.locator('a[href="#/unit/2700"]').first()).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

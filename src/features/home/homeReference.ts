@@ -20,7 +20,6 @@ export const HOME_TECH_PIC = 32;
 export const HOME_REFERENCE_COPY = {
   civs: '加成、特色单位与科技、完整科技树。',
   units: '属性、费用、克制与升级路线。',
-  tree: '每个文明可研究的单位与科技。',
   buildings: '属性、可生产单位与科技。',
   techs: '效果、费用与前置。',
 } as const;

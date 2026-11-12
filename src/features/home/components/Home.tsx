@@ -5,7 +5,7 @@ import { preloadGlobalSearch, requestGlobalSearch } from '../../../shared/search
 import { HOME_GROUPS, WIKI, type Section } from '../../../shared/nav/sections';
 import { img } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
-import { HOME_AGE_PICS, HOME_BUILDING_PIC, HOME_EMBLEM_CIVS, HOME_REFERENCE_COPY, HOME_TECH_PIC, HOME_UNIT_PICS } from '../homeReference';
+import { HOME_BUILDING_PIC, HOME_EMBLEM_CIVS, HOME_REFERENCE_COPY, HOME_TECH_PIC, HOME_UNIT_PICS } from '../homeReference';
 import { hasLegacyStartQuery } from '../legacyStartQuery';
 import '../home.css';
 
@@ -48,7 +48,6 @@ export default function Home() {
   })).filter((group) => group.sections.length > 0);
   const civ = wikiEntry('civs');
   const units = wikiEntry('units');
-  const tree = wikiEntry('tree');
   const buildings = wikiEntry('buildings');
   const techs = wikiEntry('techs');
   const emblems = HOME_EMBLEM_CIVS.flatMap((en) => {
@@ -98,13 +97,6 @@ export default function Home() {
                 <span className="home-ref-desc">{HOME_REFERENCE_COPY.units}</span>
               </span>
               <ExampleIcons paths={HOME_UNIT_PICS.map((pic) => `units/${pic}.webp`)} size={32} />
-            </Link>
-            <Link className="home-ref-row" to={tree.path}>
-              <span className="home-ref-copy">
-                <span className="home-ref-name">{tree.label}</span>
-                <span className="home-ref-desc">{HOME_REFERENCE_COPY.tree}</span>
-              </span>
-              <ExampleIcons paths={HOME_AGE_PICS.map((pic) => `techs/${pic}.webp`)} size={32} />
             </Link>
             <div className="home-ref-pair">
               <Link className="home-ref-mini" to={buildings.path}>

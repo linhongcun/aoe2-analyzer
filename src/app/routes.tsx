@@ -1,15 +1,22 @@
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { civs } from '../data';
+import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { civByEn, civs } from '../data';
 import { PAGE_REGISTRY, type RegisteredPage } from './pageRegistry';
 
 const PageMeta = lazy(() => import('../features/share/PageMeta'));
 const NotFound = lazy(() => import('../features/notFound/NotFound'));
 
+/** /tree/:civ 换成该文明详情的科技树章节。大小写按文明英文名对齐；认不出的名字交给文明详情。 */
+function TreeCivRedirect() {
+  const { civ = '' } = useParams();
+  const known = civByEn(civ) ?? civs.find((item) => item.en.toLowerCase() === civ.toLowerCase());
+  return <Navigate to={`/civ/${known?.en ?? civ}?tab=techtree`} replace />;
+}
+
 /** 元数据跟随登记表里的路由 pattern，不看地址栏里的大小写或编码。 */
 function RegisteredRoute({ page }: { page: RegisteredPage }) {
   const location = useLocation();
-  if (page.redirectDefaultTree) return <Navigate to={'/tree/' + civs[16]!.en} replace />;
+  if (page.redirectCivTree) return <TreeCivRedirect />;
   if (page.redirectTo) return <Navigate to={page.redirectKeepSearch ? { pathname: page.redirectTo, search: location.search } : page.redirectTo} replace />;
   const Page = page.Component;
   if (!Page) return null;

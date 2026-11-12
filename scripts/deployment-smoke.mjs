@@ -628,7 +628,7 @@ export async function checkSite({ site, version, commit, features = [], diagnost
         await goto('/patches/185872');
         const summary = page.locator('.patch-tree-summary');
         await summary.locator('summary').click();
-        await check(summary.getByRole('link', { name: '萨拉森', exact: true })).toHaveAttribute('href', '#/tree/Saracens');
+        await check(summary.getByRole('link', { name: '萨拉森', exact: true })).toHaveAttribute('href', '#/civ/Saracens?tab=techtree');
         await check(summary.locator('a[href="#/tech/54"]').first()).toBeVisible();
       } else if (feature === 'matchup') {
         await goto('/matchup');

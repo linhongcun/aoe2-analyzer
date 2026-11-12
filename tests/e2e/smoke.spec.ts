@@ -32,7 +32,7 @@ const ROUTES: [string, string][] = [
   ['#unit/569/Franks/4', '#sim .simtab'],
   ['#techs', '#tgrid .tech-row'],
   ['#tech/12', '#tech h1'],
-  ['#tree', '.tree .tcell'],
+  ['#tree', '#grid .card'],
   ['#tree/Britons', '.tree .tcell'],
   ['#dlc', '.dlct tr'],
   ['#compare', '#ctab tr'],
@@ -121,7 +121,6 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/units', '#ugrid .unit-row'],
     ['#/buildings', '#bgrid .card'],
     ['#/techs', '#tgrid .tech-row'],
-    ['#/tree', '.tree .tcell'],
     ['#/compare', '#ctab tr'],
     ['#/matchup', '#matchup:has(#mres) h1'],
     ['#/simulator', '#simhub .card'],
@@ -154,11 +153,20 @@ test('old #/list and #list redirect to #/civs and show the civ grid', async ({ p
   }
 });
 
-test('old #/tree redirects to #/tree/Franks and shows the Franks tree', async ({ page }) => {
-  await page.goto('./#/tree');
-  await expect(page).toHaveURL(/#\/tree\/Franks$/);
-  await expect(page.locator('#tra')).toHaveAttribute('data-value', 'Franks');
+test('old #/tree redirects to #/civs and #/tree/Franks opens the civ tech tree', async ({ page }) => {
+  await page.goto('./#/civs');
+  await page.evaluate(() => {
+    location.hash = '/tree';
+  });
+  await expect(page).toHaveURL(/#\/civs$/);
+  await expect(page.locator('#grid .card').first()).toBeVisible();
+  await page.evaluate(() => {
+    location.hash = '/tree/franks';
+  });
+  await expect(page).toHaveURL(/#\/civ\/Franks#techtree$/);
   await expect(page.locator('.tree .tcell').first()).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/civs$/);
 });
 
 test('nav: 工具 dropdown toggles on click, closes on outside click and Esc', async ({ page }) => {

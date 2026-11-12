@@ -22,13 +22,12 @@ async function capture(page: Page, info: TestInfo, name: string) {
 
 test('#521 文明情境入口预填当前文明，单边对比和生产可刷新', async ({ page }) => {
   await page.goto('./#/civ/Jurchens');
-  const nav = page.locator('#detail').getByRole('navigation', { name: '相关工具', exact: true });
+  const nav = page.getByTestId('civ-related-tools');
   for (const [name, href] of [
     ['开局流程', '#/builds?civ=Jurchens'],
     ['生产对照', '#/production?civ=Jurchens'],
     ['对局助手', '#/matchup?me=Jurchens'],
     ['文明对比', '#/compare?a=Jurchens'],
-    ['科技树', '#/tree/Jurchens'],
   ])
     await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute('href', href!);
   await nav.getByRole('link', { name: '生产对照', exact: true }).click();

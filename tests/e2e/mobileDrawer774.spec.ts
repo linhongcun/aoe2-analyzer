@@ -8,7 +8,6 @@ const WIKI_NAV = [
   ['单位', '#/units'],
   ['建筑', '#/buildings'],
   ['科技', '#/techs'],
-  ['科技树', '#/tree'],
 ] as const;
 
 const failures = new WeakMap<Page, string[]>();
@@ -85,19 +84,19 @@ test('#774 @360 /market 只默认展开经济计算组', async ({ page }) => {
   for (const index of [0, 1, 3]) await expect(groups.nth(index)).toHaveJSProperty('open', false);
 });
 
-test('#774 @360 工具面板不再重复上方「百科」的 5 项', async ({ page }) => {
+test('#774 @360 工具面板不再重复上方「百科」的 4 项', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 900 });
   await openDrawer(page, '/hotkeys');
-  // 百科组里的 5 项仍在抽屉上方。
+  // 百科组里的 4 项仍在抽屉上方。
   for (const [label, href] of WIKI_NAV) await expect(page.locator('nav.mainnav a', { hasText: label }).first()).toHaveAttribute('href', href);
-  // 展开「资料」组后，工具面板内不应再出现这 5 项。
+  // 展开「资料」组后，工具面板内不应再出现这 4 项。
   await toolsGroups(page).nth(3).locator('summary').click();
   await expect(toolsGroups(page).nth(3)).toHaveJSProperty('open', true);
   for (const [, href] of WIKI_NAV) await expect(page.locator(`#tools-menu a[href="${href}"]`), `${href} 不应在工具面板重复`).toHaveCount(0);
   await expect(page.locator('nav.mainnav a[href="#/civs"]')).toHaveCount(1);
 });
 
-test('#774 @1280 桌面工具下拉保持原结构（4 组 38 项、平铺无折叠、含 5 个百科重复项）', async ({ page }) => {
+test('#774 @1280 桌面工具下拉保持原结构（4 组 37 项、平铺无折叠、含百科重复项）', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/hotkeys');
   await page.getByRole('button', { name: '工具', exact: true }).click();
@@ -105,7 +104,7 @@ test('#774 @1280 桌面工具下拉保持原结构（4 组 38 项、平铺无折
   await expect(panel).toBeVisible();
   await expect(panel.locator('.tools-group-title')).toHaveText(['新手入门', '对局计划', '经济计算', '资料']);
   await expect(panel.locator('details')).toHaveCount(0);
-  await expect(panel.getByRole('link')).toHaveCount(38);
+  await expect(panel.getByRole('link')).toHaveCount(37);
   await expect(panel.locator('a[href="#/civs"]')).toHaveCount(1);
   // 桌面不渲染抽屉里的外观段（外观仍在页头主题按钮）。
   await expect(page.locator('#tools-menu .drawer-appearance')).toHaveCount(0);
