@@ -23,6 +23,7 @@ import {
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { Icon } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './market.css';
 
@@ -64,13 +65,6 @@ export default function Market() {
       <ToolPageHeader
         title="市场买卖预算"
         description="按你的交易顺序，估算资源收支与下一笔报价。"
-        related={{
-          label: '相关经济工具',
-          links: [
-            { to: '/production', label: '持续生产' },
-            { to: '/eco-payoff', label: '经济科技收益' },
-          ],
-        }}
         dock={
           <CalcDock
             note={status}
@@ -87,14 +81,6 @@ export default function Market() {
           />
         }
       />
-      <aside className="market-caution" aria-label="预算口径">
-        <strong>预算估算，游戏实际报价优先</strong>
-        <p>
-          按每笔整数报价估算。费率取自 DE {__DATA_SOURCES__.patch.build}{' '}
-          固定数据，其余引擎规则尚未在同版游戏逐笔复测。游戏内部可能保留小数余额，累计黄金和预算不足的临界点可能不同。
-        </p>
-        <p>所有玩家共用市场行情；这里仅执行你给定的交易，假设期间无人改变行情。不计建市场、研究科技或采集资源的开销。</p>
-      </aside>
       {!!decoded.errors.length && (
         <div className="market-error" role="alert">
           {decoded.errors.join(' ')}
@@ -107,107 +93,126 @@ export default function Market() {
         </label>
       )}
       {!decoded.errors.length && (
-        <div className="market-panel">
-          <div className="market-toolbar">
-            <div className="market-switch" role="group" aria-label="编辑方案">
-              {([0, 1] as const).map((index) => (
-                <button
-                  type="button"
-                  className={'btn' + (active === index ? ' active' : '')}
-                  aria-pressed={active === index}
-                  key={index}
-                  onClick={() => setActive(index)}
-                >
-                  编辑方案 {index === 0 ? 'A' : 'B'}
-                </button>
-              ))}
+        <ToolGrid className="market-layout">
+          <div className="market-panel">
+            <div className="market-toolbar">
+              <div className="market-switch" role="group" aria-label="编辑方案">
+                {([0, 1] as const).map((index) => (
+                  <button
+                    type="button"
+                    className={'btn' + (active === index ? ' active' : '')}
+                    aria-pressed={active === index}
+                    key={index}
+                    onClick={() => setActive(index)}
+                  >
+                    编辑方案 {index === 0 ? 'A' : 'B'}
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="btn"
+                onClick={() =>
+                  update({ plans: active === 0 ? [config.plans[0], structuredClone(config.plans[0])] : [structuredClone(config.plans[1]), config.plans[1]] })
+                }
+              >
+                复制当前方案到 {active === 0 ? 'B' : 'A'}
+              </button>
             </div>
-            <button
-              type="button"
-              className="btn"
-              onClick={() =>
-                update({ plans: active === 0 ? [config.plans[0], structuredClone(config.plans[0])] : [structuredClone(config.plans[1]), config.plans[1]] })
-              }
-            >
-              复制当前方案到 {active === 0 ? 'B' : 'A'}
-            </button>
+            <PlanEditor key={active} plan={config.plans[active]} update={updatePlan} name={active === 0 ? 'A' : 'B'} />
           </div>
-          <PlanEditor key={active} plan={config.plans[active]} update={updatePlan} name={active === 0 ? 'A' : 'B'} />
-        </div>
-      )}
-      {!decoded.errors.length && (
-        <>
-          <section className="market-panel" aria-labelledby="market-compare-title">
-            <h2 id="market-compare-title" className="calc-dock-target" tabIndex={-1}>
-              方案对照
-            </h2>
-            <p className="note">分别使用每份方案的初始库存和行情，不共用交易历史；不同资源分别列账。</p>
-            <div className="market-comparison">
-              {results.map((result, index) => (
-                <div className="market-summary" key={index} data-testid={`market-summary-${index}`}>
-                  <h3>方案 {index === 0 ? 'A' : 'B'}</h3>
-                  <p className="note">{civs.find((civ) => civ.en === config.plans[index]!.civ)?.zh ?? '文明无效'}</p>
-                  {result.errors.length ? (
-                    <p className="market-invalid">输入无效，暂停计算</p>
-                  ) : (
-                    <>
-                      <p>{result.failure ? '预算仅覆盖部分交易，后续已停止' : result.trades.length ? '预计全部交易可执行' : '没有交易，库存不变'}</p>
-                      <p>
-                        手续费 <strong className="market-number">{number(result.fee * 100)}%</strong> · 预算可执行{' '}
-                        <span className="market-number">{result.trades.length} 笔</span>
-                      </p>
-                      <dl>
-                        {STOCK_RESOURCES.map((resource) => (
-                          <div key={resource}>
-                            <dt>{RES_ZH[resource]}净变化</dt>
-                            <dd>{signed(result.delta[resource])}</dd>
+          <div className="market-side">
+            <section className="market-panel" aria-labelledby="market-compare-title">
+              <h2 id="market-compare-title" className="calc-dock-target" tabIndex={-1}>
+                方案对照
+              </h2>
+              <p className="note">分别使用每份方案的初始库存和行情，不共用交易历史；不同资源分别列账。</p>
+              <div className="market-comparison">
+                {results.map((result, index) => (
+                  <div className="market-summary" key={index} data-testid={`market-summary-${index}`}>
+                    <h3>方案 {index === 0 ? 'A' : 'B'}</h3>
+                    <p className="note">{civs.find((civ) => civ.en === config.plans[index]!.civ)?.zh ?? '文明无效'}</p>
+                    {result.errors.length ? (
+                      <p className="market-invalid">输入无效，暂停计算</p>
+                    ) : (
+                      <>
+                        <p>{result.failure ? '预算仅覆盖部分交易，后续已停止' : result.trades.length ? '预计全部交易可执行' : '没有交易，库存不变'}</p>
+                        <p>
+                          手续费 <strong className="market-number">{number(result.fee * 100)}%</strong> · 预算可执行{' '}
+                          <span className="market-number">{result.trades.length} 笔</span>
+                        </p>
+                        <dl>
+                          {STOCK_RESOURCES.map((resource) => (
+                            <div key={resource}>
+                              <dt>{RES_ZH[resource]}净变化</dt>
+                              <dd>{signed(result.delta[resource])}</dd>
+                            </div>
+                          ))}
+                          <div>
+                            <dt>累计花费黄金</dt>
+                            <dd>{number(result.spent)}</dd>
                           </div>
-                        ))}
-                        <div>
-                          <dt>累计花费黄金</dt>
-                          <dd>{number(result.spent)}</dd>
-                        </div>
-                        <div>
-                          <dt>累计获得黄金</dt>
-                          <dd>{number(result.received)}</dd>
-                        </div>
-                      </dl>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-          <PlanResult key={active + JSON.stringify(config.plans[active])} result={results[active]!} name={active === 0 ? 'A' : 'B'} />
-        </>
+                          <div>
+                            <dt>累计获得黄金</dt>
+                            <dd>{number(result.received)}</dd>
+                          </div>
+                        </dl>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+            <p className="note">预算估算，游戏实际报价优先。</p>
+          </div>
+        </ToolGrid>
       )}
-      <details className="market-panel market-method">
-        <summary>计算规则与数据来源</summary>
+      {!decoded.errors.length && <PlanResult key={active + JSON.stringify(config.plans[active])} result={results[active]!} name={active === 0 ? 'A' : 'B'} />}
+      <ToolFooter
+        related={{
+          label: '相关经济工具',
+          links: [
+            { to: '/production', label: '持续生产' },
+            { to: '/eco-payoff', label: '经济科技收益' },
+          ],
+        }}
+      >
         <p>
-          每笔成交 <span className="market-number">{MARKET_DATA.engine.lot} 资源</span>
-          。先使用当前手续费前基价计算买卖报价，按每笔四舍五入到整数黄金；成交后，该资源基价按买入增加、卖出减少{' '}
-          <span className="market-number">{MARKET_DATA.engine.step}</span>，限制在{' '}
-          <span className="market-number">
-            {MARKET_DATA.engine.minBase}–{MARKET_DATA.engine.maxBase}
-          </span>
-          。不对整批总价再次取整。
+          <strong>预算估算，游戏实际报价优先</strong>
         </p>
-        <p>最低买价由最低基价和当前费率自然计算，不另设统一买价下限。报价是整数预算，实际引擎取整仍需同版复核，临界库存请以游戏为准。</p>
-        <p>行会和大干道只切换已研究后的费率，不扣研究费。萨拉森与印度斯坦没有行会，不会叠加两种费率。</p>
-        {/* issue 275：不再向玩家显示 .dat 的校验值，固定版本与校验信息统一放在「关于数据」 */}
-        <p className="note">
-          数据所用游戏 .dat 的固定版本与校验信息见<Link to="/about-data">关于数据</Link>。
+        <p>
+          按每笔整数报价估算。费率取自 DE {__DATA_SOURCES__.patch.build}{' '}
+          固定数据，其余引擎规则尚未在同版游戏逐笔复测。游戏内部可能保留小数余额，累计黄金和预算不足的临界点可能不同。
         </p>
-        <ul>
-          {MARKET_DATA.engine.sources.map((source) => (
-            <li key={source.url}>
-              <a href={source.url} target="_blank" rel="noreferrer">
-                {source.scope}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </details>
+        <p>所有玩家共用市场行情；这里仅执行你给定的交易，假设期间无人改变行情。不计建市场、研究科技或采集资源的开销。</p>
+        <details className="market-method">
+          <summary>计算规则与数据来源</summary>
+          <p>
+            每笔成交 <span className="market-number">{MARKET_DATA.engine.lot} 资源</span>
+            。先使用当前手续费前基价计算买卖报价，按每笔四舍五入到整数黄金；成交后，该资源基价按买入增加、卖出减少{' '}
+            <span className="market-number">{MARKET_DATA.engine.step}</span>，限制在{' '}
+            <span className="market-number">
+              {MARKET_DATA.engine.minBase}–{MARKET_DATA.engine.maxBase}
+            </span>
+            。不对整批总价再次取整。
+          </p>
+          <p>最低买价由最低基价和当前费率自然计算，不另设统一买价下限。报价是整数预算，实际引擎取整仍需同版复核，临界库存请以游戏为准。</p>
+          <p>行会和大干道只切换已研究后的费率，不扣研究费。萨拉森与印度斯坦没有行会，不会叠加两种费率。</p>
+          {/* issue 275：不再向玩家显示 .dat 的校验值，固定版本与校验信息统一放在「关于数据」 */}
+          <p className="note">
+            数据所用游戏 .dat 的固定版本与校验信息见<Link to="/about-data">关于数据</Link>。
+          </p>
+          <ul>
+            {MARKET_DATA.engine.sources.map((source) => (
+              <li key={source.url}>
+                <a href={source.url} target="_blank" rel="noreferrer">
+                  {source.scope}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      </ToolFooter>
     </section>
   );
 }

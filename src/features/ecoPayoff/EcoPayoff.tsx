@@ -5,6 +5,7 @@ import { useCore, useTrees } from '../../data/hooks';
 import { Loading } from '../../shared/ui/widgets';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { AGE_ZH, RES_ZH } from '../../domain/ratings';
 import { fmtClock } from '../../domain/realCost';
 import {
@@ -108,7 +109,6 @@ function EcoPayoffBody({
       <ToolPageHeader
         title="经济科技收益"
         description="固定人数与采集条件，对比现在研究一项科技带来的投入和增量。"
-        related={{ links: [{ to: '/production', label: '持续生产工具' }] }}
         dock={
           <CalcDock
             note={shared?.text}
@@ -120,17 +120,6 @@ function EcoPayoffBody({
           />
         }
       />
-      <p className="eco-lead" data-testid="eco-lead">
-        {errors.length ? (
-          '当前方案无法计算，请先修正或重置。'
-        ) : result.balance !== null && result.state === 'ready' && result.complete ? (
-          <>
-            {payoffLead(result)}：从现在起约 <span className="eco-number">{fmtClock(result.balance)}</span>。
-          </>
-        ) : (
-          payoffLead(result)
-        )}
-      </p>
       {shared?.link && (
         <label className="eco-manual">
           方案链接
@@ -138,9 +127,7 @@ function EcoPayoffBody({
         </label>
       )}
       {parseErrors.length > 0 && <p className="note">链接格式有误，设置暂时锁定。请重置方案后重新配置。</p>}
-      <p className="eco-boundary">首版评估伐木、采金、采石的一次升级；不计算人口增长、资源耗尽、农田补种、TC 停产或军事风险。所有时长为游戏时间。</p>
-
-      <div className="eco-columns">
+      <ToolGrid className="eco-columns">
         <fieldset className="eco-settings" disabled={parseErrors.length > 0}>
           <section className="eco-card">
             <h2>研究方案</h2>
@@ -255,6 +242,9 @@ function EcoPayoffBody({
         <div className="eco-results calc-dock-target" id="eco-result" tabIndex={-1} aria-live="polite">
           {errors.length ? (
             <section className="eco-card eco-errors" role="alert">
+              <p className="eco-lead" data-testid="eco-lead">
+                当前方案无法计算，请先修正或重置。
+              </p>
               <h2>当前方案无法计算</h2>
               <ul>
                 {errors.map((e, i) => (
@@ -265,6 +255,15 @@ function EcoPayoffBody({
           ) : (
             <>
               <section className="eco-card">
+                <p className="eco-lead" data-testid="eco-lead">
+                  {result.balance !== null && result.state === 'ready' && result.complete ? (
+                    <>
+                      {payoffLead(result)}：从现在起约 <span className="eco-number">{fmtClock(result.balance)}</span>。
+                    </>
+                  ) : (
+                    payoffLead(result)
+                  )}
+                </p>
                 <h2>
                   {result.target?.zh}：{result.state === 'free' ? '自动免费，已获得' : result.state === 'already' ? '已研究，无新增投入' : '现在研究'}
                 </h2>
@@ -379,7 +378,10 @@ function EcoPayoffBody({
             数据：DE Update {__DATA_SOURCES__.patch.build}，固定游戏 .dat 导出。<Link to="/about-data">查看数据来源</Link>
           </p>
         </div>
-      </div>
+      </ToolGrid>
+      <ToolFooter related={{ links: [{ to: '/production', label: '持续生产工具' }] }}>
+        <p>首版评估伐木、采金、采石的一次升级；不计算人口增长、资源耗尽、农田补种、TC 停产或军事风险。所有时长为游戏时间。</p>
+      </ToolFooter>
     </section>
   );
 }

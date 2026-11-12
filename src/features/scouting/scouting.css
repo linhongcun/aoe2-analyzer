@@ -47,11 +47,14 @@
 .scouting-card p:last-child {
   margin-bottom: 0;
 }
-.scouting-layout {
+.scouting-layout,
+.scouting-output {
+  min-width: 0;
+}
+.scouting-output {
   display: grid;
-  grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.7fr);
-  gap: var(--space-5);
-  align-items: start;
+  gap: var(--space-4);
+  align-content: start;
 }
 .scouting-page h2,
 .scouting-page h3 {
@@ -201,9 +204,7 @@
   outline-offset: 3px;
 }
 .scouting-example {
-  padding: var(--space-4);
-  background: var(--color-surface-2);
-  border-radius: var(--radius-md);
+  margin-bottom: 0;
 }
 .scouting-optional-fields {
   display: grid;
@@ -241,9 +242,6 @@
   font-size: var(--fs-sm);
 }
 @media (max-width: 760px) {
-  .scouting-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .scouting-signals dl {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-2);
@@ -284,7 +282,8 @@
   .scouting-feedback {
     display: none;
   }
-  .scouting-layout {
+  .scouting-layout,
+  .scouting-output {
     display: block;
   }
   .scouting-card,

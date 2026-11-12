@@ -1,6 +1,5 @@
 .market-page {
-  max-width: 1160px;
-  margin-inline: auto;
+  min-width: 0;
 }
 .market-heading,
 .market-toolbar {
@@ -57,18 +56,22 @@
   border-radius: 14px;
   min-width: 0;
 }
-.market-caution {
-  padding: 18px 20px;
-  border: 1px solid var(--color-warn);
-  border-radius: 12px;
-  background: var(--color-warn-soft);
-  color: var(--color-text);
+.market-layout > .market-panel,
+.market-side > .market-panel {
+  margin-top: 0;
 }
-.market-caution strong {
-  color: var(--color-warn);
+.market-layout > .market-panel {
+  container-type: inline-size;
 }
-.market-caution p:last-child {
-  margin-bottom: 0;
+@container (max-width: 560px) {
+  .market-fields,
+  .market-orders,
+  .market-order-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.market-side {
+  min-width: 0;
 }
 .market-settings {
   display: flex;
@@ -342,9 +345,6 @@
 }
 @media (max-width: 540px) {
   .market-panel {
-    padding: 16px;
-  }
-  .market-caution {
     padding: 16px;
   }
   .market-comparison {

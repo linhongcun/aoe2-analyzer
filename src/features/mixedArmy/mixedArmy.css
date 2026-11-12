@@ -98,11 +98,23 @@
 .mixed-army-page details:not([open]) > :not(summary) {
   display: none;
 }
+.mixed-layout > .mixed-panel {
+  margin-bottom: 0;
+}
+.mixed-layout,
+.mixed-output {
+  min-width: 0;
+}
+.mixed-output {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+}
 .mixed-example {
-  margin: 0 0 var(--space-4);
+  margin: 0;
 }
 .mixed-example h2 {
-  font-size: var(--fs-h3);
+  font-size: var(--fs-body);
 }
 .mixed-details > summary {
   cursor: pointer;

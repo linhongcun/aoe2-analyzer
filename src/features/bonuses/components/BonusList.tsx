@@ -8,7 +8,7 @@ import { CivIcon } from '../../../shared/ui/art';
 import { BonusText } from '../../../shared/ui/BonusBody';
 import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
-import { RelatedTools } from '../../../shared/ui/ToolPageHeader';
+import { ToolRelated } from '../../../shared/ui/ToolPageHeader';
 import { SearchInput } from '../../../shared/ui/widgets';
 import { useSticky } from '../../../shared/utils/sticky';
 import './bonusList.css';
@@ -264,7 +264,7 @@ export default function BonusList() {
         <b>标签说明。</b>
         已计入表示有可计算的效果；部分计入表示只有部分工具计入；仅文本表示只展示游戏说明。点开单条加成可查看适用对象和各工具的计入情况。
       </p>
-      <RelatedTools links={[{ to: '/team-bonuses', label: '按玩家阵容汇总团队加成' }]} />
+      <ToolRelated links={[{ to: '/team-bonuses', label: '按玩家阵容汇总团队加成' }]} />
     </section>
   );
 }

@@ -36,10 +36,7 @@
   outline-offset: 3px;
 }
 .relic-columns {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
-  gap: var(--space-5);
-  align-items: start;
+  min-width: 0;
 }
 .relic-card {
   min-width: 0;
@@ -209,11 +206,6 @@
   padding: 0;
   clip-path: inset(50%);
   overflow: hidden;
-}
-@media (max-width: 900px) {
-  .relic-columns {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 @media (max-width: 480px) {
   .relic-card {
