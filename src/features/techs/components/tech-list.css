@@ -203,6 +203,17 @@
 #techs .tech-release:empty {
   display: none;
 }
+/* 桌面放置顺序是首发先于费用。钉在同一行，费用才留在第 5 列。 */
+@media (min-width: 721px) {
+  #techs .tech-id,
+  #techs .tech-bz,
+  #techs .tech-age,
+  #techs .tech-civ,
+  #techs .tech-cost,
+  #techs .tech-release {
+    grid-row: 1;
+  }
+}
 #techs .tech-empty {
   padding: var(--space-8) var(--space-4);
   text-align: center;
