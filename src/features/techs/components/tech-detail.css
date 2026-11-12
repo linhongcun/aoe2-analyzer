@@ -284,6 +284,16 @@
   border-top: 1px solid var(--color-line);
   padding-top: 12px;
 }
+.td-history > summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+.td-history > summary h2 {
+  margin: 0;
+}
 .td [id] {
   scroll-margin-top: calc(var(--nav-h) + 12px);
 }

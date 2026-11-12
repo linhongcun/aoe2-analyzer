@@ -343,8 +343,10 @@ export default function BuildingDetail() {
               go({ tab: open ? 'history' : 'ov' });
             }}
           >
-            <summary>更新历史</summary>
-            <PatchHistory target={{ targetType: 'building', targetId: b.id, targetNameZh: b.zh }} />
+            <summary>
+              <h2>更新历史</h2>
+            </summary>
+            <PatchHistory hostedHeading labelRegion={false} target={{ targetType: 'building', targetId: b.id, targetNameZh: b.zh }} />
           </details>
         </>
       )}

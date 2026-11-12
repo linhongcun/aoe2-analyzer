@@ -36,7 +36,8 @@ test('#435 弩手跨版本升级费用可追溯，历史筛选可分享并恢复
   expect(sourceArchive.releaseDate).toBe('2022-08-29');
   expect(sourceArchive.publishedAt).toBe('2022-08-30');
   await expect(page.locator('#unit-history')).toHaveAttribute('open', '');
-  await expect(history(page).getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(page.locator('#unit-history > summary').getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(history(page).getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(0);
   await expect(version(page, '66692')).toContainText(/官方发行日（公告当地日期）\s*2022-08-29/);
   await expect(version(page, '66692')).toContainText(/公告公开（北京时间）\s*2022-08-30/);
   await expect(version(page, '66692')).toContainText(/125\s*食物/);
@@ -155,7 +156,8 @@ test('#435 历史科技复制静态链接后新上下文打开和刷新仍保留
       await fresh.reload();
       await expect(version(fresh, '81058').locator('[data-history-entry]').first()).toBeVisible();
       await expect(fresh.getByLabel('结束日期', { exact: true })).toHaveValue('2023-04-11');
-      await expect(fresh.getByRole('tab', { name: '更新历史', exact: true })).toHaveAttribute('aria-selected', 'true');
+      await expect(fresh.getByRole('heading', { level: 2, name: '更新历史', exact: true })).toHaveCount(1);
+      await expect(fresh.getByRole('tab', { name: '更新历史', exact: true })).toHaveCount(0);
       expect(freshErrors).toEqual([]);
     } finally {
       await context.close();
