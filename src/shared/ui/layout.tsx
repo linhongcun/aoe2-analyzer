@@ -50,6 +50,7 @@ export function DetailPage({
   afterTabs,
   tablistTestId,
   sidebar,
+  showTabs = true,
 }: {
   id: string;
   crumb: string;
@@ -68,6 +69,8 @@ export function DetailPage({
   afterTabs?: ReactNode;
   tablistTestId?: string;
   sidebar?: ReactNode;
+  /** 唯一分区的标题已在正文里时不再画标签栏，避免和正文标题各说一遍。 */
+  showTabs?: boolean;
 }) {
   const [params, setParams] = useSearchParams();
   const tabId = useId();
@@ -106,26 +109,31 @@ export function DetailPage({
         <CopyPageLink />
       </div>
       {tabsTop}
-      <div role="tablist" className="dtabs" aria-label={`${title}内容`} data-testid={tablistTestId}>
-        {tabs.map((t, index) => (
-          <button
-            key={t.key}
-            id={`${tabId}-${t.key}`}
-            role="tab"
-            aria-selected={t.key === cur.key}
-            aria-controls={`${tabId}-panel`}
-            tabIndex={t.key === cur.key ? 0 : -1}
-            className={t.key === cur.key ? 'on' : undefined}
-            onClick={() => setTab(t.key)}
-            onKeyDown={(event) => tabKeys(event, index)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+      {showTabs && (
+        <div role="tablist" className="dtabs" aria-label={`${title}内容`} data-testid={tablistTestId}>
+          {tabs.map((t, index) => (
+            <button
+              key={t.key}
+              id={`${tabId}-${t.key}`}
+              role="tab"
+              aria-selected={t.key === cur.key}
+              aria-controls={`${tabId}-panel`}
+              tabIndex={t.key === cur.key ? 0 : -1}
+              className={t.key === cur.key ? 'on' : undefined}
+              onClick={() => setTab(t.key)}
+              onKeyDown={(event) => tabKeys(event, index)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      )}
       {afterTabs}
       <div className={sidebar ? 'dbody has-side' : 'dbody'}>
-        <div className="dmain" role="tabpanel" id={`${tabId}-panel`} aria-labelledby={`${tabId}-${cur.key}`} tabIndex={0}>
+        <div
+          className="dmain"
+          {...(showTabs ? { role: 'tabpanel' as const, id: `${tabId}-panel`, 'aria-labelledby': `${tabId}-${cur.key}`, tabIndex: 0 } : {})}
+        >
           {cur.content}
         </div>
         {sidebar && <aside className="dside">{sidebar}</aside>}

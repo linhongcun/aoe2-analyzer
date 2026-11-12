@@ -28,7 +28,8 @@ test('#950 直接改动不再用大卡片重复对象名，来源和前后值仍
   await page.goto('./#/unit/873?tab=history');
   await expect(page.locator('#unit-history')).toHaveAttribute('open', '');
   const root = history(page);
-  await expect(root.getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(page.locator('#unit-history > summary').getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(root.getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(0);
   await expect(root).toContainText('分批收录 DE 正式版');
   await expect(root).toContainText('没有出现在这里不代表从未改动');
   await expect(root).toContainText('档案标记不按数值重新判定，也不能直接证明整体对局强弱');
@@ -52,7 +53,8 @@ test('#950 直接改动不再用大卡片重复对象名，来源和前后值仍
   expect(await completeEntries(page)).toBeGreaterThanOrEqual(3);
 
   await page.goto('./#/tech/875?tab=history');
-  await expect(history(page).getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(page.locator('#tech-history > summary').getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(history(page).getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(0);
   await expect(history(page).getByRole('link', { name: '软甲', exact: true })).toHaveCount(0);
   await expect(history(page).locator('[data-history-entry]').first()).toContainText('前');
   await expect(history(page).locator('[data-history-entry]').first()).toContainText('后');
@@ -92,7 +94,8 @@ test('#950 冲突、空态和历史身份使用已审说明', async ({ page }) =
   await expect(history(page)).toContainText('尚未收录该对象的更新历史。这不代表它从未改动。');
   await expect(history(page).locator('.history-count')).toContainText('0');
   await expect(history(page).locator('[data-history-entry]')).toHaveCount(0);
-  await expect(history(page).getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(page.locator('#unit-history > summary').getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(history(page).getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(0);
 
   await page.goto('./#/tech/716?tab=history');
   await expect(page.getByText('历史档案，当前数据目录未收录', { exact: true })).toBeVisible();
@@ -121,7 +124,8 @@ test('#950 筛选和官方原文可展开，深色 390 不横向溢出', async (
   await page.evaluate(() => localStorage.setItem('aoe2-theme', 'dark'));
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await expect(history(page).getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(page.locator('#unit-history > summary').getByRole('heading', { level: 2, name: '更新历史', exact: true })).toBeVisible();
+  await expect(history(page).getByRole('heading', { name: '更新历史', exact: true })).toHaveCount(0);
   await expect(history(page).locator('[data-history-version="188329"] .history-version-date')).toBeVisible();
   expect(await completeEntries(page)).toBeGreaterThanOrEqual(2);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);

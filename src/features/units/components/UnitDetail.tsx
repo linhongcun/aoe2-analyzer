@@ -470,8 +470,10 @@ export default function UnitDetail() {
           setHistory(event.currentTarget.open);
         }}
       >
-        <summary>更新历史</summary>
-        <PatchHistory target={{ targetType: 'unit', targetId: u.id, targetNameZh: u.zh }} />
+        <summary>
+          <h2>更新历史</h2>
+        </summary>
+        <PatchHistory hostedHeading labelRegion={false} target={{ targetType: 'unit', targetId: u.id, targetNameZh: u.zh }} />
       </details>
     </section>
   );

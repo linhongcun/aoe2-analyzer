@@ -335,6 +335,9 @@
   font-weight: 700;
   cursor: pointer;
 }
+.bd-history > summary h2 {
+  margin: 0;
+}
 .bd [id] {
   scroll-margin-top: calc(var(--nav-h) + 12px);
 }

@@ -444,6 +444,9 @@
   font-weight: 700;
   cursor: pointer;
 }
+.ud-history > summary h2 {
+  margin: 0;
+}
 .ud [id] {
   scroll-margin-top: 12px;
 }

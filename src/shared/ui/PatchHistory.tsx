@@ -112,13 +112,32 @@ function HistoryValues({ entry }: { entry: PatchEntry }) {
   );
 }
 
-export function PatchHistory({ target, hostedHeading = false }: { target: HistoryTarget; hostedHeading?: boolean }) {
+export function PatchHistory({
+  target,
+  hostedHeading = false,
+  labelRegion = hostedHeading,
+}: {
+  target: HistoryTarget;
+  hostedHeading?: boolean;
+  /** 宿主已经给出同名标题时不再给这块区域起同名。文明页沿用原来的区域名。 */
+  labelRegion?: boolean;
+}) {
   const state = usePatchArchives();
   if (!state.archives) return <HistoryLoading error={state.error} retry={state.retry} />;
-  return <HistoryTimeline archives={state.archives} target={target} hostedHeading={hostedHeading} />;
+  return <HistoryTimeline archives={state.archives} target={target} hostedHeading={hostedHeading} labelRegion={labelRegion} />;
 }
 
-function HistoryTimeline({ archives, target, hostedHeading = false }: { archives: PatchArchive[]; target: HistoryTarget; hostedHeading?: boolean }) {
+function HistoryTimeline({
+  archives,
+  target,
+  hostedHeading = false,
+  labelRegion = hostedHeading,
+}: {
+  archives: PatchArchive[];
+  target: HistoryTarget;
+  hostedHeading?: boolean;
+  labelRegion?: boolean;
+}) {
   const [params, setParams] = useSearchParams();
   const records = historyFor(archives, target);
   const shown = filterHistory(records, params);
@@ -146,7 +165,7 @@ function HistoryTimeline({ archives, target, hostedHeading = false }: { archives
   const samePage = (item: { targetType: string; targetId: number | string }) =>
     item.targetType === target.targetType && String(item.targetId) === String(target.targetId);
   return (
-    <section className="entity-history" data-testid="entity-history" aria-label="更新历史">
+    <section className="entity-history" data-testid="entity-history" {...(labelRegion ? { 'aria-label': '更新历史' } : {})}>
       <div className={hostedHeading ? 'history-head history-head-hosted' : 'history-head'}>
         {hostedHeading ? null : <h2>更新历史</h2>}
         <p className="history-count">
@@ -350,6 +369,7 @@ export function HistoricalEntityDetail({ target }: { target: HistoryTarget }) {
       icon={<Icon name="database" />}
       tags={<span className="tag">历史档案</span>}
       initialTab="history"
+      showTabs={false}
       tabs={[
         {
           key: 'history',

@@ -278,8 +278,10 @@ export default function TechDetail() {
           setHistory(event.currentTarget.open);
         }}
       >
-        <summary>更新历史</summary>
-        <PatchHistory target={{ targetType: 'tech', targetId: tech.id, targetNameZh: tech.zh }} />
+        <summary>
+          <h2>更新历史</h2>
+        </summary>
+        <PatchHistory hostedHeading labelRegion={false} target={{ targetType: 'tech', targetId: tech.id, targetNameZh: tech.zh }} />
       </details>
     </section>
   );
