@@ -97,7 +97,7 @@ describe('B #162 文明加成与页面也支持拼音命中，排序同 #159', (
   it('B0 夹具自检：索引里有页面和文明加成两类', () => {
     expect(pages.length).toBeGreaterThan(5);
     expect(bonuses.length).toBeGreaterThan(100);
-    expect(pages.map((p) => p.zh)).toContain('科技树');
+    expect(pages.map((p) => p.zh)).not.toContain('科技树');
     expect(bonuses.map((b) => b.zh)).toContain('村民携带量 +3');
   });
 
@@ -110,8 +110,6 @@ describe('B #162 文明加成与页面也支持拼音命中，排序同 #159', (
   });
 
   it.each([
-    ['kejishu', 'page', '科技树'],
-    ['kjs', 'page', '科技树'],
     ['wenmingjiacheng', 'page', '文明加成'],
     ['cunminxiedailiang', 'bonus', '村民携带量 +3'],
     ['cmxdl', 'bonus', '村民携带量 +3'],
@@ -158,9 +156,10 @@ describe('B #162 文明加成与页面也支持拼音命中，排序同 #159', (
     expect(ids).toEqual(['p', 'b0', 'b1', 'b2', 'b3', 'b4', 's0', 's1', 's2', 'b5', 'b6']);
   });
 
-  it('B4 中文和英文照旧：「科技树」「Tech Tree」仍是精确命中排第一', () => {
-    expect(search(idx, '科技树')[0]?.zh).toBe('科技树');
-    expect(search(idx, 'Tech Tree')[0]?.zh).toBe('科技树');
+  it('B4 独立科技树页不再进入搜索，也不另加文明科技树直达结果', () => {
+    for (const query of ['科技树', 'Tech Tree', 'kejishu', 'kjs']) {
+      expect(search(idx, query).some((item) => item.kind === 'page' && (item.zh === '科技树' || item.href.startsWith('/tree')))).toBe(false);
+    }
   });
 });
 

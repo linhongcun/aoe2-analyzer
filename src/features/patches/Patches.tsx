@@ -260,7 +260,7 @@ function VersionReading({ archive }: { archive: PatchArchive }) {
           .map((civ) => (
             <section key={civ.en} aria-label={`${civ.zh}科技树开放与移除`}>
               <h4>
-                <Link to={`/tree/${civ.en}`}>{civ.zh}</Link>
+                <Link to={`/civ/${civ.en}?tab=techtree`}>{civ.zh}</Link>
               </h4>
               <ul>
                 {treeChanges.get(civ.en)!.map((entry) => (

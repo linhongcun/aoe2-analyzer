@@ -19,7 +19,6 @@ export const LAZY_COMPONENTS = [
   'UnitDetail',
   'TechList',
   'TechDetail',
-  'TreeView',
   'DlcView',
   'Compare',
   'Matchup',
@@ -96,8 +95,8 @@ export interface PageDef {
   metaDescription?: string;
   component?: ComponentId;
   redirectTo?: string;
-  /** /tree 跳到默认文明科技树 */
-  redirectDefaultTree?: boolean;
+  /** /tree/:civ 转到该文明详情的科技树章节 */
+  redirectCivTree?: boolean;
   /** 分享用的 og:url 不带查询（复盘、团战计划） */
   omitShareSearch?: boolean;
   /** 旧地址跳到新分区时保留原查询，不把指南参数并进别的页面。 */
@@ -211,17 +210,10 @@ export const PAGES: readonly PageDef[] = [
   {
     key: 'tree',
     path: '/tree',
-    kind: 'page',
-    lane: 'wiki',
-    group: 'reference',
-    label: '科技树',
-    en: 'Tech Tree',
-    icon: 'git-branch',
-    desc: '每个文明的完整科技树与差异对照',
-    match: /^\/tree(\/.*)?$/,
-    redirectDefaultTree: true,
-    metaTitle: '文明科技树',
-    metaDescription: '查看各文明可用单位和科技。',
+    kind: 'redirect',
+    redirectTo: '/civs',
+    entry: 'none',
+    entryReason: '科技树已并入文明详情，不带文明的旧地址转向 /civs',
   },
   {
     key: 'maps',
@@ -820,10 +812,10 @@ export const PAGES: readonly PageDef[] = [
   {
     key: 'tree-civ',
     path: '/tree/:civ',
-    kind: 'detail',
-    component: 'TreeView',
+    kind: 'redirect',
+    redirectCivTree: true,
     entry: 'none',
-    entryReason: '某个文明的科技树，入口在科技树',
+    entryReason: '科技树已并入文明详情，旧地址转向 /civ/:civ?tab=techtree',
   },
   {
     key: 'building-detail',

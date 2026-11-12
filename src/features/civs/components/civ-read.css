@@ -75,7 +75,6 @@
 .civ-identity,
 #bonuses,
 #kit,
-#next,
 #more,
 #patches,
 #pro {
@@ -397,62 +396,209 @@
   white-space: nowrap;
 }
 
-.civ-next {
-  margin-top: 8px;
-  padding-top: 16px;
-  border-top: 1px solid var(--civ-line-2);
+.civ-techtree {
+  min-width: 0;
+  margin-top: 40px;
+  scroll-margin-top: calc(var(--nav-h) + 60px);
 }
-
-.civ-read .civ-tree {
+.civ-tt-head {
   display: flex;
-  gap: 12px;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  min-height: 44px;
-  padding: 13px 16px;
-  border: 1px solid var(--civ-btn-edge);
-  background: var(--civ-btn);
-  color: var(--civ-btn-ink);
-  font-family: 'Songti SC', 'Noto Serif SC', 'Source Han Serif SC', serif;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-decoration: none;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
 }
-
-.civ-read .civ-tree:hover {
-  color: var(--civ-btn-ink);
-  background: var(--civ-btn);
+.civ-tt-title {
+  flex: 1 1 320px;
+  min-width: 0;
 }
-
-.civ-tree small {
-  display: block;
-  margin-top: 2px;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0;
+.civ-tt-title h2 {
+  margin-bottom: 0;
 }
-
-.civ-tools {
+.civ-tt-tools {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 16px;
-  margin: 8px 0 0;
-  padding: 0;
-  list-style: none;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 0 0 auto;
+  min-width: 0;
 }
-
-.civ-tools a {
+.civ-tt-jump {
+  display: contents;
+}
+.civ-tt-tools .tjump-field {
+  padding-bottom: 0;
+}
+.civ-tt-tools .tjump-status {
+  bottom: auto;
+  top: calc(100% + 2px);
+}
+.civ-tt-tools .tjump-list {
+  top: calc(100% + 2px + 1.3em + 4px);
+}
+.civ-tt-tools .cp-trigger,
+.civ-tt-tools .tjump-btn {
+  min-height: 44px;
+}
+.civ-tt-cmp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
+}
+.civ-tt-cmp .civpick {
+  min-width: 0;
+}
+.civ-tt-cmp .cp-trigger .cp-lab {
+  color: var(--civ-ink-3);
+  font-size: 13px;
+  margin-right: 6px;
+}
+.civ-tt-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--color-surface);
+  color: var(--civ-ink-2);
+  cursor: pointer;
+}
+.civ-tt-clear svg {
+  width: 16px;
+  height: 16px;
+}
+.civ-tt-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 16px;
+  flex-wrap: wrap;
+  margin: 10px 0 0;
+}
+.civ-tt-meta .tleg {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: 13px;
+  color: var(--civ-ink-2);
+}
+.civ-tt-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--civ-ink-3);
+  white-space: nowrap;
+}
+.civ-tt-hint svg {
+  width: 16px;
+  height: 16px;
+}
+.civ-tt-frame {
+  position: relative;
+  margin-top: 8px;
+  min-width: 0;
+}
+.civ-techtree .tscroll {
+  margin: 0;
+}
+.civ-techtree .tscroll:focus-visible {
+  outline: 2px solid var(--civ-focus);
+  outline-offset: 2px;
+}
+.civ-tt-frame::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  width: 40px;
+  border-radius: 0 10px 10px 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--c-bg-deep));
+  z-index: 5;
+}
+.civ-tt-frame.is-end::after {
+  display: none;
+}
+.civ-techtree .tother {
+  margin: 10px 0 0;
+  max-width: none;
+}
+.civ-tt-diff h3 {
+  margin: 14px 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.civ-tt-skel {
+  height: 468px;
+  margin: 0;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  background: var(--c-bg-deep);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--civ-ink-3);
+  font-size: 13px;
+}
+.civ-tt-retry {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+.civ-continue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 4px;
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--civ-ink-3);
+}
+.civ-continue a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+  padding: 0 4px;
+}
+.civ-continue-sep {
   color: var(--civ-ink-3);
-  font-size: 13px;
+}
+@media (max-width: 720px) {
+  .civ-tt-tools {
+    width: 100%;
+  }
+  .civ-tt-tools > * {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 0;
+  }
+  .civ-tt-tools .cp-trigger {
+    width: 100%;
+  }
+  .civ-tt-tools .tjump-field {
+    flex-basis: 100%;
+  }
+  .civ-tt-hint {
+    display: none;
+  }
+}
+.civ-read .civ-techtree a.tbld {
+  color: var(--c-text);
   text-decoration: none;
 }
-
-.civ-tools a:hover {
-  color: var(--civ-gold);
+.civ-read .civ-techtree a.tbld:hover .tbld-name {
+  text-decoration: underline;
 }
 
 .civ-read .sideblk {

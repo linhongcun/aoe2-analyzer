@@ -70,7 +70,7 @@ test('#/builds、#/duel 通过 axe page-has-heading-one；两页标题层级无�
 });
 
 test('#770 把原 #296 例外清单里的列表页升级为 h1 主标题', async ({ page }) => {
-  for (const route of ['/civs', '/units', '/techs', '/buildings', '/tree/Armenians', '/bonuses', '/dlc']) {
+  for (const route of ['/civs', '/units', '/techs', '/buildings', '/bonuses', '/dlc']) {
     await go(page, route, 'light');
     await expect(page.locator('.lhead h1'), route).toHaveCount(1);
     await expect(page.locator('.lhead h2'), route).toHaveCount(0);

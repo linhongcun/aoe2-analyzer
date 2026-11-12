@@ -570,7 +570,7 @@ export default function MixedArmy() {
         <div className="mixed-links">
           <Link to="/duel">单位PK：局部单兵资料</Link>
           <Link to="/production">生产规划：局部费用资料</Link>
-          <Link to={`/tree/${config.civ}`}>查看文明科技树</Link>
+          <Link to={`/civ/${config.civ}?tab=techtree`}>查看文明科技树</Link>
         </div>
         <p className="mixed-note">前置核对仅复用固定目录、科技树、形态索引与生产潜在资格。不自动研究、不自动建造，不认证资源、人口、兵力或实际支援。</p>
       </details>

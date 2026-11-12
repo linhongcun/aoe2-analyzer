@@ -80,7 +80,6 @@ for (const c of read('civs')) {
     ],
     note: '评分是本站主观参考，不代表胜率。',
   });
-  add(`/tree/${c.en}`, `${c.zh}科技树`, `查看${c.zh}可用的单位、科技及其前置关系。`);
   c.bon.forEach((text, i) => add(`/civ/${c.en}/bonus/${i}`, `${c.zh}加成 ${i + 1}`, text));
   add(`/civ/${c.en}/bonus/team`, `${c.zh}团队加成`, c.tb);
 }

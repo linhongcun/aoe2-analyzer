@@ -60,16 +60,17 @@ async function jumpTo(root: Locator, name: string) {
 
 test('#886 键盘只在确认后滚动，取消和打开列表不挪树', async ({ page }) => {
   const errors = watch(page);
-  await page.goto('./#/tree/Franks');
+  await page.goto('./#/civ/Franks#techtree');
   const root = pane(page, 'Franks');
   const scroller = root.locator('.tscroll');
   await expect(root.locator('.tree .tcell').first()).toBeVisible();
   const url = page.url();
+  const pageTop = await page.evaluate(() => window.scrollY);
   await scroller.evaluate((el) => {
     el.scrollLeft = 240;
   });
   await spyScroll(scroller);
-  const title = await page.locator('#tree h1').boundingBox();
+  const title = await page.locator('#civ-tt-title').boundingBox();
   const frame = await scroller.boundingBox();
   const button = jumpButton(root);
   await button.focus();
@@ -80,8 +81,8 @@ test('#886 键盘只在确认后滚动，取消和打开列表不挪树', async 
   await page.keyboard.press('End');
   expect(await root.locator('.tjump-list').evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
   expect(await scroller.evaluate((el) => el.scrollLeft)).toBe(240);
-  expect(await page.evaluate(() => window.scrollY)).toBe(0);
-  const titleOpen = await page.locator('#tree h1').boundingBox();
+  expect(await page.evaluate(() => window.scrollY)).toBe(pageTop);
+  const titleOpen = await page.locator('#civ-tt-title').boundingBox();
   const frameOpen = await scroller.boundingBox();
   expect(Math.round(titleOpen!.x)).toBe(Math.round(title!.x));
   expect(Math.round(frameOpen!.x)).toBe(Math.round(frame!.x));
@@ -104,14 +105,14 @@ test('#886 键盘只在确认后滚动，取消和打开列表不挪树', async 
   await page.keyboard.press('Space');
   await expect(button).toBeFocused();
   await expect.poll(async () => scroller.evaluate((el) => el.scrollLeft)).toBeLessThan(30);
-  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  expect(await page.evaluate(() => window.scrollY)).toBe(pageTop);
   expect(errors).toEqual([]);
 });
 
 test('#886 法兰克、不列颠、蒙古可跳到市场和城堡，同一项可再确认', async ({ page }) => {
   const errors = watch(page);
   for (const civ of ['Franks', 'Britons', 'Mongols']) {
-    await page.goto(`./#/tree/${civ}`);
+    await page.goto(`./#/civ/${civ}#techtree`);
     const root = pane(page, civ);
     const scroller = root.locator('.tscroll');
     await expect(root.locator('.tree .tcell').first()).toBeVisible();
@@ -133,7 +134,7 @@ test('#886 法兰克、不列颠、蒙古可跳到市场和城堡，同一项可
 
 test('#886 短反馈占位稳定，旧定时器不清掉新的定位', async ({ page }) => {
   const errors = watch(page);
-  await page.goto('./#/tree/Franks');
+  await page.goto('./#/civ/Franks#techtree');
   const root = pane(page, 'Franks');
   const button = jumpButton(root);
   await expect(root.locator('.tree .tcell').first()).toBeVisible();
@@ -177,21 +178,22 @@ test('#886 短反馈占位稳定，旧定时器不清掉新的定位', async ({ 
   expect(errors).toEqual([]);
 });
 
-test('#886 切文明或模式后菜单关闭，并按新树重建选项', async ({ page }) => {
+test('#886 换文明或差异对照后菜单关闭，并按新树重建选项', async ({ page }) => {
   const errors = watch(page);
-  await page.goto('./#/tree/Franks');
+  await page.goto('./#/civ/Franks#techtree');
   const franks = pane(page, 'Franks');
   await expect(franks.locator('.tree .tcell').first()).toBeVisible();
   await jumpButton(franks).click();
   await expect(jumpButton(franks)).toHaveAttribute('aria-expanded', 'true');
-  await page.locator('#trm').selectOption('2');
-  await expect(page.locator('#trb')).toBeVisible();
-  await expect(jumpButton(pane(page, 'Franks'))).toHaveAttribute('aria-expanded', 'false');
-  await page.locator('#trm').selectOption('1');
-  await expect(page.locator('#trb')).toHaveCount(0);
-  await jumpButton(pane(page, 'Franks')).click();
-  await pickCiv(page, 'tra', 'Incas');
+  await pickCiv(page, 'civ-tt-cmp', 'Britons');
+  await expect(jumpButton(franks)).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('.tcell.onlyA, .tcell.onlyB').first()).toBeVisible();
+  await page.getByRole('button', { name: '取消差异对照', exact: true }).click();
+  await expect(page.locator('#civ-tt-cmp')).toHaveAttribute('data-value', '');
+  await jumpButton(franks).click();
+  await pickCiv(page, 'civ-tt-civ', 'Incas');
   const incas = pane(page, 'Incas');
+  await expect(incas.locator('.tree .tcell').first()).toBeVisible();
   await expect(jumpButton(incas)).toHaveAttribute('aria-expanded', 'false');
   await expect(incas.locator('.tbld[data-bid="2556"]')).toContainText('区域建筑');
   await jumpButton(incas).click();
@@ -201,51 +203,47 @@ test('#886 切文明或模式后菜单关闭，并按新树重建选项', async 
   expect(errors).toEqual([]);
 });
 
-test('#886 上下对照两树独立，缺列补充不串到另一棵树', async ({ page }) => {
+test('#886 缺列补充留在本文明，差异对照不再另开一棵树', async ({ page }) => {
   const errors = watch(page);
-  await page.goto('./#/tree/Portuguese');
-  await expect(page.locator('.tree .tcell').first()).toBeVisible();
-  await expect(page.locator('#trb')).toHaveCount(0);
-  await page.locator('#trm').selectOption('3');
-  await expect(page.locator('#trb')).toBeVisible();
-  await pickCiv(page, 'trb', 'Hindustanis');
+  await page.goto('./#/civ/Portuguese#techtree');
   const portuguese = pane(page, 'Portuguese');
-  const hindustanis = pane(page, 'Hindustanis');
+  await expect(portuguese.locator('.tree .tcell').first()).toBeVisible();
+  await expect(page.locator('.tree-pane')).toHaveCount(1);
   await expect(portuguese.locator('.tother')).toContainText('大商站');
   await expect(portuguese.locator('.tother')).not.toContainText('商队旅馆');
-  await expect(hindustanis.locator('.tother')).toContainText('商队旅馆');
-  await expect(hindustanis.locator('.tother')).not.toContainText('大商站');
+  await pickCiv(page, 'civ-tt-cmp', 'Hindustanis');
+  await expect(page.locator('.tree-pane')).toHaveCount(1);
+  await expect(portuguese.locator('.tother')).toContainText('大商站');
+  await expect(portuguese.locator('.tother')).not.toContainText('商队旅馆');
+  await expect(page.locator('.tcell.onlyA, .tcell.onlyB').first()).toBeVisible();
   await jumpButton(portuguese).click();
   await expect(portuguese.locator('[role="option"][data-bid="1021"]')).toHaveCount(0);
   await expect(portuguese.locator('[role="option"][data-bid="1754"]')).toHaveCount(0);
   await portuguese.getByRole('option', { name: '市场', exact: true }).click();
   await expect.poll(() => portuguese.locator('.tscroll').evaluate((el) => el.scrollLeft)).toBeGreaterThan(40);
-  expect(await hindustanis.locator('.tscroll').evaluate((el) => el.scrollLeft)).toBe(0);
-  await expect(jumpButton(hindustanis)).toHaveAttribute('aria-expanded', 'false');
-  await expect(page.locator('.tcell.onlyA, .tcell.onlyB').first()).toBeVisible();
   expect(errors).toEqual([]);
 });
 
 test('#886 独特与区域标识、不可用灰化只作用在图标上', async ({ page }) => {
   const errors = watch(page);
-  await page.goto('./#/tree/Franks');
+  await page.goto('./#/civ/Franks#techtree');
   await expect(page.locator('.tree .tcell').first()).toBeVisible();
-  await expect(page.locator('a.tcell[href$="/tech/1452"]')).toHaveAttribute('aria-label', '便携弯弩装置，区域科技');
-  await expect(page.locator('a.tcell[href$="/unit/2700"]')).toHaveAttribute('aria-label', '骑马弩兵，区域单位');
-  const ax = page.locator('a.tcell[href$="/unit/281"]');
+  await expect(page.locator('a.tcell[href*="/tech/1452"]')).toHaveAttribute('aria-label', '便携弯弩装置，区域科技');
+  await expect(page.locator('a.tcell[href*="/unit/2700"]')).toHaveAttribute('aria-label', '骑马弩兵，区域单位');
+  const ax = page.locator('a.tcell[href*="/unit/281"]');
   await expect(ax).toHaveAttribute('aria-label', '掷斧兵，独特单位');
   await expect(ax).toHaveClass(/\buq\b/);
   await expect(ax).not.toHaveClass(/\brg\b/);
   expect(await ax.evaluate((el) => getComputedStyle(el).boxShadow)).not.toBe('none');
-  const galleon = page.locator('a.tcell[href$="/unit/691"]');
+  const galleon = page.locator('a.tcell[href*="/unit/691"]');
   await expect(galleon.locator('.tmark')).toHaveCount(0);
   await expect(galleon).not.toHaveClass(/\buq\b/);
   await expect(galleon).not.toHaveClass(/\brg\b/);
 
-  await page.goto('./#/tree/Portuguese');
-  const heavy = page.locator('a.tcell[href$="/unit/2701"]');
+  await page.goto('./#/civ/Portuguese#techtree');
+  const heavy = page.locator('a.tcell[href*="/unit/2701"]');
   await expect(heavy).toHaveAttribute('aria-label', '重装骑马弩兵，区域单位');
-  const crane = page.locator('a.tcell[href$="/tech/1452"]');
+  const crane = page.locator('a.tcell[href*="/tech/1452"]');
   await expect(crane).toHaveAttribute('aria-label', '便携弯弩装置，区域科技');
   for (const cell of [heavy, crane]) {
     await expect(cell).toHaveClass(/\bna\b/);
@@ -274,16 +272,16 @@ test('#886 独特与区域标识、不可用灰化只作用在图标上', async 
   await jumpButton(pane(page, 'Portuguese')).click();
   await expect(pane(page, 'Portuguese').locator('[role="option"][data-bid="1021"]')).toHaveCount(0);
 
-  await page.goto('./#/tree/Armenians');
+  await page.goto('./#/civ/Armenians#techtree');
   await expect(page.locator('.tbld[data-bid="1806"]')).toContainText('区域建筑');
   await expect(page.locator('.tbld[data-bid="1808"]')).toContainText('区域建筑');
 
-  await page.goto('./#/tree/Malay');
-  await expect(page.locator('a.tcell[href$="/building/1189"]')).toHaveAttribute('aria-label', '巨港，独特建筑');
+  await page.goto('./#/civ/Malay#techtree');
+  await expect(page.locator('a.tcell[href*="/building/1189"]')).toHaveAttribute('aria-label', '巨港，独特建筑');
   await expect(page.locator('.tother')).toHaveCount(0);
   await expect(page.locator('.tbld[data-bid="1189"]')).toHaveCount(0);
 
-  await page.goto('./#/tree/Khitans');
+  await page.goto('./#/civ/Khitans#techtree');
   await expect(page.locator('.tother')).toContainText('牧场');
   await expect(page.locator('.tother')).toContainText('区域建筑');
   await expect(page.locator('.tbld[data-bid="1889"]')).toHaveCount(0);
@@ -293,7 +291,7 @@ test('#886 独特与区域标识、不可用灰化只作用在图标上', async 
 test('#886 窄屏树内横滑不带动页面，时代标签仍贴在滚动容器左侧', async ({ page }) => {
   const errors = watch(page);
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('./#/tree/Franks');
+  await page.goto('./#/civ/Franks#techtree');
   const root = pane(page, 'Franks');
   const scroller = root.locator('.tscroll');
   await expect(root.locator('.tree .tcell').first()).toBeVisible();
@@ -329,7 +327,7 @@ test('#886 窄屏树内横滑不带动页面，时代标签仍贴在滚动容器
 test('#886 减少动效时滚动为 auto，短反馈和虚线框仍出现', async ({ page }) => {
   const errors = watch(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('./#/tree/Franks');
+  await page.goto('./#/civ/Franks#techtree');
   const root = pane(page, 'Franks');
   const scroller = root.locator('.tscroll');
   await expect(root.locator('.tree .tcell').first()).toBeVisible();
@@ -349,5 +347,52 @@ test('#886 减少动效时滚动为 auto，短反馈和虚线框仍出现', asyn
   });
   expect(Math.abs(placed.left - placed.dest)).toBeLessThan(1.5);
   expect(await columnInView(scroller, '84')).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test('#954 科技树在文明详情里，旧地址转向，节点带文明', async ({ page }) => {
+  const errors = watch(page);
+  await page.setViewportSize({ width: 1280, height: 844 });
+  await page.goto('./');
+  await expect(page.locator('nav.mainnav a', { hasText: '科技树' })).toHaveCount(0);
+  await page.goto('./#/civs');
+  await page.evaluate(() => {
+    location.hash = '/tree/franks';
+  });
+  await expect(page).toHaveURL(/#\/civ\/Franks#techtree$/);
+  const section = page.getByTestId('civ-techtree');
+  await expect(section.getByRole('heading', { level: 2, name: '科技树', exact: true })).toBeVisible();
+  await expect(page.locator('h1')).toHaveCount(1);
+  await expect(page.getByTestId('civ-tool-tree')).toHaveCount(0);
+  await expect(page.locator('#trm')).toHaveCount(0);
+  const frame = section.locator('.tscroll');
+  await expect(frame.locator('.tcell').first()).toBeVisible();
+  const box = await frame.boundingBox();
+  expect(box!.y).toBeGreaterThanOrEqual(0);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(844);
+  await expect(section.locator('.civ-tt-hint')).toContainText('共');
+  await expect(section.locator('.civ-tt-hint')).toContainText('14');
+  const tools = page.getByTestId('civ-related-tools');
+  await expect(tools).toContainText('用这个文明继续：');
+  await expect(tools.getByTestId('civ-tool-builds')).toHaveAttribute('href', '#/builds?civ=Franks');
+  await expect(tools.getByTestId('civ-tool-production')).toHaveAttribute('href', '#/production?civ=Franks');
+  await expect(tools.getByTestId('civ-tool-matchup')).toHaveAttribute('href', '#/matchup?me=Franks');
+  await expect(tools.getByTestId('civ-tool-compare')).toHaveAttribute('href', '#/compare?a=Franks');
+  const linkBox = await tools.getByTestId('civ-tool-builds').boundingBox();
+  expect(linkBox!.height).toBeGreaterThanOrEqual(44);
+  const cell = frame.locator('a.tcell[href*="/unit/"]').first();
+  const href = await cell.getAttribute('href');
+  expect(href).toContain('?civ=Franks');
+  await cell.click();
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/civ\/Franks#techtree$/);
+  await expect(frame).toBeVisible();
+  await frame.evaluate((el) => {
+    el.scrollLeft = el.scrollWidth;
+  });
+  await expect(section.locator('.civ-tt-frame')).toHaveClass(/is-end/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth === window.innerWidth)).toBe(true);
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/civs$/);
   expect(errors).toEqual([]);
 });

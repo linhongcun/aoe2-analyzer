@@ -35,6 +35,13 @@ export interface CivPickerProps {
   disabledNoteFor?: (en: string) => string | undefined;
   /** 可选：按文明返回 title/aria 的完整原因；缺省用 disabledNoteFor/disabledNote。 */
   disabledTitleFor?: (en: string) => string | undefined;
+  /** 未选中时按钮文字。缺省沿用 none。 */
+  emptyText?: string;
+  /** 已选中时画在图标前的短前缀，例如「对照」。 */
+  selectedPrefix?: string;
+  /** 未选中时不画虚线占位图标。 */
+  hideEmptyIcon?: boolean;
+  disabled?: boolean;
 }
 
 /** 文明是否匹配搜索词（ql 已 trim + 小写）；列表过滤与 Enter 共用同一条规则 */
@@ -80,6 +87,10 @@ export function CivPicker({
   disabledNote,
   disabledNoteFor,
   disabledTitleFor,
+  emptyText,
+  selectedPrefix,
+  hideEmptyIcon,
+  disabled,
 }: CivPickerProps) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
@@ -198,16 +209,19 @@ export function CivPicker({
         aria-expanded={open}
         aria-label={`${label}：${cur ? cur.zh : (none ?? '未选择')}`}
         data-value={value}
+        disabled={disabled}
         onClick={() => {
+          if (disabled) return;
           if (open) return close();
           const i = opts.findIndex((o) => o.en === value);
           setAct(i < 0 ? 0 : i);
           setOpen(true);
         }}
       >
-        {cur ? <CivIcon c={cur} /> : <span className="cp-noico" />}
+        {cur && selectedPrefix ? <span className="cp-lab">{selectedPrefix}</span> : null}
+        {cur ? <CivIcon c={cur} /> : hideEmptyIcon ? null : <span className="cp-noico" />}
         <span className="cp-name">
-          {cur ? cur.zh : none}
+          {cur ? cur.zh : (emptyText ?? none)}
           {cur && <small> {cur.en}</small>}
         </span>
         <Icon name="chevron-down" />

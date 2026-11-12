@@ -92,12 +92,12 @@ tests/e2e/          Playwright：逐路由无控制台错误 + 关键交互
 一条登记（`PageDef`）写这些：
 
 - **path**：路由 pattern，与 `<Route path>` 一致。`kind` 为 `page`、`redirect` 或 `detail`。
-- **component**：懒加载组件 id，名字来自 `LAZY_COMPONENTS`。首页是同步组件 `Home`，不进这份懒加载名单。重定向写 `redirectTo`；`/tree` 用 `redirectDefaultTree` 跳到默认文明科技树，没有组件。
+- **component**：懒加载组件 id，名字来自 `LAZY_COMPONENTS`。首页是同步组件 `Home`，不进这份懒加载名单。重定向写 `redirectTo`。不带文明的 `/tree` 转到 `/civs`；`/tree/:civ` 用 `redirectCivTree` 转到该文明详情的科技树章节。
 - **lane / group**：`lane` 为 `wiki`、`tool`、`secondary` 或 `future`，`group` 取 `SECTION_GROUPS`（新手入门、对局计划、经济计算、资料）。两者都有才进入导航和首页。首页分组和导航分组目前是同一个 `group`（issue 272，不在登记表里拆开）。`hideNav` 的页面不作为顶部百科快捷入口，分组工具菜单仍收录。`status: 'planned'`（如天梯）不进首页卡片。
-- **metaTitle / metaDescription**：静态页标题和说明。带具体 id 的单位、科技、建筑、文明、科技树、开局、术语、补丁仍由数据生成，不在登记表里逐条写。
+- **metaTitle / metaDescription**：静态页标题和说明。带具体 id 的单位、科技、建筑、文明、开局、术语、补丁仍由数据生成，不在登记表里逐条写。
 - **searchAliases**：全局搜索俗称，经 `sections.ts` 进入搜索。`aliases` 是 404「你是不是要找」的常见写法和旧路径。
 - **omitShareSearch**：分享用的 `og:url` 不带查询。目前只有复盘 `/match-review` 和团战计划 `/team-plan`。
-- **entry: 'none'**：不进首页也不进导航时必须写 `entryReason`。现有三类：首页本身（`/`）、旧路径重定向（`/list` → `/civs`，`/trade` → `/trade-income`，`/garrison` 与 `/garrison-general` → `/garrison-healing`）、详情页（文明、单条加成、单位、科技、某文明科技树、建筑、术语条目、单条补丁；入口在对应列表）。没有 `lane`、又没有 `entry: 'none'` 的页面只能出现在 `PLACEMENT_ALLOWLIST`。这是 issue 272 的已知缺口：`about-data` 仍没有首页或导航位置；`market` 与 `eco-payoff` 已经在经济计算分组里，名单先留着，不要借登记表改它们的导航。
+- **entry: 'none'**：不进首页也不进导航时必须写 `entryReason`。现有三类：首页本身（`/`）、旧路径重定向（`/list` → `/civs`，`/tree` → `/civs`，`/tree/:civ` → 文明详情科技树，`/trade` → `/trade-income`，`/garrison` 与 `/garrison-general` → `/garrison-healing`）、详情页（文明、单条加成、单位、科技、建筑、术语条目、单条补丁；入口在对应列表）。没有 `lane`、又没有 `entry: 'none'` 的页面只能出现在 `PLACEMENT_ALLOWLIST`。这是 issue 272 的已知缺口：`about-data` 仍没有首页或导航位置；`market` 与 `eco-payoff` 已经在经济计算分组里，名单先留着，不要借登记表改它们的导航。
 
 `src/app/pageRegistry.tsx` 持有 `LOADERS`：每个懒加载 id 对应一次 `lazy(() => import(...))`。`shared/` 不能 import `features/` 里的页面，所以 `import()` 放在 `app/`，再和 `PAGES` 合成 `PAGE_REGISTRY`。`Home` 同步打进入口包，其余页面按 id 懒加载。
 

@@ -70,12 +70,12 @@ describe('地图选择 #935', () => {
 });
 
 describe('地图页标记 #935', () => {
-  it('登记表去掉 hideNav，资料顺序在科技树之后', () => {
+  it('登记表去掉 hideNav，资料顺序在科技之后', () => {
     const maps = PAGES.find((item) => item.key === 'maps');
     expect(maps).toMatchObject({ path: '/maps', lane: 'wiki', group: 'reference', label: '地图' });
     expect(maps?.hideNav).toBeUndefined();
     const visible = PAGES.filter((item) => item.lane === 'wiki' && !item.hideNav).map((item) => item.key);
-    expect(visible).toEqual(['civs', 'units', 'buildings', 'techs', 'tree', 'maps', 'patches']);
+    expect(visible).toEqual(['civs', 'units', 'buildings', 'techs', 'maps', 'patches']);
   });
 
   it('路由表没有单图路径，计数不写死目录长度', () => {

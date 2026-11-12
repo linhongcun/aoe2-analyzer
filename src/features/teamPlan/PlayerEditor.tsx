@@ -127,7 +127,7 @@ export function PlayerEditor({
       />
       <p className="note">自报不会改变资格核对或证明支援足够。</p>
       <div className="tp-actions">
-        {knownCiv(player.civ) && <Link to={`/tree/${player.civ}`}>文明科技树</Link>}
+        {knownCiv(player.civ) && <Link to={`/civ/${player.civ}?tab=techtree`}>文明科技树</Link>}
         {production && <Link to={production}>持续生产资料（每行按1座）</Link>}
       </div>
     </article>

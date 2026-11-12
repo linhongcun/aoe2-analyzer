@@ -58,7 +58,6 @@ async function palette(page: Page, q: string) {
 }
 
 const B_HITS: [string, string][] = [
-  ['kejishu', '科技树'],
   ['wenmingjiacheng', '文明加成'],
   ['cunminxiedailiang', '村民携带量 +3'],
   ['cmxdl', '村民携带量 +3'],
@@ -93,6 +92,6 @@ test.describe('A #162 西西里 @360 原因不省略', () => {
 
 test('自检：夹具页面能打开（民兵 · 马里 等采集时间、搜索框）', async ({ page }) => {
   await openTime(page, 'Malians');
-  const li = await palette(page, '科技树');
-  await expect(li.filter({ hasText: '科技树' }).first()).toBeVisible();
+  const li = await palette(page, '文明加成');
+  await expect(li.filter({ hasText: '文明加成' }).first()).toBeVisible();
 });

@@ -11,7 +11,6 @@ const LIST_HEADINGS = [
   ['/units', '单位'],
   ['/techs', '科技'],
   ['/buildings', '建筑'],
-  ['/tree/Armenians', '科技树'],
   ['/bonuses', '文明加成'],
   ['/dlc', 'DLC / 资料片'],
 ] as const;
@@ -109,7 +108,7 @@ test('#770 @1280 开局时间线与跟练两个视图各有且仅有一个 h1', 
 });
 
 for (const width of [360, 375, 390, 1280])
-  test(`#770 ${width} 宽 11 路由都有唯一 h1、无横向滚动`, async ({ page }) => {
+  test(`#770 ${width} 宽 10 路由都有唯一 h1、无横向滚动`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     const routes = [...LIST_HEADINGS, ...PLAIN_HEADINGS, ['/builds?bo=feudal-drush-18', '18 人口封建民兵速攻']] as const;
     for (const [route, expected] of routes) {
