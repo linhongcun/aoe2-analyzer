@@ -18,7 +18,7 @@ async function pickCiv(page: Page, id: string, en: string) {
 const ROUTES: [string, string][] = [
   ['', '#home [data-testid="home-catalog"]'],
   ['#civs', '#grid .card'],
-  ['#simulator', '#simhub .card'],
+  ['#simulator', '#simhub .sim-row'],
   ['#buildings', '#bgrid .card'],
   ['#/building/82', '#building h1'],
   ['#building/1251', '#building h1'],
@@ -123,7 +123,7 @@ test('nav: every entry opens its real page, none opens a planned placeholder', a
     ['#/techs', '#tgrid .tech-row'],
     ['#/compare', '#ctab tr'],
     ['#/matchup', '#matchup:has(#mres) h1'],
-    ['#/simulator', '#simhub .card'],
+    ['#/simulator', '#simhub .sim-row'],
     ['#/duel', '#duel-res .duel-win'],
     ['#/builds', '#builds [data-t="build-order"]'],
     ['#/production', '[data-testid="production-page"]'],
