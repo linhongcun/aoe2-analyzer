@@ -1,7 +1,8 @@
 import { Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { civEnCasePath } from '../../../domain/civRoute';
 import { startReturnPath } from '../../../domain/startGameReturn';
-import { civByEn } from '../../../data';
+import { civByEn, civs } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DLCS } from '../../../domain/dlc';
 import { civInsights } from '../../../domain/insights';
@@ -152,6 +153,9 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
     const frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
     return () => cancelAnimationFrame(frame);
   }, [c, location.hash, location.pathname, location.search, navigate, tab]);
+  // 只差大小写时先 replace 到目录英文名。已是规范名或对不上目录则不跳，也不能先画出历史空态。
+  const canonicalPath = civEnCasePath(civs, en);
+  if (canonicalPath) return <Navigate to={{ pathname: canonicalPath, search: location.search, hash: location.hash }} replace />;
   if (!c) return <HistoricalEntityDetail target={{ targetType: 'civ', targetId: en }} />;
   const insights = civInsights(c.en);
   const uniqueUnits = core ? civUniqueUnits(c.en, core.units, core.fam) : [];

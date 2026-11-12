@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
-import { civByEn, civs } from '../data';
+import { civs } from '../data';
+import { catalogCivByRouteEn } from '../domain/civRoute';
 import { PAGE_REGISTRY, type RegisteredPage } from './pageRegistry';
 
 const PageMeta = lazy(() => import('../features/share/PageMeta'));
@@ -9,7 +10,7 @@ const NotFound = lazy(() => import('../features/notFound/NotFound'));
 /** /tree/:civ 换成该文明详情的科技树章节。大小写按文明英文名对齐；认不出的名字交给文明详情。 */
 function TreeCivRedirect() {
   const { civ = '' } = useParams();
-  const known = civByEn(civ) ?? civs.find((item) => item.en.toLowerCase() === civ.toLowerCase());
+  const known = catalogCivByRouteEn(civs, civ);
   return <Navigate to={`/civ/${known?.en ?? civ}?tab=techtree`} replace />;
 }
 
