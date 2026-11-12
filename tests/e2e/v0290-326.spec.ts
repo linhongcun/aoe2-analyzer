@@ -5,7 +5,7 @@ import { guardPage, WIDTHS, wrappedNums } from './v0290-helpers';
 /**
  * v0.29.0 验收（#329）B 组 #326 部分：取自 Kent Beck test/v0290-acceptance @ d21a0de tests/e2e/v0290-B.spec.ts。
  * #425：按维护者明确要求移除文明卡 DLC 图标，文明列表改验收图标无残留、盾徽保留及位置文字无旧缩进。
- * 数字不换行断言和下方科技模拟器的全部守卫保持原样。
+ * 数字不换行断言保持原样。#970 起科技模拟器改为结果行，费用守卫改测资源不被建筑名拆开。
  */
 guardPage();
 
@@ -27,38 +27,38 @@ test.describe('#425 文明列表：卡片保留文明盾徽，不放资料片图
     });
 });
 
-/** 科技模拟器每张卡 .mini（「兵营 · 肉 35 金 25」）：计算的 padding-left，以及它排成了几行（按文字与图标的行矩形 top 聚类） */
-async function simMinis(page: Page) {
-  return page.locator('#simhub .ucard .mini').evaluateAll((els) =>
-    els.map((el) => {
-      const range = document.createRange();
-      range.selectNodeContents(el);
-      const rects = [...range.getClientRects(), ...[...el.querySelectorAll('img, svg')].map((i) => i.getBoundingClientRect())].filter(
-        (r) => r.width > 0 && r.height > 0,
-      );
-      const mids = rects.map((r) => (r.top + r.bottom) / 2).sort((a, b) => a - b);
-      let lines = 0;
-      let last = -Infinity;
-      for (const m of mids) if (m - last > 6) (lines++, (last = m));
-      return { pad: getComputedStyle(el).paddingLeft, lines };
+/** #970 起选单位改为紧凑行。造价整组不拆开，也不和建筑名叠在一起。 */
+async function splitCosts(page: Page) {
+  return page.locator('#simhub .sim-row').evaluateAll((rows) =>
+    rows.flatMap((row) => {
+      const cost = row.querySelector('.sim-cost');
+      const meta = row.querySelector('.sim-prod');
+      if (!cost || !meta) return [row.getAttribute('data-unit-id') ?? 'missing'];
+      const resources = [...cost.querySelectorAll('.res')].map((el) => el.getBoundingClientRect()).filter((rect) => rect.width > 0 && rect.height > 0);
+      const tops = resources.map((rect) => rect.top);
+      const split = tops.length > 1 && Math.max(...tops) - Math.min(...tops) > 6;
+      const production = meta.getBoundingClientRect();
+      const price = cost.getBoundingClientRect();
+      const overlap =
+        production.width > 0 &&
+        price.width > 0 &&
+        production.left < price.right - 1 &&
+        price.left < production.right - 1 &&
+        production.top < price.bottom - 1 &&
+        price.top < production.bottom - 1;
+      return split || overlap ? [row.getAttribute('data-unit-id') ?? 'row'] : [];
     }),
   );
 }
-/** main 5c9326f 上各宽度费用行排成两行及以上的卡片数（同一测量方法，2026-10-22 00:30 北京时间实测），作为上限 */
-const SIM_WRAP_MAX: Record<(typeof WIDTHS)[number], number> = { 360: 39, 375: 30, 390: 21, 1280: 156 };
-test.describe('#326 守卫：科技模拟器卡片不受文明卡 DLC 图标留白影响（#339 复核补充）', () => {
+test.describe('#970 守卫：科技模拟器造价不再被建筑名拆开', () => {
   for (const width of WIDTHS)
-    test(`#/simulator @${width}：.mini 左内边距 ${width <= 600 ? '0' : '与 main 相同（28px）'}，费用行折行的卡片不比 main 多`, async ({ page }, info) => {
+    test(`#/simulator @${width}：结果行的资源图标同一行，且不压住生产文字`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.goto('./#/simulator');
-      await expect(page.locator('#simhub .ucard').first()).toBeVisible();
+      await expect(page.locator('#simhub .sim-row').first()).toBeVisible();
+      await expect(page.locator('#simhub .ucard, #simhub #ugrid')).toHaveCount(0);
       await page.waitForLoadState('networkidle');
-      const minis = await simMinis(page);
-      expect(minis.length, '防空转：模拟器卡片').toBeGreaterThan(100);
-      const pads = [...new Set(minis.map((m) => m.pad))];
-      expect(pads, '没有 DLC 图标，手机宽度下不留 28px 空白').toEqual([width <= 600 ? '0px' : '28px']);
-      const wrapped = minis.filter((m) => m.lines > 1).length;
-      expect(wrapped, `费用行排成多行的卡片数（main 上限 ${SIM_WRAP_MAX[width]}）`).toBeLessThanOrEqual(SIM_WRAP_MAX[width]);
-      await page.screenshot({ path: info.outputPath(`simulator-${width}.png`), fullPage: false });
+      expect(await page.locator('#simhub .sim-row').count(), '防空转：模拟器结果行').toBeGreaterThan(100);
+      expect(await splitCosts(page)).toEqual([]);
     });
 });

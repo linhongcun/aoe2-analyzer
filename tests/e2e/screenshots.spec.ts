@@ -12,7 +12,7 @@ const PAGES: [name: string, hash: string, ready: string][] = [
   ['unit-paladin', '#unit/569', '#unit .dtabs'],
   ['unit-paladin-sim', '#unit/569?tab=sim', '#sim .simt'],
   ['civ-franks', '#civ/Franks', '#detail h1'],
-  ['simulator-hub', '#/simulator', '#simhub .card'],
+  ['simulator-hub', '#/simulator', '#simhub .sim-row'],
 ];
 const WIDTHS: [number, number][] = [
   [1280, 900],

@@ -41,6 +41,8 @@ export interface CivPickerProps {
   selectedPrefix?: string;
   /** 未选中时不画虚线占位图标。 */
   hideEmptyIcon?: boolean;
+  /** 关闭态只显示中文，英文放进 aria-label / title，避免窄按钮溢出。 */
+  compactTrigger?: boolean;
   disabled?: boolean;
 }
 
@@ -90,6 +92,7 @@ export function CivPicker({
   emptyText,
   selectedPrefix,
   hideEmptyIcon,
+  compactTrigger,
   disabled,
 }: CivPickerProps) {
   const [open, setOpen] = useState(false);
@@ -207,7 +210,8 @@ export function CivPicker({
         className="cp-trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={`${label}：${cur ? cur.zh : (none ?? '未选择')}`}
+        aria-label={`${label}：${cur ? (compactTrigger ? `${cur.zh}（${cur.en}）` : cur.zh) : (none ?? '未选择')}`}
+        title={compactTrigger ? (cur ? `${cur.zh} ${cur.en}` : none) : undefined}
         data-value={value}
         disabled={disabled}
         onClick={() => {
@@ -222,13 +226,19 @@ export function CivPicker({
         {cur ? <CivIcon c={cur} /> : hideEmptyIcon ? null : <span className="cp-noico" />}
         <span className="cp-name">
           {cur ? cur.zh : (emptyText ?? none)}
-          {cur && <small> {cur.en}</small>}
+          {cur && !compactTrigger && <small> {cur.en}</small>}
         </span>
         <Icon name="chevron-down" />
       </button>
       {open && (
         <>
-          <div className="cp-mask" onClick={close} />
+          <div
+            className="cp-mask"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              close();
+            }}
+          />
           <div ref={panel} className="cp-panel" role="dialog" aria-modal="true" aria-label={label} onKeyDown={onKey}>
             <div className="cp-head">
               <Icon name="search" />

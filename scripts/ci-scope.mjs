@@ -190,7 +190,7 @@ export const PROFILES = {
       'repairCost744',
     ],
   ),
-  simulator: profile(['simulator', 'simRoute424', 'prereq'], ['layout62', 'matchupSim424', 'upgradeLine10']),
+  simulator: profile(['simulator', 'simRoute424', 'prereq', 'simulatorHub970'], ['layout62', 'matchupSim424', 'upgradeLine10', 'simulator970']),
   techs: profile(
     [
       'affects',

@@ -201,6 +201,7 @@
     "tests/e2e/siege554-555.spec.ts": 1687,
     "tests/e2e/siege581.spec.ts": 1968,
     "tests/e2e/siege631.spec.ts": 3431,
+    "tests/e2e/simulator970.spec.ts": 9000,
     "tests/e2e/siteLinking520.spec.ts": 35014,
     "tests/e2e/skipLink294.spec.ts": 17445,
     "tests/e2e/slavs197.spec.ts": 33941,
