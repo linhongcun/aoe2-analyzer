@@ -1,0 +1,35 @@
+.resource-values {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: 100%;
+  min-width: 0;
+  margin-inline-start: 2px;
+  row-gap: var(--space-1);
+  column-gap: calc(var(--space-2) + 2px);
+}
+.resource-value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  white-space: nowrap;
+}
+.resource-value-same {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+.resource-value-changed {
+  color: var(--color-text);
+  font-weight: 700;
+}
+.resource-values .si {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  vertical-align: middle;
+  flex: none;
+}
+.resource-values-patch .si {
+  width: 18px;
+  height: 18px;
+}
