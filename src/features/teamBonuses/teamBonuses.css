@@ -1,6 +1,5 @@
 .team-bonuses-page {
-  max-width: 1160px;
-  margin-inline: auto;
+  min-width: 0;
 }
 .team-bonuses-page h1,
 .team-bonuses-page h2,
@@ -55,7 +54,6 @@
   font-size: var(--fs-sm);
   font-weight: 600;
 }
-.team-notice,
 .team-panel,
 .team-error {
   padding: var(--space-6);
@@ -65,10 +63,6 @@
   background: var(--color-surface);
   min-width: 0;
 }
-.team-notice {
-  background: var(--color-surface-2);
-}
-.team-notice p:last-child,
 .team-model p:last-child {
   margin-bottom: 0;
 }
@@ -107,11 +101,17 @@
   gap: var(--space-4);
   margin-block: var(--space-6) var(--space-4);
 }
+.team-layout > .team-panel {
+  margin-top: 0;
+}
+.team-results {
+  min-width: 0;
+}
 .team-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-3);
-  margin-block: var(--space-6);
+  margin: 0 0 var(--space-6);
 }
 .team-summary > div {
   display: flex;
@@ -272,7 +272,6 @@
   }
   .team-card,
   .team-panel,
-  .team-notice,
   .team-error {
     padding: var(--space-4);
   }

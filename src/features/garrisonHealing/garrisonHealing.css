@@ -17,10 +17,7 @@
   margin-top: 0;
 }
 .healing-columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: start;
-  gap: var(--space-6);
+  min-width: 0;
 }
 .healing-card {
   min-width: 0;
@@ -188,10 +185,6 @@ ul.healing-warning {
   font-size: var(--fs-sm);
 }
 @media (max-width: 760px) {
-  .healing-columns {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-4);
-  }
   .healing-card {
     padding: var(--space-4);
   }

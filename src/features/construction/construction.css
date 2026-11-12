@@ -16,10 +16,7 @@
   min-height: 44px;
 }
 .construction-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
-  align-items: start;
+  min-width: 0;
 }
 .construction-panel {
   min-width: 0;
@@ -181,9 +178,6 @@
   outline-offset: 2px;
 }
 @media (max-width: 900px) {
-  .construction-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .construction-comparison {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }

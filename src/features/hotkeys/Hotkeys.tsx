@@ -19,6 +19,7 @@ import {
 } from '../../domain/hotkeys';
 import { Icon } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolFooter } from '../../shared/ui/ToolShell';
 import './hotkeys.css';
 
 function loadPersonalTable() {
@@ -91,17 +92,6 @@ export default function Hotkeys() {
   return (
     <section className="pane hotkeys-page" aria-labelledby="hk-title" data-testid="hotkeys-page">
       <ToolPageHeader className="hk-screen" title="游戏快捷键速查" titleId="hk-title" description={hotkeyMenuNote} />
-
-      <aside className="hk-screen hk-follow-tip" aria-label="推鹿与跟随提示">
-        <h2>推鹿时试试跟随</h2>
-        <p>
-          <span className="num nw">188329</span> 社区实测：先让斥候、鹿与目标位置对齐，再对鹿下达「跟随 /
-          Follow」，可持续推鹿，不必反复下达；遇障碍仍需调整。可在游戏选项的快捷键设置中绑定顺手的按键。
-        </p>
-        <a href="https://www.reddit.com/r/aoe2/comments/1xh3y3n/psa_follow_command_now_auto_pushes_deer/" target="_blank" rel="noopener noreferrer">
-          社区实测：Follow 推鹿
-        </a>
-      </aside>
 
       <div className="hk-screen hk-search">
         <label htmlFor="hk-query">搜索操作（中文、英文或常见用语）</label>
@@ -235,6 +225,19 @@ export default function Hotkeys() {
           </div>
         )}
       </div>
+
+      <ToolFooter>
+        <aside className="hk-screen hk-follow-tip" aria-label="推鹿与跟随提示">
+          <h2>推鹿时试试跟随</h2>
+          <p>
+            <span className="num nw">188329</span> 社区实测：先让斥候、鹿与目标位置对齐，再对鹿下达「跟随 /
+            Follow」，可持续推鹿，不必反复下达；遇障碍仍需调整。可在游戏选项的快捷键设置中绑定顺手的按键。
+          </p>
+          <a href="https://www.reddit.com/r/aoe2/comments/1xh3y3n/psa_follow_command_now_auto_pushes_deer/" target="_blank" rel="noopener noreferrer">
+            社区实测：Follow 推鹿
+          </a>
+        </aside>
+      </ToolFooter>
 
       <section className="hk-screen hk-audit" aria-label="来源与核实范围">
         <details>

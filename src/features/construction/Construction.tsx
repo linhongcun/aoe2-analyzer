@@ -7,6 +7,7 @@ import { Loading } from '../../shared/ui/widgets';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolGrid } from '../../shared/ui/ToolShell';
 import {
   calculateConstruction,
   constructionBuildings,
@@ -114,7 +115,7 @@ export default function Construction() {
           </ul>
         </div>
       )}
-      <div className="construction-grid">
+      <ToolGrid className="construction-grid">
         <section className="construction-panel" aria-labelledby="construction-config-title">
           <h2 id="construction-config-title">施工配置</h2>
           <fieldset disabled={locked}>
@@ -254,7 +255,7 @@ export default function Construction() {
           )}
           <p className="construction-limit">理论同时施工：所有普通村民已到场。不计步行、阻挡、分批到达、战斗或维修；没有在游戏里实测。</p>
         </section>
-      </div>
+      </ToolGrid>
       <section className="construction-panel" aria-labelledby="construction-gather-title">
         <h2 id="construction-gather-title">可选：原采集任务</h2>
         <p className="note">同一批村民原本执行相同任务。仅在显式选择后输出该资源的停采量；经济科技使用上方已研究状态。</p>

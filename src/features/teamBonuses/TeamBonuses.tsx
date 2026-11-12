@@ -30,6 +30,7 @@ import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { TeamSections } from '../../shared/ui/TeamSections';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { Linked, Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './teamBonuses.css';
@@ -84,19 +85,7 @@ export default function TeamBonuses() {
         title="团队加成一屏汇总"
         description="选择队友文明，检查常驻效果与需要研究的团队科技。"
         actions={[{ label: '复制队伍方案', icon: 'copy', disabled: !valid, onClick: () => void share() }]}
-        related={{
-          links: [
-            { to: '/team-fit', label: '选文明前看搭配' },
-            { to: '/team-plan', label: '约定团战分工与支援' },
-            { to: '/relic-income', label: '按明确来源预览圣物收益' },
-          ],
-        }}
       />
-      <aside className="team-notice" aria-label="汇总口径">
-        <strong>包含本人，按效果来源汇总</strong>
-        <p>重复文明的同一来源只列一条，保留全部提供者；来源合并用于查阅，不表示叠加倍率。不同来源分别列出，不计算总倍率。</p>
-        <p>研究状态只用于此页记录，不读取对局，也不修改单位 PK、建筑或经济模拟器的数值与链接。</p>
-      </aside>
       {decoded.locked && (
         <div className="team-error" role="alert">
           <p>{decoded.errors.join(' ')}</p>
@@ -114,7 +103,7 @@ export default function TeamBonuses() {
         </label>
       )}
       {!decoded.locked && (
-        <>
+        <ToolGrid className="team-layout">
           <section className="team-panel" aria-labelledby="team-config-heading">
             <div className="team-heading">
               <h2 id="team-config-heading">玩家阵容</h2>
@@ -212,55 +201,74 @@ export default function TeamBonuses() {
               时代用于团队科技的研究门槛；常驻来源的目标关联覆盖不同时代，不代表当前已解锁。降低时代或移除科技来源时，会清除此页已经不适用的研究标记。
             </p>
           </section>
-          <div className="team-summary" data-testid="team-summary">
-            <div>
-              <strong className="team-number">{sources.permanent.length}</strong>
-              <span>常驻加成来源</span>
+          <div className="team-results">
+            <div className="team-summary" data-testid="team-summary">
+              <div>
+                <strong className="team-number">{sources.permanent.length}</strong>
+                <span>常驻加成来源</span>
+              </div>
+              <div>
+                <strong className="team-number">{sources.technologies.length}</strong>
+                <span>团队科技来源</span>
+              </div>
+              <div>
+                <strong className="team-number">{config.researched.length}</strong>
+                <span>已记录研究</span>
+              </div>
             </div>
-            <div>
-              <strong className="team-number">{sources.technologies.length}</strong>
-              <span>团队科技来源</span>
-            </div>
-            <div>
-              <strong className="team-number">{config.researched.length}</strong>
-              <span>已记录研究</span>
-            </div>
-          </div>
-          <section className="team-section" aria-labelledby="team-permanent-heading">
-            <h2 id="team-permanent-heading">常驻团队加成</h2>
-            <p className="note">按游戏数据里各文明的团队效果自动识别；不需要勾选研究。具体时代和条件以原说明与数据备注为准。</p>
-            <div className="team-cards">
-              {permanent.map((row) => (
-                <PermanentCard key={row.source.id} row={row} core={core} />
-              ))}
-            </div>
-            {!permanent.length && <p className="team-empty">没有已确认匹配此筛选的常驻来源。</p>}
-          </section>
-          <section className="team-section" aria-labelledby="team-tech-heading">
-            <h2 id="team-tech-heading">需要研究的团队科技</h2>
-            <p className="note">默认未研究。勾选表示至少一名列出的来源玩家已研究；不是替游戏验证科技完成情况。</p>
-            <div className="team-cards">
-              {technologies.map((row) => (
-                <TechnologyCard key={row.source.id} row={row} core={core} config={config} update={update} />
-              ))}
-            </div>
-            {!technologies.length && <p className="team-empty">没有已确认匹配此筛选的团队科技来源。</p>}
-          </section>
-          {!!(unknownPermanent.length + unknownTechnologies.length) && (
-            <section className="team-section team-unknown" aria-labelledby="team-unknown-heading">
-              <h2 id="team-unknown-heading">关联范围待核实</h2>
-              <p>以下来源尚不能按当前目标可靠归类。未显示为已匹配，也不能据此认定没有作用。</p>
+            <section className="team-section" aria-labelledby="team-permanent-heading">
+              <h2 id="team-permanent-heading">常驻团队加成</h2>
+              <p className="note">按游戏数据里各文明的团队效果自动识别；不需要勾选研究。具体时代和条件以原说明与数据备注为准。</p>
               <div className="team-cards">
-                {unknownPermanent.map((row) => (
+                {permanent.map((row) => (
                   <PermanentCard key={row.source.id} row={row} core={core} />
                 ))}
-                {unknownTechnologies.map((row) => (
+              </div>
+              {!permanent.length && <p className="team-empty">没有已确认匹配此筛选的常驻来源。</p>}
+            </section>
+            <section className="team-section" aria-labelledby="team-tech-heading">
+              <h2 id="team-tech-heading">需要研究的团队科技</h2>
+              <p className="note">默认未研究。勾选表示至少一名列出的来源玩家已研究；不是替游戏验证科技完成情况。</p>
+              <div className="team-cards">
+                {technologies.map((row) => (
                   <TechnologyCard key={row.source.id} row={row} core={core} config={config} update={update} />
                 ))}
               </div>
+              {!technologies.length && <p className="team-empty">没有已确认匹配此筛选的团队科技来源。</p>}
             </section>
-          )}
-          <details className="team-panel team-model">
+            {!!(unknownPermanent.length + unknownTechnologies.length) && (
+              <section className="team-section team-unknown" aria-labelledby="team-unknown-heading">
+                <h2 id="team-unknown-heading">关联范围待核实</h2>
+                <p>以下来源尚不能按当前目标可靠归类。未显示为已匹配，也不能据此认定没有作用。</p>
+                <div className="team-cards">
+                  {unknownPermanent.map((row) => (
+                    <PermanentCard key={row.source.id} row={row} core={core} />
+                  ))}
+                  {unknownTechnologies.map((row) => (
+                    <TechnologyCard key={row.source.id} row={row} core={core} config={config} update={update} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+        </ToolGrid>
+      )}
+      <ToolFooter
+        related={{
+          links: [
+            { to: '/team-fit', label: '选文明前看搭配' },
+            { to: '/team-plan', label: '约定团战分工与支援' },
+            { to: '/relic-income', label: '按明确来源预览圣物收益' },
+          ],
+        }}
+      >
+        <p>
+          <strong>包含本人，按效果来源汇总</strong>
+        </p>
+        <p>重复文明的同一来源只列一条，保留全部提供者；来源合并用于查阅，不表示叠加倍率。不同来源分别列出，不计算总倍率。</p>
+        <p>研究状态只用于此页记录，不读取对局，也不修改单位 PK、建筑或经济模拟器的数值与链接。</p>
+        {!decoded.locked && (
+          <details className="team-model">
             <summary>数据版本与覆盖边界</summary>
             <p>按 DE {__DATA_SOURCES__.patch.build} 版本游戏数据里的团队效果直接整理，没有在游戏里实测。</p>
             <ul>
@@ -270,8 +278,8 @@ export default function TeamBonuses() {
             </ul>
             <p>不做阵容评分、胜率预测或效果总倍率；经济资源、共享解锁等特殊机制的部分目标关联仍待核实。</p>
           </details>
-        </>
-      )}
+        )}
+      </ToolFooter>
     </section>
   );
 }

@@ -22,6 +22,7 @@ import {
 } from '../../domain/campaigns';
 import { Icon } from '../../shared/ui/Icon';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolFooter } from '../../shared/ui/ToolShell';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './campaigns.css';
 
@@ -249,13 +250,6 @@ export default function Campaigns() {
           <textarea readOnly rows={3} value={manualLink} onFocus={(event) => event.currentTarget.select()} />
         </label>
       )}
-      <aside className="campaign-coverage" aria-label="收录范围">
-        <p>
-          首批<span className="num campaign-nowrap">10项</span>：华莱士教程、国王时代<span className="num campaign-nowrap">4个战役</span>、征服者
-          <span className="num campaign-nowrap">3个战役</span>与<span className="num campaign-nowrap">2场历史战役</span>。并非完整目录。
-        </p>
-        <p>Chronicles（编年史）、Return of Rome（罗马归来）、孙子兵法、其他战役、合作变体与社区模组暂未收录。</p>
-      </aside>
       {valid && (
         <>
           <p className="campaign-count" role="status">
@@ -285,6 +279,15 @@ export default function Campaigns() {
           )}
         </>
       )}
+      <ToolFooter>
+        <aside aria-label="收录范围">
+          <p>
+            首批<span className="num campaign-nowrap">10项</span>：华莱士教程、国王时代<span className="num campaign-nowrap">4个战役</span>、征服者
+            <span className="num campaign-nowrap">3个战役</span>与<span className="num campaign-nowrap">2场历史战役</span>。并非完整目录。
+          </p>
+          <p>Chronicles（编年史）、Return of Rome（罗马归来）、孙子兵法、其他战役、合作变体与社区模组暂未收录。</p>
+        </aside>
+      </ToolFooter>
       <details className="campaign-boundaries">
         <summary>关于数据</summary>
         <p>游戏覆盖年代来自开发方战役时间表，描述游戏剧情所跨越的区间，不是英雄生卒年，也不宣称剧情严格等同史实。区间可以重叠；排序仅提供查找方式。</p>

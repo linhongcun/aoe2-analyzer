@@ -15,6 +15,7 @@ import {
   type TradeIncomeConfig,
 } from '../../domain/tradeIncome';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
 import { Loading } from '../../shared/ui/widgets';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { useShareLink } from '../../shared/ui/useShareLink';
@@ -124,7 +125,6 @@ function TradeIncomeBody({
       <ToolPageHeader
         title="商路供给规划"
         description="用本局实测交金与完整周期，规划持续补兵所需的贸易车船。"
-        related={{ links: [{ to: '/production', label: '持续生产工具' }] }}
         actions={[
           { label: '复制方案链接', icon: 'copy', disabled: errors.length > 0, onClick: () => void copy() },
           { label: '重置', icon: 'rotate-ccw', onClick: reset },
@@ -142,11 +142,11 @@ function TradeIncomeBody({
         </label>
       )}
       {parseErrors.length > 0 && <p className="trade-income-warning">链接格式有误，设置已锁定。请重置方案后重新配置。</p>}
-      <p className="trade-income-boundary">默认数字只是用户测量示例，不是游戏固定收益。所有时间均为游戏时间；本工具不自动估算路线、拥堵或骚扰。</p>
-      <div className="trade-income-columns">
+      <ToolGrid className="trade-income-columns">
         <fieldset className="trade-income-settings" disabled={parseErrors.length > 0}>
           <section className="trade-income-card">
             <h2>本局贸易条件</h2>
+            <p className="trade-income-boundary">默认数字只是用户测量示例，不是游戏固定收益。所有时间均为游戏时间；本工具不自动估算路线、拥堵或骚扰。</p>
             <div className="trade-income-form">
               <label>
                 文明
@@ -397,7 +397,8 @@ function TradeIncomeBody({
             </p>
           </section>
         </div>
-      </div>
+      </ToolGrid>
+      <ToolFooter related={{ links: [{ to: '/production', label: '持续生产工具' }] }} />
     </section>
   );
 }

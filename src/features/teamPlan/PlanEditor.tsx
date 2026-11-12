@@ -68,7 +68,6 @@ export function PlanEditor({
           </button>
         )}
       </div>
-      <p className="tp-boundary">只核对固定数据与玩家明确确认的形态升级、解锁和生产建筑。未核对资源、人口、兵力或队友实际支援；任务认领仅表示约定。</p>
       {plan.example && (
         <p className="tp-boundary" data-testid="team-plan-example-note">
           本站整理的开放陆地范例；建筑与升级完成是可修改的示例假设，兵力与资源仍未核对。来源核对日期：{TEAM_PLAN_CHECKED}。

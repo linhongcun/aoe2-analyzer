@@ -21,6 +21,7 @@ import {
 } from '../../domain/scouting';
 import { sharePageUrl } from '../../domain/sharePage';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolExample, ToolGrid } from '../../shared/ui/ToolShell';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import { DATA_SOURCES, versionLabel } from '../../shared/utils/dataInfo';
 import './scouting.css';
@@ -211,23 +212,7 @@ export default function Scouting() {
           </ul>
         </div>
       )}
-      {isExample && !decoded.locked && (
-        <div className="scouting-example" data-testid="scouting-example">
-          <p>
-            <strong>示例观察：</strong>已见军事生产建筑与实际军队，进军方向待查。
-          </p>
-          {analysis?.status === 'covered' && (
-            <p>
-              <strong>示例判断：</strong>
-              {analysis.summary}
-            </p>
-          )}
-          <button type="button" className="btn scouting-reset" onClick={reset}>
-            清空，填写我的观察
-          </button>
-        </div>
-      )}
-      <div className="scouting-layout">
+      <ToolGrid className="scouting-layout">
         <section className="scouting-panel scouting-settings" aria-labelledby="scouting-settings-title">
           <h2 id="scouting-settings-title">选择情境与观察</h2>
           <fieldset disabled={decoded.locked}>
@@ -311,106 +296,124 @@ export default function Scouting() {
             </button>
           )}
         </section>
-        {analysis && (
-          <section className="scouting-result" data-testid="scouting-result" data-analysis-status={analysis.status} aria-labelledby="scouting-result-title">
-            <div className="scouting-panel">
-              <h2 id="scouting-result-title">{analysis.title}</h2>
-              <p className="scouting-note">
-                {scenario.title}；<span className="num">{modes[config.mode]}</span>；{maps[config.map]}；{stages[config.stage]}。
+        <div className="scouting-output">
+          {isExample && !decoded.locked && (
+            <ToolExample className="scouting-example" testId="scouting-example">
+              <p>
+                <strong>示例观察：</strong>已见军事生产建筑与实际军队，进军方向待查。
               </p>
-              <p>{analysis.summary}</p>
-              {analysis.status === 'invalid' && (
-                <div className="scouting-error" role="alert">
-                  <ul>
-                    {analysis.errors.map((error) => (
-                      <li key={error}>{error}</li>
-                    ))}
-                  </ul>
-                  <p>包括另一组的无效记录也会暂停；切回对应情境修正，原输入不会被删除。</p>
-                </div>
+              {analysis?.status === 'covered' && (
+                <p>
+                  <strong>示例判断：</strong>
+                  {analysis.summary}
+                </p>
               )}
+              <button type="button" className="btn scouting-reset" onClick={reset}>
+                清空，填写我的观察
+              </button>
+            </ToolExample>
+          )}
+          {analysis && (
+            <section className="scouting-result" data-testid="scouting-result" data-analysis-status={analysis.status} aria-labelledby="scouting-result-title">
+              <div className="scouting-panel">
+                <h2 id="scouting-result-title">{analysis.title}</h2>
+                <p className="scouting-note">
+                  {scenario.title}；<span className="num">{modes[config.mode]}</span>；{maps[config.map]}；{stages[config.stage]}。
+                </p>
+                <p>{analysis.summary}</p>
+                {analysis.status === 'invalid' && (
+                  <div className="scouting-error" role="alert">
+                    <ul>
+                      {analysis.errors.map((error) => (
+                        <li key={error}>{error}</li>
+                      ))}
+                    </ul>
+                    <p>包括另一组的无效记录也会暂停；切回对应情境修正，原输入不会被删除。</p>
+                  </div>
+                )}
+                {analysis.status === 'covered' && (
+                  <>
+                    {config.plan !== 'undecided' && <p>{analysis.planNote}</p>}
+                    {analysis.gaps.length > 0 && (
+                      <p className="scouting-note" data-testid="scouting-gaps">
+                        待查：{analysis.gaps.join(' ')}
+                      </p>
+                    )}
+                  </>
+                )}
+              </div>
               {analysis.status === 'covered' && (
                 <>
-                  {config.plan !== 'undecided' && <p>{analysis.planNote}</p>}
-                  {analysis.gaps.length > 0 && (
-                    <p className="scouting-note" data-testid="scouting-gaps">
-                      待查：{analysis.gaps.join(' ')}
-                    </p>
-                  )}
+                  <section className="scouting-panel" aria-labelledby="scouting-signals-title">
+                    <h3 id="scouting-signals-title">具体信号速查</h3>
+                    <ul className="scouting-signals" data-testid="scouting-signals">
+                      {scenario.signals.map((signal) => (
+                        <li key={signal.id} data-signal={signal.id}>
+                          <dl>
+                            <div>
+                              <dt>看到什么</dt>
+                              <dd>{signal.seen}</dd>
+                            </div>
+                            <div>
+                              <dt>可能意味着什么</dt>
+                              <dd>{signal.meaning}</dd>
+                            </div>
+                            <div>
+                              <dt>下一步做什么</dt>
+                              <dd>{signal.next}</dd>
+                            </div>
+                          </dl>
+                          <div className="scouting-signal-sources">
+                            {signal.editorial && <span className="scouting-note">本站整理</span>}
+                            {signal.sourceIds.map((id) => {
+                              const source = SCOUTING_CONTENT.sources.find((item) => item.id === id)!;
+                              return (
+                                <a key={id} href={source.url} target="_blank" rel="noopener noreferrer" aria-label={`来源：${source.title}（${signal.seen}）`}>
+                                  {source.title}
+                                </a>
+                              );
+                            })}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                  <details className="scouting-panel scouting-hypotheses">
+                    <summary>解释与观察依据（可选）</summary>
+                    <div className="scouting-cards">
+                      {analysis.hypotheses.map((result) => (
+                        <HypothesisCard result={result} key={result.hypothesis.id} />
+                      ))}
+                    </div>
+                  </details>
+                  <section className="scouting-panel" aria-labelledby="scouting-followup-title">
+                    <h3 id="scouting-followup-title">已经确认具体威胁后</h3>
+
+                    <div className="scouting-links">
+                      <Link to="/matchup">已辨认快攻的应对</Link>
+                      <Link to="/matchup/castle-defense">已见城堡前置的阶段应对</Link>
+                      <Link to="/matchup/mixed-army">已见混兵组合的分工</Link>
+                    </div>
+                  </section>
+                  <details className="scouting-panel scouting-snapshot">
+                    <summary>这次辨析使用的观察快照</summary>
+                    <dl>
+                      {scenario.observationIds.map((id) => (
+                        <div key={id}>
+                          <dt>{titleOf(id)}</dt>
+                          <dd>
+                            <ObservationText observation={config.observations[id]} />
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </details>
                 </>
               )}
-            </div>
-            {analysis.status === 'covered' && (
-              <>
-                <section className="scouting-panel" aria-labelledby="scouting-signals-title">
-                  <h3 id="scouting-signals-title">具体信号速查</h3>
-                  <ul className="scouting-signals" data-testid="scouting-signals">
-                    {scenario.signals.map((signal) => (
-                      <li key={signal.id} data-signal={signal.id}>
-                        <dl>
-                          <div>
-                            <dt>看到什么</dt>
-                            <dd>{signal.seen}</dd>
-                          </div>
-                          <div>
-                            <dt>可能意味着什么</dt>
-                            <dd>{signal.meaning}</dd>
-                          </div>
-                          <div>
-                            <dt>下一步做什么</dt>
-                            <dd>{signal.next}</dd>
-                          </div>
-                        </dl>
-                        <div className="scouting-signal-sources">
-                          {signal.editorial && <span className="scouting-note">本站整理</span>}
-                          {signal.sourceIds.map((id) => {
-                            const source = SCOUTING_CONTENT.sources.find((item) => item.id === id)!;
-                            return (
-                              <a key={id} href={source.url} target="_blank" rel="noopener noreferrer" aria-label={`来源：${source.title}（${signal.seen}）`}>
-                                {source.title}
-                              </a>
-                            );
-                          })}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-                <details className="scouting-panel scouting-hypotheses">
-                  <summary>解释与观察依据（可选）</summary>
-                  <div className="scouting-cards">
-                    {analysis.hypotheses.map((result) => (
-                      <HypothesisCard result={result} key={result.hypothesis.id} />
-                    ))}
-                  </div>
-                </details>
-                <section className="scouting-panel" aria-labelledby="scouting-followup-title">
-                  <h3 id="scouting-followup-title">已经确认具体威胁后</h3>
-
-                  <div className="scouting-links">
-                    <Link to="/matchup">已辨认快攻的应对</Link>
-                    <Link to="/matchup/castle-defense">已见城堡前置的阶段应对</Link>
-                    <Link to="/matchup/mixed-army">已见混兵组合的分工</Link>
-                  </div>
-                </section>
-                <details className="scouting-panel scouting-snapshot">
-                  <summary>这次辨析使用的观察快照</summary>
-                  <dl>
-                    {scenario.observationIds.map((id) => (
-                      <div key={id}>
-                        <dt>{titleOf(id)}</dt>
-                        <dd>
-                          <ObservationText observation={config.observations[id]} />
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </details>
-              </>
-            )}
-          </section>
-        )}
-      </div>
+            </section>
+          )}
+        </div>
+      </ToolGrid>
       <details className="scouting-panel scouting-boundaries">
         <summary>适用范围</summary>
         <p>{SCOUTING_CONTENT.editorialNotice}</p>

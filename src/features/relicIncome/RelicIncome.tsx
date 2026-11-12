@@ -18,6 +18,7 @@ import {
 } from '../../domain/relicIncome';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolGrid } from '../../shared/ui/ToolShell';
 import { GameClockLink } from '../../shared/ui/GameClockLink';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './relicIncome.css';
@@ -167,7 +168,7 @@ export default function RelicIncome() {
                 <textarea aria-label="原方案链接" readOnly value={window.location.href} onFocus={(e) => e.currentTarget.select()} />
               </label>
             )}
-            <div className="relic-columns">
+            <ToolGrid className="relic-columns">
               <section className="relic-card" aria-labelledby="relic-input-title">
                 <h2 id="relic-input-title">已生效的本局条件</h2>
                 <fieldset className="relic-settings" disabled={locked}>
@@ -336,7 +337,7 @@ export default function RelicIncome() {
                   </>
                 )}
               </section>
-            </div>
+            </ToolGrid>
             {c.civ === 'Lithuanians' && (
               <section className="relic-card" data-testid="relic-lithuanian">
                 <h2>立陶宛圣物效果说明</h2>

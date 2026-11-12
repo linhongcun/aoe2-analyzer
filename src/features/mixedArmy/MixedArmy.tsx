@@ -20,6 +20,7 @@ import { AGE_ZH } from '../../domain/ratings';
 import { sharePageUrl } from '../../domain/sharePage';
 import { CalcDock } from '../../shared/ui/CalcDock';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
+import { ToolExample, ToolGrid } from '../../shared/ui/ToolShell';
 import { Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './mixedArmy.css';
@@ -118,14 +119,14 @@ function ExampleConclusion() {
   const scenario = MIXED_ARMY_CONTENT.scenarios.find((row) => row.id === MIXED_ARMY_CONTENT.defaultScenarioId)!;
   const card = MIXED_ARMY_CONTENT.cards.find((row) => row.id === MIXED_ARMY_CONTENT.exampleCardId)!;
   return (
-    <section className="mixed-notice mixed-example" data-testid="mixed-army-result" aria-labelledby="mixed-example-title">
+    <ToolExample className="mixed-example" testId="mixed-army-result">
       <h2 id="mixed-example-title" className="calc-dock-target" tabIndex={-1}>
         示例结论
       </h2>
       <p data-testid="mixed-example">
         若已确认不列颠步弓面对近战骑兵和掷矛手：{scenario.mixedThreatNote}可参考「{card.title}」。把观察改成你的实际局面后，这里会换成对应路线。
       </p>
-    </section>
+    </ToolExample>
   );
 }
 const PENDING_REASON = /尚未确认|尚未明确确认|尚未查清|先确认|先辨认|先补|先查明/;
@@ -335,9 +336,7 @@ export default function MixedArmy() {
       ) : !ctx ? (
         <Loading />
       ) : (
-        <>
-          {!decoded.locked && showExample && <ExampleConclusion />}
-          {!decoded.locked && <MixedGaps config={config} />}
+        <ToolGrid className="mixed-layout">
           <fieldset disabled={decoded.locked} className="mixed-panel mixed-settings">
             <legend>我实际观察到什么</legend>
             <div className="mixed-grid">
@@ -488,57 +487,61 @@ export default function MixedArmy() {
               </p>
             </details>
           </fieldset>
-          {plan && !showExample && (
-            <section className="mixed-results" data-testid="mixed-army-result" aria-labelledby="mixed-result-heading">
-              <header className="mixed-result-heading">
-                <h2 id="mixed-result-heading" className="calc-dock-target" tabIndex={-1}>
-                  {plan.status === 'not-covered' ? '暂未覆盖这组输入' : plan.status === 'invalid' ? '先修正确认记录' : '按当前观察分配任务'}
-                </h2>
-                <p>{linkFirstUnits(plan.summary, new Set())}</p>
-              </header>
-              {plan.status === 'invalid' && (
-                <div className="mixed-error" role="alert">
-                  {plan.notices.map((notice) => (
-                    <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
-                  ))}
-                </div>
-              )}
-              {plan.status === 'not-covered' && (
-                <div className="mixed-notice">
-                  {plan.notices.map((notice) => (
-                    <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
-                  ))}
-                </div>
-              )}
-              {plan.cards.length > 0 && (
-                <>
-                  <section aria-labelledby="mixed-met-heading" data-testid="mixed-conditions-met">
-                    <h3 id="mixed-met-heading">所列前置与观察条件满足</h3>
-                    {conditionsMet.length ? (
-                      <div className="mixed-cards">
-                        {conditionsMet.map((result) => (
-                          <Card key={result.card.id} result={result} ctx={ctx} />
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="mixed-empty">目前没有可按所填条件采用的路线。先补查或准备，不把未知当作安全。</p>
-                    )}
-                  </section>
-                  {otherCards.length > 0 && (
-                    <section aria-labelledby="mixed-other-heading">
-                      <h3 id="mixed-other-heading">还需观察、准备或等待条件变化</h3>
-                      <div className="mixed-cards">
-                        {otherCards.map((result) => (
-                          <Card key={result.card.id} result={result} ctx={ctx} />
-                        ))}
-                      </div>
+          <div className="mixed-output">
+            {!decoded.locked && showExample && <ExampleConclusion />}
+            {plan && !showExample && (
+              <section className="mixed-results" data-testid="mixed-army-result" aria-labelledby="mixed-result-heading">
+                <header className="mixed-result-heading">
+                  <h2 id="mixed-result-heading" className="calc-dock-target" tabIndex={-1}>
+                    {plan.status === 'not-covered' ? '暂未覆盖这组输入' : plan.status === 'invalid' ? '先修正确认记录' : '按当前观察分配任务'}
+                  </h2>
+                  <p>{linkFirstUnits(plan.summary, new Set())}</p>
+                </header>
+                {plan.status === 'invalid' && (
+                  <div className="mixed-error" role="alert">
+                    {plan.notices.map((notice) => (
+                      <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
+                    ))}
+                  </div>
+                )}
+                {plan.status === 'not-covered' && (
+                  <div className="mixed-notice">
+                    {plan.notices.map((notice) => (
+                      <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
+                    ))}
+                  </div>
+                )}
+                {plan.cards.length > 0 && (
+                  <>
+                    <section aria-labelledby="mixed-met-heading" data-testid="mixed-conditions-met">
+                      <h3 id="mixed-met-heading">所列前置与观察条件满足</h3>
+                      {conditionsMet.length ? (
+                        <div className="mixed-cards">
+                          {conditionsMet.map((result) => (
+                            <Card key={result.card.id} result={result} ctx={ctx} />
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="mixed-empty">目前没有可按所填条件采用的路线。先补查或准备，不把未知当作安全。</p>
+                      )}
                     </section>
-                  )}
-                </>
-              )}
-            </section>
-          )}
-        </>
+                    {otherCards.length > 0 && (
+                      <section aria-labelledby="mixed-other-heading">
+                        <h3 id="mixed-other-heading">还需观察、准备或等待条件变化</h3>
+                        <div className="mixed-cards">
+                          {otherCards.map((result) => (
+                            <Card key={result.card.id} result={result} ctx={ctx} />
+                          ))}
+                        </div>
+                      </section>
+                    )}
+                  </>
+                )}
+              </section>
+            )}
+            {!decoded.locked && <MixedGaps config={config} />}
+          </div>
+        </ToolGrid>
       )}
       <details className="mixed-details mixed-panel mixed-boundaries" data-testid="scope-sources">
         <summary>适用范围与来源</summary>

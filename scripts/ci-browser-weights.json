@@ -233,6 +233,7 @@
     "tests/e2e/timeline.spec.ts": 72561,
     "tests/e2e/timeline45.spec.ts": 14513,
     "tests/e2e/timelineLabels472.spec.ts": 23097,
+    "tests/e2e/toolGrid962.spec.ts": 24000,
     "tests/e2e/toolPageHeader961.spec.ts": 18000,
     "tests/e2e/toolScope270.spec.ts": 6865,
     "tests/e2e/touchTargets481.spec.ts": 18580,
