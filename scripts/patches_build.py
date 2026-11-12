@@ -46,6 +46,17 @@ def generate(build='185872'):
             after = obj[attr]
         assert after == expected, (ident, attr, after, expected)
         add(kind, typ, ident, label, civ, old, after)
+    def cite(resource, anchor, bullet, text):
+        # #955：只给本条变化的那种资源补名称。原文与分节锚点来自官方 185872 页面。
+        row = rows[-1]
+        name = {'Food': '食物', 'Wood': '木材', 'Gold': '黄金'}[resource]
+        assert row['before'].isdigit() and row['after'].isdigit(), row['id']
+        row['before'] += ' ' + name
+        row['after'] += ' ' + name
+        row['source'] = SOURCE + '#' + anchor
+        row['originalText'] = text
+        row['verification'] = 'official'
+        row['sourceBullet'] = bullet
     # 官方原值 + 当时固定来源的封存事实；绝不拿今天的数据改写历史。
     for uid, old, new in [(75,2,3),(77,6,8),(473,8,9),(567,8,9)]:
         val('buff',uid,'bonus:冲击步兵',old,new,'对冲击步兵的额外伤害增加')
@@ -74,10 +85,15 @@ def generate(build='185872'):
     val('nerf',1806,'bt',40,50,'建造时间增加（秒）',typ='building')
     # 按官方文明分节逐项核对；训练/费用均为未加文明与科技效果的基础值。
     val('nerf',1759,'tt',20,24,'训练时间增加；精锐不变（秒）','Bengalis')
-    for uid in [1704,1706]: val('nerf',uid,'cost:Gold',70,80,'黄金费用增加，木材费用不变','Bohemians')
+    hussite = '(Elite) Hussite Wagon cost increased from 110 wood 70g → 110 wood 80 gold.'
+    for uid in [1704,1706]:
+        val('nerf',uid,'cost:Gold',70,80,'黄金费用增加，木材费用不变','Bohemians')
+        cite('Gold', '6af4bb1a6d373', 'Bohemians: (Elite) Hussite Wagon cost', hussite)
     assert '+10%' in data['tech'][784]['descEn']
     add('nerf','tech',784,'火药单位的移速加成降低','Bohemians','15%','10%','official-and-effects')
     val('nerf',1699,'cost:Food',30,35,'食物费用增加，黄金费用不变','Burgundians')
+    cite('Food', '6af4bb1a6d530', 'Burgundians: Flemish Militia cost',
+         'Flemish Militia cost increased from 30 food 25 gold → 35 food 25 gold.')
     val('nerf',1699,'tt',14,16,'封建时代训练时间增加（秒）','Burgundians')
     for uid,old,new in [(40,9,13),(553,12,18)]: val('buff',uid,'bonus:步兵',old,new,'对步兵的额外伤害增加','Byzantines')
     add('adjust','tech',61,'践踏效果覆盖瓦兰吉卫队；甲胄骑兵的额外反步兵伤害并入基础属性。','Byzantines',provenance='official-and-effects')
@@ -88,19 +104,32 @@ def generate(build='185872'):
     add('adjust','unit',1911,'食物费用提高、黄金费用降低。','Jurchens','35 食物、65 金',f"{data['unit'][1911]['cost']['Food']} 食物、{data['unit'][1911]['cost']['Gold']} 金")
     val('nerf',831,'hp',275,260,'基础生命降低','Koreans')
     val('nerf',869,'tt',12,18,'训练时间增加；精锐不变（秒）','Magyars')
+    bolas = '(Elite) Bolas Rider cost increased from 45 wood 50 gold → 50 wood 55 gold.'
     for uid in [2569,2571]:
         val('nerf',uid,'cost:Wood',45,50,'木材费用增加','Mapuche')
+        cite('Wood', '6af4bb1a6df85', 'Mapuche: (Elite) Bolas Rider cost', bolas)
         val('nerf',uid,'cost:Gold',50,55,'黄金费用增加','Mapuche')
+        cite('Gold', '6af4bb1a6df85', 'Mapuche: (Elite) Bolas Rider cost', bolas)
     val('nerf',2586,'atk',12,11,'基础攻击降低；精锐不变','Muisca')
     val('nerf',1001,'tt',25,28,'训练时间增加；精锐不变（秒）','Portuguese')
     val('nerf',1962,'cost:Food',65,75,'食物费用增加，黄金费用不变','Shu')
+    cite('Food', '6af4bb1a6e44f', 'Shu: War Chariot cost',
+         'War Chariot cost increased from 65 food 90 gold → 75 food 90 gold.')
     val('nerf',1962,'tt',28,32,'训练时间增加（秒）','Shu')
-    for uid in [771,773]: val('nerf',uid,'cost:Food',70,75,'食物费用增加，黄金费用不变','Spanish')
+    conquistador = '(Elite) Conquistador cost increased from 70 food 60 gold → 75 food 60 gold.'
+    for uid in [771,773]:
+        val('nerf',uid,'cost:Food',70,75,'食物费用增加，黄金费用不变','Spanish')
+        cite('Food', '6af4bb1a6e5c7', 'Spanish: (Elite) Conquistador cost', conquistador)
     val('nerf',771,'tt',24,26,'训练时间增加；精锐不变（秒）','Spanish')
     val('nerf',775,'cost:Food',0,30,'新增食物费用，黄金费用不变','Spanish')
+    cite('Food', '6af4bb1a6e5c7', 'Spanish: Missionary cost',
+         'Missionary cost increased from 100 gold → 30 food 100 gold.')
     add('buff','civ','Teutons','城堡与帝王时代的近战护甲加成扩大到步兵与骑乘单位。','Teutons',provenance='official-and-effects')
     val('adjust',554,'ma',10,8,'基础近战护甲降低；计入本文明加成后不变','Teutons')
-    for uid in [2579,2581]: val('nerf',uid,'cost:Wood',35,40,'木材费用增加，黄金费用不变','Tupi')
+    blackwood = '(Elite) Blackwood Archer cost increased from 35 wood 45 gold → 40 wood 45 gold.'
+    for uid in [2579,2581]:
+        val('nerf',uid,'cost:Wood',35,40,'木材费用增加，黄金费用不变','Tupi')
+        cite('Wood', '6af4bb1a6e71f', 'Tupi: (Elite) Blackwood Archer cost', blackwood)
     add('adjust','civ','Vietnamese','生命加成的适用对象改为步弓手和掷矛手。','Vietnamese',provenance='official-and-effects')
     for uid,old,new in [(1129,40,35),(1131,45,40)]: val('nerf',uid,'hp',old,new,'基础生命降低（未计文明加成）','Vietnamese')
     rat=frozen['dat']['eliteRattan']
@@ -109,6 +138,13 @@ def generate(build='185872'):
     add('buff','unit',1131,'精锐升级食物费用降低；黄金费用不变','Vietnamese','1000 食物、750 金','800 食物、750 金','dat')
     add('nerf','tech',463,'击杀村民、贸易单位和僧侣不再额外获得黄金。','Vikings',provenance='official-and-effects')
     val('nerf',1952,'cost:Gold',25,35,'黄金费用增加，木材费用不变','Wei')
+    cite('Gold', '6af4bb1a6eaad', 'Wei: Xianbei Raider cost',
+         'Xianbei Raider cost increased from 65 wood 25 gold → 65 wood 35 gold.')
+    cited = [row['id'] for row in rows if row.get('verification') == 'official']
+    assert cited == [
+        '185872-24', '185872-25', '185872-27', '185872-40', '185872-41', '185872-42', '185872-43',
+        '185872-46', '185872-48', '185872-49', '185872-51', '185872-54', '185872-55', '185872-61',
+    ], cited
     # 科技树变动：检查当时固定来源的可用状态；改动前状态来自官方记录。
     def tree(civ,typ,ident,gain):
         assert trees[civ,typ,ident] == gain, (civ,typ,ident,gain)

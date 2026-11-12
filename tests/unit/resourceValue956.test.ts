@@ -6,14 +6,28 @@ import type { PatchEntry } from '../../src/domain/patches';
 import { parseResourceChange, parseResourceValue, segmentUnchanged, type ValueSegment } from '../../src/domain/resourceValue';
 import { ResourceValue } from '../../src/shared/ui/ResourceValue';
 
-/** main 2507a55 仍是 #956 基线的 366 条；显示图标的就是 issue 列出的 45 条。#955 补资源名后再改这份快照。 */
+/** #956 基线 45 条；#955 核实通过的 14 条费用补上资源名后，显示图标的是 59 条。档案总数仍是 366。 */
 const ICON_IDS = [
   '125283-002-003',
   '125283-003-004',
   '125283-019-024',
   '185872-14',
+  '185872-24',
+  '185872-25',
+  '185872-27',
   '185872-37',
+  '185872-40',
+  '185872-41',
+  '185872-42',
+  '185872-43',
+  '185872-46',
+  '185872-48',
+  '185872-49',
+  '185872-51',
+  '185872-54',
+  '185872-55',
   '185872-59',
+  '185872-61',
   '188329-1',
   '188329-3',
   '66692-001-001',
@@ -55,22 +69,23 @@ const ICON_IDS = [
   '81058-148',
 ] as const;
 
-const PLAIN_NUMBER_IDS = [
-  '185872-24',
-  '185872-25',
-  '185872-27',
-  '185872-40',
-  '185872-41',
-  '185872-42',
-  '185872-43',
-  '185872-46',
-  '185872-48',
-  '185872-49',
-  '185872-51',
-  '185872-54',
-  '185872-55',
-  '185872-61',
-] as const;
+/** #955 已对照官方原文核实，只保留本条改动的那种资源。 */
+const VERIFIED_185872_COSTS = {
+  '185872-24': ['Gold', '70', '80'],
+  '185872-25': ['Gold', '70', '80'],
+  '185872-27': ['Food', '30', '35'],
+  '185872-40': ['Wood', '45', '50'],
+  '185872-41': ['Gold', '50', '55'],
+  '185872-42': ['Wood', '45', '50'],
+  '185872-43': ['Gold', '50', '55'],
+  '185872-46': ['Food', '65', '75'],
+  '185872-48': ['Food', '70', '75'],
+  '185872-49': ['Food', '70', '75'],
+  '185872-51': ['Food', '0', '30'],
+  '185872-54': ['Wood', '35', '40'],
+  '185872-55': ['Wood', '35', '40'],
+  '185872-61': ['Gold', '25', '35'],
+} as const;
 
 function loadEntries() {
   return readdirSync('src/data/patches')
@@ -132,16 +147,23 @@ describe('更新历史资源前后值 #956', () => {
     }
   });
 
-  it('全量档案里显示图标的条目就是这 45 条', () => {
+  it('全量档案里显示图标的条目就是这 59 条', () => {
     const entries = loadEntries();
     const iconIds = entries.flatMap((item) => (parseResourceChange(item) ? [item.id] : []));
     expect(entries).toHaveLength(366);
-    expect(iconIds).toHaveLength(45);
+    expect(iconIds).toHaveLength(59);
     expect([...iconIds].sort()).toEqual([...ICON_IDS].sort());
   });
 
+  it('185872 已核实的 14 条费用只标出本条改动的资源', () => {
+    for (const [id, [resource, before, after]] of Object.entries(VERIFIED_185872_COSTS)) {
+      const change = parseResourceChange(entry(id));
+      expect(change?.before, id).toEqual([{ kind: 'resource', resource, amount: Number(before), digits: before }]);
+      expect(change?.after, id).toEqual([{ kind: 'resource', resource, amount: Number(after), digits: after }]);
+    }
+  });
+
   it('纯数字、百分比、公式、描述词、交易价和只有时间都保持文字', () => {
-    for (const id of PLAIN_NUMBER_IDS) expect(parseResourceChange(entry(id)), id).toBeNull();
     for (const id of ['66692-015-032', '125283-022-029', '81058-114', '81058-48', '81058-96', '125283-010-013', '81058-21', '81058-22', '81058-2']) {
       expect(parseResourceChange(entry(id)), id).toBeNull();
     }

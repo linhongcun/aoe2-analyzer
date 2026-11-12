@@ -313,10 +313,13 @@
         "Bohemians"
       ],
       "summaryZh": "黄金费用增加，木材费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6d373",
       "provenance": "fixed-data",
-      "before": "70",
-      "after": "80"
+      "before": "70 黄金",
+      "after": "80 黄金",
+      "originalText": "(Elite) Hussite Wagon cost increased from 110 wood 70g → 110 wood 80 gold.",
+      "verification": "official",
+      "sourceBullet": "Bohemians: (Elite) Hussite Wagon cost"
     },
     {
       "id": "185872-25",
@@ -328,10 +331,13 @@
         "Bohemians"
       ],
       "summaryZh": "黄金费用增加，木材费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6d373",
       "provenance": "fixed-data",
-      "before": "70",
-      "after": "80"
+      "before": "70 黄金",
+      "after": "80 黄金",
+      "originalText": "(Elite) Hussite Wagon cost increased from 110 wood 70g → 110 wood 80 gold.",
+      "verification": "official",
+      "sourceBullet": "Bohemians: (Elite) Hussite Wagon cost"
     },
     {
       "id": "185872-26",
@@ -358,10 +364,13 @@
         "Burgundians"
       ],
       "summaryZh": "食物费用增加，黄金费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6d530",
       "provenance": "fixed-data",
-      "before": "30",
-      "after": "35"
+      "before": "30 食物",
+      "after": "35 食物",
+      "originalText": "Flemish Militia cost increased from 30 food 25 gold → 35 food 25 gold.",
+      "verification": "official",
+      "sourceBullet": "Burgundians: Flemish Militia cost"
     },
     {
       "id": "185872-28",
@@ -545,10 +554,13 @@
         "Mapuche"
       ],
       "summaryZh": "木材费用增加",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6df85",
       "provenance": "fixed-data",
-      "before": "45",
-      "after": "50"
+      "before": "45 木材",
+      "after": "50 木材",
+      "originalText": "(Elite) Bolas Rider cost increased from 45 wood 50 gold → 50 wood 55 gold.",
+      "verification": "official",
+      "sourceBullet": "Mapuche: (Elite) Bolas Rider cost"
     },
     {
       "id": "185872-41",
@@ -560,10 +572,13 @@
         "Mapuche"
       ],
       "summaryZh": "黄金费用增加",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6df85",
       "provenance": "fixed-data",
-      "before": "50",
-      "after": "55"
+      "before": "50 黄金",
+      "after": "55 黄金",
+      "originalText": "(Elite) Bolas Rider cost increased from 45 wood 50 gold → 50 wood 55 gold.",
+      "verification": "official",
+      "sourceBullet": "Mapuche: (Elite) Bolas Rider cost"
     },
     {
       "id": "185872-42",
@@ -575,10 +590,13 @@
         "Mapuche"
       ],
       "summaryZh": "木材费用增加",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6df85",
       "provenance": "fixed-data",
-      "before": "45",
-      "after": "50"
+      "before": "45 木材",
+      "after": "50 木材",
+      "originalText": "(Elite) Bolas Rider cost increased from 45 wood 50 gold → 50 wood 55 gold.",
+      "verification": "official",
+      "sourceBullet": "Mapuche: (Elite) Bolas Rider cost"
     },
     {
       "id": "185872-43",
@@ -590,10 +608,13 @@
         "Mapuche"
       ],
       "summaryZh": "黄金费用增加",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6df85",
       "provenance": "fixed-data",
-      "before": "50",
-      "after": "55"
+      "before": "50 黄金",
+      "after": "55 黄金",
+      "originalText": "(Elite) Bolas Rider cost increased from 45 wood 50 gold → 50 wood 55 gold.",
+      "verification": "official",
+      "sourceBullet": "Mapuche: (Elite) Bolas Rider cost"
     },
     {
       "id": "185872-44",
@@ -635,10 +656,13 @@
         "Shu"
       ],
       "summaryZh": "食物费用增加，黄金费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6e44f",
       "provenance": "fixed-data",
-      "before": "65",
-      "after": "75"
+      "before": "65 食物",
+      "after": "75 食物",
+      "originalText": "War Chariot cost increased from 65 food 90 gold → 75 food 90 gold.",
+      "verification": "official",
+      "sourceBullet": "Shu: War Chariot cost"
     },
     {
       "id": "185872-47",
@@ -665,10 +689,13 @@
         "Spanish"
       ],
       "summaryZh": "食物费用增加，黄金费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6e5c7",
       "provenance": "fixed-data",
-      "before": "70",
-      "after": "75"
+      "before": "70 食物",
+      "after": "75 食物",
+      "originalText": "(Elite) Conquistador cost increased from 70 food 60 gold → 75 food 60 gold.",
+      "verification": "official",
+      "sourceBullet": "Spanish: (Elite) Conquistador cost"
     },
     {
       "id": "185872-49",
@@ -680,10 +707,13 @@
         "Spanish"
       ],
       "summaryZh": "食物费用增加，黄金费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6e5c7",
       "provenance": "fixed-data",
-      "before": "70",
-      "after": "75"
+      "before": "70 食物",
+      "after": "75 食物",
+      "originalText": "(Elite) Conquistador cost increased from 70 food 60 gold → 75 food 60 gold.",
+      "verification": "official",
+      "sourceBullet": "Spanish: (Elite) Conquistador cost"
     },
     {
       "id": "185872-50",
@@ -710,10 +740,13 @@
         "Spanish"
       ],
       "summaryZh": "新增食物费用，黄金费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6e5c7",
       "provenance": "fixed-data",
-      "before": "0",
-      "after": "30"
+      "before": "0 食物",
+      "after": "30 食物",
+      "originalText": "Missionary cost increased from 100 gold → 30 food 100 gold.",
+      "verification": "official",
+      "sourceBullet": "Spanish: Missionary cost"
     },
     {
       "id": "185872-52",
@@ -753,10 +786,13 @@
         "Tupi"
       ],
       "summaryZh": "木材费用增加，黄金费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6e71f",
       "provenance": "fixed-data",
-      "before": "35",
-      "after": "40"
+      "before": "35 木材",
+      "after": "40 木材",
+      "originalText": "(Elite) Blackwood Archer cost increased from 35 wood 45 gold → 40 wood 45 gold.",
+      "verification": "official",
+      "sourceBullet": "Tupi: (Elite) Blackwood Archer cost"
     },
     {
       "id": "185872-55",
@@ -768,10 +804,13 @@
         "Tupi"
       ],
       "summaryZh": "木材费用增加，黄金费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6e71f",
       "provenance": "fixed-data",
-      "before": "35",
-      "after": "40"
+      "before": "35 木材",
+      "after": "40 木材",
+      "originalText": "(Elite) Blackwood Archer cost increased from 35 wood 45 gold → 40 wood 45 gold.",
+      "verification": "official",
+      "sourceBullet": "Tupi: (Elite) Blackwood Archer cost"
     },
     {
       "id": "185872-56",
@@ -854,10 +893,13 @@
         "Wei"
       ],
       "summaryZh": "黄金费用增加，木材费用不变",
-      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/",
+      "source": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-185872/#6af4bb1a6eaad",
       "provenance": "fixed-data",
-      "before": "25",
-      "after": "35"
+      "before": "25 黄金",
+      "after": "35 黄金",
+      "originalText": "Xianbei Raider cost increased from 65 wood 25 gold → 65 wood 35 gold.",
+      "verification": "official",
+      "sourceBullet": "Wei: Xianbei Raider cost"
     },
     {
       "id": "185872-62",
