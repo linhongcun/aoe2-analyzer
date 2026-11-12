@@ -1,6 +1,7 @@
-import { Link, useParams } from 'react-router-dom';
-import { civByEn } from '../../../data';
+import { Link, Navigate, useLocation, useParams } from 'react-router-dom';
+import { civByEn, civs } from '../../../data';
 import { civBonuses } from '../../../domain/civBonus';
+import { civEnCasePath } from '../../../domain/civRoute';
 import { CivIcon } from '../../../shared/ui/art';
 import { DetailPage, SideBlock } from '../../../shared/ui/layout';
 import BonusBody, { BonusTags, BonusText } from '../../../shared/ui/BonusBody';
@@ -10,6 +11,10 @@ import RomanArmor710 from './RomanArmor710';
 /** #/civ/:en/bonus/:idx（idx 为序号或 team） */
 export default function BonusDetail() {
   const { en = '', idx = '' } = useParams();
+  const location = useLocation();
+  // 与文明详情同一规则。保留原来的 idx、查询和页内 hash；对不上的 idx 仍走下面的列表回退。
+  const canonicalPath = civEnCasePath(civs, en, `/bonus/${idx}`);
+  if (canonicalPath) return <Navigate to={{ pathname: canonicalPath, search: location.search, hash: location.hash }} replace />;
   const c = civByEn(en);
   const list = c ? civBonuses(c) : [];
   const b = list.find((x) => String(x.idx) === idx);
