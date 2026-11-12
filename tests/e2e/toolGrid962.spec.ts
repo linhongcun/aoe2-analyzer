@@ -166,7 +166,7 @@ test('#962 口径下沉、就近说明还在，示例块带标签且可按原逻
   await expect(page.locator('header.tool-head')).toHaveCount(0);
   await open(page, '/production');
   await expect(page.getByRole('navigation', { name: '生产模式' })).toBeVisible();
-  await expect(page.locator('.tool-grid')).toHaveCount(0);
+  await expect(page.locator('.tool-grid')).toBeVisible();
 });
 
 test('#962 390 宽无横向溢出，底部操作条仍可点', async ({ page }) => {
