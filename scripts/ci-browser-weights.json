@@ -16,6 +16,7 @@
     "tests/e2e/armorValues706.spec.ts": 13500,
     "tests/e2e/automaticAge705.spec.ts": 13500,
     "tests/e2e/bengalis197.spec.ts": 44749,
+    "tests/e2e/bonuses965.spec.ts": 12000,
     "tests/e2e/breakEven.colors.spec.ts": 4152,
     "tests/e2e/breakEven.gaps.spec.ts": 12731,
     "tests/e2e/breakEven.stale.spec.ts": 4391,

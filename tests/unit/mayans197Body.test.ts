@@ -31,12 +31,12 @@ describe('#197 玛雅已编码详情的局部开局说明', () => {
     const html = render('Mayans', 1, compact);
     expect(html).toContain('data-usage="sim" data-on="true"');
     expect(html).toContain('已计入资源产量与工作率配对；储量和耗尽未模拟');
-    expect(html).toContain('已计入数值');
+    expect(html).toContain('class="tag ok">已计入');
   });
   it('其它已编码加成保留原展示，不追加玛雅专用说明', () => {
     expect(bonus('Franks', 2).encoded).toBe(true);
     const html = render('Franks', 2);
-    expect(html).toContain('已计入数值');
+    expect(html).toContain('class="tag ok">已计入');
     expect(html).not.toContain('data-usage="sim"');
     expect(html).not.toContain('储量和耗尽未模拟');
   });

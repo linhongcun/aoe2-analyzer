@@ -14,13 +14,13 @@ import { LineChip } from './LineChip';
 import type { Unit } from '../../domain/types';
 import { collapse } from '../../domain/family';
 import { ecoText } from '../../domain/datEffects';
-import { bonusUsage, showEcoSourceTag, usageLevel, type BonusUsageLine } from '../../domain/bonusUsage';
+import { bonusLevel, bonusUsage, LEVEL_ZH, showEcoSourceTag } from '../../domain/bonusUsage';
 
 const SRC_TAG: Record<string, [string, string]> = {
-  dat: ['ok', '数值来源：游戏 .dat'],
-  manual: ['txt', '数值来源：手工规则（.dat 缺少该项）'],
-  eco: ['ok', '.dat 经济/费用效果（文本展示）'],
-  text: ['txt', '无 .dat 数据'],
+  dat: ['ok', '数值来自游戏数据'],
+  manual: ['txt', '数值为本站手工规则（游戏数据缺少该项）'],
+  eco: ['ok', '游戏数据含经济/费用效果（仅文字展示）'],
+  text: ['txt', '游戏数据无对应记录'],
 };
 
 const STAT_ZH: Record<string, [string, string]> = {
@@ -39,8 +39,8 @@ const STAT_ZH: Record<string, [string, string]> = {
 const ageTxt = (a: number[]) => a.map((x) => AGE_ZH[x]!.slice(0, 2)).join('/');
 
 export function BonusTags({ b }: { b: CivBonusEnt }) {
-  const usage = b.encoded ? [] : bonusUsage(b);
-  // issue 317（Steve 设计审查）：已有工具计入的经济/费用类加成不显示「文本展示」来源标签，见 showEcoSourceTag
+  const lv = bonusLevel(b);
+  // 已有工具计入的经济/费用类加成不显示来源标签，见 showEcoSourceTag。逐工具明细在正文「各工具计入情况」。
   const src = SRC_TAG[b.src] && showEcoSourceTag(b) ? SRC_TAG[b.src] : undefined;
   return (
     <>
@@ -51,25 +51,9 @@ export function BonusTags({ b }: { b: CivBonusEnt }) {
         </span>
       ))}
       {b.ages && <span className="tag">{ageTxt(b.ages)}时代</span>}
-      {b.encoded ? <span className="tag ok">已计入数值</span> : <UsageTags lines={usage} />}
+      <span className={'tag ' + (lv === 'none' ? 'txt' : 'ok')}>{LEVEL_ZH[lv]}</span>
       {src && <span className={'tag ' + src[0]}>{src[1]}</span>}
-      {b.fresh === false && <span className="tag txt">游戏说明文字与 .dat 数值不一致（以 .dat 为准）</span>}
-    </>
-  );
-}
-
-const toolNames = (ls: BonusUsageLine[]) => ls.map((l) => l.name).join('、');
-/** issue 317：经济/费用类加成按工具写明已计入 / 未计入；没有任何工具计入时仍为「仅文本，未计入数值」 */
-function UsageTags({ lines }: { lines: BonusUsageLine[] }) {
-  if (usageLevel(lines) === 'none') return <span className="tag txt">仅文本，未计入数值</span>;
-  const on = lines.filter((l) => l.on === true),
-    off = lines.filter((l) => l.on === false),
-    unk = lines.filter((l) => l.on === null);
-  return (
-    <>
-      <span className="tag ok">已计入：{toolNames(on)}</span>
-      {off.length > 0 && <span className="tag txt">未计入：{toolNames(off)}</span>}
-      {unk.length > 0 && <span className="tag txt">未逐条核对：{toolNames(unk)}</span>}
+      {b.fresh === false && <span className="tag txt">游戏说明文字与游戏数据数值不一致（以游戏数据为准）</span>}
     </>
   );
 }
@@ -105,7 +89,7 @@ export function BonusText({ b, linked = true }: { b: CivBonusEnt; linked?: boole
   );
 }
 
-export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: boolean }) {
+export default function BonusBody({ b, compact, head = true }: { b: CivBonusEnt; compact?: boolean; head?: boolean }) {
   const core = useCore();
   if (!core) return <Loading />;
   const groups = bonusAffects(b, core.units, core.buildings);
@@ -138,13 +122,17 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
     .filter(Boolean);
   return (
     <div className={'bonusbody' + (compact ? ' compact' : '')}>
-      <p className="bz">
-        <BonusText b={b} />
-      </p>
-      <p className="note">{b.en}</p>
-      <p>
-        <BonusTags b={b} />
-      </p>
+      {head && (
+        <>
+          <p className="bz">
+            <BonusText b={b} />
+          </p>
+          <p className="note">{b.en}</p>
+          <p>
+            <BonusTags b={b} />
+          </p>
+        </>
+      )}
       {b.team && <p className="note">团队加成对你和所有盟友生效（包括你自己）。</p>}
       {ex && (
         <div className="bex">
@@ -199,7 +187,7 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
           ) : mayanTimeline ? (
             <p>开局按连续采集估算，资源储量和耗尽未模拟；其它工具沿用各自的计算口径。</p>
           ) : (
-            <p>单位模拟器属性面板不计算经济/费用类效果{b.dat.length + b.eco.length > 0 ? '，结构化数值见下方「.dat 原始效果」' : ''}。</p>
+            <p>单位模拟器属性面板不计算经济/费用类效果{b.dat.length + b.eco.length > 0 ? '，结构化数值见下方「游戏数据原始效果」' : ''}。</p>
           )}
         </div>
       )}
@@ -208,7 +196,7 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
           <Icon name="triangle-alert" className="ic warn" />
           仅文本，未计入数值：
           {b.src === 'eco'
-            ? '经济/费用类效果，结构化数值见下方「.dat 原始效果」；模拟器属性面板不计算。'
+            ? '经济/费用类效果，结构化数值见下方「游戏数据原始效果」；模拟器属性面板不计算。'
             : b.cats.includes('经济') || b.cats.includes('费用')
               ? '这是经济/费用类效果（采集、造价、研究等），以游戏原文为准，模拟器不计算。'
               : '该效果尚未编码进模拟器，以游戏原文为准。'}
@@ -246,7 +234,7 @@ export default function BonusBody({ b, compact }: { b: CivBonusEnt; compact?: bo
       ))}
       {(b.dat.length > 0 || b.eco.length > 0) && (
         <details className="datfx">
-          <summary>.dat 原始效果（{b.dat.length + (b.eco.length ? 1 : 0)} 条）</summary>
+          <summary>游戏数据原始效果（{b.dat.length + (b.eco.length ? 1 : 0)} 条）</summary>
           <ul>
             {b.dat.map((e) => (
               <li key={e.tech}>

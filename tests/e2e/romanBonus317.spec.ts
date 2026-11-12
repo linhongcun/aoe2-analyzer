@@ -1,4 +1,4 @@
-// issue 317：罗马经济/费用类加成按工具写明已计入 / 未计入，不再一律「仅文本，未计入数值」。
+// issue 317：罗马经济/费用类加成按工具写明计入情况。#965 起列表和页头标签只显示三档，逐工具结论看 [data-usage]。
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
@@ -21,8 +21,11 @@ test.describe('issue 317 罗马加成标签', () => {
     await expect(r2.locator('.brow-h .tag')).toHaveText('已计入');
     await r0.locator('.brow-h').click();
     await expect(r0).not.toContainText('仅文本，未计入数值');
-    await expect(r0).toContainText('已计入：开局模拟、真实成本、施工工具');
-    await expect(r0).toContainText('未计入：修理');
+    await expect(r0.locator('.brow-b')).toContainText('部分计入');
+    await expect(r0.locator('[data-usage="sim"]')).toContainText('开局模拟');
+    await expect(r0.locator('[data-usage="gather"]')).toContainText('真实成本');
+    await expect(r0.locator('[data-usage="construction"]')).toContainText('施工工具');
+    await expect(r0.locator('[data-usage="repair"]')).toContainText('修理');
     await expect(r0.locator('[data-usage="sim"]')).toHaveAttribute('data-on', 'true');
     await expect(r0.locator('[data-usage="sim"]')).toContainText('村民采集与建造加成已计入');
     await expect(r0.locator('[data-usage="gather"]')).toHaveAttribute('data-on', 'true');
@@ -30,7 +33,7 @@ test.describe('issue 317 罗马加成标签', () => {
     await expect(r0.locator('[data-usage="repair"]')).toHaveAttribute('data-on', 'false');
     await r2.locator('.brow-h').click();
     await expect(r2).not.toContainText('仅文本，未计入数值');
-    await expect(r2).toContainText('已计入：训练费用');
+    await expect(r2.locator('[data-usage="cost"]')).toContainText('训练费用');
     await expect(r2.locator('[data-usage]')).toHaveCount(1);
     await expect(r2.locator('[data-usage="cost"]')).toContainText('单位 PK「等资源」');
     // Steve 设计审查：有工具计入的加成不再显示「.dat 经济/费用效果（文本展示）」
@@ -44,30 +47,36 @@ test.describe('issue 317 罗马加成标签', () => {
       await expect(page.locator('#bonus [data-usage="gather"]'), c).toHaveAttribute('data-on', 'true');
       // 页眉标签行和正文各渲染一次来源标签，两处都不能有
       await expect(page.locator('main'), c).not.toContainText('无 .dat 数据');
+      await expect(page.locator('main'), c).not.toContainText('游戏数据无对应记录');
     }
     await page.goto('./#/civ/Britons/bonus/0');
     await expect(page.locator('#bonus')).toContainText('羊倌工作速度 +25%');
     await expect(page.locator('#bonus')).toContainText('仅文本，未计入数值');
-    await expect(page.locator('main')).toContainText('无 .dat 数据');
+    await expect(page.locator('#bonus .dhead')).toContainText('仅文本');
+    await expect(page.locator('main')).toContainText('游戏数据无对应记录');
+    await expect(page.locator('main')).not.toContainText('无 .dat 数据');
   });
 
-  test('没有任何工具计入的经济加成仍显示「.dat 经济/费用效果（文本展示）」', async ({ page }) => {
+  test('没有任何工具计入的经济加成仍显示经济/费用来源说明', async ({ page }) => {
     // 波兰已支持；当前8个模板均无采石分工，本条未给模板计入收益，其他工具也未计入
     await page.goto('./#/civ/Poles/bonus/2');
-    await expect(page.locator('#bonus')).toContainText('仅文本，未计入数值');
-    await expect(page.locator('#bonus')).toContainText('.dat 经济/费用效果（文本展示）');
+    await expect(page.locator('#bonus .dhead .tag.txt').filter({ hasText: '仅文本' })).toBeVisible();
+    await expect(page.locator('#bonus')).toContainText('游戏数据含经济/费用效果（仅文字展示）');
+    await expect(page.locator('#bonus .dhead')).not.toContainText('.dat');
+    await expect(page.locator('#bonus summary')).not.toContainText('.dat');
   });
 
-  test('#/bonuses 与详情页：罗马第 1 条不再显示「仅文本，未计入数值」', async ({ page }) => {
+  test('#/bonuses 与详情页：罗马第 1 条显示部分计入，不再显示「仅文本，未计入数值」', async ({ page }) => {
     await page.goto('./#/bonuses');
     await page.locator('#bq').fill('村民收集、建造和修理');
-    const li = page.locator('#blist li').filter({ hasText: '罗马' });
+    const li = page.locator('#blist li').filter({ has: page.locator('a[href$="/civ/Romans/bonus/0"]') });
     await expect(li).toHaveCount(1);
     await expect(li).not.toContainText('仅文本，未计入数值');
-    await expect(li).toContainText('已计入：开局模拟、真实成本、施工工具');
+    await expect(li.locator('.bg-lv')).toHaveText('部分计入');
     await expect(li).not.toContainText('经济/费用效果（文本展示）');
     await page.goto('./#/civ/Romans/bonus/0');
     await expect(page.locator('#bonus')).not.toContainText('仅文本，未计入数值');
+    await expect(page.locator('#bonus .dhead')).toContainText('部分计入');
     await expect(page.locator('#bonus [data-usage]')).toHaveCount(4);
     await expect(page.locator('#bonus')).not.toContainText('经济/费用效果（文本展示）');
   });

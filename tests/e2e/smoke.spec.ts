@@ -406,16 +406,17 @@ test('civ bonus rows expand inline and link to bonus detail', async ({ page }) =
   await row.locator('.brow-h').click();
   await expect(row.locator('.brow-h')).toHaveAttribute('aria-expanded', 'true');
   await expect(row.locator('.bextab')).toContainText('192');
-  await expect(row).toContainText('已计入数值');
+  await expect(row.locator('.brow-h .tag')).toHaveText('已计入');
   await page.locator('.brow[data-bonus="1"] .brow-h').click();
-  // #358：法兰克磨坊科技免费计入开局模拟（研究马轭不扣费）
-  await expect(page.locator('.brow[data-bonus="1"]')).toContainText('已计入：开局模拟');
+  // #358：法兰克磨坊科技免费计入开局模拟（研究马轭不扣费）。列表只显示档位，工具名在计入情况里。
+  await expect(page.locator('.brow[data-bonus="1"] .brow-h .tag')).toHaveText('已计入');
+  await expect(page.locator('.brow[data-bonus="1"] [data-usage="sim"]')).toContainText('开局模拟');
   await page
     .locator('.brow[data-bonus="1"]')
     .getByRole('link', { name: /查看详情页/ })
     .click();
   await expect(page).toHaveURL(/#\/civ\/Franks\/bonus\/1$/);
-  await expect(page.locator('#bonus h1')).toContainText('文明加成 2');
+  await expect(page.locator('#bonus h1')).toContainText('磨坊科技免费');
 });
 
 test('team bonus detail notes allies; bonus list filters; Ctrl+K finds bonuses', async ({ page }) => {
@@ -427,8 +428,8 @@ test('team bonus detail notes allies; bonus list filters; Ctrl+K finds bonuses',
   expect(all).toBeGreaterThan(250);
   await page.getByRole('radio', { name: '海军' }).click();
   await expect.poll(() => page.locator('#blist li').count()).toBeLessThan(all);
-  await page.locator('#benc').check();
-  await expect(page.locator('#blist li').first()).toContainText('已计入数值');
+  await page.getByRole('radio', { name: /有计入/ }).click();
+  await expect(page.locator('#blist li').first().locator('.bg-lv')).toHaveText(/已计入|部分计入/);
   await page.keyboard.press('Control+k');
   await page.getByRole('combobox', { name: '全局搜索', exact: true }).fill('磨坊科技免费');
   await expect(page.locator('.cmdk-list li').first()).toContainText('加成');
@@ -444,16 +445,16 @@ test('bonus detail on mobile', async ({ page }) => {
   expect(w).toBeLessThanOrEqual(392);
 });
 
-test('bonus detail shows .dat source, text-vs-dat note and structured eco effects', async ({ page }) => {
+test('bonus detail shows game-data source, text-vs-data note and structured eco effects', async ({ page }) => {
   await page.goto('./#/civ/Bengalis/bonus/3');
-  await expect(page.getByText('数值来源：游戏 .dat').first()).toBeVisible();
+  await expect(page.getByText('数值来自游戏数据').first()).toBeVisible();
   await page
-    .getByText(/\.dat 原始效果/)
+    .getByText(/游戏数据原始效果/)
     .first()
     .click();
   await expect(page.getByText('#870').first()).toBeVisible();
   await page.goto('./#/civ/Saracens/bonus/team');
-  await expect(page.getByText(/以 \.dat 为准/).first()).toBeVisible();
+  await expect(page.getByText('游戏说明文字与游戏数据数值不一致（以游戏数据为准）').first()).toBeVisible();
 });
 
 test('feedback link: footer + detail page button prefill GitHub issue', async ({ page }) => {

@@ -55,7 +55,8 @@ async function armorRows(target: import('@playwright/test').Locator) {
 }
 test('#710 PC1280条件护甲对象/单项/前置累计与非目标', async ({ page }) => {
   await page.goto('./#/civ/Romans/bonus/1');
-  await expect(page.locator('#bonus h1')).toContainText('罗马');
+  await expect(page.locator('#bonus h1')).toContainText('步兵护甲升级效果加倍');
+  await expect(page.locator('#bonus .bon-kind')).toContainText('罗马');
   await armorRows(region(page));
   for (const route of ['civ/Romans/bonus/0', 'civ/Britons/bonus/1']) {
     await page.goto(`./#/${route}`);
