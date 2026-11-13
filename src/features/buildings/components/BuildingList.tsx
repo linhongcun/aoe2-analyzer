@@ -1,4 +1,4 @@
-import { Fragment, useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCore } from '../../../data/hooks';
 import { BUILDING_TYPE_ZH, isUniqueBuilding } from '../../../domain/buildings';
@@ -84,50 +84,40 @@ export default function BuildingList() {
   };
   return (
     <section id="buildings" className="pane">
-      <ListHead level={1} title="建筑" desc="查找建筑并打开详情。" />
-      <nav className="b-guides" aria-label="时代升级说明">
-        {ageGuides.map(([id, label], index) => (
-          <Fragment key={id}>
-            {index > 0 && (
-              <span className="b-guide-sep" aria-hidden="true">
-                ·
-              </span>
-            )}
-            <Link to={`/tech/${id}`}>{label}</Link>
-          </Fragment>
-        ))}
-      </nav>
+      <div className="b-heading">
+        <ListHead level={1} title="建筑" desc="查找建筑并打开详情。" />
+        <nav className="b-guides" aria-label="时代升级说明">
+          {ageGuides.map(([id, label]) => (
+            <Link key={id} to={`/tech/${id}`}>
+              {label}
+            </Link>
+          ))}
+        </nav>
+      </div>
       <div className="b-filters">
         <div className="b-search">
           <SearchInput id="bq" value={q} onChange={setQ} placeholder="搜索中文、英文或拼音" label="搜索建筑，可搜中文、英文或拼音" />
-        </div>
-        <p className="b-label" id="b-type-label">
-          类型
-        </p>
-        <div className="b-chips" role="group" aria-labelledby="b-type-label">
-          <Chip pressed={type === ''} onClick={() => setType('')}>
-            全部
-          </Chip>
-          {(Object.keys(BUILDING_TYPE_ZH) as BuildingType[]).map((key) => (
-            <Chip key={key} pressed={type === key} onClick={() => setType(key)}>
-              {BUILDING_TYPE_ZH[key]}
-            </Chip>
-          ))}
-        </div>
-        <div className="b-result">
-          <p className="b-count">
-            <span id="bcnt" className="num nw">
-              {r.length} / {all.length} 座建筑
-            </span>
-          </p>
-          {summary && <p className="b-summary">{summary}</p>}
           {dirty && (
             <button type="button" className="b-clear" onClick={reset}>
               清空筛选
             </button>
           )}
         </div>
-        <p className="b-note">造价为目录基础值。时代按目录时代精确匹配。</p>
+        <div className="b-type">
+          <p className="b-label" id="b-type-label">
+            类型
+          </p>
+          <div className="b-chips" role="group" aria-labelledby="b-type-label">
+            <Chip pressed={type === ''} onClick={() => setType('')}>
+              全部
+            </Chip>
+            {(Object.keys(BUILDING_TYPE_ZH) as BuildingType[]).map((key) => (
+              <Chip key={key} pressed={type === key} onClick={() => setType(key)}>
+                {BUILDING_TYPE_ZH[key]}
+              </Chip>
+            ))}
+          </div>
+        </div>
         <details
           className="b-more"
           open={desktop || moreOpen}
@@ -176,6 +166,17 @@ export default function BuildingList() {
           </div>
         </details>
       </div>
+      <div className="b-results-bar">
+        <div className="b-result">
+          <p className="b-count">
+            <span id="bcnt" className="num nw">
+              {r.length} / {all.length} 座建筑
+            </span>
+          </p>
+          {summary && <p className="b-summary">{summary}</p>}
+        </div>
+        <p className="b-note">造价为目录基础值。时代按目录时代精确匹配。</p>
+      </div>
       {!core ? (
         <Loading />
       ) : !r.length ? (
@@ -197,7 +198,8 @@ export default function BuildingList() {
                   <p className="b-en">{b.en}</p>
                 </div>
                 <p className="b-meta">
-                  {BUILDING_TYPE_ZH[b.type]} · {AGE_ZH[b.age] ?? ''}
+                  <span className="b-type-tag">{BUILDING_TYPE_ZH[b.type]}</span>
+                  <span>{AGE_ZH[b.age] ?? ''}</span>
                 </p>
                 <div className="b-foot">
                   <p className="b-cost">
