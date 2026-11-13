@@ -279,6 +279,7 @@ export default function TechDetail() {
         }}
       >
         <summary>
+          <Icon name="chevron-right" />
           <h2>更新历史</h2>
         </summary>
         <PatchHistory hostedHeading labelRegion={false} target={{ targetType: 'tech', targetId: tech.id, targetNameZh: tech.zh }} />

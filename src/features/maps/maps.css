@@ -175,6 +175,10 @@
   flex-wrap: wrap;
   gap: var(--space-3);
   margin-bottom: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
 }
 .map-filters label {
   display: flex;
@@ -227,6 +231,7 @@
 .map-filters input,
 .map-filters select {
   width: 100%;
+  border-radius: var(--radius-pill);
 }
 .map-search-wrap input {
   padding-left: 36px;
@@ -325,6 +330,9 @@
   .map-filters {
     flex-direction: column;
     align-items: stretch;
+  }
+  .map-filters .map-search {
+    flex: none;
   }
   .map-filter-row {
     display: grid;

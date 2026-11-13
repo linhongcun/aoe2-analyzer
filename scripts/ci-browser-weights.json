@@ -169,6 +169,7 @@
     "tests/e2e/production963.spec.ts": 12000,
     "tests/e2e/realCostUncounted.spec.ts": 8951,
     "tests/e2e/refactor288.spec.ts": 22906,
+    "tests/e2e/referenceUi996.spec.ts": 3000,
     "tests/e2e/relatedTechs193.spec.ts": 9405,
     "tests/e2e/relicIncome238.spec.ts": 22485,
     "tests/e2e/relicLoading412.spec.ts": 3015,

@@ -104,7 +104,7 @@ export default function TechAffects({
   const count = listedGroupCount(shown, units, unitById, fam);
   const waiting = !!selected && !trees && civs.some((civ) => civ.en === selected) && tech.civs.includes(selected);
   return (
-    <section id="affects" aria-label="作用对象">
+    <section id="affects" className="td-section" aria-label="作用对象">
       <h2>作用对象</h2>
       {entries.map((entry) => {
         const body = effectClause(entry.parts, (text) => techEffectText(tech.id, text));
