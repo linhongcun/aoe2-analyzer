@@ -25,12 +25,13 @@ test('#521 文明情境入口预填当前文明，单边对比和生产可刷新
   const nav = page.getByTestId('civ-related-tools');
   for (const [name, href] of [
     ['开局流程', '#/builds?civ=Jurchens'],
-    ['生产对照', '#/production?civ=Jurchens'],
+    ['持续生产', '#/production?civ=Jurchens'],
+    ['训练总价', '#/production?mode=train-total&civ=Jurchens'],
     ['对局助手', '#/matchup?me=Jurchens'],
     ['文明对比', '#/compare?a=Jurchens'],
   ])
     await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute('href', href!);
-  await nav.getByRole('link', { name: '生产对照', exact: true }).click();
+  await nav.getByRole('link', { name: '持续生产', exact: true }).click();
   await expect(page.getByRole('combobox', { name: '生产文明', exact: true })).toHaveValue('Jurchens');
   await page.reload();
   await expect(page.getByRole('combobox', { name: '生产文明', exact: true })).toHaveValue('Jurchens');

@@ -32,6 +32,7 @@ import { decodeTrainCompare } from './trainCompareCodec';
 import { ProductionCompareError } from './ProductionCompareError';
 import { ProductionPageTop, ProductionModeNav } from './ProductionModeNav';
 import { ProductionTrainCompare } from './ProductionTrainCompare';
+import { TrainTotal, TrainTotalLinkError } from './TrainTotal';
 import { useProductionContext } from './useProductionContext';
 import './production.css';
 import './trainCompare.css';
@@ -45,8 +46,11 @@ export default function Production() {
   const decoded = useMemo(() => (mode.kind === 'compare' ? decodeTrainCompare(location.search) : null), [mode, location.search]);
   const { context, error } = useProductionContext();
   const errors = mode.kind === 'error' ? mode.errors : (decoded?.errors ?? []);
-  const title = mode.kind === 'legacy' ? '持续生产' : '跨文明训练对照';
-  return errors.length ? (
+  const title =
+    mode.kind === 'legacy' ? '持续生产' : mode.kind === 'total' || (mode.kind === 'error' && mode.subject === 'total') ? '训练总价' : '跨文明训练对照';
+  return mode.kind === 'error' && mode.subject === 'total' ? (
+    <TrainTotalLinkError key={location.search} errors={errors} />
+  ) : errors.length ? (
     <ProductionCompareError key={location.search} errors={errors} />
   ) : error ? (
     <section className="pane train-compare-page">
@@ -66,6 +70,8 @@ export default function Production() {
     </section>
   ) : mode.kind === 'legacy' ? (
     <LegacyProduction context={context} />
+  ) : mode.kind === 'total' ? (
+    <TrainTotal context={context} />
   ) : (
     <ProductionTrainCompare context={context} config={decoded!.config!} />
   );

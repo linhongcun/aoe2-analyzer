@@ -245,6 +245,7 @@
     "tests/e2e/touchTargets481.spec.ts": 18580,
     "tests/e2e/tradeIncome226.spec.ts": 14423,
     "tests/e2e/trainCompare459.spec.ts": 36347,
+    "tests/e2e/trainTotal978.spec.ts": 18000,
     "tests/e2e/treeJump886.spec.ts": 12000,
     "tests/e2e/trebuchet711.spec.ts": 15000,
     "tests/e2e/unitCards6.spec.ts": 2598,

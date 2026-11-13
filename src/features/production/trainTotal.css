@@ -1,0 +1,294 @@
+.train-total-page {
+  min-width: 0;
+}
+.train-total-page .num,
+.train-total-page .nw {
+  white-space: nowrap;
+}
+.train-total-page .num {
+  font-variant-numeric: tabular-nums;
+}
+.train-total-page nav.crumbs a {
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+}
+.train-total-page header.tool-head .tool-head-actions .calc-dock .btn,
+.train-total-page header.tool-head .tool-head-actions .calc-dock-jump {
+  height: auto;
+  min-height: 44px;
+}
+.train-total-page header.tool-head .tool-head-actions .calc-dock .btn::after,
+.train-total-page header.tool-head .tool-head-actions .calc-dock-jump::after {
+  content: none;
+}
+.train-total-page header.tool-head .calc-dock-actions {
+  gap: 8px;
+}
+.train-total-page :focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+.train-total-conditions,
+.train-total-rows,
+.train-total-summary,
+.train-total-techs {
+  min-width: 0;
+}
+.train-total-settings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.train-total-page label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--fs-sm);
+}
+.train-total-page select,
+.train-total-page input[type='text'],
+.train-total-manual input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  box-sizing: border-box;
+  font-size: var(--fs-body);
+}
+.train-total-rows {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+.train-total-rows h2,
+.train-total-summary h2,
+.train-total-techs h2,
+.train-total-unlocks h3 {
+  margin: 0;
+  font-size: var(--fs-h3);
+}
+.train-total-rows .note,
+.train-total-row-list,
+.train-total-unlocks {
+  grid-column: 1 / -1;
+}
+.train-total-add {
+  grid-column: 2;
+  grid-row: 1;
+}
+.train-total-rows h2 {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+}
+.train-total-row,
+.train-total-summary,
+.train-total-techs,
+.train-total-unlocks {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: var(--space-4);
+}
+.train-total-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+.train-total-row h3 {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  align-self: center;
+  font-size: var(--fs-body);
+}
+.train-total-delete {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  color: var(--color-bad);
+}
+.train-total-row label,
+.train-total-flag,
+.train-total-mini,
+.train-total-row .btn:not(.train-total-delete) {
+  grid-column: 1 / -1;
+}
+.train-total-row.is-bad {
+  background: var(--color-warn-soft);
+}
+.train-total-flag {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--color-text);
+}
+.train-total-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  color: var(--color-text-2);
+  font-size: var(--fs-sm);
+}
+.train-total-summary-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.train-total-mark {
+  display: inline-flex;
+  align-items: center;
+  margin-left: var(--space-2);
+  padding: 0 var(--space-2);
+  min-height: 24px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: 650;
+}
+.train-total-mark.is-partial {
+  background: var(--color-warn-soft);
+  color: var(--color-warn);
+}
+.train-total-mark.is-estimate {
+  background: var(--color-bad-soft);
+  color: var(--color-bad);
+}
+.train-total-scope,
+.train-total-empty {
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+}
+.train-total-alert {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-warn-soft);
+}
+.train-total-alert p,
+.train-total-summary p {
+  margin: 0;
+}
+.train-total-resources {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+.train-total-resource {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.train-total-resource > strong {
+  font-size: var(--fs-num-xl);
+}
+.train-total-lines {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.train-total-lines li {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  min-width: 0;
+}
+.train-total-tech,
+.train-total-techs,
+.train-total-unlocks {
+  display: grid;
+  gap: var(--space-3);
+}
+.train-total-techs {
+  margin-top: var(--space-6);
+}
+.train-total-page label.train-total-tech {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-text);
+}
+.train-total-tech.is-invalid {
+  background: var(--color-warn-soft);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+}
+.train-total-tech small,
+.train-total-page .note {
+  color: var(--color-text-2);
+}
+.train-total-tech small {
+  display: block;
+}
+.train-total-entry,
+.train-total-page .btn {
+  min-height: 44px;
+}
+.train-total-entry {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+}
+.train-total-manual {
+  margin-bottom: var(--space-4);
+}
+
+@media (max-width: 700px) {
+  .train-total-page header.tool-head .tool-head-actions {
+    position: static;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .train-total-page header.tool-head .calc-dock,
+  .train-total-page header.tool-head .calc-dock-actions {
+    position: static;
+    z-index: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .train-total-page header.tool-head .tool-head-actions .calc-dock .btn,
+  .train-total-page header.tool-head .tool-head-actions .calc-dock-jump {
+    flex: 0 0 auto;
+    width: auto;
+  }
+  body:has(.train-total-page header.tool-head .tool-head-actions) {
+    padding-bottom: 0;
+  }
+}

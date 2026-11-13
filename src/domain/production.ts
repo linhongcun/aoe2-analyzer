@@ -14,6 +14,8 @@ import { toggleSelected } from './prereq';
 export const PRODUCTION_RES = ['Food', 'Wood', 'Gold', 'Stone'] as const;
 export const PRODUCTION_LIMIT = 12;
 export const BUILDING_LIMIT = 100;
+/** 只决定能否训练的科技。编号必须与 productionBuildings 里的门槛一致。 */
+export const PRODUCTION_UNLOCK_TECH_IDS = [16, 47, 483, 755] as const;
 export interface ProductionRow {
   unit: number;
   building: number;
