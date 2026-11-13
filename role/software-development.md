@@ -1,6 +1,6 @@
 # 软件开发经验与维护交接
 
-给后来改这个仓库的人。本文只讲代码、数据、验证和上线怎么核对。产品范围见 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色)，视觉规格见 [docs/design/README.md](../docs/design/README.md)，目录分层的长表见 [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md)。三处冲突时，流程以 CONTRIBUTING 为准，游戏数字以仓库里的数据和脚本为准。
+给后来改这个仓库的人。本文只讲代码、数据、验证和上线怎么核对。产品范围见 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色)，Issue 阶段与同一正文交接见 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle)，视觉规格见 [docs/design/README.md](../docs/design/README.md)，目录分层的长表见 [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md)。三处冲突时，流程以 CONTRIBUTING 为准，游戏数字以仓库里的数据和脚本为准。
 
 核对基准是 2026-11-13 的 `main` `0db9c30924dc5a2acaa66d3924d2f655fc17a6c2`（页脚短 SHA `0db9c30`，`package.json` 版本 `0.77.92`）。命令都对照过 `package.json`、工作流或配置文件。没在这次核对里跑过的检查，下面会标明。
 
@@ -28,7 +28,7 @@ npm run lint:layers -- --strict
 
 数据流可以收成一条：固定上游 → `scripts/` 生成并提交 `src/data/*.json` 与 `public/img/` → 加载器做索引 → `domain/` 纯函数计算 → `features/` 和 `shared/ui` 渲染。计算放 `src/domain/`，并在 `tests/unit/` 配 Vitest。页面状态能放进 URL 的，就放进 URL。
 
-维护约定（写在 CONTRIBUTING，不是编译器规则）：站点由维护者自己使用，旧布局、旧入口、旧链接协议可以有理由换掉，不为旧行为再加兼容层。先把这一页的任务和范围写清楚，需要视觉时先有界面稿和设计通过，再开实施 issue。设计通过和开出 issue 不等于可以改代码。#978 的公开正文写了同一边界：设计复核通过的是入口和交互规格，不构成开工授权。真正可改的范围，以维护者对那一项的实现授权为准。持续发布授权也不自动认领所有开放 issue。
+维护约定（写在 CONTRIBUTING，不是编译器规则）：站点由维护者自己使用，旧布局、旧入口、旧链接协议可以有理由换掉，不为旧行为再加兼容层。需求、产品范围、设计规格、授权、代码和上线证据始终记录在同一 Issue 正文；需要视觉时按体验设计阶段交付。设计通过和阶段标签都不等于可以改代码；转入软件开发前必须有针对该事项的维护者实现授权。持续发布授权也不自动认领所有开放 Issue。详见 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle)。
 
 ## 2. 游戏数据版本和可核来源
 
@@ -167,7 +167,7 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 
 ## 7. 从改动到可以称上线
 
-1. 从最新 `main` 建分支。一个事项一个 PR。先确认这项已有实现授权；设计稿通过或 issue 已开，仍要有这一步。
+1. 从最新 `main` 建分支。一个事项沿原 Issue 开一个 PR；先确认该 Issue 正文已有实现授权；设计通过或阶段标签都不代替这一步。
 2. 游戏数字从当前数据和脚本读。改生成逻辑后在本地跑对应的 `npm run data`、`effects` 或 `eco`，并提交脚本产出。默认 CI 不会重跑 `data` 阶段。
 3. 本地跑与 diff 直接相关的测试，加上必要冒烟。报告写明没跑的部分。
 4. 合入前由实现者之外的人复核，记下实际提交 SHA、范围、结果和未解决问题。界面改动同时对一下规格。
@@ -176,7 +176,7 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 7. squash 之后，`main` 上的 SHA 不是 PR 分支尖。例如 #979 的分支尖是 `484798c3`，合入 `main` 的是 `471c1368`。部署、页脚和 tag 都对 `main` 这个 SHA。
 8. 称上线之前核对这三件事：该 `main` push 的 CI 里 `test` 与 `deploy` 都成功；Pages 完成；线上页脚「构建」的 7 位与这个 SHA 的前 7 位一致，并且这次改动的页面或资源确实在线上。已合并、PR 绿、只有祖先关系，都还不是上线。
 9. 正式 Release 还要再看。`release.yml` 在 `main` 的成功 push 型 CI 之后接续。生成 draft 不等于发布完成。当前公开的 `v0.77.92` 不是 draft，annotated tag 指向 `0db9c309`。发版步骤见 [docs/RELEASING.md](../docs/RELEASING.md)。
-10. 网站事项在范围已经上线、正式 Release 也对过之后，再把 issue 以 completed 关闭。`Relates` 不会在合并时自动关。不把只合并、还没部署或范围没做完的事项标成已部署。
+10. 网站事项仍在原 Issue 更新上线证据，并在范围已上线、正式 Release 核实后转 `阶段:已上线`，加 `已部署` 并关闭。`Relates` 不会在合并时自动关。纯仓库文档事项在原 Issue 记录“仓库交付，无网站发布”，不标 `已部署`；驳回/重复事项写理由关闭，不伪标上线。
 
 合入前的独立复核要留下。必要 CI 在最终 head 上通过之后，仓库约定不再加一轮人工产品走查当作关闭条件。运营意见用来记录具体卡点，CONTRIBUTING 写明它不是上线门禁。
 
@@ -190,11 +190,11 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 
 [#978](https://github.com/linhongcun/aoe2-analyzer/issues/978) / [PR #979](https://github.com/linhongcun/aoe2-analyzer/pull/979) 合入 `471c1368`。[run 43336159305](https://github.com/linhongcun/aoe2-analyzer/actions/runs/43336159305) 的 `deploy` 成功，接着的 [Release run 43336687203](https://github.com/linhongcun/aoe2-analyzer/actions/runs/43336687203) 也成功。训练总价从此在仓库和线上。2026-11-13 再看线上时，页脚已是后继提交 `0db9c30`（比 `471c1368` 超前 16 个提交），`assets/Production-*.js` 里仍有「训练总价」「部分训练费用」「不含研究费用」。不要沿用「还没有 train-total」的旧判断。
 
-## 9. 旧文档里还没改过来的说法
+## 9. 旧文档口径与当前状态
 
-这次只加本文和 README 的一处索引，没有改下面这些文件。读到它们时，以本文第 6 节、[ci-749](../docs/design/ci-749.md) 和 TESTING 文首为准。
+2026-11-13 基线核查时只加了本文和 README 的一处索引；下表记录当时发现的差异及当前状态。现行验证以本文第 6 节、[ci-749](../docs/design/ci-749.md) 和 TESTING 文首为准。
 
-| 位置 | 仍写着的内容 | 状态 |
+| 位置 | 当时写着的内容 | 状态 |
 | --- | --- | --- |
 | [README「部署」](../README.md) | 每次 push / PR 都跑 Vitest、Python、数据检查和整套 Playwright | 待维护。默认路径不是这套 |
 | [README 数据表](../README.md) | `.dat` 来自 auto-mods 提交 `0c38027` | 待维护。当前钉死的是 `data_sources.json` 的 `e293dc1…` |
@@ -202,7 +202,7 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 | [docs/RELEASING.md](../docs/RELEASING.md) 准备步骤第 2 点 | 高风险 PR 跑完整单测和四个浏览器 runner，窄范围保留四宽与主题 | 待维护。同文后面的默认门禁已是窄冒烟 |
 | [CONTRIBUTING 持续审阅](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) | 「CI 的路径分类继续有效」 | 待维护。同文验证投入和 `selectCiPlan` 已不让分类扩大默认门禁 |
 | [docs/CODEX-MAINTENANCE.md](../docs/CODEX-MAINTENANCE.md) 第 6 节 | 界面 PR 附 360 / 375 / 390 / 1280 截图 | 该文自己注明这不再是每 PR 门禁；条款还在 |
-| [.github/ISSUE_TEMPLATE/feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md) | 设计稿覆盖四宽度，PR 另附四宽截图 | 待维护。PR 模板已经改成不要求四宽矩阵 |
+| [.github/ISSUE_TEMPLATE/feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md) | 旧模板要求设计稿覆盖四宽度，PR 另附四宽截图 | 已按 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle) 改为同一正文的阶段区块；开发准备度在交接到软件开发时核验，不固定四宽 |
 
 ## 10. 这次没核对完的点
 
