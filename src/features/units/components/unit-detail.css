@@ -43,32 +43,33 @@
   display: flex;
   align-items: flex-start;
   gap: 12px 16px;
-  margin: 8px 0 12px;
-  padding: 0;
-  border: 0;
-  background: transparent;
+  margin: var(--space-3) 0 var(--space-4);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
   text-align: left;
 }
 .ud-icon {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
   flex: 0 0 auto;
   border-radius: var(--radius-md);
   background: var(--color-surface-2);
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-1);
   overflow: hidden;
 }
 .ud-icon img {
-  width: 64px;
-  height: 64px;
+  width: 100%;
+  height: 100%;
   margin: 0;
   border: 0;
   object-fit: contain;
 }
 .ud-id-main {
   min-width: 0;
-  flex: 1 1 auto;
+  flex: 1 1 0;
 }
 .ud-en {
   margin: 2px 0 6px;
@@ -88,7 +89,7 @@
   gap: 6px;
   min-height: 28px;
   padding: 3px 8px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   background: var(--color-tag);
   color: var(--color-text-2);
   font-size: 13px;
@@ -97,6 +98,9 @@
 .ud a.ud-tag:hover {
   color: var(--color-text);
   background: var(--color-control);
+}
+.ud a.ud-tag {
+  min-height: 44px;
 }
 .ud-tag img,
 .ud-tag .dlci,
@@ -116,8 +120,10 @@
 .ud .eseg {
   margin: 0;
   border-color: var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-2);
+  padding: 3px;
+  gap: 2px;
 }
 .ud .eseg a {
   display: inline-flex;
@@ -127,18 +133,24 @@
   min-width: 64px;
   padding: 0 12px;
   color: var(--color-text-2);
-  background: var(--color-surface);
+  background: transparent;
+  border-radius: var(--radius-pill);
   font-size: 13px;
 }
 .ud .eseg a.on {
-  background: var(--color-selected);
-  color: var(--color-on-selected);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-weight: 700;
 }
 .ud .cp-trigger {
   min-height: 44px;
   background: var(--color-surface);
   color: var(--color-text);
   border-color: var(--color-border);
+  border-radius: var(--radius-pill);
+}
+.ud .detail-copy-button {
+  border-radius: var(--radius-pill);
 }
 .ud-jump,
 .ud-tools {
@@ -150,6 +162,7 @@
   gap: 4px;
   margin: 0 0 12px;
   border-bottom: 1px solid var(--color-line);
+  padding-inline: 10px;
 }
 .ud-jump button {
   min-height: 44px;
@@ -160,22 +173,26 @@
   font-size: 13px;
 }
 .ud-jump button:hover {
-  color: var(--color-text);
-  background: transparent;
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
 }
 .ud-civ {
-  margin: 0 0 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-4);
 }
 .ud-core {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.7fr);
-  gap: 8px 28px;
-  align-items: start;
-  margin: 0 0 22px;
-  padding: 14px 16px 12px;
+  gap: var(--space-5);
+  align-items: stretch;
+  margin: 0 0 var(--space-5);
+  padding: var(--space-5);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-1);
 }
 .ud-stat-grid {
@@ -185,8 +202,8 @@
 }
 .ud-stat {
   min-width: 0;
-  padding: 10px 10px 8px;
-  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
   background: var(--color-surface-2);
 }
 .ud-stat-lab {
@@ -200,7 +217,7 @@
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
-  color: var(--color-text-2);
+  color: var(--color-accent);
 }
 .ud-stat-val {
   margin-top: 2px;
@@ -237,7 +254,7 @@
   gap: 6px;
   margin: 0 8px 8px 0;
   padding: 8px 12px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-surface-2);
   color: var(--color-text);
   font-size: 16px;
@@ -250,18 +267,54 @@
   margin-top: 4px;
   color: var(--color-muted);
   font-size: 13px;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
 }
 .ud-discount .res {
   color: var(--color-text-2);
   font-weight: 700;
 }
 .ud-section {
-  margin: 0 0 22px;
+  margin: 0 0 var(--space-5);
   min-width: 0;
 }
+.ud > .ud-section:not(#unit-sim),
+.ud-history {
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+}
+.ud-cost-col {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--color-line);
+  min-width: 0;
+}
+.ud-cost {
+  margin-top: var(--space-3);
+}
+.ud-combat {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+.ud-combat > :only-child {
+  grid-column: 1 / -1;
+}
+.ud-combat:empty {
+  display: none;
+}
+.ud-armor {
+  min-width: 0;
+  padding: 0 var(--space-4) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
 .ud-section > h2 {
-  padding-top: 16px;
-  border-top: 1px solid var(--color-line);
+  margin-bottom: var(--space-4);
 }
 .ud-obtain,
 .ud-gather {
@@ -310,6 +363,7 @@
 .ud-node.is-current {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 1px var(--color-accent);
+  background: var(--color-accent-soft);
 }
 .ud-node .uico {
   width: 40px;
@@ -354,7 +408,7 @@
   padding: 16px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-1);
 }
 .ud-civs {
@@ -376,10 +430,10 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  padding: 14px 16px;
+  padding: var(--space-5);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-1);
 }
 .ud-sim-entry h2 {
@@ -415,7 +469,7 @@
   min-width: 44px;
   padding: 0 12px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   background: var(--color-surface);
   color: var(--color-text-2);
   font-size: 13px;
@@ -432,8 +486,7 @@
   margin: 0 0 22px;
 }
 .ud-history {
-  border-top: 1px solid var(--color-line);
-  padding-top: 12px;
+  margin-bottom: var(--space-5);
 }
 .ud-history > summary {
   display: flex;
@@ -443,15 +496,35 @@
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.ud-history[open] > summary .ic {
+  transform: rotate(180deg);
+}
+.ud-sim-entry .ud-btn {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  border-color: transparent;
+  font-weight: 700;
 }
 .ud-history > summary h2 {
   margin: 0;
 }
 .ud [id] {
-  scroll-margin-top: 12px;
+  scroll-margin-top: 80px;
 }
 
 @media (max-width: 900px) {
+  .ud-cost-col {
+    padding: var(--space-4) 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-line);
+  }
+  .ud-combat {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
   .ud-core,
   .ud-stat-grid {
     grid-template-columns: 1fr;
@@ -476,12 +549,47 @@
 }
 
 @media (max-width: 430px) {
+  .ud {
+    padding-inline: 0;
+  }
+  .ud-id,
+  .ud-core,
+  .ud > .ud-section:not(#unit-sim),
+  .ud-sim-entry,
+  .ud-history {
+    padding: var(--space-4);
+  }
+  .ud-id {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 4px var(--space-3);
+  }
+  .ud-id-main {
+    display: contents;
+  }
+  .ud-id h1 {
+    grid-column: 2;
+    align-self: end;
+  }
+  .ud-en {
+    grid-column: 2;
+    margin: 0;
+  }
+  .ud-icon {
+    grid-row: 1 / 3;
+  }
+  .ud-tags,
+  .ud-id-main > .ud-kicker,
+  .ud-id-actions {
+    grid-column: 1 / -1;
+    margin-top: var(--space-2);
+  }
   .ud-icon,
   .ud-icon img {
-    width: 52px;
-    height: 52px;
+    width: 56px;
+    height: 56px;
   }
   .ud-stat {
-    padding: 8px;
+    padding: var(--space-3);
   }
 }
