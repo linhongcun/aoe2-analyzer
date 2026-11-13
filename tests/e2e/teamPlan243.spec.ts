@@ -34,6 +34,15 @@ test('#243 independent edits, exact confirmations and task claims survive every 
   await expect(page.getByRole('heading', { name: '团战分工计划', exact: true })).toBeVisible();
   await expect(page.getByRole('combobox', { name: 'P1 位置', exact: true })).toHaveValue('unspecified');
   await expect(page.getByRole('button', { name: '移除 P1', exact: true })).toBeDisabled();
+  const map = (await page.locator('.tp-map').boundingBox())!;
+  const roster = (await page.locator('.tp-roster').boundingBox())!;
+  const ages = (await page.getByRole('navigation', { name: '计划阶段', exact: true }).boundingBox())!;
+  expect(map.x + map.width).toBeLessThanOrEqual(roster.x);
+  expect(ages.y + ages.height).toBeLessThanOrEqual(map.y);
+  const initialUrl = page.url();
+  await page.getByRole('button', { name: '编辑本阶段出兵', exact: true }).click();
+  await expect(page.locator('#tp-phase-heading')).toBeFocused();
+  expect(page.url()).toBe(initialUrl);
   await page.getByRole('combobox', { name: 'P1 位置', exact: true }).selectOption('pocket');
   await page.getByRole('combobox', { name: 'P1 文明', exact: true }).selectOption('Britons');
   await page.getByRole('button', { name: '城堡阶段', exact: true }).click();
@@ -202,6 +211,13 @@ for (const width of [360, 375, 390, 1280])
       await page.addInitScript((theme) => localStorage.setItem('aoe2-theme', theme), theme);
       await page.goto(url(example()));
       await expect(page.getByTestId('p1-main-status')).toContainText('所列前置已满足');
+      if (width <= 700) {
+        const map = (await page.locator('.tp-map').boundingBox())!;
+        const roster = (await page.locator('.tp-roster').boundingBox())!;
+        expect(map.y + map.height).toBeLessThanOrEqual(roster.y);
+      }
+      await page.getByRole('button', { name: '编辑本阶段出兵', exact: true }).click();
+      await expect(page.locator('#tp-phase-heading')).toBeFocused();
       await page.getByLabel('P1 称呼', { exact: true }).focus();
       await expect(page.getByLabel('P1 称呼', { exact: true })).toBeFocused();
       await page.keyboard.press('Tab');

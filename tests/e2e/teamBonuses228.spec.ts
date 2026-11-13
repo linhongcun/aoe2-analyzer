@@ -28,6 +28,11 @@ test('#228 本人默认来源、1–4人上下限和重复来源保留全部提�
   await expect(page.getByRole('heading', { name: '团队加成一屏汇总', exact: true })).toBeVisible();
   await expect(page.getByTestId('team-bonus-Franks-team')).toHaveCount(1);
   await expect(page.getByRole('button', { name: '移除玩家 1', exact: true })).toBeDisabled();
+  const settings = (await page.locator('.team-layout > .team-panel').boundingBox())!;
+  const results = (await page.locator('.team-results').boundingBox())!;
+  expect(settings.y + settings.height).toBeLessThanOrEqual(results.y);
+  expect(Math.abs(settings.width - results.width)).toBeLessThan(1);
+  await expect(page.getByRole('heading', { name: '阵容来源总览', exact: true })).toBeVisible();
   for (let count = 0; count < 3; count++) await page.getByRole('button', { name: '添加玩家', exact: true }).click();
   await expect(page.getByRole('button', { name: '添加玩家', exact: true })).toBeDisabled();
   const source = page.getByTestId('team-bonus-Franks-team');
@@ -80,8 +85,10 @@ test('#228 单位反查保留未核实关联，不能把不完整关系当无效
   const unknown = page.locator('section[aria-labelledby="team-unknown-heading"]');
   await expect(unknown.getByTestId('team-technology-1380')).toBeVisible();
   await expect(unknown).toContainText('不能据此认定没有作用');
+  const totals = await page.getByTestId('team-summary').innerText();
   await page.getByRole('combobox', { name: '目标类别', exact: true }).selectOption('all');
   await expect(page.getByRole('combobox', { name: '具体单位', exact: true })).toHaveCount(0);
+  expect(await page.getByTestId('team-summary').innerText()).toBe(totals);
   await expect(page.getByTestId('team-technology-578')).toBeVisible();
 });
 

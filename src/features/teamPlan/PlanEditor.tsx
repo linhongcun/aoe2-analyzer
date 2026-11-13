@@ -53,6 +53,24 @@ export function PlanEditor({
           <span> · {plan.map.name.trim() || (plan.map.openness === 'unspecified' ? '地图未填' : OPEN_NAMES[plan.map.openness])}</span>
           <span>{phase.tasks.length ? <span className="tp-number"> · {phase.tasks.length} 项任务</span> : ' · 尚未选择任务'}</span>
         </p>
+        <nav className="tp-ages" aria-label="计划阶段">
+          {PLAN_AGES.map((age) => (
+            <button key={age} className="btn" aria-pressed={phase.age === age} onClick={() => update({ ...plan, activeAge: age })}>
+              {AGE_NAMES[age]}阶段
+            </button>
+          ))}
+        </nav>
+        <button
+          type="button"
+          className="btn tp-jump"
+          onClick={() => {
+            const target = document.getElementById('tp-phase-heading');
+            target?.scrollIntoView({ block: 'start' });
+            target?.focus({ preventScroll: true });
+          }}
+        >
+          编辑本阶段出兵
+        </button>
       </section>
       <div className="tp-actions">
         <button className="btn" onClick={() => update(exampleTeamPlan(), true)}>
@@ -84,109 +102,104 @@ export function PlanEditor({
           <p>原记录完整保留，下面可逐项调整；任务分配与兵种资格分别显示。</p>
         </section>
       )}
-      <section className="tp-panel" aria-labelledby="tp-map-heading">
-        <h2 id="tp-map-heading">这局的地图条件</h2>
-        <div className="tp-grid">
-          <TextField label="计划名称" value={plan.title} max={PLAN_LIMITS.title} multiline={false} onChange={(title) => update({ ...plan, title })} />
-          <TextField
-            label="地图名称"
-            value={plan.map.name}
-            max={PLAN_LIMITS.map}
-            multiline={false}
-            onChange={(name) => update({ ...plan, map: { ...plan.map, name } })}
-          />
-          <label className="tp-field">
-            陆地条件
-            <select
-              value={plan.map.openness}
-              onChange={(e) => update({ ...plan, map: { ...plan.map, openness: e.target.value as TeamPlan['map']['openness'] } })}
-            >
-              {Object.entries(OPEN_NAMES).map(([value, name]) => (
-                <option key={value} value={value}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <TextField label="地图补充条件" value={plan.map.conditions} onChange={(conditions) => update({ ...plan, map: { ...plan.map, conditions } })} />
-        </div>
-      </section>
-      <section className="tp-panel" aria-labelledby="tp-roster-heading">
-        <h2 id="tp-roster-heading">玩家与自记位置</h2>
-        <p className="note">
-          支持 <span className="tp-number">2–4</span> 名同队玩家。位置由你填写；2v2也不强制或禁止口袋，不根据文明评分安排位置。
-        </p>
-        <div className="tp-grid">
-          {plan.players.map((player) => (
-            <fieldset key={player.id} className="tp-player">
-              <legend>{player.id.toUpperCase()}</legend>
-              <TextField
-                label={`${player.id.toUpperCase()} 称呼`}
-                value={player.name}
-                max={PLAN_LIMITS.name}
-                multiline={false}
-                onChange={(name) => changePlayer({ ...player, name })}
-              />
-              <label className="tp-field">
-                {player.id.toUpperCase()} 文明
-                <select value={player.civ} onChange={(e) => changePlayer({ ...player, civ: e.target.value })}>
-                  <option value="">未选择</option>
-                  {!!player.civ && !civs.some((c) => c.en === player.civ) && <option value={player.civ}>未知文明：{player.civ}</option>}
-                  {civs.map((c) => (
-                    <option key={c.en} value={c.en}>
-                      {c.zh}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="tp-field">
-                {player.id.toUpperCase()} 位置
-                <select value={player.position} onChange={(e) => changePlayer({ ...player, position: e.target.value as PlanPlayer['position'] })}>
-                  {Object.entries(POSITION_NAMES).map(([value, name]) => (
-                    <option key={value} value={value}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <TextField
-                label={`${player.id.toUpperCase()} 位置补充`}
-                value={player.positionNote}
-                max={PLAN_LIMITS.position}
-                multiline={false}
-                onChange={(positionNote) => changePlayer({ ...player, positionNote })}
-              />
-              <button
-                className="btn"
-                disabled={plan.players.length <= 2}
-                onClick={() => {
-                  if (update(removePlanPlayer(plan, player.id))) notice(`已移除${playerLabel(player)}及其认领；其余玩家身份保留，请查看尚未分配的任务。`);
-                }}
+      <div className="tp-setup">
+        <section className="tp-panel tp-map" aria-labelledby="tp-map-heading">
+          <h2 id="tp-map-heading">这局的地图条件</h2>
+          <div className="tp-grid">
+            <TextField label="计划名称" value={plan.title} max={PLAN_LIMITS.title} multiline={false} onChange={(title) => update({ ...plan, title })} />
+            <TextField
+              label="地图名称"
+              value={plan.map.name}
+              max={PLAN_LIMITS.map}
+              multiline={false}
+              onChange={(name) => update({ ...plan, map: { ...plan.map, name } })}
+            />
+            <label className="tp-field">
+              陆地条件
+              <select
+                value={plan.map.openness}
+                onChange={(e) => update({ ...plan, map: { ...plan.map, openness: e.target.value as TeamPlan['map']['openness'] } })}
               >
-                移除 {player.id.toUpperCase()}
-              </button>
-            </fieldset>
-          ))}
-        </div>
-        <button
-          className="btn"
-          disabled={plan.players.length >= 4}
-          onClick={() => {
-            const next = addPlanPlayer(plan);
-            if (next === plan) notice('请先取消已移除负责人的悬空认领，再添加玩家；不会把旧认领转交给新玩家。');
-            else update(next);
-          }}
-        >
-          添加玩家
-        </button>
-      </section>
-      <nav className="tp-ages" aria-label="计划阶段">
-        {PLAN_AGES.map((age) => (
-          <button key={age} className="btn" aria-pressed={phase.age === age} onClick={() => update({ ...plan, activeAge: age })}>
-            {AGE_NAMES[age]}阶段
+                {Object.entries(OPEN_NAMES).map(([value, name]) => (
+                  <option key={value} value={value}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <TextField label="地图补充条件" value={plan.map.conditions} onChange={(conditions) => update({ ...plan, map: { ...plan.map, conditions } })} />
+          </div>
+        </section>
+        <section className="tp-panel tp-roster" aria-labelledby="tp-roster-heading">
+          <h2 id="tp-roster-heading">玩家与自记位置</h2>
+          <p className="note">
+            支持 <span className="tp-number">2–4</span> 名同队玩家。位置由你填写；2v2也不强制或禁止口袋，不根据文明评分安排位置。
+          </p>
+          <div className="tp-grid">
+            {plan.players.map((player) => (
+              <fieldset key={player.id} className="tp-player">
+                <legend>{player.id.toUpperCase()}</legend>
+                <TextField
+                  label={`${player.id.toUpperCase()} 称呼`}
+                  value={player.name}
+                  max={PLAN_LIMITS.name}
+                  multiline={false}
+                  onChange={(name) => changePlayer({ ...player, name })}
+                />
+                <label className="tp-field">
+                  {player.id.toUpperCase()} 文明
+                  <select value={player.civ} onChange={(e) => changePlayer({ ...player, civ: e.target.value })}>
+                    <option value="">未选择</option>
+                    {!!player.civ && !civs.some((c) => c.en === player.civ) && <option value={player.civ}>未知文明：{player.civ}</option>}
+                    {civs.map((c) => (
+                      <option key={c.en} value={c.en}>
+                        {c.zh}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="tp-field">
+                  {player.id.toUpperCase()} 位置
+                  <select value={player.position} onChange={(e) => changePlayer({ ...player, position: e.target.value as PlanPlayer['position'] })}>
+                    {Object.entries(POSITION_NAMES).map(([value, name]) => (
+                      <option key={value} value={value}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <TextField
+                  label={`${player.id.toUpperCase()} 位置补充`}
+                  value={player.positionNote}
+                  max={PLAN_LIMITS.position}
+                  multiline={false}
+                  onChange={(positionNote) => changePlayer({ ...player, positionNote })}
+                />
+                <button
+                  className="btn"
+                  disabled={plan.players.length <= 2}
+                  onClick={() => {
+                    if (update(removePlanPlayer(plan, player.id))) notice(`已移除${playerLabel(player)}及其认领；其余玩家身份保留，请查看尚未分配的任务。`);
+                  }}
+                >
+                  移除 {player.id.toUpperCase()}
+                </button>
+              </fieldset>
+            ))}
+          </div>
+          <button
+            className="btn"
+            disabled={plan.players.length >= 4}
+            onClick={() => {
+              const next = addPlanPlayer(plan);
+              if (next === plan) notice('请先取消已移除负责人的悬空认领，再添加玩家；不会把旧认领转交给新玩家。');
+              else update(next);
+            }}
+          >
+            添加玩家
           </button>
-        ))}
-      </nav>
+        </section>
+      </div>
       <section className="tp-phase" aria-labelledby="tp-phase-heading">
         <h2 id="tp-phase-heading" className="calc-dock-target" tabIndex={-1}>
           {AGE_NAMES[phase.age]}阶段的出兵约定

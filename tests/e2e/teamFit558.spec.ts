@@ -87,6 +87,14 @@ test('#558 已选阵容入口保留法兰克候选和波斯玛雅队友', async 
   await expect(panel.getByTestId('team-fit-mates')).toContainText('玛雅');
   await expect(panel.getByRole('heading', { name: '法兰克带来的团队来源', exact: true })).toBeVisible();
   await expect(panel).toContainText('编辑口径，非官方推荐');
+  const selectors = (await panel.locator('.tf-selectors').boundingBox())!;
+  const next = (await panel.locator('.tf-next').boundingBox())!;
+  const sources = (await panel.locator('.tf-source-grid').boundingBox())!;
+  expect(selectors.y + selectors.height).toBeLessThanOrEqual(next.y);
+  expect(next.y + next.height).toBeLessThanOrEqual(sources.y);
+  const mates = await panel.locator('.tf-mate').all();
+  expect((await mates[0]!.boundingBox())!.y).toBe((await mates[1]!.boundingBox())!.y);
+  await expect(panel.locator('.tf-next').getByRole('link', { name: '带入团战分工', exact: true })).toBeVisible();
 });
 
 const fitUrl = (candidate = 'Franks', mates = 'Persians,Mayans') => './#/team-fit?' + new URLSearchParams({ v: '1', mates, candidate }).toString();

@@ -235,6 +235,23 @@ export default function TeamFitResults({ config, core, trees }: TeamFitResultsPr
   );
   return (
     <div className="tf-results" data-testid="team-fit-results">
+      <aside className="tf-next" aria-labelledby="tf-next-heading">
+        <h2 id="tf-next-heading">继续核对与分工</h2>
+        <p className="note">同一来源只汇总一次，不计算重复倍率；关联来自固定数据，未作客户端实测声明。</p>
+        <div className="tf-actions">
+          <Link className="btn" to={links.bonuses}>
+            查看完整团队加成
+          </Link>
+          {links.plan ? (
+            <Link className="btn" to={links.plan}>
+              带入团战分工
+            </Link>
+          ) : (
+            <span className="note">加入至少一名队友后可带入团战分工。</span>
+          )}
+        </div>
+        <p className="note">只带入实际文明；研究完成、兵种与任务均留空。</p>
+      </aside>
       {config.mates.length === 0 && <p className="tf-solo">当前只有你的候选；以下查看自身潜力，加入队友后再比较新增。</p>}
       <div className="tf-source-grid">
         <section>
@@ -305,22 +322,6 @@ export default function TeamFitResults({ config, core, trees }: TeamFitResultsPr
           </section>
         ))}
       </section>
-      <aside className="tf-bottom">
-        <p className="note">同一来源只汇总一次，不计算重复倍率；关联来自固定数据，未作客户端实测声明。</p>
-        <div className="tf-actions">
-          <Link className="btn" to={links.bonuses}>
-            查看完整团队加成
-          </Link>
-          {links.plan ? (
-            <Link className="btn" to={links.plan}>
-              带入团战分工
-            </Link>
-          ) : (
-            <span className="note">加入至少一名队友后可带入团战分工。</span>
-          )}
-        </div>
-        <p className="note">只带入实际文明；研究完成、兵种与任务均留空。</p>
-      </aside>
     </div>
   );
 }
