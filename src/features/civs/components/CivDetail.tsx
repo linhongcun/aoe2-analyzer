@@ -10,6 +10,7 @@ import { civUniqueTechs, civUniqueUnits, relatedRegionalLines } from '../../../d
 import { AGE_ZH, TYPE_ZH } from '../../../domain/ratings';
 import type { Building, Unit } from '../../../domain/types';
 import { DlcImg, img, TechIcon, UnitIcon } from '../../../shared/ui/art';
+import { Icon } from '../../../shared/ui/Icon';
 import { InsightSlot } from '../../../shared/ui/InsightSlot';
 import { Breadcrumbs } from '../../../shared/ui/layout';
 import { CopyPageLink, DetailSource } from '../../../shared/ui/DetailBlocks';
@@ -40,6 +41,45 @@ const CHAPTERS = [
   ['techtree', '科技树'],
   ['more', '其他'],
 ] as const;
+
+const CHAPTER_IDS = CHAPTERS.map(([id]) => id);
+
+/** 章节条跟着滚动标出当前所在章节。 */
+function useActiveChapter(pathname: string, hash: string): string {
+  const [active, setActive] = useState<string>(CHAPTER_IDS[0]!);
+  useEffect(() => {
+    let frame = 0;
+    const read = () => {
+      frame = 0;
+      let current: string = CHAPTER_IDS[0]!;
+      let nearest = -Infinity;
+      if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2 && scrollY > 0) current = CHAPTER_IDS[CHAPTER_IDS.length - 1]!;
+      else
+        for (const id of CHAPTER_IDS) {
+          const el = document.getElementById(id);
+          if (!el) continue;
+          const top = el.getBoundingClientRect().top;
+          if (top <= 140 && (top > nearest || (top === nearest && hash === `#${id}`))) {
+            current = id;
+            nearest = top;
+          }
+        }
+      setActive(current);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(read);
+    };
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+    return () => {
+      removeEventListener('scroll', onScroll);
+      removeEventListener('resize', onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, [pathname, hash]);
+  return active;
+}
 
 function TechTreePending() {
   return (
@@ -75,7 +115,10 @@ function Fold({ id, title, wanted, testId, children }: { id?: string; title: str
   const [open, setOpen] = useState(wanted);
   return (
     <details id={id} className="civ-more-block" data-testid={testId} open={open} onToggle={(event) => setOpen(event.currentTarget.open)}>
-      <summary>{title}</summary>
+      <summary>
+        <Icon name="chevron-right" className={'ic chev' + (open ? ' rot' : '')} />
+        {title}
+      </summary>
       {open ? children : null}
     </details>
   );
@@ -135,6 +178,7 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
   const core = useCore();
   const params = new URLSearchParams(location.search);
   const tab = params.get('tab');
+  const chapter = useActiveChapter(location.pathname, location.hash);
   useEffect(() => {
     if (!c) return;
     session.lastCiv = c.en;
@@ -179,13 +223,6 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
   return (
     <CivBackground civ={c.en} className="civ-read">
       <Breadcrumbs current={c.zh} />
-      <nav className="civ-chapters" aria-label="本页章节">
-        {CHAPTERS.map(([id, label]) => (
-          <Link key={id} to={{ pathname: location.pathname, search: location.search, hash: `#${id}` }}>
-            {label}
-          </Link>
-        ))}
-      </nav>
       {homeReturn && (
         <div className="civ-start-return">
           <Link to={homeReturn}>回开一局</Link>
@@ -228,6 +265,13 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
           </Link>
         </div>
       </header>
+      <nav className="civ-chapters" aria-label="本页章节">
+        {CHAPTERS.map(([id, label]) => (
+          <Link key={id} to={{ pathname: location.pathname, search: location.search, hash: `#${id}` }} aria-current={chapter === id ? 'location' : undefined}>
+            {label}
+          </Link>
+        ))}
+      </nav>
       <div className="civ-columns">
         <section id="bonuses" aria-labelledby="civ-bonus-title" data-testid="civ-bonuses">
           <p className="civ-kicker">机制事实</p>
@@ -280,17 +324,10 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
       <section className="civ-more" id="more" data-testid="civ-more">
         <p className="civ-continue" data-testid="civ-related-tools">
           <span className="civ-continue-lab">用这个文明继续：</span>
-          {tools.map(([id, to, label], index) => (
-            <span key={id}>
-              {index > 0 && (
-                <span className="civ-continue-sep" aria-hidden="true">
-                  ·
-                </span>
-              )}
-              <Link data-testid={id} to={to}>
-                {label}
-              </Link>
-            </span>
+          {tools.map(([id, to, label]) => (
+            <Link key={id} data-testid={id} to={to}>
+              {label}
+            </Link>
           ))}
         </p>
         <p className="civ-kicker">其他资料</p>
