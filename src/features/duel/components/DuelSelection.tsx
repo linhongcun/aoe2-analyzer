@@ -21,6 +21,7 @@ import { PkCost } from './PkCost';
 import { TrainingPrice } from './TrainingPrice';
 import { UnitPicker } from './UnitPicker';
 import { isUnavail, r1, type SideState, type Unavail } from '../logic/duelSide';
+import { radioKeyboard } from './radioKeyboard';
 
 export function Side({
   k,
@@ -81,11 +82,12 @@ export function Side({
       <div className="bar">
         <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
         {elite && (
-          <span className="eseg" role="radiogroup" aria-label="普通/精锐">
+          <span className="eseg" role="radiogroup" aria-label="普通/精锐" onKeyDown={radioKeyboard}>
             <button
               type="button"
               role="radio"
               aria-checked={u.id === base.id}
+              tabIndex={u.id === base.id ? 0 : -1}
               className={u.id === base.id ? 'on' : undefined}
               onClick={() => onChange({ ...spec, uid: base.id })}
             >
@@ -95,6 +97,7 @@ export function Side({
               type="button"
               role="radio"
               aria-checked={u.id === elite.id}
+              tabIndex={u.id === elite.id ? 0 : -1}
               className={u.id === elite.id ? 'on' : undefined}
               onClick={() => onChange({ ...spec, uid: elite.id })}
             >
@@ -106,7 +109,7 @@ export function Side({
       <div className="bar">
         <CivPicker id={`duel-${k}-civ`} label={`${k.toUpperCase()} 方文明`} value={side.civ} allowed={u.civs} onChange={(c) => onChange({ ...spec, civ: c })} />
       </div>
-      <div className="bar duel-presets" role="radiogroup" aria-label="科技预设">
+      <div className="bar duel-presets" role="radiogroup" aria-label="科技预设" onKeyDown={radioKeyboard}>
         {(
           [
             ['none', '无科技', () => onChange({ ...spec, techs: [] })],
@@ -114,7 +117,14 @@ export function Side({
             ['f', '满科技', () => onChange({ ...spec, techs: 'f', age: 4, ageSet: true })],
           ] as const
         ).map(([id, l, f]) => (
-          <button key={id} role="radio" aria-checked={preset === id} className={preset === id ? 'on' : undefined} onClick={f}>
+          <button
+            key={id}
+            role="radio"
+            aria-checked={preset === id}
+            tabIndex={preset === id || (!preset && id === 'none') ? 0 : -1}
+            className={preset === id ? 'on' : undefined}
+            onClick={f}
+          >
             {l}
           </button>
         ))}
