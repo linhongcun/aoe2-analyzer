@@ -29,6 +29,8 @@ const TYPES = [
 
 const TYPE_ZH: Record<string, string> = { UniqueUnit: '独特单位', Unit: '通用单位', UnitUpgrade: '升级单位', RegionalUnit: '区域单位' };
 
+const statClass = (value: number) => (value === 0 ? 'num nw is-zero' : 'num nw');
+
 function unitHref(id: number, civ: string) {
   return civ ? `/unit/${id}?civ=${encodeURIComponent(civ)}` : `/unit/${id}`;
 }
@@ -100,32 +102,97 @@ export default function UnitList() {
           }
         }}
       >
-        <div className="unit-filters-primary">
-          <div className="unit-search">
-            <SearchInput id="uq" value={q} onChange={setQ} placeholder="搜索单位（中文、英文、拼音或别名）" describedBy="unit-search-hint" />
-            <p className="unit-search-hint" id="unit-search-hint">
-              可搜中文、英文、拼音或别名
-            </p>
+        <div className="unit-filter-card">
+          <div className="unit-filters-primary">
+            <div className="unit-search">
+              <SearchInput id="uq" value={q} onChange={setQ} placeholder="搜索单位（中文、英文、拼音或别名）" describedBy="unit-search-hint" />
+              <p className="unit-search-hint" id="unit-search-hint">
+                可搜中文、英文、拼音或别名
+              </p>
+            </div>
+            <CivPicker id="uciv" value={civ} onChange={setCiv} none="全部文明" label="可用文明" />
+            <select id="urole" aria-label="兵种" className={role ? 'is-on' : undefined} value={role} onChange={(e) => setRole(e.target.value as UnitRole | '')}>
+              <option value="">全部兵种</option>
+              {(Object.keys(UNIT_ROLE_ZH) as UnitRole[]).map((key) => (
+                <option key={key} value={key}>
+                  {UNIT_ROLE_ZH[key]}
+                </option>
+              ))}
+            </select>
+            <button
+              ref={toggle}
+              type="button"
+              className={`catalog-filter-toggle${secondaryCount || filtersOpen ? ' is-on' : ''}`}
+              aria-expanded={filtersOpen}
+              aria-controls={panelId}
+              onClick={() => setFiltersOpen((open) => !open)}
+            >
+              <Icon name="filter" /> 筛选{secondaryCount > 0 ? `（${secondaryCount}）` : ''}
+            </button>
           </div>
-          <CivPicker id="uciv" value={civ} onChange={setCiv} none="全部文明" label="可用文明" />
-          <select id="urole" aria-label="兵种" className={role ? 'is-on' : undefined} value={role} onChange={(e) => setRole(e.target.value as UnitRole | '')}>
-            <option value="">全部兵种</option>
-            {(Object.keys(UNIT_ROLE_ZH) as UnitRole[]).map((key) => (
-              <option key={key} value={key}>
-                {UNIT_ROLE_ZH[key]}
-              </option>
-            ))}
-          </select>
-          <button
-            ref={toggle}
-            type="button"
-            className={`catalog-filter-toggle${secondaryCount || filtersOpen ? ' is-on' : ''}`}
-            aria-expanded={filtersOpen}
-            aria-controls={panelId}
-            onClick={() => setFiltersOpen((open) => !open)}
-          >
-            <Icon name="filter" /> 筛选{secondaryCount > 0 ? `（${secondaryCount}）` : ''}
-          </button>
+          <div ref={panel} id={panelId} className="catalog-filter-panel unit-filters-secondary" data-open={filtersOpen ? 'true' : 'false'}>
+            <div className="unit-filter-row">
+              <div className="unit-filter-label">时代</div>
+              <div className="unit-chips" role="group" aria-label="时代快捷筛选">
+                <button type="button" data-v="" className={a === '' ? 'on' : undefined} aria-pressed={a === ''} onClick={() => setA('')}>
+                  全部
+                </button>
+                {([1, 2, 3, 4] as const).map((age) => (
+                  <button
+                    key={age}
+                    type="button"
+                    data-v={String(age)}
+                    className={a === String(age) ? 'on' : undefined}
+                    aria-pressed={a === String(age)}
+                    onClick={() => setA(String(age))}
+                  >
+                    <img src={img(`ages/${age}.webp`)} alt="" />
+                    {AGE_ZH[age]?.replace(/时代$/, '')}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="unit-filter-row">
+              <div className="unit-filter-label">资料片</div>
+              <select id="udlc" aria-label="资料片" className={dlc ? 'is-on' : undefined} value={dlc} onChange={(e) => setDlc(e.target.value)}>
+                <option value="">全部</option>
+                {DLCS.map((item, index) => (
+                  <option key={item.en} value={String(index)}>
+                    {item.zh}
+                  </option>
+                ))}
+                <option value="none">未标注</option>
+              </select>
+            </div>
+            <div className="unit-filter-row">
+              <div className="unit-filter-label">类别</div>
+              <div className="unit-chips" role="group" aria-label="单位类别">
+                {TYPES.map(([value, label]) => (
+                  <button
+                    key={label}
+                    type="button"
+                    data-v={value}
+                    className={t === value ? 'on' : undefined}
+                    aria-pressed={t === value}
+                    onClick={() => setT(value)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="unit-filter-meta">
+            <p className="unit-filter-note">文明可用性按当前版本科技树，不计队友解锁。</p>
+            <details className="unit-help">
+              <summary>
+                <Icon name="circle-help" /> 兵种交叉说明 <Icon name="chevron-down" />
+              </summary>
+              <p>兵种按护甲类别划分，可以交叉。例如骑射同时属于骑兵和弓兵；战车、骆驼投石机等出现在骑兵中是同一规则。</p>
+            </details>
+          </div>
+        </div>
+        <div className="unit-result-bar">
           <div className="unit-result-meta">
             <p className="unit-count">
               <span id="ucnt">{`${r.length} / ${fams.length}`}</span> <span>个系列</span>
@@ -144,68 +211,7 @@ export default function UnitList() {
               </button>
             )}
           </div>
-        </div>
-        <p className="unit-basis">生命、攻击、近战护甲、远程护甲、射程和造价是目录基础值，不是满科技或折后结果。</p>
-        <div ref={panel} id={panelId} className="catalog-filter-panel unit-filters-secondary" data-open={filtersOpen ? 'true' : 'false'}>
-          <div className="unit-filter-row">
-            <div className="unit-filter-label">时代</div>
-            <div className="unit-chips" role="group" aria-label="时代快捷筛选">
-              <button type="button" data-v="" className={a === '' ? 'on' : undefined} aria-pressed={a === ''} onClick={() => setA('')}>
-                全部
-              </button>
-              {([1, 2, 3, 4] as const).map((age) => (
-                <button
-                  key={age}
-                  type="button"
-                  data-v={String(age)}
-                  className={a === String(age) ? 'on' : undefined}
-                  aria-pressed={a === String(age)}
-                  onClick={() => setA(String(age))}
-                >
-                  <img src={img(`ages/${age}.webp`)} alt="" />
-                  {AGE_ZH[age]?.replace(/时代$/, '')}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="unit-filter-row">
-            <div className="unit-filter-label">资料片</div>
-            <select id="udlc" aria-label="资料片" className={dlc ? 'is-on' : undefined} value={dlc} onChange={(e) => setDlc(e.target.value)}>
-              <option value="">全部</option>
-              {DLCS.map((item, index) => (
-                <option key={item.en} value={String(index)}>
-                  {item.zh}
-                </option>
-              ))}
-              <option value="none">未标注</option>
-            </select>
-          </div>
-          <div className="unit-filter-row">
-            <div className="unit-filter-label">类别</div>
-            <div className="unit-chips" role="group" aria-label="单位类别">
-              {TYPES.map(([value, label]) => (
-                <button
-                  key={label}
-                  type="button"
-                  data-v={value}
-                  className={t === value ? 'on' : undefined}
-                  aria-pressed={t === value}
-                  onClick={() => setT(value)}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="unit-filter-meta">
-          <p className="unit-filter-note">文明可用性按当前版本科技树，不计队友解锁。</p>
-          <details className="unit-help">
-            <summary>
-              兵种交叉说明 <Icon name="chevron-down" />
-            </summary>
-            <p>兵种按护甲类别划分，可以交叉。例如骑射同时属于骑兵和弓兵；战车、骆驼投石机等出现在骑兵中是同一规则。</p>
-          </details>
+          <p className="unit-basis">生命、攻击、近战护甲、远程护甲、射程和造价是目录基础值，不是满科技或折后结果。</p>
         </div>
       </div>
       {!core ? (
@@ -249,7 +255,11 @@ export default function UnitList() {
               </span>
               <span className="unit-mid">
                 <span className="unit-meta mini">
-                  {u.bz || '—'} · {AGE_ZH[u.age] ?? ''}
+                  {u.bz || '—'} ·{' '}
+                  <span className="unit-age nw">
+                    {AGE_ZH[u.age] && <img src={img(`ages/${u.age}.webp`)} alt="" />}
+                    {AGE_ZH[u.age] ?? ''}
+                  </span>
                 </span>
                 <span className="unit-dot" aria-hidden="true">
                   ·
@@ -265,19 +275,19 @@ export default function UnitList() {
                 </div>
                 <div data-stat="atk">
                   <dt className="stat-label">攻击</dt>
-                  <dd className="num nw">{u.atk}</dd>
+                  <dd className={statClass(u.atk)}>{u.atk}</dd>
                 </div>
                 <div data-stat="ma">
                   <dt className="stat-label">近战护甲</dt>
-                  <dd className="num nw">{formatCatalogStat(u.ma)}</dd>
+                  <dd className={statClass(u.ma)}>{formatCatalogStat(u.ma)}</dd>
                 </div>
                 <div data-stat="pa">
                   <dt className="stat-label">远程护甲</dt>
-                  <dd className="num nw">{formatCatalogStat(u.pa)}</dd>
+                  <dd className={statClass(u.pa)}>{formatCatalogStat(u.pa)}</dd>
                 </div>
                 <div data-stat="rng">
                   <dt className="stat-label">射程</dt>
-                  <dd className="num nw">{u.rng}</dd>
+                  <dd className={statClass(u.rng)}>{u.rng}</dd>
                 </div>
               </dl>
               <Icon name="chevron-right" className="unit-go" />
