@@ -333,29 +333,35 @@ export default function UnitDetail() {
       <section className="ud-section" id="unit-notes" aria-label="适用加成、护甲与说明">
         <h2>适用加成、护甲与说明</h2>
         {u.id === 331 && <p className="ud-kicker">下列攻击加成按已核同的展开攻击字段列出。</p>}
-        {Object.keys(bonuses).length > 0 && <BonusTable B={bonuses} headingLevel={3} />}
-        {u.arms.length > 0 && (
-          <div>
-            <h3>护甲</h3>
-            <ul className="ud-arms">
-              {u.arms.map(([name, value]) => (
-                <li key={name}>
-                  {name} <span className="num nw">{value}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {armorClasses.length > 0 && (
-          <>
-            {u.id === 331 && (
-              <p className="ud-kicker" data-t="trebuchet-armor">
-                下列为目录打包记录的护甲类别，不代表展开态。
-              </p>
-            )}
-            <ArmorClasses list={u.armc} headingLevel={3} />
-          </>
-        )}
+        <div className="ud-combat">
+          {Object.keys(bonuses).length > 0 && <BonusTable B={bonuses} headingLevel={3} />}
+          {(u.arms.length > 0 || armorClasses.length > 0) && (
+            <div className="ud-armor">
+              {u.arms.length > 0 && (
+                <div>
+                  <h3>护甲</h3>
+                  <ul className="ud-arms">
+                    {u.arms.map(([name, value]) => (
+                      <li key={name}>
+                        {name} <span className="num nw">{value}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {armorClasses.length > 0 && (
+                <>
+                  {u.id === 331 && (
+                    <p className="ud-kicker" data-t="trebuchet-armor">
+                      下列为目录打包记录的护甲类别，不代表展开态。
+                    </p>
+                  )}
+                  <ArmorClasses list={u.armc} headingLevel={3} />
+                </>
+              )}
+            </div>
+          )}
+        </div>
         <p>
           准确度 <span className="num nw">{u.acc}%</span>
         </p>
@@ -435,7 +441,7 @@ export default function UnitDetail() {
             </button>
           ) : (
             <button type="button" className="ud-btn" onClick={openSim}>
-              打开科技模拟器
+              打开科技模拟器 <Icon name="arrow-right" />
             </button>
           )}
         </div>
@@ -472,6 +478,7 @@ export default function UnitDetail() {
       >
         <summary>
           <h2>更新历史</h2>
+          <Icon name="chevron-down" />
         </summary>
         <PatchHistory hostedHeading labelRegion={false} target={{ targetType: 'unit', targetId: u.id, targetNameZh: u.zh }} />
       </details>
