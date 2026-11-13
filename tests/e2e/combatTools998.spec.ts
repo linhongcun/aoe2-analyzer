@@ -69,3 +69,21 @@ test('#998 A/B 精锐与科技预设分组隔离，自定义科技不误选', as
   await page.keyboard.press('End');
   await selected(preset, '满科技');
 });
+
+test('#998 同家族精锐变体保留精锐单选入口', async ({ page }) => {
+  await page.goto('#/duel?a=1260.Cumans.4.f.&m=1');
+  const a = page.locator('#duel-a');
+  const elite = a.getByRole('radiogroup', { name: '普通/精锐', exact: true });
+  const eliteRadio = elite.getByRole('radio', { name: '精锐', exact: true });
+  await expect(eliteRadio).toHaveAttribute('aria-checked', 'true');
+  await expect(eliteRadio).toHaveAttribute('tabindex', '0');
+  await expect(elite.locator('[role="radio"][tabindex="0"]')).toHaveCount(1);
+  const variantUrl = page.url();
+  await page.locator('#duel-a-unit').focus();
+  await page.keyboard.press('Tab');
+  await selected(elite, '精锐');
+  expect(page.url()).toBe(variantUrl);
+  await page.keyboard.press('ArrowLeft');
+  await selected(elite, '普通');
+  await expect(page).toHaveURL(/a=1231/);
+});

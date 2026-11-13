@@ -2,7 +2,7 @@ import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
-import { baseUnit } from '../../../domain/family';
+import { baseUnit, isElite } from '../../../domain/family';
 import type { collapse } from '../../../domain/family';
 import { AGE_ZH } from '../../../domain/ratings';
 import { TEAM_BONUSES } from '../../../domain/effects';
@@ -47,6 +47,7 @@ export function Side({
   const { u, spec } = side;
   const base = baseUnit(u, core.fam),
     elite = core.fam.eliteOf[base.id];
+  const eliteSelected = isElite(u, core.fam);
   const preset = Array.isArray(spec.techs) ? (spec.techs.length ? '' : 'none') : spec.techs;
   const rows: StatRow[] = SIM_ROWS.map(([kk, n, ic]) => [kk, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
   return (
@@ -96,9 +97,9 @@ export function Side({
             <button
               type="button"
               role="radio"
-              aria-checked={u.id === elite.id}
-              tabIndex={u.id === elite.id ? 0 : -1}
-              className={u.id === elite.id ? 'on' : undefined}
+              aria-checked={eliteSelected}
+              tabIndex={eliteSelected ? 0 : -1}
+              className={eliteSelected ? 'on' : undefined}
               onClick={() => onChange({ ...spec, uid: elite.id })}
             >
               精锐
