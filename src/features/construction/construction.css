@@ -20,13 +20,18 @@
 }
 .construction-panel {
   min-width: 0;
-  padding: var(--space-6);
+  padding: var(--space-5);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
 }
 .construction-panel h2 {
   margin-top: 0;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+}
+.construction-page .btn {
+  border-radius: var(--radius-pill);
 }
 .construction-page fieldset {
   min-width: 0;
@@ -61,6 +66,11 @@
   border-radius: var(--radius-sm);
   font: inherit;
 }
+.construction-settings :is(select, input:not([type='checkbox'])),
+.construction-manual input {
+  border-radius: var(--radius-pill);
+  background: var(--color-control);
+}
 .construction-wide {
   grid-column: 1 / -1;
 }
@@ -90,7 +100,7 @@
 .construction-stats div {
   padding: var(--space-3);
   background: var(--color-surface-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   min-width: 0;
 }
 .construction-stats dt {
@@ -111,7 +121,7 @@
 .construction-limit,
 .construction-loss {
   padding: var(--space-4);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-warn-soft);
   color: var(--color-text);
   font-size: var(--fs-sm);
@@ -119,7 +129,7 @@
 .construction-errors {
   padding: var(--space-4);
   border: 1px solid var(--color-bad);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-bad-soft);
   color: var(--color-text);
 }
@@ -134,7 +144,7 @@
 .construction-comparison article {
   padding: var(--space-3);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
 }
 .construction-comparison article.construction-current {
   border-color: var(--color-accent);
