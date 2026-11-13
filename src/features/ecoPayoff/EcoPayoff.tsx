@@ -104,6 +104,28 @@ function EcoPayoffBody({
     available = payoffAvailable(ctx, config);
   const errors = [...parseErrors, ...result.errors];
   const groups = [...new Set(available.map((t) => t.bz.replace(/\n/g, '')))];
+  const fieldError = (key: string, prefix: string) => {
+    const error = result.errors.find((message) => message.startsWith(prefix));
+    const id = `eco-error-${key}`;
+    return {
+      props: { 'aria-invalid': error ? true : undefined, 'aria-describedby': error ? id : undefined },
+      hint: error ? (
+        <span id={id} className="eco-field-error">
+          {error.split(/(\d+(?:[–-]\d+)*(?:\s*(?:分钟|游戏秒|格|字))?)/g).map((part, index) =>
+            index % 2 === 1 ? (
+              <span className="num nw" key={index}>
+                {part}
+              </span>
+            ) : (
+              part
+            ),
+          )}
+        </span>
+      ) : null,
+    };
+  };
+  const minutesError = fieldError('minutes', '观察时长须');
+  const distanceError = fieldError('distance', '单程距离须');
   return (
     <section className="pane eco-payoff" data-testid="eco-payoff-page">
       <ToolPageHeader
@@ -168,33 +190,47 @@ function EcoPayoffBody({
               </label>
               <label>
                 观察时长（分钟）
-                <input aria-label="观察时长" inputMode="decimal" value={config.minutes} onChange={(e) => update({ ...config, minutes: e.target.value })} />
+                <input
+                  {...minutesError.props}
+                  aria-label="观察时长"
+                  inputMode="decimal"
+                  value={config.minutes}
+                  onChange={(e) => update({ ...config, minutes: e.target.value })}
+                />
+                {minutesError.hint}
               </label>
               <label>
                 木金石单程距离（格）
                 <input
                   aria-label="收益单程距离"
+                  {...distanceError.props}
                   inputMode="decimal"
                   value={config.distance}
                   onChange={(e) => update({ ...config, distance: e.target.value })}
                 />
+                {distanceError.hint}
               </label>
             </div>
           </section>
           <section className="eco-card">
             <h2>固定村民人数</h2>
             <div className="eco-form-grid">
-              {PAYOFF_RESOURCES.map((r) => (
-                <label key={r}>
-                  {RES_ZH[r]}
-                  <input
-                    aria-label={`${RES_ZH[r]}村民数`}
-                    inputMode="numeric"
-                    value={config.workers[r]}
-                    onChange={(e) => update({ ...config, workers: { ...config.workers, [r]: e.target.value } })}
-                  />
-                </label>
-              ))}
+              {PAYOFF_RESOURCES.map((r) => {
+                const error = fieldError(r, `${RES_ZH[r]}村民数须`);
+                return (
+                  <label key={r}>
+                    {RES_ZH[r]}
+                    <input
+                      aria-label={`${RES_ZH[r]}村民数`}
+                      {...error.props}
+                      inputMode="numeric"
+                      value={config.workers[r]}
+                      onChange={(e) => update({ ...config, workers: { ...config.workers, [r]: e.target.value } })}
+                    />
+                    {error.hint}
+                  </label>
+                );
+              })}
             </div>
             <p className="note">每项 0–200 人；人数固定，不计建造和走动干扰。食物基准按贴近磨坊的农田计算，仅用于静态劳动量折算。</p>
           </section>

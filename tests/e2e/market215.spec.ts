@@ -13,6 +13,18 @@ for (const width of [360, 375, 390, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('./#/market');
     await expect(page.getByRole('heading', { name: '市场买卖预算', exact: true })).toBeVisible();
+    const direction = await page.getByRole('combobox', { name: '第 1 项方向', exact: true }).boundingBox();
+    expect(direction!.width).toBeGreaterThan(90);
+    const orders = page.locator('.market-orders > li');
+    const firstOrder = await orders.nth(0).boundingBox();
+    const secondOrder = await orders.nth(1).boundingBox();
+    expect(firstOrder!.y + firstOrder!.height).toBeLessThanOrEqual(secondOrder!.y);
+    if (width < 760) {
+      const inventory = page.locator('.market-inventory').first().locator(':scope > span');
+      const firstResource = await inventory.nth(0).boundingBox();
+      const secondResource = await inventory.nth(1).boundingBox();
+      expect(firstResource!.y + firstResource!.height).toBeLessThanOrEqual(secondResource!.y);
+    }
     await expect(page.getByTestId('market-summary-0')).toContainText('全部交易可执行');
     await expect(page.getByTestId('market-summary-0')).toContainText('31');
     await expect(page.getByLabel('预算口径')).toContainText('游戏内部可能保留小数余额');

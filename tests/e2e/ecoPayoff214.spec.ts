@@ -37,6 +37,33 @@ for (const width of [360, 375, 390, 1280])
       await page.getByRole('textbox', { name: '木材村民数', exact: true }).fill('-1');
       await expect(page.getByRole('alert')).toContainText('村民数须为');
       await expect(page.getByTestId('eco-balance')).toHaveCount(0);
+      await expect(page.getByRole('textbox', { name: '木材村民数', exact: true })).toHaveAttribute('aria-invalid', 'true');
+      await expect(page.getByRole('textbox', { name: '木材村民数', exact: true })).toHaveAccessibleDescription(/木材村民数须/);
+      await page.getByRole('textbox', { name: '木材村民数', exact: true }).fill('10');
+      for (const [label, bad, good] of [
+        ['观察时长', '0', '10'],
+        ['收益单程距离', '-1', '3'],
+        ['食物村民数', '-1', '0'],
+        ['黄金村民数', '201', '0'],
+        ['石料村民数', '1.5', '0'],
+      ]) {
+        const field = page.getByRole('textbox', { name: label!, exact: true });
+        await field.fill(bad!);
+        await expect(field).toHaveAttribute('aria-invalid', 'true');
+        await expect(field).toHaveAccessibleDescription(/须/);
+        const errorId = await field.getAttribute('aria-describedby');
+        await expect(page.locator(`#${errorId}`)).toBeVisible();
+        if (label === '观察时长') {
+          const duration = page.locator(`#${errorId} .num.nw`).filter({ hasText: '120 分钟' });
+          await expect(duration).toHaveText('120 分钟');
+          const bounds = await duration.boundingBox();
+          expect(bounds!.height).toBeLessThanOrEqual(20);
+        }
+        await field.fill(good!);
+        await expect(field).not.toHaveAttribute('aria-invalid', 'true');
+        await expect(field).not.toHaveAttribute('aria-describedby');
+        await expect(page.locator(`#${errorId}`)).toHaveCount(0);
+      }
       await page.goto('./#/eco-payoff?target=no&age=2&age=3');
       await expect(page.getByRole('alert')).toContainText('链接参数');
       await expect(page.getByRole('button', { name: '复制方案链接', exact: true })).toBeDisabled();
