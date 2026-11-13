@@ -14,6 +14,7 @@ import {
   type RequirementRef,
 } from '../../../domain/civRequirements';
 import { CivIcon } from '../../../shared/ui/art';
+import { Icon } from '../../../shared/ui/Icon';
 import { ListHead } from '../../../shared/ui/layout';
 import {
   browseCivs,
@@ -122,6 +123,7 @@ export default function CivList() {
           <label className="civ-sr" htmlFor="q">
             搜索文明
           </label>
+          <Icon name="search" />
           <input
             ref={searchRef}
             id="q"
@@ -151,6 +153,7 @@ export default function CivList() {
             aria-controls="filter-panel"
             onClick={() => setPanel((current) => (current === 'filter' ? null : 'filter'))}
           >
+            <Icon name="filter" />
             按条件筛选
           </button>
           {active && (
@@ -349,11 +352,15 @@ export default function CivList() {
                   关闭
                 </button>
               </div>
-              <span className="civ-preview-crest">
-                <CivIcon c={detail} alt="" />
-              </span>
-              <h3>{detail.zh}</h3>
-              <small className="civ-en">{detail.en}</small>
+              <div className="civ-preview-id">
+                <span className="civ-preview-crest">
+                  <CivIcon c={detail} alt="" />
+                </span>
+                <div>
+                  <h3>{detail.zh}</h3>
+                  <small className="civ-en">{detail.en}</small>
+                </div>
+              </div>
               <p className="civ-type">{detail.desc}</p>
               <h4>文明加成</h4>
               <ul>
@@ -367,6 +374,7 @@ export default function CivList() {
               <p className="civ-uu">{uniqueUnitLabel(detail.uu)}</p>
               <Link className="civ-open-detail" to={`/civ/${detail.en}`}>
                 打开完整文明资料
+                <Icon name="arrow-right" />
               </Link>
               <p className="civ-help">完整资料在本站打开，本页条件保留。</p>
             </>
