@@ -24,6 +24,10 @@ export function ToolsMenu({ path, drawerOpen = false }: { path: string; drawerOp
   const panel = useRef<HTMLDivElement>(null);
   const on = toolsPath(path);
   const groupKey = currentGroupKey(path);
+  const visibleItems = () =>
+    [...(panel.current?.querySelectorAll<HTMLElement>('a[href], summary') ?? [])].filter(
+      (item) => item.getClientRects().length > 0 && !item.closest('details:not([open]) > :not(summary)'),
+    );
   useEffect(() => {
     if (!open) return;
     const down = (event: PointerEvent) => {
@@ -33,8 +37,9 @@ export function ToolsMenu({ path, drawerOpen = false }: { path: string; drawerOp
     return () => document.removeEventListener('pointerdown', down);
   }, [open]);
   const move = (event: KeyboardEvent<HTMLDivElement>) => {
-    const items = [...(panel.current?.querySelectorAll<HTMLAnchorElement>('a[href]') ?? [])].filter((item) => item.getClientRects().length > 0);
-    const index = items.indexOf(document.activeElement as HTMLAnchorElement);
+    const items = visibleItems();
+    if (!items.length) return;
+    const index = items.indexOf(document.activeElement as HTMLElement);
     let next: number;
     if (event.key === 'ArrowDown') next = (index + 1) % items.length;
     else if (event.key === 'ArrowUp') next = (index + items.length - 1) % items.length;
@@ -49,7 +54,10 @@ export function ToolsMenu({ path, drawerOpen = false }: { path: string; drawerOp
       className="tools"
       ref={ref}
       onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpenAt(null);
+        const target = event.relatedTarget as Node | null;
+        if (event.currentTarget.contains(target)) return;
+        if (drawerOpen && event.currentTarget.closest('.mainnav')?.contains(target)) return;
+        setOpenAt(null);
       }}
       onKeyDown={(event) => {
         if (open && event.key === 'Escape') {
@@ -73,7 +81,7 @@ export function ToolsMenu({ path, drawerOpen = false }: { path: string; drawerOp
             setOpenAt(path);
             const last = event.key === 'ArrowUp';
             requestAnimationFrame(() => {
-              const items = [...(panel.current?.querySelectorAll<HTMLAnchorElement>('a[href]') ?? [])].filter((item) => item.getClientRects().length > 0);
+              const items = visibleItems();
               items[last ? items.length - 1 : 0]?.focus();
             });
           }

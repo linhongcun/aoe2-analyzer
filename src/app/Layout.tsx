@@ -284,8 +284,8 @@ export function Layout({ children }: { children: ReactNode }) {
         event.preventDefault();
         setMenuAt(null);
       } else if (event.key === 'Tab') {
-        const items = [...(nav.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]):not([tabindex="-1"])') ?? [])].filter(
-          (item) => item.getClientRects().length > 0,
+        const items = [...(nav.current?.querySelectorAll<HTMLElement>('a[href], summary, button:not([disabled]):not([tabindex="-1"])') ?? [])].filter(
+          (item) => item.getClientRects().length > 0 && !item.closest('details:not([open]) > :not(summary)'),
         );
         const first = items[0];
         const last = items[items.length - 1];
