@@ -82,7 +82,7 @@ npm run bo:check     # 开局数据校验
 npm run test:py      # Python 测试：补丁号识别、差异摘要、标记校验
 ```
 
-技术栈：Vite + React 18 + TypeScript（strict）+ react-router `HashRouter` + lucide-react。架构见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。软件开发交接（改哪里、游戏数字边界、最小验证、何时算上线）见 [docs/SOFTWARE-DEVELOPMENT.md](docs/SOFTWARE-DEVELOPMENT.md)。
+技术栈：Vite + React 18 + TypeScript（strict）+ react-router `HashRouter` + lucide-react。架构见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。四个角色的交接见 [role/README.md](role/README.md)。软件开发交接（改哪里、游戏数字边界、最小验证、何时算上线）见 [role/software-development.md](role/software-development.md)。
 
 ## 部署 / Deploy
 

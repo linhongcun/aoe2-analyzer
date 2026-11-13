@@ -24,15 +24,15 @@
 
 明确不做的事：
 
-- 不是官方客户端。开一局写明不估算本局胜率，也没有连上游戏大厅。见 [StartGame.tsx](../../src/features/home/components/StartGame.tsx)。
+- 不是官方客户端。开一局写明不估算本局胜率，也没有连上游戏大厅。见 [StartGame.tsx](../src/features/home/components/StartGame.tsx)。
 - 不解析录像。手填复盘是本机草稿。
 - 不把模型结果写成实战或胜率保证。单位 PK、开局时间线、攻城估算都是近似或理想条件。
 - 不接实时官方天梯，不把主观 1–10 写成胜率。
 - 不编造游戏数值，先分清来源和版本。基础游戏值先追溯钉扎数据及其生成链；生成结果可能有导入错、语义错或版本错，不是绝对真理。与官方资料或客户端实测冲突时，记下版本、来源和差异再核实。不以记忆改值，也不用本站数据直接裁掉外部证据。主观评分、天梯快照、用户输入和模型输出各自声明来源与假设。本站未支持的效果要说出来，缺来源标「未核实」。
 
-站点主题的维护表述见 [CODEX-MAINTENANCE 第 1 节](../CODEX-MAINTENANCE.md)。线上是 <https://linhongcun.github.io/aoe2-analyzer/>，路由是 hash，`#/…`。
+站点主题的维护表述见 [CODEX-MAINTENANCE 第 1 节](../docs/CODEX-MAINTENANCE.md)。线上是 <https://linhongcun.github.io/aoe2-analyzer/>，路由是 hash，`#/…`。
 
-接手先自己把上面三件事走完，系统掌握入口、功能怎么衔接、输入输出和限制、上下文带什么丢什么。不要等真的要用了再临时翻。第 7 节是这一轮的点击顺序。页面登记在 [pageRegistry.ts](../../src/shared/nav/pageRegistry.ts)。首页和工具菜单共用同一套分组：新手入门、对局计划、经济计算、资料。新增可见页面先改登记表，不要另维护一份名单。
+接手先自己把上面三件事走完，系统掌握入口、功能怎么衔接、输入输出和限制、上下文带什么丢什么。不要等真的要用了再临时翻。第 7 节是这一轮的点击顺序。页面登记在 [pageRegistry.ts](../src/shared/nav/pageRegistry.ts)。首页和工具菜单共用同一套分组：新手入门、对局计划、经济计算、资料。新增可见页面先改登记表，不要另维护一份名单。
 
 ## 2. 按玩家任务看边界
 
@@ -46,21 +46,21 @@
 | 有效训练价   | 已选且本站已支持的费用效果之后，训练一名要多少 | 持续生产、训练总价、单位 PK 的每名训练价 | 已经含研究费，或「转型还要再花多少」 |
 | 累计研究费用 | 勾选的这些科技，研究本身要多少、多久           | 单位页的科技模拟器工作区                 | 每名兵的训练价                       |
 
-选单位列表的常显句是「造价为目录基础值，不是该文明折后训练价」。见 [SimulatorHub.tsx](../../src/features/simulator/components/SimulatorHub.tsx)。工作区写明累计研究费用不是训练价。见 [UnitDetail.tsx](../../src/features/units/components/UnitDetail.tsx)。
+选单位列表的常显句是「造价为目录基础值，不是该文明折后训练价」。见 [SimulatorHub.tsx](../src/features/simulator/components/SimulatorHub.tsx)。工作区写明累计研究费用不是训练价。见 [UnitDetail.tsx](../src/features/units/components/UnitDetail.tsx)。
 
-单位详情的目录造价旁，还有一块有条件的「折后训练价」。只有已选文明、该文明能训练、折扣组对得上、并且至少有一条已计入时才出现；对不上就写「折扣未计入」；没有已计入项就不单列。见 [unitDetailView.ts](../../src/domain/unitDetailView.ts) 的 `discountView`。这是目录区的文明折扣，不是模拟器工作区的输出。
+单位详情的目录造价旁，还有一块有条件的「折后训练价」。只有已选文明、该文明能训练、折扣组对得上、并且至少有一条已计入时才出现；对不上就写「折扣未计入」；没有已计入项就不单列。见 [unitDetailView.ts](../src/domain/unitDetailView.ts) 的 `discountView`。这是目录区的文明折扣，不是模拟器工作区的输出。
 
 2026-11-13 上午，在构建 `471c136` 上打开模拟器、勾选锻造，看到的是攻击变化和累计研究费用。那次没有在模拟器里看到折后训练价。不要写成「单位模拟一定显示折后训练价」。晚间单位详情有布局提交，我没有再点现网确认这块还好不好找。
 
-研究费不要悄悄算进训练费。训练总价的正式说明把科技研究、单位升级、建筑、住房和其他转型投入排除在外；前置科技只影响能不能选这个形态。见 [trainTotalCopy.ts](../../src/features/production/trainTotalCopy.ts)。单位 PK 的每名训练价同样不摊研究费，也不从派出预算里扣。见 [trainingCostView.ts](../../src/features/duel/logic/trainingCostView.ts)。
+研究费不要悄悄算进训练费。训练总价的正式说明把科技研究、单位升级、建筑、住房和其他转型投入排除在外；前置科技只影响能不能选这个形态。见 [trainTotalCopy.ts](../src/features/production/trainTotalCopy.ts)。单位 PK 的每名训练价同样不摊研究费，也不从派出预算里扣。见 [trainingCostView.ts](../src/features/duel/logic/trainingCostView.ts)。
 
-有效训练价的叠加在 [unitCost.ts](../../src/domain/unitCost.ts)。未完整计入的效果要标出来。训练总价在这种情况下标题侧标「估算」，不能把结果说成完整准确的总价。
+有效训练价的叠加在 [unitCost.ts](../src/domain/unitCost.ts)。未完整计入的效果要标出来。训练总价在这种情况下标题侧标「估算」，不能把结果说成完整准确的总价。
 
-目录展示用的时代投影只用于展示和筛选，禁止拿去算生产、费用、战斗或开局模拟。见 [displayAge.ts](../../src/features/units/displayAge.ts)。模拟器选单位如果做了这份投影，链接里只带单位和可选文明，不得把投影副本传进模拟。见 [hubList.ts](../../src/features/simulator/hubList.ts)。
+目录展示用的时代投影只用于展示和筛选，禁止拿去算生产、费用、战斗或开局模拟。见 [displayAge.ts](../src/features/units/displayAge.ts)。模拟器选单位如果做了这份投影，链接里只带单位和可选文明，不得把投影副本传进模拟。见 [hubList.ts](../src/features/simulator/hubList.ts)。
 
 ### 生产页的三种任务
 
-三个模式在同一路由 `#/production`，用页内「生产模式」切换。见 [ProductionModeNav.tsx](../../src/features/production/ProductionModeNav.tsx)。
+三个模式在同一路由 `#/production`，用页内「生产模式」切换。见 [ProductionModeNav.tsx](../src/features/production/ProductionModeNav.tsx)。
 
 | 模式           | 玩家任务                                                           | 数量指什么             | 结果里有什么                                                          |
 | -------------- | ------------------------------------------------------------------ | ---------------------- | --------------------------------------------------------------------- |
@@ -75,11 +75,11 @@
 - 从训练总价回持续生产，只带合法文明和时代。
 - 进对照，回到固定入口，不带走当前文明或训练总价方案。
 
-默认时代两边不一样。持续生产的默认在 [production.ts](../../src/domain/production.ts) 的 `DEFAULT_PRODUCTION`，训练总价的默认在 [trainTotal.ts](../../src/domain/trainTotal.ts) 的 `TRAIN_TOTAL_DEFAULT_AGE`。写规格前打开这两处，不要背。
+默认时代两边不一样。持续生产的默认在 [production.ts](../src/domain/production.ts) 的 `DEFAULT_PRODUCTION`，训练总价的默认在 [trainTotal.ts](../src/domain/trainTotal.ts) 的 `TRAIN_TOTAL_DEFAULT_AGE`。写规格前打开这两处，不要背。
 
-对照的允许单位、时代锁和固定入口在 [trainCompareCodec.ts](../../src/features/production/trainCompareCodec.ts)。写本文时只允许三名骑兵形态，时代必须是城堡，数量有上下限。页上仍写「所选形态已解锁」。这句和「这个文明在城堡时代造不了」可以同时出现。第 6 节说明为什么这是交互问题。
+对照的允许单位、时代锁和固定入口在 [trainCompareCodec.ts](../src/features/production/trainCompareCodec.ts)。写本文时只允许三名骑兵形态，时代必须是城堡，数量有上下限。页上仍写「所选形态已解锁」。这句和「这个文明在城堡时代造不了」可以同时出现。第 6 节说明为什么这是交互问题。
 
-登记表这一页的名字、说明、`metaTitle` 仍只有「持续生产」，没有「训练总价」「训练对照」的搜索别名。浏览器标题走登记表，所以后两个模式的标签标题仍是「持续生产」；页内主标题会换成当前模式。搜索索引用的是登记名和 `searchAliases`，见 [hooks.ts](../../src/features/search/hooks.ts)。
+登记表这一页的名字、说明、`metaTitle` 仍只有「持续生产」，没有「训练总价」「训练对照」的搜索别名。浏览器标题走登记表，所以后两个模式的标签标题仍是「持续生产」；页内主标题会换成当前模式。搜索索引用的是登记名和 `searchAliases`，见 [hooks.ts](../src/features/search/hooks.ts)。
 
 ### 模拟、PK、对局准备
 
@@ -87,7 +87,7 @@
 
 单位 PK 回答「这样的设置下，近似谁更占优、这点预算大约能出几名」。它忽略射程、走位、地形、冲锋和一部分特殊效果；页上应保持这个边界。它和训练总价不是同一个问题。对局助手里的「单位 PK」不自动带入当前双方。
 
-对局助手的页头写明：早期应对和类型反制是通用参考，不会改写成针对对手的专属打法。见 [Matchup.tsx](../../src/features/matchup/components/Matchup.tsx)。[#888](https://github.com/linhongcun/aoe2-analyzer/issues/888) 已关闭，不要把自动优势建议加回去。
+对局助手的页头写明：早期应对和类型反制是通用参考，不会改写成针对对手的专属打法。见 [Matchup.tsx](../src/features/matchup/components/Matchup.tsx)。[#888](https://github.com/linhongcun/aoe2-analyzer/issues/888) 已关闭，不要把自动优势建议加回去。
 
 开一局只保存玩家写下的选择，再按页面自己的规则带到别的工具。它不是自动推荐。跳到对局助手时带手动选择的我方和对手；开局列表不会因为带了文明就只剩这一文明。地图和路位不要假设已经传进开局流程。天梯打开的是静态快照，不按这一局筛选。
 
@@ -95,23 +95,23 @@
 
 ### 天梯快照和主观评分
 
-文明对比的雷达是维护者整理的 1–10 主观整数，不是胜率，也不是精确战力。资料行不由这些分数推导。限制写在常显的「评分性质」里。见 [Compare.tsx](../../src/features/compare/components/Compare.tsx)。分数来自 [civ_ratings.json](../../scripts/civ_ratings.json)。[#889](https://github.com/linhongcun/aoe2-analyzer/issues/889) 已关闭。上午在 `471c136` 上确认这段限制是可见的，这是正向设计，不要再报成「没写口径」。轴名要展开才列全，不要据此宣称旧验收句已经逐字满足，也不要重开。
+文明对比的雷达是维护者整理的 1–10 主观整数，不是胜率，也不是精确战力。资料行不由这些分数推导。限制写在常显的「评分性质」里。见 [Compare.tsx](../src/features/compare/components/Compare.tsx)。分数来自 [civ_ratings.json](../scripts/civ_ratings.json)。[#889](https://github.com/linhongcun/aoe2-analyzer/issues/889) 已关闭。上午在 `471c136` 上确认这段限制是可见的，这是正向设计，不要再报成「没写口径」。轴名要展开才列全，不要据此宣称旧验收句已经逐字满足，也不要重开。
 
-天梯是静态快照。页面写明不实时抓取、不推算缺失分段；胜率不是平衡建议。快照自己的补丁、截止和样本单位，以那一页的说明为准，可以和本站钉住的数据版本不同。见 [LadderTeam.tsx](../../src/features/ladder/LadderTeam.tsx)。本站钉扎看 [data_sources.json](../../scripts/data_sources.json) 和页脚「数据版本」。写本文时这份钉扎仍是 DE Update 188329。不要把天梯页上的另一个补丁号抄进百科，当成当前单位数据。
+天梯是静态快照。页面写明不实时抓取、不推算缺失分段；胜率不是平衡建议。快照自己的补丁、截止和样本单位，以那一页的说明为准，可以和本站钉住的数据版本不同。见 [LadderTeam.tsx](../src/features/ladder/LadderTeam.tsx)。本站钉扎看 [data_sources.json](../scripts/data_sources.json) 和页脚「数据版本」。写本文时这份钉扎仍是 DE Update 188329。不要把天梯页上的另一个补丁号抄进百科，当成当前单位数据。
 
 ### 从文明页往外走，文明还在不在
 
 这是两套产品语义，不是某一条链接漏了参数。
 
-- 文明页兵种行，独特单位和区域单位都链到 `/unit/:id`，不带文明。同页科技链到 `/tech/:id`。见 [CivDetail.tsx](../../src/features/civs/components/CivDetail.tsx)。
+- 文明页兵种行，独特单位和区域单位都链到 `/unit/:id`，不带文明。同页科技链到 `/tech/:id`。见 [CivDetail.tsx](../src/features/civs/components/CivDetail.tsx)。
 - 同页「用这个文明继续」会带上文明：开局流程、持续生产、训练总价、对局助手。
-- 科技树格子的链接带 `?civ=`。见 [CivTechTree.tsx](../../src/features/tree/components/CivTechTree.tsx)。上午没有逐格点开，这句是读源码，不是晚间又点过现网。
-- 模拟器在已经筛选文明时，进入单位会带上 `tab=sim` 和文明。见 [hubList.ts](../../src/features/simulator/hubList.ts)。
+- 科技树格子的链接带 `?civ=`。见 [CivTechTree.tsx](../src/features/tree/components/CivTechTree.tsx)。上午没有逐格点开，这句是读源码，不是晚间又点过现网。
+- 模拟器在已经筛选文明时，进入单位会带上 `tab=sim` 和文明。见 [hubList.ts](../src/features/simulator/hubList.ts)。
 - 源码里另有 `CivRegionalUnits`，链接会带文明，但当前文明页没有挂上它。不要把它当成玩家正在走的路径。
 
 上午在 `471c136`：从印度斯坦点古拉姆，到 `#/unit/1747`，单位页不指定文明；从模拟器筛选印度斯坦再进古拉姆，链接带文明。玩家会觉得「我正看着这个文明」，两条入口却不一样。要不要让兵种行也预填，先裁这条链接的任务是「打开单位百科」还是「带着当前文明继续算」。第 6 节写怎样避免盲改。
 
-旧地址 `#/tree/:civ` 会转到该文明详情的科技树章节。见 [routes.tsx](../../src/app/routes.tsx)。README 仍把它写成独立模块，这是文档漂移，不是运行时又有一个科技树站。
+旧地址 `#/tree/:civ` 会转到该文明详情的科技树章节。见 [routes.tsx](../src/app/routes.tsx)。README 仍把它写成独立模块，这是文档漂移，不是运行时又有一个科技树站。
 
 ## 3. 需求怎么决定
 
@@ -141,11 +141,11 @@
 2. 文明页兵种链接和模拟器入口的语义还没裁，不要先加参数。
 3. 对照的死路先处理「能选但没有可用文明」，不要先怀疑计价。
 
-已关闭的 [#978](https://github.com/linhongcun/aoe2-analyzer/issues/978)、[#889](https://github.com/linhongcun/aoe2-analyzer/issues/889)、[#888](https://github.com/linhongcun/aoe2-analyzer/issues/888)、[#272](https://github.com/linhongcun/aoe2-analyzer/issues/272) 不要因为本文重开。带「待确认」或「阻塞」的事项不动。维护者的持续发布授权只覆盖已经获准实现的更新，不能理解成可以自行认领所有开放 issue。见 [CONTRIBUTING](../../CONTRIBUTING.md#维护者的持续发布授权2026-10-24)。
+已关闭的 [#978](https://github.com/linhongcun/aoe2-analyzer/issues/978)、[#889](https://github.com/linhongcun/aoe2-analyzer/issues/889)、[#888](https://github.com/linhongcun/aoe2-analyzer/issues/888)、[#272](https://github.com/linhongcun/aoe2-analyzer/issues/272) 不要因为本文重开。带「待确认」或「阻塞」的事项不动。维护者的持续发布授权只覆盖已经获准实现的更新，不能理解成可以自行认领所有开放 issue。见 [CONTRIBUTING](../CONTRIBUTING.md#维护者的持续发布授权2026-10-24)。
 
 ## 4. 设计先行，授权和提单分开
 
-现行职责以 [CONTRIBUTING「角色」](../../CONTRIBUTING.md#角色) 为准。站点由维护者自己使用。产品写核心任务、范围和取舍；设计负责好用和美观；运营反馈找不找得到、顺不顺、看得懂看不懂，但那不是上线门禁。
+现行职责以 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色) 为准。站点由维护者自己使用。产品写核心任务、范围和取舍；设计负责好用和美观；运营反馈找不找得到、顺不顺、看得懂看不懂，但那不是上线门禁。
 
 我按这个顺序推进一件要改界面的事：
 
@@ -153,7 +153,7 @@
 2. 设计决定入口、放在哪、怎样交互。要评审视觉方向时给界面图，不用文字或线框代替。视觉只看这次相关的显示。
 3. 产品对照已经写明的任务和范围看这张图。通过之后才写「设计通过」。
 4. 实施要维护者的授权。授权和「这里有个问题」是两件事。设计通过之后，按授权另提实施单。本文里的建议都不是这句授权。
-5. 一个 issue 一个 PR。网站实现用 `Relates`，Pages 部署、线上核对和正式 Release 之后再关闭。合入即完成、不需要网站交付的文档事项可以用 `Fixes`。见 [TESTING 的交接说明](../TESTING.md)。
+5. 一个 issue 一个 PR。网站实现用 `Relates`，Pages 部署、线上核对和正式 Release 之后再关闭。合入即完成、不需要网站交付的文档事项可以用 `Fixes`。见 [TESTING 的交接说明](../docs/TESTING.md)。
 
 设计通过只表示这张图落在已定范围内。它不等于引擎算对，也不等于现网已经是这张图。研究费用不会因为设计稿里出现了，就自动进入训练价。
 
@@ -161,12 +161,12 @@
 
 测试和审阅的现行规则：
 
-- 独立复核由实现者之外完成，记下实际提交、范围、结果和未解决问题。见 [持续审阅授权](../../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25)。
-- 每份改动做必要冒烟，加上和这次 diff 直接相关的测试。纯布局不重跑无关计算或数据。报告分开写实际执行、CI 范围和未验证项。见 [TESTING](../TESTING.md) 文首，以及 [验证投入](../../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
+- 独立复核由实现者之外完成，记下实际提交、范围、结果和未解决问题。见 [持续审阅授权](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25)。
+- 每份改动做必要冒烟，加上和这次 diff 直接相关的测试。纯布局不重跑无关计算或数据。报告分开写实际执行、CI 范围和未验证项。见 [TESTING](../docs/TESTING.md) 文首，以及 [验证投入](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
 - 不把四宽截图、先红用例写成每份 PR 的门禁。视口证据按第 5 节，按这次会坏的宽度准备。
 - 旧的双路并行不是现在的工作方式。一次一项，一项一个 PR。历史暂停和后来的单项授权以 CODEX-MAINTENANCE 的当前状态为准，不要从旧句恢复成自动双线。
 
-设计索引里仍有一句「视觉 PR 须在 15 分钟内回复」。见 [设计交接](../design/README.md#给-codex-的设计交接)。CONTRIBUTING 的现行角色段没有把这句写成验收门禁。不要把它捡回来当开工条件。CODEX-MAINTENANCE 第 6 节仍摘了四宽截图，同文第 7 节写明那不是每 PR 的测试门禁。CONTRIBUTING 的定版段仍要求设计稿覆盖四档宽度。这些句子都还在仓库里。产品写新的验收时，以 TESTING 文首为准，不把四档矩阵写回「必须」。本文不改那些文件。
+设计索引里仍有一句「视觉 PR 须在 15 分钟内回复」。见 [设计交接](../docs/design/README.md#给-codex-的设计交接)。CONTRIBUTING 的现行角色段没有把这句写成验收门禁。不要把它捡回来当开工条件。CODEX-MAINTENANCE 第 6 节仍摘了四宽截图，同文第 7 节写明那不是每 PR 的测试门禁。CONTRIBUTING 的定版段仍要求设计稿覆盖四档宽度。这些句子都还在仓库里。产品写新的验收时，以 TESTING 文首为准，不把四档矩阵写回「必须」。本文不改那些文件。
 
 ## 5. 怎样验收
 
@@ -177,7 +177,7 @@
 - **跨页。** 文明、时代、科技、返回、分享。记下带了什么、丢了什么，页面有没有说明。生产三种模式的参数不能互相当成同一种数量。
 - **费用和时间。** 数字旁边能看出是目录价、有效训练价还是累计研究费；时间是游戏时间还是别的换算。研究投入不进训练费。未支持的效果有字。
 - **视口。** 这次改动会在桌面或手机上坏掉，就看那种，并写明实际打开的宽度。不要求每次都做 360、375、390、1280。没打开的宽度不要写成已覆盖。数字和「数字+单位」在窄宽下折成两行，仍然是显示问题；这是单条规则，不是四宽仪式。
-- **部署身份。** 用页脚的「构建」对上那一次部署，再谈现网。应用号来自 `package.json`，单独不能证明已上线，也不能证明未上线。见 [Layout.tsx](../../src/app/Layout.tsx)。
+- **部署身份。** 用页脚的「构建」对上那一次部署，再谈现网。应用号来自 `package.json`，单独不能证明已上线，也不能证明未上线。见 [Layout.tsx](../src/app/Layout.tsx)。
 - **和范围一致。** 只核这次声明要改的计算或数据。不要用删掉断言来掩盖算错。也不要因为相邻工具没验算，就写成已经全部正确。
 
 设计通过之后，计算和数据仍要按这次范围核对。产品点头不等于引擎验收，也不等于现网验收。
@@ -210,7 +210,7 @@
 
 ### 城堡时代却能选游侠，是死路，不是已经证明的算错
 
-对照把时代固定在城堡，单位仍可选骑士、重装骑士和游侠，文案写「所选形态已解锁」。能不能生产，看这个文明在该时代是否过得了马厩门槛。提前解锁表里，勃艮第把重装骑士放到城堡；游侠没有这条提前。见 [availabilityAge.ts](../../src/domain/availabilityAge.ts) 和 [production.ts](../../src/domain/production.ts) 里 `trainingUnitAge` 与当前时代的比较。
+对照把时代固定在城堡，单位仍可选骑士、重装骑士和游侠，文案写「所选形态已解锁」。能不能生产，看这个文明在该时代是否过得了马厩门槛。提前解锁表里，勃艮第把重装骑士放到城堡；游侠没有这条提前。见 [availabilityAge.ts](../src/domain/availabilityAge.ts) 和 [production.ts](../src/domain/production.ts) 里 `trainingUnitAge` 与当前时代的比较。
 
 上午在 `471c136` 上：选重装骑士，只有勃艮第有结果，其余请求不可用；选游侠，已选文明全部不可用，结果标题是所选形态不可用；不带文明集合、直接打开游侠的链接，已选是 0，没有结果，也没有不可用说明。当天的文明个数会随数据和默认集合变，不要抄进新规格。
 
@@ -253,7 +253,7 @@
 
 - `471c136` 的应用号是 `v0.77.81`。训练总价在这次构建上已部署。[#978](https://github.com/linhongcun/aoe2-analyzer/issues/978) 已关闭。
 - `0db9c309` 的应用号是 `v0.77.92`。生产页登记仍只有「持续生产」。文明页兵种行仍不带文明。对照仍锁城堡，并仍提供游侠。科技树格子的源码链接带 `?civ=`。
-- 数据钉扎在写本文时仍是 DE Update 188329，见 [data_sources.json](../../scripts/data_sources.json)。
+- 数据钉扎在写本文时仍是 DE Update 188329，见 [data_sources.json](../scripts/data_sources.json)。
 - 上午桌面走查覆盖了搜索、文明页到单位、三种生产里的若干单例、模拟器一笔锻造、文明对比的评分性质、天梯和更新历史的部分说明。那不是全站验收，也不是公式认证。
 
 **待核，不要写成已经知道：**
@@ -268,4 +268,4 @@
 
 ## 这份文档放在哪
 
-仓库里没有现成的角色手册目录。设计交接在 [docs/design/README.md](../design/README.md)，维护队列在 [CODEX-MAINTENANCE.md](../CODEX-MAINTENANCE.md)，贡献和授权在 [CONTRIBUTING.md](../../CONTRIBUTING.md)。产品判断方法不宜塞进设计索引或维护队列，所以单独放在 `docs/handbook/product-management.md`。本文不建立目录索引，避免和别的角色文档抢同一份名单。
+角色文档集中在 `role/`。设计交接在 [docs/design/README.md](../docs/design/README.md)，维护队列在 [CODEX-MAINTENANCE.md](../docs/CODEX-MAINTENANCE.md)，贡献和授权在 [CONTRIBUTING.md](../CONTRIBUTING.md)。产品判断方法不宜塞进设计索引或维护队列，所以单独放在 `role/product-management.md`。本文不建立目录索引，避免和别的角色文档抢同一份名单。

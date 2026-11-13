@@ -1,6 +1,6 @@
 # 软件开发经验与维护交接
 
-给后来改这个仓库的人。本文只讲代码、数据、验证和上线怎么核对。产品范围见 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色)，视觉规格见 [docs/design/README.md](design/README.md)，目录分层的长表见 [docs/ARCHITECTURE.md](ARCHITECTURE.md)。三处冲突时，流程以 CONTRIBUTING 为准，游戏数字以仓库里的数据和脚本为准。
+给后来改这个仓库的人。本文只讲代码、数据、验证和上线怎么核对。产品范围见 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色)，视觉规格见 [docs/design/README.md](../docs/design/README.md)，目录分层的长表见 [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md)。三处冲突时，流程以 CONTRIBUTING 为准，游戏数字以仓库里的数据和脚本为准。
 
 核对基准是 2026-11-13 的 `main` `0db9c30924dc5a2acaa66d3924d2f655fc17a6c2`（页脚短 SHA `0db9c30`，`package.json` 版本 `0.77.92`）。命令都对照过 `package.json`、工作流或配置文件。没在这次核对里跑过的检查，下面会标明。
 
@@ -55,7 +55,7 @@ npm run lint:layers -- --strict
 | 经济时间、费用、采集 | `npm run eco` | `scripts/eco_build.py` |
 | 基础数值对账 | `npm run stats:check` | `scripts/stats_crosscheck.py` |
 | 只看上游有没有新补丁 | `npm run data:status` | 有更新时退出码 10 |
-| 按文档走完整补丁更新 | `npm run data:update` | 见 [docs/DATA-UPDATE.md](DATA-UPDATE.md)，不自动提交 |
+| 按文档走完整补丁更新 | `npm run data:update` | 见 [docs/DATA-UPDATE.md](../docs/DATA-UPDATE.md)，不自动提交 |
 
 2026-11-13 数过当前 JSON 长度：文明 56、单位 248、科技 199、建筑 38。科技和建筑与 README 的个数一致。单位 JSON 是 248 条；README 仍写 163。首页单位数用 `src/domain/family.ts` 的 `unitCount` 做家族折叠，和 JSON 条数不是同一个数。写界面或文档时现算，不要抄 README 的 163。`data_sources.json` 里 `.dat` 标记 `civs: 63` 是补丁标记，也不是页面上的 56 个文明。
 
@@ -121,7 +121,7 @@ npm run lint:layers -- --strict
 
 推荐的验证和 CI 实际跑的集合是两件事。
 
-推荐：这次改动做必要冒烟，加上与 diff 直接相关的测试。纯布局不重跑无关计算或数据。计算或数据改动要核对这次的结果。报告分开写实际执行、CI 范围、未验证项。本地通过不能写成 CI 已跑。规则在 [docs/TESTING.md](TESTING.md) 文首（2026-11-10）和 [CONTRIBUTING「验证投入」](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
+推荐：这次改动做必要冒烟，加上与 diff 直接相关的测试。纯布局不重跑无关计算或数据。计算或数据改动要核对这次的结果。报告分开写实际执行、CI 范围、未验证项。本地通过不能写成 CI 已跑。规则在 [docs/TESTING.md](../docs/TESTING.md) 文首（2026-11-10）和 [CONTRIBUTING「验证投入」](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
 
 和代码直接相关的命令：
 
@@ -138,7 +138,7 @@ npm run build && npx playwright test tests/e2e/<本次相关>.spec.ts --reporter
 
 没设 `BASE_URL` 时，Playwright 自己起 `vite preview --port 4173 --strictPort`，读的是已有 `dist/`，所以要先 `npm run build`。设了 `BASE_URL` 就不再起服务。
 
-**当前默认 CI**（普通 `pull_request` 和 `push`，含 `main`）由 `scripts/ci-scope.mjs` 的 `selectCiPlan` 固定成窄门禁。`planChanges` 仍能在本地看出旧的风险分类，但 CI 入口不会因此把 PR 扩成 full。规格在 [docs/design/ci-749.md](design/ci-749.md)，作业在 `.github/workflows/ci.yml`。
+**当前默认 CI**（普通 `pull_request` 和 `push`，含 `main`）由 `scripts/ci-scope.mjs` 的 `selectCiPlan` 固定成窄门禁。`planChanges` 仍能在本地看出旧的风险分类，但 CI 入口不会因此把 PR 扩成 full。规格在 [docs/design/ci-749.md](../docs/design/ci-749.md)，作业在 `.github/workflows/ci.yml`。
 
 | 作业 | 普通 PR / main push |
 | --- | --- |
@@ -175,7 +175,7 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 6. 看 CI 时以最终 head 为准。PR 检查的是合并结果，不是分支上某次更早的绿。准备再推或改历史之前，先看这个 PR 是否已经 merged、`main` 是否已经有对应提交。维护者可能已经 squash 合入；合入后的新工作从新的 `main` 另开分支。
 7. squash 之后，`main` 上的 SHA 不是 PR 分支尖。例如 #979 的分支尖是 `484798c3`，合入 `main` 的是 `471c1368`。部署、页脚和 tag 都对 `main` 这个 SHA。
 8. 称上线之前核对这三件事：该 `main` push 的 CI 里 `test` 与 `deploy` 都成功；Pages 完成；线上页脚「构建」的 7 位与这个 SHA 的前 7 位一致，并且这次改动的页面或资源确实在线上。已合并、PR 绿、只有祖先关系，都还不是上线。
-9. 正式 Release 还要再看。`release.yml` 在 `main` 的成功 push 型 CI 之后接续。生成 draft 不等于发布完成。当前公开的 `v0.77.92` 不是 draft，annotated tag 指向 `0db9c309`。发版步骤见 [docs/RELEASING.md](RELEASING.md)。
+9. 正式 Release 还要再看。`release.yml` 在 `main` 的成功 push 型 CI 之后接续。生成 draft 不等于发布完成。当前公开的 `v0.77.92` 不是 draft，annotated tag 指向 `0db9c309`。发版步骤见 [docs/RELEASING.md](../docs/RELEASING.md)。
 10. 网站事项在范围已经上线、正式 Release 也对过之后，再把 issue 以 completed 关闭。`Relates` 不会在合并时自动关。不把只合并、还没部署或范围没做完的事项标成已部署。
 
 合入前的独立复核要留下。必要 CI 在最终 head 上通过之后，仓库约定不再加一轮人工产品走查当作关闭条件。运营意见用来记录具体卡点，CONTRIBUTING 写明它不是上线门禁。
@@ -192,16 +192,16 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 
 ## 9. 旧文档里还没改过来的说法
 
-这次只加本文和 README 的一处索引，没有改下面这些文件。读到它们时，以本文第 6 节、[ci-749](design/ci-749.md) 和 TESTING 文首为准。
+这次只加本文和 README 的一处索引，没有改下面这些文件。读到它们时，以本文第 6 节、[ci-749](../docs/design/ci-749.md) 和 TESTING 文首为准。
 
 | 位置 | 仍写着的内容 | 状态 |
 | --- | --- | --- |
 | [README「部署」](../README.md) | 每次 push / PR 都跑 Vitest、Python、数据检查和整套 Playwright | 待维护。默认路径不是这套 |
 | [README 数据表](../README.md) | `.dat` 来自 auto-mods 提交 `0c38027` | 待维护。当前钉死的是 `data_sources.json` 的 `e293dc1…` |
 | [README 模块表](../README.md) | 163 个单位 | 待维护。当前 `units.json` 是 248 条，首页另走 `unitCount` |
-| [docs/RELEASING.md](RELEASING.md) 准备步骤第 2 点 | 高风险 PR 跑完整单测和四个浏览器 runner，窄范围保留四宽与主题 | 待维护。同文后面的默认门禁已是窄冒烟 |
+| [docs/RELEASING.md](../docs/RELEASING.md) 准备步骤第 2 点 | 高风险 PR 跑完整单测和四个浏览器 runner，窄范围保留四宽与主题 | 待维护。同文后面的默认门禁已是窄冒烟 |
 | [CONTRIBUTING 持续审阅](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) | 「CI 的路径分类继续有效」 | 待维护。同文验证投入和 `selectCiPlan` 已不让分类扩大默认门禁 |
-| [docs/CODEX-MAINTENANCE.md](CODEX-MAINTENANCE.md) 第 6 节 | 界面 PR 附 360 / 375 / 390 / 1280 截图 | 该文自己注明这不再是每 PR 门禁；条款还在 |
+| [docs/CODEX-MAINTENANCE.md](../docs/CODEX-MAINTENANCE.md) 第 6 节 | 界面 PR 附 360 / 375 / 390 / 1280 截图 | 该文自己注明这不再是每 PR 门禁；条款还在 |
 | [.github/ISSUE_TEMPLATE/feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md) | 设计稿覆盖四宽度，PR 另附四宽截图 | 待维护。PR 模板已经改成不要求四宽矩阵 |
 
 ## 10. 这次没核对完的点
