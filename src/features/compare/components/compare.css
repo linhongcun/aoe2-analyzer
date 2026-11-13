@@ -2,14 +2,14 @@
   position: static;
   margin: 0 0 8px;
   padding: 6px 12px;
-  background: var(--color-surface);
+  background: var(--color-surface-2);
   border: 1px solid var(--color-border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
 
 .compare-basis h3,
 .compare-scores h3,
-.compare-facts h3,
+.compare-facts h2,
 .compare-basis h4 {
   margin: 0 0 4px;
   font-size: 16px;
@@ -20,6 +20,17 @@
   font-size: 13.5px;
   line-height: 1.45;
   color: var(--color-text-2);
+}
+
+.compare-scores h3,
+.compare-facts h2,
+.compare-section-title {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+}
+
+.compare-section-title {
+  margin: var(--space-6) 0 var(--space-3);
 }
 
 .compare-basis p,
@@ -91,7 +102,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  margin-bottom: 6px;
+  margin-bottom: var(--space-5);
 }
 
 #compare .lhead .note {
@@ -103,11 +114,11 @@
 
 .compare-toolbar {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-5);
 }
 
 .compare-pickers {
@@ -123,6 +134,16 @@
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  flex: 1;
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+}
+
+.compare-field:last-child {
+  border-top-color: var(--color-link);
 }
 
 .compare-field-label {
@@ -141,6 +162,8 @@
 #compare .cp-trigger {
   min-height: 44px;
   box-sizing: border-box;
+  border-radius: var(--radius-pill);
+  width: 100%;
 }
 
 .compare-share {
@@ -172,6 +195,7 @@
 .compare-share .detail-copy-fallback input {
   min-width: 0;
   min-height: 44px;
+  border-radius: var(--radius-pill);
 }
 
 .compare-team-link {
@@ -194,12 +218,18 @@
 .compare-facts {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 8px 12px;
 }
 
 .compare-facts {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-6);
+  padding: var(--space-5);
+}
+
+#compare #ctab th,
+#compare .compare-facts th {
+  background: var(--color-surface-2);
 }
 
 #compare #ctab th,
@@ -210,7 +240,7 @@
 
 #compare .compare-facts th,
 #compare .compare-facts td {
-  padding: 4px 8px;
+  padding: var(--space-3);
   vertical-align: middle;
 }
 
@@ -310,6 +340,13 @@
 }
 
 @media (max-width: 600px) {
+  .compare-field {
+    padding: var(--space-2);
+  }
+
+  .compare-facts {
+    padding: var(--space-3);
+  }
   .compare-toolbar {
     flex-direction: column;
     align-items: stretch;

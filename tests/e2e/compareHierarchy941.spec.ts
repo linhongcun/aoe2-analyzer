@@ -22,20 +22,18 @@ async function choose(page: Page, side: 'a' | 'b', en: string) {
   await expect(page.locator(side === 'a' ? '#ca' : '#cb')).toHaveAttribute('data-value', en);
 }
 
-test('#941 短摘要始终可见，表和雷达在 1280×900 首屏', async ({ page }) => {
+test('#941 资料先于主观评分，短摘要、表和雷达完整保留', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./#/compare?a=Franks&b=Britons');
   await expect(page.getByTestId('compare-rating-summary')).toHaveText(SUMMARY);
   await expect(page.getByRole('heading', { name: '完整评分口径', exact: true })).toHaveCount(0);
   const summary = await page.getByTestId('compare-rating-summary').boundingBox();
-  const navy = await page.locator('#ctab tr', { hasText: '海军' }).boundingBox();
-  const canvas = await page.locator('#crd').boundingBox();
-  const legend = await page.getByTestId('compare-legend').boundingBox();
-  expect(summary!.y).toBeGreaterThanOrEqual(0);
-  expect(summary!.y + summary!.height).toBeLessThanOrEqual(900);
-  expect(navy!.y + navy!.height).toBeLessThanOrEqual(900);
-  expect(canvas!.y + canvas!.height).toBeLessThanOrEqual(900);
-  expect(legend!.y + legend!.height).toBeLessThanOrEqual(900);
+  const facts = await page.locator('#compare-facts').boundingBox();
+  expect(facts!.y + facts!.height).toBeLessThanOrEqual(summary!.y);
+  await expect(page.locator('#compare-facts tbody tr')).toHaveCount(6);
+  await expect(page.locator('#ctab tr', { hasText: '海军' })).toBeVisible();
+  await expect(page.locator('#crd')).toBeVisible();
+  await expect(page.getByTestId('compare-legend')).toBeVisible();
   const sticky = await page.getByTestId('compare-rating-basis').evaluate((el) => getComputedStyle(el).position);
   expect(sticky).not.toBe('sticky');
 });
@@ -66,7 +64,9 @@ test('#941 390 不隐藏摘要，深色下高分仍用强调色', async ({ page 
   await expect(summary).toBeVisible();
   await expect(summary).toContainText('不能当成已证实来源');
   const box = await summary.boundingBox();
-  expect(box!.y + box!.height).toBeLessThanOrEqual(844);
+  const facts = await page.locator('#compare-facts').boundingBox();
+  expect(box!.y).toBeGreaterThanOrEqual(facts!.y + facts!.height);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(await summary.evaluate((el) => getComputedStyle(el).display)).not.toBe('none');
   await page.getByRole('button', { name: '菜单' }).click();
   await page.getByRole('radio', { name: '深色' }).click();

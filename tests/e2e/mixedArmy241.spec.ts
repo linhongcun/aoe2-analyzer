@@ -218,6 +218,8 @@ test('#241 strict damaged links lock; recoverable semantic mistakes retain edita
     await expect(page.getByRole('alert')).toContainText('推导已暂停');
     await expect(page.getByTestId('mixed-army-result')).toHaveCount(0);
     await expect(page.getByLabel('情境', { exact: true })).toBeDisabled();
+    await expect(page.getByLabel('我的文明', { exact: true })).toBeDisabled();
+    await expect(page.getByLabel('现有主力准确形态', { exact: true })).toBeDisabled();
     await expect(page.getByRole('button', { name: '复制情境链接', exact: true })).toBeDisabled();
     await page.getByRole('button', { name: '重置', exact: true }).click();
     await expect(page.getByLabel('现有主力准确形态', { exact: true })).toHaveValue('unknown');
@@ -275,6 +277,12 @@ for (const width of [360, 375, 390, 1280])
         document.documentElement.dataset.theme = value;
       }, theme);
       await expect(page.getByTestId('mixed-army-page')).toBeVisible();
+      const context = await page.locator('.mixed-context').boundingBox();
+      const observations = await page.locator('.mixed-settings').boundingBox();
+      const output = await page.locator('.mixed-output').boundingBox();
+      expect(observations!.y).toBeGreaterThanOrEqual(context!.y + context!.height);
+      if (width > 900) expect(output!.x).toBeGreaterThanOrEqual(observations!.x + observations!.width);
+      else expect(output!.y).toBeGreaterThanOrEqual(observations!.y + observations!.height);
       await page.getByText('记录已完成的形态、研究与生产建筑', { exact: true }).click();
       await page.getByText('适用范围与来源', { exact: true }).click();
       await page.locator('[data-card="britons-protected-onager"] summary').click();

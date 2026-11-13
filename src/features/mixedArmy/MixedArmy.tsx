@@ -336,10 +336,10 @@ export default function MixedArmy() {
       ) : !ctx ? (
         <Loading />
       ) : (
-        <ToolGrid className="mixed-layout">
-          <fieldset disabled={decoded.locked} className="mixed-panel mixed-settings">
-            <legend>我实际观察到什么</legend>
-            <div className="mixed-grid">
+        <>
+          <fieldset disabled={decoded.locked} className="mixed-panel mixed-context">
+            <legend>选择对局条件</legend>
+            <div className="mixed-context-grid">
               <label className="mixed-field">
                 情境
                 <select aria-label="情境" value={config.scenario} onChange={(event) => change({ scenario: event.target.value as MixedArmyConfig['scenario'] })}>
@@ -372,176 +372,187 @@ export default function MixedArmy() {
                   ))}
                 </select>
               </label>
-              <label className="mixed-field">
-                现有主力准确形态
-                <select aria-label="现有主力准确形态" value={config.ownMain} onChange={(event) => change({ ownMain: choice(event.target.value) })}>
-                  <option value="unknown">未知，尚未确认</option>
-                  <option value="other">其他主力，暂未收录</option>
-                  {mainChoices.map((id) => (
-                    <option key={id} value={id}>
-                      {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <SelectField label="实际敌军组合" value={config.enemy} options={enemyOptions} change={(enemy) => change({ enemy })} />
-              <SelectField label="地图与模式" value={config.mode} options={modeOptions} change={(mode) => change({ mode })} />
-              {scenario.observationProfile === 'wagon-cannon' && (
-                <>
-                  <div className="mixed-links mixed-field-units">
-                    <Link to="/unit/1704">胡斯派战车资料</Link>
-                    <Link to="/unit/36">手推炮资料</Link>
-                    <Link to="/unit/1709">榴弹炮资料</Link>
-                  </div>
-                  <label className="mixed-field">
-                    已见胡斯派战车（普通或精锐）
-                    <select aria-label="已见胡斯派战车（普通或精锐）" value={config.wagon} onChange={(event) => change({ wagon: choice(event.target.value) })}>
-                      <option value="unknown">未知，尚未辨认</option>
-                      <option value="other">其他，暂未覆盖</option>
-                      {[...new Set([...(scenario.enemyMainUnitIds ?? []), ...(typeof config.wagon === 'number' ? [config.wagon] : [])])].map((id) => (
-                        <option key={id} value={id}>
-                          {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="mixed-field">
-                    已见后排炮（手推炮或榴弹炮）
-                    <select
-                      aria-label="已见后排炮（手推炮或榴弹炮）"
-                      value={config.cannon}
-                      onChange={(event) => change({ cannon: choice(event.target.value) })}
-                    >
-                      <option value="unknown">未知，尚未辨认</option>
-                      <option value="other">其他，暂未覆盖</option>
-                      {[...new Set([...(scenario.enemyCannonUnitIds ?? []), ...(typeof config.cannon === 'number' ? [config.cannon] : [])])].map((id) => (
-                        <option key={id} value={id}>
-                          {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </>
-              )}
             </div>
-            <details className="mixed-details mixed-observation-details">
-              <summary>
-                地形、通路与持续资源
-                {observationUnknown > 0 ? (
-                  <>
-                    （还有 <span className="mixed-number">{observationUnknown} 项</span>未知）
-                  </>
-                ) : (
-                  '（已填写）'
-                )}
-              </summary>
-              <div className="mixed-grid">
-                <SelectField label="交战地形" value={config.terrain} options={terrainOptions} change={(terrain) => change({ terrain })} />
-                <SelectField label="敌方步行目标阵型" value={config.formation} options={formationOptions} change={(formation) => change({ formation })} />
-                <SelectField label="侧向到场与后排空当" value={config.flank} options={flankOptions} change={(flank) => change({ flank })} />
-                <SelectField label="己方保护射击位置" value={config.position} options={positionOptions} change={(position) => change({ position })} />
-                <SelectField label="撤回与替代资源" value={config.retreat} options={retreatOptions} change={(retreat) => change({ retreat })} />
-                <SelectField label="食物持续能力" value={config.food} options={foodOptions} change={(food) => change({ food })} />
-                <SelectField label="木材与黄金持续能力" value={config.woodGold} options={woodGoldOptions} change={(woodGold) => change({ woodGold })} />
-              </div>
-            </details>
-            <details className="mixed-details" data-testid="mixed-confirmations">
-              <summary>记录已完成的形态、研究与生产建筑</summary>
-              <p className="mixed-note">
-                逐项确认实际状态。选择单位不会自动确认升级；免费获得也由你确认。形态确认表示所需升级实际已完成，本页不自动核验完整研究链。未勾选表示尚未确认。
-              </p>
-              <div className="mixed-confirmation-grid">
-                <fieldset>
-                  <legend>形态升级实际完成</legend>
-                  {formChoices.map((id) => (
-                    <label className="mixed-check" key={id}>
-                      <input type="checkbox" checked={config.completedForms.includes(id)} onChange={() => toggle('completedForms', id)} />
-                      <span>
-                        {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
-                        {!mixedFormNeedsConfirmation(ctx, id) && '（此形态确认暂未支持）'}
-                      </span>
-                    </label>
-                  ))}
-                </fieldset>
-                <fieldset>
-                  <legend>必要研究实际完成</legend>
-                  {techChoices.map((id) => (
-                    <label className="mixed-check" key={id}>
-                      <input type="checkbox" checked={config.completedUnlockTechIds.includes(id)} onChange={() => toggle('completedUnlockTechIds', id)} />
-                      <span>{ctx.core.techById[id]?.zh ?? `未知科技 ${id}`}</span>
-                    </label>
-                  ))}
-                </fieldset>
-                <fieldset>
-                  <legend>当前可用的已建生产建筑</legend>
-                  {buildingChoices.map((id) => (
-                    <label className="mixed-check" key={id}>
-                      <input type="checkbox" checked={config.completedBuildings.includes(id)} onChange={() => toggle('completedBuildings', id)} />
-                      <span>{ctx.core.buildingById[id]?.zh ?? `未知建筑 ${id}`}</span>
-                    </label>
-                  ))}
-                </fieldset>
-              </div>
-              <p className="mixed-note">
-                完成研究与建筑现存分开记录；生产地点按固定科技树与生产模型核对，多个合法地点任选其一。更换情境、文明或时代会保留记录，请修正不相符的确认。
-              </p>
-            </details>
           </fieldset>
-          <div className="mixed-output">
-            {!decoded.locked && showExample && <ExampleConclusion />}
-            {plan && !showExample && (
-              <section className="mixed-results" data-testid="mixed-army-result" aria-labelledby="mixed-result-heading">
-                <header className="mixed-result-heading">
-                  <h2 id="mixed-result-heading" className="calc-dock-target" tabIndex={-1}>
-                    {plan.status === 'not-covered' ? '暂未覆盖这组输入' : plan.status === 'invalid' ? '先修正确认记录' : '按当前观察分配任务'}
-                  </h2>
-                  <p>{linkFirstUnits(plan.summary, new Set())}</p>
-                </header>
-                {plan.status === 'invalid' && (
-                  <div className="mixed-error" role="alert">
-                    {plan.notices.map((notice) => (
-                      <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
+          <ToolGrid className="mixed-layout">
+            <fieldset disabled={decoded.locked} className="mixed-panel mixed-settings">
+              <legend>我实际观察到什么</legend>
+              <div className="mixed-grid">
+                <label className="mixed-field">
+                  现有主力准确形态
+                  <select aria-label="现有主力准确形态" value={config.ownMain} onChange={(event) => change({ ownMain: choice(event.target.value) })}>
+                    <option value="unknown">未知，尚未确认</option>
+                    <option value="other">其他主力，暂未收录</option>
+                    {mainChoices.map((id) => (
+                      <option key={id} value={id}>
+                        {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
+                      </option>
                     ))}
-                  </div>
-                )}
-                {plan.status === 'not-covered' && (
-                  <div className="mixed-notice">
-                    {plan.notices.map((notice) => (
-                      <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
-                    ))}
-                  </div>
-                )}
-                {plan.cards.length > 0 && (
+                  </select>
+                </label>
+                <SelectField label="实际敌军组合" value={config.enemy} options={enemyOptions} change={(enemy) => change({ enemy })} />
+                <SelectField label="地图与模式" value={config.mode} options={modeOptions} change={(mode) => change({ mode })} />
+                {scenario.observationProfile === 'wagon-cannon' && (
                   <>
-                    <section aria-labelledby="mixed-met-heading" data-testid="mixed-conditions-met">
-                      <h3 id="mixed-met-heading">所列前置与观察条件满足</h3>
-                      {conditionsMet.length ? (
-                        <div className="mixed-cards">
-                          {conditionsMet.map((result) => (
-                            <Card key={result.card.id} result={result} ctx={ctx} />
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="mixed-empty">目前没有可按所填条件采用的路线。先补查或准备，不把未知当作安全。</p>
-                      )}
-                    </section>
-                    {otherCards.length > 0 && (
-                      <section aria-labelledby="mixed-other-heading">
-                        <h3 id="mixed-other-heading">还需观察、准备或等待条件变化</h3>
-                        <div className="mixed-cards">
-                          {otherCards.map((result) => (
-                            <Card key={result.card.id} result={result} ctx={ctx} />
-                          ))}
-                        </div>
-                      </section>
-                    )}
+                    <div className="mixed-links mixed-field-units">
+                      <Link to="/unit/1704">胡斯派战车资料</Link>
+                      <Link to="/unit/36">手推炮资料</Link>
+                      <Link to="/unit/1709">榴弹炮资料</Link>
+                    </div>
+                    <label className="mixed-field">
+                      已见胡斯派战车（普通或精锐）
+                      <select
+                        aria-label="已见胡斯派战车（普通或精锐）"
+                        value={config.wagon}
+                        onChange={(event) => change({ wagon: choice(event.target.value) })}
+                      >
+                        <option value="unknown">未知，尚未辨认</option>
+                        <option value="other">其他，暂未覆盖</option>
+                        {[...new Set([...(scenario.enemyMainUnitIds ?? []), ...(typeof config.wagon === 'number' ? [config.wagon] : [])])].map((id) => (
+                          <option key={id} value={id}>
+                            {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="mixed-field">
+                      已见后排炮（手推炮或榴弹炮）
+                      <select
+                        aria-label="已见后排炮（手推炮或榴弹炮）"
+                        value={config.cannon}
+                        onChange={(event) => change({ cannon: choice(event.target.value) })}
+                      >
+                        <option value="unknown">未知，尚未辨认</option>
+                        <option value="other">其他，暂未覆盖</option>
+                        {[...new Set([...(scenario.enemyCannonUnitIds ?? []), ...(typeof config.cannon === 'number' ? [config.cannon] : [])])].map((id) => (
+                          <option key={id} value={id}>
+                            {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
                   </>
                 )}
-              </section>
-            )}
-            {!decoded.locked && <MixedGaps config={config} />}
-          </div>
-        </ToolGrid>
+              </div>
+              <details className="mixed-details mixed-observation-details">
+                <summary>
+                  地形、通路与持续资源
+                  {observationUnknown > 0 ? (
+                    <>
+                      （还有 <span className="mixed-number">{observationUnknown} 项</span>未知）
+                    </>
+                  ) : (
+                    '（已填写）'
+                  )}
+                </summary>
+                <div className="mixed-grid">
+                  <SelectField label="交战地形" value={config.terrain} options={terrainOptions} change={(terrain) => change({ terrain })} />
+                  <SelectField label="敌方步行目标阵型" value={config.formation} options={formationOptions} change={(formation) => change({ formation })} />
+                  <SelectField label="侧向到场与后排空当" value={config.flank} options={flankOptions} change={(flank) => change({ flank })} />
+                  <SelectField label="己方保护射击位置" value={config.position} options={positionOptions} change={(position) => change({ position })} />
+                  <SelectField label="撤回与替代资源" value={config.retreat} options={retreatOptions} change={(retreat) => change({ retreat })} />
+                  <SelectField label="食物持续能力" value={config.food} options={foodOptions} change={(food) => change({ food })} />
+                  <SelectField label="木材与黄金持续能力" value={config.woodGold} options={woodGoldOptions} change={(woodGold) => change({ woodGold })} />
+                </div>
+              </details>
+              <details className="mixed-details" data-testid="mixed-confirmations">
+                <summary>记录已完成的形态、研究与生产建筑</summary>
+                <p className="mixed-note">
+                  逐项确认实际状态。选择单位不会自动确认升级；免费获得也由你确认。形态确认表示所需升级实际已完成，本页不自动核验完整研究链。未勾选表示尚未确认。
+                </p>
+                <div className="mixed-confirmation-grid">
+                  <fieldset>
+                    <legend>形态升级实际完成</legend>
+                    {formChoices.map((id) => (
+                      <label className="mixed-check" key={id}>
+                        <input type="checkbox" checked={config.completedForms.includes(id)} onChange={() => toggle('completedForms', id)} />
+                        <span>
+                          {ctx.core.unitById[id]?.zh ?? `未知单位 ${id}`}
+                          {!mixedFormNeedsConfirmation(ctx, id) && '（此形态确认暂未支持）'}
+                        </span>
+                      </label>
+                    ))}
+                  </fieldset>
+                  <fieldset>
+                    <legend>必要研究实际完成</legend>
+                    {techChoices.map((id) => (
+                      <label className="mixed-check" key={id}>
+                        <input type="checkbox" checked={config.completedUnlockTechIds.includes(id)} onChange={() => toggle('completedUnlockTechIds', id)} />
+                        <span>{ctx.core.techById[id]?.zh ?? `未知科技 ${id}`}</span>
+                      </label>
+                    ))}
+                  </fieldset>
+                  <fieldset>
+                    <legend>当前可用的已建生产建筑</legend>
+                    {buildingChoices.map((id) => (
+                      <label className="mixed-check" key={id}>
+                        <input type="checkbox" checked={config.completedBuildings.includes(id)} onChange={() => toggle('completedBuildings', id)} />
+                        <span>{ctx.core.buildingById[id]?.zh ?? `未知建筑 ${id}`}</span>
+                      </label>
+                    ))}
+                  </fieldset>
+                </div>
+                <p className="mixed-note">
+                  完成研究与建筑现存分开记录；生产地点按固定科技树与生产模型核对，多个合法地点任选其一。更换情境、文明或时代会保留记录，请修正不相符的确认。
+                </p>
+              </details>
+            </fieldset>
+            <div className="mixed-output">
+              {!decoded.locked && showExample && <ExampleConclusion />}
+              {plan && !showExample && (
+                <section className="mixed-results" data-testid="mixed-army-result" aria-labelledby="mixed-result-heading">
+                  <header className="mixed-result-heading">
+                    <h2 id="mixed-result-heading" className="calc-dock-target" tabIndex={-1}>
+                      {plan.status === 'not-covered' ? '暂未覆盖这组输入' : plan.status === 'invalid' ? '先修正确认记录' : '按当前观察分配任务'}
+                    </h2>
+                    <p>{linkFirstUnits(plan.summary, new Set())}</p>
+                  </header>
+                  {plan.status === 'invalid' && (
+                    <div className="mixed-error" role="alert">
+                      {plan.notices.map((notice) => (
+                        <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
+                      ))}
+                    </div>
+                  )}
+                  {plan.status === 'not-covered' && (
+                    <div className="mixed-notice">
+                      {plan.notices.map((notice) => (
+                        <p key={notice}>{linkFirstUnits(notice, new Set())}</p>
+                      ))}
+                    </div>
+                  )}
+                  {plan.cards.length > 0 && (
+                    <>
+                      <section aria-labelledby="mixed-met-heading" data-testid="mixed-conditions-met">
+                        <h3 id="mixed-met-heading">所列前置与观察条件满足</h3>
+                        {conditionsMet.length ? (
+                          <div className="mixed-cards">
+                            {conditionsMet.map((result) => (
+                              <Card key={result.card.id} result={result} ctx={ctx} />
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="mixed-empty">目前没有可按所填条件采用的路线。先补查或准备，不把未知当作安全。</p>
+                        )}
+                      </section>
+                      {otherCards.length > 0 && (
+                        <section aria-labelledby="mixed-other-heading">
+                          <h3 id="mixed-other-heading">还需观察、准备或等待条件变化</h3>
+                          <div className="mixed-cards">
+                            {otherCards.map((result) => (
+                              <Card key={result.card.id} result={result} ctx={ctx} />
+                            ))}
+                          </div>
+                        </section>
+                      )}
+                    </>
+                  )}
+                </section>
+              )}
+              {!decoded.locked && <MixedGaps config={config} />}
+            </div>
+          </ToolGrid>
+        </>
       )}
       <details className="mixed-details mixed-panel mixed-boundaries" data-testid="scope-sources">
         <summary>适用范围与来源</summary>

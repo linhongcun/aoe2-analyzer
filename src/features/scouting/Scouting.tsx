@@ -212,30 +212,32 @@ export default function Scouting() {
           </ul>
         </div>
       )}
+      <section className="scouting-panel scouting-context-panel" aria-labelledby="scouting-context-title">
+        <h2 id="scouting-context-title">选择情境与计划</h2>
+        <fieldset disabled={decoded.locked}>
+          <legend>条件与当前计划</legend>
+          <Select
+            label="情境"
+            value={config.scenario}
+            options={Object.fromEntries(SCOUTING_CONTENT.scenarios.map((row) => [row.id, row.title])) as Record<ScoutingConfig['scenario'], string>}
+            change={(scenario) => change(withScenario(config, scenario))}
+          />
+          <details className="scouting-context">
+            <summary>
+              地图与模式（<span className="num">{modes[config.mode]}</span> · {maps[config.map]}）
+            </summary>
+            <div className="scouting-optional-fields">
+              <Select label="地图" value={config.map} options={maps} change={(map) => change({ map })} />
+              <Select label="模式" value={config.mode} options={modes} change={(mode) => change({ mode })} />
+            </div>
+          </details>
+          <Select label="我的当前阶段" value={config.stage} options={stages} change={(stage) => change({ stage })} />
+          <Select label="我正在考虑的计划" value={config.plan} options={plans} change={(plan) => change({ plan })} />
+        </fieldset>
+      </section>
       <ToolGrid className="scouting-layout">
         <section className="scouting-panel scouting-settings" aria-labelledby="scouting-settings-title">
-          <h2 id="scouting-settings-title">选择情境与观察</h2>
-          <fieldset disabled={decoded.locked}>
-            <legend>条件与当前计划</legend>
-            <Select
-              label="情境"
-              value={config.scenario}
-              options={Object.fromEntries(SCOUTING_CONTENT.scenarios.map((row) => [row.id, row.title])) as Record<ScoutingConfig['scenario'], string>}
-              change={(scenario) => change(withScenario(config, scenario))}
-            />
-            <details className="scouting-context">
-              <summary>
-                地图与模式（<span className="num">{modes[config.mode]}</span> · {maps[config.map]}）
-              </summary>
-              <div className="scouting-optional-fields">
-                <Select label="地图" value={config.map} options={maps} change={(map) => change({ map })} />
-                <Select label="模式" value={config.mode} options={modes} change={(mode) => change({ mode })} />
-              </div>
-            </details>
-            <Select label="我的当前阶段" value={config.stage} options={stages} change={(stage) => change({ stage })} />
-            <Select label="我正在考虑的计划" value={config.plan} options={plans} change={(plan) => change({ plan })} />
-          </fieldset>
-
+          <h2 id="scouting-settings-title">记录实际观察</h2>
           <fieldset disabled={decoded.locked} className="scouting-observations">
             <legend>我的观察</legend>
             {scenario.observationIds.map((id) => {
