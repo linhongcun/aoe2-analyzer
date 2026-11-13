@@ -46,12 +46,13 @@
 .eco-card {
   min-width: 0;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-4);
   background: var(--color-surface);
 }
 .eco-card h2 {
   font-size: var(--fs-h3);
+  font-weight: 700;
   margin: 0 0 var(--space-4);
 }
 .eco-card h3 {
@@ -80,11 +81,15 @@
   max-width: 100%;
   box-sizing: border-box;
   font-size: var(--fs-body);
+  border-radius: var(--radius-pill);
+}
+.eco-payoff button {
+  border-radius: var(--radius-pill);
 }
 .eco-tech-group {
   min-width: 0;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   margin-top: var(--space-4);
   padding: var(--space-2) var(--space-3);
 }
@@ -135,7 +140,7 @@
   white-space: nowrap;
   background: var(--color-surface-2);
   padding: var(--space-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
 }
 .eco-resource-grid {
   display: grid;
@@ -145,7 +150,7 @@
 .eco-resource {
   min-width: 0;
   padding: var(--space-3);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-surface-2);
 }
 .eco-resource h3 {
@@ -176,7 +181,8 @@
 }
 .eco-balance {
   font-size: var(--fs-h3);
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-accent);
 }
 .eco-payoff details {
   font-size: var(--fs-sm);
@@ -198,11 +204,6 @@
 }
 .eco-source {
   font-size: var(--fs-xs);
-}
-@media (max-width: 800px) {
-  .eco-card {
-    padding: var(--space-3);
-  }
 }
 @media (max-width: 420px) {
   .eco-resource-grid {

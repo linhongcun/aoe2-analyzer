@@ -51,11 +51,12 @@
   min-width: 0;
   padding: var(--space-4);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
 }
 .trade-income-card h2 {
   font-size: var(--fs-h3);
+  font-weight: 700;
   margin: 0 0 var(--space-4);
 }
 .trade-income-form,
@@ -85,6 +86,10 @@
   max-width: 100%;
   box-sizing: border-box;
   font-size: var(--fs-body);
+  border-radius: var(--radius-pill);
+}
+.trade-income button {
+  border-radius: var(--radius-pill);
 }
 .trade-income-source-link {
   margin-top: var(--space-2);
@@ -137,7 +142,7 @@
   min-width: 0;
   padding: var(--space-3);
   background: var(--color-surface-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
 }
 .trade-income-costs h3 {
   font-size: var(--fs-body);
@@ -154,11 +159,6 @@
   align-items: center;
   color: var(--color-link);
   cursor: pointer;
-}
-@media (max-width: 800px) {
-  .trade-income-card {
-    padding: var(--space-3);
-  }
 }
 @media (max-width: 420px) {
   .trade-income-costs {

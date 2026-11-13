@@ -30,6 +30,7 @@
 }
 .relic-income button {
   white-space: normal;
+  border-radius: var(--radius-pill);
 }
 .relic-income :is(button, input, select, textarea, summary, a):focus-visible {
   outline: 2px solid var(--color-link);
@@ -46,7 +47,8 @@
   background: var(--color-surface);
 }
 .relic-card h2 {
-  font-size: 22px;
+  font-size: var(--fs-h3);
+  font-weight: 700;
   margin: 0 0 var(--space-4);
 }
 .relic-card h3 {
@@ -80,6 +82,9 @@
 }
 .relic-settings :is(input, select):disabled {
   opacity: 0.65;
+}
+.relic-settings :is(input:not([type='checkbox']), select) {
+  border-radius: var(--radius-pill);
 }
 .relic-span {
   grid-column: 1 / -1;
@@ -195,6 +200,7 @@
 }
 .relic-manual textarea {
   min-height: 96px;
+  border-radius: var(--radius-md);
   resize: vertical;
   overflow-wrap: anywhere;
   font-size: var(--fs-sm);
