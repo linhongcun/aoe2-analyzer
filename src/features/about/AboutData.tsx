@@ -20,6 +20,7 @@ export default function AboutData() {
         </a>
         。游戏原版 .dat © Microsoft，本站只发布由它派生的数值，不分发该文件。
       </p>
+      <h2>固定数据来源</h2>
       <table className="stat src-table">
         <thead>
           <tr>
@@ -54,7 +55,7 @@ export default function AboutData() {
       <p>
         <Link to="/patches">查看更新历史</Link>
       </p>
-      <h3>补丁数据变化</h3>
+      <h2>补丁数据变化</h2>
       <ul>
         {PATCH_NOTES.map((b) => (
           <li key={b}>

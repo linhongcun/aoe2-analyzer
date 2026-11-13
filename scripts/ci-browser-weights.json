@@ -15,6 +15,7 @@
     "tests/e2e/armenians197.spec.ts": 45382,
     "tests/e2e/armorValues706.spec.ts": 13500,
     "tests/e2e/automaticAge705.spec.ts": 13500,
+    "tests/e2e/batchUi994.spec.ts": 7500,
     "tests/e2e/bengalis197.spec.ts": 44749,
     "tests/e2e/bonuses965.spec.ts": 12000,
     "tests/e2e/breakEven.colors.spec.ts": 4152,
