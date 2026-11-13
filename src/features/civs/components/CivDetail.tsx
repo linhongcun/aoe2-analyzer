@@ -45,31 +45,39 @@ const CHAPTERS = [
 const CHAPTER_IDS = CHAPTERS.map(([id]) => id);
 
 /** 章节条跟着滚动标出当前所在章节。 */
-function useActiveChapter(): string {
+function useActiveChapter(pathname: string, hash: string): string {
   const [active, setActive] = useState<string>(CHAPTER_IDS[0]!);
   useEffect(() => {
     let frame = 0;
     const read = () => {
       frame = 0;
       let current: string = CHAPTER_IDS[0]!;
+      let nearest = -Infinity;
       if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2 && scrollY > 0) current = CHAPTER_IDS[CHAPTER_IDS.length - 1]!;
       else
         for (const id of CHAPTER_IDS) {
           const el = document.getElementById(id);
-          if (el && el.getBoundingClientRect().top <= 140) current = id;
+          if (!el) continue;
+          const top = el.getBoundingClientRect().top;
+          if (top <= 140 && (top > nearest || (top === nearest && hash === `#${id}`))) {
+            current = id;
+            nearest = top;
+          }
         }
       setActive(current);
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(read);
     };
-    read();
+    onScroll();
     addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
     return () => {
       removeEventListener('scroll', onScroll);
+      removeEventListener('resize', onScroll);
       cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [pathname, hash]);
   return active;
 }
 
@@ -170,7 +178,7 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
   const core = useCore();
   const params = new URLSearchParams(location.search);
   const tab = params.get('tab');
-  const chapter = useActiveChapter();
+  const chapter = useActiveChapter(location.pathname, location.hash);
   useEffect(() => {
     if (!c) return;
     session.lastCiv = c.en;

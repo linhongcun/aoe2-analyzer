@@ -7,6 +7,43 @@ const BUILDING_LABELS = ['属性', '生产', '研究', '说明', '相关', '更�
 const UNIT_LABELS = ['属性', '如何获得', '说明', '相关', '模拟器', '更新历史'];
 const CIV_LABELS = ['身份', '加成', '兵种', '科技树', '其他'];
 
+for (const width of [1280, 390]) {
+  test(`文明章节滚动高亮与锚点选择 ${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./#/civ/Franks');
+    await expect(page.locator('#kit .kit-row').first()).toBeVisible();
+    const active = page.locator('.civ-chapters [aria-current="location"]');
+    await expect(active).toHaveText('身份');
+
+    await page.locator('#bonuses').evaluate((el) => el.scrollIntoView());
+    await expect(active).toHaveText('加成');
+
+    for (const label of ['兵种', '加成', '科技树']) {
+      await page.locator('.civ-chapters').getByRole('link', { name: label, exact: true }).click();
+      await expect(active).toHaveText(label);
+    }
+
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+    await expect(active).toHaveText('其他');
+
+    await page.goto('./#/civ/Vietnamese#bonuses');
+    await expect(page.locator('#detail h1')).toContainText('越南');
+    await expect(active).toHaveText('加成');
+  });
+}
+
+test('文明章节高亮跟随单双栏切换重新计算', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.goto('./#/civ/Franks');
+  await expect(page.locator('#kit .kit-row').first()).toBeVisible();
+  await page.locator('#kit').evaluate((el) => el.scrollIntoView());
+  const active = page.locator('.civ-chapters [aria-current="location"]');
+  await expect(active).toHaveText('兵种');
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.locator('#bonuses').evaluate((el) => el.scrollIntoView());
+  await expect(active).toHaveText('加成');
+});
+
 async function setTheme(page: Page, theme: 'light' | 'dark') {
   await page.evaluate((value) => localStorage.setItem('aoe2-theme', value), theme);
   await page.reload();
