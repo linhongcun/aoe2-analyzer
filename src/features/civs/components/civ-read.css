@@ -16,8 +16,9 @@
   --civ-btn-ink: var(--color-on-accent);
   --civ-btn-edge: var(--color-accent);
   --civ-focus: var(--color-link);
-  margin: calc(var(--space-8) * -1) calc(var(--space-10) * -1);
-  padding: 20px 28px 64px;
+  /* 底边不外扩，否则会盖住页面下方的分享按钮。 */
+  margin: calc(var(--space-8) * -1) calc(var(--space-10) * -1) 0;
+  padding: 20px 28px 40px;
   background: var(--civ-bg);
   color: var(--civ-ink);
   font-size: 16px;
@@ -26,7 +27,20 @@
 
 .civ-read :where(h1, h2, h3, h4) {
   color: var(--civ-ink);
-  font-family: 'Songti SC', 'Noto Serif SC', 'Source Han Serif SC', serif;
+  font-family: var(--font-sans);
+}
+
+/* 身份、加成、兵种、科技树、其他资料各是一张卡。 */
+.civ-read header.civ-identity,
+.civ-columns > section,
+.civ-techtree,
+.civ-read > .insight-slot,
+.civ-read > .detail-section,
+.civ-more {
+  border: 1px solid var(--civ-line);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
 }
 
 .civ-read a {
@@ -51,10 +65,11 @@
   z-index: 4;
   display: flex;
   justify-content: flex-start;
-  gap: 0 16px;
-  margin: 0 0 8px;
-  padding: 4px 0;
+  gap: 0 24px;
+  margin: 8px 0 0;
+  padding: 0;
   overflow-x: auto;
+  border-bottom: 1px solid var(--civ-line);
   background: var(--civ-bg);
 }
 
@@ -62,14 +77,23 @@
   display: inline-flex;
   flex: none;
   align-items: center;
+  min-width: 44px;
   min-height: 44px;
+  justify-content: center;
+  border-bottom: 2px solid transparent;
   color: var(--civ-ink-2);
-  font-size: 13px;
+  font-size: 14px;
   text-decoration: none;
 }
 
 .civ-chapters a:hover {
-  color: var(--civ-gold);
+  color: var(--civ-ink);
+}
+
+.civ-read .civ-chapters a[aria-current] {
+  border-bottom-color: var(--civ-gold);
+  color: var(--civ-ink);
+  font-weight: 600;
 }
 
 .civ-identity,
@@ -85,34 +109,39 @@
   position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 12px 18px;
+  gap: 12px 20px;
   align-items: center;
   overflow: hidden;
-  padding: 8px 0 16px;
-  border: 0;
-  border-bottom: 1px solid var(--civ-line-2);
-  background: transparent;
+  padding: 20px 24px;
   text-align: left;
 }
 
 .identity-art {
   position: absolute;
-  top: -20%;
-  right: -12px;
-  width: 220px;
-  height: 150%;
+  top: 0;
+  right: 0;
+  width: min(46%, 440px);
+  height: 100%;
   background-image: var(--civ-art);
   background-repeat: no-repeat;
   background-position: right center;
-  background-size: contain;
-  opacity: 0.22;
+  background-size: cover;
+  opacity: 0.3;
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, var(--color-text) 70%);
+  mask-image: linear-gradient(90deg, transparent, var(--color-text) 70%);
 }
 
 .civ-crest {
-  width: 56px;
-  height: 56px;
+  position: relative;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
+}
+
+.civ-identity-main {
+  position: relative;
+  min-width: 0;
 }
 
 .civ-dlc {
@@ -160,7 +189,6 @@
 
 .civ-official em {
   color: var(--civ-gold);
-  font-family: 'Songti SC', 'Noto Serif SC', 'Source Han Serif SC', serif;
   font-size: 18px;
   font-style: normal;
   font-weight: 600;
@@ -185,16 +213,16 @@
   position: relative;
   z-index: 1;
   display: flex;
-  flex-direction: column;
   gap: 8px;
-  align-items: flex-end;
+  align-items: center;
+  align-self: start;
 }
 
 .civ-read .detail-copy-button,
 .civ-read .civ-list-link {
   border: 1px solid var(--civ-line-2);
-  border-radius: 2px;
-  background: transparent;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
   color: var(--civ-ink-2);
 }
 
@@ -208,8 +236,8 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0 12px;
-  font-size: 13px;
+  padding: 0 16px;
+  font-size: 14px;
   text-decoration: none;
 }
 
@@ -226,29 +254,34 @@
 .civ-columns {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 28px 40px;
-  align-items: start;
+  gap: 20px;
+  align-items: stretch;
   padding-top: 20px;
 }
 
+.civ-columns > section,
+.civ-more {
+  min-width: 0;
+  padding: 20px 24px 24px;
+}
+
 .civ-kicker {
-  margin: 0 0 8px;
+  margin: 0 0 4px;
   color: var(--civ-gold-2);
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
 }
 
 .civ-read h2 {
-  margin: 0 0 10px;
-  padding-bottom: 8px;
+  margin: 0 0 6px;
   font-size: 22px;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  background-image: linear-gradient(90deg, var(--civ-line-2), transparent 78%);
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 100% 1px;
+  line-height: 1.3;
+}
+
+.civ-columns .note {
+  margin: 0 0 14px;
 }
 
 .civ-read .num {
@@ -260,7 +293,6 @@
   margin: 0;
   border: 0;
   border-top: 1px solid var(--civ-line);
-  border-left: 2px solid var(--civ-gold-2);
   border-radius: 0;
   background: transparent;
 }
@@ -271,9 +303,16 @@
 }
 
 .civ-read .brow-h {
-  min-height: 44px;
-  padding: 8px 0 8px 12px;
+  gap: 10px;
+  min-height: 52px;
+  padding: 10px 8px;
+  border-radius: var(--radius-sm);
   color: var(--civ-ink);
+}
+
+.civ-read .brow-h .chev {
+  flex: none;
+  color: var(--civ-ink-3);
 }
 
 .civ-read .brow-h:hover {
@@ -297,21 +336,28 @@
 }
 
 .civ-team {
-  margin-top: 18px;
+  margin: 18px 0 14px;
+  padding: 12px 12px 4px;
+  border-radius: var(--radius-md);
+  background: var(--civ-lift);
+}
+
+.civ-team .blrows {
+  box-shadow: none;
 }
 
 .civ-team .civ-bonus-team,
 .civ-team .kicker {
-  margin: 0 0 8px;
+  margin: 0 8px 6px;
   color: var(--civ-copper);
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
 }
 
-.civ-team .brow {
-  border-left-color: var(--civ-copper);
-  background: var(--civ-lift);
+.civ-team .brow-h:hover,
+.civ-team .brow.open .brow-h {
+  background: var(--color-surface);
 }
 
 .civ-read .tag.ok,
@@ -328,35 +374,37 @@
 .civ-group-title {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 10px;
+  align-items: baseline;
+  gap: 4px 10px;
   margin: 0 0 8px;
   color: var(--civ-ink-3);
   font-size: 13px;
-  font-weight: 600;
 }
 
 .civ-group-title b {
-  color: var(--civ-ink-2);
+  color: var(--civ-ink);
+  font-size: 15px;
   font-weight: 600;
 }
 
 .civ-read .kit-row {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
   min-height: 44px;
-  padding: 8px 0;
+  padding: 10px 8px;
   border-top: 1px solid var(--civ-line);
   color: var(--civ-ink);
   text-decoration: none;
 }
 
-.civ-kit-group .kit-row:last-child {
-  border-bottom: 1px solid var(--civ-line);
+.civ-kit-group:last-child {
+  margin-bottom: 0;
 }
 
-.kit-row:hover {
-  color: var(--civ-gold);
+.civ-read .kit-row:hover {
+  border-radius: var(--radius-sm);
+  background: var(--civ-lift);
 }
 
 .kit-icons {
@@ -370,10 +418,12 @@
   height: 42px;
   margin: 0;
   border-color: var(--civ-line);
+  border-radius: var(--radius-sm);
   background: var(--civ-bg-deep);
 }
 
 .kit-meta {
+  flex: 1 1 0;
   min-width: 0;
 }
 
@@ -393,12 +443,16 @@
 
 .kit-age {
   margin-left: auto;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--civ-lift);
   white-space: nowrap;
 }
 
 .civ-techtree {
   min-width: 0;
-  margin-top: 40px;
+  margin-top: 20px;
+  padding: 20px 24px 24px;
   scroll-margin-top: calc(var(--nav-h) + 60px);
 }
 .civ-tt-head {
@@ -561,19 +615,28 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 4px;
-  margin: 0 0 12px;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--civ-line);
   font-size: 14px;
   color: var(--civ-ink-3);
 }
-.civ-continue a {
+.civ-continue-lab {
+  margin-right: 4px;
+}
+.civ-read .civ-continue a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0 4px;
+  padding: 0 16px;
+  border: 1px solid var(--civ-line);
+  border-radius: var(--radius-pill);
+  color: var(--civ-ink);
+  text-decoration: none;
 }
-.civ-continue-sep {
-  color: var(--civ-ink-3);
+.civ-read .civ-continue a:hover {
+  background: var(--civ-lift);
 }
 @media (max-width: 720px) {
   .civ-tt-tools {
@@ -625,8 +688,7 @@
 }
 
 .civ-more {
-  margin-top: 40px;
-  padding-top: 8px;
+  margin-top: 20px;
 }
 
 .civ-more-block {
@@ -636,11 +698,32 @@
 
 .civ-more-block summary {
   display: flex;
+  gap: 10px;
   align-items: center;
-  min-height: 44px;
-  color: var(--civ-ink-2);
+  min-height: 48px;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  color: var(--civ-ink);
   font-weight: 600;
   cursor: pointer;
+  list-style: none;
+}
+
+.civ-more-block summary::-webkit-details-marker {
+  display: none;
+}
+
+.civ-more-block summary:hover {
+  background: var(--civ-lift);
+}
+
+.civ-more-block summary .chev {
+  flex: none;
+  color: var(--civ-ink-3);
+}
+
+.civ-more .detail-source {
+  margin-bottom: 0;
 }
 
 .civ-read .civ-history h2 {
@@ -663,10 +746,10 @@
   font-size: 16px;
 }
 
-.civ-read .insight-slot {
-  background: var(--civ-lift);
-  border-color: var(--civ-line);
-  box-shadow: none;
+.civ-read > .insight-slot,
+.civ-read > .detail-section {
+  margin: 20px 0 0;
+  padding: 20px 24px 24px;
 }
 
 .civ-read .insight-slot > h2 {
@@ -714,9 +797,7 @@
 
   .civ-identity-actions {
     grid-column: 1 / -1;
-    flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
   }
 
   .civ-columns {
@@ -731,8 +812,28 @@
 
 @media (max-width: 600px) {
   .civ-read {
-    margin: calc(var(--space-4) * -1);
-    padding: 12px 16px 48px;
+    margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) 0;
+    padding: 12px 16px 24px;
+  }
+
+  .civ-read header.civ-identity,
+  .civ-columns > section,
+  .civ-techtree,
+  .civ-read > .insight-slot,
+  .civ-read > .detail-section,
+  .civ-more {
+    padding: 16px;
+  }
+
+  .civ-crest {
+    width: 64px;
+    height: 64px;
+  }
+
+  .civ-read .brow-h,
+  .civ-read .kit-row {
+    padding-right: 0;
+    padding-left: 0;
   }
 }
 
@@ -740,4 +841,9 @@
   .identity-art {
     display: none;
   }
+}
+
+/* 插画是深色线稿，深色主题下反相才看得见。 */
+:root[data-theme='dark'] .civ-read .identity-art {
+  filter: invert(1);
 }
