@@ -8,14 +8,11 @@ export const HOME_EMBLEM_CIVS = ['Byzantines', 'Japanese', 'Vikings'] as const;
 /** 民兵、步弓手、弩手、骑士、村民 */
 export const HOME_UNIT_PICS = [8, 17, 18, 1, 15] as const;
 
-/** 封建、城堡、帝王 */
+/** 封建、城堡、帝王，科技入口的视觉例示 */
 export const HOME_AGE_PICS = [30, 31, 32] as const;
 
-/** 城堡 */
-export const HOME_BUILDING_PIC = 7;
-
-/** 帝王时代，科技入口的视觉例示 */
-export const HOME_TECH_PIC = 32;
+/** 城镇中心、兵营、城堡 */
+export const HOME_BUILDING_PICS = [28, 2, 7] as const;
 
 export const HOME_REFERENCE_COPY = {
   civs: '加成、特色单位与科技、完整科技树。',
