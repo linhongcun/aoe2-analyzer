@@ -27,7 +27,7 @@ for (const width of [360, 375, 390, 1280]) {
     }
     await expect(page.getByTestId('market-summary-0')).toContainText('全部交易可执行');
     await expect(page.getByTestId('market-summary-0')).toContainText('31');
-    await expect(page.getByLabel('预算口径')).toContainText('游戏内部可能保留小数余额');
+    await expect(page.locator('.market-page .tool-foot-notes')).toContainText('游戏内部可能保留小数余额');
     expect((await page.locator('.market-ledger caption').boundingBox())!.width).toBeGreaterThan(200);
     await page.screenshot({ path: info.outputPath(`market215-light-${width}.png`), fullPage: true });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
