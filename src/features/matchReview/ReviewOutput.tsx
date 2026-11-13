@@ -40,7 +40,7 @@ export function ReviewOutput({
   onUsePrepared,
 }: ReviewOutputProps) {
   return (
-    <>
+    <div className="mr-output-grid">
       <section id="mr-output" tabIndex={-1} className="mr-panel" aria-labelledby="mr-output-title">
         <h2 id="mr-output-title">求助摘要与打印</h2>
         <p>勾选希望包含的区段。预览、复制与打印使用同一份内容；完整 JSON 备份始终包含所有草稿字段。</p>
@@ -137,6 +137,6 @@ export function ReviewOutput({
           )}
         </div>
       </section>
-    </>
+    </div>
   );
 }

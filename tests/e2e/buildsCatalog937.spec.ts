@@ -20,6 +20,10 @@ test('#937 目录比较开局，时间动态，不展开步骤', async ({ page }
   await expect(page.getByText('选一个开局，看看你会卡在哪')).toHaveCount(0);
   await expect(page.locator('.tl-empty, .bo-steps')).toHaveCount(0);
   await expect(page.locator('[data-t="build-order"]')).toHaveCount(orders.length);
+  const firstCard = await page.locator('[data-t="build-order"]').nth(0).boundingBox();
+  const secondCard = await page.locator('[data-t="build-order"]').nth(1).boundingBox();
+  expect(secondCard!.x).toBeGreaterThanOrEqual(firstCard!.x + firstCard!.width);
+  expect(secondCard!.y).toBe(firstCard!.y);
   await expect(page.getByRole('link', { name: '查看时间线', exact: true })).toHaveCount(orders.length);
   await expect(page.getByRole('link', { name: '专注跟练', exact: true })).toHaveCount(orders.length);
   for (const [label, href] of [

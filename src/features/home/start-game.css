@@ -4,6 +4,48 @@
   min-width: 0;
   max-width: 100%;
 }
+.start-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.start-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 230px) minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+.start-progress {
+  padding: var(--space-4);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.start-progress .start-steps {
+  display: grid;
+  margin-top: var(--space-3);
+}
+.start-progress .start-chip {
+  width: 100%;
+}
+.start-current {
+  min-width: 0;
+}
+.start-current > :first-child {
+  margin-top: 0;
+}
+@media (max-width: 800px) {
+  .start-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+  .start-progress .start-steps {
+    display: flex;
+  }
+}
 .start-kicker,
 .start-note,
 .start-hint,

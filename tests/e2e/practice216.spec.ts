@@ -37,8 +37,15 @@ for (const width of [360, 375, 390, 1280])
       await expect(progress).toContainText('当前第 8 / 12 步');
       await expect(current.getByTestId('practice-action')).toHaveCount(4);
       const currentBox = await current.boundingBox();
-      expect(currentBox!.y).toBeGreaterThanOrEqual(52);
-      expect(currentBox!.y).toBeLessThan(120);
+      const controls = page.locator('.bp-controls');
+      const controlsBox = await controls.boundingBox();
+      const topbarBox = await page.locator('header.topbar').boundingBox();
+      expect(controlsBox!.y).toBeGreaterThanOrEqual(topbarBox!.y + topbarBox!.height);
+      expect(controlsBox!.y + controlsBox!.height).toBeLessThanOrEqual(currentBox!.y);
+      expect(currentBox!.y).toBeLessThan(450);
+      await expect(zone).toBeFocused();
+      await expect(controls.getByRole('button', { name: '完成这一步，继续', exact: true })).toBeInViewport();
+      await expect(current.getByRole('heading')).toBeInViewport();
       await expect(current).toContainText('训练 3 个民兵');
       await expect(current).toContainText('升级为武士');
       await expect(page.getByTestId('practice-next')).toContainText('第 9 步');

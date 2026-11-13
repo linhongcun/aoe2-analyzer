@@ -132,7 +132,6 @@ export default function BuildPracticeView({
   const rows = useMemo(() => practiceSteps(order, timeline), [order, timeline]);
   const [completed, setCompleted] = useState(0);
   const zone = useRef<HTMLDivElement>(null);
-  const currentCard = useRef<HTMLElement>(null);
   const previousCompleted = useRef(0);
   const done = completed === rows.length;
   const current = rows[Math.min(completed, rows.length - 1)]!;
@@ -150,8 +149,7 @@ export default function BuildPracticeView({
     if (previousCompleted.current === completed) return;
     previousCompleted.current = completed;
     if (mode !== 'practice') return;
-    // 手机按钮在两张卡片之后；推进后把真正的当前步骤带回视野。
-    currentCard.current?.scrollIntoView({ block: 'start' });
+    zone.current?.scrollIntoView({ block: 'start' });
     zone.current?.focus({ preventScroll: true });
   }, [completed, mode]);
   const keyboard = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -194,66 +192,69 @@ export default function BuildPracticeView({
           </button>
         </nav>
       </header>
-      <div className="bp-settings bp-screen-only" role="group" aria-label="跟练配置">
-        <label>
-          开局
-          <select aria-label="跟练开局" value={order.id} onChange={(event) => onChange({ bo: event.target.value })}>
-            {buildOrders.map((build) => (
-              <option key={build.id} value={build.id}>
-                {build.name.zh}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div>
-          <span>文明</span>
-          <CivPicker
-            id="practice-civ"
-            label="跟练文明"
-            none="通用"
-            value={query.civ}
-            onChange={(civ) => onChange({ civ: civ || null })}
-            isEnabled={simSupport}
-            disabledGroup="暂不支持 · 文明加成尚未计入"
-            disabledNote="文明加成尚未计入"
-            disabledNoteFor={simSupportNote}
-            disabledTitleFor={simSupportTitle}
-          />
-        </div>
-        <p className="note">
-          切换开局、文明或参数后重新开始；刷新不保存进度。<Link to={buildPracticeUrl(params, null)}>调整模拟参数</Link>
-        </p>
-      </div>
-      <div className="bp-context">
-        <p data-testid="practice-parameters">
-          <b>{selectedCiv}</b> · <span className="nw">走路距离 {query.dist} 格</span> · 自动造房{query.house ? '开启' : '关闭'}
-          {timeline.noHouses && '（不需要房子，不执行）'} · 团队加成未计入
-        </p>
-        <p className="note">
-          地图：{order.map}。推荐文明：{order.civs.length ? order.civs.map((civ) => civByEn(civ)?.zh ?? civ).join('、') : '通用'}。
-        </p>
-        {unsupported && (
-          <p className="bp-warning" role="status" data-testid="practice-civ-warning">
-            {simSupportWarning(query.civ, selectedCiv)}以下数字不是该文明的完整估算。
+      <div className="bp-setup">
+        <div className="bp-settings bp-screen-only" role="group" aria-label="跟练配置">
+          <label>
+            开局
+            <select aria-label="跟练开局" value={order.id} onChange={(event) => onChange({ bo: event.target.value })}>
+              {buildOrders.map((build) => (
+                <option key={build.id} value={build.id}>
+                  {build.name.zh}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div>
+            <span>文明</span>
+            <CivPicker
+              id="practice-civ"
+              label="跟练文明"
+              none="通用"
+              value={query.civ}
+              onChange={(civ) => onChange({ civ: civ || null })}
+              isEnabled={simSupport}
+              disabledGroup="暂不支持 · 文明加成尚未计入"
+              disabledNote="文明加成尚未计入"
+              disabledNoteFor={simSupportNote}
+              disabledTitleFor={simSupportTitle}
+            />
+          </div>
+          <p className="note">
+            切换开局、文明或参数后重新开始；刷新不保存进度。<Link to={buildPracticeUrl(params, null)}>调整模拟参数</Link>
           </p>
-        )}
-        {query.variant && <p className="note">链接的{query.variant === 'aggr' ? '激进' : '保守'}变体尚无独立步骤数据，当前仍按本开局的相同步骤估算。</p>}
-        {civNotes.length > 0 && (
-          <ul className="note">
-            {civNotes.map((note, i) => (
-              <li key={i}>{timeline.civ === 'Bengalis' || timeline.civ === 'Poles' || cartUnits ? <NumUnitText text={note} cartUnits={cartUnits} /> : note}</li>
-            ))}
-          </ul>
-        )}
-        <p className="note">时间均为模拟估算，不是倒计时或游戏监测。步骤村民数来自开局标记；人口与分配为模拟步骤开始快照，研究类估算时点可能晚于该快照。</p>
-        <nav className="bar bp-screen-only" aria-label="跟练辅助资料">
-          <GameClockLink seconds={rowTime(current.simulation)} label="换算当前步骤时点" />
-          <Link className="community-tool-entry" to="/hotkeys">
-            查游戏操作与个人按键表
-          </Link>
-        </nav>
+        </div>
+        <div className="bp-context">
+          <p data-testid="practice-parameters">
+            <b>{selectedCiv}</b> · <span className="nw">走路距离 {query.dist} 格</span> · 自动造房{query.house ? '开启' : '关闭'}
+            {timeline.noHouses && '（不需要房子，不执行）'} · 团队加成未计入
+          </p>
+          <p className="note">
+            地图：{order.map}。推荐文明：{order.civs.length ? order.civs.map((civ) => civByEn(civ)?.zh ?? civ).join('、') : '通用'}。
+          </p>
+          {unsupported && (
+            <p className="bp-warning" role="status" data-testid="practice-civ-warning">
+              {simSupportWarning(query.civ, selectedCiv)}以下数字不是该文明的完整估算。
+            </p>
+          )}
+          {query.variant && <p className="note">链接的{query.variant === 'aggr' ? '激进' : '保守'}变体尚无独立步骤数据，当前仍按本开局的相同步骤估算。</p>}
+          {civNotes.length > 0 && (
+            <ul className="note">
+              {civNotes.map((note, i) => (
+                <li key={i}>
+                  {timeline.civ === 'Bengalis' || timeline.civ === 'Poles' || cartUnits ? <NumUnitText text={note} cartUnits={cartUnits} /> : note}
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="note">时间均为模拟估算，不是倒计时或游戏监测。步骤村民数来自开局标记；人口与分配为模拟步骤开始快照，研究类估算时点可能晚于该快照。</p>
+          <nav className="bar bp-screen-only" aria-label="跟练辅助资料">
+            <GameClockLink seconds={rowTime(current.simulation)} label="换算当前步骤时点" />
+            <Link className="community-tool-entry" to="/hotkeys">
+              查游戏操作与个人按键表
+            </Link>
+          </nav>
+        </div>
       </div>
-
       {mode === 'practice' && (
         <div className="bp-screen-only bp-zone" ref={zone} tabIndex={0} role="region" aria-label="手动跟练区域" onKeyDown={keyboard}>
           <div className="bp-progress">
@@ -265,8 +266,22 @@ export default function BuildPracticeView({
             </p>
             <progress value={completed} max={rows.length} aria-label="已手动跟完的步骤" />
           </div>
+          <div className="bp-controls">
+            <button className="bp-button" type="button" disabled={completed === 0} onClick={() => move('previous')}>
+              <Icon name="arrow-left" />
+              上一步
+            </button>
+            <button className="bp-button bp-primary" type="button" disabled={done} onClick={() => move('next')}>
+              <Icon name={done ? 'check' : 'arrow-right'} />
+              {done ? '已跟完全部步骤' : completed === rows.length - 1 ? '完成最后一步' : '完成这一步，继续'}
+            </button>
+            <button className="bp-button" type="button" disabled={completed === 0} onClick={() => move('reset')}>
+              <Icon name="rotate-ccw" />
+              重新开始
+            </button>
+          </div>
           <div className="bp-cards">
-            <article className="bp-current" ref={currentCard} data-testid="practice-current">
+            <article className="bp-current" data-testid="practice-current">
               <h2>
                 {done ? '最后一步回顾' : '当前步骤'}
                 <span className="nw">第 {current.index + 1} 步</span>
@@ -286,20 +301,6 @@ export default function BuildPracticeView({
                 </p>
               )}
             </article>
-          </div>
-          <div className="bp-controls">
-            <button className="bp-button" type="button" disabled={completed === 0} onClick={() => move('previous')}>
-              <Icon name="arrow-left" />
-              上一步
-            </button>
-            <button className="bp-button bp-primary" type="button" disabled={done} onClick={() => move('next')}>
-              <Icon name={done ? 'check' : 'arrow-right'} />
-              {done ? '已跟完全部步骤' : completed === rows.length - 1 ? '完成最后一步' : '完成这一步，继续'}
-            </button>
-            <button className="bp-button" type="button" disabled={completed === 0} onClick={() => move('reset')}>
-              <Icon name="rotate-ccw" />
-              重新开始
-            </button>
           </div>
           <p className="note">在跟练区域使用左右方向键后退 / 前进。快捷键仅在此网页获得焦点时生效；不会自动推进或读取游戏状态。</p>
         </div>
