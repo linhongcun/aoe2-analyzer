@@ -183,7 +183,58 @@
 .mr-print {
   display: none;
 }
+.mr-task-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding-block: var(--space-3);
+}
+.mr-task-nav button {
+  flex: 1 1 140px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+.mr-recording,
+.mr-followup,
+.mr-output-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+.mr-recording {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+}
+.mr-context-column {
+  min-width: 0;
+}
+.mr-context-column .mr-grid,
+.mr-followup .mr-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+.mr-recording .mr-panel,
+.mr-followup .mr-panel,
+.mr-output-grid .mr-panel {
+  margin-top: 0;
+}
+.mr-storage.mr-panel {
+  padding: var(--space-3);
+}
+.mr-storage .mr-notice {
+  margin-block: 0;
+}
+.mr-task-nav ~ div h2 {
+  scroll-margin-top: calc(var(--nav-h) + var(--space-4));
+}
 @media (max-width: 700px) {
+  .mr-recording,
+  .mr-followup,
+  .mr-output-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
   .mr-grid {
     grid-template-columns: minmax(0, 1fr);
   }

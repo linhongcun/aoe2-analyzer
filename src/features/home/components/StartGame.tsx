@@ -32,24 +32,35 @@ export default function StartGame({ state, onChange }: { state: StartState; onCh
   const lobbyStart = state.lobby && state.current === 'civ';
   return (
     <section className="start-game" data-testid="start-game" aria-labelledby="start-title">
-      <p className="start-kicker">{lobbyStart ? '开一局 / 已在大厅' : '开一局'}</p>
-      <h1 id="start-title">{state.current == null ? '本局摘要' : '开一局'}</h1>
-      <p className="start-lede">{lede(state)}</p>
-      <StepBar state={state} onChange={onChange} />
-      <p className="start-note">{note(state)}</p>
-      {state.current === 'mode' ? <ModeStep state={state} onChange={onChange} /> : null}
-      {state.current === 'map' ? <MapStep state={state} onChange={onChange} /> : null}
-      {state.current === 'lane' ? <LaneStep state={state} onChange={onChange} /> : null}
-      {state.current === 'civ' ? <CivStep state={state} onChange={onChange} /> : null}
-      {state.current === 'opponent' ? <OpponentStep state={state} onChange={onChange} /> : null}
-      {state.current == null ? <Summary state={state} onChange={onChange} /> : null}
-      {state.current === 'mode' ? (
-        <div className="start-alts">
+      <div className="start-heading">
+        <div>
+          <p className="start-kicker">{lobbyStart ? '开一局 / 已在大厅' : '开一局'}</p>
+          <h1 id="start-title">{state.current == null ? '本局摘要' : '开一局'}</h1>
+          <p className="start-lede">{lede(state)}</p>
+        </div>
+        {state.current === 'mode' ? (
           <button type="button" className="start-lobby" data-testid="start-lobby" onClick={() => onChange(() => enterLobby())}>
             已在大厅
           </button>
+        ) : null}
+      </div>
+      <div className="start-workspace">
+        <aside className="start-progress" aria-labelledby="start-progress-title">
+          <h2 id="start-progress-title" className="start-col-title">
+            本局进度
+          </h2>
+          <StepBar state={state} onChange={onChange} />
+          <p className="start-note">{note(state)}</p>
+        </aside>
+        <div className="start-current">
+          {state.current === 'mode' ? <ModeStep state={state} onChange={onChange} /> : null}
+          {state.current === 'map' ? <MapStep state={state} onChange={onChange} /> : null}
+          {state.current === 'lane' ? <LaneStep state={state} onChange={onChange} /> : null}
+          {state.current === 'civ' ? <CivStep state={state} onChange={onChange} /> : null}
+          {state.current === 'opponent' ? <OpponentStep state={state} onChange={onChange} /> : null}
+          {state.current == null ? <Summary state={state} onChange={onChange} /> : null}
         </div>
-      ) : null}
+      </div>
       <StartFeatureMenu state={state} />
     </section>
   );

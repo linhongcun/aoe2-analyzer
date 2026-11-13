@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "source": "Historical file wall spans from timestamped Playwright line events (overlapping runner work, not per-case CPU duration). Seed only; exact new reporter durations supersede after first measured run. The 338 non-sweep allowance excludes the long sweeps; staticSweepMs uses the historical paired-worker table-sweep cadence rounded upward. Files without historical measurement use non-skipped case count × defaultCaseMs; staticSweep338.spec.ts uses staticSweepMs. Coverage checked 2026-11-09.",
+  "source": "Historical file wall spans from timestamped Playwright line events (overlapping runner work, not per-case CPU duration). Seed only; exact new reporter durations supersede after first measured run. The 338 non-sweep allowance excludes the long sweeps; staticSweepMs uses the historical paired-worker table-sweep cadence rounded upward. Files without historical measurement use non-skipped case count × defaultCaseMs; staticSweep338.spec.ts uses staticSweepMs. Coverage checked 2026-11-14.",
   "historicalRuns": [41551266996],
   "historicalJob": 125639155326,
   "defaultCaseMs": 1500,
@@ -155,6 +155,7 @@
     "tests/e2e/negativeBonus707.spec.ts": 15000,
     "tests/e2e/nomadReveal758.spec.ts": 9000,
     "tests/e2e/notFound290.spec.ts": 11539,
+    "tests/e2e/openingUi1016.spec.ts": 6000,
     "tests/e2e/overflow64.spec.ts": 39323,
     "tests/e2e/pageBudget282.spec.ts": 52396,
     "tests/e2e/pageMetaAlias287.spec.ts": 2530,

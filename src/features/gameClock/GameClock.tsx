@@ -107,78 +107,86 @@ export default function GameClock() {
         <ToolGrid className="gc-layout">
           <section className="gc-panel" aria-labelledby="gc-input-title">
             <h2 id="gc-input-title">填写时长与倍率</h2>
-            <label>
-              换算方向
-              <select value={config.direction} onChange={(event) => update({ ...config, direction: event.target.value as GameClockConfig['direction'] })}>
-                <option value="game-to-real">游戏时间换成现实时间</option>
-                <option value="real-to-game">现实时间换成游戏时间</option>
-              </select>
-            </label>
-            <label>
-              输入单位
-              <select value={config.unit} onChange={(event) => changeUnit(event.target.value as GameClockUnit)}>
-                <option value="minutes">分:秒</option>
-                <option value="seconds">秒</option>
-              </select>
-            </label>
-            <label>
-              {gameInput ? '原始游戏时长' : '原始现实时长'}
-              <input
-                type="text"
-                inputMode={config.unit === 'seconds' ? 'decimal' : 'text'}
-                value={config.duration}
-                maxLength={64}
-                placeholder={config.unit === 'minutes' ? '例如 10:00' : '例如 600'}
-                aria-invalid={durationInvalid}
-                aria-describedby="gc-duration-help"
-                onChange={(event) => update({ ...config, duration: event.target.value })}
-              />
-            </label>
-            <p className="note" id="gc-duration-help">
-              {config.unit === 'minutes' ? '按“分:秒”填写，秒位为 00–59，可加小数，如 0:05.5。' : '填写非负十进制秒数，可加小数。'}最多{' '}
-              <span className="gc-number">{`${GAME_CLOCK_DURATION_LIMIT} 秒`}</span>。
-            </p>
-            <label>
-              速度倍率
-              <input
-                type="text"
-                inputMode="decimal"
-                value={config.ratio}
-                maxLength={64}
-                aria-invalid={ratioInvalid}
-                aria-describedby="gc-ratio-help"
-                onChange={(event) => update({ ...config, ratio: event.target.value })}
-              />
-            </label>
-            <p className="note" id="gc-ratio-help">
-              大于 <span className="gc-number">0</span>、不超过 <span className="gc-number">1000</span>。每现实秒对应的游戏秒数；请按自己的设置填写。
-            </p>
-            <div className="gc-presets" role="group" aria-label="游戏速度预设">
-              {SPEED_PRESETS.map((preset) => (
-                <button
-                  key={preset.ratio}
-                  type="button"
-                  aria-label={`${preset.ratio} ${preset.name}（${preset.english}）`}
-                  aria-pressed={!ratioInvalid && Number(config.ratio) === Number(preset.ratio)}
-                  onClick={() => update({ ...config, ratio: preset.ratio })}
-                >
-                  <span className="gc-number">{`${preset.ratio} ${preset.name}`}</span>
-                </button>
-              ))}
-            </div>
-            {unitError && (
-              <p role="alert" className="gc-error">
-                <ClockText text={unitError} />
+            <fieldset className="gc-input-group">
+              <legend>原始时长</legend>
+              <div className="gc-input-options">
+                <label>
+                  换算方向
+                  <select value={config.direction} onChange={(event) => update({ ...config, direction: event.target.value as GameClockConfig['direction'] })}>
+                    <option value="game-to-real">游戏时间换成现实时间</option>
+                    <option value="real-to-game">现实时间换成游戏时间</option>
+                  </select>
+                </label>
+                <label>
+                  输入单位
+                  <select value={config.unit} onChange={(event) => changeUnit(event.target.value as GameClockUnit)}>
+                    <option value="minutes">分:秒</option>
+                    <option value="seconds">秒</option>
+                  </select>
+                </label>
+              </div>
+              <label>
+                {gameInput ? '原始游戏时长' : '原始现实时长'}
+                <input
+                  type="text"
+                  inputMode={config.unit === 'seconds' ? 'decimal' : 'text'}
+                  value={config.duration}
+                  maxLength={64}
+                  placeholder={config.unit === 'minutes' ? '例如 10:00' : '例如 600'}
+                  aria-invalid={durationInvalid}
+                  aria-describedby="gc-duration-help"
+                  onChange={(event) => update({ ...config, duration: event.target.value })}
+                />
+              </label>
+              <p className="note" id="gc-duration-help">
+                {config.unit === 'minutes' ? '按“分:秒”填写，秒位为 00–59，可加小数，如 0:05.5。' : '填写非负十进制秒数，可加小数。'}最多{' '}
+                <span className="gc-number">{`${GAME_CLOCK_DURATION_LIMIT} 秒`}</span>。
               </p>
-            )}
-            <div className="gc-actions">
-              <button type="button" className="btn" onClick={() => update(defaultGameClockConfig())}>
-                试算数学示例
-              </button>
-            </div>
-            <p className="note">
-              示例采用标准速度（天梯默认），倍率为 <span className="gc-number">1.7</span>。
-            </p>
+            </fieldset>
+            <fieldset className="gc-input-group">
+              <legend>速度倍率</legend>
+              <label>
+                速度倍率
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={config.ratio}
+                  maxLength={64}
+                  aria-invalid={ratioInvalid}
+                  aria-describedby="gc-ratio-help"
+                  onChange={(event) => update({ ...config, ratio: event.target.value })}
+                />
+              </label>
+              <p className="note" id="gc-ratio-help">
+                大于 <span className="gc-number">0</span>、不超过 <span className="gc-number">1000</span>。每现实秒对应的游戏秒数；请按自己的设置填写。
+              </p>
+              <div className="gc-presets" role="group" aria-label="游戏速度预设">
+                {SPEED_PRESETS.map((preset) => (
+                  <button
+                    key={preset.ratio}
+                    type="button"
+                    aria-label={`${preset.ratio} ${preset.name}（${preset.english}）`}
+                    aria-pressed={!ratioInvalid && Number(config.ratio) === Number(preset.ratio)}
+                    onClick={() => update({ ...config, ratio: preset.ratio })}
+                  >
+                    <span className="gc-number">{`${preset.ratio} ${preset.name}`}</span>
+                  </button>
+                ))}
+              </div>
+              {unitError && (
+                <p role="alert" className="gc-error">
+                  <ClockText text={unitError} />
+                </p>
+              )}
+              <div className="gc-actions">
+                <button type="button" className="btn" onClick={() => update(defaultGameClockConfig())}>
+                  试算数学示例
+                </button>
+              </div>
+              <p className="note">
+                示例采用标准速度（天梯默认），倍率为 <span className="gc-number">1.7</span>。
+              </p>
+            </fieldset>
           </section>
           <section className="gc-panel gc-result" aria-labelledby="gc-result-title" aria-live="polite">
             <h2 id="gc-result-title" className="calc-dock-target" tabIndex={-1}>

@@ -35,6 +35,32 @@
 }
 .gc-layout {
   margin-bottom: var(--space-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.gc-input-group {
+  min-width: 0;
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.gc-input-group legend {
+  padding-inline: var(--space-2);
+  font-weight: 600;
+  color: var(--color-text-2);
+}
+.gc-input-options {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--space-3);
+}
+.gc-result {
+  border-top: 3px solid var(--color-accent);
+}
+.gc-clock {
+  padding: var(--space-5) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-soft);
 }
 .gc-panel {
   background: var(--color-surface);
@@ -148,6 +174,10 @@
   margin-block: var(--space-4);
 }
 @media (max-width: 700px) {
+  .gc-layout,
+  .gc-input-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .gc-equation > div {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-1);
