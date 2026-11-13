@@ -23,12 +23,14 @@
   min-width: 0;
   padding: var(--space-5);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
   overflow-wrap: anywhere;
 }
 .healing-card > h2 {
   margin-top: 0;
+  font-size: var(--fs-h3);
+  font-weight: 700;
 }
 .healing-fields {
   display: grid;
@@ -58,8 +60,11 @@
   color: var(--color-text);
   background: var(--color-control);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   padding: var(--space-2) var(--space-3);
+}
+.healing-page :is(button, .btn) {
+  border-radius: var(--radius-pill);
 }
 .healing-page button,
 .healing-page .ulink {
@@ -88,7 +93,7 @@
 .healing-warning {
   overflow-wrap: anywhere;
   padding: var(--space-3);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   color: var(--color-bad);
   background: var(--color-bad-soft);
   font-size: var(--fs-sm);
@@ -142,7 +147,7 @@ ul.healing-warning {
 .healing-metrics > div {
   min-width: 0;
   padding: var(--space-4);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-surface-2);
 }
 .healing-metrics dt {
@@ -152,7 +157,7 @@ ul.healing-warning {
 .healing-metrics dd {
   margin: var(--space-1) 0 0;
   font-size: var(--fs-h3);
-  font-weight: 600;
+  font-weight: 700;
 }
 .healing-number {
   font-variant-numeric: tabular-nums;
@@ -168,7 +173,7 @@ ul.healing-warning {
   min-width: 0;
   padding: var(--space-3);
   background: var(--color-surface-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   font-size: var(--fs-sm);
 }
 .healing-comparison h4 {
