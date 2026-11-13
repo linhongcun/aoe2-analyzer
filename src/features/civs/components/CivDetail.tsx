@@ -170,7 +170,8 @@ export default function CivDetail({ techTree: TechTree }: { techTree: ComponentT
     : [];
   const tools = [
     ['civ-tool-builds', `/builds?civ=${c.en}`, '开局流程'],
-    ['civ-tool-production', `/production?civ=${c.en}`, '生产对照'],
+    ['civ-tool-production', `/production?civ=${c.en}`, '持续生产'],
+    ['civ-tool-train-total', `/production?mode=train-total&civ=${c.en}`, '训练总价'],
     ['civ-tool-matchup', `/matchup?me=${c.en}`, '对局助手'],
     ['civ-tool-compare', `/compare?a=${c.en}`, '文明对比'],
   ] as const;

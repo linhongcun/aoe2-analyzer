@@ -3,7 +3,8 @@ import { expect, test, type Page } from '@playwright/test';
 
 const TOOLS = [
   ['开局流程', '#/builds?civ=Armenians', 'civ-tool-builds'],
-  ['生产对照', '#/production?civ=Armenians', 'civ-tool-production'],
+  ['持续生产', '#/production?civ=Armenians', 'civ-tool-production'],
+  ['训练总价', '#/production?mode=train-total&civ=Armenians', 'civ-tool-train-total'],
   ['对局助手', '#/matchup?me=Armenians', 'civ-tool-matchup'],
   ['文明对比', '#/compare?a=Armenians', 'civ-tool-compare'],
   ['科技树', '#/tree/Armenians', 'civ-tool-tree'],
@@ -91,7 +92,7 @@ test('#602 页内 Tab 在上，相关工具在下，职业选手视角不进情�
   await expect(tech).not.toContainText('查看完整科技树');
   await expect(tech).not.toContainText('职业选手视角');
   await expect(page.getByRole('heading', { name: '职业选手原始资料', exact: true })).toHaveCount(0);
-  await expect(tools.getByRole('link')).toHaveCount(5);
+  await expect(tools.getByRole('link')).toHaveCount(6);
   await expect(tools).not.toContainText('职业选手视角');
   expect((await new AxeBuilder({ page }).include('#detail').withTags(['wcag2a', 'wcag2aa']).analyze()).violations).toEqual([]);
 });
@@ -123,6 +124,6 @@ test('#602 深色 1280 仍能分出本页内容与相关工具', async ({ page }
   const tabBox = (await tabs.boundingBox())!;
   const toolBox = (await tools.boundingBox())!;
   expect(toolBox.y).toBeGreaterThan(tabBox.y + tabBox.height - 1);
-  await expect(tools.getByRole('link')).toHaveCount(5);
+  await expect(tools.getByRole('link')).toHaveCount(6);
   await expect(tools).not.toContainText('职业选手视角');
 });
