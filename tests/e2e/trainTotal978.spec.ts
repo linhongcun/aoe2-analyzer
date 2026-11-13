@@ -17,6 +17,12 @@ test('#978 空方案默认帝王且不预填科技或兵种', async ({ page }) =
   await expect(page.getByLabel('训练总价时代')).toHaveValue('4');
   await expect(page.getByTestId('train-total-row')).toHaveCount(0);
   await expect(page.getByTestId('train-total-empty')).toHaveText('添加兵种并填写训练数量后查看合计。');
+  const setup = await page.locator('.train-total-setup').boundingBox();
+  const conditions = await page.locator('.train-total-conditions').boundingBox();
+  const results = await page.locator('.train-total-results').boundingBox();
+  expect(setup!.y + setup!.height).toBeLessThanOrEqual(conditions!.y);
+  expect(conditions!.x + conditions!.width).toBeLessThanOrEqual(results!.x);
+  await expect(page.locator('.train-total-results .train-total-techs')).toBeVisible();
   await expect(page.getByTestId('train-total-result')).not.toContainText('下列总价');
   await expect(page.getByTestId('train-total-result')).not.toContainText('已计入行小计');
   await expect(page.getByTestId('train-total-result')).not.toContainText('部分训练费用');
@@ -74,6 +80,10 @@ test('#978 数量按训练价相加，化学只解锁，切换和返回各自保
   await page.getByRole('button', { name: '添加兵种', exact: true }).click();
   await expect(page.getByTestId('train-total-row')).toHaveCount(1);
   await expect(page.getByLabel('兵种 1 训练数量')).toHaveValue('1');
+  const unitField = await page.getByLabel('兵种 1 单位', { exact: true }).boundingBox();
+  const quantityField = await page.getByLabel('兵种 1 训练数量', { exact: true }).boundingBox();
+  expect(unitField!.x + unitField!.width).toBeLessThanOrEqual(quantityField!.x);
+  expect(unitField!.y).toBe(quantityField!.y);
   const food = page.getByTestId('train-total-resource-Food');
   await expect(food).toBeVisible();
   const once = (await food.innerText()).replace(/\s/g, '');

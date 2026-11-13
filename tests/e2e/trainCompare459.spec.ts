@@ -185,6 +185,10 @@ test('#459 invalid raw links and quantity drafts stop results and copying until 
   await page.getByRole('button', { name: '应用参数', exact: true }).click();
   await expect(rows(page)).toHaveCount(2);
   await page.getByRole('textbox', { name: '目标数量', exact: true }).fill('0');
+  await expect(page.locator('.train-compare-results')).toContainText('当前未生成结果或可复制链接');
+  await expect(rows(page)).toHaveCount(0);
+  await expect(copy(page)).toBeDisabled();
+  await expect(page.getByRole('combobox', { name: '对照单位', exact: true })).toBeDisabled();
   await page.getByRole('textbox', { name: '目标数量', exact: true }).press('Enter');
   expect(query(page).get('n')).toBe('0');
   await expect(page.getByRole('alert')).toBeVisible();
@@ -260,6 +264,10 @@ for (const width of [360, 375, 390, 1280])
       await page.addInitScript((value) => localStorage.setItem('aoe2-theme', value), theme);
       await page.goto('./#/production?mode=train-compare&v=1&unit=38&age=3&n=10&civs=Franks,Huns,Berbers,Portuguese,Poles');
       await expect(rows(page)).toHaveCount(5);
+      const conditions = await page.locator('.train-compare-conditions').boundingBox();
+      const results = await page.locator('.train-compare-results').boundingBox();
+      if (width === 1280) expect(conditions!.x + conditions!.width).toBeLessThanOrEqual(results!.x);
+      else expect(conditions!.y + conditions!.height).toBeLessThanOrEqual(results!.y);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await expect(page.getByRole('columnheader')).toHaveCount(4);
       await expect(row(page, 'Huns').getByRole('row').first().getByRole('cell').nth(0)).toContainText(/25\s*秒/);
