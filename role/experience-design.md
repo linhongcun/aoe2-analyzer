@@ -15,7 +15,7 @@
 
 接手体验设计时用本文：先看哪份源码，一次交付交什么，提单前查什么，以及哪几类界面错误会反复出现。
 
-视觉令牌和组件草案在 [`docs/design/DESIGN-SYSTEM.md`](design/DESIGN-SYSTEM.md)。逐项规格的目录在 [`docs/design/README.md`](design/README.md)。产品范围、测试投入、实现队列分别在 [`CONTRIBUTING.md`](../CONTRIBUTING.md)、[`docs/TESTING.md`](TESTING.md)、[`docs/CODEX-MAINTENANCE.md`](CODEX-MAINTENANCE.md)。单页规格仍放 `docs/design/`，不要写进本文。
+视觉令牌和组件草案在 [`docs/design/DESIGN-SYSTEM.md`](../docs/design/DESIGN-SYSTEM.md)。逐项规格的目录在 [`docs/design/README.md`](../docs/design/README.md)。产品范围、测试投入、实现队列分别在 [`CONTRIBUTING.md`](../CONTRIBUTING.md)、[`docs/TESTING.md`](../docs/TESTING.md)、[`docs/CODEX-MAINTENANCE.md`](../docs/CODEX-MAINTENANCE.md)。单页规格仍放 `docs/design/`，不要写进本文。
 
 本文不改应用配置，也不新增一条审批链。
 
@@ -25,7 +25,7 @@
 
 | 要确认的事 | 先打开 |
 | --- | --- |
-| 这一页在导航和首页的哪一组、路径和标题 | [`src/shared/nav/pageRegistry.ts`](../src/shared/nav/pageRegistry.ts)。懒加载 import 在 [`src/app/pageRegistry.tsx`](../src/app/pageRegistry.tsx)，登记规则见 [`docs/ARCHITECTURE.md`](ARCHITECTURE.md)「页面登记表」 |
+| 这一页在导航和首页的哪一组、路径和标题 | [`src/shared/nav/pageRegistry.ts`](../src/shared/nav/pageRegistry.ts)。懒加载 import 在 [`src/app/pageRegistry.tsx`](../src/app/pageRegistry.tsx)，登记规则见 [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md)「页面登记表」 |
 | 路由在 hash 里 | [`src/app/App.tsx`](../src/app/App.tsx)、[`src/app/routes.tsx`](../src/app/routes.tsx) |
 | 浅色 / 深色实际色值 | [`src/shared/styles/tokens.css`](../src/shared/styles/tokens.css)。切换逻辑在 [`src/app/theme/theme.ts`](../src/app/theme/theme.ts)、[`src/app/theme/useTheme.ts`](../src/app/theme/useTheme.ts) |
 | 界面图标 | [`src/shared/ui/Icon.tsx`](../src/shared/ui/Icon.tsx) 的 `ICONS` |
@@ -34,10 +34,10 @@
 | 工具页壳 | [`src/shared/ui/ToolPageHeader.tsx`](../src/shared/ui/ToolPageHeader.tsx)、[`src/shared/ui/ToolShell.tsx`](../src/shared/ui/ToolShell.tsx) 的 `ToolGrid` |
 | 顶栏、焦点、窄屏抽屉 | [`src/app/Layout.tsx`](../src/app/Layout.tsx)、[`src/shared/styles/editorial-shell.css`](../src/shared/styles/editorial-shell.css) |
 | 对象更新历史 | [`src/shared/ui/PatchHistory.tsx`](../src/shared/ui/PatchHistory.tsx)；站点列表是登记表里的 `/patches` |
-| 已通过的短稿和勘误 | [`docs/design/README.md`](design/README.md)。短稿目录里若有 `ERRATA.md`，以勘误为准；当前索引写明只有 `docs/design/mockups/issue24-v3/ERRATA.md` |
+| 已通过的短稿和勘误 | [`docs/design/README.md`](../docs/design/README.md)。短稿目录里若有 `ERRATA.md`，以勘误为准；当前索引写明只有 `docs/design/mockups/issue24-v3/ERRATA.md` |
 | 游戏数字从哪来 | 生成数据与 [`scripts/data_sources.json`](../scripts/data_sources.json)。界面只读这些结果，不手写玩法数字 |
 
-本基线最新提交是 [#1002](https://github.com/linhongcun/aoe2-analyzer/issues/1002) / [PR #1003](https://github.com/linhongcun/aoe2-analyzer/pull/1003)。界面只改持续生产、施工、驻军治疗三份页面 CSS，同提交还有规格、版本号和 CHANGELOG。规格写明训练总价和跨文明对照不动，见 [`docs/design/support-tools-ui-20261113.md`](design/support-tools-ui-20261113.md)。看生产页卡片时用这份，不用更早的截图。
+本基线最新提交是 [#1002](https://github.com/linhongcun/aoe2-analyzer/issues/1002) / [PR #1003](https://github.com/linhongcun/aoe2-analyzer/pull/1003)。界面只改持续生产、施工、驻军治疗三份页面 CSS，同提交还有规格、版本号和 CHANGELOG。规格写明训练总价和跨文明对照不动，见 [`docs/design/support-tools-ui-20261113.md`](../docs/design/support-tools-ui-20261113.md)。看生产页卡片时用这份，不用更早的截图。
 
 ## 现行职责
 
@@ -63,7 +63,7 @@
 
 **实际实现。** `body` 已设 `font-variant-numeric: tabular-nums`。`.nw` 在 [`src/shared/styles/base.css`](../src/shared/styles/base.css) 里是 `white-space: nowrap`。`.num` 的 tabular 规则散落在各页样式，没有一条全局 `.num`。数值和「数字+单位」仍要用 `.nw` 包住，避免 360 宽折成两行。
 
-**实际实现。** 颜色只写在 `tokens.css`。[`scripts/check-colors.mjs`](../scripts/check-colors.mjs) 禁止源码里另写十六进制和 `rgb()` / `hsl()`。[`docs/design/contrast.py`](design/contrast.py) 检查的是脚本内写死的色对，文件说明对应设计规范草案：正文阈值 4.5，大字和 UI 图形 3.0。本基线里，深色 `--color-bad` 在 `tokens.css` 是 `#ff6961`，`contrast.py` 仍是 `#ff6b5e`；深色 `--color-bad-soft` 分别是 `#452323` 和 `#3a1714`。写稿和验收以 `tokens.css` 为准。`contrast.py` 通过只说明它自己的色对过了阈值。
+**实际实现。** 颜色只写在 `tokens.css`。[`scripts/check-colors.mjs`](../scripts/check-colors.mjs) 禁止源码里另写十六进制和 `rgb()` / `hsl()`。[`docs/design/contrast.py`](../docs/design/contrast.py) 检查的是脚本内写死的色对，文件说明对应设计规范草案：正文阈值 4.5，大字和 UI 图形 3.0。本基线里，深色 `--color-bad` 在 `tokens.css` 是 `#ff6961`，`contrast.py` 仍是 `#ff6b5e`；深色 `--color-bad-soft` 分别是 `#452323` 和 `#3a1714`。写稿和验收以 `tokens.css` 为准。`contrast.py` 通过只说明它自己的色对过了阈值。
 
 ## 协作顺序
 
@@ -84,7 +84,7 @@
 
 设计不替产品排期，不替实现选定算法或改计算口径，也不替测试做模拟引擎或现网验收。稿上的「设计通过」只覆盖入口、结构和视觉。超时、未点到、未量到的项写成未确认。
 
-[`docs/design/README.md`](design/README.md) 仍写视觉 PR 要在 15 分钟内回复。`CODEX-MAINTENANCE` 把更早的双路实施记为历史暂停。这两句都留在原文里当记录。新工作不把回复时限或双路门禁写成永恒规则。
+[`docs/design/README.md`](../docs/design/README.md) 仍写视觉 PR 要在 15 分钟内回复。`CODEX-MAINTENANCE` 把更早的双路实施记为历史暂停。这两句都留在原文里当记录。新工作不把回复时限或双路门禁写成永恒规则。
 
 ## 交付时分成三份
 
@@ -96,17 +96,17 @@
 
 **审阅说明。** 放在业务画面外面，说明取舍、有意删掉的内容和实现边界。防错句写进实施条款，不写进玩家界面。
 
-状态只覆盖这一次会碰到的：默认、选中、空结果、未知、错误、不可用、恢复、URL 和返回。空、未知和 0 用不同句子。训练总价在没有已计入行时不展示资源卡，见 [`trainTotalCopy.ts`](../src/features/production/trainTotalCopy.ts)。驻军治疗规格写明零秒不是未知，见 [`support-tools-ui-20261113.md`](design/support-tools-ui-20261113.md)。没有这次的功能就不要为了状态表造一个。
+状态只覆盖这一次会碰到的：默认、选中、空结果、未知、错误、不可用、恢复、URL 和返回。空、未知和 0 用不同句子。训练总价在没有已计入行时不展示资源卡，见 [`trainTotalCopy.ts`](../src/features/production/trainTotalCopy.ts)。驻军治疗规格写明零秒不是未知，见 [`support-tools-ui-20261113.md`](../docs/design/support-tools-ui-20261113.md)。没有这次的功能就不要为了状态表造一个。
 
 实施 issue 自己要能读完：目标、照此实现的界面、不改的文件和行为、验收时怎样算正常。本地 zip 和截图在上传到 GitHub 之前，正文里写成「未附在 issue 上」。实施不依赖打开本地包。
 
 ## 这次要检查什么
 
-PC 优先，窄屏做到这次的路径基本可用。设计索引里的桌面参照是 1280。只查这次改到的布局、可读性和关键操作。不把全站、全尺寸、全主题矩阵加回每次 PR，也不为设计评审加无关 CI。全站回归是否在跑，以 [`docs/TESTING.md`](TESTING.md) 文首为准。
+PC 优先，窄屏做到这次的路径基本可用。设计索引里的桌面参照是 1280。只查这次改到的布局、可读性和关键操作。不把全站、全尺寸、全主题矩阵加回每次 PR，也不为设计评审加无关 CI。全站回归是否在跑，以 [`docs/TESTING.md`](../docs/TESTING.md) 文首为准。
 
 有浮层时写清焦点从哪来、键盘怎样关闭、关闭后回到哪个控件。长中文、图标和费用保持同一阅读基线；一行放不下时整组费用换行，不把单个资源拆到错位的列。浅色和深色都看这次的默认态。有遮罩时看打开与关闭两态。
 
-可点区域按**这一项的交互规格**。适用控件常用至少 44×44 CSS 像素，例如 [`docs/design/touch-targets-481.md`](design/touch-targets-481.md) 只补开局术语链接和页脚里不足的链接，并写明不放大整站普通内联链接。`CODEX-MAINTENANCE` 第 6 节的「可点区域 ≥ 44×44」是摘要；同文第 7 节写明四宽截图不是每 PR 测试门禁。
+可点区域按**这一项的交互规格**。适用控件常用至少 44×44 CSS 像素，例如 [`docs/design/touch-targets-481.md`](../docs/design/touch-targets-481.md) 只补开局术语链接和页脚里不足的链接，并写明不放大整站普通内联链接。`CODEX-MAINTENANCE` 第 6 节的「可点区域 ≥ 44×44」是摘要；同文第 7 节写明四宽截图不是每 PR 测试门禁。
 
 这不是「所有 WCAG 场合都强制 44」。W3C WCAG 2.2 里，[2.5.8 Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) 是 AA，目标至少 24×24 CSS 像素，并有间距、等效控件、行内文本等例外；[2.5.5 Target Size (Enhanced)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html) 是 AAA，目标至少 44×44 CSS 像素，同样有行内文本等例外。引用这两条只说明外部门槛，不表示本站已经按它们全站测过。
 
@@ -198,7 +198,7 @@ PC 优先，窄屏做到这次的路径基本可用。设计索引里的桌面�
 
 | 冲突 | 本基线怎么取 |
 | --- | --- |
-| [`DESIGN-SYSTEM.md`](design/DESIGN-SYSTEM.md) 草案（2026-10-11）写手机端优先保证可读，并把深色放到第 4 阶段；样例 CSS 含 `prefers-color-scheme` | 色值和主题开关以 `tokens.css` 与 `src/app/theme/` 为准。本基线的 `tokens.css` 只有 `:root[data-theme='dark']`，没有 `prefers-color-scheme` 块。检查范围以本文「这次要检查什么」为准 |
+| [`DESIGN-SYSTEM.md`](../docs/design/DESIGN-SYSTEM.md) 草案（2026-10-11）写手机端优先保证可读，并把深色放到第 4 阶段；样例 CSS 含 `prefers-color-scheme` | 色值和主题开关以 `tokens.css` 与 `src/app/theme/` 为准。本基线的 `tokens.css` 只有 `:root[data-theme='dark']`，没有 `prefers-color-scheme` 块。检查范围以本文「这次要检查什么」为准 |
 | 设计索引仍要求视觉 PR 15 分钟内回复；维护文档保留双路暂停 | 当作历史记录。现行分工以 CONTRIBUTING「角色」和本文「协作顺序」为准 |
 | `CODEX-MAINTENANCE` 第 6 节和 CONTRIBUTING「版本工作流 / 设计稿」仍写 360 / 375 / 390 / 1280；CONTRIBUTING「按改动风险控制验证投入」和 TESTING 文首写全站全尺寸不是门禁 | 设计说明覆盖这次相关状态。测试投入以 TESTING 文首为准，不把四宽矩阵加回每次 PR |
 | `contrast.py`、设计规范草案和 `tokens.css` 的个别深色值不一致 | 界面使用 `tokens.css`。改色的实施 issue 再决定是否同步检查脚本 |
@@ -206,4 +206,4 @@ PC 优先，窄屏做到这次的路径基本可用。设计索引里的桌面�
 
 外部规范（WCAG、别的产品的界面）写来源、看过的范围和不适用的地方。引用本身不是本站已经验证。成熟案例按上一节的四段写：当时发生在哪、本基线代码、以后怎样迁移、哪一段还没复测。案例过时或路径改了，就改那一节，不另堆一份 issue 目录。
 
-2026-11-09 的页面任务优先优化在 [`docs/design/task-focused-ui-2026-11.md`](design/task-focused-ui-2026-11.md)，基线是更早的 `483e513`。用它看当时的筛选、开一局和详情扫描结论；数字和截图位置以那份证据为准，不把它当成 2026-11-13 的全站现状。
+2026-11-09 的页面任务优先优化在 [`docs/design/task-focused-ui-2026-11.md`](../docs/design/task-focused-ui-2026-11.md)，基线是更早的 `483e513`。用它看当时的筛选、开一局和详情扫描结论；数字和截图位置以那份证据为准，不把它当成 2026-11-13 的全站现状。
