@@ -135,44 +135,47 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
           <input readOnly value={share.manualLink} onFocus={(event) => event.currentTarget.select()} />
         </label>
       )}
-      <ToolGrid>
-        <div className="train-total-conditions">
-          <div className="train-total-settings">
-            <label>
-              文明
-              <select aria-label="训练总价文明" value={config.civ} onChange={(event) => write({ ...config, civ: event.target.value })}>
-                {!civName && <option value={config.civ}>无效文明：{config.civ}</option>}
-                {civs.map((item) => (
-                  <option key={item.en} value={item.en}>
-                    {item.zh}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              时代
-              <select
-                aria-label="训练总价时代"
-                value={config.age ?? ''}
-                onChange={(event) => write({ ...config, age: Number(event.target.value), ageRaw: null })}
-              >
-                {config.age == null && <option value="">无效时代：{config.ageRaw || '空'}</option>}
-                {[1, 2, 3, 4].map((age) => (
-                  <option key={age} value={age}>
-                    {AGE_ZH[age]}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          {unlocks.length > 0 && (
-            <div className="train-total-unlocks">
-              <h3>影响是否可训练</h3>
-              {unlocks.map((tech) => (
-                <TechCheck key={tech.id} choice={tech} onToggle={() => toggleTech(config, tech.id, write)} />
+      <div className="train-total-setup">
+        <section className="train-total-settings" aria-labelledby="train-total-settings-title">
+          <h2 id="train-total-settings-title">文明与时代</h2>
+          <label>
+            文明
+            <select aria-label="训练总价文明" value={config.civ} onChange={(event) => write({ ...config, civ: event.target.value })}>
+              {!civName && <option value={config.civ}>无效文明：{config.civ}</option>}
+              {civs.map((item) => (
+                <option key={item.en} value={item.en}>
+                  {item.zh}
+                </option>
               ))}
-            </div>
-          )}
+            </select>
+          </label>
+          <label>
+            时代
+            <select
+              aria-label="训练总价时代"
+              value={config.age ?? ''}
+              onChange={(event) => write({ ...config, age: Number(event.target.value), ageRaw: null })}
+            >
+              {config.age == null && <option value="">无效时代：{config.ageRaw || '空'}</option>}
+              {[1, 2, 3, 4].map((age) => (
+                <option key={age} value={age}>
+                  {AGE_ZH[age]}
+                </option>
+              ))}
+            </select>
+          </label>
+        </section>
+        {unlocks.length > 0 && (
+          <div className="train-total-unlocks">
+            <h3>影响是否可训练</h3>
+            {unlocks.map((tech) => (
+              <TechCheck key={tech.id} choice={tech} onToggle={() => toggleTech(config, tech.id, write)} />
+            ))}
+          </div>
+        )}
+      </div>
+      <ToolGrid className="train-total-workspace">
+        <div className="train-total-conditions">
           <section className="train-total-rows" aria-labelledby="train-total-rows-title">
             <h2 id="train-total-rows-title">训练行</h2>
             <button
@@ -276,23 +279,29 @@ export function TrainTotal({ context }: { context: ProductionContext }) {
             </div>
           </section>
         </div>
-        <Result config={config} decodedWarnings={decoded.warnings} result={result} summary={summary} excluded={excluded} write={write} />
+        <div className="train-total-results">
+          <Result config={config} decodedWarnings={decoded.warnings} result={result} summary={summary} excluded={excluded} write={write} />
+          <section className="train-total-techs" aria-labelledby="train-total-techs-title">
+            <h2 id="train-total-techs-title">影响训练单价的科技</h2>
+            <p className="note">
+              科技全方案共享。是否改价按每个单位单独判断；已选不等于每一行都计入，也不等于效果已全部完整计入。切文明或时代后，失效的已选科技会保留并标明原因，停止计入，需手动移除。
+            </p>
+            {costs.length === 0 && <p className="note">当前文明和时代没有可选手动费用科技。</p>}
+            {costs.map((tech) => (
+              <TechCheck key={tech.id} choice={tech} onToggle={() => toggleTech(config, tech.id, write)} />
+            ))}
+            {result.invalidTechIds.length > 0 && (
+              <button
+                type="button"
+                className="btn"
+                onClick={() => write({ ...config, techs: config.techs.filter((id) => !result.invalidTechIds.includes(id)) })}
+              >
+                移除不可用科技
+              </button>
+            )}
+          </section>
+        </div>
       </ToolGrid>
-      <section className="train-total-techs" aria-labelledby="train-total-techs-title">
-        <h2 id="train-total-techs-title">影响训练单价的科技</h2>
-        <p className="note">
-          科技全方案共享。是否改价按每个单位单独判断；已选不等于每一行都计入，也不等于效果已全部完整计入。切文明或时代后，失效的已选科技会保留并标明原因，停止计入，需手动移除。
-        </p>
-        {costs.length === 0 && <p className="note">当前文明和时代没有可选手动费用科技。</p>}
-        {costs.map((tech) => (
-          <TechCheck key={tech.id} choice={tech} onToggle={() => toggleTech(config, tech.id, write)} />
-        ))}
-        {result.invalidTechIds.length > 0 && (
-          <button type="button" className="btn" onClick={() => write({ ...config, techs: config.techs.filter((id) => !result.invalidTechIds.includes(id)) })}>
-            移除不可用科技
-          </button>
-        )}
-      </section>
       <ToolFooter
         related={{
           links: [
