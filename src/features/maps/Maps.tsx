@@ -33,6 +33,8 @@ export default function Maps() {
   const [implicitId, setImplicitId] = useState(KNOWN_IDS[0] ?? '');
   const [listHold, setListHold] = useState<string | null>(null);
   const focusDetail = useRef(false);
+  const focusList = useRef(false);
+  const searchRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const detailPaneRef = useRef<HTMLDivElement>(null);
   const detailRef = useRef<HTMLElement>(null);
@@ -59,6 +61,15 @@ export default function Maps() {
     focusDetail.current = false;
     detailRef.current?.focus({ preventScroll: true });
   }, [selected?.id, missing, showDetail]);
+
+  useEffect(() => {
+    if (showDetail || !focusList.current) return;
+    focusList.current = false;
+    const row = listRef.current?.querySelector<HTMLButtonElement>('[aria-pressed="true"]');
+    const target = row ?? searchRef.current;
+    target?.focus({ preventScroll: true });
+    target?.scrollIntoView({ block: 'nearest' });
+  }, [showDetail]);
 
   const chooseMap = (id: string) => {
     focusDetail.current = true;
@@ -96,7 +107,13 @@ export default function Maps() {
           <span>搜索地图</span>
           <span className="map-search-wrap">
             <Icon name="search" />
-            <input type="search" value={query} placeholder="黑森林、Black Forest、BF" onChange={(event) => retarget(event.target.value, group)} />
+            <input
+              ref={searchRef}
+              type="search"
+              value={query}
+              placeholder="黑森林、Black Forest、BF"
+              onChange={(event) => retarget(event.target.value, group)}
+            />
           </span>
         </label>
         <div className="map-filter-row">
@@ -160,7 +177,14 @@ export default function Maps() {
         </div>
         {(selected || missing) && (
           <div className="map-detail-pane" ref={detailPaneRef}>
-            <button type="button" className="map-back" onClick={() => setListHold(raw)}>
+            <button
+              type="button"
+              className="map-back"
+              onClick={() => {
+                focusList.current = true;
+                setListHold(raw);
+              }}
+            >
               <Icon name="arrow-left" />
               返回目录
             </button>
