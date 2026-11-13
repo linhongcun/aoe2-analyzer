@@ -17,6 +17,7 @@ import { countForTime, fmtClock, realCostOf } from '../../../domain/realCost';
 import { contextSearchAfterCanon } from '../logic/duelContext';
 import { DUEL_COST_MODEL } from '../logic/trainingCostView';
 import { Icon } from '../../../shared/ui/Icon';
+import { radioKeyboard } from './radioKeyboard';
 import { ListHead } from '../../../shared/ui/layout';
 import { Loading } from '../../../shared/ui/widgets';
 import { DATA_SOURCES } from '../../../shared/utils/dataInfo';
@@ -203,7 +204,7 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
         </p>
       )}
       {contextBar}
-      <div className="bar fbar" role="radiogroup" aria-label="模式">
+      <div className="bar fbar" role="radiogroup" aria-label="模式" onKeyDown={radioKeyboard}>
         {(
           [
             ['1', '1v1'],
@@ -215,6 +216,7 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
             key={k}
             role="radio"
             aria-checked={mode === k || (k === 'r' && mode === 't')}
+            tabIndex={mode === k || (k === 'r' && mode === 't') ? 0 : -1}
             className={mode === k || (k === 'r' && mode === 't') ? 'on' : undefined}
             onClick={() => set({ m: k }, ['be'])}
           >
@@ -239,17 +241,25 @@ function DuelCalculator({ resources }: { resources: CoreTreesResources }) {
       </div>
       {eq && (
         <div className="rc-seg">
-          <span className="seg" role="radiogroup" aria-label="比法" data-t="rc-toggle">
+          <span className="seg" role="radiogroup" aria-label="比法" data-t="rc-toggle" onKeyDown={radioKeyboard}>
             <button
               type="button"
               role="radio"
               aria-checked={mode === 'r'}
+              tabIndex={mode === 'r' ? 0 : -1}
               className={mode === 'r' ? 'on' : undefined}
               onClick={() => set({ m: 'r' }, ['vil', 'min'])}
             >
               等资源
             </button>
-            <button type="button" role="radio" aria-checked={mode === 't'} className={mode === 't' ? 'on' : undefined} onClick={() => set({ m: 't' })}>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={mode === 't'}
+              tabIndex={mode === 't' ? 0 : -1}
+              className={mode === 't' ? 'on' : undefined}
+              onClick={() => set({ m: 't' })}
+            >
               <Icon name="clock" className="ic" />
               等采集时间
             </button>

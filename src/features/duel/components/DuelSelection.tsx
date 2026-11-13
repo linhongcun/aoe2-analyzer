@@ -2,7 +2,7 @@ import { civByEn } from '../../../data';
 import { useCore } from '../../../data/hooks';
 import { DPS_UNAVAILABLE_REASON } from '../../../domain/duel';
 import { formatHp } from '../../../domain/hpFormat';
-import { baseUnit } from '../../../domain/family';
+import { baseUnit, isElite } from '../../../domain/family';
 import type { collapse } from '../../../domain/family';
 import { AGE_ZH } from '../../../domain/ratings';
 import { TEAM_BONUSES } from '../../../domain/effects';
@@ -21,6 +21,7 @@ import { PkCost } from './PkCost';
 import { TrainingPrice } from './TrainingPrice';
 import { UnitPicker } from './UnitPicker';
 import { isUnavail, r1, type SideState, type Unavail } from '../logic/duelSide';
+import { radioKeyboard } from './radioKeyboard';
 
 export function Side({
   k,
@@ -46,6 +47,7 @@ export function Side({
   const { u, spec } = side;
   const base = baseUnit(u, core.fam),
     elite = core.fam.eliteOf[base.id];
+  const eliteSelected = isElite(u, core.fam);
   const preset = Array.isArray(spec.techs) ? (spec.techs.length ? '' : 'none') : spec.techs;
   const rows: StatRow[] = SIM_ROWS.map(([kk, n, ic]) => [kk, n, ic === null ? (u.rng > 1 ? 'patk' : 'atk') : ic]);
   return (
@@ -81,11 +83,12 @@ export function Side({
       <div className="bar">
         <UnitPicker id={`duel-${k}-unit`} label={`${k.toUpperCase()} 方单位`} value={u} list={fams} onChange={(x) => onChange({ ...spec, uid: x.id })} />
         {elite && (
-          <span className="eseg" role="radiogroup" aria-label="普通/精锐">
+          <span className="eseg" role="radiogroup" aria-label="普通/精锐" onKeyDown={radioKeyboard}>
             <button
               type="button"
               role="radio"
               aria-checked={u.id === base.id}
+              tabIndex={u.id === base.id ? 0 : -1}
               className={u.id === base.id ? 'on' : undefined}
               onClick={() => onChange({ ...spec, uid: base.id })}
             >
@@ -94,8 +97,9 @@ export function Side({
             <button
               type="button"
               role="radio"
-              aria-checked={u.id === elite.id}
-              className={u.id === elite.id ? 'on' : undefined}
+              aria-checked={eliteSelected}
+              tabIndex={eliteSelected ? 0 : -1}
+              className={eliteSelected ? 'on' : undefined}
               onClick={() => onChange({ ...spec, uid: elite.id })}
             >
               精锐
@@ -106,7 +110,7 @@ export function Side({
       <div className="bar">
         <CivPicker id={`duel-${k}-civ`} label={`${k.toUpperCase()} 方文明`} value={side.civ} allowed={u.civs} onChange={(c) => onChange({ ...spec, civ: c })} />
       </div>
-      <div className="bar duel-presets" role="radiogroup" aria-label="科技预设">
+      <div className="bar duel-presets" role="radiogroup" aria-label="科技预设" onKeyDown={radioKeyboard}>
         {(
           [
             ['none', '无科技', () => onChange({ ...spec, techs: [] })],
@@ -114,7 +118,14 @@ export function Side({
             ['f', '满科技', () => onChange({ ...spec, techs: 'f', age: 4, ageSet: true })],
           ] as const
         ).map(([id, l, f]) => (
-          <button key={id} role="radio" aria-checked={preset === id} className={preset === id ? 'on' : undefined} onClick={f}>
+          <button
+            key={id}
+            role="radio"
+            aria-checked={preset === id}
+            tabIndex={preset === id || (!preset && id === 'none') ? 0 : -1}
+            className={preset === id ? 'on' : undefined}
+            onClick={f}
+          >
             {l}
           </button>
         ))}

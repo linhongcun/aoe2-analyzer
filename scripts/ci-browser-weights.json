@@ -6,6 +6,7 @@
   "defaultCaseMs": 1500,
   "staticSweepMs": 85000,
   "files": {
+    "tests/e2e/combatTools998.spec.ts": 4500,
     "tests/e2e/accuracy746.spec.ts": 13500,
     "tests/e2e/age106.spec.ts": 4340,
     "tests/e2e/ageBuildings704.spec.ts": 12000,

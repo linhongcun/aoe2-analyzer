@@ -40,7 +40,7 @@
   min-height: 44px;
   padding: 0 12px;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-pill);
   background: var(--color-surface);
   color: var(--color-text);
   font-size: 13px;
@@ -76,15 +76,15 @@
 }
 .siege-panel {
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 12px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
   background: var(--color-surface);
 }
 .siege-panel h2 {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-muted);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
   margin: 0 0 10px;
 }
 .siege-field {
@@ -109,7 +109,7 @@
   min-width: 44px;
   min-height: 44px;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-pill);
   background: var(--color-surface);
   color: var(--color-text);
   font-size: 14px;
@@ -143,6 +143,7 @@
 .siege-stepper button {
   border: 0;
   padding: 0;
+  border-radius: var(--radius-sm);
 }
 .siege-stepper input {
   width: 52px;
@@ -196,15 +197,15 @@
 .siege-result {
   border: 1px solid var(--color-accent-ring);
   background: var(--color-accent-soft);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 16px;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-4);
 }
 .siege-result h2 {
   margin: 0 0 10px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-muted);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
 }
 .siege-metrics {
   display: grid;
@@ -277,6 +278,7 @@
   height: 44px;
 }
 .siege-compare thead th {
+  background: var(--color-surface-2);
   color: var(--color-muted);
   font-size: 12px;
   font-weight: 500;

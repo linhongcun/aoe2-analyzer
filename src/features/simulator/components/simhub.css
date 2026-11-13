@@ -6,8 +6,8 @@
 #simhub .sim-filters {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 14px 16px 12px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
   box-shadow: var(--shadow-1);
   margin-bottom: var(--space-4);
   min-width: 0;
@@ -28,6 +28,7 @@
   width: 100%;
   max-width: none;
   box-sizing: border-box;
+  border-radius: var(--radius-pill);
 }
 #simhub .civpick,
 #simhub #srole {
@@ -48,6 +49,14 @@
   min-width: 44px;
   min-height: 44px;
   box-sizing: border-box;
+}
+#simhub .cp-trigger,
+#simhub #srole,
+#simhub .catalog-filter-toggle,
+#simhub .sim-chips button,
+#simhub .sim-reset,
+#simhub .sim-empty button {
+  border-radius: var(--radius-pill);
 }
 #simhub .cp-trigger {
   display: flex;
@@ -186,8 +195,12 @@
   margin: 0;
   color: var(--color-muted);
 }
-#simhub .sim-rows {
+#simhub .sim-rows,
+#simhub .sim-empty {
   min-width: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
 }
 #simhub .sim-head,
 #simhub .sim-row {
@@ -198,7 +211,9 @@
   min-width: 0;
 }
 #simhub .sim-head {
-  padding: 0 4px 8px;
+  padding: 12px 16px;
+  background: var(--color-surface-2);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   font-size: 13px;
   font-weight: 700;
   color: var(--color-muted);
@@ -209,10 +224,14 @@
 }
 #simhub .sim-row {
   min-height: 56px;
-  padding: 8px 4px;
+  padding: 8px 16px;
   color: var(--color-text);
   text-decoration: none;
   border-bottom: 1px solid var(--color-line);
+}
+#simhub .sim-row:last-child {
+  border-bottom: 0;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 #simhub .sim-row:any-link,
 #simhub .sim-row:visited {
@@ -331,7 +350,11 @@
     row-gap: 4px;
     align-items: center;
     min-height: 44px;
-    padding: 10px 4px;
+    padding: 10px 12px;
+  }
+  #simhub .sim-row:first-of-type {
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
   }
   #simhub .sim-id {
     grid-area: id;
@@ -363,14 +386,27 @@
 @media (max-width: 600px) {
   #simhub .sim-primary {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: center;
   }
-  #simhub .sim-search,
-  #simhub .sim-meta {
+  #simhub .sim-search {
     grid-column: 1 / -1;
     margin-left: 0;
     width: 100%;
+  }
+  #simhub .sim-meta {
+    display: contents;
+  }
+  #simhub .sim-count {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  #simhub .catalog-filter-active,
+  #simhub .sim-reset {
+    grid-column: 1 / -1;
+  }
+  #simhub .sim-reset {
+    justify-self: start;
   }
   #simhub .civpick,
   #simhub #srole {
@@ -378,8 +414,8 @@
     width: auto;
   }
   #simhub .catalog-filter-toggle {
-    grid-column: 3;
-    grid-row: 2;
+    grid-column: 2;
+    grid-row: 3;
     justify-self: end;
   }
   #simhub .catalog-filter-panel {
