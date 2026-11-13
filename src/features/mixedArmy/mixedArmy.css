@@ -10,7 +10,8 @@
 }
 .mixed-army-page h2 {
   margin: 0 0 var(--space-3);
-  font-size: 22px;
+  font-size: var(--fs-h3);
+  font-weight: 700;
 }
 .mixed-army-page h3 {
   margin: 0 0 var(--space-3);
@@ -40,24 +41,42 @@
 }
 .mixed-army-page .btn {
   white-space: normal;
+  border-radius: var(--radius-pill);
 }
 .mixed-panel {
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
   padding: var(--space-5);
   margin: 0 0 var(--space-6);
   min-width: 0;
 }
-.mixed-settings > legend {
+.mixed-settings > legend,
+.mixed-context > legend {
   font-size: var(--fs-h3);
   font-weight: 700;
   padding: 0 var(--space-2);
+}
+.mixed-context-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+@media screen and (min-width: 901px) {
+  .mixed-context-grid {
+    grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr));
+  }
+  .mixed-layout.tool-grid {
+    grid-template-columns: minmax(340px, 1fr) minmax(0, 1.6fr);
+  }
 }
 .mixed-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-4);
+}
+.mixed-settings > .mixed-grid > .mixed-field:first-child {
+  grid-column: 1 / -1;
 }
 .mixed-field {
   display: flex;
@@ -74,13 +93,14 @@
   max-width: 100%;
   box-sizing: border-box;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-control);
   color: var(--color-text);
   padding: var(--space-2) var(--space-3);
 }
 .mixed-field select {
   height: 48px;
+  border-radius: var(--radius-pill);
   text-overflow: ellipsis;
 }
 .mixed-field textarea {
@@ -133,7 +153,7 @@
 }
 .mixed-confirmation-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
   gap: var(--space-3);
   margin: var(--space-4) 0;
 }
@@ -141,7 +161,7 @@
   min-width: 0;
   margin: 0;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   padding: var(--space-2);
 }
 .mixed-confirmation-grid legend {
@@ -194,7 +214,7 @@
 }
 .mixed-cards {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: var(--space-4);
   margin-top: var(--space-4);
   align-items: start;
@@ -204,7 +224,7 @@
   padding: var(--space-5);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow-wrap: anywhere;
 }
 .mixed-card header h3 {
@@ -216,7 +236,7 @@
   background: var(--color-surface-2);
   color: var(--color-text-2);
   font-size: var(--fs-sm);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
 }
 .mixed-status-met {
   background: var(--color-good-soft);
@@ -236,7 +256,7 @@
   margin: var(--space-4) 0;
   padding: var(--space-3);
   background: var(--color-surface-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
 }
 .mixed-roles > div {
   display: grid;
@@ -302,7 +322,7 @@
   margin: 0 0 var(--space-4);
   padding: var(--space-4);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
   min-width: 0;
 }
@@ -319,7 +339,7 @@
 }
 .mixed-gaps li {
   padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   background: var(--color-tag);
   color: var(--color-text);
   font-size: var(--fs-sm);

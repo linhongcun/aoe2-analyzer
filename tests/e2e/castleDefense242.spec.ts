@@ -145,6 +145,13 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.getByTestId('castle-defense-page')).toBeVisible();
       await expect(page.getByTestId('castle-defense-actions')).toContainText('代价与风险');
       await expect(page.getByTestId('castle-defense-actions')).toContainText('下次复查');
+      const settings = await page.locator('.castle-defense-settings').boundingBox();
+      const result = await page.getByTestId('castle-defense-result').boundingBox();
+      expect(result!.y).toBeGreaterThanOrEqual(settings!.y + settings!.height);
+      const intro = await page.locator('.castle-defense-intro').boundingBox();
+      const actions = await page.getByTestId('castle-defense-actions').boundingBox();
+      if (width > 1000) expect(actions!.x).toBeGreaterThanOrEqual(intro!.x + intro!.width);
+      else expect(actions!.y).toBeGreaterThanOrEqual(intro!.y + intro!.height);
       const badControls = await page
         .getByTestId('castle-defense-page')
         .locator('select, button, summary, a:visible')

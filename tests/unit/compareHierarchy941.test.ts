@@ -32,7 +32,7 @@ describe('#941 文明对比信息层级', () => {
     expect(SUMMARY).toContain('不能当成已证实来源');
   });
 
-  it('默认收起完整口径，摘要、对照表和雷达按顺序出现', () => {
+  it('资料先于主观评分，完整口径默认收起且摘要、表和雷达保留', () => {
     const html = page('/compare?a=Franks&b=Britons');
     const body = text(html);
     expect(body).toContain(COMPARE_LEDE);
@@ -40,13 +40,13 @@ describe('#941 文明对比信息层级', () => {
     expect(body).toContain(SUMMARY);
     expect(html).not.toContain('>完整评分口径<');
     expect(html).toContain('查看完整评分口径');
-    expect(html.indexOf('compare-toolbar')).toBeLessThan(html.indexOf('compare-rating-basis'));
+    expect(html.indexOf('compare-toolbar')).toBeLessThan(html.indexOf('id="compare-facts-title"'));
+    expect(html.indexOf('id="compare-facts-title"')).toBeLessThan(html.indexOf('compare-rating-basis'));
     expect(html.indexOf('compare-rating-basis')).toBeLessThan(html.indexOf('id="compare-scores-title"'));
     expect(html.indexOf('id="compare-scores-title"')).toBeLessThan(html.indexOf('>能力评分<'));
-    expect(html.indexOf('>能力评分<')).toBeLessThan(html.indexOf('id="compare-facts-title"'));
-    expect(html.indexOf('id="compare-facts-title"')).toBeLessThan(html.indexOf('团战位置适配'));
+    expect(html.indexOf('>能力评分<')).toBeLessThan(html.indexOf('团战位置适配'));
     expect(body.indexOf('查看这两个文明的团队加成来源')).toBeLessThan(body.indexOf('评分性质'));
-    expect(body).toContain('以下条目来自文明资料字段，不由上表分数推导。');
+    expect(body).toContain('以下条目来自文明资料字段，不由主观分数推导。');
     expect(body).toContain('参考开局');
     expect(html).toContain('href="/team-bonuses?');
     expect(html).toContain(encodeTeamBonuses(updateTeamRoster(defaultTeamBonusConfig(), ['Franks', 'Britons'])).replace(/&/g, '&amp;'));

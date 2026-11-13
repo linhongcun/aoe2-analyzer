@@ -12,9 +12,34 @@ async function pick(page: Page, id: 'ma' | 'me', civ: string) {
   await expect(page.locator(`#${id}`)).toHaveAttribute('data-value', civ);
 }
 
+async function expectTaskLayout(page: Page, desktop: boolean) {
+  const setup = await page.locator('.mu-setup').boundingBox();
+  const practice = await page.locator('.mu-practice').boundingBox();
+  const tools = await page.locator('.mu-toolbox').boundingBox();
+  const reference = await page.locator('.mu-region-ref').boundingBox();
+  if (!setup || !practice || !tools || !reference) throw new Error('Expected all four matchup task regions');
+  if (desktop) {
+    expect(practice.x).toBeGreaterThanOrEqual(setup.x + setup.width);
+    expect(Math.abs(practice.y - setup.y)).toBeLessThan(2);
+  } else {
+    expect(practice.y).toBeGreaterThanOrEqual(setup.y + setup.height);
+    const cards = await page.locator('.mu-tactic-card').evaluateAll((elements) => elements.map((el) => el.getBoundingClientRect().x));
+    expect(new Set(cards).size).toBe(1);
+  }
+  expect(tools.y).toBeGreaterThanOrEqual(practice.y + practice.height);
+  expect(reference.y).toBeGreaterThanOrEqual(tools.y + tools.height);
+  await expect(page.locator('.mu-tactic-card')).toHaveCount(3);
+  expect(await page.locator('.mu-tactic-card').evaluateAll((links) => links.map((link) => link.getAttribute('href')))).toEqual([
+    '#/matchup/scouting',
+    '#/matchup/mixed-army',
+    '#/matchup/castle-defense',
+  ]);
+}
+
 test('#939 默认对阵分清跟文明走的入口与通用参考', async ({ page }) => {
   await page.goto('./#/matchup');
   await expect(page.locator('#mres')).toBeVisible();
+  await expectTaskLayout(page, true);
   expect(hashParams(page.url()).has('me')).toBe(false);
   expect(hashParams(page.url()).has('opp')).toBe(false);
   await expect(page.getByRole('heading', { level: 1, name: '对局助手', exact: true })).toBeVisible();
@@ -89,6 +114,7 @@ test('#939 390 宽不横向溢出，深色仍能读到两个分区', async ({ pa
   await page.goto('./#/matchup');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await expect(page.locator('#mres')).toBeVisible();
+  await expectTaskLayout(page, false);
   await expect(page.getByRole('heading', { name: '通用参考', exact: true })).toBeVisible();
   await expect(page.getByRole('region', { name: '可按当前文明核对的练习' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

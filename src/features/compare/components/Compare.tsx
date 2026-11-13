@@ -40,9 +40,9 @@ export function compareRatingSummary(verifiedAt: string): string {
 /** 八轴原来各写一遍的 axisGap，合并后仍列出全部轴名。 */
 export const COMPARE_AXIS_NAMES_NOTE = '下列八个轴只按既定顺序命名，现有记录只有轴名。分数是该项相对强弱的主观整数，单独的量化规则待核。可在此核对各轴名称：';
 
-export const COMPARE_FACT_NOTE = '下方特色兵种、城堡科技、帝王科技、团队加成和开局是资料对照，不由这些分数推导。';
+export const COMPARE_FACT_NOTE = '特色兵种、城堡科技、帝王科技、团队加成和开局是资料对照，不由这些分数推导。';
 
-const DATA_NOTE = '以下条目来自文明资料字段，不由上表分数推导。';
+const DATA_NOTE = '以下条目来自文明资料字段，不由主观分数推导。';
 
 const ROWS: [string, 'uu' | 'ct' | 'it' | 'tb' | 'op'][] = [
   ['特色兵种', 'uu'],
@@ -178,6 +178,27 @@ export default function Compare() {
           链接缺少{linkNote.side === 'b' ? '对手' : '我方'}文明，已自动选择「{civByEn(linkNote.civ)?.zh ?? linkNote.civ}」，请按实际补选。
         </p>
       )}
+      <section className="compare-facts" id="compare-facts" aria-labelledby="compare-facts-title">
+        <h2 id="compare-facts-title">资料对照</h2>
+        <p className="note">{DATA_NOTE}</p>
+        <table>
+          <tbody>
+            <tr>
+              <th />
+              <CivHead civ={a} side="a" />
+              <CivHead civ={b} side="b" />
+            </tr>
+            {ROWS.map(([label, key]) => (
+              <tr key={key}>
+                <td>{label}</td>
+                <td className="compare-side-a">{cell(a, key)}</td>
+                <td className="compare-side-b">{cell(b, key)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+      <h2 className="compare-section-title">主观评分参考</h2>
       <section className="compare-basis" aria-labelledby="compare-basis-title" data-testid="compare-rating-basis">
         <h3 id="compare-basis-title">评分性质</h3>
         <p className="compare-summary" data-testid="compare-rating-summary">
@@ -232,26 +253,6 @@ export default function Compare() {
           </p>
         </div>
       </div>
-      <section className="compare-facts" id="compare-facts" aria-labelledby="compare-facts-title">
-        <h3 id="compare-facts-title">资料对照</h3>
-        <p className="note">{DATA_NOTE}</p>
-        <table>
-          <tbody>
-            <tr>
-              <th />
-              <CivHead civ={a} side="a" />
-              <CivHead civ={b} side="b" />
-            </tr>
-            {ROWS.map(([label, key]) => (
-              <tr key={key}>
-                <td>{label}</td>
-                <td className="compare-side-a">{cell(a, key)}</td>
-                <td className="compare-side-b">{cell(b, key)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
       <div id="cpos">
         <PosBox list={[a, b]} />
         <p className="note" data-testid="compare-position-basis">

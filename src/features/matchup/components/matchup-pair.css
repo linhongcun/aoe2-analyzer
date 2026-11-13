@@ -6,22 +6,22 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--space-1);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-5);
 }
 
 #matchup .lhead .note {
-  max-width: 42em;
+  max-width: 58em;
   font-size: var(--fs-body);
   line-height: var(--lh-body);
 }
 
 .mu-region {
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
   box-shadow: var(--shadow-1);
-  padding: 12px 16px 8px;
-  margin: 0 0 var(--space-3);
+  padding: var(--space-5);
+  margin: 0 0 var(--space-6);
   min-width: 0;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .mu-region h2 {
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--space-4);
   font-size: var(--fs-h3);
   line-height: 1.25;
   font-weight: 700;
@@ -105,6 +105,15 @@
   box-sizing: border-box;
 }
 
+#matchup .mu-pick .cp-trigger,
+#matchup .rush-defense select {
+  border-radius: var(--radius-pill);
+}
+
+#matchup .rush-defense {
+  border-radius: var(--radius-md);
+}
+
 .mu-tools {
   display: flex;
   flex-wrap: wrap;
@@ -148,6 +157,210 @@
 
 .mu-ref-block:last-child {
   margin-bottom: 0;
+}
+
+.mu-ref-block + .mu-ref-block {
+  padding-left: var(--space-6);
+  border-left: 1px solid var(--color-border);
+}
+
+.mu-pair-layout {
+  display: grid;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.mu-pair-ready {
+  grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.75fr);
+}
+
+.mu-setup {
+  min-width: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
+.mu-setup .mu-picks {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.mu-setup .mu-pick {
+  max-width: none;
+}
+
+.mu-setup .mu-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: var(--space-3) 0;
+}
+
+.mu-setup .mu-chip {
+  justify-content: center;
+}
+
+.mu-setup .mu-pk {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  margin-bottom: 0;
+}
+
+.mu-practice {
+  min-width: 0;
+}
+
+#matchup .mu-practice .champi-age-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+
+#matchup .mu-practice > .rush-defense {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+#matchup .mu-practice > .rush-defense > h3 {
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+}
+
+.mu-practice .mu-rush {
+  margin: var(--space-4) 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
+.mu-practice .mu-rush select {
+  flex: 1;
+  min-width: 0;
+}
+
+#matchup .mu-practice-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+#matchup .mu-practice-links:empty {
+  display: none;
+}
+
+#matchup .mu-practice-links > a {
+  display: block;
+  padding: var(--space-4);
+  min-height: 88px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  color: var(--color-link);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: var(--lh-body);
+  overflow-wrap: anywhere;
+}
+
+#matchup .mu-practice-links > a:only-child {
+  grid-column: 1 / -1;
+}
+
+.mu-toolbox {
+  margin: 0 0 var(--space-6);
+}
+
+.mu-toolbox h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h3);
+}
+
+.mu-toolbox > .mu-scope {
+  max-width: none;
+  margin-bottom: var(--space-4);
+}
+
+.mu-tactic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  padding: 0;
+  margin: 0;
+}
+
+.mu-tactic-card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-width: 0;
+  min-height: 44px;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: var(--fs-body);
+}
+
+.mu-tactic-icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-1);
+  color: var(--color-muted);
+}
+
+.mu-tactic-icons .ic:first-child {
+  width: 24px;
+  height: 24px;
+}
+
+.mu-tactic-description {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+}
+
+.mu-tactic-card:hover,
+#matchup .mu-practice-links > a:hover {
+  border-color: var(--color-link);
+  color: var(--color-link);
+}
+
+.mu-tactic-card:focus-visible,
+.mu-related-tools a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.mu-related-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-6);
+  margin-top: var(--space-2);
+  padding: 0;
+}
+
+.mu-related-tools a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 44px;
+  min-height: 44px;
+  font-size: var(--fs-sm);
+}
+
+.mu-reference-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+.mu-reference-grid > .mu-ref-block {
+  margin: 0;
 }
 
 .mu-guide h4 {
@@ -224,14 +437,37 @@
   font-size: var(--fs-xs);
 }
 
+@media (max-width: 900px) {
+  .mu-pair-ready,
+  .mu-reference-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mu-ref-block + .mu-ref-block {
+    padding-left: 0;
+    border-left: 0;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+}
+
 @media (max-width: 720px) {
+  .mu-region {
+    padding: var(--space-4);
+  }
+
+  .mu-tactic-grid,
+  #matchup .mu-practice-links {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #matchup .mu-practice-links > a {
+    min-height: 64px;
+  }
+
   #matchup .lhead .note,
   #matchup .mu-scope {
     line-height: 1.4;
-  }
-
-  .mu-region {
-    padding: 6px 8px;
   }
 
   .mu-pick label {
@@ -239,7 +475,7 @@
   }
 
   #matchup .rush-defense {
-    padding: 4px 8px;
+    padding: var(--space-3);
   }
 
   .mu-pick {

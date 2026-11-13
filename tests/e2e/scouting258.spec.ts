@@ -197,6 +197,8 @@ test('#258 malformed links suspend all explanations until explicit reset', async
     await expect(page.getByRole('alert')).toContainText('解释已暂停');
     await expect(page.getByTestId('scouting-result')).toHaveCount(0);
     await expect(page.getByLabel('情境', { exact: true })).toBeDisabled();
+    await expect(page.getByLabel('我的当前阶段', { exact: true })).toBeDisabled();
+    await expect(page.getByLabel('所填区域内的实际军队：状态', { exact: true })).toBeDisabled();
     await expect(page.getByRole('button', { name: '复制情报链接' })).toBeDisabled();
     await expect(page).toHaveURL(new RegExp(suffix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'));
     await page.getByRole('button', { name: '清空，填写我的观察' }).click();
@@ -282,6 +284,8 @@ test('#258 keyboard, successful copying, sources and dark print retain a complet
   await expect(page.locator('.scouting-snapshot')).toHaveAttribute('open', '');
   await expect(page.locator('.scouting-hypotheses')).toHaveAttribute('open', '');
   await page.emulateMedia({ media: 'print' });
+  await expect(page.locator('.scouting-settings')).toBeHidden();
+  await expect(page.locator('.scouting-context-panel')).toBeHidden();
   await expect(page.getByRole('button', { name: '打印当前辨析' })).toBeHidden();
   await expect(page.locator('.scouting-snapshot')).toContainText('12:34');
   await expect(page.locator('[data-hypothesis]')).toHaveCount(2);
@@ -304,6 +308,12 @@ for (const width of [360, 375, 390, 1280])
       await expect(page.getByTestId('scouting-page')).toBeVisible();
       if (width === 390) expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(3500);
       await expect(page.getByTestId('scouting-signals').locator('[data-signal]')).toHaveCount(3);
+      const context = await page.locator('.scouting-context-panel').boundingBox();
+      const observations = await page.locator('.scouting-settings').boundingBox();
+      const output = await page.locator('.scouting-output').boundingBox();
+      expect(observations!.y).toBeGreaterThanOrEqual(context!.y + context!.height);
+      if (width > 900) expect(output!.x).toBeGreaterThanOrEqual(observations!.x + observations!.width);
+      else expect(output!.y).toBeGreaterThanOrEqual(observations!.y + observations!.height);
       await expect(page.locator('.scouting-boundaries')).not.toHaveAttribute('open');
       const small = await page
         .getByTestId('scouting-page')
