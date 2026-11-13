@@ -30,7 +30,7 @@ import { CivPicker } from '../../shared/ui/CivPicker';
 import { Icon } from '../../shared/ui/Icon';
 import { TeamSections } from '../../shared/ui/TeamSections';
 import { ToolPageHeader } from '../../shared/ui/ToolPageHeader';
-import { ToolFooter, ToolGrid } from '../../shared/ui/ToolShell';
+import { ToolFooter } from '../../shared/ui/ToolShell';
 import { Linked, Loading } from '../../shared/ui/widgets';
 import { useShareLink } from '../../shared/ui/useShareLink';
 import './teamBonuses.css';
@@ -103,11 +103,22 @@ export default function TeamBonuses() {
         </label>
       )}
       {!decoded.locked && (
-        <ToolGrid className="team-layout">
+        <div className="team-layout">
           <section className="team-panel" aria-labelledby="team-config-heading">
             <div className="team-heading">
               <h2 id="team-config-heading">玩家阵容</h2>
-              <span className="team-number">{config.players.length} / 4 名玩家</span>
+              <div className="team-roster-actions">
+                <span className="team-number">{config.players.length} / 4 名玩家</span>
+                <button
+                  className="btn"
+                  type="button"
+                  disabled={config.players.length >= 4}
+                  onClick={() => update(updateTeamRoster(config, [...config.players, config.players[0]!]))}
+                >
+                  <Icon name="plus" />
+                  添加玩家
+                </button>
+              </div>
             </div>
             <div className="team-players">
               {config.players.map((civ, index) => (
@@ -149,73 +160,75 @@ export default function TeamBonuses() {
                 </div>
               ))}
             </div>
-            <button
-              className="btn"
-              type="button"
-              disabled={config.players.length >= 4}
-              onClick={() => update(updateTeamRoster(config, [...config.players, config.players[0]!]))}
-            >
-              <Icon name="plus" />
-              添加玩家
-            </button>
-            <div className="team-filters">
-              <label>
-                当前时代
-                <select value={config.age} onChange={(event) => update(updateTeamRoster(config, config.players, Number(event.target.value)))}>
-                  {[1, 2, 3, 4].map((age) => (
-                    <option key={age} value={age}>
-                      {AGE_ZH[age]}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                目标类别
-                <select value={config.target} onChange={(event) => update({ ...config, target: event.target.value as TeamBonusConfig['target'], unit: null })}>
-                  {TEAM_TARGETS.map((target) => (
-                    <option key={target} value={target}>
-                      {TEAM_TARGET_ZH[target]}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              {config.target === 'units' && (
+
+            <section className="team-filter-panel" aria-labelledby="team-filter-heading">
+              <h2 id="team-filter-heading">时代与查看范围</h2>
+              <div className="team-filters">
                 <label>
-                  具体单位
-                  <select
-                    value={config.unit ?? ''}
-                    onChange={(event) => update({ ...config, unit: event.target.value === '' ? null : Number(event.target.value) })}
-                  >
-                    <option value="">全部单位关联</option>
-                    {core.units.map((unit) => (
-                      <option key={unit.id} value={unit.id}>
-                        {unit.zh} · {unit.en}
+                  当前时代
+                  <select value={config.age} onChange={(event) => update(updateTeamRoster(config, config.players, Number(event.target.value)))}>
+                    {[1, 2, 3, 4].map((age) => (
+                      <option key={age} value={age}>
+                        {AGE_ZH[age]}
                       </option>
                     ))}
                   </select>
                 </label>
-              )}
-            </div>
-            <p className="note">目标筛选只采用已核对过的单位、建筑及生产关系；没有可靠对应关系的来源单列为“关联范围待核实”，不会用文字关键词猜测完整覆盖。</p>
-            <p className="note">
-              时代用于团队科技的研究门槛；常驻来源的目标关联覆盖不同时代，不代表当前已解锁。降低时代或移除科技来源时，会清除此页已经不适用的研究标记。
-            </p>
+                <label>
+                  目标类别
+                  <select
+                    value={config.target}
+                    onChange={(event) => update({ ...config, target: event.target.value as TeamBonusConfig['target'], unit: null })}
+                  >
+                    {TEAM_TARGETS.map((target) => (
+                      <option key={target} value={target}>
+                        {TEAM_TARGET_ZH[target]}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {config.target === 'units' && (
+                  <label>
+                    具体单位
+                    <select
+                      value={config.unit ?? ''}
+                      onChange={(event) => update({ ...config, unit: event.target.value === '' ? null : Number(event.target.value) })}
+                    >
+                      <option value="">全部单位关联</option>
+                      {core.units.map((unit) => (
+                        <option key={unit.id} value={unit.id}>
+                          {unit.zh} · {unit.en}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+              </div>
+              <p className="note">目标筛选只采用已核对过的单位、建筑及生产关系；没有可靠对应关系的来源单列为“关联范围待核实”，不会用文字关键词猜测完整覆盖。</p>
+              <p className="note">
+                时代用于团队科技的研究门槛；常驻来源的目标关联覆盖不同时代，不代表当前已解锁。降低时代或移除科技来源时，会清除此页已经不适用的研究标记。
+              </p>
+            </section>
           </section>
           <div className="team-results">
-            <div className="team-summary" data-testid="team-summary">
-              <div>
-                <strong className="team-number">{sources.permanent.length}</strong>
-                <span>常驻加成来源</span>
+            <section className="team-overview" aria-labelledby="team-overview-heading">
+              <h2 id="team-overview-heading">阵容来源总览</h2>
+              <p className="note">以下来源计数为整队总数，不随目标筛选缩减；已记录研究仅代表本页记录。</p>
+              <div className="team-summary" data-testid="team-summary">
+                <div>
+                  <strong className="team-number">{sources.permanent.length}</strong>
+                  <span>常驻加成来源</span>
+                </div>
+                <div>
+                  <strong className="team-number">{sources.technologies.length}</strong>
+                  <span>团队科技来源</span>
+                </div>
+                <div>
+                  <strong className="team-number">{config.researched.length}</strong>
+                  <span>已记录研究</span>
+                </div>
               </div>
-              <div>
-                <strong className="team-number">{sources.technologies.length}</strong>
-                <span>团队科技来源</span>
-              </div>
-              <div>
-                <strong className="team-number">{config.researched.length}</strong>
-                <span>已记录研究</span>
-              </div>
-            </div>
+            </section>
             <section className="team-section" aria-labelledby="team-permanent-heading">
               <h2 id="team-permanent-heading">常驻团队加成</h2>
               <p className="note">按游戏数据里各文明的团队效果自动识别；不需要勾选研究。具体时代和条件以原说明与数据备注为准。</p>
@@ -251,7 +264,7 @@ export default function TeamBonuses() {
               </section>
             )}
           </div>
-        </ToolGrid>
+        </div>
       )}
       <ToolFooter
         related={{
