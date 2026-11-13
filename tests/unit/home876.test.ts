@@ -7,7 +7,7 @@ import civs from '../../src/data/civs.json';
 import techs from '../../src/data/techs.json';
 import units from '../../src/data/units.json';
 import Home from '../../src/features/home/components/Home';
-import { HOME_AGE_PICS, HOME_BUILDING_PIC, HOME_EMBLEM_CIVS, HOME_TECH_PIC, HOME_UNIT_PICS } from '../../src/features/home/homeReference';
+import { HOME_AGE_PICS, HOME_BUILDING_PICS, HOME_EMBLEM_CIVS, HOME_UNIT_PICS } from '../../src/features/home/homeReference';
 import { PAGES } from '../../src/shared/nav/pageRegistry';
 
 const home = (search = '') => renderToStaticMarkup(createElement(StaticRouter, { location: { pathname: '/', search } }, createElement(Home)));
@@ -48,7 +48,7 @@ describe('首页方向 B #876', () => {
     expect([74, 4, 24, 38, 83].map((id) => unitPic.get(id))).toEqual([...HOME_UNIT_PICS]);
     const techPic = new Map((techs as { id: number; pic: number }[]).map((tech) => [tech.id, tech.pic]));
     expect([101, 102, 103].map((id) => techPic.get(id))).toEqual([...HOME_AGE_PICS]);
-    expect(techPic.get(103)).toBe(HOME_TECH_PIC);
-    expect((buildings as { id: number; pic: number }[]).find((building) => building.id === 82)?.pic).toBe(HOME_BUILDING_PIC);
+    const buildingPic = new Map((buildings as { id: number; pic: number }[]).map((building) => [building.id, building.pic]));
+    expect([109, 12, 82].map((id) => buildingPic.get(id))).toEqual([...HOME_BUILDING_PICS]);
   });
 });

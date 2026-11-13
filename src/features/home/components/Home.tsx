@@ -5,7 +5,7 @@ import { preloadGlobalSearch, requestGlobalSearch } from '../../../shared/search
 import { HOME_GROUPS, WIKI, type Section } from '../../../shared/nav/sections';
 import { img } from '../../../shared/ui/art';
 import { Icon } from '../../../shared/ui/Icon';
-import { HOME_BUILDING_PIC, HOME_EMBLEM_CIVS, HOME_REFERENCE_COPY, HOME_TECH_PIC, HOME_UNIT_PICS } from '../homeReference';
+import { HOME_AGE_PICS, HOME_BUILDING_PICS, HOME_EMBLEM_CIVS, HOME_REFERENCE_COPY, HOME_UNIT_PICS } from '../homeReference';
 import { hasLegacyStartQuery } from '../legacyStartQuery';
 import '../home.css';
 
@@ -46,14 +46,17 @@ export default function Home() {
     ...group,
     sections: group.sections.filter((section) => !featured.has(section.key)),
   })).filter((group) => group.sections.length > 0);
-  const civ = wikiEntry('civs');
-  const units = wikiEntry('units');
-  const buildings = wikiEntry('buildings');
-  const techs = wikiEntry('techs');
   const emblems = HOME_EMBLEM_CIVS.flatMap((en) => {
     const found = civs.find((item) => item.en === en);
     return found ? [found.en.toLowerCase()] : [];
   });
+  // 四张资料卡同级排列，右上角的数量都从当前数据算出。
+  const reference = [
+    { key: 'civs', count: civs.length, art: emblems.map((en) => `civs/${en}.webp`), size: 40 },
+    { key: 'units', count: __CATALOG_COUNTS__.units, art: HOME_UNIT_PICS.map((pic) => `units/${pic}.webp`), size: 32 },
+    { key: 'buildings', count: __CATALOG_COUNTS__.buildings, art: HOME_BUILDING_PICS.map((pic) => `buildings/${pic}.webp`), size: 32 },
+    { key: 'techs', count: __CATALOG_COUNTS__.techs, art: HOME_AGE_PICS.map((pic) => `techs/${pic}.webp`), size: 32 },
+  ] as const;
 
   return (
     <section id="home" className="pane home-page">
@@ -79,42 +82,20 @@ export default function Home() {
 
       <section className="home-ref" aria-labelledby="home-ref-title">
         <h2 id="home-ref-title">资料</h2>
-        <div className="home-ref-compose">
-          <Link className="home-civ" to={civ.path}>
-            <span className="home-civ-copy">
-              <span className="home-ref-title">{civ.label}</span>
-              <span className="home-ref-desc">{HOME_REFERENCE_COPY.civs}</span>
-              <span className="home-go">
-                浏览全部文明 <Icon name="arrow-right" />
-              </span>
-            </span>
-            <ExampleIcons paths={emblems.map((en) => `civs/${en}.webp`)} size={52} />
-          </Link>
-          <div className="home-ref-side">
-            <Link className="home-ref-row" to={units.path}>
-              <span className="home-ref-copy">
-                <span className="home-ref-name">{units.label}</span>
-                <span className="home-ref-desc">{HOME_REFERENCE_COPY.units}</span>
-              </span>
-              <ExampleIcons paths={HOME_UNIT_PICS.map((pic) => `units/${pic}.webp`)} size={32} />
-            </Link>
-            <div className="home-ref-pair">
-              <Link className="home-ref-mini" to={buildings.path}>
-                <ExampleIcons paths={[`buildings/${HOME_BUILDING_PIC}.webp`]} size={32} />
-                <span className="home-ref-copy">
-                  <span className="home-ref-name">{buildings.label}</span>
-                  <span className="home-ref-desc">{HOME_REFERENCE_COPY.buildings}</span>
+        <div className="home-ref-grid">
+          {reference.map((item) => {
+            const entry = wikiEntry(item.key);
+            return (
+              <Link className="home-ref-card" data-k={item.key} to={entry.path} key={item.key}>
+                <span className="home-ref-top">
+                  <ExampleIcons paths={item.art} size={item.size} />
+                  <span className="home-ref-count num nw">{item.count}</span>
                 </span>
+                <span className="home-ref-name">{entry.label}</span>
+                <span className="home-ref-desc">{HOME_REFERENCE_COPY[item.key]}</span>
               </Link>
-              <Link className="home-ref-mini" to={techs.path}>
-                <ExampleIcons paths={[`techs/${HOME_TECH_PIC}.webp`]} size={32} />
-                <span className="home-ref-copy">
-                  <span className="home-ref-name">{techs.label}</span>
-                  <span className="home-ref-desc">{HOME_REFERENCE_COPY.techs}</span>
-                </span>
-              </Link>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </section>
 
@@ -123,9 +104,14 @@ export default function Home() {
         <div className="home-catalog-grid">
           {catalog.map((group) => (
             <section key={group.key} className="home-group" aria-labelledby={`home-${group.key}`}>
-              <h3 className="home-group-title" id={`home-${group.key}`}>
-                {group.title}
-              </h3>
+              <div className="home-group-head">
+                <h3 className="home-group-title" id={`home-${group.key}`}>
+                  {group.title}
+                </h3>
+                <p className="home-group-count">
+                  <span className="num nw">{group.sections.length}</span> 项
+                </p>
+              </div>
               <ul>
                 {group.sections.map((section) => (
                   <li key={section.key}>

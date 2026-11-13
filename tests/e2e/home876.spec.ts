@@ -12,8 +12,7 @@ test('#876 1280 首屏能看到开一局标题和配置按钮', async ({ page })
   await expect(page.locator('#home a[href="#/start"]')).toHaveCount(1);
   await expect(page.locator('#home [data-testid="start-game"]')).toHaveCount(0);
   const unitIconsAligned = await page
-    .locator('.home-ref-row')
-    .first()
+    .locator('.home-ref-card[data-k="units"]')
     .locator('.home-examples img')
     .evaluateAll((images) => {
       const top = images[0]?.getBoundingClientRect().top ?? 0;
