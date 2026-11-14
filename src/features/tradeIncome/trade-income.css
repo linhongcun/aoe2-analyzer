@@ -173,3 +173,39 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* issue 1025：页头“复制方案链接”“重置”：按钮本体就是热区，不靠透明伪元素补高。只限本页。 */
+.trade-income header.tool-head .tool-head-actions > .btn::after {
+  content: none;
+}
+@media (min-width: 701px) {
+  .trade-income header.tool-head .tool-head-actions > .btn {
+    gap: var(--space-2);
+    height: 48px;
+    min-height: 48px;
+    padding: 0 var(--space-4);
+  }
+}
+@media (max-width: 700px) {
+  .trade-income header.tool-head .tool-head-actions {
+    position: static;
+    flex: 1 0 100%;
+    flex-wrap: wrap;
+    padding: 0;
+    border-top: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .trade-income header.tool-head .tool-head-actions > .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: 44px;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+  body:has(.trade-income header.tool-head .tool-head-actions) {
+    padding-bottom: 0;
+  }
+}
