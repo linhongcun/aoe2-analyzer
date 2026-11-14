@@ -1,6 +1,6 @@
 # 体验设计原则
 
-这是面向全站的当前可复用原则，不是每个功能的规格。当前目标、授权、交互细节和完成态设计图写在对应 Issue；设计通过不等于实现授权。实际交接规则见[体验设计接手指南](../../role/experience-design.md)和[Issue 生命周期](../../CONTRIBUTING.md#issue-lifecycle)。
+这是面向全站的当前可复用原则，不是每个功能的规格。当前目标、授权依据、交互细节和完成态设计图写在对应 Issue；UX 完成后直接交软件开发，进入该阶段即获既定范围内的开发授权，无需维护者另行批准。实际交接规则见[体验设计接手指南](../../role/experience-design.md)和[Issue 生命周期](../../CONTRIBUTING.md#issue-lifecycle)。
 
 ## 任务优先
 
