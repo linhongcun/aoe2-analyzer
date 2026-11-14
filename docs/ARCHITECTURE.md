@@ -80,4 +80,4 @@ flowchart LR
 
 ## 验证与交付
 
-`npm run build` 执行类型检查、Vite 构建和静态页生成；`npm run lint` 包含分层及设计索引检查。测试范围与当前 CI 以 [TESTING 第 6 节](TESTING.md#ci-659-validation)和工作流为准。普通部署不等同于手动 full 测试；main 上的 CI/Deploy 成功后发布到 GitHub Pages，正式 Release 使用已部署产物，见 [RELEASING.md](RELEASING.md)。
+`npm run build` 执行类型检查、Vite 构建和静态页生成；`npm run lint` 包含设计索引、颜色与 CSS 检查。分层边界需单独运行 `npm run lint:layers -- --strict`。测试范围与当前 CI 以 [TESTING 第 6 节](TESTING.md#ci-659-validation)和工作流为准。普通部署不等同于手动 full 测试；main 上的 CI/Deploy 成功后发布到 GitHub Pages，正式 Release 使用已部署产物，见 [RELEASING.md](RELEASING.md)。

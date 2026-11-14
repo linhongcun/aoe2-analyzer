@@ -106,7 +106,7 @@ PC 优先，窄屏做到这次的路径基本可用。设计索引里的桌面�
 
 有浮层时写清焦点从哪来、键盘怎样关闭、关闭后回到哪个控件。长中文、图标和费用保持同一阅读基线；一行放不下时整组费用换行，不把单个资源拆到错位的列。浅色和深色都看这次的默认态。有遮罩时看打开与关闭两态。
 
-可点区域按**这一项的交互规格**。适用控件常用至少 44×44 CSS 像素，例如 [[docs/design/touch-targets-481.md](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/touch-targets-481.md)](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/touch-targets-481.md) 只补开局术语链接和页脚里不足的链接，并写明不放大整站普通内联链接。`MAINTENANCE` 第 6 节的「可点区域 ≥ 44×44」是摘要；同文第 7 节写明四宽截图不是每 PR 测试门禁。
+可点区域按**这一项的交互规格**。适用控件常用至少 44×44 CSS 像素，例如[触控目标历史规格](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/touch-targets-481.md)，只补开局术语链接和页脚里不足的链接，并写明不放大整站普通内联链接。`MAINTENANCE` 第 6 节的「可点区域 ≥ 44×44」是摘要；同文第 7 节写明四宽截图不是每 PR 测试门禁。
 
 这不是「所有 WCAG 场合都强制 44」。W3C WCAG 2.2 里，[2.5.8 Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) 是 AA，目标至少 24×24 CSS 像素，并有间距、等效控件、行内文本等例外；[2.5.5 Target Size (Enhanced)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html) 是 AAA，目标至少 44×44 CSS 像素，同样有行内文本等例外。引用这两条只说明外部门槛，不表示本站已经按它们全站测过。
 
