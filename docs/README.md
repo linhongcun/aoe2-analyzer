@@ -8,4 +8,4 @@
 4. [测试规则](TESTING.md)与[发布流程](RELEASING.md)。
 5. [贡献与授权规则](../CONTRIBUTING.md)、[维护说明](MAINTENANCE.md)及[角色指南索引](../role/README.md)，包括[产品管理](../role/product-management.md)、[体验设计](../role/experience-design.md)与[软件开发](../role/software-development.md)。
 
-当前需求、授权、设计图和交付证据以原 Issue 为准；本仓库不另存一次性功能规格或发布日志。
+当前需求、授权、设计图和交付证据以原 Issue 为准；版本摘要见 [CHANGELOG](../CHANGELOG.md)，发布核验流程见[发布流程](RELEASING.md)。本仓库不另存一次性功能规格或逐版本发布日志。

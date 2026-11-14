@@ -2,7 +2,7 @@
 
 本项目已获 hongcun 的[持续发布授权](../CONTRIBUTING.md#维护者的持续发布授权2026-10-24)：已授权更新完成适用审查和必要验证后直接部署并完成正式 Release，无需逐次确认。独立复核、实现范围、Hold、数据来源和受保护产品验收规则继续有效。
 
-#431 的一次适用验证原则继续有效；2026-11-03 维护者授权 #659 分阶段门禁，取代旧 PR 完整浏览器上限和全局壳层 targeted 例外。当前 CI 与验证规则见 [TESTING 第 6 节](TESTING.md#ci-659-validation)和 [CONTRIBUTING「验证投入」](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)：按风险验证、只复用可信 v2 原始阶段证明，main 构建真实 SHA，Release 直接打包已部署产物。历史审阅与发版记录保留。
+#431 的一次适用验证原则继续有效；2026-11-03 维护者授权 #659 分阶段门禁，取代旧 PR 完整浏览器上限和全局壳层 targeted 例外。当前 CI 与验证规则见 [TESTING 第 6 节](TESTING.md#ci-659-validation)和 [CONTRIBUTING「验证投入」](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)：按风险验证、只复用可信 v2 原始阶段证明，main 构建真实 SHA，Release 直接打包已部署产物。版本摘要见 [CHANGELOG](../CHANGELOG.md)；具体范围与授权以原 Issue 为准，复核记录以对应 PR 为准，部署与正式发布状态以 GitHub Actions、Pages、tag 和 GitHub Release 记录为准。本文件说明当前发布流程，不另存逐版本档案。
 
 ## 准备、合并与网站部署
 
