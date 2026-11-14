@@ -4,7 +4,7 @@
 
 开始或继续实现前，先读 [docs/MAINTENANCE.md「授权核验」](docs/MAINTENANCE.md#issue-authorization) 与当前原始 Issue。CONTRIBUTING 与本文件冲突时，以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
 
-- 每个 Issue 只有一个实现写者和一个实现 PR；同时在审 PR 不超过 2 个。不同角色在同一 Issue 正文按阶段交接，不另开阶段 Issue。
+- 每个 Issue 只有一个实现写者和一个实现 PR；同时在审 PR 不超过 2 个。不同角色在同一 Issue 正文按阶段交接，不另开阶段 Issue。不同 Issue 的并行处理/开发与合并发布顺序见 [MAINTENANCE「按事项并行、合并发布串行」](docs/MAINTENANCE.md#按事项并行合并发布串行)。
 - 开工前核验原 Issue 的最新范围、验收标准、非目标、显式实现授权、阶段和状态标签、当前认领/负责人、关联 PR 与 Hold/依赖。阶段标签或历史批次不授予范围或实现权限；不得扫描 backlog 并自行批量认领。
 - 关闭的 Issue 不重开、不重复实施；只有维护者在原 Issue 记录新的明确授权后例外。不得自行解除、绕过或清除 Hold。
 - 实际 UX 工作须在同一 Issue 正文直接嵌入覆盖主要界面和重要状态的完成态设计图。只有纯 docs/data 且无 UI 时，产品经理可在同一 Issue 记录 UX 不适用及理由；细则见 [Issue 生命周期](CONTRIBUTING.md#issue-lifecycle)。
