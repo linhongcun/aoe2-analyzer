@@ -4,12 +4,12 @@
 
 ## 给 Codex 的设计交接
 
-改界面前先读同一 Issue 正文的当前需求与“体验设计”规格、本索引和 [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)。正文是单项决定、当前规格和交接记录的主来源；真实视觉材料或必要的复杂/可复用规格可由正文链接到本目录。链接到短稿目录时，如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 [mockups/issue24-v3/ERRATA.md](mockups/issue24-v3/ERRATA.md)。阶段、认领、授权和交接规则见 [CONTRIBUTING「Issue 生命周期」](../../CONTRIBUTING.md#issue-lifecycle)。
+改界面前先读同一 Issue 正文的当前需求与“体验设计”规格、本索引和 [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)。正文是单项决定、当前规格和交接记录的主来源；每次实际 UX 交付都必须把完成态、可直接查看的设计图嵌入正文，覆盖主要界面和重要状态。复杂/可复用规格可由正文链接到本目录补充，但不能代替正文中的图。链接到短稿目录时，如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 [mockups/issue24-v3/ERRATA.md](mockups/issue24-v3/ERRATA.md)。阶段、认领、授权和交接规则见 [CONTRIBUTING「Issue 生命周期」](../../CONTRIBUTING.md#issue-lifecycle)。
 
-- **挂靠**：UI 当前规格和决定写在原 Issue 正文“体验设计”节；真实视觉材料或必要的复杂/可复用规格可附加或链接 `docs/design/<topic>/`。不为阶段变化新建设计/实施 Issue 或 per-issue 文档。没有可执行的已授权范围则留在当前阶段补齐，不自创版式、不扩范围。设计通过不等于实现授权。
+- **挂靠**：UI 当前规格、决定和完成态设计图写在原 Issue 正文“体验设计”节；设计图须直接显示、覆盖本范围主要界面和重要状态。复杂/可复用规格可附加或链接 `docs/design/<topic>/` 补充，不取代正文设计图。不为阶段变化新建设计/实施 Issue 或 per-issue 文档。没有可执行的已授权范围则留在当前阶段补齐，不自创版式、不扩范围。设计通过不等于实现授权；只有纯 docs/data 且无 UI 时才可记录 UX 不适用。
 - **硬规则**：方向 C（浅色编辑风）。界面图标只用 Lucide，经 `src/shared/ui/Icon.tsx` 登记，不用 emoji。游戏素材用 `public/img/` 原版图标。颜色只用 `src/shared/styles/tokens.css`。数字和「数字+单位」用 `.num` / `.nw`。中文 UI。PC-first（以 1280 为准），不为窄屏过度打磨。按本次改动影响选择必要视口和界面证据，如实标明覆盖，不固定四宽。
-- **角色**：Steve 定范围和「设计通过」。Jony 负责好用与美观；评审视觉方向时给界面图，不以文字或线框代替，只看本次相关显示。旧组件功能可以有理由取舍。Codex 实现。视觉 PR 须在 15 分钟内回复「我在看」「视觉 N/A」「ETA」或「通过」。产品、运营和视觉职责见 [CONTRIBUTING「角色」](../../CONTRIBUTING.md#角色)。
-- **短稿**：目录通常有 `*.md`（验收、不要做）和 1280 线框或截图。实现 PR 对照 §AC，按本次改动影响选择必要视口和界面证据，如实标明覆盖，不固定四宽。
+- **角色**：Steve 定范围和「设计通过」。Jony 负责好用与美观；每次实际 UX 交付都提供可查看的完成态界面图，直接嵌入同一 Issue 正文，不以文字、规格、线框或本地 ZIP 代替，并由产品对照范围确认图及重要状态。只有纯 docs/data 且无 UI 时可由产品经理记录 UX 不适用及理由，不得用于实际 UX 工作。旧组件功能可以有理由取舍。Codex 实现。视觉 PR 的旧版 15 分钟回复要求不作为现行交接门槛。产品、运营和视觉职责见 [CONTRIBUTING「角色」](../../CONTRIBUTING.md#角色)。
+- **短稿**：目录通常有 `*.md`（验收、不要做）和 1280 线框或截图；这些短稿仅作补充，线框不能替代实际 UX 交付所需的完成态设计图。实现 PR 对照 §AC，按本次改动影响选择必要视口和界面证据，如实标明覆盖，不固定四宽。
 - **当前**：`insights-584/` 已合 main（[#621](https://github.com/linhongcun/aoe2-analyzer/pull/621)）。[#584](https://github.com/linhongcun/aoe2-analyzer/issues/584) 已实现并关闭（2026-11-02，PR #623，CHANGELOG 0.74.11）。`ladder-571/` 已上线。后续解耦见 [#625](https://github.com/linhongcun/aoe2-analyzer/issues/625)（已关闭，设计稿 [ladder-independent-625.md](ladder-independent-625.md)）。
 - **交叉**：[CODEX-MAINTENANCE §6 设计硬规则](../CODEX-MAINTENANCE.md#6-设计硬规则摘要)、[CONTRIBUTING「设计与代码规范」](../../CONTRIBUTING.md#设计与代码规范)。交接与 issue 质量条见 [#627](https://github.com/linhongcun/aoe2-analyzer/issues/627)（产品侧主文档 PR 收口，本文不关该 issue）。
 
