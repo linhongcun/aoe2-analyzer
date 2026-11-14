@@ -1,10 +1,10 @@
-# Codex 维护纪律 / CODEX-MAINTENANCE
+# 维护与协作规范 / MAINTENANCE
 
-给 Codex（及同类无人值守编码代理）用的维护纪律。人类与角色代理仍以 [CONTRIBUTING.md](../CONTRIBUTING.md) 为准；本文件与 CONTRIBUTING / [AGENTS.md](../AGENTS.md) 冲突时，以 CONTRIBUTING 为准，并在 issue 里指出。
+本文件适用于 Cursor、Codex、Claude Code、Devin 及其他编码代理。人类与角色代理仍以 [CONTRIBUTING.md](../CONTRIBUTING.md) 为准；本文件与 CONTRIBUTING / [AGENTS.md](../AGENTS.md) 冲突时，以 CONTRIBUTING 为准，并在 issue 里指出。
 
 入口：先读 AGENTS.md → 本文件（先看下方当前状态）→ 要做的那条 issue。
 
-Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 执行；本文件只补充 Codex 领取门禁，不另建阶段流程。
+Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 执行；本文件只补充 执行门禁，不另建阶段流程。
 
 已记录的维护者授权优先于本文件的默认限制。当前项目的[持续发布授权](../CONTRIBUTING.md#维护者的持续发布授权2026-10-24)要求：已授权更新完成适用审查和测试后直接完成上线，不再逐次询问发布。现行审阅流程按 [持续审阅授权](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) 执行；#431 已授权一次适用验证、可信证据复用和后台全量，现行验证规则见 [验证投入](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。范围、Hold 和测试保护继续有效。
 
@@ -22,7 +22,7 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 
 #922 正文写明「本票不要求立刻开工」。维护者于 2026-11-11 11:06（Asia/Shanghai，t316u）授权处理当天提的、之前页面没做好的 issue；该授权只覆盖 #922 的这条暂缓。此登记不授权其它编号。
 
-无人值守 Codex 用这一节决定**现在领什么、跳过什么**。功能实现默认由 Codex 认领；产品范围与是否恢复由维护者决定。设计硬规则仍是第 6 节与 `docs/design/`；测试门禁见 [TESTING](TESTING.md)。不另建一套流程，也不把角色代理自循环当作实现通道。
+所有编码代理均用这一节决定**现在领什么、跳过什么**。功能实现由当前授权的执行者认领；产品范围与是否恢复由维护者决定。设计硬规则仍是第 6 节与 `docs/design/`；测试门禁见 [TESTING](TESTING.md)。不另建一套流程，也不把角色代理自循环当作实现通道。
 
 门禁不变：一次只认领 1 个 issue；同时在审 PR ≤ 2；实现者之外的**独立代理复核**加上按风险选择的 CI；持续发布授权以 CONTRIBUTING 为准。维护者已于2026-11-03授权已部署 issue 可直接关闭，见 [持续关闭授权](../CONTRIBUTING.md#已部署-issue-的持续关闭授权2026-11-03)。网站实现 PR 使用 `Relates #N`，交付核验后执行者关闭已完成的 issue，不再等待具名人员或额外产品走查。`Fixes #N` 合入默认分支会提前关 issue，只用于合入即完成、无需网站交付的事项。
 
@@ -130,9 +130,9 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 - 正文缺少可核对的 **「验收标准」**，或缺少 **「不要做」/「不在范围」**。只有空的「-」、没有可核对的功能结果，都算没写完。执行者可在已授权范围内先补齐规格并交独立代理复核，不得自行发明产品范围
 - 标题形如「待村长确认」的版本范围
 
-### 作者写到 Codex 能领
+### 开工就绪检查
 
-开写前正文应能逐项勾上。缺任一项，Codex 跳过，或只在已授权范围内补规格，不直接实现：
+开写前正文应能逐项勾上。缺任一项，执行者跳过，或只在已授权范围内补规格，不直接实现：
 
 - [ ] **玩家场景**：谁在什么情况下要用
 - [ ] **验收标准**：能说明这次功能怎样算正常，不是空的「-」
@@ -145,7 +145,7 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 
 ## 6. 设计硬规则（摘要）
 
-完整规范见 [docs/design/DESIGN-SYSTEM.md](design/DESIGN-SYSTEM.md) 与 [docs/design/README.md](design/README.md)「[给 Codex 的设计交接](design/README.md#给-codex-的设计交接)」（各短稿目录内如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 `docs/design/mockups/issue24-v3/ERRATA.md`）。
+完整规范见 [docs/design/DESIGN-SYSTEM.md](design/DESIGN-SYSTEM.md) 与 [docs/design/README.md](design/README.md)「设计交接」（各短稿目录内如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 `docs/design/mockups/issue24-v3/ERRATA.md`）。
 
 - **图标**：只用 Lucide，经 `src/shared/ui/Icon.tsx` 的 `ICONS` 登记后 `<Icon name="..." />`；禁止 emoji / Unicode 符号当图标（ESLint 会拦）；游戏美术图标除外。
 - **颜色**：只用 `src/shared/styles/tokens.css` 设计令牌；`npm run lint:colors`。
@@ -154,11 +154,11 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 - **四宽截图**：界面 PR 附 **360 / 375 / 390 / 1280**，无横向滚动、无 console error / pageerror。
 - **中文 UI**：文案与相邻页面一致；新增页面先改 `pageRegistry`，分组见 [ARCHITECTURE](ARCHITECTURE.md)「页面登记表」。
 
-带界面的 issue 先读 [设计索引「给 Codex 的设计交接」](design/README.md#给-codex-的设计交接)。
+带界面的 issue 先读 [设计索引「设计交接」](design/README.md#设计交接)。
 
 UI 的当前规格和完成态设计图写在同一 Issue 正文“体验设计”节；体验设计交付并交回产品确认前，实际 UX 工作必须嵌入可直接查看、覆盖主要界面和重要状态的设计图。复杂/可复用规格可链接 `docs/design/` 补充，不能代替正文图；只有纯 docs/data 且无 UI 时可记录 UX 不适用。不得仅为阶段变化新建 Issue 或文档。缺少可执行规格或设计图时不得标记设计交付完成或转软件开发。具体交接见 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle)。
 
-方向 C、Lucide、原版游戏图标、tokens、PC-first，以及 Steve / Jony / Codex 的分工，以该节为准。
+方向 C、Lucide、原版游戏图标、tokens、PC-first，以及产品、设计、实现的分工，以该节为准。
 
 ## 7. 测试规则
 
@@ -218,7 +218,7 @@ NODE
 - [ ] 从**当前已授权范围和自身单一阶段**挑选尚未完成的事项，核对实际代码、正文、认领及已合并/开放 PR；继续自己的有效认领，不接管他人认领；不要继续使用已完成 issue 的旧示例选单，也不要把“超出上一轮小修”解释成“项目无法推进”
 - [ ] 大功能 / 新页面（如 #308、#33）先有明确规格与设计材料，由执行者准备并交实现者之外的独立代理复核后再实现；不要自行扩范围
 - [ ] 分支名与 PR 标题符合 Conventional Commits：`类型(#issue): 描述`
-- [ ] 测试按 [TESTING](TESTING.md) 文首：功能是否正常、必要冒烟和直接相关测试。`Relates` / `Fixes` 仍按该文 Codex 交接；此处不另写门禁
+- [ ] 测试按 [TESTING](TESTING.md) 文首：功能是否正常、必要冒烟和直接相关测试。`Relates` / `Fixes` 仍按该文编码代理交接；此处不另写门禁
 
 ## 9. 发版
 

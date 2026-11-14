@@ -12,11 +12,11 @@
 
 分层边界在 `scripts/check-layers.mjs`。`features/X` 不引用 `features/Y`；`shared/` 不引用 `features/` 和 `app/`；`domain/` 不引用 React、`features/`、`app/`、`shared/ui`。核心 JSON 只能由 `LOADERS` 里这 7 个文件直接 import：
 
-| 文件 | 作用 |
-| --- | --- |
-| `src/data/index.ts` | 异步入口。`civs` 随主包；单位、科技、建筑、科技树动态 import |
-| `src/data/raw/civs.ts` `raw/units.ts` `raw/techs.ts` `raw/buildings.ts` `raw/eco.ts` | 同步原样转出 |
-| `src/domain/datEffects.ts` | `effects.json` 的类型和转换 |
+| 文件                                                                                 | 作用                                                         |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| `src/data/index.ts`                                                                  | 异步入口。`civs` 随主包；单位、科技、建筑、科技树动态 import |
+| `src/data/raw/civs.ts` `raw/units.ts` `raw/techs.ts` `raw/buildings.ts` `raw/eco.ts` | 同步原样转出                                                 |
+| `src/domain/datEffects.ts`                                                           | `effects.json` 的类型和转换                                  |
 
 本地严格检查：
 
@@ -34,28 +34,28 @@ npm run lint:layers -- --strict
 
 当前补丁钉在 `scripts/data_sources.json`：
 
-| 项 | 当前值 |
-| --- | --- |
-| 补丁 | DE Update 188329，日期 2026-10-28 |
-| `.dat` | `SiegeEngineers/auto-mods` `e293dc106b0f3b0ceac2db98409fbcc5c921190b`，路径 `dat/empires2_x2_p1.dat` |
-| `.dat` sha256 | `d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f` |
-| 目录文本和图标 | `SiegeEngineers/aoe2techtree` `e56728e76b7d08301fba7b18d5f16bc8554c109a` |
-| 补丁号识别 | `SiegeEngineers/halfon` `7f96c37fc5f63c7141ec7d88e91c627beb375b28` |
+| 项             | 当前值                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------- |
+| 补丁           | DE Update 188329，日期 2026-10-28                                                                    |
+| `.dat`         | `SiegeEngineers/auto-mods` `e293dc106b0f3b0ceac2db98409fbcc5c921190b`，路径 `dat/empires2_x2_p1.dat` |
+| `.dat` sha256  | `d0aefd92428e2215d6f4d9b1d544901e6f171e19183f9e0b88218de5153a337f`                                   |
+| 目录文本和图标 | `SiegeEngineers/aoe2techtree` `e56728e76b7d08301fba7b18d5f16bc8554c109a`                             |
+| 补丁号识别     | `SiegeEngineers/halfon` `7f96c37fc5f63c7141ec7d88e91c627beb375b28`                                   |
 
 页头「数据版本」链到 `#/about-data`。页脚同时显示 `package.json` 版本和构建短 SHA。短 SHA 由 `vite.config.ts` 取 `git rev-parse HEAD` 的前 7 位；取不到时是 `dev`。
 
 生成文件在仓库里，但只由脚本改。不要手改 `src/data/*.json` 和 `public/img/`。`.dat` 与 `scripts/.cache/` 不提交。
 
-| 要更新什么 | 命令 | 脚本 |
-| --- | --- | --- |
-| 文明、单位、科技、建筑、科技树、图标，并重建拼音索引 | `npm run data` | `scripts/build_data.py`，然后 `scripts/pinyin_build.mjs` |
-| 只检查拼音索引是否过期 | `npm run pinyin:check` | 同上，`--check` |
-| 下载并核对 `.dat` 的 sha256 与补丁标记 | `npm run dat:check` | `scripts/dat_source.py --check` |
-| 效果表 | `npm run effects` | `scripts/effects_build.py`，审计 `scripts/effects_audit.ts` |
-| 经济时间、费用、采集 | `npm run eco` | `scripts/eco_build.py` |
-| 基础数值对账 | `npm run stats:check` | `scripts/stats_crosscheck.py` |
-| 只看上游有没有新补丁 | `npm run data:status` | 有更新时退出码 10 |
-| 按文档走完整补丁更新 | `npm run data:update` | 见 [docs/DATA-UPDATE.md](../docs/DATA-UPDATE.md)，不自动提交 |
+| 要更新什么                                           | 命令                   | 脚本                                                         |
+| ---------------------------------------------------- | ---------------------- | ------------------------------------------------------------ |
+| 文明、单位、科技、建筑、科技树、图标，并重建拼音索引 | `npm run data`         | `scripts/build_data.py`，然后 `scripts/pinyin_build.mjs`     |
+| 只检查拼音索引是否过期                               | `npm run pinyin:check` | 同上，`--check`                                              |
+| 下载并核对 `.dat` 的 sha256 与补丁标记               | `npm run dat:check`    | `scripts/dat_source.py --check`                              |
+| 效果表                                               | `npm run effects`      | `scripts/effects_build.py`，审计 `scripts/effects_audit.ts`  |
+| 经济时间、费用、采集                                 | `npm run eco`          | `scripts/eco_build.py`                                       |
+| 基础数值对账                                         | `npm run stats:check`  | `scripts/stats_crosscheck.py`                                |
+| 只看上游有没有新补丁                                 | `npm run data:status`  | 有更新时退出码 10                                            |
+| 按文档走完整补丁更新                                 | `npm run data:update`  | 见 [docs/DATA-UPDATE.md](../docs/DATA-UPDATE.md)，不自动提交 |
 
 2026-11-13 数过当前 JSON 长度：文明 56、单位 248、科技 199、建筑 38。科技和建筑与 README 的个数一致。单位 JSON 是 248 条；README 仍写 163。首页单位数用 `src/domain/family.ts` 的 `unitCount` 做家族折叠，和 JSON 条数不是同一个数。写界面或文档时现算，不要抄 README 的 163。`data_sources.json` 里 `.dat` 标记 `civs: 63` 是补丁标记，也不是页面上的 56 个文明。
 
@@ -73,13 +73,13 @@ npm run lint:layers -- --strict
 
 右栏文案以 `src/features/production/trainTotalCopy.ts` 为准，不要把不完整的数说成整份总价：
 
-| 状态 | 界面怎么说 |
-| --- | --- |
-| 还没有训练行 | 不出现资源卡，也不出现「部分训练费用」 |
-| 有行，但没有一行可计入 | 标题仍是「训练总价」，写「当前没有已计入的训练行。」 |
-| 只有一部分行可计入 | 标题改成「已计入行小计」，标记「部分训练费用」，并写已计入 x / y 行 |
-| 已选费用效果没能完整计入 | 另标「估算，未完整计入」。下面的数是估算 |
-| 文明或时代无效 | 右栏报错。复制在这种状态下不可用 |
+| 状态                     | 界面怎么说                                                          |
+| ------------------------ | ------------------------------------------------------------------- |
+| 还没有训练行             | 不出现资源卡，也不出现「部分训练费用」                              |
+| 有行，但没有一行可计入   | 标题仍是「训练总价」，写「当前没有已计入的训练行。」                |
+| 只有一部分行可计入       | 标题改成「已计入行小计」，标记「部分训练费用」，并写已计入 x / y 行 |
+| 已选费用效果没能完整计入 | 另标「估算，未完整计入」。下面的数是估算                            |
+| 文明或时代无效           | 右栏报错。复制在这种状态下不可用                                    |
 
 「部分训练费用」只表示有的行没进小计。它和文明加成列表的「部分计入」不是同一个词。加成三档在 `src/domain/bonusUsage.ts` 的 `bonusLevel`：工具都计入为「已计入」，有的计入有的没有为「部分计入」，都没有为「仅文本」。各工具自己的提示才是该工具的支持范围。
 
@@ -140,16 +140,16 @@ npm run build && npx playwright test tests/e2e/<本次相关>.spec.ts --reporter
 
 **当前默认 CI**（普通 `pull_request` 和 `push`，含 `main`）由 `scripts/ci-scope.mjs` 的 `selectCiPlan` 固定成窄门禁。`planChanges` 仍能在本地看出旧的风险分类，但 CI 入口不会因此把 PR 扩成 full。规格在 [docs/design/ci-749.md](../docs/design/ci-749.md)，作业在 `.github/workflows/ci.yml`。
 
-| 作业 | 普通 PR / main push |
-| --- | --- |
-| `plan` | 每次都跑。冻结选择，并决定后面哪些作业可以复用 |
-| `static` | 需求里始终有。检查是 `npm run lint`、`npx tsc -p . --noEmit`、`content:check --strict`、`check-source-presentation.mjs`、`content:validators --check`、`lint:layers --strict` |
-| `build` | 每次都跑，不可复用。`npm run build`，再加构建身份烟测（页脚版本与这次检出的提交） |
-| `browser-1` | 每次都跑，窄门禁下不可复用。对着这次构建，Chromium 单分片 |
-| `test` | 每次都跑。聚齐本次需求里的阶段；失败则不部署 |
-| `deploy` | 仅 `main` 的 push，且 `plan` 与 `test` 都成功 |
-| `unit`、`data`、`static-main` | 普通路径不纳入需求，作业会被跳过 |
-| `browser-2` 到 `browser-4` | 只在手动 full |
+| 作业                          | 普通 PR / main push                                                                                                                                                           |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plan`                        | 每次都跑。冻结选择，并决定后面哪些作业可以复用                                                                                                                                |
+| `static`                      | 需求里始终有。检查是 `npm run lint`、`npx tsc -p . --noEmit`、`content:check --strict`、`check-source-presentation.mjs`、`content:validators --check`、`lint:layers --strict` |
+| `build`                       | 每次都跑，不可复用。`npm run build`，再加构建身份烟测（页脚版本与这次检出的提交）                                                                                             |
+| `browser-1`                   | 每次都跑，窄门禁下不可复用。对着这次构建，Chromium 单分片                                                                                                                     |
+| `test`                        | 每次都跑。聚齐本次需求里的阶段；失败则不部署                                                                                                                                  |
+| `deploy`                      | 仅 `main` 的 push，且 `plan` 与 `test` 都成功                                                                                                                                 |
+| `unit`、`data`、`static-main` | 普通路径不纳入需求，作业会被跳过                                                                                                                                              |
+| `browser-2` 到 `browser-4`    | 只在手动 full                                                                                                                                                                 |
 
 窄冒烟固定为 `tests/e2e/smoke.spec.ts` 的 6 条：首页、`#civs`、`#/civ/Franks`、`#unit/569` 可打开且无控制台错误；Ctrl+K 搜索 `paladin`；法兰克圣骑士满科技生命值 192。缺一条，规划失败。构建身份是 `tests/e2e/ciBuild659.spec.ts` 里标题为 fresh build identity 的那一条。手动 full 才保留 24 条冷路由。
 
@@ -194,15 +194,15 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 
 2026-11-13 基线核查时只加了本文和 README 的一处索引；下表记录当时发现的差异及当前状态。现行验证以本文第 6 节、[ci-749](../docs/design/ci-749.md) 和 TESTING 文首为准。
 
-| 位置 | 当时写着的内容 | 状态 |
-| --- | --- | --- |
-| [README「部署」](../README.md) | 每次 push / PR 都跑 Vitest、Python、数据检查和整套 Playwright | 待维护。默认路径不是这套 |
-| [README 数据表](../README.md) | `.dat` 来自 auto-mods 提交 `0c38027` | 待维护。当前钉死的是 `data_sources.json` 的 `e293dc1…` |
-| [README 模块表](../README.md) | 163 个单位 | 待维护。当前 `units.json` 是 248 条，首页另走 `unitCount` |
-| [docs/RELEASING.md](../docs/RELEASING.md) 准备步骤第 2 点 | 高风险 PR 跑完整单测和四个浏览器 runner，窄范围保留四宽与主题 | 待维护。同文后面的默认门禁已是窄冒烟 |
-| [CONTRIBUTING 持续审阅](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) | 「CI 的路径分类继续有效」 | 待维护。同文验证投入和 `selectCiPlan` 已不让分类扩大默认门禁 |
-| [docs/CODEX-MAINTENANCE.md](../docs/CODEX-MAINTENANCE.md) 第 6 节 | 界面 PR 附 360 / 375 / 390 / 1280 截图 | 该文自己注明这不再是每 PR 门禁；条款还在 |
-| [.github/ISSUE_TEMPLATE/feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md) | 旧模板要求设计稿覆盖四宽度，PR 另附四宽截图 | 已按 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle) 改为同一正文的阶段区块；开发准备度在交接到软件开发时核验，不固定四宽 |
+| 位置                                                                                      | 当时写着的内容                                                | 状态                                                                                                                           |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| [README「部署」](../README.md)                                                            | 每次 push / PR 都跑 Vitest、Python、数据检查和整套 Playwright | 待维护。默认路径不是这套                                                                                                       |
+| [README 数据表](../README.md)                                                             | `.dat` 来自 auto-mods 提交 `0c38027`                          | 待维护。当前钉死的是 `data_sources.json` 的 `e293dc1…`                                                                         |
+| [README 模块表](../README.md)                                                             | 163 个单位                                                    | 待维护。当前 `units.json` 是 248 条，首页另走 `unitCount`                                                                      |
+| [docs/RELEASING.md](../docs/RELEASING.md) 准备步骤第 2 点                                 | 高风险 PR 跑完整单测和四个浏览器 runner，窄范围保留四宽与主题 | 待维护。同文后面的默认门禁已是窄冒烟                                                                                           |
+| [CONTRIBUTING 持续审阅](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25)                | 「CI 的路径分类继续有效」                                     | 待维护。同文验证投入和 `selectCiPlan` 已不让分类扩大默认门禁                                                                   |
+| [docs/MAINTENANCE.md](../docs/MAINTENANCE.md) 第 6 节                                     | 界面 PR 附 360 / 375 / 390 / 1280 截图                        | 该文自己注明这不再是每 PR 门禁；条款还在                                                                                       |
+| [.github/ISSUE_TEMPLATE/feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md) | 旧模板要求设计稿覆盖四宽度，PR 另附四宽截图                   | 已按 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle) 改为同一正文的阶段区块；开发准备度在交接到软件开发时核验，不固定四宽 |
 
 ## 10. 这次没核对完的点
 

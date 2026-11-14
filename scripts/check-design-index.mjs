@@ -10,13 +10,12 @@ import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const REQUIRED_ENTRIES = Object.freeze([
-  'chinese197.md',
-  'gurjaras197.md',
-  'mapuche197.md',
-  'mayans197.md',
-  'final-civs197.md',
+  'DESIGN-SYSTEM.md',
+  'ci-749.md',
   'mechanism-652/SPEC.md',
   'routes-652/SPEC.md',
+  'build-sim-source-478.md',
+  'build-mechanisms-478.md',
   'mockups/issue3-summary-2x2/range-390/',
 ]);
 export const FORBIDDEN_PHRASES = Object.freeze(['实现未做', '仍 OPEN', '不关 #584', '尚未出新稿']);

@@ -2,7 +2,7 @@
 
 > 作者：Jony Ive · 体验设计 · 2026-10-30（Asia/Shanghai）  
 > 依据：[#517](https://github.com/linhongcun/aoe2-analyzer/issues/517) 断点清单；产品范围：两条主路径，对阵优先；少开新站；不大改视觉。  
-> 用途：Steve 拆可交付子 issue；Codex 实现 S1 时不得自行发明产品决策。
+> 用途：产品拆分可交付子 Issue；实现者实施 S1 时不得自行发明产品决策。
 
 ---
 
@@ -26,23 +26,23 @@
 
 ```ts
 type SiteContext = {
-  meCiv: string;      // 文明 en，如 Mongols / Jurchens（必填于对阵路径）
-  oppCiv?: string;    // 对手文明 en；查文明单方路径可缺
-  bo?: string;        // 开局 id，对应 builds?bo=
-  unit?: string;      // 单位 id，对应 /unit/:id
+  meCiv: string; // 文明 en，如 Mongols / Jurchens（必填于对阵路径）
+  oppCiv?: string; // 对手文明 en；查文明单方路径可缺
+  bo?: string; // 开局 id，对应 builds?bo=
+  unit?: string; // 单位 id，对应 /unit/:id
   from?: 'matchup' | 'duel' | 'builds' | 'civ' | 'compare' | 'production' | 'players' | 'events';
 };
 ```
 
 **写入规则**：
 
-| 来源页 | 写入 |
-| --- | --- |
-| `#/matchup` | `meCiv` + `oppCiv`（URL 主源）；sticky `mu.a`/`mu.e` 仅无 query 时回退 |
-| `#/duel` | 从 `a=`/`b=` pack 解析双方 civ → 情境栏展示；回助手时带 `me`/`opp` |
-| `#/builds` | 保留 `civ=`；若带 `from=matchup` 且有 `opp=`，情境栏显示对手入口 |
-| `#/civ/:en` | `meCiv = :en`；进入对阵时预填 `me=` |
-| `#/unit/:id` | 若带 `civ=` 则文明名链回 `#/civ/{civ}`；保留 `me`/`opp`/`from` 供回程 |
+| 来源页       | 写入                                                                   |
+| ------------ | ---------------------------------------------------------------------- |
+| `#/matchup`  | `meCiv` + `oppCiv`（URL 主源）；sticky `mu.a`/`mu.e` 仅无 query 时回退 |
+| `#/duel`     | 从 `a=`/`b=` pack 解析双方 civ → 情境栏展示；回助手时带 `me`/`opp`     |
+| `#/builds`   | 保留 `civ=`；若带 `from=matchup` 且有 `opp=`，情境栏显示对手入口       |
+| `#/civ/:en`  | `meCiv = :en`；进入对阵时预填 `me=`                                    |
+| `#/unit/:id` | 若带 `civ=` 则文明名链回 `#/civ/{civ}`；保留 `me`/`opp`/`from` 供回程  |
 
 **不入库**：不引入全局 Context Provider 新架构；优先 query string + 现有 sticky 回退。实现细节留给工程，本规格只定「可见 URL 与链接必须带什么」。
 
@@ -52,22 +52,22 @@ type SiteContext = {
 
 ### 3.1 复用（不得改名）
 
-| 参数 | 现有用法 | 本规格 |
-| --- | --- | --- |
-| `civ=` | `#/builds?civ=Mongols` | 继续表示「当前开局/单方工具所属文明」 |
-| `bo=` | `#/builds?bo=…` | 不变 |
+| 参数        | 现有用法                       | 本规格                                    |
+| ----------- | ------------------------------ | ----------------------------------------- |
+| `civ=`      | `#/builds?civ=Mongols`         | 继续表示「当前开局/单方工具所属文明」     |
+| `bo=`       | `#/builds?bo=…`                | 不变                                      |
 | `a=` / `b=` | `#/duel?a=<unit.civ.age…>&b=…` | **仍只用于 PK 单位 pack**，不对局助手复用 |
-| `tab=` | 详情页标签（若已有） | 保留 |
+| `tab=`      | 详情页标签（若已有）           | 保留                                      |
 
 ### 3.2 新增：对局助手
 
 **采用**：`#/matchup?me=Mongols&opp=Chinese`
 
-| 候选 | 决定 | 理由 |
-| --- | --- | --- |
-| `?me=&opp=` | **采用** | 与 UI「我的文明 / 对手文明」一致；与 duel 的 `a`/`b`（单位 pack）不冲突 |
-| `?a=&b=` 文明名 | 不用 | 与 duel pack 同名异义，深链易混 |
-| `?civ=&vs=` | 不用 | `civ=` 在 builds 已是单方语义；对称对阵用 me/opp 更清晰 |
+| 候选            | 决定     | 理由                                                                    |
+| --------------- | -------- | ----------------------------------------------------------------------- |
+| `?me=&opp=`     | **采用** | 与 UI「我的文明 / 对手文明」一致；与 duel 的 `a`/`b`（单位 pack）不冲突 |
+| `?a=&b=` 文明名 | 不用     | 与 duel pack 同名异义，深链易混                                         |
+| `?civ=&vs=`     | 不用     | `civ=` 在 builds 已是单方语义；对称对阵用 me/opp 更清晰                 |
 
 **读写规则（S1 必须）**：
 
@@ -78,31 +78,31 @@ type SiteContext = {
 
 ### 3.3 文明对比 / 生产（S2）
 
-| 页 | 约定 |
-| --- | --- |
-| `#/compare` | `#/compare?a=Mongols&b=Chinese`（文明 en；对称工具用 a/b 可接受，因无 unit pack） |
-| `#/production` | `#/production?civ=Jurchens`（与 builds 对齐） |
+| 页             | 约定                                                                              |
+| -------------- | --------------------------------------------------------------------------------- |
+| `#/compare`    | `#/compare?a=Mongols&b=Chinese`（文明 en；对称工具用 a/b 可接受，因无 unit pack） |
+| `#/production` | `#/production?civ=Jurchens`（与 builds 对齐）                                     |
 
 从文明页进入时必须带上当前文明。
 
 ### 3.4 跨页透传速查
 
-| 从 → 到 | 目标 URL 形态 |
-| --- | --- |
-| matchup → duel | 已有深链保留；情境栏回程用 `#/matchup?me={me}&opp={opp}` |
-| matchup → 我方开局 | `#/builds?civ={me}&from=matchup&opp={opp}`（有默认 bo 则再加 `bo=`） |
-| matchup → 对手开局 | `#/builds?civ={opp}&from=matchup&me={me}`（`me`/`opp` 始终是原对阵双方；回程 `opp` 由 `civ` 还原，见 §5.3） |
-| matchup → 文明 | `#/civ/{me}` 或 `#/civ/{opp}` |
-| matchup → unit | `#/unit/{id}?civ={me}&from=matchup&me={me}&opp={opp}` |
-| civ → matchup | `#/matchup?me={en}`（`opp` 可缺，沿用 sticky 或占位提示选对手） |
-| civ → builds | `#/builds?civ={en}`（有推荐 bo 则加） |
-| civ → production | `#/production?civ={en}` |
-| civ → compare | `#/compare?a={en}`（b 缺省或 sticky） |
-| builds → civ | 文明名 → `#/civ/{civ}` |
-| builds「查看全部开局」 | `#/builds?civ={civ}`（**必须保留 civ=**；若当前无 civ 则不加） |
-| duel → matchup | `#/matchup?me={civFromA}&opp={civFromB}` |
-| duel → civ | `#/civ/{civ}` 双方各一链 |
-| duel → builds | `#/builds?civ={meCiv}&from=duel` |
+| 从 → 到                | 目标 URL 形态                                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- |
+| matchup → duel         | 已有深链保留；情境栏回程用 `#/matchup?me={me}&opp={opp}`                                                    |
+| matchup → 我方开局     | `#/builds?civ={me}&from=matchup&opp={opp}`（有默认 bo 则再加 `bo=`）                                        |
+| matchup → 对手开局     | `#/builds?civ={opp}&from=matchup&me={me}`（`me`/`opp` 始终是原对阵双方；回程 `opp` 由 `civ` 还原，见 §5.3） |
+| matchup → 文明         | `#/civ/{me}` 或 `#/civ/{opp}`                                                                               |
+| matchup → unit         | `#/unit/{id}?civ={me}&from=matchup&me={me}&opp={opp}`                                                       |
+| civ → matchup          | `#/matchup?me={en}`（`opp` 可缺，沿用 sticky 或占位提示选对手）                                             |
+| civ → builds           | `#/builds?civ={en}`（有推荐 bo 则加）                                                                       |
+| civ → production       | `#/production?civ={en}`                                                                                     |
+| civ → compare          | `#/compare?a={en}`（b 缺省或 sticky）                                                                       |
+| builds → civ           | 文明名 → `#/civ/{civ}`                                                                                      |
+| builds「查看全部开局」 | `#/builds?civ={civ}`（**必须保留 civ=**；若当前无 civ 则不加）                                              |
+| duel → matchup         | `#/matchup?me={civFromA}&opp={civFromB}`                                                                    |
+| duel → civ             | `#/civ/{civ}` 双方各一链                                                                                    |
+| duel → builds          | `#/builds?civ={meCiv}&from=duel`                                                                            |
 
 ---
 
@@ -170,49 +170,49 @@ flowchart LR
 
 ### 5.1 `#/matchup`（S1 核心）
 
-| 元素 | 规格 |
-| --- | --- |
-| 标题区 `h3` | `{我方zh}` / `{对手zh}` 各自为 `Link` → `#/civ/{en}`；中间「vs」纯文本。Lucide 可选 `swords` 装饰，非必须 |
-| URL | 见 §3.2；CivPicker onChange 写 `me`/`opp` |
+| 元素                         | 规格                                                                                                                                                                                                                                                                                                                                                       |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 标题区 `h3`                  | `{我方zh}` / `{对手zh}` 各自为 `Link` → `#/civ/{en}`；中间「vs」纯文本。Lucide 可选 `swords` 装饰，非必须                                                                                                                                                                                                                                                  |
+| URL                          | 见 §3.2；CivPicker onChange 写 `me`/`opp`                                                                                                                                                                                                                                                                                                                  |
 | 情境 chips（标题下、结果上） | 横向 wrap，类名建议 `ctx-chips`：①「单位 PK」→ 现有 rush/默认 duel 深链（保持现状逻辑，仅确保回程可还原 me/opp）②「我方开局」→ `#/builds?civ={me}&from=matchup&opp={opp}` ③「对手开局」→ `#/builds?civ={opp}&from=matchup&me={me}`（文案「对手开局」；若无该文明专用 bo，builds 页沿用「通用示意」disclaimer，**不在此填数据**）④「我方文明」⑤「对手文明」 |
-| 分享提示 | chips 旁 muted：`可复制地址栏链接分享这对阵` |
-| 推荐单位链 | `#/unit/{id}?civ={me}&from=matchup&me={me}&opp={opp}` |
-| 衍生工具（城堡/侦察/混兵等） | **S1 不强制**透传；S2+ 再带 `me`/`opp` 或注明「将丢失对局上下文」——见范围外 |
+| 分享提示                     | chips 旁 muted：`可复制地址栏链接分享这对阵`                                                                                                                                                                                                                                                                                                               |
+| 推荐单位链                   | `#/unit/{id}?civ={me}&from=matchup&me={me}&opp={opp}`                                                                                                                                                                                                                                                                                                      |
+| 衍生工具（城堡/侦察/混兵等） | **S1 不强制**透传；S2+ 再带 `me`/`opp` 或注明「将丢失对局上下文」——见范围外                                                                                                                                                                                                                                                                                |
 
 线框：`wire-matchup.html`。
 
 ### 5.2 `#/duel`（S1）
 
-| 元素 | 规格 |
-| --- | --- |
-| 情境栏位置 | `ListHead` 下、模式切换上；一条 `nav.ctx-bar` |
-| 回链 | Lucide `arrow-left` + 文案「回对局助手」→ `#/matchup?me={civA}&opp={civB}`（从 a/b pack 解析 civ；解析失败则链 `#/matchup` 无参） |
-| 双方文明 | 「{zhA}」「{zhB}」→ `#/civ/…` |
-| 开局 | 「{zhA} 开局」→ `#/builds?civ={civA}&from=duel`；「{zhB} 开局」同理 |
-| 面包屑 | 若全局面包屑仅「首页」，S1 不重做整条面包屑；以情境栏回链为准 |
+| 元素       | 规格                                                                                                                              |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 情境栏位置 | `ListHead` 下、模式切换上；一条 `nav.ctx-bar`                                                                                     |
+| 回链       | Lucide `arrow-left` + 文案「回对局助手」→ `#/matchup?me={civA}&opp={civB}`（从 a/b pack 解析 civ；解析失败则链 `#/matchup` 无参） |
+| 双方文明   | 「{zhA}」「{zhB}」→ `#/civ/…`                                                                                                     |
+| 开局       | 「{zhA} 开局」→ `#/builds?civ={civA}&from=duel`；「{zhB} 开局」同理                                                               |
+| 面包屑     | 若全局面包屑仅「首页」，S1 不重做整条面包屑；以情境栏回链为准                                                                     |
 
 线框：`wire-duel.html`。
 
 ### 5.3 `#/builds`（S1 对阵回程 + S2 查文明加固）
 
-| 元素 | 规格 |
-| --- | --- |
-| 当前文明名 | 改为 `Link` → `#/civ/{civ}`；无 civ 时不显示链接 |
+| 元素                                       | 规格                                                                                                                                                                                                          |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 当前文明名                                 | 改为 `Link` → `#/civ/{civ}`；无 civ 时不显示链接                                                                                                                                                              |
 | 情境栏（当 `from=matchup` 或同时有 `opp`） | 「回对局助手」→ `#/matchup?me={civ}&opp={opp}`（注意：若本页 `civ` 是对手，则 me/opp 按 query 还原：进入对手开局时 URL 为 `civ={opp}&from=matchup&me={原me}`，回程 `me` 取 query.`me`，`opp` 取 query.`civ`） |
-| 「查看全部开局」 | 目标必须带当前 `civ=`（若有） |
-| 通用示意 | 保持现有 disclaimer；**不扩开局库** |
+| 「查看全部开局」                           | 目标必须带当前 `civ=`（若有）                                                                                                                                                                                 |
+| 通用示意                                   | 保持现有 disclaimer；**不扩开局库**                                                                                                                                                                           |
 
 ### 5.4 `#/civ/:en`（S2）
 
 情境条（概览区顶部或现有「科技树 / 对比 / 助手」行升级为统一 strip）：
 
-| Chip 文案 | 目标 |
-| --- | --- |
-| 开局流程 | `#/builds?civ={en}` |
-| 生产对照 | `#/production?civ={en}` |
-| 对局助手 | `#/matchup?me={en}` |
-| 文明对比 | `#/compare?a={en}` |
-| 职业选手视角 | 保持现有入口 |
+| Chip 文案    | 目标                    |
+| ------------ | ----------------------- |
+| 开局流程     | `#/builds?civ={en}`     |
+| 生产对照     | `#/production?civ={en}` |
+| 对局助手     | `#/matchup?me={en}`     |
+| 文明对比     | `#/compare?a={en}`      |
+| 职业选手视角 | 保持现有入口            |
 
 线框：`wire-civ.html`。
 
@@ -265,13 +265,13 @@ flowchart LR
 
 ## 7. 状态
 
-| 状态 | 行为 |
-| --- | --- |
-| 缺 `me` 或 `opp` | matchup：回退 sticky；civ→matchup 仅 `me=` 时对手用 sticky，chips「对手开局」仍可用 |
-| 未知文明 id | 忽略该 query 键 + muted note「链接中的文明无效，已用上次选择」；不白屏 |
-| 无专用开局 / 通用示意 | builds 现有 disclaimer；chip 仍可进；**不编造 BO 数据** |
-| duel pack 缺 civ | 回助手链不加 me/opp；文明链接隐藏该项 |
-| 相同 me=opp | 允许（自我练习）；不特殊拦截 |
+| 状态                  | 行为                                                                                |
+| --------------------- | ----------------------------------------------------------------------------------- |
+| 缺 `me` 或 `opp`      | matchup：回退 sticky；civ→matchup 仅 `me=` 时对手用 sticky，chips「对手开局」仍可用 |
+| 未知文明 id           | 忽略该 query 键 + muted note「链接中的文明无效，已用上次选择」；不白屏              |
+| 无专用开局 / 通用示意 | builds 现有 disclaimer；chip 仍可进；**不编造 BO 数据**                             |
+| duel pack 缺 civ      | 回助手链不加 me/opp；文明链接隐藏该项                                               |
+| 相同 me=opp           | 允许（自我练习）；不特殊拦截                                                        |
 
 ---
 
@@ -325,7 +325,7 @@ flowchart LR
 
 ---
 
-## 11. 实现提示（给 Codex，非产品决策）
+## 11. 实现提示（非产品决策）
 
 - matchup 今日用 `useSticky('mu.a'|'mu.e', index)`；S1 改为 **query 优先，sticky 回退**，index↔en 映射沿用 `civs` 表。
 - duel 的 `a`/`b` pack 格式见 `src/features/duel/logic/state.ts`；情境栏只读解析 civ 段，不改 pack 协议。

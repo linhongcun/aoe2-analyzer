@@ -36,7 +36,7 @@ export {
 /**
  * M2 开局时间线模拟（纯函数、确定性：无随机数，固定 0.1 秒步长，同输入同输出）。
  * 输入：开局（M1 BuildOrder）+ 文明 + 参数；游戏数值全部来自 src/data/eco.json（DE .dat 导出）。
- * 输出字段与 #3 交互稿第 4 节草案对齐（BuildTimeline / TimelineStep / Anomaly），差异见 docs/BUILD-SIM.md。
+ * 输出契约为 BuildTimeline / TimelineStep / Anomaly；行为由本模块及其专项单测维护。
  */
 import type { Action, BuildOrder, Task } from './buildOrder';
 import { buildOrders as ALL_BOS } from '../data/buildOrders';

@@ -30,7 +30,7 @@
 - 不接实时官方天梯，不把主观 1–10 写成胜率。
 - 不编造游戏数值，先分清来源和版本。基础游戏值先追溯钉扎数据及其生成链；生成结果可能有导入错、语义错或版本错，不是绝对真理。与官方资料或客户端实测冲突时，记下版本、来源和差异再核实。不以记忆改值，也不用本站数据直接裁掉外部证据。主观评分、天梯快照、用户输入和模型输出各自声明来源与假设。本站未支持的效果要说出来，缺来源标「未核实」。
 
-站点主题的维护表述见 [CODEX-MAINTENANCE 第 1 节](../docs/CODEX-MAINTENANCE.md)。线上是 <https://linhongcun.github.io/aoe2-analyzer/>，路由是 hash，`#/…`。
+站点主题的维护表述见 [MAINTENANCE 第 1 节](../docs/MAINTENANCE.md)。线上是 <https://linhongcun.github.io/aoe2-analyzer/>，路由是 hash，`#/…`。
 
 接手先自己把上面三件事走完，系统掌握入口、功能怎么衔接、输入输出和限制、上下文带什么丢什么。不要等真的要用了再临时翻。第 7 节是这一轮的点击顺序。页面登记在 [pageRegistry.ts](../src/shared/nav/pageRegistry.ts)。首页和工具菜单共用同一套分组：新手入门、对局计划、经济计算、资料。新增可见页面先改登记表，不要另维护一份名单。
 
@@ -164,9 +164,9 @@
 - 独立复核由实现者之外完成，记下实际提交、范围、结果和未解决问题。见 [持续审阅授权](../CONTRIBUTING.md#维护者的持续审阅授权2026-10-25)。
 - 每份改动做必要冒烟，加上和这次 diff 直接相关的测试。纯布局不重跑无关计算或数据。报告分开写实际执行、CI 范围和未验证项。见 [TESTING](../docs/TESTING.md) 文首，以及 [验证投入](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
 - 不把四宽截图、先红用例写成每份 PR 的门禁。视口证据按第 5 节，按这次会坏的宽度准备。
-- 旧的双路并行不是现在的工作方式。一次一项，一项一个 PR。历史暂停和后来的单项授权以 CODEX-MAINTENANCE 的当前状态为准，不要从旧句恢复成自动双线。
+- 旧的双路并行不是现在的工作方式。一次一项，一项一个 PR。历史暂停和后来的单项授权以 MAINTENANCE 的当前状态为准，不要从旧句恢复成自动双线。
 
-设计索引旧版曾记录「视觉 PR 须在 15 分钟内回复」，现已明确该时限不是现行交接门槛。见 [设计交接](../docs/design/README.md#给-codex-的设计交接)，不要把旧时限捡回来当开工条件。CODEX-MAINTENANCE 第 6 节仍摘录四宽截图，但同文第 7 节写明那不是每 PR 的测试门禁；CONTRIBUTING 的版本工作流现已按改动影响选择视口，不设固定四宽要求。产品写新的验收时，以 TESTING 文首为准，不把四档矩阵写回「必须」。
+设计索引旧版曾记录「视觉 PR 须在 15 分钟内回复」，现已明确该时限不是现行交接门槛。见 [设计交接](../docs/design/README.md#设计交接)，不要把旧时限捡回来当开工条件。MAINTENANCE 第 6 节仍摘录四宽截图，但同文第 7 节写明那不是每 PR 的测试门禁；CONTRIBUTING 的版本工作流现已按改动影响选择视口，不设固定四宽要求。产品写新的验收时，以 TESTING 文首为准，不把四档矩阵写回「必须」。
 
 ## 5. 怎样验收
 
@@ -268,4 +268,4 @@
 
 ## 这份文档放在哪
 
-角色文档集中在 `role/`。设计交接在 [docs/design/README.md](../docs/design/README.md)，维护队列在 [CODEX-MAINTENANCE.md](../docs/CODEX-MAINTENANCE.md)，贡献和授权在 [CONTRIBUTING.md](../CONTRIBUTING.md)。产品判断方法不宜塞进设计索引或维护队列，所以单独放在 `role/product-management.md`。本文不建立目录索引，避免和别的角色文档抢同一份名单。
+角色文档集中在 `role/`。设计交接在 [docs/design/README.md](../docs/design/README.md)，维护队列在 [MAINTENANCE.md](../docs/MAINTENANCE.md)，贡献和授权在 [CONTRIBUTING.md](../CONTRIBUTING.md)。产品判断方法不宜塞进设计索引或维护队列，所以单独放在 `role/product-management.md`。本文不建立目录索引，避免和别的角色文档抢同一份名单。

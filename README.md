@@ -48,7 +48,7 @@
 | 科技/文明加成/团队加成的结构化效果（`src/data/effects.json`）                              | DE 原版 `empires2_x2_p1.dat`，来自 [SiegeEngineers/auto-mods](https://github.com/SiegeEngineers/auto-mods) 提交 `0c38027`，sha256 `4aa2f0a7…7baa` 固定 | `npm run effects`（`scripts/effects_build.py` + 审计 `scripts/effects_audit.ts`） |
 | 经济/开局数据（训练/建造/研究时间与费用、村民采集速率、文明经济效果，`src/data/eco.json`） | 同上                                                                                                                                                   | `npm run eco`（`scripts/eco_build.py`，对账见 `docs/ECO-DATA.md`）                |
 | 村民驻军数据（弹丸基数/上限、驻军贡献与相关科技，`src/data/garrison.json`）                | 同一固定 `.dat`；算法与范围见 [issue218 规格](docs/design/issue218-spec.md)                                                                            | `python3 scripts/garrison_build.py`（CI 使用 `--check` 校验可复现）               |
-| 开局库（`src/data/build-orders/*.json`）                                                   | 社区开局转写，逐个注明出处（见 [docs/BUILD-ORDERS.md](docs/BUILD-ORDERS.md)）                                                                          | `npm run bo:check`                                                                |
+| 开局库（`src/data/build-orders/*.json`）                                                   | 社区开局转写，逐个注明出处（[数据](src/data/build-orders/)；[验证](tests/unit/buildOrders.test.ts)）                                                   | `npm run bo:check`                                                                |
 | 基础数值对账（aoe2techtree vs .dat）                                                       | 同上                                                                                                                                                   | `npm run stats:check`                                                             |
 
 - 全部上游固定版本（仓库、提交、sha256、补丁号、日期）集中在 **`scripts/data_sources.json`**；站点页头徽章「数据版本：DE 188329（2026-10-28）」链接到 [关于数据](https://linhongcun.github.io/aoe2-analyzer/#/about-data) 页。
@@ -112,7 +112,7 @@ Age of Empires II © Microsoft Corporation. 本项目依据 Microsoft 的 [Game 
 - 界面图标只用 [Lucide](https://lucide.dev)（`<Icon name="..." />`，本地打包），禁止 emoji / Unicode 符号作图标；游戏美术图标不受此限。
 - 数值必须可溯源：效果来自 `.dat`，手工规则仅在 `.dat` 确实缺失时保留并在审计中列出。
 - 详见 [CONTRIBUTING.md](CONTRIBUTING.md)；AI 编码代理请先读 [AGENTS.md](AGENTS.md)。
-- Codex / 无人值守维护纪律：[docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)（一次一 issue、门禁；队列见「当前状态 / 2026-11-02」）。
+- 编码代理维护纪律：[docs/MAINTENANCE.md](docs/MAINTENANCE.md)（适用于各类编码代理；一次一 issue、门禁与跳过条件）。
 
 ## 第三方组件 / Third-party
 

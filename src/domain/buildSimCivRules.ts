@@ -3,14 +3,14 @@ import type { simScope } from './buildSimCoverage';
 import type { Mods } from './buildSimEffects';
 import { CONSTRUCTION_DATA } from '../data/construction';
 const TC = 109;
-/** tech453 / effect510，res267 add33.333302；公开Function12的 .01×267 语义与连续模型边界见 docs/design/portuguese197.md。 */
+/** tech453 / effect510，res267 add33.333302；Function12 的连续收入与离散触发边界见 FORAGER_WOOD_ASSUMPTION。 */
 export const RES_FORAGER_WOOD = 267;
 export const FORAGER_WOOD_NOTE = '采果兼产木材按连续收入估算';
 export const FORAGER_WOOD_ASSUMPTION =
   '采果兼产木材按采果有效食物收入的比例连续流入；共用采果的携带量和往返时间，不增加伐木走路。不模拟客户端逐笔到账、取整和走路期间的触发时序。';
 /** 额外收入以采果率为基数，不从食物库存余额或存放加成反推。 */
 export const foragerWoodIncome = (m: Mods, task: string, rate: number) => (task === 'berries' ? rate * m.foragerWood : 0);
-/** tech1071的502 set7配33 set16；百分比及连续近似边界见 docs/design/shu197.md。 */
+/** tech1071 的 502 set7 配 res33 set16；连续近似边界见 SHU_KNIGHT_TEMPLATE_NOTE 与 LUMBER_FOOD_ASSUMPTION。 */
 export const RES_LUMBER_FOOD = 502;
 export const LUMBER_FOOD_NOTE = '伐木兼产食物按连续收入估算';
 export const LUMBER_FOOD_ASSUMPTION =
@@ -19,7 +19,7 @@ export const SHU_KNIGHT_TEMPLATE_NOTE = '蜀不能训练骑士；骑士方案仅
 export const lumberFoodIncome = (m: Mods, task: string, rate: number) => (task === 'wood' ? rate * m.lumberFood : 0);
 export const hasLumberFoodContext = (row: { tech?: number; effects?: EffectRow['effects'] }) =>
   row.tech === 1071 && row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 16);
-/** tech594的276 add10配33 set11；公开百分比及连续近似边界见 docs/design/malians197.md。 */
+/** tech594 的 276 add10 配 res33 set11；本模型以连续采金收入近似。 */
 export const RES_GOLD_PRODUCTIVITY = 276;
 export const MALIAN_GOLD_NOTE = '采金交仓额外黄金按连续收入估算';
 export const MALIAN_GOLD_ASSUMPTION =
@@ -28,7 +28,7 @@ export const hasMalianGoldContext = (row: { source?: string; tech?: number; effe
   row.source === 'bonus' &&
   row.tech === 594 &&
   row.effects?.some((effect) => effect.kind === 'res' && effect.res === 33 && effect.op === 'set' && effect.v === 11);
-/** tech1475的298 set10.01配33 set34；固定公开百分比及连续近似边界见docs/design/varangians197.md。 */
+/** tech1475 的 298 set10.01 配 res33 set34；模型的连续收入与逐笔到账边界见 VARANGIAN_GOLD_ASSUMPTION。 */
 export const RES_WILD_FOOD_GOLD = 298;
 export const VARANGIAN_GOLD_NOTE = '牧羊、狩猎和捕鱼兼产黄金按连续收入估算';
 export const VARANGIAN_GOLD_ASSUMPTION =

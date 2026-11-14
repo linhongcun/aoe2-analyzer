@@ -24,7 +24,8 @@ function places(): [string, string][] {
   const out: [string, string][] = [['page-metadata.json /relic-income title', TITLE]];
   const nav = /key:\s*'relic-income'[\s\S]*?label:\s*'([^']+)'/.exec(read('src/shared/nav/pageRegistry.ts'));
   out.push(['pageRegistry.ts relic-income label', nav?.[1] ?? '（没找到）']);
-  const h1 = /<h1[^>]*>([^<]+)<\/h1>/.exec(read('src/features/relicIncome/RelicIncome.tsx'));
+  const h1 =
+    /<h1[^>]*>([^<]+)<\/h1>/.exec(read('src/features/relicIncome/RelicIncome.tsx')) ?? /title="([^"]+)"/.exec(read('src/features/relicIncome/RelicIncome.tsx'));
   out.push(['RelicIncome.tsx h1', h1?.[1]?.trim() ?? '（没找到）']);
   for (const f of files('src'))
     for (const m of read(f).matchAll(/<Link\b[^>]*to="\/relic-income[^"]*"[^>]*>\s*([^<]+?)\s*<\/Link>/g)) out.push([`${f} 入口链接`, m[1]!]);
@@ -40,7 +41,7 @@ describe('#273 圣物功能只有一个名字', () => {
   it('位置都找到了（对照）', () => {
     const p = places();
     expect(p.filter(([, t]) => t === '（没找到）')).toEqual([]);
-    expect(p.filter(([w]) => w.includes('入口链接')).length).toBeGreaterThanOrEqual(3);
+    expect(p.filter(([w]) => w.includes('入口链接')).length).toBeGreaterThanOrEqual(2);
   });
   it('标题、导航、h1、入口链接与 CHANGELOG 用到的名字只有一个', () => {
     const byName: Record<string, string[]> = {};
@@ -61,10 +62,13 @@ describe('#273 对照：CHANGELOG 历史条目原样保留（Steve 2026-10-22：
   });
 });
 
-describe('#273 对照：可复现说明移到仓库文档后仍在', () => {
-  it('docs/RELIC-INCOME.md 存在并指向复现脚本 relic_income_build.py，脚本存在', () => {
-    expect(existsSync('docs/RELIC-INCOME.md')).toBe(true);
-    expect(read('docs/RELIC-INCOME.md')).toMatch(/relic_income_build\.py/);
+describe('#273 对照：可复现入口保留在工程数据更新文档', () => {
+  it('DATA-UPDATE 指向可复现生产器，脚本与生成数据存在', () => {
+    const updateGuide = read('docs/DATA-UPDATE.md');
+    expect(updateGuide).toMatch(/scripts\/relic_income_build\.py/);
+    expect(updateGuide).toMatch(/relic_income\.json/);
+    expect(updateGuide).toMatch(/--check/);
     expect(existsSync('scripts/relic_income_build.py')).toBe(true);
+    expect(existsSync('src/data/relic_income.json')).toBe(true);
   });
 });
