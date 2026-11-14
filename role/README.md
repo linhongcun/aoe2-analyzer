@@ -10,3 +10,5 @@
 | [product-operations.md](product-operations.md) | 产品运营：信息能否找到、操作是否顺、结果能否看懂 |
 
 范围和授权仍以仓库根目录的 [CONTRIBUTING.md](../CONTRIBUTING.md#角色) 为准。视觉规格仍在 [docs/design/README.md](../docs/design/README.md)。
+
+所有角色按同一 Issue 正文依序交接；阶段、正文结构、授权、认领和终态以 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 为唯一流程规范。角色文档提供可复用的职责知识，不作为单个 Issue 的状态记录。

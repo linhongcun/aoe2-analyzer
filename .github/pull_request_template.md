@@ -1,10 +1,12 @@
 ## 目标分支
 
-<!-- 当前版本分支 release/vX.Y.Z；线上数据热修写 main -->
+<!-- 普通已授权更新默认直接进入 main；仅多项冻结集成时使用 release/vX.Y.Z。 -->
 
 ## 关联 issue
 
-Fixes #
+Relates #
+
+<!-- 网站实现默认 Relates #N；仅合入即完成、无需网站发布的纯仓库文档交付使用 Fixes #N。 -->
 
 ## 改动内容
 

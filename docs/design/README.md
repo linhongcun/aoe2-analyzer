@@ -4,9 +4,9 @@
 
 ## 给 Codex 的设计交接
 
-改界面前先读本索引、[DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)、该 issue 的短稿目录。各短稿目录内如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 [mockups/issue24-v3/ERRATA.md](mockups/issue24-v3/ERRATA.md)。
+改界面前先读同一 Issue 正文的当前需求与“体验设计”规格、本索引和 [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)。正文是单项决定、当前规格和交接记录的主来源；真实视觉材料或必要的复杂/可复用规格可由正文链接到本目录。链接到短稿目录时，如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 [mockups/issue24-v3/ERRATA.md](mockups/issue24-v3/ERRATA.md)。阶段、认领、授权和交接规则见 [CONTRIBUTING「Issue 生命周期」](../../CONTRIBUTING.md#issue-lifecycle)。
 
-- **挂靠**：UI 改动须挂 `docs/design/<topic>/` 规格，或 issue 内可测规格。没有则跳过，或先补规格。只实现已挂到 issue、且产品已定稿或 Steve 已写「设计通过」的短稿。不自创版式，不扩范围。
+- **挂靠**：UI 当前规格和决定写在原 Issue 正文“体验设计”节；真实视觉材料或必要的复杂/可复用规格可附加或链接 `docs/design/<topic>/`。不为阶段变化新建设计/实施 Issue 或 per-issue 文档。没有可执行的已授权范围则留在当前阶段补齐，不自创版式、不扩范围。设计通过不等于实现授权。
 - **硬规则**：方向 C（浅色编辑风）。界面图标只用 Lucide，经 `src/shared/ui/Icon.tsx` 登记，不用 emoji。游戏素材用 `public/img/` 原版图标。颜色只用 `src/shared/styles/tokens.css`。数字和「数字+单位」用 `.num` / `.nw`。中文 UI。PC-first（以 1280 为准），不为窄屏过度打磨。按本次改动影响选择必要视口和界面证据，如实标明覆盖，不固定四宽。
 - **角色**：Steve 定范围和「设计通过」。Jony 负责好用与美观；评审视觉方向时给界面图，不以文字或线框代替，只看本次相关显示。旧组件功能可以有理由取舍。Codex 实现。视觉 PR 须在 15 分钟内回复「我在看」「视觉 N/A」「ETA」或「通过」。产品、运营和视觉职责见 [CONTRIBUTING「角色」](../../CONTRIBUTING.md#角色)。
 - **短稿**：目录通常有 `*.md`（验收、不要做）和 1280 线框或截图。实现 PR 对照 §AC，按本次改动影响选择必要视口和界面证据，如实标明覆盖，不固定四宽。
