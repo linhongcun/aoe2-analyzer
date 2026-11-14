@@ -11,4 +11,4 @@
 
 范围和授权仍以仓库根目录的 [CONTRIBUTING.md](../CONTRIBUTING.md#角色) 为准。全站文档路径见 [docs/README.md](../docs/README.md)，当前设计原则见 [docs/design/DESIGN-SYSTEM.md](../docs/design/DESIGN-SYSTEM.md)。
 
-所有角色按同一 Issue 正文依序交接；阶段、正文结构、授权、认领和终态以 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 为唯一流程规范。角色文档提供可复用的职责知识，不作为单个 Issue 的状态记录。
+所有角色按同一 Issue 正文依序交接；阶段、正文结构、授权、认领和终态以 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle) 为唯一流程规范。不同 Issue 的分支并行处理/开发及合并发布顺序见 [CONTRIBUTING「按事项并行、合并发布串行」](../CONTRIBUTING.md#按事项并行合并发布串行)。角色文档提供可复用的职责知识，不作为单个 Issue 的状态记录。
