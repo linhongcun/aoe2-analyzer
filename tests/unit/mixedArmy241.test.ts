@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadCore, loadTrees } from '../../src/data';
-import { GENERAL_GARRISON_DATA } from '../../src/domain/garrisonGeneral';
+import { GARRISON_TECH_DATA } from '../../src/domain/garrisonTechs';
 import type { ProductionContext } from '../../src/domain/production';
 import {
   MIXED_ARMY_CONTENT,
@@ -152,7 +152,7 @@ describe('#241 honest unit prerequisites', () => {
     expect(prereq({ unitId: 492, completedForms: [492], completedBuildings: [87] }).status).toBe('conditions-met');
   });
   it('does not AND all candidate upgrade technologies or infer a research chain from them', () => {
-    expect(GENERAL_GARRISON_DATA.unitUpgradeTechs?.[567]?.length).toBeGreaterThan(1);
+    expect(GARRISON_TECH_DATA.unitUpgradeTechs?.[567]?.length).toBeGreaterThan(1);
     expect(prereq({ civ: 'Britons', unitId: 567, completedForms: [567], completedBuildings: [12] }).status).toBe('conditions-met');
   });
   it('audits the finite shape index and pauses unsupported special/pool-external units', () => {

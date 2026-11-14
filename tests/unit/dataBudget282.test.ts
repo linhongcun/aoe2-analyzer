@@ -48,8 +48,10 @@ describe('#282 compact calculation inputs', () => {
   it('ships only consumed garrison unit/catalog fields', () => {
     for (const unit of Object.values(garrison.units)) {
       for (const key of ['name', 'languageId', 'minRange', 'resourceCapacity']) expect(unit).not.toHaveProperty(key);
-      expect(unit.catalog).not.toHaveProperty('en');
-      expect(unit.catalog).not.toHaveProperty('zh');
+      if ('catalog' in unit) {
+        expect(unit.catalog).not.toHaveProperty('en');
+        expect(unit.catalog).not.toHaveProperty('zh');
+      }
     }
   });
   it('preserves every runtime garrison payload from main cca7e56 under historical provenance', () => {
