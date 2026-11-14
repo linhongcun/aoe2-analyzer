@@ -86,11 +86,11 @@ npm run test:py      # Python 测试：补丁号识别、差异摘要、标记�
 
 ## 部署 / Deploy
 
-**GitHub Actions 自动部署**（`.github/workflows/ci.yml`），Pages 源为 GitHub Actions：
+GitHub Actions 根据 `.github/workflows/ci.yml` 中的计划选择验证阶段。普通 PR/push 的默认门禁为 static、build 与窄范围 Playwright 冒烟；unit、data、其他浏览器范围按计划条件运行或复用可信证据。不是每个 PR 都运行完整 Vitest、Python 与数据再生成。确切的默认范围、手动 full 与部署条件见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)。
 
-- push / PR 到 `main`：安装 → ESLint → `tsc` 类型检查 → Vitest → Python 测试 → 数据检查（`.dat` sha256 + 补丁标记；`.dat` 与 genieutils 环境按 `data_sources.json` 哈希缓存；并校验 `effects.json` 可由固定 `.dat` 原样复现）→ 构建 → Playwright（chromium）冒烟。
-- 仅当以上全部通过且为 push 到 `main` 时，`deploy` 作业用 `actions/deploy-pages` 发布 `dist/`。PR 只测试不部署。
-- 线上验证：`BASE_URL=https://linhongcun.github.io/aoe2-analyzer/ npm run e2e`。
+只有 push 到 `main` 且计划与聚合检查成功时，`deploy` 才通过 `actions/deploy-pages` 发布；PR 不部署。线上手动验证命令和限制见 [RELEASING](docs/RELEASING.md)。
+
+全站文档与数据来源入口见[文档索引](docs/README.md)。
 
 ## 数据与素材来源 / Credits
 

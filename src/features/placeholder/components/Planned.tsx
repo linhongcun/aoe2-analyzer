@@ -12,7 +12,7 @@ export default function Planned() {
       <div className="posbox">
         <h3>{s && <Icon name={s.icon} />} 该模块规划中</h3>
         <p>{s?.desc}</p>
-        <p className="note">详见 docs/IA-REDESIGN.md 的扩展位设计。</p>
+        <p className="note">详见 docs/ARCHITECTURE.md 的路由、导航与元数据说明。</p>
       </div>
     </section>
   );
