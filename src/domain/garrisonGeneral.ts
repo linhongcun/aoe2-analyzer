@@ -1,6 +1,6 @@
 /** Issue 224: building capacity, entry compatibility and a documented projectile model. Coverage: ./garrisonCoverage.ts. */
 import raw from '../data/garrison_general.json';
-import { freeGarrisonTechs, implicitShapeTechs } from './garrisonTechs';
+import { freeGarrisonTechs, GARRISON_TECH_DATA, implicitShapeTechs } from './garrisonTechs';
 import { DATA_PATCH_BUILD } from '../data/meta';
 import hostIds from '../data/garrison_hosts.json';
 import type { Core } from '../data';
@@ -373,7 +373,7 @@ export function getGarrisonTechs(ctx: GeneralGarrisonContext, b: Building, confi
     const unit = data.units[id];
     if (unit?.secondaryProjectile && unit.secondaryProjectile >= 0) targets.add(unit.secondaryProjectile);
   }
-  const shapeUpgrades = new Set(Object.values(data.unitUpgradeTechs ?? {}).flat());
+  const shapeUpgrades = new Set(Object.values(GARRISON_TECH_DATA.unitUpgradeTechs ?? {}).flat());
   return availableTechs(ctx, config, data).filter(
     (t) =>
       !shapeUpgrades.has(t.id) &&

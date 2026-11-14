@@ -1,7 +1,7 @@
 /** Issue 243: explicit shared agreements, never a team score or automatic readiness claim. */
 import content from '../content/team-plan.json';
 import { DATA_SOURCES } from '../data/sources';
-import shapes from '../data/garrison_general.json';
+import { GARRISON_TECH_DATA } from './garrisonTechs';
 import { civs } from '../data';
 import { DATA_PATCH_BUILD } from '../data/meta';
 import { reviewedTeachingContent188329, TEACHING_COMPATIBILITY_188329 } from '../data/teachingCompatibility188329';
@@ -323,7 +323,7 @@ export interface ForceCheck {
   missingUnlockTechIds: number[];
   missingBuildingIds: number[];
 }
-const shapeIndex = shapes.unitUpgradeTechs as Record<string, number[]>;
+const shapeIndex = GARRISON_TECH_DATA.unitUpgradeTechs as Record<string, number[]>;
 export function requiredPlanUnlocks(unitId: number): number[] {
   return content.unlockRequirements.filter((r) => r.units.includes(unitId)).flatMap((r) => r.techs);
 }

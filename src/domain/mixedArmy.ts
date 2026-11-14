@@ -5,7 +5,7 @@ import units from '../data/raw/units';
 import techs from '../data/raw/techs';
 import buildings from '../data/raw/buildings';
 import { civs } from '../data';
-import { GENERAL_GARRISON_DATA } from './garrisonGeneral';
+import { GARRISON_TECH_DATA } from './garrisonTechs';
 import { productionBuildings, productionTechAge, productionTechs, type ProductionContext } from './production';
 
 // Keep the reviewed prose intact; finite execution metadata is maintained by the same IDs.
@@ -250,7 +250,7 @@ function potentialBuildings(ctx: ProductionContext, civ: string, age: number, un
 }
 export function mixedFormNeedsConfirmation(ctx: ProductionContext, unitId: number): boolean {
   const unit = ctx.core.unitById[unitId];
-  return !!unit?.from_ && !!GENERAL_GARRISON_DATA.unitUpgradeTechs?.[unitId]?.length;
+  return !!unit?.from_ && !!GARRISON_TECH_DATA.unitUpgradeTechs?.[unitId]?.length;
 }
 function descendsFrom(ctx: ProductionContext, descendant: number, ancestor: number): boolean {
   const visited = new Set<number>();
