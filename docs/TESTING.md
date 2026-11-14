@@ -4,7 +4,7 @@
 
 **2026-11-10（优先于下文，以及 AGENTS / CONTRIBUTING / MAINTENANCE 里冲突的测试门禁）**：Kent 只确认这次改动的功能是否正常。本站仅自己使用，历史包袱小，允许重构并接受回归。旧布局、旧入口、旧链接协议、重复功能不必兼容；有意合并、替代或删除不算 bug。每份 PR 只做必要冒烟，加上与本次 diff 直接相关的测试。纯布局不重跑无关计算或数据测试。不把全站、全尺寸、全主题矩阵设为每 PR 门禁。改到计算或数据时，只核对该改动的正确性。报告分开写实际执行、CI 实际范围、未验证项；没跑的不要写成通过。
 
-默认 CI 配置不因本文改变，仍是 [#749](design/ci-749.md) 的 static、真实 SHA 构建和 Chromium 单分片窄冒烟。设计文档里的宽度或截图要求不自动变成测试门禁。
+CI 的当前执行范围以本节和仓库工作流为准。设计文档里的宽度或截图要求不自动变成测试门禁。
 
 ## 1. 测试放哪
 
@@ -115,9 +115,9 @@ Kent 只确认这次改动的功能是否正常，用与 diff 直接相关的 Vi
 
 2026-11-10 的每 PR 义务只有：必要冒烟，加上与本次 diff 直接相关的测试。纯布局不跑无关单测、数据再生成或 Python 数据测试。计算或数据只跑能核对这次结果的测试。全站、四宽、明暗、axe、完整单测和 data 不是每 PR 门禁，也不是普通 PR 的合并条件。
 
-**默认 CI 仍是 [#749](design/ci-749.md)（2026-11-08），本文不改工作流。** 普通 PR 与 main push 只跑 `static`、`build`（构建身份）和 Chromium 单分片窄冒烟，main 在聚合成功后才上传 `deployed-site` 并部署。多分片、24 路由、axe、四宽、单测和 data 只在手动 `workflow_dispatch` 且 `full=true` 时跑，不部署。日更 schedule 已关。`planChanges` 的 `maintenance` / `civ-ui` / `targeted` / `full` 不再决定 PR 必须跑什么。下表只供手动 full 或本地排查对照。
+普通 PR 与 main push 的实际门禁由工作流执行；当前范围为 static、真实 SHA 构建和 Chromium 单分片窄冒烟，main 聚合成功后才上传 deployed-site 并部署。多分片、24 路由、axe、全量单测和 data 属于手动 full，不是默认部署门槛。下表只供手动 full 或本地排查对照。
 
-#431 的「小改动不等长回归」仍然有效。#659 的闭包和实验记录见 [ci-659.md](design/ci-659.md)，不把其中的完整浏览器写成每 PR 门禁。
+#431 的「小改动不等长回归」仍然有效。#659 的历史冻结规格与实验记录见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-659.md)；当前执行范围以本节和工作流为准。
 
 `scripts/ci-scope.mjs` 仍会生成 `scope`、`features`、`unit`、`e2e`、`data`、`full` 与浏览器计划；`ci-stage.mjs` 在手动 full 时冻结精确检查 ID、文件和 case 集合。手动 full 若声称跑了完整范围，须有真实执行证明，不能用空列表或文件请求列表代替。这不是每 PR 要跑 full。
 
@@ -204,7 +204,7 @@ npx playwright test tests/e2e/searchLoading371.spec.ts tests/e2e/aliases.spec.ts
 
 `npm run content:check` 从文件系统发现 `src/content`、`src/data` 中的全部 JSON（排除 schema 目录），按登记的明确结构检查，默认列出告警。`--strict` 对所有问题返回非零；#442 清理完全部 22 处旧来源展示后，CI 使用 `--strict`，当前 46 份原始输入必须零告警、零错误。
 
-`scripts/content-baseline.mjs` 现在仅导出空冻结清单，不能再新增迁移豁免；兼容的 `--ratchet` 与严格模式具有相同阻断效果。开局与入门的原始来源证据保留，页面读取共享公开投影；独立 `node scripts/check-source-presentation.mjs` 再验证这 9 份输入对应的公开 DTO，拒绝内部定位、伪造或不一致的 pin、未知字段和坏链接。原编译器、登记表、公开格式 policy 与五个运行时边界保持不变。边界与归属规则见 [公开来源规格](design/source-presentation-442.md)，初始迁移过程见 [#285 规格](design/issue285-json-validation.md)。
+`scripts/content-baseline.mjs` 现在仅导出空冻结清单，不能再新增迁移豁免；兼容的 `--ratchet` 与严格模式具有相同阻断效果。开局与入门的原始来源证据保留，页面读取共享公开投影；独立 `node scripts/check-source-presentation.mjs` 再验证这 9 份输入对应的公开 DTO，拒绝内部定位、伪造或不一致的 pin、未知字段和坏链接。原编译器、登记表、公开格式 policy 与五个运行时边界保持不变。历史边界与初始迁移记录见[来源规格](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/source-presentation-442.md)和[#285 原始规格](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/issue285-json-validation.md)。
 
 来源 UI 的检查笔记仍限定在两类页面、纯公开投影、独立 checker 和四份来源 schema。这些变化不自动变成每 PR 的 full 或 data。改到原始数据时只核对这次正确性。规则及反例由 `sourcePresentationScope442` 验证。
 
@@ -214,4 +214,4 @@ npx playwright test tests/e2e/searchLoading371.spec.ts tests/e2e/aliases.spec.ts
 
 `duel` 的旧笔记覆盖标题、URL、伤害、时代、回放、升级、费用和盈亏平衡。仅 `src/shared/ui/sim/SimPanel.tsx` 和 `src/shared/ui/RealCost.tsx` 两个展示文件使用已核消费者的 Duel、单位、建筑联合范围；直接消费者新增时，`headingScope364` 会要求重新核对范围。其他 shared 文件、核心 domain 算式、全局 CSS 不因此要求每 PR 跑完整检查。算式或数据有改动时只核对该结果。
 
-Duel 局部 CSS 的选择器审计、#442 的 schema 检查，以及 184 对视觉守恒工具，都不是每 PR 门禁。说明见 [验证工具](design/duel-heading-364-visual/README.md)。
+Duel 局部 CSS 的选择器审计、#442 的 schema 检查，以及 184 对视觉守恒工具，都不是每 PR 门禁。历史审计见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/duel-heading-364-visual/README.md)。

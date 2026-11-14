@@ -166,7 +166,7 @@
 - 不把四宽截图、先红用例写成每份 PR 的门禁。视口证据按第 5 节，按这次会坏的宽度准备。
 - 旧的双路并行不是现在的工作方式。一次一项，一项一个 PR。历史暂停和后来的单项授权以 MAINTENANCE 的当前状态为准，不要从旧句恢复成自动双线。
 
-设计索引旧版曾记录「视觉 PR 须在 15 分钟内回复」，现已明确该时限不是现行交接门槛。见 [设计交接](../docs/design/README.md#设计交接)，不要把旧时限捡回来当开工条件。MAINTENANCE 第 6 节仍摘录四宽截图，但同文第 7 节写明那不是每 PR 的测试门禁；CONTRIBUTING 的版本工作流现已按改动影响选择视口，不设固定四宽要求。产品写新的验收时，以 TESTING 文首为准，不把四档矩阵写回「必须」。
+旧设计索引曾记录「视觉 PR 须在 15 分钟内回复」；这只是历史记录，不是现行交接门槛。可查[基线索引原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/README.md)。当前交付按 [CONTRIBUTING](../CONTRIBUTING.md#issue-lifecycle) 在原 Issue 正文交接；视口检查按改动影响选择，不设固定矩阵。
 
 ## 5. 怎样验收
 

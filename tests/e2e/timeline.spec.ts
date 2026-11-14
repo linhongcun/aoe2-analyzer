@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 /**
  * #3 M3 时间线界面：端到端验收（PR #21 骨架 → M3 草稿 PR 逐条启用）。
- * 依据：docs/design/issue3-timeline-spec.md v1.0/v1.1 + #6 时间线视觉说明。
+ * 依据：https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/issue3-timeline-spec.md v1.0/v1.1 + #6 时间线视觉说明。
  * 数字一律来自 buildSim（simulateBuild），用例只断言结构与相对关系，不写死秒数。
  * 仍为 fixme 的用例都写明了原因。
  */

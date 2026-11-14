@@ -1,4 +1,4 @@
-/** #25 PK 盈亏平衡点（v3 样稿 docs/design/mockups/issue25-v3/）。只负责展示，计算见 domain/breakEven.ts */
+/** #25 PK 盈亏平衡点（v3 样稿：https://github.com/linhongcun/aoe2-analyzer/tree/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/mockups/issue25-v3/）。只负责展示，计算见 domain/breakEven.ts */
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { breakEven, BREAK_EVEN_CAP, type BreakEvenResult } from '../../../domain/breakEven';

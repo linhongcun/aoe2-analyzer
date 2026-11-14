@@ -1,5 +1,5 @@
 // #545 失败验收（路径 2）。不实现页面。当前 main 仍露出五档空 Elo 芯片和「分段胜率」，这些用例应红，直到实现 PR。
-// 规格：docs/design/ladder-545/ladder-545.md §6。只覆盖当前快照「仅 all 有文明」能核对的视觉 AC。不做 360×主题矩阵。
+// 规格：https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ladder-545/ladder-545.md §6。只覆盖当前快照「仅 all 有文明」能核对的视觉 AC。不做 360×主题矩阵。
 // 快照一旦给其它 key 写入非空 civs，本文件会在收集阶段直接失败：那时应改测 radiogroup 回归，不要沿用只读 pill。不造这份数据。
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';

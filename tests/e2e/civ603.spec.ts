@@ -1,5 +1,5 @@
 // #603 失败验收。只编码文明详情概览主栏的编辑式分区，不实现界面。
-// 对照设计短稿 docs/design/civ-overview-603/（PR #615，main 046a0ac）。
+// 对照设计短稿：https://github.com/linhongcun/aoe2-analyzer/tree/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/civ-overview-603/（PR #615，main 046a0ac）。
 // 当前概览仍是连续段落：开局说明铺满、优势/劣势是加粗顿号整行。本文件应红，直到 #603 落地。
 // 不关 #603。不改 src/、不改 tests/**/v0*-acceptance*、不改评分口径和加成原文。
 //

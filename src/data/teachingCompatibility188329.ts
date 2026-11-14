@@ -9,7 +9,7 @@ export const TEACHING_COMPATIBILITY_188329 = {
   approvedPatch: 188329,
   reviewedAt: '2026-10-29',
   baselineCommit: '7f3521c2',
-  evidence: 'docs/design/teaching-compatibility-486.md',
+  evidence: 'https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/teaching-compatibility-486.md',
   // Baseline teaching facts remain unchanged; eco additionally records the source-only metadata audit below.
   audit: {
     units: '416854add45339048fc7aa19a6b76efa275a62d140f45dbc6f6345cb4ca295b4',

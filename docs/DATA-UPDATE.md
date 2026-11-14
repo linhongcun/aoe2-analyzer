@@ -1,5 +1,7 @@
 # 补丁数据更新流程
 
+开局模拟来源摘要、历史 pin 和 64 KiB 限额见[可复现来源说明](data/BUILD-SIM-SOURCES.md)。
+
 单一入口是本地脚本。只改 `scripts/data_sources.json` 的 pin，不要手改生成 JSON。覆盖清单是 `scripts/data_update_coverage.json`，检查命令是 `python3 scripts/data_update_coverage.py`。检查只读源码，不跑生成器，不下载 `.dat`，不更新 pin。
 
 ## 独立数据生产器

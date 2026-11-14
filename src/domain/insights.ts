@@ -1,6 +1,6 @@
 /**
  * issue 584 「鲜为人知」短句。按单位 id / 文明英文名挂到对应页，两条路由不复制同一条。
- * 数字与单位在渲染时包进 .num / .nw。文案门禁见 docs/design/insights-584/insights-584.md。
+ * 数字与单位在渲染时包进 .num / .nw。文案门禁原件：https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/insights-584/insights-584.md。
  */
 
 /** 规格里的范围箭头（6→9）。用模板字符串，避免被当成图标字面量。 */

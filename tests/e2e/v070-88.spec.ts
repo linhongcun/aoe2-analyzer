@@ -1,4 +1,4 @@
-// v0.7.0 #88 等采集时间（Kent 草稿 #120 issuecomment-6157773161；设计稿 docs/design/mockups/issue88-real-cost）
+// v0.7.0 #88 等采集时间（Kent 草稿 #120 issuecomment-6157773161；设计稿 https://github.com/linhongcun/aoe2-analyzer/tree/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/mockups/issue88-real-cost）
 // 手算值来自 Kent 草稿，#127（0.5 取整）合并后 Kent 复核不变。
 import { expect, test, type Page } from '@playwright/test';
 

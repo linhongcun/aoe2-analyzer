@@ -138,7 +138,7 @@ npm run build && npx playwright test tests/e2e/<本次相关>.spec.ts --reporter
 
 没设 `BASE_URL` 时，Playwright 自己起 `vite preview --port 4173 --strictPort`，读的是已有 `dist/`，所以要先 `npm run build`。设了 `BASE_URL` 就不再起服务。
 
-**当前默认 CI**（普通 `pull_request` 和 `push`，含 `main`）由 `scripts/ci-scope.mjs` 的 `selectCiPlan` 固定成窄门禁。`planChanges` 仍能在本地看出旧的风险分类，但 CI 入口不会因此把 PR 扩成 full。规格在 [docs/design/ci-749.md](../docs/design/ci-749.md)，作业在 `.github/workflows/ci.yml`。
+**当前默认 CI**（普通 `pull_request` 和 `push`，含 `main`）由 `scripts/ci-scope.mjs` 的 `selectCiPlan` 固定成窄门禁。`planChanges` 仍能在本地看出旧的风险分类，但 CI 入口不会因此把 PR 扩成 full。规格在 [docs/design/ci-749.md](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-749.md)，作业在 `.github/workflows/ci.yml`。
 
 | 作业                          | 普通 PR / main push                                                                                                                                                           |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -192,7 +192,7 @@ e2e 权重在 `scripts/ci-browser-weights.json`。`npm run lint` 会跑 `lint:br
 
 ## 9. 旧文档口径与当前状态
 
-2026-11-13 基线核查时只加了本文和 README 的一处索引；下表记录当时发现的差异及当前状态。现行验证以本文第 6 节、[ci-749](../docs/design/ci-749.md) 和 TESTING 文首为准。
+2026-11-13 基线核查时只加了本文和 README 的一处索引；下表记录当时发现的差异及当前状态。现行验证以本文第 6 节、[ci-749](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-749.md) 和 TESTING 文首为准。
 
 | 位置                                                                                      | 当时写着的内容                                                | 状态                                                                                                                           |
 | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
