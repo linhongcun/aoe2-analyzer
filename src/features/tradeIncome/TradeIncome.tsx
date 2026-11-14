@@ -110,12 +110,47 @@ function TradeIncomeBody({
 }) {
   const errors = [...parseErrors, ...r.errors];
   const available = tradeIncomeUnits(ctx, c);
-  const field = (key: 'gold' | 'cycle' | 'count' | 'target', label: string, whole = false) => (
-    <label>
-      {label}
-      <input aria-label={label} inputMode={whole ? 'numeric' : 'decimal'} value={c[key]} onChange={(e) => update({ ...c, [key]: e.target.value })} />
-    </label>
-  );
+  const fieldError = (key: string, prefix: string, help?: string) => {
+    const error = r.errors.find((message) => message.startsWith(prefix));
+    const id = `trade-error-${key}`;
+    return {
+      props: {
+        'aria-invalid': error ? true : undefined,
+        'aria-describedby': [help, error ? id : undefined].filter(Boolean).join(' ') || undefined,
+      },
+      hint: error ? (
+        <span id={id} className="trade-income-field-error">
+          {error.split(/(\d+(?:[–-]\d+)*(?:\s*(?:分钟|游戏秒|格|字))?)/g).map((part, index) =>
+            index % 2 === 1 ? (
+              <span className="num nw" key={index}>
+                {part}
+              </span>
+            ) : (
+              part
+            ),
+          )}
+        </span>
+      ) : null,
+    };
+  };
+  const sourceError = fieldError('price-source', '请填写实际单价来源（');
+  const field = (key: 'gold' | 'cycle' | 'count' | 'target', label: string, whole = false) => {
+    const prefix = { gold: '每次交金量须', cycle: '完整周期须', count: '当前数量须', target: '目标黄金须' }[key];
+    const error = fieldError(key, prefix, key === 'cycle' ? 'trade-cycle-help' : undefined);
+    return (
+      <label>
+        {label}
+        <input
+          {...error.props}
+          aria-label={label}
+          inputMode={whole ? 'numeric' : 'decimal'}
+          value={c[key]}
+          onChange={(e) => update({ ...c, [key]: e.target.value })}
+        />
+        {error.hint}
+      </label>
+    );
+  };
   const baseline = () => {
     const price = calculateTradeIncome(ctx, { ...c, priceMode: 'baseline' }).cost;
     update({ ...c, priceMode: 'manual', prices: Object.fromEntries(TRADE_INCOME_RES.map((k) => [k, String(price[k] ?? 0)])) as TradeIncomeConfig['prices'] });
@@ -186,7 +221,7 @@ function TradeIncomeBody({
               {field('cycle', '完整周期（游戏秒）')}
               {field('count', '当前车船数量', true)}
             </div>
-            <p className="note">
+            <p className="note" id="trade-cycle-help">
               完整周期是同一交金点两次连续交金之间的时间，包含往返和装卸；不能填写单程时间或首趟启动时间。例如连续交金发生在游戏时间{' '}
               <span className="trade-income-number">10:00</span> 和 <span className="trade-income-number">12:00</span>，周期填{' '}
               <span className="trade-income-number">120 秒</span>。
@@ -248,27 +283,34 @@ function TradeIncomeBody({
             {c.priceMode === 'manual' && (
               <>
                 <div className="trade-income-form">
-                  {TRADE_INCOME_RES.map((res) => (
-                    <label key={res}>
-                      {RES_ZH[res]}单价
-                      <input
-                        aria-label={`${RES_ZH[res]}单价`}
-                        inputMode="decimal"
-                        value={c.prices[res]}
-                        onChange={(e) => update({ ...c, prices: { ...c.prices, [res]: e.target.value } })}
-                      />
-                    </label>
-                  ))}
+                  {TRADE_INCOME_RES.map((res) => {
+                    const error = fieldError(`price-${res}`, `手填${RES_ZH[res]}单价须`);
+                    return (
+                      <label key={res}>
+                        {RES_ZH[res]}单价
+                        <input
+                          aria-label={`${RES_ZH[res]}单价`}
+                          {...error.props}
+                          inputMode="decimal"
+                          value={c.prices[res]}
+                          onChange={(e) => update({ ...c, prices: { ...c.prices, [res]: e.target.value } })}
+                        />
+                        {error.hint}
+                      </label>
+                    );
+                  })}
                 </div>
                 <label className="trade-income-label">
                   实际单价来源
                   <input
                     aria-label="实际单价来源"
+                    {...sourceError.props}
                     maxLength={200}
                     value={c.priceSource}
                     placeholder="例如：本局生产面板，已研究相关科技"
                     onChange={(e) => update({ ...c, priceSource: e.target.value })}
                   />
+                  {sourceError.hint}
                 </label>
                 <p className="note">确定免费才填 0；未知价格请先核对。各项为单个车船的实际资源费用。</p>
                 <p className="trade-income-warning">手填价不随文明、时代或单位选择自动变化；更换选择后请重新核对实际单价和来源。</p>

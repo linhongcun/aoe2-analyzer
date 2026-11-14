@@ -71,10 +71,37 @@ for (const width of [360, 375, 390, 1280])
       await page.screenshot({ path: info.outputPath(`trade-income226-${theme}-${width}.png`), fullPage: true });
       await page.getByRole('textbox', { name: '完整周期（游戏秒）', exact: true }).fill('0');
       await expect(page.getByRole('alert')).toContainText('完整周期须为大于 0');
+      await expect(page.getByRole('textbox', { name: '完整周期（游戏秒）', exact: true })).toHaveAttribute(
+        'aria-describedby',
+        'trade-cycle-help trade-error-cycle',
+      );
+      await expect(page.getByRole('textbox', { name: '完整周期（游戏秒）', exact: true })).toHaveAccessibleDescription(/完整周期是.*完整周期须/);
       await expect(page.getByRole('textbox', { name: '完整周期（游戏秒）', exact: true })).toBeEnabled();
       await expect(page.getByRole('button', { name: '复制方案链接', exact: true })).toBeDisabled();
       await page.getByRole('textbox', { name: '完整周期（游戏秒）', exact: true }).fill('120');
       await expect(page.getByRole('alert')).toHaveCount(0);
+      await expect(page.getByRole('textbox', { name: '完整周期（游戏秒）', exact: true })).toHaveAttribute('aria-describedby', 'trade-cycle-help');
+      for (const [label, bad, good] of [
+        ['每次实际交金量', '-1', '100'],
+        ['当前车船数量', '1.5', '10'],
+        ['目标黄金／游戏分钟', '-1', '601'],
+        ['食物单价', '-1', '0'],
+        ['木材单价', '-1', '75.5'],
+        ['黄金单价', '-1', '0'],
+        ['石料单价', '-1', '0'],
+        ['实际单价来源', '', '本局生产面板'],
+      ]) {
+        const field = page.getByRole('textbox', { name: label!, exact: true });
+        await field.fill(bad!);
+        await expect(field).toHaveAttribute('aria-invalid', 'true');
+        await expect(field).toHaveAccessibleDescription(/须|请填写/);
+        const errorId = await field.getAttribute('aria-describedby');
+        await expect(page.locator(`#${errorId}`)).toBeVisible();
+        await field.fill(good!);
+        await expect(field).not.toHaveAttribute('aria-invalid', 'true');
+        await expect(field).not.toHaveAttribute('aria-describedby');
+        await expect(page.locator(`#${errorId}`)).toHaveCount(0);
+      }
       await page.getByRole('textbox', { name: '每次实际交金量', exact: true }).fill('0');
       await expect(page.getByTestId('trade-needed')).toContainText('正目标无解');
       await page.getByRole('textbox', { name: '目标黄金／游戏分钟', exact: true }).fill('0');
