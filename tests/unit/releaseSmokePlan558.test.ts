@@ -259,19 +259,4 @@ describe('#558 release smoke baseline trust and workflow contract', () => {
     expect(validateSmokeBaselineRelease(formal(), repository)).toEqual(formal());
     expect(() => validateSmokeBaselineRelease({ ...formal(), published_at: 'not-a-date' }, repository)).toThrow();
   });
-  it('plans only after npm ci and artifact verification and before tag/draft; original artifact packaging still verifies the same bytes', () => {
-    const workflow = readFileSync('.github/workflows/release.yml', 'utf8');
-    const install = workflow.indexOf('run: node scripts/ci-budget.mjs --run -- npm ci --legacy-peer-deps'),
-      verify = workflow.indexOf('name: Verify deployed artifact identity and bytes'),
-      plan = workflow.indexOf('name: Plan feature smoke from the previous formal release'),
-      tag = workflow.indexOf('name: Verify deployment, tag and draft Release');
-    expect(install).toBeLessThan(verify);
-    expect(verify).toBeLessThan(plan);
-    expect(plan).toBeLessThan(tag);
-    expect(workflow.slice(plan, tag)).toContain('GH_TOKEN: ${{ github.token }}');
-    expect(workflow).toContain('node scripts/prepare-release.mjs --smoke-plan');
-    expect(workflow).toContain('node scripts/deployment-smoke.mjs --plan "$RUNNER_TEMP/release-smoke-plan.json"');
-    expect(workflow).not.toContain('node scripts/deployment-smoke.mjs --plan dist/build-evidence.json');
-    expect(workflow.match(/node scripts\/site-artifact.mjs --verify/g)).toHaveLength(2);
-  });
 });

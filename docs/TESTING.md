@@ -113,58 +113,30 @@ Kent 只确认这次改动的功能是否正常，用与 diff 直接相关的 Vi
 
 ## 6. 每 PR 跑什么，以及 CI 实际覆盖
 
-2026-11-10 的每 PR 义务只有：必要冒烟，加上与本次 diff 直接相关的测试。纯布局不跑无关单测、数据再生成或 Python 数据测试。计算或数据只跑能核对这次结果的测试。全站、四宽、明暗、axe、完整单测和 data 不是每 PR 门禁，也不是普通 PR 的合并条件。
+2026-11-10 的每 PR 义务只有：必要冒烟，加上与本次 diff 直接相关的测试。纯布局不跑无关单测、数据再生成或 Python 数据测试。计算或数据只跑能核对这次结果的测试。#431 的「小改动不等长回归」仍然有效。
 
-普通 PR 与 main push 的实际门禁由工作流执行；当前范围为 static、真实 SHA 构建和 Chromium 单分片窄冒烟，main 聚合成功后才上传 deployed-site 并部署。多分片、24 路由、axe、全量单测和 data 属于手动 full，不是默认部署门槛。下表只供手动 full 或本地排查对照。
+CI 只有两个工作流，定义在 `.github/workflows/`：
 
-#431 的「小改动不等长回归」仍然有效。#659 的历史冻结规格与实验记录见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-659.md)；当前执行范围以本节和工作流为准。
+| 工作流                  | 触发                                    | 内容                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ----------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ci.yml`（CI / Deploy） | 每个 PR、main push                      | `check`：安装依赖一次 → PR 标题检查 → `node scripts/ci-commands.mjs static`（lint、tsc、`content:check --strict`、`check-source-presentation`、`content:validators --check`、`lint:layers --strict`）→ `npm run build` → 安装 Chromium → `node scripts/ci-commands.mjs smoke`。main push 成功后 `deploy` 用 `actions/deploy-pages` 发布同一份 `dist`，并上传 `site` 产物供 Release 打包。PR 不部署。 |
+| `full.yml`（CI full）   | 每日北京时间 02:30，或 Actions 手动触发 | 同样的 static，再加 `unused:check`、对比度、`introductions:check`、全部 Vitest、`node scripts/ci-commands.mjs data`（Python 测试、`.dat` 复现、生成数据与报告一致性、开局库校验）、构建和整站 Playwright。不部署，不触发 Release。                                                                                                                                                                   |
 
-`scripts/ci-scope.mjs` 仍会生成 `scope`、`features`、`unit`、`e2e`、`data`、`full` 与浏览器计划；`ci-stage.mjs` 在手动 full 时冻结精确检查 ID、文件和 case 集合。手动 full 若声称跑了完整范围，须有真实执行证明，不能用空列表或文件请求列表代替。这不是每 PR 要跑 full。
+窄冒烟固定 7 条，由 `scripts/ci-scope.mjs` 的 `GATE_NARROW_SMOKE` 和 `BUILD_IDENTITY_TITLE` 定义、`ci-commands.mjs` 以 `--grep` 选出：`tests/e2e/smoke.spec.ts` 的首页、`#civs`、`#/civ/Franks`、`#unit/569` 无控制台错误，Ctrl+K 搜索，法兰克圣骑士满科技 192 HP；加 `tests/e2e/ciBuild659.spec.ts` 的构建身份（页脚版本与提交等于本次检出）。改这组用例的标题要同步改 `GATE_NARROW_SMOKE`。
 
-| 范围          | 适用变化                                                            | 只在手动 full 或本地排查时                                                  |
-| ------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `maintenance` | 普通文档、仅项目版本号变化                                          | 必要冒烟；不扩成计算或数据                                                  |
-| `civ-ui`      | 已审计的文明页面及限定 CSS                                          | 受影响页面的必要冒烟；四宽和主题仅在这次要核对它们时                        |
-| `targeted`    | 已证明完整消费者闭包的功能页面、辅助文件及相关测试                  | 与 diff 直接相关的测试；不取全站并集                                        |
-| `full`        | 公共计算、全局 CSS/tokens、路由、共享壳层、未知范围、依赖、策略自身 | 仅手动 full，不是每 PR 门禁。计算或数据只核对该次结果；纯布局不重生未变数据 |
+默认门禁不随 diff 扩成 full，也不复用其他 run 的结果：每次 PR/main 都实跑 static、构建和窄冒烟。`scripts/ci-scope.mjs` 的 `planChanges` 仍保留 `maintenance` / `civ-ui` / `targeted` / `full` 分类，只供本地判断该补哪些直接相关测试和数据管线，不改变 CI 范围。
 
-上表和旧的消费者闭包（未证明闭包则 full、全局 CSS、Layout/Icon/PageMeta、功能自己的四宽主题必须保留）都不再扩大每 PR 的测试。默认 CI 不会因 diff 打开 data 或四片浏览器。`CI_E2E_FULL=false` 不能把默认 CI 实际会跑的窄冒烟说成没跑。
+CI full 失败不阻塞 PR 合并，但须有人认领：定位真实失败，建 Issue 或修复，不提高超时、增加重试或放宽断言。#338 的 hash 与表格检查、24 条冷路由、四宽与明暗矩阵都只在 CI full 或本地排查时跑。
 
-### 并行阶段、同一构建与严格聚合
-
-核心 static 包含 lint、类型、严格内容/公开来源/预编译校验器和严格分层。默认不跑 static-main、unit 或 data。手动 full 才把 unused、contrast 与必要 introductions 放进 static-main，并跑全部单测和 data。build 每次实际构建当前 SHA。默认构建烟测只核对页脚版本和 HEAD；24 路由冷启动只在 full。build 与 static-main 均不可复用。默认 `browser-1` 也不可复用，必须对着本次构建执行。
-
-手动 full 的浏览器固定四个 runner。默认门禁固定 1 片，不把窄冒烟拆成矩阵，也不把 24 路由加回默认。按历史实测时长加权 LPT 分配仍只用于 full；缺少历史时明确使用保守权重，不能将文件数平均或原生 shard 当作性能保证。保留 default/serial 组原子性，不全局启用 `fullyParallel`。每片先核对精确 case 选择，所有本次实际分片只消费同一不可变 build snapshot，不能各自构建或在浏览器后向 dist 写收据。
-
-最终 `test` 核对本次计划内各阶段的真实成功结果、精确 case 并集和交集、允许的既有 skip、数据结果与构建身份。失败、取消、超时、缺片、重复/漏 case、非预期跳过和错构建均阻断证明与 deploy。文件检查、软链接拒绝和无匹配失败继续有效。full 的 24 路由新构建 smoke 不因源码测试复用而省略；默认窄冒烟本身不可复用。
-
-#338 的 hash 与表格检查留在手动 full，不回默认门禁。有意替换旧布局或旧表时，更新或去掉对应 golden 不算放水；不能用改 golden 掩盖计算或数据错误。
-
-### PR 到 main 的 v2 阶段复用
-
-只接受 `ci-stage-evidence.mjs` 验证的 v2 原始执行证明；v1 一律拒绝，不能补字段升级。来源必须是经 GitHub API 核实的同仓库成功 run/attempt/真实数字 job 与所属 artifact；匹配实际 tested tree、策略与工具链指纹、精确检查/文件/case 集合、合法 PR merge/push 来源、artifact 大小/摘要/时间窗口。不能只看 artifact 名、PR head SHA、祖先关系或符号 `GITHUB_JOB`。
-
-复用直接指向原始执行证明，不允许任意继承链。PR 浏览器证明绑定其原始且已核实的构建；同树 main 可复用该源码覆盖，但仍需自己的真实 SHA 构建与冷烟测，原 PR 和 main 页脚字节无需相同。build、static-main 永远补跑。错误仓库、v1、失败/取消、过期、损坏、下载失败、策略/工具链/集合不符均执行所缺必要阶段，不能冒充通过。
-
-收据放在独立 artifact，通过不可变 gate 引用和 manifest 摘要关联构建。最终 `ci-validation-evidence`、Pages 与 `deployed-site` 绑定同一快照；Release 校验准确 main 的外部 v2 gate、实际 test/deploy 与相同产物字节，再打包，流程见 [RELEASING](RELEASING.md)。日志明确区分当前执行与原始复用来源。
-
-### 单次预算与实测时序
-
-每个 CI/Deploy run 从 GitHub `run.created_at` 起共用30分钟，包含初始及阶段排队、同 run 的 rerun/attempt、命令、网络等待、聚合和 deploy 队列。命令运行中和响应/下载期间均受剩余预算约束，到期拒绝成功证明和发布；不能给每个阶段重新30分钟。诊断最多另用90秒，只保存失败证据。平台终止和进程清理可能有延迟，不承诺机器在物理30:00瞬间停止。
-
-Release 自己的 run 也从其 `run.created_at` 计30分钟，下载并核对准确 main gate/产物，不能重建。完成事件触发的独立时序 workflow 使用 GitHub 已完成数据报告 wall、排队、全部 runner 分钟、最慢片和失败反馈；PR→main→deploy→Release 整链与各 run 分别记录。日常10分钟是实测目标，不能将最慢 job 或局部本地计时写成完整交付耗时。
-
-### 后台完整检查
-
-CI/Deploy 不再有日更 schedule。手动 full（`workflow_dispatch`，`full` 默认 true）保留完整套件，禁用复用并强制 full/data，仍共享同一30分钟预算，真实失败需定位。该次运行不部署、不触发 Release。
+CI 钉的是 Node `20.19.5`，CI full 另钉 Python `3.12`。e2e 权重文件 `scripts/ci-browser-weights.json` 仍由 `lint:browser-weights` 要求覆盖每个 spec（新增 spec 要加一条权重），它不再用于分片。
 
 ## 7. 合并前要绿什么（摘要）
 
 本地按文首 2026-11-10：必要冒烟和与本次改动直接相关的测试。没有新修改时不扩大范围。全局 Icon、共享样式不因此要求每 PR 跑 full。
 
-报告写清三件事：本地实际命令和结果；这次 CI 的范围（默认 #749：static、构建身份、单分片窄冒烟；手动 full 另计）；没跑的宽度、主题、计算或数据。跳过、复用、中止不要写成通过。
+报告写清三件事：本地实际命令和结果；这次 CI 的范围（默认：static、构建身份、7 条窄冒烟；CI full 另计）；没跑的宽度、主题、计算或数据。跳过、中止不要写成通过。
 
-部署是否成功看 main 的真实 test、deploy 和线上结果。空 statuses、只有 PR 绿灯或仅提交祖先关系不算已部署。不得伪造结论、提高超时、增加重试，或放宽断言掩盖算错和数据错误。
+部署是否成功看 main 的真实 check、deploy 和线上结果。空 statuses、只有 PR 绿灯或仅提交祖先关系不算已部署。不得伪造结论、提高超时、增加重试，或放宽断言掩盖算错和数据错误。
 
 ### 异步数据就绪（#412）
 

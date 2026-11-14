@@ -2,34 +2,28 @@
 
 本项目已获 hongcun 的[持续发布授权](../CONTRIBUTING.md#维护者的持续发布授权2026-10-24)：已授权更新完成适用审查和必要验证后直接部署并完成正式 Release，无需逐次确认。独立复核、实现范围、Hold、数据来源和受保护产品验收规则继续有效。
 
-#431 的一次适用验证原则继续有效；2026-11-03 维护者授权 #659 分阶段门禁，取代旧 PR 完整浏览器上限和全局壳层 targeted 例外。当前 CI 与验证规则见 [TESTING 第 6 节](TESTING.md#ci-659-validation)和 [CONTRIBUTING「验证投入」](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)：按风险验证、只复用可信 v2 原始阶段证明，main 构建真实 SHA，Release 直接打包已部署产物。版本摘要见 [CHANGELOG](../CHANGELOG.md)；具体范围与授权以原 Issue 为准，复核记录以对应 PR 为准，部署与正式发布状态以 GitHub Actions、Pages、tag 和 GitHub Release 记录为准。本文件说明当前发布流程，不另存逐版本档案。
+#431 的一次适用验证原则继续有效。当前 CI 与验证规则见 [TESTING 第 6 节](TESTING.md#ci-659-validation)。
 
 ## 准备、合并与网站部署
 
 1. 普通更新从最新 main 建实现分支，一个 issue、一个 PR 直接对 main；只有确需多项冻结集成时才建立 `release/vX.Y.Z`。版本号为三段，`package.json` 与锁文件一并更新。CHANGELOG 用 `scripts/changelog.mjs` 的 `insertVersionSection` 插在 Unreleased 正文之后、已有版本之前。
-2. 完成实现者之外的独立复核，以及按变更计划选择的一次验证。高风险 PR 与 main 一样执行完整单测和四 runner 浏览器；窄范围保留受影响功能正负路径、四宽与主题。阶段 v2 证明记录实际被测提交/tree、策略/工具链、精确检查/文件/case 集合和原始 run/attempt/数字 job/artifact；PR 通常测试 merge ref，不能仅用 PR head SHA。
-3. 合入 main。仅复用 GitHub 核实的同仓库成功原始执行证明，并匹配 tree、策略、工具链、精确集合与 artifact 归属/摘要；v1、坏证明或任意复用链无效，执行所缺必要阶段。build 与 static-main 不可复用。release 分支经过同样判断。
-4. main 重新构建其真实 `__BUILD__`。默认只跑 static、构建身份烟测和 Chromium 单分片窄冒烟（首页、`#civs`、`#/civ/Franks`、`#unit/569`、Ctrl+K 搜索、法兰克圣骑士满科技 192 HP）。`test` 成功后才把同一 dist 上传为 `deployed-site` 并部署。冒烟或聚合失败则不部署。24 路由、多分片、单测和 data 只在手动 full，不作为这次部署的门禁。等待该 main run 的实际 `test` 与 `deploy` 都成功。
+2. 完成实现者之外的独立复核，以及按 TESTING 选择的一次适用验证。
+3. 合入 main。PR 的 CI / Deploy `check` 必须成功；它每次实跑，不复用其他 run 的结果。
+4. main push 重新执行同一 `check`（static、构建、7 条窄冒烟，页脚身份等于本次提交），成功后 `deploy` 用官方 `actions/deploy-pages` 发布同一份 `dist`，并上传 `site` 产物。冒烟失败则不部署。全部单测、data 与整站浏览器在 CI full（每日/手动）运行，不作为这次部署的门禁。
 
 普通 UI 更新不重生成未变数据，不默认执行无关计算与整站扫描。核心计算、依赖、共享基础设施和未知范围仍完整验证一次；涉及数据、生成脚本、来源等变化时才做相应数据管线。不要为凑项数或固定周期推迟已就绪的授权更新。
 
 ## 自动接续正式 Release
 
-`.github/workflows/release.yml` 在同仓库 main 的成功 push 型 CI/Deploy 后自动接续，并保留从 main 显式指定三段版本号的手动恢复入口。准备阶段核对事件来源、实际成功的 test/deploy 和当前部署 SHA，从该提交读取 package 版本。普通更新无需 release 分支；使用多项集成分支时继续核对版本与集成关系。
+`.github/workflows/release.yml` 在同仓库 main 的成功 push 型 CI / Deploy 完成后自动接续；手动恢复时在 Actions 里填入该次成功 run 的 ID。它先通过 GitHub API 核对该 run 确为 main 的成功 push 型 CI / Deploy，再检出其 `head_sha` 并读取 `package.json` 版本。
 
-正式步骤下载该准确 main run 的 `deployed-site`，读取 dist 中的 `build-evidence.json`，并下载外部 v2 gate 证明，核对不可变 gate 引用、manifest/文件摘要、版本、commit/tree 与真实成功 test/deploy 来源。构建目录中不补写验证收据。随后核对真实站点页脚和本次功能，确认 annotated tag 指向实际部署提交，直接将这份准确字节的已部署 dist 压成网站 ZIP 并生成 SHA256SUMS.txt，上传后正式发布。
+若 `vX.Y.Z` 已是正式 Release 则幂等跳过；若已有同名 tag 却不指向该提交则失败，不覆盖 tag。否则下载该 run 的 `site` 产物（即部署的那份 `dist`），压成 `aoe2-analyzer-site-vX.Y.Z.zip` 并生成 `SHA256SUMS.txt`，以该提交为 target 创建 tag 与 Release，说明指向该提交的 CHANGELOG；已存在 draft 时补齐附件并转正式。
 
-不再默认执行 594 项线上回归，不再从 tag 二次构建 ZIP。缺少或不匹配的部署产物应明确失败，不能用重新构建另一份网站掩盖来源问题。完整单测、数据检查和整站浏览器仍保留在风险触发的一次验证、nightly 和手动完整检查中。
-
-自动入口对已正式发布的同版本幂等跳过，未完成的 draft 可恢复；已有 tag 指向不符时拒绝发布，不覆盖 tag。**生成 draft 不代表正式 Release 已完成。**
+不从 tag 二次构建 ZIP，也不在 Release 里重跑浏览器验证：产物就是 CI 已验证并部署的字节。缺少产物应明确失败，不能用重新构建另一份网站掩盖来源问题。
 
 ## 核验、恢复与环境
 
-`scripts/release.mjs` 保留 `npm run release -- vX.Y.Z`、`--dry-run`、`--site-url` 和 `--footer-timeout`。默认页脚等待600秒仍受剩余预算限制，须在 main 检查和部署成功后调用，不靠延长等待代替就绪判断。Release runner 只允许推版本 tag，不代替执行者首次将代码合入 main。
-
-CI/Deploy 与 Release 各自从 GitHub `run.created_at` 起共享30分钟验证预算，包含初始排队、子阶段/部署队列、同 run 重跑、命令和网络等待；Release 不能从下载或验证步骤重新计时。到期、取消、缺片或坏证明均拒绝成功与发布，诊断最多另用90秒且不能继续验证。平台终止与进程清理可能延迟，不承诺物理30:00瞬间停止。Release 的独立预算不隐藏前序 PR/main 等待，整链另外报告。
-
-当前 `test` job 可以明确记录并核实复用的验证证据，但不能把旧 run 写成当前提交重新执行过全套。发布准备仍核对当前 main run 实际成功的 test/deploy、准确 SHA 与产物归属；页面部署、draft 和正式发布分别报告。
+`scripts/release.mjs` 保留 `npm run release -- vX.Y.Z`、`--dry-run`、`--site-url` 和 `--footer-timeout`。默认页脚等待600秒，须在 main 检查和部署成功后调用，不靠延长等待代替就绪判断。Release runner 只允许推版本 tag，不代替执行者首次将代码合入 main。
 
 任何真实失败都停止相应发布步骤。修复原因后以同一版本恢复，已完成且一致的步骤幂等跳过。不提高超时、增加重试或放宽断言掩盖问题，不用临时本地站点替代真实线上页脚核对。需要留本地日志时使用 `set -o pipefail`，保留真实退出码。
 
@@ -39,6 +33,4 @@ CI/Deploy 与 Release 各自从 GitHub `run.created_at` 起共享30分钟验证�
 
 ## 后台完整回归
 
-CI/Deploy 的当前手动与默认触发规则见 [TESTING 第 6 节](TESTING.md#ci-659-validation)和仓库工作流；本文件说明正式 Release 的产物核验与发布步骤。
-
-日常单次运行以10分钟为实测目标。独立完成事件时序报告使用 GitHub workflow-completed 数据统计 wall、排队、全部 runner 分钟与最慢浏览器片；交付时另列 PR→main→deploy→Release 整链，不能用局部 job 时间或目标代替实际耗时。
+完整单测、数据检查和整站浏览器由 `.github/workflows/full.yml` 每日及手动执行，详见 [TESTING 第 6 节](TESTING.md#ci-659-validation)；它不部署、不触发 Release。真实失败按 Issue 认领修复，不写成已通过。

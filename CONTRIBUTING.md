@@ -85,16 +85,13 @@ hongcun 明确要求：“以后已经部署的 issue，就可以关闭了”。
 
 ## 按改动风险控制验证投入（2026-10-25）
 
-hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归，并在 #431 授权实施「每份代码只做一次相关验证、release/main 复用结果、部署后短核验、全量转后台」。2026-11-10：每 PR 只做必要冒烟和与本次改动直接相关的测试；纯布局不重跑无关计算或数据；全站全尺寸主题矩阵不是门禁；计算或数据只做针对性正确性检查。报告区分实际执行、CI 范围和未验证项。有意替换的旧布局、入口、链接和重复功能，不再用历史验收期望卡住。独立复核与数据来源职责不变。当前 CI 与手动 full 范围见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)；历史冻结规格见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-659.md)。
+hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归，并在 #431 授权实施「每份代码只做一次相关验证、release/main 复用结果、部署后短核验、全量转后台」。2026-11-10：每 PR 只做必要冒烟和与本次改动直接相关的测试；纯布局不重跑无关计算或数据；全站全尺寸主题矩阵不是门禁；计算或数据只做针对性正确性检查。报告区分实际执行、CI 范围和未验证项。有意替换的旧布局、入口、链接和重复功能，不再用历史验收期望卡住。独立复核与数据来源职责不变。当前 CI 范围见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)。
 
-- 默认 CI、手动 full 和部署范围以 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)及仓库工作流为准。
-- `planChanges` 仍记录 `civ-ui` / `targeted` / `full` 分类，供手动 full 和本地检查。`formatTime`、`dupNames`、`glossary`、`linker`、`sharePage`、`simRoute` 在完整闭包另经审计前，手动 full 仍按广覆盖跑。只有手动 full，或本地需要时，才执行数据管线。
-- 默认 `browser-1` 只有一片，不可复用，消费同一次不可变构建。手动 full 才按历史时长加权 LPT 分到四个 runner。最终 `test` 核对本次计划内的阶段、精确 case 与构建身份；失败、取消、超时、缺片或错误证明均阻断部署。#338 的 hash/表格检查留在 full，不回默认门禁。
-- 只接受经 GitHub 核实的 v2 原始阶段证明；v1 全部无效。PR merge ref 到 main 的复用要求同仓库、相同 tree/策略/工具链、精确检查/文件/case 集合，以及真实成功来源 run/attempt/数字 job/artifact 匹配，不能只凭 PR head SHA、祖先关系或任意复用链。缺少有效证明时执行所缺必要阶段，并如实区分本次执行与原始执行来源。
-- build 不复用。main 仍重建实际提交的 `__BUILD__`，默认对新构建执行窄冒烟和页脚身份检查，再将同一快照用于 Pages 和 `deployed-site`。static-main 只在手动 full，且该次不部署。Release 下载准确成功 main run 的产物，核对外部 v2 gate、窄冒烟记录、manifest、版本/SHA/tree/tag 和本次功能，直接打包相同字节与 SHA256，不二次构建。
-- 每次 CI/Deploy 或 Release run 从 GitHub `run.created_at` 起共享30分钟预算，包含初始/阶段/部署排队、重跑、命令、网络等待和聚合；不能逐阶段重置。Release 有自己的 run 起点。诊断最多另用90秒，不能继续验证或签发成功证明；平台清理延迟不构成物理30:00停止承诺。完成后的独立时序报告使用 GitHub workflow-completed 数据，列出 wall、排队、全部 runner 分钟与最慢片；PR→main→deploy→Release 整链另外汇总。
-- 日更 schedule 已关闭。手动完整运行保留全量单测、数据检查和整站浏览器回归，禁用证据复用，强制 `full` 和 `data`，不部署、不触发 Release。真实失败仍须定位，不提高超时、增加重试或放宽断言掩盖问题。
-- 本地先做一次必要验证。没有新修改、真实失败或未解决问题时不扩大或重复测试；需要定位失败时收窄到具体问题。报告实际执行、复用、跳过或中止范围。日常单次运行以10分钟为实测目标；不能将目标、局部计时或超预算的结果写成完成承诺。
+- 默认 CI（每个 PR 与 main push）只跑 static、真实构建和 7 条窄冒烟，每次实跑、不复用其他 run 的结果；范围与命令以 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)及 `.github/workflows/ci.yml` 为准。
+- `planChanges` 仍记录 `civ-ui` / `targeted` / `full` 分类，只供本地判断该补哪些直接相关测试和数据管线，不改变 CI 范围。
+- main push 成功后用同一份 `dist` 部署 Pages 并上传 `site` 产物；Release 直接打包该产物并核对版本/tag，不二次构建。
+- 全量单测、数据检查、`unused`/对比度/简介检查和整站浏览器回归在 `.github/workflows/full.yml`（每日及手动）运行，不部署、不触发 Release，也不是普通 PR 的合并条件。真实失败仍须认领定位，不提高超时、增加重试或放宽断言掩盖问题。
+- 本地先做一次必要验证。没有新修改、真实失败或未解决问题时不扩大或重复测试；需要定位失败时收窄到具体问题。报告实际执行、跳过或中止范围，不把目标或局部计时写成完成承诺。
 
 ## 版本工作流
 
@@ -126,7 +123,7 @@ hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归
 - **默认流程**：实现 PR 完成独立复核和适用验证 → 合入 main → main 核实可复用证据或执行当前必要验证，构建真实 SHA 并做短烟测 → `test` 与 Pages `deploy` 实际成功 → Release 核对线上版本/构建与本次功能、创建 annotated tag、打包同一已部署产物并正式发布 → 核对 issue 已完成。多项 release 分支集成仍可使用同一流程，但不因经过该分支额外重跑相同验证。
 - **成功含义**：当前 run 的真实 `test` 检查可以依据经核验的成功证据完成，日志和产物须写明原执行范围、来源及复用关系。空 statuses、只有 PR 绿灯或代码祖先关系不能代表已部署成功；main 的真实 `test`、`deploy` 和实际线上结果仍须确认。
 - **发版脚本**：`npm run release -- vX.Y.Z`（`scripts/release.mjs`）保留 `--dry-run`、`--site-url`、`--footer-timeout`，无需为普通更新创建 release 分支。若使用 release 分支，则继续检查其集成关系；普通更新以已部署 main 为发布源。已有 tag 指向不符时退出，不覆盖 tag。
-- **产物复用**：main 上传的 `deployed-site` 与 Pages 使用相同 dist，内含 `build-evidence.json`。Release 只下载经实际成功 `test`/`deploy` 核实的同仓库准确 main run 产物，核对版本、commit/tree 及 tag 后生成 ZIP 和 SHA256SUMS；缺少或不符时明确失败，不回退为再构建一份未经部署的 ZIP，也不回退为整站线上回归。
+- **产物复用**：main 的 `check` 成功后，同一份 dist 既发布到 Pages，也上传为 `site` 产物。Release 只下载经 GitHub API 核实的同仓库 main 成功 push 型 CI / Deploy run 的该产物，核对版本与 tag 后生成 ZIP 和 SHA256SUMS；缺少或不符时明确失败，不回退为再构建一份未经部署的 ZIP，也不回退为整站线上回归。
 - **重跑与失败**：每一步看远端仓库、部署和产物的真实状态；修复原因后可以同版本恢复，已完成且一致的步骤幂等跳过。页面部署、draft Release 和正式发布是不同状态。不要用本地站点代替真实线上核对，也不要用管道吞掉失败退出码。
 - **公告**：玩家可见的版本更新说明写在根目录 CHANGELOG。需要外部公告时仍由 hongcun 明确决定；说明中的数字须依据实际部署或 tag 提交核对、经独立复核后写入该版本条目，外部渠道由 hongcun 本人发布。
 
