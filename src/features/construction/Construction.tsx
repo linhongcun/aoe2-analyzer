@@ -355,10 +355,6 @@ export default function Construction() {
         </ul>
         <p className="note">理论多人工期 = 单人工期 × 3 ÷（人数 + 2）；总村民秒 = 人数 × 完工秒数；停采量 = 总村民秒 × 所选原任务的有效采集速率。</p>
         <p>
-          <a href="https://github.com/linhongcun/aoe2-analyzer/blob/main/docs/CONSTRUCTION-MODEL.md" target="_blank" rel="noreferrer">
-            施工数据说明
-          </a>{' '}
-          ·{' '}
           <a href="https://github.com/SFTtech/openage/blob/master/doc/reverse_engineering/game_mechanics/build_speed.md" target="_blank" rel="noreferrer">
             公开多人施工规则
           </a>{' '}

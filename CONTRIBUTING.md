@@ -1,6 +1,10 @@
 # 贡献约定 / Contributing
 
-AI 编码代理先读 [AGENTS.md](AGENTS.md)（目录、命令、数据规则、测试规则的速查）。无人值守 Codex 的队列、跳过条件和 issue 质量条见 [docs/CODEX-MAINTENANCE.md](docs/CODEX-MAINTENANCE.md)；与本文冲突时以本文为准。
+编码代理先读 [AGENTS.md](AGENTS.md)（目录、命令、数据规则、测试规则的速查）。适用于 Cursor、Codex、Claude Code、Devin 及其他编码代理的无人值守队列、跳过条件和 issue 质量条见 [docs/MAINTENANCE.md](docs/MAINTENANCE.md)；与本文冲突时以本文为准。
+
+## 文档归属
+
+游戏行为以代码、生成/内容数据和测试为准；当前需求、规格、设计、证据与交接保留在原 Issue。仓库文档用于架构、贡献、构建/测试/发布和可复现来源流程；不新增一次性功能机制手册或 发布日志。已退休的历史说明通过 Git 历史查看，不另建归档目录。
 
 ## 角色
 

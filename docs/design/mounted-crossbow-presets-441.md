@@ -4,7 +4,7 @@
 
 准备基线：2026-10-26 `main` 的 `6e71f655509487da69bb4f5a1d1592de19fa95f4`（v0.38.0），数据 DE185872。规格与失败用例独立预审后，实施分支更新到 #285 合入的 `38a35d5da27839e3bcd44eb511a8ffcdef1c29c3`（v0.39.0），本批产品版本 v0.40.0。#308 因投石车次弹丸规则缺证据保持未实施。
 
-已读 AGENTS、CONTRIBUTING、docs/CODEX-MAINTENANCE；现行流程为执行者准备、独立代理复核，不沿用历史具名签字。已读取 GitHub #441 正文/空评论，查询无已打开实现 PR。开工时须再查最新 main 和 PR。
+已读 AGENTS、CONTRIBUTING、docs/MAINTENANCE；现行流程为执行者准备、独立代理复核，不沿用历史具名签字。已读取 GitHub #441 正文/空评论，查询无已打开实现 PR。开工时须再查最新 main 和 PR。
 
 ## 最小范围
 

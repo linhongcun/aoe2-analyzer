@@ -16,7 +16,7 @@
 - [罗马页面精确历史/当前捕获](final-civs197-romans-golden-preview.json)：同一URL、同一捕获器，未换服务器受试版本或mock通用文明。
 - [C段12个历史场景的逐步库存/时间对照](final-civs197-whitelist-migration-preview.json)：波兰/罗马各六历史模板，保留完整前后值。
 - [运行量化报告](final-civs197-runtime-quantified.json)：其它54文明加通用的440份完整结果、1485份采集帮助结果前后完全一致；两文明8模板无超时。
-- [规格](final-civs197.md)与AGENTS.md“测试规则”：**“未经维护者明确授权，不要改 `tests/**/v0*-acceptance*` 及其他受保护验收用例的期望值。”** 这条仓库规则是本次需要限定确认的依据，不是新增业务参数或重新请求一般发布授权。
+- [规格](https://github.com/linhongcun/aoe2-analyzer/blob/19a7b03a1ebfe019cd8598c95abe4d7701d6608f/docs/design/final-civs197.md)与AGENTS.md“测试规则”：**“未经维护者明确授权，不要改 `tests/**/v0*-acceptance*` 及其他受保护验收用例的期望值。”** 这条仓库规则是本次需要限定确认的依据，不是新增业务参数或重新请求一般发布授权。
 
 ## 唯一罗马页面的逐行差异
 

@@ -85,7 +85,7 @@ it('#659 a feature keeps its own width/theme guard; unrelated civs and long tour
   );
   expect(broad.e2e).toEqual([spec('civDlcFilters'), spec('smoke')]);
   expect(prCappedExcludes(spec('wei197'), ['src/domain/weight.ts'])).toBe(true);
-  expect(prCappedExcludes(spec('wei197'), ['docs/design/wei197.md'])).toBe(false);
+  expect(prCappedExcludes(spec('wei197'), ['docs/design/wei197-source.json'])).toBe(false);
 
   const builds = applyBrowserPolicy(planChanges([change('src/features/builds/BuildOrderList.tsx')]), pr);
   expect(builds.e2e).toContain(spec('build41'));

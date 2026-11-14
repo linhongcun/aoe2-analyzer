@@ -97,7 +97,7 @@ export const RES_DEPOSIT: Record<number, Res> = { 299: 'food' };
  * 是否也作用于狩猎以外的采集：未核实（res 268 是玩家级资源，.dat 看不出限定范围），模型只按狩猎算。
  */
 export const RES_HUNT_FOOD = 268;
-/** 高棉只在完整来源门控下应用本站免回仓连续近似；不声称已证明DE185872选择器的可执行映射。见docs/design/khmer197.md。 */
+/** 高棉只在完整来源门控下应用本站免回仓连续近似；DE185872 选择器的可执行映射未由游戏引擎验证。 */
 /**
  * 西班牙 tech 186「C-Bonus, Tech reward」在 .dat 里只有 res 269 set 300 一条命令（#42）。
  * 金额：https://ageofempires.fandom.com/wiki/Spanish_(Age_of_Empires_II) 「Receive 20 gold for each technology researched.」（已打开核对，见 #42 issuecomment-6106638881）

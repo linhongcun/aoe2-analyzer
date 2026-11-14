@@ -2,6 +2,10 @@
 
 单一入口是本地脚本。只改 `scripts/data_sources.json` 的 pin，不要手改生成 JSON。覆盖清单是 `scripts/data_update_coverage.json`，检查命令是 `python3 scripts/data_update_coverage.py`。检查只读源码，不跑生成器，不下载 `.dat`，不更新 pin。
 
+## 独立数据生产器
+
+建造模型数据由 `scripts/construction_build.py` 生成，`python3 scripts/construction_build.py --check` 校验固定来源与 `src/data/construction.json` 可复现；圣物收益由 `scripts/relic_income_build.py` 生成，`python3 scripts/relic_income_build.py --check` 校验 `src/data/relic_income.json`。两者读取 `scripts/data_sources.json` 的固定 DE `.dat` 来源，不运行游戏客户端；源数据元信息中的引擎验证状态仍以 `engineVerifiedInPinnedBuild` 为准。
+
 ```bash
 python3 scripts/data_update.py          # 与 npm run data:update 相同
 npm run data:update                     # 有更新才生成；开始前先过覆盖清单

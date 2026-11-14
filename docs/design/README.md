@@ -1,47 +1,31 @@
 # 设计稿索引（持续更新）
 
+## 当前工程与设计入口
+
+- [设计系统](DESIGN-SYSTEM.md)
+- [默认 CI #749](ci-749.md)、[机制 #652](mechanism-652/SPEC.md)、[路由 #652](routes-652/SPEC.md)
+- [#478 来源证据流程](build-sim-source-478.md)、[机制来源流程](build-mechanisms-478.md)
+- [#3 时间线摘要样稿](mockups/issue3-summary-2x2/range-390/)
+
 2026-11-09 定向 UI 优化见 [页面任务优先的 UI 优化](task-focused-ui-2026-11.md)：移动列表筛选、开一局层级、文明/单位详情扫描三项；包含真实跨行业参考、冻结规格、量化对比、验证边界与可复用规则。
 
-## 给 Codex 的设计交接
+## 设计交接
 
 改界面前先读同一 Issue 正文的当前需求与“体验设计”规格、本索引和 [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)。正文是单项决定、当前规格和交接记录的主来源；每次实际 UX 交付都必须把完成态、可直接查看的设计图嵌入正文，覆盖主要界面和重要状态。复杂/可复用规格可由正文链接到本目录补充，但不能代替正文中的图。链接到短稿目录时，如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 [mockups/issue24-v3/ERRATA.md](mockups/issue24-v3/ERRATA.md)。阶段、认领、授权和交接规则见 [CONTRIBUTING「Issue 生命周期」](../../CONTRIBUTING.md#issue-lifecycle)。
 
 - **挂靠**：UI 当前规格、决定和完成态设计图写在原 Issue 正文“体验设计”节；设计图须直接显示、覆盖本范围主要界面和重要状态。复杂/可复用规格可附加或链接 `docs/design/<topic>/` 补充，不取代正文设计图。不为阶段变化新建设计/实施 Issue 或 per-issue 文档。没有可执行的已授权范围则留在当前阶段补齐，不自创版式、不扩范围。设计通过不等于实现授权；只有纯 docs/data 且无 UI 时才可记录 UX 不适用。
 - **硬规则**：方向 C（浅色编辑风）。界面图标只用 Lucide，经 `src/shared/ui/Icon.tsx` 登记，不用 emoji。游戏素材用 `public/img/` 原版图标。颜色只用 `src/shared/styles/tokens.css`。数字和「数字+单位」用 `.num` / `.nw`。中文 UI。PC-first（以 1280 为准），不为窄屏过度打磨。按本次改动影响选择必要视口和界面证据，如实标明覆盖，不固定四宽。
-- **角色**：Steve 定范围和「设计通过」。Jony 负责好用与美观；每次实际 UX 交付都提供可查看的完成态界面图，直接嵌入同一 Issue 正文，不以文字、规格、线框或本地 ZIP 代替，并由产品对照范围确认图及重要状态。只有纯 docs/data 且无 UI 时可由产品经理记录 UX 不适用及理由，不得用于实际 UX 工作。旧组件功能可以有理由取舍。Codex 实现。视觉 PR 的旧版 15 分钟回复要求不作为现行交接门槛。产品、运营和视觉职责见 [CONTRIBUTING「角色」](../../CONTRIBUTING.md#角色)。
+- **角色**：Steve 定范围和「设计通过」。Jony 负责好用与美观；每次实际 UX 交付都提供可查看的完成态界面图，直接嵌入同一 Issue 正文，不以文字、规格、线框或本地 ZIP 代替，并由产品对照范围确认图及重要状态。只有纯 docs/data 且无 UI 时可由产品经理记录 UX 不适用及理由，不得用于实际 UX 工作。旧组件功能可以有理由取舍。编码代理实现。视觉 PR 的旧版 15 分钟回复要求不作为现行交接门槛。产品、运营和视觉职责见 [CONTRIBUTING「角色」](../../CONTRIBUTING.md#角色)。
 - **短稿**：目录通常有 `*.md`（验收、不要做）和 1280 线框或截图；这些短稿仅作补充，线框不能替代实际 UX 交付所需的完成态设计图。实现 PR 对照 §AC，按本次改动影响选择必要视口和界面证据，如实标明覆盖，不固定四宽。
 - **当前**：`insights-584/` 已合 main（[#621](https://github.com/linhongcun/aoe2-analyzer/pull/621)）。[#584](https://github.com/linhongcun/aoe2-analyzer/issues/584) 已实现并关闭（2026-11-02，PR #623，CHANGELOG 0.74.11）。`ladder-571/` 已上线。后续解耦见 [#625](https://github.com/linhongcun/aoe2-analyzer/issues/625)（已关闭，设计稿 [ladder-independent-625.md](ladder-independent-625.md)）。
-- **交叉**：[CODEX-MAINTENANCE §6 设计硬规则](../CODEX-MAINTENANCE.md#6-设计硬规则摘要)、[CONTRIBUTING「设计与代码规范」](../../CONTRIBUTING.md#设计与代码规范)。交接与 issue 质量条见 [#627](https://github.com/linhongcun/aoe2-analyzer/issues/627)（产品侧主文档 PR 收口，本文不关该 issue）。
 
-v0.62.0 女真开局支持见 [第十四批规格](jurchens197.md)及[有界固定来源摘要](jurchens197-source-summary.json)：明确尸体腐烂与耗尽未模拟，不把不腐烂变成收入；骑士方案仅供通用经济模板。当前8套未研究攻城/防御加成目标；受控石工术验证收费与真实研究完成窗口。必要[教学来源审计](jurchens197-teaching-metadata.json)仅补两条来源字段的投影SHA，保留原事实、旧hash与精确逆恢复证明。实际验证、独立图审、CI和发布以本批PR交付记录为准。
+## 模型实现与来源证据
+
+游戏行为由 `src/domain/`、`src/features/`、生成/内容数据和对应测试维护；#197 的机器可读来源、验证与量化证据继续留在本目录，不因退休叙述规格而改写。固定来源与可复现流程见 [build-sim-source-478.md](build-sim-source-478.md)、[build-mechanisms-478.md](build-mechanisms-478.md) 和 [`scripts/build_sim_source_history.json`](../../scripts/build_sim_source_history.json)；专项行为以 `tests/unit/`、`tests/py/` 为准。
+
+- **交叉**：[MAINTENANCE §6 设计硬规则](../MAINTENANCE.md#6-设计硬规则摘要)、[CONTRIBUTING「设计与代码规范」](../../CONTRIBUTING.md#设计与代码规范)。交接与 issue 质量条见 [#627](https://github.com/linhongcun/aoe2-analyzer/issues/627)（产品侧主文档 PR 收口，本文不关该 issue）。
 
 新增开局文明的来源证据按 [#478 有界摘要与固定来源重建流程](build-sim-source-478.md)执行；现有历史原件及对应验收保持。
-
-v0.58.0 高棉开局支持见 [第十三批规格](khmer197.md)：完整来源门控、独立农田供给、638免前置与显式付费建筑政策；[固定来源](khmer197-source.json)、[公开语义](khmer197-public-sources.json)及[真实先红](khmer197-first-red.json)及[分段转绿与必要本地检查](khmer197-green-boundary.json)。[实际A本地验证](khmer197-validation.json)、[量化](khmer197-runtime-quantified.json)及[独立图审](khmer197-ui-review.json)记录一次构建、新9项/原22项/62路由烟测，以及原严格比较FAIL与单独精确六叶分类；CI与发布以实际PR记录为准。
-
-v0.57.0 斯拉夫开局支持见 [#197第十二批规格](slavs197.md)：独立农田供需稳态模型、近距离旧通用估算差异、FC2真实任务披露与团队人口未模拟；[真实先红](slavs197-first-red.json)、[固定来源](slavs197-source.json)、[公开语义](slavs197-public-sources.json)及[原99转绿和追加边界](slavs197-green-boundary.json)，另见[本地A实际验证](slavs197-validation.json)、[量化](slavs197-runtime-quantified.json)和[独立图审](slavs197-ui-review.json)。
-
-v0.56.0 格鲁吉亚开局支持见 [#197第十一批规格](georgians197.md)：免费起始车与逐次付费新车独立、完成地点/时代类别及来源门控；[真实先红](georgians197-first-red.json)、[固定来源](georgians197-source.json)、[公开语义](georgians197-public-sources.json)、[实际量化](georgians197-runtime-quantified.json)与[验证记录](georgians197-validation.json)。
-
-v0.54.1 亚美尼亚开局支持见 [#197第十批规格](armenians197.md)：付费骡车、研究地点和实际研究完成增强；[真实先红](armenians197-first-red.json)、[固定来源](armenians197-source.json)与[公开语义](armenians197-public-sources.json)及[实际验证](armenians197-validation.json)。
-
-v0.54.0 孟加拉开局支持见 [#197第九批规格](bengalis197.md)：完整4条时代赠村来源、完成TC计数、正常起点及住房/骑士模板边界；[正式先红](bengalis197-first-red.json)、[固定来源](bengalis197-source.json)与[公开语义](bengalis197-public-sources.json)与[实际验证](bengalis197-validation.json)。
-
-v0.53.0 魏开局支持见 [#197第八批规格](wei197.md)：完整16条研究完成奖励、独立免费出生事件、正常TC起点、满住房人口模型及骑士模板限制；[正式先红](wei197-first-red.json)、[固定来源](wei197-source.json)、[公开语义](wei197-public-sources.json)与[实际验证](wei197-validation.json)。
-
-v0.52.0 西西里开局支持见 [#197第七批规格](sicilians197.md)：真实TC施工形态、城堡及防御工事工期，农田升级额外储量/失效/续种边界；[先红记录](sicilians197-first-red.json)、[固定来源](sicilians197-source.json)与[TC门控](sicilians197-tc-gates.json)。
-
-v0.50.0 鞑靼开局经济支持见 [#197第五批规格](tatars197.md)：牧羊工作率/产量真实配对、完整行原子性、既有TC肉类代理与新增羊/耗尽边界；[正式先红](tatars197-first-red.json)、[来源摘录](tatars197-source.json)及[公开语义](tatars197-public-sources.json)。
-
-v0.48.0 瓦兰吉人开局经济支持见 [#197第四批规格](varangians197.md)：牧羊、狩猎、村民和渔船捕鱼兼产黄金的连续库存模型，固定百分比及完整上下文防护；[真实先红](varangians197-first-red.json)、[原始摘录](varangians197-source.json)与[公开语义](varangians197-public-sources.json)。
-
-v0.47.0 马里开局经济支持见 [#197第三批规格](malians197.md)：采金交仓收益、完整建筑木费与农田排除、固定来源/类别生成及旧39文明保护；[真实先红](malians197-first-red.json)、[原始摘录](malians197-source.json)。
-
-v0.45.0 蜀开局经济支持见 [#197第二批规格](shu197.md)：完整固定来源、伐木兼产食物、科技费用折扣及骑士模板限制；[真实先红](shu197-first-red.json)、[原始摘录](shu197-source.json)。
-
-v0.42.0 葡萄牙开局经济支持见 [#197首批规格](portuguese197.md)：固定数据完整闭包、采果兼产木材连续库存模型与黄金费用折扣；[真实先红](portuguese197-first-red.json)与[原始摘录](portuguese197-source.json)用于独立核验。
-
-其余 #197 主规格：[中国](chinese197.md)、[古吉拉特](gurjaras197.md)、[马普切](mapuche197.md)、[玛雅](mayans197.md)、[最终文明](final-civs197.md)；对应的验收、迁移与验证记录见同目录。
 
 v0.26.0 维护者授权范围与独立工程规格见 [学习工具规格](v0.26.0-learning-tools.md)（#259）；此条不表示 Steve/Kent 本人签字。
 
@@ -62,11 +46,11 @@ SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分
 
 - [机制 652 规格](mechanism-652/SPEC.md)（[#652](https://github.com/linhongcun/aoe2-analyzer/issues/652)）：机制说明与验证记录。
 - [路由 652 规格](routes-652/SPEC.md)（[#652](https://github.com/linhongcun/aoe2-analyzer/issues/652)）：路由诊断、评审与验证记录。
-- [#517 站点串联](site-linking-517/)（[#517](https://github.com/linhongcun/aoe2-analyzer/issues/517)）：对阵优先的信息架构稿，供 Steve 拆切片与 Codex S1 前对齐。
+- [#517 站点串联](site-linking-517/)（[#517](https://github.com/linhongcun/aoe2-analyzer/issues/517)）：对阵优先的信息架构稿，供 Steve 拆切片与 实现阶段 前对齐。
 - [#626 跟随推鹿短提示](hotkeys-follow-626.md)：快捷键页首的 188329 社区实测用法、来源、四宽与既有个人表边界。
-- [#308 攻城拆建筑](siege-308/)（[#308](https://github.com/linhongcun/aoe2-analyzer/issues/308)）：`#/siege` 视觉交互稿，供 Codex 与 Steve 设计审阅。
-- [#533 攻城情境入口](siege-533/)（[#533](https://github.com/linhongcun/aoe2-analyzer/issues/533)）：单位页「算拆建筑」、冲车检索、未核实反馈。短稿，供实现者（Codex）实现（Steve 设计通过后）。
-- [#33 天梯数据](ladder-33/)（[#33](https://github.com/linhongcun/aoe2-analyzer/issues/33)）：`#/ladder` 阿拉伯 1v1 分段胜率与新手友好度视觉交互稿，供 Steve 设计审阅后交 Codex。
+- [#308 攻城拆建筑](siege-308/)（[#308](https://github.com/linhongcun/aoe2-analyzer/issues/308)）：`#/siege` 视觉交互稿，供实现者与产品设计审阅。
+- [#533 攻城情境入口](siege-533/)（[#533](https://github.com/linhongcun/aoe2-analyzer/issues/533)）：单位页「算拆建筑」、冲车检索、未核实反馈。短稿，供实现者在产品设计通过后实现。
+- [#33 天梯数据](ladder-33/)（[#33](https://github.com/linhongcun/aoe2-analyzer/issues/33)）：`#/ladder` 阿拉伯 1v1 分段胜率与新手友好度视觉交互稿，供产品设计审阅后交实现者。
 - [#545 天梯空分段](ladder-545/)（[#545](https://github.com/linhongcun/aoe2-analyzer/issues/545)）：顶栏只露有数据的 Elo 分段；当前快照改为只读「全部」。短稿，供 Steve 设计通过后由 Linus 实现。
 - [#547 天梯快照与首屏截止](ladder-547/)（[#547](https://github.com/linhongcun/aoe2-analyzer/issues/547)）：换一份新于 p162286 的阿拉伯 1v1 静态快照，并把统计截止或「非当前平衡」升到来源条第一行。短稿，供产品设计通过后由 Linus 实现。与 #566 并行。
 - [#577 天梯默认切片与三视图](ladder-577/)（[#577](https://github.com/linhongcun/aoe2-analyzer/issues/577)）：Steve P1。`#/ladder` 默认 4v4 随机地图 · Elo 1200–1400 · 近 90 天 · 全图；表和走势先做，分层与分布随后。短稿，供产品设计通过后由 Linus 实现。
@@ -75,8 +59,6 @@ SPEC 里提到的 `shot.mjs` / `gen.py` / `capture.mjs` 等脚本也在归档分
 - [#584 鲜为人知洞察槽位](insights-584/)（[#584](https://github.com/linhongcun/aoe2-analyzer/issues/584)）：2026-11-01 修订，对齐 #603 四卡。单位页固定槽，空态「暂无」；文明页只在有条目时插在评分卡与文明加成之间，无条目不挂、不写「暂无」。已实现并关闭（2026-11-02，PR #623）。
 - [#559 地图边路 / 中路](maps-559/)（[#559](https://github.com/linhongcun/aoe2-analyzer/issues/559)）：地图详情在现有推荐文明下增加开图 4v4 的边路 / 中路编辑推荐；无稿显式待补。短稿，供 Steve 设计通过后实现。
 - [#702 SD3 观赛窗口](maps-sd3-watch-702.md)（[#702](https://github.com/linhongcun/aoe2-analyzer/issues/702)）：`#/maps` 合集旁列出半决赛与决赛的上海时间和 UTC。开放时展开；2026-11-09 00:00 UTC 起收起为「本届已结束」。不接直播、不爬比分。
-- [#752 SD3 赛图机制短卡](maps-sd3-mechanics-752.md)（[#752](https://github.com/linhongcun/aoe2-analyzer/issues/752)）：`#/maps` 合集旁列出薄冰、猴岛、圣谷的手册机制，并链到手册。查不到的细节标待确认。不改观赛窗和胜利条件。
-- [#747 Standard 奇观与圣物倒计时](standard-victory-747.md)（[#747](https://github.com/linhongcun/aoe2-analyzer/issues/747)）：`#/game-guide` 胜利条件区补 Standard 入口。年数只读科技说明；地图基础秒数和 UGC 附加时间不写死。
 - [#592 开一局引导](start-game-592/)（[#592](https://github.com/linhongcun/aoe2-analyzer/issues/592)）：Steve 软锁。首页主路径 A 是模式 → 地图 →（仅组队才有路位）→ 文明 → 对手，可跳过、可回退，结束于「本局摘要」。B「已在大厅」从文明起。C 首刀不做。工具宫格降为「更多工具」。短稿，供产品设计通过后实现。
 - [#602 文明详情菜单分层](civ-nav-602/)（[#602](https://github.com/linhongcun/aoe2-analyzer/issues/602)）：页内 Tab 是本页内容；情境条降为「相关工具」，只放离开本页的五件。职业选手视角只留 Tab。侧栏去掉「快速入口」。短稿即布局依据。
 - [#603 文明概览主栏分区](civ-overview-603/)（[#603](https://github.com/linhongcun/aoe2-analyzer/issues/603)）：概览主栏分成开局、评分、加成、优劣。开局是一行路线加次要「查看全部开局」；定位和特色兵种收进评分卡；没有洞察就不占位；优劣用芯片。短稿，供 Steve 设计通过后另刀实现。不改 #602 的菜单。

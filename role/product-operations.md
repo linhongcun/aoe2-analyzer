@@ -2,7 +2,7 @@
 
 给接手本站日常使用和玩家反馈的人。职责以 [CONTRIBUTING「角色」](../CONTRIBUTING.md#角色) 为准：运营回答信息能否找到、操作是否顺畅、结果能否看懂，并写明具体场景和卡点。Issue 阶段和交接按 [CONTRIBUTING「Issue 生命周期」](../CONTRIBUTING.md#issue-lifecycle)；同一正文持续记录，不另开评审/实施 Issue。本文只记录已经用过的问法和口径。范围、设计和开发验收仍看 CONTRIBUTING、[TESTING](../docs/TESTING.md) 与 [AGENTS「开发执行」](../AGENTS.md#dev-exec-2026-11-10)。
 
-站点目前主要由维护者自己使用。PC（约 1280）上的路径要走通，窄屏保持能读、能点。旧布局、旧入口和旧链接可以按该页的核心任务改掉。观察用来提改进，不是上线门禁，也不进入 CI 或全尺寸矩阵。玩法说明见 [一局入门](../docs/GAME-GUIDE.md)、[混编情境卡](../docs/MIXED-ARMY.md) 和 [内容与购买导航](../docs/CONTENT-GUIDE.md)，本文不写攻略。
+站点目前主要由维护者自己使用。PC（约 1280）上的路径要走通，窄屏保持能读、能点。旧布局、旧入口和旧链接可以按该页的核心任务改掉。观察用来提改进，不是上线门禁，也不进入 CI 或全尺寸矩阵。玩法入口见 [`src/features/gameGuide/`](../src/features/gameGuide/)、[`src/features/mixedArmy/`](../src/features/mixedArmy/) 和 [内容与购买导航](../docs/CONTENT-GUIDE.md)，本文不写攻略。
 
 ## 谁处理什么
 
