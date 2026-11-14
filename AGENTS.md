@@ -2,23 +2,13 @@
 
 ## 编码代理 / 无人值守维护（必读）
 
-批量或无人值守改代码前，先读 **[docs/MAINTENANCE.md](docs/MAINTENANCE.md)**：产品边界、一次一 issue、同时在审 PR ≤2、门禁（独立代理复核＋按风险选择的 CI）、当前 Hold 表、跳过条件与选 issue checklist。先看该文 [「当前状态 / 2026-11-02」](docs/MAINTENANCE.md#status-2026-11-02) 再选 issue。
+开始或继续实现前，先读 [docs/MAINTENANCE.md「授权核验」](docs/MAINTENANCE.md#issue-authorization) 与当前原始 Issue。CONTRIBUTING 与本文件冲突时，以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
 
-与 CONTRIBUTING 冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准。
-
-Issue 五阶段、同一正文、角色交接、认领与授权规则以 [CONTRIBUTING「Issue 生命周期」](CONTRIBUTING.md#issue-lifecycle) 为准；本文件的选单/编码检查不得另开阶段 Issue，也不得把阶段标签当作实现授权。
-
-**本轮游戏机制批授权（2026-11-05）**：维护者明确要求处理今天完善游戏机制的 issue。按母单 #703 已锁顺序 **#704 → #705 → #706 → #707 → #709 → #711 → #708 → #712**，再处理 P2 **#710、#713**；单写者、一项一 PR 串行交付。既有持续复核、发布与关闭授权有效，规格与真实来源要求不变。测试门禁见「测试规则」。#570/#573/#574 数据阻塞不在本批范围。
-
-**当前开一局菜单单项授权（2026-11-05）**：维护者明确要求“先在菜单上完善开一局功能最终形态；不完善的菜单可置灰，让后续逐渐完善有方向。” 当前只实施 [#700](https://github.com/linhongcun/aoe2-analyzer/issues/700)：首页内部紧凑功能菜单，已有能力可用，未来能力原生 disabled 且说明原因；不实施未来模型，不改变既有自主选择和状态协议。按独立复核、适用CI、真实部署、正式Release及持续关闭门禁完整交付，无需再逐步询问。前序3项已交付，不重做；#570/#573/#574仍缺原始数据保持阻塞。详见[当前菜单记录](docs/MAINTENANCE.md#start-game-menu-2026-11-05)。
-
-**前序非阻塞 backlog 批授权（2026-11-04，已完成）**：维护者已明确要求处理所有非阻塞 issue。本批按 **#688 → #652 → #657** 串行交付；#570/#573/#574仍因可核验原始数据缺失保持阻塞。此次授权取代下文历史11项/13项白名单及上一批对#652/#657的排除，不重开已交付项；规格、来源、单写者、独立复核、适用CI和真实上线/正式Release/关闭门禁不变。详见[当前批次记录](docs/MAINTENANCE.md#nonblocking-2026-11-04)与[#688认领记录](https://github.com/linhongcun/aoe2-analyzer/issues/688)。
-
-**一次验证与快速发布（#431）**：普通已授权更新默认一个 issue、一个 PR 直接合入 `main`；只有需要多项冻结集成时才建 `release/vX.Y.Z`。同一代码树的真实成功验证可由 release/main 复用，main 仍构建真实 SHA 并做短烟测，发布 ZIP 使用已部署产物。全量回归在夜间后台或重大变更时执行一次，不作为普通 UI 更新逐阶段重复等待的门槛。现行规则见 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
-
-**CI 分阶段门禁（#659，2026-11-03）**：维护者已明确授权处理 #659，取代 #514 的 PR 完整浏览器禁令与 #513 的全局壳层 targeted 例外。当前门禁见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)；历史冻结规格见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-659.md)。
-
-**持续发布授权**：hongcun 已要求已授权更新完成适用审查和测试后直接部署，不再逐次询问发布；不能停在 release 分支便称完成上线。发布授权及边界以 [CONTRIBUTING「维护者的持续发布授权」](CONTRIBUTING.md#维护者的持续发布授权2026-10-24) 为准；现行审阅流程以 [「维护者的持续审阅授权」](CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) 为准，由实现者之外的独立代理复核，记录实际提交 SHA、复核范围、结果和未解决问题，不再依赖指定人员签字。
+- 每个 Issue 只有一个实现写者和一个实现 PR；同时在审 PR 不超过 2 个。不同角色在同一 Issue 正文按阶段交接，不另开阶段 Issue。
+- 开工前核验原 Issue 的最新范围、验收标准、非目标、显式实现授权、阶段和状态标签、当前认领/负责人、关联 PR 与 Hold/依赖。阶段标签或历史批次不授予范围或实现权限；不得扫描 backlog 并自行批量认领。
+- 关闭的 Issue 不重开、不重复实施；只有维护者在原 Issue 记录新的明确授权后例外。不得自行解除、绕过或清除 Hold。
+- 实际 UX 工作须在同一 Issue 正文直接嵌入覆盖主要界面和重要状态的完成态设计图。只有纯 docs/data 且无 UI 时，产品经理可在同一 Issue 记录 UX 不适用及理由；细则见 [Issue 生命周期](CONTRIBUTING.md#issue-lifecycle)。
+- 独立复核、按风险选择的 CI、持续合并/发布/关闭授权，以 [CONTRIBUTING.md](CONTRIBUTING.md)、[TESTING](docs/TESTING.md) 与 [RELEASING](docs/RELEASING.md) 为准。本文件和维护说明不另授产品范围或发布权限。
 
 ### 数字不换行（`.num` / `.nw`）
 
@@ -26,15 +16,7 @@ Issue 五阶段、同一正文、角色交接、认领与授权规则以 [CONTRI
 
 ### Hold（勿开）
 
-单条 Hold 表当前没有新增暂停编号。2026-11-02 较早的双路功能暂停及其后续范围授权，见 [MAINTENANCE「当前状态 / 2026-11-02」](docs/MAINTENANCE.md#status-2026-11-02)。维护者后来明确授权本轮11项串行处理：#625、#626、#641、#572、#584、#582、#585、#558、#570、#573、#574；该授权已在 [#625 评论](https://github.com/linhongcun/aoe2-analyzer/issues/625#issuecomment-6568916109)记录。只在本轮范围内执行，一个 issue 一个 PR；已交付项不重复认领，数据阻塞项按当前状态等待可核验输入。
-
-解 Hold 或扩大范围仍须维护者明确授权。审阅流程变更本身不解除 Hold，也不恢复双路并行；本轮后来授权不扩展到其它未授权事项。#372 仅按下方既有两条预置授权解除。
-
-2026-10-26 维护者定向要求修复当时仅有的两条 bug（#442、#364），#364 已按[本轮具体授权](CONTRIBUTING.md#364-标题层级定向修复授权2026-10-26)纳入实施。此项授权不涉及 #372。
-
-随后维护者针对 #372 两条预置明确回复“嗯，解除暂停，实施吧”，已按[本轮定向解除暂停记录](CONTRIBUTING.md#372-两条预置定向解除暂停2026-10-26)纳入实施；上方 #364 的旧授权范围作为历史保留。
-
-给 Cursor、Codex、Claude Code、Devin 及其他编码代理的通用入口。冲突时以 [CONTRIBUTING.md](CONTRIBUTING.md) 为准，并在 issue 里指出。
+选择或继续工作前核验原 Issue 的最新 Hold、待确认、阻塞与依赖状态。只有维护者在原 Issue 明确授权后才能解除 Hold；本文件不枚举当前 Hold，也不清除或扩展任何授权。
 
 ## 项目是什么
 
