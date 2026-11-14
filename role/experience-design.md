@@ -23,19 +23,19 @@
 
 按这个顺序看，够开始一页的设计。改到哪一页，再打开该页自己的组件和样式。
 
-| 要确认的事                             | 先打开                                                                                                                                                                                                                        |
-| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 这一页在导航和首页的哪一组、路径和标题 | [`src/shared/nav/pageRegistry.ts`](../src/shared/nav/pageRegistry.ts)。懒加载 import 在 [`src/app/pageRegistry.tsx`](../src/app/pageRegistry.tsx)，登记规则见 [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md)「页面登记表」 |
-| 路由在 hash 里                         | [`src/app/App.tsx`](../src/app/App.tsx)、[`src/app/routes.tsx`](../src/app/routes.tsx)                                                                                                                                        |
-| 浅色 / 深色实际色值                    | [`src/shared/styles/tokens.css`](../src/shared/styles/tokens.css)。切换逻辑在 [`src/app/theme/theme.ts`](../src/app/theme/theme.ts)、[`src/app/theme/useTheme.ts`](../src/app/theme/useTheme.ts)                              |
-| 界面图标                               | [`src/shared/ui/Icon.tsx`](../src/shared/ui/Icon.tsx) 的 `ICONS`                                                                                                                                                              |
-| 游戏原版图标、费用                     | [`src/shared/ui/art.tsx`](../src/shared/ui/art.tsx)，文件在 `public/img/`                                                                                                                                                     |
-| 页头、面包屑、搜索                     | [`src/shared/ui/layout.tsx`](../src/shared/ui/layout.tsx) 的 `ListHead`、`Breadcrumbs`；[`src/shared/ui/widgets.tsx`](../src/shared/ui/widgets.tsx) 的 `SearchInput`                                                          |
-| 工具页壳                               | [`src/shared/ui/ToolPageHeader.tsx`](../src/shared/ui/ToolPageHeader.tsx)、[`src/shared/ui/ToolShell.tsx`](../src/shared/ui/ToolShell.tsx) 的 `ToolGrid`                                                                      |
-| 顶栏、焦点、窄屏抽屉                   | [`src/app/Layout.tsx`](../src/app/Layout.tsx)、[`src/shared/styles/editorial-shell.css`](../src/shared/styles/editorial-shell.css)                                                                                            |
-| 对象更新历史                           | [`src/shared/ui/PatchHistory.tsx`](../src/shared/ui/PatchHistory.tsx)；站点列表是登记表里的 `/patches`                                                                                                                        |
-| 可复用设计原则                         | [体验设计系统](../docs/design/DESIGN-SYSTEM.md)，具体需求和完成态设计图以原 Issue 为准                                                                                                                                        |
-| 游戏数字从哪来                         | 生成数据与 [`scripts/data_sources.json`](../scripts/data_sources.json)。界面只读这些结果，不手写玩法数字                                                                                                                      |
+| 要确认的事                             | 先打开                                                                                                                                                                                                      |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 这一页在导航和首页的哪一组、路径和标题 | [`src/shared/nav/pageRegistry.ts`](../src/shared/nav/pageRegistry.ts)。懒加载 import 在 [`src/app/pageRegistry.tsx`](../src/app/pageRegistry.tsx)，登记规则见 [路由、导航与元数据](../docs/ARCHITECTURE.md) |
+| 路由在 hash 里                         | [`src/app/App.tsx`](../src/app/App.tsx)、[`src/app/routes.tsx`](../src/app/routes.tsx)                                                                                                                      |
+| 浅色 / 深色实际色值                    | [`src/shared/styles/tokens.css`](../src/shared/styles/tokens.css)。切换逻辑在 [`src/app/theme/theme.ts`](../src/app/theme/theme.ts)、[`src/app/theme/useTheme.ts`](../src/app/theme/useTheme.ts)            |
+| 界面图标                               | [`src/shared/ui/Icon.tsx`](../src/shared/ui/Icon.tsx) 的 `ICONS`                                                                                                                                            |
+| 游戏原版图标、费用                     | [`src/shared/ui/art.tsx`](../src/shared/ui/art.tsx)，文件在 `public/img/`                                                                                                                                   |
+| 页头、面包屑、搜索                     | [`src/shared/ui/layout.tsx`](../src/shared/ui/layout.tsx) 的 `ListHead`、`Breadcrumbs`；[`src/shared/ui/widgets.tsx`](../src/shared/ui/widgets.tsx) 的 `SearchInput`                                        |
+| 工具页壳                               | [`src/shared/ui/ToolPageHeader.tsx`](../src/shared/ui/ToolPageHeader.tsx)、[`src/shared/ui/ToolShell.tsx`](../src/shared/ui/ToolShell.tsx) 的 `ToolGrid`                                                    |
+| 顶栏、焦点、窄屏抽屉                   | [`src/app/Layout.tsx`](../src/app/Layout.tsx)、[`src/shared/styles/editorial-shell.css`](../src/shared/styles/editorial-shell.css)                                                                          |
+| 对象更新历史                           | [`src/shared/ui/PatchHistory.tsx`](../src/shared/ui/PatchHistory.tsx)；站点列表是登记表里的 `/patches`                                                                                                      |
+| 可复用设计原则                         | [体验设计系统](../docs/design/DESIGN-SYSTEM.md)，具体需求和完成态设计图以原 Issue 为准                                                                                                                      |
+| 游戏数字从哪来                         | 生成数据与 [`scripts/data_sources.json`](../scripts/data_sources.json)。界面只读这些结果，不手写玩法数字                                                                                                    |
 
 历史页面复核见 [#1002](https://github.com/linhongcun/aoe2-analyzer/issues/1002) / [PR #1003](https://github.com/linhongcun/aoe2-analyzer/pull/1003) 及[基线规格原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/support-tools-ui-20261113.md)；它记录当时的持续生产、施工和驻军治疗布局，不作为当前通用组件规范。
 
@@ -102,7 +102,7 @@
 
 ## 这次要检查什么
 
-PC 优先，窄屏做到这次的路径基本可用。设计索引里的桌面参照是 1280。只查这次改到的布局、可读性和关键操作。不把全站、全尺寸、全主题矩阵加回每次 PR，也不为设计评审加无关 CI。全站回归是否在跑，以 [`docs/TESTING.md`](../docs/TESTING.md) 文首为准。
+PC 优先，窄屏做到这次的路径基本可用。按这次改动检查相关的桌面和窄屏布局、可读性与关键操作；具体范围依 Issue 和实际影响确定，不设固定宽度，也不把全站、全尺寸、全主题矩阵加回每次 PR，更不为设计评审增加无关 CI。全站回归是否在跑，以 [`docs/TESTING.md`](../docs/TESTING.md) 文首为准。
 
 有浮层时写清焦点从哪来、键盘怎样关闭、关闭后回到哪个控件。长中文、图标和费用保持同一阅读基线；一行放不下时整组费用换行，不把单个资源拆到错位的列。浅色和深色都看这次的默认态。有遮罩时看打开与关闭两态。
 
