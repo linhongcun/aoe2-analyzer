@@ -1,5 +1,5 @@
 // #559 地图边路 / 中路。失败验收，对齐 Steve 设计通过的规格
-// docs/design/maps-559/maps-559.md §8（PR #560 @ 541c21a）。
+// https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/maps-559/maps-559.md §8（PR #560 @ 541c21a）。
 // 只编码验收，不实现区块。当前 main 没有 data-testid="map-positions"，这些用例应红。
 // 不要改期望去凑绿，也不要改 tests/**/v0*-acceptance*。本文件不关闭 #559。
 //

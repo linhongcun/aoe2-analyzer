@@ -4,7 +4,7 @@
 
 ## 文档归属
 
-游戏行为以代码、生成/内容数据和测试为准；当前需求、规格、设计、证据与交接保留在原 Issue。仓库文档用于架构、贡献、构建/测试/发布和可复现来源流程；不新增一次性功能机制手册或 发布日志。已退休的历史说明通过 Git 历史查看，不另建归档目录。
+游戏行为以代码、生成/内容数据和测试为准；当前需求、规格、设计、证据与交接保留在原 Issue。仓库文档用于架构、贡献、构建/测试/发布和可复现来源流程；不新增一次性功能机制手册或发布日志。已退休的历史说明通过 Git 历史查看，不另建归档目录。
 
 ## 角色
 
@@ -91,13 +91,13 @@ hongcun 本轮明确请求：“我看目前 GitHub 上还有两个 bug 的 issu
 
 hongcun 针对“胡斯派战车对轻型投石车、精锐胡斯派战车对中型投石车”的具体方案明确回复：“嗯，解除暂停，实施吧”，见 [6411790420](https://github.com/linhongcun/aoe2-analyzer/issues/372#issuecomment-6411790420)。本轮据此解除 #372 暂停，精确实施现有单位 PK 的两条波希米亚对法兰克、当前时代满科技、无团队加成1v1预置及打开/复制入口，数据DE185872；此前Hold正文和上方 #364 的历史授权记录保留，本节是其后的具体解除。
 
-新增预置区是原 #duel 的兄弟语义区，页首本地快捷按钮仅scroll/focus到该区，复用现有样式；原计算器全文、受保护金标准与验收期望保留。不新增第三预置、Generic文明、其它页面、建筑工具或数据/计算/URL解析/依赖变更。完整状态和验证规格见 [#372规格](docs/design/bohemian-duel-presets-372.md)，独立复核及持续发布沿现行流程执行；本次解除不自动授权其它开放issue。
+新增预置区是原 #duel 的兄弟语义区，页首本地快捷按钮仅scroll/focus到该区，复用现有样式；原计算器全文、受保护金标准与验收期望保留。不新增第三预置、Generic文明、其它页面、建筑工具或数据/计算/URL解析/依赖变更。完整状态和验证规格见 [#372规格](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/bohemian-duel-presets-372.md)，独立复核及持续发布沿现行流程执行；本次解除不自动授权其它开放issue。
 
 ## 按改动风险控制验证投入（2026-10-25）
 
-hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归，并在 #431 授权实施「每份代码只做一次相关验证、release/main 复用结果、部署后短核验、全量转后台」。2026-11-10：每 PR 只做必要冒烟和与本次改动直接相关的测试；纯布局不重跑无关计算或数据；全站全尺寸主题矩阵不是门禁；计算或数据只做针对性正确性检查。报告区分实际执行、CI 范围和未验证项。有意替换的旧布局、入口、链接和重复功能，不再用历史验收期望卡住。独立复核与数据来源职责不变。默认 CI 仍是下方 #749，手动 full 不是普通 PR 的合并条件。#659 只供手动 full 追溯，见 [ci-659](docs/design/ci-659.md)。
+hongcun 已明确要求测试辅助交付，不让小改动等待长时间回归，并在 #431 授权实施「每份代码只做一次相关验证、release/main 复用结果、部署后短核验、全量转后台」。2026-11-10：每 PR 只做必要冒烟和与本次改动直接相关的测试；纯布局不重跑无关计算或数据；全站全尺寸主题矩阵不是门禁；计算或数据只做针对性正确性检查。报告区分实际执行、CI 范围和未验证项。有意替换的旧布局、入口、链接和重复功能，不再用历史验收期望卡住。独立复核与数据来源职责不变。当前 CI 与手动 full 范围见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)；历史冻结规格见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-659.md)。
 
-- **默认 CI（#749，2026-11-08）**只跑 static、真实 SHA 构建（页脚身份）和 Chromium 单分片窄冒烟。普通 PR 不再按风险自动扩成四片、24 路由、单测或 data。手动 `workflow_dispatch` 且 `full=true` 才跑这些；该次不部署。细则见 [ci-749](docs/design/ci-749.md)。
+- 默认 CI、手动 full 和部署范围以 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)及仓库工作流为准。
 - `planChanges` 仍记录 `civ-ui` / `targeted` / `full` 分类，供手动 full 和本地检查。`formatTime`、`dupNames`、`glossary`、`linker`、`sharePage`、`simRoute` 在完整闭包另经审计前，手动 full 仍按广覆盖跑。只有手动 full，或本地需要时，才执行数据管线。
 - 默认 `browser-1` 只有一片，不可复用，消费同一次不可变构建。手动 full 才按历史时长加权 LPT 分到四个 runner。最终 `test` 核对本次计划内的阶段、精确 case 与构建身份；失败、取消、超时、缺片或错误证明均阻断部署。#338 的 hash/表格检查留在 full，不回默认门禁。
 - 只接受经 GitHub 核实的 v2 原始阶段证明；v1 全部无效。PR merge ref 到 main 的复用要求同仓库、相同 tree/策略/工具链、精确检查/文件/case 集合，以及真实成功来源 run/attempt/数字 job/artifact 匹配，不能只凭 PR head SHA、祖先关系或任意复用链。缺少有效证明时执行所缺必要阶段，并如实区分本次执行与原始执行来源。
@@ -208,7 +208,7 @@ OpenAI Codex 在启用 git attribution 时使用这一行，见源码 [`codex-rs
 
 - **图标**：自定义界面图标禁止使用 emoji 或 Unicode 符号字形（⚔ ← → ★ ✓ ✕ ▲▼ 🔍 等）。统一使用 [Lucide](https://lucide.dev)（ISC License），通过 `lucide-react` 本地打包（不使用 CDN，站点需在中国可访问）。在 `src/shared/ui/Icon.tsx` 的 `ICONS` 表登记后以 `<Icon name="..." />` 使用；颜色用 `currentColor`，尺寸由 CSS（`.ic`）控制。ESLint 规则 `no-restricted-syntax` 会拦截代码中的 emoji/箭头符号。
 - 游戏美术图标（文明/单位/科技/建筑/DLC/属性）保持使用 `public/img/` 下的素材。
-- 样式：颜色只用 `src/shared/styles/tokens.css` 中的设计令牌（CSS 变量），保持深色中世纪主题（`npm run lint:colors` 检查），规范见 `docs/DESIGN-SYSTEM.md`。
+- 样式：颜色和间距只用 `src/shared/styles/tokens.css` 中的设计令牌（CSS 变量），由 `npm run lint:colors` 检查，规范见 `docs/design/DESIGN-SYSTEM.md`。
 - 按本次改动影响检查必要视口（无横向滚动、无页面报错）和浅色与深色，对比度满足 WCAG AA。不固定四宽。
 - 领域逻辑（`src/domain`）必须是纯函数、无 React 依赖，并配 Vitest 单测。
 - 数据：`npm run data` 重新生成 `src/data/*.json` 与 `public/img/*`，不要手改生成的 JSON；主观评分改 `scripts/civ_ratings.json`。

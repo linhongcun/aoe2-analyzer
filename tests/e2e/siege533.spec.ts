@@ -1,4 +1,4 @@
-// #533 攻城体验 MVP 失败验收，对齐 Jony #542（docs/design/siege-533/）。
+// #533 攻城体验 MVP 失败验收，对齐 Jony #542（https://github.com/linhongcun/aoe2-analyzer/tree/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/siege-533/）。
 // 只编码验收，不实现入口、检索或反馈。当前 main 上入口、未核实文案和「冲车」工具页结果应红。
 // 不要改这些期望去凑绿，也不要改 tests/**/v0*-acceptance* 或 siege308 的金标准数字。
 //

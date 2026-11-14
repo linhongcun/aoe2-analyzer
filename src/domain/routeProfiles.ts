@@ -1,4 +1,4 @@
-/** Issue 652 两时代来源适配。审核见 docs/design/routes-652/REVIEW.md，结构变化必须重新审核。 */
+/** Issue 652 两时代来源适配。审核见 https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/routes-652/REVIEW.md；结构变化必须重新审核。 */
 import type { Cost, SimStats, Tech, Unit } from './types';
 import { DAT } from './datEffects';
 import { TEAM_BONUSES } from './effects';

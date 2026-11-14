@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-/** #94 高亮对比度 / #95 手机弹层固定高度（稿：docs/design/mockups/issue94-95-civpicker） */
+/** #94 高亮对比度 / #95 手机弹层固定高度（稿：https://github.com/linhongcun/aoe2-analyzer/tree/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/mockups/issue94-95-civpicker） */
 const lum = (c: string) => {
   const [r, g, b] = (c.match(/[\d.]+/g) ?? [])
     .slice(0, 3)

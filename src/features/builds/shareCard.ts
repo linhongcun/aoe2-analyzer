@@ -1,5 +1,5 @@
 /**
- * #19 分享卡（v0.4，Jony SPEC：docs/design/mockups/issue19/share-card/SPEC.md @ design/jony-archive）。
+ * #19 分享卡（v0.4，Jony SPEC：https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/mockups/issue19/share-card/SPEC.md）。
  * 原则：卡片不自己算，和页面用同一套函数——rangeLabel（#56）、pickSummaryBottleneck + summaryText（#57）、formatClock。
  * 纯函数，不碰 DOM；数字全部来自 simulateBuild → buildView。
  */

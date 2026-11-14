@@ -1,5 +1,5 @@
 // #520 S1 失败验收（Kent Beck）。只编码验收，不实现功能；当前 main 应红。
-// 规格：docs/design/site-linking-517/site-linking-517.md §3.2、§5.1–§5.3、§10 S1。
+// 规格：https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/site-linking-517/site-linking-517.md §3.2、§5.1–§5.3、§10 S1。
 // 参数锁定（#520 产品裁定，以 §5.1 为准）：me/opp 始终是原始对阵双方。
 //   我方开局 #/builds?civ={me}&from=matchup&opp={opp}
 //   对手开局 #/builds?civ={opp}&from=matchup&me={me}（不要写成 opp={me}）

@@ -39,7 +39,7 @@
 
 ## 全文明状态
 
-2026-10-30 #197 第十八批补充：波兰与罗马已由 [PR #510](https://github.com/linhongcun/aoe2-analyzer/pull/510) 合入。波兰的显式磨坊替换为付费大庄园，使用实际成本、工期、人口与研究地点；模板未指定农田邻接，因此不计即时收获，当前 8 套没有采石，不产生采石兼产黄金。罗马村民采集与施工倍率只应用一次，农田按消费者携带/往返均速与独立供给上限取较小值。食物池启动、田块绑定、耗尽与续种仍未模拟，独立真实成本保持原口径。完整来源、失效门控及已批准的限定验收迁移见[规格](https://github.com/linhongcun/aoe2-analyzer/blob/19a7b03a1ebfe019cd8598c95abe4d7701d6608f/docs/design/final-civs197.md)、[迁移授权与执行](design/final-civs197-acceptance-approval.md)和[验证记录](design/final-civs197-validation.md)。这批实现已包含在 v0.73.1 的成功完整 CI、实际部署和正式发布产物中。
+2026-10-30 #197 第十八批补充：波兰与罗马已由 [PR #510](https://github.com/linhongcun/aoe2-analyzer/pull/510) 合入。波兰的显式磨坊替换为付费大庄园，使用实际成本、工期、人口与研究地点；模板未指定农田邻接，因此不计即时收获，当前 8 套没有采石，不产生采石兼产黄金。罗马村民采集与施工倍率只应用一次，农田按消费者携带/往返均速与独立供给上限取较小值。食物池启动、田块绑定、耗尽与续种仍未模拟，独立真实成本保持原口径。完整来源、失效门控及已批准的限定验收迁移见[规格](https://github.com/linhongcun/aoe2-analyzer/blob/19a7b03a1ebfe019cd8598c95abe4d7701d6608f/docs/design/final-civs197.md)、[迁移授权与执行](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/final-civs197-acceptance-approval.md)和[验证记录](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/final-civs197-validation.md)。这批实现已包含在 v0.73.1 的成功完整 CI、实际部署和正式发布产物中。
 
 2026-10-30 #197 第十七批补充：瞿折罗按当前8套未驻畜模板迁入支持集合。完整核验856/effect871与857/effect872；857创建两丛1549果树，不折算为库存或村民；普通3村民和1名1755骆驼斥候占1人口，库存200食物/200木/100金/200石和4/5人口保持。现有动作没有驻畜，不因磨坊或牧羊自动产生食物，驻畜收益、额外果丛与耗尽明确未模拟；未来未知/驻畜动作仍拒绝支持。448侦骑继续原训练，只有骑士模板需通用经济估算说明。时间线、分享PNG、跟练/打印和加成用途保持同口径。见[规格](https://github.com/linhongcun/aoe2-analyzer/blob/19a7b03a1ebfe019cd8598c95abe4d7701d6608f/docs/design/gurjaras197.md)与[完整固定来源](design/gurjaras197-source-summary.json)，实际CI和发布以PR记录为准。
 

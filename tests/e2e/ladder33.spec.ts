@@ -1,6 +1,6 @@
 // #33 `#/ladder` 阿拉伯 1v1 天梯。不改 pageRegistry / v0*-acceptance。
 // #545 锁定当前快照只露出有数据的分段：不再要求六枚芯片、可点空态，以及首页「分段胜率」。那些断言改到 tests/e2e/ladder545.spec.ts，在实现前应红。
-// 设计：docs/design/ladder-33/ladder-33.md；空芯片与入口文案：docs/design/ladder-545/ladder-545.md。
+// 设计：https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ladder-33/ladder-33.md；空芯片与入口文案：https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ladder-545/ladder-545.md。
 // 锚点来自 Age of Notes 阿拉伯页 data-wr / data-games / data-pr（2026-11-01，补丁 185872）。百分数原样写入，界面固定两位小数，不得再乘 100。
 // testid：ladder-page/context/bracket(data-elo)/source/patch-note/table/row-{En}/sort-{win|play|games|name|tier}/tier/expand/reason-{En}/fallback-toast/share/footer/empty。data-games < 300 标「样本少」。
 import { existsSync, readFileSync } from 'node:fs';

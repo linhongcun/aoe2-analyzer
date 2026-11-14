@@ -22,7 +22,7 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 
 #922 正文写明「本票不要求立刻开工」。维护者于 2026-11-11 11:06（Asia/Shanghai，t316u）授权处理当天提的、之前页面没做好的 issue；该授权只覆盖 #922 的这条暂缓。此登记不授权其它编号。
 
-所有编码代理均用这一节决定**现在领什么、跳过什么**。功能实现由当前授权的执行者认领；产品范围与是否恢复由维护者决定。设计硬规则仍是第 6 节与 `docs/design/`；测试门禁见 [TESTING](TESTING.md)。不另建一套流程，也不把角色代理自循环当作实现通道。
+所有编码代理均用这一节决定**现在领什么、跳过什么**。功能实现由当前授权的执行者认领；产品范围与是否恢复由维护者决定。设计硬规则见第 6 节与[体验设计原则](design/DESIGN-SYSTEM.md)；测试门禁见 [TESTING](TESTING.md)。不另建一套流程，也不把角色代理自循环当作实现通道。
 
 门禁不变：一次只认领 1 个 issue；同时在审 PR ≤ 2；实现者之外的**独立代理复核**加上按风险选择的 CI；持续发布授权以 CONTRIBUTING 为准。维护者已于2026-11-03授权已部署 issue 可直接关闭，见 [持续关闭授权](../CONTRIBUTING.md#已部署-issue-的持续关闭授权2026-11-03)。网站实现 PR 使用 `Relates #N`，交付核验后执行者关闭已完成的 issue，不再等待具名人员或额外产品走查。`Fixes #N` 合入默认分支会提前关 issue，只用于合入即完成、无需网站交付的事项。
 
@@ -30,7 +30,7 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 
 ### 当前开一局菜单单项授权（2026-11-05）
 
-维护者明确要求：“先在菜单上完善开一局功能最终形态；不完善的菜单可置灰，让后续逐渐完善有方向。” 已建并认领[#700](https://github.com/linhongcun/aoe2-analyzer/issues/700)，基线为实际v0.77.19/main `fa7c4f9175dc2fd2b3186b98df8b85287a569ac1`；正式可测规格见[开一局菜单](design/start-game-menu-700.md)。本轮为一个菜单issue、一个实现PR和单一源写者；完成独立预审/终审、适用Home验证、真实main/Pages、公开功能/身份与正式Release完整核验后标已部署关闭，持续发布与关闭授权不变，无需额外确认。
+维护者明确要求：“先在菜单上完善开一局功能最终形态；不完善的菜单可置灰，让后续逐渐完善有方向。” 已建并认领[#700](https://github.com/linhongcun/aoe2-analyzer/issues/700)，基线为实际v0.77.19/main `fa7c4f9175dc2fd2b3186b98df8b85287a569ac1`；原始规格见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/start-game-menu-700.md)。本轮为一个菜单issue、一个实现PR和单一源写者；完成独立预审/终审、适用Home验证、真实main/Pages、公开功能/身份与正式Release完整核验后标已部署关闭，持续发布与关闭授权不变，无需额外确认。
 
 范围是首页开一局的内部功能结构：默认收起的紧凑菜单，当前真实入口沿已有动作和安全上下文链接；四类未来能力原生disabled并明确“规划中”和未支持原因，不提前实现其模型，不承诺上线时间。已有1v1/组队人数、其它地图、自主选文明、手填大厅与工具保持可用；不把有限计算覆盖误当成整条流程未开发，不改全局nav/协议/状态机/计算/生成数据/CI。旧Practice静态外形/文案仅按本次用户明确方向迁移为更强禁用与无副作用语义，独立复核，不改其它业务保护。
 
@@ -58,7 +58,7 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 
 ### #659 定向授权（2026-11-03）
 
-维护者在本轮明确回复“ok，可以处理那个 ci 的 issue 了”，授权实施 #659 的 CI 执行、覆盖、阶段证明、预算和等价巡检范围，见 [冻结规格](design/ci-659.md)。它是上述11项之后的单项授权，不扩大产品范围或解除其它数据阻塞；本文件旧的 PR 完整浏览器上限及壳层例外按下方新规则替代。
+维护者在本轮明确回复“ok，可以处理那个 ci 的 issue 了”，授权实施 #659 的 CI 执行、覆盖、阶段证明、预算和等价巡检范围。当前执行规则见 [TESTING 第 6 节](TESTING.md#ci-659-validation)，历史冻结规格见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-659.md)。它是上述11项之后的单项授权，不扩大产品范围或解除其它数据阻塞。
 
 ### 开一局走查批授权（2026-11-03）
 
@@ -145,18 +145,18 @@ Issue 阶段、同一正文、角色认领与交接统一按 [CONTRIBUTING「Iss
 
 ## 6. 设计硬规则（摘要）
 
-完整规范见 [docs/design/DESIGN-SYSTEM.md](design/DESIGN-SYSTEM.md) 与 [docs/design/README.md](design/README.md)「设计交接」（各短稿目录内如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 `docs/design/mockups/issue24-v3/ERRATA.md`）。
+通用原则见 [体验设计指南](design/DESIGN-SYSTEM.md)；具体需求、设计图与交接记录在原 Issue 正文，不以本地短稿或勘误替代。
 
 - **图标**：只用 Lucide，经 `src/shared/ui/Icon.tsx` 的 `ICONS` 登记后 `<Icon name="..." />`；禁止 emoji / Unicode 符号当图标（ESLint 会拦）；游戏美术图标除外。
 - **颜色**：只用 `src/shared/styles/tokens.css` 设计令牌；`npm run lint:colors`。
 - **无障碍**：文字对比度 WCAG AA；可点区域 ≥ **44×44**；文字不小于 12px。
 - **数字不换行**：数值与「数字+单位」用 **`.num`**（等宽数字）与/或 **`.nw`**（`white-space: nowrap`）包住，360 宽也不能折行。
-- **四宽截图**：界面 PR 附 **360 / 375 / 390 / 1280**，无横向滚动、无 console error / pageerror。
+- **视口**：按本次任务检查相关窄屏和桌面状态，无横向滚动或页面错误；不要求固定宽度矩阵。
 - **中文 UI**：文案与相邻页面一致；新增页面先改 `pageRegistry`，分组见 [ARCHITECTURE](ARCHITECTURE.md)「页面登记表」。
 
-带界面的 issue 先读 [设计索引「设计交接」](design/README.md#设计交接)。
+带界面的事项按 [体验设计接手指南](../role/experience-design.md)交接。
 
-UI 的当前规格和完成态设计图写在同一 Issue 正文“体验设计”节；体验设计交付并交回产品确认前，实际 UX 工作必须嵌入可直接查看、覆盖主要界面和重要状态的设计图。复杂/可复用规格可链接 `docs/design/` 补充，不能代替正文图；只有纯 docs/data 且无 UI 时可记录 UX 不适用。不得仅为阶段变化新建 Issue 或文档。缺少可执行规格或设计图时不得标记设计交付完成或转软件开发。具体交接见 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle)。
+UI 的当前规格和完成态设计图写在同一 Issue 正文“体验设计”节；体验设计交付并交回产品确认前，实际 UX 工作必须嵌入可直接查看、覆盖主要界面和重要状态的设计图。只有纯 docs/data 且无 UI 时可记录 UX 不适用。不得仅为阶段变化新建 Issue 或功能规格文档。缺少可执行规格或设计图时不得标记设计交付完成或转软件开发。具体交接见 [Issue 生命周期](../CONTRIBUTING.md#issue-lifecycle)。
 
 方向 C、Lucide、原版游戏图标、tokens、PC-first，以及产品、设计、实现的分工，以该节为准。
 
@@ -170,7 +170,7 @@ UI 的当前规格和完成态设计图写在同一 Issue 正文“体验设计�
 
 ### CI 分阶段门禁（#659 / #749）
 
-2026-11-10 起，下表不是每 PR 门禁。#659 只在手动 full 时追溯，见 [ci-659.md](design/ci-659.md) 与 [TESTING 第6节](TESTING.md#ci-659-validation)。
+2026-11-10 起，下表不是每 PR 门禁。当前 CI 执行范围仅在 [TESTING 第 6 节](TESTING.md#ci-659-validation)维护。
 
 | 改动                                                                         | 手动 full 或本地排查时的旧分类（不是每 PR 义务）              |
 | ---------------------------------------------------------------------------- | ------------------------------------------------------------- |
@@ -183,7 +183,7 @@ UI 的当前规格和完成态设计图写在同一 Issue 正文“体验设计�
 
 旧的消费者闭包（未证明则 full、功能自己的四宽主题必须保留、全站守卫改动即 full）不再扩大每 PR 测试。`CI_E2E_FULL=false` 不能把默认 CI 实际会跑的窄冒烟说成没跑。
 
-**默认 CI（#749）**只跑 static、build 和一条不可复用的 Chromium 窄冒烟；main 聚合成功后才上传 `deployed-site` 并部署。不要把四片、24 路由、axe、单测或 data 加回默认。手动 full 才并行 static-main、unit、data 与四片浏览器。最终 `test` 核对本次计划内的阶段和精确 case；失败、取消、超时、缺片、错构建均阻断 deploy。#338 留在 full。见 [ci-749](design/ci-749.md)。
+默认门禁、手动 full 与部署条件以 [TESTING 第 6 节](TESTING.md#ci-659-validation)和工作流为准；本维护说明不复制 CI 执行细节。
 
 仅 v2 原始阶段执行证明可复用，v1 无效。GitHub 核实同仓库成功来源 run/attempt/数字 job/artifact，并匹配实际 tree、策略、工具链和精确检查/文件/case 集合；不沿用任意继承链。缺失或坏证明补跑所缺必要阶段。build 与默认 browser-1 不复用；main 重新构建真实 SHA 并执行窄冒烟，而不是每次 24 路由。static-main 只在手动 full。不能把复用写成本次重新执行。
 

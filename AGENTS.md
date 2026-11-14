@@ -16,7 +16,7 @@ Issue 五阶段、同一正文、角色交接、认领与授权规则以 [CONTRI
 
 **一次验证与快速发布（#431）**：普通已授权更新默认一个 issue、一个 PR 直接合入 `main`；只有需要多项冻结集成时才建 `release/vX.Y.Z`。同一代码树的真实成功验证可由 release/main 复用，main 仍构建真实 SHA 并做短烟测，发布 ZIP 使用已部署产物。全量回归在夜间后台或重大变更时执行一次，不作为普通 UI 更新逐阶段重复等待的门槛。现行规则见 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)。
 
-**CI 分阶段门禁（#659，2026-11-03）**：维护者已明确授权处理 #659，取代 #514 的 PR 完整浏览器禁令与 #513 的全局壳层 targeted 例外。2026-11-10 起完整浏览器不再是每 PR 门禁，见「测试规则」。冻结规格见 [ci-659.md](docs/design/ci-659.md)，只在手动 full 使用。
+**CI 分阶段门禁（#659，2026-11-03）**：维护者已明确授权处理 #659，取代 #514 的 PR 完整浏览器禁令与 #513 的全局壳层 targeted 例外。当前门禁见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)；历史冻结规格见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-659.md)。
 
 **持续发布授权**：hongcun 已要求已授权更新完成适用审查和测试后直接部署，不再逐次询问发布；不能停在 release 分支便称完成上线。发布授权及边界以 [CONTRIBUTING「维护者的持续发布授权」](CONTRIBUTING.md#维护者的持续发布授权2026-10-24) 为准；现行审阅流程以 [「维护者的持续审阅授权」](CONTRIBUTING.md#维护者的持续审阅授权2026-10-25) 为准，由实现者之外的独立代理复核，记录实际提交 SHA、复核范围、结果和未解决问题，不再依赖指定人员签字。
 
@@ -64,7 +64,7 @@ Vite 6 + React 18 + TypeScript（strict、`noUncheckedIndexedAccess`）+ react-r
 | `tests/unit/`          | Vitest（`*.test.ts`，只有这里会被收集）                                                                                                                                                                                                                                                                          |
 | `tests/e2e/`           | Playwright（`*.spec.ts`），默认宽度 1280                                                                                                                                                                                                                                                                         |
 | `tests/py/`            | Python 数据脚本测试                                                                                                                                                                                                                                                                                              |
-| `docs/`                | 架构、数据说明、`docs/design/` 设计稿与规格                                                                                                                                                                                                                                                                      |
+| `docs/`                | 当前架构、数据更新与来源、测试/发布流程、设计原则和维护规则；产品规格留在原 Issue                                                                                                                                                                                                                                |
 | `public/img/`          | 游戏图标（生成）                                                                                                                                                                                                                                                                                                 |
 
 分层边界（#281，CI 用 `npm run lint:layers -- --strict` 检查，有任何违规即失败；不带 `--strict` 只报告、总以 0 退出）：`features/X` 不 import `features/Y`（要共享的挪到 `shared/` 或 `domain/`）；`shared/` 不 import `features/`、`app/`；`domain/` 不 import react、`features/`、`app/`、`shared/ui`；核心数据 JSON `src/data/{civs,units,techs,buildings,trees,eco,effects}.json` 只能由 `scripts/check-layers.mjs` 的 `LOADERS` 里逐个登记的 7 个文件直接 import，src 下其他任何文件（含 `shared/`、`app/`、`data/` 其他文件）都要经它们读取：`src/data/index.ts`（异步入口：civs 随主包，units/techs/buildings/trees 动态 import 拆包）、`src/data/raw/civs.ts` `raw/units.ts` `raw/techs.ts` `raw/buildings.ts` `raw/eco.ts`（唯一的同步入口，原样转出）、`src/domain/datEffects.ts`（特例：effects.json 的类型与转换）。新增入口要登记进 `LOADERS` 并同步更新本段和 `docs/ARCHITECTURE.md`。`import type` 和动态 `import()` 同样计入。
@@ -74,7 +74,7 @@ Vite 6 + React 18 + TypeScript（strict、`noUncheckedIndexedAccess`）+ react-r
 - **游戏数字只从数据里读，不要凭记忆写。** 来源：`src/data/civs.json` 等生成文件（派生自 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) 固定提交）和由 DE 原版 `.dat` 派生的 `effects.json` / `eco.json`。issue、设计稿、测试里写的数字和数据不一致时，以数据为准，并在 issue 里说明。
 - 生成的 `src/data/*.json` 和 `public/img/*` **是提交在仓库里的**，但只能由脚本生成（`npm run data`、`npm run effects`、`npm run eco`），不要手改；CI 会校验 `effects.json`、`eco.json` 可由固定 `.dat` 原样复现。
 - **`.dat`（© Microsoft）和下载缓存 `scripts/.cache/` 绝不提交**（已 gitignore），只在构建时下载。
-- 新增 #197 开局文明来源证据使用 `scripts/build_sim_source.py` 的有界摘要，完整中间输出留在忽略缓存；`*197*source*.json` 每份限 64 KiB，历史原件仅按固定指纹保留，不追加豁免。命令、固定来源与审阅边界见 [来源证据流程](docs/design/build-sim-source-478.md)。
+- 开局模拟来源证据使用 `scripts/build_sim_source.py` 的有界摘要，完整中间输出留在忽略缓存；`*197*source*.json` 每份限 64 KiB，历史原件仅按固定指纹保留，不追加豁免。命令、固定来源与审阅边界见 [来源证据流程](docs/data/BUILD-SIM-SOURCES.md)。
 - 主观评分改 `scripts/civ_ratings.json`。社区来源（攻略、别名、俗称）只收 2020 年以后的；没能核对的标「未核实」。
 
 ## 命令（均已在仓库核对）
@@ -115,11 +115,11 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 
 ## 合并前必须通过
 
-按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。**默认 CI（#749）**是 static、真实 SHA 构建和 Chromium 单分片窄冒烟；main 在聚合成功后才部署。不要把四片浏览器、24 路由、axe、单测或 data 加回普通 PR。这些只在手动 `workflow_dispatch` 且 `full=true` 时跑，且该次不部署。`planChanges` 的 `maintenance` / `civ-ui` / `targeted` / `full` 分类不再驱动默认门禁。细则见 [ci-749](docs/design/ci-749.md)。
+按 [CONTRIBUTING「验证投入」](CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 为每份代码做一次适用验证。默认 CI、手动 full 与部署范围见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)和工作流；不把手动 full 误写为默认部署门槛。
 
-手动 full 不是普通 PR 的合并条件。需要时才跑；其内容仍见 #659 / [ci-749](docs/design/ci-749.md)。默认窄冒烟失败、超时或错构建不得部署。
+手动 full 不是普通 PR 的合并条件。需要时才跑；默认窄冒烟失败、超时或错构建不得部署。历史 #749 范围见[基线原件](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-749.md)。
 
-只接受经 GitHub 核实的 v2 原始阶段证明；v1 无效。复用必须匹配仓库、Git tree、策略、工具链、精确检查/文件/case 集合和来源 run/attempt/数字 job/artifact，不能继承任意复用链。build 与默认 `browser-1` 不复用，main 始终重建真实 SHA。static-main 只属于手动 full。单次 run 从 `run.created_at` 起共享30分钟预算，包含排队、重跑、聚合和部署；诊断最多额外90秒且不能变绿。细则见 [TESTING](docs/TESTING.md)、[ci-749](docs/design/ci-749.md) 和 [ci-659](docs/design/ci-659.md)。
+只接受经 GitHub 核实的 v2 原始阶段证明；v1 无效。复用必须匹配仓库、Git tree、策略、工具链、精确检查/文件/case 集合和来源 run/attempt/数字 job/artifact，不能继承任意复用链。build 与默认 `browser-1` 不复用，main 始终重建真实 SHA。static-main 只属于手动 full。单次 run 从 `run.created_at` 起共享30分钟预算，包含排队、重跑、聚合和部署；诊断最多额外90秒且不能变绿。当前规则见 [TESTING 第 6 节](docs/TESTING.md#ci-659-validation)；历史 #749/#659 规格分别见[ci-749](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-749.md)与[ci-659](https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ci-659.md)原件。
 
 ## 测试规则
 
@@ -135,7 +135,7 @@ BASE_URL=http://localhost:4173/ npx playwright test --reporter=line
 - **数字不换行**：数值、「数字+单位」不能被折到两行（例如「1个村民」在 360 宽折行就是 bug）。
 - 图标只用 Lucide（在 `src/shared/ui/Icon.tsx` 登记后 `<Icon name="..." />`），禁止 emoji 和 Unicode 符号当图标（ESLint 会拦）；游戏美术图标除外。
 - 文字不小于 12px；可点区域不小于 44×44；颜色只用设计令牌，对比度满足 WCAG AA。
-- 完整设计规范：[docs/design/DESIGN-SYSTEM.md](docs/design/DESIGN-SYSTEM.md)，既有设计稿和规格索引：[docs/design/README.md](docs/design/README.md)（各短稿目录内如有 `ERRATA.md`，优先于该目录 SPEC；当前只有 `docs/design/mockups/issue24-v3/ERRATA.md`）。
+- 当前体验设计原则：[docs/design/DESIGN-SYSTEM.md](docs/design/DESIGN-SYSTEM.md)；设计说明和机器证据入口：[docs/design/README.md](docs/design/README.md)。具体需求、授权和完成态设计图留在原 Issue。
 
 ## 怎么读 issue
 

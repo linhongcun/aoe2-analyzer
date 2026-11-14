@@ -2,7 +2,7 @@
 
 本项目已获 hongcun 的[持续发布授权](../CONTRIBUTING.md#维护者的持续发布授权2026-10-24)：已授权更新完成适用审查和必要验证后直接部署并完成正式 Release，无需逐次确认。独立复核、实现范围、Hold、数据来源和受保护产品验收规则继续有效。
 
-#431 的一次适用验证原则继续有效；2026-11-03 维护者授权 #659 分阶段门禁，取代旧 PR 完整浏览器上限和全局壳层 targeted 例外。当前规则见 [CONTRIBUTING「验证投入」](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25) 与 [#659 冻结规格](design/ci-659.md)：按风险验证、只复用可信 v2 原始阶段证明、main 构建真实 SHA，Release 直接打包已部署产物。历史审阅与发版记录保留。
+#431 的一次适用验证原则继续有效；2026-11-03 维护者授权 #659 分阶段门禁，取代旧 PR 完整浏览器上限和全局壳层 targeted 例外。当前 CI 与验证规则见 [TESTING 第 6 节](TESTING.md#ci-659-validation)和 [CONTRIBUTING「验证投入」](../CONTRIBUTING.md#按改动风险控制验证投入2026-10-25)：按风险验证、只复用可信 v2 原始阶段证明，main 构建真实 SHA，Release 直接打包已部署产物。历史审阅与发版记录保留。
 
 ## 准备、合并与网站部署
 
@@ -39,6 +39,6 @@ CI/Deploy 与 Release 各自从 GitHub `run.created_at` 起共享30分钟验证�
 
 ## 后台完整回归
 
-CI/Deploy 已关闭每日 schedule。手动调度的 full 默认开启，强制 full/data，禁用验证证据复用，不部署、不触发 Release。失败保留在真实 Actions 记录中并按故障定位；普通更新不等待这次手动回归。默认门禁见 [ci-749](design/ci-749.md)。
+CI/Deploy 的当前手动与默认触发规则见 [TESTING 第 6 节](TESTING.md#ci-659-validation)和仓库工作流；本文件说明正式 Release 的产物核验与发布步骤。
 
 日常单次运行以10分钟为实测目标。独立完成事件时序报告使用 GitHub workflow-completed 数据统计 wall、排队、全部 runner 分钟与最慢浏览器片；交付时另列 PR→main→deploy→Release 整链，不能用局部 job 时间或目标代替实际耗时。

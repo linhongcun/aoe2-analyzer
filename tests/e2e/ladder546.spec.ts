@@ -2,7 +2,7 @@
 // #580 把阿拉伯 1v1「全部」补齐后，原「12–16 家 / 至少一家待补」与产品冲突。
 // 本文件按这次授权改成：已写档等于全部段行数，待补为 0。不改天梯 UI 骨架。
 // 不点名文明，也不把胜率写成档位来源。
-// 设计：docs/design/ladder-33/ladder-33.md（友好度 pill / 待补展开）。
+// 设计：https://github.com/linhongcun/aoe2-analyzer/blob/362f1ed7a7acebbecb08f43dfa04684828eba923/docs/design/ladder-33/ladder-33.md（友好度 pill / 待补展开）。
 // 页上现成免责是「编辑口径，不是官方推荐」（页脚 / 图例），不是另一句新文案。本文件不要求改字。
 import { readFileSync } from 'node:fs';
 import { expect, test, type Locator, type Page } from '@playwright/test';
